@@ -1,0 +1,83 @@
+{
+  "fingerprint": "69aca101ec7a13b96544b0d004d56469ae08da521c7adc2d2401cf9a63769d79",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Machinery",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats15/en/Machinery_motion/result.json",
+      "input_sha256": "fcb33976571867a5df88f44da8c09363a7061b4d0dce38e71de5abccd8f5a5e7",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 272 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 272 s\n"
+    },
+    {
+      "scene": "Summaries",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats15/en/Summaries_motion/result.json",
+      "input_sha256": "5a883c561e397dd11407281bbf688ea97e2bd406f331b729ae63eec19d83b394",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 268 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 268 s\n"
+    },
+    {
+      "scene": "Prediction",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats15/en/Prediction_motion/result.json",
+      "input_sha256": "2a52ac8e03200511dcf90f132030b7d64c9eab2de2e8956873388114d513e8ee",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 241 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 241 s\n"
+    },
+    {
+      "scene": "Grids",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats15/en/Grids_motion/result.json",
+      "input_sha256": "4827814a2f48924ca3729ec42e58dee471672d6280e1f3b26282ae92444b2d81",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 260 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 260 s\n"
+    },
+    {
+      "scene": "Metropolis",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats15/en/Metropolis_motion/result.json",
+      "input_sha256": "6e28b5bba700d8c79828aa8448520237671fc919a79794099ac23c3aa6ff0e3f",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 332 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 332 s\n"
+    },
+    {
+      "scene": "Frequency",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats15/en/Frequency_motion/result.json",
+      "input_sha256": "8e538202ea98a28426fbf025a23c487b75c2a3b4e07ab58c302bfcc1c7d0cab6",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 266 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 266 s\n"
+    },
+    {
+      "scene": "Hypotheses",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats15/en/Hypotheses_motion/result.json",
+      "input_sha256": "21049252c8df7600910b3907d04d7a7e91bbd87c817d3c99e3abd6eded464e02",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 287 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 287 s\n"
+    }
+  ]
+}

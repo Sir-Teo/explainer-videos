@@ -1,0 +1,23 @@
+{
+  "part": "stats15",
+  "fingerprint": "69aca101ec7a13b96544b0d004d56469ae08da521c7adc2d2401cf9a63769d79",
+  "english_endpoints": 12,
+  "native_1080_endpoints": 9,
+  "silent_motion_chapters": 7,
+  "audio_scene": "Metropolis",
+  "audio_lines": 8,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats15/en/Metropolis/videos/s09_metropolis/480p15/Metropolis.mp4",
+    "seconds": 308.332682,
+    "narration_sha256": "efe54801690f6a23bd35c51b97939d917cf060a2815c2b121cd5f3ae6661d61a",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 308 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 308 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

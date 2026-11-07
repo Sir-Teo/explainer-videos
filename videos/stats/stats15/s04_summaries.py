@@ -87,14 +87,14 @@ class Summaries(VoiceoverScene):
             step = ladder(self, rows, whys, keep=4, top=2.6, x=0.2, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                step(k, transform=False)
                 if k == 0:
                     self.play(FadeOut(intro), run_time=0.25)
-                step(k, transform=False)
         self.clear_scene()
 
     def intervals(self):
         d = load("summaries")
-        A, ax = self.axes_beta(center=(-2.2, 0.6, 0))
+        A, ax = self.axes_beta(center=(-2.2, 1.1, 0))
         xs = np.linspace(0, 0.7, 400)
         dist = stats.beta(3, 12)
         f = dist.pdf(xs)
@@ -112,7 +112,7 @@ class Summaries(VoiceoverScene):
             MathTex(rf"\text{{HPD:}}\ [{h0:.3f},\ {h1:.3f}]", font_size=28, color=OBS),
             label(r"the shortest 95\% interval: \ every point inside is more plausible than every point outside", font_size=22),
             label(rf"widths: \ {hi - lo:.3f} \ vs \ {h1 - h0:.3f}", font_size=22, color=GREY_A),
-        ), 12.4, 0.2, [0, -2.55, 0])
+        ), 12.4, 0.16, [0, -2.65, 0])
         with self.voiceover(
             "Intervals. <bookmark mark='a'/> The simplest ninety-five percent credible interval cuts two and a half percent of "
             "the posterior probability from each tail: from point oh four seven to point four two eight. <bookmark mark='b'/> "
@@ -145,6 +145,7 @@ class Summaries(VoiceoverScene):
         rows[1][2].set_color(S.ALT)
         whys = [why(r"quantiles map through monotone functions"), why(r"just transform the endpoints"),
                 why(r"densities change by the Jacobian (Part 5)"), why(r"a convention, \ stated")]
+        intro = label('Credible intervals depend on the reporting scale', font_size=36)
         with self.voiceover(
             "There's a trade-off. <bookmark mark='a'/> Quantiles pass through any increasing transformation, so the "
             "equal-tailed interval for the odds is just the equal-tailed interval for p, with its endpoints transformed. "
@@ -154,10 +155,13 @@ class Summaries(VoiceoverScene):
             "usual default for reporting; HPD intervals minimize length for this unimodal posterior on the scale you care about. "
             "Either way, say which."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def reading(self):
@@ -204,7 +208,7 @@ class Summaries(VoiceoverScene):
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                step(k, transform=False)
                 if k == 0:
                     self.play(FadeOut(intro), run_time=0.25)
-                step(k, transform=False)
         self.clear_scene()

@@ -1,11 +1,13 @@
-# Part 15: First Bayes — scientific source review
+# Part 15 English source and visual review
 
-Reviewed all 12 scenes, problem solutions, the 12 compute items (including a new analytic mixture update), local plotting helpers and the first-course Bayesian toolkit. All scenes import, all compute items have been refreshed, and seven new reference checks plus five existing toolkit checks pass **12 tests**.
+All 12 chapters received source review and endpoint inspection. Scientific corrections are recorded in [scientific-review.md](scientific-review.md). Current fingerprint: `69aca101ec7a13b96544b0d004d56469ae08da521c7adc2d2401cf9a63769d79`.
 
-The Challenger grid now extends from intercept -20 to 100 and slope -1.5 to 0.3, with 325,141 points. A wider, finer independent integration checks its mean and negative-slope probability. The corrected mean slope is -0.290869 rather than -0.286611 from the truncated grid. Trapezoidal weights replace sampled grid summaries and independent coordinate jitter. Grid and MCMC target the same proper posterior under the flat improper coefficient prior; the finite grid is explicitly numerical truncation.
+- All 12 endpoint captures pass runtime, bounds and blank-beat checks; translation warnings remain visible.
+- Nine native 1080p cases cover Machinery, Conjugacy, Summaries, Prediction, Priors, Grids, Metropolis, Frequency and Hypotheses. The interval chart and captions have clear vertical separation.
+- Seven silent motion chapters cover Machinery, Summaries, Prediction, Grids, Metropolis, Frequency and Hypotheses. All pass blank/sparse-frame scans. Context headings remain through the first derivation row, with persistent headings for initially sparse batch and transformed-draw explanations.
+- The actual narrated Metropolis preview is 308.333 seconds. All eight speech lines pass signal/alignment checks, recorded narration matches current source, and the blank/sparse scan is clean. Its contact sheet was inspected.
+- All 12 focused scientific/toolkit checks pass after visual repairs.
 
-The predictive and plug-in binomials now use the same posterior mean: their SDs are 1.917 and 1.515. Their variance difference is m(m-1) times the posterior variance, so one future Bernoulli trial agrees exactly with the plug-in mean. The tiny Paris-births probability uses the representable exact beta tail, and conjugate mixture weights and probabilities update analytically. Odds-ratio summaries use every retained MCMC draw rather than the displayed thinned subset. Density outlines and traces are clipped geometrically without flattening off-scale values.
+Receipts: [verification](verification.json), [endpoints](endpoints.json), [native cases](native-endpoints.json), [motion](motion.json), [speech](metropolis-audio.json), [tests](tests-final.txt).
 
-Other corrections qualify the pseudo-observation interpretation, continuous MAP loss, infinite exchangeability, regular posterior asymptotics, nonconstant-data requirements for the normal reference posterior, MCMC ergodicity and function-specific precision, prior-data conflict, proper priors for ordinary Bayes factors, and the restricted continuous p-value class behind the Sellke bound. The wrong-prior illustration now uses an attainable integer count. SBC requires independent conditional draws and appropriate tie handling; flat ranks alone do not prove correctness. Introductory headings support narration before formulas appear.
-
-English visual verification is next. Chinese translation tables, continuous listening/playback and final bilingual masters remain open.
+This completes the English source/visual pass. Chinese narration/caption tables, continuous listening and narrated playback, and final masters in both languages remain open. This is not bilingual production approval.

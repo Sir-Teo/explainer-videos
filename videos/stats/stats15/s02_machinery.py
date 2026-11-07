@@ -136,6 +136,7 @@ class Machinery(VoiceoverScene):
         rows[3][2].set_color(POST)
         whys = [why(r"update on the first data"), why(r"then on the second, \ with the first posterior as prior"),
                 why(r"conditional independence here; otherwise use $p(y_2\mid y_1,\theta)$"), why(r"learning is coherent")]
+        intro = label('Coherent updating gives the same posterior in batches', font_size=36)
         with self.voiceover(
             "<bookmark mark='a'/> Updating on the first piece of data gives a posterior. <bookmark mark='b'/> Use it as the "
             "prior for the second piece. <bookmark mark='c'/> The result is the same as updating on both at once, whenever the "
@@ -143,6 +144,8 @@ class Machinery(VoiceoverScene):
             "matter whether you learn from data one observation at a time, in batches, or all together, or in what order: "
             "you end in the same place. That's one sense in which Bayesian learning is coherent."
         ) as vo:
+            intro.scale_to_fit_width(min(intro.width, 12.5)).move_to([0, 3.2, 0])
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -158,6 +161,7 @@ class Machinery(VoiceoverScene):
             label(r"the price: \ a prior; \ the reward: \ direct statements about $\theta$", font_size=24, color=OBS),
             label(r"de Finetti (Part 5): \ infinitely exchangeable Bernoulli data are a mixture of IID laws", font_size=22, color=GREY_A),
         ), 12.4, 0.4, [0, 0, 0])
+        intro = label('Probability can describe uncertainty about a parameter', font_size=36)
         with self.voiceover(
             "What has changed? <bookmark mark='a'/> Since Part 8, the parameter has been a fixed number and the data random. "
             "<bookmark mark='b'/> A ninety-five percent confidence interval was a promise about a procedure, over repeated "
@@ -167,8 +171,11 @@ class Machinery(VoiceoverScene):
             "think a confidence interval makes. <bookmark mark='e'/> The price is a prior; the reward is a direct answer. "
             "<bookmark mark='f'/> And de Finetti's theorem from Part 5 says the prior isn't arbitrary decoration: an infinitely extendible exchangeable Bernoulli sequence has an IID mixture representation. Finite exchangeability alone does not guarantee it."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcdef"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
 
@@ -180,6 +187,7 @@ class Machinery(VoiceoverScene):
             label(r"Ramsey (1926), \ de Finetti (1937), \ Savage (1954): \ probability as coherent belief", font_size=24, color=POST),
             label(r"from about 1990: \ MCMC makes it computable \ (Gelfand \& Smith 1990)", font_size=24, color=OBS),
         ), 12.4, 0.44, [0, 0, 0])
+        intro = label('Bayesian inference has a long mathematical history', font_size=36)
         with self.voiceover(
             "A little history. <bookmark mark='a'/> Through the nineteenth century, Laplace's method, then called inverse "
             "probability, was simply how inference was done, in astronomy, geodesy and the social sciences. "
@@ -189,7 +197,10 @@ class Machinery(VoiceoverScene):
             "Finetti and Leonard Savage rebuilt the foundations, with probability as the coherent degree of belief of a person "
             "who acts on it. <bookmark mark='e'/> And from about 1990, Markov chain Monte Carlo, popularized in applied Bayesian statistics by Alan Gelfand and Adrian Smith, made a wider range of models practical. Earlier MCMC methods and applications predate their paper. Part 26 picks up the modern story."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()

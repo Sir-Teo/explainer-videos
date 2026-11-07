@@ -1,0 +1,138 @@
+{
+  "fingerprint": "69aca101ec7a13b96544b0d004d56469ae08da521c7adc2d2401cf9a63769d79",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 46
+      },
+      "input_record": "renders/qa/series/stats15/en/Hook/result.json",
+      "input_sha256": "9219ad50e39efd2ad0e62e44582551c7d2b6cb20732849e6bb732f288b1fa8d0"
+    },
+    {
+      "scene": "Machinery",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 55
+      },
+      "input_record": "renders/qa/series/stats15/en/Machinery/result.json",
+      "input_sha256": "71a3462ec3c223100b2015200134ca9caa892be5af122aef78325ca4cd38b0d8"
+    },
+    {
+      "scene": "Conjugacy",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 52
+      },
+      "input_record": "renders/qa/series/stats15/en/Conjugacy/result.json",
+      "input_sha256": "5162ad0668278a7dadb3146e35ce79b3860e1341dbfb32c168818d6908a57ba1"
+    },
+    {
+      "scene": "Summaries",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 50
+      },
+      "input_record": "renders/qa/series/stats15/en/Summaries/result.json",
+      "input_sha256": "37f03bee9ba55e96381fab7ab9bd52a3493d742cc45837a72e98490b6c79a24f"
+    },
+    {
+      "scene": "Prediction",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 48
+      },
+      "input_record": "renders/qa/series/stats15/en/Prediction/result.json",
+      "input_sha256": "be3e387ed07b941519a3e5ff7ec6e846353a4d6e6c249f5d440709c2f34d0072"
+    },
+    {
+      "scene": "Priors",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/series/stats15/en/Priors/result.json",
+      "input_sha256": "bd76317af73d3a3a1e2f278543354e2c60aa129658dba97d9998843797837d1c"
+    },
+    {
+      "scene": "NormalModel",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 36
+      },
+      "input_record": "renders/qa/series/stats15/en/NormalModel/result.json",
+      "input_sha256": "971c5aee39360823abeda0280c718c3077bd94befb32492c47e5fb0e3f4d7430"
+    },
+    {
+      "scene": "Grids",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 35
+      },
+      "input_record": "renders/qa/series/stats15/en/Grids/result.json",
+      "input_sha256": "a0f747e9e2467da9368c9f44ad3747f96b6041ea3568db2b172ed164c2f98a77"
+    },
+    {
+      "scene": "Metropolis",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 59
+      },
+      "input_record": "renders/qa/series/stats15/en/Metropolis/result.json",
+      "input_sha256": "e5541012e1465c2f954a6fdb9790eee3d08c3f958837b2adf7019c3ff4519195"
+    },
+    {
+      "scene": "Frequency",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 58
+      },
+      "input_record": "renders/qa/series/stats15/en/Frequency/result.json",
+      "input_sha256": "b6b56cc0d2077c2cd798d6379c985dca7cce9849a4a2eaa5a6e5d7e35ef30359"
+    },
+    {
+      "scene": "Hypotheses",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 59
+      },
+      "input_record": "renders/qa/series/stats15/en/Hypotheses/result.json",
+      "input_sha256": "27f96787cbbe0d3b0f2dfe84baa330419eb5b140ab0e233a6e56c982fa272f8c"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 7,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 62
+      },
+      "input_record": "renders/qa/series/stats15/en/Outro/result.json",
+      "input_sha256": "3f0ab7d88b378f350a2fef11f136981d2076bc265568823876a4a7a951ff0c2a"
+    }
+  ]
+}

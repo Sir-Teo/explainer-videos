@@ -1,0 +1,106 @@
+{
+ "video": "stats15",
+ "scene": "Metropolis",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 8,
+ "lines": [
+  {
+   "raw": "Chapter eight. When grids fail.",
+   "spoken": "Chapter eight. When grids fail.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/e568570327261f83.wav",
+   "duration": 2.35,
+   "tokens": 5,
+   "peak": 0.33148193359375,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Part 7 built a Markov chain whose long-run distribution is any target we like. Here's the target: the posterior. <bookmark mark='a'/> From the current point, propose a random step. <bookmark mark='b'/> Compute the ratio of the posterior at the proposal to the posterior here. The unknown normalizing constant, the integral we couldn't do, cancels: only likelihood times prior is needed. <bookmark mark='c'/> If the proposal is more probable, move there; if it's less probable, move there only with probability equal to the ratio. <bookmark mark='d'/> Record where you are, even if you stayed. That's the Metropolis algorithm of 1953, invented to simulate molecules at Los Alamos.",
+   "spoken": "Part 7 built a Markov chain whose long-run distribution is any target we like. Here's the target: the posterior. From the current point, propose a random step. Compute the ratio of the posterior at the proposal to the posterior here. The unknown normalizing constant, the integral we couldn't do, cancels: only likelihood times prior is needed. If the proposal is more probable, move there; if it's less probable, move there only with probability equal to the ratio. Record where you are, even if you stayed. That's the Metropolis algorithm of 1953, invented to simulate molecules at Los Alamos.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/18688ee3571397e8.wav",
+   "duration": 38.075,
+   "tokens": 98,
+   "peak": 0.44500732421875,
+   "issues": [],
+   "elapsed": 0.07,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Why does it work? <bookmark mark='a'/> With a symmetric proposal, the probability flow from theta to theta prime, in equilibrium, is the smaller of the two posterior values times the proposal density. <bookmark mark='b'/> That's symmetric, so it equals the flow back. <bookmark mark='c'/> Detailed balance, from Part 7: the posterior is the chain's stationary distribution. <bookmark mark='d'/> With irreducibility, appropriate recurrence and integrability, averages along the chain converge to posterior expectations, though successive draws are correlated, which is the price.",
+   "spoken": "Why does it work? With a symmetric proposal, the probability flow from theta to theta prime, in equilibrium, is the smaller of the two posterior values times the proposal density. That's symmetric, so it equals the flow back. Detailed balance, from Part 7: the posterior is the chain's stationary distribution. With irreducibility, appropriate recurrence and integrability, averages along the chain converge to posterior expectations, though successive draws are correlated, which is the price.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/877b598ffd3e5f3f.wav",
+   "duration": 29.4,
+   "tokens": 73,
+   "peak": 0.769073486328125,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "The step size matters, and trace plots show why. These are three chains on the Challenger posterior, each fifteen hundred steps of the slope. <bookmark mark='a'/> With tiny steps, nearly every proposal is accepted, but the chain creeps, wandering slowly: the five thousand retained draws, beyond the burn-in and longer than this displayed trace, have an estimated slope effective sample size of about twelve. <bookmark mark='b'/> With good steps, about forty-five percent are accepted and the trace looks like noise, the fuzzy caterpillar you want: an effective sample size of over two hundred. <bookmark mark='c'/> With huge steps, nearly every proposal lands somewhere improbable and is rejected; the chain sits still for long stretches. The theory of Roberts, Gelman and Gilks gives about 0.234 in a particular high-dimensional random-walk limit, not a universal target. In low dimensions, tune for function-specific Monte Carlo efficiency rather than acceptance alone.",
+   "spoken": "The step size matters, and trace plots show why. These are three chains on the Challenger posterior, each fifteen hundred steps of the slope. With tiny steps, nearly every proposal is accepted, but the chain creeps, wandering slowly: the five thousand retained draws, beyond the burn-in and longer than this displayed trace, have an estimated slope effective sample size of about twelve. With good steps, about forty-five percent are accepted and the trace looks like noise, the fuzzy caterpillar you want: an effective sample size of over two hundred. With huge steps, nearly every proposal lands somewhere improbable and is rejected; the chain sits still for long stretches. The theory of Roberts, Gelman and Gilks gives about 0.234 in a particular high-dimensional random-walk limit, not a universal target. In low dimensions, tune for function-specific Monte Carlo efficiency rather than acceptance alone.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/ecdaaae9dc1abbd3.wav",
+   "duration": 56.625,
+   "tokens": 141,
+   "peak": 0.705780029296875,
+   "issues": [],
+   "elapsed": 0.06,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "The Challenger posterior hides a second trap. <bookmark mark='a'/> In the original coordinates, intercept and slope, it's the long diagonal ridge of Part 14. A random walk with independent steps in each coordinate can't follow a ridge: steps along it are rare, and steps across it are rejected. This selected proposal gives an effective sample size of twelve. <bookmark mark='b'/> Centre the temperature at seventy degrees, so the intercept becomes the log-odds at seventy, and the ridge becomes a less correlated hill, through a shear rather than a rotation. The same algorithm, the same step budget, the same posterior: an effective sample size of over two hundred. <bookmark mark='c'/> Choosing coordinates in which the posterior is roughly round is the single most useful trick in practical MCMC, and Part 27 goes much further, with Hamiltonian Monte Carlo.",
+   "spoken": "The Challenger posterior hides a second trap. In the original coordinates, intercept and slope, it's the long diagonal ridge of Part 14. A random walk with independent steps in each coordinate can't follow a ridge: steps along it are rare, and steps across it are rejected. This selected proposal gives an effective sample size of twelve. Centre the temperature at seventy degrees, so the intercept becomes the log-odds at seventy, and the ridge becomes a less correlated hill, through a shear rather than a rotation. The same algorithm, the same step budget, the same posterior: an effective sample size of over two hundred. Choosing coordinates in which the posterior is roughly round is the single most useful trick in practical MCMC, and Part 27 goes much further, with Hamiltonian Monte Carlo.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/419f08d832f7adfa.wav",
+   "duration": 50.775,
+   "tokens": 131,
+   "peak": 0.481597900390625,
+   "issues": [],
+   "elapsed": 0.07,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> A chain must also find the posterior before it can explore it. This one starts at a slope of zero, no temperature effect at all, and takes a few dozen steps to drift into the region of high probability. <bookmark mark='b'/> Those early draws reflect the starting point, not the posterior, so they're thrown away: the burn-in, or warm-up. <bookmark mark='c'/> In practice you run several chains from scattered starting points and check that they end up agreeing, with diagnostics like the R-hat statistic of Part 27. A single chain that looks fine can still be stuck.",
+   "spoken": "A chain must also find the posterior before it can explore it. This one starts at a slope of zero, no temperature effect at all, and takes a few dozen steps to drift into the region of high probability. Those early draws reflect the starting point, not the posterior, so they're thrown away: the burn-in, or warm-up. In practice you run several chains from scattered starting points and check that they end up agreeing, with diagnostics like the R-hat statistic of Part 27. A single chain that looks fine can still be stuck.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/e841a9ab5d8ffc95.wav",
+   "duration": 30.95,
+   "tokens": 93,
+   "peak": 0.444488525390625,
+   "issues": [],
+   "elapsed": 0.05,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Run a longer chain: twenty thousand steps, the first two thousand discarded. Here are its draws of the two coefficients, a round cloud in the centred coordinates. <bookmark mark='b'/> Compare with the grid. The posterior mean of the slope: close estimates within Monte Carlo error; the grid is about minus point two nine one. The median probability of distress at thirty-one degrees: point nine nine nine nine both ways. The probability it exceeds ninety percent: point nine seven, both ways. <bookmark mark='c'/> The chain's eighteen thousand correlated draws are worth about five hundred independent ones, for the slope mean. Other summaries need their own effective sample sizes and Monte Carlo errors. <bookmark mark='d'/> The walk reproduces the grid, and unlike the grid it scales: in Part 27 the same idea handles models with thousands of parameters.",
+   "spoken": "Run a longer chain: twenty thousand steps, the first two thousand discarded. Here are its draws of the two coefficients, a round cloud in the centred coordinates. Compare with the grid. The posterior mean of the slope: close estimates within Monte Carlo error; the grid is about minus point two nine one. The median probability of distress at thirty-one degrees: point nine nine nine nine both ways. The probability it exceeds ninety percent: point nine seven, both ways. The chain's eighteen thousand correlated draws are worth about five hundred independent ones, for the slope mean. Other summaries need their own effective sample sizes and Monte Carlo errors. The walk reproduces the grid, and unlike the grid it scales: in Part 27 the same idea handles models with thousands of parameters.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/eb02a32bf631826d.wav",
+   "duration": 49.95,
+   "tokens": 130,
+   "peak": 0.691375732421875,
+   "issues": [],
+   "elapsed": 0.06,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "One more reason to like posterior draws. <bookmark mark='a'/> The chain gives a list of parameter values. <bookmark mark='b'/> Apply any function to each draw, and you have draws from that function's posterior: no delta method, no new derivation. <bookmark mark='c'/> The odds ratio for ten degrees colder is e to the minus ten beta one: its posterior median is about fifteen, with a ninety-five percent interval from about two to about three hundred and thirty, wider at the top than Part 14's profile interval, because a flat prior leaves the steep slopes plausible. <bookmark mark='d'/> And practical questions get direct answers: the posterior probability that ten degrees of cold multiplies the odds of distress by more than five.",
+   "spoken": "One more reason to like posterior draws. The chain gives a list of parameter values. Apply any function to each draw, and you have draws from that function's posterior: no delta method, no new derivation. The odds ratio for ten degrees colder is e to the minus ten beta one: its posterior median is about fifteen, with a ninety-five percent interval from about two to about three hundred and thirty, wider at the top than Part 14's profile interval, because a flat prior leaves the steep slopes plausible. And practical questions get direct answers: the posterior probability that ten degrees of cold multiplies the odds of distress by more than five.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/3f338e58b892057c.wav",
+   "duration": 41.35,
+   "tokens": 111,
+   "peak": 0.492340087890625,
+   "issues": [],
+   "elapsed": 0.07,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats15/en/Metropolis_motion/result.json",
+ "input_sha256": "6e28b5bba700d8c79828aa8448520237671fc919a79794099ac23c3aa6ff0e3f"
+}
