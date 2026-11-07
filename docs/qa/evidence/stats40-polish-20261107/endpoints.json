@@ -1,0 +1,193 @@
+{
+  "fingerprint": "a2a33fc65d5616dd6d135cd6c1102ce4f18b84606f34d61e6a613ea9266430c5",
+  "scope": "English sampled visual review; continuous playback/listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 14,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 28
+      },
+      "input_record": "renders/qa/series/stats40/en/Hook/result.json",
+      "input_sha256": "d0237e50f8ac37ef05638381ac5da437e29a02d149f5089d0f5e2f54a2d2248e"
+    },
+    {
+      "scene": "Lifetimes",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 37
+      },
+      "input_record": "renders/qa/series/stats40/en/Lifetimes/result.json",
+      "input_sha256": "d0f2e34023c4c565aa4e617ed43aa63cfc322de0c507ef025c72b402fa710c90"
+    },
+    {
+      "scene": "Censoring",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 57
+      },
+      "input_record": "renders/qa/series/stats40/en/Censoring/result.json",
+      "input_sha256": "8838acfad9b67bec1d90b2eea3ae1efc0af092af147f1f7b02a22fdec1c14c2b"
+    },
+    {
+      "scene": "KaplanMeier",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 36
+      },
+      "input_record": "renders/qa/series/stats40/en/KaplanMeier/result.json",
+      "input_sha256": "81703e40dfa4ee966ebc60f6bcc31f5d367c11c1c48e418c7425e400c2c1cf2c"
+    },
+    {
+      "scene": "Greenwood",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 54
+      },
+      "input_record": "renders/qa/series/stats40/en/Greenwood/result.json",
+      "input_sha256": "8585713930068f4c4dd7466e5b438015bb065f9559054970c0febd05055095e6"
+    },
+    {
+      "scene": "NelsonAalen",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 45
+      },
+      "input_record": "renders/qa/series/stats40/en/NelsonAalen/result.json",
+      "input_sha256": "d0f20b2127ea2f8695f4760c948dd7c0783f973403dc91dde179987d6d52e8e9"
+    },
+    {
+      "scene": "Counting",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 37
+      },
+      "input_record": "renders/qa/series/stats40/en/Counting/result.json",
+      "input_sha256": "5ee86a5acb6661d84ad55009b85d2e88a4927788214f035aa5b0089e5fca6e15"
+    },
+    {
+      "scene": "LogRank",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 36
+      },
+      "input_record": "renders/qa/series/stats40/en/LogRank/result.json",
+      "input_sha256": "3bc5671cf12f0efa4a071e17a2fd76c92f7353e940c47a3718d9820475b67c68"
+    },
+    {
+      "scene": "Cox",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 64
+      },
+      "input_record": "renders/qa/series/stats40/en/Cox/result.json",
+      "input_sha256": "2d94d815030866d488dd8afda2dcfe4e2dc3f49d2273ca470ead6fb14abfc06a"
+    },
+    {
+      "scene": "Checking",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 47
+      },
+      "input_record": "renders/qa/series/stats40/en/Checking/result.json",
+      "input_sha256": "3f6c703b27e8cd2f67cc673446fb23f3393c8182b44f22ba734ef5d9ec21710c"
+    },
+    {
+      "scene": "HazardRatios",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 53
+      },
+      "input_record": "renders/qa/series/stats40/en/HazardRatios/result.json",
+      "input_sha256": "ea84b6c6d1a4a57c750a267ec6b1d11d19cd5f4aa50069648a18e388822faeb7"
+    },
+    {
+      "scene": "Immortal",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 58
+      },
+      "input_record": "renders/qa/series/stats40/en/Immortal/result.json",
+      "input_sha256": "1a9b4c2b466205b721c08507e0e1eb7f9fe4ad402c9640a7d31638b33d41714b"
+    },
+    {
+      "scene": "Parametric",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 57
+      },
+      "input_record": "renders/qa/series/stats40/en/Parametric/result.json",
+      "input_sha256": "763556f7b1a3be33ff316cd98c78ead1a6edcc198db189f38e045c58b9ce7a1b"
+    },
+    {
+      "scene": "Competing",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 47
+      },
+      "input_record": "renders/qa/series/stats40/en/Competing/result.json",
+      "input_sha256": "dcfe21515feae16b46866a558043b2dbec1b8edc11a56b0bf1b9c2a8f8e082e1"
+    },
+    {
+      "scene": "Frailty",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 39
+      },
+      "input_record": "renders/qa/series/stats40/en/Frailty/result.json",
+      "input_sha256": "04b16bccf5bb5adca3076db5bbdfaa58cce8ef2dcd328380e067cfffd6f52088"
+    },
+    {
+      "scene": "Prediction",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 66
+      },
+      "input_record": "renders/qa/series/stats40/en/Prediction/result.json",
+      "input_sha256": "43a4b4979a44484c687d04430e90b4c9be505b3eee682d22dda4496a5a463786"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 11,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 61
+      },
+      "input_record": "renders/qa/series/stats40/en/Outro/result.json",
+      "input_sha256": "24378c767f5c8ccbf64a943ba9fb16b605d67d6ed86c3298bd7ef69b298a5694"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "part": "stats40",
+  "fingerprint": "a2a33fc65d5616dd6d135cd6c1102ce4f18b84606f34d61e6a613ea9266430c5",
+  "english_endpoints": 17,
+  "native_1080_endpoints": 16,
+  "silent_motion_chapters": 16,
+  "audio_scene": "Censoring",
+  "audio_lines": 7,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats40/en/Censoring/videos/s03_censoring/480p15/Censoring.mp4",
+    "seconds": 213.19999999999862,
+    "narration_sha256": "d5a7dbb65ff023845c72aaa2d9c19628fba55f4b819afac5447c71f2722e75c7",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 213 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 213 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

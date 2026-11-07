@@ -1,0 +1,182 @@
+{
+  "fingerprint": "a2a33fc65d5616dd6d135cd6c1102ce4f18b84606f34d61e6a613ea9266430c5",
+  "scope": "English sampled visual review; continuous playback/listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 14,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats40/en/Hook_motion/result.json",
+      "input_sha256": "ece31975158bb4712efc44d20f0ee83fcf0c598621006c64f72b042ef72fb88e",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 152 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 152 s\n"
+    },
+    {
+      "scene": "Lifetimes",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats40/en/Lifetimes_motion/result.json",
+      "input_sha256": "00284fa74cf3f0de67fa6e6d0f1948c8d95972fb8bb0e3c51f7a3dc6d955e934",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 205 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 205 s\n"
+    },
+    {
+      "scene": "Censoring",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats40/en/Censoring_motion/result.json",
+      "input_sha256": "8211cd536b233bccf31a4aaf5e6cf190568cdc630094df3f8ce48bd9f8e05e36",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 232 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 232 s\n"
+    },
+    {
+      "scene": "KaplanMeier",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats40/en/KaplanMeier_motion/result.json",
+      "input_sha256": "6da772d0b67883be192ce4b528e12950f0505c8966c286a0c8e5f7669e673c49",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 187 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 187 s\n"
+    },
+    {
+      "scene": "Greenwood",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats40/en/Greenwood_motion/result.json",
+      "input_sha256": "94854663a0e08d9b0bb28b1af38bbbc449d2791ce2de7cfe4b06911c74d2e56b",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 199 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 199 s\n"
+    },
+    {
+      "scene": "NelsonAalen",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats40/en/NelsonAalen_motion/result.json",
+      "input_sha256": "addc660c1f13547c0c70a660e9361d2adc8ec54f9e8fa0de52b80bd2569abfde",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 168 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 168 s\n"
+    },
+    {
+      "scene": "Counting",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats40/en/Counting_motion/result.json",
+      "input_sha256": "c55791acc0301b52b902262330fcbafbf9cceb3a51ec584e40f4953433128302",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 167 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 167 s\n"
+    },
+    {
+      "scene": "LogRank",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats40/en/LogRank_motion/result.json",
+      "input_sha256": "fc08c178c3d0b503ffa2c76bafe96c2e9ac46bc5ac737403954bb14adcf30e21",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 160 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 160 s\n"
+    },
+    {
+      "scene": "Cox",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats40/en/Cox_motion/result.json",
+      "input_sha256": "5de0f0395da3b45fbcd4a5348c2843285572cfd88614a1c663af232e4f68d0c4",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 270 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 270 s\n"
+    },
+    {
+      "scene": "Checking",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats40/en/Checking_motion/result.json",
+      "input_sha256": "275d7e378f0ee3224caeb43d8c5f47c78c299207dca4d26561f135f6d2acd6f4",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 176 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 176 s\n"
+    },
+    {
+      "scene": "HazardRatios",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats40/en/HazardRatios_motion/result.json",
+      "input_sha256": "826bf56b65cb347474b2b36424f3691493b6a6a94fb8933f1a40bdfc3d63ab3b",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 192 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 192 s\n"
+    },
+    {
+      "scene": "Immortal",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats40/en/Immortal_motion/result.json",
+      "input_sha256": "864c1fae6d5bf739ccc5a0e53e22763f5b529755ed383d6e584b22717bae2c25",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 243 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 243 s\n"
+    },
+    {
+      "scene": "Parametric",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats40/en/Parametric_motion/result.json",
+      "input_sha256": "4978f6aa752962b9aa2e15071657b9e74dc2715bb15559fd5b0cfc141b26777f",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 182 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 182 s\n"
+    },
+    {
+      "scene": "Competing",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats40/en/Competing_motion/result.json",
+      "input_sha256": "ab71d1dfb014a70d82edae657e64e36a354ff784991d9af00f9570aaa93d8d30",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 211 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 211 s\n"
+    },
+    {
+      "scene": "Frailty",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats40/en/Frailty_motion/result.json",
+      "input_sha256": "ef2f628bae002acec4d800e115917e69d86e0640067344f5a09402f24857fff5",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 189 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 189 s\n"
+    },
+    {
+      "scene": "Prediction",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats40/en/Prediction_motion/result.json",
+      "input_sha256": "c8e1856f94177d50e11274e80e6106c4008d6f6ce4d23d63d74fff7d7f2a84a8",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 244 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 244 s\n"
+    }
+  ]
+}

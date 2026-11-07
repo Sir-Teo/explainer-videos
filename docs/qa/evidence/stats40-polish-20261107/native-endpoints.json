@@ -1,0 +1,182 @@
+{
+  "fingerprint": "a2a33fc65d5616dd6d135cd6c1102ce4f18b84606f34d61e6a613ea9266430c5",
+  "scope": "English sampled visual review; continuous playback/listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 14,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 28
+      },
+      "input_record": "renders/qa/native1080/stats40/en/Hook/result.json",
+      "input_sha256": "2ea78c27ffc8de63261e88e245b26b82d2dbd22ef5e87ca38dfa2eb0a68e3b47"
+    },
+    {
+      "scene": "Lifetimes",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 37
+      },
+      "input_record": "renders/qa/native1080/stats40/en/Lifetimes/result.json",
+      "input_sha256": "07e902f184d04a621dbeb9e9bcd70fdded0c2f7c55426ba0075c64535b656ce9"
+    },
+    {
+      "scene": "Censoring",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 57
+      },
+      "input_record": "renders/qa/native1080/stats40/en/Censoring/result.json",
+      "input_sha256": "11f166734dafeeb2619eafc4e71ac65da31c6bac6ca786351986ad7888050c83"
+    },
+    {
+      "scene": "KaplanMeier",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 36
+      },
+      "input_record": "renders/qa/native1080/stats40/en/KaplanMeier/result.json",
+      "input_sha256": "822c9d2fe2f18fac8152825a8557b2bfe43478d878b4db559b598f5e44eb4aa0"
+    },
+    {
+      "scene": "Greenwood",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 54
+      },
+      "input_record": "renders/qa/native1080/stats40/en/Greenwood/result.json",
+      "input_sha256": "a85f94d8272623a5f1cca27696c7d380d29c1f6f3411c944f44139a276c305bf"
+    },
+    {
+      "scene": "NelsonAalen",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 45
+      },
+      "input_record": "renders/qa/native1080/stats40/en/NelsonAalen/result.json",
+      "input_sha256": "8f206e61d81faaa678f276815d10ef4b205a474cfc9d57d234b8cdf8bec39e25"
+    },
+    {
+      "scene": "Counting",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 37
+      },
+      "input_record": "renders/qa/native1080/stats40/en/Counting/result.json",
+      "input_sha256": "aa51e6962d37827f1412e207109552b51d9fc44d810a3d6f8c173b9d7fe2c32f"
+    },
+    {
+      "scene": "LogRank",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 36
+      },
+      "input_record": "renders/qa/native1080/stats40/en/LogRank/result.json",
+      "input_sha256": "a830ccda0e4ba276cac34234a778dc2fafac946212f81403092d7c30c3b1d264"
+    },
+    {
+      "scene": "Cox",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 64
+      },
+      "input_record": "renders/qa/native1080/stats40/en/Cox/result.json",
+      "input_sha256": "d79184a39bf3a1e7bbe9e69153a652832f20767074b69d540be48c09d14e612f"
+    },
+    {
+      "scene": "Checking",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 47
+      },
+      "input_record": "renders/qa/native1080/stats40/en/Checking/result.json",
+      "input_sha256": "6af0d719b8f808d6e9fa6fd7db40b23cca2046e980841ce98f1a15d1e4e98fa8"
+    },
+    {
+      "scene": "HazardRatios",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 53
+      },
+      "input_record": "renders/qa/native1080/stats40/en/HazardRatios/result.json",
+      "input_sha256": "6c41a724e49ab8ed0406341796e3e0cf26300dab13b604ecf7f91c73d71fc0b6"
+    },
+    {
+      "scene": "Immortal",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 58
+      },
+      "input_record": "renders/qa/native1080/stats40/en/Immortal/result.json",
+      "input_sha256": "b02f68fbfe6e306c7a2b438704889b38540459cc31b86748ba4e9e79eeef4605"
+    },
+    {
+      "scene": "Parametric",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 57
+      },
+      "input_record": "renders/qa/native1080/stats40/en/Parametric/result.json",
+      "input_sha256": "469f6c0cc84d77b6ee560cd548d7ea52e81954a88624633b769b952ddbc9df8d"
+    },
+    {
+      "scene": "Competing",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 47
+      },
+      "input_record": "renders/qa/native1080/stats40/en/Competing/result.json",
+      "input_sha256": "d3864c64e1537d3606a110add293ee90bdeeadad0e93212774fa969f4dce982e"
+    },
+    {
+      "scene": "Frailty",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 39
+      },
+      "input_record": "renders/qa/native1080/stats40/en/Frailty/result.json",
+      "input_sha256": "920198143276f8c09732193419d3c8be4504984855a6fa3b858679fbff9385be"
+    },
+    {
+      "scene": "Prediction",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 66
+      },
+      "input_record": "renders/qa/native1080/stats40/en/Prediction/result.json",
+      "input_sha256": "c4d1aacf81e9f74772b390478e12c6368598b58ffbc1ae9937e0aae9682977df"
+    }
+  ]
+}

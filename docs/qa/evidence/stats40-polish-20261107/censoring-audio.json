@@ -1,0 +1,95 @@
+{
+ "video": "stats40",
+ "scene": "Censoring",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 7,
+ "lines": [
+  {
+   "raw": "Chapter two. Censoring and truncation.",
+   "spoken": "Chapter two. Censoring and truncation.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/89da48d3636344b9.wav",
+   "duration": 3.2,
+   "tokens": 5,
+   "peak": 0.434326171875,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Four ways a lifetime can be partly hidden. <bookmark mark='b'/> Right censoring, the common one: we know only that the event had not happened by some time, because the study ended or the patient was lost. <bookmark mark='c'/> Left censoring: it had already happened before we looked. <bookmark mark='d'/> Interval censoring: it happened between two visits. <bookmark mark='e'/> And truncation, which is different: people whose event came too early never enter the study at all, so we do not even know they existed.",
+   "spoken": "Four ways a lifetime can be partly hidden. Right censoring, the common one: we know only that the event had not happened by some time, because the study ended or the patient was lost. Left censoring: it had already happened before we looked. Interval censoring: it happened between two visits. And truncation, which is different: people whose event came too early never enter the study at all, so we do not even know they existed.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/2e55ce359f0a78af.wav",
+   "duration": 24.9,
+   "tokens": 75,
+   "peak": 0.477386474609375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> With right censoring we see the smaller of the lifetime T and a censoring time C, and an indicator of which came first. <bookmark mark='b'/> The likelihood and regression analyses require censoring to be independent of the lifetime conditional on the covariates used, with adequate follow-up support. Unadjusted Kaplan-Meier needs independence at the population level being pooled; conditional independence alone is insufficient. <bookmark mark='c'/> Then the likelihood multiplies the density for each observed event and the survival function for each censored case, exactly the at least this long of the open rings. <bookmark mark='d'/> The assumption fails if the sickest patients drop out, or the healthiest stop coming to clinic, and the data alone cannot tell: it is the missing at random of Part forty-one, in disguise.",
+   "spoken": "With right censoring we see the smaller of the lifetime T and a censoring time C, and an indicator of which came first. The likelihood and regression analyses require censoring to be independent of the lifetime conditional on the covariates used, with adequate follow-up support. Unadjusted Kaplan-Meier needs independence at the population level being pooled; conditional independence alone is insufficient. Then the likelihood multiplies the density for each observed event and the survival function for each censored case, exactly the at least this long of the open rings. The assumption fails if the sickest patients drop out, or the healthiest stop coming to clinic, and the data alone cannot tell: it is the missing at random of Part forty-one, in disguise.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/a713992acaaadfd9.wav",
+   "duration": 47.4,
+   "tokens": 121,
+   "peak": 0.589599609375,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The World runs a cohort study: 4,000 adults aged forty to seventy-nine, followed for fifteen years. <bookmark mark='b'/> 1,086 deaths are seen, and the other 2,914 are censored: <bookmark mark='c'/> most reached the end of the study alive, and the rest moved away or stopped answering. <bookmark mark='d'/> Unlike any real study, the World also knows every lifetime, including those it did not see, so we can check each method against the truth.",
+   "spoken": "The World runs a cohort study: 4,000 adults aged forty to seventy-nine, followed for fifteen years. 1,086 deaths are seen, and the other 2,914 are censored: most reached the end of the study alive, and the rest moved away or stopped answering. Unlike any real study, the World also knows every lifetime, including those it did not see, so we can check each method against the truth.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/d51d3c4d0ab1f1d5.wav",
+   "duration": 26.25,
+   "tokens": 67,
+   "peak": 0.59185791015625,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> What share of the cohort survives ten years? The truth, in gold, is point seven eight six. <bookmark mark='b'/> Counting the censored as deaths gives point five nine, far too low. <bookmark mark='c'/> Dropping them, and using only people whose fate is known, is worse: point three two, because the dropped are mostly survivors. <bookmark mark='d'/> Counting them as alive to the end gives point eight two, too high. <bookmark mark='e'/> The Kaplan-Meier curve, in blue, closely follows the truth: point seven eight six. This agreement is empirical, under the simulator’s independent dropout; Kaplan-Meier is not exact in one finite sample.",
+   "spoken": "What share of the cohort survives ten years? The truth, in gold, is point seven eight six. Counting the censored as deaths gives point five nine, far too low. Dropping them, and using only people whose fate is known, is worse: point three two, because the dropped are mostly survivors. Counting them as alive to the end gives point eight two, too high. The Kaplan-Meier curve, in blue, closely follows the truth: point seven eight six. This agreement is empirical, under the simulator’s independent dropout; Kaplan-Meier is not exact in one finite sample.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/4d3c0279c40b9aeb.wav",
+   "duration": 34.3,
+   "tokens": 93,
+   "peak": 0.52252197265625,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Truncation appears as soon as we measure time by age. Someone enrolled at sixty-five is seen only because they survived to sixty-five. <bookmark mark='b'/> So the risk set at each age must contain only those who have entered and not yet left: delayed entry. <bookmark mark='c'/> Ignoring it treats everyone as at risk from forty, crediting them with years in which they could not have died in our data. <bookmark mark='d'/> Age can be a useful clock. Estimating survival from forty additionally requires entry to be independent of lifetime, possibly after appropriate adjustment.",
+   "spoken": "Truncation appears as soon as we measure time by age. Someone enrolled at sixty-five is seen only because they survived to sixty-five. So the risk set at each age must contain only those who have entered and not yet left: delayed entry. Ignoring it treats everyone as at risk from forty, crediting them with years in which they could not have died in our data. Age can be a useful clock. Estimating survival from forty additionally requires entry to be independent of lifetime, possibly after appropriate adjustment.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/3c72ac4b1ed36236.wav",
+   "duration": 32.55,
+   "tokens": 87,
+   "peak": 0.651702880859375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> A separate seeded demonstration generates lifetimes from forty and independent scheduled entry ages from forty to eighty. Only people alive at entry are observed, followed for at most fifteen years. The true survival from forty, in gold, has a median of 78. <bookmark mark='b'/> Ignoring delayed entry gives a curve that is far too optimistic, with a median of 82. <bookmark mark='c'/> Starting each person’s risk at entry closely follows the reference curve here. Frailty is generated at forty and survivor selection is retained; this is not the original World cohort, whose frailty is reset at recruitment.",
+   "spoken": "A separate seeded demonstration generates lifetimes from forty and independent scheduled entry ages from forty to eighty. Only people alive at entry are observed, followed for at most fifteen years. The true survival from forty, in gold, has a median of 78. Ignoring delayed entry gives a curve that is far too optimistic, with a median of 82. Starting each person’s risk at entry closely follows the reference curve here. Frailty is generated at forty and survivor selection is retained; this is not the original World cohort, whose frailty is reset at recruitment.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/00a21bf72867a63d.wav",
+   "duration": 36.925,
+   "tokens": 93,
+   "peak": 0.537445068359375,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats40/en/Censoring_motion/result.json",
+ "input_sha256": "8211cd536b233bccf31a4aaf5e6cf190568cdc630094df3f8ce48bd9f8e05e36"
+}
