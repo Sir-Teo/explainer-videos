@@ -30,7 +30,7 @@ class DP(VoiceoverScene):
         rows[3][2].set_color(SHRUNK)
         whys = [why(r"Ferguson (1973)"), why(r"for every partition of the space"), why(r"a centre and a concentration"),
                 why(r"conjugate: \ prior guess and data, \ weighted")]
-        intro = label('A prior predictive distribution supplies a model comparison', font_size=36).move_to([0, 3.3, 0])
+        intro = label('A Dirichlet process puts a prior on a random probability measure', font_size=36).move_to([0, 3.3, 0])
         if intro.width > 12.5:
             intro.width = 12.5
         with self.voiceover(

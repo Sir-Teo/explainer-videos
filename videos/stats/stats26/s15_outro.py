@@ -23,7 +23,7 @@ class Outro(VoiceoverScene):
     def recap(self):
         items = [
             (r"eight schools: \ neither 28 nor 7.7", PATH), (r"exchangeability motivates sharing; \ normality is a choice", PRIOR),
-            (r"$p(\tau \mid y)$ on a grid; \ A: \ 10 [$-2$, 31]", SHRUNK), (r"Jeffreys, \ reference, \ half-Cauchy", PRIOR),
+            (r"$p(\tau \mid y)$ on a grid; \ A: \ 10 [$-2$, 32]", SHRUNK), (r"Jeffreys, \ reference, \ half-Cauchy", PRIOR),
             (r"conjugacy: \ priors as pseudo-data", SHRUNK), (r"BvM: \ TV 0.08 $\to$ 0.008", HIT),
             (r"Bayes factors: \ Bartlett's warning", RES), (r"PEAR: \ $p = 0.0003$, \ BF 12 for $H_0$", RES),
             (r"Occam: \ evidence peaks at the simulated degree here", SHRUNK), (r"decisions; \ EVPI 2.20, \ EVSI 1.23", POST),
