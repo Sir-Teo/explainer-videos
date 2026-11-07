@@ -146,7 +146,7 @@ python tools/lecture_length.py stats55 --floor 50
      3/4. The score test attains the envelope (Neyman–Pearson in the limit experiment).
 7. **Half-lines.**
    - Brackets [1{x ≤ t_{j−1}}, 1{x ≤ t_j}] at quantiles with P-mass ≤ ε² have L₂(P) size ≤ ε; there are ⌈1/ε²⌉.
-   - ∫₀¹ √(log N_[](ε)) dε < ∞, so the class is Donsker (Ossiander).
+   - ∫₀¹ √(log N_{[]}(ε)) dε < ∞, so the class is Donsker (Ossiander).
    - Hölder-α on [0, 1]^d has log N_[] ≍ ε^{−d/α}: the sufficient entropy integral is finite when α>d/2 under a regular reference law such as uniform measure. Divergence of this test alone is not a converse Donsker theorem.
 8. **The median.**
    - Along dP_t = (1 + tg) dP, F_t(m_t) = 1/2. Differentiating: E[1{X ≤ m} g] + f(m) ṁ = 0, so ṁ = E[ψ̃ g] with
