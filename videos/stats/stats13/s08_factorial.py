@@ -61,11 +61,11 @@ class Factorial(VoiceoverScene):
             label(rf"then time alone: \ {s2[1]:.1f} min: \ {d['quality']:.1f}", font_size=24, color=S.TREAT),
             label(rf"the real best: \ 205$^\circ$C, \ 31 min: \ {d['optimum']:.0f}", font_size=24, color=EXACT),
             label(r"a diagonal ridge: \ the knobs interact", font_size=24, color=OBS),
-            label(r"one knob at a time can't see it", font_size=22, color=GREY_A),
+            label(r"one pass stops early; it does not estimate interaction", font_size=22, color=GREY_A),
         ), 5.2, 0.32, [3.9, 0.1, 0])
         tag = simulated_tag(r"the island bakery (hidden truth shown)", corner=DR)
         with self.voiceover(
-            "First, why asking one question at a time fails. <bookmark mark='a'/> The island's bakery wants the best bread. "
+            "First, why a single pass of one-factor-at-a-time optimization can fail. <bookmark mark='a'/> The island's bakery wants the best bread. "
             "Its quality depends on two knobs, oven temperature and baking time, through a surface it can't see; we'll show "
             "it, brightest where the bread is best. <bookmark mark='b'/> The baker starts at one eighty degrees and twenty "
             "minutes, and the bread is poor. <bookmark mark='c'/> Following the old aphorism, he varies one factor at a time. "
@@ -74,7 +74,7 @@ class Factorial(VoiceoverScene):
             "half minutes, quality seventy-nine and a half. He stops, satisfied. <bookmark mark='e'/> The real best is at two "
             "oh five degrees and thirty-one minutes, quality eighty-five. <bookmark mark='f'/> The bright ridge runs diagonally: "
             "a hotter oven wants a shorter bake. The two knobs interact. <bookmark mark='g'/> Moving one knob at a time, "
-            "along the grid lines, you can only crawl up a diagonal ridge, and you can easily stop too soon."
+            "along the grid lines, you can only crawl up a diagonal ridge, and you can easily stop too soon. Repeating coordinate searches can converge on this smooth surface, but this one pass did not."
         ) as vo:
             self.play(FadeIn(A), FadeIn(tag))
             vo.wait_until("a")
@@ -119,7 +119,7 @@ class Factorial(VoiceoverScene):
             "effect is the average change from the cool side to the hot side: fourteen points. <bookmark mark='d'/> The time "
             "effect, nineteen. <bookmark mark='e'/> And the interaction: the hotter oven gains twenty-nine points on a short "
             "bake but nothing on a long one, and half that change, minus fifteen, is the interaction. <bookmark mark='f'/> A big interaction is the diagonal ridge, "
-            "detected by four bakes. One factor at a time could never measure it, because it never visits the corners where "
+            "detected by four bakes. This baseline-and-one-change design cannot estimate the interaction, because it omits the corner where "
             "both knobs have moved."
         ) as vo:
             self.play(FadeIn(A), FadeIn(cells))
@@ -171,8 +171,8 @@ class Factorial(VoiceoverScene):
             "either withheld or applied. <bookmark mark='b'/> Every combination makes a two-to-the-three factorial: the eight "
             "corners of a cube. With two plots of each, sixteen plots. <bookmark mark='c'/> Frank Yates named each corner by "
             "the nutrients present: one in brackets for none, n for nitrogen alone, n p for both, up to n p k. "
-            "<bookmark mark='d'/> In our simulation, nitrogen truly adds six bushels, phosphate two, potash half a bushel, and "
-            "nitrogen and phosphate together add two more than their separate effects: an interaction. Here are the average "
+            "<bookmark mark='d'/> In our simulation, the true averaged high-minus-low effects are six bushels for nitrogen, two for phosphate and half a bushel for potash; "
+            "the NP interaction effect is two, half the four-bushel difference between the nitrogen effects at the two phosphate levels. Here are the average "
             "yields at each corner."
         ) as vo:
             self.play(Create(edges), FadeIn(axl), FadeIn(tag))
@@ -265,8 +265,8 @@ class Factorial(VoiceoverScene):
             "<bookmark mark='d'/> And a third time, one pass per factor. <bookmark mark='e'/> The top of the last column is "
             "the grand total; every other entry, divided by four, is an effect, in standard order: N, P, NP, K, NK, PK and "
             "NPK. Nitrogen six point two, phosphate three point oh, their interaction one point three; the rest are small. "
-            "Yates published it in 1937, in The Design and Analysis of Factorial Experiments. It's a fast Fourier transform "
-            "for the group of the cube's corners, thirty years before the FFT."
+            "Yates published it in 1937, in The Design and Analysis of Factorial Experiments. It's the Walsh-Hadamard transform "
+            "for the group of the cube's corners, later familiar in fast transform algorithms."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -338,7 +338,7 @@ class Factorial(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"Daniel (1959): \ sorted $|$effects$|$", font_size=24),
             label(r"pure noise: \ a line through 0", font_size=24),
-            label(r"N and P stand off it: \ real", font_size=24, color=OBS),
+            label(r"N and P stand off it: \ evidence of activity", font_size=24, color=OBS),
             label(r"NP: \ 1.34 vs SE 0.53, \ borderline", font_size=24),
             label(r"the tool for unreplicated designs", font_size=22, color=GREY_A),
         ), 4.6, 0.36, [4.4, 0.1, 0])
@@ -346,10 +346,10 @@ class Factorial(VoiceoverScene):
             "How do you judge seven effects at once? <bookmark mark='a'/> Cuthbert Daniel's 1959 idea: sort the absolute "
             "effects and plot them against the quantiles of a half-normal distribution. <bookmark mark='b'/> If no effect were "
             "real, all seven would be noise, and the points would lie roughly on a straight line through zero. "
-            "<bookmark mark='c'/> Nitrogen and phosphate stand far off the line: they're real. <bookmark mark='d'/> The NP "
+            "<bookmark mark='c'/> Nitrogen and phosphate stand far off the line: evidence of active effects, rather than a calibrated multiple-testing guarantee. <bookmark mark='d'/> The NP "
             "interaction is borderline here, one point three four against a standard error of point five three, about two and "
             "a half standard errors: real in truth, but just at the edge of what sixteen plots can see. <bookmark mark='e'/> "
-            "In industrial experiments, which often have no replicates, Daniel's plot is the main way to tell signal from noise."
+            "In industrial experiments, which often have no replicates, Daniel's plot is a useful screening plot, relying on effect sparsity rather than guaranteeing that every marked effect is real."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -365,7 +365,7 @@ class Factorial(VoiceoverScene):
         rows = [
             cmath(r"\text{OFAT, \ 16 plots}", r":", r"\text{4 settings} \times 4\ \text{plots};\ \ \mathrm{SE} = \sigma\sqrt{2/4} = 0.71\sigma", font_size=28),
             cmath(r"2^3\text{ factorial, \ 16 plots}", r":", r"\mathrm{SE} = \sigma\sqrt{2/8} = 0.50\sigma", font_size=28),
-            cmath(r"\text{efficiency}", r":", r"\text{OFAT needs twice the plots for the same precision}", font_size=28),
+            cmath(r"\text{efficiency}", r":", r"\text{twice the plots for these simple contrasts; estimands differ}", font_size=28),
             cmath(r"\text{and}", r":", r"\text{only the factorial sees the interactions}", font_size=28),
         ]
         rows[1][2].set_color(OBS)
@@ -375,10 +375,10 @@ class Factorial(VoiceoverScene):
             "So the factorial wins twice. <bookmark mark='a'/> With sixteen plots, one factor at a time would use four "
             "settings, the baseline plus one change per factor, four plots each. Each effect is a difference of two means of "
             "four: standard error point seven one sigma. <bookmark mark='b'/> The factorial compares eight plots with eight "
-            "for every effect: point five oh sigma. <bookmark mark='c'/> To match it, the one-factor design needs twice the "
+            "for every effect: point five oh sigma. <bookmark mark='c'/> Under an additive mean model these target the same effects, and the one-factor design needs twice the "
             "plots. Fisher called this hidden replication: every plot replicates every comparison. <bookmark mark='d'/> And "
             "only the factorial measures interactions. Fisher added a third advantage: because each effect is averaged over "
-            "the other factors' levels, its conclusions hold over a wider range of conditions. That's the questionnaire."
+            "the other factors' levels, its reported main effects average over the tested factor combinations; interactions still require reporting simple effects. That's the questionnaire."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.0, buff=0.65, edge=6.9)
             for k, m_ in enumerate("abcd"):

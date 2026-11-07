@@ -78,19 +78,22 @@ class Blocking(VoiceoverScene):
         ], font_size=24, col_buff=0.55, row_buff=0.22, colors=[GREY_B, BLOCK, OBS, RES]).move_to([0, -0.6, 0])
         foot = fit_rows(VGroup(
             label(r"the same 24 numbers, \ the same treatment SS", font_size=24),
-            label(r"the blocks take 768 of the 820, \ out of the error and into a row of their own", font_size=24, color=BLOCK),
+            label(r"the blocks take 829 of the 859 residual SS, \ into a row of their own", font_size=24, color=BLOCK),
         ), 12.0, 0.22, [0, -2.7, 0])
+        intro = label('Analyse the same harvest with and without its blocks', font_size=36)
         with self.voiceover(
             "Analyse the harvest two ways. <bookmark mark='a'/> Ignore the blocks, and run Chapter three's one-way analysis. "
-            "The treatment sum of squares is twenty-five, but the residual is nearly eight hundred: the soil's slope is in the "
-            "error. F is point two one, p point eight nine. Nothing to see. <bookmark mark='b'/> Now include the blocks, as the "
-            "design says we must. The block row takes seven hundred and sixty-eight of the sum of squares. The treatment sum of "
-            "squares is exactly the same twenty-five, but the residual has fallen to twenty-six, the error mean square from "
-            "forty to one point seven. F is four point nine four, p point zero one four. <bookmark mark='c'/> The same "
+            "The treatment sum of squares is ten point nine, but the residual is eight hundred and fifty-nine: the soil's slope is in the "
+            "error. F is point zero eight, p point nine seven. Nothing to see. <bookmark mark='b'/> Now include the blocks, as the "
+            "design says we must. The block row takes eight hundred and twenty-nine of the sum of squares. The treatment sum of "
+            "squares is exactly the same ten point nine, but the residual has fallen to thirty, the error mean square from "
+            "forty-three to two point zero one. F is one point eight one, p point one nine. This is the first seeded harvest, chosen before seeing its result. Better precision still does not guarantee significance. <bookmark mark='c'/> The same "
             "twenty-four numbers, the same treatment comparison. <bookmark mark='d'/> The difference is that the design "
             "measured the soil, and the analysis took it out of the error."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(t1, lag_ratio=0.1))
             vo.wait_until("b")
             self.play(FadeIn(t2, lag_ratio=0.1))
@@ -121,12 +124,12 @@ class Blocking(VoiceoverScene):
             label(r"the gain is the soil's variation between blocks", font_size=22, color=GREY_A),
         ), 5.0, 0.34, [4.3, 0.2, 0])
         with self.voiceover(
-            "Is that one harvest typical? <bookmark mark='a'/> Repeat each design four thousand times on this field. "
+            "The first harvest did not detect the real differences. How often does each design succeed? <bookmark mark='a'/> Repeat each design four thousand times on this field. "
             "<bookmark mark='b'/> The completely randomized design, analysed one way, detects the treatment differences ten "
             "percent of the time. The block design detects them seventy-four percent of the time. <bookmark mark='c'/> The "
             "average error mean square falls from thirty-three to two point two five. <bookmark mark='d'/> Since variance "
             "falls like one over the number of plots, the block design is about as precise as a completely randomized one "
-            "with fifteen times as many plots. <bookmark mark='e'/> Blocking costs nothing but thought, and here it's worth "
+            "with fifteen times as many plots. <bookmark mark='e'/> Blocking also costs planning and error degrees of freedom; here its precision gain is worth "
             "fifteen fields."
         ) as vo:
             self.play(FadeIn(A))
@@ -150,9 +153,9 @@ class Blocking(VoiceoverScene):
         ]
         rows[3][2].set_color(OBS)
         whys = [why(r"additive: \ a block shifts every treatment equally"), why(r"three perpendicular pieces"),
-                why(r"the error is the treatment $\times$ block interaction"), why(r"the block effects $\beta_b$ cancel exactly")]
+                why(r"unreplicated: noise and treatment $\times$ block variation mix"), why(r"the block effects $\beta_b$ cancel exactly")]
         with self.voiceover(
-            "The model behind the block design. <bookmark mark='a'/> A yield is a grand mean, plus a treatment effect, plus a "
+            "The additive model behind the block design. Its exact F reference assumes independent Gaussian errors of equal variance; unreplicated interactions cannot be separately estimated. <bookmark mark='a'/> A yield is a grand mean, plus a treatment effect, plus a "
             "block effect, plus noise. The block effect shifts every treatment in that block by the same amount. "
             "<bookmark mark='b'/> The total sum of squares now splits into three perpendicular pieces: treatments, blocks and "
             "error. <bookmark mark='c'/> So do the degrees of freedom. The error is whatever's left: how far the treatment "
@@ -207,23 +210,23 @@ class Blocking(VoiceoverScene):
         d = load("blocking")
         rows = [
             cmath(r"\text{paired } t", r"=", rf"\bar d\,/\,(s_d/\sqrt{{15}}) = {d['zea_t']:.2f},\quad p = {d['zea_p']:.4f}", font_size=32),
-            cmath(r"\text{under } H_0", r":", r"\text{each pair's two labels were equally likely swapped}", font_size=30),
+            cmath(r"\text{under } H_0", r":", r"\text{null model: independent, symmetric paired differences}", font_size=30),
             cmath(r"2^{15}", r"=", r"32{,}768\ \text{sign patterns}", font_size=32),
             cmath(r"\#\{\textstyle\sum \pm|d_i| \ge \sum d_i\}", r"=", rf"{d['zea_count']}\quad\Rightarrow\quad p = 2 \times \tfrac{{{d['zea_count']}}}{{32768}} = {d['zea_p_perm']:.3f}", font_size=30),
         ]
         rows[3][2].set_color(OBS)
-        whys = [why(r"the analysis that respects the pairs"), why(r"Fisher's view: \ the randomization within each block"),
+        whys = [why(r"the analysis that respects the pairs"), why(r"documented randomization or a sign-symmetry assumption"),
                 why(r"every way the pairs could have been labelled"), why(r"Fisher, \ \emph{The Design of Experiments} (1935), \ ch.~3")]
         with self.voiceover(
             "<bookmark mark='a'/> The analysis must respect the blocks: compare within each pair. The paired t statistic is two "
             "point one five, with p just under point zero five. <bookmark mark='b'/> Fisher re-analysed Darwin's data in 1935 "
             "as a randomization test within blocks. If crossing did nothing, each pair's two labels could equally well have "
             "been swapped, which flips the sign of that pair's difference. <bookmark mark='c'/> Fifteen pairs give two to the "
-            "fifteenth, thirty-two thousand seven hundred and sixty-eight, sign patterns. <bookmark mark='d'/> Eight hundred "
+            "fifteenth, thirty-two thousand eight hundred and twenty-nine, sign patterns. <bookmark mark='d'/> Eight hundred "
             "and sixty-three of them give a total at least as large as Darwin's, so the two-sided p-value is point zero five "
             "three, close to the t-test's. Part 10 met this test; here it's the analysis that matches a block design. Darwin "
-            "hadn't randomized which seedling went where in the pot, so here the test rests on assuming that the placement "
-            "didn't matter."
+            "hadn't randomized which seedling went where in the pot, so this historical sign-flip calculation assumes independent differences with signs equally likely under the null; assuming merely that placement "
+            "didn't matter is insufficient on its own."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.65, edge=6.9)
             for k, m_ in enumerate("abcd"):

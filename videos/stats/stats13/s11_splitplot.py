@@ -86,7 +86,7 @@ class SplitPlot(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> The model has two error terms. Each whole plot has its own random error, w, shared by its four "
             "subplots: the soil of that strip, the way its channel ran. Each subplot also has its own error, e. "
-            "<bookmark mark='b'/> Two strata of error, sigma w and sigma. <bookmark mark='c'/> Irrigation is compared between "
+            "<bookmark mark='b'/> Two strata of error, sigma w and sigma, taken independent and Gaussian here for the exact F references. <bookmark mark='c'/> Irrigation is compared between "
             "whole plots, so its comparison carries the whole-plot error: the variance involves sigma w squared, divided by "
             "the number of blocks, just four. <bookmark mark='d'/> Varieties are compared within whole plots, so w cancels, "
             "and only the small subplot error remains. The split plot measures the subplot factor precisely, and the "
@@ -187,7 +187,7 @@ class SplitPlot(VoiceoverScene):
             cmath(r"\mathbb E[\text{MS}_{\text{irrigation}} \mid H_0]", r"=", r"\sigma^2 + 4\sigma_w^2 = 17", font_size=32),
             cmath(r"\mathbb E[\text{MS}_{\text{subplot}}]", r"=", r"\sigma^2 = 1", font_size=32),
             cmath(r"\text{CRD error}", r"=", r"\tfrac{1}{24}\big(3\,\text{MS}_{\text{block}} + 3\,\text{MS}_{\text{whole plot}} + 18\,\text{MS}_{\text{subplot}}\big)", font_size=28),
-            cmath(r"\mathbb E[\text{CRD error}]", r"\approx", r"(3 \cdot 25 + 3 \cdot 17 + 18 \cdot 1)/24 = 6", font_size=30),
+            cmath(r"\mathbb E[\text{CRD error}]", r"=", r"(3 \cdot 25 + 3 \cdot 17 + 18 \cdot 1)/24 = 6", font_size=30),
         ]
         rows[2][2].set_color(RES)
         rows[3][2].set_color(RES)
@@ -200,7 +200,7 @@ class SplitPlot(VoiceoverScene):
             "seventeen. <bookmark mark='b'/> The subplot error estimates only sigma squared, one. <bookmark mark='c'/> The "
             "completely randomized analysis pools everything left over into one error: three degrees of freedom of blocks, "
             "three of whole-plot error, and eighteen of subplot error. <bookmark mark='d'/> Dominated by the subplots, it "
-            "estimates about six, not seventeen. So with no effect at all, its F averages nearly three, and it's judged "
+            "estimates about six, not seventeen. So with no effect at all, its ratio of expected mean squares is nearly three; this is not the exact expectation of the ratio, and it's judged "
             "against an F distribution with twenty-four denominator degrees of freedom instead of three. Both mistakes push "
             "the same way."
         ) as vo:

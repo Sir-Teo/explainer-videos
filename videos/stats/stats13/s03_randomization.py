@@ -33,8 +33,9 @@ class Randomization(VoiceoverScene):
         whys = [why(r"two potential yields: \ Neyman (1923)"), why(r"one of them, \ chosen by the randomization"),
                 why(r"Fisher's sharp null: \ the variety does nothing, \ anywhere"),
                 why(r"so every other labelling was equally likely to have happened")]
+        intro = label('The assignment mechanism supplies the null distribution', font_size=36)
         with self.voiceover(
-            "Fisher's argument needs no model of the soil at all. <bookmark mark='a'/> Each plot has two potential yields: what "
+            "Fisher's argument needs no model of the soil, assuming no interference between plots and well-defined treatments. <bookmark mark='a'/> Each plot has two potential yields: what "
             "it would give with variety A, and what it would give with B. Jerzy Neyman wrote experiments this way in 1923. "
             "<bookmark mark='b'/> We see only one of the two, the one the randomization chose. <bookmark mark='c'/> Now "
             "suppose the variety does nothing whatever, on any plot: each plot's two potential yields are equal. That's "
@@ -42,9 +43,12 @@ class Randomization(VoiceoverScene):
             "twenty yields we harvested would have been exactly the same under any other labelling. The yields are fixed "
             "numbers; the only randomness is in which labels went where, and we chose those labels ourselves, by lot."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.65, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -151,7 +155,7 @@ class Randomization(VoiceoverScene):
         b1 = hist_bars(A1.ax, e1, np.histogram(dh, e1)[0], color=S.WORLD, opacity=0.8)
         b2 = hist_bars(A2.ax, e2, np.histogram(di, e2)[0], color=S.WORLD, opacity=0.8)
         rows = fit_rows(VGroup(
-            label(r"200 of the World's adults, \ split 100 / 100 by lot, \ 5,000 times", font_size=24),
+            label(r"200 of the World's adults, \ split 100 / 100 by lot, \ 5,000 times (1,500 shown)", font_size=24),
             MathTex(rf"\text{{SD of the height gap}}\ {d['sd_h']:.2f}\ \text{{cm;\ \ income gap}}\ {d['sd_i'] / 1000:.1f}\ \text{{thousand}}", font_size=26),
             label(rf"beyond two SDs: \ {100 * d['big_h']:.1f}\% of splits, \ as chance says", font_size=24, color=OBS),
             label(r"nobody measured these: \ randomization balances every variable at once, \ on average", font_size=24, color=OBS),
@@ -162,7 +166,7 @@ class Randomization(VoiceoverScene):
             "World's adults, and split them a hundred and a hundred by lot, five thousand times, as if for a trial. "
             "<bookmark mark='b'/> The two groups' mean heights differ by a centimetre or so, with a standard deviation of one "
             "point three; their mean incomes differ by a few thousand. <bookmark mark='c'/> Splits more than two standard "
-            "deviations apart occur four point eight percent of the time: exactly the rate chance predicts, so the test's "
+            "deviations apart occur four point eight percent of the time: close to a normal benchmark, while the randomization distribution remains the actual yardstick, so the test's "
             "p-value already accounts for them. <bookmark mark='d'/> We never told the randomizer about height or income. "
             "It balances them anyway, along with blood pressure, diet, genes and everything else, not perfectly in any one "
             "split, but in a way whose imperfection is known."
@@ -213,7 +217,7 @@ class Randomization(VoiceoverScene):
     def why_t(self):
         rows = [
             cmath(r"p_{\text{rand}}", r"=", r"\frac{\#\{\text{labellings with } |\Delta| \ge |\Delta_{\text{obs}}|\}}{\binom{n}{n/2}}", font_size=34),
-            cmath(r"\text{large } n", r":", r"\text{the randomization distribution of } t \approx t_{n-2}", font_size=32),
+            cmath(r"\text{large, regular samples}", r":", r"\text{studentized randomization }t\approx N(0,1)\approx t_{n-2}", font_size=32),
             cmath(r"\text{so}", r":", r"p_t \approx p_{\text{rand}}\ \text{ without normal errors}", font_size=32),
             cmath(r"\text{too many labellings}", r":", r"\text{sample 10{,}000 of them (Part 10)}", font_size=32),
         ]
@@ -225,9 +229,9 @@ class Randomization(VoiceoverScene):
             "So the logic of a randomized experiment is self-contained. <bookmark mark='a'/> The p-value is a count: the "
             "share of possible labellings that give a difference at least as extreme as the one observed. The only "
             "probability in it is the experimenter's own coin. <bookmark mark='b'/> In the 1930s Eden and Yates checked it "
-            "on real wheat data, and Pitman and Welch proved it: for moderate samples, the randomization distribution of "
-            "the t statistic is close to Student's t distribution. <bookmark mark='c'/> So the familiar t-test and F-test "
-            "are justified by the design, even when the errors aren't normal. <bookmark mark='d'/> When the labellings are "
+            "on real wheat data. Later theory clarifies that under finite-variance and no-dominant-observation conditions, the large-sample studentized randomization distribution of "
+            "the t statistic approaches a standard normal, close to a large-df t reference. <bookmark mark='c'/> So the familiar t-test and F-test "
+            "can be useful approximations without normal errors under these conditions. Exact finite-sample t and F references still need their model assumptions. <bookmark mark='d'/> When the labellings are "
             "too many to count, sample ten thousand of them at random, as in Part 10. On the Coverage Board, a randomization "
             "test on skewed data keeps its five percent promise, as we'll see at the end of this part."
         ) as vo:

@@ -27,7 +27,7 @@ class Hook(VoiceoverScene):
                           fill_color=FieldPlot.colour(b + g.normal(0, 2), 12, 40), fill_opacity=0.95)
             strips.add(r)
         strips.arrange(RIGHT, buff=0.06).move_to([0, -1.6, 0])
-        names = label(r"strips: \ no manure, \ farmyard manure, \ N, \ P, \ K, \ and their combinations", font_size=22,
+        names = label(r"schematic strips and colours: \ no manure, \ farmyard manure, \ N, \ P, \ K, \ combinations", font_size=22,
                       color=GREY_A).next_to(strips, DOWN, buff=0.25)
         with self.voiceover(
             "<bookmark mark='a'/> In 1843 John Bennet Lawes, who had made a fortune from artificial fertilizer, and the "
@@ -54,7 +54,7 @@ class Hook(VoiceoverScene):
             label(r"\emph{Studies in Crop Variation I} \ (1921): \ the Broadbalk yields, \ 1852--1918", font_size=24),
             label(r"the weather, \ the weeds, \ the drift of the soil, \ a change of variety: \ all tangled with the manures", font_size=24,
                   color=RES),
-            label(r"the records could describe, \ but they could not decide", font_size=26, color=OBS),
+            label(r"the records needed assumptions to identify manure effects", font_size=26, color=OBS),
             label(r"a job he is said to have called \ ``raking over the muck heap''", font_size=22, color=GREY_A),
         ), 12.4, 0.32, [0, -1.2, 0])
         with self.voiceover(
@@ -63,7 +63,7 @@ class Hook(VoiceoverScene):
             "Crop Variation, analysed the Broadbalk yields from 1852 onward. He found slow trends, cycles and the effects of "
             "rainfall. <bookmark mark='c'/> But every comparison was tangled: a strip that did well might have had the better "
             "soil, the drier corner, fewer weeds, or a later variety of wheat. <bookmark mark='d'/> Seventy years of "
-            "observations could describe what had happened. They could not decide what a manure does. <bookmark mark='e'/> "
+            "observations could describe what had happened. They could not isolate what a manure does without additional assumptions about soil, weather and the changing practices. <bookmark mark='e'/> "
             "Fisher is said to have described the job as raking over the muck heap."
         ) as vo:
             vo.wait_until("a")

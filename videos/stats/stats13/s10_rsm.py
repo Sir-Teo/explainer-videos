@@ -28,10 +28,11 @@ class Surface(VoiceoverScene):
                           r"pressure, \ time and concentrations; \ find the best settings in as few runs as possible", color=S.POST,
                           width=10.6, font_size=22).move_to([0, 1.3, 0])
         rows = fit_rows(VGroup(
-            label(r"in a factory, \ runs are cheap and quick: \ experiment sequentially", font_size=24),
+            label(r"in a factory, \ runs can be quicker than field trials: \ experiment sequentially", font_size=24),
             label(r"far from the top, \ the surface looks like a plane: \ fit one, \ and climb", font_size=24, color=S.POST),
             label(r"near the top, \ it looks like a quadratic: \ fit one, \ and find its peak", font_size=24, color=OBS),
         ), 12.4, 0.3, [0, -1.7, 0])
+        intro = label('Sequential experiments fit a local response surface', font_size=36)
         with self.voiceover(
             "Agriculture gets one harvest a year. Industry can run an experiment every afternoon. <bookmark mark='a'/> In "
             "1951 George Box, a chemist turned statistician, and K. B. Wilson, both at Imperial Chemical Industries, "
@@ -41,7 +42,9 @@ class Surface(VoiceoverScene):
             "Near the top, the surface looks like a quadratic bowl, upside down: fit a quadratic, and find its peak. Let's give "
             "the island's baker the method."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc, shift=UP * 0.2))
             for k, m_ in enumerate("bcd"):
                 vo.wait_until(m_)
@@ -153,9 +156,9 @@ class Surface(VoiceoverScene):
             "<bookmark mark='a'/> Stage three: Box and Wilson's central composite design, centred on the best point found. "
             "<bookmark mark='b'/> A small factorial square, <bookmark mark='c'/> plus four axial points, out along each axis at "
             "plus or minus root two in coded units, so all eight lie on a circle. <bookmark mark='d'/> Plus five bakes at the "
-            "centre. <bookmark mark='e'/> Thirteen bakes, with three levels of each factor along the axes: enough to fit a full "
+            "centre. <bookmark mark='e'/> Thirteen bakes, with five distinct levels of each factor: enough to fit a full "
             "quadratic, with its curvatures and its interaction. <bookmark mark='f'/> Putting the axial points at root two "
-            "makes the design rotatable: the prediction is equally precise in every direction from the centre."
+            "makes the design rotatable: under independent equal-variance errors, fitted-mean prediction variance depends only on the distance from the centre in coded units."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")

@@ -44,7 +44,7 @@ class Optimal(VoiceoverScene):
         ), 4.6, 0.36, [4.5, 0.1, 0])
         with self.voiceover(
             "Experiments also choose where to measure. <bookmark mark='a'/> Suppose we'll fit a straight line through ten "
-            "observations, and we may choose the doses anywhere from minus one to one. <bookmark mark='b'/> The slope's "
+            "observations, and we may choose the doses anywhere from minus one to one. <bookmark mark='b'/> With independent equal-variance errors, the slope's "
             "variance is sigma squared over the spread of the x's, Part 12. <bookmark mark='c'/> Spread evenly, the slope's "
             "standard error is point five oh sigma. <bookmark mark='d'/> Put half the observations at each end, and it's "
             "point three two. <bookmark mark='e'/> That's as good as two and a half times as many evenly spread observations. "
@@ -105,7 +105,7 @@ class Optimal(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> The model: a quadratic in x, with x anywhere from minus one to one. <bookmark mark='b'/> The "
             "coefficients' covariance is sigma squared over n times the inverse of M, the information matrix per observation, "
-            "built from the vectors one, x, x squared at the design points. A good design makes M large. But M is a matrix: "
+            "built from the vectors one, x, x squared at the design points; the design has full column rank and independent equal-variance errors. A good design makes M large. But M is a matrix: "
             "large in what sense? <bookmark mark='c'/> The most popular answer: make its determinant as large as possible. "
             "That's D-optimality, D for determinant. <bookmark mark='d'/> The determinant measures the volume of the joint "
             "confidence ellipsoid for all three coefficients: the bigger det M, the smaller the ellipsoid."
@@ -193,7 +193,7 @@ class Optimal(VoiceoverScene):
     def equivalence(self):
         rows = [
             cmath(r"d(x, \xi)", r"=", r"f(x)^\top M(\xi)^{-1} f(x)", font_size=34),
-            cmath(r"\int d(x, \xi)\, \xi(dx)", r"=", r"\mathrm{tr}\big(M^{-1}M\big) = p\quad\text{for every design}", font_size=30),
+            cmath(r"\int d(x, \xi)\, \xi(dx)", r"=", r"\mathrm{tr}\big(M^{-1}M\big) = p\quad\text{for nonsingular }M", font_size=30),
             cmath(r"\xi^*\ \text{D-optimal}", r"\iff", r"\max_x d(x, \xi^*) = p", font_size=34),
             cmath(r"\text{D-optimal}", r"=", r"\text{G-optimal (Smith's criterion)}", font_size=32),
         ]
@@ -203,11 +203,11 @@ class Optimal(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> Write the variance function as f transpose M inverse f. <bookmark mark='b'/> Averaged over the "
             "design's own points, it's the trace of M inverse times M: always p, the number of parameters, for any design "
-            "whatever. So the maximum can't be less than p. <bookmark mark='c'/> Kiefer and Wolfowitz's equivalence theorem of "
-            "1960: a design is D-optimal exactly when its maximum is p, reached at its support points. <bookmark mark='d'/> So "
+            "with nonsingular information. So the maximum can't be less than p. <bookmark mark='c'/> Kiefer and Wolfowitz's equivalence theorem of "
+            "1960, for approximate designs with freely chosen probability weights on a compact design space: a design is D-optimal exactly when its maximum is p, reached at its support points. <bookmark mark='d'/> So "
             "maximizing the determinant, a statement about the coefficients, and minimizing the worst prediction variance, "
             "Smith's 1918 criterion, give the same design. It also gives a practical check: compute the variance function, "
-            "and if it ever exceeds p, the design can be improved by moving weight toward that x."
+            "and if it ever exceeds p, moving weight toward that x can improve the approximate design. An exact finite-run design must also respect integer allocation constraints."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):

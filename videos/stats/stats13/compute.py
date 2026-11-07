@@ -71,6 +71,51 @@ def nest(obj):
 EFFECT = 2.0  # variety B yields 2 bushels more than A, on every plot
 
 
+def clipped_segments(xs, ys, rectangle):
+    """Clip line segments to a rectangle without flattening off-scale values."""
+    xmin, xmax, ymin, ymax = rectangle
+    points = np.column_stack((xs, ys))
+    result = []
+    for start, end in zip(points[:-1], points[1:]):
+        if not np.isfinite([start, end]).all():
+            continue
+        delta = end - start
+        lo, hi = 0.0, 1.0
+        for k, lower, upper in ((0, xmin, xmax), (1, ymin, ymax)):
+            if delta[k] == 0:
+                if not lower <= start[k] <= upper:
+                    hi = -1
+                    break
+            else:
+                a, b = sorted(((lower - start[k]) / delta[k], (upper - start[k]) / delta[k]))
+                lo, hi = max(lo, a), min(hi, b)
+        if lo <= hi:
+            result.append((start + lo * delta, start + hi * delta))
+    return result
+
+
+def histogram_density(values, edges):
+    """Density per full sample; observations outside the viewport retain their mass."""
+    counts, _ = np.histogram(values, edges)
+    return counts / (len(values) * np.diff(edges))
+
+
+def factorial_contrasts(X, y, names):
+    """High-minus-low contrasts for columns that actually vary in this design.
+
+    A defining word is constant in a regular fraction and is confounded with
+    the intercept, so it has no high-minus-low contrast.
+    """
+    X, y = np.asarray(X), np.asarray(y)
+    effects = {}
+    for order in range(1, len(names) + 1):
+        for indices in itertools.combinations(range(len(names)), order):
+            column = np.prod(X[:, indices], axis=1)
+            if np.any(column > 0) and np.any(column < 0):
+                effects[''.join(names[i] for i in indices)] = float(y[column > 0].mean() - y[column < 0].mean())
+    return effects
+
+
 def compute_field():
     f = D.Field()
     g = rng(1919)
@@ -117,7 +162,7 @@ def compute_field():
     return nest({"fertility": f.fertility, "uniform": uniform, "sys_y": y, "sys_est": sys_est, "sys_flip": sys_flip,
                  "rand_mean": ests.mean(), "rand_sd": ests.std(), "rand_ests": ests[:400], "layouts": layouts,
                  "replication": rep, "pair_mean": pair_ests.mean(), "pair_sd": pair_ests.std(),
-                 "uniform_cv": uniform.std() / uniform.mean()})
+                 "uniform_cv": uniform.std() / uniform.mean(), "effective_sigma": float(np.sqrt(f.fertility.var(ddof=1) + f.noise**2))})
 
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -206,9 +251,9 @@ def compute_contrasts():
     pairs = []
     for i, j in itertools.combinations(range(5), 2):
         pairs.append({"i": i, "j": j, "diff": float(np.mean(groups[j]) - np.mean(groups[i])), "p_tukey": float(res.pvalue[i, j]),
-                      "p_raw": float(stats.ttest_ind(groups[i], groups[j]).pvalue),
+                      "p_raw": float(2 * stats.t.sf(abs(np.mean(groups[j]) - np.mean(groups[i])) / np.sqrt(2 * a["mse"] / 6), a["dfw"])),
                       "sig": abs(np.mean(groups[j]) - np.mean(groups[i])) > tk["hsd"]})
-    dn = stats.dunnett(*groups[1:], control=groups[0])
+    dn = stats.dunnett(*groups[1:], control=groups[0], rng=rng(1955))
     t_crit = float(stats.t.ppf(0.975, a["dfw"]))
     # Dunnett's two-sided 95% multiplier for 4 comparisons with a control, 25 df, by simulation (400,000 draws)
     gd = rng(1955)
@@ -246,7 +291,7 @@ def compute_blocking():
         a = D.oneway([y2[alloc2 == t] for t in range(4)])
         rej_crd += a["p"] < 0.05
         mse_crd.append(a["mse"])
-        if ex_alloc is None and 0.005 < rb["p"] < 0.03:  # a typical run of a design with 74% power
+        if r == 0:  # preselected first replicate; no selection by significance
             ex_alloc, ex_y, ex_rcbd = alloc, y, rb
             ex_oneway = D.oneway([y[alloc == t] for t in range(4)])
     zea = np.array(museum.DARWIN_ZEA, float)
@@ -338,7 +383,7 @@ def compute_fraction():
     yh = yf[keep]
     Xh = Xf[keep]
     ef = D.factorial_effects(Xf, yf, names="ABCD")
-    eh = D.factorial_effects(Xh, yh, names="ABCD")
+    eh = factorial_contrasts(Xh, yh, names="ABCD")
     al = {w: D.aliases(w, ["ABCD"])[0] for w in ["A", "B", "C", "D", "AB", "AC", "AD"]}
     pb_row = [1, 1, -1, 1, 1, 1, -1, -1, -1, 1, -1]
     pb = np.array([np.roll(pb_row, k) for k in range(11)] + [[-1] * 11])

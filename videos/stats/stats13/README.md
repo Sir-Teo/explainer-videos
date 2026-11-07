@@ -2,7 +2,7 @@
 
 Part 13 of a sixty-five-part course in statistics, from a first course to a PhD (see [the series plan](../README.md)
 and [the syllabus](../SYLLABUS.md)), in Stage II, Bachelor's: Methods. Part 12 fitted relationships to data that
-were already there. This part designs the data, so that the answer is unambiguous.
+were already there. This part designs the data, to support interpretable comparisons with a defensible uncertainty assessment.
 
 It opens at Rothamsted. Broadbalk has been sown with wheat since 1843, and in 1919 Fisher arrives to analyse
 seventy-six years of records that can describe but not decide. A simulated uniformity trial shows the soil's own
@@ -38,7 +38,7 @@ Every number on screen is computed in [`compute.py`](compute.py) or inline in a 
 - everything else is a seeded simulation.
 
 **Built in this part:**
-- **`statkit.design`** ([`explainer/stats/kit/design.py`](../../../explainer/stats/kit/design.py)):
+- **`statkit.design`** ([`explainer/stats/kit/design.py`](../../../../explainer/stats/kit/design.py)):
   - `Field`, the field-trial simulator: a hidden fertility surface plus plot noise;
   - `Bakery`, a hidden response surface;
   - one-way, RCBD and Latin-square ANOVAs;
@@ -83,14 +83,14 @@ python tools/lecture_length.py stats13 --floor 50
 | 2 | Randomization as inference | 20 plots: difference 2.71; 6,322 of 184,756 labellings, p = 0.034 (t: 0.031); height-gap SD 1.32 cm, 4.8% beyond 2 SD; a chooser's gap 16.1 cm |
 | 3 | One-way ANOVA | SST 107.8 = 46.6 + 61.2; F = 5.07 on (3, 20), p = 0.009; R² = 0.432 |
 | 4 | Contrasts | 37.09 + 1.04 + 8.45 = 46.59; FWER 26.6% vs Tukey 4.95%; multipliers t 2.06, Dunnett 2.61, Tukey 2.94, Bonferroni 3.08, Scheffé 3.32; HSD 3.50 |
-| 5 | Blocking | ignoring blocks F = 0.21, p = 0.89; RCBD F = 4.94, p = 0.014; power 10% vs 74%; MSE 33.4 vs 2.25; Darwin t = 2.15, 863/32,768, p = 0.053 |
+| 5 | Blocking | first seeded harvest: ignoring blocks F = 0.084, p = 0.968; RCBD F = 1.806, p = 0.189; power 10% vs 74%; MSE 33.4 vs 2.25; Darwin t = 2.15, 863/32,768, p = 0.053 |
 | 6 | Latin squares | F = 17.8 vs 0.88 one-way; power 96% vs 20%; 161,280 squares of order 5 |
 | 7 | Factorials | OFAT ends at 225 °C, 26.5 min, quality 79.6 vs 85; 2² effects 14.3, 19.0, −15.0; NPK: N 6.21, P 2.95, NP 1.34, SE 0.53 |
 | 8 | Fractional factorials | half fraction A 4.21 (full 4.51), AB + CD 1.68; Plackett–Burman XᵀX = 12I |
 | 9 | Response surfaces | first-order fit 43.9 + 12.6x₁ + 15.6x₂; best on the path 85.3; stationary point 203.0 °C, 31.7 min, predicted 85.2 (truth 84.9); 29 bakes |
 | 10 | Split plots | wrong F = 22.3 on (1, 24), p = 8 × 10⁻⁵; right F = 6.79 on (1, 3), p = 0.08; null rejection 25.6% vs 5.01% |
 | 11 | Optimal design | slope SE 0.495σ (even) vs 0.316σ (ends); det M 4/27 = 0.148 vs 0.039; max d(x) = 3 vs 7.5 |
-| 12 | Power | n for 80%: 42 (σ = 4) vs 12 (σ = 2); MDE 3.54 at n = 20, 1.77 at n = 80; Cohen 393 / 63 / 25; exaggeration 2.41× at n = 5, 1.12× at n = 42 |
+| 12 | Power | n for 80%: 42 (σ = 4) vs 12 (σ = 2); MDE 3.54 at n = 20, 1.77 at n = 80; normal-approximation Cohen 393 / 63 / 25; exaggeration 2.41× at n = 5, 1.12× at n = 42 |
 | 13 | Online experiments | ρ = 0.80; SE 0.056 → 0.034; p 0.065 → 3.9 × 10⁻⁵; worth 2.8× the users; SRM 50,000 vs 50,820, p = 0.0098 |
 | 14 | Outro | — |
 
@@ -193,3 +193,13 @@ calculation with the noncentral t gives 42, the value in chapter 12.
 | potential outcomes, interference, two-stage designs | 35, 62 |
 | sequential and adaptive experiments | 58 |
 | the Coverage Board | every part; 65 |
+
+## Review qualifications
+
+The blocking illustration is the first seeded replicate, selected before seeing its p-value; the 4,000-run power comparison uses every repetition. Plot subsets are labelled separately from full-run summaries. The C–D unadjusted comparison uses the common ANOVA error (25 df, p ≈ 0.009), matching the family-wise simulation and Tukey comparison; Dunnett's numerical integration is seeded.
+
+Normal-theory ANOVA, contrast and split-plot reference distributions require their independent Gaussian, equal-variance/additive models. Randomization tests instead use the actual assignment distribution under a sharp null (with no interference and consistent treatment definitions). Large-sample t approximations need regularity. Darwin's nonrandomized sign-flip calculation requires independent symmetric differences under the null.
+
+Row, column and letter permutations of the cyclic Latin square sample its permutation class, rather than all order-five squares uniformly. The central composite design uses five levels per factor. One OFAT pass stopping short is not a claim that repeated coordinate ascent cannot converge. NPK effects use high-minus-low coding: the NP interaction effect is half its difference of simple effects. A complementary resolution-IV half fraction reverses D alone; reversing every factor would preserve the even defining word. Constant defining columns are omitted from fractional contrast output instead of emitting NaN.
+
+The Kiefer–Wolfowitz equivalence statement concerns approximate designs with nonsingular information and freely chosen probability weights on the specified compact space. Exact finite-run allocations also require integer counts. Power and MDE formulas using normal quantiles are approximations; power alone does not remove confounding or selection bias. Fitted CUPED adjustment may have finite-sample bias; its SE and z-test here are asymptotic. A sample-ratio flag is evidence to investigate, rather than proof of a platform defect.

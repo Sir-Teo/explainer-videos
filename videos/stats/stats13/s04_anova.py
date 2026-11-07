@@ -152,7 +152,7 @@ class Anova(VoiceoverScene):
             "perpendicular to it, in the other twenty dimensions. <bookmark mark='d'/> So the total sum of squares, one hundred "
             "and seven point eight, is the between sum of squares, forty-six point six, plus the within sum of squares, "
             "sixty-one point two. <bookmark mark='e'/> And the dimensions add the same way: twenty-three degrees of freedom "
-            "are three between plus twenty within. That's Cochran's theorem from Part 8 at work."
+            "are three between plus twenty within. That's the orthogonal geometry behind Cochran's theorem. Normal errors also give the independent chi-squared laws."
         ) as vo:
             self.add(ns)
             self.play(FadeIn(ns.axes3))
@@ -197,7 +197,7 @@ class Anova(VoiceoverScene):
         whys = [why(r"between: \ per degree of freedom"), why(r"within: \ the pure error, \ $\hat\sigma^2$"),
                 why(r"signal-to-noise"), why(r"Part 8's $F$ distribution")]
         with self.voiceover(
-            "Now the test. <bookmark mark='a'/> Divide each sum of squares by its degrees of freedom. The between mean square "
+            "Now the normal-theory test: assume independent Gaussian errors with the same variance in all groups. <bookmark mark='a'/> Divide each sum of squares by its degrees of freedom. The between mean square "
             "is forty-six point six over three, fifteen point five. <bookmark mark='b'/> The within mean square, sixty-one "
             "point two over twenty, three point oh six, is the pure error: an estimate of sigma squared, whatever the "
             "fertilizers do. <bookmark mark='c'/> Their ratio, F, is five point oh seven. <bookmark mark='d'/> If the fertilizers "
@@ -276,21 +276,25 @@ class Anova(VoiceoverScene):
             cmath(r"y_{ij}", r"=", r"\mu + \alpha_i + \varepsilon_{ij},\qquad \textstyle\sum_i \alpha_i = 0", font_size=32),
             cmath(r"\mathbb E[\text{MSW}]", r"=", r"\sigma^2", font_size=34),
             cmath(r"\mathbb E[\text{MSB}]", r"=", r"\sigma^2 + \frac{n}{k - 1}\sum_i \alpha_i^2", font_size=34),
-            cmath(r"F", r"\approx", r"1 + \frac{n\sum_i\alpha_i^2}{(k-1)\,\sigma^2}\ \text{ on average}", font_size=32),
+            cmath(r"\mathbb E[F]", r"=", r"\frac{\nu}{\nu-2}\left(1 + \frac{n\sum_i\alpha_i^2}{(k-1)\,\sigma^2}\right),\quad\nu=N-k>2", font_size=32),
         ]
         rows[2][2].set_color(OBS)
         whys = [why(r"the effects model: \ $k$ groups of $n$"), why(r"always: \ the yardstick"),
                 why(r"inflated by real differences, \ and only by them"), why(r"the noncentrality: \ power, \ chapter 12")]
+        intro = label('What the mean squares estimate', font_size=36)
         with self.voiceover(
-            "Why does the ratio work? <bookmark mark='a'/> Write the model as a grand mean, plus a fertilizer effect alpha "
+            "Why does the ratio work? <bookmark mark='a'/> Write the balanced model with independent mean-zero, equal-variance errors as a grand mean, plus a fertilizer effect alpha "
             "summing to zero, plus noise. <bookmark mark='b'/> The within mean square always estimates sigma squared, "
             "whatever the effects. <bookmark mark='c'/> The between mean square estimates sigma squared plus n over k minus "
             "one times the sum of the squared effects: inflated by real differences, and by nothing else. <bookmark mark='d'/> "
-            "So F hovers around one when nothing is going on, and grows with the effects relative to the noise. That "
+            "Under Gaussian errors, the mean of F includes the denominator correction, nu over nu minus two. It approaches one under the null as error degrees of freedom grow, and increases with the effects relative to the noise. That "
             "growth, the noncentrality, is what determines an experiment's power, the subject of chapter twelve."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.65, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()

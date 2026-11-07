@@ -77,8 +77,8 @@ class Principles(VoiceoverScene):
         sl = label(r"tidy layout", font_size=20, color=RES).next_to(sline, UP, buff=0.08)
         rows = fit_rows(VGroup(
             label(r"randomize: \ any 72 plots get B, \ chosen by lot", font_size=24),
-            MathTex(rf"\text{{4,000 random layouts: \ mean }} {d['rand_mean']:.2f},\quad \text{{SD }} {d['rand_sd']:.2f}", font_size=28),
-            label(r"each layout's error is chance, \ and chance has a known distribution", font_size=24, color=OBS),
+            MathTex(rf"\text{{4,000 layouts (400 shown): \ mean }} {d['rand_mean']:.2f},\quad \text{{SD }} {d['rand_sd']:.2f}", font_size=28),
+            label(r"the randomization distribution describes layout error", font_size=24, color=OBS),
             label(r"unbiased over the randomization, \ whatever the soil is like", font_size=22, color=GREY_A),
         ), 12.4, 0.24, [0, -2.85, 0])
         with self.voiceover(
@@ -106,7 +106,7 @@ class Principles(VoiceoverScene):
     def replication(self):
         d = load("field")
         rep = {int(k): v for k, v in d["replication"].items()}
-        sig = rep[1] / np.sqrt(2)
+        sig = d["effective_sigma"]
         A = axes([0, 75], [0, 7], x_length=7.0, y_length=4.4, xlabel=r"plots of each variety, \ $n$", ylabel=r"SD of the estimate",
                  xticks=[1, 8, 16, 36, 72], yticks=[0, 2, 4, 6], center=[-2.4, -0.2, 0])
         ax = A.ax
@@ -122,9 +122,9 @@ class Principles(VoiceoverScene):
             label(r"with one plot each, \ there is no way to tell variety from plot", font_size=22, color=GREY_A),
         ), 5.0, 0.32, [4.3, 0.0, 0])
         with self.voiceover(
-            "The first principle, replication. <bookmark mark='a'/> With one plot of each variety, the comparison is hopeless. "
+            "The first principle, replication; the plot noise is independent in this simulator. <bookmark mark='a'/> With one plot of each variety, the comparison is hopeless. "
             "<bookmark mark='b'/> With n plots of each, chosen at random, the standard deviation of the difference falls "
-            "like sigma times the square root of two over n, Part 8's law. <bookmark mark='c'/> Here sigma, the variation of "
+            "like sigma times the square root of two over n, Part 8's law. <bookmark mark='c'/> Here sigma combines finite-field fertility variation and independent plot noise: the effective variation of "
             "one plot, is about four point three bushels. <bookmark mark='d'/> The simulated dots follow the curve: six "
             "bushels of uncertainty with one plot each, point seven with seventy-two. <bookmark mark='e'/> And replication "
             "does a second job, which Fisher thought just as important: <bookmark mark='f'/> by comparing plots that got the "
@@ -190,7 +190,7 @@ class Principles(VoiceoverScene):
                           r"Whether each change was up or down was decided by drawing cards from a shuffled pack, \ and the "
                           r"subject could not see it", color=S.PRIOR, width=10.4, font_size=24).move_to([0, 1.1, 0])
         rows = fit_rows(VGroup(
-            label(r"the first experiment known to have been randomized by a deliberate chance device", font_size=24),
+            label(r"one of the earliest documented experiments randomized by a deliberate chance device", font_size=24),
             label(r"blinding and randomization together: \ the subject's guesses could not follow a pattern", font_size=24, color=S.PRIOR),
             label(r"Fisher (1926, \ 1935) \ made randomization the basis of the analysis itself", font_size=24, color=OBS),
         ), 12.4, 0.32, [0, -1.9, 0])
@@ -198,7 +198,7 @@ class Principles(VoiceoverScene):
             "Fisher wasn't the first to randomize. <bookmark mark='a'/> In 1884 the philosopher Charles Sanders Peirce and his "
             "student Joseph Jastrow tested whether a person could feel a tiny change in a weight pressing on a finger. To keep the "
             "subject from anticipating, they decided whether each change was up or down by drawing cards from a shuffled "
-            "pack. <bookmark mark='b'/> It's the earliest experiment known to have been randomized on purpose, by a "
+            "pack. <bookmark mark='b'/> It's an early documented experiment randomized on purpose, by a "
             "chance device, and it was blinded too. <bookmark mark='c'/> What Fisher added, forty years later, was the "
             "realization that the randomization is not just a safeguard. It is the probability model on which the analysis "
             "rests. That's the next chapter."
@@ -219,7 +219,7 @@ class Principles(VoiceoverScene):
             cmath(r"\text{analyse as randomized}", r":", r"\text{the layout's chance is the model}", font_size=32),
         ]
         rows[1][2].set_color(OBS)
-        whys = [why(r"precision, \ and a yardstick for it"), why(r"fairness: \ no confounding, \ seen or unseen"),
+        whys = [why(r"precision, \ and a yardstick for it"), why(r"assignment independent of potential outcomes"),
                 why(r"blocks: \ remove what you know varies"), why(r"``block what you can, \ randomize what you cannot''")]
         with self.voiceover(
             "So, three principles. <bookmark mark='a'/> Replicate, to shrink the error and to measure it. "
