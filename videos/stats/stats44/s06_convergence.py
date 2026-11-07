@@ -21,17 +21,19 @@ class Convergence(VoiceoverScene):
         self.play(FadeOut(card))
 
     def upcrossings(self):
-        g = np.random.default_rng(44)
+        g = np.random.default_rng(9)
         n = 400
-        x = np.cumsum(g.standard_normal(n)) * 0.35
-        x = x + 2.0  # deterministic start; no future-dependent recentering
-        A = axes([0, n], [-2, 6], x_length=7.4, y_length=4.2, xlabel=r"$n$", ylabel=r"$M_n$", xticks=[0, 200, 400], yticks=[0, 2, 4],
+        x = np.r_[2.0, 2.0 + np.cumsum(g.standard_normal(n)) * 0.35]
+        # Fixed initial value and increments; show the entire seeded path.
+        lo = min(-2.0, float(np.floor(x.min() / 2) * 2))
+        hi = max(4.0, float(np.ceil(x.max() / 2) * 2))
+        A = axes([0, n], [lo, hi], x_length=7.4, y_length=4.2, xlabel=r"$n$", ylabel=r"$M_n$", xticks=[0, 200, 400], yticks=np.arange(lo, hi + 1, 2),
                  center=[-2.5, 0.3, 0])
         ax = A.ax
         a, b = 1.0, 3.0
         la = DashedLine(ax.c2p(0, a), ax.c2p(n, a), color=GREY_B, stroke_width=2)
         lb = DashedLine(ax.c2p(0, b), ax.c2p(n, b), color=GREY_B, stroke_width=2)
-        path = polyline(ax, np.arange(n), x, CHAINC, 2)
+        path = polyline(ax, np.arange(n + 1), x, CHAINC, 2)
         ups = VGroup()
         below, start = x[0] < a, None
         for i, v in enumerate(x):
@@ -50,7 +52,7 @@ class Convergence(VoiceoverScene):
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The convergence theorem rests on counting upcrossings: climbs of the path from below a "
-            "level a to above a level b. <bookmark mark='b'/> This path makes several. <bookmark mark='c'/> Doob's "
+            "level a to above a level b. <bookmark mark='b'/> This seeded illustration makes three completed upcrossings. The seed was chosen for visibility, not for estimating how often crossings occur. <bookmark mark='c'/> Doob's "
             "upcrossing inequality: the expected number of upcrossings is at most the expected positive part of M n minus a, "
             "over b minus a. <bookmark mark='d'/> The proof is a betting system: buy when the path falls below a, sell when it "
             "rises above b. Each completed climb earns at least b minus a, and a fair game cannot pay for unboundedly many."

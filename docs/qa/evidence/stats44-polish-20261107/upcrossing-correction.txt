@@ -1,0 +1,4 @@
+Fixed seed 9, M0=2, 400 independent normal increments scaled by .35.
+Observed range: -1.025423911 to 6.379963751; viewport -2 to 8.
+Completed crossings of [1,3]: [(12, 20), (98, 107), (257, 265)].
+Seed chosen for illustration. This is not an estimate of crossing frequency.
