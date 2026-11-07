@@ -28,8 +28,12 @@ class OpenProblems(LectureMixin, VoiceoverScene):
         ]
         cols = [GREY_B, NAIVEC2, ENTC, PLANC, TGT, PLANC, FLOWC, FLOWC]
         tab = table_rows([hdr] + body, font_size=26, col_buff=0.7, row_buff=0.28, colors=cols).move_to([0, 0.1, 0])
-        if tab.width > 13.4:
-            tab.width = 13.4
+        if tab.width > 12.6:
+            tab.width = 12.6
+        head = label(r"Optimal transport: objects, estimators and guarantees", font_size=36).move_to([0, 3.3, 0])
+        if head.width > 12.6:
+            head.width = 12.6
+        self.play(FadeIn(head))
         with self.voiceover(
             "<bookmark mark='a'/> The part in one table. <bookmark mark='b'/> The Wasserstein distance by its plug-in, cursed "
             "at n to the minus one over d. The entropic cost by Sinkhorn, at the parametric rate with a constant that "
