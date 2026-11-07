@@ -19,54 +19,48 @@ class Frontier(VoiceoverScene, ThreeDScene):
         self.papers()
 
     def card(self):
-        c = chapter_card(19, r"Frontier: pricing faster, 2023--2026", r"Where is computational pricing research now?",
+        c = chapter_card(19, r"Frontier: interpolation and selected research", r"Where is computational pricing research now?",
                          lit=(2024,), part=PART)
-        with self.voiceover("Chapter nineteen. The frontier: pricing faster, from 2023 to 2026."):
+        with self.voiceover('Chapter nineteen. Interpolation, randomized integration, and selected research.'):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
     def chebyshev(self, ch):
         (x0, x1), (y0, y1) = ch["box"]
         xs, ys = np.asarray(ch["xs"]), np.asarray(ch["ys"])
-        ax = ThreeDAxes(x_range=[x0, x1, 15], y_range=[y0, y1, 0.02], z_range=[-8, 0, 2], x_length=6.6, y_length=5.0,
+        zr = data_range(*[r["err_surface"] for r in ch["rows"]])
+        ax = ThreeDAxes(x_range=[x0, x1, 15], y_range=[y0, y1, 0.02], z_range=[*zr, 2], x_length=6.6, y_length=5.0,
                         z_length=3.0, tips=False, axis_config={"stroke_color": GREY_C, "include_ticks": False,
                                                                "stroke_width": 2})
         ax.shift(DOWN * 0.4)
         rows = ch["rows"]
 
         def surf(r):
-            f = RegularGridInterpolator((xs, ys), np.clip(np.asarray(r["err_surface"]), -8, 0))
+            f = RegularGridInterpolator((xs, ys), np.asarray(r["err_surface"]))
             sf = Surface(lambda u, v: ax.c2p(u, v, float(f((u, v)))), u_range=[x0, x1], v_range=[y0, y1],
                          resolution=(24, 24), fill_opacity=0.85, stroke_width=0.3, stroke_color="#0E1117",
                          checkerboard_colors=False)
-            sf.set_fill_by_value(axes=ax, colorscale=[(QC.GAIN, -7), (QC.DELTA, -4), (QC.LOSS, -1)], axis=2)
+            sf.set_fill_by_value(axes=ax, colorscale=[(QC.GAIN, zr[0]), (QC.DELTA, sum(zr) / 2), (QC.LOSS, zr[1])], axis=2)
             return sf
 
         def nodes(r):
-            return VGroup(*[Dot3D(ax.c2p(a, b, -8), radius=0.03, color=GREY_A, resolution=(4, 4))
+            return VGroup(*[Dot3D(ax.c2p(a, b, zr[0]), radius=0.03, color=GREY_A, resolution=(4, 4))
                             for a in r["x"] for b in r["y"]])
 
         show = [r for r in rows if r["n"] in (4, 8, 16, 32)]
         hint = VGroup(label(r"across: spot $S_0$ (70 to 130)", font_size=21, color=GREY_A),
                       label(r"back: initial variance $v_0$ (0.01 to 0.09)", font_size=21, color=GREY_A),
-                      label(r"up: $\log_{10}$ error of the interpolant", font_size=21, color=GREY_A),
+                      label(r"up: log discrepancy on a 25 by 25 grid; censored at $10^{-12}$", font_size=21, color=GREY_A),
                       label(r"floor: the Chebyshev nodes (COS prices)", font_size=21, color=GREY_A)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.1).to_corner(UL, buff=0.35)
-        tags = [MathTex(rf"{r['n']}\times{r['n']}\ \text{{nodes: max error}}\ {r['max_err']:.1e}", font_size=28,
+        tags = [MathTex(rf"{r['n']}\times{r['n']}\ \text{{nodes: max over 200 test sites}}\ {r['max_err']:.1e}", font_size=28,
                         color=OPT).to_corner(UR, buff=0.4) for r in show]
         self.set_camera_orientation(phi=64 * DEGREES, theta=-58 * DEGREES, zoom=0.85)
         fixed(self, hint, *tags)
         s = surf(show[0])
         nd = nodes(show[0])
         with self.voiceover(
-            "First, a pricer that is trained, then used. Gaß, Glau, Mahlstedt and Mair proposed in 2018 to price an "
-            "option at Chebyshev nodes over a box of parameters, here the spot and Heston's initial variance, and "
-            "interpolate everywhere else. The floor shows the nodes, crowded toward the edges; the surface is the "
-            "interpolant's error, on a log scale. <bookmark mark='a'/> Four by four nodes: errors near "
-            f"{show[0]['max_err']:.1f}. Eight by eight, then sixteen, then thirty-two. <bookmark mark='b'/> The error "
-            "surface collapses, a factor of ten for every few nodes added: the exponential convergence of polynomial "
-            f"interpolation for analytic functions. At thirty-two by thirty-two the worst error over the whole box is "
-            f"about {show[-1]['max_err'] * 1e6:.0f} in a million."
+            f"Build a Chebyshev interpolant over this fixed two-parameter box: initial spot and initial variance, with the remaining contract and model parameters fixed. Labels come from a five-hundred-and-twelve-term COS calculation, so they have numerical error too. The surface compares on a separate twenty-five-by-twenty-five grid; saved log discrepancies below one trillionth are censored at that level. <bookmark mark='a'/> Four, eight, sixteen and thirty-two nodes per direction improve this example. The headline maximum is over two hundred fixed random test sites, not the supremum over the entire box. <bookmark mark='b'/> At thirty-two nodes per direction that sampled maximum is {show[-1]['max_err']:.3g}. Analytic interpolation theory requires regularity in a complex neighbourhood and appropriate bounds. Finite tests provide no extrapolation, Greek-accuracy or arbitrage certificate."
         ) as vo:
             self.play(Create(ax), FadeIn(hint), FadeIn(nd), Create(s), FadeIn(tags[0]), run_time=2)
             vo.wait_until("a")
@@ -89,32 +83,30 @@ class Frontier(VoiceoverScene, ThreeDScene):
         mc = min((q for q in race["points"] if q["method"].startswith("Monte Carlo")), key=lambda q: q["err"])
         items = [(r"Chebyshev interpolant, one query", ch["t_cheb"], GOOD),
                  (r"COS, one price (512 terms)", ch["t_cos"], OPT),
-                 (rf"Monte Carlo, error {mc['err']:.3f}", mc["time"], BAD)]
-        g = axes([-4.5, 1], [0, 4], x_length=7.0, y_length=3.0, xlabel=r"seconds per price (log)",
+                 (rf"MC: one sampling s.e. {mc['err']:.3f}", mc["time"], BAD)]
+        xr = data_range([np.log10(t) for _, t, _ in items])
+        baseline = xr[0]
+        g = axes(xr, [0, 4], x_length=7.0, y_length=3.0, xlabel=r"seconds per price (log)",
                  xticks=[-4, -2, 0], xfmt=lambda v: f"10^{{{int(v)}}}", font_size=15).to_edge(LEFT, buff=3.2).shift(UP * 0.5)
         ax = g.ax
         bars = VGroup()
         for i, (nm, t, col) in enumerate(items):
             y = 3 - i
             x1 = np.log10(t)
-            bars.add(VGroup(Rectangle(width=max(ax.c2p(x1, 0)[0] - ax.c2p(-4.5, 0)[0], 0.02), height=0.5, stroke_width=0,
-                                      fill_color=col, fill_opacity=0.85).move_to(ax.c2p(-4.5, y), aligned_edge=LEFT),
-                            label(nm, font_size=17, color=col).next_to(ax.c2p(-4.5, y), LEFT, buff=0.15),
+            bars.add(VGroup(Rectangle(width=max(ax.c2p(x1, 0)[0] - ax.c2p(baseline, 0)[0], 0.02), height=0.5, stroke_width=0,
+                                      fill_color=col, fill_opacity=0.85).move_to(ax.c2p(baseline, y), aligned_edge=LEFT),
+                            label(nm, font_size=17, color=col).next_to(ax.c2p(baseline, y), LEFT, buff=0.15),
                             MathTex(rf"{t * 1e3:.3g}\,\text{{ms}}", font_size=20, color=GREY_A).next_to(ax.c2p(x1, y), RIGHT,
                                                                                                    buff=0.1)))
-        build = last["calls"] * ch["t_cos"]
+        build = last["t_build"]
+        saving = ch["t_cos"] - ch["t_cheb"]
+        break_even = build / saving if saving > 0 else float("inf")
         q = predict(rf"The pricer needs {last['calls']:,} COS prices to build. When does it pay?".replace(",", "{,}"),
                     width=6.0, font_size=21).to_edge(DOWN, buff=0.4)
         note_ = wrapped_label(r"low-rank tensor formats (Glau, Kressner and Statti 2020) take the idea to many parameters; "
                               r"Part 17's networks are the learned version", 10.0, 18, GREY_A).next_to(q, UP, buff=0.3)
         with self.voiceover(
-            f"The bill: {last['calls']:,} COS prices to build it, once. A query then costs "
-            f"{ch['t_cheb'] * 1e3:.2f} milliseconds against {ch['t_cos'] * 1e3:.2f} for a COS price, "
-            f"{ch['t_cos'] / ch['t_cheb']:.0f} times less, and against seconds for a simulation. "
-            "<bookmark mark='a'/> Pause and predict: when does it pay? After roughly as many queries as it cost to "
-            "build, which a calibration or a scenario run reaches in seconds; and far sooner when the pricer it "
-            "replaces is slow. Low-rank tensors extend it to many parameters, and Part seventeen's networks are "
-            "the learned version of the same idea."
+            f"The final interpolant uses {last['calls']:,} COS labels and has recorded build time {build:.3f} seconds. A fixed query takes {ch['t_cheb'] * 1000:.3f} milliseconds, versus {ch['t_cos'] * 1000:.3f} for the timed COS implementation. This is a shared-CPU, single-query comparison; batching and parameters can change it. The MC row reports one sampling standard error and is not accuracy-matched to these deterministic diagnostics. <bookmark mark='a'/> Break-even against repeated COS queries is build time divided by COS-query time minus interpolation-query time, provided that difference is positive. Here that is about {break_even:.0f} queries. Building the interpolant consumes work; it does not disappear. Low-rank tensor methods exploit additional structure to address some higher-dimensional parameter spaces. They do not remove every dimensionality or accuracy problem."
         ) as vo:
             self.play(FadeIn(g), LaggedStart(*[FadeIn(b) for b in bars], lag_ratio=0.4, run_time=2.5))
             vo.wait_until("a")
@@ -124,11 +116,11 @@ class Frontier(VoiceoverScene, ThreeDScene):
 
     def median(self, rq):
         ns = np.log10(rq["ns"])
-        g = loglog(1, 3.8, -10, -2, r"points per scrambled Sobol set", r"RMSE of $\int_0^1 e^u\,du$", x_length=6.4,
+        g = loglog(*data_range(ns), *data_range(np.log10(rq["mean"]), np.log10(rq["median"])), r"points per scrambled Sobol set", r"RMSE of $\int_0^1 e^u\,du$", x_length=6.4,
                    y_length=4.2, xt=[1, 2, 3], yt=[-10, -8, -6, -4, -2]).to_edge(LEFT, buff=0.8).shift(DOWN * 0.2)
         ax = g.ax
-        lm = polyline(ax, ns, np.clip(np.log10(rq["mean"]), -10, -2), QC.THETA)
-        ld = polyline(ax, ns, np.clip(np.log10(rq["median"]), -10, -2), GOOD)
+        lm = polyline(ax, ns, np.log10(rq["mean"]), QC.THETA)
+        ld = polyline(ax, ns, np.log10(rq["median"]), GOOD)
         leg = legend([(QC.THETA, r"mean of 11 scramblings"), (GOOD, r"median of 11 scramblings")], font_size=17)
         leg.next_to(g, UP, buff=0.1).align_to(g, LEFT)
         k = 3
@@ -136,16 +128,11 @@ class Frontier(VoiceoverScene, ThreeDScene):
             MathTex(rf"n = {rq['ns'][k]:,}".replace(",", "{,}") + rf":\ \ \text{{mean}}\ {rq['mean'][k]:.1e},\ \ "
                     rf"\text{{median}}\ {rq['median'][k]:.1e}", font_size=26, color=GOOD),
             wrapped_label(r"Pan and Owen (\textit{Math.\ Comp.}\ 2023): the median of independent randomisations of a "
-                          r"net converges super-polynomially for smooth integrands; the mean cannot beat $n^{-3/2}$. "
-                          r"Here the median reaches double precision's floor by $n = 4{,}096$", 4.6, 18, GREY_A),
+                          r"nets: conditional super-polynomial results require analytic derivative bounds and growing repetition count. "
+                          r"Here 11 fixed repeats and 30 experiments use 30-bit grids; plateau near $8\times10^{-10}$ is consistent with grid bias, not double precision.", 4.6, 18, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Second, measured: an idea from Zexin Pan and Art Owen, published in 2023. Scramble a Sobol net eleven "
-            "times. The usual estimate is the mean of the eleven. Take the median instead. "
-            "<bookmark mark='a'/> On a smooth integral, the mean's error falls like n to the minus three halves, the "
-            "best a scrambled net can do on average. The median falls faster than any power: at a thousand points it "
-            f"is {rq['mean'][k] / rq['median'][k]:,.0f} times more accurate, and soon it hits the floor of double "
-            "precision. One line of code changed."
+            f"This example compares the mean and median of eleven independently scrambled Sobol estimates of the exponential integral. RMSE uses thirty experiments. The full saved values are plotted. <bookmark mark='a'/> At the displayed thousand-point scale, the empirical RMSE ratio is {rq['mean'][k] / rq['median'][k]:.0f}. Pan and Owen's one-dimensional theorem assumes analytic derivative bounds and a repetition count growing with log sample size. Eleven fixed repeats do not meet that asymptotic condition, and this plot is not proof of a universal rate. The mean has no universal minus-three-halves ceiling for every integrand. Our SciPy construction uses a thirty-bit grid. Its uniform-grid leading bias for this integral is about minus eight times ten to minus ten, consistent with the median plateau. That plateau is far above double-precision machine epsilon."
         ) as vo:
             self.play(FadeIn(g), Create(lm), FadeIn(leg[0]))
             vo.wait_until("a")
@@ -155,15 +142,15 @@ class Frontier(VoiceoverScene, ThreeDScene):
 
     def papers(self):
         cards = [
-            (2023, r"Pan and Owen, \textit{Math.\ Comp.}", r"median-of-means for randomized nets: super-polynomial accuracy "
-             r"in one dimension; a multivariate follow-up (arXiv 2208.05078)."),
+            (2023, r"Pan and Owen, \textit{Math.\ Comp.}", r"medians of independently randomized net estimates: super-polynomial accuracy "
+             r"under analytic and repetition-growth conditions; a multivariate follow-up (arXiv 2208.05078)."),
             (2024, r"Junike, \textit{Numerische Mathematik}", r"how many terms the COS method needs for a given error, "
              r"building on Junike and Pankrashkin's truncation range (2022)."),
-            (2023, r"Bayer, Pelizzari, Schoenmakers (arXiv 2312.03444)", r"Longstaff--Schwartz and the dual bound with "
+            (2025, r"Bayer, Pelizzari, Schoenmakers (arXiv 2312.03444v2)", r"Longstaff--Schwartz and the dual bound with "
              r"signature features, for non-Markovian (rough) models: chapters 8--9 generalised (Part 14)."),
             (2024, r"Stamatopoulos and Zeng, \textit{Quantum}", r"derivative pricing by quantum signal processing: the "
-             r"cheapest resource estimate so far (chapter 18)."),
-            (2023, r"Dalzell et al.\ (arXiv 2310.03011)", r"a survey of quantum algorithms with end-to-end costs; its "
+             r"a specified resource scenario, separating T-count and T-depth (chapter 18)."),
+            (2025, r"Dalzell et al.\ (arXiv 2310.03011v2; Cambridge book)", r"a survey of quantum algorithms with end-to-end costs; its "
              r"finance section is the sober accounting of chapter 18."),
             (2018, r"Ga{\ss}, Glau, Mahlstedt, Mair; Glau, Kressner, Statti (2020)", r"Chebyshev and low-rank tensor "
              r"pricers: the offline--online split behind fast calibration."),
@@ -176,12 +163,7 @@ class Frontier(VoiceoverScene, ThreeDScene):
             g.scale_to_fit_width(13.4)
         g.move_to(ORIGIN)
         with self.voiceover(
-            "The reading list for the frontier. Pan and Owen's medians. Gero Junike's bound on how many cosine terms "
-            "a target error needs, which turns chapter sixteen's rule of thumb into a guarantee. <bookmark mark='a'/> "
-            "Christian Bayer, Luca Pelizzari and John Schoenmakers's Longstaff–Schwartz and dual bounds with "
-            "signature features, for rough volatility, where the state is the whole path. Stamatopoulos and Zeng's "
-            "quantum signal processing. <bookmark mark='b'/> A survey of quantum algorithms with end-to-end costs; "
-            "and the Chebyshev and tensor pricers."
+            "Selected reading, with assumptions and versions attached. Pan and Owen give analytic-integrand and repetition-growth conditions for median estimators. Junike's COS error control requires its density regularity, tail and derivative bounds; it does not turn any cumulant rule into an unconditional guarantee. <bookmark mark='a'/> Bayer, Pelizzari and Schoenmakers's signature-based primal and dual stopping paper was revised in twenty-twenty-five. It develops non-Markovian approximation and convergence under its stated assumptions. The twenty-twenty-four quantum signal-processing paper is a particular resource analysis, without a claim here that it remains globally cheapest. <bookmark mark='b'/> Dalzell and colleagues' end-to-end survey has a twenty-twenty-five revision and Cambridge book edition. Chebyshev and tensor methods illustrate how offline work may support faster later queries when smoothness and low-rank structure are available."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(c, shift=UP * 0.2) for c in g[:2]], lag_ratio=0.4))
             vo.wait_until("a")
