@@ -62,9 +62,38 @@ def nest(obj):
     return obj
 
 
-def eff_reps(per_rep, nominal=0.9) -> int:
-    v = np.var(np.asarray(per_rep, float), ddof=1) / len(per_rep)
-    return int(round(nominal * (1 - nominal) / max(v, 1e-12)))
+def mean_mc_se(per_rep):
+    """Monte Carlo error across independent fields, retaining the actual field count."""
+    return float(np.std(per_rep, ddof=1) / math.sqrt(len(per_rep)))
+
+
+def meuse_covariances(xy, z, river_distance):
+    """Fit every covariance/trend component using only the supplied training sample."""
+    edges = np.linspace(0, 1.6, 16)
+    v = SP.variogram(xy, z, edges)
+    fs = SP.fit_variogram(v['lag'], v['gamma'], v['n'], 'sph')
+    X = np.column_stack([np.ones(len(z)), np.sqrt(river_distance)])
+    residual = z - X @ np.linalg.lstsq(X, z, rcond=None)[0]
+    vr = SP.variogram(xy, residual, edges)
+    fr = SP.fit_variogram(vr['lag'], vr['gamma'], vr['n'], 'sph')
+    cov = lambda h: fs['sill'] - SP.model_variogram(h, 0., fs['sill'], fs['range'], 'sph')
+    covr = lambda h: fr['sill'] - SP.model_variogram(h, 0., fr['sill'], fr['range'], 'sph')
+    return fs, fr, cov, covr
+
+
+def kriging_fold(xy, z, trend, test):
+    """Estimate covariance on the training fold, then predict the withheld observations."""
+    fit = SP.gp_fit(xy[~test], z[~test], trend[~test], nu=1.5, reml=True)
+    cov = lambda h: SP.matern(h, fit['sigma2'], fit['rho'], 1.5)
+    pred = SP.krige(xy[~test], z[~test], xy[test], cov, trend[~test], trend[test], nugget=fit['tau2'])
+    return pred['pred'], pred['var'] + fit['tau2'], fit
+
+
+def lattice_marginal_variance(nx, ny, kappa):
+    """Exact average marginal variance from the free-boundary grid Laplacian spectrum."""
+    lx = 2 - 2 * np.cos(np.pi * np.arange(nx) / nx)
+    ly = 2 - 2 * np.cos(np.pi * np.arange(ny) / ny)
+    return float(np.mean(1 / (kappa**2 + ly[:, None] + lx[None, :])**2))
 
 
 def circulant_field(nx, ny, h, sigma2, rho, nu, g):
@@ -102,19 +131,24 @@ def compute_meuse():
     uk = SP.krige(xy, z, gxy, covr, sd_, np.sqrt(gr["dist"]), nugget=fr["nugget"])
     # leave-one-out cross-validation
     err = {"mean": [], "idw": [], "ok": [], "uk": []}
+    loo_z = []
     for i in range(len(z)):
         k = np.arange(len(z)) != i
         d = np.sqrt(((xy[k] - xy[i]) ** 2).sum(1))
         err["mean"].append(z[i] - z[k].mean())
         wts = 1 / d ** 2
         err["idw"].append(z[i] - wts @ z[k] / wts.sum())
-        err["ok"].append(z[i] - SP.krige(xy[k], z[k], xy[i:i + 1], cov, nugget=fs["nugget"])["pred"][0])
-        err["uk"].append(z[i] - SP.krige(xy[k], z[k], xy[i:i + 1], covr, sd_[k], sd_[i:i + 1], nugget=fr["nugget"])["pred"][0])
+        fso, fsu, co, cu = meuse_covariances(xy[k], z[k], m['dist'][k])
+        ordinary = SP.krige(xy[k], z[k], xy[i:i+1], co, nugget=fso['nugget'])
+        universal = SP.krige(xy[k], z[k], xy[i:i+1], cu, sd_[k], sd_[i:i+1], nugget=fsu['nugget'])
+        err['ok'].append(z[i] - ordinary['pred'][0])
+        err['uk'].append(z[i] - universal['pred'][0])
+        loo_z.append((z[i] - universal['pred'][0]) / math.sqrt(universal['var'][0] + fsu['nugget']))
     rmse = {k: float(np.sqrt(np.mean(np.square(v_)))) for k, v_ in err.items()}
     return nest({"x": xy[:, 0], "y": xy[:, 1], "z": z, "zinc": m["zinc"], "v": v, "vr": vr, "fe": fe, "fs": fs,
                  "vres": vres, "fr": fr, "gx": gxy[:, 0], "gy": gxy[:, 1], "ok": ok["pred"], "ok_sd": np.sqrt(ok["var"]),
                  "uk": uk["pred"], "uk_sd": np.sqrt(uk["var"]), "uk_beta": uk["beta"], "rmse": rmse, "n": len(z),
-                 "river": museum.meuse_river()})
+                 "river": museum.meuse_river(), "loo_z": loo_z, "covariance_fit_scope": "training_fold"})
 
 
 def compute_world():
@@ -213,17 +247,16 @@ def compute_gmrf():
     kappa = math.sqrt(8) / 8.0  # range of about 8 grid steps
     Q = SP.gmrf_precision(nx, ny, kappa, tau=1.0)
     g = rng(3904)
-    u = SP.gmrf_sample(Q, g)
-    u = u / u.std()
-    Qs = Q / (1 / np.var(SP.gmrf_sample(Q, rng(1))))  # rough rescale not needed for the mean
+    marginal_variance = lattice_marginal_variance(nx, ny, kappa)
+    u = SP.gmrf_sample(Q, g) / math.sqrt(marginal_variance)
+    prior_precision = Q * marginal_variance
     obs = np.sort(g.choice(nx * ny, 150, replace=False))
     y = u[obs] + 0.3 * g.standard_normal(150)
-    var_u = float(np.var(SP.gmrf_sample(Q, rng(2))))
-    mu = SP.gmrf_condition(Q * var_u, obs, y, 0.09)
+    mu = SP.gmrf_condition(prior_precision, obs, y, 0.09)
     nnz = int(Q.nnz)
     return nest({"nx": nx, "ny": ny, "u": u.reshape(ny, nx), "obs": obs, "y": y, "mu": mu.reshape(ny, nx), "nnz": nnz,
                  "n": nx * ny, "dense": (nx * ny) ** 2, "rmse": float(np.sqrt(np.mean((mu - u) ** 2))),
-                 "pattern": np.array(Q[:60, :60].toarray() != 0, int)})
+                 "pattern": np.array(Q[:60, :60].toarray() != 0, int), "prior_average_marginal_variance_raw": marginal_variance, "prior_scale_scope": "deterministic Laplacian eigenvalues"})
 
 
 def town_neighbours(xy, k=5):
@@ -363,17 +396,15 @@ def compute_blockcv():
     P = World().pollution
     xy = np.column_stack([P["sx"], P["sy"]])
     z, tr = P["annual"], P["s_traffic"]
-    f = SP.gp_fit(xy, z, tr, nu=1.5, reml=True)
-    cov = lambda d: SP.matern(d, f["sigma2"], f["rho"], 1.5)
     g = rng(3910)
 
     def run(folds):
         err, zs = np.zeros(300), np.zeros(300)
         for k in np.unique(folds):
             te = folds == k
-            kr = SP.krige(xy[~te], z[~te], xy[te], cov, tr[~te], tr[te], nugget=f["tau2"])
-            err[te] = z[te] - kr["pred"]
-            zs[te] = err[te] / np.sqrt(kr["var"] + f["tau2"])
+            pred, variance, fit = kriging_fold(xy, z, tr, te)
+            err[te] = z[te] - pred
+            zs[te] = err[te] / np.sqrt(variance)
         nn = np.array([np.min(np.sqrt(((xy[folds != folds[i]] - xy[i]) ** 2).sum(1))) for i in range(300)])
         return {"rmse": float(np.sqrt(np.mean(err ** 2))), "cover": float(np.mean(np.abs(zs) <= 1.645)), "nn": float(np.median(nn))}
 
@@ -386,7 +417,7 @@ def compute_blockcv():
     land = np.column_stack([Xg[P["land"]], Yg[P["land"]]])[::7]
     from scipy.spatial import cKDTree
     dl = cKDTree(xy).query(land)[0]
-    return nest({"random": rand, "block": block, "land_nn_median": float(np.median(dl)), "station_nn_median": float(np.median(cKDTree(xy).query(xy, 2)[0][:, 1]))})
+    return nest({"random": rand, "block": block, "land_nn_median": float(np.median(dl)), "station_nn_median": float(np.median(cKDTree(xy).query(xy, 2)[0][:, 1])), "covariance_fit_scope": "training_fold"})
 
 
 def compute_extra():
@@ -412,17 +443,8 @@ def compute_extra():
                 lag.append(float(d[kk].mean()))
                 gam.append(float(0.5 * np.mean((z[i][kk] - z[j][kk]) ** 2)))
         out[str(a)] = {"lag": lag, "gamma": gam}
-    # universal kriging LOO z-scores with the residual spherical model
-    b = np.linalg.lstsq(X, z, rcond=None)[0]
-    vres = SP.variogram(xy, z - X @ b, np.linspace(0, 1.6, 16))
-    fr = SP.fit_variogram(vres["lag"], vres["gamma"], vres["n"], "sph")
-    covr = lambda h: fr["sill"] - SP.model_variogram(h, 0.0, fr["sill"], fr["range"], "sph")
-    zs = []
-    for t in range(len(z)):
-        k = np.arange(len(z)) != t
-        kr = SP.krige(xy[k], z[k], xy[t:t + 1], covr, sd_[k], sd_[t:t + 1], nugget=fr["nugget"])
-        zs.append(float((z[t] - kr["pred"][0]) / np.sqrt(kr["var"][0] + fr["nugget"])))
-    zs = np.asarray(zs)
+    # The Meuse computation refits trend and covariance inside every held-out fold.
+    zs = np.asarray(load('meuse')['loo_z'], float)
     # World: effective sample size of the 300 stations' mean
     P = World().pollution
     sxy = np.column_stack([P["sx"], P["sy"]])
@@ -489,18 +511,18 @@ def compute_board():
         bg.append(abs(f["beta"][1] - 1) <= 1.645 * math.sqrt(f["cov_beta"][1, 1]))
     rows = [
         Row(39, r"kriging 90\% PI, \ true covariance", r"Mat\'ern $\nu = 5/2$ fields, \ $n = 200$", "coverage", 0.9,
-            float(np.mean(ct)), eff_reps(ct)),
+            float(np.mean(ct)), reps, mc_se=mean_mc_se(ct)),
         Row(39, r"kriging PI, \ REML plug-in", r"Mat\'ern $\nu = 5/2$ fields, \ $n = 200$", "coverage", 0.9,
-            float(np.mean(cr)), eff_reps(cr)),
+            float(np.mean(cr)), reps, mc_se=mean_mc_se(cr)),
         Row(39, r"kriging PI, \ exponential fitted", r"Mat\'ern $\nu = 5/2$ fields, \ $n = 200$", "coverage", 0.9,
-            float(np.mean(cm)), eff_reps(cm)),
+            float(np.mean(cm)), reps, mc_se=mean_mc_se(cm)),
         Row(39, r"OLS CI for a covariate", r"spatially correlated errors, \ $n = 200$", "coverage", 0.9,
             float(np.mean(bo)), reps),
         Row(39, r"GLS (REML) CI for the covariate", r"spatially correlated errors, \ $n = 200$", "coverage", 0.9,
             float(np.mean(bg)), reps),
     ]
     save_rows(39, rows)
-    return nest({"rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows]})
+    return nest({"rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows], "replicates": {"true": ct, "reml": cr, "exponential": cm, "ols": bo, "gls": bg}})
 
 
 ITEMS = {
