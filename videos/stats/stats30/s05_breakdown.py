@@ -100,6 +100,10 @@ class Breakdown(VoiceoverScene):
             label(r"no free lunch for the mean; \ but Huber buys 95\% efficiency and 50\% breakdown", font_size=22),
             label(r"efficiency and breakdown are separate properties: \ both are needed", font_size=22, color=PATH),
         ), 12.0, 0.22, [0, -2.4, 0])
+        intro = label('Breakdown and efficiency measure different properties', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
+        self.add(intro)
         with self.voiceover(
             "<bookmark mark='a'/> Breakdown and efficiency together. The mean: full efficiency, zero breakdown. Trimmed "
             "means: breakdown equal to the trimming, efficiency ninety-four and eighty-nine percent. Hodges–Lehmann: ninety-five "
