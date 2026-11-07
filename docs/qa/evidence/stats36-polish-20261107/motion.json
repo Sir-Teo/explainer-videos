@@ -1,0 +1,182 @@
+{
+  "fingerprint": "8593745d048d88571db3488eb5d0ecc12765f689d1e79e7723eb067c28375894",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats36/en/Hook_motion/result.json",
+      "input_sha256": "97e018173bd28be1fe75086aa3ac471b7dcafb161b2cb0f9ddb0b0228b9bb4f8",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 252 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 252 s\n"
+    },
+    {
+      "scene": "Unconfounded",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats36/en/Unconfounded_motion/result.json",
+      "input_sha256": "627f2fdb88782fd804c606f7fa090bba2b13b1e40235e0a769e9c9ac446697a5",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 190 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 190 s\n"
+    },
+    {
+      "scene": "DAGs",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats36/en/DAGs_motion/result.json",
+      "input_sha256": "13ff28cacbd7ebbee65726ffb50c28eb784e6948d3932101b199c4c2cf812683",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 220 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 220 s\n"
+    },
+    {
+      "scene": "Backdoor",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats36/en/Backdoor_motion/result.json",
+      "input_sha256": "1c8818738fe19914c7645a0a89b16f5bf3dd07a96641d34a5c90808c4522e1d0",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 206 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 206 s\n"
+    },
+    {
+      "scene": "Frontdoor",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats36/en/Frontdoor_motion/result.json",
+      "input_sha256": "d0cfade66754d03a7d0b12a74a5444158ab13bacbcdcdf5a3df10cf1e87a7043",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 200 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 200 s\n"
+    },
+    {
+      "scene": "Simpson",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats36/en/Simpson_motion/result.json",
+      "input_sha256": "837e3efb24629556929785199eeaae7c4ccac4b14f662896a830c59eda57663c",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 135 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 135 s\n"
+    },
+    {
+      "scene": "GComp",
+      "status": "needs-review",
+      "frames": 15,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats36/en/GComp_motion/result.json",
+      "input_sha256": "d407ed25d77144a5edfc1a6fc0fb445f70aaf00f0702f201eea611a5459c86fd",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 138 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 138 s\n"
+    },
+    {
+      "scene": "Propensity",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats36/en/Propensity_motion/result.json",
+      "input_sha256": "48ad9a9c3e82ca53e8441b14ebb8ff4e35ca453052895a0f4741f978a22b0d35",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 160 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 160 s\n"
+    },
+    {
+      "scene": "IPW",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats36/en/IPW_motion/result.json",
+      "input_sha256": "189d9ea832ef82777d7b8d9835fdb66c8731c86831e261aa856426f4c945687d",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 210 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 210 s\n"
+    },
+    {
+      "scene": "AIPW",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats36/en/AIPW_motion/result.json",
+      "input_sha256": "7927d9f60d18b3fc1f0e9fd2552dcf1eaad6db574bef66212b508809a343aa0e",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 237 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 237 s\n"
+    },
+    {
+      "scene": "DML",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats36/en/DML_motion/result.json",
+      "input_sha256": "d72783f816619564fe08b25deb4442916dfe851cfbf3ae21c42ad6b138281084",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 227 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 227 s\n"
+    },
+    {
+      "scene": "CATE",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats36/en/CATE_motion/result.json",
+      "input_sha256": "d6206759bb80979bdb5c38c6f7bff7297e285853b3b9f190647e8e7f0206e5c6",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 267 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 267 s\n"
+    },
+    {
+      "scene": "Sensitivity",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 9
+      },
+      "input_record": "renders/qa/series/stats36/en/Sensitivity_motion/result.json",
+      "input_sha256": "69e9016e457d135baa21d8f4c76b432cde4aabb8693d56d5ca28336fc3b2815e",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 296 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 296 s\n"
+    },
+    {
+      "scene": "Smoking",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats36/en/Smoking_motion/result.json",
+      "input_sha256": "9e8e4881fd7b7dc3d2ff7f84466c3a549b0cdda10b4273aadb190d656ed6585c",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 241 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 241 s\n"
+    },
+    {
+      "scene": "TimeVarying",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats36/en/TimeVarying_motion/result.json",
+      "input_sha256": "ae2ff957c100108c85c648f80cc82e03c23a33ff7b735771e57e396010e71984",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 212 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 212 s\n"
+    },
+    {
+      "scene": "LaLonde",
+      "status": "needs-review",
+      "frames": 17,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats36/en/LaLonde_motion/result.json",
+      "input_sha256": "90daafb72fb770af07db5b4c76a66ed5b4597fa57e91e50cb43e86518fb0e172",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 204 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 204 s\n"
+    }
+  ]
+}

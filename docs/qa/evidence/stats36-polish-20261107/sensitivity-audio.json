@@ -1,0 +1,117 @@
+{
+ "video": "stats36",
+ "scene": "Sensitivity",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 9,
+ "lines": [
+  {
+   "raw": "Chapter twelve. Sensitivity analysis.",
+   "spoken": "Chapter twelve. Sensitivity analysis.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/268b8348832ae4ab.wav",
+   "duration": 3.2,
+   "tokens": 4,
+   "peak": 0.333526611328125,
+   "issues": [],
+   "elapsed": 0.05,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Return to the World's study, but now let the doctors also judge each patient's frailty, which no data set records. <bookmark mark='b'/> Frail patients are treated more often, and their pressure would be higher anyway. <bookmark mark='c'/> Adjusting for the four recorded covariates gives minus seven point three, with a small standard error. <bookmark mark='d'/> The truth is minus nine point nine; had frailty been measured, adjusting for it would have given minus nine point one. <bookmark mark='e'/> The observed data alone do not generally identify this hidden-confounding bias. What we can do is ask how strong an unmeasured confounder would have to be to change the conclusion.",
+   "spoken": "Return to the World's study, but now let the doctors also judge each patient's frailty, which no data set records. Frail patients are treated more often, and their pressure would be higher anyway. Adjusting for the four recorded covariates gives minus seven point three, with a small standard error. The truth is minus nine point nine; had frailty been measured, adjusting for it would have given minus nine point one. The observed data alone do not generally identify this hidden-confounding bias. What we can do is ask how strong an unmeasured confounder would have to be to change the conclusion.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/8398c046980c60b9.wav",
+   "duration": 35.2,
+   "tokens": 100,
+   "peak": 0.468994140625,
+   "issues": [],
+   "elapsed": 0.05,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Paul Rosenbaum's approach starts from matched pairs. If there is no hidden bias, the two members of a pair, alike on the measured covariates, were equally likely to be the treated one: a coin within each pair. <bookmark mark='b'/> Hidden bias of size gamma allows their odds of treatment to differ by up to a factor gamma, because of something unmeasured. <bookmark mark='c'/> For each gamma, compute a worst-case one-sided signed-rank tail probability under the sharp null and the matched-pair assignment model. We compute the signed-rank tail by exact dynamic programming over independent pair signs, including average-rank ties. <bookmark mark='d'/> The smallest gamma that makes the effect insignificant summarizes how robust the finding is.",
+   "spoken": "Paul Rosenbaum's approach starts from matched pairs. If there is no hidden bias, the two members of a pair, alike on the measured covariates, were equally likely to be the treated one: a coin within each pair. Hidden bias of size gamma allows their odds of treatment to differ by up to a factor gamma, because of something unmeasured. For each gamma, compute a worst-case one-sided signed-rank tail probability under the sharp null and the matched-pair assignment model. We compute the signed-rank tail by exact dynamic programming over independent pair signs, including average-rank ties. The smallest gamma that makes the effect insignificant summarizes how robust the finding is.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/e647c4075196c2cd.wav",
+   "duration": 41.175,
+   "tokens": 108,
+   "peak": 0.476531982421875,
+   "issues": [],
+   "elapsed": 0.06,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> In the World's frailty study, we form disjoint pairs without reusing controls, using a caliper on the estimated logit propensity score. Unmatched treated patients are omitted. <bookmark mark='b'/> the matched estimate is minus six point eight. <bookmark mark='c'/> The displayed gamma threshold describes loss of significance for this matched sample under the sensitivity model. Approximate matching also leaves some measured-covariate imbalance. <bookmark mark='d'/> The simulator tells us that the average effect is negative despite substantial bias in its estimated size. The sensitivity threshold alone does not establish the actual confounder's strength, identify the causal sign, or bound all estimation bias.",
+   "spoken": "In the World's frailty study, we form disjoint pairs without reusing controls, using a caliper on the estimated logit propensity score. Unmatched treated patients are omitted. the matched estimate is minus six point eight. The displayed gamma threshold describes loss of significance for this matched sample under the sensitivity model. Approximate matching also leaves some measured-covariate imbalance. The simulator tells us that the average effect is negative despite substantial bias in its estimated size. The sensitivity threshold alone does not establish the actual confounder's strength, identify the causal sign, or bound all estimation bias.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/6fa64bd6390e5c64.wav",
+   "duration": 42.2,
+   "tokens": 94,
+   "peak": 0.54571533203125,
+   "issues": [],
+   "elapsed": 0.05,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> For risk ratios, Tyler VanderWeele and Peng Ding proposed in 2017 a number that is easy to report. Given an observed risk ratio, <bookmark mark='b'/> the E-value is the risk ratio plus the square root of the risk ratio times the risk ratio minus one. <bookmark mark='c'/> The E-value is an equal-strength threshold: if both sensitivity associations are below E, this confounding bound cannot explain the association. One association can be smaller than E if the other is sufficiently larger. Their trade-off is the product divided by the sum minus one, under the specified risk-ratio sensitivity model. <bookmark mark='d'/> For a risk ratio of two, the equal-strength threshold is three point four one. An association of ten on one side and three on the other can also exceed the required bias factor.",
+   "spoken": "For risk ratios, Tyler VanderWeele and Peng Ding proposed in 2017 a number that is easy to report. Given an observed risk ratio, the E-value is the risk ratio plus the square root of the risk ratio times the risk ratio minus one. The E-value is an equal-strength threshold: if both sensitivity associations are below E, this confounding bound cannot explain the association. One association can be smaller than E if the other is sufficiently larger. Their trade-off is the product divided by the sum minus one, under the specified risk-ratio sensitivity model. For a risk ratio of two, the equal-strength threshold is three point four one. An association of ten on one side and three on the other can also exceed the required bias factor.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/3c5daab615133d29.wav",
+   "duration": 47.9,
+   "tokens": 126,
+   "peak": 0.592437744140625,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> For regression estimates, Carlos Cinelli and Chad Hazlett described a confounder by two partial R-squared values: how much of the treatment's variation it explains, and how much of the outcome's, beyond what is measured. <bookmark mark='b'/> The omitted-variable bias is then bounded exactly by a formula in the standard error, the degrees of freedom and those two numbers. <bookmark mark='c'/> Their robustness value is the common partial R-squared a confounder would need with both to erase the estimate entirely, computable from the t statistic alone. <bookmark mark='d'/> And it can be benchmarked: compare it with how much the strongest measured covariate explains.",
+   "spoken": "For regression estimates, Carlos Cinelli and Chad Hazlett described a confounder by two partial R-squared values: how much of the treatment's variation it explains, and how much of the outcome's, beyond what is measured. The omitted-variable bias is then bounded exactly by a formula in the standard error, the degrees of freedom and those two numbers. Their robustness value is the common partial R-squared a confounder would need with both to erase the estimate entirely, computable from the t statistic alone. And it can be benchmarked: compare it with how much the strongest measured covariate explains.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/7d552910592c068f.wav",
+   "duration": 38.575,
+   "tokens": 96,
+   "peak": 0.483917236328125,
+   "issues": [],
+   "elapsed": 0.07,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> In the frailty study, the adjusted estimate has a t statistic of about minus twenty. <bookmark mark='b'/> Its robustness value is point three zero: a confounder explaining thirty percent of the residual variation in both treatment and outcome would be needed to erase it. <bookmark mark='c'/> The actual frailty explains about nine percent of each. <bookmark mark='d'/> That is far below thirty, so this particular measured-in-the-simulator frailty does not erase the adjusted regression coefficient; but it is large enough to bias the estimate by over a quarter, and a full sensitivity analysis would plot the bias for every pair of R-squared values, not just report one number.",
+   "spoken": "In the frailty study, the adjusted estimate has a t statistic of about minus twenty. Its robustness value is point three zero: a confounder explaining thirty percent of the residual variation in both treatment and outcome would be needed to erase it. The actual frailty explains about nine percent of each. That is far below thirty, so this particular measured-in-the-simulator frailty does not erase the adjusted regression coefficient; but it is large enough to bias the estimate by over a quarter, and a full sensitivity analysis would plot the bias for every pair of R-squared values, not just report one number.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/dc59ba2b1347ddfe.wav",
+   "duration": 40.15,
+   "tokens": 101,
+   "peak": 0.764923095703125,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> On the Board: regression adjustment for the recorded covariates when doctors also use an unrecorded frailty, over five hundred studies. Broken. Adjusting for these measured covariates alone does not identify the effect under this graph. Further assumptions, additional data or a sensitivity analysis are needed.",
+   "spoken": "On the Board: regression adjustment for the recorded covariates when doctors also use an unrecorded frailty, over five hundred studies. Broken. Adjusting for these measured covariates alone does not identify the effect under this graph. Further assumptions, additional data or a sensitivity analysis are needed.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/be7d73c3ad50cf69.wav",
+   "duration": 20.85,
+   "tokens": 45,
+   "peak": 0.503814697265625,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The lesson is to report an observational estimate with its sensitivity analysis, never alone. <bookmark mark='b'/> An early formal sensitivity analysis was Jerome Cornfield's, in 1959, <bookmark mark='c'/> in the case where it mattered most.",
+   "spoken": "The lesson is to report an observational estimate with its sensitivity analysis, never alone. An early formal sensitivity analysis was Jerome Cornfield's, in 1959, in the case where it mattered most.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/a74b77d7ae87d7be.wav",
+   "duration": 14.25,
+   "tokens": 31,
+   "peak": 0.636810302734375,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats36/en/Sensitivity_motion/result.json",
+ "input_sha256": "69e9016e457d135baa21d8f4c76b432cde4aabb8693d56d5ca28336fc3b2815e"
+}

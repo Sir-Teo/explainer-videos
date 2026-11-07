@@ -1,0 +1,193 @@
+{
+  "fingerprint": "8593745d048d88571db3488eb5d0ecc12765f689d1e79e7723eb067c28375894",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 41
+      },
+      "input_record": "renders/qa/series/stats36/en/Hook/result.json",
+      "input_sha256": "9c43cf19346136af8159199f691ec80e30c0dd0a954bd29ebb1b418ba3a3bbe3"
+    },
+    {
+      "scene": "Unconfounded",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 34
+      },
+      "input_record": "renders/qa/series/stats36/en/Unconfounded/result.json",
+      "input_sha256": "aef9d627f74253c4d0c5cefe562445f3155b4d9972c77417d1caedc569b8a9db"
+    },
+    {
+      "scene": "DAGs",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 39
+      },
+      "input_record": "renders/qa/series/stats36/en/DAGs/result.json",
+      "input_sha256": "57dd43f5807e97f43ef12cda3d3c95b57baa55deb5d620323c0c248735445966"
+    },
+    {
+      "scene": "Backdoor",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 34
+      },
+      "input_record": "renders/qa/series/stats36/en/Backdoor/result.json",
+      "input_sha256": "3568c64a007538cf8b3c2a491c6899a22f1feaed505b648aac78e9c111a0c49b"
+    },
+    {
+      "scene": "Frontdoor",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 37
+      },
+      "input_record": "renders/qa/series/stats36/en/Frontdoor/result.json",
+      "input_sha256": "cea5d202be2cf5ce1cf1831ed7f991ba289eceba21a682dae6b16d523f821ed0"
+    },
+    {
+      "scene": "Simpson",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 37
+      },
+      "input_record": "renders/qa/series/stats36/en/Simpson/result.json",
+      "input_sha256": "0d1efb9d7f6d9ec173474140a130c87e621c450bf65aceac9f55e39e9cd30279"
+    },
+    {
+      "scene": "GComp",
+      "status": "needs-review",
+      "frames": 15,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 27
+      },
+      "input_record": "renders/qa/series/stats36/en/GComp/result.json",
+      "input_sha256": "da7e89a196263a0d768181ee0ffdca7e928d030e48626521f3cf9d2b0cdb28bb"
+    },
+    {
+      "scene": "Propensity",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/series/stats36/en/Propensity/result.json",
+      "input_sha256": "5dac6c89a8a6850be57eb4f1974eccd3e7bcedbaf75c2824a9764d2299c2a1df"
+    },
+    {
+      "scene": "IPW",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/series/stats36/en/IPW/result.json",
+      "input_sha256": "2737b2ce5803881d8748a5ef3e15da900aa8b60b6d09e15b9fd0217a3a63b2b2"
+    },
+    {
+      "scene": "AIPW",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 64
+      },
+      "input_record": "renders/qa/series/stats36/en/AIPW/result.json",
+      "input_sha256": "a03f5282080798d8f26c2381ac17eeebb99114678e8918f428f6c781bb40481d"
+    },
+    {
+      "scene": "DML",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 52
+      },
+      "input_record": "renders/qa/series/stats36/en/DML/result.json",
+      "input_sha256": "6320157f46d231bdf97944a9a2e315300cfed25eda6ac4cded5e996a66ac1ad9"
+    },
+    {
+      "scene": "CATE",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 60
+      },
+      "input_record": "renders/qa/series/stats36/en/CATE/result.json",
+      "input_sha256": "3f129dca1ea0cb478102db9749097d93d94ea918c6057e42c47a8f908e5a1d1e"
+    },
+    {
+      "scene": "Sensitivity",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 63
+      },
+      "input_record": "renders/qa/series/stats36/en/Sensitivity/result.json",
+      "input_sha256": "56fd5d3414062ade6409fb9056d8701f2af5aad75ea6fb246bcf54b5c96805b2"
+    },
+    {
+      "scene": "Smoking",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/series/stats36/en/Smoking/result.json",
+      "input_sha256": "65c23b9455726ee24582c902b676d461ddc4c91677f3729911f700098d70eed9"
+    },
+    {
+      "scene": "TimeVarying",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 34
+      },
+      "input_record": "renders/qa/series/stats36/en/TimeVarying/result.json",
+      "input_sha256": "0bb1e8c0d17ca911b23cd73dfb469437e87ce7a5440170aef8b0dd2f59382aad"
+    },
+    {
+      "scene": "LaLonde",
+      "status": "needs-review",
+      "frames": 17,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 39
+      },
+      "input_record": "renders/qa/series/stats36/en/LaLonde/result.json",
+      "input_sha256": "3e29bb949c512c196ca5e4233003fb88bc59dd497b0bc428bac53ce75fc62eae"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 11,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 67
+      },
+      "input_record": "renders/qa/series/stats36/en/Outro/result.json",
+      "input_sha256": "5f07825fb95790ee17b859264ed8f551e793f8278724bdd1848135174c4599c1"
+    }
+  ]
+}

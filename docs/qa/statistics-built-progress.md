@@ -62,7 +62,7 @@ No part is signed off for bilingual production. The branch has zero narration_zh
 | 33 | `stats33` | 14 | Scientific source corrections complete; visual verification in progress |
 | 34 | `stats34` | 13 | Scientific source corrections, all 18 inputs and 16 checks complete; visual verification in progress |
 | 35 | `stats35` | 16 | Scientific source corrections and 20 checks complete; visual verification in progress |
-| 36 | `stats36` | 17 | Scientific source corrections and 23 checks complete; visual verification in progress |
+| 36 | `stats36` | 17 | English source and visual review complete; bilingual/listening/master gates open |
 | 37 | `stats37` | 16 | Scientific source corrections and 23 checks complete; visual verification in progress |
 | 38 | `stats38` | 14 | Scientific source corrections and 19 checks complete; visual verification in progress |
 | 39 | `stats39` | 16 | Full source read; scientific corrections and 22 checks pass; numerical reconciliation and visuals in progress |
@@ -70,7 +70,7 @@ No part is signed off for bilingual production. The branch has zero narration_zh
 | 41 | `stats41` | 11 | Scientific source corrections complete; visual verification in progress |
 | 42 | `stats42` | 12 | Scientific source corrections complete; visual verification in progress |
 | 43 | `stats43` | 15 | Scientific source corrections complete; visual verification in progress |
-| 44 | `stats44` | 15 | Not yet reviewed chapter by chapter |
+| 44 | `stats44` | 15 | Scientific source corrections and 14 checks complete; visual verification in progress |
 | 45 | `stats45` | 15 | Not yet reviewed chapter by chapter |
 | 46 | `stats46` | 14 | Not yet reviewed chapter by chapter |
 | 47 | `stats47` | 15 | Not yet reviewed chapter by chapter |

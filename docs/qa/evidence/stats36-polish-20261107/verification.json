@@ -1,0 +1,23 @@
+{
+  "part": "stats36",
+  "fingerprint": "8593745d048d88571db3488eb5d0ecc12765f689d1e79e7723eb067c28375894",
+  "english_endpoints": 17,
+  "native_1080_endpoints": 16,
+  "silent_motion_chapters": 16,
+  "audio_scene": "Sensitivity",
+  "audio_lines": 9,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats36/en/Sensitivity/videos/s13_sensitivity/480p15/Sensitivity.mp4",
+    "seconds": 294.532357,
+    "narration_sha256": "75fb37d254be6fe93a63002417ce973ddff2d21adfb72db5af8482a3940d3fc2",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 294 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 294 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

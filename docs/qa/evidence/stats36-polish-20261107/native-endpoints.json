@@ -1,0 +1,182 @@
+{
+  "fingerprint": "8593745d048d88571db3488eb5d0ecc12765f689d1e79e7723eb067c28375894",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 41
+      },
+      "input_record": "renders/qa/native1080/stats36/en/Hook/result.json",
+      "input_sha256": "cb678269d5889a4306072b2d27022102d204d87b34d928521eb92cedf9c60d06"
+    },
+    {
+      "scene": "Unconfounded",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 34
+      },
+      "input_record": "renders/qa/native1080/stats36/en/Unconfounded/result.json",
+      "input_sha256": "c316499a4e6dea36f430eb77f344765508ef51222b0afe9b54e959f1081e2fab"
+    },
+    {
+      "scene": "DAGs",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 39
+      },
+      "input_record": "renders/qa/native1080/stats36/en/DAGs/result.json",
+      "input_sha256": "531fdd7dc56e7d3a7ae04158cacadbdad6af498ce0a5104a9087776371f27148"
+    },
+    {
+      "scene": "Backdoor",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 34
+      },
+      "input_record": "renders/qa/native1080/stats36/en/Backdoor/result.json",
+      "input_sha256": "d0300c995023ee44d2918799621d3d6025bc432cedc16d74ceced0a73cfb27b9"
+    },
+    {
+      "scene": "Frontdoor",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 37
+      },
+      "input_record": "renders/qa/native1080/stats36/en/Frontdoor/result.json",
+      "input_sha256": "733182e209e20e4710d09126132360db46f0dc8ca95b18f3dc1a313e566a7c91"
+    },
+    {
+      "scene": "Simpson",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 37
+      },
+      "input_record": "renders/qa/native1080/stats36/en/Simpson/result.json",
+      "input_sha256": "d66b6ed99510290edad88edc64a8d35ffb50a4f9b86a342983a018f314929886"
+    },
+    {
+      "scene": "GComp",
+      "status": "needs-review",
+      "frames": 15,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 27
+      },
+      "input_record": "renders/qa/native1080/stats36/en/GComp/result.json",
+      "input_sha256": "9cbe32a6e76c4a054ddc31a95a52eab43f9674cb0a2abf0e8f03c8e173932af3"
+    },
+    {
+      "scene": "Propensity",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/native1080/stats36/en/Propensity/result.json",
+      "input_sha256": "3d358acb7d50c9371f834923de8e7d1699545b9feb18f77e5370ce2202e99f30"
+    },
+    {
+      "scene": "IPW",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/native1080/stats36/en/IPW/result.json",
+      "input_sha256": "1af64b21bf6f5c6fdd0df95d7e310a8600c23ef9870230a1b121e35eb826049a"
+    },
+    {
+      "scene": "AIPW",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 64
+      },
+      "input_record": "renders/qa/native1080/stats36/en/AIPW/result.json",
+      "input_sha256": "8ba53e5343aa5be55ae9606a5e37b298608fe6d59f7138e825933b1b6886f52c"
+    },
+    {
+      "scene": "DML",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 52
+      },
+      "input_record": "renders/qa/native1080/stats36/en/DML/result.json",
+      "input_sha256": "8770034712abeb53fff27fbdd2c992b74e1ce6c41cf78e375b4c19495b12f1ca"
+    },
+    {
+      "scene": "CATE",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 60
+      },
+      "input_record": "renders/qa/native1080/stats36/en/CATE/result.json",
+      "input_sha256": "813c773d20e4d30015297f531a221be8461cf7fe7318c7a317b7ed4c95ec8c48"
+    },
+    {
+      "scene": "Sensitivity",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 63
+      },
+      "input_record": "renders/qa/native1080/stats36/en/Sensitivity/result.json",
+      "input_sha256": "f8dc07cab24e23766593e220ae92c49377fed169b899845b24564fc0124874a7"
+    },
+    {
+      "scene": "Smoking",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/native1080/stats36/en/Smoking/result.json",
+      "input_sha256": "d073ff2379b886f15f6b637c67c06f6f45bd59ea4e24b9d0690486ff6d025578"
+    },
+    {
+      "scene": "TimeVarying",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 34
+      },
+      "input_record": "renders/qa/native1080/stats36/en/TimeVarying/result.json",
+      "input_sha256": "4044af9c00e59f1134d0966ff25554e4ae37538af15d24d71df663a82b4301a6"
+    },
+    {
+      "scene": "LaLonde",
+      "status": "needs-review",
+      "frames": 17,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 39
+      },
+      "input_record": "renders/qa/native1080/stats36/en/LaLonde/result.json",
+      "input_sha256": "d7e9c0ee0197b397107329bb7e561040440ce202246ca581aab3a94dc30daa33"
+    }
+  ]
+}
