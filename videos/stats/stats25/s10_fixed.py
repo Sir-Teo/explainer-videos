@@ -190,8 +190,8 @@ class Fixed(VoiceoverScene):
     def advice(self):
         rows = fit_rows(VGroup(
             label(r"`random' is not about the groups being random: \ it is the assumption $u_g \perp x$", font_size=24, color=RES),
-            label(r"want a within-group effect, \ robust to group confounders? \ fixed effects, \ or Mundlak", font_size=24),
-            label(r"want to predict for a new group, \ or a group-level effect? \ random effects", font_size=24, color=SHRUNK),
+            label(r"within effects: \ additive group control + strict exogeneity; \ FE or Mundlak", font_size=24),
+            label(r"new groups or group-level effects need between-group assumptions; \ RE is one option", font_size=24, color=SHRUNK),
             label(r"Mundlak's model gives both; \ the Hausman test checks the gap", font_size=24, color=HIT),
             label(r"Part 37: \ fixed effects as a causal design for panels", font_size=24, color=GREY_A),
         ), 12.6, 0.5, [0, 0, 0])

@@ -62,13 +62,14 @@ class Components(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"grey: \ pupils, \ each school's spread", font_size=22),
             label(r"green: \ school means", font_size=22, color=SHRUNK),
-            label(r"gold: \ the World's mean", font_size=22, color=TRUE),
+            label(r"gold: \ unweighted average of 400 school means", font_size=22, color=TRUE),
             label(r"pupils differ a lot; \ schools differ a bit", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [3.9, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Six of the World's schools. Within each, pupils' scores spread widely. "
-            "<bookmark mark='b'/> The school means differ from one another <bookmark mark='c'/> and from the World's average, "
-            "<bookmark mark='d'/> but by much less than pupils differ within a school."
+            "<bookmark mark='a'/> Six of the World's schools. Within each, pupils' scores spread widely. <bookmark "
+            "mark='b'/> The school means differ from one another <bookmark mark='c'/> and from the unweighted average"
+            " of all four hundred school means, <bookmark mark='d'/> but by much less than pupils differ within a "
+            "school."
         ) as vo:
             self.add(simulated_tag())
             self.play(FadeIn(A))
