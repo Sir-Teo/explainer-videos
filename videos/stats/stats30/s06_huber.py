@@ -117,6 +117,10 @@ class Huber(VoiceoverScene):
             label(r"the mean's worst-case variance is infinite for every $\varepsilon > 0$", font_size=22),
             label(rf"$k = 1.345$: \ 95\% efficient at the normal \ (computed: {d['eff']['huber']:.3f}); \ the usual default", font_size=22, color=HUBC),
         ), 12.0, 0.22, [0, -2.4, 0])
+        intro = label('Minimax clipping depends on the contamination fraction', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
+        self.add(intro)
         with self.voiceover(
             "<bookmark mark='a'/> The minimax k for each amount of contamination. At one in a thousand, k is two point six "
             "three, and the price is under one percent of variance. At five percent, k is one point four, and the worst-case "
