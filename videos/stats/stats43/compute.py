@@ -31,7 +31,8 @@ import math
 from dataclasses import asdict
 
 import numpy as np
-from scipy import special, stats
+from scipy import special, stats, optimize
+from scipy.integrate import quad
 
 from explainer.ai.cache import Cache
 from explainer.stats import museum
@@ -64,11 +65,83 @@ def nest(obj):
     return obj
 
 
-def eff_reps(per_rep, nominal=0.9) -> int:
-    v = np.var(np.asarray(per_rep, float), ddof=1) / len(per_rep)
-    if v == 0:
-        return len(per_rep)
-    return int(round(nominal * (1 - nominal) / max(v, 1e-12)))
+def histogram_density(values, bins, range):
+    """Unconditional density on a finite viewport; omitted tails are not renormalized."""
+    values=np.asarray(values,float)
+    counts,edges=np.histogram(values,bins=bins,range=range)
+    return counts/(len(values)*np.diff(edges)),edges
+
+
+def normal_lattice_distances(atoms, probabilities):
+    """Finite lattice versus standard normal; extrema and quantile cells, no spatial grid."""
+    atoms, probabilities = np.asarray(atoms, float), np.asarray(probabilities, float)
+    probabilities = probabilities / probabilities.sum()
+    right = np.cumsum(probabilities); right[-1] = 1.
+    left = np.r_[0., right[:-1]]
+    def levy_ok(e):
+        return max(np.max(right-stats.norm.cdf(atoms+e)), np.max(stats.norm.cdf(atoms-e)-left)) <= e
+    lo, hi = 0., 1.
+    for _ in range(55):
+        mid = (lo+hi)/2
+        if levy_ok(mid): hi=mid
+        else: lo=mid
+    levy = hi
+    def outside(e):
+        mass = np.maximum(0., np.minimum(right, stats.norm.cdf(atoms+e))-np.maximum(left, stats.norm.cdf(atoms-e)))
+        return 1.-mass.sum()
+    lo, hi = 0., 1.
+    for _ in range(55):
+        mid = (lo+hi)/2
+        if outside(mid)<=mid: hi=mid
+        else: lo=mid
+    # Integrate |atom - Phi^-1(u)| analytically over each quantile cell.
+    middle = np.clip(stats.norm.cdf(atoms), left, right)
+    pdf_left, pdf_middle, pdf_right = [stats.norm.pdf(stats.norm.ppf(v)) for v in (left,middle,right)]
+    wasserstein = np.sum(atoms*(2*middle-left-right)+2*pdf_middle-pdf_left-pdf_right)
+    return dict(levy=float(levy), ky_fan=float(hi), wasserstein=float(wasserstein))
+
+
+def aggregate_returns(returns, width):
+    """Nonoverlapping complete blocks; discard the final incomplete block."""
+    returns = np.asarray(returns, float)
+    return returns[:len(returns)//width*width].reshape(-1,width).sum(1)
+
+
+def urn_tail(n):
+    """P(|K/n - 3/5| >= 1/50); exact rational event boundaries avoid float ceilings."""
+    n = np.asarray(n, dtype=np.int64)
+    return stats.binom.cdf((29*n)//50,n,.6) + stats.binom.sf((31*n+49)//50-1,n,.6)
+
+
+def urn_sizes(target):
+    lower_rate, upper_rate = LI.bernoulli_rate(.58,.6), LI.bernoulli_rate(.62,.6)
+    guaranteed = math.ceil(math.log(2/target)/min(lower_rate,upper_rate))
+    ns = np.arange(1,guaranteed+1)
+    probabilities = urn_tail(ns)
+    first = int(ns[np.flatnonzero(probabilities<=target)[0]])
+    safe = int(ns[np.flatnonzero(probabilities>target)[-1]]+1)
+    return dict(first_admissible=first, safe_from=safe, checked_through=guaranteed,
+                boundary='inclusive |K/n - 3/5| >= 1/50, integer arithmetic',
+                all_later_certificate='Exact check through Chernoff threshold; monotone Chernoff envelope thereafter')
+
+
+def maximum_distance(kind, n, alpha=2.):
+    """Continuous supremum with scalar optimization; exact-power CDFs from the kit."""
+    if kind in ('exponential','uniform','pareto'):
+        def gap(t):
+            finite = math.exp(n*math.log1p(-t/n)) if t<n else 0.
+            return math.exp(-t)-finite
+        result=optimize.minimize_scalar(lambda t:-gap(t),bounds=(0.,min(float(n),40.)),method='bounded',options={'xatol':1e-12})
+        return float(-result.fun)
+    grid=np.linspace(-8,15,12001)
+    gap=np.abs(LI.max_cdf(kind,n,grid)-LI.max_limit(kind,grid))
+    local=np.flatnonzero((gap[1:-1]>=gap[:-2]) & (gap[1:-1]>=gap[2:]))+1
+    answer=float(gap.max())
+    for i in local:
+        if gap[i]<1e-10:continue
+        result=optimize.minimize_scalar(lambda x:-abs(float(LI.max_cdf(kind,n,x)-LI.max_limit(kind,x))),bounds=(grid[i-1],grid[i+1]),method='bounded')
+        answer=max(answer,float(-result.fun))
+    return answer
 
 
 def compute_cantor():
@@ -83,7 +156,7 @@ def compute_digits():
     d = LI.binary_digits(u, 10)
     run = np.mean(d[:, :3].sum(1) == 3)
     e = -np.log1p(-u)  # the quantile transform of Exp(1)
-    h, edges = np.histogram(e, bins=40, range=(0, 6), density=True)
+    h, edges = histogram_density(e, bins=40, range=(0, 6))
     return {"share": d.mean(0), "corr01": float(np.corrcoef(d[:, 0], d[:, 1])[0, 1]), "three_heads": float(run),
             "u_example": float(u[0]), "digits_example": d[0], "exp_hist": h, "exp_edges": edges}
 
@@ -123,7 +196,7 @@ def compute_runs():
             starts, ends = np.flatnonzero(d == 1), np.flatnonzero(d == -1)
             L.append(int((ends - starts).max()) if len(starts) else 0)
         out.append({"n": n, "mean": float(np.mean(L)), "lo": float(np.quantile(L, 0.1)), "hi": float(np.quantile(L, 0.9)),
-                    "log2": math.log2(n)})
+                    "log2": math.log2(n), "reps": len(L), "mc_se": float(np.std(L,ddof=1)/np.sqrt(len(L)))})
     return {"rows": out}
 
 
@@ -158,9 +231,9 @@ def compute_weak():
         F = LI.lattice_cdf(b["atoms"], b["probs"])
         Q = LI.lattice_ppf(b["atoms"], b["probs"])
         k = LI.kolmogorov_lattice(b["atoms"], b["probs"], stats.norm.cdf)
-        pb = LI.prokhorov_bracket(F, stats.norm.cdf, Q, stats.norm.ppf, x)
+        pb = normal_lattice_distances(b["atoms"], b["probs"])
         rows.append({"n": n, "kolmogorov": k["d"], "at": k["x"], "levy": pb["levy"], "ky_fan": pb["ky_fan"],
-                     "wasserstein": LI.wasserstein1(F, stats.norm.cdf, x)})
+                     "wasserstein": pb["wasserstein"]})
     b = LI.bernoulli_sum_atoms(10, 0.5)
     # the Levy square at the worst point, for the picture
     grid = np.linspace(-3.5, 3.5, 701)
@@ -177,9 +250,11 @@ def compute_horse():
     lam = float((k * nk).sum() / N)
     exp_ = N * stats.poisson.pmf(k, lam)
     exp_[-1] = N * stats.poisson.sf(k[-2], lam)
-    chi2 = float(((nk - exp_) ** 2 / exp_).sum())
+    pooled_obs = np.r_[nk[:2],nk[2:].sum()]
+    pooled_expected = np.r_[exp_[:2],exp_[2:].sum()]
+    chi2 = float(((pooled_obs-pooled_expected)**2/pooled_expected).sum())
     tv = [{"n": n, "tv": LI.tv_binomial_poisson(n, lam / n), "bound": n * (lam / n) ** 2} for n in (5, 20, 100, 500, 2000)]
-    return {"k": k, "obs": nk, "N": N, "lam": lam, "expected": exp_, "chi2": chi2, "p": float(stats.chi2.sf(chi2, len(k) - 2)),
+    return {"k": k, "obs": nk, "N": N, "lam": lam, "expected": exp_, "chi2": chi2, "p": float(stats.chi2.sf(chi2,1)), "gof": dict(categories=["0","1","2+"],observed=pooled_obs,expected=pooled_expected,df=1,reference="approximate pooled chi-square; lambda estimated"),
             "tv": tv, "deaths": int((k * nk).sum())}
 
 
@@ -217,13 +292,13 @@ def compute_lindeberg():
     # (a) equal uniforms: Lindeberg holds
     n = 20
     s = g.uniform(-1, 1, (reps, n)).sum(1) / math.sqrt(n / 3)
-    out["equal"] = {"ks": float(stats.kstest(s, "norm").statistic), "hist": np.histogram(s, bins=60, range=(-4, 4), density=True)[0]}
+    out["equal"] = {"ks": float(stats.kstest(s, "norm").statistic), "hist": histogram_density(s, bins=60, range=(-4, 4))[0]}
     # (b) Rademacher steps with Var X_k = 4^k: the last carries three quarters of the variance
     k = np.arange(1, n + 1)
     sd = 2.0 ** k
     signs = g.choice([-1.0, 1.0], (reps, n))
     t = (signs * sd).sum(1) / math.sqrt((sd ** 2).sum())
-    out["dominant"] = {"ks": float(stats.kstest(t, "norm").statistic), "hist": np.histogram(t, bins=60, range=(-4, 4), density=True)[0],
+    out["dominant"] = {"ks": float(stats.kstest(t, "norm").statistic), "hist": histogram_density(t, bins=60, range=(-4, 4))[0],
                        "share_last": float(sd[-1] ** 2 / (sd ** 2).sum())}
     edges = np.linspace(-4, 4, 61)
     out["mid"] = (edges[:-1] + edges[1:]) / 2
@@ -246,11 +321,11 @@ def compute_rates():
                 p = 0.1 if kind == "bernoulli01" else 0.5
                 b = LI.bernoulli_sum_atoms(n, p)
                 kd.append(LI.kolmogorov_lattice(b["atoms"], b["probs"], stats.norm.cdf)["d"])
-                wd.append(LI.wasserstein1(LI.lattice_cdf(b["atoms"], b["probs"]), stats.norm.cdf, x))
+                wd.append(normal_lattice_distances(b["atoms"],b["probs"])["wasserstein"])
             elif kind == "poisson":
                 b = LI.poisson_sum_atoms(n, 1.0)
                 kd.append(LI.kolmogorov_lattice(b["atoms"], b["probs"], stats.norm.cdf)["d"])
-                wd.append(LI.wasserstein1(LI.lattice_cdf(b["atoms"], b["probs"]), stats.norm.cdf, x))
+                wd.append(normal_lattice_distances(b["atoms"],b["probs"])["wasserstein"])
             else:
                 F = LI.exponential_sum_cdf(n)
                 kd.append(LI.kolmogorov(F, stats.norm.cdf, x))
@@ -286,12 +361,12 @@ def compute_stable():
     out["dax_kurt"] = float(stats.kurtosis(r))
     ks = []
     for m in (1, 5, 20):
-        s = np.add.reduceat(r - r.mean(), np.arange(0, len(r) - len(r) % m, m))[: len(r) // m]
+        s = aggregate_returns(r-r.mean(),m)
         zz = (s - s.mean()) / s.std()
         ks.append({"m": m, "n": len(zz), "ks": float(stats.kstest(zz, "norm").statistic), "kurt": float(stats.kurtosis(zz))})
     out["dax_sums"] = ks
     zr = (r - r.mean()) / r.std()
-    out["dax_hist"] = np.histogram(zr, bins=60, range=(-6, 6), density=True)[0]
+    out["dax_hist"] = histogram_density(zr, bins=60, range=(-6, 6))[0]
     out["dax_tail"] = float(np.mean(np.abs(zr) > 4))
     out["normal_tail"] = float(2 * stats.norm.sf(4))
     return out
@@ -304,9 +379,7 @@ def compute_ld():
     exact, clt, chern = [], [], []
     Ihi, Ilo = LI.bernoulli_rate(p + eps, p), LI.bernoulli_rate(p - eps, p)
     for n in ns:
-        hi = stats.binom.sf(math.ceil(n * (p + eps)) - 1, n, p)
-        lo = stats.binom.cdf(math.floor(n * (p - eps)), n, p)
-        exact.append(float(hi + lo))
+        exact.append(float(urn_tail(n)))
         clt.append(float(2 * stats.norm.sf(eps * math.sqrt(n / (p * (1 - p))))))
         chern.append(float(math.exp(-n * Ihi) + math.exp(-n * Ilo)))
 
@@ -315,19 +388,12 @@ def compute_ld():
         i = np.flatnonzero(v <= target)
         return int(ns[i[0]]) if len(i) else None
 
-    # refine the exact n by a direct search near the coarse answer
-    def exact_at(n):
-        return stats.binom.sf(math.ceil(n * (p + eps)) - 1, n, p) + stats.binom.cdf(math.floor(n * (p - eps)), n, p)
-
-    n_exact = None
-    for n in range(4000, 9000):
-        if exact_at(n) <= target and all(exact_at(m) <= target for m in range(n, n + 60, 7)):
-            n_exact = n
-            break
+    sizes=urn_sizes(target)
+    n_exact=sizes["safe_from"]
     a = np.linspace(0.01, 0.99, 197)
     rate = [LI.bernoulli_rate(v, p) for v in a]
     return {"p": p, "eps": eps, "target": target, "ns": ns, "exact": exact, "clt": clt, "chernoff": chern,
-            "n_bernoulli": museum.BERNOULLI["n"], "n_exact": n_exact,
+            "n_bernoulli": museum.BERNOULLI["n"], "n_exact": n_exact, "size_certificate": sizes,
             "n_clt": int(math.ceil((stats.norm.isf(target / 2) / eps) ** 2 * p * (1 - p))),
             "n_chernoff": int(math.ceil(math.log(2 / target) / min(Ihi, Ilo))), "I_hi": Ihi, "I_lo": Ilo,
             "a": a, "rate": rate, "quad": [(v - p) ** 2 / (2 * p * (1 - p)) for v in a]}
@@ -338,9 +404,9 @@ def compute_extremes():
     rows = {}
     for kind in ("exponential", "uniform", "normal"):
         xx = np.linspace(-6, 0, 2401) if kind == "uniform" else x
-        rows[kind] = [{"n": n, "d": LI.kolmogorov(LI.max_cdf(kind, n, xx), LI.max_limit(kind, xx), xx)} for n in (10, 100, 1000, 10_000, 100_000)]
+        rows[kind] = [{"n": n, "d": maximum_distance(kind,n)} for n in (10, 100, 1000, 10_000, 100_000)]
     xp = np.linspace(0.02, 20, 4000)
-    rows["pareto"] = [{"n": n, "d": LI.kolmogorov(LI.max_cdf("pareto", n, xp, 2.0), LI.max_limit("pareto", xp, 2.0), xp)} for n in (10, 100, 1000, 10_000, 100_000)]
+    rows["pareto"] = [{"n": n, "d": maximum_distance("pareto",n)} for n in (10, 100, 1000, 10_000, 100_000)]
     # curves for the picture: exponential and normal maxima at n = 10 and 1000 against the Gumbel
     g = np.linspace(-3, 6, 300)
     curves = {f"{k}_{n}": LI.max_cdf(k, n, g) for k in ("exponential", "normal") for n in (10, 1000)}
@@ -380,7 +446,7 @@ def compute_board():
             xb, s = x.mean(1), x.std(1, ddof=1)
             q = stats.t.ppf(0.95, n - 1)
             cov[i:i + m] = np.abs(xb - mu) <= q * s / math.sqrt(n)
-        rows.append(Row(43, method, setting, "coverage", 0.9, float(cov.mean()), eff_reps(cov)))
+        rows.append(Row(43, method, setting, "coverage", 0.9, float(cov.mean()), reps, mc_se=float(cov.std(ddof=1)/np.sqrt(reps))))
     save_rows(43, rows)
     return {"rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows], "z": float(z)}
 

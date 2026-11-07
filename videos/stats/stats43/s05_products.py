@@ -30,13 +30,16 @@ class Products(VoiceoverScene):
         rows[1][-1].set_color(LAWC)
         whys = [why(r"for $\sigma$-algebras"), why(r"for variables: \ their information"), why(r"a generating class"), why(r"by the next theorem")]
         with self.voiceover(
-            "<bookmark mark='a'/> Independence is a property of information. Two sigma-algebras are independent if every "
-            "event of one is independent of every event of the other. <bookmark mark='b'/> Two random variables are "
-            "independent if the sigma-algebras they generate are. <bookmark mark='c'/> By pi–lambda again, it is enough "
-            "that the joint CDF factors into the marginals. <bookmark mark='d'/> Functions of independent variables are "
-            "then independent, because their information is contained in the originals', and the expectation of a product "
-            "factors, by the theorem that follows."
+            "<bookmark mark='a'/> Independence is a property of information. Two sigma-algebras are independent if "
+            "every event of one is independent of every event of the other. <bookmark mark='b'/> Two random variables"
+            " are independent if the sigma-algebras they generate are. <bookmark mark='c'/> By pi–lambda again, it is"
+            " enough that the joint CDF factors into the marginals. <bookmark mark='d'/> Measurable functions of "
+            "independent variables are then independent, because their information is contained in the originals', "
+            "and the expectation of a product factors, by the theorem that follows."
         ) as vo:
+            heading=label('Independence is a property of sigma-algebras',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -51,15 +54,19 @@ class Products(VoiceoverScene):
             cmath(r"E[XY]", r"=", r"\textstyle\iint xy \, d\mu_X\, d\mu_Y = E X \, E Y \ \ (X \perp Y: \ \text{the joint law is } \mu_X \times \mu_Y)", font_size=28),
         ]
         rows[2][-1].set_color(GOODC)
-        whys = [why(r"rectangles, \ then Carath\'eodory"), why(r"non-negative: \ always"), why(r"signed: \ if absolutely integrable"), why(r"the product rule")]
+        whys = [why(r"rectangles, \ then Carath\'eodory"), why(r"non-negative measurable; sigma-finite spaces"), why(r"signed: \ if absolutely integrable"), why(r"the product rule")]
         with self.voiceover(
-            "<bookmark mark='a'/> The product measure gives a rectangle the product of its sides' measures, and "
-            "Carathéodory's theorem extends that uniquely. <bookmark mark='b'/> Tonelli's theorem: for a non-negative "
-            "function, the double integral equals either iterated integral, in either order. <bookmark mark='c'/> Fubini's "
-            "theorem: the same holds for a signed function, provided its absolute value is integrable. <bookmark "
-            "mark='d'/> Independence says the joint law is the product of the marginals, and Fubini then gives the product "
-            "rule for expectations. The proviso in Fubini is not a technicality."
+            "<bookmark mark='a'/> For sigma-finite measure spaces, including probability spaces, the product measure "
+            "gives a rectangle the product of its sides' measures, and Carathéodory's theorem extends that uniquely. "
+            "<bookmark mark='b'/> Tonelli's theorem: for a non-negative function, the double integral equals either "
+            "iterated integral, in either order. <bookmark mark='c'/> Fubini's theorem: the same holds for a signed "
+            "function, provided its absolute value is integrable. <bookmark mark='d'/> Independence says the joint "
+            "law is the product of the marginals, and Fubini then gives the product rule for expectations. The "
+            "proviso in Fubini is not a technicality."
         ) as vo:
+            heading=label('Product integration requires measurability and sigma-finiteness',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -126,6 +133,9 @@ class Products(VoiceoverScene):
             "uncountably many coordinates at once, such as continuity of a path. Part forty-four's Brownian motion needs "
             "one more step."
         ) as vo:
+            heading=label('Consistent finite-dimensional laws define a product-space law',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -137,15 +147,16 @@ class Products(VoiceoverScene):
             label(r"$n$ i.i.d.\ observations: \ the law of the data is $\mu_\theta^{\otimes n}$", font_size=26),
             label(r"its density with respect to $\lambda^{\otimes n}$: \ $\prod_i f_\theta(x_i)$, \ the likelihood", font_size=26, color=LAWC),
             label(r"a likelihood is a Radon--Nikodym derivative: \ $dP_\theta / d\nu$", font_size=26, color=S.ACCENT),
-            label(r"discrete, \ continuous, \ censored, \ mixed: \ one definition", font_size=26, color=GOODC),
+            label(r"one fixed dominating measure for the parameter family is required", font_size=26, color=GOODC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Statistics lives on these products. A sample of n independent observations has the "
-            "n-fold product law. <bookmark mark='b'/> Its density, with respect to the product of Lebesgue measures, is the "
-            "product of the individual densities: the likelihood of Part twenty-two. <bookmark mark='c'/> In general a "
-            "likelihood is a Radon–Nikodym derivative, the density of the data's law with respect to some fixed measure. "
-            "<bookmark mark='d'/> That is why one definition covers counts, measurements, censored survival times and "
-            "mixtures of them: each is a density with respect to its own dominating measure."
+            "n-fold product law. <bookmark mark='b'/> Its density, with respect to the product of Lebesgue measures, "
+            "is the product of the individual densities: the likelihood of Part twenty-two. <bookmark mark='c'/> In "
+            "general a likelihood is a Radon–Nikodym derivative, the density of the data's law with respect to some "
+            "fixed measure. <bookmark mark='d'/> That is why one definition covers counts, measurements, censored "
+            "survival times and mixtures of them: when the whole parameter family admits one fixed, "
+            "parameter-independent dominating measure. Some statistical families are not dominated in this way."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

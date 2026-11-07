@@ -34,7 +34,7 @@ class Extremes(VoiceoverScene):
             cmath(r"M_n", r"=", r"\max(X_1, \ldots, X_n), \ \ P(M_n \le x) = F(x)^n", font_size=34),
             cmath(r"\frac{M_n - b_n}{a_n}", r"\Rightarrow", r"G \ \text{non-degenerate}", font_size=34),
             cmath(r"\text{max-stable}", r":", r"G(x)^k = G(\alpha_k x + \beta_k) \ \ \text{for every } k", font_size=32),
-            cmath(r"\text{FTG}", r":", r"G(x) = \exp\big(-(1 + \xi x)^{-1/\xi}\big)", font_size=34),
+            cmath(r"\text{FTG}", r":", r"G(x) = \exp\big(-(1 + \xi x)^{-1/\xi}\big),\quad 1+\xi x>0\ (\xi=0:\text{ limit})", font_size=34),
         ]
         rows[3][-1].set_color(S.ACCENT)
         whys = [why(r"independence"), why(r"normalized maxima"), why(r"the limit's own property"), why(r"Gumbel $\xi = 0$; \ Fr\'echet $\xi > 0$; \ Weibull $\xi < 0$")]
@@ -47,6 +47,9 @@ class Extremes(VoiceoverScene):
             "that equation: the only solutions form one family, the generalized extreme value laws, Gumbel when xi is zero, "
             "Fréchet when xi is positive, reversed Weibull when it is negative."
         ) as vo:
+            heading=label('A nondegenerate iid maximum limit must be max-stable',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -70,6 +73,9 @@ class Extremes(VoiceoverScene):
             "s, s to the minus xi. <bookmark mark='d'/> When xi is zero the shift is minus log s and psi is e to the minus x, "
             "the Gumbel law; otherwise psi is one plus xi x to the minus one over xi. Three families, one equation."
         ) as vo:
+            heading=label('Max-stability restricts the affine normalization maps',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -91,17 +97,20 @@ class Extremes(VoiceoverScene):
             label(r"exponential maxima, \ $n = 10$: \ already close", font_size=22, color=LAWC),
             label(r"normal maxima, \ $n = 10$ and $1{,}000$: \ still visibly off", font_size=22, color=BADC),
             label(r"exponential, \ Pareto, \ uniform: \ $F^n = (1 - t/n)^n$ vs $e^{-t}$", font_size=22, color=GREY_A),
-            label(r"normal: \ the error falls like $1/\log n$", font_size=22, color=S.ACCENT),
+            label(r"normal: logarithmically slow; log-log corrections depend on norming", font_size=22, color=S.ACCENT),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Which laws go where? The exponential and the normal both lie in the Gumbel domain, Pareto "
-            "tails in the Fréchet domain, bounded laws like the uniform in the reversed Weibull domain. <bookmark mark='b'/> "
-            "But the speed differs enormously. Normalized exponential maxima are close to the Gumbel law already at ten. "
-            "<bookmark mark='c'/> Normal maxima, at ten and even at a thousand, are still visibly off. <bookmark mark='d'/> "
-            "For the exponential, the Pareto and the uniform, after normalizing, the CDF of the maximum is exactly one minus "
-            "t over n, to the n, against its limit e to the minus t, so all three converge at the same rate, about one over "
-            "n. <bookmark mark='e'/> For the normal, the error falls only like one over log n: a hundred thousand "
-            "observations are not enough for a good Gumbel fit to normal maxima."
+            "<bookmark mark='a'/> Which laws go where? The exponential and the normal both lie in the Gumbel domain, "
+            "Pareto tails in the Fréchet domain, the uniform in the reversed Weibull domain. Bounded support alone "
+            "does not establish a Weibull domain, and not every distribution admits a nondegenerate affine maximum "
+            "limit. <bookmark mark='b'/> But the speed differs enormously. Normalized exponential maxima are close to"
+            " the Gumbel law already at ten. <bookmark mark='c'/> Normal maxima, at ten and even at a thousand, are "
+            "still visibly off. <bookmark mark='d'/> For the exponential, the Pareto and the uniform, after "
+            "normalizing, the CDF of the maximum is exactly one minus t over n, to the n, against its limit e to the "
+            "minus t, so all three converge at the same rate, about one over n. <bookmark mark='e'/> For the normal, "
+            "the convergence is logarithmically slow, with log-log corrections for the displayed classical "
+            "normalizing constants. Better quantile-based centering changes the rate constants and corrections: a "
+            "hundred thousand observations are not enough for a good Gumbel fit to normal maxima."
         ) as vo:
             self.play(FadeIn(A), FadeIn(exact_tag(r"exact: $F(a_n x + b_n)^n$")))
             vo.wait_until("a")
@@ -124,7 +133,7 @@ class Extremes(VoiceoverScene):
             rows.append([nm] + [sci(r["d"]) for r in d["rows"][k]])
         tab = table_rows(rows, font_size=26, col_buff=0.55, row_buff=0.22, colors=[GREY_A, None, None, None, BADC]).move_to([0, 0.6, 0])
         msg = fit_rows(VGroup(
-            label(r"exact Kolmogorov distances of the normalized maximum from its limit", font_size=24, color=GREY_A),
+            label(r"numerical supremum distances from exact maximum CDF formulas", font_size=24, color=GREY_A),
             label(r"three identical rows: \ the same function of $t$; \ the normal's barely halves in $10^4\times$ the data", font_size=24, color=S.ACCENT),
         ), 12.4, 0.3, [0, -2.2, 0])
         with self.voiceover(
@@ -161,13 +170,7 @@ class Extremes(VoiceoverScene):
             label(rf"the 100-year level: \ {d['rl100']:.2f} m \ (Gumbel {d['rl100_gumbel']:.2f} m); \ the record: \ {d['pp_max']:.2f} m", font_size=22, color=S.ACCENT),
         ), 12.4, 0.28, [0, -2.45, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Real maxima. Stuart Coles's standard example: the highest sea level each year at Port Pirie, "
-            f"in South Australia, sixty-five years from 1923. <bookmark mark='b'/> Each point is already a maximum over a "
-            f"year of tides, so the theorem says a generalized extreme value law should fit, and it does. The fitted shape xi "
-            f"is {say(d['xi'], 2)}, close to the Gumbel case. <bookmark mark='c'/> The level exceeded on average once a "
-            f"century, the hundred-year return level that engineers design sea walls for, is {say(d['rl100'], 2)} metres "
-            f"under the fitted law, and {say(d['rl100_gumbel'], 2)} under a pure Gumbel. The record, in 1934, was "
-            f"{say(d['pp_max'], 2)}. Part six's Dutch dikes were designed this way, with the theorem behind them."
+            f"<bookmark mark='a'/> Real maxima. Stuart Coles's standard example: the highest sea level each year at Port Pirie, in South Australia, sixty-five years from 1923. <bookmark mark='b'/> Each point is already a maximum over a year of tides, so a stationary block-maximum model motivates a GEV approximation if the domain-of-attraction and dependence conditions hold. Annual maxima alone do not guarantee this; the fitted curve is an illustrative model, not a goodness-of-fit proof. The fitted shape xi is {say(d['xi'], 2)}, close to the Gumbel case. <bookmark mark='c'/> The fitted level with one percent annual exceedance probability, the hundred-year return level that engineers design sea walls for, is {say(d['rl100'], 2)} metres under an iid stationary fitted law, and {say(d['rl100_gumbel'], 2)} under a pure Gumbel. A return level is an uncertain model estimate, not a guarantee about the next hundred years. The record, in 1934, was {say(d['pp_max'], 2)}. Part six's Dutch dikes were designed this way, with the theorem behind them."
         ) as vo:
             self.play(FadeIn(A), FadeIn(B), FadeIn(museum_tag(r"Port Pirie: \ Coles (2001)")))
             vo.wait_until("a")

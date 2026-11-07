@@ -31,15 +31,19 @@ class Measures(VoiceoverScene):
         rows[3][-1].set_color(BADC)
         whys = [why(r"length, \ on everything"), why(r"Vitali (1905)"), why(r"rational shifts tile the interval"), why(r"contradiction")]
         with self.voiceover(
-            "<bookmark mark='a'/> Part two quietly assumed that every set of outcomes has a probability. Try it for the "
-            "simplest case: a length on every subset of the unit interval, unchanged by shifting a set around the interval, "
-            "countably additive, and giving the whole interval length one. <bookmark mark='b'/> In 1905 Giuseppe Vitali "
-            "showed there is no such thing. Call two points equivalent if they differ by a rational number, and, using the "
-            "axiom of choice, pick one point from every equivalence class. Call that set V. <bookmark mark='c'/> Shifting V "
-            "by each rational in the interval, wrapping around at one, gives countably many disjoint copies that together "
-            "cover the interval exactly. <bookmark mark='d'/> So one would equal a countable sum of equal lengths: zero if "
-            "V's length is zero, infinity if it is anything else. No length can be assigned to V."
+            "<bookmark mark='a'/> Part two quietly assumed that every set of outcomes has a probability. Try it for "
+            "the simplest case: a length on every subset of the unit interval, unchanged by shifting a set around the"
+            " interval, countably additive, and giving the whole interval length one. <bookmark mark='b'/> In 1905 "
+            "Giuseppe Vitali showed there is no such thing. Call two points equivalent if they differ by a rational "
+            "number, and, using the axiom of choice, pick one point from every equivalence class. Call that set V. "
+            "<bookmark mark='c'/> Shifting V by each rational in the interval, wrapping around at one, gives "
+            "countably many disjoint copies that together cover the interval exactly. <bookmark mark='d'/> So one "
+            "would equal a countable sum of equal lengths: zero if V's length is zero, infinity if it is anything "
+            "else. No rotation-invariant, countably additive extension of length can measure V."
         ) as vo:
+            heading=label('Vitali excludes rotation-invariant length on every subset',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -63,17 +67,18 @@ class Measures(VoiceoverScene):
             label(r"$[0, 1)$ bent into a circle: \ shifts are rotations", font_size=24, color=GREY_A),
             label(r"blue: \ a few points of $V$", font_size=24, color=LAWC),
             label(r"each colour: \ $V$ rotated by a rational", font_size=24, color=S.ACCENT),
-            label(r"so: \ not every set can be an event", font_size=26, color=BADC),
+            label(r"not every subset admits rotation-invariant length", font_size=26, color=BADC),
             label(r"probabilities live on a \emph{$\sigma$-algebra} of sets", font_size=26, color=GOODC),
         ), 5.4, 0.42, [3.6, 0.0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Bend the interval into a circle, so that shifting with wrap-around becomes rotation. "
-            "<bookmark mark='b'/> Here are a few points of V, in blue. <bookmark mark='c'/> Each colour is V rotated by a "
-            "different rational; the infinitely many rotations fill the circle without overlapping. A rotation cannot "
-            "change a length, so all the copies would have the same length, and there are too many of them. <bookmark "
-            "mark='d'/> The lesson is not that probability is broken, but that it must be more modest. <bookmark "
-            "mark='e'/> Probabilities are assigned to a collection of sets rich enough for everything we want to ask, and "
-            "no richer: a sigma-algebra."
+            "<bookmark mark='a'/> Bend the interval into a circle, so that shifting with wrap-around becomes "
+            "rotation. <bookmark mark='b'/> The blue points are a finite schematic for representatives; a computer "
+            "cannot construct a Vitali set. <bookmark mark='c'/> Each colour is V rotated by a different rational; "
+            "the infinitely many rotations fill the circle without overlapping. A rotation cannot change a length, so"
+            " all the copies would have the same length, and there are too many of them. <bookmark mark='d'/> The "
+            "lesson is not that probability is broken, but that it must be more modest. <bookmark mark='e'/> "
+            "Probabilities are assigned to a collection of sets rich enough for everything we want to ask, and no "
+            "richer: a sigma-algebra."
         ) as vo:
             self.play(Create(ring), FadeIn(side[0]))
             vo.wait_until("b")
@@ -91,20 +96,24 @@ class Measures(VoiceoverScene):
             cmath(r"\mathcal F", r":", r"\Omega \in \mathcal F; \ \ A \in \mathcal F \Rightarrow A^c \in \mathcal F; \ \ A_1, A_2, \ldots \in \mathcal F \Rightarrow \textstyle\bigcup_i A_i \in \mathcal F", font_size=28),
             cmath(r"P", r":", r"\mathcal F \to [0, 1], \ \ P(\Omega) = 1, \ \ P\big(\textstyle\bigsqcup_i A_i\big) = \sum_i P(A_i)", font_size=30),
             cmath(r"\mathcal B(\mathbb R)", r"=", r"\sigma\{(a, b]\}: \ \text{the smallest } \sigma\text{-algebra containing the intervals}", font_size=30),
-            cmath(r"\text{in } \mathcal B", r":", r"\text{open and closed sets, countable sets, } \{\omega : \lim X_n(\omega) \text{ exists}\}, \ldots", font_size=28),
+            cmath(r"\text{in } \mathcal B", r":", r"\text{open and closed sets, countable sets; measurable inverse images are events}", font_size=28),
         ]
         rows[2][-1].set_color(LAWC)
         whys = [why(r"closed under countable operations"), why(r"countable additivity"), why(r"the Borel sets"), why(r"everything we ask")]
         with self.voiceover(
-            "<bookmark mark='a'/> A sigma-algebra contains the whole space, the complement of each of its sets, and the "
-            "union of any countable sequence of its sets, so also countable intersections and limits. <bookmark mark='b'/> "
-            "A probability measure gives each of its sets a number between zero and one, one to the whole space, and adds "
-            "over countably many disjoint sets: Part two's third axiom, now on a sigma-algebra. <bookmark mark='c'/> On the "
-            "real line the standard choice is the Borel sigma-algebra, the smallest one containing the intervals. <bookmark "
-            "mark='d'/> It holds every set a statistician will ever ask about: open and closed sets, countable sets, and "
-            "events like the set of outcomes on which a sequence of random variables converges. Vitali's set is not in "
-            "it, and nothing is lost."
+            "<bookmark mark='a'/> A sigma-algebra contains the whole space, the complement of each of its sets, and "
+            "the union of any countable sequence of its sets, so also countable intersections and limits. <bookmark "
+            "mark='b'/> A probability measure gives each of its sets a number between zero and one, one to the whole "
+            "space, and adds over countably many disjoint sets: Part two's third axiom, now on a sigma-algebra. "
+            "<bookmark mark='c'/> On the real line the standard choice is the Borel sigma-algebra, the smallest one "
+            "containing the intervals. <bookmark mark='d'/> It contains the standard events on the real line: open "
+            "and closed sets, countable sets, and the inverse images needed for measurable real-valued observations. "
+            "Convergence events live in the underlying outcome sigma-algebra; completed measures can also contain "
+            "non-Borel subsets of null sets. Vitali's set is not Lebesgue measurable."
         ) as vo:
+            heading=label('A sigma-algebra specifies which subsets are events',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -121,14 +130,18 @@ class Measures(VoiceoverScene):
         rows[3][-1].set_color(GOODC)
         whys = [why(r"a generating class"), why(r"where two measures agree"), why(r"the $\pi$--$\lambda$ theorem"), why(r"uniqueness")]
         with self.voiceover(
-            "<bookmark mark='a'/> How do we know that two measures agreeing on intervals agree everywhere? A pi-system is a "
-            "class closed under finite intersections, like the half-lines from minus infinity to x. <bookmark mark='b'/> "
-            "The sets on which two probability measures agree always form a lambda-system: it contains the whole space, "
-            "differences of nested sets, and increasing limits. <bookmark mark='c'/> Dynkin's pi–lambda theorem says that "
-            "a lambda-system containing a pi-system contains the whole sigma-algebra it generates. <bookmark mark='d'/> So "
-            "two laws with the same CDF are the same law on every Borel set. Every uniqueness theorem in probability, from "
-            "characteristic functions to product measures, is proved this way."
+            "<bookmark mark='a'/> How do we know that two measures agreeing on intervals agree everywhere? A "
+            "pi-system is a class closed under finite intersections, like the half-lines from minus infinity to x. "
+            "<bookmark mark='b'/> The sets on which two probability measures agree always form a lambda-system: it "
+            "contains the whole space, differences of nested sets, and increasing limits. <bookmark mark='c'/> "
+            "Dynkin's pi–lambda theorem says that a lambda-system containing a pi-system contains the whole "
+            "sigma-algebra it generates. <bookmark mark='d'/> So two laws with the same CDF are the same law on every"
+            " Borel set. This generating-class argument supports many uniqueness results, including laws determined "
+            "by CDFs and product probability measures."
         ) as vo:
+            heading=label('A generating pi-system determines a probability law',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -154,6 +167,9 @@ class Measures(VoiceoverScene):
             "from zero to one, and the same construction gives a unique law with CDF F. Every distribution we have used "
             "exists because of this theorem."
         ) as vo:
+            heading=label('Outer measure constructs the Lebesgue-Stieltjes law',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

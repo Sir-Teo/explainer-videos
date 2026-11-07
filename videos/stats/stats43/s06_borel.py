@@ -40,6 +40,9 @@ class BorelCantelli(VoiceoverScene):
             "Its proof: the chance that none happens from n on is a product of one minus each probability, at most e to the "
             "minus their sum, which is zero."
         ) as vo:
+            heading=label('Summability and independence govern infinitely often events',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -61,22 +64,14 @@ class BorelCantelli(VoiceoverScene):
         side = fit_rows(VGroup(
             label(r"$A_n$: \ a run of $r_n$ heads starts at toss $n$; \ $P(A_n) = 2^{-r_n}$", font_size=22),
             label(r"$r_n = (1 + \varepsilon)\log_2 n$: \ $\sum n^{-1-\varepsilon} < \infty$: \ finitely often", font_size=22, color=GOODC),
-            label(r"$r_n = (1 - \varepsilon)\log_2 n$: \ the sum diverges: \ infinitely often", font_size=22, color=S.ACCENT),
+            label(r"lower bound: use independent blocks; divergence alone is insufficient", font_size=22, color=S.ACCENT),
             label(rf"so the longest run $\approx \log_2 n$: \ {last['mean']:.1f} in $2^{{20}}$ tosses", font_size=22, color=LAWC),
             label(r"Erd\H{o}s \& R\'enyi (1970)", font_size=20, color=GREY_B),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Here is the pair at work. Toss a fair coin n times: how long is the longest run of heads? "
-            f"Let A n be the event that a run of length r n starts at toss n; it has probability two to the minus r n. "
-            f"<bookmark mark='b'/> If r n is a little more than log base two of n, the probabilities sum like one over n to "
-            f"the one plus epsilon, which converges, so such runs happen only finitely often. <bookmark mark='c'/> If r n is "
-            f"a little less, the sum diverges, and an argument with independent blocks of tosses shows that such runs keep "
-            f"happening. <bookmark mark='d'/> So the longest run grows like log base two of n, the gold line. Simulated coins "
-            f"agree: about {say(last['mean'], 1)} in a million tosses, against twenty for log base two. <bookmark mark='e'/> "
-            f"Paul Erdős and Alfréd Rényi proved it in 1970; it is also why a run of seven heads in a hundred tosses is no "
-            f"evidence of a biased coin."
+            f"<bookmark mark='a'/> Here is the pair at work. Toss a fair coin n times: how long is the longest run of heads? Let A n be the event that a run of length r n starts at toss n; it has probability two to the minus r n. <bookmark mark='b'/> If r n is a little more than log base two of n, the probabilities sum like one over n to the one plus epsilon, which converges, so such runs happen only finitely often. <bookmark mark='c'/> If r n is a little less, the sum diverges, and an argument with independent blocks of tosses shows that such runs keep happening. <bookmark mark='d'/> So the longest run grows like log base two of n, the gold line. Simulated coins agree: about {say(last['mean'], 1)} in a million tosses, against twenty for log base two. <bookmark mark='e'/> Paul Erdős and Alfréd Rényi proved it in 1970; a run of seven heads in a hundred tosses need not be surprising under fairness. Its evidential weight depends on the prespecified statistic and the probability model."
         ) as vo:
-            self.play(FadeIn(A), FadeIn(exact_tag(r"simulated: 200 sequences at each $n$")))
+            self.play(FadeIn(A), FadeIn(exact_tag(r"simulated: 200 paths; 40 paths for $n\ge 2^{18}$")))
             vo.wait_until("a")
             self.play(FadeIn(side[0]))
             vo.wait_until("b")
@@ -129,6 +124,9 @@ class BorelCantelli(VoiceoverScene):
             "infinitely often: each is either almost certain or almost impossible. The law never says which; the next "
             "chapter does."
         ) as vo:
+            heading=label('Independent tail events have probability zero or one',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

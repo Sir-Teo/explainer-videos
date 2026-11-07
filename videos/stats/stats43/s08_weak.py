@@ -39,6 +39,9 @@ class WeakConvergence(VoiceoverScene):
             "<bookmark mark='c'/> Probabilities of closed sets can only grow in the limit, <bookmark mark='d'/> and "
             "probabilities of sets whose boundary carries no limiting mass converge. Each form is the right tool somewhere."
         ) as vo:
+            heading=label('Weak convergence tests laws through bounded continuous functions',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -66,16 +69,7 @@ class WeakConvergence(VoiceoverScene):
             label(rf"Prokhorov: \ in [{r['levy']:.3f}, \ {r['ky_fan']:.3f}]", font_size=24, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> To say how close two laws are, we need distances, and this part's lab computes them "
-            f"exactly. Here is a standardized binomial with ten trials, as a staircase, against the normal CDF. <bookmark "
-            f"mark='b'/> The Kolmogorov distance is the largest vertical gap between the graphs, {say(r['kolmogorov'], 3)}, "
-            f"at zero, where the staircase jumps over the curve. <bookmark mark='c'/> Paul Lévy's distance is the side of the "
-            f"largest box that can be slid between the two graphs, allowing a little horizontal slack as well as vertical: "
-            f"{say(r['levy'], 3)}. Unlike Kolmogorov's, it metrizes weak convergence, so it is not fooled by one over n. "
-            f"<bookmark mark='d'/> The Wasserstein distance is the area between the graphs, {say(r['wasserstein'], 3)}: "
-            f"the least average distance mass must move to turn one law into the other. <bookmark mark='e'/> And the "
-            f"Lévy–Prokhorov distance, which works on any space, is pinned between Lévy's below and the Ky Fan distance of "
-            f"the quantile coupling above."
+            f"<bookmark mark='a'/> To say how close two laws are, we need distances, and this part's lab uses lattice extrema, analytic normal quantile-cell integrals and numerical bisection, avoiding simulation noise for these binomial comparisons. Here is a standardized binomial with ten trials, as a staircase, against the normal CDF. <bookmark mark='b'/> The Kolmogorov distance is the largest vertical gap between the graphs, {say(r['kolmogorov'], 3)}, at zero, where the staircase jumps over the curve. <bookmark mark='c'/> Paul Lévy's distance is the side of the largest box that can be slid between the two graphs, allowing a little horizontal slack as well as vertical: {say(r['levy'], 3)}. Unlike Kolmogorov's, it metrizes weak convergence, so it is not fooled by one over n. <bookmark mark='d'/> The Wasserstein distance is the area between the graphs, {say(r['wasserstein'], 3)}: the least average distance mass must move to turn one law into the other. <bookmark mark='e'/> And the Lévy–Prokhorov distance, on Polish metric spaces, is pinned between Lévy's below and the Ky Fan distance of the quantile coupling above."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -97,15 +91,11 @@ class WeakConvergence(VoiceoverScene):
         tab = table_rows(rows, font_size=28, col_buff=0.7, row_buff=0.22, colors=[GREY_A, None, None, None, None]).move_to([0, 0.6, 0])
         rr = d["rows"]
         msg = fit_rows(VGroup(
-            label(rf"each falls by half when $n$ quadruples: \ the $1/\sqrt n$ rate \ ({rr[0]['kolmogorov'] / rr[-1]['kolmogorov']:.1f}$\times$ over $40\times$ the trials)", font_size=24, color=S.ACCENT),
+            label(rf"deterministic numerical distances; several roughly halve as $n$ quadruples \ ({rr[0]['kolmogorov'] / rr[-1]['kolmogorov']:.1f}$\times$ over $40\times$ the trials)", font_size=24, color=S.ACCENT),
             label(r"L\'evy $\le$ Prokhorov $\le$ Ky Fan of a coupling; \ Kolmogorov $\ge$ L\'evy", font_size=24, color=GREY_A),
         ), 12.4, 0.3, [0, -2.2, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The same distances for four, ten, forty and a hundred and sixty trials. <bookmark "
-            f"mark='b'/> Every one halves when the number of trials quadruples: the one-over-root-n rate, measured without "
-            f"simulation error. From four trials to a hundred and sixty, the Kolmogorov distance falls "
-            f"{rr[0]['kolmogorov'] / rr[-1]['kolmogorov']:.1f}-fold, close to the square root of forty. <bookmark mark='c'/> "
-            f"The inequalities between them hold at every n, as they must."
+            f"<bookmark mark='a'/> The same distances for four, ten, forty and a hundred and sixty trials. <bookmark mark='b'/> The displayed distances shrink as the number of trials grows; several roughly halve when the number of trials quadruples, but the quantile-coupling upper bound is not an exact one-over-root-n law: these are deterministic calculations with numerical tolerances, rather than Monte Carlo estimates. From four trials to a hundred and sixty, the Kolmogorov distance falls {rr[0]['kolmogorov'] / rr[-1]['kolmogorov']:.1f}-fold, close to the square root of forty. <bookmark mark='c'/> The inequalities between them hold at every n, as they must."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tab))
@@ -146,14 +136,15 @@ class WeakConvergence(VoiceoverScene):
             label(r"proofs about laws become proofs about variables", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Weak convergence is about laws, not random variables, yet it can always be represented by "
-            "variables that converge in the strongest sense. Take a single uniform U. <bookmark mark='b'/> For each n, put Y n "
-            "equal to F n inverse of U: by chapter two it has law F n. Here are the quantile functions of standardized "
-            "binomials with four, sixteen and sixty-four trials. <bookmark mark='c'/> When the laws converge weakly, the "
+            "<bookmark mark='a'/> Weak convergence is about laws, not random variables, yet it can always be "
+            "represented by variables on a new common space that converge almost surely, without asserting the "
+            "original variables do so. Take a single uniform U. <bookmark mark='b'/> For each n, put Y n equal to F n"
+            " inverse of U: by chapter two it has law F n. Here are the quantile functions of standardized binomials "
+            "with four, sixteen and sixty-four trials. <bookmark mark='c'/> When the laws converge weakly, the "
             "quantile functions converge at almost every u, here to the normal quantile function in gold, <bookmark "
-            "mark='d'/> so the Y n converge almost surely. This is Anatoliy Skorokhod's representation theorem. <bookmark "
-            "mark='e'/> It turns proofs about laws into proofs about variables: the continuous mapping theorem of Part six, "
-            "for instance, becomes a one-line consequence of continuity."
+            "mark='d'/> so the Y n converge almost surely. This is Anatoliy Skorokhod's representation theorem. "
+            "<bookmark mark='e'/> It turns proofs about laws into proofs about variables: the continuous mapping "
+            "theorem of Part six, for instance, becomes a one-line consequence of continuity."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -220,19 +211,11 @@ class WeakConvergence(VoiceoverScene):
         tab.move_to([3.4, 0.9, 0])
         side = fit_rows(VGroup(
             label(rf"{d['deaths']} deaths in {d['N']} corps-years: \ $\hat\lambda = {d['lam']:.2f}$", font_size=22),
-            label(rf"blue: \ observed; \ gold: \ Poisson; \ $\chi^2 = {d['chi2']:.2f}$, \ $p = {d['p']:.2f}$", font_size=22, color=GREY_A),
+            label(rf"pooled 0,1,2+; approximate $\chi^2_1$ reference: \ $\chi^2 = {d['chi2']:.2f}$, \ $p = {d['p']:.2f}$", font_size=22, color=GREY_A),
             label(r"a total-variation limit: \ stronger than weak convergence", font_size=22, color=S.ACCENT),
         ), 12.4, 0.28, [0, -2.75, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> A real limit theorem at work. In 1898 Ladislaus Bortkiewicz counted the soldiers of the "
-            f"Prussian cavalry killed by horse kicks: {d['deaths']} deaths over {d['N']} corps-years, a mean of "
-            f"{say(d['lam'], 2)}. <bookmark mark='b'/> The counts, in blue, match a Poisson law, in gold, almost exactly: a "
-            f"chi-squared of {say(d['chi2'], 2)}. <bookmark mark='c'/> Why Poisson? Each of many soldiers had a tiny "
-            f"chance of being killed, and a binomial with many trials and small chances converges to a Poisson. Lucien Le "
-            f"Cam's 1960 inequality says how fast: the total variation distance between a sum of independent Bernoullis and "
-            f"the Poisson with the same mean is at most the sum of the squared chances, here lambda squared over n. The "
-            f"table checks it exactly. <bookmark mark='d'/> Total variation bounds every event's probability at once, a "
-            f"stronger kind of convergence than weak convergence."
+            f"<bookmark mark='a'/> A real limit theorem at work. In 1898 Ladislaus Bortkiewicz counted the soldiers of the Prussian cavalry killed by horse kicks: {d['deaths']} deaths over {d['N']} corps-years, a mean of {say(d['lam'], 2)}. <bookmark mark='b'/> The counts, in blue, are compared with a fitted Poisson law, in gold. For an approximate goodness-of-fit reference, pool the rare counts into two or more deaths; the resulting statistic is {say(d['chi2'], 2)}. <bookmark mark='c'/> Why Poisson? A rare-event model with independent, small event probabilities motivates a Poisson approximation. Agreement of this historical table with a fitted Poisson does not establish that independence or equal risks held. Lucien Le Cam's 1960 inequality says how fast: the total variation distance between a sum of independent Bernoullis and the Poisson with the same mean is at most the sum of the squared chances, here lambda squared over n. The table checks it exactly. <bookmark mark='d'/> Total variation bounds every event's probability at once, a stronger kind of convergence than weak convergence."
         ) as vo:
             self.play(FadeIn(A), FadeIn(museum_tag(r"Bortkiewicz (1898): \ Prussian cavalry, \ 1875--1894")))
             vo.wait_until("a")

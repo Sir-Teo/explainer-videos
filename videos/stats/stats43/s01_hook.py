@@ -85,13 +85,16 @@ class Hook(VoiceoverScene):
             c.scale(0.86)
         VGroup(*cards).arrange(DOWN, buff=0.25).move_to(ORIGIN)
         with self.voiceover(
-            "<bookmark mark='a'/> Three promises from the first stage are now due. Part two defined probability as an "
-            "additive function on events, and quietly assumed that every set of outcomes is an event. Chapter one shows "
-            "why that is impossible. <bookmark mark='b'/> Part three said the moment generating function determines a "
-            "law, and asked you to trust it. Chapter eight proves it, with characteristic functions. <bookmark mark='c'/> "
-            "And Part six stated the strong law, proved the central limit theorem only for laws with a moment "
-            "generating function, and quoted Berry and Esseen's rate. Chapters six, nine and ten prove all three, the "
-            "last with Charles Stein's method."
+            "<bookmark mark='a'/> Three promises from the first stage are now due. Part two defined probability as an"
+            " additive function on events, and quietly assumed that every set of outcomes is an event. Chapter one "
+            "shows why that is impossible for rotation-invariant length on every subset of the interval, assuming the"
+            " axiom of choice. An atomic probability such as a point mass can be defined on all subsets. <bookmark "
+            "mark='b'/> Part three said the moment generating function determines a law, and asked you to trust it. "
+            "Chapter eight proves it, with characteristic functions. <bookmark mark='c'/> And Part six stated the "
+            "strong law, proved the central limit theorem only for laws with a moment generating function, and quoted"
+            " Berry and Esseen's rate. Chapters six and nine explain the strong law and central limit theorem proofs."
+            " Chapter ten develops Stein's method and states a published Berry–Esseen constant; it does not derive "
+            "that sharp constant."
         ) as vo:
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
@@ -113,9 +116,9 @@ class Hook(VoiceoverScene):
             "<bookmark mark='a'/> Part forty-three: measure-theoretic probability, the first part of the PhD core. "
             "<bookmark mark='b'/> We'll build sigma-algebras and measures, random variables and their integrals; "
             "independence, the Borel–Cantelli lemmas and the zero–one laws, and a full proof of the strong law; weak "
-            "convergence, characteristic functions, Lindeberg's theorem and Stein's method, with every rate measured "
-            "exactly in a weak-convergence lab; and then what lies beyond the normal: stable laws, large deviations and "
-            "extremes. Each condition that matters gets its counterexample."
+            "convergence, characteristic functions, Lindeberg's theorem and Stein's method, with exact probability "
+            "formulas and numerical distance calculations in a weak-convergence lab; and then what lies beyond the "
+            "normal: stable laws, large deviations and extremes. Each condition that matters gets its counterexample."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head, shift=UP * 0.2))

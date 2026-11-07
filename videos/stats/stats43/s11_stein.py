@@ -23,7 +23,7 @@ class Stein(VoiceoverScene):
 
     def identity(self):
         rows = [
-            cmath(r"Z \sim N(0, 1)", r"\iff", r"E\big[f'(Z) - Z f(Z)\big] = 0 \ \text{ for all smooth bounded } f", font_size=30),
+            cmath(r"Z \sim N(0, 1)", r"\iff", r"E\big[f'(Z) - Z f(Z)\big] = 0 \ \text{ for suitable smooth } f\text{ with bounded derivatives}", font_size=30),
             cmath(r"\Rightarrow", r":", r"\text{integrate by parts: } \textstyle\int f'(z) \phi(z) dz = \int z f(z) \phi(z) dz", font_size=30),
             cmath(r"\Leftarrow", r":", r"f = \text{the solution below, for } h = 1(\cdot \le x), \ \text{gives } P(W \le x) = \Phi(x)", font_size=28),
             cmath(r"\text{check}", r":", r"E[\cos Z - Z \sin Z] \approx 0; \ \ \text{for } E - 1, \ E \sim \text{Exp}(1): \ \text{not } 0", font_size=28),
@@ -31,13 +31,17 @@ class Stein(VoiceoverScene):
         rows[0][-1].set_color(LAWC)
         whys = [why(r"Stein's identity (1972)"), why(r"$\phi'(z) = -z\phi(z)$"), why(r"the characterization"), why(r"tested in the kit")]
         with self.voiceover(
-            "<bookmark mark='a'/> In 1972 Charles Stein found a characterization of the normal law that leads to explicit "
-            "error bounds. A random variable is standard normal exactly when the expectation of f prime minus z f is zero "
-            "for every smooth bounded f. <bookmark mark='b'/> One direction is integration by parts, because the normal "
-            "density's derivative is minus z times the density. <bookmark mark='c'/> The other comes from choosing f cleverly, "
-            "as the solution of an equation we write next. <bookmark mark='d'/> The kit checks it numerically: with f the "
-            "sine, the expectation is zero for normal draws, and clearly not zero for a centred exponential."
+            "<bookmark mark='a'/> In 1972 Charles Stein found a characterization of the normal law that leads to "
+            "explicit error bounds. A random variable is standard normal exactly when the expectation of f prime "
+            "minus z f is zero for a suitable class of smooth test functions with bounded derivatives and integrable "
+            "terms. <bookmark mark='b'/> One direction is integration by parts, because the normal density's "
+            "derivative is minus z times the density. <bookmark mark='c'/> The other comes from choosing f cleverly, "
+            "as the solution of an equation we write next. <bookmark mark='d'/> The kit checks it numerically: with f"
+            " the sine, the expectation is zero for normal draws, and clearly not zero for a centred exponential."
         ) as vo:
+            heading=label('Stein characterizes the normal through integration by parts',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -54,13 +58,18 @@ class Stein(VoiceoverScene):
         rows[2][-1].set_color(S.ACCENT)
         whys = [why(r"Stein's equation"), why(r"its bounded solution"), why(r"substitute $W$"), why(r"distance becomes a moment bound")]
         with self.voiceover(
-            "<bookmark mark='a'/> For any test function h, Stein's equation asks for an f whose f prime minus w f equals h "
-            "minus its normal expectation. <bookmark mark='b'/> It is a first-order linear equation with an explicit bounded "
-            "solution, and its derivatives are bounded by constants depending only on h. <bookmark mark='c'/> Substitute "
-            "the sum W for w and take expectations: the distance between E h of W and E h of Z equals the expectation of f "
-            "prime minus W f at W. <bookmark mark='d'/> The question about distances has become a question about one "
+            "<bookmark mark='a'/> For a bounded test function h, or a Lipschitz function with finite normal "
+            "expectation, Stein's equation asks for an f whose f prime minus w f equals h minus its normal "
+            "expectation. <bookmark mark='b'/> It is a first-order linear equation with an explicit bounded solution,"
+            " and the relevant Stein-factor bounds depend on the class of h. Indicator tests require "
+            "almost-everywhere derivatives or a smoothing argument. <bookmark mark='c'/> Substitute the sum W for w "
+            "and take expectations: the distance between E h of W and E h of Z equals the expectation of f prime "
+            "minus W f at W. <bookmark mark='d'/> The question about distances has become a question about one "
             "expectation, which a Taylor expansion and a clever coupling can bound."
         ) as vo:
+            heading=label('A differential equation converts test functions into error bounds',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -69,7 +78,7 @@ class Stein(VoiceoverScene):
 
     def bound(self):
         rows = [
-            cmath(r"W", r"=", r"\textstyle\sum_i \xi_i, \ \ \xi_i = X_i / \sqrt n, \ \ E X = 0, \ \text{Var}\, X = 1, \ \ \rho = E|X|^3", font_size=30),
+            cmath(r"W", r"=", r"\textstyle\sum_i \xi_i, \ \ \xi_i = X_i / \sqrt n, \ \ X_i\text{ i.i.d.},\ E X = 0, \ \text{Var}\, X = 1, \ \ \rho = E|X|^3", font_size=30),
             cmath(r"d_W(W, Z)", r"\le", r"\textstyle\sum_i E|\xi_i|^3 = \rho / \sqrt n", font_size=34),
             cmath(r"d_K(W, Z)", r"\le", r"C \rho / \sqrt n, \ \ C \le 0.4748", font_size=34),
             cmath(r"\text{tight}", r":", r"\text{for a fair coin, } d_K \approx 1/\sqrt{2\pi n}: \ \text{the rate cannot improve}", font_size=30),
@@ -78,14 +87,18 @@ class Stein(VoiceoverScene):
         rows[2][-1].set_color(S.ACCENT)
         whys = [why(r"standardized sums"), why(r"Stein, \ zero-bias coupling"), why(r"Berry--Esseen; \ Shevtsova (2011)"), why(r"half the largest atom")]
         with self.voiceover(
-            "<bookmark mark='a'/> For a standardized sum of independent terms with third absolute moment rho, <bookmark "
-            "mark='b'/> Stein's method with Larry Goldstein's zero-bias coupling gives a clean bound on the Wasserstein "
-            "distance: at most rho over root n, constant one. <bookmark mark='c'/> For the Kolmogorov distance, the "
-            "Berry–Esseen theorem gives C rho over root n, and after decades of work the best known constant for identically "
-            "distributed summands is point four seven four eight, by Irina Shevtsova in 2011. <bookmark mark='d'/> The rate "
-            "one over root n cannot be improved: a fair coin's standardized sum has atoms of height about one over root two pi "
-            "n, and a continuous CDF must miss half of each jump."
+            "<bookmark mark='a'/> For an iid standardized sum with common third absolute moment rho, "
+            "<bookmark mark='b'/> Stein's method with Larry Goldstein's zero-bias coupling gives a clean bound on the"
+            " Wasserstein distance: at most rho over root n, constant one. <bookmark mark='c'/> For the Kolmogorov "
+            "distance, the Berry–Esseen theorem gives C rho over root n, and after decades of work a published "
+            "universal upper bound for iid summands is point four seven four eight, by Irina Shevtsova in 2011. "
+            "<bookmark mark='d'/> The rate one over root n cannot be improved: a fair coin's standardized sum has "
+            "largest atom about the square root of two over pi n. Half that jump is one over the square root of two "
+            "pi n, which a continuous CDF cannot avoid."
         ) as vo:
+            heading=label('Third moments control iid normal-approximation rates',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -95,7 +108,7 @@ class Stein(VoiceoverScene):
     def rates(self):
         d = load("rates")
         ns = np.log10(np.asarray(d["ns"], float))
-        A = axes([0, 3.1], [-3.2, 0], x_length=7.4, y_length=4.4, xlabel=r"$n$", ylabel=r"Kolmogorov distance to $\Phi$ \ (exact)",
+        A = axes([0, 3.1], [-3.2, 0], x_length=7.4, y_length=4.4, xlabel=r"$n$", ylabel=r"Kolmogorov distance to $\Phi$ \ (computed)",
                  xticks=[0, 1, 2, 3], yticks=[-3, -2, -1, 0], log_x=True, xfmt=lambda v: f"10^{{{int(v)}}}",
                  yfmt=lambda v: f"10^{{{int(v)}}}", center=[-2.5, 0.2, 0])
         ax = A.ax
@@ -135,7 +148,7 @@ class Stein(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(rf"the exponential at $n = 30$: \ Kolmogorov distance {d['k30']:.3f}, \ bound {d['be30']:.3f}", font_size=26, color=S.ACCENT),
             label(r"so the CDF is within 2.4\% everywhere: \ ``$n \ge 30$'' looks safe", font_size=26, color=GREY_A),
-            label(r"but a $t$ interval needs the tails, \ and skewness enters at order $1/\sqrt n$", font_size=26, color=BADC),
+            label(r"but a $t$ interval needs the tails, \ and the leading CDF term cancels in a symmetric two-sided interval", font_size=26, color=BADC),
             label(r"Part 47's Edgeworth correction: \ $P(T \le z) \approx \Phi(z) + \frac{\gamma}{6\sqrt n}(2z^2 + 1)\phi(z)$", font_size=26, color=GOODC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
@@ -153,9 +166,12 @@ class Stein(VoiceoverScene):
 
     def board(self):
         show_board(self, board_rows("Uniform", "Exp(1)"),
-                   "<bookmark mark='a'/> The Coverage Board: nominal ninety percent t intervals for a mean. For uniform data, "
-                   "symmetric with light tails, ten observations are plenty: kept. <bookmark mark='b'/> For exponential data, "
-                   "ten observations cover eighty-six percent, and a hundred cover eighty-nine point two: both broken, by a "
-                   "margin that shrinks like one over root n. <bookmark mark='c'/> At a thousand, coverage reaches ninety "
-                   "percent within simulation error: kept.",
+                   "<bookmark mark='a'/> The Coverage Board: nominal ninety percent t intervals for a mean. For uniform "
+            "data, symmetric with light tails, the simulated ten-observation intervals achieve nominal coverage "
+            "within Monte Carlo error. This is not a general sample-size rule. <bookmark mark='b'/> For exponential "
+            "data, ten observations cover eighty-six percent, and a hundred cover eighty-nine point two: both broken "
+            "in these simulations. The leading one-over-root-n studentized CDF skewness term is even in z and cancels"
+            " for a symmetric two-sided interval; under regularity, its coverage error is generally of order one over"
+            " n, not one over root n. <bookmark mark='c'/> At a thousand, coverage reaches ninety percent within "
+            "simulation error: kept.",
                    [("a", [0]), ("b", [1, 2]), ("c", [3])])

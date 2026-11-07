@@ -4,14 +4,13 @@ Part 43 of a sixty-five-part course in statistics, from a first course to a PhD 
 and [the syllabus](../SYLLABUS.md)), and the first part of Stage IV, the PhD core. In 1900 Hilbert asked for axioms of
 probability (his sixth problem), and in 1933 Kolmogorov supplied them, on top of Lebesgue's measure. This part:
 - builds the axioms: σ-algebras, measures, random variables, integrals, products;
-- proves the limit theorems the first three stages used: the strong law, Lévy's continuity theorem, Lindeberg–Feller,
-  and the Berry–Esseen rate by Stein's method;
+- develops proofs and proof outlines for the strong law, Lévy continuity and Lindeberg–Feller; presents Stein bounds and a cited Berry–Esseen constant;
 - then looks beyond the normal: stable laws, large deviations and extremes.
 
 It keeps three promises from Stage I:
-- **Part 2** assumed that every set is an event; Vitali's set shows it cannot be.
+- **Part 2** used elementary event spaces; Vitali rules out extending rotation-invariant length to every subset of the interval (with choice). Atomic probabilities can be defined on all subsets.
 - **Part 3** said the MGF determines the law; this part proves it, and shows that moments alone do not.
-- **Part 6** proved the CLT by MGFs and stated the strong law and the Berry–Esseen rate; this part proves all three.
+- **Part 6** proved the CLT by MGFs and stated the strong law and the Berry–Esseen rate; this part develops the strong-law/CLT arguments and explains the approximation rates; the published 0.4748 constant is stated rather than derived.
 
 **Built in this part:**
 - **`statkit.limits`, the weak-convergence lab** ([`explainer/stats/kit/limits.py`](../../../explainer/stats/kit/limits.py)),
@@ -51,10 +50,10 @@ The Coverage Board gains six rows, all nominal 90% t intervals for a mean:
 |---|---|---|
 | Uniform(0, 1), n = 10 | 89.8% | kept |
 | Exp(1), n = 10 | 85.6% | broken |
-| Exp(1), n = 100 | 89.2% | broken (the 1/√n skewness term) |
+| Exp(1), n = 100 | 89.2% | broken (studentization/skewness; the leading CDF term cancels for symmetric two-sided coverage) |
 | Exp(1), n = 1,000 | 89.9% | kept |
 | Pareto, α = 2.5 (finite variance), n = 100 | 83.7% | broken |
-| Pareto, α = 1.5 (infinite variance), n = 1,000 | 70.4% | broken, at every n |
+| Pareto, α = 1.5 (infinite variance), n = 1,000 | 70.4% | broken in this simulation; Gaussian studentization is not asymptotically justified |
 
 ## Build it
 
@@ -77,12 +76,12 @@ python tools/lecture_length.py stats43 --floor 50
 | 4 | Independence and products | the double series 0 ≠ 1 |
 | 5 | Borel–Cantelli and the 0–1 laws | longest run 19.6 in 2^20 tosses |
 | 6 | The strong law | ±1/j settles (0.0025); ±1/j^0.4 wanders |
-| 7 | Weak convergence | Bin(10): Kolmogorov 0.123, Lévy 0.088, W 0.159; horse kicks χ² 0.60 |
+| 7 | Weak convergence | Bin(10): Kolmogorov 0.123, Lévy 0.088, W 0.159; horse kicks pooled χ²₁ 0.063 |
 | 8 | Characteristic functions | inversion to 0.0008; Heyde's equal moments |
 | 9 | Lindeberg–Feller | KS 0.003 vs 0.057 (L_n = 0.75) |
 | 10 | Stein's method and the rates | slopes −0.497 to −0.500; 84% vs 14% of the bound |
 | 11 | Infinitely divisible and stable laws | c = 2.507; DAX kurtosis 6.3 → 1.2 → 0.36 |
-| 12 | Large deviations | Bernoulli 25,550; Chernoff 9,171; CLT 6,498; exact 6,489 |
+| 12 | Large deviations | Bernoulli 25,550; Chernoff 9,171; CLT 6,498; safe at every later size from 6,520 |
 | 13 | Extremes | 0.028 → 0.0003 vs 0.064 → 0.035; Port Pirie ξ̂ = −0.05, 100-year 4.69 m |
 | 14 | Outro | — |
 
@@ -122,7 +121,7 @@ The rest of the part's numbers, chapter by chapter:
     | 160 | 0.0315 | 0.0225 | 0.0733 | 0.0395 |
 
   - Skorokhod's representation; tightness, Prokhorov and Helly (N(0, n²) loses its mass).
-  - Bortkiewicz: 122 deaths in 200 corps-years, λ̂ = 0.61, χ² = 0.60 (p = 0.90). Le Cam:
+  - Bortkiewicz: 122 deaths in 200 corps-years, λ̂ = 0.61, pooled χ²₁ = 0.0628 (approximate p = 0.802), combining counts ≥ 2 before the reference test. Le Cam:
     d_TV(Bin(n, λ/n), Poi(λ)) = 0.0311, 0.0073, 0.0014 at n = 5, 20, 100, under λ²/n = 0.074, 0.019, 0.0037.
 - **Chapter 8.**
   - Characteristic functions; inversion (the triangle recovered to 0.0008).
@@ -131,8 +130,8 @@ The rest of the part's numbers, chapter by chapter:
   - Lévy's continuity theorem via the tail bound (Cauchy, u = 1: 0.736 ≥ 0.295); Cramér–Wold.
 - **Chapter 9.**
   - Lindeberg's theorem and Feller's converse; the replacement proof with its two Taylor remainders.
-  - 20 equal uniforms: KS 0.003. Twenty signs with Var X_k = 4^k: the last holds 75% of the variance, L_n = 0.75, and
-    the limit is uniform (binary digits), KS 0.057.
+  - 20 equal uniforms: KS 0.003. Twenty signs with Var X_k = 4^k: the last holds 75% of the variance, L_n(1/2) → 0.75, and
+    the limiting law is uniform (binary digits); each finite sum is on a lattice, KS 0.057.
 - **Chapter 10.**
   - Stein's identity and equation; d_W ≤ ρ/√n; Berry–Esseen with C = 0.4748.
   - Exact Kolmogorov slopes: coin −0.497, coin(0.1) −0.496, Poisson −0.498, exponential −0.500. They reach 84%, 65%,
@@ -141,11 +140,10 @@ The rest of the part's numbers, chapter by chapter:
 - **Chapter 11.**
   - Lévy–Khintchine; stable laws; the generalized CLT.
   - Symmetric Pareto(3/2) sums: the characteristic function approaches exp(−2.507|t|^{3/2}) at rate n^{−1/3}.
-  - DAX: 1,859 returns, kurtosis 6.3, 0.32% of days beyond 4 SD (normal 0.0063%), Hill α̂ 3.5–4.4. Weekly and monthly
-    kurtosis 1.23 and 0.36.
+  - DAX: 1,859 returns, kurtosis 6.3, 0.32% of days beyond 4 SD (normal 0.0063%), Hill α̂ 3.5–4.4. Complete nonoverlapping 5- and 20-day blocks (371 and 92) have sample excess kurtosis 1.234 and 0.372. Residual days are discarded.
 - **Chapter 12.**
   - Chernoff and Cramér; the Bernoulli rate is KL(a‖p).
-  - Bernoulli's urn (p = 0.6, ±0.02, 1000:1): exact 6,489 draws; CLT 6,498; Chernoff 9,171; Bernoulli 25,550.
+  - Bernoulli's urn (p = 0.6, ±0.02, 1000:1): exact 6,520 draws; CLT 6,498; Chernoff 9,171; Bernoulli 25,550.
   - Sanov.
 - **Chapter 13.**
   - Max-stability and the Fisher–Tippett–Gnedenko theorem with its proof.
@@ -245,3 +243,16 @@ The rest of the part's numbers, chapter by chapter:
 - **Part 46**: Stein's lemma and the KL exponent of tests.
 - **Part 47**: the delta method and Edgeworth expansions, proved.
 - **Part 48**: Donsker's theorem: weak convergence of whole processes.
+
+
+## Scientific conditions and verification
+
+The weak-lab binomial distances use lattice extrema, analytic normal quantile-cell integrals and bisection. The Prokhorov upper bound integrates the entire continuous quantile coupling rather than treating a finite quantile grid as a certified bound. General kit distance routines are grid approximations; gamma distances in the rate lab retain their numerical-grid interpretation. The maximum-distance table optimizes continuous CDF differences from exact distribution formulas; numerical tolerance remains.
+
+For the urn, the event is the inclusive deviation |K/n − 3/5| ≥ 1/50. Integer arithmetic defines its boundaries. The first individually admissible size is 6,481, but lattice oscillations cause some later sizes to fail. The size safe for **every** larger n is 6,520: all sizes were checked through 9,171 and the monotone Chernoff envelope certifies the remainder. This replaces an arbitrary handful of later spot checks. The normal approximation remains 6,498; Bernoulli's historical bound is 25,550.
+
+The SLLN converse uses every integer jump threshold; the Etemadi argument defines truncated sums and uses convergence of their expectations. The Lindeberg replacement proof operates on summands already divided by their total standard deviation. The converse needs Feller's maximal-variance condition. For symmetric two-sided t intervals the leading even-in-z studentized Edgeworth term cancels, so regular coverage error is generally O(1/n), despite the O(1/√n) one-sided CDF correction.
+
+Stable domains generally need centering, slowly varying normalization and tail balance; pure n^(1/alpha) normalization is specific to examples such as the symmetric Pareto law. Hill estimates do not establish finite variance or a CLT for dependent DAX returns. Cramer needs an MGF near zero; Sanov gives interior/closure rate bounds, with equality for suitable rate-continuity sets. Bounded support alone does not establish an extreme-value domain. The displayed classical normal-maximum norming has logarithmic/log-log corrections; a universal pure 1/log(n) rate is not claimed.
+
+The Port Pirie return level is a stationary fitted-model estimate with 1% annual exceedance probability, with parameter uncertainty unquantified in this illustration; it is not a guarantee about the next century. Stationarity, dependence and extreme-value model adequacy are the relevant assumptions. The course does not infer these assumptions from plotting annual maxima. [Scientific QA evidence](../../../docs/qa/evidence/stats43-polish-20261107/source-review.md) records computations, tests and primary data scope. Chinese narration/captions, continuous listening/playback and final narrated masters remain open.

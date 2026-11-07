@@ -29,16 +29,21 @@ class Lindeberg(VoiceoverScene):
             cmath(r"\text{Feller}", r":", r"\max_k \text{Var}\, X_{nk} / s_n^2 \to 0 \text{ and the CLT} \Rightarrow L_n \to 0", font_size=30),
         ]
         rows[2][-1].set_color(GOODC)
-        whys = [why(r"a triangular array"), why(r"no summand matters"), why(r"Lindeberg (1922)"), why(r"Feller (1935): \ the converse")]
+        whys = [why(r"a triangular array"), why(r"vanishing truncated tail variance at every positive threshold"), why(r"Lindeberg (1922)"), why(r"Feller (1935): \ the converse")]
         with self.voiceover(
-            "<bookmark mark='a'/> The general setting is a triangular array: for each n, independent centred variables, not "
-            "necessarily identically distributed, with total variance s n squared. <bookmark mark='b'/> Lindeberg's quantity "
-            "measures how much of that variance comes from summands larger than epsilon times s n. <bookmark mark='c'/> "
-            "Jarl Waldemar Lindeberg proved in 1922 that if it tends to zero for every epsilon, the standardized sum is "
-            "asymptotically normal. <bookmark mark='d'/> And William Feller proved in 1935 that the condition is also "
-            "necessary, as long as no single summand's variance is a non-vanishing share of the total. So the theorem is "
-            "exact: the central limit theorem holds, in this setting, precisely when no summand matters."
+            "<bookmark mark='a'/> The general setting is a triangular array: for each n, independent centred "
+            "variables, not necessarily identically distributed, with total variance s n squared. <bookmark "
+            "mark='b'/> Lindeberg's quantity measures how much of that variance comes from summands larger than "
+            "epsilon times s n. <bookmark mark='c'/> Jarl Waldemar Lindeberg proved in 1922 that if it tends to zero "
+            "for every epsilon, the standardized sum is asymptotically normal. <bookmark mark='d'/> And William "
+            "Feller proved in 1935 that the condition is also necessary, as long as no single summand's variance is a"
+            " non-vanishing share of the total. So the theorem is exact: under Feller's maximal-variance condition, "
+            "Lindeberg's tail-variance condition is equivalent to the CLT. Without that condition, a dominant summand"
+            " can itself be normal and the sum can still be normal."
         ) as vo:
+            heading=label('Lindeberg controls the share of variance in large summands',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -85,23 +90,29 @@ class Lindeberg(VoiceoverScene):
 
     def taylor(self):
         rows = [
-            cmath(r"f(W + X)", r"=", r"f(W) + X f'(W) + \tfrac12 X^2 f''(W) + R, \ \ |R| \le \min\big(\tfrac16 |X|^3 \|f'''\|, \ X^2 \|f''\|\big)", font_size=26),
-            cmath(r"\text{the same for } Z", r":", r"\text{the first three terms cancel: \ same mean, same variance, } W \perp X, Z", font_size=28),
-            cmath(r"\textstyle\sum_k E|R_k|", r"\le", r"\tfrac{\varepsilon}{6} \|f'''\| s_n^2 + \|f''\| \textstyle\sum_k E\big[X_k^2 1(|X_k| > \varepsilon s_n)\big] + (\text{the } Z\text{'s})", font_size=26),
-            cmath(r"\div s_n^2", r":", r"\le \tfrac{\varepsilon}{6} \|f'''\| + \|f''\| L_n(\varepsilon) + o(1) \ \to \ \text{as small as we like}", font_size=28),
+            cmath(r"\xi_k", r"=", r"X_{nk}/s_n,\quad \eta_k=Z_{nk}/s_n,\quad \sum_k\operatorname{Var}(\xi_k)=1", font_size=30),
+            cmath(r"f(W+\xi_k)", r"=", r"f(W)+\xi_k f'(W)+\tfrac12\xi_k^2 f''(W)+R_k", font_size=30),
+            cmath(r"|R_k|", r"\le", r"\min\{ |\xi_k|^3\|f'''\|/6,\ \xi_k^2\|f''\|\};\quad \text{matched first two moments cancel}", font_size=28),
+            cmath(r"\sum_k E|R_k|", r"\le", r"\varepsilon\|f'''\|/6+\|f''\|L_n(\varepsilon);\quad \text{the normal replacement tails vanish too}", font_size=28),
         ]
         rows[3][-1].set_color(GOODC)
         whys = [why(r"Taylor, \ two remainders"), why(r"matched moments"), why(r"small summands: \ cubic; \ large: \ Lindeberg"), why(r"standardize")]
         with self.voiceover(
-            "<bookmark mark='a'/> Expand f around W to second order. The remainder is at most a sixth of the absolute cube "
-            "times the third derivative's bound, or the square times the second derivative's, whichever is smaller. "
-            "<bookmark mark='b'/> Do the same for the normal replacement. Because X and its replacement have the same mean and "
-            "variance and are independent of W, the first three terms cancel exactly. <bookmark mark='c'/> Use the cubic "
-            "bound on summands smaller than epsilon s n, and the quadratic bound on the larger ones, whose total is exactly "
-            "Lindeberg's quantity. <bookmark mark='d'/> After standardizing, the error is at most epsilon times a constant "
-            "plus a constant times L n of epsilon. Let n grow, then epsilon shrink. Smooth test functions suffice for weak "
+            "<bookmark mark='a'/> First divide every summand and normal replacement by s n, so their total variance "
+            "is one. Expand f around the sum of the other standardized terms to second order. The remainder is at "
+            "most a sixth of the absolute cube times the third derivative's bound, or the square times the second "
+            "derivative's, whichever is smaller. <bookmark mark='b'/> Do the same for the normal replacement. Because"
+            " X and its replacement have the same mean and variance and are independent of W, the first three terms "
+            "cancel exactly. <bookmark mark='c'/> Use the cubic bound on summands smaller than epsilon s n, and the "
+            "quadratic bound on the larger ones, whose total is exactly Lindeberg's quantity. <bookmark mark='d'/> "
+            "The error is at most epsilon times a derivative bound plus a constant times L n of epsilon, with the "
+            "same bounds for the normal replacements. Lindeberg implies that their largest variance vanishes, so "
+            "their tail term also vanishes. Let n grow, then epsilon shrink. Smooth test functions suffice for weak "
             "convergence, and the theorem is proved."
         ) as vo:
+            heading=label('Standardize first, then bound the Taylor remainders',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -116,25 +127,18 @@ class Lindeberg(VoiceoverScene):
         B = axes([-4, 4], [0, 0.9], x_length=5.4, y_length=3.4, xlabel=r"$S_n / s_n$", ylabel=r"density", xticks=[-4, -2, 0, 2, 4],
                  yticks=[0, 0.4, 0.8], center=[3.3, 0.8, 0])
         w = mid[1] - mid[0]
-        ha = bars_at(A.ax, mid, np.minimum(d["equal"]["hist"], 0.9), w, LAWC, opacity=0.75)
-        hb = bars_at(B.ax, mid, np.minimum(d["dominant"]["hist"], 0.9), w, BADC, opacity=0.75)
+        ha = bars_at(A.ax, mid, d["equal"]["hist"], w, LAWC, opacity=0.75)
+        hb = bars_at(B.ax, mid, d["dominant"]["hist"], w, BADC, opacity=0.75)
         xs = np.linspace(-4, 4, 200)
         na = curve(A.ax, xs, stats.norm.pdf(xs), LIMC, 3)
         nb = curve(B.ax, xs, stats.norm.pdf(xs), LIMC, 3)
         side = fit_rows(VGroup(
-            label(rf"20 equal uniforms: \ $L_n = 0$, \ KS distance {d['equal']['ks']:.3f}", font_size=22, color=LAWC),
+            label(rf"20 equal uniforms: \ $L_n(1/2)=0$, \ KS distance {d['equal']['ks']:.3f}", font_size=22, color=LAWC),
             label(rf"20 signs with $\text{{Var}}\, X_k = 4^k$: \ the last holds {100 * d['dominant']['share_last']:.0f}\% of the variance", font_size=22, color=BADC),
-            label(rf"$L_n(\tfrac12) = {d['L_dominant']:.2f}$ \ for every $n$: \ the limit is uniform, \ KS {d['dominant']['ks']:.3f}", font_size=22, color=BADC),
+            label(rf"$L_n(\tfrac12) = {d['L_dominant']:.2f}$ \ as $n\to\infty$: \ the limiting law is uniform, \ KS {d['dominant']['ks']:.3f}", font_size=22, color=BADC),
         ), 12.4, 0.28, [0, -2.3, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Here is the condition doing its work. On the left, twenty independent uniforms of equal "
-            f"size: Lindeberg's quantity is zero once n passes twelve, and the standardized sum is normal to within "
-            f"{say(d['equal']['ks'], 3)} in Kolmogorov distance. <bookmark mark='b'/> On the right, twenty random signs whose "
-            f"variances grow like four to the k: the last one alone carries three quarters of the total. <bookmark "
-            f"mark='c'/> Lindeberg's quantity stays at three quarters however long the array, and the sum is no more normal "
-            f"at twenty terms than at two. Read from the largest term down, the signs have sizes that halve each time: they "
-            f"are the binary digits of chapter two, and their sum is uniform on an interval, flat-topped, not normal. One "
-            f"summand that matters is enough to break the theorem."
+            f"<bookmark mark='a'/> Here is the condition doing its work. On the left, twenty independent uniforms of equal size: Lindeberg's quantity is zero once n passes twelve, and the standardized sum is normal to within {say(d['equal']['ks'], 3)} in Kolmogorov distance. <bookmark mark='b'/> On the right, twenty random signs whose variances grow like four to the k: the last one alone carries three quarters of the total. <bookmark mark='c'/> At epsilon one half, Lindeberg's quantity tends to three quarters as this array grows, and the sum is no more normal at twenty terms than at two. Read from the largest term down, the signs have sizes that halve each time: they are the binary digits of chapter two, and their finite sum is uniform on a fine lattice and its limiting law is continuous uniform, not normal. This particular dominant-sign construction fails the CLT; dominance alone is not a universal obstruction."
         ) as vo:
             self.play(FadeIn(A), FadeIn(B), FadeIn(exact_tag(r"simulated: 200,000 sums each")))
             vo.wait_until("a")
@@ -147,18 +151,19 @@ class Lindeberg(VoiceoverScene):
 
     def part6(self):
         rows = fit_rows(VGroup(
-            label(r"i.i.d., \ variance $\sigma^2$: \ $L_n(\varepsilon) = E[X^2 1(|X| > \varepsilon\sigma\sqrt n)]/\sigma^2 \to 0$ \ by DCT", font_size=26, color=GOODC),
+            label(r"i.i.d. centered, \ $0<\sigma^2<\infty$: \ $L_n(\varepsilon) = E[X^2 1(|X| > \varepsilon\sigma\sqrt n)]/\sigma^2 \to 0$ \ by DCT", font_size=26, color=GOODC),
             label(r"so the classical CLT needs only a finite variance", font_size=26, color=GREY_A),
             label(r"Part 6's proof assumed an MGF: \ it excluded $t$-distributions, \ Pareto tails, \ incomes", font_size=26, color=BADC),
             label(r"Lyapunov's condition, \ $\sum E|X_k|^{2+\delta} / s_n^{2+\delta} \to 0$, \ implies Lindeberg's", font_size=26, color=S.ACCENT),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> For identically distributed summands with finite variance, Lindeberg's quantity is the "
-            "expected squared value beyond epsilon sigma root n, which tends to zero by dominated convergence. <bookmark "
-            "mark='b'/> So the classical central limit theorem needs nothing beyond a finite variance. <bookmark mark='c'/> "
-            "Part six's proof assumed a moment generating function, which quietly excluded t distributions, Pareto tails "
-            "and the World's incomes; that assumption is now gone. <bookmark mark='d'/> In practice one often checks "
-            "Lyapunov's stronger condition on moments slightly above two, which implies Lindeberg's."
+            "<bookmark mark='a'/> For identically distributed summands with finite variance, Lindeberg's quantity is "
+            "the expected squared value beyond epsilon sigma root n, which tends to zero by dominated convergence. "
+            "<bookmark mark='b'/> So the iid classical CLT needs a positive finite variance, with centering by the "
+            "finite mean. <bookmark mark='c'/> Part six's proof assumed a moment generating function, which quietly "
+            "excluded t distributions, Pareto tails and the World's incomes; that assumption is now gone. <bookmark "
+            "mark='d'/> In practice one often checks Lyapunov's stronger condition on moments slightly above two, "
+            "which implies Lindeberg's."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

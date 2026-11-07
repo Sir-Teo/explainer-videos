@@ -8,7 +8,7 @@ PROBLEMS = [
     r"If $\sum_n P(|X_n - X| > \varepsilon) < \infty$ for every $\varepsilon > 0$, \ show $X_n \to X$ almost surely.",
     r"Show that i.i.d.\ summands with finite variance satisfy Lindeberg's condition.",
     r"Find Cram\'er's rate $I(a)$ for $N(\mu, \sigma^2)$ and for Poisson($\lambda$) summands.",
-    r"For Exp(1) maxima, \ show $\sup_t |(1 - t/n)^n - e^{-t}| \approx 2e^{-2}/n$, \ the distance in chapter 13's table.",
+    r"For Exp(1) maxima, \ show $\sup_{0\le t\le n} |(1 - t/n)^n - e^{-t}| \approx 2e^{-2}/n$, \ the distance in chapter 13's table.",
 ]
 
 
@@ -38,16 +38,17 @@ class Outro(VoiceoverScene):
         head = label(r"Part 43, \ in twelve lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Part forty-three in twelve lines. <bookmark mark='a'/> Vitali showed that not every set can have a size, so "
-            "probabilities live on sigma-algebras, built from intervals by Carathéodory's theorem and pinned down by "
-            "pi–lambda. A random variable is a measurable map, and its law a push-forward. Monotone and dominated "
-            "convergence move limits through expectations, and uniform integrability is exactly what they need. Product "
-            "measures, Fubini and Kolmogorov's extension make infinite sequences exist. Borel–Cantelli decides what happens "
-            "infinitely often, and the zero–one laws say tail events are certain or impossible. The strong law follows from "
-            "three series, or from Etemadi's truncation. Weak convergence has its distances and Skorokhod's representation; "
-            "characteristic functions determine laws and detect their convergence. Lindeberg's condition is exactly what "
-            "the central limit theorem needs, and Stein's method measures its speed. Beyond the normal lie stable laws, "
-            "exponential large deviations, and the extreme-value laws."
+            "Part forty-three in twelve lines. <bookmark mark='a'/> Vitali showed that not every set can have a size,"
+            " so probabilities live on sigma-algebras, built from intervals by Carathéodory's theorem and pinned down"
+            " by pi–lambda. A random variable is a measurable map, and its law a push-forward. Monotone and dominated"
+            " convergence move limits through expectations, and uniform integrability characterizes L-one convergence"
+            " when integrable variables converge in probability. Product measures, Fubini and Kolmogorov's extension "
+            "make infinite sequences exist. Borel–Cantelli decides what happens infinitely often, and the zero–one "
+            "laws say tail events are certain or impossible. The strong law follows from three series, or from "
+            "Etemadi's truncation. Weak convergence has its distances and Skorokhod's representation; characteristic "
+            "functions determine laws and detect their convergence. under Feller's maximal-variance condition, "
+            "Lindeberg's condition characterizes the array CLT, and Stein's method measures its speed. Beyond the "
+            "normal lie stable laws, exponential large deviations, and the extreme-value laws."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -55,15 +56,16 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def upgrade(self):
-        card = upgrade_card(43, r"every limit theorem here: \ independent summands",
+        card = upgrade_card(43, r"the principal sum limit theorems here: \ independent summands",
                             r"independence; \ but Markov chains, \ time series and MCMC are dependent",
                             r"Part 44: \ martingales, \ Markov chains, \ Brownian motion")
         with self.voiceover(
-            "<bookmark mark='a'/> A promise for the next part. Every theorem in this one assumed independent summands. "
-            "<bookmark mark='b'/> But Part seven's Markov chains, Part seventeen's time series and every MCMC sampler produce "
-            "dependent sequences, and we have been averaging them anyway. <bookmark mark='c'/> Part forty-four supplies the "
-            "tools: conditional expectation, martingales and their convergence theorems, the ergodic theorem for Markov "
-            "chains, and Brownian motion."
+            "<bookmark mark='a'/> A promise for the next part. The main sum limit theorems here concern independent "
+            "summands. Integration and weak-convergence tools do not generally need independence; even the strong law"
+            " proof used only pairwise independence. <bookmark mark='b'/> But Part seven's Markov chains, Part "
+            "seventeen's time series and every MCMC sampler produce dependent sequences, and we have been averaging "
+            "them anyway. <bookmark mark='c'/> Part forty-four supplies the tools: conditional expectation, "
+            "martingales and their convergence theorems, the ergodic theorem for Markov chains, and Brownian motion."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(card[0]), FadeIn(card[1][0]), FadeIn(card[1][1][0]))
@@ -79,15 +81,16 @@ class Outro(VoiceoverScene):
             (r"Stein's lemma in testing; \ the KL exponent", [46]), (r"the delta method and Edgeworth, \ proved", [47]),
             (r"Donsker: \ weak convergence of whole processes", [48]),
         ], font_size=22)
+        self.add(card.head)
         with self.voiceover(
-            "Where it comes back. <bookmark mark='a'/> Part forty-four defines conditional expectation as a projection and "
-            "builds martingales. Part forty-five treats sufficiency as a statement about sigma-algebras. Part forty-six uses "
-            "the large-deviation exponent for the error rates of tests. Part forty-seven proves the delta method and the "
-            "Edgeworth expansion. And Part forty-eight extends weak convergence from laws on the line to whole random "
-            "functions, with Donsker's theorem."
+            "Where it comes back. <bookmark mark='a'/> Part forty-four gives the L-two projection view of conditional"
+            " expectation and builds martingales. Part forty-five treats sufficiency as a statement about "
+            "sigma-algebras. Part forty-six uses the large-deviation exponent for the error rates of tests. Part "
+            "forty-seven proves the delta method and the Edgeworth expansion. And Part forty-eight extends weak "
+            "convergence from laws on the line to whole random functions, with Donsker's theorem."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):

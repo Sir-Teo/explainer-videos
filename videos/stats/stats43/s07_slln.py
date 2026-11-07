@@ -25,20 +25,25 @@ class StrongLaw(VoiceoverScene):
             cmath(r"X_i \text{ i.i.d.}, \ E|X| < \infty", r"\Rightarrow", r"\bar X_n \to \mu \ \text{ almost surely}", font_size=34),
             cmath(r"E|X| = \infty", r"\Rightarrow", r"\limsup |\bar X_n| = \infty \ \text{ almost surely}", font_size=34),
             cmath(r"\text{why}", r":", r"\textstyle\sum_n P(|X| > n) \le E|X| \le 1 + \sum_n P(|X| > n)", font_size=32),
-            cmath(r"\text{so}", r":", r"E|X| = \infty \Rightarrow |X_n| > n \text{ i.o. (BC II)} \Rightarrow \bar X_n \text{ cannot settle}", font_size=30),
+            cmath(r"\text{so}", r":", r"\forall M\ge1:\ |X_n|>Mn\ \text{i.o. (BC II)};\ |X_n|/n\le |\bar X_n|+|\bar X_{n-1}|", font_size=30),
         ]
         rows[0][-1].set_color(GOODC)
         rows[1][-1].set_color(BADC)
         whys = [why(r"Kolmogorov (1930s)"), why(r"the converse"), why(r"the layer cake, \ in steps"), why(r"jumps of size $n$")]
         with self.voiceover(
-            "<bookmark mark='a'/> The theorem: for independent, identically distributed variables with a finite mean, the "
-            "running average converges to the mean, almost surely. <bookmark mark='b'/> And the condition is exactly right: "
-            "if the mean of the absolute value is infinite, the running averages are unbounded, almost surely. <bookmark "
-            "mark='c'/> The converse takes two lines. The layer-cake formula, in integer steps, says the expected absolute "
-            "value is finite exactly when the probabilities that the absolute value exceeds n have a finite sum. <bookmark "
-            "mark='d'/> If they don't, the second Borel–Cantelli lemma makes jumps of size bigger than n happen infinitely "
-            "often, and each such jump moves the average by more than one. The Cauchy law is the standard example."
+            "<bookmark mark='a'/> The theorem: for independent, identically distributed variables with a finite mean,"
+            " the running average converges to the mean, almost surely. <bookmark mark='b'/> And the condition is "
+            "exactly right: if the mean of the absolute value is infinite, the running averages are unbounded, almost"
+            " surely. <bookmark mark='c'/> The converse takes two lines. The layer-cake formula, in integer steps, "
+            "says the expected absolute value is finite exactly when the probabilities that the absolute value "
+            "exceeds n have a finite sum. <bookmark mark='d'/> If they don't, for every positive integer M, "
+            "Borel–Cantelli gives absolute X n exceeding M n infinitely often. Thus limsup of absolute X n over n is "
+            "infinite. Since X n over n equals the current average minus one minus one over n times the previous "
+            "average, the averages cannot remain bounded. The Cauchy law is the standard example."
         ) as vo:
+            heading=label('The iid strong law needs a finite absolute first moment',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -53,7 +58,7 @@ class StrongLaw(VoiceoverScene):
             cmath(r"\iff", r"\;", r"\textstyle\sum X_k \text{ converges a.s.}; \ \ Y_k = X_k 1(|X_k| \le c)", font_size=30),
         ]
         rows[0][-1].set_color(LAWC)
-        whys = [why(r"Kolmogorov: \ Chebyshev for the whole path"), why(r"Cauchy criterion, \ a.s."), why(r"Kolmogorov (1928)"), why(r"truncated at any $c > 0$")]
+        whys = [why(r"independent centered summands with finite variances"), why(r"Cauchy criterion, \ a.s."), why(r"Kolmogorov (1928)"), why(r"truncated at any $c > 0$")]
         with self.voiceover(
             "<bookmark mark='a'/> Kolmogorov's route went through series. His maximal inequality is Chebyshev's inequality "
             "for a whole path: the chance that the partial sums ever reach lambda, before time n, is at most the final "
@@ -64,6 +69,9 @@ class StrongLaw(VoiceoverScene):
             "sums. <bookmark mark='d'/> The truncation is the trick: big terms are handled by Borel–Cantelli, small ones by "
             "the maximal inequality."
         ) as vo:
+            heading=label('Independent random series are controlled by variance and truncation',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -78,8 +86,8 @@ class StrongLaw(VoiceoverScene):
         B = axes([0, 5000], [-15, 15], x_length=5.6, y_length=3.6, xlabel=r"terms", ylabel=r"$\sum_{j \le k} \pm 1/j^{0.4}$", xticks=[0, 2500, 5000],
                  yticks=[-15, 0, 15], center=[3.2, 0.9, 0])
         cols = [LAWC, S.ALT, S.ACCENT, S.PRIOR, S.KEPT, S.RESID]
-        p1 = VGroup(*[polyline(A.ax, k, np.clip(np.asarray(d["p1"][i]), -4, 4), cols[i % 6], 1.8) for i in range(6)])
-        p4 = VGroup(*[polyline(B.ax, k, np.clip(np.asarray(d["p4"][i]), -15, 15), cols[i % 6], 1.8) for i in range(6)])
+        p1 = VGroup(*[polyline(A.ax, k, np.asarray(d["p1"][i]), cols[i % 6], 1.8) for i in range(6)])
+        p4 = VGroup(*[polyline(B.ax, k, np.asarray(d["p4"][i]), cols[i % 6], 1.8) for i in range(6)])
         side = fit_rows(VGroup(
             label(r"random signs, \ $\pm 1/j$: \ $\sum 1/j^2 < \infty$: \ converges, \ almost surely", font_size=24, color=GOODC),
             label(rf"between 50,000 and 100,000 terms it moves {d['tail_mean']:.4f} on average", font_size=22, color=GREY_A),
@@ -108,24 +116,30 @@ class StrongLaw(VoiceoverScene):
 
     def etemadi(self):
         rows = [
-            cmath(r"1.", r":", r"X \ge 0 \ \text{(split } X = X^+ - X^-\text{)}; \ \ Y_k = X_k 1(X_k \le k)", font_size=30),
+            cmath(r"1.", r":", r"X \ge 0 \ \text{(split } X = X^+ - X^-\text{)}; \ \ Y_k = X_k 1(X_k \le k),\quad T_n=\sum_{k\le n}Y_k", font_size=30),
             cmath(r"2.", r":", r"\textstyle\sum_k P(X_k \ne Y_k) = \sum_k P(X > k) \le E X < \infty: \ \text{BC I}", font_size=30),
             cmath(r"3.", r":", r"k_n = \lfloor \alpha^n \rfloor: \ \textstyle\sum_n P\big(|T_{k_n} - E T_{k_n}| > \varepsilon k_n\big) \le C \sum_k \frac{E Y_k^2}{k^2} < \infty", font_size=28),
             cmath(r"4.", r":", r"k_n \le m < k_{n+1}: \ \frac{T_{k_n}}{k_{n+1}} \le \frac{T_m}{m} \le \frac{T_{k_{n+1}}}{k_n}", font_size=32),
         ]
         rows[3][-1].set_color(GOODC)
-        whys = [why(r"truncate"), why(r"they differ finitely often"), why(r"Chebyshev along a geometric subsequence"), why(r"so $\mu/\alpha \le \lim \le \alpha\mu$; \ $\alpha \downarrow 1$")]
+        whys = [why(r"truncate"), why(r"they differ finitely often"), why(r"Chebyshev along a geometric subsequence"), why(r"so $\mu/\alpha \le \liminf\le\limsup \le \alpha\mu$; \ $\alpha \downarrow 1$")]
         with self.voiceover(
             "<bookmark mark='a'/> The shortest proof is Nasrollah Etemadi's, from 1981, and it needs only pairwise "
-            "independence. Split each variable into positive and negative parts, so assume it is non-negative, and truncate "
-            "the k-th at k. <bookmark mark='b'/> The truncated and original sequences differ only finitely often, by the "
-            "first Borel–Cantelli lemma, because the chances of a difference sum to at most the mean. <bookmark mark='c'/> "
-            "Along a geometric subsequence, k n equal to alpha to the n, Chebyshev's inequality and a careful sum show "
-            "that the deviation probabilities are summable, so Borel–Cantelli again gives convergence along the "
-            "subsequence. <bookmark mark='d'/> Finally, because the variables are non-negative, the partial sums increase, "
-            "and every average between two subsequence times is sandwiched between their averages. The limit is pinned "
-            "between mu over alpha and alpha times mu, and alpha can be taken as close to one as we like."
+            "independence. Split each variable into positive and negative parts, so assume it is non-negative, and "
+            "truncate the k-th at k. <bookmark mark='b'/> The truncated and original sequences differ only finitely "
+            "often, by the first Borel–Cantelli lemma, because the chances of a difference sum to at most the mean. "
+            "<bookmark mark='c'/> Along a geometric subsequence, k n equal to alpha to the n, Chebyshev's inequality "
+            "and a careful sum show that the deviation probabilities are summable, so Borel–Cantelli again gives "
+            "convergence along the subsequence. <bookmark mark='d'/> Finally, because the variables are non-negative,"
+            " the partial sums increase, and every average between two subsequence times is sandwiched between their "
+            "averages. The lower and upper limits are pinned between mu over alpha and alpha times mu. Here T n is "
+            "the sum of the truncated variables; its expectation divided by n tends to mu by dominated convergence "
+            "followed by Cesaro averaging. The variance summability follows by interchanging non-negative sums, "
+            "bounded by a constant times the finite mean; and alpha can be taken as close to one as we like."
         ) as vo:
+            heading=label('Truncation and geometric subsequences prove the strong law',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -140,11 +154,11 @@ class StrongLaw(VoiceoverScene):
         B = axes([0, 4.3], [-6, 6], x_length=5.6, y_length=3.6, xlabel=r"$n$", ylabel=r"$\bar X_n$, \ Cauchy", xticks=[0, 1, 2, 3, 4],
                  yticks=[-6, 0, 6], log_x=True, xfmt=lambda v: f"10^{{{int(v)}}}", center=[3.2, 0.9, 0])
         cols = [LAWC, S.ALT, S.ACCENT, S.PRIOR, S.KEPT, S.RESID]
-        pe = VGroup(*[polyline(A.ax, k, np.clip(np.asarray(d["exp"][i]), 0, 2.5), cols[i], 1.8) for i in range(6)])
-        pc = VGroup(*[polyline(B.ax, k, np.clip(np.asarray(d["cauchy"][i]), -6, 6), cols[i], 1.8) for i in range(6)])
+        pe = VGroup(*[polyline(A.ax, k, np.asarray(d["exp"][i]), cols[i], 1.8) for i in range(6)])
+        pc = VGroup(*[polyline(B.ax, k, np.asarray(d["cauchy"][i]), cols[i], 1.8) for i in range(6)])
         mu = DashedLine(A.ax.c2p(0, 1), A.ax.c2p(4.3, 1), color=LIMC, stroke_width=2.5)
         sub = np.asarray(d["sub"])
-        sd = VGroup(*[Dot(A.ax.c2p(np.log10(s), min(v, 2.5)), radius=0.05, color=WHITE) for s, v in zip(sub, d["exp_sub"])])
+        sd = VGroup(*[Dot(A.ax.c2p(np.log10(s), v), radius=0.05, color=WHITE) for s, v in zip(sub, d["exp_sub"]) if 0 <= v <= 2.5])
         side = fit_rows(VGroup(
             label(r"exponential, \ $E|X| = 1$: \ every path settles on 1", font_size=24, color=GOODC),
             label(r"white: \ the geometric subsequence $\lfloor 1.3^n \rfloor$ of Etemadi's step 3", font_size=22, color=GREY_A),
