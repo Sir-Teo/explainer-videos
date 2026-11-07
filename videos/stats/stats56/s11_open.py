@@ -28,6 +28,12 @@ class OpenProblems(VoiceoverScene):
         ]
         tab = table_rows([hdr] + body, font_size=28, col_buff=0.7, row_buff=0.3,
                          colors=[GREY_B, SIMC, CONDC, SPLITC, SPLITC, HYBC, HYBC]).move_to([0, 0.1, 0])
+        if tab.width > 12.6:
+            tab.width = 12.6
+        heading = label('Comparing selective inference guarantees', font_size=36).move_to([0, 3.3, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> The part in one table: what each approach needs, and what it costs. <bookmark mark='b'/> PoSI needs nothing about the selection rule and costs up to root p in width. Conditional inference needs the exact rule and Gaussian noise, and its intervals grow long near the edge of the selection region. Randomization needs you to randomize, and costs noisier selection. Splitting, fission and thinning need a divisible family, and cost information. Knockoffs and conformal selection need the law of the covariates or the stated independent or conditional exchangeability assumptions, and give an error rate instead of intervals. And the hybrid needs a simultaneous band, and costs a small slice of the level."
         ) as vo:
