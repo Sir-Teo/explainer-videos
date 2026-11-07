@@ -159,7 +159,7 @@ python tools/lecture_length.py stats59 --floor 50
 
 Detailed [scientific source review](../../../docs/qa/evidence/stats59-polish-20261107/source-review.md):
 
-All twelve English scenes, computation paths and legacy AMP helpers were reviewed. Twenty-three checks pass (19 local parameterized checks and four legacy tests). All twelve cached inputs were regenerated. Scientific source is reconciled; sampled visual and bilingual production approval remain pending.
+All twelve English scenes, computation paths and legacy AMP helpers were reviewed. Twenty-three checks pass (19 local parameterized checks and four legacy tests). All twelve cached inputs were regenerated. Scientific source is reconciled; the recorded sampled visual checkpoint is complete; bilingual production approval remains open.
 
 The logistic table incorrectly equated a failed numerical root with a nonexistent MLE. At kappa=.3, gamma^2=5, the corrected bracketed proximal map and bounded positive least-squares solve find alpha=3.07379, sigma=11.63229, lambda=13.74917 and LRT factor=2.95240. Independently integrating the existence objective gives boundary .32558861, so .3 is inside the asymptotic existence region. The gamma=0 boundary is exactly .5 instead of the former noisy .501 Monte Carlo estimate. Integrating the independent Z analytically leaves a smooth one-dimensional Gaussian integral. Root status and phase status are distinct. Increasing quadrature from 161 to 241 nodes changes the .3 LRT factor by about 1.24e-5; values at .1 match the published 1.1678, 3.3466 and .9605. Tests independently bracket logistic proximal roots through lambda=10000. Central-bracket safeguarding prevents the old unguarded Newton cycle for larger scales.
 
@@ -191,4 +191,4 @@ Gaussian equivalence matches certain limiting spectral/risk quantities under act
 
 Persistent result headings and local segment clipping preserve genuine viewport crossings and missing breaks. Scatter values are not clamped. Ridge and RF plots include all observed/theoretical vertical values instead of flattening peaks at plot edges. The empirical biopsy histogram explicitly discloses values outside its plotted range.
 
-The narration estimate is about 55 minutes. English sampled native/motion/narrated checks remain pending. Chinese narration/captions, continuous listening/full narrated playback and final bilingual masters remain open.
+The narration estimate is about 55 minutes. The recorded English sampled visual checkpoint is complete. Chinese narration/captions, continuous listening/full narrated playback and final bilingual masters remain open.
