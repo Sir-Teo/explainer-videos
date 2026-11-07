@@ -1,0 +1,95 @@
+{
+ "video": "stats35",
+ "scene": "Neyman",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 7,
+ "lines": [
+  {
+   "raw": "Chapter five. Neyman's variance.",
+   "spoken": "Chapter five. Neyman's variance.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/abadbf4553c317e0.wav",
+   "duration": 2.675,
+   "tokens": 4,
+   "peak": 0.35028076171875,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Neyman asked a different question from Fisher. Not whether the effect is zero, but how precisely the difference in means estimates the average effect, over repeated randomizations of the same fixed patients. It is unbiased, as we saw. <bookmark mark='b'/> Its variance, which Neyman derived by treating the treated group as a sample drawn without replacement from the patients, is S one squared over n one, plus S nought squared over n nought, minus S tau squared over n. <bookmark mark='c'/> The S's are the variances, across the patients, of the treated outcomes, the untreated outcomes, and the individual effects. <bookmark mark='d'/> The first two can be estimated from the two arms. The third cannot, because no patient shows us their effect. So the usual estimate drops it, and is too large on average: conservative.",
+   "spoken": "Neyman asked a different question from Fisher. Not whether the effect is zero, but how precisely the difference in means estimates the average effect, over repeated randomizations of the same fixed patients. It is unbiased, as we saw. Its variance, which Neyman derived by treating the treated group as a sample drawn without replacement from the patients, is S one squared over n one, plus S nought squared over n nought, minus S tau squared over n. The S's are the variances, across the patients, of the treated outcomes, the untreated outcomes, and the individual effects. The first two can be estimated from the two arms. The third cannot, because no patient shows us their effect. So the usual estimate drops it, and is too large on average: conservative.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/5c1cecae959c6523.wav",
+   "duration": 47.4,
+   "tokens": 129,
+   "peak": 0.6724853515625,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> If every patient had the same effect, S tau would be zero and the usual estimate would be exactly unbiased. <bookmark mark='b'/> When effects vary, it overstates the variance. <bookmark mark='c'/> The subtracted term reflects a finite population: a patient in the treated group is, by that fact, absent from the control group, and the two arms' errors partly cancel. <bookmark mark='d'/> If instead we want the average effect in a superpopulation from which the patients were sampled independently and identically, the extra sampling variation exactly restores the missing term, and the usual estimate is right. The conservative formula is the correct one for the population average.",
+   "spoken": "If every patient had the same effect, S tau would be zero and the usual estimate would be exactly unbiased. When effects vary, it overstates the variance. The subtracted term reflects a finite population: a patient in the treated group is, by that fact, absent from the control group, and the two arms' errors partly cancel. If instead we want the average effect in a superpopulation from which the patients were sampled independently and identically, the extra sampling variation exactly restores the missing term, and the usual estimate is right. The conservative formula is the correct one for the population average.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/f8632f4166824659.wav",
+   "duration": 39.3,
+   "tokens": 101,
+   "peak": 0.77349853515625,
+   "issues": [],
+   "elapsed": 0.05,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> In the World we can compute every term. The patients' treated and untreated outcomes vary with standard deviations of about ten; their individual effects, with a standard deviation of four point eight. <bookmark mark='b'/> The true standard deviation of the estimate, with a thousand patients per arm, is point four four six; the conservative formula gives point four five eight. <bookmark mark='c'/> Re-randomizing the same two thousand patients four thousand times gives point four three nine, matching the true value. <bookmark mark='d'/> Here the effects vary much less than the outcomes do, so the conservative formula is only three percent too large.",
+   "spoken": "In the World we can compute every term. The patients' treated and untreated outcomes vary with standard deviations of about ten; their individual effects, with a standard deviation of four point eight. The true standard deviation of the estimate, with a thousand patients per arm, is point four four six; the conservative formula gives point four five eight. Re-randomizing the same two thousand patients four thousand times gives point four three nine, matching the true value. Here the effects vary much less than the outcomes do, so the conservative formula is only three percent too large.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/62b697fa63740e53.wav",
+   "duration": 35.075,
+   "tokens": 96,
+   "peak": 0.716583251953125,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The randomization distribution of the estimate, over four thousand draws of the coin. <bookmark mark='b'/> It is close to normal, with Neyman's standard deviation, as a finite-population central limit theorem predicts when neither arm is dominated by a few extreme units. <bookmark mark='c'/> Ninety percent intervals built from the conservative standard error cover the trial's average effect 91 point one percent of the time: slightly above ninety percent in this example. A conservative variance supports asymptotic coverage under regularity; it does not by itself guarantee finite-sample normal-interval coverage.",
+   "spoken": "The randomization distribution of the estimate, over four thousand draws of the coin. It is close to normal, with Neyman's standard deviation, as a finite-population central limit theorem predicts when neither arm is dominated by a few extreme units. Ninety percent intervals built from the conservative standard error cover the trial's average effect 91 point one percent of the time: slightly above ninety percent in this example. A conservative variance supports asymptotic coverage under regularity; it does not by itself guarantee finite-sample normal-interval coverage.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/a0943b45202fade0.wav",
+   "duration": 37.05,
+   "tokens": 84,
+   "peak": 0.580474853515625,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> On the Board: the randomized trial with Neyman's conservative interval, over a thousand fresh randomizations. Kept. Set it beside the doctor's choice from chapter three, which never covered at all.",
+   "spoken": "On the Board: the randomized trial with Neyman's conservative interval, over a thousand fresh randomizations. Kept. Set it beside the doctor's choice from chapter three, which never covered at all.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/3736791c2283b69e.wav",
+   "duration": 12.725,
+   "tokens": 30,
+   "peak": 0.39044189453125,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The variance of the effects cannot be estimated, but it can be bounded, because we do know the distributions of the treated and untreated outcomes separately. <bookmark mark='b'/> Its smallest value consistent with those distributions comes from pairing the sorted treated outcomes with the sorted untreated ones. <bookmark mark='c'/> Peter Aronow, Donald Green and Donald Lee used this in 2014 to sharpen Neyman's variance estimate while retaining asymptotic validity under their regularity conditions. <bookmark mark='d'/> The lesson is more general: some features of the science, such as the exact share of patients harmed, are not generally identified by a parallel-arm randomized trial alone.",
+   "spoken": "The variance of the effects cannot be estimated, but it can be bounded, because we do know the distributions of the treated and untreated outcomes separately. Its smallest value consistent with those distributions comes from pairing the sorted treated outcomes with the sorted untreated ones. Peter Aronow, Donald Green and Donald Lee used this in 2014 to sharpen Neyman's variance estimate while retaining asymptotic validity under their regularity conditions. The lesson is more general: some features of the science, such as the exact share of patients harmed, are not generally identified by a parallel-arm randomized trial alone.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/f52aa3532a50ede9.wav",
+   "duration": 39.725,
+   "tokens": 97,
+   "peak": 0.600250244140625,
+   "issues": [],
+   "elapsed": 0.05,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats35/en/Neyman_motion/result.json",
+ "input_sha256": "86f1925038b6b55b71c3b06e39f1d7a25e835ebaea4066544d3b7a0f1ae6df14"
+}

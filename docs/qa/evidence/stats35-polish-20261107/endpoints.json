@@ -1,0 +1,182 @@
+{
+  "fingerprint": "3b95ec499f42b14ea7768f35faf025f6d5d209f10771671fc3a2d085d518e42d",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 53
+      },
+      "input_record": "renders/qa/series/stats35/en/Hook/result.json",
+      "input_sha256": "fb25b96ec2bf5192e7eb9f7c2538f4f585455d364c15ac5ea0507dcc3e97cbb1"
+    },
+    {
+      "scene": "Potential",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/series/stats35/en/Potential/result.json",
+      "input_sha256": "5505fbc08c9fa7f4564c59f7c82055466cbe82a892b3ee64f6ed2505f1813256"
+    },
+    {
+      "scene": "Estimands",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 44
+      },
+      "input_record": "renders/qa/series/stats35/en/Estimands/result.json",
+      "input_sha256": "67a68fb886aed7a4248fd2531ba433b73776315462bf6213a83ca131a1f06847"
+    },
+    {
+      "scene": "Randomization",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 54
+      },
+      "input_record": "renders/qa/series/stats35/en/Randomization/result.json",
+      "input_sha256": "c6e19ac7be5a6f19a84473fd34a2bab52d7eae051bd7a7a2c73eb7ce5412620e"
+    },
+    {
+      "scene": "Fisher",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 47
+      },
+      "input_record": "renders/qa/series/stats35/en/Fisher/result.json",
+      "input_sha256": "1188ce368f87ad656cbcf93b13b46567d31ad5761edb289924d41d98347e0750"
+    },
+    {
+      "scene": "Neyman",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 48
+      },
+      "input_record": "renders/qa/series/stats35/en/Neyman/result.json",
+      "input_sha256": "cd8b163e64689ac648c9442b747fcf1875fdb98341f9bffcacd5a9a9f47f7f9f"
+    },
+    {
+      "scene": "Blocks",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 40
+      },
+      "input_record": "renders/qa/series/stats35/en/Blocks/result.json",
+      "input_sha256": "7dca19e7a7c3af684a3272cdcffc3fad8c699a378398136897d8574fdb7b2604"
+    },
+    {
+      "scene": "Adjust",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 55
+      },
+      "input_record": "renders/qa/series/stats35/en/Adjust/result.json",
+      "input_sha256": "cca406bd2ed7fb753349ece77cd3ebb00b87b5b07d3ff04a0227fc70c3fbe085"
+    },
+    {
+      "scene": "Cluster",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 41
+      },
+      "input_record": "renders/qa/series/stats35/en/Cluster/result.json",
+      "input_sha256": "143b49ad49cc9e3da1f4428a0965079924ff0aaab4943d60093177ae78462490"
+    },
+    {
+      "scene": "Noncompliance",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 63
+      },
+      "input_record": "renders/qa/series/stats35/en/Noncompliance/result.json",
+      "input_sha256": "df1f844d7b3e94c22d19f60ec20b0cdef7e5c580c25b3872610c66131b00154d"
+    },
+    {
+      "scene": "Interference",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 47
+      },
+      "input_record": "renders/qa/series/stats35/en/Interference/result.json",
+      "input_sha256": "92cf5f4e4347edd5a5053a104de720bdaf957113d8a4bf885f812a0c8411f66f"
+    },
+    {
+      "scene": "Subgroups",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 55
+      },
+      "input_record": "renders/qa/series/stats35/en/Subgroups/result.json",
+      "input_sha256": "d09e00557bd156ff0f720e9cd15f05fd097fc77bb110faba535819b325466b02"
+    },
+    {
+      "scene": "Sequential",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 51
+      },
+      "input_record": "renders/qa/series/stats35/en/Sequential/result.json",
+      "input_sha256": "16a7010329f9588895967f7713aa1b1062d45853557b0b34f2cb5189e18da1a5"
+    },
+    {
+      "scene": "Surrogates",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/series/stats35/en/Surrogates/result.json",
+      "input_sha256": "c90e637019a34828213863c508bb70e3ba7c134d2ac866649a8e569d186f7a5a"
+    },
+    {
+      "scene": "Transport",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 35
+      },
+      "input_record": "renders/qa/series/stats35/en/Transport/result.json",
+      "input_sha256": "8ff3165c6d2d53ede66967fd4aa00035f8b024b7293f81df779c8e57d7e8f99f"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 11,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 67
+      },
+      "input_record": "renders/qa/series/stats35/en/Outro/result.json",
+      "input_sha256": "2ed66b57df39497d6368fd82572ae2fbcbe424ee7520cec40de83015b6e292bf"
+    }
+  ]
+}

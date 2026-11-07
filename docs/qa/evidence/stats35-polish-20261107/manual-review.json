@@ -1,0 +1,61 @@
+{
+  "baseline": [
+    "Hook",
+    "Potential",
+    "Estimands",
+    "Randomization",
+    "Fisher",
+    "Neyman",
+    "Blocks",
+    "Adjust",
+    "Cluster",
+    "Noncompliance",
+    "Interference",
+    "Subgroups",
+    "Sequential",
+    "Surrogates",
+    "Transport",
+    "Outro"
+  ],
+  "native": [
+    "Hook",
+    "Potential",
+    "Estimands",
+    "Randomization",
+    "Fisher",
+    "Neyman",
+    "Blocks",
+    "Adjust",
+    "Cluster",
+    "Noncompliance",
+    "Interference",
+    "Subgroups",
+    "Sequential",
+    "Surrogates",
+    "Transport"
+  ],
+  "motion": [
+    "Hook",
+    "Potential",
+    "Estimands",
+    "Randomization",
+    "Fisher",
+    "Neyman",
+    "Blocks",
+    "Adjust",
+    "Cluster",
+    "Noncompliance",
+    "Interference",
+    "Subgroups",
+    "Sequential",
+    "Surrogates",
+    "Transport"
+  ],
+  "actual": "Neyman; full actual Kokoro sheet inspected, no cropped content, zero blank/sparse runs",
+  "noncompliance_caption_clarification": "Fresh caption sheet inspected; only when offered is present.",
+  "noncompliance_fresh_caption_viewed": true,
+  "fresh_repaired_baseline_native": [
+    "Noncompliance"
+  ],
+  "fresh_repaired_noncompliance": "Current baseline, native 1080p and motion sheets inspected; persistent assumptions heading prevents sparse hold; fresh motion scan zero blank/sparse runs."
+}

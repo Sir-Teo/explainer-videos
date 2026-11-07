@@ -1,0 +1,23 @@
+{
+  "part": "stats35",
+  "fingerprint": "3b95ec499f42b14ea7768f35faf025f6d5d209f10771671fc3a2d085d518e42d",
+  "english_endpoints": 16,
+  "native_1080_endpoints": 15,
+  "silent_motion_chapters": 15,
+  "audio_scene": "Neyman",
+  "audio_lines": 7,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats35/en/Neyman/videos/s06_neyman/480p15/Neyman.mp4",
+    "seconds": 222.599674,
+    "narration_sha256": "fb6d48bbf25c8dc9c51ab629ac7867195f92fcc5183c84ec6eb7770cf3f047d3",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 222 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 222 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

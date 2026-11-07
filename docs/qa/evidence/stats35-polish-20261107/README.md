@@ -1,3 +1,5 @@
-# Part 35 source review checkpoint
+# Part 35 English source and visual review
 
-All sixteen chapters and fourteen numerical inputs reviewed. Scientific corrections and 20 checks complete; endpoint, native-resolution, motion and representative narrated-preview review remains in progress. See source-review.md, source-data.json, computed-inputs.json and tests-final.txt. Chinese narration, continuous listening and final masters remain open; no bilingual production approval.
+All sixteen chapter endpoint sheets, fifteen native 1080p captures and fifteen motion sheets were inspected. Fresh baseline, native and motion captures verify the repaired Noncompliance assumptions section: its persistent heading removes the sparse hold while the assumptions remain readable. Current runtime, bounds and blank/sparse scans have no outstanding issues apart from missing translation tables. The 223-second narrated Neyman preview was inspected; its seven speech lines pass signal/timing checks and match current source.
+
+See [source corrections](source-review.md), [verification](verification.json), [manual review](manual-review.json), [numerical input hashes](computed-inputs.json), [historical data checks](source-data.json) and [test output](tests-final.txt). Fourteen numerical inputs were reviewed and twenty focused checks passed. This closes the English source and sampled visual pass. Chinese narration/caption tables, continuous listening/full narrated playback and final bilingual narrated masters remain open.
