@@ -37,23 +37,18 @@ class SubGaussian(VoiceoverScene):
     def definitions(self):
         rows = [
             cmath(r"\|X\|_{\psi_2}", r"=", r"\inf\{t > 0 : E\, e^{X^2/t^2} \le 2\}: \ \text{sub-Gaussian}", font_size=34),
-            cmath(r"\|X\|_{\psi_2} \le K", r"\Leftrightarrow", r"P(|X| > t) \le 2 e^{-t^2/K^2} \ \Leftrightarrow \ E e^{\lambda X} \le e^{\lambda^2 K^2}", font_size=30),
+            cmath(r"EX=0,\ \|X\|_{\psi_2} \lesssim K", r"\Longleftrightarrow_{\text{up to constants}}", r"P(|X| > t) \le 2 e^{-t^2/K^2} \ \Longleftrightarrow_{\text{up to constants}} \ E e^{\lambda X} \le e^{\lambda^2 K^2}", font_size=30),
             cmath(r"\|X\|_{\psi_1}", r"=", r"\inf\{t : E\, e^{|X|/t} \le 2\}: \ \text{sub-exponential, \ tails } e^{-t/K}", font_size=32),
             cmath(r"\|XY\|_{\psi_1}", r"\le", r"\|X\|_{\psi_2}\|Y\|_{\psi_2}: \ \text{squares of sub-Gaussians are sub-exponential}", font_size=30),
         ]
         rows[0][-1].set_color(GAUSSC)
         rows[2][-1].set_color(MATC)
         whys = [why(r"an Orlicz norm"), why(r"three equivalent views, \ up to constants"), why(r"heavier, \ but still light"), why(r"why $\chi^2$ is sub-exponential")]
+        heading = label('Tail, norm and centered MGF conditions agree up to constants', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The workhorse of the subject is a norm that measures how heavy a tail is. The psi-two norm "
-            "of a random variable is the smallest t such that the expectation of e to the X squared over t squared is at most "
-            "two. Variables with a finite psi-two norm are called sub-Gaussian. <bookmark mark='b'/> Up to universal "
-            "constants, three statements are equivalent: the norm is at most K, the tails fall like e to the minus t squared "
-            "over K squared, and the moment generating function is at most that of a normal with variance about K squared. "
-            "<bookmark mark='c'/> With the absolute value in place of the square we get the psi-one norm and sub-exponential "
-            "variables, whose tails fall like e to the minus t over K. <bookmark mark='d'/> And the product of two "
-            "sub-Gaussians is sub-exponential, which is why a chi-square variable, a sum of squared normals, has "
-            "sub-exponential rather than Gaussian tails."
+            "<bookmark mark='a'/> The workhorse of the subject is a norm that measures how heavy a tail is. The psi-two norm of a random variable is the smallest t such that the expectation of e to the X squared over t squared is at most two. Variables with a finite psi-two norm are called sub-Gaussian. <bookmark mark='b'/> Up to universal constants, three statements are equivalent: the norm is at most K, the tails fall like e to the minus t squared over K squared, and, after centering, the moment generating function is bounded by that of a normal with variance a universal constant times K squared. <bookmark mark='c'/> With the absolute value in place of the square we get the psi-one norm and sub-exponential variables, whose tails fall like e to the minus t over K. <bookmark mark='d'/> And the product of two sub-Gaussians is sub-exponential, which is why a chi-square variable, a sum of squared normals, has sub-exponential rather than Gaussian tails."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -88,23 +83,20 @@ class SubGaussian(VoiceoverScene):
 
     def hoeffding(self):
         rows = [
-            cmath(r"X_i \text{ independent}, \ \|X_i\|_{\psi_2} \le K", r":", r"P\big(|\textstyle\sum a_i X_i| \ge t\big) \le 2\exp\Big(-\frac{c\, t^2}{K^2 \|a\|_2^2}\Big)", font_size=30),
-            cmath(r"\|X_i\|_{\psi_1} \le K", r":", r"P\big(|\textstyle\sum a_i X_i| \ge t\big) \le 2\exp\Big(-c \min\Big(\frac{t^2}{K^2\|a\|_2^2}, \frac{t}{K \|a\|_\infty}\Big)\Big)", font_size=28),
+            cmath(r"X_i \text{ independent},\ EX_i=0,\ \|X_i\|_{\psi_2} \le K", r":", r"P\big(|\textstyle\sum a_i X_i| \ge t\big) \le 2\exp\Big(-\frac{c\, t^2}{K^2 \|a\|_2^2}\Big)", font_size=30),
+            cmath(r"X_i \text{ independent},\ EX_i=0,\ \|X_i\|_{\psi_1} \le K", r":", r"P\big(|\textstyle\sum a_i X_i| \ge t\big) \le 2\exp\Big(-c \min\Big(\frac{t^2}{K^2\|a\|_2^2}, \frac{t}{K \|a\|_\infty}\Big)\Big)", font_size=28),
             cmath(r"\text{read}", r":", r"\text{Gaussian for small deviations, \ exponential for large ones}", font_size=32),
-            cmath(r"\text{Bernstein (bounded, \ variance } \sigma^2)", r":", r"e^{-n t^2 / (2(\sigma^2 + t/3))}: \ \text{sees the variance}", font_size=30),
+            cmath(r"\text{Bernstein: } EX_i=\mu,\ |X_i-\mu|\le1,\ \mathrm{Var}(X_i)=\sigma^2", r":", r"e^{-n t^2 / (2(\sigma^2 + t/3))}: \ \text{sees the variance}", font_size=30),
         ]
         rows[0][-1].set_color(GAUSSC)
         rows[1][-1].set_color(MATC)
         rows[3][-1].set_color(GOODC)
         whys = [why(r"general Hoeffding"), why(r"Bernstein's inequality, \ general form"), why(r"two regimes"), why(r"rare events: \ $\sigma^2 \ll 1$")]
+        heading = label('Independent centered sums have Gaussian and exponential tail regimes', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The two basic inequalities. For a weighted sum of independent sub-Gaussians, the general "
-            "Hoeffding inequality: Gaussian tails, with the variance replaced by K squared times the squared length of the "
-            "weights. <bookmark mark='b'/> For sub-exponentials, Bernstein's inequality: the tail is the smaller of a "
-            "Gaussian term and an exponential one. <bookmark mark='c'/> Small deviations look Gaussian; large ones only "
-            "exponential, because a single big summand can dominate. <bookmark mark='d'/> For bounded variables with small "
-            "variance, Bernstein's classical form uses the variance itself rather than the range, which is everything for "
-            "rare events."
+            "<bookmark mark='a'/> The two basic inequalities. For a weighted sum of independent, mean-zero sub-Gaussians, the general Hoeffding inequality: Gaussian tails, with the variance replaced by K squared times the squared length of the weights. <bookmark mark='b'/> For independent, mean-zero sub-exponentials, Bernstein's inequality has a Gaussian regime for small deviations and an exponential regime for large ones. <bookmark mark='c'/> Small deviations look Gaussian; large ones only exponential, because a single big summand can dominate. <bookmark mark='d'/> For bounded variables with small variance, Bernstein's classical form uses the variance itself rather than the range, which is everything for rare events."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -169,13 +161,11 @@ class SubGaussian(VoiceoverScene):
         rows[2][-1].set_color(GAUSSC)
         rows[3][-1].set_color(GOODC)
         whys = [why(r"$n = 200$"), why(r"$n = 200$"), why(r"$\sigma^2 = 1/4$"), why(r"Part 48's Bousquet, \ again")]
+        heading = label('Exact tail probabilities and upper bounds answer different questions', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            f"<bookmark mark='a'/> For a fair coin, at a tenth above a half, the exact tail is {say_sci(r['exact'][i])}, Hoeffding "
-            f"gives {say_sci(r['hoeffding'][i])} and Bernstein {say_sci(r['bernstein'][i])}: all within an order of magnitude. <bookmark "
-            f"mark='b'/> For the rare event, at four points above two percent, the exact tail is {say_sci(q['exact'][j])}, while "
-            f"Hoeffding gives {say_sci(q['hoeffding'][j])}. <bookmark mark='c'/> For a coin the variance is already as large as a "
-            f"bounded variable allows, so Hoeffding loses little. <bookmark mark='d'/> For rare events only a bound that sees "
-            f"the variance is any use, the same lesson as Bousquet's inequality in Part forty-eight."
+            f"<bookmark mark='a'/> For a fair coin, at a tenth above a half, the exact tail is {say_sci(r['exact'][i])}, Hoeffding gives {say_sci(r['hoeffding'][i])} and Bernstein {say_sci(r['bernstein'][i])}: the bounds are upper guarantees, not approximations to the exact probability. <bookmark mark='b'/> For the rare event, at four points above two percent, the exact tail is {say_sci(q['exact'][j])}, while Hoeffding gives {say_sci(q['hoeffding'][j])}. <bookmark mark='c'/> For a coin the variance is already as large as a bounded variable allows, so Hoeffding loses little. <bookmark mark='d'/> For rare events only a bound that sees the variance is any use, the same lesson as Bousquet's inequality in Part forty-eight."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):

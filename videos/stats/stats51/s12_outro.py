@@ -128,11 +128,7 @@ class Outro(VoiceoverScene):
         tr.to_edge(UP, buff=0.8)
         nxt.next_to(tr, DOWN, buff=1.0)
         with self.voiceover(
-            "Fifty-one parts of sixty-five. <bookmark mark='a'/> In high dimensions, randomness becomes predictable. A random "
-            "point sits on the equator, a random vector on a thin shell, a random matrix has its singular values pinned "
-            "between root n minus root p and root n plus root p, and the maximum of a million Gaussians is very nearly a "
-            "fixed number. That predictability is what makes statistics with many parameters possible at all. <bookmark "
-            "mark='b'/> Next, Part fifty-two: high-dimensional statistics."
+            "Fifty-one parts of sixty-five. <bookmark mark='a'/> In high dimensions, randomness becomes predictable. A random point sits on the equator, a random vector on a thin shell, a random matrix has expected extreme singular values bounded by root n minus root p and root n plus root p, with random deviations around those expectations, and the maximum of a million Gaussians is very nearly a fixed number. That predictability is what makes statistics with many parameters possible at all. <bookmark mark='b'/> Next, Part fifty-two: high-dimensional statistics."
         ) as vo:
             self.play(FadeIn(tr))
             vo.wait_until("a")

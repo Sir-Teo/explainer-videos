@@ -16,8 +16,8 @@ class Lipschitz(VoiceoverScene):
         self.talagrand()
 
     def card(self):
-        card = chapter_card(3, r"Concentration of Lipschitz functions", r"Anything smooth of many independent pieces is nearly constant", lit=(1976,), part=PART)
-        with self.voiceover("Chapter three. Concentration of Lipschitz functions: anything smooth of many independent pieces is nearly constant."):
+        card = chapter_card(3, r"Concentration of Lipschitz functions", r"Lipschitz functions of Gaussian inputs concentrate", lit=(1976,), part=PART)
+        with self.voiceover('Chapter three. Concentration of Lipschitz functions: Lipschitz functions of Gaussian inputs concentrate.'):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
 
@@ -31,15 +31,11 @@ class Lipschitz(VoiceoverScene):
         rows[1][-1].set_color(GAUSSC)
         rows[3][-1].set_color(GOODC)
         whys = [why(r"changes by at most $L$ per unit move"), why(r"Tsirelson--Ibragimov--Sudakov (1976)"), why(r"Nash; \ Chernoff (1981)"), why(r"dimension-free")]
+        heading = label('The input law and Lipschitz constant determine concentration', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The general principle. A function of n variables is L-Lipschitz if moving the input a "
-            "distance d moves the output at most L times d. <bookmark mark='b'/> Boris Tsirelson, Ildar Ibragimov and "
-            "Vladimir Sudakov proved in 1976 that if the input is a standard Gaussian vector, the function exceeds its mean by "
-            "t with probability at most e to the minus t squared over two L squared. <bookmark mark='c'/> Its variance is at "
-            "most L squared, the Gaussian Poincaré inequality. <bookmark mark='d'/> What is remarkable is what is missing: the "
-            "dimension n. The length of the vector, its largest coordinate, the operator norm of a random matrix, any "
-            "supremum of linear forms: all are Lipschitz, and all concentrate around their means with Gaussian tails, in any "
-            "dimension."
+            "<bookmark mark='a'/> The general principle. A function of n variables is L-Lipschitz if moving the input a distance d moves the output at most L times d. <bookmark mark='b'/> Boris Tsirelson, Ildar Ibragimov and Vladimir Sudakov proved in 1976 that if the input is a standard Gaussian vector, the function exceeds its mean by t with probability at most e to the minus t squared over two L squared. <bookmark mark='c'/> Its variance is at most L squared, the Gaussian Poincaré inequality. <bookmark mark='d'/> What is remarkable is what is missing: the dimension n. The length of the vector, its largest coordinate, the operator norm of a random matrix, a supremum of linear forms with bounded coefficient norms: these are Lipschitz, and all concentrate around their means with Gaussian tails, in any dimension."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -57,6 +53,9 @@ class Lipschitz(VoiceoverScene):
         rows[2][-1].set_color(GAUSSC)
         rows[3][-1].set_color(GOODC)
         whys = [why(r"Gross (1975)"), why(r"Herbst's argument"), why(r"chapter 1's definition"), why(r"why $n$ never appears")]
+        heading = label('Log-Sobolev tensorization keeps the Gaussian constant dimension free', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> One proof, in outline, because it shows where the dimension goes. Leonard Gross's Gaussian "
             "log-Sobolev inequality of 1975 bounds the entropy of a squared function by twice its expected squared gradient. "
@@ -115,7 +114,7 @@ class Lipschitz(VoiceoverScene):
 
     def maxtable(self):
         d = load("lipschitz")
-        rows = [[r"$n$", r"$E \max_i g_i$ \ (exact)", r"simulated", r"$\sqrt{2 \log n}$", r"SD of the max"]]
+        rows = [[r"$n$", r"$E \max_i g_i$ \ (quadrature)", r"simulated", r"$\sqrt{2 \log n}$", r"SD of the max"]]
         for r in d["rows"]:
             rows.append([f"{r['n']:,}", f"{r['exact_mean']:.3f}", f"{r['mean']:.3f}", f"{r['sqrt2log']:.3f}", f"{r['sd']:.3f}"])
         tab = table_rows(rows, font_size=30, col_buff=0.8, row_buff=0.38, colors=[GREY_B] + [None] * 4)
@@ -150,6 +149,9 @@ class Lipschitz(VoiceoverScene):
         ]
         rows[1][-1].set_color(SPHC)
         whys = [why(r"the same for the sphere"), why(r"scale: \ radius $\sqrt n$"), why(r"Lévy, \ Schmidt (1948)"), why(r"geometry behind the bound")]
+        heading = label('Spherical isoperimetry explains each fixed equatorial band', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> The same concentration holds on the sphere of radius root n: Lipschitz functions of a "
             "uniform point concentrate with Gaussian tails, independent of the dimension. <bookmark mark='b'/> The first "
@@ -169,18 +171,12 @@ class Lipschitz(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"beyond Gaussians:", font_size=28, color=GREY_A),
             label(r"bounded independent coordinates: \ Talagrand's convex-distance inequality (1995)", font_size=26, color=GAUSSC),
-            label(r"for \emph{convex} Lipschitz $f$ of independent $X_i \in [0, 1]$: \ $P(|f - Mf| \ge t) \le 4 e^{-t^2/4}$", font_size=26, color=GOODC),
+            label(r"for \emph{convex} 1-Lipschitz $f$ of independent $X_i \in [0, 1]$: \ $P(|f - Mf| \ge t) \le 4 e^{-t^2/4}$", font_size=26, color=GOODC),
             label(r"convexity is needed: \ without it, \ bounded coordinates can fail to concentrate", font_size=26, color=BADC),
             label(r"the same mechanism powers Part 48's Talagrand inequality for empirical processes", font_size=26, color=SPHC),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Beyond Gaussian inputs. <bookmark mark='b'/> For independent bounded coordinates, Michel "
-            "Talagrand's convex-distance inequality of 1995 does the same job, <bookmark mark='c'/> for convex Lipschitz "
-            "functions: they are within t of their median except with probability four e to the minus t squared over four, "
-            "whatever the dimension. <bookmark mark='d'/> Convexity cannot be dropped: there are non-convex Lipschitz "
-            "functions of bounded coordinates that do not concentrate at this rate. <bookmark mark='e'/> And the same "
-            "mechanism lies under Part forty-eight's Talagrand inequality for the supremum of an empirical process, which is "
-            "a convex function of the sample."
+            "<bookmark mark='a'/> Beyond Gaussian inputs. <bookmark mark='b'/> For independent bounded coordinates, Michel Talagrand's convex-distance inequality of 1995 does the same job, <bookmark mark='c'/> for convex, one-Lipschitz functions: they are within t of their median except with probability four e to the minus t squared over four, whatever the dimension. <bookmark mark='d'/> Convexity cannot be dropped: there are non-convex Lipschitz functions of bounded coordinates that do not concentrate at this rate. <bookmark mark='e'/> And the same mechanism lies under Part forty-eight's Talagrand inequality for the supremum of an empirical process, which is a supremum of sample sums. Its general proof does not require convexity in the original observations."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
