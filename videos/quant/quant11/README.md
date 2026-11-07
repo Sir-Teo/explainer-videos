@@ -420,3 +420,12 @@ python tools/make.py quant11 --cpu-voice -q m            # English and Chinese, 
 * Deribit比特币期权成交（2024-01-03至2025-11-26的100个星期三，世界协调时0–12点；Surface两天）、DVOL；币安BTCUSDT小时数据2021–2025；
   第12部分的每周SSVI网格；第10部分的月度损益；芝加哥期权交易所COR3M（新的`data.cboe_index`，冻结到2025-12-31）；FRED的VIX；弗伦奇的数据。
 * 在试验计数器上登记：预测者优势检验（第7章）和样本外预测器（第18章）。
+
+
+## Sequential polish validation
+
+The [Part 11 evidence record](../../../docs/qa/quant11-polish-evidence.json)
+records the current bilingual endpoint and English silent-playback pass, manual
+sheet hashes, calculation-source preservation, original cache restoration and
+sample speech checks. Full production-voice listening and synchronization remain
+pending. The local chaptered preview is `renders/quant11_polished_silent.mp4`.

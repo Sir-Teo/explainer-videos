@@ -29,8 +29,9 @@ Delivery workflow: continue directly on `quantitative-finance`. Commit and push 
 | 8 | Visual pass complete; full production-voice listening pending |
 | 9 | Visual pass complete; full production-voice listening pending |
 | 10 | Visual pass complete; full production-voice listening pending |
-| 11 | Scientific corrections applied; frame QA in progress |
-| 12–43 | Pending; do not infer approval from historical build notes |
+| 11 | Visual pass complete; full production-voice listening pending |
+| 12 | In progress: scientific, narration and visual QA |
+| 13–43 | Pending; do not infer approval from historical build notes |
 
 ## Part 1: The Fair Game
 
@@ -782,4 +783,73 @@ reports. Local git-ignored review artifacts are:
   opening, 146.7 seconds, matching the final narration,
   with its reviewed contact sheet and dead-air scan.
 
-Part 11 is next in the sequential pass.
+Part 11’s completed visual pass is recorded below.
+
+
+## Part 11: Trading Options — completed visual pass
+
+The examples distinguish hypothetical model P&L, observational option marks and
+executable trades. The HAR forecast includes later entry-day variance; the weekly
+Surface reconstructs IV from marks pooled through noon. Neither example establishes
+an implementable forecasting edge. Disjoint windows need not be independent, and
+existing code registrations do not establish registration before calculation.
+All 66 out-of-sample predictions and all five bootstrap refits remain visible;
+the refit range is descriptive. Kelly's quadratic uses the second moment, while
+the overlapping-sample bankruptcy wall does not bound unseen losses.
+
+Short-dated ticket returns treat each trade record as one unit, ignoring reported
+amount. Their hypothetical buyer returns are distinct from the sellers’ own P&L.
+Greek derivations state their model and finite-step assumptions. The 25-delta call
+and put signs, local RR/BF interpretation, continuous log-contract weights,
+American cash-dividend exercise tie and same-expiry put-spread liability bound are
+corrected or qualified. Markouts use signed dollar-converted values, with changing
+horizon cohorts; their change does not identify informed traders. The fixed
+24-client Glosten–Milgrom replay ends at belief 0.5, with quotes recomputed at
+0.35/0.65. Full recorded inventory, hedge-loss and pinning ranges are retained.
+Fixed-rule versus learner evaluation cohorts are explicit, and only kappa=1 has
+three replay seeds. Synthetic Black–Scholes hedge marks on Heston paths are
+identified as such.
+
+The research derivation fixes a martingale measure and hedge before the
+mean-variance approximation. Its finite empirical exponential tilt is distinct
+from optimizing hedge strategies or proving a population exponential moment.
+A worked answer compares dollar and IV cross-impact. Initial research cards,
+baseline curves and near-money table rows appear during their explanations.
+Camera orbits settle after at most eight seconds, and duplicate post-camera
+fade-outs are removed. Two small formula reveals reach their explanatory notes
+sooner; the gamma surface labels its scale and display cap. Missing Mandarin captions and
+narration are repaired. Regulatory histories distinguish allegations, judgments,
+market-value losses and principal losses; OCC totals include futures and COR3M
+pre-launch history is backcast.
+
+All 29 original compute items are cached. Two descriptive caches initially enumerated partial raw-date folders while dependency
+restoration was incomplete. Flow and short-dated-option caches were quarantined
+and restored normally from the unchanged 100 frozen dates, with both repairs
+recorded separately. The full flow sample contains 524,281 trades. No force or data-refresh option was used. Compute and
+pricing sources, the manifest, trial registry and track record remain unchanged
+from the Part 10 completion commit. Twelve existing tests pass. The as-of-Part-11
+counter remains 312 (chapter 7: 311); the global registry remains 23,562. This pass
+added no market trials and opened no sealed holdout.
+
+Validation: 63 current receipts, all with zero automated warnings: 21 English
+endpoint checks, 21 Mandarin checks and 21 English silent playback checks.
+Every endpoint sheet and forty-frame motion sheet was visually inspected, with
+review hashes bound to the final artifacts. Chinese coverage is
+145/145 source lines and spliced sentences; the source narration estimate is
+64.9 minutes. Actual Kokoro
+samples cover Hook, MarketMaker, Research, Frontier and India in English and Hook,
+Frontier and India in Mandarin: 46 lines pass signal and token-time checks. These checks
+do not certify pronunciation; full production-voice listening and synchronization
+remain pending.
+
+The [compact evidence record](quant11-polish-evidence.json) retains source, input,
+receipt and manual-review hashes, source checks, cache repair, tests and speech
+reports. Local git-ignored review artifacts are:
+
+- `renders/quant11_polished_silent.mp4`: 76:59, 480p15, with 21 embedded chapters,
+  English soft subtitles and companion subtitle and chapter files.
+- `media/quant11/narrated_qa/videos/s01_hook/480p15/Hook.mp4`: the actual English
+  opening, 190.9 seconds, with its reviewed contact
+  sheet and dead-air scan.
+
+Part 12 is next in the sequential pass.
