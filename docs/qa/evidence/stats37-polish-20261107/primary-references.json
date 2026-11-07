@@ -2,7 +2,7 @@
   {
     "name": "Snow Table IX",
     "source": "https://epi-snow.ph.ucla.edu/Stream3_GrandExperiment_d.html",
-    "correction": "Historical rest-of-London printed rate 59 differs from 1422/256423*10000=55.4552. Company death-rate ratio from counts is 8.40194; denominator houses, not individuals."
+    "correction": "Historical rest-of-London printed rate 59 differs from 1422/256423*10000=55.4552. Company death-rate ratio from counts is 8.401853; denominator houses, not individuals."
   },
   {
     "name": "Card and Krueger Table 3",

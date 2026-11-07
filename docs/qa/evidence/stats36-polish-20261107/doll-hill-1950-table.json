@@ -1,0 +1,17 @@
+{
+  "source": "https://bpb-us-w1.wpmucdn.com/sites.usc.edu/dist/5/476/files/2019/12/DollHill1950.pdf",
+  "table": "IV",
+  "printed_page": 742,
+  "pdf_page": 4,
+  "population": "men",
+  "cases": {
+    "smokers": 647,
+    "nonsmokers": 2,
+    "total": 649
+  },
+  "controls": {
+    "smokers": 622,
+    "nonsmokers": 27,
+    "total": 649
+  }
+}
