@@ -68,9 +68,8 @@ class EfficientScore(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> In the picture: the red line is the nuisance tangent space. <bookmark mark='b'/> The blue arrow is the score for theta. If the nuisance were known, its length squared would be the information. <bookmark mark='c'/> But part of the score lies along the nuisance directions: a small change in theta looks, to the data, partly like a small change in the nuisance, and that part cannot be used. <bookmark mark='d'/> What remains, the gold arrow perpendicular to the nuisance space, is the efficient score. <bookmark mark='e'/> It is shorter, so the information is smaller and the bound larger: the information lost is the squared length of the red projection. The variance penalty is the difference between inverse informations."
         ) as vo:
-            self.play(FadeIn(box), FadeIn(exact_tag(r"a schematic")))
             vo.wait_until("a")
-            self.play(Create(nl), FadeIn(side[0]))
+            self.play(FadeIn(box), Create(nl), FadeIn(side[0]), FadeIn(exact_tag(r"a schematic")))
             vo.wait_until("b")
             self.play(GrowArrow(sc), FadeIn(side[1]))
             vo.wait_until("c")
