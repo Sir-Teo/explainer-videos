@@ -11,7 +11,7 @@ def fpr_of(p, ppv, fnr):
 
 class Impossibility(LectureMixin, VoiceoverScene):
     def construct(self):
-        self.card_voiceover("Chapter nine. The impossibility theorem: why both sides of the COMPAS debate were right.", 9,
+        self.card_voiceover("Chapter nine. Impossibility results: which fairness requirements conflict, under which conditions.", 9,
                             r"Impossibility", r"One line of algebra", lit=(2016, 2017))
         self.identity()
         self.plug()
@@ -65,7 +65,7 @@ class Impossibility(LectureMixin, VoiceoverScene):
                  ylabel=r"false positive rate forced by the identity", xticks=[0.2, 0.3, 0.4, 0.5, 0.6, 0.7], yticks=[0, 0.25, 0.5, 0.75, 1],
                  center=[-2.4, 0.2, 0])
         ax = A.ax
-        cb = polyline(ax, ps, fpr_of(ps, B["ppv"], B["fnr"]), GRPA, 2.5, 0.6)
+        cb = polyline(ax, ps[fpr_of(ps, B["ppv"], B["fnr"]) <= 1], fpr_of(ps, B["ppv"], B["fnr"])[fpr_of(ps, B["ppv"], B["fnr"]) <= 1], GRPA, 2.5, 0.6)
         cw = polyline(ax, ps, fpr_of(ps, W["ppv"], W["fnr"]), GRPB, 2.5, 0.6)
         common = polyline(ax, ps, fpr_of(ps, ppv, fnr), S.ACCENT, 4)
         db = Dot(ax.c2p(B["base"], B["fpr"]), radius=0.1, color=GRPA)
@@ -77,7 +77,7 @@ class Impossibility(LectureMixin, VoiceoverScene):
             [(r"dots: \ the observed FPRs", WHITE), (rf"{B['fpr']:.2f} and {W['fpr']:.2f}", WHITE)],
             [(rf"gold: \ a shared PPV {ppv:.2f}, \ FNR {fnr:.2f}", S.ACCENT),
              (rf"forces {fpr_of(B['base'], ppv, fnr):.2f} and {fpr_of(W['base'], ppv, fnr):.2f}", S.ACCENT)],
-            [(r"equal FPRs need equal base rates", BADC), (r"or a perfect classifier", BADC)],
+            [(r"equal FPRs need equal base rates", BADC), (r"or a degenerate zero-error factor", BADC)],
         ])
         with self.voiceover(
             f"<bookmark mark='a'/> The identity as a picture: the false positive rate it forces, against a group's base "
@@ -87,7 +87,7 @@ class Impossibility(LectureMixin, VoiceoverScene):
             f"{ppv:.2f} and {fnr:.2f}. The gold curve: at the two base rates, it forces false positive rates of "
             f"{fpr_of(B['base'], ppv, fnr):.2f} and {fpr_of(W['base'], ppv, fnr):.2f}. <bookmark mark='d'/> The disparity "
             f"ProPublica found is not a defect peculiar to COMPAS. Any score with equal predictive values and equal miss "
-            f"rates must have it, unless base rates are equal or prediction is perfect."
+            f"rates must have it, provided base rates differ and the shared factor is positive. A PPV of one gives zero false positives without requiring zero false negatives; degenerate cases need separate treatment."
         ) as vo:
             self.play(FadeIn(A), FadeIn(museum_tag(r"ProPublica's COMPAS data (the Museum)")))
             vo.wait_until("a")
@@ -123,8 +123,8 @@ class Impossibility(LectureMixin, VoiceoverScene):
             "mark='b'/> Sam Corbett-Davies, Emma Pierson, Avi Feller, Sharad Goel and Aziz Huq framed it in 2017 as Part "
             "forty-five's decision theory: detaining someone has a cost, releasing someone who reoffends has another. "
             "<bookmark mark='c'/> Under that framing the rule that minimizes expected cost is one threshold on a calibrated "
-            "risk, the same for everyone, and it violates separation whenever base rates differ. <bookmark mark='d'/> "
-            "Equalizing false positive rates instead needs different thresholds for different groups, detaining some "
+            "risk, the same for everyone, under group-invariant classification costs. Different base rates alone do not force this particular threshold to violate equalized odds; the full score and operating point matter. <bookmark mark='d'/> "
+            "Equalizing false positive rates instead can require group-dependent or randomized thresholds, detaining some "
             "lower-risk people of one group or releasing some higher-risk people of another. Each option is a value "
             "judgement; the arithmetic makes the trade explicit.",
             [(r"\text{decision theory}", r":", r"\text{costs of detaining and releasing}", 40),
@@ -152,12 +152,8 @@ class Impossibility(LectureMixin, VoiceoverScene):
 
     def choice(self):
         self.list_voiceover(
-            "<bookmark mark='a'/> What the theorem settles, and what it does not. <bookmark mark='b'/> It settles the "
-            "dispute of 2016: both sides measured something real, and no score could have satisfied both. <bookmark "
-            "mark='c'/> It does not say which criterion matters. That depends on the decision, on who bears each kind of "
-            "error, and on whether the labels can be trusted. <bookmark mark='d'/> What a statistician owes is the full table "
-            "of rates by group, with their uncertainty, and the constraints that link them.",
+            "<bookmark mark='a'/> The algebra clarifies a conflict, rather than certifying either party's entire empirical case. <bookmark mark='b'/> With unequal nondegenerate base rates and a shared positive error factor, equal PPV and false-negative rates force unequal false-positive rates. PPV equal to one is a zero-false-positive exception even when some positives are missed; that is not necessarily perfect prediction. <bookmark mark='c'/> The result does not choose which rates matter. Decisions, costs, labels and uncertainty all enter that judgment. <bookmark mark='d'/> Report the full descriptive table with appropriate uncertainty and distinguish PPV parity of a binary decision from sufficiency of a full score.",
             [(r"the theorem:", GREY_A),
-             (r"settles: \ both sides were right, \ and could not both be satisfied", S.ACCENT),
+             (r"clarifies: \ exact criteria conflict under explicit conditions", S.ACCENT),
              (r"does not settle: \ which criterion, \ for which decision", GREY_A),
              (r"owed: \ every rate by group, \ with its uncertainty", OKC)])

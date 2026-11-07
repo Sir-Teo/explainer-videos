@@ -26,7 +26,7 @@ class Testing(LectureMixin, VoiceoverScene):
             "error beta, missing you when you are. <bookmark mark='d'/> Peter Kairouz, Sewoong Oh and Pramod Viswanath showed "
             "in 2015 that epsilon-delta privacy is exactly two linear constraints on every test's pair of errors.",
             [(r"\text{Wasserman \& Zhou}", r":", r"\text{privacy as testing (2010)}", 40),
-             (r"H_0: D \ \ \text{vs} \ \ H_1: D'", r":", r"\text{neighbouring datasets}", 40),
+             (r"H_0: D' \ \ \text{vs} \ \ H_1: D", r":", r"\text{neighbouring datasets}", 40),
              (r"\text{any test}", r":", r"(\alpha, \beta) = (\text{type I}, \ \text{type II})", 40),
              (r"(\varepsilon, \delta)\text{-DP}", r"\iff", r"\alpha + e^{\varepsilon}\beta \ge 1 - \delta, \ \ e^{\varepsilon}\alpha + \beta \ge 1 - \delta", 34)],
             [r"Part 46", r"the attacker's question", r"the two errors", r"Kairouz, \ Oh \& Viswanath (2015)"],
@@ -96,13 +96,7 @@ class Testing(LectureMixin, VoiceoverScene):
 
     def gdp(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Jinshuo Dong, Aaron Roth and Weijie Su made the trade-off function itself the "
-            "definition, in 2022: a mechanism is f-differentially private if every test's errors lie above f. <bookmark "
-            "mark='b'/> The Gaussian family is special. Mu-GDP means telling the neighbours apart is exactly as hard as "
-            "telling a normal with mean zero from one with mean mu, both with variance one. <bookmark mark='c'/> The Gaussian "
-            "mechanism with sensitivity Delta and noise sigma is Delta over sigma GDP, with no slack and no inequality: it is "
-            "exact. <bookmark mark='d'/> And composition is exact too: k Gaussian releases compose to the square root of "
-            "the sum of their mus squared, as independent signals add.",
+            "<bookmark mark='a'/> Dong, Roth and Su use trade-off functions to define f-privacy: every neighboring pair must have its optimal testing curve above f. <bookmark mark='b'/> Mu-GDP means the experiment is at least as hard to distinguish as unit-variance normals separated by mu. Equality is not required for every mechanism or every neighboring pair. <bookmark mark='c'/> For a Gaussian mechanism, a pair separated by sensitivity Delta has the exact curve G of Delta over sigma. Smaller shifts are more private; attaining the sensitivity makes the worst pair exact. <bookmark mark='d'/> Gaussian trade-off composition gives G with the root sum of squared mus. This bound is sharp for independent Gaussian shifts; arbitrary mechanisms satisfying those GDP bounds can be strictly more private.",
             [(r"f\text{-DP}", r":", r"T(M(D), M(D')) \ge f", 40),
              (r"\mu\text{-GDP}", r":", r"f = G_\mu = T(N(0, 1), N(\mu, 1))", 40),
              (r"N(0, \sigma^2) \text{ noise}", r":", r"\mu = \Delta / \sigma", 40),
@@ -124,21 +118,15 @@ class Testing(LectureMixin, VoiceoverScene):
              (r"\mu = 1, \ \alpha = 0.05", r":", rf"\text{{power }} {1 - b:.2f}", 40),
              (r"\mu = 0.5, \ \mu = 3", r":", rf"{1 - st.norm.cdf(1.645 - 0.5):.2f}, \ \ {1 - st.norm.cdf(1.645 - 3):.2f}", 40),
              (r"(\varepsilon, \delta(\varepsilon))", r":", r"\text{a whole curve per } \mu", 40)],
-            [r"interpretable", r"five times guessing", r"near guessing; \ not safe", r"report the curve"],
+            [r"interpretable", r"five times guessing", r"power depends on $\mu$ and the error rate", r"report the curve"],
             colors=[(1, OKC)])
 
     def clt(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Why Gaussian? Dong, Roth and Su proved a central limit theorem for privacy. <bookmark "
-            "mark='b'/> Compose many mechanisms, each nearly private, of any kind: the trade-off function of the "
-            "composition converges to a Gaussian one, G mu, with mu determined by the components' small privacy losses. "
-            "<bookmark mark='c'/> So the training of a large model, thousands of noisy steps, has a privacy guarantee that is "
-            "approximately mu-GDP, whatever the individual steps. <bookmark mark='d'/> It is the Lindeberg theorem of Part "
-            "forty-three, applied to the log-likelihood ratio between neighbours: the privacy loss is a sum of small "
-            "independent pieces.",
+            "<bookmark mark='a'/> Why does Gaussian privacy recur? Dong, Roth and Su prove limit theorems for compositions of many weak mechanisms. <bookmark mark='b'/> Under their moment and negligibility conditions, the composition's trade-off approaches a Gaussian curve, with its parameter determined by the components. Merely having many steps is insufficient. <bookmark mark='c'/> Approximate GDP accounting can be useful for specified subsampled training mechanisms, but its finite-step approximation error needs control. It is not a universal exact certificate for any training algorithm. <bookmark mark='d'/> The analogy with a central limit theorem is helpful. For independent product experiments the privacy loss adds independent terms; adaptive training involves conditional increments and requires the appropriate composition argument.",
             [(r"\text{many small mechanisms}", r":", r"f_1 \otimes \cdots \otimes f_k", 40),
              (r"k \to \infty", r":", r"\text{converges to } G_\mu", 40),
-             (r"\text{training}", r":", r"\text{approximately } \mu\text{-GDP}", 40),
+             (r"\text{training}", r":", r"\text{GDP approximation needs error control}", 40),
              (r"\text{why}", r":", r"\text{the privacy loss is a sum}", 40)],
             [r"a privacy CLT", r"Dong, \ Roth \& Su (2022)", r"chapter 7", r"Part 43's Lindeberg"],
             colors=[(1, OKC)])

@@ -34,12 +34,7 @@ class Inference(LectureMixin, VoiceoverScene):
 
     def aware(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The cure is to treat the noise as part of the data-generating process, because its "
-            "distribution is published. <bookmark mark='b'/> The variance of the noisy proportion is the sampling variance "
-            "plus two over n epsilon, squared. <bookmark mark='c'/> A noise-aware interval uses both. <bookmark mark='d'/> "
-            "Vishesh Karwa and Salil Vadhan gave finite-sample private intervals for a normal mean in 2018. More general "
-            "recipes include a parametric bootstrap that simulates both the sampling and the privacy noise, studied by "
-            "Cecilia Ferrando, Shufan Wang and Daniel Sheldon, and Bayesian inference with the noise in the likelihood.",
+            "<bookmark mark='a'/> Model the published noise as part of the experiment. <bookmark mark='b'/> For the untruncated noisy proportion, variance is p times one minus p over n plus two over the square of n epsilon. Clipping the released estimate changes that exact identity. <bookmark mark='c'/> Our noise-aware Wald approximation uses that sum, with a clipped plug-in value only for its sampling variance. Its center remains the raw noisy proportion. A Gaussian critical value is an approximation, especially when Laplace noise dominates; including a variance term alone is not a finite-sample coverage theorem. <bookmark mark='d'/> Exact or calibrated alternatives include inversion of the binomial-Laplace convolution and noise-aware bootstrap methods. Karwa and Vadhan's normal-mean intervals and Ferrando and colleagues' private bootstrap address specific models with their own assumptions.",
             [(r"\text{known noise}", r":", r"\text{part of the model}", 40),
              (r"\mathrm{Var}(\tilde p)", r"=", r"\frac{p(1 - p)}{n} + \frac{2}{(n\varepsilon)^2}", 40),
              (r"\text{noise-aware}", r":", r"\tilde p \pm 1.96\sqrt{\tilde p(1 - \tilde p)/n + 2/(n\varepsilon)^2}", 38),
@@ -81,7 +76,7 @@ class Inference(LectureMixin, VoiceoverScene):
             f"The privacy noise has standard deviation fourteen counts, against a sampling standard deviation of about "
             f"four and a half at n of a hundred. <bookmark mark='c'/> At epsilon of a half, the noise is five times smaller, "
             f"and the naive interval nearly works. <bookmark mark='d'/> The noise-aware interval covers between "
-            f"{100 * min(ya1):.0f} and {100 * max(ya1):.0f} percent everywhere."
+            f"{100 * min(ya1):.0f} and {100 * max(ya1):.0f} percent across these grid points. Those estimates have Monte Carlo error and do not establish coverage for all proportions and budgets."
         ) as vo:
             self.play(FadeIn(A), Create(nom), FadeIn(seeded_tag()))
             vo.wait_until("a")
@@ -101,7 +96,7 @@ class Inference(LectureMixin, VoiceoverScene):
                    f"<bookmark mark='a'/> On the Board, at a thousand people and epsilon of a tenth, over "
                    f"{q['board_reps']:,} runs: the Wald interval that ignores the privacy noise covers "
                    f"{100 * q['board_naive']:.1f} percent of the time: broken. <bookmark mark='b'/> The noise-aware interval "
-                   f"covers {100 * q['board_aware']:.1f} percent: kept.", [("a", [0]), ("b", [1])])
+                   f"covers {100 * q['board_aware']:.1f} percent in this experiment. Its normal approximation is not a universal finite-sample guarantee.", [("a", [0]), ("b", [1])])
 
     def beyond(self):
         self.lad_voiceover(
@@ -136,15 +131,10 @@ class Inference(LectureMixin, VoiceoverScene):
 
     def public(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The deeper point. <bookmark mark='b'/> Older disclosure methods, swapping records between "
-            "places or suppressing small cells, were kept secret, because knowing them helped the attacker. <bookmark "
-            "mark='c'/> So analysts could not correct for them, and their effect on inference was unknowable. <bookmark "
-            "mark='d'/> Differential privacy's noise can be published in full, mechanism and parameters, without weakening "
-            "the guarantee. For the first time, a statistical agency's confidentiality protection can be modelled exactly by "
-            "its users.",
-            [(r"\text{swapping, \ suppression}", r":", r"\text{secret methods}", 40),
-             (r"\text{so}", r":", r"\text{uncorrectable bias}", 40),
-             (r"\text{DP}", r":", r"\text{published noise}", 40),
+            "<bookmark mark='a'/> Transparency helps inference. <bookmark mark='b'/> Traditional swapping often concealed design details, making its induced measurement error hard to model. Suppression rules and some earlier disclosure methods have also been public, so secrecy is not universal. <bookmark mark='c'/> Differential privacy permits publication of the mechanism and its parameters. The realized noise itself must not be disclosed alongside the noisy answer, since subtraction would recover the original. <bookmark mark='d'/> With a fully specified release, users can incorporate privacy randomization into inference. Complex optimization, clipping and invariants can still make that likelihood difficult; transparency enables the calculation without making every calculation easy.",
+            [(r"\text{swapping, \ suppression}", r":", r"\text{details often undisclosed}", 40),
+             (r"\text{so}", r":", r"\text{harder to model error}", 40),
+             (r"\text{DP}", r":", r"\text{published mechanism, not realized noise}", 40),
              (r"\text{result}", r":", r"\text{inference can model it}", 40)],
-            [r"the old way", r"unknowable effects", r"transparency", r"a first"],
+            [r"the old way", r"unknowable effects", r"transparency", r"transparent release design"],
             colors=[(2, OKC), (3, OKC)])

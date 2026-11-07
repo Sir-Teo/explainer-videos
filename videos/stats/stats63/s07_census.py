@@ -41,22 +41,17 @@ class Census(LectureMixin, VoiceoverScene):
             "<bookmark mark='c'/> Some numbers, called invariants, were published exactly, including each state's total "
             "population, which apportions Congress. <bookmark mark='d'/> Then post-processing: an optimization finds "
             "nonnegative integer counts, consistent across levels and with the invariants, as close as possible to the noisy "
-            "measurements. Post-processing costs no privacy.",
+            "measurements. The optimization costs no additional privacy conditional on the published invariants. Publishing a confidential total exactly is not free post-processing of noisy counts: it restricts the protected universe or adds an unprotected release.",
             [(r"\text{hierarchy}", r":", r"\text{nation} \to \text{state} \to \cdots \to \text{block}", 40),
              (r"\text{measure}", r":", r"\text{discrete Gaussian noise}, \ \rho = 2.63", 40),
              (r"\text{invariants}", r":", r"\text{state totals, \ exact}", 40),
              (r"\text{post-process}", r":", r"\text{nonnegative, \ consistent integers}", 40)],
-            [r"top down", r"zCDP", r"apportionment", r"free for privacy"],
+            [r"top down", r"zCDP", r"apportionment", r"conditional on public invariants"],
             colors=[(1, PRIVC), (3, OKC)])
 
     def projection(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> A toy version shows what post-processing does to the statistics. <bookmark mark='b'/> "
-            "Four hundred blocks in a county, with populations from a skewed distribution: many tiny blocks and a few large "
-            "ones. <bookmark mark='c'/> Add rounded Gaussian noise of standard deviation four to each count. Some small "
-            "blocks get negative counts. <bookmark mark='d'/> Then project: the least-squares nonnegative counts that add "
-            "up to the county's exact total. The solution subtracts one constant from every count, and sets to zero those "
-            "that would go negative: a water-filling.",
+            "<bookmark mark='a'/> A toy version shows what post-processing does to the statistics. <bookmark mark='b'/> Four hundred blocks in a county, with populations from a skewed distribution: many tiny blocks and a few large ones. <bookmark mark='c'/> Add rounded Gaussian noise of standard deviation four to each count. Some small blocks get negative counts. <bookmark mark='d'/> Then take the continuous least-squares nonnegative projection onto the county total and round by largest remainders. The integer counts still add up exactly. This is a fixed-public-total illustration, not a calibrated implementation of TopDown. The solution subtracts one constant from every count, and sets to zero those that would go negative: a water-filling.",
             [(r"\text{blocks}", r":", r"400, \ \text{skewed sizes}", 40),
              (r"\text{noise}", r":", r"\tilde c_b = c_b + \mathrm{round}(N(0, 4^2))", 40),
              (r"\text{project}", r":", r"\min \textstyle\sum (c_b - \tilde c_b)^2, \ \ c_b \ge 0, \ \sum c_b = C", 38),
@@ -116,13 +111,7 @@ class Census(LectureMixin, VoiceoverScene):
 
     def why_bias(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Why the bias? <bookmark mark='b'/> A block of one person with noise of standard "
-            "deviation four is pushed below zero about a third of the time, and nonnegativity lifts every such "
-            "measurement up to zero. Truncation raises the mean. <bookmark mark='c'/> To keep the total exact, the "
-            "projection takes the excess from everyone else, a little from each large block. <bookmark mark='d'/> The same "
-            "mechanism, in the real census, made small places a little bigger and large places a little smaller, and "
-            "added error to counts for small groups. The Bureau later published the noisy measurements themselves, which "
-            "analysts can use without the post-processing bias: the redistricting file appeared in June 2023.",
+            "<bookmark mark='a'/> Why the bias? <bookmark mark='b'/> A block of one person with noise of standard deviation four is pushed below zero about a third of the time, and nonnegativity lifts every such measurement up to zero. Truncation raises the mean. <bookmark mark='c'/> To keep the total exact, the projection takes the excess from everyone else, a little from each large block. <bookmark mark='d'/> Related nonnegativity and consistency constraints can bias small-area counts in real releases. The actual hierarchy and optimization are more complex than this toy, so it does not quantify the real census bias. The Bureau later published the noisy measurements themselves, which analysts can use without the post-processing bias: the redistricting file appeared in June 2023.",
             [(r"\text{a block of one}", r":", r"P(\tilde c < 0) \approx 0.35", 40),
              (r"\text{nonnegativity}", r":", r"\text{truncation raises the mean}", 40),
              (r"\text{exact total}", r":", r"\text{taken from large blocks}", 40),
@@ -150,12 +139,12 @@ class Census(LectureMixin, VoiceoverScene):
             "<bookmark mark='a'/> Who should choose epsilon? <bookmark mark='b'/> John Abowd and Ian Schmutte argued in "
             "2019 that privacy and accuracy are both public goods, and that the budget is an economic choice: spend it until "
             "the marginal social cost of lost privacy equals the marginal social benefit of accuracy. <bookmark mark='c'/> "
-            "The mathematics prices the trade-off exactly, in mean squared error per unit of rho. <bookmark mark='d'/> It "
+            "Mathematical models and empirical evaluations describe privacy-accuracy trade-offs under specified releases and losses. <bookmark mark='d'/> It "
             "does not say where to stand on the curve. That is a decision for the society whose data they are, informed by "
             "the curve, which is more than any previous disclosure method offered.",
             [(r"\text{who chooses } \varepsilon", r":", r"\text{a social decision}", 40),
              (r"\text{economics}", r":", r"\text{marginal cost} = \text{marginal benefit}", 40),
-             (r"\text{statistics}", r":", r"\text{the exact trade-off curve}", 40),
+             (r"\text{statistics}", r":", r"\text{a model-specific privacy--accuracy curve}", 40),
              (r"\text{not decided by}", r":", r"\text{the mathematics alone}", 40)],
             [r"the open question", r"Abowd \& Schmutte (2019)", r"chapters 4--5", r"Part 45's decisions"],
             colors=[(2, OKC)])

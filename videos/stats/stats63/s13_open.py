@@ -54,15 +54,9 @@ class OpenProblems(LectureMixin, VoiceoverScene):
 
     def op_inference(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Problem one: private inference beyond simple statistics. <bookmark mark='b'/> For a "
-            "proportion or a mean, noise-aware intervals are understood. For a regression with many coefficients, a "
-            "mixed model, or a survival analysis on privatized data, valid finite-sample intervals are mostly not known, "
-            "and the parametric bootstrap can fail when the privacy noise and clipping interact. <bookmark mark='c'/> "
-            "Private synthetic data, released for analysts to explore freely, is a promising route, but inference from it "
-            "is valid only for the analyses its generator anticipated. <bookmark mark='d'/> Efficient, valid private "
-            "inference for the models of Parts twenty-three to forty is open.",
+            "<bookmark mark='a'/> Problem one: private inference beyond simple statistics. <bookmark mark='b'/> For a proportion or a mean, noise-aware intervals are understood. For a regression with many coefficients, a mixed model, or a survival analysis on privatized data, valid finite-sample intervals are mostly not known, and the parametric bootstrap can fail when the privacy noise and clipping interact. <bookmark mark='c'/> Private synthetic data, released for analysts to explore freely, is a promising route, but inference from it requires compatibility and uncertainty propagation between generator and analysis; some general-purpose guarantees exist for specified query classes, rather than arbitrary downstream inference. <bookmark mark='d'/> Useful inference results already exist for many specific models. Broadly efficient finite-sample methods across complex models, clipping rules and releases remain an active frontier.",
             [(r"\text{problem 1}", r":", r"\text{private inference, \ beyond the mean}", 40),
-             (r"\text{regression, \ mixed models}", r":", r"\text{finite-sample validity unknown}", 40),
+             (r"\text{regression, \ mixed models}", r":", r"\text{model-specific results; broad efficient methods needed}", 40),
              (r"\text{synthetic data}", r":", r"\text{valid for anticipated analyses}", 40),
              (r"\text{open}", r":", r"\text{efficient valid private inference}", 40)],
             [r"chapter 5's limits", r"clipping and noise", r"Raghunathan, \ Reiter \& Rubin (2003)", r"Parts 23--40"],
@@ -90,7 +84,7 @@ class OpenProblems(LectureMixin, VoiceoverScene):
             "unclear: one document, one user who wrote thousands, or one fact repeated across the web. <bookmark mark='c'/> "
             "Fine-tuning a publicly pretrained model privately works far better than training from scratch, but the "
             "pretraining data were not private. <bookmark mark='d'/> What guarantee is meaningful for a model trained on "
-            "the internet, and how to audit it with one training run, is open.",
+            "the internet, and how to scale reliable audits beyond existing single-run methods, remains an active question.",
             [(r"\text{problem 3}", r":", r"\text{privacy for foundation models}", 40),
              (r"\text{the unit}", r":", r"\text{document, \ user, \ or fact?}", 40),
              (r"\text{public pretraining}", r":", r"\text{private fine-tuning works}", 40),
@@ -100,12 +94,7 @@ class OpenProblems(LectureMixin, VoiceoverScene):
 
     def op_dynamics(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Problem four: fairness over time. <bookmark mark='b'/> Decisions change the data: a "
-            "lending rule changes who repays, and a policing model changes where arrests are recorded, which changes the "
-            "next model's training labels. Danielle Ensign and colleagues showed how predictive policing can run away in "
-            "such a loop. <bookmark mark='c'/> Static criteria, checked once, can make the long-run outcome worse. "
-            "<bookmark mark='d'/> Criteria and procedures with guarantees over the dynamics, which need causal models of the "
-            "feedback, are open.",
+            "<bookmark mark='a'/> Problem four: fairness over time. <bookmark mark='b'/> Decisions change the data: a lending rule changes who repays, and a policing model changes where arrests are recorded, which changes the next model's training labels. Danielle Ensign and colleagues showed how predictive policing can run away in such a loop. <bookmark mark='c'/> Static criteria, checked once, can make the long-run outcome worse. <bookmark mark='d'/> Existing dynamic fairness models provide some guarantees. Robust decisions across uncertain feedback models and multiple fairness objectives remain open.",
             [(r"\text{problem 4}", r":", r"\text{fairness over time}", 40),
              (r"\text{feedback}", r":", r"\text{decisions change future labels}", 40),
              (r"\text{static criteria}", r":", r"\text{can worsen the long run}", 40),

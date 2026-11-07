@@ -31,7 +31,7 @@ import numpy as np
 from explainer.ai.cache import Cache
 from explainer.stats import museum
 from explainer.stats.board import Row, save_rows
-from explainer.stats.kit import privacy as P
+from . import checked as P
 
 CACHE = Cache("stats63")
 load = CACHE.load
@@ -92,7 +92,6 @@ def compute_tradeoff():
 def compute_accounting():
     sigma, delta = 5.0, 1e-5
     ks = [1, 3, 10, 30, 100, 300, 1000]
-    e1 = P.gaussian_sigma_analytic  # noqa: F841 (for reference)
     one = None
     # (eps, delta/k) for one release, by the exact Gaussian delta: find eps with delta_one = delta / (2k)
     from scipy import optimize
@@ -101,7 +100,7 @@ def compute_accounting():
         d1 = delta / (2 * k)
         e_one = optimize.brentq(lambda e: P.gaussian_delta(sigma, 1, e) - d1, 1e-6, 50)
         out["basic"].append(k * e_one)
-        out["advanced"].append(P.advanced_composition(e_one, k, delta / 2)[0])
+        out["advanced"].append(P.advanced_composition(e_one, k, delta / 2, d1)[0])
         out["rdp"].append(P.rdp_gaussian_eps(1, sigma, k, delta))
         out["zcdp"].append(P.zcdp_to_dp(k * P.zcdp_gaussian(1, sigma), delta))
         one = e_one if one is None else one
@@ -132,7 +131,7 @@ def compute_inference():
                 o = P.private_proportion(x, eps, r)
                 cn += o["naive"][0] <= 0.3 <= o["naive"][1]
                 ca += o["aware"][0] <= 0.3 <= o["aware"][1]
-            grid.append({"n": n, "eps": eps, "naive": cn / reps, "aware": ca / reps})
+            grid.append({"n": n, "eps": eps, "naive": cn / reps, "aware": ca / reps, "reps": reps, "mcse_naive": math.sqrt((cn/reps)*(1-cn/reps)/reps), "mcse_aware": math.sqrt((ca/reps)*(1-ca/reps)/reps)})
     reps = 2000
     cn = ca = 0
     for _ in range(reps):
@@ -148,41 +147,37 @@ def compute_census():
     m = 400
     true = np.maximum(np.round(np.exp(r.normal(3.0, 1.4, m))), 0)
     total = true.sum()
-    sigma = 4.0  # discrete Gaussian noise of sd 4 on each block count
+    sigma = 4.0  # rounded continuous Gaussian; not a discrete Gaussian mechanism
     reps = 200
     post, raw = [], []
     for _ in range(reps):
         noisy = true + np.round(r.normal(0, sigma, m))
         raw.append(noisy)
-        post.append(np.round(P.nonneg_total_projection(noisy, total)))
+        post.append(P.integer_total_projection(noisy, total))
     post, raw = np.array(post), np.array(raw)
     bins = [0, 5, 20, 100, 1e9]
     rows = []
     for lo, hi in zip(bins[:-1], bins[1:]):
         k = (true >= lo) & (true < hi)
         rows.append({"lo": lo, "hi": hi, "n": int(k.sum()), "bias_raw": float((raw[:, k] - true[k]).mean()),
-                     "bias_post": float((post[:, k] - true[k]).mean())})
+                     "bias_post": float((post[:, k] - true[k]).mean()), "mcse_post": float((post[:, k]-true[k]).mean(1).std(ddof=1)/np.sqrt(reps))})
     return {"m": m, "sigma": sigma, "total": float(total), "rows": rows, "true": true, "post0": post[0], "raw0": raw[0],
-            "neg_raw": float(np.mean(raw < 0)), "neg_post": float(np.mean(post < 0))}
+            "neg_raw": float(np.mean(raw < 0)), "neg_post": float(np.mean(post < 0)), "max_total_error": float(np.max(abs(post.sum(1)-total))), "noise_law": "rounded continuous Gaussian; illustrative fixed-public-total projection", "reps": reps}
 
 
 def compute_dpsgd():
-    r = rng(6305)
-    X, y, _ = museum.breast_cancer()
-    Z = (X - X.mean(0)) / X.std(0)
-    Z = np.column_stack([np.ones(len(y)), Z])
-    rhos = [0.003, 0.01, 0.03, 0.1, 0.3, 1.0, float("inf")]
-    out = []
-    for rho in rhos:
-        acc = []
-        for _ in range(10):
-            o = r.permutation(len(y))
-            tr, te = o[:400], o[400:]
-            w = P.dp_logistic_gd(Z[tr], y[tr], rho, 60, 1.0, 2.0, r)["w"]
-            acc.append(float(np.mean(((Z[te] @ w) > 0) == y[te])))
-        eps = P.zcdp_to_dp(rho, 1e-5) if math.isfinite(rho) else None
-        out.append({"rho": rho if math.isfinite(rho) else None, "eps": eps, "acc": float(np.mean(acc)), "sd": float(np.std(acc))})
-    return {"n_train": 400, "n_test": len(y) - 400, "rows": out}
+    r=rng(6305);X,y,_=museum.breast_cancer();Z=P.fixed_features(X)
+    splits=[r.permutation(len(y)) for _ in range(10)]
+    out=[]
+    for rho in [.003,.01,.03,.1,.3,1.,float('inf')]:
+        acc=[]
+        for o in splits:
+            tr,te=o[:400],o[400:]
+            w=P.dp_logistic_gd(Z[tr],y[tr],rho,60,1.,2.,r)['w']
+            acc.append(float(np.mean(((Z[te]@w)>0)==y[te])))
+        out.append(dict(rho=rho if math.isfinite(rho) else None,eps=P.zcdp_to_dp(rho,1e-5) if math.isfinite(rho) else None,acc=float(np.mean(acc)),sd=float(np.std(acc,ddof=1)),accuracy=acc))
+    return dict(n_train=400,n_test=len(y)-400,rows=out,adjacency='fixed-size replace-one',sensitivity=2.,preprocessing='fixed public feature units; clipped pointwise; no fitted centering/scaling',release_scope='One model per budget. Accuracy and repeated fits are public-data diagnostics, not a jointly private release.')
+
 
 
 def compute_compas():
@@ -233,32 +228,27 @@ def compute_multical():
         for k, g in zip(names, gte):
             per_b[k].append(P.weighted_calibration_gap(pred[te], y[te], [g]))
             per_a[k].append(P.weighted_calibration_gap(tp, y[te], [g]))
-    return {"names": names, "splits": 20, "train_hist": hist, "before": float(np.mean(before)), "after": float(np.mean(after)),
+    return {"names": names, "splits": 20, "train_hist": hist, "metric_scope": "size-weighted mean absolute cell residual; not worst-cell multicalibration", "paired_gap_mcse": float(np.std(np.array(after)-before,ddof=1)/np.sqrt(20)), "split_before": before, "split_after": after, "before": float(np.mean(before)), "after": float(np.mean(after)),
             "in_before": float(np.mean(ins_b)), "in_after": float(np.mean(ins_a)),
-            "per": {k: {"before": float(np.mean(per_b[k])), "after": float(np.mean(per_a[k]))} for k in names}}
+            "per": {k: {"before": float(np.mean(per_b[k])), "after": float(np.mean(per_a[k])), "paired_gap_mcse": float(np.std(np.array(per_a[k])-per_b[k],ddof=1)/np.sqrt(20))} for k in names}}
 
 
 def compute_cfair():
-    r = rng(6317)
-    n = 20000
-    A = (r.random(n) < 0.5).astype(float)  # group
-    U = r.standard_normal(n)  # underlying propensity, the same distribution in both groups
-    priors = np.maximum(0, np.round(1.5 + 1.0 * U + 1.2 * A + r.standard_normal(n)))  # heavier policing of group A
-    Y = (r.random(n) < 1 / (1 + np.exp(-(-0.5 + 0.9 * U)))).astype(float)  # true risk depends on U only
-    X1 = np.column_stack([np.ones(n), priors])
-    w1 = _logit(X1, Y)
-    s1 = 1 / (1 + np.exp(-X1 @ w1))
-    # counterfactually fair: use the part of priors not explained by A (the residual), a function of U and noise only
-    b = np.polyfit(A, priors, 1)
-    res = priors - np.polyval(b, A)
-    X2 = np.column_stack([np.ones(n), res])
-    w2 = _logit(X2, Y)
-    s2 = 1 / (1 + np.exp(-X2 @ w2))
-    # counterfactual: flip A, regenerate priors with the same U and noise
-    out = {}
-    for name, s in (("priors", s1), ("residual", s2)):
-        out[name] = {"gap": float(s[A == 1].mean() - s[A == 0].mean()), "auc": _auc(s, Y)}
-    return {"n": n, **out, "true_gap": float(Y[A == 1].mean() - Y[A == 0].mean())}
+    r=rng(6317)
+    def sample(n):
+        A=(r.random(n)<.5).astype(float);U=r.standard_normal(n);noise=r.standard_normal(n)
+        P=1.5+U+1.2*A+noise  # continuous prior-arrest measurement index, not a rounded count
+        risk=1/(1+np.exp(-(-.5+.9*U)));Y=(r.random(n)<risk).astype(float)
+        return A,U,noise,P,Y,risk
+    at,ut,et,pt,yt,rt=sample(10000);A,U,e,priors,Y,risk=sample(20000)
+    out={}
+    for name,train,test,testcf in [('priors',pt,priors,1.5+U+1.2*(1-A)+e),('residual',pt-1.2*at,priors-1.2*A,1.5+U+e)]:
+        w=_logit(np.column_stack([np.ones(len(train)),train]),yt)
+        score=lambda z:1/(1+np.exp(-np.column_stack([np.ones(len(z)),z])@w))
+        s=score(test);scf=score(testcf)
+        out[name]=dict(gap=float(s[A==1].mean()-s[A==0].mean()),auc=_auc(s,Y),counterfactual_max_change=float(np.max(abs(s-scf))),counterfactual_mean_change=float(np.mean(abs(s-scf))))
+    return dict(n=len(Y),n_train=len(yt),**out,true_gap=float(Y[A==1].mean()-Y[A==0].mean()),risk_gap=float(risk[A==1].mean()-risk[A==0].mean()),oracle_effect=1.2,model='continuous additive measurement index; independent train/test; oracle structural residual')
+
 
 
 def _auc(s, y):

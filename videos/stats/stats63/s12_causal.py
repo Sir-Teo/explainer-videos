@@ -34,17 +34,11 @@ class CausalFairness(LectureMixin, VoiceoverScene):
 
     def definition(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Matt Kusner, Joshua Loftus, Chris Russell and Ricardo Silva defined counterfactual "
-            "fairness in 2017. <bookmark mark='b'/> Write the world as a structural causal model: background factors U, "
-            "the group A, the features X caused by both. <bookmark mark='c'/> A predictor is counterfactually fair if, for "
-            "each individual, its distribution would be the same had their group been different, with their background "
-            "factors held fixed. <bookmark mark='d'/> A sufficient condition: the predictor uses only quantities that are "
-            "not descendants of A in the graph. In a linear model, the part of each feature not explained by A, its "
-            "residual, is such a quantity.",
+            "<bookmark mark='a'/> Kusner and colleagues define counterfactual fairness within a structural causal model. <bookmark mark='b'/> Condition on an individual's observed information, infer a distribution of background factors, and compare predictions when the protected attribute is intervened on while those background factors are shared. <bookmark mark='c'/> Equality of these counterfactual predictive distributions is the criterion; a small group-average prediction gap does not establish it. <bookmark mark='d'/> Using genuine nondescendants can suffice. In a correctly specified additive model, subtracting the known structural effect of A recovers an invariant component. Ordinary regression residuals need not do that, especially with confounding, nonlinearities, clipping or an incorrectly estimated effect.",
             [(r"\text{SCM}", r":", r"U, \ A \ \to \ X \ \to \ \hat Y", 40),
              (r"\text{counterfactual fairness}", r":", r"\hat Y_{A \leftarrow a}(U) \overset{d}{=} \hat Y_{A \leftarrow a'}(U) \mid X, A", 40),
              (r"\text{sufficient}", r":", r"\text{use only non-descendants of } A", 40),
-             (r"\text{linear case}", r":", r"\text{residuals of features on } A", 40)],
+             (r"\text{linear case}", r":", r"\text{remove the correct structural effect, not any regression}", 40)],
             [r"Kusner et al. (2017)", r"Part 36's models", r"the individual counterfactual", r"a recipe"],
             colors=[(1, OKC)])
 
@@ -52,20 +46,15 @@ class CausalFairness(LectureMixin, VoiceoverScene):
         G = CausalGraph({"A": (-2.2, 1.0), "U": (-2.2, -1.2), "P": (0.4, 0.0), "Y": (2.8, -1.2)},
                         [("A", "P"), ("U", "P"), ("U", "Y")], center=[-2.2, 0.0, 0], scale=1.0, radius=0.42,
                         colors={"A": GRPA, "U": GREY_A, "P": BADC, "Y": OKC},
-                        labels={"A": r"$A$", "U": r"$U$", "P": r"priors", "Y": r"$Y$"})
+                        labels={"A": r"$A$", "U": r"$U$", "P": r"index", "Y": r"$Y$"})
         side = side_groups([
             [(r"$A$: \ group, \ half the population", GRPA)],
             [(r"$U$: \ propensity, \ same in both groups", GREY_A)],
-            [(r"priors $= 1.5 + U + 1.2A +$ noise", BADC), (r"heavier policing of group A", BADC)],
+            [(r"index $= 1.5 + U + 1.2A +$ noise", BADC), (r"heavier policing of group A", BADC)],
             [(r"$Y$: \ rearrest, \ depends on $U$ only", OKC)],
         ], pos=(4.0, 0.2, 0))
         with self.voiceover(
-            "<bookmark mark='a'/> A simulated world, built to show the idea. Twenty thousand people, half in group A. "
-            "<bookmark mark='b'/> Each has an underlying propensity U, with the same distribution in both groups. "
-            "<bookmark mark='c'/> Their count of prior arrests depends on U, and also on their group, because group A is "
-            "policed more heavily: 1.2 more priors on average for the same propensity. <bookmark mark='d'/> Future "
-            "rearrest depends on U alone. So in this world the groups' true risks are identical, and the priors carry a "
-            "path from group to score that has nothing to do with risk."
+            "<bookmark mark='a'/> Our revised toy uses a continuous prior-arrest measurement index, not an integer count. Train on ten thousand simulated people and evaluate on twenty thousand independent people. <bookmark mark='b'/> Background propensity U and measurement noise have the same law in both groups. <bookmark mark='c'/> The measurement is one point five plus U plus one point two times A plus noise. The coefficient one point two is known by construction. Subtracting it times A leaves one point five plus U plus noise, unchanged by a paired intervention on A. <bookmark mark='d'/> The outcome depends only on U in this toy. This deliberately specified model permits an oracle fair feature; real arrest data do not identify that decomposition automatically."
         ) as vo:
             self.play(FadeIn(G), FadeIn(seeded_tag()))
             vo.wait_until("a")
@@ -103,14 +92,7 @@ class CausalFairness(LectureMixin, VoiceoverScene):
             [(r"fairer and more accurate,", OKC), (r"because the bias was noise", OKC)],
         ], pos=(3.9, 0.3, 0))
         with self.voiceover(
-            f"<bookmark mark='a'/> The average score of group A minus that of the others. The true rearrest rates differ "
-            f"by {say(d['true_gap'], 3)}, zero up to sampling. <bookmark mark='b'/> A logistic regression on prior arrests "
-            f"scores group A {say(d['priors']['gap'], 3)} higher, about eight points, with an area under the ROC curve of "
-            f"{say(d['priors']['auc'], 2)}. <bookmark mark='c'/> A regression on the residual of priors after removing the "
-            f"group's average, a function of U and noise only, scores the groups within {say(abs(d['residual']['gap']), 3)} "
-            f"of each other, and its area under the curve is higher, {say(d['residual']['auc'], 2)}. <bookmark mark='d'/> "
-            f"Here fairness and accuracy agree, because the extra priors were measurement error with respect to risk. "
-            f"That is a property of this causal model, which the data alone could not have revealed."
+            f"<bookmark mark='a'/> The average score of group A minus that of the others. The true rearrest rates differ by {say(d['true_gap'], 3)}, zero up to sampling. <bookmark mark='b'/> A logistic regression on prior arrests scores group A {say(d['priors']['gap'], 3)} higher, about nine points, with an area under the ROC curve of {say(d['priors']['auc'], 2)}. <bookmark mark='c'/> A regression on the oracle structural residual after subtracting the known coefficient one point two times A, a function of U and noise only, scores the groups within {say(abs(d['residual']['gap']), 3)} of each other, and its area under the curve is higher, {say(d['residual']['auc'], 2)}. <bookmark mark='d'/> Here fairness and accuracy agree, because the extra priors were measurement error with respect to risk. That is a property of this specified causal model. Directly paired counterfactual predictions agree to numerical precision for the oracle residual and change for the raw index. Group-average gaps and AUC alone would not prove counterfactual fairness."
         ) as vo:
             self.play(FadeIn(A), Create(zero), FadeIn(seeded_tag()))
             vo.wait_until("a")

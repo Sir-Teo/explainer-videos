@@ -82,13 +82,7 @@ class Hook(LectureMixin, VoiceoverScene):
             [(r"add a blood pressure:", BADC), (rf"{100 * rows[3]['unique']:.1f}\% unique", BADC)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> It is easy to underestimate how few facts single a person out. Take the Museum's "
-            f"NHANES extract, {d['n']:,} American adults with complete measurements. <bookmark mark='b'/> Age and sex "
-            f"alone, {rows[1]['classes']} combinations, single out nobody: every combination is shared. <bookmark "
-            f"mark='c'/> Add one measurement, the body-mass index to one decimal place, and {100 * rows[2]['unique']:.0f} "
-            f"percent of the sample are unique. <bookmark mark='d'/> Add a blood pressure, and "
-            f"{100 * rows[3]['unique']:.1f} percent are. Anyone who knew those four facts about a participant would find "
-            f"their whole record."
+            "<bookmark mark='a'/> The Museum's NHANES extract contains 5,176 adults with complete age, sex, body-mass index and at least one blood-pressure measurement. This is an unweighted complete-case sample, with age top-coded at eighty. <bookmark mark='b'/> Age and sex alone single out nobody in this extract. <bookmark mark='c'/> Adding body-mass index to one decimal makes about eighty-one percent unique within this sample. <bookmark mark='d'/> Adding rounded average systolic pressure makes almost everyone sample-unique. Linking an external record would additionally require matching measurements, inclusion knowledge and a suitable identified source. Sample uniqueness alone is not a demonstrated re-identification attack or a population uniqueness estimate."
         ) as vo:
             self.play(FadeIn(A), FadeIn(museum_tag(r"NHANES (the Museum)")))
             vo.wait_until("a")
@@ -137,16 +131,11 @@ class Hook(LectureMixin, VoiceoverScene):
 
     def decisions(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The same records feed decisions. <bookmark mark='b'/> In 2016 the newsroom ProPublica "
-            "studied COMPAS, a commercial score used in Broward County, Florida, to rate how likely defendants were to be "
-            "arrested again. <bookmark mark='c'/> Black defendants who were not rearrested had been labelled high risk about "
-            "twice as often as white defendants who were not. <bookmark mark='d'/> The company replied that the score was "
-            "equally accurate for both groups: a high score meant the same chance of rearrest. Both claims were true. "
-            "Chapters eight to eleven explain how, and what follows.",
+            "<bookmark mark='a'/> The same records feed decisions. <bookmark mark='b'/> ProPublica studied COMPAS scores for Broward County defendants in 2016, using two-year rearrest as its outcome. <bookmark mark='c'/> Among defendants without a recorded rearrest, Black defendants were labelled medium or high risk nearly twice as often as white defendants. <bookmark mark='d'/> The company emphasized predictive performance and approximate calibration instead. These are different criteria, and both descriptive patterns can coexist. The empirical predictive values and score-specific rates are not exactly equal across groups; the mathematical conflict does not prove every empirical claim made in that dispute.",
             [(r"\text{COMPAS}", r":", r"\text{a risk score for defendants}", 40),
              (r"\text{ProPublica}", r":", r"\text{false positives twice as common for Black defendants}", 36),
-             (r"\text{Northpointe}", r":", r"\text{a high score means the same in both groups}", 38),
-             (r"\text{both}", r":", r"\text{true}", 40)],
+             (r"\text{Northpointe}", r":", r"\text{emphasized approximate predictive parity}", 38),
+             (r"\text{both patterns}", r":", r"\text{can coexist}", 40)],
             [r"Broward County, \ Florida", r"Angwin et al. (2016)", r"Dieterich et al. (2016)", r"chapter 9"],
             colors=[(1, GRPA), (2, GRPB), (3, S.ACCENT)])
 

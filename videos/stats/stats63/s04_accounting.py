@@ -19,16 +19,11 @@ class Accounting(LectureMixin, VoiceoverScene):
 
     def loss(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Basic composition adds epsilons, and that is far too pessimistic. To see why, look at the "
-            "privacy loss: the log of the ratio of the output's densities under the two neighbours, evaluated at the output "
-            "actually seen. <bookmark mark='b'/> It is a random variable. Epsilon-DP says it never exceeds epsilon. "
-            "<bookmark mark='c'/> Over k independent releases, the losses add. Basic composition assumes every one is at its "
-            "maximum at once. <bookmark mark='d'/> But a sum of k independent pieces, each bounded by epsilon and with a "
-            "small mean, concentrates: its typical size grows like the square root of k, as in Part six, not like k.",
+            "<bookmark mark='a'/> Privacy loss is the log likelihood ratio of a released output under a neighboring pair. <bookmark mark='b'/> Pure epsilon privacy bounds its absolute value by epsilon almost surely. Approximate privacy instead bounds suitable tail excesses. <bookmark mark='c'/> For independent releases, joint privacy loss is a sum. Adaptive releases also decompose into conditional losses, and composition theorems handle that dependence. <bookmark mark='d'/> Fluctuations can grow on a square-root scale, while the positive mean accumulates. Advanced composition therefore includes both a square-root term and a term proportional to k epsilon squared for small epsilon; square-root growth does not persist indefinitely at fixed per-step privacy.",
             [(r"L", r"=", r"\log \frac{p_D(M)}{p_{D'}(M)}", 40),
              (r"\varepsilon\text{-DP}", r":", r"|L| \le \varepsilon", 40),
              (r"k \text{ releases}", r":", r"L_1 + \cdots + L_k", 40),
-             (r"\text{typically}", r":", r"\sqrt{k} \text{ scale, \ not } k", 40)],
+             (r"\text{typically}", r":", r"\sqrt{k}\text{ fluctuations, plus accumulating mean}", 40)],
             [r"the privacy-loss variable", r"a bound", r"they add", r"Part 6's square root"],
             colors=[(3, OKC)])
 
@@ -123,33 +118,20 @@ class Accounting(LectureMixin, VoiceoverScene):
     def census(self):
         d = load("accounting")
         self.lad_voiceover(
-            f"<bookmark mark='a'/> The 2020 census's redistricting data were released under zCDP with a total rho of 2.63: "
-            f"2.56 for the person tables and 0.07 for housing units. <bookmark mark='b'/> By the conversion on the last "
-            f"slide, at a delta of ten to the minus ten, that is an epsilon of about {d['census_eps']:.1f}. <bookmark "
-            f"mark='c'/> E to the eighteen is about sixty million, a nearly vacuous bound on an attacker's odds. <bookmark "
-            f"mark='d'/> But the conversion is loose, and the guarantee applies to the worst person in the worst block. In "
-            f"the testing language of chapter two, a Gaussian mechanism with rho of 2.63 is mu-GDP with mu the square root of "
-            f"two rho, about 2.3: an attacker with a five percent false alarm rate would have power about three quarters, "
-            f"for one specific record, knowing everyone else's. Neither number is small. Both are honest about the worst "
-            f"case.",
+            "<bookmark mark='a'/> The redistricting release's stated zCDP budget is rho 2.63, split into 2.56 for person tables and .07 for housing. Its protected neighboring universe must respect published invariants; exact state totals are outside that protection. <bookmark mark='b'/> The standard zCDP conversion at delta ten to minus ten gives epsilon about eighteen point two. <bookmark mark='c'/> That is a weak multiplicative worst-case bound, and the guarantee should be read with its adjacency and invariants. A large upper bound is not evidence that an actual attack attains it. <bookmark mark='d'/> For comparison only, a continuous Gaussian shift experiment with rho 2.63 has mu equal to root two rho, about 2.29, and power about .74 at five percent false positives. The real release uses discrete noise, hierarchy and post-processing. Rho-zCDP alone does not imply this exact GDP curve or this attack power for the census.",
             [(r"\rho_{2020}", r"=", r"2.63 \ \ (2.56 \text{ persons}, \ 0.07 \text{ housing})", 40),
              (r"\varepsilon \ (\delta = 10^{-10})", r"\approx", rf"{d['census_eps']:.1f}", 40),
              (r"e^{18}", r"\approx", r"6 \times 10^{7}", 40),
              (r"\mu = \sqrt{2\rho}", r"\approx", r"2.3: \ \text{power} \approx 0.74 \text{ at } \alpha = 0.05", 40)],
-            [r"Abowd et al. (2022)", r"zCDP's conversion", r"nearly vacuous", r"the testing reading"],
+            [r"Abowd et al. (2022)", r"zCDP's conversion", r"nearly vacuous", r"Gaussian comparison only; not census GDP"],
             colors=[(1, BADC), (3, PRIVC)])
 
     def subsampling(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> One more tool. <bookmark mark='b'/> If each step uses a random fraction q of the data, a "
-            "given person is usually not in the batch at all, and the step's privacy loss for them is smaller: privacy "
-            "amplification by subsampling. <bookmark mark='c'/> Roughly, an epsilon step becomes a q times epsilon step, "
-            "for small epsilon. <bookmark mark='d'/> Martin Abadi and colleagues' moments accountant, of 2016, tracked "
-            "subsampled Gaussian steps through Renyi-type moments, and made private training of deep networks possible. "
-            "Modern accountants compute the privacy-loss distribution numerically, by fast Fourier transform, and are tight.",
+            "<bookmark mark='a'/> Subsampling can amplify privacy. <bookmark mark='b'/> When a person is selected secretly at random with probability q, suitable mechanisms and adjacency relations admit a smaller effective budget. Revealing batch membership can destroy that amplification. <bookmark mark='c'/> For Poisson subsampling under the relevant add/remove model, the pure epsilon expression is log of one plus q times e to epsilon minus one; it is approximately q epsilon when epsilon is small. Replacement and fixed-size sampling have different details. <bookmark mark='d'/> Abadi and colleagues' moments accountant tracks subsampled Gaussian training more tightly than basic composition. Modern numerical privacy-loss accountants can give certified bounds with discretization and truncation error control; an FFT by itself is not a proof of tightness.",
             [(r"\text{subsample}", r":", r"\text{each step sees a fraction } q", 40),
              (r"\text{amplification}", r":", r"\varepsilon \ \to \ \text{about } q\varepsilon", 40),
              (r"\text{moments accountant}", r":", r"\text{subsampled Gaussians}", 40),
              (r"\text{numerical}", r":", r"\text{the loss distribution by FFT}", 40)],
-            [r"most steps miss you", r"small $\varepsilon$", r"Abadi et al. (2016)", r"tight accountants"],
+            [r"most steps miss you", r"small $\varepsilon$", r"Abadi et al. (2016)", r"certified numerical bounds"],
             colors=[(1, OKC)])
