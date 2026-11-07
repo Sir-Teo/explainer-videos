@@ -48,10 +48,12 @@ class HonestIntervals(VoiceoverScene):
     def chart(self):
         d = load("board")
         lh = np.log10(d["hs"])
-        A = axes([-2.7, -0.7], [-3.6, -0.6], x_length=7.4, y_length=4.4, xlabel=r"bandwidth $h$ \ (log scale)", ylabel=r"$\log_{10}$ MSE at the peak",
-                 xticks=[np.log10(0.005), np.log10(0.02), np.log10(0.08)], xfmt=lambda v: f"{10 ** v:.3f}", yticks=[-3.5, -3, -2.5, -2, -1.5, -1], center=[-2.5, 0.2, 0])
-        ax = A.ax
         y = np.log10(d["risk_by_h"])
+        lower = 0.5 * np.floor(2 * np.min(y) - 0.5)
+        upper = 0.5 * np.ceil(2 * np.max(y) + 0.5)
+        A = axes([-2.7, -0.7], [lower, upper], x_length=7.4, y_length=4.4, xlabel=r"bandwidth $h$ \ (log scale)", ylabel=r"$\log_{10}$ MSE at the peak",
+                 xticks=[np.log10(0.005), np.log10(0.02), np.log10(0.08)], xfmt=lambda v: f"{10 ** v:.3f}", yticks=np.arange(lower, upper + 0.25, 0.5).tolist(), center=[-2.5, 0.2, 0])
+        ax = A.ax
         c = VGroup(polyline(ax, lh, y, UPC, 4), *[Dot(ax.c2p(a, b), radius=0.08, color=UPC) for a, b in zip(lh, y)])
         opt = Dot(ax.c2p(np.log10(d["h_opt"]), y[list(d["hs"]).index(d["h_opt"])]), radius=0.13, color=LOWC)
         und = Dot(ax.c2p(np.log10(d["h_under"]), y[list(d["hs"]).index(d["h_under"])]), radius=0.13, color=ADAPTC)
