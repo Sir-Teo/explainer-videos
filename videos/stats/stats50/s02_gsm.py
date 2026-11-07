@@ -15,7 +15,7 @@ class SequenceModel(VoiceoverScene):
         self.ellipsoid()
 
     def card(self):
-        card = chapter_card(1, r"The Gaussian sequence model", r"One model that stands for almost every problem", lit=(1996,), part=PART)
+        card = chapter_card(1, r"The Gaussian sequence model", r"A model for regular Gaussian approximation problems", lit=(1996,), part=PART)
         with self.voiceover("Chapter one. The Gaussian sequence model: one model that stands for almost every problem."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
@@ -29,14 +29,11 @@ class SequenceModel(VoiceoverScene):
         ]
         rows[2][-1].set_color(HYPC)
         whys = [why(r"Part 29's problem"), why(r"an orthonormal basis $\varphi_k$"), why(r"independent noise, \ coordinate by coordinate"), why(r"errors add up, \ too")]
+        heading = label('Orthogonal Gaussian coefficients make function estimation a sequence problem', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Start from nonparametric regression: noisy observations of an unknown function at n "
-            "points. <bookmark mark='b'/> Take inner products of the data with an orthonormal basis, such as cosines or "
-            "wavelets. Each coefficient is the function's true coefficient plus Gaussian noise of size sigma over root n, "
-            "independent across coefficients. <bookmark mark='c'/> That is the Gaussian sequence model: infinitely many "
-            "unknown means, each observed once with noise of size epsilon. <bookmark mark='d'/> And by Parseval's identity, "
-            "the squared error of the function is the sum of the squared errors of its coefficients. Estimating a function "
-            "becomes estimating a long vector of means."
+            "<bookmark mark='a'/> Start from nonparametric regression: noisy observations of an unknown function at n points. <bookmark mark='b'/> Take inner products of the data with an orthonormal basis, such as cosines or wavelets. With a discretely orthonormal design transform, the finite coefficients have independent Gaussian errors. Continuous coefficients are approximated by quadrature; the white-noise model gives the exact infinite orthonormal sequence representation. <bookmark mark='c'/> That is the Gaussian sequence model: infinitely many unknown means, each observed once with noise of size epsilon. <bookmark mark='d'/> And by Parseval's identity, the squared error of the function is the sum of the squared errors of its coefficients. Estimating a function becomes estimating a long vector of means."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -50,7 +47,7 @@ class SequenceModel(VoiceoverScene):
         A = axes([0, 64], [-4.5, 0], x_length=7.4, y_length=4.4, xlabel=r"coefficient index $k$", ylabel=r"$\log_{10}|\theta_k|$",
                  xticks=[0, 16, 32, 48, 64], yticks=[-4, -3, -2, -1, 0], center=[-2.5, 0.2, 0])
         ax = A.ax
-        th = np.log10(np.maximum(d["theta"], 3e-5))
+        th = np.log10(np.asarray(d["theta"]))
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.05, color=TRUTHC) for a, b in zip(k, th) if b > -4.5])
         e100 = DashedLine(ax.c2p(0, np.log10(d["eps100"])), ax.c2p(64, np.log10(d["eps100"])), color=LOWC, stroke_width=2.5)
         e1e4 = DashedLine(ax.c2p(0, np.log10(d["eps10000"])), ax.c2p(64, np.log10(d["eps10000"])), color=UPC, stroke_width=2.5)
@@ -69,7 +66,7 @@ class SequenceModel(VoiceoverScene):
             "coordinate by coordinate, is the whole of nonparametric estimation in this model. More data lowers the noise "
             "line and lets more coefficients through, which is where the rates come from."
         ) as vo:
-            self.play(FadeIn(A), FadeIn(exact_tag(r"exact: \ the coefficients")))
+            self.play(FadeIn(A), FadeIn(exact_tag(r"numerical cosine quadrature coefficients")))
             vo.wait_until("a")
             self.play(FadeIn(side[0]))
             vo.wait_until("b")
@@ -87,19 +84,11 @@ class SequenceModel(VoiceoverScene):
             label(r"Le Cam's deficiency: \ two experiments are equivalent if each can simulate the other's decisions", font_size=26),
             label(r"Brown \& Low (1996): \ regression on $[0,1]$ $\equiv$ white noise $dY = f\,dt + \tfrac{\sigma}{\sqrt n}\,dW$, \ for $f$ smoother than $\tfrac12$", font_size=26, color=UPC),
             label(r"Nussbaum (1996): \ density estimation $\equiv$ white noise with $f$ replaced by $2\sqrt f$", font_size=26, color=S.ALT),
-            label(r"so a minimax result in the sequence model holds, \ asymptotically, \ for regression and densities", font_size=26, color=HYPC),
+            label(r"transfer needs the specified classes, transformation and loss conditions", font_size=26, color=HYPC),
             label(r"the same role the Gaussian shift played for LAN in Part 47", font_size=26, color=GREY_A),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The connection is more than an analogy. Le Cam defined when two statistical experiments "
-            "are equivalent: when each can mimic the other's decisions with vanishing loss. <bookmark mark='b'/> In 1996 "
-            "Lawrence Brown and Mark Low proved that nonparametric regression is asymptotically equivalent to the white-noise "
-            "model, and so to the sequence model, for functions smoother than a half. <bookmark mark='c'/> The same year "
-            "Michael Nussbaum proved it for density estimation, with the root of the density in place of the function. "
-            "<bookmark mark='d'/> So a minimax theorem proved in the sequence model holds, asymptotically, for regression and "
-            "densities too. <bookmark mark='e'/> The sequence model plays the role here that the Gaussian shift played for "
-            "local asymptotic normality in Part forty-seven: a single, clean experiment that every messier problem "
-            "approaches as the data grow, so that one theorem proved there is many theorems proved at once."
+            "<bookmark mark='a'/> The connection is more than an analogy. Le Cam defined when two statistical experiments are equivalent: when each can mimic the other's decisions with vanishing loss. <bookmark mark='b'/> In 1996 Lawrence Brown and Mark Low proved that nonparametric regression is asymptotically equivalent to the white-noise model, and so to the sequence model, on appropriate bounded smoothness classes above one half, with regular design and known Gaussian noise. <bookmark mark='c'/> The same year Michael Nussbaum proved it for density estimation, for sufficiently smooth densities bounded away from zero, with twice the square root of the density as the white-noise drift. <bookmark mark='d'/> Within the equivalence theorem's model classes and suitable loss conditions, decision bounds can transfer asymptotically. Density transformations and constants must be tracked; arbitrary unbounded losses do not transfer automatically. <bookmark mark='e'/> The sequence model plays the role here that the Gaussian shift played for local asymptotic normality in Part forty-seven: a useful clean experiment that these regular models approach as the data grow, so that one theorem proved there is many theorems proved at once."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
@@ -115,13 +104,7 @@ class SequenceModel(VoiceoverScene):
             label(r"inverse problems, \ deconvolution, \ spectral density estimation: \ the noise level varies with $k$", font_size=26, color=GREY_A),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The sequence model has appeared before, in other clothes. <bookmark mark='b'/> Part "
-            "twenty-nine's kernels, splines and wavelets are all, in a suitable basis, rules that shrink each coefficient by "
-            "some factor. <bookmark mark='c'/> Part twenty-five's James–Stein estimator is the sequence model with a finite "
-            "number of coordinates and one common shrinkage. <bookmark mark='d'/> Part thirty-two's sparse means are the "
-            "sequence model with most coefficients zero. <bookmark mark='e'/> And inverse problems, such as deconvolution or "
-            "estimating a spectral density, are sequence models whose noise level grows with k. One model, studied once, "
-            "answers all of them."
+            "<bookmark mark='a'/> The sequence model has appeared before, in other clothes. <bookmark mark='b'/> Part twenty-nine's many linear smoothers can be understood spectrally as shrinkage in a suitable basis. Boundary rules, irregular designs and nonlinear procedures require their own analysis. <bookmark mark='c'/> Part twenty-five's James–Stein estimator is the sequence model with a finite number of coordinates and one common shrinkage. <bookmark mark='d'/> Part thirty-two's sparse means are the sequence model with most coefficients zero. <bookmark mark='e'/> And inverse problems, such as deconvolution or estimating a spectral density, are sequence models whose noise level grows with k. One model, studied once, answers all of them."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
@@ -138,13 +121,11 @@ class SequenceModel(VoiceoverScene):
         rows[2][-1].set_color(HYPC)
         rows[3][-1].set_color(LOWC)
         whys = [why(r"a Sobolev ellipsoid"), why(r"smoothness as coefficient decay"), why(r"the target"), why(r"chapters 2--5 prove it")]
+        heading = label('A Sobolev ellipsoid bounds weighted coefficient energy', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Smoothness becomes a constraint on the coefficients: the sum of k to the two alpha times "
-            "theta k squared is at most C squared, an ellipsoid. <bookmark mark='b'/> For the cosine basis and whole alpha, "
-            "it is a bound on the integral of the alpha-th derivative squared: a Sobolev ball. <bookmark mark='c'/> The "
-            "minimax risk is the best worst-case squared error over the ellipsoid. <bookmark mark='d'/> With epsilon one over "
-            "root n it is of order n to the minus two alpha over two alpha plus one, Stone's rate in one dimension. The "
-            "next four chapters find its constant, prove it is a lower bound, and match it."
+            "<bookmark mark='a'/> Smoothness becomes a constraint on the coefficients: the sum of k to the two alpha times theta k squared is at most C squared, an ellipsoid. <bookmark mark='b'/> For the appropriate Sobolev domain and boundary conditions in a complete cosine expansion, including its constant term, it is a bound on the integral of the alpha-th derivative squared: a Sobolev ball. <bookmark mark='c'/> The minimax risk is the best worst-case squared error over the ellipsoid. <bookmark mark='d'/> With epsilon one over root n it is of order n to the minus two alpha over two alpha plus one, Stone's rate in one dimension. The next four chapters find its constant, prove it is a lower bound, and match it."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):

@@ -31,6 +31,9 @@ class Pinsker(VoiceoverScene):
         rows[2][-1].set_color(LINC)
         rows[3][-1].set_color(HYPC)
         whys = [why(r"bias$^2$ + variance, \ per coordinate"), why(r"$a_k = k^\alpha$"), why(r"tapered shrinkage"), why(r"linear rules are asymptotically minimax")]
+        heading = label('Exact linear minimax risk and asymptotic unrestricted risk differ', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> Consider linear estimators, each coefficient multiplied by a weight c k. Each coordinate's "
             "risk is a squared bias, one minus c k squared times theta k squared, plus a variance, c k squared times epsilon "
@@ -118,19 +121,16 @@ class Pinsker(VoiceoverScene):
             cmath(r"\hat\theta_k = y_k \mathbf 1\{k \le N\}", r":", r"\text{keep the first } N, \ \text{drop the rest}", font_size=34),
             cmath(r"\sup_{\Theta} R", r"=", r"N\varepsilon^2 + C^2 (N + 1)^{-2\alpha}: \ \text{variance plus the worst tail}", font_size=32),
             cmath(r"N^* \asymp (C/\varepsilon)^{2/(2\alpha + 1)}", r"\Rightarrow", r"\text{the same rate as Pinsker, \ a worse constant}", font_size=32),
-            cmath(r"\text{the constant's ratio}", r":", r"\text{1.3--1.5 for } \alpha = 1: \ \text{the taper is worth a third}", font_size=32),
+            cmath(r"\text{the constant's ratio}", r":", r"\text{3^{2/3}\approx2.0801\quad(\alpha=1):\ \text{worst-case asymptotic ratio}", font_size=32),
         ]
         rows[1][-1].set_color(UPC)
         rows[3][-1].set_color(LINC)
         whys = [why(r"the projection estimator"), why(r"nature puts all its energy at $N + 1$"), why(r"Part 29's bandwidth, \ in disguise"), why(r"chapter 6 measures it")]
+        heading = label('Projection has the same rate and a larger worst-case constant', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Compare the simplest linear rule: keep the first N coefficients as they are and drop the "
-            "rest, a projection. <bookmark mark='b'/> Its worst-case risk is N epsilon squared from the kept noise, plus the "
-            "largest tail nature can hide beyond N, which is C squared times N plus one to the minus two alpha. <bookmark "
-            "mark='c'/> Balancing the two gives the same rate as Pinsker's, with N growing like C over epsilon to the two "
-            "over two alpha plus one: the projection's N plays the role of Part twenty-nine's bandwidth. <bookmark mark='d'/> "
-            "But the constant is worse, by a factor of about one point three to one point five for one derivative. Tapering "
-            "the weights instead of cutting them off is worth about a third of the risk."
+            "<bookmark mark='a'/> Compare the simplest linear rule: keep the first N coefficients as they are and drop the rest, a projection. <bookmark mark='b'/> Its worst-case risk is N epsilon squared from the kept noise, plus the largest tail nature can hide beyond N, which is C squared times N plus one to the minus two alpha. <bookmark mark='c'/> Balancing the two gives the same rate as Pinsker's, with N growing like C over epsilon to the two over two alpha plus one: the projection's N plays the role of Part twenty-nine's bandwidth. <bookmark mark='d'/> But the worst-case asymptotic constant is larger by three to the power two thirds, about two point oh eight, for one derivative. This is distinct from comparing estimators at one selected truth."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -141,20 +141,18 @@ class Pinsker(VoiceoverScene):
     def meaning(self):
         rows = [
             cmath(r"\text{risk} \propto n^{-2\alpha/(2\alpha+1)}", r"\Rightarrow", r"\text{a factor } c \text{ in risk} = c^{(2\alpha+1)/(2\alpha)} \text{ in sample size}", font_size=30),
-            cmath(r"\alpha = 1, \ c = 1.4", r":", r"1.4^{3/2} \approx 1.66: \ \text{the projection needs 66\% more data}", font_size=32),
+            cmath(r"\alpha = 1, \ c = 3^{2/3}", r":", r"c^{3/2}=3:\ \text{the projection needs three times the data}", font_size=32),
             cmath(r"\text{parametric}, \ \text{risk} \propto 1/n", r":", r"\text{a factor } c \text{ in risk} = c \text{ in sample size}", font_size=32),
             cmath(r"\text{the slower the rate}", r":", r"\text{the more data a constant is worth}", font_size=34),
         ]
         rows[1][-1].set_color(LINC)
         rows[3][-1].set_color(HYPC)
         whys = [why(r"invert the rate"), why(r"Pinsker vs.\ projection"), why(r"Part 45's efficiency"), why(r"constants matter")]
+        heading = label('A risk constant changes the required sample size', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Is a constant factor worth caring about? Invert the rate. If the risk falls like n to the "
-            "minus two alpha over two alpha plus one, then a factor c in risk is a factor c to the two alpha plus one over two "
-            "alpha in sample size. <bookmark mark='b'/> For one derivative, a projection estimator one point four times worse "
-            "than Pinsker's needs about sixty-six percent more data to match it. <bookmark mark='c'/> In a parametric problem "
-            "the exchange rate is one to one. <bookmark mark='d'/> The slower the rate, the more data a constant factor is "
-            "worth: in nonparametric problems, constants are not a detail."
+            "<bookmark mark='a'/> Is a constant factor worth caring about? Invert the rate. If the risk falls like n to the minus two alpha over two alpha plus one, then a factor c in risk is a factor c to the two alpha plus one over two alpha in sample size. <bookmark mark='b'/> For one derivative, the worst-case projection constant is three to the power two thirds times Pinsker's. At the n to the minus two thirds rate, that means three times as much data for the same asymptotic risk. <bookmark mark='c'/> In a parametric problem the exchange rate is one to one. <bookmark mark='d'/> The slower the rate, the more data a constant factor is worth: in nonparametric problems, constants are not a detail."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -165,23 +163,20 @@ class Pinsker(VoiceoverScene):
     def prior(self):
         d = load("pinsker")
         rows = [
-            cmath(r"\text{the least favourable prior}", r":", r"\theta_k \sim N(0, \tau_k^2), \ \ \tau_k^2 = \varepsilon^2 (\mu/a_k - 1)_+", font_size=32),
-            cmath(r"\text{its Bayes rule}", r":", r"\frac{\tau_k^2}{\tau_k^2 + \varepsilon^2} = 1 - \frac{a_k}{\mu}: \ \text{Pinsker's weights, \ exactly}", font_size=32),
-            cmath(r"\text{Bayes risk}", r"=", r"\textstyle\sum \tau_k^2 \varepsilon^2/(\tau_k^2 + \varepsilon^2) = R_L: \ \text{a saddle point}", font_size=32),
-            cmath(r"\text{why linear wins}", r":", r"\text{the prior concentrates on the ellipsoid as } \varepsilon \to 0", font_size=32),
+            cmath(r"\text{Gaussian average-energy prior}", r":", r"\theta_k \sim N(0, \tau_k^2), \ \ \tau_k^2 = \varepsilon^2 (\mu/a_k - 1)_+", font_size=32),
+            cmath(r"\text{its Bayes rule}", r":", r"\frac{\tau_k^2}{\tau_k^2 + \varepsilon^2} = (1 - \frac{a_k}{\mu})_+: \ \text{Pinsker's weights, \ exactly}", font_size=32),
+            cmath(r"\text{Bayes risk}", r"=", r"\textstyle\sum \tau_k^2 \varepsilon^2/(\tau_k^2 + \varepsilon^2) =R_L:\ \text{not a finite-noise bounded-set saddle point}", font_size=32),
+            cmath(r"\text{why linear wins}", r":", r"\text{shrink the radius, add slack, then truncate with controlled risk}", font_size=32),
         ]
         rows[1][-1].set_color(LINC)
         rows[2][-1].set_color(HYPC)
-        whys = [why(r"Part 45's least favourable priors"), why(r"Part 25's shrinkage"), why(r"minimax $=$ Bayes"), why(r"so the lower bound applies to all rules")]
+        whys = [why(r"Part 45's least favourable priors"), why(r"Part 25's shrinkage"), why(r"exact average-risk identity; support still matters"), why(r"so the lower bound applies to all rules")]
         r = d["rows"][1]
+        heading = label('Gaussian average-risk identities still need a valid prior support argument', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            f"<bookmark mark='a'/> Why are linear rules good enough? Put a Gaussian prior on the coefficients, with variances "
-            f"that vanish beyond the cut-off. <bookmark mark='b'/> Its Bayes rule is the posterior mean, which shrinks each "
-            f"coordinate by tau squared over tau squared plus epsilon squared: and that is exactly Pinsker's weight. "
-            f"<bookmark mark='c'/> Its Bayes risk equals the linear minimax risk, to every digit: at epsilon point oh three "
-            f"both are {r['risk']:.6f}. A Bayes risk is a lower bound for every estimator, so we have a saddle point, Part "
-            f"forty-five's least favourable prior in infinite dimensions. <bookmark mark='d'/> The prior does not quite live "
-            f"on the ellipsoid, but it concentrates there as the noise shrinks, which is why the result is asymptotic."
+            f"<bookmark mark='a'/> Why are linear rules good enough? Put a Gaussian prior on the coefficients, with variances that vanish beyond the cut-off. <bookmark mark='b'/> Its Bayes rule is the posterior mean, which shrinks each coordinate by tau squared over tau squared plus epsilon squared: and that is exactly Pinsker's weight. <bookmark mark='c'/> Its Bayes risk equals the linear minimax risk, to every digit: at epsilon point oh three both are {r['risk']:.6f}. That equality is exact for this Gaussian average-risk calculation and the linear minimax value. It is not a finite-noise saddle point for unrestricted estimation over a bounded ellipsoid, because this Gaussian prior is not supported there. <bookmark mark='d'/> The asymptotic proof uses a slightly smaller prior radius, with enough slack relative to its energy fluctuation, then conditions or truncates into the ellipsoid while controlling risk. Concentration around the boundary alone would not make the outside probability vanish."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):

@@ -30,6 +30,9 @@ class Lepski(VoiceoverScene):
         ]
         rows[2][-1].set_color(ADAPTC)
         whys = [why(r"a grid of smoothing levels"), why(r"the usual trade-off"), why(r"Lepski (1990)"), why(r"no knowledge of $s$")]
+        heading = label('Check every bandwidth and choose the largest admissible one', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> Oleg Lepski's method, of 1990, chooses a bandwidth at a point without knowing the "
             "smoothness. Compute the estimate at a grid of bandwidths, from small to large. <bookmark mark='b'/> Small "
@@ -47,20 +50,17 @@ class Lepski(VoiceoverScene):
     def tests(self):
         rows = [
             cmath(r"\text{step } j", r":", r"\text{test } H_0: \text{bias}(h_j) \text{ is small, \ against every finer } h_i", font_size=32),
-            cmath(r"\kappa", r"\asymp", r"\sqrt{\log n}: \ \text{a Bonferroni correction over the grid}", font_size=34),
+            cmath(r"\kappa", r"\asymp", r"\sqrt{\log n}:\ \text{polynomial failure-probability control}", font_size=34),
             cmath(r"\text{too-large } h", r":", r"\text{rejected with high probability, \ once its bias exceeds } \kappa\,\sigma", font_size=32),
             cmath(r"\text{Goldenshluger \& Lepski (2011)}", r":", r"\text{the same idea for whole functions, \ many dimensions}", font_size=30),
         ]
         rows[1][-1].set_color(HYPC)
         whys = [why(r"a sequence of tests"), why(r"Part 33's multiplicity"), why(r"bias reveals itself"), why(r"the modern form")]
+        heading = label('Calibration depends on the required failure probability', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Lepski's rule is a sequence of tests. At each step it tests whether the current bandwidth's "
-            "bias is still small, by comparing its estimate with every finer one. <bookmark mark='b'/> The constant kappa must "
-            "grow like the root of log n, a Bonferroni correction over the grid of bandwidths, Part thirty-three's "
-            "multiplicity in a new place. That correction is the source of the log factor in the adaptive rate. <bookmark "
-            "mark='c'/> A bandwidth whose bias exceeds kappa standard deviations is rejected with high probability, so the "
-            "rule stops near the oracle. <bookmark mark='d'/> Alexander Goldenshluger and Lepski extended the idea in 2011 to "
-            "whole functions in several dimensions, comparing estimators through a common smoother."
+            "<bookmark mark='a'/> Lepski's rule is a sequence of tests. At each step it tests whether the current bandwidth's bias is still small, by comparing its estimate with every finer one. <bookmark mark='b'/> To obtain polynomially small failure probabilities for adaptive risk control, a threshold of order root log n is often used. A fixed-level Bonferroni correction over J comparisons instead depends on log J, Part thirty-three's multiplicity in a new place. Our numerical illustration uses a fixed kappa of two point two, so it is not an implementation of that full asymptotic calibration. <bookmark mark='c'/> A bandwidth whose bias exceeds kappa standard deviations is rejected with high probability, so the rule stops near the oracle. <bookmark mark='d'/> Alexander Goldenshluger and Lepski extended the idea in 2011 to whole functions in several dimensions, comparing estimators through a common smoother."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -109,7 +109,7 @@ class Lepski(VoiceoverScene):
     def table(self):
         d = load("lepski")
         rows = [[r"function", r"oracle MSE", r"fixed $h = 0.04$", r"Lepski", r"Lepski / oracle"]]
-        for k, nm in (("smooth", r"$\sin 2\pi x$, \ smooth"), ("kink", r"$|x - \tfrac12|^{1/2}$, \ rough")):
+        for k, nm in (("smooth", r"$\sin 2\pi x$, \ smooth"), ("kink", r"$3|x - \tfrac12|^{1/2}$, \ rough")):
             r = d[k]
             rows.append([nm, f"{r['oracle']:.4f}", f"{r['fixed']:.4f}", f"{r['lepski']:.4f}", f"{r['lepski'] / r['oracle']:.1f}"])
         tab = table_rows(rows, font_size=30, col_buff=0.8, row_buff=0.45, colors=[GREY_B, UPC, HYPC])
@@ -119,10 +119,7 @@ class Lepski(VoiceoverScene):
         s, k = d["smooth"], d["kink"]
         foot = label(rf"the fixed bandwidth is {k['fixed'] / k['oracle']:.1f} times the oracle on the rough function; \ Lepski is within {max(s['lepski'] / s['oracle'], k['lepski'] / k['oracle']):.1f} on both", font_size=24, color=ADAPTC).move_to([0, -1.6, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> In numbers. A fixed bandwidth of point oh four is the oracle choice for the smooth "
-            f"function but costs a factor of {say(k['fixed'] / k['oracle'], 1)} on the rough one. Lepski's choice costs a factor "
-            f"of {say(s['lepski'] / s['oracle'], 1)} and {say(k['lepski'] / k['oracle'], 1)}: never the best, never bad. "
-            f"<bookmark mark='b'/> That uniformity across classes is what adaptation means."
+            f"<bookmark mark='a'/> In numbers. A fixed bandwidth of point oh four is a useful fixed comparison for the smooth function but costs a factor of {say(k['fixed'] / k['oracle'], 1)} on the rough one. Lepski's choice costs a factor of {say(s['lepski'] / s['oracle'], 1)} and {say(k['lepski'] / k['oracle'], 1)}: these are two finite-sample examples, not a uniform performance guarantee over all functions. <bookmark mark='b'/> That uniformity across classes is what adaptation means."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tab), FadeIn(simulated_tag(r"simulated")))
@@ -150,12 +147,7 @@ class Lepski(VoiceoverScene):
             label(r"local smoothing chosen by the data, \ point by point", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The motorcycle crash data from Part twenty-nine: head acceleration after a simulated "
-            f"impact, a curve that is flat, then plunges, then rebounds. <bookmark mark='b'/> Lepski's method picks a window "
-            f"at each point separately. <bookmark mark='c'/> At fourteen and twenty-two milliseconds, where the curve moves "
-            f"fast, it picks half-widths of {P[0]['h']:.0f} and {P[1]['h']:.0f} milliseconds. <bookmark mark='d'/> At forty, "
-            f"where it has settled, {P[2]['h']:.0f}. <bookmark mark='e'/> The smoothing adapts to the local roughness, which "
-            f"a single global bandwidth cannot do."
+            f"<bookmark mark='a'/> the historical motorcycle-impact measurements from Part twenty-nine: head acceleration after simulated motorcycle impacts, a curve that is flat, then plunges, then rebounds. <bookmark mark='b'/> Lepski's method picks a window at each point separately. <bookmark mark='c'/> At fourteen and twenty-two milliseconds, where the curve moves fast, it picks half-widths of {P[0]['h']:.0f} and {P[1]['h']:.0f} milliseconds. <bookmark mark='d'/> At forty, where it has settled, {P[2]['h']:.0f}. <bookmark mark='e'/> These windows illustrate local data-dependent smoothing. They use a crude global noise estimate from adjacent differences, despite heteroskedasticity; they do not establish calibrated uncertainty or a smoothness theorem for these measurements."
         ) as vo:
             self.play(FadeIn(A), FadeIn(dots), FadeIn(museum_tag(r"Silverman (1985); \ Schmidt, \ Mattern \& Schüler (1981)")))
             vo.wait_until("a")
@@ -175,19 +167,17 @@ class Lepski(VoiceoverScene):
             cmath(r"\text{known } s", r":", r"\inf \sup E(\hat f(x_0) - f(x_0))^2 \asymp n^{-2s/(2s+1)}", font_size=32),
             cmath(r"\text{unknown } s, \ \text{pointwise}", r":", r"\text{the best adaptive rate is } (n/\log n)^{-2s/(2s+1)}", font_size=32),
             cmath(r"\text{the price}", r":", r"\text{a log factor, \ and it cannot be avoided}", font_size=34),
-            cmath(r"\text{global } L_2 \text{ loss}", r":", r"\text{no price: \ adaptation is free \ (block JS, \ chapter 6)}", font_size=32),
+            cmath(r"\text{global } L_2 \text{ loss, appropriate classes}", r":", r"\text{rate adaptation possible; sharp constants need refined rules}", font_size=32),
         ]
         rows[1][-1].set_color(ADAPTC)
         rows[2][-1].set_color(LOWC)
         rows[3][-1].set_color(UPC)
         whys = [why(r"Farrell, \ Stone"), why(r"Lepski (1990, \ 1991)"), why(r"Brown \& Low (1996)"), why(r"Efromovich \& Pinsker")]
+        heading = label('The price of adaptation depends on the class and loss', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> How much does not knowing the smoothness cost? With s known, the pointwise rate is n to the "
-            "minus two s over two s plus one. <bookmark mark='b'/> With s unknown, Lepski showed the best rate any adaptive "
-            "estimator can achieve at a point is the same with n replaced by n over log n. <bookmark mark='c'/> That log "
-            "factor is a genuine price, and Lawrence Brown and Mark Low proved it cannot be avoided. <bookmark mark='d'/> For "
-            "the global squared-error loss, by contrast, there is no price at all: blockwise James–Stein adapts exactly. "
-            "Whether adaptation is free depends on the loss."
+            "<bookmark mark='a'/> How much does not knowing the smoothness cost? With s known, the pointwise rate is n to the minus two s over two s plus one. <bookmark mark='b'/> With s unknown, Lepski showed the best rate any adaptive estimator can achieve at a point is the same with n replaced by n over log n. <bookmark mark='c'/> That log factor is a genuine price, and Lawrence Brown and Mark Low proved it cannot be avoided. <bookmark mark='d'/> For the global squared-error loss, by contrast, there is no price at all: properly designed refined block estimators can adapt without a loss in the global minimax order, and sharp constructions can recover the constant under their theorem conditions. Whether adaptation is free depends on the loss."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):

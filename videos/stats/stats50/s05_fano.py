@@ -32,6 +32,9 @@ class Fano(VoiceoverScene):
         rows[2][-1].set_color(LOWC)
         rows[3][-1].set_color(HYPC)
         whys = [why(r"a $2\delta$-separated packing"), why(r"information theory's inequality"), why(r"the lower bound"), why(r"$\log M \gg \beta$")]
+        heading = label('A packing turns estimation into identification among many laws', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> Two points give rates for one-dimensional features. For a whole function, or a long vector, "
             "use many hypotheses: M of them, pairwise at least two delta apart, each with Kullback–Leibler divergence at most "
@@ -57,6 +60,9 @@ class Fano(VoiceoverScene):
         rows[1][-1].set_color(HYPC)
         rows[3][-1].set_color(LOWC)
         whys = [why(r"a uniform prior on the packing"), why(r"mutual information, \ bounded by KL"), why(r"entropy accounting"), why(r"Fano (1952)")]
+        heading = label('Mutual information limits how much a sample reveals', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> Why Fano's inequality holds. Let nature pick the hypothesis index J uniformly, and then draw "
             "the data. <bookmark mark='b'/> The mutual information between J and the data is the average Kullback–Leibler "
@@ -116,6 +122,9 @@ class Fano(VoiceoverScene):
         rows[2][-1].set_color(HYPC)
         rows[3][-1].set_color(LOWC)
         whys = [why(r"vertices as hypotheses"), why(r"Gilbert (1952); \ Varshamov (1957)"), why(r"the guarantee is loose"), why(r"the engine of Fano bounds")]
+        heading = label('An existence theorem and a finite random search are distinct', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             f"<bookmark mark='a'/> The standard source of packings is the hypercube: binary strings of length d, with Hamming "
             f"distance. <bookmark mark='b'/> The Varshamov–Gilbert bound, from coding theory, guarantees at least two to the d "
@@ -133,20 +142,18 @@ class Fano(VoiceoverScene):
     def sparse(self):
         rows = [
             cmath(r"y = \theta + z, \ \theta \in \mathbb R^p, \ \|\theta\|_0 \le s", r":", r"\text{sparse normal means}", font_size=32),
-            cmath(r"\text{pack } s\text{-sparse sign vectors}", r":", r"\log M \asymp s \log(p/s)", font_size=34),
-            cmath(r"\Rightarrow", r"\;", r"\inf_{\hat\theta} \sup_{\|\theta\|_0 \le s} E\|\hat\theta - \theta\|^2 \asymp s \log(p/s)", font_size=34),
+            cmath(r"\text{pack } s\text{-sparse sign vectors}", r":", r"\log M \asymp s \log(ep/s)", font_size=34),
+            cmath(r"\Rightarrow", r"\;", r"\inf_{\hat\theta} \sup_{\|\theta\|_0 \le s} E\|\hat\theta - \theta\|^2 \asymp s \log(ep/s)", font_size=34),
             cmath(r"\text{attained by}", r":", r"\text{soft thresholding at } \sqrt{2 \log(p/s)}, \ \text{the lasso, \ SLOPE}", font_size=32),
         ]
         rows[2][-1].set_color(LOWC)
         rows[3][-1].set_color(UPC)
         whys = [why(r"Part 32's sparsity"), why(r"choose the support: \ $\binom ps$ ways"), why(r"Donoho \& Johnstone (1994)"), why(r"Part 32's estimators, \ optimal")]
+        heading = label('An unknown sparse support costs logarithmic complexity', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The cleanest application: estimating a vector of p normal means of which at most s are "
-            "non-zero, Part thirty-two's sparsity. <bookmark mark='b'/> Pack sign vectors with s non-zero coordinates: there "
-            "are about p choose s supports, so log M is of order s log p over s. <bookmark mark='c'/> Fano's inequality then "
-            "gives the minimax risk: s log p over s, the price of not knowing where the signal is. <bookmark mark='d'/> And "
-            "soft thresholding at the root of two log p over s attains it up to a constant, as do the lasso and SLOPE: Part "
-            "thirty-two's estimators are minimax optimal."
+            "<bookmark mark='a'/> The cleanest application: estimating a vector of p normal means of which at most s are non-zero, Part thirty-two's sparsity. <bookmark mark='b'/> Pack sign vectors with s non-zero coordinates: there are about p choose s supports, so log M is of order s log p over s. <bookmark mark='c'/> Fano's inequality then gives the minimax risk: of order s log of e p over s, the price of an unknown support; the e keeps the expression meaningful in the dense endpoint. <bookmark mark='d'/> And soft thresholding at the root of two log p over s attains it up to a constant, as do the lasso and SLOPE: Part thirty-two's estimators are minimax optimal."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -156,23 +163,19 @@ class Fano(VoiceoverScene):
 
     def entropy(self):
         rows = [
-            cmath(r"\text{Yang \& Barron (1999)}", r":", r"\text{the minimax rate } \varepsilon_n^2 \text{ solves } \log N(\varepsilon_n) \asymp n\,\varepsilon_n^2", font_size=30),
+            cmath(r"\text{Yang \& Barron (1999)}", r":", r"\text{a global-entropy rate bound can balance } \log N(\varepsilon_n) \asymp n\,\varepsilon_n^2", font_size=30),
             cmath(r"\log N(\varepsilon) \asymp \varepsilon^{-1/s}", r"\Rightarrow", r"\varepsilon_n^2 \asymp n^{-2s/(2s+1)}: \ \text{Hölder}", font_size=32),
-            cmath(r"\log N(\varepsilon) \asymp d \log(1/\varepsilon)", r"\Rightarrow", r"\varepsilon_n^2 \asymp d \log n / n: \ \text{parametric}", font_size=32),
+            cmath(r"\log N(\varepsilon) \asymp d \log(1/\varepsilon)", r"\Rightarrow", r"\varepsilon_n^2 \asymp d\log n/n:\ \text{loose global bound; local theory gives }d/n", font_size=32),
             cmath(r"\text{the lesson}", r":", r"\text{Part 48's entropy decides the rate: \ size is difficulty}", font_size=32),
         ]
         rows[0][-1].set_color(HYPC)
         rows[3][-1].set_color(ADAPTC)
         whys = [why(r"a general recipe"), why(r"smooth functions"), why(r"finite dimensions"), why(r"complexity, \ measured")]
+        heading = label('Global entropy bounds may need localization for a sharp rate', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Fano's method leads to a general recipe, due to Yuhong Yang and Andrew Barron in 1999. For "
-            "density estimation in Hellinger distance, the minimax rate is the epsilon at which the log covering number of the "
-            "class equals n epsilon squared: the class's complexity balances the information in the sample. <bookmark "
-            "mark='b'/> For Hölder classes, whose entropy is one over epsilon to the one over s, this gives the familiar n to "
-            "the minus two s over two s plus one. <bookmark mark='c'/> For a d-parameter family, whose entropy is d log one "
-            "over epsilon, it gives the parametric rate with a log factor. <bookmark mark='d'/> So Part forty-eight's metric "
-            "entropy, invented to make empirical processes behave, also decides how hard estimation is. The size of a class "
-            "is its difficulty."
+            "<bookmark mark='a'/> Fano's method leads to a general recipe, due to Yuhong Yang and Andrew Barron in 1999. For density estimation in Hellinger distance, a global entropy balance can provide rate bounds when packing, covering and information conditions hold: the class's complexity balances the information in the sample. <bookmark mark='b'/> For Hölder classes, whose entropy is one over epsilon to the one over s, this gives the familiar n to the minus two s over two s plus one. <bookmark mark='c'/> For a d-parameter family, whose entropy is d log one over epsilon, this global calculation gives a generally loose d log n over n bound. Local entropy or local packings recover the sharp d over n rate in regular finite-dimensional models. <bookmark mark='d'/> So Part forty-eight's metric entropy, invented to make empirical processes behave, also decides how hard estimation is. The size of a class is its difficulty."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -200,11 +203,7 @@ class Fano(VoiceoverScene):
             label(rf"about {ratio:.1f} times the rate, \ for every $s$", font_size=22, color=HYPC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> A thousand means, with s of them large. <bookmark mark='b'/> Using the data as they are "
-            f"costs a risk of p, a thousand. <bookmark mark='c'/> The minimax rate s log of e p over s is far smaller when "
-            f"the vector is sparse. <bookmark mark='d'/> Soft thresholding, simulated with the signals placed where they hurt "
-            f"most, <bookmark mark='e'/> tracks the rate at about {say(ratio, 1)} times it, for every sparsity level: the "
-            f"lower bound and the estimator agree up to a constant."
+            f"<bookmark mark='a'/> A thousand means, with s of them large. <bookmark mark='b'/> Using the data as they are costs a risk of p, a thousand. <bookmark mark='c'/> The minimax rate s log of e p over s is far smaller when the vector is sparse. <bookmark mark='d'/> Soft thresholding, simulated at the chosen large-signal vectors, rather than an independently verified supremum over all sparse vectors, <bookmark mark='e'/> tracks the rate at about {say(ratio, 1)} times it, for every sparsity level: the selected simulation tracks the rate proxy. The minimax upper theorem requires separate uniform risk control."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"blue simulated: \ 400 samples")))
             vo.wait_until("a")
