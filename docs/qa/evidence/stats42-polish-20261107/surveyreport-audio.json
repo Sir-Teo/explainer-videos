@@ -1,0 +1,84 @@
+{
+ "video": "stats42",
+ "scene": "SurveyReport",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 6,
+ "lines": [
+  {
+   "raw": "Chapter six. How wrong could we be, and what do we tell the minister?",
+   "spoken": "Chapter six. How wrong could we be, and what do we tell the minister?",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/576c0c61a68c7f9e.wav",
+   "duration": 4.325,
+   "tokens": 14,
+   "peak": 0.404266357421875,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The estimate rests on one assumption the data cannot check: that the graph has every common cause of switching and pressure. Part thirty-six's robustness value asks how strong a missing one would have to be. Start from one seeded completed dataset and its adjusted regression, using classical OLS standard errors for the partial-variance identities. This is a sensitivity illustration for that OLS coefficient, not pooled MI-AIPW inference: minus two point four five, with a t statistic of minus four point two three on almost three thousand degrees of freedom. <bookmark mark='b'/> Divide the t by the root of the degrees of freedom. <bookmark mark='c'/> Carlos Cinelli and Chad Hazlett's robustness value is then point zero seven four: a hidden confounder explaining 7.4 percent of the residual variance of both switching and pressure would erase the effect. <bookmark mark='d'/> One explaining 4.1 percent of each would make it no longer significant at five percent.",
+   "spoken": "The estimate rests on one assumption the data cannot check: that the graph has every common cause of switching and pressure. Part thirty-six's robustness value asks how strong a missing one would have to be. Start from one seeded completed dataset and its adjusted regression, using classical OLS standard errors for the partial-variance identities. This is a sensitivity illustration for that OLS coefficient, not pooled MI-AIPW inference: minus two point four five, with a t statistic of minus four point two three on almost three thousand degrees of freedom. Divide the t by the root of the degrees of freedom. Carlos Cinelli and Chad Hazlett's robustness value is then point zero seven four: a hidden confounder explaining 7.4 percent of the residual variance of both switching and pressure would erase the effect. One explaining 4.1 percent of each would make it no longer significant at five percent.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/252c21580faaefab.wav",
+   "duration": 57.6,
+   "tokens": 147,
+   "peak": 0.6558837890625,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Draw it. Across, how much of switching a hidden confounder explains; up, how much of pressure. In the red region, the adjusted effect would be zero or positive. <bookmark mark='b'/> The robustness value is where the boundary crosses the diagonal. <bookmark mark='c'/> Is that a lot? Compare a confounder we did measure, the strongest: having been told one's pressure is high. It explains 4.0 percent of switching and 3.3 percent of pressure. <bookmark mark='d'/> A hidden factor twice as strong as a doctor's diagnosis would not erase the effect. <bookmark mark='e'/> Three times as strong would. Whether such a factor exists is a question for physicians and sociologists, not for the data; the analysis can only say how strong it would have to be.",
+   "spoken": "Draw it. Across, how much of switching a hidden confounder explains; up, how much of pressure. In the red region, the adjusted effect would be zero or positive. The robustness value is where the boundary crosses the diagonal. Is that a lot? Compare a confounder we did measure, the strongest: having been told one's pressure is high. It explains 4.0 percent of switching and 3.3 percent of pressure. A hidden factor twice as strong as a doctor's diagnosis would not erase the effect. Three times as strong would. Whether such a factor exists is a question for physicians and sociologists, not for the data; the analysis can only say how strong it would have to be.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/f57daec7bf146f89.wav",
+   "duration": 40.125,
+   "tokens": 116,
+   "peak": 0.542572021484375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Observational evidence is strongest when it agrees with experiments, and here there is a real one. Bruce Neal and colleagues' Salt Substitute and Stroke Study, published in 2021, randomized six hundred villages in rural China, with about twenty-one thousand adults at high risk, to a salt substitute of three quarters sodium chloride and one quarter potassium chloride, or to ordinary salt, for about five years. <bookmark mark='b'/> Pressure fell by about three point three millimetres in the substitute villages, <bookmark mark='c'/> and strokes by fourteen percent, with fewer deaths. <bookmark mark='d'/> It is a cluster-randomized trial, Case one's design, and it supports the same direction of effect in its own high-risk rural Chinese population. Transporting its magnitude to the island requires further assumptions.",
+   "spoken": "Observational evidence is strongest when it agrees with experiments, and here there is a real one. Bruce Neal and colleagues' Salt Substitute and Stroke Study, published in 2021, randomized six hundred villages in rural China, with about twenty-one thousand adults at high risk, to a salt substitute of three quarters sodium chloride and one quarter potassium chloride, or to ordinary salt, for about five years. Pressure fell by about three point three millimetres in the substitute villages, and strokes by fourteen percent, with fewer deaths. It is a cluster-randomized trial, Case one's design, and it supports the same direction of effect in its own high-risk rural Chinese population. Transporting its magnitude to the island requires further assumptions.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/17b7fb7bedfbc8a1.wav",
+   "duration": 47.325,
+   "tokens": 117,
+   "peak": 0.521331787109375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> And then the page the minister will actually read. It leads with the finding, in the minister's units: among comparable adults, using the substitute lowered pressure by about two point two millimetres, with an interval from one point zero to three point four. <bookmark mark='b'/> It explains, in one sentence, why the newspapers saw the opposite. <bookmark mark='c'/> It states the assumptions in plain words, <bookmark mark='d'/> and a separate OLS sensitivity illustration. It does not quantify sensitivity to the missing-at-random assumption or directly bound the pooled AIPW effect. <bookmark mark='e'/> It says what independent evidence agrees. <bookmark mark='f'/> And it ends with advice the data support: keep the substitute on sale, promote it, and recommend clinical review for kidney disease or potassium-raising medicines because extra potassium can cause hyperkalaemia. No p-values, no Greek; every number in it traceable to the analysis.",
+   "spoken": "And then the page the minister will actually read. It leads with the finding, in the minister's units: among comparable adults, using the substitute lowered pressure by about two point two millimetres, with an interval from one point zero to three point four. It explains, in one sentence, why the newspapers saw the opposite. It states the assumptions in plain words, and a separate OLS sensitivity illustration. It does not quantify sensitivity to the missing-at-random assumption or directly bound the pooled AIPW effect. It says what independent evidence agrees. And it ends with advice the data support: keep the substitute on sale, promote it, and recommend clinical review for kidney disease or potassium-raising medicines because extra potassium can cause hyperkalaemia. No p-values, no Greek; every number in it traceable to the analysis.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/b9430ae468d14829.wav",
+   "duration": 52.525,
+   "tokens": 132,
+   "peak": 0.751129150390625,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The World can tell us what no real consultant ever learns. The substitute lowers everyone's pressure by exactly three millimetres. <bookmark mark='b'/> Our estimate, minus two point two two, has an interval that covers it. <bookmark mark='c'/> Had every income been known, the same estimator would have given minus two point two six; the remaining gap can reflect sampling variation and fitted-model approximation, which the interval was built to allow for. <bookmark mark='d'/> The headline's comparison had the wrong sign, and a narrow interval around it.",
+   "spoken": "The World can tell us what no real consultant ever learns. The substitute lowers everyone's pressure by exactly three millimetres. Our estimate, minus two point two two, has an interval that covers it. Had every income been known, the same estimator would have given minus two point two six; the remaining gap can reflect sampling variation and fitted-model approximation, which the interval was built to allow for. The headline's comparison had the wrong sign, and a narrow interval around it.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/a38d59902125fdb9.wav",
+   "duration": 28.275,
+   "tokens": 80,
+   "peak": 0.6800537109375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats42/en/SurveyReport_motion/result.json",
+ "input_sha256": "35d95a3a3480c541abef27c9e45101f79d80b399d38d1709c7197935d605463c"
+}

@@ -1,0 +1,11 @@
+[
+  {
+    "scene": "TrialPlan",
+    "fingerprint": "15969d72df4b1981e8b75cc89aef014f28656484a7b0be34f27325c12202b49a",
+    "report_sha256": "2991fc7d884c7fbeb94591d72d626be740c96c93b773556b8e27c7ad4d634c1c",
+    "start_seconds": 5.75,
+    "duration_seconds": 3.0,
+    "frame": "trialplan-protocol-title-7s.png",
+    "review": "Manually inspected the 7-second frame and full motion contact sheet. The legible protocol title introduces the spoken sentence, The protocol has six lines, before the six rows appear. Intentional short title introduction; no blank run, clipped content or prolonged unexplained empty screen. Sparse detector warning retained in the motion receipt."
+  }
+]

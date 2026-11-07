@@ -1,0 +1,127 @@
+{
+  "fingerprint": "15969d72df4b1981e8b75cc89aef014f28656484a7b0be34f27325c12202b49a",
+  "scope": "English sampled visual review; continuous playback/listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 11,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 40
+      },
+      "input_record": "renders/qa/native1080/stats42/en/Hook/result.json",
+      "input_sha256": "ae9038f8cb055d5fc24fbbe4900c2c0750046b7b2220269f3b76f8977a543932"
+    },
+    {
+      "scene": "TrialUnit",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/native1080/stats42/en/TrialUnit/result.json",
+      "input_sha256": "a28c1942dd4c699b0a5fe1dc9c7946ebc7f89f009065020e445866192c12a9af"
+    },
+    {
+      "scene": "TrialSize",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/native1080/stats42/en/TrialSize/result.json",
+      "input_sha256": "4c613e21c4a52cd5231f7e3b28bf07921a8587239f8e6985bad9b563a21afcbc"
+    },
+    {
+      "scene": "TrialPlan",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 54
+      },
+      "input_record": "renders/qa/native1080/stats42/en/TrialPlan/result.json",
+      "input_sha256": "6ee1d177250a2baaee3820e2cabe61fc65862615e4d05d6f890002eab068db99"
+    },
+    {
+      "scene": "SurveyGraph",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 38
+      },
+      "input_record": "renders/qa/native1080/stats42/en/SurveyGraph/result.json",
+      "input_sha256": "cb652e65a4b175cfd0bfc629442fe4b597d0c5ab841de69dbb7c5c1de1b5d32a"
+    },
+    {
+      "scene": "SurveyEstimate",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 66
+      },
+      "input_record": "renders/qa/native1080/stats42/en/SurveyEstimate/result.json",
+      "input_sha256": "e2ee286fa30a78396d8350fe4be20c648aa0488aae50039b717135b8c814a54d"
+    },
+    {
+      "scene": "SurveyReport",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/native1080/stats42/en/SurveyReport/result.json",
+      "input_sha256": "5b052998d939542d61e04d594915ac7e8b599f44b3ea2e3c4bc461ac5e223187"
+    },
+    {
+      "scene": "ExamLikelihood",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 11,
+        "untranslated-on-screen": 64
+      },
+      "input_record": "renders/qa/native1080/stats42/en/ExamLikelihood/result.json",
+      "input_sha256": "85b825b246c83c61870b00a9735f0f72cc5a5de46dd87330708b3b710e4db433"
+    },
+    {
+      "scene": "ExamBayes",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 10,
+        "untranslated-on-screen": 57
+      },
+      "input_record": "renders/qa/native1080/stats42/en/ExamBayes/result.json",
+      "input_sha256": "e7998b69d481c3a136c071f41c242a4531c572bb0f663a0f5e9fc9cc498d38fc"
+    },
+    {
+      "scene": "ExamNonparametric",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 10,
+        "untranslated-on-screen": 73
+      },
+      "input_record": "renders/qa/native1080/stats42/en/ExamNonparametric/result.json",
+      "input_sha256": "85c5b7efd16a7eebbadb67c83dfb89203e9cba8ea586fff0707061eb0c8ae9a1"
+    },
+    {
+      "scene": "ExamModern",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 11,
+        "untranslated-on-screen": 67
+      },
+      "input_record": "renders/qa/native1080/stats42/en/ExamModern/result.json",
+      "input_sha256": "4dc2005575e1aa87ff3545ff85aec31cc3adc2e77c47782088a050d507bc4289"
+    }
+  ]
+}

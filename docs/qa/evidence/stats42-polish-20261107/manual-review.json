@@ -1,0 +1,221 @@
+{
+  "scope": "Native endpoint sheets for all non-Outro chapters, Outro baseline sheet, all silent motion contact sheets, and one fresh narrated contact sheet manually inspected. Baseline non-Outro sheets not separately manually reviewed.",
+  "records": [
+    {
+      "part": "stats42",
+      "scene": "Hook",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats42/en/Hook/sheet.png",
+      "sha256": "ce23e8a73ef175861951ff556022242a422fd6250b5663f82c23c228dfdaaa4c",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T18:16:15.255937+00:00"
+    },
+    {
+      "part": "stats42",
+      "scene": "TrialUnit",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats42/en/TrialUnit/sheet.png",
+      "sha256": "3cf6a90492aa2863260ffac185b41c71779260407e835dac4c0c55d8ae886a56",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T18:16:15.293981+00:00"
+    },
+    {
+      "part": "stats42",
+      "scene": "TrialSize",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats42/en/TrialSize/sheet.png",
+      "sha256": "555770e97e9462d94c2bc181d823960788f9d893dee0f958e118f60e231f60ca",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T18:16:15.325132+00:00"
+    },
+    {
+      "part": "stats42",
+      "scene": "TrialPlan",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats42/en/TrialPlan/sheet.png",
+      "sha256": "42d206240466a291c273eea1b093506bb06272fbb8d53d82dc5cee6fb5297da9",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T18:16:23.741491+00:00"
+    },
+    {
+      "part": "stats42",
+      "scene": "SurveyGraph",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats42/en/SurveyGraph/sheet.png",
+      "sha256": "9eaeb18254af77b27c827957ca8833647f718cf1a8a7122217a660b273fc0a83",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T18:16:23.834479+00:00"
+    },
+    {
+      "part": "stats42",
+      "scene": "SurveyEstimate",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats42/en/SurveyEstimate/sheet.png",
+      "sha256": "4248f839f129ee3acd4d5855fa89a760006899a8fd1776fef46a3c4ba953ce08",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T18:16:23.894428+00:00"
+    },
+    {
+      "part": "stats42",
+      "scene": "SurveyReport",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats42/en/SurveyReport/sheet.png",
+      "sha256": "c8223699508ab76208559037757a6c4dadb5fb1958e1930bb8f4c3ee17dbd78b",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T18:16:48.504045+00:00"
+    },
+    {
+      "part": "stats42",
+      "scene": "ExamLikelihood",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats42/en/ExamLikelihood/sheet.png",
+      "sha256": "5954c09d048ddb9c3bdcaff897260e2397026895ba05e8ad388cd54078f01faa",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T18:16:48.540751+00:00"
+    },
+    {
+      "part": "stats42",
+      "scene": "ExamBayes",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats42/en/ExamBayes/sheet.png",
+      "sha256": "61ece7cacf817ed79b7daa84b93a6e7dd4aa5e256f5b180831a0aa4941995e26",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T18:16:48.602495+00:00"
+    },
+    {
+      "part": "stats42",
+      "scene": "ExamNonparametric",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats42/en/ExamNonparametric/sheet.png",
+      "sha256": "12ac42efc285b2425a4123c3a69df59af5ce84ecc5d3fc2012b2c27a641cbc62",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T18:17:00.043176+00:00"
+    },
+    {
+      "part": "stats42",
+      "scene": "ExamModern",
+      "kind": "native1080",
+      "sheet": "renders/qa/native1080/stats42/en/ExamModern/sheet.png",
+      "sha256": "df08a3f9d14452df076821163cbc9d3ddc1b572cf74180819df7f28ada66b46b",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T18:17:00.128017+00:00"
+    },
+    {
+      "part": "stats42",
+      "scene": "Outro",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats42/en/Outro/sheet.png",
+      "sha256": "c7de4f14b5b811dd4b54a0d08e340f5315066e7a7ba0d8eabc038ea22c5acf73",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T18:17:00.198733+00:00"
+    },
+    {
+      "part": "stats42",
+      "scene": "Hook_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats42/en/Hook_motion/motion_sheet.png",
+      "sha256": "6e38d5bb2a7aa4a5c664fcd73f4bd29eaed965f05250bd30d9c33122439815b2",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T18:17:17.476956+00:00"
+    },
+    {
+      "part": "stats42",
+      "scene": "TrialUnit_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats42/en/TrialUnit_motion/motion_sheet.png",
+      "sha256": "145e414a27548c2a9af30fa8e1e26c09a1e17b296a8697513cd94faf702adc99",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T18:17:17.506665+00:00"
+    },
+    {
+      "part": "stats42",
+      "scene": "TrialSize_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats42/en/TrialSize_motion/motion_sheet.png",
+      "sha256": "9e26d44212fabd6e59b12cc5fe94e9651a09f1d690eb15716aa34395cd13c221",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T18:17:17.536714+00:00"
+    },
+    {
+      "part": "stats42",
+      "scene": "TrialPlan_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats42/en/TrialPlan_motion/motion_sheet.png",
+      "sha256": "17e46c0419235d0c409df7b68b960b932d5389fd2ab58800ff2507202c13fd6b",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T18:17:30.626460+00:00"
+    },
+    {
+      "part": "stats42",
+      "scene": "SurveyGraph_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats42/en/SurveyGraph_motion/motion_sheet.png",
+      "sha256": "66431aedc2bd436a7c199ca95cb2ba4eaa5c33183e5afc8d5179e973903edd65",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T18:17:30.664759+00:00"
+    },
+    {
+      "part": "stats42",
+      "scene": "SurveyEstimate_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats42/en/SurveyEstimate_motion/motion_sheet.png",
+      "sha256": "d331dd63bdbd8729664e483c5f6276133818ff836f9d4ec9b4335547422757ae",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T18:17:30.701435+00:00"
+    },
+    {
+      "part": "stats42",
+      "scene": "SurveyReport_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats42/en/SurveyReport_motion/motion_sheet.png",
+      "sha256": "5695be7068692f1ac345c1ff202eaefcc4cf19934d4eb7d10f79ff738821a323",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T18:17:41.531401+00:00"
+    },
+    {
+      "part": "stats42",
+      "scene": "ExamLikelihood_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats42/en/ExamLikelihood_motion/motion_sheet.png",
+      "sha256": "9ec876c3bba7a9053b5e39b8a46d63f77d335bd00a3efcd8ff5c7954bab88185",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T18:17:41.584357+00:00"
+    },
+    {
+      "part": "stats42",
+      "scene": "ExamBayes_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats42/en/ExamBayes_motion/motion_sheet.png",
+      "sha256": "a28177f98aa8599dd7649a9a4579ea65dfcc16d3c19dd6ce91bb2c50eab2b4cb",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T18:17:41.621605+00:00"
+    },
+    {
+      "part": "stats42",
+      "scene": "ExamNonparametric_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats42/en/ExamNonparametric_motion/motion_sheet.png",
+      "sha256": "e9effd5c92862fb47bd2689e9eeb7246c929ffb4b71165c0fa8837dc50dc73a3",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T18:17:51.393674+00:00"
+    },
+    {
+      "part": "stats42",
+      "scene": "ExamModern_motion",
+      "kind": "series",
+      "sheet": "renders/qa/series/stats42/en/ExamModern_motion/motion_sheet.png",
+      "sha256": "9c062056ab78291dc5f097aeff4262365445d39689f48e249e7981b18418809c",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T18:17:51.448429+00:00"
+    },
+    {
+      "part": "stats42",
+      "scene": "SurveyReport",
+      "kind": "narrated",
+      "sheet": "renders/qa/narrated/stats42/en/SurveyReport/narrated-sheet.png",
+      "sha256": "93e781101dd659e7769bf6aca576cf56d0266354c5c0771ad29db925b451e510",
+      "review": "Manually viewed contact sheet: sampled content legible, layout contained, no substantive collision or misleading truncation observed. This is sampled visual review, not continuous playback or listening.",
+      "utc": "2026-11-07T18:17:51.494639+00:00"
+    }
+  ]
+}

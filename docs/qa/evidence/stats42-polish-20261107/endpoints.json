@@ -1,0 +1,138 @@
+{
+  "fingerprint": "15969d72df4b1981e8b75cc89aef014f28656484a7b0be34f27325c12202b49a",
+  "scope": "English sampled visual review; continuous playback/listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 11,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 40
+      },
+      "input_record": "renders/qa/series/stats42/en/Hook/result.json",
+      "input_sha256": "e306b1b4f292bf94e2dc8807ed128e30d400d4d855bda6319ab410ba2f5c640d"
+    },
+    {
+      "scene": "TrialUnit",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/series/stats42/en/TrialUnit/result.json",
+      "input_sha256": "9d1234bcab2bbe327b6ec6f4fe36253825e014ea826650e7e6348e5ac8d2670c"
+    },
+    {
+      "scene": "TrialSize",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/series/stats42/en/TrialSize/result.json",
+      "input_sha256": "134088aeef875a0d2a77e34bd2b0bb84d53c7c1bc662cf5ae34181e98195f6f5"
+    },
+    {
+      "scene": "TrialPlan",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 54
+      },
+      "input_record": "renders/qa/series/stats42/en/TrialPlan/result.json",
+      "input_sha256": "6f53c078e8a1da1e092d6803f25b8562fa8a92fe858f7b88235c7cdf35e1c414"
+    },
+    {
+      "scene": "SurveyGraph",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 38
+      },
+      "input_record": "renders/qa/series/stats42/en/SurveyGraph/result.json",
+      "input_sha256": "9981b46f1f39475009b6d37a00da22b86160e593e967fbb9fbb3a242be48bef2"
+    },
+    {
+      "scene": "SurveyEstimate",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 66
+      },
+      "input_record": "renders/qa/series/stats42/en/SurveyEstimate/result.json",
+      "input_sha256": "3c1ea8106272315b5408dd158d087955aa49ad0759e53c76885e9f168cc2487e"
+    },
+    {
+      "scene": "SurveyReport",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/series/stats42/en/SurveyReport/result.json",
+      "input_sha256": "287e45d10e042043371e2193dd440a6f493bb35030f0ee9249c7aa14bbe9b861"
+    },
+    {
+      "scene": "ExamLikelihood",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 11,
+        "untranslated-on-screen": 64
+      },
+      "input_record": "renders/qa/series/stats42/en/ExamLikelihood/result.json",
+      "input_sha256": "55d43d15dcdd0a6acde10cc0e029ab2aec81b0f46128daa97eca77077acd8e06"
+    },
+    {
+      "scene": "ExamBayes",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 10,
+        "untranslated-on-screen": 57
+      },
+      "input_record": "renders/qa/series/stats42/en/ExamBayes/result.json",
+      "input_sha256": "03916c702d25dea79f0affb60eb645862d22e75aaa09d07d3a223a99e959222a"
+    },
+    {
+      "scene": "ExamNonparametric",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 10,
+        "untranslated-on-screen": 73
+      },
+      "input_record": "renders/qa/series/stats42/en/ExamNonparametric/result.json",
+      "input_sha256": "6599d57e317c5ddf91242f810bc0b6c1b6d6ccc628249bc9b4797d3e3bf6d461"
+    },
+    {
+      "scene": "ExamModern",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 11,
+        "untranslated-on-screen": 67
+      },
+      "input_record": "renders/qa/series/stats42/en/ExamModern/result.json",
+      "input_sha256": "d60365328abdac1af38edd6577ce03264daade0fe73942de044553159cec2a52"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 17,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 67
+      },
+      "input_record": "renders/qa/series/stats42/en/Outro/result.json",
+      "input_sha256": "3efcb807c19f7c92151f5aefc50d04182b4400d4aac22e0eb6830499601cf774"
+    }
+  ]
+}

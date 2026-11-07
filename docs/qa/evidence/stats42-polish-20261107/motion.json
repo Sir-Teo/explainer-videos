@@ -1,0 +1,129 @@
+{
+  "fingerprint": "15969d72df4b1981e8b75cc89aef014f28656484a7b0be34f27325c12202b49a",
+  "scope": "English sampled visual review; continuous playback/listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 11,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats42/en/Hook_motion/result.json",
+      "input_sha256": "87b756fd45b30faad2f10f28bdf0b7a010710fdcc96c91c8ab6e90f1a2710a34",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 204 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 204 s\n"
+    },
+    {
+      "scene": "TrialUnit",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats42/en/TrialUnit_motion/result.json",
+      "input_sha256": "f564412954611f1d9d22db115a65db0e77a647624c65142da41064263c7153bf",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 297 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 297 s\n"
+    },
+    {
+      "scene": "TrialSize",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats42/en/TrialSize_motion/result.json",
+      "input_sha256": "c4e25ce5ed24ca1655280179783eec4d783c28ca61db007de46f37206294f57e",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 278 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 278 s\n"
+    },
+    {
+      "scene": "TrialPlan",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "dead-air-review": 1,
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats42/en/TrialPlan_motion/result.json",
+      "input_sha256": "4d8a24cdc534bd122a1ce77a131867a9344715b13f3b1aa2d44bda05d570d1c8",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 312 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 1, 3.0 s of 312 s\n   0:05.75   3.0 s   [  +5.8 s]\n",
+      "sparse_review": "Explicitly reviewed title introduction; see reviewed-sparse-segments.json"
+    },
+    {
+      "scene": "SurveyGraph",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats42/en/SurveyGraph_motion/result.json",
+      "input_sha256": "75f728c4003ba924be351bfa80452dcdaa19c329759486fdc9569d058de3c0a3",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 259 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 259 s\n"
+    },
+    {
+      "scene": "SurveyEstimate",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats42/en/SurveyEstimate_motion/result.json",
+      "input_sha256": "92ed44712b06c071d38b66065bbd75312fb0bcd5bc6cd2c40b148f962576576d",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 305 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 305 s\n"
+    },
+    {
+      "scene": "SurveyReport",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats42/en/SurveyReport_motion/result.json",
+      "input_sha256": "35d95a3a3480c541abef27c9e45101f79d80b399d38d1709c7197935d605463c",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 256 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 256 s\n"
+    },
+    {
+      "scene": "ExamLikelihood",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 11
+      },
+      "input_record": "renders/qa/series/stats42/en/ExamLikelihood_motion/result.json",
+      "input_sha256": "a79708e5b0330bf8b89a48d336c3bef38066b7d0adfc6803e62140b9289c2d91",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 394 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 394 s\n"
+    },
+    {
+      "scene": "ExamBayes",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 10
+      },
+      "input_record": "renders/qa/series/stats42/en/ExamBayes_motion/result.json",
+      "input_sha256": "3c3ee7ddfe72965559b05e698fee8aa80cf974385998f509bc33f829024998e9",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 413 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 413 s\n"
+    },
+    {
+      "scene": "ExamNonparametric",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 10
+      },
+      "input_record": "renders/qa/series/stats42/en/ExamNonparametric_motion/result.json",
+      "input_sha256": "0719706a2428ef89662aa7249b2e3b5db2bf95856126e855e000e8971da9a12e",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 389 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 389 s\n"
+    },
+    {
+      "scene": "ExamModern",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 11
+      },
+      "input_record": "renders/qa/series/stats42/en/ExamModern_motion/result.json",
+      "input_sha256": "0fe29457b61a0fb4524aa826535d043916aa6d5eba82bf7c9240bc8a6ff16544",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 441 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 441 s\n"
+    }
+  ]
+}
