@@ -38,8 +38,8 @@ From there the part covers:
 - **Kriging.**
   - The BLUP derived with a Lagrange multiplier; simple, ordinary and universal.
   - Universal kriging of Meuse with √(river distance): β̂ = 7.01 − 2.61 √d; the standard-error map.
-  - Leave-one-out RMSE of log zinc: overall mean 0.724, inverse-distance weighting 0.514, ordinary kriging 0.393,
-    universal 0.375.
+  - Leave-one-out RMSE of log zinc: overall mean 0.724, inverse-distance weighting 0.514, ordinary kriging 0.394,
+    universal 0.376.
   - The World: RMSE 0.54 over the island against 2.64 for the traffic trend alone; the REML plug-in's 90% intervals
     cover 83% of the island in this one field.
   - Known-covariance simple kriging equals Gaussian conditioning. Universal kriging corresponds to a flat trend prior when the design and resulting posterior are proper. BLUP moment properties and Gaussian interval coverage are distinct. Latent-field prediction excludes a new measurement nugget; observed-value validation includes it.
@@ -62,7 +62,7 @@ From there the part covers:
 - **GMRFs and the SPDE.**
   - Precision zeros as conditional independence (Besag 1974).
   - A 60 × 40 SPDE lattice: 30,204 nonzeros of 5.76 million. Conditioning on 150 noisy values by one sparse solve
-    gives a reconstruction error reported below after regenerating the coherent-prior example. Its deterministic scale gives unit average marginal prior variance; the realized sample is not divided by its random spatial SD. This small teaching sampler uses dense Cholesky, while conditioning is sparse. The free-boundary grid approximates a whole-space Matérn/SPDE construction. Practical range √(8ν)/κ is twice the scale ρ used in this part's Matérn definition.
+    gives a reconstruction RMSE of 0.612. Its deterministic scale gives unit average marginal prior variance; the realized sample is not divided by its random spatial SD. This small teaching sampler uses dense Cholesky, while conditioning is sparse. The free-boundary grid approximates a whole-space Matérn/SPDE construction. Practical range √(8ν)/κ is twice the scale ρ used in this part's Matérn definition.
   - Lindgren, Rue & Lindström; INLA.
 - **Areal data.**
   - Moran's I for the World's 200 towns' log case rates: 0.085, permutation p = 0.018 under an exchangeable-value reference. Unequal expected counts imply unequal raw-rate variance, so that reference is not the null of independent equal-risk Poisson counts. This is exploratory. The plotted curve is a normal approximation to permutation moments, not the actual permutation distribution.
@@ -82,7 +82,7 @@ From there the part covers:
   - Hodges & Reich; Paciorek's scales; restricted spatial regression; spatial+. Fine-scale exposure variation needs identifying assumptions, and no random-effect model automatically removes confounding. RSR's OLS equivalence concerns the standard Gaussian linear formulation; interval undercoverage is a risk, not a universal identity.
 - **Space and time.**
   - Separable covariances; Gneiting's family, whose spatial correlation spreads with the time lag.
-  - The World's daily readings: the island-wide daily mean has a lag-1 ACF of 0.72 (AR(1) weather with φ = 0.7).
+  - The World's daily readings: the daily station mean has a lag-1 ACF of 0.72 (AR(1) weather with φ = 0.7).
     Daily anomaly correlations are approximately distance-independent, with model value 0.64 = 4/(4 + 1.5²). A common weather effect contributes constant spatial covariance but cancels from same-day spatial differences and is invisible to that variogram. The daily station average is not a direct census of the island's spatial mean.
   - Dynamic models; advection–diffusion SPDEs.
 - **Gaussian processes in machine learning.**
@@ -93,8 +93,8 @@ From there the part covers:
 - **Honest prediction.**
   - The plug-in variance; Zimmerman & Cressie.
   - Kriging the World's stations: random 10-fold CV RMSE 0.99 against 1.34 for 3 × 3 spatial blocks, whose held-out
-    stations are 2.8 times further from the training data. The covariance and trend are refitted inside each training fold. Empirical coverage is reported separately for each validation design after the rerun; distance-aware variance does not guarantee calibration.
-  - Meuse's LOO z-scores under universal kriging: mean z² 1.05, 90% coverage 86%, with a long right tail.
+    stations are 2.8 times further from the training data. The covariance and trend are refitted inside each training fold. Empirical 90% coverage is 89.3% for random folds and 90.7% for spatial blocks in this realization; distance-aware variance does not guarantee calibration.
+  - Meuse's LOO z-scores under universal kriging: mean z² 1.09, 90% coverage 86%, with a long right tail.
   - The Board; a checklist.
 
 Data:
@@ -149,16 +149,16 @@ python tools/lecture_length.py stats39 --floor 50
 | 1 | Spatial data | n_eff = 5.7 of 300 |
 | 2 | Random fields | Bochner |
 | 3 | Variograms | nugget 0.054, partial sill 0.585 (total sill 0.639), range 0.90 km |
-| 4 | Kriging | LOO RMSE 0.724 → 0.375 |
+| 4 | Kriging | LOO RMSE 0.724 → 0.376 |
 | 5 | Matérn and identifiability | CV 38% vs 9% |
-| 6 | Likelihood | ν = 3/2 wins; 27 hours |
-| 7 | Scaling | 100,000 sites in 4.6 s |
+| 6 | Likelihood | ν = 3/2 wins; cubic timing extrapolation 12.3 hours |
+| 7 | Scaling | 100,000 sites in 4.3 s (this machine/load) |
 | 8 | GMRFs and the SPDE | 30,204 of 5.76M |
 | 9 | Areal data | I = 0.085; RMSE 0.58 → 0.18 |
 | 10 | Point processes | 359 of 578 |
 | 11 | Spatial confounding | 1.80 vs 1.81 |
 | 12 | Space and time | 0.64 at every distance |
-| 13 | GPs in machine learning | 8 evaluations vs 401 |
+| 13 | GPs in machine learning | best reached on evaluation 8; 11 overall; 401-point reference grid |
 | 14 | Honest prediction | 0.99 vs 1.34 |
 | 15 | Outro | — |
 
@@ -252,3 +252,11 @@ python tools/lecture_length.py stats39 --floor 50
 - **Part 44**: Brownian motion, the first Gaussian process.
 - **Part 53**: Gaussian-process priors and how fast posteriors contract.
 - **Part 60**: predicting in a new region as distribution shift.
+
+## QA reconciliation
+
+All fifteen numerical inputs regenerated after the source corrections. Twenty-two checks pass, including training-fold isolation, independent BLUP conditioning, deterministic GMRF scaling, covariance reconstruction from the enlarged circulant embedding, evaluation-count bookkeeping and kit checks. Meuse/Snow data and the embedding/World approximation receipts are retained in the QA evidence directory.
+
+The Board uses 250 independent fields. Field-level coverage fractions, rather than 12,500 correlated prediction sites, determine Monte Carlo error. Achieved coverage and empirical MCSE are 89.912% ± 0.306 percentage points (known covariance), 88.872% ± 0.374 (REML), 97.880% ± 0.154 (exponential), 28.0% ± 2.845 (OLS slope) and 86.0% ± 2.199 (GLS slope). These are Monte Carlo standard errors, not confidence half-widths. The REML prediction shortfall barely exceeds the Board's three-MCSE convention in this run; that label is descriptive of the specified simulation. Prediction intervals concern latent fields; validation against noisy observations includes a new nugget.
+
+English sampled visual review is pending. Chinese narration/captions, continuous listening and final masters remain open.
