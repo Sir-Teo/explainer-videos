@@ -1,347 +1,148 @@
 # Quant, Built — Part 16: Computing Prices
 
-Part 16 of a forty-three-part series on quantitative finance (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), in Act III, Derivatives. It is the numerical-analysis part: every method a desk uses
-to turn a model into a price, with its error rate proved, its algorithm built in the House's code, and all of them
-measured on one scoreboard. It covers:
+This part studies numerical prices, sensitivities and exercise policies on synthetic textbook contracts. It distinguishes sampling uncertainty, discretization and truncation bias, numerical-reference error, and model assumptions. An error bar or agreement between two implementations does not certify total pricing accuracy.
 
-* Monte Carlo's error bar, random numbers and reproducible parallel streams;
-* variance reduction: control variates (Kemna–Vorst), antithetics, stratification and Latin hypercubes, importance
-  sampling with the optimal shift learned by cross-entropy;
-* quasi-Monte Carlo: discrepancy, Koksma–Hlawka, Sobol nets, scrambling; the Brownian bridge, principal components and
-  effective dimension;
-* multilevel Monte Carlo: Giles's complexity theorem, Euler against Milstein;
-* American options: Longstaff–Schwartz run backward on real paths, the duality bound (Rogers; Haugh–Kogan;
-  Andersen–Broadie), a proper Bermudan reference, and the five-asset max-call against Part 17's network;
-* Greeks by bumps, pathwise and likelihood ratio (and Malliavin weights); adjoint differentiation and its cost;
-* finite differences: θ-schemes, von Neumann stability, Lax; Crank–Nicolson's ringing and Rannacher; the American put
-  as a linear complementarity problem (PSOR and the penalty method);
-* ADI for Heston on non-uniform grids;
-* Fourier pricing: Carr–Madan, Lewis, COS, and the race between every method;
-* the industry's machines (overnight runs, SIMM and FRTB sensitivities, Danske Bank's AAD, JPMorgan's FPGAs,
-  STAC-A2, QuantLib and ORE); quantum amplitude estimation built, simulated and costed; the 2023–2026 frontier.
+The 22 scenes contain an opening, 19 numbered chapters, a research chapter and a closing exercise set. The current English narration estimate is about 66 minutes; rendered duration includes animation and pauses. Both narration languages follow the same scientific qualifications.
 
-Every number is computed by the series' own code ([`compute.py`](compute.py), and the House's
-[`engine`](../../../explainer/quant/house/engine.py), tested in `tests/test_quant_house.py`) on one CPU core. No market
-data are used: the products are textbook cases (Black–Scholes with 20% volatility and 5% rates; Heston with
-v₀ = θ = 0.04, κ = 1.5, ξ = 0.5, ρ = −0.7; Broadie–Glasserman's five-asset max-call), so every method can be checked
-against an exact or near-exact price.
+## Scope and reproducibility
 
-*An education in methods, not investment advice. Firms and episodes are described from the public record; figures
-that come from a firm's or vendor's own account are labelled as such.*
+The existing [compute driver](compute.py) and House numerical algorithms are unchanged in this polish. All 37 original Part 16 cache items were restored through their ordinary fixed-seed commands. The referenced Part 17 stopping result was also restored normally. No market data, new market-strategy trials, cache refreshes or sealed holdouts were used. Part 16's historical trial counter remains **312**, and the series counter remains **23,562**.
 
-## Chapters (about 64 minutes)
+Examples include Black–Scholes calls and puts, discretely monitored Asian options, the Heston model with initial and long-run variance 0.04, mean reversion 1.5, volatility of variance 0.5 and correlation −0.7, and a five-asset Bermudan max-call. Different examples use different rates and dividends; the opening Heston comparison uses zero rates and zero dividends.
 
-* **One price, many machines** (2.8 min). Four engines race on one Heston call, drawn as the wall clock reaches each
-  run; the history from Crank–Nicolson (1947) and Metropolis–Ulam (1949) to quantum resource estimates (2021, 2024);
-  the plan; the House's pricing engine.
-* **1. Monte Carlo: an average with an error bar** (2.3). Three seeds' running estimates to a million paths with the
-  95% funnel; the strong law, the CLT and Slutsky; n(ε) = (1.96σ/ε)²; efficiency = 1/(variance × cost). The payoff's
-  standard deviation is 14.7, so ±1 cent at 95% needs about 8.3 million paths; the band covers the true price in 94.4%
-  of 1,000 runs. Berry–Esseen. Predict: twice the noise at a quarter of the cost is a draw.
-* **2. Random numbers and sample paths** (2.9). Inverse transform drawn live; Box–Muller; the Cholesky shear to
-  ρ = −0.7; W = LZ with LLᵀ = min(tᵢ, tⱼ). **Lab:** `brownian_bridge` reproduces the covariance to 6 × 10⁻¹⁷.
-  Counter-based streams (Philox): 1,000 paths in shuffled order are bit-identical; KS tests on 10⁶ draws; a Python loop
-  is about 740 times slower than numpy.
-* **3. Variance reduction: controls, mirrors and strata** (3.1). The regression line rotates and the histogram
-  collapses: Kemna–Vorst's geometric control has ρ = 0.9996 and divides the variance by about 1,300 (the stock: 2.8).
-  b* and 1 − ρ²; antithetics (call ρ = −0.50; straddle +0.64, worse); stratification (16 strata ÷24, 256 ÷504); Latin
-  hypercube on 64 dimensions ÷3.3. **Lab:** `mc_call`'s antithetic and control branches.
-* **4. Variance reduction: importance sampling** (2.4). The sampling density slides from θ = 0 to 7 above the
-  variance-ratio curve: strike-centred θ = 2.20 gives ÷98, the optimum near 2.75 gives ÷133, θ = 5 only ÷4.6 and
-  beyond ~6 worse than nothing (weight degeneracy, ESS). The zero-variance density, the convex second moment,
-  cross-entropy (two steps from 0 land between 2.80 and 2.91, then 2.86–2.87), Glasserman–Heidelberger–Shahabuddin.
-* **5. Quasi-Monte Carlo: filling space evenly** (3.4). Sixteen Sobol points light every elementary box (a (0,4,2)-net);
-  random points leave 4 empty and 4 crowded of 16. Discrepancy, Koksma–Hlawka, (log n)^d/n, van der Corput's digit
-  reversal, Joe–Kuo. L2-star discrepancy: slope −0.96 for Sobol in 2D; in 16D at these n neither Sobol nor Halton beats
-  random yet. Halton's coordinates 29–30 stripe. Scrambling gives error bars; dropping the first point multiplies the
-  error by 3.5 at n = 64 and 45 at n = 4,096 (Owen 2022).
-* **6. QMC on paths: the Brownian bridge and effective dimension** (2.9). 3D: what each normal adds to the path,
-  step / bridge / PCA; first-normal share of the average's variance 4.6% / 75.6% / 98.6%. The bridge crystallising.
-  ANOVA, truncation dimension, Karhunen–Loève. On the 64-fixing Asian at 16,384 paths, spread: pseudo-random 0.049,
-  Sobol 0.0127 (stalled), bridge 0.0016, PCA 0.00018 (270× less than random). Paskov–Traub (1995), CMO (1997).
-* **7. Multilevel Monte Carlo** (3.6). Coupled fine and coarse paths; the level bars; the complexity theorem proved
-  (telescoping, MSE split, Lagrange, the geometric series). **Replay:** the adaptive loop pass by pass at ε = 0.01 (10
-  levels; four seeds' costs within 0.3%). **Lab:** `_mlmc_level` (V₀ = 161 → V₁₀ = 0.0018). Cost: 4×, 11× and 26×
-  cheaper than standard at ε = 0.04, 0.02, 0.01. European call: β = 0.99 (Euler) against 1.96 (Milstein); ε²·cost from
-  ε = 0.04 to 0.005 rises 1,160 → 1,773 for Euler and falls 1,048 → 592 for Milstein. Rhee–Glynn's unbiased version.
-* **8. American options I: Longstaff–Schwartz on real paths** (2.8). The regression run backward date by date on the
-  House's paths, the boundary traced and compared with the tree's. Snell envelope, L² projection, cash flow not value,
-  lower bound. **Replay:** degree 1–5 × 10³–10⁵ fitting paths, 5 seeds: a line plateaus at 5.98; cubics reach the
-  Bermudan reference 6.067; with 10³ paths degree 2 is best. On 400,000 fresh paths 6.071 ± 0.011; Tsitsiklis–Van Roy's
-  value regression is 6.097 in sample (above the truth).
-* **9. American options II: the dual bound, and five assets** (3.4). One outer path with its inner fans and the policy's
-  martingale; the duality bound derived; AB's bound falls from 6.41 (50 inner) to 6.075 (1,600); the 5,000-step
-  Bermudan tree, 6.067, sits inside [6.061, 6.075]. **Lab:** `andersen_broadie_put`'s outer loop. Five-asset max-call:
-  LSM on 2,000,000 fresh paths 25.878 / 26.074 / 26.103 ± 0.014 with 2k / 20k / 200k fitting paths; Part 17's deep
-  stopping 26.107 ± 0.020: a statistical tie; Becker–Cheridito–Jentzen's published bounds [26.156, 26.162].
-* **10. Greeks three ways** (2.7). 3D: the bump's error over (h, n): a valley with independent numbers (11 at h = 0.01,
-  best 0.017), flat 7.5 × 10⁻³ with common numbers. Bump bias–variance, pathwise, likelihood ratio, Malliavin (Fournié et
-  al. 1999). Call and digital table; the digital's LR standard error is 3.3 times smaller than the bump's.
-* **11. Adjoint differentiation** (2.8). A one-path call's tape forward and backward with real numbers (the series'
-  autodiff); Jacobian products, the adjoint recursion, the cheap-gradient principle, Giles–Glasserman, Capriotti.
-  **Lab:** `aad_greeks` (five Greeks for 2.2 prices against 7.4 by bumping). Scaling on a basket, 2–128 inputs:
-  wall clock (best of several runs, shared machine; at 128 inputs AAD 1.5 prices, central bumps 380) and operation
-  counts (backward/forward ≈ 1.2 at every size, so AAD ≈ 2.2 prices). Check-pointing.
-* **12. Finite differences I: θ-schemes and stability** (2.7). 3D: the explicit march, stable with 2,000 steps (10.411)
-  and exploding with 200 (λ = 2). The θ-scheme, von Neumann's amplification factors live, Lax, the 400-step bound;
-  convergence (CN ratio 4.0). Schwartz (1977).
-* **13. Finite differences II: ringing, and the American put** (3.1). CN's g → −1 mode flipping sign; the digital's
-  gamma ringing and Rannacher's cure. 3D: the American surface with its stopping region and free boundary (S* ≈ 81 a
-  year out) over the European. The LCP; PSOR (Cryer 1971) traced sweep by sweep; the penalty method (Forsyth–Vetzal
-  2002): 6.0873 on 400 × 400 with two Newton iterations per step; PSOR 200 × 200 6.0789; tree 6.0900. **Lab:**
-  `fd_american_put`.
-* **14. ADI for Heston** (2.4). 3D: row and column sweeps on the sinh grid, the price surface and its delta, gamma and
-  variance sensitivity. Douglas, Craig–Sneyd, in 't Hout–Foulon. Uniform against sinh grids: 2.66 against 0.045 at
-  40 × 20 (59×), 0.59 against 0.0019 at 160 × 80.
-* **15. Fourier I: Carr–Madan and Lewis** (2.4). The α-damping slider; the transform; the derivation; λη = 2π/N as two
-  rulers; Lewis's integral agrees with COS to 12 decimals; CM's error against α plateaus at 1.1 × 10⁻³ (the strike grid).
-* **16. Fourier II: the COS method, and the race** (2.8). Heston's density rebuilt by 2 … 128 cosines, coefficients
-  decaying exponentially; the derivation; the truncation range (L = 4: 0.12; L = 16: 5 × 10⁻⁸). **Lab:** `cos_price`.
-  The race again, with Monte Carlo plus a control variate (variance ÷2.7: the line shifts, the slope stays).
-* **17. Industry: the overnight run, GPUs and adjoints** (2.8). Trades × scenarios; SIMM and FRTB sensitivities; Danske
-  Bank (Risk.net In-House System of the Year 2015, as reported); JPMorgan and Maxeler (eight hours to under four
-  minutes, the bank's and vendor's account; Weston et al. 2012); STAC-A2; QuantLib, ORE, the OCC's STANS. This machine
-  (shared, load ≈ 50 on 4 cores): 10⁶ payoffs by a Python loop 3.6 s, numpy 19 ms, float32 2.3 ms; 4 processes no faster
-  than one. COS beat Monte Carlo's best accuracy about 14,000 times faster. The nightly validation report.
-* **18. Quantum amplitude estimation** (2.9). The Grover rotation in the good/bad plane; the derivation (Rebentrost et al.
-  2018, Stamatopoulos et al. 2020, Brassard et al. 2002, Montanaro 2015, Suzuki et al. 2020). **Replay:** the MLAE
-  likelihood sharpening; 40 runs: slope −0.94 against −0.5, 33× smaller error than MC at 410,150 calls. Costs:
-  Chakrabarti et al. (2021): 8k logical qubits, T-depth 54 million, ~1 s (10 MHz T-gates against ~10 kHz logical clocks
-  then estimated); Stamatopoulos–Zeng (2024): 4.7k qubits, 10⁹ T-gates at 45 MHz.
-* **19. Frontier: pricing faster, 2023–2026** (2.4). **Replay (3D):** a Chebyshev pricer for Heston over (S₀, v₀),
-  error 4 × 10⁻² → 3.7 × 10⁻⁶ from 8 to 32 nodes per axis (1,024 COS calls); a query 0.11 ms against 0.35 ms for COS.
-  RQMC median-of-means (Pan–Owen 2023): 2,000× more accurate than the mean at 1,024 points. Junike (2024),
-  Bayer–Pelizzari–Schoenmakers (2023), Stamatopoulos–Zeng (2024), Dalzell et al. (2023), Glau–Kressner–Statti (2020).
-* **For the researcher: paths against basis functions** (4.6). Each date's regression β̂ = Ĝ⁻¹m̂ needs the sample
-  Gram matrix to converge, Var(Ĝ_kk) = (E ψ_k⁴ − (E ψ_k²)²)/N, so N must dwarf the basis's largest fourth moment
-  (Glasserman and Yu 2004: worst-case path counts exponential in the degree for Brownian motion, faster for GBM).
-  Exact fourth moments: orthonormal Hermite h_k of a Gaussian 93 at k = 3, 3.5 × 10⁴ at 6, 9.5 × 10⁹ at 12, about 9^k;
-  normalized powers of a lognormal at σ√t = 0.2, e^{4σ²tk²}, 1.0 × 10¹⁰ at k = 12. Experiment: Longstaff and
-  Schwartz's Bermudan put (S₀ 36, K 40, σ 20%, r 6%, one year, 50 dates; a 3,000-step tree gives 4.478), rules fitted
-  on N paths with polynomials in S/K, valued on 100,000 fresh paths (s.e. 0.009), three seeds: with 500 paths
-  4.451 at degree 4 and 4.349 at 12; with 2,000 4.464 and 4.452; with 10,000 and 50,000 every degree 3–12 is within
-  0.007 of the tree. The price's error is second order in the regression's near the boundary (Belomestny 2011's margin
-  condition). Three open problems; pause: a 2% continuation error costs of the order of 0.04%.
-* **The pricing engine, recap, desk questions, ten problems (two at qualifying-exam level)** (2.4). Rule 16; the trial
-  counter stays at 310.
+These are CPU experiments with varying configurations. In particular, the parallel workload uses process pools and the Part 17 stopping reference uses two training threads. Timings depend on implementation, repetition policy, workload, host and container quota. Published bank examples and quantum resource estimates are external claims with their own scope.
 
-## Hands-on
+The completed source pass preserves full saved display ranges. Some panels intentionally select observations: the American path fan shows the first 150 saved paths, and each date's regression panel shows the first 300 saved in-the-money observations. The nested-path illustration selects a positive-payoff example from up to 40 candidates. Neither selection is a representative performance estimate. ADI surfaces are explicitly shown as separately rescaled shapes with actual ranges printed. The finite-difference instability plot uses a signed logarithmic vertical coordinate. The Chebyshev error surface retains the cache's declared censoring at 10⁻¹².
 
-* Labs (real House code, output from the cache): `brownian_bridge` (ch. 2), `mc_call` (3), `_mlmc_level` (7),
-  `andersen_broadie_put` (9), `aad_greeks` (11), `fd_american_put` (13), `stochvol.cos_price` (16).
-* Replays: cross-entropy learning the IS shift (4), the MLMC adaptive loop (7), LSM backward and the basis × paths sweep
-  with seed bands (8), MLAE's likelihood (18), the Chebyshev pricer by node doubling (19).
-* 3D: the bridge's coordinates (6), the bump-error valley (10), the explicit march (12), the American surface (13), the
-  Heston surface and Greeks (14), the Chebyshev error surface (19).
-* New House functions (all in `explainer/quant/house/engine.py`, each tested): `geometric_asian_call`, `asian_control`,
-  `stratified_call`, `is_cross_entropy`, `path_matrix`, `variance_captured`, `l2_star_discrepancy`, `mlmc_run`
-  (Euler/Milstein, Asian/European, traced), `lsm_put_trace`, `lsm_put_eval`, `bermudan_tree`, `lsm_max_call`,
-  `aad_basket`, `fd_american_penalty`, `lewis_call`, `mlae`, `chebyshev2d`/`chebyshev2d_eval`, `heston_adi_grid`.
+## Chapters and qualifications
 
-## Textbook audit
+| Scene | Subject and interpretation |
+| --- | --- |
+| Opening | Separate recorded timings; Monte Carlo height is one sampling standard error, while grid and Fourier heights are absolute differences from a COS reference. These are different metrics. The history retains all 13 events. |
+| 1. Monte Carlo | Pointwise asymptotic intervals, finite-replicate coverage, centred Berry–Esseen moment, and variance times work. Coverage at many running sample sizes is not simultaneous coverage. |
+| 2. Paths | Inverse normal, Box–Muller, covariance factors and a power-of-two Brownian bridge. Philox uses path-indexed keys `[2026, j]`; the reproducibility demonstration does not prove independent streams or cross-platform identity. |
+| 3. Controls and strata | Fixed population coefficient versus a coefficient estimated from the same sample; antithetic comparisons at equal payoff evaluations; common histogram bins and denominators; empirical stratification and Latin-hypercube ratios. Moment matching can bias nonlinear estimates. |
+| 4. Importance sampling | Support and moment conditions; full variance-ratio curve; a best tested shift on a finite grid rather than an exact optimum. Cross-entropy optimizes a divergence and uses the strike through the payoff. Freeze a learned proposal before independent production evaluation. |
+| 5. QMC | Aligned dyadic elementary boxes, rather than arbitrary equal-area shapes. Koksma–Hlawka requires finite Hardy–Krause variation. Measured L2-star discrepancy differs from its supremum counterpart. Ten-scramble normal intervals are approximate. Finite-bit scrambling can produce zero; the normal transform clamps endpoints at 10⁻¹². |
+| 6. Bridge and PCA | Different factors preserve the joint Gaussian law, rather than individual paths. Reported coordinate shares concern a linear Brownian average. PCA maximizes discrete path energy, not variance capture for every payoff. Replicate standard deviation excludes bias. |
+| 7. MLMC | Telescoping, independent-level MSE decomposition, variance/work allocation and the full conditional complexity theorem. Last-correction bias is an adaptive proxy. The standard comparison estimates step work, rather than measuring matched total RMSE or seconds. |
+| 8. LSM | Simulated paths and 25 exercise dates: a Bermudan contract. A fixed policy's expectation is a lower bound; a noisy evaluation and an in-sample mean need not be. Polynomial sweeps reuse evaluation paths; seed bands are minima and maxima. |
+| 9. Duality | Finite-grid optional stopping; ideal Doob martingale versus noisy nested approximation; conditional Jensen comparison. Both reported point estimates have Monte Carlo error. The fresh policy evaluation replaces the in-sample lower label. |
+| 10. Greeks | Thirty-seed RMSE, smoothness conditions for central bumps, regularity for common numbers, and differentiation-under-expectation conditions. A digital's derivative is undefined at its strike; the Dirac derivative is distributional. Score identities need regular density/support and direct terms when the payoff explicitly depends on the parameter. |
+| 11. AAD | A scalar-output gradient in work proportional to the executed tape, with memory costs. One-path derivatives require pathwise conditions before becoming expectation Greeks. The derivative with respect to maturity is not calendar theta. Element-count proxies are not literal FLOPs. |
+| 12. Finite differences | The diffusion-only number σ²Smax²Δt/ΔS² has threshold one; the heat-equation number aΔt/Δx² has threshold one half. Drift, reaction and boundaries need further checks. Signed-log plots retain the unstable high-stock region. |
+| 13. LCP | Pure alternating mode and weak CN damping; two implicit half steps have a different factor from one full step. Full gamma ranges, conditional PSOR convergence, finite penalty error and update size versus residual. |
+| 14. ADI | Directional tridiagonal solves, mixed terms and conditional time order. Separately normalized price and derivative shapes show actual ranges. The variance-state partial derivative is not standard volatility vega. COS is a numerical reference. |
+| 15. Fourier | Relative log strike k=log(K/S₀), normalized call c=C/S₀ and a log-return characteristic function. Half-line inversion takes a real part. The Lewis formula shown assumes zero rates/dividends and uses exp(−iuk). Saved absolute-log-strike transform arrays are changed exactly to these coordinates. |
+| 16. COS | A high-term numerical density reference, finite density errors, L2 expansion conditions, tail/coefficient/series/roundoff errors and conditional exponential convergence. At L=40 the discrepancy is zero by construction against the same reference. COS recursion extensions can handle some barriers and Bermudans. |
+| 17. Industry | Dated primary accounts, scoped SIMM/FRTB statements, distinct timing workloads, and actual selected test tolerances. No invented nightly automation or model-validation certificate. |
+| 18. Quantum | Ideal binomial measurements for toy amplitude 0.3; no financial circuit was built. Oracle-query counts differ from runtime. Likelihood curves are maximum-normalized; percentile bands are not confidence intervals. Separate logical qubits, T-count, T-depth and assumed T-layer clocks. |
+| 19. Research selection | Chebyshev maximum over 200 fixed test sites, not a box supremum. Build-time break-even includes the actual build. The RQMC plateau is consistent with a 30-bit grid bias, not double precision. Theorems require their analytic and repetition-growth conditions. |
+| Research | A single Gram-diagonal RMS diagnostic is not a universal regression path budget. Unconditional moments differ from the in-the-money design. Exercise-loss bounds need policy occupancy, uniform continuation error and a margin condition. A worked halving-error answer follows the pause. |
+| Closing | Consistent recap, four desk questions and ten exercises with the assumptions below. |
 
-| Book · section | Chapter |
-|---|---|
-| Glasserman (2003) ch. 1 Foundations (efficiency = variance × work) | 1 |
-| Glasserman ch. 2 Generating random numbers and variables (inverse transform, Box–Muller, Cholesky) | 2 |
-| Glasserman ch. 3 Sample paths (random walk, Brownian bridge, PCA) | 2, 6 (short rates, jumps, LMM: Parts 5, 13, 19) |
-| Glasserman ch. 4 Variance reduction (controls, antithetics, stratification, Latin hypercube, moment matching, importance sampling) | 3, 4 |
-| Glasserman ch. 5 Quasi-Monte Carlo (discrepancy, Koksma–Hlawka, van der Corput, Halton, Sobol, nets, randomized QMC, effective dimension) | 5, 6 |
-| Glasserman ch. 6 Discretization methods | Part 5 (orders); 7 (MLMC uses them); barrier crossings Part 15 |
-| Glasserman ch. 7 Estimating sensitivities (finite differences, pathwise, likelihood ratio) | 10, 11 |
-| Glasserman ch. 8 Pricing American options (parametric, random trees, mesh, regression, duality) | 8, 9 |
-| Glasserman ch. 9 Applications in risk management | Part 40 (forward line in ch. 4) |
-| Savine (2018) Parts I–II (parallel simulation library) | 2, 17 |
-| Savine Part III (AAD, tapes, check-pointing) | 11 |
-| Andersen–Piterbarg vol. I, finite-difference chapters (θ-schemes, stability, non-uniform grids, ADI) | 12, 13, 14 |
-| Andersen–Piterbarg vol. I, Monte Carlo chapter (RNG, QMC, variance reduction, Greeks, regression) | 1–11 |
-| Duffy (2006): θ-schemes, CN's oscillations and their fixes, exponential fitting, free boundaries, ADI | 12, 13, 14 |
-| Seydel: random numbers, MC for SDEs, FD for standard and American options | 2, 1, 12, 13 (finite elements: named in ch. 12; desks rarely use them for vanillas) |
-| Oosterlee–Grzelak (2019): the COS method chapter | 16 |
-| Hull, *Options, Futures and Other Derivatives*: numerical procedures (MC, FD; trees in Part 10) | 1, 12 |
+## Selected restored results
 
-## Papers (on screen)
+These values identify the saved experiment. They are not promises for other products or machines.
 
-Crank–Nicolson (1947); Metropolis–Ulam (1949); Box–Muller (1958); Sobol (1967); Cryer (1971); Boyle (1977);
-Schwartz (1977); Brennan–Schwartz (1978); Rannacher (1984); Craig–Sneyd (1988); Kemna–Vorst (1990); Paskov–Traub
-(1995); Broadie–Glasserman (1996; random trees 1997; stochastic mesh 2004); Caflisch–Morokoff–Owen (1997); Rubinstein
-(1997, cross-entropy); Glasserman–Heidelberger–Shahabuddin (1999); Fournié–Lasry–Lebuchoux–Lions–Touzi (1999);
-Carr–Madan (1999); Longstaff–Schwartz (2001); Tsitsiklis–Van Roy (2001); Lewis (2001); Rogers (2002);
-Clément–Lamberton–Protter (2002); Forsyth–Vetzal (2002); Brassard–Høyer–Mosca–Tapp (2002); Andersen–Broadie (2004);
-Haugh–Kogan (2004); Giles–Glasserman (2006); Giles (2008); Fang–Oosterlee (2008; Bermudan COS 2009); Joe–Kuo (2008);
-Griewank–Walther (2008); in 't Hout–Foulon (2010); Capriotti (2011); Salmon–Moraes–Dror–Shaw (2011, Philox);
-Weston–Spooner–Racanière–Mencer (2012); Montanaro (2015); Rhee–Glynn (2015); Gaß–Glau–Mahlstedt–Mair (2018);
-Rebentrost–Gupt–Bromley (2018); Becker–Cheridito–Jentzen (2019); Stamatopoulos et al. (2020); Suzuki et al. (2020);
-Glau–Kressner–Statti (2020); Chakrabarti et al. (2021); Owen (2022, dropping the first Sobol point); Junike–Pankrashkin
-(2022); Pan–Owen (2023); Bayer–Pelizzari–Schoenmakers (2023); Dalzell et al. (2023); Junike (2024);
-Stamatopoulos–Zeng (2024).
+| Quantity | Saved result and limit |
+| --- | --- |
+| Plain-call payoff standard deviation | 14.7242; normal-approximation sampling half-width ±0.01 suggests 8.329 million iid paths. Bias is separate. |
+| Empirical interval coverage | 944 of 1,000 repetitions; this coverage estimate itself has sampling uncertainty. |
+| Geometric Asian control | Mean empirical variance ratio 1,299.7 across five seeds; stock control 2.836. Fitting and setup affect comparisons. |
+| Normal-shift importance sampling | Strike-centred shift ≈2.200; best tested grid shift 2.75, empirical ratio 133.0. Cross-entropy is a different optimization problem. |
+| 25-date policy evaluation | 6.070952 ±0.011418, one estimated s.e., on 400,000 fresh paths. In-sample mean 6.060957 is not the lower expectation estimate. |
+| Nested upper expectation estimate | 6.414419 ±0.056730 with 50 inner paths; 6.075002 ±0.009047 with 1,600. Each uses 400 outer paths; nested bias is additional. |
+| Same-date tree reference | 6.066965 at 5,000 steps; finite tree error remains. Point estimates need not enclose it. |
+| Five-asset policies | LSM with 200,000 fitting paths: 26.103290 ±0.013914 on two million evaluation paths. Part 17 network: 26.108393 ±0.019744 on one million. Evaluation errors do not measure training uncertainty or prove equivalence. |
+| AAD at 128 inputs | 0.7035 NumPy-price-baseline times versus 259.67 for central bumps. Different implemented computations and timing effects explain why a measured ratio may be below one; a gradient is not free. |
+| Parallel timing scope | Loop: 100,000 timed then ×10; NumPy: one million pre-generated values; pool: draw plus price. Best-of counts are 2, 5 and 3 respectively. Recorded host count 5 logical CPUs; container quota 4 CPU equivalents. |
+| Chebyshev | 32×32 labels; sampled maximum 3.7051×10⁻⁶ at 200 sites. Build 0.316876 s, fixed query 0.108865 ms versus COS 0.286893 ms; break-even ≈1,780 queries if these timings persist. |
+| RQMC median | Fixed 11 repetitions, 30 experiments and 30-bit Sobol grids. Leading uniform-grid bias for ∫exp(u)du is approximately −8.0014×10⁻¹⁰. |
 
-## Build it
+## Ten worked solutions — English
+
+1. **A fixed control coefficient.** For iid pairs with finite second moments and Var(C)>0,
+   Var(Ȳ−b(C̄−EC)) = [Var(Y)−2bCov(Y,C)+b²Var(C)]/n. Completing the square gives b*=Cov(Y,C)/Var(C), and minimum Var(Y)(1−ρ²)/n. This identity concerns a deterministic population coefficient. Same-sample fitting can bias the estimator; a frozen independent pilot preserves conditional unbiasedness.
+
+2. **Normal-shift importance sampling.** With p=N(0,1), qθ=N(θ,1), p(z)/qθ(z)=exp(−θz+θ²/2). Evaluate under qθ and weight every payoff. For zero dividend yield, log ST=log S₀+(r−σ²/2)T+σ√T z, so the strike threshold is zK=[log(K/S₀)−(r−σ²/2)T]/(σ√T). Setting θ=zK centres the proposal on the threshold. It need not minimize variance, and cross-entropy need not find that minimum either. Support and required moments must hold.
+
+3. **Finite-grid dual upper expectation.** Let h be integrable discounted rewards on a finite horizon and M an admissible integrable martingale with M₀=0. Optional stopping gives EMτ=0 for every admissible stopping time. Thus Ehτ=E(hτ−Mτ)≤E maxᵢ(hᵢ−Mᵢ). Take the supremum over τ. The maximum must be integrable. A noisy nested process is not automatically a martingale; its expected-maximum argument uses the separate conditional-unbiasedness/Jensen construction. Finite Monte Carlo estimates are not sure bounds.
+
+4. **Heat-equation stability.** For u_t=a u_xx, the explicit centred update has amplification g=1−4λsin²(ξ/2), λ=aΔt/Δx². For a≥0, |g|≤1 at all frequencies exactly when 0≤λ≤1/2, under the periodic/infinite-grid Fourier setup. In Black–Scholes, a=σ²S²/2, so its diffusion-only criterion is σ²Smax²Δt/ΔS²≤1. A full pricing scheme must also handle drift, reaction and boundaries.
+
+5. **Reverse-tape work.** For scalar output y and differentiable elementary operations, seed ȳ=1. Each edge i→j contributes v̄ⱼ ∂vⱼ/∂vᵢ to v̄ᵢ. Visiting each edge once costs O(W) for tape work W under the operation model, with storage or recomputation costs. Computing all n input directions by separate forward sweeps costs O(nW). The tape's own W can grow with n; there is no universal wall-clock factor, and many output components can require more reverse sweeps.
+
+6. **Hybrid call gamma.** In Black–Scholes with S₀,σ,T>0, let D=e^(−rT)(ST/S₀)1{ST>K}, the pathwise delta integrand. For the lognormal terminal density, the spot score is Z/(S₀σ√T). D also has explicit dependence 1/S₀ at fixed ST. Differentiating its expectation by the score method therefore gives
+   Γ=E[e^(−rT)ST/S₀² ·1{ST>K}·(Z/(σ√T)−1)].
+   The −1 term is essential. Density differentiation and integrability conditions justify the identity. A sample average estimates gamma with its own sampling variance; a discontinuous integrand should not be differentiated naively pathwise again.
+
+7. **MLMC when β=γ.** Assume the theorem's positive bias, correction-variance and work exponents, independent level estimates, α≥min(β,γ)/2 and appropriate integer-allocation/regularity conditions. With bias O(M^(−αL)), L=O(log ε⁻¹). Each √(VₗCₗ)=O(1) when β=γ, so the sum is O(L+1). Optimal continuous allocation gives cost proportional to ε⁻²(Σ√(VₗCₗ))², hence O(ε⁻²(log ε)²), including the theorem's allocation treatment. This does not certify an adaptive bias proxy.
+
+8. **FFT spacing.** Set uⱼ=jη and kₘ=−b+mλ. In exp(−iuⱼkₘ), exp(ijηb) is a pre-factor, while the j,m kernel is exp(−ijmηλ). Matching the N-point FFT kernel exp(−2πijm/N) requires ηλ=2π/N. At fixed η, doubling N halves strike spacing and extends frequency cutoff. At fixed N, changing η trades spacing, truncation and aliasing effects.
+
+9. **Gram diagonal and lognormal moments.** For iid states and finite Eψₖ⁴, Ĝₖₖ=N⁻¹Σψₖ(Xₙ)² has variance [Eψₖ⁴−(Eψₖ²)²]/N. If Eψₖ²=1 its standard deviation is √[(Eψₖ⁴−1)/N]. For S=exp(σW_t−σ²t/2), ESᵖ=exp[(p²−p)σ²t/2]. Therefore, for ψₖ=Sᵏ/√ES²ᵏ, Eψₖ⁴=ES⁴ᵏ/(ES²ᵏ)²=exp(4σ²tk²). This single-diagonal diagnostic does not control the full inverse Gram matrix or price error, and the unconditional law differs from in-the-money regression sampling.
+
+10. **One-date margin bound.** Given true continuation C, payoff h and fitted continuation Ĉ, a wrong decision loses Δ=|C−h| and requires Δ≤|C−Ĉ|. If |C−Ĉ|≤ε uniformly, expected loss ≤E[Δ1{0<Δ≤ε}]≤εP(0<Δ≤ε). A margin bound P(0<Δ≤u)≤Auᵅ gives loss ≤Aε^(1+α). Zero-gap atoms incur no loss and need not be excluded from the state distribution. Linear margin α=1 gives a quadratic bound with units and constants. Halving ε quarters this bound, not necessarily the realised loss. In multiple dates, use the Snell continuation and the policy-occupancy identity; dropping occupancy gives a sum of per-date bounds, rather than a naive equality over every wrong decision.
+
+## 中文说明与十题解答
+
+本部分在合成教材合约上研究数值定价、敏感度和行权策略，区分抽样不确定性、离散与截断偏差、数值参考误差和模型假设。标准误或两个实现相符，都不能认证总精度。二十二个场景包含开场、十九章、研究章和结尾。当前英文旁白估计约六十六分钟，成片还包含动画和停顿。
+
+本轮没有修改计算驱动或定价引擎算法。三十七项原始缓存及第十七部分停止参考按原有固定种子正常恢复，没有刷新缓存、读取密封保留集或新增市场策略试验。本部分累计计数为312，全系列为23,562。处理器配置因实验而异，并行案例使用多个进程，停止参考使用两个训练线程。
+
+图中保留保存数据的完整显示范围。部分图明确抽取子集：行权图显示前150条路径，各日期回归显示前300个保存价内观察值；嵌套路径特意选取有正支付的例子。它们不代表性能抽样。二维方向分裂曲面分别缩放形状，并显示实际数值范围；不稳定差分图采用带符号对数；插值曲面的原缓存明确在10⁻¹²处截尾。
+
+研究章的四阶矩公式只诊断单个格拉姆对角项，不是通用路径预算。价内设计分布、矩阵维度、非对角误差和条件数都重要。继续价值的一致误差与边界概率条件可给出行权损失上界，但不能把百分之二误差直接变成百分之零点零四价格损失。研究暂停题随后给出“误差减半，上界缩为四分之一”的条件解答。
+
+1. **固定控制系数。** 对独立同分布样本对且二阶矩有限，控制估计方差等于[Var(Y)−2bCov(Y,C)+b²Var(C)]/n。控制方差为正时，配方得到b*=Cov(Y,C)/Var(C)，最小方差为Var(Y)(1−ρ²)/n。它针对固定总体系数。同样本估计系数可能有偏；独立试验拟合后固定系数，可保持条件无偏。
+
+2. **正态平移。** 原密度为标准正态，提议密度均值为θ时，似然比为exp(−θz+θ²/2)。在提议分布下抽样并加权。零股息下，支付开始的正态阈值为[log(K/S₀)−(r−σ²/2)T]/(σ√T)。把θ设为该阈值，使提议中心对准支付区域，但未必方差最优。交叉熵最小化另一种目标，也未必找到方差最优值；还需支撑和可积条件。
+
+3. **有限网格对偶。** 支付已折现，期限有限，鞅可积且初值为零。可选停止给出EMτ=0，所以Ehτ=E(hτ−Mτ)≤E maxᵢ(hᵢ−Mᵢ)，再对策略取上确界。最大值也须可积。含噪嵌套过程不自动为鞅；相应上界期望依赖另外的条件无偏和詹森论证。有限蒙特卡洛点估计不是必然上界。
+
+4. **热方程稳定性。** 显式中心格式增长因子为1−4λsin²(ξ/2)，λ=aΔt/Δx²。在周期或无限网格傅里叶分析下，非负扩散系数的全频稳定条件是λ≤1/2。布莱克斯科尔斯扩散系数为σ²S²/2，因此纯扩散条件为σ²Smax²Δt/ΔS²≤1。漂移、反应和边界仍需检查。
+
+5. **反向计算带。** 标量输出伴随量从一开始，每条边把下游伴随量乘局部导数，累加到输入。通常基本运算成本模型下，每条边访问一次，工作量为计算带工作量的同阶，还需存储或重计算。分别传播全部n个输入方向需要n次前向扫描。计算带本身可随输入数增大，不存在通用墙钟倍数；多个输出可能需要更多反向扫描。
+
+6. **混合伽马。** 现价、波动率和期限为正时，看涨路径德尔塔被积函数为D=exp(−rT)(ST/S₀)1{ST>K}。对终端对数正态密度求现价导数，得分为Z/(S₀σ√T)。固定ST时，D还显式含1/S₀，因此伽马为E[exp(−rT)ST/S₀²·1{ST>K}·(Z/(σ√T)−1)]。减一项不可遗漏。恒等式需要密度微分和可积条件；样本均值仍有抽样方差，不能再次直接对指标函数做朴素路径微分。
+
+7. **多层复杂度。** 假设定理的正偏差、方差和成本指数，各层独立，并满足阿尔法至少为贝塔与伽马较小值一半等正则和整数分配条件。偏差按M的负阿尔法L次方下降，所以层数为误差倒数对数阶。贝塔等于伽马时，每项方差成本乘积的平方根有界，求和为层数阶。最优连续分配成本与误差负二次方乘该和的平方成比例，得到误差负二次方乘对数平方的复杂度。它不能认证自适应偏差代理量。
+
+8. **快速傅里叶步长。** 设频率为jη，对数执行价为−b+mλ。反演指数中，与j、m同时相关的核为exp(−ijmηλ)。要匹配N点快速傅里叶核exp(−2πijm/N)，必须ηλ=2π/N。固定η把N翻倍，执行价间距减半并扩展频率范围；固定N改变η则要权衡步长、截断和混叠。
+
+9. **格拉姆矩与对数正态矩。** 独立同分布状态且四阶矩有限时，样本对角项方差为[Eψ⁴−(Eψ²)²]/N。二阶矩归一为一时，标准差为四阶矩减一除路径数后开平方。对S=exp(σW_t−σ²t/2)，p阶矩为exp[(p²−p)σ²t/2]。代入归一化单项式，四阶矩为exp(4σ²tk²)。这只是单个对角项诊断，不能控制完整逆矩阵或价格误差；无条件分布也不同于价内回归分布。
+
+10. **单日期边界概率界。** 真实继续价值与支付的差距为Δ。错误决策要求Δ不超过继续价值估计误差；零差距不产生损失。若一致误差不超过ε，则期望损失至多为εP(0<Δ≤ε)。若概率不超过Aε的阿尔法次方，损失上界就是Aε的一加阿尔法次方。线性边界条件产生带单位和常数的二次上界；误差减半使这个上界变为四分之一，不保证实际损失同比变化。多日期问题必须使用最优斯内尔继续价值和策略访问权重；去掉访问权重只能给出逐日期上界之和，不能写成朴素的全日期错误决策等式。
+
+## Primary references and dated claims
+
+- Glasserman, *Monte Carlo Methods in Financial Engineering* (2003); Savine, *Modern Computational Finance* (2018); Andersen and Piterbarg, *Interest Rate Modeling*, volume I; Duffy, *Finite Difference Methods in Financial Engineering*; Oosterlee and Grzelak, *Mathematical Modeling and Computation in Finance*.
+- [Glasserman and Yu, “Number of Paths versus Number of Basis Functions in American Option Pricing” (2004)](https://business.columbia.edu/sites/default/files-efs/pubfiles/1372/Glasserman_number_of_paths.pdf), DOI 10.1214/105051604000000846. Worst-case polynomial settings, not a universal per-option budget.
+- [Pan and Owen, “Super-polynomial accuracy of one dimensional randomized nets using the median of means”](https://arxiv.org/abs/2111.12676), v3 July 2022, published 2023. Analytic derivative bounds and growing repetitions are essential to the stated asymptotics.
+- [Junike, “On the number of terms in the COS method for European option pricing” (2024)](https://link.springer.com/article/10.1007/s00211-024-01402-1). Error control is conditional on its regularity and bounds.
+- [Bayer, Pelizzari and Schoenmakers, “Primal and dual optimal stopping with signatures”](https://arxiv.org/abs/2312.03444v2), revised February 2025.
+- [Glau, Kressner and Statti, “Low-Rank Tensor Approximation for Chebyshev Interpolation in Parametric Option Pricing” (2020)](https://doi.org/10.1137/19M1244172); [author preprint](https://arxiv.org/abs/1902.04367).
+- [Chakrabarti et al., “A Threshold for Quantum Advantage in Derivative Pricing” (2021)](https://quantum-journal.org/papers/q-2021-06-01-463/). Autocallable Table 1 case: three assets, 20 steps, target error 0.002, about 8,000 logical qubits, T-count 1.2×10¹⁰ and T-depth 5.4×10⁷. TARF is a different case. These are resource estimates, not measured execution.
+- [Stamatopoulos and Zeng, “Derivative Pricing using Quantum Signal Processing” (2024)](https://quantum-journal.org/papers/q-2024-04-30-1322/). Stated QSP case: about 4,700 logical qubits, total T-count 2.4×10⁹, T-depth 4.5×10⁷; 45 MHz sequential T-layer rate to match an assumed classical second. The 16-fold count and four-fold qubit improvements compare this paper's arithmetic reference, not the 2021 headline. Amplitude error 0.001 and confidence 0.68 belong to that resource construction.
+- [Dalzell et al., “Quantum algorithms: A survey of applications and end-to-end complexities”](https://arxiv.org/abs/2310.03011v2), revised August 2025; Cambridge book edition April 2025.
+- [Risk.net, Danske Bank's 2015 in-house system award](https://www.risk.net/derivatives/2387869/house-system-year-danske-bank). Reported firm episode, not a local benchmark.
+- [University REF case study on Maxeler/JPMorgan](https://impact.ref.ac.uk/casestudies/CaseStudy.aspx?Id=42142), citing Weston et al. (2012), DOI 10.1002/cpe.1778. The eight-hour to under-four-minute example is specific to the described computation.
+- [Official STAC-A2 report](https://docs.stacresearch.com/news/2014/09/08/stac-reports-intels-new-haswell-server-chip-and-without-xeon-phi-stac-a2). Multi-asset, path-dependent Heston Greeks with early exercise; results concern specified implementations and include STAC-audited work.
+- [OCC margin methodology](https://www.theocc.com/risk-management/margin-methodology). STANS is a full-portfolio Monte Carlo system introduced in 2006.
+- [ISDA SIMM 2.9+2606 publication](https://www.isda.org/?p=1283022). Methodology publication is distinct from a firm's implementation or jurisdictional applicability. FRTB standardized market-risk capital also includes default and residual-risk components beyond its sensitivities-based method.
+
+## Local verification
+
+Ten existing `test_engine` tests passed during this review. They check selected fixed examples with their own tolerances, including stochastic allowances, covariance, stopping, adjoint, finite-difference, Fourier and toy amplitude/interpolation cases. Passing them does not establish every function's correctness, financial model adequacy or a bank's production controls.
+
+The visual pass is in progress. Final English/Chinese narration-beat receipts, silent-motion review, current-frame inspection and artifact-bound evidence will be recorded in [the sequential QA log](../../../docs/qa/quantitative-finance-polish.md) when complete. Text-only execution is not a rendered visual approval. Full continuous production-voice listening remains a separate pending pass.
+
+From the repository root, with the Manim environment active and original caches available:
 
 ```bash
-python -m videos.quant.quant16.compute                    # every number (the longest items take a few minutes each)
-EXPLAINER_TTS=silent python tools/qa_scene.py quant16 COS  # one chapter, silent, with a contact sheet
-python tools/make.py quant16 --cpu-voice -q m             # English and Chinese, narrated on the CPU
+python tools/qa_series.py quant16 --cached-only --resume --timeout 1800
+python tools/qa_series.py quant16 --lang zh --cached-only --resume --timeout 1800
+python tools/qa_series.py quant16 --motion --cached-only --resume --timeout 1800
+python tools/lecture_length.py quant16 --floor 50
 ```
-
-## Desk questions, with solutions
-
-1. **How many paths for a price to one basis point?**
-   * The 95% half-width is 1.96 σ_Y/√n, so n ≈ (1.96 σ_Y/ε)².
-   * For the one-year at-the-money call σ_Y ≈ 14.7, so ±1 cent at 95% needs about 8.3 million plain paths (2.2 million
-     for a one-standard-error cent).
-   * A control variate with a closed-form twin, stratification or Sobol points with a bridge cut that by one to three
-     orders of magnitude. Quote the error with the price.
-2. **Why is AAD's cost independent of the number of Greeks?**
-   * The price is a composition of elementary operations; reverse mode carries the adjoint ∂V/∂(intermediate) backward
-     through the recorded tape, one multiply–add per edge.
-   * One sweep yields ∂V/∂x for every input at once: a small constant (here 2.2) times one pricing, for five inputs or
-     five thousand. Bumping needs one or two extra pricings per input.
-   * The cost is memory: the tape stores the forward pass, so long simulations check-point.
-3. **Crank–Nicolson gives the right price for a digital, but the gamma oscillates. Why, and the fix?**
-   * CN's amplification factor (1 − 2λs)/(1 + 2λs) tends to −1 for high frequencies when λ is large: those modes flip
-     sign each step and barely decay. A payoff with a jump is full of them; differentiating twice magnifies them.
-   * Rannacher: start with a few fully implicit (half-)steps (factor 1/(1 + 4λs) → 0), then switch to CN; the scheme
-     stays second order.
-4. **LSM says 6.06, the dual bound 6.41. What next?**
-   * The gap is policy suboptimality plus the inner simulation's upward bias (Jensen: E max(· + noise) ≥ max E).
-   * Rerun the dual with more inner paths: here the bound fell from 6.41 (50 inner) to 6.075 (1,600). If the gap
-     does not shrink, improve the regression basis (or the fitting paths), and evaluate the policy on fresh paths.
-
-## Problems, with solutions
-
-1. **The optimal control variate.** Var(Y − b(C − EC)) = Var Y − 2b Cov(Y, C) + b² Var C, minimised at
-   b* = Cov(Y, C)/Var C; substituting gives Var Y − Cov²/Var C = Var Y (1 − ρ²).
-2. **Importance sampling's shift.** Under Z ~ N(θ, 1) the likelihood ratio is φ(z)/φ(z − θ) = exp(−θz + θ²/2), so
-   E[f(Z)] = E_θ[f(Z) e^{−θZ + θ²/2}]. Centring on the strike: S₀ exp((r − σ²/2)T + σ√T θ) = K, so
-   θ = (ln(K/S₀) − (r − σ²/2)T)/(σ√T) (2.20 for K = 160).
-3. **The duality bound.** For a stopping time τ, optional stopping gives E[M_τ] = M₀ = 0, so
-   E[h_τ] = E[h_τ − M_τ] ≤ E[max_t (h_t − M_t)]; take the supremum over τ. Equality holds for the martingale part of
-   the Snell envelope.
-4. **Stability of the explicit scheme.** For u_t = a u_xx, u_j^{n+1} = u_j^n + λ(u_{j+1}^n − 2u_j^n + u_{j−1}^n),
-   λ = aΔt/Δx². Substituting u_j^n = g^n e^{ijkΔx}: g = 1 − 4λ sin²(kΔx/2), and |g| ≤ 1 for all k iff λ ≤ ½. For
-   Black–Scholes a = σ²S²/2 is largest at S_max: Δt ≤ ΔS²/(σ²S_max²).
-5. **Why reverse mode is cheap.** The Jacobian of f(g(h(x))) is J_f J_g J_h. Forward mode multiplies from the right
-   carrying n columns (n passes); reverse mode starts from the 1 × m row of a scalar output, so every product is a row:
-   a constant multiple of one evaluation (Griewank's cheap gradient principle).
-6. **A mixed gamma estimator.** Pathwise delta is Δ = E[g(S_T)] with g(s) = e^{−rT} 1{s > K} s/S₀. Differentiating
-   g again would need the derivative of an indicator (a delta function), so differentiate the density of S_T instead
-   (score Z/(S₀σ√T)) and keep the explicit 1/S₀: Γ = E[g Z/(S₀σ√T)] − E[g]/S₀
-   = E[e^{−rT} 1{S_T > K} (S_T/S₀²)(Z/(σ√T) − 1)].
-7. **Multilevel cost when β = γ.** With V_l ∝ M^{−βl} and C_l ∝ M^{γl}, √(V_l C_l) is constant, so
-   Σ_{l ≤ L} √(V_l C_l) ∝ L. The bias M^{−αL} ≤ ε/√2 needs L ≈ log(1/ε)/(α log M), so the cost
-   2ε^{−2}(Σ√(V_lC_l))² = O(ε^{−2}(log ε)²).
-8. **λη = 2π/N.** The FFT computes Σ_j e^{−2πijm/N} x_j. The Carr–Madan sum is Σ_j e^{−iu_jk_m} ψ(u_j)η with
-   u_j = jη, k_m = −b + mλ, so e^{−iu_jk_m} = e^{ijηb} e^{−ijmηλ}: matching the kernel needs ηλ = 2π/N.
-9. **(qual) The Gram matrix's fourth moments.** Ĝ_kk = (1/N)Σ_nψ_k(X_n)² is a mean of N iid copies of ψ_k², so
-   Var Ĝ_kk = Var(ψ_k²)/N = (E ψ_k⁴ − (E ψ_k²)²)/N. With S = e^{σW_t − σ²t/2}, E S^m = e^{m(m−1)σ²t/2}, so for
-   ψ_k = S^k/√(E S^{2k}): E ψ_k⁴ = E S^{4k}/(E S^{2k})² = exp[(4k(4k − 1) − 2·2k(2k − 1))σ²t/2] = e^{4σ²tk²}.
-10. **(qual) Second-order loss.** Stopping pays h, continuing C; the rule continues when Ĉ > h. It is wrong only
-   when C and Ĉ lie on opposite sides of h, and then |C − h| ≤ |C − Ĉ|. So the loss is E[|C − h|1{wrong}] ≤
-   E[|C − Ĉ|1{|C − h| ≤ |C − Ĉ|}] ≤ ε·Pr(|C − h| ≤ ε) = O(ε²) when |C − Ĉ| ≤ ε and the margin condition
-   Pr(|C − h| ≤ ε) = O(ε) holds.
-
-## For the researcher
-
-* **The theorems.** Longstaff and Schwartz (2001); Clément, Lamberton and Protter (2002) on convergence; Glasserman
-  and Yu (2004), "Number of paths versus number of basis functions in American option pricing," *Ann. Appl. Probab.*
-  14(4); Stentoft (2004) on polynomial growth for bounded underlyings; Belomestny (2011), "Pricing Bermudan options by
-  nonparametric regression: optimal rates of convergence for lower estimates," *Finance Stoch.* 15.
-* **Simplifications.** One asset, monomials in S/K, in-the-money regressions only, three seeds; the tree's 50-date
-  Bermudan as truth; the fourth moments computed for the stationary laws, not for the conditional regressions.
-* **Open problems.** Bases and rates in high dimension; the dual bound's own trade-off; Greeks of regressed rules.
-
-## Data and reproducibility
-
-* No market data: all products are textbook cases with exact or near-exact references (Black–Scholes formulas,
-  Kemna–Vorst's geometric Asian, 2,000-step and 5,000-step trees, COS with 4,096 terms on a wide range).
-* Wall-clock times (`race`, `race_cv`, `aad_scale`, `parallel`, `lcp`, `cheb`) are best-of-N on one core of a shared
-  build machine, under load; they will differ on other hardware. Where the narration compares costs it also shows
-  machine-independent counts (tape operations, pricings, oracle calls).
-* Monte Carlo errors are reported as standard errors or root-mean-square errors over repeated seeds.
-* `american.bermudan_tree25` (a 25-step tree, 6.146) is no Bermudan reference and is not shown; `bermudan_ref` is.
-* Part 17's deep-stopping result is read from `.cache/quant17/stopping.json`, not recomputed.
-* No strategy was tested; the trial counter is unchanged at 310.
-
----
-
-# 量化金融，从零搭建 — 第16部分：计算价格
-
-这是本系列第三幕“衍生品”中讲数值分析的一部分：交易台把模型变成价格的每一种方法，证明它的误差阶，用我们公司的代码搭出算法，
-再把所有方法放在同一张记分牌上比较。本部分讲：
-
-* 蒙特卡洛的误差棒、随机数与可复现的并行随机数流；
-* 方差缩减：控制变量（Kemna–Vorst）、对偶变量、分层抽样与拉丁超立方、用交叉熵学出最优平移的重要性抽样；
-* 拟蒙特卡洛：差异度、Koksma–Hlawka不等式、Sobol网、扰乱；布朗桥、主成分与有效维数；
-* 多层蒙特卡洛：Giles的复杂度定理，欧拉格式对米尔斯坦格式；
-* 美式期权：在真实路径上倒着运行Longstaff–Schwartz、对偶上界（Rogers；Haugh–Kogan；Andersen–Broadie）、真正的百慕大参考值，
-  以及五资产最大值看涨期权与第17部分神经网络的比较；
-* 扰动法、路径法与似然比法（以及Malliavin权重）计算希腊字母；伴随算法微分及其成本；
-* 有限差分：θ格式、冯·诺依曼稳定性、拉克斯定理；克兰克-尼科尔森的振荡与Rannacher起步；作为线性互补问题的美式看跌期权（PSOR与罚函数法）；
-* 非均匀网格上赫斯顿模型的ADI；
-* 傅里叶定价：Carr–Madan、Lewis、COS，以及所有方法之间的竞赛；
-* 业界的机器（隔夜计算、SIMM与FRTB敏感度、丹斯克银行的AAD、摩根大通的FPGA、STAC-A2、QuantLib与ORE）；量子振幅估计的构造、模拟与成本；2023–2026年的前沿。
-
-所有数字都由本系列自己的代码在一个CPU核上算出。不使用市场数据：产品都是教科书案例，因此每种方法都能与精确或近乎精确的价格核对。
-
-*讲的是方法，不构成投资建议。涉及的公司与事件均依据公开记录；来自公司或供应商自述的数字均已注明。*
-
-## 各章（约64分钟）
-
-* **一个价格，多台机器。** 四台引擎为同一个赫斯顿看涨期权竞赛；从克兰克-尼科尔森（1947）、梅特罗波利斯-乌拉姆（1949）到量子资源估算（2021、2024）的历史；本部分安排；我们公司的定价引擎。
-* **1. 蒙特卡洛：带误差棒的平均。** 三个随机种子到一百万条路径的运行估计与95%漏斗；强大数定律、中心极限定理、Slutsky；收益标准差14.7，95%下正负一分钱约需830万条路径；误差带在1000次运行中覆盖真价94.4%。
-* **2. 随机数与样本路径。** 逆变换、Box–Muller、Cholesky剪切；**实验**：`brownian_bridge`把协方差复现到6 × 10⁻¹⁷；Philox计数器流乱序计算逐位相同；Python循环比numpy慢约740倍。
-* **3. 方差缩减：控制变量、镜像与分层。** Kemna–Vorst几何控制变量ρ = 0.9996，方差缩小约1300倍（股票仅2.8倍）；看涨期权对偶相关−0.50，跨式+0.64；16层÷24，256层÷504；拉丁超立方÷3.3。**实验**：`mc_call`。
-* **4. 方差缩减：重要性抽样。** 以行权价为中心÷98，最优约θ = 2.75时÷133，θ = 5仅÷4.6；交叉熵两步学出平移量。
-* **5. 拟蒙特卡洛：均匀地填满空间。** 数字网的格子检验；差异度与Koksma–Hlawka；van der Corput；二维中Sobol斜率−0.96；十六维中尚未胜过随机点；Halton第29–30维的条纹；丢掉第一个点使误差在64点时大3.5倍、4096点时大45倍。
-* **6. 路径上的拟蒙特卡洛：布朗桥与有效维数。** 第一个正态数的方差份额：逐步4.6%、布朗桥75.6%、主成分98.6%；64维亚式期权上主成分比随机路径离散程度小270倍。
-* **7. 多层蒙特卡洛。** 复杂度定理的证明；自适应循环回放（10层，四个种子成本相差0.3%）；**实验**：`_mlmc_level`；ε = 0.01时便宜26倍；欧式看涨期权β：欧拉0.99、米尔斯坦1.96。
-* **8. 美式期权（上）。** 倒着运行的回归与边界；基函数次数×路径数扫描；新路径上6.071 ± 0.011；百慕大参考值6.067；TvR样本内6.097偏高。
-* **9. 美式期权（下）。** 对偶上界的推导与一条外层路径；上界从6.41降到6.075；五千步百慕大树6.067落在区间内；**实验**：`andersen_broadie_put`；五资产最大值看涨期权：LSM 26.103 ± 0.014，深度停时26.107 ± 0.020，统计上平局。
-* **10. 三种方法算希腊字母。** 扰动误差的三维山谷；路径法、似然比法、Malliavin；数字期权上似然比法的标准误差小3.3倍。
-* **11. 伴随算法微分。** 一条路径看涨期权的计算带前向与反向；廉价梯度原理；**实验**：`aad_greeks`（2.2次定价对扰动法7.4次）；按输入数的缩放：128个输入时AAD 1.5次定价，中心扰动380次；运算计数显示反向约为前向的1.2倍。
-* **12. 有限差分（上）。** 显式格式的三维推进与爆炸；冯·诺依曼放大因子；拉克斯定理；收敛阶。
-* **13. 有限差分（下）。** 克兰克-尼科尔森的振荡与Rannacher；美式看跌期权的三维曲面与自由边界；PSOR与罚函数法（6.0873，每步两次牛顿迭代）；**实验**：`fd_american_put`。
-* **14. 赫斯顿模型的ADI。** 行列扫描、价格曲面与希腊字母；均匀网格与sinh网格：40 × 20时2.66对0.045。
-* **15. 傅里叶方法（上）。** α阻尼滑块；λη = 2π/N；Lewis积分与COS一致到小数点后12位。
-* **16. 傅里叶方法（下）。** 余弦重建密度；截断区间；**实验**：`cos_price`；带控制变量的蒙特卡洛重新参赛。
-* **17. 业界。** 交易×情景；SIMM与FRTB；丹斯克银行（据Risk.net报道）；摩根大通与Maxeler（据银行与供应商自述，八小时降到四分钟以内）；STAC-A2；QuantLib、ORE、OCC；本机实测（Python循环3.6秒、numpy 19毫秒、float32 2.3毫秒，四个进程并不更快）；夜间验证报告。
-* **18. 量子振幅估计。** Grover旋转；最大似然振幅估计回放：斜率−0.94对−0.5；资源估算：8000逻辑量子比特、T深度5400万（2021），4700逻辑量子比特、10⁹个T门、45 MHz（2024）。
-* **19. 前沿。** 切比雪夫定价器（32×32节点误差3.7 × 10⁻⁶）；随机化拟蒙特卡洛的中位数（Pan–Owen 2023）；阅读清单。
-* **写给研究者：路径数与基函数。** 每个日期的回归β̂ = Ĝ⁻¹m̂要求样本格拉姆矩阵收敛，Var(Ĝ_kk) = (E ψ_k⁴ − (E ψ_k²)²)/N，所以N必须远大于基中最大的四阶矩（格拉斯曼与Bin Yu 2004：最坏情形下路径数对布朗运动按次数指数增长，对几何布朗运动更快）。精确的四阶矩：高斯变量的标准正交埃尔米特多项式h_k在k = 3时93、6时3.5 × 10⁴、12时9.5 × 10⁹，约为9^k；σ√t = 0.2的对数正态归一化幂e^{4σ²tk²}，k = 12时1.0 × 10¹⁰。实验：朗斯塔夫–施瓦茨的百慕大看跌（S₀ 36、K 40、σ 20%、r 6%、一年、50个日期；3,000步二叉树给出4.478），用S/K的多项式在N条路径上拟合规则，在100,000条新路径上估值（标准误0.009），三个种子：500条路径时4次为4.451、12次为4.349；2,000条时4.464与4.452；10,000与50,000条时3–12次都在二叉树值的0.007以内。在边界附近，价格误差是回归误差的二阶量（别洛梅斯特尼2011的边际条件）。三个开放问题；暂停题：2%的继续价值误差只造成约0.04%量级的损失。
-* **定价引擎、回顾、交易台问题、十道习题（两道为资格考试水平）。** 第16条规矩；试验计数器仍为310。
-
-## 交易台问题与解答
-
-1. **要把价格算到一个基点，需要多少条路径？** 95%半宽是1.96 σ_Y/√n，所以n ≈ (1.96 σ_Y/ε)²。一年期平值看涨期权σ_Y ≈ 14.7，正负一分钱约需830万条普通路径（一个标准误差为一分钱时约220万条）。带闭式孪生的控制变量、分层或带布朗桥的Sobol点能把它减少一到三个数量级。报价时要同时报误差。
-2. **为什么AAD的成本与希腊字母的个数无关？** 价格是基本运算的复合；反向模式沿记录的计算带把伴随量向后传，每条边一次乘加。一次扫描同时得到对所有输入的导数：一次定价的一个小常数倍（这里2.2倍），无论输入有五个还是五千个。扰动法每个输入要多定价一到两次。代价是内存，长模拟要设检查点。
-3. **克兰克-尼科尔森给出数字期权的正确价格，但Gamma振荡。为什么？怎么修？** λ大时，放大因子(1 − 2λs)/(1 + 2λs)对高频趋于−1：这些模式每步变号、几乎不衰减。带跳跃的收益充满这类模式，求两次导数又放大它们。Rannacher：先走几个完全隐式（半）步（因子1/(1 + 4λs)趋于0），再换成克兰克-尼科尔森，格式仍是二阶。
-4. **LSM给出6.06，对偶上界6.41。下一步做什么？** 差距是策略的次优性加上内层模拟的向上偏差（Jensen）。先用更多内层路径重算对偶界：这里从6.41（50条）降到6.075（1600条）。如果差距不缩小，再改进回归基函数或拟合路径，并在新路径上评估策略。
-
-## 习题与解答
-
-1. **最优控制变量。** Var(Y − b(C − EC)) = Var Y − 2b Cov(Y, C) + b² Var C，在b* = Cov(Y, C)/Var C处最小；代入得Var Y (1 − ρ²)。
-2. **重要性抽样的平移。** Z ~ N(θ, 1)时似然比为exp(−θz + θ²/2)。以行权价为中心：θ = (ln(K/S₀) − (r − σ²/2)T)/(σ√T)（K = 160时为2.20）。
-3. **对偶上界。** 由可选停时定理E[M_τ] = 0，所以E[h_τ] = E[h_τ − M_τ] ≤ E[max_t (h_t − M_t)]，再对τ取上确界；取Snell包络的鞅部分时等号成立。
-4. **显式格式的稳定性。** 代入u_j^n = g^n e^{ijkΔx}得g = 1 − 4λ sin²(kΔx/2)，对所有k有|g| ≤ 1当且仅当λ ≤ ½；对布莱克-斯科尔斯得Δt ≤ ΔS²/(σ²S_max²)。
-5. **为什么反向模式便宜。** 雅可比矩阵J_f J_g J_h：前向模式从右乘，携带n列（n轮）；反向模式从标量输出的行向量开始从左乘，每次乘积都是行向量，成本是一次求值的常数倍。
-6. **混合Gamma估计量。** 路径法Delta为e^{−rT} 1{S_T > K} S_T/S₀；它对S₀的导数含有δ函数，所以对剩下的显式依赖改用似然比：Γ = E[e^{−rT} 1{S_T > K} (S_T/S₀²)(Z/(σ√T) − 1)]。
-7. **β = γ时多层方法的成本。** √(V_l C_l)为常数，所以和与L成正比；偏差要求L ≈ log(1/ε)/(α log M)，于是成本为O(ε^{−2}(log ε)²)。
-8. **λη = 2π/N。** FFT计算Σ_j e^{−2πijm/N} x_j；Carr–Madan的核为e^{−iu_jk_m} = e^{ijηb} e^{−ijmηλ}，要与之匹配必须ηλ = 2π/N。
-9. **（资格考试）格拉姆矩阵的四阶矩。** Ĝ_kk = (1/N)Σ_nψ_k(X_n)²是N个独立同分布ψ_k²的均值，所以Var Ĝ_kk = (E ψ_k⁴ − (E ψ_k²)²)/N。S = e^{σW_t − σ²t/2}时E S^m = e^{m(m−1)σ²t/2}，所以ψ_k = S^k/√(E S^{2k})的E ψ_k⁴ = E S^{4k}/(E S^{2k})² = e^{4σ²tk²}。
-10. **（资格考试）二阶损失。** 停止得h，继续得C；规则在Ĉ > h时继续。只有当C和Ĉ在h的两侧时它才错，此时|C − h| ≤ |C − Ĉ|。所以损失E[|C − h|1{错}] ≤ E[|C − Ĉ|1{|C − h| ≤ |C − Ĉ|}] ≤ ε·Pr(|C − h| ≤ ε)，在|C − Ĉ| ≤ ε且边际条件Pr(|C − h| ≤ ε) = O(ε)成立时为O(ε²)。
-
-## 数据与可复现性
-
-* 不使用市场数据；所有产品都有精确或近乎精确的参考价格。
-* 墙钟时间在共享且繁忙的构建机器上取多次运行中的最好值，换一台机器会不同；叙述比较成本时同时给出与机器无关的计数。
-* `american.bermudan_tree25`（25步二叉树，6.146）不是百慕大参考值，不在画面上使用；`bermudan_ref`才是。
-* 第17部分的深度停时结果读取自其缓存，不重新计算。
-* 本部分没有测试任何策略；试验计数器仍为310。
-
-## 写给研究者
-
-* **定理。** 朗斯塔夫与施瓦茨（2001）；Clément、Lamberton与Protter（2002）论收敛；格拉斯曼与Bin Yu（2004），*Ann. Appl. Probab.* 14(4)；Stentoft（2004）论有界标的下的多项式增长；别洛梅斯特尼（2011），*Finance Stoch.* 15。
-* **简化。** 单一资产、S/K的单项式、只对实值路径回归、三个种子；以50个日期的二叉树百慕大价格为真值；四阶矩按平稳分布计算，而非条件回归。
-* **开放问题。** 高维下的基与速率；对偶上界自身的取舍；回归规则的希腊字母。
