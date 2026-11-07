@@ -59,9 +59,34 @@ def nest(obj):
     return obj
 
 
-def eff_reps(per_rep, nominal=0.9) -> int:
-    v = np.var(np.asarray(per_rep, float), ddof=1) / len(per_rep)
-    return int(round(nominal * (1 - nominal) / max(v, 1e-12)))
+def mean_mc_se(per_rep):
+    """Monte Carlo standard error across independently calibrated datasets."""
+    return float(np.std(per_rep, ddof=1) / math.sqrt(len(per_rep)))
+
+
+def delayed_entry_sample(C, g, population=200_000, observed=4000):
+    """Separate age-40 population, independently scheduled entry, retained only while alive.
+
+    Covariate triples preserve their empirical joint distribution. Frailty is drawn at
+    age 40 and survivor selection changes its distribution among later entrants.
+    """
+    W = World()
+    idx = g.integers(0, len(C['age']), population)
+    male, sbp, bmi = (np.asarray(C[k])[idx] for k in ('male', 'sbp', 'bmi'))
+    Z = g.gamma(1 / W.FRAILTY_VAR, W.FRAILTY_VAR, population)
+    r1 = Z * np.exp(np.log(.006) - 20 * W.CVD_GOMPERTZ + W.CVD_SBP * (sbp - 140)
+                    + W.CVD_MALE * male + W.CVD_BMI * (bmi - 27))
+    r2 = np.exp(np.log(.006) - 20 * W.OTHER_GOMPERTZ + W.OTHER_MALE * male)
+    T1 = np.log1p(W.CVD_GOMPERTZ * g.exponential(1, population) / r1) / W.CVD_GOMPERTZ
+    T2 = np.log1p(W.OTHER_GOMPERTZ * g.exponential(1, population) / r2) / W.OTHER_GOMPERTZ
+    lifetime = 40 + np.minimum(T1, T2)
+    entry = g.uniform(40, 80, population)
+    eligible = np.flatnonzero(lifetime > entry)
+    sample = g.choice(eligible, observed, replace=False)
+    censor = entry[sample] + np.minimum(g.exponential(1 / W.DROPOUT, observed), 15)
+    exit = np.minimum(lifetime[sample], censor)
+    return dict(lifetime=lifetime, entry=entry[sample], exit=exit,
+                event=(lifetime[sample] <= censor).astype(int))
 
 
 def km_dict(km):
@@ -122,9 +147,14 @@ def compute_life():
     A2 = np.exp(lo(1, 60)) / W.OTHER_GOMPERTZ * (np.exp(W.OTHER_GOMPERTZ * t) - 1)
     th = W.FRAILTY_VAR
     S60 = (1 + th * A1) ** (-1 / th) * np.exp(-A2)
-    k = int(np.argmin(np.abs(S60 - 0.5)))
+    from scipy.optimize import brentq
+    def survival60(u):
+        a1 = np.exp(lp(1, 60)) * np.expm1(W.CVD_GOMPERTZ * u) / W.CVD_GOMPERTZ
+        a2 = np.exp(lo(1, 60)) * np.expm1(W.OTHER_GOMPERTZ * u) / W.OTHER_GOMPERTZ
+        return (1 + th * a1) ** (-1 / th) * np.exp(-a2)
+    median60 = brentq(lambda u: survival60(u) - .5, 0, 100)
     return nest({"graunt_ages": museum.GRAUNT_AGES, "graunt_alive": museum.GRAUNT_ALIVE, "ages": ages, "haz": haz,
-                 "grid": grid, "truth": S, "t60": t, "S60": S60, "median60": float(t[k]),
+                 "grid": grid, "truth": S, "t60": t, "S60": S60, "median60": median60,
                  "n": len(C["time"]), "deaths": int((C["status"] > 0).sum()), "censored": int((C["status"] == 0).sum()),
                  "admin": int((C["time"] >= W.COHORT_YEARS - 1e-9).sum()), "lost": int(((C["status"] == 0) & (C["time"] < W.COHORT_YEARS - 1e-6)).sum())})
 
@@ -145,31 +175,23 @@ def compute_censor():
     # naive 3: censored treated as survivors to the end
     s_surv = np.array([((t > u) | (d == 0)).mean() for u in grid])
     at10 = lambda s: float(s[np.argmin(np.abs(grid - 10))])  # noqa: E731
-    # delayed entry: survival by attained age, entry at the baseline age
-    age_in, age_out = C["age"], C["age"] + t
-    kma = SV.kaplan_meier(age_out, d, entry=age_in)
-    kmn = SV.kaplan_meier(age_out, d)  # ignoring delayed entry (as if followed from 40)
+    # The baseline World cohort resets frailty at recruitment, so it is unsuitable
+    # for an age-40 left-truncation demonstration. Generate the latter separately.
+    entry_data = delayed_entry_sample(C, rng(4001))
+    kma = SV.kaplan_meier(entry_data['exit'], entry_data['event'], entry=entry_data['entry'])
+    kmn = SV.kaplan_meier(entry_data['exit'], entry_data['event'])
     ag = np.arange(40, 95)
-    # truth on the age scale: a large synthetic cohort followed from 40 (frailty integrated, sbp/bmi/sex mixed)
-    g = rng(4001)
-    m = 200_000
-    male = g.random(m) < 0.49
-    sbp = np.asarray(C["sbp"])[g.integers(0, len(t), m)]
-    bmi = np.asarray(C["bmi"])[g.integers(0, len(t), m)]
-    Z = g.gamma(1 / W.FRAILTY_VAR, W.FRAILTY_VAR, m)
-    r1 = Z * np.exp(np.log(0.006) + W.CVD_GOMPERTZ * (40 - 60) + W.CVD_SBP * (sbp - 140) + W.CVD_MALE * male + W.CVD_BMI * (bmi - 27))
-    r2 = np.exp(np.log(0.006) + W.OTHER_GOMPERTZ * (40 - 60) + W.OTHER_MALE * male)
-    T1 = np.log1p(W.CVD_GOMPERTZ * g.exponential(1, m) / r1) / W.CVD_GOMPERTZ
-    T2 = np.log1p(W.OTHER_GOMPERTZ * g.exponential(1, m) / r2) / W.OTHER_GOMPERTZ
-    life = 40 + np.minimum(T1, T2)
-    s_age_true = np.array([(life > a).mean() for a in ag])
+    s_age_true = np.array([(entry_data['lifetime'] > a).mean() for a in ag])
     return nest({"grid": grid, "truth": truth, "km": s_km, "km_lo": SV.step_at(grid, km["t"], km["loglog"][0]),
                  "km_hi": SV.step_at(grid, km["t"], km["loglog"][1]), "as_dead": s_dead, "drop": s_drop, "as_alive": s_surv,
                  "at10": {"truth": at10(truth), "km": at10(s_km), "as_dead": at10(s_dead), "drop": at10(s_drop), "as_alive": at10(s_surv)},
                  "ages": ag, "age_entry": SV.step_at(ag, kma["t"], kma["surv"]), "age_naive": SV.step_at(ag, kmn["t"], kmn["surv"]),
                  "age_truth": s_age_true, "age_med": {"entry": float(ag[np.argmin(np.abs(SV.step_at(ag, kma["t"], kma["surv"]) - 0.5))]),
                                                       "naive": float(ag[np.argmin(np.abs(SV.step_at(ag, kmn["t"], kmn["surv"]) - 0.5))]),
-                                                      "truth": float(ag[np.argmin(np.abs(s_age_true - 0.5))])}})
+                                                      "truth": float(np.median(entry_data['lifetime']))},
+                 "entry_sample": {k: v for k, v in entry_data.items() if k != 'lifetime'},
+                 "entry_population": len(entry_data['lifetime']),
+                 "entry_scope": "separate age-40 simulation, independent scheduled entry, retained if alive"})
 
 
 def compute_counting():
@@ -181,7 +203,7 @@ def compute_counting():
     grid = np.linspace(0, 2.5, 251)
     N = np.array([((t <= u) & (e == 1)).sum() for u in grid])
     Y = np.array([(t >= u).sum() for u in grid])
-    Lam = np.concatenate([[0.0], np.cumsum((Y[:-1] + Y[1:]) / 2 * np.diff(grid))])
+    Lam = np.minimum(t[:, None], grid).sum(axis=0)  # exact integrated risk time, hazard one
     # many paths: M(1) = N(1) - Lambda(1) has mean 0 and variance E Lambda(1)
     Ms, Ls = [], []
     for _ in range(4000):
@@ -191,7 +213,7 @@ def compute_counting():
         Ls.append(np.minimum(tt, 1).sum())
     Ms = np.array(Ms)
     return nest({"grid": grid, "N": N, "Y": Y, "Lam": Lam, "M_mean": float(Ms.mean()), "M_var": float(Ms.var()),
-                 "Lam_mean": float(np.mean(Ls)), "hist": np.histogram(Ms, np.arange(-20.5, 21.5, 1.0))[0], "n": n})
+                 "Lam_mean": float(np.mean(Ls)), "M_values": Ms, "M_outside_hist": int(np.sum((Ms < -20.5) | (Ms > 20.5))), "hist": np.histogram(Ms, np.arange(-20.5, 21.5, 1.0))[0], "n": n})
 
 
 def pbc_design(rand_only=True):
@@ -295,7 +317,7 @@ def compute_hr():
     # RMST difference to tau = 4: int 1/(1+0.5t) - 1/(1+t) = 2 ln 3 - ln 5
     rmst = {"treated": 2 * math.log(3.0), "control": math.log(5.0)}
     return nest({"periods": periods, "hrs": hrs, "ts": ts, "frail": frail, "s0": s0, "s1": s1, "rmst": rmst,
-                 "cox_hr": math.exp(SV.cox_fit(np.minimum(T, 4.0)[::20], (T <= 4.0).astype(int)[::20], a[::20].astype(float),
+                 "cox_n": len(a[::20]), "cox_hr": math.exp(SV.cox_fit(np.minimum(T, 4.0)[::20], (T <= 4.0).astype(int)[::20], a[::20].astype(float),
                                                ties="breslow")["beta"][0])})
 
 
@@ -470,7 +492,8 @@ def compute_conformal():
 
     def q10(xs):
         S = SV.cox_survival(f, xs[:, None], grid)
-        return grid[np.argmax(S <= 0.9, axis=1)]
+        crossed = np.any(S <= .9, axis=1)
+        return np.where(crossed, grid[np.argmax(S <= .9, axis=1)], grid[-1])
 
     xt, Tt, Ct = draw(2000)
     q_cal, q_test = q10(x[cal]), q10(xt)
@@ -555,17 +578,17 @@ def compute_board():
             float(np.mean(plain)), reps),
         Row(40, r"KM 90\% CI, \ log-log", r"exponential lifetimes, \ $n = 20$, \ $S(t) = 0.30$", "coverage", 0.9,
             float(np.mean(ll)), reps),
-        Row(40, r"Cox Wald 90\% CI for $\beta$", r"exponential, \ $n = 60$, \ censoring 30\%", "coverage", 0.9,
+        Row(40, r"Cox Wald 90\% CI for $\beta$", r"exponential, \ $n = 60$, \ about 33\% censored", "coverage", 0.9,
             float(np.mean(cw)), len(cw)),
         Row(40, r"Cox CI, \ ever-treated \ (immortal time)", r"a null treatment started during follow-up, \ $n = 400$", "coverage", 0.9,
             float(np.mean(imm_n)), len(imm_n)),
         Row(40, r"Cox CI, \ treatment as time-varying", r"a null treatment started during follow-up, \ $n = 400$", "coverage", 0.9,
             float(np.mean(imm_tv)), len(imm_tv)),
         Row(40, r"conformal lower bound for $T$ \ (90\%)", r"Weibull lifetimes, \ exponential censoring, \ a wrong $q(x)$", "coverage", 0.9,
-            float(np.mean(conf)), eff_reps(conf)),
+            float(np.mean(conf)), len(conf), mc_se=mean_mc_se(conf)),
     ]
     save_rows(40, rows)
-    return nest({"rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows]})
+    return nest({"rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows], "conformal_replicates": conf})
 
 
 ITEMS = {
