@@ -118,19 +118,16 @@ class Hook(VoiceoverScene):
         rd = readout(r"\text{daily delta: costs paid}", lambda: float(cd[idx()]), digits=3, font_size=26, color=DELTA)
         rows = h["band"]["rows"]
         r5 = next(r for r in rows if abs(r["cost"] - 0.005) < 1e-9)
+        r5 = dict(r5, deep=load("hedge_seeds")["runs"]["0.005_3"]["eval"])
         side = VGroup(legend([(NET, r"the learned band, and the network's holding"), (DELTA, r"Black--Scholes delta, "
                                                                                                r"rebalanced daily")],
                              font_size=17), rb, rd,
                       wrapped_label(rf"on this path: the band trades on {L['trades_band']} of 30 days, delta on "
-                                    rf"{L['trades_delta']}. Over 200{{,}}000 paths the price to charge is "
+                                    rf"{L['trades_delta']}. Live policy: seed 3. Its 200{{,}}000-path empirical objective is "
                                     rf"{r5['deep']['price']:.2f} against {r5['delta']['price']:.2f}", 4.6, 19, GREY_A)
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.45)
         with self.voiceover(
-            "Watch it work on one simulated month: the stock on top; below, the corridor the network draws each day, "
-            "and what it holds. <bookmark mark='a'/> Inside the corridor it does nothing; when an edge reaches the "
-            "holding, it trades, but only to that edge. The delta hedger trades every single day. "
-            f"<bookmark mark='b'/> On this path the band trades on {L['trades_band']} days of thirty, delta on "
-            f"{L['trades_delta']}, and the fees pile up accordingly."
+            f"Watch the independently trained seed-three policy on one simulated month: stock above, holdings below. The teaser used seed two; this live panel's empirical evaluation uses seed three. <bookmark mark='a'/> At each daily decision, the band clamps the old holding to its nearest edge. Between decisions, the holding stays fixed even as the state changes. <bookmark mark='b'/> On this path the band trades on {L['trades_band']} of thirty days and daily delta on {L['trades_delta']}. These are one-path trade counts, not a typical-frequency estimate or a population-risk guarantee."
         ) as vo:
             self.play(FadeIn(top), FadeIn(bot), FadeIn(side[0]))
             self.add(price, band, sb, sd)
