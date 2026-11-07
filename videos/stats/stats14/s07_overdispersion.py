@@ -116,15 +116,14 @@ class Overdispersion(VoiceoverScene):
         rows[0][2].set_color(RES)
         rows[2][2].set_color(HIT)
         whys = [why(r"assumes variance $= \mu$"), why(r"assumes variance $= \phi\mu$: \ Wedderburn (1974)"),
-                why(r"Part 12's HC0: \ no variance model at all"), why(r"the estimate is fine; \ its uncertainty was not")]
+                why(r"independent-unit sandwich; large-sample inference"), why(r"mean-model consistency requires assumptions too")]
         with self.voiceover(
             "What does it do to the inference? <bookmark mark='a'/> The Poisson standard error of the slope is point zero two "
             "one: it believes each big town is a nearly exact measurement. <bookmark mark='b'/> Robert Wedderburn's "
             "quasi-likelihood of 1974 keeps the estimating equations and scales the variance by the dispersion: the standard "
             "error grows by the square root of twenty-two, to point one oh. <bookmark mark='c'/> The sandwich standard error "
-            "of Part 12 assumes nothing about the variance and gives point one eight, larger still, because here the variance "
-            "isn't proportional to the mean. <bookmark mark='d'/> All three share the same estimate. Overdispersion leaves the "
-            "coefficient usable and makes its Poisson standard error wrong by a factor of eight."
+            "of Part 12 allows heteroskedasticity under independent towns and a correct mean model, giving point one eight, larger still, because here the variance "
+            "isn't proportional to the mean. <bookmark mark='d'/> All three share the same estimate. With a correct conditional mean and independent towns, overdispersion can leave the coefficient consistent and makes its Poisson standard error wrong by a factor of eight."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -136,7 +135,7 @@ class Overdispersion(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"quasi-Poisson: \ variance $\phi\mu$; \ a quick fix when the variance is roughly proportional", font_size=24),
             label(r"negative binomial: \ a gamma-mixed Poisson, \ variance $\mu + \mu^2/k$ \ (Greenwood \& Yule 1920)", font_size=24, color=S.ALT),
-            label(r"sandwich standard errors: \ robust to any variance, \ with enough units", font_size=24, color=HIT),
+            label(r"sandwich standard errors: \ heteroskedasticity-robust under a correct mean and regularity", font_size=24, color=HIT),
             label(r"random effects: \ model the towns' differences directly \ (Part 25)", font_size=24, color=S.PRIOR),
             label(r"always check: \ dispersion, \ deviance on its df, \ residuals against fitted means", font_size=24, color=OBS),
         ), 12.4, 0.44, [0, 0, 0])
@@ -144,8 +143,7 @@ class Overdispersion(VoiceoverScene):
             "The remedies. <bookmark mark='a'/> Quasi-Poisson, a quick fix when the variance is roughly proportional to the mean. "
             "<bookmark mark='b'/> The negative binomial, a Poisson whose rate is itself gamma-distributed, with variance mu plus "
             "mu squared over k, exactly our simulation's structure; Major Greenwood and George Udny Yule used it in 1920 for "
-            "accident counts among munitions workers. <bookmark mark='c'/> Sandwich standard errors, robust to any variance "
-            "pattern when there are enough units. <bookmark mark='d'/> Or random effects, which model the towns' differences "
+            "accident counts among munitions workers. <bookmark mark='c'/> Sandwich standard errors, asymptotically valid with a correct mean, independent units, finite moments and no dominating town; it does not repair dependence or mean-model bias. <bookmark mark='d'/> Or random effects, which model the towns' differences "
             "directly, Part 25. <bookmark mark='e'/> And always check before trusting a Poisson standard error: the dispersion, "
             "the deviance against its degrees of freedom, and the residuals against the fitted means."
         ) as vo:
@@ -162,12 +160,12 @@ class Overdispersion(VoiceoverScene):
         with self.voiceover(
             "The Coverage Board, with eight rows. First, the logistic intervals: twenty-three flights at the Challenger "
             "temperatures, simulated ten thousand times from the fitted curve. In about two percent of samples the zeros and "
-            "ones are perfectly separated by temperature, and no finite estimate exists; those count as misses for Wald, while "
-            "a profile interval still exists and is checked directly. <bookmark mark='a'/> For the slope, the Wald interval "
+            "ones are completely or quasi-separated by temperature, and no finite estimate exists; those count as misses for Wald, while "
+            "a likelihood-ratio confidence set can still be checked directly using the correct likelihood supremum. <bookmark mark='a'/> For the slope, the Wald interval "
             "covers ninety-five point three percent: kept, even with the separated samples counted against it. The profile "
             "interval covers ninety-one point six: broken. <bookmark mark='b'/> For the probability at thirty-one degrees, the "
             "same pattern: Wald ninety-five point three, profile ninety-one point five. So at twenty-three flights it's the "
-            "theoretically better interval that falls short, because the chi-squared calibration of the likelihood ratio is "
+            "profile likelihood interval that falls short, because the chi-squared calibration of the likelihood ratio is "
             "itself a large-sample result, while the Wald interval here is saved by being very wide. Small samples keep "
             "asymptotic theory honest, and Part 16's bootstrap and Part 22's corrections return to this. "
             "<bookmark mark='c'/> Then the Poisson rate ratio on the two hundred towns. With truly Poisson counts, the classical "

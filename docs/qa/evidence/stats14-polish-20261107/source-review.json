@@ -1,0 +1,18 @@
+{
+  "part": "stats14",
+  "fingerprint": "90bb613d6c09bdbc684bd6f2e456a36357177ca1edb90e72b2cd29ea2d4481cf",
+  "scenes_reviewed": 13,
+  "compute_items": [
+    "challenger",
+    "latent",
+    "rates",
+    "clinic",
+    "tables",
+    "casecontrol",
+    "scoring",
+    "board"
+  ],
+  "focused_tests": 13,
+  "english_visual_review_complete": false,
+  "bilingual_production_approval": false
+}

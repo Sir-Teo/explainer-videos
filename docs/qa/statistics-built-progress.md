@@ -38,7 +38,7 @@ No part is signed off for bilingual production. The branch has zero `narration_z
 | 11 | `stats11` | 13 | Scientific source corrections complete; visual verification in progress |
 | 12 | `stats12` | 13 | Scientific source corrections complete; visual verification in progress |
 | 13 | `stats13` | 15 | Scientific source corrections complete; visual verification in progress |
-| 14 | `stats14` | 13 | Not yet reviewed chapter by chapter |
+| 14 | `stats14` | 13 | Scientific source corrections complete; visual verification in progress |
 | 15 | `stats15` | 12 | Not yet reviewed chapter by chapter |
 | 16 | `stats16` | 13 | Not yet reviewed chapter by chapter |
 | 17 | `stats17` | 12 | Not yet reviewed chapter by chapter |

@@ -105,13 +105,12 @@ class Simpson(VoiceoverScene):
         h2 = label(r"women's applications", font_size=24, color=WOMEN).next_to(m2, UP, buff=0.2)
         foot = fit_rows(VGroup(
             label(r"column width: \ how many applied; \ coloured height: \ the share admitted", font_size=22, color=GREY_A),
-            label(r"the same heights, \ department by department; \ different widths", font_size=24, color=OBS),
+            label(r"different application shares; \ department A also has a large rate gap", font_size=24, color=OBS),
         ), 12.4, 0.22, [0, -2.8, 0])
         with self.voiceover(
             "<bookmark mark='a'/> A mosaic plot shows it all at once. Each column is a department; its width is the number of "
             "applications, and the coloured part is the share admitted. Men on the left, women on the right. "
-            "<bookmark mark='b'/> The coloured heights match closely, department by department: admission didn't depend much "
-            "on sex. What differs is the widths. The men's picture is dominated by the wide, mostly coloured columns A and B; the "
+            "<bookmark mark='b'/> Most department rates are much closer than the pooled comparison; department A is an exception with a large gap. What differs is the widths. The men's picture is dominated by the wide, mostly coloured columns A and B; the "
             "women's by the wide, mostly dark columns C to F."
         ) as vo:
             vo.wait_until("a")
@@ -127,7 +126,7 @@ class Simpson(VoiceoverScene):
             cmath(r"p_{\text{men}}", r"=", r"\sum_k w^{\text{men}}_k\, p^{\text{men}}_k", font_size=34),
             cmath(r"p_{\text{women}}", r"=", r"\sum_k w^{\text{women}}_k\, p^{\text{women}}_k", font_size=34),
             cmath(r"w^{\text{men}}", r"\ne", r"w^{\text{women}}", font_size=34),
-            cmath(r"\text{so}", r":", rf"{100 * d['men_rate']:.1f}\%\ \text{{vs}}\ {100 * d['women_rate']:.1f}\%\ \text{{while}}\ p^{{\text{{women}}}}_k \gtrsim p^{{\text{{men}}}}_k", font_size=30),
+            cmath(r"\text{so}", r":", rf"{100 * d['men_rate']:.1f}\%\ \text{{vs}}\ {100 * d['women_rate']:.1f}\%\ \text{{while}}\ \text{{women higher in 4 of 6 departments}}", font_size=30),
         ]
         rows[2][2].set_color(RES)
         whys = [why(r"a weighted average of the department rates"), why(r"the same, \ with women's weights"),
@@ -148,7 +147,7 @@ class Simpson(VoiceoverScene):
 
     def meaning(self):
         rows = fit_rows(VGroup(
-            label(r"Bickel, \ Hammel \& O'Connell: \ the admissions committees showed no bias against women", font_size=24),
+            label(r"Bickel, \ Hammel \& O'Connell: \ the aggregate gap did not establish within-department discrimination", font_size=24),
             label(r"the gap came from where women applied: \ crowded fields with few places", font_size=24, color=WOMEN),
             label(r"which raises its own questions, \ about earlier choices and funding", font_size=24, color=GREY_A),
             label(r"the right comparison depends on the question: \ the department is part of the story", font_size=24, color=OBS),
@@ -156,10 +155,9 @@ class Simpson(VoiceoverScene):
         ), 12.4, 0.44, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Bickel, Hammel and O'Connell concluded that the admissions committees, taken together, showed "
-            "no bias against women; if anything, a small bias in their favour. <bookmark mark='b'/> The aggregate gap arose "
+            "little evidence of an overall within-department disadvantage for women. These aggregate counts alone cannot establish the absence of discrimination. <bookmark mark='b'/> The aggregate gap arose "
             "because women applied in larger numbers to departments that were crowded and had few places. <bookmark mark='c'/> "
-            "That raises its own questions, about the earlier choices and the funding that shaped those applications, but they "
-            "aren't questions about the committees. <bookmark mark='d'/> Which table is right depends on the question being "
+            "That raises its own questions, about the earlier choices and the funding that shaped those applications, and admissions mechanisms; a causal conclusion needs more than these counts. <bookmark mark='d'/> Which table is right depends on the question being "
             "asked. <bookmark mark='e'/> Deciding which variables to condition on is a causal question, and Parts 35 and 36 "
             "give the tools, diagrams among them, for answering it."
         ) as vo:

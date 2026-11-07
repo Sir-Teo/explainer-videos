@@ -59,6 +59,36 @@ def nest(obj):
     return obj
 
 
+def clipped_segments(xs, ys, rectangle):
+    """Clip line segments to a rectangle without flattening off-scale values."""
+    xmin, xmax, ymin, ymax = rectangle
+    points = np.column_stack((xs, ys))
+    result = []
+    for start, end in zip(points[:-1], points[1:]):
+        if not np.isfinite([start, end]).all():
+            continue
+        delta = end - start
+        lo, hi = 0.0, 1.0
+        for k, lower, upper in ((0, xmin, xmax), (1, ymin, ymax)):
+            if delta[k] == 0:
+                if not lower <= start[k] <= upper:
+                    hi = -1
+                    break
+            else:
+                a, b = sorted(((lower - start[k]) / delta[k], (upper - start[k]) / delta[k]))
+                lo, hi = max(lo, a), min(hi, b)
+        if lo <= hi:
+            result.append((start + lo * delta, start + hi * delta))
+    return result
+
+
+def histogram_density(values, edges):
+    """Density per full sample; observations outside the viewport retain their mass."""
+    counts, _ = np.histogram(values, edges)
+    return counts / (len(values) * np.diff(edges))
+
+
+
 def compute_challenger():
     lp = ols.fit(XC, Y)
     f = glm.logistic(XC, Y)
@@ -197,6 +227,46 @@ def compute_casecontrol():
                  "cc_age_cases": age[cs], "cc_age_ctrl": age[ct], "prevalence": float(sick[adults].mean())})
 
 
+def screening_design(age, test_a, test_b):
+    """Use the same count of positive tests in training and prediction."""
+    positives = np.asarray(test_a, float) + np.asarray(test_b, float)
+    return np.column_stack([np.ones(len(positives)), (np.asarray(age, float) - 50) / 10, positives])
+
+
+def logistic_supremum(y):
+    """Exact separation limit for an intercept plus the fixed temperature design.
+
+    At a mixed-outcome tied temperature, quasi-separation leaves a nonzero
+    binomial log-likelihood; it must not be replaced by the complete-separation
+    supremum of zero. Numerical failure is also not evidence of separation.
+    """
+    y = np.asarray(y, float)
+    if y.sum() in (0, len(y)):
+        return 0.0, None, 'complete'
+    ones, zeros = T[y == 1], T[y == 0]
+    if ones.max() < zeros.min() or zeros.max() < ones.min():
+        return 0.0, None, 'complete'
+    threshold = None
+    if ones.max() == zeros.min():
+        threshold = ones.max()
+    elif zeros.max() == ones.min():
+        threshold = zeros.max()
+    if threshold is not None:
+        tied = y[T == threshold]
+        p = tied.mean()
+        ll = special.xlogy(tied.sum(), p) + special.xlogy(len(tied) - tied.sum(), 1 - p)
+        return float(ll), None, 'quasi'
+    # Centering improves the finite-fit conditioning without changing the model.
+    center, scale = T.mean(), T.std()
+    Z = np.column_stack([np.ones(len(T)), (T-center)/scale])
+    fit = glm.logistic(Z, y, max_iter=200)
+    if np.max(np.abs(Z.T @ (y - fit.mu))) > 1e-7:
+        raise RuntimeError('Finite logistic fit failed its score convergence check')
+    beta = np.array([[1, -center/scale], [0, 1/scale]]) @ fit.coef
+    fit = glm.Glm('binomial', beta, XC, y, np.ones(len(y)), np.zeros(len(y)))
+    return fit.loglik, fit, None
+
+
 def compute_scoring():
     s = W.screening
     adults = np.flatnonzero(W.adult)
@@ -215,16 +285,15 @@ def compute_scoring():
     pred, obs, cnt = glm.calibration(p, ye, bins=10)
     pred_b, obs_b, _ = glm.calibration(p_bad, ye, bins=10)
     # a test that uses both screening results too
-    both = (s["test_a"][te].astype(float) + s["test_b"][te].astype(float))
-    p2_train = glm.logistic(np.column_stack([Xtr, s["test_a"][tr] + s["test_b"][tr]]), yt)
-    p2 = p2_train.predict(np.column_stack([Xte, both]))
+    p2_train = glm.logistic(screening_design(age[tr], s["test_a"][tr], s["test_b"][tr]), yt)
+    p2 = p2_train.predict(screening_design(age[te], s["test_a"][te], s["test_b"][te]))
     f2, t2, auc2 = glm.roc(p2, ye)
     keep = np.linspace(0, len(fpr) - 1, 200).astype(int)
     keep2 = np.linspace(0, len(f2) - 1, 200).astype(int)
-    return nest({"auc": auc, "brier": glm.brier(p, ye), "brier_bad": glm.brier(p_bad, ye), "brier_base": glm.brier(np.full_like(ye, ye.mean()), ye),
+    return nest({"auc": auc, "brier": glm.brier(p, ye), "brier_bad": glm.brier(p_bad, ye), "brier_base": glm.brier(np.full_like(ye, yt.mean()), ye),
                  "fpr": fpr[keep], "tpr": tpr[keep], "auc_both": auc2, "fpr2": f2[keep2], "tpr2": t2[keep2], "brier_both": glm.brier(p2, ye),
                  "cal_pred": pred, "cal_obs": obs, "cal_n": cnt, "cal_pred_bad": pred_b, "cal_obs_bad": obs_b, "prevalence": float(ye.mean()),
-                 "coef": f.coef})
+                 "coef": f.coef, "both_coef": p2_train.coef, "base_risk": float(yt.mean())})
 
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -242,8 +311,8 @@ def _intercept_only(y, offset, start=0.0):
         a += step
         if abs(step) < 1e-10:
             break
-    p = np.clip(special.expit(a + offset), 1e-15, 1 - 1e-15)
-    return a, float(np.sum(y * np.log(p) + (1 - y) * np.log1p(-p)))
+    eta = a + offset
+    return a, float(np.sum(y * eta - np.logaddexp(0.0, eta)))
 
 
 def _ll_eta31_fixed(y, e):
@@ -257,14 +326,14 @@ def _ll_eta31_fixed(y, e):
         b += step
         if abs(step) < 1e-10:
             break
-    p = np.clip(special.expit(e + b * (T - 31)), 1e-15, 1 - 1e-15)
-    return float(np.sum(y * np.log(p) + (1 - y) * np.log1p(-p)))
+    eta = e + b * (T - 31)
+    return float(np.sum(y * eta - np.logaddexp(0.0, eta)))
 
 
 def compute_board():
     """Logistic rows: a profile-likelihood interval covers the truth exactly when the likelihood-ratio statistic at the
     truth is below chi2_1(0.95), which works for every sample, separated or not (the supremum of the log-likelihood is
-    0 under separation, and the profile interval is then one-sided).  A Wald interval needs a finite estimate: under
+    0 under complete separation; tied mixed outcomes require a nonzero quasi-separation limit).  A Wald interval needs a finite estimate: under
     separation there is none, and the sample counts as a miss."""
     g = rng(14_000)
     f0 = glm.logistic(XC, Y)
@@ -272,22 +341,17 @@ def compute_board():
     eta31 = a0 + 31 * b0
     crit = stats.chi2.ppf(0.95, 1)
     hits = {"b_w": 0, "b_p": 0, "e_w": 0, "e_p": 0}
-    sep = 0
+    sep = quasi = 0
     for _ in range(R_BOARD):
         y = (g.random(23) < special.expit(a0 + b0 * T)).astype(float)
-        separated = (y.sum() in (0, 23) or np.max(T[y == 1]) < np.min(T[y == 0]) or np.min(T[y == 1]) > np.max(T[y == 0]))
-        f = None
-        if not separated:
-            f = glm.logistic(XC, y)
-            se = f.se()
-            if not np.all(np.isfinite(se)) or se[1] > 5 or not np.all(np.isfinite(f.coef)):
-                separated, f = True, None
-        ll_sup = 0.0 if separated else f.loglik
-        sep += separated
+        ll_sup, f, separation = logistic_supremum(y)
+        sep += separation is not None
+        quasi += separation == 'quasi'
         # profile: the LR test at the truth
         hits["b_p"] += 2 * (ll_sup - _intercept_only(y, b0 * T)[1]) <= crit
         hits["e_p"] += 2 * (ll_sup - _ll_eta31_fixed(y, eta31)) <= crit
         if f is not None:
+            se = f.se()
             z = 1.959964
             hits["b_w"] += abs(f.coef[1] - b0) <= z * se[1]
             x31 = np.array([1.0, 31.0])
@@ -320,7 +384,7 @@ def compute_board():
         Row(14, r"Poisson rate ratio, \ sandwich SE", over, "coverage", 0.95, pc["nb_s"], R_BOARD),
     ]
     save_rows(14, rows)
-    return {"rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows], "separated": sep}
+    return {"rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows], "separated": sep, "quasi_separated": quasi}
 
 
 ITEMS = {

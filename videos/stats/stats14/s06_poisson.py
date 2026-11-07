@@ -104,7 +104,7 @@ class Poisson(VoiceoverScene):
         whys = [why(r"rare events among many: \ Part 3's law of small numbers"), why(r"$\log N_i$: \ the offset, \ a term with coefficient fixed at 1"),
                 why(r"so each $e^{\beta}$ multiplies the rate: \ a rate ratio"), why(r"the same algorithm, \ the Poisson variance")]
         with self.voiceover(
-            "<bookmark mark='a'/> Each band's count is Poisson: rare events among many people, Part 3's law of small numbers, "
+            "<bookmark mark='a'/> We approximate each band's binomial count by Poisson: rare events among many people, Part 3's law of small numbers, "
             "the horse kicks again. <bookmark mark='b'/> Its mean is the band's population times a rate, and the log of the rate "
             "is linear in age and sex. Taking logs, the population enters as log N, a term in the linear predictor whose "
             "coefficient is fixed at one: an offset. <bookmark mark='c'/> Exponentiate, and each coefficient multiplies the "
@@ -168,14 +168,14 @@ class Poisson(VoiceoverScene):
         ]
         rows[1][2].set_color(OBS)
         whys = [why(r"the baseline rate (age coded as decades from 50)"), why(r"each decade multiplies the rate by 1.55"),
-                why(r"the interval contains 1"), why(r"and the model found no effect")]
+                why(r"the interval contains 1"), why(r"no detected association; not proof of equality")]
         with self.voiceover(
             "Reading the coefficients. <bookmark mark='a'/> With age coded in decades from fifty, the intercept gives the "
             "baseline: seven point seven cases per thousand women aged fifty. <bookmark mark='b'/> Each extra decade multiplies "
             "the rate by one point five five, with a tight interval, from one point five three to one point five seven, because "
             "there are seven thousand cases. <bookmark mark='c'/> Men versus women: a rate ratio of point nine nine, with an "
             "interval from point nine four to one point oh three, which contains one. <bookmark mark='d'/> And in the World, "
-            "the condition truly ignores sex. The model found what's there, and didn't find what isn't."
+            "the condition truly ignores sex. The fitted age trend is clear; the interval is compatible with no sex association, which is consistent with this simulator's construction."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -199,7 +199,7 @@ class Poisson(VoiceoverScene):
             "<bookmark mark='b'/> It's thirty-one on twenty-five degrees of freedom: about what chance alone would give. "
             "<bookmark mark='c'/> A second check is the Pearson dispersion: the squared residuals divided by the fitted means, "
             "averaged over the degrees of freedom. It's one point two two. <bookmark mark='d'/> For truly Poisson counts it "
-            "should be near one, because a Poisson variance equals its mean. When it's far above one, the Poisson standard "
+            "is expected to be near one under a suitable Poisson mean model; it is not a proof of fit, because a Poisson variance equals its mean. When it's far above one, the Poisson standard "
             "errors are wrong, which is the next chapter."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)
@@ -225,8 +225,7 @@ class Poisson(VoiceoverScene):
             "Part 3's law of small numbers. <bookmark mark='b'/> And for a small probability, the log and the logit nearly "
             "agree. <bookmark mark='c'/> So for a rare condition, Poisson regression's log rate ratio per decade, point four "
             "four, <bookmark mark='d'/> is close to logistic regression's log odds ratio per decade on the same World, point "
-            "four five. For rare outcomes the two models tell the same story, and the choice between them is about "
-            "convenience: Poisson handles exposure and person-time through the offset, logistic handles individual yes-or-no "
+            "four five. For rare outcomes the two models tell the same story, and the appropriate choice also depends on the sampling unit and mean model: Poisson handles exposure and person-time through the offset, logistic handles individual yes-or-no "
             "records."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.7, edge=6.9)

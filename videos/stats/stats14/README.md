@@ -16,8 +16,7 @@ From there the part covers:
   - p̂(31 °F) = 0.9996;
   - a Wald interval [0.48, 1] vs a profile interval [0.80, 1], with the profile log-likelihood drawn;
   - the extrapolation caveat;
-- Poisson regression with offsets on the World's screening condition by age and sex (the age effect found, the null
-  sex effect confirmed), and the rare-outcome link to logistic regression;
+- Poisson regression with offsets on the World's screening condition by age and sex (the age effect found, the sex estimate consistent with no effect, without proving equality), and the rare-outcome link to logistic regression;
 - overdispersion in the World's 200 towns: quasi-Poisson and sandwich SEs;
 - two-way tables at Berkeley 1973: χ², risk difference, RR, OR with Woolf's interval, OR vs RR, r × c tables;
 - Simpson's paradox: rates by department, application shares, mosaic plots, weighted averages;
@@ -33,7 +32,7 @@ Every number on screen is computed in [`compute.py`](compute.py) or inline in a 
 - the clinic visits are simulated on the World's towns.
 
 **Built in this part:**
-- **`statkit.glm` (I)** ([`explainer/stats/kit/glm.py`](../../../explainer/stats/kit/glm.py)):
+- **`statkit.glm` (I)** ([`explainer/stats/kit/glm.py`](../../../../explainer/stats/kit/glm.py)):
   - logistic and Poisson regression by IRLS, with step-halving, offsets and binomial trials;
   - classical, quasi and sandwich covariances; deviance and Pearson dispersion;
   - Wald and profile-likelihood intervals (constrained IRLS with continuation);
@@ -58,9 +57,9 @@ The Coverage Board gains eight rows, all 95% intervals, R = 10,000.
 | Poisson rate ratio, sandwich SE | 200 towns, gamma frailty | 90.61% | broken |
 
 Notes on the logistic rows:
-- In 205 of the 10,000 samples the outcomes are perfectly separated by temperature. They have no finite estimate,
+- In 205 of the 10,000 samples separation prevents a finite MLE: 115 are completely separated and 90 are quasi-separated at tied temperatures. They have no finite estimate,
   so they count as Wald misses.
-- The profile interval still exists in those samples (it is one-sided), and its coverage is checked directly: the
+- The likelihood-ratio confidence set is checked directly using the correct supremum, including the nonzero tied-outcome limit under quasi-separation: the
   likelihood-ratio statistic at the truth must fall below χ²₁(0.95).
 
 ## Build it
@@ -87,8 +86,8 @@ python tools/lecture_length.py stats14 --floor 50
 | 7 | Two-way tables | men 44.5% vs women 30.4%; X² = 92.2; OR 1.84 [1.62, 2.09], RR 1.47; dept × admission X² = 779, sex × dept 1,068 |
 | 8 | Simpson's paradox | A: women 82% vs men 62%; women ahead in 4 of 6 |
 | 9 | Three-way tables | OR_MH = 0.905; CMH X² = 1.52, p = 0.22; women's adjusted log-odds +0.100 (SE 0.081) vs −0.610 pooled; Breslow–Day 18.8, p = 0.002 (without A: 2.6, p = 0.63) |
-| 10 | Case–control studies | Doll & Hill OR 14.0 [3.3, 59]; World slopes 0.451 (all), 0.493 (cohort of 40,000), 0.411 (400 + 400); intercept shift 4.68 vs 4.63 predicted |
-| 11 | Scoring predictions | AUC 0.725 (age), 0.992 (age + tests); Brier 0.00990 (base), 0.00983 (age), 0.01099 (odds × 4), 0.00475 (with tests) |
+| 10 | Case–control studies | Doll & Hill crude aggregate OR 14.0; matched inference requires matched-stratum data; World slopes 0.451 (all), 0.493 (cohort of 40,000), 0.411 (400 + 400); intercept shift 4.68 vs 4.63 predicted |
+| 11 | Scoring predictions | AUC 0.725 (age), 0.992 (age + tests); Brier 0.00990 (training-prevalence forecast, 0.9%), 0.00983 (age), 0.01099 (odds × 4), 0.00345 (with tests) |
 | 12 | Outro | — |
 
 ## Sources

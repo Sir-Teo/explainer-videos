@@ -37,7 +37,7 @@ class ChallengerFit(VoiceoverScene):
         dash = ChallengerDashboard(ax, T, Y, f, x0=81, readout_pos=[5.0, 1.0, 0])
         cold = DashedLine(ax.c2p(53, 0), ax.c2p(53, 1.1), color=GREY_C, stroke_width=1.5)
         cl = label(r"coldest flight", font_size=18, color=GREY_B).next_to(cold, UP, buff=0.05)
-        foot = label(r"95\% band: \ Wald, \ on the log-odds scale", font_size=20, color=GREY_A).to_corner(DR, buff=0.4)
+        foot = label(r"pointwise nominal 95\% Wald intervals on the log-odds scale", font_size=20, color=GREY_A).to_corner(DR, buff=0.4)
         with self.voiceover(
             "Here is the Challenger dashboard: the flights, the fitted curve, and a ninety-five percent band around it. "
             "<bookmark mark='a'/> At eighty-one degrees, the warmest flight, the fitted chance of O-ring distress is about "
@@ -122,7 +122,7 @@ class ChallengerFit(VoiceoverScene):
             MathTex(rf"p(31) \in [{d['p31_profile'][0]:.2f},\ 1.00]", font_size=30, color=OBS),
         ), 4.0, 0.34, [4.9, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The better interval comes from the likelihood itself. For each possible value of the "
+            "<bookmark mark='a'/> An alternative interval uses the likelihood itself with an asymptotic likelihood-ratio cutoff. For each possible value of the "
             "log-odds at thirty-one degrees, find the best fit to the flights that has that value, and record its "
             "log-likelihood. That's the profile log-likelihood, in green. <bookmark mark='b'/> The Wald interval pretends it's "
             "the teal parabola. They agree near the top and part company in the tails: the real profile falls steeply on the "
@@ -159,18 +159,18 @@ class ChallengerFit(VoiceoverScene):
         l1 = label(r"Wald", font_size=24, color=S.ALT).next_to(ax.c2p(wl, 2), LEFT, buff=0.25)
         l2 = label(r"profile", font_size=24, color=S.LIK).next_to(ax.c2p(pl, 1), LEFT, buff=0.25)
         rows = fit_rows(VGroup(
-            label(r"both are 95\% intervals from the same fit", font_size=24),
-            label(r"the profile interval is invariant: \ the same answer on any scale", font_size=24, color=S.LIK),
+            label(r"both are nominal 95\% intervals from the same fit", font_size=24),
+            label(r"profile sets transform under one-to-one changes of scale", font_size=24, color=S.LIK),
             label(r"the Wald interval depends on the scale it was built on", font_size=24, color=S.ALT),
             label(r"which keeps its promise at $n = 23$? \ The Coverage Board, \ chapter six", font_size=24, color=OBS),
         ), 12.4, 0.3, [0, -1.7, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Side by side: the Wald interval, point four eight to one, and the profile interval, point "
             "eight oh to one, from the same fit to the same twenty-three flights. <bookmark mark='b'/> The profile interval has "
-            "a property the Wald interval lacks: it's the same whatever scale you compute it on, probability, odds or "
+            "a property the Wald interval lacks: it transforms consistently under one-to-one changes of scale, probability, odds or "
             "log-odds, because it's defined by the likelihood, not by an approximation on one scale. <bookmark mark='c'/> The "
             "Wald interval depends on the scale it was built on. <bookmark mark='d'/> Which keeps its promise with only "
-            "twenty-three flights? Theory favours the profile interval; the Coverage Board, at the end of chapter six, has a "
+            "twenty-three flights? Likelihood geometry favours profiling, while its chi-squared calibration is asymptotic; the Coverage Board, at the end of chapter six, has a "
             "surprise."
         ) as vo:
             self.play(FadeIn(A))
@@ -188,18 +188,17 @@ class ChallengerFit(VoiceoverScene):
             label(rf"the tail is the model's: \ logit {d['p31']:.4f}, \ probit 0.999998 \ (chapter two)", font_size=24),
             label(r"linear in temperature on the log-odds scale? \ The data cannot check it below 53$^\circ$F", font_size=24),
             label(rf"Dalal et al.'s binomial model, \ 6 rings per flight: \ each ring {d['p6_31']:.2f}, \ at least one: \ virtually 1", font_size=24, color=S.ALT),
-            label(r"every reasonable model says: \ colder is worse, \ and nothing in the data suggests 31$^\circ$F is safe", font_size=24, color=OBS),
+            label(r"the fitted models agree: \ colder is associated with more distress, \ and nothing in the data suggests 31$^\circ$F is safe", font_size=24, color=OBS),
         ), 12.6, 0.44, [0, 0.1, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Now the caveat that every statistics course must teach with this example. Thirty-one "
             "degrees is twenty-two degrees colder than any flight: an extrapolation. <bookmark mark='b'/> The probability "
             "there comes from the model's tail, and as chapter two showed, the logit and probit tails differ by a factor of "
             "more than a hundred in the chance of no distress. <bookmark mark='c'/> And nothing in the data can check whether the "
-            "log-odds keep falling in a straight line below fifty-three degrees. <bookmark mark='d'/> Dalal, Fowlkes and "
-            "Hoadley modelled each flight's six O-rings as binomial trials: each ring's chance of distress at thirty-one is about "
-            "point eight two, so at least one ring was virtually certain. <bookmark mark='e'/> The models disagree about the "
+            "log-odds keep falling in a straight line below fifty-three degrees. <bookmark mark='d'/> A second fit treats each flight's six O-rings as binomial trials, assuming equal risk and independence within flight: each ring's chance of distress at thirty-one is about "
+            "point eight two, so this binomial model puts the chance of at least one distress event very near one. Shared flight conditions can violate ring independence. <bookmark mark='e'/> The models disagree about the "
             "number. They agree about the direction: colder is worse, and nothing in twenty-three flights suggests that "
-            "thirty-one degrees was safe. The decision that night needed only that."
+            "thirty-one degrees was safe. The fitted probabilities describe thermal distress, not the probability of catastrophic vehicle loss."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
@@ -215,7 +214,7 @@ class ChallengerFit(VoiceoverScene):
         ]
         rows[2][2].set_color(OBS)
         whys = [why(r"selecting on the outcome hid the effect"), why(r"one curve, \ bounded in $[0, 1]$"),
-                why(r"invariant, \ honest about the tail"), why(r"a model's tail is an assumption")]
+                why(r"invariant under one-to-one changes; calibration still needs checking"), why(r"a model's tail is an assumption")]
         with self.voiceover(
             "So, the Challenger analysis in four lines. <bookmark mark='a'/> Use all the evidence, including the flights where "
             "nothing happened: selecting on the outcome hid the effect. <bookmark mark='b'/> Model the probability with a "
