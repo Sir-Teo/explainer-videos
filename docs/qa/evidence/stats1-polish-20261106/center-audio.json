@@ -19,7 +19,7 @@
    "tokens": 7,
    "peak": 0.442779541015625,
    "issues": [],
-   "elapsed": 0.04,
+   "elapsed": 0.01,
    "asr_review_leads": []
   },
   {
@@ -80,5 +80,5 @@
  ],
  "issues": [],
  "input_record": "renders/qa/series/stats1/en/Center/result.json",
- "input_sha256": "51fb51679395b1cfb328c109b07a1276b95d4ed06440c236e42dbf967fe4a289"
+ "input_sha256": "98a5b69e1f6a3fc4378c9165a94e51575752e3aada043d63fde69ef44bded77f"
 }

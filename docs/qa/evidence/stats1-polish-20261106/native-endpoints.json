@@ -1,5 +1,5 @@
 {
-  "fingerprint": "2b8db39ee49fd91f4c6f7a02fd2f65a3382dac27a973f83f8637b71ee88ab705",
+  "fingerprint": "90b24584f538b1d532a007b72b56bb5e01709faca47532b1030e54538c28821f",
   "scope": "English render review; listening and bilingual production gates remain open",
   "records": [
     {
@@ -11,7 +11,7 @@
         "untranslated-on-screen": 29
       },
       "input_record": "renders/qa/native1080/stats1/en/Center/result.json",
-      "input_sha256": "12218752741beb23fdad9663b38ca92c8d28613f14ae74ff23637346989c61f1"
+      "input_sha256": "e3644b88de2c2322c491fe5e4eef0f6d19c6246d4f177f5ed579ce214da2515d"
     },
     {
       "scene": "Correlation",
@@ -22,7 +22,7 @@
         "untranslated-on-screen": 27
       },
       "input_record": "renders/qa/native1080/stats1/en/Correlation/result.json",
-      "input_sha256": "6f4bdf0be0153c9bc825ebaad4bcc562329735b9dc5688391d9eb26c19a6a232"
+      "input_sha256": "96ab0360bb5141362767f826e583ba9c3134815911e1712420e80925830b559d"
     },
     {
       "scene": "Integrity",
@@ -33,7 +33,7 @@
         "untranslated-on-screen": 37
       },
       "input_record": "renders/qa/native1080/stats1/en/Integrity/result.json",
-      "input_sha256": "76d9be2d4a2d7086739206f02abcf99b57f842c052d608135f36555d2feec404"
+      "input_sha256": "7cdae8e276d2dd9d391dc9118ecac0a2ffcc84b893b0dbb6164592b52987acba"
     },
     {
       "scene": "QQ",
@@ -44,7 +44,7 @@
         "untranslated-on-screen": 35
       },
       "input_record": "renders/qa/native1080/stats1/en/QQ/result.json",
-      "input_sha256": "2d15873fa0bd0ab2588a8b0173ced91e897a9538c2df2d313150335d88be62c6"
+      "input_sha256": "100a9c2d4e0f3219735fda20791503fe66d4671910c20b1583d92919d19f4671"
     },
     {
       "scene": "Quantiles",
@@ -55,7 +55,7 @@
         "untranslated-on-screen": 30
       },
       "input_record": "renders/qa/native1080/stats1/en/Quantiles/result.json",
-      "input_sha256": "ca4f7b86797d1300b9b10a106563b707d893832136627b9f957efecb17f07a41"
+      "input_sha256": "793b6acc43fb386e56f2c04ce1c2a8d3278e94f56b6c00587314815e4e7eb3b8"
     },
     {
       "scene": "Spread",
@@ -66,7 +66,7 @@
         "untranslated-on-screen": 29
       },
       "input_record": "renders/qa/native1080/stats1/en/Spread/result.json",
-      "input_sha256": "5e026084d494c69efc0be5adb58555a67863f905e50e9886e52fa4b77c11a547"
+      "input_sha256": "4ebc57a0b20e16afcb6f650335a4cbf6cce59c64e19dcf939dcd60ceee574f29"
     }
   ]
 }

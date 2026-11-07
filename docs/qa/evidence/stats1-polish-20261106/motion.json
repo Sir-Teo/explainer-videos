@@ -1,5 +1,5 @@
 {
-  "fingerprint": "2b8db39ee49fd91f4c6f7a02fd2f65a3382dac27a973f83f8637b71ee88ab705",
+  "fingerprint": "90b24584f538b1d532a007b72b56bb5e01709faca47532b1030e54538c28821f",
   "scope": "English render review; listening and bilingual production gates remain open",
   "records": [
     {
@@ -10,7 +10,7 @@
         "narration-translation": 5
       },
       "input_record": "renders/qa/series/stats1/en/Spread_motion/result.json",
-      "input_sha256": "442a8ae02fead040f806d0d0f4ca208ecb3d4446f13c7e68de5fd4ec19ce603f",
+      "input_sha256": "1a7368ff1049ac17c628e61d8ba755e6c3e256982252ab56b31f4bf9bbf40c58",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 277 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 277 s\n"
     },
     {
@@ -21,7 +21,7 @@
         "narration-translation": 5
       },
       "input_record": "renders/qa/series/stats1/en/QQ_motion/result.json",
-      "input_sha256": "dd772ac364e79f153343e509cb2ef317f7a4a2f7bb1aa3700bba4547062f0d0a",
+      "input_sha256": "e682674e7f08d84e1632a7051e848b55e1f9ede7cd97a0accef066a2c4a92251",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 236 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 236 s\n"
     },
     {
@@ -32,7 +32,7 @@
         "narration-translation": 4
       },
       "input_record": "renders/qa/series/stats1/en/SameStats_motion/result.json",
-      "input_sha256": "e9e9ebd89cb087e1dabdcfa95537c26065525da7e00b78af98587c5b8748ba0f",
+      "input_sha256": "a235b1d46558ba881132b9ccfd892d51ede97f54b0d37fccf0d57b586a850727",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 172 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 172 s\n"
     },
     {
@@ -43,7 +43,7 @@
         "narration-translation": 6
       },
       "input_record": "renders/qa/series/stats1/en/Integrity_motion/result.json",
-      "input_sha256": "8cd705ab2f7f3e2673cd5f5100efec983d234239360737d0158390e578e4a678",
+      "input_sha256": "571ca19f5657f043788a3f7dacf42a9e35784bf8bb376159b9bd13139a6ef835",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 270 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 270 s\n"
     }
   ]
