@@ -33,8 +33,9 @@ Delivery workflow: continue directly on `quantitative-finance`. Commit and push 
 | 12 | Visual pass complete; full production-voice listening pending |
 | 13 | Visual pass complete; full production-voice listening pending |
 | 14 | Visual pass complete; full production-voice listening pending |
-| 15 | In progress: scientific, narration and visual QA |
-| 16–43 | Pending; do not infer approval from historical build notes |
+| 15 | Visual pass complete; full production-voice listening pending |
+| 16 | In progress: scientific, narration and visual QA |
+| 17–43 | Pending; do not infer approval from historical build notes |
 
 ## Part 1: The Fair Game
 
@@ -1120,4 +1121,23 @@ and English soft subtitles), its companion subtitle/chapter files, and the actua
 166.4-second opening at
 `media/quant14/narrated_qa/videos/s01_hook/480p15/Hook.mp4`.
 
-Part 15 is next in the sequential pass.
+Part 15 continues the sequential pass below.
+
+
+## Part 15: Exotics and Structured Products
+
+Visual pass complete on `quantitative-finance`:
+
+- Specify inclusive monthly knock-out, strict daily knock-in, later redemption and recovery, conditional coupons, and the 21-trading-day model month. Decomposition uses the coupon solve's same paths; the loss leg is cancelled by autocall.
+- State reflection, static-symmetry, Asian-control, numeraire, UVM and martingale-bound assumptions. Correct the call-spread limit at the strike, terminal atoms, right put derivative, and infimum/subgradient conditions.
+- Preserve full plotted paths, scatter, Greek and estimator ranges. Use common histogram counts and all-path denominators, and match the UVM incumbent weights to its displayed objective.
+- Separate issuer position delta, hedge units and cash exposure. Derive hypothetical rebalancing from unit changes, qualify state changes and vega policy, and keep empirical impact distinct from observed orders and causal evidence.
+- Distinguish unequal calibration fits from common-marginal bounds, empirical payoff tilts from calibrated pricing models/AVAs, and repeated synthetic references from an untouched market holdout. Report proxy error, batch timing and label/training costs separately.
+- Correct Petra Vokata's 2021 JFE citation; date the Korean/Natixis record and model-governance updates; state accounting/capital applicability and the scope of each frontier benchmark.
+- Center and enlarge standalone predictions, wrap the research-author column, enlarge implementation cards, and align Mandarin narration/captions and ten worked bilingual solutions.
+
+Validation: 42 actual current English/Mandarin endpoint renders and 21 actual English motion renders passed with zero unresolved warnings. The motion scan raised 2 sparse-screen flags, each lasting 1.5 seconds; exact movie intervals were inspected and accepted as fade/draw transitions, with artifact hashes and rationale retained. Endpoint renders have zero automated warnings. Every contact sheet was inspected; 31 focused native frames have artifact-bound review records. All 125/125 narration sources have Mandarin coverage; the estimate is 64.8 minutes. Eleven existing numerical tests passed. Thirty-six original cache items were restored through 36 normal invocations, with no force/refresh, new market trials or sealed holdout access. Fifty-nine protected files, including Part 15's pricing source, remain unchanged.
+
+The [compact evidence record](quant15-polish-evidence.json) binds all 63 receipts, data inputs, manual review artifacts, 12 CPU speech reports (71 sampled lines, zero signal/token-timing issues), and the actual narrated opening (169.9 seconds). These checks do not certify pronunciation or full continuous synchronization. Full production-voice listening remains pending.
+
+Local ignored artifacts: `renders/quant15_polished_silent.mp4`, 74:34 including animation/pauses, with 21 embedded chapters and English soft subtitles; adjacent `.srt` and `.chapters.txt`; and `media/quant15/narrated_qa/videos/s01_hook/480p15/Hook.mp4`.
