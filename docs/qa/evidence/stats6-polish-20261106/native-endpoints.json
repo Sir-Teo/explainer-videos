@@ -1,5 +1,5 @@
 {
-  "fingerprint": "f225e7026593a97d0d4c61d14513b9536ac9dc89828b764bc918e8efd65c5c2f",
+  "fingerprint": "9fd2564bae27097f662243f5f60d7ab8ac9251a9a38ceed13963593e0d09ef1e",
   "scope": "English render review; listening and bilingual production gates remain open",
   "records": [
     {
@@ -11,7 +11,7 @@
         "untranslated-on-screen": 37
       },
       "input_record": "renders/qa/native1080/stats6/en/WeakLaw/result.json",
-      "input_sha256": "7df5cc930b879be6e57407942dbfbf14d55e84d094839c1bdba687baee8c0c17"
+      "input_sha256": "68c4e02bd58953fce9ebe32fb7ae7abc01924eaa09090f3072ba71ae370159c2"
     },
     {
       "scene": "Convergence",
@@ -22,7 +22,7 @@
         "untranslated-on-screen": 42
       },
       "input_record": "renders/qa/native1080/stats6/en/Convergence/result.json",
-      "input_sha256": "ed20a04972f32f2ec6cb01625838497a96bbebd959038381ae6cee7d56dc92f1"
+      "input_sha256": "af0e8110b41944d28343dfb566d113000096c31ecd3044ffc1a3546920845f4b"
     },
     {
       "scene": "CLTSeen",
@@ -33,7 +33,7 @@
         "untranslated-on-screen": 29
       },
       "input_record": "renders/qa/native1080/stats6/en/CLTSeen/result.json",
-      "input_sha256": "d5c18a36493d8d16b90f02bfba2def983bfff0941ee74664b4eea1e9e7892ff5"
+      "input_sha256": "6e268220568223730bf1c4dd1fda1d95d36f2a65658a3854272ce289f7ce652e"
     },
     {
       "scene": "Thirty",
@@ -44,7 +44,7 @@
         "untranslated-on-screen": 37
       },
       "input_record": "renders/qa/native1080/stats6/en/Thirty/result.json",
-      "input_sha256": "f5c770bda2ce1a45d3c0b5fe512205e751ebc2893b7a8085098f69862469df78"
+      "input_sha256": "e3dd4f976cf40795eced9f7924f8d1d5298766f25d2c2d1e5672b3d747ce64e7"
     },
     {
       "scene": "Delta",
@@ -55,7 +55,7 @@
         "untranslated-on-screen": 29
       },
       "input_record": "renders/qa/native1080/stats6/en/Delta/result.json",
-      "input_sha256": "857124b124299ab3e8de36b60c300332d7cf84b70d0442d126f793c90711d91c"
+      "input_sha256": "3e257172f6a31cda79bc6eef0b00c361b5d7803523cad4280680bb7842ce0005"
     },
     {
       "scene": "Fail",
@@ -66,7 +66,7 @@
         "untranslated-on-screen": 33
       },
       "input_record": "renders/qa/native1080/stats6/en/Fail/result.json",
-      "input_sha256": "7f715bb65ae3379cde72ee92d50dbf799c95844f39edacd0040e5ab823f71fe5"
+      "input_sha256": "5807db7ae5ac811b24f96763db43d331e5a9f049c5792d18d6e133dcdf5f64e2"
     },
     {
       "scene": "Floods",
@@ -77,7 +77,7 @@
         "untranslated-on-screen": 38
       },
       "input_record": "renders/qa/native1080/stats6/en/Floods/result.json",
-      "input_sha256": "6da6b7f80f79e6628dd146ca5ca9349e6b2f63196cc2e8527e6c712e1c02ce36"
+      "input_sha256": "9094e4a87dff1ea79f931418a99d2f8a6369dd6218f19279ac554ae1fd181fec"
     }
   ]
 }

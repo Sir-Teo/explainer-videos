@@ -1,5 +1,5 @@
 {
-  "fingerprint": "f225e7026593a97d0d4c61d14513b9536ac9dc89828b764bc918e8efd65c5c2f",
+  "fingerprint": "9fd2564bae27097f662243f5f60d7ab8ac9251a9a38ceed13963593e0d09ef1e",
   "scope": "English render review; listening and bilingual production gates remain open",
   "records": [
     {
@@ -11,7 +11,7 @@
         "untranslated-on-screen": 33
       },
       "input_record": "renders/qa/series/stats6/en/Hook/result.json",
-      "input_sha256": "46b146fbdfa98d9e9fdac9d051f28235bad9224da23fa47ebf26039314dcba86"
+      "input_sha256": "6745a2e44a1c34bcf718fbe560af0339279d104875c2e102969c755cb8818b8e"
     },
     {
       "scene": "Inequalities",
@@ -22,7 +22,7 @@
         "untranslated-on-screen": 30
       },
       "input_record": "renders/qa/series/stats6/en/Inequalities/result.json",
-      "input_sha256": "950401e63dab5d248d22c5ea78194933e2292a9e845887447dd2526c27f65f50"
+      "input_sha256": "caecf921cb74650e469feb9a3846edf2fa0423de25e2a5ff31d76d1ac78fab47"
     },
     {
       "scene": "WeakLaw",
@@ -33,7 +33,7 @@
         "untranslated-on-screen": 37
       },
       "input_record": "renders/qa/series/stats6/en/WeakLaw/result.json",
-      "input_sha256": "25dfcd2e3e0ec48d7ecba0e99b4205f5e75729c1968bf48f4b7b3df7a27bd77f"
+      "input_sha256": "af42e456134d5edf5f22d4d3e2d49146279c83754131a5ae1e84108929a30d69"
     },
     {
       "scene": "Convergence",
@@ -44,7 +44,7 @@
         "untranslated-on-screen": 42
       },
       "input_record": "renders/qa/series/stats6/en/Convergence/result.json",
-      "input_sha256": "dd27b2d7d661d31886c86908f7ebf7b5e0870c5384b110c9e4931931afcabd80"
+      "input_sha256": "64156ad56476a7edda1887d7acf3e382aa448cb5539f9da13bda3177bc445cb8"
     },
     {
       "scene": "CLTSeen",
@@ -55,7 +55,7 @@
         "untranslated-on-screen": 29
       },
       "input_record": "renders/qa/series/stats6/en/CLTSeen/result.json",
-      "input_sha256": "c32b7ad1353286358416d36933be1f94576f18cbd1cd23237f6169845cd5cf44"
+      "input_sha256": "62f1d99f1a1c2cd954ca65db883cc04ca9b02b527aebc96116ae257d2b88de9a"
     },
     {
       "scene": "CLTProof",
@@ -66,7 +66,7 @@
         "untranslated-on-screen": 27
       },
       "input_record": "renders/qa/series/stats6/en/CLTProof/result.json",
-      "input_sha256": "fff9f28eb269b1428e994ae7c783e5ec265eefa027d95c8454488b572b3f4c26"
+      "input_sha256": "7cbe6c465752587ba66919890c7c03472210367fe17e754fe8bff420ad7c466c"
     },
     {
       "scene": "Using",
@@ -77,7 +77,7 @@
         "untranslated-on-screen": 22
       },
       "input_record": "renders/qa/series/stats6/en/Using/result.json",
-      "input_sha256": "22d35963e4e103ee2b852fc864c7bcec771a6a0ad4c222d73a1eca0822ffce8c"
+      "input_sha256": "6aaf20dfde38574dd1948c21e5f0be533b706ff605a925be118e2755a7502cda"
     },
     {
       "scene": "Thirty",
@@ -88,7 +88,7 @@
         "untranslated-on-screen": 37
       },
       "input_record": "renders/qa/series/stats6/en/Thirty/result.json",
-      "input_sha256": "d81f6de04a0aaf9be0716bc9112f0de6e88800dacf769720805181c618a6ea96"
+      "input_sha256": "6a299a934a6dcea2ce64ea8303e775e57df2942b929b2acde65f42318ac459c8"
     },
     {
       "scene": "Delta",
@@ -99,7 +99,7 @@
         "untranslated-on-screen": 29
       },
       "input_record": "renders/qa/series/stats6/en/Delta/result.json",
-      "input_sha256": "7c2532b14b884637a4cb6760bd093344f78d7e444ffe23cdf0c73747b4fbad97"
+      "input_sha256": "49a8d63c3ba512ae9a550c149a9b00a8fb2f2ce11a6cdf18648ce70550cc7876"
     },
     {
       "scene": "Slutsky",
@@ -110,7 +110,7 @@
         "untranslated-on-screen": 33
       },
       "input_record": "renders/qa/series/stats6/en/Slutsky/result.json",
-      "input_sha256": "ce6c7773a8b84c2a54de01efac2c33ba9a2b26f5cb51701f155de7ec9ee653fc"
+      "input_sha256": "e3ba04bd006da7d89dc7732a47707c0c20a85b43e336be45716b398c929e4bb0"
     },
     {
       "scene": "Fail",
@@ -121,7 +121,7 @@
         "untranslated-on-screen": 33
       },
       "input_record": "renders/qa/series/stats6/en/Fail/result.json",
-      "input_sha256": "878c8df8bf7ae81361467d2e2e3d94e648fc95108f814bd1dddcaccabd9e43f9"
+      "input_sha256": "221e7d64934b0b845bbf3876eb6c7db25cd93a795cb7544cae67faea41b29ca7"
     },
     {
       "scene": "Concentration",
@@ -132,7 +132,7 @@
         "untranslated-on-screen": 37
       },
       "input_record": "renders/qa/series/stats6/en/Concentration/result.json",
-      "input_sha256": "ad27f8566973901beda00881b2fbe43aad5fa8d50c20bbf94e974a31860e85bd"
+      "input_sha256": "0f96bf36bf409dfde4bc9aad0f844f5525ad36cbbc1af5b71e9c05fc1e73ca79"
     },
     {
       "scene": "Maxima",
@@ -143,7 +143,7 @@
         "untranslated-on-screen": 33
       },
       "input_record": "renders/qa/series/stats6/en/Maxima/result.json",
-      "input_sha256": "d810f8e89d26dc3b9a796eaba743d7522188cae3020fa11fee5cfb8c5ad6d2a7"
+      "input_sha256": "554c880a0e52b57b6f24827d18edaa8e53c59073d797695635f9accce1ccb4a1"
     },
     {
       "scene": "Floods",
@@ -154,7 +154,7 @@
         "untranslated-on-screen": 38
       },
       "input_record": "renders/qa/series/stats6/en/Floods/result.json",
-      "input_sha256": "541b2d224787134ee87a5d91d215e78bc5001e75d3418eb08a170f281d415c77"
+      "input_sha256": "1ddb2af65698f819eb7ea37bd2a809b43f7592996eda0f2384bebe431ddee68f"
     },
     {
       "scene": "Outro",
@@ -165,7 +165,7 @@
         "untranslated-on-screen": 63
       },
       "input_record": "renders/qa/series/stats6/en/Outro/result.json",
-      "input_sha256": "38130f3bf1b15382c9caaeccade658be20378e532e0f3bd38bd152919dc9c53c"
+      "input_sha256": "6ee978faa73dd8337f49508f2ccd24fafadeaad13573e5774247f68c7901033c"
     }
   ]
 }

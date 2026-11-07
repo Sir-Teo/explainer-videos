@@ -1,5 +1,5 @@
 {
-  "fingerprint": "f225e7026593a97d0d4c61d14513b9536ac9dc89828b764bc918e8efd65c5c2f",
+  "fingerprint": "9fd2564bae27097f662243f5f60d7ab8ac9251a9a38ceed13963593e0d09ef1e",
   "scope": "English render review; listening and bilingual production gates remain open",
   "records": [
     {
@@ -10,7 +10,7 @@
         "narration-translation": 4
       },
       "input_record": "renders/qa/series/stats6/en/Hook_motion/result.json",
-      "input_sha256": "21254094c48b05a50ae1db5010e5b2c10d41e08b3e49aa0a2a05fc10c2507dc7",
+      "input_sha256": "91e9596aaa2bf0cefb4a5dac4cbb445468de200fe4aa26e92404399ece867aa7",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 184 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 184 s\n"
     },
     {
@@ -21,7 +21,7 @@
         "narration-translation": 6
       },
       "input_record": "renders/qa/series/stats6/en/WeakLaw_motion/result.json",
-      "input_sha256": "9ef5e9cb1ef6f7b91c613650b79cdfcbacc86998ecd404fd3901aed86fe83feb",
+      "input_sha256": "918fb3c7d9324b37ef316496acaa59bc187f64297d5de05281c44ce33c799ad9",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 234 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 234 s\n"
     },
     {
@@ -32,7 +32,7 @@
         "narration-translation": 6
       },
       "input_record": "renders/qa/series/stats6/en/Convergence_motion/result.json",
-      "input_sha256": "d887788dda552b539582018de498bedd7788a389a9805e50359299f023567ae8",
+      "input_sha256": "b49398fce480d038adcca9a44880f66aadc4eecfcb92611212192d79d74e1bea",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 244 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 244 s\n"
     },
     {
@@ -43,7 +43,7 @@
         "narration-translation": 7
       },
       "input_record": "renders/qa/series/stats6/en/Delta_motion/result.json",
-      "input_sha256": "2c5701f3738c0e301272e281a4c79cc307db8c5ab37ed314c0cd068bc643416f",
+      "input_sha256": "aafb0a5516710cd1a9d74acb489a5b6dabfa100197adddd067b5083cbbf5e5ca",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 271 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 271 s\n"
     },
     {
@@ -54,7 +54,7 @@
         "narration-translation": 5
       },
       "input_record": "renders/qa/series/stats6/en/Fail_motion/result.json",
-      "input_sha256": "9135598c5a1df8a33a0587d4b51acb7a09d4eeb27724e466e092ecb0906ac629",
+      "input_sha256": "d24f294835ca4135798e1bd490d864c5d2738f467c17cca7bbcbea35b1fd67e0",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 216 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 216 s\n"
     },
     {
@@ -65,7 +65,7 @@
         "narration-translation": 7
       },
       "input_record": "renders/qa/series/stats6/en/Floods_motion/result.json",
-      "input_sha256": "4c2035e0d401e02c8e46ac18e6a61e5f90e39656d1336dc75fd68ae006e43320",
+      "input_sha256": "491940071099c4eea29787f595b425eca57eeea81c113c30d678891e5dffee75",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 276 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 276 s\n"
     }
   ]

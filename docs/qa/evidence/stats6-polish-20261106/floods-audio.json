@@ -19,7 +19,7 @@
    "tokens": 6,
    "peak": 0.40838623046875,
    "issues": [],
-   "elapsed": 0.02,
+   "elapsed": 0.01,
    "asr_review_leads": []
   },
   {
@@ -30,7 +30,7 @@
    "tokens": 132,
    "peak": 0.788970947265625,
    "issues": [],
-   "elapsed": 0.03,
+   "elapsed": 0.04,
    "asr_review_leads": []
   },
   {
@@ -41,7 +41,7 @@
    "tokens": 85,
    "peak": 0.511322021484375,
    "issues": [],
-   "elapsed": 0.03,
+   "elapsed": 0.01,
    "asr_review_leads": []
   },
   {
@@ -52,7 +52,7 @@
    "tokens": 84,
    "peak": 0.686767578125,
    "issues": [],
-   "elapsed": 0.02,
+   "elapsed": 0.01,
    "asr_review_leads": []
   },
   {
@@ -63,7 +63,7 @@
    "tokens": 114,
    "peak": 0.47503662109375,
    "issues": [],
-   "elapsed": 0.03,
+   "elapsed": 0.02,
    "asr_review_leads": []
   },
   {
@@ -74,7 +74,7 @@
    "tokens": 124,
    "peak": 0.631927490234375,
    "issues": [],
-   "elapsed": 0.05,
+   "elapsed": 0.04,
    "asr_review_leads": []
   },
   {
@@ -91,5 +91,5 @@
  ],
  "issues": [],
  "input_record": "renders/qa/series/stats6/en/Floods_motion/result.json",
- "input_sha256": "4c2035e0d401e02c8e46ac18e6a61e5f90e39656d1336dc75fd68ae006e43320"
+ "input_sha256": "491940071099c4eea29787f595b425eca57eeea81c113c30d678891e5dffee75"
 }
