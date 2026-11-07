@@ -1,0 +1,149 @@
+{
+  "fingerprint": "affef96dfe05ae9b820baccf72d8f04a296975aacd20322348032e2418509f55",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/native1080/stats24/en/Hook/result.json",
+      "input_sha256": "50a992269827d05f9bbbb60073d96eaf7069a69e7ec8093a30884b9adbdd4b04"
+    },
+    {
+      "scene": "Upgrade",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 40
+      },
+      "input_record": "renders/qa/native1080/stats24/en/Upgrade/result.json",
+      "input_sha256": "9e47fa31cf5b5dcf4ec0d0677a22f99db2f53ad76f963ab0eda3eaab40cadc6c"
+    },
+    {
+      "scene": "Family",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 71
+      },
+      "input_record": "renders/qa/native1080/stats24/en/Family/result.json",
+      "input_sha256": "1d4efe441615d52c46fc78b3721ee11d245f76723ac7c712b55a4c5a0965431e"
+    },
+    {
+      "scene": "IRLS",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/native1080/stats24/en/IRLS/result.json",
+      "input_sha256": "758befc851ead1447036ac4a84737453202374ff6eab9097efa0c7cfc72095dd"
+    },
+    {
+      "scene": "Deviance",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 75
+      },
+      "input_record": "renders/qa/native1080/stats24/en/Deviance/result.json",
+      "input_sha256": "936f31b2956b87745b9bbe9478653ebd04078db0646e1a961ce81d64c002f514"
+    },
+    {
+      "scene": "Asymptotics",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 57
+      },
+      "input_record": "renders/qa/native1080/stats24/en/Asymptotics/result.json",
+      "input_sha256": "0743efd708597a180bf8c1912d61ec1b028da7d0ce1cdd566ba9a52ab526263d"
+    },
+    {
+      "scene": "Separation",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 53
+      },
+      "input_record": "renders/qa/native1080/stats24/en/Separation/result.json",
+      "input_sha256": "7ba7a5e02f1529e4e50fc94c4b49ce2f8a2245c81b33db6d0a48d17b4d9ba31b"
+    },
+    {
+      "scene": "Quasi",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 67
+      },
+      "input_record": "renders/qa/native1080/stats24/en/Quasi/result.json",
+      "input_sha256": "2c81c1b836b1f1201b75d8c26ec23e9db9274c92a4781ce4877f808a0434f3ad"
+    },
+    {
+      "scene": "Counts",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 75
+      },
+      "input_record": "renders/qa/native1080/stats24/en/Counts/result.json",
+      "input_sha256": "89a5f21f3655c93e139c830c0e8f37163bb3f64073f3d8ff9aa42d947910eec7"
+    },
+    {
+      "scene": "LogLinear",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 56
+      },
+      "input_record": "renders/qa/native1080/stats24/en/LogLinear/result.json",
+      "input_sha256": "217423a3b8f7a71f1c13325da1c2fa711d979820a4773ef59829a51754809df6"
+    },
+    {
+      "scene": "Ordinal",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 61
+      },
+      "input_record": "renders/qa/native1080/stats24/en/Ordinal/result.json",
+      "input_sha256": "a68db0bea2f33e3f77026f72f7f4f9022e99cde4e73cbbff4f8880738a0b17fd"
+    },
+    {
+      "scene": "GEE",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 64
+      },
+      "input_record": "renders/qa/native1080/stats24/en/GEE/result.json",
+      "input_sha256": "034c9d92f4c93cb395604b35c39831fbcb904abe0410324bee28a4ef99024286"
+    },
+    {
+      "scene": "Scoring",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 64
+      },
+      "input_record": "renders/qa/native1080/stats24/en/Scoring/result.json",
+      "input_sha256": "4fce0579c372771e0393ba414b7dc357dbd3cf43f6e72ac03cfe25da4fec322b"
+    }
+  ]
+}

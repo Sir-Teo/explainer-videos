@@ -1,0 +1,23 @@
+{
+  "part": "stats24",
+  "fingerprint": "affef96dfe05ae9b820baccf72d8f04a296975aacd20322348032e2418509f55",
+  "english_endpoints": 14,
+  "native_1080_endpoints": 13,
+  "silent_motion_chapters": 12,
+  "audio_scene": "GEE",
+  "audio_lines": 7,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats24/en/GEE/videos/s12_gee/480p15/GEE.mp4",
+    "seconds": 271.865365,
+    "narration_sha256": "7e9dfc096c19fadfac3587c6ef471c2d45c5bf1f9bdf5172f5f9b7b1825f59f5",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 272 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 272 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

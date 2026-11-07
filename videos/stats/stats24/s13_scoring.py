@@ -195,8 +195,8 @@ class Scoring(VoiceoverScene):
     def murphy(self):
         rows = [
             cmath(r"\text{Brier}", r"=", r"\text{reliability} - \text{resolution} + \text{uncertainty}", font_size=30),
-            cmath(r"\text{reliability}", r":", r"\text{population: E[(P-E[Y\mid P])^2]}", font_size=30),
-            cmath(r"\text{resolution}", r":", r"\text{how far the bins' rates spread from the base rate}", font_size=28),
+            cmath(r"\text{reliability}", r":", r"E\{(P-E[Y\mid P])^2\}", font_size=30),
+            cmath(r"\text{resolution}", r":", r"\mathrm{Var}\{E[Y\mid P]\}", font_size=28),
             cmath(r"\text{log score}", r":", r"\text{expected excess } = \mathrm{KL}(p \,\|\, q)", font_size=30),
         ]
         rows[3][-1].set_color(PATH)

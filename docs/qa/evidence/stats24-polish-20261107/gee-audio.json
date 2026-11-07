@@ -1,0 +1,95 @@
+{
+ "video": "stats24",
+ "scene": "GEE",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 7,
+ "lines": [
+  {
+   "raw": "Chapter eleven. Generalized estimating equations.",
+   "spoken": "Chapter eleven. Generalized estimating equations.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/108f29ec9ebc4efe.wav",
+   "duration": 3.875,
+   "tokens": 5,
+   "peak": 0.525238037109375,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Part 23's schools again, with a yes-or-no outcome: did the pupil score above five hundred and fifty? Thirty-two percent did, in a sample of forty schools. <bookmark mark='b'/> A logistic regression on the tutoring programme and home background. <bookmark mark='c'/> Fitted as if every pupil were independent, the programme's coefficient has a standard error of point oh nine four. <bookmark mark='d'/> But pupils in the same school share teachers, intake, and the programme itself, so as Part 23 showed for least squares, that standard error is too small.",
+   "spoken": "Part 23's schools again, with a yes-or-no outcome: did the pupil score above five hundred and fifty? Thirty-two percent did, in a sample of forty schools. A logistic regression on the tutoring programme and home background. Fitted as if every pupil were independent, the programme's coefficient has a standard error of point oh nine four. But pupils in the same school share teachers, intake, and the programme itself, so as Part 23 showed for least squares, that standard error is too small.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/9f5217a4435c34ef.wav",
+   "duration": 31.45,
+   "tokens": 82,
+   "peak": 0.504119873046875,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Kung-Yee Liang and Scott Zeger's generalized estimating equations, from 1986, write a GLM score cluster by cluster: derivatives of the mean, times an inverse covariance, times the residuals. <bookmark mark='b'/> The covariance is a working guess: the binomial variances combined with <bookmark mark='c'/> a working correlation within each cluster, independence, exchangeable, autoregressive or unstructured. <bookmark mark='d'/> The standard errors come from a sandwich that sums each cluster's residual products, Part 23's cluster-robust idea. With a correct mean conditional on the relevant cluster covariates, independent clusters, adequate moments and a regular design, the estimates can remain consistent when the working correlation is wrong. The sandwich then provides asymptotic uncertainty; few clusters need care.",
+   "spoken": "Kung-Yee Liang and Scott Zeger's generalized estimating equations, from 1986, write a GLM score cluster by cluster: derivatives of the mean, times an inverse covariance, times the residuals. The covariance is a working guess: the binomial variances combined with a working correlation within each cluster, independence, exchangeable, autoregressive or unstructured. The standard errors come from a sandwich that sums each cluster's residual products, Part 23's cluster-robust idea. With a correct mean conditional on the relevant cluster covariates, independent clusters, adequate moments and a regular design, the estimates can remain consistent when the working correlation is wrong. The sandwich then provides asymptotic uncertainty; few clusters need care.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/37f46060b9ca010b.wav",
+   "duration": 49.575,
+   "tokens": 106,
+   "peak": 0.751800537109375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Three fits. <bookmark mark='b'/> GEE with an independence working correlation reproduces the logistic estimate exactly, point four five three, but its robust standard error is point two two eight, two point four times the naive one. <bookmark mark='c'/> With an exchangeable correlation, estimated at point oh nine between pupils of one school, the estimate moves to point four oh five and the model-based and robust errors agree, though agreement in one sample does not establish that the correlation model is correct. <bookmark mark='d'/> The census independence-logistic projection is point three nine two; the census exchangeable estimating-equation target is point three seven eight. They differ slightly because this logistic mean is an approximation. The coverage study uses each procedure's own census target.",
+   "spoken": "Three fits. GEE with an independence working correlation reproduces the logistic estimate exactly, point four five three, but its robust standard error is point two two eight, two point four times the naive one. With an exchangeable correlation, estimated at point oh nine between pupils of one school, the estimate moves to point four oh five and the model-based and robust errors agree, though agreement in one sample does not establish that the correlation model is correct. The census independence-logistic projection is point three nine two; the census exchangeable estimating-equation target is point three seven eight. They differ slightly because this logistic mean is an approximation. The coverage study uses each procedure's own census target.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/45a094f9cbc9aa92.wav",
+   "duration": 47.025,
+   "tokens": 115,
+   "peak": 0.782470703125,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> GEE estimates a marginal, population-averaged effect: a population-averaged mean-model coefficient. Reading it as the effect of adopting a programme additionally needs a suitable causal design. <bookmark mark='b'/> A mixed model, Part 25, estimates a conditional effect: the change within one school, holding its own effect fixed. <bookmark mark='c'/> For a logistic link they differ: averaging over school effects flattens the curve, so the marginal coefficient is smaller, roughly the conditional one divided by the square root of one plus point three four six times the school-effect variance, as Scott Zeger, Kung-Yee Liang and Paul Albert showed. <bookmark mark='d'/> Neither is wrong. A minister choosing a policy wants the first; a head teacher wants the second. With an identity link and an independent mean-zero random intercept, the marginal and conditional slopes coincide. Some other links also preserve slopes under particular random-effect models; coincidence is not exclusive to linear models.",
+   "spoken": "GEE estimates a marginal, population-averaged effect: a population-averaged mean-model coefficient. Reading it as the effect of adopting a programme additionally needs a suitable causal design. A mixed model, Part 25, estimates a conditional effect: the change within one school, holding its own effect fixed. For a logistic link they differ: averaging over school effects flattens the curve, so the marginal coefficient is smaller, roughly the conditional one divided by the square root of one plus point three four six times the school-effect variance, as Scott Zeger, Kung-Yee Liang and Paul Albert showed. Neither is wrong. A minister choosing a policy wants the first; a head teacher wants the second. With an identity link and an independent mean-zero random intercept, the marginal and conditional slopes coincide. Some other links also preserve slopes under particular random-effect models; coincidence is not exclusive to linear models.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/286abe1a7bec17cc.wav",
+   "duration": 59.9,
+   "tokens": 142,
+   "peak": 0.713348388671875,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> How much does the working correlation matter? If it's right, GEE is efficient, like generalized least squares, and the model-based and robust standard errors agree, as they did here. <bookmark mark='b'/> With an incorrect working correlation, consistency still needs the correct relevant conditional mean, cluster independence and suitable regularity. Under mean misspecification, changing the working correlation can change the target. <bookmark mark='c'/> With few clusters the sandwich often underestimates uncertainty, the few-cluster problem of Part 23; Lloyd Mancl and Timothy DeRouen's correction helps. <bookmark mark='d'/> And with covariates that change over time, a non-independence working correlation can bias the estimates unless the model conditions on everything that matters, as Margaret Pepe and Garnet Anderson showed.",
+   "spoken": "How much does the working correlation matter? If it's right, GEE is efficient, like generalized least squares, and the model-based and robust standard errors agree, as they did here. With an incorrect working correlation, consistency still needs the correct relevant conditional mean, cluster independence and suitable regularity. Under mean misspecification, changing the working correlation can change the target. With few clusters the sandwich often underestimates uncertainty, the few-cluster problem of Part 23; Lloyd Mancl and Timothy DeRouen's correction helps. And with covariates that change over time, a non-independence working correlation can bias the estimates unless the model conditions on everything that matters, as Margaret Pepe and Garnet Anderson showed.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/4b04275518a153ad.wav",
+   "duration": 48.425,
+   "tokens": 109,
+   "peak": 0.625152587890625,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The Board: five hundred samples of forty schools, against the corresponding census estimating-equation target for each working correlation. Logistic regression with the iid standard error: fifty-five percent, broken. <bookmark mark='b'/> GEE with independence and the robust standard error: ninety-five, kept. <bookmark mark='c'/> GEE with an exchangeable working correlation: about ninety-six, kept.",
+   "spoken": "The Board: five hundred samples of forty schools, against the corresponding census estimating-equation target for each working correlation. Logistic regression with the iid standard error: fifty-five percent, broken. GEE with independence and the robust standard error: ninety-five, kept. GEE with an exchangeable working correlation: about ninety-six, kept.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/9a3d7e023099fcc3.wav",
+   "duration": 22.875,
+   "tokens": 47,
+   "peak": 0.517059326171875,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats24/en/GEE_motion/result.json",
+ "input_sha256": "380ab0842972cd685cca7522d0fbbb4f140d30acfe2482415f6ed5ab14da0821"
+}
