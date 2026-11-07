@@ -62,7 +62,7 @@ No part is signed off for bilingual production. The branch has zero narration_zh
 | 33 | `stats33` | 14 | Scientific source corrections complete; visual verification in progress |
 | 34 | `stats34` | 13 | Source corrections and 16 checks passed; full numerical rerun and visuals in progress |
 | 35 | `stats35` | 16 | Scientific source corrections and 20 checks complete; visual verification in progress |
-| 36 | `stats36` | 17 | Source corrections and 21 checks passed; full DML rerun and visuals in progress |
+| 36 | `stats36` | 17 | Scientific source corrections and 23 checks complete; visual verification in progress |
 | 37 | `stats37` | 16 | Not yet reviewed chapter by chapter |
 | 38 | `stats38` | 14 | Not yet reviewed chapter by chapter |
 | 39 | `stats39` | 16 | Not yet reviewed chapter by chapter |

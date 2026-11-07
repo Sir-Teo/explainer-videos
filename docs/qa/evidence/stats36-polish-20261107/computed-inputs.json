@@ -1,0 +1,67 @@
+[
+  {
+    "item": "lalonde",
+    "path": ".cache/stats36/lalonde.json",
+    "sha256": "9d97f67b6ae4629c874941f149857161efce82df0f15200a52ff152a39bd8fee"
+  },
+  {
+    "item": "simpson",
+    "path": ".cache/stats36/simpson.json",
+    "sha256": "07f6ed24ca27d16dd870420f2464ac1b57c39c94a256ec742f62bccf1646b2e5"
+  },
+  {
+    "item": "colliders",
+    "path": ".cache/stats36/colliders.json",
+    "sha256": "a3852af503345aefc9d46622957d79f763bf7ce276728dbeb2dacb25321a3043"
+  },
+  {
+    "item": "frontdoor",
+    "path": ".cache/stats36/frontdoor.json",
+    "sha256": "f20b699024587c72f4bd79035ec24e91af48c2e4c0ed1cd726905d1cf8ff0933"
+  },
+  {
+    "item": "obs",
+    "path": ".cache/stats36/obs.json",
+    "sha256": "132117749d1f39de145f7320a53e03bd24e6ec71851e37b84e4c7a5da00c8511"
+  },
+  {
+    "item": "kang",
+    "path": ".cache/stats36/kang.json",
+    "sha256": "a518f86c419155a76e7c1b4c16821a30f370416f07626c70465bbfa0b45c8402"
+  },
+  {
+    "item": "dml",
+    "path": ".cache/stats36/dml.json",
+    "sha256": "267d5d6a6f8ab8a6a999b71ee6fee52505523640547b0aa1e9cf0c7b8dd21e2e"
+  },
+  {
+    "item": "cate",
+    "path": ".cache/stats36/cate.json",
+    "sha256": "1506425a67c279faf56bd9fc04b53501c4f1fcc091876727f1397cff81d2e4ed"
+  },
+  {
+    "item": "sens",
+    "path": ".cache/stats36/sens.json",
+    "sha256": "598dc66459a600dfc2bc3c5be69c2b6e34de965f286ac98a739c10802dd684d6"
+  },
+  {
+    "item": "smoking",
+    "path": ".cache/stats36/smoking.json",
+    "sha256": "bdbe71de7a3bc98e8f0a68b205ff048914a8b720791429ec25c245b90317d064"
+  },
+  {
+    "item": "msm",
+    "path": ".cache/stats36/msm.json",
+    "sha256": "06607dd5e3b80cb866630ad834f850652ae86580417cd59d653800cc34ef139c"
+  },
+  {
+    "item": "lalonde2",
+    "path": ".cache/stats36/lalonde2.json",
+    "sha256": "1c2bdffe2df55be04cd289711c01068d31516e03ce581ac72a70829c55d0db6c"
+  },
+  {
+    "item": "board",
+    "path": ".cache/stats36/board.json",
+    "sha256": "448d554d28304a658e4ae975ba04dd2137fb11ab6761e83b270467c7753a874d"
+  }
+]
