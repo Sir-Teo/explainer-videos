@@ -19,7 +19,7 @@
    "tokens": 6,
    "peak": 0.335052490234375,
    "issues": [],
-   "elapsed": 0.01,
+   "elapsed": 0.05,
    "asr_review_leads": []
   },
   {
@@ -30,7 +30,7 @@
    "tokens": 122,
    "peak": 0.612945556640625,
    "issues": [],
-   "elapsed": 0.02,
+   "elapsed": 0.03,
    "asr_review_leads": []
   },
   {
@@ -41,7 +41,7 @@
    "tokens": 86,
    "peak": 0.477386474609375,
    "issues": [],
-   "elapsed": 0.01,
+   "elapsed": 0.03,
    "asr_review_leads": []
   },
   {
@@ -63,11 +63,11 @@
    "tokens": 112,
    "peak": 0.682952880859375,
    "issues": [],
-   "elapsed": 0.02,
+   "elapsed": 0.01,
    "asr_review_leads": []
   }
  ],
  "issues": [],
  "input_record": "renders/qa/series/stats4/en/SVD_motion/result.json",
- "input_sha256": "a411e90b67f1c52ec6d3b7be63e7ebe0ba1d886ab28510be59b66699ecebea53"
+ "input_sha256": "995b107a1964e28eb76c125a471abf495993a3947439f98a12adbc024cf472ad"
 }
