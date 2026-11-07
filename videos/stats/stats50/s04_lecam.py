@@ -90,9 +90,8 @@ class LeCam(VoiceoverScene):
             "say which candidate is true, <bookmark mark='e'/> then with probability bounded away from zero the estimate is "
             "far from the truth. That is the whole idea."
         ) as vo:
-            self.play(FadeIn(exact_tag(r"the lower-bound workbench")))
             vo.wait_until("a")
-            self.play(FadeIn(pts), FadeIn(side[0]))
+            self.play(FadeIn(pts), FadeIn(side[0]), FadeIn(exact_tag(r"the lower-bound workbench")))
             vo.wait_until("b")
             self.play(FadeIn(disc), FadeIn(side[1]))
             vo.wait_until("c")

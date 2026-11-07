@@ -5,3 +5,5 @@ All twelve chapters and six solutions were audited; twelve inputs regenerated an
 English visual review remains pending. This is not bilingual production, continuous-listening or final-master approval.
 
 Render repair: Pinsker's worst-case risk ratio was incorrectly wrapped in a text-mode TeX command. The actual corrected production expression compiles; see [receipt](caption-compile.log). All visual checks must be refreshed after this source change.
+
+Motion presentation repair: Lower-bound illustrations now display their initial hypotheses together with the source tag, removing the tag-only pause. Flagged frames were inspected individually and are retained as before-change evidence. Fresh full-part captures are pending.
