@@ -90,7 +90,12 @@ class EstimatedParameters(VoiceoverScene):
         if tab.width > 12.6:
             tab.width = 12.6
         tab.move_to([0, 0.9, 0])
-        foot = label(r"the law of $D$ with estimated location--scale or scale parameters is \emph{parameter-free}: \ equivariant fit: one table per family and $n$", font_size=24, color=CLASSC).move_to([0, -1.3, 0])
+        foot = VGroup(
+            label(r"Location--scale or scale family, equivariant fit: the law of $D$ is parameter-free", font_size=28, color=CLASSC),
+            label(r"One reference table per family and sample size $n$", font_size=28, color=CLASSC),
+        ).arrange(DOWN, buff=0.16).move_to([0, -1.2, 0])
+        if foot.width > 12.6:
+            foot.width = 12.6
         foot2 = label(r"so a parametric bootstrap is exact, \ up to Monte Carlo error: \ simulate from $F_{\hat\theta}$, \ refit, \ recompute", font_size=24, color=GOODC).move_to([0, -2.1, 0])
         with self.voiceover(
             f"<bookmark mark='a'/> How far off? For normal samples of twenty, the correct ninety-five percent point of D is {say(d['crit_est'], 3)}, against Kolmogorov's {say(d['crit_kolm'], 3)}. A test using Kolmogorov's table almost never rejects: its simulated rejection rate across forty thousand samples is about {100 * d['size_norm_naive']:.3f} percent. For the exponential with an estimated rate, at fifty, the size is {100 * d['size_exp_naive']:.1f} percent instead of five. <bookmark mark='b'/> The remedy rests on a lucky fact. For location–scale and scale families, the law of D does not depend on the true parameters when the fitting rule is equivariant. <bookmark mark='c'/> So a parametric bootstrap, simulating from the fitted distribution, refitting, and recomputing D, gets the right critical value, up to Monte Carlo error. For other families bootstrap consistency needs regular estimation and a valid conditional process limit; it is not automatic."

@@ -1,0 +1,38 @@
+[11/07/26 20:02:44] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}Location--s                        
+                             cale or scale family,                              
+                             equivariant fit: the law of                        
+                             $D$ is                                             
+                             parameter-free\special{dvis                        
+                             vgm:raw </g>} to                                   
+                             media/Tex/932e920348e6bfab.                        
+                             tex                                                
+[11/07/26 20:02:45] INFO     Writing                     tex_file_writing.py:110
+                             \special{dvisvgm:raw <g                            
+                             id='unique000'>}One                                
+                             reference table per family                         
+                             and sample size                                    
+                             $n$\special{dvisvgm:raw                            
+                             </g>} to                                           
+                             media/Tex/a14a1e6121268711.                        
+                             tex                                                
+{
+  "width": 9.767909637499999,
+  "height": 0.6888501166666666,
+  "left": [
+    -4.8839548187499995,
+    -1.2,
+    0.0
+  ],
+  "right": [
+    4.8839548187499995,
+    -1.2,
+    0.0
+  ],
+  "bottom": [
+    0.0,
+    -1.5444250583333332,
+    0.0
+  ]
+}
