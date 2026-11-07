@@ -69,7 +69,7 @@ class Recipes(VoiceoverScene):
             "Here's the game we'll play throughout. <bookmark mark='a'/> Three factories, each of which has built "
             "three hundred tanks. We capture six from each, at random. <bookmark mark='b'/> Each capture gives a "
             "different set of serial numbers, and each recipe gives a different estimate. <bookmark mark='c'/> Doubling "
-            "the mean jumps around; the maximum is always too small, since it can never exceed N; and the scaled-up "
+            "the mean jumps around; the maximum never exceeds N and usually falls below it; and the scaled-up "
             "maximum lands on either side. Three factories can't settle which recipe is best. Ten thousand can."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tag))
@@ -100,7 +100,7 @@ class Recipes(VoiceoverScene):
         tl = MathTex(r"N = 300", font_size=26, color=EXACT).next_to(panels[0][2], UP, buff=0.08)
         verdict = fit_rows(VGroup(
             label(r"$2\bar x - 1$: \ unbiased, \ wide", font_size=24, color=MOM),
-            label(r"$\max$: \ tight, \ but always low", font_size=24, color=MAX),
+            label(r"$\max$: \ tight, \ biased low", font_size=24, color=MAX),
             label(r"$m(1 + \tfrac1k) - 1$: \ unbiased \emph{and} tight", font_size=24, color=UMVUE),
         ), 4.6, 0.26, [4.6, -2.9, 0])
         tag = simulated_tag(r"simulated: \ 20,000 factories, \ $k = 6$", corner=UR)
@@ -108,7 +108,7 @@ class Recipes(VoiceoverScene):
             "So here are twenty thousand factories, each with three hundred tanks, six captured from each. "
             "<bookmark mark='a'/> The sampling distribution of two x-bar minus one is centred on three hundred, it's "
             "unbiased, but it's wide: its standard deviation is seventy. <bookmark mark='b'/> The maximum is tight, but "
-            "it's always below the truth, by forty-two on average. Its root mean squared error, which counts both "
+            "it never exceeds the truth and is below it by forty-two on average. Its root mean squared error, which counts both "
             "failures, is fifty-six. <bookmark mark='c'/> The scaled maximum is centred and tight: standard deviation "
             "forty-three. It wins on both counts. <bookmark mark='d'/> Why should the maximum beat the mean? The mean "
             "averages every serial, but most of them say little about where the numbers stop; the largest one is "
@@ -139,8 +139,8 @@ class Recipes(VoiceoverScene):
         leg = legend([(MOM, EST_TEX["mom"]), (MAX, EST_TEX["max"]), (UMVUE, EST_TEX["umvue"]), (WHITE, r"exact SD of the UMVUE")],
                      font_size=22).move_to([4.5, 2.0, 0])
         rows = fit_rows(VGroup(
-            MathTex(r"\mathrm{SD}(2\bar X - 1) = \sqrt{\frac{(N+1)(N-k)}{3k}} \;\propto\; \frac{1}{\sqrt k}", font_size=28, color=MOM),
-            MathTex(r"\mathrm{SD}\big(m(1 + \tfrac1k) - 1\big) = \sqrt{\frac{(N-k)(N+1)}{k(k+2)}} \;\propto\; \frac1k", font_size=28,
+            MathTex(r"\mathrm{SD}(2\bar X - 1) = \sqrt{\frac{(N+1)(N-k)}{3k}} \;\approx\; \frac{N}{\sqrt{3k}}\quad(k\ll N)", font_size=28, color=MOM),
+            MathTex(r"\mathrm{SD}\big(m(1 + \tfrac1k) - 1\big) = \sqrt{\frac{(N-k)(N+1)}{k(k+2)}} \;\approx\; \frac Nk\quad(1\ll k\ll N)", font_size=28,
                     color=UMVUE),
             label(r"the usual rate is $1/\sqrt k$; \ the maximum's is $1/k$", font_size=24, color=S.ACCENT),
         ), 5.4, 0.36, [3.9, -1.1, 0])
@@ -151,7 +151,7 @@ class Recipes(VoiceoverScene):
             "<bookmark mark='b'/> The mean-based recipe's standard deviation has an exact formula: it falls like one "
             "over root k, the rate of every average in Part 6. <bookmark mark='c'/> The scaled maximum's falls like one "
             "over k, and the white dashes, its exact standard deviation, sit on the simulation. "
-            "<bookmark mark='d'/> One over k is faster than one over root k. Capture four times as many tanks and the "
+            "<bookmark mark='d'/> One over k is faster than one over root k. When the capture is a small fraction of a large factory, capture four times as many tanks and approximately the "
             "mean-based error halves, but the maximum-based error falls by four. Remember this. Later in the part we'll "
             "prove that, for smooth problems, no unbiased estimator can beat one over root n. The tank problem isn't "
             "smooth, and that's how it escapes."

@@ -31,6 +31,7 @@ class CramerRao(VoiceoverScene):
         h3 = history_card(1943, r"Maurice Fr\'echet, \ Paris", r"the same inequality, \ earlier; \ and Aitken \& Silverstone (1942), \ "
                           r"Darmois (1945)", color=GREY_B, width=4.0, font_size=22).move_to([4.3, 0.9, 0])
         foot = label(r"some call it the information inequality, \ to share the credit", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.6)
+        intro = label('The information inequality had several discoverers', font_size=36)
         with self.voiceover(
             "This result was found several times in a few years. <bookmark mark='a'/> Rao proved it in the same 1945 "
             "paper as the Rao–Blackwell theorem. <bookmark mark='b'/> Harald Cramér proved it in his 1946 book, "
@@ -40,8 +41,11 @@ class CramerRao(VoiceoverScene):
             "Harold Silverstone came close in 1942. <bookmark mark='d'/> So some books call it the information "
             "inequality, which shares the credit."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, (m_, h) in enumerate(zip("abc", (h1, h2, h3))):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(h, shift=UP * 0.2))
             vo.wait_until("d")
             self.play(FadeIn(foot))
@@ -84,6 +88,7 @@ class CramerRao(VoiceoverScene):
         whys = [why(r"unbiased, \ for every $\theta$"), why(r"differentiate under the integral; \ $E U = 0$ makes it a covariance"),
                 why(r"Cauchy--Schwarz: \ a correlation is at most 1"), why(r"the score of $n$ observations has variance $nI$ (ch.~9)"),
                 why(r"divide: \ done")]
+        intro = label('Unbiasedness and Cauchy--Schwarz imply a bound', font_size=36)
         with self.voiceover(
             "The proof is four lines, and the key is Cauchy–Schwarz. <bookmark mark='a'/> Unbiasedness says the mean "
             "of T is psi of theta, for every theta. <bookmark mark='b'/> So we can differentiate it in theta. The "
@@ -94,9 +99,12 @@ class CramerRao(VoiceoverScene):
             "that's the bound. Every unbiased estimator must be correlated with the score, because its mean has to "
             "track theta; and its correlation with the score can't exceed one, so its variance can't be too small."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=5, top=2.9, x=-0.6, buff=0.5, edge=6.9)
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -112,15 +120,16 @@ class CramerRao(VoiceoverScene):
         pseg = Line(o, proj, color=S.ACCENT, stroke_width=9)
         lu = MathTex(r"U\ (\text{the score})", font_size=30, color=LIK).next_to(U.get_end(), DOWN, buff=0.2)
         lt = MathTex(r"T - \psi(\theta)", font_size=30, color=UMVUE).next_to(T.get_end(), UP, buff=0.15)
-        lp = MathTex(r"\text{length fixed: } \frac{\mathrm{Cov}(T, U)}{\|U\|} = \frac{\psi'}{\sqrt{nI}}", font_size=28,
+        lp = MathTex(r"\text{length fixed: } \frac{\mathrm{Cov}(T, U)}{\|U\|} = \frac{|\psi'|}{\sqrt{nI}}", font_size=28,
                      color=S.ACCENT).next_to(pseg, DOWN, buff=0.35)
         arc = Arc(radius=0.7, start_angle=0, angle=ang, arc_center=o, color=GREY_A)
         rows = fit_rows(VGroup(
             label(r"random variables as vectors: \ $\langle X, Y\rangle = \mathrm{Cov}(X, Y)$", font_size=24),
             label(r"unbiasedness fixes $T$'s shadow on the score", font_size=24, color=S.ACCENT),
-            label(r"a vector is never shorter than its shadow: \ $\mathrm{SD}(T) \ge \psi'/\sqrt{nI}$", font_size=24),
+            label(r"a vector is never shorter than its shadow: \ $\mathrm{SD}(T) \ge |\psi'|/\sqrt{nI}$", font_size=24),
             label(r"equality: \ $T - \psi$ points along $U$, \ $T = \psi + a(\theta)\,U$", font_size=24, color=UMVUE),
         ), 5.2, 0.34, [4.3, 1.6, 0])
+        intro = label('The score fixes the projection of an unbiased estimator', font_size=36)
         with self.voiceover(
             "Here's the same proof as a picture. <bookmark mark='a'/> Treat random variables with mean zero as vectors, "
             "with the covariance as the dot product, so a standard deviation is a length. The score is one vector. "
@@ -130,7 +139,9 @@ class CramerRao(VoiceoverScene):
             "shadow's length: that's the bound. <bookmark mark='e'/> And it's attained only when T points exactly along "
             "the score, with no sideways component, when T is a linear function of the score."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(GrowArrow(U), FadeIn(lu), FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(GrowArrow(T), FadeIn(lt), Create(arc))
@@ -159,6 +170,7 @@ class CramerRao(VoiceoverScene):
             label(r"not attained: \ the exponential's rate $\lambda$, \ the normal's $\sigma$, \ $e^{-\lambda}$ \ (UMVUEs still exist)",
                   font_size=24, color=GREY_A),
         ), 12.6, 0.3, [0, -2.0, 0])
+        intro = label('Equality in the information inequality', font_size=36)
         with self.voiceover(
             "When can the bound be reached exactly? <bookmark mark='a'/> Only when T minus its mean is a multiple of "
             "the score, for every theta. <bookmark mark='b'/> Rearranged, the derivative of the log-density is a "
@@ -166,13 +178,16 @@ class CramerRao(VoiceoverScene):
             "log-density has exponential-family form, with T as its sufficient statistic. "
             "<bookmark mark='d'/> So the bound is attained only by the natural statistic of an exponential family, "
             "estimating its own mean. <bookmark mark='e'/> The sample mean for a normal mean, or a Poisson rate, or a "
-            "proportion. <bookmark mark='f'/> For anything else, the exponential's rate, a normal standard deviation, "
+            "proportion. <bookmark mark='f'/> For these other examples, the exponential's rate, a normal standard deviation, "
             "the probability of a quiet year, the best unbiased estimator exists, but its variance sits strictly "
             "above the bound."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.8, x=-0.6, buff=0.5, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             for k, m_ in enumerate("def"):
                 vo.wait_until(m_)
@@ -209,7 +224,7 @@ class CramerRao(VoiceoverScene):
             "At five observations that's one and two thirds; at a hundred, one point zero two. It never touches the "
             "line, but it approaches it. <bookmark mark='c'/> The MLE, n over the total, is biased, so compare its mean "
             "squared error instead: worse still at small n, nearly three times the bound at n equals five, and also "
-            "converging to one. The bound is a large-sample truth, and in small samples it can be far from tight."
+            "converging to one. The bound is valid at every sample size under its assumptions, but it need not be tight. Here the unbiased estimator approaches it as the sample grows."
         ) as vo:
             self.play(FadeIn(A), FadeIn(tag))
             vo.wait_until("a")
@@ -238,21 +253,20 @@ class CramerRao(VoiceoverScene):
                       (WHITE, r"any $1/\sqrt k$ rate")], font_size=22).move_to([4.4, 2.1, 0])
         rows = fit_rows(VGroup(
             label(r"the support $\{1, \dots, N\}$ moves with $N$:", font_size=24),
-            label(r"no score, \ no information, \ no bound", font_size=24),
-            MathTex(r"\mathrm{Var}\,\hat N_{\mathrm{UMVUE}} = \frac{(N - k)(N + 1)}{k(k + 2)} \sim \frac{N^2}{k^2}", font_size=28,
+            label(r"integer $N$, moving support: the smooth bound does not apply", font_size=24),
+            MathTex(r"\mathrm{Var}\,\hat N_{\mathrm{UMVUE}} = \frac{(N - k)(N + 1)}{k(k + 2)} \approx \frac{N^2}{k^2}\quad(1\ll k\ll N)", font_size=28,
                     color=UMVUE),
             label(r"irregular models can be estimated faster than $1/\sqrt n$", font_size=26, color=S.ACCENT),
             label(r"each new tank moves the edge we are looking for", font_size=22, color=GREY_A),
         ), 4.6, 0.32, [4.3, -0.9, 0])
         with self.voiceover(
             "And now the tanks break the speed limit. <bookmark mark='a'/> On log scales, a one over root k rate is a "
-            "line of slope minus a half. The moment estimator follows it. <bookmark mark='b'/> The best unbiased "
-            "estimator falls with slope minus one: its standard deviation shrinks like one over k, not one over root k. "
+            "line of slope minus a half. The moment estimator approximately follows it while k is small relative to N. <bookmark mark='b'/> For one much smaller than k and k much smaller than N, the best unbiased "
+            "estimator approximately falls with slope minus one: its standard deviation shrinks like one over k, not one over root k. "
             "<bookmark mark='c'/> The dashed line is any estimator obeying a one over root k law, matched at two tanks. "
             "By twenty tanks the scaled maximum is already more than twice as accurate, and the gap keeps widening. "
             "<bookmark mark='d'/> How is that allowed? The bound's proof differentiated the density in theta, and here "
-            "the set of possible serials, one to N, moves with N. There's no score and no Fisher information, so there's "
-            "no bound. <bookmark mark='e'/> Each extra captured tank tells us about the edge of the distribution "
+            "the set of possible serials, one to N, moves with N. N is integer-valued and the support moves, so the usual score-based Cramér–Rao proof does not apply. Other bounds for irregular models still exist. <bookmark mark='e'/> Each extra captured tank tells us about the edge of the distribution "
             "directly, and the edge is the parameter. Irregular problems, like boundaries and change points, can be "
             "estimated at rate one over n, and Part 47 studies such rates in general."
         ) as vo:
@@ -275,17 +289,18 @@ class CramerRao(VoiceoverScene):
                   font_size=32),
             cmath(r"\mathrm{MSE}", r"\ge", r"\frac{\big(1 + b'(\theta)\big)^2}{n\,I(\theta)} + b(\theta)^2", font_size=32),
         ]
-        whys = [why(r"the same proof, \ with $\psi(\theta) = \theta + b(\theta)$"), why(r"shrinkage ($b' < 0$) lowers the variance floor")]
+        whys = [why(r"the same proof, \ with $\psi(\theta) = \theta + b(\theta)$"), why(r"shrinkage ($-2 < b' < 0$) lowers the variance floor")]
         foot = fit_rows(VGroup(
             label(r"a biased estimator can go below $1/(nI)$, \ at some $\theta$: \ Part 8's $n + 1$ divisor, \ James--Stein", font_size=24),
             label(r"Hodges (1951): \ an estimator that beats the bound at one point, \ asymptotically; \ Le Cam: \ only on a set of "
                   r"measure zero (Part 47)", font_size=24, color=GREY_A),
             label(r"the bound is a benchmark for regular, unbiased estimation, \ not a law of nature", font_size=26, color=S.ACCENT),
         ), 12.6, 0.3, [0, -2.45, 0])
+        intro = label('Bias changes the information bound', font_size=36)
         with self.voiceover(
             "Two more ways around the bound. <bookmark mark='a'/> The same proof works for a biased estimator, with "
             "the derivative of its mean in place of one. <bookmark mark='b'/> If the bias shrinks estimates toward a "
-            "point, so that its derivative is negative, the variance floor drops below one over n I. "
+            "point, so that the derivative of its mean lies between zero and one, the variance floor drops below one over n I. "
             "<bookmark mark='c'/> So biased estimators can beat the bound at some values of theta: Part 8's n plus one "
             "divisor did, and James–Stein shrinkage does. <bookmark mark='d'/> And in 1951 Joseph Hodges built an "
             "estimator that beats the bound asymptotically at one point, at no cost elsewhere in the limit. Lucien "
@@ -293,9 +308,12 @@ class CramerRao(VoiceoverScene):
             "estimators pay heavily nearby: Part 47 tells that story. <bookmark mark='e'/> The Cramér–Rao bound is a "
             "benchmark for regular, unbiased estimation, not a law of nature."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=2.9, x=-0.6, buff=0.5, edge=6.9)
             for k, m_ in enumerate("ab"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             for k, m_ in enumerate("cde"):
                 vo.wait_until(m_)

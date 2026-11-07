@@ -53,7 +53,7 @@ class RaoBlackwell(VoiceoverScene):
         tc = theorem_card(r"Rao--Blackwell", r"Let $\hat\theta$ be any estimator with $E\hat\theta^2 < \infty$ \ and $T$ a sufficient "
                           r"statistic. \ Then $\tilde\theta = E(\hat\theta \mid T)$ \ (i) is an estimator, \ (ii) has the same mean as "
                           r"$\hat\theta$, \ and (iii) has \ $\mathrm{MSE}(\tilde\theta) \le \mathrm{MSE}(\hat\theta)$ for every $\theta$, \ "
-                          r"with equality only if $\hat\theta$ is already a function of $T$.", who=r"Rao (1945); \ Blackwell (1947)",
+                          r"with equality only if $\hat\theta$ is already a function of $T$, almost surely under that $\theta$.", who=r"Rao (1945); \ Blackwell (1947)",
                           color=UMVUE, width=10.8, font_size=26).move_to([0, 1.0, 0])
         foot = fit_rows(VGroup(
             label(r"(i) needs sufficiency: \ the conditional law of the data given $T$ is free of $\theta$, \ so the average can be computed",
@@ -92,6 +92,7 @@ class RaoBlackwell(VoiceoverScene):
         rows[4][2].set_color(GREY_A)
         whys = [why(r"the tower property (Part 5)"), why(r"Eve's law (Part 5): \ within plus between"), why(r"the second term is $\tilde\theta$'s variance"),
                 why(r"the first term is $\ge 0$; \ equal means, \ so MSE too"), why(r"Jensen, \ conditionally: \ $L(\theta, E[\hat\theta \mid T]) \le E[L(\theta,\hat\theta) \mid T]$")]
+        intro = label('Conditioning removes within-statistic variance', font_size=36)
         with self.voiceover(
             "The proof uses nothing but Part 5. <bookmark mark='a'/> The mean is unchanged, by the tower property: the "
             "average of conditional averages is the overall average. <bookmark mark='b'/> For the variance, use Eve's "
@@ -102,9 +103,12 @@ class RaoBlackwell(VoiceoverScene):
             "within-T wobble, which is noise. <bookmark mark='e'/> And the same argument, using Jensen's inequality "
             "conditionally, works for any convex loss, not just squared error."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=5, top=2.9, x=-0.6, buff=0.55, edge=6.9)
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 

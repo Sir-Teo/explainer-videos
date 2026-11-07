@@ -46,7 +46,7 @@ class Likelihood(VoiceoverScene):
             "<bookmark mark='c'/> He had forerunners: Daniel Bernoulli in 1778, Johann Lambert, and Gauss, who in 1809 "
             "derived the normal curve by asking which error law makes the average the most likely value. "
             "<bookmark mark='d'/> And Fisher was careful with words. He called the quantity the likelihood, to keep it "
-            "distinct from a probability. It is the probability of the data, read as a function of the parameter. It is "
+            "distinct from a probability. It is the probability mass, or for continuous data the density, evaluated at the data and read as a function of the parameter. It is "
             "not the probability of the parameter."
         ) as vo:
             vo.wait_until("a")
@@ -84,6 +84,7 @@ class Likelihood(VoiceoverScene):
         bx = B.ax
         Lc = curve(bx, ps_, L, LIK, 3.5)
         pts = VGroup(*[Dot(bx.c2p(p, comb(n, k) * p ** k * (1 - p) ** (n - k)), radius=0.07, color=S.ACCENT) for p in ps])
+        intro = label('Seven heads in ten tosses: which probability fits?', font_size=36)
         with self.voiceover(
             "Here's what it means. A coin is tossed ten times and lands heads seven times. What is p? "
             "<bookmark mark='a'/> Each panel is a candidate value of p, and the bars are the probabilities of every "
@@ -95,7 +96,9 @@ class Likelihood(VoiceoverScene):
             "seven, the observed proportion. Notice the curve isn't a density in p; its area isn't one. It only ranks "
             "parameter values by how well they predicted what happened."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(*[FadeIn(pn[0]) for pn in panels], *[FadeIn(pn[2]) for pn in panels])
             self.play(*[FadeIn(pn[1], lag_ratio=0.05) for pn in panels])
             vo.wait_until("b")
@@ -122,7 +125,7 @@ class Likelihood(VoiceoverScene):
         rows = fit_rows(VGroup(
             MathTex(r"\ell(p) = k\log p + (n - k)\log(1 - p)", font_size=28),
             label(r"the same peak; \ ten times the data, \ ten times the curvature", font_size=24, color=S.ACCENT),
-            label(r"the width where $\ell$ drops $1.92$: \ a 95\% interval (Wilks; \ Part 11)", font_size=24, color=GREY_A),
+            label(r"the width where $\ell$ drops $1.92$: \ an approximate 95\% likelihood interval (regular large samples)", font_size=24, color=GREY_A),
         ), 5.0, 0.34, [4.3, -0.8, 0])
         with self.voiceover(
             "In practice we work with the logarithm of the likelihood: products of probabilities become sums, and "
@@ -157,19 +160,23 @@ class Likelihood(VoiceoverScene):
         rows[4][2].set_color(LIK)
         whys = [why(r"independent observations: \ multiply"), why(r"take logs: \ add"), why(r"the score: \ the slope of $\ell$"),
                 why(r"at an interior peak the slope is zero"), why(r"the observed proportion, \ as it should be")]
+        intro = label('The score is the slope of the log-likelihood', font_size=36)
         with self.voiceover(
             "The machinery. <bookmark mark='a'/> For independent observations, the likelihood is a product of "
             "densities, one per observation. <bookmark mark='b'/> Its logarithm is a sum. <bookmark mark='c'/> The "
             "derivative of the log-likelihood has a name: the score. It's a sum of independent pieces, one per "
-            "observation, which means the law of large numbers and the central limit theorem apply to it, and that "
+            "observation, so under the required moment and regularity conditions the law of large numbers and the central limit theorem apply to it, and that "
             "will be the key to everything in chapters five and nine. <bookmark mark='d'/> At a peak inside the "
             "parameter space, the score is zero. That's the likelihood equation. <bookmark mark='e'/> For the coin, the "
             "score is k over p minus n minus k over one minus p, and it vanishes at k over n. Maximum likelihood "
             "recovers the obvious answer, which is reassuring, and then goes on to give answers where nothing is obvious."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=5, top=2.95, x=-0.6, buff=0.45, edge=6.9)
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -197,6 +204,7 @@ class Likelihood(VoiceoverScene):
             cells.add(VGroup(MathTex(str(kk), font_size=26).move_to([xs[0], y, 0]), MathTex(str(o), font_size=26, color=DATA).move_to([xs[1], y, 0]),
                              MathTex(f"{e:.1f}", font_size=26, color=LIK).move_to([xs[2], y, 0])))
         src = historical_tag(r"Bortkiewicz (1898): \ 10 corps $\times$ 20 years", corner=DR)
+        intro = label("Bortkiewicz's horse-kick counts", font_size=36)
         with self.voiceover(
             "A real example, from Part 3's Museum. <bookmark mark='a'/> Ladislaus Bortkiewicz's two hundred "
             "corps-years of Prussian cavalry records, and the number of soldiers killed by horse kicks in each. If the "
@@ -208,8 +216,10 @@ class Likelihood(VoiceoverScene):
             "sixty-six with one, against sixty-five; twenty with two, against twenty-two. A one-parameter model, fitted "
             "by maximum likelihood, reproduces a century-old table almost exactly."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(src))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(FadeIn(rows[1]))
@@ -230,7 +240,7 @@ class Likelihood(VoiceoverScene):
         A = axes([150, 500], [0, 1.1], x_length=6.6, y_length=3.6, xlabel=r"$N$", ylabel=r"$L(N) \div L(214)$",
                  xticks=[150, 214, 300, 400, 500], yticks=[0, 0.5, 1], center=[-2.8, -0.6, 0])
         ax = A.ax
-        bars = VGroup(*[Line(ax.c2p(N, 0), ax.c2p(N, v), color=LIK, stroke_width=1.6) for N, v in zip(Ns[::3], L[::3]) if v > 0])
+        bars = VGroup(*[Line(ax.c2p(N, 0), ax.c2p(N, v), color=LIK, stroke_width=1.6) for N, v in zip(Ns, L) if v > 0])
         zero = Line(ax.c2p(150, 0), ax.c2p(m - 1, 0), color=S.RESID, stroke_width=5)
         rows = fit_rows(VGroup(
             MathTex(r"L(N) = P_N(\text{these 6 serials}) = \begin{cases} 0, & N < m \\[2pt] 1/\binom{N}{6}, & N \ge m \end{cases}",
@@ -240,6 +250,7 @@ class Likelihood(VoiceoverScene):
             label(r"the peak is at the jump: \ the score equation says nothing", font_size=24, color=S.ACCENT),
             label(r"and the MLE is biased low (ch.~1)", font_size=24, color=S.ACCENT),
         ), 4.9, 0.34, [4.2, -0.2, 0])
+        intro = label('The tank likelihood has a boundary maximum', font_size=36)
         with self.voiceover(
             "Now the tanks, by likelihood. <bookmark mark='a'/> Given N, every set of six serials from one to N is "
             "equally likely, so the probability of the six we saw is one over N choose six, provided N is at least "
@@ -250,7 +261,9 @@ class Likelihood(VoiceoverScene):
             "setting a derivative to zero would never have found it. And the MLE here is the recipe we already saw was "
             "biased low: maximum likelihood is a principle, not a guarantee of quality in small samples."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(A), FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(Create(zero), LaggedStart(*[Create(b) for b in bars], lag_ratio=0.01), FadeIn(rows[1]), run_time=2.5)
@@ -274,6 +287,7 @@ class Likelihood(VoiceoverScene):
                   color=GREY_A),
             label(r"likelihood is about the data's fit, \ not the parameter's coordinates", font_size=26, color=S.ACCENT),
         ), 12.6, 0.36, [0, -1.4, 0])
+        intro = label('Transforming a maximum likelihood estimate', font_size=36)
         with self.voiceover(
             "One property makes maximum likelihood especially convenient. <bookmark mark='a'/> It's invariant. If theta "
             "hat maximizes the likelihood, then the maximum likelihood estimate of any function of theta is that "
@@ -285,7 +299,9 @@ class Likelihood(VoiceoverScene):
             "likelihood measures how well each distribution fits the data, and the same distribution fits equally well "
             "whatever coordinates we use to label it."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(tc, shift=UP * 0.2))
             for k, m_ in enumerate("bcde"):
                 vo.wait_until(m_)

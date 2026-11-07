@@ -34,6 +34,7 @@ class Information(VoiceoverScene):
         rows[3][2].set_color(LIK)
         whys = [why(r"the score of one observation"), why(r"average it under the same $\theta$"),
                 why(r"swap derivative and integral: \ the regularity conditions"), why(r"the score is centred at the truth")]
+        intro = label('Why a regular score has mean zero', font_size=36)
         with self.voiceover(
             "Chapter five's standard error depended on something called the Fisher information. Here's what it is. "
             "<bookmark mark='a'/> Start with the score of a single observation, the derivative of its log-density. "
@@ -44,9 +45,12 @@ class Information(VoiceoverScene):
             "The score has mean zero at the true parameter. Evaluated at the truth, the log-likelihood is, on average, "
             "flat."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.6, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -127,7 +131,7 @@ class Information(VoiceoverScene):
             (r"$N(\mu, \sigma^2)$, \ $\mu$", r"\frac{1}{\sigma^2}", r"\frac{\sigma^2}{n}"),
             (r"$N(\mu, \sigma^2)$, \ $\sigma^2$", r"\frac{1}{2\sigma^4}", r"\frac{2\sigma^4}{n}"),
             (r"Exponential$(\lambda)$", r"\frac{1}{\lambda^2}", r"\frac{\lambda^2}{n}"),
-            (r"Cauchy, \ location", r"\frac12", r"\frac2n"),
+            (r"Cauchy, \ location (scale 1)", r"\frac12", r"\frac2n"),
         ]
         hdr = VGroup(label(r"model", font_size=24, color=GREY_B), label(r"$I(\theta)$", font_size=26, color=GREY_B),
                      label(r"$1/(nI)$", font_size=26, color=GREY_B))
@@ -175,6 +179,7 @@ class Information(VoiceoverScene):
         cv2 = curve(bx, ps2, np.sqrt((1 - ps2) / ps2), S.RESID, 3.5)
         foot = label(r"a fair coin is the hardest to pin down in absolute terms; \ a rare event, \ in relative terms", font_size=24,
                      color=S.ACCENT).to_edge(DOWN, buff=0.35)
+        intro = label('Absolute error and relative error for a coin', font_size=36)
         with self.voiceover(
             "The coin's information has a lesson. <bookmark mark='a'/> One over the information is p times one minus "
             "p, largest at a half. A fair coin is the hardest coin to pin down: each toss is maximally unpredictable, "
@@ -184,7 +189,9 @@ class Information(VoiceoverScene):
             "you need huge samples to see enough cases. Which picture matters depends on the question, and on the "
             "coordinates you measure in."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(A), Create(cv))
             vo.wait_until("b")
             self.play(FadeIn(B), Create(cv2))
@@ -202,9 +209,10 @@ class Information(VoiceoverScene):
         rows[2][2].set_color(LIK)
         whys = [why(r"variances of independent scores add"), why(r"the chain rule on the score"),
                 why(r"$dp/d\eta = p(1-p)$"), why(r"the delta method, \ again: \ Part 14's logistic regression")]
+        intro = label('Information adds and transforms', font_size=36)
         with self.voiceover(
-            "Two rules make information easy to work with. <bookmark mark='a'/> First, it adds: n independent "
-            "observations carry n times the information of one, which is where the root n in every standard error comes "
+            "Two rules make information easy to work with. <bookmark mark='a'/> First, it adds: n independent identically distributed "
+            "observations carry n times the information of one, which is where the root n in regular standard errors comes "
             "from. <bookmark mark='b'/> Second, it transforms by the chain rule. If theta is a function of some other "
             "parameter eta, the score picks up a factor of the derivative, and the information picks up its square. "
             "<bookmark mark='c'/> Measure a coin on the log-odds scale, the scale of logistic regression: the "
@@ -212,9 +220,12 @@ class Information(VoiceoverScene):
             "scale, extreme probabilities are the hardest to estimate. Information isn't a property of the experiment "
             "alone; it depends on what you're asking."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.6, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -228,13 +239,13 @@ class Information(VoiceoverScene):
         ]
         rows[2][2].set_color(LIK)
         rows[3][2].set_color(S.ACCENT)
-        whys = [why(r"several parameters: \ a matrix, \ PSD (Part 4)"), why(r"orthogonal: \ learning $\sigma$ does not help or hurt $\mu$"),
+        whys = [why(r"several parameters: \ a covariance matrix; positive definite to invert (Part 4)"), why(r"orthogonal: \ no first-order asymptotic information loss for $\mu$"),
                 why(r"the multivariate version of ch.~5"), why(r"the Schur complement (Part 4); \ equality iff orthogonal")]
         with self.voiceover(
             "<bookmark mark='a'/> With several parameters, the information becomes a matrix: the covariance matrix of "
             "the score vector, or minus the average Hessian of the log-density. Being a covariance matrix, it's positive "
             "semidefinite. <bookmark mark='b'/> For the normal, it's diagonal: the mean and the variance are orthogonal "
-            "parameters, so not knowing one costs nothing in estimating the other. <bookmark mark='c'/> The MLE is "
+            "parameters, so not knowing one costs no first-order asymptotic information for the other. Finite-sample uncertainty can still increase. <bookmark mark='c'/> The MLE is "
             "asymptotically normal with covariance matrix the inverse of the information. <bookmark mark='d'/> And here's "
             "a subtle fact from Part 4's Schur complement: the first diagonal entry of the inverse is at least one over "
             "the first diagonal entry. Not knowing the other parameters can only hurt. Unknown nuisance parameters cost "
@@ -261,6 +272,7 @@ class Information(VoiceoverScene):
             label(r"how fast nearby distributions become distinguishable", font_size=24, color=GREY_A),
             label(r"Rao (1945): \ $I$ as a Riemannian metric on the model, \ information geometry", font_size=22, color=GREY_A),
         ), 5.2, 0.34, [4.2, -0.2, 0])
+        intro = label('Information as local KL curvature', font_size=36)
         with self.voiceover(
             "One last view, which ties this chapter to chapter five. <bookmark mark='a'/> Here is the Kullback–Leibler "
             "divergence from the true Poisson, with rate point seven, to every other Poisson. It's zero at the truth "
@@ -271,7 +283,9 @@ class Information(VoiceoverScene):
             "makes the information a way of measuring distance on the space of models, a Riemannian metric, and that "
             "idea grew into the field of information geometry."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(A), Create(cv))
             vo.wait_until("b")
             self.play(Create(par), FadeIn(rows[0]))

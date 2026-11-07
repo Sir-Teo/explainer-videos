@@ -28,11 +28,12 @@ class Moments(VoiceoverScene):
                           r"first five moments, \ and solved a polynomial of degree nine", color=S.MUSEUM, width=9.8,
                           font_size=24).move_to([0, 0.9, 0])
         rows = fit_rows(VGroup(
-            label(r"the method needs no density, \ only averages: \ it works when nothing else can be computed", font_size=24,
+            label(r"the method needs no density, \ only computable, finite moments: \ no density required", font_size=24,
                   color=S.ACCENT),
             label(r"Fisher (1912, 1922) would attack it as inefficient, \ and propose maximum likelihood", font_size=24,
                   color=GREY_A),
         ), 12.6, 0.3, [0, -2.2, 0])
+        intro = label("Pearson's crab mixture problem", font_size=36)
         with self.voiceover(
             "In 1893 the zoologist Raphael Weldon measured a thousand crabs from the Bay of Naples, and found that one "
             "ratio, forehead breadth to body length, had a lopsided distribution. Perhaps two races of crab were mixed "
@@ -44,7 +45,9 @@ class Moments(VoiceoverScene):
             "years later, the young Ronald Fisher would argue that it throws information away, and propose maximum "
             "likelihood instead. We'll build both, and then settle the argument."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(rows[0]))
@@ -66,9 +69,8 @@ class Moments(VoiceoverScene):
             "The recipe. <bookmark mark='a'/> A model with p unknown parameters has moments, the expected value of X, "
             "of X squared, and so on, each a function of theta. <bookmark mark='b'/> The sample has moments too: plain "
             "numbers, the averages of the data, their squares, and so on. <bookmark mark='c'/> Set the first p of them "
-            "equal: p equations in p unknowns. <bookmark mark='d'/> Solve, and that's the estimator. Any convenient set "
-            "of moments works: in practice we usually match the mean and the variance rather than the raw second moment. "
-            "By the law of large numbers the sample moments converge to the model's, so if the inversion is "
+            "equal: p equations in p unknowns. <bookmark mark='d'/> Solve, and that's the estimator. Choose finite moments that identify the parameters: in practice we usually match the mean and the variance rather than the raw second moment. "
+            "For independent identically distributed data with those moments finite, the law of large numbers makes the sample moments converge to the model's, so if the identifying inversion is "
             "continuous, the estimator is consistent. That's the whole method."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.5, x=-0.6, buff=0.9, edge=6.9)
@@ -89,8 +91,8 @@ class Moments(VoiceoverScene):
         a, b = d["mom"]
         rows = fit_rows(VGroup(
             MathTex(r"\text{Gamma}(\alpha, \beta):\ \ E X = \alpha\beta,\quad \mathrm{Var}\,X = \alpha\beta^2", font_size=28),
-            MathTex(rf"\bar x = {d['mean']:.2f},\quad s^2 = {d['var']:.2f}", font_size=28, color=DATA),
-            MathTex(r"\hat\beta = \frac{s^2}{\bar x},\qquad \hat\alpha = \frac{\bar x^2}{s^2}", font_size=30, color=MOM),
+            MathTex(rf"\bar x = {d['mean']:.2f},\quad v_n = {d['var']:.2f}", font_size=28, color=DATA),
+            MathTex(r"\hat\beta = \frac{v_n}{\bar x},\qquad \hat\alpha = \frac{\bar x^2}{v_n}", font_size=30, color=MOM),
             MathTex(rf"\hat\alpha = {a:.2f},\quad \hat\beta = {b:.2f}", font_size=30, color=MOM),
             MathTex(rf"\text{{truth (dashed): }} \alpha = {d['a0']:g},\ \beta = {d['sc0']:g}", font_size=28, color=WHITE),
         ), 5.4, 0.3, [4.1, 0.0, 0])
@@ -98,7 +100,7 @@ class Moments(VoiceoverScene):
         with self.voiceover(
             "An example. <bookmark mark='a'/> Fifty draws from a gamma distribution, the skewed distribution of waiting "
             "times and rainfall totals. It has a shape alpha and a scale beta. Its mean is alpha beta, and its variance "
-            "is alpha beta squared. <bookmark mark='b'/> The sample has mean four point eight and variance seven point "
+            "is alpha beta squared. <bookmark mark='b'/> The sample has mean four point eight and divisor-n variance seven point "
             "three five. <bookmark mark='c'/> Divide the variance by the mean to get beta, and square the mean over the "
             "variance to get alpha. <bookmark mark='d'/> Three point one four and one point five three. "
             "<bookmark mark='e'/> The truth, which only the simulation knows, was two point five and two. The fitted "
@@ -159,9 +161,9 @@ class Moments(VoiceoverScene):
         rows = fit_rows(VGroup(
             MathTex(rf"\mathrm{{SD}}:\ {d['sd_mom']:.3f}\ \text{{vs}}\ {d['sd_mle']:.3f}", font_size=28),
             MathTex(rf"\text{{bias}}:\ {d['bias_mom']:+.3f}\ \text{{vs}}\ {d['bias_mle']:+.3f}", font_size=28),
-            MathTex(rf"\text{{efficiency}} = \Big(\tfrac{{{d['sd_mle']:.3f}}}{{{d['sd_mom']:.3f}}}\Big)^2 = {eff:.2f}", font_size=28,
+            MathTex(rf"\text{{variance ratio}} = \Big(\tfrac{{{d['sd_mle']:.3f}}}{{{d['sd_mom']:.3f}}}\Big)^2 = {eff:.2f}", font_size=28,
                     color=S.ACCENT),
-            label(rf"moments waste about {100 * (1 - eff):.0f}\% of the sample", font_size=24, color=S.ACCENT),
+            label(rf"about {100 * (1 - eff):.0f}\% less information by this variance comparison", font_size=24, color=S.ACCENT),
         ), 5.0, 0.32, [4.4, -0.4, 0])
         tag = simulated_tag(r"simulated: \ 4,000 samples of 50", corner=DR)
         with self.voiceover(
@@ -169,7 +171,7 @@ class Moments(VoiceoverScene):
             "same gamma, the shape estimated from each by moments. It's centred near two and a half, but spread out: "
             "standard deviation point six two. <bookmark mark='b'/> Now the same samples, estimated by maximum "
             "likelihood, which we'll build in the next chapter. Tighter: point five two, and less biased too. "
-            "<bookmark mark='c'/> The ratio of variances is the efficiency: point seven one. Fitting by moments here is "
+            "<bookmark mark='c'/> The simulated variance ratio is point seven one. If variance scales inversely with sample size, fitting by moments here is approximately "
             "like throwing away about thirty percent of the data. That was exactly Fisher's complaint. The method of "
             "moments is simple, it's often a good starting point, as we'll use it in chapter four, but it isn't the "
             "best that can be done."
@@ -196,9 +198,10 @@ class Moments(VoiceoverScene):
             label(r"generalized method of moments (Hansen, 1982): \ more equations than unknowns, \ weighted (Part 37)", font_size=24,
                   color=S.ACCENT),
         ), 12.6, 0.32, [0, -1.9, 0])
+        intro = label('When moment estimators have a normal limit', font_size=36)
         with self.voiceover(
-            "One more thing the method gives for free. <bookmark mark='a'/> Sample moments are averages, so the central "
-            "limit theorem makes them jointly normal, and the estimator is a smooth function of them, so the delta "
+            "One more thing the method gives for free. <bookmark mark='a'/> With independent identically distributed data and finite moments through order twice the highest moment used, the multivariate central "
+            "limit theorem gives a joint normal limit for the moments. If the identifying inversion is differentiable, the delta "
             "method of Part 6 makes the estimator approximately normal too, with a variance we can compute from the "
             "gradient of the inversion and the covariance of the moments. <bookmark mark='b'/> So moment estimators come "
             "with standard errors. <bookmark mark='c'/> The catch is that higher moments are noisy: Pearson's fifth "
@@ -206,7 +209,9 @@ class Moments(VoiceoverScene):
             "in econometrics, where Lars Hansen's generalized method of moments, from 1982, uses more equations than "
             "unknowns and weights them optimally. It won him a share of the 2013 Nobel prize, and it returns with instrumental variables in Part 37."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(tc, shift=UP * 0.2))
             for k, m_ in enumerate("bcd"):
                 vo.wait_until(m_)

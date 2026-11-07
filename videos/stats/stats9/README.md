@@ -27,11 +27,11 @@ Every number on screen is computed in [`compute.py`](compute.py). The Museum sup
 
 Everything else is a seeded simulation or an exact calculation, and is tagged as such.
 
-**Built in this part:** the tank factory game, [`explainer/stats/kit/estimation.py`](../../../explainer/stats/kit/estimation.py)
+**Built in this part:** the tank factory game, [`explainer/stats/kit/estimation.py`](../../../../explainer/stats/kit/estimation.py)
 (tested in `tests/test_stats_kit_estimation.py`). `tank_game(recipe, N, k, reps, model)` grades any estimator of N,
 given as a function of a `(reps, k)` array of captured serials, on simulated factories. It reports the bias, the SD
-and the RMSE with Monte Carlo errors, under the textbook model (`"uniform"`) or a world the recipe did not assume
-(`"newer"`: newer tanks captured up to 3× as often; `"offset"`: serials start at 1,001). The module also has `newton`
+and the RMSE; bias and RMSE include Monte Carlo errors, under the textbook model (`"uniform"`) or a world the recipe did not assume
+(`"newer"`: sequential capture weights increase from 1 to 3; `"offset"`: serials start at 1,001). The module also has `newton`
 and `observed_information`. The `TankFactory` picture is in `explainer/stats/viz.py`.
 
 | RMSE, N = 300, k = 5 | uniform | newer | offset |
@@ -106,8 +106,7 @@ python tools/lecture_length.py stats9 --floor 50
 **1. Moments for the Beta.**
 
 *Solution.* With m = x̄, matching E X = α/(α + β) = m and Var X = m(1 − m)/(α + β + 1) = v gives
-α + β = m(1 − m)/v − 1 =: c. So α̂ = m·c and β̂ = (1 − m)·c. This needs v < m(1 − m), which holds for any sample in
-(0, 1) that is not constant.
+α + β = m(1 − m)/v − 1 =: c. So α̂ = m·c and β̂ = (1 − m)·c. This needs v < m(1 − m), and v > 0; these hold for a nonconstant sample in (0, 1) when v uses divisor n.
 
 **2. The Pareto.**
 
@@ -123,7 +122,7 @@ g = 0 almost everywhere, and M is complete. Since E M = nθ/(n + 1), the UMVUE i
 
 **4. A Rao–Blackwellized probability.**
 
-*Solution.* 1{X₁ ≤ c} is unbiased for Φ(c − μ), and X̄ is complete and sufficient. (X₁, X̄) is bivariate normal with
+*Solution.* 1{X₁ ≤ c} is unbiased for Φ(c − μ), and X̄ is complete and sufficient. For n > 1, (X₁, X̄) is bivariate normal with
 Cov(X₁, X̄) = 1/n = Var X̄, so X₁ ∣ X̄ ~ N(X̄, 1 − 1/n). Hence
 
 E(1{X₁ ≤ c} ∣ X̄) = Φ((c − X̄)/√(1 − 1/n)),
