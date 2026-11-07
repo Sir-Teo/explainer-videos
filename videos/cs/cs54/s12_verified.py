@@ -321,7 +321,7 @@ class Verified(VoiceoverScene):
             "five fifty-one-bit limbs, <bookmark mark='e'/> and a limb product that reaches that bit wraps round as "
             "nineteen times itself: the code is full of nineteens. <bookmark mark='f'/> Fiat-Crypto generates such "
             "code from the specification, with a Coq proof. HACL star proves memory safety, correctness, and that no "
-            "branch or address depends on a secret, closing Part 27's timing channels."
+            "branch or address depends on a secret, closing Part 29's timing channels."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
