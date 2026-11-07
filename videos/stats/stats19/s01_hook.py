@@ -24,11 +24,12 @@ class Hook(VoiceoverScene):
             label(r"both Hamilton and Madison later left lists, \ and the lists disagreed", font_size=24, color=RES),
         ), 12.4, 0.3, [0, -1.5, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In 1787 and 1788, eighty-five essays appeared in New York newspapers urging the state to "
-            "ratify the new Constitution. All were signed Publius. They were written by Alexander Hamilton, James Madison and "
-            "John Jay, and as The Federalist they became a founding text of American government. <bookmark mark='b'/> But "
-            "who wrote which? <bookmark mark='c'/> Hamilton, shortly before the duel that killed him, left a list of his "
-            "authorship. Madison later left another. The lists disagreed about twelve papers."
+            "<bookmark mark='a'/> In 1787 and 1788, eighty-five essays defended the new Constitution, most first "
+            "appearing in New York newspapers urging the state to ratify the new Constitution. All were signed "
+            "Publius. They were written by Alexander Hamilton, James Madison and John Jay, and as The Federalist they"
+            " became a founding text of American government. <bookmark mark='b'/> But who wrote which? <bookmark "
+            "mark='c'/> Hamilton, shortly before the duel that killed him, left a list of his authorship. Madison "
+            "later left another. The lists disagreed about twelve papers."
         ) as vo:
             self.play(FadeIn(tl))
             vo.wait_until("a")
@@ -58,11 +59,12 @@ class Hook(VoiceoverScene):
                                     ("JOINT", r"joint, \ 3"), ("DISPUTED", r"disputed, \ 12"))]).arrange(RIGHT, buff=0.5)
         key.move_to([0, -1.8, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Here are the eighty-five papers. By the consensus of historians, Hamilton wrote fifty-one, "
-            "Madison fourteen, Jay five, and three were joint work. <bookmark mark='b'/> The twelve in gold are disputed: "
-            "numbers forty-nine to fifty-eight, sixty-two and sixty-three. Historians had argued about them for a century and a "
-            "half, by style and by argument, without settling it. The two men wrote in the same formal style, on the same "
-            "subjects, often with the same sentence lengths."
+            "<bookmark mark='a'/> Here are the eighty-five papers. By the consensus of historians, Hamilton wrote "
+            "fifty-one, Madison fourteen, Jay five, and three were joint work. <bookmark mark='b'/> The twelve in "
+            "gold are disputed: numbers forty-nine to fifty-eight, sixty-two and sixty-three. Historians had debated "
+            "their authorship for a century and a half. Douglass Adair had already argued for Madison in 1944; "
+            "statistical analysis later quantified the evidence. The two men wrote in the same formal style, on the "
+            "same subjects, often with the same sentence lengths."
         ) as vo:
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(c_) for c_ in cells], lag_ratio=0.01), FadeIn(key), run_time=2.0)
@@ -80,7 +82,7 @@ class Hook(VoiceoverScene):
         bars = VGroup()
         for k, wd in enumerate(words):
             for j, (au, col) in enumerate((("HAMILTON", HAM), ("MADISON", MAD), ("DISPUTED", DISP))):
-                v = min(d[au][wd], 11.9)
+                v = d[au][wd]
                 bars.add(Rectangle(width=w, height=max(0.01, ax.c2p(0, v)[1] - ax.c2p(0, 0)[1]), stroke_width=0, fill_color=col,
                                    fill_opacity=0.9).move_to(ax.c2p(k - 0.27 + 0.27 * j, 0), aligned_edge=DOWN))
         names = VGroup(*[label(rf"\emph{{{wd}}}", font_size=22, color=GREY_A).next_to(ax.c2p(k, 0), DOWN, buff=0.15)
@@ -119,7 +121,7 @@ class Hook(VoiceoverScene):
         dots = VGroup()
         for au, y in rows_y.items():
             for v in d["upon"][au]:
-                dots.add(Dot(ax.c2p(min(v, 7.9), y + 0.35 * (g.random() - 0.5)), radius=0.07, color=cols[au]))
+                dots.add(Dot(ax.c2p(v, y + 0.35 * (g.random() - 0.5)), radius=0.07, color=cols[au]))
         names = VGroup(*[label(t, font_size=22, color=cols[au]).next_to(ax.c2p(-0.3, y), LEFT, buff=0.15)
                          for au, y, t in (("HAMILTON", 2.8, r"Hamilton, \ 51"), ("MADISON", 1.7, r"Madison, \ 14"),
                                           ("DISPUTED", 0.6, r"disputed, \ 12"))])

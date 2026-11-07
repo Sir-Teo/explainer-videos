@@ -7,7 +7,7 @@ import numpy as np
 from explainer.stats import *  # noqa: F403
 from explainer.stats import museum  # noqa: F401
 
-from .compute import load  # noqa: F401
+from .compute import clipped_segments, load  # noqa: F401
 
 PART = 19
 
@@ -21,9 +21,7 @@ OBS = S.ACCENT  # the observed statistic
 
 
 def polyline(ax, xs, ys, color, stroke_width=2.5, opacity=1.0) -> VMobject:
-    m = VMobject(stroke_color=color, stroke_width=stroke_width, stroke_opacity=opacity)
-    m.set_points_as_corners([ax.c2p(a, b) for a, b in zip(xs, ys)])
-    return m
+    return clip_curve(ax, xs, ys, color, stroke_width).set_stroke(opacity=opacity)
 
 
 def fit_rows(rows: VGroup, width: float, buff: float, pos) -> VGroup:
@@ -35,13 +33,22 @@ def fit_rows(rows: VGroup, width: float, buff: float, pos) -> VGroup:
 
 
 def clip_curve(ax, xs, ys, color, stroke_width=3, ymin=None, ymax=None):
-    xs, ys = np.asarray(xs, float), np.asarray(ys, float)
-    keep = np.isfinite(ys)
-    if ymin is not None:
-        keep &= ys >= ymin
-    if ymax is not None:
-        keep &= ys <= ymax
-    return curve(ax, xs[keep], ys[keep], color, stroke_width)
+    xmin, xmax, bottom, top = bounds(ax)
+    rectangle = (xmin, xmax, max(bottom, ymin) if ymin is not None else bottom,
+                 min(top, ymax) if ymax is not None else top)
+    result = VMobject(stroke_color=color, stroke_width=stroke_width)
+    previous = None
+    for start, end in clipped_segments(xs, ys, rectangle):
+        if previous is None or not np.allclose(previous, start, atol=1e-12, rtol=0):
+            result.start_new_path(ax.c2p(*start))
+        result.add_line_to(ax.c2p(*end))
+        previous = end
+    return result
+
+
+
+def curve(ax, xs, ys, color, stroke_width=3):
+    return clip_curve(ax, xs, ys, color, stroke_width)
 
 
 def shade(ax, xs, ys, color, opacity=0.35):
@@ -70,6 +77,16 @@ HIT, MISS = S.KEPT, S.BROKEN
 
 def scatter(ax, xs, ys, color=None, radius=0.06, opacity=0.9):
     return VGroup(*[Dot(ax.c2p(a, b), radius=radius, color=color or DATA, fill_opacity=opacity) for a, b in zip(xs, ys)])
+
+
+def plot_cell(ax, x, y, dx, dy, color, opacity):
+    """The visible intersection of a grid cell with the plotting rectangle."""
+    xmin, xmax, ymin, ymax = bounds(ax)
+    left, right = max(xmin, x-dx/2), min(xmax, x+dx/2)
+    bottom, top = max(ymin, y-dy/2), min(ymax, y+dy/2)
+    return Polygon(ax.c2p(left, bottom), ax.c2p(right, bottom),
+                   ax.c2p(right, top), ax.c2p(left, top), stroke_width=0,
+                   fill_color=color, fill_opacity=opacity)
 
 
 def fit_line(ax, a, b, x0, x1, color=None, stroke_width=4):
@@ -141,9 +158,7 @@ FC = S.EST  # forecasts and their intervals
 
 def series_line(ax, t, y, color=None, stroke_width=2.5, opacity=1.0):
     """A time series as a polyline on ``ax`` (NaNs skipped)."""
-    t, y = np.asarray(t, float), np.asarray(y, float)
-    k = np.isfinite(y)
-    return polyline(ax, t[k], y[k], color or SERIES, stroke_width, opacity)
+    return polyline(ax, t, y, color or SERIES, stroke_width, opacity)
 
 
 def band(ax, t, lo, hi, color, opacity=0.25):

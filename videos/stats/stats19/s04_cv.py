@@ -32,6 +32,7 @@ class CrossValidation(VoiceoverScene):
         rows[3][2].set_color(CVC)
         whys = [why(r"Part 16, \ chapter ten"), why(r"for each setting $\theta$ of the dial"), why(r"a rough measure of its noise"),
                 why(r"$k$ for neighbours, \ degree for polynomials, \ $\lambda$ for the lasso")]
+        intro = label('Repeat the full fitting procedure inside each fold', font_size=36)
         with self.voiceover(
             "Part 16 introduced cross-validation; here it does its main job. <bookmark mark='a'/> Split the data into K folds; "
             "fit on all but one and predict the one left out, in turn. <bookmark mark='b'/> Do that for every setting of the "
@@ -39,10 +40,14 @@ class CrossValidation(VoiceoverScene):
             "standard error. <bookmark mark='d'/> Then choose the setting with the smallest cross-validated error. That's how "
             "nearly every tuning parameter in machine learning is chosen."
         ) as vo:
+            intro.scale_to_fit_width(min(intro.width, 12.5))
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def curve(self):
@@ -54,12 +59,12 @@ class CrossValidation(VoiceoverScene):
         ax = A.ax
         bars = VGroup(*[Line(ax.c2p(k, max(0.08, m - s)), ax.c2p(k, min(0.3, m + s)), color=CVC, stroke_width=1.8, stroke_opacity=0.6)
                         for k, m, s in zip(ks, cv, se)])
-        ccv = polyline(ax, ks, np.minimum(cv, 0.3), CVC, 3.5)
-        cte = polyline(ax, ks, np.minimum(te, 0.3), TEST, 3)
+        ccv = polyline(ax, ks, cv, CVC, 3.5)
+        cte = polyline(ax, ks, te, TEST, 3)
         rows = fit_rows(VGroup(
             label(r"one training set of 100", font_size=22),
             label(r"blue: \ 10-fold CV, \ $\pm 1$ SE", font_size=22, color=CVC),
-            label(r"red: \ the true test error \ (4,000 new points)", font_size=22, color=TEST),
+            label(r"red: \ test error on 4,000 new cases \ (4,000 new points)", font_size=22, color=TEST),
             MathTex(rf"\text{{CV's choice}}: k = {d['best_k']}", font_size=26, color=CVC),
             MathTex(rf"\text{{the truth's}}: k = {d['test_argmin']}", font_size=26, color=TEST),
         ), 3.45, 0.4, [5.1, 0.3, 0])
@@ -67,7 +72,7 @@ class CrossValidation(VoiceoverScene):
             "<bookmark mark='a'/> Here's cross-validation choosing k for nearest neighbours, from a single training set of a "
             "hundred. <bookmark mark='b'/> The ten-fold CV error, with bars of one standard error, has the U shape: high for k "
             "equal to one, falling, then rising as the rule gets too stiff. <bookmark mark='c'/> Because this is a simulation, we "
-            "can also draw the true test error of each rule, on four thousand new points. CV tracks it well. "
+            "can also draw test error on 4,000 new cases of each rule, on four thousand new points. CV tracks it well. "
             "<bookmark mark='d'/> CV's minimum is at k equals eight. <bookmark mark='e'/> The truth's is at seven. From a single "
             "training set of a hundred, cross-validation found nearly the best rule."
         ) as vo:
@@ -94,42 +99,55 @@ class CrossValidation(VoiceoverScene):
         rows[3][2].set_color(RES)
         whys = [why(r"its SE bars overlap widely"), why(r"Breiman, \ Friedman, \ Olshen \& Stone (1984)"),
                 why(r"$k$ larger means simpler, \ smoother"), why(r"this time, \ the rule cost accuracy")]
+        intro = label('The one-SE rule trades observed fit for simplicity', font_size=36)
         with self.voiceover(
             "<bookmark mark='a'/> But the CV curve is itself noisy, and near its bottom it's nearly flat, so its minimum is "
             "uncertain. <bookmark mark='b'/> A common convention, from the authors of the CART book in 1984, is the one-"
             "standard-error rule: choose the simplest model whose CV error is within one standard error of the minimum. "
             "<bookmark mark='c'/> Here that's k equals seventeen, a smoother rule than CV's choice of eight. "
-            "<bookmark mark='d'/> And here it costs accuracy: the true test errors are point one four one against point one "
+            "<bookmark mark='d'/> And here it costs accuracy: test error on 4,000 new casess are point one four one against point one "
             "one nine. The rule protects against chasing noise in the CV curve, and buys simplicity; it doesn't promise a "
             "lower error, and on any one dataset it can be worse."
         ) as vo:
+            intro.scale_to_fit_width(min(intro.width, 12.5))
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def honest(self):
         rows = [
             cmath(r"\text{CV estimates}", r":", r"\text{the error of the procedure, \ averaged over training sets}", font_size=28),
-            cmath(r"\text{not}", r":", r"\text{the error of the one rule you fitted}", font_size=28),
+            cmath(r"\text{distinguish}", r":", r"\text{average procedure risk and a particular full-data fit}", font_size=28),
             cmath(r"\text{the fold SE}", r":", r"\text{ignores that folds share data}", font_size=28),
-            cmath(r"\text{so}", r":", r"\text{CV} \pm 2\,\text{SE is too narrow}", font_size=30),
+            cmath(r"\text{so}", r":", r"\text{CV} \pm 2\,\text{SE can be too narrow}", font_size=30),
         ]
         rows[3][2].set_color(RES)
         whys = [why(r"Bates, \ Hastie \& Tibshirani (2023)"), why(r"a subtle but real difference"),
                 why(r"the $K$ fold errors are correlated"), why(r"the Board checks it")]
+        intro = label('Distinguish average procedure risk from a particular fit', font_size=36)
         with self.voiceover(
-            "What exactly does cross-validation estimate? <bookmark mark='a'/> Stephen Bates, Trevor Hastie and Robert Tibshirani "
-            "showed in 2023 that it estimates the average error of the procedure, over training sets like ours, <bookmark mark='b'/> "
-            "rather than the error of the particular rule we fitted to our data. <bookmark mark='c'/> And the usual standard "
-            "error, the spread of the fold errors, treats the folds as independent, though they share most of their training "
-            "data. <bookmark mark='d'/> So CV plus or minus two standard errors is too narrow as an interval for the test error."
+            "What exactly does cross-validation estimate? <bookmark mark='a'/> Stephen Bates, Trevor Hastie and "
+            "Robert Tibshirani studied the difference between average procedure risk and the conditional risk of a "
+            "particular fit. Their exact independence result concerns homoskedastic Gaussian least squares, not every"
+            " learner. In general, K-fold CV evaluates fits trained on only K minus one folds, <bookmark mark='b'/> "
+            "so its target also differs from a rule trained on the entire observed sample. <bookmark mark='c'/> And "
+            "the usual standard error, the spread of the fold errors, treats the folds as independent, though they "
+            "share most of their training data. <bookmark mark='d'/> Ignoring that dependence can make CV intervals "
+            "too narrow, as the next simulation checks."
         ) as vo:
+            intro.scale_to_fit_width(min(intro.width, 12.5))
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def board(self):
@@ -137,10 +155,12 @@ class CrossValidation(VoiceoverScene):
         b = coverage_board(rows, lit_part=19, placeholders=0, font_size=20, row_h=0.62)
         b.scale_to_fit_width(min(b.width, 13.0)).move_to(ORIGIN)
         with self.voiceover(
-            "<bookmark mark='a'/> The Board: two thousand training sets of a hundred, each with ten-fold CV and an interval of "
-            "plus or minus one point nine six fold standard errors, checked against the true test error of the rule fitted to "
-            "that training set. Coverage ninety point five percent: broken, modestly. Bates and colleagues' nested "
-            "cross-validation repairs it, at a considerable cost in computation."
+            "<bookmark mark='a'/> The Board: two thousand training sets of a hundred, each with ten-fold CV and an "
+            "interval of plus or minus one point nine six fold standard errors, checked against test error on 4,000 "
+            "new cases of the rule fitted to that training set. Coverage ninety point one five percent against the "
+            "exact population risk: broken, modestly. Bates and colleagues propose a specialized nested procedure to "
+            "estimate uncertainty, with improved coverage in their examples. Ordinary nested tuning, discussed later,"
+            " is a different use of an outer loop and is not an automatic confidence-interval repair."
         ) as vo:
             self.play(FadeIn(b.head), FadeIn(b.axis), FadeIn(b.legend))
             vo.wait_until("a")
@@ -156,11 +176,12 @@ class CrossValidation(VoiceoverScene):
             label(r"every choice made with the data goes inside the loop: \ chapter ten", font_size=24, color=OBS),
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> With one fold per observation, cross-validation is leave-one-out: nearly unbiased, quite "
-            "variable, and for linear smoothers computable from a single fit, as Part 16 showed. <bookmark mark='b'/> Five or ten "
-            "folds are the usual compromise. <bookmark mark='c'/> The folds must respect the data's structure: blocks of time, "
-            "as in Part 17's rolling origins; whole clusters, as in Part 18's towns. <bookmark mark='d'/> And every choice made "
-            "with the data, including which variables to use, has to be repeated inside each fold, or the estimate leaks. "
+            "<bookmark mark='a'/> With one fold per observation, cross-validation is leave-one-out: often with small "
+            "training-size bias, with variance that depends on the learner, and for linear smoothers computable from "
+            "a single fit, as Part 16 showed. <bookmark mark='b'/> Five or ten folds are the usual compromise. "
+            "<bookmark mark='c'/> The folds must respect the data's structure: blocks of time, as in Part 17's "
+            "rolling origins; whole clusters, as in Part 18's towns. <bookmark mark='d'/> And every choice made with "
+            "the data, including which variables to use, has to be repeated inside each fold, or the estimate leaks. "
             "Chapter ten shows how badly."
         ) as vo:
             for k, m_ in enumerate("abcd"):

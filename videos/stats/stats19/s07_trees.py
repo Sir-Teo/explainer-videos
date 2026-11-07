@@ -41,6 +41,7 @@ class Trees(VoiceoverScene):
         rows[3][2].set_color(OBS)
         whys = [why(r"try every variable and every cut"), why(r"Breiman, \ Friedman, \ Olshen \& Stone (1984): \ CART"),
                 why(r"greedy: \ the best split now, \ not the best tree"), why(r"a piecewise-constant rule")]
+        intro = label('A tree chooses splits to reduce within-node impurity', font_size=36)
         with self.voiceover(
             "A tree asks a sequence of yes-or-no questions. <bookmark mark='a'/> At each step it considers every variable and "
             "every cut point, and picks the split that makes the two halves most homogeneous. <bookmark mark='b'/> "
@@ -50,10 +51,14 @@ class Trees(VoiceoverScene):
             "best tree overall. <bookmark mark='d'/> A new case runs down the questions to a leaf, and gets the leaf's average "
             "or majority."
         ) as vo:
+            intro.scale_to_fit_width(min(intro.width, 12.5))
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def diagram(self):
@@ -114,7 +119,7 @@ class Trees(VoiceoverScene):
             Rectangle(width=ax.c2p(2.6, 0)[0] - ax.c2p(t2, 0)[0], height=ax.c2p(0, 95)[1] - ax.c2p(0, 18)[1], stroke_width=0,
                       fill_color=BLUE, fill_opacity=0.22).move_to(ax.c2p(t2, 18), aligned_edge=DL))
         cuts = VGroup(*[DashedLine(ax.c2p(t, 18), ax.c2p(t, 95), color=OBS, stroke_width=2.5) for t in (t1, t2)])
-        dots = VGroup(*[Dot(ax.c2p(min(max(a, 0.62), 2.58), b), radius=0.035, color=BLUE if c else RED) for (a, b), c in zip(X, v)])
+        dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.035, color=BLUE if c else RED) for (a, b), c in zip(X, v) if 0.6 <= a <= 2.6 and 18 <= b <= 95])
         rows = fit_rows(VGroup(
             label(r"a tree cuts the plane into boxes", font_size=22),
             label(r"splits are parallel to the axes", font_size=22, color=OBS),
@@ -140,52 +145,61 @@ class Trees(VoiceoverScene):
 
     def prune(self):
         rows = [
-            cmath(r"\text{grow big}", r":", r"\text{until leaves have 20 adults: \ 35 leaves}", font_size=30),
+            cmath(r"\text{grow big}", r":", r"\text{depth at most 6; min leaf 20; 35 leaves}", font_size=30),
             cmath(r"R_\alpha(T)", r"=", r"\text{error}(T) + \alpha\,|T|", font_size=32),
             cmath(r"\text{weakest link}", r":", r"\text{collapse the split that buys least per leaf}", font_size=30),
-            cmath(r"\alpha", r":", r"\text{chosen by cross-validation}", font_size=30),
+            cmath(r"\alpha", r":", r"\text{our CV chooses a maximum leaf budget}", font_size=30),
         ]
         rows[1][2].set_color(OBS)
         whys = [why(r"stopping early can miss a good later split"), why(r"cost-complexity: \ a penalty per leaf"),
                 why(r"a nested sequence of subtrees"), why(r"chapter three, \ again")]
+        intro = label('Weakest-link pruning trades fit against tree size', font_size=36)
         with self.voiceover(
-            "How big should the tree be? <bookmark mark='a'/> CART's answer is to grow it large, here until the leaves hold "
-            "about twenty adults, thirty-five leaves in all, because a split that looks useless can enable a useful one below "
-            "it. <bookmark mark='b'/> Then prune, by penalizing size: the error plus alpha times the number of leaves. "
-            "<bookmark mark='c'/> As alpha grows, the splits that buy the least improvement per leaf are collapsed first, the "
-            "weakest links, giving a nested sequence of smaller and smaller trees. <bookmark mark='d'/> Cross-validation picks "
-            "alpha, and so the size."
+            "How big should the tree be? <bookmark mark='a'/> CART's answer is to grow it large, here with a maximum "
+            "depth of six and a minimum leaf size of twenty, giving thirty-five leaves, because a split that looks "
+            "useless can enable a useful one below it. <bookmark mark='b'/> Then prune, by penalizing size: the error"
+            " plus alpha times the number of leaves. <bookmark mark='c'/> As alpha grows, the splits that buy the "
+            "least improvement per leaf are collapsed first, the weakest links, giving a nested sequence of smaller "
+            "and smaller trees. <bookmark mark='d'/> Our implementation uses cross-validation to choose a maximum "
+            "leaf budget along these weakest-link paths. The pruning objective here is total Gini impurity, and the "
+            "held-out score is misclassification error."
         ) as vo:
+            intro.scale_to_fit_width(min(intro.width, 12.5))
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def cv_size(self):
         d = load("tree")
         sz = np.asarray(d["sizes"], float)
         cv = np.asarray(d["cv"])
-        A = axes([0, 25], [0.34, 0.41], x_length=8.4, y_length=4.2, xlabel=r"leaves", ylabel=r"10-fold CV misclassification",
+        A = axes([0, 25], [0.34, 0.41], x_length=8.4, y_length=4.2, xlabel=r"maximum leaf budget", ylabel=r"10-fold CV misclassification",
                  xticks=[1, 5, 10, 15, 20, 25], yticks=[0.35, 0.37, 0.39, 0.41], center=[-1.4, 0.3, 0])
         ax = A.ax
         c = polyline(ax, sz, cv, CVC, 3.5)
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.06, color=CVC) for a, b in zip(sz, cv)])
         base = DashedLine(ax.c2p(0, d["base"]), ax.c2p(25, d["base"]), color=GREY_B, stroke_width=2)
         rows = fit_rows(VGroup(
-            MathTex(rf"\text{{CV's choice}}: {d['best']}\ \text{{leaves}}", font_size=26, color=CVC),
+            MathTex(rf"\text{{CV's choice}}: {d['best']}\ \text{{budget; actual leaves: }}{d['pruned_leaves']}", font_size=26, color=CVC),
             MathTex(rf"\text{{test error}}: {100 * d['test_pruned']:.1f}\%\ \text{{pruned}},\ {100 * d['test_full']:.1f}\%\ \text{{full}}", font_size=24),
             MathTex(rf"\text{{always Red}}: {100 * d['base']:.1f}\%", font_size=24, color=GREY_B),
             label(r"the vote is mostly unpredictable from income and age", font_size=20, color=RES),
         ), 3.45, 0.4, [5.1, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The cross-validated error for each pruned size: one leaf, a single guess for everyone, is "
-            "worst; the minimum is at four leaves, and larger trees slowly get worse. <bookmark mark='b'/> On a thousand "
-            "held-out adults, the pruned tree misclassifies thirty-five point nine percent, and the full thirty-five-leaf tree "
-            "thirty-eight point five. <bookmark mark='c'/> Predicting Red for everyone would misclassify thirty-seven point six. "
-            "<bookmark mark='d'/> So the tree helps only a little, which is the truth: in the World, income and age shift the "
-            "odds of voting Blue, but most of the vote is individual. A good learner is honest about how little can be "
-            "predicted; the unpruned tree, worse than guessing, is not."
+            "<bookmark mark='a'/> The cross-validated error for each pruned size: one leaf, a single guess for "
+            "everyone, is worst; the minimum occurs at a budget of four leaves. Weakest-link pruning can remove "
+            "several leaves at once, so the final tree actually has three. Larger budgets generally do worse in this "
+            "example. <bookmark mark='b'/> On a thousand held-out adults, the pruned tree misclassifies thirty-five "
+            "point nine percent, and the full thirty-five-leaf tree thirty-eight point five. <bookmark mark='c'/> "
+            "Predicting Red for everyone would misclassify thirty-seven point six. <bookmark mark='d'/> So the tree "
+            "helps only a little, which is the truth: in the World, income and age shift the odds of voting Blue, but"
+            " most of the vote is individual. A good learner is honest about how little can be predicted; the "
+            "unpruned tree, worse than guessing, is not."
         ) as vo:
             self.play(FadeIn(A), Create(base))
             vo.wait_until("a")
@@ -197,20 +211,22 @@ class Trees(VoiceoverScene):
 
     def pros_cons(self):
         rows = fit_rows(VGroup(
-            label(r"trees: \ readable, \ handle any kind of variable, \ find interactions", font_size=24, color=HIT),
+            label(r"trees: \ readable, \ numeric or suitably encoded categorical variables, \ find interactions", font_size=24, color=HIT),
             label(r"but unstable: \ a slightly different sample, \ a different tree", font_size=24, color=RES),
             label(r"high variance: \ chapter two's problem", font_size=24),
-            label(r"the cure: \ average many trees \ (bagging, \ random forests, \ boosting)", font_size=24, color=OBS),
+            label(r"the cure: \ ensembles: bagging and forests average; boosting adds sequentially", font_size=24, color=OBS),
             label(r"Breiman (1996, \ 2001); \ Friedman (2001): \ Parts 54 and 64", font_size=22, color=GREY_A),
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Trees are readable, handle any kind of variable without transformation, and find "
-            "interactions on their own. <bookmark mark='b'/> But they're unstable: change a few observations and the first "
-            "split may move, and everything below it. <bookmark mark='c'/> That's chapter two's variance problem in its purest "
-            "form. <bookmark mark='d'/> The cure is to average many trees, grown on bootstrap resamples or on reweighted data: "
-            "bagging, random forests and boosting. <bookmark mark='e'/> Breiman's random forests of 2001 and Friedman's gradient "
-            "boosting of the same year are among the most accurate off-the-shelf predictors there are; Parts 54 and 64 take "
-            "them up."
+            "<bookmark mark='a'/> Small trees can be readable and find interactions automatically. Numeric thresholds"
+            " need no feature scaling; categorical variables still need suitable split rules or encoding. <bookmark "
+            "mark='b'/> But they're unstable: change a few observations and the first split may move, and everything "
+            "below it. <bookmark mark='c'/> That's chapter two's variance problem in its purest form. <bookmark "
+            "mark='d'/> Bagging and random forests average trees fitted to resampled data. Boosting builds a "
+            "sequential weighted sum, often fitting residuals or reweighted cases; these are related ensemble ideas, "
+            "not identical algorithms. <bookmark mark='e'/> Breiman's random forests of 2001 and Friedman's gradient "
+            "boosting of the same year are among the most accurate off-the-shelf predictors there are; Parts 54 and "
+            "64 take them up."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

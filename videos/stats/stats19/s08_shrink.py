@@ -23,27 +23,34 @@ class Shrinkage(VoiceoverScene):
 
     def ridge(self):
         rows = [
-            cmath(r"\hat\beta_{\text{ridge}}", r"=", r"\arg\min \|y - X\beta\|^2 + \lambda\|\beta\|_2^2", font_size=30),
-            cmath(r"\ ", r"=", r"(X'X + \lambda I)^{-1} X'y", font_size=32),
+            cmath(r"\hat\beta_{\text{ridge}}", r"=", r"\arg\min \frac{1}{2n}\|y-X\beta\|^2 + \frac\lambda2\|\beta\|_2^2", font_size=30),
+            cmath(r"\ ", r"=", r"(X'X + n\lambda I)^{-1} X'y", font_size=32),
             cmath(r"\lambda = 0", r":", r"\text{least squares};\ \ \lambda \to \infty: \ \beta \to 0", font_size=30),
             cmath(r"\text{the trade}", r":", r"\text{a little bias for a lot less variance}", font_size=30),
         ]
         rows[3][2].set_color(OBS)
-        whys = [why(r"Hoerl \& Kennard (1970)"), why(r"always invertible, \ even with collinear $x$'s"),
+        whys = [why(r"Hoerl \& Kennard (1970)"), why(r"positive $\lambda$: invertible even with collinear predictors"),
                 why(r"a dial from Part 12 to nothing"), why(r"chapter two, \ applied to coefficients")]
+        intro = label('Regularization stabilizes a regression with noisy predictors', font_size=36)
         with self.voiceover(
-            "Linear models have their own dial. <bookmark mark='a'/> Ridge regression, proposed by Arthur Hoerl and Robert "
-            "Kennard in 1970, minimizes the squared error plus lambda times the sum of squared coefficients. "
-            "<bookmark mark='b'/> The solution adds lambda to the diagonal of X prime X before inverting, so it exists even "
-            "when the predictors are nearly collinear and least squares falls apart. <bookmark mark='c'/> Lambda zero is Part "
-            "12's least squares; as lambda grows, every coefficient shrinks toward zero. <bookmark mark='d'/> The shrinkage "
-            "adds bias and removes variance, chapter two's trade, and with many predictors or noisy data the trade is usually "
-            "favourable."
+            "Linear models have their own dial. <bookmark mark='a'/> Ridge regression, proposed by Arthur Hoerl and "
+            "Robert Kennard in 1970, uses centred responses and standardized predictors, leaving the intercept "
+            "unpenalized. In per-observation units it minimizes squared error divided by two n, plus lambda over two "
+            "times the squared coefficient norm. <bookmark mark='b'/> The solution adds n lambda to the diagonal of X"
+            " prime X before inverting, so for positive lambda it is invertible even with collinear predictors and "
+            "least squares falls apart. <bookmark mark='c'/> Lambda zero is Part 12's least squares; as lambda grows,"
+            " the penalized coefficient vector tends to zero; individual coordinates need not change monotonically. "
+            "<bookmark mark='d'/> The shrinkage adds bias and removes variance, chapter two's trade, and with many "
+            "predictors or noisy data the trade is usually favourable."
         ) as vo:
+            intro.scale_to_fit_width(min(intro.width, 12.5))
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def lasso(self):
@@ -56,6 +63,7 @@ class Shrinkage(VoiceoverScene):
         rows[3][2].set_color(OBS)
         whys = [why(r"Tibshirani (1996)"), why(r"absolute values instead of squares"), why(r"the corners of the next picture"),
                 why(r"a sparse, \ readable model")]
+        intro = label('The absolute-value penalty can set coefficients to zero', font_size=36)
         with self.voiceover(
             "<bookmark mark='a'/> Robert Tibshirani's lasso, of 1996, changes one thing: it penalizes the sum of the absolute "
             "values of the coefficients instead of their squares. <bookmark mark='b'/> The one-norm. <bookmark mark='c'/> The "
@@ -63,10 +71,14 @@ class Shrinkage(VoiceoverScene):
             "<bookmark mark='d'/> So the lasso shrinks and selects variables at the same time, and produces a sparse model "
             "that can be read."
         ) as vo:
+            intro.scale_to_fit_width(min(intro.width, 12.5))
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def geometry(self):
@@ -88,6 +100,7 @@ class Shrinkage(VoiceoverScene):
         t2 = label(r"ridge: \ $\beta_1^2 + \beta_2^2 \le t^2$", font_size=22, color=S.CTRL).next_to(g2, UP, buff=0.1)
         r1 = MathTex(rf"\hat\beta = ({b1[0]:.2f},\ {abs(b1[1]):.2f})", font_size=24, color=OBS).next_to(g1, DOWN, buff=0.1)
         r2 = MathTex(rf"\hat\beta = ({b2[0]:.2f},\ {b2[1]:.2f})", font_size=24, color=S.CTRL).next_to(g2, DOWN, buff=0.1)
+        intro = label('Lasso and ridge constrain coefficients in different shapes', font_size=36)
         with self.voiceover(
             "Why exact zeros? The picture explains it. <bookmark mark='a'/> In the plane of two coefficients, the least-squares "
             "estimate sits at the green dot, and the ellipses around it are contours of equal squared error. "
@@ -98,7 +111,10 @@ class Shrinkage(VoiceoverScene):
             "<bookmark mark='e'/> Here the lasso keeps beta one and sets beta two to zero; ridge keeps a little of both. In many "
             "dimensions the diamond has many corners and edges, and the lasso lands on them constantly."
         ) as vo:
+            intro.scale_to_fit_width(min(intro.width, 12.5))
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(g1), FadeIn(g2), Create(c1b), Create(c2b))
             vo.wait_until("b")
             self.play(DrawBorderThenFill(diamond), DrawBorderThenFill(circle), FadeIn(t1), FadeIn(t2))
@@ -120,18 +136,20 @@ class Shrinkage(VoiceoverScene):
         soft = polyline(ax, z, np.sign(z) * np.maximum(np.abs(z) - lam, 0), OBS, 3.5)
         rid = polyline(ax, z, z / (1 + lam), S.CTRL, 3.5)
         rows = fit_rows(VGroup(
-            label(r"orthonormal predictors:", font_size=22),
+            label(r"orthogonal standardized predictors: $X^\top X=nI$", font_size=22),
             MathTex(r"\text{lasso}: \ \text{sign}(\hat\beta)\,(|\hat\beta| - \lambda)_+", font_size=26, color=OBS),
             MathTex(r"\text{ridge}: \ \hat\beta / (1 + \lambda)", font_size=26, color=S.CTRL),
             label(r"the lasso zeroes small coefficients and shifts big ones by $\lambda$", font_size=20),
-            label(r"ridge scales everything, \ zeroes nothing", font_size=20, color=GREY_A),
+            label(r"ridge scales coefficients; it does not select by thresholding", font_size=20, color=GREY_A),
         ), 6.2, 0.4, [3.2, 0.0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> When the predictors are orthonormal, both rules act coefficient by coefficient, and their "
-            "difference fits in one picture. <bookmark mark='b'/> The lasso soft-thresholds: any least-squares coefficient "
-            "smaller than lambda becomes zero, and larger ones move toward zero by lambda. <bookmark mark='c'/> Ridge simply "
-            "scales every coefficient by one over one plus lambda. <bookmark mark='d'/> So the lasso kills small effects and "
-            "keeps large ones, slightly shrunk; <bookmark mark='e'/> ridge keeps everyone, all a little smaller."
+            "<bookmark mark='a'/> With standardized orthogonal predictors, X prime X equal to n I, and both losses in"
+            " the per-observation units just stated, the rules act coefficient by coefficient, and their difference "
+            "fits in one picture. <bookmark mark='b'/> The lasso soft-thresholds: any least-squares coefficient "
+            "smaller than lambda becomes zero, and larger ones move toward zero by lambda. <bookmark mark='c'/> Ridge"
+            " simply scales every coefficient by one over one plus lambda. <bookmark mark='d'/> So the lasso kills "
+            "small effects and keeps large ones, slightly shrunk; <bookmark mark='e'/> ridge keeps everyone, all a "
+            "little smaller."
         ) as vo:
             self.play(FadeIn(A), Create(ident))
             vo.wait_until("a")
@@ -147,14 +165,14 @@ class Shrinkage(VoiceoverScene):
 
     def paths(self):
         d = load("lasso")
-        lams = np.log10(np.asarray(d["lams"]))
+        lams = -np.log10(np.asarray(d["lams"]))
         P = np.asarray(d["path"])
         R = np.asarray(d["ridge_path"])
-        rl = np.log10(np.asarray(d["ridge_lams"]))
+        rl = -np.log10(np.asarray(d["ridge_lams"]))
         true = np.asarray(d["true"])
-        A = axes([lams.min(), lams.max()], [-2.6, 4.2], x_length=5.6, y_length=3.8, xlabel=r"$\log_{10}\lambda$",
+        A = axes([lams.min(), lams.max()], [-2.6, 4.2], x_length=5.6, y_length=3.8, xlabel=r"$-\log_{10}\lambda$ (less penalty to the right)",
                  ylabel=r"coefficients", yticks=[-2, 0, 2, 4], center=[-3.4, 0.4, 0], font_size=16)
-        B = axes([rl.min(), rl.max()], [-2.6, 4.2], x_length=5.6, y_length=3.8, xlabel=r"$\log_{10}\lambda$",
+        B = axes([rl.min(), rl.max()], [-2.6, 4.2], x_length=5.6, y_length=3.8, xlabel=r"$-\log_{10}\lambda$ (less penalty to the right)",
                  ylabel=r"coefficients", yticks=[-2, 0, 2, 4], center=[3.4, 0.4, 0], font_size=16)
         cols = [OBS if t != 0 else GREY_C for t in true]
         la = VGroup(*[polyline(A.ax, lams, P[:, j], cols[j], 2.8 if true[j] else 1.4) for j in range(P.shape[1])])
@@ -163,16 +181,17 @@ class Shrinkage(VoiceoverScene):
         tb = label(r"ridge", font_size=24, color=S.CTRL).next_to(B, UP, buff=0.1)
         foot = fit_rows(VGroup(
             label(r"20 predictors; \ 3 truly matter \ (gold); \ 17 are noise \ (grey)", font_size=22),
-            label(r"lasso: \ coefficients enter one by one as $\lambda$ falls; \ ridge: \ all at once, \ never exactly zero", font_size=20,
+            label(r"lasso: \ coefficients enter one by one as $\lambda$ falls; \ ridge: smooth shrinkage, without a thresholding rule", font_size=20,
                   color=GREY_A),
         ), 12.4, 0.2, [0, -2.6, 0])
         tag = simulated_tag(r"$n = 100$, \ $p = 20$", corner=UR)
         with self.voiceover(
-            "<bookmark mark='a'/> Now a regression with twenty predictors, of which three really matter, in gold, and seventeen "
-            "are noise, in grey. <bookmark mark='b'/> The lasso path traces every coefficient as lambda decreases from left to "
-            "right. At the left, all are zero. As lambda falls, the three real effects enter first, one after another, and "
-            "only later do the noise variables creep in. <bookmark mark='c'/> The ridge path, for comparison: every coefficient "
-            "grows smoothly from zero together, and none is ever exactly zero."
+            "<bookmark mark='a'/> Now a regression with twenty predictors, of which three really matter, in gold, and"
+            " seventeen are noise, in grey. <bookmark mark='b'/> The lasso path traces every coefficient as lambda "
+            "decreases from left to right on the negative log lambda axis. At the left, all are zero. As lambda "
+            "falls, the three real effects enter first, one after another, and only later do the noise variables "
+            "creep in. <bookmark mark='c'/> The ridge path, for comparison: every coefficient grows smoothly from "
+            "zero together, with no mechanism that deliberately sets small coefficients exactly to zero."
         ) as vo:
             self.add(tag)
             vo.wait_until("a")
@@ -193,15 +212,17 @@ class Shrinkage(VoiceoverScene):
                   font_size=26),
         ]
         rows[2][2].set_color(HIT)
-        whys = [why(r"the most accurate predictor"), why(r"chapter three's rule, \ for $\lambda$"),
+        whys = [why(r"the minimum observed CV loss; not proof of optimal prediction"), why(r"chapter three's rule, \ for $\lambda$"),
                 why(r"selection, \ here, \ succeeded"), why(r"standardized scale: \ shrunk toward 0")]
         with self.voiceover(
-            "<bookmark mark='a'/> Choose lambda by ten-fold cross-validation. The minimum keeps eight variables: the three real "
-            "ones and five passengers, which help prediction a little by soaking up noise. <bookmark mark='b'/> The one-standard-"
-            "error rule chooses a larger lambda, and keeps three. <bookmark mark='c'/> Exactly the three real effects. "
-            "<bookmark mark='d'/> Their estimates are shrunk toward zero, the lasso's bias, which a refit by least squares on the "
-            "selected variables would remove. Whether selection like this can be trusted in general, and what inference after it "
-            "means, are questions for Parts 32 and 56."
+            "<bookmark mark='a'/> Choose lambda by ten-fold cross-validation. The minimum keeps eight variables: the "
+            "three real ones and five passengers, which give a slightly lower observed CV score but do not thereby "
+            "establish a real prediction benefit. <bookmark mark='b'/> The one-standard-error rule chooses a larger "
+            "lambda, and keeps three. <bookmark mark='c'/> Exactly the three real effects. <bookmark mark='d'/> Their"
+            " estimates are shrunk toward zero, the lasso's bias, A least-squares refit removes the explicit "
+            "shrinkage penalty, but it does not generally remove bias from data-dependent selection or validate "
+            "ordinary post-selection intervals. Whether selection like this can be trusted in general, and what "
+            "inference after it means, are questions for Parts 32 and 56."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):

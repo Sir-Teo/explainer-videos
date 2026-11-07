@@ -33,6 +33,7 @@ class Decided(VoiceoverScene):
         rows[2][2].set_color(DISP)
         whys = [why(r"chapter five's Poisson naive Bayes"), why(r"honest error on papers like these"),
                 why(r"held out completely"), why(r"$+1$: \ 10 to 1 for Madison; \ $-1$: \ 10 to 1 for Hamilton")]
+        intro = label('Apply the fitted models to the disputed papers', font_size=36)
         with self.voiceover(
             "<bookmark mark='a'/> Now the verdict. Train chapter five's Poisson naive Bayes on the sixty-five papers of known "
             "authorship, using ninety-one words. <bookmark mark='b'/> Its leave-one-out error on those papers is zero. "
@@ -40,10 +41,14 @@ class Decided(VoiceoverScene):
             "<bookmark mark='d'/> We'll report the log odds in base ten: plus one means ten to one for Madison, minus one ten to "
             "one for Hamilton, with equal prior odds."
         ) as vo:
+            intro.scale_to_fit_width(min(intro.width, 12.5))
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def verdicts(self):
@@ -66,11 +71,12 @@ class Decided(VoiceoverScene):
             label(r"chapter five's caveat: \ these odds are far too extreme", font_size=20, color=GREY_A),
         ), 12.4, 0.2, [0, -3.05, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Here they are. Every one of the twelve disputed papers comes out for Madison, most by "
-            "overwhelming margins. <bookmark mark='b'/> The exception is number fifty-five, where the evidence is weak: log "
-            "odds of point six, about four to one. <bookmark mark='c'/> Remember chapter five's warning: naive Bayes counts "
-            "correlated words as independent evidence, so these magnitudes are far too extreme. The direction is what to "
-            "trust, and even the direction for fifty-five is uncertain."
+            "<bookmark mark='a'/> Here they are. Every one of the twelve disputed papers comes out for Madison, most "
+            "by overwhelming margins. <bookmark mark='b'/> The exception is number fifty-five, where the evidence is "
+            "weak: log odds of point six, about four to one. <bookmark mark='c'/> Remember chapter five's warning: "
+            "naive Bayes counts correlated words as independent evidence, so these magnitudes are far too extreme. "
+            "The broad direction is a useful model-dependent indication, and even the direction for fifty-five is "
+            "uncertain."
         ) as vo:
             self.play(FadeIn(A), Create(zero), FadeIn(names))
             vo.wait_until("a")
@@ -198,13 +204,15 @@ class Decided(VoiceoverScene):
         msg.to_edge(UP, buff=0.35)
         with self.voiceover(
             "Mosteller and Wallace's most important check was of robustness: does the answer depend on a few words? "
-            "<bookmark mark='a'/> In blue, our verdicts with all ninety-one words. <bookmark mark='b'/> Now drop upon, "
-            "the single strongest word, in teal. Eleven papers still favour Madison, by a little less. <bookmark mark='c'/> But number "
-            "fifty-five flips, to about a hundred and fifty to one for Hamilton, before chapter five's discount. "
-            "<bookmark mark='d'/> Drop whilst and there as well, in gold, and the picture is the same: eleven for Madison, one fragile "
-            "paper, and just one leave-one-out error in sixty-five on the known papers. <bookmark mark='e'/> The eleven are robust; "
-            "number fifty-five rests on one fact: no upon at all in two thousand words, where Hamilton would average about seven. That's why their book, and every careful "
-            "analysis since, treats fifty-five as the hard case."
+            "<bookmark mark='a'/> In blue, our verdicts with all ninety-one words. <bookmark mark='b'/> Now drop "
+            "upon, the single strongest word, in teal. Eleven papers still favour Madison, by a little less. "
+            "<bookmark mark='c'/> But number fifty-five flips, to about a hundred and fifty to one for Hamilton, "
+            "before chapter five's discount. <bookmark mark='d'/> Drop whilst and there as well, in gold, and the "
+            "picture is the same: eleven for Madison, one fragile paper, and just one leave-one-out error in "
+            "sixty-five on the known papers. <bookmark mark='e'/> The eleven are robust; number fifty-five rests on "
+            "one fact: no upon at all in two thousand words, where Hamilton would average about seven. Their original"
+            " analysis also identified fifty-five as its weakest case; sensitivity here is a reason to report the "
+            "modelling dependence."
         ) as vo:
             self.play(FadeIn(A), Create(zero), FadeIn(names))
             for j, m_ in enumerate("abd"):
