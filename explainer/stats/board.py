@@ -5,7 +5,7 @@
 A row records one method in one setting: its nominal level (0.95 for an interval's coverage, 0.05 for a test's
 size), what it actually achieved over R seeded replications, the Monte Carlo band, and a mean width (or power).
 
-Verdicts, against the nominal level with Monte Carlo standard error se = sqrt(p(1 - p)/R):
+Verdicts use the supplied empirical Monte Carlo standard error when present. This supports several correlated\nintervals per independently simulated dataset: estimate the SE across dataset-level coverage averages. Legacy\nrows use the independent-Bernoulli reference se = sqrt(p(1 - p)/R). Verdicts are:
 
 * **kept**: within 3 se of nominal;
 * **broken**: an interval covering less (a test rejecting more) than 3 se beyond nominal;
@@ -37,18 +37,26 @@ class Row:
     reps: int
     width: float | None = None  # mean interval width (or power, for a test, in ``extra``)
     extra: str = ""
+    mc_se: float | None = None  # empirical MC SE across independent simulated datasets, when supplied
 
     @property
     def se(self) -> float:
+        if self.mc_se is not None:
+            if not math.isfinite(self.mc_se) or self.mc_se < 0:
+                raise ValueError("Monte Carlo standard error must be finite and nonnegative")
+            return self.mc_se
         return math.sqrt(self.nominal * (1 - self.nominal) / self.reps)
 
     @property
     def verdict(self) -> str:
-        return verdict(self.kind, self.nominal, self.achieved, self.reps)
+        return verdict(self.kind, self.nominal, self.achieved, self.reps, mc_se=self.mc_se)
 
 
-def verdict(kind: str, nominal: float, achieved: float, reps: int, k: float = 3.0) -> str:
-    se = math.sqrt(nominal * (1 - nominal) / reps)
+def verdict(kind: str, nominal: float, achieved: float, reps: int, k: float = 3.0,
+            *, mc_se: float | None = None) -> str:
+    se = math.sqrt(nominal * (1 - nominal) / reps) if mc_se is None else mc_se
+    if not math.isfinite(se) or se < 0:
+        raise ValueError("Monte Carlo standard error must be finite and nonnegative")
     if abs(achieved - nominal) <= k * se:
         return KEPT
     worse = achieved < nominal if kind == "coverage" else achieved > nominal
