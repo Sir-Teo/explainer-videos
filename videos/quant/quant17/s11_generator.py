@@ -1,270 +1,100 @@
 from __future__ import annotations
 
 import numpy as np
-
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant17.common import axes, data_range
-from explainer.quant.house import deep as D
-from videos.quant.quant17.common import BAD, GEN_COL, GOOD, NET, PART, REF, ask, house_lab, illustration, load
-
-ORDER = ["i.i.d. normal", "i.i.d. bootstrap", "GJR-GARCH", "signature LSTM", "diffusion"]
+from videos.quant.quant17.common import GOOD, NET, PART, REF, axes, data_range
 
 
 class Generator(VoiceoverScene):
     def construct(self):
-        g = load("generator")
-        r = load("ddpm_reverse")
         self.card()
-        self.why_generate()
         self.derive()
-        self.reverse(r)
-        self.contenders(g, r)
-        self.lineup(g)
-        self.scores(g)
+        self.gaussian_reverse()
+        self.signature_scope()
+        self.validation()
 
     def card(self):
-        c = chapter_card(16, r"Market generators", r"Can a network invent markets that look real?", lit=(2020,), part=PART)
-        with self.voiceover("Chapter sixteen. Market generators."):
+        c = chapter_card(16, r"Market generators", r"What can an invented path establish?", lit=(2020,), part=PART)
+        with self.voiceover("Chapter sixteen. Market generators. This chapter uses an analytical Gaussian illustration; it does not train on or inspect the sealed BTC window."):
             self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
         self.play(FadeOut(c))
 
-    def why_generate(self):
-        rows = [cmath(r"z", r"\ \mapsto\ ", r"(r_1, \dots, r_{32})", font_size=40, colors={r"(r_1, \dots, r_{32})": NET}),
-                cmath(r"\mathbb{E}\big[S(\text{real})\big]", r"\approx", r"\mathbb{E}\big[S(\text{generated})\big]",
-                      font_size=36, colors={r"\mathbb{E}\big[S(\text{generated})\big]": NET})]
-        whys = [why(r"the deep hedger is only as good as the paths it trains on, and history is one path. A generator turns "
-                    r"noise into new 32-day windows of returns; Buehler, Horvath, Lyons, Perez Arribas and Wood (2020) built "
-                    r"one for exactly this; J.P. Morgan's team, Risk.net reported, trained its hedgers on such simulated data"),
-                why(r"how to compare a set of paths with another? The expected signature (Part 5) of a path's time, level "
-                    r"and running variance characterizes its law; matching it trains the generator (Ni et al.\ 2021). A "
-                    r"diffusion model, the method behind image generators (AI series, Part 21), is the other contender")]
-        step = ladder(self, rows, whys, keep=2, top=2.4, x=-0.6, buff=1.0, edge=6.9)
-        with self.voiceover(
-            "The deep hedger learned from simulated paths. Where do the paths come from? History gives us one path, "
-            "and a hedger trained on a model learns the model's mistakes. So the same team built market generators: "
-            "networks that turn noise into new stretches of market history, and, as Risk.net reported, trained "
-            "hedgers on their output. "
-            "<bookmark mark='a'/> Judging a generator means comparing two clouds of paths. One way uses the path "
-            "signature from Part five: its average over a set of paths pins down their law, and matching averages "
-            "trains a generator. The other contender is a diffusion model, the method behind image generators, from "
-            "the AI series."
-        ) as vo:
-            step(0)
-            vo.wait_until("a")
-            step(1)
-        self.wait(0.4)
-        self.clear_scene()
-
     def derive(self):
-        rows = [cmath(r"x_t", r"=", r"\sqrt{\bar\alpha_t}\,x_0 + \sqrt{1 - \bar\alpha_t}\,\varepsilon,\quad "
-                      r"\bar\alpha_t = \textstyle\prod_{s \le t}(1 - \beta_s)", font_size=36, colors={r"x_t": GREY_B}),
-                cmath(r"\min_\theta", r"\ ", r"\mathbb{E}\,\lVert \varepsilon - \varepsilon_\theta(x_t, t)\rVert^2", font_size=38,
-                      colors={r"\min_\theta": GOOD}),
-                cmath(r"x_{t-1}", r"=", r"\frac{1}{\sqrt{\alpha_t}}\Big(x_t - \frac{\beta_t}{\sqrt{1 - \bar\alpha_t}}\,"
-                      r"\varepsilon_\theta(x_t, t)\Big) + \sqrt{\beta_t}\,z", font_size=36, colors={r"x_{t-1}": GEN_COL["diffusion"]}),
-                cmath(r"d(X, Y)", r"=", r"\big\lVert\, \mathbb{E}\,S(X) - \mathbb{E}\,S(Y) \,\big\rVert", font_size=38,
-                      colors={r"d(X, Y)": NET})]
-        whys = [why(r"the forward process: add a little Gaussian noise 200 times; composing Gaussian steps gives any $x_t$ "
-                    r"in one draw, a blend of the real window and pure noise"),
-                why(r"Ho, Jain and Abbeel (2020): train a network to recognise the noise that was added (the AI series, "
-                    r"Part 21, builds it)"),
-                why(r"then run backwards from pure noise, removing the predicted noise one step at a time: a new window"),
-                why(r"to judge any generator: the expected signature (Part 5) of the windows, as a path of time, level and "
-                    r"running variance, determines their law under a normalization (Chevyrev and Oberhauser 2022), so "
-                    r"the distance between expected signatures compares two generators. The lead-lag transform's "
-                    r"second level is the quadratic variation: volatility clustering shows")]
-        step = ladder(self, rows, whys, keep=3, top=3.0, x=-0.4, buff=0.55, edge=6.9)
-        with self.voiceover(
-            "How does a diffusion model invent a month of bitcoin? Forward: add a little Gaussian noise to a real "
-            "window, two hundred times, until nothing is left; any stage is one blend of window and noise. "
-            "<bookmark mark='a'/> Train a network to "
-            "look at a noisy window and the stage, and recognise the noise that was added. <bookmark mark='b'/> Then "
-            "run it backwards: start from pure noise and remove the predicted noise one step at a time. What remains "
-            "is a window no one has seen. <bookmark mark='c'/> And to judge it, the signature from Part five. Read "
-            "each window as a path of time, cumulative return and running variance; the average signature of a set "
-            "of windows determines their law, so the distance between two averages compares two generators."
-        ) as vo:
+        rows = [cmath(r"x_t", r"=", r"\sqrt{\bar\alpha_t}x_0+\sqrt{1-\bar\alpha_t}\varepsilon,\quad\varepsilon\sim N(0,I)", font_size=33),
+                cmath(r"\bar\alpha_t", r"=", r"\prod_{s=1}^t(1-\beta_s)", font_size=36),
+                cmath(r"\min_\theta", r"\ ", r"\mathbb E\|\varepsilon-\varepsilon_\theta(x_t,t)\|^2", font_size=36),
+                cmath(r"\varepsilon_{\rm opt}(x_t,t)", r"=", r"\mathbb E[\varepsilon\mid x_t,t]", font_size=34)]
+        whys = [why(r"the forward marginal of a noisy 32-component return window"),
+                why(r"200 steps, $\beta=10^{-4}$ to $0.02$: $\bar\alpha_{200}\approx0.132$, so signal amplitude is about $0.364$, not zero"),
+                why(r"squared loss learns a conditional mean, not each window's exact hidden noise"),
+                why(r"a Gaussian start approximates the terminal forward law only when the schedule makes that approximation adequate")]
+        step = ladder(self, rows, whys, keep=3, top=2.7, x=-0.5, buff=0.65, edge=6.9)
+        with self.voiceover("A diffusion model adds Gaussian noise to a return window, then learns a reverse model. The forward marginal is one blend of data and noise. <bookmark mark='a'/> Its cumulative alpha is a product. In the legacy two-hundred-step schedule, that product is about 0.132: the original window still has amplitude 0.364. It has not become exactly pure noise. <bookmark mark='b'/> Squared noise-prediction loss is minimized by a conditional mean, not by reconstructing the particular hidden noise perfectly. <bookmark mark='c'/> A standard Gaussian start can therefore introduce a terminal-law approximation. Finite network error and reverse discretization add other errors. Ho, Jain and Abbeel's framework supplies a method, not a guarantee that a small trained network reproduces financial tails.") as vo:
             step(0)
-            vo.wait_until("a")
-            step(1)
-            vo.wait_until("b")
-            step(2)
-            vo.wait_until("c")
-            step(3)
-        self.wait(0.4)
+            vo.wait_until("a"); step(1)
+            vo.wait_until("b"); step(2)
+            vo.wait_until("c"); step(3)
+        self.wait(0.5)
         self.clear_scene()
 
-    def reverse(self, r):
-        s0 = r["seeds"]["0"]
-        sn = s0["snaps"]
-        fw = s0["forward"]
-        ts = [int(t) for t in r["ts"]]
-        lim = 14.0
-        gl = axes([0, 32], [-lim, lim], x_length=5.6, y_length=4.2, xlabel=r"day", ylabel=r"cumulative return (sd units)",
-                  xticks=[0, 16, 32], yticks=[-10, 0, 10], font_size=13)
-        gr = axes([0, 32], [-lim, lim], x_length=5.6, y_length=4.2, xlabel=r"day", ylabel="", xticks=[0, 16, 32],
-                  yticks=[], font_size=13)
-        VGroup(gl, gr).arrange(RIGHT, buff=0.8).shift(DOWN * 0.3)
-        x = np.arange(33)
-
+    def gaussian_reverse(self):
+        # Exact stationary-Gaussian conditional dynamics; no fitted market data.
+        beta = np.linspace(1e-4, 0.02, 200)
+        rng = np.random.default_rng(17016)
+        x = rng.standard_normal((24, 32))
+        snaps = {200: x.copy()}
+        stages = [200, 150, 100, 60, 30, 10, 0]
+        for t in range(199, -1, -1):
+            x = np.sqrt(1 - beta[t]) * x + np.sqrt(beta[t]) * rng.standard_normal(x.shape)
+            if t in stages:
+                snaps[t] = x.copy()
+        paths = {t: np.c_[np.zeros(24), np.cumsum(v, axis=1)] for t, v in snaps.items()}
+        g = axes([0, 32], data_range(*paths.values(), zero=True), x_length=10.4, y_length=3.8,
+                 xlabel=r"component / day", ylabel=r"cumulative standardized return", xticks=[0, 16, 32], yticks=[], font_size=16)
+        g.shift(DOWN * 0.45)
+        title = label(r"Exact reverse example: independent Gaussian windows", font_size=29).to_edge(UP, buff=0.35)
+        eq = MathTex(r"x_{t-1}\mid x_t\sim N(\sqrt{\alpha_t}x_t,\,\beta_t I)", font_size=32).next_to(title, DOWN, buff=0.3)
+        foot = wrapped_label(r"24 fixed-seed illustration paths; all saved values shown. No neural fit, BTC data or market-validation score.", 12.2, 20, GREY_A).to_edge(DOWN, buff=0.3)
         def fan(t):
-            W = np.asarray(sn[str(t)])
-            return VGroup(*[curve(gl.ax, x, np.clip(np.r_[0, np.cumsum(w)], -lim, lim), GEN_COL["diffusion"],
-                                  stroke_width=1.4).set_stroke(opacity=0.7) for w in W])
-
-        def one(t):
-            w = np.asarray(fw[str(t)])
-            return curve(gr.ax, x, np.clip(np.r_[0, np.cumsum(w)], -lim, lim), REF, stroke_width=3)
-        tl = label(r"reverse: 24 windows from noise", font_size=20, color=GEN_COL["diffusion"]).next_to(gl, UP, buff=0.15)
-        tr_ = label(r"forward: one real window, drowned", font_size=20, color=REF).next_to(gr, UP, buff=0.15)
-        cur, cur2 = fan(ts[0]), one(ts[-1])
-        stage = label(rf"step {ts[0]}", font_size=24, color=GREY_A).to_edge(UP, buff=0.3)
-        with self.voiceover(
-            "Here it is, live. On the left, twenty-four windows of pure noise, wandering like random walks with "
-            "wild steps. On the right, one real window of bitcoin, held out from training. <bookmark mark='a'/> Run the "
-            "two processes against each other: the real window drowns in noise as the forward process runs, while on "
-            "the left the reverse process strips noise away, two hundred steps down to zero. The fans settle into "
-            "paths with the scale and the jumps of real returns: invented months of bitcoin."
-        ) as vo:
-            self.play(FadeIn(gl), FadeIn(gr), FadeIn(tl), FadeIn(tr_), FadeIn(cur), Create(cur2), FadeIn(stage))
+            return VGroup(*[curve(g.ax, np.arange(33), p, NET, stroke_width=1.4).set_stroke(opacity=0.65) for p in paths[t]])
+        lines = fan(200)
+        badge = label(r"step 200", font_size=22, color=REF).to_corner(UR, buff=0.3)
+        with self.voiceover("Here is a reverse process we can justify exactly. Suppose the original window has thirty-two independent standard Gaussian coordinates. Every forward marginal is then standard Gaussian. Gaussian conditioning gives the reverse law shown above, so no fitted denoiser is needed. <bookmark mark='a'/> The twenty-four paths change as we step backward, but their marginal distribution stays Gaussian throughout. The fixed seed makes this illustration reproducible; no path is selected for looking realistic. <bookmark mark='b'/> At step zero these are still independent Gaussian returns. Attractive pictures cannot establish clustering, leverage, crash dependence or useful hedge performance. A generator can produce plausible-looking paths and still miss the features that matter to a particular book.") as vo:
+            self.play(FadeIn(title), FadeIn(eq), FadeIn(g), FadeIn(lines), FadeIn(badge), FadeIn(foot))
             vo.wait_until("a")
-            per = max(vo.remaining(0.5), 6) / (len(ts) - 1)
-            for i, t in enumerate(ts[1:], 1):
-                st = label(rf"step {t}", font_size=24, color=GREY_A).move_to(stage)
-                self.play(Transform(cur, fan(t)), Transform(cur2, one(ts[len(ts) - 1 - i])), Transform(stage, st),
-                          run_time=per)
-        self.wait(0.4)
-        self.clear_scene()
-
-    def contenders(self, g, r):
-        cs = VGroup(
-            firm_card(r"GJR-GARCH", r"the econometric baseline of Part 7: volatility that reacts to the last shock, "
-                      r"more to falls than to rises", width=3.1, font_size=15, kind=r"Method"),
-            firm_card(r"Quant GANs", r"Wiese, Knobloch, Korn and Kretschmer (2020): temporal convolutions trained "
-                      r"adversarially; volatility clustering and leverage", source=r"\textit{Quantitative Finance}",
-                      width=3.1, font_size=15, kind=r"Method"),
-            firm_card(r"Signature generators", r"Buehler, Horvath, Lyons, Perez Arribas and Wood (2020), for small data; "
-                      r"Ni, Szpruch et al.\ (2020, 2021): Sig-Wasserstein GANs; Kidger et al.\ (2021): neural SDEs as GANs",
-                      width=3.1, font_size=15, kind=r"Method"),
-            firm_card(r"Diffusion", r"Ho, Jain and Abbeel (2020): the image generators' method, here on return windows",
-                      width=3.1, font_size=15, kind=r"Method"),
-        ).arrange(RIGHT, buff=0.15).to_edge(UP, buff=0.35)
-        for c_ in cs:
-            c_[0].set_stroke(GREY_C)
-        sig = np.asarray(g["curves"]["sig"])
-        dd = np.array([r["seeds"][s]["curve"] for s in ("0", "1", "2")])
-        g1 = axes([0, len(sig) - 1], [float(np.log10(sig.min())) - 0.1, float(np.log10(sig.max())) + 0.1], x_length=5.4,
-                  y_length=2.8, xlabel=r"training step (signature network)", ylabel=r"$\log_{10}$ signature loss",
-                  xticks=[0, len(sig) - 1], xfmt=lambda v: f"{10 * v:,.0f}".replace(",", "{,}"), yticks=[], font_size=12)
-        g2 = axes([0, dd.shape[1] - 1], [float(dd.min()) * 0.95, float(np.percentile(dd, 99))], x_length=5.4,
-                  y_length=2.8, xlabel=r"training step (diffusion)", ylabel=r"noise-prediction loss",
-                  xticks=[0, dd.shape[1] - 1], xfmt=lambda v: f"{20 * v:,.0f}".replace(",", "{,}"), yticks=[], font_size=12)
-        VGroup(g1, g2).arrange(RIGHT, buff=0.9).to_edge(DOWN, buff=0.45)
-        l1 = curve(g1.ax, np.arange(len(sig)), np.log10(sig), GEN_COL["signature LSTM"], stroke_width=2.5)
-        l2 = seed_band(g2.ax, np.arange(dd.shape[1]), np.clip(dd, None, float(np.percentile(dd, 99))), GEN_COL["diffusion"])
-        ks = [r["seeds"][s]["kurtosis"] for s in ("0", "1", "2")]
-        with self.voiceover(
-            "Four contenders: GJR-GARCH from Part seven; Quant GANs, temporal convolutions trained adversarially; "
-            "signature-based generators, which Buehler's team built for small data; and diffusion. "
-            "<bookmark mark='a'/> Two trained here, replayed: the signature network's loss, and the diffusion model's, "
-            "three seeds. The three "
-            f"diffusion seeds produce windows with excess kurtosis between {min(ks):.1f} and {max(ks):.1f}, against "
-            f"{r['real_kurtosis_train']:.1f} in the training years: the tails are the hard part."
-        ) as vo:
-            self.play(LaggedStart(*[FadeIn(c_, shift=UP * 0.2) for c_ in cs], lag_ratio=0.4, run_time=3))
-            vo.wait_until("a")
-            self.play(FadeIn(g1), FadeIn(g2), Create(l1), Create(l2), run_time=3)
-        self.wait(0.4)
-        self.clear_scene()
-
-    def lineup(self, g):
-        L = g["lineup"]
-        panels = [("real", np.asarray(w)) for w in L["real"]] + [("diffusion", np.asarray(w)) for w in L["diffusion"]]
-        order = np.random.default_rng(3).permutation(len(panels))
-        cells = VGroup()
-        for k in order:
-            kind, w = panels[k]
-            x = np.r_[0, np.cumsum(w)]
-            lim = max(0.35, float(np.abs(x).max()) * 1.15)
-            ax = Axes(x_range=[0, 32, 8], y_range=[-lim, lim, lim], x_length=2.9, y_length=1.9, tips=False,
-                      axis_config={"stroke_color": GREY_D, "stroke_width": 1, "include_ticks": False})
-            line = ax.plot_line_graph(np.arange(33), x, add_vertex_dots=False, line_color=GREY_A, stroke_width=2)
-            box = SurroundingRectangle(ax, buff=0.08, stroke_color=GREY_D, stroke_width=1)
-            cells.add(VGroup(ax, line, box))
-            cells[-1].kind = kind
-        cells.arrange_in_grid(rows=2, cols=4, buff=(0.35, 0.45)).move_to(UP * 0.1)
-        head = label(r"Eight 32-day stretches of bitcoin: four real, four invented", font_size=28).to_edge(UP, buff=0.5)
-        tags = VGroup(*[label(r"real" if c.kind == "real" else r"diffusion model", font_size=18,
-                              color=REF if c.kind == "real" else GEN_COL["diffusion"]).next_to(c, DOWN, buff=0.08)
-                        for c in cells])
-        src = illustration(r"real windows from the held-out last 20\% of 2017--2025; cumulative log return")
-        with self.voiceover(
-            "A lineup. Eight stretches of thirty-two days of bitcoin, as cumulative returns. Four are real, taken from "
-            "the last fifth of the data, which no generator saw. Four were invented by a small diffusion model trained "
-            "on the earlier years. Which are which? <bookmark mark='a'/> Here is the answer. By eye, they are hard to "
-            "tell apart. The eye is a weak test, so the next step is to measure."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(src), LaggedStart(*[FadeIn(c) for c in cells], lag_ratio=0.15, run_time=3))
-            vo.wait_until("a")
-            for c, t in zip(cells, tags):
-                c[1].set_color(REF if c.kind == "real" else GEN_COL["diffusion"])
-            self.play(FadeIn(tags), *[c[1].animate.set_color(REF if c.kind == "real" else GEN_COL["diffusion"])
-                                      for c in cells])
-        self.wait(0.6)
-        self.clear_scene()
-
-    def scores(self, g):
-        sc = g["scores"]
-        cols = [(r"excess kurtosis", "kurtosis", "{:.1f}"), (r"vol clustering", "acf_abs_mean", "{:.2f}"),
-                (r"leverage", "leverage", "{:+.2f}"), (r"lag-1 autocorr.", "acf1", "{:+.2f}"),
-                (r"dist.\ to training", "sig_train", "{:.2f}"), (r"dist.\ to held-out", "sig_dist", "{:.2f}")]
-        names = ["real (train)", "real (held out)"] + ORDER
-        disp = {"real (held out)": r"real, 2024--2025 (held out)", "real (train)": r"real, 2017--2023 (training)",
-                "i.i.d. normal": r"independent normal draws", "i.i.d. bootstrap": r"independent resampling",
-                "GJR-GARCH": r"GJR-GARCH (Part 7)", "signature LSTM": r"signature-trained network",
-                "diffusion": r"diffusion model"}
-        tab = VGroup(VGroup(label(r"", font_size=17), *[label(c[0], font_size=16, color=GREY_A) for c in cols]))
-        for nm in names:
-            s_ = sc[nm]
-            tab.add(VGroup(label(disp[nm], font_size=18, color=GEN_COL.get(nm, WHITE)),
-                           *[MathTex(f.format(s_[k]).replace("-0.00", "0.00").replace("+0.00", "0.00"), font_size=23,
-                                     color=GEN_COL.get(nm, WHITE)) for _, k, f in cols]))
-        xs = [-4.7, -1.75, -0.15, 1.35, 2.85, 4.45, 6.1]
-        for i, row in enumerate(tab):
-            for j, cell in enumerate(row):
-                cell.move_to([xs[j], 2.5 - 0.55 * i, 0])
-        tr, te = sc["real (train)"], sc["real (held out)"]
-        best_tr = min(ORDER, key=lambda k: sc[k]["sig_train"])
-        best_te = min(ORDER, key=lambda k: sc[k]["sig_dist"])
-        spoken = {"i.i.d. normal": "independent normal draws", "i.i.d. bootstrap": "independent resampling",
-                  "GJR-GARCH": "GJR-GARCH model of Part seven", "signature LSTM": "signature-trained network",
-                  "diffusion": "diffusion model"}
-        b_tr, b_te = spoken[best_tr], spoken[best_te]
-        sl = sc["signature LSTM"]
-        foot = wrapped_label(rf"measured inside 32-day windows (so clustering reads lower than on a long series); distances "
-                             r"are signature distances (depth 4), every set clipped at the training data's 0.1\% and 99.9\% "
-                             rf"quantiles. By distance alone, {disp[best_tr]} sit closest to the training years, with no "
-                             rf"clustering at all; only the signature-trained network gets tails ({sl['kurtosis']:.0f}), "
-                             rf"clustering ({sl['acf_abs_mean']:.2f}) and leverage right. No single score is enough",
-                             12.6, 18, GREY_A).to_edge(DOWN, buff=0.3)
-        src = illustration(r"4{,}000 generated windows each; daily log returns, standardized", corner=UR)
-        with self.voiceover(
-            "Part one's stylized facts, measured in each set of windows, with the signature distance to each real "
-            "period. "
-            f"<bookmark mark='a'/> First, the two real periods. The training years have excess kurtosis of "
-            f"{tr['kurtosis']:.0f}; the held-out years, calmer, {te['kurtosis']:.1f}. They are far apart: the future "
-            "did not look like the past. <bookmark mark='b'/> Now the generators. Independent draws have no clustering "
-            f"at all, and yet, by the signature distance, the {b_tr} sit closest to the training years, a hair ahead "
-            "of the signature-trained network. At this depth the distance is a weak judge, and the facts catch what it "
-            "misses: only the signature-trained network has fat tails, clustering and leverage near those of the "
-            f"training years. The {b_te} is closest to the held-out years for a dull reason: its tails are thin, and "
-            "those years were calm. No single score is enough."
-            " Next: putting these networks into production, and the rules they answer to."
-        ) as vo:
-            self.play(FadeIn(tab[0]), FadeIn(tab[1]), FadeIn(src))
-            vo.wait_until("a")
-            self.play(FadeIn(tab[2]))
+            for t in stages[1:]:
+                self.play(Transform(lines, fan(t)), Transform(badge, label(rf"step {t}", font_size=22, color=REF).move_to(badge)), run_time=1.4)
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(r_) for r_ in tab[3:]], lag_ratio=0.3, run_time=3), FadeIn(foot))
-        self.wait(0.6)
+            self.play(Indicate(eq))
+        self.wait(0.5)
+        self.clear_scene()
+
+    def signature_scope(self):
+        rows = [cmath(r"\phi_m(X)", r"=", r"S_{\le m}(\operatorname{augment}(X))", font_size=36),
+                cmath(r"d_m(P,Q)", r"=", r"\|\mathbb E_P\phi_m-\mathbb E_Q\phi_m\|", font_size=36),
+                cmath(r"d_m(P,Q)=0", r"\not\Rightarrow", r"P=Q\quad(m<\infty)", font_size=38)]
+        whys = [why(r"specify time, level, running variance or lead--lag augmentation"),
+                why(r"empirical means are noisy; overlapping windows are dependent; tail clipping changes the law being compared"),
+                why(r"identification results require the full suitable normalized signature and stated path-space assumptions; depth four is a finite feature diagnostic")]
+        step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.5, buff=0.95, edge=6.9)
+        with self.voiceover("Signatures offer another way to compare generated paths. First specify the augmentation: time, cumulative returns and running variance, or a lead-lag path. <bookmark mark='a'/> A finite-depth distance compares expected feature vectors. The empirical version contains sampling error, and overlapping windows are not independent replications. Winsorizing returns stabilizes a score, but compares transformed laws and can conceal tail mistakes. <bookmark mark='b'/> Identification theorems for a full appropriately normalized signature do not say that depth four identifies a path law. Different distributions can match finitely many expectations. Use signatures alongside tail behavior, volatility persistence, leverage, stress dependence and downstream losses; choose those diagnostics before seeing the test set.") as vo:
+            step(0)
+            vo.wait_until("a"); step(1)
+            vo.wait_until("b"); step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def validation(self):
+        items = [(r"Fit and tune", r"research-window training data; separate chronological validation; train-only scaling"),
+                 (r"Test once", r"a disjoint registered window; no overlapping fitted windows; dependence-aware uncertainty"),
+                 (r"Stress the book", r"multiple generators, common payoff and costs, and declared tail scenarios"),
+                 (r"This pass", r"BTC-through-2025 generator, reverse and cross-generator jobs were not executed; no scores presented")]
+        cards = VGroup(*[desk_question(q, a, width=12.2, font_size=23) for q, a in items]).arrange(DOWN, buff=0.3)
+        if cards.height > 7.2:
+            cards.scale_to_fit_height(7.2)
+        with self.voiceover("A useful evaluation separates fitting, tuning and a final chronological test. Scaling and clipping thresholds come from training alone. Overlapping windows require dependence-aware uncertainty. Choosing a generator after inspecting a test score turns that score into validation data. <bookmark mark='a'/> Test a hedger on the same payoff and costs across more than one generator and disjoint historical windows, with predeclared stress scenarios. Agreement on a few moments cannot certify the next crisis. <bookmark mark='b'/> The legacy jobs use BTC history through 2025; their cross-generator replay overlaps fitted history. They were not executed in this pass, and their scores are not presented. This analytical example preserves the series' sealed investing window. Next come production controls and the validation design.") as vo:
+            self.play(FadeIn(cards[0]), FadeIn(cards[1]))
+            vo.wait_until("a"); self.play(FadeIn(cards[2]))
+            vo.wait_until("b"); self.play(FadeIn(cards[3]))
+        self.wait(0.5)
         self.clear_scene()

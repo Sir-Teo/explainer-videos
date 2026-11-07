@@ -7,44 +7,27 @@ from videos.quant.quant17.common import axes, data_range
 from videos.quant.quant17.common import BAD, DELTA, GOOD, IV, NET, OPT, PART, load
 
 DESK = [
-    (r"Your hedger has costs. Why does the optimal hedge have a band?",
-     r"straying from delta by $\epsilon$ adds hedging risk of order $\epsilon^2$; trading back costs of order $\epsilon$. "
-     r"Small deviations are cheaper to keep than to fix, so the hedger waits until the risk pays for the trade: a band of "
-     r"half-width about $(3 c S \Gamma^2 / 2\gamma)^{1/3}$ (Whalley and Wilmott), widest where gamma is large"),
-    (r"A neural calibrator fits the surface beautifully. How do you know it is right?",
-     r"re-price the calibrated parameters by the slow engine (fresh Monte Carlo) and compare; check every input lies "
-     r"inside the training ranges; know its held-out error and the noise of its own labels. A network extrapolates "
-     r"silently, so the check is not optional"),
-    (r"You have a thousand simulated payoffs. Why also record their derivatives?",
-     r"each sample then carries one label per input, at the cost of about one extra pricing by adjoint differentiation; "
-     r"the slopes pin down the function's shape between samples, so the price and, above all, the Greeks need far fewer "
-     r"samples (Huge and Savine 2020)"),
-    (r"Your deep hedger makes money on average with no costs. Is it hedging?",
-     r"partly it is speculating: under a real-world drift the exponential-utility hedge is delta plus Merton's "
-     r"$\mu / \gamma\sigma^2 S$. Compare its holdings with delta on driftless paths, price it on driftless paths, and "
-     r"train under a (near-)martingale measure if the drift is not a view you want to hold"),
+    (r"Why does a small-cost hedge have a band?",
+     r"in the reflected-gap approximation, risk costs $A h^2$ per unit time and turnover costs $B c/h$; minimizing their sum gives $h\propto c^{1/3}$, under the asymptotic assumptions"),
+    (r"How do you check a neural calibration?",
+     r"use independent simulation with error bars, verify the training domain, and separate surrogate, Monte Carlo, optimization and model errors; small fit error is not identification"),
+    (r"Why record payoff derivatives?",
+     r"valid pathwise derivatives add correlated slope labels at modest adjoint cost; justify differentiation under expectation, especially at discontinuous payoffs"),
+    (r"Does average hedge profit prove better replication?",
+     r"no: drift and the risk objective can introduce investment demand; compare exposures and risk under stated measures, with the appropriate no-claim baseline"),
 ]
 
 PROBLEMS = [
-    r"Show that the entropic risk $\rho(X) = \frac1\gamma \log \mathbb{E} e^{-\gamma X}$ satisfies $\rho(X + c) = "
-    r"\rho(X) - c$, and conclude that $\min_\delta \rho(-Z + (\delta\cdot S)_T - C_T)$ is the seller's indifference price.",
-    r"Heuristically derive the scaling $(c\,\Gamma^2/\gamma)^{1/3}$ of the no-trade band by balancing the quadratic cost "
-    r"of mis-hedging against the linear cost of trading.",
-    r"Let $u$ solve the pricing PDE. Use It\^o's formula to show that $Y_t = u(t, X_t)$, $Z_t = \sigma X_t \nabla u$ "
-    r"solve the BSDE $dY = f(Y)\,dt + Z\,dW$ with $f(y) = (1 - \delta) Q(y) y + R y$.",
-    r"For a linear model $f(x) = w^\top \phi(x)$, write the normal equations of differential regression with weight "
-    r"$\lambda$ on the derivative labels.",
-    r"Show that the deep stopping objective at date $n$ is maximized by stopping when $g_n \ge \mathbb{E}[G_{n+1} \mid "
-    r"X_n]$, and that every stopping rule's expected payoff is a lower bound on the Bermudan price.",
-    r"Derive Leland's volatility $\hat\sigma^2 = \sigma^2\big(1 + \sqrt{2/\pi}\,k / (\sigma\sqrt{\Delta t})\big)$ from "
-    r"the expected cost of rebalancing a delta hedge every $\Delta t$.",
-    r"Show that in a complete market with zero rates the exponential-utility hedge of a claim under drift $\mu$ is "
-    r"$\delta^* = \Delta + \mu / (\gamma\sigma^2 S)$.",
-    r"Labels with Monte Carlo variance $s^2$: show that a held-out error against them is at least $s$, and explain why "
-    r"doubling $s^2$ need not double the network's error against the truth.",    r"(qual) For $dY = RY\,dt + Z\cdot dW$, $Y_0 = y_0$, and $g = e^{RT}u_0 + \int e^{R(T-t)}Z^*\cdot dW$, show "
-    r"$\mathbb E|Y_T - g|^2 = e^{2RT}(y_0 - u_0)^2 + \mathbb E\int e^{2R(T-t)}|Z - Z^*|^2dt$ for adapted $Z$.",
-    r"(qual) With $Z$ constant on each of $N$ steps, show the loss cannot fall below $\min_{Z \text{ step}}\mathbb E\int "
-    r"|Z - Z^*|^2dt$, and that this is $O(1/N)$ when $Z^*$ is $\frac12$-H\"older in mean square.",
+    r"For finite entropic risk, prove cash invariance and derive the seller's premium as the optimized short-claim risk minus the optimized no-claim risk. When is the second term zero?",
+    r"For a reflected hedge gap with variance rate $a^2$, derive total turnover $a^2/(2h)$ and minimize $\gamma\sigma^2S^2h^2/6+cS a^2/(2h)$. State the small-cost assumptions.",
+    r"Use It\^o's formula and the pricing PDE to obtain $dY=f(Y)dt+Z\cdot dW$, with $Y=u(t,X)$ and $Z_i=\sigma X_i\partial_i u$; distinguish $Z$ from share holdings.",
+    r"Write the normal equations for linear differential regression with price-feature matrix $\Phi$, derivative-feature matrices $D_j$, and derivative weight $\lambda$.",
+    r"Derive the date-$n$ stopping decision from the conditional continuation value. Why is a fixed rule's expected discounted payoff a lower bound, but its simulated sample mean need not be?",
+    r"Derive Leland's volatility correction using one-way proportional cost $c$; express it also using round-trip cost $k=2c$ and state the approximation.",
+    r"In the continuous-time complete constant-volatility market with zero rates and exponential utility, derive the investment overlay $\mu/(\gamma\sigma^2 S)$ for a replicable claim.",
+    r"For conditionally unbiased validation labels with independent noise of variance $s^2$, derive the population MSE decomposition. Does the realized finite-sample RMSE have to exceed $s$?",
+    r"(qual) For the continuous linear BSDE, prove $L_{\rm pop}=e^{2RT}(y_0-u_0)^2+\mathbb E\int_0^T e^{2R(T-t)}|Z-Z^*|^2dt$, under square-integrability assumptions.",
+    r"(qual) For predictable left-endpoint step controls, derive an $O(h)$ upper bound on the continuous population control-error floor under mean-square half-H\"older regularity. Does this prove an exact $1/N$ floor or certify Euler batch loss?",
 ]
 
 
@@ -52,14 +35,16 @@ class Outro(VoiceoverScene):
     def construct(self):
         self.recap(load("hlp"), load("calib"), load("calib_hist"), load("dml"), load("bsde"), load("stopping"),
                    load("hedge"), load("nsde"), load("greeks_act"), load("calib_noise"), load("bsde_seeds"),
-                   load("drift"), load("crossgen"))
+                   load("drift"))
         self.desk()
         self.problems()
         self.payoffs()
         self.references()
         self.house()
 
-    def recap(self, hl, c, ch, d, b, st, h, n, ga, nz, bs, dr, cg):
+    def recap(self, hl, c, ch, d, b, st, h, n, ga, nz, bs, dr):
+        trace = load("nsde_trace")
+        n = dict(n, low=trace["low"], high=trace["high"])
         floor = sum(r["H"] < 0.021 for r in ch["rows"]) / len(ch["rows"])
         hi = h["band"]["rows"][-1]
         gr = float(np.mean([ga["runs"][f"ReLU_{s}"]["gamma_rmse"] for s in (0, 1)]) /
@@ -71,15 +56,15 @@ class Outro(VoiceoverScene):
             (rf"its Greeks depend on the activation: ReLU's gamma error is {gr:.0f} times SiLU's", NET),
             (rf"the neural calibrator: {nz['net_fresh']['rmse']:.2f} vol points from fresh simulation; the Surface in "
              rf"{c['surface']['seconds']:.0f} s", IV),
-            (rf"$H$ week by week: at the box's floor, 0.02, in {100 * floor:.0f}\% of weeks; a near tie with Heston", IV),
-            (r"derivatives as labels, and a Gaussian process that uses them exactly", GOOD),
+            (rf"$H$ week by week: near the box's floor ($H<0.021$) in {100 * floor:.0f}\% of weeks; descriptive constrained fits, not identification", IV),
+            (r"derivative labels and a Gaussian working model with finite features", GOOD),
             (rf"100 dimensions: the deep BSDE gives {t0['mean']:.2f} $\pm$ {t0['sd']:.2f} against {b['reference']:.1f}", NET),
-            (rf"deep stopping: {st['5']['lower']:.2f}, level with Longstaff--Schwartz, below the published bounds", NET),
-            (rf"the deep hedger: an indifference price; under drift it holds Merton's extra {devs:.3f} shares", DELTA),
+            (rf"deep stopping: {st['5']['lower']:.2f}, a simulated policy mean; published results have different budgets", NET),
+            (rf"finite-sample hedger risk; under drift, average extra holdings {devs:.3f} shares", DELTA),
             (rf"it learns where not to trade; at {100 * hi['cost']:g}\% costs it needs {hi['deep']['price']:.2f}, not "
              rf"{hi['delta']['price']:.2f}", DELTA),
-            (rf"the same vanillas leave a barrier free between {n['low']['doc']:.3f} and {n['high']['doc']:.3f}", BAD),
-            (r"generators invent markets; a hedger is tested across them and on history (Rule 17)", BAD),
+            (rf"penalized barrier candidates, not bounds: {n['low']['doc']:.3f} and {n['high']['doc']:.3f}", BAD),
+            (r"Gaussian reverse illustration; cross-generator history validation remains a plan", BAD),
         ]
         rows = VGroup()
         for i, (t, col) in enumerate(items, 1):
@@ -92,13 +77,7 @@ class Outro(VoiceoverScene):
         if rows.height > 6.6:
             rows.scale_to_fit_height(6.6)
         with self.voiceover(
-            "Part seventeen in eleven lines. A network learns a pricing formula from prices, but its Greeks are only "
-            "as good as its activation. A network calibrates a rough model in seconds, every week, and its training "
-            "box has walls. Derivatives make better labels, and a Gaussian process uses them exactly, at a cost. Deep "
-            "networks price in a hundred dimensions and learn when to exercise. The deep hedger's objective is an "
-            "indifference price; under a drift it rediscovers Merton and speculates; with costs it learns where not "
-            "to trade. Neural models measure model risk. And generators invent markets, on which every hedger must be "
-            "tested, alongside history."
+            'The main results are conditional numerical demonstrations. Networks approximate prices, but smoothness does not enforce correct Greeks or convexity. Calibration has label noise, domain limits and optimizer error. Differential labels add correlated information; a Gaussian process adds chosen statistical assumptions. High-dimensional BSDE and stopping solvers still have discretization, training and simulation error. Hedger entries are empirical risk objectives; an indifference premium requires its no-claim baseline. Band priors constrain the policy class. Penalized neural-SDE candidates illustrate sensitivity without certified robust bounds. Finally, the Gaussian reverse illustration is analytical, while the disjoint-history cross-generator test remains a validation plan.'
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.6,
                                                  run_time=22))
@@ -110,15 +89,7 @@ class Outro(VoiceoverScene):
         if cards.height > 7.4:
             cards.scale_to_fit_height(7.4)
         with self.voiceover(
-            "Three desk questions. Why does a hedger with costs have a band? Because straying from delta adds risk "
-            "that grows with the square of the gap, while trading back costs in proportion to it: small gaps are "
-            "cheaper to keep. <bookmark mark='a'/> How do you know a neural calibration is right? Re-price it with the "
-            "slow engine, and check its inputs are inside the region it learned. <bookmark mark='b'/> And why record "
-            "the derivatives of simulated payoffs? Because each one is another label, nearly free with adjoints, and "
-            "they fix the shape between samples. <bookmark mark='c'/> And if your deep hedger makes money on average "
-            "with no costs, is it hedging? Partly it is betting on the drift: compare it with delta on driftless "
-            "paths, and train under a martingale measure unless the bet is one you mean to hold. Full solutions are "
-            "in the notes."
+            "Four desk questions. The cube-root band balances a quadratic risk cost against turnover proportional to the inverse width, not a static quadratic-versus-linear comparison. <bookmark mark='a'/> Check a neural calibration with independent simulation and uncertainty, domain checks, and a decomposition of errors. <bookmark mark='b'/> Derivative labels help when their unbiasedness and computational cost are justified; discontinuous payoffs require special care. <bookmark mark='c'/> Average profit does not prove better replication. Separate investment demand from hedging, and include the optimized no-claim baseline when deriving an indifference premium. The bilingual notes give the details."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
@@ -133,10 +104,7 @@ class Outro(VoiceoverScene):
     def problems(self):
         ps = problem_set(PROBLEMS, font_size=19)
         with self.voiceover(
-            "And ten problems: the indifference price, the band's scaling, the BSDE behind the deep solver, "
-            "differential regression, why deep stopping gives a lower bound, Leland's volatility, Merton's term in the "
-            "hedge, and what label noise does to a calibrator. Two are qualifying-exam problems: the loss "
-            "decomposition, and its floor. Solutions, in English and Chinese, are in the notes."
+            "The ten exercises cover cash baselines, reflected-band turnover, the BSDE hedge units, differential regression, stopping bounds, Leland's cost convention, Merton's investment term and validation-label noise. The two qualifying problems distinguish continuous population loss from Euler training loss, and an order-h upper bound from an exact rate. Complete English and Chinese solutions are in the notes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))
             self.wait(3)
@@ -176,10 +144,7 @@ class Outro(VoiceoverScene):
              r"Buehler et al.: SANOS, DYSANOS, GROMM (2026); Arzel and Lehdili (2026); SR 11-7 (2011); SR 26-2 (2026); "
              r"PRA SS1/23"])
         with self.voiceover(
-            "The textbook chapters this part covers, and the papers it draws on, from Leland's costs in 1985 to the "
-            "generative option markets of 2026. Ruf and Wang counted well over a hundred papers on networks for "
-            "pricing and hedging by 2020; the notes map each one used here to its chapter. Every network here was "
-            "trained on one shared CPU, several times over; the production version retrains them at full size."
+            'The notes link the primary methods and distinguish paper results from this small CPU implementation. Fixed-seed cached runs support the numerical demonstrations reviewed here. The three legacy BTC-through-2025 jobs were deliberately not restored. Source review and sampled audio checks do not replace continuous listening to a production master.'
         ):
             self.play(FadeIn(card))
             self.wait(3)

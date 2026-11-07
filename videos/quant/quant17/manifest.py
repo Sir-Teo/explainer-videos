@@ -22,7 +22,7 @@ SCENES = [
     ("s11_generator", "Generator", "16. Market generators"),
     ("s12_production", "Production", "17. Production and model risk"),
     ("s12a_frontier", "Frontier", "18. The frontier, 2023 to 2026"),
-    ("s13_house", "House", "19. Rule 17, tested"),
+    ("s13_house", "House", "19. Rule 17: the validation plan"),
     ("s15_research", "Research", "For the researcher: population loss and price-error bounds"),
     ("s14_outro", "Outro", "Recap, desk questions, problems"),
 ]
