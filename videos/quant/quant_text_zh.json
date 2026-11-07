@@ -30082,7 +30082,7 @@
     "$K=100$, $T=1$, $\\sigma=20\\%$, $r=5\\%$; curves: 600 steps, ATM price: 2000 steps": "$K=100$、$T=1$、$\\sigma=20\\%$、$r=5\\%$；曲线用600步，显示的平值价格用2000步",
     "47 overlapping 30-day calls, every 15 days in 2019--2020. Hindsight realized volatility and a band tuned on all tested windows; no costs. Errors in \\% of model premium; positive means money kept. The nonzero means remain unexplained.": "47份重叠的30天看涨期权，2019--2020年每15天开始。使用事后实际波动率，带宽在全部受测窗口上调参，不含成本。误差以模型权利金的\\%计，正值表示留有盈余，非零均值的成因尚未识别",
     "$S_0 = K = 100${,} $T = 1${,} $\\sigma = 25\\%$; 400{,}000 pricing samples; $\\pm$ one standard error": "$S_0=K=100$、$T=1$、$\\sigma=25\\%$；400{,}000个定价样本；$\\pm$一个标准误",
-    "stock weight for the next return": "下一期收益对应的股票权重"
+    "stock weight for the next return": "下一期股票权重"
   },
   "phrases": {
     "you owe": "你欠",
