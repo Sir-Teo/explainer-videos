@@ -1,0 +1,160 @@
+{
+  "fingerprint": "53ae8b14bc128368b4835e618610262709ef35940779e5749f67d9a1ec27ac61",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 44
+      },
+      "input_record": "renders/qa/series/stats33/en/Hook/result.json",
+      "input_sha256": "614d89b6f0bb69fb329d08a83e52da81ab0c3f1f28020c7215ddb10ce01a7624"
+    },
+    {
+      "scene": "Problem",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 53
+      },
+      "input_record": "renders/qa/series/stats33/en/Problem/result.json",
+      "input_sha256": "ec0b2ea6bc4d782bf28a947e29274c111f728f1ee33511b8ecadfec6bf3dfe6c"
+    },
+    {
+      "scene": "FWER",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 75
+      },
+      "input_record": "renders/qa/series/stats33/en/FWER/result.json",
+      "input_sha256": "f66136ef502b0ba800f2c16ec4609503db5520e315c86dc58957fdc0949fe0c6"
+    },
+    {
+      "scene": "FDR",
+      "status": "needs-review",
+      "frames": 34,
+      "warnings": {
+        "narration-translation": 10,
+        "untranslated-on-screen": 71
+      },
+      "input_record": "renders/qa/series/stats33/en/FDR/result.json",
+      "input_sha256": "479ce49b3c129c05efc947728f1422797578e80cba2c3856a5345e6b57da3720"
+    },
+    {
+      "scene": "Adaptive",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 53
+      },
+      "input_record": "renders/qa/series/stats33/en/Adaptive/result.json",
+      "input_sha256": "8eba894fd0ff4aab8e34157d84e42d5ec1cf98a8207aa3149e7cd176c5778826"
+    },
+    {
+      "scene": "Efron",
+      "status": "needs-review",
+      "frames": 32,
+      "warnings": {
+        "narration-translation": 10,
+        "untranslated-on-screen": 63
+      },
+      "input_record": "renders/qa/series/stats33/en/Efron/result.json",
+      "input_sha256": "03802ce7a17d10e061e3c2d5af57b9e92356dbcc7f6f611eccd2d1f43a23a6d6"
+    },
+    {
+      "scene": "Spread",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 66
+      },
+      "input_record": "renders/qa/series/stats33/en/Spread/result.json",
+      "input_sha256": "38b34686884cec70deb6bf8b621668e56e6b4937501d2747ae7a211adabca6c7"
+    },
+    {
+      "scene": "Knockoffs",
+      "status": "needs-review",
+      "frames": 34,
+      "warnings": {
+        "narration-translation": 10,
+        "untranslated-on-screen": 80
+      },
+      "input_record": "renders/qa/series/stats33/en/Knockoffs/result.json",
+      "input_sha256": "996c344b8aba63eb3357ab9e10ab4e3c2a90f66b226e7cbe696e140ec35709d8"
+    },
+    {
+      "scene": "Forking",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 46
+      },
+      "input_record": "renders/qa/series/stats33/en/Forking/result.json",
+      "input_sha256": "6ca76e13cbb5b020ed4bd06f78863f6bdb185c4f2d014301d867b60872ad4dfa"
+    },
+    {
+      "scene": "Replication",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 61
+      },
+      "input_record": "renders/qa/series/stats33/en/Replication/result.json",
+      "input_sha256": "f4ed1aa857d5e5f12b5ee62e27a9bca5b00b70b29367e3660f373b249fd4e9e8"
+    },
+    {
+      "scene": "PubBias",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 45
+      },
+      "input_record": "renders/qa/series/stats33/en/PubBias/result.json",
+      "input_sha256": "87086a64c24ceffe990aafa78c0ea727971d9b46c091a4b688003ce5ff05880c"
+    },
+    {
+      "scene": "Remedies",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 52
+      },
+      "input_record": "renders/qa/series/stats33/en/Remedies/result.json",
+      "input_sha256": "84b21a0bd241624b1d16192fd8bdb5ea7a48be14c70926a16a4cbe0a4e5f67d3"
+    },
+    {
+      "scene": "FCR",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 57
+      },
+      "input_record": "renders/qa/series/stats33/en/FCR/result.json",
+      "input_sha256": "907351a40fd07c0ea02631a9832e680cac4288118420e98d77b12c017ff6ca6d"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 11,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 67
+      },
+      "input_record": "renders/qa/series/stats33/en/Outro/result.json",
+      "input_sha256": "8e370ab97409318f038d46dd588135f47198a7e2439e6f62bcc37e8f71760d5f"
+    }
+  ]
+}

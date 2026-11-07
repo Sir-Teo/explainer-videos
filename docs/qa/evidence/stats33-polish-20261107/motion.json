@@ -1,0 +1,149 @@
+{
+  "fingerprint": "53ae8b14bc128368b4835e618610262709ef35940779e5749f67d9a1ec27ac61",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats33/en/Hook_motion/result.json",
+      "input_sha256": "ce9d07d1f4696d53053e32fe4804c0629003d16433143b44beb070e9601a03be",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 261 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 261 s\n"
+    },
+    {
+      "scene": "Problem",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats33/en/Problem_motion/result.json",
+      "input_sha256": "d83397a1fe107a0399ef14ff8c71b0c60ec3700a2fd57a438cb858517b58eb46",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 218 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 218 s\n"
+    },
+    {
+      "scene": "FWER",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 9
+      },
+      "input_record": "renders/qa/series/stats33/en/FWER_motion/result.json",
+      "input_sha256": "0d816dec08c4e2f1c2f631aa13da849c17c53af41626fdbe0178a8bd2b89b478",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 292 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 292 s\n"
+    },
+    {
+      "scene": "FDR",
+      "status": "needs-review",
+      "frames": 34,
+      "warnings": {
+        "narration-translation": 10
+      },
+      "input_record": "renders/qa/series/stats33/en/FDR_motion/result.json",
+      "input_sha256": "af1d89ccbfb283ea7336295ba40edb4dfaa08a7d283cd5f6e4eb1098208c96ac",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 302 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 302 s\n"
+    },
+    {
+      "scene": "Adaptive",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats33/en/Adaptive_motion/result.json",
+      "input_sha256": "3807b13468e71cfb8285797c49186e88832722743cd51ba06fe66e048a08f551",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 196 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 196 s\n"
+    },
+    {
+      "scene": "Efron",
+      "status": "needs-review",
+      "frames": 32,
+      "warnings": {
+        "narration-translation": 10
+      },
+      "input_record": "renders/qa/series/stats33/en/Efron_motion/result.json",
+      "input_sha256": "1a2eedd48fc9706adfc1884d9c9c5ae8e464fcd82f754a751ed833d23ceff908",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 263 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 263 s\n"
+    },
+    {
+      "scene": "Spread",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats33/en/Spread_motion/result.json",
+      "input_sha256": "c616c3b88f5d4f4a9d2e9546c804c162da23c9e3039911fd61a5396e4b23ea5d",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 248 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 248 s\n"
+    },
+    {
+      "scene": "Knockoffs",
+      "status": "needs-review",
+      "frames": 34,
+      "warnings": {
+        "narration-translation": 10
+      },
+      "input_record": "renders/qa/series/stats33/en/Knockoffs_motion/result.json",
+      "input_sha256": "993277d53ae8fda8d8f5c590624e0674ae375e6980f9aef486f2567a9b26dbd7",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 306 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 306 s\n"
+    },
+    {
+      "scene": "Forking",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats33/en/Forking_motion/result.json",
+      "input_sha256": "efdb4967812326439846fb7544ed0977161a9dc6fd76c5aaffecc90f60fb1f98",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 218 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 218 s\n"
+    },
+    {
+      "scene": "Replication",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats33/en/Replication_motion/result.json",
+      "input_sha256": "c7c6b2772434be5b39639b4ba3222a5f4c21b71679f4871d7d59230e4e1c68c5",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 226 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 226 s\n"
+    },
+    {
+      "scene": "PubBias",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats33/en/PubBias_motion/result.json",
+      "input_sha256": "c028c3b880aa9531aefd46032acba02ff99bcdbcda7de410d385a9f902418477",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 222 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 222 s\n"
+    },
+    {
+      "scene": "Remedies",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats33/en/Remedies_motion/result.json",
+      "input_sha256": "3265c2cc668ca5d2aea6d74e9409effd9aded2c231b2bfeaae11456f53304e5c",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 254 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 254 s\n"
+    },
+    {
+      "scene": "FCR",
+      "status": "needs-review",
+      "frames": 22,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats33/en/FCR_motion/result.json",
+      "input_sha256": "1280634361cc83f81a41b0c2d5396ac6292db7ebd0f03ed14dbac5132f47f891",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 186 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 186 s\n"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "actual": "Knockoffs sheet inspected; zero blank/sparse runs; current narration text to be matched at archive",
+  "baseline": [
+    "Hook",
+    "Problem",
+    "FWER",
+    "FDR",
+    "Adaptive",
+    "Efron",
+    "Spread",
+    "Knockoffs",
+    "Forking",
+    "Replication",
+    "PubBias",
+    "Remedies",
+    "FCR",
+    "Outro"
+  ],
+  "native": [
+    "Hook",
+    "Problem",
+    "FWER",
+    "FDR",
+    "Adaptive",
+    "Efron",
+    "Spread",
+    "Knockoffs",
+    "Forking",
+    "Replication",
+    "PubBias",
+    "Remedies",
+    "FCR"
+  ],
+  "motion": [
+    "Hook",
+    "Problem",
+    "FWER",
+    "FDR",
+    "Adaptive",
+    "Efron",
+    "Spread",
+    "Knockoffs",
+    "Forking",
+    "Replication",
+    "PubBias",
+    "Remedies",
+    "FCR"
+  ],
+  "fresh_repaired_baseline_native": [
+    "Replication",
+    "Remedies"
+  ],
+  "fresh_repaired_motion": [
+    "Replication",
+    "Remedies"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "part": "stats33",
+  "fingerprint": "53ae8b14bc128368b4835e618610262709ef35940779e5749f67d9a1ec27ac61",
+  "english_endpoints": 14,
+  "native_1080_endpoints": 13,
+  "silent_motion_chapters": 13,
+  "audio_scene": "Knockoffs",
+  "audio_lines": 10,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats33/en/Knockoffs/videos/s08_knockoffs/480p15/Knockoffs.mp4",
+    "seconds": 291.932031,
+    "narration_sha256": "e5e6aa00cd85b5a6fb0160338b74715673cfc1d565c2e8fa160a0bf73952e792",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 292 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 292 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

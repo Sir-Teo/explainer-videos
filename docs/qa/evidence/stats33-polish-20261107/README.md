@@ -1,16 +1,5 @@
-# Part 33 scientific source checkpoint
+# Part 33 English source and visual review
 
-Reviewed every English chapter and all 11 numerical inputs, common helpers, kit implementation,
-solutions and glossary. Sixteen focused numerical checks passed in 15.40 seconds (eight new
-regression/reference checks plus eight existing kit checks).
+All fourteen English chapter endpoint sheets, thirteen native 1080p captures and thirteen motion sheets were inspected. Fresh baseline, native and motion checks confirm the repaired replication table and remedies context headings remain visible during narration holds. Current runtime, bounds and blank/sparse scans have no outstanding issues apart from missing translation tables. The narrated Knockoffs preview is source matched, its speech checks pass, and its contact sheet has been inspected.
 
-The numerical inputs record SHA-256 hashes of recomputed cache files. Study-level proportions,
-knockoff replicates and primary-data provenance are archived separately. The compiled solver
-uses the teaching objective and independently checks each solution’s KKT residual below 2e-7.
-
-Corrected per-study FDR/FCR uncertainty and empty-family handling, refit CV transforms inside
-training folds, qualified the error-control theorems, removed clipped histogram/knockoff displays,
-and retained context above formula sequences. Primary prostate values agree within 6e-7;
-this does not assert identical six-decimal rounding. The independent GLM density matches to 1.4e-15.
-
-Visual capture, full narrated playback/listening, Chinese material and final masters remain open.
+See the [source review](source-review.md), [verification](verification.json), [manual review](manual-review.json) and capture receipts. This completes the English source and sampled visual pass. Chinese narration/caption tables, continuous listening/full narrated playback and final bilingual narrated masters remain open.
