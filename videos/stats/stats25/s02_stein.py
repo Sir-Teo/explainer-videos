@@ -26,19 +26,24 @@ class Stein(VoiceoverScene):
             cmath(r"X", r"\sim", r"N_p(\theta, I), \ \ p \ge 3", font_size=30),
             cmath(r"\text{risk}", r"=", r"E\,\|\hat\theta - \theta\|^2; \ \ \text{the MLE } X: \ p", font_size=30),
             cmath(r"\hat\theta^{JS}", r"=", r"\Big(1 - \dfrac{p - 2}{\|X\|^2}\Big) X", font_size=32),
-            cmath(r"\text{towards } \bar X", r":", r"(p - 3) \text{ in place of } (p - 2)", font_size=30),
+            cmath(r"\text{towards } \bar X", r":", r"(p - 3) \text{ in place of } (p - 2), \ p\ge4", font_size=30),
         ]
         rows[2][2].set_color(SHRUNK)
         whys = [why(r"$p$ means, \ one observation each"), why(r"total squared error"),
                 why(r"James \& Stein (1961)"), why(r"one degree of freedom spent on the target")]
+        intro = label('Known equal-variance normal observations and total squared-error risk', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> The setting: p means, each measured once with normal error of variance one. "
-            "<bookmark mark='b'/> Judge an estimator by its risk, the expected total squared error. The obvious estimator, "
-            "X itself, which is also the maximum likelihood estimate, has risk exactly p. <bookmark mark='c'/> Willard "
-            "James and Charles Stein's estimator multiplies X by one minus p minus two over the squared length of X: "
-            "the farther the data from zero, the less it shrinks. <bookmark mark='d'/> Shrinking towards the grand mean "
-            "instead, as Efron and Morris did, costs one degree of freedom: p minus three."
+            "<bookmark mark='b'/> Judge an estimator by its risk, the expected total squared error. The obvious "
+            "estimator, X itself, which is also the maximum likelihood estimate, has risk exactly p. <bookmark "
+            "mark='c'/> Willard James and Charles Stein's estimator multiplies X by one minus p minus two over the "
+            "squared length of X: the farther the data from zero, the less it shrinks. <bookmark mark='d'/> Shrinking"
+            " towards the grand mean instead, as Efron and Morris did, costs one degree of freedom: p minus three. "
+            "Strict improvement for this estimated target requires at least four means."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -55,14 +60,19 @@ class Stein(VoiceoverScene):
         rows[3][2].set_color(PATH)
         whys = [why(r"integrate by parts against the normal density"), why(r"any correction $g$"),
                 why(r"expand the square, \ apply the lemma"), why(r"Stein's unbiased risk estimate (1981)")]
+        intro = label('Integration by parts provides an unbiased risk identity', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> The proof rests on Stein's lemma, an integration by parts against the normal density: the "
-            "covariance of an error with a smooth function of X equals the expected derivative of that function. "
-            "<bookmark mark='b'/> Write any estimator as X plus a correction g. <bookmark mark='c'/> Expand the squared "
-            "error and apply the lemma to the cross term: the risk is p plus the expected squared correction plus twice "
-            "its expected divergence. <bookmark mark='d'/> Everything inside that expectation is computable from the data, "
-            "so it is an unbiased estimate of the risk, Stein's unbiased risk estimate, SURE."
+            "<bookmark mark='a'/> The proof rests on Stein's lemma, an integration by parts against the normal "
+            "density: the covariance of an error with a smooth function of X equals the expected derivative of that "
+            "function. <bookmark mark='b'/> Write an estimator as X plus a sufficiently regular correction g, with "
+            "integrable derivatives and risk. <bookmark mark='c'/> Expand the squared error and apply the lemma to "
+            "the cross term: the risk is p plus the expected squared correction plus twice its expected divergence. "
+            "<bookmark mark='d'/> Everything inside that expectation is computable from the data, so it is an "
+            "unbiased estimate of the risk, Stein's unbiased risk estimate, SURE."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -79,6 +89,9 @@ class Stein(VoiceoverScene):
         rows[3][2].set_color(HIT)
         whys = [why(r"James--Stein's correction"), why(r"a short calculation"), why(r"always below $p$"),
                 why(r"the MLE is dominated")]
+        intro = label('James-Stein improves total expected risk for every fixed mean vector', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> For James–Stein, the correction is minus p minus two over the squared length, times X. "
             "<bookmark mark='b'/> Its divergence works out to minus p minus two squared over the squared length. "
@@ -87,6 +100,7 @@ class Stein(VoiceoverScene):
             "estimate is beaten everywhere: it is inadmissible. The argument needs p minus two to be positive, which is why "
             "it starts at three."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -153,21 +167,25 @@ class Stein(VoiceoverScene):
     def geometry(self):
         rows = [
             cmath(r"E\,\|X\|^2", r"=", r"\|\theta\|^2 + p", font_size=32),
-            cmath(r"\text{so}", r":", r"X \text{ is too long, \ on average, \ by } p", font_size=30),
+            cmath(r"\text{so}", r":", r"\text{squared length is too large, \ on average, \ by }p", font_size=30),
             cmath(r"\text{best shrink}", r":", r"cX, \ \ c^* = \tfrac{\|\theta\|^2}{\|\theta\|^2 + p} \approx 1 - \tfrac{p}{\|X\|^2}", font_size=30),
-            cmath(r"p = 1, 2", r":", r"\text{the noise in } \|X\|^2 \text{ outweighs the gain}", font_size=30),
+            cmath(r"p = 1, 2", r":", r"\text{the domination argument does not apply}", font_size=30),
         ]
         rows[2][2].set_color(SHRUNK)
         whys = [why(r"each coordinate adds one unit of noise"), why(r"in high dimensions, \ noise is length"),
                 why(r"estimate $\|\theta\|^2$ by $\|X\|^2 - p$"), why(r"so the paradox needs three")]
+        intro = label('Squared lengths explain a shrinkage heuristic; SURE supplies the proof', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Why should shrinking help? Look at lengths. The squared length of X is, on average, the "
-            "squared length of theta plus p, one unit of noise from every coordinate. <bookmark mark='b'/> So the data vector "
-            "is systematically too long, and in many dimensions the excess is large. <bookmark mark='c'/> The best multiple "
-            "of X would shrink it by the factor theta's length over X's expected length, and estimating the unknown length "
-            "from the data gives almost exactly James–Stein's factor. <bookmark mark='d'/> In one or two dimensions the "
-            "noise in that estimate costs more than the shrinkage gains; from three on, it never does."
+            "<bookmark mark='a'/> The squared length of X has expectation theta's squared length plus p: each "
+            "coordinate contributes one unit of noise. <bookmark mark='b'/> It is the squared length that is too "
+            "large by p, not the length itself. <bookmark mark='c'/> The best constant multiple of X uses the ratio "
+            "of theta's squared length to that squared length plus p. Plugging in an estimate suggests shrinkage, but"
+            " this heuristic is not the proof for an adaptive rule. <bookmark mark='d'/> The rigorous argument next "
+            "gives p minus two and requires at least three dimensions."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

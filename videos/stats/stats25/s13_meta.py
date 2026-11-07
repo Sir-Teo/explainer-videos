@@ -33,6 +33,9 @@ class Meta(VoiceoverScene):
         rows[2][2].set_color(SHRUNK)
         whys = [why(r"each study reports an estimate and its SE"), why(r"inverse-variance weights"),
                 why(r"Fay--Herriot again, \ with studies for towns"), why(r"DerSimonian \& Laird (1986): \ moments of Cochran's $Q$")]
+        intro = label('A working probability model states the assumptions behind shrinkage', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Meta-analysis combines studies, each reporting an estimate and its standard error. "
             "<bookmark mark='b'/> If every study estimates the same effect, the best combination weights each by its inverse "
@@ -41,6 +44,7 @@ class Meta(VoiceoverScene):
             "place of towns. <bookmark mark='d'/> Rebecca DerSimonian and Nan Laird's 1986 estimator of tau squared matches "
             "Cochran's heterogeneity statistic Q to its expectation, a method of moments."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -113,21 +117,27 @@ class Meta(VoiceoverScene):
         rows = [
             cmath(r"Q", r"=", rf"\textstyle\sum w_k (y_k - \hat\mu_{{FE}})^2 = {r['Q']:.2f}, \ \ E\,Q = K - 1 = {K - 1} \text{{ if }} \tau = 0", font_size=28),
             cmath(r"\hat\tau^2", r"=", rf"{r['tau2']:.3f}: \ \hat\tau = {np.sqrt(r['tau2']):.2f} \ \ (\text{{truth }} {d['tau']})", font_size=30),
-            cmath(r"I^2", r"=", rf"\dfrac{{Q - (K - 1)}}{{Q}} = {r['I2']:.2f}", font_size=30),
-            cmath(r"\text{prediction interval}", r":", r"\hat\mu \pm t_{K - 2}\sqrt{\hat\tau^2 + \mathrm{SE}^2}: \ \text{the next study}", font_size=28),
+            cmath(r"I^2", r"=", rf"\max\{{0,(Q-K+1)/Q\}} = {r['I2']:.2f}", font_size=30),
+            cmath(r"\text{prediction interval}", r":", r"\hat\mu\pm t_{K-2}\sqrt{\hat\tau^2+\mathrm{SE}^2}:\ \text{approximate, next latent effect}", font_size=28),
         ]
         rows[2][2].set_color(SHRUNK)
         whys = [why(r"Cochran (1954)"), why(r"five studies: \ $\tau$ is barely estimable"),
-                why(r"Higgins \& Thompson (2002): \ the share that is heterogeneity"), why(r"Higgins, Thompson \& Spiegelhalter (2009)")]
+                why(r"Higgins \& Thompson (2002): \ relative heterogeneity of study estimates"), why(r"Higgins, Thompson \& Spiegelhalter (2009)")]
+        intro = label('Study heterogeneity and individual-outcome variation are different', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Cochran's Q sums the weighted squared deviations from the common estimate: seventeen, "
-            "against four expected if all the studies shared one effect. <bookmark mark='b'/> The DerSimonian–Laird estimate "
-            "of tau is point two six, against a true point one five: from five studies, tau is barely estimable. "
-            "<bookmark mark='c'/> Julian Higgins and Simon Thompson's I squared reports the share of the variation that is "
-            "heterogeneity rather than chance, seventy-seven percent here. <bookmark mark='d'/> And the most useful summary "
-            "for practice is often the prediction interval: where the effect in the next study, or the next hospital, is "
-            "likely to fall."
+            "<bookmark mark='a'/> Cochran's Q sums the weighted squared deviations from the common estimate: "
+            "seventeen, against four expected if all the studies shared one effect. <bookmark mark='b'/> The "
+            "DerSimonian–Laird estimate of tau is point two six, against a true point one five: from five studies, "
+            "tau is barely estimable. <bookmark mark='c'/> I squared estimates the relative contribution of "
+            "between-study heterogeneity to study-estimate variation, seventy-seven percent here. It is not a share "
+            "of individual-outcome variance. <bookmark mark='d'/> And the most useful summary for practice is often "
+            "the prediction interval: where the effect in the next study, or the next hospital, might fall under the "
+            "same exchangeable study model. With five studies, this plug-in prediction interval is a rough "
+            "approximation."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -144,13 +154,19 @@ class Meta(VoiceoverScene):
         rows[2][2].set_color(PATH)
         whys = [why(r"a $z$ interval"), why(r"chapter six's problem: \ few groups"),
                 why(r"Hartung \& Knapp (2001); \ Sidik \& Jonkman (2002)"), why(r"Satterthwaite's idea, \ for studies")]
+        intro = label('Hartung-Knapp uses a residual scale and a t reference', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> The DerSimonian–Laird interval is a z interval with the estimated weights. "
-            "<bookmark mark='b'/> Its trouble is chapter six's: with few studies, tau squared is noisy, and the interval "
-            "treats it as known. <bookmark mark='c'/> Joachim Hartung and Guido Knapp's interval rescales the standard error "
-            "by how much the studies actually scatter around the estimate, and uses a t with K minus one degrees of freedom. "
-            "<bookmark mark='d'/> It is chapter six's lesson for studies instead of schools."
+            "<bookmark mark='b'/> Its trouble is chapter six's: with few studies, tau squared is noisy, and the "
+            "interval treats it as known. <bookmark mark='c'/> Joachim Hartung and Guido Knapp's interval rescales "
+            "the standard error by how much the studies actually scatter around the estimate, and uses a t with K "
+            "minus one degrees of freedom. <bookmark mark='d'/> It is chapter six's lesson for studies. Unmodified "
+            "Hartung–Knapp can still be narrower than a z interval when residual heterogeneity is small; it does not "
+            "guarantee coverage in every setting."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -183,12 +199,13 @@ class Meta(VoiceoverScene):
             label(r"Part 26: \ the eight schools, \ a meta-analysis done the Bayesian way", font_size=24, color=GREY_A),
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Two cautions. Studies that found nothing are less often published, so the literature "
-            "overstates effects. <bookmark mark='b'/> A funnel plot, like the hospitals', should be symmetric if not; "
-            "asymmetry suggests missing small studies. <bookmark mark='c'/> And combining biased studies only produces a "
-            "precise biased answer. <bookmark mark='d'/> The model also shrinks each study's own effect towards the mean, as "
-            "Efron and Morris shrank the hitters. <bookmark mark='e'/> Part 26 begins with exactly such a meta-analysis, "
-            "the eight schools, done the Bayesian way."
+            "<bookmark mark='a'/> Two cautions. Studies that found nothing are less often published, so the "
+            "literature overstates effects. <bookmark mark='b'/> Under a common effect and suitable sampling "
+            "conditions a funnel plot should be roughly symmetric. Asymmetry can reflect selection, heterogeneity or "
+            "other small-study effects; it does not diagnose publication bias alone. <bookmark mark='c'/> And "
+            "combining biased studies only produces a precise biased answer. <bookmark mark='d'/> The model also "
+            "shrinks each study's own effect towards the mean, as Efron and Morris shrank the hitters. <bookmark "
+            "mark='e'/> Part 26 begins with exactly such a meta-analysis, the eight schools, done the Bayesian way."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

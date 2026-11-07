@@ -32,16 +32,19 @@ class Rasch(VoiceoverScene):
         rows[0][2].set_color(SHRUNK)
         whys = [why(r"Rasch (1960): \ ability minus difficulty"), why(r"a GLMM: \ chapter ten's machinery"),
                 why(r"`specific objectivity'"), why(r"Birnbaum (1968)")]
+        intro = label('A working probability model states the assumptions behind shrinkage', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> In 1960 the Danish mathematician Georg Rasch proposed that the log odds of a person "
-            "answering an exam question correctly is the person's ability minus the question's difficulty. "
-            "<bookmark mark='b'/> Treat the persons as a sample, with abilities drawn from a normal, and the items as fixed, "
-            "and it is a logistic mixed model, fitted by chapter ten's machinery. <bookmark mark='c'/> A special property: "
-            "a person's raw score, the number of correct answers, is a sufficient statistic for their ability, so persons "
-            "can be compared without reference to which items were used, what Rasch called specific objectivity. "
-            "<bookmark mark='d'/> Allan Birnbaum's two-parameter model lets items also differ in how sharply they "
-            "discriminate."
+            "<bookmark mark='a'/> Rasch's model gives the log odds of a correct answer as ability minus item "
+            "difficulty. Responses are assumed locally independent given ability. <bookmark mark='b'/> With normal "
+            "random abilities and fixed items, this is a logistic mixed model. <bookmark mark='c'/> Conditional on "
+            "the fixed item parameters, a person's raw score is sufficient for ability. Comparing raw scores directly"
+            " requires the same item set; this does not make scores from arbitrary exam forms interchangeable. "
+            "Specific objectivity concerns conditional model comparisons. <bookmark mark='d'/> The two-parameter "
+            "model also lets items differ in discrimination."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -114,28 +117,29 @@ class Rasch(VoiceoverScene):
     def abilities(self):
         d = load("rasch")
         sc, ah, at = np.asarray(d["raw_score"]), np.asarray(d["ability_hat"]), np.asarray(d["ability_true"])
-        A = axes([-0.5, 15.5], [-3.2, 3.2], x_length=7.2, y_length=4.6, xlabel=r"raw score: \ correct answers out of 15",
+        A = axes([-0.5, 15.5], [-3.6, 3.6], x_length=7.2, y_length=4.6, xlabel=r"raw score: \ correct answers out of 15",
                  ylabel=r"ability", xticks=[0, 5, 10, 15], yticks=[-3, 0, 3], center=[-2.0, 0.3, 0])
         ax = A.ax
         g = np.random.Generator(np.random.PCG64(60))
         jit = 0.35 * (g.random(len(sc)) - 0.5)
-        tdots = VGroup(*[Dot(ax.c2p(s + j, np.clip(t, -3.2, 3.2)), radius=0.04, color=TRUE, fill_opacity=0.6) for s, j, t in zip(sc, jit, at)])
+        tdots = VGroup(*[Dot(ax.c2p(s + j, t), radius=0.04, color=TRUE, fill_opacity=0.6) for s, j, t in zip(sc, jit, at)])
         order = np.argsort(sc)
         mline = polyline(ax, sc[order], ah[order], SHRUNK, 4)
         rows = fit_rows(VGroup(
             label(r"gold: \ each person's true ability", font_size=22, color=TRUE),
-            label(r"green: \ the estimate, \ a function of the raw score alone", font_size=22, color=SHRUNK),
+            label(r"green: \ conditional ability modes; \ same complete item set", font_size=22, color=SHRUNK),
             label(rf"correlation with the truth: \ {np.corrcoef(at, ah)[0, 1]:.2f}", font_size=22),
             label(r"15 questions measure ability only roughly", font_size=22, color=RES),
             label(r"extreme scores are shrunk: \ 15 of 15 is not infinite ability", font_size=22, color=SHRUNK),
         ), 4.4, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
             "<bookmark mark='a'/> And the persons. In gold, each person's true ability against their raw score. "
-            "<bookmark mark='b'/> In green, the model's estimate: a smooth function of the raw score alone, as sufficiency "
-            "promised. <bookmark mark='c'/> Its correlation with the truth is point eight six: <bookmark mark='d'/> fifteen "
-            "questions measure ability only roughly, which is why the gold cloud is so wide at each score. "
-            "<bookmark mark='e'/> And the random-effects estimate is shrunk: a perfect score doesn't mean infinite ability, "
-            "which is what fixed-effects maximum likelihood would say."
+            "<bookmark mark='b'/> In green, the fitted conditional mode of ability: a function of the raw score for "
+            "this same complete item set, holding the fitted difficulties fixed. <bookmark mark='c'/> Its correlation"
+            " with the truth is point eight six: <bookmark mark='d'/> fifteen questions measure ability only roughly,"
+            " which is why the gold cloud is so wide at each score. <bookmark mark='e'/> And the random-effects "
+            "estimate is shrunk: a perfect score doesn't mean infinite ability, which is what fixed-effects maximum "
+            "likelihood would say."
         ) as vo:
             self.add(simulated_tag(r"simulated: \ a seeded example"))
             self.play(FadeIn(A))
@@ -178,20 +182,21 @@ class Rasch(VoiceoverScene):
         items = VGroup(*[curve(ax, th, P[:, j] * (1 - P[:, j]), GREY_B, 1.4) for j in range(len(b))])
         info = (P * (1 - P)).sum(1)
         tot = curve(ax, th, info, PATH, 4)
-        sem = curve(ax, th, np.minimum(1 / np.sqrt(info), 4), RES, 3)
+        sem = curve(ax, th, 1 / np.sqrt(info), RES, 3)
         rows = fit_rows(VGroup(
             label(r"grey: \ each item's information $p(1 - p)$", font_size=22, color=GREY_B),
             label(rf"yellow: \ the test's, \ the sum: \ peak {info.max():.1f}", font_size=22, color=PATH),
-            label(r"red: \ the SE of $\hat\theta$, \ $1/\sqrt{I(\theta)}$", font_size=22, color=RES),
+            label(r"red: \ known-item asymptotic SE, \ $1/\sqrt{I(\theta)}$", font_size=22, color=RES),
             label(r"precise in the middle; \ poor at the extremes", font_size=22, color=GREY_A),
         ), 4.3, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> How precisely does the exam measure? Each item's Fisher information about ability is p "
-            "times one minus p, largest for people for whom the item is a coin flip. <bookmark mark='b'/> The test's "
-            "information is the sum, peaking at about two point nine in the middle of the difficulties. "
-            "<bookmark mark='c'/> One over its square root is the standard error of an ability estimate, about point five nine "
-            "at best, <bookmark mark='d'/> and much worse for the very able and the struggling, whom no item challenges. "
-            "Test designers shape this curve by choosing items."
+            "<bookmark mark='a'/> How precisely does the exam measure? Each item's Fisher information about ability "
+            "is p times one minus p, largest for people for whom the item is a coin flip. <bookmark mark='b'/> The "
+            "test's information is the sum, peaking at about two point nine in the middle of the difficulties. "
+            "<bookmark mark='c'/> With known item difficulties, its inverse square root is an asymptotic likelihood "
+            "standard error, not the posterior uncertainty of our shrunk ability modes: about point five nine at "
+            "best, <bookmark mark='d'/> with less information at extremes, where all items can be too easy or too "
+            "hard. Test designers shape this curve by choosing items."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")

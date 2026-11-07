@@ -58,19 +58,25 @@ class Growth(VoiceoverScene):
             cmath(r"y_{it}", r"=", r"(\beta_0 + b_{0i}) + (\beta_1 + b_{1i})(t - 8) + \varepsilon_{it}", font_size=30),
             cmath(r"(b_{0i}, b_{1i})", r"\sim", r"N(0, G), \ \ G = \begin{pmatrix} \tau_0^2 & \tau_{01} \\ \tau_{01} & \tau_1^2 \end{pmatrix}", font_size=28),
             cmath(r"\mathrm{Var}\,y_{it}", r"=", r"\tau_0^2 + 2\tau_{01}(t - 8) + \tau_1^2 (t - 8)^2 + \sigma^2", font_size=28),
-            cmath(r"\text{centring}", r":", r"\text{age 8 makes } \tau_{01} \text{ the correlation at the middle}", font_size=28),
+            cmath(r"\text{centring}", r":", r"\tau_{01}=\mathrm{Cov}(b_0,b_1)\text{ at age origin }8", font_size=28),
         ]
         rows[0][2].set_color(SHRUNK)
         whys = [why(r"random intercepts and slopes: \ Laird \& Ware"), why(r"intercepts and slopes may correlate"),
-                why(r"the spread grows away from the centre"), why(r"choose the origin with care")]
+                why(r"variance minimum depends on covariance"), why(r"choose the origin with care")]
+        intro = label('A working probability model states the assumptions behind shrinkage', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> The natural model gives each child a random intercept and a random slope: their own height "
-            "at age eight, and their own growth rate. <bookmark mark='b'/> The two random effects have a covariance matrix "
-            "G, which allows tall children to grow faster or slower. <bookmark mark='c'/> The implied variance of a height "
-            "changes with age, smallest near the centre and growing away from it, a fan of lines. <bookmark mark='d'/> "
-            "Centring age at eight makes the intercept the height at eight; with age uncentred, the intercept would be a "
-            "height at birth, far outside the data, and its correlation with the slope would be an artefact."
+            "<bookmark mark='a'/> The natural model gives each child a random intercept and a random slope: their own"
+            " height at age eight, and their own growth rate. <bookmark mark='b'/> The two random effects have a "
+            "covariance matrix G, which allows tall children to grow faster or slower. <bookmark mark='c'/> The "
+            "implied variance of a height is a quadratic in age. Its minimum depends on the intercept-slope "
+            "covariance, and need not occur at age eight. <bookmark mark='d'/> Centring age at eight makes the "
+            "intercept the height at eight; with age uncentred, the intercept would be a height at birth, far outside"
+            " the data, and its covariance with the slope would have a different interpretation. Centering changes "
+            "this covariance; it does not make every association an artefact."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -161,20 +167,25 @@ class Growth(VoiceoverScene):
             cmath(r"\text{compound symmetry}", r":", r"\text{one correlation for any two times}", font_size=30),
             cmath(r"\text{AR(1)}", r":", r"\rho^{|t - s|}: \ \text{closer in time, \ more alike}", font_size=30),
             cmath(r"\text{unstructured}", r":", r"\text{every variance and covariance free}", font_size=30),
-            cmath(r"\text{missing visits}", r":", r"\text{fine if MAR: \ the likelihood uses what is there}", font_size=30),
+            cmath(r"\text{missing visits}", r":", r"\text{MAR + ignorable mechanism + correct joint outcome model}", font_size=30),
         ]
         rows[3][2].set_color(HIT)
         whys = [why(r"the random intercept's implied pattern"), why(r"Part 17's autoregression, \ within a person"),
                 why(r"$T(T + 1)/2$ parameters"), why(r"Part 41; \ unlike complete-case analysis")]
+        intro = label('Repeated-measure likelihood relies on a joint outcome model', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Random effects are one way to model the covariance of repeated measures. A random intercept "
-            "alone implies compound symmetry, one correlation between any two times. <bookmark mark='b'/> An autoregressive "
-            "structure, Part 17's, makes nearby times more alike than distant ones. <bookmark mark='c'/> An unstructured "
-            "covariance lets every variance and covariance be free, which is feasible when there are few time points. "
-            "<bookmark mark='d'/> And a great practical virtue: children who miss a visit still contribute everything they "
-            "have, and the likelihood is valid if the missingness depends only on what was observed, Part 41's missing at "
-            "random."
+            "<bookmark mark='a'/> Random effects are one way to model the covariance of repeated measures. A random "
+            "intercept alone implies compound symmetry, one correlation between any two times. <bookmark mark='b'/> "
+            "An autoregressive structure, Part 17's, makes nearby times more alike than distant ones. <bookmark "
+            "mark='c'/> An unstructured covariance lets every variance and covariance be free, which is feasible when"
+            " there are few time points. <bookmark mark='d'/> And a great practical virtue: children who miss a visit"
+            " still contribute everything they have, Under missing at random, distinct missingness parameters and a "
+            "correctly specified joint outcome model, likelihood can ignore the missingness mechanism. Informative "
+            "visits can violate these conditions."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

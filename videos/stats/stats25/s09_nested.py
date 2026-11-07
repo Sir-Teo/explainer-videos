@@ -32,6 +32,9 @@ class Nested(VoiceoverScene):
         rows[0][2].set_color(SHRUNK)
         whys = [why(r"towns, \ schools within towns, \ pupils within schools"), why(r"a variance at each level"),
                 why(r"two pupils share more the closer they sit"), why(r"school 7 of town 3 is not school 7 of town 4")]
+        intro = label('Nested random effects create covariance at multiple levels', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Clusters can sit inside clusters. The World's schools are in towns, so a pupil's score can "
             "have a town effect, a school-within-town effect, and the pupil's own. <bookmark mark='b'/> Each level has its "
@@ -39,6 +42,7 @@ class Nested(VoiceoverScene):
             "share both. <bookmark mark='d'/> The design is nested: every school belongs to exactly one town, so a school's "
             "label only means something within its town."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -48,7 +52,7 @@ class Nested(VoiceoverScene):
     def nested_fit(self):
         d = load("nested")
         tot = d["school_var"] + d["pupil_var"]
-        vals = [(r"towns", d["town_var"], PATH), (r"schools within towns", d["school_resid_var"], SHRUNK), (r"pupils", d["pupil_var"], RAW)]
+        vals = [(r"towns", d["town_var"], PATH), (r"school-mean residuals", d["school_resid_var"], SHRUNK), (r"pupils", d["pupil_var"], RAW)]
         bar_w = 9.0
         y0 = 0.6
         segs = VGroup()
@@ -56,21 +60,23 @@ class Nested(VoiceoverScene):
         x = -bar_w / 2
         tot3 = sum(v for _, v, _ in vals)
         for nm, v, c in vals:
-            w = max(bar_w * v / tot3, 0.04)
-            r = Rectangle(width=w, height=0.9, stroke_width=0, fill_color=c, fill_opacity=0.85).move_to([x + w / 2, y0, 0])
+            w = max(bar_w * v / max(vv for _, vv, _ in vals), 0.04)
+            r = Rectangle(width=w, height=0.38, stroke_width=0, fill_color=c, fill_opacity=0.85).move_to([x + w / 2, y0 - len(segs) * 0.65, 0])
             segs.add(r)
-            x += w
+            # Independent estimate bars, not an additive variance decomposition.
         for (nm, v, c), r in zip(vals, segs):
-            names.add(label(rf"{nm}: \ {v:,.0f} \ ({100 * v / tot3:.1f}\%)", font_size=22, color=c))
-        names.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([0, -1.2, 0])
-        head = label(rf"the World's {d['n_schools']} schools in {d['n_towns']} towns: \ the variance, \ split three ways", font_size=26).move_to([0, 2.4, 0])
-        foot = label(r"the World built no town effect: \ the town variance is noise, \ near the boundary", font_size=22, color=GREY_A).move_to([0, -2.7, 0])
+            names.add(label(rf"{nm}: \ {v:,.0f}", font_size=22, color=c))
+        names.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([0, -1.9, 0])
+        head = label(rf"{d['n_schools']} schools in {d['n_towns']} towns: \ separate two-stage estimates", font_size=26).move_to([0, 2.4, 0])
+        foot = label(r"no explicit town effect generated; \ no calibrated test computed", font_size=22, color=GREY_A).move_to([0, -2.7, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Fit it to the World: four hundred schools in ninety towns. <bookmark mark='b'/> Pupils "
-            "carry four-fifths of the variance, <bookmark mark='c'/> schools within towns nearly a fifth, <bookmark mark='d'/> "
-            "and towns about half a percent, a variance of forty-nine against more than seventeen hundred for schools. "
-            "<bookmark mark='e'/> The World built no town effect at all, so that small number is noise, an estimate pressed "
-            "against the boundary at zero. Chapter six's mixture test would not reject it."
+            "<bookmark mark='a'/> This display compares two separate working fits: a pupil-level school-intercept "
+            "model, and an unweighted model of school means grouped by town. It is a two-stage approximation, not a "
+            "joint three-level likelihood. <bookmark mark='b'/> The pupil-model residual variance is large. <bookmark"
+            " mark='c'/> The school-mean model also has substantial residual variation, including pupil-mean noise. "
+            "<bookmark mark='d'/> Its town component is about forty-nine. <bookmark mark='e'/> No explicit town "
+            "effect was generated, but a positive fitted component can occur. We have not computed a calibrated "
+            "town-variance test, so these estimates alone do not establish significance."
         ) as vo:
             self.add(simulated_tag())
             vo.wait_until("a")
@@ -115,6 +121,9 @@ class Nested(VoiceoverScene):
         rows[0][2].set_color(SHRUNK)
         whys = [why(r"essay quality, \ rater severity"), why(r"both are samples from populations"),
                 why(r"no nesting: \ the factors cut across"), why(r"no block structure: \ dense algebra, \ or sparse")]
+        intro = label('Crossed effects separate essay quality from rater severity', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Other factors cross instead of nesting. An exam essay's grade depends on the essay's "
             "quality and on the severity of whoever reads it. <bookmark mark='b'/> Both essays and raters are samples from "
@@ -122,6 +131,7 @@ class Nested(VoiceoverScene):
             "read any essay. <bookmark mark='d'/> The covariance no longer splits into blocks, one per group, so the fit "
             "needs general sparse algebra, which is what lme4 does; statkit's version is dense, for a few thousand rows."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
