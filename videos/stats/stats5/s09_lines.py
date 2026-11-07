@@ -119,7 +119,7 @@ class Lines(VoiceoverScene):
         whys = [why(r"$U$ independent noise in $X$: \ the covariance survives, \ the variance grows"),
                 why(r"the reliability ratio"), why(r"simulated: \ $\sigma_X = \sigma_U = 1$")]
         spear = label(r"Spearman (1904): \ divide a correlation by $\sqrt{\text{reliability}_X\,\text{reliability}_Y}$ \ to undo it",
-                      font_size=22, color=GREY_A).to_edge(DOWN, buff=0.4).shift(RIGHT * 2.6)
+                      font_size=22, color=GREY_A).move_to([2.6, -2.7, 0])
         if spear.width > 7.4:
             spear.width = 7.4
         tag = note(r"simulated: subset of 1,500; off-panel points omitted; slopes use all draws").to_corner(DL, buff=0.3)
