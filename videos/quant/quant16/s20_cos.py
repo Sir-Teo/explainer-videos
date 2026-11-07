@@ -31,32 +31,29 @@ class COS(VoiceoverScene):
     def rebuild(self, cd):
         y = np.asarray(cd["y"])
         tru = np.asarray(cd["true"])
-        top = float(tru.max()) * 1.15
-        g = axes([y[0], y[-1]], [-0.3, top], x_length=7.0, y_length=4.2, xlabel=r"log-return $\log(S_T/S_0)$",
+        Ns = ["2", "4", "8", "16", "32", "64", "128"]
+        yr = data_range(tru, *[cd["rec"][n] for n in Ns])
+        g = axes([y[0], y[-1]], yr, x_length=7.0, y_length=4.2, xlabel=r"log-return $\log(S_T/S_0)$",
                  ylabel=r"density", xticks=[-0.8, -0.4, 0, 0.4], yticks=[0, 1, 2], font_size=15)
         g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
         ax = g.ax
         truth = curve(ax, y, tru, GREY_B, stroke_width=5)
         Ns = ["2", "4", "8", "16", "32", "64", "128"]
-        recs = [curve(ax, y, np.clip(np.asarray(cd["rec"][n]), -0.3, top), QC.DELTA, stroke_width=3) for n in Ns]
+        recs = [curve(ax, y, np.asarray(cd["rec"][n]), QC.DELTA, stroke_width=3) for n in Ns]
         errs = {n: float(np.max(np.abs(np.asarray(cd["rec"][n]) - tru))) for n in Ns}
         tag = MathTex(r"N = 2", font_size=32, color=QC.DELTA).next_to(g, UP, buff=0.05).align_to(g, RIGHT)
         A = np.asarray(cd["A"])
-        h = axes([0, len(A)], [-12, 1], x_length=4.2, y_length=3.0, xlabel=r"$k$",
+        positive = A > 0
+        coeff_yr = data_range(np.log10(A[positive]))
+        h = axes([0, len(A)], coeff_yr, x_length=4.2, y_length=3.0, xlabel=r"$k$",
                  ylabel=r"$|A_k|$ ($\log_{10}$)", xticks=[0, 100, 200], yticks=[-10, -5, 0], font_size=14)
         h.to_edge(RIGHT, buff=0.6).shift(DOWN * 0.2)
-        dots = VGroup(*[Dot(h.ax.c2p(k, np.clip(np.log10(max(a_, 1e-12)), -12, 1)), radius=0.025, color=QC.DELTA)
-                        for k, a_ in enumerate(A)])
+        dots = VGroup(*[Dot(h.ax.c2p(k, np.log10(a_)), radius=0.025, color=QC.DELTA)
+                        for k, a_ in enumerate(A) if a_ > 0])
         src = illustration(rf"Heston, one year: $v_0 = \theta = 0.04$, $\kappa = 1.5$, $\xi = 0.5$, $\rho = -0.7$; range "
                            rf"$[{cd['a']:.2f}, {cd['b']:.2f}]$")
         with self.voiceover(
-            "Fang Fang and Kees Oosterlee's cosine method of 2008 asks a simpler question: what is the density of "
-            "the log-return? In grey, Heston's. Rebuild it from cosines, one term after another. "
-            "<bookmark mark='a'/> Two terms: a rough hump. Four, eight: the skew appears. Sixteen: the left tail. By "
-            f"sixty-four the largest error is {errs['64']:.1e}, and at a hundred and twenty-eight it is gone. "
-            "<bookmark mark='b'/> On the right, the size of each cosine's coefficient on a log scale: a straight "
-            "line down. The coefficients fall exponentially, and so does the error. That is the method's whole "
-            "advantage."
+            f"In grey is a high-term numerical Heston density reference, not an exact density. The cosine approximations retain all saved values, including negative oscillations. <bookmark mark='a'/> As terms are added, shape and tails improve. On these sampled density sites the sixty-four-term maximum discrepancy is {errs['64']:.1e}; at one hundred and twenty-eight it is {errs['128']:.1e}, finite rather than gone. <bookmark mark='b'/> The coefficient plot shows all strictly positive saved magnitudes without an artificial floor; exact zeros have no finite logarithm and are omitted. Rapid decay is favourable in this example. Exponential convergence requires appropriate analyticity and coefficient decay and does not hold for every model."
         ) as vo:
             self.play(FadeIn(g), Create(truth), FadeIn(src))
             self.play(Create(recs[0]), FadeIn(tag))
@@ -78,27 +75,21 @@ class COS(VoiceoverScene):
                   colors={r"V": OPT}),
             cmath(r"f(y)", r"=", r"{\sum_{k \ge 0}}' A_k\cos\Big(k\pi\frac{y - a}{b - a}\Big),\quad A_k = \frac{2}{b - a}"
                   r"\int_a^b f(y)\cos\Big(k\pi\frac{y - a}{b - a}\Big)dy", font_size=28),
-            cmath(r"A_k", r"\approx", r"\frac{2}{b - a}\,\mathrm{Re}\Big[\varphi\Big(\frac{k\pi}{b - a}\Big)e^{-ik\pi\frac{a}{b - a}}\Big]",
+            cmath(r"A_k", r"\approx", r"\frac{2}{b - a}\,\mathrm{Re}\Big[\varphi\Big(\frac{k\pi}{b - a}\Big)e^{ik\pi\frac{x-a}{b - a}}\Big]",
                   font_size=32, colors={r"A_k": QC.DELTA}),
             cmath(r"V", r"\approx", r"e^{-rT}{\sum_{k < N}}'\,\mathrm{Re}\Big[\varphi\Big(\frac{k\pi}{b - a}\Big)"
                   r"e^{ik\pi\frac{x - a}{b - a}}\Big]V_k", font_size=32, colors={r"V": GOOD}),
-            cmath(r"\text{error}", r"=", r"\text{truncation} + O(e^{-\nu N})", font_size=34, colors={r"\text{error}": BAD}),
+            cmath(r"\text{error}", r"=", r"\text{tail/coefficient truncation} + \text{series} + \text{roundoff}", font_size=34, colors={r"\text{error}": BAD}),
         ]
-        whys = [why(r"truncate to $[a, b] = c_1 \pm L\sqrt{c_2}$ from the cumulants; the tails are tiny"),
-                why(r"any function on $[a, b]$ is a cosine series (the prime halves the first term)"),
-                why(r"extend the integral back to the whole line: that is the characteristic function's definition"),
+        whys = [why(r"$x=\log(S_0/K)$, $y=\log(S_T/K)$; monetary payoff $v(y)$; cumulant-based range is a heuristic, not a tail certificate"),
+                why(r"an $L^2$ density has an $L^2$ cosine expansion; pointwise or uniform convergence requires additional regularity"),
+                why(r"$\varphi$ is the CF of $y-x$; extending finite-range coefficients to the whole line introduces a tail approximation"),
                 why(r"the payoff's cosine coefficients $V_k$ are in closed form (the code's \texttt{chi} and \texttt{psi})"),
                 why(r"exponential for densities analytic in a strip; Junike (2024) gives the $N$ for a target error "
                     r"(chapter 19)")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.55, edge=6.9)
         with self.voiceover(
-            "Four steps. A price is the payoff integrated against the density; cut the integral to a finite range, "
-            "set by the distribution's cumulants. <bookmark mark='a'/> On that range the density is a cosine series. "
-            "<bookmark mark='b'/> Each coefficient is an integral of the density against a cosine, and extending it "
-            "to the whole line turns it into the characteristic function at one frequency: known in closed form. "
-            "<bookmark mark='c'/> The payoff's own cosine coefficients are elementary integrals, so the price is one "
-            "short sum. <bookmark mark='d'/> Its error is the truncation, plus a term that falls exponentially in the "
-            "number of terms."
+            "Define x as log initial stock over strike, y as log terminal stock over strike, and phi as the characteristic function of y minus x. The payoff v of y is in currency units. Cut its density integral to a finite interval; a cumulant rule proposes the interval but does not certify payoff-tail error. <bookmark mark='a'/> A square-integrable density admits a cosine expansion in the L2 sense, with additional conditions for stronger convergence. The prime halves the constant term. <bookmark mark='b'/> Extending coefficient integrals to the full line introduces a tail approximation and gives the characteristic function with phase x minus a. <bookmark mark='c'/> Monetary payoff coefficients are elementary integrals, yielding the displayed pricing sum. <bookmark mark='d'/> Errors include tail and coefficient truncation, finite series and roundoff. Exponential series decay needs suitable analyticity, boundary behaviour and coefficient bounds. Conditional error-control results require their full assumptions."
         ) as vo:
             for i, mk in enumerate("abcd"):
                 step(i)
@@ -110,12 +101,15 @@ class COS(VoiceoverScene):
     def truncate(self, cd, f):
         L = np.asarray(cd["L"], float)
         e = np.asarray(cd["errL"])
-        g = axes([2, 42], [-15, 0], x_length=5.6, y_length=3.8, xlabel=r"range half-width $L$ (in standard deviations)",
+        ok = e > 0
+        yr = data_range(np.log10(e[ok]))
+        g = axes(data_range(L), yr, x_length=5.6, y_length=3.8, xlabel=r"range half-width $L$ (in standard deviations)",
                  ylabel=r"price error, $N = 4{,}096$ ($\log_{10}$)", xticks=[10, 20, 30, 40], yticks=[-15, -10, -5, 0],
                  font_size=14).to_edge(LEFT, buff=0.7).shift(DOWN * 0.2)
         ok = e > 0
-        line = polyline(g.ax, L[ok], np.clip(np.log10(e[ok]), -15, 0), BAD, radius=0.05)
-        mark = DashedLine(g.ax.c2p(16, -15), g.ax.c2p(16, 0), stroke_color=GREY_B, stroke_width=1.5)
+        line = polyline(g.ax, L[ok], np.log10(e[ok]), BAD, radius=0.05)
+        mark = DashedLine(g.ax.c2p(16, yr[0]), g.ax.c2p(16, yr[1]), stroke_color=GREY_B, stroke_width=1.5)
+        reference_note = wrapped_label(r"$L=40$: zero discrepancy by construction against the same 4,096-term reference; not a zero tail-error claim", 5.6, 20, GREY_A).next_to(g, DOWN, buff=0.2)
         cos = [x for x in f["rows"] if x["method"] == "COS"]
         card = lab_card(r"the COS sum", [
             "k = np.arange(N)",
@@ -133,16 +127,9 @@ class COS(VoiceoverScene):
         out = [f"N = {x['N']:>3}: error {x['err']:.1e}" for x in cos if x["N"] in (32, 64, 128, 256)]
         e16 = float(e[list(L).index(16.0)])
         with self.voiceover(
-            "The other knob is the range. Too narrow, and the left tail of a strongly skewed density is cut off: with "
-            f"a half-width of four standard deviations the error is {e[0]:.2f}. Widen it, and the truncation error "
-            f"falls fast; at sixteen, the House's choice for this correlation, it is about {e16 * 1e8:.0f} in a hundred "
-            "million. "
-            "<bookmark mark='a'/> The House's COS code is ten lines: the put's coefficients in closed form, the "
-            "characteristic function at each frequency, one sum, and the call by put–call parity. "
-            f"<bookmark mark='b'/> Run it: with {cos[-2]['N']} terms the error is about {cos[-2]['err'] * 1e8:.0f} in a "
-            "hundred million."
+            f"Vary the interval half-width while retaining four thousand and ninety-six terms. The discrepancy from the same method at L forty is {e[0]:.2f} at L four, and {e16:.3g} at L sixteen. This comparison combines range and finite-series effects; it is not an exact truncation-error measurement. L forty has zero discrepancy by construction and is labelled separately, rather than plotted at a fake logarithmic zero. <bookmark mark='a'/> The code computes put coefficients, multiplies by characteristic-function phases, sums and uses put–call parity. <bookmark mark='b'/> The displayed {cos[-2]['N']}-term reference discrepancy is {cos[-2]['err']:.3g}. Shared assumptions and correlated numerical errors still limit what agreement establishes."
         ) as vo:
-            self.play(FadeIn(g), Create(line), FadeIn(mark))
+            self.play(FadeIn(g), Create(line), FadeIn(mark), FadeIn(reference_note))
             vo.wait_until("a")
             self.play(FadeIn(card))
             vo.wait_until("b")
@@ -152,18 +139,20 @@ class COS(VoiceoverScene):
 
     def race(self, r, rc):
         pts = r["points"] + rc["points"]
-        g = loglog(-4.2, 1.5, -8, 0, r"wall-clock time (seconds, one core)", r"error in the price", x_length=7.4,
+        xr = data_range([np.log10(p["time"]) for p in pts])
+        yr = data_range([np.log10(p["err"]) for p in pts])
+        g = loglog(*xr, *yr, r"wall-clock time (seconds, one core)", r"MC: one sampling s.e.; others: absolute reference error", x_length=7.4,
                    y_length=4.6, xt=[-4, -2, 0], yt=[-8, -6, -4, -2, 0])
         g.to_edge(LEFT, buff=0.6).shift(DOWN * 0.3)
         ax = g.ax
-        clock = ValueTracker(-4.2)
+        clock = ValueTracker(xr[0])
         by = {m: sorted([q for q in pts if q["method"] == m], key=lambda q: q["time"]) for m in ORDER}
 
         def draw(m):
             def make():
                 rr = [q for q in by[m] if np.log10(q["time"]) <= clock.get_value()]
                 grp = VGroup()
-                pp = [ax.c2p(np.clip(np.log10(q["time"]), -4.2, 1.5), np.clip(np.log10(max(q["err"], 1e-9)), -8, 0)) for q in rr]
+                pp = [ax.c2p(np.log10(q["time"]), np.log10(q["err"])) for q in rr]
                 if len(pp) > 1:
                     grp.add(VMobject(stroke_color=METHOD_COL[m], stroke_width=3).set_points_as_corners(pp))
                 grp.add(*[Dot(q_, radius=0.06, color=METHOD_COL[m]) for q_ in pp])
@@ -180,29 +169,19 @@ class COS(VoiceoverScene):
                           rf"$\sqrt{{{cv['ratio']:.1f}}}$ and keeps its slope", 4.0, 17, GREY_A),
             wrapped_label(r"Fourier for vanillas when the model has a characteristic function (Bermudans too: Fang and "
                           r"Oosterlee 2009); grids for low-dimensional early exercise and barriers; simulation for "
-                          r"everything else", 4.0, 17, WHITE),
+                          r"many high-dimensional or path-dependent products", 4.0, 17, WHITE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(leg, DOWN, buff=0.35).align_to(leg, LEFT)
-        q = predict(r"Why can COS not price a barrier directly?", width=4.0, font_size=19).to_corner(DR, buff=0.25)
-        src = illustration(r"Monte Carlo's plotted error is its standard error; reference: COS, 4{,}096 terms, $L = 40$",
+        q = predict(r"Why is a terminal-density vanilla formula insufficient for a barrier?", width=4.0, font_size=19).to_corner(DR, buff=0.25)
+        src = illustration(r"synthetic zero-rate/zero-dividend case; MC: one s.e., excluding 50-step QE and fitted-control bias; COS numerical reference",
                            corner=DL)
         with self.voiceover(
-            "Now the race of the opening, run again with everything we know, including Monte Carlo with a control "
-            "variate. The clock runs from a tenth of a millisecond to ten seconds. <bookmark mark='a'/> COS finishes "
-            f"first, with an error of {cos_best['err'] * 1e8:.0f} in a hundred million in under a millisecond. "
-            "Carr–Madan follows, then the ADI grid. <bookmark mark='b'/> Monte Carlo crawls down its square-root "
-            f"line; the control variate shifts it down by a factor of {np.sqrt(cv['ratio']):.1f}, but cannot change "
-            "the slope. Its plotted error is the standard error, the honest expected size. "
-            "<bookmark mark='c'/> So the rule: Fourier when the model allows it and the product is a vanilla; grids "
-            "for low-dimensional products with early exercise or barriers; simulation for everything else. Pause and "
-            "predict: why can the cosine method not price a barrier? It needs only the terminal density, and a "
-            "barrier needs the path."
-            " Next: how banks run these engines overnight."
+            f"The same saved timings now include a stock control variate. The clock spans the recorded data range on a shared CPU. This is a comparison of different diagnostics, not a matched total-accuracy race. <bookmark mark='a'/> For COS, grids and FFT, the vertical metric is absolute difference from the chosen COS reference. The best displayed COS difference is {cos_best['err']:.3g}. Sharing a reference limits independent validation. <bookmark mark='b'/> For Monte Carlo, height is one estimated sampling standard error, excluding fifty-step QE bias and any same-sample control-fitting bias. A fixed population control changes the asymptotic variance constant, with work and estimation effects considered separately. Here the empirical ratio is {cv['ratio']:.1f}. <bookmark mark='c'/> Characteristic-function methods are useful for suitable vanillas; grids for manageable state dimensions; simulation for many high-dimensional and path-dependent problems. A terminal density alone cannot identify a barrier touch. COS backward-recursion extensions can nevertheless handle barriers and Bermudans. Next, industry workloads and hardware."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src), *[FadeIn(x) for x in lines])
             vo.wait_until("a")
-            self.play(clock.animate.set_value(-1.5), run_time=4, rate_func=linear)
+            self.play(clock.animate.set_value(xr[0] + 0.5 * (xr[1] - xr[0])), run_time=4, rate_func=linear)
             vo.wait_until("b")
-            self.play(clock.animate.set_value(1.5), run_time=4, rate_func=linear)
+            self.play(clock.animate.set_value(xr[1]), run_time=4, rate_func=linear)
             self.play(FadeIn(side[0]))
             vo.wait_until("c")
             self.play(FadeIn(side[1]), FadeIn(q))
