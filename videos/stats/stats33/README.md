@@ -321,5 +321,4 @@ by about 2.6 Monte Carlo SE. Funnel asymmetry and p-curve patterns are diagnosti
 explanations, and PET extrapolation is model-dependent. Registration comparisons are observational.
 
 Source checks, independent numerical tests and reproducible input hashes are archived in
-`docs/qa/evidence/stats33-polish-20261107`. Render, listening and bilingual production approval
-remain pending until their evidence is recorded.
+[the Part 33 evidence](../../../docs/qa/evidence/stats33-polish-20261107/README.md). The recorded English sampled visual checkpoint is complete; continuous listening/playback, Chinese production and final narrated masters remain open.
