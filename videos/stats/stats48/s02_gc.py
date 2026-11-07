@@ -52,11 +52,11 @@ class GlivenkoCantelli(VoiceoverScene):
     def sequences(self):
         d = load("gc")
         cp = np.log10(np.asarray(d["checkpoints"], float))
-        A = axes([0, 3.7], [0, 0.6], x_length=7.4, y_length=4.4, xlabel=r"$n$ \ (log scale)", ylabel=r"$\sup_t |F_n(t) - t|$",
-                 xticks=[0, 1, 2, 3], xfmt=lambda v: f"{10 ** v:,.0f}", yticks=[0, 0.2, 0.4, 0.6], center=[-2.5, 0.2, 0])
+        A = axes([0, 3.7], [0, 1], x_length=7.4, y_length=4.4, xlabel=r"$n$ \ (log scale)", ylabel=r"$\sup_t |F_n(t) - t|$",
+                 xticks=[0, 1, 2, 3], xfmt=lambda v: f"{10 ** v:,.0f}", yticks=[0, 0.25, 0.5, 0.75, 1], center=[-2.5, 0.2, 0])
         ax = A.ax
         cols = [EMPC, S.ALT, S.PRIOR]
-        cs = [clip_curve(ax, cp, d["seqs"][str(s)], c, 3, ymin=0, ymax=0.6) for s, c in enumerate(cols)]
+        cs = [clip_curve(ax, cp, d["seqs"][str(s)], c, 3, ymin=0, ymax=1) for s, c in enumerate(cols)]
         nn = np.logspace(0.3, 3.7, 100)
         env = polyline(ax, np.log10(nn), np.sqrt(np.log(np.log(nn) + 1.0) / (2 * nn)) * 1.2, BOUNDC, 2.5)
         side = fit_rows(VGroup(
