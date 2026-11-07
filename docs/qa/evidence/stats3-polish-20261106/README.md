@@ -30,3 +30,5 @@ python -m pytest tests/test_stats*.py tests/test_qa*.py -q
 ```
 
 Chinese narration and on-screen translation tables, continuous listening/playback, and final narrated masters remain pending. Translation warnings are retained. See [the progress tracker](../../statistics-built-progress.md).
+
+[Shared-source refresh](shared-source-refresh.json): all endpoint/native/motion captures and speech checks rerun after the World programme-name correction; narrated source matching verified.

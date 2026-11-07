@@ -1,5 +1,5 @@
 {
-  "fingerprint": "293e019072aaa984d33657c4ee70f9b2872e4d43bd34ea7218da690ca47cd7f3",
+  "fingerprint": "bb7ec7fc1f4f196727fb0863c22210e1b0e891436989cab39094501740deb5da",
   "scope": "English render review; listening and bilingual production gates remain open",
   "records": [
     {
@@ -10,7 +10,7 @@
         "narration-translation": 6
       },
       "input_record": "renders/qa/series/stats3/en/Transforms_motion/result.json",
-      "input_sha256": "5bc4e4abc637845da24af0a77c51cc5ac1cab43d1096790b2a76197fb84f4e97",
+      "input_sha256": "a677c8933fc47a7f7efe32e654d35716fed45709c3790c3867ef3fd2ec36d742",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 214 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 214 s\n"
     },
     {
@@ -21,7 +21,7 @@
         "narration-translation": 6
       },
       "input_record": "renders/qa/series/stats3/en/Sampling_motion/result.json",
-      "input_sha256": "a5162241dcd1b3d339fca259d1b973708ee460c37e3f99ded0107a438e8badaa",
+      "input_sha256": "6f8e610275b18ad5514982f87ecf0e39e87c3b26543dff065cd253f93c20d140",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 216 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 216 s\n"
     }
   ]
