@@ -54,6 +54,9 @@ class Chaining(VoiceoverScene):
         g.move_to([0, 0.4, 0])
         labs = VGroup(*[label(rf"level {k}: \ $2^{{{k}}}$ cells", font_size=20, color=GREY_B).next_to(rows[k], LEFT, buff=0.35).set_x(-6.2) for k in range(6)])
         foot = label(r"each new point is tied to its parent, \ $2^{-k}$ away: \ the link has s.d. $2^{-k/2}$", font_size=24, color=CLASSC).move_to([0, -2.7, 0])
+        heading = label('Refine each cell and connect new points to the coarser net', font_size=36).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> Richard Dudley's chaining, from 1967, uses the correlation. Build nets that refine: at "
             "level zero, the two endpoints; <bookmark mark='b'/> at each later level, add the midpoints of the previous "
