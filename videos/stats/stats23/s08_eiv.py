@@ -271,6 +271,9 @@ class EIV(VoiceoverScene):
             label(r"simulate more error and extrapolate back: \ SIMEX (Cook \& Stefanski 1994)", font_size=24, color=TEAL),
             label(r"and the whole subject: \ Part 41", font_size=24, color=GREY_A),
         ), 12.4, 0.5, [0, 0, 0])
+        intro = label('Correcting measurement error requires information beyond the regression', font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "Every cure needs information from outside the regression itself. <bookmark mark='a'/> If repeated "
             "measurements give the reliability, divide by it: Part 20's regression calibration. <bookmark mark='b'/> "
@@ -280,6 +283,7 @@ class EIV(VoiceoverScene):
             "SIMEX adds extra simulated error in steps, watches the slope shrink, and extrapolates back to no error "
             "at all. <bookmark mark='e'/> Part 41 treats measurement error in full."
         ) as vo:
+            self.add(intro)
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))

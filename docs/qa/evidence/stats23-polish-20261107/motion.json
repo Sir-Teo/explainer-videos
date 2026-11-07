@@ -1,0 +1,127 @@
+{
+  "fingerprint": "b3b0231297374fb51513c3aa4eb8b06e3d177d6761a46b2176c26181be2d3f7f",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats23/en/Hook_motion/result.json",
+      "input_sha256": "dbd13e29189ac4590f6e4990b8fa71f417c09ad1c38adc014d413359b4ce8888",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 200 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 200 s\n"
+    },
+    {
+      "scene": "Upgrade",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats23/en/Upgrade_motion/result.json",
+      "input_sha256": "68d191173f96abfc8cd3dd318d766b34c5596afb491aebbdf1658d499f13c920",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 153 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 153 s\n"
+    },
+    {
+      "scene": "GLH",
+      "status": "needs-review",
+      "frames": 36,
+      "warnings": {
+        "narration-translation": 9
+      },
+      "input_record": "renders/qa/series/stats23/en/GLH_motion/result.json",
+      "input_sha256": "ab3a7d811f9395086738404b047cea6ef6583274d1a30e2afc310fbafb0019fa",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 321 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 321 s\n"
+    },
+    {
+      "scene": "GLS",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats23/en/GLS_motion/result.json",
+      "input_sha256": "4d2ddb36e42335253de72bf921093f8621fda8ee26d8f9b7f38bc63675265991",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 270 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 270 s\n"
+    },
+    {
+      "scene": "Hetero",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats23/en/Hetero_motion/result.json",
+      "input_sha256": "1fc6427a3904c693956631568546b5a63242282b033a338cee8380c8b69dbb75",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 269 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 269 s\n"
+    },
+    {
+      "scene": "Cluster",
+      "status": "needs-review",
+      "frames": 32,
+      "warnings": {
+        "narration-translation": 9
+      },
+      "input_record": "renders/qa/series/stats23/en/Cluster_motion/result.json",
+      "input_sha256": "d6ab79400c8d6dc2a8911bb5cae0bd7ca688f6a8ce7c0295d89237ab6eb8321c",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 340 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 340 s\n"
+    },
+    {
+      "scene": "EIV",
+      "status": "needs-review",
+      "frames": 33,
+      "warnings": {
+        "narration-translation": 9
+      },
+      "input_record": "renders/qa/series/stats23/en/EIV_motion/result.json",
+      "input_sha256": "49b489737ef0d2e871de9daea763dbc80b34950d0386b4973b6f106a42b3fb35",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 356 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 356 s\n"
+    },
+    {
+      "scene": "Quantile",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats23/en/Quantile_motion/result.json",
+      "input_sha256": "beba42098920f7f0d124c28af7de955b1090c70b085c3d0e9253b298ac7efa23",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 286 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 286 s\n"
+    },
+    {
+      "scene": "Splines",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats23/en/Splines_motion/result.json",
+      "input_sha256": "5f5ed4b35a0f42e2fe0335b46d63855b25134619a7d51c409cf90366800f5c41",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 232 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 232 s\n"
+    },
+    {
+      "scene": "Numerics",
+      "status": "needs-review",
+      "frames": 32,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats23/en/Numerics_motion/result.json",
+      "input_sha256": "08ed827c05b0b23c42bb45885f2a5f15513c8a59418f42ed78fcd96d18e74650",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 293 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 293 s\n"
+    },
+    {
+      "scene": "Influence",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats23/en/Influence_motion/result.json",
+      "input_sha256": "3d56df190ef5939249e15af355d2ef9ae01c9110acd5a0a9b771fc93b5bcc002",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 228 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 228 s\n"
+    }
+  ]
+}

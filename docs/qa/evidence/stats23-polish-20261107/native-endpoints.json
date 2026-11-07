@@ -1,0 +1,138 @@
+{
+  "fingerprint": "b3b0231297374fb51513c3aa4eb8b06e3d177d6761a46b2176c26181be2d3f7f",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 18,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 48
+      },
+      "input_record": "renders/qa/native1080/stats23/en/Hook/result.json",
+      "input_sha256": "4a69ae260ba5d42e115bcc8cbe18fb3ababc38b0aed01a3273b3bfcf6900700f"
+    },
+    {
+      "scene": "Upgrade",
+      "status": "needs-review",
+      "frames": 19,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 28
+      },
+      "input_record": "renders/qa/native1080/stats23/en/Upgrade/result.json",
+      "input_sha256": "7aacc1be46ef937b844e3075bc3ef4111b7ec492c0a04752f93fcf88f7bdc5dc"
+    },
+    {
+      "scene": "GLH",
+      "status": "needs-review",
+      "frames": 35,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 55
+      },
+      "input_record": "renders/qa/native1080/stats23/en/GLH/result.json",
+      "input_sha256": "2a8c2194f149b5771ed415574dc9665c8f06a3066256d1465fd2fa7f0ac3ca9a"
+    },
+    {
+      "scene": "GLS",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 60
+      },
+      "input_record": "renders/qa/native1080/stats23/en/GLS/result.json",
+      "input_sha256": "a6c1f90f5252db79b2f1bd2fe49e7e3a2d4a5c74b1fe00a7440804e295f4661e"
+    },
+    {
+      "scene": "Hetero",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 65
+      },
+      "input_record": "renders/qa/native1080/stats23/en/Hetero/result.json",
+      "input_sha256": "1328fca8ee85b563759373bc176ad9906bc4adf13772434a49a9d6d55d644fa4"
+    },
+    {
+      "scene": "Cluster",
+      "status": "needs-review",
+      "frames": 32,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 89
+      },
+      "input_record": "renders/qa/native1080/stats23/en/Cluster/result.json",
+      "input_sha256": "abacb19b4baa46e75d49430b2021a1a38b9b7f9a9fe105311960434f6c13e8cd"
+    },
+    {
+      "scene": "Approx",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 44
+      },
+      "input_record": "renders/qa/native1080/stats23/en/Approx/result.json",
+      "input_sha256": "d6f680a931024fd061c1014526027b8616995d18f2b532a188eab3a12bc4e59c"
+    },
+    {
+      "scene": "EIV",
+      "status": "needs-review",
+      "frames": 33,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 70
+      },
+      "input_record": "renders/qa/native1080/stats23/en/EIV/result.json",
+      "input_sha256": "329a071fead90cc9d9f4f31338b88264a809866da9f7f10ceb1e507f4930abe7"
+    },
+    {
+      "scene": "Quantile",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 68
+      },
+      "input_record": "renders/qa/native1080/stats23/en/Quantile/result.json",
+      "input_sha256": "8d3005fb5d85e9f5a7a214cd68cc9c0eec666c08623f177356e7a64b91c7685e"
+    },
+    {
+      "scene": "Splines",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 53
+      },
+      "input_record": "renders/qa/native1080/stats23/en/Splines/result.json",
+      "input_sha256": "387e6985b77934ffbb1bd4e04be42d257f326b17741f2dbd011d322988cc582f"
+    },
+    {
+      "scene": "Numerics",
+      "status": "needs-review",
+      "frames": 32,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 58
+      },
+      "input_record": "renders/qa/native1080/stats23/en/Numerics/result.json",
+      "input_sha256": "ffcaed3a90a2654e4c1abc097e10521e7f336bc6d71dc1d75aeafbd36d5149f3"
+    },
+    {
+      "scene": "Influence",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 43
+      },
+      "input_record": "renders/qa/native1080/stats23/en/Influence/result.json",
+      "input_sha256": "8a3189d4a324adce1dabe820221631a36e9702b734020275e27835fdf6ba314a"
+    }
+  ]
+}

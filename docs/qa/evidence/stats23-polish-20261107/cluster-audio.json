@@ -1,0 +1,117 @@
+{
+ "video": "stats23",
+ "scene": "Cluster",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 9,
+ "lines": [
+  {
+   "raw": "Chapter five. Clustering.",
+   "spoken": "Chapter five. Clustering.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/14912b65333bf4e0.wav",
+   "duration": 2.25,
+   "tokens": 3,
+   "peak": 0.3929443359375,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The World has four hundred schools. Sample forty and take every pupil in them: about two and a half thousand pupils. <bookmark mark='b'/> Half the schools run a tutoring programme, assigned to whole schools. Each dot is a school's mean score, sized by its number of pupils. <bookmark mark='c'/> A regression of pupils' scores on the programme and home background estimates the effect at twenty-seven and a half points; the World's truth is twenty. <bookmark mark='d'/> The usual standard error says three point six five, so the estimate looks precise and wrong. <bookmark mark='e'/> The cluster-robust standard error says ten. The truth is well inside its interval.",
+   "spoken": "The World has four hundred schools. Sample forty and take every pupil in them: about two and a half thousand pupils. Half the schools run a tutoring programme, assigned to whole schools. Each dot is a school's mean score, sized by its number of pupils. A regression of pupils' scores on the programme and home background estimates the effect at twenty-seven and a half points; the World's truth is twenty. The usual standard error says three point six five, so the estimate looks precise and wrong. The cluster-robust standard error says ten. The truth is well inside its interval.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/ff09b34b39552c6c.wav",
+   "duration": 33.425,
+   "tokens": 99,
+   "peak": 0.7589111328125,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Brent Moulton gave the size of the problem in 1986. A simple equal-size exchangeable model gives a variance inflation factor of one plus cluster size minus one, times the regressor and error intraclass correlations. Using average size with unequal clusters and covariate adjustment is a heuristic. It's Kish's design effect from Part 18. <bookmark mark='b'/> Here there are sixty-one pupils per school; the programme is the same for every pupil in a school, so its correlation is one; and the residuals' intraclass correlation is only point one one four. <bookmark mark='c'/> But point one one four times sixty is about seven: the variance is understated eightfold, the standard error by a factor of two point eight. <bookmark mark='d'/> The cluster-robust standard error came out two point seven five times the iid one.",
+   "spoken": "Brent Moulton gave the size of the problem in 1986. A simple equal-size exchangeable model gives a variance inflation factor of one plus cluster size minus one, times the regressor and error intraclass correlations. Using average size with unequal clusters and covariate adjustment is a heuristic. It's Kish's design effect from Part 18. Here there are sixty-one pupils per school; the programme is the same for every pupil in a school, so its correlation is one; and the residuals' intraclass correlation is only point one one four. But point one one four times sixty is about seven: the variance is understated eightfold, the standard error by a factor of two point eight. The cluster-robust standard error came out two point seven five times the iid one.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/4eb83f7c45940e12.wav",
+   "duration": 49.0,
+   "tokens": 126,
+   "peak": 0.698883056640625,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The fix is chapter one's sandwich again, with clusters independent of each other but anything allowed inside. <bookmark mark='b'/> For the meat, add up each cluster's scores, X transpose e, and square the sum: correlations within a cluster are captured because the cross-products are kept. <bookmark mark='c'/> With a small-sample factor this is CR one, from Kung-Yee Liang and Scott Zeger and from Manuel Arellano, and it's compared with a t distribution with G minus one degrees of freedom. <bookmark mark='d'/> It is consistent as the number of clusters grows. Cluster asymptotics need many independent schools, finite moments and no dominant cluster. Information also depends on within-school predictor variation; there is no universal effective sample size equal to G.",
+   "spoken": "The fix is chapter one's sandwich again, with clusters independent of each other but anything allowed inside. For the meat, add up each cluster's scores, X transpose e, and square the sum: correlations within a cluster are captured because the cross-products are kept. With a small-sample factor this is CR one, from Kung-Yee Liang and Scott Zeger and from Manuel Arellano, and it's compared with a t distribution with G minus one degrees of freedom. It is consistent as the number of clusters grows. Cluster asymptotics need many independent schools, finite moments and no dominant cluster. Information also depends on within-school predictor variation; there is no universal effective sample size equal to G.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/9f87d333dbb98d68.wav",
+   "duration": 44.85,
+   "tokens": 113,
+   "peak": 0.784515380859375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> But clusters are often few. With eight schools, the meat is estimated from eight summed residual vectors. <bookmark mark='b'/> And as chapter four found for single points, residuals understate errors, most for clusters that are large or unusual. <bookmark mark='c'/> With few clusters CR one can be too small and tests can reject too often, as Colin Cameron, Jonah Gelbach and Douglas Miller documented in 2008. <bookmark mark='d'/> This is everyday reality: policy studies cluster by state or country, and Part 37's difference-in-differences studies often have fewer than twenty.",
+   "spoken": "But clusters are often few. With eight schools, the meat is estimated from eight summed residual vectors. And as chapter four found for single points, residuals understate errors, most for clusters that are large or unusual. With few clusters CR one can be too small and tests can reject too often, as Colin Cameron, Jonah Gelbach and Douglas Miller documented in 2008. This is everyday reality: policy studies cluster by state or country, and Part 37's difference-in-differences studies often have fewer than twenty.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/c825dc5eec8b40f1.wav",
+   "duration": 35.05,
+   "tokens": 83,
+   "peak": 0.701202392578125,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The wild cluster bootstrap. First, fit the model with the null hypothesis imposed, keeping fitted values and residuals. <bookmark mark='b'/> Then make new data sets by multiplying all the residuals in a cluster by the same random weight, plus or minus one, or one of Matthew Webb's six values. Each school's residuals keep their internal pattern, which is what the inference needs to respect. <bookmark mark='c'/> Refit and compute the cluster-robust t-statistic each time. <bookmark mark='d'/> We use one plus the number of at-least-as-extreme bootstrap statistics, divided by one plus the number of draws. This Monte Carlo correction prevents zero p-values; it does not make few-cluster inference exact. With eight clusters, signs alone give only two hundred and fifty-six possible data sets; Webb's weights give one point seven million.",
+   "spoken": "The wild cluster bootstrap. First, fit the model with the null hypothesis imposed, keeping fitted values and residuals. Then make new data sets by multiplying all the residuals in a cluster by the same random weight, plus or minus one, or one of Matthew Webb's six values. Each school's residuals keep their internal pattern, which is what the inference needs to respect. Refit and compute the cluster-robust t-statistic each time. We use one plus the number of at-least-as-extreme bootstrap statistics, divided by one plus the number of draws. This Monte Carlo correction prevents zero p-values; it does not make few-cluster inference exact. With eight clusters, signs alone give only two hundred and fifty-six possible data sets; Webb's weights give one point seven million.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/4edaa65215a88e95.wav",
+   "duration": 48.75,
+   "tokens": 123,
+   "peak": 0.527984619140625,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> At which level should you cluster: pupils, schools, towns, or regions? <bookmark mark='b'/> Alberto Abadie, Susan Athey, Guido Imbens and Jeffrey Wooldridge argue from the design: cluster at the level where the treatment was assigned, or where the sample was drawn. Here the programme was assigned to schools, so schools. <bookmark mark='c'/> When errors are correlated along two dimensions at once, say schools and years, two-way clustering adds the two one-way variances and subtracts their intersection. <bookmark mark='d'/> Coarser clustering can reduce the available independent units and make variance estimates unreliable; it is not automatically conservative. Few-cluster two-way estimates can even be indefinite.",
+   "spoken": "At which level should you cluster: pupils, schools, towns, or regions? Alberto Abadie, Susan Athey, Guido Imbens and Jeffrey Wooldridge argue from the design: cluster at the level where the treatment was assigned, or where the sample was drawn. Here the programme was assigned to schools, so schools. When errors are correlated along two dimensions at once, say schools and years, two-way clustering adds the two one-way variances and subtracts their intersection. Coarser clustering can reduce the available independent units and make variance estimates unreliable; it is not automatically conservative. Few-cluster two-way estimates can even be indefinite.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/fe40a60f9aed73a0.wav",
+   "duration": 39.8,
+   "tokens": 97,
+   "peak": 0.5709228515625,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Clustering can be modelled instead of merely corrected. Give each school a mean-zero effect u g shared by all its pupils, uncorrelated with the predictors and independent of individual errors. <bookmark mark='b'/> Then each school's errors have an exchangeable covariance: equal variances, and one correlation between any two pupils. <bookmark mark='c'/> Generalized least squares with a known covariance gives the fixed-coefficient estimator for the random-intercept model of Part 25, more efficient than least squares when the model is right. <bookmark mark='d'/> Pairing it with a cluster-robust standard error can protect against covariance misspecification under cluster asymptotics, while a biased conditional-mean model still needs attention, which is exactly what Part 24's generalized estimating equations do.",
+   "spoken": "Clustering can be modelled instead of merely corrected. Give each school a mean-zero effect u g shared by all its pupils, uncorrelated with the predictors and independent of individual errors. Then each school's errors have an exchangeable covariance: equal variances, and one correlation between any two pupils. Generalized least squares with a known covariance gives the fixed-coefficient estimator for the random-intercept model of Part 25, more efficient than least squares when the model is right. Pairing it with a cluster-robust standard error can protect against covariance misspecification under cluster asymptotics, while a biased conditional-mean model still needs attention, which is exactly what Part 24's generalized estimating equations do.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/d04187379f4549fa.wav",
+   "duration": 47.65,
+   "tokens": 108,
+   "peak": 0.470550537109375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The Board, with a thousand samples of forty schools. The iid standard error covers the programme's true effect forty-nine percent of the time: broken. <bookmark mark='b'/> Cluster-robust: ninety-five, kept. <bookmark mark='c'/> Now only eight schools. Cluster-robust with t on seven degrees of freedom: eighty-nine, broken. <bookmark mark='d'/> The wild cluster bootstrap with Webb's weights: ninety-six, kept.",
+   "spoken": "The Board, with a thousand samples of forty schools. The iid standard error covers the programme's true effect forty-nine percent of the time: broken. Cluster-robust: ninety-five, kept. Now only eight schools. Cluster-robust with t on seven degrees of freedom: eighty-nine, broken. The wild cluster bootstrap with Webb's weights: ninety-six, kept.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/d3cb385fb9b499f0.wav",
+   "duration": 22.2,
+   "tokens": 50,
+   "peak": 0.4825439453125,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats23/en/Cluster_motion/result.json",
+ "input_sha256": "d6ab79400c8d6dc2a8911bb5cae0bd7ca688f6a8ce7c0295d89237ab6eb8321c"
+}

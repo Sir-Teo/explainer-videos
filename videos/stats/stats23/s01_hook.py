@@ -121,6 +121,9 @@ class Hook(VoiceoverScene):
         rows[1][2].set_color(RES)
         whys = [why(r"the condition number: \ Part 4"), why(r"forming $X^\top X$ squares it"),
                 why(r"single precision has 7; \ double has 16"), why(r"chapter ten: \ numerics")]
+        intro = label("Conditioning limits how perturbations affect a least-squares solution", font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Why? The condition number of the design matrix, the ratio of its largest to "
             "smallest singular value, is about five billion: some direction in the data is almost not there. "
@@ -131,6 +134,7 @@ class Hook(VoiceoverScene):
             " Centring and scaling the predictors brings the condition number down to about one hundred and ten. "
             "Chapter ten returns to the numerics."
         ) as vo:
+            self.add(intro)
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.82, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

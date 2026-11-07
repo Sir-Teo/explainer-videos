@@ -1,0 +1,23 @@
+{
+  "part": "stats23",
+  "fingerprint": "b3b0231297374fb51513c3aa4eb8b06e3d177d6761a46b2176c26181be2d3f7f",
+  "english_endpoints": 13,
+  "native_1080_endpoints": 12,
+  "silent_motion_chapters": 11,
+  "audio_scene": "Cluster",
+  "audio_lines": 9,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats23/en/Cluster/videos/s06_cluster/480p15/Cluster.mp4",
+    "seconds": 333.931706,
+    "narration_sha256": "bf9248046f4037d17172b92a2e04e49f86ba6fe48e3577f670636e48a153dfe1",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 334 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 334 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}
