@@ -164,7 +164,7 @@ class Simultaneous(VoiceoverScene):
         tag = simulated_tag(r"simulated: \ the World", corner=DR)
         with self.voiceover(
             "How much does the simultaneity matter? <bookmark mark='a'/> Over two thousand samples of a hundred men, the "
-            "band contains the whole true curve ninety-six point eight percent of the time: kept, a little conservatively. "
+            "band contains the whole true curve ninety-five point eight five percent of the time, checking both limits at all CDF jumps. "
             "<bookmark mark='b'/> Now try the naive alternative: a separate nominal ninety-five percent Wald interval for the "
             "distribution function at each of two hundred points, and ask how often all of them hold together. Less "
             "than one percent of the time. <bookmark mark='c'/> These Wald intervals also undercover individually near the tails, so this comparison combines poor marginal calibration with multiplicity. It does not isolate simultaneity alone. The band was built for the joint promise, and Part 48 shows where its shape comes "

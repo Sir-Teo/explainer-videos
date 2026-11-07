@@ -23,8 +23,8 @@ class Likelihood(VoiceoverScene):
     def two_of_thirty(self):
         d = load("likelihood")
         order = ["wald", "wilson", "agresti_coull", "clopper_pearson", "jeffreys", "lr"]
-        A = axes([-0.02, 0.26], [0, 7], x_length=8.4, y_length=4.6, xlabel=r"$p$: \ 95\% intervals from 2 successes in 30",
-                 xticks=[0, 0.0667, 0.1, 0.2], xfmt=lambda v: f"{v:g}", center=[-1.4, -0.2, 0])
+        A = axes([-0.02, 0.26], [0, 7], x_length=7.0, y_length=4.6, xlabel=r"$p$: \ 95\% intervals from 2 successes in 30",
+                 xticks=[0, 0.0667, 0.1, 0.2], xfmt=lambda v: f"{v:g}", center=[-0.7, -0.2, 0])
         ax = A.ax
         zero = DashedLine(ax.c2p(0, 0), ax.c2p(0, 7), color=GREY_B, stroke_width=1.5)
         ph = DashedLine(ax.c2p(2 / 30, 0), ax.c2p(2 / 30, 7), color=DATA, stroke_width=2)
