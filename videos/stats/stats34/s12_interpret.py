@@ -249,10 +249,11 @@ class Interpret(VoiceoverScene):
             + say(d["v0"], 1) + ". <bookmark mark='b'/> Each feature's share is a step up or down. This case has a large x "
             "four, which pushes the prediction up most, then x two and x one, through the sine of their product; x three, "
             "near the high end of its parabola, adds a little; x five, near its average, a small contribution. <bookmark mark='c'/> The "
-            "steps end exactly at the prediction for this case's five values, " + say(d["vall"], 1) + ": the shares account "
-            "for the whole difference for this five-player game; the other features, including the twin, are averaged over the background rather than fixed at the full case. <bookmark mark='d'/> Like partial dependence, the coalition values fill in the missing "
-            "features independently of the ones fixed, so with correlated features they too ask the model about cases that "
-            "do not exist."
+            "steps end exactly at the prediction for this case's five values, " + say(d["vall"], 1) + ": the shares account for the whole difference for this five-player game; the other features, including "
+            "the twin, are averaged over the background rather than fixed at the full case. <bookmark mark='d'/> Like"
+            " partial dependence, the coalition values fill in the missing features independently of the ones fixed, "
+            "so with correlated features they too ask the model about combinations that are very rare under their "
+            "joint distribution."
         ) as vo:
             self.add(friedman_tag())
             self.play(FadeIn(A), Create(base), FadeIn(labs), FadeIn(side[0]))
