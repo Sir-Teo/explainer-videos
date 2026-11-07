@@ -1,0 +1,83 @@
+{
+  "fingerprint": "6aeab51c57a6a1fbb5fb3a42e7babde4ec182015f07062e3eb7fad50d44d62f1",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 15,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 26
+      },
+      "input_record": "renders/qa/native1080/stats11/en/Hook/result.json",
+      "input_sha256": "b0df42e786301ff87d419438f3fba01133a01cff25d023b32f8f922ffaf07947"
+    },
+    {
+      "scene": "Pivots",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 32
+      },
+      "input_record": "renders/qa/native1080/stats11/en/Pivots/result.json",
+      "input_sha256": "f06792ef6a1c6b1b1f8241ac363bfa1b85b40c48fd575dbe9ef12edbfb444013"
+    },
+    {
+      "scene": "Binomial",
+      "status": "needs-review",
+      "frames": 34,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 50
+      },
+      "input_record": "renders/qa/native1080/stats11/en/Binomial/result.json",
+      "input_sha256": "11092277e974494a9cc503bab1acedbdb9cffcf385af1c4ea6c811f9cea8d27d"
+    },
+    {
+      "scene": "Likelihood",
+      "status": "needs-review",
+      "frames": 21,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 38
+      },
+      "input_record": "renders/qa/native1080/stats11/en/Likelihood/result.json",
+      "input_sha256": "89de5f8f6b2dbedf569821657579b192b76c0c54dbc8b56de9ba7bfac0ce5e86"
+    },
+    {
+      "scene": "Fieller",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 30
+      },
+      "input_record": "renders/qa/native1080/stats11/en/Fieller/result.json",
+      "input_sha256": "9222cdb9f1620a7765f15517e40118a0aac93a5e174c370359a8b189cf85a6d1"
+    },
+    {
+      "scene": "Simultaneous",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 30
+      },
+      "input_record": "renders/qa/native1080/stats11/en/Simultaneous/result.json",
+      "input_sha256": "0ecb27a35804cb823de4605c381f252cb463c660772a0415a141e1ac288d831c"
+    },
+    {
+      "scene": "Board",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 58
+      },
+      "input_record": "renders/qa/native1080/stats11/en/Board/result.json",
+      "input_sha256": "675b0ce6a549af808ea41bc00e166eb97982f3e43728865ab74c097e57c193fd"
+    }
+  ]
+}

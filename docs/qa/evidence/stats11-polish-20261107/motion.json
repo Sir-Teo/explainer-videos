@@ -1,0 +1,72 @@
+{
+  "fingerprint": "6aeab51c57a6a1fbb5fb3a42e7babde4ec182015f07062e3eb7fad50d44d62f1",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 15,
+      "warnings": {
+        "narration-translation": 5
+      },
+      "input_record": "renders/qa/series/stats11/en/Hook_motion/result.json",
+      "input_sha256": "a6ae2f4089baca5e7aa994ae6b3d247c11432e0cc2d58f7c819e383d090a85e0",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 190 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 190 s\n"
+    },
+    {
+      "scene": "Pivots",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats11/en/Pivots_motion/result.json",
+      "input_sha256": "9d4ad5470eec03e62eae8f665c4a0be13e90ee0132811516d9ce5c22abcb12e9",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 258 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 258 s\n"
+    },
+    {
+      "scene": "Belt",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats11/en/Belt_motion/result.json",
+      "input_sha256": "36bf1c924aa00e054f4719f13251b769da1d041e591040af13d36cbc253e0448",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 235 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 235 s\n"
+    },
+    {
+      "scene": "Binomial",
+      "status": "needs-review",
+      "frames": 34,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats11/en/Binomial_motion/result.json",
+      "input_sha256": "c5d9ec2ef02d872beabf1eb9555378c1ee01c0da32c86f4ee30a44067804bfb7",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 300 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 300 s\n"
+    },
+    {
+      "scene": "Fieller",
+      "status": "needs-review",
+      "frames": 25,
+      "warnings": {
+        "narration-translation": 6
+      },
+      "input_record": "renders/qa/series/stats11/en/Fieller_motion/result.json",
+      "input_sha256": "96dec725b52d95bf7e4bb6547eaa9fbc345c8a1875f935721e47a33cf0fc1985",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 214 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 214 s\n"
+    },
+    {
+      "scene": "Simultaneous",
+      "status": "needs-review",
+      "frames": 24,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats11/en/Simultaneous_motion/result.json",
+      "input_sha256": "6f9fc69bbb6c4d2cf43bcf8f5fdd7e76330e51975c78b11fd4bb4b2c07830f09",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 226 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 226 s\n"
+    }
+  ]
+}

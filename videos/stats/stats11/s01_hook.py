@@ -38,8 +38,8 @@ class Hook(VoiceoverScene):
     def sawtooth(self):
         d = load("sawtooth")
         ns = np.asarray(d["ns"])
-        A = axes([10, 100], [0.8, 0.97], x_length=10.0, y_length=4.4, xlabel=r"sample size $n$", ylabel=r"exact coverage at $p = 0.2$",
-                 xticks=[10, 25, 50, 75, 100], yticks=[0.8, 0.85, 0.9, 0.95], yfmt=lambda v: f"{v:.2f}", center=[0, 0.3, 0])
+        A = axes([10, 100], [0.8, 0.97], x_length=10.0, y_length=4.0, xlabel=r"sample size $n$", ylabel=r"exact coverage at $p = 0.2$",
+                 xticks=[10, 25, 50, 75, 100], yticks=[0.8, 0.85, 0.9, 0.95], yfmt=lambda v: f"{v:.2f}", center=[0, 0.6, 0])
         ax = A.ax
         nom = DashedLine(ax.c2p(10, 0.95), ax.c2p(100, 0.95), color=EXACT, stroke_width=2.5)
         line = polyline(ax, ns, d["cov_n"], MISS, 2.5)
@@ -101,8 +101,8 @@ class Hook(VoiceoverScene):
     def across_p(self):
         d = load("sawtooth")
         ps = np.asarray(d["ps"])
-        A = axes([0, 1], [0.2, 1], x_length=9.6, y_length=4.4, xlabel=r"true proportion $p$, \ $n = 50$", ylabel=r"exact coverage",
-                 xticks=[0, 0.25, 0.5, 0.75, 1], yticks=[0.2, 0.5, 0.8, 0.95, 1], center=[0, 0.2, 0])
+        A = axes([0, 1], [0.2, 1], x_length=9.6, y_length=4.0, xlabel=r"true proportion $p$, \ $n = 50$", ylabel=r"exact coverage",
+                 xticks=[0, 0.25, 0.5, 0.75, 1], yticks=[0.2, 0.5, 0.8, 0.95, 1], center=[0, 0.6, 0])
         ax = A.ax
         nom = DashedLine(ax.c2p(0, 0.95), ax.c2p(1, 0.95), color=EXACT, stroke_width=2.5)
         cv = polyline(ax, ps, d["cov_p"], MISS, 2.2)

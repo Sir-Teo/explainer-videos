@@ -65,7 +65,7 @@ class Pivots(VoiceoverScene):
             rows.add(VGroup(label(nm, font_size=24, color=GREY_A), MathTex(pv, font_size=26), MathTex(iv, font_size=26, color=OBS)))
         rows.arrange(DOWN, buff=0.26).move_to([0, 0.5, 0])
         for r in rows:
-            r[0].set_x(-5.2)
+            r[0].set_x(-4.8)
             r[1].set_x(-1.2)
             r[2].set_x(3.8)
         foot = label(rf"checked: \ rate interval {100 * d['rate']:.1f}\%, \ $F$ interval {100 * d['F']:.1f}\% \ (20,000 samples each)", font_size=24,
@@ -80,7 +80,8 @@ class Pivots(VoiceoverScene):
             "percent, both within Monte Carlo error. Each interval is exact, but only if its model is right: the "
             "variance interval, for example, needs normal data, as Part 8's coverage check showed."
         ) as vo:
-            self.play(FadeIn(hdr))
+            heading = label(r"Exact pivots require their sampling models", font_size=36).to_edge(UP, buff=0.4)
+            self.play(FadeIn(hdr), FadeIn(heading))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k + 1], shift=RIGHT * 0.2))
@@ -114,7 +115,7 @@ class Pivots(VoiceoverScene):
             step = ladder(self, rows, whys, keep=3, top=2.4, x=-0.6, buff=0.9, edge=6.9)
             for kk, m_ in enumerate("abc"):
                 vo.wait_until(m_)
-                if k == 0:
+                if kk == 0:
                     self.play(FadeOut(intro), run_time=0.25)
                 step(kk, transform=False)
             vo.wait_until("d")

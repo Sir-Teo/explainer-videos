@@ -126,6 +126,7 @@ class Board(VoiceoverScene):
         rows[1][2].set_color(OBS)
         whys = [why(r"choose the precision first, \ then $R$ (Part 7)"), why(r"a 3-SE threshold is resolution, \ not guaranteed detection power"),
                 why(r"\texttt{python -m videos.stats.statsN.compute --force board}")]
+        intro = label('Choose Monte Carlo precision before the simulation', font_size=36)
         with self.voiceover(
             "How many replications does a row need? <bookmark mark='a'/> Choose the precision first. The Monte Carlo "
             "standard error is root point nine five times point zero five over R, so R is that product over the squared "
@@ -134,8 +135,11 @@ class Board(VoiceoverScene):
             "That's the resolution of every verdict on it. <bookmark mark='c'/> And every row uses fixed, published seeds, "
             "so anyone can regenerate the board exactly with one command."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.4, x=0.0, buff=0.9, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()

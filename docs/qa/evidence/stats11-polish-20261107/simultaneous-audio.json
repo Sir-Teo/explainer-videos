@@ -1,0 +1,95 @@
+{
+ "video": "stats11",
+ "scene": "Simultaneous",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 7,
+ "lines": [
+  {
+   "raw": "Chapter eight. Simultaneous intervals.",
+   "spoken": "Chapter eight. Simultaneous intervals.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/afc7eac58face327.wav",
+   "duration": 3.0,
+   "tokens": 4,
+   "peak": 0.4761962890625,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Part 10's multiple-testing problem has an interval version. <bookmark mark='a'/> If you report k intervals, each at ninety-five percent, the chance that all of them cover their targets is ninety-five percent to the k, if they're independent. <bookmark mark='b'/> With ten, sixty percent. If a conclusion depends on all the intervals being right at once, the individual promises aren't enough.",
+   "spoken": "Part 10's multiple-testing problem has an interval version. If you report k intervals, each at ninety-five percent, the chance that all of them cover their targets is ninety-five percent to the k, if they're independent. With ten, sixty percent. If a conclusion depends on all the intervals being right at once, the individual promises aren't enough.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/0fae7187ec73d89a.wav",
+   "duration": 21.65,
+   "tokens": 56,
+   "peak": 0.402740478515625,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The Bonferroni fix works for intervals as for tests: make each one at level one minus alpha over k, and the union bound guarantees that all k hold together with probability at least one minus alpha, however they're related. <bookmark mark='b'/> For five intervals, the multiplier rises from one point nine six to two point five eight: each interval is about a third wider.",
+   "spoken": "The Bonferroni fix works for intervals as for tests: make each one at level one minus alpha over k, and the union bound guarantees that all k hold together with probability at least one minus alpha, however they're related. For five intervals, the multiplier rises from one point nine six to two point five eight: each interval is about a third wider.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/066cf42d410d4015.wav",
+   "duration": 22.225,
+   "tokens": 62,
+   "peak": 0.439605712890625,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "A simulation makes it concrete. Ten independent means, each with a t-interval from fifteen observations. <bookmark mark='a'/> Each interval keeps its promise, but all ten hold together only sixty percent of the time, just as point nine five to the tenth predicts. <bookmark mark='b'/> With Bonferroni's adjustment, each interval at ninety-nine and a half percent, all ten hold together ninety-five percent of the time. <bookmark mark='c'/> The price is a multiplier of three point three instead of two point one.",
+   "spoken": "A simulation makes it concrete. Ten independent means, each with a t-interval from fifteen observations. Each interval keeps its promise, but all ten hold together only sixty percent of the time, just as point nine five to the tenth predicts. With Bonferroni's adjustment, each interval at ninety-nine and a half percent, all ten hold together ninety-five percent of the time. The price is a multiplier of three point three instead of two point one.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/05b2b5f54493792f.wav",
+   "duration": 27.05,
+   "tokens": 74,
+   "peak": 0.559051513671875,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> In the independent normal common-variance model, Henry Scheffé went further in 1953. His intervals cover every contrast among k group means simultaneously, infinitely many of them, including contrasts you only thought of after looking at the data. <bookmark mark='b'/> The multiplier comes from the F distribution, square root of k minus one times an F quantile. <bookmark mark='c'/> It's the price of fishing, paid in advance: wider intervals, but a promise that survives any amount of looking. <bookmark mark='d'/> John Tukey's method does the same for all pairwise differences, and the Working–Hotelling band of Part 12 does it for every point on a regression line.",
+   "spoken": "In the independent normal common-variance model, Henry Scheffé went further in 1953. His intervals cover every contrast among k group means simultaneously, infinitely many of them, including contrasts you only thought of after looking at the data. The multiplier comes from the F distribution, square root of k minus one times an F quantile. It's the price of fishing, paid in advance: wider intervals, but a promise that survives any amount of looking. John Tukey's method does the same for all pairwise differences, and the Working–Hotelling band of Part 12 does it for every point on a regression line.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/c06b7782077f4906.wav",
+   "duration": 37.975,
+   "tokens": 99,
+   "peak": 0.58184814453125,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "The most beautiful simultaneous interval is a band around a whole distribution. <bookmark mark='a'/> Here's the empirical distribution function of a hundred of the World's men, Part 1's staircase. <bookmark mark='b'/> The Dvoretzky–Kiefer–Wolfowitz inequality, from 1956, with the sharp constant Pascal Massart proved in 1990, says the chance that the staircase strays more than epsilon from the true curve, anywhere at all, is at most two e to the minus two n epsilon squared. <bookmark mark='c'/> Solve for epsilon at five percent: point one three six for a hundred observations. <bookmark mark='d'/> So this band, the staircase plus and minus point one three six, contains the entire true distribution function with probability at least ninety-five percent, whatever that distribution is. <bookmark mark='e'/> Here's the truth, in green, inside it.",
+   "spoken": "The most beautiful simultaneous interval is a band around a whole distribution. Here's the empirical distribution function of a hundred of the World's men, Part 1's staircase. The Dvoretzky–Kiefer–Wolfowitz inequality, from 1956, with the sharp constant Pascal Massart proved in 1990, says the chance that the staircase strays more than epsilon from the true curve, anywhere at all, is at most two e to the minus two n epsilon squared. Solve for epsilon at five percent: point one three six for a hundred observations. So this band, the staircase plus and minus point one three six, contains the entire true distribution function with probability at least ninety-five percent, whatever that distribution is. Here's the truth, in green, inside it.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/08334236b2e07224.wav",
+   "duration": 48.2,
+   "tokens": 119,
+   "peak": 0.645233154296875,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "How much does the simultaneity matter? <bookmark mark='a'/> Over two thousand samples of a hundred men, the band contains the whole true curve ninety-five point eight five percent of the time, checking both limits at all CDF jumps. <bookmark mark='b'/> Now try the naive alternative: a separate nominal ninety-five percent Wald interval for the distribution function at each of two hundred points, and ask how often all of them hold together. Less than one percent of the time. <bookmark mark='c'/> These Wald intervals also undercover individually near the tails, so this comparison combines poor marginal calibration with multiplicity. It does not isolate simultaneity alone. The band was built for the joint promise, and Part 48 shows where its shape comes from.",
+   "spoken": "How much does the simultaneity matter? Over two thousand samples of a hundred men, the band contains the whole true curve ninety-five point eight five percent of the time, checking both limits at all CDF jumps. Now try the naive alternative: a separate nominal ninety-five percent Wald interval for the distribution function at each of two hundred points, and ask how often all of them hold together. Less than one percent of the time. These Wald intervals also undercover individually near the tails, so this comparison combines poor marginal calibration with multiplicity. It does not isolate simultaneity alone. The band was built for the joint promise, and Part 48 shows where its shape comes from.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/9a94b6d1fb73eca9.wav",
+   "duration": 43.8,
+   "tokens": 115,
+   "peak": 0.735107421875,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats11/en/Simultaneous_motion/result.json",
+ "input_sha256": "6f9fc69bbb6c4d2cf43bcf8f5fdd7e76330e51975c78b11fd4bb4b2c07830f09"
+}

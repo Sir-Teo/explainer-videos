@@ -81,6 +81,9 @@ class Fieller(VoiceoverScene):
             clipx = lambda v: float(np.clip(v, -6, 12))  # noqa: E731
             if c["kind"] == "bounded":
                 g.add(Line(nl.n2p(clipx(c["lo"])), nl.n2p(clipx(c["hi"])), color=OBS, stroke_width=8))
+                if c["hi"] > 12:
+                    g.add(Arrow(nl.n2p(10.5), nl.n2p(12.3), buff=0, color=OBS, stroke_width=4),
+                          MathTex(rf"\text{{to}}\ {c['hi']:.1f}", font_size=20, color=OBS).next_to(nl.n2p(10.5), UP, buff=0.12))
             elif c["kind"] == "complement":
                 g.add(Line(nl.n2p(-6), nl.n2p(clipx(c["lo"])), color=OBS, stroke_width=8),
                       Line(nl.n2p(clipx(c["hi"])), nl.n2p(12), color=OBS, stroke_width=8))
@@ -89,6 +92,9 @@ class Fieller(VoiceoverScene):
                                  MathTex(rf"\text{{and}}\ \le {c['lo']:.0f}", font_size=20, color=OBS).next_to(nl.n2p(-4.5), UP, buff=0.12)))
             else:
                 g.add(Line(nl.n2p(-6), nl.n2p(12), color=OBS, stroke_width=8))
+                g.add(Arrow(nl.n2p(-4.5), nl.n2p(-6.3), buff=0, color=OBS, stroke_width=4))
+            if c["kind"] in ("complement", "all"):
+                g.add(Arrow(nl.n2p(10.5), nl.n2p(12.3), buff=0, color=OBS, stroke_width=4))
             dl, dh = c["delta"]
             g.add(Line(nl.n2p(clipx(dl)) + DOWN * 0.22, nl.n2p(clipx(dh)) + DOWN * 0.22, color=METHOD_COL["wald"], stroke_width=4))
             g.add(Dot(nl.n2p(clipx(c["ratio"])), radius=0.07, color=WHITE))
@@ -122,6 +128,7 @@ class Fieller(VoiceoverScene):
             label(r"a method that always reports a finite interval for a ratio \ must fail its promise near $\mu_x = 0$", font_size=24),
             label(r"weak instruments in econometrics are the same problem: \ Part 37's Anderson--Rubin sets", font_size=24, color=GREY_A),
         ), 12.6, 0.34, [0, -1.7, 0])
+        intro = label('Why valid ratio confidence sets can be unbounded', font_size=36)
         with self.voiceover(
             "Is the infinite answer a defect? <bookmark mark='a'/> No. Leon Gleser and Jiunn Tzon Hwang proved in 1987 that "
             "under appropriate weak-identification conditions, as a ratio does when the denominator's mean is zero, every "
@@ -131,7 +138,9 @@ class Fieller(VoiceoverScene):
             "<bookmark mark='d'/> The same theorem governs weak instruments in econometrics, and Part 37's Anderson–Rubin "
             "intervals, which can also be infinite."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(tc, shift=UP * 0.2))
             for k, m_ in enumerate("bcd"):
                 vo.wait_until(m_)
@@ -142,7 +151,7 @@ class Fieller(VoiceoverScene):
         d = load("fieller")
         rows = [
             cmath(r"g", r"=", r"\frac{z^2\, v_x}{\bar x^2} = \Big(\frac{z}{\bar x/\mathrm{SE}(\bar x)}\Big)^2", font_size=34),
-            cmath(r"g < 1", r"\iff", r"\bar x \text{ is significantly far from } 0 \iff \text{Fieller's set is bounded}", font_size=30),
+            cmath(r"g < 1", r"\iff", r"|\bar x| > z\,\mathrm{SE}(\bar x) \iff \text{bounded Fieller set}", font_size=30),
         ]
         rows[1][2].set_color(OBS)
         whys = [why(r"Fieller's index: \ how uncertain the denominator is"), why(r"$g = 1$: \ the denominator's own interval just touches 0")]

@@ -181,6 +181,7 @@ class Neyman(VoiceoverScene):
                 why(r"width $\propto 1/\sqrt n$")]
         foot = label(r"a margin of error is half a confidence interval's width \ for one proportion, \ not for the gap between two", font_size=24,
                      color=GREY_A).to_edge(DOWN, buff=0.5)
+        intro = label('Round up a sample-size planning approximation', font_size=36)
         with self.voiceover(
             "Intervals also plan studies. <bookmark mark='a'/> A poll's margin of error is half the width of a ninety-five "
             "percent interval for a proportion, and it's largest when p is a half. <bookmark mark='b'/> Set it to three "
@@ -189,9 +190,12 @@ class Neyman(VoiceoverScene):
             "thousand. <bookmark mark='d'/> And a common slip: the margin applies to one candidate's share. The gap "
             "between two exhaustive choices has exactly twice the standard error of one share; with other choices, the covariance determines the gap's error."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.4, x=0.0, buff=0.8, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             vo.wait_until("d")
             self.play(FadeIn(foot))
@@ -206,6 +210,7 @@ class Neyman(VoiceoverScene):
         whys = [why(r"``the side-effect rate is at most\dots''; \ ``the strength is at least\dots''"),
                 why(r"$t_{0.95}$, \ not $t_{0.975}$: \ a tighter bound on the side that matters")]
         foot = label(r"chosen before the data, \ like a one-sided test (Part 10): \ the duality again", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.8)
+        intro = label('Put the error budget in one preselected tail', font_size=36)
         with self.voiceover(
             "Sometimes only one side matters. <bookmark mark='a'/> A regulator wants an upper bound on a side-effect rate; "
             "an engineer wants a lower bound on a beam's strength. A one-sided confidence bound promises that the "
@@ -214,9 +219,12 @@ class Neyman(VoiceoverScene):
             "tighter than the end of the two-sided interval. <bookmark mark='c'/> Like a one-sided test, the side has to "
             "be chosen before looking at the data. It's the duality again: one-sided bounds invert one-sided tests."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=2, top=1.8, x=0.0, buff=1.0, edge=6.9)
             for k, m_ in enumerate("ab"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             vo.wait_until("c")
             self.play(FadeIn(foot))

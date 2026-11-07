@@ -73,6 +73,7 @@ class Outro(VoiceoverScene):
             (r"Fieller, weak identification", [37, 46]),
             (r"the Coverage Board", [12, 14, 16, 65]),
         ], font_size=22)
+        intro = label('Where interval construction returns', font_size=36)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Inverted tests give the intervals of regression in Part 12 and of "
             "generalized linear models in Part 14. Profile likelihood intervals return in Part 22, bootstrap intervals in "
@@ -80,7 +81,9 @@ class Outro(VoiceoverScene):
             "grow into conformal prediction in Part 34; credible intervals into Bayesian data analysis; and Fieller's "
             "unbounded sets into the weak-instrument problem of Part 37."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 

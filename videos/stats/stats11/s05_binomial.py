@@ -66,6 +66,7 @@ class Binomial(VoiceoverScene):
         rows[3][2].set_color(METHOD_COL["agresti_coull"])
         whys = [why(r"the null's own SE, \ not $\hat p$'s"), why(r"square: \ solve for the two roots"),
                 why(r"pulled toward $\tfrac12$: \ never a zero-width interval"), why(r"$z^2/2 \approx 2$: \ ``add two successes and two failures''")]
+        intro = label('Invert the score test using its null variance', font_size=36)
         with self.voiceover(
             "Here's why Wilson's interval works. <bookmark mark='a'/> The score test divides by the standard error the "
             "null value implies, root p-nought times one minus p-nought over n, not by the estimated one. "
@@ -75,9 +76,12 @@ class Binomial(VoiceoverScene):
             "interval has positive width. <bookmark mark='d'/> Agresti and Coull's idea: z squared over two is almost "
             "two, so add two successes and two failures, and use the plain Wald formula around that centre."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.7, x=-0.2, buff=0.6, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
