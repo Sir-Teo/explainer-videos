@@ -151,7 +151,9 @@ class Carving(VoiceoverScene):
 
     def carving(self):
         rows = fit_rows(VGroup(
-            label(r"carving \ (Fithian, \ Sun \& Taylor 2014):", font_size=28, color=GREY_A),
+            VGroup(label(r"Data carving retains information after selection", font_size=36, color=WHITE),
+                   label(r"Fithian, \ Sun \& Taylor (2014)", font_size=22, color=GREY_A))
+                .arrange(DOWN, aligned_edge=LEFT, buff=0.12),
             label(r"select on a fraction of the data, \ as in splitting", font_size=26, color=SPLITC),
             label(r"but infer with all of it, \ conditioning on the selection", font_size=26, color=CONDC),
             label(r"optimal carving tests weakly improve on splitting: \ the held-out part is used, \ and so is what is left in the first part", font_size=26, color=HYBC),

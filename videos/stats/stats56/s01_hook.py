@@ -79,7 +79,7 @@ class Hook(VoiceoverScene):
 
     def question(self):
         rows = fit_rows(VGroup(
-            label(r"this part's question:", font_size=28, color=GREY_A),
+            label(r"Honest inference after selecting a question", font_size=36, color=WHITE),
             label(r"how do you give honest uncertainty about a question chosen by looking at the data?", font_size=28, color=SELC),
             label(r"four families, \ each with a price:", font_size=26, color=GREY_A),
             label(r"cover every question you might have asked \ (PoSI)", font_size=24, color=SIMC),

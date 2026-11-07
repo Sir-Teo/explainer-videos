@@ -43,6 +43,10 @@ class Hook(VoiceoverScene):
             (r"Show every step. \ A correct answer without its proof earns nothing.", WHITE),
             (r"--- the Graduate Committee", S.ACCENT),
         ], r"Department of Statistics \ \textbullet\ \ qualifying examination").move_to([0, -0.3, 0])
+        heading = label(r"Qualifying exam: twelve problems, six hours", font_size=36).move_to([0, 3.3, 0])
+        if heading.width > 12.6:
+            heading.width = 12.6
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> It is the night before the qualifying exam. The letter on the desk says: your examination is tomorrow at nine. Twelve problems, six hours, drawing on the core, Parts forty-three to fifty-four. <bookmark mark='b'/> And the line that matters: show every step. At this level, a correct answer without its proof earns nothing. The exam asks whether you can prove things, which is what research will ask of you every day."
         ) as vo:
