@@ -145,11 +145,11 @@ class Quantum(VoiceoverScene):
         a = history_card(2021, r"Chakrabarti, Krishnakumar, Mazzola, Stamatopoulos, Woerner, Zeng (\textit{Quantum})",
                          r"Autocallable resource case: 3 assets, 20 steps, target error $2\times10^{-3}$; 8{,}000 logical qubits, "
                          r"T-count $1.2\times10^{10}$, T-depth $5.4\times10^7$. TARF is a different resource case. "
-                         r"These are dated fault-tolerant estimates, not measured runtime.", color=QC.IDEA, width=6.3, font_size=18)
+                         r"These are dated fault-tolerant estimates, not measured runtime.", color=QC.IDEA, width=6.3, font_size=22)
         b = history_card(2024, r"Stamatopoulos and Zeng (\textit{Quantum})", r"QSP autocallable case: 4{,}700 logical qubits, total T-count $2.4\times10^9$, T-depth $4.5\times10^7$. "
                          r"Matching an assumed classical second needs a 45 MHz sequential T-layer rate. The quoted 16-fold T-count "
                          r"and 4-fold qubit gains compare this paper's 19{,}200-qubit arithmetic reference.", color=QC.IDEA, width=6.3,
-                         font_size=18)
+                         font_size=22)
         grid = VGroup(a, b).arrange(RIGHT, buff=0.3, aligned_edge=UP).to_edge(UP, buff=0.6)
         q = predict(r"A quadratic speedup in samples, each sample $10^4$ times slower than a CPU's. When does it win?",
                     width=6.4, font_size=21).to_edge(DOWN, buff=0.5)

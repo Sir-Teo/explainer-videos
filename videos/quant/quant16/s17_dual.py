@@ -227,7 +227,10 @@ class Dual(VoiceoverScene):
                           r"An illustrative 100-point-per-axis tensor grid has $100^5=10^{10}$ nodes per date", 4.6, 18, GREY_A),
             wrapped_label(r"basis (15 functions): the sorted prices, their squares, the two largest's product, the payoff "
                           r"and its square, the largest cubed", 4.6, 18, GREY_A),
-            MathTex(rf"\text{{difference}}\ {diff:+.3f}\ \ (\pm {2 * comb:.3f}):\ \text{{{verdict}}}", font_size=26, color=OPT),
+            VGroup(
+                MathTex(rf"\text{{difference}}\ {diff:+.3f}\ \ (\pm {2 * comb:.3f})", font_size=26, color=OPT),
+                wrapped_label(verdict, 4.6, 21, OPT),
+            ).arrange(DOWN, aligned_edge=LEFT, buff=0.12),
             wrapped_label(r"the other classical methods: random trees and the stochastic mesh (Broadie and Glasserman "
                           r"1997, 2004); Glasserman ch.\ 8", 4.6, 17, GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.35)

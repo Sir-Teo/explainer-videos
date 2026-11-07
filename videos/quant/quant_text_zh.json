@@ -30923,7 +30923,7 @@
     "Bayer, Pelizzari, Schoenmakers (arXiv 2312.03444v2)": "拜尔、佩利扎里、舍恩马克斯（预印本2312.03444第二版）",
     "Dalzell et al.\\ (arXiv 2310.03011v2; Cambridge book)": "达尔泽尔等（预印本2310.03011第二版；剑桥图书）",
     "recorded seconds (log); row workloads differ": "记录秒数（对数）；各行工作负载不同",
-    "\\text{loop} \\div \\text{numpy}:\\ 135\\times": "\\text{循环}\\div\\text{数组库：}\\135\\times",
+    "\\text{loop} \\div \\text{numpy}:\\ 135\\times": "\\text{循环}\\div\\text{数组库：}\\ 135\\times",
     "COS example: 0.173 ms; absolute numerical-reference difference 0.0036; not matched to MC total error": "余弦示例：0.173毫秒；绝对数值参考差异0.0036；未与蒙特卡洛总误差匹配",
     "recorded 2026-11-07: host reports 5 logical CPUs; container quota is 4 CPU equivalents. Best of 2 loop runs, 5 NumPy runs, 3 draw/process runs. Vector rows reuse normals; pool rows draw and price.": "记录于2026-11-07：主机报告5个逻辑处理器，容器配额相当于4个。循环取2次、数组库5次、生成与进程3次的最佳值。向量行复用正态数，进程行生成并定价",
     "Selected repository numerical tests: ten tests passed in this review": "选定仓库数值测试：本次审查通过十项测试",
@@ -31019,7 +31019,17 @@
     "The bound becomes one quarter: $A(\\delta/2)^2=A\\delta^2/4$. This scales a conditional upper bound, not the realised loss or an automatic percentage of the option price.": "上界变为四分之一：$A(\\delta/2)^2=A\\delta^2/4$。这是条件上界的缩放，并非实际损失，也不是自动等于期权价格的某个百分比",
     "3{,}000-step tree reference: 4.478": "3{,}000步树参考：4.478",
     "\\text{mean} = 1.9\\times 10^{-6}": "\\text{均值}=1.9\\times10^{-6}",
-    "\\text{median} = 8.9\\times 10^{-10}": "\\text{中位数}=8.9\\times10^{-10}"
+    "\\text{median} = 8.9\\times 10^{-10}": "\\text{中位数}=8.9\\times10^{-10}",
+    "\\begin{gathered}n = 64:\\ \\text{keep}\\ 3.9\\times 10^{-3}\\\\\\text{drop}\\ 1.4\\times 10^{-2}\\ \\ (\\times 4)\\end{gathered}": "\\begin{gathered}n = 64:\\ \\text{保留}\\ 3.9\\times 10^{-3}\\\\\\text{去掉}\\ 1.4\\times 10^{-2}\\ \\ (\\times 4)\\end{gathered}",
+    "\\begin{gathered}n = 256:\\ \\text{keep}\\ 5.1\\times 10^{-4}\\\\\\text{drop}\\ 3.2\\times 10^{-3}\\ \\ (\\times 6)\\end{gathered}": "\\begin{gathered}n = 256:\\ \\text{保留}\\ 5.1\\times 10^{-4}\\\\\\text{去掉}\\ 3.2\\times 10^{-3}\\ \\ (\\times 6)\\end{gathered}",
+    "\\begin{gathered}n = 1{,}024:\\ \\text{keep}\\ 7.1\\times 10^{-5}\\\\\\text{drop}\\ 8.0\\times 10^{-4}\\ \\ (\\times 11)\\end{gathered}": "\\begin{gathered}n = 1{,}024:\\ \\text{保留}\\ 7.1\\times 10^{-5}\\\\\\text{去掉}\\ 8.0\\times 10^{-4}\\ \\ (\\times 11)\\end{gathered}",
+    "\\begin{gathered}n = 4{,}096:\\ \\text{keep}\\ 4.4\\times 10^{-6}\\\\\\text{drop}\\ 2.0\\times 10^{-4}\\ \\ (\\times 45)\\end{gathered}": "\\begin{gathered}n = 4{,}096:\\ \\text{保留}\\ 4.4\\times 10^{-6}\\\\\\text{去掉}\\ 2.0\\times 10^{-4}\\ \\ (\\times 45)\\end{gathered}",
+    "\\text{difference}\\ +0.005\\ \\ (\\pm 0.048)": "\\text{差值}\\ +0.005\\ \\ (\\pm 0.048)",
+    "difference unresolved at two s.e.": "两倍标准误下未分辨差异",
+    "the network ahead": "神经网络领先",
+    "Longstaff--Schwartz ahead": "朗斯塔夫施瓦茨领先",
+    "\\text{binomial tree, 2{,}000 steps:}\\ 6.0900": "\\text{二叉树，2{,}000步：}\\ 6.0900",
+    "\\text{1{,}000 paths, shuffled order: identical bits}\\ (yes)": "\\text{1{,}000条路径，打乱次序：逐比特相同}\\ (\\text{是})"
   },
   "phrases": {
     "you owe": "你欠",

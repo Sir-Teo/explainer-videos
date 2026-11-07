@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant16.common import BAD, GOOD, METHOD_COL, OPT, PART, illustration, load, loglog, polyline, predict, axes, data_range, pause_card, flat_camera
+from videos.quant.quant16.common import BAD, GOOD, METHOD_COL, OPT, PART, illustration, load, loglog, polyline, predict, axes, data_range, pause_card, flat_camera, sci
 
 
 def unit_square(side, center, color=GREY_C):
@@ -209,11 +209,15 @@ class QMC(VoiceoverScene):
                     font_size=21).to_corner(UR, buff=0.4)
         tab = VGroup(wrapped_label(r"Empirical RMSE on $\int e^{u_1 + u_2}$; 100 scramblings (Owen 2022)", 5.0, 20, GREY_A))
         for n_, r in rows.items():
-            tab.add(MathTex(rf"n = {int(n_):,}".replace(",", "{,}") + rf":\ \ \text{{keep}}\ {r['keep']:.1e}\ \ "
-                            rf"\text{{drop}}\ {r['drop']:.1e}\ \ (\times {r['drop'] / r['keep']:.0f})", font_size=22))
-        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(q, DOWN, buff=0.35).align_to(q, LEFT)
-        if tab.width > 5.1:
-            tab.scale_to_fit_width(5.1)
+            n_tex = f"{int(n_):,}".replace(",", "{,}")
+            tab.add(MathTex(
+                rf"\begin{{gathered}}n = {n_tex}:\ \text{{keep}}\ {sci(r['keep'], 1)}\\"
+                rf"\text{{drop}}\ {sci(r['drop'], 1)}\ \ (\times {r['drop'] / r['keep']:.0f})\end{{gathered}}",
+                font_size=22))
+        tab.arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        if tab.width > 4.4:
+            tab.scale_to_fit_width(4.4)
+        tab.next_to(q, DOWN, buff=0.35).align_to(q, LEFT)
         last = list(rows.values())[-1]
         with self.voiceover(
             f"Randomized scrambling preserves net structure while allowing independent replicate estimates. Here ten scrambles each use one thousand and twenty-four points. Their sample standard deviation measures replicate dispersion; dividing by root ten estimates the standard error of their average. The displayed 1.96 interval is an approximate normal interval, not a finite-sample coverage guarantee. <bookmark mark='a'/> Should we discard the first point to avoid an infinite inverse normal? <bookmark mark='b'/> In this smooth two-dimensional example, dropping it increases empirical root mean square error by {list(rows.values())[0]['drop'] / list(rows.values())[0]['keep']:.0f} times at sixty-four points and {last['drop'] / last['keep']:.0f} times at four thousand. These ratios are example-specific. Preserve powers of two. Ideal continuous scrambling hits zero with probability zero, but finite-bit implementations can return zero. The House normal transform clamps endpoints at one trillionth, a tiny change to the transformed integrand that should be disclosed. Next, coordinate ordering for long paths."

@@ -57,9 +57,11 @@ class AAD(VoiceoverScene):
         for r in rows:
             box = Rectangle(width=w, height=1.4, stroke_color=GREY_C, stroke_width=1.2, fill_color="#0E141C",
                             fill_opacity=1)
-            op = MathTex(r["op"], font_size=24, color=SPOT if r["leaf"] else GREY_A)
-            val = MathTex(f"{r['val']:.3g}", font_size=22, color=WHITE)
-            adj = MathTex(f"{r['adj']:.3g}", font_size=22, color=DELTA)
+            # Indicating a filled box can bring it forward in scene insertion order.
+            # Keep every tape field above that box throughout the reverse sweep.
+            op = MathTex(r["op"], font_size=24, color=SPOT if r["leaf"] else GREY_A).set_z_index(1)
+            val = MathTex(f"{r['val']:.3g}", font_size=22, color=WHITE).set_z_index(1)
+            adj = MathTex(f"{r['adj']:.3g}", font_size=22, color=DELTA).set_z_index(1)
             cells.add(VGroup(box, op, val, adj))
         cells.arrange_in_grid(rows=2, cols=cols, buff=(0.06, 0.7)).move_to(UP * 0.2)
         for c in cells:

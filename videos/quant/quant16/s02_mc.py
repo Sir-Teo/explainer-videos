@@ -106,7 +106,7 @@ class MC(VoiceoverScene):
                 why(r"solve the half-width for $n$: the exponent is dimension-free; variance and single-path cost may still grow with dimension"),
                 why(r"with cost $c$ per path and budget $C$, $n = C/c$: an estimator is worth $1/(\sigma_Y^2 c)$ "
                     r"(Hammersley and Handscomb 1964)")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.6, buff=0.55, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.6, buff=0.55, edge=6.9)
         with self.voiceover(
             "Under the pricing measure, a discounted payoff has expectation V. <bookmark mark='a'/> For independent identically distributed paths, finite absolute first moment gives almost-sure convergence by the strong law. <bookmark mark='b'/> Positive finite variance gives the central limit theorem; consistent sample variance and Slutsky then give an asymptotic pointwise ninety-five percent interval. This is a sampling statement, separate from discretization or model error. <bookmark mark='c'/> Solving the target normal half-width gives n approximately equal to 1.96 squared times payoff variance divided by epsilon squared. The exponent does not contain dimension, but variance and the cost of one path can depend on dimension. <bookmark mark='d'/> With cost c per independent draw and budget C, sampling standard error is approximately sigma times the square root of c over C. Compare variance times cost at a fixed bias target, including any fitting or preprocessing costs when material."
         ) as vo:
