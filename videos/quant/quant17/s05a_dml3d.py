@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.quant import *  # noqa: F403
 from videos.quant.quant17.common import axes, data_range
-from videos.quant.quant17.common import BAD, GOOD, NET, OPT, PART, REF, ask, grid_fn, illustration, load, surf3d_axes
+from videos.quant.quant17.common import BAD, GOOD, NET, OPT, PART, REF, ask, grid_fn, illustration, load, surf3d_axes, flat_camera
 
 METH = [("plain", BAD, r"network, payoffs only"), ("diff", GOOD, r"network, payoffs and slopes"),
         ("gp", QC.Q, r"Gaussian process with gradients")]
@@ -28,13 +28,22 @@ class DML3D(VoiceoverScene, ThreeDScene):
 
     def _axes(self, r):
         g1, g2 = np.asarray(r["g1"]), np.asarray(r["g2"])
-        zmax = float(np.asarray(r["exact"]).max()) * 1.1
-        ax = surf3d_axes([g1[0], g1[-1], 20], [g2[0], g2[-1], 20], [0, zmax, 10], x_length=6.6, y_length=5.0,
+        X = np.asarray(r["samples"]["X"])
+        Y = np.asarray(r["samples"]["Y"])
+        slopes = np.asarray(r["samples"]["dY"])
+        h = 0.06 * (g1[-1] - g1[0])
+        zlo, zmax = data_range(r["exact"], *r["surfs"].values(),
+                               np.asarray(r["surfs"]["gp"]) - 2 * np.asarray(r["gp_sd"]),
+                               np.asarray(r["surfs"]["gp"]) + 2 * np.asarray(r["gp_sd"]),
+                               Y - h * np.abs(slopes).sum(1), Y + h * np.abs(slopes).sum(1), zero=True)
+        xr = data_range(g1, X[:, 0] - h, X[:, 0] + h)
+        yr = data_range(g2, X[:, 1] - h, X[:, 1] + h)
+        ax = surf3d_axes([*xr, 20], [*yr, 20], [zlo, zmax, 10], x_length=6.6, y_length=5.0,
                          z_length=3.2).shift(DOWN * 0.4)
         return ax, g1, g2, zmax
 
     def _surf(self, ax, g1, g2, Z, zmax, col, opacity=0.6, res=(18, 18)):
-        f = grid_fn(g1, g2, np.clip(np.asarray(Z), 0, zmax))
+        f = grid_fn(g1, g2, np.asarray(Z))
         return Surface(lambda u, v: ax.c2p(u, v, f(u, v)), u_range=(g1[0], g1[-1]), v_range=(g2[0], g2[-1]),
                        resolution=res, fill_color=col, fill_opacity=opacity, stroke_width=0.3, stroke_color=col,
                        checkerboard_colors=False)
@@ -43,14 +52,14 @@ class DML3D(VoiceoverScene, ThreeDScene):
         ax, g1, g2, zmax = self._axes(r)
         S = r["samples"]
         X, Y, dY = np.asarray(S["X"]), np.asarray(S["Y"]), np.asarray(S["dY"])
-        m = (X[:, 0] > g1[0]) & (X[:, 0] < g1[-1]) & (X[:, 1] > g2[0]) & (X[:, 1] < g2[-1]) & (Y < zmax)
+        m = np.isfinite(Y) & np.all(np.isfinite(X), axis=1)
         dots = VGroup(*[Dot3D(ax.c2p(a, b, c), radius=0.05, color=OPT, resolution=(4, 4))
                         for (a, b), c in zip(X[m], Y[m])])
         h = 0.06 * (g1[-1] - g1[0])
         tiles = VGroup()
         for (a, b), c, (p, q) in zip(X[m], Y[m], dY[m]):
             corners = [(a + sa * h, b + sb * h, c + p * sa * h + q * sb * h) for sa, sb in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
-            if all(0 <= z <= zmax for _, _, z in corners):
+            if all(np.isfinite(z) for _, _, z in corners):
                 tiles.add(Polygon(*[ax.c2p(*cc) for cc in corners], stroke_color=GOOD, stroke_width=1,
                                   fill_color=GOOD, fill_opacity=0.35))
         ex = self._surf(ax, g1, g2, r["exact"], zmax, WHITE, opacity=0.08)
@@ -58,7 +67,7 @@ class DML3D(VoiceoverScene, ThreeDScene):
         df = self._surf(ax, g1, g2, r["surfs"]["diff"], zmax, GOOD)
         s0 = r["seeds"]["0"]
         hint = VGroup(label(r"asset 1 (across), asset 2 (back), price (up)", font_size=19, color=GREY_A),
-                      legend([(OPT, r"64 simulated payoffs"), (GOOD, r"their pathwise tangent planes"),
+                      legend([(OPT, r"64 simulated payoffs"), (GOOD, r"local pathwise planes (affine extensions)"),
                               (WHITE, r"the exact price (faint)"), (BAD, r"fit to payoffs only"),
                               (GOOD, r"fit to payoffs and slopes")], font_size=16)).arrange(DOWN, aligned_edge=LEFT,
                                                                                             buff=0.15).to_corner(UL, buff=0.3)
@@ -89,6 +98,7 @@ class DML3D(VoiceoverScene, ThreeDScene):
             self.move_camera(theta=-70 * DEGREES, phi=70 * DEGREES, run_time=max(vo.remaining(0.3), 1.5))
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, dots, tiles, ex, df)),
                                                                   FadeOut(hint), FadeOut(errs)], run_time=1.2)
+        flat_camera(self)
         self.clear_scene()
 
     def gp_derive(self):
@@ -99,28 +109,20 @@ class DML3D(VoiceoverScene, ThreeDScene):
                       font_size=34, colors={r"=": WHITE}),
                 cmath(r"\bar f(x_*)", r"=", r"m + k_*^\top \big(K + \Sigma\big)^{-1}\big[\,y - m;\ \partial y\,\big]",
                       font_size=38, colors={r"\bar f(x_*)": QC.Q}),
-                cmath(r"\text{cost}", r"=", r"O\big((n(1 + d))^3\big)\ \ \text{vs}\ \ O(n)\ \text{per epoch}", font_size=38,
+                cmath(r"\text{cost}", r"=", r"O(M^3)\ \text{dense GP},\ M=n(1+d);\ O(n)\ \text{fixed-net epoch}", font_size=38,
                       colors={r"\text{cost}": OPT})]
         whys = [why(r"Dixon, Halperin and Bilokon (ch.\ 3): a Gaussian process puts a prior on functions; its kernel "
                     r"says how alike two prices are, given how close their states are"),
                 why(r"differentiation is linear, so derivatives of a Gaussian process are jointly Gaussian with it, with "
                     r"covariances that are derivatives of the kernel: slope observations enter exactly like price ones"),
                 why(r"the posterior mean given the $n$ payoffs and the $n d$ slopes, stacked, with their noise $\Sigma$: the "
-                    r"same information differential machine learning uses, combined exactly, with error bars"),
+                    r"same observations, different statistical model; a Gaussian working likelihood with chosen noise covariance gives model-conditional uncertainty"),
                 why(r"but one linear solve on $n(1 + d)$ observations: cubic. At $n = 64$, $d = 2$ that is 192; at a "
-                    r"desk's $n = 10^5$ and $d = 100$ it is ten million, and the network's linear cost is the reason to "
+                    r"desk's $n = 10^5$ and $d = 100$ it is 10.1 million, and the fixed network's per-epoch linear cost is the reason to "
                     r"use one")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.62, edge=6.9)
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.4, buff=0.62, edge=6.9)
         with self.voiceover(
-            "Using slopes as labels has a classical twin. A Gaussian process puts a probability distribution on "
-            "functions: its kernel says how alike two prices are, given how close their states are. "
-            "<bookmark mark='a'/> Differentiation is linear, so the derivative of a Gaussian process is Gaussian too, "
-            "jointly with the process, and its covariances are simply derivatives of the kernel. A slope observation "
-            "enters the model exactly the way a price observation does. <bookmark mark='b'/> Condition on both, and "
-            "the posterior mean is one linear solve over the stacked payoffs and slopes: the same information "
-            "differential machine learning uses, combined exactly, and with error bars. <bookmark mark='c'/> The catch "
-            "is the cost: cubic in the number of observations. Fine for sixty-four samples on two assets; hopeless for "
-            "a desk's hundred thousand on a hundred. The network is the scalable version."
+            "A classical alternative puts a Gaussian-process prior on the pricing function. <bookmark mark='a'/> With a sufficiently smooth kernel, its mean-square derivatives are jointly Gaussian, and differentiated kernels give the covariance blocks for value and gradient observations. <bookmark mark='b'/> Under a Gaussian observation model and fixed hyperparameters, conditioning is a linear solve. These pathwise labels are actually correlated and heteroscedastic; the saved example instead uses chosen diagonal noise variances and cross-validates three length scales. Its posterior is a working model, not an exact description of simulation error. <bookmark mark='c'/> Dense factorization costs order M cubed and storage M squared for M equal to n times one plus d. A fixed neural architecture has linear work in n per epoch, but its architecture, derivative cost and required epochs still matter. Sparse and structured GP methods provide other tradeoffs."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -141,10 +143,10 @@ class DML3D(VoiceoverScene, ThreeDScene):
         dn = self._surf(ax, g1, g2, mu - 2 * sd, zmax, GREY_B, opacity=0.12, res=(14, 14))
         S = r["samples"]
         X, Y = np.asarray(S["X"]), np.asarray(S["Y"])
-        m = (X[:, 0] > g1[0]) & (X[:, 0] < g1[-1]) & (X[:, 1] > g2[0]) & (X[:, 1] < g2[-1]) & (Y < zmax)
+        m = np.isfinite(Y) & np.all(np.isfinite(X), axis=1)
         dots = VGroup(*[Dot3D(ax.c2p(a, b, c), radius=0.05, color=OPT, resolution=(4, 4)) for (a, b), c in zip(X[m], Y[m])])
         s0 = r["seeds"]["0"]
-        hint = VGroup(legend([(QC.Q, r"posterior mean"), (GREY_B, r"plus and minus two standard deviations")],
+        hint = VGroup(legend([(QC.Q, r"posterior mean"), (GREY_B, r"pointwise mean $\pm2$ model standard deviations")],
                              font_size=17),
                       label(rf"length scale {s0['gp_ls']:.0f}, chosen by cross-validation on the payoffs; grid error "
                             rf"{s0['gp']:.2f}", font_size=18, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT,
@@ -153,10 +155,7 @@ class DML3D(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(hint)
         self.remove(hint)
         with self.voiceover(
-            "Here is the Gaussian process on the same sixty-four payoffs and slopes: its mean, and a translucent shell "
-            "two standard deviations above and below. <bookmark mark='a'/> The shell is thin where the samples are "
-            "dense and opens up at the corners, where nothing was observed. A network gives you a number; the process "
-            f"also tells you where not to believe it. Its grid error here is {s0['gp']:.2f}."
+            f"The saved seed-zero GP uses the same sixty-four value-and-gradient samples. All saved sample coordinates and full surface values are retained; the surfaces themselves cover the fixed evaluation grid. The translucent sheets are the posterior mean plus and minus two pointwise model standard deviations. <bookmark mark='a'/> They condition on the selected kernel and assumed noise model. They are not a simultaneous band or a validated frequentist error bound for this non-Gaussian simulation problem. The recorded grid RMSE is {s0['gp']:.2f}; a visually thin shell does not by itself certify an accurate price."
         ) as vo:
             self.play(Create(ax), FadeIn(dots), FadeIn(hint[0]))
             self.play(Create(gp), run_time=2)
@@ -165,6 +164,7 @@ class DML3D(VoiceoverScene, ThreeDScene):
             self.move_camera(theta=-25 * DEGREES, run_time=max(vo.remaining(0.3), 2))
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, gp, up, dn, dots)),
                                                                   FadeOut(hint)], run_time=1.2)
+        flat_camera(self)
         self.clear_scene()
 
     def table(self, r):
@@ -200,10 +200,7 @@ class DML3D(VoiceoverScene, ThreeDScene):
         q = ask(r"a digital pays 1 above the strike. Its pathwise derivative is zero on almost every path. What do "
                 r"the slope labels teach the network?")
         with self.voiceover(
-            "And the digital: its payoff is flat on both sides of the strike, so its pathwise derivative is zero on "
-            "almost every path, and the slopes teach the network that the price is flat. Smooth the payoff, or use "
-            "Part sixteen's likelihood-ratio derivatives."
-            " Next: a hundred dimensions."
+            'For a digital payoff, the classical pathwise derivative is zero away from the strike and undefined at the strike. Averaging those zero labels misses the derivative of the exercise probability. Value labels may still pull the fit, but zero derivative labels give the wrong gradient target. Conditional smoothing or likelihood-ratio estimators require their own regularity conditions; smoothing the payoff also introduces a bias to control. Next: a hundred dimensions.'
         ):
             self.play(FadeIn(q))
         self.wait(0.5)
