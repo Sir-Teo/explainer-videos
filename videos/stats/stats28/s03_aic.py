@@ -30,14 +30,19 @@ class AIC(VoiceoverScene):
             cmath(r"\text{choose}", r":", r"\text{the smallest } C_p", font_size=30),
         ]
         rows[0][2].set_color(AICC)
-        whys = [why(r"Mallows (1973): \ training error plus optimism"), why(r"an honest noise estimate"),
+        whys = [why(r"Mallows (1973): \ training error plus optimism"), why(r"unbiased only under an adequate variance model"),
                 why(r"an unbiased estimate of prediction error"), why(r"for linear models with squared error")]
         with self.voiceover(
-            "<bookmark mark='a'/> The direct cure: estimate the optimism and add it back. Colin Mallows's Cp is the training "
-            "error plus two d sigma squared over n, <bookmark mark='b'/> with sigma squared estimated from the largest "
-            "model. <bookmark mark='c'/> Its expectation is the in-sample prediction error, <bookmark mark='d'/> so choosing the "
-            "model with the smallest Cp aims at the best predictor. It is chapter one's optimism, made into a criterion."
+            "<bookmark mark='a'/> The direct cure: estimate the optimism and add it back. Colin Mallows's Cp is the "
+            "training error plus two d sigma squared over n, <bookmark mark='b'/> with a noise-variance estimate, "
+            "often from a sufficiently rich full model. <bookmark mark='c'/> With fixed linear fits and an unbiased "
+            "noise estimate, its expectation is prediction error for new responses at the same design points, "
+            "<bookmark mark='d'/> so choosing the model with the smallest Cp aims at the best predictor. It is "
+            "chapter one's optimism, made into a criterion."
         ) as vo:
+            intro=label('Cp adds a variance-based optimism estimate to training error',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -62,6 +67,9 @@ class AIC(VoiceoverScene):
             "optimistically, because the same data chose theta hat: by about k, the number of parameters. "
             "<bookmark mark='d'/> Correct for it, multiply by minus two, and you have AIC."
         ) as vo:
+            intro=label('AIC targets expected predictive log loss for a fixed regular candidate',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -86,6 +94,9 @@ class AIC(VoiceoverScene):
             "averages k. <bookmark mark='d'/> So the training log likelihood sits k over two above the truth's, and the new "
             "data's k over two below it: an optimism of k in total, when the model is correct."
         ) as vo:
+            intro=label('Two local expansions give the regular AIC optimism term',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -104,15 +115,19 @@ class AIC(VoiceoverScene):
         whys = [why(r"Part 22's sandwich: \ $J \ne K$"), why(r"Takeuchi (1976)"),
                 why(rf"variance {d['var']:.1f} vs mean {d['mean']:.1f}: \ overdispersed"), why(r"the correct model: \ about $k$")]
         with self.voiceover(
-            "<bookmark mark='a'/> AIC's k assumes the model is right. If it isn't, Part 22's sandwich appears: the quadratic "
-            "form averages the trace of J times K inverse, where J is the variance of the score and K the expected "
-            "curvature. <bookmark mark='b'/> Kei Takeuchi's criterion uses that trace as the penalty. <bookmark mark='c'/> A "
-            "Poisson regression for the World's doctor visits, intercept and age, has two parameters, but Takeuchi's penalty "
-            "is nine point five, because the visits are far more variable than a Poisson allows. <bookmark mark='d'/> Fitted "
-            "to data that really are Poisson, the same trace is one point eight, close to two. In practice TIC's penalty is "
-            "noisy, and fixing the model is better than fixing the penalty."
+            "<bookmark mark='a'/> AIC's k assumes the model is right. If it isn't, Part 22's sandwich appears: the "
+            "quadratic form averages the trace of J times K inverse, where J is the variance of the score and K the "
+            "expected curvature. <bookmark mark='b'/> Kei Takeuchi's criterion uses that trace as the penalty. "
+            "<bookmark mark='c'/> A Poisson regression for the World's doctor visits, intercept and age, has two "
+            "parameters, but Takeuchi's penalty is nine point five, because the visits are far more variable than a "
+            "Poisson allows. <bookmark mark='d'/> Fitted to data that really are Poisson, the same trace is one point"
+            " eight, close to two. In practice the estimated penalty is noisy and relies on regularity and suitable "
+            "independent observations. It corrects an expected log-score bias; it does not repair every model defect."
         ) as vo:
             self.add(simulated_tag())
+            intro=label('Misspecified-model curvature changes the predictive penalty',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -123,19 +138,24 @@ class AIC(VoiceoverScene):
         rows = [
             cmath(r"\text{AICc}", r"=", r"\text{AIC} + \dfrac{2k(k+1)}{n - k - 1}", font_size=32),
             cmath(r"\text{why}", r":", r"\text{the Taylor argument fails when } k/n \text{ is not small}", font_size=30),
-            cmath(r"\text{normal regression}", r":", r"\text{exact, \ Hurvich \& Tsai (1989)}", font_size=30),
+            cmath(r"\text{correct Gaussian linear regression}", r":", r"\text{fixed candidate, unknown variance; } n>k+1", font_size=30),
             cmath(r"\text{rule}", r":", r"\text{use AICc unless } n/k > 40", font_size=30),
         ]
         rows[0][2].set_color(AICC)
         whys = [why(r"a small-sample correction"), why(r"AIC then favours too-big models"), why(r"Sugiura (1978)"),
                 why(r"Burnham \& Anderson's advice")]
         with self.voiceover(
-            "<bookmark mark='a'/> With small samples AIC is itself optimistic about big models. The corrected AICc adds two k "
-            "times k plus one over n minus k minus one. <bookmark mark='b'/> The Taylor argument assumes k is small relative "
-            "to n; when it isn't, AIC chooses models that are too large. <bookmark mark='c'/> For normal regression the "
-            "correction is exact, from Nariaki Sugiura, and Clifford Hurvich and Chih-Ling Tsai. <bookmark mark='d'/> Kenneth "
-            "Burnham and David Anderson's advice: use AICc unless n is more than about forty times k."
+            "<bookmark mark='a'/> With small samples AIC is itself optimistic about big models. The corrected AICc "
+            "adds two k times k plus one over n minus k minus one. <bookmark mark='b'/> The Taylor argument assumes k"
+            " is small relative to n; when it isn't, AIC chooses models that are too large. <bookmark mark='c'/> For "
+            "correctly specified Gaussian linear regression with unknown variance and n greater than k plus one, this"
+            " is an exact correction for each fixed candidate, from Nariaki Sugiura, and Clifford Hurvich and "
+            "Chih-Ling Tsai. <bookmark mark='d'/> Kenneth Burnham and David Anderson's advice: use AICc unless n is "
+            "more than about forty times k."
         ) as vo:
+            intro=label('AICc is model-specific; the Gaussian formula needs residual degrees of freedom',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -158,11 +178,13 @@ class AIC(VoiceoverScene):
             label(rf"AIC chooses {best['size']}: \ {', '.join(best['subset'])}", font_size=20, color=PATH),
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The model-selection bench, on real data: Stamey's prostate cancer study, sixty-seven men in "
-            "the training set, log PSA predicted from eight clinical measures, with the best subset of each size. "
-            "<bookmark mark='b'/> Teal is each model's misfit, minus twice its log likelihood above the best one's; it shrinks "
-            "as predictors are added. <bookmark mark='c'/> Blue is AIC's penalty, two per parameter. <bookmark mark='d'/> Their "
-            "sum is smallest at seven predictors: AIC keeps almost everything, everything except gleason."
+            "<bookmark mark='a'/> The model-selection bench, on real data: Stamey's prostate cancer study, "
+            "sixty-seven men in the training set, log PSA predicted from eight clinical measures, with the best "
+            "subset of each size. <bookmark mark='b'/> Teal is each model's misfit, minus twice its log likelihood "
+            "above the best one's; it shrinks as predictors are added. <bookmark mark='c'/> Blue is AIC's penalty, "
+            "two per parameter. <bookmark mark='d'/> Their sum is smallest at seven predictors, everything except "
+            "gleason. These are searched fits; a penalty based on their coefficient counts alone does not account for"
+            " the whole subset-search procedure."
         ) as vo:
             self.add(prostate_tag())
             self.play(FadeIn(Bn.axes_), FadeIn(Bn.names), FadeIn(xl))
@@ -182,7 +204,7 @@ class AIC(VoiceoverScene):
         aic = np.array([c["aic"] for c in crit])
         dl = aic - aic.min()
         order = np.argsort(dl)
-        hdr = [r"\textbf{size}", r"\textbf{$\Delta$AIC}", r"\textbf{Akaike weight}", r"\textbf{evidence ratio to the best}"]
+        hdr = [r"\textbf{size}", r"\textbf{$\Delta$AIC}", r"\textbf{Akaike weight}", r"\textbf{relative support: best / candidate}"]
         w = np.exp(-dl / 2)
         w /= w.sum()
         body = [[f"{crit[i]['size']}", f"{dl[i]:.1f}", f"{w[i]:.2f}", f"{np.exp(dl[i] / 2):.1f}"] for i in order[:6]]
@@ -191,15 +213,17 @@ class AIC(VoiceoverScene):
             r[1].set_color(AICC)
         tb.move_to([0, 0.7, 0])
         foot = fit_rows(VGroup(
-            label(r"only differences matter: \ AIC's constant is arbitrary", font_size=22),
+            label(r"compare the same observations and likelihood scale; \ searched fits add selection optimism", font_size=22),
             label(r"Burnham \& Anderson: \ $\Delta < 2$, \ substantial support; \ $4$--$7$, \ less; \ $> 10$, \ essentially none", font_size=22, color=PATH),
         ), 12.0, 0.22, [0, -2.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> AIC's absolute value means nothing; only differences do. Here are the six best sizes, ranked "
-            "by their difference from the best. <bookmark mark='b'/> Six predictors are half a unit behind seven, four a little "
-            "over one, five and eight under two. Burnham and Anderson's rule of thumb: models within two of the best have "
-            "substantial support, those four to seven behind considerably less, and those more than ten behind essentially "
-            "none. Five models here are within two: AIC has a favourite, but not a winner."
+            "<bookmark mark='a'/> AIC differences are meaningful for comparable likelihoods on the same data and "
+            "response scale. The absolute value depends on the likelihood convention. Here are the six best sizes, "
+            "ranked by their difference from the best. <bookmark mark='b'/> Six predictors are half a unit behind "
+            "seven, four a little over one, five and eight under two. Burnham and Anderson's rule of thumb: models "
+            "within two of the best have substantial support, those four to seven behind considerably less, and those"
+            " more than ten behind essentially none. Five models here are within two: AIC has a favourite, but not a "
+            "winner."
         ) as vo:
             self.add(prostate_tag())
             vo.wait_until("a")

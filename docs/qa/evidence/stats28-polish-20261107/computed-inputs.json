@@ -1,0 +1,100 @@
+{
+  "items": [
+    {
+      "item": "freedman",
+      "path": ".cache/stats28/freedman.json",
+      "bytes": 2601,
+      "sha256": "f46bfd2762fde16165cc3ab5225cba647db3e5659b24fa80a0120d6bc0de02b4"
+    },
+    {
+      "item": "optimism",
+      "path": ".cache/stats28/optimism.json",
+      "bytes": 25874,
+      "sha256": "16a22f2c4bb7944951ea277a24125bb39ca401f149d90f660631f196345ecab5"
+    },
+    {
+      "item": "lassodf",
+      "path": ".cache/stats28/lassodf.json",
+      "bytes": 509,
+      "sha256": "3ebc19fbc3e519c114cfb322659e06d39133e0283d4fd1aaec7f944d7ab51391"
+    },
+    {
+      "item": "tic",
+      "path": ".cache/stats28/tic.json",
+      "bytes": 125,
+      "sha256": "2324669e43c72dae76c113df855f3f9dee431c2fe3e29ec5a1850a9cf3e10a7c"
+    },
+    {
+      "item": "consistency",
+      "path": ".cache/stats28/consistency.json",
+      "bytes": 895,
+      "sha256": "a3254991a4253a6d39dbe4dd0ddc4e4d2bb01019c091f81392aab8c57172b605"
+    },
+    {
+      "item": "prostate",
+      "path": ".cache/stats28/prostate.json",
+      "bytes": 10898,
+      "sha256": "68f62e2c939a7b6c14ea25eaed94243e48a094efd56b44517004d30ed13b1813"
+    },
+    {
+      "item": "cv",
+      "path": ".cache/stats28/cv.json",
+      "bytes": 35025,
+      "sha256": "45a3b03bcb4ba36c086c2e3750645357703fd2b5697e3656d2e2fd1f9400e2ce"
+    },
+    {
+      "item": "loo",
+      "path": ".cache/stats28/loo.json",
+      "bytes": 2437,
+      "sha256": "6edbb5ed01ad3b4f9dca5f28bf6ffd7c159856e5b0f5c5293ad61584452de024"
+    },
+    {
+      "item": "rlct",
+      "path": ".cache/stats28/rlct.json",
+      "bytes": 1186,
+      "sha256": "b36d847b899a308ac8236bb85d0ec73ac1d7a86020251b2a3cc8e5f6d8c85f92"
+    },
+    {
+      "item": "mdl",
+      "path": ".cache/stats28/mdl.json",
+      "bytes": 1572,
+      "sha256": "a8a92e3e4ade472cb7e500b9cc75413e52319e73551d28fe5588c0bab66d65f1"
+    },
+    {
+      "item": "averaging",
+      "path": ".cache/stats28/averaging.json",
+      "bytes": 14334,
+      "sha256": "4e08994af964e76005e99918ea8ff621b2d84b655800e4a11218c2c5ef45f468"
+    },
+    {
+      "item": "subsets",
+      "path": ".cache/stats28/subsets.json",
+      "bytes": 803,
+      "sha256": "ee673552e0d9cc835bc6906b3c72cef799bcc092de8a1b934bbe46a2827abed7"
+    },
+    {
+      "item": "pit",
+      "path": ".cache/stats28/pit.json",
+      "bytes": 776,
+      "sha256": "df5872e3a4d98335cdf76812c2ef4ff9f37fcf0f2a26b77fd33114418bc3068f"
+    },
+    {
+      "item": "board",
+      "path": ".cache/stats28/board.json",
+      "bytes": 1013,
+      "sha256": "3da6eebeb27ddb6d084153c355b014be312f34457df867e362361589b8ca5d21"
+    },
+    {
+      "item": "stability",
+      "path": ".cache/stats28/stability.json",
+      "bytes": 1184,
+      "sha256": "36022f54529edc6319eee2d55143dfb908660911a4f1e44acf1f6e1f3d03be0a"
+    },
+    {
+      "item": "prostate_pit",
+      "path": ".cache/stats28/prostate_pit.json",
+      "bytes": 5536,
+      "sha256": "518b4d0cc69542940161fc9e365c2254e6598d61edb69dcd7b51e241495cc5ae"
+    }
+  ]
+}

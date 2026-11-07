@@ -33,13 +33,18 @@ class Singular(VoiceoverScene):
         whys = [why(r"a two-component mixture, \ $a, b$ unknown"), why(r"one component is enough"),
                 why(r"no weight, \ or no shift: \ a cross, \ not a point"), why(r"its determinant is zero")]
         with self.voiceover(
-            "<bookmark mark='a'/> Every criterion so far assumed a regular model: a unique true parameter with an invertible "
-            "information matrix. Many useful models aren't regular. Take a mixture: with probability a, a standard normal is "
-            "shifted by b. <bookmark mark='b'/> Suppose the truth is a plain standard normal. <bookmark mark='c'/> Then any "
-            "parameter with a equal to zero is true, whatever b is, and so is any parameter with b equal to zero, whatever a "
-            "is. The true parameters form a cross. <bookmark mark='d'/> Along it the Fisher information is singular, and the "
-            "Taylor expansions behind AIC and BIC, which divided by it, fail."
+            "<bookmark mark='a'/> The classical AIC and BIC derivations just used regular, identifiable "
+            "parameterizations with nonsingular information. Cross-validation and importance-sampling identities do "
+            "not themselves require all those assumptions. Many useful models aren't regular. Take a mixture: with "
+            "probability a, a standard normal is shifted by b. <bookmark mark='b'/> Suppose the truth is a plain "
+            "standard normal. <bookmark mark='c'/> Then any parameter with a equal to zero is true, whatever b is, "
+            "and so is any parameter with b equal to zero, whatever a is. The true parameters form a cross. <bookmark"
+            " mark='d'/> Along it the Fisher information is singular, and the Taylor expansions behind AIC and BIC, "
+            "which divided by it, fail."
         ) as vo:
+            intro=label('A smaller truth can make a larger mixture singular',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -69,15 +74,16 @@ class Singular(VoiceoverScene):
             label(r"orange: \ log likelihood within 0.5, 1.5, 3 of its max", font_size=22, color=LOOC),
             label(r"$n = 100$: \ a broad region hugging the cross", font_size=22),
             label(r"$n = 2{,}000$: \ it narrows, \ but not like an ellipse", font_size=22),
-            label(r"the volume shrinks like $n^{-1/2}$, \ not $n^{-1}$", font_size=22, color=RES),
+            label(r"near the crossing: \ volume $\asymp n^{-1/2}\log n$", font_size=22, color=RES),
         ), 4.6, 0.42, [4.2, 0.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Here is the parameter plane, with the true set in gold: the whole left edge, where the "
-            "weight is zero, and the whole middle line, where the shift is zero. <bookmark mark='b'/> The orange curves are "
-            "the log likelihood's level sets for a hundred standard normal draws. <bookmark mark='c'/> The high-likelihood "
-            "region is no ellipse around a point; it is a broad band hugging the cross. <bookmark mark='d'/> With two "
-            "thousand draws it narrows, but slowly and unevenly. <bookmark mark='e'/> Its volume shrinks like one over root n, "
-            "where a regular two-parameter model's would shrink like one over n. That exponent is what BIC gets wrong."
+            "<bookmark mark='a'/> Here is the parameter plane, with the true set in gold: the whole left edge, where "
+            "the weight is zero, and the whole middle line, where the shift is zero. <bookmark mark='b'/> The orange "
+            "curves are the log likelihood's level sets for a hundred standard normal draws. <bookmark mark='c'/> The"
+            " high-likelihood region is no ellipse around a point; it is a broad band hugging the cross. <bookmark "
+            "mark='d'/> With two thousand draws it narrows, but slowly and unevenly. <bookmark mark='e'/> Near the "
+            "crossing, the leading volume is proportional to log n over root n, whereas a regular two-parameter model"
+            " gives one over n. That exponent is what BIC gets wrong."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A))
@@ -102,15 +108,20 @@ class Singular(VoiceoverScene):
         ]
         rows[2][2].set_color(LOOC)
         whys = [why(r"the free energy: \ minus the log evidence"), why(r"BIC, \ chapter three"),
-                why(r"Watanabe (2009): \ $\lambda$ the RLCT, \ $m$ its order"), why(r"singular models are simpler than they look")]
+                why(r"Watanabe (2009): \ $\lambda$ the RLCT, \ $m$ its order"), why(r"appropriate realizable analytic and positive-prior conditions")]
         with self.voiceover(
-            "<bookmark mark='a'/> Watanabe asked what the log evidence really does. Call minus the log evidence the free "
-            "energy. <bookmark mark='b'/> For a regular model it is the minimized negative log likelihood plus d over two log "
-            "n: BIC. <bookmark mark='c'/> For a singular model, Sumio Watanabe proved in 2009, using resolution of "
-            "singularities from algebraic geometry, that it is lambda log n, with a log log n correction. Lambda is the real "
-            "log canonical threshold, a birational invariant of the true set. <bookmark mark='d'/> It is never more than d over "
-            "two, and often much less: a singular model is effectively simpler than its parameter count."
+            "<bookmark mark='a'/> Watanabe asked what the log evidence really does. Call minus the log evidence the "
+            "free energy. <bookmark mark='b'/> For a regular model it is the minimized negative log likelihood plus d"
+            " over two log n: BIC. <bookmark mark='c'/> For a singular model, Sumio Watanabe proved in 2009, using "
+            "resolution of singularities from algebraic geometry, that it is lambda log n, with a log log n "
+            "correction. Lambda is the real log canonical threshold, a birational invariant of the true set. "
+            "<bookmark mark='d'/> In the well-behaved realizable analytic setting with an appropriate positive prior,"
+            " it is at most d over two and can be smaller: a singular model is effectively simpler than its parameter"
+            " count."
         ) as vo:
+            intro=label('Singular evidence depends on the true stratum and prior',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -119,7 +130,7 @@ class Singular(VoiceoverScene):
 
     def watanabe(self):
         rows = [
-            cmath(r"K(\theta)", r"=", r"\mathrm{KL}(\text{truth} \,\|\, p_\theta) \approx \tfrac12 a^2 b^2 \ \text{near the cross}", font_size=28),
+            cmath(r"K(\theta)", r"=", r"\mathrm{KL}(\text{truth} \,\|\, p_\theta) \approx \tfrac12 a^2 b^2 \ \text{near }(a,b)=(0,0)", font_size=28),
             cmath(r"V(t)", r"=", r"\text{prior volume of } \{K(\theta) < t\} \propto t^{\lambda} (\log 1/t)^{m-1}", font_size=28),
             cmath(r"\{a^2 b^2 < t\}", r":", r"\text{volume} \asymp \sqrt t\, \log(1/t)", font_size=30),
             cmath(r"\lambda", r"=", r"\tfrac12, \ \ m = 2 \ \ \text{(regular: } \lambda = 1)", font_size=32),
@@ -128,12 +139,17 @@ class Singular(VoiceoverScene):
         whys = [why(r"the KL divergence vanishes on the cross"), why(r"how fast the near-true region shrinks"),
                 why(r"a direct calculation"), why(r"half the regular exponent")]
         with self.voiceover(
-            "<bookmark mark='a'/> For the mixture it can be done by hand. Near the cross the divergence from the truth is "
-            "about half a squared times b squared. <bookmark mark='b'/> The evidence is governed by the prior volume of "
-            "parameters whose divergence is below a small t, which scales like t to the lambda. <bookmark mark='c'/> The set "
-            "where a squared b squared is below t has volume of order root t times log one over t. <bookmark mark='d'/> So "
-            "lambda is one half, with multiplicity two: half the exponent of a regular two-parameter model."
+            "<bookmark mark='a'/> For the mixture it can be done by hand. Near the intersection a equals b equals "
+            "zero, the leading divergence is half a squared times b squared. Away from that intersection the "
+            "coefficient changes, though the relevant local vanishing structure remains. <bookmark mark='b'/> The "
+            "evidence is governed by the prior volume of parameters whose divergence is below a small t, which scales"
+            " like t to the lambda. <bookmark mark='c'/> The set where a squared b squared is below t has volume of "
+            "order root t times log one over t. <bookmark mark='d'/> So lambda is one half, with multiplicity two: "
+            "half the exponent of a regular two-parameter model."
         ) as vo:
+            intro=label('The crossing changes the leading volume of near-true parameters',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -159,12 +175,13 @@ class Singular(VoiceoverScene):
             label(r"BIC would charge the mixture 1", font_size=22, color=RES),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Check it numerically. For sample sizes from thirty to ten thousand, compute the evidence by "
-            "quadrature over the parameter plane, for six data sets each. <bookmark mark='b'/> A regular two-parameter normal "
-            "model: its free energy grows with slope point nine eight in log n, the predicted one. <bookmark mark='c'/> The "
-            "mixture's grows with slope point four two. <bookmark mark='d'/> Watanabe's one half, pulled down a little by the "
-            "log log n term. <bookmark mark='e'/> BIC would charge the mixture the full one, and so would wrongly penalize "
-            "every mixture, neural network and factor model it compared."
+            "<bookmark mark='a'/> Check it numerically. For sample sizes from thirty to ten thousand, compute the "
+            "evidence by quadrature over the parameter plane, for six data sets each. <bookmark mark='b'/> A regular "
+            "two-parameter normal model: its free energy grows with slope point nine nine in log n, the predicted "
+            "one. <bookmark mark='c'/> The mixture's grows with slope point four two. <bookmark mark='d'/> Watanabe's"
+            " one half, pulled down a little by the log log n term. <bookmark mark='e'/> BIC would charge the mixture"
+            " the full one, giving the wrong leading evidence penalty for this singular example. Mixtures and neural "
+            "models can also have locally regular regions; not every instance shares this exponent."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A))
@@ -183,17 +200,19 @@ class Singular(VoiceoverScene):
     def where(self):
         rows = fit_rows(VGroup(
             label(r"singular: \ mixtures, \ hidden Markov models, \ factor analysis, \ reduced rank, \ neural networks", font_size=24),
-            label(r"WAIC and LOO stay valid \ (Watanabe 2010)", font_size=24, color=LOOC),
+            label(r"WAIC and LOO: \ asymptotic relations under suitable assumptions", font_size=24, color=LOOC),
             label(r"WBIC: \ the evidence from one tempered posterior \ (Watanabe 2013)", font_size=24, color=HIT),
             label(r"sBIC: \ a BIC with the right $\lambda$ \ (Drton \& Plummer 2017)", font_size=24, color=BICC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Singular models are everywhere: mixtures, hidden Markov models, factor analysis, reduced-rank "
-            "regression, and every neural network, whose hidden units can be permuted or switched off. <bookmark mark='b'/> "
-            "WAIC and Bayesian leave-one-out remain valid for them, which is why Watanabe built WAIC. "
-            "<bookmark mark='c'/> His WBIC estimates the evidence from a single posterior tempered at one over log n. "
-            "<bookmark mark='d'/> And Mathias Drton and Martyn Plummer's singular BIC puts the right lambda into a BIC, model "
-            "by model."
+            "<bookmark mark='a'/> Singular models are everywhere: mixtures, hidden Markov models, factor analysis, "
+            "reduced-rank regression, and neural networks with redundant or inactive units. A finite permutation "
+            "symmetry alone does not make a locally identified mode singular. <bookmark mark='b'/> For important "
+            "analytic singular settings, WAIC and Bayesian leave-one-out retain asymptotic predictive relationships "
+            "under additional assumptions. Finite-sample approximation and sampling diagnostics still matter. "
+            "<bookmark mark='c'/> His WBIC estimates the evidence from a single posterior tempered at one over log n."
+            " <bookmark mark='d'/> And Mathias Drton and Martyn Plummer's singular BIC puts the right lambda into a "
+            "BIC, model by model."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -206,7 +225,7 @@ class Singular(VoiceoverScene):
             [r"a regular model", r"$d$", r"$d/2$", r"$d/2$"],
             [r"this mixture, \ truth $N(0, 1)$", r"2", r"1", r"$1/2$"],
             [r"reduced-rank regression, \ rank $r$ of $H \times M$", r"$r(H + M - r)$", r"$\tfrac12 r(H + M - r)$", r"smaller \ (Aoyagi \& Watanabe 2005)"],
-            [r"neural net with spare hidden units", r"many", r"many", r"bounded by the units in use"],
+            [r"neural net with spare hidden units", r"many", r"many", r"architecture, true stratum and prior matter"],
         ]
         tb = table_rows([hdr] + body, font_size=24, col_buff=0.7, row_buff=0.3, colors=[GREY_A, AICC, LOOC, None, None])
         for r in tb[1:]:
@@ -217,12 +236,14 @@ class Singular(VoiceoverScene):
             label(r"so does the right penalty: \ singular models cannot be scored by counting parameters", font_size=22, color=RES),
         ), 12.0, 0.22, [0, -2.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The real log canonical threshold has been worked out for many models. For a regular model it "
-            "is d over two, BIC's value. For our mixture at a single-component truth, one half instead of one. "
-            "<bookmark mark='b'/> For reduced-rank regression, Miki Aoyagi and Watanabe computed it exactly, and it is "
-            "smaller than half the parameter count. For a neural network with unneeded hidden units, it is limited by the "
-            "units the truth actually uses. <bookmark mark='c'/> And it depends on where the truth lies, not only on the model, "
-            "so no penalty that just counts parameters can be right for singular models."
+            "<bookmark mark='a'/> The real log canonical threshold has been worked out for many models. For a regular"
+            " model it is d over two, BIC's value. For our mixture at a single-component truth, one half instead of "
+            "one. <bookmark mark='b'/> For reduced-rank regression, Miki Aoyagi and Watanabe computed it exactly, "
+            "with thresholds depending on matrix dimensions and the fitted and true ranks; at singular lower-rank "
+            "truths they can differ from the regular half-dimension penalty. For neural networks, the threshold "
+            "depends on architecture, the true parameter stratum and the prior. Counting only the units used by one "
+            "representation is not a general formula. <bookmark mark='c'/> And it depends on where the truth lies, "
+            "not only on the model, so no penalty that just counts parameters can be right for singular models."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tb[0]), FadeIn(tb[1]), FadeIn(tb[2]))

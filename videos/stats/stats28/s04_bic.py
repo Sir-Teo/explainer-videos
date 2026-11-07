@@ -41,6 +41,9 @@ class BIC(VoiceoverScene):
             "log n, plus terms that don't grow. <bookmark mark='d'/> Gideon Schwarz dropped those terms: minus twice it is "
             "BIC, whose penalty per parameter is log n rather than two."
         ) as vo:
+            intro=label('Regular Laplace evidence has a leading dimension penalty',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -103,11 +106,13 @@ class BIC(VoiceoverScene):
             label(r"AIC's 2 is fixed; \ $\log n$ grows", font_size=22, color=GREY_A),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> First, when the truth is among the candidates: data from a quadratic, polynomials of degree "
-            "zero to six, three hundred data sets at each sample size. <bookmark mark='b'/> BIC's chance of picking degree "
-            "two climbs to ninety-nine percent: it is consistent. <bookmark mark='c'/> AIC's stalls around three quarters, "
-            "however much data arrives: a quarter of the time it adds a superfluous term. <bookmark mark='d'/> Its fixed "
-            "penalty of two is beaten, now and then, by noise; BIC's log n eventually wins every such contest."
+            "<bookmark mark='a'/> First, when the truth is among the candidates: data from a quadratic, polynomials "
+            "of degree zero to six, three hundred data sets at each sample size. <bookmark mark='b'/> BIC's chance of"
+            " picking degree two climbs to ninety-nine percent: it is consistent. <bookmark mark='c'/> AIC's stalls "
+            "around three quarters, however much data arrives: a quarter of the time it adds a superfluous term. "
+            "<bookmark mark='d'/> Its fixed penalty of two is beaten, now and then, by noise; for a fixed regular "
+            "candidate list containing the identifiable truth, BIC's growing penalty yields model-selection "
+            "consistency."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A))
@@ -133,15 +138,18 @@ class BIC(VoiceoverScene):
         tb.move_to([0, 0.8, 0])
         foot = fit_rows(VGroup(
             label(r"truth: \ $\sin(2x)e^{0.3x}$, \ not a polynomial; \ candidates: \ degrees 0--12", font_size=22),
-            label(r"large $n$: \ AIC predicts better (efficient); \ small $n$: \ AIC's appetite needs AICc", font_size=22, color=PATH),
+            label(r"this finite experiment: \ performance depends on sample size and approximation error", font_size=22, color=PATH),
         ), 12.0, 0.22, [0, -1.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Second, when no candidate is true: a smooth curve that is not a polynomial, approximated by "
-            "polynomials up to degree twelve, and judged by prediction risk. <bookmark mark='b'/> With a thousand points, AIC's "
-            "choices predict fifteen percent better than BIC's: AIC is efficient, tracking the best approximation as it gets "
-            "more complex. <bookmark mark='c'/> With fifty points, plain AIC's licence to fit degree-twelve polynomials is a "
-            "disaster, and AICc repairs most of it. Yuhong Yang proved in 2005 that no criterion can be both consistent and "
-            "efficient: choose the goal first."
+            "<bookmark mark='a'/> Second, when no candidate is true: a smooth curve that is not a polynomial, "
+            "approximated by polynomials up to degree twelve, and judged by prediction risk. <bookmark mark='b'/> "
+            "With a thousand points, AIC's choices predict fifteen percent better than BIC's: this finite experiment "
+            "favours AIC at that sample size. It does not establish an asymptotic efficiency theorem for the fixed "
+            "list of degrees zero through twelve. <bookmark mark='c'/> With fifty points, plain AIC's licence to fit "
+            "degree-twelve polynomials is a disaster, and AICc repairs most of it. Yuhong Yang studied a tradeoff "
+            "between model-identification consistency and uniform risk adaptation. That result has a specific scope; "
+            "it is not a ban on every criterion being both consistent and prediction-efficient in a finite regular "
+            "candidate list."
         ) as vo:
             self.add(seeded_tag())
             vo.wait_until("a")
@@ -189,6 +197,9 @@ class BIC(VoiceoverScene):
             "computed the limiting chances, and they match the plateau. <bookmark mark='d'/> BIC's threshold is log n, which "
             "grows, so its chance of overfitting goes to zero."
         ) as vo:
+            intro=label('A fixed pair of nested regular models gives a 0.157 limit',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -206,13 +217,18 @@ class BIC(VoiceoverScene):
         whys = [why(r"what Schwarz threw away"), why(r"a prior worth one observation"), why(r"Kass \& Wasserman (1995)"),
                 why(r"under that prior, \ Part 26's evidence")]
         with self.voiceover(
-            "<bookmark mark='a'/> What did Schwarz throw away? The dropped constant involves the prior at the estimate and the "
-            "information per observation. <bookmark mark='b'/> Robert Kass and Larry Wasserman noticed that for one particular "
-            "prior, a normal centred at the estimate with the information of a single observation, the unit-information prior, "
-            "<bookmark mark='c'/> those terms cancel, and BIC's error shrinks to order one over root n. "
-            "<bookmark mark='d'/> So the exponentiated difference in BIC approximates a Bayes factor under a prior worth one "
-            "data point: diffuse, and so, by Part 26's Lindley paradox, kind to small models."
+            "<bookmark mark='a'/> What did Schwarz throw away? The dropped constant involves the prior at the "
+            "estimate and the information per observation. <bookmark mark='b'/> Robert Kass and Larry Wasserman "
+            "noticed that for one particular prior, a normal centred at the estimate with the information of a single"
+            " observation, the unit-information prior, <bookmark mark='c'/> in a regular setting those leading "
+            "constants cancel. Centering this illustrative prior at the estimate uses the data; it is not a uniquely "
+            "prescribed fixed prior or an automatic Bayes-factor guarantee. <bookmark mark='d'/> So the exponentiated"
+            " difference in BIC approximates a Bayes factor under a prior worth one data point: diffuse, and so, by "
+            "Part 26's Lindley paradox, kind to small models."
         ) as vo:
+            intro=label('Prior and curvature constants matter in a BIC approximation',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

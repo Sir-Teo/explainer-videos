@@ -50,18 +50,23 @@ class Calibration(VoiceoverScene):
             cmath(r"F_t", r":", r"\text{the forecast distribution for } y_t", font_size=30),
             cmath(r"u_t", r"=", r"F_t(y_t)", font_size=34),
             cmath(r"F_t \text{ true}", r"\Rightarrow", r"u_t \sim U(0, 1), \ \text{independent}", font_size=30),
-            cmath(r"\text{histogram of } u_t", r":", r"\text{flat if calibrated}", font_size=30),
+            cmath(r"\text{histogram of } u_t", r":", r"\text{check uniformity and dependence; \ flatness alone is insufficient}", font_size=30),
         ]
         rows[1][2].set_color(HIT)
         whys = [why(r"issued before $y_t$ is seen"), why(r"the probability integral transform"),
                 why(r"Part 7's inverse-CDF method, \ backwards"), why(r"Dawid (1984); \ Diebold, Gunther \& Tay (1998)")]
         with self.voiceover(
-            "<bookmark mark='a'/> The tool is the probability integral transform. Each forecast is a whole distribution, "
-            "issued before the observation arrives. <bookmark mark='b'/> Evaluate it at what happened. "
-            "<bookmark mark='c'/> If the forecasts are the true conditional distributions, these values are independent "
-            "uniforms: Part 7's inverse-CDF method run backwards. <bookmark mark='d'/> So their histogram should be flat, "
-            "Dawid's proposal, made routine for economic forecasts by Francis Diebold, Todd Gunther and Anthony Tay."
+            "<bookmark mark='a'/> The tool is the probability integral transform. Each forecast is a whole "
+            "distribution, issued before the observation arrives. <bookmark mark='b'/> Evaluate it at what happened. "
+            "<bookmark mark='c'/> For continuous outcomes, if forecasts are the true conditional distributions given "
+            "the relevant past information, the PIT values are independent uniforms. Discrete outcomes require a "
+            "randomized transform: Part 7's inverse-CDF method run backwards. <bookmark mark='d'/> So their histogram"
+            " should be flat, Dawid's proposal, made routine for economic forecasts by Francis Diebold, Todd Gunther "
+            "and Anthony Tay."
         ) as vo:
+            intro=label('Continuous conditional forecasts imply uniform PIT values',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -128,19 +133,24 @@ class Calibration(VoiceoverScene):
             cmath(r"S(F, y)", r":", r"\text{a penalty for forecast } F \text{ when } y \text{ happens}", font_size=30),
             cmath(r"\text{proper}", r":", r"E_{G}\, S(G, Y) \le E_{G}\, S(F, Y) \ \ \text{for all } F", font_size=30),
             cmath(r"\text{strictly proper}", r":", r"\text{equality only at } F = G", font_size=30),
-            cmath(r"\text{log score, \ CRPS}", r":", r"\text{strictly proper; \ squared error of the mean: \ not}", font_size=28),
+            cmath(r"\text{log score, \ CRPS}", r":", r"\text{strictly proper; \ mean squared error: \ proper, \ not strictly proper for distributions}", font_size=28),
         ]
         rows[1][2].set_color(PATH)
         whys = [why(r"a scoring rule"), why(r"honesty is the best policy"), why(r"no other forecast ties the truth"),
                 why(r"Gneiting \& Raftery (2007)")]
         with self.voiceover(
-            "<bookmark mark='a'/> Why these scores? A scoring rule charges a penalty for a forecast once the outcome is known. "
-            "<bookmark mark='b'/> It is proper if a forecaster who believes G minimizes their expected penalty by reporting G "
-            "itself: honesty is the best policy. <bookmark mark='c'/> Strictly proper if nothing else ties. "
-            "<bookmark mark='d'/> The log score and CRPS are strictly proper, Tilmann Gneiting and Adrian Raftery's survey "
-            "explains; squared error of the forecast mean is not, because it ignores the spread entirely. AIC, WAIC and LOO are "
-            "all estimates of an expected log score: this part's criteria are forecasters' scores in disguise."
+            "<bookmark mark='a'/> Why these scores? A scoring rule charges a penalty for a forecast once the outcome "
+            "is known. <bookmark mark='b'/> It is proper if a forecaster who believes G minimizes their expected "
+            "penalty by reporting G itself: honesty is the best policy. <bookmark mark='c'/> Strictly proper if "
+            "nothing else ties. <bookmark mark='d'/> The log score and CRPS are strictly proper, Tilmann Gneiting and"
+            " Adrian Raftery's survey explains; squared error of the forecast mean is proper but not strictly proper "
+            "over full distributions, because any forecast with the correct mean ties, regardless of its spread. AIC,"
+            " WAIC and LOO are all estimates of an expected log score: this part's criteria are forecasters' scores "
+            "in disguise."
         ) as vo:
+            intro=label('Strict propriety identifies the full predictive distribution',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -150,16 +160,18 @@ class Calibration(VoiceoverScene):
     def sharp(self):
         rows = fit_rows(VGroup(
             label(r"maximize sharpness, \ subject to calibration \ (Gneiting, Balabdaoui \& Raftery 2007)", font_size=24, color=HIT),
-            label(r"a climatological forecast is calibrated, \ and useless", font_size=24, color=GREY_A),
+            label(r"climatology: \ a marginally calibrated baseline may miss conditional information", font_size=24, color=GREY_A),
             label(r"check the PIT; \ compare by a proper score", font_size=24, color=PATH),
             label(r"weather services have done this since the 1950s \ (Brier 1950)", font_size=24, color=BICC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Gneiting, Fadoua Balabdaoui and Raftery summed it up: maximize the sharpness of the forecasts, "
-            "subject to calibration. <bookmark mark='b'/> Calibration alone isn't enough: forecasting the long-run climate "
-            "every day is calibrated and useless. <bookmark mark='c'/> So check the PIT histogram, and compare competing models "
-            "by a proper score. <bookmark mark='d'/> Weather forecasters have worked this way since Glenn Brier's score of "
-            "1950, and their forecasts improved, by about a day of lead time per decade, because they were scored honestly."
+            "<bookmark mark='a'/> Gneiting, Fadoua Balabdaoui and Raftery summed it up: maximize the sharpness of the"
+            " forecasts, subject to calibration. <bookmark mark='b'/> Calibration alone isn't enough: a "
+            "climatological forecast can be marginally calibrated and useful as a baseline, yet miss information that"
+            " improves conditional prediction. <bookmark mark='c'/> So check the PIT histogram, and compare competing"
+            " models by a proper score. <bookmark mark='d'/> Weather forecasters have worked this way since Glenn "
+            "Brier's score of 1950, Scoring helps evaluate progress; improvements also depend on observations, "
+            "physical models and computation."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -179,21 +191,22 @@ class Calibration(VoiceoverScene):
             bars = hist_bars(ax, np.linspace(0, 1, 6), dens, color=col, opacity=0.8)
             flat = DashedLine(ax.c2p(0, 1), ax.c2p(1, 1), color=WHITE, stroke_width=1.5)
             t = label(title, font_size=22, color=col).next_to(A, UP, buff=0.1)
-            s = VGroup(label(rf"KS $p = {d[key]['ks_p']:.2f}$", font_size=20, color=GREY_A),
+            s = VGroup(label(rf"descriptive KS distance {d[key]['ks_distance']:.2f}", font_size=20, color=GREY_A),
                        label(rf"LOO log score ${d[key]['lpd']:.2f}$", font_size=22, color=col)).arrange(DOWN, buff=0.12)
             s.next_to(A, DOWN, buff=0.45)
             panels.add(VGroup(A, bars, flat, t, s))
-        foot = label(r"all three calibrated; \ the sharper two score far better; \ the extra six predictors add 0.01",
+        foot = label(r"dependent LOO PITs do not prove calibration; \ compare predictive scores and uncertainty",
                      font_size=22, color=PATH).to_edge(DOWN, buff=1.0)
         with self.voiceover(
-            "<bookmark mark='a'/> Real forecasts: predict each of the sixty-seven prostate training men from a model fitted to "
-            "the other sixty-six. For a normal linear model with the reference prior, the leave-one-out predictive is a t "
-            "distribution, and the PIT is just the t CDF of the externally studentized residual, Part 23's diagnostic in new "
-            "clothes. The intercept-only model is calibrated: flat histogram, Kolmogorov–Smirnov p-value point nine six. "
-            "<bookmark mark='b'/> The two-predictor model is calibrated too, and much sharper: its log score is half a nat "
-            "better. <bookmark mark='c'/> The full model is calibrated and scores only a hundredth better than the pair. "
-            "<bookmark mark='d'/> Calibration rules out bad forecasters; sharpness, measured by a proper score, ranks the "
-            "good ones."
+            "<bookmark mark='a'/> For each of sixty-seven prostate training observations, fit on the other sixty-six."
+            " Under a normal linear model with the reference prior, the predictive CDF is Student t, applied to the "
+            "externally studentized residual. These leave-one-out PITs share training data, so ordinary "
+            "independent-sample Kolmogorov–Smirnov p-values are not valid calibration tests. <bookmark mark='b'/> The"
+            " two-predictor model has a higher average held-out log density than the intercept-only model. <bookmark "
+            "mark='c'/> The full model gains about another hundredth of a nat. <bookmark mark='d'/> The displayed "
+            "histograms and descriptive KS distances can reveal patterns, but neither a flat histogram nor a large "
+            "uncalibrated p-value would prove that a model is calibrated. Assess prediction with appropriate held-out"
+            " or model-based checks and proper scores."
         ) as vo:
             self.add(prostate_tag())
             for k, m_ in enumerate("abc"):
@@ -223,6 +236,9 @@ class Calibration(VoiceoverScene):
             "statkit's crps_normal from Part 24 computes. <bookmark mark='d'/> And for a forecast that is a single point it is "
             "just the absolute error, so the CRPS lets point and probabilistic forecasts be compared on one scale."
         ) as vo:
+            intro=label('CRPS evaluates a predictive CDF on the outcome’s scale',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

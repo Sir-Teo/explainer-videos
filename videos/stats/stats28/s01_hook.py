@@ -61,10 +61,11 @@ class Hook(VoiceoverScene):
             label(rf"{d['n_sig05']} with $p < 0.05$ \ (2.5 expected by chance)", font_size=24, color=RES),
         ), 12.0, 0.3, [0, -1.8, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Round one. Each dot is one predictor's p-value. With fifty predictors and a hundred "
-            "observations, R squared is point four six, but the overall F test, p of point seven six, rightly says there is "
-            "nothing here. <bookmark mark='b'/> Fourteen predictors have p-values below point two five: keep those. "
-            "<bookmark mark='c'/> Two are below point oh five, about what chance would give."
+            "<bookmark mark='a'/> Round one. Each dot is one predictor's p-value. With fifty predictors and a hundred"
+            " observations, R squared is point four six, but the overall F test, p of point seven six, gives no "
+            "evidence against the null in this run. A large p-value is not proof that every coefficient is zero. "
+            "<bookmark mark='b'/> Fourteen predictors have p-values below point two five: keep those. <bookmark "
+            "mark='c'/> Two are below point oh five, about what chance would give."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A), Create(cut))
@@ -139,16 +140,17 @@ class Hook(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"choosing a model with the data, \ then testing it on the same data, \ is circular", font_size=26, color=RES),
             label(r"the fit always improves with more choice: \ that is optimism", font_size=26),
-            label(r"so: \ estimate it (AIC, \ BIC, \ CV), \ avoid it (splitting), \ or correct for it", font_size=26, color=HIT),
+            label(r"estimate predictive optimism (AIC, CV); \ compare evidence (BIC); \ separate selection from inference", font_size=26, color=HIT),
             label(r"and ask what the chosen model is for: \ prediction, \ or truth?", font_size=26, color=PATH),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The lesson: choosing a model with the data, then testing it on the same data, is circular. "
-            "<bookmark mark='b'/> The more choice you have, the better the chosen fit looks, whether or not anything is "
-            "there; statisticians call the gap optimism. <bookmark mark='c'/> This part shows how to estimate it, with AIC, "
-            "BIC and cross-validation, how to avoid it, by splitting the data, and how to correct inference for it. "
-            "<bookmark mark='d'/> And it asks what the chosen model is for: to predict well, or to find the truth, which turn "
-            "out to be different goals."
+            "<bookmark mark='a'/> The lesson: choosing a model with the data, then testing it on the same data, is "
+            "circular. <bookmark mark='b'/> The more choice you have, the better the chosen fit looks, whether or not"
+            " anything is there; statisticians call the gap optimism. <bookmark mark='c'/> This part estimates "
+            "predictive optimism with AIC and cross-validation, contrasts BIC's evidence objective, uses splitting to"
+            " separate selection from inference, and considers corrections after selection. <bookmark mark='d'/> And "
+            "it asks what the chosen model is for: to predict well, or to find the truth, which turn out to be "
+            "different goals."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

@@ -1,0 +1,21 @@
+{
+  "url": "https://hastie.su.domains/ElemStatLearn/datasets/prostate.data",
+  "sha256": "65e3c8581c1a140aa4ad27d857df18e024d3ea7560f6a653417740e783daad71",
+  "rows": 97,
+  "predictors": [
+    "lcavol",
+    "lweight",
+    "age",
+    "lbph",
+    "svi",
+    "lcp",
+    "gleason",
+    "pgg45"
+  ],
+  "target": "lpsa",
+  "train": 67,
+  "test": 30,
+  "precision": "Museum rounds continuous values to seven decimal places",
+  "max_absolute_predictor_difference": 5.000000014021566e-08,
+  "split_matches_exactly": true
+}

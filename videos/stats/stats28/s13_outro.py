@@ -23,11 +23,11 @@ class Outro(VoiceoverScene):
     def recap(self):
         items = [
             (r"Freedman: \ noise becomes a model", RES), (r"optimism $= 2\sigma^2\,\mathrm{df}/n$", HIT),
-            (r"Cp, \ AIC, \ TIC, \ AICc", AICC), (r"BIC: \ consistent, \ not efficient", BICC),
+            (r"Cp, \ AIC, \ TIC, \ AICc", AICC), (r"BIC: \ identification and prediction have different aims", BICC),
             (r"CV estimates the procedure's error", CVC), (r"PSIS-LOO, \ $\hat k$, \ WAIC", LOOC),
             (r"singular: \ $\lambda = \tfrac12$, \ not 1", LOOC), (r"MDL: \ the shortest code", PATH),
-            (r"stacking beats BMA when all are wrong", HIT), (r"after selection: \ 75\% coverage", RES),
-            (r"subsets vs lasso: \ the SNR decides", PATH), (r"PIT and proper scores", HIT),
+            (r"stacking helps in this misspecified mixture example", HIT), (r"after selection: \ 75\% coverage", RES),
+            (r"subsets vs lasso: \ signal and design matter", PATH), (r"PIT and proper scores", HIT),
         ]
         rows = VGroup(*[label(rf"{i}.\ \ {t}", font_size=26, color=c) for i, (t, c) in enumerate(items)])
         cols = VGroup(VGroup(*rows[:6]).arrange(DOWN, aligned_edge=LEFT, buff=0.45),
@@ -37,17 +37,20 @@ class Outro(VoiceoverScene):
         head = label(r"Part 28, \ in twelve lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Part twenty-eight in twelve lines. <bookmark mark='a'/> Freedman's screening turned fifty columns of noise into a "
-            "significant regression. Training error is optimistic by two sigma squared times the degrees of freedom over n, "
-            "and degrees of freedom can be measured for any procedure. Mallows's Cp and Akaike's AIC add the optimism back; "
-            "Takeuchi's TIC handles the wrong model and AICc small samples. BIC, from the Laplace approximation, finds the "
-            "true model when it is a candidate, but predicts worse when none is. Cross-validation estimates the error of the "
-            "procedure, not of the fit in hand. PSIS-LOO and WAIC bring prediction to Bayesian models, with k-hat as a "
-            "warning light. Singular models like mixtures have Watanabe's lambda, one half here, in place of d over two. "
-            "MDL chooses the model that compresses the data most, and rediscovers BIC. Stacking combines wrong models into a "
-            "right one, where Bayesian model averaging picks one at random. Intervals after selection covered seventy-five "
-            "percent, and splitting restored ninety-five. Best subsets beat the lasso only when the signal is strong. And "
-            "forecasts should be calibrated, checked by the PIT, and compared by proper scores."
+            "Part twenty-eight in twelve lines. <bookmark mark='a'/> Freedman's screening turned fifty columns of "
+            "noise into a significant regression. Training error is optimistic by two sigma squared times the degrees"
+            " of freedom over n, and degrees of freedom can be measured for any procedure. Mallows's Cp and Akaike's "
+            "AIC add the optimism back; Takeuchi's TIC handles the wrong model and AICc small samples. BIC, from the "
+            "Laplace approximation, can consistently identify a true model in a suitable fixed regular candidate "
+            "list; its prediction ranking depends on the setting. Cross-validation estimates procedure performance; "
+            "it can give limited information about the realized error of one fitted model. PSIS-LOO and WAIC bring "
+            "prediction to Bayesian models, with k-hat as a warning light. Singular models like mixtures have "
+            "Watanabe's lambda, one half here, in place of d over two. MDL chooses the model that compresses the data"
+            " most, and rediscovers BIC. In our symmetric example, stacking learns the correct mixture while Bayesian"
+            " model averaging concentrates on a randomly favoured candidate. Intervals after selection covered "
+            "seventy-five percent, and splitting restored ninety-five. Our sparse-design experiment favours shrinkage"
+            " at low signal and unshrunk subsets at high signal. And forecasts should be calibrated, checked by the "
+            "PIT, and compared by proper scores."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -62,11 +65,12 @@ class Outro(VoiceoverScene):
             (r"oracle inequalities and minimax rates", [50]), (r"selective inference in depth", [56]),
         ], font_size=22)
         with self.voiceover(
-            "Where it comes back. <bookmark mark='a'/> Part 29 chooses smoothing parameters by GCV and counts their degrees of "
-            "freedom. Part 32 studies selection in high dimensions. Part 33 controls the false discovery rate and the coverage "
-            "of selected effects. Part 34's conformal prediction gives predictive intervals that hold whatever model was "
-            "chosen. Part 36 picks nuisance models for causal estimates by cross-fitting. Part 38 evaluates forecasts. Part 50 "
-            "proves oracle inequalities for model selection. And Part 56 returns to inference after selection, in depth."
+            "Where it comes back. <bookmark mark='a'/> Part 29 chooses smoothing parameters by GCV and counts their "
+            "degrees of freedom. Part 32 studies selection in high dimensions. Part 33 controls the false discovery "
+            "rate and the coverage of selected effects. Part 34's conformal prediction gives predictive intervals "
+            "with exchangeability and appropriate separation of fitting from calibration. Part 36 picks nuisance "
+            "models for causal estimates by cross-fitting. Part 38 evaluates forecasts. Part 50 proves oracle "
+            "inequalities for model selection. And Part 56 returns to inference after selection, in depth."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)

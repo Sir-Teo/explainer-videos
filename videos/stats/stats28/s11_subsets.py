@@ -51,14 +51,18 @@ class Subsets(VoiceoverScene):
         whys = [why(r"best subset of size $s$"), why(r"Natarajan (1995)"), why(r"Furnival \& Wilson (1974)"),
                 why(r"Bertsimas, King \& Mazumder (2016)")]
         with self.voiceover(
-            "<bookmark mark='a'/> The alternative to greed is to search everything: the subset of size s with the smallest "
-            "residual sum of squares. <bookmark mark='b'/> There are two to the p subsets, and the problem is NP-hard in "
-            "general. <bookmark mark='c'/> George Furnival and Robert Wilson's leaps and bounds prunes whole branches of the "
-            "search tree, since adding variables can only lower the RSS; it handles thirty or forty predictors. "
-            "<bookmark mark='d'/> Dimitris Bertsimas, Angela King and Rahul Mazumder used modern mixed-integer solvers to reach "
-            "hundreds, with a certificate of optimality. Statkit's best_subset enumerates, which is enough for the prostate "
-            "data's eight."
+            "<bookmark mark='a'/> The alternative to greed is to search everything: the subset of size s with the "
+            "smallest residual sum of squares. <bookmark mark='b'/> There are two to the p subsets, and the problem "
+            "is NP-hard in general. <bookmark mark='c'/> George Furnival and Robert Wilson's leaps and bounds prunes "
+            "whole branches of the search tree, since adding variables can only lower the RSS; it handles thirty or "
+            "forty predictors. <bookmark mark='d'/> Dimitris Bertsimas, Angela King and Rahul Mazumder used modern "
+            "mixed-integer solvers to reach hundreds, with an optimality certificate when the solver closes the gap; "
+            "difficulty and running time depend on the design. Statkit's best_subset enumerates, which is enough for "
+            "the prostate data's eight."
         ) as vo:
+            intro=label('Best-subset optimization trades computation for a search guarantee',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -69,7 +73,7 @@ class Subsets(VoiceoverScene):
         d = load("subsets")
         snr = np.log10(np.asarray(d["snrs"], float))
         A = axes([-1.5, 1.0], [-2.2, 0.4], x_length=7.4, y_length=4.4, xlabel=r"signal-to-noise ratio \ (log scale)",
-                 ylabel=r"relative risk \ (log scale)", xticks=[np.log10(0.05), np.log10(0.25), 0, np.log10(6)],
+                 ylabel=r"relative excess risk \ (log scale)", xticks=[np.log10(0.05), np.log10(0.25), 0, np.log10(6)],
                  yticks=[-2, -1, 0], xfmt=lambda v: f"{10 ** v:g}", yfmt=lambda v: f"10^{{{int(v)}}}", center=[-2.0, 0.3, 0])
         ax = A.ax
         cols = (("best", PATH), ("forward", AICC), ("lasso", HIT))
@@ -83,13 +87,16 @@ class Subsets(VoiceoverScene):
             label(rf"high SNR: \ best subset {d['best'][-1]:.3f} vs lasso {d['lasso'][-1]:.3f}", font_size=22, color=PATH),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Which wins? Trevor Hastie, Robert Tibshirani and Ryan Tibshirani ran the race in 2020; here "
-            "is a small version: a hundred observations, ten correlated predictors of which five matter, and four "
-            "signal-to-noise ratios. Risk is prediction error relative to the null model's. <bookmark mark='b'/> Best subset "
-            "and forward stepwise, each tuned on a validation set, run almost together. <bookmark mark='c'/> The lasso is "
-            "green. <bookmark mark='d'/> When the signal is weak, the lasso wins clearly: its shrinkage tames the variance that "
-            "subset selection's all-or-nothing choices add. <bookmark mark='e'/> When the signal is strong, best subset wins: "
-            "it keeps the right five unshrunk, while the lasso's shrinkage now costs bias."
+            "<bookmark mark='a'/> Which wins? Trevor Hastie, Robert Tibshirani and Ryan Tibshirani ran the race in "
+            "2020; here is a small version: a hundred observations, ten correlated predictors of which five matter, "
+            "and four signal-to-noise ratios. The plotted metric is prediction risk above irreducible noise, divided "
+            "by the signal variance, so the zero predictor has relative excess risk one. <bookmark mark='b'/> Best "
+            "subset and forward stepwise, each tuned on a validation set, run almost together. <bookmark mark='c'/> "
+            "The lasso is green. <bookmark mark='d'/> When the signal is weak, the lasso wins clearly: its shrinkage "
+            "tames the variance that subset selection's all-or-nothing choices add. <bookmark mark='e'/> When the "
+            "signal is strong, best subset wins: unshrunk subset estimates can have less bias, while lasso shrinkage "
+            "can cost accuracy. These are twenty-five-replication point estimates for one design, not a universal "
+            "winner."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A))
@@ -117,19 +124,25 @@ class Subsets(VoiceoverScene):
             [r"lasso, \ 10-fold CV", f"{pen['lasso']['nonzero']}", f"{pen['lasso']['test']:.3f}"],
             [r"ridge, \ 10-fold CV", "8", f"{pen['ridge']['test']:.3f}"],
         ]
+        hdr.append(r"\textbf{paired MSE difference vs full $\pm$ SE}")
+        for row,record in zip(body,[t['null'],t['full'],t['aic'],t['bic'],pen['lasso'],pen['ridge']]):
+            row.append(rf"${record['paired_difference_full']:.3f}\pm{record['paired_se_full']:.3f}$")
         tb = table_rows([hdr] + body, font_size=26, col_buff=0.9, row_buff=0.28, colors=[GREY_A, RES, GREY_B, AICC, BICC, HIT, HIT])
-        tb.move_to([0, 0.7, 0])
+        if tb.width>13.:tb.width=13.
+        tb.move_to([0,0.7,0])
         foot = fit_rows(VGroup(
             label(r"Hastie, Tibshirani \& Friedman's train/test split: \ 67 and 30", font_size=22),
-            label(r"everything but the null model within 0.03; \ the test set's own SE is 0.14--0.18", font_size=22, color=PATH),
+            label(r"observed nonnull gaps about 0.03; \ compare paired test-case differences, \ not marginal SE overlap", font_size=22, color=PATH),
         ), 12.0, 0.22, [0, -2.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> And the prostate data's verdict, on the thirty men held out. The null model's error is one "
-            "point oh six. <bookmark mark='b'/> Full least squares: point five two. AIC's and CV's seven predictors: point five "
-            "two. BIC's and the one-SE rule's two: point four nine. The lasso and ridge: point five oh. "
-            "<bookmark mark='c'/> Every method but the null lands within three hundredths of the others, while thirty test "
-            "cases can only measure error to within about point one five. Chapter four's flat CV curve was telling the "
-            "truth: on these data the choice hardly matters, and a confident claim that one model is best would be noise."
+            "<bookmark mark='a'/> And the prostate data's verdict, on the thirty men held out. The null model's error"
+            " is one point oh six. <bookmark mark='b'/> Full least squares: point five two. AIC's and CV's seven "
+            "predictors: point five two. BIC's and the one-SE rule's two: point four nine. The lasso and ridge: point"
+            " five oh. <bookmark mark='c'/> The nonnull methods' observed errors differ by about three hundredths. We"
+            " now also compute paired test-case differences against full least squares: their standard errors range "
+            "from about point oh oh five to point oh six five. A large individual-error SE is not itself evidence "
+            "that two methods are equivalent. Chapter four's flat CV curve was telling the truth: on these data the "
+            "choice hardly matters, and a confident claim that one model is best would be noise."
         ) as vo:
             self.add(prostate_tag())
             vo.wait_until("a")
@@ -184,13 +197,15 @@ class Subsets(VoiceoverScene):
             label(r"only lcavol is kept every time", font_size=22, color=RES),
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> How stable are the prostate selections? Resample the sixty-seven men with replacement four "
-            "hundred times and redo the best-subset search each time. <bookmark mark='b'/> The bars show how often each "
-            "predictor is kept, blue for AIC and purple for BIC. <bookmark mark='c'/> AIC produced sixty-six different models, "
-            "and its original seven-predictor choice came back only fifteen percent of the time. <bookmark mark='d'/> BIC "
-            "produced sixty-two, and its pair came back eighteen percent of the time. <bookmark mark='e'/> Only cancer volume "
-            "is kept every time. This is Breiman's instability, measured; Nicolai Meinshausen and Peter Bühlmann's stability "
-            "selection turns such frequencies into a selection rule with error control."
+            "<bookmark mark='a'/> How stable are the prostate selections? Resample the sixty-seven men with "
+            "replacement four hundred times and redo the best-subset search each time. <bookmark mark='b'/> The bars "
+            "show how often each predictor is kept, blue for AIC and purple for BIC. <bookmark mark='c'/> AIC "
+            "produced sixty-six different models, and its original seven-predictor choice came back only fifteen "
+            "percent of the time. <bookmark mark='d'/> BIC produced sixty-two, and its pair came back eighteen "
+            "percent of the time. <bookmark mark='e'/> Only cancer volume is kept every time. This is Breiman's "
+            "instability, measured; Nicolai Meinshausen and Peter Bühlmann's stability selection uses structured "
+            "subsampling and additional assumptions to obtain error control. These ordinary bootstrap frequencies are"
+            " a descriptive stability check, not that guarantee."
         ) as vo:
             self.add(prostate_tag())
             self.play(FadeIn(A), FadeIn(nm))

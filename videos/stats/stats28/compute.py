@@ -117,6 +117,36 @@ def compute_optimism():
                  "y": y, "xx": xx, "truth": f_true(xx), "fits": fits})
 
 
+def covariance_df(fit, X, mu, sigma, R, g):
+    """Unbiased Gaussian covariance reference with independent-replicate Monte Carlo error."""
+    baseline=fit(X,mu)
+    values=[]
+    for _ in range(R):
+        error=sigma*g.standard_normal(len(mu))
+        values.append(float((fit(X,mu+error)-baseline)@error/sigma**2))
+    values=np.asarray(values)
+    return float(values.mean()),float(values.std(ddof=1)/np.sqrt(R))
+
+
+def poisson_mle(X,y):
+    """Finite Poisson MLE by safeguarded Newton steps, with an explicit score check."""
+    X,y=np.asarray(X,float),np.asarray(y,float)
+    if np.any(y<0) or y.sum()==0:raise ValueError("positive total count required for a finite intercept")
+    b=np.zeros(X.shape[1]);b[0]=np.log(y.mean())
+    def ll(beta):
+        eta=X@beta
+        if np.any(eta>700):return -np.inf
+        return float(y@eta-np.exp(eta).sum())
+    for _ in range(100):
+        mu=np.exp(X@b);score=X.T@(y-mu)
+        if np.max(np.abs(score))<1e-7:return b
+        step=np.linalg.solve(X.T@(mu[:,None]*X),score)
+        rate=1.
+        while rate>2**-30 and ll(b+rate*step)<ll(b)+1e-4*rate*float(score@step):rate*=.5
+        if rate<=2**-30:raise RuntimeError("Poisson line search stalled")
+        b=b+rate*step
+    raise RuntimeError("Poisson MLE did not converge")
+
 def compute_lassodf():
     g = rng(2007)
     X, y, _, _ = museum.prostate()
@@ -135,8 +165,8 @@ def compute_lassodf():
             nz.append(int(np.sum(np.abs(b) > 1e-8)))
             return yv.mean() + Xm @ b
 
-        df = Se.df_monte_carlo(fp, Xs, mu, sigma, 600, g)
-        out.append({"lam": lam, "df_mc": df, "mean_nonzero": float(np.mean(nz)) + 1})  # +1: the intercept
+        df,mc_se = covariance_df(fp, Xs, mu, sigma, 600, g)
+        out.append({"lam": lam, "df_mc": df, "mc_se": mc_se, "mean_nonzero": float(np.mean(nz[1:])) + 1})  # +1: the intercept
     return nest({"rows": out, "sigma": sigma})
 
 
@@ -148,21 +178,15 @@ def compute_tic():
     age = (W.age[smp] - 50) / 10
     X = np.column_stack([np.ones(len(y)), age])
     # Poisson MLE
-    b = np.zeros(2)
-    for _ in range(50):
-        mu = np.exp(X @ b)
-        b = b + np.linalg.solve(X.T @ (mu[:, None] * X), X.T @ (y - mu))
-    mu = np.exp(X @ b)
+    b=poisson_mle(X,y)
+    mu=np.exp(X@b)
     scores = (y - mu)[:, None] * X
     H = -(X.T @ (mu[:, None] * X))
     pen_p = Se.tic_penalty(scores, H)
     # the same for data that really are Poisson
     yp = rng(29).poisson(mu)
-    bp = b.copy()
-    for _ in range(50):
-        m2 = np.exp(X @ bp)
-        bp = bp + np.linalg.solve(X.T @ (m2[:, None] * X), X.T @ (yp - m2))
-    m2 = np.exp(X @ bp)
+    bp=poisson_mle(X,yp)
+    m2=np.exp(X@bp)
     pen_true = Se.tic_penalty((yp - m2)[:, None] * X, -(X.T @ (m2[:, None] * X)))
     return nest({"k": 2, "tic_visits": pen_p, "tic_poisson": pen_true, "mean": float(y.mean()), "var": float(y.var())})
 
@@ -243,16 +267,24 @@ def compute_prostate():
     best_cv = int(np.argmin(cv_mean))
     one_se = int(min(k for k in range(len(bs)) if cv_mean[k] <= cv_mean[best_cv] + cv_se[best_cv]))
 
+    heldout_errors={}
     def test_err(cols):
         Xd = np.column_stack([np.ones(n), Ztr[:, cols]])
         coef, _ = ols(Xd, ytr)
-        return float(np.mean((yte - np.column_stack([np.ones(len(yte)), Zte[:, cols]]) @ coef) ** 2))
+        errors=(yte-np.column_stack([np.ones(len(yte)),Zte[:,cols]])@coef)**2
+        heldout_errors[tuple(cols)]=errors
+        return float(errors.mean())
 
     picks = {"aic": int(np.argmin([c["aic"] for c in crit])), "bic": int(np.argmin([c["bic"] for c in crit])), "cv": best_cv,
              "cv1se": one_se}
     tests = {k: {"size": v, "subset": crit[v]["subset"], "test": test_err(bs[v]["subset"])} for k, v in picks.items()}
     tests["full"] = {"size": 8, "subset": names, "test": test_err(list(range(8)))}
-    tests["null"] = {"size": 0, "subset": [], "test": float(np.mean((yte - ytr.mean()) ** 2))}
+    tests["null"] = {"size": 0, "subset": [], "test": test_err([])}
+    for name,record in tests.items():
+        cols=tuple(list(range(8)) if name=="full" else ([] if name=="null" else bs[picks[name]]["subset"]))
+        errors=heldout_errors[cols]
+        record["test_se"]=float(errors.std(ddof=1)/np.sqrt(len(yte)))
+        record["test_errors"]=errors
     # lasso and ridge tuned by the same folds
     lams = np.geomspace(0.002, 1.0, 40)
 
@@ -261,9 +293,12 @@ def compute_prostate():
         for te_idx in folds:
             tr_idx = np.setdiff1d(np.arange(n), te_idx)
             ym = ytr[tr_idx].mean()
+            fold_mean=Xtr[tr_idx].mean(0);fold_sd=Xtr[tr_idx].std(0)
+            fold_train=(Xtr[tr_idx]-fold_mean)/fold_sd
+            fold_test=(Xtr[te_idx]-fold_mean)/fold_sd
             for i, lam in enumerate(lams):
-                b = fit(Ztr[tr_idx], ytr[tr_idx] - ym, lam)
-                e[i] += np.mean((ytr[te_idx] - ym - Ztr[te_idx] @ b) ** 2)
+                b = fit(fold_train, ytr[tr_idx] - ym, lam)
+                e[i] += np.mean((ytr[te_idx] - ym - fold_test @ b) ** 2)
         return e / 10
 
     out_pen = {}
@@ -272,7 +307,14 @@ def compute_prostate():
         lam = float(lams[int(np.argmin(e))])
         b = fit(Ztr, ytr - ytr.mean(), lam)
         out_pen[name] = {"lam": lam, "coef": b, "test": float(np.mean((yte - ytr.mean() - Zte @ b) ** 2)),
-                         "nonzero": int(np.sum(np.abs(b) > 1e-8))}
+                         "nonzero": int(np.sum(np.abs(b) > 1e-8)),
+                         "test_errors":(yte-ytr.mean()-Zte@b)**2}
+        out_pen[name]["test_se"]=float(np.std(out_pen[name]["test_errors"],ddof=1)/np.sqrt(len(yte)))
+    reference=np.asarray(tests["full"]["test_errors"])
+    for record in list(tests.values())+list(out_pen.values()):
+        delta=np.asarray(record["test_errors"])-reference
+        record["paired_difference_full"]=float(delta.mean())
+        record["paired_se_full"]=float(delta.std(ddof=1)/np.sqrt(len(delta)))
     return nest({"names": names, "crit": crit, "cv_mean": cv_mean, "cv_se": cv_se, "picks": picks, "tests": tests,
                  "pen": out_pen, "n_train": n, "n_test": int(len(yte))})
 
@@ -307,8 +349,9 @@ def compute_cv():
 
 def compute_loo():
     lab, y, s = museum.eight_schools()
-    grid = np.linspace(0, 60, 3001)
-    h = B.hier_normal(y, s, grid)
+    from videos.stats.stats26.compute import hier_normal
+    h=hier_normal(y,s)
+    grid=h.tau
     g = rng(2017)
     S = 8000
     dr = h.draws(S, g)
@@ -317,71 +360,101 @@ def compute_loo():
     pm, pse = np.sum(w * y) / w.sum(), 1 / np.sqrt(w.sum())
     mu = g.normal(pm, pse, S)
     L_c = stats.norm.logpdf(y[None, :], mu[:, None], s[None, :])
-    th_np = y[None, :] + s[None, :] * g.standard_normal((S, 8))  # flat priors, each school alone
+    prior_sd=100.
+    separate_var=1/(1/s**2+1/prior_sd**2)
+    separate_mean=separate_var*y/s**2
+    th_np=separate_mean+np.sqrt(separate_var)*g.standard_normal((S,8))
     L_n = stats.norm.logpdf(y[None, :], th_np, s[None, :])
     out = {}
     for name, L in (("hierarchical", L_h), ("pooled", L_c), ("separate", L_n)):
         lo = Se.psis_loo(L)
         wa = Se.waic(L)
         out[name] = {"elpd": lo["elpd"], "se": lo["se"], "p_loo": lo["p_loo"], "khat": lo["khat"], "waic": wa["elpd"],
-                     "p_waic": wa["p_waic"]}
+                     "p_waic": wa["p_waic"], "elpd_i":lo["elpd_i"]}
     # exact leave-one-school-out for the hierarchical model
     exact = 0.0
+    exact_i=[]
     for j in range(8):
         m = np.arange(8) != j
-        hj = B.hier_normal(y[m], s[m], grid)
+        hj=hier_normal(y[m],s[m],grid)
         dens = hj.post_tau
         # predictive for a new school: y_j ~ N(mu_hat(tau), V_mu(tau) + tau^2 + s_j^2)
         pred = stats.norm.pdf(y[j], hj.mu_hat, np.sqrt(hj.v_mu + grid ** 2 + s[j] ** 2))
-        exact += np.log(np.trapezoid(dens * pred, grid))
+        point=float(np.log(np.trapezoid(dens*pred,grid)))
+        exact_i.append(point);exact+=point
     out["hierarchical"]["exact"] = float(exact)
+    out["hierarchical"]["exact_i"]=exact_i
     # exact LOO for complete pooling: the other seven's pooled estimate
     ex_c = 0.0
+    exact_c=[]
     for j in range(8):
         m = np.arange(8) != j
         ww = w[m]
         pmj, psej = np.sum(ww * y[m]) / ww.sum(), 1 / np.sqrt(ww.sum())
-        ex_c += stats.norm.logpdf(y[j], pmj, np.sqrt(psej ** 2 + s[j] ** 2))
+        point=float(stats.norm.logpdf(y[j],pmj,np.sqrt(psej**2+s[j]**2)))
+        exact_c.append(point);ex_c+=point
     out["pooled"]["exact"] = float(ex_c)
+    out["pooled"]["exact_i"]=exact_c
+    separate_exact=stats.norm.logpdf(y,0,np.sqrt(prior_sd**2+s**2))
+    out["separate"]["exact"]=float(separate_exact.sum())
+    out["separate"]["prior_sd"]=prior_sd
+    delta=np.asarray(exact_c)-np.asarray(exact_i)
+    out["comparison"]={"pooled_minus_hierarchical":float(delta.sum()),"paired_se":float(np.sqrt(len(y)*np.var(delta,ddof=1)))}
     out["labels"] = lab
     return nest(out)
 
 
+def mixture_log_evidence_ratio(x,refinement=1):
+    """Uniform prior a in [0,1], b in [-2,2], with a grid resolving both singular axes."""
+    x=np.asarray(x,float)
+    A=np.r_[0.,np.geomspace(1e-6,1.,240*refinement)]
+    positive=np.geomspace(1e-6,2.,180*refinement)
+    Bg=np.r_[-positive[::-1],0.,positive]
+    ll=np.empty((len(A),len(Bg)))
+    for j,b in enumerate(Bg):
+        e=np.expm1(b*x-.5*b*b)
+        ll[:,j]=np.log1p(A[:,None]*e).sum(1)
+    shift=ll.max()
+    z=np.trapezoid(np.trapezoid(np.exp(ll-shift),Bg,axis=1),A)/4
+    return float(np.log(z)+shift)
+
+
+def regular_log_evidence_ratio(x):
+    """Full declared prior: mean U(-2,2), log SD U(-1,1); integrate mean analytically."""
+    x=np.asarray(x,float);n=len(x);xb=x.mean();sse=np.sum((x-xb)**2)
+    def log_integrand(logsd):
+        sd=np.exp(logsd)
+        a,b=np.sqrt(n)*np.array([-2-xb,2-xb])/sd
+        mass=stats.norm.cdf(b)-stats.norm.cdf(a)
+        if mass<=0:return -np.inf
+        return float(-(n-1)*logsd-.5*sse/sd**2+.5*np.sum(x*x)+.5*np.log(2*np.pi/n)+np.log(mass)-np.log(8))
+    mode=optimize.minimize_scalar(lambda t:-log_integrand(t),bounds=(-1,1),method='bounded')
+    shift=max(log_integrand(mode.x),log_integrand(-1),log_integrand(1))
+    value=integrate.quad(lambda t:np.exp(log_integrand(t)-shift),-1,1,epsabs=1e-11,epsrel=1e-10)[0]
+    return float(np.log(value)+shift)
+
+
 def compute_rlct():
-    """p(x | a, b) = (1 - a) N(0, 1) + a N(b, 1), a ~ U(0, 1), b ~ U(-2, 2); the truth is N(0, 1) (a b = 0).  The
-    free energy F_n = -log Z_n + sum log p(x | truth) grows like lambda log n with lambda = 1/2, against d/2 = 1 for a
-    regular two-parameter model."""
-    g = rng(2010)
-    ns = [30, 100, 300, 1000, 3000, 10000]
-    A = np.linspace(0, 1, 201)
-    Bg = np.linspace(-2, 2, 241)
-    out = {"ns": ns, "F": [], "F_regular": []}
+    """Finite-data free-energy comparisons, with full-prior and grid-refinement checks."""
+    g=rng(2010);ns=[30,100,300,1000,3000,10000]
+    out={"ns":ns,"F":[],"F_regular":[],"mc_se":[],"mc_se_regular":[],"refinement":[]}
     for n in ns:
-        Fs, Fr = [], []
-        for _ in range(6):
-            x = g.standard_normal(n)
-            # log likelihood ratio on the grid: sum_i log(1 - a + a exp(b x_i - b^2/2)), one b at a time
-            ll = np.empty((len(A), len(Bg)))
-            for j, b in enumerate(Bg):
-                e = np.exp(b * x - 0.5 * b * b) - 1.0
-                ll[:, j] = np.sum(np.log1p(A[:, None] * e[None, :]), axis=1)
-            mx = ll.max()
-            Z = np.trapezoid(np.trapezoid(np.exp(ll - mx), Bg, axis=1), A) / 4.0  # uniform prior density 1/4
-            Fs.append(-(np.log(Z) + mx))
-            # a regular two-parameter model for comparison: N(m, s^2) with m ~ U(-2, 2), log s ~ U(-1, 1)
-            ms = np.linspace(-0.6, 0.6, 301)
-            ls = np.linspace(-0.4, 0.4, 301)
-            M, LS = np.meshgrid(ms, ls, indexing="ij")
-            xb, x2 = x.mean(), np.mean(x ** 2)
-            llr = n * (-LS - 0.5 * (x2 - 2 * M * xb + M ** 2) / np.exp(2 * LS)) + 0.5 * n * x2
-            mr = llr.max()
-            Zr = np.trapezoid(np.trapezoid(np.exp(llr - mr), ls, axis=1), ms) / (4.0 * 2.0)
-            Fr.append(-(np.log(Zr) + mr))
-        out["F"].append(float(np.mean(Fs)))
-        out["F_regular"].append(float(np.mean(Fr)))
-    ln = np.log(ns)
-    out["slope"] = float(np.polyfit(ln, out["F"], 1)[0])
-    out["slope_regular"] = float(np.polyfit(ln, out["F_regular"], 1)[0])
+        Fs,Fr=[],[]
+        for replication in range(6):
+            x=g.standard_normal(n)
+            value=mixture_log_evidence_ratio(x)
+            Fs.append(-value);Fr.append(-regular_log_evidence_ratio(x))
+            if replication==0:
+                fine=mixture_log_evidence_ratio(x,2)
+                difference=abs(value-fine)
+                if difference>.005:raise RuntimeError(f"mixture quadrature refinement discrepancy: {difference}")
+                out["refinement"].append({"n":n,"log_evidence_difference":difference})
+        out["F"].append(float(np.mean(Fs)));out["F_regular"].append(float(np.mean(Fr)))
+        out["mc_se"].append(float(np.std(Fs,ddof=1)/np.sqrt(6)))
+        out["mc_se_regular"].append(float(np.std(Fr,ddof=1)/np.sqrt(6)))
+        print(f"RLCT n={n} completed",flush=True)
+    ln=np.log(ns)
+    out["slope"]=float(np.polyfit(ln,out["F"],1)[0]);out["slope_regular"]=float(np.polyfit(ln,out["F_regular"],1)[0])
     return nest(out)
 
 
@@ -419,18 +492,10 @@ def compute_averaging():
             y = np.where(z, g.normal(-2, 1, n), g.normal(2, 1, n))
             yt = np.where(g.random(2000) < 0.5, g.normal(-2, 1, 2000), g.normal(2, 1, 2000))
             le, lpd, pred = [], [], []
-            for c in (-2.0, 2.0):
-                # model k: y ~ N(c_k, 1), its mean all but fixed (prior SD 0.01): two candidates, neither true
-                tau2 = 1e-4
-                v = 1 / (1 / tau2 + n)
-                m = v * (c / tau2 + y.sum())
-                le.append(stats.multivariate_normal(np.full(n, c), np.eye(n) + tau2).logpdf(y) if n <= 200 else
-                          _log_evidence_normal(y, c, tau2))
-                # LOO predictive densities
-                vi = 1 / (1 / tau2 + n - 1)
-                mi = vi * (c / tau2 + y.sum() - y)
-                lpd.append(stats.norm.logpdf(y, mi, np.sqrt(vi + 1)))
-                pred.append(stats.norm.pdf(yt, m, np.sqrt(v + 1)))
+            for c in (-2.0,2.0):
+                le.append(float(stats.norm.logpdf(y,c,1).sum()))
+                lpd.append(stats.norm.logpdf(y,c,1))  # fixed model: no refit changes its predictive
+                pred.append(stats.norm.pdf(yt,c,1))
             wbma = Se.bma_weights(le)
             wst = Se.stacking_weights(np.column_stack(lpd))
             pred = np.array(pred)
@@ -438,7 +503,7 @@ def compute_averaging():
             ws.append(wst[0])
             sb.append(np.mean(np.log(wbma @ pred)))
             ss.append(np.mean(np.log(wst @ pred)))
-            sbest.append(max(np.mean(np.log(pred[0])), np.mean(np.log(pred[1]))))
+            sbest.append(float(np.mean(np.log(pred[int(np.argmax(le))]))))
         res["bma"].append(float(np.mean(np.abs(np.array(wb) - 0.5)) + 0.5))
         res["stack"].append(float(np.mean(np.abs(np.array(ws) - 0.5)) + 0.5))
         res["score_bma"].append(float(np.mean(sb)))
@@ -467,7 +532,7 @@ def compute_subsets():
     beta = np.zeros(p)
     beta[np.linspace(0, p - 1, s).astype(int)] = 1.0
     snrs = [0.05, 0.25, 1.0, 6.0]
-    out = {"snrs": snrs, "best": [], "forward": [], "lasso": []}
+    out = {"snrs":snrs,"best":[],"forward":[],"lasso":[],"mc_se":{k:[] for k in ["best","forward","lasso"]},"reps":25,"metric":"excess prediction risk divided by signal variance"}
     for snr in snrs:
         sigma = np.sqrt(beta @ Sig @ beta / snr)
         rr = {"best": [], "forward": [], "lasso": []}
@@ -506,6 +571,7 @@ def compute_subsets():
             rr["lasso"].append(risk(*best_b))
         for k in rr:
             out[k].append(float(np.mean(rr[k])))
+            out["mc_se"][k].append(float(np.std(rr[k],ddof=1)/np.sqrt(len(rr[k]))))
     return nest(out)
 
 
@@ -636,7 +702,7 @@ def compute_prostate_pit():
         pit = stats.t.cdf(r, nu)
         lpd = stats.t.logpdf(r, nu) - np.log(scale)
         out[key] = {"pit": pit, "hist": np.histogram(pit, np.linspace(0, 1, 6))[0], "lpd": float(np.mean(lpd)),
-                    "ks_p": float(stats.kstest(pit, "uniform").pvalue), "k": k, "sd": float(np.sqrt(np.mean(scale ** 2)))}
+                    "ks_distance":float(stats.kstest(pit,"uniform").statistic), "ks_scope":"descriptive only; LOO PITs share fitted data, so the iid KS p-value is not calibrated", "k": k, "sd": float(np.sqrt(np.mean(scale ** 2)))}
     return nest(out)
 
 

@@ -30,6 +30,9 @@ dependencies = [
     "pyarrow>=15",
 ]
 
+[project.optional-dependencies]
+statistics-qa = ["pytest>=8", "pytest-subtests>=0.14", "statsmodels>=0.14", "pandas>=2.2", "scikit-learn>=1.5"]
+
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"

@@ -44,6 +44,9 @@ class Selective(VoiceoverScene):
             "<bookmark mark='d'/> In ninety-five percent of a thousand repeats. Every criterion in this part selects; none of "
             "them makes the usual tests and intervals of the selected model valid."
         ) as vo:
+            intro=label('A selection record changes the interpretation of ordinary tests',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -73,11 +76,12 @@ class Selective(VoiceoverScene):
             label(rf"kept estimates: \ $E|\hat\beta_1| = {mean_abs:.2f}$, \ {mean_abs / BETA:.1f} times the truth", font_size=22),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Why, in the simplest case. A coefficient whose true value is point oh five is estimated with "
-            "standard error point one. <bookmark mark='b'/> Roughly, AIC keeps a predictor when its t-statistic exceeds root "
-            "two in size: the red tails. <bookmark mark='c'/> That happens about a fifth of the time. <bookmark mark='d'/> "
-            "And when it does, the estimate is, on average, almost four times the truth in size. Only the lucky "
-            "overestimates survive selection: the winner's curse."
+            "<bookmark mark='a'/> Why, in the simplest case. A coefficient whose true value is point oh five is "
+            "estimated with standard error point one. <bookmark mark='b'/> Roughly, AIC keeps a predictor when its "
+            "t-statistic exceeds root two in size: the red tails. <bookmark mark='c'/> That happens about a fifth of "
+            "the time. <bookmark mark='d'/> And when it does, the estimate is, on average, almost four times the "
+            "truth in size. Only estimates with extreme magnitudes survive, including some with the wrong sign: the "
+            "winner's curse."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A), Create(full), Create(truth))
@@ -92,7 +96,7 @@ class Selective(VoiceoverScene):
         self.clear_scene()
 
     def conditional(self):
-        t = stats.t.ppf(0.975, 89)
+        t = stats.norm.ppf(0.975)
         pk = stats.norm.sf(KEEP, BETA, SE) + stats.norm.cdf(-KEEP, BETA, SE)
 
         def cover_and_keep():
@@ -114,13 +118,17 @@ class Selective(VoiceoverScene):
         whys = [why(r"averaged over all data sets"), why(r"only the data sets where $x_1$ is reported"),
                 why(r"normal calculation: \ the Board's 75\% next"), why(r"Benjamini \& Yekutieli (2005); \ Fithian et al.\ (2014)")]
         with self.voiceover(
-            "<bookmark mark='a'/> The usual interval covers ninety-five percent of the time, averaged over all data sets. "
-            "<bookmark mark='b'/> But it is only reported when the predictor is kept. Given that, its coverage is the chance of "
-            "covering and being kept, over the chance of being kept. <bookmark mark='c'/> A normal calculation gives "
-            "seventy-seven percent. <bookmark mark='d'/> The relevant guarantee is coverage conditional on the selection that "
-            "led us to look, the idea Yoav Benjamini and Daniel Yekutieli formalized for selected parameters, and William "
-            "Fithian, Dennis Sun and Jonathan Taylor for selected models."
+            "<bookmark mark='a'/> The usual interval covers ninety-five percent of the time, averaged over all data "
+            "sets. <bookmark mark='b'/> But it is only reported when the predictor is kept. Given that, its coverage "
+            "is the chance of covering and being kept, over the chance of being kept. <bookmark mark='c'/> A normal "
+            "calculation gives about seventy-six percent for this known-standard-error normal example. <bookmark "
+            "mark='d'/> The relevant guarantee is coverage conditional on the selection that led us to look, the idea"
+            " Yoav Benjamini and Daniel Yekutieli formalized for selected parameters, and William Fithian, Dennis Sun"
+            " and Jonathan Taylor for selected models."
         ) as vo:
+            intro=label('Reported intervals need coverage conditional on reporting',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -152,16 +160,18 @@ class Selective(VoiceoverScene):
     def split(self):
         rows = fit_rows(VGroup(
             label(r"splitting: \ select on one half, \ infer on the other \ (Cox 1975)", font_size=24, color=HIT),
-            label(r"valid, \ whatever the selection rule, \ even a person looking at plots", font_size=24, color=HIT),
+            label(r"valid held-out inference needs its model assumptions and a well-defined target", font_size=24, color=HIT),
             label(r"the price: \ half the data for each task, \ and a random answer", font_size=24, color=RES),
             label(r"the selection share: \ about the same, \ with half the data", font_size=24, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Splitting is the oldest fix, from David Cox in 1975. <bookmark mark='b'/> It is valid for any "
-            "selection procedure at all, including an analyst staring at plots, because the inferential half never saw the "
-            "choice being made. <bookmark mark='c'/> The price is power, since each task gets half the data, and an answer that "
-            "depends on the random split. <bookmark mark='d'/> Here x one was kept about as often from half the data as from "
-            "all of it, but its intervals are wider by a factor of about root two."
+            "<bookmark mark='a'/> Splitting is the oldest fix, from David Cox in 1975. <bookmark mark='b'/> With a "
+            "valid inferential model and a well-defined target, an untouched independent half supports inference "
+            "regardless of the selection rule on the first half. Changing the covariates can change the target "
+            "coefficient; the Board's independent predictors avoid that population-target problem. <bookmark "
+            "mark='c'/> The price is power, since each task gets half the data, and an answer that depends on the "
+            "random split. <bookmark mark='d'/> Here x one was kept about as often from half the data as from all of "
+            "it, but its intervals are wider by a factor of about root two."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -172,20 +182,26 @@ class Selective(VoiceoverScene):
         rows = [
             cmath(r"\text{PoSI}", r":", r"\text{widen to cover every model you might choose}", font_size=30),
             cmath(r"\text{polyhedral}", r":", r"\text{condition on the selection event exactly}", font_size=30),
-            cmath(r"\text{data fission}", r":", r"y = f(y) + g(y), \ \text{independent parts}", font_size=30),
+            cmath(r"\text{data fission}", r":", r"\text{auxiliary randomness; \ model-specific information splitting}", font_size=30),
             cmath(r"\text{Part 56}", r":", r"\text{all of them, \ on the Board}", font_size=30),
         ]
         rows[3][2].set_color(PATH)
         whys = [why(r"Berk, Brown, Buja, Zhang \& Zhao (2013)"), why(r"Lee, Sun, Sun \& Taylor (2016)"),
                 why(r"Leiner, Duan, Wasserman \& Ramdas (2023)"), why(r"selective inference in depth")]
         with self.voiceover(
-            "<bookmark mark='a'/> Three modern fixes use all the data. Richard Berk and colleagues' PoSI widens intervals "
-            "enough to cover simultaneously over every model that could have been chosen. <bookmark mark='b'/> Jason Lee, "
-            "Dennis Sun, Yuekai Sun and Jonathan Taylor showed that for the lasso and stepwise methods the selection event is a "
-            "polyhedron, and conditioned on it exactly. <bookmark mark='c'/> Data fission splits each observation, rather than "
-            "the data set, into two independent noisy parts. <bookmark mark='d'/> Part 56 builds all three and puts them on the "
-            "Board."
+            "<bookmark mark='a'/> Three modern fixes use all the data. Richard Berk and colleagues' PoSI widens "
+            "intervals enough to cover simultaneously over every model that could have been chosen. <bookmark "
+            "mark='b'/> Jason Lee, Dennis Sun, Yuekai Sun and Jonathan Taylor showed that for suitable fixed-tuning "
+            "lasso and forward-stepwise selection records, conditioning on the appropriate signs and choices yields "
+            "polyhedral events under a Gaussian model. Data-dependent tuning needs additional treatment. <bookmark "
+            "mark='c'/> Data fission uses auxiliary randomness and an appropriate observation model to separate "
+            "selection and inference information. Independent components require the corresponding construction and "
+            "assumptions; they are not arbitrary deterministic pieces of an observation. <bookmark mark='d'/> Part 56"
+            " builds all three and puts them on the Board."
         ) as vo:
+            intro=label('Post-selection corrections require their statistical assumptions',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
