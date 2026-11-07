@@ -6,15 +6,14 @@ from explainer.quant import *  # noqa: F403
 from videos.quant.quant16.common import BAD, GOOD, OPT, PART, illustration, load, predict, axes, data_range, pause_card, flat_camera
 
 VALIDATION = [
-    (r"\texttt{mc\_call}, \texttt{asian\_control}, \texttt{stratified\_call}", r"Black--Scholes; Kemna--Vorst", r"3 s.e."),
-    (r"\texttt{normals}, \texttt{brownian\_bridge}, \texttt{path\_matrix}", r"$LL^\top = \min(t_i, t_j)$", r"$10^{-12}$"),
-    (r"\texttt{mlmc}, \texttt{mlmc\_run}", r"Black--Scholes; Milstein's $\beta \ge 1.7$", r"3 s.e."),
-    (r"\texttt{lsm\_put}, \texttt{andersen\_broadie\_put}, \texttt{bermudan\_tree}", r"European $<$ Bermudan $<$ American",
-     r"bracket"),
-    (r"\texttt{greeks\_three\_ways}, \texttt{aad\_greeks}, \texttt{aad\_basket}", r"closed-form Greeks; bumps", r"$10^{-3}$"),
-    (r"\texttt{fd\_european}, \texttt{fd\_american\_put}, \texttt{fd\_american\_penalty}", r"Black--Scholes; the tree",
-     r"0.02"),
-    (r"\texttt{heston\_adi}, \texttt{carr\_madan}, \texttt{cos\_price}, \texttt{lewis\_call}", r"each other", r"$10^{-8}$"),
+    (r"Monte Carlo and variance reduction", r"selected Black--Scholes checks: $4$ s.e.; geometric Asian: $3$ s.e.; finite-seed dispersion tests"),
+    (r"Path factors and discrepancy", r"$\max|LL^\top-C|<10^{-12}$ on the test grid; one-dimensional discrepancy reference"),
+    (r"Multilevel estimator", r"fixed-run price check: $3$ s.e. plus $0.01$; fitted Milstein variance exponent $\ge1.7$"),
+    (r"Stopping policies and bounds", r"selected tree/order comparisons with explicit Monte Carlo and finite-grid allowances"),
+    (r"Greeks and adjoints", r"selected delta disagreement $<0.02$; AAD/bump relative allowance $1\%$; basket delta $<10^{-3}$"),
+    (r"ADI, FFT and Lewis/COS", r"selected ADI difference $<0.03$, FFT $<0.01$, Lewis/COS agreement $<10^{-8}$"),
+    (r"American penalty solver", r"selected grid differs from the 2,000-step tree by less than $0.02$; finite boundary check"),
+    (r"Toy amplitude and interpolation", r"20-run toy amplitude RMSE comparison; polynomial interpolation tolerance $10^{-10}$"),
 ]
 
 
@@ -46,21 +45,14 @@ class Hardware(VoiceoverScene):
                    color=GREY_A).next_to(cells, UP, buff=0.12)
         order = np.random.default_rng(1).permutation(len(cells))
         reg = VGroup(
-            history_card(r"margin", r"ISDA SIMM", r"Initial margin on uncleared derivatives is computed from delta, vega and "
-                         r"curvature sensitivities, risk class by risk class: thousands of Greeks per counterparty, every "
-                         r"day.", color=QC.FIRM, width=6.2, font_size=18),
-            history_card(r"capital", r"Basel's FRTB (2019)", r"The standardised approach to market-risk capital is a "
-                         r"sensitivities-based method: the same Greeks again, for the regulator.", color=QC.FIRM, width=6.2,
+            history_card(r"margin", r"ISDA SIMM", r"A sensitivity-based model for initial margin on covered non-cleared derivatives. Version 2.9+2606 "
+                         r"was published in 2026; publication does not establish every firm's implementation date.", color=QC.FIRM, width=6.2, font_size=18),
+            history_card(r"capital", r"Basel's FRTB (2019)", r"The market-risk standardised approach includes a sensitivities-based method, plus default-risk "
+                         r"and residual-risk components. Applicability and implementation dates depend on jurisdiction.", color=QC.FIRM, width=6.2,
                          font_size=18),
         ).arrange(RIGHT, buff=0.3, aligned_edge=UP).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Where does all this run? Every night a bank reprices its whole book under thousands of scenarios: for "
-            "risk limits, for capital, and for the valuation adjustments of Part twenty-one, which simulate every "
-            "counterparty's exposure years ahead. Trades down, scenarios across; each cell is a pricing. "
-            "<bookmark mark='a'/> And it is not only prices. Initial margin on uncleared derivatives, under ISDA's "
-            "standard model, is computed from delta, vega and curvature sensitivities. The Basel Committee's 2019 "
-            "market-risk rules compute standardised capital from sensitivities too. A large bank needs millions of "
-            "Greeks a day, which is exactly the market for adjoint differentiation."
+            "Banks use large pricing workloads for exposure, limits, margin and capital, with schedules and approximations varying by firm and purpose. The grid is an illustration of trades crossed with scenarios, not a measured bank production run. <bookmark mark='a'/> ISDA SIMM uses sensitivities for covered non-cleared initial margin. Its published methodology version does not imply every firm's current implementation. Basel's market-risk standardized approach includes a sensitivities-based component as well as default and residual-risk charges. These workloads help explain demand for efficient gradients, while operational and regulatory scope must be checked for the actual institution."
         ) as vo:
             self.play(FadeIn(cells), FadeIn(rl), FadeIn(cl))
             self.play(LaggedStart(*[cells[i].animate.set_fill(opacity=0.85) for i in order], lag_ratio=0.004, run_time=5))
@@ -81,11 +73,10 @@ class Hardware(VoiceoverScene):
                       width=6.3, font_size=18)
         c = history_card(r"benchmark", r"STAC-A2", r"Designed by bank quants with STAC: Monte Carlo Greeks of a multi-asset, "
                          r"path-dependent Heston option with early exercise. Chapters 2--11 in one test; results are "
-                         r"vendor-run.", color=QC.IDEA, width=6.3, font_size=18)
+                         r"reported for specific implementations, including STAC-audited results.", color=QC.IDEA, width=6.3, font_size=18)
         d = history_card(r"open and cleared", r"QuantLib, ORE, the OCC", r"QuantLib (open source since 2000) ships Sobol "
-                         r"paths with a Brownian bridge (chapter 6); ORE (2016, built on QuantLib) adds XVA, with adjoint "
-                         r"sensitivities and GPU runs in recent releases. The Options Clearing Corporation sets margin with a "
-                         r"Monte Carlo model, STANS.", color=QC.IDEA, width=6.3, font_size=18)
+                         r"paths with a Brownian bridge; ORE builds valuation and risk analytics on QuantLib. The OCC's official "
+                         r"methodology describes STANS as a full-portfolio Monte Carlo margin system, introduced in 2006.", color=QC.IDEA, width=6.3, font_size=18)
         grid = VGroup(VGroup(a, b).arrange(RIGHT, buff=0.3, aligned_edge=UP),
                       VGroup(c, d).arrange(RIGHT, buff=0.3, aligned_edge=UP)).arrange(DOWN, buff=0.25)
         if grid.height > 7.3:
@@ -116,21 +107,23 @@ class Hardware(VoiceoverScene):
 
     def machine(self, par, race):
         n = par["n"]
-        items = [(r"Python loop", par["t_loop"], BAD), (r"numpy, float64", par["t_numpy"], OPT),
+        items = [(r"loop, 10-fold extrapolation", par["t_loop"], BAD), (r"numpy, float64", par["t_numpy"], OPT),
                  (r"numpy, float32", par["t_float32"], QC.THETA)] + \
                 [(rf"{w} process{'es' if w != '1' else ''} (draw + price)", t, GOOD) for w, t in par["procs"].items()]
-        base = par["t_gen_numpy"]
-        g = axes([-3.5, 2.5], [0, len(items) + 1], x_length=7.2, y_length=4.4, xlabel=r"seconds for $10^6$ payoffs (log)",
+        base = par["procs"]["1"]
+        xr = data_range([np.log10(t) for _, t, _ in items])
+        baseline = xr[0]
+        g = axes(xr, [0, len(items) + 1], x_length=5.2, y_length=4.4, xlabel=r"recorded seconds (log); row workloads differ",
                  xticks=[-3, -2, -1, 0, 1, 2], xfmt=lambda v: f"10^{{{int(v)}}}", font_size=15).to_edge(LEFT, buff=2.6)
         g.shift(DOWN * 0.3)
         ax = g.ax
         bars = VGroup()
         for i, (nm, t, col) in enumerate(items):
             y = len(items) - i
-            x1 = np.clip(np.log10(t), -3.5, 2.5)
-            bars.add(VGroup(Rectangle(width=max(ax.c2p(x1, 0)[0] - ax.c2p(-3.5, 0)[0], 0.02), height=0.42, stroke_width=0,
-                                      fill_color=col, fill_opacity=0.85).move_to(ax.c2p(-3.5, y), aligned_edge=LEFT),
-                            label(nm, font_size=17, color=col).next_to(ax.c2p(-3.5, y), LEFT, buff=0.15),
+            x1 = np.log10(t)
+            bars.add(VGroup(Rectangle(width=max(ax.c2p(x1, 0)[0] - ax.c2p(baseline, 0)[0], 0.02), height=0.42, stroke_width=0,
+                                      fill_color=col, fill_opacity=0.85).move_to(ax.c2p(baseline, y), aligned_edge=LEFT),
+                            label(nm, font_size=17, color=col).next_to(ax.c2p(baseline, y), LEFT, buff=0.15),
                             MathTex(rf"{t:.3g}\,\text{{s}}", font_size=20, color=GREY_A).next_to(ax.c2p(x1, y), RIGHT, buff=0.1)))
         p = par["procs"]
         sp4 = base / p["4"] if "4" in p else float("nan")
@@ -142,11 +135,11 @@ class Hardware(VoiceoverScene):
             MathTex(rf"\text{{loop}} \div \text{{numpy}}:\ {par['t_loop'] / par['t_numpy']:,.0f}\times".replace(",", "{,}"),
                     font_size=26, color=OPT),
             MathTex(rf"4\ \text{{processes}}:\ {sp4:.1f}\times\ \text{{one}}", font_size=26, color=GOOD),
-            MathTex(rf"\text{{COS vs Monte Carlo's best:}}\ {speed:,.0f}\times".replace(",", "{,}"), font_size=26,
-                    color=QC.HOUSE),
+            wrapped_label(rf"COS example: {cos['time'] * 1000:.3g} ms; absolute numerical-reference difference {cos['err']:.2g}; "
+                          r"not matched to MC total error", 4.0, 21, QC.HOUSE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.35).shift(UP * 1.4)
-        loadtxt = wrapped_label(rf"this machine, {par['date']}: {par['cores']} cores shared with other jobs (load "
-                                rf"{par['load'][0]:.0f} at the time); best of three", 3.6, 16, GREY_B)
+        loadtxt = wrapped_label(rf"recorded {par['date']}: host reports {par['cores']} logical CPUs; container quota is 4 CPU equivalents. "
+                                r"Best of 2 loop runs, 5 NumPy runs, 3 draw/process runs. Vector rows reuse normals; pool rows draw and price.", 4.0, 19, GREY_B)
         loadtxt.next_to(side, DOWN, buff=0.3).align_to(side, LEFT)
         q = predict(r"Monte Carlo is embarrassingly parallel. Is a Longstaff--Schwartz pricing?", width=4.0,
                     font_size=18).to_corner(DR, buff=0.25)
@@ -156,13 +149,7 @@ class Hardware(VoiceoverScene):
         verdict = ("barely helps here, because the machine is shared and already busy" if sp4 < 1.5 else
                    "helps, though less than the four cores promise")
         with self.voiceover(
-            "What does hardware buy on this machine? One million payoffs, priced six ways. A Python loop over the "
-            f"paths takes {par['t_loop']:.1f} seconds. <bookmark mark='a'/> The same arithmetic as one vectorised "
-            f"numpy line takes {par['t_numpy'] * 1e3:.0f} milliseconds, about {par['t_loop'] / par['t_numpy']:,.0f} "
-            f"times faster: the first speed-up of every quant is to stop looping. {f32} <bookmark mark='b'/> Splitting the paths over four processes, each with its own random stream, "
-            f"{verdict}. <bookmark mark='c'/> And the race said the rest: on one core, the cosine method beat Monte "
-            f"Carlo's best accuracy about {speed:,.0f} times faster. Algorithms first. Pause and predict: is "
-            "Longstaff–Schwartz embarrassingly parallel? Not fully: every date's regression gathers all the paths."
+            f"These timings use distinct workloads and repetition counts. The Python loop times one hundred thousand pre-generated payoffs, then extrapolates tenfold to {par['t_loop']:.3f} seconds. <bookmark mark='a'/> NumPy directly prices one million pre-generated values in {par['t_numpy'] * 1000:.2f} milliseconds. The ratio {par['t_loop'] / par['t_numpy']:.0f} illustrates these implementations, with extrapolation and shared-machine effects. Float32 throughput does not certify price or Greek accuracy. <bookmark mark='b'/> Pool workers both draw normals and price them, so compare four workers with the one-worker pool: ratio {sp4:.2f}. Startup, communication, workload and CPU quota all matter; host load alone cannot explain the result. The recorded host reports {par['cores']} logical CPUs, while the container quota is four CPU equivalents. <bookmark mark='c'/> The separate COS timing and numerical-reference difference are shown without claiming matched total accuracy to Monte Carlo. LSM path simulation can be parallelized, but each exercise date requires regression reductions and synchronization."
         ) as vo:
             self.play(FadeIn(g), FadeIn(bars[0]))
             vo.wait_until("a")
@@ -175,34 +162,16 @@ class Hardware(VoiceoverScene):
         self.clear_scene()
 
     def validation(self, env):
-        head = label(r"The House's nightly validation report: every engine function against an independent result",
-                     font_size=24, color=QC.HOUSE).to_edge(UP, buff=0.5)
-        rows = VGroup(VGroup(label(r"functions", font_size=18, color=GREY_B), label(r"checked against", font_size=18,
-                                                                                    color=GREY_B),
-                             label(r"tolerance", font_size=18, color=GREY_B)))
-        for a_, b_, c_ in VALIDATION:
-            rows.add(VGroup(label(a_, font_size=17, color=QC.HOUSE), label(b_, font_size=17, color=GREY_A),
-                            label(c_, font_size=17, color=GOOD)))
-        for r in rows:
-            r[0].move_to([-3.2, 0, 0])
-            r[1].move_to([3.0, 0, 0])
-            r[2].move_to([5.9, 0, 0])
-        rows.arrange(DOWN, buff=0.28).next_to(head, DOWN, buff=0.4)
-        for r in rows:
-            r[0].set_x(-3.2)
-            r[1].set_x(3.0)
-            r[2].set_x(5.9)
-        if rows.width > 13.4:
-            rows.scale_to_fit_width(13.4)
-        foot = wrapped_label(r"\texttt{tests/test\_quant\_house.py}: run on every change; a failing line stops the "
-                             r"night's prices", 12.0, 18, GREY_A).to_edge(DOWN, buff=0.4)
+        head = wrapped_label(r"Selected repository numerical tests: ten tests passed in this review", 12.0, 28, QC.HOUSE).to_edge(UP, buff=0.3)
+        rows = VGroup(*[VGroup(wrapped_label(title, 6.0, 23, QC.HOUSE),
+                              wrapped_label(detail, 6.0, 19, GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+                       for title, detail in VALIDATION])
+        rows.arrange_in_grid(rows=4, cols=2, cell_alignment=UL, buff=(0.45, 0.28)).next_to(head, DOWN, buff=0.35)
+        if rows.height > 5.8:
+            rows.scale_to_fit_height(5.8)
+        foot = wrapped_label(r"Source: tests/test\_quant\_house.py; fixed examples and tolerances. Numerical verification does not certify model adequacy or every production price.", 12.4, 20, GREY_A).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "Finally, the part of the engine no one sees. Every function this part built is checked against an "
-            "independent answer, every night: Monte Carlo against closed forms within three standard errors, path "
-            "constructions against the covariance to round-off, the American bounds against a tree, the adjoints "
-            "against bumps, the grids against Fourier and each other. <bookmark mark='a'/> A failing line stops the "
-            "night's prices. Model risk is mostly computation risk, and this report is how the House sleeps."
-            " Next: whether a quantum computer will ever do it faster."
+            "Ten selected engine tests passed in this review. They check fixed examples at their actual tolerances: stochastic comparisons with sampling allowances, covariance identities, multilevel diagnostics, stopping examples, adjoint-bump agreement, grid and transform comparisons, and toy interpolation and amplitude cases. These are the repository's tests, not evidence of an automated nightly bank process or independent validation of every engine function. <bookmark mark='a'/> A passing suite supports these numerical cases. It does not certify every price, all discretization biases, out-of-sample calibration behaviour or the financial model itself. Model misspecification and computational error are distinct concerns. Next, quantum resource estimates."
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.3, run_time=5))
             vo.wait_until("a")
