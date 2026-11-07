@@ -148,8 +148,8 @@ class Digitals(VoiceoverScene):
             cmath(r"P\Big(\min_{t \le T} X_t \le b\Big)", r"=", r"N\Big(\frac{b - \mu T}{\sigma\sqrt T}\Big) + "
                   r"e^{2\mu b/\sigma^2}\,N\Big(\frac{b + \mu T}{\sigma\sqrt T}\Big)", font_size=34,
                   colors={r"P\Big(\min_{t \le T} X_t \le b\Big)": OPT}),
-            cmath(r"\mu = 0:\quad OT", r"=", r"2\,N\Big(\frac{b}{\sigma\sqrt T}\Big) = 2 \times \text{digital}",
-                  font_size=34, colors={r"\mu = 0:\quad OT": GOOD}),
+            cmath(r"\mu = 0:\quad\Pr(\tau\le T)", r"=", r"2\,N\Big(\frac{b}{\sigma\sqrt T}\Big) = 2\Pr(X_T\le b)",
+                  font_size=34, colors={r"\mu = 0:\quad\Pr(\tau\le T)": GOOD}),
             cmath(r"r = q = 0:\quad OT", r"=", r"N(-d_2) + \frac{S}{H}\,N(-d_1)", font_size=34,
                   colors={r"r = q = 0:\quad OT": IV}),
         ]
@@ -198,7 +198,7 @@ class Digitals(VoiceoverScene):
                                     rf"{d['at_k']['flat']:.3f}", 5.0, 19, WHITE),
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
         pp = pause_card(r"At the money, with negative smile slope: how does the digital compare with Black--Scholes at the same volatility?",
-                        width=6.4).to_corner(UR, buff=0.3)
+                        width=10.8, font_size=34).move_to(ORIGIN)
         src = real_data(r"the Surface: Part 12's SSVI fit to Deribit bitcoin options, 10 December 2025, 30-day slice")
         cheaper = d["at_k"]["skew"] < d["at_k"]["flat"]
         tail = (", and further out, where the bitcoin smile turns up, it is cheaper." if cheaper else ".")

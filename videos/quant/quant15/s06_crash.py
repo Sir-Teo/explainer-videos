@@ -46,7 +46,7 @@ class Crash(VoiceoverScene):
             "January, Bloomberg reported about thirteen billion dollars of them close to their loss triggers, and "
             "UBS analysts estimated the whole market at around fifty billion. <bookmark mark='a'/> On the "
             "twenty-second, as Risk.net reported it, the CSI 500 fell 4.7 percent in a day to a four-year low, with "
-            f"up to a third of products at their knock-in. Over five weeks the index fell {100 * abs(f['drop']):.0f} "
+            f"up to a third of products at their knock-in. Over the saved December twenty-ninth to February fifth window, the ETF proxy fell {100 * abs(f['drop']):.0f} "
             "percent. In April, Bloomberg reported, regulators told the largest brokers to stop growing their "
             "exposure to these products."
         ) as vo:
@@ -85,9 +85,9 @@ class Crash(VoiceoverScene):
                           r"103\% monthly, knock-in 75\% daily, 24 months), followed day by day on the index's real path",
                           3.4, 17, GREY_A),
             wrapped_label(rf"{b['n_ki_2024']} knocked in between 22 January and 5 February", 3.4, 19, BAD),
-            wrapped_label(rf"the dealers' futures hedge, priced by the surrogate (chapter 16): it grew from {dl[0]:.0f} to "
-                          rf"{dl[i_pk]:.0f} notes' worth as the index fell, then the knock-ins cut it to {dl[i_low]:.0f} on "
-                          r"the day of the low: selling into the fall", 3.4, 17, DELTA),
+            wrapped_label(rf"hypothetical cash hedge exposure from the proxy (chapter 16): {dl[0]:.0f} to "
+                          rf"{dl[i_pk]:.0f} at its peak, and {dl[i_low]:.0f} at "
+                          r"the ETF low; exposure changes include spot, age and contract states, not observed orders", 3.4, 17, DELTA),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
         src = illustration(r"stylized book, one note of notional 1 a month; the index path is real (510500.SS)", corner=DL)
         with self.voiceover(
@@ -112,15 +112,12 @@ class Crash(VoiceoverScene):
             cmath(r"\Delta_i^{+} - \Delta_i^{-}", r"<", r"0\ \text{in the illustrated reduction, not universally}", font_size=38,
                   colors={r"\Delta_i^{+} - \Delta_i^{-}": BAD}),
         ]
-        whys = [why(r"the futures the hedgers trade on day $t$: Taylor for the smooth part, plus a jump in each note's "
-                    r"hedge on the day it knocks in"),
-                why(r"above the barrier the hedge grows as the index falls: the book's gamma makes the hedgers buy "
-                    r"the dip"),
-                why(r"on the knock-in the hedge jumps down to the knocked-in sheet of chapter 8: the hedgers sell, "
-                    r"into the fall")]
+        whys = [why('first-order hedge-unit change at fixed state plus state-transition terms; time, issuance and redemption add terms'),
+                why('the hedge slope is minus issuer gamma; its sign depends on the state and model'),
+                why('a state change may reduce hedge units; the cached day-to-day exposure diagnostic also includes spot and aging')]
         step = ladder(self, rows, whys, keep=3, top=2.5, x=-0.8, buff=0.9, edge=6.9)
-        pp = pause_card(r"As the index fell toward the barriers, did the hedgers buy or sell?", width=6.0)
-        pp.to_corner(DR, buff=0.3)
+        pp = pause_card(r"As the index fell toward the barriers, did the hedgers buy or sell?", width=10.8, font_size=34)
+        pp.move_to(ORIGIN)
         with self.voiceover(
             "Under a delta-neutral policy, separate units held from their cash exposure. <bookmark mark='a'/> If h is the positive hedge and issuer position delta is minus h, then the smooth hedge change is minus issuer gamma times the spot move. Time, new issues and redemptions contribute additional terms. <bookmark mark='b'/> A knock-in changes the state and may reduce the hedge, but its sign is model- and state-dependent. The cache's knock-in-day diagnostic compares today's note exposure with yesterday's, so it also contains spot and time changes; it does not isolate a pure state jump. To estimate rebalancing, first convert cash exposure to underlying units, then difference those units. Simply differencing dollar exposure includes mark-to-market changes even when the number of units is fixed."
         ) as vo:

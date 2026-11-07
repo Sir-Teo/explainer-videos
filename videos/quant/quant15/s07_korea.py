@@ -206,23 +206,13 @@ class Korea(VoiceoverScene):
     def natixis(self):
         card = firm_card(
             r"Natixis, December 2018",
-            r"The French bank, a large issuer of Korean autocallables, cut its fourth-quarter 2018 revenues by "
-            r"EUR 100 million and set aside a EUR 160 million provision on ``some specific products traded with clients "
-            r"in Asia'' in equity derivatives. It said the model used to manage them had led to ``a hedging strategy "
-            r"that proved to be deficient'' in the market conditions of late 2018. Bloomberg reported that it stopped "
-            r"creating the notes; Risk.net linked the loss to the size of its books and to products on a leveraged "
-            r"Korean index.",
+            'Initial announcement, 18 December 2018: EUR 100 million revenue reduction plus EUR 160 million provision related to Asian equity derivatives and an inadequate hedge in late-2018 conditions. Final 4Q18 results: EUR 259 million non-recurring charge. Bloomberg and Risk.net separately discussed Korean autocallables, issuance and book size; accounting charges are not all realized cash losses.',
             numbers=[(r"\text{EUR }100\text{m}", r"revenue reduction, 4Q18"), (r"\text{EUR }160\text{m}", r"provision"),
                      (r"\approx \text{EUR }260\text{m}", r"in all")],
             source=r"Natixis / Groupe BPCE release, 18 December 2018; Bloomberg; Risk.net", width=11.6, font_size=22)
         card.move_to(ORIGIN)
         with self.voiceover(
-            "The dealer's side of the same product. In December 2018 Natixis, one of the largest issuers of "
-            "Korean autocallables, cut its fourth-quarter revenues by a hundred million euros and set aside a "
-            "hundred and sixty million more, on what it called some specific products traded with clients in Asia. "
-            "In its words, the model used to manage them had led to a hedging strategy that proved deficient in the "
-            "market conditions. Bloomberg reported that it stopped creating the notes."
-            " Many of those notes were written on several indices at once. Next: worst-of, and correlation."
+            "Natixis's December 2018 announcement described a one-hundred-million-euro revenue reduction and a further one-hundred-and-sixty-million provision linked to Asian equity derivatives. The bank attributed the problem to an inadequate hedge under late-2018 conditions. These were the initial announced accounting impacts, not a statement that every euro was already a realized cash loss. Its final fourth-quarter results reported a two-hundred-and-fifty-nine-million-euro non-recurring charge. Press accounts discussed Korean autocallables and stopped issuance, but their attribution should be kept separate from the bank's own disclosure. Many autocallables involve several indices; next, worst-of dependence."
         ):
             self.play(FadeIn(card, shift=UP * 0.2))
         self.wait(0.5)

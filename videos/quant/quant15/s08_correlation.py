@@ -91,8 +91,7 @@ class Correlation(VoiceoverScene, ThreeDScene):
             cmath(r"\frac{\partial V}{\partial\rho}", r"=", r"\mathbb E\Big[\int_0^T e^{-rt}\sigma_1\sigma_2 S_1 S_2\,"
                   r"\partial_{12}V\,dt\Big]", font_size=34, colors={r"\frac{\partial V}{\partial\rho}": BAD}),
         ]
-        whys = [why(r"constant-parameter GBM, no dividends; constant-parameter GBM, no dividends; Margrabe (1978): change the numeraire to $S_2$ (Part 9); the exchange option becomes a call on the "
-                    r"ratio, struck at 1"),
+        whys = [why('constant-parameter GBM, no dividends; Margrabe (1978): change the numeraire to $S_2$ (Part 9); the exchange option becomes a call on the ratio, struck at 1'),
                 why(r"It\^o for a ratio (Part 5): $S_1/S_2$ is a $\mathbb Q^{(2)}$-martingale with this volatility; so the "
                     r"price is Black--Scholes with $\sigma$, $K = 1$"),
                 why(r"algebra: the worse asset is the first minus an exchange option, priced by Margrabe; the worst-of "

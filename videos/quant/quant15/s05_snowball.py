@@ -26,7 +26,7 @@ class Snowball(VoiceoverScene):
     def payoff(self, s):
         t = s["terms"]
         rows = VGroup(
-            VGroup(label(r"months 3 through 24 (inclusive):", font_size=24, color=GREY_A),
+            VGroup(label('model months 3 through 24 inclusive; 21 trading observations per month:', font_size=24, color=GREY_A),
                    label(rf"index $\ge$ {100 * t['ko']:.0f}\% of its start $\Rightarrow$ repaid, plus the coupon for the months "
                          r"held", font_size=24, color=GOOD)).arrange(DOWN, aligned_edge=LEFT, buff=0.08),
             VGroup(label(r"every day:", font_size=24, color=GREY_A),
@@ -133,7 +133,7 @@ class Snowball(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(hb, DOWN, buff=0.4).align_to(hb, LEFT)
         if stats.width > 4.8:
             stats.scale_to_fit_width(4.8)
-        pp = pause_card(r"What fraction of these snowballs end before maturity?", width=5.4).to_corner(UR, buff=0.4)
+        pp = pause_card(r"What fraction of these snowballs end before maturity?", width=10.8, font_size=34).move_to(ORIGIN)
         src = illustration(r"150 of 40{,}000 simulated paths at the fair coupon; gold stops at its knock-out", corner=DL)
         with self.voiceover(
             "Pause and predict: what fraction of these notes end before maturity? <bookmark mark='a'/> Watch a "

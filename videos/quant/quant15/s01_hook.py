@@ -61,7 +61,8 @@ class Hook(VoiceoverScene):
 
     def predict(self):
         card = pause_card(r"A note advertises 15\% a year with a 75\% knock-in. Which claims fund the coupon, "
-                          r"and what margin does the issuer keep?", width=9.0)
+                          r"and what margin does the issuer keep?", width=10.8, font_size=34)
+        card.move_to(ORIGIN)
         with self.voiceover(
             'Keep a question in mind. A note advertises fifteen percent a year, with conditional repayment and a knock-in a quarter below its starting level. Which contingent claims fund that coupon, and how much margin remains for the issuer? Chapter seven prices our specified contract; the headline rate alone cannot answer.'
         ):

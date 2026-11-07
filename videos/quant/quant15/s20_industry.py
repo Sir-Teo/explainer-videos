@@ -74,11 +74,7 @@ class Industry(VoiceoverScene):
         leg = legend([(BAD, r"booked on day one (fair value evidenced by observable inputs)"),
                       (GOOD, r"deferred; illustrative release as valuation factors change")], font_size=16)
         leg.next_to(g, UP, buff=0.15).align_to(g, LEFT)
-        side = definition_card(r"Day-one profit (IFRS 9 B5.1.2A)", r"a gain at inception, the price minus the fair "
-                               r"value, is recognised at once only if the fair value is evidenced by a quoted price for "
-                               r"the same instrument or a valuation that uses only observable market data. Otherwise "
-                               r"it is deferred and recognised as the factors market participants would use change. A "
-                               r"valuation evidence determines whether the observable-input condition is met; the straight release line is schematic",
+        side = definition_card(r"Day-one profit (IFRS 9 B5.1.2A)", 'initial price minus fair value: immediate recognition requires an active-market quote for an identical instrument, or a valuation using only observable market data. Otherwise defer and release as relevant valuation factors, including time, change; the straight line is schematic',
                                color=GOOD, width=5.6, font_size=19).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
             f"Reducing the coupon by three percentage points gives an initial model-value difference of {margin:.3f} per note in our calculation, before costs and reserves. It is not guaranteed realized profit. <bookmark mark='a'/> IFRS 9's day-one rule distinguishes fair value evidenced by an active-market quote for an identical instrument, or a valuation using only observable market data, from other valuations. In the latter case the initial difference is deferred and recognized as relevant valuation factors, including time, change. Whether a particular note qualifies depends on its evidence, not simply its snowball label. The green straight line is an illustrative release path, not a prescribed accounting schedule."

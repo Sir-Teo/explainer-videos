@@ -177,7 +177,7 @@ class UVM(VoiceoverScene):
                    f"{bk['hedged_lower']:.2f} and {bk['hedged_upper']:.2f}: market prices are information, and the "
                    "Lagrangian model uses them." if tight else
                    f"but only to {bk['hedged_upper']:.2f}: here the vanillas do little for this payoff.")
-        pp = pause_card(r"Is the worst-case price of a book the sum of its parts?", width=5.6).to_corner(UR, buff=0.3)
+        pp = pause_card(r"Is the worst-case price of a book the sum of its parts?", width=10.8, font_size=34).move_to(ORIGIN)
         with self.voiceover(
             f"Is the worst-case price additive across legs? <bookmark mark='a'/> In this finite-grid example the separate call-spread legs sum to {bk['legs_sum']:.2f}, versus {bk['upper']:.2f} priced jointly. The supremum of a sum is at most the sum of suprema; a common worst-case control is sufficient for equality. <bookmark mark='b'/> Adding vanilla trades at the stated Black-Scholes 25-percent prices lets the desk optimize a residual payoff, following Avellaneda and Parás. The displayed optimizer keeps the best observed objective and its matching weights. It uses a finite evaluation budget and an approximate PDE solver; it does not certify the continuous global optimum or a numerical error bound. Market-price constraints can tighten the chosen model-class range without making it model-free."
         ) as vo:

@@ -142,7 +142,7 @@ class Business(VoiceoverScene):
                                     r"learned in 2008 that this part of the coupon is not free", 4.6, 19, GREY_A),
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         pp = pause_card(r"The issuer's credit spread widens by 100 bp. Does the coupon it can offer rise or fall?",
-                        width=6.0).to_corner(UR, buff=0.3)
+                        width=10.8, font_size=34).move_to(ORIGIN)
         with self.voiceover(
             f"<bookmark mark='p'/> In this funding-spread calculation, does a hundred-basis-point widening raise or lower the model coupon? <bookmark mark='a'/> It raises it: discounting shrinks the promised cash flows, so a larger coupon restores the modeled issue value. The result runs from {100 * c[0]:.1f} percent at zero spread to {100 * c[2]:.1f} at a hundred basis points and {100 * c[-1]:.1f} at two hundred. The extra headline rate compensates for lending to the issuer; it does not make the product safer. Our discount-spread calculation does not simulate issuer default or recovery. Lehman's note holders in 2008 illustrate why the credit exposure belongs in the discussion."
         ) as vo:
@@ -165,19 +165,9 @@ class Business(VoiceoverScene):
                       r"investors. Each issuer is short the exotic it sold, and hedges it in the futures and options "
                       r"markets.", source=r"public record", width=6.0, font_size=21),
         ).arrange(RIGHT, buff=0.4, aligned_edge=UP).move_to(UP * 0.2)
-        foot = wrapped_label(r"the risk that stays with the issuer is crowded: thousands of notes with the same index, the same "
-                             r"barriers and similar dates, hedged by a handful of desks that must trade in the same direction "
-                             r"at the same moment (chapters 9 and 15)", 11.8, 20, GREY_A).to_edge(DOWN, buff=0.5)
+        foot = wrapped_label('similar underlyings, barriers and dates can concentrate hedge demand; net positions, contract states and hedge policies determine actual trade direction and timing (chapters 9 and 15)', 11.8, 20, GREY_A).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Who are the players? On one side, savers and wealthy individuals looking for more than a deposit pays, "
-            "buying through their bank, a broker or a private fund. Claire Célérier and Boris Vallée found European "
-            "banks raising the headline rates of retail products, when rates were low, by making them more complex. "
-            "<bookmark mark='a'/> On the other side, the issuers: investment banks in Europe and the US, securities "
-            "firms and banks in Korea, and in China the over-the-counter desks of brokers. Each is short the exotic it "
-            "sold. <bookmark mark='b'/> And the risk that stays with them is crowded: thousands of notes on the same "
-            "index, with the same barriers, hedged by a handful of desks that must trade in the same direction at the "
-            "same moment."
-            " Who is on the other side of these notes? Next."
+            "Who are the players? Savers and wealthy individuals buy notes through banks, brokers or private funds. Claire Célérier and Boris Vallée studied European retail products: lower interest rates were associated with higher headline rates and greater complexity. <bookmark mark='a'/> Issuers include investment banks, Korean securities firms and banks, and Chinese brokers' over-the-counter desks. Each is short the contract it sold, before other positions and hedges. <bookmark mark='b'/> Similar underlyings, barriers and dates can concentrate hedge demand. That does not force all desks to trade the same way: netting, contract states, models and hedge policies determine actual direction and timing. Next, what our hypothetical historical buyers earned."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")

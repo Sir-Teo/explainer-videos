@@ -29,15 +29,13 @@ class Frontier(VoiceoverScene):
             cmath(r"\partial_{S_0}\mathbb E[F]", r"=", r"\mathbb E[\partial_{S_0}F] - \mathbb E_w\big[[F]\,\phi(z^{*})\,"
                   r"\partial_{S_0}z^{*}\big]", font_size=36, colors={r"\partial_{S_0}\mathbb E[F]": GOOD}),
         ]
-        whys = [why(r"pathwise (and AAD): an indicator is flat almost everywhere, so its derivative on every path is "
-                    r"zero, and the estimate of the delta is zero: biased"),
-                why(r"GBM first-step likelihood ratio, $\Delta t=T/21$, $F$ discounted; shift the first Gaussian density ($S_T = S_0 e^{\cdots + "
-                    r"\sigma\sqrt T Z}$); unbiased, but noisy"),
+        whys = [why('pathwise/AAD gives zero almost surely for this indicator; exchanging derivative and expectation is invalid, so the estimator misses delta'),
+                why('GBM first-step likelihood ratio: $\\Delta t=T/21$, $Z_1\\sim N(0,1)$, $F$ discounted; shift the first transition density, with score $Z_1/(S_0\\sigma\\sqrt{\\Delta t})$'),
                 why(r"pathwise plus the boundary term: the jump $[F]$ times the density at the boundary times the "
                     r"negative boundary speed, with $[F]=F_{right}-F_{left}$; regular roots, integrability and all boundaries accounted for (Lakshtanov 2026)")]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.8, buff=0.9, edge=6.9)
         pp = pause_card(r"Automatic differentiation gives a digital's delta as exactly zero. Bug or feature?",
-                        width=6.0).to_corner(DR, buff=0.3)
+                        width=10.8, font_size=34).move_to(ORIGIN)
         with self.voiceover(
             "Adjoint differentiation efficiently computes pathwise Greeks, but discontinuities need care. For the digital indicator, the sampled pathwise derivative is zero almost surely. <bookmark mark='a'/> Interchanging that derivative with expectation is invalid here, so averaging zeros misses a positive delta. Other discontinuous payoffs can have nonzero but biased pathwise contributions. <bookmark mark='b'/> Our likelihood-ratio estimator shifts the first Gaussian step of GBM; its score uses delta t, not the terminal-time Gaussian score. Both approaches can be valid but have different variance. <bookmark mark='c'/> Conditioning across a regular boundary adds the missing jump term. With jump defined as right value minus left value, the displayed moving-root term has a minus sign. The general result requires regular boundaries, integrability and accounting for all roots. Numerically finding boundaries and simulating continuous barriers add separate errors."
         ) as vo:
@@ -116,7 +114,7 @@ class Frontier(VoiceoverScene):
             (r"Che, Lim, Sun (2026)", r"multi-period, multi-asset martingale optimal transport: model-free bounds for "
              r"worst-of autocallables (Part 9)", QC.Q),
         ]
-        rows = VGroup(*[VGroup(label(a, font_size=19, color=c), wrapped_label(b, 7.6, 18, GREY_A)).arrange(
+        rows = VGroup(*[VGroup(wrapped_label(a, 4.5, 19, c), wrapped_label(b, 7.6, 18, GREY_A)).arrange(
             RIGHT, buff=0.3, aligned_edge=UP) for a, b, c in items])
         for r_ in rows:
             r_[1].align_to(rows, LEFT).shift(RIGHT * 4.9)

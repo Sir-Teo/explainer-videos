@@ -78,7 +78,7 @@ class Static(VoiceoverScene):
                             label(r"Monte Carlo", font_size=22, color=GREY_A),
                             label(r"closed form, shifted barrier", font_size=22, color=GREY_A)))
         for r in rows:
-            tab.add(VGroup(label(r["name"], font_size=24), MathTex(rf"{r['mc']:.2f} \pm {2 * r['se']:.2f}", font_size=28),
+            tab.add(VGroup(label("2,520-step grid" if r["name"] == "continuous (fine grid)" else r["name"], font_size=24), MathTex(rf"{r['mc']:.2f} \pm {2 * r['se']:.2f}", font_size=28),
                            MathTex(f"{r['bgk']:.2f}", font_size=28, color=GOOD)))
         tab.add(VGroup(label(r"the textbook formula", font_size=24, color=GREY_A),
                        VectorizedPoint(), MathTex(f"{b['continuous']:.2f}", font_size=28, color=BAD)))
@@ -100,12 +100,7 @@ class Static(VoiceoverScene):
         src = illustration(rf"down-and-out call: $S = K = {p['S']:.0f}$, $H = {p['H']:.0f}$, six months, $\sigma = "
                            rf"{100 * p['sigma']:.0f}\%$; 100{{,}}000 paths, 20 steps a day", corner=UR)
         with self.voiceover(
-            "How much more? Watched monthly, the knock-out is worth "
-            f"{rows[0]['mc']:.2f}, against {b['continuous']:.2f} for the textbook formula; daily, {rows[2]['mc']:.2f}. "
-            "<bookmark mark='a'/> Broadie, Glasserman and Kou explained it in 1997: a walk looked at every delta t lands "
-            "past the barrier by an overshoot whose mean is beta sigma root delta t, with beta about 0.58, from the Riemann "
-            "zeta function. <bookmark mark='b'/> So shift the barrier away by that much and use the continuous formula: the "
-            "right-hand column matches every frequency within the noise."
+            f"How much more is a discretely watched knock-out worth? Monthly Monte Carlo gives {rows[0]['mc']:.2f}, versus {b['continuous']:.2f} for continuous monitoring; daily gives {rows[2]['mc']:.2f}. <bookmark mark='a'/> Broadie, Glasserman and Kou's 1997 correction uses a limiting Gaussian-walk overshoot, beta sigma root delta t, with beta about 0.5826. It is an asymptotic approximation, especially delicate near the barrier. <bookmark mark='b'/> Moving the barrier away improves this example's agreement across frequencies. The fine grid remains discrete, and the printed twice-naive-standard-error bands are diagnostics, not confidence guarantees for dependent antithetic observations. The original weekly schedule has a terminal remainder. Neither the table nor the correction is an exact continuous-monitoring certificate."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(src), LaggedStart(*[FadeIn(r_[:2]) for r_ in tab[1:-1]], lag_ratio=0.2),
                       FadeIn(tab[-1]))
@@ -245,8 +240,8 @@ class Static(VoiceoverScene):
         verdict = (f"The skew breaks the hedge: the gap is {g7:+.2f}, about {ratio:.0f} times the monitoring error."
                    if abs(g7) > 2 * abs(g_bs) else
                    f"Even with the skew the gap is {g7:+.2f}, not far from the monitoring error.")
-        pp = pause_card(r"With a negative skew, is the put-symmetry hedge too dear or too cheap?", width=6.0)
-        pp.to_corner(UR, buff=0.3)
+        pp = pause_card(r"With a negative skew, is the put-symmetry hedge too dear or too cheap?", width=10.8, font_size=34)
+        pp.move_to(ORIGIN)
         src = illustration(r"$S = K = 100$, $H = 90$, six months, $r = q = 0$; 50{,}000 paths of 500 steps; Heston "
                            r"$v_0 = \theta = 0.0625$, $\kappa = 2$, $\xi = 0.8$", corner=UL)
         with self.voiceover(

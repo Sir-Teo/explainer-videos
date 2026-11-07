@@ -23,14 +23,12 @@ PROBLEMS = [
     r"Explain why a barrier watched every $\Delta t$ behaves like a continuous one moved by $e^{\pm\beta\sigma\sqrt{\Delta t}}$, "
     r"and check it against a simulation.",
     r"For jointly Gaussian log prices in Black--Scholes, derive the mean and variance of the log geometric average.",
-    r"Show that $\frac{(S_T-K+\varepsilon)^+-(S_T-K)^+}{\varepsilon}$ dominates the digital at every expiry price and converges to "
-    r"it as $\varepsilon \to 0$.",
+    'For $\\varepsilon>0$, show that $[(S_T-K+\\varepsilon)^+-(S_T-K)^+]/\\varepsilon$ dominates $1_{\\{S_T>K\\}}$. Find its pointwise limit, including $S_T=K$; when do prices converge to the strict digital?',
     r"Write the snowball as repayment, conditional coupons and an autocall-cancelled knock-in loss leg; discuss the "
     r"vega of all legs, without asserting a universal sign.",
     r"Show that the snowball's value is affine in the coupon, $V(c) = A + cB$, and solve for the fair coupon.",
     r"Price a chooser option (call or put, chosen at $t_1$) as a call plus a put, by put--call parity.",
-    r"Derive Margrabe's formula for $\mathbb E[e^{-rT}(S_1 - S_2)^+]$ by changing the numeraire to $S_2$.",    r"(qual) Prove that a down one-touch at $B$ satisfies $\Pr(S_T \le B) \le \operatorname{OT} \le \min_{K > B}P(K)/(K - B)$ "
-    r"at zero rates/dividends for a nonnegative UI price martingale; derive the tangent condition at a smooth interior minimizer, without assuming uniqueness.",
+    r"Derive Margrabe's formula for $\mathbb E[e^{-rT}(S_1 - S_2)^+]$ by changing the numeraire to $S_2$.",    '(qual) For a maturity-paid down-touch and a nonnegative UI price martingale at zero rates/dividends, prove $\\Pr(S_T\\le B)\\le\\operatorname{OT}\\le\\inf_{K>B}P(K)/(K-B)$. State trading assumptions and the tangent/subgradient condition; allow terminal atoms.',
     r"(qual) Write the call super-hedge of an up one-touch at $B > S_0$, show it dominates on every path even with "
     r"upward gaps, and compute the bound in Black--Scholes for $\sigma = 50\%$, $T = 0.25$, $B = 1.2$.",
 ]
@@ -53,21 +51,21 @@ class Outro(VoiceoverScene):
         o = load("outcomes")
         d = load("decompose")
         items = [
-            (rf"a note is a bond, a coupon strip and a short put: the put is {abs(d['blocks']['dip']):.3f} of every 1", OPT),
-            (r"buyers' record: fees and complexity ate the crash-put premium; vintage decided the rest", GOOD),
+            (rf"this note's autocall-cancelled loss leg is {abs(d['blocks']['dip']):.3f} of every 1", OPT),
+            ('84 overlapping historical note vintages: subsequent paths matter; investor studies have different samples', GOOD),
             (r"barriers: reflection, the closed form, and its image in the PDE", BARRIER),
-            (rf"watched monthly a knock-out is worth {b['rows'][0]['mc']:.2f}, not {b['continuous']:.2f}; static hedges "
-             r"need a symmetric smile", BARRIER),
+            (rf"watched monthly a knock-out is worth {b['rows'][0]['mc']:.2f}, not {b['continuous']:.2f}; static replication "
+             r"needs conditional symmetry at every touch", BARRIER),
             (r"a digital has a difficult discrete hedge; a held call spread gives a terminal payoff overhedge", BAD),
             (rf"the continuous geometric log-average has variance $\sigma^2T/3$; a control variate reduces sampling noise", QC.HOUSE),
             (rf"the snowball's fair coupon, {100 * o['coupon']:.1f}\%, is a linear solve; {100 * o['p_ko']:.0f}\% knock out",
              IV),
-            (r"the issuer's hedge falls off a cliff at the knock-in; its vega peak and sign depend on state and model", DELTA),
-            (rf"January 2024: hedges grew to {dl.max():.0f} notes' worth and were cut to {dl[np.argmin(px)]:.0f}; Korea "
+            ("the issuer's hedge and vega depend on contract state and model; knock-in is not a universal loss jump", DELTA),
+            (rf"hypothetical 2024 cash hedge peaked at {dl.max():.0f} and was {dl[np.argmin(px)]:.0f}; six stylized Korean vintages "
              rf"lost {100 * min(-r['return'] for r in lost):.0f}--{100 * max(-r['return'] for r in lost):.0f}\%", BAD),
             (r"worst-of investors sell the loss put (long correlation); cliquets retain risks beyond aggregate vega", GOOD),
-            (r"model risk has a price: uncertain volatility, model ranges, entropy worst cases", VEGA),
-            (rf"a network reprices a snowball in {1e6 * sg['t_net']:.1f} microseconds; a polynomial can do as well", VEGA),
+            ('uncertain volatility, unequal model fits and empirical entropy tilts answer different questions', VEGA),
+            (rf"repeated-batch proxy timing: {1e6 * sg['t_net']:.1f} microseconds/output; polynomial RMSE is lower here", VEGA),
         ]
         rows = VGroup()
         for i, (t, col) in enumerate(items, 1):

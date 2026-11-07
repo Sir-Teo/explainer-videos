@@ -96,8 +96,8 @@ class ModelRisk(VoiceoverScene):
         foot = wrapped_label(rf"the vanillas: local vol, Heston and Bates agree to {100 * v3:.1f}\%; variance gamma, the "
                              rf"worst fit of the four, is {100 * (M['VG']['vanilla90'] / np.mean(van3) - 1):+.0f}\% off. "
                              r"exotic differences also contain calibration and numerical error", 12.0, 20, GREY_A).to_edge(DOWN, buff=0.5)
-        pp = pause_card(r"Which is most model-dependent: the one-touch, the double-no-touch or the autocall?", width=6.0)
-        pp.to_corner(DR, buff=0.3)
+        pp = pause_card(r"Which is most model-dependent: the one-touch, the double-no-touch or the autocall?", width=10.8, font_size=34)
+        pp.move_to(ORIGIN)
         with self.voiceover(
             f"Which displayed payoff varies most across these fitted implementations? <bookmark mark='a'/> The ninety-day ATM call differs by {100 * v3:.1f} percent of its mean across local volatility, Heston and Bates. Variance gamma differs from their mean by {100 * (M['VG']['vanilla90'] / np.mean(van3) - 1):+.0f} percent. Thus even this vanilla benchmark differs. <bookmark mark='b'/> The one-touch range is {100 * spreads['onetouch']:.0f} percent of its mean; it is not uniquely pinned by the smile. Double-no-touch prices run from {dn[dlo]:.3f} to {dn[dhi]:.3f}, and autocall coupons from {100 * cp[lo_k]:.1f} to {100 * cp[hi_k]:.1f} percent. A coupon is a contract rate, not the price of a fixed common payoff. These ranges motivate model review, but they are not certified bounds over all models reproducing exact market vanillas."
         ) as vo:
@@ -118,13 +118,11 @@ class ModelRisk(VoiceoverScene):
                   colors={r"\sup_Q \big\{\mathbb E^{Q}[V] : D(Q\,\|\,P) \le \eta\big\}": QC.Q}),
             cmath(r"\eta(\theta)", r"=", r"\theta\,\mathbb E_{Q_\theta}[V] - \log \mathbb E\,e^{\theta V}", font_size=34,
                   colors={r"\eta(\theta)": IV}),
-            cmath(r"\text{reserve}", r"=", r"\text{model price} - \text{worst plausible price}", font_size=36,
-                  colors={r"\text{reserve}": OPT}),
+            cmath('\\text{tilt gap}', r"=", '\\text{baseline mean} - \\text{lowest empirical tilted mean}', font_size=36,
+                  colors={'\\text{tilt gap}': OPT}),
         ]
-        whys = [why(r"Cont (2006): the range of prices over every model consistent with the calibration instruments; "
-                    r"zero for the vanillas themselves, a coherent measure of model uncertainty"),
-                why(r"Glasserman and Xu (2014): the worst case over all models within relative entropy $\eta$ of the "
-                    r"model; by entropy duality (Donsker--Varadhan) the optimum is an exponential tilt"),
+        whys = [why('Cont (2006): range over an explicitly chosen exactly calibrated model set; a calibration instrument has zero range only under exact matching'),
+                why('Glasserman and Xu (2014), entropy duality: here tilt empirical discounted payoffs within budget $\\eta$; no martingale or calibration constraints'),
                 why(r"plug the tilt into the relative entropy; solve for $\theta$, then the worst price is "
                     r"$\mathbb E_{Q_\theta}[V]$, all from the model's own paths"),
                 why(r"an illustrative reserve proxy; an entropy budget does not establish regulatory prudent value")]
@@ -171,14 +169,14 @@ class ModelRisk(VoiceoverScene):
                                   stroke_width=1.3).set_stroke(opacity=float(0.08 + 0.8 * w[j])) for j in range(80)])
         lines = always_redraw(fan)
         h = axes([0, 0.5], [float(val.min()) - 0.02, 1.01], x_length=5.0, y_length=3.6,
-                 xlabel=r"relative entropy budget $\eta$", ylabel=r"worst value of the note", xticks=[0, 0.25, 0.5],
+                 xlabel=r"relative entropy budget $\eta$", ylabel='lowest empirical tilted mean', xticks=[0, 0.25, 0.5],
                  yticks=[round(float(val.min()), 2), 1.0], font_size=14).to_edge(RIGHT, buff=0.5).shift(UP * 0.5)
         tr = always_redraw(lambda: Dot(h.ax.c2p(e.get_value(), float(np.interp(e.get_value(), eta, val))), radius=0.08,
                                        color=BAD))
         cv = curve(h.ax, eta, val, BAD, stroke_width=3)
         i1 = int(np.argmin(np.abs(eta - 0.1)))
-        foot = wrapped_label(rf"at $\eta = 0.1$ the worst model values the note at {val[i1]:.3f} instead of {r['base']:.3f}, and gives a "
-                             rf"discounted payoff below $0.97e^{-0.04}$ a probability of {100 * pl[i1]:.0f}\% instead of {100 * pl[0]:.0f}\%", 5.4, 19,
+        foot = wrapped_label(rf"at $\eta = 0.1$ the empirical tilt values the note at {val[i1]:.3f} instead of {r['base']:.3f}, and gives a "
+                             rf"discounted payoff below $0.97e^{{-0.04}}$ a probability of {100 * pl[i1]:.0f}\% instead of {100 * pl[0]:.0f}\%", 5.4, 19,
                              GREY_A).next_to(h, DOWN, buff=0.3)
         src = illustration(r"the CSI 500 snowball at its fair coupon: 40{,}000 paths, 80 drawn; opacity = the tilt's weight",
                            corner=DL)

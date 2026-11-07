@@ -84,7 +84,8 @@ class Buyers(VoiceoverScene):
                              rf"{100 * b['mean_ann']:.1f}\%; {b['beat_index']} of {b['n']} beat holding the index over "
                              r"the same months. One path of history is a description, not a sample of what could "
                              r"have happened", 12.0, 21, GREY_A).to_edge(DOWN, buff=0.5)
-        pp = pause_card(r"Notes sold near the index's top, or near its bottom: which did better?", width=7.0)
+        pp = pause_card(r"Notes sold near the index's top, or near its bottom: which did better?", width=10.8, font_size=34)
+        pp.move_to(ORIGIN)
         with self.voiceover(
             f"Pause: in this history, which vintages did better, those issued near peaks or near troughs? <bookmark mark='a'/> The trough vintages did better here because of their subsequent paths. Every new note starts with the same proportional barrier distances; a lower absolute starting price does not mechanically put it farther from its own knock-in. <bookmark mark='b'/> Across {b['n']} reconstructed notes, {b['n_loss']} lost money, the worst loss {100 * abs(b['worst']):.0f} percent. The simple average of annualized returns is {100 * b['mean_ann']:.1f} percent; {b['beat_index']} beat the ETF's price change over their own holding periods. This average is neither a compound portfolio return nor an ex-ante expected return. It ignores reinvestment, dividends, client fees and issuer default, and the overlapping notes are dependent."
         ) as vo:

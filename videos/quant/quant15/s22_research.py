@@ -204,12 +204,12 @@ class Research(VoiceoverScene):
         cards = VGroup(
             desk_question(r"implementation: add more information", r"adding the smiles at intermediate dates, or the "
                           r"prices of other barriers, narrows the band; computing the sharp bounds is a multi-marginal "
-                          r"transport problem (Part 9); our one-maturity strike grid does not solve it", width=12.4, font_size=18),
-            desk_question(r"implementation: specify an admissible class", r"the extreme model is unrealistic; bounds over models with "
-                          r"plausible paths (bounded volatility, Chapter 13's uncertain volatility) are tighter but "
-                          r"model-dependent again; its choice needs a stated purpose and validation", width=12.4, font_size=18),
+                          r"transport problem (Part 9); our one-maturity strike grid does not solve it", width=12.4, font_size=26),
+            desk_question(r"implementation: specify an admissible class", r"an extremal model need not suit a desk; bounds over models with "
+                          r"plausible paths (bounded volatility, Chapter 13's uncertain volatility) may tighten the range but become "
+                          r"model-dependent again; its choice needs a stated purpose and validation", width=12.4, font_size=26),
             desk_question(r"implementation: match observation and trading", r"match the information set, attainable trades and payoff for barriers "
-                          r"watched only at the close; our current grid is an illustration, not a certified sharp solver", width=12.4, font_size=18),
+                          r"watched only at the close; our current grid is an illustration, not a certified sharp solver", width=12.4, font_size=26),
         ).arrange(DOWN, buff=0.22)
         head = label(r"Implementation questions", font_size=30).to_edge(UP, buff=0.3)
         with self.voiceover(
@@ -224,7 +224,8 @@ class Research(VoiceoverScene):
 
     def question(self):
         q = pause_card(r"write the super-hedge for an up one-touch at $B > S_0$ using calls. What bound does it give, and "
-                       r"why does an upward gap through $B$ help the hedger rather than hurt?")
+                       r"why does an upward gap through $B$ help the hedger rather than hurt?", font_size=34)
+        q.move_to(ORIGIN)
         with self.voiceover(
             "Pause and predict. Write the super-hedge for an up one-touch, using calls. What bound does it give? And "
             "why does an upward gap through the barrier help the hedger, rather than hurt?"
