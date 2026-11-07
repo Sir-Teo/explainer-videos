@@ -16,7 +16,7 @@ class Hook(VoiceoverScene):
         tl = timeline(lit=(1900, 1933)).to_edge(UP, buff=0.35)
         hc = history_card(1900, r"David Hilbert, \ the International Congress of Mathematicians, \ Paris",
                           r"twenty-three problems to define the century's mathematics; \ the sixth asked for axioms for "
-                          r"probability, \ and Kolmogorov answered it in 1933 \ (Part 43)",
+                          r"probability; \ Kolmogorov axiomatized probability in 1933 \ (Part 43)",
                           color=PROBC, width=11.4, font_size=23).move_to([0, 1.1, 0])
         q = VGroup(
             label(r"``As long as a branch of science offers an abundance of problems,", font_size=27),
@@ -24,12 +24,7 @@ class Hook(VoiceoverScene):
             note(r"D. Hilbert, \ \emph{Mathematical Problems} \ (1900)"),
         ).arrange(DOWN, buff=0.2).move_to([0, -1.6, 0])
         with self.voiceover(
-            "This part closes the PhD core, and like the comprehensive exam of Part forty-two, it introduces no new method. "
-            "<bookmark mark='a'/> In August 1900, at the International Congress of Mathematicians in Paris, David Hilbert "
-            "set out twenty-three problems that he hoped would shape the century's mathematics. The sixth asked for axioms "
-            "for the theory of probability; Andrey Kolmogorov answered it in 1933, and Part forty-three began there. "
-            "<bookmark mark='b'/> Hilbert's address opened with a sentence every doctoral student should know. As long as a "
-            "branch of science offers an abundance of problems, <bookmark mark='c'/> so long is it alive."
+            "This part closes the PhD core, and like the comprehensive exam of Part forty-two, it introduces no new method. <bookmark mark='a'/> In August 1900, at the International Congress of Mathematicians in Paris, David Hilbert set out twenty-three problems that he hoped would shape the century's mathematics. The sixth concerned axiomatizing physics, including probability. Kolmogorov established the measure-theoretic probability framework in 1933, the starting point of Part forty-three; this did not settle the whole sixth problem. <bookmark mark='b'/> Hilbert's address opened with a sentence every doctoral student should know. As long as a branch of science offers an abundance of problems, <bookmark mark='c'/> so long is it alive."
         ) as vo:
             self.play(FadeIn(tl))
             vo.wait_until("a")
@@ -44,16 +39,12 @@ class Hook(VoiceoverScene):
         m = memo([
             (r"Dear candidate,", WHITE),
             (r"your qualifying examination is tomorrow at nine: \ twelve problems, \ six hours.", GREY_A),
-            (r"One problem from each part of the core, \ Parts 43 to 54.", GREY_A),
+            (r"Twelve problems drawing on the core, \ Parts 43 to 54.", GREY_A),
             (r"Show every step. \ A correct answer without its proof earns nothing.", WHITE),
             (r"--- the Graduate Committee", S.ACCENT),
         ], r"Department of Statistics \ \textbullet\ \ qualifying examination").move_to([0, -0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> It is the night before the qualifying exam. The letter on the desk says: your examination "
-            "is tomorrow at nine. Twelve problems, six hours, one from each part of the core, Parts forty-three to "
-            "fifty-four. <bookmark mark='b'/> And the line that matters: show every step. At this level, a correct answer "
-            "without its proof earns nothing. The exam asks whether you can prove things, which is what research will ask "
-            "of you every day."
+            "<bookmark mark='a'/> It is the night before the qualifying exam. The letter on the desk says: your examination is tomorrow at nine. Twelve problems, six hours, drawing on the core, Parts forty-three to fifty-four. <bookmark mark='b'/> And the line that matters: show every step. At this level, a correct answer without its proof earns nothing. The exam asks whether you can prove things, which is what research will ask of you every day."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(m[0]), FadeIn(m[1]), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in m[2][:3]], lag_ratio=0.5), run_time=4.0)

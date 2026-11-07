@@ -41,15 +41,7 @@ class ExamMinimax(ExamMixin, VoiceoverScene):
         rows[0][-1].set_color(HDC)
         rows[3][-1].set_color(PROOFC)
         whys = [why(r"Rigollet \& H\"utter, \ Lemma 4.14"), why(r"far apart, \ hard to tell apart"), why(r"Part 50"), why(r"optimize $\delta$")]
-        self.steps_voiceover("<bookmark mark='a'/> The packing: there are M binary vectors with exactly s ones, any two differing in at "
-                   "least s over two places, with log M at least s over eight times log of one plus d over two s. <bookmark "
-                   "mark='b'/> Scale them by delta. Any two are at squared distance at least s delta squared over two, while "
-                   "the Kullback–Leibler divergence between their data distributions, n over two sigma squared times the "
-                   "squared distance, is at most n s delta squared over sigma squared. <bookmark mark='c'/> Fano's inequality "
-                   "from Part fifty: the minimax risk is at least a quarter of the squared separation, times one minus the "
-                   "divergence plus log two, over log M. <bookmark mark='d'/> Choose delta to balance the two, and the bound "
-                   "becomes sigma squared times log M minus log two squared, over thirty-two n log M: of order sigma squared s "
-                   "log of d over s, over n.", rows, whys)
+        self.steps_voiceover("<bookmark mark='a'/> The packing, for one at most s at most d over eight: there are M binary vectors with exactly s ones, any two differing in at least s over two places, with log M at least s over eight times log of one plus d over two s. <bookmark mark='b'/> Scale them by delta. Any two are at squared distance at least s delta squared over two, while the Kullback–Leibler divergence between their data distributions, n over two sigma squared times the squared distance, is at most n s delta squared over sigma squared. <bookmark mark='c'/> Fano's inequality from Part fifty: the minimax risk is at least a quarter of the squared separation, times one minus the divergence plus log two, over log M. <bookmark mark='d'/> If this packing bound is too small, disjoint supports give at least floor d over s alternatives, enough to keep Fano nontrivial. Choose delta to balance the two, and the bound becomes sigma squared times log M minus log two squared, over thirty-two n log M: of order sigma squared s log of d over s, over n.", rows, whys)
         self.clear_but(card)
         self.p9_table(d, card)
         self.p9_upper(card)
@@ -72,38 +64,26 @@ class ExamMinimax(ExamMixin, VoiceoverScene):
         rows[3][-1].set_color(PROOFC)
         whys = [why(r"soft thresholding"), why(r"Donoho \& Johnstone (1994)"), why(r"each coordinate: \ signal or noise"), why(r"$s\log(d/s)$ with a refined $\lambda$")]
         self.steps_voiceover(
-            "<bookmark mark='a'/> The upper bound, to finish the problem. Soft thresholding at sigma root two log d "
-            "over n shrinks every coordinate toward zero and kills the small ones. <bookmark mark='b'/> Donoho and "
-            "Johnstone's oracle inequality bounds its risk by two log d plus one, times the noise level plus the sum "
-            "over coordinates of the smaller of the squared signal and the noise level: what an oracle choosing to "
-            "keep or kill each coordinate would pay, times a logarithm. <bookmark mark='c'/> For an s-sparse vector "
-            "that is at most two log d plus one, times s plus one, times sigma squared over n. <bookmark mark='d'/> So "
-            "Fano's lower bound and thresholding's upper bound meet, up to constants, and with the threshold tuned to "
-            "log of d over s instead of log d, the rate is exactly sigma squared s log of d over s, over n.",
+            "<bookmark mark='a'/> The upper bound, to finish the problem. Soft thresholding at sigma root two log d over n shrinks every coordinate toward zero and kills the small ones. <bookmark mark='b'/> Donoho and Johnstone's oracle inequality bounds its risk by two log d plus one, times the noise level plus the sum over coordinates of the smaller of the squared signal and the noise level: what an oracle choosing to keep or kill each coordinate would pay, times a logarithm. <bookmark mark='c'/> For an s-sparse vector that is at most two log d plus one, times s plus one, times sigma squared over n. <bookmark mark='d'/> This displayed log d bound need not match log d over s uniformly over all sparsity regimes, with the threshold tuned to the known sparsity through log of d over s, the risk has rate sigma squared s log of d over s, over n.",
             rows, whys)
         self.clear_but(card)
 
     def p9_table(self, d, card):
         s, n = d["s"], d["n"]
         rows_ = [r for r in d["rows"] if r["d"] in (100, 1000, 10000, 100000)]
-        hdr = [r"$d$", r"rate $\frac{s\log(ed/s)}{n}$", r"$\frac{2s\log(d/s)}{n}$", r"soft thresh., worst", r"Fano bound"]
+        hdr = [r"$d$", r"rate $\frac{s\log(ed/s)}{n}$", r"$\frac{2s\log(d/s)}{n}$", r"soft threshold, 4 signals", r"Fano bound"]
         body = [[f"{r['d']:,}", f"{r['rate']:.3f}", f"{2 * s * math.log(r['d'] / s) / n:.3f}", f"{r['soft']:.3f}", f"{r['lower']:.5f}"] for r in rows_]
         tab = table_rows([hdr] + body, font_size=22, col_buff=0.5, row_buff=0.2,
                          colors=[GREY_B] + [WHITE] * len(body)).move_to([0, -0.4, 0])
         foot = fit_rows(VGroup(
             label(rf"$s = {s}$, \ $n = {n}$, \ $\sigma = 1$; \ soft thresholding at $\sqrt{{2\log(d/s)/n}}$, \ the worst of four signal sizes", font_size=22, color=GREY_A),
             label(r"all grow like $\log d$; \ Fano's constant is poor, \ the rate is right", font_size=24, color=PROOFC),
-            label(r"the exact constant: \ $2\sigma^2 s\log(d/s)/n$ \ (Donoho \& Johnstone 1994)", font_size=22, color=HDC),
+            label(r"sparse asymptotic equivalent: \ $2\sigma^2 s\log(d/s)/n$ \ (Donoho \& Johnstone 1994)", font_size=22, color=HDC),
         ), 12.4, 0.25, [0, -2.85, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The numbers, with ten nonzero entries and a hundred observations, as the dimension grows "
-            f"from a hundred to a hundred thousand. <bookmark mark='b'/> Soft thresholding at the universal threshold, in its "
-            f"worst case over four signal sizes, has risk growing like log d, about twice the rate s log e d over s, over n. "
-            f"<bookmark mark='c'/> Fano's bound grows like log d too, but its constant is poor, hundreds of times smaller: "
-            f"minimax lower bounds are about rates. <bookmark mark='d'/> The exact asymptotic constant, two sigma squared s "
-            f"log d over s, over n, is attained by thresholding, as David Donoho and Iain Johnstone showed in 1994."
+            f"<bookmark mark='a'/> The numbers, with ten nonzero entries and a hundred observations, as the dimension grows from a hundred to a hundred thousand. <bookmark mark='b'/> Soft thresholding at the sparsity-dependent threshold, evaluated exactly using Gaussian truncated moments, at the largest risk among four signal sizes, has risk growing like log d, about twice the rate s log e d over s, over n. <bookmark mark='c'/> Fano's bound grows like log d too, but its constant is poor, hundreds of times smaller: this elementary Fano argument identifies the rate but not the sharp constant. <bookmark mark='d'/> In a sparse asymptotic regime with s over d tending to zero and the required dimension conditions, the sharp minimax equivalent is two sigma squared s log d over s, over n, attained by thresholding, as David Donoho and Iain Johnstone showed in 1994."
         ) as vo:
-            self.play(FadeIn(tab[0]), FadeIn(exact_tag(r"bounds exact; \ thresholding simulated")))
+            self.play(FadeIn(tab[0]), FadeIn(exact_tag(r"analytic bounds and Gaussian risks")))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r) for r in tab[1:]], lag_ratio=0.3), FadeIn(foot[0]), run_time=3.0)
             vo.wait_until("b")
@@ -138,13 +118,7 @@ class ExamMinimax(ExamMixin, VoiceoverScene):
         rows[2][-1].set_color(HDC)
         rows[3][-1].set_color(PROOFC)
         whys = [why(r"a sum of random matrices"), why(r"the matrix variance"), why(r"Tropp (2012)"), why(r"solve the quadratic in $t$")]
-        self.steps_voiceover("<bookmark mark='a'/> Write the error as a sum of independent, mean-zero random matrices, each the rank-one "
-                   "deviation divided by n, with operator norm at most d over n. <bookmark mark='b'/> Because x x transpose "
-                   "squared is d times x x transpose, the matrix variance is d minus one over n times the identity. <bookmark "
-                   "mark='c'/> Matrix Bernstein, in Joel Tropp's form, bounds the tail by two d times a Bernstein exponent, and "
-                   "integrating gives the expected norm: the root of two v log two d, plus L log two d over three. <bookmark "
-                   "mark='d'/> Setting the tail bound to delta and solving the quadratic in t gives the radius of a confidence "
-                   "ball that holds with probability at least ninety-five percent, for every n.", rows, whys)
+        self.steps_voiceover("<bookmark mark='a'/> Write the error as a sum of independent, mean-zero random matrices, each the rank-one deviation divided by n, with operator norm at most d over n. <bookmark mark='b'/> Because x x transpose squared is d times x x transpose, the matrix variance is d minus one over n times the identity. <bookmark mark='c'/> Matrix Bernstein, in Joel Tropp's form, bounds the tail by two d times a Bernstein exponent, and an exponential-moment optimization gives the displayed expected-norm bound: the root of two v log two d, plus L log two d over three. <bookmark mark='d'/> Setting the tail bound to delta and solving the quadratic in t gives the radius of a confidence ball that holds with probability at least ninety-five percent, for every n in the stated Rademacher reference model. This radius uses the variance and norm bounds proved for that model; it is not a universal ball for an arbitrary unknown covariance.", rows, whys)
         self.clear_but(card)
         self.p10_chart(d, card)
         self.p10_log(card)
@@ -153,9 +127,7 @@ class ExamMinimax(ExamMixin, VoiceoverScene):
         self.clear_scene()
         br = load("board")["rows"]
         show_board(self, board_rows("Bernstein"),
-                   f"<bookmark mark='a'/> On the Board, two thousand samples of four hundred: the matrix-Bernstein ball, of "
-                   f"radius {say(r4['t'], 2)}, contains the true covariance every time, {100 * br[3]['achieved']:.0f} percent. "
-                   f"Conservative by design: a dimension-free argument pays for its generality.", [("a", [0])])
+                   f"<bookmark mark='a'/> On the Board, two thousand samples of four hundred: the matrix-Bernstein ball, of radius {say(r4['t'], 2)}, contains the true covariance every time, {100 * br[3]['achieved']:.0f} percent. Conservative in this design. The general matrix inequality explicitly depends on dimension through its prefactor and variance scale.", [("a", [0])])
         self.map_voiceover("<bookmark mark='a'/> The proof, mapped. Write the error as a sum, <bookmark mark='b'/> compute its "
                        "matrix variance, <bookmark mark='c'/> apply matrix Bernstein, whose proof rests on Lieb's concavity "
                        "theorem for the trace exponential, <bookmark mark='d'/> and invert the tail bound into a confidence "
@@ -164,7 +136,7 @@ class ExamMinimax(ExamMixin, VoiceoverScene):
 
     def p10_log(self, card):
         rows = [
-            cmath(r"\text{a } \tfrac14\text{-net}", r":", r"9^d \text{ points, \ a union bound}: \ \|\hat\Sigma - I\| \lesssim \sqrt{d/n}", font_size=34),
+            cmath(r"\text{a }\tfrac14\text{-net}", r":", r"9^d \text{ points, \ a union bound}: \ \|\hat\Sigma-I\|\lesssim\sqrt{d/n}+d/n", font_size=34),
             cmath(r"\text{matrix Bernstein}", r":", r"\text{no net, \ but the factor } 2d \text{ in front: \ } \sqrt{d\log d/n}", font_size=32),
             cmath(r"\log d \text{ needed?}", r":", r"\text{not here; \ for random diagonal sums, \ yes}", font_size=34),
             cmath(r"\text{the trade}", r":", r"\text{a norm and a variance suffice; \ the price is } \sqrt{\log d}", font_size=34),
@@ -173,15 +145,7 @@ class ExamMinimax(ExamMixin, VoiceoverScene):
         rows[3][-1].set_color(PROOFC)
         whys = [why(r"Part 51's $\varepsilon$-nets, \ for sub-Gaussian vectors"), why(r"Tropp's dimensional factor"), why(r"coupon-collector sums"), why(r"universality has a price")]
         self.steps_voiceover(
-            "<bookmark mark='a'/> Why the logarithm? Part fifty-one had a second route: cover the sphere with a net of "
-            "at most nine to the d points, bound each quadratic form by a scalar Bernstein inequality, and take a "
-            "union bound. For sub-Gaussian vectors like these, that gives the root of d over n, with no logarithm. "
-            "<bookmark mark='b'/> Matrix Bernstein needs no net, but carries a factor of two d in front of the "
-            "exponential, which costs a root log d. <bookmark mark='c'/> For these vectors the logarithm is not "
-            "needed, as the Marchenko–Pastur edge showed. For sums of random diagonal matrices, where a few "
-            "coordinates collect most of the mass by chance, as in the coupon collector's problem, it is. <bookmark "
-            "mark='d'/> Matrix Bernstein needs only a bound on each summand's norm and the matrix variance, and that "
-            "generality is what the logarithm buys.",
+            "<bookmark mark='a'/> Why the logarithm? Part fifty-one had a second route: cover the sphere with a net of at most nine to the d points, bound each quadratic form by a scalar Bernstein inequality, and take a union bound. For sub-Gaussian vectors like these, that gives a bound of order root d over n plus d over n, without the logarithm. The square-root term dominates when n is at least d. <bookmark mark='b'/> Matrix Bernstein needs no net, but carries a factor of two d in front of the exponential, which costs a root log d. <bookmark mark='c'/> For these vectors the logarithm is not needed, as the Marchenko–Pastur edge showed. For sums of random diagonal matrices, where a few coordinates collect most of the mass by chance, as in the coupon collector's problem, it is. <bookmark mark='d'/> Matrix Bernstein needs only a bound on each summand's norm and the matrix variance, and that generality is what the logarithm buys.",
             rows, whys)
         self.clear_but(card)
 
@@ -209,13 +173,7 @@ class ExamMinimax(ExamMixin, VoiceoverScene):
             label(r"all fall like $\sqrt{d\log d/n}$ or better", font_size=22, color=GREY_A),
         ), 4.6, 0.36, SIDE)
         with self.voiceover(
-            f"<bookmark mark='a'/> The error against n, with fifty dimensions. In blue, its simulated mean: {say(r4['mean'], 2)} "
-            f"at four hundred observations; in teal, its ninety-fifth percentile, {say(r4['q95'], 2)}. <bookmark mark='b'/> "
-            f"The Marchenko–Pastur edge of Part fifty-two, one plus the root of d over n, squared, minus one, predicts them "
-            f"almost exactly: {say(r4['mp'], 2)}. <bookmark mark='c'/> The matrix Bernstein bound on the mean is "
-            f"{say(r4['mean_bound'], 2)}, <bookmark mark='d'/> and the ball's radius {say(r4['t'], 2)}: about twice the truth, "
-            f"for an argument that knows nothing about this distribution beyond its norm and variance. <bookmark mark='e'/> "
-            f"All of them fall at the same rate, up to the logarithm that the matrix argument pays."
+            f"<bookmark mark='a'/> The error against n, with fifty dimensions. In blue, its simulated mean: {say(r4['mean'], 2)} at four hundred observations; in teal, its ninety-fifth percentile, {say(r4['q95'], 2)}. <bookmark mark='b'/> The Marchenko–Pastur edge of Part fifty-two, one plus the root of d over n, squared, minus one, gives an asymptotic upper-edge reference, not a finite-sample mean or ninety-fifth percentile: {say(r4['mp'], 2)}. <bookmark mark='c'/> The matrix Bernstein bound on the mean is {say(r4['mean_bound'], 2)}, <bookmark mark='d'/> and the ball's radius {say(r4['t'], 2)}: about twice the truth, for an argument that knows nothing about this distribution beyond its norm and variance. <bookmark mark='e'/> All of them fall at the same rate, up to the logarithm that the matrix argument pays."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated; \ bounds exact")))
             vo.wait_until("a")

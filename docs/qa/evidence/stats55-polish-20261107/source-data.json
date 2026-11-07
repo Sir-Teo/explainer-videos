@@ -1,0 +1,16 @@
+[
+  {
+    "dataset": "Snow Table IX",
+    "url": "https://www.gutenberg.org/cache/epub/72894/pg72894-images.html",
+    "sha256": "1adced951c66656e8838445e0a91aa48c920112dcef6a05a7b661170c99b03a0",
+    "verification": "All nine houses/deaths/rate entries agree with the original 1855 text transcription, including the rest-of-London row.",
+    "scope": "Primary book transcription, not original page-image validation"
+  },
+  {
+    "dataset": "Newcomb",
+    "url": "https://vincentarelbundock.github.io/Rdatasets/csv/MASS/newcomb.csv",
+    "sha256": "fa1289ffe98f14d79cc26758999a4b68f63e6821fc1c0b700be193490bbefb9e",
+    "verification": "All 66 passage times agree as a multiset; order is not used.",
+    "scope": "Independent package distribution; original historical data table not retrieved"
+  }
+]

@@ -81,7 +81,7 @@ No part is signed off for bilingual production. The branch has zero narration_zh
 | 52 | `stats52` | 13 | Scientific source and numerical reconciliation complete; 19 checks pass; visual verification pending |
 | 53 | `stats53` | 13 | Scientific source and numerical reconciliation complete; 21 checks pass; visual verification pending |
 | 54 | `stats54` | 12 | Scientific source and numerical reconciliation complete; 23 checks pass; visual verification pending |
-| 55 | `stats55` | 8 | Not yet reviewed chapter by chapter |
+| 55 | `stats55` | 8 | Scientific source and numerical reconciliation complete; 21 checks pass; visual verification pending |
 | 56 | `stats56` | 12 | Not yet reviewed chapter by chapter |
 | 57 | `stats57` | 12 | Not yet reviewed chapter by chapter |
 | 58 | `stats58` | 16 | Not yet reviewed chapter by chapter |
