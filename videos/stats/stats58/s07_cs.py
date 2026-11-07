@@ -222,8 +222,8 @@ class ConfidenceSequences(LectureMixin, VoiceoverScene):
             'platforms have adopted always-valid inference, as Ramesh Johari and colleagues argued they should, '
             'because their users look every day.'
         ),
-            [(r"what to take away:", GREY_A),
+            [('Confidence sequences: guarantees and efficiency', GREY_A),
              (r"a CS construction: \ invert an anytime-valid test per candidate", WEALTHC),
              (r"watch continuously, \ stop at any time, \ extend with more data", CSC),
              (r"width near the LIL limit; \ betting adapts to the variance", CSC),
-             (r"A/B platforms adopted always-valid inference \ (Johari et al.): \ users look daily", SPRTC)])
+             (r"A/B platforms adopted always-valid inference \ (Johari et al.): \ users look daily", SPRTC)], head_size=36)

@@ -200,8 +200,8 @@ class Betting(LectureMixin, VoiceoverScene):
             'The practical distinction is the guarantee of the particular construction, rather than the letter used '
             'to report evidence.'
         ),
-            [(r"$p$-values and e-values:", GREY_A),
+            [('Combining $p$-values and e-values in sequential analysis', GREY_A),
              (r"both $p$-values and e-values can be fixed-sample or anytime-valid", CSC),
              (r"combine with difficulty \ $|$ \ average under any dependence, \ multiply in sequence", CSC),
              (r"surprise under $H_0$ \ $|$ \ money won, \ optimized by Kelly's criterion", WEALTHC),
-             (r"sequential validity is an additional guarantee, \ not automatic", FIXEDC)])
+             (r"sequential validity is an additional guarantee, \ not automatic", FIXEDC)], head_size=36)

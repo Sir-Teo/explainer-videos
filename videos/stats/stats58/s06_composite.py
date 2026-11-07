@@ -197,8 +197,8 @@ class Composite(LectureMixin, VoiceoverScene):
             "conditional null. Neither device alone solves an arbitrary composite null. <bookmark mark='e'/> Choose "
             'a construction whose assumptions and stopping information match the scientific experiment.'
         ),
-            [(r"for composite nulls:", GREY_A),
+            [('Constructing e-processes for composite nulls', GREY_A),
              (r"universal inference: \ independent split, \ correct likelihood model; \ often conservative", WEALTHC),
              (r"GROW e-values: \ optimal growth; \ explicit for $t$-tests, \ $2 \times 2$ tables, \ exponential families", CSC),
              (r"sequential extensions need validity in the stated filtration", SPRTC),
-             (r"the choice: \ how much structure can be computed with", GREY_A)])
+             (r"the choice: \ how much structure can be computed with", GREY_A)], head_size=36)

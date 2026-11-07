@@ -143,7 +143,7 @@ class OffPolicy(LectureMixin, VoiceoverScene):
             "Part sixty-two. <bookmark mark='d'/> And reinforcement learning, where the policy acts over many steps "
             'and the weights multiply, the hardest case of all.'
         ),
-            [(r"where it is used:", GREY_A),
+            [('Applications of anytime-valid off-policy evaluation', GREY_A),
              (r"recommenders and advertising: \ test a policy on old logs", BANDITC),
              (r"medicine: \ dynamic treatment regimes \ (Part 62)", CSC),
-             (r"reinforcement learning: \ weights multiply over steps", FIXEDC)])
+             (r"reinforcement learning: \ weights multiply over steps", FIXEDC)], head_size=36)

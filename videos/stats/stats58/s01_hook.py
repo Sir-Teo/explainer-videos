@@ -126,11 +126,11 @@ class Hook(LectureMixin, VoiceoverScene):
             "as you go, as an A/B platform or an adaptive trial does. <bookmark mark='e'/> Then the data are no "
             'longer independent of the design, and inference needs its own tools.'
         ),
-            [(r"two questions:", GREY_A),
+            [('Two questions about repeatedly inspecting data', GREY_A),
              (r"1. \ test so that you may look, \ and stop, \ whenever you like", WEALTHC),
              (r"answer: \ Ville's inequality (1939), \ betting, \ e-values, \ confidence sequences", CSC),
              (r"2. \ experiment when you choose what to collect as you go", BANDITC),
-             (r"answer: \ adaptive designs, \ and inference that knows how the data were chosen", BANDITC)])
+             (r"answer: \ adaptive designs, \ and inference that knows how the data were chosen", BANDITC)], head_size=36)
 
     def upgrade(self):
         cards = [

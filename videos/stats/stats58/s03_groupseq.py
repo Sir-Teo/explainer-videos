@@ -176,8 +176,8 @@ class GroupSequential(LectureMixin, VoiceoverScene):
             "mark='e'/> For them we need guarantees that hold at every time at once, which is the next chapter's "
             'subject.'
         ),
-            [(r"where this leaves us:", GREY_A),
+            [('From planned looks to continuous monitoring', GREY_A),
              (r"group-sequential designs: \ exact, \ efficient, \ accepted by regulators", CSC),
              (r"but: \ looks or a spending plan in advance, \ and a known maximum", FIXEDC),
              (r"online platforms look continuously and stop for their own reasons", WEALTHC),
-             (r"needed: \ guarantees at every time at once", SPRTC)])
+             (r"needed: \ guarantees at every time at once", SPRTC)], head_size=36)
