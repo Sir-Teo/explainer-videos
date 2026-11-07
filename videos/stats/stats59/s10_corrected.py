@@ -20,53 +20,61 @@ class Corrected(LectureMixin, VoiceoverScene):
 
     def rescale(self):
         d = load("lrt")
+        heading = label('A null LRT with a fixed number of coordinates', font_size=30, color=PROPC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            f"<bookmark mark='a'/> The first correction is to the likelihood-ratio test. Under the null, twice the log "
-            f"likelihood ratio converges to kappa sigma star squared over lambda star, times a chi-squared with one degree "
-            f"of freedom. <bookmark mark='b'/> So divide the statistic by that factor before comparing it with the "
-            f"chi-squared table. <bookmark mark='c'/> Here the factor is {say(d['factor'], 3)}, and the simulated mean of "
-            f"the statistic is {say(d['mean_llr'], 3)}, against the factor's prediction of the same. <bookmark mark='d'/> For "
-            f"k coefficients tested jointly, the same factor multiplies a chi-squared with k degrees of freedom.",
+            f"<bookmark mark='a'/> The first correction is to the likelihood-ratio test. Under the null, twice the log likelihood ratio converges to kappa sigma star squared over lambda star, times a chi-squared with one degree of freedom. <bookmark mark='b'/> So divide the statistic by that factor before comparing it with the chi-squared table. <bookmark mark='c'/> Here the factor is {say(d['factor'], 3)}, and the simulated mean of the statistic is {say(d['mean_llr'], 3)}, against the factor's prediction of the same. <bookmark mark='d'/> For a fixed number k of null coefficients tested jointly, the same factor multiplies a chi-squared with k degrees of freedom.",
             [(r"2\Lambda_j", r"\Rightarrow", r"\frac{\kappa\sigma_\star^2}{\lambda_\star}\,\chi^2_1", 40),
              (r"\text{rescaled}", r":", r"2\Lambda_j\big/\tfrac{\kappa\sigma_\star^2}{\lambda_\star} \approx \chi^2_1", 40),
              (r"\text{here}", r":", rf"\text{{factor }} {d['factor']:.3f}; \ \ E[2\Lambda] = {d['mean_llr']:.3f}", 38),
-             (r"k \text{ coefficients}", r":", r"\frac{\kappa\sigma_\star^2}{\lambda_\star}\,\chi^2_k", 40)],
+             (r"k \text{ fixed null coefficients}", r":", r"\frac{\kappa\sigma_\star^2}{\lambda_\star}\,\chi^2_k", 40)],
             [r"Sur \& Cand\`es", r"one division", r"simulated", r"joint tests"],
             colors=[(0, PROPC), (1, PROPC)])
 
     def debias(self):
         d = load("hook")
+        heading = label('A corrected center and correctly scaled spread', font_size=30, color=PROPC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
             f"<bookmark mark='a'/> The second correction is to the estimates: divide the MLE by alpha star. <bookmark "
             f"mark='b'/> Then each coordinate is approximately unbiased, with standard deviation sigma star over alpha star "
             f"in the same units. <bookmark mark='c'/> A confidence interval for beta j is the debiased estimate, plus or "
             f"minus one point nine six times that standard deviation, after the right normalization. <bookmark mark='d'/> At "
             f"kappa a fifth and gamma squared five, alpha star is {say(d['alpha'], 3)} and sigma star {say(d['sigma'], 2)}: "
-            f"the textbook interval is centred in the wrong place and is too narrow.",
+            f"the uncorrected center is inflated. Once the center is divided by alpha, its appropriate noise scale is also divided by alpha, so the corrected interval need not be wider.",
             [(r"\tilde\beta_j", r"=", r"\hat\beta_j/\alpha_\star", 40),
              (r"\tilde\beta_j", r"\approx", r"\beta_j + (\sigma_\star/\alpha_\star)\,Z", 40),
              (r"\text{interval}", r":", r"\tilde\beta_j \pm 1.96\,\sigma_\star/(\alpha_\star\tau_j)", 40),
              (r"\text{here}", r":", rf"\alpha_\star = {d['alpha']:.3f}, \ \sigma_\star = {d['sigma']:.2f}", 40)],
-            [r"remove the inflation", r"approximately normal", r"$\tau_j$: the design's scale", r"chapter 0's numbers"],
+            [r"remove the inflation", r"approximately normal", r"$\tau_j=\mathrm{SD}(\sqrt nX_j\mid\sqrt nX_{-j})$", r"chapter 0's numbers"],
             colors=[(0, PROPC), (2, PROPC)])
 
     def estimate_gamma(self):
+        heading = label('Feasible signal-strength estimation', font_size=30, color=PROPC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> But the corrections need gamma, the signal strength, which is unknown. <bookmark "
-            "mark='b'/> Sur and Candès estimate it with ProbeFrontier: subsample the observations and find the sample size "
-            "at which the data become separable, since chapter one's boundary depends on gamma. <bookmark mark='c'/> Later "
-            "work by Yadlowsky, Yun, McLean and D'Amour gave a faster method, SLOE, from the leave-one-out residuals. "
-            "<bookmark mark='d'/> Either way, gamma is estimated from the data, and the corrected intervals and tests are "
-            "feasible.",
+            (
+            "<bookmark mark='a'/> These corrections depend on an unknown signal-strength parameter. The numerical tables use the known simulation truth, so they are oracle illustrations rather than an implementation of a feasible estimator. <bookmark mark='b'/> ProbeFrontier estimates signal by examining separability under subsampling, using the theoretical phase boundary. <bookmark mark='c'/> SLOE instead estimates the corrupted predictor variance from leave-one-out fitted predictions. Combined with the scalar equations, that reparameterization supports feasible inference with the paper's Gaussian-model consistency guarantees. It is not simply a sample variance of response residuals. <bookmark mark='d'/> Nuisance estimation contributes its own finite-sample error; neither method automatically validates corrections outside its assumptions."
+        ),
             [(r"\text{needed}", r":", r"\gamma^2 = \mathrm{Var}(x'\beta), \ \text{unknown}", 40),
              (r"\text{ProbeFrontier}", r":", r"\text{find where subsamples become separable}", 40),
-             (r"\text{SLOE}", r":", r"\text{leave-one-out residuals}", 40),
+             (r"\text{SLOE}", r":", r"\text{leave-one-out predictor variance; \ reparameterized system}", 40),
              (r"\text{so}", r":", r"\text{feasible corrections}", 40)],
             [r"a nuisance parameter", r"Sur \& Cand\`es (2019)", r"Yadlowsky et al. (2021)", r"in practice"],
             colors=[(3, PROPC)])
 
     def real(self):
         d = load("real")
+        heading = label('A semi-synthetic stress test outside the theorem', font_size=30, color=PROPC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
             f"<bookmark mark='a'/> Does the theory survive a real design? The thirty features of the Wisconsin breast cancer "
             f"biopsies are strongly correlated, nothing like independent Gaussians. <bookmark mark='b'/> Take {d['n']} biopsies "
@@ -89,7 +97,7 @@ class Corrected(LectureMixin, VoiceoverScene):
         A = axes([0.5, 3.0], [0, 0.2], x_length=7.4, y_length=4.4, xlabel=r"inflation: \ slope of $x'\hat\beta$ on $x'\beta$, \ held out",
                  ylabel=r"fraction of subsamples", xticks=[0.5, 1, 1.5, 2, 2.5, 3], yticks=[0, 0.1, 0.2], center=[-2.5, 0.2, 0])
         ax = A.ax
-        h = hist_bars(ax, edges, np.histogram(np.clip(sl, 0.5, 3.0 - 1e-9), edges)[0] / len(sl), color=SIMC, opacity=0.6)
+        h = hist_bars(ax, edges, np.histogram(sl, edges)[0] / len(sl), color=SIMC, opacity=0.6)
         one = DashedLine(ax.c2p(1, 0), ax.c2p(1, 0.2), color=CLASSC, stroke_width=3)
         th = DashedLine(ax.c2p(d["alpha_theory"], 0), ax.c2p(d["alpha_theory"], 0.2), color=PROPC, stroke_width=3)
         side = fit_rows(VGroup(
@@ -98,15 +106,10 @@ class Corrected(LectureMixin, VoiceoverScene):
             label(rf"green: \ the Gaussian-design theory, \ $\alpha_\star = {d['alpha_theory']:.2f}$", font_size=22, color=PROPC),
             label(rf"measured: \ median {d['slope_q'][1]:.2f}, \ mean {d['slope_mean']:.2f}", font_size=22, color=SIMC),
             label(rf"80\% between {d['slope_q'][0]:.2f} and {d['slope_q'][2]:.2f}", font_size=22, color=GREY_A),
+            label(rf"{d['failed_finite_fits']} of {d['attempts']} attempts have no finite converged fit; \\ {np.sum((sl<0.5)|(sl>3))} outside plot", font_size=21, color=GREY_A),
         ), 4.6, 0.38, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Over {d['reps']} subsamples of the biopsies. <bookmark mark='b'/> The textbook expects a "
-            f"slope of one: no inflation. <bookmark mark='c'/> The theory for a Gaussian design predicts "
-            f"{say(d['alpha_theory'], 2)}. <bookmark mark='d'/> The measured slopes have a median of "
-            f"{say(d['slope_q'][1], 2)} and a mean of {say(d['slope_mean'], 2)}. <bookmark mark='e'/> Eighty percent fall "
-            f"between {say(d['slope_q'][0], 2)} and {say(d['slope_q'][2], 2)}: on a real, strongly correlated design the "
-            f"predictor is inflated about as the Gaussian theory says, a hint of the universality chapter one promised, and a "
-            f"reason to apply the corrections beyond the textbook's assumptions, with care."
+            f"<bookmark mark='a'/> Over {d['reps']} subsamples of the biopsies. <bookmark mark='b'/> The textbook expects a slope of one: no inflation. <bookmark mark='c'/> The theory for a Gaussian design predicts {say(d['alpha_theory'], 2)}. <bookmark mark='d'/> The measured slopes have a median of {say(d['slope_q'][1], 2)} and a mean of {say(d['slope_mean'], 2)}. <bookmark mark='e'/> Eighty percent fall between {say(d['slope_q'][0], 2)} and {say(d['slope_q'][2], 2)}: on a real, strongly correlated design these finite converged fits show substantial variability outside the Gaussian model. This fixed-design stress test does not validate Gaussian-theory confidence coverage. Failed or separated fits are reported separately, and slopes condition on a finite converged fit."
         ) as vo:
             self.play(FadeIn(A), FadeIn(museum_tag(r"Wolberg, \ Street \& Mangasarian (1995); \ outcomes simulated")))
             vo.wait_until("a")
@@ -118,7 +121,7 @@ class Corrected(LectureMixin, VoiceoverScene):
             vo.wait_until("d")
             self.play(FadeIn(side[3]))
             vo.wait_until("e")
-            self.play(FadeIn(side[4]))
+            self.play(FadeIn(side[4]), FadeIn(side[5]))
         self.clear_scene()
 
     def board(self):
@@ -130,20 +133,27 @@ class Corrected(LectureMixin, VoiceoverScene):
 
     def other(self):
         self.list_voiceover(
-            "<bookmark mark='a'/> Other corrections in the proportional regime. <bookmark mark='b'/> Debiased lasso "
-            "intervals need a degrees-of-freedom adjustment when the support is a constant fraction of n, as Pierre Bellec "
-            "and Cun-Hui Zhang showed. <bookmark mark='c'/> Cross-validation's estimate of risk is consistent, but its "
-            "uncertainty is not what the fixed-p formulas say. <bookmark mark='d'/> The bootstrap can fail: El Karoui and "
-            "Purdom showed in 2018 that resampling residuals or pairs misstates the variance of regression estimates when p "
-            "is a fraction of n.",
+            (
+            "<bookmark mark='a'/> Other corrections in the proportional regime. <bookmark mark='b'/> Debiased lasso intervals need a degrees-of-freedom adjustment when the support is a constant fraction of n, as Pierre Bellec and Cun-Hui Zhang showed. <bookmark mark='c'/> Under suitable model and validation assumptions, cross-validation can consistently estimate its target risk, but training-sample size and dependence between folds matter for both target and uncertainty. <bookmark mark='d'/> The bootstrap can fail: El Karoui and Purdom showed in 2018 that resampling residuals or pairs misstates the variance of regression estimates when p is a fraction of n."
+        ),
             [(r"other corrections:", GREY_A),
              (r"debiased lasso: \ a degrees-of-freedom adjustment \ (Bellec \& Zhang)", PROPC),
              (r"cross-validation: \ consistent for risk, \ not for its uncertainty", SIMC),
              (r"the bootstrap can fail \ (El Karoui \& Purdom 2018)", CLASSC)])
 
     def worked_interval(self):
+        heading = label('A hypothetical Gaussian-coordinate interval', font_size=30, color=PROPC).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
-            "<bookmark mark='a'/> A worked interval in the hook's units. Suppose a coefficient's MLE is 15. <bookmark mark='b'/> The textbook reports it as 15, with a standard error of 3.9 from the Fisher information: an interval from 7.4 to 22.6. <bookmark mark='c'/> The corrected estimate is 15 over 1.50, which is 10, with standard error 4.74 over 1.50, about 3.2. <bookmark mark='d'/> So the corrected interval runs from 3.8 to 16.2: centred a third lower, and shaped by the right noise level.",
+            (
+            "<bookmark mark='a'/> A worked interval in the hook's units. Suppose a coefficient's MLE is 15. "
+            "<bookmark mark='b'/> The textbook reports it as 15, with a standard error of 3.9 from the Fisher "
+            "information: an interval from 7.4 to 22.6. <bookmark mark='c'/> The corrected estimate is 15 over "
+            "1.50, which is 10, with standard error 4.74 over 1.50, about 3.2. <bookmark mark='d'/> So the "
+            'corrected interval runs from 3.8 to 16.2: centred a third lower, and shaped by the right noise level.'
+        ),
             [('\\hat\\beta_j', '=', '15', 40),
              ('\\text{textbook}', ':', '15 \\pm 1.96 \\times 3.9 = (7.4, \\ 22.6)', 40),
              ('\\text{corrected}', ':', '15/1.50 = 10, \\ \\ \\mathrm{se} = 4.74/1.50 \\approx 3.2', 40),

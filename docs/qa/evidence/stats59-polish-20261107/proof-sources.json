@@ -1,0 +1,44 @@
+[
+  {
+    "name": "sur-candes",
+    "url": "https://arxiv.org/abs/1803.06964",
+    "sha256": "349ddbcc34ca3d5e5d2d5eeda552730049924468ded4b662c214fe4cbd2017c4",
+    "review": "System (5), empirical coefficient law and fixed-coordinate null LRT; below the MLE existence boundary, Gaussian design and signal moment conditions."
+  },
+  {
+    "name": "existence",
+    "url": "https://arxiv.org/abs/1804.09753",
+    "sha256": "64ccb81ddf15b126555f13bbc559c5cead0e8b411217ed1bc66722dfa23078d4",
+    "review": "Asymptotic separability phase boundary; no finite-sample iff or solver-status criterion. The no-intercept boundary integrates out Z analytically."
+  },
+  {
+    "name": "covariance",
+    "url": "https://arxiv.org/abs/2001.09351",
+    "sha256": "1391c75774ed98f389b52e9cd0817a1ae54562be1202798600afeb2ac39c3812",
+    "review": "Gaussian arbitrary-covariance coefficient inference uses conditional predictor scales, not arbitrary non-Gaussian universality."
+  },
+  {
+    "name": "cgmt",
+    "url": "https://arxiv.org/abs/1408.4837",
+    "sha256": "d72f652abaf621a7c249bc06227a64f52c5cd4d086b588da6acfa5f855c5d9f4",
+    "review": "Theorem II.1: compact admissible sets, convexity for two-sided value comparison, growth/gap condition for minimizer norms; unbounded sets require localization."
+  },
+  {
+    "name": "rf",
+    "url": "https://arxiv.org/abs/1908.05355",
+    "sha256": "d69796c99ca1e28365f4b92cbc92c339c59e7efac09e3a3066987303920d00a5",
+    "review": "Assumptions 1-3 and Theorem 2: spherical input/weight model, activation moments and target/noise hypotheses. Gaussian equivalence concerns limiting risks, not an identity for each feature."
+  },
+  {
+    "name": "mest",
+    "url": "https://digicoll.lib.berkeley.edu/record/85728/files/810.pdf",
+    "sha256": "82bd0a361878c95aa8559aa8429a3f5fd19ba1ad4e939397cbd9dbd4b39caf97",
+    "review": "Optimal M-estimation under Gaussian design and error/loss assumptions; effective noise convolution and proximal loss construction."
+  },
+  {
+    "name": "sloe",
+    "url": "https://papers.neurips.cc/paper_files/paper/2021/file/f6c2a0c4b566bc99d596e58638e342b0-Paper.pdf",
+    "sha256": "d386b88f4ac8f71810110924943d3c304485ee76fd1d8d873e94043dabde8559",
+    "review": "SLOE estimates corrupted predictor variance eta^2 through leave-one-out predictions, then reparameterizes the scalar system. Numerical examples here use oracle known gamma, not an implemented SLOE estimate."
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "dataset": "Wisconsin diagnostic breast cancer",
+  "url": "https://archive.ics.uci.edu/static/public/17/breast+cancer+wisconsin+diagnostic.zip",
+  "archive_sha256": "bc154869ef13f753f9e2b5a17e248cfe1ba4b6721db7c4da9f4880e40b05d3af",
+  "data_sha256": "d606af411f3e5be8a317a5a8b652b425aaf0ff38ca683d5327ffff94c3695f4a",
+  "records": 569,
+  "features": 30,
+  "verification": "all 17,070 feature values and all 569 diagnoses agree exactly in row order with UCI wdbc.data",
+  "local_csv_sha256": "a5329478b28b84d8cdf96fe81e0990efacbad282b7a500533149ed4d2a318461",
+  "scope": "All 17070 feature values and 569 diagnoses verified again. Only covariates are used here; outcomes are simulated. Standardization and random beta scaling use this fixed empirical design, not a population Gaussian calibration theorem."
+}
