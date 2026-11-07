@@ -165,6 +165,8 @@ class EB(VoiceoverScene):
             label(rf"their true effects: \ average {d['mean_theta_top']:.2f}: \ the winner's curse", font_size=22, color=TRUE),
             label(rf"Tweedie's estimates: \ average {d['mean_tw_top']:.2f}", font_size=22, color=SHRUNK),
         ), 12.0, 0.22, [0, -2.9, 0])
+        head=label("Selection inflates extreme estimates; shrinkage uses all observations",font_size=36).move_to([0,3.3,0])
+        if head.width>12.5:head.width=12.5
         with self.voiceover(
             "<bookmark mark='a'/> Now select the ten largest z-scores, the discoveries. Their average is five point six one. "
             "<bookmark mark='b'/> But the true effects behind them average only five point oh seven: they were selected "
@@ -173,6 +175,7 @@ class EB(VoiceoverScene):
             "selected estimates back to an average of four point eight four. Because the correction comes from the whole "
             "distribution, it applies even after selection."
         ) as vo:
+            self.play(FadeIn(head))
             self.play(FadeIn(P.lines), FadeIn(P.names), FadeIn(P.ticks))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(x, scale=0.5) for x in P.raw], lag_ratio=0.05), FadeIn(rows[0]))
