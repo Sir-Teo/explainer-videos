@@ -18,7 +18,7 @@ SCENES = [
     ("s08a_drift", "Drift", "12. Risk measures and the drift trap"),
     ("s09_band", "Band", "13. Where not to trade"),
     ("s09a_band3d", "Band3D", "14. The band as a surface"),
-    ("s10_nsde", "NSDE", "15. Neural SDEs and robust bounds"),
+    ("s10_nsde", "NSDE", "15. Neural SDEs and model sensitivity"),
     ("s11_generator", "Generator", "16. Market generators"),
     ("s12_production", "Production", "17. Production and model risk"),
     ("s12a_frontier", "Frontier", "18. The frontier, 2023 to 2026"),
