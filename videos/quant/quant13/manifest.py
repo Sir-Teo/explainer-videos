@@ -18,7 +18,7 @@ SCENES = [
     ("s06a_mixfrac", "MixFrac", "12. The mixing fraction"),
     ("s07_bergomi", "Bergomi", "13. Bergomi: forward variance as the state"),
     ("s08_forward", "Forward", "14. Forward smiles and cliquets"),
-    ("s08a_puzzle", "Puzzle", "15. The SPX/VIX puzzle, measured on bitcoin"),
+    ("s08a_puzzle", "Puzzle", "15. A volatility-index challenge: Bitcoin illustration"),
     ("s09_calibration", "Calibration", "16. Calibration: valleys, identifiability, instability"),
     ("s09a_industry", "Industry", "17. Industry: who builds these models, and how desks judge them"),
     ("s09b_frontier", "Frontier", "18. Frontier, 2023-2026"),
