@@ -26,21 +26,18 @@ class Gaps(VoiceoverScene):
         rows = [
             cmath(r"G(n, \tfrac12) \ \text{vs.\ } G(n, \tfrac12) + \text{a clique on } k \text{ vertices}", r":", r"\text{planted clique}", font_size=30),
             cmath(r"\text{information-theoretically}", r":", rf"k > 2\log_2 n \approx {d['log_n']:.0f}: \ \text{{search all }} k\text{{-sets}}", font_size=30),
-            cmath(r"\text{in polynomial time}", r":", rf"k \gtrsim \sqrt n = {d['sqrt_n']:.0f}: \ \text{{degrees, \ spectra}}", font_size=32),
+            cmath(r"\text{in polynomial time}", r":", rf"k \gtrsim \sqrt n = {d['sqrt_n']:.0f}: \ \text{{spectral scales; \ constants and model conditions matter}}", font_size=32),
             cmath(r"2\log_2 n \ll k \ll \sqrt n", r":", r"\text{no efficient method known, \ after 30 years}", font_size=32),
         ]
         rows[1][-1].set_color(UPC)
         rows[2][-1].set_color(ADAPTC)
         rows[3][-1].set_color(LOWC)
         whys = [why(r"Jerrum (1992); \ Kučera (1995)"), why(r"exponential-time search"), why(r"Alon, \ Krivelevich \& Sudakov (1998)"), why(r"the conjectured hard regime")]
+        heading = label('Planted clique illustrates conjectured asymptotic computational gaps', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            f"<bookmark mark='a'/> The minimax theory so far asks what is possible with unlimited computation. A random graph "
-            f"in which each edge is present with probability one half, against the same graph with a clique of k vertices "
-            f"planted in it. <bookmark mark='b'/> Information-theoretically, a clique larger than about twice log base two of "
-            f"n can be detected: search every set of k vertices. For n of four hundred that is about {d['log_n']:.0f}. "
-            f"<bookmark mark='c'/> But the best polynomial-time methods, counting degrees or using the top eigenvector, need "
-            f"k of order root n, here twenty. <bookmark mark='d'/> In between, detection is possible in principle and no "
-            f"efficient algorithm is known, after thirty years of trying."
+            f"<bookmark mark='a'/> The minimax theory so far asks what is possible with unlimited computation. A random graph in which each edge is present with probability one half, against the same graph with a clique of k vertices planted in it. <bookmark mark='b'/> Information-theoretically, a clique larger than about twice log base two of n can be detected: search every set of k vertices. For n of four hundred that is about {d['log_n']:.0f}. <bookmark mark='c'/> But the best polynomial-time methods, appropriate spectral methods, need k of order root n, here twenty. <bookmark mark='d'/> In between, detection is possible in principle and no efficient algorithm is known, after thirty years of trying."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -65,14 +62,10 @@ class Gaps(VoiceoverScene):
             label(r"green: \ the total-edge test, \ polynomial time", font_size=22, color=ADAPTC),
             label(rf"blue: \ $2\log_2 n \approx {d['log_n']:.0f}$: \ possible in principle", font_size=22, color=UPC),
             label(rf"gold: \ $\sqrt n = {d['sqrt_n']:.0f}$", font_size=22, color=HYPC),
-            label(r"red band: \ detectable, \ but not by any known fast test", font_size=22, color=LOWC),
+            label(r"red band: \ schematic asymptotic scales, not finite-$n$ hardness", font_size=22, color=LOWC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Simulated, with four hundred vertices. <bookmark mark='b'/> The simplest efficient test "
-            f"counts edges. Its power is near five percent for small cliques and climbs past a half only when the clique is a "
-            f"good deal larger than root n. <bookmark mark='c'/> Exhaustive search would succeed from about {d['log_n']:.0f} "
-            f"vertices, <bookmark mark='d'/> but polynomial-time methods need about root n. <bookmark mark='e'/> The red band "
-            f"is the gap: problems that are statistically solvable but, as far as anyone knows, computationally out of reach."
+            f"<bookmark mark='a'/> Simulated, with four hundred vertices. <bookmark mark='b'/> The simplest efficient test counts edges. Its power is near five percent for small cliques and climbs past a half only when the clique is a good deal larger than root n. <bookmark mark='c'/> Exhaustive search would succeed from about {d['log_n']:.0f} vertices, <bookmark mark='d'/> but polynomial-time methods need about root n. <bookmark mark='e'/> The red band schematically marks the two asymptotic scales. It is not an established finite-n hardness interval. The general gap concerns problems that are statistically solvable but, as far as anyone knows, computationally out of reach."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated")))
             vo.wait_until("a")
@@ -89,22 +82,20 @@ class Gaps(VoiceoverScene):
 
     def spca(self):
         rows = [
-            cmath(r"\Sigma = I_p + \lambda\, vv^\top, \ \|v\|_0 = k", r":", r"\text{sparse PCA: \ detect or estimate } v", font_size=32),
+            cmath(r"\Sigma = I_p + \lambda\, vv^\top, \ \|v\|_0 = k,\ \|v\|_2=1", r":", r"\text{sparse PCA: \ detect or estimate } v", font_size=32),
             cmath(r"\text{statistically}", r":", r"n \gtrsim k \log p / \lambda^2", font_size=34),
-            cmath(r"\text{efficient methods}", r":", r"n \gtrsim k^2 \log p / \lambda^2: \ \text{a factor } k \text{ more data}", font_size=32),
+            cmath(r"\text{common tractable methods, weak-spike regimes}", r":", r"n \gtrsim k^2 \log p / \lambda^2: \ \text{a factor } k \text{ more data}", font_size=32),
             cmath(r"\text{Berthet \& Rigollet (2013)}", r":", r"\text{a fast method for the gap would detect planted cliques}", font_size=30),
         ]
         rows[1][-1].set_color(UPC)
         rows[2][-1].set_color(ADAPTC)
         rows[3][-1].set_color(LOWC)
         whys = [why(r"a spiked covariance"), why(r"exhaustive search over supports"), why(r"semidefinite relaxations"), why(r"a reduction")]
+        heading = label('Sparse-PCA computational claims need a stated parameter regime', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The gap reaches statistics proper. In sparse principal components, a covariance matrix has "
-            "one spike in a direction with only k non-zero coordinates. <bookmark mark='b'/> Statistically, about k log p "
-            "over lambda squared observations suffice, by searching over supports. <bookmark mark='c'/> Every known "
-            "efficient method, including semidefinite relaxations, needs about k squared log p: a factor of k more data. "
-            "<bookmark mark='d'/> Quentin Berthet and Philippe Rigollet showed in 2013 that a fast method working in the gap "
-            "would give a fast method for planted clique. The gap is inherited, by reduction, from a problem believed hard."
+            "<bookmark mark='a'/> The gap reaches statistics proper. In sparse principal components, a covariance matrix has one spike in a direction with only k non-zero coordinates. <bookmark mark='b'/> Statistically, about k log p over lambda squared observations suffice, by searching over supports. <bookmark mark='c'/> In important weak-spike Gaussian regimes, common tractable methods have requirements on a k-squared rather than k scale, up to logarithmic and signal-strength factors. That is not a universal bound on every efficient method in every parameter regime. <bookmark mark='d'/> Quentin Berthet and Philippe Rigollet showed in 2013 that a fast method working in the gap would give a fast method for planted clique. The gap is inherited, by reduction, from a problem believed hard."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -115,21 +106,18 @@ class Gaps(VoiceoverScene):
     def lasso(self):
         rows = [
             cmath(r"\text{sparse regression}, \ y = X\beta + z", r":", r"\text{minimax: \ } s\log(p/s)/n, \ \text{best subset attains it}", font_size=30),
-            cmath(r"\text{best subset}", r":", r"\binom ps \text{ fits: \ exponential time}", font_size=34),
+            cmath(r"\text{best subset}", r":", r"\binom ps\text{ fits: combinatorial; polynomial for fixed }s", font_size=34),
             cmath(r"\text{the lasso}", r":", r"\text{the same rate, \ in polynomial time, \ \emph{if} } X \text{ is well conditioned}", font_size=30),
             cmath(r"\text{badly conditioned } X", r":", r"\text{evidence of a gap: \ Zhang, \ Wainwright \& Jordan (2014)}", font_size=30),
         ]
         rows[2][-1].set_color(ADAPTC)
         rows[3][-1].set_color(LOWC)
         whys = [why(r"Fano's rate, \ chapter 4"), why(r"Part 28's search"), why(r"Part 52's restricted eigenvalues"), why(r"the gap reaches regression")]
+        heading = label('Prediction, coefficient error and computational hardness need different conditions', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Gaps appear even in regression. With a sparse coefficient vector, the minimax prediction "
-            "rate is Fano's s log p over s, divided by n, and best-subset selection attains it. <bookmark mark='b'/> But best "
-            "subset must search p choose s models, which takes exponential time. <bookmark mark='c'/> The lasso attains the "
-            "same rate in polynomial time, provided the design is well conditioned on sparse vectors, a condition Part "
-            "fifty-two calls restricted eigenvalues. <bookmark mark='d'/> When the design is badly conditioned, Yuchen Zhang, "
-            "Martin Wainwright and Michael Jordan found evidence in 2014 that no polynomial-time method can match best subset. "
-            "Computation, not just information, can set the rate."
+            "<bookmark mark='a'/> Gaps appear even in regression. With a sparse coefficient vector, the minimax prediction rate is Fano's s log p over s, divided by n, and best-subset selection attains it. <bookmark mark='b'/> But best subset must search p choose s models, which is a combinatorial algorithm; for growing sparsity it can be superpolynomial, while fixed sparsity gives polynomial enumeration. This does not prove that every instance requires enumeration. <bookmark mark='c'/> The lasso attains the same rate in polynomial time, provided the design is well conditioned on sparse vectors, a condition Part fifty-two calls restricted eigenvalues. <bookmark mark='d'/> For certain hard-design families and specified complexity assumptions, Yuchen Zhang, Martin Wainwright and Michael Jordan found evidence in 2014 that no polynomial-time method can match best subset. Computation, not just information, can set the rate."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -142,17 +130,11 @@ class Gaps(VoiceoverScene):
             label(r"for the working statistician:", font_size=28, color=GREY_A),
             label(r"a minimax rate is a promise about the best method, \ not about the one you can run", font_size=26, color=UPC),
             label(r"when the efficient methods need more data, \ the computational rate is the honest planning number", font_size=26, color=ADAPTC),
-            label(r"convex relaxations (the lasso, \ SDPs) \ often sit exactly at the computational limit", font_size=26, color=HYPC),
-            label(r"a method that claims the statistical limit in the gap is probably wrong, \ or exponential", font_size=26, color=LOWC),
+            label(r"convex relaxations can match conjectured scales in specified models", font_size=26, color=HYPC),
+            label(r"assess a claimed improvement by its assumptions, proof and complexity", font_size=26, color=LOWC),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> What this means in practice. <bookmark mark='b'/> A minimax rate promises what the best "
-            "method could do, not what the method you can actually run will do. <bookmark mark='c'/> When the efficient "
-            "methods need more data, as in sparse principal components, the computational rate is the honest number for "
-            "planning a study. <bookmark mark='d'/> Convex relaxations, like the lasso and semidefinite programs, often sit "
-            "exactly at the computational limit, which is one reason they are so widely used. <bookmark mark='e'/> And a fast "
-            "method that claims to reach the statistical limit inside a conjectured gap deserves suspicion: it is probably "
-            "wrong, or secretly exponential."
+            "<bookmark mark='a'/> What this means in practice. <bookmark mark='b'/> A minimax rate promises what the best method could do, not what the method you can actually run will do. <bookmark mark='c'/> When the efficient methods need more data, as in sparse principal components, the computational rate is the honest number for planning a study. <bookmark mark='d'/> Convex relaxations have useful guarantees in many models and may match conjectured computational scalings in particular regimes, which is one reason they are so widely used. <bookmark mark='e'/> And a fast method that claims to reach the statistical limit inside a conjectured gap deserves suspicion: its assumptions, guarantees and computational complexity should be examined carefully. Additional structure can remove an apparent gap."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
@@ -168,14 +150,7 @@ class Gaps(VoiceoverScene):
             label(r"the new question: \ the best rate \emph{for an efficient estimator}", font_size=26, color=ADAPTC),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Proving that no polynomial-time algorithm exists would separate P from NP, so the field "
-            "collects evidence instead. <bookmark mark='b'/> Reductions from planted clique, by Berthet and Rigollet and later "
-            "by Matthew Brennan and Guy Bresler, transfer its presumed hardness to many problems. <bookmark mark='c'/> The "
-            "low-degree method, developed by Samuel Hopkins in 2018, asks whether any polynomial of degree about log n in the "
-            "data can tell the hypotheses apart; when none can, it predicts that no efficient test can either. <bookmark "
-            "mark='d'/> Sum-of-squares and statistical-query bounds tell the same story. <bookmark mark='e'/> And so minimax "
-            "theory has a new question alongside the old one: not only how well can anyone estimate, but how well can anyone "
-            "estimate quickly."
+            "<bookmark mark='a'/> General average-case lower bounds beyond restricted algorithm classes remain out of reach in many of these models, so the field studies conditional reductions and restricted-model evidence. <bookmark mark='b'/> Reductions from planted clique, by Berthet and Rigollet and later by Matthew Brennan and Guy Bresler, transfer its presumed hardness to many problems. <bookmark mark='c'/> The low-degree method, developed by Samuel Hopkins in 2018, asks whether any polynomial of degree about log n in the data can tell the hypotheses apart; when none can, it predicts that no efficient test can either. <bookmark mark='d'/> Sum-of-squares and statistical-query bounds tell the same story. <bookmark mark='e'/> And so minimax theory has a new question alongside the old one: not only how well can anyone estimate, but how well can anyone estimate quickly."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

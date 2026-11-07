@@ -27,7 +27,7 @@ import math
 from dataclasses import asdict
 
 import numpy as np
-from scipy import stats
+from scipy import stats, integrate, optimize
 
 from explainer.ai.cache import Cache
 from explainer.stats import museum
@@ -58,6 +58,109 @@ def nest(obj):
     return obj
 
 
+def bernoulli_se(values):
+    return float(np.std(values,ddof=1)/math.sqrt(len(values)))
+
+
+def polynomial_bump(u):
+    """C2 compact bump with supremum 1 and |second derivative| <= 6."""
+    u=np.asarray(u,float)
+    return np.maximum(1-u*u,0)**3
+
+
+def lecam_density_pair(x,w,L=1.):
+    if not 0<w<=.5 or L<1:raise ValueError("Use w in (0,.5] and L>=1")
+    x=np.asarray(x,float);h=(L-stats.norm.pdf(0))*w*w/6
+    if h>=stats.norm.pdf(1.5):raise ValueError("Positivity bound exceeded")
+    base=stats.norm.pdf(x)
+    return base,base+h*(polynomial_bump(x/w)-polynomial_bump((x-1)/w)),h
+
+
+def lecam_density_point(n,s=2.,L=1.):
+    """Valid C2 norm-one Gaussian-baseline density pair and product-TV bound."""
+    if s!=2 or L!=1:raise ValueError("This explicit construction is for C2 norm one")
+    nodes,weights=np.polynomial.legendre.leggauss(64)
+    def candidate(w):
+        h=(1-stats.norm.pdf(0))*w*w/6
+        chi2=h*h*w*np.dot(weights,polynomial_bump(nodes)**2*(1/stats.norm.pdf(w*nodes)+1/stats.norm.pdf(1+w*nodes)))
+        tv=min(1.,math.sqrt(n*chi2))
+        return {"w":float(w),"h":float(h),"chi2":float(chi2),"tv":tv,"bound":h*h*(1-tv)/8}
+    opt=optimize.minimize_scalar(lambda w:-candidate(w)["bound"],bounds=(1e-7,.5),method="bounded",options={"xatol":1e-12})
+    best=max((candidate(opt.x),candidate(.5)),key=lambda x:x["bound"])
+    return best|{"rate":n**(-.8),"class":"densities on R with max(||f||inf,||f prime||inf,||f second||inf)<=1","support_centres":[0.,1.],"bump":"(1-u squared)^3 positive part"}
+
+
+def kde_uniform_upper(n):
+    h=(1/(2*math.sqrt(math.pi)*n))**.2
+    return {"h":h,"bound":h**4/4+1/(2*math.sqrt(math.pi)*n*h)}
+
+
+def kde_normal_mse(n,h):
+    mean=stats.norm.pdf(0)/math.sqrt(1+h*h)
+    second=1/(2*math.pi*h*math.sqrt(h*h+2))
+    return float((mean-stats.norm.pdf(0))**2+(second-mean*mean)/n)
+
+
+def varshamov_gilbert(d,generator,trials=3000):
+    """Exact original candidate stream and distance checks, accelerated by bit counts."""
+    encoded=[];points=[]
+    for _ in range(trials):
+        v=generator.integers(0,2,d);code=sum(int(bit)<<j for j,bit in enumerate(v))
+        if all((code^other).bit_count()>=d/8 for other in encoded):encoded.append(code);points.append(v)
+    return {"M":len(points),"guarantee":2**(d/8),"pts":np.array(points),"trials":trials,"scope":"random finite search, existence theorem does not guarantee its output size"}
+
+
+def assouad_holder(n,s=1.,L=1.):
+    """Disjoint 0/1 bumps, exact fixed-design KL, conservative decision reduction."""
+    if s not in (1.,2.):raise ValueError("Explicit Lipschitz or C2 construction only")
+    x=np.arange(1,n+1)/n;best={"bound":0.}
+    integral=2/3 if s==1 else integrate.quad(lambda u:float(polynomial_bump(u)**2),-1,1,epsabs=1e-13)[0]
+    for m in range(1,400):
+        cell=np.minimum((x*m).astype(int),m-1);u=2*m*x-(2*cell+1)
+        b=np.maximum(1-np.abs(u),0) if s==1 else polynomial_bump(u)
+        h_max=L*(1/(2*m))**s/(1 if s==1 else 6)
+        unit_norms=np.bincount(cell,weights=b*b,minlength=m)
+        tv_per_height=math.sqrt(float(unit_norms.max())/4)
+        h=min(h_max,2/(3*tv_per_height)) if tv_per_height>0 else h_max
+        norms=h*h*unit_norms
+        kl=float(norms.max()/2);tv=min(1.,math.sqrt(kl/2))
+        sep=h*h*integral/(2*m);bound=m*sep*(1-tv)/8
+        if bound>best["bound"]:best={"bound":bound,"m":m,"h":h,"max_neighbour_kl":kl,"tv_upper":tv,"coordinate_l2_separation_squared":sep}
+    return best|{"rate":n**(-2*s/(2*s+1)),"loss":"integrated squared error; unrestricted estimates reduced to binary decisions"}
+
+
+def lepski(ests,sds,kappa=2.2):
+    """Largest admissible index; a rejected intermediate index does not stop search."""
+    return max(j for j in range(len(ests)) if all(abs(ests[j]-ests[i])<=kappa*sds[i] for i in range(j)))
+
+
+def higher_criticism(x,alpha0=.5):
+    """Positive sup of standardized CDF excess over t in [1/n,alpha0]."""
+    x=np.atleast_2d(np.asarray(x,float));n=x.shape[1];p=np.sort(stats.norm.sf(x),axis=1)
+    lo=1/n
+    if not lo<=alpha0<1:raise ValueError("Need 1/n <= alpha0 < 1")
+    ranks=np.arange(1,n+1)/n
+    valid=(p>=lo)&(p<=alpha0)
+    denom=np.sqrt(np.clip(p,lo,alpha0)*(1-np.clip(p,lo,alpha0)))
+    interior=np.where(valid,math.sqrt(n)*(ranks[None,:]-p)/denom,-np.inf).max(axis=1)
+    lower=math.sqrt(n)*((p<=lo).mean(axis=1)-lo)/math.sqrt(lo*(1-lo))
+    upper=math.sqrt(n)*((p<=alpha0).mean(axis=1)-alpha0)/math.sqrt(alpha0*(1-alpha0))
+    return np.maximum.reduce([interior,lower,upper,np.zeros(len(x))])
+
+
+def fixed_window_risks(f,x0,n,hs):
+    x=np.arange(1,n+1)/n;truth=float(f(np.array([x0]))[0]);result=[]
+    for h in hs:
+        values=f(x[np.abs(x-x0)<=h]);result.append(float((values.mean()-truth)**2+1/len(values)))
+    return np.array(result)
+
+
+def bias_aware_radius(x,x0,h,L1,L2,alpha=.05):
+    dx=np.asarray(x)[np.abs(np.asarray(x)-x0)<=h]-x0
+    bias=L1*abs(dx.mean())+L2*np.mean(dx*dx)/2
+    return float(bias+stats.norm.ppf(1-alpha/2)/math.sqrt(len(dx))),float(bias)
+
+
 # ---------------------------------------------------------------------------------------------------------------
 def kde_at(x, x0, h):
     return np.mean(np.exp(-0.5 * ((x - x0) / h) ** 2), axis=-1) / (math.sqrt(2 * math.pi) * h)
@@ -76,7 +179,7 @@ def compute_hook():
         h = 1.06 * n ** (-0.2)
         reps = 2000 if n <= 1600 else 600
         e = [kde_at(r.standard_normal(n), 0.0, h) - f0 for _ in range(reps)]
-        sim.append({"n": n, "mse": float(np.mean(np.square(e)))})
+        sim.append({"n": n, "mse": float(np.mean(np.square(e))),"exact_mse":kde_normal_mse(n,h),"reps":reps,"bandwidth":h})
     return {"ns": ns, "curves": curves, "sim": sim}
 
 
@@ -115,7 +218,7 @@ def compute_lecam():
     for d in (0.25, 0.5, 1.0, 2.0, 3.0):
         div.append({"d": d, "tv": GK.tv_normal(d), "h2": GK.hellinger2_normal(d), "kl": GK.kl_normal(d), "pinsker": min(1, math.sqrt(GK.kl_normal(d) / 2))})
     ns = [250, 1000, 4000, 16000, 64000]
-    lower = [GK.lecam_density_point(n, s=2.0, L=1.0)["bound"] for n in ns]
+    lower = [lecam_density_point(n, s=2.0, L=1.0)["bound"] for n in ns]
     # an upper bound: the kernel estimate of a smooth density at a point, its simulated MSE
     r = rng(5003)
     upper = []
@@ -125,13 +228,13 @@ def compute_lecam():
         reps = 1000 if n <= 4000 else 200
         e = [kde_at(r.standard_normal(n), 0.0, h) - f0 for _ in range(reps)]
         upper.append(float(np.mean(np.square(e))))
-    best = GK.lecam_density_point(4000, s=2.0, L=1.0)
-    return {"div": div, "ns": ns, "lower": lower, "upper": upper, "best": best}
+    best = lecam_density_point(4000, s=2.0, L=1.0)
+    return {"div": div, "ns": ns, "lower": lower, "normal_mse_mc": upper,"upper":[kde_uniform_upper(n)["bound"] for n in ns], "best": best,"scope":"valid C2 norm-one pair lower bound and uniform Gaussian-KDE upper bound; normal risk stored separately"}
 
 
 def compute_fano():
     r = rng(5004)
-    vg = GK.varshamov_gilbert(24, r, trials=3000)
+    vg = varshamov_gilbert(24, r, trials=3000)
     p, n = 1000, 1
     rows = []
     for s in (1, 5, 20, 50, 100):
@@ -147,8 +250,8 @@ def compute_fano():
 
 def compute_assouad():
     ns = [100, 1000, 10000, 100000]
-    out = {"ns": ns, "s1": [GK.assouad_holder(n, 1.0)["bound"] for n in ns], "s2": [GK.assouad_holder(n, 2.0)["bound"] for n in ns],
-           "m1": [GK.assouad_holder(n, 1.0)["m"] for n in ns]}
+    out = {"ns": ns, "s1": [assouad_holder(n, 1.0)["bound"] for n in ns], "s2": [assouad_holder(n, 2.0)["bound"] for n in ns],
+           "m1": [assouad_holder(n, 1.0)["m"] for n in ns]}
     return out
 
 
@@ -161,8 +264,10 @@ def compute_upper():
         th = GK.hardest_theta(eps, a, 1.0)
         y = th[None, :] + eps * r.standard_normal((300, len(a)))
         risk = lambda e: float(np.mean(np.sum((e - th) ** 2, axis=1)))  # noqa: E731
-        trunc = min(risk(GK.est_truncation(y, N)) for N in range(1, 200, 2))
-        rows.append({"eps": eps, "bound": p["risk"], "pinsker": risk(GK.est_linear(y, p["shrink"])), "trunc_best": trunc,
+        cutoffs=np.arange(len(a)+1)
+        trunc_risk=cutoffs*eps**2+np.r_[np.cumsum(th[::-1]**2)[::-1],0.]
+        cutoff=int(np.argmin(trunc_risk));trunc=risk(GK.est_truncation(y,cutoff))
+        rows.append({"eps": eps, "bound": p["risk"], "pinsker": risk(GK.est_linear(y, p["shrink"])), "trunc_best": trunc,"oracle_cutoff":cutoff,"oracle_truth_risk":float(trunc_risk[cutoff]),"scope":"risk at one Pinsker-worst truth, not supremum risk for every estimator",
                      "bjs": risk(GK.est_block_js(y, eps)), "soft": risk(GK.est_soft(y, eps * math.sqrt(2 * math.log(len(a)))))})
     return {"rows": rows}
 
@@ -176,7 +281,7 @@ def lepski_rep(f, x0, n, hs, r, kappa=2.2):
         ests.append(y[m].mean())
         sds.append(1 / math.sqrt(m.sum()))
     ests, sds = np.array(ests), np.array(sds)
-    j = GK.lepski(ests, sds, kappa)
+    j = lepski(ests, sds, kappa)
     return ests, sds, j
 
 
@@ -196,8 +301,9 @@ def compute_lepski():
             risk_by_h += (e - f0) ** 2
             lep.append((e[j] - f0) ** 2)
             chosen.append(j)
-        risk_by_h /= reps
-        out[name] = {"risk_by_h": risk_by_h, "lepski": float(np.mean(lep)), "oracle": float(risk_by_h.min()), "fixed": float(risk_by_h[4]),
+        risk_mc=risk_by_h/reps
+        risk_by_h=fixed_window_risks(f,x0,n,hs)
+        out[name] = {"risk_by_h": risk_by_h,"risk_by_h_mc":risk_mc,"kappa":2.2,"reps":reps, "lepski": float(np.mean(lep)), "oracle": float(risk_by_h.min()), "fixed": float(risk_by_h[4]),
                      "chosen": np.bincount(chosen, minlength=len(hs)) / reps}
     return out
 
@@ -207,7 +313,7 @@ def compute_detect():
     n = 10000
     betas = np.linspace(0.5, 1.0, 51)
     boundary = [GK.detection_boundary(b) for b in betas]
-    null = GK.higher_criticism(r.standard_normal((400, n)))
+    null = higher_criticism(r.standard_normal((400, n)))
     crit = float(np.quantile(null, 0.95))
     nullmax = np.max(r.standard_normal((400, n)), axis=1)
     critmax = float(np.quantile(nullmax, 0.95))
@@ -215,7 +321,7 @@ def compute_detect():
     for b in (0.6, 0.7, 0.8, 0.9):
         for rr in (0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8):
             x = GK.sparse_mixture(n, b, rr, r, reps=150)
-            hc = GK.higher_criticism(x)
+            hc = higher_criticism(x)
             mx = np.max(x, axis=1)
             grid.append({"beta": b, "r": rr, "hc": float(np.mean(hc > crit)), "max": float(np.mean(mx > critmax)),
                          "above": rr > GK.detection_boundary(b)})
@@ -223,16 +329,14 @@ def compute_detect():
 
 
 def compute_clique():
-    r = rng(5008)
-    n = 400
-    ks = [0, 10, 20, 30, 40, 60, 80]
-    null = [GK.degree_stat(GK.planted_clique(n, 0, r)) for _ in range(300)]
-    crit = float(np.quantile(null, 0.95))
-    rows = []
-    for k in ks:
-        st = [GK.degree_stat(GK.planted_clique(n, k, r)) for _ in range(150)]
-        rows.append({"k": k, "power": float(np.mean(np.array(st) > crit))})
-    return {"n": n, "rows": rows, "sqrt_n": math.sqrt(n), "log_n": 2 * math.log2(n)}
+    r=rng(5008);n=400;N=n*(n-1)//2;reps=150
+    cutoff=int(stats.binom.ppf(.95,N,.5));rows=[]
+    for k in (0,10,20,30,40,60,80):
+        planted=k*(k-1)//2
+        st=np.array([GK.degree_stat(GK.planted_clique(n,k,r)) for _ in range(reps)])
+        hit=st>(cutoff-N/2)/math.sqrt(N/4)
+        rows.append({"k":k,"power":float(hit.mean()),"exact_power":float(stats.binom.sf(cutoff-planted,N-planted,.5)),"mc_se":bernoulli_se(hit)})
+    return {"n":n,"rows":rows,"sqrt_n":math.sqrt(n),"log_n":2*math.log2(n),"null_edge_cutoff":cutoff,"reps":reps,"null_size":float(stats.binom.sf(cutoff,N,.5))}
 
 
 def compute_mcycle():
@@ -255,7 +359,7 @@ def compute_mcycle():
             sds.append(sigma / math.sqrt(m.sum()))
         ests, sds = np.array(ests), np.array(sds)
         ok = np.isfinite(ests)
-        j = GK.lepski(ests[ok], sds[ok])
+        j = lepski(ests[ok], sds[ok])
         out["points"].append({"x0": x0, "h": float(hs[ok][j]), "est": float(ests[ok][j]), "se": float(sds[ok][j])})
     return out
 
@@ -268,15 +372,20 @@ def compute_board():
     truth = float(f(np.array([x0]))[0])
     x = np.arange(1, n + 1) / n
     hs = np.array([0.0025, 0.005, 0.01, 0.02, 0.04, 0.08, 0.16])
-    # the MSE-optimal box bandwidth at x0, found by simulation once
+    # Preserve an independent pilot comparison; choose the oracle using exact bias plus variance.
     risk = np.zeros(len(hs))
     for _ in range(400):
         y = f(x) + r.standard_normal(n)
         risk += np.array([(y[np.abs(x - x0) <= h].mean() - truth) ** 2 for h in hs])
-    h_opt = float(hs[int(np.argmin(risk))])
+    pilot_risk_mc=risk/400
+    risk=fixed_window_risks(f,x0,n,hs)
+    h_opt=float(hs[int(np.argmin(risk))])
     idx = list(hs).index(h_opt)
     h_under = float(hs[max(0, idx - 2)])
-    hit = {"opt": [], "under": [], "lepski": []}
+    L1=2*math.pi+40*math.exp(-.5);L2=4*math.pi**2+800
+    radii=[bias_aware_radius(x,x0,h,L1,L2)[0] for h in hs]
+    h_bias=float(hs[int(np.argmin(radii))]);bias_radius,bias_bound=bias_aware_radius(x,x0,h_bias,L1,L2)
+    hit = {"opt": [], "under": [], "lepski": [],"bias_aware":[]}
     for _ in range(reps):
         y = f(x) + r.standard_normal(n)
         for key, h in (("opt", h_opt), ("under", h_under)):
@@ -285,21 +394,23 @@ def compute_board():
             hit[key].append(abs(e - truth) <= 1.96 * se)
         ests = np.array([y[np.abs(x - x0) <= h].mean() for h in hs])
         sds = np.array([1 / math.sqrt(np.sum(np.abs(x - x0) <= h)) for h in hs])
-        j = GK.lepski(ests, sds)
+        j = lepski(ests, sds)
         hit["lepski"].append(abs(ests[j] - truth) <= 1.96 * sds[j])
-    rows = [Row(50, r"pointwise CI, \ MSE-optimal bandwidth", r"a peak at $x_0$, \ $n = 2{,}000$", "coverage", 0.95, float(np.mean(hit["opt"])), reps),
-            Row(50, r"pointwise CI, \ undersmoothed (bandwidth / 4)", r"a peak at $x_0$, \ $n = 2{,}000$", "coverage", 0.95, float(np.mean(hit["under"])), reps),
-            Row(50, r"pointwise CI, \ Lepski's bandwidth", r"a peak at $x_0$, \ $n = 2{,}000$", "coverage", 0.95, float(np.mean(hit["lepski"])), reps)]
+        hit["bias_aware"].append(abs(y[np.abs(x-x0)<=h_bias].mean()-truth)<=bias_radius)
+    rows = [Row(50, r"pointwise CI, \ MSE-optimal bandwidth", r"a peak at $x_0$, \ $n = 2{,}000$", "coverage", 0.95, float(np.mean(hit["opt"])), reps,mc_se=bernoulli_se(hit["opt"])),
+            Row(50, r"pointwise CI, \ undersmoothed (bandwidth / 4)", r"a peak at $x_0$, \ $n = 2{,}000$", "coverage", 0.95, float(np.mean(hit["under"])), reps,mc_se=bernoulli_se(hit["under"])),
+            Row(50, r"pointwise CI, \ Lepski's bandwidth", r"a peak at $x_0$, \ $n = 2{,}000$", "coverage", 0.95, float(np.mean(hit["lepski"])), reps,mc_se=bernoulli_se(hit["lepski"])),
+            Row(50,r"pointwise CI, bias-aware fixed bandwidth",r"known Gaussian noise; derivative-bounded class","coverage",.95,float(np.mean(hit["bias_aware"])),reps,mc_se=bernoulli_se(hit["bias_aware"]))]
     # higher criticism: the asymptotic critical value (sqrt(2 log log n)) against a simulated one
     nn = 2000
-    null = GK.higher_criticism(r.standard_normal((3000, nn)))
+    null = higher_criticism(r.standard_normal((3000, nn)))
     asym = math.sqrt(2 * math.log(math.log(nn)))
-    sim_crit = float(np.quantile(GK.higher_criticism(r.standard_normal((3000, nn))), 0.95))
-    rows.append(Row(50, r"higher criticism, \ asymptotic critical value", r"null $N(0,1)$, \ $n = 2{,}000$", "size", 0.05, float(np.mean(null > asym)), 3000))
-    rows.append(Row(50, r"higher criticism, \ simulated critical value", r"null $N(0,1)$, \ $n = 2{,}000$", "size", 0.05, float(np.mean(null > sim_crit)), 3000))
+    sim_crit = float(np.quantile(higher_criticism(r.standard_normal((3000, nn))), 0.95))
+    rows.append(Row(50, r"higher criticism, \ leading null scale (not 5-percent calibrated)", r"null $N(0,1)$, \ $n = 2{,}000$", "size", 0.05, float(np.mean(null > asym)), 3000,extra="5-percent comparison benchmark only; leading scale is not a level-specific cutoff",mc_se=bernoulli_se(null>asym)))
+    rows.append(Row(50, r"higher criticism, \ simulated critical value", r"null $N(0,1)$, \ $n = 2{,}000$", "size", 0.05, float(np.mean(null > sim_crit)), 3000,mc_se=bernoulli_se(null>sim_crit)))
     save_rows(50, rows)
     return {"rows": [asdict(q) | {"verdict": q.verdict, "se": q.se} for q in rows], "h_opt": h_opt, "h_under": h_under, "hs": hs,
-            "risk_by_h": risk / 400, "asym": asym, "sim_crit": sim_crit}
+            "risk_by_h": risk,"pilot_risk_mc":pilot_risk_mc,"h_bias_aware":h_bias,"bias_aware_radius":bias_radius,"bias_bound":bias_bound,"derivative_bounds":{"L1":L1,"L2":L2},"independent_datasets":reps,"hc_evaluation_datasets":3000,"hc_calibration_datasets":3000,"asym_scope":"leading null scale, not a nominal 5-percent critical value", "asym": asym, "sim_crit": sim_crit}
 
 
 ITEMS = {

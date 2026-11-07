@@ -25,15 +25,7 @@ class Hook(VoiceoverScene):
             label(r"a speed limit, \ and the curse of dimensionality, \ as theorems", font_size=26, color=HYPC),
         ), 12.4, 0.55, [0, -0.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In Part twenty-nine a kernel density estimate's squared error shrank like n to the minus "
-            "four fifths for a density with two derivatives, slower than the one over n of a parametric model. <bookmark "
-            "mark='b'/> The natural question is whether a cleverer method could do better. <bookmark mark='c'/> In 1972 "
-            "Roger Farrell proved that it cannot: at a single point, no estimator, of any kind, beats that rate uniformly "
-            "over the smoothness class. <bookmark mark='d'/> In 1980 Charles Stone found the general law: with s derivatives "
-            "in d dimensions, the best possible squared error is n to the minus two s over two s plus d, for every method "
-            "whatsoever. <bookmark mark='e'/> It is a speed limit, and it turns the curse of dimensionality from a slogan "
-            "into a theorem. It also changed what statisticians try to prove about their methods: not just that an estimator "
-            "converges, but that it converges as fast as anything possibly could."
+            "<bookmark mark='a'/> In Part twenty-nine a kernel density estimate's squared error shrank like n to the minus four fifths for a density with two derivatives, slower than the one over n of a parametric model. <bookmark mark='b'/> The natural question is whether a cleverer method could do better. <bookmark mark='c'/> In 1972 Roger Farrell proved that it cannot: at a single point, no estimator, of any kind, beats that rate uniformly over the smoothness class. <bookmark mark='d'/> In 1980 Charles Stone found the general law: with s derivatives in d dimensions, over the specified bounded smoothness class, the minimax squared-error rate is n to the minus two s over two s plus d, for every method whatsoever. <bookmark mark='e'/> It is a speed limit, and it turns the curse of dimensionality from a slogan into a theorem. It also changed what statisticians try to prove about their methods: not just that an estimator converges, but that it converges as fast as anything possibly could."
         ) as vo:
             self.play(FadeIn(tl))
             for k, m_ in enumerate("abcde"):
@@ -94,15 +86,10 @@ class Hook(VoiceoverScene):
             label(r"blue: \ its simulated MSE, \ bandwidth $1.06\,n^{-1/5}$", font_size=22, color=UPC),
             label(rf"slope {slope:.2f}", font_size=22, color=UPC),
             label(r"red dashed: \ slope $-4/5$, \ Farrell's limit", font_size=22, color=LOWC),
-            label(r"approaching $-4/5$: \ the method meets the limit", font_size=22, color=ADAPTC),
+            label(r"approaching $-4/5$: \ one-density illustration; \ uniform bound in chapter 3", font_size=22, color=ADAPTC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The two halves of a minimax statement. A kernel estimate of a normal density at zero, "
-            f"<bookmark mark='b'/> with its simulated mean squared error from a hundred to six thousand four hundred "
-            f"observations. <bookmark mark='c'/> On log scales the slope is {say(slope, 2)}, close to minus four fifths and "
-            f"steepening towards it as n grows: <bookmark mark='d'/> asymptotically the upper bound, what one method "
-            f"achieves, meets the lower bound, what no method can beat, in rate. <bookmark mark='e'/> "
-            f"When the two meet, the rate is settled. This part builds the tools for the lower half, which is the hard one."
+            f"<bookmark mark='a'/> A pointwise illustration of the rate, rather than a uniform upper-bound proof. A kernel estimate of a normal density at zero, <bookmark mark='b'/> with its simulated mean squared error from a hundred to six thousand four hundred observations. <bookmark mark='c'/> On log scales the slope is {say(slope, 2)}, close to minus four fifths and steepening towards it as n grows: <bookmark mark='d'/> this normal-density example has the same asymptotic exponent as the class-wide minimax rate. A result at one density does not establish a uniform upper bound; chapter three supplies a genuine class-wide KDE bound. <bookmark mark='e'/> When the two meet, the rate is settled. This part builds the tools for the lower half, which is the hard one."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated")))
             vo.wait_until("a")
@@ -150,14 +137,11 @@ class Hook(VoiceoverScene):
         rows[1][-1].set_color(LOWC)
         rows[3][-1].set_color(HYPC)
         whys = [why(r"Wald's game, \ Part 45"), why(r"weak duality"), why(r"Part 45's least favourable prior"), why(r"every lower bound here")]
+        heading = label('A supported prior turns a worst-case risk into a lower bound', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Minimax theory is Part forty-five's decision theory taken to infinite dimensions. The "
-            "statistician picks an estimator; nature picks the parameter. <bookmark mark='b'/> For any prior on the parameter "
-            "set, the worst-case risk of an estimator is at least its average risk under that prior, and so the minimax risk "
-            "is at least the prior's Bayes risk. <bookmark mark='c'/> Every lower bound in this part is a Bayes risk for a "
-            "well-chosen prior, and the best possible one comes from the least favourable prior. <bookmark mark='d'/> Le Cam's "
-            "method puts the prior on two points, Fano's on a packing, Assouad's on the vertices of a cube, and Pinsker's on a "
-            "Gaussian. The art is in the choice of prior."
+            "<bookmark mark='a'/> Minimax theory is Part forty-five's decision theory taken to infinite dimensions. The statistician picks an estimator; nature picks the parameter. <bookmark mark='b'/> For any prior on the parameter set, the worst-case risk of an estimator is at least its average risk under that prior, and so the minimax risk is at least the prior's Bayes risk. <bookmark mark='c'/> The lower-bound methods use prior-average testing or estimation risks for carefully chosen supported priors, and the best possible one comes from the least favourable prior. <bookmark mark='d'/> Le Cam's method puts the prior on two points, Fano's on a packing, Assouad's on the vertices of a cube, and the asymptotic Pinsker proof uses a Gaussian prior with slack and controlled truncation into the ellipsoid. The art is in the choice of prior."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -192,7 +176,7 @@ class Hook(VoiceoverScene):
     def objectives(self):
         head = VGroup(label(r"Part 50", font_size=34, color=GREY_B), label(r"Minimax Theory", font_size=48)).arrange(DOWN, buff=0.25)
         obj = objectives_card([
-            r"the Gaussian sequence model, \ and why it stands for almost every problem",
+            r"the Gaussian sequence model, \ and its connections to regular regression and density models",
             r"Pinsker's exact minimax risk; \ Le Cam's, \ Fano's and Assouad's lower bounds",
             r"upper bounds that match: \ blockwise James--Stein, \ thresholding; \ Lepski's adaptation",
             r"minimax testing and higher criticism; \ statistical--computational gaps",
@@ -200,12 +184,7 @@ class Hook(VoiceoverScene):
         prereq = note(r"prerequisites: \ Parts 29, \ 45, \ 47").to_corner(DL, buff=0.3)
         built = note(r"built: \ \texttt{statkit.gsm}, \ the lower-bound workbench").to_corner(DR, buff=0.3)
         with self.voiceover(
-            "<bookmark mark='a'/> Part fifty: minimax theory, the limits of estimation. <bookmark mark='b'/> We'll meet the "
-            "Gaussian sequence model and see why it stands for regression and density estimation; find Pinsker's exact "
-            "minimax risk; build lower bounds by Le Cam's, Fano's and Assouad's methods on a workbench of packed hypotheses; "
-            "match them with blockwise James–Stein and thresholding; adapt to unknown smoothness with Lepski's method; test "
-            "for sparse signals with higher criticism; and end at the frontier where statistics meets computational "
-            "complexity."
+            "<bookmark mark='a'/> Part fifty: minimax theory, the limits of estimation. <bookmark mark='b'/> We'll meet the Gaussian sequence model and see why it stands for regression and density estimation; find Pinsker's exact linear minimax risk and asymptotic unrestricted constant; build lower bounds by Le Cam's, Fano's and Assouad's methods on a workbench of packed hypotheses; match them with blockwise James–Stein and thresholding; adapt to unknown smoothness with Lepski's method; test for sparse signals with higher criticism; and end at the frontier where statistics meets computational complexity."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head, shift=UP * 0.2))

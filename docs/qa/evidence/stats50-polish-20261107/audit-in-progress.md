@@ -1,3 +1,5 @@
+Implementation checkpoint: the correction checklist below has now been reconciled in the [source and numerical review](source-review.md), with seventeen passing checks. Visual verification remains pending. The original audit is retained for traceability.
+
 # Part 50 audit in progress
 
 The scientific source read is complete, but implementation, numerical verification and visual QA are pending. Read the full README (including six solutions), manifest, all twelve computations, the full Gaussian-sequence toolkit and all five toolkit tests, all twelve scenes and common helpers. After the runtime disconnected, the remaining scenes and previously truncated excerpts were read through GitHub at the statistics-built branch. No Part 50 code has been edited or tested. These findings are a correction checklist, not approval.

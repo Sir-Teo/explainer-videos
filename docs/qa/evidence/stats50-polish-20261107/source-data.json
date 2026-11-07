@@ -1,0 +1,8 @@
+{
+  "dataset": "motorcycle impact measurements",
+  "records": 133,
+  "url": "https://vincentarelbundock.github.io/Rdatasets/csv/MASS/mcycle.csv",
+  "sha256": "b89a1e4eb0391a982b32be3e378df00e8593ff9971e9425e9c5d7929b74f9801",
+  "verification": "all time/acceleration pairs agree exactly in row order",
+  "scope": "independent MASS data distribution, not independent retrieval of the original experiment"
+}

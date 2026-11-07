@@ -31,6 +31,9 @@ class MinimaxTesting(VoiceoverScene):
         rows[1][-1].set_color(LOWC)
         rows[2][-1].set_color(HYPC)
         whys = [why(r"a composite alternative"), why(r"the minimax separation rate"), why(r"Ingster (1982, \ 1993)"), why(r"testing $\ne$ estimation")]
+        heading = label('Testing a global null has its own minimax separation scale', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> Testing has its own minimax theory. Test whether the parameter is zero against the "
             "alternative that it is at least rho away, within a smoothness class. <bookmark mark='b'/> The minimax "
@@ -55,6 +58,9 @@ class MinimaxTesting(VoiceoverScene):
         ]
         rows[2][-1].set_color(HYPC)
         whys = [why(r"Ingster's chi-square statistic"), why(r"signal vs.\ fluctuation"), why(r"balance them"), why(r"why testing is easier")]
+        heading = label('A quadratic statistic pools energy across noisy coordinates', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> Here is why. Ingster's test sums the first N squared observations, each corrected for the "
             "noise. Its mean is the signal's energy in those coordinates, and under the null its standard deviation is only "
@@ -74,18 +80,16 @@ class MinimaxTesting(VoiceoverScene):
         rows = [
             cmath(r"X_i \sim (1 - \epsilon_n) N(0, 1) + \epsilon_n N(\mu_n, 1)", r",", r"i = 1, \dots, n", font_size=32),
             cmath(r"\epsilon_n = n^{-\beta}, \ \mu_n = \sqrt{2 r \log n}", r":", r"\text{a few, \ faint signals}", font_size=32),
-            cmath(r"\text{detectable iff}", r":", r"r > \rho^*(\beta) = \begin{cases} \beta - \tfrac12 & \tfrac12 < \beta \le \tfrac34 \\ (1 - \sqrt{1 - \beta})^2 & \tfrac34 < \beta < 1 \end{cases}", font_size=30),
+            cmath(r"\text{consistent detection above the boundary}", r":", r"r > \rho^*(\beta) = \begin{cases} \beta - \tfrac12 & \tfrac12 < \beta \le \tfrac34 \\ (1 - \sqrt{1 - \beta})^2 & \tfrac34 < \beta < 1 \end{cases}", font_size=30),
             cmath(r"\text{the boundary}", r":", r"\text{below it, \ every test is asymptotically powerless}", font_size=32),
         ]
         rows[2][-1].set_color(LOWC)
         whys = [why(r"the sparse mixture"), why(r"$n^{1-\beta}$ signals"), why(r"Ingster (1997); \ Jin (2003)"), why(r"a lower bound for tests")]
+        heading = label('The detection boundary belongs to a specified rare-and-weak model', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> A cleaner case, important in genomics: n test statistics, almost all pure noise, a small "
-            "fraction carrying a shift. <bookmark mark='b'/> Let the fraction be n to the minus beta and the shift the root of "
-            "two r log n, so the signals are both rare and faint. <bookmark mark='c'/> Ingster and Jiashun Jin found the exact "
-            "detection boundary: the mixture can be told from pure noise exactly when r exceeds a function rho star of beta, "
-            "beta minus a half for moderately sparse signals and one minus the root of one minus beta, squared, for very "
-            "sparse ones. <bookmark mark='d'/> Below the boundary, every test, of any kind, is asymptotically powerless."
+            "<bookmark mark='a'/> A cleaner case, important in genomics: n test statistics, almost all pure noise, a small fraction carrying a shift. <bookmark mark='b'/> Let the fraction be n to the minus beta and the shift the root of two r log n, so the signals are both rare and faint. <bookmark mark='c'/> Ingster and Jiashun Jin found the exact detection boundary: in the independent known-variance positive-shift model, consistent global detection is possible above the boundary for beta strictly between a half and one; namely when r exceeds a function rho star of beta, beta minus a half for moderately sparse signals and one minus the root of one minus beta, squared, for very sparse ones. <bookmark mark='d'/> Below the boundary, every test, of any kind, is asymptotically powerless."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -95,20 +99,18 @@ class MinimaxTesting(VoiceoverScene):
 
     def vsest(self):
         rows = [
-            cmath(r"\text{estimate the sparse } \theta", r":", r"\text{signals must exceed } \sqrt{2\log n} \text{ to be found}", font_size=32),
+            cmath(r"\text{almost-full support recovery, rare/weak model}", r":", r"r>\beta\quad\text{under the specified asymptotic recovery loss}", font_size=32),
             cmath(r"\text{detect that any exist}", r":", r"\mu = \sqrt{2r\log n}, \ r < 1, \ \text{still detectable above } \rho^*(\beta)", font_size=30),
             cmath(r"\beta < \tfrac12", r":", r"\text{dense: \ the sum } \textstyle\sum X_i \text{ detects even tiny shifts}", font_size=32),
             cmath(r"\text{so}", r":", r"\text{knowing that something is there, \ without knowing where}", font_size=32),
         ]
         rows[1][-1].set_color(HYPC)
         whys = [why(r"chapter 4: \ thresholds"), why(r"the detectable region"), why(r"Part 33's global null"), why(r"genomics' everyday situation")]
+        heading = label('Global detection and support recovery are different tasks', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Compare with estimation. To locate individual signals among n coordinates, each must exceed "
-            "the root of two log n, chapter four's threshold. <bookmark mark='b'/> But to detect that some signals exist, "
-            "shifts with r below one, too small to locate any single one, are enough, as long as r is above the boundary. "
-            "<bookmark mark='c'/> And when the signals are dense, beta below a half, a simple sum detects even tiny shifts. "
-            "<bookmark mark='d'/> There is a wide region where we can know that something is there without being able to say "
-            "where, which is the everyday situation of genome-wide studies, and of Part thirty-three's global null."
+            "<bookmark mark='a'/> Compare with estimation. Global detection differs from support recovery. In the independent rare-and-weak normal-means model, almost-full recovery has a different boundary, r exceeding beta; exact recovery and familywise thresholding have their own requirements. <bookmark mark='b'/> But to detect that some signals exist, strengths between the global detection boundary and the almost-full recovery boundary can suffice. Some individual signals may still be discovered; failure of almost-full recovery does not mean that no signal can ever be located. <bookmark mark='c'/> And when the signals are dense, beta below a half, a simple sum detects even tiny shifts. <bookmark mark='d'/> There is a wide region where we can know that something is there without being able to say where, which is the everyday situation of genome-wide studies, and of Part thirty-three's global null."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -158,22 +160,18 @@ class MinimaxTesting(VoiceoverScene):
         d = load("detect")
         g = {(x["beta"], x["r"]): x for x in d["grid"]}
         rows = [
-            cmath(r"HC^*", r"=", r"\max_{i \le n/2} \frac{\sqrt n\,(i/n - p_{(i)})}{\sqrt{p_{(i)}(1 - p_{(i)})}}", font_size=34),
+            cmath(r"HC^*", r"=", r"\max\!\left(0,\sup_{t\in[1/n,\,1/2]}\frac{\sqrt n\,(F_n^p(t)-t)}{\sqrt{t(1-t)}}\right)", font_size=34),
             cmath(r"\text{Tukey's idea, \ Donoho \& Jin (2004)}", r":", r"\text{the most surprising standardized excess of small } p\text{-values}", font_size=30),
             cmath(r"\text{adaptive}", r":", r"\text{optimal along the whole boundary, \ without knowing } \beta \text{ or } r", font_size=32),
             cmath(r"\beta = 0.9, \ r = 0.8", r":", rf"\text{{HC power }} {g[(0.9, 0.8)]['hc']:.2f}; \ \text{{the max test }} {g[(0.9, 0.8)]['max']:.2f}", font_size=32),
         ]
         rows[2][-1].set_color(ADAPTC)
         whys = [why(r"sorted $p$-values"), why(r"Part 33's $p$-value plots"), why(r"like Lepski, \ for tests"), why(r"very sparse: \ the max wins")]
+        heading = label('Evaluate the truncated CDF excess, including its endpoints', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            f"<bookmark mark='a'/> Higher criticism is John Tukey's idea, made precise by David Donoho and Jiashun Jin in 2004. "
-            f"Sort the p-values, and at each rank compare the fraction of p-values below a level with what pure noise would "
-            f"give, standardized. <bookmark mark='b'/> Take the most surprising excess. <bookmark mark='c'/> It needs no "
-            f"knowledge of the sparsity or the strength, yet it is optimal along the whole detection boundary: the testing "
-            f"counterpart of Lepski's adaptation. <bookmark mark='d'/> No test wins everywhere at finite n: in the very sparse "
-            f"corner, beta point nine and r point eight, the simple maximum statistic has power {say(g[(0.9, 0.8)]['max'], 2)} "
-            f"against higher criticism's {say(g[(0.9, 0.8)]['hc'], 2)}, while in the moderately sparse region higher criticism "
-            f"is far ahead."
+            f"<bookmark mark='a'/> Higher criticism is John Tukey's idea, made precise by David Donoho and Jiashun Jin in 2004. Use one-sided normal p-values and take the positive supremum of the standardized empirical-CDF excess over levels between one over n and one half. The endpoint one over n is evaluated too, so extremely small p-values are retained through their count. <bookmark mark='b'/> Take the most surprising excess. <bookmark mark='c'/> It needs no knowledge of the sparsity or the strength, yet it is optimal along the whole detection boundary: an asymptotic result under this specific independent rare-and-weak model, not a finite-sample power guarantee. <bookmark mark='d'/> No test wins everywhere at finite n: in the very sparse corner, beta point nine and r point eight, the simple maximum statistic has power {say(g[0.9, 0.8]['max'], 2)} against higher criticism's {say(g[0.9, 0.8]['hc'], 2)}, while in the moderately sparse region higher criticism is far ahead."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):

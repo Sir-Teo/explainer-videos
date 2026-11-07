@@ -7,7 +7,7 @@ PROBLEMS = [
     r"Show that the Bayes rule for $\theta_k \sim N(0, \tau_k^2)$ is $\tau_k^2 y_k/(\tau_k^2 + \varepsilon^2)$, \ and find its Bayes risk.",
     r"Prove Le Cam's bound: \ $\max_j E_j(\hat\theta - \theta_j)^2 \ge \tfrac{\delta^2}{2}(1 - \mathrm{TV}(P_0, P_1))$.",
     r"Show $\mathrm{TV}(N(0,1), N(d,1)) = 2\Phi(|d|/2) - 1$, \ and check Pinsker's inequality for it.",
-    r"With $f_1 = f_0 + h\,b((x - x_0)/w)$, \ $h = Lw^s$, \ choose $w$ to get the rate $n^{-2s/(2s+1)}$ at $x_0$.",
+    r"With a valid mass-preserving density perturbation $f_1=f_0+h(b_0-b_1)$, \ $h = Lw^s$, \ choose $w$ to get the rate $n^{-2s/(2s+1)}$ at $x_0$.",
     r"For the sparse mixture, \ show that the maximum statistic detects iff $r > (1 - \sqrt{1 - \beta})^2$.",
 ]
 
