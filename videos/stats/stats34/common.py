@@ -41,15 +41,14 @@ def shade(ax, xs, ys, color, opacity=0.35):
 
 
 def bars_at(ax, xs, hs, width, color, opacity=0.8, highlight=None, hcolor=None):
-    """Bars centred on ``xs`` (a pmf); indices in ``highlight`` drawn in ``hcolor``."""
-    g = VGroup()
-    y0 = bounds(ax)[2]
-    w = ax.c2p(width, y0)[0] - ax.c2p(0, y0)[0]
-    for i, (x, h) in enumerate(zip(xs, hs)):
-        c = hcolor if highlight is not None and i in highlight else color
-        hh = max(1e-3, ax.c2p(x, h)[1] - ax.c2p(x, y0)[1])
-        g.add(Rectangle(width=w, height=hh, stroke_width=0, fill_color=c, fill_opacity=opacity).move_to(ax.c2p(x, y0), aligned_edge=DOWN))
+    g=VGroup();w=abs(ax.c2p(width,0)[0]-ax.c2p(0,0)[0])
+    for i,(x,h) in enumerate(zip(xs,hs)):
+        c=hcolor if highlight is not None and i in highlight else color
+        height=max(1e-3,abs(ax.c2p(x,h)[1]-ax.c2p(x,0)[1]))
+        bar=Rectangle(width=w,height=height,stroke_width=0,fill_color=c,fill_opacity=opacity)
+        bar.move_to(ax.c2p(x,0),aligned_edge=DOWN if h>=0 else UP);g.add(bar)
     return g
+
 
 FIT = S.FIT
 RES = S.RESID
