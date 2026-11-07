@@ -473,7 +473,7 @@
   "e4f429127f6f": {
    "scene": "Frontier",
    "en": "The other direction is to learn. <bookmark mark='a'/> A compiler is full of guesses. Inline this call? Spill which value? Unroll this loop how far? Each is a hand-tuned heuristic. <bookmark mark='b'/> In 2021 Google's MLGO project replaced LLVM's inlining heuristic with a small neural network, trained by reinforcement learning to make code smaller, and later did the same for which value the register allocator evicts. <bookmark mark='c'/> It saves a few percent of code size in production. <bookmark mark='d'/> The difficulties are practical: the guess must be fast, since it runs millions of times, and it must stay good as the programs being compiled change. <bookmark mark='e'/> How such policies are trained is the subject of our companion series, AI, Built.",
-   "zh": "另一个方向是学习。<bookmark mark='a'/>编译器里充满了猜测。内联这次调用吗？溢出哪个值？这个循环展开多少？每一个都是手工调好的启发式。<bookmark mark='b'/>2021 年，谷歌的 MLGO 项目用一个小神经网络替换了 LLVM 的内联启发式，用强化学习训练它让代码变小，后来又对寄存器分配器驱逐哪个值做了同样的事。<bookmark mark='c'/>它在生产中节省了百分之几的代码体积。<bookmark mark='d'/>困难都很实际：猜测必须快，因为它要运行几百万次；还必须在被编译的程序变化时依然好用。<bookmark mark='e'/>这样的策略怎样训练，是我们的姊妹系列《AI，从零搭建》的主题。"
+   "zh": "另一个方向是学习。<bookmark mark='a'/>编译器里充满了猜测。内联这次调用吗？溢出哪个值？这个循环展开多少？每一个都是手工调好的启发式。<bookmark mark='b'/>2021 年，谷歌的 MLGO 项目用一个小神经网络替换了 LLVM 的内联启发式，用强化学习训练它让代码变小，后来又对寄存器分配器驱逐哪个值做了同样的事。<bookmark mark='c'/>它在生产中节省了百分之几的代码体积。<bookmark mark='d'/>困难都很实际：猜测必须快，因为它要运行几百万次；还必须在被编译的程序变化时依然好用。<bookmark mark='e'/>这样的策略怎样训练，是我们的姊妹系列《人工智能，从零搭建》的主题。"
   },
   "feccfe716031": {
    "scene": "Frontier",

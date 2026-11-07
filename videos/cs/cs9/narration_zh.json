@@ -318,7 +318,7 @@
   "00c7b5fad8b3": {
    "scene": "Dram",
    "en": "Modern memory keeps the cell and changes the plumbing. <bookmark mark='a'/> A DDR5 module splits into two channels with many more banks, so more rows can be open at once. <bookmark mark='b'/> High-bandwidth memory stacks DRAM dies on top of each other, beside the processor, joined by a thousand wires per stack instead of sixty-four: the memory of every large AI accelerator, as AI, Built's seventeenth part showed. <bookmark mark='c'/> And one more lookup hides in every access: the address a program uses is virtual, and must be translated to a physical one through page tables, with its own small cache, the TLB. That was the extra climb at the top of the staircase. Part 32 builds it.",
-   "zh": "现代存储器保留了单元，改了管道。<bookmark mark='a'/>一条 DDR5 内存条分成两个通道，存储体也多得多，所以能同时打开更多行。<bookmark mark='b'/>高带宽存储器把 DRAM 晶粒一层层叠起来，放在处理器旁边，每叠用一千根导线相连，而不是六十四根：这是每个大型人工智能加速器的存储器，正如《AI，从零搭建》第十七部分所示。<bookmark mark='c'/>每次访问里还藏着一次查找：程序使用的地址是虚拟的，必须经由页表翻译成物理地址，这有它自己的小缓存 TLB。这就是阶梯顶端那段额外的攀升。第32部分会造出它。"
+   "zh": "现代存储器保留了单元，改了管道。<bookmark mark='a'/>一条 DDR5 内存条分成两个通道，存储体也多得多，所以能同时打开更多行。<bookmark mark='b'/>高带宽存储器把 DRAM 晶粒一层层叠起来，放在处理器旁边，每叠用一千根导线相连，而不是六十四根：这是每个大型人工智能加速器的存储器，正如《人工智能，从零搭建》第十七部分所示。<bookmark mark='c'/>每次访问里还藏着一次查找：程序使用的地址是虚拟的，必须经由页表翻译成物理地址，这有它自己的小缓存 TLB。这就是阶梯顶端那段额外的攀升。第32部分会造出它。"
   },
   "e43d3865a609": {
    "scene": "Job",

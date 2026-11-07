@@ -148,7 +148,7 @@ ZH = {
         "<bookmark mark='c'/>所以某个输入会迫使它至少做 log 6 向上取整、也就是三次比较。再聪明也躲不开。",
     "The same argument works for any n.":
         "同样的论证对任何 n 都成立。<bookmark mark='a'/>排序必须区分 n 的阶乘种次序，所以它的树高至少是 log n!，由斯特林公式，"
-        "这是 n log n 减去大约 1.44n。<bookmark mark='b'/>把它当作信息来读，就像《AI，从零构建》在第一部分里那样。一次比较有两种"
+        "这是 n log n 减去大约 1.44n。<bookmark mark='b'/>把它当作信息来读，就像《人工智能，从零搭建》在第一部分里那样。一次比较有两种"
         "结果，所以至多告诉我们一比特。要从 n! 种次序中认出一种，需要 log n! 比特。<bookmark mark='c'/>没有哪个比较排序能做得更好，"
         "不只是在最坏情况下，平均来说也是如此，因为一棵树叶子的平均深度至少也是同一个对数。归并排序和堆排序在常数意义下是最优的。",
     "Decision trees are one way to prove lower bounds.":
