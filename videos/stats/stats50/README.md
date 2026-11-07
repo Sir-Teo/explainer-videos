@@ -84,7 +84,7 @@ python tools/lecture_length.py stats50 --floor 50
 
 ## QA checkpoint
 
-All twelve scenes, six solutions, twelve computations, shared toolkit and tests were read. All twelve inputs were regenerated; seventeen focused checks pass. All 133 motorcycle time/acceleration pairs agree exactly with an independent MASS data distribution. See the [scientific source review](../../../docs/qa/evidence/stats50-polish-20261107/source-review.md), input hashes and logs. English visual verification is pending; Chinese narration/captions, continuous listening and final masters remain open.
+All twelve scenes, six solutions, twelve computations, shared toolkit and tests were read. All twelve inputs were regenerated; seventeen focused checks pass. All 133 motorcycle time/acceleration pairs agree exactly with an independent MASS data distribution. See the [scientific source review](../../../docs/qa/evidence/stats50-polish-20261107/source-review.md), input hashes and logs. The recorded English sampled visual checkpoint is complete; Chinese narration/captions, continuous listening and final masters remain open.
 
 ## Sources
 

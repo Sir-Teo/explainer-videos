@@ -259,4 +259,4 @@ All fifteen numerical inputs regenerated after the source corrections. Twenty-tw
 
 The Board uses 250 independent fields. Field-level coverage fractions, rather than 12,500 correlated prediction sites, determine Monte Carlo error. Achieved coverage and empirical MCSE are 89.912% ± 0.306 percentage points (known covariance), 88.872% ± 0.374 (REML), 97.880% ± 0.154 (exponential), 28.0% ± 2.845 (OLS slope) and 86.0% ± 2.199 (GLS slope). These are Monte Carlo standard errors, not confidence half-widths. The REML prediction shortfall barely exceeds the Board's three-MCSE convention in this run; that label is descriptive of the specified simulation. Prediction intervals concern latent fields; validation against noisy observations includes a new nugget.
 
-English sampled visual review is pending. Chinese narration/captions, continuous listening and final masters remain open.
+The recorded English sampled visual checkpoint is complete. Chinese narration/captions, continuous listening and final masters remain open.

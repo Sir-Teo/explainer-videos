@@ -163,7 +163,7 @@ The rest of the part's numbers, chapter by chapter:
 
 ## QA checkpoint
 
-All fourteen scenes and six solutions were read. Fourteen numerical inputs were regenerated; eighteen focused checks pass. The [source review](../../../docs/qa/evidence/stats48-polish-20261107/source-review.md) records numerical fixes, assumptions and independent data comparisons. English visual review is pending; Chinese narration/captions, continuous listening and final masters remain open.
+All fourteen scenes and six solutions were read. Fourteen numerical inputs were regenerated; eighteen focused checks pass. The [source review](../../../docs/qa/evidence/stats48-polish-20261107/source-review.md) records numerical fixes, assumptions and independent data comparisons. The recorded English sampled visual checkpoint is complete; Chinese narration/captions, continuous listening and final masters remain open.
 
 ## Sources
 
