@@ -106,13 +106,7 @@ class Arbitrage(VoiceoverScene):
                     r"says which moments $\mathbb{E}\,S^{1+p}$ are finite")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-1.0, buff=0.72, edge=6.9)
         with self.voiceover(
-            "The derivation. Write Black's formula in log-moneyness and total variance. <bookmark mark='a'/> The "
-            "density is the call's second strike derivative; differentiate twice, and it collapses to a positive "
-            "factor times one function of the smile, g. <bookmark mark='b'/> No butterfly arbitrage exactly when g is "
-            "never negative. <bookmark mark='c'/> At fixed moneyness a call is a convex payoff of a martingale, so total "
-            "variance must not fall with maturity. <bookmark mark='d'/> And Roger Lee showed in 2004 that the wings can "
-            "grow at most like two times the absolute log-moneyness, the slope telling which moments are finite. "
-            "Michael Roper's 2010 note collects these into one checklist."
+            """The derivation. Write Black's formula in log-moneyness and positive, smooth total variance. <bookmark mark='a'/> Twice differentiating the call gives a positive factor times g. <bookmark mark='b'/> Non-negative g gives a non-negative density; a complete butterfly-arbitrage characterization also requires the appropriate tail boundary condition. A finite scan alone is not a global proof. <bookmark mark='c'/> For a non-negative martingale with the stated carry normalization, convex ordering requires non-decreasing total variance at fixed forward moneyness. <bookmark mark='d'/> Lee's moment formula bounds the asymptotic limsup of total variance divided by absolute log-moneyness by two. It constrains extreme tails, not every slope on a finite chart."""
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -197,14 +191,7 @@ class Arbitrage(VoiceoverScene):
         src = real_data(r"the Surface: wing slopes $b(1 \pm \rho)$ of each expiry's SVI fit")
         bl, br, pr, ql = last["beta_L"], last["beta_R"], last["p_R"], last["q_L"]
         with self.voiceover(
-            "Lee's bound on the Surface. For each expiry, the slopes of the two wings of total variance, puts in red, "
-            "calls in blue, against the limit of two. <bookmark mark='a'/> They grow with maturity, and at the last "
-            f"expiry they reach {bl:.2f} on the put side and {br:.2f} on the call side: nowhere near the limit. "
-            "Read them through Lee's formula and they say something about the distribution: moments of the price "
-            f"are finite up to about power {1 + pr:.1f} on the upside. Pause and predict: a wing of slope two and a "
-            "half: what can you do? <bookmark mark='b'/> Sell the far calls. Their implied price exceeds what any "
-            "distribution with that forward allows, and the bound says so before any model is chosen."
-            " Next: a smile in five numbers that can be made to respect those bounds."
+            f"""Lee's bound on the Surface. These are the fitted SVI asymptotic wing slopes, compared with two. <bookmark mark='a'/> At the last expiry they are {bl} on the put side and {br} on the call side. Conditional on extending that fitted tail indefinitely, Lee's inversion gives an upper-tail critical moment power near {1 + pr:.1f}; it does not establish finiteness at the critical endpoint or identify the true unquoted tail. Pause and predict: an asymptotic wing slope of two and a half? <bookmark mark='b'/> It violates the necessary tail bound. Reject or repair that extrapolation; this is not an instruction to sell uncovered far calls. Next: SVI."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(lim), FadeIn(limt), FadeIn(leg))
             self.play(LaggedStart(*[FadeIn(x) for x in dl], lag_ratio=0.1), LaggedStart(*[FadeIn(x) for x in dr],

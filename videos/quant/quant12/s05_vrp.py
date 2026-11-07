@@ -109,13 +109,7 @@ class VRP(VoiceoverScene):
                     r"S\&P 500 returns at quarterly horizons")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.6, buff=0.72, edge=6.9)
         with self.voiceover(
-            "Why a premium at all? A risk-neutral expectation is a real-world one weighted by the discount factor m. "
-            "<bookmark mark='a'/> So the gap between the two expectations of variance is a covariance between m and "
-            "variance. <bookmark mark='b'/> Variance is highest when markets fall, exactly when wealth is worth most: "
-            "the covariance is positive, and variance is insurance. Carr and Wu measured the premium in 2009. "
-            "<bookmark mark='c'/> Overlapping windows need Newey and West's estimator. <bookmark mark='d'/> And "
-            "Bollerslev, Tauchen and Zhou found that the premium measured in advance predicts S&P 500 returns a "
-            "quarter ahead. We will test that on Bitcoin."
+            """Why can variance carry a premium? Under a consistent stochastic discount factor m and the same horizon, the risk-neutral minus physical expectation of variance is its covariance with m divided by the mean of m. <bookmark mark='a'/> That is a pricing identity, not an equality between a quoted strike and one future realized observation. <bookmark mark='b'/> A positive covariance offers an insurance interpretation; our sample averages alone do not prove it or make the sign universal. <bookmark mark='c'/> We use a four-lag Bartlett Newey--West estimate for the overlapping windows. This finite-lag choice does not eliminate every possible source of dependence. <bookmark mark='d'/> Bollerslev, Tauchen and Zhou studied return predictability for equities; our Bitcoin comparison remains retrospective and descriptive."""
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -141,26 +135,19 @@ class VRP(VoiceoverScene):
                   ylabel=r"cumulative, and its drawdown", xticks=[2022, 2023, 2024, 2025], xfmt=lambda u: f"{u:.0f}",
                   yticks=[0, round(hi, 0)], font_size=15).next_to(g, DOWN, buff=0.45)
         cl = curve(g2.ax, t, cum, IV, stroke_width=3)
-        ddb = band(g2.ax, t, cum + dd, cum, BAD, 0.3)
+        ddb = band(g2.ax, t, cum, cum - dd, BAD, 0.3)
         wi = int(np.argmin(pnl))
         flag = VGroup(glow_dot(g.ax.c2p(t[wi], float(np.clip(pnl[wi], -1.2, 1))), color=BAD, radius=0.08),
                       label(rf"worst: the month from {_nice(p['worst_day'])}", font_size=17, color=BAD).next_to(
                           g.ax.c2p(t[wi], -1.1), RIGHT, buff=0.15))
         side = label(rf"skewness of the weekly P\&L {p['skew']:.2f}; best {p['best']:+.2f}, worst {p['worst']:+.2f}",
                      font_size=20, color=GREY_A).to_corner(DL, buff=0.3)  # left of the source line
-        src = real_data(r"each week: sell the 30-day variance swap at the strip's price, receive realized variance", corner=DR)
+        src = real_data('hypothetical short variance: receive fixed strike, pay realized variance; overlapping windows, no execution costs', corner=DR)
         sk, w, b = p["skew"], p["worst"], p["best"]
         assert p["worst_day"] == "2021-05-12", p["worst_day"]  # the narration names this week
         sp = 100 * p["share_pos"]
         with self.voiceover(
-            "Now look at it from the seller's side: the insurer. Each week, sell the thirty-day variance swap at the "
-            "strip's price and pay out what Bitcoin realizes. Most weeks are small gains, in green. "
-            f"<bookmark mark='a'/> And a few are not. The worst month was the one that began on the twelfth of May 2021, the week before "
-            f"Bitcoin's May 2021 crash: a loss of {w:.2f} in variance units, larger than the best gain of {b:.2f}. The "
-            f"skewness of the weekly profits is {sk:.2f}. <bookmark mark='b'/> The cumulative line climbs, with the "
-            "drawdowns shaded under it. Pause and predict: a strategy that wins "
-            f"{sp:.0f} percent of weeks: is it a good one? Look at the other weeks first. Part eleven's crisis file "
-            "shows what this left tail looks like when a fund adds leverage."
+            f"""Consider normalized model short-variance payoffs: the fitted variance strike minus subsequent realized variance. They exclude execution and funding costs. <bookmark mark='a'/> The worst window begins May twelfth, 2021, with P-and-L {w:.2f} in variance units; the best is {b:.2f}, and sample skewness is {sk:.2f}. <bookmark mark='b'/> The cumulative line is a sum of overlapping weekly-start payoffs, not a compounded account return or independent sequence of bets. Its shaded drawdown is relative to that sum's running high. A positive payoff in {sp:.0f} percent of windows does not establish an attractive implementable strategy."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), LaggedStart(*[Create(x) for x in bars], lag_ratio=0.005, run_time=3))
             vo.wait_until("a")
@@ -194,13 +181,7 @@ class VRP(VoiceoverScene):
                   "Whatever the variance premium pays for in Bitcoin, it does not forecast Bitcoin's next month. ")
         t1, t2 = b["t"], bl["t"]
         with self.voiceover(
-            "Year by year, the premium never disappears: implied above realized on average in every calendar year, "
-            "positive in most weeks of each. <bookmark mark='a'/> Now Bollerslev, Tauchen and Zhou's question. "
-            "Regress the next thirty days' Bitcoin return on the premium measured in advance. This is a description of "
-            "the data, not a strategy test, so the trial counter does not move. The t-statistic is "
-            f"{t1:+.2f} over the whole sample, and {t2:+.2f} in the last two years. {branch}"
-            "For the S&P 500 the predictability they found was at quarterly horizons, and the next question is whether "
-            "the same premium exists there."
+            f"""In this sample the mean fitted variance gap is positive in each calendar year. <bookmark mark='a'/> The next-return regression uses the fitted variance strike minus trailing realized variance as a descriptive covariate. The surface pools records through noon, so an executable eight-o'clock information set is not established. The whole-sample slope t-statistic is {t1:+.2f}, and the 2024--2025 value is {t2:+.2f}. These particular fits do not provide clear slope evidence, but failure to reject zero is not proof of no predictability. This was not a registered strategy evaluation; no new trial is claimed. Bollerslev, Tauchen and Zhou's equity result concerned a different asset, horizon and construction."""
         ) as vo:
             self.play(FadeIn(src), LaggedStart(*[FadeIn(r_) for r_ in rows], lag_ratio=0.3, run_time=3))
             vo.wait_until("a")

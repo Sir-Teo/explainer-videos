@@ -96,12 +96,7 @@ class SSVI(VoiceoverScene, ThreeDScene):
         th = np.asarray(r["theta"])
         rm = r["rmse"]
         with self.voiceover(
-            "The House's fitter is a dozen lines, and the trick is the unpacking: the optimizer searches freely, and "
-            "every constraint lives in the map to the model's parameters. A hyperbolic tangent keeps rho inside minus "
-            "one and one, eta is clipped to the butterfly bound, and the thetas are sums of exponentials, so they "
-            "can only rise. "
-            f"<bookmark mark='a'/> On the Surface's quotes, weighted by vega: rho {f['rho']:.2f}, eta {f['eta']:.2f}, "
-            f"gamma {f['gamma']:.2f}, and an error of {rm:.2f} volatility points."
+            f"""The House's fitter maps unconstrained search variables to constrained parameters. A hyperbolic tangent bounds rho; eta times one plus absolute rho is capped at two; cumulative positive increments make theta non-decreasing. This enforces the calendar condition for this power law, but the eta cap alone does not prove the butterfly condition when gamma exceeds one half. <bookmark mark='a'/> On the filtered quotes, the fitted rho is {f['rho']:.2f}, eta {f['eta']:.2f}, gamma {f['gamma']:.2f}, and the vega-weighted error {rm:.2f} volatility points. The next theorem supplies the remaining maturity restriction."""
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -149,12 +144,7 @@ class SSVI(VoiceoverScene, ThreeDScene):
         start = run["loss"][0]
         nr = len(runs)
         with self.voiceover(
-            f"Now watch it fit, in three dimensions. White dots are the quotes. This start is the worst of {nr}, about "
-            f"{start:.0f} volatility points off. On the right, the error after every evaluation, the replayed start "
-            "in violet, the others in grey. <bookmark mark='a'/> The surface lifts, tilts and folds onto the dots, "
-            "the camera circling as it goes. <bookmark mark='b'/> Every start ends within "
-            f"{max(finals) - min(finals):.4f} of the same error, {min(finals):.2f} points. A twelve-parameter fit of "
-            "two hundred and fifty quotes, with no arbitrage allowed at any step."
+            f"Now watch it fit, in three dimensions. White dots are the quotes. This start is the worst of {nr}, about {start:.0f} volatility points off. On the right, the error after every evaluation, the replayed start in violet, the others in grey. <bookmark mark='a'/> The surface lifts, tilts and folds onto the dots, the camera circling as it goes. <bookmark mark='b'/> Every start ends within {max(finals) - min(finals):.4f} of the same error, {min(finals):.2f} points. A twelve-parameter fit of the filtered quotes. Calendar constraints are imposed during the search; every intermediate surface is not certified free of butterflies."
         ) as vo:
             self.play(Create(ax), FadeIn(dots), FadeIn(cur), FadeIn(g), FadeIn(faint), FadeIn(cnt), FadeIn(src))
             vo.wait_until("a")

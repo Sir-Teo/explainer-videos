@@ -95,16 +95,7 @@ class VarSwap(VoiceoverScene):
                     r"replication short by about $|J|^3/3$")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.6, buff=0.72, edge=6.9)
         with self.voiceover(
-            "Why the log? Itô's formula. The log of the price drifts down by half the variance, so realized variance "
-            "is twice the gains of holding one over S of the asset, minus twice the log return. The first term is a "
-            "trading strategy; the second is the log contract. <bookmark mark='a'/> Peter Carr and Dilip Madan's "
-            "identity writes any smooth payoff as a bond, a forward, and a strip of options weighted by its second "
-            "derivative. <bookmark mark='b'/> For the log, the second derivative is one over K squared, so the fair "
-            "variance strike is two over T times the integral of out-of-the-money option prices over K squared. "
-            "Anthony Neuberger proposed the log contract in 1994; Goldman's Demeterfi, Derman, Kamal and Zou wrote the "
-            "desk's version in 1999. <bookmark mark='c'/> Mark Britten-Jones and Neuberger showed it needs no model at "
-            "all, as long as the price moves continuously. <bookmark mark='d'/> And if it jumps, the identity breaks by "
-            "a cubic term: a down-jump leaves the replication short."
+            """Why the log? For a positive continuous diffusion, Ito's formula relates quadratic variation of log price to a log payoff and dynamic trading gains. Assume zero rates and dividends, an integrable martingale and continuous costless hedging for the exact pricing identity. <bookmark mark='a'/> Carr and Madan express a smooth payoff as cash, a forward and an option strip. <bookmark mark='b'/> Minus log has second derivative one over K squared; the annualized variance strike uses two over T times the full out-of-the-money strip integral. <bookmark mark='c'/> The ideal identity is model independent within these diffusion and integrability assumptions. Our finite strikes and discrete rebalancing introduce errors. <bookmark mark='d'/> Log jumps add a correction: squared log-jump variance differs from the hedge's two times exponential-J minus one minus J. Its leading difference is cubic, not an exact cubic formula for large jumps."""
         ) as vo:
             step(0)
             vo.wait_until("a")

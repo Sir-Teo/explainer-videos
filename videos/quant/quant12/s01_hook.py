@@ -57,12 +57,7 @@ class Hook(VoiceoverScene, ThreeDScene):
         self.add_fixed_in_frame_mobjects(hint, params, src)
         self.remove(hint, params, src)
         with self.voiceover(
-            "Here is the Surface, the frozen day of Bitcoin options this series prices against. Each white dot is a "
-            "quote: an implied volatility at one strike and one expiry. <bookmark mark='a'/> Through them, a smooth "
-            "surface with no arbitrage in it, fitted to within a fraction of a volatility point. <bookmark mark='b'/> "
-            "Read its shape. Along the strikes it curves up at both ends, and higher on the downside: the smile and "
-            "its skew, the price of crash insurance. Along the expiries it changes too: the term structure. This part "
-            "is about reading that shape, fitting it without arbitrage, and trading it."
+            """Here is the Surface, our frozen Bitcoin pricing example. Each white dot is an implied volatility reconstructed from an option mark, pooled from midnight through noon, rather than a simultaneous executable quote. <bookmark mark='a'/> The fit misses by less than a volatility point. Its sufficient no-arbitrage conditions cover the quoted maturities; they do not cover every arbitrarily short maturity. <bookmark mark='b'/> Read its shape: a smile across strikes, and a term structure across expiries. This part explains those shapes, their checks, and the models and contracts built from them."""
         ) as vo:
             self.play(FadeIn(hint), FadeIn(src), Create(ax), FadeIn(dots), run_time=2)
             vo.wait_until("a")
@@ -98,15 +93,7 @@ class Hook(VoiceoverScene, ThreeDScene):
             labels.add(t)
         head = label(r"How we got here", font_size=34, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "How did the market come to quote a surface? In 1973 Black and Scholes priced every option with one "
-            "volatility, and for fourteen years the market more or less agreed. <bookmark mark='a'/> Then on the "
-            "nineteenth of October 1987 the S&P 500 fell by a fifth in a day, and from then on index puts far below the "
-            "money traded at much higher implied volatilities than calls: the skew was born. <bookmark mark='b'/> In "
-            "1993 Cboe began publishing the VIX. In 1994 Dupire, Derman and Kani, and Rubinstein each showed how to fit "
-            "the whole smile with one model. Goldman's quants explained how to trade variance itself, and in 2003 the "
-            "VIX became exactly that: a strip of options. <bookmark mark='c'/> Then futures, arbitrage-free fits, and a "
-            "decade of selling volatility that ended on the fifth of February 2018. <bookmark mark='d'/> And the newest "
-            "chapters are Bitcoin's: Deribit's volatility index, same-day options, options on Bitcoin funds."
+            """How did the surface become the market's language? Black and Scholes' 1973 model supplied the one-volatility benchmark. <bookmark mark='a'/> The October 1987 crash made equity-index downside skew especially prominent; it was not the first possible departure from a flat smile. <bookmark mark='b'/> Cboe launched the original VIX in 1993. Dupire, Derman and Kani, and Rubinstein developed local-volatility and implied-tree approaches in 1994. Variance-strip research led to the 2003 VIX redesign. <bookmark mark='c'/> Futures and volatility-linked notes followed; 2018 exposed their reset risks. <bookmark mark='d'/> Bitcoin added DVOL, volatility futures and ETF options. Each development concerns a different pricing, hedging or index-construction problem."""
         ) as vo:
             self.play(FadeIn(head), Create(line), FadeIn(ticks))
             self.play(FadeIn(dots[0]), FadeIn(labels[0]))
@@ -147,11 +134,7 @@ class Hook(VoiceoverScene, ThreeDScene):
         fixed(self, t1, t2, q)
         self.set_camera_orientation(phi=68 * DEGREES, theta=-62 * DEGREES, zoom=0.9)
         with self.voiceover(
-            "Here is that history as one picture. Before 1987 the surface was, near enough, flat: a single number. "
-            "Pause and predict: when it bends, which corner rises highest? <bookmark mark='a'/> The short-dated "
-            "downside. Options that pay if the price collapses soon are the ones everybody wants and nobody wants to "
-            "sell: crash insurance. The flat plane bends into the Surface of December 2025. Black and Scholes still "
-            "gives the language, implied volatility; but the object we trade is this whole curved sheet."
+            """Here is a simplified one-volatility benchmark, shown as a flat plane. It is not a claim that every pre-1987 market smile was flat. Pause and predict: in this fitted Bitcoin example, which corner rises most? <bookmark mark='a'/> The short-dated downside. The plane bends into a bounded view of the December 2025 fit. Its plotted strike, maturity and volatility ranges are a display choice, not the whole unquoted tail. Implied volatility remains our price language, while the surface organizes a family of option prices."""
         ) as vo:
             self.play(Create(ax), FadeIn(flat), FadeIn(t1), FadeIn(q))
             vo.wait_until("a")

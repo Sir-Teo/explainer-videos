@@ -85,12 +85,7 @@ class Volmageddon(VoiceoverScene):
         src = real_data(r"FRED: VIXCLS, VXVCLS")
         r1, r2 = snap["20180202"], snap["20180205"]
         with self.voiceover(
-            "The VIX through that year: long and low, then the spike. <bookmark mark='a'/> VIX over its three-month "
-            f"version went from {r1:.3f} on the Friday to {r2:.3f} on the Monday. <bookmark mark='b'/> The mechanism: "
-            "the front futures jumped in the afternoon; every inverse and leveraged note had to buy futures near the "
-            "close, Chapter fourteen's two r N; all needed the same contracts in the same minutes, and their buying "
-            "pushed prices higher, in futures that traded on for a quarter of an hour after stocks closed. The hedge "
-            "was the amplifier."
+            f"""The VIX through that year: calm, then the spike. <bookmark mark='a'/> VIX divided by VIX3M rose from {r1:.3f} on Friday to {r2:.3f} on Monday. <bookmark mark='b'/> Daily inverse and leveraged targets can require buying volatility futures after a rise. If large orders meet limited liquidity, that can amplify a move. The simple reset arithmetic establishes this possible feedback channel; it does not identify the size or causal share of actual hedge demand in February's crash. Issuers could hedge earlier or in other instruments, and their actual execution requires separate evidence."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(line), run_time=2.5)
             vo.wait_until("a")
@@ -149,25 +144,16 @@ class Volmageddon(VoiceoverScene):
         self.clear_scene()
 
     def lessons(self):
-        rows = [cmath(r"\text{loss of a } -1\times \text{ note}", r"=", r"-\,r_{\text{index}}\ \ \text{(one day, unbounded "
-                      r"relative to its gains)}", font_size=34, colors={r"\text{loss of a } -1\times \text{ note}": BAD})]
-        whys = [why(r"a year of roll yield is a few percent a month; one day's index return can exceed 100\%")]
+        rows = [cmath(r"r_{\rm note}", r"=", r"\max(-1,-r_{\rm index})\quad (N_t>0)", font_size=34, colors={r"r_{\rm note}": BAD})]
+        whys = [why('daily-close, limited-liability toy; excludes fees and intraday acceleration; loss cannot exceed 100\\% of NAV')]
         step = ladder(self, rows, whys, keep=1, top=2.4, x=-0.6, buff=0.8, edge=6.9)
         notes = VGroup(
-            wrapped_label(r"the variance premium of Chapter 12 and the roll of Chapter 14 are the same trade: paid a little "
-                          r"every month, for bearing the crash", 11.6, 21, GREY_A),
-            wrapped_label(r"the product's own hedging made the crash worse: a promise on the daily close-to-close return "
-                          r"forces trades at the close, whatever the price", 11.6, 21, BAD),
-            wrapped_label(r"pause and predict: why did the issuer have to buy at the close, not earlier?", 11.6, 21, QC.HOUSE),
+            wrapped_label('variance swaps and VIX-futures roll carry related risks, with different payoffs and convexity', 11.6, 21, GREY_A),
+            wrapped_label('reset targets can create feedback near the close; actual flow and causal impact need separate evidence', 11.6, 21, BAD),
+            wrapped_label('pause and predict: why might reset hedging concentrate near the close?', 11.6, 21, QC.HOUSE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(DOWN, buff=0.7)
         with self.voiceover(
-            "The arithmetic of the loss is one line: an inverse note loses the index's daily return, and nothing caps "
-            "that return. A year of roll yield is a few percent a month; one day erased it. <bookmark mark='a'/> This "
-            "is Chapter twelve's premium again, seen from the seller: paid a little every month, for bearing the crash. "
-            "And the product's design made the crash worse. Pause and predict: why did the issuer have to buy at the "
-            "close, not earlier in the day? Because the note promised the close-to-close return, and the hedge is only "
-            "exact at the close: buying earlier is a bet that the move will hold."
-            " Today a feedback of this kind runs through dealers' option hedges. Next."
+            """A daily inverse note can lose its entire value when its index rises enough. Our daily-close toy floors NAV at zero; real acceleration terms can act intraday. <bookmark mark='a'/> VIX-futures roll exposure and variance-swap insurance are related volatility risks, but not identical trades or payoffs. In 2018 earlier gains were overwhelmed by a sharp move. Pause and predict: why might target-reset hedging concentrate near the close? The promised daily return fixes an end-of-day exposure target. It does not make earlier risk management impossible or prove that every issuer traded the same way. Next: option-dealer feedback."""
         ) as vo:
             step(0)
             vo.wait_until("a")

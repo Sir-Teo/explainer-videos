@@ -110,12 +110,7 @@ class Smile(VoiceoverScene):
         src = note(r"a 30-day option at 50\% volatility, Gram--Charlier densities priced and inverted",
                                        font_size=18, color=GREY_B).to_corner(DR, buff=0.25)
         with self.voiceover(
-            "Why this shape? An option price is an expectation under the risk-neutral distribution; implied volatility "
-            "is what Black and Scholes need to match it. Their world: a normal distribution, a flat line. "
-            "<bookmark mark='a'/> Give the distribution negative skewness, a longer left tail: puts gain value, and "
-            "the line tilts into a skew. Positive skewness tilts it toward the calls. <bookmark mark='b'/> Now add "
-            "excess kurtosis, fatter tails on both sides: both wings rise, a smile. <bookmark mark='c'/> The grey "
-            "dashes, a first-order formula, catch the tilt near the money and drift in the wings."
+            """Why this shape? Option prices are expectations under a risk-neutral law. Gaussian log returns give the flat Black--Scholes smile. <bookmark mark='a'/> Our illustrative density changes its log-return skew parameter: a negative setting lifts puts relative to calls; a positive setting does the reverse. <bookmark mark='b'/> A positive kurtosis parameter lifts both wings. The polynomial can become negative, so this illustration clips and renormalizes it, then shifts log returns to preserve the forward. The sliders therefore need not equal the resulting distribution's exact moments. <bookmark mark='c'/> The grey first-order formula is a local approximation, best near the money."""
         ) as vo:
             self.play(FadeIn(gL), FadeIn(gR), Create(normal), Create(flat), FadeIn(src))
             self.add(dens, sm, r1)
@@ -155,11 +150,7 @@ class Smile(VoiceoverScene):
                     r"must not be negative")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-1.2, buff=0.6, edge=6.9)
         with self.voiceover(
-            "As algebra: a normal density corrected by two Hermite polynomials, weighted by skewness and excess "
-            "kurtosis. <bookmark mark='a'/> Price and invert to first order: implied volatility is a line in d tilted "
-            "by the skewness, plus a parabola lifted by the kurtosis, the result of Backus, Foresi and Wu. "
-            "<bookmark mark='b'/> The sign of the skew is the sign of the risk-neutral skewness. <bookmark mark='c'/> "
-            "Along expiries, total variance adds up, and the difference between two expiries is the forward variance."
+            """As algebra: correct the standardized log-return Gaussian by Hermite polynomials. <bookmark mark='a'/> Pricing and inversion to first order gives Backus, Foresi and Wu's tilted line and curved correction. <bookmark mark='b'/> This is a local link between smile slope and log-return skewness, not a universal equality of their signs for arbitrary distributions. Chapter thirteen will show why near-money skew and full-distribution skewness can disagree. <bookmark mark='c'/> At fixed forward moneyness, total implied variance must be non-decreasing in maturity under the calendar-arbitrage assumptions. Its maturity increment defines forward implied variance, rather than a physical variance forecast."""
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -202,17 +193,7 @@ class Smile(VoiceoverScene):
         m7, m180, inv = 100 * m[0], 100 * m[5], 100 * t["inv_7_180"]
         cs = 100 * call
         with self.voiceover(
-            f"Now the same two coordinates through time: {n} Wednesdays of Bitcoin surfaces since April 2021, each "
-            "rebuilt from that morning's trades. On top, at-the-money volatility at four expiries. "
-            f"<bookmark mark='a'/> On average the term structure slopes up, from {m7:.0f} percent at a week to "
-            f"{m180:.0f} at six months. But in {inv:.0f} percent of weeks it inverts, and the short end jumps above "
-            "the long: those are the weeks of crashes and squeezes, when fear is about now. <bookmark mark='b'/> "
-            "Below, the thirty-day skew, red when puts are dearer, gold when calls are. "
-            f"Bitcoin's smile was call-skewed in {cs:.0f} percent of these weeks. The S&P 500 has been put-skewed "
-            "every day since 1987; Bitcoin's buyers have often paid more for the upside than for the crash. Pause and "
-            "predict: a market whose risk-neutral returns are positively skewed: which way does its smile tilt? Toward "
-            "the calls."
-            " A smile is a snapshot. Next: how the whole surface moves."
+            f"Now the same two coordinates through time: {n} Wednesdays of Bitcoin surfaces since April 2021, each rebuilt from that morning's trades. On top, at-the-money volatility at four expiries. <bookmark mark='a'/> On average the term structure slopes up, from {m7:.0f} percent at a week to {m180:.0f} at six months. But in {inv:.0f} percent of weeks it inverts, and the short end jumps above the long: those are the weeks of crashes and squeezes, when fear is about now. <bookmark mark='b'/> Below, the thirty-day skew, red when puts are dearer, gold when calls are. Bitcoin's smile was call-skewed in {cs:.0f} percent of these weeks. The S&P 500 has usually been put-skewed since the 1987 crash; Bitcoin's buyers have often paid more for the upside than for the crash. Pause and predict: in our local log-return illustration, a positive skew parameter tilts the near-money smile which way? Toward the calls. A smile is a snapshot. Next: how the whole surface moves."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.3, run_time=3),
                       FadeIn(leg))

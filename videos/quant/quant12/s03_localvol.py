@@ -40,12 +40,7 @@ class LocalVol(VoiceoverScene, ThreeDScene):
         src = real_data(r"the Surface's SSVI fit; Dupire by finite differences")
         fixed(self, t1, t2, src)
         with self.voiceover(
-            "Can one model reprice every option on the surface at once? Let volatility depend only on the price and "
-            "the date: a function sigma of S and t, nothing random. Here, translucent, is the Surface's implied "
-            "volatility. <bookmark mark='a'/> And here, solid, is the local volatility that reproduces it, computed "
-            "from its slopes. <bookmark mark='b'/> Drop the camera and look along the strikes: the local surface is "
-            "steeper, roughly twice as steep as the implied one, and it bends hardest at the short end. Implied "
-            "volatility is an average over the path to expiry; local volatility is the thing being averaged."
+            "Can one model reprice every option on the surface at once? Let volatility depend only on the price and the date: a deterministic function sigma of S and t, evaluated at a random price. Here, translucent, is the Surface's implied volatility. <bookmark mark='a'/> And here, solid, is the local volatility that reproduces it, computed from its slopes. <bookmark mark='b'/> Drop the camera and look along the strikes: the local surface is steeper, roughly twice as steep as the implied one, and it bends hardest at the short end. Implied volatility is a price-based effective parameter, not a literal unconditional average of local volatility along paths."
         ) as vo:
             self.play(Create(ax), FadeIn(si), FadeIn(t1), FadeIn(src))
             vo.wait_until("a")
@@ -125,12 +120,7 @@ class LocalVol(VoiceoverScene, ThreeDScene):
                f"sigma_imp(0) {100 * L[d]['imp_atm']:.1f}%" for d in ("7", "30", "90")]
         g30 = L["30"]["g_min"]
         with self.voiceover(
-            "In the House it is three small functions. Gatheral's g, local variance as the time slope over g, and "
-            "central differences to get the slopes from any total-variance function. <bookmark mark='a'/> Run on the "
-            "Surface's SSVI at seven, thirty and ninety days. g stays well above zero, its smallest value at thirty "
-            f"days {g30:.2f}, so local variance is defined everywhere; and at the money, local volatility sits a few "
-            "points below implied, because implied volatility also averages the steep, convex wings of local "
-            "volatility that the price might wander into."
+            f"In the House it is three small functions. Gatheral's g, local variance as the time slope over g, and central differences to get the slopes from any total-variance function. <bookmark mark='a'/> Run on the Surface's SSVI at seven, thirty and ninety days. g stays well above zero, its smallest value at thirty days {g30:.2f}, so the tested local-variance grid is well defined; and at the money, local volatility sits a few points below implied, reflecting this fitted surface and its time and strike derivatives, rather than a universal level ordering."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

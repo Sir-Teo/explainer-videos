@@ -62,11 +62,11 @@ class Research(VoiceoverScene):
         self.clear_scene()
 
     def optimum(self):
-        rows = [cmath(r"\operatorname{MSE}(h)", r"=", r"\frac{h^4}{144}\,q''^2 + \frac{6s^2}{h^4}", font_size=32,
-                      colors={r"\operatorname{MSE}(h)": OPT}),
+        rows = [cmath(r"\operatorname{MSE}_{\rm lead}(h)", r"=", r"\frac{h^4}{144}\,q''^2 + \frac{6s^2}{h^4}", font_size=32,
+                      colors={r"\operatorname{MSE}_{\rm lead}(h)": OPT}),
                 cmath(r"h^*", r"=", r"\Big(\frac{864\,s^2}{q''^2}\Big)^{1/8}", font_size=34, colors={r"h^*": SIM}),
-                cmath(r"\operatorname{MSE}(h^*)", r"=", r"\frac{2\sqrt6}{12}\,|q''|\,s\quad\Rightarrow\quad "
-                      r"\operatorname{RMSE} \propto s^{1/2}", font_size=30, colors={r"\operatorname{MSE}(h^*)": BAD})]
+                cmath(r"\operatorname{MSE}_{\rm lead}(h^*)", r"=", r"\frac{2\sqrt6}{12}\,|q''|\,s\quad\Rightarrow\quad "
+                      r"\operatorname{RMSE} \propto s^{1/2}", font_size=30, colors={r"\operatorname{MSE}_{\rm lead}(h^*)": BAD})]
         whys = [why(r"squared bias plus variance"),
                 why(r"setting the derivative to zero balances the two: $h^8 = 864s^2/q''^2$"),
                 why(r"at the optimum the two terms are equal; the error falls only like the square root of the noise. "
@@ -74,12 +74,7 @@ class Research(VoiceoverScene):
                     r"derivative, as in nonparametric statistics")]
         step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.5, edge=6.9)
         with self.voiceover(
-            "So there is a best width. <bookmark mark='a'/> The mean squared error is the squared bias, growing like h "
-            "to the fourth, plus the variance, shrinking like h to the minus four. <bookmark mark='b'/> Balance them: "
-            "the best width is the eighth root of eight hundred and sixty-four s squared over the density's curvature "
-            "squared. <bookmark mark='c'/> At that width the two terms are equal, and the error falls only like the "
-            "square root of the noise. Halve the errors in prices, and the density improves by about thirty percent, "
-            "not fifty. That is the price of a second derivative, as every nonparametric statistician knows."
+            """There is a locally preferred width under these assumptions. <bookmark mark='a'/> The leading Taylor approximation to mean squared error is squared bias, growing as h to the fourth, plus variance shrinking as h to the minus fourth. It requires a sufficiently smooth density and non-zero local curvature. <bookmark mark='b'/> Minimizing that approximation gives the eighth root of eight hundred and sixty-four s squared divided by curvature squared. It is not an exact global optimum for arbitrary noise or wide butterflies. <bookmark mark='c'/> At this local balance the two leading terms are equal and the approximate RMSE scales as the square root of s. Halving price-error standard deviation therefore reduces the approximated RMSE by about thirty percent."""
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -94,7 +89,7 @@ class Research(VoiceoverScene):
     def mse_plot(self, t):
         a = t["at"]["atm"]
         h = np.asarray(t["h"], float)
-        g = axes([-0.7, 1.05], [-4.0, 0.5], x_length=8.0, y_length=4.2, xlabel=r"butterfly half-width $h$, \% of the forward",
+        g = axes([-0.7, 1.15], [-4.0, 0.5], x_length=8.0, y_length=4.2, xlabel=r"butterfly half-width $h$, \% of the forward",
                  ylabel=r"root mean squared error of $\hat q_h$ at the money (log scale)",
                  xticks=[np.log10(0.25), 0.0, np.log10(3), 1.0], yticks=[-4, -3, -2, -1, 0],
                  xfmt=lambda v: f"{10 ** v:g}", yfmt=lambda v: f"10^{{{int(v)}}}", font_size=15,
@@ -109,7 +104,7 @@ class Research(VoiceoverScene):
             dots.add(VGroup(*[Dot(ax.c2p(xs[j], np.log10(np.sqrt(r["mse_sim"][j]))), radius=0.05, color=col) for j in sel]))
             stars.add(Star(n=5, outer_radius=0.12, color=col, fill_opacity=1).move_to(
                 ax.c2p(np.log10(r["h_star"]), np.log10(r["rmse_star"]))))
-        qline = DashedLine(ax.c2p(-0.7, np.log10(a["q"])), ax.c2p(1.05, np.log10(a["q"])), color=GREY_B, stroke_width=1.5)
+        qline = DashedLine(ax.c2p(-0.7, np.log10(a["q"])), ax.c2p(1.15, np.log10(a["q"])), color=GREY_B, stroke_width=1.5)
         qlab = label(r"the density itself", font_size=15, color=GREY_B).next_to(ax.c2p(-0.7, np.log10(a["q"])), UR, buff=0.06)
         leg = legend([(N_COL[k], rf"price error $s = {k}$ per 100") for k in a["noise"]], font_size=16).to_edge(
             RIGHT, buff=0.3).shift(UP * 1.4)
@@ -157,15 +152,10 @@ class Research(VoiceoverScene):
             for i, cell in enumerate(row):
                 cell.move_to([hx[i], 1.5 - 0.75 * j, 0])
             tab.add(row)
-        foot = wrapped_label(r"at the money; the simulated best is the best of the widths tried (a grid of 0.25\%). Each "
-                             r"fivefold increase in the noise multiplies the best error by $\sqrt5 \approx 2.24$; the "
-                             r"same holds in the put wing at 85", 11.6, 16, GREY_A).to_edge(DOWN, buff=0.6)
+        foot = wrapped_label('simulated widths: 0.25--10\\%; high-noise formula optima exceed this grid. Formula RMSE is a local approximation.', 11.6, 16, GREY_A).to_edge(DOWN, buff=0.6)
         rs = [r["rmse_star"] for r in a["noise"].values()]
         with self.voiceover(
-            "The numbers. <bookmark mark='a'/> The best widths from the formula and from the simulation agree, to "
-            "within the grid of widths tried. <bookmark mark='b'/> And the best error, relative to the density: one "
-            "percent at the smallest noise, then a little over two, then about five. Each fivefold rise in the "
-            f"noise multiplies it by {rs[1] / rs[0]:.2f}: the square root of five."
+            f"""The numbers. <bookmark mark='a'/> At the two smaller noise levels, the at-the-money formula gives about five point four and eight point one percent, close to the sampled minima. At the largest noise level it gives twelve point one percent, beyond the simulation's ten-percent limit. The reported sampled minimum is that boundary, not confirmation of the predicted optimum. The put wing shows the same limitation. <bookmark mark='b'/> The relative errors shown are the leading formula's RMSE at its own optimum. Each fivefold noise increase multiplies that approximation by {rs[1] / rs[0]:.2f}, the square root of five; finite-width simulation error need not follow it exactly."""
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(foot))
             vo.wait_until("a")
@@ -184,8 +174,8 @@ class Research(VoiceoverScene):
                 (r"trade price $-$ mark price: robust s.d., per 100 of the forward", rf"{b['noise_sd']:.3f}"),
                 (r"listed strike spacing near the money", rf"{b['strike_spacing_pct']:.2f}\%"),
                 (r"at-the-money volatility, 30 days (the Surface)", rf"{100 * b['atm_iv']:.0f}\%"),
-                (r"best half-width $h^*$", rf"{b['h_star']:.1f}\%"),
-                (r"noise alone with adjacent strikes, relative to the density", rf"\pm{100 * sd_adj / q_atm:.0f}\%")]
+                ('local plug-in half-width $h^*$', rf"{b['h_star']:.1f}\%"),
+                ('conditional noise s.d. / reference density, adjacent strikes', rf"\pm{100 * sd_adj / q_atm:.0f}\%")]
         tab = VGroup()
         for j, (a_, v) in enumerate(rows):
             r_ = VGroup(label(a_, font_size=19, color=GREY_A), MathTex(v, font_size=28, color=IV if j >= 4 else WHITE))
@@ -197,14 +187,7 @@ class Research(VoiceoverScene):
                              r"smoothed model, which is why densities built from marks and fits (Part 9) look clean", 11.8, 16,
                              GREY_A).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "How noisy are real prices? Take every Bitcoin option trade on the Surface's two days with a month or so "
-            "to run. <bookmark mark='a'/> Against Deribit's own mark price at that moment, trades scatter by about "
-            f"{b['noise_sd']:.3f} per hundred of the forward. <bookmark mark='b'/> Listed strikes sit about one percent "
-            f"apart. But at forty-six percent volatility the best butterfly is {b['h_star']:.0f} percent wide: eight "
-            "strikes on each side, not one. <bookmark mark='c'/> Built from adjacent strikes, the density from trades "
-            f"would carry noise of plus or minus {100 * sd_adj / q_atm:.0f} percent of itself. Every clean density you "
-            "have seen from such data was smoothed, by a model, a fit or the exchange's mark; the smoothing is the "
-            "estimate's real content."
+            f"""What scale do real trade--mark differences have? Across the two frozen days, their robust dispersion is about {b['noise_sd']:.3f} per hundred of the reference underlying. <bookmark mark='a'/> This includes spreads, model marks and heterogeneous trades; it does not identify independent measurement-error standard deviation. <bookmark mark='b'/> Plug that number into the independent-error lognormal illustration, using the fitted at-the-money volatility, and its local width is {b['h_star']:.1f} percent, several listed strikes each side. This is a conditional sensitivity calculation, not an empirically established optimal bandwidth. <bookmark mark='c'/> Under those same assumptions, adjacent-strike noise has standard deviation about {100 * sd_adj / q_atm:.0f} percent of the reference density. That is a one-standard-deviation scale, not a confidence bound. Smoothing and its assumptions materially affect density estimates."""
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(foot))
             vo.wait_until("a")
@@ -218,26 +201,20 @@ class Research(VoiceoverScene):
 
     def open_problems(self):
         cards = VGroup(
-            desk_question(r"open: shape constraints and optimal rates", r"densities are non-negative and integrate to one; "
-                          r"estimators that impose no-arbitrage shapes (A\"it-Sahalia and Duarte 2003) beat raw butterflies, "
-                          r"but optimal rates under realistic, correlated quote errors are not settled", width=12.4,
+            desk_question(r"open: shape constraints and optimal rates", 'shape constraints restrict density estimates; accuracy and rates still depend on noise assumptions', width=12.4,
                           font_size=18),
-            desk_question(r"open: errors that are not independent", r"bid--ask bounce, stale quotes and a common forward "
-                          r"error correlate across strikes; a common error cancels in a butterfly, a stale one does not",
+            desk_question('open: dependent price errors', 'common additive or affine price errors cancel; generic stale or forward-related errors need not',
                           width=12.4, font_size=18),
             desk_question(r"open: inference on the tails", r"the tails, where crash probabilities live, have few quotes and "
                           r"wide spreads; confidence bands for tail probabilities from option prices are rarely reported",
                           width=12.4, font_size=18),
         ).arrange(DOWN, buff=0.22)
         with self.voiceover(
-            "Three open questions. <bookmark mark='a'/> Densities are non-negative and integrate to one. Estimators "
-            "that impose those shapes beat raw butterflies, but optimal rates with realistic quote errors are not "
-            "settled. <bookmark mark='b'/> Real errors are not independent: bid-ask bounce, stale quotes and a common "
-            "error in the forward correlate across strikes. A common error cancels in a butterfly; a stale one does "
-            "not. <bookmark mark='c'/> And in the tails, where crash probabilities live, quotes are few and spreads "
-            "wide: confidence bands for tail probabilities read from options are rarely reported at all."
+            """Three open questions. <bookmark mark='a'/> Non-negativity and normalization restrict density estimators; imposing these shapes can help, but does not guarantee smaller error in every setting. Rates with realistic dependent quote errors depend on the statistical model. <bookmark mark='b'/> A common additive price error cancels because the butterfly weights sum to zero; so does an affine strike-dependent error. A generic stale or forward-related error need not have either form. Correlation structure, rather than staleness alone, controls amplification. <bookmark mark='c'/> In the tails, few observations and wide spreads make confidence bands especially sensitive to extrapolation assumptions."""
         ) as vo:
-            for k, mk in enumerate(("a", "b", "c")):
+            self.play(FadeIn(cards[0], shift=UP * 0.2))
+            vo.wait_until("a")
+            for k, mk in enumerate(("b", "c"), 1):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
         self.wait(0.4)
@@ -251,5 +228,10 @@ class Research(VoiceoverScene):
             "width, and the best density error, change?"
         ):
             self.play(FadeIn(q))
+        self.wait(6)
+        answer = MathTex(r"h^*_{\rm new}/h^*_{\rm old}=16^{-1/4}=\tfrac12,\qquad "
+                         r"{\rm RMSE}_{\rm new}/{\rm RMSE}_{\rm old}=16^{-1/2}=\tfrac14", font_size=34).move_to(DOWN * 0.7)
+        with self.voiceover('Under the leading local approximation, width scales with the fourth root of the error standard deviation, so it halves. Density RMSE scales with its square root, so it falls to one quarter.'):
+            self.play(FadeIn(answer))
         self.wait(0.5)
         self.clear_scene()

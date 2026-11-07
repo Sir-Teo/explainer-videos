@@ -56,13 +56,7 @@ class ETP(VoiceoverScene, ThreeDScene):
         cg, ms = 100 * v["contango"], 100 * v["median_slope"]
         f0, f1 = v["front"]
         with self.voiceover(
-            "A VIX future settles, at expiry, on the VIX of that morning. Here is the whole futures curve, every day "
-            "from June 2017 to March 2018, as a ribbon: date across, days to expiry going back, price up, and the VIX "
-            "itself as white dots at the front. <bookmark mark='a'/> Almost every day the curve slopes up: futures above "
-            f"the spot index, further-out futures higher still. The second month sat above the first on {cg:.0f} "
-            f"percent of these days, by {ms:.1f} percent at the median. <bookmark mark='b'/> Then the red line. On the "
-            f"fifth of February 2018 the front future went from {f0:.2f} to {f1:.2f}, and the curve folded over: "
-            "backwardation, the near future above the far."
+            f"A VIX future settles on a special opening quotation built from the opening prices of selected SPX options, rather than the ordinary live VIX print. Here is the whole futures curve, every day from June 2017 to March 2018, as a ribbon: date across, days to expiry going back, price up, and the VIX itself as white dots at the front. <bookmark mark='a'/> Almost every day the curve slopes up: futures above the spot index, further-out futures higher still. The second month sat above the first on {cg:.0f} percent of these days, by {ms:.1f} percent at the median. <bookmark mark='b'/> Then the red line. On the fifth of February 2018 the front future went from {f0:.2f} to {f1:.2f}, and the curve folded over: backwardation, the near future above the far."
         ) as vo:
             self.play(Create(ax), FadeIn(hint), FadeIn(src))
             self.play(LaggedStart(*[Create(x) for x in lines[:-2]], lag_ratio=0.02, run_time=4), FadeIn(spot))
@@ -80,25 +74,18 @@ class ETP(VoiceoverScene, ThreeDScene):
                       font_size=38, colors={r"F^{VX}_t(T)": IV}),
                 cmath(r"w_1", r"=", r"\frac{d_r}{d_t},\quad w_2 = 1 - w_1,\quad r_t = \frac{w_1F_1' + w_2F_2'}{w_1F_1 + w_2F_2} - 1",
                       font_size=34, colors={r"w_1": LV}),
-                cmath(r"\text{roll yield}", r"\approx", r"\frac{F_2 - F_1}{F_1}\ \text{per month, to the short}", font_size=36),
+                cmath(r"\text{curve slope}", r"=", r"\frac{F_2-F_1}{F_1}\quad \text{(not a guaranteed return)}", font_size=34),
                 cmath(r"N_{t+1}", r"=", r"N_t(1 + L\,r),\qquad \text{trade} = (L^2 - L)\,r\,N_t", font_size=38,
                       colors={r"N_{t+1}": OPT})]
-        whys = [why(r"a future on the index, not on variance: Jensen puts it below the forward variance strike, so it is "
-                    r"not replicated by options"),
+        whys = [why('ideal deterministic-rate pricing; Jensen concerns risk-neutral expectations of the settlement index'),
                 why(r"the short-term futures index: hold the first and second months, shifting weight daily ($d_r$ days "
                     r"left in the roll period of $d_t$)"),
-                why(r"in contango each future drifts down toward spot as it ages: the seller of the index earns the slope"),
+                why('contango is a cross-maturity price relation, not guaranteed convergence profit'),
                 why(r"a daily-reset note with leverage $L$; to restore exposure $L N_{t+1}$ the issuer trades $(L^2 - L) r N_t$: "
                     r"for $L = -1$ and $L = 2$ alike, $+2rN_t$, buying after a rise (Cheng and Madhavan 2009)")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.65, edge=6.9)
         with self.voiceover(
-            "Four lines. A VIX future is the expected VIX at expiry; the VIX is a square root of variance, so by "
-            "Jensen the future sits below the root of the forward variance: no strip of options replicates it. "
-            "<bookmark mark='a'/> The short-term index holds the first and second months, shifting weight a little "
-            "every day. <bookmark mark='b'/> In contango each future drifts down toward spot: the short collects the "
-            "roll. <bookmark mark='c'/> And a note promising L times each day's return must, after a rise of r, trade L "
-            "squared minus L, times r, times its value. For L of minus one that is plus two r N: buy after a rise, as "
-            "Cheng and Madhavan showed in 2009; the same for a doubly leveraged long note."
+            """Four lines. In the ideal model with deterministic rates, a volatility future is a risk-neutral expectation of its settlement index. Jensen bounds it by the root of the expected squared index, not by a physical forecast. <bookmark mark='a'/> The short-term futures index rolls between its first two eligible contracts. <bookmark mark='b'/> A contango curve describes prices across maturities today; it does not guarantee that a contract's price will fall tomorrow or that a short position will collect a profit. <bookmark mark='c'/> For a frictionless daily-reset target, rebalancing notional is L squared minus L, times the daily index return, times the note's pre-move value. For minus one and plus two leverage it is two r N. This specifies an end-of-day exposure adjustment, not every issuer's actual trading schedule."""
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -174,14 +161,7 @@ class ETP(VoiceoverScene, ThreeDScene):
         src = real_data(r"rebuilt from Cboe settlements by the index's published roll rule; not the issuer's figures")
         g17, f5 = 100 * v["note_jun_dec"], 100 * v["note_feb5"]
         with self.voiceover(
-            "Now run the year. The index, in gold, sags all through 2017: the roll eats it. The inverse note, in "
-            f"purple, climbs: {g17:+.0f} percent from June to December, a smooth, steady climb. "
-            "<bookmark mark='a'/> Then the fifth of February. Below, the futures the note's hedger had to buy at each "
-            "day's close, as a multiple of the note's value: small every day, until one bar of nearly twice the note "
-            f"itself. The note lost {abs(f5):.1f} percent in a day. Pause and predict: a billion-dollar inverse note, its "
-            "index up ten percent. How much must the hedge buy? Two hundred million dollars of futures, in the last "
-            "minutes of trading, whatever the price."
-            " Next: the day those mechanics broke."
+            f"""Run the historical reconstruction. The hypothetical daily inverse note gained {g17:.0f} percent from June through December 2017. <bookmark mark='a'/> On February fifth it lost {abs(f5):.1f} percent. The lower bars show target rebalancing purchases as a multiple of the PRE-move note value; the large bar is nearly twice that value. The illustration excludes fees, actual execution, issuer discretion and intraday acceleration terms, so it is not a reconstruction of XIV's exact contractual NAV. Pause and predict: pre-move NAV of one billion, index up ten percent, minus-one daily leverage. The target exposure adjustment is two hundred million dollars. That arithmetic identifies potential demand, not its actual market impact."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(leg), FadeIn(g2))
             self.add(ci, cn)

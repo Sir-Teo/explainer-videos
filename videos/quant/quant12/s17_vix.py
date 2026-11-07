@@ -61,13 +61,7 @@ class VIX(VoiceoverScene):
                f"30-day: {100 * v['our_vix']:.1f}%    Deribit DVOL at 08:00: {100 * v['dvol']:.1f}%"]
         s1, s2, ours, dv = 100 * p0["sigma"], 100 * p1["sigma"], 100 * v["our_vix"], 100 * v["dvol"]
         with self.voiceover(
-            "The VIX is Chapter nine's variance strike, discretized so an exchange can compute it from listed quotes. "
-            "The recipe: find K zero, the first strike at or below the forward; puts below, calls above, both "
-            "averaged at K zero; weight each by its share of the grid over its square; sum, scale, and subtract one "
-            "correction. <bookmark mark='a'/> On the Surface's two expiries around thirty days, "
-            "each strike's contribution builds as the loop adds it, puts in red carrying most of the weight. "
-            f"<bookmark mark='b'/> The two expiries give {s1:.1f} and {s2:.1f} percent; interpolated to thirty days, "
-            f"{ours:.1f}. Deribit's own index, DVOL, read {dv:.1f} at the same moment."
+            f"""The VIX is a discretized, annualized variance-price measure, quoted as a volatility. Find K zero at or below the forward, use puts below and calls above, average the pair at K zero, weight by strike spacing over strike squared, and subtract the prescribed correction. <bookmark mark='a'/> Our Bitcoin illustration applies that formula to model marks on the two available expiries around thirty days, not the full SPX index eligibility and liquidity rules. <bookmark mark='b'/> Its expiry values are {s1:.1f} and {s2:.1f} percent; total-variance interpolation gives {ours:.1f}. The hourly DVOL observation is {dv:.1f}. Pooling and time aggregation differ, so these are not synchronized executable index prices."""
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -93,12 +87,7 @@ class VIX(VoiceoverScene):
                     r"minutes)")]
         step = ladder(self, rows, whys, keep=3, top=2.7, x=-0.6, buff=0.8, edge=6.9)
         with self.voiceover(
-            "On paper: the discretized strip with one correction. <bookmark mark='a'/> The strip should switch from "
-            "puts to calls at the forward, but switches at K zero, just below; between them it holds calls where puts "
-            "belong, and put-call parity, to second order, gives exactly the subtracted term. <bookmark mark='b'/> "
-            "Then two expiries around thirty days are combined linearly in total variance. That is Cboe's rebuild of "
-            "September 2003, designed with Goldman Sachs; Robert Whaley's original of 1993 averaged at-the-money "
-            "implied volatilities on the S&P 100."
+            "On paper: the discretized strip with one correction. <bookmark mark='a'/> The strip should switch from puts to calls at the forward, but switches at K zero, just below; between them it holds calls where puts belong, and put-call parity, to second order, motivates the prescribed subtracted term. It is a discretization correction, not an exact continuum identity. <bookmark mark='b'/> Then two expiries around thirty days are combined linearly in total variance. That is Cboe's rebuild of September 2003, designed with Goldman Sachs; Robert Whaley's original of 1993 averaged at-the-money implied volatilities on the S&P 100."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -128,13 +117,7 @@ class VIX(VoiceoverScene):
         src = real_data(r"weekly Deribit surfaces; DVOL from Deribit", corner=DL)
         n, a, b, c_, gm, gs = v["n_weeks"], 100 * v["mean_ours"], 100 * v["mean_dvol"], v["corr"], v["gap_mean"], v["gap_sd"]
         with self.voiceover(
-            f"Now our index against Deribit's, every Wednesday for {n} weeks. Deribit launched DVOL in March 2021 with "
-            "the same recipe: two expiries around thirty days, the VIX's sum over strikes. <bookmark mark='a'/> Ours "
-            "comes from the fitted surface; theirs from live quotes. They move together almost perfectly, a "
-            f"correlation of {c_:.3f}, and ours runs {gm:+.1f} points higher on average, give or take {gs:.1f}. The "
-            "difference is the wings: our fit extends the smile to strikes nobody quotes, while an index has to stop "
-            "where the quotes stop. Pause and predict: remove every option beyond twenty percent. Does the index rise "
-            "or fall? Falls: Chapter nine's truncation."
+            f"""Compare the fitted proxy with DVOL over {n} Wednesdays. Deribit's March 2021 index uses a related variance-strip approach, with its own liquidity, delta and smoothing rules. <bookmark mark='a'/> Their correlation is {c_:.3f}; our proxy averages {gm:.1f} points higher, with sample standard deviation {gs:.1f}. Model extrapolation of unquoted wings can contribute, alongside quote selection, mark fitting and different observation windows. This comparison does not isolate one cause. Pause and predict: holding the rest of a positive option strip fixed, removing strikes beyond twenty percent removes positive contributions. The truncated variance estimate falls."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(lo), FadeIn(leg[0]), run_time=2)
             vo.wait_until("a")

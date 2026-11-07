@@ -26,7 +26,7 @@ class Gamma(VoiceoverScene):
         n = len(e)
         m = np.arange(n)
         ax = axes([0, n], [-0.05, 0.05], x_length=8.4, y_length=4.2, xlabel=r"minutes of a trading day",
-                  ylabel=r"log return since the open", xticks=[0, 360, 390], yticks=[-0.04, 0, 0.04],
+                  ylabel='cumulative minute return (linear toy)', xticks=[0, 360, 390], yticks=[-0.04, 0, 0.04],
                   yfmt=lambda u: f"{100 * u:+.0f}\\%", font_size=16).to_edge(LEFT, buff=0.5).shift(DOWN * 0.2)
         tr = ValueTracker(2)
         close = Rectangle(width=ax.ax.c2p(390, 0)[0] - ax.ax.c2p(360, 0)[0], height=ax.ax.c2p(0, 0.05)[1] - ax.ax.c2p(0, -0.05)[1],
@@ -76,25 +76,15 @@ class Gamma(VoiceoverScene):
                 cmath(r"r_{\text{last 30}}", r"=", r"-c\,k\,r_{\text{rest of day}} + \varepsilon,\qquad k = \lambda\Gamma_d S",
                       font_size=36, colors={r"r_{\text{last 30}}": BAD}),
                 cmath(r"\text{GEX}", r"=", r"\sum_i \Gamma_i\,S^2\,\text{OI}_i\,s_i", font_size=40, colors={r"\text{GEX}": LV})]
-        whys = [why(r"the dealer's hedge trade: to stay delta-neutral, sell $\Gamma_d S\,\Delta S$ of the asset after a move "
-                    r"$\Delta S$"),
-                why(r"with linear price impact $\lambda$, the move includes the hedge's own impact: solve the fixed point"),
+        whys = [why('h is dollar notional; shares traded are $-\\Gamma_d\\Delta S$, with position size in $\\Gamma_d$'),
+                why('$\\lambda$ is price change per dollar traded; this row assumes the full hedge is immediate'),
                 why(r"long gamma leans against moves; short gamma chases them"),
                 why(r"if a share $c$ of the hedge waits for the close, the last half hour continues the day when $k < 0$: "
                     r"intraday momentum"),
-                why(r"gamma exposure: each strike's gamma times open interest, signed by the dealers' assumed side; the "
-                    r"assumption $s_i$ is the weak point")]
+                why('GEX per unit fractional move; contract gamma includes its multiplier; dealer signs require assumptions')]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.6, buff=0.72, edge=6.9)
         with self.voiceover(
-            "The model is three lines. A dealer with gamma Gamma d must sell Gamma d times S times the move to stay "
-            "neutral. <bookmark mark='a'/> If trading moves the price by lambda per unit, the move includes the "
-            "hedge's own impact; solve the fixed point, and the news is divided by one plus lambda Gamma d S. "
-            "<bookmark mark='b'/> Long gamma divides by more than one: damping. Short gamma divides by less than one: "
-            "amplification, without bound as the product approaches one. <bookmark mark='c'/> If part of the hedge is "
-            "left for the close, the last half hour's return is proportional to the rest of the day's, with a positive "
-            "slope when dealers are short gamma. <bookmark mark='d'/> Analysts estimate the dealers' gamma from open "
-            "interest: the gamma exposure, or GEX. Its weak point is the sign: open interest does not say who is long, "
-            "so every GEX number rests on an assumption about who sold."
+            """Here is a linear feedback model. Gamma is the position's delta sensitivity per unit price move. The neutralizing share trade is minus Gamma times the price change; h is its dollar notional, so it also multiplies by S. <bookmark mark='a'/> Define lambda as price impact per dollar traded. If the whole hedge is immediate, solving the fixed point divides the external move by one plus lambda Gamma S. <bookmark mark='b'/> Long gamma damps; stable short-gamma feedback amplifies. The singularity is a limit of this linear toy, not a prediction of infinite real prices. <bookmark mark='c'/> The simulation defers half the hedge: its intraday denominator is one plus half k, and the closing return includes minus half k times the earlier return. <bookmark mark='d'/> GEX requires contract size and an assumed dealer side; open interest alone does not identify that side."""
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -112,7 +102,7 @@ class Gamma(VoiceoverScene):
         ks = np.asarray(g["k"])
         vol, sl = np.asarray(g["vol"]), np.asarray(g["slope"])
         g1 = axes([-0.6, 0.6], [0.5, 2.0], x_length=5.4, y_length=3.4, xlabel=r"dealer gamma $k = \lambda\Gamma_d S$",
-                  ylabel=r"realized vol $/$ no-dealer vol", xticks=[-0.5, 0, 0.5], yticks=[0.5, 1, 1.5, 2], font_size=15)
+                  ylabel='s.d. of pre-close return / no-dealer s.d.', xticks=[-0.5, 0, 0.5], yticks=[0.5, 1, 1.5, 2], font_size=15)
         g2 = axes([-0.6, 0.6], [-0.4, 0.4], x_length=5.4, y_length=3.4, xlabel=r"dealer gamma $k$",
                   ylabel=r"slope: last 30 min on the rest of the day", xticks=[-0.5, 0, 0.5], yticks=[-0.3, 0, 0.3],
                   font_size=15)
@@ -132,12 +122,7 @@ class Gamma(VoiceoverScene):
         src = simulated(r"simulated", corner=UR)
         vs, vl, ss = g["vol_short"], g["vol_long"], g["slope_short"]
         with self.voiceover(
-            "Now sweep the dealers' gamma from short to long, two thousand simulated days for each value, five seeds "
-            "as a band. <bookmark mark='a'/> On the left, realized volatility relative to a market without dealers. "
-            f"Short gamma of minus one half raises it by a factor of {vs:.2f}; long gamma of one half cuts it to "
-            f"{vl:.2f}, right on the formula. <bookmark mark='b'/> On the right, the slope of the last half hour on the "
-            f"rest of the day: {ss:+.2f} when dealers are short, negative when they are long. This is a simulation; "
-            "its truth is known because we wrote it. The question is whether real markets look like it."
+            f"""Sweep k over two thousand simulated days per value and five seeds. The bands show the full minimum-to-maximum range, not confidence intervals. <bookmark mark='a'/> The left panel measures the standard deviation across days of the return BEFORE the final half hour, relative to the no-dealer version. It is not each day's sum of squared minute returns. With half the hedge deferred, minus-one-half k gives {vs:.2f} times this standard deviation, and plus-one-half gives {vl:.2f}. <bookmark mark='b'/> The closing-on-earlier-return slope is {ss:+.2f} in the short case. These relations follow the specified simulation, rather than identifying causal dealer effects in observed markets."""
         ) as vo:
             self.play(FadeIn(g1), FadeIn(src), Create(thd))
             vo.wait_until("a")
@@ -154,8 +139,7 @@ class Gamma(VoiceoverScene):
                       r"the last half hour's return is predicted by the rest of the day's; the effect is strongest when "
                       r"hedgers of index options and leveraged ETFs are short gamma.", width=6.4, font_size=20),
             firm_card(r"Same-day options",
-                      r"Cboe launched the one-day VIX (VIX1D) on 24 April 2023. Options expiring the same day reached a "
-                      r"record 62.4\% of S\&P 500 option volume in August 2025 (Cboe).", width=6.4, font_size=20),
+                      'VIX1D launched 24 April 2023. Same-day options were 62.4\\% of SPX option volume in August 2025 (Cboe).', width=6.4, font_size=20),
             firm_card(r"Do they move the index? The evidence is mixed",
                       r"Andersen, Fusari and Todorov (2017) priced weekly options' short-term risks; Bandi, Fusari and "
                       r"Ren\`o (2023) price 0DTE options with jumps for the wings; Dim, Eraker and Vilkov (2024) find that "
@@ -173,16 +157,7 @@ class Gamma(VoiceoverScene):
         q = label(r"pause and predict: dealers short gamma at 6{,}000, spot 6{,}010, one hour to expiry", font_size=20,
                   color=QC.HOUSE).to_edge(DOWN, buff=0.15)
         with self.voiceover(
-            "The public record. Baltussen, Da, Lammers and Martens found the closing pattern in more than sixty futures "
-            "markets since 1974, strongest when hedgers are short gamma. <bookmark mark='a'/> Same-day options have "
-            "grown into the majority of S&P 500 option volume: a record 62.4 percent in August 2025, by Cboe's count. "
-            "<bookmark mark='b'/> Do they move the index? The research is mixed. Andersen, Fusari and Todorov priced "
-            "weekly options' risks; Bandi, Fusari and Renò priced same-day options with jumps; Dim, Eraker and Vilkov "
-            "find that their gamma does not feed past volatility. <bookmark mark='c'/> And Beckmeyer and co-authors "
-            "estimate that retail traders lose on them. Pause and predict: dealers short gamma at the six-thousand "
-            "strike, the index at six thousand and ten, an hour to go. Their hedging pushes it away; long gamma would "
-            "pin it."
-            " Next: can a network learn the surface?"
+            """The public record. Baltussen, Da, Lammers and Martens document intraday momentum across more than sixty futures markets, with evidence consistent with hedging feedback. <bookmark mark='a'/> Cboe reports that zero-day contracts were 62.4 percent of SPX option volume in August 2025, not all options tied to the S&P 500. <bookmark mark='b'/> Short-maturity pricing and feedback studies reach different conclusions under different position and flow measures; a large open-interest number by itself does not establish destabilizing dealer demand. <bookmark mark='c'/> Research also documents retail trading costs and losses in specific samples. Pause and predict: under our toy assumptions, short gamma amplifies local moves and long gamma damps them. Neither sign alone guarantees a pin at a particular listed strike in a real market."""
         ) as vo:
             self.play(FadeIn(cards[0]))
             vo.wait_until("a")

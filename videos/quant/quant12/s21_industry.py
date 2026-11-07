@@ -25,11 +25,11 @@ class Industry(VoiceoverScene):
                         r"(Robert Whaley's design)"),
                  (2003, r"September: the VIX becomes a strip of S\&P 500 options, designed with Goldman Sachs"),
                  (2004, r"March: VIX futures on the Cboe Futures Exchange; options on the VIX follow in February 2006"),
-                 (2021, r"March: Deribit launches DVOL, the same recipe on bitcoin options; DVOL futures in 2023"),
+                 (2021, 'March: Deribit launches variance-based DVOL, with its own filters; DVOL futures follow in 2023'),
                  (2023, r"April: Cboe's one-day VIX (VIX1D), for same-day options"),
                  (2024, r"November: options on BlackRock's bitcoin ETF (IBIT) list on Nasdaq; about \$1.9bn notional "
                         r"traded on the first day, as reported by Nasdaq"),
-                 (2025, r"August: Coinbase completes its purchase of Deribit, about \$2.9bn, as reported")]
+                 (2025, '14 August: Coinbase closes Deribit acquisition; filing consideration about \\$4.3bn (earlier announcement: \\$2.9bn)')]
         rows = VGroup()
         for y, t in steps:
             rows.add(VGroup(label(str(y), font_size=24, color=QC.FIRM), wrapped_label(t, 10.6, 20, GREY_A)
@@ -39,16 +39,7 @@ class Industry(VoiceoverScene):
         q = label(r"pause and predict: why can an exchange publish a VIX for bitcoin, but not a true variance-swap rate?",
                   font_size=19, color=QC.HOUSE).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "The public face of the surface is an index. Cboe published the first VIX in 1993, an average of "
-            "at-the-money implied volatilities on S&P 100 options, designed by Robert Whaley. In September 2003 it "
-            "became Chapter eleven's strip of S&P 500 options, designed with Goldman Sachs; futures followed in 2004 "
-            "and options on the VIX in 2006. <bookmark mark='a'/> Crypto copied the recipe. Deribit launched DVOL in "
-            "March 2021 and listed futures on it two years later. Cboe added a one-day VIX in 2023 as same-day options "
-            "took over. In November 2024 options on BlackRock's Bitcoin fund began trading on Nasdaq, and in 2025 "
-            "Coinbase completed its purchase of Deribit, for about two point nine billion dollars, as reported. "
-            "<bookmark mark='b'/> Pause and predict: why can an exchange publish a VIX for Bitcoin, but not a true "
-            "variance-swap rate? Because listed strikes stop: the index is a truncated strip, Chapter nine's missing "
-            "wings, and the true rate needs a model for what nobody quotes."
+            """An index is the public face of the surface. Cboe's original VIX used S&P 100 options; the 2003 redesign uses an SPX option strip. Futures followed in 2004, options in 2006. <bookmark mark='a'/> Deribit launched DVOL in March 2021 and its futures in 2023. Cboe introduced VIX1D in 2023. IBIT options began trading in November 2024. Coinbase closed its Deribit acquisition on August fourteenth, 2025. Its filing records total consideration of about four point three billion dollars; the earlier two point nine billion announcement valued the stock component at a different date. <bookmark mark='b'/> An exchange can publish a precisely specified truncated index. Inferring a continuum-strike variance price still needs assumptions about unquoted tails and the target contract's sampling, jump and carry conventions."""
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(r_) for r_ in rows[:3]], lag_ratio=0.4, run_time=3))
             vo.wait_until("a")
@@ -126,12 +117,7 @@ class Industry(VoiceoverScene):
             tab.scale_to_fit_width(13.0)
         tab.set_x(0)
         with self.voiceover(
-            "And here is ours. The volatility desk of the House now has a surface builder, every function tested: "
-            "SVI and its trader's form; SSVI, and the function that says where its no-arbitrage proof holds; the "
-            "butterfly and wing checks; local volatility as a formula and as a tree; variance, indices and moments "
-            "from strips; the futures index and the notes built on it; and a network that learns a surface without "
-            "arbitrage."
-            " Last, the frontier."
+            """Here is the House's surface builder: SVI and its trader's coordinates; SSVI and the maturity domain of its sufficient conditions; sampled butterfly and wing diagnostics; local volatility as a formula and a tree; strips for variance, indices and moments; a futures-index and daily-reset-note illustration; and neural fits with grid penalties and explicit remaining violations. Tests check these implementations. They do not certify every fitted surface, every extrapolated strike or every future market scenario. Last, the frontier."""
         ) as vo:
             self.play(FadeIn(chart))
             self.play(LaggedStart(*[FadeIn(r_) for r_ in tab], lag_ratio=0.4, run_time=6))

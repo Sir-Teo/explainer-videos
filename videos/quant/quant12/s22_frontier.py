@@ -74,27 +74,26 @@ class Frontier(VoiceoverScene):
         steps = H[0][:, 0]
         te = np.array([h[:, 2] for h in H])
         tr = np.array([h[:, 1] for h in H])
-        hi = float(max(te.max(), tr.max()) * 1.05)
+        hi = float(max(te.max(), tr.max(), o["dec_rmse"], o["ssvi_rmse"]) * 1.05)
         g = axes([0, steps[-1]], [0, hi], x_length=6.4, y_length=4.0, xlabel=r"training step",
                  ylabel=r"RMSE (vol points)", xticks=[0, steps[-1]], xfmt=lambda u: f"{u:,.0f}".replace(",", "{,}"),
                  yticks=[0, round(hi / 2), round(hi)], font_size=15).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
         bt = seed_band(g.ax, steps, np.clip(tr, 0, hi), LV)
         bte = seed_band(g.ax, steps, np.clip(te, 0, hi), IV)
-        dec = DashedLine(g.ax.c2p(0, min(o["dec_rmse"], hi)), g.ax.c2p(steps[-1], min(o["dec_rmse"], hi)), color=GREY_B)
-        ss = DashedLine(g.ax.c2p(0, min(o["ssvi_rmse"], hi)), g.ax.c2p(steps[-1], min(o["ssvi_rmse"], hi)), color=OPT)
+        dec = DashedLine(g.ax.c2p(0, o["dec_rmse"]), g.ax.c2p(steps[-1], o["dec_rmse"]), color=GREY_B)
+        ss = DashedLine(g.ax.c2p(0, o["ssvi_rmse"]), g.ax.c2p(steps[-1], o["ssvi_rmse"]), color=OPT)
         leg = legend([(LV, r"training weeks"), (IV, r"held-out weeks (the last 20\%)"),
-                      (GREY_B, r"the autoencoder's decoded grid, same two numbers"),
+                      (GREY_B, 'two-component PCA, fitted on all weeks'),
                       (OPT, r"SSVI fitted to each held-out week itself")], font_size=16).next_to(g, UP, buff=0.1
                                                                                                 ).align_to(g, LEFT)
         mt = float(np.mean([r["test"] for r in R]))
         beats_dec = mt < o["dec_rmse"]
         beats_ssvi = mt < o["ssvi_rmse"]
         side = VGroup(
-            wrapped_label(r"one network for all weeks: implied vol as a function of $(k, \sqrt T)$ and the week's two "
-                          r"autoencoder numbers, trained on every quote of the first 80\% of weeks", 4.6, 19, GREY_A),
-            MathTex(rf"\text{{held out: }} {mt:.2f}\ \text{{vs decoder}}\ {o['dec_rmse']:.2f}\ \text{{vs SSVI}}\ "
+            wrapped_label("latent-conditioned IV regression; the full-sample VAE and each test week's entire grid supply its two codes", 4.6, 19, GREY_A),
+            MathTex(rf"\text{{held out: }} {mt:.2f}\ \text{{vs PCA}}\ {o['dec_rmse']:.2f}\ \text{{vs SSVI}}\ "
                     rf"{o['ssvi_rmse']:.2f}", font_size=26, color=IV),
-            wrapped_label(r"SSVI here is fitted to the very quotes it is scored on: a ceiling, not a fair race", 4.6, 18,
+            wrapped_label('PCA and VAE use all weeks; SSVI fits test quotes. Conditional reconstruction, not a predictive race.', 4.6, 18,
                           GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         src = real_data(rf"{o['n_quotes']:,} quotes from {o['n_weeks']} weekly Deribit surfaces; three seeds".replace(",", "{,}"))
@@ -104,14 +103,7 @@ class Frontier(VoiceoverScene):
               "The network does not beat the decoder: the two numbers, not the network, set the limit. ")
         b2 = ("the network even beats it, " if beats_ssvi else "fitted to each week it does better, ")
         with self.voiceover(
-            "A small replication of the idea, on our own data. One network for every week: it takes log-moneyness, "
-            "the square root of maturity, and the week's two numbers from the autoencoder, and returns an implied "
-            "volatility. It trains on every quote of the first eighty percent of weeks, and is scored on weeks "
-            f"from {first} on, which it never saw. <bookmark mark='a'/> Three seeds, the band. On the held-out weeks it "
-            f"misses by {mt:.2f} volatility points. The autoencoder's own decoded grid, from the same two numbers, "
-            f"misses by {d:.2f}. {b1}As for SSVI: {b2}at {s_:.2f}, "
-            "but that comparison flatters SSVI, which was fitted to the very quotes it is scored on, with a dozen "
-            "parameters to the network's two."
+            f"""Here is a latent-conditioned regression illustration, rather than a replication of the graph neural operator. It takes log-moneyness, square-root maturity, and two codes from the week's entire fitted grid. The final regressor trains on the first eighty percent of weeks and holds out weeks from {first}. But the autoencoder was fitted on all weeks, including those later dates; their full current grids also supply their codes. These are conditional reconstruction checks, not fully unseen-date forecasts. <bookmark mark='a'/> Across three seeds the regressor's error is {mt:.2f} volatility points. The {d:.2f} baseline is a two-component PCA fitted to all weeks, with its reconstructed grid clamped to the supported coordinates. It is not the autoencoder decoder. SSVI's {s_:.2f} error uses fits to each test week's own quotes. These methods condition on different information and are not a fair predictive race."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), FadeIn(side[0]), FadeIn(leg))
             vo.wait_until("a")

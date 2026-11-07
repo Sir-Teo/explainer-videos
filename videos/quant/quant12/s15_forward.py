@@ -57,14 +57,7 @@ class Forward(VoiceoverScene):
         src = real_data(r"the Surface's local vol; smiles by the BBF average")
         R = m["R_lv"]
         with self.voiceover(
-            "Local volatility reprices today perfectly. What does it say about tomorrow? Move the spot up, and watch "
-            "the smile it implies. <bookmark mark='a'/> Under sticky moneyness the smile rides along with the spot. "
-            "Under local volatility it slides the other way: the local volatility function is pinned to absolute "
-            "prices, and when the spot climbs past the low-volatility region, the average along the path to each "
-            "strike changes against it. <bookmark mark='b'/> Measured on the Surface's own local volatility, the "
-            f"skew-stickiness ratio is {R:.2f}. In 2002 Patrick Hagan, Deep Kumar, Andrew Lesniewski and Diana Woodward made "
-            "this their complaint: a model whose smile moves against the market's gets the delta wrong, however "
-            "perfectly it fits today."
+            f"In the ideal continuous model, local volatility reproduces a suitable arbitrage-free input surface. Numerical fits retain discretization error. What does it say about tomorrow? Move the spot up, and watch the smile it implies. <bookmark mark='a'/> Under sticky moneyness the smile rides along with the spot. Under local volatility it slides the other way: the local volatility function is pinned to absolute prices, and when the spot climbs past the low-volatility region, the average along the path to each strike changes against it. <bookmark mark='b'/> Measured on the Surface's own local volatility, the skew-stickiness ratio is {R:.2f}. In 2002 Patrick Hagan, Deep Kumar, Andrew Lesniewski and Diana Woodward made this their complaint: a model whose smile moves against the market's gets the delta wrong, however perfectly it fits today."
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(today), FadeIn(leg))
             self.add(spot, c_mo, c_lv)
@@ -147,16 +140,7 @@ class Forward(VoiceoverScene):
         src = real_data(r"40{,}000 local-vol paths on the Surface; forward 30-day returns")
         s0, s90, st = 100 * sk[starts[0]], 100 * sk[starts[-1]], 100 * m["today_skew"]
         with self.voiceover(
-            "Simulate it. Forty thousand paths of the Surface's local volatility, and for each start date, the "
-            "distribution of the next thirty days' return, turned into a smile. <bookmark mark='a'/> Starting now, "
-            f"it reproduces today's skew: {s0:.1f} points between the ninety and hundred-and-ten percent strikes, "
-            f"against {st:.1f} on the Surface. <bookmark mark='b'/> Start it in fifteen days, thirty, sixty, ninety, and "
-            f"the skew fades, to {s90:.1f} points three months out. Real markets do not do this: Bitcoin's skew has "
-            "come and gone, but nothing about it decays on a schedule. A cliquet, a string of forward-start options, "
-            "priced under local volatility would be priced on smiles that will not exist. Pause and predict: two "
-            "models with identical local volatility, one of them local volatility itself. Same price for a "
-            "thirty-day option starting in sixty days? No: Part thirteen prices it across models."
-            " Next: a contract that pays on volatility itself, whatever the model."
+            f"""Simulate forty thousand paths and price unit payoffs on the return ratio over each following thirty-day window. These ratio options omit the start-date spot multiplier in an asset-weighted forward-start payoff. <bookmark mark='a'/> Starting now, the skew between ninety and hundred-and-ten percent strikes is {s0:.1f} points, against {st:.1f} on the Surface. <bookmark mark='b'/> With starts fifteen through ninety days ahead, this model's skew fades to {s90:.1f}. That behavior depends on this calibration; it is not a universal local-volatility theorem or a forecast of future market smiles. Pause and predict: identical single-date marginals imply identical prices for a thirty-day ratio option starting in sixty days? No: the joint law matters. Part thirteen compares models."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(today), FadeIn(leg[0]))
             vo.wait_until("a")

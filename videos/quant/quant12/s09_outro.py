@@ -28,7 +28,7 @@ PROBLEMS = [
     r"Derive Martin's bound: if $\text{cov}(m_T R_T, R_T) \le 0$, then $\mathbb{E}[R_T] - R_f \ge \text{var}^Q(R_T)/R_f$.",
     r"Derive Gatheral's $g(k)$ from Black's formula written in total variance $w$ and log-moneyness $k$.",
     r"Show that $K_{vol} \approx \sqrt{K_{var}} - \text{Var}(V)/(8K_{var}^{3/2})$ for a volatility swap.",    r"(qual) Show that the butterfly estimate $\hat q_h$ has bias $\frac{h^2}{12}q'' + O(h^4)$ and, with independent price "
-    r"errors of variance $s^2$, variance $6s^2/h^4$; find $h^*$ and show $\operatorname{MSE}(h^*) = \frac{\sqrt6}{6}|q''|s$.",
+    r"errors of variance $s^2$, variance $6s^2/h^4$; find $h^*$ and show $\operatorname{MSE}_{\rm lead}(h^*) = \frac{\sqrt6}{6}|q''|s$.",
     r"(qual) If every price carries the same error $\eta_0$ plus independent errors, show $\eta_0$ cancels in $\hat q_h$; if "
     r"instead errors at neighbouring strikes have correlation $\rho$, find the variance of $\hat q_h$.",
 ]
@@ -48,21 +48,21 @@ class Outro(VoiceoverScene):
     def recap(self, t, d, s, m, r, p, x, n):
         import numpy as np
         items = [
-            (rf"the smile is a distribution: skew is skewness; bitcoin was call-skewed in {100 * t['call_skew']:.0f}\% of "
+            (rf"the smile gives local distributional clues; bitcoin was call-skewed in {100 * t['call_skew']:.0f}\% of "
              rf"weeks", IV),
             (rf"surfaces move in three shapes: level, skew, term ({100 * sum(d['explained'][:3]):.0f}\% of weekly moves)", SPOT),
             (r"static arbitrage is $g \ge 0$, $\partial_T w \ge 0$ and Lee's wings: shown happening in Vogt's smile", BAD),
             (rf"SVI fits a slice in five numbers; SSVI the surface, at {s['rmse']:.2f} vol points", LV),
             (r"Dupire's local vol is the expected variance given the price (Gy\"ongy), checked by simulation", LV),
-            (rf"but its forward skew fades: {100 * m['fwd_skew']['0']:.1f} now, {100 * m['fwd_skew']['90']:.1f} three "
+            (rf"this LV calibration has fading forward skew: {100 * m['fwd_skew']['0']:.1f} now, {100 * m['fwd_skew']['90']:.1f} three "
              rf"months out", BAD),
             (rf"a variance swap is a strip plus a hedge: replicated on {r['n']} bitcoin months", OPT),
             (r"the VIX is that strip, truncated; ours tracks Deribit's DVOL", IV),
-            (rf"the variance premium: positive {100 * p['share_pos']:.0f}\% of weeks, $t = {p['t']:.1f}$; it does not "
-             rf"forecast returns", RV),
+            (rf"the variance premium: positive {100 * p['share_pos']:.0f}\% of weeks, $t = {p['t']:.1f}$; this descriptive fit does not establish "
+             rf"return predictability", RV),
             (rf"short-volatility notes buy at the close: one day cost {abs(100 * x['note_feb5']):.0f}\%", BAD),
             (r"dealer gamma damps or amplifies; the 0DTE evidence is mixed", OPT),
-            (rf"a network learns a surface without arbitrage: {float(np.mean(n['pen_test'])):.2f} vol points held out", LV),
+            (rf"a grid-penalized network, with remaining calendar flags: {float(np.mean(n['pen_test'])):.2f} vol points held out", LV),
         ]
         rows = VGroup()
         for i, (txt, col) in enumerate(items, 1):
@@ -75,12 +75,7 @@ class Outro(VoiceoverScene):
         if rows.height > 6.4:
             rows.scale_to_fit_height(6.4)
         with self.voiceover(
-            "Part twelve in twelve lines. The smile is a distribution. Surfaces move in three shapes, and some shapes "
-            "are impossible. SVI fits a slice; SSVI the surface. Local volatility is expected variance given the "
-            "price; its future smiles fade. A variance swap is a strip and a hedge; the VIX is that strip, truncated. "
-            "The variance premium is insurance, not a forecast. Short-volatility notes buy at the close, and one day "
-            "cost almost everything. Dealer hedging calms or shakes a market. And networks learn surfaces, if taught "
-            "the rules."
+            """Part twelve in twelve lines. Smiles contain distributional information, with local approximations and tail assumptions. SVI fits slices; SSVI supplies a surface with conditions whose domain must be checked. Local volatility can match suitable diffusion marginals, without fixing joint dynamics. A continuous-hedge variance identity becomes approximate on finite strikes and discrete clocks. VIX is a prescribed variance-price index. Historical variance gaps are descriptive; a regression that fails to reject zero does not prove no predictability. Daily-reset products and dealer hedging can create feedback under specified assumptions. Neural reconstruction and sampled arbitrage penalties are useful tools, not global guarantees or fully unseen-date forecasts."""
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.6,
                                                  run_time=20))
@@ -112,12 +107,7 @@ class Outro(VoiceoverScene):
         if cards.height > 7.4:
             cards.scale_to_fit_height(7.4)
         with self.voiceover(
-            "Three desk questions. The VIX sits above realized volatility because variance is insurance. "
-            "<bookmark mark='a'/> A variance swap is replicated by every out-of-the-money option, weighted by one "
-            "over the strike squared, and a delta hedge rebalanced on the contract's own clock. "
-            "<bookmark mark='b'/> And when spot falls five percent: under sticky strike, at-the-money volatility "
-            "slides up the skew; under sticky delta it stays put; under local volatility it rises about twice as far "
-            "as under sticky strike. Full solutions are in the notes."
+            """Three desk questions. A positive variance-price gap is consistent with insurance when the required discount-factor covariance is positive; the sample alone does not prove that mechanism. <bookmark mark='a'/> Continuous-diffusion variance is replicated by a continuum option strip and continuous stock hedge under zero-carry and integrability assumptions; sampling, jumps, strike truncation and costs leave corrections. <bookmark mark='b'/> For the local short-maturity skew illustration, a five-percent spot fall raises ATM volatility by about two points under sticky strike, zero under sticky moneyness, and roughly four under local volatility. The factor of two is an approximation, not a universal rule. Full solutions are in the notes."""
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")

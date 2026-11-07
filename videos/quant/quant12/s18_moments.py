@@ -53,13 +53,7 @@ class Moments(VoiceoverScene):
         src = real_data(r"the Surface's SSVI fit, 30-day strip")
         sq, sk, ku = 100 * np.sqrt(mo["var"]), mo["skew"], mo["kurt"]
         with self.voiceover(
-            "Chapter nine bought variance with a strip weighted by one over K squared. Change the weights, and the "
-            "same options price other things. <bookmark mark='a'/> Weight them equally and you get Ian Martin's SVIX, "
-            "the risk-neutral variance of the return itself. <bookmark mark='b'/> Weight them by a cubic in log-"
-            "moneyness, negative for puts and positive for calls, and the strip prices the third moment: Gurdip Bakshi, "
-            "Nikunj Kapadia and Dilip Madan's risk-neutral skewness, from 2003. <bookmark mark='c'/> On the Surface at "
-            f"thirty days: a risk-neutral volatility of {sq:.1f} percent, a skewness of {sk:.2f}, and a kurtosis of "
-            f"{ku:.1f}, more than twice a normal distribution's three."
+            f"""Change the strip weights to price other payoffs. <bookmark mark='a'/> Equal weights give the variance of the simple gross return, the object behind Martin's SVIX. <bookmark mark='b'/> For a cubic log-return payoff, the strip uses its second derivative, proportional to six x minus three x squared over K squared; the payoff is cubic, not that weight. Centering and scaling the log moments gives Bakshi, Kapadia and Madan's skewness construction. <bookmark mark='c'/> The fitted, truncated thirty-day strip gives annualized log-return volatility {sq:.1f} percent, log-return skewness {sk:.2f}, and kurtosis {ku:.1f}. These are different from simple-return variance, and their tail estimates depend on the extrapolated model outside observed strikes."""
         ) as vo:
             self.play(FadeIn(gs[0]), FadeIn(src))
             vo.wait_until("a")
@@ -83,18 +77,12 @@ class Moments(VoiceoverScene):
         whys = [why(r"Carr--Madan with $f(S) = S^2$: $f'' = 2$, a flat weight; $R = S_T/S_0$, zero rates"),
                 why(r"Martin (2017): from $\mathbb{E}^Q X = R_f\,\mathbb{E}[mX]$ and $\mathbb{E}[mR] = 1$, expand "
                     r"$\text{var}^Q(R)$"),
-                why(r"his negative-correlation condition: holds if the market's return is bad news for whoever "
-                    r"holds it (Problem 5)"),
+                why('requires $\\operatorname{cov}(mR,R)\\le0$; not established by the observed price strip'),
                 why(r"Carr--Madan with $f = r^n$: each moment is its own strip (Bakshi, Kapadia and Madan 2003)"),
                 why(r"centre and scale as usual, with $\mu = \mathbb{E}^Q r$")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.6, buff=0.72, edge=6.9)
         with self.voiceover(
-            "Carr and Madan's identity again. For the payoff S squared the second derivative is constant: the "
-            "risk-neutral variance is a flat strip. <bookmark mark='a'/> Martin: weight by the discount factor, and "
-            "the expected excess return is that variance minus a covariance. <bookmark mark='b'/> If the covariance is "
-            "not positive, as Martin argues for the market, the variance is a lower bound on the expected excess return, "
-            "read straight from option prices. <bookmark mark='c'/> Powers of the log return give each moment its own "
-            "strip; <bookmark mark='d'/> centre and scale for skewness and kurtosis, model free."
+            """Carr and Madan's identity gives a flat strip for simple-return variance. <bookmark mark='a'/> Let R be the gross asset return, m its stochastic discount factor, and R f deterministic. The physical expected excess return equals risk-neutral variance divided by R f, minus covariance of m R with R. <bookmark mark='b'/> Martin's bound requires that covariance to be non-positive. It is a substantive condition, not something proved by a smile or by variance rising in a historical crash. <bookmark mark='c'/> Log-return powers instead give strips for log moments. <bookmark mark='d'/> Center and scale them for skewness and kurtosis. A continuum of exact prices gives model-independent formulas; finite quoted strikes leave tail and smoothing assumptions."""
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -163,15 +151,7 @@ class Moments(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(ORIGIN)
         a, b = 100 * m["svix_mean"], 100 * m["svix_late"]
         with self.voiceover(
-            "What does the bound say? For the S&P 500, Martin found it averaged about five percent a year, close to "
-            "the historical equity premium, and rose above twenty percent at the height of the 2008 crisis. "
-            f"<bookmark mark='a'/> For Bitcoin, the same strips give {a:.0f} percent a year on average since 2021, and "
-            f"{b:.0f} in the last two years. <bookmark mark='b'/> Pause and predict: if options say Bitcoin's expected "
-            "return is at least thirty percent a year, why not simply buy? Because the bound is only as good as its "
-            "condition. It assumes the asset's falls arrive in bad times for whoever holds it at the margin. For the "
-            "stock market that is plausible; for Bitcoin it is an assumption nobody has tested, and a lower bound "
-            "under an assumption is not a forecast."
-            " Next: the products built to trade the VIX, and how they work."
+            f"""What does the conditional bound say? Martin's equity application motivates using option-implied simple-return variance as a lower bound under his covariance condition. <bookmark mark='a'/> For our Bitcoin strip, dividing the thirty-day statistic by its year fraction gives {a:.0f} percent on average, and {b:.0f} in 2024--2025. This is a simple annualization, not a compounded one-year return guarantee. <bookmark mark='b'/> Pause and predict: does a large number imply buying Bitcoin is justified? No. The required covariance condition is not established here for Bitcoin; model extrapolation and the retrospective quote window add limitations. A lower bound under unverified assumptions is not a forecast or an executable recommendation."""
         ) as vo:
             self.play(FadeIn(notes[0]))
             vo.wait_until("a")

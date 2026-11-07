@@ -63,13 +63,7 @@ class Replicate(VoiceoverScene):
         day = R["day"]
         kv, rvf, tot = R["kvar"], float(rv[-1]), float((strip + hedge)[-1])
         with self.voiceover(
-            f"Take the Wednesday of {day}. At eight in the morning the House buys the thirty-day strip off that day's "
-            f"fitted surface, for a variance strike of {kv:.3f}. Then Bitcoin trades, hour by hour, for thirty days. "
-            "<bookmark mark='a'/> Every hour it rebalances its delta hedge. Watch the ledger: the strip swings with the "
-            "price, the hedge the other way, and their sum, in orange, climbs steadily along the green line, the "
-            "variance realized so far. <bookmark mark='b'/> After thirty days: the strip and hedge "
-            f"together paid {tot:.3f}, the realized variance was {rvf:.3f}. The strip bought variance, and the hedge "
-            "turned it into exactly the variance that happened."
+            f"""Take {day} as a hypothetical pricing reconstruction. The reference time is eight, but its fitted Surface pools marks through noon; no executable eight-o'clock purchase is established. Set rates and costs to zero, use a finite model option strip, and follow Binance's hourly path for thirty days. <bookmark mark='a'/> The purple line is the strip's intrinsic payoff evaluated at the running spot, not its remaining-maturity market value. Together with the hypothetical stock hedge, it approximates the running realized-variance line. <bookmark mark='b'/> The final sum is {tot:.3f}, versus hourly variance {rvf:.3f}, and the initial variance strike is {kv:.1f} percent as volatility. Finite strikes, venue/reference differences and discrete returns leave error; this is not exact self-financing execution on Deribit."""
         ) as vo:
             self.play(FadeIn(g1), FadeIn(g2), FadeIn(src), FadeIn(leg), FadeIn(VGroup(ro[2], ro[3])))
             self.add(pl, c1, c2, c4, c3)
@@ -139,14 +133,7 @@ class Replicate(VoiceoverScene):
         sdh, sdd, mean = r["err_h_sd"], r["daily_vs_hourly_sd"], r["rv_mean"]
         lg = r["listed_gap_volpts"]
         with self.voiceover(
-            f"One month could be luck. Here are all {n} of them, one starting every Wednesday since April 2021. With an "
-            "hourly hedge, replicated against realized variance sits on the diagonal: the error has a standard "
-            f"deviation of {sdh:.4f} on an average variance of {mean:.3f}. <bookmark mark='a'/> Now hedge once a day, "
-            "and compare with the hourly variance. The cloud spreads: a standard deviation of "
-            f"{sdd:.3f}. The daily hedge replicates daily variance, not hourly; a contract must say how often it "
-            "samples the price, and the desk must hedge on the same clock. <bookmark mark='b'/> One more leak: buy only "
-            f"a listed grid of strikes, and the variance strike reads {lg:.1f} volatility points low, because the far "
-            "wings are missing."
+            f"""Here are {n} overlapping thirty-day windows, beginning every Wednesday. They are not independent months. The hourly-hedge error has standard deviation {sdh:.4f}, against mean realized variance {mean:.3f}. <bookmark mark='a'/> Rebalance daily but retain hourly variance as the target, and the difference has standard deviation {sdd:.3f}. Even matching the sampling clock leaves higher-order return and truncation errors; it does not exactly replicate discrete squared log returns. <bookmark mark='b'/> A synthetic listed-style strike grid changes the model variance strike by {lg:.1f} volatility points on average. It is a discretization and truncation comparison, not observed executable contract performance."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(diag), FadeIn(leg[0]), FadeIn(side[0]))
             self.play(LaggedStart(*[FadeIn(x) for x in dh], lag_ratio=0.005, run_time=2.5), FadeIn(side[1]))
@@ -218,15 +205,7 @@ class Replicate(VoiceoverScene):
         src = real_data(rf"{r['n']} realized 30-day variances of bitcoin, 2021--2025")
         a, b, gp, ap = 100 * c["sqrt_E"], 100 * c["E_sqrt"], 100 * c["gap"], 100 * c["approx_gap"]
         with self.voiceover(
-            "Here is the convexity, measured. Each dot is one month's realized variance, placed on the square-root "
-            "curve. <bookmark mark='a'/> The square root of the average variance is "
-            f"{a:.1f} percent; the average of the square roots, which is what a volatility swap pays on average, is "
-            f"{b:.1f}. The gap is {gp:.1f} volatility points. The second-order formula says {ap:.1f}: for Bitcoin, "
-            "whose variance itself swings wildly, the expansion is not small, and the formula overshoots. "
-            "<bookmark mark='b'/> Pause and predict: on the same month, which strike is higher as a volatility, the "
-            "variance swap's or the volatility swap's? The variance swap's, always: the buyer of variance owns the "
-            "convexity, and pays for it."
-            " The same strip, quoted as an index, is the VIX. Next."
+            f"""Here is Jensen's inequality in historical data. Each dot is one overlapping window's realized variance. <bookmark mark='a'/> The root of its sample mean is {a:.1f} percent; the mean of its roots is {b:.1f}; the gap is {gp:.1f} points. The local second-order approximation gives {ap:.1f}, overshooting because variance fluctuates substantially. These are physical sample averages, not market fair strikes. <bookmark mark='b'/> For the same payoff horizon under a common risk-neutral measure, a volatility swap's fair strike cannot exceed the square root of the fair variance strike. Equality requires constant realized variance under that measure. This pricing inequality does not turn historical means into tradable prices."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(sq))
             self.play(LaggedStart(*[FadeIn(x) for x in dots], lag_ratio=0.005, run_time=2))

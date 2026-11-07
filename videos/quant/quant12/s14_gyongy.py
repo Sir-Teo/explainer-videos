@@ -39,14 +39,7 @@ class Gyongy(VoiceoverScene):
                     r"Chapter 8's warning")]
         step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.6, buff=0.65, edge=6.9)
         with self.voiceover(
-            "Why should one function of price and time fit a market whose volatility is random? Let volatility be any "
-            "process. Apply Tanaka's formula to the call payoff and take expectations: the call's maturity slope is the "
-            "expected variance as the price passes the strike. <bookmark mark='a'/> Condition on where the price ends, and that is the "
-            "density at the strike times the conditional expected variance. <bookmark mark='b'/> Compare with "
-            "Dupire's derivation: local variance is the risk-neutral expectation of the instantaneous variance, given "
-            "that the price is at that strike. Istvan Gyöngy proved in 1986 that this local model reproduces the "
-            "distribution of the price at every single date. <bookmark mark='c'/> Every single date, one at a time. Not "
-            "how the dates are joined together; that difference is the subject of the next chapter."
+            """Why can one function of price and time reproduce a stochastic-volatility diffusion's marginal laws? Work under a fixed risk-neutral measure with a continuous Ito price, zero carry, and suitable integrability and existence conditions. Tanaka's formula gives the call's maturity slope. <bookmark mark='a'/> Conditioning at the strike gives density times conditional instantaneous variance. <bookmark mark='b'/> Comparison with Dupire yields local variance as that conditional expectation. Gyongy's mimicking theorem and its extensions justify a corresponding Markov diffusion under appropriate regularity. It is not a theorem for arbitrary jumps or every possible model. <bookmark mark='c'/> It matches each single-date law, not the joint law across dates."""
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -138,15 +131,7 @@ class Gyongy(VoiceoverScene):
         src = real_data(r"40{,}000 paths under the Surface's Dupire local vol, 4 steps a day")
         r0, r1 = rep[0], rep[-1]
         with self.voiceover(
-            "Now run the theorem the other way: simulate the Surface's own local volatility, and see whether it gives "
-            "back the Surface. Here is the fifty-one-day smile, and the Monte Carlo smile as the number of paths grows. "
-            "<bookmark mark='a'/> Five hundred paths: ragged. Two thousand, eight thousand, forty thousand: it settles "
-            "onto the Surface. <bookmark mark='b'/> Expiry by expiry, the simulated smile sits within "
-            f"{r1['rmse_ssvi']:.2f} volatility points of the fitted surface at {r1['days']} days, and "
-            f"{r0['rmse_ssvi']:.2f} at {r0['days']} days. The short end is hardest: local volatility is steepest there, "
-            "and a simulation in quarter-day steps has to resolve it. One function of price and time really does reprice "
-            "the whole Surface."
-            " Matching today's surface is not the same as getting tomorrow's right. Next."
+            f"""Now simulate the fitted Surface's local volatility. This is a finite numerical repricing check, with time discretization and Monte Carlo error. Here is the fifty-one-day smile. <bookmark mark='a'/> Five hundred, two thousand, eight thousand, then forty thousand paths progressively stabilize its estimate. <bookmark mark='b'/> The sampled-strike RMSE against the fitted smile is {r1['rmse_ssvi']:.2f} volatility points at {r1['days']} days and {r0['rmse_ssvi']:.2f} at {r0['days']} days. Those are average errors, not uniform bounds or proof of exact repricing at every strike. The short end is harder with quarter-day simulation steps. Matching today's marginal prices still does not determine tomorrow's joint dynamics."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(src), Create(target), FadeIn(leg), FadeIn(cnt), Create(cur))
             vo.wait_until("a")

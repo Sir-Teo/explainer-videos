@@ -53,12 +53,7 @@ class SVI(VoiceoverScene):
             r"$\sigma$: rounds the vertex")]).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(ro, DOWN, buff=0.45)
         src = illustration(r"raw SVI, illustrative parameters; dashes: the two asymptotes")
         with self.voiceover(
-            "In 2004 Jim Gatheral published a parametrization that had been in use at Merrill Lynch since 1999: SVI, "
-            "for stochastic volatility inspired. Total variance is a hyperbola: five numbers, each with one job. "
-            "<bookmark mark='a'/> a lifts the whole curve. b opens the wings, the slopes of the two straight lines "
-            "the hyperbola approaches. <bookmark mark='b'/> rho tilts it: that is the skew. m slides it sideways, "
-            "and sigma rounds the vertex. Two straight wings and a smooth bottom: that is exactly what Lee's theorem "
-            "says the far wings must look like, which is why the shape works so well."
+            """In 2004 Jim Gatheral published SVI, stochastic volatility inspired, used at Merrill Lynch since 1999. Its total variance is a hyperbola with five parameters. <bookmark mark='a'/> a lifts it; b controls the wing slopes. <bookmark mark='b'/> rho tilts, m shifts, and sigma rounds the vertex. The straight asymptotic wings are a useful parametrization consistent with Lee's slope bounds when constrained. Lee's theorem does not require every admissible smile to have exactly straight wings."""
         ) as vo:
             self.play(FadeIn(g), FadeIn(src))
             self.add(line, asl, asr)
@@ -140,10 +135,7 @@ class SVI(VoiceoverScene):
         n = per["n"]
         days = per["T"] * 365
         with self.voiceover(
-            "Here is the House's fitter. The residual is the weighted gap in total variance. Six starting points, a "
-            "bounded least-squares search from each, and the bounds include Lee's: b times one plus rho can never "
-            f"exceed two. <bookmark mark='a'/> Run it on the Surface's {days:.0f}-day expiry, {n} quotes, weighted by "
-            f"vega: five numbers, and a fit within {rm:.2f} volatility points."
+            f"Here is the House's fitter. The residual is the weighted gap in total variance. Six starting points, a bounded least-squares search from each, and the bounds include Lee's: b times one plus absolute rho can never exceed two. <bookmark mark='a'/> Run it on the Surface's {days:.0f}-day expiry, {n} quotes, weighted by vega: five numbers, and a fit within {rm:.2f} volatility points."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -189,12 +181,7 @@ class SVI(VoiceoverScene):
         src = real_data(rf"the Surface, expiry {r['expiry']}, unweighted fits", corner=UR)
         lo, hi, n0, n1, best = min(fi), max(fi), min(nf), max(nf), min(fl)
         with self.voiceover(
-            "Watch the fit happen. Six starts drawn at random, the worst of them "
-            f"{hi:.0f} volatility points off the quotes, the best {lo:.0f}. Each line is one start's current guess; on "
-            "the right, its error after each evaluation of the residual, on a log scale. <bookmark mark='a'/> Within "
-            f"{n0} to {n1} evaluations every start lands on the same curve, at {best:.3f} volatility points. "
-            "For one expiry, SVI's least-squares problem is benign: there is nothing to compare, and that is the point. "
-            "The trouble starts when expiries are fitted separately, as Chapter three showed."
+            f"Watch the fit happen. Six starts drawn at random, the worst of them {hi:.0f} volatility points off the quotes, the best {lo:.0f}. Each line is one start's current guess; on the right, its error after each evaluation of the residual, on a log scale. <bookmark mark='a'/> Within {n0} to {n1} evaluations every start lands on the same curve, at {best:.3f} volatility points. These six starts reach similar fits in this example; that does not prove a benign optimization landscape for every expiry. The trouble starts when expiries are fitted separately, as Chapter three showed."
         ) as vo:
             self.play(FadeIn(rp), FadeIn(src))
             rp.play(self, run_time=9)
@@ -226,13 +213,7 @@ class SVI(VoiceoverScene):
         last = rows[-1]
         pw, cw = last["pw"], last["cw"]
         with self.voiceover(
-            "And here is the whole Surface in the trader's coordinates, one row per expiry. The at-the-money variance "
-            "climbs with maturity, the skew psi is small, and the wings steepen: at the longest expiry the put wing is "
-            f"{pw:.2f} and the call wing {cw:.2f}. <bookmark mark='a'/> The smallest g across all eleven fits is "
-            f"{gmin:.2f}: each slice on its own is free of butterflies. Claude Martini and Arianna Mingone mapped, in "
-            "2022, exactly which SVI parameters guarantee that; and Chapter three showed that slices which are clean "
-            "one by one can still cross. The cure is to fit the surface as one object."
-            " Next: SSVI."
+            f"And here is the whole Surface in the trader's coordinates, one row per expiry. The at-the-money variance climbs with maturity, the skew psi is small, and the wings steepen: at the longest expiry the put wing is {pw:.2f} and the call wing {cw:.2f}. <bookmark mark='a'/> The smallest g across all eleven fits is {gmin:.2f}: no negative g was found on the sampled log-moneyness grid from minus one to one. That finite scan is not a proof for all strikes. Claude Martini and Arianna Mingone mapped, in 2022, exactly which SVI parameters guarantee that; and Chapter three showed that slices which are clean one by one can still cross. The cure is to fit the surface as one object. Next: SSVI."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab[0]))
             self.play(LaggedStart(*[FadeIn(x) for x in tab[1:]], lag_ratio=0.15, run_time=4))

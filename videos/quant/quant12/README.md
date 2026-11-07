@@ -82,23 +82,23 @@ VIX3M, Yahoo Finance's S&P 500 and Cboe's VIX futures settlements.
   Andersen–Fusari–Todorov, Bandi–Fusari–Renò, Dim–Eraker–Vilkov, Beckmeyer et al.
 * **17. Learning surfaces.** A VAE over 243 weekly surfaces, replayed (five seeds): 2.93 vol points against 3.59 for
   two principal components; one latent tracks ATM vol (corr −0.96). Latent walks in 3D. An arbitrage-penalised network
-  (Ackerer et al. 2020) on the Surface, replayed with its collocation violations: held-out 1.29/1.73/0.80 vol points
-  (three splits) with no violations, against 0.97/0.84/0.88 unpenalised with 1–10% of the grid in violation and SSVI
-  1.96/2.06/2.23; vega-weighted, SSVI wins (0.79 against 0.93).
+  (Ackerer et al. 2020) on the Surface, replayed with its collocation violations: held-out 1.29/0.93/0.82 vol points
+  (three splits) in the restored CPU run; zero negative-density grid flags, but one calendar flag in one run, against 0.97/0.84/0.88 unpenalised with 1–10% of the grid in violation and SSVI
+  1.96/2.06/2.23. See the saved runs for the distinct vega-weighted metric.
 * **18. Who builds surfaces, and who sells them.** Cboe and Deribit as index makers; dealers' quants (Goldman's DDKZ
   and Derman–Kani, Dupire at Paribas, SVI at Merrill Lynch, Andreasen–Huge at Danske Bank); the House's builder.
 * **19. Frontier, 2023–2026.** Operator deep smoothing (ICLR 2025), VolGAN (2024), surfaces as images (Kelly et al.
   2023), no-arbitrage SVI and eSSVI (Martini–Mingone 2022); one network for all weeks, trained here (three seeds).
 * **For the researcher: reading the density from noisy prices.** The butterfly q̂_h = [C̃(K−h) − 2C̃(K) + C̃(K+h)]/h²
-  with independent price errors of sd s: bias (h²/12)q″ + O(h⁴), variance 6s²/h⁴, best half-width
-  h* = (864s²/q″²)^{1/8}, MSE(h*) = (√6/6)|q″|s, so the error falls like s^{1/2}. Simulation (a lognormal at 60%, 30
+  with independent price errors of sd s: bias (h²/12)q″ + O(h⁴), variance 6s²/h⁴, leading local-MSE half-width
+  h* = (864s²/q″²)^{1/8}, MSE_lead(h*) = (√6/6)|q″|s, so the error falls like s^{1/2}. Simulation (a lognormal at 60%, 30
   days, 4,000 draws per width): at the money, s = 0.002/0.01/0.05 per 100 of the forward gives h* = 5.4/8.1/12.1%
   (simulated best 5.5/8.0/10.0 on a 0.25% grid) and a relative error at h* of 1.0/2.3/5.2%; the put wing at 85
   agrees. Deribit BTC options, the Surface's two days, 644 trades of 20–45 days within 15% of spot: trade price
   against mark price, robust sd 0.026 per 100 of the forward; listed strikes 1.08% apart; at the Surface's 46%
   at-the-money volatility h* = 8.4%, about eight strikes on each side; adjacent strikes would leave noise of ±184% of
   the density. Three open problems; pause: errors cut 16-fold halve h* (16^{1/4} = 2) and quarter the error.
-* **Outro.** Twelve lines, Rule 12 (the trial counter stays at 310), three desk questions, nine problems (two at
+* **Outro.** Twelve lines, Rule 12 (the trial counter stays at 312), three desk questions, nine problems (two at
   qualifying-exam level), payoffs, references.
 
 ## Build it
@@ -212,12 +212,12 @@ paper; Deribit DVOL methodology: ch. 11.
 
 ## Data and reproducibility
 
-* The Surface: Deribit BTC option trades on 10 and 11 December 2025.
+* The Surface: Deribit BTC option marks reconstructed from trades on 10 and 11 December 2025. The main fit uses 193 filtered observations from 254 reconstructed marks.
 * Weekly surfaces: Deribit trades (00:00–12:00 UTC) every Wednesday from 7 April 2021 to 26 November 2025, 243 days
   with no gaps, each built by `surface.build` and checksummed in `videos/quant/data/manifest.json`.
 * Binance BTCUSDT hourly; Deribit DVOL; FRED VIXCLS (1990–2025) and VXVCLS (2007–2025); Yahoo Finance ^GSPC
   (1990–2025); Cboe Futures Exchange VX settlements for the twelve expiries May 2017 – April 2018 (`data.cboe_vx`).
-* No strategy was tested; the predictability regression of ch. 12 is descriptive. The trial counter stays at 310.
+* No strategy was tested; the predictability regression of ch. 12 is descriptive. The trial counter stays at 312.
 
 ---
 
@@ -252,7 +252,7 @@ paper; Deribit DVOL methodology: ch. 11.
 * **17. 学习曲面。** VAE回放（2.93对主成分3.59个波动率点）；带无套利惩罚的网络：留出误差更低且无违规，但按vega加权SSVI更好。
 * **18. 业界。** 交易所指数、交易商的量化研究、我们的曲面构建器。
 * **19. 前沿。** 算子深度平滑、VolGAN、把曲面当图像、无套利SVI与eSSVI；“一个网络用于所有周”的小规模复现。
-* **写给研究者：从含噪价格中读出密度。** 独立价格误差标准差为s时，蝶式q̂_h = [C̃(K−h) − 2C̃(K) + C̃(K+h)]/h²的偏差为(h²/12)q″ + O(h⁴)，方差6s²/h⁴，最佳半宽h* = (864s²/q″²)^{1/8}，MSE(h*) = (√6/6)|q″|s，所以误差按s^{1/2}下降。模拟（60%对数正态、30天、每个宽度4,000次抽取）：平值处s = 每100远期0.002/0.01/0.05时h* = 5.4/8.1/12.1%（0.25%网格上模拟最佳为5.5/8.0/10.0），h*处的相对误差为1.0/2.3/5.2%；85处的看跌翼一致。曲面两天的Deribit BTC期权，644笔20–45天、距现价15%以内的成交：成交价相对标记价的稳健标准差为每100远期0.026；挂牌执行价间距1.08%；在曲面平值波动率46%下h* = 8.4%，每边约八个执行价；用相邻执行价会留下相当于密度±184%的噪声。三个开放问题；暂停题：误差降为十六分之一时h*减半（16^{1/4} = 2），误差降为四分之一。
+* **写给研究者：从含噪价格中读出密度。** 独立价格误差标准差为s时，蝶式q̂_h = [C̃(K−h) − 2C̃(K) + C̃(K+h)]/h²的偏差为(h²/12)q″ + O(h⁴)，方差6s²/h⁴，最佳半宽h* = (864s²/q″²)^{1/8}，MSE_lead(h*) = (√6/6)|q″|s，所以误差按s^{1/2}下降。模拟（60%对数正态、30天、每个宽度4,000次抽取）：平值处s = 每100远期0.002/0.01/0.05时h* = 5.4/8.1/12.1%（0.25%网格上模拟最佳为5.5/8.0/10.0），h*处的相对误差为1.0/2.3/5.2%；85处的看跌翼一致。曲面两天的Deribit BTC期权，644笔20–45天、距现价15%以内的成交：成交价相对标记价的稳健标准差为每100远期0.026；挂牌执行价间距1.08%；在曲面平值波动率46%下h* = 8.4%，每边约八个执行价；用相邻执行价会留下相当于密度±184%的噪声。三个开放问题；暂停题：误差降为十六分之一时h*减半（16^{1/4} = 2），误差降为四分之一。
 
 ## 交易台问题与解答
 
@@ -285,7 +285,7 @@ paper; Deribit DVOL methodology: ch. 11.
 7. **波动率互换的凸性。** 在K = E V处展开√V ≈ √K + (V − K)/(2√K) − (V − K)²/(8K^{3/2})。取期望，线性项消失：
    E√V ≈ √K − Var(V)/(8K^{3/2})。比特币的方差的方差很大，展开会高估（4.1对实测的3.0个波动率点）。
 
-8. **（资格考试）蝶式的偏差与方差。** 把C(K ± h)展开到四阶：C(K−h) − 2C(K) + C(K+h) = h²C″ + (h⁴/12)C⁗ + O(h⁶)，奇数项抵消，C″ = q，所以E q̂_h = q + (h²/12)q″ + O(h⁴)。噪声(η₋ − 2η₀ + η₊)/h²的方差为(1 + 4 + 1)s²/h⁴。MSE = h⁴q″²/144 + 6s²/h⁴，导数在h⁸ = 864s²/q″²处为零，此时两项相等，MSE(h*) = (√6/6)|q″|s。
+8. **（资格考试）蝶式的偏差与方差。** 把C(K ± h)展开到四阶：C(K−h) − 2C(K) + C(K+h) = h²C″ + (h⁴/12)C⁗ + O(h⁶)，奇数项抵消，C″ = q，所以E q̂_h = q + (h²/12)q″ + O(h⁴)。噪声(η₋ − 2η₀ + η₊)/h²的方差为(1 + 4 + 1)s²/h⁴。MSE = h⁴q″²/144 + 6s²/h⁴，导数在h⁸ = 864s²/q″²处为零，此时两项相等，MSE_lead(h*) = (√6/6)|q″|s。
 9. **（资格考试）相关的误差。** 加在三个价格上的共同误差η₀以权重1 − 2 + 1 = 0进入，相互抵消。若corr(η(K), η(K ± h)) = ρ、corr(η(K−h), η(K+h)) = ρ₂，则Var = (s²/h⁴)[6 − 8ρ + 2ρ₂]：正相关的相邻误差有帮助，所以平滑（相关）的误差如陈旧的远期危害较小，而交替的误差（买卖价反弹，ρ < 0）危害更大。
 
 ## 数据与可复现性
@@ -300,3 +300,87 @@ paper; Deribit DVOL methodology: ch. 11.
 * **定理。** Breeden与Litzenberger（1978）；Aït-Sahalia与Lo（1998），*JF* 53；Aït-Sahalia与Duarte（2003），*J. Econometrics* 116；二阶导数的速率是非参数统计中的标准速率（Stone 1982）。
 * **简化。** 对数正态真值、零利率、三个等间距执行价、独立误差；Deribit的噪声是成交相对标记价，包含半个价差和标记价自身的误差。
 * **开放问题。** 形状约束与相关误差下的最优速率；陈旧与交替的误差；尾部推断。
+
+
+## Scientific scope of this polish pass
+
+The Surface pools marks from 00:00 through 12:00 UTC around an 08:00 reference.
+Later records enter its reference spot and fitted smile. The reconstruction is
+neither a simultaneous executable quote sheet nor an established 08:00 trading
+information set. All contracts in the replication illustration are hypothetical
+zero-carry dollar payoffs; Binance paths and Deribit references need not coincide.
+Its running strip curve is intrinsic payoff evaluated at the current spot, not
+an option mark with remaining maturity. Discrete hedging and finite strikes leave
+replication error. The 243 weekly-start thirty-day windows overlap.
+
+SVI's finite g scan is a diagnostic. The complete density characterization also
+requires positive smooth variance and tail boundary conditions; Lee's moment
+formula constrains asymptotic limsup slopes. It does not require linear wings or
+prove finiteness at a critical moment endpoint. SSVI's eta cap alone does not
+certify butterfly freedom when gamma exceeds one half. The final fitted Surface
+satisfies the sufficient inequalities above its reported theta threshold, covering
+the displayed quoted maturities. Intermediate fits and arbitrarily short expiries
+are not all certified. Gyongy's result concerns suitable continuous Ito processes
+and marginal distributions under stated existence and integrability conditions.
+It does not cover arbitrary jump models or determine joint laws. Forward ratio
+payoffs here omit the start-date spot multiplier of asset-weighted forward starts.
+
+The Gram--Charlier illustration clips negative polynomial densities, renormalizes
+and martingale-shifts them. Slider values need not be exact moments of the final
+law. Its skew relation is local. Log-return moments are distinct from SVIX's
+simple-return variance; finite-tail extrapolation matters especially for higher
+moments. Martin's covariance condition is not established here for Bitcoin.
+Annualizing a thirty-day conditional bound does not guarantee a compounded annual
+return. Historical Jensen comparisons are physical sample statistics, not market
+fair volatility-swap strikes.
+
+The VAE and PCA reconstructions use all weeks. In the frontier, only the final
+latent-conditioned MLP holds out the last 20% of weeks; the full-sample VAE and
+those weeks' complete fitted grids supply their codes. The quantity called
+`dec_rmse` in the unchanged calculation is a two-component PCA reconstruction,
+with coordinates clamped to its grid. It is not the VAE decoder. PCA uses all
+weeks, and SSVI fits the test week's own quotes, so these are conditional
+reconstruction comparisons with different information, not a predictive race.
+The graph-neural-operator paper is discussed separately; the local MLP is an
+illustration rather than its implementation. Three same-date quote splits and
+seed min--max ranges do not supply confidence intervals or global arbitrage proofs.
+The restored penalized runs have no negative-g points on the audit grid, but one
+run has one negative-calendar-slope point out of 12,060 (0.00829%); it is shown
+without rounding to zero. Unchanged fixed-seed neural fits can vary numerically
+with software and hardware, so the evidence binds the actual restored caches.
+
+Dealer gamma's first hedge variable is dollar notional, with a separate share
+trade. The simulation defers half the hedge and measures dispersion across days
+of the pre-close return. Its singularity belongs to a linear toy. Open interest
+does not identify dealer inventory. The August 2025 62.4% figure refers to SPX
+options specifically. Daily-reset flows use pre-move NAV; contango does not
+promise convergence profit, and target flows alone do not identify actual causal
+market impact. The limited-liability note illustration excludes real fees and
+intraday acceleration and differs from a variance-swap payoff.
+
+The research bandwidth minimizes a leading local Taylor MSE with non-zero
+curvature, not the exact finite-width error. Formula widths of 12.1% (ATM) and
+12.7% (put wing) exceed the original simulation grid's 10% maximum; its boundary
+minimum is not confirmation of those optima. Trade--mark robust dispersion does
+not identify independent measurement noise. The plug-in bandwidth and the
+adjacent-strike one-standard-deviation scale remain conditional illustrations.
+A common additive or affine price error cancels in a butterfly; generic stale or
+forward-related errors need not. The pause has a worked answer: width halves and
+approximate RMSE quarters after a sixteenfold reduction in noise standard deviation.
+
+Coinbase completed Deribit on 14 August 2025. Its September 2026 filing records
+about $4.3 billion of acquisition consideration; the earlier $2.9 billion
+announcement used a different stock valuation. Sources checked include
+[Coinbase's filing](https://www.sec.gov/Archives/edgar/data/1679788/000167978826000122/coin-20260930.htm),
+[Cboe's SPX volume report](https://www.cboe.com/insights/posts/spx-0-dte-options-jump-to-record-62-share-in-august),
+[Cboe's settlement specifications](https://www.cboe.com/tradable_products/vix/vix_futures/specifications),
+and [Deribit's DVOL methodology](https://insights.deribit.com/exchange-updates/dvol-deribit-implied-volatility-index/).
+VIX futures settle to a special opening quotation; the model proxy and hourly
+DVOL observations have different selection and time-aggregation conventions.
+Their gap is not attributed solely to the wings.
+
+All 28 original compute items are restored from frozen inputs. The original
+compute and House sources, manifest, registry and track record remain unchanged.
+The as-of-Part-12 counter is 312 and the global registry 23,562; this pass adds no
+market trials and opens no sealed holdout. Visual and playback QA are still in
+progress. Full production-voice listening remains pending.

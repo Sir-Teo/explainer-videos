@@ -55,14 +55,7 @@ class Learning(VoiceoverScene, ThreeDScene):
         rs = v["recon_seeds"]
         pc = v["pca2_rmse"]
         with self.voiceover(
-            "Can a network find its own coordinates? A variational autoencoder squeezes each week's surface, a "
-            "hundred and two volatilities, through two numbers and rebuilds it. Here it trains on every week since "
-            "April 2021: left, the week FTX collapsed, rebuilt at each checkpoint; right, the error, five seeds as a "
-            "band. <bookmark mark='a'/> At first the rebuilt smiles are a "
-            "blur near the average; within a few hundred steps they find the level, and then the shape. "
-            f"<bookmark mark='b'/> After three thousand steps the error is {r0:.1f} volatility points, and the five "
-            f"seeds agree to within {max(rs) - min(rs):.2f}. The fair baseline, two principal components of the same "
-            f"grids, the best linear two-number summary, gets {pc:.1f}."
+            f"Can a network find its own coordinates? A variational autoencoder squeezes each week's surface, a hundred and two volatilities, through two numbers and rebuilds it. Here it trains on every week since April 2021: left, the week FTX collapsed, rebuilt at each checkpoint; right, the error, five seeds as a band. <bookmark mark='a'/> At first the rebuilt smiles are a blur near the average; within a few hundred steps they find the level, and then the shape. <bookmark mark='b'/> After three thousand steps the error is {r0:.1f} volatility points, and the five seeds agree to within {max(rs) - min(rs):.2f}. The in-sample baseline, two principal components minimizing standardized log-grid squared error, gets {pc:.1f}. Both methods are fitted and evaluated on all these weeks; this comparison is reconstruction, not forecasting."
         ) as vo:
             self.play(FadeIn(rp), FadeIn(leg), FadeIn(head), FadeIn(src))
             vo.wait_until("a")
@@ -227,10 +220,10 @@ class Learning(VoiceoverScene, ThreeDScene):
         pg, rg = np.asarray(n["pen_g"]), np.asarray(n["raw_g"])
         pc, rc = np.asarray(n["pen_cal"]), np.asarray(n["raw_cal"])
         hd = [r"", r"split 1", r"split 2", r"split 3", r"butterfly", r"calendar"]
-        body = [(r"penalized network", IV, [f"{x:.2f}" for x in pt] + [rf"{100 * pg.max():.1f}\%", rf"{100 * pc.max():.1f}\%"]),
+        body = [(r"penalized network", IV, [f"{x:.2f}" for x in pt] + [rf"{100 * pg.max():.1f}\%", rf"{100 * pc.max():.3f}\%"]),
                 (r"same network, no penalty", BAD, [f"{x:.2f}" for x in rt] + [rf"{100 * rg.mean():.1f}\%",
                                                                               rf"{100 * rc.mean():.1f}\%"]),
-                (r"SSVI", LV, [f"{x:.2f}" for x in st] + [r"0", r"0"])]
+                (r"SSVI", LV, [f"{x:.2f}" for x in st] + [r"	ext{n/a}", r"	ext{n/a}"])]
         cells = VGroup(*[label(h, font_size=19, color=GREY_B) for h in hd])
         for name, col, vals in body:
             cells.add(label(name, font_size=22, color=col), *[MathTex(v, font_size=28, color=col) for v in vals])
@@ -246,8 +239,7 @@ class Learning(VoiceoverScene, ThreeDScene):
         note_ = label(r"violations: share of a $201 \times 60$ grid ($|k| \le 1$, 3 days to 0.8 years) with $g < 0$ or "
                       r"$\partial_T w < 0$; unweighted RMSE", font_size=17, color=GREY_B).next_to(tab, DOWN, buff=0.3)
         wins = bool(np.mean(pt) < np.mean(st))
-        verdict = (r"the network beats SSVI out of sample here, at the cost of a closed form, provable extrapolation and "
-                   r"speed" if wins else r"SSVI is as good or better out of sample here, and it comes with proofs")
+        verdict = ('lower unweighted error in these same-date held-out quote splits; finite-grid penalties are not a global guarantee' if wins else 'SSVI has comparable or lower held-out quote error here; analytic conditions still require a stated domain')
         foot = VGroup(wrapped_label(verdict, 11.6, 21, QC.HOUSE),
                       wrapped_label(r"pause and predict: the network fits better. Why might a desk still quote SSVI?", 11.6,
                                     21, GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(DOWN, buff=0.6)
@@ -260,14 +252,7 @@ class Learning(VoiceoverScene, ThreeDScene):
                    "But weight the errors by vega, as a desk would, and the order flips: SSVI wins, because the "
                    "network's gains are in the far wings, where options are cheap. ")
         with self.voiceover(
-            f"The scores. On held-out quotes the penalized network misses by {a:.2f} volatility points on average over "
-            f"three splits, and has no arbitrage anywhere on a fine grid. The same network without the penalty fits "
-            f"the held-out quotes better, {b:.2f}, but {rgm:.0f} percent of the grid has a negative density: it buys "
-            "accuracy with arbitrage. SSVI, refitted on the same training quotes, misses by "
-            f"{c:.2f}. {branch}<bookmark mark='a'/> {branch2}Pause and predict: if the network fits better, why might a "
-            "desk still quote SSVI? Because SSVI extrapolates with a guarantee, fits in milliseconds, moves smoothly "
-            "from one day to the next, and its parameters mean something to a trader."
-            " Next: who builds surfaces, and who sells them."
+            f"""The scores. Across three same-date quote splits, the penalized network's mean held-out error is {a:.2f} volatility points; without penalties it is {b:.2f}; the SSVI fits trained on the same subsets give {c:.2f}. These are interpolation checks, not tests on new dates. The unpenalized fits have negative g on an average {rgm:.1f} percent of the audit grid. Penalized fits have no sampled negative g, but one run retains a calendar violation: its worst sampled share is {100 * pc.max():.3f} percent, now shown without rounding it away. Zero sampled flags would still not prove global absence of arbitrage. <bookmark mark='a'/> Vega-weighted errors are {pv:.2f} for the network and {sv:.2f} for SSVI; changing the metric can change the ranking. SSVI offers interpretable parameters and analytic sufficient conditions, subject to their domain. A network penalty alone supplies neither a tail guarantee nor safe extrapolation."""
         ) as vo:
             self.play(FadeIn(tab), FadeIn(note_))
             vo.wait_until("a")
