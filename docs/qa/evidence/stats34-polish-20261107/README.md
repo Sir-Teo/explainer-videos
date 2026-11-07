@@ -1,16 +1,5 @@
-# Part 34 source and numerical checkpoint
+# Part 34 scientific source and numerical checkpoint
 
-All 13 English chapters and their supporting code have been read. Sixteen focused checks
-passed in 10.51 seconds, including eight new checks for variance decomposition, tied isotonic
-calibration, representative independent sampling and primary data, plus eight existing kit tests.
+All thirteen English chapters and supporting calculations were reviewed; all eighteen numerical inputs were regenerated. Sixteen focused checks pass in 7.77 seconds. [The source review](source-review.md) records corrected forest variance, independent IJ pilots, tied calibration, independent representative PPI/weighted-conformal sampling, numerical reconciliation and inferential qualifications.
 
-Corrected finite-tree noise double-counting, pooled isotonic score ties, separated the IJ
-reference pilot from evaluated forests, aligned the PPI target with the full empirical adult
-population and sampled independently, and recorded study-level Monte Carlo uncertainty.
-
-The primary Wisconsin breast-cancer table matches all 569×30 measurements exactly, with the
-documented target-label inversion. Numerical ensemble variance now decomposes exactly into
-estimated variance plus bias squared (residual below 2e-15).
-
-Full numerical reruns, reconciliation of historical narrated numbers, visual captures, listening,
-Chinese material and final narrated masters remain pending. This is an intermediate checkpoint.
+English endpoint/native/motion captures and an actual narrated PPI preview are running. Chinese material, continuous listening and final narrated masters remain pending; this checkpoint is not production approval.

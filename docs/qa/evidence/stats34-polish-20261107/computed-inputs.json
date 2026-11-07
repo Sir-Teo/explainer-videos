@@ -1,0 +1,92 @@
+[
+  {
+    "item": "rashomon",
+    "path": ".cache/stats34/rashomon.json",
+    "sha256": "f5d5fbeccf81a1358b71e181fa8f4b068a9d5613dac4de93dffe42128cc2c453"
+  },
+  {
+    "item": "forest",
+    "path": ".cache/stats34/forest.json",
+    "sha256": "bc7cf2a190dd6da20293418941cc5545b302b59500d827391b89237121b418bd"
+  },
+  {
+    "item": "variance",
+    "path": ".cache/stats34/variance.json",
+    "sha256": "c01141cffdff21eddee242bdd678720ef5f51f94f31d6b9c0c91d60daa33baa1"
+  },
+  {
+    "item": "ij",
+    "path": ".cache/stats34/ij.json",
+    "sha256": "2bb0613ae987c5e493cf59bca87d975d32d68b2db4fb450a67e3630b1b707e5f"
+  },
+  {
+    "item": "ij_sub",
+    "path": ".cache/stats34/ij_sub.json",
+    "sha256": "dbf91efa5510d2b59a8e06fd3cb6099790b20291b3ba2df592b43a7676dd8c60"
+  },
+  {
+    "item": "boost",
+    "path": ".cache/stats34/boost.json",
+    "sha256": "a3539bea4c2f544a9156e3214c5e04046fe926c83a0c82305214e29c927d67fd"
+  },
+  {
+    "item": "cv",
+    "path": ".cache/stats34/cv.json",
+    "sha256": "83b20b64df796a96c7918413228bd9ffb25014c5fecc252667c10d31e1b2dcfd"
+  },
+  {
+    "item": "calib",
+    "path": ".cache/stats34/calib.json",
+    "sha256": "86828975544254a5edbdb49f0d266a3127ca20876593d4e8cdd015e7d2d2f7da"
+  },
+  {
+    "item": "lemma",
+    "path": ".cache/stats34/lemma.json",
+    "sha256": "316fc5dad155766bce179a1c7ee556b36da2c936e7d92b0bea43e86dc425221b"
+  },
+  {
+    "item": "split",
+    "path": ".cache/stats34/split.json",
+    "sha256": "683dc12c69588ab7834e983ad52f88991673d1801a07d2a6cd56234564e0b59d"
+  },
+  {
+    "item": "jack",
+    "path": ".cache/stats34/jack.json",
+    "sha256": "cb063d90ce9f981fb8d1531a2feaa75faee9790669d149054729ece21ac7d4f2"
+  },
+  {
+    "item": "diab",
+    "path": ".cache/stats34/diab.json",
+    "sha256": "516246655a4a9d240b419beda9ccff127dc8713926110b43683997486871bbf1"
+  },
+  {
+    "item": "shift",
+    "path": ".cache/stats34/shift.json",
+    "sha256": "5749f49d5f0b0bdb726827d45523f15e97d55fea34c880f69f2eef060dd44a45"
+  },
+  {
+    "item": "aci",
+    "path": ".cache/stats34/aci.json",
+    "sha256": "c1effb875026b43114738c841e675c979a1be4f6828b0f0edcb5736d9bb5a0b2"
+  },
+  {
+    "item": "sets",
+    "path": ".cache/stats34/sets.json",
+    "sha256": "15018f283cc8e76dead8e6058e853e24154246f133f0436150081ce3ce5387b8"
+  },
+  {
+    "item": "ppi",
+    "path": ".cache/stats34/ppi.json",
+    "sha256": "6b55ce7057c6503c2f2d41e44de4c4d369db05764452f3dd3b667e1ae3955f0d"
+  },
+  {
+    "item": "interp",
+    "path": ".cache/stats34/interp.json",
+    "sha256": "06db9316fc25045c0e0dba77ce3741662f01b0924c6f5c45943a98c11e81de61"
+  },
+  {
+    "item": "board",
+    "path": ".cache/stats34/board.json",
+    "sha256": "c104df2d3ebd0a9f1b8f928ebdfdcd89ec534202b19c4f017f102428a3866531"
+  }
+]

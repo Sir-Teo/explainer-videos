@@ -202,19 +202,21 @@ class PPI(VoiceoverScene):
         rows = [
             cmath(r"\mathrm{Var}\,\hat\theta^{PP}", r"=", r"\dfrac{\mathrm{Var} f(X)}{N} + \dfrac{\mathrm{Var}\big(Y - f(X)\big)}{n}", font_size=30),
             cmath(r"\text{classical}", r":", r"\mathrm{Var}(Y)/n", font_size=32),
-            cmath(r"\text{better when}", r":", r"\mathrm{Var}(Y - f) < \mathrm{Var}(Y) \ \text{(and } N \gg n)", font_size=30),
+            cmath(r"\text{better when}", r":", r"\mathrm{Var}(Y-f) + (n/N)\,\mathrm{Var}(f) < \mathrm{Var}(Y)", font_size=30),
             cmath(r"\text{here}", r":", rf"\mathrm{{se}}\ {se[3]:.2f} \text{{ vs }} {se[0]:.2f}: \ 300 \text{{ visits with PPI++ act like }} {d['n_equiv']:,.0f}", font_size=28),
         ]
         rows[3][-1].set_color(BANDC)
         whys = [why(r"two independent samples"), why(r"labels alone"), why(r"a good model has small residuals"),
                 why(r"averaged over 300 draws")]
         with self.voiceover(
-            "<bookmark mark='a'/> Its variance has two parts, one from each sample: the variance of the guesses over N, "
-            "and the variance of the guesses' errors over n. <bookmark mark='b'/> The classical estimate's variance is the "
-            "variance of Y over n. <bookmark mark='c'/> So prediction-powered inference wins whenever the guesses' errors "
-            "vary less than the truth itself, which is to say whenever the model explains some of the variation, even if it "
-            "is biased. <bookmark mark='d'/> For the watch, the standard error falls from about one millimetre to about "
-            "a half. Three hundred clinic visits, helped by twenty thousand biased guesses, are worth about "
+            "<bookmark mark='a'/> Its variance has two parts, one from each sample: the variance of the guesses over "
+            "N, and the variance of the guesses' errors over n. <bookmark mark='b'/> The classical estimate's "
+            "variance is the variance of Y over n. <bookmark mark='c'/> So plain prediction-powered inference wins "
+            "when the residual variance plus n over N times the prediction variance is below the outcome variance. "
+            "With enough unlabelled cases, that is approximately when the guesses' errors vary less than the truth "
+            "itself, which is to say whenever the model explains some of the variation, even if it is biased. "
+            "<bookmark mark='d'/> For the watch, the standard error falls from about one millimetre to about a half. "
+            "Three hundred clinic visits, helped by twenty thousand biased guesses, are worth about "
             + f"{d['n_equiv']:,.0f}" + " visits alone."
         ) as vo:
             intro=label('Independent sample variances determine the precision gain',font_size=36).move_to([0,3.3,0])

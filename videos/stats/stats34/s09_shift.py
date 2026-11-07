@@ -143,9 +143,9 @@ class Shift(VoiceoverScene):
             label(r"the weights raise the threshold to match the harder population", font_size=26),
         ), 12.4, 0.6, [0, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The unweighted threshold was about forty-two thousand dollars, and covered "
+            "<bookmark mark='a'/> The unweighted threshold was about " + say(d["q"], 1) + " thousand dollars, and covered "
             + say(100 * d["unweighted"], 1) + " percent. <bookmark mark='b'/> The weighted threshold rises to about "
-            "forty-seven thousand, and covers " + say(100 * d["weighted"], 1) + " percent. <bookmark mark='c'/> The "
+            + say(d["qw"], 1) + " thousand, and covers " + say(100 * d["weighted"], 1) + " percent. <bookmark mark='c'/> The "
             "weights simply let the calibration cases from mid-career, the ones that resemble the test population, set "
             "the threshold."
         ) as vo:
