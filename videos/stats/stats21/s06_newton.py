@@ -30,15 +30,21 @@ class Newton(VoiceoverScene):
         ]
         rows[1][2].set_color(NEWT)
         whys = [why(r"a quadratic through the current point"), why(r"jump to the quadratic's peak"),
-                why(r"Fisher (1925): \ always negative definite"), why(r"identical for a canonical link: \ Part 14")]
+                why(r"negative semidefinite; \ nonsingularity and safeguarding matter"), why(r"identical for a canonical link: \ Part 14")]
+        intro = label('Newton uses a local quadratic model, with safeguards', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Newton's idea: near the current guess, approximate the log likelihood by a quadratic, using "
-            "its gradient g and its Hessian H, the matrix of second derivatives. <bookmark mark='b'/> Then jump straight to the "
-            "quadratic's peak: theta minus H inverse g. <bookmark mark='c'/> Fisher's scoring method, from 1925, replaces the "
-            "Hessian by minus the expected information, which is always negative definite, so every step goes uphill in a "
-            "useful direction. <bookmark mark='d'/> For logistic regression and any canonical link the two are identical, and "
-            "each step is a weighted least squares fit: iteratively reweighted least squares, from Part 14."
+            "<bookmark mark='a'/> Newton's idea: near the current guess, approximate the log likelihood by a "
+            "quadratic, using its gradient g and its Hessian H, the matrix of second derivatives. <bookmark "
+            "mark='b'/> Then jump straight to the quadratic's peak: theta minus H inverse g. <bookmark mark='c'/> "
+            "Fisher's scoring method, from 1925, replaces the Hessian by minus the expected information, which is "
+            "negative semidefinite. With nonsingular information it gives an ascent direction, but a full step can "
+            "still overshoot; a line search or trust region safeguards the update. <bookmark mark='d'/> For logistic "
+            "regression and any canonical link the two are identical, and each step is a weighted least squares fit: "
+            "iteratively reweighted least squares, from Part 14."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -60,7 +66,7 @@ class Newton(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(rf"the World's vote on log income, \ $n = {d['n']:,}$", font_size=22),
             label(r"contours: \ the log likelihood", font_size=22, color=LEVEL),
-            label(r"red: \ gradient ascent, \ best fixed step", font_size=22, color=GRAD),
+            label(r"red: \ gradient ascent, \ safe fixed step $1/L$", font_size=22, color=GRAD),
             label(r"blue: \ Newton", font_size=22, color=NEWT),
             label(r"a long, \ narrow ridge: \ intercept and slope trade off", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.4, 0.2, 0])
@@ -109,12 +115,14 @@ class Newton(VoiceoverScene):
             label(r"gradient: \ the error shrinks by a fixed factor: \ linear, \ slow when the problem is ill-conditioned", font_size=22, color=GRAD),
         ), 12.4, 0.25, [0, -2.8, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Count the error after each step, the distance to the maximum. Newton starts four units away; "
-            "then point four five; then point zero one two; then nine millionths; then five trillionths; then nothing a "
-            "computer can measure. <bookmark mark='b'/> The number of correct digits roughly doubles every step: quadratic "
-            "convergence. <bookmark mark='c'/> Gradient ascent shrinks the error by a constant factor each step, and on this "
-            "ridge the factor is close to one: after four hundred steps it's still point five eight away. The price of Newton is "
-            "a linear system with the Hessian at each step, which for a few dozen parameters is nothing."
+            "<bookmark mark='a'/> Count the error after each step, the distance to the maximum. Newton starts four "
+            "units away; then point four five; then point zero one two; then nine millionths; then five trillionths; "
+            "then nothing a computer can measure. <bookmark mark='b'/> Near a regular optimum with a nonsingular "
+            "Hessian, Newton has local quadratic convergence; this example roughly doubles its correct digits as it "
+            "approaches the solution. <bookmark mark='c'/> Gradient ascent shrinks the error by a constant factor "
+            "each step, and on this ridge the factor is close to one: after four hundred steps it's still point five "
+            "eight away. The price of Newton is a linear system with the Hessian at each step, which for a few dozen "
+            "parameters is nothing."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(t[0]), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in t[1:]], lag_ratio=0.4), run_time=5.0)
@@ -175,6 +183,9 @@ class Newton(VoiceoverScene):
         rows[2][2].set_color(NEWT)
         whys = [why(r"nonlinear least squares: \ growth curves, \ dose--response"), why(r"$J$: \ the Jacobian; \ drop the residual term"),
                 why(r"Gauss--Newton: \ a linear least-squares fit each step"), why(r"a trust region: \ $\mu$ large is a gradient step")]
+        intro = label('Linearize a nonlinear mean and solve for an update', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> A close relative handles nonlinear least squares, fitting a curve like a growth model or a "
             "dose-response curve. <bookmark mark='b'/> The Hessian has two parts: J transposed J, built from first derivatives "
@@ -184,6 +195,7 @@ class Newton(VoiceoverScene):
             "multiple of the identity, which shortens the step when the linearization can't be trusted: large mu gives a cautious "
             "gradient step, small mu a bold Gauss–Newton step."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -196,7 +208,7 @@ class Newton(VoiceoverScene):
             label(r"trust region: \ trust the quadratic only within a radius \ (Levenberg--Marquardt)", font_size=24, color=NEWT),
             label(r"quasi-Newton: \ build the curvature from gradients \ (BFGS)", font_size=24, color=TEAL),
             label(r"several starting points, \ for problems that are not concave", font_size=24, color=OBS),
-            label(r"cost: \ $O(p^3)$ per step; \ for millions of parameters, \ chapters seven to ten", font_size=22, color=GREY_A),
+            label(r"dense factorization: \ $O(p^3)$, \ plus Hessian formation; \ for millions of parameters, \ chapters seven to ten", font_size=22, color=GREY_A),
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The standard repairs: a line search, which shrinks each step until the objective improves; "

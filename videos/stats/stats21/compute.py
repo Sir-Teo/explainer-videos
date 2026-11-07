@@ -63,6 +63,28 @@ def nest(obj):
     return obj
 
 
+def clipped_segments(xs, ys, rectangle):
+    """Intersect segments with the viewport, preserving crossings and missing breaks."""
+    xmin, xmax, ymin, ymax = rectangle
+    points = np.column_stack((xs, ys))
+    result = []
+    for start, end in zip(points[:-1], points[1:]):
+        if not np.isfinite([start, end]).all():
+            continue
+        delta = end-start
+        lo, hi = 0., 1.
+        for j, lower, upper in ((0, xmin, xmax), (1, ymin, ymax)):
+            if delta[j] == 0:
+                if not lower <= start[j] <= upper:
+                    hi = -1
+                    break
+            else:
+                a, b = sorted(((lower-start[j])/delta[j], (upper-start[j])/delta[j]))
+                lo, hi = max(lo, a), min(hi, b)
+        if lo <= hi:
+            result.append((start+lo*delta, start+hi*delta))
+    return result
+
 BAKERY_C = [3.0, 4.0]  # profit per tray of loaves, per tray of cakes
 BAKERY_A = [[1.0, 2.0], [3.0, 2.0], [1.0, 1.0]]  # flour (sacks), oven (hours), staff (shifts) per tray
 BAKERY_B = [14.0, 24.0, 9.0]
@@ -91,6 +113,8 @@ def compute_bakery():
 
 
 def compute_convex():
+    from scipy.optimize import brentq
+    from scipy.special import expit
     x = np.array([-2.1, -1.6, -1.2, 3.4, 4.0, 4.6, 5.1])
     f, _, _ = O.cauchy_location(x)
     th = np.linspace(-6, 10, 401)
@@ -101,8 +125,15 @@ def compute_convex():
     fit = O.logistic_scoring(X, v)
     bs = np.linspace(-0.5, 1.5, 301)
     ll = [float(np.sum(v * (fit["b"][0] + b * z) - np.logaddexp(0, fit["b"][0] + b * z))) for b in bs]
+    profile = []
+    for b in bs:
+        a = brentq(lambda a: np.sum(v - expit(a + b * z)), -50, 50)
+        eta = a + b * z
+        profile.append(float(np.sum(v * eta - np.logaddexp(0, eta))))
     loc_max = [float(th[i]) for i in range(1, len(th) - 1) if cl[i] > cl[i - 1] and cl[i] > cl[i + 1]]
-    return nest({"x": x, "theta": th, "cauchy": cl, "local_max": loc_max, "b": bs, "logistic": ll, "b_hat": fit["b"][1]})
+    return nest({"x": x, "theta": th, "cauchy": cl, "local_max": loc_max, "b": bs, "logistic": ll,
+                 "profile": profile, "profile_se": fit["se"][1], "logistic_max": fit["loglik"][-1],
+                 "b_hat": fit["b"][1]})
 
 
 def compute_kkt():
@@ -163,7 +194,7 @@ def compute_newton():
     sc = O.logistic_scoring(X, y, iters=12)
     bhat = sc["b"]
     err = [float(np.linalg.norm(b - bhat)) for b in sc["path"]]
-    # gradient ascent with the best fixed step 1/L
+    # Gradient ascent with a globally safe fixed step 1/L, not an optimal fixed step.
     L = float(np.linalg.eigvalsh(X.T @ X / 4).max())
     b = np.zeros(2)
     gpath = [b.copy()]
@@ -190,7 +221,7 @@ def compute_mm():
     th = 9.0
     steps = []
     for _ in range(8):
-        w = 1 / (1e-9 + np.abs(x - th))
+        w = 1 / np.abs(x - th)  # these eight illustrative iterates never coincide with an observation
         steps.append({"theta": th, "w": w})
         th = float(np.sum(w * x) / np.sum(w))
     grid = np.linspace(-1, 13, 281)
@@ -249,6 +280,37 @@ def compute_prox():
                  "cond": float(np.linalg.cond(X.T @ X / n))})
 
 
+def fused_lasso(y, lam, rho=1.0, iters=800):
+    """TV denoising with one O(n) banded factorization; record both ADMM residuals."""
+    from scipy.linalg import cholesky_banded, cho_solve_banded
+
+    y = np.asarray(y, float)
+    if y.ndim != 1 or not len(y) or not np.isfinite(y).all() or not np.isfinite([lam, rho]).all() or lam < 0 or rho <= 0 or iters < 1:
+        raise ValueError("Require finite nonempty y, lambda >= 0, rho > 0, and positive iterations")
+    if len(y) == 1:
+        return {"b": y.copy(), "primal_res": np.zeros(iters), "dual_res": np.zeros(iters),
+                "objective": np.zeros(iters)}
+    ab = np.zeros((2, len(y)))
+    ab[0] = 1 + 2 * rho
+    ab[0, [0, -1]] = 1 + rho
+    ab[1, :-1] = -rho
+    factor = cholesky_banded(ab, lower=True)
+    transpose = lambda v: np.r_[-v[0], v[:-1] - v[1:], v[-1]]  # noqa: E731
+    z, u = np.zeros(len(y) - 1), np.zeros(len(y) - 1)
+    objectives, primal, dual = [], [], []
+    for _ in range(iters):
+        b = cho_solve_banded((factor, True), y + rho * transpose(z - u))
+        Db = np.diff(b)
+        previous = z
+        z = O.prox_l1(Db + u, lam / rho)
+        u += Db - z
+        objectives.append(0.5 * np.sum((y - b) ** 2) + lam * np.abs(Db).sum())
+        primal.append(np.linalg.norm(Db - z))
+        dual.append(rho * np.linalg.norm(transpose(z - previous)))
+    return {"b": b, "objective": np.asarray(objectives), "primal_res": np.asarray(primal),
+            "dual_res": np.asarray(dual)}
+
+
 def compute_admm():
     g = rng(2011)
     levels = [(0, 30, 0.0), (30, 55, 2.0), (55, 70, -1.0), (70, 120, 1.0)]
@@ -256,8 +318,9 @@ def compute_admm():
     y = truth + g.normal(0, 0.6, len(truth))
     fits = {}
     for lam in (0.5, 3.0, 20.0):
-        r = O.fused_lasso_admm(y, lam, rho=1.0, iters=800)
-        fits[str(lam)] = {"b": r["b"], "res": r["primal_res"][:400], "obj": r["objective"][:400]}
+        r = fused_lasso(y, lam, rho=1.0, iters=800)
+        fits[str(lam)] = {"b": r["b"], "res": r["primal_res"][:400], "dual_res": r["dual_res"][:400],
+                          "obj": r["objective"][:400]}
     return nest({"y": y, "truth": truth, "fits": fits})
 
 
@@ -292,8 +355,10 @@ def compute_inference():
     for _ in range(300):
         i = g.integers(0, len(y), len(y))
         bs.append(O.logistic_scoring(X[i], y[i], iters=15)["b"][1])
-    return nest({"b": sc["b"], "se": se, "info": info, "opt_err": opt_err[::10], "boot_se": float(np.std(bs, ddof=1)),
-                 "first_below": int(np.argmax(np.array(opt_err) < se[1] / 10)) + 1})
+    below = np.flatnonzero(np.asarray(opt_err) < se[1] / 10)
+    return nest({"b": sc["b"], "se": se, "info": info, "opt_err": opt_err[::10],
+                 "opt_iters": np.arange(1, len(opt_err) + 1)[::10], "boot_se": float(np.std(bs, ddof=1)),
+                 "first_below": int(below[0] + 1) if len(below) else None})
 
 
 def compute_pava():
@@ -371,10 +436,17 @@ def compute_sandwich():
                  "sd_reps": float(np.std(reps, ddof=1))})
 
 
+def population_vote_target():
+    """Census logistic projection for the fixed finite World, including its nuisance intercept."""
+    # Exact finite-population projection: no sampled reference error shared by all replicates.
+    truth_X = np.column_stack([np.ones(len(_li)), (_li - Z_MEAN) / Z_SD])
+    truth_y = W.survey["vote_blue"][W.adult].astype(float)
+    return O.logistic_scoring(truth_X, truth_y)["b"]
+
+
 def compute_board():
     hits_last = hits_avg = 0
-    truth_X, truth_y = vote_data(200_000, 2199)
-    beta = O.logistic_scoring(truth_X, truth_y)["b"][1]  # the large-sample target, effectively the population value
+    beta = population_vote_target()[1]
     for r in range(R_BOARD):
         X, y = vote_data(2000, 30_000 + r)
         s = O.sgd_logistic(X, y, step0=1.0, power=0.6)

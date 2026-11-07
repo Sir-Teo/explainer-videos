@@ -30,15 +30,20 @@ class CoordinateDescent(VoiceoverScene):
         rows[1][2].set_color(PATH)
         whys = [why(r"cycle through the coordinates"), why(r"$r^{(j)}$: \ the residual without $\beta_j$"),
                 why(r"soft thresholding: \ chapter two's KKT"), why(r"Tseng (2001): \ a separable penalty")]
+        intro = label('Optimize one coordinate while holding the others fixed', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Coordinate descent is the simplest idea of all: hold every variable fixed but one, minimize "
-            "over that one exactly, and cycle. <bookmark mark='b'/> For the lasso each one-variable problem has a closed form: "
-            "compute the correlation of predictor j with the residual that leaves it out, <bookmark mark='c'/> and soft-"
-            "threshold it: shrink toward zero by lambda, and set it to zero if it doesn't get past. That's chapter two's KKT "
-            "condition, solved one coordinate at a time. <bookmark mark='d'/> Paul Tseng proved in 2001 that this converges "
-            "whenever the objective is a smooth convex function plus a penalty that separates into one convex piece per "
-            "coordinate, as the lasso's does."
+            "<bookmark mark='a'/> Coordinate descent is the simplest idea of all: hold every variable fixed but one, "
+            "minimize over that one exactly, and cycle. <bookmark mark='b'/> For the lasso each one-variable problem "
+            "has a closed form: compute the correlation of predictor j with the residual that leaves it out, "
+            "<bookmark mark='c'/> and soft-threshold it: shrink toward zero by lambda, and set it to zero if it "
+            "doesn't get past. That's chapter two's KKT condition, solved one coordinate at a time. <bookmark "
+            "mark='d'/> Paul Tseng proved in 2001 that this converges under regularity on the objective and "
+            "coordinate minimizations, including separable penalties; the standard convex lasso with nonzero design "
+            "columns and an attained optimum fits that framework."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -130,17 +135,22 @@ class CoordinateDescent(VoiceoverScene):
             label(r"warm starts: \ solve for a decreasing sequence of $\lambda$, \ each from the last", font_size=24, color=NEWT),
             label(r"active sets: \ cycle over the non-zero coefficients until they settle", font_size=24, color=TEAL),
             label(r"screening rules: \ discard predictors that must be zero", font_size=24, color=HIT),
-            label(r"Friedman, \ Hastie \& Tibshirani (2010): \ \texttt{glmnet}, \ a whole path in the time of one fit", font_size=22, color=GREY_A),
+            label(r"Friedman, \ Hastie \& Tibshirani (2010): \ \texttt{glmnet}, \ efficient regularization paths with warm starts and screening", font_size=22, color=GREY_A),
         ), 12.4, 0.5, [0, 0, 0])
+        intro = label('Warm starts and sparse updates make regularization paths efficient', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "Coordinate descent became the standard way to fit the lasso for reasons that compound. <bookmark mark='a'/> Each "
-            "update costs one inner product. <bookmark mark='b'/> Warm starts: you want the whole path of solutions as lambda "
-            "decreases, and each solution is an excellent starting point for the next. <bookmark mark='c'/> Active sets: most "
-            "coefficients are zero, so cycle over the few that aren't until they settle, then check the rest. "
-            "<bookmark mark='d'/> Screening rules can rule out predictors in advance. <bookmark mark='e'/> Jerome Friedman, "
-            "Trevor Hastie and Rob Tibshirani built these into glmnet in 2010, and it computes an entire regularization path in "
-            "about the time it takes to fit one least-squares regression."
+            "Coordinate descent became the standard way to fit the lasso for reasons that compound. <bookmark "
+            "mark='a'/> Each update costs one inner product. <bookmark mark='b'/> Warm starts: you want the whole "
+            "path of solutions as lambda decreases, and each solution is an excellent starting point for the next. "
+            "<bookmark mark='c'/> Active sets: most coefficients are zero, so cycle over the few that aren't until "
+            "they settle, then check the rest. <bookmark mark='d'/> Screening rules can rule out predictors in "
+            "advance. <bookmark mark='e'/> Jerome Friedman, Trevor Hastie and Rob Tibshirani built these into glmnet "
+            "in 2010, and it computes an entire regularization path in a small multiple of the cost of an individual "
+            "fit in favorable problems. The speed depends on sparsity, correlations, tolerances and the lambda path."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))

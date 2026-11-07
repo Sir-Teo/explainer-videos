@@ -31,15 +31,21 @@ class Convexity(VoiceoverScene):
             cmath(r"\text{strongly convex}", r":", r"\nabla^2 f(x) \succeq m I,\ m > 0", font_size=30),
         ]
         whys = [why(r"the segment stays inside"), why(r"the chord lies above the graph"), why(r"every tangent lies below"),
-                why(r"curvature never negative"), why(r"curvature bounded away from zero: \ a unique minimum")]
+                why(r"curvature never negative"), why(r"curvature bounded away from zero: \ at most one minimizer; \ existence also needed")]
+        intro = label('Convexity compares every point on a line segment', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> A set is convex if the segment between any two of its points stays inside it: a disc, a "
-            "polygon, a half-plane; not a crescent. <bookmark mark='b'/> A function is convex if its chord between any two "
-            "points lies above its graph. <bookmark mark='c'/> Equivalently, for a smooth function, every tangent lies below the "
-            "graph. <bookmark mark='d'/> Or, with two derivatives, the Hessian, the matrix of second derivatives, is positive "
-            "semidefinite everywhere: the curvature is never negative in any direction. <bookmark mark='e'/> Strong convexity "
-            "asks for curvature bounded away from zero, which guarantees a unique minimum and fast algorithms."
+            "<bookmark mark='a'/> A set is convex if the segment between any two of its points stays inside it: a "
+            "disc, a polygon, a half-plane; not a crescent. <bookmark mark='b'/> A function is convex if its chord "
+            "between any two points lies above its graph. <bookmark mark='c'/> Equivalently, for a smooth function, "
+            "every tangent lies below the graph. <bookmark mark='d'/> Or, with two derivatives, the Hessian, the "
+            "matrix of second derivatives, is positive semidefinite everywhere: the curvature is never negative in "
+            "any direction. <bookmark mark='e'/> Strong convexity asks for curvature bounded away from zero, which "
+            "gives at most one minimizer. Existence and algorithmic rates require further conditions, such as "
+            "smoothness and a suitable step size."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=5, top=2.8, x=-0.6, buff=0.62, edge=6.9)
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
@@ -47,8 +53,8 @@ class Convexity(VoiceoverScene):
         self.clear_scene()
 
     def picture(self):
-        A = axes([-3, 3], [0, 4], x_length=7.4, y_length=4.4, xlabel=r"$x$", ylabel=r"$f(x)$", xticks=[-3, 0, 3],
-                 yticks=[0, 2, 4], center=[-2.2, 0.2, 0])
+        A = axes([-3, 3], [-2, 5], x_length=7.4, y_length=4.4, xlabel=r"$x$", ylabel=r"$f(x)$", xticks=[-3, 0, 3],
+                 yticks=[-2, 0, 2, 4], center=[-2.2, 0.2, 0])
         ax = A.ax
         f = lambda x: np.log1p(np.exp(x)) + 0.12 * x ** 2  # noqa: E731
         fp = lambda x: 1 / (1 + np.exp(-x)) + 0.24 * x  # noqa: E731
@@ -89,19 +95,24 @@ class Convexity(VoiceoverScene):
             cmath(r"\text{Jensen}", r":", r"f(E X) \le E f(X) \text{ for convex } f", font_size=30),
             cmath(r"f(x) = x^2", r":", r"(E X)^2 \le E X^2, \ \text{so} \ \mathrm{Var}\,X \ge 0", font_size=30),
             cmath(r"f(x) = -\log x", r":", r"E \log X \le \log E X", font_size=30),
-            cmath(r"\text{so}", r":", r"E \log \frac{q(X)}{p(X)} \le \log E \frac{q(X)}{p(X)} = 0", font_size=30),
+            cmath(r"\text{so}", r":", r"E_p \log \frac{q(X)}{p(X)} \le \log E_p \frac{q(X)}{p(X)} \le 0", font_size=30),
         ]
         rows[3][2].set_color(TRUE)
         whys = [why(r"the chord inequality, \ with many points"), why(r"Part 6"), why(r"the geometric mean $\le$ the arithmetic"),
                 why(r"Gibbs: \ Kullback--Leibler $\ge 0$; \ why MLE works, \ Part 22")]
+        intro = label('Jensen compares a function of a mean with a mean of the function', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> The chord inequality with many points, weighted by probabilities, is Jensen's inequality: "
-            "f of the mean is at most the mean of f. <bookmark mark='b'/> With x squared it says a variance is never negative. "
-            "<bookmark mark='c'/> With minus log it says the average of logs is at most the log of the average. "
-            "<bookmark mark='d'/> And applied to a likelihood ratio, it says the expected log likelihood is highest at the "
-            "true distribution: the Kullback–Leibler divergence is never negative. That one line is the reason maximum "
-            "likelihood works, which Part 22 develops."
+            "<bookmark mark='a'/> The chord inequality with many points, weighted by probabilities, is Jensen's "
+            "inequality: f of the mean is at most the mean of f. <bookmark mark='b'/> With x squared it says a "
+            "variance is never negative. <bookmark mark='c'/> With minus log it says the average of logs is at most "
+            "the log of the average. <bookmark mark='d'/> And applied to a likelihood ratio, it says the expected log"
+            " likelihood is highest at the true distribution: the Kullback–Leibler divergence is never negative. That"
+            " population comparison motivates maximum likelihood; consistency also needs identification and "
+            "regularity, as Part 22 develops."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -150,16 +161,21 @@ class Convexity(VoiceoverScene):
         ]
         rows[3][2].set_color(TRUE)
         whys = [why(r"an exponential family, \ natural parameter $\theta$"), why(r"differentiate under the integral: \ $A$ is convex"),
-                why(r"linear minus convex: \ concave"), why(r"one peak, \ found by Newton in a few steps")]
+                why(r"linear minus convex: \ concave"), why(r"finite interior optimum, \ if it exists; \ safeguard Newton steps")]
+        intro = label('A log-partition function supplies nonnegative curvature', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "Why are exponential families safe? <bookmark mark='a'/> Write the density as h of x times the exponential of "
-            "theta times T of x, minus a normalizing function A of theta, the log-partition function. "
-            "<bookmark mark='b'/> Differentiating the normalization shows that A's first derivative is the mean of T and its "
-            "second derivative is the variance of T, which can't be negative: A is convex. <bookmark mark='c'/> The log "
-            "likelihood is theta times the sum of the T's, which is linear, minus n times A, which is convex, so it's concave. "
-            "<bookmark mark='d'/> Its single peak is where the model's mean of T matches the sample's: maximum likelihood, for "
-            "these families, is the method of moments."
+            "Why are exponential families safe? <bookmark mark='a'/> Write the density as h of x times the "
+            "exponential of theta times T of x, minus a normalizing function A of theta, the log-partition function. "
+            "<bookmark mark='b'/> Differentiating the normalization shows that A's first derivative is the mean of T "
+            "and its second derivative is the variance of T, which can't be negative: A is convex. <bookmark "
+            "mark='c'/> The log likelihood is theta times the sum of the T's, which is linear, minus n times A, which"
+            " is convex, so it's concave. <bookmark mark='d'/> If a finite interior maximum exists, its score matches"
+            " the model mean of T to the sample mean. Minimality can make it unique. Boundary data can instead lead "
+            "to an unattained supremum."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -170,22 +186,29 @@ class Convexity(VoiceoverScene):
         rows = [
             cmath(r"m I \preceq \nabla^2 f \preceq L I", r":", r"\kappa = L / m, \ \text{the condition number}", font_size=30),
             cmath(r"\text{gradient descent, \ step } 1/L", r":", r"f(x_k) - f^* \le (1 - 1/\kappa)^k \,(f(x_0) - f^*)", font_size=28),
-            cmath(r"\kappa = 10", r":", r"\text{a digit every 22 steps; \ } \kappa = 10^4: \ 23{,}000 \text{ steps}", font_size=28),
+            cmath(r"\kappa = 10", r":", r"\text{bound reduced tenfold in 22 steps; \ } \kappa = 10^4: \ 23{,}000 \text{ steps}", font_size=28),
             cmath(r"\text{remedies}", r":", r"\text{centre and scale the predictors; \ or use the curvature (Newton)}", font_size=28),
         ]
         rows[2][2].set_color(RES)
         whys = [why(r"the flattest and steepest curvatures"), why(r"a linear rate, \ set by $\kappa$"),
                 why(r"$\ln 10 \cdot \kappa$ steps per digit"), why(r"chapter five shows both")]
+        intro = label('Curvature bounds control gradient-descent guarantees', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "Convexity says an algorithm can't get trapped; how fast it gets there depends on the shape of the bowl. "
-            "<bookmark mark='a'/> If the curvature is everywhere between m and L, their ratio kappa is the condition number: one "
-            "for a round bowl, huge for a long thin valley. <bookmark mark='b'/> Gradient descent with step one over L then "
-            "shrinks the error by a factor of one minus one over kappa per step. <bookmark mark='c'/> With kappa ten, that's a "
-            "correct digit every twenty-two steps; with kappa ten thousand, every twenty-three thousand. <bookmark mark='d'/> "
-            "In statistics a large kappa usually comes from predictors on very different scales, or strongly correlated. "
-            "Centring and scaling them rounds the bowl, and Newton's method, which uses the curvature itself, doesn't care "
-            "about kappa at all. Chapter five shows both."
+            "Convexity makes local minima global. Whether an algorithm converges, and its speed, still depend on its "
+            "assumptions and step choices. <bookmark mark='a'/> If the curvature is everywhere between m and L, their"
+            " ratio kappa is the condition number: one for a round bowl, huge for a long thin valley. <bookmark "
+            "mark='b'/> Gradient descent with step one over L then has an objective-gap upper bound decreasing by a "
+            "factor of one minus one over kappa per step. <bookmark mark='c'/> With kappa ten, that's a tenfold "
+            "reduction of this objective-gap bound in about twenty-two steps; with kappa ten thousand, every "
+            "twenty-three thousand. <bookmark mark='d'/> In statistics a large kappa usually comes from predictors on"
+            " very different scales, or strongly correlated. Centring and scaling them rounds the bowl, and Newton "
+            "uses curvature and is invariant to invertible linear reparameterizations in exact arithmetic, but "
+            "ill-conditioned linear solves and poor starting points can still cause difficulty. Chapter five shows "
+            "both."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -201,11 +224,12 @@ class Convexity(VoiceoverScene):
             label(r"there: \ several starts, \ and humility", font_size=22, color=GREY_A),
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Which statistical problems are convex? Exponential families, written in their natural "
-            "parameter, have concave log likelihoods, because the log-partition function is convex. <bookmark mark='b'/> So "
-            "generalized linear models with the canonical link, logistic and Poisson regression, are safe. "
-            "<bookmark mark='c'/> So are ridge, the lasso and quantile regression. <bookmark mark='d'/> Mixtures, heavy-tailed "
-            "location models, factor models and neural networks are not. <bookmark mark='e'/> For those we use several starting "
+            "<bookmark mark='a'/> Which statistical problems are convex? Exponential families, written in their "
+            "natural parameter, have concave log likelihoods, because the log-partition function is convex. <bookmark"
+            " mark='b'/> So canonical logistic and Poisson regressions have concave log likelihoods. Concavity does "
+            "not ensure that a finite MLE exists: separation is one counterexample. <bookmark mark='c'/> So are "
+            "ridge, the lasso and quantile regression. <bookmark mark='d'/> Mixtures, heavy-tailed location models, "
+            "factor models and neural networks are not. <bookmark mark='e'/> For those we use several starting "
             "points, and some humility about whether we found the best answer."
         ) as vo:
             for k, m_ in enumerate("abcde"):

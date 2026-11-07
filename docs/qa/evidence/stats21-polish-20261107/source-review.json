@@ -1,0 +1,117 @@
+{
+  "part": "stats21",
+  "fingerprint": "dbe88d097e4ca24e532aa2335a8d38375851f510d02216ffb0914fe2a6de7f8d",
+  "compute_items": [
+    {
+      "item": "bakery",
+      "path": ".cache/stats21/bakery.json",
+      "sha256": "33660f15e092bee7da35ff0ed7b6d2b2bee13340037d27849d6c44bd5bbcdf0d"
+    },
+    {
+      "item": "convex",
+      "path": ".cache/stats21/convex.json",
+      "sha256": "8615df47fac644efe99c061cc93d0ef826ec84a3e41cb68222dcb9c4a281c2a7"
+    },
+    {
+      "item": "kkt",
+      "path": ".cache/stats21/kkt.json",
+      "sha256": "a65c0ce7c6f92e1e6ad57540689ca71de9669eb90a65c2e3c23667a0abffd4d0"
+    },
+    {
+      "item": "np",
+      "path": ".cache/stats21/np.json",
+      "sha256": "ba4c8aeba387948fc71f0e6ba047d75b00a92bb2e3aec8b2d56ec876e5728ca9"
+    },
+    {
+      "item": "lad",
+      "path": ".cache/stats21/lad.json",
+      "sha256": "8c0d530cd436c2e2bf13eb3e7a52be7a97800c488e9144e5c1e59239feb63079"
+    },
+    {
+      "item": "newton",
+      "path": ".cache/stats21/newton.json",
+      "sha256": "06c4d92d1cebe3551ad4100aa275f8b3ac0bee1807315c6973b4ebac17f72895"
+    },
+    {
+      "item": "mm",
+      "path": ".cache/stats21/mm.json",
+      "sha256": "2e411217229666e9a51880ea6628a3a0e7d08c078d5c5520d176318916ac701f"
+    },
+    {
+      "item": "cd",
+      "path": ".cache/stats21/cd.json",
+      "sha256": "d3b7bbce3a8b2c2dcde3812df267b1b4a8b1385b270da78723c337286af8e8a0"
+    },
+    {
+      "item": "prox",
+      "path": ".cache/stats21/prox.json",
+      "sha256": "7dd2e9c837044f916b64617a81cad3f315a747e3a6a6869637487ae0e171c860"
+    },
+    {
+      "item": "admm",
+      "path": ".cache/stats21/admm.json",
+      "sha256": "df9b5c1500daa812b230344200eb2d62578d05f0f76b39201c3b71a714a819fc"
+    },
+    {
+      "item": "sgd",
+      "path": ".cache/stats21/sgd.json",
+      "sha256": "72957ebeb3403c15c05a8b190b48052affed2bd8ce4dd8f0818a5a6f0d591c2d"
+    },
+    {
+      "item": "inference",
+      "path": ".cache/stats21/inference.json",
+      "sha256": "ed33dfffa0bc5a5d34b6ad5d02342b47249d82be09d2c55bfcd7981c08c28962"
+    },
+    {
+      "item": "pava",
+      "path": ".cache/stats21/pava.json",
+      "sha256": "ae3b283023a15de5a8c9af1315045d326176c59cdf551ea3e1d74b4ff888ff56"
+    },
+    {
+      "item": "bt",
+      "path": ".cache/stats21/bt.json",
+      "sha256": "5b097da1d02b2cdf5705f9d6af1302c72ac182cde232bfd760df66e04d1f09e0"
+    },
+    {
+      "item": "cdcorr",
+      "path": ".cache/stats21/cdcorr.json",
+      "sha256": "e900ce90d66918ded0aafd1f86be09dc298cdec868040b4127c402d2dab0ad62"
+    },
+    {
+      "item": "sgdsteps",
+      "path": ".cache/stats21/sgdsteps.json",
+      "sha256": "dd9daa67377251f6d11678f367be449da761e939f942cdf119d26484aff3bc4a"
+    },
+    {
+      "item": "sandwich",
+      "path": ".cache/stats21/sandwich.json",
+      "sha256": "07be9e0803692bf732869c27e95e841734095b162152004d8b739c9ed8e91a89"
+    },
+    {
+      "item": "board",
+      "path": ".cache/stats21/board.json",
+      "sha256": "fd883eb17f441170fc31d6070a971bfde3b3c6da4b3a9bed11867b7e8e4a3cf6"
+    }
+  ],
+  "imported_scenes": [
+    "Hook",
+    "Convexity",
+    "Lagrange",
+    "Duality",
+    "LinearProgramming",
+    "Newton",
+    "MM",
+    "CoordinateDescent",
+    "Proximal",
+    "ADMM",
+    "Stochastic",
+    "OptimAndInference",
+    "Outro"
+  ],
+  "scope": "Scientific source and numerical checks only; visual verification follows",
+  "finite_world_logistic_target": [
+    -0.5125597040165347,
+    0.5712856676373135
+  ],
+  "production_approval": false
+}
