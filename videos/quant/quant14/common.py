@@ -51,7 +51,8 @@ def loglog_curve(ax, T, sk, color, y_range=(-1.6, 0.6), stroke_width=3):
 
 
 def pause(question: str, width=7.2, font_size=24):
-    return pause_card(question, width=width, font_size=font_size)
+    return wrapped_label(question, max_width=width, font_size=font_size,
+                         color=QC.IDEA).to_corner(DL, buff=0.3)
 
 
 def running_min(xs):
