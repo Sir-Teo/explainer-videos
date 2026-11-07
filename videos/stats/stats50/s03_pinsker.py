@@ -121,7 +121,7 @@ class Pinsker(VoiceoverScene):
             cmath(r"\hat\theta_k = y_k \mathbf 1\{k \le N\}", r":", r"\text{keep the first } N, \ \text{drop the rest}", font_size=34),
             cmath(r"\sup_{\Theta} R", r"=", r"N\varepsilon^2 + C^2 (N + 1)^{-2\alpha}: \ \text{variance plus the worst tail}", font_size=32),
             cmath(r"N^* \asymp (C/\varepsilon)^{2/(2\alpha + 1)}", r"\Rightarrow", r"\text{the same rate as Pinsker, \ a worse constant}", font_size=32),
-            cmath(r"\text{the constant's ratio}", r":", r"\text{3^{2/3}\approx2.0801\quad(\alpha=1):\ \text{worst-case asymptotic ratio}", font_size=32),
+            cmath(r"\text{the constant's ratio}", r":", r"3^{2/3}\approx2.0801\quad(\alpha=1):\ \text{worst-case asymptotic ratio}", font_size=32),
         ]
         rows[1][-1].set_color(UPC)
         rows[3][-1].set_color(LINC)
