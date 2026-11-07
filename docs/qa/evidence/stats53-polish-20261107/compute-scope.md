@@ -1,0 +1,1 @@
+The initial run completed doob through bands, including all three DP-mixture chains. It was stopped during the expensive old spike/slab interval calculation. The final refinement regenerated semipar, adapt, bands, hdbayes, misspec and board with analytic mixture quantiles and cached quadrature nodes. Together the logs cover all twelve current numerical inputs.

@@ -29,14 +29,11 @@ class Schwartz(VoiceoverScene):
         ]
         rows[2][-1].set_color(GOODC)
         whys = [why(r"prior mass near the truth"), why(r"identifiability, \ uniformly"), why(r"for the fixed truth $p_0$"), why(r"two ingredients")]
+        heading = label('Posterior convergence requires both local and global model conditions', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Lorraine Schwartz's theorem of 1965 is about a fixed truth p zero. The first condition: the "
-            "prior puts positive mass on every Kullback–Leibler neighbourhood of the truth, however small. <bookmark "
-            "mark='b'/> The second: for each neighbourhood U of the truth, there are tests that distinguish the truth from "
-            "everything outside U, with errors that vanish exponentially fast. <bookmark mark='c'/> Then the posterior mass "
-            "of U tends to one, almost surely under the truth. <bookmark mark='d'/> Two ingredients, then: enough prior mass "
-            "near the truth, and a model in which the truth can be told apart from the alternatives. Every consistency and "
-            "rate theorem since is built from these two."
+            "<bookmark mark='a'/> Lorraine Schwartz's theorem of 1965 is about a fixed truth p zero. The first condition: the prior puts positive mass on every Kullback–Leibler neighbourhood of the truth, however small. <bookmark mark='b'/> In an i.i.d. dominated model, a sufficient testing condition is: for each chosen neighbourhood U of the truth, there are tests that distinguish the truth from everything outside U, with errors that vanish exponentially fast. <bookmark mark='c'/> Then the posterior mass of U tends to one, almost surely under the truth. <bookmark mark='d'/> Two ingredients, then: enough prior mass near the truth, and a model in which the truth can be told apart from the alternatives. Every consistency and rate theorem since is built from these two."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -48,18 +45,16 @@ class Schwartz(VoiceoverScene):
         rows = [
             cmath(r"\Pi(U^c \mid X)", r"=", r"\frac{\int_{U^c} \prod_i \frac{p}{p_0}(X_i)\, d\Pi(p)}{\int \prod_i \frac{p}{p_0}(X_i)\, d\Pi(p)}", font_size=32),
             cmath(r"\text{denominator}", r"\ge", r"e^{-n(\varepsilon + o(1))}: \ \text{from KL support}", font_size=34),
-            cmath(r"\text{numerator}", r"\le", r"e^{-nc}: \ \text{from the tests, \ with } c > \varepsilon", font_size=34),
+            cmath(r"(1-\phi_n)\times\text{numerator}", r"\;", r"\text{has exponentially small expectation; type-I error controlled}", font_size=34),
             cmath(r"\text{ratio}", r"\to", r"0, \ \text{exponentially}", font_size=36),
         ]
         rows[3][-1].set_color(GOODC)
         whys = [why(r"Bayes' formula, \ as likelihood ratios"), why(r"the law of large numbers"), why(r"Markov's inequality"), why(r"the proof")]
+        heading = label('Tests control a weighted numerator, while prior mass controls the denominator', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Why it works. Write the posterior mass outside U as a ratio of integrals of likelihood "
-            "ratios against the truth. <bookmark mark='b'/> The denominator cannot be too small: the prior has mass near the "
-            "truth, where the likelihood ratio decays at most like e to the minus n epsilon, by the law of large numbers "
-            "applied to the log ratio. <bookmark mark='c'/> The numerator is small: the tests show that alternatives outside "
-            "U lose likelihood at an exponential rate c. <bookmark mark='d'/> Choose epsilon below c and the ratio vanishes "
-            "exponentially."
+            "<bookmark mark='a'/> Why it works. Write the posterior mass outside U as a ratio of integrals of likelihood ratios against the truth. <bookmark mark='b'/> The denominator cannot be too small: the prior has mass near the truth, where the likelihood ratio decays at most like e to the minus n epsilon, by the law of large numbers applied to the log ratio. <bookmark mark='c'/> Multiply the numerator by one minus the test. Uniform type-two error controls the expectation of this test-weighted integral; small type-one error controls the event where the test rejects. The raw numerator need not itself have exponentially small expectation. <bookmark mark='d'/> Choose epsilon below c and the ratio vanishes exponentially."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -70,13 +65,14 @@ class Schwartz(VoiceoverScene):
     def chart(self):
         d = load("schwartz")
         th = np.asarray(d["theta"])
-        A = axes([-1.5, 3.2], [0, 14], x_length=7.4, y_length=4.4, xlabel=r"$\theta$ \ (the truth is $\theta_0 = 0$)", ylabel=r"posterior density",
-                 xticks=[-1, 0, 1, 2, 3], yticks=[0, 4, 8, 12], center=[-2.5, 0.2, 0])
+        top = np.log10(1 + max(max(v["good"]) for v in d["post"].values()) + max(max(v["bad"]) for v in d["post"].values())) + .08
+        A = axes([-1.5, 3.2], [0, top], x_length=7.4, y_length=4.4, xlabel=r"$\theta$ \ (the truth is $\theta_0 = 0$)", ylabel=r"$\log_{10}(1+\mathrm{density})$",
+                 xticks=[-1, 0, 1, 2, 3], yticks=[0, 1, 2, 3], center=[-2.5, 0.2, 0])
         ax = A.ax
-        g = {k: clip_curve(ax, th, v["good"], POSTC, 3 + i, ymin=0, ymax=14) for i, (k, v) in enumerate(d["post"].items())}
-        b = {k: clip_curve(ax, th, v["bad"], BADC, 3 + i, ymin=0, ymax=14) for i, (k, v) in enumerate(d["post"].items())}
+        g = {k: clip_curve(ax, th, np.log10(1+np.asarray(v["good"])), POSTC, 3 + i, ymin=0, ymax=top) for i, (k, v) in enumerate(d["post"].items())}
+        b = {k: clip_curve(ax, th, np.log10(1+np.asarray(v["bad"])), BADC, 3 + i, ymin=0, ymax=top) for i, (k, v) in enumerate(d["post"].items())}
         supp = Rectangle(width=ax.c2p(3, 0)[0] - ax.c2p(1, 0)[0], height=0.18, fill_color=PRIORC, fill_opacity=0.5, stroke_width=0).move_to(ax.c2p(2, 0.3))
-        zero = DashedLine(ax.c2p(0, 0), ax.c2p(0, 14), color=TRUTHC, stroke_width=2.5)
+        zero = DashedLine(ax.c2p(0, 0), ax.c2p(0, top), color=TRUTHC, stroke_width=2.5)
         side = fit_rows(VGroup(
             label(r"$X_i \sim N(\theta_0, 1)$, \ $\theta_0 = 0$; \ $n = 10, \ 100, \ 1{,}000$", font_size=22),
             label(r"blue: \ prior $N(0, 10)$: \ KL support everywhere", font_size=22, color=POSTC),
@@ -115,6 +111,9 @@ class Schwartz(VoiceoverScene):
         ]
         rows[3][-1].set_color(GOODC)
         whys = [why(r"Barron, \ Schervish \& Wasserman (1999)"), why(r"Part 48's entropy"), why(r"the prior's tails"), why(r"for densities")]
+        heading = label('A sieve balances testing complexity against prior mass outside it', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> For densities, tests against everything outside a neighbourhood can be hard to build directly. Andrew Barron, Mark Schervish and Larry Wasserman's way around it, in 1999, splits the model into a sieve and the rest. <bookmark mark='b'/> On the sieve, the covering numbers must grow at most exponentially in n, slowly enough that tests exist, by the entropy arguments of Part forty-eight. <bookmark mark='c'/> Off it, the prior's mass must be exponentially small, so the posterior can ignore it. <bookmark mark='d'/> Then the posterior is consistent in Hellinger distance. The same split, made quantitative, is the next chapter's theorem."
         ) as vo:
@@ -129,16 +128,11 @@ class Schwartz(VoiceoverScene):
             label(r"where the conditions come from in practice:", font_size=28, color=GREY_A),
             label(r"KL support: \ a Dirichlet-process mixture of normals has it for most smooth densities", font_size=26, color=POSTC),
             label(r"tests: \ exist when the model is not too large, \ measured by entropy (Part 48)", font_size=26, color=FREQC),
-            label(r"Diaconis--Freedman's prior fails the first: \ the DP itself is discrete, \ with no KL support", font_size=26, color=BADC),
+            label(r"a direct DP lacks KL support at densities; \ weak consistency can still hold", font_size=26, color=BADC),
             label(r"next: \ the same two ingredients, \ quantified, \ give rates", font_size=26, color=GOODC),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Where the conditions come from in practice. <bookmark mark='b'/> Kullback–Leibler support "
-            "holds for Dirichlet-process mixtures of normals at most smooth densities, as Subhashis Ghosal, Jayanta Ghosh and "
-            "R. V. Ramamoorthi showed in 1999. <bookmark mark='c'/> Tests exist when the model is not too large, measured by "
-            "the entropy of Part forty-eight. <bookmark mark='d'/> And Diaconis and Freedman's prior fails the first "
-            "condition: a Dirichlet process draws discrete distributions, which have infinite Kullback–Leibler divergence from "
-            "any density. <bookmark mark='e'/> Next, the same two ingredients, quantified, give rates."
+            "<bookmark mark='a'/> Where the conditions come from in practice. <bookmark mark='b'/> Kullback–Leibler support holds for Dirichlet-process mixtures of normals at most smooth densities, as Subhashis Ghosal, Jayanta Ghosh and R. V. Ramamoorthi showed in 1999. <bookmark mark='c'/> Tests exist when the model is not too large, measured by the entropy of Part forty-eight. <bookmark mark='d'/> And A Dirichlet process draws discrete distributions, so a continuous truth is not in its KL support as a prior directly on sampling distributions. KL support is sufficient, not necessary for every mode of consistency: DP posterior CDFs can still be weakly consistent. The location counterexample needs its own model-specific argument. <bookmark mark='e'/> Next, the same two ingredients, quantified, give rates."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

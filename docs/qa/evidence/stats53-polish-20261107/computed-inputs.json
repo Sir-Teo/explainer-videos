@@ -1,0 +1,74 @@
+[
+  {
+    "name": "doob",
+    "path": ".cache/stats53/doob.json",
+    "sha256": "7dbfdcdd9ebaaf35cb37f780819e620b402e3445de1cbd9a63c4fe3fd63c5854",
+    "bytes": 34495
+  },
+  {
+    "name": "schwartz",
+    "path": ".cache/stats53/schwartz.json",
+    "sha256": "9ff31bd022dce32de8ce45299008397b986ba24f17fe909b46bb8dcdec9ddd9a",
+    "bytes": 152791
+  },
+  {
+    "name": "rates",
+    "path": ".cache/stats53/rates.json",
+    "sha256": "589101dc55c7b7cc1d2988bcbd70ab9538bd914b470009a4d7bf21f343d2196e",
+    "bytes": 6342
+  },
+  {
+    "name": "bvm",
+    "path": ".cache/stats53/bvm.json",
+    "sha256": "1083b1a95784f11a3381712227178011c6455a76763e3aa27aa49e56fb859914",
+    "bytes": 604
+  },
+  {
+    "name": "semipar",
+    "path": ".cache/stats53/semipar.json",
+    "sha256": "f8712ee71c09ae79a80b583e23de93b6b2313a9b84bad1abf7f9457def8afd1a",
+    "bytes": 4829
+  },
+  {
+    "name": "dp",
+    "path": ".cache/stats53/dp.json",
+    "sha256": "b7bcbd9bedb22c010827deffb847e936b39b32c0c75421ba6f1a0fb37dd450a8",
+    "bytes": 69300
+  },
+  {
+    "name": "gp",
+    "path": ".cache/stats53/gp.json",
+    "sha256": "5617ecf69accfb8c46b23a74cecf918466b6952c0e0a44c1cdaa3b89316c84b8",
+    "bytes": 1258
+  },
+  {
+    "name": "adapt",
+    "path": ".cache/stats53/adapt.json",
+    "sha256": "38b6cecde60c6faa1c87e95c76729558623e4c1733599f50857f409ade51445f",
+    "bytes": 3499
+  },
+  {
+    "name": "bands",
+    "path": ".cache/stats53/bands.json",
+    "sha256": "be305dc84d9c2c0a8a2784f9fbedb99a2fe3db8f1f9ac5829a913eac0c93853a",
+    "bytes": 143507
+  },
+  {
+    "name": "hdbayes",
+    "path": ".cache/stats53/hdbayes.json",
+    "sha256": "cdb82f54e5a04bd000d2810a2695c692a1dfbaad7b1b8ab0c852dd8a84355c61",
+    "bytes": 5386
+  },
+  {
+    "name": "misspec",
+    "path": ".cache/stats53/misspec.json",
+    "sha256": "0428b2d39356dbca209b6339ed55f31013a176a56edb2cc68c25c3efe1a86b91",
+    "bytes": 188
+  },
+  {
+    "name": "board",
+    "path": ".cache/stats53/board.json",
+    "sha256": "0605dadb6b489b57c03e9dfa0d852515930f7d92d8d50849dc87ac3f921fe396",
+    "bytes": 49280
+  }
+]

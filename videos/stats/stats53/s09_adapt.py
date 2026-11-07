@@ -30,6 +30,9 @@ class Adaptation(VoiceoverScene):
         ]
         rows[3][-1].set_color(GOODC)
         whys = [why(r"type-II maximum likelihood"), why(r"a prior on the prior"), why(r"the marginal likelihood"), why(r"Knapik, \ Szabó et al. (2016)")]
+        heading = label('Empirical and hierarchical Bayes select or average hyperparameters', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
             "<bookmark mark='a'/> Two ways to choose the smoothness from the data. Empirical Bayes maximizes the marginal "
             "likelihood, the probability of the data with the parameter integrated out. <bookmark mark='b'/> Hierarchical "
@@ -49,7 +52,7 @@ class Adaptation(VoiceoverScene):
         g = np.asarray(d["grid"])
         ll = np.asarray(d["ll"])
         ll = ll - ll.max()
-        A = axes([0.2, 3.0], [-60, 3], x_length=7.4, y_length=4.4, xlabel=r"prior smoothness $\alpha$", ylabel=r"log marginal likelihood (max $= 0$)",
+        A = axes([0.2, 3.0], [-60, 3], x_length=7.4, y_length=4.4, xlabel=r"prior smoothness $\alpha$", ylabel=r"log marginal likelihood (max $=0$; displayed window $\ge-60$)",
                  xticks=[0.5, 1, 1.5, 2, 2.5, 3], yticks=[-60, -40, -20, 0], center=[-2.5, 0.2, 0])
         ax = A.ax
         c = clip_curve(ax, g, ll, PRIORC, 4, ymin=-60, ymax=3)
@@ -84,25 +87,20 @@ class Adaptation(VoiceoverScene):
     def table(self):
         d = load("adapt")
         rows = [[r"$n$"] + [f"$10^{{{int(np.log10(r['n']))}}}$" for r in d["rows"]],
-                [r"$\hat\alpha$ \ (mean, \ 20 data sets)"] + [f"{r['alpha_hat']:.2f}" for r in d["rows"]],
+                [r"$\hat\alpha$ \ (mean, \ 200 data sets)"] + [f"{r['alpha_hat']:.2f}" for r in d["rows"]],
                 [r"SD of $\hat\alpha$"] + [f"{r['alpha_sd']:.2f}" for r in d["rows"]],
-                [r"EB risk / best fixed $\alpha$"] + [f"{r['risk'] / r['oracle']:.3f}" for r in d["rows"]]]
-        tab = table_rows(rows, font_size=28, col_buff=0.7, row_buff=0.42, colors=[GREY_B, BALLC, GREY_A, GOODC])
+                [r"EB risk / best fixed $\alpha$"] + [f"{r['risk'] / r['oracle']:.3f}" for r in d["rows"]],
+                [r"MCSE of risk ratio"] + [f"{r['risk_mcse'] / r['oracle']:.3f}" for r in d["rows"]]]
+        tab = table_rows(rows, font_size=28, col_buff=0.7, row_buff=0.42, colors=[GREY_B, BALLC, GREY_A, GOODC, GREY_B])
         tab.move_to([0, 0.9, 0])
         rr = d["rows"]
         foot = label(r"$\hat\alpha$ drifts towards $\beta = 1$ \ and steadies; \ the risk approaches the oracle's", font_size=24, color=GREY_A).move_to([0, -1.2, 0])
-        foot2 = label(r"empirical Bayes costs almost nothing in risk", font_size=24, color=GOODC).move_to([0, -2.0, 0])
+        foot2 = label(r"actual selected-estimator risk; \ Monte Carlo error reported", font_size=24, color=GOODC).move_to([0, -2.0, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Over twenty data sets at each size. The estimated smoothness averages "
-            f"{say(rr[0]['alpha_hat'], 2)} at a hundred observations and {say(rr[-1]['alpha_hat'], 2)} at a million, with "
-            f"its spread shrinking from {say(rr[0]['alpha_sd'], 2)} to {say(rr[-1]['alpha_sd'], 2)}. <bookmark mark='b'/> "
-            f"The empirical Bayes posterior's risk is within {100 * (rr[0]['risk'] / rr[0]['oracle'] - 1):.0f} percent of the "
-            f"best fixed smoothness's at a hundred, and within {100 * (rr[-1]['risk'] / rr[-1]['oracle'] - 1):.1f} percent at a "
-            f"million. <bookmark mark='c'/> For estimation, adaptation is nearly free, as Part fifty found for Lepski's "
-            f"method."
+            f"<bookmark mark='a'/> Over two hundred independent data sets at each size. The risk is the squared error of the estimator chosen using that very data set, not a fixed-alpha risk formula evaluated after selection. The estimated smoothness averages {say(rr[0]['alpha_hat'], 2)} at a hundred observations and {say(rr[-1]['alpha_hat'], 2)} at a million, with its spread shrinking from {say(rr[0]['alpha_sd'], 2)} to {say(rr[-1]['alpha_sd'], 2)}. <bookmark mark='b'/> The empirical Bayes posterior's risk is within {100 * (rr[0]['risk'] / rr[0]['oracle'] - 1):.0f} percent of the best fixed smoothness's at a hundred, and within {100 * (rr[-1]['risk'] / rr[-1]['oracle'] - 1):.1f} percent at a million. <bookmark mark='c'/> These are Monte Carlo risk comparisons against the best fixed candidate, with a reported simulation error. They do not prove uniformly negligible adaptation cost."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(tab), FadeIn(simulated_tag(r"simulated; \ risks exact")))
+            self.play(FadeIn(tab), FadeIn(simulated_tag(r"simulated fitted-estimator risk; \ fixed-candidate oracle exact")))
             vo.wait_until("b")
             self.play(FadeIn(foot))
             vo.wait_until("c")
@@ -118,8 +116,11 @@ class Adaptation(VoiceoverScene):
         ]
         rows[3][-1].set_color(GOODC)
         whys = [why(r"the score in $\alpha$"), why(r"method of moments, \ weighted"), why(r"the bias--variance frontier"), why(r"and only there")]
+        heading = label('The marginal score sees energy near the signal-to-noise frontier', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> Why does the marginal likelihood find the smoothness? Set its derivative in alpha to zero. <bookmark mark='b'/> The equation matches the observed energy at each frequency, Y k squared, to the energy the prior predicts, lambda k plus one over n, a weighted method of moments. <bookmark mark='c'/> The weights concentrate the information around the frequency where signal and noise are of the same size, about n to the one over one plus two beta. <bookmark mark='d'/> So alpha hat measures the truth's smoothness at the critical frequency, and only there. If the truth behaves differently elsewhere, as an inconvenient truth does, alpha hat is fooled."
+            "<bookmark mark='a'/> Why does the marginal likelihood find the smoothness? Set its derivative in alpha to zero. <bookmark mark='b'/> For an interior continuous optimum the score equation matches the observed energy at each frequency, Y k squared, to the energy the prior predicts, lambda k plus one over n, a weighted method of moments. <bookmark mark='c'/> The weights concentrate the information around the frequency where signal and noise are of the same size, about n to the one over one plus two beta. <bookmark mark='d'/> So alpha hat measures the truth's smoothness at the critical frequency, and only there. If the truth behaves differently elsewhere, as an inconvenient truth does, alpha hat is fooled."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -132,12 +133,15 @@ class Adaptation(VoiceoverScene):
             cmath(r"\text{hierarchical}", r":", r"\pi(\alpha \mid Y) \propto \lambda(\alpha)\, p(Y \mid \alpha)", font_size=34),
             cmath(r"\text{concentrates}", r":", r"\text{around } \hat\alpha \text{ as } n \text{ grows}", font_size=34),
             cmath(r"\text{so}", r":", r"\text{hierarchical} \approx \text{empirical Bayes, \ asymptotically}", font_size=34),
-            cmath(r"\text{in practice}", r":", r"\text{a little more honesty in small samples}", font_size=32),
+            cmath(r"\text{in practice}", r":", r"\text{hyperparameter averaging does not guarantee better coverage}", font_size=32),
         ]
         rows[2][-1].set_color(GOODC)
         whys = [why(r"a posterior over priors"), why(r"Knapik et al. (2016)"), why(r"same rates"), why(r"the full-Bayes argument")]
+        heading = label('Hyperparameter averaging does not guarantee improved frequentist coverage', font_size=34).move_to([0, 3.3, 0])
+        if heading.width > 12.5: heading.width = 12.5
+        self.add(heading)
         with self.voiceover(
-            "<bookmark mark='a'/> The hierarchical alternative puts a prior on alpha and lets the data update it, the posterior over alpha being the prior times the marginal likelihood. <bookmark mark='b'/> That posterior concentrates around the empirical Bayes choice. <bookmark mark='c'/> So asymptotically the two behave the same, with the same rates and the same coverage problems. <bookmark mark='d'/> In small samples, the spread of the posterior over alpha propagates into the credible sets, which makes them a little wider and a little more honest: the usual argument for being fully Bayesian."
+            "<bookmark mark='a'/> The hierarchical alternative puts a prior on alpha and lets the data update it, the posterior over alpha being the prior times the marginal likelihood. <bookmark mark='b'/> That posterior concentrates around the empirical Bayes choice. <bookmark mark='c'/> So asymptotically the two behave the same, with the same rates and the same coverage problems. <bookmark mark='d'/> In small samples, the spread of the posterior over alpha propagates into the credible sets, which can change their width, but does not by itself guarantee better frequentist coverage: the usual argument for being fully Bayesian."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -154,12 +158,7 @@ class Adaptation(VoiceoverScene):
             label(r"which truths? \ the next chapter, \ and the Board", font_size=26, color=BALLC),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> But for uncertainty quantification, adaptation has a price, as Mark Low's theorem in Part "
-            "fifty warned. <bookmark mark='b'/> The posterior's spread depends on the estimated smoothness. If the data make "
-            "alpha hat too large, the posterior is too confident and the credible ball too small. <bookmark mark='c'/> For "
-            "most truths alpha hat is about right, and a modestly inflated ball covers. <bookmark mark='d'/> For some truths, "
-            "alpha hat is fooled, and no fixed inflation rescues coverage at every sample size. <bookmark mark='e'/> Which "
-            "truths those are is the next chapter's question."
+            "<bookmark mark='a'/> But for uncertainty quantification, adaptation has a price, as Mark Low's theorem in Part fifty warned. <bookmark mark='b'/> The posterior's spread depends on the estimated smoothness. If the data make alpha hat too large, the posterior is too confident and the credible ball too small. <bookmark mark='c'/> For suitable tail-regular truths in the covered regime, and a modestly inflated ball covers. <bookmark mark='d'/> For some truths, alpha hat is fooled, and no fixed inflation rescues coverage at every sample size. <bookmark mark='e'/> Which truths those are is the next chapter's question."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
