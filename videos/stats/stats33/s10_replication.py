@@ -81,6 +81,8 @@ class Replication(VoiceoverScene):
             label(r"$\alpha = 0.05$; \ prior = the share of tested effects that are real", font_size=22),
             label(r"low priors and low power make most positive findings false, \ before any misconduct", font_size=22, color=FALSEC),
         ), 12.0, 0.22, [0, -1.9, 0])
+        # Keep the header readable while the four-second row entrance begins.
+        self.add(tb[0], foot[0])
         with self.voiceover(
             "<bookmark mark='a'/> Some cases. A confirmatory trial of a plausible treatment, with even odds, good power and "
             "no bias: ninety-four percent of positive results are true. A well-powered field with a quarter of tested "
@@ -89,7 +91,7 @@ class Replication(VoiceoverScene):
             "low power make most positive findings false, with no misconduct at all."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(tb[0]), LaggedStart(*[FadeIn(r) for r in tb[1:]], lag_ratio=0.4), FadeIn(foot[0]), run_time=4.0)
+            self.play(LaggedStart(*[FadeIn(r) for r in tb[1:]], lag_ratio=0.4), run_time=4.0)
             vo.wait_until("b")
             self.play(FadeIn(foot[1]))
         self.clear_scene()

@@ -136,6 +136,10 @@ class Remedies(VoiceoverScene):
         self.clear_scene()
 
     def position(self):
+        heading = label(r"Count the questions; report the uncertainty", font_size=36).move_to([0, 3.3, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         rows = fit_rows(VGroup(
             label(r"this course's position", font_size=28),
             label(r"count your questions, \ including the analyses you did not report", font_size=26, color=BHC),
