@@ -158,7 +158,7 @@ class PoSI(VoiceoverScene):
 
     def verdict(self):
         rows = fit_rows(VGroup(
-            label(r"PoSI's strengths:", font_size=28, color=GREY_A),
+            label(r"PoSI: simultaneous protection for any selection rule", font_size=36, color=WHITE),
             label(r"valid for any selection, \ including informal snooping a paper never reports", font_size=26, color=HYBC),
             label(r"needs no model of how the selection was made", font_size=26, color=HYBC),
             label(r"its weaknesses:", font_size=28, color=GREY_A),

@@ -124,14 +124,14 @@ class ConformalSelection(VoiceoverScene):
 
     def lesson(self):
         rows = fit_rows(VGroup(
-            label(r"what it shows:", font_size=28, color=GREY_A),
-            label(r"selection with a guarantee needs no model of $Y$ given $X$, \ the stated sampling conditions", font_size=26, color=HYBC),
+            label(r"Selection guarantees require the stated sampling assumptions", font_size=36, color=WHITE),
+            label(r"selection can avoid a model of $Y$ given $X$; \ sampling conditions still matter", font_size=26, color=HYBC),
             label(r"power depends on the score; \ validity needs the sampling assumptions", font_size=26, color=CONDC),
             label(r"the same pattern as knockoffs: \ a reference set that mimics the nulls", font_size=26, color=SPLITC),
             label(r"next: \ the oldest selection of all, \ picking the winner", font_size=26, color=SELC),
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> What it shows. <bookmark mark='b'/> Selection with a guarantee needs no model of the outcome given the features, the independent sampling assumptions used here, or the paper's stronger conditional exchangeability conditions. <bookmark mark='c'/> The predictor's quality decides the power, while validity also requires those sampling conditions and separate training. <bookmark mark='d'/> And the pattern is the same as for knockoffs: a reference set that behaves like the nulls, against which the candidates are ranked. <bookmark mark='e'/> Next, the oldest selection of all: picking the winner."
+            "<bookmark mark='a'/> What it shows. <bookmark mark='b'/> Selection with a guarantee needs no model of the outcome given the features, but it does need the independent sampling assumptions used here, or the paper's stronger conditional exchangeability conditions. <bookmark mark='c'/> The predictor's quality decides the power, while validity also requires those sampling conditions and separate training. <bookmark mark='d'/> And the pattern is the same as for knockoffs: a reference set that behaves like the nulls, against which the candidates are ranked. <bookmark mark='e'/> Next, the oldest selection of all: picking the winner."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
