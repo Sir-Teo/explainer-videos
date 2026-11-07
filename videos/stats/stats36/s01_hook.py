@@ -22,18 +22,19 @@ class Hook(VoiceoverScene):
                           color=Y1C, width=11.2, font_size=22).move_to([0, 0.9, 0])
         rows = fit_rows(VGroup(
             label(r"if the methods work, \ they should agree with the experiment", font_size=24),
-            label(r"they did not: \ estimates scattered widely, \ some far from the truth, \ some of the wrong sign", font_size=24, color=MISSC),
+            label(r"they did not: \ estimates scattered widely, \ some far from the experimental estimate, \ some of the wrong sign", font_size=24, color=MISSC),
         ), 12.0, 0.35, [0, -1.7, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In 1986 the economist Robert LaLonde, fresh from his doctorate at Princeton, published one of the most "
-            "influential tests in social science. The National Supported Work Demonstration of the mid-1970s had randomly "
-            "assigned disadvantaged workers, many of them ex-offenders and former addicts, either to a programme of "
-            "subsidized work experience or to a control group. LaLonde kept the programme's participants, threw away the "
-            "randomized controls, and replaced them with men drawn from national surveys. Then he asked the econometric "
-            "methods of the day to recover the experimental answer. <bookmark mark='b'/> If the methods worked, they would "
-            "agree with the experiment. <bookmark mark='c'/> They did not. The estimates scattered widely, many far from the "
-            "experimental benchmark and some with the wrong sign, and the specification tests of the time could not tell "
-            "the good ones from the bad."
+            "<bookmark mark='a'/> In 1986 the economist Robert LaLonde, fresh from his doctorate at Princeton, "
+            "published one of the most influential tests in social science. The National Supported Work Demonstration"
+            " of the mid-1970s had randomly assigned disadvantaged workers, many of them ex-offenders and former "
+            "addicts, either to a programme of subsidized work experience or to a control group. LaLonde kept the "
+            "programme's participants, threw away the randomized controls, and replaced them with men drawn from "
+            "national surveys. Then he asked the econometric methods of the day to recover the experimental answer. "
+            "<bookmark mark='b'/> If the methods targeted the same effect under valid assumptions, their estimates "
+            "should be compatible with the experiment's sampling uncertainty. <bookmark mark='c'/> They did not. The "
+            "estimates scattered widely, many far from the experimental benchmark and some with the wrong sign, and "
+            "the specification tests of the time could not tell the good ones from the bad."
         ) as vo:
             self.play(FadeIn(tl))
             vo.wait_until("a")
@@ -50,14 +51,15 @@ class Hook(VoiceoverScene):
             label(rf"Dehejia \& Wahba's subsample: \ {d['n']['treated']} trainees, \ {d['n']['exp_control']} randomized controls", font_size=26),
             label(r"outcome: \ earnings in 1978, \ after the programme (1982 dollars)", font_size=26),
             label(rf"the experiment: \ \${d['exp']['est']:,.0f} \ (95\% CI \${d['exp']['lo']:,.0f} to \${d['exp']['hi']:,.0f})", font_size=26, color=BANDC),
-            label(r"a benchmark no observational study gets", font_size=26, color=TAUC),
+            label(r"a randomized benchmark, \ with its own sampling uncertainty", font_size=26, color=TAUC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The data have been reanalysed ever since. In the subsample that Rajeev Dehejia and Sadek "
-            "Wahba used in 1999, one hundred and eighty-five men took part in the programme and two hundred and sixty were "
-            "randomized controls. <bookmark mark='b'/> The outcome is earnings in 1978, after the programme. <bookmark "
-            "mark='c'/> The experiment says the programme raised earnings by about one thousand eight hundred dollars, with a "
-            "wide interval. <bookmark mark='d'/> It is a benchmark that an observational study, by definition, never gets."
+            "<bookmark mark='a'/> The data have been reanalysed ever since. In the subsample that Rajeev Dehejia and "
+            "Sadek Wahba used in 1999, one hundred and eighty-five men took part in the programme and two hundred and"
+            " sixty were randomized controls. <bookmark mark='b'/> The outcome is earnings in 1978, after the "
+            "programme. <bookmark mark='c'/> The experiment says the programme raised earnings by about one thousand "
+            "eight hundred dollars, with a wide interval. <bookmark mark='d'/> This noisy experimental estimate "
+            "provides a valuable benchmark; it is not the exact treatment effect."
         ) as vo:
             self.add(nsw_tag())
             for k, m_ in enumerate("abcd"):
@@ -78,11 +80,12 @@ class Hook(VoiceoverScene):
             label(r"randomization made the first two columns alike; \ nothing makes the third", font_size=24, color=MISSC),
         ), 12.4, 0.35, [0, -1.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Now do what LaLonde did: replace the randomized controls with four hundred and twenty-nine "
-            "men from the Panel Study of Income Dynamics, a national household survey. <bookmark mark='b'/> The trainees and "
-            "the randomized controls look alike, because a coin divided them. <bookmark mark='c'/> The survey men do not. "
-            "They are older, far more likely to be married, much less likely to be black, and in 1974 earned more than twice "
-            "as much. Nothing made them comparable."
+            "<bookmark mark='a'/> Following LaLonde's comparison strategy, replace the randomized controls with the "
+            "four hundred and twenty-nine comparison men in the MatchIt teaching data from the Panel Study of Income "
+            "Dynamics, a national household survey. <bookmark mark='b'/> The trainees and the randomized controls "
+            "look alike, because a coin divided them. <bookmark mark='c'/> The survey men do not. They are older, far"
+            " more likely to be married, much less likely to be black, and in 1974 earned more than twice as much. "
+            "Nothing made them comparable."
         ) as vo:
             self.add(nsw_tag())
             vo.wait_until("a")

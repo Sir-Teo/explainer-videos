@@ -37,9 +37,8 @@ class Sensitivity(VoiceoverScene):
             "which no data set records. <bookmark mark='b'/> Frail patients are treated more often, and their pressure would "
             "be higher anyway. <bookmark mark='c'/> Adjusting for the four recorded covariates gives minus "
             + say(-d["est"], 1) + ", with a small standard error. <bookmark mark='d'/> The truth is minus " + say(-d["ate"], 1)
-            + "; had frailty been measured, adjusting for it would have given minus " + say(-d["est_with_u"], 1) + ". <bookmark "
-            "mark='e'/> Nothing in the data reveals the problem. What we can do is ask how strong an unmeasured confounder "
-            "would have to be to change the conclusion."
+            + "; had frailty been measured, adjusting for it would have given minus " + say(-d["est_with_u"], 1) + ". <bookmark mark='e'/> The observed data alone do not generally identify this hidden-confounding bias. "
+            "What we can do is ask how strong an unmeasured confounder would have to be to change the conclusion."
         ) as vo:
             self.add(obs_tag())
             for k, m_ in enumerate("abcde"):
@@ -51,20 +50,25 @@ class Sensitivity(VoiceoverScene):
         rows = [
             cmath(r"\text{matched pair } j", r":", r"\text{under no hidden bias, \ each member equally likely treated}", font_size=28),
             cmath(r"\text{hidden bias } \Gamma", r":", r"\tfrac{1}{\Gamma} \le \tfrac{\text{odds}_i}{\text{odds}_{i'}} \le \Gamma", font_size=30),
-            cmath(r"\text{for each } \Gamma", r":", r"\text{the worst-case } p\text{-value of the signed-rank test}", font_size=28),
+            cmath(r"\text{for each } \Gamma", r":", r"\text{the exact worst-case one-sided } p\text{-value of the signed-rank test}", font_size=28),
             cmath(r"\Gamma^\star", r":", r"\text{the smallest } \Gamma \text{ that makes it insignificant}", font_size=30),
         ]
         rows[3][-1].set_color(TAUC)
         whys = [why(r"a coin within the pair"), why(r"two patients alike on $X$ may differ in odds by $\Gamma$"),
                 why(r"Rosenbaum (1987, 2002)"), why(r"a one-number summary of robustness")]
         with self.voiceover(
-            "<bookmark mark='a'/> Paul Rosenbaum's approach starts from matched pairs. If there is no hidden bias, the two "
-            "members of a pair, alike on the measured covariates, were equally likely to be the treated one: a coin within "
-            "each pair. <bookmark mark='b'/> Hidden bias of size gamma allows their odds of treatment to differ by up to a "
-            "factor gamma, because of something unmeasured. <bookmark mark='c'/> For each gamma, compute the worst p-value "
-            "of the signed-rank test over all the ways the hidden bias could act. <bookmark mark='d'/> The smallest gamma "
-            "that makes the effect insignificant summarizes how robust the finding is."
+            "<bookmark mark='a'/> Paul Rosenbaum's approach starts from matched pairs. If there is no hidden bias, "
+            "the two members of a pair, alike on the measured covariates, were equally likely to be the treated one: "
+            "a coin within each pair. <bookmark mark='b'/> Hidden bias of size gamma allows their odds of treatment "
+            "to differ by up to a factor gamma, because of something unmeasured. <bookmark mark='c'/> For each gamma,"
+            " compute a worst-case one-sided signed-rank tail probability under the sharp null and the matched-pair "
+            "assignment model. We compute the signed-rank tail by exact dynamic programming over independent pair "
+            "signs, including average-rank ties. <bookmark mark='d'/> The smallest gamma that makes the effect "
+            "insignificant summarizes how robust the finding is."
         ) as vo:
+            intro=label('A matched-pair sensitivity model limits hidden assignment odds',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -82,19 +86,19 @@ class Sensitivity(VoiceoverScene):
         line = VGroup(polyline(ax, gs, lp, PSC, 3), *[Dot(ax.c2p(g, v), radius=0.06, color=PSC) for g, v in zip(gs, lp)])
         sig = DashedLine(ax.c2p(1, -np.log10(0.05)), ax.c2p(7, -np.log10(0.05)), color=MISSC, stroke_width=2)
         side = fit_rows(VGroup(
-            label(r"the World's frailty study, \ treated matched to untreated", font_size=22),
+            label(rf"frailty study: \ {d['world_pairs']} disjoint pairs; \ logit-score caliper", font_size=22),
             label(rf"matched estimate: \ ${d['world_match']:.1f}$ mm Hg", font_size=22, color=Y0C),
             label(rf"still significant until $\Gamma^\star \approx {d['gamma_star']:.1f}$", font_size=22, color=TAUC),
             label(r"the real frailty biases the size, \ not the sign", font_size=22, color=MISSC),
         ), 4.2, 0.42, [4.6, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In the World's frailty study, matching each treated patient to an untreated one on the "
-            "recorded covariates, <bookmark mark='b'/> the matched estimate is minus " + say(-d["world_match"], 1) + ". "
-            "<bookmark mark='c'/> The effect is so strong that it stays significant until gamma is nearly seven: an "
-            "unmeasured confounder would have to change the odds of treatment sevenfold between otherwise identical "
-            "patients to explain it away. <bookmark mark='d'/> The real frailty here is much weaker than that. It biases the "
-            "size of the effect, but could never reverse its sign. Rosenbaum's analysis answers the second question, not the "
-            "first."
+            "<bookmark mark='a'/> In the World's frailty study, we form disjoint pairs without reusing controls, "
+            "using a caliper on the estimated logit propensity score. Unmatched treated patients are omitted. "
+            "<bookmark mark='b'/> the matched estimate is minus " + say(-d["world_match"], 1) + ". <bookmark mark='c'/> The displayed gamma threshold describes loss of significance for this matched "
+            "sample under the sensitivity model. Approximate matching also leaves some measured-covariate imbalance. "
+            "<bookmark mark='d'/> The simulator tells us that the average effect is negative despite substantial bias"
+            " in its estimated size. The sensitivity threshold alone does not establish the actual confounder's "
+            "strength, identify the causal sign, or bound all estimation bias."
         ) as vo:
             self.add(obs_tag())
             self.play(FadeIn(A), Create(sig), FadeIn(side[0]))
@@ -110,20 +114,25 @@ class Sensitivity(VoiceoverScene):
         rows = [
             cmath(r"\text{observed risk ratio}", r":", r"RR", font_size=32),
             cmath(r"E", r"=", r"RR + \sqrt{RR\,(RR - 1)}", font_size=34),
-            cmath(r"\text{meaning}", r":", r"\text{a confounder associated with both by } RR \ge E \text{ could explain it}", font_size=26),
+            cmath(r"\text{meaning}", r":", r"\text{equal strengths } E; \ \text{otherwise use } B=ab/(a+b-1)", font_size=26),
             cmath(r"RR = 2", r"\Rightarrow", r"E = 3.41", font_size=32),
         ]
         rows[1][-1].set_color(TAUC)
         whys = [why(r"e.g. a cohort study"), why(r"VanderWeele \& Ding (2017)"),
-                why(r"weaker confounding cannot"), why(r"a single number to report")]
+                why(r"both associations below $E$ are insufficient"), why(r"a single number to report")]
         with self.voiceover(
-            "<bookmark mark='a'/> For risk ratios, Tyler VanderWeele and Peng Ding proposed in 2017 a number that is easy to "
-            "report. Given an observed risk ratio, <bookmark mark='b'/> the E-value is the risk ratio plus the square root "
-            "of the risk ratio times the risk ratio minus one. <bookmark mark='c'/> An unmeasured confounder could explain "
-            "away the observed association only if it were associated with both treatment and outcome by risk ratios of at "
-            "least E; weaker confounding cannot, whatever its form. <bookmark mark='d'/> An observed risk ratio of two needs "
-            "a confounder of strength three point four one."
+            "<bookmark mark='a'/> For risk ratios, Tyler VanderWeele and Peng Ding proposed in 2017 a number that is "
+            "easy to report. Given an observed risk ratio, <bookmark mark='b'/> the E-value is the risk ratio plus "
+            "the square root of the risk ratio times the risk ratio minus one. <bookmark mark='c'/> The E-value is an"
+            " equal-strength threshold: if both sensitivity associations are below E, this confounding bound cannot "
+            "explain the association. One association can be smaller than E if the other is sufficiently larger. "
+            "Their trade-off is the product divided by the sum minus one, under the specified risk-ratio sensitivity "
+            "model. <bookmark mark='d'/> For a risk ratio of two, the equal-strength threshold is three point four "
+            "one. An association of ten on one side and three on the other can also exceed the required bias factor."
         ) as vo:
+            intro=label('The E-value is an equal-strength threshold with unequal-strength tradeoffs',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -149,6 +158,9 @@ class Sensitivity(VoiceoverScene):
             "the t statistic alone. <bookmark mark='d'/> And it can be benchmarked: compare it with how much the strongest "
             "measured covariate explains."
         ) as vo:
+            intro=label('Robustness values describe sensitivity of a specified regression',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -161,15 +173,16 @@ class Sensitivity(VoiceoverScene):
             label(rf"$t = {d['t']:.1f}$ \ on {d['dof']:,} df", font_size=26),
             label(rf"robustness value: \ {d['rv']:.2f}; \ to lose significance at 5\%: \ {d['rv_sig']:.2f}", font_size=26, color=TAUC),
             label(rf"the actual frailty: \ partial $R^2$ {d['r2_tu']:.3f} with treatment, \ {d['r2_yu']:.3f} with outcome", font_size=26, color=MISSC),
-            label(r"far below 0.30: \ the sign is safe; \ the size, \ as we know, \ is not", font_size=26, color=BANDC),
+            label(r"this actual frailty leaves a negative coefficient; \ its size is still biased", font_size=26, color=BANDC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> In the frailty study, the adjusted estimate has a t statistic of about minus twenty. "
-            "<bookmark mark='b'/> Its robustness value is " + say(d["rv"]) + ": a confounder explaining thirty percent of the "
-            "residual variation in both treatment and outcome would be needed to erase it. <bookmark mark='c'/> The actual "
-            "frailty explains about nine percent of each. <bookmark mark='d'/> That is far below thirty, so the sign of the "
-            "effect is safe; but it is large enough to bias the estimate by over a quarter, and a full sensitivity analysis "
-            "would plot the bias for every pair of R-squared values, not just report one number."
+            "<bookmark mark='b'/> Its robustness value is " + say(d["rv"]) + ": a confounder explaining thirty percent of the residual variation in both treatment and outcome would "
+            "be needed to erase it. <bookmark mark='c'/> The actual frailty explains about nine percent of each. "
+            "<bookmark mark='d'/> That is far below thirty, so this particular measured-in-the-simulator frailty does"
+            " not erase the adjusted regression coefficient; but it is large enough to bias the estimate by over a "
+            "quarter, and a full sensitivity analysis would plot the bias for every pair of R-squared values, not "
+            "just report one number."
         ) as vo:
             self.add(obs_tag())
             for k, m_ in enumerate("abcd"):
@@ -181,20 +194,21 @@ class Sensitivity(VoiceoverScene):
         rows = board_rows("unmeasured frailty")
         show_board(self, rows,
                    "<bookmark mark='a'/> On the Board: regression adjustment for the recorded covariates when doctors also "
-                   "use an unrecorded frailty, over five hundred studies. Broken. No estimator applied to these data could "
-                   "fix it; only a sensitivity analysis can say how worried to be.",
+                   "use an unrecorded frailty, over five hundred studies. Broken. Adjusting for these measured covariates "
+                   "alone does not identify the effect under this graph. Further assumptions, additional data or a "
+                   "sensitivity analysis are needed.",
                    [("a", [0])])
 
     def lesson(self):
         rows = fit_rows(VGroup(
             label(r"report the estimate with its sensitivity, \ not alone", font_size=26, color=TAUC),
-            label(r"Cornfield's 1959 argument was the first sensitivity analysis", font_size=26, color=GREY_A),
+            label(r"Cornfield's 1959 argument: \ an early formal sensitivity analysis", font_size=26, color=GREY_A),
             label(r"next: \ the case where it mattered most", font_size=26, color=MISSC),
         ), 12.4, 0.6, [0, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The lesson is to report an observational estimate with its sensitivity analysis, never "
-            "alone. <bookmark mark='b'/> The first sensitivity analysis was Jerome Cornfield's, in 1959, <bookmark mark='c'/> "
-            "in the case where it mattered most."
+            "<bookmark mark='a'/> The lesson is to report an observational estimate with its sensitivity analysis, "
+            "never alone. <bookmark mark='b'/> An early formal sensitivity analysis was Jerome Cornfield's, in 1959, "
+            "<bookmark mark='c'/> in the case where it mattered most."
         ) as vo:
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)

@@ -1,0 +1,319 @@
+{
+  "version": "6.9",
+  "hitCount": 1,
+  "request": {
+    "queryString": "EXT_ID:15213107 AND SRC:MED",
+    "internalQuery": "EXT_ID:15213107 AND SRC:MED",
+    "resultType": "CORE",
+    "cursorMark": "*",
+    "pageSize": 25,
+    "sort": "",
+    "synonym": false
+  },
+  "resultList": {
+    "result": [
+      {
+        "id": "15213107",
+        "source": "MED",
+        "pmid": "15213107",
+        "pmcid": "PMC437139",
+        "fullTextIdList": {
+          "fullTextId": [
+            "PMC437139"
+          ]
+        },
+        "doi": "10.1136/bmj.38142.554479.ae",
+        "title": "Mortality in relation to smoking: 50 years' observations on male British doctors.",
+        "authorString": "Doll R, Peto R, Boreham J, Sutherland I.",
+        "authorList": {
+          "author": [
+            {
+              "fullName": "Doll R",
+              "lastName": "Doll",
+              "firstName": "Richard",
+              "initials": "R",
+              "authorAffiliationDetailsList": {
+                "authorAffiliation": [
+                  {
+                    "affiliation": "Clinical Trial Service Unit and Epidemiological Studies Unit (CTSU), Radcliffe Infirmary, Oxford OX2 6HE."
+                  }
+                ]
+              }
+            },
+            {
+              "fullName": "Peto R",
+              "lastName": "Peto",
+              "firstName": "Richard",
+              "initials": "R"
+            },
+            {
+              "fullName": "Boreham J",
+              "lastName": "Boreham",
+              "firstName": "Jillian",
+              "initials": "J"
+            },
+            {
+              "fullName": "Sutherland I",
+              "lastName": "Sutherland",
+              "firstName": "Isabelle",
+              "initials": "I"
+            }
+          ]
+        },
+        "dataLinksTagsList": {
+          "dataLinkstag": [
+            "altmetrics",
+            "recommended_reviews",
+            "wikipedia"
+          ]
+        },
+        "journalInfo": {
+          "issue": "7455",
+          "volume": "328",
+          "journalIssueId": 1161857,
+          "dateOfPublication": "2004 Jun",
+          "monthOfPublication": 6,
+          "yearOfPublication": 2004,
+          "journal": {
+            "medlineAbbreviation": "BMJ",
+            "title": "BMJ (Clinical research ed.)",
+            "essn": "1756-1833",
+            "issn": "0959-8138",
+            "isoabbreviation": "BMJ",
+            "nlmid": "8900488"
+          },
+          "printPublicationDate": "2004-06-01"
+        },
+        "pubYear": "2004",
+        "pageInfo": "1519",
+        "abstractText": "<h4>Objective</h4>To compare the hazards of cigarette smoking in men who formed their habits at different periods, and the extent of the reduction in risk when cigarette smoking is stopped at different ages.<h4>Design</h4>Prospective study that has continued from 1951 to 2001.<h4>Setting</h4>United Kingdom.<h4>Participants</h4>34 439 male British doctors. Information about their smoking habits was obtained in 1951, and periodically thereafter; cause specific mortality was monitored for 50 years.<h4>Main outcome measures</h4>Overall mortality by smoking habit, considering separately men born in different periods.<h4>Results</h4>The excess mortality associated with smoking chiefly involved vascular, neoplastic, and respiratory diseases that can be caused by smoking. Men born in 1900-1930 who smoked only cigarettes and continued smoking died on average about 10 years younger than lifelong non-smokers. Cessation at age 60, 50, 40, or 30 years gained, respectively, about 3, 6, 9, or 10 years of life expectancy. The excess mortality associated with cigarette smoking was less for men born in the 19th century and was greatest for men born in the 1920s. The cigarette smoker versus non-smoker probabilities of dying in middle age (35-69) were 42% nu 24% (a twofold death rate ratio) for those born in 1900-1909, but were 43% nu 15% (a threefold death rate ratio) for those born in the 1920s. At older ages, the cigarette smoker versus non-smoker probabilities of surviving from age 70 to 90 were 10% nu 12% at the death rates of the 1950s (that is, among men born around the 1870s) but were 7% nu 33% (again a threefold death rate ratio) at the death rates of the 1990s (that is, among men born around the 1910s).<h4>Conclusion</h4>A substantial progressive decrease in the mortality rates among non-smokers over the past half century (due to prevention and improved treatment of disease) has been wholly outweighed, among cigarette smokers, by a progressive increase in the smoker nu non-smoker death rate ratio due to earlier and more intensive use of cigarettes. Among the men born around 1920, prolonged cigarette smoking from early adult life tripled age specific mortality rates, but cessation at age 50 halved the hazard, and cessation at age 30 avoided almost all of it.",
+        "affiliation": "Clinical Trial Service Unit and Epidemiological Studies Unit (CTSU), Radcliffe Infirmary, Oxford OX2 6HE.",
+        "publicationStatus": "ppublish",
+        "language": "eng",
+        "pubModel": "Print-Electronic",
+        "pubTypeList": {
+          "pubType": [
+            "Research Support, Non-U.S. Gov't",
+            "research-article",
+            "Journal Article"
+          ]
+        },
+        "meshHeadingList": {
+          "meshHeading": [
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Humans"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Neoplasms",
+              "meshQualifierList": {
+                "meshQualifier": [
+                  {
+                    "majorTopic_YN": "N",
+                    "abbreviation": "ET",
+                    "qualifierName": "etiology"
+                  },
+                  {
+                    "majorTopic_YN": "Y",
+                    "abbreviation": "MO",
+                    "qualifierName": "mortality"
+                  }
+                ]
+              }
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Lung Neoplasms",
+              "meshQualifierList": {
+                "meshQualifier": [
+                  {
+                    "majorTopic_YN": "N",
+                    "abbreviation": "MO",
+                    "qualifierName": "mortality"
+                  }
+                ]
+              }
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Epidemiologic Methods"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Mortality",
+              "meshQualifierList": {
+                "meshQualifier": [
+                  {
+                    "majorTopic_YN": "N",
+                    "abbreviation": "TD",
+                    "qualifierName": "trends"
+                  }
+                ]
+              }
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Cause of Death"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Prospective Studies"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Smoking",
+              "meshQualifierList": {
+                "meshQualifier": [
+                  {
+                    "majorTopic_YN": "Y",
+                    "abbreviation": "MO",
+                    "qualifierName": "mortality"
+                  }
+                ]
+              }
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Smoking Cessation",
+              "meshQualifierList": {
+                "meshQualifier": [
+                  {
+                    "majorTopic_YN": "Y",
+                    "abbreviation": "SN",
+                    "qualifierName": "statistics & numerical data"
+                  }
+                ]
+              }
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Age Distribution"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Adult"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Aged"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Aged, 80 and over"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Middle Aged"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Physicians",
+              "meshQualifierList": {
+                "meshQualifier": [
+                  {
+                    "majorTopic_YN": "Y",
+                    "abbreviation": "SN",
+                    "qualifierName": "statistics & numerical data"
+                  }
+                ]
+              }
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Male"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "United Kingdom",
+              "meshQualifierList": {
+                "meshQualifier": [
+                  {
+                    "majorTopic_YN": "N",
+                    "abbreviation": "EP",
+                    "qualifierName": "epidemiology"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "subsetList": {
+          "subset": [
+            {
+              "code": "IM",
+              "name": "Index Medicus"
+            }
+          ]
+        },
+        "fullTextUrlList": {
+          "fullTextUrl": [
+            {
+              "availability": "Subscription required",
+              "availabilityCode": "S",
+              "documentStyle": "doi",
+              "site": "DOI",
+              "url": "https://doi.org/10.1136/bmj.38142.554479.AE"
+            },
+            {
+              "availability": "Free",
+              "availabilityCode": "F",
+              "documentStyle": "html",
+              "site": "Europe_PMC",
+              "url": "https://europepmc.org/articles/PMC437139"
+            },
+            {
+              "availability": "Free",
+              "availabilityCode": "F",
+              "documentStyle": "pdf",
+              "site": "Europe_PMC",
+              "url": "https://europepmc.org/articles/PMC437139?pdf=render"
+            },
+            {
+              "availability": "Free",
+              "availabilityCode": "F",
+              "documentStyle": "doi",
+              "site": "DOI",
+              "url": "https://doi.org/10.1136/bmj.38142.554479.ae"
+            }
+          ]
+        },
+        "commentCorrectionList": {
+          "commentCorrection": [
+            {
+              "source": "MED",
+              "id": "15217842",
+              "reference": "BMJ. 2004 Jun 26;328(7455):1507. doi: 10.1136/bmj.328.7455.1507.",
+              "type": "Comment in",
+              "orderIn": 1
+            }
+          ]
+        },
+        "isOpenAccess": "N",
+        "inEPMC": "Y",
+        "inPMC": "Y",
+        "citedByCount": 1972,
+        "hasReferences": "Y",
+        "hasTextMinedTerms": "Y",
+        "hasDbCrossReferences": "N",
+        "hasPDF": "Y",
+        "hasBook": "N",
+        "hasSuppl": "N",
+        "hasLabsLinks": "Y",
+        "hasData": "N",
+        "authMan": "N",
+        "epmcAuthMan": "N",
+        "nihAuthMan": "N",
+        "hasTMAccessionNumbers": "N",
+        "dateOfCompletion": "2004-07-19",
+        "dateOfCreation": "2004-06-24",
+        "dateOfRevision": "2026-01-28",
+        "electronicPublicationDate": "2004-06-22",
+        "firstPublicationDate": "2004-06-22",
+        "firstIndexDate": "2009-12-23",
+        "fullTextReceivedDate": "2025-02-05",
+        "hasEvaluations": "N"
+      }
+    ]
+  }
+}

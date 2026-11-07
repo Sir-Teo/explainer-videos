@@ -42,7 +42,7 @@ class DML(VoiceoverScene):
 
     def orthogonal(self):
         rows = [
-            cmath(r"\hat\tau - \tau", r"\approx", r"\text{(average of } \psi \text{ at the truth)} + \text{(nuisance error terms)}", font_size=26),
+            cmath(r"\hat\tau - \tau", r"\approx", r"\text{(average of } \psi-\tau \text{ at the truth)} + \text{(nuisance error terms)}", font_size=26),
             cmath(r"\text{AIPW's score}", r":", r"\text{first-order insensitive to errors in } \mu \text{ and } e", font_size=28),
             cmath(r"\text{remainder}", r"\lesssim", r"\|\hat\mu - \mu\| \cdot \|\hat e - e\|", font_size=30),
             cmath(r"\text{each } o(n^{-1/4})", r"\Rightarrow", r"\text{the product is } o(n^{-1/2}): \ \text{negligible}", font_size=28),
@@ -51,14 +51,19 @@ class DML(VoiceoverScene):
         whys = [why(r"a Taylor expansion"), why(r"Neyman orthogonality"), why(r"a product of two errors"),
                 why(r"slower than parametric is enough")]
         with self.voiceover(
-            "<bookmark mark='a'/> The resolution has two parts. Expand the estimation error: the average of the score at the "
-            "true nuisances, which is the good part, plus terms from the errors in the fitted nuisances. <bookmark mark='b'/> "
-            "The doubly robust score has a special property, Neyman orthogonality: its derivative with respect to the "
-            "nuisances is zero, so small errors in them have no first-order effect. <bookmark mark='c'/> What remains is "
-            "roughly the product of the outcome model's error and the propensity model's error. <bookmark mark='d'/> If each "
-            "converges faster than n to the minus a quarter, much slower than a parametric model's n to the minus a half, "
-            "their product is negligible, and the estimate behaves as if the nuisances were known. Part 49 proves this."
+            "<bookmark mark='a'/> The resolution has two parts. Expand the estimation error: the average of the "
+            "centered score at the true nuisances, which is the good part, plus terms from the errors in the fitted "
+            "nuisances. <bookmark mark='b'/> The doubly robust score has a special property, Neyman orthogonality: "
+            "its derivative with respect to the nuisances is zero, so small errors in them have no first-order "
+            "effect. <bookmark mark='c'/> What remains is roughly the product of the outcome model's error and the "
+            "propensity model's error. <bookmark mark='d'/> If each converges faster than n to the minus a quarter, "
+            "much slower than a parametric model's n to the minus a half, their product is negligible, and, with "
+            "overlap, suitable moments and the other regularity conditions, the estimate has the same first-order "
+            "behavior as if the nuisances were known. Part 49 proves this."
         ) as vo:
+            intro=label('Orthogonality controls first-order nuisance errors under regularity',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -73,15 +78,16 @@ class DML(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"fit $\hat\mu_0, \hat\mu_1, \hat e$ on half 2; \ evaluate $\psi_i$ on half 1", font_size=24, color=BANDC),
             label(r"then swap; \ average all the $\psi_i$", font_size=24, color=PSC),
-            label(r"no unit's score uses a model that saw it: \ no overfitting bias", font_size=24, color=TAUC),
+            label(r"no direct own-outcome reuse; \ approximation and finite-sample bias can remain", font_size=24, color=TAUC),
             label(r"Chernozhukov, \ Chetverikov, \ Demirer, \ Duflo, \ Hansen, \ Newey \& Robins (2018)", font_size=22, color=GREY_A),
         ), 12.4, 0.45, [0, -0.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The second part is cross-fitting. Split the data in two. <bookmark mark='b'/> Fit the "
-            "outcome regressions and the propensity score on the second half, and evaluate each patient's score on the "
-            "first half. <bookmark mark='c'/> Then swap the halves, and average all the scores. <bookmark mark='d'/> No "
-            "patient's score uses a model that was trained on that patient, so overfitting cannot shrink the residuals or "
-            "bias the estimate. <bookmark mark='e'/> Victor Chernozhukov and six colleagues set out this double, or debiased, "
+            "<bookmark mark='a'/> The second part is cross-fitting. Split the data in two. <bookmark mark='b'/> Fit "
+            "the outcome regressions and the propensity score on the second half, and evaluate each patient's score "
+            "on the first half. <bookmark mark='c'/> Then swap the halves, and average all the scores. <bookmark "
+            "mark='d'/> No patient's score uses a nuisance model trained on that patient. This removes direct reuse "
+            "of its outcome in nuisance fitting; finite-sample bias and nuisance approximation error can still "
+            "remain. <bookmark mark='e'/> Victor Chernozhukov and six colleagues set out this double, or debiased, "
             "machine learning in 2018; it works with any learner fast enough."
         ) as vo:
             vo.wait_until("a")
@@ -107,6 +113,9 @@ class DML(VoiceoverScene):
             "The untreated outcome is Friedman's function from Part 34, sharing those shapes. <bookmark mark='d'/> The "
             "effect varies, with an average of three."
         ) as vo:
+            intro=label('A nonlinear confounding simulation has population average effect three',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -120,13 +129,14 @@ class DML(VoiceoverScene):
                 [r"AIPW, \ forests, \ no cross-fitting", rf"{d['nocf']['bias']:.2f}", rf"{d['nocf']['mean_se']:.2f}", rf"{100 * d['nocf']['cover']:.0f}\%"],
                 [r"DML: \ forests, \ cross-fitted", rf"{d['dml']['bias']:.2f}", rf"{d['dml']['mean_se']:.2f}", rf"{100 * d['dml']['cover']:.0f}\%"]]
         tab = table_rows(rows, font_size=26, col_buff=0.8, row_buff=0.3, colors=[GREY_A, MISSC, MISSC, BANDC]).move_to([0, 0.9, 0])
-        foot = label(rf"{d['reps']} simulated studies; \ true SD of the DML estimate {d['dml']['sd']:.2f}", font_size=22, color=GREY_A).move_to([0, -1.6, 0])
+        foot = label(rf"{d['reps']} simulated studies; \ sampling SD estimate {d['dml']['sd']:.2f}", font_size=22, color=GREY_A).move_to([0, -1.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> A hundred and fifty simulated studies. <bookmark mark='b'/> Linear regression adjustment is "
-            "biased by over one, and its intervals never cover the truth. <bookmark mark='c'/> The doubly robust estimator "
-            "with random forests fitted to all the data is biased by more than half a point, and its standard errors are too "
-            "small: it never covers either. <bookmark mark='d'/> The same estimator with cross-fitting has a small bias, "
-            "standard errors that match its real variability, and covers " + f"{100 * d['dml']['cover']:.0f}" + " percent of "
+            "<bookmark mark='a'/> A hundred and fifty simulated studies. <bookmark mark='b'/> Linear regression "
+            "adjustment is biased by over one, and its intervals never cover the truth. <bookmark mark='c'/> The "
+            "doubly robust estimator with random forests fitted to all the data is biased by more than half a point, "
+            "and its standard errors are too small: it never covers either. <bookmark mark='d'/> The same estimator "
+            "with cross-fitting has a small bias, standard errors that match its estimated sampling variability, and "
+            "covers " + f"{100 * d['dml']['cover']:.0f}" + " percent of "
             "the time."
         ) as vo:
             self.add(seeded_tag())
@@ -141,8 +151,8 @@ class DML(VoiceoverScene):
         rows = board_rows("OLS adjustment, \\ linear", "no cross-fitting", "cross-fitted")
         show_board(self, rows,
                    "<bookmark mark='a'/> On the Board. Linear adjustment under nonlinear confounding: broken. Forests "
-                   "without cross-fitting: broken. <bookmark mark='b'/> Double machine learning: kept, a little below "
-                   "ninety because a small bias remains at this sample size.",
+                   "without cross-fitting: broken. <bookmark mark='b'/> Double machine learning is within the Board's "
+                   "Monte Carlo tolerance here. This finite simulation does not establish a coverage guarantee.",
                    [("a", [0, 1]), ("b", [2])])
 
     def plr(self):

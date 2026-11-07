@@ -1,0 +1,272 @@
+{
+  "version": "6.9",
+  "hitCount": 2,
+  "request": {
+    "queryString": "TITLE:\"Smoking and carcinoma\" AND FIRST_PDATE:[1950-01-01 TO 1950-12-31]",
+    "resultType": "core",
+    "cursorMark": "*",
+    "pageSize": 25,
+    "sort": "",
+    "synonym": false
+  },
+  "resultList": {
+    "result": [
+      {
+        "id": "PMC2039092",
+        "source": "PMC",
+        "pmcid": "PMC2039092",
+        "fullTextIdList": {
+          "fullTextId": [
+            "PMC2039092"
+          ]
+        },
+        "title": "Smoking and Carcinoma of the Lung",
+        "journalInfo": {
+          "issue": "4686",
+          "volume": "2",
+          "journalIssueId": 3839,
+          "dateOfPublication": "1950 Oct",
+          "monthOfPublication": 10,
+          "yearOfPublication": 1950,
+          "journal": {
+            "medlineAbbreviation": "Br Med J",
+            "title": "British medical journal",
+            "issn": "0007-1447",
+            "isoabbreviation": "Br Med J",
+            "nlmid": "0372673"
+          },
+          "printPublicationDate": "1950-10-01"
+        },
+        "pubYear": "1950",
+        "pageInfo": "1004-1004",
+        "language": "eng",
+        "pubModel": "Undetermined",
+        "pubTypeList": {
+          "pubType": [
+            "Letter"
+          ]
+        },
+        "fullTextUrlList": {
+          "fullTextUrl": [
+            {
+              "availability": "Free",
+              "availabilityCode": "F",
+              "documentStyle": "html",
+              "site": "PubMedCentral",
+              "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2039092/?tool=EBI"
+            },
+            {
+              "availability": "Free",
+              "availabilityCode": "F",
+              "documentStyle": "pdf",
+              "site": "PubMedCentral",
+              "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2039092/pdf/?tool=EBI"
+            },
+            {
+              "availability": "Free",
+              "availabilityCode": "F",
+              "documentStyle": "html",
+              "site": "Europe_PMC",
+              "url": "https://europepmc.org/articles/PMC2039092"
+            },
+            {
+              "availability": "Free",
+              "availabilityCode": "F",
+              "documentStyle": "pdf",
+              "site": "Europe_PMC",
+              "url": "https://europepmc.org/articles/PMC2039092?pdf=render"
+            }
+          ]
+        },
+        "isOpenAccess": "N",
+        "inEPMC": "Y",
+        "inPMC": "Y",
+        "citedByCount": 0,
+        "hasReferences": "N",
+        "hasTextMinedTerms": "Y",
+        "hasDbCrossReferences": "N",
+        "hasPDF": "Y",
+        "hasBook": "N",
+        "hasSuppl": "N",
+        "hasLabsLinks": "N",
+        "hasData": "N",
+        "authMan": "N",
+        "epmcAuthMan": "N",
+        "nihAuthMan": "N",
+        "hasTMAccessionNumbers": "N",
+        "dateOfCreation": "2025-02-02",
+        "dateOfRevision": "2026-08-25",
+        "electronicPublicationDate": "1950-10-28",
+        "firstPublicationDate": "1950-10-28",
+        "firstIndexDate": "2010-02-22",
+        "fullTextReceivedDate": "2025-02-02",
+        "hasEvaluations": "N"
+      },
+      {
+        "id": "14772469",
+        "source": "MED",
+        "pmid": "14772469",
+        "pmcid": "PMC2038856",
+        "fullTextIdList": {
+          "fullTextId": [
+            "PMC2038856"
+          ]
+        },
+        "doi": "10.1136/bmj.2.4682.739",
+        "title": "Smoking and carcinoma of the lung; preliminary report.",
+        "authorString": "DOLL R, HILL AB.",
+        "authorList": {
+          "author": [
+            {
+              "fullName": "DOLL R",
+              "lastName": "DOLL",
+              "firstName": "R",
+              "initials": "R"
+            },
+            {
+              "fullName": "HILL AB",
+              "lastName": "HILL",
+              "firstName": "A B",
+              "initials": "AB"
+            }
+          ]
+        },
+        "dataLinksTagsList": {
+          "dataLinkstag": [
+            "altmetrics",
+            "wikipedia"
+          ]
+        },
+        "journalInfo": {
+          "issue": "4682",
+          "volume": "2",
+          "journalIssueId": 3786,
+          "dateOfPublication": "1950 Sep",
+          "monthOfPublication": 9,
+          "yearOfPublication": 1950,
+          "journal": {
+            "medlineAbbreviation": "Br Med J",
+            "title": "British medical journal",
+            "issn": "0007-1447",
+            "isoabbreviation": "Br Med J",
+            "nlmid": "0372673"
+          },
+          "printPublicationDate": "1950-09-01"
+        },
+        "pubYear": "1950",
+        "pageInfo": "739-748",
+        "publicationStatus": "ppublish",
+        "language": "eng",
+        "pubModel": "Print",
+        "pubTypeList": {
+          "pubType": [
+            "research-article",
+            "Journal Article"
+          ]
+        },
+        "meshHeadingList": {
+          "meshHeading": [
+            {
+              "majorTopic_YN": "Y",
+              "descriptorName": "Lung"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Humans"
+            },
+            {
+              "majorTopic_YN": "Y",
+              "descriptorName": "Neoplasms"
+            },
+            {
+              "majorTopic_YN": "Y",
+              "descriptorName": "Carcinoma"
+            },
+            {
+              "majorTopic_YN": "Y",
+              "descriptorName": "Lung Neoplasms"
+            },
+            {
+              "majorTopic_YN": "Y",
+              "descriptorName": "Smoking"
+            },
+            {
+              "majorTopic_YN": "N",
+              "descriptorName": "Tobacco Products"
+            }
+          ]
+        },
+        "keywordList": {
+          "keyword": [
+            "Tobacco",
+            "Carcinoma",
+            "Lungs, Neoplasms"
+          ]
+        },
+        "subsetList": {
+          "subset": [
+            {
+              "code": "OM",
+              "name": "pre-1966 citations"
+            }
+          ]
+        },
+        "fullTextUrlList": {
+          "fullTextUrl": [
+            {
+              "availability": "Subscription required",
+              "availabilityCode": "S",
+              "documentStyle": "doi",
+              "site": "DOI",
+              "url": "https://doi.org/10.1136/bmj.2.4682.739"
+            },
+            {
+              "availability": "Free",
+              "availabilityCode": "F",
+              "documentStyle": "html",
+              "site": "Europe_PMC",
+              "url": "https://europepmc.org/articles/PMC2038856"
+            },
+            {
+              "availability": "Free",
+              "availabilityCode": "F",
+              "documentStyle": "pdf",
+              "site": "Europe_PMC",
+              "url": "https://europepmc.org/articles/PMC2038856?pdf=render"
+            },
+            {
+              "availability": "Free",
+              "availabilityCode": "F",
+              "documentStyle": "doi",
+              "site": "DOI",
+              "url": "https://doi.org/10.1136/bmj.2.4682.739"
+            }
+          ]
+        },
+        "isOpenAccess": "N",
+        "inEPMC": "Y",
+        "inPMC": "Y",
+        "citedByCount": 923,
+        "hasReferences": "Y",
+        "hasTextMinedTerms": "Y",
+        "hasDbCrossReferences": "N",
+        "hasPDF": "Y",
+        "hasBook": "N",
+        "hasSuppl": "N",
+        "hasLabsLinks": "Y",
+        "hasData": "N",
+        "authMan": "N",
+        "epmcAuthMan": "N",
+        "nihAuthMan": "N",
+        "hasTMAccessionNumbers": "N",
+        "dateOfCompletion": "2004-02-15",
+        "dateOfCreation": "1950-09-30",
+        "dateOfRevision": "2024-10-07",
+        "firstPublicationDate": "1950-09-01",
+        "firstIndexDate": "2009-12-23",
+        "fullTextReceivedDate": "2025-02-02",
+        "hasEvaluations": "N"
+      }
+    ]
+  }
+}

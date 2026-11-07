@@ -81,6 +81,7 @@ class Outro(VoiceoverScene):
             (r"high-dimensional confounding", [52]), (r"distribution shift as transport", [60]),
             (r"mediation, \ heterogeneity, \ causal discovery", [62]), (r"counterfactual fairness", [63]),
         ], font_size=22)
+        self.add(card.head)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part 37 finds natural experiments. Part 40 asks causal questions about "
             "survival. Part 41 applies the same weighting and doubly robust ideas to missing data. Part 49 derives the "
@@ -89,7 +90,7 @@ class Outro(VoiceoverScene):
             "causal graphs from data. And Part 63 asks what counterfactual fairness means."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):

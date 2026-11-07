@@ -45,16 +45,17 @@ class Smoking(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"a case-control study could be biased by who is asked and how they remember", font_size=26, color=GREY_A),
             label(r"so in 1951 Doll and Hill wrote to every doctor in Britain", font_size=26),
-            label(r"the British Doctors Study: \ 40,000 doctors, \ followed for fifty years", font_size=26, color=Y0C),
+            label(r"fifty-year analysis: \ 34,439 male British doctors", font_size=26, color=Y0C),
             label(r"lung cancer deaths rose with cigarettes per day; \ stopping cut the risk", font_size=26, color=TAUC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> A comparison of hospital patients could be biased by who is admitted, who is asked, and "
-            "how they remember their habits; Berkson's warning from chapter three applies. <bookmark mark='b'/> So in 1951 "
-            "Doll and Hill wrote to every doctor in Britain, asking about their smoking. <bookmark mark='c'/> About forty "
-            "thousand replied, and their deaths were followed for half a century: the British Doctors Study. <bookmark "
-            "mark='d'/> Deaths from lung cancer rose with the number of cigarettes smoked, and doctors who stopped had lower "
-            "risks than those who continued."
+            "<bookmark mark='a'/> A comparison of hospital patients could be biased by who is admitted, who is asked,"
+            " and how they remember their habits; Berkson's warning from chapter three applies. <bookmark mark='b'/> "
+            "So in 1951 Doll and Hill wrote to every doctor in Britain, asking about their smoking. <bookmark "
+            "mark='c'/> About forty thousand doctors initially responded. The landmark fifty-year analysis followed "
+            "thirty-four thousand four hundred and thirty-nine male British doctors. <bookmark mark='d'/> Deaths from"
+            " lung cancer rose with the number of cigarettes smoked, and doctors who stopped had lower risks than "
+            "those who continued."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -90,7 +91,7 @@ class Smoking(VoiceoverScene):
         d = load("smoking")
         rows = [
             cmath(r"RR_{\text{smoking}}", r"\approx", r"9 \ \text{for lung cancer deaths}", font_size=32),
-            cmath(r"\text{if } U \text{ explains it}", r"\Rightarrow", r"P(U \mid \text{smoker}) / P(U \mid \text{non}) \ge 9", font_size=30),
+            cmath(r"\text{if } U \text{ explains it}", r"\Rightarrow", r"P(U=1 \mid \text{smoker}) / P(U=1 \mid \text{non}) \ge 9", font_size=30),
             cmath(r"\text{heavy smokers}", r":", r"\text{higher risks still: \ more lopsided still}", font_size=30),
             cmath(r"E\text{-value of } 9", r"=", rf"{d['e_value_9']:.1f}", font_size=34),
         ]
@@ -98,14 +99,18 @@ class Smoking(VoiceoverScene):
         whys = [why(r"from the cohort studies"), why(r"Cornfield et al. (1959)"),
                 why(r"no known trait is so lopsided"), why(r"the same argument, \ in modern form")]
         with self.voiceover(
-            "<bookmark mark='a'/> Jerome Cornfield and five colleagues answered in 1959. Smokers' risk of dying of lung "
-            "cancer was about nine times that of non-smokers. <bookmark mark='b'/> If a hidden factor explained all of it, "
-            "they proved, the factor would have to be at least nine times as common among smokers as among non-smokers. "
-            "<bookmark mark='c'/> For heavy smokers, whose risks were higher still, it would have to be more lopsided still. "
-            "No known inherited trait is distributed so unevenly between smokers and non-smokers. <bookmark mark='d'/> In "
-            "modern terms, the E-value of a risk ratio of nine is about " + say(d["e_value_9"], 1) + ". Cornfield's "
-            "inequality was the first sensitivity analysis, and it is why the scientific argument was considered settled."
+            "<bookmark mark='a'/> Jerome Cornfield and five colleagues answered in 1959. Smokers' risk of dying of "
+            "lung cancer was about nine times that of non-smokers. <bookmark mark='b'/> If a hidden factor explained "
+            "all of it, they showed that a binary confounder fully explaining that association would have to be at "
+            "least nine times as prevalent among smokers under their model. <bookmark mark='c'/> For heavy smokers, "
+            "whose risks were higher still, it would have to be more lopsided still. No known inherited trait is "
+            "distributed so unevenly between smokers and non-smokers. <bookmark mark='d'/> In modern terms, the "
+            "E-value of a risk ratio of nine is about " + say(d["e_value_9"], 1) + ". Cornfield's inequality was an early formal sensitivity analysis and one part of a much broader "
+            "accumulation of causal evidence."
         ) as vo:
+            intro=label('Cornfield bounds address a specified hidden-confounding hypothesis',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -143,17 +148,19 @@ class Smoking(VoiceoverScene):
 
     def lesson(self):
         rows = fit_rows(VGroup(
-            label(r"no randomized trial of smoking was ever run, \ or could be", font_size=26),
+            label(r"harmful long-term smoking assignments are unethical; \ cessation trials are possible", font_size=26),
             label(r"the case was made by triangulation: \ many designs, \ many populations, \ a sensitivity argument", font_size=26, color=TAUC),
             label(r"1964: \ the US Surgeon General's report", font_size=26, color=BANDC),
             label(r"next: \ when the treatment itself changes over time", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> No randomized trial of smoking was ever run, or ever could be. <bookmark mark='b'/> The case "
-            "was made by triangulation: case-control and cohort studies in many countries, a dose-response gradient, the "
-            "benefit of stopping, and Cornfield's argument that no plausible confounder could explain it. <bookmark "
-            "mark='c'/> In 1964 the United States Surgeon General's report concluded that cigarette smoking causes lung "
-            "cancer. <bookmark mark='d'/> Next, treatments that are not a single decision but a sequence of them."
+            "<bookmark mark='a'/> Assigning people to prolonged harmful smoking exposure is not an ethical way to "
+            "establish this causal effect. Smoking-cessation interventions can, and do, use randomized trials. "
+            "<bookmark mark='b'/> The case was made by triangulation: case-control and cohort studies in many "
+            "countries, a dose-response gradient, the benefit of stopping, and Cornfield's argument that no plausible"
+            " confounder could explain it. <bookmark mark='c'/> In 1964 the United States Surgeon General's report "
+            "concluded that cigarette smoking causes lung cancer. <bookmark mark='d'/> Next, treatments that are not "
+            "a single decision but a sequence of them."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
