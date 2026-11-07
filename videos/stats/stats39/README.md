@@ -26,14 +26,14 @@ From there the part covers:
   - Tobler's first law; Cressie's three kinds of data.
   - Meuse's log zinc, high by the river; the World's field, 20 + 3 × traffic + a Matérn field (σ² = 6.25, ρ = 1.5,
     ν = 3/2) with a nugget of 0.64.
-  - The effective sample size of the World's 300 stations for the island-wide mean is 5.7: the honest SE is 1.10, not
-    σ/√n = 0.15.
+  - Under the nominal known covariance, the trend-removed station average estimates an ensemble mean level with effective sample size 5.7: model-based SE 1.10, not
+    σ/√n = 0.15. This is not the prediction error for the realized island's spatial average; that requires covariances with the target area average.
 - **Random fields.** Stationarity, isotropy, Gaussianity; Bochner's theorem; four seeded fields of different
   smoothness and range; the standard families.
 - **Variograms.**
-  - Matheron's estimator. Meuse's log zinc, spherical fit by Cressie's WLS: nugget 0.054, sill 0.585, range 0.90 km.
-  - Robust (Cressie–Hawkins) estimates are close, because the logs have tamed the large values.
-  - Directional variograms: lowest along the river (north-east), highest across it.
+  - Matheron's estimator. Meuse's log zinc, spherical fit by Cressie's WLS: nugget 0.054, partial sill 0.585 (total sill 0.639), range 0.90 km.
+  - Robust (Cressie–Hawkins) estimates are close, consistent with the logs reducing large-value influence; agreement is not proof that no outliers remain.
+  - Raw directional variograms: lowest along the river (north-east), highest across it. A river-distance trend can mimic anisotropy; these alone do not identify geometric residual anisotropy.
   - The World's empirical variogram tracks the truth at short lags and keeps rising beyond.
 - **Kriging.**
   - The BLUP derived with a Lagrange multiplier; simple, ordinary and universal.
@@ -42,36 +42,36 @@ From there the part covers:
     universal 0.375.
   - The World: RMSE 0.54 over the island against 2.64 for the traffic trend alone; the REML plug-in's 90% intervals
     cover 83% of the island in this one field.
-  - Kriging = the GP posterior.
+  - Known-covariance simple kriging equals Gaussian conditioning. Universal kriging corresponds to a flat trend prior when the design and resulting posterior are proper. BLUP moment properties and Gaussian interval coverage are distinct. Latent-field prediction excludes a new measurement nugget; observed-value validation includes it.
 - **Matérn and identifiability.**
   - The family, its closed forms, its spectrum and Whittle's SPDE; Stein's "use the Matérn".
   - 80 seeded fields (n = 300, exponential, ρ = 0.3, σ² = 1): ML estimates of ρ and σ² vary by 38% and 34% along a
-    ridge, while σ²/ρ varies by 9% (Zhang 2004).
+    ridge, while σ²/ρ varies by 9% (Zhang 2004). This fixed-n experiment illustrates variability, not a proof of consistency. For Gaussian Matérn fields of known ν in dimensions at most three on a fixed bounded domain, variance and range cannot both be consistently estimated under infill. Equivalent Gaussian measures are not identical finite-dimensional distributions; increasing the domain changes the result. Finite predictions still depend on both parameters.
   - Kriging the World along the ridge (ρ × 2 with σ² × 8, or ρ × 0.7 with σ² × 0.34) leaves the RMSE at 0.51–0.53 and
     coverage at 87–90%. Off it, ρ × 2 alone gives 63% and ρ × 0.5 alone 98%.
 - **Likelihood.**
   - ML and REML (Patterson & Thompson). On the World with ν = 3/2: REML ρ̂ = 2.09, σ̂² = 8.30, τ̂² = 0.72,
     β̂ = (19.35, 2.83); ML ρ̂ = 1.96, σ̂² = 7.11.
   - Choosing ν: REML log-likelihoods −457.68 (ν = 1/2), −455.69 (3/2, the truth), −457.11 (5/2).
-  - The cubic wall: 0.78 s per likelihood at n = 2,000, so about 27 hours at n = 100,000.
+  - The cubic wall: likelihood time and the n = 100,000 cubic extrapolation are machine- and load-dependent measurements, not an actual exact 100,000-site fit. The covariance matrix alone would require 80 GB. REML need not always give larger covariance parameters or eliminate all variance bias.
 - **Scaling.**
   - Vecchia's approximation. On 2,000 points (ν = 3/2, with a nugget), the log-likelihood error is 523 with m = 1,
-    35 with m = 10 and 2.8 with m = 30. The profile in ρ peaks at the same place as the exact one, but is flatter.
-  - 100,000 locations on the World's island: 4.6 s with m = 10.
+    35 with m = 10 and 2.8 with m = 30. The displayed range profiles have nearby grid maxima in this realization. Approximation can move estimates and distort curvature in either direction. The fast candidate search selects earlier points among 4m nearest overall and can use fewer than m, rather than always finding the exact m nearest predecessors.
+  - 100,000 jittered land-node locations provide a timing benchmark with m = 10. Values reuse selected grid-node latent values, so this is not an exact Matérn simulation at the jittered coordinates; timing depends on the machine and load.
   - NNGP; tapering, low rank, and Heaton et al.'s competition.
 - **GMRFs and the SPDE.**
   - Precision zeros as conditional independence (Besag 1974).
   - A 60 × 40 SPDE lattice: 30,204 nonzeros of 5.76 million. Conditioning on 150 noisy values by one sparse solve
-    gives RMSE 0.68.
+    gives a reconstruction error reported below after regenerating the coherent-prior example. Its deterministic scale gives unit average marginal prior variance; the realized sample is not divided by its random spatial SD. This small teaching sampler uses dense Cholesky, while conditioning is sparse. The free-boundary grid approximates a whole-space Matérn/SPDE construction. Practical range √(8ν)/κ is twice the scale ρ used in this part's Matérn definition.
   - Lindgren, Rue & Lindström; INLA.
 - **Areal data.**
-  - Moran's I for the World's 200 towns' log case rates: 0.085, permutation p = 0.018.
+  - Moran's I for the World's 200 towns' log case rates: 0.085, permutation p = 0.018 under an exchangeable-value reference. Unequal expected counts imply unequal raw-rate variance, so that reference is not the null of independent equal-risk Poisson counts. This is exploratory. The plotted curve is a normal approximation to permutation moments, not the actual permutation distribution.
   - SMRs: the smallest quarter of towns range from 0 to 3.16; 20 towns have no cases.
-  - CAR and SAR; BYM. The smoothed relative risks have RMSE 0.18 against the truth, against 0.58 for the raw SMRs,
+  - Compatible CAR conditionals require a symmetric positive precision T⁻¹(I−ρW); intrinsic normalized CAR needs constraints and a proper posterior. The teaching BYM-style fit uses fixed precisions, a small proper ridge and posterior modes, rather than integrated posterior means. CAR, SAR and their parameter restrictions are distinct. The smoothed relative risks have RMSE 0.18 against the truth, against 0.58 for the raw SMRs,
     and are too flat (slope 0.56): shrinkage's bias.
 - **Point patterns.**
-  - Snow's map: 359 of 578 deaths (62%) are nearest the Broad Street pump; the next pump has 64.
-  - Ripley's K and Besag's L. Snow's deaths lie far above the band from 199 CSR patterns at every scale.
+  - Snow's map: 359 of 578 digitized deaths (62%) are nearest the Broad Street pump by straight-line map distance; the next pump has 64. These are not reconstructed walking-distance catchments or all London deaths.
+  - Ripley's K and Besag's L. Snow's deaths exceed the pointwise 95% reference from 199 fixed-count uniform patterns at the displayed scales. The case-derived window and many-distance comparison make this exploratory, not a calibrated simultaneous global test.
   - But CSR is the wrong null: the inhomogeneous K and case–control designs. Cox processes and the LGCP.
 - **Spatial confounding.** 60 seeded fields, n = 250, with an unmeasured spatial confounder correlated 0.8 with the
   exposure and the same range, β = 1.
@@ -79,22 +79,21 @@ From there the part covers:
     biased, and more confident.
   - With the spatial term independent of the exposure, both are unbiased (1.01 and 1.02), and GLS's SD is 0.13
     against OLS's 0.37.
-  - Hodges & Reich; Paciorek's scales; restricted spatial regression; spatial+.
+  - Hodges & Reich; Paciorek's scales; restricted spatial regression; spatial+. Fine-scale exposure variation needs identifying assumptions, and no random-effect model automatically removes confounding. RSR's OLS equivalence concerns the standard Gaussian linear formulation; interval undercoverage is a risk, not a universal identity.
 - **Space and time.**
   - Separable covariances; Gneiting's family, whose spatial correlation spreads with the time lag.
   - The World's daily readings: the island-wide daily mean has a lag-1 ACF of 0.72 (AR(1) weather with φ = 0.7).
-    Daily anomalies correlate 0.64 at every distance, weather's share 4/(4 + 1.5²) of the daily variance.
+    Daily anomaly correlations are approximately distance-independent, with model value 0.64 = 4/(4 + 1.5²). A common weather effect contributes constant spatial covariance but cancels from same-day spatial differences and is invisible to that variogram. The daily station average is not a direct census of the island's spatial mean.
   - Dynamic models; advection–diffusion SPDEs.
 - **Gaussian processes in machine learning.**
   - The dictionary; the marginal likelihood's Occam factor; emulators (Sacks et al. 1989).
   - Expected improvement (Jones, Schonlau & Welch 1998): on a two-dip function it finds x = −0.48 (true −0.47) within
-    eight evaluations, against 401 for a grid.
+    eight evaluations counting the three initial observations; eleven evaluations are made overall. The 401-point grid is a reference at that resolution, not a proof of a continuous global optimum.
   - Snoek et al.; Neal's infinite networks; kernel ridge and splines.
 - **Honest prediction.**
   - The plug-in variance; Zimmerman & Cressie.
   - Kriging the World's stations: random 10-fold CV RMSE 0.99 against 1.34 for 3 × 3 spatial blocks, whose held-out
-    stations are 2.8 times further from the training data. Coverage holds in both (89% and 91%), because the kriging
-    variance knows the distance.
+    stations are 2.8 times further from the training data. The covariance and trend are refitted inside each training fold. Empirical coverage is reported separately for each validation design after the rerun; distance-aware variance does not guarantee calibration.
   - Meuse's LOO z-scores under universal kriging: mean z² 1.05, 90% coverage 86%, with a long right tail.
   - The Board; a checklist.
 
@@ -111,7 +110,7 @@ Data:
   - **Kriging and likelihood:** simple, ordinary and universal kriging with the GLS trend and its covariance (checked
     against Gaussian conditioning); the Gaussian log-likelihood; ML and REML fits; exact and Vecchia likelihoods (a
     k-d tree version for large n).
-  - **Lattices and areas:** the SPDE precision on a grid, sampling and conditioning by sparse Cholesky; Moran's I with
+  - **Lattices and areas:** the SPDE precision on a grid, sampling by dense Cholesky in this small implementation and conditioning by a sparse solve; Moran's I with
     a permutation test; BYM-style smoothing of relative risks.
   - **Points, space–time and design:** Ripley's K and CSR envelopes; Gneiting's space–time covariance; expected
     improvement.
@@ -130,6 +129,8 @@ The Coverage Board gains five rows:
 | OLS 90% CI for a covariate | spatially correlated errors, n = 200 | 28.0% | broken |
 | GLS (REML) CI for the covariate | same | 86.0% | kept |
 
+The local field gallery now expands its circulant embedding until its eigenvalues are nonnegative to numerical tolerance, instead of truncating substantive negative modes. The existing World generator retains a very fine spectral approximation: at nominal variance 6.25 its maximum covariance perturbation from spectral truncation is about 0.000125. It is distinguished from the exact nominal Matérn model used in the independent-field Board simulations. Continuous Bochner covariance representations, mean-square smoothness, boundary approximations, Gneiting parameter ranges and fixed-domain assumptions are explicit.
+
 ## Build it
 
 ```bash
@@ -147,7 +148,7 @@ python tools/lecture_length.py stats39 --floor 50
 | 0 | Krige's boreholes | 1951 |
 | 1 | Spatial data | n_eff = 5.7 of 300 |
 | 2 | Random fields | Bochner |
-| 3 | Variograms | nugget 0.054, sill 0.585, range 0.90 km |
+| 3 | Variograms | nugget 0.054, partial sill 0.585 (total sill 0.639), range 0.90 km |
 | 4 | Kriging | LOO RMSE 0.724 → 0.375 |
 | 5 | Matérn and identifiability | CV 38% vs 9% |
 | 6 | Likelihood | ν = 3/2 wins; 27 hours |
@@ -228,7 +229,7 @@ python tools/lecture_length.py stats39 --floor 50
 - **Matérn; smoothness ν**: the covariance family with a differentiability parameter.
 - **Infill asymptotics; microergodic parameter**: more data in a fixed region; the combination σ²/ρ^{2ν} it can
   learn.
-- **REML**: likelihood of error contrasts, which corrects ML's variance bias.
+- **REML**: likelihood of error contrasts that removes fixed-trend parameters; a scale correction for known correlation shape does not imply unbiased estimation of every covariance parameter.
 - **Vecchia approximation; NNGP; screening**: conditioning on a few nearest earlier neighbours; its use as a prior;
   why it works.
 - **GMRF; SPDE; INLA**: a Gaussian field with sparse precision; Matérn fields as solutions of a stochastic PDE;

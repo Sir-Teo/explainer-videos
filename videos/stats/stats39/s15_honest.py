@@ -38,6 +38,9 @@ class Honest(VoiceoverScene):
             "is wrong, Stein's theory says the predictions can survive, but the variances need not. Only coverage, measured, "
             "can tell."
         ) as vo:
+            intro=label('Estimated covariance uncertainty is absent from plug-in kriging variance',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -55,17 +58,19 @@ class Honest(VoiceoverScene):
             tab.width = 12.6
         foot = fit_rows(VGroup(
             label(r"random folds test interpolation; \ blocks test extrapolation into empty regions", font_size=24, color=GREY_A),
-            label(r"the kriging variance knows the distance: \ coverage holds in both", font_size=24, color=BANDC),
+            label(r"variances reflect the fitted model; empirical coverage still requires checking", font_size=24, color=BANDC),
             label(r"choose the CV that matches where you will predict \ (Roberts et al.\ 2017)", font_size=24, color=TAUC),
         ), 12.4, 0.3, [0, -1.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> First, cross-validation. Hold out stations at random, ten folds, and kriging misses by "
+            "<bookmark mark='a'/> First, cross-validation. Fit the covariance and trend within each training fold, "
+            "then predict held-out stations. With random ten-fold validation, kriging misses by "
             + say(r["rmse"], 2) + ". <bookmark mark='b'/> Hold out whole blocks of the island instead, and it misses by "
-            + say(b["rmse"], 2) + ", because the held-out stations are now nearly three times further from the training data. "
-            "<bookmark mark='c'/> Random folds measure interpolation, blocks measure extrapolation. <bookmark mark='d'/> "
-            "The kriging variance knows the distance, so the coverage of its intervals holds in both. <bookmark "
-            "mark='e'/> The lesson, from David Roberts and colleagues in ecology: choose the cross-validation that matches "
-            "the distances at which you will actually predict."
+            + say(b["rmse"], 2) + ", because the held-out stations are farther from the training data, as the distance column shows. "
+            "<bookmark mark='c'/> Random folds measure interpolation, blocks measure extrapolation. <bookmark "
+            "mark='d'/> Kriging variance reflects distance under its fitted model, but this does not guarantee "
+            "coverage. Read the empirical coverage separately for each design, allowing for dependent errors and "
+            "estimated parameters. <bookmark mark='e'/> The lesson, from David Roberts and colleagues in ecology: "
+            "choose the cross-validation that matches the distances at which you will actually predict."
         ) as vo:
             self.add(pollution_tag())
             vo.wait_until("a")
@@ -80,16 +85,19 @@ class Honest(VoiceoverScene):
     def board(self):
         rows = board_rows("kriging", "OLS CI", "GLS")
         text = (
-            "<bookmark mark='a'/> The Coverage Board, over two hundred and fifty seeded fields, each with two hundred "
-            "observations and fifty prediction sites. Kriging with the true covariance gives ninety percent intervals that "
-            "cover as promised. <bookmark mark='b'/> With the parameters estimated by REML and plugged in, coverage is "
-            "eighty-nine percent: only a point short, but over twelve thousand five hundred predictions the shortfall is "
-            "real, so the Board marks it broken. That is the plug-in's price, small and systematic. <bookmark mark='c'/> "
-            "Fitting an exponential covariance to these smooth fields, the wrong smoothness, gives intervals that are too "
-            "wide: conservative. <bookmark mark='d'/> And for a regression coefficient, ordinary least squares intervals "
-            "that ignore the spatial correlation of the errors are badly broken, covering just over a quarter of the time. "
-            "<bookmark mark='e'/> Generalized least squares with the REML covariance brings them back to eighty-six "
-            "percent, within the Board's tolerance for two hundred and fifty fields; what remains is, again, the plug-in."
+            "<bookmark mark='a'/> The Coverage Board averages over two hundred and fifty independent seeded fields, "
+            "each with two hundred observations and fifty prediction sites. The true-covariance intervals cover "
+            + say(100 * rows[0].achieved, 1) + " percent. <bookmark mark='b'/> The REML plug-in covers "
+            + say(100 * rows[1].achieved, 1) + " percent, with a Monte Carlo standard error of "
+            + say(100 * rows[1].se, 2) + " percentage points across fields. Its Board classification is "
+            + rows[1].verdict + ". The fifty predictions within a field are correlated, so twelve thousand five "
+            "hundred predictions are not that many independent studies. <bookmark mark='c'/> The fitted exponential "
+            "model covers " + say(100 * rows[2].achieved, 1) + " percent in these smooth fields. Wrong covariance "
+            "need not always make intervals conservative. <bookmark mark='d'/> For the regression slope, ordinary "
+            "least squares covers " + say(100 * rows[3].achieved, 1) + " percent when it ignores spatial errors. "
+            "<bookmark mark='e'/> Generalized least squares with REML covers " + say(100 * rows[4].achieved, 1) +
+            " percent, classified " + rows[4].verdict + ". These simulation labels do not establish exact coverage "
+            "or isolate covariance-estimation error from every finite-sample effect."
         )
         show_board(self, rows, text, [("a", [0]), ("b", [1]), ("c", [2]), ("d", [3]), ("e", [4])])
 
@@ -116,31 +124,36 @@ class Honest(VoiceoverScene):
     def meuse_check(self):
         d = load("extra")
         z = np.asarray(d["z"], float)
-        edges = np.linspace(-3, 4.5, 16)
-        h, _ = np.histogram(np.clip(z, -2.99, 4.49), edges)
+        lower = min(-3., float(np.floor(z.min()*2)/2))
+        upper = max(4.5, float(np.ceil(z.max()*2)/2))
+        edges = np.arange(lower, upper + .25, .5)
+        h, _ = np.histogram(z, edges)
         dens = h / (len(z) * (edges[1] - edges[0]))
-        A = axes([-3, 4.5], [0, 0.6], x_length=7.4, y_length=4.0, xlabel=r"leave-one-out $z$-score", ylabel=r"density",
+        A = axes([lower, upper], [0, max(.6, float(np.ceil(dens.max()*5)/5))], x_length=7.4, y_length=4.0, xlabel=r"leave-one-out $z$-score", ylabel=r"density",
                  xticks=[-3, -1.5, 0, 1.5, 3, 4.5], yticks=[0, 0.2, 0.4, 0.6], xfmt=lambda v: f"{v:g}", yfmt=lambda v: f"{v:g}",
                  center=[-2.5, 0.2, 0])
         ax = A.ax
         bars = hist_bars(ax, edges, dens, FIELDC)
-        xs = np.linspace(-3, 4.5, 200)
+        xs = np.linspace(lower, upper, 200)
         nc = polyline(ax, xs, np.exp(-xs ** 2 / 2) / np.sqrt(2 * np.pi), TRUEC, 3)
         side = fit_rows(VGroup(
-            label(r"Meuse, \ universal kriging: \ each sample predicted from the other 154", font_size=22),
+            label(r"Meuse: trend and covariance refitted using only the other 154 samples", font_size=22),
             label(r"$z = (Z_i - \hat Z_{-i}) / \text{SE}$", font_size=22, color=FIELDC),
             label(rf"mean $z^2$: \ {d['mean_z2']:.2f} \ (ideal 1)", font_size=22, color=BANDC),
             label(rf"90\% intervals cover {100 * d['cover90']:.0f}\%: \ a little short", font_size=22, color=TAUC),
             label(r"the right tail: \ a few samples far richer than their neighbours", font_size=22, color=MISSC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Real data allow the same check. Predict each Meuse sample from the other hundred and "
-            "fifty-four, by universal kriging, <bookmark mark='b'/> and divide the error by the kriging standard error. "
-            "If the model is right, these z-scores should look standard normal. <bookmark mark='c'/> Their mean square is "
+            "<bookmark mark='a'/> Real data allow the same check. Predict each Meuse sample from the other hundred "
+            "and fifty-four, by universal kriging, <bookmark mark='b'/> and divide the error by the kriging standard "
+            "error. With known Gaussian covariance the standardized prediction errors are marginally normal. Here "
+            "covariance is estimated, so a normal histogram is a diagnostic, not an exact conditional guarantee. "
+            "<bookmark mark='c'/> Their mean square is "
             + say(d["mean_z2"], 2) + ", close to one, <bookmark mark='d'/> but the ninety percent intervals cover "
-            + str(round(100 * d["cover90"])) + " percent, a little short, <bookmark mark='e'/> because of a long right tail: "
-            "a few samples much richer in zinc than anything near them, which a Gaussian field finds surprising. A "
-            "heavier-tailed model, or a transformation chosen with this in mind, would do better."
+            + str(round(100 * d["cover90"])) + " percent, a little short, <bookmark mark='e'/> because of a long right tail: a few samples much richer "
+            "in zinc than anything near them, which a Gaussian field finds surprising. A heavier-tailed model or a "
+            "new transformation might improve this, but must be fitted inside training folds and checked on fresh "
+            "validation data."
         ) as vo:
             self.add(meuse_tag())
             vo.wait_until("a")

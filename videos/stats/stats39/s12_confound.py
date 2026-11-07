@@ -39,6 +39,9 @@ class Confounding(VoiceoverScene):
             "the exposure and the confounder are smooth fields of the same range with correlation point eight, and the "
             "true coefficient is one."
         ) as vo:
+            intro=label('Correlated spatial effects can confound an exposure coefficient',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -85,20 +88,25 @@ class Confounding(VoiceoverScene):
             cmath(r"\text{GLS}", r":", r"\hat\beta \text{ uses the variation in } x \text{ that } \Sigma \text{ calls cheap}", font_size=30),
             cmath(r"x \text{ smooth}", r":", r"\text{its variation is in the same directions as } U\text{'s}", font_size=30),
             cmath(r"\text{so}", r":", r"\text{the two compete: \ nothing says which is which}", font_size=30),
-            cmath(r"\text{Paciorek (2010)}", r":", r"\text{bias falls only if } x \text{ varies at finer scales than } U", font_size=30),
+            cmath(r"\text{Paciorek (2010)}", r":", r"\text{finer-scale unconfounded variation in }x\text{ can reduce bias under conditions}", font_size=30),
         ]
         rows[3][-1].set_color(BANDC)
         whys = [why(r"a weighted regression"), why(r"Hodges \& Reich (2010)"), why(r"collinearity in disguise"),
                 why(r"scale is the lever")]
         with self.voiceover(
             "<bookmark mark='a'/> Why not? Generalized least squares estimates beta from whatever variation in the "
-            "exposure the covariance treats as informative. <bookmark mark='b'/> When the exposure is a smooth field, its "
-            "variation lies in the same large-scale patterns as the confounder's, as James Hodges and Brian Reich showed in "
-            "2010. <bookmark mark='c'/> The random effect and the exposure then compete for the same patterns, and nothing "
-            "in the data says which deserves the credit: collinearity in disguise. <bookmark mark='d'/> Christopher "
-            "Paciorek showed the same year that the spatial model reduces the bias only when the exposure varies at finer "
-            "scales than the confounder, so that local contrasts are unconfounded."
+            "exposure the covariance treats as informative. <bookmark mark='b'/> When the exposure is a smooth field,"
+            " its variation lies in the same large-scale patterns as the confounder's, as James Hodges and Brian "
+            "Reich showed in 2010. <bookmark mark='c'/> The random effect and the exposure then compete for the same "
+            "patterns, and nothing in the data says which deserves the credit: collinearity in disguise. <bookmark "
+            "mark='d'/> Christopher Paciorek showed the same year that under his model assumptions, additional "
+            "exposure variation at finer scales than the confounder can reduce bias. Fine-scale variation is useful "
+            "only when it is sufficiently unconfounded; a difference in smoothness alone is not causal "
+            "identification."
         ) as vo:
+            intro=label('Fine-scale variation needs identifying assumptions',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -108,18 +116,20 @@ class Confounding(VoiceoverScene):
     def rsr(self):
         rows = fit_rows(VGroup(
             label(r"restricted spatial regression: \ force the random effect orthogonal to $x$", font_size=26, color=TAUC),
-            label(r"it returns OLS's point estimate, \ with intervals too narrow", font_size=26, color=MISSC),
+            label(r"Gaussian linear RSR can retain OLS confounding and understate uncertainty", font_size=26, color=MISSC),
             label(r"Hanks et al.\ (2015), \ Khan \& Calder (2022): \ do not use it to protect $\hat\beta$", font_size=26, color=GREY_A),
             label(r"newer proposals \ (spatial+, \ Dupont et al.\ 2022): \ remove $x$'s smooth part first", font_size=26, color=BANDC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> A once-popular fix, restricted spatial regression, makes the random effect orthogonal to "
-            "the exposure, so the two no longer compete. <bookmark mark='b'/> But that simply hands every shared pattern "
-            "to the exposure: it returns the ordinary least squares estimate, confounding and all, with intervals that are "
-            "too narrow. <bookmark mark='c'/> Later work, by Ephraim Hanks and colleagues and by Kori Khan and Catherine "
-            "Calder, recommends against it. <bookmark mark='d'/> Newer methods, such as Emiko Dupont's spatial plus, first "
-            "remove the smooth part of the exposure, so that only its fine-scale variation is used, which is Paciorek's "
-            "condition, made into a method."
+            "<bookmark mark='a'/> A once-popular fix, restricted spatial regression, makes the random effect "
+            "orthogonal to the exposure, so the two no longer compete. <bookmark mark='b'/> But that simply hands "
+            "every shared pattern to the exposure: in the standard Gaussian linear formulation with a flat "
+            "coefficient prior it can return the ordinary least squares estimate, confounding and all, and intervals "
+            "can be too narrow. <bookmark mark='c'/> Later work, by Ephraim Hanks and colleagues and by Kori Khan and"
+            " Catherine Calder, recommends against it. <bookmark mark='d'/> Newer methods, such as Emiko Dupont's "
+            "spatial plus, first remove the smooth part of the exposure, so that only its fine-scale variation is "
+            "used, which is Paciorek's idea made into a method under further assumptions; this does not automatically"
+            " identify a causal effect."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -128,16 +138,16 @@ class Confounding(VoiceoverScene):
 
     def lessons(self):
         rows = fit_rows(VGroup(
-            label(r"a spatial random effect fixes the standard errors, \ not the confounding", font_size=28, color=BANDC),
+            label(r"a spatial error model can improve efficiency without identifying a causal effect", font_size=28, color=BANDC),
             label(r"adjustment needs the confounder, \ or a design: \ Parts 35--37", font_size=28, color=TAUC),
             label(r"the Board, \ chapter 14: \ OLS intervals under spatial errors, \ and GLS's", font_size=28, color=GREY_A),
         ), 12.4, 0.7, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The lesson. A spatial random effect corrects the standard errors for dependence, which "
-            "matters a great deal, as chapter fourteen's Board will show. It does not remove confounding. <bookmark "
-            "mark='b'/> That still requires measuring the confounder, or a design that makes it irrelevant, the tools of "
-            "Parts thirty-five to thirty-seven. <bookmark mark='c'/> Spatial structure in the residuals is a warning, not "
-            "a remedy."
+            "<bookmark mark='a'/> The lesson. A correctly specified spatial error model can improve standard errors "
+            "for dependence; estimated covariance uncertainty still matters, which matters a great deal, as chapter "
+            "fourteen's Board will show. It does not remove confounding. <bookmark mark='b'/> That still requires "
+            "measuring the confounder, or a design that makes it irrelevant, the tools of Parts thirty-five to "
+            "thirty-seven. <bookmark mark='c'/> Spatial structure in the residuals is a warning, not a remedy."
         ) as vo:
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)

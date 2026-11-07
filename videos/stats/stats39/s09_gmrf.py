@@ -46,6 +46,9 @@ class GMRF(VoiceoverScene):
             "Besag showed in 1974 how to build a valid joint distribution on a lattice from such local conditionals: a "
             "Gaussian Markov random field."
         ) as vo:
+            intro=label('Gaussian conditional independence is encoded by precision zeros',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -69,7 +72,7 @@ class GMRF(VoiceoverScene):
             label(rf"a {d['nx']} $\times$ {d['ny']} lattice: \ $n = {d['n']:,}$", font_size=24),
             label(r"left: \ the precision of a 12 $\times$ 8 one, \ in full", font_size=24, color=FIELDC),
             label(rf"nonzeros: \ {d['nnz']:,} \ of {d['dense']:,}", font_size=24, color=TAUC),
-            label(rf"that is {100 * d['nnz'] / d['dense']:.2f}\%: \ each value talks to 12 neighbours", font_size=24, color=BANDC),
+            label(rf"that is {100 * d['nnz'] / d['dense']:.2f}\%: \ up to 12 neighbours per interior stencil", font_size=24, color=BANDC),
             label(r"sparse Cholesky: \ about $O(n^{3/2})$ in two dimensions", font_size=24, color=GREY_A),
         ), 5.2, 0.42, [3.7, 0.3, 0])
         with self.voiceover(
@@ -93,7 +96,7 @@ class GMRF(VoiceoverScene):
     def spde(self):
         rows = [
             cmath(r"(\kappa^2 - \Delta)^{\alpha/2}\, W", r"=", r"\text{white noise}, \ \ \alpha = \nu + d/2", font_size=30),
-            cmath(r"\text{solution}", r":", r"\text{a Mat\'ern field, \ range } \rho = \sqrt{8\nu}/\kappa", font_size=30),
+            cmath(r"\text{solution}", r":", r"\text{practical range } r_p=\sqrt{8\nu}/\kappa;\ \text{chapter 5 scale }\rho=r_p/2", font_size=30),
             cmath(r"\alpha = 2", r":", r"Q = \tau (\kappa^2 I + G)^\top (\kappa^2 I + G), \ \ G = \text{the graph Laplacian}", font_size=28),
             cmath(r"\text{Lindgren, Rue \& Lindstr\"om (2011)}", r":", r"\text{finite elements on any mesh}", font_size=28),
         ]
@@ -101,13 +104,17 @@ class GMRF(VoiceoverScene):
         whys = [why(r"Whittle's SPDE"), why(r"$\nu = 1$ in two dimensions"), why(r"a discretized operator: \ sparse"),
                 why(r"the SPDE approach")]
         with self.voiceover(
-            "<bookmark mark='a'/> The bridge from Matérn fields to sparse precisions is Whittle's equation from chapter "
-            "five. <bookmark mark='b'/> Its solutions are exactly Matérn fields, with the range set by kappa. <bookmark "
-            "mark='c'/> Discretize the operator on a grid, and the precision is a square of a sparse matrix built from the "
-            "graph Laplacian: this is what made the sparsity pattern we just saw. <bookmark mark='d'/> Finn Lindgren, "
-            "Håvard Rue and Johan Lindström showed in 2011 how to do this with finite elements on any triangulated mesh, "
-            "including irregular regions and the sphere. A continuous Matérn field, with the speed of a Markov field."
-        ) as vo:
+            "<bookmark mark='a'/> The bridge from Matérn fields to sparse precisions is Whittle's equation from "
+            "chapter five. <bookmark mark='b'/> On the whole Euclidean domain, under the stationary construction, its"
+            " solutions have Matérn covariance. Kappa determines the range; finite grids and boundaries introduce "
+            "approximation. <bookmark mark='c'/> Discretize the operator on a grid, and the precision is a square of "
+            "a sparse matrix built from the graph Laplacian: this is what made the sparsity pattern we just saw. "
+            "<bookmark mark='d'/> Finn Lindgren, Håvard Rue and Johan Lindström showed in 2011 how to do this with "
+            "finite elements on any triangulated mesh, including irregular regions and the sphere. A continuous "
+            "Matérn field, with the speed of a Markov field."        ) as vo:
+            intro=label('A discretized stochastic operator gives a sparse field precision',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -118,21 +125,23 @@ class GMRF(VoiceoverScene):
         d = load("gmrf")
         u, mu = np.asarray(d["u"], float), np.asarray(d["mu"], float)
         nx = d["nx"]
-        F1 = grid_surface(u, [-3.3, 0.5, 0], 5.8)
-        F2 = grid_surface(mu, [3.3, 0.5, 0], 5.8)
+        limit = float(np.ceil(max(np.abs(u).max(), np.abs(mu).max())))
+        F1 = grid_surface(u, [-3.3, 0.5, 0], 5.8, -limit, limit)
+        F2 = grid_surface(mu, [3.3, 0.5, 0], 5.8, -limit, limit)
         obs = np.asarray(d["obs"], int)
         pts = F2.dots(obs % nx, obs // nx, WHITE, 0.035)
         t1 = label(r"a GMRF sample \ ($n = 2{,}400$)", font_size=22, color=TRUEC).next_to(F1, UP, buff=0.1)
         t2 = label(r"its conditional mean from 150 noisy values \ (white)", font_size=22, color=FIELDC).next_to(F2, UP, buff=0.1)
         foot = fit_rows(VGroup(
             label(r"conditioning: \ solve $(Q + A^\top A/\sigma_\varepsilon^2)\, \mu = A^\top y/\sigma_\varepsilon^2$ \ with a sparse solver", font_size=22, color=BANDC),
-            label(rf"RMSE against the sample: \ {d['rmse']:.2f} \ (the field's SD is 1)", font_size=22, color=GREY_A),
+            label(rf"RMSE against the sample: \ {d['rmse']:.2f} \ (average marginal prior variance normalized to 1)", font_size=22, color=GREY_A),
         ), 12.4, 0.25, [0, -2.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> On the left, a sample from this Markov field, drawn through a sparse Cholesky factor. "
-            "<bookmark mark='b'/> On the right, its conditional mean given a hundred and fifty noisy observations, in white. "
-            "<bookmark mark='c'/> The conditioning is one sparse linear solve: the precision of the posterior is the prior "
-            "precision plus a diagonal term at the observed sites. <bookmark mark='d'/> The reconstruction misses by "
+            "<bookmark mark='a'/> On the left, a sample from this Markov field. This small teaching implementation "
+            "uses dense Cholesky for sampling; the conditioning solve is sparse. <bookmark mark='b'/> On the right, "
+            "its conditional mean given a hundred and fifty noisy observations, in white. <bookmark mark='c'/> The "
+            "conditioning is one sparse linear solve: the precision of the posterior is the prior precision plus a "
+            "diagonal term at the observed sites. <bookmark mark='d'/> The reconstruction misses by "
             + say(d["rmse"], 2) + " standard deviations: the large features are recovered, the small ones between "
             "observations are not, and could not be."
         ) as vo:

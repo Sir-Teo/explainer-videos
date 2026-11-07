@@ -28,7 +28,7 @@ class Likelihood(VoiceoverScene):
             cmath(r"\text{profile}", r":", r"\text{maximize } \ell(\hat\beta(\theta), \theta) \text{ over } \theta = (\rho, \sigma^2, \tau^2)", font_size=30),
         ]
         rows[2][-1].set_color(TAUC)
-        whys = [why(r"one draw of an $n$-variate normal"), why(r"Part 21's likelihood"), why(r"GLS, \ given $\theta$"),
+        whys = [why(r"one draw of an $n$-variate normal"), why(r"Part 22's likelihood"), why(r"GLS, \ given $\theta$"),
                 why(r"Mardia \& Marshall (1984)")]
         with self.voiceover(
             "<bookmark mark='a'/> Variogram fitting by eye or by least squares was the geostatistician's way. Statisticians "
@@ -39,6 +39,9 @@ class Likelihood(VoiceoverScene):
             "maximize over the few covariance parameters numerically. Kanti Mardia and Roger Marshall gave the asymptotics "
             "in 1984."
         ) as vo:
+            intro=label('Gaussian likelihood profiles out a generalized least-squares trend',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -53,16 +56,21 @@ class Likelihood(VoiceoverScene):
             cmath(r"\text{e.g.}", r":", r"\text{for i.i.d. data, \ REML gives } s^2 = \text{RSS}/(n - p)", font_size=30),
         ]
         rows[2][-1].set_color(BANDC)
-        whys = [why(r"Part 21's $n$ vs $n - 1$"), why(r"error contrasts"), why(r"Patterson \& Thompson (1971)"),
+        whys = [why(r"known correlation shape: ML scale uses $n$, REML uses $n-p$"), why(r"error contrasts"), why(r"Patterson \& Thompson (1971)"),
                 why(r"the familiar correction")]
         with self.voiceover(
-            "<bookmark mark='a'/> Maximum likelihood underestimates the variance, because it treats the estimated trend "
-            "as if it were known: Part twenty-one's n against n minus one. <bookmark mark='b'/> Restricted maximum "
-            "likelihood uses only the error contrasts, linear combinations of the data whose distribution does not "
-            "involve beta at all. <bookmark mark='c'/> The result is the profile likelihood with one extra term, a "
-            "log-determinant that penalizes the trend, <bookmark mark='d'/> and for independent data it gives back the "
-            "familiar residual variance with n minus p in the denominator."
+            "<bookmark mark='a'/> With a known correlation shape, maximum likelihood for the scale is biased downward"
+            " because it treats the estimated trend as if it were known: the familiar n against n minus p. With "
+            "jointly estimated covariance shapes the bias comparison is more complicated, and REML is not universally"
+            " unbiased. <bookmark mark='b'/> Restricted maximum likelihood uses only the error contrasts, linear "
+            "combinations of the data whose distribution does not involve beta at all. <bookmark mark='c'/> The "
+            "result is the profile likelihood with one extra term, a log-determinant that penalizes the trend, "
+            "<bookmark mark='d'/> and for independent data it gives back the familiar residual variance with n minus "
+            "p in the denominator."
         ) as vo:
+            intro=label('Restricted likelihood uses contrasts that remove the fixed trend',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -78,17 +86,18 @@ class Likelihood(VoiceoverScene):
                 [r"REML", f"{f['rho']:.2f}", f"{f['sigma2']:.2f}", f"{f['tau2']:.2f}", f"{f['beta'][0]:.2f}", f"{f['beta'][1]:.2f}"]]
         tab = table_rows(rows, font_size=28, col_buff=0.7, row_buff=0.34, colors=[GREY_A, TRUEC, FIELDC, BANDC]).move_to([0, 1.0, 0])
         foot = fit_rows(VGroup(
-            label(r"REML's range and variance are larger than ML's, \ as theory says", font_size=24, color=BANDC),
+            label(r"REML range and variance are larger here; this ordering is not universal", font_size=24, color=BANDC),
             label(r"both overshoot the truth together, \ along chapter five's ridge", font_size=24, color=TAUC),
             label(r"the trend, \ which kriging needs most, \ is close", font_size=24, color=GREY_A),
         ), 12.4, 0.3, [0, -1.6, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Both fits on the World's stations, with smoothness three halves. <bookmark mark='b'/> "
             "Restricted likelihood gives a range of " + say(f["rho"], 2) + " and a variance of " + say(f["sigma2"], 1) +
-            ", against the truth of one point five and six point two five; maximum likelihood gives smaller values of both. "
-            "<bookmark mark='c'/> Both overshoot the range and the variance together, along chapter five's ridge: one island "
-            "cannot separate them. <bookmark mark='d'/> The trend coefficients, which matter most for the predictions, are "
-            "close to the truth."
+            ", against the truth of one point five and six point two five; in this fit maximum likelihood gives "
+            "smaller values of both, which is not a universal ordering theorem. <bookmark mark='c'/> Both overshoot "
+            "the range and the variance together, along chapter five's ridge: one island cannot separate them. "
+            "<bookmark mark='d'/> The trend coefficients, which matter most for the predictions, are close to the "
+            "truth."
         ) as vo:
             self.add(pollution_tag())
             vo.wait_until("a")
@@ -150,14 +159,14 @@ class Likelihood(VoiceoverScene):
             label(r"each likelihood: \ a Cholesky factor of an $n \times n$ matrix", font_size=22),
             label(r"memory $O(n^2)$, \ time $O(n^3)$", font_size=22, color=TAUC),
             label(rf"2,000 locations: \ {ys[-1]:.2f} s; \ the optimizer needs hundreds", font_size=22, color=FIELDC),
-            label(rf"100,000 locations: \ about {d['cubic_extrap_hours']:,.0f} hours, \ each", font_size=22, color=MISSC),
+            label(rf"100,000: cubic extrapolation {d['cubic_extrap_hours']:,.0f} hours, not measured", font_size=22, color=MISSC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The catch is the cost. Every evaluation of the likelihood needs the Cholesky factor of an "
             "n by n covariance matrix. <bookmark mark='b'/> That is n squared memory and n cubed time; the gold line has "
-            "slope three. <bookmark mark='c'/> Two thousand locations take " + say(ys[-1], 2) + " seconds per evaluation, "
-            "and the optimizer needs hundreds of evaluations. <bookmark mark='d'/> A hundred thousand locations, a modest "
-            "satellite image, would take about " + f"{d['cubic_extrap_hours']:,.0f}" + " hours for each one. Chapter seven "
+            "slope three. <bookmark mark='c'/> Two thousand locations take " + say(ys[-1], 2) + " seconds per evaluation, and the optimizer needs hundreds of evaluations. <bookmark mark='d'/> A hundred"
+            " thousand locations, a modest satellite image, under a simple cubic extrapolation from this machine and "
+            "load would take about " + f"{d['cubic_extrap_hours']:,.0f}" + " hours for each one. Chapter seven "
             "is about getting around this."
         ) as vo:
             self.add(seeded_tag())

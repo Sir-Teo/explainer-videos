@@ -49,3 +49,23 @@ def test_universal_kriging_matches_independent_constrained_blup_system():
 def test_spatial_board_mcse_uses_independent_field_fractions():
     values=np.array([.62,.77,.85,.95,.99])
     assert C.mean_mc_se(values)==pytest.approx(values.std(ddof=1)/np.sqrt(len(values)))
+
+
+@pytest.mark.parametrize('nu',[.5,1.5,2.5])
+def test_circulant_embedding_preserves_covariance_instead_of_clipping_negative_modes(nu):
+    lam=C.circulant_embedding(60,40,.1,1.,1.,nu)
+    assert lam.min()>=0
+    implied=np.fft.ifft2(lam).real
+    offsets=np.arange(20)*.1
+    np.testing.assert_allclose(implied[0,:20],SP.matern(offsets,1.,1.,nu),atol=1e-10)
+    assert implied[0,0]==pytest.approx(1.,abs=1e-10)
+
+
+def test_independent_spatial_source_tables_match_at_documented_storage_precision():
+    import json
+    from pathlib import Path
+    rows=json.loads(Path('docs/qa/evidence/stats39-polish-20261107/source-data.json').read_text())
+    assert [r['rows'] for r in rows]==[155,3103,176,578,13]
+    for row in rows[:2]:assert max(row['maximum_absolute_error_by_column'].values())<=5.00001e-6
+    assert rows[2]['maximum_absolute_error']<=.5
+    for row in rows[3:]:assert row['maximum_absolute_error']<=5.00001e-6

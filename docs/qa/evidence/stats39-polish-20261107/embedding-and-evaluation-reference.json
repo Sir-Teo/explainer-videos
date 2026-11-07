@@ -1,0 +1,20 @@
+{
+  "gallery_checked_embedding_nu_2_5": {
+    "shape": [
+      160,
+      240
+    ],
+    "minimum_eigenvalue": 8.915638289481997e-07
+  },
+  "world_existing_approximation": {
+    "unit_variance_max_covariance_difference": 1.9970663922341814e-05,
+    "nominal_variance": 6.25,
+    "absolute_max_covariance_difference": 0.00012481664951463634
+  },
+  "bayesian_optimization": {
+    "total_function_evaluations": 11,
+    "first_best_evaluation": 8,
+    "best_x": -0.48,
+    "reference_grid_points": 401
+  }
+}

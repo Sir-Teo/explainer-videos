@@ -39,6 +39,9 @@ class SpaceTime(VoiceoverScene):
             "is the same at every time lag, only scaled down, which is physically odd: weather systems move, and what "
             "happens here today happens further away tomorrow."
         ) as vo:
+            intro=label('Separable covariance fixes the spatial shape across time lags',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -62,10 +65,11 @@ class SpaceTime(VoiceoverScene):
         A2, c2, t2 = self._panel(non, h, [3.4, -0.2, 0], r"Gneiting, \ $\beta = 1$", BANDC)
         key = label(r"time lag \ $u = 0$ \ (blue), \ $1$ \ (gold), \ $2$ \ (red)", font_size=22, color=GREY_A).move_to([0, -3.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The spatial correlation at three time lags, each scaled to start at one. <bookmark "
-            "mark='b'/> Under separability the three curves are one curve: the spatial shape never changes. <bookmark "
-            "mark='c'/> Under Tilmann Gneiting's non-separable family, the spatial correlation spreads out as the time lag "
-            "grows: values far apart in space are related across a longer time gap."
+            "<bookmark mark='a'/> The spatial shape at three time lags, normalized by the covariance at zero spatial "
+            "lag for each time lag. This compares shapes rather than absolute cross-time correlations. <bookmark "
+            "mark='b'/> Under separability the three curves are one curve: the spatial shape never changes. <bookmark"
+            " mark='c'/> Under Tilmann Gneiting's non-separable family, the spatial correlation spreads out as the "
+            "time lag grows: values far apart in space are related across a longer time gap."
         ) as vo:
             self.add(seeded_tag())
             vo.wait_until("a")
@@ -87,13 +91,17 @@ class SpaceTime(VoiceoverScene):
         whys = [why(r"Gneiting's family"), why(r"how fast time decorrelates"), why(r"a parameter to test"),
                 why(r"Bochner again")]
         with self.voiceover(
-            "<bookmark mark='a'/> Gneiting's family of 2002, built so that it is always a valid covariance. The time lag "
-            "enters through a function psi, <bookmark mark='b'/> here a power plus one, <bookmark mark='c'/> and a single "
-            "parameter beta between zero and one sets the space-time interaction. At zero, the model is separable, so "
-            "separability becomes a hypothesis the data can test. <bookmark mark='d'/> Proving such functions valid, "
-            "positive definite in space and time together, is the hard part, and Gneiting did it through Bochner's "
-            "theorem and mixtures."
+            "<bookmark mark='a'/> Gneiting's family of 2002, valid for positive variance, a and c, alpha and gamma "
+            "between zero and one, beta between zero and one, and nonnegative delta, in the displayed spatial "
+            "dimension. The time lag enters through a function psi, <bookmark mark='b'/> here a power plus one, "
+            "<bookmark mark='c'/> and a single parameter beta between zero and one sets the space-time interaction. "
+            "At zero, the model is separable, so separability becomes a hypothesis the data can test. <bookmark "
+            "mark='d'/> Proving such functions valid, positive definite in space and time together, is the hard part,"
+            " and Gneiting did it through Bochner's theorem and mixtures."
         ) as vo:
+            intro=label('Space-time covariance validity requires parameter restrictions',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -108,17 +116,19 @@ class SpaceTime(VoiceoverScene):
         ax = A.ax
         bars = VGroup(*[Line(ax.c2p(k, 0), ax.c2p(k, a), color=FIELDC, stroke_width=6) for k, a in enumerate(acf)])
         ks = np.arange(15)
-        ref = polyline(ax, ks, 0.7 ** ks * 4 / (4 + 1.5 ** 2 / 300), TAUC, 2.5)
+        reference = 0.7 ** ks * 4 / (4 + 1.5 ** 2 / 300)
+        reference[0] = 1.0
+        ref = polyline(ax, ks, reference, TAUC, 2.5)
         side = fit_rows(VGroup(
             label(r"the World's 300 stations, \ 365 days", font_size=22),
-            label(r"day $t$ at station $s$: \ annual value + weather$_t$ + noise", font_size=22, color=GREY_A),
-            label(rf"the island-wide daily mean: \ lag-1 ACF {acf[1]:.2f}", font_size=22, color=FIELDC),
+            label(r"day $t$ at station $s$: \ latent annual level + weather$_t$ + noise", font_size=22, color=GREY_A),
+            label(rf"the station-average daily reading: \ lag-1 ACF {acf[1]:.2f}", font_size=22, color=FIELDC),
             label(r"gold: \ the AR(1) weather, \ $\phi = 0.7$", font_size=22, color=TAUC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The World's stations also report every day for a year. <bookmark mark='b'/> Each day's "
-            "reading is the station's annual level, plus that day's weather, shared across the island, plus noise. "
-            "<bookmark mark='c'/> The island-wide daily mean has a lag-one autocorrelation of " + say(acf[1], 2) + ", "
+            "<bookmark mark='a'/> The World's stations also report every day for a year. <bookmark mark='b'/> Each "
+            "day's reading is the station's annual level, plus that day's weather, shared across the island, plus "
+            "noise. <bookmark mark='c'/> The station-average daily reading has a lag-one autocorrelation of " + say(acf[1], 2) + ", "
             "<bookmark mark='d'/> which is the autoregressive weather of Part seventeen, with coefficient point seven."
         ) as vo:
             self.add(pollution_tag())
@@ -150,9 +160,10 @@ class SpaceTime(VoiceoverScene):
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Subtract each station's own mean, and correlate the daily anomalies of pairs of "
-            "stations. <bookmark mark='b'/> The correlation is " + say(sc[0], 2) + " at every distance, <bookmark mark='c'/> "
-            "exactly weather's share of the daily variance. <bookmark mark='d'/> A signal shared by the whole region looks, "
-            "to a variogram, like dependence of infinite range. It must be modelled first, as a time series, before any "
+            "stations. <bookmark mark='b'/> The correlation is " + say(sc[0], 2) + " at every distance, <bookmark mark='c'/> approximately the model's weather share of daily variance, with"
+            " finite-series variation. <bookmark mark='d'/> A signal shared by the whole region looks, in the spatial"
+            " covariance like a component that does not decay with distance. It cancels from same-day spatial "
+            "differences and is invisible to that variogram. It must be modelled first, as a time series, before any "
             "spatial structure in what remains can be seen."
         ) as vo:
             self.add(pollution_tag())
