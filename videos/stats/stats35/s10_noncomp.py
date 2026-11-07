@@ -134,6 +134,10 @@ class Noncompliance(VoiceoverScene):
         self.clear_scene()
 
     def assumptions(self):
+        heading = label(r"Four assumptions identify the complier effect", font_size=36).move_to([0, 3.3, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         rows = fit_rows(VGroup(
             label(r"1. \ $Z$ randomized", font_size=26, color=BANDC),
             label(r"2. \ exclusion: \ $Z$ affects $Y$ only through $D$ \ (blinding helps)", font_size=26, color=TAUC),
