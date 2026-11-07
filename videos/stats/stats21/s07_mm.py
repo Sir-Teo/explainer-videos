@@ -31,14 +31,19 @@ class MM(VoiceoverScene):
         rows[3][2].set_color(HIT)
         whys = [why(r"a majorizer: \ above $f$ everywhere"), why(r"touching it at the current point"),
                 why(r"minimize the easy surrogate instead"), why(r"so $f$ never goes up: \ the descent property")]
+        intro = label('A touching majorizer makes a surrogate-reducing step safe', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "MM stands for majorize, then minimize, a principle Kenneth Lange and others built into a general method. "
-            "<bookmark mark='a'/> At the current point, build a surrogate function g that lies above f everywhere, "
-            "<bookmark mark='b'/> and touches it at the current point. <bookmark mark='c'/> Minimize the surrogate, which is "
-            "chosen to be easy, often a quadratic. <bookmark mark='d'/> Then f at the new point is at most the surrogate there, "
-            "which is at most the surrogate at the old point, which equals f there. The objective can never increase. No line "
-            "search, no tuning."
+            "MM stands for majorize, then minimize, a principle Kenneth Lange and others built into a general method."
+            " <bookmark mark='a'/> At the current point, build a surrogate function g that lies above f everywhere, "
+            "<bookmark mark='b'/> and touches it at the current point. <bookmark mark='c'/> Minimize the surrogate, "
+            "which is chosen to be easy, often a quadratic. <bookmark mark='d'/> Then f at the new point is at most "
+            "the surrogate there, which is at most the surrogate at the old point, which equals f there. With an "
+            "exact touching majorizer and a surrogate-reducing update, the objective cannot increase. Constructing "
+            "the surrogate and solving the subproblem still require care."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -57,7 +62,7 @@ class MM(VoiceoverScene):
         ticks = VGroup(*[Line(ax.c2p(v, 0), ax.c2p(v, 2.5), color=GREY_B, stroke_width=2) for v in x])
         maj, mins = VGroup(), VGroup()
         for k, th in enumerate(d["thetas"][:4]):
-            w = 1 / (1e-9 + np.abs(x - th))
+            w = 1 / np.abs(x - th)
             g = np.array([np.sum(w * (x - t) ** 2 / 2 + np.abs(x - th) / 2) for t in grid])
             m = g < 50
             maj.add(curve(ax, grid[m], g[m], PATH, 2.5))
@@ -91,7 +96,7 @@ class MM(VoiceoverScene):
 
     def family(self):
         rows = [
-            cmath(r"\text{EM}", r":", r"\text{the expected complete-data log likelihood minorizes}", font_size=28),
+            cmath(r"\text{EM}", r":", r"\text{the expected complete-data log likelihood plus current posterior entropy}", font_size=28),
             cmath(r"\text{IRLS for LAD, \ quantiles}", r":", r"\text{the parabola above } |r| \text{ (Hunter \& Lange 2000)}", font_size=28),
             cmath(r"\text{Weiszfeld (1937)}", r":", r"\text{the spatial median}", font_size=28),
             cmath(r"\text{multidimensional scaling}", r":", r"\text{SMACOF (de Leeuw 1977)}", font_size=28),
@@ -99,13 +104,19 @@ class MM(VoiceoverScene):
         rows[0][2].set_color(PATH)
         whys = [why(r"Dempster, \ Laird \& Rubin (1977): \ Part 22"), why(r"the median example, \ in regression"),
                 why(r"the same weights, \ in the plane"), why(r"Part 31")]
+        intro = label('Familiar algorithms share a surrogate-optimization principle', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "Many famous algorithms turn out to be MM in disguise. <bookmark mark='a'/> The EM algorithm, the next part's main "
-            "tool, is MM for maximization: the expected log likelihood of the complete data lies below the real one and "
-            "touches it. <bookmark mark='b'/> Hunter and Lange's algorithm for quantile regression uses the parabola trick we "
-            "just saw. <bookmark mark='c'/> Weiszfeld's 1937 algorithm for the spatial median is the same weighted mean in two "
-            "dimensions. <bookmark mark='d'/> And so is de Leeuw's SMACOF for multidimensional scaling, in Part 31."
+            "Many famous algorithms turn out to be MM in disguise. <bookmark mark='a'/> The EM algorithm, the next "
+            "part's main tool, is MM for maximization: the expected complete-data log likelihood plus the entropy of "
+            "the current conditional latent distribution is a touching lower bound. The entropy term is constant in "
+            "the new parameter and is essential to that bound. <bookmark mark='b'/> Hunter and Lange's algorithm for "
+            "quantile regression uses the parabola trick we just saw. <bookmark mark='c'/> Weiszfeld's 1937 algorithm"
+            " for the spatial median is the same weighted mean in two dimensions. <bookmark mark='d'/> And so is de "
+            "Leeuw's SMACOF for multidimensional scaling, in Part 31."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -125,13 +136,15 @@ class MM(VoiceoverScene):
             label(r"median regression of Engel's food spending", font_size=22),
             label(rf"the LP optimum: \ {d['engel_lp']:,.1f}", font_size=22, color=NEWT),
             label(r"MM: \ weighted least squares, \ again and again", font_size=22, color=PATH),
-            label(r"always downhill; \ steadily, \ not quadratically", font_size=22, color=HIT),
+            label(r"the displayed original loss decreases; \ epsilon smooths the update", font_size=22, color=HIT),
         ), 3.45, 0.42, [5.1, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Here's MM doing median regression on Engel's households, each step a weighted least squares "
-            "fit. <bookmark mark='b'/> The linear program gives the exact optimum. <bookmark mark='c'/> MM's objective falls "
-            "toward it, <bookmark mark='d'/> never rising, a little closer at every step, but linearly, not with Newton's "
-            "doubling digits. That's the usual bargain: reliable, simple, and sometimes slow."
+            "<bookmark mark='a'/> Here's MM doing median regression on Engel's households, each step a weighted least"
+            " squares fit. <bookmark mark='b'/> The linear program gives the exact optimum. <bookmark mark='c'/> MM's"
+            " objective falls toward it, <bookmark mark='d'/> decreasing in this example, though not with Newton's "
+            "local doubling of digits. The implementation uses a tiny smoothing epsilon, so its exact monotonicity "
+            "theorem concerns a smoothed check loss; the original objective is shown here. That's the usual bargain: "
+            "reliable, simple, and sometimes slow."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -162,14 +175,16 @@ class MM(VoiceoverScene):
             label(r"Zermelo (1929), \ for chess; \ Hunter (2004): \ it is MM", font_size=20, color=GREY_A),
         ), 12.0, 0.25, [0, -1.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Another MM classic ranks competitors from their head-to-head results. Here's a toy season "
-            "among four of the World's town teams, each pair meeting ten times. The Bradley–Terry model gives each team a "
-            "strength g, and says team i beats team j with probability g i over g i plus g j. <bookmark mark='b'/> The update "
-            "has a lovely form: a team's new strength is its total wins divided by a sum over its opponents. "
-            "<bookmark mark='c'/> The log likelihood rises at every step. <bookmark mark='d'/> At the end, Harbour is the "
-            "strongest, and would beat Quarry eighty-seven percent of the time. <bookmark mark='e'/> Ernst Zermelo proposed "
-            "exactly this iteration for chess tournaments in 1929; David Hunter showed in 2004 that it's an MM algorithm, which "
-            "is why it always works."
+            "<bookmark mark='a'/> Another MM classic ranks competitors from their head-to-head results. Here's a toy "
+            "season among four of the World's town teams, each pair meeting ten times. The Bradley–Terry model gives "
+            "each team a strength g, and says team i beats team j with probability g i over g i plus g j. <bookmark "
+            "mark='b'/> The update has a lovely form: a team's new strength is its total wins divided by a sum over "
+            "its opponents. <bookmark mark='c'/> The log likelihood rises at every step. <bookmark mark='d'/> At the "
+            "end, Harbour is the strongest, and would beat Quarry eighty-seven percent of the time. <bookmark "
+            "mark='e'/> Ernst Zermelo proposed exactly this iteration for chess tournaments in 1929; David Hunter "
+            "showed in 2004 that it's an MM algorithm, which explains likelihood ascent. A finite positive strength "
+            "MLE also needs an adequately connected win network; the overall strength scale is unidentified and "
+            "normalized here."
         ) as vo:
             self.add(simulated_tag(r"a toy season"))
             vo.wait_until("a")
@@ -183,14 +198,15 @@ class MM(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"MM: \ stable, \ monotone, \ no step sizes to tune", font_size=24, color=HIT),
             label(r"each step easy: \ a weighted mean, \ a least-squares fit, \ a closed form", font_size=24, color=PATH),
-            label(r"convergence: \ linear, \ sometimes painfully slow", font_size=24, color=RES),
+            label(r"often locally linear under regularity; \ no universal rate", font_size=24, color=RES),
             label(r"remedies: \ acceleration (SQUAREM), \ or switch to Newton near the end", font_size=22, color=GREY_A),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> So MM algorithms are stable and monotone, with no step size to choose. <bookmark mark='b'/> Each "
-            "step is something simple, a weighted mean or a least-squares fit. <bookmark mark='c'/> The cost is speed: "
-            "convergence is linear, and can be painfully slow when the surrogate is much more curved than the function. "
-            "<bookmark mark='d'/> The standard fixes are extrapolation schemes like SQUAREM, or switching to Newton once close."
+            "<bookmark mark='a'/> So MM algorithms are stable and monotone, with no step size to choose. <bookmark "
+            "mark='b'/> Each step is something simple, a weighted mean or a least-squares fit. <bookmark mark='c'/> "
+            "The cost is speed: convergence is often locally linear under suitable regularity, and can be painfully "
+            "slow when the surrogate is much more curved than the function. <bookmark mark='d'/> The standard fixes "
+            "are extrapolation schemes like SQUAREM, or switching to Newton once close."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

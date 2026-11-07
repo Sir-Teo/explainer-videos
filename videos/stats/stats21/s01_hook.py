@@ -21,17 +21,18 @@ class Hook(VoiceoverScene):
                          r"the solutions days later, \ apologizing that they were harder than usual. \ They were open problems.",
                          color=PATH, width=11.0, font_size=23).move_to([0, 1.2, 0])
         rows = fit_rows(VGroup(
-            label(r"one: \ his thesis, \ \emph{Ann. Math. Stat.} (1940)", font_size=24),
+            label(r"one solution published in 1940; \ both contributed to his 1946 thesis", font_size=24),
             label(r"the other, \ with Abraham Wald (1951): \ the Neyman--Pearson lemma, \ generalized", font_size=24, color=NEWT),
             label(r"1947: \ the simplex method, \ for planning the US Air Force", font_size=24, color=PATH),
         ), 12.0, 0.35, [0, -1.7, 0])
         with self.voiceover(
-            "The master's stage begins with a story statisticians like to tell. <bookmark mark='a'/> In 1939 George Dantzig, a "
-            "graduate student at Berkeley, arrived late to a class of Jerzy Neyman's. Two problems were on the board, and he "
-            "copied them down as homework. A few days later he handed in solutions, apologizing that they had taken longer "
-            "than usual. They were two famous unsolved problems in statistics. <bookmark mark='b'/> One became his thesis. "
-            "<bookmark mark='c'/> The other, published with Abraham Wald in 1951, generalized the Neyman–Pearson lemma, and its "
-            "mathematics turned out to be the duality of linear programming. <bookmark mark='d'/> By then Dantzig had invented "
+            "The master's stage begins with a story statisticians like to tell. <bookmark mark='a'/> In 1939 George "
+            "Dantzig, a graduate student at Berkeley, arrived late to a class of Jerzy Neyman's. Two problems were on"
+            " the board, and he copied them down as homework. A few days later he handed in solutions, apologizing "
+            "that they had taken longer than usual. They were two famous unsolved problems in statistics. <bookmark "
+            "mark='b'/> The two solutions formed the basis of his 1946 doctoral thesis. <bookmark mark='c'/> The "
+            "other, published with Abraham Wald in 1951, generalized the Neyman–Pearson lemma, and its mathematics "
+            "turned out to be the duality of linear programming. <bookmark mark='d'/> By then Dantzig had invented "
             "the simplex method, in 1947, to plan the logistics of the United States Air Force."
         ) as vo:
             self.play(FadeIn(tl))
@@ -115,21 +116,23 @@ class Hook(VoiceoverScene):
         steps = VGroup(*[Arrow(ax.c2p(*a), ax.c2p(*b), buff=0.08, color=PATH, stroke_width=4) for a, b in zip(path, path[1:])])
         dual = d["dual"]
         rows = fit_rows(VGroup(
-            label(r"the simplex method: \ walk from corner to corner, \ uphill", font_size=22, color=PATH),
+            label(r"the simplex method: \ moves between basic feasible solutions, \ nondecreasing profit", font_size=22, color=PATH),
             label(rf"$(0, 0)$: \ {vals[0]:.0f} \ $\to$ \ $(0, 7)$: \ {vals[1]:.0f} \ $\to$ \ $(4, 5)$: \ {vals[2]:.0f}", font_size=22),
             label(r"no uphill neighbour: \ optimal", font_size=22, color=HIT),
             label(rf"shadow prices: \ flour {dual[0]:.0f}, \ oven {dual[1]:.0f}, \ staff {dual[2]:.0f}", font_size=22, color=NEWT),
             label(r"the dual problem prices the constraints: \ chapter three", font_size=20, color=GREY_A),
         ), 5.0, 0.4, [3.9, 0.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The profit is a straight line's worth of plans at each level, so the best plan is always at "
-            "a corner of the polygon. Dantzig's simplex method walks from corner to corner, always uphill. "
-            "<bookmark mark='b'/> Start at the empty plan, profit zero. The cakes earn more, so bake cakes until flour runs out: "
-            "seven trays, profit twenty-eight. Then trade cakes for loaves along the flour line until the staff run out: four "
-            "trays of loaves and five of cakes, thirty-two. <bookmark mark='c'/> No neighbouring corner is higher, so this is the "
-            "optimum. <bookmark mark='d'/> The method also gives shadow prices: one more sack of flour is worth one, one more "
-            "shift of staff two, and one more oven hour nothing, because the oven isn't full. <bookmark mark='e'/> Those prices "
-            "solve a second linear program, the dual, which is where Dantzig's homework comes back."
+            "<bookmark mark='a'/> The profit is a straight line's worth of plans at each level, so at least one optimal plan is "
+            "at a corner of this bounded feasible polygon. Dantzig's simplex method moves between basic feasible solutions "
+            "without decreasing profit; degenerate pivots can leave it unchanged. <bookmark mark='b'/> Start at the "
+            "empty plan, profit zero. The cakes earn more, so bake cakes until flour runs out: seven trays, profit "
+            "twenty-eight. Then trade cakes for loaves along the flour line until the staff run out: four trays of "
+            "loaves and five of cakes, thirty-two. <bookmark mark='c'/> No neighbouring corner is higher, so this is "
+            "the optimum. <bookmark mark='d'/> The method also gives shadow prices: for sufficiently small resource "
+            "changes within the same optimal regime, an extra sack of flour is worth one, a staff shift two, and an "
+            "oven hour nothing because the oven is slack. <bookmark mark='e'/> Those prices solve a second linear "
+            "program, the dual, which is where Dantzig's homework comes back."
         ) as vo:
             self.play(FadeIn(rows[0]), FadeIn(dots[0], scale=1.5), Create(iso[0]))
             vo.wait_until("a")
@@ -151,16 +154,17 @@ class Hook(VoiceoverScene):
             label(r"1947: \ Jack Laderman solves it exactly by the simplex method", font_size=24),
             label(r"9 constraints, \ 77 unknowns: \ about 120 person-days on desk calculators", font_size=24, color=GREY_A),
             label(r"the optimum: \ \$39.69 a year, \ 24 cents better than Stigler's guess", font_size=24, color=HIT),
-            label(r"today: \ millions of variables, \ in seconds", font_size=24, color=PATH),
+            label(r"today: \ large sparse programs, \ with problem-dependent runtime", font_size=24, color=PATH),
         ), 12.0, 0.35, [0, -1.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The first big test of the method was a famous puzzle. In 1945 the economist George Stigler "
-            "asked for the cheapest diet that meets nine nutritional requirements, choosing among seventy-seven foods at 1939 "
-            "prices. By clever trial and error he found one costing thirty-nine dollars and ninety-three cents a year. "
-            "<bookmark mark='b'/> In 1947 Jack Laderman solved it exactly with Dantzig's new simplex method: nine constraints, "
-            "seventy-seven unknowns, and about a hundred and twenty person-days of work on desk calculators. "
-            "<bookmark mark='c'/> The true optimum was thirty-nine sixty-nine: Stigler had been within twenty-four cents. "
-            "<bookmark mark='d'/> Today a laptop solves linear programs with millions of variables in seconds."
+            "<bookmark mark='a'/> The first big test of the method was a famous puzzle. In 1945 the economist George "
+            "Stigler asked for the cheapest diet that meets nine nutritional requirements, choosing among "
+            "seventy-seven foods at 1939 prices. By clever trial and error he found one costing thirty-nine dollars "
+            "and ninety-three cents a year. <bookmark mark='b'/> In 1947 Jack Laderman solved it exactly with "
+            "Dantzig's new simplex method: nine constraints, seventy-seven unknowns, and about a hundred and twenty "
+            "person-days of work on desk calculators. <bookmark mark='c'/> The true optimum was thirty-nine "
+            "sixty-nine: Stigler had been within twenty-four cents. <bookmark mark='d'/> Modern solvers handle much "
+            "larger sparse programs, though runtime depends on structure, conditioning and hardware."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(hc, shift=UP * 0.2))
@@ -180,6 +184,9 @@ class Hook(VoiceoverScene):
         rows[4][2].set_color(PATH)
         whys = [why(r"a closed form"), why(r"a linear program: \ chapter four"), why(r"Newton, \ usually: \ chapter five"),
                 why(r"coordinate descent, \ proximal steps"), why(r"algorithms and their guarantees")]
+        intro = label('Statistical estimators are defined by optimization problems', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "Why does a statistician need this? Because almost every estimator is the solution of an optimization problem. "
             "<bookmark mark='a'/> The mean minimizes squared distances, in closed form. <bookmark mark='b'/> The median "
@@ -188,6 +195,7 @@ class Hook(VoiceoverScene):
             "even differentiable. <bookmark mark='e'/> This part is about how those optima are found, how fast, and what the "
             "shape of the problem tells us about the estimator."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=5, top=2.8, x=-0.4, buff=0.62, edge=6.9)
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

@@ -25,10 +25,10 @@ class Outro(VoiceoverScene):
             (r"Dantzig's homework; \ the simplex", PATH), (r"convexity: \ local is global", FIT),
             (r"Jensen; \ KL $\ge 0$", FIT), (r"Lagrange, \ KKT, \ slackness", NEWT),
             (r"duality: \ shadow prices", NEWT), (r"Neyman--Pearson as an LP", TRUE),
-            (r"LAD and quantiles: \ LPs", RES), (r"Newton: \ digits double", NEWT),
-            (r"MM: \ always downhill", PATH), (r"coordinate descent: \ glmnet", PATH),
+            (r"LAD and quantiles: \ LPs", RES), (r"Newton: \ local quadratic convergence", NEWT),
+            (r"MM: \ touching majorizers give descent", PATH), (r"coordinate descent: \ glmnet", PATH),
             (r"ISTA $1/k$, \ FISTA $1/k^2$", FAST), (r"ADMM: \ split and conquer", TEAL),
-            (r"SGD; \ Polyak--Ruppert: \ 93\%", GRAD), (r"curvature $=$ uncertainty", TRUE),
+            (r"SGD; \ Polyak--Ruppert: \ 93\%", GRAD), (r"curvature and uncertainty: \ with assumptions", TRUE),
         ]
         rows = VGroup(*[label(rf"{i + 1}.\ \ {t}", font_size=26, color=c) for i, (t, c) in enumerate(items)])
         cols = VGroup(VGroup(*rows[:7]).arrange(DOWN, aligned_edge=LEFT, buff=0.4),
@@ -38,14 +38,16 @@ class Outro(VoiceoverScene):
         head = label(r"Part 21, \ in fourteen lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Part twenty-one in fourteen lines. <bookmark mark='a'/> Dantzig's homework led to linear programming and the "
-            "simplex method. Convex problems have no local traps, and Jensen's inequality shows why likelihood works. Lagrange "
-            "multipliers and the KKT conditions handle constraints, with complementary slackness; duality turns constraints "
-            "into prices, and the Neyman–Pearson lemma into a linear program whose multiplier is the critical value. Least "
-            "absolute deviations and quantile regression are linear programs. Newton's method doubles its correct digits each "
-            "step; MM algorithms never go uphill; coordinate descent powers the lasso; FISTA's momentum turns one over k into "
-            "one over k squared; ADMM splits hard problems into easy ones. Averaged stochastic gradient is as efficient as "
-            "maximum likelihood, and the Board confirmed its intervals. And the curvature at the optimum is the uncertainty."
+            "Part twenty-one in fourteen lines. <bookmark mark='a'/> Dantzig's homework led to linear programming and"
+            " the simplex method. Convex problems have no local traps, and Jensen's inequality shows why likelihood "
+            "works. Lagrange multipliers and the KKT conditions handle constraints, with complementary slackness; "
+            "duality turns constraints into prices, and the Neyman–Pearson lemma into a linear program whose "
+            "multiplier is the critical value. Least absolute deviations and quantile regression are linear programs."
+            " Near a regular optimum, Newton can have quadratic convergence; MM algorithms never go uphill; "
+            "coordinate descent powers the lasso; FISTA's momentum turns one over k into one over k squared; ADMM "
+            "splits hard problems into easy ones. Averaged stochastic gradient has strong asymptotic guarantees under"
+            " explicit regularity and step assumptions; the Board illustrates one finite-sample setting. Curvature "
+            "supports regular likelihood inference, while misspecification requires more than the Hessian alone."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -111,11 +113,11 @@ class Outro(VoiceoverScene):
         tr.to_edge(UP, buff=0.8)
         nxt.next_to(tr, DOWN, buff=1.0)
         with self.voiceover(
-            "Twenty-one parts of sixty-five, the first of the master's. <bookmark mark='a'/> We can now compute almost any "
-            "estimator, and read its uncertainty from the landscape. <bookmark mark='b'/> Next, the likelihood itself. In 1894 "
-            "Karl Pearson tried to split a thousand crabs from Naples into two species by solving a ninth-degree polynomial. "
-            "Maximum likelihood and the EM algorithm do it better, and a wrong model gets a sandwich. Part 22: likelihood in "
-            "depth."
+            "Twenty-one parts of sixty-five, the first of the master's. <bookmark mark='a'/> We have a collection of "
+            "algorithms for many estimators, and know that interpreting their curvature requires statistical "
+            "assumptions. <bookmark mark='b'/> Next, the likelihood itself. In 1894 Karl Pearson tried to split a "
+            "thousand crabs from Naples into two species by solving a ninth-degree polynomial. Maximum likelihood and"
+            " the EM algorithm do it better, and a wrong model gets a sandwich. Part 22: likelihood in depth."
         ) as vo:
             self.play(FadeIn(tr))
             self.play(*[tr.cells[i].animate.set_fill(S.ACCENT, opacity=0.9) for i in range(21)])

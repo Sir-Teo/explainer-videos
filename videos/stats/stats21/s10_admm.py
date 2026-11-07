@@ -31,6 +31,9 @@ class ADMM(VoiceoverScene):
         rows[3][2].set_color(PATH)
         whys = [why(r"two easy pieces, \ tied by a constraint"), why(r"handle $f$ alone"), why(r"handle $g$ alone"),
                 why(r"the running dual: \ the price of disagreement")]
+        intro = label('Split the variables and update the disagreement price', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Some problems are hard only because two easy pieces are tangled together. ADMM untangles "
             "them: give each piece its own variable, x and z, and tie them with a linear constraint. <bookmark mark='b'/> Then "
@@ -39,6 +42,7 @@ class ADMM(VoiceoverScene):
             "multiplier that accumulates whatever disagreement remains, the price that drives the two toward agreement. The "
             "idea dates from the 1970s; Stephen Boyd and colleagues' 2011 survey made it a standard tool."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -55,6 +59,9 @@ class ADMM(VoiceoverScene):
         rows[3][2].set_color(PATH)
         whys = [why(r"the fused lasso (Tibshirani et al. 2005)"), why(r"the penalty is separable in $z$"),
                 why(r"a tridiagonal solve: \ $O(n)$"), why(r"soft thresholding, \ again")]
+        intro = label('Differences make the fused penalty separable', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Chapter seven's stuck example was a fused lasso: fit a sequence b to data y, penalizing the "
             "absolute jumps between neighbours, so the fit is piecewise constant. Coordinate descent fails because the penalty "
@@ -62,6 +69,7 @@ class ADMM(VoiceoverScene):
             "penalty is separable. <bookmark mark='c'/> The b-step is a linear system whose matrix is tridiagonal, solvable in "
             "linear time. <bookmark mark='d'/> The z-step is soft thresholding. Two easy steps, repeated."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -83,15 +91,15 @@ class ADMM(VoiceoverScene):
         key = fit_rows(VGroup(
             label(r"grey: \ 120 noisy points; \ gold thin: \ the truth, \ four levels", font_size=22),
             label(r"red: \ $\lambda = 0.5$: \ too many jumps", font_size=22, color=GRAD),
-            label(r"gold: \ $\lambda = 3$: \ the four levels, \ shrunk a little", font_size=22, color=PATH),
+            label(r"gold: \ $\lambda = 3$: \ the broad levels, \ with shrinkage and residual small jumps", font_size=22, color=PATH),
             label(r"blue: \ $\lambda = 20$: \ nearly flat", font_size=22, color=NEWT),
         ), 12.0, 0.2, [0, -2.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Here's a signal with four levels and noise, a hundred and twenty points, simulated. "
-            "<bookmark mark='b'/> With a small lambda the fused lasso follows the noise, with many small jumps. "
-            "<bookmark mark='c'/> With lambda three it finds the four levels, each a little shrunk toward its neighbours, the "
-            "lasso's usual bias. <bookmark mark='d'/> With lambda twenty almost every jump costs too much, and the fit is "
-            "nearly flat. Choosing lambda is Part 19's job, by cross-validation."
+            "<bookmark mark='a'/> Here's a signal with four levels and noise, a hundred and twenty points, simulated."
+            " <bookmark mark='b'/> With a small lambda the fused lasso follows the noise, with many small jumps. "
+            "<bookmark mark='c'/> With lambda three it recovers the broad level pattern, with shrinkage and some "
+            "remaining small jumps, the lasso's usual bias. <bookmark mark='d'/> With lambda twenty almost every jump"
+            " costs too much, and the fit is nearly flat. Choosing lambda is Part 19's job, by cross-validation."
         ) as vo:
             self.add(simulated_tag(r"simulated: \ a piecewise-constant signal", corner=UR))
             self.play(FadeIn(A), LaggedStart(*[FadeIn(x) for x in dots], lag_ratio=0.01), Create(truth), FadeIn(key[0]), run_time=2.0)
@@ -110,23 +118,25 @@ class ADMM(VoiceoverScene):
         A = axes([0, len(res)], [-4, 1], x_length=8.0, y_length=4.2, xlabel=r"ADMM iteration", ylabel=r"$\|Db - z\|$ (log$_{10}$)",
                  xticks=[0, 100, 200, 300, 400], yticks=[-4, -3, -2, -1, 0, 1], center=[-1.6, 0.3, 0])
         ax = A.ax
-        ln = polyline(ax, ks, np.clip(np.log10(res), -4, 1), PATH, 3.5)
+        ln = polyline(ax, ks, np.log10(res), PATH, 3.5)
+        dual = polyline(ax, ks, np.log10(np.maximum(d["fits"]["3.0"]["dual_res"], 1e-15)), NEWT, 2.5)
         rows = fit_rows(VGroup(
             label(r"the primal residual: \ how much $z$ and $Db$ disagree", font_size=22),
             label(r"fast at first, \ then a steady linear decline", font_size=22, color=PATH),
             label(r"a few digits come quickly; \ many digits slowly", font_size=22, color=GREY_A),
-            label(r"for statistics, \ a few digits are usually enough", font_size=22, color=HIT),
+            label(r"blue: \ dual residual; \ check both against scaled tolerances", font_size=22, color=NEWT),
         ), 3.45, 0.42, [5.1, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> How quickly does it settle? Track the primal residual, the disagreement between z and the "
-            "differences of b. <bookmark mark='b'/> It falls fast at first, then declines steadily. <bookmark mark='c'/> That's "
-            "ADMM's character: a few digits of accuracy come quickly, many digits slowly. <bookmark mark='d'/> For statistics, "
-            "where the estimate's standard error is far larger than the third decimal place, a few digits are usually enough, "
-            "a point chapter eleven makes precise."
+            "<bookmark mark='a'/> How quickly does it settle? Track the primal residual, the disagreement between z "
+            "and the differences of b. <bookmark mark='b'/> It falls fast at first, then declines steadily. <bookmark"
+            " mark='c'/> That's ADMM's character: a few digits of accuracy come quickly, many digits slowly. "
+            "<bookmark mark='d'/> The blue curve is the dual residual, rho times the norm of D transposed applied to "
+            "the change in z. A small primal residual alone does not certify optimality. Check both residuals against"
+            " appropriately scaled tolerances, and relate numerical accuracy to the statistical task."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
-            self.play(Create(ln), FadeIn(rows[0]), run_time=2.0)
+            self.play(Create(ln), Create(dual), FadeIn(rows[0]), run_time=2.0)
             for k, m_ in enumerate("bcd"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k + 1]))
@@ -142,13 +152,19 @@ class ADMM(VoiceoverScene):
         rows[2][2].set_color(PATH)
         whys = [why(r"$f_m$: \ the loss on machine $m$'s share of the data"), why(r"in parallel, \ each machine alone"),
                 why(r"average, \ then apply the penalty"), why(r"each machine's disagreement")]
+        intro = label('Local fits share coefficients through a consensus constraint', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> Here's the form that made ADMM famous for large data. Spread the data across M machines, give "
-            "each its own copy of the coefficients, x m, and require every copy to equal a shared z. <bookmark mark='b'/> Each "
-            "machine updates its own copy, using only its own data, all at the same time. <bookmark mark='c'/> The coordinator "
-            "averages the copies and applies the penalty's proximal operator. <bookmark mark='d'/> And each machine updates its "
-            "disagreement. Only coefficient vectors travel between machines, never the data, which also matters for privacy."
+            "<bookmark mark='a'/> Here's the form that made ADMM famous for large data. Spread the data across M "
+            "machines, give each its own copy of the coefficients, x m, and require every copy to equal a shared z. "
+            "<bookmark mark='b'/> Each machine updates its own copy, using only its own data, all at the same time. "
+            "<bookmark mark='c'/> The coordinator averages the copies and applies the penalty's proximal operator. "
+            "<bookmark mark='d'/> And each machine updates its disagreement. Only coefficient and multiplier vectors "
+            "are exchanged in this scheme. Those messages can still leak information; distributed computation alone "
+            "is not a privacy guarantee."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -160,14 +176,16 @@ class ADMM(VoiceoverScene):
             label(r"ADMM: \ split into pieces, \ each with an easy step", font_size=24, color=PATH),
             label(r"distributed: \ each machine fits its share; \ a consensus step averages", font_size=24, color=NEWT),
             label(r"generalized lasso, \ graphical lasso, \ robust PCA, \ trend filtering", font_size=24, color=TEAL),
-            label(r"converges for any $\rho > 0$; \ how fast depends on $\rho$", font_size=22, color=GREY_A),
+            label(r"two-block convex guarantees need regularity; \ speed depends on $\rho$", font_size=22, color=GREY_A),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> ADMM's strength is that it turns one hard problem into a sequence of easy ones. "
-            "<bookmark mark='b'/> The pieces can even live on different computers: each fits its own share of the data, and a "
-            "consensus step averages them. <bookmark mark='c'/> It handles the generalized lasso, the graphical lasso for "
-            "networks of variables, robust principal components and trend filtering. <bookmark mark='d'/> It converges for any "
-            "positive penalty rho, though how fast depends on choosing rho well."
+            "<bookmark mark='b'/> The pieces can even live on different computers: each fits its own share of the "
+            "data, and a consensus step averages them. <bookmark mark='c'/> It handles the generalized lasso, the "
+            "graphical lasso for networks of variables, robust principal components and trend filtering. <bookmark "
+            "mark='d'/> For the standard two-block convex formulation, closed proper objectives, an attained saddle "
+            "point and adequately solved subproblems give convergence guarantees for fixed positive rho. Arbitrary "
+            "nonconvex or multi-block extensions need separate analysis."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

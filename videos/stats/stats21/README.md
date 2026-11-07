@@ -6,7 +6,7 @@ the solution of an optimization problem. This part is about how those problems a
 shape says about the estimator.
 
 It opens with George Dantzig, who in 1939 copied two open problems from Neyman's blackboard as homework and solved
-them. One became the Dantzig–Wald generalized Neyman–Pearson lemma, whose mathematics is linear-programming duality.
+them. Both formed his 1946 doctoral thesis; one became the Dantzig–Wald generalized Neyman–Pearson lemma, whose mathematics is linear-programming duality.
 In 1947 Dantzig invented the simplex method. The World's bakery is a two-variable LP: the simplex walks
 (0, 0) → (0, 7) → (4, 5), for profits 0 → 28 → 32, with shadow prices of 1, 0 and 2. Stigler's 1945 diet problem was
 solved by Laderman in 1947 at $39.69 a year.
@@ -14,8 +14,8 @@ solved by Laderman in 1947 at $39.69 a year.
 From there the part covers:
 - **Convexity.** Definitions; chords and tangents; Jensen and KL ≥ 0. A concave logistic likelihood beside a Cauchy
   likelihood with two peaks (−1.28 and 4.0). The log-partition function is convex, so exponential families have
-  concave likelihoods. Condition numbers set gradient descent's linear rate: κ = 10 needs 22 steps per digit,
-  κ = 10⁴ needs 23,000.
+  concave likelihoods. Condition numbers set gradient descent's linear rate: κ = 10 gives about 22 steps per factor-ten reduction of a standard objective-gap bound,
+  κ = 10⁴ about 23,000, under the stated smoothness, strong-convexity and step assumptions.
 - **Lagrange and KKT.**
   - The multinomial MLE derived with a multiplier.
   - A binomial MLE under p ≤ ½: with 30/50 the constraint binds, multiplier 20; with 20/50 the multiplier is 0
@@ -29,7 +29,8 @@ From there the part covers:
   - Ridge's dual and kernels.
   - The lasso's duality gap as a stopping certificate: ten orders of magnitude in 120 coordinate updates.
 - **Linear programming.**
-  - Boscovich's five meridian arcs (1757): the LAD line passes through Quito and Lapland (slope 800, against 725 for
+  - A modern unconstrained LAD fit to Boscovich's five meridian arcs (1757), distinct from his historical
+    fit with zero-sum signed errors: the LAD line passes through Quito and Lapland (slope 800, against 725 for
     least squares; absolute error 327 against 349).
   - LAD as an LP; Klee–Minty and Karmarkar.
   - The check function and quantile regression (Koenker & Bassett 1978). On Engel's 235 households the slopes run from
@@ -39,10 +40,10 @@ From there the part covers:
     the top in 5 steps (errors 4.1, 0.45, 0.012, 8.7 × 10⁻⁶, 4.5 × 10⁻¹²); gradient ascent is still 0.58 away after 400.
   - Plain Newton on the Cauchy likelihood converges to a minimum (0.76); with a line search it reaches the peak (3.99).
   - Gauss–Newton and Levenberg–Marquardt; remedies.
-- **MM algorithms.**
+- **MM algorithms.** Exact touching surrogates give descent; convergence and rates require further conditions.
   - The descent property; the median by quadratic majorizers (9 → 7.09 → 6.86 → …).
-  - EM, IRLS, Weiszfeld and SMACOF as MM.
-  - Median regression on Engel against the LP optimum.
+  - EM (including the current-posterior entropy term), IRLS, Weiszfeld and SMACOF as MM.
+  - Smoothed median-regression MM on Engel against the LP optimum; original check-loss monotonicity here is observed, not a general smoothing guarantee.
   - Bradley–Terry strengths for a toy season by Zermelo's iteration (Hunter 2004): 2.92, 1.10, 0.71, 0.44, with
     P(Harbour beats Quarry) = 0.87.
 - **Coordinate descent.**
@@ -51,21 +52,24 @@ From there the part covers:
   - glmnet's tricks; a non-separable penalty on which coordinate descent is stuck.
 - **Proximal methods.** Proximal operators, with soft and hard thresholding. ISTA vs FISTA on a 40-predictor lasso
   with condition number 4,745: errors 10⁻¹·⁷ vs 10⁻⁴·⁸ after 400 steps, under their 1/k and 1/k² bounds. Nesterov's
-  optimal rate.
+  optimal worst-case order for the general smooth convex first-order oracle class, with bounded initial distance.
+  The displayed optimum is a high-accuracy numerical reference; the hard-threshold map shows its jumps and set-valued ties.
 - **ADMM.**
-  - Splitting; the fused lasso on a four-level signal (λ = 0.5, 3, 20); the primal residual.
-  - Consensus ADMM across machines.
+  - Splitting; the fused lasso on a four-level signal (λ = 0.5, 3, 20); both primal and dual residuals. A local banded solver factors the tridiagonal system once, with linear work per update.
+  - Two-block convex ADMM needs regularity and a saddle point; distributed coefficient sharing alone is not a privacy guarantee.
 - **Stochastic gradient.**
   - Robbins–Monro for a median (10.0 from a start of 0).
   - SGD's last iterate against the Polyak–Ruppert average for the World's vote, 20,000 adults.
-  - A step-exponent study: the average is best near γ = ½, at 0.29 SE from the MLE.
-  - Minibatches, Adam, SVRG.
+  - A finite step-exponent study: the average is closest to the MLE near γ = ½, at 0.29 model-based SE.
+    The endpoint γ = ½ is outside the classic square-summable-step condition; this finite experiment is not an efficiency theorem.
+  - Minibatches, momentum, Adam, SVRG and SAGA, distinguishing velocity, adaptive scaling and variance reduction.
   - Two Board rows.
 - **Optimization and inference.**
   - The observed information gives SE 0.183, against a bootstrap's 0.196.
-  - The quadratic at the peak and the Wald interval.
-  - Optimization error against statistical error: stop at SE/10, here after 1,013 iterations (Bottou & Bousquet).
-  - A sandwich preview: 0.0508 vs 0.0513, against a true 0.0497.
+  - A genuine profile likelihood over the intercept, its quadratic at the joint MLE and a marginal slope Wald interval.
+  - Optimization error against statistical error: compare with SE/10, here first crossed after 1,013 iterations (Bottou & Bousquet).
+    Deterministic algorithm error can bias an estimate; it cannot automatically be added in quadrature to sampling variance.
+  - A sandwich preview: 0.0508 vs 0.0513, against a 400-replicate Monte Carlo SD of 0.0497. IID asymptotics and model assumptions are explicit.
   - Warnings read from the landscape.
 
 Every number on screen is computed in [`compute.py`](compute.py):
@@ -74,7 +78,7 @@ Every number on screen is computed in [`compute.py`](compute.py):
 - the rest are seeded simulations or worked examples.
 
 **Built in this part:**
-- **`statkit.optim`** ([`explainer/stats/kit/optim.py`](../../../explainer/stats/kit/optim.py)), checked in
+- **`statkit.optim`** ([`explainer/stats/kit/optim.py`](../../../../explainer/stats/kit/optim.py)), checked in
   `tests/test_stats_kit_optim.py`:
   - Newton with backtracking, and the Cauchy location likelihood;
   - Fisher scoring for logistic regression;
@@ -82,14 +86,17 @@ Every number on screen is computed in [`compute.py`](compute.py):
   - a dense simplex method that records its vertex path;
   - the Neyman–Pearson LP;
   - soft thresholding, ISTA/FISTA, coordinate descent and the duality gap for the lasso;
-  - ADMM for the lasso and the fused lasso;
+  - ADMM for the lasso and the fused lasso (this part uses a local banded TV solver recording both residuals);
   - SGD with Polyak–Ruppert averaging and Robbins–Monro;
   - PAVA and Bradley–Terry MM.
 - **The landscape** (`Landscape` and `marching_squares` in `explainer/stats/viz.py`): level sets of any function or
   grid of two parameters, and optimizer paths across them.
 - **The Museum**: Boscovich's arcs (`BOSCOVICH`) and Engel's households (`engel()`).
 
-The Coverage Board gains two rows: 95% Wald intervals after one pass of SGD.
+The Coverage Board gains two rows: 95% model-based Wald intervals after one pass of SGD.
+The target is the logistic projection in the entire finite adult World (slope 0.5712857),
+computed from the census score equation. Income-only logistic specification is imperfect;
+its model-based curvature intervals need not have exactly 95% coverage even after accurate optimization.
 
 | Method | Setting | Reps | Achieved | Verdict |
 |---|---|---|---|---|
@@ -161,7 +168,9 @@ concave if X has full column rank.
 
 *Solution.* The Lagrangian is −Σp log p − α(Σp − 1) − λ(Σkp − μ). Setting ∂/∂p_k = −log p_k − 1 − α − λk = 0 gives
 p_k = e^{−1−α}e^{−λk} ∝ e^{−λk}, with α and λ fixed by the two constraints. This is an exponential family with
-sufficient statistic k: maximum entropy subject to moment constraints always yields one.
+sufficient statistic k when a normalizable interior solution exists. On a finite support an interior feasible
+mean gives this form; boundary constraints can force zeros or degenerate support with no finite multiplier.
+On infinite support, feasibility, existence and a finite normalizing constant must also be checked.
 
 **3. The bakery's dual.**
 
@@ -189,7 +198,8 @@ Together: x = sign(v)(|v| − λ)₊.
 
 *Solution.* Near θ*, M(θ) ≈ f(θ*)(θ − θ*), so the recursion behaves like e_{k+1} ≈ (1 − a f/k)e_k + noise/k.
 - **The noise term.** It contributes variance of order Σ a²/j² × Π(1 − af/i)², which is O(1/k) only if af > 1/2.
-  Otherwise the contraction is too weak and the error decays like k^{−af}, slower than 1/√k.
+  At af = 1/2 the variance is O(log k / k); for 0 < af < 1/2 it is O(k^{−2af}),
+  with a comparable initial-error contribution, slower than the usual 1/k variance.
 - **For N(10, 3²).** f(10) = 1/(3√(2π)) ≈ 0.133, so a > 1/(2 × 0.133) ≈ 3.76; our a = 10 qualifies.
 - **Optimal choice.** a = 1/f(θ*) gives the optimal asymptotic variance, τ(1 − τ)/f² per observation.
 
@@ -214,10 +224,10 @@ Together: x = sign(v)(|v| − λ)₊.
 - **Coordinate descent; warm start; active set**: one variable at a time; solving along a λ path; cycling over
   non-zeros.
 - **Proximal operator; ISTA; FISTA; Nesterov acceleration**: penalized nearest point; gradient step plus prox; with
-  momentum, rate 1/k².
+  momentum and an O(1/k²) worst-case objective-gap bound under convex smooth/composite assumptions.
 - **ADMM; consensus**: alternating updates of split variables with a running dual; parallel copies forced to agree.
 - **Stochastic gradient; Robbins–Monro; Polyak–Ruppert averaging**: one-observation steps; steps with Σa = ∞,
-  Σa² < ∞; averaging iterates for efficiency.
+  Σa² < ∞; averaging iterates for asymptotic efficiency under stability, moment and regularity conditions (typically 1/2 < γ < 1).
 - **Observed information; sandwich**: −∇²ℓ at the optimum; A⁻¹BA⁻¹ when the model may be wrong.
 - **Isotonic regression; PAVA**: least squares under an order constraint; pooling adjacent violators.
 - **Bradley–Terry model**: P(i beats j) = gᵢ/(gᵢ + gⱼ).
@@ -235,3 +245,9 @@ Together: x = sign(v)(|v| − λ)₊.
 | optimal transport as an LP | 61 |
 | training neural networks | 64 |
 | the Coverage Board | every part; 65 |
+
+## QA status
+
+Scientific corrections and independent numerical checks are recorded in
+[the review evidence](../../../../docs/qa/evidence/stats21-polish-20261107/scientific-review.md).
+English visual verification follows. Continuous listening, Chinese narration/captions and final bilingual masters remain open.
