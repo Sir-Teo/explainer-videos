@@ -31,13 +31,17 @@ class MDL(VoiceoverScene):
         whys = [why(r"Shannon: \ probabilities are code lengths"), why(r"Kraft's inequality: \ and back again"),
                 why(r"Rissanen (1978): \ describe the model, \ then the data"), why(r"regularities are what compress")]
         with self.voiceover(
-            "<bookmark mark='a'/> A third tradition starts from compression. Any probability distribution defines a code: by "
-            "Shannon, an outcome of probability p can be sent in minus log two p bits. <bookmark mark='b'/> And by Kraft's "
-            "inequality, any decodable code defines a distribution. Probabilities and code lengths are the same thing. "
-            "<bookmark mark='c'/> Jorma Rissanen's idea: to send data, first send a model, then the data using that model's "
-            "code. <bookmark mark='d'/> The best model gives the shortest total: a model that captures real regularities "
-            "compresses; one that memorizes noise costs too much to describe."
+            "<bookmark mark='a'/> A third tradition starts from compression. Any probability distribution defines a "
+            "code: by Shannon, minus log two p is an ideal code length; integer prefix-code lengths may need "
+            "rounding. <bookmark mark='b'/> And by Kraft's inequality, uniquely decodable prefix-code lengths satisfy"
+            " a subprobability bound. With suitable normalization, codes and probability models are closely related. "
+            "<bookmark mark='c'/> Jorma Rissanen's idea: to send data, first send a model, then the data using that "
+            "model's code. <bookmark mark='d'/> The best model gives the shortest total: a model that captures real "
+            "regularities compresses; one that memorizes noise costs too much to describe."
         ) as vo:
+            intro=label('Ideal code lengths connect probabilities and compression',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -65,17 +69,20 @@ class MDL(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"chapter one's 30 points, \ one data set", font_size=22),
             label(r"teal: \ the data given the fit, \ $-\log_2$ likelihood", font_size=22, color=TRAIN),
-            label(r"gold: \ the coefficients, \ $\tfrac12 \log_2 n$ bits each", font_size=22, color=PATH),
+            label(r"gold: \ leading coefficient and noise-scale penalty, \ $\tfrac12\log_2 n$ each", font_size=22, color=PATH),
             label(rf"shortest: \ degree {best}, \ {rs[best]['total']:.1f} bits", font_size=22),
             label(r"$\tfrac12 \log n$ per parameter: \ BIC again", font_size=22, color=BICC),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Apply it to chapter one's thirty points. <bookmark mark='b'/> The teal bars are the bits "
-            "needed to send the responses given each polynomial's fit, up to a common discretization constant; they fall as "
-            "the degree rises. <bookmark mark='c'/> The gold bars are the bits to send the coefficients. Each needs to be "
-            "stated only to the precision the data can support, about one over root n, which costs half log two n bits. "
-            "<bookmark mark='d'/> The shortest total is degree five, where the test error was lowest too. "
-            "<bookmark mark='e'/> Half log n per parameter is BIC's penalty, arrived at by an entirely different road."
+            "<bookmark mark='a'/> Apply it to chapter one's thirty points. <bookmark mark='b'/> The teal bars are the"
+            " bits needed to send the responses given each polynomial's fit, up to a common discretization constant; "
+            "they fall as the degree rises. <bookmark mark='c'/> The gold bars are the bits to send the coefficients."
+            " In a regular fixed-dimensional approximation, precision of order one over root n gives a leading half "
+            "log two n penalty per coefficient and for the noise scale. Ranges, model-index coding and data "
+            "discretization contribute additional terms. <bookmark mark='d'/> This leading-term relative code "
+            "criterion selects degree five in this dataset. The averaged prediction-risk curve also had its minimum "
+            "there, a numerical coincidence rather than a coding guarantee. <bookmark mark='e'/> Half log n per "
+            "parameter is BIC's penalty, arrived at by an entirely different road."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A))
@@ -102,14 +109,18 @@ class MDL(VoiceoverScene):
         whys = [why(r"the best fit in hindsight: \ not a distribution"), why(r"Shtarkov (1987): \ normalize it"),
                 why(r"the same excess for every $y$: \ minimax"), why(r"Rissanen (1996): \ BIC plus Jeffreys's volume")]
         with self.voiceover(
-            "<bookmark mark='a'/> The two-part code is crude. A sharper code would use the best-fitting parameter for the data "
-            "at hand, but that isn't a distribution: its sum over all possible data sets exceeds one. "
-            "<bookmark mark='b'/> Yuri Shtarkov's normalized maximum likelihood divides by that sum. <bookmark mark='c'/> "
-            "Every data set then costs the same amount more than its hindsight-optimal code, the log of the normalizer, and no "
-            "code does better in the worst case. That excess, the regret, is the model's complexity. <bookmark mark='d'/> "
-            "Rissanen showed it is k over two log n over two pi, plus the log of Jeffreys's prior's total volume: BIC, refined "
-            "by the geometry of the model."
+            "<bookmark mark='a'/> The two-part code is crude. A sharper code would use the best-fitting parameter for"
+            " the data at hand, but that isn't a distribution: its sum over all possible data sets exceeds one. "
+            "<bookmark mark='b'/> Yuri Shtarkov's normalized maximum likelihood divides by that sum when it is "
+            "finite. Unrestricted Gaussian models often require restrictions or another coding construction. "
+            "<bookmark mark='c'/> Every data set then costs the same amount more than its hindsight-optimal code, the"
+            " log of the normalizer, and no code does better in the worst case. That excess, the regret, is the "
+            "model's complexity. <bookmark mark='d'/> Rissanen showed it is k over two log n over two pi, plus the "
+            "log of Jeffreys's prior's total volume: BIC, refined by the geometry of the model."
         ) as vo:
+            intro=label('Normalized maximum likelihood requires a finite normalizer',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -130,10 +141,11 @@ class MDL(VoiceoverScene):
             label(r"Jeffreys's volume for a coin: \ $\int_0^1 \frac{d\theta}{\sqrt{\theta(1 - \theta)}} = \pi$", font_size=22, color=BICC),
         ), 12.0, 0.22, [0, -2.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> For a coin, the regret can be computed exactly, summing over all possible numbers of heads. "
-            "<bookmark mark='b'/> Rissanen's approximation is half log of n pi over two, because the Jeffreys volume of a coin "
-            "is pi. It is off by a sixth of a nat at ten flips and by less than a hundredth from a thousand: the complexity "
-            "of a one-parameter model grows like half log n, the same rate for every regular parameter."
+            "<bookmark mark='a'/> For a coin, the regret can be computed exactly, summing over all possible numbers "
+            "of heads. <bookmark mark='b'/> Rissanen's approximation is half log of n pi over two, because the "
+            "Jeffreys volume of a coin is pi. It is off by a sixth of a nat at ten flips and by less than two "
+            "hundredths at a thousand: the complexity of a one-parameter model grows like half log n, the same rate "
+            "for every regular parameter."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tb[0]), LaggedStart(*[FadeIn(r) for r in tb[1:]], lag_ratio=0.2), FadeIn(foot[0]))
@@ -147,19 +159,24 @@ class MDL(VoiceoverScene):
             cmath(r"-\log p(y_1, \ldots, y_n)", r"=", r"\textstyle\sum_t -\log p(y_t \mid y_1, \ldots, y_{t-1})", font_size=28),
             cmath(r"\text{plug-in}", r":", r"\textstyle\sum_t -\log p(y_t \mid \hat\theta_{t-1})", font_size=30),
             cmath(r"\text{Bayes}", r":", r"\text{the evidence, \ term by term}", font_size=30),
-            cmath(r"\text{all three}", r":", r"\tfrac k2 \log n \ \text{to first order}", font_size=30),
+            cmath(r"\text{regular leading redundancy}", r":", r"\tfrac k2 \log n \ \text{to first order}", font_size=30),
         ]
         rows[1][2].set_color(PATH)
         whys = [why(r"any joint code is a sequence of predictions"), why(r"Dawid (1984): \ the prequential principle"),
                 why(r"the marginal likelihood is a forecaster"), why(r"NML, \ prequential, \ Bayes")]
         with self.voiceover(
-            "<bookmark mark='a'/> A third code is sequential. Any joint probability factors into one-step-ahead predictions, so "
-            "a code length is a running total of forecasting losses. <bookmark mark='b'/> Predict each observation from the "
-            "estimate fitted to those before it: Philip Dawid's prequential approach, honest because no observation helps "
-            "predict itself. <bookmark mark='c'/> Part 26's marginal likelihood is exactly such a sum, which explains why it "
-            "penalizes complexity. <bookmark mark='d'/> To first order the normalized, prequential and Bayesian codes all cost "
-            "k over two log n. MDL, Bayes and honest prediction meet, and chapter eleven returns to Dawid's forecasts."
+            "<bookmark mark='a'/> A third code is sequential. Any joint probability factors into one-step-ahead "
+            "predictions, so a code length is a running total of forecasting losses. <bookmark mark='b'/> Predict "
+            "each observation from the estimate fitted to those before it: Philip Dawid's prequential approach, "
+            "honest because no observation helps predict itself. <bookmark mark='c'/> Part 26's marginal likelihood "
+            "is exactly such a sum, which explains why it penalizes complexity. <bookmark mark='d'/> For suitably "
+            "regular well-specified models and properly initialized predictors, their leading redundancy can be k "
+            "over two log n. This is not a statement about every plug-in predictor or improper evidence. MDL, Bayes "
+            "and honest prediction meet, and chapter eleven returns to Dawid's forecasts."
         ) as vo:
+            intro=label('A valid sequence of predictions defines a joint code',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

@@ -39,6 +39,9 @@ class LOO(VoiceoverScene):
             "posterior predictive density, an integral over the leave-one-out posterior. <bookmark mark='d'/> Done literally, "
             "that is n separate fits, each an MCMC run. Part 27's importance sampling avoids them."
         ) as vo:
+            intro=label('Leave-one-out predicts observations omitted from fitting',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -56,12 +59,17 @@ class LOO(VoiceoverScene):
         whys = [why(r"removing one likelihood term"), why(r"weights from draws you already have"),
                 why(r"importance sampling, \ Part 27"), why(r"Vehtari, Gelman \& Gabry (2017)")]
         with self.voiceover(
-            "<bookmark mark='a'/> The leave-one-out posterior differs from the full posterior only by one likelihood term. "
-            "<bookmark mark='b'/> So the full posterior's draws can be reweighted by one over that observation's likelihood. "
-            "<bookmark mark='c'/> The weighted average then estimates the leave-one-out predictive density. "
-            "<bookmark mark='d'/> These weights can have heavy tails, so Aki Vehtari, Andrew Gelman and Jonah Gabry smooth them "
-            "with Part 27's Pareto fit, and the k-hat for each observation says whether its estimate can be trusted."
+            "<bookmark mark='a'/> The leave-one-out posterior differs from the full posterior only by one likelihood "
+            "term. <bookmark mark='b'/> So the full posterior's draws can be reweighted by one over that "
+            "observation's likelihood. <bookmark mark='c'/> The weighted average then estimates the leave-one-out "
+            "predictive density. <bookmark mark='d'/> These weights can have heavy tails, so Aki Vehtari, Andrew "
+            "Gelman and Jonah Gabry smooth them with Part 27's Pareto fit, and each estimated k-hat warns about a "
+            "deletion's weight-tail stability. The warning threshold depends on effective sample size and is capped "
+            "near point seven."
         ) as vo:
+            intro=label('Deletion reweighting needs a proper posterior and stable tails',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -79,12 +87,16 @@ class LOO(VoiceoverScene):
         whys = [why(r"the in-sample predictive fit"), why(r"an effective number of parameters"),
                 why(r"Watanabe (2010)"), why(r"chapter six")]
         with self.voiceover(
-            "<bookmark mark='a'/> Sumio Watanabe's WAIC takes another route. Start from the log predictive density of the "
-            "observed data, which is optimistic. <bookmark mark='b'/> Estimate the optimism by the posterior variance of each "
-            "observation's log likelihood, summed: an effective number of parameters. <bookmark mark='c'/> Subtract. "
-            "<bookmark mark='d'/> Watanabe proved that this matches leave-one-out asymptotically, even for the singular "
-            "models of chapter six where AIC and BIC both break."
+            "<bookmark mark='a'/> Sumio Watanabe's WAIC takes another route. Start from the log predictive density of"
+            " the observed data, which is optimistic. <bookmark mark='b'/> Estimate the optimism by the posterior "
+            "variance of each observation's log likelihood, summed: an effective number of parameters. <bookmark "
+            "mark='c'/> Subtract. <bookmark mark='d'/> Under suitable analytic and integrability assumptions, "
+            "Watanabe established asymptotic equivalence to Bayesian leave-one-out for important singular-model "
+            "settings. This is not a finite-sample guarantee for every model."
         ) as vo:
+            intro=label('WAIC estimates a predictive optimism term from posterior variation',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -103,16 +115,19 @@ class LOO(VoiceoverScene):
         tb.move_to([0, 0.8, 0])
         foot = fit_rows(VGroup(
             label(r"higher is better; \ exact LOO: \ refit without each school", font_size=22),
-            label(r"pooling predicts a left-out school best; \ no pooling worst, \ with an unreliable estimate", font_size=22, color=PATH),
+            label(r"whole-school prediction; \ independent priors are explicit, \ and PSIS needs the analytic check", font_size=22, color=PATH),
         ), 12.0, 0.22, [0, -1.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Part 26's eight schools, under three models, compared by how well they predict a left-out "
-            "school's estimate. <bookmark mark='b'/> Complete pooling scores minus thirty point five six, its PSIS estimate "
-            "matching exact leave-one-out to the second decimal. <bookmark mark='c'/> The hierarchical model scores minus "
-            "thirty-one point two one, against an exact minus thirty-one point three four, with about one and a half effective "
-            "parameters. <bookmark mark='d'/> No pooling is worst, minus thirty-seven, and its effective number of parameters, "
-            "almost seven, says it is predicting each school from almost nothing. For these data, the simplest model predicts "
-            "best."
+            "<bookmark mark='a'/> Compare predictions of a whole left-out school. Complete pooling uses a flat "
+            "common-mean prior; the hierarchy uses flat mean and scale priors with a proper posterior. Independent "
+            "effects now have explicit normal priors with standard deviation one hundred: a flat prior would leave "
+            "the held-out effect undefined. <bookmark mark='b'/> Complete pooling has PSIS score minus thirty point "
+            "six zero, versus analytic leave-one-out minus thirty point five six. <bookmark mark='c'/> The hierarchy "
+            "gives minus thirty-one point one eight, versus the numerical reference minus thirty-one point three "
+            "four. <bookmark mark='d'/> The independent model's PSIS score is minus thirty-six point four six, but "
+            "its analytic score is minus forty-four point three three. The failed importance approximation is much "
+            "too optimistic. The small pooling-versus-hierarchy difference also needs uncertainty, not just a "
+            "ranking."
         ) as vo:
             self.add(schools_tag())
             vo.wait_until("a")
@@ -136,17 +151,18 @@ class LOO(VoiceoverScene):
         names = VGroup(*[label(lab[j], font_size=22, color=GREY_A).next_to(ax.c2p(j, -0.2), DOWN, buff=0.15) for j in range(8)])
         rows = fit_rows(VGroup(
             label(r"blue: \ complete pooling: \ all small", font_size=22, color=AICC),
-            label(r"green: \ hierarchical: \ about 0.4--0.7", font_size=22, color=HIT),
-            label(r"red: \ no pooling: \ above 0.7: \ do not trust", font_size=22, color=RES),
+            label(r"green: \ hierarchical deletion-weight diagnostics", font_size=22, color=HIT),
+            label(r"red: \ independent effects; \ high k-hat warns of unstable weights", font_size=22, color=RES),
             label(r"each school dominates its own $\theta_j$", font_size=22, color=GREY_A),
         ), 3.6, 0.42, [5.0, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The k-hats explain the last line. Under complete pooling, leaving one school out barely "
-            "changes the posterior, and every k-hat is small. <bookmark mark='b'/> Under the hierarchical model they run "
-            "from point four to point seven: usable, with care. <bookmark mark='c'/> Under no pooling, each school's effect is "
-            "determined by that school alone, so removing it changes everything, and most k-hats exceed point seven. "
-            "<bookmark mark='d'/> There the PSIS estimate shouldn't be trusted, and the remedy is to refit those cases exactly, "
-            "which the diagnostic tells you to do."
+            "<bookmark mark='a'/> The weight-tail diagnostics help explain these approximations. Complete pooling "
+            "shares information across schools, so each deletion changes relatively little. <bookmark mark='b'/> The "
+            "hierarchy has more variable deletion weights and needs closer inspection. <bookmark mark='c'/> For "
+            "independent effects under the diffuse proper prior, deleting a school's only measurement leaves its "
+            "broad prior; reweighting the much narrower full posterior is difficult. <bookmark mark='d'/> Large "
+            "k-hats warn against trusting PSIS. Here exact analytic prediction is available; in other cases refit or "
+            "integrate out local latent effects. A low k-hat alone would not prove accuracy."
         ) as vo:
             self.add(schools_tag())
             self.play(FadeIn(A), Create(thr), FadeIn(names))
@@ -160,14 +176,15 @@ class LOO(VoiceoverScene):
     def compare(self):
         rows = fit_rows(VGroup(
             label(r"report differences in elpd with their SE, \ not just the winner", font_size=24),
-            label(r"differences under 4, \ or under 2 SE: \ the data barely distinguish the models", font_size=24, color=PATH),
+            label(rf"pooled minus hierarchical: {load('loo')['comparison']['pooled_minus_hierarchical']:.2f}; rough paired SE {load('loo')['comparison']['paired_se']:.2f}", font_size=24, color=PATH),
             label(r"LOO and WAIC estimate prediction; \ they do not test truth", font_size=24, color=RES),
             label(r"use them to choose, \ or better, \ to weight: \ chapter eight", font_size=24, color=HIT),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> When comparing models this way, report the differences in elpd with their standard errors. "
-            "<bookmark mark='b'/> A difference smaller than about four, or than two standard errors, means the data barely "
-            "distinguish the models: complete pooling's lead over the hierarchical model here is well within that. "
+            "<bookmark mark='a'/> When comparing models this way, report the differences in elpd with their standard "
+            "errors. <bookmark mark='b'/> For these eight schools the pooling-versus-hierarchy lead is small and "
+            "uncertain. The caption reports a rough paired pointwise standard error; with only eight heterogeneous "
+            "schools, it needs caution. Four elpd units is a practical heuristic, not a universal decision boundary. "
             "<bookmark mark='c'/> These are estimates of predictive accuracy, not tests of which model is true. "
             "<bookmark mark='d'/> And rather than choose, it is often better to weight, chapter eight."
         ) as vo:
@@ -186,17 +203,21 @@ class LOO(VoiceoverScene):
             cmath(r"\text{prefer}", r":", r"\text{PSIS-LOO: \ it says when it fails}", font_size=30),
         ]
         rows[1][2].set_color(RES)
-        whys = [why(r"8 parameters for 8 schools"), why(r"three too optimistic"), why(r"both close when all is well"),
+        whys = [why(r"explicit independent $N(0,100^2)$ priors"), why(r"compare both approximations with analytic LOO"), why(r"this hierarchy is closer to its numerical reference"),
                 why(r"Vehtari, Gelman \& Gabry (2017)")]
         with self.voiceover(
-            "<bookmark mark='a'/> When the k-hats are high, WAIC and PSIS-LOO part company. For no pooling, PSIS-LOO counts "
-            "almost seven effective parameters, close to the eight there are. <bookmark mark='b'/> WAIC counts four, and scores "
-            "the model three points too well. <bookmark mark='c'/> For the hierarchical model, where all is well, the two agree "
-            "with each other and with exact leave-one-out to within a few tenths. <bookmark mark='d'/> Vehtari, Gelman and "
-            "Gabry therefore recommend PSIS-LOO: they behave alike when both work, and only one of them tells you when it "
-            "doesn't."
+            "<bookmark mark='a'/> With the explicit proper independent-effect priors, compare both approximations "
+            "against the analytic leave-one-school-out score of minus forty-four point three three. <bookmark "
+            "mark='b'/> PSIS gives about minus thirty-six point five and WAIC about minus thirty-three point nine: "
+            "both are too optimistic, with high k-hats warning that importance sampling is unstable. Their difference"
+            " is not itself a measurement of the truth. <bookmark mark='c'/> For the hierarchy, both approximations "
+            "are much closer to the numerical refit reference. <bookmark mark='d'/> PSIS-LOO is useful because its "
+            "tail diagnostics help identify difficult deletions, which should then be checked or refitted."
         ) as vo:
             self.add(schools_tag())
+            intro=label('Check both approximations against an independent predictive reference',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

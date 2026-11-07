@@ -29,19 +29,24 @@ class Averaging(VoiceoverScene):
             cmath(r"p(M_k \mid y)", r"\propto", r"p(y \mid M_k)\, p(M_k)", font_size=32),
             cmath(r"p(\tilde y \mid y)", r"=", r"\textstyle\sum_k p(\tilde y \mid y, M_k)\, p(M_k \mid y)", font_size=30),
             cmath(r"\text{uncertainty}", r":", r"\text{within models, \ and between them}", font_size=30),
-            cmath(r"\text{optimal}", r":", r"\text{if one of the } M_k \text{ is true}", font_size=30),
+            cmath(r"\text{optimal}", r":", r"\text{prior-averaged log score under the joint Bayesian model}", font_size=30),
         ]
         rows[1][2].set_color(AICC)
         whys = [why(r"each model's evidence, \ Part 26"), why(r"Bayesian model averaging"),
                 why(r"Hoeting, Madigan, Raftery \& Volinsky (1999)"), why(r"the $\mathcal M$-closed view")]
         with self.voiceover(
-            "<bookmark mark='a'/> Choosing one model throws away the uncertainty about which. Bayes's answer: give each model "
-            "a prior probability, and its posterior probability is proportional to the prior times the evidence. "
-            "<bookmark mark='b'/> Predict with the posterior-weighted mixture of the models' predictions. "
-            "<bookmark mark='c'/> Its uncertainty includes both the uncertainty within each model and the uncertainty between "
-            "them, the case Jennifer Hoeting, David Madigan, Adrian Raftery and Chris Volinsky made in 1999. "
-            "<bookmark mark='d'/> If one of the candidates is true, nothing predicts better on average."
+            "<bookmark mark='a'/> Choosing one model throws away the uncertainty about which. Bayes's answer: give "
+            "each model a prior probability, and its posterior probability is proportional to the prior times the "
+            "evidence. <bookmark mark='b'/> Predict with the posterior-weighted mixture of the models' predictions. "
+            "<bookmark mark='c'/> Its uncertainty includes both the uncertainty within each model and the uncertainty"
+            " between them, the case Jennifer Hoeting, David Madigan, Adrian Raftery and Chris Volinsky made in 1999."
+            " <bookmark mark='d'/> Under the stated joint prior and log score, the posterior predictive is Bayes "
+            "optimal for prior-averaged prediction. Merely containing the fixed true model does not guarantee "
+            "finite-sample dominance over every predictor."
         ) as vo:
+            intro=label('Bayesian model averaging uses a specified joint prior',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -52,16 +57,17 @@ class Averaging(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"$\mathcal M$-closed: \ the truth is one of the candidates", font_size=26, color=BICC),
             label(r"$\mathcal M$-open: \ none of them is; \ we want the best combination", font_size=26, color=AICC),
-            label(r"BMA's weights converge to the single candidate closest in KL", font_size=26, color=RES),
+            label(r"with a unique KL-best candidate, \ BMA can concentrate there", font_size=26, color=RES),
             label(r"a mixture of wrong models can beat each of them", font_size=26, color=HIT),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> José Bernardo and Adrian Smith named the distinction. In the M-closed world the truth is one "
-            "of the candidates. <bookmark mark='b'/> In the M-open world none is, and the honest goal is the best combination. "
-            "<bookmark mark='c'/> In that world Bayesian model averaging behaves oddly: as data accumulate, its weights pile "
-            "onto whichever single candidate is closest in Kullback–Leibler divergence, because the evidence of each model "
-            "is a product over observations. <bookmark mark='d'/> Yet a weighted mixture of wrong models can be much closer "
-            "to the truth than any one of them."
+            "<bookmark mark='a'/> José Bernardo and Adrian Smith named the distinction. In the M-closed world the "
+            "truth is one of the candidates. <bookmark mark='b'/> In the M-open world none is, and the honest goal is"
+            " the best combination. <bookmark mark='c'/> In that world Bayesian model averaging behaves oddly: as "
+            "data accumulate, with a unique KL-best candidate and suitable conditions, its weights concentrate there."
+            " Equal-KL candidates, as in our symmetric example, need not converge to one fixed winner, because the "
+            "evidence of each model is a product over observations. <bookmark mark='d'/> Yet a weighted mixture of "
+            "wrong models can be much closer to the truth than any one of them."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -142,7 +148,7 @@ class Averaging(VoiceoverScene):
 
     def scores(self):
         d = load("averaging")
-        hdr = [r"\textbf{$n$}", r"\textbf{best single model}", r"\textbf{BMA}", r"\textbf{stacking}"]
+        hdr = [r"\textbf{$n$}", r"\textbf{training-selected single}", r"\textbf{BMA}", r"\textbf{stacking}"]
         body = [[f"{n}", f"{a:.2f}", f"{b:.2f}", f"{c:.2f}"] for n, a, b, c in zip(d["ns"], d["score_best"], d["score_bma"], d["score_stack"])]
         tb = table_rows([hdr] + body, font_size=26, col_buff=1.0, row_buff=0.3, colors=[GREY_A] + [None] * 5)
         for r in tb[1:]:
@@ -152,15 +158,16 @@ class Averaging(VoiceoverScene):
         tb.move_to([0, 0.8, 0])
         foot = fit_rows(VGroup(
             label(r"mean log density of 2{,}000 new draws \ (higher is better)", font_size=22),
-            label(r"the truth itself scores $-2.05$: \ stacking is within a hundredth of it", font_size=22, color=HIT),
+            label(r"at larger sample sizes stacking approaches the true predictive score near $-2.05$", font_size=22, color=HIT),
         ), 12.0, 0.22, [0, -2.0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Judge the predictions on two thousand new draws by their log score. "
-            "<bookmark mark='b'/> The best single model scores about minus five point two: it assigns almost no probability to "
-            "half of the data. <bookmark mark='c'/> Bayesian model averaging is no better, about minus five point one, because "
-            "it has in effect chosen one model. <bookmark mark='d'/> Stacking scores minus two point oh six, within a hundredth "
-            "of the truth's own minus two point oh five. In the M-open world, combining beats choosing, and Bayes's weights "
-            "are not the ones to combine with."
+            "<bookmark mark='a'/> Judge the predictions on two thousand new draws by their log score. <bookmark "
+            "mark='b'/> The single candidate selected on the training data scores about minus five point four: it "
+            "assigns almost no probability to half of the data. <bookmark mark='c'/> Bayesian model averaging also "
+            "loses heavily in this example because it has in effect chosen one model. <bookmark mark='d'/> As sample "
+            "size grows, stacking approaches the true predictive distribution's score, near minus two point oh five. "
+            "Here the mixture improves prediction greatly. That is an example of stacking's potential benefit under "
+            "misspecification, not a theorem that it always beats Bayesian weights."
         ) as vo:
             self.add(seeded_tag())
             vo.wait_until("a")
@@ -182,13 +189,17 @@ class Averaging(VoiceoverScene):
         whys = [why(r"Yao, Vehtari, Simpson \& Gelman (2018)"), why(r"no refitting needed"),
                 why(r"cheaper, \ but chooses like BMA"), why(r"stacked regressions, \ super learners")]
         with self.voiceover(
-            "<bookmark mark='a'/> Stacking, in the Bayesian form of Yuling Yao, Aki Vehtari, Daniel Simpson and Andrew Gelman: "
-            "choose weights on the simplex to maximize the summed log of the weighted leave-one-out predictive densities. "
-            "<bookmark mark='b'/> Those densities come free from chapter five's PSIS-LOO. <bookmark mark='c'/> Weighting each "
-            "model by its exponentiated elpd, pseudo-BMA, is cheaper but behaves like BMA, piling weight on one model. "
-            "<bookmark mark='d'/> For point predictions the idea is older: David Wolpert's stacked generalization and Leo "
-            "Breiman's stacked regressions, today's super learners."
+            "<bookmark mark='a'/> Stacking, in the Bayesian form of Yuling Yao, Aki Vehtari, Daniel Simpson and "
+            "Andrew Gelman: choose weights on the simplex to maximize the summed log of the weighted leave-one-out "
+            "predictive densities. <bookmark mark='b'/> When its diagnostics are adequate, chapter five's PSIS-LOO "
+            "can estimate those densities without a full refit for every point. <bookmark mark='c'/> Weighting each "
+            "model by its exponentiated elpd, pseudo-BMA, is cheaper but behaves like BMA, piling weight on one "
+            "model. <bookmark mark='d'/> For point predictions the idea is older: David Wolpert's stacked "
+            "generalization and Leo Breiman's stacked regressions, today's super learners."
         ) as vo:
+            intro=label('Stacking optimizes a mixture’s leave-one-out predictive score',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -214,19 +225,21 @@ class Averaging(VoiceoverScene):
                                 stroke_width=1).move_to(ax.c2p(k + 0.19, v / 2)) for k, v in enumerate(wb)])
         rows = fit_rows(VGroup(
             label(r"Akaike weights: \ $w_k \propto e^{-\text{AIC}_k/2}$", font_size=22, color=AICC),
-            label(rf"no size above {100 * wa.max():.0f}\%: \ spread over sizes 4--8", font_size=22, color=AICC),
-            label(r"BIC weights: \ approximate posterior probabilities", font_size=22, color=BICC),
+            label(rf"no candidate above {100 * wa.max():.0f}\%: \ spread over sizes 4--8", font_size=22, color=AICC),
+            label(r"BIC criterion weights for these searched candidates", font_size=22, color=BICC),
             label(rf"sizes 2, 3, 4: \ {100 * wb[2]:.0f}\%, {100 * wb[3]:.0f}\%, {100 * wb[4]:.0f}\%", font_size=22, color=BICC),
             label(r"either way: \ no single subset deserves our confidence", font_size=22, color=RES),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Back to the prostate data. Burnham and Anderson's Akaike weights turn AIC differences into "
-            "weights. <bookmark mark='b'/> No subset size gets more than about a third of them; the weight spreads over four to "
-            "eight predictors. <bookmark mark='c'/> BIC differences, exponentiated, approximate posterior model probabilities. "
-            "<bookmark mark='d'/> They move the weight to smaller models, but split it almost evenly between two, three and four "
-            "predictors. <bookmark mark='e'/> Either way the message is the "
-            "same as chapter four's flat CV curve: the data do not single out one subset, and any report that pretends they do "
-            "overstates what is known."
+            "<bookmark mark='a'/> Back to the prostate data. Burnham and Anderson's Akaike weights turn AIC "
+            "differences into weights. <bookmark mark='b'/> No subset size gets more than about a third of them; the "
+            "weight spreads over four to eight predictors. <bookmark mark='c'/> For a fixed candidate list with "
+            "appropriate model and parameter priors, BIC differences can approximate posterior model odds. Here we "
+            "display normalized criterion weights for one searched subset per size; they are not posterior "
+            "probabilities of subset sizes or of all possible models. <bookmark mark='d'/> They move the weight to "
+            "smaller models, but split it almost evenly between two, three and four predictors. <bookmark mark='e'/> "
+            "Either way the message is the same as chapter four's flat CV curve: the data do not single out one "
+            "subset, and any report that pretends they do overstates what is known."
         ) as vo:
             self.add(prostate_tag())
             self.play(FadeIn(A))
@@ -260,6 +273,9 @@ class Averaging(VoiceoverScene):
             "uniform prior on subsets piles its mass on models of half the size, so James Scott and James Berger recommend a "
             "beta-binomial prior on the number of predictors, which also corrects for multiplicity."
         ) as vo:
+            intro=label('Model-space computation and model priors affect averaging',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

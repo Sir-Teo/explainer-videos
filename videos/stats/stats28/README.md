@@ -1,8 +1,7 @@
 # Statistics, Built — Part 28: Which Model?
 
 Part 28 of a sixty-five-part course in statistics, from a first course to a PhD (see [the series plan](../README.md)
-and [the syllabus](../SYLLABUS.md)), and the eighth part of Stage III, Master's. Part 27 made any model we can write
-down computable. This part asks which of them to believe, and how to choose without fooling yourself:
+and [the syllabus](../SYLLABUS.md)), and the eighth part of Stage III, Master's. Part 27 introduced computational tools and their limits. This part asks which of them to believe, and how to choose without fooling yourself:
 - the optimism of training error, and degrees of freedom for any procedure;
 - Cp, AIC, TIC and AICc; BIC, consistency and efficiency; cross-validation and what it estimates;
 - Bayesian leave-one-out with Pareto-smoothed importance sampling, WAIC, and singular models;
@@ -26,18 +25,18 @@ From there the part covers:
   - Degrees of freedom: tr S for linear smoothers, Stein's divergence, and Monte Carlo for anything. The lasso on
     the prostate predictors (600 simulated responses per λ):
 
-    | λ | df, simulated | 1 + E(nonzero) |
+    | λ | df estimate ± MCSE | 1 + E(nonzero) |
     |---|---|---|
-    | 0.02 | 7.98 | 8.05 |
-    | 0.08 | 6.46 | 6.07 |
-    | 0.2 | 4.58 | 4.61 |
-    | 0.4 | 2.96 | 2.95 |
+    | 0.02 | 8.00 ± 0.16 | 8.04 |
+    | 0.08 | 6.48 ± 0.15 | 6.07 |
+    | 0.2 | 4.58 ± 0.12 | 4.61 |
+    | 0.4 | 2.95 ± 0.11 | 2.95 |
 
 - **Cp and AIC.**
   - Mallows's Cp; AIC as an estimate of expected KL, derived by two Taylor expansions (optimism k).
   - TIC: tr(ĴK̂⁻¹) for a Poisson regression of the World's doctor visits (mean 2.42, variance 13.7) is 9.47 against
     k = 2; on Poisson data, 1.81. AICc (Sugiura 1978; Hurvich & Tsai 1989).
-  - The bench on Stamey's prostate data (67 training men, best subset of each size): AIC chooses 7 predictors
+  - The bench on Stamey's prostate data (67 training men, searched best subset of each size): AIC chooses 7 predictors
     (all but gleason). ΔAIC: 6 predictors 0.46, 4 1.28, 5 1.74, 8 1.98, 3 3.42, 2 5.49.
 - **BIC.**
   - Laplace's method derived; the unit-information prior (Kass & Wasserman 1995).
@@ -68,19 +67,19 @@ From there the part covers:
   - What CV estimates (Bates, Hastie & Tibshirani 2024). In 400 simulated regressions (n = 50, 10 predictors, 4
     real), corr(CV, this fit's true error) = −0.06, while mean CV 1.32 matches the mean error 1.30.
   - Choosing K (Breiman & Spector 1992; Kohavi 1995).
-- **Bayesian LOO and WAIC**, on the eight schools:
+- **Bayesian LOO and WAIC**, predicting a whole held-out school. The hierarchy uses flat mean/scale priors with proper leave-one-out posteriors; independent effects use explicit N(0,100²) priors.
 
-  | Model | PSIS-LOO elpd | exact LOO | p_loo | k̂ | WAIC | p_WAIC |
-  |---|---|---|---|---|---|---|
-  | complete pooling | −30.56 | −30.56 | 0.68 | all < 0.26 | −30.54 | 0.66 |
-  | hierarchical | −31.21 | −31.34 | 1.58 | 0.40–0.71 | −30.99 | 1.36 |
-  | no pooling | −36.97 | — | 6.89 | 0.78–1.06 | −34.08 | 4.01 |
+  | Model | PSIS-LOO elpd | refit/analytic LOO | p_loo | WAIC | p_WAIC |
+  |---|---|---|---|---|---|
+  | complete pooling | -30.60 | -30.56 | 0.70 | -30.57 | 0.68 |
+  | hierarchical | -31.18 | -31.34 | 1.56 | -30.96 | 1.34 |
+  | independent effects, proper prior | -36.46 | -44.33 | 6.42 | -33.91 | 3.87 |
 
-  WAIC is three points too optimistic exactly where k̂ warns.
+  The exact pooled-minus-hierarchical difference is 0.781, with a rough paired pointwise SE of 0.275 across only eight schools. For independent effects, both PSIS and WAIC are seriously optimistic against the analytic reference; large Pareto tail estimates warn of unstable deletion weights. A flat independent prior would instead make the held-out effect's posterior undefined.
 - **Singular models.**
   - The mixture (1 − a)N(0, 1) + aN(b, 1) at a N(0, 1) truth: the true set is a cross.
   - Watanabe's free energy, λ log n − (m − 1) log log n, with λ = ½, m = 2 by hand. By quadrature for n = 30 to
-    10,000, the free energy grows with slope 0.42 in log n (theory ½, less a log log term), against 0.98 for a regular
+    10,000, the free energy grows with slope 0.42 in log n (theory ½ with a log log correction; finite-n Monte Carlo comparison), against 0.99 for a regular
     two-parameter model (theory 1).
   - RLCTs of other models; WBIC and sBIC.
 - **MDL.**
@@ -101,23 +100,23 @@ From there the part covers:
 
     | n | 20 | 50 | 100 | 200 | 500 |
     |---|---|---|---|---|---|
-    | BMA's weight on its favourite | 0.988 | 0.992 | 0.991 | 0.993 | 0.998 |
-    | stacking's | 0.593 | 0.561 | 0.541 | 0.527 | 0.519 |
-    | log score, best single | −5.33 | −5.31 | −5.30 | −5.26 | −5.16 |
-    | log score, BMA | −5.03 | −5.19 | −5.04 | −5.17 | −5.18 |
-    | log score, stacking | −2.09 | −2.06 | −2.06 | −2.05 | −2.06 |
+    | BMA weight on favourite | 0.988 | 0.992 | 0.992 | 0.993 | 0.999 |
+    | stacking weight on favourite | 0.593 | 0.561 | 0.541 | 0.527 | 0.519 |
+    | log density, training-selected single | -5.411 | -5.419 | -5.423 | -5.423 | -5.412 |
+    | log density, BMA | -5.031 | -5.207 | -5.074 | -5.238 | -5.358 |
+    | log density, stacking | -2.087 | -2.062 | -2.057 | -2.052 | -2.054 |
 
     The truth's own score is −2.05.
   - Stacking (Wolpert 1992; Breiman 1996; Yao et al. 2018).
   - Prostate Akaike weights peak at 0.30 (size 7) and spread over sizes 4–8. BIC weights split 0.30 / 0.28 / 0.27
     over sizes 2, 3 and 4.
 - **Inference after selection.**
-  - The winner's curse for β₁ = 0.05 with SE 0.1. AIC keeps it 21% of the time, when |β̂₁| averages 3.9 times the
-    truth; the conditional coverage of the usual 95% interval is 0.161/0.209 = 0.77 by a normal calculation.
+  - The winner's curse for β₁ = 0.05 with known SE 0.1. AIC keeps it 21% of the time, when |β̂₁| averages 3.9 times the
+    truth; the conditional coverage of the usual 95% interval is 0.1581/0.2081 = 0.7597 by a normal calculation.
   - The Board's simulation (below); splitting (Cox 1975); PoSI, polyhedral inference, data fission (Part 56).
 - **Subset selection.**
   - Stepwise's sins; leaps and bounds; mixed-integer optimization.
-  - The race: n = 100, p = 10, 5 true, correlation 0.35^{|i−j|}, tuned on a validation set. Relative risk:
+  - The race: n = 100, p = 10, 5 true, correlation 0.35^{|i−j|}, tuned on a validation set. Relative excess risk (above irreducible noise, divided by signal variance), averaged over 25 replicates:
 
     | SNR | 0.05 | 0.25 | 1 | 6 |
     |---|---|---|---|---|
@@ -133,8 +132,8 @@ From there the part covers:
     | full least squares | 8 | 0.521 |
     | AIC = CV best subset | 7 | 0.517 |
     | BIC = CV one-SE | 2 | 0.492 |
-    | lasso (10-fold CV) | 7 | 0.504 |
-    | ridge (10-fold CV) | 8 | 0.506 |
+    | lasso (10-fold CV, fold-specific preprocessing) | 7 | 0.501 |
+    | ridge (10-fold CV, fold-specific preprocessing) | 8 | 0.502 |
 
   - Bootstrap stability, 400 resamples:
     - AIC produced 66 distinct models and its original pick 15% of the time;
@@ -150,12 +149,8 @@ From there the part covers:
     | underconfident (SD 2) | 1.738 | 0.658 | 99.95% | hump |
     | biased (+0.7) | 1.687 | 0.715 | 80.6% | sloped |
 
-  - Prostate leave-one-out PIT (the t CDF of the externally studentized residual). Mean LOO log density and KS p:
-    - intercept only: −1.63 (KS p 0.96);
-    - lcavol + lweight: −1.18 (0.999);
-    - all eight: −1.17 (0.58).
+  - Prostate leave-one-out PITs are descriptive, dependent residual-based diagnostics. Mean held-out log densities are −1.631 (intercept), −1.183 (two predictors) and −1.170 (all eight). Descriptive KS distances are 0.060, 0.044 and 0.093; iid KS p-values are omitted because the LOO fits overlap. None of these histograms proves calibration.
 
-    All three are calibrated; sharpness separates them.
   - Proper scoring rules and the CRPS (Matheson & Winkler 1976; Gneiting & Raftery 2007); sharpness subject to
     calibration.
 
@@ -205,11 +200,11 @@ python tools/lecture_length.py stats28 --floor 50
 | 2 | Cp and AIC | TIC 9.47 vs k = 2; AIC picks 7 of 8 |
 | 3 | BIC | picks 2; P(true degree) 0.99 vs AIC's 0.75; P(χ²₁ > 2) = 0.157 |
 | 4 | Cross-validation theory | one-SE picks 2; corr(CV, true error) −0.06 |
-| 5 | Bayesian LOO and WAIC | −30.56 / −31.21 / −36.97; k̂ up to 1.06 |
-| 6 | Singular models | slopes 0.42 vs 0.98 (theory ½ vs 1) |
+| 5 | Bayesian LOO and WAIC | refit/analytic −30.56 / −31.34 / −44.33; check PSIS tail warnings |
+| 6 | Singular models | slopes 0.42 vs 0.99 (theory ½ vs 1) |
 | 7 | Minimum description length | degree 5 at 40.9 bits; regret ≈ ½ log(nπ/2) |
 | 8 | Averaging | BMA 0.99 on one model; stacking −2.06 vs truth −2.05 |
-| 9 | Inference after selection | 77% by calculation; Board 75.1% vs 95.7% split |
+| 9 | Inference after selection | 76% by the coherent known-SE calculation; Board 75.1% vs 95.7% split |
 | 10 | Subset selection | lasso wins at SNR 0.05, best subset at 6; 66 bootstrap models |
 | 11 | Calibrated forecasts | coverage 58% / 90% / 99.95%; LOO log score −1.63 vs −1.18 |
 | 12 | Outro | — |
@@ -358,3 +353,25 @@ almost everywhere. So reporting the true g uniquely minimizes the expected log s
 | oracle inequalities, minimax rates | 50 |
 | selective inference in depth | 56 |
 | the Coverage Board | every part; 65 |
+
+## QA qualifications and independent checks
+
+The 97 prostate rows, eight predictors, log-PSA response and 67/30 train/test indicator independently match the ESL source at the Museum's seven-decimal precision (maximum absolute predictor difference 5e-8). The table is a teaching reanalysis, not a clinical prediction validation.
+
+Optimism identities concern independent new responses at the same fixed design with the stated variance model. tr(S) requires a response-independent linear smoother; Stein divergence identities require Gaussian noise and differentiability/integrability. A fixed-penalty lasso's active count estimates covariance degrees of freedom under suitable design conditions, not after arbitrary tuning. The new covariance simulation reports independent-replicate Monte Carlo error. Cp needs an adequate unbiased noise estimate; minimizing an unbiased estimate can itself add selection optimism. AIC/AICc/TIC fixed-candidate derivations do not automatically account for searching over all subsets. AICc's formula is exact only in its specified Gaussian setting, with coefficients and unknown variance counted in k and n > k+1.
+
+Regular BIC approximations need appropriate positive proper priors and identifiable fixed-dimensional models. An MLE-centred unit-information construction is data-dependent. Finite-candidate identification consistency is not incompatible with every notion of predictive efficiency; Yang's tradeoff concerns particular uniform risk-adaptation goals. The finite-degree simulation does not prove that AIC must eventually predict better than BIC whenever all candidates are wrong. Normalized criterion weights over one searched subset per size are not posterior probabilities of all subsets or of model size.
+
+Penalized regression now centers/scales using each training fold, then applies those statistics to that fold's held-out cases. Fold-based SEs and the one-SE rule are tuning heuristics under overlapping training fits. PRESS shortcuts concern OLS or compatible fixed linear penalized fits, not arbitrary smoother matrices. General claims that CV contains no fit-specific error information, is always upward biased, or that five folds always has lower variance than LOO are too strong. The Bates–Hastie–Tibshirani interval construction is distinct from ordinary nested tuning. The 30-person test comparison now stores per-case losses and paired differences against full least squares; individual-error SEs alone cannot establish equivalence.
+
+The independent-effect school model now has proper N(0,100²) priors, an analytic held-out predictive score and an explicit PSIS failure example. The hierarchy uses the wide trapezoidal-CDF approximation from Part 26, with independent Gaussian-contrast integration checking its LOO reference. Paired pointwise uncertainty across eight heterogeneous schools is only a rough comparison. WAIC/LOO asymptotics require analytic/integrability assumptions and do not validate every finite singular-model fit.
+
+The singular-mixture evidence uses a nonuniform grid resolving both crossing axes; doubling resolution changes the checked log evidences by less than 0.0011. Its regular comparator integrates the full declared mean/log-SD prior, with analytic mean integration and adaptive log-SD quadrature. The local KL approximation a²b²/2 concerns the crossing intersection; the n^(-1/2) volume also has a log n factor. RLCT bounds and formulas depend on realizability, prior and true stratum. A finite label permutation alone need not create local singularity, and counting used neural units is not a general RLCT formula.
+
+MDL graphics show leading relative code criteria with omitted shared discretization/index constants; a Gaussian density is not a literal finite-bit code. NML needs a finite normalizer, which fails for many unrestricted Gaussian models. Regular coding equivalences and plug-in predictors need initialization and regularity. The coin approximation is within 0.02 nats at n=1000, not 0.01.
+
+The M-open averaging example now uses the exactly stated fixed N(-2,1) and N(2,1) candidates; the single candidate is selected on training data, never on held-out scores. BMA optimality is prior-averaged under its joint model and loss. A unique KL-best candidate needs assumptions; equal-KL ties need not settle on one fixed winner. Stacking helps this example, not every misspecified problem.
+
+The known-SE selection illustration now consistently uses a normal 95% cutoff. Data splitting still needs valid held-out inference for a well-defined target; independent predictors keep the Board's population coefficient stable across submodels. Polyhedral results need the appropriate fixed tuning/selection record, and data fission uses auxiliary randomness with model-specific conditions. Ordinary bootstrap inclusion frequencies are not themselves formal stability-selection error control. The subset race reports excess risk and simulation uncertainty, not total noisy prediction risk or a universal SNR threshold.
+
+Uniform PITs require suitable continuous true conditional forecasts (randomization for atoms). Marginal flatness does not prove conditional calibration or independence. Squared error of a predictive mean is proper but not strictly proper over full distributions. Climatology can be a useful marginally calibrated baseline. Forecast improvements are not attributed to honest scoring alone. Curves preserve clipped crossings and gaps rather than flattening out-of-range values.
