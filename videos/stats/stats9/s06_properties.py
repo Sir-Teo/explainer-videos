@@ -55,10 +55,9 @@ class Properties(VoiceoverScene):
             "Why should maximum likelihood work at all? <bookmark mark='a'/> Divide the log-likelihood by n. It becomes "
             "an average: the average, over the observations, of log p lambda of x. For ten Poisson observations, this "
             "curve is wobbly, and its peak can be far from the true rate, point seven. <bookmark mark='b'/> With a "
-            "hundred, it's steadier. With two thousand, steadier still. <bookmark mark='c'/> By the law of large "
-            "numbers, the whole curve converges to a fixed one: the expected log-density, averaged over the true "
-            "distribution. <bookmark mark='d'/> And that limiting curve peaks exactly at the truth. If the curves "
-            "converge, and the limit has a unique peak at the truth, the peaks converge too. That's consistency, and "
+            "hundred, it's steadier. With two thousand, steadier still. <bookmark mark='c'/> Under a uniform law of large "
+            "numbers, the curve converges uniformly to a fixed one: the expected log-density, averaged over the true "
+            "distribution. <bookmark mark='d'/> And that limiting curve peaks exactly at the truth. With uniform convergence and a well-separated unique maximum, and control of the parameter space, the maximizing parameters converge too. That's consistency, and "
             "it's Abraham Wald's 1949 argument. Why does the limit peak at the truth? That's a theorem of its own."
         ) as vo:
             self.play(FadeIn(A), FadeIn(tag), Create(tr))
@@ -78,12 +77,12 @@ class Properties(VoiceoverScene):
             cmath(r"E_{\theta_0}\log p_\theta(X) - E_{\theta_0}\log p_{\theta_0}(X)", r"=", r"E_{\theta_0}\log\frac{p_\theta(X)}{p_{\theta_0}(X)}",
                   font_size=32),
             cmath(r"\vphantom{x}", r"\le", r"\log E_{\theta_0}\frac{p_\theta(X)}{p_{\theta_0}(X)}", font_size=32),
-            cmath(r"\vphantom{x}", r"=", r"\log \int p_\theta(x)\,dx = \log 1 = 0", font_size=32),
+            cmath(r"\vphantom{x}", r"=", r"\log \int_{p_{\theta_0}>0} p_\theta(x)\,dx\;\le\;0", font_size=32),
             cmath(r"\mathrm{KL}(\theta_0 \,\|\, \theta)", r"=", r"E_{\theta_0}\log\frac{p_{\theta_0}(X)}{p_\theta(X)} \;\ge\; 0", font_size=32),
         ]
         rows[3][2].set_color(S.ACCENT)
         whys = [why(r"the gap between any $\theta$ and the truth"), why(r"Jensen: \ $\log$ is concave (Part 6)"),
-                why(r"the ratio's mean is the total probability of $p_\theta$"),
+                why(r"candidate mass on the truth's support is at most 1"),
                 why(r"Kullback \& Leibler (1951): \ zero only if $p_\theta = p_{\theta_0}$")]
         foot = label(r"identifiability: \ different $\theta$ must give different distributions", font_size=24,
                      color=GREY_A).to_edge(DOWN, buff=0.2)
@@ -91,8 +90,7 @@ class Properties(VoiceoverScene):
             "<bookmark mark='a'/> Compare the expected log-density at any theta with the one at the truth, theta zero. "
             "The difference is the expected log of a ratio. <bookmark mark='b'/> The logarithm is concave, so by "
             "Jensen's inequality the average of the log is at most the log of the average. <bookmark mark='c'/> And "
-            "the average of the ratio, under the truth, is just the total probability of p theta: one. The log of one "
-            "is zero. <bookmark mark='d'/> So the gap is never positive. Turned around, the quantity is the "
+            "the average of the ratio is the probability p theta assigns to the truth's support, at most one, and equal to one for a common positive support. Its logarithm is at most zero. <bookmark mark='d'/> So the gap is never positive. Turned around, the quantity is the "
             "Kullback–Leibler divergence, from information theory, and it is zero only when the two distributions "
             "agree. <bookmark mark='e'/> As long as different parameters give different distributions, which is called "
             "identifiability, the truth is the unique peak. Maximum likelihood is, in the limit, a search for the "
@@ -118,6 +116,7 @@ class Properties(VoiceoverScene):
         rows[3][2].set_color(LIK)
         whys = [why(r"Taylor-expand the score around the truth"), why(r"solve, \ and scale by $\sqrt n$"),
                 why(r"CLT on the score's sum; \ LLN on its slope; \ $I$: \ ch.~9"), why(r"Slutsky (Part 6): \ the MLE is asymptotically normal")]
+        intro = label('Regular MLEs: a Taylor expansion and a CLT', font_size=36)
         with self.voiceover(
             "Next, how big is the error? The answer comes from the score. <bookmark mark='a'/> At the MLE, the score is "
             "zero. Expand it in a Taylor series around the true value: the score at the truth plus the distance times "
@@ -129,9 +128,12 @@ class Properties(VoiceoverScene):
             "is approximately normal, with variance one over the information. Fisher conjectured this in 1922; making "
             "it rigorous took until the 1940s, and Part 47 does it properly."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
         self.clear_scene()
 
@@ -159,6 +161,7 @@ class Properties(VoiceoverScene):
             MathTex(rf"\hat\lambda \pm 1.96\,\mathrm{{SE}} = [{lo:.3f},\ {hi:.3f}]", font_size=30, color=S.ACCENT),
             label(r"the observed information: \ how sharply the data's curve is bent", font_size=22, color=GREY_A),
         ), 5.4, 0.32, [4.0, 0.0, 0])
+        intro = label('Estimating uncertainty from likelihood curvature', font_size=36)
         with self.voiceover(
             "In practice we turn that into a standard error, using the curvature of the log-likelihood. "
             "<bookmark mark='a'/> Here again is the horse-kick log-likelihood. Near its peak, any smooth curve looks "
@@ -171,7 +174,9 @@ class Properties(VoiceoverScene):
             "one point nine two, nearly agree. With two hundred observations, the likelihood is already almost "
             "perfectly quadratic."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(A), Create(cv))
             vo.wait_until("b")
             self.play(Create(par), FadeIn(rows[:2]))
@@ -224,7 +229,7 @@ class Properties(VoiceoverScene):
         panels = VGroup()
         for j, (n, xr, ed) in enumerate(((5, (0, 2.0), np.linspace(0, 2.0, 41)), (100, (0.3, 0.7), np.linspace(0.3, 0.7, 41)))):
             est = n / g.exponential(1 / lam, (40000, n)).sum(1)
-            h, _ = np.histogram(est, ed, density=True)
+            h = histogram_density(est, ed)
             ymax = max(h.max(), stats.norm.pdf(0, 0, lam / np.sqrt(n))) * 1.15
             A = axes(list(xr), [0, ymax], x_length=5.6, y_length=3.6, xlabel=rf"$\hat\lambda$, \ $n = {n}$",
                      xticks=[xr[0], lam, xr[1]], center=[-3.4 + 6.8 * j, 0.2, 0])
@@ -236,15 +241,14 @@ class Properties(VoiceoverScene):
             panels.add(VGroup(A, bars, nc, tl))
         leg = legend([(SIM, r"simulated $\hat\lambda = 1/\bar x$"), (LIK, r"$N\big(\lambda, \lambda^2/n\big)$: \ the asymptotic law")],
                      font_size=22).to_edge(UP, buff=0.4)
-        foot = label(r"$n = 5$: \ skewed, \ biased up 25\%, \ SD 0.36 vs 0.22 predicted; \ $n = 100$: \ indistinguishable", font_size=24,
+        foot = label(r"$n = 5$: \ skewed, \ biased up 25\%, \ SD 0.36 vs 0.22 predicted; \ $n = 100$: \ much closer", font_size=24,
                      color=S.ACCENT).to_edge(DOWN, buff=0.85)
         tag = simulated_tag(r"simulated: \ 40,000 samples, \ rate $0.5$", corner=DR)
         with self.voiceover(
             "The exponential rate. <bookmark mark='a'/> With five observations, the sampling distribution of one over "
             "x-bar is skewed, with a long right tail, and the normal approximation, in green, misses it badly: the "
             "estimator is biased up by a quarter, and its spread is larger than the formula predicts. "
-            "<bookmark mark='b'/> With a hundred observations, the histogram and the normal curve are almost "
-            "indistinguishable. <bookmark mark='c'/> Large-sample theory is a statement about large samples. How large "
+            "<bookmark mark='b'/> With a hundred observations, the histogram and the normal curve are much closer, though some skewness remains. <bookmark mark='c'/> Large-sample theory is a statement about large samples. How large "
             "is large enough depends on the model and the parameter, and simulation is how you find out. Part 11 "
             "tests the resulting intervals on the Coverage Board, and Part 22 shows how to do better with the "
             "likelihood's own shape."
@@ -261,7 +265,7 @@ class Properties(VoiceoverScene):
     def failures(self):
         tc = theorem_card(r"When the theory holds", r"the model is identifiable; \ the support of $p_\theta$ does not depend on $\theta$; \ "
                           r"$\theta_0$ is inside the parameter space; \ $\log p_\theta$ is smooth enough in $\theta$; \ "
-                          r"and the number of parameters stays fixed as $n$ grows", who=r"the regularity conditions (Cram\'er, 1946)",
+                          r"the Fisher information is finite and positive; \ suitable derivative domination and consistent interior maximization hold; \ and dimension stays fixed", who=r"the regularity conditions (Cram\'er, 1946)",
                           color=LIK, width=10.4, font_size=24).move_to([0, 1.7, 0])
         rows = fit_rows(VGroup(
             label(r"the support moves: \ the uniform and the tanks, \ error $\propto 1/n$, \ not normal (ch.~10)", font_size=24),
@@ -272,20 +276,22 @@ class Properties(VoiceoverScene):
         ), 12.6, 0.3, [0, -1.6, 0])
         for r in rows:
             r.set_color(GREY_A)
+        intro = label('Conditions behind regular likelihood theory', font_size=36)
         with self.voiceover(
             "This all rests on conditions, and it's worth knowing exactly where they break. <bookmark mark='a'/> The "
             "model must be identifiable; the set of possible values mustn't depend on the parameter; the truth must be "
             "inside the parameter space, not on its edge; the log-density must be smooth; and the number of parameters "
-            "must stay fixed as the data grow. <bookmark mark='b'/> Break the support condition and you get the uniform "
+            "must stay fixed as the data grow. This is a checklist of the main conditions, not a complete theorem: finite positive information, derivative domination and control of the maximizing solution also matter. <bookmark mark='b'/> Break the support condition and you get the uniform "
             "and the tanks, where the error shrinks like one over n and isn't normal. <bookmark mark='c'/> Let the "
             "parameters grow with the data, and the MLE can be inconsistent: Jerzy Neyman and Elizabeth Scott's 1948 "
             "example gives pairs of measurements, each pair with its own mean. The MLE of the common variance converges "
             "to half the truth, however much data you collect. <bookmark mark='d'/> A mixture of two normals has an "
             "unbounded likelihood: shrink one component onto a single data point and the likelihood goes to infinity. "
-            "<bookmark mark='e'/> And a parameter on a boundary, like a variance that's truly zero, gives a distribution "
-            "that's half a point mass, which Part 25 meets."
+            "<bookmark mark='e'/> And a parameter on a boundary, like a variance that's truly zero, can produce an asymptotic likelihood-ratio law with a point mass, in the simplest single-component case half the mass at zero, which Part 25 meets."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(tc, shift=UP * 0.2))
             for k, m_ in enumerate("bcde"):
                 vo.wait_until(m_)

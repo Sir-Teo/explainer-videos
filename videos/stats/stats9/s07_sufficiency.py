@@ -113,6 +113,7 @@ class Sufficiency(VoiceoverScene):
             label(r"so no procedure can do better with Alice's data than with Bob's: \ the rest of the data is lossless to discard",
                   font_size=24, color=S.ACCENT),
         ), 12.6, 0.3, [0, -2.8, 0])
+        intro = label('Regenerating the data from a sufficient statistic', font_size=36)
         with self.voiceover(
             "Here's a way to see why. <bookmark mark='a'/> Alice has twelve coin tosses. She sends Bob only one number: "
             "the count of heads, here three. <bookmark mark='b'/> Bob, who doesn't know p, can still manufacture a "
@@ -122,7 +123,9 @@ class Sufficiency(VoiceoverScene):
             "estimator, any test, applied to Bob's fake data performs exactly as well as on Alice's. Nothing was lost in "
             "the message. Throwing the rest away is lossless compression, for the purpose of learning about p."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(left))
             self.play(GrowArrow(arrow), FadeIn(msg))
             vo.wait_until("b")
@@ -145,6 +148,7 @@ class Sufficiency(VoiceoverScene):
         rows[2][2].set_color(S.ACCENT)
         whys = [why(r"discrete data, \ $T(x) = t$"), why(r"factor: \ $g_\theta(t)$ is the same for every $y$ in the sum"),
                 why(r"it cancels: \ sufficient. \ (Conversely, \ $g_\theta(t) = P_\theta(T = t)$.)")]
+        intro = label('Factor the likelihood to find what matters', font_size=36)
         with self.voiceover(
             "Checking the definition directly is tedious. Fisher's factorization makes it easy. <bookmark mark='a'/> "
             "T is sufficient exactly when the density splits into two factors: one that depends on theta, but only "
@@ -156,7 +160,9 @@ class Sufficiency(VoiceoverScene):
             "cancels, and what's left doesn't involve theta. That's sufficiency. For the converse, take g to be the "
             "probability of T itself."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(tc, shift=UP * 0.2))
             step = ladder(self, rows, whys, keep=3, top=1.0, x=-0.6, buff=0.45, edge=6.9)
             for k, m_ in enumerate("bcd"):
@@ -172,7 +178,7 @@ class Sufficiency(VoiceoverScene):
              r"\big(\sum x_i,\ \sum x_i^2\big)"),
             (r"Gamma$(\alpha, \beta)$", r"\frac{(\prod x_i)^{\alpha - 1}e^{-\sum x_i/\beta}}{\Gamma(\alpha)^n\beta^{n\alpha}}",
              r"\big(\sum \log x_i,\ \sum x_i\big)"),
-            (r"Uniform$(0, \theta)$; \ tanks", r"\theta^{-n}\,\mathbf 1\{\max x_i \le \theta\}", r"\max x_i"),
+            (r"Uniform$(0, \theta)$", r"\theta^{-n}\,\mathbf 1\{\max x_i \le \theta\}", r"\max x_i"),
         ]
         rows = VGroup()
         for nm, dens, T in items:
@@ -253,10 +259,11 @@ class Sufficiency(VoiceoverScene):
                     font_size=28),
             label(r"Pitman--Koopman--Darmois (1935--36): \ a sufficient statistic of fixed dimension for every $n$", font_size=24,
                   color=GREY_A),
-            label(r"exists (with fixed support) only in exponential families", font_size=24, color=GREY_A),
+            label(r"under regularity and fixed support: only in exponential families", font_size=24, color=GREY_A),
             label(r"so the normal, Poisson, gamma compress perfectly; \ the Cauchy needs the whole sample, \ sorted", font_size=24,
                   color=GREY_A),
         ), 12.6, 0.4, [0, 0.0, 0])
+        intro = label('How much can a regular statistic compress?', font_size=36)
         with self.voiceover(
             "How far can the data be compressed? <bookmark mark='a'/> The full dataset is trivially sufficient, so the "
             "aim is the smallest sufficient statistic. <bookmark mark='b'/> A minimal sufficient statistic is one that "
@@ -264,12 +271,14 @@ class Sufficiency(VoiceoverScene):
             "gave a test in 1950: two datasets should get the same value exactly when the ratio of their likelihoods "
             "doesn't depend on theta. <bookmark mark='d'/> And a deep theorem, from Edwin Pitman, Bernard Koopman and "
             "Georges Darmois in the mid-1930s, says that a sufficient statistic of fixed dimension, whatever the sample "
-            "size, exists only in exponential families, at least when the support is fixed. <bookmark mark='e'/> So the "
-            "normal, the Poisson and the gamma compress perfectly into a few sums, while for the Cauchy distribution "
-            "nothing less than the whole sorted sample will do. Exponential families are special, and Part 22 shows how "
+            "size, under the theorem's regularity assumptions, including fixed support, exists only in exponential families. Dimension here means a regular statistic, excluding artificial encodings of the whole sample into a number. <bookmark mark='e'/> So the "
+            "normal, the Poisson and the gamma compress perfectly into a few sums, while for the Cauchy location model with known scale, nothing less than the whole sorted sample will do. Exponential families are special, and Part 22 shows how "
             "much else follows from that."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k] if k < 3 else (rows[3:5] if k == 3 else rows[5]), shift=RIGHT * 0.2))
         self.clear_scene()

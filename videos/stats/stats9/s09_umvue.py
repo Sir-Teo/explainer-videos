@@ -45,6 +45,7 @@ class UMVUE(VoiceoverScene):
             label(r"three unbiased starting points, \ one destination", font_size=26, color=S.ACCENT),
             label(r"is that luck? \ could some other unbiased estimator still beat it?", font_size=24, color=GREY_A),
         ), 12.6, 0.3, [0, -2.6, 0])
+        intro = label('Do different unbiased starts reach the same estimator?', font_size=36)
         with self.voiceover(
             "Rao–Blackwell improves an estimator, but it raises a question. <bookmark mark='a'/> What if we'd started "
             "somewhere else? Here are three unbiased estimators of N: twice the mean minus one; twice the first serial "
@@ -53,7 +54,9 @@ class UMVUE(VoiceoverScene):
             "<bookmark mark='d'/> Is that a coincidence? And might some other unbiased estimator, one we haven't "
             "thought of, still do better? The property that settles both questions is called completeness."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(LaggedStart(*[FadeIn(b, shift=DOWN * 0.1) for b in boxes], lag_ratio=0.3))
             vo.wait_until("b")
             self.play(*[GrowArrow(a) for a in arrows])
@@ -243,6 +246,7 @@ class UMVUE(VoiceoverScene):
             r[0].set_x(-4.0)
             r[1].set_x(1.0)
             r[2].set_x(4.6)
+        intro = label('Completeness in full exponential families', font_size=36)
         with self.voiceover(
             "Where do complete statistics come from? <bookmark mark='a'/> Mostly from exponential families. If the "
             "density has the exponential-family form, and the natural parameters range over an open set, the "
@@ -254,7 +258,9 @@ class UMVUE(VoiceoverScene):
             "variance, with its own small correction. And the tanks, which aren't an exponential family, but whose "
             "maximum we proved complete by hand."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(tc, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in rows], lag_ratio=0.5), run_time=6.0)
@@ -274,6 +280,7 @@ class UMVUE(VoiceoverScene):
             label(r"the best unbiased estimator can be absurd; \ $\max(0, \cdot)$ is biased and better", font_size=26, color=S.ACCENT),
             label(r"unbiasedness is a constraint, \ not a virtue: \ chapter 11 lets bias back in", font_size=24, color=GREY_A),
         ), 12.6, 0.3, [0, -2.5, 0])
+        intro = label('A best unbiased probability estimate can be negative', font_size=36)
         with self.voiceover(
             "But best unbiased doesn't always mean good. Here's a classic warning. <bookmark mark='a'/> One Poisson "
             "observation, and we want e to the minus two lambda, the chance of two quiet years in a row. "
@@ -282,12 +289,15 @@ class UMVUE(VoiceoverScene):
             "<bookmark mark='c'/> Match coefficients: g of x is minus one to the power x. That's the only unbiased "
             "estimator, so it's the UMVUE, and it estimates a probability as plus one or minus one. "
             "<bookmark mark='d'/> Simply replacing the negative values with zero gives a biased estimator that's "
-            "closer to the truth every time. <bookmark mark='e'/> Unbiasedness is a constraint we chose, not a virtue in "
+            "never further from the truth, and strictly closer whenever the estimate was negative. <bookmark mark='e'/> Unbiasedness is a constraint we chose, not a virtue in "
             "itself, and chapter eleven lets bias back in."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.7, x=-0.6, buff=0.6, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 step(k, transform=False)
             vo.wait_until("d")
             self.play(FadeIn(foot[0]))

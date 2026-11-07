@@ -22,6 +22,7 @@ class Hook(VoiceoverScene):
             label(r"numbered in sequence: \ the largest number seen says something about how many exist", font_size=24, color=S.ACCENT),
             label(r"R. Ruggles \& H. Brodie, \ \emph{JASA} (1947), \ told the story after the war", font_size=22, color=GREY_A),
         ), 12.6, 0.3, [0, -1.6, 0])
+        intro = label('Estimating production from captured serial numbers', font_size=36)
         with self.voiceover(
             "In the Second World War, Allied planners needed a number: how many tanks was Germany building each month? "
             "<bookmark mark='a'/> Conventional intelligence, from spies, aerial photographs and prisoners, gave one "
@@ -31,8 +32,10 @@ class Hook(VoiceoverScene):
             "sequence carry information: the largest one you've seen tells you something about how many exist. "
             "<bookmark mark='d'/> Richard Ruggles and Henry Brodie described the work after the war, in 1947."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(tl))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc, shift=UP * 0.2))
             for k, m_ in enumerate("bcd"):
                 vo.wait_until(m_)
@@ -53,7 +56,7 @@ class Hook(VoiceoverScene):
                              MathTex(str(st), font_size=32, color=SIM).move_to([xs[1], y, 0]),
                              MathTex(f"{it:,}".replace(",", "{,}"), font_size=32, color=S.RESID).move_to([xs[2], y, 0]),
                              MathTex(str(gr), font_size=32, color=EXACT).move_to([xs[3], y, 0])))
-        take = label(r"the serial numbers came close, \ and closer each year; \ intelligence was four to eight times too high", font_size=26,
+        take = label(r"the serial numbers came close, \ and closer each year; \ intelligence was about four to eight times too high", font_size=26,
                      color=S.ACCENT).to_edge(DOWN, buff=0.9)
         src = historical_tag(r"Ruggles \& Brodie (1947), \ monthly production", corner=DR)
         with self.voiceover(
@@ -63,7 +66,7 @@ class Hook(VoiceoverScene):
             "two hundred and forty-four from the statistics, fifteen hundred and fifty from intelligence, two hundred "
             "and seventy-one in fact. <bookmark mark='c'/> August 1942: three hundred and twenty-seven, fifteen hundred "
             "and fifty, and three hundred and forty-two. <bookmark mark='d'/> The serial numbers were usually close; "
-            "intelligence was five to ten times too high. How do you turn a handful of serial numbers into a count?"
+            "intelligence was about four to eight times too high in these months. How do you turn a handful of serial numbers into a count?"
         ) as vo:
             self.play(FadeIn(hdr), Create(line), FadeIn(src))
             for k, m_ in enumerate("abc"):

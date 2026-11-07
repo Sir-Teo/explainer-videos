@@ -34,6 +34,12 @@ CACHE = Cache("stats9")
 load = CACHE.load
 
 
+def histogram_density(values, edges):
+    """Density per full sample; observations outside the viewport retain their mass."""
+    counts, _ = np.histogram(values, edges)
+    return counts / (len(values) * np.diff(edges))
+
+
 def rng(seed: int) -> np.random.Generator:
     return np.random.Generator(np.random.PCG64(seed))
 
@@ -66,6 +72,29 @@ def capture(g, N, k, reps, weights=None, offset=0):
     return np.array([g.choice(N, k, replace=False, p=p) + 1 + offset for _ in range(reps)])
 
 
+def clipped_segments(xs, ys, rectangle):
+    """Clip line segments to a rectangle without flattening off-scale values."""
+    xmin, xmax, ymin, ymax = rectangle
+    points = np.column_stack((xs, ys))
+    result = []
+    for start, end in zip(points[:-1], points[1:]):
+        if not np.isfinite([start, end]).all():
+            continue
+        delta = end - start
+        lo, hi = 0.0, 1.0
+        for k, lower, upper in ((0, xmin, xmax), (1, ymin, ymax)):
+            if delta[k] == 0:
+                if not lower <= start[k] <= upper:
+                    hi = -1
+                    break
+            else:
+                a, b = sorted(((lower - start[k]) / delta[k], (upper - start[k]) / delta[k]))
+                lo, hi = max(lo, a), min(hi, b)
+        if lo <= hi:
+            result.append((start + lo * delta, start + hi * delta))
+    return result
+
+
 def compute_tanks():
     g = rng(1943)
     N = 300
@@ -74,7 +103,7 @@ def compute_tanks():
     est = tank_estimates(s)
     ed = np.linspace(100, 500, 81)
     out = {"N": N, "one": one, "one_est": {k: float(v[0]) for k, v in tank_estimates(one[None, :]).items()},
-           "edges": ed, "hist": {k: np.histogram(v, ed, density=True)[0] for k, v in est.items()},
+           "edges": ed, "hist": {k: histogram_density(v, ed) for k, v in est.items()},
            "stats6": {k: {"mean": float(v.mean()), "sd": float(v.std()), "rmse": float(np.sqrt(np.mean((v - N) ** 2)))}
                       for k, v in est.items()}}
     ks = list(range(2, 21))
@@ -121,9 +150,9 @@ def compute_moments():
     return nest({"a0": a0, "sc0": sc0, "x": x, "mean": float(m), "var": float(v), "mom": mom_one, "mle": mle_one,
                  "xs": xs, "pdf_true": stats.gamma.pdf(xs, a0, scale=sc0), "pdf_mom": stats.gamma.pdf(xs, mom_one[0], scale=mom_one[1]),
                  "pdf_mle": stats.gamma.pdf(xs, mle_one[0], scale=mle_one[1]),
-                 "edges": ed, "h_mom": np.histogram(am, ed, density=True)[0], "h_mle": np.histogram(al, ed, density=True)[0],
+                 "edges": ed, "h_mom": histogram_density(am, ed), "h_mle": histogram_density(al, ed),
                  "sd_mom": float(am.std()), "sd_mle": float(al.std()), "bias_mom": float(am.mean() - a0),
-                 "bias_mle": float(al.mean() - a0), "hist_x": np.histogram(x, np.linspace(0, 20, 21), density=True)[0]})
+                 "bias_mle": float(al.mean() - a0), "hist_x": histogram_density(x, np.linspace(0, 20, 21))})
 
 
 def compute_likelihood():
@@ -132,13 +161,13 @@ def compute_likelihood():
     for n in (10, 100, 1000):
         k = int(0.7 * n)
         ll = k * np.log(ps) + (n - k) * np.log(1 - ps)
-        out[str(n)] = ll - ll.max()
+        out[str(n)] = ll - (k * np.log(k / n) + (n - k) * np.log1p(-k / n))
     hk_k, hk_n = np.asarray(museum.HORSEKICK_K), np.asarray(museum.HORSEKICK_N)
     n = hk_n.sum()
     S = (hk_k * hk_n).sum()
     lams = np.linspace(0.4, 1.0, 300)
     ll = S * np.log(lams) - n * lams
-    out["hk"] = {"n": int(n), "S": int(S), "lam_hat": float(S / n), "lams": lams, "ll": ll - ll.max(),
+    out["hk"] = {"n": int(n), "S": int(S), "lam_hat": float(S / n), "lams": lams, "ll": ll - (S * np.log(S / n) - S),
                  "se": float(np.sqrt(S / n / n)), "k": hk_k, "count": hk_n,
                  "expected": n * stats.poisson.pmf(hk_k, S / n)}
     return nest(out)
@@ -163,10 +192,10 @@ def compute_examples():
     rates = np.linspace(0.1, 1.5, 300)
     ll = len(x) * np.log(rates) - rates * x.sum()
     u = np.sort(g.uniform(0, 10, 8))
-    th = np.linspace(5, 16, 400)
+    th = np.unique(np.r_[np.linspace(5, 16, 400), u.max()])
     lik = np.where(th >= u.max(), th ** -len(u), 0.0)
-    return nest({"exp_x": x, "rates": rates, "exp_ll": ll - ll.max(), "rate_hat": float(1 / x.mean()),
-                 "u": u, "th": th, "u_lik": lik / lik.max(), "u_max": float(u.max())})
+    return nest({"exp_x": x, "rates": rates, "exp_ll": ll - (len(x) * np.log(1 / x.mean()) - len(x)), "rate_hat": float(1 / x.mean()),
+                 "u": u, "th": th, "u_lik": lik / u.max() ** -len(u), "u_max": float(u.max())})
 
 
 def compute_curvature():

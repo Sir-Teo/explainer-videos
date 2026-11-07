@@ -59,7 +59,7 @@ class Examples(VoiceoverScene):
         sds = np.linspace(1.0, 4.0, 30)
         M, Sd = np.meshgrid(mus, sds)
         ll = -n * np.log(Sd) - ((x[None, None, :] - M[..., None]) ** 2).sum(-1) / (2 * Sd ** 2)
-        ll -= ll.max()
+        ll -= -n * np.log(x.std()) - n / 2
         A = axes([8, 12], [1, 4], x_length=6.6, y_length=4.5, xlabel=r"$\mu$", ylabel=r"$\sigma$", xticks=[8, 9, 10, 11, 12],
                  yticks=[1, 2, 3, 4], center=[-2.6, -0.2, 0])
         ax = A.ax
@@ -75,7 +75,7 @@ class Examples(VoiceoverScene):
         mu_h, sd_h = x.mean(), x.std()
         pk = Dot(ax.c2p(mu_h, sd_h), radius=0.08, color=S.ACCENT)
         ring = VGroup()
-        thr = -1.92 * 1.0
+        thr = -stats.chi2.ppf(0.95, df=2) / 2
         for i in range(len(sds)):
             for j in range(len(mus)):
                 if ll[i, j] >= thr - 0.0 and (ll[i, j] - thr) < 0.6:
@@ -96,7 +96,7 @@ class Examples(VoiceoverScene):
             "and the divisor-n standard deviation. <bookmark mark='c'/> The truth, ten and two, sits inside the bright "
             "region. <bookmark mark='d'/> Notice the shape. The hill falls off steeply toward small sigma, since a "
             "narrow curve can't explain the spread we see, but only slowly toward large sigma. The white dots trace the "
-            "contour one point nine two below the peak, a joint confidence region in miniature. In more than one "
+            "contour about three log-likelihood units below the peak, an approximate ninety-five percent joint confidence region using two degrees of freedom. In more than one "
             "dimension, likelihood becomes geometry: a peak, a curvature matrix, and contours."
         ) as vo:
             self.play(FadeIn(A), FadeIn(tag))
@@ -271,6 +271,7 @@ class Examples(VoiceoverScene):
             label(r"the error is squared at every step: \ quadratic convergence, \ the digits double", font_size=26, color=S.ACCENT),
             label(r"the moment estimator's best use: \ a starting point for likelihood", font_size=24, color=GREY_A),
         ), 12.6, 0.3, [0, -2.2, 0])
+        intro = label("Newton's method near the root", font_size=36)
         with self.voiceover(
             "How fast does it converge? <bookmark mark='a'/> Start instead from the method-of-moments estimate, three "
             "point one three six, which is already close. <bookmark mark='b'/> After one Newton step the error is about "
@@ -279,8 +280,10 @@ class Examples(VoiceoverScene):
             "time. That's quadratic convergence. And it suggests the method of moments' best role: not the final "
             "answer, but a good place to start the search for the maximum likelihood estimate."
         ) as vo:
+            self.play(FadeIn(intro))
             self.play(FadeIn(hdr))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(rows[0]), FadeIn(notes[0]))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in rows[1:]], lag_ratio=0.5))

@@ -8,7 +8,7 @@ from videos.stats.stats9.common import *  # noqa: F403
 
 NAMES = {"mom": r"$2\bar x - 1$", "max": r"$m$ \ (MLE)", "umvue": r"$m(1 + \tfrac1k) - 1$", "range": r"$(m - m_1)\tfrac{k+1}{k-1} - 1$"}
 COLS = {"mom": MOM, "max": MAX, "umvue": UMVUE, "range": S.PRIOR}
-MODELS = [("uniform", (r"the textbook:", r"uniform capture")), ("newer", (r"newer tanks captured", r"up to $3\times$ as often")),
+MODELS = [("uniform", (r"the textbook:", r"uniform capture")), ("newer", (r"newer tanks captured", r"relative capture weights \ from 1 to 3")),
           ("offset", (r"serials start", r"at 1{,}001"))]
 
 
@@ -63,8 +63,7 @@ class Compare(VoiceoverScene):
             "is equally likely to be captured, the best unbiased estimator wins, at fifty. The maximum is biased low, "
             "the moment estimator is noisy, and the range estimator is noisier still, since it uses two order "
             "statistics and an assumption less. <bookmark mark='b'/> Now suppose newer tanks, the ones with higher "
-            "serials, are more likely to be at the front and so more likely to be captured, up to three times as "
-            "likely. Every estimator is pushed upward. The moment estimator is now biased by nearly fifty. The best "
+            "serials, are more likely to be at the front and so more likely to be captured, with sequential sampling weights up to three times as large. These are sampling weights, not an exact ratio of marginal inclusion probabilities. Every estimator is pushed upward. The moment estimator is now biased by nearly fifty. The best "
             "unbiased estimator is biased too, by sixteen, but it still wins on error. "
             "<bookmark mark='c'/> Finally, suppose the numbering doesn't start at one, but at a thousand and one, and "
             "nobody told us. Every estimator that assumed a start at one is off by hundreds or thousands. Only the "
@@ -110,8 +109,7 @@ class Compare(VoiceoverScene):
             "squared error can be computed exactly, with no simulation. <bookmark mark='b'/> The unbiased choice, a "
             "equals one plus one over k, gives fifty point four. <bookmark mark='c'/> But the minimum is a "
             "little to the left, at a multiplier close to k plus two over k plus one. That recipe is biased low, "
-            "slightly, and its error is slightly smaller, forty-nine point seven. And a star barely depends on N, so the shrunken recipe can be used "
-            "without knowing N. <bookmark mark='d'/> Part 8's lesson again: accepting a little bias can buy a little "
+            "slightly, and its error is slightly smaller, forty-nine point seven. And a star barely depends on N, so the shrunken recipe can be approximated without knowing N by the fixed multiplier k plus two over k plus one. The exact optimum shown still uses the simulated truth. <bookmark mark='d'/> Part 8's lesson again: accepting a little bias can buy a little "
             "variance. Here the gain is small, about one and a half percent. The big differences on the board came from the model, "
             "not from bias."
         ) as vo:
@@ -142,7 +140,7 @@ class Compare(VoiceoverScene):
         frame = SurroundingRectangle(code, color=GREY_D, buff=0.3, corner_radius=0.12)
         head = label(r"Built: \ the tank factory game", font_size=34, color=S.ACCENT).to_edge(UP, buff=0.4)
         foot = fit_rows(VGroup(
-            label(r"any recipe, \ any $N$ and $k$, \ three worlds: \ bias, \ SD, \ RMSE, \ each with its Monte Carlo error", font_size=24),
+            label(r"any recipe, \ any $N$ and $k$, \ three worlds: \ bias, \ SD, \ RMSE, \ bias and RMSE with Monte Carlo errors; SD as a point estimate", font_size=24),
             label(r"\texttt{explainer/stats/kit/estimation.py}: \ also Newton's method and the observed information", font_size=22,
                   color=GREY_A),
         ), 12.6, 0.3, [0, -2.6, 0])
@@ -151,10 +149,8 @@ class Compare(VoiceoverScene):
             "<bookmark mark='b'/> Write any recipe as a function of the captured serials, one row per factory. This "
             "one is the maximum plus the maximum over k, a near-miss of the best unbiased estimator. "
             "<bookmark mark='c'/> The game simulates ten thousand factories and grades the recipe, reporting its bias, "
-            "its standard deviation and its root mean squared error, each with its Monte Carlo standard error, as Part "
-            "7 insisted. <bookmark mark='d'/> And you can grade it on worlds it didn't assume. Try to beat forty-two "
-            "under the textbook model. The theory of this part says you can't with an unbiased recipe, and can only "
-            "shave a little with a biased one."
+            "its standard deviation and its root mean squared error, with Monte Carlo standard errors for bias and RMSE, as Part 7 insisted; SD is reported as a point estimate. <bookmark mark='d'/> And you can grade it on worlds it didn't assume. Try to beat forty-two "
+            "under the textbook model. The theory of this part says you can't with an unbiased recipe, while within the multiplier family shown, a modest shrinkage buys a small gain here. A biased estimator can do much better at a particular N and worse elsewhere."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head))
@@ -179,6 +175,7 @@ class Compare(VoiceoverScene):
                   color=GREY_A),
             label(r"robust statistics: \ estimators that degrade gracefully (Part 30)", font_size=26, color=GREY_A),
         ), 12.6, 0.45, [0, 0.0, 0])
+        intro = label('Accuracy depends on the model assumptions', font_size=36)
         with self.voiceover(
             "What does the board teach? <bookmark mark='a'/> Efficiency is bought with assumptions. "
             "<bookmark mark='b'/> The best unbiased estimator is the best only in the world it was derived for, where "
@@ -191,7 +188,10 @@ class Compare(VoiceoverScene):
             "Kullback–Leibler divergence, which Part 22 makes precise. <bookmark mark='e'/> And estimators designed to "
             "degrade gracefully when the model is a little wrong are the subject of robust statistics, in Part 30."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
