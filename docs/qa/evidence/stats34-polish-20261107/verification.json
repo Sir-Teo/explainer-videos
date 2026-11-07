@@ -1,0 +1,23 @@
+{
+  "part": "stats34",
+  "fingerprint": "709984d3076869ba88e65662086e5f9c42a2c2d956246da797ed322b03bebd50",
+  "english_endpoints": 13,
+  "native_1080_endpoints": 12,
+  "silent_motion_chapters": 12,
+  "audio_scene": "PPI",
+  "audio_lines": 11,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats34/en/PPI/videos/s11_ppi/480p15/PPI.mp4",
+    "seconds": 392.199349,
+    "narration_sha256": "3ab08ae0a5f985b6ec3fe2b3be84f7f8c0902df39a0c908d6b9323ad3e4662fd",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 392 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 392 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

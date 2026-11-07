@@ -1,0 +1,47 @@
+{
+  "baseline": [
+    "Hook",
+    "Explain",
+    "Forests",
+    "Boosting",
+    "CV",
+    "Calibration",
+    "Split",
+    "Jackknife",
+    "Shift",
+    "Sets",
+    "PPI",
+    "Interpret",
+    "Outro"
+  ],
+  "native": [
+    "Hook",
+    "Explain",
+    "Forests",
+    "Boosting",
+    "CV",
+    "Calibration",
+    "Split",
+    "Jackknife",
+    "Shift",
+    "Sets",
+    "PPI",
+    "Interpret"
+  ],
+  "motion": [
+    "Hook",
+    "Explain",
+    "Forests",
+    "Boosting",
+    "CV",
+    "Calibration",
+    "Split",
+    "Jackknife",
+    "Shift",
+    "Sets",
+    "PPI",
+    "Interpret"
+  ],
+  "actual": "PPI narrated sheet inspected, 392s; blank/sparse scans zero runs, current raw narration/audio still to be checked at archive.",
+  "findings": "All endpoint/native/motion sheets inspected; prediction intervals, forest uncertainty, calibration captions, and PPI comparisons remain inside their plots and readable. No unresolved sampled visual defects."
+}

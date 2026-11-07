@@ -1,5 +1,5 @@
-# Part 34 scientific source and numerical checkpoint
+# Part 34 English source and visual review
 
-All thirteen English chapters and supporting calculations were reviewed; all eighteen numerical inputs were regenerated. Sixteen focused checks pass in 7.77 seconds. [The source review](source-review.md) records corrected forest variance, independent IJ pilots, tied calibration, independent representative PPI/weighted-conformal sampling, numerical reconciliation and inferential qualifications.
+All thirteen chapter endpoint sheets, twelve native 1080p captures and twelve motion sheets were inspected. Forest uncertainty, conformal intervals, calibration captions and prediction-powered comparisons remain readable and within their plots. Current runtime, bounds and blank/sparse scans have no outstanding issues apart from missing translation tables. The 392-second narrated PPI preview was inspected; its eleven speech lines pass signal/timing checks and match current source.
 
-English endpoint/native/motion captures and an actual narrated PPI preview are running. Chinese material, continuous listening and final narrated masters remain pending; this checkpoint is not production approval.
+See [source corrections](source-review.md), [verification](verification.json), [manual review](manual-review.json) and [historical data checks](source-data.json). Eighteen numerical inputs were regenerated and sixteen focused checks passed. This closes the English source and sampled visual pass. Chinese narration/caption tables, continuous listening/full narrated playback and final bilingual narrated masters remain open.

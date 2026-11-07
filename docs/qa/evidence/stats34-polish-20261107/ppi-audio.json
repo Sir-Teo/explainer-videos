@@ -1,0 +1,139 @@
+{
+ "video": "stats34",
+ "scene": "PPI",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 11,
+ "lines": [
+  {
+   "raw": "Chapter ten. Prediction-powered inference.",
+   "spoken": "Chapter ten. Prediction-powered inference.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/9f1624d5501d2f79.wav",
+   "duration": 3.125,
+   "tokens": 4,
+   "peak": 0.37786865234375,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> So far we have put intervals around predictions. Now turn it round: use predictions to estimate something else. Suppose measuring the truth is expensive, so we have it for only n cases. <bookmark mark='b'/> But a machine-learning model can guess it cheaply for a great many more, N. <bookmark mark='c'/> This is now common in science: protein structures predicted by AlphaFold instead of solved by crystallography, galaxies classified by a neural network instead of by volunteers, documents coded by a language model instead of by researchers. <bookmark mark='d'/> We want a population quantity, a mean or a regression coefficient, with an interval we can trust, and we want the guesses to help.",
+   "spoken": "So far we have put intervals around predictions. Now turn it round: use predictions to estimate something else. Suppose measuring the truth is expensive, so we have it for only n cases. But a machine-learning model can guess it cheaply for a great many more, N. This is now common in science: protein structures predicted by AlphaFold instead of solved by crystallography, galaxies classified by a neural network instead of by volunteers, documents coded by a language model instead of by researchers. We want a population quantity, a mean or a regression coefficient, with an interval we can trust, and we want the guesses to help.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/6e2d715021feae84.wav",
+   "duration": 38.925,
+   "tokens": 106,
+   "peak": 0.69805908203125,
+   "issues": [],
+   "elapsed": 0.07,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> On the World. A health agency wants the island's mean systolic blood pressure. <bookmark mark='b'/> The truth for a person requires a clinic visit with three cuff readings; it can afford three hundred. <bookmark mark='c'/> But twenty thousand residents wear a smartwatch that estimates blood pressure. <bookmark mark='d'/> The watch's estimate is a random forest on the wearer's age, sex, body-mass index and the watch's own pulse-wave signal, <bookmark mark='e'/> trained by the manufacturer on its early users, who were all aged eighteen to fifty. <bookmark mark='f'/> Its guesses track the clinic readings well, with correlation point eight six, but not along the diagonal.",
+   "spoken": "On the World. A health agency wants the island's mean systolic blood pressure. The truth for a person requires a clinic visit with three cuff readings; it can afford three hundred. But twenty thousand residents wear a smartwatch that estimates blood pressure. The watch's estimate is a random forest on the wearer's age, sex, body-mass index and the watch's own pulse-wave signal, trained by the manufacturer on its early users, who were all aged eighteen to fifty. Its guesses track the clinic readings well, with correlation point eight six, but not along the diagonal.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/c598b7f151a048b6.wav",
+   "duration": 34.275,
+   "tokens": 94,
+   "peak": 0.573455810546875,
+   "issues": [],
+   "elapsed": 0.06,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Here is the problem. By age, the true mean pressure rises steadily, <bookmark mark='b'/> and the watch agrees, <bookmark mark='c'/> over the ages it was trained on. <bookmark mark='d'/> Beyond fifty it falls behind, because a forest cannot extrapolate: for a pressure higher than any it saw in training, it cannot extrapolate its prediction beyond the range of training responses. For the over-eighties, the truth averages a hundred and fifty-one, the watch a hundred and thirty-six. <bookmark mark='e'/> Over the whole island, its guesses are about three millimetres of mercury too low.",
+   "spoken": "Here is the problem. By age, the true mean pressure rises steadily, and the watch agrees, over the ages it was trained on. Beyond fifty it falls behind, because a forest cannot extrapolate: for a pressure higher than any it saw in training, it cannot extrapolate its prediction beyond the range of training responses. For the over-eighties, the truth averages a hundred and fifty-one, the watch a hundred and thirty-six. Over the whole island, its guesses are about three millimetres of mercury too low.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/92ec198e11aacd7c.wav",
+   "duration": 27.975,
+   "tokens": 84,
+   "peak": 0.577178955078125,
+   "issues": [],
+   "elapsed": 0.06,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Three estimates, each with a ninety percent interval, from one draw of the labelled and unlabelled samples. The true island mean, which we know because this is the World, is the dashed line. <bookmark mark='b'/> The classical estimate uses the three hundred clinic visits alone. It is honest and wide. <bookmark mark='c'/> The naive estimate treats the twenty thousand guesses as if they were data. Its interval is tiny, and it is nowhere near the truth: it estimates the mean of the watch, not of the people. <bookmark mark='d'/> The prediction-powered estimate uses both, and is both honest and narrower than the classical one.",
+   "spoken": "Three estimates, each with a ninety percent interval, from one draw of the labelled and unlabelled samples. The true island mean, which we know because this is the World, is the dashed line. The classical estimate uses the three hundred clinic visits alone. It is honest and wide. The naive estimate treats the twenty thousand guesses as if they were data. Its interval is tiny, and it is nowhere near the truth: it estimates the mean of the watch, not of the people. The prediction-powered estimate uses both, and is both honest and narrower than the classical one.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/01043580697da0d5.wav",
+   "duration": 33.225,
+   "tokens": 98,
+   "peak": 0.7972412109375,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The idea is one line of algebra. The mean of Y equals the mean of the guesses, minus the mean error of the guesses. <bookmark mark='b'/> Estimate the first term with the many unlabelled cases, and the second, the rectifier, with the few labelled ones, where we have both the guess and the truth. <bookmark mark='c'/> For a fixed prediction function, independent representative samples and finite moments, the mean estimator is unbiased even if the predictions are biased. That is Anastasios Angelopoulos, Stephen Bates, Clara Fannjiang, Michael Jordan and Tijana Zrnic's prediction-powered inference, published in Science in 2023. <bookmark mark='d'/> Here, the rectifier says the watch reads about three millimetres low on the labelled cases, and the estimate adds that back.",
+   "spoken": "The idea is one line of algebra. The mean of Y equals the mean of the guesses, minus the mean error of the guesses. Estimate the first term with the many unlabelled cases, and the second, the rectifier, with the few labelled ones, where we have both the guess and the truth. For a fixed prediction function, independent representative samples and finite moments, the mean estimator is unbiased even if the predictions are biased. That is Anastasios Angelopoulos, Stephen Bates, Clara Fannjiang, Michael Jordan and Tijana Zrnic's prediction-powered inference, published in Science in 2023. Here, the rectifier says the watch reads about three millimetres low on the labelled cases, and the estimate adds that back.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/eac66c31e51b45f9.wav",
+   "duration": 45.0,
+   "tokens": 115,
+   "peak": 0.582305908203125,
+   "issues": [],
+   "elapsed": 0.08,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Its variance has two parts, one from each sample: the variance of the guesses over N, and the variance of the guesses' errors over n. <bookmark mark='b'/> The classical estimate's variance is the variance of Y over n. <bookmark mark='c'/> So plain prediction-powered inference wins when the residual variance plus n over N times the prediction variance is below the outcome variance. With enough unlabelled cases, that is approximately when the guesses' errors vary less than the truth itself, which is to say whenever the model explains some of the variation, even if it is biased. <bookmark mark='d'/> For the watch, the standard error falls from about one millimetre to about a half. Three hundred clinic visits, helped by twenty thousand biased guesses, are worth about 1,045 visits alone.",
+   "spoken": "Its variance has two parts, one from each sample: the variance of the guesses over N, and the variance of the guesses' errors over n. The classical estimate's variance is the variance of Y over n. So plain prediction-powered inference wins when the residual variance plus n over N times the prediction variance is below the outcome variance. With enough unlabelled cases, that is approximately when the guesses' errors vary less than the truth itself, which is to say whenever the model explains some of the variation, even if it is biased. For the watch, the standard error falls from about one millimetre to about a half. Three hundred clinic visits, helped by twenty thousand biased guesses, are worth about 1,045 visits alone.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/7602093a05a46613.wav",
+   "duration": 46.275,
+   "tokens": 123,
+   "peak": 0.71142578125,
+   "issues": [],
+   "elapsed": 0.09,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> What if the model is bad? Put a weight lambda on the guesses. The estimate stays unbiased for every fixed lambda; estimating lambda from the same data need not preserve exact unbiasedness, <bookmark mark='b'/> and the lambda that minimizes its variance is a regression coefficient of Y on the guesses, slightly shrunk. Angelopoulos, John Duchi and Zrnic call this PPI plus plus. <bookmark mark='c'/> Loosen the watch strap, so that each guess carries extra noise with a standard deviation of twenty-five. Plain prediction-powered inference, with lambda one, now has a standard error of one point five five, worse than the one point zero zero of the labels alone. <bookmark mark='d'/> PPI plus plus turns lambda down to about point two three, and its standard error, point nine two, is again a little better than the classical one. With lambda estimated, it is never worse than ignoring the guesses, up to terms that vanish with n.",
+   "spoken": "What if the model is bad? Put a weight lambda on the guesses. The estimate stays unbiased for every fixed lambda; estimating lambda from the same data need not preserve exact unbiasedness, and the lambda that minimizes its variance is a regression coefficient of Y on the guesses, slightly shrunk. Angelopoulos, John Duchi and Zrnic call this PPI plus plus. Loosen the watch strap, so that each guess carries extra noise with a standard deviation of twenty-five. Plain prediction-powered inference, with lambda one, now has a standard error of one point five five, worse than the one point zero zero of the labels alone. PPI plus plus turns lambda down to about point two three, and its standard error, point nine two, is again a little better than the classical one. With lambda estimated, it is never worse than ignoring the guesses, up to terms that vanish with n.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/600ef5b6d4f6a1e7.wav",
+   "duration": 52.375,
+   "tokens": 149,
+   "peak": 0.699188232421875,
+   "issues": [],
+   "elapsed": 0.08,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> On the Board, over a thousand draws of the clinic sample and the watch sample. The classical interval: kept. <bookmark mark='b'/> The guesses treated as data: broken completely, never covering the truth. <bookmark mark='c'/> Prediction-powered, and PPI plus plus: both kept, with intervals about half as wide as the classical one.",
+   "spoken": "On the Board, over a thousand draws of the clinic sample and the watch sample. The classical interval: kept. The guesses treated as data: broken completely, never covering the truth. Prediction-powered, and PPI plus plus: both kept, with intervals about half as wide as the classical one.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/8e6539460afd7cb0.wav",
+   "duration": 18.275,
+   "tokens": 47,
+   "peak": 0.504486083984375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Survey statisticians will recognize the estimator. <bookmark mark='b'/> With the population's guesses known and a random sample measured, it is the difference estimator, the simplest case of Part 18's model-assisted estimation: the population mean of the model, plus the sample mean of the residuals. <bookmark mark='c'/> Claes Cassel, Carl-Erik Särndal and Jan Wretman analysed it in 1976, and Jay Breidt and Jean Opsomer surveyed its use with machine-learning models in 2017. <bookmark mark='d'/> What the new work adds is generality, to regression coefficients, quantiles and any estimand defined by a convex loss, and the tuning of lambda; and, perhaps most of all, a reason for the many fields now flooded with machine-learning labels to use it.",
+   "spoken": "Survey statisticians will recognize the estimator. With the population's guesses known and a random sample measured, it is the difference estimator, the simplest case of Part 18's model-assisted estimation: the population mean of the model, plus the sample mean of the residuals. Claes Cassel, Carl-Erik Särndal and Jan Wretman analysed it in 1976, and Jay Breidt and Jean Opsomer surveyed its use with machine-learning models in 2017. What the new work adds is generality, to regression coefficients, quantiles and any estimand defined by a convex loss, and the tuning of lambda; and, perhaps most of all, a reason for the many fields now flooded with machine-learning labels to use it.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/4c37369e46ec849e.wav",
+   "duration": 44.425,
+   "tokens": 110,
+   "peak": 0.704620361328125,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Two conditions carry the guarantee. The labelled cases must be a random sample from the same population as the unlabelled ones; if the clinic only sees the sick, no rectifier can save us. <bookmark mark='b'/> And the model must not have been trained on the labelled cases, or its errors there will look too small; with only one data set, cross-fitting does the job. <bookmark mark='c'/> With regularity conditions and asymptotically valid power tuning, a model can improve precision; plain PPI with weight one can increase variance. <bookmark mark='d'/> One last question about black boxes: when we ask one to explain itself, what are we estimating?",
+   "spoken": "Two conditions carry the guarantee. The labelled cases must be a random sample from the same population as the unlabelled ones; if the clinic only sees the sick, no rectifier can save us. And the model must not have been trained on the labelled cases, or its errors there will look too small; with only one data set, cross-fitting does the job. With regularity conditions and asymptotically valid power tuning, a model can improve precision; plain PPI with weight one can increase variance. One last question about black boxes: when we ask one to explain itself, what are we estimating?",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/2c01fad50a70e703.wav",
+   "duration": 35.15,
+   "tokens": 100,
+   "peak": 0.656005859375,
+   "issues": [],
+   "elapsed": 0.06,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats34/en/PPI_motion/result.json",
+ "input_sha256": "a58952aa21cf5e37a20918b2edb4b17c46625c44e929d8518d837670e0d93b04"
+}

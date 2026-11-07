@@ -1,0 +1,149 @@
+{
+  "fingerprint": "709984d3076869ba88e65662086e5f9c42a2c2d956246da797ed322b03bebd50",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/series/stats34/en/Hook/result.json",
+      "input_sha256": "c3bd05ccf58d41a834f62a374fe0976eb842bafcad88587d3b4555d8d9bb7769"
+    },
+    {
+      "scene": "Explain",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 72
+      },
+      "input_record": "renders/qa/series/stats34/en/Explain/result.json",
+      "input_sha256": "9fefc7281e731d2fdc728f56959634d36eb7285feb418f6efc36c920276d1741"
+    },
+    {
+      "scene": "Forests",
+      "status": "needs-review",
+      "frames": 48,
+      "warnings": {
+        "narration-translation": 13,
+        "untranslated-on-screen": 99
+      },
+      "input_record": "renders/qa/series/stats34/en/Forests/result.json",
+      "input_sha256": "b7cedc10cb6816c45de20f308ef53db2529714d7cb5b9cbf4a6ab21653c2dcf7"
+    },
+    {
+      "scene": "Boosting",
+      "status": "needs-review",
+      "frames": 34,
+      "warnings": {
+        "narration-translation": 10,
+        "untranslated-on-screen": 62
+      },
+      "input_record": "renders/qa/series/stats34/en/Boosting/result.json",
+      "input_sha256": "99dbcddf889ae4c35e0726155a0a614db1d049870ccf55cd202da1ccbe816edf"
+    },
+    {
+      "scene": "CV",
+      "status": "needs-review",
+      "frames": 36,
+      "warnings": {
+        "narration-translation": 10,
+        "untranslated-on-screen": 65
+      },
+      "input_record": "renders/qa/series/stats34/en/CV/result.json",
+      "input_sha256": "d1450541c372cdad42a24dda7b475c8b77805993a056bc8801b4d8bc0cd3360c"
+    },
+    {
+      "scene": "Calibration",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 65
+      },
+      "input_record": "renders/qa/series/stats34/en/Calibration/result.json",
+      "input_sha256": "a5eb114dbcd927359c7875554f2a410db7c47bc5ce6872db31e5fb1bc5f739f5"
+    },
+    {
+      "scene": "Split",
+      "status": "needs-review",
+      "frames": 42,
+      "warnings": {
+        "narration-translation": 12,
+        "untranslated-on-screen": 81
+      },
+      "input_record": "renders/qa/series/stats34/en/Split/result.json",
+      "input_sha256": "5417e4864ed5340d8faf33c903d051e4566ccae803172b4cc2b29352d660197a"
+    },
+    {
+      "scene": "Jackknife",
+      "status": "needs-review",
+      "frames": 40,
+      "warnings": {
+        "narration-translation": 12,
+        "untranslated-on-screen": 89
+      },
+      "input_record": "renders/qa/series/stats34/en/Jackknife/result.json",
+      "input_sha256": "4cf0d19acd8f837a845e52e94c0b336e9af0b3023d23db56447bb8493523d6c4"
+    },
+    {
+      "scene": "Shift",
+      "status": "needs-review",
+      "frames": 39,
+      "warnings": {
+        "narration-translation": 12,
+        "untranslated-on-screen": 76
+      },
+      "input_record": "renders/qa/series/stats34/en/Shift/result.json",
+      "input_sha256": "a4e62e2c7a5c32c01eaa9d0c22b7d2c3f207a86b6fe023a892dd92286d4adcb8"
+    },
+    {
+      "scene": "Sets",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 68
+      },
+      "input_record": "renders/qa/series/stats34/en/Sets/result.json",
+      "input_sha256": "1c7019982287a9e1c8dc591164ff15e6847421d88a61c391efdd4cf0139160d6"
+    },
+    {
+      "scene": "PPI",
+      "status": "needs-review",
+      "frames": 41,
+      "warnings": {
+        "narration-translation": 11,
+        "untranslated-on-screen": 72
+      },
+      "input_record": "renders/qa/series/stats34/en/PPI/result.json",
+      "input_sha256": "6be015d754eec6ff2567f067cb68cdad45fbb1cdccf7b331c657a0a8b320f7e2"
+    },
+    {
+      "scene": "Interpret",
+      "status": "needs-review",
+      "frames": 35,
+      "warnings": {
+        "narration-translation": 10,
+        "untranslated-on-screen": 58
+      },
+      "input_record": "renders/qa/series/stats34/en/Interpret/result.json",
+      "input_sha256": "ad4fc9bbe59af4989db45a79d0fe4915b7c91e31b168461499d9e050c0cd70ab"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 14,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 74
+      },
+      "input_record": "renders/qa/series/stats34/en/Outro/result.json",
+      "input_sha256": "233284cf2debee12ec305cd5b6eae04711583bab65d7097c00f0d81887c18f46"
+    }
+  ]
+}

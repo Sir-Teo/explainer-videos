@@ -1,0 +1,138 @@
+{
+  "fingerprint": "709984d3076869ba88e65662086e5f9c42a2c2d956246da797ed322b03bebd50",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 23,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats34/en/Hook_motion/result.json",
+      "input_sha256": "afc238672a1591e69d763c336c9bd461175b36444b41b14fc8ce84c7256980a9",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 324 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 324 s\n"
+    },
+    {
+      "scene": "Explain",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 9
+      },
+      "input_record": "renders/qa/series/stats34/en/Explain_motion/result.json",
+      "input_sha256": "cdd881f9425ae0f7354ab1a365e008c87b2a91991285cf7af7c9280f7cc9603f",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 336 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 336 s\n"
+    },
+    {
+      "scene": "Forests",
+      "status": "needs-review",
+      "frames": 48,
+      "warnings": {
+        "narration-translation": 13
+      },
+      "input_record": "renders/qa/series/stats34/en/Forests_motion/result.json",
+      "input_sha256": "2ed9f3a6f7c808533506e89b76242296c3e70a6559e63455a62267e0fe349096",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 630 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 630 s\n"
+    },
+    {
+      "scene": "Boosting",
+      "status": "needs-review",
+      "frames": 34,
+      "warnings": {
+        "narration-translation": 10
+      },
+      "input_record": "renders/qa/series/stats34/en/Boosting_motion/result.json",
+      "input_sha256": "3c73834f8663dd646ff76a03e1130e7687140ee36f8cac75ff71d78eae15d4e1",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 396 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 396 s\n"
+    },
+    {
+      "scene": "CV",
+      "status": "needs-review",
+      "frames": 36,
+      "warnings": {
+        "narration-translation": 10
+      },
+      "input_record": "renders/qa/series/stats34/en/CV_motion/result.json",
+      "input_sha256": "210bb71a498552107b880590901f36ec2043d2c7e15267adf83e4897226ca9a2",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 374 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 374 s\n"
+    },
+    {
+      "scene": "Calibration",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats34/en/Calibration_motion/result.json",
+      "input_sha256": "9b89035f8bf1d3b28329edd6cd87936be3d14aebce148d60bf6e414f1cf4e5cd",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 304 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 304 s\n"
+    },
+    {
+      "scene": "Split",
+      "status": "needs-review",
+      "frames": 42,
+      "warnings": {
+        "narration-translation": 12
+      },
+      "input_record": "renders/qa/series/stats34/en/Split_motion/result.json",
+      "input_sha256": "6aa852edc19ae570624248175b89f7ce40e293faba73c0f02ce6fc79ca71c12a",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 453 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 453 s\n"
+    },
+    {
+      "scene": "Jackknife",
+      "status": "needs-review",
+      "frames": 40,
+      "warnings": {
+        "narration-translation": 12
+      },
+      "input_record": "renders/qa/series/stats34/en/Jackknife_motion/result.json",
+      "input_sha256": "bbec02009337cd33b5a298876467828402f987a13e8bc0f83adbb73e5e6a9791",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 483 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 483 s\n"
+    },
+    {
+      "scene": "Shift",
+      "status": "needs-review",
+      "frames": 39,
+      "warnings": {
+        "narration-translation": 12
+      },
+      "input_record": "renders/qa/series/stats34/en/Shift_motion/result.json",
+      "input_sha256": "95232845613168757f1e66bcee129e0f776c2f114e6e6757309eb386ff8f65ab",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 366 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 366 s\n"
+    },
+    {
+      "scene": "Sets",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 9
+      },
+      "input_record": "renders/qa/series/stats34/en/Sets_motion/result.json",
+      "input_sha256": "aff5f73edd135eb2067612ef89e6dc7dfbb1367f044c6c84f466b9c3e303f0f5",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 354 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 354 s\n"
+    },
+    {
+      "scene": "PPI",
+      "status": "needs-review",
+      "frames": 41,
+      "warnings": {
+        "narration-translation": 11
+      },
+      "input_record": "renders/qa/series/stats34/en/PPI_motion/result.json",
+      "input_sha256": "a58952aa21cf5e37a20918b2edb4b17c46625c44e929d8518d837670e0d93b04",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 438 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 438 s\n"
+    },
+    {
+      "scene": "Interpret",
+      "status": "needs-review",
+      "frames": 35,
+      "warnings": {
+        "narration-translation": 10
+      },
+      "input_record": "renders/qa/series/stats34/en/Interpret_motion/result.json",
+      "input_sha256": "26a0e7992e856cb8d2c1a1a7b845328d3b9ea1650cd1b268e08ee314d60392c6",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 410 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 410 s\n"
+    }
+  ]
+}
