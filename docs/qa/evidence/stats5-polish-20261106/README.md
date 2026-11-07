@@ -9,3 +9,5 @@ The 134.866-second narrated Lines preview matches the current narration and was 
 The JSON receipts record the source fingerprint and data inputs. Native sheets, the narrated contact sheet, audio receipt and focused-test output are preserved here. Reproduce native captures with native_endpoints.py from the repository root.
 
 This is an English source/visual pass. Chinese narration and captions, continuous listening/full playback, and final narrated masters remain open. Translation warnings are preserved; no bilingual production approval is implied.
+
+[Shared-source refresh](shared-source-refresh.json): all endpoint/native/motion captures and speech checks rerun after the World programme-name correction; narrated source matching verified.
