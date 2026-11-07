@@ -76,7 +76,7 @@ class Feed(VoiceoverScene):
             "A news feed shows each user the recent posts of everyone they follow. <bookmark mark='a'/> The data is "
             "a follower graph, and real follower graphs follow a power law: most accounts have a few dozen "
             "followers, and a handful have millions. <bookmark mark='b'/> Our instrument draws a synthetic graph of "
-            f"{num(f['users'])} users from such a law. The median account has {f['median_followers']:.0f} followers, "
+            f"{f['users']:,.0f} users from such a law. The median account has {f['median_followers']:.0f} followers, "
             f"but the mean is {f['mean_followers']:.0f}, pulled up by the giants, and the largest is followed by "
             "everyone. <bookmark mark='c'/> Each user posts half a time a day and opens the timeline twenty times: "
             "fifty thousand posts against two million reads. The question is when to do the work of putting "
@@ -186,7 +186,7 @@ class Feed(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(side, DOWN, buff=0.45)
         with self.voiceover(
             "Push has a flaw, and it lives at the top of the power law. <bookmark mark='a'/> When the largest "
-            f"account posts, the system must write {num(f['max_followers'])} timelines, a burst of work on the "
+            f"account posts, the system must write {f['max_followers']:,.0f} timelines, a burst of work on the "
             "timeline store, and the last follower sees the post only when the last write lands. "
             "<bookmark mark='b'/> On a log scale the gap is plain: the median post fans out to "
             f"{f['median_followers']:.0f} timelines, the mean to {f['mean_followers']:.0f}, and the largest to all "
@@ -244,7 +244,7 @@ class Feed(VoiceoverScene):
             "for each threshold. <bookmark mark='b'/> Counted in operations, pure push is still cheapest: pulling "
             f"the {h['celebrities']} giants multiplies the total about {ops[1] / ops[0]:.0f} fold, because pulls "
             "happen at every read. <bookmark mark='c'/> What the hybrid buys is the worst case. No post now fans out "
-            f"to more than {num(h['max_fanout_per_post'])} timelines, and the pulled posts are the same few hot "
+            f"to more than {h['max_fanout_per_post']:,.0f} timelines, and the pulled posts are the same few hot "
             "items read by everyone, which a cache serves almost for free. <bookmark mark='d'/> Silberstein and "
             "colleagues made the choice per pair in 2010, comparing how often the author posts with how often the "
             "reader reads. The trade-off is total work against the tail."
