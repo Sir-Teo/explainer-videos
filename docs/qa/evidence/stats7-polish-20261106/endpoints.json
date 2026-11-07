@@ -1,5 +1,5 @@
 {
-  "fingerprint": "0eca94f1c783f7ce67bc973359515605866d843608e72609d3b9e0b267818e18",
+  "fingerprint": "3a125a745138cb523834051fb0557f8dd4a67e481b89df20f262f70cdfa40861",
   "scope": "English render review; listening and bilingual production gates remain open",
   "records": [
     {
@@ -11,7 +11,7 @@
         "untranslated-on-screen": 22
       },
       "input_record": "renders/qa/series/stats7/en/Hook/result.json",
-      "input_sha256": "97538e879a7d566162e55835520b2345b83c188c1f932036baa9cd01802a308d"
+      "input_sha256": "1e28709225ca3dfc4c9adb37e708cdd233975cfd94effe79f352c74bed9e7c1f"
     },
     {
       "scene": "Generators",
@@ -22,7 +22,7 @@
         "untranslated-on-screen": 36
       },
       "input_record": "renders/qa/series/stats7/en/Generators/result.json",
-      "input_sha256": "94c4741bdea543f95c2ce31ee9ebf1205ea340163ba8feea6510d6f6b1bb56c2"
+      "input_sha256": "2020c6de87858ab4d37d546a98e3f5f329a9070161dd7c59ffd2043be271ac0f"
     },
     {
       "scene": "Inverse",
@@ -33,7 +33,7 @@
         "untranslated-on-screen": 26
       },
       "input_record": "renders/qa/series/stats7/en/Inverse/result.json",
-      "input_sha256": "5e86bfc65bf27915cb3b5acaf666086d34a77a89ce20d0466a0fd9fc992b46b9"
+      "input_sha256": "e329cab7c6812fab37fd2272f72ab535bc6a0712fb678258772b3e3e5999b71c"
     },
     {
       "scene": "Rejection",
@@ -44,7 +44,7 @@
         "untranslated-on-screen": 34
       },
       "input_record": "renders/qa/series/stats7/en/Rejection/result.json",
-      "input_sha256": "f4b525aec713520921105131377f8c27408435e69426516ef0447f4bf040edb0"
+      "input_sha256": "c4e33a015c8d2afca92df2e9aa4613259c507fd063c524a903e6ef02d725faa5"
     },
     {
       "scene": "Special",
@@ -55,7 +55,7 @@
         "untranslated-on-screen": 24
       },
       "input_record": "renders/qa/series/stats7/en/Special/result.json",
-      "input_sha256": "693d475c04e15b3dd37720113bd402b163d258f276f7eec5fd0da1ffd7e532a8"
+      "input_sha256": "af26515770e47601a769860f05e854734dcdef4137207d350d8c8691b3124e1a"
     },
     {
       "scene": "MonteCarlo",
@@ -66,7 +66,7 @@
         "untranslated-on-screen": 38
       },
       "input_record": "renders/qa/series/stats7/en/MonteCarlo/result.json",
-      "input_sha256": "4bd9678c03c21c669c0e2278cee5335e9590ff09e3d16a688c94a4794e2c9b67"
+      "input_sha256": "e399f9ec6e1ddaf388978f1b1efd630b11ee33eb15167ca5c4140bfa105c1b72"
     },
     {
       "scene": "Studies",
@@ -77,7 +77,7 @@
         "untranslated-on-screen": 38
       },
       "input_record": "renders/qa/series/stats7/en/Studies/result.json",
-      "input_sha256": "5859e4d2b19da3353c14f2e1b7ad78750a9ab302755085eda8d53f643eb27747"
+      "input_sha256": "244d37e2a33215de064ca8cec55629c6d9df5ebb719f317c92e9e25a20f6ef34"
     },
     {
       "scene": "VarRed",
@@ -88,7 +88,7 @@
         "untranslated-on-screen": 38
       },
       "input_record": "renders/qa/series/stats7/en/VarRed/result.json",
-      "input_sha256": "70ebab88004b8c5a36fcc32fe6be235c15189939d9a374ac82543b87415c3073"
+      "input_sha256": "db087e431cef6a71126ed8b83335ca5681c12370be79032c36ce97226a80c522"
     },
     {
       "scene": "Chains",
@@ -99,7 +99,7 @@
         "untranslated-on-screen": 41
       },
       "input_record": "renders/qa/series/stats7/en/Chains/result.json",
-      "input_sha256": "791fb3a5f9745b9951c87df2b12ab4f1265597f1e8d4c9cbaab1cc0996ac099d"
+      "input_sha256": "dd112e1e4d917ab16e02bf65bddac129d9b3335e8c9d01e21f8dac0e9c3dae2a"
     },
     {
       "scene": "Stationary",
@@ -110,7 +110,7 @@
         "untranslated-on-screen": 31
       },
       "input_record": "renders/qa/series/stats7/en/Stationary/result.json",
-      "input_sha256": "d8d7bd6f99bb20af3b99b531088d3a2bb09bf5c094d7e526f4eb02b029f9b082"
+      "input_sha256": "a55be59caa3d8534f58eb9067801f6a11c138a3f0f6129682037e48d843a6684"
     },
     {
       "scene": "Mixing",
@@ -121,7 +121,7 @@
         "untranslated-on-screen": 29
       },
       "input_record": "renders/qa/series/stats7/en/Mixing/result.json",
-      "input_sha256": "a99d732860deef614528fdcc499ecf260d6b47448f92ffe2785e7f42dfe0ea56"
+      "input_sha256": "048d2f1afb68c5b3627d895f77f7dd30306562cf02508bb17ba4a52b430b3cb1"
     },
     {
       "scene": "Metropolis",
@@ -132,7 +132,7 @@
         "untranslated-on-screen": 35
       },
       "input_record": "renders/qa/series/stats7/en/Metropolis/result.json",
-      "input_sha256": "b3faca335c80435a147c50f1bb763ec6250c7523e60226d216f4a264b43b1b16"
+      "input_sha256": "3dbe3985f6f30344903f383a50486ea13703ee52d79dc9c02fb74467fe171747"
     },
     {
       "scene": "Outro",
@@ -143,7 +143,7 @@
         "untranslated-on-screen": 60
       },
       "input_record": "renders/qa/series/stats7/en/Outro/result.json",
-      "input_sha256": "ed769c451d2be477bc6296c1e9f4ba0e911ee5a1016712e8767df114e10a0c33"
+      "input_sha256": "57c89de804f480b3ffb88b17791528a1e9e1429712a51fd36ea65c5dbb5c9cbb"
     }
   ]
 }

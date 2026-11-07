@@ -9,3 +9,5 @@ The 250.600-second narrated MonteCarlo preview matches the current narration and
 Receipts preserve the source fingerprint and data input records, with native sheets, narrated contact sheet, audio checks and focused-test output. Reproduce native captures with native_endpoints.py from the repository root.
 
 This is an English source/visual pass. Chinese narration/captions, continuous listening/full playback, and final narrated masters remain open. Translation warnings are preserved; no bilingual production approval is implied.
+
+[Shared-source refresh](shared-source-refresh.json): all endpoint/native/motion captures and speech checks rerun after the World programme-name and Board covariance corrections; narrated source matching verified.

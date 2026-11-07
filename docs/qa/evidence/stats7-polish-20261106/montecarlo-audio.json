@@ -19,7 +19,7 @@
    "tokens": 5,
    "peak": 0.362762451171875,
    "issues": [],
-   "elapsed": 13.05,
+   "elapsed": 0.03,
    "asr_review_leads": []
   },
   {
@@ -30,7 +30,7 @@
    "tokens": 98,
    "peak": 0.635498046875,
    "issues": [],
-   "elapsed": 47.93,
+   "elapsed": 0.05,
    "asr_review_leads": []
   },
   {
@@ -41,7 +41,7 @@
    "tokens": 99,
    "peak": 0.847900390625,
    "issues": [],
-   "elapsed": 60.0,
+   "elapsed": 0.04,
    "asr_review_leads": []
   },
   {
@@ -52,7 +52,7 @@
    "tokens": 144,
    "peak": 0.50665283203125,
    "issues": [],
-   "elapsed": 57.56,
+   "elapsed": 0.07,
    "asr_review_leads": []
   },
   {
@@ -63,7 +63,7 @@
    "tokens": 101,
    "peak": 0.5130615234375,
    "issues": [],
-   "elapsed": 32.59,
+   "elapsed": 0.06,
    "asr_review_leads": []
   },
   {
@@ -74,7 +74,7 @@
    "tokens": 83,
    "peak": 0.626678466796875,
    "issues": [],
-   "elapsed": 36.76,
+   "elapsed": 0.02,
    "asr_review_leads": []
   },
   {
@@ -85,11 +85,11 @@
    "tokens": 160,
    "peak": 0.478973388671875,
    "issues": [],
-   "elapsed": 81.58,
+   "elapsed": 0.06,
    "asr_review_leads": []
   }
  ],
  "issues": [],
  "input_record": "renders/qa/series/stats7/en/MonteCarlo_motion/result.json",
- "input_sha256": "4c46ef78138432c1ed5737da34fa5669a28fd72a0fadf5e503960b0a53ccffd7"
+ "input_sha256": "1b90421cd7333c89123974e09e85d2958e41943bccb4587b3e86475f0887826c"
 }
