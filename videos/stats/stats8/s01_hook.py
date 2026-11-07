@@ -153,8 +153,8 @@ class Hook(VoiceoverScene):
             "Coverage Board, where textbook intervals are tested against the truth. <bookmark mark='c'/> Some of them "
             "fail."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(head, shift=UP * 0.2))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq))
             vo.wait_until("c")
