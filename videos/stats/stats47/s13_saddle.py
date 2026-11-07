@@ -143,7 +143,7 @@ class Saddlepoint(VoiceoverScene):
 
     def uses(self):
         rows = fit_rows(VGroup(
-            label(r"uses:", font_size=28, color=GREY_A),
+            label(r"Applications of saddlepoint approximations", font_size=36, color=GREY_A),
             label(r"tail p-values for rank and permutation tests, \ without enumeration", font_size=26, color=GOODC),
             label(r"the bootstrap without resampling: \ saddlepoint bootstrap distributions \ (Davison \& Hinkley 1988)", font_size=26),
             label(r"Barndorff-Nielsen's $p^*$: \ refined conditional likelihood approximation under additional regularity", font_size=26, color=S.ACCENT),
