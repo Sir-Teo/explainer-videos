@@ -89,7 +89,7 @@ class Hardware(VoiceoverScene):
                        for k, l in enumerate(lines)])
         hot = 11
         probe_l = label(r"probe array: \ one cache line per possible byte \ (16 of 256 shown)", font_size=17,
-                        color=GREY_A).next_to(lines, UP, buff=0.9).set_x(0)
+                        color=GREY_A).next_to(lines, UP, buff=0.3).set_x(0)
         notes = VGroup(
             wrapped_label(r"the branch predictor guesses ``in bounds'' and runs ahead, \ reading past the array", 12.4,
                           font_size=20, color=NO),
@@ -121,7 +121,7 @@ class Hardware(VoiceoverScene):
         self.clear_scene()
 
     def channel(self):
-        head = label(r"Side channels \ (Parts 27 and 29)", font_size=36).to_edge(UP, buff=0.3)
+        head = label(r"Side channels \ (Parts 8 and 29)", font_size=36).to_edge(UP, buff=0.3)
         ax = Axes(x_range=[0, 16, 4], y_range=[0, 600, 200], x_length=5.4, y_length=3.0, tips=False,
                   axis_config={"color": GREY_C, "font_size": 15}).move_to([-3.3, -0.1, 0])
         xs = np.linspace(0, 16, 9)
@@ -131,8 +131,8 @@ class Hardware(VoiceoverScene):
             [ax.c2p(x, 520) for x in xs])
         xl = label(r"correct leading bytes of a guess", font_size=15, color=GREY_A).next_to(ax, DOWN, buff=0.2)
         yl = label(r"time (schematic)", font_size=15, color=GREY_A).next_to(ax, UP, buff=0.05).align_to(ax, LEFT)
-        el = label(r"stop at first mismatch", font_size=16, color=NO).next_to(ax.c2p(16, 520), UR, buff=0.05)
-        cl = label(r"constant time", font_size=16, color=YES).next_to(ax.c2p(16, 520), DR, buff=0.05)
+        el = label(r"stop at first mismatch", font_size=16, color=NO).next_to(ax.c2p(9, 380), DR, buff=0.1)
+        cl = label(r"constant time", font_size=16, color=YES).next_to(ax.c2p(1, 520), UR, buff=0.1)
         ill = label(r"illustrative", font_size=14, color=GREY_B).next_to(ax, DOWN, buff=0.5)
         notes = VGroup(
             wrapped_label(r"what you did not mean to say also leaks: \ \textbf{time}, \ \textbf{power}, \ the "
@@ -143,7 +143,7 @@ class Hardware(VoiceoverScene):
                           r"\textit{constant time}", 5.6, font_size=20, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.3, 0.0, 0])
         with self.voiceover(
-            "Rowhammer and Spectre are two cases of a wider truth, the one Parts 27 and 29 kept meeting. "
+            "Rowhammer and Spectre are two cases of a wider truth, the one Parts 8 and 29 kept meeting. "
             "<bookmark mark='a'/> A computation says more than its output. It leaks through how long it takes, how "
             "much power it draws, what it leaves in the cache, even the sound the capacitors make. "
             "<bookmark mark='b'/> The classic example is a comparison that stops at the first wrong byte. The more "
@@ -179,7 +179,7 @@ class Hardware(VoiceoverScene):
                           r"performance \ --- \ the roofline of Part 9 moves", 12.6, font_size=21, color=HEAD),
             wrapped_label(r"the modern answer: \ a \textbf{hardware--software contract} that says exactly what the "
                           r"layer below promises not to leak", 12.6, font_size=21, color=WHITE),
-        ).arrange(DOWN, buff=0.3).to_edge(DOWN, buff=0.5)
+        ).arrange(DOWN, buff=0.3).next_to(VGroup(promise, leak), DOWN, buff=1.0)
         with self.voiceover(
             "Step back, because these share one shape, and it is the thread of the whole series. "
             "<bookmark mark='a'/> Every layer makes a promise so the layer above need not look down. Memory holds "

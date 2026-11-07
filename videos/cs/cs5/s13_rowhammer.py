@@ -52,7 +52,7 @@ class Rowhammer(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
         side.next_to(tags, RIGHT, buff=0.45).align_to(g, UP)
         with self.voiceover(
-            "As DRAM cells shrank, their neighbours came uncomfortably close. In 2014 Yoonu Kim, Onur Mutlu and their "
+            "As DRAM cells shrank, their neighbours came uncomfortably close. In 2014 Yoongu Kim, Onur Mutlu and their "
             "colleagues at Carnegie Mellon and Intel published a disturbing measurement. <bookmark mark='a'/> Pick two "
             "rows of memory, and access them alternately, as fast as possible: open one, open the other, again and "
             "again. Each time a row is opened, the electrical activity disturbs the rows next to it, and a little "

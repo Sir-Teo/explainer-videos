@@ -148,7 +148,7 @@ class Threats(VoiceoverScene):
         with self.voiceover(
             "This part is a tour of attacks, so here are the landmarks, with the dates this series is sure of. "
             "<bookmark mark='a'/> In 1988 the Morris worm spread across the early internet, partly through a buffer "
-            "overflow in a network service, and brought the idea of a self-replicating attack into the open. "
+            "overflow in a network service. "
             "<bookmark mark='b'/> In 1996 an article by the author who wrote as Aleph One explained the stack "
             "overflow carefully enough that anyone could follow it. <bookmark mark='c'/> In 2014 Rowhammer showed "
             "that software could flip bits in memory it never touched; in 2018 Spectre and Meltdown showed that "
