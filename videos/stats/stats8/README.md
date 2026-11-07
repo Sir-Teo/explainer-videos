@@ -26,7 +26,7 @@ Every number on screen is computed in [`compute.py`](compute.py). The Museum sup
 
 Everything else is the World (seed 1662) or a seeded simulation, and is tagged as such.
 
-**Built in this part:** the first rows of the Coverage Board ([`explainer/stats/board.py`](../../../../explainer/stats/board.py)),
+**Built in this part:** the first rows of the Coverage Board ([`explainer/stats/board.py`](../../../explainer/stats/board.py)),
 written to `.cache/stats8/board.json` by `python -m videos.stats.stats8.compute --force board`. Each row has R = 10,000
 replications.
 

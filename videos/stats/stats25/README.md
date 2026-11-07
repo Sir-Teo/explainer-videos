@@ -105,13 +105,13 @@ Every number on screen is computed in [`compute.py`](compute.py):
 - the rest are seeded simulations.
 
 **Built in this part:**
-- **`statkit.shrink`** ([`explainer/stats/kit/shrink.py`](../../../../explainer/stats/kit/shrink.py)):
+- **`statkit.shrink`** ([`explainer/stats/kit/shrink.py`](../../../explainer/stats/kit/shrink.py)):
   - James–Stein (towards 0 or the mean, positive part), SURE and Monte Carlo risk (the legacy helper name includes “exact”);
   - normal empirical Bayes;
   - the NPMLE of a prior by EM on a grid, and Tweedie's formula;
   - Fay–Herriot;
   - random-effects meta-analysis (DL, I², Hartung–Knapp).
-- **`statkit.mixed`** ([`explainer/stats/kit/mixed.py`](../../../../explainer/stats/kit/mixed.py)), checked against
+- **`statkit.mixed`** ([`explainer/stats/kit/mixed.py`](../../../explainer/stats/kit/mixed.py)), checked against
   statsmodels in `tests/test_stats_kit_mixed.py`:
   - `lmm`: random intercepts and slopes by ML or REML, with per-group Woodbury algebra, BLUPs and ICC;
   - `satterthwaite` degrees of freedom;

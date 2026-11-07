@@ -50,7 +50,7 @@ Every number on screen is computed in [`compute.py`](compute.py) or inline in a 
   - `turnout`.
 
   Adding it changes no earlier block.
-- **`statkit.survey`** ([`explainer/stats/kit/survey.py`](../../../../explainer/stats/kit/survey.py)), checked in
+- **`statkit.survey`** ([`explainer/stats/kit/survey.py`](../../../explainer/stats/kit/survey.py)), checked in
   `tests/test_stats_kit_survey.py`:
   - the SRS mean with the fpc;
   - proportional and Neyman allocation, and stratified variances and means;

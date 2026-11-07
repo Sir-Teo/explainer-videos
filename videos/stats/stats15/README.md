@@ -36,7 +36,7 @@ Every number on screen is computed in [`compute.py`](compute.py) or inline in a 
 - the billiard table is a seeded simulation.
 
 **Built in this part:**
-- **`statkit.bayes` (I)** ([`explainer/stats/kit/bayes.py`](../../../../explainer/stats/kit/bayes.py)), checked in
+- **`statkit.bayes` (I)** ([`explainer/stats/kit/bayes.py`](../../../explainer/stats/kit/bayes.py)), checked in
   `tests/test_stats_kit_bayes.py`:
   - conjugate updates (beta, gamma, normal, and the normal model with unknown variance);
   - equal-tailed and HPD intervals;

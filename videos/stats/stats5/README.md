@@ -15,7 +15,7 @@ Every number on screen is computed in [`compute.py`](compute.py). Galton's count
 (`museum.GALTON_*`, from HistData; Hanley 2004). Everything else is the World (seed 1662) or a seeded simulation, and
 is tagged as such.
 
-**Built in this part:** the Gaussian slicer (`GaussianSlicer` in [`explainer/stats/viz.py`](../../../../explainer/stats/viz.py)).
+**Built in this part:** the Gaussian slicer (`GaussianSlicer` in [`explainer/stats/viz.py`](../../../explainer/stats/viz.py)).
 It is a bivariate normal density drawn as a turnable wireframe surface over its floor. It cuts the surface at chosen
 values of x, and each slice, renormalized, is the conditional density of y given x: a normal whose centre moves along
 the regression line and whose width never changes. It is used for the World's families (mid-parent and son), and it

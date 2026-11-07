@@ -31,9 +31,9 @@ Every number on screen is computed in [`compute.py`](compute.py). The Museum sup
 Heights, incomes and the clinic come from the World (seed 1662). Everything else is a seeded simulation or exact.
 
 **Built in this part:**
-- **The permutation machine** (`PermutationMachine` in [`explainer/stats/viz.py`](../../../../explainer/stats/viz.py)):
+- **The permutation machine** (`PermutationMachine` in [`explainer/stats/viz.py`](../../../explainer/stats/viz.py)):
   tokens dealt into two rows, the shuffled statistic stacking into the null distribution.
-- **`statkit.tests`** ([`explainer/stats/kit/tests.py`](../../../../explainer/stats/kit/tests.py)): z, t, paired,
+- **`statkit.tests`** ([`explainer/stats/kit/tests.py`](../../../explainer/stats/kit/tests.py)): z, t, paired,
   Welch, permutation (exact or Monte Carlo), Fisher's sign flips, the sign test, Fisher's exact test, Pearson's χ²,
   the LRT, Bonferroni, power and sample size. Every one is checked against SciPy in
   `tests/test_stats_kit_tests.py`, which also reproduces Fisher's 863/32,768.

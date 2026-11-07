@@ -93,7 +93,7 @@ Every number on screen is computed in [`compute.py`](compute.py):
 - the rest are seeded simulations or worked examples.
 
 **Built in this part:**
-- **`statkit.mle`** ([`explainer/stats/kit/mle.py`](../../../../explainer/stats/kit/mle.py)), checked in
+- **`statkit.mle`** ([`explainer/stats/kit/mle.py`](../../../explainer/stats/kit/mle.py)), checked in
   `tests/test_stats_kit_mle.py`:
   - numerical Hessians;
   - the two-normal mixture likelihood, EM with its rate, and Pearson's moment equations (multistart solutions and the sixth
@@ -278,6 +278,6 @@ All 15 chapters, numerical helpers and solutions have received scientific source
 Eight independent Part 22 checks and 12 existing likelihood-kit checks pass (20 total).
 The historical crab table matches all 29 rows of CRAN mixdist's published data, including
 both open-ended tail classes. Details and current compute/source receipts are in
-[the scientific evidence](../../../../docs/qa/evidence/stats22-polish-20261107/scientific-review.md).
+[the scientific evidence](../../../docs/qa/evidence/stats22-polish-20261107/scientific-review.md).
 English visual verification follows; Chinese narration/captions, continuous listening
 and final bilingual masters remain open.

@@ -23,7 +23,7 @@ levels are the Museum's (`museum.OX_*`, `museum.BERNOULLI`, `museum.PORTPIRIE`);
 (seed 1662); everything else is a seeded simulation or an exact calculation, and is tagged as such.
 
 **Built in this part:** the Galton board (`GaltonBoard` in
-[`explainer/stats/viz.py`](../../../../explainer/stats/viz.py)). Balls fall through rows of pegs, bouncing left or
+[`explainer/stats/viz.py`](../../../explainer/stats/viz.py)). Balls fall through rows of pegs, bouncing left or
 right, and stack in bins:
 - `drops(scene, bits)` animates balls along their zig-zag paths, each landing on the current pile;
 - `bars(counts)` draws the pile for when there are too many balls to animate;

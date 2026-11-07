@@ -78,7 +78,7 @@ Every number on screen is computed in [`compute.py`](compute.py):
 - the rest are seeded simulations.
 
 **Built in this part:**
-- **`statkit.ols` II** ([`explainer/stats/kit/ols.py`](../../../../explainer/stats/kit/ols.py)), checked in
+- **`statkit.ols` II** ([`explainer/stats/kit/ols.py`](../../../explainer/stats/kit/ols.py)), checked in
   `tests/test_stats_kit_ols2.py`:
   - normal equations and QR in any precision, and correct digits;
   - Householder QR written out;

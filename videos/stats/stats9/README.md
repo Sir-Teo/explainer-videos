@@ -27,7 +27,7 @@ Every number on screen is computed in [`compute.py`](compute.py). The Museum sup
 
 Everything else is a seeded simulation or an exact calculation, and is tagged as such.
 
-**Built in this part:** the tank factory game, [`explainer/stats/kit/estimation.py`](../../../../explainer/stats/kit/estimation.py)
+**Built in this part:** the tank factory game, [`explainer/stats/kit/estimation.py`](../../../explainer/stats/kit/estimation.py)
 (tested in `tests/test_stats_kit_estimation.py`). `tank_game(recipe, N, k, reps, model)` grades any estimator of N,
 given as a function of a `(reps, k)` array of captured serials, on simulated factories. It reports the bias, the SD
 and the RMSE; bias and RMSE include Monte Carlo errors, under the textbook model (`"uniform"`) or a world the recipe did not assume

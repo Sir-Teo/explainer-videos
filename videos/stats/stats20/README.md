@@ -61,7 +61,7 @@ The part distinguishes recall-day associations from causal trial effects:
 
 Numerical results are computed in [`compute.py`](compute.py) by the pipeline in [`pipeline.py`](pipeline.py):
 - the data are NHANES 2017–2018 (CDC/NCHS, public domain), extracted by
-  [`tools/nhanes_extract.py`](../../../../tools/nhanes_extract.py) into `explainer/stats/data/nhanes_bp.csv`
+  [`tools/nhanes_extract.py`](../../../tools/nhanes_extract.py) into `explainer/stats/data/nhanes_bp.csv`
   (5,533 adults, 29 columns, SHA-256 `ae9be143…`); the SEQN-aligned two-day weight supplement is
   [`data/nhanes_day2_weights.csv`](data/nhanes_day2_weights.csv). CDC requires **WTDR2D** when an analysis uses both recalls;
   the original extract remains unchanged. All 5,533 rows reproduce byte-for-byte from current CDC downloads;
@@ -75,7 +75,7 @@ Numerical results are computed in [`compute.py`](compute.py) by the pipeline in 
   - `world_frame`, an NHANES-shaped survey of the World (10 strata, 2 PPS town draws with replacement each, 250 adults per draw, exact age-stratum sampling probabilities and Hansen–Hurwitz draw weights).
 
   All of them run unchanged on NHANES and the World.
-- **`statkit.capstone`** ([`explainer/stats/kit/capstone.py`](../../../../explainer/stats/kit/capstone.py)):
+- **`statkit.capstone`** ([`explainer/stats/kit/capstone.py`](../../../explainer/stats/kit/capstone.py)):
   `DecisionLog`, restricted cubic splines, reliability from replicates, and regression calibration.
 - **`statkit.survey` additions**: `svy_mean` and `svy_ols` (Taylor linearization over strata and PSUs, with model and
   sandwich SEs alongside), and `psu_bootstrap_weights` (Rao & Wu 1988).
@@ -234,7 +234,7 @@ replicates. The PSU-level information has 30 − 15 = 15 degrees of freedom howe
 The source and numerical review corrected two-day weights, joint calibration uncertainty, the centered interaction slope,
 the small-design Wald test and the SRS reference underlying the displayed design effect. Error-model and causal claims
 are qualified. The toy World survey uses exact within-age inclusion probabilities. See the
-[QA evidence](../../../../docs/qa/evidence/stats20-polish-20261107/scientific-review.md) for validation and remaining visual gates.
+[QA evidence](../../../docs/qa/evidence/stats20-polish-20261107/scientific-review.md) for validation and remaining visual gates.
 
 The operational eligibility rules exclude positive recorded pregnancy tests and recorded current BP medication use.
 Unknown pregnancy status and skipped medication items are retained as no recorded positive/use, not confirmed negatives.

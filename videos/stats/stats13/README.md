@@ -38,7 +38,7 @@ Every number on screen is computed in [`compute.py`](compute.py) or inline in a 
 - everything else is a seeded simulation.
 
 **Built in this part:**
-- **`statkit.design`** ([`explainer/stats/kit/design.py`](../../../../explainer/stats/kit/design.py)):
+- **`statkit.design`** ([`explainer/stats/kit/design.py`](../../../explainer/stats/kit/design.py)):
   - `Field`, the field-trial simulator: a hidden fertility surface plus plot noise;
   - `Bakery`, a hidden response surface;
   - one-way, RCBD and Latin-square ANOVAs;

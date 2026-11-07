@@ -32,7 +32,7 @@ Every number on screen is computed in [`compute.py`](compute.py) or inline in a 
 - everything else is a seeded simulation.
 
 **Built in this part:**
-- **`statkit.ols`** ([`explainer/stats/kit/ols.py`](../../../../explainer/stats/kit/ols.py)): QR-based fits with:
+- **`statkit.ols`** ([`explainer/stats/kit/ols.py`](../../../explainer/stats/kit/ols.py)): QR-based fits with:
   - classical and HC0–HC3 covariances;
   - t, p and intervals, R² and adjusted R², nested F-tests;
   - confidence, Working–Hotelling and prediction bands;

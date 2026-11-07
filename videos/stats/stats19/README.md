@@ -8,7 +8,7 @@ It opens with the *Federalist* papers of 1787–88. Hamilton, Madison and Jay al
 were claimed by both Hamilton and Madison. Mosteller and Wallace (1964) settled the question with the rates of dull
 words. *upon* appears in every one of Hamilton's 51 papers, at 1.0–7.5 per 1,000 words. It is absent from 11 of
 Madison's 14 and from 10 of the 12 disputed papers. The texts come from Project Gutenberg, counted by
-[`tools/federalist_counts.py`](../../../../tools/federalist_counts.py).
+[`tools/federalist_counts.py`](../../../tools/federalist_counts.py).
 
 From there the part covers:
 - **Prediction error.** Training and test error; polynomials of degree 1–14 fitted to 30 points.
@@ -66,7 +66,7 @@ Every number on screen is computed in [`compute.py`](compute.py) or inline in a 
   examples).
 
 **Built in this part:**
-- **`statkit.learn`** ([`explainer/stats/kit/learn.py`](../../../../explainer/stats/kit/learn.py)), checked in
+- **`statkit.learn`** ([`explainer/stats/kit/learn.py`](../../../explainer/stats/kit/learn.py)), checked in
   `tests/test_stats_kit_learn.py`:
   - K-fold splits, CV scores with fold SEs, and the one-SE rule;
   - k-NN regression and classification;

@@ -78,7 +78,7 @@ Every number on screen is computed in [`compute.py`](compute.py):
 - the rest are seeded simulations or worked examples.
 
 **Built in this part:**
-- **`statkit.optim`** ([`explainer/stats/kit/optim.py`](../../../../explainer/stats/kit/optim.py)), checked in
+- **`statkit.optim`** ([`explainer/stats/kit/optim.py`](../../../explainer/stats/kit/optim.py)), checked in
   `tests/test_stats_kit_optim.py`:
   - Newton with backtracking, and the Cauchy location likelihood;
   - Fisher scoring for logistic regression;
@@ -249,5 +249,5 @@ Together: x = sign(v)(|v| − λ)₊.
 ## QA status
 
 Scientific corrections and independent numerical checks are recorded in
-[the review evidence](../../../../docs/qa/evidence/stats21-polish-20261107/scientific-review.md).
+[the review evidence](../../../docs/qa/evidence/stats21-polish-20261107/scientific-review.md).
 English visual verification follows. Continuous listening, Chinese narration/captions and final bilingual masters remain open.

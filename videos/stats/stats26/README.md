@@ -93,7 +93,7 @@ Every number on screen is computed in [`compute.py`](compute.py):
 - the rest are seeded simulations.
 
 **Built in this part:**
-- **`statkit.bayes` II** ([`explainer/stats/kit/bayes.py`](../../../../explainer/stats/kit/bayes.py)), checked in
+- **`statkit.bayes` II** ([`explainer/stats/kit/bayes.py`](../../../explainer/stats/kit/bayes.py)), checked in
   `tests/test_stats_kit_bayes2.py`:
   - the hierarchical normal model (`hier_normal`: τ's marginal posterior on a grid, conditional means and independent numerical draws);
   - `bf01_normal`; the Sellke–Bayarri–Berger bound;

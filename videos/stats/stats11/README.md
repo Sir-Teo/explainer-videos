@@ -29,7 +29,7 @@ Every number on screen is computed in [`compute.py`](compute.py) or inline in a 
 - Everything else is a seeded simulation.
 
 **Built in this part:**
-- **`statkit.intervals`** ([`explainer/stats/kit/intervals.py`](../../../../explainer/stats/kit/intervals.py)):
+- **`statkit.intervals`** ([`explainer/stats/kit/intervals.py`](../../../explainer/stats/kit/intervals.py)):
   Wald, Wilson, Agresti–Coull, Clopper–Pearson, Jeffreys and likelihood-ratio intervals for a proportion;
   `binom_coverage` and `binom_width` (exact); the t, variance and rate pivots; Fieller; the DKW band; prediction
   intervals; Wilks' order-statistic coverage. It is tested in `tests/test_stats_kit_intervals.py` (against SciPy, and

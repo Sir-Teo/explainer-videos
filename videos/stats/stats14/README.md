@@ -32,7 +32,7 @@ Every number on screen is computed in [`compute.py`](compute.py) or inline in a 
 - the clinic visits are simulated on the World's towns.
 
 **Built in this part:**
-- **`statkit.glm` (I)** ([`explainer/stats/kit/glm.py`](../../../../explainer/stats/kit/glm.py)):
+- **`statkit.glm` (I)** ([`explainer/stats/kit/glm.py`](../../../explainer/stats/kit/glm.py)):
   - logistic and Poisson regression by IRLS, with step-halving, offsets and binomial trials;
   - classical, quasi and sandwich covariances; deviance and Pearson dispersion;
   - Wald and profile-likelihood intervals (constrained IRLS with continuation);

@@ -20,8 +20,8 @@ It opens with John von Neumann's warning (1951) that arithmetic randomness is "a
 Numerical examples are cached in [`compute.py`](compute.py); small seeded harness, stratification, and chain demonstrations are evaluated in their scenes. The generators and samplers there are statkit's
 own; the riffle-shuffle distances are exact. For a forward riffle with the deck listed in final order, rising sequences are one plus descents of the inverse permutation; inversion preserves the Eulerian counts used in TV. The d-ball comparison uses the same actual budget m^d for the grid error and exact Monte Carlo standard error. Displayed histograms retain omitted tail mass in their denominators. The control-variate comparison uses the known population coefficient 6(3−e), rather than fitting it to the same draws.
 
-**Built in this part:** `statkit.random` ([`explainer/stats/kit/random.py`](../../../../explainer/stats/kit/random.py)),
-tested against SciPy in [`tests/test_stats_kit_random.py`](../../../../tests/test_stats_kit_random.py). It contains:
+**Built in this part:** `statkit.random` ([`explainer/stats/kit/random.py`](../../../explainer/stats/kit/random.py)),
+tested against SciPy in [`tests/test_stats_kit_random.py`](../../../tests/test_stats_kit_random.py). It contains:
 - **generators:** `randu`, `lcg`, `PCG32`;
 - **samplers:** `inverse_cdf`, `discrete_inverse`, `rejection`, `box_muller`, `marsaglia_tsang`, `AliasTable`;
 - **the simulation-study harness:** `streams` (independent, reproducible generators), `mc_se`, and `simulate`, which

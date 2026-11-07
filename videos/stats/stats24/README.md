@@ -88,7 +88,7 @@ Every number on screen is computed in [`compute.py`](compute.py):
 - the rest are seeded simulations.
 
 **Built in this part:**
-- **`statkit.glm` II** ([`explainer/stats/kit/glm.py`](../../../../explainer/stats/kit/glm.py)), checked in
+- **`statkit.glm` II** ([`explainer/stats/kit/glm.py`](../../../explainer/stats/kit/glm.py)), checked in
   `tests/test_stats_kit_glm2.py`:
   - `Family`, with links (identity, log, logit, probit, cloglog, inverse), variance functions and unit deviances;
   - `glm_fit`, a general IRLS recording its path, with deviance, Pearson/deviance/randomized quantile residuals, φ̂, and
