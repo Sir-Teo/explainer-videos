@@ -6,22 +6,22 @@ from explainer.quant import *  # noqa: F403
 from videos.quant.quant16.common import BAD, DELTA, GOOD, METHOD_COL, OPT, PART, load, sci, axes, data_range, pause_card, flat_camera
 
 PROBLEMS = [
-    r"Show that the control-variate estimator $\bar Y - b(\bar C - \mathbb{E}C)$ has minimal variance at "
+    r"For a deterministic coefficient and finite second moments, show that the control-variate estimator $\bar Y - b(\bar C - \mathbb{E}C)$ has minimal variance at "
     r"$b^* = \text{cov}(Y, C)/\text{var}(C)$, and that the variance falls by the factor $1 - \rho_{YC}^2$.",
     r"For importance sampling with a normal shifted by $\theta$, derive the likelihood ratio, and the $\theta$ that "
     r"centres the shifted normal on the strike.",
-    r"Show that for any martingale $M$ with $M_0 = 0$, $\sup_\tau \mathbb{E}[h_\tau] \le \mathbb{E}[\max_t (h_t - M_t)]$.",
+    r"On a finite exercise grid with integrable rewards and an integrable martingale, show that for $M_0=0$, $\sup_\tau \mathbb{E}[h_\tau] \le \mathbb{E}[\max_t (h_t - M_t)]$.",
     r"Derive the stability condition of the explicit scheme for the heat equation by von Neumann analysis.",
-    r"Show that reverse-mode differentiation of $f(g(h(x)))$ for $x \in \mathbb{R}^n$ costs a constant multiple of "
-    r"one evaluation, while forward mode costs $n$ times.",
+    r"For a scalar-output differentiable tape, show reverse work is $O(\text{tape work})$; contrast computing all "
+    r"input directions by forward sweeps. State memory and elementary-operation assumptions.",
     r"Build a mixed estimator of a call's gamma: pathwise once (for delta), then the likelihood ratio.",
-    r"Multilevel Monte Carlo with $\beta = \gamma$: show that $\sum_l \sqrt{V_l C_l}$ grows like $L \sim \log "
+    r"Under Giles's bias, independence and allocation conditions, with $\beta = \gamma$: show that $\sum_l \sqrt{V_l C_l}$ grows like $L \sim \log "
     r"\varepsilon^{-1}$, so the cost is $O(\varepsilon^{-2}(\log\varepsilon)^2)$.",
     r"Show that the FFT forces $\lambda\eta = 2\pi/N$ in Carr and Madan's discretisation.",    r"(qual) Show that $\operatorname{Var}(\hat G_{kk}) = (\mathbb E\psi_k^4 - (\mathbb E\psi_k^2)^2)/N$, and that for "
     r"$\psi_k = S^k/\sqrt{\mathbb E S^{2k}}$ with $S = e^{\sigma W_t - \sigma^2t/2}$, $\mathbb E\psi_k^4 = e^{4\sigma^2tk^2}$.",
     r"(qual) For a one-date stopping problem (stop and get $h$, or continue and get $C$), show that using $\hat C$ "
     r"loses $\mathbb E[|C - h|\,\mathbf 1\{\text{wrong}\}] \le \mathbb E[|C - \hat C|\,\mathbf 1\{|C - h| \le |C - \hat C|\}]$, "
-    r"and that this is $O(\varepsilon^2)$ if $\Pr(|C - h| \le \varepsilon) = O(\varepsilon)$ and $|C - \hat C| \le \varepsilon$.",
+    r"and that this is $O(\varepsilon^2)$ if $\Pr(0<|C - h| \le \varepsilon) = O(\varepsilon)$ and $|C - \hat C| \le \varepsilon$.",
 ]
 
 
@@ -39,18 +39,12 @@ class Outro(VoiceoverScene):
 
     def house(self, env):
         chart = house_chart(PART, lit=("data", "vol")).scale(0.7).to_edge(UP, buff=0.3)
-        rule = wrapped_label(r"Rule 16: every price leaves the engine with its error estimate (a standard error, a duality "
-                             r"gap or a grid-refinement difference), and every method is checked nightly against a second, "
-                             r"independent one on the same product. "
-                             rf"No strategy was tested in this part: the trial counter still reads {env['trials']}.",
-                             12.4, 22, QC.HOUSE).to_edge(DOWN, buff=0.5)
+        rule = wrapped_label(r"Rule 16: report sampling uncertainty separately from bias and numerical-reference error. Use refinement, "
+                             r"alternative formulations and dual expectations within their assumptions; noisy point estimates are not sure bounds. "
+                             rf"No market strategy trial was added: the part's cumulative counter remains {env['trials']}.",
+                             12.4, 24, QC.HOUSE).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "The House now has a pricing engine, shared by every desk: simulation with its variance reduction and "
-            "quasi-random paths, multilevel estimators, American options bracketed from both sides, Greeks by "
-            "adjoints, grids in one and two dimensions, and Fourier pricing. <bookmark mark='a'/> Its rule, the "
-            "sixteenth: no price leaves the engine without its error, and every method is checked each night "
-            "against an independent one. No strategy was tested, and the trial counter still reads "
-            f"{env['trials']}."
+            f"The House has a collection of pricing methods, rather than a universal accuracy certificate. <bookmark mark='a'/> Rule sixteen is to separate sampling uncertainty from discretization, truncation, reference and model errors, and choose verification suited to the method. No automated nightly production control is claimed here. These synthetic numerical examples add no market strategy trials; the part's cumulative counter remains {env['trials']}."
         ) as vo:
             self.play(FadeIn(chart))
             vo.wait_until("a")
@@ -65,22 +59,22 @@ class Outro(VoiceoverScene):
         unif = {(x["nS"], x["uniform"]): x["err"] for x in ag["rows"]}
         cos_best = min((x for x in r["points"] if x["method"] == "COS"), key=lambda x: x["err"])
         items = [
-            (rf"Monte Carlo's error bar is honest: {100 * ml['coverage']:.1f}\% coverage; a cent costs "
+            (rf"MC pointwise empirical coverage: {100 * ml['coverage']:.1f}\% coverage; a cent costs "
              rf"{ml['cent_paths'] / 1e6:.1f} million paths", OPT),
             (rf"a twin with a formula divides the variance by {ct['summary']['geo']['ratio']:,.0f}".replace(",", "{,}"), GOOD),
-            (rf"importance sampling, learned in two steps: variance $\div$ {isw['ratio_best']:.0f}", GOOD),
+            (rf"IS: best tested fixed-grid variance ratio $\div$ {isw['ratio_best']:.0f}", GOOD),
             (rf"Sobol nets, and the bridge or PCA: {q['sd']['pseudo-random'][-1] / ed['pca_sd'][-1]:.0f} times less "
              r"spread on 64 dimensions", METHOD_COL["Sobol + bridge"]),
-            (rf"multilevel Monte Carlo: {sav:.0f} times cheaper at one cent", GOOD),
+            (rf"MLMC: estimated step-work ratio {sav:.0f} at a one-cent target", GOOD),
             (rf"Longstaff--Schwartz on fresh paths {lv['eval'][0]:.3f}, the dual {a['ab'][-1]['upper']:.3f}; five "
-             rf"assets: a tie with the network" if abs(mc["deep"]["lower"] - mc["lsm"]["200000"]["lower"]) <
+             rf"assets: difference unresolved at two evaluation s.e." if abs(mc["deep"]["lower"] - mc["lsm"]["200000"]["lower"]) <
              2 * np.hypot(mc["deep"]["se"], mc["lsm"]["200000"]["se"]) else
              rf"Longstaff--Schwartz on fresh paths {lv['eval'][0]:.3f}, the dual {a['ab'][-1]['upper']:.3f}", DELTA),
-            (r"Greeks: bumps need common numbers; the likelihood ratio handles jumps", DELTA),
-            (rf"AAD: {big['inputs']} Greeks for {big['t_aad'] / big['t_price']:.1f} prices, bumping "
+            (r"Greeks: estimator regularity, common numbers, score weights and bias all matter", DELTA),
+            (rf"AAD benchmark: {big['inputs']} input derivatives at {big['t_aad'] / big['t_price']:.1f} prices, bumping "
              rf"{big['t_bump'] / big['t_price']:.0f}", DELTA),
             (rf"grids: stability, Rannacher's start; the American put by penalty, {lc['penalty']['price']:.3f}", BAD),
-            (rf"ADI on a stretched grid: {unif[(40, True)] / unif[(40, False)]:.0f} times more accurate than uniform",
+            (rf"ADI on a stretched grid: {unif[(40, True)] / unif[(40, False)]:.0f} times smaller COS-reference discrepancy in this case",
              METHOD_COL["ADI (Craig-Sneyd)"]),
             (rf"Fourier: COS to ${sci(cos_best['err'])}$ in {cos_best['time'] * 1e3:.2f} ms; amplitude estimation's slope "
              rf"{qa['slope']:.2f}", METHOD_COL["COS"]),
@@ -96,10 +90,7 @@ class Outro(VoiceoverScene):
         if rows.height > 6.4:
             rows.scale_to_fit_height(6.4)
         with self.voiceover(
-            "Part sixteen in eleven lines. Monte Carlo's error bar is honest, and expensive. Controls and importance "
-            "sampling shrink it; nets and the bridge make paths cheap; multilevel removes the cost of a fine step. "
-            "American options are bracketed from both sides. Adjoints deliver every Greek for a few prices. Grids "
-            "need stability and a careful start. And for a vanilla, Fourier wins by orders of magnitude."
+            'Part sixteen in eleven lines. Sampling intervals have assumptions and measured coverage. Controls, shifts and randomized nets can reduce variance in suitable problems. Multilevel allocates correction work under bias and variance conditions. Fixed-policy and dual expectations bound finite-date stopping values, while their numerical estimates remain noisy. Adjoint work scales with a scalar-output tape, with memory and regularity costs. Grids require stability, appropriate boundaries and a careful start. Characteristic-function methods can be fast for suitable products. Every numerical ratio on this page belongs to its saved experiment, rather than a universal method ranking.'
         ):
             self.play(FadeIn(title), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows], lag_ratio=0.6,
                                                  run_time=22))
@@ -108,29 +99,24 @@ class Outro(VoiceoverScene):
 
     def desk(self, ml):
         D = [
-            (r"How many paths for a price to one basis point?",
+            (r"How many iid paths for an approximate one-cent 95\% half-width?",
              rf"$n \approx (1.96\,\sigma_Y/\varepsilon)^2$: here $\sigma_Y \approx {ml['sd']:.1f}$, so a cent at 95\% "
              rf"needs about {ml['cent_paths'] / 1e6:.1f} million plain paths; controls, strata or Sobol cut that by orders "
-             r"of magnitude"),
-            (r"Why is AAD's cost independent of the number of Greeks?",
+             r"of magnitude in some examples; bias and cost remain separate"),
+            (r"What controls AAD work for a scalar price?",
              r"one reverse sweep carries the adjoint to every input at once, one multiply--add per tape edge: a small "
-             r"constant times one pricing, for five inputs or five thousand"),
+             r"constant times executed tape work under the operation model; pricing work and memory can grow with inputs"),
             (r"Crank--Nicolson's gamma oscillates. Why, and the fix?",
              r"its amplification tends to $-1$ for high frequencies at large $\lambda$, so a payoff's jump rings; a few "
              r"implicit (half-)steps first (Rannacher) damp it"),
             (r"LSM says 6.06, the dual bound 6.41. What next?",
-             r"rerun the dual with more inner paths: if the gap shrinks it was noise; if not, improve the basis"),
+             r"separate outer uncertainty, inner upward bias and dual looseness; increase inner work as a diagnostic, then evaluate policy and martingale approximations"),
         ]
         cards = VGroup(*[desk_question(q, a_, width=12.6, font_size=22) for q, a_ in D]).arrange(DOWN, buff=0.22)
         if cards.height > 7.4:
             cards.scale_to_fit_height(7.4)
         with self.voiceover(
-            "Four desk questions. Paths for a basis point: the payoff's standard deviation over the target, squared, "
-            "times 1.96 squared; millions of plain paths, far fewer with the tricks of chapters three to six. "
-            "<bookmark mark='a'/> Why AAD's cost does not grow with the Greeks: one reverse sweep reaches every input. "
-            "<bookmark mark='b'/> Crank–Nicolson's ringing gamma: weak damping of high frequencies; start with "
-            "implicit steps. <bookmark mark='c'/> And a wide duality gap: first more inner paths, then a better basis. "
-            "Full solutions are in the notes."
+            "Four desk questions. For an unbiased iid estimator under a normal approximation, a target sampling half-width uses variance times one point nine six squared divided by target squared. One cent is one basis point only on a one-hundred-dollar notional; the units must be specified. Bias remains separate. <bookmark mark='a'/> Reverse work is proportional to a scalar-output tape, with memory and implementation costs. <bookmark mark='b'/> Crank–Nicolson can weakly damp high frequencies; a suitable implicit start can improve behaviour. <bookmark mark='c'/> A wide observed dual gap mixes policy quality, dual approximation, inner bias and outer uncertainty. Increasing inner work is a diagnostic, not proof that all remaining gap is policy loss. Worked solutions are in the notes."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             for k, mk in enumerate("abc", 1):
@@ -142,11 +128,7 @@ class Outro(VoiceoverScene):
     def problems(self):
         ps = problem_set(PROBLEMS, font_size=18)
         with self.voiceover(
-            "And ten problems: the optimal control variate, importance sampling's shift, the duality bound, the "
-            "explicit scheme's stability, why reverse mode is cheap, a gamma estimator, the multilevel cost when beta "
-            "equals gamma, and the FFT's grid constraint. Two are qualifying-exam problems: the Gram matrix's "
-            "fourth moments, and why a wrong exercise rule costs only second order. Solutions, in English and "
-            "Chinese, are in the notes."
+            'Ten problems cover fixed-coefficient control variates, normal-shift importance sampling, finite-grid optional stopping, heat-equation stability, reverse-tape work, a hybrid gamma estimator, conditional multilevel complexity and the FFT grid constraint. The last two derive a single Gram-diagonal moment diagnostic and a one-date margin-conditioned price-loss bound. State the assumptions as part of each solution. Worked English and Chinese solutions are in the notes.'
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))
             self.wait(3)
@@ -184,8 +166,7 @@ class Outro(VoiceoverScene):
              r"Suzuki et al.\ (2020)",
              r"Chakrabarti et al.\ (2021); Owen (2022); Pan--Owen (2023); Junike (2024); Stamatopoulos--Zeng (2024)"])
         with self.voiceover(
-            "The textbook chapters this part covers, and the papers it draws on. Every number here was computed by the "
-            "House's engine on one CPU core."
+            'The notes identify the textbooks, original research and dated industry resource reports. Numerical examples are synthetic fixed-seed CPU runs with varying configurations: the parallel example uses multiple processes and the Part seventeen stopping reference uses two training threads. Published industry and quantum resource figures are external source claims, not local measurements.'
         ):
             self.play(FadeIn(card))
             self.wait(3)
@@ -195,9 +176,7 @@ class Outro(VoiceoverScene):
         smap = series_map(current=PART + 1, done=PART)
         nxt = label(r"Next: Part 17, Deep Pricing and Hedging", font_size=32, color=QC.IDEA).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "The House can now compute any price it can write down, and say how wrong it might be. "
-            "<bookmark mark='a'/> Next, Part seventeen: deep pricing and hedging. Networks that learn prices from "
-            "this engine, solve equations in a hundred dimensions, and hedge books that no formula describes."
+            "This part provides numerical methods and evidence for specific pricing problems, with explicit assumptions and unresolved error sources. <bookmark mark='a'/> Next is Part seventeen, deep pricing and hedging: learning price maps, studying high-dimensional equations and training hedging or stopping policies, with their own approximation and evaluation questions."
         ) as vo:
             self.play(FadeIn(smap))
             vo.wait_until("a")

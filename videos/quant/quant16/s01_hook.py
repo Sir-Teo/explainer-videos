@@ -42,11 +42,13 @@ class Hook(VoiceoverScene):
     def race(self, r):
         """The four engines start together; each point appears when the wall clock reaches it."""
         pts = r["points"]
-        g = loglog(-4.2, 1.0, -8, 0, r"wall-clock time (seconds, one core)", r"absolute error; MC: one standard error", x_length=8.4,
+        xr = data_range([np.log10(q["time"]) for q in pts])
+        yr = data_range([np.log10(q["err"]) for q in pts])
+        g = loglog(*xr, *yr, r"wall-clock time (seconds, one core)", r"absolute error; MC: one standard error", x_length=8.4,
                    y_length=4.6, xt=[-4, -3, -2, -1, 0, 1], yt=[-8, -6, -4, -2, 0])
         g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.3)
         ax = g.ax
-        clock = ValueTracker(-4.2)
+        clock = ValueTracker(xr[0])
         by = {m: sorted([q for q in pts if q["method"] == m], key=lambda q: q["time"]) for m in ORDER}
 
         def draw(m):
@@ -64,7 +66,7 @@ class Hook(VoiceoverScene):
             return always_redraw(make)
 
         lines = [draw(m) for m in ORDER]
-        hand = always_redraw(lambda: DashedLine(ax.c2p(clock.get_value(), -8), ax.c2p(clock.get_value(), 0),
+        hand = always_redraw(lambda: DashedLine(ax.c2p(clock.get_value(), yr[0]), ax.c2p(clock.get_value(), yr[1]),
                                                 stroke_color=GREY_B, stroke_width=1.5))
         tick = readout(r"\log_{10}(t / \text{s}) =", lambda: clock.get_value(), digits=1, font_size=26, color=GREY_A)
         tick.next_to(ax, UP, buff=0.1).align_to(ax, RIGHT)
@@ -80,9 +82,9 @@ class Hook(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src), *[FadeIn(x) for x in lines], FadeIn(hand), FadeIn(tick))
             vo.wait_until("a")
-            self.play(clock.animate.set_value(-2.5), run_time=3, rate_func=linear)
+            self.play(clock.animate.set_value(xr[0] + 0.4 * (xr[1] - xr[0])), run_time=3, rate_func=linear)
             vo.wait_until("b")
-            self.play(clock.animate.set_value(1.0), run_time=max(vo.remaining(0.5), 2.0), rate_func=linear)
+            self.play(clock.animate.set_value(xr[1]), run_time=max(vo.remaining(0.5), 2.0), rate_func=linear)
         self.play(FadeIn(note_))
         self.wait(0.6)
         self.clear_scene()
@@ -126,21 +128,13 @@ class Hook(VoiceoverScene):
         def X(y):
             return x0 + (x1 - x0) * (y - 1940) / (2030 - 1940)
 
-        axis = Line([x0, 0, 0], [x1, 0, 0], color=GREY_D, stroke_width=2)
-        ticks = VGroup(*[VGroup(Line([X(y), -0.06, 0], [X(y), 0.06, 0], color=GREY_D),
-                                Text(str(y), font_size=13, color=GREY_D).next_to([X(y), 0, 0], DOWN, buff=0.12))
+        axis = Line([x0, -3.0, 0], [x1, -3.0, 0], color=GREY_D, stroke_width=2)
+        ticks = VGroup(*[VGroup(Line([X(y), -3.06, 0], [X(y), -2.94, 0], color=GREY_D),
+                                Text(str(y), font_size=17, color=GREY_C).next_to([X(y), -3.0, 0], DOWN, buff=0.12))
                          for y in range(1940, 2031, 10)])
-        dots, labs = VGroup(), VGroup()
-        for k, (yr, name, col) in enumerate(HISTORY):
-            d = Dot([X(yr), 0, 0], radius=0.08, color=col)
-            lvl = [1.0, 2.0, 3.0][k % 3] * (1 if k % 2 == 0 else -1)
-            t = label(rf"{yr}\; {name}", font_size=17, color=col)
-            t.move_to([X(yr), 0.55 * lvl, 0])
-            keep_in_frame(t, margin=0.25)
-            lead = Line(d.get_center(), t.get_bottom() if lvl > 0 else t.get_top(), color=GREY_C, stroke_width=1,
-                        stroke_opacity=0.5)
-            dots.add(d)
-            labs.add(VGroup(lead, t))
+        dots = VGroup(*[Dot([X(yr), -3.0, 0], radius=0.065, color=col) for yr, _, col in HISTORY])
+        labs = VGroup(*[wrapped_label(rf"{yr}: {name}", 5.9, 25, col) for yr, name, col in HISTORY])
+        labs.arrange_in_grid(rows=7, cols=2, cell_alignment=LEFT, buff=(0.5, 0.22)).move_to(UP * 0.5)
         head = label(r"How we got here", font_size=34).to_edge(UP, buff=0.35)
         strip = VGroup(axis, ticks)
         with self.voiceover(
@@ -191,8 +185,7 @@ class Hook(VoiceoverScene):
     def house(self):
         chart = house_chart(PART, lit=("data", "vol"))
         with self.voiceover(
-            "In the House, this part builds the pricing engine that every desk shares, and every chapter adds to its "
-            "code. <bookmark mark='a'/> Its rule: no number leaves it without an estimate of its own error."
+            "This part supplies numerical pricing methods for the House. Each method has a defined scope and a different error diagnostic. <bookmark mark='a'/> The practical rule is to distinguish sampling uncertainty, discretization and truncation bias, reference error and model assumptions. A standard error alone does not certify a price's total accuracy."
         ) as vo:
             self.play(FadeIn(chart))
             vo.wait_until("a")
