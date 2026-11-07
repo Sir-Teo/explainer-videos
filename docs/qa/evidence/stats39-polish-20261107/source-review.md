@@ -1,4 +1,4 @@
-# Part 39 scientific review, first checkpoint
+# Part 39 scientific review, completed source/numerical checkpoint
 
 All sixteen chapters, README/solutions/glossary, common helpers, fifteen computations, the spatial kit and its eleven tests, and the World pollution generator were read. Eighteen focused checks pass: seven new cases and eleven kit checks. This is an intermediate numerical correction checkpoint; broader scientific narration and visual reconciliation remain in progress.
 
@@ -15,3 +15,5 @@ Scientific narration and display corrections are now applied. Fixed-domain known
 The gallery now expands its covariance embedding until its spectrum is nonnegative to numerical tolerance. Independent inverse-FFT checks verify the intended covariance without substantive eigenvalue clipping. The pre-existing World generator's much smaller approximation is quantified (maximum covariance perturbation about 0.000125 at variance 6.25) rather than called exact. All observations/intervals remain raw; previously clipped risk-ratio and GP-band values and silently omitted upper-tail parameter estimates now retain full axes. Twenty-nine persistent formula headings and crossing/missing-break-preserving geometry prepare the visual pass.
 
 Independent package-maintainer distributions were compared for all 155 Meuse samples, 3,103 grid nodes, 176 river vertices, 578 digitized deaths and thirteen pumps. Heavy-metal measurements and main coordinates match exactly; normalized river distances and Snow coordinates agree within five decimal places. The river outline is stored rounded to metres (at most half a metre difference), and pump labels agree exactly. Twenty-two focused checks now pass: eleven new cases and eleven kit checks. Full numerical and README reconciliation is still in progress; no visual completion or production approval is claimed.
+
+All fifteen computations have now completed, final README numbers are reconciled, and input hashes are archived. The Board metadata now also use empirical errors for the OLS/GLS binary field-level events. Source/numerical review is complete; sampled visual review remains pending.

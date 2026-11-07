@@ -1,0 +1,92 @@
+[
+  {
+    "name": "meuse",
+    "path": ".cache/stats39/meuse.json",
+    "sha256": "4b91a2993fe88aa13a0325c1f62b41127e5cb30a2541021753fbce4510c932e7",
+    "bytes": 351659
+  },
+  {
+    "name": "world",
+    "path": ".cache/stats39/world.json",
+    "sha256": "303e3c49ae403e1846ed1362c6bded6fcb758489b843aa6213923fdb9c3f9183",
+    "bytes": 100345
+  },
+  {
+    "name": "fields",
+    "path": ".cache/stats39/fields.json",
+    "sha256": "a5e9988339a3d4ff7c863c55344374f52ef8cf7fd5e5bd75f75b50ed2d5b8942",
+    "bytes": 228433
+  },
+  {
+    "name": "ident",
+    "path": ".cache/stats39/ident.json",
+    "sha256": "5b473f3c199f23f4f5b7e610e2cc9e89edf95c34bbbc229d44fafc9315d89892",
+    "bytes": 5508
+  },
+  {
+    "name": "scale",
+    "path": ".cache/stats39/scale.json",
+    "sha256": "eb13f47e60765030cbf35e7bd950d8d04261b6f4d7cbd77b90dd0b55c7e8c6ee",
+    "bytes": 1108
+  },
+  {
+    "name": "gmrf",
+    "path": ".cache/stats39/gmrf.json",
+    "sha256": "fa38253fb16a7f12c7a16f3cc4c3b6d3581960b441446a859b339514f2c0d651",
+    "bytes": 141233
+  },
+  {
+    "name": "areal",
+    "path": ".cache/stats39/areal.json",
+    "sha256": "a69d28554f658ae514f189e2b29289ac2eed1a753bee89249cfe540ddde741b1",
+    "bytes": 353268
+  },
+  {
+    "name": "snow",
+    "path": ".cache/stats39/snow.json",
+    "sha256": "cc5b3ad55172523a8067622483848bcb7285ebb86119fe52b4079893f588f93e",
+    "bytes": 22767
+  },
+  {
+    "name": "confound",
+    "path": ".cache/stats39/confound.json",
+    "sha256": "8bc16e360101f79512fa06bb4148bd3715013385b5632ae50779e4489ea7eccd",
+    "bytes": 406
+  },
+  {
+    "name": "blockcv",
+    "path": ".cache/stats39/blockcv.json",
+    "sha256": "2c593b809f330a002ad7b8a3d45645639d73e3e2074958e468fa5905b2239f40",
+    "bytes": 337
+  },
+  {
+    "name": "extra",
+    "path": ".cache/stats39/extra.json",
+    "sha256": "be9219dd5204792791087f96b1491207799952c0e9a3f5b736a2892f724b9ad5",
+    "bytes": 5776
+  },
+  {
+    "name": "ridge_pred",
+    "path": ".cache/stats39/ridge_pred.json",
+    "sha256": "2eee29a57d51cad65091d891d7298d09cbada2cb70f31c476c50f3f2bba7952c",
+    "bytes": 899
+  },
+  {
+    "name": "spacetime",
+    "path": ".cache/stats39/spacetime.json",
+    "sha256": "e94086c63adc5b866de3bcd9195297a4a007ab2792d00b734e5863c2d5245934",
+    "bytes": 190844
+  },
+  {
+    "name": "bayesopt",
+    "path": ".cache/stats39/bayesopt.json",
+    "sha256": "773559ac14466404029eb62d8a9d631619c537986cdb27c0ec2d773b86bd1ef9",
+    "bytes": 258911
+  },
+  {
+    "name": "board",
+    "path": ".cache/stats39/board.json",
+    "sha256": "e26e82395a1f92fa96a1fcd687eef805e6869cf69565ea4f1b10973a8e9f763e",
+    "bytes": 13077
+  }
+]

@@ -527,9 +527,9 @@ def compute_board():
         Row(39, r"kriging PI, \ exponential fitted", r"Mat\'ern $\nu = 5/2$ fields, \ $n = 200$", "coverage", 0.9,
             float(np.mean(cm)), reps, mc_se=mean_mc_se(cm)),
         Row(39, r"OLS CI for a covariate", r"spatially correlated errors, \ $n = 200$", "coverage", 0.9,
-            float(np.mean(bo)), reps),
+            float(np.mean(bo)), reps, mc_se=mean_mc_se(bo)),
         Row(39, r"GLS (REML) CI for the covariate", r"spatially correlated errors, \ $n = 200$", "coverage", 0.9,
-            float(np.mean(bg)), reps),
+            float(np.mean(bg)), reps, mc_se=mean_mc_se(bg)),
     ]
     save_rows(39, rows)
     return nest({"rows": [asdict(r) | {"verdict": r.verdict, "se": r.se} for r in rows], "replicates": {"true": ct, "reml": cr, "exponential": cm, "ols": bo, "gls": bg}})

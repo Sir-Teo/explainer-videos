@@ -1,0 +1,75 @@
+{
+  "scope": "Empirical Monte Carlo errors recomputed from the retained 250 independent-field replicates; no resimulation or alteration of achieved rates.",
+  "rows": [
+    {
+      "part": 39,
+      "method": "kriging 90\\% PI, \\ true covariance",
+      "setting": "Mat\\'ern $\\nu = 5/2$ fields, \\ $n = 200$",
+      "kind": "coverage",
+      "nominal": 0.9,
+      "achieved": 0.89912,
+      "reps": 250,
+      "width": null,
+      "extra": "",
+      "mc_se": 0.003063468910739633,
+      "verdict": "kept",
+      "se": 0.003063468910739633
+    },
+    {
+      "part": 39,
+      "method": "kriging PI, \\ REML plug-in",
+      "setting": "Mat\\'ern $\\nu = 5/2$ fields, \\ $n = 200$",
+      "kind": "coverage",
+      "nominal": 0.9,
+      "achieved": 0.8887200000000001,
+      "reps": 250,
+      "width": null,
+      "extra": "",
+      "mc_se": 0.00374399739127359,
+      "verdict": "broken",
+      "se": 0.00374399739127359
+    },
+    {
+      "part": 39,
+      "method": "kriging PI, \\ exponential fitted",
+      "setting": "Mat\\'ern $\\nu = 5/2$ fields, \\ $n = 200$",
+      "kind": "coverage",
+      "nominal": 0.9,
+      "achieved": 0.9788000000000001,
+      "reps": 250,
+      "width": null,
+      "extra": "",
+      "mc_se": 0.0015421260034257148,
+      "verdict": "conservative",
+      "se": 0.0015421260034257148
+    },
+    {
+      "part": 39,
+      "method": "OLS CI for a covariate",
+      "setting": "spatially correlated errors, \\ $n = 200$",
+      "kind": "coverage",
+      "nominal": 0.9,
+      "achieved": 0.28,
+      "reps": 250,
+      "width": null,
+      "extra": "",
+      "mc_se": 0.028454148277832308,
+      "verdict": "broken",
+      "se": 0.028454148277832308
+    },
+    {
+      "part": 39,
+      "method": "GLS (REML) CI for the covariate",
+      "setting": "spatially correlated errors, \\ $n = 200$",
+      "kind": "coverage",
+      "nominal": 0.9,
+      "achieved": 0.86,
+      "reps": 250,
+      "width": null,
+      "extra": "",
+      "mc_se": 0.021989409645240245,
+      "verdict": "kept",
+      "se": 0.021989409645240245
+    }
+  ]
+}
