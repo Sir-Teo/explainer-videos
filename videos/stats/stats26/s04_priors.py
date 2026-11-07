@@ -155,7 +155,7 @@ class Priors(VoiceoverScene):
         densities = {k: tau*np.log(10)*np.asarray(sub[k]["dens"]) for k in PCOL}
         ymax = 1.1*max(a.max() for a in densities.values())
         A = axes([-3, 3], [0, ymax], x_length=7.4, y_length=4.4, xlabel=r"$\tau$ (log scale)", ylabel=r"density per log unit",
-                 xticks=[-3,-2,-1,0,1,2,3], xfmt=lambda v: rf"$10^{{{int(v)}}}$", yticks=[0, ymax / 2, ymax], center=[-2.1, 0.3, 0], yfmt=lambda v: f"{v:.2f}")
+                 xticks=[-3,-2,-1,0,1,2,3], xfmt=lambda v: rf"10^{{{int(v)}}}", yticks=[0, ymax / 2, ymax], center=[-2.1, 0.3, 0], yfmt=lambda v: f"{v:.2f}")
         ax = A.ax
         cs = VGroup(*[curve(ax, eta, densities[k], PCOL[k], 3) for k in PCOL])
         rows = fit_rows(VGroup(
