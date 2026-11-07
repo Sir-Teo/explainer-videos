@@ -1,0 +1,138 @@
+{
+  "fingerprint": "6872a73c37ac36931be3c99154d5705a165a148b1a4b1ee2bba564136cd56f41",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Hook",
+      "status": "needs-review",
+      "frames": 20,
+      "warnings": {
+        "narration-translation": 6,
+        "untranslated-on-screen": 42
+      },
+      "input_record": "renders/qa/series/stats18/en/Hook/result.json",
+      "input_sha256": "2ea0ee8c43a9d54dc7ed820a530225616ff94d2e963ebd32d073cd0b1804974a"
+    },
+    {
+      "scene": "WhatWentWrong",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/series/stats18/en/WhatWentWrong/result.json",
+      "input_sha256": "74be1170fff085e7040f746616e7b0a612880ee6d719f1761d2d15d4c71a8196"
+    },
+    {
+      "scene": "Meng",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 46
+      },
+      "input_record": "renders/qa/series/stats18/en/Meng/result.json",
+      "input_sha256": "5fd4f8650d6139dc7ab1954185372a6bdcbf14b10b19e0647127d89df45f8d34"
+    },
+    {
+      "scene": "DesignBased",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 56
+      },
+      "input_record": "renders/qa/series/stats18/en/DesignBased/result.json",
+      "input_sha256": "ddeac5ee0bd158db4f340538e6ab91d314e95423f5155f7a5a1948fcf69d1dec"
+    },
+    {
+      "scene": "SimpleRandom",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 45
+      },
+      "input_record": "renders/qa/series/stats18/en/SimpleRandom/result.json",
+      "input_sha256": "3f040403a2065a52f6580a3fe562506571a2fd2ef0a2ce716ace1fb3ff4fe01d"
+    },
+    {
+      "scene": "Strata",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 62
+      },
+      "input_record": "renders/qa/series/stats18/en/Strata/result.json",
+      "input_sha256": "574344a1bb2a8f9feb502e9310080444bbf15720a1ad2de362aa6f9b4556785c"
+    },
+    {
+      "scene": "Clusters",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 63
+      },
+      "input_record": "renders/qa/series/stats18/en/Clusters/result.json",
+      "input_sha256": "c4a61f38d4ae70b146cc6ba956c8e4cf8dba97ee15c36d679245fe6e333fdd54"
+    },
+    {
+      "scene": "HorvitzThompson",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 51
+      },
+      "input_record": "renders/qa/series/stats18/en/HorvitzThompson/result.json",
+      "input_sha256": "2d5e40beed9a4fdcbdcce2ae087f041f0f3783a50e822952d07a8635e4a00fb1"
+    },
+    {
+      "scene": "Ratio",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 61
+      },
+      "input_record": "renders/qa/series/stats18/en/Ratio/result.json",
+      "input_sha256": "657725daa1b1270240935391c662d8e839238736e18b1caeb56ae104284e8304"
+    },
+    {
+      "scene": "Weighting",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 65
+      },
+      "input_record": "renders/qa/series/stats18/en/Weighting/result.json",
+      "input_sha256": "9523b572d1abf1c546a4fd29e71da6616b4fc9b2ac2a4791981f1996f17d954d"
+    },
+    {
+      "scene": "Polls",
+      "status": "needs-review",
+      "frames": 38,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 61
+      },
+      "input_record": "renders/qa/series/stats18/en/Polls/result.json",
+      "input_sha256": "b5a9897436d8e775b732dd1d7170d7106199287aeff01832c30e7f1cc05ab5e0"
+    },
+    {
+      "scene": "Outro",
+      "status": "needs-review",
+      "frames": 7,
+      "warnings": {
+        "narration-translation": 5,
+        "untranslated-on-screen": 60
+      },
+      "input_record": "renders/qa/series/stats18/en/Outro/result.json",
+      "input_sha256": "aa7720afe05aa842bf86b0c0e46edfbd6bcdb9c22577181178003b808e415574"
+    }
+  ]
+}

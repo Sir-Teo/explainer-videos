@@ -152,6 +152,9 @@ class Strata(VoiceoverScene):
             label(r"Neyman halves the SE: \ as good as an SRS of about 5,600", font_size=24, color=OBS),
             label(r"the SRS's simulated SD is below its formula: \ the heavy tail again", font_size=20, color=GREY_B),
         ), 12.4, 0.3, [0, -2.0, 0])
+        intro = label('Compare allocation rules using both theory and repeated samples', font_size=36).move_to([0, 3.2, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> The results. A simple random sample of a thousand estimates mean income with a "
             "standard error of one point eight thousand. Stratifying with proportional allocation brings it to one "
@@ -161,6 +164,7 @@ class Strata(VoiceoverScene):
             " because with the Pareto tail a few enormous incomes dominate the variance; the stratified designs "
             "control exactly that."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
             self.play(FadeIn(tab[0]), LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.4), run_time=2.5)
             vo.wait_until("b")
@@ -186,6 +190,7 @@ class Strata(VoiceoverScene):
         rows[3][2].set_color(GREY_A)
         whys = [why(r"real differences between regions"), why(r"per respondent"), why(r"proportional allocation, \ per respondent"),
                 why(r"tiny: \ the regions differ far less than people do")]
+        intro = label('Stratification helps most when stratum means differ', font_size=36)
         with self.voiceover(
             "Stratification isn't always dramatic. <bookmark mark='a'/> Stratify the vote by the World's ten regions:"
             " Blue's share ranges from thirty to forty-six percent across them, a real difference. <bookmark "
@@ -195,10 +200,13 @@ class Strata(VoiceoverScene):
             "people within each region differ far more. Stratification pays when the strata explain a large share of "
             "the variance, as the income bands did for income."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def post(self):

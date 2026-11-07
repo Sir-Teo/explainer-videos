@@ -1,0 +1,105 @@
+{
+  "fingerprint": "6872a73c37ac36931be3c99154d5705a165a148b1a4b1ee2bba564136cd56f41",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "WhatWentWrong",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 49
+      },
+      "input_record": "renders/qa/native1080/stats18/en/WhatWentWrong/result.json",
+      "input_sha256": "ed1fa27341622626419cc711175bf230170a4ac30c5298bcc9e64fddc4f37f6b"
+    },
+    {
+      "scene": "Meng",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 46
+      },
+      "input_record": "renders/qa/native1080/stats18/en/Meng/result.json",
+      "input_sha256": "124258152dd5620bdcc3cbf87078341158d663a0d090a376441773e571184301"
+    },
+    {
+      "scene": "SimpleRandom",
+      "status": "needs-review",
+      "frames": 30,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 45
+      },
+      "input_record": "renders/qa/native1080/stats18/en/SimpleRandom/result.json",
+      "input_sha256": "d5f88d8979180f4e723a68c3242e28a1cb7a866b8ea2bd4248b622f1e6186126"
+    },
+    {
+      "scene": "Strata",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 62
+      },
+      "input_record": "renders/qa/native1080/stats18/en/Strata/result.json",
+      "input_sha256": "99dd21f21d1f2c70cec20ad7cbf729d0840c615e08feea890ecd9a1e709e756d"
+    },
+    {
+      "scene": "Clusters",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 63
+      },
+      "input_record": "renders/qa/native1080/stats18/en/Clusters/result.json",
+      "input_sha256": "38413e4eef4567bf1018ba60ab33ddf9b4967c9675a7ba0835a47046cd6ea8d0"
+    },
+    {
+      "scene": "HorvitzThompson",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 51
+      },
+      "input_record": "renders/qa/native1080/stats18/en/HorvitzThompson/result.json",
+      "input_sha256": "f5647de206f43650302288c3e8b25c010966c052394d81283ff4dbe96e49a21e"
+    },
+    {
+      "scene": "Ratio",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 61
+      },
+      "input_record": "renders/qa/native1080/stats18/en/Ratio/result.json",
+      "input_sha256": "0a4e974d11cca3eb03f275905790b143e0cfd93a49cc1c3430815c77b61f5a03"
+    },
+    {
+      "scene": "Weighting",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 65
+      },
+      "input_record": "renders/qa/native1080/stats18/en/Weighting/result.json",
+      "input_sha256": "fd05e634c30a5f2a07a7838d738f77c291701f099568edfbb575c39f1772c869"
+    },
+    {
+      "scene": "Polls",
+      "status": "needs-review",
+      "frames": 38,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 61
+      },
+      "input_record": "renders/qa/native1080/stats18/en/Polls/result.json",
+      "input_sha256": "4673fb6c9307ed3e9bd75af914a62c9890508432678eb6ece10b1efeda443afe"
+    }
+  ]
+}

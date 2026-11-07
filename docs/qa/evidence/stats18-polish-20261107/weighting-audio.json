@@ -1,0 +1,106 @@
+{
+ "video": "stats18",
+ "scene": "Weighting",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 8,
+ "lines": [
+  {
+   "raw": "Chapter nine. Weighting.",
+   "spoken": "Chapter nine. Weighting.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/cb3bbeed21e7f948.wav",
+   "duration": 2.2,
+   "tokens": 3,
+   "peak": 0.331939697265625,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "A real survey's weight has three layers. <bookmark mark='a'/> The design weight, one over the inclusion probability; a nonresponse adjustment; and a calibration factor. <bookmark mark='b'/> The nonresponse adjustment divides by the estimated response rate within cells of similar people, so that respondents stand in for the nonrespondents who resemble them. <bookmark mark='c'/> Calibration then adjusts the weights so that weighted totals match what a census says: by age, sex, region, education. <bookmark mark='d'/> Estimates are weighted means. Weighting can't create information, but it can rebalance it.",
+   "spoken": "A real survey's weight has three layers. The design weight, one over the inclusion probability; a nonresponse adjustment; and a calibration factor. The nonresponse adjustment divides by the estimated response rate within cells of similar people, so that respondents stand in for the nonrespondents who resemble them. Calibration then adjusts the weights so that weighted totals match what a census says: by age, sex, region, education. Estimates are weighted means. Weighting can't create information, but it can rebalance it.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/bb613a09fb54fbe3.wav",
+   "duration": 31.9,
+   "tokens": 79,
+   "peak": 0.54364013671875,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "How is the nonresponse adjustment made? <bookmark mark='a'/> Group everyone who was sampled into cells, using information known for responders and nonresponders alike, such as region and age from the frame. <bookmark mark='b'/> In each cell, the response rate is the share who answered. <bookmark mark='c'/> Each responder's weight is multiplied by one over their cell's response rate, so that they stand in for the nonresponders who resemble them. <bookmark mark='d'/> With many variables, a logistic regression of responding on the frame variables, Part 14's model, gives each person a propensity, and its inverse is the weight. The same idea, inverse probability weighting, returns in Part 35 for causal inference.",
+   "spoken": "How is the nonresponse adjustment made? Group everyone who was sampled into cells, using information known for responders and nonresponders alike, such as region and age from the frame. In each cell, the response rate is the share who answered. Each responder's weight is multiplied by one over their cell's response rate, so that they stand in for the nonresponders who resemble them. With many variables, a logistic regression of responding on the frame variables, Part 14's model, gives each person a propensity, and its inverse is the weight. The same idea, inverse probability weighting, returns in Part 35 for causal inference.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/2bdc9c6cbe592b6c.wav",
+   "duration": 40.975,
+   "tokens": 102,
+   "peak": 0.617156982421875,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Here's calibration by raking, on the World's Digest returns. The returns are far too rich and too old: ten percent come from the bottom income band, against a third of the population, and twenty-four percent are over sixty-seven, against eighteen. <bookmark mark='b'/> W. Edwards Deming and Frederick Stephan, preparing the 1940 US census, invented the fix. Scale the weights so the income shares match the census exactly. <bookmark mark='c'/> That knocks the age shares out a little, so now scale them to match age. <bookmark mark='d'/> Income is slightly off again; repeat. <bookmark mark='e'/> The adjustments shrink rapidly: after four rounds both margins match to within a ten-thousandth. It's iterative proportional fitting, and it converges whenever a solution exists.",
+   "spoken": "Here's calibration by raking, on the World's Digest returns. The returns are far too rich and too old: ten percent come from the bottom income band, against a third of the population, and twenty-four percent are over sixty-seven, against eighteen. W. Edwards Deming and Frederick Stephan, preparing the 1940 US census, invented the fix. Scale the weights so the income shares match the census exactly. That knocks the age shares out a little, so now scale them to match age. Income is slightly off again; repeat. The adjustments shrink rapidly: after four rounds both margins match to within a ten-thousandth. It's iterative proportional fitting, and it converges whenever a solution exists.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/6c36b24e13bd163f.wav",
+   "duration": 43.1,
+   "tokens": 111,
+   "peak": 0.667327880859375,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> The result. The raw returns said fifty-eight percent Blue. Raked to the census margins of region, age and income, they say forty-nine. The truth is thirty-eight. <bookmark mark='b'/> Weighting removed less than half the error. <bookmark mark='c'/> And it had a cost: the weights range from point one seven to nearly eight, and Kish's effective sample size falls from thirty-four and a half thousand to seventeen thousand. That's still plenty of precision. It's the bias that remains.",
+   "spoken": "The result. The raw returns said fifty-eight percent Blue. Raked to the census margins of region, age and income, they say forty-nine. The truth is thirty-eight. Weighting removed less than half the error. And it had a cost: the weights range from point one seven to nearly eight, and Kish's effective sample size falls from thirty-four and a half thousand to seventeen thousand. That's still plenty of precision. It's the bias that remains.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/bc651a5858e9fd78.wav",
+   "duration": 26.2,
+   "tokens": 73,
+   "peak": 0.40411376953125,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Why can't weighting finish the job? <bookmark mark='a'/> It assumes that within each weighting cell, the people who responded resemble the people who didn't. <bookmark mark='b'/> That's Donald Rubin's condition of missing at random, which Part 41 makes precise: the chance of responding depends only on things we've weighted for. <bookmark mark='c'/> On the World it's false. Blue voters return their ballots more often than Red voters at every income, every age, in every region: the response depends on the answer itself. <bookmark mark='d'/> No reweighting on income, age or region can correct that. The Digest's nonresponse was missing not at random, the hardest kind.",
+   "spoken": "Why can't weighting finish the job? It assumes that within each weighting cell, the people who responded resemble the people who didn't. That's Donald Rubin's condition of missing at random, which Part 41 makes precise: the chance of responding depends only on things we've weighted for. On the World it's false. Blue voters return their ballots more often than Red voters at every income, every age, in every region: the response depends on the answer itself. No reweighting on income, age or region can correct that. The Digest's nonresponse was missing not at random, the hardest kind.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/27f019dcc5b30a6b.wav",
+   "duration": 35.775,
+   "tokens": 97,
+   "peak": 0.501190185546875,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> On the Board, two hundred fresh mailings: the raked Digest returns, with a plug-in independent-unit standard error using the weights, cover the truth zero times. That formula is not a full design-based variance calculation, and cannot remove the eleven-point bias.",
+   "spoken": "On the Board, two hundred fresh mailings: the raked Digest returns, with a plug-in independent-unit standard error using the weights, cover the truth zero times. That formula is not a full design-based variance calculation, and cannot remove the eleven-point bias.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/8f90e45c01e686a9.wav",
+   "duration": 17.725,
+   "tokens": 40,
+   "peak": 0.44427490234375,
+   "issues": [],
+   "elapsed": 0.01,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> So: weights correct for the variables you weight on, and only those. <bookmark mark='b'/> Kish's effective sample size describes weight dispersion under a working independent, equal-variance model. It does not measure selection bias or the precision gains from useful calibration variables. <bookmark mark='c'/> The best weighting variables predict both who responds and what they answer. <bookmark mark='d'/> A probability sample, weighted for its modest nonresponse, beats a huge self-selected one. <bookmark mark='e'/> And forgetting one such variable has consequences, as the American polls of 2016 found with education, which is the last chapter's story.",
+   "spoken": "So: weights correct for the variables you weight on, and only those. Kish's effective sample size describes weight dispersion under a working independent, equal-variance model. It does not measure selection bias or the precision gains from useful calibration variables. The best weighting variables predict both who responds and what they answer. A probability sample, weighted for its modest nonresponse, beats a huge self-selected one. And forgetting one such variable has consequences, as the American polls of 2016 found with education, which is the last chapter's story.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/6e3e54bb5c5e2c69.wav",
+   "duration": 36.675,
+   "tokens": 86,
+   "peak": 0.536468505859375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats18/en/Weighting_motion/result.json",
+ "input_sha256": "0c9effbced135a309d9f9fb79f2096a1f48a88ec4c2150b2aaebcf94077570eb"
+}

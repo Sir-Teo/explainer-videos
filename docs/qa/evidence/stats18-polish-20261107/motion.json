@@ -1,0 +1,94 @@
+{
+  "fingerprint": "6872a73c37ac36931be3c99154d5705a165a148b1a4b1ee2bba564136cd56f41",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "WhatWentWrong",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats18/en/WhatWentWrong_motion/result.json",
+      "input_sha256": "9cb169255cc03d9cfda2bde452c8bada27d00d9ac2dc96fcda23becfad8eaed3",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 238 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 238 s\n"
+    },
+    {
+      "scene": "Meng",
+      "status": "needs-review",
+      "frames": 26,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats18/en/Meng_motion/result.json",
+      "input_sha256": "9fa91c72f493429fb457b8f6d7165a5a44dda5217f5669a2c344a4f2fd1b5a9e",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 300 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 300 s\n"
+    },
+    {
+      "scene": "Strata",
+      "status": "needs-review",
+      "frames": 28,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats18/en/Strata_motion/result.json",
+      "input_sha256": "b252c6a9620551c721b6434b3a343395e07af59d4a38067f7796282623c89a05",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 256 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 256 s\n"
+    },
+    {
+      "scene": "Clusters",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats18/en/Clusters_motion/result.json",
+      "input_sha256": "72d6efc95854b8b1d72ce341d9782b11be78d3b4b31e2be510068877269f0449",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 291 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 291 s\n"
+    },
+    {
+      "scene": "HorvitzThompson",
+      "status": "needs-review",
+      "frames": 27,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats18/en/HorvitzThompson_motion/result.json",
+      "input_sha256": "a7c98aee0bf07f4209ede6b44d9eb63655f1e7d856a2682d9ee50c2b3462c2d8",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 265 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 265 s\n"
+    },
+    {
+      "scene": "Ratio",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats18/en/Ratio_motion/result.json",
+      "input_sha256": "c4c596c65c59cabb01e12a4151a9c00c96b325c049326741981c28b96baa7d4b",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 288 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 288 s\n"
+    },
+    {
+      "scene": "Weighting",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats18/en/Weighting_motion/result.json",
+      "input_sha256": "0c9effbced135a309d9f9fb79f2096a1f48a88ec4c2150b2aaebcf94077570eb",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 257 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 257 s\n"
+    },
+    {
+      "scene": "Polls",
+      "status": "needs-review",
+      "frames": 38,
+      "warnings": {
+        "narration-translation": 9
+      },
+      "input_record": "renders/qa/series/stats18/en/Polls_motion/result.json",
+      "input_sha256": "a29e9b3a4bc4ac998e02a44159a15abfd1751b12acba31533c5783059d8f6270",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 338 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 338 s\n"
+    }
+  ]
+}
