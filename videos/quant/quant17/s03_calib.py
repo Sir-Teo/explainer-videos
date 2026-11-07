@@ -33,15 +33,10 @@ class Calibrator(VoiceoverScene):
                     rf"expiry and moneyness to its implied volatility, offline, from Monte Carlo: here "
                     rf"{npts} prices from 12{{,}}000 parameter sets"),
                 why(r"then calibrate online by gradient descent through the network, which is smooth and differentiable: "
-                    r"the slow simulation is paid once, not at every step of every calibration")]
+                    r"simulation moves offline; fresh engine checks and retraining remain necessary")]
         step = ladder(self, rows, whys, keep=2, top=2.4, x=-0.6, buff=1.0, edge=6.9)
         with self.voiceover(
-            "Part fourteen found that rough Bergomi fits the Surface better than Heston, but it has no formula: "
-            "each calibration ran Monte Carlo inside an optimizer, for minutes. Blanka Horvath, Aitor Muguruza and "
-            "Mehdi Tomas split the work in two. <bookmark mark='a'/> Offline, a network learns the model's implied "
-            "volatility from its parameters, an expiry and a strike, trained on Monte Carlo prices from twelve thousand "
-            "random parameter sets. Online, calibration runs through the network, which is smooth and can be "
-            "differentiated. The slow simulation is paid once."
+            "Part fourteen compared rough Bergomi and Heston on one frozen option surface. The slow engine uses simulation inside calibration. Neural calibration moves much of that work offline, following research including Horvath, Muguruza and Tomas. <bookmark mark='a'/> Here a pointwise surrogate learns implied volatility from five parameters, maturity and log-moneyness. Its labels come from twelve thousand parameter sets. Online optimization differentiates this fitted surrogate. Simulation is still needed for independent checks, new parameter regions and retraining; paying once does not remove numerical bias or model risk."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -70,7 +65,7 @@ class Calibrator(VoiceoverScene):
                                                                    color=GOOD)).arrange(DOWN, buff=0.08).move_to(on)
         lin = VGroup(*[history_card(y, w, t, color=QC.IDEA, width=6.2, font_size=16) for y, w, t in (
             (2016, r"Hernandez, \textit{Risk}", r"a network learns the inverse map, quotes to parameters, for Hull--White"),
-            (2018, r"Bayer and Stemper, arXiv", r"pointwise: one implied vol per $(\theta, T, k)$"),
+            (2018, r"Bayer and Stemper, arXiv", r"neural calibration of rough stochastic volatility"),
             (2019, r"Liu, Oosterlee and Bohte, \textit{Risks}", r"networks for prices and implied volatilities"),
             (2021, r"Horvath, Muguruza and Tomas, \textit{Quantitative Finance}",
              r"the forward map on a grid, for rough volatility"))]
@@ -78,13 +73,7 @@ class Calibrator(VoiceoverScene):
         if lin.width > 13.4:
             lin.scale_to_fit_width(13.4)
         with self.voiceover(
-            "The work splits in two. Offline, once: draw twelve thousand random parameter sets, simulate each by "
-            f"Monte Carlo, and keep {n_pts:,} implied volatilities as labels; then fit the network to them. That took "
-            "hours, once. <bookmark mark='a'/> Online, every day: gradient descent on the five parameters, through the "
-            "network, in seconds. <bookmark mark='b'/> In 2016 Andres Hernandez first mapped quotes straight to "
-            "parameters. Christian Bayer and Benjamin Stemper made it pointwise, the form used here; Liu, Oosterlee "
-            "and Bohte learned prices and implied volatilities; and Horvath, Muguruza and Tomas made it practical for "
-            "rough volatility."
+            f"Offline, draw twelve thousand parameter sets and retain {n_pts:,} finite implied-volatility labels, then train the surrogate. Many option labels share the same simulated paths, so this is not that many independent observations. <bookmark mark='a'/> Online, fit the five parameters through the surrogate. These recorded CPU times describe different workloads and do not prove equal accuracy. <bookmark mark='b'/> The history includes Hernandez's inverse calibration, Bayer and Stemper's neural calibration, Liu, Oosterlee and Bohte's pricing and implied-volatility networks, and Horvath, Muguruza and Tomas's rough-volatility calibration. Our pointwise implementation is an illustration within this literature."
         ) as vo:
             self.play(Create(off), FadeIn(t_off), FadeIn(bar_bg), FadeIn(bar), FadeIn(cap))
             self.play(LaggedStart(*[FadeIn(d) for d in cloud], lag_ratio=0.01),
@@ -102,6 +91,8 @@ class Calibrator(VoiceoverScene):
         L = np.array([[r["val_rmse"] for r in h0], [r["val_rmse"] for r in h1]])
         sl = c["slices"]
         cks = ["0", "1", "5", "10", "20", "40"]
+        yr = data_range(*[d["iv"] for d in sl],
+                        *[k["snaps"][c][j] for c in cks for j in range(len(sl))])
 
         def frame(i):
             panels = VGroup()
@@ -109,23 +100,23 @@ class Calibrator(VoiceoverScene):
                 kk = np.asarray(d["kk"])
                 iv = np.asarray(d["iv"])
                 y = np.asarray(k["snaps"][cks[i]][j])
-                ylo, yhi = 0.3, 1.0
+                ylo, yhi = yr
                 g = axes([kk[0], kk[-1]], [ylo, yhi], x_length=1.75, y_length=2.4, xlabel=rf"{d['T'] * 365:.0f} days",
                          ylabel=r"implied vol" if j == 0 else "", xticks=[], yticks=[0.4, 0.7, 1.0] if j == 0 else [],
                          yfmt=lambda v: rf"{100 * v:.0f}\%", font_size=12)
                 dots = VGroup(*[Dot(g.ax.c2p(a, b_), radius=0.03, color=IV) for a, b_ in zip(d["k"], iv)
-                                if kk[0] <= a <= kk[-1] and ylo < b_ < yhi])
-                panels.add(VGroup(g, dots, curve(g.ax, kk, np.clip(y, ylo, yhi), NET, stroke_width=3)))
+                                if kk[0] <= a <= kk[-1] and np.isfinite(b_)])
+                panels.add(VGroup(g, dots, curve(g.ax, kk, y, NET, stroke_width=3)))
             panels.arrange(RIGHT, buff=0.15)
             return VGroup(panels, label(rf"after epoch {cks[i]}: the Surface's smiles at the calibrated parameters",
                                         font_size=16, color=NET).next_to(panels, DOWN, buff=0.15))
         rp = TrainingReplay(ep, L, frame, checkpoints=[1, 2, 5, 10, 20, 40], ylabel=r"held-out error (vol points)",
                             xlabel=r"epoch")
         leg = legend([(IV, r"the Surface's quotes"), (NET, r"what the network (seed 1) says rough Bergomi gives"),
-                      (QC.Q, r"band: seeds 0 and 1, error on parameter sets never seen")], font_size=16).to_edge(UP, buff=0.3)
+                      (QC.Q, r"two-seed min--max; held-out parameter sets; not a confidence interval")], font_size=16).to_edge(UP, buff=0.3)
         e0, e1 = h0[-1]["val_rmse"], h1[-1]["val_rmse"]
         src = illustration(rf"4 layers of 96 units; 40 epochs of the {comma(c['n_train'])} training labels; "
-                           rf"about {c['train_seconds'] / 60:.0f} minutes a seed on a CPU")
+                           rf"about {c['train_seconds'] / 60:.0f} recorded shared-CPU minutes for the base seed")
         with self.voiceover(
             "Here is the network learning, from two random starts. On the right, its error on parameter sets it never "
             "saw. On the left, what it believes rough Bergomi gives at the parameters we will calibrate in the next "
@@ -144,23 +135,18 @@ class Calibrator(VoiceoverScene):
         s10 = d["rmse"] / np.sqrt(1.5)
         rows = [cmath(r"\mathbb{E}(\hat F - y)^2", r"=", r"\mathbb{E}(\hat F - F)^2 + s^2", font_size=40,
                       colors={r"\mathbb{E}(\hat F - y)^2": NET}),
-                cmath(r"\mathbb{E}(y_{10k} - y_{20k})^2", r"=", r"s_{10k}^2 + s_{20k}^2 = 1.5\, s_{10k}^2", font_size=40,
+                cmath(r"\mathbb{E}(y_{10k} - y_{20k})^2", r"=", r"s_{10k}^2 + s_{20k}^2 \approx 1.5\, s_{10k}^2", font_size=40,
                       colors={r"\mathbb{E}(y_{10k} - y_{20k})^2": BAD}),
                 cmath(r"s_{10k}", r"\approx", rf"{d['rmse']:.2f} / \sqrt{{1.5}} = {s10:.2f}", font_size=40,
                       colors={r"s_{10k}": BAD})]
         whys = [why(r"a label $y$ is the true implied vol $F$ plus Monte Carlo noise of variance $s^2$, independent of the "
-                    r"network: so a held-out error can never fall below the noise of the labels it is scored against"),
+                    r"network: this identity assumes conditionally unbiased label noise, independent of the fitted network; it concerns expected squared error, not every finite sample"),
                 why(r"two independent simulations of the same parameters, with 10{,}000 and 20{,}000 paths: Monte Carlo "
-                    r"variance falls like one over the number of paths, so their gap has variance $1.5\,s_{10k}^2$"),
-                why(r"so the label-against-fresh gap overstates the labels' own noise by $\sqrt{1.5}$; and the fair judge of "
-                    r"the network is the fresher, less noisy simulation")]
+                    r"price-estimator variance scales as $1/n$; the $1.5$ implied-vol approximation also needs local linearization and comparable biases"),
+                why(r"dividing the gap by $\sqrt{1.5}$ is a diagnostic, not an exact noise estimate; implied-vol inversion, finite-IV selection and common time-grid bias remain")]
         step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.4, buff=0.7, edge=6.9)
         with self.voiceover(
-            "How good is that? The labels themselves are noisy: each is the true implied volatility plus Monte Carlo "
-            "noise, so a held-out error can never fall below the noise of the labels it is scored against. "
-            f"<bookmark mark='a'/> So we simulated {nz['n_sets']} held-out parameter sets again, with twenty thousand "
-            "fresh paths. Two independent simulations differ by both their noises, one and a half times the label's "
-            f"variance. <bookmark mark='b'/> So the labels' own noise is about {s10:.2f} vol points."
+            f"An ideal variance decomposition first: conditionally unbiased independent validation noise adds to the network's expected squared error. It is not a lower bound for every measured finite-sample error. Implied-volatility labels need extra care: inversion is nonlinear and can be biased. <bookmark mark='a'/> The saved diagnostic repeats {nz['n_sets']} held-out parameter sets with twenty thousand paths, comparing them with the ten-thousand-path labels. A one-and-a-half variance factor is only a local linear approximation; both engines also share time-discretization bias. <bookmark mark='b'/> Dividing the gap by square root of one point five gives {s10:.2f} vol points as an illustrative noise diagnostic, not a certified noise floor or a true-model error."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -169,7 +155,7 @@ class Calibrator(VoiceoverScene):
             step(2)
         self.wait(0.4)
         self.clear_scene()
-        names = [(r"network vs its own label (10k paths)", a, NET), (r"network vs fresh simulation (20k paths)", b, GOOD),
+        names = [(r"network vs held-out labels (10k paths)", a, NET), (r"network vs fresh simulation (20k paths)", b, GOOD),
                  (r"label vs fresh simulation", d, BAD)]
         mx = max(x["rmse"] for _, x, _ in names) * 1.25
         g = axes([-0.5, 2.5], [0, mx], x_length=6.6, y_length=4.0, ylabel=r"vol points", xticks=[], yticks=[0, 1, 2],
@@ -185,19 +171,16 @@ class Calibrator(VoiceoverScene):
                             wrapped_label(nm, 2.0, 15, col).next_to(g.ax.c2p(i, 0), DOWN, buff=0.15)))
         closer = b["rmse"] < d["rmse"]
         if closer:
-            verdict = "the network is closer to the fresh simulation than its own training labels are"
+            verdict = "the network is closer to the fresh simulation than these held-out labels are"
         else:
-            verdict = "the network is no closer to the fresh simulation than its own labels are"
+            verdict = "the network is no closer to the fresh simulation than these held-out labels are"
         side = wrapped_label(rf"bars: root-mean-square; white lines: median absolute ({b['median_abs']:.2f}, "
                              rf"{d['median_abs']:.2f}). {nz['n_points']:,} points on {nz['n_sets']} parameter sets the "
                              r"network never saw. The variance split is not exact (implied-vol noise has heavy tails), so "
                              r"no single 'true error' is claimed".replace(",", "{,}", 1), 4.4, 18,
                              GREY_A).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Now the three comparisons side by side. The network against its own noisy label: "
-            f"{a['rmse']:.2f} vol points. <bookmark mark='a'/> The same labels against the fresh simulation: "
-            f"{d['rmse']:.2f}. <bookmark mark='b'/> And the network against the fresh simulation: {b['rmse']:.2f}. So "
-            f"{verdict}. A smooth fit to hundreds of thousands of noisy labels averages much of their noise away."
+            f"Compare the saved finite-implied-volatility subset. Network against held-out ten-thousand-path labels: {a['rmse']:.2f} vol points. <bookmark mark='a'/> Those labels against fresh simulation: {d['rmse']:.2f}. <bookmark mark='b'/> Network against fresh simulation: {b['rmse']:.2f}. Here {verdict}. These statistics mix parameter sets with correlated option errors and exclude non-finite fresh implied volatilities. The comparison can suggest smoothing of label noise; it does not uniquely identify the surrogate's bias, variance or continuous-time pricing error."
         ) as vo:
             self.play(FadeIn(g), FadeIn(bars[0]))
             vo.wait_until("a")

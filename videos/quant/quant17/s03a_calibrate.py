@@ -6,7 +6,7 @@ from explainer.quant import *  # noqa: F403
 from videos.quant.quant17.common import axes, data_range
 from explainer.quant.house import deep as D
 from videos.quant.quant17.common import (BAD, GOOD, IV, NET, OPT, PART, REF, ask, grid_fn, house_lab, illustration,
-                                         load, surf3d_axes)
+                                         load, surf3d_axes, flat_camera)
 
 
 class Calibrate(VoiceoverScene, ThreeDScene):
@@ -28,36 +28,23 @@ class Calibrate(VoiceoverScene, ThreeDScene):
         self.play(FadeOut(c))
 
     def derive(self, c, t):
-        n_it = len(t["traces"]) * (200 + 100)
         rows = [cmath(r"\vartheta(u)", r"=", r"\ell + (h - \ell)\,\tfrac{1 + \tanh u}{2}", font_size=40,
                       colors={r"\vartheta(u)": GOOD}),
                 cmath(r"\nabla_u L", r"=", r"\nabla_\vartheta L \odot (h - \ell)\,\tfrac{1 - \tanh^2 u}{2}", font_size=40,
                       colors={r"\nabla_u L": BAD}),
                 cmath(r"\nabla_\vartheta L", r"=", r"2\textstyle\sum_i w_i\,(\hat F_i - \sigma_i)\,\nabla_\vartheta \hat F_i",
                       font_size=40, colors={r"\nabla_\vartheta L": NET}),
-                cmath(r"\text{cost}", r"\approx", rf"{n_it:,}".replace(",", "{,}") + rf"\times {1e3 * c['t_net_surface']:.1f}"
-                      r"\,\text{ms}\ \ \text{vs}\ \ " + rf"{n_it:,}".replace(",", "{,}")
-                      + rf"\times {c['t_mc_surface']:.1f}\,\text{{s}}", font_size=36, colors={r"\text{cost}": OPT})]
+                cmath(r"\text{one surface pass}", r":", rf"{1e3 * c['t_net_surface']:.1f}\,\text{{ms: surrogate}}"
+                      rf"\quad {c['t_mc_surface']:.1f}\,\text{{s: 20k MC}}", font_size=32)]
         whys = [why(r"optimize an unconstrained $u$ and map it into the training box $[\ell, h]$: every iterate is a "
-                    r"parameter set the network has seen around"),
+                    r"point inside the parameter bounds; this does not guarantee training coverage or interpolation accuracy"),
                 why(r"the chain rule through the map: its slope $(1 - \tanh^2 u)/2$ goes to zero at the walls. A parameter "
-                    r"pushed against a wall stops moving and stays there"),
-                why(r"the gradient of the fit through the network is exact, by automatic differentiation. Through Monte "
-                    r"Carlo, each gradient would need extra simulations for five parameters, all of them noisy"),
-                why(rf"{len(t['traces'])} starts of 200 Adam steps and up to 100 L-BFGS steps each: through the network, "
-                    r"seconds; by simulation, at this cost per surface, hours, before the extra simulations each gradient "
-                    r"would need")]
-        step = ladder(self, rows, whys, keep=4, top=2.9, x=-0.4, buff=0.62, edge=6.9)
+                    r"near a wall can move very slowly; finite-precision saturation can be more severe"),
+                why(r"autodiff differentiates the fitted network, subject to arithmetic error; its gradient need not equal the pricing engine's. Monte Carlo can also use adjoints, pathwise or score estimators"),
+                why(r"separate recorded pass timings on a shared CPU; network timing averages 100 evaluations. MC uses 20,000 paths. These are not matched-accuracy total calibration timings; L-BFGS can call its closure repeatedly")]
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.4, buff=0.62, edge=6.9)
         with self.voiceover(
-            "Calibration is now an optimization over five numbers. First, keep the parameters where the network was "
-            "trained: squash a free variable into the training box with a hyperbolic tangent. <bookmark mark='a'/> By "
-            "the chain rule the gradient picks up the tangent's slope, which vanishes at the walls: a parameter pushed "
-            "against a wall stops there, without complaint. <bookmark mark='b'/> Second, the gradient is exact, by "
-            "automatic differentiation; by Monte Carlo it would cost more simulations, and be noisy. "
-            "<bookmark mark='c'/> Third, the cost. Twelve starts, a few hundred steps each: through "
-            f"the network a pass costs {1e3 * c['t_net_surface']:.1f} milliseconds, by simulation "
-            f"{c['t_mc_surface']:.1f} seconds. Seconds against hours, before counting the extra simulations every "
-            "Monte Carlo gradient would need."
+            f"Map a free variable through tanh into the parameter box. Finite inputs lie in its interior, but being inside the bounds does not guarantee adequate training coverage. <bookmark mark='a'/> The map's slope tends to zero near a wall, slowing optimization; finite precision can saturate it. A wall does not reveal an unconstrained optimum. <bookmark mark='b'/> Automatic differentiation gives the gradient of the fitted surrogate, not automatically the true pricing map. Monte Carlo can also use pathwise, score or adjoint gradients. <bookmark mark='c'/> The saved pass timings are {1e3 * c['t_net_surface']:.1f} milliseconds for the surrogate, averaged over a hundred evaluations, and {c['t_mc_surface']:.1f} seconds for twenty-thousand-path simulation. They use different error sources and are not a matched-accuracy comparison of complete calibration jobs."
         ) as vo:
             step(0)
             vo.wait_until("a")
@@ -74,13 +61,14 @@ class Calibrate(VoiceoverScene, ThreeDScene):
         Q = t["quotes"]
         k, T, iv = (np.asarray(Q[x]) for x in ("k", "T", "iv"))
         m = (k >= kk[0]) & (k <= kk[-1]) & (T <= TT[-1]) & (T >= TT[0])
-        ax = surf3d_axes([kk[0], kk[-1], 0.2], [0, TT[-1], 0.1], [0.3, 1.1, 0.2]).shift(DOWN * 0.3)
-        dots = smile_points3d(ax, k[m], T[m], np.clip(iv[m], 0.3, 1.1), radius=0.04)
+        zr = data_range(t["surfs"], iv[m])
+        ax = surf3d_axes([kk[0], kk[-1], 0.2], [0, TT[-1], 0.1], [*zr, 0.2]).shift(DOWN * 0.3)
+        dots = smile_points3d(ax, k[m], T[m], iv[m], radius=0.04)
         tr = t["traces"][t["best"]]
         picks = list(t["picks"])
 
         def surf(i):
-            f = grid_fn(kk, TT, np.clip(np.asarray(t["surfs"][i]), 0.3, 1.1))
+            f = grid_fn(kk, TT, np.asarray(t["surfs"][i]))
             return Surface(lambda u, v: ax.c2p(u, v, f(u, v)), u_range=(kk[0], kk[-1]), v_range=(TT[0], TT[-1]),
                            resolution=(20, 12), fill_color=NET, fill_opacity=0.55, stroke_width=0.4,
                            stroke_color=WHITE, checkerboard_colors=False)
@@ -123,17 +111,19 @@ class Calibrate(VoiceoverScene, ThreeDScene):
                 self.move_camera(theta=(-62 + 4 * i) * DEGREES, run_time=per * 0.25)
         self.move_camera(phi=0, theta=-90 * DEGREES, zoom=1.0, added_anims=[FadeOut(VGroup(ax, s, dots)), FadeOut(hint),
                                                                   FadeOut(pan)], run_time=1.2)
+        flat_camera(self)
         self.clear_scene()
 
     def starts(self, t):
         trs = t["traces"]
-        g = axes([0, 200], [-0.5, 1.5], x_length=7.0, y_length=4.2, xlabel=r"Adam step", ylabel=r"fit (vol points)",
+        yr = data_range(*[np.log10(tr["rmse"][:-1]) for tr in trs])
+        g = axes([0, 200], yr, x_length=7.0, y_length=4.2, xlabel=r"Adam step", ylabel=r"fit (vol points)",
                  xticks=[0, 100, 200], yticks=[0, 1], yfmt=lambda v: f"10^{{{v:.0f}}}", font_size=14,
                  ).to_edge(LEFT, buff=0.8).shift(DOWN * 0.2)
         lines = VGroup()
         for i, tr in enumerate(trs):
             st = np.asarray(tr["step"][:-1], float)
-            y = np.log10(np.clip(np.asarray(tr["rmse"][:-1]), 10 ** -0.5, 10 ** 1.5))
+            y = np.log10(np.asarray(tr["rmse"][:-1]))
             lines.add(curve(g.ax, st, y, NET if i == t["best"] else GREY_B, stroke_width=4 if i == t["best"] else 1.5))
         finals = sorted(tr["rmse"][-1] for tr in trs)
         Hs = [tr["params"][-1][0] for tr in trs]
@@ -183,7 +173,7 @@ class Calibrate(VoiceoverScene, ThreeDScene):
         for d in sl:
             k, iv, mc = np.asarray(d["k"]), np.asarray(d["iv"]), np.asarray(d["mc"])
             kk, net = np.asarray(d["kk"]), np.asarray(d["net"])
-            ylo, yhi = float(np.nanmin(np.r_[iv, net])) - 0.03, float(np.nanmax(np.r_[iv, net])) + 0.03
+            ylo, yhi = data_range(iv, net, mc)
             yt = [v / 100 for v in range(int(np.ceil(ylo * 10)) * 10, int(yhi * 100) + 1, 10)]
             g = axes([kk[0], kk[-1]], [ylo, yhi], x_length=3.7, y_length=2.8, xlabel=r"log-moneyness $k$",
                      ylabel=r"implied volatility" if not groups else "",
@@ -192,8 +182,8 @@ class Calibrate(VoiceoverScene, ThreeDScene):
             ax = g.ax
             dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.045, color=IV) for a, b in zip(k, iv)])
             chk = VGroup(*[Cross(scale_factor=0.06, stroke_color=REF, stroke_width=2).move_to(ax.c2p(a, b))
-                           for a, b in zip(k, mc) if np.isfinite(b) and ylo < b < yhi])
-            ln = curve(ax, kk, np.clip(net, ylo, yhi), NET, stroke_width=3)
+                           for a, b in zip(k, mc) if np.isfinite(b)])
+            ln = curve(ax, kk, net, NET, stroke_width=3)
             ttl = label(rf"{d['T'] * 365:.0f} days", font_size=20).next_to(g, UP, buff=0.1)
             groups.add(VGroup(g, dots, ln, chk, ttl))
         groups.arrange(RIGHT, buff=0.45).to_edge(UP, buff=0.9)
@@ -211,13 +201,7 @@ class Calibrate(VoiceoverScene, ThreeDScene):
                   font_size=19, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(leg, DOWN, buff=0.3).to_edge(LEFT, buff=0.8)
         with self.voiceover(
-            "Now the check that matters. Three expiries of the Surface: the market in orange, the network's smile in "
-            "purple. <bookmark mark='a'/> The crosses are fresh Monte Carlo at the same parameters. "
-            f"The fit is {s['net_rmse']:.2f} vol points through the network and {s['mc_rmse']:.2f} "
-            f"by simulation, with Hurst exponent {p['H']:.2f}. <bookmark mark='b'/> A pass of the network over the whole "
-            f"surface takes {1e3 * c['t_net_surface']:.1f} milliseconds, against {c['t_mc_surface']:.0f} seconds of Monte "
-            f"Carlo. Part fourteen's direct fit found H of {p14['params']['H']:.2f}. Calibration that took minutes now "
-            "takes seconds, so it can be done every week for two years, which is the next chapter."
+            f"Three selected expiries provide a visual check: market quotes and the surrogate's smile. <bookmark mark='a'/> Crosses are fresh sixty-thousand-path Monte Carlo at the fitted parameters. The full-surface vega-weighted RMSE is {s['net_rmse']:.2f} vol points through the surrogate and {s['mc_rmse']:.2f} on finite simulation outputs; fitted H is {p['H']:.2f}. These figures include simulation noise and numerical bias. <bookmark mark='b'/> The separate speed benchmark used only twenty thousand paths: {1e3 * c['t_net_surface']:.1f} milliseconds per surrogate surface, against {c['t_mc_surface']:.0f} seconds per simulation. Part fourteen's direct fit found H of {p14['params']['H']:.2f}. Different objectives, finite optimization and surrogate error can produce different parameters; agreement of fits does not identify a unique market H."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(VGroup(gg[0], gg[1], gg[4])) for gg in groups], lag_ratio=0.3),
                       FadeIn(leg[0]))
