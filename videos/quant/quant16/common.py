@@ -76,3 +76,39 @@ def fixed(scene, *mobs):
     scene.add_fixed_in_frame_mobjects(*mobs)
     scene.remove(*mobs)
     return mobs
+
+
+def data_range(*arrays, pad=0.06, zero=False):
+    """Full finite support for display, without moving observations to plot edges."""
+    import numpy as np
+    values = np.concatenate([np.asarray(a, float).ravel() for a in arrays])
+    values = values[np.isfinite(values)]
+    if zero:
+        values = np.r_[values, 0.0]
+    if not len(values):
+        raise ValueError("No finite observations")
+    lo, hi = float(values.min()), float(values.max())
+    margin = max(hi - lo, abs(lo) * 0.05, 1e-8) * pad
+    return lo - margin, hi + margin
+
+
+_base_axes = axes
+
+
+def axes(x_range, y_range, **kwargs):
+    """Keep selected tick labels inside the displayed support."""
+    for name, support in (("xticks", x_range), ("yticks", y_range)):
+        if kwargs.get(name) is not None:
+            kwargs[name] = [x for x in kwargs[name] if support[0] <= x <= support[1]]
+    return _base_axes(x_range, y_range, **kwargs)
+
+
+def pause_card(text, width=12.4, font_size=25):
+    """Keep this part's prediction-width API local."""
+    return wrapped_label(text, max_width=width, font_size=font_size, color=QC.IDEA).to_edge(DOWN, buff=0.3)
+
+
+def flat_camera(scene):
+    """Release pinned labels and restore the normal camera after a 3D segment."""
+    scene.remove_fixed_in_frame_mobjects(*list(scene.camera.fixed_in_frame_mobjects))
+    scene.set_camera_orientation(phi=0, theta=-90 * DEGREES, gamma=0, zoom=1.0, frame_center=ORIGIN)

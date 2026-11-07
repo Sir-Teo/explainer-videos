@@ -4,7 +4,7 @@ import numpy as np
 from scipy.interpolate import RegularGridInterpolator
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant16.common import BAD, GOOD, OPT, PART, fixed, illustration, load, loglog, polyline, predict
+from videos.quant.quant16.common import BAD, GOOD, OPT, PART, fixed, illustration, load, loglog, polyline, predict, axes, data_range, pause_card, flat_camera
 
 
 class Frontier(VoiceoverScene, ThreeDScene):
@@ -81,7 +81,7 @@ class Frontier(VoiceoverScene, ThreeDScene):
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(Group(*[m for m in self.mobjects]))], run_time=1.5)
         self.clear_scene()
         # back to the flat camera for the rest of the chapter, whatever the animated move left behind
-        self.set_camera_orientation(phi=0, theta=-90 * DEGREES, gamma=0, zoom=1.0, frame_center=ORIGIN)
+        flat_camera(self)
 
     def speed(self, ch, race):
         rows = ch["rows"]

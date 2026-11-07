@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant16.common import BAD, GOOD, OPT, PART, illustration, load, predict
+from videos.quant.quant16.common import BAD, GOOD, OPT, PART, illustration, load, predict, axes, data_range, pause_card, flat_camera
 
 VALIDATION = [
     (r"\texttt{mc\_call}, \texttt{asian\_control}, \texttt{stratified\_call}", r"Black--Scholes; Kemna--Vorst", r"3 s.e."),

@@ -5,7 +5,7 @@ import numpy as np
 from explainer.quant import *  # noqa: F403
 from explainer.quant.house import engine as E
 from videos.quant.quant16.common import (BAD, GOOD, METHOD_COL, OPT, PART, SPOT, fixed, illustration, load, loglog,
-                                         polyline, predict)
+                                         polyline, predict, axes, data_range, pause_card, flat_camera)
 
 KINDS = [("step", r"step by step", GREY_B), ("bridge", r"Brownian bridge", METHOD_COL["Sobol + bridge"]),
          ("pca", r"principal components", METHOD_COL["PCA"])]
@@ -86,6 +86,7 @@ class Bridge(VoiceoverScene, ThreeDScene):
                                                                   FadeOut(names["pca"]), FadeOut(nums["pca"]),
                                                                   FadeOut(src)], run_time=1.5)
         self.clear_scene()
+        flat_camera(self)
 
     def crystal(self):
         z = np.random.default_rng(4).standard_normal((1, 64))

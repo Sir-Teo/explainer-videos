@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant16.common import BAD, GOOD, OPT, PART, fixed, illustration, load, loglog, polyline, predict
+from videos.quant.quant16.common import BAD, GOOD, OPT, PART, fixed, illustration, load, loglog, polyline, predict, axes, data_range, pause_card, flat_camera
 
 
 class FD(VoiceoverScene, ThreeDScene):
@@ -78,6 +78,7 @@ class FD(VoiceoverScene, ThreeDScene):
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, badl)), FadeOut(hint), FadeOut(t2),
                                                                   FadeOut(lam)], run_time=1.5)
         self.clear_scene()
+        flat_camera(self)
 
     def proof(self, f):
         rows = [

@@ -4,7 +4,7 @@ import numpy as np
 from scipy.interpolate import RegularGridInterpolator
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant16.common import BAD, DELTA, GOOD, OPT, PART, SPOT, fixed, illustration, load, predict
+from videos.quant.quant16.common import BAD, DELTA, GOOD, OPT, PART, SPOT, fixed, illustration, load, predict, axes, data_range, pause_card, flat_camera
 
 
 class Greeks(VoiceoverScene, ThreeDScene):
@@ -74,6 +74,7 @@ class Greeks(VoiceoverScene, ThreeDScene):
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, sc)), FadeOut(hint), FadeOut(t_c),
                                                                   FadeOut(nums_c)], run_time=1.5)
         self.clear_scene()
+        flat_camera(self)
 
     def proof(self):
         rows = [

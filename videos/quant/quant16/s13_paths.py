@@ -4,7 +4,7 @@ import numpy as np
 from scipy.special import ndtr, ndtri
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant16.common import BAD, GOOD, OPT, PART, SPOT, illustration, load, predict
+from videos.quant.quant16.common import BAD, GOOD, OPT, PART, SPOT, illustration, load, predict, axes, data_range, pause_card, flat_camera
 
 
 class Paths(VoiceoverScene):

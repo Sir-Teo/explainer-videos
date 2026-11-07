@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.quant import *  # noqa: F403
 from videos.quant.quant16.common import (BAD, GOOD, METHOD_COL, OPT, PART, illustration, load, loglog, polyline,
-                                         predict, sci)
+                                         predict, sci, axes, data_range, pause_card, flat_camera)
 
 ORDER = ["Monte Carlo (QE, 50 steps)", "Monte Carlo, control variate", "ADI (Craig-Sneyd)", "Carr-Madan FFT", "COS"]
 

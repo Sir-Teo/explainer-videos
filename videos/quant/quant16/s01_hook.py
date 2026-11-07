@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant16.common import BAD, GOOD, METHOD_COL, OPT, PART, illustration, load, loglog, predict, sci
+from videos.quant.quant16.common import BAD, GOOD, METHOD_COL, OPT, PART, illustration, load, loglog, predict, sci, axes, data_range, pause_card, flat_camera
 
 ORDER = ["Monte Carlo (QE, 50 steps)", "ADI (Craig-Sneyd)", "Carr-Madan FFT", "COS"]
 
@@ -42,7 +42,7 @@ class Hook(VoiceoverScene):
     def race(self, r):
         """The four engines start together; each point appears when the wall clock reaches it."""
         pts = r["points"]
-        g = loglog(-4.2, 1.0, -8, 0, r"wall-clock time (seconds, one core)", r"error in the price", x_length=8.4,
+        g = loglog(-4.2, 1.0, -8, 0, r"wall-clock time (seconds, one core)", r"absolute error; MC: one standard error", x_length=8.4,
                    y_length=4.6, xt=[-4, -3, -2, -1, 0, 1], yt=[-8, -6, -4, -2, 0])
         g.to_edge(LEFT, buff=0.7).shift(DOWN * 0.3)
         ax = g.ax
@@ -56,9 +56,9 @@ class Hook(VoiceoverScene):
                 grp = VGroup()
                 if len(rr) > 1:
                     grp.add(VMobject(stroke_color=METHOD_COL[m], stroke_width=3).set_points_as_corners(
-                        [ax.c2p(np.log10(q["time"]), np.clip(np.log10(q["err"]), -8, 0)) for q in rr]))
+                        [ax.c2p(np.log10(q["time"]), np.log10(q["err"])) for q in rr]))
                 for q in rr:
-                    grp.add(Dot(ax.c2p(np.log10(q["time"]), np.clip(np.log10(q["err"]), -8, 0)), radius=0.07,
+                    grp.add(Dot(ax.c2p(np.log10(q["time"]), np.log10(q["err"])), radius=0.07,
                                 color=METHOD_COL[m]))
                 return grp
             return always_redraw(make)
@@ -74,13 +74,9 @@ class Hook(VoiceoverScene):
         note_ = wrapped_label(rf"COS is below $10^{{-5}}$ after {cos_hit * 1e3:.2f} ms; Monte Carlo's first point "
                               rf"arrives after {mc_first * 1e3:.0f} ms", 3.6, 18, GREY_A).next_to(leg, DOWN, buff=0.4)
         note_.align_to(leg, LEFT)
-        src = illustration(r"the race of chapter 16: one Heston call; each method's runs, by wall-clock time")
+        src = illustration(r"one Heston call, zero rates; separate shared-CPU timings; MC: sampling error only")
         with self.voiceover(
-            "Here is one option, a one-year call under the Heston model of Part thirteen, and four engines that "
-            "price it, all started at the same moment. <bookmark mark='a'/> The clock runs on a log scale. Watch "
-            "where each engine's error is when the clock reaches it. The two Fourier methods arrive first, and one of "
-            "them is already accurate to a millionth before simulation has produced anything. <bookmark mark='b'/> "
-            "The grid comes next. Monte Carlo arrives last, and is still the least accurate when the race ends."
+            "A one-year Heston call, with zero rates and dividends, priced four ways. These are separately timed runs on a shared CPU, revealed as an illustrative clock reaches each recorded time. <bookmark mark='a'/> The vertical axis needs care. Grid and Fourier points show absolute error against a high-resolution COS reference. Monte Carlo points show one estimated sampling standard error, which excludes the bias of its fifty-step QE discretization. This is not a common total-error guarantee. <bookmark mark='b'/> In this fixed low-dimensional benchmark, Fourier methods reach small reference errors quickly. A path-dependent or many-asset payoff can change the choice of method. Timing and accuracy depend on this implementation, grid and machine."
         ) as vo:
             self.play(FadeIn(g), FadeIn(leg), FadeIn(src), *[FadeIn(x) for x in lines], FadeIn(hand), FadeIn(tick))
             vo.wait_until("a")
@@ -102,7 +98,7 @@ class Hook(VoiceoverScene):
         for m in ORDER:
             b = best[m]
             rows.add(VGroup(label(m, font_size=24, color=METHOD_COL[m]),
-                            MathTex(rf"\text{{error}}\ {sci(b['err'])}", font_size=28),
+                            MathTex(rf"\text{{{'one SE' if m == ORDER[0] else 'abs. error'}}}\ {sci(b['err'])}", font_size=28),
                             MathTex(rf"{b['time']:.4f}\,\text{{s}}", font_size=28)))
         rows.arrange(DOWN, buff=0.45)
         for row in rows:
@@ -111,15 +107,11 @@ class Hook(VoiceoverScene):
             row[2].set_x(4.2)
         head = label(rf"one Heston call, four engines (price {r['ref']:.4f})", font_size=28).to_edge(UP, buff=0.9)
         rows.next_to(head, DOWN, buff=0.6)
-        q = predict(r"Ten times the accuracy from Monte Carlo costs how many times the work?", width=7.4,
+        q = predict(r"Ten times smaller sampling SE: how much work for iid paths at fixed cost?", width=7.4,
                     font_size=22).to_edge(DOWN, buff=0.4)
-        src = illustration(r"each engine's most accurate run; one CPU core", corner=UR)
+        src = illustration(r"smallest displayed metric per method; CPU timings are implementation-specific", corner=UR)
         with self.voiceover(
-            "Here are their best runs. They agree on the price. They do not agree on what it costs to get there, or "
-            "on how much you can trust the last digits. Choosing the method, and knowing its error, is the craft of "
-            "this part. <bookmark mark='a'/> Pause and predict. If you want ten times the accuracy from Monte Carlo, "
-            "how many times the work do you pay? By the end of the first chapter you will be able to say why the "
-            "answer is a hundred."
+            "These rows select the smallest displayed error metric for each method, with the time of that same run. The Monte Carlo row is a standard error; the others are errors against the reference, so they do not certify equally accurate prices. A numerical reference itself also has truncation and floating-point error. <bookmark mark='a'/> Pause and predict. For an unbiased independent-path estimator with fixed variance and constant cost per path, how much work buys ten times smaller sampling standard error? A hundred times. That scaling does not remove time-discretization bias or price-model error."
         ) as vo:
             self.play(FadeIn(head), FadeIn(src), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows],
                                                              lag_ratio=0.4, run_time=3))

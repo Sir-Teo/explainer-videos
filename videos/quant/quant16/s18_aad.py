@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.ai.autodiff import Tensor, topological_order
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant16.common import BAD, DELTA, GOOD, OPT, PART, SPOT, illustration, load, polyline, predict
+from videos.quant.quant16.common import BAD, DELTA, GOOD, OPT, PART, SPOT, illustration, load, polyline, predict, axes, data_range, pause_card, flat_camera
 
 OPS = {"+": "+", "neg": r"-", "*": r"\times", "exp": r"\exp", "relu": r"(\cdot)^+", "**": r"\surd", "pow": r"\surd",
        "input": r"\text{in}"}

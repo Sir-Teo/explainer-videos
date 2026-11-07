@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant16.common import BAD, DELTA, GOOD, METHOD_COL, OPT, PART, load, sci
+from videos.quant.quant16.common import BAD, DELTA, GOOD, METHOD_COL, OPT, PART, load, sci, axes, data_range, pause_card, flat_camera
 
 PROBLEMS = [
     r"Show that the control-variate estimator $\bar Y - b(\bar C - \mathbb{E}C)$ has minimal variance at "

@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant16.common import BAD, GOOD, IV, OPT, PART, SPOT, load
+from videos.quant.quant16.common import BAD, GOOD, IV, OPT, PART, SPOT, load, axes, data_range, pause_card, flat_camera
 
 N_COL = {"500": BAD, "2000": QC.THETA, "10000": IV, "50000": GOOD}
 

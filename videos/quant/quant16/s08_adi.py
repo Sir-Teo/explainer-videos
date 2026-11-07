@@ -4,7 +4,7 @@ import numpy as np
 from scipy.interpolate import RegularGridInterpolator
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant16.common import BAD, DELTA, GOOD, OPT, PART, fixed, illustration, load, loglog, polyline, predict
+from videos.quant.quant16.common import BAD, DELTA, GOOD, OPT, PART, fixed, illustration, load, loglog, polyline, predict, axes, data_range, pause_card, flat_camera
 
 
 class ADI(VoiceoverScene, ThreeDScene):
@@ -89,6 +89,7 @@ class ADI(VoiceoverScene, ThreeDScene):
         self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, vega, rows, cols)), FadeOut(hint),
                                                                   FadeOut(names[3])], run_time=1.5)
         self.clear_scene()
+        flat_camera(self)
 
     def split(self):
         rows = [
