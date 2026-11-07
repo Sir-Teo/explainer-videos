@@ -38,6 +38,10 @@ class CovariateShift(LectureMixin, VoiceoverScene):
             colors=[(2, FIXC)])
 
     def identity(self):
+        heading = label("Importance weighting and overlap under covariate shift", font_size=34).move_to([0, 3.35, 0])
+        if heading.width > 12.5:
+            heading.width = 12.5
+        self.add(heading)
         self.lad_voiceover(
             "<bookmark mark='a'/> The importance weight is the ratio of the two covariate densities, q over p. <bookmark "
             "mark='b'/> Any expectation under the target is an expectation under the training distribution, reweighted: "

@@ -144,7 +144,7 @@ class Misspecification(VoiceoverScene):
 
     def safebayes(self):
         rows = fit_rows(VGroup(
-            label(r"choosing the learning rate $\eta$:", font_size=28, color=GREY_A),
+            label(r"Choosing a learning rate for generalized posteriors", font_size=36, color=GREY_A),
             label(r"for calibration: \ match the sandwich, \ as here", font_size=26, color=GOODC),
             label(r"for prediction: \ Grünwald's SafeBayes picks $\eta$ to avoid overfitting a wrong model", font_size=26, color=PRIORC),
             label(r"Grünwald \& van Ommen (2017): \ standard Bayes can be inconsistent under misspecification", font_size=26, color=BADC),
