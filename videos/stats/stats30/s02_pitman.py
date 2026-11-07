@@ -29,8 +29,9 @@ class Pitman(VoiceoverScene):
                             r"derive Pitman's efficacy, \ the $3/\pi$, \ and the bound by the calculus of variations")
         with self.voiceover(
             "<bookmark mark='a'/> Part 16 quoted two numbers: the Wilcoxon test is ninety-five and a half percent as "
-            "efficient as the t-test for normal data, and never less than eighty-six point four percent. "
-            "<bookmark mark='b'/> It didn't show where they come from. <bookmark mark='c'/> Now we derive both."
+            "efficient as the t-test for normal data, and under the regular symmetric finite-variance location "
+            "assumptions, never less than eighty-six point four percent. <bookmark mark='b'/> It didn't show where "
+            "they come from. <bookmark mark='c'/> Now we derive both."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(card[0]), FadeIn(card[1][0]), FadeIn(card[1][1][0]))
@@ -58,6 +59,9 @@ class Pitman(VoiceoverScene):
             "over noise, per observation. <bookmark mark='d'/> The ratio of efficacies is the limiting ratio of the sample "
             "sizes the two tests need for the same power."
         ) as vo:
+            intro=label('Pitman efficiency compares power against shrinking local shifts',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -67,7 +71,7 @@ class Pitman(VoiceoverScene):
     def wilcoxon(self):
         rows = [
             cmath(r"t\text{-test}", r":", r"\mu(\theta) = \theta, \ \ \sigma^2 = \mathrm{Var}\,X: \ \ \text{efficacy } 1/\sigma^2", font_size=28),
-            cmath(r"\text{Wilcoxon}", r":", r"\tfrac{1}{n^2}W \approx P(X_i + X_j > 0) = \textstyle\int F(x + 2\theta)\, dF \dots", font_size=26),
+            cmath(r"\text{Wilcoxon}", r":", r"\tfrac{W^+}{n(n+1)/2} \approx P(X_i + X_j > 0) = \textstyle\int F(x + 2\theta)\, dF \dots", font_size=26),
             cmath(r"\mu'(0)", r"=", r"2\textstyle\int f^2, \ \ \sigma^2(0) = \tfrac13: \ \ \text{efficacy } 12 \bigl(\int f^2\bigr)^2", font_size=28),
             cmath(r"\text{ARE}", r"=", r"12\, \sigma^2 \bigl(\textstyle\int f^2\bigr)^2 \ = \ 3/\pi \ \text{ at the normal}", font_size=30),
         ]
@@ -83,6 +87,9 @@ class Pitman(VoiceoverScene):
             "squared. At the normal the integral is one over two root pi, and the ratio is three over pi, ninety-five point "
             "five percent."
         ) as vo:
+            intro=label('Walsh-average signs reveal the signed-rank drift and variance',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -108,11 +115,12 @@ class Pitman(VoiceoverScene):
             labs.add(label(rf"{pretty[nm]}: \ {v:.3f}", font_size=20, color=GREY_A).next_to(ax.c2p(0.75, y), LEFT, buff=0.15))
         with self.voiceover(
             "<bookmark mark='a'/> The efficiency across eleven distributions. At the normal, point nine five five. "
-            "<bookmark mark='b'/> At every heavier-tailed distribution, the logistic, the Laplace, the t distributions and "
-            "the contaminated normals, the rank test wins: by ten percent at the logistic, fifty at the Laplace, ninety at "
-            "t with three degrees of freedom. <bookmark mark='c'/> At the uniform they tie. <bookmark mark='d'/> And at one "
-            "peculiar distribution, a parabola, the rank test does worst: eighty-six point four percent. That is the "
-            "bound, and no distribution goes lower."
+            "<bookmark mark='b'/> At every heavier-tailed distribution, the logistic, the Laplace, the t "
+            "distributions and the contaminated normals, the rank test wins: by ten percent at the logistic, fifty at"
+            " the Laplace, ninety at t with three degrees of freedom. <bookmark mark='c'/> At the uniform they tie. "
+            "<bookmark mark='d'/> And at one peculiar distribution, a parabola, the rank test does worst: eighty-six "
+            "point four percent. That is the local asymptotic bound over the stated regular finite-variance density "
+            "class."
         ) as vo:
             self.play(FadeIn(A), Create(one))
             vo.wait_until("a")
@@ -136,14 +144,18 @@ class Pitman(VoiceoverScene):
         whys = [why(r"ARE is scale-free: \ fix $\sigma = 1$"), why(r"Part 29's Epanechnikov argument again"),
                 why(r"a parabola on $[-\sqrt5, \sqrt5]$"), why(r"Hodges \& Lehmann (1956)")]
         with self.voiceover(
-            "<bookmark mark='a'/> The bound is a calculus-of-variations problem. The efficiency is scale-free, so fix the "
-            "variance at one and minimize the integral of f squared over densities. <bookmark mark='b'/> With Lagrange "
-            "multipliers, wherever f is positive it must be a downward parabola, <bookmark mark='c'/> exactly Part 29's "
-            "Epanechnikov argument: three over twenty root five times five minus x squared. <bookmark mark='d'/> Plugging "
-            "in gives one hundred and eight over one hundred and twenty-five, point eight six four: Joseph Hodges and Erich "
-            "Lehmann's theorem of 1956. Giving up the data's values for their ranks costs at most thirteen point six "
-            "percent, and can gain without limit."
+            "<bookmark mark='a'/> The bound is a calculus-of-variations problem. The efficiency is scale-free, so fix"
+            " the variance at one and minimize the integral of f squared over densities. <bookmark mark='b'/> With "
+            "Lagrange multipliers, wherever f is positive it must be a downward parabola, <bookmark mark='c'/> "
+            "exactly Part 29's Epanechnikov argument: three over twenty root five times five minus x squared. "
+            "<bookmark mark='d'/> Plugging in gives one hundred and eight over one hundred and twenty-five, point "
+            "eight six four: Joseph Hodges and Erich Lehmann's theorem of 1956. For this Wilcoxon comparison under "
+            "the location assumptions, local asymptotic efficiency is at least point eight six four and can be "
+            "arbitrarily large. This is not a universal finite-sample power comparison."
         ) as vo:
+            intro=label('A density optimization gives the local Wilcoxon efficiency bound',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -155,15 +167,16 @@ class Pitman(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"normal scores: \ replace rank $i$ by $\Phi^{-1}(i/(n + 1))$", font_size=24, color=HLC),
             label(rf"ARE to $t$: \ normal {d['normal']:.3f}; \ logistic {d['logistic']:.3f}; \ $t_3$ {d['t_3']:.2f}", font_size=24),
-            label(r"Chernoff \& Savage (1958): \ ARE $\ge 1$ for every distribution", font_size=24, color=HIT),
-            label(r"ranks with the right scores: \ nothing to lose, \ ever", font_size=24, color=PATH),
+            label(r"Chernoff \& Savage (1958): \ local ARE $\ge 1$ under regular location assumptions", font_size=24, color=HIT),
+            label(r"an asymptotic local-power result, not finite-sample dominance", font_size=24, color=PATH),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> One more step. Replace each rank by the corresponding normal quantile: the normal-scores "
-            "test. <bookmark mark='b'/> At the normal it is fully efficient; at the logistic it beats t by five percent; at "
-            "t with three degrees of freedom by sixty-four. <bookmark mark='c'/> Herman Chernoff and Richard Savage proved in "
-            "1958 that its efficiency relative to t is at least one for every distribution. <bookmark mark='d'/> Choose the "
-            "scores well, and a rank test never loses to the t-test at all."
+            "<bookmark mark='a'/> One more step. Replace each rank by the corresponding normal quantile: the "
+            "normal-scores test. <bookmark mark='b'/> At the normal it is fully efficient; at the logistic it beats t"
+            " by five percent; at t with three degrees of freedom by sixty-four. <bookmark mark='c'/> Herman Chernoff"
+            " and Richard Savage proved in 1958 that its efficiency relative to t is at least one under the theorem's"
+            " regular finite-variance location-model conditions. <bookmark mark='d'/> This is an asymptotic "
+            "local-power result under its assumptions, not dominance at every sample size or alternative."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -187,6 +200,9 @@ class Pitman(VoiceoverScene):
             "inherits the efficiency of the test it inverts. <bookmark mark='d'/> At the Laplace distribution the median is "
             "twice as efficient as the mean, and Hodges–Lehmann one and a half times."
         ) as vo:
+            intro=label('Regular test inversion transfers local asymptotic efficiency',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -211,6 +227,9 @@ class Pitman(VoiceoverScene):
             "squared f of zero squared: two over pi at the normal, sixty-four percent, because the sign test throws away the "
             "sizes. <bookmark mark='d'/> At the Laplace, it is two: there, ignoring sizes is exactly right."
         ) as vo:
+            intro=label('A sign statistic responds to the density at the center',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

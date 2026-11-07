@@ -1,8 +1,7 @@
 # Statistics, Built — Part 30: Robust Statistics
 
 Part 30 of a sixty-five-part course in statistics, from a first course to a PhD (see [the series plan](../README.md)
-and [the syllabus](../SYLLABUS.md)), and the tenth part of Stage III, Master's. Part 29 estimated curves on the
-assumption that every observation was honest. This part asks what survives when a few are not, or when the tails are
+and [the syllabus](../SYLLABUS.md)), and the tenth part of Stage III, Master's. Part 29 estimated curves and introduced robust LOESS; most examples still assumed trustworthy observations. This part asks what survives when a few are not, or when the tails are
 heavier than any model admits:
 - efficiency, and the Hodges–Lehmann estimator;
 - influence functions and breakdown;
@@ -86,11 +85,11 @@ From there the part covers:
     | biweight | 0.92 | 0.96 | 0.99 | 0.96 | 0.85 | 0.85 |
 
 - **Scale.**
-  - The copper data (24 values, one at 28.95): mean 4.28, SD 5.30; median 3.385, MAD 0.526, Qn 0.633, Sn 0.757;
+  - The copper data (24 values, one at 28.95): mean 4.28, SD 5.30; median 3.385, MAD 0.526, Qn 0.633, Sn 0.799;
     Huber 3.216.
   - 1-D masking on Newcomb: the 3-SD rule flags −44 (6.5 SD) but not −2 (2.6 SD) until a second pass (4.7 SD). The MAD
     rule flags both at once (16 and 6.5 MADs).
-  - Efficiencies at n = 100: MAD 0.36, Sn 0.59, Qn 0.77 (asymptotically 0.37, 0.58, 0.82); M-scales.
+  - Efficiencies at n = 100: MAD 0.36, Sn 0.58, Qn 0.77 (asymptotically 0.37, 0.58, 0.82); M-scales.
 - **Robust regression** on the CYG OB1 stars (47 stars, 4 giants):
 
   | Fit | Intercept | Slope |
@@ -102,23 +101,23 @@ From there the part covers:
   | LTS (reweighted) | −8.50 | 3.05 |
   | MM | −5.02 | 2.26 |
 
-  The reweighted LTS and MM fits match robustbase's `ltsReg` and `lmrob`. LTS flags stars 7, 9, 11, 20, 30 and 34;
+  These are seeded teaching fits. Finite corrections, tuning and initializations differ across packages; exact agreement with robustbase is not established here. LTS flags stars 7, 9, 11, 20, 30 and 34;
   least-squares residuals flag none. GM-estimators and their 1/(p + 1) bound; S-estimators and Hössjer's 33%; MM
   inference.
-- **Robust multivariate.** Hawkins–Bradu–Kass (75 × 3, 14 planted outliers):
+- **Robust multivariate.** Hawkins–Bradu–Kass (75 × 3, ten bad-leverage and four additional good-leverage cases in the regression construction):
   - classical distances flag 2 points, not the planted ten (masked at ≈ 2);
-  - MCD robust distances (≈ 30–41) flag exactly the 14;
+  - MCD robust distances (≈ 30–41) flag all 14 remote predictor cases, without classifying their response quality;
   - the classical and MCD 97.5% ellipses; Stahel–Donoho.
 - **Heavy-tailed means.**
   - Median of means, derived (k = 8 log(1/δ)); Catoni's estimator; vector versions.
-  - Pareto(2.2), n = 500, 4,000 samples, quantiles of |error|:
+  - Lomax (shifted Pareto, shape 2.2), n = 500, 4,000 samples, quantiles of |error|:
 
     | Estimator | median | 90% | 99% | 99.9% |
     |---|---|---|---|---|
     | mean | 0.055 | 0.134 | 0.312 | 0.813 |
     | 5% trimmed | 0.250 | 0.294 | 0.331 | 0.354 |
     | median of 20 means | 0.087 | 0.165 | 0.223 | 0.261 |
-    | Catoni (δ = 0.001) | 0.056 | 0.131 | 0.224 | 0.556 |
+    | Catoni (δ = 0.001, known variance bound) | 0.052 | 0.121 | 0.184 | 0.280 |
 
     The trimmed mean targets a different functional: the median is 0.37, the mean 0.83.
 
@@ -158,6 +157,16 @@ A 3-MAD rejection rule followed by a t interval (not a Board row) covers:
 - 92.9% on clean data;
 - 92.8% with gross errors;
 - 94.0% with the inch errors.
+
+Scientific qualifications: the efficiency results concern regular continuous symmetric location models and local asymptotic power, rather than every finite sample or distribution. Signed-rank intervals use the continuous symmetry reference; historical rounded data contain ties. The local interval implementation uses its exact signed-rank reference even above n = 60, and returns infinite bounds when a requested two-sided confidence level cannot have finite nonrandom endpoints.
+
+Sn uses the low outer/high inner medians and the documented robustbase finite-sample factors, replacing the kit’s averaged-even-median variant. Qn retains the original 2.2219 normalization and approximate historical finite corrections; it is not claimed to match every modern robustbase default. The finite sample median moves continuously and piecewise linearly when one point is dragged; a discontinuous population influence function describes a different limit. Estimated scales can also keep a finite-sample redescending sensitivity curve from returning exactly to zero.
+
+Huber’s minimax theorem here assumes the known-scale symmetric contamination neighborhood; the maximal-bias curve also holds scale known. M-scale breakdown counts both explosion and implosion. Fixed predictor dimension, general position and appropriate objective/initialization conditions are needed for asymptotic LTS/MM/MCD guarantees. Random-start fits are numerical approximations, not certified global minimizers. Predictor-distance cutoffs are normal-reference diagnostics, not exact tests on fitted distances.
+
+The Princeton-style comparison covers seven procedures and five distributions, not a universal minimax class. Slash and Cauchy sample means have infinite population MSE: their finite Monte Carlo MSE averages are diagnostics and cannot estimate that expectation; their population efficiency is zero. Catoni’s simulation explicitly supplies the true Lomax variance 7.638889 and a two-sided confidence tuning, replacing an unverified sample-variance plug-in. Empirical 99.9% error quantiles have only four expected tail observations in 4,000 replicates and do not cap possible errors. Twenty MOM blocks provide a different theorem failure bound, exp(−20/8) ≈ 0.082, so theoretical confidence levels are not matched in this descriptive race.
+
+The World coverage rows evaluate both intervals against the latent female-population mean. HL targets a pseudo-median under asymmetry; its observed mean coverage is an empirical diagnostic rather than a general guarantee. Unknown common systematic shifts require external calibration or an identifiable error model.
 
 ## Build it
 
@@ -244,8 +253,7 @@ constraints, with c = 3/(20√5). For any admissible f = f₀ + δ: ∫δ = 0 an
 
 **3. The trimmed mean's influence function.**
 
-*Solution.* With q = F⁻¹(1 − α), the α-trimmed mean of a symmetric F equals its winsorized-type M-functional with ψ the
-identity clipped at ±q. Its IF at z is min(max(z, −q), q)/(1 − 2α). It is linear in the middle and constant beyond q,
+*Solution.* With q = F⁻¹(1 − α), the α-trimmed mean has, at a regular symmetric F, the same local influence function as the fixed-cutoff clipped-score functional. Its IF at z is min(max(z, −q), q)/(1 − 2α). It is linear in the middle and constant beyond q,
 so γ* = q/(1 − 2α). At the normal with α = 0.1: 1.2816/0.8 = 1.60.
 
 **4. Hodges–Lehmann's breakdown.**
@@ -265,7 +273,7 @@ I(F₀) = (1 − ε)(2Φ(k) − 1).
 *Solution.* Each block has m = n/k points, so by Chebyshev P(|X̄_j − μ| > 2σ/√m) ≤ 1/4. If the median of the k block
 means is more than 2σ/√m from μ, at least k/2 blocks are. The number of such blocks is Binomial(k, p) with p ≤ 1/4,
 and by Hoeffding P(Bin ≥ k/2) ≤ exp(−2k(1/4)²) = e^{−k/8}. With k = ⌈8 log(1/δ)⌉, the bound holds with probability
-at least 1 − δ: |μ̂ − μ| ≤ 2σ√(k/n) = 2σ√(8 log(1/δ)/n) up to rounding.
+at least 1 − δ: |μ̂ − μ| ≤ 2σ√(k/n) = 2σ√(8 log(1/δ)/n) when k divides n. Otherwise replace n/k by floor(n/k), and require 1 ≤ k ≤ n; the displayed exercise’s 2σ√(2k/n) bound follows for k ≤ n/2.
 
 ## Glossary
 

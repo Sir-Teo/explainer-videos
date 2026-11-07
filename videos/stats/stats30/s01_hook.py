@@ -54,12 +54,16 @@ class Hook(VoiceoverScene):
         whys = [why(r"the contaminated normal"), why(r"squares magnify the far points"), why(r"absolute values don't, \ as much"),
                 why(r"both coefficients of variation, \ asymptotically; \ $\delta = E|X - \mu|$")]
         with self.voiceover(
-            "<bookmark mark='a'/> Tukey's model: a share epsilon of the observations comes from a normal with three times "
-            "the standard deviation, the rest from the main normal. <bookmark mark='b'/> The standard deviation squares "
-            "each deviation, which magnifies the far points. <bookmark mark='c'/> The mean absolute deviation doesn't, as "
-            "much. <bookmark mark='d'/> Compare them by the ratio of their squared coefficients of variation: one minus "
-            "the kurtosis over four, against sigma over delta squared minus one."
+            "<bookmark mark='a'/> Tukey's model: a share epsilon of the observations comes from a normal with three "
+            "times the standard deviation, the rest from the main normal. <bookmark mark='b'/> The standard deviation"
+            " squares each deviation, which magnifies the far points. <bookmark mark='c'/> The mean absolute "
+            "deviation doesn't, as much. <bookmark mark='d'/> Compare them by the ratio of their squared coefficients"
+            " of variation: the kurtosis minus one, divided by four, against variance divided by mean absolute "
+            "deviation squared, minus one."
         ) as vo:
+            intro=label('A small wider-normal component changes relative precision',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -83,12 +87,13 @@ class Hook(VoiceoverScene):
             label(rf"$\varepsilon = 0.05$: \ {d['are_005']:.2f} times", font_size=22, color=PATH),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> At epsilon zero, the standard deviation wins, as Fisher said: the mean deviation is only "
-            "eighty-eight percent as efficient. <bookmark mark='b'/> But the curve rises fast. They break even at "
-            "epsilon of point oh oh one eight: one gross error in five hundred and seventy observations. "
-            "<bookmark mark='c'/> At one in a hundred, the crude mean deviation is forty-four percent more efficient. "
-            "<bookmark mark='d'/> At one in twenty, twice as efficient. Real data are rarely cleaner than one in a hundred, "
-            "and so the optimal procedure for a model can be a bad procedure for the world."
+            "<bookmark mark='a'/> At epsilon zero, the standard deviation wins, as Fisher said: the mean deviation is"
+            " only eighty-eight percent as efficient. <bookmark mark='b'/> But the curve rises fast. They break even "
+            "at epsilon of point oh oh one eight: one gross error in five hundred and seventy observations. <bookmark"
+            " mark='c'/> At one in a hundred, the crude mean deviation is forty-four percent more efficient. "
+            "<bookmark mark='d'/> At one in twenty, twice as efficient. This shows sensitivity to one specific "
+            "wider-normal mixture, rather than a measured universal rate of errors in real data. An optimal procedure"
+            " for a model can perform poorly nearby."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A), Create(one))
@@ -118,11 +123,11 @@ class Hook(VoiceoverScene):
             label(rf"gold: \ the modern value, \ {d['true']}", font_size=22, color=TRUE),
         ), 12.0, 0.22, [0, -2.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Real data, with a known answer. In 1882 Simon Newcomb timed light crossing the Potomac to a "
-            "mirror and back, seven thousand four hundred metres, sixty-six times. Stephen Stigler used his measurements in "
-            "1977 to test estimators against the truth. <bookmark mark='b'/> Most cluster in the twenties and thirties; two "
-            "stray far below, at minus forty-four and minus two. <bookmark mark='c'/> The modern value of the speed of light "
-            "corresponds to thirty-three point oh two on this scale."
+            "<bookmark mark='a'/> Real data, with a known answer. In 1882 Simon Newcomb timed light crossing the "
+            "Potomac to a mirror and back, in a series of sixty-six measurements. Stephen Stigler used his "
+            "measurements in 1977 to test estimators against the truth. <bookmark mark='b'/> Most cluster in the "
+            "twenties and thirties; two stray far below, at minus forty-four and minus two. <bookmark mark='c'/> The "
+            "modern value of the speed of light corresponds to thirty-three point oh two on this scale."
         ) as vo:
             self.add(newcomb_tag())
             self.play(FadeIn(A))
@@ -148,12 +153,13 @@ class Hook(VoiceoverScene):
             label(rf"and none comes near {d['true']}: \ robustness fixes outliers, \ not systematic error", font_size=22, color=RES),
         ), 12.0, 0.22, [0, -2.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Six estimates of the centre. The mean of all sixty-six is twenty-six point two; drop the two "
-            "strays and it jumps to twenty-seven point seven five. <bookmark mark='b'/> The median, the trimmed mean, "
-            "Hodges–Lehmann, Huber's and the biweight barely notice: all between twenty-seven and a half and twenty-seven "
-            "point seven, with or without the strays. That is robustness. <bookmark mark='c'/> And not one of them reaches "
-            "thirty-three. Newcomb's apparatus had a systematic error that no estimator can see; Stigler's real lesson was "
-            "that robustness protects against stray points, not against bias."
+            "<bookmark mark='a'/> Six estimates of the centre. The mean of all sixty-six is twenty-six point two; "
+            "drop the two strays and it jumps to twenty-seven point seven five. <bookmark mark='b'/> The median, the "
+            "trimmed mean, Hodges–Lehmann, Huber's and the biweight barely notice: the robust estimates range from "
+            "about twenty-seven to twenty-seven point seven across these analyses. That is robustness. <bookmark "
+            "mark='c'/> And not one of them reaches thirty-three. The remaining discrepancy suggests a systematic "
+            "component that these location estimators do not remove; Stigler's real lesson was that robustness "
+            "protects against stray points, not against bias."
         ) as vo:
             self.add(newcomb_tag())
             vo.wait_until("a")
@@ -185,7 +191,7 @@ class Hook(VoiceoverScene):
     def objectives(self):
         head = VGroup(label(r"Part 30", font_size=34, color=GREY_B), label(r"Robust Statistics", font_size=60)).arrange(DOWN, buff=0.25)
         obj = objectives_card([
-            r"Pitman efficiency: \ ranks lose at most 13.6\%",
+            r"Pitman efficiency: \ Wilcoxon bound in a regular location model",
             r"Hodges--Lehmann; \ influence functions; \ breakdown",
             r"Huber's minimax M-estimator; \ robust scale",
             r"robust regression and covariance: \ LTS, \ MM, \ MCD",
@@ -194,11 +200,12 @@ class Hook(VoiceoverScene):
         prereq = note(r"prerequisites: \ Parts 16, \ 22 and 23").to_corner(DL, buff=0.3)
         built = note(r"built: \ \texttt{statkit.robust}; \ the estimator rail").to_corner(DR, buff=0.3)
         with self.voiceover(
-            "<bookmark mark='a'/> Part thirty: robust statistics. <bookmark mark='b'/> We'll derive the efficiency of rank "
-            "methods and prove they never lose more than thirteen point six percent; build the Hodges–Lehmann estimator; "
-            "measure influence and breakdown; derive Huber's minimax estimator; estimate scale robustly; fit regressions and "
-            "covariances that refuse to be dragged; estimate means of heavy-tailed data; and test it all on contaminated "
-            "samples from the World."
+            "<bookmark mark='a'/> Part thirty: robust statistics. <bookmark mark='b'/> We'll derive the efficiency of"
+            " rank methods and prove the Wilcoxon local asymptotic bound under a regular continuous symmetric "
+            "location model with finite variance; build the Hodges–Lehmann estimator; measure influence and "
+            "breakdown; derive Huber's minimax estimator; estimate scale robustly; fit regressions and covariances "
+            "that refuse to be dragged; estimate means of heavy-tailed data; and test it all on contaminated samples "
+            "from the World."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head, shift=UP * 0.2))
@@ -210,20 +217,24 @@ class Hook(VoiceoverScene):
     def stigler(self):
         rows = [
             cmath(r"\text{Stigler (1977)}", r":", r"\text{24 historical data sets with known answers}", font_size=30),
-            cmath(r"\text{best}", r":", r"\text{the 10\% trimmed mean}", font_size=30),
+            cmath(r"\text{best}", r":", r"\text{light trimming was competitive}", font_size=30),
             cmath(r"\text{the mean}", r":", r"\text{surprisingly close behind}", font_size=30),
-            cmath(r"\text{heavy robustness}", r":", r"\text{no better: \ real data were biased, \ not wild}", font_size=30),
+            cmath(r"\text{heavy robustness}", r":", r"\text{does not remove a common systematic error}", font_size=30),
         ]
         rows[2][2].set_color(PATH)
         whys = [why(r"Cavendish, \ Michelson, \ Newcomb"), why(r"light trimming"), why(r"most real errors were modest"),
                 why(r"`Do robust estimators deal with real data?'")]
         with self.voiceover(
-            "<bookmark mark='a'/> Stigler did this for twenty-four historical data sets with known answers: Cavendish's "
-            "density of the earth, Michelson's and Newcomb's speeds of light. <bookmark mark='b'/> The best performer was a "
-            "lightly trimmed mean, ten percent from each end. <bookmark mark='c'/> The plain mean was surprisingly close "
-            "behind. <bookmark mark='d'/> And the most aggressively robust estimators did no better, because the real "
-            "problem in those data was systematic error, not wild observations. Robustness is insurance, not a cure."
+            "<bookmark mark='a'/> Stigler did this for twenty-four historical data sets with known answers: "
+            "Cavendish's density of the earth, Michelson's and Newcomb's speeds of light. <bookmark mark='b'/> "
+            "Lightly trimmed means were competitive in this historical comparison. <bookmark mark='c'/> The plain "
+            "mean was surprisingly close behind. <bookmark mark='d'/> Aggressive resistance to isolated outliers does"
+            " not remove a common systematic measurement error. Our Newcomb calculation illustrates that limitation; "
+            "it does not establish a universal ranking of estimators. Robustness is insurance, not a cure."
         ) as vo:
+            intro=label('Resistance to isolated points does not remove a common systematic shift',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -248,6 +259,9 @@ class Hook(VoiceoverScene):
             "different spreads, Tukey's model seventy-four years early. <bookmark mark='d'/> The rules' weakness is that they "
             "judge points by the mean and standard deviation that the outliers themselves distort."
         ) as vo:
+            intro=label('Classical rejection rules can be distorted by the points they judge',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

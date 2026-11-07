@@ -61,14 +61,18 @@ class Scale(VoiceoverScene):
         ]
         rows[0][2].set_color(MEDC)
         whys = [why(r"Hampel (1974); \ Gauss had used it"), why(r"consistent for $\sigma$ at the normal"),
-                why(r"the most possible"), why(r"and it assumes symmetry")]
+                why(r"the most possible"), why(r"Gaussian normalization; \ also defined for skewed distributions")]
         with self.voiceover(
-            "<bookmark mark='a'/> The median absolute deviation: the median of the distances from the median, Hampel's "
-            "choice, used by Gauss long before. <bookmark mark='b'/> Multiplying by one point four eight two six makes it "
-            "estimate sigma at the normal. <bookmark mark='c'/> Its breakdown is fifty percent, the most possible. "
-            "<bookmark mark='d'/> But it is only thirty-seven percent efficient at the normal, and it measures spread around "
-            "a centre, which implicitly assumes symmetry."
+            "<bookmark mark='a'/> The median absolute deviation: the median of the distances from the median, "
+            "Hampel's choice, used by Gauss long before. <bookmark mark='b'/> Multiplying by one point four eight two"
+            " six makes it estimate sigma at the normal. <bookmark mark='c'/> Its breakdown is fifty percent, the "
+            "most possible. <bookmark mark='d'/> But it is only thirty-seven percent efficient at the normal, and it "
+            "is a scale functional about the median for skewed distributions too; the multiplier is calibrated "
+            "specifically to Gaussian standard deviation."
         ) as vo:
+            intro=label('Normal calibration turns median absolute deviation into a scale estimate',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -78,20 +82,24 @@ class Scale(VoiceoverScene):
     def qn_def(self):
         rows = [
             cmath(r"Q_n", r"=", r"2.2219\, \{|x_i - x_j| : i < j\}_{(k)}, \ \ k = \tbinom{h}{2}, \ h = \lfloor n/2 \rfloor + 1", font_size=26),
-            cmath(r"S_n", r"=", r"1.1926\, \mathrm{med}_i\, \mathrm{med}_j |x_i - x_j|", font_size=30),
+            cmath(r"S_n", r"=", r"1.1926\, \mathrm{lowmed}_i\, \mathrm{highmed}_j |x_i - x_j|", font_size=30),
             cmath(r"\text{no centre}", r":", r"\text{pairwise distances only}", font_size=30),
             cmath(r"\text{efficiency}", r":", r"Q_n \ 82\%, \ \ S_n \ 58\%, \ \ \text{both } 50\% \text{ breakdown}", font_size=28),
         ]
         rows[0][2].set_color(HLC)
-        whys = [why(r"about the first quartile of the pairwise gaps"), why(r"a median of medians"),
-                why(r"so no symmetry is assumed"), why(r"Rousseeuw \& Croux (1993)")]
+        whys = [why(r"about the first quartile of the pairwise gaps"), why(r"low outer / high inner median; finite corrections included"),
+                why(r"centre-free; \ normalization is distribution-specific"), why(r"Rousseeuw \& Croux (1993)")]
         with self.voiceover(
-            "<bookmark mark='a'/> Peter Rousseeuw and Christophe Croux proposed two better ones in 1993. Qn is a low order "
-            "statistic, roughly the first quartile, of all pairwise distances, scaled by two point two two. "
-            "<bookmark mark='b'/> Sn is a median of medians of pairwise distances. <bookmark mark='c'/> Neither needs a "
-            "centre, so neither assumes symmetry. <bookmark mark='d'/> Both keep fifty percent breakdown, and Qn is "
-            "eighty-two percent efficient at the normal, more than twice the MAD."
+            "<bookmark mark='a'/> Peter Rousseeuw and Christophe Croux proposed two better ones in 1993. Qn is a low "
+            "order statistic, roughly the first quartile, of all pairwise distances, scaled by two point two two. "
+            "<bookmark mark='b'/> Sn is low outer / high inner median; finite corrections included of pairwise distances. <bookmark mark='c'/> Neither "
+            "explicitly estimates a centre. Their Gaussian consistency constants do not make them estimators of "
+            "standard deviation for arbitrary skewed laws. <bookmark mark='d'/> Both keep fifty percent breakdown, "
+            "and Qn is eighty-two percent efficient at the normal, more than twice the MAD."
         ) as vo:
+            intro=label('Pairwise gaps define center-free resistant scales',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -107,14 +115,14 @@ class Scale(VoiceoverScene):
         tb.move_to([0, 0.7, 0])
         foot = fit_rows(VGroup(
             label(r"efficiency: \ variance of $\log s$ over that of the estimator, \ 3,000 normal samples", font_size=22),
-            label(r"$Q_n$: \ the best of both, \ at $O(n \log n)$ with Croux \& Rousseeuw's algorithm", font_size=22, color=HLC),
+            label(r"$Q_n$: \ efficient selection can be $O(n \log n)$; this teaching implementation stores all pairs", font_size=22, color=HLC),
         ), 12.0, 0.22, [0, -2.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The scale estimators side by side, with efficiencies measured on three thousand normal "
-            "samples of a hundred. The standard deviation: five point three on the copper data, full efficiency, zero "
-            "breakdown. The interquartile range and MAD: about point six, thirty-seven percent efficient. Sn: fifty-nine "
-            "percent. <bookmark mark='b'/> Qn: seventy-seven percent at this sample size, eighty-two in the limit, and fifty "
-            "percent breakdown, computable fast."
+            "<bookmark mark='a'/> The scale estimators side by side, with efficiencies measured on three thousand "
+            "normal samples of a hundred. The standard deviation: five point three on the copper data, full "
+            "efficiency, zero breakdown. The interquartile range and MAD: about point six, thirty-seven percent "
+            "efficient. Sn: about fifty-eight percent. <bookmark mark='b'/> Qn: seventy-seven percent at this sample "
+            "size, eighty-two in the limit, and fifty percent breakdown, computable fast."
         ) as vo:
             self.add(chem_tag())
             vo.wait_until("a")
@@ -131,11 +139,11 @@ class Scale(VoiceoverScene):
             label(r"next: \ the same problems, \ worse, \ in regression", font_size=24, color=PATH),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Robust scale matters beyond reporting spread. Every M-estimate needs a scale to decide "
-            "what counts as far, and that scale must be robust too. <bookmark mark='b'/> Outlier rules should use the median "
-            "and MAD, not the mean and standard deviation, <bookmark mark='c'/> because outliers inflate the standard "
-            "deviation and so hide themselves: masking. <bookmark mark='d'/> In regression the same problems return, in a "
-            "worse form."
+            "<bookmark mark='a'/> Robust scale matters beyond reporting spread. Every M-estimate needs a scale to "
+            "decide what counts as far, and that scale must be robust too. <bookmark mark='b'/> Median and MAD can "
+            "give useful resistant diagnostic thresholds; a three-MAD rule is not a universal test, especially for "
+            "skewed or rounded data, <bookmark mark='c'/> because outliers inflate the standard deviation and so hide"
+            " themselves: masking. <bookmark mark='d'/> In regression the same problems return, in a worse form."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -146,7 +154,7 @@ class Scale(VoiceoverScene):
         rows = [
             cmath(r"\tfrac1n \textstyle\sum_i \rho\bigl(\tfrac{r_i}{s}\bigr)", r"=", r"b", font_size=32),
             cmath(r"\rho", r":", r"\text{bounded, \ e.g.\ the biweight's}", font_size=30),
-            cmath(r"b / \max\rho", r"=", r"\varepsilon^*: \ b = \tfrac12 \text{ gives } 50\%", font_size=30),
+            cmath(r"\min(b/\max\rho,1-b/\max\rho)", r"=", r"\varepsilon^*: \ b = \tfrac12 \text{ gives } 50\%", font_size=30),
             cmath(r"\text{use}", r":", r"\text{the scale inside S- and MM-estimators}", font_size=30),
         ]
         rows[0][2].set_color(HUBC)
@@ -154,11 +162,15 @@ class Scale(VoiceoverScene):
                 why(r"Huber (1981): \ breakdown set by $b$"), why(r"chapter seven")]
         with self.voiceover(
             "<bookmark mark='a'/> A third kind: an M-estimate of scale, the s that makes the average of rho of the "
-            "standardized residuals equal a constant b. <bookmark mark='b'/> With a bounded rho, like the biweight's, a huge "
-            "residual counts at most one. <bookmark mark='c'/> The breakdown point is b over the maximum of rho, so b equal "
-            "to a half gives fifty percent. <bookmark mark='d'/> This M-scale is the engine inside the S- and MM-regression "
-            "estimators of the next chapter."
+            "standardized residuals equal a constant b. <bookmark mark='b'/> With a bounded rho, like the biweight's,"
+            " a huge residual counts at most one. <bookmark mark='c'/> For fixed-center scale estimation under the "
+            "regular setup, both explosion and implosion matter: the asymptotic breakdown is the smaller of b over "
+            "maximum rho and one minus that ratio. Choosing one half balances them. <bookmark mark='d'/> This M-scale"
+            " is the engine inside the S- and MM-regression estimators of the next chapter."
         ) as vo:
+            intro=label('Bounded loss balances scale explosion and implosion',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

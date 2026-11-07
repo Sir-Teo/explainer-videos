@@ -42,6 +42,9 @@ class Influence(VoiceoverScene):
             "derivative of the functional in the direction of a point mass at z. <bookmark mark='d'/> Its sample version is "
             "Tukey's sensitivity curve: add one observation at z, and record n plus one times the change in the estimate."
         ) as vo:
+            intro=label('An influence function is a local distributional derivative',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -61,12 +64,13 @@ class Influence(VoiceoverScene):
             label(r"the biweight comes back: \ it rejects the point", font_size=22, color=BIWC),
         ), 12.0, 0.2, [0, -2.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The estimator rail, this part's instrument: two dozen of Newcomb's measurements on a line, "
-            "and below, five estimates of their centre. Take the largest observation and drag it to the right. "
-            "<bookmark mark='b'/> The mean follows it, without limit. <bookmark mark='c'/> The median, Hodges–Lehmann and "
-            "Huber's estimate move a little at first and then stop: beyond some point, how far out the observation is no "
-            "longer matters. <bookmark mark='d'/> The biweight moves and then comes back: once the point is far enough out, "
-            "it is given weight zero, as if rejected."
+            "<bookmark mark='a'/> The estimator rail, this part's instrument: two dozen of Newcomb's measurements on "
+            "a line, and below, five estimates of their centre. Take the largest observation and drag it to the "
+            "right. <bookmark mark='b'/> The mean follows it, without limit. <bookmark mark='c'/> In this "
+            "demonstration the median and Hodges–Lehmann eventually stop responding to the point's distance. Huber's "
+            "bounded residual score limits its direct effect, though estimating the scale can also matter. <bookmark "
+            "mark='d'/> The biweight moves and then comes back: once the point is far enough out, it is given weight "
+            "zero, as if rejected."
         ) as vo:
             self.add(newcomb_tag())
             self.play(FadeIn(rail))
@@ -94,14 +98,15 @@ class Influence(VoiceoverScene):
             label(r"mean: \ a straight line, \ unbounded", font_size=22, color=MEANC),
             label(r"median: \ a step", font_size=22, color=MEDC),
             label(r"Hodges--Lehmann, \ Huber: \ bounded", font_size=22, color=HLC),
-            label(r"biweight: \ bounded, \ and back to zero", font_size=22, color=BIWC),
+            label(r"biweight score redescends; estimated-scale SC may retain an offset", font_size=22, color=BIWC),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The sensitivity curves, on all sixty-four clean measurements. <bookmark mark='b'/> The "
-            "mean's is a straight line: one observation can move it anywhere. <bookmark mark='c'/> The median's is a step: "
-            "it only cares which side of the centre the point is on. <bookmark mark='d'/> Hodges–Lehmann's and Huber's rise "
-            "and level off. <bookmark mark='e'/> The biweight's rises, then falls back to zero: a far enough point has no "
-            "influence at all. Estimators with this shape are called redescending."
+            "<bookmark mark='a'/> The sensitivity curves, on all sixty-four clean measurements. <bookmark mark='b'/> "
+            "The mean's is a straight line: one observation can move it anywhere. <bookmark mark='c'/> The median's "
+            "is a step: it only cares which side of the centre the point is on. <bookmark mark='d'/> Hodges–Lehmann's"
+            " and Huber's rise and level off. <bookmark mark='e'/> The biweight score returns to zero far out. A "
+            "finite-sample sensitivity curve with an estimated MAD need not return exactly to zero, because adding a "
+            "point can change the scale. Estimators with this shape are called redescending."
         ) as vo:
             self.add(newcomb_tag())
             self.play(FadeIn(A))
@@ -127,12 +132,17 @@ class Influence(VoiceoverScene):
         whys = [why(r"the gross-error sensitivity"), why(r"one point can move it anywhere"), why(r"at the standard normal"),
                 why(r"the influence function is the $\psi$")]
         with self.voiceover(
-            "<bookmark mark='a'/> The worst influence, the supremum of its absolute value, is the gross-error sensitivity. "
-            "<bookmark mark='b'/> For the mean the influence function is z minus mu: unbounded. <bookmark mark='c'/> For the "
-            "median it is plus or minus one over twice the density at the median, at the standard normal one point two five, "
-            "the smallest of any consistent estimator. <bookmark mark='d'/> For an M-estimator, the solution of a sum of psi "
-            "functions equal to zero, it is psi itself, scaled: so you design the influence function by choosing psi."
+            "<bookmark mark='a'/> The worst influence, the supremum of its absolute value, is the gross-error "
+            "sensitivity. <bookmark mark='b'/> For the mean the influence function is z minus mu: unbounded. "
+            "<bookmark mark='c'/> For the median it is plus or minus one over twice the density at the median, at the"
+            " standard normal one point two five, the minimum gross-error sensitivity among regular Fisher-consistent"
+            " normal location functionals, with the appropriate equivariance and normalization constraints. <bookmark"
+            " mark='d'/> For an M-estimator, the solution of a sum of psi functions equal to zero, it is psi itself, "
+            "scaled: so you design the influence function by choosing psi."
         ) as vo:
+            intro=label('Gross-error sensitivity is the largest absolute influence',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -192,6 +202,9 @@ class Influence(VoiceoverScene):
             "the von Mises expansion. <bookmark mark='d'/> So bounded influence and small variance pull against each other, "
             "and the best compromise is chapter five's problem."
         ) as vo:
+            intro=label('An asymptotically linear expansion connects influence and variance',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -203,18 +216,23 @@ class Influence(VoiceoverScene):
             cmath(r"\min_\psi", r"\ ", r"V(\psi, \Phi) \ \text{ subject to } \ \gamma^*(\psi) \le c", font_size=30),
             cmath(r"\text{solution}", r":", r"\psi(z) = \max(-k, \min(k, z)), \ \ k = k(c)", font_size=30),
             cmath(r"\text{so}", r":", r"\text{Huber's } \psi \text{ again, \ from a different question}", font_size=30),
-            cmath(r"c \to \sqrt{\pi/2}", r":", r"\text{the median: \ the most robust}", font_size=30),
+            cmath(r"c \to \sqrt{\pi/2}", r":", r"\text{the median: \ minimal sensitivity in this location problem}", font_size=30),
         ]
         rows[2][2].set_color(HUBC)
         whys = [why(r"Hampel's optimality problem"), why(r"bounded, \ linear in the middle"),
                 why(r"Hampel (1968): \ the same answer as Huber's minimax"), why(r"the smallest possible sensitivity")]
         with self.voiceover(
-            "<bookmark mark='a'/> Hampel posed the trade-off as an optimization: minimize the variance at the normal, subject "
-            "to a bound c on the gross-error sensitivity. <bookmark mark='b'/> The solution is the identity, clipped at plus "
-            "and minus k: <bookmark mark='c'/> Huber's psi again, reached from a different question, which is part of why it "
-            "is so widely used. <bookmark mark='d'/> As c falls to its smallest possible value, root pi over two, k shrinks "
-            "to zero and the solution becomes the median, the most robust estimator of all."
+            "<bookmark mark='a'/> Hampel posed the trade-off as an optimization: minimize the variance at the normal,"
+            " subject to a bound c on the gross-error sensitivity. <bookmark mark='b'/> The solution is the identity,"
+            " clipped at plus and minus k: <bookmark mark='c'/> Huber's psi again, reached from a different question,"
+            " which is part of why it is so widely used. <bookmark mark='d'/> As c falls to its smallest possible "
+            "value, root pi over two, k shrinks to zero and the solution becomes the median, the least "
+            "gross-error-sensitive solution within this regular normal-location problem, rather than under every "
+            "definition of robustness."
         ) as vo:
+            intro=label('A sensitivity constraint changes the normal-location variance optimum',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -230,15 +248,16 @@ class Influence(VoiceoverScene):
         rail = EstimatorRail(x, est, (10, 50), index=int(np.argmin(x)), width=9.6, center=[0.6, 0.4, 0], font_size=20)
         rows = fit_rows(VGroup(
             label(r"now slide the smallest point slowly across the middle", font_size=22),
-            label(r"the median jumps as the point crosses it: \ influence is a step", font_size=22, color=MEDC),
+            label(r"the sample median: continuous, piecewise linear; population IF is a step", font_size=22, color=MEDC),
             label(r"the others glide: \ smooth influence, \ like the mean's near the centre", font_size=22, color=HLC),
         ), 12.0, 0.2, [0, -2.7, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The rail shows the shape near the centre too. Slide the smallest point slowly from the left "
-            "across the middle of the data. <bookmark mark='b'/> The median doesn't move at all until the point crosses it, "
-            "then jumps: its influence is a step, which also makes it inefficient. <bookmark mark='c'/> Hodges–Lehmann and "
-            "Huber glide smoothly, like the mean does, for points near the centre. They behave like the mean where the mean "
-            "is good, and like the median where the mean fails."
+            "<bookmark mark='a'/> The rail shows the shape near the centre too. Slide the smallest point slowly from "
+            "the left across the middle of the data. <bookmark mark='b'/> As a single sample point moves, the sample "
+            "median is continuous and piecewise linear, changing which order statistics define it. Its population "
+            "influence function has a step, a different limiting statement. <bookmark mark='c'/> Hodges–Lehmann and "
+            "Huber glide smoothly, like the mean does, for points near the centre. They behave like the mean where "
+            "the mean is good, and like the median where the mean fails."
         ) as vo:
             self.add(newcomb_tag())
             self.play(FadeIn(rail))
@@ -262,13 +281,17 @@ class Influence(VoiceoverScene):
         whys = [why(r"the standard deviation as a functional"), why(r"quadratic: \ far points dominate"),
                 why(r"the mean deviation: \ linear"), why(r"both unbounded, \ one far worse")]
         with self.voiceover(
-            "<bookmark mark='a'/> The hook's duel, seen through influence functions. Treat the standard deviation as a "
-            "functional of the distribution. <bookmark mark='b'/> At the normal its influence function is half of z squared "
-            "minus one: quadratic, so a point at ten standard units counts fifty times as much as a typical one. "
-            "<bookmark mark='c'/> The mean deviation's is the absolute value of z minus a constant: only linear. "
-            "<bookmark mark='d'/> Both are unbounded, but one grows far faster, which is exactly why Tukey's rare wide errors "
-            "hurt the standard deviation so much more."
+            "<bookmark mark='a'/> The hook's duel, seen through influence functions. Treat the standard deviation as "
+            "a functional of the distribution. <bookmark mark='b'/> At the normal its influence function is half of z"
+            " squared minus one: quadratic, so a point at ten standard units has influence forty-nine point five; "
+            "comparison with a typical point depends on which point is chosen. <bookmark mark='c'/> The mean "
+            "deviation's is the absolute value of z minus a constant: only linear. <bookmark mark='d'/> Both are "
+            "unbounded, but one grows far faster, which is exactly why Tukey's rare wide errors hurt the standard "
+            "deviation so much more."
         ) as vo:
+            intro=label('Quadratic scale influence amplifies distant observations',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

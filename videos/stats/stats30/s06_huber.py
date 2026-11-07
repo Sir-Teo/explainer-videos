@@ -43,6 +43,9 @@ class Huber(VoiceoverScene):
             "worst-case variance over the whole neighbourhood is smallest. <bookmark mark='d'/> It is a game: the "
             "statistician chooses psi, nature chooses the contaminant, and Huber found its saddle point."
         ) as vo:
+            intro=label('Known-scale symmetric contamination defines an asymptotic minimax game',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -58,13 +61,17 @@ class Huber(VoiceoverScene):
         ]
         rows[2][2].set_color(RES)
         whys = [why(r"the hardest distribution to estimate the centre of"), why(r"normal in the middle"),
-                why(r"exponential tails: \ the heaviest the budget allows"), why(r"so that $f_0$ integrates to 1")]
+                why(r"exponential tails: \ the least-information continuation"), why(r"so that $f_0$ integrates to 1")]
         with self.voiceover(
-            "<bookmark mark='a'/> Nature's best move is the member of the neighbourhood with the least Fisher information, "
-            "the hardest to estimate the centre of. <bookmark mark='b'/> It is normal in the middle, scaled by one minus "
-            "epsilon, <bookmark mark='c'/> with exponential tails beyond plus or minus k, the heaviest the contamination "
-            "budget allows. <bookmark mark='d'/> k is fixed by requiring the density to integrate to one."
+            "<bookmark mark='a'/> Nature's best move is the member of the neighbourhood with the least Fisher "
+            "information, the hardest to estimate the centre of. <bookmark mark='b'/> It is normal in the middle, "
+            "scaled by one minus epsilon, <bookmark mark='c'/> with exponential tails beyond plus or minus k, the "
+            "exponential continuation minimizing Fisher information in this neighbourhood; heavier contaminant tails "
+            "are also allowed. <bookmark mark='d'/> k is fixed by requiring the density to integrate to one."
         ) as vo:
+            intro=label('The least-information member has normal center and exponential tails',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -88,6 +95,9 @@ class Huber(VoiceoverScene):
             "neighbourhood does more damage than f naught does, <bookmark mark='d'/> and at f naught no psi does better, by "
             "Cramér–Rao. A saddle point: Huber's estimator is minimax."
         ) as vo:
+            intro=label('The least-favorable score is a clipped location score',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -173,11 +183,12 @@ class Huber(VoiceoverScene):
             label(r"redescenders reject far points, \ but can have several roots", font_size=22, color=GREY_A),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The zoo of psi functions. The mean's is the identity. <bookmark mark='b'/> Huber's clips "
-            "it: monotone, so the estimating equation has a unique root. <bookmark mark='c'/> Tukey's biweight bends back to "
-            "zero at four point six nine: redescending, so gross errors get no weight at all. <bookmark mark='d'/> Frank "
-            "Hampel's three-part psi does the same with straight pieces. <bookmark mark='e'/> Redescending estimators reject "
-            "far points cleanly, but their equations can have several roots, so they need a good, robust starting point, a "
+            "<bookmark mark='a'/> The zoo of psi functions. The mean's is the identity. <bookmark mark='b'/> Huber's "
+            "clips it: monotone, giving a convex objective; a flat interval of roots is possible if no observations "
+            "supply local curvature. <bookmark mark='c'/> Tukey's biweight bends back to zero at four point six nine:"
+            " redescending, so gross errors get no weight at all. <bookmark mark='d'/> Frank Hampel's three-part psi "
+            "does the same with straight pieces. <bookmark mark='e'/> Redescending estimators reject far points "
+            "cleanly, but their equations can have several roots, so they need a good, robust starting point, a "
             "lesson MM-regression builds on."
         ) as vo:
             self.play(FadeIn(A))
@@ -199,12 +210,16 @@ class Huber(VoiceoverScene):
         whys = [why(r"the estimating equation"), why(r"Huber: \ 1 in the middle, \ $k/|u|$ outside"),
                 why(r"iteratively reweighted least squares"), why(r"chapter six")]
         with self.voiceover(
-            "<bookmark mark='a'/> To compute it, solve the estimating equation. <bookmark mark='b'/> Write psi of u as a "
-            "weight times u: for Huber, weight one in the middle and k over u outside. <bookmark mark='c'/> Then the "
-            "equation says mu is a weighted mean, and iterating, recompute the weights, recompute the mean, converges: "
-            "iteratively reweighted least squares, Part 24's algorithm again. <bookmark mark='d'/> The residuals must be "
-            "standardized by a scale that is itself robust, here the MAD, the subject of the next chapter."
+            "<bookmark mark='a'/> To compute it, solve the estimating equation. <bookmark mark='b'/> Write psi of u "
+            "as a weight times u: for Huber, weight one in the middle and k over absolute u outside. <bookmark "
+            "mark='c'/> Then the equation says mu is a weighted mean, and iterating, recompute the weights, recompute"
+            " the mean, converges: iteratively reweighted least squares, Part 24's algorithm again. <bookmark "
+            "mark='d'/> The residuals must be standardized by a scale that is itself robust, here the MAD, the "
+            "subject of the next chapter."
         ) as vo:
+            intro=label('A residual score can be written as an iterative weighting rule',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -225,17 +240,20 @@ class Huber(VoiceoverScene):
         tb.move_to([0, 0.6, 0])
         foot = fit_rows(VGroup(
             label(rf"efficiency relative to the best of the seven, \ $n = {d['n']}$, \ {d['R']:,} samples each", font_size=22),
-            label(r"the mean: \ best at the normal, \ worthless at the Cauchy; \ the biweight's worst case is 0.85", font_size=22, color=PATH),
+            label(r"mean has infinite MSE for slash/Cauchy; \ worst is over these five cases", font_size=22, color=PATH),
         ), 12.0, 0.22, [0, -2.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In 1970 and 1971 six statisticians at Princeton, Andrews, Bickel, Hampel, Huber, Rogers and "
-            "Tukey, ran a vast simulation of sixty-eight location estimators. Here is a small version: seven estimators, five "
-            "distributions from the normal to the Cauchy, samples of twenty, efficiency relative to the best on each. "
-            "<bookmark mark='b'/> The mean is best at the normal and worthless at the slash and the Cauchy. The median never "
-            "falls below sixty-eight percent, but never rises much above it except in the wild tails. Hodges–Lehmann and "
-            "Huber are excellent until the tails become extreme. <bookmark mark='c'/> The redescending biweight has the best "
-            "worst case, eighty-five percent, alongside the twenty-five percent trimmed mean. The Princeton study's lesson: "
-            "several robust estimators are nearly as good as the best on every distribution, and the mean is not one of them."
+            "<bookmark mark='a'/> In 1970 and 1971 six statisticians at Princeton, Andrews, Bickel, Hampel, Huber, "
+            "Rogers and Tukey, ran a vast simulation of sixty-eight location estimators. Here is a small version: "
+            "seven estimators, five distributions from the normal to the Cauchy, samples of twenty, efficiency "
+            "relative to the best on each. <bookmark mark='b'/> In this simulation the mean is best at the normal. "
+            "Its population mean-squared error is infinite under slash and Cauchy sampling, so no finite Monte Carlo "
+            "average estimates that risk. The median never falls below sixty-eight percent, but never rises much "
+            "above it except in the wild tails. Hodges–Lehmann and Huber are excellent until the tails become "
+            "extreme. <bookmark mark='c'/> The redescending biweight has the best worst case, eighty-five percent, "
+            "alongside the twenty-five percent trimmed mean. This teaching study compares seven estimators on five "
+            "distributions; the displayed worst column is the worst of those five, not a minimax guarantee over all "
+            "distributions."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tb[0]), FadeIn(tb[1:3]), FadeIn(foot[0]))
@@ -253,15 +271,19 @@ class Huber(VoiceoverScene):
             cmath(r"\text{breakdown}", r":", r"\text{lower than with the MAD}", font_size=30),
         ]
         rows[1][2].set_color(HUBC)
-        whys = [why(r"location"), why(r"Huber's Proposal 2: \ consistent at the normal"), why(r"statsmodels' and MASS's default"),
+        whys = [why(r"location"), why(r"Huber's Proposal 2: \ consistent at the normal"), why(r"an option; ordinary defaults use MAD"),
                 why(r"why a fixed MAD scale is often preferred")]
         with self.voiceover(
-            "<bookmark mark='a'/> Huber also proposed estimating scale and location together: <bookmark mark='b'/> his "
-            "Proposal 2 adds a second equation, matching the average squared psi to its value at the normal. "
-            "<bookmark mark='c'/> It is the default in several packages. <bookmark mark='d'/> But its breakdown point is lower "
-            "than with a fixed MAD, because the scale can be inflated by the outliers it is supposed to judge, which is why "
-            "modern practice fixes a high-breakdown scale first."
+            "<bookmark mark='a'/> Huber also proposed estimating scale and location together: <bookmark mark='b'/> "
+            "his Proposal 2 adds a second equation, matching the average squared psi to its value at the normal. "
+            "<bookmark mark='c'/> It is an available scale option in several packages; both MASS rlm and statsmodels "
+            "RLM ordinarily use a MAD scale by default. <bookmark mark='d'/> But its breakdown point is lower than "
+            "with a fixed MAD, because the scale can be inflated by the outliers it is supposed to judge, which is "
+            "why modern practice fixes a high-breakdown scale first."
         ) as vo:
+            intro=label('Joint location-scale equations require separate robustness analysis',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

@@ -1,0 +1,82 @@
+{
+  "items": [
+    {
+      "item": "tukey",
+      "path": ".cache/stats30/tukey.json",
+      "bytes": 3081,
+      "sha256": "2603dc3299514082dfd57508d7171c8f265c3f0235863550055a8794aad84620"
+    },
+    {
+      "item": "newcomb",
+      "path": ".cache/stats30/newcomb.json",
+      "bytes": 1537,
+      "sha256": "a44f8aa5d2508df0f7ff40e44b385633e595b3f7d8ddaab5b1ff273a1a38b5b5"
+    },
+    {
+      "item": "are",
+      "path": ".cache/stats30/are.json",
+      "bytes": 814,
+      "sha256": "8e720fe9ffb3031a10b806eeb5f3b46a20e292e35577054f7ebbc81f9cbbd649"
+    },
+    {
+      "item": "influence",
+      "path": ".cache/stats30/influence.json",
+      "bytes": 86358,
+      "sha256": "b8bcbd5a388168675777e2fb3216fcf24abeb5358870441f1a84e457c3dde080"
+    },
+    {
+      "item": "breakdown",
+      "path": ".cache/stats30/breakdown.json",
+      "bytes": 4127,
+      "sha256": "de9f359e061b7c5dc7e535a0427a8080e993d136890cf6f7ed8e41f069ce7fde"
+    },
+    {
+      "item": "huber",
+      "path": ".cache/stats30/huber.json",
+      "bytes": 6210,
+      "sha256": "19cabae4e9618e66e24fcba852034c998d5bf6a03dd38699966f6e7241829da4"
+    },
+    {
+      "item": "scale",
+      "path": ".cache/stats30/scale.json",
+      "bytes": 720,
+      "sha256": "1dff1f65fbbb7716da5b389ede2fdb18e2f9831676a7e564702c2784dd214dcc"
+    },
+    {
+      "item": "regression",
+      "path": ".cache/stats30/regression.json",
+      "bytes": 4380,
+      "sha256": "f2fc32cfeacec0a468d376c8045a23e9fc6f7beac9a3f424a22d43dabf445554"
+    },
+    {
+      "item": "mcd",
+      "path": ".cache/stats30/mcd.json",
+      "bytes": 6560,
+      "sha256": "ce674d21d2fa751aedc10a2c217d5b5b4e5ef6f21fd661efc17b445ca83e29ed"
+    },
+    {
+      "item": "mom",
+      "path": ".cache/stats30/mom.json",
+      "bytes": 798,
+      "sha256": "ce4e2961d43d8a43d23820b1c31309049ae7dfd830488eb318063b2f9fba6979"
+    },
+    {
+      "item": "board",
+      "path": ".cache/stats30/board.json",
+      "bytes": 2595,
+      "sha256": "9386d47ab3537ee977c35bbfa59e7f252b7a39958e1a664a30ea934bd6479e9f"
+    },
+    {
+      "item": "princeton",
+      "path": ".cache/stats30/princeton.json",
+      "bytes": 2782,
+      "sha256": "9d9778091f08ce74d44eea83e51dd5b0cf84fcf9c8ed113b279c36b3942644f4"
+    },
+    {
+      "item": "corrupt",
+      "path": ".cache/stats30/corrupt.json",
+      "bytes": 1615,
+      "sha256": "e4f96830c111c23785a1935235652b779e96e5beebdc59f4e77479b92d787bf2"
+    }
+  ]
+}

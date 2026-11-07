@@ -1,0 +1,40 @@
+[
+  {
+    "dataset": "newcomb",
+    "rows": 66,
+    "match": "identical multiset; Museum uses a different row order",
+    "url": "https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/MASS/newcomb.csv",
+    "sha256": "fa1289ffe98f14d79cc26758999a4b68f63e6821fc1c0b700be193490bbefb9e"
+  },
+  {
+    "dataset": "chem",
+    "rows": 24,
+    "match": "all rows exactly",
+    "url": "https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/MASS/chem.csv",
+    "sha256": "56affa6023512f466d9699f3e53f3a6cb3efb18c96764be7a58cc21d72c9b88d"
+  },
+  {
+    "dataset": "starsCYG",
+    "rows": 47,
+    "match": "all rows exactly",
+    "url": "https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/robustbase/starsCYG.csv",
+    "sha256": "578bfda4f4b76a99ee3697ea678888efd6e001808d44b9ad98eae0746ddcbed4"
+  },
+  {
+    "dataset": "hbk",
+    "rows": 75,
+    "match": "all rows exactly",
+    "url": "https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/robustbase/hbk.csv",
+    "sha256": "682f37ebe5d7044bdf5a510bfa6ae1877316d06e21f2ed1892417b8dd74047cf"
+  },
+  {
+    "reference": "qnsn.R",
+    "url": "https://raw.githubusercontent.com/cran/robustbase/master/R/qnsn.R",
+    "sha256": "4641e153abc9033f7073c57d4e8ad254a1d4df9c1c79ca864c8b51a0922737dd"
+  },
+  {
+    "reference": "qn_sn.c",
+    "url": "https://raw.githubusercontent.com/cran/robustbase/master/src/qn_sn.c",
+    "sha256": "795011650a3e0ba023c21cbaa7f35854eca4a1918d277a7a344a772d317e1192"
+  }
+]

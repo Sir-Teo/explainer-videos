@@ -88,6 +88,9 @@ class Regression(VoiceoverScene):
             "better than least squares, because the giants are leverage points that pull the line towards themselves and so "
             "don't even have large residuals."
         ) as vo:
+            intro=label('Bounding the residual score alone does not bound design leverage',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -105,13 +108,18 @@ class Regression(VoiceoverScene):
         whys = [why(r"Rousseeuw (1984)"), why(r"least trimmed squares"), why(r"whatever the outliers' $x$ or $y$"),
                 why(r"each step can only lower the criterion")]
         with self.voiceover(
-            "<bookmark mark='a'/> Peter Rousseeuw's answer, 1984: minimize the median of the squared residuals instead of "
-            "their sum. <bookmark mark='b'/> Or, better behaved, least trimmed squares: the sum of only the h smallest squared "
-            "residuals, with h about half of n. <bookmark mark='c'/> Both break down only when about half the data are bad, "
-            "wherever the bad points lie. <bookmark mark='d'/> Finding the best half is combinatorial; FAST-LTS starts from "
-            "many random small subsets and improves each by concentration steps, refitting least squares on the h best "
-            "points, which can only lower the criterion."
+            "<bookmark mark='a'/> Peter Rousseeuw's answer, 1984: minimize the median of the squared residuals "
+            "instead of their sum. <bookmark mark='b'/> Or, better behaved, least trimmed squares: the sum of only "
+            "the h smallest squared residuals, with h about half of n. <bookmark mark='c'/> Under general position "
+            "and a fixed predictor dimension, exact high-breakdown regression estimators can approach one-half "
+            "breakdown. Finite-sample bounds depend on n, p and h; a random-start approximation is not a certificate "
+            "of the global optimum. <bookmark mark='d'/> Finding the best half is combinatorial; FAST-LTS starts from"
+            " many random small subsets and improves each by concentration steps, refitting least squares on the h "
+            "best points, which can only lower the criterion."
         ) as vo:
+            intro=label('Trimming the residual objective changes its replacement sensitivity',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -134,12 +142,13 @@ class Regression(VoiceoverScene):
             label(r"all the robust lines follow the main sequence", font_size=22, color=PATH),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The fits. Least squares, sloping down. <bookmark mark='b'/> Least median of squares: slope "
-            "four, through the densest part of the main sequence. <bookmark mark='c'/> Least trimmed squares, after the "
-            "customary reweighting step: intercept minus eight and a half, slope three point oh five, robustbase's numbers to "
-            "the last digit. <bookmark mark='d'/> The MM-estimator: slope two point two six. <bookmark mark='e'/> They "
-            "differ, because the main sequence itself is curved and scattered, but all of them describe the main sequence, "
-            "and none is captured by the giants."
+            "<bookmark mark='a'/> The fits. Least squares, sloping down. <bookmark mark='b'/> Least median of "
+            "squares: slope four, through the densest part of the main sequence. <bookmark mark='c'/> Least trimmed "
+            "squares, after the customary reweighting step: intercept minus eight and a half, slope three point oh "
+            "five, for this seeded teaching implementation; tuning, corrections and algorithms can change software "
+            "results. <bookmark mark='d'/> The MM-estimator: slope two point two six. <bookmark mark='e'/> They "
+            "differ, because the main sequence itself is curved and scattered, but all of them describe the main "
+            "sequence, and none is captured by the giants."
         ) as vo:
             self.add(stars_tag())
             self.play(FadeIn(A), FadeIn(pts))
@@ -155,19 +164,25 @@ class Regression(VoiceoverScene):
             cmath(r"\text{step 1}", r":", r"\text{a 50\% breakdown start (LTS, \ or an S-estimate)}", font_size=28),
             cmath(r"\text{step 2}", r":", r"\text{an M-scale } \hat s: \ \tfrac1n \textstyle\sum \rho(r_i/\hat s) = \tfrac12", font_size=28),
             cmath(r"\text{step 3}", r":", r"\text{biweight M-regression from the start, \ } \hat s \text{ fixed}, \ c = 4.685", font_size=28),
-            cmath(r"\text{result}", r":", r"50\% \text{ breakdown and } 95\% \text{ efficiency}", font_size=30),
+            cmath(r"\text{result}", r":", r"\text{theoretical MM: high breakdown, }95\%\text{ normal efficiency}", font_size=30),
         ]
         rows[3][2].set_color(BIWC)
         whys = [why(r"robust, \ but inefficient: \ LTS is 7\%"), why(r"the biweight $\rho$, \ $c = 1.547$"),
                 why(r"a redescender, \ started in the right basin"), why(r"Yohai (1987)")]
         with self.voiceover(
-            "<bookmark mark='a'/> High breakdown alone is not enough: least trimmed squares is only seven percent efficient "
-            "when the errors really are normal. Victor Yohai's MM-estimator fixes that in three steps. Start from a "
-            "high-breakdown fit. <bookmark mark='b'/> Estimate the residual scale by a robust M-scale. "
-            "<bookmark mark='c'/> Then run a biweight M-regression from that start with the scale held fixed: a redescending "
-            "estimator, started in the right basin, finds the right root. <bookmark mark='d'/> The result keeps fifty percent "
-            "breakdown and gets ninety-five percent efficiency, and is the default in modern robust regression software."
+            "<bookmark mark='a'/> High breakdown alone is not enough: least trimmed squares is only seven percent "
+            "efficient when the errors really are normal. Victor Yohai's MM-estimator fixes that in three steps. "
+            "Start from a high-breakdown fit. <bookmark mark='b'/> Estimate the residual scale by a robust M-scale. "
+            "<bookmark mark='c'/> Then run a biweight M-regression from that start with the scale held fixed: a "
+            "redescending estimator with a robust start. Multiple roots and convergence remain computational issues; "
+            "theoretical MM guarantees require the appropriate initial fit and objective conditions. <bookmark "
+            "mark='d'/> The theoretical construction can combine asymptotic high breakdown and about ninety-five "
+            "percent Gaussian efficiency, under the theoretical conditions. Our LTS-initialized fixed-scale fit is an"
+            " MM-style illustration, not a certified global S/MM solution."
         ) as vo:
+            intro=label('High-breakdown initialization and fixed-scale refinement have distinct roles',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -178,13 +193,13 @@ class Regression(VoiceoverScene):
         d = load("regression")
         n = len(d["x"])
         so, sl = np.asarray(d["ols_std"]), np.asarray(d["lts_std"])
-        A = axes([0, n + 1], [-4, 14], x_length=8.2, y_length=4.2, xlabel=r"star number", ylabel=r"standardized residual",
+        A = axes([0, n + 1], [min(-4,float(sl.min())-1),max(14,float(sl.max())+1)], x_length=8.2, y_length=4.2, xlabel=r"star number", ylabel=r"standardized residual",
                  xticks=[1, 10, 20, 30, 40, 47], yticks=[-2.5, 0, 2.5, 10], xfmt=lambda v: f"{int(v)}", yfmt=lambda v: f"{v:g}",
                  center=[-2.2, 0.3, 0])
         ax = A.ax
         bands = VGroup(*[DashedLine(ax.c2p(0, v), ax.c2p(n + 1, v), color=GREY_B, stroke_width=1.5) for v in (-2.5, 2.5)])
         po = VGroup(*[Dot(ax.c2p(k + 1, v), radius=0.06, color=MEANC) for k, v in enumerate(so)])
-        pl = VGroup(*[Dot(ax.c2p(k + 1, min(v, 13.5)), radius=0.06, color=HLC) for k, v in enumerate(sl)])
+        pl = VGroup(*[Dot(ax.c2p(k + 1, v), radius=0.06, color=HLC) for k, v in enumerate(sl)])
         out = [int(k) + 1 for k in d["lts_outliers"]]
         rows = fit_rows(VGroup(
             label(r"red: \ least squares: \ none beyond $\pm 2.5$", font_size=22, color=MEANC),
@@ -215,10 +230,11 @@ class Regression(VoiceoverScene):
             label(r"an outlier is a question, \ not a nuisance: \ here, \ a different kind of star", font_size=24, color=PATH),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Practical advice: fit both robustly and by least squares, and when they disagree, find out "
-            "why. <bookmark mark='b'/> Look for outliers in robust residuals, never in least-squares ones. "
-            "<bookmark mark='c'/> Use MM for estimates and inference, LTS for diagnosis. <bookmark mark='d'/> And treat an "
-            "outlier as a question: here the four points were not errors at all, but a different kind of star."
+            "<bookmark mark='a'/> Practical advice: fit both robustly and by least squares, and when they disagree, "
+            "find out why. <bookmark mark='b'/> Compare robust and ordinary residual diagnostics; neither a large "
+            "residual nor a robust weight proves a data error. <bookmark mark='c'/> Use MM for estimates and "
+            "inference, LTS for diagnosis. <bookmark mark='d'/> And treat an outlier as a question: here the four "
+            "points were not errors at all, but a different kind of star."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -228,20 +244,25 @@ class Regression(VoiceoverScene):
     def s_est(self):
         rows = [
             cmath(r"\hat\beta_S", r"=", r"\arg\min_\beta\ s(r(\beta)), \ \ s \text{ an M-scale}", font_size=30),
-            cmath(r"\text{LS}", r":", r"\arg\min \text{ of the SD of the residuals}", font_size=30),
-            cmath(r"\text{breakdown}", r":", r"50\% \text{ with } b = \tfrac12", font_size=30),
+            cmath(r"\text{LS}", r":", r"\arg\min \text{ residual mean square about zero}", font_size=30),
+            cmath(r"\text{breakdown}", r":", r"\text{near }50\% \text{ for fixed }p\text{ and general position}", font_size=30),
             cmath(r"\text{efficiency}", r":", r"\le 33\% \text{ at 50\% breakdown}", font_size=30),
         ]
         rows[0][2].set_color(BIWC)
         whys = [why(r"Rousseeuw \& Yohai (1984)"), why(r"least squares minimizes a non-robust scale"),
                 why(r"the scale's breakdown, \ inherited"), why(r"Hössjer (1992): \ the price of high breakdown")]
         with self.voiceover(
-            "<bookmark mark='a'/> S-estimators, from Rousseeuw and Yohai, generalize the idea: choose the coefficients that "
-            "minimize a robust M-scale of the residuals. <bookmark mark='b'/> Least squares is the special case that "
-            "minimizes the ordinary standard deviation. <bookmark mark='c'/> With a fifty percent breakdown scale, the fit "
-            "inherits fifty percent breakdown. <bookmark mark='d'/> But Ola Hössjer proved that at fifty percent breakdown an "
-            "S-estimator can be at most thirty-three percent efficient. High breakdown and high efficiency need two steps."
+            "<bookmark mark='a'/> S-estimators, from Rousseeuw and Yohai, generalize the idea: choose the "
+            "coefficients that minimize a robust M-scale of the residuals. <bookmark mark='b'/> Least squares "
+            "minimizes the residual mean square about zero. Using a centered residual standard deviation alone would "
+            "leave the intercept unidentified. <bookmark mark='c'/> With a fifty percent breakdown scale, the fit "
+            "inherits fifty percent breakdown. <bookmark mark='d'/> But Ola Hössjer proved that at fifty percent "
+            "breakdown an S-estimator can be at most thirty-three percent efficient. High breakdown and high "
+            "efficiency need two steps."
         ) as vo:
+            intro=label('Robust residual scale can define a regression objective',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -265,6 +286,9 @@ class Regression(VoiceoverScene):
             "Ricardo Maronna, Oscar Bustos and Victor Yohai showed their breakdown point is at most one over p plus one, "
             "falling as predictors are added. High breakdown needs a different idea."
         ) as vo:
+            intro=label('Design weights can limit local leverage influence',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -279,7 +303,7 @@ class Regression(VoiceoverScene):
             cmath(r"\text{caution}", r":", r"\text{valid near the model, \ not under arbitrary contamination}", font_size=28),
         ]
         rows[3][2].set_color(PATH)
-        whys = [why(r"for MM at the model"), why(r"heteroscedasticity-robust versions too"),
+        whys = [why(r"fixed $p$, homoscedastic independent errors and regular design"), why(r"heteroscedasticity-robust versions too"),
                 why(r"Ronchetti \& Hampel's tests"), why(r"robust inference is still local")]
         with self.voiceover(
             "<bookmark mark='a'/> MM estimates come with standard errors: at the model the estimator is asymptotically normal, "
@@ -289,6 +313,9 @@ class Regression(VoiceoverScene):
             "near the model, not under arbitrary contamination: robust inference, like robust estimation, buys protection "
             "within a neighbourhood, not everywhere."
         ) as vo:
+            intro=label('Model-based robust asymptotics require design and error conditions',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
