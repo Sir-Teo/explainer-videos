@@ -1,0 +1,105 @@
+{
+  "part": "stats22",
+  "fingerprint": "811e63904bcb9c8f8eb8dd2f19f547780dd0eb52052f29df25422d3100e4fc88",
+  "compute_items": [
+    {
+      "item": "crabs",
+      "path": ".cache/stats22/crabs.json",
+      "sha256": "60f08032933509aedbc25be9c15ccda4e070a5fe09c00c83cea17d86aa0e9956"
+    },
+    {
+      "item": "consistency",
+      "path": ".cache/stats22/consistency.json",
+      "sha256": "72099ad174381688fdefecaa1416819580d9154867bd5d8c251afbec33545a4d"
+    },
+    {
+      "item": "asymp",
+      "path": ".cache/stats22/asymp.json",
+      "sha256": "10af5b7661e9ab3b9522fcd592523442c4e43bdfa96a20cd739afc75af53c997"
+    },
+    {
+      "item": "efron",
+      "path": ".cache/stats22/efron.json",
+      "sha256": "d3e09f06740a225ae82fa0085ff845f173cc430b735742365f129628d70e0dd3"
+    },
+    {
+      "item": "gamma",
+      "path": ".cache/stats22/gamma.json",
+      "sha256": "ce0649d52c907618fed1cda70ea5fe2c2ce60decc2ce2d455f48832a414ca703"
+    },
+    {
+      "item": "trinity",
+      "path": ".cache/stats22/trinity.json",
+      "sha256": "0980a8c3d121180ef2971d26bcb4bac4ae082f0af482fdfd85375fe82cf3cf20"
+    },
+    {
+      "item": "hauck",
+      "path": ".cache/stats22/hauck.json",
+      "sha256": "e63e16ae8457148d22accd472bcdf6380a33d2e70b2f4a24c5bd951d6e115d38"
+    },
+    {
+      "item": "neyman",
+      "path": ".cache/stats22/neyman.json",
+      "sha256": "253675f77a14650c8cec5bdd65eca53a55c9e7ec53c48bac2ff8355c4743b835"
+    },
+    {
+      "item": "kl",
+      "path": ".cache/stats22/kl.json",
+      "sha256": "185e1bc16fa2f41df23429d117b08deb6e746aa816919f9b96f7ada797874ec2"
+    },
+    {
+      "item": "sandwich",
+      "path": ".cache/stats22/sandwich.json",
+      "sha256": "b1cb3ac74d4d84ea9220242f597491519f7080e0dd8fd54cd5a7e1201a05bcf6"
+    },
+    {
+      "item": "misbehave",
+      "path": ".cache/stats22/misbehave.json",
+      "sha256": "b2e4708c02d9df26ccd48402d9616d4fac0166bd31c6c62b1b95ac1723c7e255"
+    },
+    {
+      "item": "ising",
+      "path": ".cache/stats22/ising.json",
+      "sha256": "02232e0bf3ebfe5903fc29959ffd5129bf3cd67d275bc0f2faa5de9b01332d2f"
+    },
+    {
+      "item": "principle",
+      "path": ".cache/stats22/principle.json",
+      "sha256": "e0223f80c1c93b2e4508a582e37f02d34f3226e962463f9356593831754a69fb"
+    },
+    {
+      "item": "em_mm",
+      "path": ".cache/stats22/em_mm.json",
+      "sha256": "3f8e2743982a5f10d8ecfa7a2d42ecdaf55ec05fe128db9bad94b3fe857463c9"
+    },
+    {
+      "item": "lrboot",
+      "path": ".cache/stats22/lrboot.json",
+      "sha256": "0849e526ecc10f1c7f00ce4f3731b995552d86f68ea5923229233cec844c5154"
+    },
+    {
+      "item": "board",
+      "path": ".cache/stats22/board.json",
+      "sha256": "6f257dc6876125d41c14269eacc960368830aee61fa86b2bbcaeb6e01b974f3d"
+    }
+  ],
+  "imported_scenes": [
+    "Hook",
+    "Upgrade",
+    "Consistency",
+    "Normality",
+    "Information",
+    "Profile",
+    "Trinity",
+    "NeymanScott",
+    "EM",
+    "Misbehave",
+    "Misspecification",
+    "Quasi",
+    "Principle",
+    "Geometry",
+    "Outro"
+  ],
+  "scope": "Scientific source and numerical checks; visual review follows",
+  "production_approval": false
+}

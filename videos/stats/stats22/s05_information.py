@@ -29,6 +29,9 @@ class Information(VoiceoverScene):
         rows[1][2].set_color(LIK)
         whys = [why(r"the average curvature, \ over imagined samples"), why(r"the curvature of this sample's likelihood"),
                 why(r"curvature does not depend on the data there"), why(r"a sharp or a flat peak, \ by luck")]
+        intro = label('Observed and expected information answer different questions', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "Chapter three's variance, one over n I, used the expected information. There's a second candidate. "
             "<bookmark mark='a'/> The expected information is the average curvature of the log likelihood over all the samples "
@@ -38,6 +41,7 @@ class Information(VoiceoverScene):
             "observed information depends on how the sample happens to fall: tightly clustered data give a sharp peak, "
             "scattered data a flat one."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -65,16 +69,18 @@ class Information(VoiceoverScene):
             label(r"blue: \ the MLE's actual variance", font_size=22, color=MLE_C),
             label(r"green: \ the average $1/J$ there", font_size=22, color=LIK),
             label(rf"dashed: \ $1/(nI) = {d['expected_var']:.2f}$, \ the same for all", font_size=22, color=TRUE),
-            label(r"$1/J$ tracks the truth; \ $1/(nI)$ cannot", font_size=22, color=HIT),
+            label(r"$1/J$ tracks these conditional Monte Carlo variances", font_size=22, color=HIT),
         ), 3.45, 0.42, [5.1, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Bradley Efron and David Hinkley asked in 1978 which one we should use. Simulate eight thousand "
-            "Cauchy samples of twenty, and sort them into quarters by their observed information. <bookmark mark='b'/> In blue, "
-            "the actual variance of the estimate within each quarter: samples with sharper peaks really do give more accurate "
-            "estimates, by a factor of more than two from the flattest quarter to the sharpest. <bookmark mark='c'/> In green, "
-            "one over the observed information, averaged in each quarter: it tracks the blue closely. <bookmark mark='d'/> The "
-            "expected information gives the same answer, point one, for every sample, <bookmark mark='e'/> right on average but "
-            "wrong for the sample in hand."
+            "<bookmark mark='a'/> Bradley Efron and David Hinkley asked in 1978 which one we should use. Simulate "
+            "eight thousand Cauchy samples of twenty, and sort them into quarters by their observed information. "
+            "<bookmark mark='b'/> In blue, the actual variance of the estimate within each quarter: samples with "
+            "sharper peaks really do give more accurate estimates, by a factor of more than two from the flattest "
+            "quarter to the sharpest. <bookmark mark='c'/> In green, one over the observed information, averaged in "
+            "each quarter: it tracks the blue closely. <bookmark mark='d'/> The expected information gives the same "
+            "answer, point one, for every sample, <bookmark mark='e'/> an unconditional asymptotic approximation that"
+            " misses the variation among these information strata. This simulation is not a universal finite-sample "
+            "ordering of variance estimates."
         ) as vo:
             self.play(FadeIn(A), FadeIn(names))
             vo.wait_until("a")
@@ -97,17 +103,22 @@ class Information(VoiceoverScene):
             cmath(r"\text{Fisher (1934)}", r":", r"\text{recover the information the MLE alone loses}", font_size=28),
         ]
         rows[2][2].set_color(LIK)
-        whys = [why(r"a statistic that says nothing about $\theta$"), why(r"for a location family: \ the spacing of the data"),
+        whys = [why(r"its marginal law is parameter-free"), why(r"for a location family: \ the spacing of the data"),
                 why(r"Efron \& Hinkley (1978)"), why(r"the conditionality principle: \ chapter twelve")]
+        intro = label('A location-equivariant configuration is ancillary', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "Why does the observed information win? <bookmark mark='a'/> An ancillary statistic is one whose distribution "
-            "doesn't depend on the parameter: by itself it says nothing about theta. <bookmark mark='b'/> In a location family "
-            "the configuration, the pattern of distances of the data from the estimate, is ancillary. <bookmark mark='c'/> But "
-            "it tells us how precise this particular estimate is, and given the configuration the variance is close to one over "
-            "J, the observed information. <bookmark mark='d'/> Fisher argued for conditioning on ancillaries in 1934: judge "
-            "an estimate by the experiment you actually did, not by an average over experiments you might have done. Chapter "
-            "twelve returns to this idea."
+            "Why does the observed information win? <bookmark mark='a'/> An ancillary statistic is one whose "
+            "distribution doesn't depend on the parameter: by itself it says nothing about theta. <bookmark "
+            "mark='b'/> For a location-equivariant estimator in a location family, the centered configuration has a "
+            "parameter-free distribution and is ancillary. <bookmark mark='c'/> But it tells us how precise this "
+            "particular estimate is, and given the configuration the variance is close to one over J, the observed "
+            "information. <bookmark mark='d'/> Fisher argued for conditioning on ancillaries in 1934: judge an "
+            "estimate by the experiment you actually did, not by an average over experiments you might have done. "
+            "Chapter twelve returns to this idea."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -116,17 +127,18 @@ class Information(VoiceoverScene):
 
     def advice(self):
         rows = fit_rows(VGroup(
-            label(r"report SEs from the observed information: \ $\sqrt{1/J(\hat\theta)}$", font_size=24, color=LIK),
+            label(r"regular-model curvature SEs: \ $\sqrt{1/J(\hat\theta)}$", font_size=24, color=LIK),
             label(r"it is what Newton's method computes anyway (Part 21)", font_size=24),
             label(r"Fisher scoring uses the expected: \ equal at the end for canonical GLMs", font_size=24, color=GREY_A),
             label(r"and when the model may be wrong: \ neither; \ the sandwich, \ chapter ten", font_size=24, color=OBS),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> So the practical advice is to report standard errors from the observed information, the "
-            "curvature of your own likelihood at its peak. <bookmark mark='b'/> It's what Newton's method computes anyway. "
-            "<bookmark mark='c'/> Fisher scoring uses the expected information, but for canonical generalized linear models the "
-            "two coincide. <bookmark mark='d'/> And if the model itself may be wrong, neither curvature is right, and we need "
-            "chapter ten's sandwich."
+            "<bookmark mark='a'/> For a regular, well-fitted likelihood with nonsingular curvature, observed "
+            "information is often a useful standard-error estimate. Finite-sample conditional accuracy still needs "
+            "assessment. <bookmark mark='b'/> It's what Newton's method computes anyway. <bookmark mark='c'/> Fisher "
+            "scoring uses the expected information, but for canonical generalized linear models with fixed dispersion"
+            " and design the two coincide. <bookmark mark='d'/> And if the model itself may be wrong, neither "
+            "curvature is right, and we need chapter ten's sandwich."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

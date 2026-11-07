@@ -46,14 +46,16 @@ class Trinity(VoiceoverScene):
         ), 3.45, 0.42, [5.1, 0.3, 0])
         with self.voiceover(
             "There are three classical ways to test a value of a parameter, and all three are readings of one curve. "
-            "<bookmark mark='a'/> Here's the log likelihood for fourteen successes in twenty trials, and the hypothesis that p "
-            "is a half. <bookmark mark='b'/> The likelihood-ratio test measures how far the curve falls from its peak to the "
-            "hypothesis: twice the drop is three point two nine. <bookmark mark='c'/> The Wald test measures the horizontal "
-            "distance from the estimate to the hypothesis, in standard errors computed at the estimate; squared, that's three "
-            "point eight one. <bookmark mark='d'/> The score test looks only at the hypothesis: how steeply the curve is still rising "
-            "there, scaled by the information at p one half: three point two. <bookmark mark='e'/> All three are approximately "
-            "chi-squared with one degree of freedom, and here they give p-values from point oh five one to point oh seven four, "
-            "enough to change a verdict at five percent."
+            "<bookmark mark='a'/> Here's the log likelihood for fourteen successes in twenty trials, and the "
+            "hypothesis that p is a half. <bookmark mark='b'/> The likelihood-ratio test measures how far the curve "
+            "falls from its peak to the hypothesis: twice the drop is three point two nine. <bookmark mark='c'/> The "
+            "Wald test measures the horizontal distance from the estimate to the hypothesis, in standard errors "
+            "computed at the estimate; squared, that's three point eight one. <bookmark mark='d'/> The score test "
+            "looks only at the hypothesis: how steeply the curve is still rising there, scaled by the information at "
+            "p one half: three point two. <bookmark mark='e'/> Under the regular null, all three have an asymptotic "
+            "chi-squared distribution with one degree of freedom, and here they give p-values from point oh five one "
+            "to point oh seven four, all above five percent in this example, so all three fail to reject here. Other "
+            "data near a cutoff can produce different decisions."
         ) as vo:
             self.play(FadeIn(A), Create(cv))
             vo.wait_until("a")
@@ -78,15 +80,19 @@ class Trinity(VoiceoverScene):
         rows[2][2].set_color(LRC)
         whys = [why(r"needs only the unrestricted fit"), why(r"needs only the fit under $H_0$ (Rao 1948)"),
                 why(r"needs both; \ invariant to reparametrization (Wilks 1938)"), why(r"a quadratic log likelihood makes them equal")]
+        intro = label('Three regular tests compare distance, slope and height', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> As formulas: the Wald statistic is the squared distance weighted by the information at the "
-            "estimate, so it needs only the unrestricted fit. <bookmark mark='b'/> Rao's score statistic, from 1948, is the "
-            "squared score at the null divided by the null information, so it needs only the fit under the hypothesis, "
-            "convenient when the full model is hard to fit. <bookmark mark='c'/> The likelihood ratio, Wilks's 1938 statistic, "
-            "needs both fits, but it doesn't change if we reparametrize, say from p to log odds. <bookmark mark='d'/> If the log "
-            "likelihood were exactly quadratic, all three would be equal; their differences measure how far from quadratic it "
-            "is."
+            "<bookmark mark='a'/> As formulas: the Wald statistic is the squared distance weighted by the information"
+            " at the estimate, so it needs only the unrestricted fit. <bookmark mark='b'/> Rao's score statistic, "
+            "from 1948, is the squared score at the null divided by the null information, so it needs only the fit "
+            "under the hypothesis, convenient when the full model is hard to fit. <bookmark mark='c'/> The likelihood"
+            " ratio, Wilks's 1938 statistic, needs both fits, but it doesn't change if we reparametrize, say from p "
+            "to log odds. <bookmark mark='d'/> For an exactly quadratic log likelihood with matching information "
+            "scaling, all three coincide; their differences measure how far from quadratic it is."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -101,8 +107,11 @@ class Trinity(VoiceoverScene):
             cmath(r"\text{invert LR}", r":", r"\ell(p_0) \ge \ell(\hat p) - 1.92: \ \text{the profile cut}", font_size=30),
         ]
         rows[2][2].set_color(SCORE)
-        whys = [why(r"Part 11: \ every test is an interval"), why(r"Part 11's Wald interval: \ coverage collapses near 0 and 1"),
+        whys = [why(r"Part 11: \ invert tests into confidence sets"), why(r"Part 11's Wald interval: \ coverage collapses near 0 and 1"),
                 why(r"the SE at $p_0$, \ not at $\hat p$: \ Wilson (1927)"), why(r"chapter five's interval")]
+        intro = label('Invert a family of tests to obtain a confidence set', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Each test gives an interval, by Part 11's recipe: collect the values the test doesn't "
             "reject. <bookmark mark='b'/> Inverting the Wald test gives the Wald interval for a proportion, the one whose "
@@ -112,6 +121,7 @@ class Trinity(VoiceoverScene):
             "cut at one point nine two below the peak. Three tests, three intervals, and the differences between them are the "
             "differences Part 11's Board recorded."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.82, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -121,7 +131,7 @@ class Trinity(VoiceoverScene):
     def hauck(self):
         d = load("hauck")
         b = np.asarray(d["betas"], float)
-        A = axes([0, 7], [0, 9], x_length=8.0, y_length=4.4, xlabel=r"true logistic slope $\beta$", ylabel=r"median test statistic",
+        A = axes([0, 7], [0, 9], x_length=8.0, y_length=4.4, xlabel=r"true logistic slope $\beta$", ylabel=r"median statistic, \ finite-MLE fits only",
                  xticks=[0, 1, 2, 3, 4, 5, 6, 7], yticks=[0, 2, 4, 6, 8], center=[-1.6, 0.3, 0])
         ax = A.ax
         wz = VGroup(polyline(ax, b, d["wald_z"], WALD, 3.5), *[Dot(ax.c2p(x, y), radius=0.06, color=WALD) for x, y in zip(b, d["wald_z"])])
@@ -132,16 +142,17 @@ class Trinity(VoiceoverScene):
             label(r"gold: \ $\sqrt{\Lambda}$, \ the LR statistic, \ rising", font_size=22, color=LRC),
             label(r"blue: \ the Wald $|z|$: \ rises, \ then falls", font_size=22, color=WALD),
             label(r"the SE grows faster than the estimate", font_size=22, color=GREY_A),
-            label(r"Hauck \& Donner (1977)", font_size=20, color=GREY_B),
+            label(rf"finite MLEs retained: \ {min(d['retained'])}--{max(d['retained'])} of {d['attempted']} per slope", font_size=20, color=GREY_B),
         ), 3.45, 0.42, [5.1, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Sometimes the differences are dramatic. Fit logistic regressions to samples of sixty, with "
-            "true slopes from zero to seven, and test whether the slope is zero. <bookmark mark='b'/> The likelihood-ratio "
-            "statistic, in gold, grows steadily with the true effect, as it should. <bookmark mark='c'/> The Wald statistic, in "
-            "blue, grows at first, peaks around a slope of three, and then falls: the stronger the evidence, the less "
-            "significant the Wald test says it is. <bookmark mark='d'/> When the fitted probabilities approach zero and one, the "
-            "estimated standard error grows faster than the estimate. <bookmark mark='e'/> Walter Hauck and Allan Donner pointed "
-            "this out in 1977; it's why software reports likelihood-ratio tests for logistic models."
+            "<bookmark mark='a'/> Sometimes the differences are dramatic. Fit logistic regressions to samples of "
+            "sixty, with true slopes from zero to seven, and test whether the slope is zero. <bookmark mark='b'/> The"
+            " likelihood-ratio statistic, in gold, grows steadily with the true effect, as it should. <bookmark "
+            "mark='c'/> The Wald statistic, in blue, grows at first, peaks around a slope of three, and then falls: "
+            "the stronger the evidence, the less significant the Wald test says it is. <bookmark mark='d'/> When the "
+            "fitted probabilities approach zero and one, the estimated standard error grows faster than the estimate."
+            " <bookmark mark='e'/> Walter Hauck and Allan Donner pointed this out in 1977; it is a reason to compare "
+            "likelihood-ratio and Wald inference. Software often reports Wald tests too."
         ) as vo:
             self.play(FadeIn(A), Create(crit))
             vo.wait_until("a")

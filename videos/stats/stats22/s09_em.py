@@ -33,6 +33,9 @@ class EM(VoiceoverScene):
         rows[3][2].set_color(HIT)
         whys = [why(r"what we have"), why(r"what would make it easy"), why(r"a log of a sum: \ no closed form"),
                 why(r"a sum of logs: \ two separate normal fits")]
+        intro = label('Latent component labels would simplify the likelihood', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "The crabs' fit came from an algorithm built on one idea: pretend you know what you don't. "
             "<bookmark mark='a'/> We observe each crab's ratio. <bookmark mark='b'/> We don't observe which race it belongs to, "
@@ -42,6 +45,7 @@ class EM(VoiceoverScene):
             "proportion would be the share of race one, and each component's mean and spread would be the ordinary mean and "
             "spread of its own crabs."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.78, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -53,20 +57,25 @@ class EM(VoiceoverScene):
             cmath(r"\text{E-step}", r":", r"r_i = \dfrac{p\,\phi_1(x_i)}{p\,\phi_1(x_i) + (1 - p)\,\phi_2(x_i)}", font_size=30),
             cmath(r"\text{M-step}", r":", r"p = \bar r, \ \ \mu_1 = \dfrac{\sum r_i x_i}{\sum r_i}, \ \ \sigma_1^2 = \dfrac{\sum r_i (x_i - \mu_1)^2}{\sum r_i}", font_size=28),
             cmath(r"\text{repeat}", r":", r"\text{until the log likelihood stops rising}", font_size=30),
-            cmath(r"\text{Dempster, Laird, Rubin}", r":", r"\text{1977: \ one algorithm for all missing data}", font_size=28),
+            cmath(r"\text{Dempster, Laird, Rubin}", r":", r"\text{1977: \ a framework for incomplete-data estimation}", font_size=28),
         ]
         rows[0][2].set_color(CRAB1)
         whys = [why(r"each crab's chance of race 1, \ given $\theta$"), why(r"weighted fits, \ as if the $r_i$ were labels"),
                 why(r"chapter eight's guarantee: \ it never falls"), why(r"McKendrick (1926), \ Hartley (1958), \ Baum (1970)")]
+        intro = label('EM alternates conditional expectation and maximization', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> So alternate. In the E-step, for expectation, use the current parameters to compute each "
-            "crab's probability of belonging to race one: its responsibility. <bookmark mark='b'/> In the M-step, for "
-            "maximization, refit as if the responsibilities were labels: the proportion is the average responsibility, and "
-            "each mean and variance is a weighted mean and variance. <bookmark mark='c'/> Repeat until nothing changes. "
-            "<bookmark mark='d'/> Arthur Dempster, Nan Laird and Donald Rubin named the algorithm in 1977 and showed it was one "
-            "method for every missing-data problem; special cases go back to the epidemiologist Anderson McKendrick in 1926 "
-            "and to the Baum–Welch algorithm for hidden Markov models."
-        ) as vo:
+            "<bookmark mark='a'/> So alternate. In the E-step, for expectation, use the current parameters to compute"
+            " each crab's probability of belonging to race one: its responsibility. <bookmark mark='b'/> In the "
+            "M-step, for maximization, refit as if the responsibilities were labels: the proportion is the average "
+            "responsibility, and each mean and variance is a weighted mean and variance. <bookmark mark='c'/> Monitor"
+            " likelihood changes, parameter changes and numerical diagnostics; a tiny likelihood increment alone need"
+            " not establish parameter accuracy. <bookmark mark='d'/> Arthur Dempster, Nan Laird and Donald Rubin "
+            "named the algorithm in 1977 and gave a general framework for many incomplete-data problems, although "
+            "either step may still be difficult; special cases go back to the epidemiologist Anderson McKendrick in "
+            "1926 and to the Baum–Welch algorithm for hidden Markov models."       ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.82, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -128,6 +137,9 @@ class EM(VoiceoverScene):
         rows[3][-1].set_color(PATH)
         whys = [why(r"any distribution $q$ for the missing labels"), why(r"Jensen: \ log of an average $\ge$ average of logs"),
                 why(r"the E-step's responsibilities"), why(r"$Q$: \ the expected complete-data log likelihood")]
+        intro = label('Jensen builds a touching lower bound for EM', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "Why does it work? <bookmark mark='a'/> Write the likelihood as a sum over the unseen labels, and multiply and "
             "divide by any distribution q for those labels. <bookmark mark='b'/> The log is concave, so by Jensen's inequality "
@@ -137,6 +149,7 @@ class EM(VoiceoverScene):
             "builds a lower bound that touches the log likelihood at the current point. Q is the expected complete-data log "
             "likelihood, and the M-step maximizes it."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.82, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -148,7 +161,7 @@ class EM(VoiceoverScene):
         p, ll = np.asarray(d["p"]), np.asarray(d["ll"])
         top = float(ll.max())
         lo = 20 * np.floor((min(s_["ll"] for s_ in d["steps"]) - 30) / 20)
-        A = axes([0, 1], [lo, top + 8], x_length=8.0, y_length=4.4, xlabel=r"mixing proportion $p$ \ (other four at the MLE)",
+        A = axes([0, 1], [lo, top + 8], x_length=8.0, y_length=4.4, xlabel=r"mixing proportion $p$ \ (other four at the local fit)",
                  ylabel=r"log likelihood", xticks=[0, 0.2, 0.4, 0.6, 0.8, 1.0], yticks=[], center=[-1.6, 0.3, 0])
         ax = A.ax
         m = ll > lo
@@ -200,7 +213,7 @@ class EM(VoiceoverScene):
         gap = ll[-1] - ll[:-1]
         it = np.arange(len(gap))
         k = gap > 1e-12
-        A = axes([0, 1700], [-12, 0], x_length=8.0, y_length=4.4, xlabel=r"EM iteration", ylabel=r"$\log_{10}$ of the gap to the maximum",
+        A = axes([0, 1700], [-12, 0], x_length=8.0, y_length=4.4, xlabel=r"EM iteration", ylabel=r"$\log_{10}$ gap to the attained local limit",
                  xticks=[0, 400, 800, 1200, 1600], yticks=[-12, -9, -6, -3, 0], center=[-1.6, 0.3, 0])
         ax = A.ax
         pl = polyline(ax, it[k], np.log10(gap[k]), PATH, 3)
@@ -210,17 +223,19 @@ class EM(VoiceoverScene):
             label(rf"{d['iters']:,} iterations to a change below $10^{{-13}}$", font_size=22, color=PATH),
             label(r"a straight line: \ linear convergence", font_size=22),
             label(rf"each step keeps {100 * d['rate']:.2f}\% of the error", font_size=22, color=RES),
-            label(r"Newton: \ a few steps, \ no guarantee", font_size=22, color=GREY_A),
+            label(r"Newton: local acceleration; \ both methods need safeguards", font_size=22, color=GREY_A),
         ), 3.45, 0.42, [5.1, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The full five-parameter run on the crabs started from p equals one half and ended at point "
-            "four three. <bookmark mark='b'/> It took one thousand six hundred and twenty-two iterations. <bookmark mark='c'/> "
-            "On a log scale, the gap between the current log likelihood and the maximum falls along a straight line: linear "
-            "convergence, the same fraction of the error gone each step. <bookmark mark='d'/> Here each step keeps ninety-nine "
-            "point three six percent of the error in the parameters, so the gap, which is quadratic in the error, shrinks by "
-            "about one point three percent per step. <bookmark mark='e'/> Newton's method from Part 21 would finish in a handful "
-            "of steps, but it can wander off or propose a negative variance; EM never does. Practical software often runs EM "
-            "first and finishes with Newton."
+            "<bookmark mark='a'/> The full five-parameter run on the crabs started from p equals one half and ended "
+            "at point four three. <bookmark mark='b'/> It took one thousand six hundred and twenty-two iterations. "
+            "<bookmark mark='c'/> On a log scale, the gap between the current log likelihood and the attained local "
+            "log-likelihood limit falls approximately along a straight line: linear convergence, the same fraction of"
+            " the error gone each step. <bookmark mark='d'/> Here each step keeps ninety-nine point three six percent"
+            " of the error in the parameters, so the gap, which is quadratic in the error, shrinks by about one point"
+            " three percent per step. <bookmark mark='e'/> Newton's method from Part 21 would finish in a handful of "
+            "steps, but unsafeguarded Newton can wander off or propose a negative variance. EM preserves nonnegative "
+            "variance updates, yet can still approach a singular collapsed component. Practical software often runs "
+            "EM first and finishes with Newton."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -247,16 +262,22 @@ class EM(VoiceoverScene):
         rows[3][2].set_color(RES)
         whys = [why(r"Dempster, Laird \& Rubin (1977)"), why(r"the missing-information principle (Louis 1982)"),
                 why(r"the labels are almost entirely unknown"), why(r"from the observed information: \ the mix is barely pinned down")]
+        intro = label('Missing labels reduce the observed information', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> The rate isn't arbitrary. Dempster, Laird and Rubin showed it equals the largest fraction of "
-            "the complete-data information that the missing labels take away. <bookmark mark='b'/> Thomas Louis turned this "
-            "into a formula for standard errors in 1982: the observed information is the complete information minus the missing "
-            "information. <bookmark mark='c'/> For the crabs the rate is point nine nine three six: the two races overlap so "
-            "much that the labels, which would make the problem easy, are almost entirely unknown. <bookmark mark='d'/> The "
-            "observed information gives a standard error for the proportion of point one five, so forty-three percent plus or "
-            "minus twenty-nine points. The means are pinned down to a few thousandths, but how the crabs divide between the races "
-            "the data barely say."
+            "<bookmark mark='a'/> Near a regular isolated EM fixed point, the dominant linear convergence rate is an "
+            "eigenvalue of the missing-information fraction matrix. Our successive-step estimate illustrates that "
+            "local result. <bookmark mark='b'/> Thomas Louis turned this into a formula for standard errors in 1982: "
+            "the observed information is the complete information minus the missing information. <bookmark mark='c'/>"
+            " For the crabs the rate is point nine nine three six: the two races overlap so much that the labels, "
+            "which would make the problem easy, are almost entirely unknown. <bookmark mark='d'/> The observed "
+            "information gives a standard error for the proportion of point one five, so the local curvature "
+            "approximation is forty-three percent plus or minus twenty-nine points. Weak separation and mixture "
+            "irregularity limit the reliability of this Wald approximation. The means are pinned down to a few "
+            "thousandths, but how the crabs divide between the races the data barely say."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.82, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

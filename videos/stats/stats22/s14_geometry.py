@@ -48,6 +48,9 @@ class Geometry(VoiceoverScene):
         rows[1][2].set_color(PATH)
         whys = [why(r"chapter two's KL, \ to second order"), why(r"Rao (1945): \ the Fisher metric"),
                 why(r"$I = \mathrm{diag}(1/\sigma^2, \, 2/\sigma^2)$"), why(r"it measures distributions, \ not coordinates")]
+        intro = label('Fisher information gives a local metric on distributions', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> The Kullback–Leibler divergence between two nearby members of a family is, to second order, "
             "half a quadratic form in the information matrix. <bookmark mark='b'/> C. R. Rao took that seriously in 1945: "
@@ -56,6 +59,7 @@ class Geometry(VoiceoverScene):
             "squared plus two d sigma squared, all over sigma squared. <bookmark mark='d'/> Because it's built from the "
             "distributions themselves, these distances don't depend on how we label the parameters."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.82, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -79,19 +83,19 @@ class Geometry(VoiceoverScene):
                             fill_color=PATH, fill_opacity=0.15).move_to(ax.c2p(m, s))
                 ell.add(e)
         rows = fit_rows(VGroup(
-            label(r"each ellipse: \ the same Fisher distance", font_size=22, color=PATH),
+            label(r"each ellipse: \ a local Fisher-metric approximation", font_size=22, color=PATH),
             label(r"equally hard to tell apart", font_size=22),
             label(r"small $\sigma$: \ tiny ellipses, \ easy to tell", font_size=22, color=GREY_A),
             label(r"large $\sigma$: \ big ellipses", font_size=22, color=GREY_A),
             label(r"the hyperbolic plane, \ in disguise", font_size=22, color=TEAL),
         ), 3.3, 0.42, [5.2, 0.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Here's the normal family as a plane: mean across, standard deviation up. Each gold ellipse "
-            "contains the distributions within the same small Fisher distance of its centre, <bookmark mark='b'/> the ones "
-            "equally hard to tell apart from it with a fixed amount of data. <bookmark mark='c'/> Near the bottom, narrow "
-            "normals, the ellipses are tiny: move the mean a little and the difference is obvious. <bookmark mark='d'/> Higher "
-            "up, wide normals, they're large. <bookmark mark='e'/> With the mean rescaled by root two, this is exactly the "
-            "hyperbolic plane of non-Euclidean geometry."
+            "<bookmark mark='a'/> Here's the normal family as a plane: mean across, standard deviation up. Each gold "
+            "ellipse approximates a small ball in the local Fisher metric at its centre, <bookmark mark='b'/> the "
+            "ones equally hard to tell apart from it with a fixed amount of data. <bookmark mark='c'/> Near the "
+            "bottom, narrow normals, the ellipses are tiny: move the mean a little and the difference is obvious. "
+            "<bookmark mark='d'/> Higher up, wide normals, they're large. <bookmark mark='e'/> With the mean rescaled"
+            " by root two, this is exactly the hyperbolic plane of non-Euclidean geometry."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -142,22 +146,28 @@ class Geometry(VoiceoverScene):
 
     def natural(self):
         rows = [
-            cmath(r"\text{gradient}", r":", r"\theta \leftarrow \theta + \eta\, \nabla \ell(\theta)", font_size=30),
-            cmath(r"\text{natural gradient}", r":", r"\theta \leftarrow \theta + \eta\, I(\theta)^{-1} \nabla \ell(\theta)", font_size=30),
+            cmath(r"\text{gradient}", r":", r"\theta \leftarrow \theta + \eta\, \nabla \ell_n(\theta)", font_size=30),
+            cmath(r"\text{natural gradient}", r":", r"\theta \leftarrow \theta + \eta\, \big(nI(\theta)\big)^{-1} \nabla \ell_n(\theta)", font_size=30),
             cmath(r"\eta = 1", r":", r"\text{Fisher scoring, \ Part 21}", font_size=30),
             cmath(r"\text{today}", r":", r"\text{K-FAC, \ trust regions; \ variational inference}", font_size=28),
         ]
         rows[1][2].set_color(PATH)
         whys = [why(r"steepest in the coordinates: \ not invariant"), why(r"Amari (1998): \ steepest in the metric"),
                 why(r"the natural gradient is an old friend"), why(r"Parts 27 and 64")]
+        intro = label('Scale the summed gradient by full-sample information', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> The geometry pays off in optimization. The ordinary gradient points uphill in the "
-            "coordinates we happened to choose; rescale a parameter and it points somewhere else. <bookmark mark='b'/> Shun-ichi "
-            "Amari's natural gradient, from 1998, points uphill in the Fisher metric instead: multiply the gradient by the "
-            "inverse information. <bookmark mark='c'/> With a step of one, that's exactly Fisher scoring from Part 21. "
-            "<bookmark mark='d'/> Approximations to it train large neural networks and drive variational inference, which "
-            "Parts 27 and 64 will meet."
+            "coordinates we happened to choose; rescale a parameter and it points somewhere else. <bookmark "
+            "mark='b'/> Shun-ichi Amari's natural gradient, from 1998, points uphill in the Fisher metric instead: "
+            "multiply the gradient by the inverse information. <bookmark mark='c'/> Using the full-sample information"
+            " n I with the summed log-likelihood gradient, a unit step is Fisher scoring from Part 21. The vector "
+            "field transforms invariantly; a finite coordinate Euler step need not be exactly invariant under "
+            "nonlinear reparametrization. <bookmark mark='d'/> Approximations to it train large neural networks and "
+            "drive variational inference, which Parts 27 and 64 will meet."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.82, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -174,14 +184,19 @@ class Geometry(VoiceoverScene):
         rows[1][2].set_color(PRIOR)
         whys = [why(r"the metric's area element"), why(r"Jeffreys (1946): \ uniform in the geometry"),
                 why(r"Part 11's Jeffreys interval"), why(r"Part 26: \ priors from invariance")]
+        intro = label('Jeffreys prior is the Fisher volume element', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "<bookmark mark='a'/> And it gives Bayesians a prior. A metric has a volume element, the square root of the "
-            "determinant of the information. <bookmark mark='b'/> Harold Jeffreys proposed in 1946 to use it as a prior: "
-            "spread belief evenly in the geometry, not in an arbitrary parametrization, so the answer doesn't depend on the "
-            "parametrization. <bookmark mark='c'/> For a binomial proportion it's the beta of one half, one half, behind Part "
-            "11's Jeffreys interval. <bookmark mark='d'/> For the normal it's one over sigma squared. Part 26 takes up priors "
-            "in earnest."
+            "<bookmark mark='a'/> And it gives Bayesians a prior. A metric has a volume element, the square root of "
+            "the determinant of the information. <bookmark mark='b'/> Harold Jeffreys proposed in 1946 to use it as a"
+            " prior: spread belief evenly in the geometry, not in an arbitrary parametrization, so the answer doesn't"
+            " depend on the parametrization. <bookmark mark='c'/> For a binomial proportion it's the beta of one "
+            "half, one half, behind Part 11's Jeffreys interval. <bookmark mark='d'/> For the joint normal mean and "
+            "standard deviation, its density with respect to d mu d sigma is one over sigma squared. This prior is "
+            "improper, and posterior propriety must be checked. Part 26 takes up priors in earnest."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.82, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

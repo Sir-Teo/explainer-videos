@@ -32,15 +32,20 @@ class Misspecification(VoiceoverScene):
         rows[2][2].set_color(PATH)
         whys = [why(r"$g$: \ the true distribution, \ not in the model"), why(r"the second term does not involve $\theta$"),
                 why(r"the KL projection of the truth onto the model"), why(r"a true model is the special case")]
+        intro = label('A misspecified fit targets expected log density', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "Suppose the data really come from some distribution g that isn't in our model at all. "
-            "<bookmark mark='a'/> The average log likelihood still converges, by the law of large numbers, to the expected "
-            "log density under the truth. <bookmark mark='b'/> That's minus the Kullback–Leibler divergence from the truth to "
-            "the model, plus a term that doesn't depend on theta. <bookmark mark='c'/> So the maximum likelihood estimate "
-            "converges to theta star, the member of the model closest to the truth in Kullback–Leibler divergence: the "
-            "truth's projection onto the model. <bookmark mark='d'/> When the model is right, the projection is the truth "
-            "itself, and chapter two's consistency is the special case."
+            "Suppose the data really come from some distribution g that isn't in our model at all. <bookmark "
+            "mark='a'/> The average log likelihood still converges, by the law of large numbers, to the expected log "
+            "density under the truth. <bookmark mark='b'/> That's minus the Kullback–Leibler divergence from the "
+            "truth to the model, plus a term that doesn't depend on theta. <bookmark mark='c'/> With suitable uniform"
+            " convergence, identification and a well-separated optimum, the estimate converges to theta star, the "
+            "member of the model closest to the truth in Kullback–Leibler divergence: the truth's projection onto the"
+            " model. <bookmark mark='d'/> When the model is right, the projection is the truth itself, and chapter "
+            "two's consistency is the special case."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.82, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -101,16 +106,23 @@ class Misspecification(VoiceoverScene):
         rows[2][2].set_color(PATH)
         whys = [why(r"chapter three's expansion, \ around $\theta^*$"), why(r"two different matrices now"),
                 why(r"bread, \ meat, \ bread: \ the sandwich"), why(r"the information identity of chapter one")]
+        intro = label('Curvature and score variance differ under misspecification', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
-            "And the uncertainty? <bookmark mark='a'/> Chapter three's expansion still works, around theta star instead of "
-            "the truth. <bookmark mark='b'/> But now two different matrices appear: A, the expected curvature, and B, the "
-            "variance of the score, both computed under the true distribution. <bookmark mark='c'/> The estimate is "
-            "approximately normal with covariance A inverse, B, A inverse: bread, meat, bread, the sandwich. Peter Huber "
-            "derived it in 1967; Friedhelm Eicker had the regression case in 1963 and Halbert White brought it to economics "
-            "in 1980. <bookmark mark='d'/> If the model is true, the information identity of chapter one says A equals B, the "
-            "sandwich collapses to the inverse information, and we're back to the usual answer. Estimate A and B by their "
-            "sample averages and you have standard errors that don't trust the model."
+            "And the uncertainty? <bookmark mark='a'/> Chapter three's expansion still works, around theta star "
+            "instead of the truth. <bookmark mark='b'/> But now two different matrices appear: A, the expected "
+            "curvature, and B, the variance of the score, both computed under the true distribution. <bookmark "
+            "mark='c'/> The root-n-scaled estimation error is asymptotically normal with covariance A inverse, B, A "
+            "inverse; the estimate's covariance includes a further factor one over n: bread, meat, bread, the "
+            "sandwich. Peter Huber derived it in 1967; Friedhelm Eicker had the regression case in 1963 and Halbert "
+            "White brought it to economics in 1980. <bookmark mark='d'/> If the model is true, the information "
+            "identity of chapter one says A equals B, the sandwich collapses to the inverse information, and we're "
+            "back to the usual answer. Estimate A and B by their sample averages and you have asymptotic standard "
+            "errors robust to distributional misspecification under the required sampling, moment and smoothness "
+            "conditions."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.82, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -127,6 +139,9 @@ class Misspecification(VoiceoverScene):
         rows[2][2].set_color(PATH)
         whys = [why(r"the observed information, \ per observation"), why(r"each observation's own score, \ squared"),
                 why(r"least squares: \ HC0, \ Part 12's robust SEs"), why(r"sum scores within a cluster first: \ Part 23")]
+        intro = label('Estimate both bread and score covariance under the sampling design', font_size=36).move_to([0, 3.35, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> In practice both matrices come from the fitted model. The bread is the observed information, "
             "averaged over observations. <bookmark mark='b'/> The meat is the average outer product of each observation's own "
@@ -135,6 +150,7 @@ class Misspecification(VoiceoverScene):
             "White's HC zero. <bookmark mark='d'/> If observations come in correlated clusters, add up the scores within each "
             "cluster before squaring: the cluster-robust sandwich, which Part 23 examines when there are few clusters."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.82, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -159,16 +175,18 @@ class Misspecification(VoiceoverScene):
             label(rf"{n} counts: \ log mean $0.5 + 0.4x$", font_size=22),
             label(r"but negative binomial, \ not Poisson", font_size=22, color=RES),
             label(rf"mean {d['mean']:.2f}, \ variance {d['var']:.2f}", font_size=22),
-            label(rf"slope estimate {d['b'][1]:.3f} \ (truth 0.4): \ fine", font_size=22, color=HIT),
+            label(rf"slope estimate {d['b'][1]:.3f} \ (truth 0.4): \ one sample", font_size=22, color=HIT),
         ), 4.6, 0.38, [4.2, 1.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> An everyday case. Four hundred counts whose log mean rises linearly with a covariate, with a "
-            "slope of point four, <bookmark mark='b'/> but generated from a negative binomial, so they're more variable than a "
-            "Poisson model allows. <bookmark mark='c'/> The mean is two point one, the variance six point six, three times as "
-            "large. <bookmark mark='d'/> Fit a Poisson regression anyway. The slope estimate is fine, point four seven, "
-            "because the Poisson score equations only need the mean to be right. <bookmark mark='e'/> But the model-based "
-            "standard error is too small: the sandwich is sixty percent larger, and quasi-Poisson, which scales by the "
-            "estimated dispersion, agrees with it."
+            "<bookmark mark='a'/> An everyday case. Four hundred counts whose log mean rises linearly with a "
+            "covariate, with a slope of point four, <bookmark mark='b'/> but generated from a negative binomial, so "
+            "they're more variable than a Poisson model allows. <bookmark mark='c'/> The mean is two point one, the "
+            "variance six point six, three times as large. <bookmark mark='d'/> Fit a Poisson regression anyway. The "
+            "slope estimate is fine, point four seven, because the Poisson score equations only need the mean to be "
+            "right. <bookmark mark='e'/> But the model-based standard error is too small: the sandwich is sixty "
+            "percent larger, and a scalar quasi-Poisson adjustment is fairly close here. But our negative-binomial "
+            "variance is mu plus mu squared over k, not a constant multiple of mu. A quasi-Poisson model-based SE is "
+            "therefore not guaranteed valid; the sandwich estimates the required score variability."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")

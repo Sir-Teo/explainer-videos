@@ -1,0 +1,7 @@
+{
+  "url": "https://raw.githubusercontent.com/cran/mixdist/master/data/pearson.txt.gz",
+  "sha256": "4ecc71984cbadf4a89517d5ca62c10825b552d168e430da46bd43f9b31a2e0e9",
+  "verified_rows": 29,
+  "total_crabs": 1000,
+  "match": "All interval upper bounds, including infinity, and counts match the Museum exactly"
+}
