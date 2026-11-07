@@ -36,7 +36,7 @@ PROBLEMS = [
     r"$j$, show $\mathbb E|Y_1 - \hat Y_1|^2 = 2H\Delta^{2H}\sum_j\int_{j-1}^{j}(x^{a} - c_j^{a})^2dx$, that the sum converges, "
     r"and that the optimal $c_j$ on each cell is $b_j$.",
     r"(qual) Show that the left-point Riemann scheme's variance is $1 - \Delta^{2H}2H|\zeta(1 - 2H)|(1 + o(1))$ "
-    r"(for $H < \frac12$), and hence that exponentiating with $t^{2H}$ biases $\mathbb E[v_1]$ by a factor "
+    r"(for $H < \frac12$), and hence that exponentiating with $t^{2H}$ biases $\mathbb E[v_1]$ to leading order by a factor "
     r"$e^{-\eta^2 H|\zeta(1 - 2H)|\Delta^{2H}}$."
 ]
 
