@@ -33,6 +33,9 @@ class Fission(VoiceoverScene):
         rows[1][-1].set_color(HYBC)
         rows[2][-1].set_color(NAIVEC)
         whys = [why(r"Cox (1975)"), why(r"by independence"), why(r"one pixel, \ one count, \ one region"), why(r"Leiner, \ Duan, \ Wasserman \& Ramdas")]
+        head = label('Splitting', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> The oldest fix is sample splitting, studied by David Cox in 1975: select on one half of the "
             "data and infer on the other. <bookmark mark='b'/> It is valid for any selection rule, because the second half "
@@ -49,21 +52,19 @@ class Fission(VoiceoverScene):
 
     def fission(self):
         rows = [
-            cmath(r"X \sim N(\mu, \sigma^2), \ Z \sim N(0, \sigma^2)", r":", r"f = X + \tau Z, \ \ g = X - Z/\tau", font_size=34),
+            cmath(r"X \sim N(\mu, \sigma^2), \ Z \sim N(0, \sigma^2),\ Z\perp X,\ \tau>0", r":", r"f = X + \tau Z, \ \ g = X - Z/\tau", font_size=34),
             cmath(r"\mathrm{Cov}(f, g)", r"=", r"\sigma^2 - \tau\cdot\tfrac1\tau\,\sigma^2 = 0 \ \Rightarrow \ f \perp g", font_size=34),
             cmath(r"f \sim N(\mu, (1 + \tau^2)\sigma^2)", r",", r"g \sim N(\mu, (1 + \tau^{-2})\sigma^2)", font_size=34),
-            cmath(r"\text{use}", r":", r"\text{select with } f, \ \text{infer with } g: \ \text{exactly valid, \ any rule}", font_size=34),
+            cmath(r"\text{use}", r":", r"\text{select with } f, \ \text{infer with } g: \ \text{valid individual inference with known variance}", font_size=34),
         ]
         rows[1][-1].set_color(PROOFC)
         rows[3][-1].set_color(SPLITC)
         whys = [why(r"add and subtract the same noise"), why(r"jointly Gaussian"), why(r"both carry $\mu$"), why(r"data fission (2025)")]
+        head = label('Fission', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> For a normal observation, the answer is a short calculation. Draw independent noise Z with "
-            "the same variance; let f be X plus tau Z and g be X minus Z over tau. <bookmark mark='b'/> Their covariance is "
-            "sigma squared minus tau times one over tau times sigma squared: zero. They are jointly Gaussian, so they are "
-            "independent. <bookmark mark='c'/> Both carry the same mean, with variances inflated by one plus tau squared and "
-            "one plus one over tau squared. <bookmark mark='d'/> So select with f, and infer with g: the inference is "
-            "exactly valid, whatever the selection rule."
+            "<bookmark mark='a'/> For a normal observation, the answer is a short calculation. With known variance and positive tau, draw independent noise Z with the same variance; let f be X plus tau Z and g be X minus Z over tau. <bookmark mark='b'/> Their covariance is sigma squared minus tau times one over tau times sigma squared: zero. They are jointly Gaussian, so they are independent. <bookmark mark='c'/> Both carry the same mean, with variances inflated by one plus tau squared and one plus one over tau squared. <bookmark mark='d'/> So select with f, and infer with g: the inference is valid for each chosen fixed target with a correctly calibrated procedure on g. Multiple reported intervals need a separate simultaneous or false coverage correction. Plug-in variances do not preserve the exact independence argument."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -81,13 +82,11 @@ class Fission(VoiceoverScene):
         ]
         rows[1][-1].set_color(PROOFC)
         whys = [why(r"thinning a Poisson process"), why(r"a classical fact"), why(r"Neufeld, \ Dharamshi, \ Gao \& Witten (2024)"), why(r"100,000 simulated counts")]
+        head = label('Thinning', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> For counts, the analogue is thinning. Given a Poisson count, keep each event independently "
-            "with probability epsilon. <bookmark mark='b'/> The kept and discarded counts are independent Poisson variables, "
-            "a classical fact about thinning a Poisson process. <bookmark mark='c'/> Anna Neufeld, Ameer Dharamshi, Lucy Gao "
-            f"and Daniela Witten extended the idea to every convolution-closed family. <bookmark mark='d'/> A check: with "
-            f"epsilon a half and a mean of eight, the two pieces have means {say(d['mean_a'], 2)} and {say(d['mean_b'], 2)}, "
-            f"and a correlation of {say(d['corr'], 4)}."
+            f"<bookmark mark='a'/> For counts, the analogue is thinning. Given a Poisson count, keep each event independently with probability epsilon. <bookmark mark='b'/> The kept and discarded counts are independent Poisson variables, a classical fact about thinning a Poisson process. <bookmark mark='c'/> Anna Neufeld, Ameer Dharamshi, Lucy Gao and Daniela Witten extended the idea to convolution-closed families with a valid parameter partition and a sampleable conditional splitting law. Needed nuisance parameters must be known for exact independence. <bookmark mark='d'/> A check: with epsilon a half and a mean of eight, the two pieces have means {say(d['mean_a'], 2)} and {say(d['mean_b'], 2)}, and a correlation of {say(d['corr'], 4)}."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -104,14 +103,11 @@ class Fission(VoiceoverScene):
         ]
         rows[2][-1].set_color(HYBC)
         whys = [why(r"Leiner et al., \ Section 4"), why(r"any selection: \ lasso, \ stepwise, \ eyeballing"), why(r"PoSI's target, \ no constant needed"), why(r"the paper's examples")]
+        head = label('Regression', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> Fission works for whole regressions. With a fixed design and Gaussian noise, "
-            "<bookmark mark='b'/> fission the response vector into f and g, and choose a model with f by any means: "
-            "the lasso, stepwise, or looking at plots. <bookmark mark='c'/> Then fit the chosen model to g by least "
-            "squares; its ordinary intervals are valid for the projection of the mean onto the chosen columns, PoSI's "
-            "target, with no inflation constant at all. <bookmark mark='d'/> Leiner and colleagues extend this to "
-            "generalized linear models, to trend filtering, and to interactive procedures where an analyst selects in "
-            "several rounds."
+            "<bookmark mark='a'/> Fission works for whole regressions. With a fixed design and Gaussian noise, <bookmark mark='b'/> fission the response vector into f and g, and choose a model with f by any means: the lasso, stepwise, or looking at plots. <bookmark mark='c'/> Then fit the chosen model to g by least squares; its ordinary intervals are valid for the projection of the mean onto the chosen columns, PoSI's target, using the known inflated noise variance. These are individual intervals; simultaneous coverage still needs multiplicity control. <bookmark mark='d'/> Leiner and colleagues extend this to generalized linear models, to trend filtering, and to interactive procedures where an analyst selects in several rounds."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -190,19 +186,17 @@ class Fission(VoiceoverScene):
         rows = [
             cmath(r"\text{single-cell RNA}", r":", r"\text{counts } X_{ij}: \ \text{cluster cells, \ then find marker genes}", font_size=34),
             cmath(r"\text{count splitting}", r":", r"\text{thin each count: \ cluster on } X^{(1)}, \text{ test on } X^{(2)}", font_size=34),
-            cmath(r"\text{Poisson}", r":", r"\text{exact; \ negative binomial needs the dispersion}", font_size=32),
+            cmath(r"\text{Poisson}", r":", r"\text{exact; \ NB needs a beta-binomial split with known shape}", font_size=32),
             cmath(r"\text{so}", r":", r"\text{the double dipping of chapter 9, \ avoided by construction}", font_size=34),
         ]
         rows[1][-1].set_color(SPLITC)
         rows[3][-1].set_color(HYBC)
         whys = [why(r"a common pipeline"), why(r"Neufeld et al. (2022)"), why(r"convolution-closed only"), why(r"a preview")]
+        head = label('Counts', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> The most popular application is in single-cell genomics. Counts of each gene in each "
-            "cell are clustered into cell types, and then the same counts are tested to find the genes that mark each "
-            "type. <bookmark mark='b'/> Count splitting, by Neufeld and colleagues, thins every count into two: "
-            "cluster on one, test on the other. <bookmark mark='c'/> For Poisson counts the pieces are exactly "
-            "independent; for negative binomial counts, the overdispersion must be known or estimated. <bookmark "
-            "mark='d'/> It avoids by construction the double dipping that chapter nine attacks by conditioning."
+            "<bookmark mark='a'/> The most popular application is in single-cell genomics. Counts of each gene in each cell are clustered into cell types, and then the same counts are tested to find the genes that mark each type. <bookmark mark='b'/> Count splitting, by Neufeld and colleagues, thins every count into two: cluster on one, test on the other. <bookmark mark='c'/> For Poisson counts the pieces are exactly independent; ordinary binomial thinning of a negative binomial count leaves dependent pieces. With known shape, the appropriate conditional split is beta-binomial and partitions that shape. Estimating dispersion gives a working approximation, not exact independence. <bookmark mark='d'/> It avoids by construction the double dipping that chapter nine attacks by conditioning."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):

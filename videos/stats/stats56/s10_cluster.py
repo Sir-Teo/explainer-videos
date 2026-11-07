@@ -30,6 +30,9 @@ class Clustering(VoiceoverScene):
         ]
         rows[2][-1].set_color(NAIVEC)
         whys = [why(r"$k$-means, \ hierarchical"), why(r"the obvious next step"), why(r"double dipping"), why(r"the motivating science")]
+        head = label('Double dip', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> In unsupervised learning the selection is the whole analysis. An algorithm splits the data "
             "into clusters. <bookmark mark='b'/> The obvious next step is to test whether the clusters' means differ. "
@@ -52,15 +55,12 @@ class Clustering(VoiceoverScene):
         ]
         rows[2][-1].set_color(SELC)
         rows[3][-1].set_color(CONDC)
-        whys = [why(r"in $d$ dimensions, \ its norm"), why(r"keep everything else fixed"), why(r"computed by re-clustering"), why(r"Gao, \ Bien \& Witten (2024)")]
+        whys = [why(r"in $d$ dimensions, \ its norm"), why(r"keep everything else fixed"), why(r"analytic quadratic inequalities for global 1D two-means"), why(r"Gao, \ Bien \& Witten (2024)")]
+        head = label('Test', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> Lucy Gao, Jacob Bien and Daniela Witten condition on the clustering. Let nu be the contrast "
-            "that gives the difference of the two clusters' means. <bookmark mark='b'/> Perturb the data along that "
-            "contrast only, replacing the observed difference by phi and keeping everything else fixed. <bookmark "
-            "mark='c'/> The set S collects the values of phi for which the algorithm, rerun on the perturbed data, finds "
-            "the same clusters. <bookmark mark='d'/> Under the null the difference is sigma times the norm of nu times a chi "
-            "variable, and the selective p-value is its chance of exceeding the observed difference, conditional on lying in "
-            "S. For hierarchical clustering they compute S exactly; Yiqun Chen and Witten did the same for k-means."
+            "<bookmark mark='a'/> Lucy Gao, Jacob Bien and Daniela Witten condition on the clustering. Let nu be the contrast that gives the difference of the two clusters' means. <bookmark mark='b'/> Perturb the data along that contrast only, replacing the observed difference by phi and keeping everything else fixed. <bookmark mark='c'/> The set S collects the values of phi for which the algorithm, rerun on the perturbed data, finds the same clusters. <bookmark mark='d'/> Under the null the difference is sigma times the norm of nu times a chi variable, and the selective p-value is its chance of exceeding the observed difference, conditional on lying in S. For our global one dimensional two-means algorithm, alternative sorted split costs are quadratic in phi. Solving their inequalities gives the selection region analytically, without a grid. The cited papers develop related calculations for hierarchical and k-means algorithms."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -93,19 +93,12 @@ class Clustering(VoiceoverScene):
         hn = hist(B.ax, np.asarray(n["x"]), 15, 41, 26, n["cut"])
         rows = fit_rows(VGroup(
             label(rf"Old Faithful: \ two-means splits at {f['cut']:.2f} min: \ {f['n'][0]} and {f['n'][1]} eruptions", font_size=24, color=GREY_A),
-            label(rf"naive $p = {f['naive']:.0e}$; \ selective $p = {f['selective']:.0e}$: \ two real clusters", font_size=24, color=HYBC),
+            label(rf"naive $p = {f['naive']:.0e}$; \ selective $p = {f['selective']:.0e}$: \ working Gaussian model", font_size=24, color=HYBC),
             label(rf"Newcomb: \ splits at {n['cut']:.1f}: \ {n['n'][0]} and {n['n'][1]} measurements", font_size=24, color=GREY_A),
-            label(rf"naive $p = {n['naive']:.0e}$; \ selective $p = {n['selective']:.2f}$: \ one cluster, \ cut in two", font_size=24, color=NAIVEC),
+            label(rf"naive $p = {n['naive']:.0e}$; \ selective $p = {n['selective']:.2f}$: \ working Gaussian model", font_size=24, color=NAIVEC),
         ), 12.4, 0.3, [0, -2.0, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Two real data sets in one dimension, each split by two-means. Old Faithful's eruptions "
-            f"split at {say(f['cut'], 2)} minutes into {f['n'][0]} short and {f['n'][1]} long ones. <bookmark mark='b'/> The "
-            f"naive test's P-value is astronomically small, and so is the selective one: two real clusters, as every "
-            f"geologist knows. <bookmark mark='c'/> Newcomb's passage times, without the two outliers, are one population "
-            f"of repeated measurements, but two-means still splits them, at {say(n['cut'], 1)}. <bookmark mark='d'/> The "
-            f"naive test calls the split hugely significant. The selective test gives a P-value of {say(n['selective'], 2)}: "
-            f"one cluster, cut in two by the algorithm. In both, sigma is estimated conservatively by the overall standard "
-            f"deviation."
+            f"<bookmark mark='a'/> Two real data sets in one dimension, each split by two-means. Old Faithful's eruptions split at {say(f['cut'], 2)} minutes into {f['n'][0]} short and {f['n'][1]} long ones. <bookmark mark='b'/> The naive test's P-value is astronomically small, and so is this working-model selective value, consistent with the visible separation. These historical data are not verified Gaussian observations with known variance. <bookmark mark='c'/> Newcomb's passage times, without the two outliers, are one population of repeated measurements, but two-means still splits them, at {say(n['cut'], 1)}. <bookmark mark='d'/> The naive test calls the split hugely significant. The selective test gives a P-value of {say(n['selective'], 2)}: the algorithm alone can create a striking naive comparison. In both historical examples sigma is the overall sample standard deviation, which is not a certified upper bound. These are approximate illustrations; removing Newcomb outliers also changes the analysis."
         ) as vo:
             self.play(FadeIn(A), FadeIn(B), FadeIn(museum_tag(r"Old Faithful; \ Newcomb (1891)")))
             vo.wait_until("a")
@@ -124,7 +117,7 @@ class Clustering(VoiceoverScene):
         nv = np.asarray(d["naive"])
         bins = np.linspace(0, 1, 11)
         h, _ = np.histogram(s, bins)
-        A = axes([0, 1], [0, 1.6 * len(s) / 10], x_length=7.4, y_length=4.4, xlabel=r"$p$-value", ylabel=r"count",
+        A = axes([0, 1], [0, max(1.6 * len(s) / 10, max(h) * 1.1)], x_length=7.4, y_length=4.4, xlabel=r"$p$-value", ylabel=r"count",
                  xticks=[0, 0.25, 0.5, 0.75, 1], yticks=[0, 100, 200], center=[-2.5, 0.2, 0])
         ax = A.ax
         bars = VGroup(*[Rectangle(width=ax.c2p(b1, 0)[0] - ax.c2p(b0, 0)[0] - 0.04, height=ax.c2p(0, c)[1] - ax.c2p(0, 0)[1], stroke_width=0,
@@ -138,11 +131,7 @@ class Clustering(VoiceoverScene):
             label(r"conditioning on the clustering restores the null", font_size=22, color=HYBC),
         ), 4.6, 0.4, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The check. {len(s):,} samples of forty from a single normal, so there are no clusters at "
-            f"all. <bookmark mark='b'/> The selective P-values are flat, as a valid test's must be: "
-            f"{100 * np.mean(s < 0.05):.1f} percent fall below five percent. <bookmark mark='c'/> The naive P-values fall "
-            f"below five percent {100 * np.mean(nv < 0.05):.0f} percent of the time. <bookmark mark='d'/> Conditioning on "
-            f"the clustering restores the null."
+            f"<bookmark mark='a'/> The check. {len(s):,} samples of forty from a single normal, so there are no clusters at all. <bookmark mark='b'/> With independent Gaussian data and known sigma one, these exact pivots should be uniform. A conservative valid p-value need only be superuniform. Here {100 * np.mean(s < 0.05):.1f} percent fall below five percent. <bookmark mark='c'/> The naive P-values fall below five percent {100 * np.mean(nv < 0.05):.0f} percent of the time. <bookmark mark='d'/> Conditioning on the clustering restores the null."
         ) as vo:
             self.play(FadeIn(A), FadeIn(flat), FadeIn(simulated_tag(r"simulated")))
             vo.wait_until("a")
@@ -157,13 +146,16 @@ class Clustering(VoiceoverScene):
 
     def why_works(self):
         rows = [
-            cmath(r"\text{condition on}", r":", r"\text{the clustering, \ and the data orthogonal to } \nu", font_size=34),
+            cmath(r"\text{condition on}", r":", r"\text{the partition, \ contrast direction, \ and data orthogonal to }\nu", font_size=34),
             cmath(r"\text{then}", r":", r"\text{the only randomness left is the size of the difference}", font_size=34),
             cmath(r"\text{under } H_0", r":", r"\text{that size is } \sigma\|\nu\|\chi_1, \ \text{truncated to } S", font_size=34),
             cmath(r"\text{so}", r":", r"\text{exact: \ the polyhedral lemma's idea}", font_size=32),
         ]
         rows[3][-1].set_color(PROOFC)
         whys = [why(r"the nuisance part"), why(r"one dimension"), why(r"Gaussian data, \ known $\sigma$"), why(r"chapter 3, \ again")]
+        head = label('Why works', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> Why is it exact? The test conditions on the clustering and on every feature of the "
             "data that is orthogonal to the contrast nu. <bookmark mark='b'/> What remains random is only the size of "
@@ -180,20 +172,18 @@ class Clustering(VoiceoverScene):
 
     def extensions(self):
         rows = [
-            cmath(r"\sigma \text{ unknown}", r":", r"\text{overestimate it: \ conservative}", font_size=32),
+            cmath(r"\sigma \text{ unknown}", r":", r"\text{a fixed known upper bound is conservative}", font_size=32),
             cmath(r"\text{many clusters}", r":", r"\text{test each pair; \ multiplicity, \ again}", font_size=34),
             cmath(r"\text{other problems}", r":", r"\text{changepoints, \ PCA, \ trees}", font_size=32),
             cmath(r"\text{or}", r":", r"\text{thin first: \ cluster on one part, \ test on the other}", font_size=32),
         ]
         rows[3][-1].set_color(SPLITC)
-        whys = [why(r"still valid"), why(r"Part 33"), why(r"the same perturbation idea"), why(r"for count data")]
+        whys = [why(r"sample SD is not a certified upper bound"), why(r"Part 33"), why(r"the same perturbation idea"), why(r"for count data")]
+        head = label('Extensions', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> Some practicalities. When sigma is unknown, an overestimate keeps the test valid but "
-            "conservative, which is what we did. <bookmark mark='b'/> With many clusters, every pair can be tested, and the "
-            "multiplicity of Part thirty-three returns. <bookmark mark='c'/> The same perturbation idea gives selective tests "
-            "after detecting changepoints, after principal components, and after fitting trees. <bookmark mark='d'/> And "
-            "for count data such as gene expression, chapter five's thinning gives a simpler route: cluster on one thinned "
-            "copy, test on the other."
+            "<bookmark mark='a'/> Some practicalities. A fixed known upper bound on sigma is conservative in this truncated chi model. The sample standard deviation is not such a bound. An estimated upper bound needs its own error budget or a justified conditional argument. <bookmark mark='b'/> With many clusters, every pair can be tested, and the multiplicity of Part thirty-three returns. <bookmark mark='c'/> The same perturbation idea gives selective tests after detecting changepoints, after principal components, and after fitting trees. <bookmark mark='d'/> And for count data such as gene expression, chapter five's thinning gives a simpler route: cluster on one thinned copy, test on the other."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):

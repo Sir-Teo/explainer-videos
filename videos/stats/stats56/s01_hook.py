@@ -47,12 +47,12 @@ class Hook(VoiceoverScene):
         d = load("hook")
         k = len(d["est"])
         xs = np.arange(k)
-        A = axes([-0.8, k - 0.2], [0, 2.4], x_length=8.0, y_length=4.2, xlabel=r"the 20 genes with the largest $|t|$, \ ranked",
+        A = axes([-0.8, k - 0.2], [min(0, min(d["rep"]) - .1), max(2.4, max(d["est"] + d["rep"] + d["true"]) + .1)], x_length=8.0, y_length=4.2, xlabel=r"the 20 genes with the largest $|t|$, \ ranked",
                  ylabel=r"effect, \ SD units", xticks=[0, 4, 9, 14, 19], xfmt=lambda v: f"{int(v) + 1}", yticks=[0, 1, 2], center=[-2.3, 0.0, 0])
         ax = A.ax
         est = VGroup(*[Dot(ax.c2p(x, v), radius=0.09, color=NAIVEC) for x, v in zip(xs, d["est"])])
         tru = VGroup(*[Dot(ax.c2p(x, v), radius=0.09, color=TRUEC6) for x, v in zip(xs, d["true"])])
-        rep = VGroup(*[Dot(ax.c2p(x, min(max(v, 0), 2.35)), radius=0.08, color=SPLITC) for x, v in zip(xs, d["rep"])])
+        rep = VGroup(*[Dot(ax.c2p(x, v), radius=0.08, color=SPLITC) for x, v in zip(xs, d["rep"])])
         links = VGroup(*[Line(ax.c2p(x, a), ax.c2p(x, b), color=GREY_D, stroke_width=1.5) for x, a, b in zip(xs, d["est"], d["true"])])
         side = fit_rows(VGroup(
             label(rf"the World's gene study: \ {d['m']:,} genes, \ 25 + 25 people", font_size=22),
@@ -62,14 +62,7 @@ class Hook(VoiceoverScene):
             label(rf"inflated by {100 * (d['mean_est'] / d['mean_true'] - 1):.0f}\%, \ though every one of the 20 is real", font_size=22, color=SELC),
         ), 4.2, 0.4, [4.6, 0.2, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The World can show it, because in the World we know the truth. Its gene study measures five "
-            f"thousand genes on twenty-five patients and twenty-five controls. Take the twenty genes with the largest test "
-            f"statistics. <bookmark mark='b'/> Their estimated effects, in red, average {say(d['mean_est'], 2)} standard "
-            f"deviations. <bookmark mark='c'/> Their true effects, in white, average {say(d['mean_true'], 2)}. <bookmark "
-            f"mark='d'/> And a replication study, a fresh twenty-five and twenty-five, finds {say(d['mean_rep'], 2)}: the "
-            f"truth, not the discovery. <bookmark mark='e'/> The discoveries were inflated by about "
-            f"{100 * (d['mean_est'] / d['mean_true'] - 1):.0f} percent, even though every one of these twenty genes is "
-            f"genuinely involved. Selection, not error, did it."
+            f"<bookmark mark='a'/> The World can show it, because in the World we know the truth. Its gene study measures five thousand genes on twenty-five patients and twenty-five controls. Take the twenty genes with the largest test statistics. <bookmark mark='b'/> Their estimated effects, in red, average {say(d['mean_est'], 2)} standard deviations. <bookmark mark='c'/> Their true effects, in white, average {say(d['mean_true'], 2)}. <bookmark mark='d'/> And a replication study, a fresh twenty-five and twenty-five, finds {say(d['mean_rep'], 2)}, close to the known truth in this draw. A fresh replication still has sampling error. <bookmark mark='e'/> The discoveries were inflated by about {100 * (d['mean_est'] / d['mean_true'] - 1):.0f} percent, even though every one of these twenty genes is genuinely involved. Selection amplified the sampling noise, even though these associations are real."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"the World; \ truth known")))
             vo.wait_until("a")
@@ -88,20 +81,14 @@ class Hook(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"this part's question:", font_size=28, color=GREY_A),
             label(r"how do you give honest uncertainty about a question chosen by looking at the data?", font_size=28, color=SELC),
-            label(r"five answers, \ at five prices:", font_size=26, color=GREY_A),
+            label(r"four families, \ each with a price:", font_size=26, color=GREY_A),
             label(r"cover every question you might have asked \ (PoSI)", font_size=24, color=SIMC),
             label(r"condition on having asked this one \ (selective inference)", font_size=24, color=CONDC),
             label(r"pay a little noise or data for freedom \ (randomization, \ splitting, \ fission)", font_size=24, color=SPLITC),
             label(r"control an error rate over the selected set \ (knockoffs, \ conformal selection)", font_size=24, color=HYBC),
         ), 12.4, 0.36, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> This part's question: <bookmark mark='b'/> how do you give honest uncertainty about a "
-            "question that was chosen by looking at the data? <bookmark mark='c'/> There are five kinds of answer, each with "
-            "its own price. <bookmark mark='d'/> You can cover every question you might have asked, which is the idea of "
-            "post-selection inference, PoSI. <bookmark mark='e'/> You can condition on having asked this particular "
-            "question, which is selective inference. <bookmark mark='f'/> You can pay a little noise, or a little data, "
-            "for the freedom to select as you like: randomization, splitting and fission. <bookmark mark='g'/> Or you can "
-            "control an error rate over the whole selected set, as knockoffs and conformal selection do."
+            "<bookmark mark='a'/> This part's question: <bookmark mark='b'/> how do you give honest uncertainty about a question that was chosen by looking at the data? <bookmark mark='c'/> There are four families of answer, each with its own price. <bookmark mark='d'/> You can cover every question you might have asked, which is the idea of post-selection inference, PoSI. <bookmark mark='e'/> You can condition on having asked this particular question, which is selective inference. <bookmark mark='f'/> You can pay a little noise, or a little data, for the freedom to select as you like: randomization, splitting and fission. <bookmark mark='g'/> Or you can control an error rate over the whole selected set, as knockoffs and conformal selection do."
         ) as vo:
             for k, m_ in enumerate("abcdefg"):
                 vo.wait_until(m_)
@@ -111,21 +98,18 @@ class Hook(VoiceoverScene):
     def history(self):
         rows = [
             cmath(r"\text{Cox (1975)}", r":", r"\text{split the sample: \ select on one half, \ test on the other}", font_size=34),
-            cmath(r"\text{Leeb \& P\"otscher (2006)}", r":", r"\text{no uniform fix for naive intervals}", font_size=32),
+            cmath(r"\text{Leeb \& P\"otscher (2006)}", r":", r"\text{limits on uniform post-selection distribution estimation}", font_size=32),
             cmath(r"\text{Berk et al. (2013)}", r":", r"\text{cover every model: \ PoSI}", font_size=34),
             cmath(r"\text{Lee et al. (2016)}", r":", r"\text{condition on selection, \ exactly}", font_size=34),
         ]
         rows[1][-1].set_color(NAIVEC)
         rows[3][-1].set_color(CONDC)
         whys = [why(r"the oldest fix"), why(r"an impossibility theorem"), why(r"simultaneity"), why(r"the polyhedral lemma")]
+        head = label('History', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> A short history. In 1975 David Cox analysed sample splitting: select on one half of "
-            "the data and test on the other. <bookmark mark='b'/> In 2006 Hannes Leeb and Benedikt Pötscher proved a "
-            "sobering impossibility: the distribution of an estimator after model selection depends on unknown "
-            "parameters in a way that cannot be estimated uniformly, so no bootstrap or plug-in can fix the naive "
-            "intervals. <bookmark mark='c'/> The response came in two forms. Berk and colleagues in 2013 covered every "
-            "model at once. <bookmark mark='d'/> Lee, Sun, Sun and Taylor in 2016 conditioned on the selection, "
-            "exactly and computably, and the field of selective inference grew from there."
+            "<bookmark mark='a'/> A short history. In 1975 David Cox analysed sample splitting: select on one half of the data and test on the other. <bookmark mark='b'/> In 2006 Hannes Leeb and Benedikt Pötscher proved a sobering impossibility: the distribution of an estimator after model selection depends on unknown parameters in a way that cannot be estimated uniformly, under the paper's model-selection conditions. This rules out a uniform distribution-estimation fix there, not every form of valid post-selection inference. <bookmark mark='c'/> The response came in two forms. Berk and colleagues in 2013 covered every model at once. <bookmark mark='d'/> Lee, Sun, Sun and Taylor in 2016 conditioned on the selection, exactly and computably, and the field of selective inference grew from there."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -171,17 +155,13 @@ class Hook(VoiceoverScene):
     def upgrade(self):
         cards = [
             upgrade_card(33, r"control the false discovery rate over thousands of questions", r"the discoveries' estimates and intervals can be read at face value",
-                         r"chapters 1--8: \ honest intervals for what was selected"),
+                         r"interval guarantees and FDR guarantees answer different questions"),
             upgrade_card(52, r"the lasso selects, \ and the debiased lasso gives intervals", r"the question was fixed before the lasso chose",
                          r"chapter 3: \ inference on the lasso's own model"),
         ]
         VGroup(*cards).arrange(DOWN, buff=0.4).move_to(ORIGIN)
         with self.voiceover(
-            "<bookmark mark='a'/> Two promises come due. Part thirty-three controlled the false discovery rate over thousands "
-            "of questions, and quietly let us read the discoveries' estimates at face value. Chapters one to eight give "
-            "honest intervals for what was selected. <bookmark mark='b'/> And Part fifty-two's lasso selected variables, "
-            "while its intervals assumed the question had been fixed in advance. Chapter three gives inference on the "
-            "lasso's own model."
+            "<bookmark mark='a'/> Two promises come due. Part thirty-three controlled the false discovery rate over thousands of questions, and quietly let us read the discoveries' estimates at face value. This part distinguishes interval guarantees from the false discovery rate guarantees of knockoffs and conformal selection. <bookmark mark='b'/> And Part fifty-two's lasso selected variables, while its intervals assumed the question had been fixed in advance. Chapter three gives inference on the lasso's own model."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(cards[0], shift=UP * 0.2))

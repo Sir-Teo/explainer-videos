@@ -31,6 +31,9 @@ class PoSI(VoiceoverScene):
         rows[0][-1].set_color(SIMC)
         rows[3][-1].set_color(SELC)
         whys = [why(r"$\mu = E Y$: \ the projection"), why(r"meaning changes with $M$"), why(r"Berk, \ Brown, \ Buja, \ Zhang \& Zhao"), why(r"a moving target")]
+        head = label('Target', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> Richard Berk, Lawrence Brown, Andreas Buja, Kai Zhang and Linda Zhao, at Wharton, began "
             "with the target. For any submodel M, a set of columns, define beta M as the projection of the mean of Y onto "
@@ -55,14 +58,11 @@ class PoSI(VoiceoverScene):
         rows[1][-1].set_color(SIMC)
         rows[3][-1].set_color(HYBC)
         whys = [why(r"each a normal contrast of $Y$"), why(r"the PoSI constant"), why(r"$\hat M$ is one of the $M$'s"), why(r"its strength")]
+        head = label('Constant', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> For each submodel and each coefficient in it, the standardized estimate is a normal "
-            "contrast of Y, with the contrast vector l j dot M. <bookmark mark='b'/> The PoSI constant K is the one minus "
-            "alpha quantile of the largest of these t-statistics, over every submodel and every coefficient in it. "
-            "<bookmark mark='c'/> Then intervals of half-width K standard errors cover every coefficient of the selected "
-            "model, simultaneously, because the selected model is one of the models in the maximum. <bookmark mark='d'/> "
-            "And that holds for any selection rule at all: the lasso, stepwise regression, or a human looking at plots and "
-            "trying things until something works."
+            "<bookmark mark='a'/> Assume a fixed full-rank design, jointly Gaussian observations, and known noise variance. For each submodel and each coefficient in it, the standardized estimate is a normal contrast of Y, with the contrast vector l j dot M. <bookmark mark='b'/> The PoSI constant K is the one minus alpha quantile of the largest of these t-statistics, over every submodel and every coefficient in it. <bookmark mark='c'/> Then intervals of half-width K standard errors cover every coefficient of the selected model, simultaneously, because the selected model is one of the models in the maximum. <bookmark mark='d'/> And that holds for any selection rule at all: the lasso, stepwise regression, or a human looking at plots and trying things until something works."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -94,13 +94,7 @@ class PoSI(VoiceoverScene):
             label(rf"white: \ Scheff\'e, \ $\sqrt{{\chi^2_p}}$: \ {r10['scheffe']:.2f}", font_size=22, color=WHITE),
         ), 4.6, 0.4, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The PoSI constant by simulation, against the number of variables. Without correction, one "
-            f"point nine six. <bookmark mark='b'/> For an orthogonal design, the constant grows slowly, to {say(r10['orth'], 2)} "
-            f"with ten variables. <bookmark mark='c'/> For correlated variables it grows faster, to {say(r10['corr'], 2)}, "
-            f"because coefficients mean very different things in different submodels. <bookmark mark='d'/> A Bonferroni "
-            f"correction over all {r10['n_contrasts']:,} coefficients would need {say(r10['bonf'], 2)}, <bookmark mark='e'/> "
-            f"and Scheffé's method, which covers every linear contrast, {say(r10['scheffe'], 2)}. PoSI sits between the "
-            f"naive and the universal."
+            f"<bookmark mark='a'/> The PoSI constant by simulation, against the number of variables. Without correction, one point nine six. <bookmark mark='b'/> For an orthogonal design, the constant grows slowly, to {say(r10['orth'], 2)} with ten variables. <bookmark mark='c'/> For correlated variables it grows faster, to {say(r10['corr'], 2)}, because coefficients mean very different things in different submodels. <bookmark mark='d'/> A Bonferroni correction over all {r10['n_contrasts']:,} coefficients would need {say(r10['bonf'], 2)}, <bookmark mark='e'/> and Scheffé's method, which covers every linear contrast, {say(r10['scheffe'], 2)}. PoSI sits between the naive and the universal. The correlated constants use four thousand calibration draws, with pointwise order-statistic uncertainty stored and another four thousand draws for independent coverage validation. They are Monte Carlo estimates, not certified exact critical values."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated, \ 4,000 draws per point")))
             vo.wait_until("a")
@@ -125,6 +119,9 @@ class PoSI(VoiceoverScene):
         rows[1][-1].set_color(HYBC)
         rows[2][-1].set_color(NAIVEC)
         whys = [why(r"all contrasts in a $p$-space"), why(r"each $t_{j\cdot M}$ is the same for all $M$"), why(r"the gap is real"), why(r"affordable for small $p$")]
+        head = label('Bounds', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
             "<bookmark mark='a'/> How large can K get? Never larger than Scheffé's constant, the root of a chi-squared "
             "quantile, of order root p. <bookmark mark='b'/> For an orthogonal design every submodel's coefficients are the "
@@ -142,19 +139,16 @@ class PoSI(VoiceoverScene):
         rows = [
             cmath(r"\text{compute } K", r":", r"\text{simulate } \max_{M, j}|l_{j\cdot M}'Z|, \ Z \sim N(0, I): \ p\,2^{p-1} \text{ contrasts}", font_size=30),
             cmath(r"\text{restrict}", r":", r"\text{submodels of size} \le m: \ \text{fewer contrasts, \ a smaller } K", font_size=32),
-            cmath(r"\sigma \text{ unknown}", r":", r"\text{use } \hat\sigma \text{ from the full model and a } t\text{-type constant}", font_size=32),
+            cmath(r"\sigma \text{ unknown}", r":", r"\text{independent valid variance estimate; \ calibrated }t\text{ maximum}", font_size=32),
             cmath(r"\text{target}", r":", r"\text{report what } \beta_{j\cdot\hat M} \text{ means: \ the effect adjusted for } \hat M", font_size=32),
         ]
         rows[1][-1].set_color(SIMC)
         whys = [why(r"Monte Carlo, \ as on the chart"), why(r"a smaller search space"), why(r"a $t$ maximum"), why(r"interpretation matters")]
+        head = label('Practice', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> In practice the constant is computed by simulation: draw standard normal vectors and "
-            "take the largest absolute contrast over all p times two to the p minus one coefficients, as we did for "
-            "the chart. <bookmark mark='b'/> If only submodels up to some size m will ever be considered, the maximum "
-            "runs over fewer contrasts and the constant shrinks. <bookmark mark='c'/> With sigma unknown, estimate it "
-            "from the full model and use a t-type constant. <bookmark mark='d'/> And report what the target means: the "
-            "effect of x j adjusted for the other selected variables, which can differ in size and even sign from its "
-            "effect in another model."
+            "<bookmark mark='a'/> In practice the constant is computed by simulation: draw standard normal vectors and take the largest absolute contrast over all p times two to the p minus one coefficients, as we did for the chart. <bookmark mark='b'/> If only submodels up to some size m will ever be considered, the maximum runs over fewer contrasts and the constant shrinks. <bookmark mark='c'/> With sigma unknown, estimate it using an independent, correctly scaled variance estimate with known degrees of freedom, and use the corresponding t maximum. Full-model residual variance needs a correctly specified mean model for that exact argument. <bookmark mark='d'/> And report what the target means: the effect of x j adjusted for the other selected variables, which can differ in size and even sign from its effect in another model."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):

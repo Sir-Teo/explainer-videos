@@ -27,20 +27,16 @@ class Knockoffs(VoiceoverScene):
             cmath(r"\text{the goal}", r":", r"\text{FDR} \le q \text{ in finite samples}", font_size=36),
             cmath(r"\tilde X", r":", r"\tilde X'\tilde X = X'X, \ \ X'\tilde X = X'X - \mathrm{diag}(s)", font_size=30),
             cmath(r"W_j", r"=", r"|\hat\beta_j| - |\hat\beta_{\tilde j}| \ \text{ from one lasso on } [X, \tilde X]", font_size=34),
-            cmath(r"\hat S", r"=", r"\{j: W_j \ge T\}, \ \ T = \min\Big\{t: \frac{1 + \#\{W_j \le -t\}}{\#\{W_j \ge t\} \vee 1} \le q\Big\}", font_size=30),
+            cmath(r"\hat S", r"=", r"\{j: W_j \ge T\}, \ \ T = \min\Big\{t\in\{|W_j|:|W_j|>0\}: \frac{1 + \#\{W_j \le -t\}}{\#\{W_j \ge t\} \vee 1} \le q\Big\}", font_size=30),
         ]
         rows[1][-1].set_color(SPLITC)
         rows[3][-1].set_color(HYBC)
         whys = [why(r"Barber \& Cand\`es (2015)"), why(r"same geometry, \ no signal"), why(r"a contest: \ original vs fake"), why(r"knockoff$+$")]
+        head = label('Fixed x', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> Part thirty-three met knockoffs as a method; here is why they work. Rina Foygel Barber and "
-            "Emmanuel Candès wanted variable selection with false discovery rate control in finite samples. <bookmark "
-            "mark='b'/> Their idea: build a fake copy of every variable, a knockoff, whose correlations with everything "
-            "mimic the original's, but which has no effect on the outcome. <bookmark mark='c'/> Fit one lasso on originals "
-            "and knockoffs together, and score each variable by how much larger its coefficient is than its knockoff's. "
-            "<bookmark mark='d'/> Select the variables whose score exceeds a threshold T, chosen as the smallest t at which "
-            "the estimated false discovery proportion, one plus the number of scores below minus t, over the number above "
-            "t, is at most q."
+            "<bookmark mark='a'/> Part thirty-three met knockoffs as a method; here is why they work. Rina Foygel Barber and Emmanuel Candès wanted variable selection with false discovery rate control in finite samples. <bookmark mark='b'/> Their idea: build a fake copy of every variable, a knockoff, whose correlations with everything mimic the original's, but which has no effect on the outcome. <bookmark mark='c'/> Fit one lasso on originals and knockoffs together, and score each variable by how much larger its coefficient is than its knockoff's. <bookmark mark='d'/> Select the variables whose score exceeds a threshold T, chosen among positive observed absolute scores, or infinity if none qualifies, as the smallest t at which the estimated false discovery proportion, one plus the number of scores below minus t, over the number above t, is at most q."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -57,13 +53,11 @@ class Knockoffs(VoiceoverScene):
         ]
         rows[0][-1].set_color(SPLITC)
         whys = [why(r"Cand\`es, \ Fan, \ Janson \& Lv (2018)"), why(r"the burden moves to $X$"), why(r"Part 33's construction"), why(r"the trade")]
+        head = label('Model x', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> Candès, Yingying Fan, Lucas Janson and Jinchi Lv's model-X knockoffs turn the requirement "
-            "into a distributional one: swapping any set of variables with their knockoffs leaves the joint law of the "
-            "pair unchanged, and the knockoffs are generated without looking at Y. <bookmark mark='b'/> That needs the law of "
-            "the covariates to be known, but nothing at all about how Y depends on them. <bookmark mark='c'/> For Gaussian "
-            "covariates, the knockoffs are drawn from a conditional normal, the construction of Part thirty-three. <bookmark "
-            "mark='d'/> Any sample size, more variables than observations, and any model for the outcome are allowed."
+            "<bookmark mark='a'/> Candès, Yingying Fan, Lucas Janson and Jinchi Lv's model-X knockoffs turn the requirement into a distributional one: swapping any set of variables with their knockoffs leaves the joint law of the pair unchanged, and the knockoffs are generated without looking at Y. <bookmark mark='b'/> That needs the law of the covariates to be known, but nothing at all about how Y depends on them. <bookmark mark='c'/> For centered Gaussian covariates with known positive definite covariance, draw knockoffs independently of the outcome conditional on X. The displayed conditional covariance must be positive semidefinite, with feasible diagonal D. The null is conditional independence of Y and a coordinate given all other coordinates. <bookmark mark='d'/> Any sample size, more variables than observations, and any model for the outcome are allowed."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -74,19 +68,17 @@ class Knockoffs(VoiceoverScene):
     def flip(self):
         rows = [
             cmath(r"\text{swap a null } j", r":", r"X_j \leftrightarrow \tilde X_j \ \Rightarrow \ W_j \to -W_j, \ \text{others unchanged}", font_size=32),
-            cmath(r"\text{exchangeability}", r"\Rightarrow", r"\text{null signs: \ fair coins, \ given } |W|", font_size=32),
+            cmath(r"\text{exchangeability}", r"\Rightarrow", r"\text{nonzero null signs: \ fair coins given } |W|, W_{\rm nonnull}", font_size=32),
             cmath(r"\#\{\text{null } W_j \ge t\}", r"\approx", r"\#\{\text{null } W_j \le -t\} \le \#\{W_j \le -t\}", font_size=34),
             cmath(r"\Rightarrow", r"\;", r"\text{the numerator of } T\text{'s ratio estimates the false discoveries}", font_size=32),
         ]
         rows[1][-1].set_color(SPLITC)
         whys = [why(r"the antisymmetry of $W$"), why(r"the sign-flip property"), why(r"negatives mirror false positives"), why(r"conservatively")]
+        head = label('Flip', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> The key property. Swapping a null variable with its knockoff simply flips the sign of its "
-            "score and leaves every other score alone. <bookmark mark='b'/> Since the swap leaves the joint law unchanged, "
-            "the signs of the null scores are independent fair coins, given their magnitudes. <bookmark mark='c'/> So the "
-            "number of null scores above t is matched, on average, by the number below minus t, and that is at most the "
-            "number of all scores below minus t. <bookmark mark='d'/> The numerator of the threshold's ratio is therefore a "
-            "conservative estimate of the number of false discoveries."
+            "<bookmark mark='a'/> The key property. Swapping a null variable with its knockoff simply flips the sign of its score and leaves every other score alone. <bookmark mark='b'/> Since the swap leaves the joint law unchanged, the signs of the nonzero null scores are independent fair coins, given all magnitudes and the nonnull scores. Zero scores are excluded from this argument. <bookmark mark='c'/> So the number of null scores above t is matched, on average, by the number below minus t, and that is at most the number of all scores below minus t. <bookmark mark='d'/> The numerator of the threshold's ratio is therefore a conservative estimate of the number of false discoveries."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -98,19 +90,16 @@ class Knockoffs(VoiceoverScene):
         rows = [
             cmath(r"\text{fixed-X}", r":", r"\text{no model for } X; \ \text{Gaussian linear model for } Y; \ n \ge 2p", font_size=32),
             cmath(r"\text{model-X}", r":", r"\text{the law of } X \text{ known; \ any model for } Y; \ \text{any } n", font_size=34),
-            cmath(r"\text{statistics } W", r":", r"\text{anything antisymmetric}", font_size=32),
+            cmath(r"\text{statistics } W", r":", r"\text{swap flip; \ fixed-X also requires sufficiency}", font_size=32),
             cmath(r"\text{power}", r":", r"\text{depends on } s \text{ in } \tilde X: \ \text{knockoffs far from the originals help}", font_size=32),
         ]
         rows[3][-1].set_color(SPLITC)
         whys = [why(r"Barber \& Cand\`es (2015)"), why(r"Cand\`es et al. (2018)"), why(r"the flexibility"), why(r"equicorrelated or SDP")]
+        head = label('Compare x', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> The two frameworks trade assumptions. Fixed-X knockoffs need no model for the "
-            "covariates, but a Gaussian linear model for the response and at least twice as many observations as "
-            "variables. <bookmark mark='b'/> Model-X knockoffs need the covariates' law, but nothing about the "
-            "response, and any sample size. <bookmark mark='c'/> In both, the score can be anything antisymmetric in "
-            "an original and its knockoff: lasso coefficients, random-forest importances, or a neural network's. "
-            "<bookmark mark='d'/> Power depends on how different the knockoffs are from the originals, set by the "
-            "constant s, chosen to be as large as the covariance allows."
+            "<bookmark mark='a'/> The two frameworks trade assumptions. Fixed-X knockoffs need no model for the covariates, but a Gaussian linear model for the response and at least twice as many observations as variables. <bookmark mark='b'/> Model-X knockoffs need the covariates' law, but nothing about the response, and any sample size. <bookmark mark='c'/> Model-X permits learners whose paired statistics obey the simultaneous swap flip property. Fixed-X additionally requires sufficiency: dependence on the augmented design and response through their Gram matrix and cross-products. Antisymmetry alone does not justify an arbitrary forest or neural network for fixed-X. <bookmark mark='d'/> Power depends on how different the knockoffs are from the originals, set by the constant s, chosen to be as large as the covariance allows."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -120,7 +109,7 @@ class Knockoffs(VoiceoverScene):
 
     def martingale(self):
         rows = [
-            cmath(r"M(t)", r"=", r"\frac{V^+(t)}{1 + V^-(t)}, \ \ V^\pm(t) = \#\{\text{null } j: \pm W_j \ge t\}", font_size=34),
+            cmath(r"M(t)", r"=", r"\frac{V^+(t)}{1 + V^-(t)}, \ \ V^\pm(t) = \#\{\text{null } j: \pm W_j \ge t,\ W_j\ne0\}", font_size=34),
             cmath(r"\text{as } t \text{ grows}", r":", r"M \text{ is a supermartingale}", font_size=32),
             cmath(r"T \text{ a stopping time}", r"\Rightarrow", r"E\,M(T) \le E\,M(0) \le 1", font_size=36),
             cmath(r"\text{FDR}", r"=", r"E\Big[\frac{V^+(T)}{\#\{W \ge T\} \vee 1}\Big] \le q\,E\,M(T) \le q \qquad \blacksquare", font_size=32),
@@ -128,14 +117,11 @@ class Knockoffs(VoiceoverScene):
         rows[1][-1].set_color(SPLITC)
         rows[3][-1].set_color(PROOFC)
         whys = [why(r"false positives over (one plus) mirrors"), why(r"a hypergeometric calculation"), why(r"optional stopping, \ Part 44"), why(r"by the definition of $T$")]
+        head = label('Martingale', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> The proof that the false discovery rate is at most q is a martingale argument. Let M of t be "
-            "the number of null scores above t, divided by one plus the number below minus t. <bookmark mark='b'/> As t "
-            "increases, null scores drop out one at a time, each from a side chosen by a fair coin, and a short calculation "
-            "shows M is a supermartingale. <bookmark mark='c'/> The threshold T is a stopping time for this process, so by "
-            "optional stopping, the expected value of M at T is at most its starting value, which is at most one: problem two "
-            "of the qualifying exam, now doing real work. <bookmark mark='d'/> And by the definition of T, the false "
-            "discovery proportion at T is at most q times M of T. Taking expectations, the rate is at most q."
+            "<bookmark mark='a'/> The proof that the false discovery rate is at most q is a martingale argument. Let M of t be the number of null scores above t, divided by one plus the number below minus t. <bookmark mark='b'/> Begin with all magnitudes, the nonnull statistics, and the counts of the remaining positive and negative null signs. As t increases, reveal signs of removed scores. Their conditional distribution is hypergeometric, and that calculation makes M a supermartingale in this filtration. <bookmark mark='c'/> The threshold T is a stopping time for this process, so by optional stopping, the expected value of M at T is at most the expectation of its starting value, which is at most one. The realized starting ratio can exceed one. There are finitely many score thresholds, so the stopping argument is bounded. <bookmark mark='d'/> And by the definition of T, the false discovery proportion at T is at most q times M of T. Taking expectations, the rate is at most q."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -146,10 +132,10 @@ class Knockoffs(VoiceoverScene):
     def chart(self):
         d = load("knockoffs")
         fdp = np.asarray(d["fdp"])
-        bins = np.linspace(0, 0.4, 9)
+        bins = np.linspace(0, 1, 11)
         h, _ = np.histogram(fdp, bins)
-        A = axes([0, 0.4], [0, max(h) + 2], x_length=7.4, y_length=4.4, xlabel=r"false discovery proportion of one run", ylabel=r"runs",
-                 xticks=[0, 0.1, 0.2, 0.3, 0.4], yticks=[0, 10, 20], center=[-2.5, 0.2, 0])
+        A = axes([0, 1], [0, max(h) + 2], x_length=7.4, y_length=4.4, xlabel=r"false discovery proportion of one run", ylabel=r"runs",
+                 xticks=[0, .25, .5, .75, 1], yticks=[0, 10, 20], center=[-2.5, 0.2, 0])
         ax = A.ax
         bars = VGroup(*[Rectangle(width=ax.c2p(b1, 0)[0] - ax.c2p(b0, 0)[0] - 0.04, height=max(ax.c2p(0, c)[1] - ax.c2p(0, 0)[1], 0.001),
                                   stroke_width=0, fill_color=SPLITC, fill_opacity=0.8).move_to([(ax.c2p(b0, 0)[0] + ax.c2p(b1, 0)[0]) / 2, (ax.c2p(0, 0)[1] + ax.c2p(0, c)[1]) / 2, 0])
@@ -159,17 +145,12 @@ class Knockoffs(VoiceoverScene):
         side = fit_rows(VGroup(
             label(rf"$n = {d['n']}$, \ $p = {d['p']}$ AR(1) Gaussian covariates, \ {d['k']} real", font_size=22),
             label(rf"teal: \ 40 runs of model-X knockoff$+$, \ $q = {d['q']:g}$", font_size=22, color=SPLITC),
-            label(rf"gold: \ the average, \ the FDR: \ {d['fdr']:.3f}", font_size=22, color=SELC),
+            label(rf"gold: \ mean FDP {d['fdr']:.3f} \ (MCSE {d['fdr_mcse']:.3f})", font_size=22, color=SELC),
             label(rf"power: \ {100 * d['power']:.0f}\% of the real variables found", font_size=22, color=HYBC),
-            label(rf"$M(T)$ averaged {d['ratio']:.2f}: \ at most 1, \ as proved", font_size=22, color=PROOFC),
+            label(rf"mean $M(T)={d['ratio']:.2f}$ \ (MCSE {d['ratio_mcse']:.2f}); \ $E M(T)\le1$", font_size=22, color=PROOFC),
         ), 4.6, 0.4, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> A check: three hundred observations of a hundred correlated Gaussian covariates, fifteen "
-            f"with real effects. <bookmark mark='b'/> The histogram shows the false discovery proportion of each of forty "
-            f"runs of model-X knockoff plus at q equal to a tenth: many runs have none, a few have more than a tenth. "
-            f"<bookmark mark='c'/> Their average, the false discovery rate, is {say(d['fdr'], 3)}. <bookmark mark='d'/> And "
-            f"{100 * d['power']:.0f} percent of the real variables are found. <bookmark mark='e'/> The supermartingale at the "
-            f"stopping time averaged {say(d['ratio'], 2)}, at most one, as the proof requires."
+            f"<bookmark mark='a'/> A check: three hundred observations of a hundred correlated Gaussian covariates, fifteen with real effects. <bookmark mark='b'/> The histogram shows the false discovery proportion of each of forty runs of model-X knockoff plus at q equal to a tenth: many runs have none, a few have more than a tenth. <bookmark mark='c'/> Their average, the false discovery rate, is {say(d['fdr'], 3)}. <bookmark mark='d'/> And {100 * d['power']:.0f} percent of the real variables are found. <bookmark mark='e'/> The supermartingale at the stopping time averaged {say(d['ratio'], 2)}. This is a Monte Carlo average; the theorem bounds its population expectation, not every finite-run average."
         ) as vo:
             self.play(FadeIn(A), FadeIn(simulated_tag(r"simulated")))
             vo.wait_until("a")
@@ -193,14 +174,11 @@ class Knockoffs(VoiceoverScene):
         ]
         rows[1][-1].set_color(SPLITC)
         whys = [why(r"model-X's assumption"), why(r"Barber, \ Cand\`es \& Samworth (2020)"), why(r"a large reference panel"), why(r"Ren \& Barber (2024)")]
+        head = label('Robust', font_size=32, color=SELC).move_to([0, 3.3, 0])
+        if head.width > 12.5: head.width = 12.5
+        self.add(head)
         with self.voiceover(
-            "<bookmark mark='a'/> The catch in model-X is that the law of the covariates is rarely known exactly. <bookmark "
-            "mark='b'/> Barber, Candès and Richard Samworth showed the guarantee degrades gracefully: the rate is at most q "
-            "times e to the epsilon, plus the chance that the knockoff construction's estimated Kullback–Leibler error exceeds "
-            "epsilon for some variable. <bookmark mark='c'/> In practice the covariate law is estimated from many unlabelled "
-            "observations, such as a genotype reference panel. <bookmark mark='d'/> And because a single knockoff draw is "
-            "random, Zhimei Ren and Barber derandomized the procedure by aggregating many draws through e-values, the subject "
-            "of Part fifty-eight."
+            "<bookmark mark='a'/> The catch in model-X is that the law of the covariates is rarely known exactly. <bookmark mark='b'/> Barber, Candès and Richard Samworth showed the guarantee degrades gracefully: the rate is at most q times e to the epsilon, plus the chance that the knockoff construction's realized empirical log density ratio exceeds epsilon for a null variable. This exchangeability error is not the ordinary population Kullback–Leibler divergence; taking a maximum over all variables is conservative. <bookmark mark='c'/> In practice the covariate law is estimated from many unlabelled observations, such as a genotype reference panel. <bookmark mark='d'/> And because a single knockoff draw is random, Zhimei Ren and Barber derandomized the procedure by aggregating many draws through e-values, the subject of Part fifty-eight."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):

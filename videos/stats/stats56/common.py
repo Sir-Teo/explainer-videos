@@ -416,3 +416,82 @@ SIMC = S.PRIOR  # simultaneous (PoSI, projection, Bonferroni): purple
 SELC = S.ACCENT  # the selected unit / the selection event: gold
 SPLITC = S.ALT  # splitting, fission, randomization: teal
 TRUEC6 = WHITE  # the truth
+
+
+# Part-local viewport intersections: do not connect discarded samples or clamp curves.
+
+def polyline(ax, xs, ys, color, stroke_width=2.5, opacity=1.0):
+    m=VMobject(stroke_color=color,stroke_width=stroke_width,stroke_opacity=opacity)
+    last=None
+    for p,q in clipped_segments(xs,ys,bounds(ax)):
+        if last is None or not np.allclose(last,p,atol=1e-12,rtol=0):
+            m.start_new_path(ax.c2p(*p))
+        m.add_line_to(ax.c2p(*q))
+        last=q
+    return m
+
+
+def clip_curve(ax,xs,ys,color,stroke_width=3,ymin=None,ymax=None):
+    rectangle=list(bounds(ax))
+    if ymin is not None:rectangle[2]=max(rectangle[2],ymin)
+    if ymax is not None:rectangle[3]=min(rectangle[3],ymax)
+    m=VMobject(stroke_color=color,stroke_width=stroke_width)
+    last=None
+    for p,q in clipped_segments(xs,ys,rectangle):
+        if last is None or not np.allclose(last,p,atol=1e-12,rtol=0):m.start_new_path(ax.c2p(*p))
+        m.add_line_to(ax.c2p(*q));last=q
+    return m
+
+
+def curve(ax,xs,ys,color,stroke_width=3):
+    return polyline(ax,xs,ys,color,stroke_width)
+
+
+def clipped_segments(xs, ys, rectangle):
+    """Intersect segments with the viewport, preserving crossings and missing breaks."""
+    xmin, xmax, ymin, ymax = rectangle
+    points = np.column_stack((xs, ys))
+    result = []
+    for start, end in zip(points[:-1], points[1:]):
+        if not np.isfinite([start, end]).all():
+            continue
+        delta = end-start
+        lo, hi = 0., 1.
+        for j, lower, upper in ((0, xmin, xmax), (1, ymin, ymax)):
+            if delta[j] == 0:
+                if not lower <= start[j] <= upper:
+                    hi = -1
+                    break
+            else:
+                a, b = sorted(((lower-start[j])/delta[j], (upper-start[j])/delta[j]))
+                lo, hi = max(lo, a), min(hi, b)
+        if lo <= hi:
+            result.append((start+lo*delta, start+hi*delta))
+    return result
+
+
+_BaseSelectionWindow = SelectionWindow
+class SelectionWindow(_BaseSelectionWindow):
+    """Use log masses and geometrically clipped curves, preserving the true peak."""
+    def pivot(self, mu):
+        from .checked import truncnorm_sf
+        return truncnorm_sf(self.y, mu, self.sigma, self.a, self.b)
+
+    def at(self, mu):
+        from scipy import stats as st
+        from .checked import _log_mass
+        ax=self.ax
+        xs=np.linspace(self.lo,self.hi,600)
+        full=polyline(ax,xs,st.norm.pdf(xs,mu,self.sigma)*self.k,self.full_color,2.5,.7)
+        a,b=max(self.lo,self.a),min(self.hi,self.b)
+        xx=np.linspace(a,b,600)
+        logmass=_log_mass((self.a-mu)/self.sigma,(self.b-mu)/self.sigma)
+        yy=np.exp(st.norm.logpdf(xx,mu,self.sigma)-logmass)*self.k
+        trunc=polyline(ax,xx,yy,self.trunc_color,4)
+        tx=np.linspace(max(self.y,a),b,400)
+        ty=np.exp(st.norm.logpdf(tx,mu,self.sigma)-logmass)*self.k
+        # Intersect the filled region with the viewport; the density line itself is not flattened.
+        bottom,top=bounds(ax)[2:]
+        points=[ax.c2p(tx[0],bottom)]+[ax.c2p(x,np.clip(v,bottom,top)) for x,v in zip(tx,ty)]+[ax.c2p(tx[-1],bottom)]
+        tail=Polygon(*points,stroke_width=0,fill_color=self.trunc_color,fill_opacity=.35)
+        return VGroup(full,trunc,tail)
