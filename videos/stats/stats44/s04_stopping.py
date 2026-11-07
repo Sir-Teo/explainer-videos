@@ -30,14 +30,18 @@ class OptionalStopping(VoiceoverScene):
         rows[1][-1].set_color(MARTC)
         whys = [why(r"decided by the past"), why(r"Doob's optional stopping"), why(r"bounded steps"), why(r"stopped martingales")]
         with self.voiceover(
-            "<bookmark mark='a'/> A stopping time is a rule for quitting that uses only the past: whether you have stopped by "
-            "time n must be decided by time n. <bookmark mark='b'/> Doob's optional stopping theorem: at a stopping time, the "
-            "expected value of a martingale is its starting value, provided the stopping time is bounded, or the stopped "
-            "martingale is uniformly integrable, <bookmark mark='c'/> or the expected stopping time is finite and the steps "
-            "are bounded. <bookmark mark='d'/> The proof: the martingale stopped at tau is again a martingale, so its mean "
-            "never changes, and one of the conditions lets the limit pass inside the expectation. No stopping rule can turn "
-            "a fair game into a favourable one, unless the conditions fail."
+            "<bookmark mark='a'/> A stopping time is a rule for quitting that uses only the past: whether you have "
+            "stopped by time n must be decided by time n. <bookmark mark='b'/> Doob's optional stopping theorem: at a"
+            " stopping time, the expected value of a martingale is its starting value, provided the stopping time is "
+            "bounded, or the stopped martingale is uniformly integrable and the stopping time is almost surely "
+            "finite, <bookmark mark='c'/> or the expected stopping time is finite and the steps are bounded. "
+            "<bookmark mark='d'/> The proof: the martingale stopped at tau is again a martingale, so its mean never "
+            "changes, and one of the conditions lets the limit pass inside the expectation. No stopping rule can turn"
+            " a fair game into a favourable one, unless the conditions fail."
         ) as vo:
+            heading=label('Optional stopping needs a valid limit interchange',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -54,15 +58,19 @@ class OptionalStopping(VoiceoverScene):
         rows[3][-1].set_color(BADC)
         whys = [why(r"optional stopping, \ bounded steps"), why(r"the second martingale"), why(r"de Moivre's martingale"), why(r"the house edge, \ compounded")]
         with self.voiceover(
-            "<bookmark mark='a'/> The theorem's classic use is the gambler's ruin. Start with a pounds and play a fair game "
-            "until you reach b or go broke. Your fortune is a martingale with bounded steps, so its expected final value is "
-            "a, which is b times the chance of reaching b. <bookmark mark='b'/> So that chance is a over b, and applying the "
-            "theorem to the second martingale, S n squared minus n, the expected length of play is a times b minus a. "
-            "<bookmark mark='c'/> For an unfair game, q over p to the power S n is a martingale, de Moivre's, and it gives the "
-            "chance of reaching b in closed form. <bookmark mark='d'/> At an American roulette wheel, betting red, the chance "
-            "of doubling ten pounds before losing them is about a quarter; of doubling a hundred, three in a hundred thousand. "
-            "A small house edge, compounded over a long game, is decisive."
+            "<bookmark mark='a'/> The theorem's classic use is the gambler's ruin. Start with a pounds and play a "
+            "fair game until you reach b or go broke. Your fortune is a martingale with bounded steps, and the exit "
+            "time has finite mean, so its expected final value is a, which is b times the chance of reaching b. "
+            "<bookmark mark='b'/> So that chance is a over b, and applying the theorem to the second martingale, S n "
+            "squared minus n, the expected length of play is a times b minus a. <bookmark mark='c'/> For an unfair "
+            "game, q over p to the power S n is a martingale, de Moivre's, and it gives the chance of reaching b in "
+            "closed form. <bookmark mark='d'/> At an American roulette wheel, betting red, the chance of doubling ten"
+            " pounds before losing them is about a quarter; of doubling a hundred, three in a hundred thousand. A "
+            "small house edge, compounded over a long game, is decisive."
         ) as vo:
+            heading=label("Stopping two martingales solves gambler's ruin",font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -95,20 +103,12 @@ class OptionalStopping(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"the doubling strategy: \ bet 1; \ after each loss, \ double; \ stop at the first win", font_size=26),
             label(r"you always end exactly 1 ahead: \ $M_\tau = 1$, \ but $M_0 = 0$", font_size=26, color=S.ACCENT),
-            label(rf"with unlimited credit: \ the stake before the first win has infinite mean \ (simulated: \ max {d['max_need']:,.0f})", font_size=24, color=BADC),
+            label(rf"with unlimited credit: \ total funding $2^T-1$ including the winning bet has infinite mean \ (simulated: \ max {d['max_need']:,.0f})", font_size=24, color=BADC),
             label(rf"with a bankroll of {d['bank']:,}: \ ten losses ruin you; \ fair coin: \ expected gain {d['ev_fair']:.0f}", font_size=24, color=GOODC),
-            label(rf"roulette: \ ruin with probability {d['lose_all_roulette']:.4f}, \ expected gain ${d['ev_roulette']:.2f}$ per round", font_size=24, color=BADC),
+            label(rf"roulette: \ ruin with probability {d['lose_all_roulette']:.4f}, \ expected gain ${d['ev_roulette']:.2f}$ per strategy cycle", font_size=24, color=BADC),
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Then why does the doubling strategy, the martingale of the casinos, seem to work? Bet one; "
-            f"after each loss, double the bet; stop at the first win. <bookmark mark='b'/> You always finish exactly one ahead, "
-            f"so the expected final fortune is one, not zero: optional stopping has failed. <bookmark mark='c'/> The "
-            f"stopping time is finite, but the conditions are not met: the losses before the first win are unbounded, and "
-            f"their expected size is infinite; in two hundred thousand simulated rounds, one needed over a million in "
-            f"credit. <bookmark mark='d'/> Give the gambler a real bankroll, enough for ten doublings, and the theorem "
-            f"applies: on a fair coin the expected gain is exactly zero, many small wins balanced by a rare ruin. <bookmark "
-            f"mark='e'/> At the roulette wheel ruin comes once in about six hundred rounds, and the strategy loses "
-            f"{say(-d['ev_roulette'], 2)} per round on average."
+            f"<bookmark mark='a'/> Then why does the doubling strategy, the martingale of the casinos, seem to work? Bet one; after each loss, double the bet; stop at the first win. <bookmark mark='b'/> You always finish exactly one ahead, so the expected final fortune is one, not zero: the optional-stopping equality does not apply. <bookmark mark='c'/> The stopping time is finite, but the conditions are not met: the losses before the first win are unbounded, and their expected size is infinite; in two hundred thousand simulated strategy cycles, one needed over a million in credit. <bookmark mark='d'/> Give the gambler a real bankroll, one thousand and twenty-three, enough for ten losing bets, one through five hundred and twelve, and the theorem applies: on a fair coin the expected gain is exactly zero, many small wins balanced by a rare ruin. <bookmark mark='e'/> At the roulette wheel ruin comes once in about six hundred rounds, and the strategy loses {say(-d['ev_roulette'], 2)} per strategy cycle on average."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
@@ -125,13 +125,19 @@ class OptionalStopping(VoiceoverScene):
         rows[1][-1].set_color(MARTC)
         whys = [why(r"centred sums"), why(r"Wald's identity"), why(r"Part 58 returns to it"), why(r"the likelihood principle")]
         with self.voiceover(
-            "<bookmark mark='a'/> For sums of identically distributed steps with mean mu, S n minus n mu is a martingale, "
-            "<bookmark mark='b'/> and optional stopping gives Wald's identity: the expected sum at a stopping time is mu times "
-            "the expected number of steps. <bookmark mark='c'/> Abraham Wald used it in 1945 to compute the expected sample "
-            "size of his sequential probability ratio test. <bookmark mark='d'/> A stopping rule based on the data changes "
-            "the sampling distribution of everything frequentist, but not the likelihood; Part fifty-eight will reconcile the "
-            "two views with martingales."
+            "<bookmark mark='a'/> For independent identically distributed integrable steps of mean mu, with a "
+            "stopping time adapted to their history and finite expected duration, S n minus n mu is a martingale, "
+            "<bookmark mark='b'/> and optional stopping gives Wald's identity: the expected sum at a stopping time is"
+            " mu times the expected number of steps. <bookmark mark='c'/> Abraham Wald used it in 1945 to compute the"
+            " expected sample size of his sequential probability ratio test. <bookmark mark='d'/> A stopping rule "
+            "based on the data can change frequentist calibration. Its likelihood contribution is parameter "
+            "independent when the stopping mechanism is parameter free; under that condition the likelihood remains "
+            "proportional to the fixed-sample likelihood; Part fifty-eight will reconcile the two views with "
+            "martingales."
         ) as vo:
+            heading=label("Wald's identity needs integrable iid steps and a finite mean time",font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

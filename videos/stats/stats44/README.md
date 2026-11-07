@@ -68,12 +68,12 @@ python tools/lecture_length.py stats44 --floor 50
 | # | Chapter | Numbers |
 |---|---|---|
 | 0 | Markov counts the vowels of *Onegin* | P(V \| V) = 0.128, P(V \| C) = 0.663; π = 0.432; block variance 5.25 vs 24.5 (i.i.d.) and 7.56 (chain) |
-| 1 | Conditional expectation | Borel's paradox: 6,460 vs 19,743 points near a meridian and the equator |
-| 2 | Martingales | likelihood ratios: median wealth 1.4 × 10⁻⁹ after 1,000 tosses, mean 0.98; Pólya's urn, KS p = 0.71 |
+| 1 | Conditional expectation | Borel's paradox: 6,460 wedge points vs 10,065 geodesic-band points approaching the same half-meridian |
+| 2 | Martingales | likelihood ratios: median wealth 1.4 × 10⁻⁹ after 1,000 tosses, theoretical mean 1 (Monte Carlo 0.98 at 20 tosses); finite-urn calibrated KS p = 0.7421 |
 | 3 | Optional stopping | roulette 10 → 20: 0.259; 50 → 100: 0.0051; 100 → 200: 2.7 × 10⁻⁵; doubling: ruin 0.0016, EV −0.67 |
 | 4 | Maximal inequalities and Ville | 8.2% of 4,000 null paths ever reach wealth 10 (≤ 10%) |
 | 5 | Martingale convergence | upcrossings; Pólya's urn settles; reverse martingales and the strong law |
-| 6 | Martingale concentration | empty bins: mean 367.7, SD 9.9; McDiarmid valid but implies SD ≈ 16 |
+| 6 | Martingale concentration | empty bins: mean 367.7, SD 9.9; McDiarmid scale proxy ≈ 16, not the actual SD |
 | 7 | The martingale CLT | AR(1): φ = 0.5 covered 89.9%, skew −0.22; φ = 0.98 covered 70.0%, skew −1.25 |
 | 8 | Markov chains on general spaces | RWM: τ = 23; SE 0.0022 (i.i.d.) vs 0.0104 (batch means) |
 | 9 | Coupling and mixing | cycle n = 20: t_mix 38, relaxation 40.9; hypercube t_mix 16 (d = 10), 91 (d = 40); 7 shuffles: TV 0.334 |
@@ -91,26 +91,25 @@ The rest of the part's numbers, chapter by chapter:
   - E[X | 𝒢] is defined by Radon–Nikodym (Kolmogorov 1933) and, in L², is the orthogonal projection onto
     𝒢-measurable variables: the best predictor.
   - The tower property, taking out what is known, and the conditional variance decomposition.
-  - Borel's paradox: uniform points on the sphere conditioned near a great circle give a uniform law near the equator
-    but a cos(latitude) law near a meridian. Conditioning on a null event depends on the σ-algebra, not the event.
+  - Borel's paradox: the same half-meridian {y = 0, x > 0}, with angle φ = atan2(z, x), is approached by a longitude wedge or a geodesic band. Their limiting angle densities are cos(φ)/2 and 1/π on (−π/2, π/2). The limiting set alone does not specify a conditional law. A regular conditional law is only unique almost everywhere in the conditioning value.
 - **Chapter 2.**
   - Martingales, sub- and supermartingales; the Doob decomposition into a martingale and a predictable compensator.
   - Under the null, a likelihood ratio is a martingale with mean one, yet almost every path goes to zero (KL 0.0204
     per toss): the mean is carried by rare large paths.
-  - Pólya's urn: the share of red is a martingale, and its limit is Beta(1, 1); 24 paths and a KS test (p = 0.71).
+  - Pólya's urn: its bounded share martingale has a Beta(1,1) limit. The figure uses 24 long paths and 2,000 independent urns at 600 draws. At that finite horizon the 601 possible shares are exactly uniform on a lattice. The KS distance is 0.0146847, calibrated against that law with 9,999 multinomial null runs: p = 0.7421 (Monte Carlo SE 0.00438), not evidence proving a limit theorem.
 - **Chapter 3.**
-  - Optional stopping holds for bounded stopping times, bounded stopped paths, or integrable steps with E τ < ∞.
+  - Optional stopping holds for bounded stopping times; for uniformly integrable stopped martingales at an almost surely finite time; or for uniformly bounded increments with E τ < ∞. Integrable increments alone are insufficient.
   - Fair ruin: P(reach b) = a/b and E τ = a(b − a): 100, 2,500 and 10,000 spins.
   - Unfair ruin by de Moivre's martingale (q/p)^S.
-  - Doubling with a 1,023-unit bank and 10 doublings: ruin probability 0.0016 at roulette odds, EV −0.67. Without a
-    bank limit, the needed credit has median 1 but maximum 1,048,575 in 100,000 runs.
+  - Doubling with a 1,023-unit bank and 10 losing bets (1 through 512): ruin probability 0.0016 at roulette odds, EV −0.67. Without a
+    bank limit, the needed credit has median 1 but maximum 1,048,575 in 200,000 independent strategy cycles.
 - **Chapter 4.**
   - Doob's maximal inequality and Doob's L² inequality.
   - Ville (1939): for a nonnegative martingale with mean one, P(sup M ≥ 1/α) ≤ α. This gives anytime-valid tests:
     the betting paths stay valid under continuous monitoring.
-  - E-values and p-values: 1/M is an anytime-valid p-value.
+  - E-values and p-values: 1/max₀≤k≤n M_k is an anytime-valid p-value including M₀ = 1; a current reciprocal must be capped at 1. Products require independent or conditionally valid factors. Continuing the same valid process differs from selecting a new bet after observing its result.
 - **Chapter 5.** The upcrossing inequality gives convergence of L¹-bounded martingales almost surely; uniform
-  integrability gives L¹ convergence. Lévy's upward theorem and reverse martingales give the strong law and de Finetti.
+  integrability gives L¹ convergence. Lévy's upward theorem uses the sigma-algebra generated by all finite information sets. Reverse-martingale convergence proves the iid integrable strong law. De Finetti additionally needs conditional factorization of all bounded indicator products, outlined here.
 - **Chapter 6.**
   - Azuma–Hoeffding for bounded differences.
   - McDiarmid's bounded-difference inequality, with constant 2 from Hoeffding's lemma on a known range.
@@ -118,11 +117,10 @@ The rest of the part's numbers, chapter by chapter:
 - **Chapter 7.**
   - McLeish's martingale CLT: conditional variances converge in probability and a conditional Lindeberg condition
     holds.
-  - For the AR(1) score Σ x_{t−1}ε_t it gives √n(φ̂ − φ) ⇒ N(0, 1 − φ²). It fails as φ → 1, where the information
-    explodes.
+  - For the AR(1) score Σ x_{t−1}ε_t it gives √n(φ̂ − φ) ⇒ N(0, 1 − φ²). For every fixed |φ| < 1 it remains valid under the stationary moment assumptions. At φ = 0.98 and n = 100 the approximation is poor; a unit root or local-to-unity sequence changes the normalization and limit.
 - **Chapter 8.**
   - Harris chains; small sets and minorization; Foster–Lyapunov drift conditions.
-  - Geometric ergodicity and the MCMC CLT, with variance σ²τ; batch means estimate it.
+  - With psi-irreducibility, aperiodicity, the small-set drift/minorization conditions and Eπ|f|^(2+δ) < ∞, the MCMC CLT has variance σ²τ. The displayed τ is a positive-lag truncation at 60, and the 30-batch SE is a finite approximation. Consistency of batch means needs both batch length and number to grow.
   - Mengersen–Tweedie: random-walk Metropolis is geometrically ergodic only for light-tailed targets.
 - **Chapter 9.**
   - Total variation; the coupling inequality.
@@ -136,20 +134,19 @@ The rest of the part's numbers, chapter by chapter:
   - Exit problems: P = b/(a + b), E τ = ab.
   - Quadratic variation 1, total variation infinite.
 - **Chapter 11.**
-  - Donsker (1951): the rescaled walk converges to Brownian motion in C[0, 1]; continuous functionals follow.
+  - Donsker (1951): centered iid walks with finite positive variance, standardized by σ√n, converge as step paths in D[0,1] with J₁ topology, or as linearly interpolated paths in C[0,1]. Functionals must be continuous at almost every Brownian path.
   - The reflection principle: P(max ≥ 1) = 2P(B₁ ≥ 1) = 0.317, simulated 0.311.
   - The Brownian bridge and Kolmogorov–Smirnov (to Part 48).
-  - The Dickey–Fuller statistic converges to a functional of Brownian motion: its 5% point is −1.95 (ρ form −8.06), not
-    −1.645.
+  - The Dickey–Fuller statistic converges to a functional of Brownian motion: with neither an intercept nor a trend its 5% point is about −1.95 (ρ form −8.06), versus −1.645 for a standard normal. Adding an intercept gives about −2.86. The derivation also needs Σ ε²/n → σ² by the LLN; Donsker alone does not give the stochastic-integral limit.
 - **Chapter 12.**
   - Khinchin (1924): limsup S_n/√(2n log log n) = 1 almost surely.
   - Strassen's functional law; the proof by exponential maximal bounds and Borel–Cantelli on geometric blocks.
-  - Sequential tests that hold for all time must pay this √(log log n) factor.
+  - For sample-mean-centered intervals with a root-n asymptotic boundary, all-time coverage requires an iterated-logarithm factor; this is not a universal claim about every test or interval shape. The plotted finite-window maxima do not converge to 1 as the endpoint increases with a fixed initial cutoff.
 - **Chapter 13.**
   - N − Λ is a martingale with predictable variation Λ (Aalen 1978), the Doob–Meyer decomposition.
-  - Nelson–Aalen with variance Σ d/Y².
+  - Nelson–Aalen targets H*(t) = ∫₀ᵗ1{Y(s)>0}λ(s)ds. Its predictable bracket uses the true hazard; Σ d/Y² estimates that bracket. Recorded-week ties use the grouped-event convention.
   - The log-rank statistic is a martingale integral.
-  - Rebolledo's CLT makes Greenwood, log-rank and Cox asymptotically normal.
+  - Rebolledo's CLT requires a deterministic continuous bracket limit and Lindeberg/small-jump control. It supports normalized KM/NA estimators, log-rank scores and regular Cox coefficient estimates under independent censoring, predictable entry, adequate risk sets and their other regularity conditions.
 
 ## Sources
 
@@ -187,7 +184,7 @@ The rest of the part's numbers, chapter by chapter:
 ## Problems and solutions
 
 1. **Conditional expectation as the best predictor.**
-   - Let Y = E[X | 𝒢] and Z be any 𝒢-measurable variable in L².
+   - Assume X ∈ L²; let Y = E[X | 𝒢] and Z ∈ L²(𝒢).
    - E(X − Z)² = E(X − Y)² + 2E[(X − Y)(Y − Z)] + E(Y − Z)².
    - Y − Z is 𝒢-measurable, so E[(X − Y)(Y − Z)] = E[(Y − Z) E(X − Y | 𝒢)] = 0.
    - Hence E(X − Z)² = E(X − Y)² + E(Y − Z)² ≥ E(X − Y)². Equality holds iff Z = Y almost surely, which gives
@@ -196,7 +193,7 @@ The rest of the part's numbers, chapter by chapter:
    - S_n² − n is a martingale for a ±1 walk.
    - τ, the exit time from (0, b) started at a, has E τ < ∞ (a geometric bound: from anywhere, b straight steps exit),
      and the stopped process is dominated by b² + τ.
-   - So optional stopping gives E S_τ² = E τ.
+   - So optional stopping gives E S_τ² − E τ = S₀² = a².
    - E S_τ² = b² · P(hit b) = b² · a/b = ab, so E τ = ab − a² = a(b − a).
 3. **De Moivre's martingale.**
    - E[(q/p)^{S_{n+1}} | ℱ_n] = (q/p)^{S_n} [p (q/p) + q (p/q)] = (q/p)^{S_n} (q + p) = (q/p)^{S_n}.
@@ -206,7 +203,7 @@ The rest of the part's numbers, chapter by chapter:
    - Balance: π₁(1 − a) = π₀ b, so π₁ = b / (1 − a + b).
    - The second eigenvalue of P is a − b, so E[X_k | X₀] − π₁ = (a − b)^k (X₀ − π₁) (true at k = 1 by direct check,
      then by the Markov property).
-   - So Cov(X₀, X_k) = (a − b)^k Var X₀ and the lag-k correlation is (a − b)^k.
+   - So under stationary initialization, Cov(X₀, X_k) = (a − b)^k Var X₀ and the lag-k correlation is (a − b)^k.
    - For *Onegin*, a = 0.128 and b = 0.663: π₁ = 0.663 / 1.535 = 0.432 and the lag-1 correlation is −0.534.
 5. **McDiarmid for empty bins.**
    - Z = f(X₁, …, X_n), where X_i is ball i's bin, independent.
@@ -214,11 +211,10 @@ The rest of the part's numbers, chapter by chapter:
    - McDiarmid: P(|Z − EZ| ≥ t) ≤ 2 exp(−2t² / Σ c_i²) = 2 exp(−2t²/n).
    - For n = 1,000 the bound is below 0.05 only for t ≥ 43, but the simulated SD is 9.9: valid but loose.
 6. **The Nelson–Aalen variance.**
-   - Ĥ(t) − H*(t) = ∫₀ᵗ J(s)/Y(s) dM(s), where J = 1(Y > 0) and M = N − ∫ Y λ.
+   - Ĥ(t) − H*(t) = ∫₀ᵗ J(s)/Y(s) dM(s), where J = 1(Y > 0), H*(t) = ∫₀ᵗJ(s)λ(s)ds, and M = N − ∫Yλ. Assume a nonexplosive continuous-time intensity model with no simultaneous individual events and sufficient integrability.
    - The integrand is predictable, so the integral is a martingale with predictable variation
      ∫ J/Y² d⟨M⟩ = ∫ J/Y² · Y λ ds = ∫ J λ / Y ds.
-   - Its compensator increment Y λ ds is estimated without bias by the observed increment dN, so ∫ J/Y² dN, which is
-     Σ_{t_j ≤ t} d_j / Y_j², estimates the variance. It is the optional variation of the integral.
+   - Replacing the compensator increment Yλ ds by dN gives ∫J/Y² dN = Σ d_j/Y_j², an observed-event bracket estimator. With individual unit jumps it is the optional variation. Aggregated simultaneous jumps have squared jump sizes instead; ties in recorded times need a grouping convention, and the log-rank variance uses its tied-event finite-population correction.
 
 ## Glossary
 
@@ -256,3 +252,8 @@ The rest of the part's numbers, chapter by chapter:
 - **Part 53**: posterior consistency, beyond Doob's theorem.
 - **Part 54**: McDiarmid for the generalization gap of learned predictors.
 - **Part 58**: Ville's inequality at work: e-values, confidence sequences, bandits and Freedman's inequality.
+
+
+## QA scope
+
+The [scientific review and verification receipts](../../../docs/qa/evidence/stats44-polish-20261107/source-review.md) document regenerated inputs, independent reference checks and corrected theorem conditions. English endpoint, native-resolution, motion and narrated-preview review remains in progress. Chinese narration/caption tables, full listening and final narrated masters remain open production gates.

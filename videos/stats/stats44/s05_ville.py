@@ -25,9 +25,9 @@ class Maximal(VoiceoverScene):
 
     def doob(self):
         rows = [
-            cmath(r"\text{Doob}", r":", r"P\big(\max_{k \le n} M_k \ge \lambda\big) \le E[M_n^+] / \lambda \ \ \text{(submartingale)}", font_size=30),
+            cmath(r"\text{Doob}", r":", r"P\big(\max_{0 \le k \le n} M_k \ge \lambda\big) \le E[M_n^+] / \lambda \ \ \text{(submartingale)}", font_size=30),
             cmath(r"\text{proof}", r":", r"\tau = \text{first time above } \lambda; \ \ \lambda P(\tau \le n) \le E[M_\tau 1_{\tau \le n}] \le E[M_n^+]", font_size=28),
-            cmath(r"L^p", r":", r"E\big[\max_{k \le n} |M_k|^p\big] \le \big(\tfrac{p}{p - 1}\big)^p E|M_n|^p, \ \ p > 1", font_size=30),
+            cmath(r"L^p", r":", r"E\big[\max_{0 \le k \le n} |M_k|^p\big] \le \big(\tfrac{p}{p - 1}\big)^p E|M_n|^p, \ \ p > 1", font_size=30),
             cmath(r"\text{so}", r":", r"\text{a martingale's whole path is controlled by its last value}", font_size=30),
         ]
         rows[0][-1].set_color(MARTC)
@@ -40,6 +40,9 @@ class Maximal(VoiceoverScene):
             "constant times the final value, for every p above one. <bookmark mark='d'/> A martingale cannot wander far "
             "without its final value showing it."
         ) as vo:
+            heading=label('Stop at the first crossing to control the running maximum',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -74,7 +77,7 @@ class Maximal(VoiceoverScene):
         rows = [
             cmath(r"M_n \ge 0", r",", r"\ M_0 = 1, \ \text{a (super)martingale under } H_0", font_size=32),
             cmath(r"\text{Ville}", r":", r"P_0\big(\sup_{n \ge 0} M_n \ge 1/\alpha\big) \le \alpha", font_size=36),
-            cmath(r"\text{proof}", r":", r"\text{Doob at every } n, \text{ then } n \to \infty: \ \ \alpha \cdot \tfrac{1}{\alpha} \le E M_0 = 1", font_size=30),
+            cmath(r"\text{proof}", r":", r"\tau=\inf\{k:M_k\ge1/\alpha\}:\ \ P(\tau\le n)/\alpha\le E M_{\tau\wedge n}\le1", font_size=30),
             cmath(r"\text{test}", r":", r"\text{reject } H_0 \text{ when your wealth reaches } 1/\alpha, \ \text{at any time you like}", font_size=30),
         ]
         rows[1][-1].set_color(MARTC)
@@ -89,6 +92,9 @@ class Maximal(VoiceoverScene):
             "over alpha. You may look after every observation and stop whenever you like, and the false alarm rate is still "
             "at most alpha. Part fifty-eight builds modern anytime-valid inference on this one line."
         ) as vo:
+            heading=label('Nonnegative wealth gives an infinite-horizon crossing bound',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -110,15 +116,7 @@ class Maximal(VoiceoverScene):
             label(r"green: \ a biased coin: \ wealth grows exponentially", font_size=22, color=ALTC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Here is the test, drawn with this part's betting-paths instrument. A gambler bets against "
-            f"a fair coin, putting her wealth on heads at the odds a sixty percent coin would deserve. <bookmark mark='b'/> "
-            f"Forty of four thousand wealth paths under the null, on a log scale: most sink towards zero. <bookmark "
-            f"mark='c'/> The red line is wealth ten, one over alpha for alpha a tenth. Of the four thousand paths, "
-            f"{100 * d['cross10']:.1f} percent ever touched it within a thousand tosses, inside Ville's ten percent; and "
-            f"however long we kept watching, no more than ten percent ever would. <bookmark mark='d'/> Against a coin that "
-            f"really is biased, wealth grows exponentially, and the line is crossed early. The test's power is the speed of "
-            f"that growth: the Kullback–Leibler divergence again."
-        ) as vo:
+            f"<bookmark mark='a'/> Here is the test, drawn with this part's betting-paths instrument. A gambler bets against a fair coin, putting her wealth on heads at the odds a sixty percent coin would deserve. <bookmark mark='b'/> Forty of four thousand wealth paths under the null, on a log scale: most sink towards zero. <bookmark mark='c'/> The red line is wealth ten, one over alpha for alpha a tenth. Of the four thousand paths, {100 * d['cross10']:.1f} percent ever touched it within a thousand tosses, inside Ville's ten percent; The theorem bounds the true infinite-horizon crossing probability by ten percent, not the exact fraction in every finite simulation. <bookmark mark='d'/> Against a coin that really is biased, wealth grows exponentially, and the line is crossed early. This long-run log-wealth growth helps explain power, although it is not itself a finite-sample power calculation: the Kullback–Leibler divergence again."       ) as vo:
             self.play(FadeIn(A), FadeIn(exact_tag(r"simulated: 4,000 fair coins, 1,000 tosses each")))
             vo.wait_until("a")
             self.play(FadeIn(side[0]))
@@ -140,18 +138,21 @@ class Maximal(VoiceoverScene):
 
     def pvalues(self):
         rows = fit_rows(VGroup(
-            label(r"an anytime-valid p-value: \ $p_n = 1 / \max_{k \le n} M_k$", font_size=26, color=MARTC),
+            label(r"an anytime-valid p-value: \ $p_n = 1 / \max_{0 \le k \le n} M_k$", font_size=26, color=MARTC),
             label(r"by Ville, \ $P_0(p_n \le \alpha \text{ for some } n) \le \alpha$: \ valid however you stop", font_size=26),
-            label(r"an e-value: \ $M_\tau$ itself, \ with $E_0 M_\tau \le 1$ at any stopping time", font_size=26, color=S.ACCENT),
+            label(r"an e-value: \ $M_\tau$ itself, \ with $E_0 M_\tau \le 1$ at finite stopping times (or a defined limit)", font_size=26, color=S.ACCENT),
             label(r"evidence that can be multiplied across studies \ and continued after a look", font_size=26, color=GOODC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Ville's inequality turns wealth into p-values. One over the running maximum of the wealth is "
-            "an anytime-valid p-value: <bookmark mark='b'/> under the null, the chance it ever falls below alpha is at most "
-            "alpha, whatever stopping rule the analyst follows, even one chosen after looking. <bookmark mark='c'/> The wealth "
-            "at a stopping time is itself an e-value: by optional stopping, its expectation under the null is at most one. "
-            "<bookmark mark='d'/> Unlike p-values, e-values from independent studies can simply be multiplied, and a study can "
-            "be extended after an interim look without spending any error. Part fifty-eight is built on them."
+            "<bookmark mark='a'/> Ville's inequality turns wealth into p-values. Include the initial wealth of one. "
+            "One over the running maximum is then an anytime-valid p-value: <bookmark mark='b'/> under the null, the "
+            "chance it ever falls below alpha is at most alpha, whatever stopping rule the analyst follows, even one "
+            "chosen after looking. <bookmark mark='c'/> The wealth at a stopping time is itself an e-value: for "
+            "finite stopping times its expectation is at most one. An infinite stopping time needs the nonnegative "
+            "supermartingale limit and Fatou's lemma. <bookmark mark='d'/> Unlike p-values, e-values from independent"
+            " studies can simply be multiplied, Conditional validity also allows sequential products. A study can "
+            "continue after an interim look while following the same valid wealth process; choosing a new favorable "
+            "bet after seeing its outcomes is not licensed. Part fifty-eight is built on them."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

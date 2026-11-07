@@ -23,12 +23,13 @@ class Hook(VoiceoverScene):
             label(r"1913: \ to show it on real data, \ he counts the letters of a poem", font_size=26, color=S.ACCENT),
         ), 12.4, 0.55, [0, -0.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In 1902 the Moscow mathematician Pavel Nekrasov argued that the law of large numbers "
-            "requires independence, <bookmark mark='b'/> and concluded, because social statistics are regular, that human "
-            "acts must be independent, a proof of free will. <bookmark mark='c'/> In St Petersburg, Andrei Markov was "
-            "furious. In 1906 he proved the law of large numbers for sequences in which each variable depends on the one "
-            "before, the chains that now bear his name. <bookmark mark='d'/> And in January 1913, at the two hundredth "
-            "anniversary of Bernoulli's law, he showed it on real data, by counting the letters of a poem."
+            "<bookmark mark='a'/> In 1902 the Moscow mathematician Pavel Nekrasov argued that the law of large "
+            "numbers requires independence, <bookmark mark='b'/> and concluded, because social statistics are "
+            "regular, that human acts must be independent, a proof of free will. <bookmark mark='c'/> In St "
+            "Petersburg, Andrei Markov strongly disagreed. In 1906 he established a law of large numbers for suitable"
+            " dependent finite-state chains. A Markov property alone does not guarantee a law of large numbers. "
+            "<bookmark mark='d'/> And in January 1913, at the two hundredth anniversary of Bernoulli's law, he showed"
+            " it on real data, by counting the letters of a poem."
         ) as vo:
             self.play(FadeIn(tl))
             for k, m_ in enumerate("abcd"):
@@ -59,13 +60,7 @@ class Hook(VoiceoverScene):
             label(r"recomputed here from the public-domain text", font_size=20, color=GREY_B),
         ), 12.4, 0.35, [0, -1.6, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The poem was Pushkin's Eugene Onegin, which every Russian reader knew. Markov took its "
-            f"first twenty thousand letters, leaving out the hard and soft signs, which are not sounds, and wrote each "
-            f"as a vowel or a consonant. <bookmark mark='b'/> Here are the first sixty, in the original Russian: gold for "
-            f"vowels, blue for consonants. <bookmark mark='c'/> We redid his count from the public-domain text. It gives "
-            f"{d['vowels']:,} vowels, against Markov's {d['markov']['vowels']:,}, <bookmark mark='d'/> and "
-            f"{d['n'] - d['vowels']:,} consonants. A hundred and thirteen years and a change of spelling later, the count "
-            f"is off by one."
+            f"<bookmark mark='a'/> The poem was Pushkin's Eugene Onegin, which every Russian reader knew. Markov took its first twenty thousand letters, leaving out the hard and soft signs, which are not sounds, and wrote each as a vowel or a consonant. <bookmark mark='b'/> Here are the first sixty, in the original Russian: gold for vowels, blue for consonants. <bookmark mark='c'/> We redid his count from the public-domain text. It gives {d['vowels']:,} vowels, against Markov's {d['markov']['vowels']:,}, <bookmark mark='d'/> and {d['n'] - d['vowels']:,} consonants. With a modern spelling and transcription, this count differs by one; the text version and counting convention matter."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(quote), FadeIn(side[0]))
@@ -100,13 +95,7 @@ class Hook(VoiceoverScene):
             label(rf"stationary share of vowels: \ {d['pi1']:.3f} \ (observed {d['share']:.3f})", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Then he counted pairs. A vowel was followed by another vowel only "
-            f"{int(c[1][1]):,} times, Markov's count was {d['markov']['vv']:,}, <bookmark mark='b'/> and two consonants "
-            f"followed each other {int(c[0][0]):,} times, his {d['markov']['cc']:,}. <bookmark mark='c'/> So after a vowel "
-            f"the next letter is a vowel with probability {say(P[1][1], 3)}; after a consonant, {say(P[0][1], 3)}. "
-            f"<bookmark mark='d'/> Letters alternate: the sequence is strongly dependent, a two-state chain with these "
-            f"transition probabilities. <bookmark mark='e'/> Yet the long-run share of vowels, the chain's stationary "
-            f"probability, {say(d['pi1'], 3)}, matches the observed share: the law of large numbers holds."
+            f"<bookmark mark='a'/> Then he counted pairs. A vowel was followed by another vowel only {int(c[1][1]):,} times, Markov's count was {d['markov']['vv']:,}, <bookmark mark='b'/> and two consonants followed each other {int(c[0][0]):,} times, his {d['markov']['cc']:,}. <bookmark mark='c'/> So after a vowel the next letter is a vowel with probability {say(P[1][1], 3)}; after a consonant, {say(P[0][1], 3)}. <bookmark mark='d'/> Adjacent letters show strong dependence. These fitted probabilities describe a homogeneous first-order model; the poem is not established to be generated by that model. <bookmark mark='e'/> Yet the long-run share of vowels, the chain's stationary probability, {say(d['pi1'], 3)}, matches the observed share. This near equality follows largely from fitting transitions to the same sequence; it is not independent evidence for a limit theorem."
         ) as vo:
             self.play(FadeIn(vn), FadeIn(cn), FadeIn(museum_tag(r"Pushkin, \ \emph{Eugene Onegin}; \ Markov (1913)")))
             vo.wait_until("a")
@@ -143,14 +132,7 @@ class Hook(VoiceoverScene):
             label(r"Markov's own: \ 0.208 \ and \ about 0.3", font_size=20, color=GREY_B),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Markov went further. He cut the text into two hundred blocks of a hundred letters and "
-            f"counted the vowels in each. <bookmark mark='b'/> The counts vary far less than independence would allow: "
-            f"their variance is {say(d['var_block'], 2)}, <bookmark mark='c'/> against {say(d['var_iid'], 1)} for "
-            f"independent letters. <bookmark mark='d'/> The chain explains most of the difference: alternation makes "
-            f"blocks more alike, and its variance is {say(d['var_chain'], 1)}. <bookmark mark='e'/> The ratios, "
-            f"{say(d['var_block'] / d['var_iid'], 3)} observed and {say(d['var_chain'] / d['var_iid'], 2)} for the chain, are "
-            f"Markov's dispersion coefficients; he found point two oh eight, and about point three. Dependence changes the "
-            f"variance, not the law of large numbers. That is the subject of this part."
+            f"<bookmark mark='a'/> Markov went further. He cut the text into two hundred blocks of a hundred letters and counted the vowels in each. <bookmark mark='b'/> The counts vary far less than independence would allow: their variance is {say(d['var_block'], 2)}, <bookmark mark='c'/> against {say(d['var_iid'], 1)} for independent letters. <bookmark mark='d'/> The chain explains most of the difference: alternation makes blocks more alike, and its approximate block-count variance is {say(d['var_chain'], 1)}. <bookmark mark='e'/> The ratios, {say(d['var_block'] / d['var_iid'], 3)} observed and {say(d['var_chain'] / d['var_iid'], 2)} for the chain, are Markov's dispersion coefficients; he found point two oh eight, and about point three. Under appropriate ergodicity conditions, dependence changes the asymptotic variance while preserving a law of large numbers. The gold normal curve is an approximation, not the exact chain count law. That is the subject of this part."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -200,11 +182,12 @@ class Hook(VoiceoverScene):
         prereq = note(r"prerequisites: \ Part 43").to_corner(DL, buff=0.3)
         built = note(r"built: \ \texttt{statkit.chains}, \ the coupling and mixing lab; \ betting paths").to_corner(DR, buff=0.3)
         with self.voiceover(
-            "<bookmark mark='a'/> Part forty-four: martingales, Markov chains and Brownian motion. <bookmark mark='b'/> We'll "
-            "define conditional expectation properly, build martingales and their stopping, maximal and convergence "
-            "theorems, with Ville's inequality, the root of anytime-valid testing; prove concentration and a central limit "
-            "theorem for martingales; give Markov chains on general spaces their ergodic theory, with a coupling and mixing "
-            "lab; and construct Brownian motion, the limit of every random walk."
+            "<bookmark mark='a'/> Part forty-four: martingales, Markov chains and Brownian motion. <bookmark "
+            "mark='b'/> We'll define conditional expectation properly, build martingales and their stopping, maximal "
+            "and convergence theorems, with Ville's inequality, the root of anytime-valid testing; prove "
+            "concentration and a central limit theorem for martingales; give Markov chains on general spaces their "
+            "ergodic theory, with a coupling and mixing lab; and construct Brownian motion, the limit of centered "
+            "independent identically distributed walks with finite positive variance after standardization."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head, shift=UP * 0.2))

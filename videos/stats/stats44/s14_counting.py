@@ -30,13 +30,17 @@ class Counting(VoiceoverScene):
         rows[2][-1].set_color(MARTC)
         whys = [why(r"events in time"), why(r"the compensator"), why(r"Aalen (1978)"), why(r"chapter 2's decomposition, \ in continuous time")]
         with self.voiceover(
-            "<bookmark mark='a'/> A counting process counts events as they happen: deaths in a cohort, relapses in a trial. "
-            "<bookmark mark='b'/> Its compensator is the integral of the number at risk times the hazard: the expected count "
-            "given the past, accumulated continuously, and known an instant ahead. <bookmark mark='c'/> The difference, "
-            "counts minus compensator, is a martingale, and its predictable variation is the compensator itself. Odd Aalen's "
-            "1978 thesis made this the foundation of survival analysis. <bookmark mark='d'/> It is chapter two's Doob "
-            "decomposition in continuous time, the Doob–Meyer decomposition."
-        ) as vo:
+            "<bookmark mark='a'/> A counting process counts events as they happen: deaths in a cohort, relapses in a "
+            "trial. <bookmark mark='b'/> Its compensator is the integral of the number at risk times the hazard: an "
+            "accumulated predictable intensity, rather than in general the conditional expectation of the full count "
+            "at time t. <bookmark mark='c'/> The difference, counts minus compensator, is a martingale, and its "
+            "predictable variation is the compensator itself. Under nonexplosion and suitable integrability, this "
+            "gives a true martingale; otherwise localization may be needed. Odd Aalen's 1978 paper made this the "
+            "foundation of survival analysis. <bookmark mark='d'/> It is chapter two's Doob decomposition in "
+            "continuous time, the Doob–Meyer decomposition."       ) as vo:
+            heading=label('A predictable intensity compensates observed event counts',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -48,24 +52,27 @@ class Counting(VoiceoverScene):
         g = np.asarray(d["grid"])
         A = axes([0, 2.5], [0, 130], x_length=5.4, y_length=3.4, xlabel=r"$t$", ylabel=r"count", xticks=[0, 1, 2], yticks=[0, 60, 120],
                  center=[-3.5, 0.9, 0])
-        B = axes([0, 2.5], [-20, 20], x_length=5.4, y_length=3.4, xlabel=r"$t$", ylabel=r"$M(t) = N(t) - \Lambda(t)$", xticks=[0, 1, 2],
+        B = axes([0, 2.5], [-26, 26], x_length=5.4, y_length=3.4, xlabel=r"$t$", ylabel=r"$M(t) = N(t) - \Lambda(t)$", xticks=[0, 1, 2],
                  yticks=[-20, 0, 20], center=[3.3, 0.9, 0])
-        N = VMobject(stroke_color=CHAINC, stroke_width=3)
-        N.set_points_as_corners([A.ax.c2p(a, b) for a, b in zip(g, d["N"])])
-        L = polyline(A.ax, g, d["Lam"], LIMC, 3)
-        M = polyline(B.ax, g, d["M"], MARTC, 3)
+        observed=np.asarray(d["observed_time"])
+        event_times=np.sort(observed[np.asarray(d["observed_event"],bool)])
+        knots=np.unique(np.r_[0.,observed,2.5])
+        times=np.repeat(knots,2)
+        # At an event, include both the left limit and right-continuous count.
+        counts=np.column_stack((np.searchsorted(event_times,knots,side="left"),
+                                np.searchsorted(event_times,knots,side="right"))).ravel()
+        compensator=np.minimum(times[:,None],observed[None,:]).sum(axis=1)
+        N=polyline(A.ax,times,counts,CHAINC,3)
+        L=polyline(A.ax,times,compensator,LIMC,3)
+        M=polyline(B.ax,times,counts-compensator,MARTC,3)
         band = VGroup(polyline(B.ax, g, 2 * np.sqrt(np.asarray(d["Lam"])), GREY_B, 2), polyline(B.ax, g, -2 * np.sqrt(np.asarray(d["Lam"])), GREY_B, 2))
         side = fit_rows(VGroup(
             label(rf"{d['n']} lifetimes, \ hazard 1, \ censored at random: \ {d['events']} events", font_size=22),
             label(r"blue: \ $N(t)$; \ gold: \ its compensator $\Lambda(t)$", font_size=22, color=CHAINC),
-            label(r"right: \ the martingale, \ inside $\pm 2\sqrt{\Lambda(t)}$", font_size=22, color=MARTC),
+            label(r"$\pm2\sqrt{\Lambda(t)}$: illustrative scale, not a calibrated confidence band", font_size=22, color=MARTC),
         ), 12.4, 0.28, [0, -2.3, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> Two hundred simulated lifetimes with hazard one, censored at random times: "
-            f"{d['events']} events. <bookmark mark='b'/> In blue the count of events, in gold its compensator, the integral "
-            f"of the number still at risk. The two climb together. <bookmark mark='c'/> On the right, their difference, the "
-            f"martingale. It wanders around zero inside plus or minus two times the root of the compensator, its predictable "
-            f"standard deviation, and ends at {say(d['M'][-1], 1)} after more than a hundred events."
+            f"<bookmark mark='a'/> Two hundred simulated lifetimes with hazard one, censored at random times: {d['events']} events. <bookmark mark='b'/> In blue the count of events, in gold its compensator, the integral of the number still at risk. The two climb together. <bookmark mark='c'/> On the right, their difference, the martingale. It wanders around zero inside plus or minus two times the root of the compensator, an illustrative band rather than a guaranteed ninety-five percent interval. The compensator is the bracket, not a pathwise conditional variance. The martingale ends at {say(d['M'][-1], 1)} after more than a hundred events."
         ) as vo:
             self.play(FadeIn(A), FadeIn(B), FadeIn(exact_tag(r"simulated: 200 lifetimes")))
             vo.wait_until("a")
@@ -83,29 +90,27 @@ class Counting(VoiceoverScene):
         A = axes([0, 24], [0, 6], x_length=7.4, y_length=4.4, xlabel=r"weeks", ylabel=r"cumulative hazard $\hat H(t)$",
                  xticks=[0, 5, 10, 15, 20], yticks=[0, 2, 4, 6], center=[-2.5, 0.2, 0])
         ax = A.ax
-        pts, lo, hi = [], [], []
+        pts, lo, hi = [(0.,0.)], [], []
         prev, pl, ph = 0.0, 0.0, 0.0
         tt = [0.0]
         for a, h, s in zip(t, na, se):
             pts += [(a, prev), (a, h)]
             prev = h
-        pts.append((23, prev))
+        pts.append((24, prev))
         st = VMobject(stroke_color=CHAINC, stroke_width=4)
-        st.set_points_as_corners([ax.c2p(a, min(b, 6)) for a, b in pts])
-        bnd = band(ax, t, np.maximum(na - 1.96 * se, 0), np.minimum(na + 1.96 * se, 6), CHAINC, 0.25)
+        st.set_points_as_corners([ax.c2p(a, b) for a, b in pts])
+        step_t=np.r_[0.,np.repeat(t,2),24.]
+        def limits(values):
+            return np.r_[0.,np.column_stack((np.r_[0.,values[:-1]],values)).ravel(),values[-1]]
+        bnd=band(ax,step_t,limits(np.maximum(na-1.96*se,0)),limits(na+1.96*se),CHAINC,.25)
         side = fit_rows(VGroup(
-            label(r"the 6-MP trial's placebo arm \ (21 children)", font_size=22),
+            label(r"the 6-MP trial's placebo arm \ (21 patients)", font_size=22),
             label(r"Nelson--Aalen: \ $\hat H(t) = \sum_{t_j \le t} d_j / Y(t_j)$", font_size=22, color=CHAINC),
-            label(r"$\hat H - H$: \ a martingale integral, \ var $\sum d_j / Y_j^2$", font_size=22, color=MARTC),
+            label(r"$\hat H-H^*$: stopped target; estimated bracket $\sum d_j/Y_j^2$", font_size=22, color=MARTC),
             label(rf"at 23 weeks: \ $\hat H = {na[-1]:.2f}$, \ SE {se[-1]:.2f}", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            f"<bookmark mark='a'/> The payoff is in Part forty's methods. Here is the placebo arm of the 6-MP trial. <bookmark "
-            f"mark='b'/> The Nelson–Aalen estimator adds, at each event time, the number of events over the number at risk. "
-            f"<bookmark mark='c'/> Its error, Nelson–Aalen minus the true cumulative hazard, is a stochastic integral against "
-            f"the counting-process martingale, so its variance is the integrated predictable variation: the sum of the "
-            f"events over the number at risk squared. <bookmark mark='d'/> That gives the band, and a cumulative hazard of "
-            f"{say(na[-1], 2)} at twenty-three weeks, with standard error {say(se[-1], 2)}."
+            f"<bookmark mark='a'/> The payoff is in Part forty's methods. Here is the placebo arm of the 6-MP trial. <bookmark mark='b'/> The Nelson–Aalen estimator adds, at each event time, the number of events over the number at risk. <bookmark mark='c'/> Its error, Nelson–Aalen minus the cumulative hazard stopped when the risk set is empty, is a stochastic integral against the counting-process martingale. Its predictable variation integrates the true intensity over the squared risk set. The sum of observed events over the risk set squared estimates that bracket; it is not the predictable bracket itself. <bookmark mark='d'/> This gives an approximate pointwise normal band. These recorded times contain ties; the usual grouped-event convention is an approximation to the continuous event-time model. The estimated cumulative hazard of {say(na[-1], 2)} at twenty-three weeks, with standard error {say(se[-1], 2)}."
         ) as vo:
             self.play(FadeIn(A), FadeIn(museum_tag(r"Freireich et al. (1963), \ via Gehan (1965)")))
             vo.wait_until("a")
@@ -121,18 +126,21 @@ class Counting(VoiceoverScene):
     def rebolledo(self):
         rows = fit_rows(VGroup(
             label(r"Rebolledo (1980): \ a martingale CLT for counting processes", font_size=26),
-            label(r"if $\langle M_n \rangle(t) \to V(t)$ and the jumps vanish, \ $M_n \Rightarrow$ a Gaussian martingale", font_size=26, color=MARTC),
-            label(r"so: \ Greenwood's formula, \ the log-rank test, \ Cox's partial likelihood: \ all asymptotically normal", font_size=26, color=GOODC),
+            label(r"brackets $\to$ deterministic continuous $V$, plus Lindeberg: Gaussian limit", font_size=26, color=MARTC),
+            label(r"normalized KM/NA estimators, log-rank scores and regular Cox estimates: asymptotic normality", font_size=26, color=GOODC),
             label(r"Andersen, \ Borgan, \ Gill \& Keiding, \ \emph{Statistical Models Based on Counting Processes} (1993)", font_size=22, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Rolando Rebolledo's central limit theorem for counting-process martingales completes the "
-            "picture. <bookmark mark='b'/> If the predictable variations converge and the jumps become small, the "
-            "martingales converge to a Gaussian martingale. <bookmark mark='c'/> Applied to stochastic integrals, it makes "
-            "Greenwood's formula, the log-rank test and Cox's partial likelihood asymptotically normal, with censoring and "
-            "delayed entry handled for free, because the at-risk process is predictable. <bookmark mark='d'/> The theory is "
-            "set out in the book by Andersen, Borgan, Gill and Keiding. Every standard error in Part forty was, underneath, "
-            "a martingale calculation."
+            "<bookmark mark='a'/> Rolando Rebolledo's central limit theorem for counting-process martingales "
+            "completes the picture. <bookmark mark='b'/> If normalized predictable variations converge to a "
+            "deterministic continuous limit and a Lindeberg or equivalent small-jump condition holds, the martingales"
+            " converge to a Gaussian martingale. <bookmark mark='c'/> Applied to stochastic integrals, it supports "
+            "asymptotic normality for suitably normalized Kaplan–Meier and Nelson–Aalen estimators, log-rank scores, "
+            "and regular Cox coefficient estimates. Independent censoring, predictable entry, adequate risk sets and "
+            "the relevant identification and regularity conditions are still needed. A variance formula or likelihood"
+            " is not itself an asymptotically normal estimator. <bookmark mark='d'/> The theory is set out in the "
+            "book by Andersen, Borgan, Gill and Keiding. Every standard error in Part forty was, underneath, a "
+            "martingale calculation."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -144,19 +152,23 @@ class Counting(VoiceoverScene):
             cmath(r"N_1, N_0", r":", r"\text{counting processes of two groups, \ at risk } Y_1, Y_0", font_size=32),
             cmath(r"U", r"=", r"\textstyle\int_0^\tau \frac{Y_0}{Y_1 + Y_0}\, dN_1 - \frac{Y_1}{Y_1 + Y_0}\, dN_0: \ \text{observed minus expected}", font_size=28),
             cmath(r"H_0: \lambda_1 = \lambda_0", r"\Rightarrow", r"U = \textstyle\int \frac{Y_0}{Y} dM_1 - \frac{Y_1}{Y} dM_0: \ \text{a martingale integral}", font_size=28),
-            cmath(r"\text{Var}", r"=", r"\textstyle\int \frac{Y_1 Y_0}{Y^2}\, dN: \ \text{the log-rank variance, \ by } \langle M \rangle", font_size=30),
+            cmath(r"\widehat{\text{Var}}", r"=", r"\textstyle\int \frac{Y_1 Y_0}{Y^2}\, dN: \ \text{estimates the bracket; tied times need correction}", font_size=30),
         ]
         rows[3][-1].set_color(GOODC)
         whys = [why(r"Part 40's two arms"), why(r"the log-rank statistic"), why(r"the compensators cancel"), why(r"Rebolledo makes it normal")]
         with self.voiceover(
             "<bookmark mark='a'/> The log-rank test of Part forty is a stochastic integral too. Take the counting "
-            "processes of two groups with their numbers at risk. <bookmark mark='b'/> The log-rank statistic integrates, "
-            "over time, the events in group one weighted by the share at risk in group zero, minus the reverse: observed "
-            "minus expected. <bookmark mark='c'/> Under the null of equal hazards the compensators cancel exactly, and what "
-            "is left is an integral of predictable weights against the two martingales. <bookmark mark='d'/> Its variance "
-            "is the integrated predictable variation, the familiar log-rank variance, and Rebolledo's theorem, next, makes "
-            "it normal."
+            "processes of two groups with their numbers at risk. <bookmark mark='b'/> The log-rank statistic "
+            "integrates, over time, the events in group one weighted by the share at risk in group zero, minus the "
+            "reverse: observed minus expected. <bookmark mark='c'/> Under the null of equal hazards the compensators "
+            "cancel exactly, and what is left is an integral of predictable weights against the two martingales. "
+            "<bookmark mark='d'/> Its bracket uses the common true hazard. Replacing intensity increments by observed"
+            " events gives a variance estimator; tied groups require the finite-population correction used in Part "
+            "forty. Rebolledo's theorem, next, makes it normal."
         ) as vo:
+            heading=label('Equal hazards cancel the log-rank compensators',font_size=36).move_to([0,3.3,0])
+            if heading.width>12.5: heading.width=12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
