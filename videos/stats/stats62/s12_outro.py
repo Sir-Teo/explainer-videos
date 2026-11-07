@@ -75,12 +75,13 @@ class Outro(LectureMixin, VoiceoverScene):
             (r"fair treatment rules and counterfactual fairness", [63]), (r"causal questions about AI systems", [64]),
             (r"the dissertation's causal chapter", [65]),
         ], font_size=22)
+        self.play(FadeIn(card.head))
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part sixty-three's fair treatment rules and counterfactual fairness. "
             "Part sixty-four's causal questions about AI systems. And the dissertation's causal chapter."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=5.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=5.0)
         self.clear_scene()
 
     def problems(self):

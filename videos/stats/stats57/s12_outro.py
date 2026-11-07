@@ -68,13 +68,14 @@ class Outro(VoiceoverScene):
             (r"prediction for causal effects", [62]), (r"uncertainty for foundation models", [64]),
             (r"the dissertation's predictive claims", [65]),
         ], font_size=22)
+        self.play(FadeIn(card.head))
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part fifty-eight's e-values and test martingales. Part fifty-nine's "
             "conformal inference when p and n grow together. Part sixty-two's prediction intervals for individual causal "
             "effects. Part sixty-four's uncertainty for foundation models. And the predictive claims of the dissertation."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):

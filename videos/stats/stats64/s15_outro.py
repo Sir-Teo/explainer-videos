@@ -72,13 +72,14 @@ class Outro(LectureMixin, VoiceoverScene):
             (r"the full Coverage Board, \ every promise of the degree", [65]),
             (r"the dissertation's open problem", [65]),
         ], font_size=22)
+        self.play(FadeIn(card.head))
         with self.voiceover(
-            "Where it comes back. <bookmark mark='a'/> In Part sixty-five: a simulation study designed in advance and "
+            "Where it comes back. <bookmark mark='a'/> In Part sixty-five: a simulation study with an explicit protocol, "
             "reported whatever it shows; the full Coverage Board, every promise of the degree tested; and an open problem "
             "from these last parts, attacked as a dissertation."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=5.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=5.0)
         self.clear_scene()
 
     def problems(self):

@@ -78,6 +78,7 @@ class Outro(VoiceoverScene):
             (r"Rademacher complexity, \ contraction, \ uniform laws", [54]), (r"confidence sequences by Ville's inequality", [58]),
             (r"proportional asymptotics: \ Marchenko--Pastur at work", [59]),
         ], font_size=22)
+        self.play(FadeIn(card.head))
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part fifty-two proves that random designs satisfy restricted eigenvalue "
             "conditions and derives the lasso's rate, and studies sparse PCA against the spiked covariance model, to which "
@@ -86,7 +87,7 @@ class Outro(VoiceoverScene):
             "and n grow together, where Marchenko–Pastur is the starting point."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):

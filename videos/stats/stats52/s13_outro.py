@@ -76,6 +76,7 @@ class Outro(VoiceoverScene):
             (r"selective inference after the lasso", [56]), (r"the lasso's exact risk when $p/n \to \delta$", [59]),
             (r"high-dimensional causal adjustment", [62]),
         ], font_size=22)
+        self.play(FadeIn(card.head))
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part fifty-three proves posterior contraction for sparse priors. Part "
             "fifty-four gives learning bounds in high dimensions. Part fifty-six builds exact inference after selection, the "
@@ -83,7 +84,7 @@ class Outro(VoiceoverScene):
             "together. And Part sixty-two adjusts for many confounders at once."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):

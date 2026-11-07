@@ -77,6 +77,7 @@ class Outro(VoiceoverScene):
             (r"posterior contraction rates match minimax", [53]), (r"learning-theory lower bounds; \ VC and Fano", [54]),
             (r"private estimation's minimax rates", [63]),
         ], font_size=22)
+        self.play(FadeIn(card.head))
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part fifty-one develops concentration and chaining in high dimensions. "
             "Part fifty-two proves that the lasso attains Fano's s log p over s. Part fifty-three asks when Bayesian posteriors "
@@ -84,7 +85,7 @@ class Outro(VoiceoverScene):
             "finds the minimax price of privacy."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 
     def problems(self):
