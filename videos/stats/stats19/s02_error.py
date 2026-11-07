@@ -216,6 +216,9 @@ class PredictionError(VoiceoverScene):
             label(r"fixed training inputs versus new random inputs", font_size=20, color=RES),
             label(r"blue: expected risk at the same fixed inputs", font_size=20, color=S.CTRL),
         ), 3.45, 0.4, [5.1, 0.3, 0])
+        intro = label('Covariance penalties target prediction at the training inputs', font_size=36).move_to([0, 3.2, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Here are the two curves again, <bookmark mark='b'/> with the Cp-style score in "
             "gold, computed from the thirty training points and the known noise variance. The blue curve is the exact"
@@ -228,6 +231,7 @@ class PredictionError(VoiceoverScene):
             "fixed-design linear projection. Cross-validation can assess new-case performance by holding out inputs "
             "as well as responses."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
             self.play(FadeIn(A), Create(ct), Create(cte), FadeIn(rows[0]), FadeIn(rows[1]), run_time=2.0)
             vo.wait_until("b")

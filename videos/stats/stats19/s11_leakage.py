@@ -112,6 +112,9 @@ class Leakage(VoiceoverScene):
         ar = VGroup(Arrow(r1.get_bottom(), r2.get_top(), buff=0.06, stroke_width=3, color=GREY_B),
                     Arrow(frame.get_bottom(), r3.get_top(), buff=0.06, stroke_width=3, color=GREY_B))
         foot = label(r"the truth: \ 50\%", font_size=26, color=GREY_A).to_edge(DOWN, buff=0.5)
+        intro = label("Feature selection must be repeated within each training fold", font_size=36).move_to([0, 3.3, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> Do it that way and cross-validation reports an error of eleven point three percent. "
             "A classifier that's right nearly nine times in ten, from pure noise. <bookmark mark='b'/> The right way puts the "
@@ -120,6 +123,7 @@ class Leakage(VoiceoverScene):
             "fifty point one percent, <bookmark mark='d'/> which is the truth. Same data, same classifier, same folds. The only "
             "difference is whether the held-out people helped choose the measurements."
         ) as vo:
+            self.add(intro)
             vo.wait_until("a")
             self.play(FadeIn(head_w), FadeIn(w1), GrowArrow(aw[0]), FadeIn(w2), GrowArrow(aw[1]), FadeIn(w3), run_time=2.5)
             vo.wait_until("b")
