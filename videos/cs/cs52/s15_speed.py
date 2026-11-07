@@ -139,18 +139,21 @@ class Speed(VoiceoverScene):
             wrapped_label(rf"\texttt{{gemm}} runs {big['gemm_gflops'] / big['axpy_gflops']:.0f} and "
                           rf"{big['gemm_gflops'] / big['gemv_gflops']:.0f} times faster than the other two", 4.0,
                           font_size=19, color=YES),
-            wrapped_label(r"small \texttt{axpy} and \texttt{gemv} problems fit in cache and run fast; \ from "
+            wrapped_label(r"small \texttt{axpy} problems fit in cache and run fast; \ from "
                           r"memory they crawl \ (Part 9)", 4.0, font_size=19, color=WHITE),
-            wrapped_label(r"NumPy's BLAS, \ best of 3--5 runs, \ on a shared, \ busy machine", 4.0, font_size=16,
+            wrapped_label(r"NumPy's BLAS on this machine's cores, \ best of 3--5 runs", 4.0, font_size=16,
                           color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(tab, DOWN, buff=0.4)
         notes.align_to(tab, LEFT)
         with self.voiceover(
             "Here are the three levels timed on this machine, through NumPy, which calls an optimized BLAS. "
-            "<bookmark mark='a'/> Matrix multiplication climbs as n grows, to twenty-five billion operations per "
-            "second at two thousand and forty-eight. <bookmark mark='b'/> The other two, at that size, manage a "
-            "fifth and a quarter of a billion: about a hundred times slower, doing the same kind of arithmetic. "
-            "<bookmark mark='c'/> The small vector problems fit in cache and run much faster, which is Part 9's "
+            "<bookmark mark='a'/> Matrix multiplication climbs as n grows, to about "
+            f"{big['gemm_gflops']:.0f} billion operations per second at two thousand and forty-eight. "
+            "<bookmark mark='b'/> The other two, at that size, manage "
+            f"{big['axpy_gflops']:.1f} and {big['gemv_gflops']:.0f} billion: "
+            f"{big['gemm_gflops'] / big['axpy_gflops']:.0f} and {big['gemm_gflops'] / big['gemv_gflops']:.0f} times "
+            "slower, doing the same kind of arithmetic. <bookmark mark='c'/> Small vector additions fit in cache "
+            "and run faster than large ones, which is Part 9's "
             "memory hierarchy, not arithmetic. <bookmark mark='d'/> So the craft of numerical linear algebra "
             "since 1990 has been to recast every algorithm so that most of its work is level three."
         ) as vo:
@@ -366,8 +369,8 @@ class Speed(VoiceoverScene):
             "Almost all of it is matrix multiplication, so it measures a machine at its best. <bookmark "
             "mark='b'/> On this scale, our machine's level-one speed sits here, and its matrix "
             "multiplication here. <bookmark mark='c'/> In June 2022 Frontier, at Oak Ridge, became the "
-            "first to pass ten to the eighteen operations per second: forty-four million times our matrix"
-            " multiplication. <bookmark mark='d'/> A conjugate-gradient benchmark, sparse and memory-"
+            "first to pass ten to the eighteen operations per second: about "
+            f"{ratio / 1e6:.0f} million times our matrix multiplication. <bookmark mark='d'/> A conjugate-gradient benchmark, sparse and memory-"
             "bound like most real simulations, reaches only a few percent of the same machines' peak."
         ) as vo:
             self.play(FadeIn(head))

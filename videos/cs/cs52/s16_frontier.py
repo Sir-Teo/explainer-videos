@@ -68,7 +68,7 @@ class Frontier(VoiceoverScene):
             "<bookmark mark='b'/> Orthonormalize them, project, and take the SVD of a small matrix. Nathan Halko, "
             "Per-Gunnar Martinsson and Joel Tropp analysed this in 2011. <bookmark mark='c'/> On our "
             f"{r['m']:,} by {r['n']:,} matrix, a few extra random columns and one or two power steps bring the error "
-            f"to within {100 * (best['ratio'] - 1):.0f} percent of the best any rank-{r['k']} matrix can do, in a "
+            f"to within {max(1, round(100 * (best['ratio'] - 1)))} percent of the best any rank-{r['k']} matrix can do, in a "
             f"fraction of the {r['full_seconds']:.1f} seconds a full SVD takes."
         ) as vo:
             self.play(FadeIn(head))
