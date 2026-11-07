@@ -5,7 +5,7 @@ The branch contains **65 parts and 888 chapters**. All manifests resolve to exis
 
 ## Current checkpoint
 
-Parts 1–24 have completed chapter-by-chapter English source/visual passes, recorded in their evidence folders and commits. [Part 23](evidence/stats23-polish-20261107/README.md) includes thirteen endpoint captures, twelve native 1080p cases, eleven motion checks and a 333.932-second narrated Cluster preview with nine clean speech checks. Parts 25–28 are progressing through source, numerical and visual verification; the table below distinguishes their completed phases.
+Parts 1–24 have completed chapter-by-chapter English source/visual passes, recorded in their evidence folders and commits. [Part 23](evidence/stats23-polish-20261107/README.md) includes thirteen endpoint captures, twelve native 1080p cases, eleven motion checks and a 333.932-second narrated Cluster preview with nine clean speech checks. Part 26 also has a completed English source/visual pass: fifteen chapter captures, fourteen native and motion checks and an eight-line narrated Hierarchy preview. Parts 25 and 27–30 are progressing through their remaining verification phases; the table below distinguishes them.
 
 A [shared World programme-name collision](evidence/world-programmes-20261107/README.md) has been corrected. The [Coverage Board now preserves empirical Monte Carlo uncertainty](evidence/board-mc-20261107/README.md) for correlated intervals within one simulation. Legacy-row values are unchanged. Parts 1–22 retain the visual inspections recorded at their commits; their conservative shared-code fingerprints are being refreshed after the Board correction. Parts 1–4 have completed that latest refresh; further parts remain queued. Part 23's final receipts include the corrected shared source.
 
@@ -52,7 +52,7 @@ No part is signed off for bilingual production. The branch has zero narration_zh
 | 23 | `stats23` | 13 | English source/visual pass complete; production gates open |
 | 24 | `stats24` | 14 | English source/visual pass complete; production gates open |
 | 25 | `stats25` | 15 | Scientific source corrections complete; visual verification in progress |
-| 26 | `stats26` | 15 | Scientific source corrections complete; visual verification in progress |
+| 26 | `stats26` | 15 | English source/visual pass complete; production gates open |
 | 27 | `stats27` | 15 | Source review and numerical verification in progress |
 | 28 | `stats28` | 13 | Scientific source corrections complete; visual verification in progress |
 | 29 | `stats29` | 14 | Scientific source corrections complete; visual verification in progress |
