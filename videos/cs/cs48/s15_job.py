@@ -6,6 +6,22 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs48.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, load
 
 
+def che(n_items, size, s=1.0):
+    """Che's approximation for LRU with Zipf(s) popularity over n_items: solve sum(1 - e^(-p T)) = size for T,
+    then the hit rate is sum p (1 - e^(-p T))."""
+    p = [1 / (k + 1) ** s for k in range(n_items)]
+    z = sum(p)
+    p = [x / z for x in p]
+    lo, hi = 0.0, 1e9
+    for _ in range(200):
+        t = (lo + hi) / 2
+        if sum(1 - math.exp(-x * t) for x in p) < size:
+            lo = t
+        else:
+            hi = t
+    return sum(x * (1 - math.exp(-x * lo)) for x in p)
+
+
 def box(name, color, w=2.3, h=0.75, size=19):
     r = RoundedRectangle(width=w, height=h, corner_radius=0.1, stroke_color=color, stroke_width=2, fill_color=BG,
                          fill_opacity=1)
@@ -158,9 +174,11 @@ class Job(VoiceoverScene):
                           r"\ (chapter 4)", 12.4, font_size=20, color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Why did three hundred entries do so much? <bookmark mark='a'/> Chapter three's numbers answer it. On "
-            f"skewed traffic, three hundred entries of LRU catch {100 * r['lru']:.0f} percent of requests in a "
-            "catalogue of a hundred thousand, exactly as Che's formula predicts; an admission filter like TinyLFU "
+            "Why did three hundred entries do so much? <bookmark mark='a'/> Chapter three's formula answers it. For "
+            "the Job's own catalogue, three thousand books with Zipf popularity, Che's formula predicts that three "
+            f"hundred entries catch {100 * che(3000, 300):.0f} percent, which is what the service measured. In "
+            f"chapter three's catalogue of a hundred thousand, the same three hundred catch only {100 * r['lru']:.0f} "
+            "percent with LRU, as the bars show; an admission filter like TinyLFU "
             f"catches {100 * r['tinylfu']:.0f}, close to the best possible fixed set. <bookmark mark='b'/> A hit "
             "rate h multiplies capacity by one over one minus h, as long as the cache is cheap to ask, which is why "
             "caches appear in every design. <bookmark mark='c'/> The price is that answers can be stale when a book "
