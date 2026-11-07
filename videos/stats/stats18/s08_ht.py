@@ -157,6 +157,7 @@ class HorvitzThompson(VoiceoverScene):
         rows[3][2].set_color(RES)
         whys = [why(r"one elephant's weight, \ for the whole herd"), why(r"the biggest elephant, \ times 4,900"),
                 why(r"Horvitz--Thompson keeps its promise"), why(r"the design must use what we know")]
+        intro = label('An unbiased procedure can still give absurd individual estimates', font_size=36)
         with self.voiceover(
             "Sambo is drawn, of course. <bookmark mark='a'/> The Horvitz–Thompson estimate is Sambo's weight times a "
             "hundred over ninety-nine: about one elephant's weight, for a herd of fifty. <bookmark mark='b'/> Had the"
@@ -166,10 +167,13 @@ class HorvitzThompson(VoiceoverScene):
             "teacher of statistics. The moral is not to abandon randomization but to design with what you know: "
             "inclusion probabilities should track the quantity being measured, and an estimator should be judged by "
             "its whole distribution, not only its mean."       ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def hajek(self):
@@ -182,6 +186,9 @@ class HorvitzThompson(VoiceoverScene):
         rows[1][2].set_color(WEIGHT)
         whys = [why(r"divide the HT total by $N$"), why(r"H\'ajek (1971): \ divide by the estimated $N$"),
                 why(r"a ratio estimator: \ chapter eight"), why(r"a weight column, \ $w_i = 1/\pi_i$, \ adjusted")]
+        intro = label('A weighted mean can divide by a known or estimated population size', font_size=36).move_to([0, 3.2, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> For a mean, the Horvitz–Thompson estimate divides the weighted total by the known "
             "population size. <bookmark mark='b'/> Jaroslav Hájek suggested dividing instead by the sum of the "
@@ -190,6 +197,7 @@ class HorvitzThompson(VoiceoverScene):
             "is random or the weights uneven it's usually much less variable: it doesn't let a lucky draw of heavily "
             "weighted units inflate the total. <bookmark mark='d'/> Every survey dataset you'll meet carries a weight"
             " column of this kind: one over the inclusion probability, adjusted, as chapter nine will show."      ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

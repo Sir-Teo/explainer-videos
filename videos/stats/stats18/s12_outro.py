@@ -60,6 +60,7 @@ class Outro(VoiceoverScene):
             (r"missing data: \ MCAR, \ MAR, \ MNAR; \ multiple imputation", [41]), (r"semiparametric efficiency of weighting", [49]),
             (r"privacy in surveys and censuses", [63]),
         ], font_size=22)
+        intro = label('Where sampling and survey methods return', font_size=36)
         with self.voiceover(
             "Where it comes back. <bookmark mark='a'/> Part 19 turns to prediction and how to evaluate it honestly, "
             "and Part 20, the bachelor's capstone, takes an analysis from question to report. Part 25 builds "
@@ -67,7 +68,9 @@ class Outro(VoiceoverScene):
             "missing-data problem, with Horvitz–Thompson weights in a new role. Part 41 gives missing data its full "
             "theory. Part 49 shows when weighting is efficient. And Part 63 asks how a census can publish its counts "
             "without revealing anyone."       ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows], lag_ratio=0.3), run_time=6.0)
         self.clear_scene()
 

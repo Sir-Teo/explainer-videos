@@ -62,6 +62,9 @@ class Ratio(VoiceoverScene):
         rows[2][2].set_color(OBS)
         whys = [why(r"unknown for France; \ known for the sample"), why(r"people per birth, \ in the sample"),
                 why(r"$X$, \ all births, \ known exactly"), why(r"births track population closely")]
+        intro = label('A sample ratio scales a known auxiliary total', font_size=36).move_to([0, 3.2, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> In general: we want the total of y, the population, and we know the total of an "
             "auxiliary variable x, births, for everyone. <bookmark mark='b'/> Estimate the ratio of y to x from the "
@@ -69,6 +72,7 @@ class Ratio(VoiceoverScene):
             "when y is roughly proportional to x, a line through the origin, because then the ratio barely varies "
             "from one unit to the next, and a sample pins it down precisely."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -112,6 +116,9 @@ class Ratio(VoiceoverScene):
         rows[1][2].set_color(OBS)
         whys = [why(r"for a mean"), why(r"the delta method (Part 9): \ only the residual spread counts"),
                 why(r"the plain mean's variance"), why(r"a ratio of means isn't the mean of a ratio")]
+        intro = label('Ratio estimation exploits a relationship through the origin', font_size=36).move_to([0, 3.2, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> For a mean, the ratio estimator is the sample mean of y over the sample mean of x, "
             "times the known population mean of x. <bookmark mark='b'/> By Part 9's delta method, its variance "
@@ -121,6 +128,7 @@ class Ratio(VoiceoverScene):
             "unbiased for the ratio, under regularity and a population auxiliary mean bounded away from zero. It need"
             " not be negligible for small, skewed samples or an unstable denominator."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -208,6 +216,9 @@ class Ratio(VoiceoverScene):
         rows[3][2].set_color(OBS)
         whys = [why(r"correct the mean by how far $\bar x$ missed"), why(r"Part 12's least squares"),
                 why(r"calibration: \ S\"arndal, \ Swensson \& Wretman (1992)"), why(r"the best of both views of chapter three")]
+        intro = label('Regression estimation adjusts for auxiliary mean imbalance', font_size=36).move_to([0, 3.2, 0])
+        if intro.width > 12.5:
+            intro.width = 12.5
         with self.voiceover(
             "<bookmark mark='a'/> When the relation isn't a line through the origin, use the regression estimator: "
             "correct the sample mean of y by the slope times how far the sample mean of x missed the known population"
@@ -219,6 +230,7 @@ class Ratio(VoiceoverScene):
             "variables predict the outcome well. It is not generally exactly unbiased in a finite sample. It unites "
             "chapter three's two views."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
