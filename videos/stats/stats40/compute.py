@@ -25,7 +25,9 @@ Items:
 from __future__ import annotations
 
 import math
+import json
 from dataclasses import asdict
+from pathlib import Path
 
 import numpy as np
 
@@ -94,6 +96,22 @@ def km_dict(km):
             "plain_hi": km["plain"][1], "ll_lo": km["loglog"][0], "ll_hi": km["loglog"][1]}
 
 
+def paired_remission_bootstrap(reps=3999, pairs=None):
+    """Resample the original 21 matched pairs, preserving each pair's two arms."""
+    if pairs is None:
+        pairs = json.loads(Path(__file__).with_name("gehan_pairs.json").read_text())["pairs"]
+    times = {arm: np.array([p[arm]["time"] for p in pairs]) for arm in ("mp", "placebo")}
+    events = {arm: np.array([p[arm]["event"] for p in pairs]) for arm in times}
+    g = rng(4011)
+    differences = []
+    for _ in range(reps):
+        draw = g.integers(0, len(pairs), len(pairs))
+        means = {arm: SV.rmst(SV.kaplan_meier(times[arm][draw], events[arm][draw]), 35.)["rmst"]
+                 for arm in times}
+        differences.append(means["mp"] - means["placebo"])
+    return np.asarray(differences)
+
+
 def compute_gehan():
     g = museum.gehan()
     t, e, grp = g["time"], g["event"], g["group"]
@@ -116,8 +134,11 @@ def compute_gehan():
                               "ci": [math.exp(f["beta"][0] - 1.96 * f["se"][0]), math.exp(f["beta"][0] + 1.96 * f["se"][0])],
                               "lr": f["lr"], "score": f["score"], "wald": f["wald"]}
     d_rmst = out["mp"]["rmst"]["rmst"] - out["pl"]["rmst"]["rmst"]
-    se = math.sqrt(out["mp"]["rmst"]["var"] + out["pl"]["rmst"]["var"])
-    out["rmst_diff"] = {"diff": d_rmst, "se": se, "ci": [d_rmst - 1.96 * se, d_rmst + 1.96 * se]}
+    draws = paired_remission_bootstrap()
+    out["rmst_diff"] = {"diff": d_rmst, "se": float(draws.std(ddof=1)),
+                        "ci": np.quantile(draws, [.025, .975]), "bootstrap_reps": len(draws),
+                        "uncertainty_scope": "matched-pair percentile bootstrap; 35-week KM tail extension",
+                        "bootstrap_differences": draws}
     # the naive analyses: drop the censored; treat censored as relapses
     mp = grp == 1
     out["naive"] = {"mean_all_as_events": float(t[mp].mean()), "mean_events_only": float(t[mp & (e == 1)].mean()),
@@ -186,8 +207,7 @@ def compute_censor():
                  "km_hi": SV.step_at(grid, km["t"], km["loglog"][1]), "as_dead": s_dead, "drop": s_drop, "as_alive": s_surv,
                  "at10": {"truth": at10(truth), "km": at10(s_km), "as_dead": at10(s_dead), "drop": at10(s_drop), "as_alive": at10(s_surv)},
                  "ages": ag, "age_entry": SV.step_at(ag, kma["t"], kma["surv"]), "age_naive": SV.step_at(ag, kmn["t"], kmn["surv"]),
-                 "age_truth": s_age_true, "age_med": {"entry": float(ag[np.argmin(np.abs(SV.step_at(ag, kma["t"], kma["surv"]) - 0.5))]),
-                                                      "naive": float(ag[np.argmin(np.abs(SV.step_at(ag, kmn["t"], kmn["surv"]) - 0.5))]),
+                 "age_truth": s_age_true, "age_med": {"entry": SV.km_median(kma), "naive": SV.km_median(kmn),
                                                       "truth": float(np.median(entry_data['lifetime']))},
                  "entry_sample": {k: v for k, v in entry_data.items() if k != 'lifetime'},
                  "entry_population": len(entry_data['lifetime']),
@@ -377,6 +397,15 @@ def compute_competing():
     age10 = m["age"] / 10
     X = np.column_stack([male, age10])
     fg = SV.fine_gray(t, st, X, cause=1)
+    # Resample whole patients and refit the censoring distribution in each draw.
+    # The toolkit's inverse conditional information omits that uncertainty.
+    bootstrap_rng = rng(4010)
+    fg_bootstrap = []
+    for _ in range(399):
+        draw = bootstrap_rng.integers(0, len(t), len(t))
+        fg_bootstrap.append(SV.fine_gray(t[draw], st[draw], X[draw], cause=1)["beta"])
+    fg_bootstrap = np.asarray(fg_bootstrap)
+    fg_se = fg_bootstrap.std(axis=0, ddof=1)
     cs = SV.cox_fit(t, (st == 1).astype(int), X)
     cs2 = SV.cox_fit(t, (st == 2).astype(int), X)
     fg2 = SV.fine_gray(t, st, X, cause=2)
@@ -392,7 +421,9 @@ def compute_competing():
                  "at20": {"cif1": at(aj["cif1"], 20), "naive1": at(aj["naive1"], 20), "cif2": at(aj["cif2"], 20)},
                  "at30": {"cif1": at(aj["cif1"], 30), "naive1": at(aj["naive1"], 30)},
                  "n": len(t), "n_prog": int(prog.sum()), "n_death": int((st == 2).sum()), "median_age": float(np.median(m["age"])),
-                 "fg": {"beta": fg["beta"], "se": fg["se"]}, "cs": {"beta": cs["beta"], "se": cs["se"]},
+                 "fg": {"beta": fg["beta"], "se": fg_se, "se_method": "399 patient-pairs bootstrap fits, censoring KM refitted",
+                        "bootstrap_beta": fg_bootstrap, "conditional_information_se": fg["se"]},
+                 "cs": {"beta": cs["beta"], "se": cs["se"]},
                  "cs2": {"beta": cs2["beta"], "se": cs2["se"]}, "fg2": {"beta": fg2["beta"], "se": fg2["se"]},
                  "world": {"grid": grid, "true1": true1, "true2": true2,
                            "aj1": SV.step_at(grid, ajc["t"], ajc["cif1"], 0.0), "naive1": SV.step_at(grid, ajc["t"], ajc["naive1"], 0.0),
@@ -438,6 +469,24 @@ def compute_frailty():
                  "true_hr": math.exp(W.CVD_MALE), "ages": ages, "h_ind": a0, "h_pop": hpop})
 
 
+def brier_score(time, event, survival, horizon):
+    """IPCW Brier with G(T-) for deaths and right-continuous G(t) for survivors.
+
+    Uses a pooled censoring KM, appropriate under unconditional independent
+    censoring and adequate censoring support at the evaluation horizon.
+    """
+    time, event, survival = np.asarray(time), np.asarray(event), np.asarray(survival)
+    censor = SV.kaplan_meier(time, 1 - event)
+    before = np.searchsorted(censor["t"], time, side="left") - 1
+    g_before = np.r_[1., censor["surv"]][before + 1]
+    g_horizon = float(SV.km_at(censor, [horizon])[0]) if len(censor["t"]) else 1.
+    if g_horizon <= 0:
+        raise ValueError("No censoring support at the Brier evaluation horizon")
+    died, alive = (time <= horizon) & (event == 1), time > horizon
+    return float(np.mean(died * survival**2 / np.maximum(g_before, 1e-12)
+                         + alive * (1 - survival)**2 / g_horizon))
+
+
 def compute_predict():
     t, d, X, names, _ = pbc_design(rand_only=False)
     n = len(t)
@@ -460,15 +509,15 @@ def compute_predict():
     S_rsf = np.exp(-chf[:, np.argmin(np.abs(grid - t5))])
     km = SV.kaplan_meier(t[tr], d[tr])
     S_km = np.full(test.sum(), float(SV.km_at(km, [t5])[0]))
-    b = {k: SV.brier_ipcw(t[test], d[test], s, t5) for k, s in (("km", S_km), ("cox", S_cox), ("rsf", S_rsf))}
+    b = {k: brier_score(t[test], d[test], s, t5) for k, s in (("km", S_km), ("cox", S_cox), ("rsf", S_rsf))}
     # Brier over time
     bt = {"cox": [], "rsf": [], "km": []}
     times = np.arange(1, 11)
     for u in times:
         j = np.argmin(np.abs(grid - u))
-        bt["cox"].append(SV.brier_ipcw(t[test], d[test], SV.cox_survival(f, X[test], [u])[:, 0], u))
-        bt["rsf"].append(SV.brier_ipcw(t[test], d[test], np.exp(-chf[:, j]), u))
-        bt["km"].append(SV.brier_ipcw(t[test], d[test], np.full(test.sum(), float(SV.km_at(km, [u])[0])), u))
+        bt["cox"].append(brier_score(t[test], d[test], SV.cox_survival(f, X[test], [u])[:, 0], u))
+        bt["rsf"].append(brier_score(t[test], d[test], np.exp(-chf[:, j]), u))
+        bt["km"].append(brier_score(t[test], d[test], np.full(test.sum(), float(SV.km_at(km, [u])[0])), u))
     return nest({"n": n, "n_test": int(test.sum()), "c_cox_train": c_cox_tr, "c_cox": c_cox, "c_bili": c_bili, "c_rsf": c_rsf,
                  "brier5": b, "times": times, "brier_t": bt, "beta": f["beta"], "names": names})
 

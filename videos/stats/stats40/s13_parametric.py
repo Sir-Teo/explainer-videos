@@ -38,6 +38,9 @@ class Parametric(VoiceoverScene):
             "find easier to explain than a hazard ratio: this treatment makes remissions last forty percent longer. "
             "<bookmark mark='d'/> The error distribution sets the shape of the hazard."
         ) as vo:
+            heading = label('Accelerated failure time models rescale the lifetime clock', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -59,6 +62,9 @@ class Parametric(VoiceoverScene):
             "<bookmark mark='d'/> Then everything from Part twenty-two applies: Newton's method, the observed "
             "information for standard errors, likelihood ratio tests and Akaike's criterion."
         ) as vo:
+            heading = label('Events contribute density; censoring contributes survival', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -75,12 +81,16 @@ class Parametric(VoiceoverScene):
         rows[2][-1].set_color(TAUC)
         whys = [why(r"Weibull (1951)"), why(r"two readings of one model"), why(r"translate between them"), why(r"a theorem")]
         with self.voiceover(
-            "<bookmark mark='a'/> The Weibull distribution, named for the Swedish engineer Waloddi Weibull, is special. "
-            "<bookmark mark='b'/> It is both a proportional hazards model and an accelerated failure time model, <bookmark "
-            "mark='c'/> with the hazard ratio coefficient equal to minus the time coefficient over the scale. <bookmark "
-            "mark='d'/> It is the only family, with its special case the exponential, that is both, so Weibull hazard "
-            "ratios can be compared directly with Cox's."
+            "<bookmark mark='a'/> The Weibull distribution, named for the Swedish engineer Waloddi Weibull, is "
+            "special. <bookmark mark='b'/> It is both a proportional hazards model and an accelerated failure time "
+            "model, <bookmark mark='c'/> with the hazard ratio coefficient equal to minus the time coefficient over "
+            "the scale. <bookmark mark='d'/> Within the regular nondegenerate continuous families with a common AFT "
+            "scale and freely varying covariates, it is the only family, with its special case the exponential, that "
+            "is both, so Weibull hazard ratios can be compared directly with Cox's."
         ) as vo:
+            heading = label('The regular Weibull model has both AFT and PH forms', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -99,14 +109,14 @@ class Parametric(VoiceoverScene):
         tab = table_rows(rows, font_size=28, col_buff=0.9, row_buff=0.34, colors=cols).move_to([0, 0.8, 0])
         foot = fit_rows(VGroup(
             label(rf"Weibull's implied HR per 10 points: \ {d['weibull_hr_karno']:.2f}, \ against Cox's {d['hr_karno10']:.2f}", font_size=24, color=TAUC),
-            label(r"log-logistic wins: \ its hazard rises, \ then falls, \ like the Karnofsky effect fading", font_size=24, color=BANDC),
+            label(r"lowest AIC among these four models; not a test of proportional hazards", font_size=24, color=BANDC),
         ), 12.4, 0.3, [0, -1.8, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The veterans' data under four models. <bookmark mark='b'/> Ten Karnofsky points stretch "
             "survival time by a factor of about one point four to one point five in every model. The Weibull's scale is "
             "close to one, so it is nearly exponential, and its implied hazard ratio, " + say(d["weibull_hr_karno"], 2)
-            + ", matches Cox's. <bookmark mark='c'/> By Akaike's criterion the log-logistic fits best: its hazard rises and "
-            "then falls, which suits a population in which the sickest die first."
+            + ", matches Cox's. <bookmark mark='c'/> By Akaike's criterion the log-logistic fits best: its hazard rises"
+            " and then falls, a descriptive fit here, not proof of a particular selection mechanism."
         ) as vo:
             self.add(veteran_tag())
             vo.wait_until("a")
@@ -172,7 +182,7 @@ class Parametric(VoiceoverScene):
             cmath(r"S(t)", r"=", r"\pi + (1 - \pi)\, S_u(t)", font_size=34),
             cmath(r"\pi", r":", r"\text{the cured fraction: \ the plateau}", font_size=30),
             cmath(r"6\text{-MP}", r":", rf"\text{{the curve stops at }} {d['mp']['surv'][-1]:.2f}: \ \text{{cured, \ or not followed long enough?}}", font_size=30),
-            cmath(r"\text{identifiable}", r":", r"\text{only with follow-up well beyond the last event}", font_size=30),
+            cmath(r"\text{identifiable}", r":", r"\text{finite follow-up cannot distinguish a plateau from an unobserved tail}", font_size=30),
         ]
         rows[0][-1].set_color(TAUC)
         whys = [why(r"Boag (1949); \ Berkson \& Gage (1952)"), why(r"a mixture"), why(r"Gehan's data"), why(r"a plateau needs time")]
@@ -180,10 +190,13 @@ class Parametric(VoiceoverScene):
             "<bookmark mark='a'/> Some diseases are cured in a fraction of patients. A cure model mixes a fraction pi who "
             "will never have the event with others whose survival falls to zero. <bookmark mark='b'/> Pi is the height of "
             "the plateau the curve approaches. <bookmark mark='c'/> The 6-MP curve stops at " + say(d["mp"]["surv"][-1], 2)
-            + ": a cured fraction, or simply the end of follow-up? <bookmark mark='d'/> Thirty-five weeks cannot say. A "
-            "cure fraction is identifiable only when follow-up continues well beyond the last event, which for childhood "
-            "leukaemia, today mostly curable, took decades."
+            + ": a cured fraction, or simply the end of follow-up? <bookmark mark='d'/> Thirty-five weeks cannot say. "
+            "Nonparametric identification requires enough follow-up to distinguish a genuine cured fraction from a "
+            "long tail. A finite plateau alone does not suffice; parametric extrapolation adds assumptions."
         ) as vo:
+            heading = label('A finite survival plateau does not establish a cured fraction', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

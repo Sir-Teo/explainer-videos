@@ -53,13 +53,16 @@ class Immortal(VoiceoverScene):
         rows[2][-1].set_color(SURVC)
         whys = [why(r"looking into the future"), why(r"guaranteed survival"), why(r"start-stop rows"), why(r"Anderson et al.\ (1983)")]
         with self.voiceover(
-            "<bookmark mark='a'/> The general mistake: classifying people at the start of follow-up by something that "
-            "happens to them later. <bookmark mark='b'/> Whoever ends up treated must have survived until treatment, so "
-            "the treated group is guaranteed a stretch of survival. <bookmark mark='c'/> The fix is to let treatment be a "
-            "covariate that switches on when it starts: each person contributes untreated time until then, and treated "
-            "time after, using chapter nine's start-stop rows. <bookmark mark='d'/> Or classify everyone at a fixed "
-            "landmark time and follow from there."
+            "<bookmark mark='a'/> The general mistake: classifying people at the start of follow-up by something that"
+            " happens to them later. <bookmark mark='b'/> Whoever ends up treated must have survived until treatment,"
+            " so the treated group is guaranteed a stretch of survival. <bookmark mark='c'/> Correcting the time "
+            "classification requires treatment to be a covariate that switches on when it starts: each person "
+            "contributes untreated time until then, and treated time after, using chapter nine's start-stop rows. "
+            "<bookmark mark='d'/> Or classify everyone at a fixed landmark time and follow from there."
         ) as vo:
+            heading = label('Treatment status must follow the actual treatment clock', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -123,16 +126,17 @@ class Immortal(VoiceoverScene):
                 [r"time-varying, \ adjusted for age", f"{d['tva_hr']:.2f}", f"{d['tva_ci'][0]:.2f}--{d['tva_ci'][1]:.2f}"]]
         tab = table_rows(rows, font_size=28, col_buff=1.2, row_buff=0.36, colors=[GREY_A, MISSC, SURVC, SURVC]).move_to([0, 0.7, 0])
         foot = fit_rows(VGroup(
-            label(r"a 73\% reduction in the hazard becomes \ no detectable difference", font_size=24, color=TAUC),
+            label(r"correct time allocation removes much of the apparent protective association", font_size=24, color=TAUC),
             label(r"Crowley \& Hu (1977): \ the analysis that made time-varying covariates standard", font_size=24, color=GREY_A),
         ), 12.4, 0.3, [0, -1.7, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The numbers. <bookmark mark='b'/> The naive comparison gives a hazard ratio of "
             + say(d["naive_hr"], 2) + ": transplantation would cut the hazard of death by nearly three quarters. "
             "<bookmark mark='c'/> With transplant as a time-varying covariate, the ratio is " + say(d["tv_hr"], 2) + ", "
-            "<bookmark mark='d'/> and adjusting for age, " + say(d["tva_hr"], 2) + ", with wide intervals around one. In "
-            "these early years, with the drugs of the time, there was no clear survival benefit at all. John Crowley and "
-            "Marie Hu's analysis of 1977 made time-varying covariates a standard tool."
+            "<bookmark mark='d'/> and adjusting for age, " + say(d["tva_hr"], 2) + ", with wide intervals around one. In these early years, with the drugs of the time, these association "
+            "estimates are imprecise. Correcting immortal time does not resolve confounding by disease severity or "
+            "establish a causal absence of benefit. John Crowley and Marie Hu's analysis of 1977 made time-varying "
+            "covariates a standard tool."
         ) as vo:
             self.add(stanford_tag())
             vo.wait_until("a")
@@ -162,7 +166,8 @@ class Immortal(VoiceoverScene):
             "ratio of " + say(d["naive_hr"], 2) + ", a protective effect, with an interval excluding one: immortal time "
             "again. <bookmark mark='c'/> Treating use as time-varying removes that, and reveals the next bias: "
             + say(d["tv_hr"], 2) + ", harmful, because those given statins had higher pressure, confounding by indication. "
-            "<bookmark mark='d'/> Adjusting for pressure and age as well gives " + say(d["tva_hr"], 2) + ", the truth."
+            "<bookmark mark='d'/> Adjusting for pressure and age as well gives " + say(d["tva_hr"], 2) + ", closer to the known no-effect model. This approximate adjusted Cox fit is not itself the simulator’s "
+            "exact causal truth."
         ) as vo:
             self.add(cohort_tag())
             vo.wait_until("a")

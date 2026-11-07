@@ -58,3 +58,23 @@ def test_calibration_mc_se_preserves_independent_dataset_count():
     per_dataset = np.array([.7, .9, .8, 1.])
     expected = math.sqrt(sum((x-per_dataset.mean())**2 for x in per_dataset)/(len(per_dataset)*(len(per_dataset)-1)))
     assert C.mean_mc_se(per_dataset) == pytest.approx(expected, rel=1e-15)
+
+
+def test_brier_uses_censoring_jump_at_evaluation_horizon():
+    # One of three is censored at t=1. Two observed survivors stand in for all
+    # three, using G(1)=2/3, rather than G(1-)=1.
+    assert C.brier_score([1., 2., 3.], [0, 1, 1], [.5, .5, .5], 1.) == pytest.approx(.25)
+    # Without censoring the weighted score reduces to the ordinary binary MSE.
+    t = np.array([1., 2., 3.]); s = np.array([.3, .4, .9])
+    assert C.brier_score(t, np.ones(3, int), s, 2.) == pytest.approx(np.mean(((t>2)-s)**2))
+
+
+def test_trial_bootstrap_preserves_pair_covariance():
+    # Complete lifetimes make RMST the ordinary mean. Two matched pair
+    # differences 2 and 6 give bootstrap means 2,4,6 with probabilities 1/4,1/2,1/4.
+    pairs = [dict(mp=dict(time=3., event=1), placebo=dict(time=1., event=1)),
+             dict(mp=dict(time=8., event=1), placebo=dict(time=2., event=1))]
+    draws = C.paired_remission_bootstrap(reps=4000, pairs=pairs)
+    np.testing.assert_array_equal(np.unique(draws), [2., 4., 6.])
+    assert np.mean(draws) == pytest.approx(4., abs=.08)
+    assert np.var(draws) == pytest.approx(2., abs=.12)

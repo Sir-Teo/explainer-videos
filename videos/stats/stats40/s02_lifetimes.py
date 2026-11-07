@@ -32,12 +32,16 @@ class Lifetimes(VoiceoverScene):
         whys = [why(r"the survival function"), why(r"the hazard: \ the risk now, \ given alive"),
                 why(r"the cumulative hazard"), why(r"one function, \ three faces")]
         with self.voiceover(
-            "<bookmark mark='a'/> A lifetime T is a positive random variable, and its survival function S of t is the "
-            "chance it exceeds t. <bookmark mark='b'/> The hazard is the instantaneous rate of the event at time t among "
-            "those who have survived to t: the density divided by the survival. <bookmark mark='c'/> Its integral is the "
-            "cumulative hazard, which is minus the log of the survival function, <bookmark mark='d'/> so survival is e to "
-            "the minus cumulative hazard. Any one of the three determines the other two."
+            "<bookmark mark='a'/> For the continuous lifetime models here, T is positive and has a density. Its "
+            "survival function S of t is the chance it exceeds t. <bookmark mark='b'/> The hazard is the "
+            "instantaneous rate of the event at time t among those who have survived to t: the density divided by the"
+            " survival. <bookmark mark='c'/> Its integral is the cumulative hazard, which is minus the log of the "
+            "survival function, <bookmark mark='d'/> so survival is e to the minus cumulative hazard. Any one of the "
+            "three determines the other two."
         ) as vo:
+            heading = label('Survival and hazard describe a continuous lifetime distribution', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -52,11 +56,12 @@ class Lifetimes(VoiceoverScene):
             label(r"constant hazard $\lambda$: \ the exponential, \ no memory, \ $S = e^{-\lambda t}$ \ (Part 3)", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The hazard is the natural language for lifetimes because it describes risk among those "
-            "still at risk. <bookmark mark='b'/> A hazard of point zero one a year means that, of those alive now, about "
-            "one in a hundred will die over the coming year. <bookmark mark='c'/> It can rise with age, fall after a "
-            "dangerous operation, or stay constant, <bookmark mark='d'/> which gives the exponential distribution of Part "
-            "three, the only lifetime without memory."
+            "<bookmark mark='a'/> The hazard is the natural language for lifetimes because it describes risk among "
+            "those still at risk. <bookmark mark='b'/> A hazard of point zero one a year means that, of those alive "
+            "now, about one in a hundred will die over the coming year if the hazard stays near that rate. <bookmark "
+            "mark='c'/> It can rise with age, fall after a dangerous operation, or stay constant, <bookmark "
+            "mark='d'/> which gives the exponential distribution of Part three, the only nondegenerate continuous "
+            "lifetime distribution with the memoryless property."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -106,15 +111,16 @@ class Lifetimes(VoiceoverScene):
         side = fit_rows(VGroup(
             label(r"Benjamin Gompertz (1825): \ $h(a) = \alpha e^{\beta a}$", font_size=22, color=HAZC),
             label(r"a straight line on a log scale", font_size=22, color=GREY_A),
-            label(r"the World: \ men \ (red), \ women \ (blue)", font_size=22),
+            label(r"fixed SBP 130, BMI 27, frailty 1: men (red), women (blue)", font_size=22),
             label(r"doubling about every 8 years", font_size=22, color=TAUC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
             "<bookmark mark='a'/> In 1825 the actuary Benjamin Gompertz noticed that adult death rates grow "
-            "exponentially with age. <bookmark mark='b'/> On a log scale, the hazard is a straight line. <bookmark "
-            "mark='c'/> Here are the World's hazards for a man and a woman with average blood pressure: men's higher at "
-            "every age, <bookmark mark='d'/> and both doubling roughly every eight years. Gompertz's law still describes "
-            "human mortality between about thirty and ninety remarkably well."
+            "exponentially with age. <bookmark mark='b'/> On a log scale, a single Gompertz hazard is a straight "
+            "line. Our sum of two Gompertz hazards is approximately straight. <bookmark mark='c'/> Here are the "
+            "World's hazards for a man and a woman with systolic pressure 130, BMI 27 and frailty one: men's higher "
+            "at every age, <bookmark mark='d'/> and both doubling roughly every eight years. Gompertz's law still "
+            "describes human mortality between about thirty and ninety remarkably well."
         ) as vo:
             self.add(cohort_tag())
             vo.wait_until("a")
@@ -138,15 +144,16 @@ class Lifetimes(VoiceoverScene):
         guide = VGroup(DashedLine(ax.c2p(0, 0.5), ax.c2p(m, 0.5), color=TAUC, stroke_width=2),
                        DashedLine(ax.c2p(m, 0.5), ax.c2p(m, 0), color=TAUC, stroke_width=2))
         side = fit_rows(VGroup(
-            label(r"a 60-year-old man in the World", font_size=22),
-            label(r"$S(t) = e^{-H(t)}$, \ $H$ from both causes", font_size=22, color=SURVC),
+            label(r"model man recruited at 60; SBP 130, BMI 27", font_size=22),
+            label(r"$S(t)=E_Z[e^{-ZH_{\rm CVD}(t)}]e^{-H_{\rm other}(t)}$", font_size=22, color=SURVC),
             label(rf"median remaining life: \ {m:.1f} years", font_size=22, color=TAUC),
             label(r"the mean needs the whole tail, \ the median does not", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Integrating the hazard gives the survival curve. For a sixty-year-old man in the "
-            "World, <bookmark mark='b'/> survival from sixty falls slowly at first, then faster, as the hazard climbs. "
-            "<bookmark mark='c'/> Half such men live another " + say(m, 1) + " years. <bookmark mark='d'/> The median is "
+            "<bookmark mark='a'/> Integrating the hazard gives the survival curve. For a model man recruited at "
+            "sixty, with systolic pressure 130 and BMI 27, in the World, <bookmark mark='b'/> survival from sixty "
+            "falls slowly at first, then faster, as the hazard climbs. <bookmark mark='c'/> After integrating over "
+            "frailty drawn at recruitment, half this model group live another " + say(m, 1) + " years. <bookmark mark='d'/> The median is "
             "the natural summary for lifetimes, because it needs only the first half of the curve; the mean needs the "
             "whole tail, and the tail is exactly what censoring hides."
         ) as vo:
@@ -162,12 +169,12 @@ class Lifetimes(VoiceoverScene):
         self.clear_scene()
 
     def shapes(self):
-        A = axes([0, 3], [0, 3], x_length=7.4, y_length=4.2, xlabel=r"time", ylabel=r"hazard $h(t)$",
-                 xticks=[0, 1, 2, 3], yticks=[0, 1, 2, 3], xfmt=lambda v: f"{v:g}", yfmt=lambda v: f"{v:g}", center=[-2.5, 0.2, 0])
+        A = axes([0, 3], [0, 6.2], x_length=7.4, y_length=4.2, xlabel=r"time", ylabel=r"hazard $h(t)$",
+                 xticks=[0, 1, 2, 3], yticks=[0, 2, 4, 6], xfmt=lambda v: f"{v:g}", yfmt=lambda v: f"{v:g}", center=[-2.5, 0.2, 0])
         ax = A.ax
         ts = np.linspace(0.02, 3, 150)
-        cs = [polyline(ax, ts, np.clip(k * ts ** (k - 1), 0, 3), c, 3) for k, c in ((0.5, Y0C), (1.0, GREY_B), (2.0, HAZC))]
-        bath = np.clip(0.4 / np.sqrt(ts) + 0.15 * ts ** 2 + 0.2, 0, 3)
+        cs = [polyline(ax, ts, k * ts ** (k - 1), c, 3) for k, c in ((0.5, Y0C), (1.0, GREY_B), (2.0, HAZC))]
+        bath = 0.4 / np.sqrt(ts) + 0.15 * ts ** 2 + 0.2
         cb = polyline(ax, ts, bath, AREAC, 3)
         side = fit_rows(VGroup(
             label(r"Weibull, \ shape $k = 1/2$: \ falling", font_size=22, color=Y0C),

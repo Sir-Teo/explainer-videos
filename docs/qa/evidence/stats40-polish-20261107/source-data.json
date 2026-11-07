@@ -1,0 +1,117 @@
+[
+  {
+    "dataset": "pbc",
+    "rows": 418,
+    "numeric_columns": {
+      "id": 0.0,
+      "time": 0.0,
+      "status": 0.0,
+      "trt": 0.0,
+      "age": 0.0,
+      "ascites": 0.0,
+      "hepato": 0.0,
+      "spiders": 0.0,
+      "edema": 0.0,
+      "bili": 0.0,
+      "chol": 0.0,
+      "albumin": 0.0,
+      "copper": 0.0,
+      "alk.phos": 0.0,
+      "ast": 0.0,
+      "trig": 0.0,
+      "platelet": 0.0,
+      "protime": 0.0,
+      "stage": 0.0
+    },
+    "categorical_columns": [
+      "sex"
+    ],
+    "source": "https://raw.githubusercontent.com/therneau/survival/master/data/pbc.rda",
+    "object": "pbc",
+    "sha256": "86ed4d908bccc801a01053b4e619a23e92d1b1bf8000a8429c7ced7632de44e2"
+  },
+  {
+    "dataset": "stanford",
+    "rows": 170,
+    "numeric_columns": {
+      "id": 0.0,
+      "start": 0.0,
+      "stop": 0.0,
+      "event": 0.0,
+      "transplant": 0.0,
+      "age": 0.0,
+      "year": 0.0,
+      "surgery": 0.0
+    },
+    "categorical_columns": [],
+    "source": "https://raw.githubusercontent.com/therneau/survival/master/data/heart.rda",
+    "object": "jasa1",
+    "sha256": "891548eaf8b238e619bec29f646de3eb55a91140b3f0385b93e92892a58af0a3"
+  },
+  {
+    "dataset": "mgus2",
+    "rows": 1384,
+    "numeric_columns": {
+      "id": 0.0,
+      "age": 0.0,
+      "dxyr": 0.0,
+      "hgb": 0.0,
+      "creat": 0.0,
+      "mspike": 0.0,
+      "ptime": 0.0,
+      "pstat": 0.0,
+      "futime": 0.0,
+      "death": 0.0
+    },
+    "categorical_columns": [
+      "sex"
+    ],
+    "source": "https://raw.githubusercontent.com/therneau/survival/master/data/cancer.rda",
+    "object": "mgus2",
+    "sha256": "31f15835cfc5cb7c3b1ba0556acc4c9a34f4ab318cb2a28ba47b2a6045cd773f"
+  },
+  {
+    "dataset": "veteran",
+    "rows": 137,
+    "numeric_columns": {
+      "trt": 0.0,
+      "time": 0.0,
+      "status": 0.0,
+      "karno": 0.0,
+      "diagtime": 0.0,
+      "age": 0.0,
+      "prior": 0.0
+    },
+    "categorical_columns": [
+      "celltype"
+    ],
+    "source": "https://raw.githubusercontent.com/therneau/survival/master/data/cancer.rda",
+    "object": "veteran",
+    "sha256": "31f15835cfc5cb7c3b1ba0556acc4c9a34f4ab318cb2a28ba47b2a6045cd773f"
+  },
+  {
+    "dataset": "kidney",
+    "rows": 76,
+    "numeric_columns": {
+      "id": 0.0,
+      "time": 0.0,
+      "status": 0.0,
+      "age": 0.0,
+      "sex": 0.0,
+      "frail": 0.0
+    },
+    "categorical_columns": [
+      "disease"
+    ],
+    "source": "https://raw.githubusercontent.com/therneau/survival/master/data/cancer.rda",
+    "object": "kidney",
+    "sha256": "31f15835cfc5cb7c3b1ba0556acc4c9a34f4ab318cb2a28ba47b2a6045cd773f"
+  },
+  {
+    "dataset": "gehan",
+    "rows": 42,
+    "comparison": "All time/event/treatment triples exactly equal after sorting; pair IDs are not retained in the teaching table",
+    "source": "https://raw.githubusercontent.com/cran/MASS/master/data/gehan.rda",
+    "sha256": "1fea660482ef3963c656b0995becec13011bc050fb387ef45849ba0741e403fd"
+  }
+]

@@ -26,7 +26,7 @@ class Greenwood(VoiceoverScene):
             cmath(r"\log \hat S(t)", r"=", r"\textstyle\sum_{t_k \le t} \log(1 - d_k/n_k)", font_size=32),
             cmath(r"\text{Var}\log(1 - \hat q_k)", r"\approx", r"\dfrac{d_k}{n_k (n_k - d_k)}", font_size=32),
             cmath(r"\widehat{\text{Var}}\, \hat S(t)", r"=", r"\hat S(t)^2 \textstyle\sum_{t_k \le t} \dfrac{d_k}{n_k (n_k - d_k)}", font_size=32),
-            cmath(r"\text{why it sums}", r":", r"\text{the factors are uncorrelated \ (martingales, \ chapter 6)}", font_size=30),
+            cmath(r"\text{why it sums}", r":", r"\text{orthogonal martingale increments give the asymptotic variance}", font_size=30),
         ]
         rows[2][-1].set_color(SURVC)
         whys = [why(r"a sum of logs"), why(r"the delta method on a binomial"), why(r"Greenwood (1926)"),
@@ -34,11 +34,15 @@ class Greenwood(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> The log of the Kaplan-Meier estimate is a sum of logs of the factors. <bookmark "
             "mark='b'/> Each factor is a binomial proportion among the n k at risk, and the delta method gives the "
-            "variance of its log. <bookmark mark='c'/> Adding them and converting back gives Major Greenwood's formula of "
-            "1926, derived for life tables of cancer patients half a century before Kaplan and Meier: S squared times a sum "
-            "of d over n times n minus d. <bookmark mark='d'/> Adding variances needs the factors to be uncorrelated, which "
-            "they are, a fact chapter six will explain."
+            "variance of its log. <bookmark mark='c'/> Adding them and converting back gives Major Greenwood's "
+            "formula of 1926, derived for life tables of cancer patients half a century before Kaplan and Meier: S "
+            "squared times a sum of d over n times n minus d. <bookmark mark='d'/> The asymptotic linear "
+            "representation uses orthogonal martingale increments, which justify this variance estimate; the "
+            "nonlinear product factors are not claimed independent."
         ) as vo:
+            heading = label('Martingale increments justify the Greenwood variance estimate', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -57,16 +61,18 @@ class Greenwood(VoiceoverScene):
         bl = K.band(np.asarray(km["ll_lo"], float), np.asarray(km["ll_hi"], float), color=MPC, opacity=0.3)
         side = fit_rows(VGroup(
             label(r"6-MP, \ with 95\% pointwise bands", font_size=22, color=MPC),
-            label(r"red: \ plain, \ $\hat S \pm 1.96\, \text{SE}$", font_size=22, color=MISSC),
+            label(r"red: plain $\hat S\pm1.96\,{\rm SE}$, clipped to $[0,1]$", font_size=22, color=MISSC),
             label(r"green: \ log-log, \ always inside $[0, 1]$", font_size=22, color=MPC),
-            label(r"wider as the risk set shrinks", font_size=22, color=GREY_A),
+            label(r"small tail risk sets limit precision", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The 6-MP curve with ninety-five percent bands. <bookmark mark='b'/> The plain band, "
-            "estimate plus or minus one point nine six standard errors, in red, is symmetric, and can poke above one or "
+            "<bookmark mark='a'/> The 6-MP curve with approximate ninety-five percent pointwise intervals. <bookmark "
+            "mark='b'/> The plain band, estimate plus or minus one point nine six standard errors, in red, is "
+            "symmetric before clipping; this display clips it to zero and one. Unclipped it can extend above one or "
             "below zero. <bookmark mark='c'/> The log-log band, in green, is computed for log of minus log S and "
-            "transformed back, so it stays inside zero and one and is lopsided where it should be. <bookmark mark='d'/> "
-            "Both widen to the right, as the risk set shrinks: by week thirty-two only a handful remain."
+            "transformed back, so it stays inside zero and one and is lopsided where it should be. <bookmark "
+            "mark='d'/> Tail uncertainty often grows as the risk set shrinks, although interval width need not "
+            "increase monotonically: by week thirty-two only a handful remain."
         ) as vo:
             self.add(gehan_tag())
             vo.wait_until("a")
@@ -96,6 +102,9 @@ class Greenwood(VoiceoverScene):
             "The transformation matters when the risk sets are small, the lesson of Part eleven's binomial intervals once "
             "more. The Board measures how much."
         ) as vo:
+            heading = label('Confidence intervals depend on the scale of approximation', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -118,20 +127,24 @@ class Greenwood(VoiceoverScene):
         rows = [
             cmath(r"\text{pointwise}", r":", r"P\big(S(t) \in \text{band at } t\big) \ge 1 - \alpha \ \text{for each } t", font_size=30),
             cmath(r"\text{simultaneous}", r":", r"P\big(S(t) \in \text{band for all } t \le \tau\big) \ge 1 - \alpha", font_size=30),
-            cmath(r"\text{Hall--Wellner}", r":", r"\hat S(t) - S(t) \approx S(t)\, B\big(\sigma^2(t)\big): \ \text{a Brownian bridge in a new clock}", font_size=28),
-            cmath(r"\text{in practice}", r":", r"\text{wider, \ by roughly half again at } 95\%", font_size=30),
+            cmath(r"\text{Hall--Wellner}", r":", r"\sqrt n(\hat S-S)\Rightarrow -S(t)\,W(v(t)),\quad v(t)=\lim n\sigma^2(t)", font_size=28),
+            cmath(r"\text{in practice}", r":", r"\text{critical values depend on the band and time interval}", font_size=30),
         ]
         rows[2][-1].set_color(TAUC)
-        whys = [why(r"what most software draws"), why(r"for the whole curve"), why(r"Hall \& Wellner (1980)"), why(r"Part 48's empirical processes")]
+        whys = [why(r"what most software draws"), why(r"for the whole curve"), why(r"Hall \& Wellner (1980); Brownian bridge reparametrization"), why(r"Part 48's empirical processes")]
         with self.voiceover(
-            "<bookmark mark='a'/> These bands are pointwise: at each single time, they cover the true survival with "
-            "ninety-five percent probability. <bookmark mark='b'/> A statement about the whole curve at once, that it lies "
-            "inside the band everywhere up to some horizon, needs a simultaneous band. <bookmark mark='c'/> W. J. Hall and "
-            "Jon Wellner built one in 1980 from the fact that the Kaplan-Meier error behaves like a Brownian bridge run on "
-            "a new clock, the subject of Part forty-eight. <bookmark mark='d'/> Simultaneous bands are wider; reading a "
-            "pointwise band as if it were simultaneous is another way of looking at many times and reporting the one that "
-            "looks best."
+            "<bookmark mark='a'/> These bands are pointwise: at each single time, their nominal coverage at a fixed "
+            "time is ninety-five percent, approximately under regularity conditions. <bookmark mark='b'/> A statement"
+            " about the whole curve at once, that it lies inside the band everywhere up to some horizon, needs a "
+            "simultaneous band. <bookmark mark='c'/> W. J. Hall and Jon Wellner built one in 1980 from the fact that "
+            "the Kaplan-Meier error has a Gaussian-process limit, expressible using Brownian motion or a rescaled "
+            "Brownian bridge on a new clock, the subject of Part forty-eight. <bookmark mark='d'/> Simultaneous bands"
+            " are wider; reading a pointwise band as if it were simultaneous is another way of looking at many times "
+            "and reporting the one that looks best."
         ) as vo:
+            heading = label('Pointwise intervals do not cover the entire curve simultaneously', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

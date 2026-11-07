@@ -1,0 +1,67 @@
+[
+  {
+    "item": "gehan",
+    "path": ".cache/stats40/gehan.json",
+    "sha256": "73998fcd3ea08b17deffcbb7596bff4670bbc8a25d343f5c7e022d7c7cff94a5"
+  },
+  {
+    "item": "life",
+    "path": ".cache/stats40/life.json",
+    "sha256": "9eb41fb3d961351853d0b7e12d9004fb99a95f2264ffd8644562bea8389c8a4a"
+  },
+  {
+    "item": "censor",
+    "path": ".cache/stats40/censor.json",
+    "sha256": "1805ef9306ec815fa4fb4e64e5aacd5c51aefe6cd3a4fe9dbe858a6134c5dd67"
+  },
+  {
+    "item": "counting",
+    "path": ".cache/stats40/counting.json",
+    "sha256": "7655d5bc5469cbeb7f2233e5e5393b0196faa5a13519b5b70e72964d2d38429a"
+  },
+  {
+    "item": "pbc",
+    "path": ".cache/stats40/pbc.json",
+    "sha256": "ada7c4eb6d9fb0a29a8a760c907cdd132dfcf287c2ce774f6c2e032a4bc942cd"
+  },
+  {
+    "item": "veteran",
+    "path": ".cache/stats40/veteran.json",
+    "sha256": "f765e7757d3958e17e96b2c8a5d1bb17c3311c62b7183d692ec1fc94532608dc"
+  },
+  {
+    "item": "hr",
+    "path": ".cache/stats40/hr.json",
+    "sha256": "ab517d071880296807feef17848d345761b9d5ac934da042e88a7b3faefa477b"
+  },
+  {
+    "item": "immortal",
+    "path": ".cache/stats40/immortal.json",
+    "sha256": "f0967fa353ce5e930103866473d1954c1c3f1a31ac9356f85776f43c66b16243"
+  },
+  {
+    "item": "competing",
+    "path": ".cache/stats40/competing.json",
+    "sha256": "2b0b1e475a42271fd012134b5a55e7f51f34b1902eae8513b21ecd5b4f3e9d61"
+  },
+  {
+    "item": "frailty",
+    "path": ".cache/stats40/frailty.json",
+    "sha256": "844116de972515692667b45097d90dccbb4a624e6d19bedcd8c839f3df529786"
+  },
+  {
+    "item": "predict",
+    "path": ".cache/stats40/predict.json",
+    "sha256": "bdef59d980b4650f977fd1f718d966012c28819045e40313a50ebefbc527ee90"
+  },
+  {
+    "item": "conformal",
+    "path": ".cache/stats40/conformal.json",
+    "sha256": "885411f0454d04b0c38f8b151561773cae7406984b0933ed84182f18e97707d7"
+  },
+  {
+    "item": "board",
+    "path": ".cache/stats40/board.json",
+    "sha256": "2aee1122bc87f5b949ead64df8393758c37385dc82db4878f54c004e3e67dcd6"
+  }
+]

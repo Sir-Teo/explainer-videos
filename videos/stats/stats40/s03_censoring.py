@@ -56,14 +56,19 @@ class Censoring(VoiceoverScene):
         whys = [why(r"the time and the indicator"), why(r"non-informative censoring"), why(r"a censored case contributes $S$"),
                 why(r"untestable from the data")]
         with self.voiceover(
-            "<bookmark mark='a'/> With right censoring we see the smaller of the lifetime T and a censoring time C, and "
-            "an indicator of which came first. <bookmark mark='b'/> Everything that follows assumes the censoring is "
-            "independent of the lifetime, perhaps given covariates: being censored tells us nothing about one's risk. "
-            "<bookmark mark='c'/> Then the likelihood multiplies the density for each observed event and the survival "
-            "function for each censored case, exactly the at least this long of the open rings. <bookmark mark='d'/> The "
-            "assumption fails if the sickest patients drop out, or the healthiest stop coming to clinic, and the data "
-            "alone cannot tell: it is the missing at random of Part forty-one, in disguise."
+            "<bookmark mark='a'/> With right censoring we see the smaller of the lifetime T and a censoring time C, "
+            "and an indicator of which came first. <bookmark mark='b'/> The likelihood and regression analyses "
+            "require censoring to be independent of the lifetime conditional on the covariates used, with adequate "
+            "follow-up support. Unadjusted Kaplan-Meier needs independence at the population level being pooled; "
+            "conditional independence alone is insufficient. <bookmark mark='c'/> Then the likelihood multiplies the "
+            "density for each observed event and the survival function for each censored case, exactly the at least "
+            "this long of the open rings. <bookmark mark='d'/> The assumption fails if the sickest patients drop out,"
+            " or the healthiest stop coming to clinic, and the data alone cannot tell: it is the missing at random of"
+            " Part forty-one, in disguise."
         ) as vo:
+            heading = label('Independent censoring assumptions determine the likelihood', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -113,8 +118,8 @@ class Censoring(VoiceoverScene):
             + ". <bookmark mark='b'/> Counting the censored as deaths gives " + say(a["as_dead"], 2) + ", far too low. "
             "<bookmark mark='c'/> Dropping them, and using only people whose fate is known, is worse: " + say(a["drop"], 2)
             + ", because the dropped are mostly survivors. <bookmark mark='d'/> Counting them as alive to the end gives "
-            + say(a["as_alive"], 2) + ", too high. <bookmark mark='e'/> The Kaplan-Meier curve, in blue, lies on the "
-            "truth: " + say(a["km"], 3) + ". Censoring handled correctly is information; handled any other way, it is bias."
+            + say(a["as_alive"], 2) + ", too high. <bookmark mark='e'/> The Kaplan-Meier curve, in blue, closely follows the truth: " + say(a["km"], 3) + ". This agreement is empirical, under the simulator’s independent dropout; Kaplan-Meier is not exact in "
+            "one finite sample."
         ) as vo:
             self.add(cohort_tag())
             vo.wait_until("a")
@@ -135,12 +140,16 @@ class Censoring(VoiceoverScene):
         whys = [why(r"delayed entry"), why(r"enter late, \ leave at the event"), why(r"survival overstated"),
                 why(r"age, \ not time on study")]
         with self.voiceover(
-            "<bookmark mark='a'/> Truncation appears as soon as we measure time by age. Someone enrolled at sixty-five is "
-            "seen only because they survived to sixty-five. <bookmark mark='b'/> So the risk set at each age must contain "
-            "only those who have entered and not yet left: delayed entry. <bookmark mark='c'/> Ignoring it treats everyone "
-            "as at risk from forty, crediting them with years in which they could not have died in our data. <bookmark "
-            "mark='d'/> For a cohort, age is the natural clock, and handling entry correctly is what makes it usable."
+            "<bookmark mark='a'/> Truncation appears as soon as we measure time by age. Someone enrolled at "
+            "sixty-five is seen only because they survived to sixty-five. <bookmark mark='b'/> So the risk set at "
+            "each age must contain only those who have entered and not yet left: delayed entry. <bookmark mark='c'/> "
+            "Ignoring it treats everyone as at risk from forty, crediting them with years in which they could not "
+            "have died in our data. <bookmark mark='d'/> Age can be a useful clock. Estimating survival from forty "
+            "additionally requires entry to be independent of lifetime, possibly after appropriate adjustment."
         ) as vo:
+            heading = label('Delayed-entry risk sets exclude the years before recruitment', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -162,15 +171,18 @@ class Censoring(VoiceoverScene):
             label(rf"gold: \ the truth \ (median {m['truth']:.0f})", font_size=22, color=TRUEC),
             label(rf"entry ignored: \ median {m['naive']:.0f}", font_size=22, color=MISSC),
             label(rf"delayed entry: \ median {m['entry']:.0f}", font_size=22, color=SURVC),
-            label(r"the cohort's own years, \ used correctly", font_size=22, color=GREY_A),
+            label(r"separate age-40 simulation; independent scheduled entry", font_size=22, color=GREY_A),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The cohort on the age scale. The true survival from forty, in gold, has a median of "
+            "<bookmark mark='a'/> A separate seeded demonstration generates lifetimes from forty and independent "
+            "scheduled entry ages from forty to eighty. Only people alive at entry are observed, followed for at most"
+            " fifteen years. The true survival from forty, in gold, has a median of "
             + str(round(m["truth"])) + ". <bookmark mark='b'/> Ignoring delayed entry gives a curve that is far too "
-            "optimistic, with a median of " + str(round(m["naive"])) + ". <bookmark mark='c'/> Starting each person's risk "
-            "at their age of entry recovers the truth, from a cohort none of whom was followed for more than fifteen years."
+            "optimistic, with a median of " + str(round(m["naive"])) + ". <bookmark mark='c'/> Starting each person’s risk at entry closely follows the reference curve here. "
+            "Frailty is generated at forty and survivor selection is retained; this is not the original World cohort,"
+            " whose frailty is reset at recruitment."
         ) as vo:
-            self.add(cohort_tag())
+            self.add(seeded_tag())
             vo.wait_until("a")
             self.play(FadeIn(A), Create(ct), FadeIn(side[0]))
             vo.wait_until("b")

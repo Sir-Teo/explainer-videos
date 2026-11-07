@@ -38,6 +38,9 @@ class NelsonAalen(VoiceoverScene):
             "Kaplan-Meier, since e to the minus x exceeds one minus x. <bookmark mark='d'/> The idea: each event uses up a "
             "one over n k share of the risk among those exposed."
         ) as vo:
+            heading = label('Nelson-Aalen sums events divided by the risk set', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -100,10 +103,11 @@ class NelsonAalen(VoiceoverScene):
             r[4].set_color(HAZC)
         foot = label(r"close while $d_k \ll n_k$; \ they part as the risk set thins", font_size=24, color=GREY_A).move_to([0, -2.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Side by side for 6-MP, the two survival estimates agree to within a few thousandths "
-            "early on, <bookmark mark='b'/> and drift apart only as the number at risk gets small. Both are consistent; "
-            "Nelson-Aalen is the more natural for the theory, and for checking models, because it estimates the "
-            "hazard, which is what models are written in."
+            "<bookmark mark='a'/> Side by side for 6-MP, the two survival estimates are close early in follow-up, "
+            "<bookmark mark='b'/> and drift apart only as the number at risk gets small. For continuous lifetimes and"
+            " independent censoring, both are consistent where follow-up has support; Nelson-Aalen is the more "
+            "natural for the theory, and for checking models, because it estimates the hazard, which is what models "
+            "are written in."
         ) as vo:
             self.add(gehan_tag())
             vo.wait_until("a")
@@ -128,6 +132,9 @@ class NelsonAalen(VoiceoverScene):
             "log cumulative hazards are parallel, a constant distance beta apart, the assumption of chapter eight. "
             "<bookmark mark='d'/> So look at log H against log t before fitting anything."
         ) as vo:
+            heading = label('Cumulative hazard plots help assess model shape', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -144,13 +151,18 @@ class NelsonAalen(VoiceoverScene):
         rows[1][-1].set_color(HAZC)
         whys = [why(r"grouped data"), why(r"the censored count half"), why(r"Cutler \& Ederer (1958)"), why(r"the product limit")]
         with self.voiceover(
-            "<bookmark mark='a'/> Before computers, survival was computed from life tables: follow-up cut into intervals, "
-            "with the numbers entering, dying and censored in each. <bookmark mark='b'/> The actuarial estimate of the "
-            "chance of dying in an interval counts each censored person as at risk for half of it. <bookmark mark='c'/> "
-            "Multiplying the interval survivals gives Sidney Cutler and Fred Ederer's estimator, published the same year as "
-            "Kaplan and Meier's. <bookmark mark='d'/> Shrink the intervals until each holds at most one event time, and the "
-            "actuarial table becomes the product-limit estimator: the limit in its name."
+            "<bookmark mark='a'/> Before computers, survival was computed from life tables: follow-up cut into "
+            "intervals, with the numbers entering, dying and censored in each. <bookmark mark='b'/> The actuarial "
+            "estimate of the chance of dying in an interval approximately counts each censored person as at risk for "
+            "half of it, using a uniform-within-interval censoring approximation. <bookmark mark='c'/> Multiplying "
+            "the interval survivals gives Sidney Cutler and Fred Ederer's estimator, published the same year as "
+            "Kaplan and Meier's. <bookmark mark='d'/> When exact event and censoring times are available, shrink "
+            "intervals so distinct event and censoring times are separated; the actuarial table becomes the "
+            "product-limit estimator: the limit in its name."
         ) as vo:
+            heading = label('Grouped life tables approximate within-interval exposure', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

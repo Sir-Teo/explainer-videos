@@ -24,7 +24,7 @@ class Prediction(VoiceoverScene):
 
     def concordance(self):
         rows = [
-            cmath(r"\text{usable pair}", r":", r"T_i < T_j \text{ and } i \text{ had the event}", font_size=30),
+            cmath(r"\text{usable pair}", r":", r"X_i < X_j \text{ and } i \text{ had the event}", font_size=30),
             cmath(r"C", r"=", r"P(\text{risk}_i > \text{risk}_j \mid \text{usable pair})", font_size=32),
             cmath(r"C = 0.5", r":", r"\text{a coin}; \ \ C = 1: \ \text{a perfect ranking}", font_size=30),
             cmath(r"\text{limits}", r":", r"\text{ranks only; \ depends on censoring; \ blind to calibration}", font_size=30),
@@ -40,6 +40,9 @@ class Prediction(VoiceoverScene):
             "judges the ranking, it depends on the censoring pattern, and it cannot see whether the predicted "
             "probabilities are right."
         ) as vo:
+            heading = label('Concordance measures ranking among comparable observed pairs', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -57,12 +60,17 @@ class Prediction(VoiceoverScene):
         whys = [why(r"Graf et al.\ (1999)"), why(r"inverse probability of censoring"), why(r"censoring as a lifetime"),
                 why(r"Part 18's Horvitz--Thompson")]
         with self.voiceover(
-            "<bookmark mark='a'/> The Brier score measures calibration and discrimination together: the mean squared error "
-            "of the predicted probability of surviving past t. <bookmark mark='b'/> Patients censored before t have no "
-            "outcome, so the others are weighted up by the inverse probability of remaining uncensored, <bookmark "
-            "mark='c'/> estimated by Kaplan-Meier applied to the censoring times. <bookmark mark='d'/> It is Part "
-            "eighteen's Horvitz-Thompson weighting: each observed patient stands in for the censored ones like them."
+            "<bookmark mark='a'/> The Brier score measures calibration and discrimination together: the mean squared "
+            "error of the predicted probability of surviving past t. <bookmark mark='b'/> Patients censored before t "
+            "have no outcome, so the others are weighted up by the inverse probability of remaining uncensored, "
+            "<bookmark mark='c'/> estimated by Kaplan-Meier applied to the censoring times. <bookmark mark='d'/> It "
+            "is Part eighteen's Horvitz-Thompson weighting: the weights require adequate censoring support. A pooled "
+            "censoring KM assumes the relevant unconditional independence; censoring that depends on predictors needs"
+            " suitable conditional weights."
         ) as vo:
+            heading = label('Censoring weights require independence and follow-up support', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -86,9 +94,9 @@ class Prediction(VoiceoverScene):
             "two thirds and a test third. <bookmark mark='b'/> With no model, the concordance is one half by definition, "
             "and the five-year Brier score is " + say(b["km"], 2) + ". <bookmark mark='c'/> Bilirubin alone ranks patients "
             "with a concordance of " + say(d["c_bili"], 2) + ". <bookmark mark='d'/> The Mayo Cox model reaches "
-            + say(d["c_cox"], 2) + " on new patients, and cuts the Brier score to " + say(b["cox"], 2) + ". <bookmark "
-            "mark='e'/> A random survival forest, a hundred and fifty trees split by log-rank statistics, does a little "
-            "worse: with five well-chosen variables and a few hundred patients, the old model is hard to beat."
+            + say(d["c_cox"], 2) + " on new patients, and cuts the Brier score to " + say(b["cox"], 2) + ". <bookmark mark='e'/> A random survival forest, a hundred and fifty trees split by log-rank statistics,"
+            " does a little worse on this one seeded split: with five well-chosen variables and a few hundred "
+            "patients, the old model is hard to beat."
         ) as vo:
             self.add(pbc_tag())
             vo.wait_until("a")
@@ -132,14 +140,15 @@ class Prediction(VoiceoverScene):
             label(r"random survival forests \ (Ishwaran et al.\ 2008): \ trees split by the log-rank statistic", font_size=26, color=AREAC),
             label(r"each leaf: \ a Nelson--Aalen curve; \ the forest: \ their average", font_size=26),
             label(r"also: \ boosting Cox's partial likelihood; \ neural nets for hazards \ (DeepSurv)", font_size=26, color=GREY_A),
-            label(r"they win with many variables, \ interactions, \ and many events", font_size=26, color=TAUC),
+            label(r"potential gains with interactions and enough events; validate out of sample", font_size=26, color=TAUC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Hemant Ishwaran's random survival forests grow trees whose splits maximize a log-rank "
-            "statistic. <bookmark mark='b'/> Each leaf holds a Nelson-Aalen curve, and the forest averages them. <bookmark "
-            "mark='c'/> Others boost Cox's partial likelihood, or fit hazards with neural networks. <bookmark mark='d'/> "
-            "They earn their keep when there are many variables, real interactions, and enough events to learn them; with "
-            "a few strong predictors, as in PBC, a well-specified Cox model is hard to improve on."
+            "<bookmark mark='a'/> Hemant Ishwaran's random survival forests grow trees whose splits maximize a "
+            "log-rank statistic. <bookmark mark='b'/> Each leaf holds a Nelson-Aalen curve, and the forest averages "
+            "them. <bookmark mark='c'/> Others boost Cox's partial likelihood, or fit hazards with neural networks. "
+            "<bookmark mark='d'/> They can help when there are many variables, real interactions, and enough events "
+            "to learn them; with a few strong predictors, as in PBC, a well-specified Cox model is hard to improve "
+            "on."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -148,7 +157,7 @@ class Prediction(VoiceoverScene):
 
     def conformal(self):
         rows = [
-            cmath(r"\text{goal}", r":", r"L(x) \text{ with } P(T \ge L(X)) \ge 1 - \alpha, \ \text{whatever the model}", font_size=30),
+            cmath(r"\text{goal}", r":", r"L(x) \text{ with } P(T \ge L(X)) \ge 1 - \alpha, \ \text{under exchangeability and censoring conditions}", font_size=30),
             cmath(r"\text{problem}", r":", r"\text{censored calibration times hide } T", font_size=30),
             cmath(r"\text{fix}", r":", r"\text{use } T \wedge c_0 \text{ for units with } C \ge c_0, \ \text{weighted by } 1/P(C \ge c_0 \mid x)", font_size=28),
             cmath(r"L(x)", r"=", r"\min\big(q(x) - \hat\eta, \ c_0\big): \ \text{Part 34's split conformal}", font_size=30),
@@ -157,14 +166,21 @@ class Prediction(VoiceoverScene):
         whys = [why(r"a lower prediction bound"), why(r"the score needs $T$"), why(r"Cand\`es, \ Lei \& Ren (2023)"),
                 why(r"a model's $q$, \ corrected")]
         with self.voiceover(
-            "<bookmark mark='a'/> Part thirty-four's conformal prediction can be carried over. The goal is a lower bound on "
-            "a new patient's lifetime that holds with probability ninety percent, whatever model produced it. <bookmark "
-            "mark='b'/> The difficulty is that censoring hides the calibration patients' lifetimes. <bookmark mark='c'/> "
-            "Emmanuel Candès, Lihua Lei and Zhimei Ren's answer: pick a threshold c nought, use only calibration patients "
-            "whose censoring time exceeds it, for whom the lifetime capped at c nought is seen, and weight them by the "
-            "inverse chance of being so lucky. <bookmark mark='d'/> Then calibrate any model's quantile as in split "
-            "conformal."
+            "<bookmark mark='a'/> Part thirty-four's conformal prediction can be carried over. The goal is a lower "
+            "bound on a new patient's lifetime with ninety percent marginal coverage under exchangeability, a "
+            "predictor trained separately, and the required censoring assumptions; it is not a conditional guarantee "
+            "for every patient. <bookmark mark='b'/> The difficulty is that censoring hides the calibration patients'"
+            " lifetimes. <bookmark mark='c'/> Emmanuel Candès, Lihua Lei and Zhimei Ren's answer: pick a threshold c "
+            "nought, use only calibration patients whose censoring time exceeds it, for whom the lifetime capped at c"
+            " nought is seen, and weight them by the inverse chance of being so lucky. <bookmark mark='d'/> The "
+            "demonstration has known censoring times, even for early failures, and censoring independent of "
+            "covariates and lifetimes, so weights are constant. With known correct censoring weights the model can be"
+            " arbitrary; estimated weights do not generally give exact finite-sample coverage. Then calibrate its "
+            "quantile as in split conformal."
         ) as vo:
+            heading = label('Censored conformal bounds need known censoring information', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

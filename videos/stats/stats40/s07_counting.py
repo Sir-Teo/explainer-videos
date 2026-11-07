@@ -31,13 +31,17 @@ class Counting(VoiceoverScene):
         whys = [why(r"a step function, \ jumps of 1"), why(r"the risk set's size"), why(r"the compensator: \ expected events"),
                 why(r"Aalen (1978)")]
         with self.voiceover(
-            "<bookmark mark='a'/> Odd Aalen's thesis of 1978 recast the whole subject in terms of counting. N of t counts "
-            "the events observed by time t. <bookmark mark='b'/> Y of t counts those still at risk. <bookmark mark='c'/> "
-            "The compensator integrates the hazard over the risk set: the number of events we should expect by t, given "
-            "who has been at risk. <bookmark mark='d'/> The difference, observed minus expected, is a martingale: its "
-            "expected future change, given the past, is zero, whatever censoring has happened, as long as censoring "
-            "depends only on the past."
+            "<bookmark mark='a'/> Odd Aalen's 1978 counting-process work recast the whole subject in terms of "
+            "counting. N of t counts the events observed by time t. <bookmark mark='b'/> Y of t counts those still at"
+            " risk. <bookmark mark='c'/> The compensator integrates the hazard over the risk set: the accumulated "
+            "predictable event intensity, based on who has been at risk. <bookmark mark='d'/> The difference, "
+            "observed minus expected, is a martingale: its expected future change, given the past, is zero, provided "
+            "the specified intensity remains valid in the observed-data filtration and censoring does not reveal "
+            "additional future event risk."
         ) as vo:
+            heading = label('Observed events minus integrated intensity form a martingale', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -98,12 +102,16 @@ class Counting(VoiceoverScene):
         whys = [why(r"no drift, \ given the past"), why(r"the predictable variation"), why(r"stochastic integrals"),
                 why(r"Rebolledo (1980); \ Part 44")]
         with self.voiceover(
-            "<bookmark mark='a'/> Martingales have no drift: given everything up to just before t, the expected increment "
-            "is zero. <bookmark mark='b'/> Their predictable variation is the compensator itself, so the variance of M is "
-            "the expected number of events. <bookmark mark='c'/> Weighting the increments by anything known just before "
-            "each time gives another martingale. <bookmark mark='d'/> And Rolando Rebolledo's central limit theorem says "
-            "such sums of many small jumps are approximately normal. Part forty-four proves it."
+            "<bookmark mark='a'/> Martingales have no drift: given everything up to just before t, the expected "
+            "increment is zero. <bookmark mark='b'/> Their predictable variation is the compensator itself, so the "
+            "variance of M is the expected number of events. <bookmark mark='c'/> With suitable integrability, "
+            "weighting the increments by a predictable process known just before each time gives another martingale. "
+            "<bookmark mark='d'/> And Rolando Rebolledo's central limit theorem says a normal limit follows when jump"
+            " sizes are negligible and predictable variance converges appropriately. Part forty-four proves it."
         ) as vo:
+            heading = label('Martingale limits require variance and jump-size conditions', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -114,7 +122,7 @@ class Counting(VoiceoverScene):
         d = load("counting")
         h = np.asarray(d["hist"], float)
         edges = np.arange(-20.5, 21.5, 1.0)
-        dens = h / h.sum()
+        dens = h / 4000
         A = axes([-20.5, 20.5], [0, 0.1], x_length=7.4, y_length=4.0, xlabel=r"$M(1) = N(1) - \Lambda(1)$", ylabel=r"share of 4,000 paths",
                  xticks=[-20, -10, 0, 10, 20], yticks=[0, 0.05, 0.1], xfmt=lambda v: f"{v:g}", yfmt=lambda v: f"{v:g}", center=[-2.5, 0.2, 0])
         ax = A.ax
@@ -126,14 +134,13 @@ class Counting(VoiceoverScene):
             label(r"4,000 paths of 50 lifetimes", font_size=22),
             label(rf"mean of $M(1)$: \ {d['M_mean']:.2f}", font_size=22, color=TAUC),
             label(rf"variance: \ {d['M_var']:.1f}; \ $E\Lambda(1)$ = {d['Lam_mean']:.1f}", font_size=22, color=TAUC),
-            label(r"blue: \ the normal Rebolledo promises", font_size=22, color=SURVC),
+            label(r"blue: a normal approximation", font_size=22, color=SURVC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Check it on four thousand such paths. <bookmark mark='b'/> Observed minus expected events "
             "by time one averages " + say(d["M_mean"], 2) + ", zero up to simulation noise, <bookmark mark='c'/> and its "
-            "variance is " + say(d["M_var"], 1) + ", against an expected compensator of " + say(d["Lam_mean"], 1) + ". "
-            "<bookmark mark='d'/> And the histogram is close to the normal curve the martingale central limit theorem "
-            "promises."
+            "variance is " + say(d["M_var"], 1) + ", against an expected compensator of " + say(d["Lam_mean"], 1) + ". <bookmark mark='d'/> And the histogram is close to a normal reference; the martingale central limit "
+            "theorem explains the approximation under its conditions."
         ) as vo:
             self.add(seeded_tag())
             vo.wait_until("a")
@@ -148,18 +155,20 @@ class Counting(VoiceoverScene):
 
     def payoff(self):
         rows = fit_rows(VGroup(
-            label(r"Nelson--Aalen: \ $\hat H - H = \int dM / Y$, \ a martingale: \ unbiased, \ variance $\int dN / Y^2$", font_size=26, color=HAZC),
+            label(r"Nelson--Aalen: $\hat H-\int 1\{Y>0\}h\,dt=\int 1\{Y>0\}\,dM/Y$", font_size=26, color=HAZC),
             label(r"Kaplan--Meier: \ $\hat S / S - 1 = -\int (\hat S_- / S)\, dM / Y$: \ Greenwood's formula falls out", font_size=26, color=SURVC),
             label(r"log-rank: \ a weighted integral of $dM$ \ (chapter 7)", font_size=26, color=TAUC),
             label(r"Cox's score: \ a sum of martingale increments \ (chapter 8; \ Andersen \& Gill 1982)", font_size=26, color=GREY_A),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Why bother? Because every estimator in this part is an integral against M. The "
-            "Nelson-Aalen error is the martingale integral of dM over Y, so it is unbiased and its variance follows at "
-            "once. <bookmark mark='b'/> The Kaplan-Meier error has the same form, and Greenwood's formula drops out. "
-            "<bookmark mark='c'/> The log-rank statistic is a weighted integral of dM, <bookmark mark='d'/> and so is "
-            "Cox's score. Per Kragh Andersen and Richard Gill used this in 1982 to give Cox's model its large-sample theory, "
-            "including covariates that change over time."
+            "Nelson-Aalen error is the martingale integral of dM over Y, for the cumulative hazard stopped when the "
+            "risk set becomes empty. This qualification matters: the estimator is not exactly unbiased for "
+            "unrestricted H after the last person leaves. Its variance estimator follows at once. <bookmark "
+            "mark='b'/> The Kaplan-Meier error has the same form, and Greenwood's formula drops out. <bookmark "
+            "mark='c'/> The log-rank statistic is a weighted integral of dM, <bookmark mark='d'/> and so is Cox's "
+            "score. Per Kragh Andersen and Richard Gill used this in 1982 to give Cox's model its large-sample "
+            "theory, including covariates that change over time."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

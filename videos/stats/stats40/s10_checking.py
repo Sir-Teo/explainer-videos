@@ -28,16 +28,19 @@ class Checking(VoiceoverScene):
             cmath(r"\text{test}", r":", r"\text{regress } r^*_j \text{ on } g(t): \ \text{a slope means } \beta_j \text{ changes}", font_size=30),
         ]
         rows[2][-1].set_color(TAUC)
-        whys = [why(r"Schoenfeld (1982): \ one per event"), why(r"scaled by the information"), why(r"Grambsch \& Therneau (1994)"),
+        whys = [why(r"Schoenfeld (1982): \ one per event"), why(r"scaled using the coefficient covariance"), why(r"Grambsch \& Therneau (1994)"),
                 why(r"$g$: \ time, \ log time, \ or KM")]
         with self.voiceover(
             "<bookmark mark='a'/> David Schoenfeld's residuals of 1982: at each event, the failing person's covariate "
-            "minus the risk-set average, the terms of the score. <bookmark mark='b'/> Scaled by the estimated information "
+            "minus the risk-set average, the terms of the score. <bookmark mark='b'/> Scaled using the estimated coefficient covariance "
             "and added to beta hat, <bookmark mark='c'/> they estimate the coefficient at that event's time, as Patricia "
             "Grambsch and Terry Therneau showed in 1994. <bookmark mark='d'/> If the hazards are proportional, they "
             "scatter around a horizontal line; a trend against time means the effect changes, and a regression on a "
             "function of time gives a test."
         ) as vo:
+            heading = label('Scaled residuals diagnose time variation in coefficients', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -60,17 +63,17 @@ class Checking(VoiceoverScene):
         side = fit_rows(VGroup(
             label(r"VA lung cancer trial: \ 137 men, \ 128 deaths", font_size=22),
             label(rf"Cox: \ HR {d['hr_karno10']:.2f} per 10 Karnofsky points \ (blue line)", font_size=22, color=SURVC),
-            label(r"orange: \ the residuals' running mean", font_size=22, color=HAZC),
-            label(rf"strong early, \ gone later: \ GT $p = {d['zph_p'][0]:.3f}$", font_size=22, color=MISSC),
+            label(r"orange: means within event-time bins", font_size=22, color=HAZC),
+            label(rf"strong early, \ gone later: \ approximate diagnostic $p = {d['zph_p'][0]:.3f}$", font_size=22, color=MISSC),
         ), 4.6, 0.42, [4.45, 0.4, 0])
         with self.voiceover(
             "<bookmark mark='a'/> The Veterans' Administration lung cancer trial: a hundred and thirty-seven men with "
             "advanced disease, almost all of whom died. <bookmark mark='b'/> The Karnofsky score measures how well a "
-            "patient can function, and Cox's model gives a hazard ratio of " + say(d["hr_karno10"], 2) + " per ten "
-            "points: fitter patients die more slowly. <bookmark mark='c'/> But the scaled residuals tell a different story "
-            "over time. <bookmark mark='d'/> The effect is strong in the first months and fades towards nothing later; "
-            "Grambsch and Therneau's test gives a p-value of " + say(d["zph_p"][0], 3) + ". The single hazard ratio "
-            "averages a large early effect and none at all."
+            "patient can function, and Cox's model gives a hazard ratio of " + say(d["hr_karno10"], 2) + " per ten points: fitter patients die more slowly. <bookmark mark='c'/> But the scaled residuals tell a "
+            "different story over time. <bookmark mark='d'/> The effect is strong in the first months and fades "
+            "towards nothing later; our approximate KM-transformed scaled-residual diagnostic gives a p-value of " + say(d["zph_p"][0], 3) + ". This diagnostic uses a simplified constant covariance and Breslow risk-set residuals, so it is not an "
+            "exact reproduction of software’s tie-adjusted Grambsch-Therneau test. The single hazard ratio averages a"
+            " large early effect and none at all."
         ) as vo:
             self.add(veteran_tag())
             vo.wait_until("a")
@@ -85,21 +88,21 @@ class Checking(VoiceoverScene):
 
     def zph_table(self):
         d = load("pbc")
-        rows = [[r"Mayo model: \ Grambsch--Therneau", r"$\chi^2_1$", r"$p$"]]
+        rows = [[r"Mayo model: approximate KM-transform residual diagnostic", r"$\chi^2_1$", r"$p$"]]
         for n, c, p in zip(d["names"], d["zph_chi2"], d["zph_p"]):
             rows.append([n, f"{c:.2f}", f"{p:.3f}"])
         cols = [GREY_A] + [MISSC if p < 0.1 else None for p in d["zph_p"]]
         tab = table_rows(rows, font_size=26, col_buff=1.0, row_buff=0.3, colors=cols).move_to([0, 0.8, 0])
         foot = fit_rows(VGroup(
             label(r"no strong violation; \ bilirubin and prothrombin time are borderline", font_size=24, color=GREY_A),
-            label(r"with 125 deaths the test has little power; \ with 100,000 it rejects for trivial changes", font_size=24, color=TAUC),
+            label(r"power depends on events and departure; clinical size still matters", font_size=24, color=TAUC),
         ), 12.4, 0.3, [0, -2.0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The same tests for the Mayo model. <bookmark mark='b'/> No covariate violates the "
-            "assumption badly; bilirubin and prothrombin time are borderline, with p-values near point one. <bookmark "
-            "mark='c'/> Like every goodness-of-fit test, this one has little power with a hundred and twenty-five deaths "
-            "and rejects for trivial departures with a hundred thousand. Look at the residual plot, and ask whether the "
-            "change in effect matters."
+            "<bookmark mark='a'/> The same tests for the Mayo model. <bookmark mark='b'/> These approximate "
+            "diagnostics do not provide strong evidence against the assumption; bilirubin and prothrombin time are "
+            "borderline, with p-values near point one. <bookmark mark='c'/> Like every goodness-of-fit test, its "
+            "power depends on the departure and the available events, and very large samples can detect clinically "
+            "trivial changes. Look at the residual plot, and ask whether the change in effect matters."
         ) as vo:
             self.add(pbc_tag())
             vo.wait_until("a")
@@ -121,13 +124,16 @@ class Checking(VoiceoverScene):
         whys = [why(r"for a nuisance factor"), why(r"an interaction with time"), why(r"Andersen--Gill counting process"),
                 why(r"no PH needed")]
         with self.voiceover(
-            "<bookmark mark='a'/> What to do. If the offending variable is a nuisance, stratify on it: each stratum gets "
-            "its own baseline hazard, and nothing is assumed about how they relate. <bookmark mark='b'/> If its effect is "
-            "the point, let the coefficient change with time, smoothly or in pieces. <bookmark mark='c'/> Both are fitted "
-            "by splitting each person's follow-up into start-stop rows, the counting-process form of chapter six. "
-            "<bookmark mark='d'/> Or report an estimand that needs no proportional hazards at all, the subject of chapter "
-            "ten."
+            "<bookmark mark='a'/> What to do. If the offending variable is a nuisance, stratify on it: each stratum "
+            "gets its own baseline hazard, and nothing is assumed about how they relate. <bookmark mark='b'/> If its "
+            "effect is the point, let the coefficient change with time, smoothly or in pieces. <bookmark mark='c'/> "
+            "Time-varying covariates or piecewise effects can be fitted by splitting follow-up into start-stop rows; "
+            "the counting-process form of chapter six. <bookmark mark='d'/> Or report an estimand that needs no "
+            "proportional hazards at all, the subject of chapter ten."
         ) as vo:
+            heading = label('Respond to nonproportionality by changing the model or estimand', font_size=36).move_to([0,3.3,0])
+            if heading.width > 12.5: heading.width = 12.5
+            self.play(FadeIn(heading))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -146,7 +152,8 @@ class Checking(VoiceoverScene):
             "<bookmark mark='a'/> For the veterans, split each man's follow-up at ninety days and give the score a "
             "separate coefficient in each piece. <bookmark mark='b'/> In the first ninety days, ten Karnofsky points cut "
             "the hazard to " + say(d["early_hr"], 2) + " of its value; <bookmark mark='c'/> after ninety days, the ratio is "
-            + say(d["late_hr"], 2) + ": no effect. The functional score predicts who dies soon, not who dies later."
+            + say(d["late_hr"], 2) + ": a much weaker estimated late association. An interval containing one does not establish that the late "
+            "effect is zero."
         ) as vo:
             self.add(veteran_tag())
             vo.wait_until("a")

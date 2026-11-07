@@ -1,7 +1,7 @@
-# Part 40 scientific review in progress
+# Part 40 scientific source checkpoint
 
-All seventeen chapters, their common helpers, README, numerical computation, survival toolkit, existing toolkit tests and World cohort generator have been read. This is an intermediate checkpoint; the accompanying findings include unresolved items.
+All seventeen chapters, their common helpers, README, numerical computation, survival toolkit, existing toolkit tests and World cohort generator have been read. [The final source review](source-review.md) records resolved findings; the intermediate file preserves discovery notes.
 
-The first fixes rebuild the delayed-entry demonstration from a coherent age-40 population with independent entry and survival selection, integrate the counting-process compensator exactly, solve the remaining-life median accurately, and preserve the actual independent calibration count and Monte Carlo uncertainty in the conformal study. Eighteen numerical checks pass, including independent statsmodels risk sets and numerical integration over gamma frailty.
+Corrections include a coherent delayed-entry population, exact integrated risk time, a solved remaining-life median, the actual independent conformal calibration count, patient bootstrap uncertainty for Fine–Gray, matched-pair bootstrap uncertainty for the trial’s restricted mean, and correct censoring jumps in Brier scoring. Twenty numerical checks pass. All six real datasets were compared with independent upstream R objects, and all thirteen numerical inputs were regenerated.
 
-The full numerical rerun and remaining source, primary-data and visual reviews are in progress. Chinese material, continuous listening and final narrated masters remain open.
+English endpoint, native 1080p, motion and an actual narrated Censoring preview are rendering. Chinese material, continuous listening and final narrated masters remain open.
