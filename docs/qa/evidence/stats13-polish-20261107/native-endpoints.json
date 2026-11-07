@@ -1,0 +1,105 @@
+{
+  "fingerprint": "8c792a0270a9a60a0fcd77c52f942c6ef12ab385678f43885aae33e2537f6c0c",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Principles",
+      "status": "needs-review",
+      "frames": 33,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 50
+      },
+      "input_record": "renders/qa/native1080/stats13/en/Principles/result.json",
+      "input_sha256": "10dd33542ed9b4c2f7a69786beec31a883e99371712e89a8ea675f3113db40db"
+    },
+    {
+      "scene": "Anova",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 55
+      },
+      "input_record": "renders/qa/native1080/stats13/en/Anova/result.json",
+      "input_sha256": "6a0337d1473940a2e3a0416c1ead97392f9e36e8d354cdefd87da39cef9ef711"
+    },
+    {
+      "scene": "Contrasts",
+      "status": "needs-review",
+      "frames": 40,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 79
+      },
+      "input_record": "renders/qa/native1080/stats13/en/Contrasts/result.json",
+      "input_sha256": "cfcf14dfc8042f1995553ac9329921360fa7ec120231b554b51859adf1c6c8ba"
+    },
+    {
+      "scene": "Blocking",
+      "status": "needs-review",
+      "frames": 34,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 64
+      },
+      "input_record": "renders/qa/native1080/stats13/en/Blocking/result.json",
+      "input_sha256": "295560ff5c926b0e8407988da29538e09cc3fe227d0dd09c2fcc15440de575a7"
+    },
+    {
+      "scene": "Factorial",
+      "status": "needs-review",
+      "frames": 44,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 78
+      },
+      "input_record": "renders/qa/native1080/stats13/en/Factorial/result.json",
+      "input_sha256": "674d0c1857b171c982a4300e96727bc36d4cd98082af7a9da169541e4f4ebaaf"
+    },
+    {
+      "scene": "Fraction",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 8,
+        "untranslated-on-screen": 62
+      },
+      "input_record": "renders/qa/native1080/stats13/en/Fraction/result.json",
+      "input_sha256": "2dce9dd3cec574539f1966d81733603c52a64742d029834b6ea4e166567442d7"
+    },
+    {
+      "scene": "Surface",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 39
+      },
+      "input_record": "renders/qa/native1080/stats13/en/Surface/result.json",
+      "input_sha256": "07bedc72d95250af552a36586b94a114ca0aac2e395ae10142a7a3b9860a6bd2"
+    },
+    {
+      "scene": "SplitPlot",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 7,
+        "untranslated-on-screen": 57
+      },
+      "input_record": "renders/qa/native1080/stats13/en/SplitPlot/result.json",
+      "input_sha256": "f6c4069de892ed3d763355ee3260e4f0f49d1c11daa54c84d5228ab910c04ee7"
+    },
+    {
+      "scene": "Online",
+      "status": "needs-review",
+      "frames": 39,
+      "warnings": {
+        "narration-translation": 9,
+        "untranslated-on-screen": 66
+      },
+      "input_record": "renders/qa/native1080/stats13/en/Online/result.json",
+      "input_sha256": "63bf08200c52bdd17a9e5e72b337d4b7c7250ca0e704080d067ae8b40c871238"
+    }
+  ]
+}

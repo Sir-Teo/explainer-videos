@@ -194,6 +194,7 @@ class Principles(VoiceoverScene):
             label(r"blinding and randomization together: \ the subject's guesses could not follow a pattern", font_size=24, color=S.PRIOR),
             label(r"Fisher (1926, \ 1935) \ made randomization the basis of the analysis itself", font_size=24, color=OBS),
         ), 12.4, 0.32, [0, -1.9, 0])
+        intro = label('Random assignment predates Fisher', font_size=36)
         with self.voiceover(
             "Fisher wasn't the first to randomize. <bookmark mark='a'/> In 1884 the philosopher Charles Sanders Peirce and his "
             "student Joseph Jastrow tested whether a person could feel a tiny change in a weight pressing on a finger. To keep the "
@@ -203,7 +204,9 @@ class Principles(VoiceoverScene):
             "realization that the randomization is not just a safeguard. It is the probability model on which the analysis "
             "rests. That's the next chapter."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc, shift=UP * 0.2))
             for k, m_ in enumerate("bc"):
                 vo.wait_until(m_)
@@ -221,6 +224,7 @@ class Principles(VoiceoverScene):
         rows[1][2].set_color(OBS)
         whys = [why(r"precision, \ and a yardstick for it"), why(r"assignment independent of potential outcomes"),
                 why(r"blocks: \ remove what you know varies"), why(r"``block what you can, \ randomize what you cannot''")]
+        intro = label('Replication, randomization and local control', font_size=36)
         with self.voiceover(
             "So, three principles. <bookmark mark='a'/> Replicate, to shrink the error and to measure it. "
             "<bookmark mark='b'/> Randomize, so that the expected estimate over all layouts is the true effect, tau, "
@@ -229,8 +233,11 @@ class Principles(VoiceoverScene):
             "it was randomized. The modern summary, from George Box and his co-authors: block what you can, randomize what "
             "you cannot."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.65, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()

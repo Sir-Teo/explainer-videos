@@ -154,6 +154,7 @@ class Blocking(VoiceoverScene):
         rows[3][2].set_color(OBS)
         whys = [why(r"additive: \ a block shifts every treatment equally"), why(r"three perpendicular pieces"),
                 why(r"unreplicated: noise and treatment $\times$ block variation mix"), why(r"the block effects $\beta_b$ cancel exactly")]
+        intro = label('The additive block model and its error assumptions', font_size=36)
         with self.voiceover(
             "The additive model behind the block design. Its exact F reference assumes independent Gaussian errors of equal variance; unreplicated interactions cannot be separately estimated. <bookmark mark='a'/> A yield is a grand mean, plus a treatment effect, plus a "
             "block effect, plus noise. The block effect shifts every treatment in that block by the same amount. "
@@ -163,10 +164,13 @@ class Blocking(VoiceoverScene):
             "treatment means contains no block effects at all. Every treatment saw every block once, so the soil cancels "
             "exactly, the same reason the pairs in chapter one worked."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.8, buff=0.65, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def darwin(self):
@@ -186,6 +190,7 @@ class Blocking(VoiceoverScene):
             label(r"two pairs strongly favour the selfed plant", font_size=24, color=S.CTRL),
         ), 12.0, 0.25, [0, -2.4, 0])
         tag = historical_tag(r"Darwin (1876), \ via Fisher (1935)", corner=DR)
+        intro = label('Darwin compared plants within pairs', font_size=36)
         with self.voiceover(
             "Blocking is older than Fisher. <bookmark mark='a'/> In 1876 Charles Darwin published his experiments on cross- and "
             "self-fertilization. For maize, he grew fifteen pairs of seedlings, one from a crossed parent and one from a "
@@ -196,7 +201,9 @@ class Blocking(VoiceoverScene):
             "positive; their mean is twenty point nine. <bookmark mark='d'/> But two pairs strongly favour the self-fertilized "
             "plant. Is the difference real?"
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc, shift=UP * 0.2), FadeIn(tag))
             vo.wait_until("b")
             self.play(FadeIn(rows[0]), FadeIn(A), Create(zl))
@@ -242,6 +249,7 @@ class Blocking(VoiceoverScene):
             label(r"useless blocks lose a little precision; \ ignored blocks can lose a great deal", font_size=26, color=RES),
             label(r"incomplete blocks (Yates 1936): \ when a block cannot hold every treatment", font_size=24, color=GREY_A),
         ), 12.6, 0.42, [0, 0, 0])
+        intro = label('Block on known sources of variation', font_size=36)
         with self.voiceover(
             "When should you block? <bookmark mark='a'/> Whenever you know something varies: strips of soil, days of the week, "
             "batches of material, litters of mice, the technician running the assay, the patient in a crossover trial. "
@@ -252,7 +260,10 @@ class Blocking(VoiceoverScene):
             "for two of four varieties, say, Frank Yates's balanced incomplete block designs of 1936 arrange the treatments so "
             "that every pair meets equally often."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()

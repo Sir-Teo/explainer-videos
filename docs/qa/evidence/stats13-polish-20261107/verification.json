@@ -1,0 +1,23 @@
+{
+  "part": "stats13",
+  "fingerprint": "8c792a0270a9a60a0fcd77c52f942c6ef12ab385678f43885aae33e2537f6c0c",
+  "english_endpoints": 15,
+  "native_1080_endpoints": 9,
+  "silent_motion_chapters": 7,
+  "audio_scene": "Online",
+  "audio_lines": 9,
+  "audio_issues": 0,
+  "narrated_preview": {
+    "movie": "renders/qa/narrated/stats13/en/Online/videos/s14_online/480p15/Online.mp4",
+    "seconds": 398.932357,
+    "narration_sha256": "16fd5287efa2187913c1607c3b69f82fd326a0fe0d8cbd3eec426d12a98838e4",
+    "raw_narration_matches_current_endpoints": true,
+    "dead_air_scan": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 399 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 399 s\n"
+  },
+  "bilingual_production_approval": false,
+  "remaining": [
+    "Chinese narration/caption tables missing",
+    "continuous listening and narrated playback",
+    "final narrated masters in both languages"
+  ]
+}

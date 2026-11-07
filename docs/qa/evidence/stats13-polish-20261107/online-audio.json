@@ -1,0 +1,117 @@
+{
+ "video": "stats13",
+ "scene": "Online",
+ "lang": "en",
+ "backend": "kokoro",
+ "voice": "af_heart",
+ "status": "completed",
+ "source_current": true,
+ "scope": "signal and alignment integrity; listening and narrated playback pending",
+ "listening_review": "pending",
+ "narrated_playback_review": "pending",
+ "expected_lines": 9,
+ "lines": [
+  {
+   "raw": "Chapter thirteen. Online experiments.",
+   "spoken": "Chapter thirteen. Online experiments.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/4ae290bf8c080b26.wav",
+   "duration": 3.0,
+   "tokens": 4,
+   "peak": 0.402191162109375,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> Around 2012, an engineer at Bing, Microsoft's search engine, suggested a small change to how ads were shown: move some of each ad's text up into its headline. The idea sat on a list for months, judged low priority. When someone finally tested it, in a two-week online experiment, revenue rose twelve percent: worth more than a hundred million dollars a year in the United States alone. <bookmark mark='b'/> The story is told by Ron Kohavi, Diane Tang and Ya Xu in their book on online experiments. <bookmark mark='c'/> Their broader point is humbling: most ideas, when tested, do nothing or do harm, and nobody can tell in advance which. <bookmark mark='d'/> So large technology companies now run tens of thousands of randomized experiments a year. They're Fisher's experiments, with users as plots.",
+   "spoken": "Around 2012, an engineer at Bing, Microsoft's search engine, suggested a small change to how ads were shown: move some of each ad's text up into its headline. The idea sat on a list for months, judged low priority. When someone finally tested it, in a two-week online experiment, revenue rose twelve percent: worth more than a hundred million dollars a year in the United States alone. The story is told by Ron Kohavi, Diane Tang and Ya Xu in their book on online experiments. Their broader point is humbling: most ideas, when tested, do nothing or do harm, and nobody can tell in advance which. So large technology companies now run tens of thousands of randomized experiments a year. They're Fisher's experiments, with users as plots.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/cb8c8342b72ccc04.wav",
+   "duration": 45.7,
+   "tokens": 127,
+   "peak": 0.520782470703125,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "The anatomy of an A/B test. <bookmark mark='a'/> The unit is a user, assigned by an experiment-specific randomized hash of their ID, so the same person always sees the same version. <bookmark mark='b'/> Two arms, the control and the change, usually split fifty fifty: a Bernoulli-randomized design with millions of plots. <bookmark mark='c'/> A metric chosen in advance, like revenue per user. <bookmark mark='d'/> And the estimate is the difference in means, with Welch's standard error from Part 10. Everything in this part applies. The one new problem is that the effects are tiny, a fraction of a percent, and the metrics are noisy. Even with millions of users, precision is precious.",
+   "spoken": "The anatomy of an A/B test. The unit is a user, assigned by an experiment-specific randomized hash of their ID, so the same person always sees the same version. Two arms, the control and the change, usually split fifty fifty: a Bernoulli-randomized design with millions of plots. A metric chosen in advance, like revenue per user. And the estimate is the difference in means, with Welch's standard error from Part 10. Everything in this part applies. The one new problem is that the effects are tiny, a fraction of a percent, and the metrics are noisy. Even with millions of users, precision is precious.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/84ed310f06aa9704.wav",
+   "duration": 37.975,
+   "tokens": 104,
+   "peak": 0.707183837890625,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Here's a simulated test with twenty thousand users. <bookmark mark='a'/> The change truly adds point one five to each user's monthly spend, about one and a half percent. <bookmark mark='b'/> Plot each user's spend this month against their spend last month, before the experiment began. Most of the variation in this month's spend was already there: big spenders stay big spenders. <bookmark mark='c'/> The correlation is point eight. <bookmark mark='d'/> So subtract the part of each user's spend that last month predicts, and compare what's left. <bookmark mark='e'/> Using a pre-treatment covariate avoids adjusting away treatment effects, because the change cannot have affected last month. This is regression adjustment using a baseline covariate, rather than design-stage blocking; fitted adjustment can have small finite-sample bias.",
+   "spoken": "Here's a simulated test with twenty thousand users. The change truly adds point one five to each user's monthly spend, about one and a half percent. Plot each user's spend this month against their spend last month, before the experiment began. Most of the variation in this month's spend was already there: big spenders stay big spenders. The correlation is point eight. So subtract the part of each user's spend that last month predicts, and compare what's left. Using a pre-treatment covariate avoids adjusting away treatment effects, because the change cannot have affected last month. This is regression adjustment using a baseline covariate, rather than design-stage blocking; fitted adjustment can have small finite-sample bias.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/02d5bda00e16e688.wav",
+   "duration": 43.775,
+   "tokens": 114,
+   "peak": 0.57867431640625,
+   "issues": [],
+   "elapsed": 0.05,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "<bookmark mark='a'/> In 2013 Alex Deng, Ya Xu, Ron Kohavi and Toby Walker named it CUPED: replace each user's metric by the metric minus theta times their centred pre-experiment value, with theta the regression slope of y on x. <bookmark mark='b'/> For a fixed population-optimal coefficient, the residual variance is one minus rho squared times the original: here, about thirty-six percent of it. <bookmark mark='c'/> The plain comparison estimates point one oh four, with a standard error of point zero five six: p point zero six five, not significant. <bookmark mark='d'/> CUPED, on the same users, estimates point one four, with a standard error of point zero three four: p of four in a hundred thousand. Cutting the variance to thirty-six percent is worth two point eight times as many users. Statisticians will recognize Fisher's analysis of covariance from 1932, adapted at scale. The fitted-coefficient standard error and z-test here are large-sample approximations.",
+   "spoken": "In 2013 Alex Deng, Ya Xu, Ron Kohavi and Toby Walker named it CUPED: replace each user's metric by the metric minus theta times their centred pre-experiment value, with theta the regression slope of y on x. For a fixed population-optimal coefficient, the residual variance is one minus rho squared times the original: here, about thirty-six percent of it. The plain comparison estimates point one oh four, with a standard error of point zero five six: p point zero six five, not significant. CUPED, on the same users, estimates point one four, with a standard error of point zero three four: p of four in a hundred thousand. Cutting the variance to thirty-six percent is worth two point eight times as many users. Statisticians will recognize Fisher's analysis of covariance from 1932, adapted at scale. The fitted-coefficient standard error and z-test here are large-sample approximations.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/363287c18db4db66.wav",
+   "duration": 59.225,
+   "tokens": 145,
+   "peak": 0.69842529296875,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "Is that one experiment typical? <bookmark mark='a'/> Repeat the whole experiment two thousand times; the histogram shows the first six hundred. The plain estimates, in red, spread widely around the truth; the CUPED estimates, in gold, cluster tightly: their standard deviation falls from point zero five seven to point zero three three. <bookmark mark='b'/> Both are centred on the true point one five. The estimates show little bias in this large simulation. Fitting theta on these same data can introduce small finite-sample bias, even with a pre-treatment covariate. The covariate was measured before the coin was tossed. <bookmark mark='c'/> David Freedman worried in 2008 that regression adjustment could mislead in experiments; Winston Lin showed in 2013 that with an interaction and robust standard errors, under regularity conditions it is at least as precise, asymptotically. It's now routine.",
+   "spoken": "Is that one experiment typical? Repeat the whole experiment two thousand times; the histogram shows the first six hundred. The plain estimates, in red, spread widely around the truth; the CUPED estimates, in gold, cluster tightly: their standard deviation falls from point zero five seven to point zero three three. Both are centred on the true point one five. The estimates show little bias in this large simulation. Fitting theta on these same data can introduce small finite-sample bias, even with a pre-treatment covariate. The covariate was measured before the coin was tossed. David Freedman worried in 2008 that regression adjustment could mislead in experiments; Winston Lin showed in 2013 that with an interaction and robust standard errors, under regularity conditions it is at least as precise, asymptotically. It's now routine.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/607bac34f30b02fd.wav",
+   "duration": 52.6,
+   "tokens": 131,
+   "peak": 0.696441650390625,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "The most important check in online experiments costs nothing. <bookmark mark='a'/> This experiment was designed as a fifty-fifty split. The arms received fifty thousand and fifty thousand eight hundred and twenty users. <bookmark mark='b'/> A chi-squared test of the split, Part 10's goodness of fit, gives p equals point zero zero nine eight. A fair coin rarely misses by this much. <bookmark mark='c'/> That's a sample-ratio mismatch, and it is evidence of an assignment or logging problem, although a valid randomized test can occasionally flag by chance. <bookmark mark='d'/> Bots filtered differently in the two arms; a bug that crashes the new version for some browsers, so their users vanish from the logs; a redirect that loses people. <bookmark mark='e'/> If selection or logging depends on the arm, comparability can fail and the original randomization guarantee no longer applies to the recorded comparison. Check the split before reading any metric.",
+   "spoken": "The most important check in online experiments costs nothing. This experiment was designed as a fifty-fifty split. The arms received fifty thousand and fifty thousand eight hundred and twenty users. A chi-squared test of the split, Part 10's goodness of fit, gives p equals point zero zero nine eight. A fair coin rarely misses by this much. That's a sample-ratio mismatch, and it is evidence of an assignment or logging problem, although a valid randomized test can occasionally flag by chance. Bots filtered differently in the two arms; a bug that crashes the new version for some browsers, so their users vanish from the logs; a redirect that loses people. If selection or logging depends on the arm, comparability can fail and the original randomization guarantee no longer applies to the recorded comparison. Check the split before reading any metric.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/4e09d2cdff81df6f.wav",
+   "duration": 51.875,
+   "tokens": 140,
+   "peak": 0.56451416015625,
+   "issues": [],
+   "elapsed": 0.04,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "The old pitfalls come back at scale. <bookmark mark='a'/> Watching the p-value every day and stopping when it dips below five percent breaks the test, as Part 10 showed; Part 58 builds tests that allow it. <bookmark mark='b'/> Novelty effects: users react to anything new, then settle, so a two-day test can mislead. <bookmark mark='c'/> Interference: on a social network, treating one user changes what their friends see, so the control group isn't untreated. Parts 35 and 62 take this up. <bookmark mark='d'/> Dozens of metrics and segments: chapter four's multiplicity. <bookmark mark='e'/> And A/A tests, where both arms get the same version, check that the platform's five percent really is five percent.",
+   "spoken": "The old pitfalls come back at scale. Watching the p-value every day and stopping when it dips below five percent breaks the test, as Part 10 showed; Part 58 builds tests that allow it. Novelty effects: users react to anything new, then settle, so a two-day test can mislead. Interference: on a social network, treating one user changes what their friends see, so the control group isn't untreated. Parts 35 and 62 take this up. Dozens of metrics and segments: chapter four's multiplicity. And A/A tests, where both arms get the same version, check that the platform's five percent really is five percent.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/f88615fdecaa8a3d.wav",
+   "duration": 38.475,
+   "tokens": 103,
+   "peak": 0.4547119140625,
+   "issues": [],
+   "elapsed": 0.02,
+   "asr_review_leads": []
+  },
+  {
+   "raw": "The Coverage Board, with seven new rows, all tests whose promise is a five percent false-rejection rate. <bookmark mark='a'/> The randomization test on skewed data, ten plots against ten: five point two percent, kept. Its validity came from the coin. <bookmark mark='b'/> A t-test on the tidy systematic layout of chapter one, with no real difference between varieties: it rejects every single time. The soil's gradient is confounded with the varieties. <bookmark mark='c'/> All ten pairwise t-tests among five groups, unadjusted: at least one false rejection twenty-seven percent of the time, broken. Tukey's method: four point nine five percent, kept. <bookmark mark='d'/> The split plot analysed as a completely randomized design: twenty-six percent, broken. With the whole-plot error: five point oh one, kept. <bookmark mark='e'/> And the CUPED test in ten thousand A/A experiments: five point two, kept. Every broken row in this part is a design ignored by its analysis.",
+   "spoken": "The Coverage Board, with seven new rows, all tests whose promise is a five percent false-rejection rate. The randomization test on skewed data, ten plots against ten: five point two percent, kept. Its validity came from the coin. A t-test on the tidy systematic layout of chapter one, with no real difference between varieties: it rejects every single time. The soil's gradient is confounded with the varieties. All ten pairwise t-tests among five groups, unadjusted: at least one false rejection twenty-seven percent of the time, broken. Tukey's method: four point nine five percent, kept. The split plot analysed as a completely randomized design: twenty-six percent, broken. With the whole-plot error: five point oh one, kept. And the CUPED test in ten thousand A/A experiments: five point two, kept. Every broken row in this part is a design ignored by its analysis.",
+   "audio_path": "/workspace/explainer-videos/.cache/tts/94fe589574c480da.wav",
+   "duration": 55.275,
+   "tokens": 141,
+   "peak": 0.53350830078125,
+   "issues": [],
+   "elapsed": 0.03,
+   "asr_review_leads": []
+  }
+ ],
+ "issues": [],
+ "input_record": "renders/qa/series/stats13/en/Online_motion/result.json",
+ "input_sha256": "3cca7c69f695eba847469875d7bb4a5d52b42d6adde320fb769c3b99656a4135"
+}

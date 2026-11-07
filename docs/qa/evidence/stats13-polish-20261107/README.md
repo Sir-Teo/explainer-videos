@@ -1,11 +1,13 @@
-# Part 13: Experiments by Design — scientific source review
+# Part 13 English source and visual review
 
-Reviewed all 15 scenes, the README and problem solutions, all 15 compute items, the local drawing helpers and the design toolkit. All scene modules import. The full compute refresh completed, followed by a refresh of the field item after adding its analytic effective plot variance.
+All 15 chapters received source review and endpoint inspection. [Scientific corrections](scientific-review.md) are retained separately. Final fingerprint: `8c792a0270a9a60a0fcd77c52f942c6ef12ab385678f43885aae33e2537f6c0c`.
 
-The review removes p-value selection from the blocking example: the first seeded replicate now appears regardless of significance (RCBD p = 0.189, versus 0.968 when blocks are ignored). The all-replicate power comparison remains separate. It seeds Dunnett integration, aligns unadjusted contrast p-values with the pooled ANOVA error, omits constant defining columns from fractional contrasts, and distinguishes every displayed subset from full-run summaries.
+- All 15 English endpoints pass runtime, bounds and blank-beat checks; translation warnings remain visible.
+- Nine native 1080p cases cover Principles, Anova, Contrasts, Blocking, Factorial, Fraction, Surface, SplitPlot and Online.
+- Seven motion checks cover Principles, Anova, Blocking, Factorial, Fraction, Surface and Online. All pass blank/sparse scanning. Motion inspection repaired empty introductory holds, the initial orthogonal-projection drawing, the Yates table reveal and fractional-design transitions.
+- The actual narrated Online preview is 398.932 seconds. Nine speech lines pass signal/alignment checks, recorded narration matches current source and its blank/sparse scan is clean. Its contact sheet was inspected.
+- All 15 focused scientific/toolkit tests pass after visual repairs.
 
-Scientific corrections cover normal-theory assumptions versus sharp-null randomization, independent symmetric signs for Darwin’s nonrandomized pairs, the denominator correction in the mean of F, mixed nutrient changes in the planned contrasts, Latin-square permutation classes, high-minus-low interaction coding, complementary fractions, admissible Plackett–Burman run counts, five-level central composite designs, approximate versus integer optimal designs, and approximate power/MDE calculations. CUPED now allows finite-sample fitted-adjustment bias and labels asymptotic inference; sample-ratio mismatch is a diagnostic flag. Curves are geometrically clipped without flattening their off-scale values.
+Receipts: [verification](verification.json), [endpoints](endpoints.json), [native cases](native-endpoints.json), [motion](motion.json), [speech](online-audio.json), [tests](tests-final.txt).
 
-Seven new independent checks plus the existing design toolkit checks pass **15 tests**. References include statsmodels linear-model contrasts and block tests, paired whole-plot t tests, explicit alias contrasts, rotatable prediction variance, the optimal-design equivalence bound and exhaustive randomization probabilities.
-
-English visual verification is in progress. No bilingual production approval: Chinese tables, continuous listening/playback and final narrated masters remain open.
+This completes the English source/visual pass. Chinese narration/caption tables, continuous listening and narrated playback, and final masters in both languages remain open. This is not bilingual production approval.

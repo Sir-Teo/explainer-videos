@@ -124,7 +124,7 @@ class Anova(VoiceoverScene):
     def pythagoras(self):
         d = load("anova")
         a = d["anova"]
-        ns = NSpace(scale=0.6, center=[-3.0, -0.8, 0], angle=-0.7, tilt=0.38, axis_len=5.6, axis_labels=[r"", r"", r""])
+        ns = NSpace(scale=0.50, center=[-2.8, -0.5, 0], angle=-0.7, tilt=0.38, axis_len=5.6, axis_labels=[r"", r"", r""])
         u1 = np.array([1.0, 0.0, 0.0])
         u2 = np.array([0.0, 1.0, 0.0])
         pl = ns.plane(u1, u2, extent=5.0, color=OBS, opacity=0.14)
@@ -144,6 +144,7 @@ class Anova(VoiceoverScene):
                     rf"\underbrace{{{a['ssw']:.1f}}}_{{\text{{SSW}}}}", font_size=32),
             MathTex(r"23 = 3 + 20\ \ \text{degrees of freedom}", font_size=28, color=GREY_A),
         ), 5.4, 0.34, [3.9, 0.1, 0])
+        intro = label('Orthogonal projections split the sum of squares', font_size=32).move_to([0, 2.9, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Write the twenty-four deviations from the grand mean as one vector, in twenty-four-dimensional "
             "space; we can only draw three of the dimensions. <bookmark mark='b'/> The between-groups part, the group means "
@@ -155,10 +156,10 @@ class Anova(VoiceoverScene):
             "are three between plus twenty within. That's the orthogonal geometry behind Cochran's theorem. Normal errors also give the independent chi-squared laws."
         ) as vo:
             self.add(ns)
-            self.play(FadeIn(ns.axes3))
+            self.play(FadeIn(ns.axes3), FadeIn(intro))
             vo.wait_until("a")
             self.add(vy)
-            self.play(NSpace.reveal(vy), FadeIn(rows[0]))
+            self.play(NSpace.reveal(vy), FadeIn(rows[0]), FadeOut(intro))
             vo.wait_until("b")
             self.add(pl, vh)
             self.play(NSpace.reveal(pl, vh), FadeIn(rows[1]))
@@ -256,6 +257,7 @@ class Anova(VoiceoverScene):
         rows[3][2].set_color(OBS)
         whys = [why(r"dummy variables: \ ``none'' is the baseline"), why(r"the control mean, \ then each fertilizer's gain"),
                 why(r"the share of variation the fertilizers explain"), why(r"Part 12's nested $F$-test: \ the same number")]
+        intro = label('ANOVA is a nested linear-model comparison', font_size=36)
         with self.voiceover(
             "The analysis of variance is also a regression. <bookmark mark='a'/> Code each fertilizer with a dummy variable, "
             "leaving none as the baseline, and regress the yields on the dummies. <bookmark mark='b'/> The intercept is the "
@@ -265,10 +267,13 @@ class Anova(VoiceoverScene):
             "nested F-test, comparing this model with the intercept alone, gives exactly the same five point oh seven. ANOVA "
             "and regression are one linear model, seen from two sides. Fisher's tables became regression software."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.65, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def expectations(self):
@@ -294,7 +299,7 @@ class Anova(VoiceoverScene):
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.65, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                step(k, transform=False)
                 if k == 0:
                     self.play(FadeOut(intro), run_time=0.25)
-                step(k, transform=False)
         self.clear_scene()

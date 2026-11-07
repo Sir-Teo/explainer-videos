@@ -232,6 +232,7 @@ class Power(VoiceoverScene):
             label(r"``post hoc power'' from the observed effect is a function of the $p$-value: \ it adds nothing", font_size=24, color=RES),
             label(r"design reduces $\sigma$; \ only the budget increases $n$", font_size=26, color=OBS),
         ), 12.4, 0.46, [0, 0, 0])
+        intro = label('Plan for the smallest effect worth detecting', font_size=36)
         with self.voiceover(
             "Some practical rules. <bookmark mark='a'/> A power calculation needs two inputs: the effect worth detecting, and "
             "the noise. <bookmark mark='b'/> The noise comes from a pilot study or past trials, and it's uncertain itself, so "
@@ -241,7 +242,10 @@ class Power(VoiceoverScene):
             "that number is just a transformation of the p-value, and tells you nothing new. <bookmark mark='e'/> Finally, "
             "remember the trade: design reduces sigma, and only money increases n."
         ) as vo:
+            self.play(FadeIn(intro))
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()

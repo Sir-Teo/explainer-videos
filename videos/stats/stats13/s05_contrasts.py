@@ -59,9 +59,9 @@ class Contrasts(VoiceoverScene):
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-1.6, buff=0.55, edge=6.9)
             for k, m_ in enumerate("abcdef"):
                 vo.wait_until(m_)
+                step(k, transform=False)
                 if k == 0:
                     self.play(FadeOut(intro), run_time=0.25)
-                step(k, transform=False)
         self.clear_scene()
 
     def split_bar(self):
@@ -248,6 +248,7 @@ class Contrasts(VoiceoverScene):
         sides = VGroup(*[label(NAMES[i] if i else r"ctl", font_size=18, color=TRT[i]).next_to(grid[i * n], LEFT, buff=0.1) for i in range(n)])
         key = VGroup(label(r"beyond HSD", font_size=20, color=HIT), label(r"unadjusted only", font_size=20, color=RES),
                      label(r"neither", font_size=20, color=GREY_B)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(grid, LEFT, buff=1.1)
+        intro = label('Compare all pairs with one family-wise guarantee', font_size=36)
         with self.voiceover(
             "Tukey's honestly significant difference. <bookmark mark='a'/> Declare two means different if their gap exceeds "
             "q times the standard error of one mean, where q is a quantile of the studentized range: the range of k normal "
@@ -258,10 +259,13 @@ class Contrasts(VoiceoverScene):
             "pair, C against D, passes an unadjusted t-test and fails Tukey's: red. It might be real. But this "
             "experiment can't honestly claim them."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.8, buff=0.4, edge=6.9)
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
             vo.wait_until("d")
             self.play(Create(grid), FadeIn(heads), FadeIn(sides))
             self.play(LaggedStart(*[FadeIn(f_) for f_ in fills], lag_ratio=0.1), FadeIn(texts), FadeIn(key), run_time=2.0)
@@ -279,6 +283,7 @@ class Contrasts(VoiceoverScene):
         for j, v in enumerate(pv):
             tab[1][j + 1].set_color(HIT if v < 0.05 else GREY_A)
         foot = label(r"only C beats the control, \ honestly: \ the method matches the question", font_size=24, color=OBS).move_to([0, -2.4, 0])
+        intro = label('Compare new treatments with the same control', font_size=36)
         with self.voiceover(
             "If the only question is which new fertilizers beat the control, <bookmark mark='a'/> the family is smaller: four "
             "comparisons, not ten. Charles Dunnett's 1955 method, devised while he worked for a pharmaceutical company, "
@@ -286,7 +291,9 @@ class Contrasts(VoiceoverScene):
             "an adjusted p of point zero zero one; A, B and D don't. <bookmark mark='c'/> The method matches the question, "
             "and the question should be written down before the harvest."
         ) as vo:
+            self.play(FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.25)
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(tab))
@@ -304,6 +311,7 @@ class Contrasts(VoiceoverScene):
         ]
         whys = [why(r"the experiment's own questions"), why(r"the studentized range"), why(r"the smaller family"),
                 why(r"the price of snooping"), why(r"a different promise: \ Benjamini \& Hochberg (1995)")]
+        intro = label('Choose the comparison family from the scientific question', font_size=36)
         with self.voiceover(
             "So, a short guide. <bookmark mark='a'/> For a few contrasts planned in advance, each usual-level test gives an individual guarantee; "
             "use Bonferroni or Holm for a family guarantee. <bookmark mark='b'/> For all pairs, Tukey. <bookmark mark='c'/> For each "
@@ -312,8 +320,11 @@ class Contrasts(VoiceoverScene):
             "controlling the chance of even one false rejection is too strict. Benjamini and Hochberg's false discovery rate "
             "makes a different promise, and Part 33 builds it."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=5, top=2.7, x=0.6, buff=0.55, edge=6.9)
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()

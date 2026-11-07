@@ -1,0 +1,83 @@
+{
+  "fingerprint": "8c792a0270a9a60a0fcd77c52f942c6ef12ab385678f43885aae33e2537f6c0c",
+  "scope": "English render review; listening and bilingual production gates remain open",
+  "records": [
+    {
+      "scene": "Principles",
+      "status": "needs-review",
+      "frames": 33,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats13/en/Principles_motion/result.json",
+      "input_sha256": "e25067b114c1ae3ef8ebf6b410f834ae5645bd87148412442622a98952c1ae9f",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 300 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 300 s\n"
+    },
+    {
+      "scene": "Anova",
+      "status": "needs-review",
+      "frames": 29,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats13/en/Anova_motion/result.json",
+      "input_sha256": "46b3e323e83004fac3b1e8ebcfad109dc50a12eb72d3d7d4df2b476a059ec70b",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 339 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 339 s\n"
+    },
+    {
+      "scene": "Blocking",
+      "status": "needs-review",
+      "frames": 34,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats13/en/Blocking_motion/result.json",
+      "input_sha256": "5688dcda998843fab6eeeff64a75390af4379da502b85221e763f609143522b5",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 370 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 370 s\n"
+    },
+    {
+      "scene": "Factorial",
+      "status": "needs-review",
+      "frames": 44,
+      "warnings": {
+        "narration-translation": 9
+      },
+      "input_record": "renders/qa/series/stats13/en/Factorial_motion/result.json",
+      "input_sha256": "7209deb933218c700b96220654e528171fecd1654ec200923a2e117633cac466",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 437 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 437 s\n"
+    },
+    {
+      "scene": "Fraction",
+      "status": "needs-review",
+      "frames": 31,
+      "warnings": {
+        "narration-translation": 8
+      },
+      "input_record": "renders/qa/series/stats13/en/Fraction_motion/result.json",
+      "input_sha256": "b614e5f5db76ee97abc334b311b23a21a075935a8fd30308938028e6a2a02cf9",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 349 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 349 s\n"
+    },
+    {
+      "scene": "Surface",
+      "status": "needs-review",
+      "frames": 32,
+      "warnings": {
+        "narration-translation": 7
+      },
+      "input_record": "renders/qa/series/stats13/en/Surface_motion/result.json",
+      "input_sha256": "215ce4caadf6025ab529248892827cdd0ef3a60fb59bc0d218292512aacfa93f",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 278 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 278 s\n"
+    },
+    {
+      "scene": "Online",
+      "status": "needs-review",
+      "frames": 39,
+      "warnings": {
+        "narration-translation": 9
+      },
+      "input_record": "renders/qa/series/stats13/en/Online_motion/result.json",
+      "input_sha256": "3cca7c69f695eba847469875d7bb4a5d52b42d6adde320fb769c3b99656a4135",
+      "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 429 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 429 s\n"
+    }
+  ]
+}

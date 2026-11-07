@@ -47,9 +47,9 @@ class Randomization(VoiceoverScene):
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.65, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
+                step(k, transform=False)
                 if k == 0:
                     self.play(FadeOut(intro), run_time=0.25)
-                step(k, transform=False)
         self.clear_scene()
 
     def trial(self):
@@ -225,6 +225,7 @@ class Randomization(VoiceoverScene):
         whys = [why(r"exact: \ the only probability is the experimenter's coin"),
                 why(r"Eden \& Yates (1933), \ Pitman (1937), \ Welch (1937)"), why(r"the design justifies the familiar test"),
                 why(r"a Monte Carlo $p$-value, \ with its own small error")]
+        intro = label('Compare randomization inference with the t approximation', font_size=36)
         with self.voiceover(
             "So the logic of a randomized experiment is self-contained. <bookmark mark='a'/> The p-value is a count: the "
             "share of possible labellings that give a difference at least as extreme as the one observed. The only "
@@ -235,8 +236,11 @@ class Randomization(VoiceoverScene):
             "too many to count, sample ten thousand of them at random, as in Part 10. On the Coverage Board, a randomization "
             "test on skewed data keeps its five percent promise, as we'll see at the end of this part."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.6, buff=0.65, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
