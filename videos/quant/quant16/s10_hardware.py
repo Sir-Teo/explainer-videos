@@ -107,7 +107,7 @@ class Hardware(VoiceoverScene):
 
     def machine(self, par, race):
         n = par["n"]
-        items = [(r"loop, 10-fold extrapolation", par["t_loop"], BAD), (r"numpy, float64", par["t_numpy"], OPT),
+        items = [(r"loop ($10^5\times10$)", par["t_loop"], BAD), (r"numpy, float64", par["t_numpy"], OPT),
                  (r"numpy, float32", par["t_float32"], QC.THETA)] + \
                 [(rf"{w} process{'es' if w != '1' else ''} (draw + price)", t, GOOD) for w, t in par["procs"].items()]
         base = par["procs"]["1"]

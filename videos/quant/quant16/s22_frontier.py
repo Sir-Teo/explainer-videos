@@ -4,7 +4,7 @@ import numpy as np
 from scipy.interpolate import RegularGridInterpolator
 
 from explainer.quant import *  # noqa: F403
-from videos.quant.quant16.common import BAD, GOOD, OPT, PART, fixed, illustration, load, loglog, polyline, predict, axes, data_range, pause_card, flat_camera
+from videos.quant.quant16.common import BAD, GOOD, OPT, PART, fixed, illustration, load, loglog, polyline, predict, sci, axes, data_range, pause_card, flat_camera
 
 
 class Frontier(VoiceoverScene, ThreeDScene):
@@ -50,11 +50,12 @@ class Frontier(VoiceoverScene, ThreeDScene):
         show = [r for r in rows if r["n"] in (4, 8, 16, 32)]
         hint = VGroup(label(r"across: spot $S_0$ (70 to 130)", font_size=21, color=GREY_A),
                       label(r"back: initial variance $v_0$ (0.01 to 0.09)", font_size=21, color=GREY_A),
-                      label(r"up: log discrepancy on a 25 by 25 grid; censored at $10^{-12}$", font_size=21, color=GREY_A),
-                      label(r"floor: the Chebyshev nodes (COS prices)", font_size=21, color=GREY_A)).arrange(
+                      label(r"up: log discrepancy; cached floor $10^{-12}$", font_size=21, color=GREY_A),
+                      label(r"surface: 25 by 25 test grid; floor: COS nodes", font_size=21, color=GREY_A)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.1).to_corner(UL, buff=0.35)
-        tags = [MathTex(rf"{r['n']}\times{r['n']}\ \text{{nodes: max over 200 test sites}}\ {r['max_err']:.1e}", font_size=28,
-                        color=OPT).to_corner(UR, buff=0.4) for r in show]
+        tags = [VGroup(MathTex(rf"{r['n']}\times{r['n']}\ \text{{nodes}}", font_size=28, color=OPT),
+                       wrapped_label(rf"maximum at 200 fixed test sites: ${sci(r['max_err'], 1)}$", 5.0, 22, OPT))
+                .arrange(DOWN, aligned_edge=RIGHT, buff=0.15).to_corner(UR, buff=0.4) for r in show]
         self.set_camera_orientation(phi=64 * DEGREES, theta=-58 * DEGREES, zoom=0.85)
         fixed(self, hint, *tags)
         s = surf(show[0])
@@ -127,7 +128,7 @@ class Frontier(VoiceoverScene, ThreeDScene):
         side = VGroup(
             MathTex(rf"n = {rq['ns'][k]:,}".replace(",", "{,}") + rf":\ \ \text{{mean}}\ {rq['mean'][k]:.1e},\ \ "
                     rf"\text{{median}}\ {rq['median'][k]:.1e}", font_size=26, color=GOOD),
-            wrapped_label(r"Pan and Owen (\textit{Math.\ Comp.}\ 2023): the median of independent randomisations of a "
+            wrapped_label(r"Pan and Owen (\textit{Math.\ Comp.}\ 2023): the median of independent randomisations of "
                           r"nets: conditional super-polynomial results require analytic derivative bounds and growing repetition count. "
                           r"Here 11 fixed repeats and 30 experiments use 30-bit grids; plateau near $8\times10^{-10}$ is consistent with grid bias, not double precision.", 4.6, 18, GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
@@ -148,7 +149,7 @@ class Frontier(VoiceoverScene, ThreeDScene):
              r"building on Junike and Pankrashkin's truncation range (2022)."),
             (2025, r"Bayer, Pelizzari, Schoenmakers (arXiv 2312.03444v2)", r"Longstaff--Schwartz and the dual bound with "
              r"signature features, for non-Markovian (rough) models: chapters 8--9 generalised (Part 14)."),
-            (2024, r"Stamatopoulos and Zeng, \textit{Quantum}", r"derivative pricing by quantum signal processing: the "
+            (2024, r"Stamatopoulos and Zeng, \textit{Quantum}", r"derivative pricing by quantum signal processing: "
              r"a specified resource scenario, separating T-count and T-depth (chapter 18)."),
             (2025, r"Dalzell et al.\ (arXiv 2310.03011v2; Cambridge book)", r"a survey of quantum algorithms with end-to-end costs; its "
              r"finance section is the sober accounting of chapter 18."),

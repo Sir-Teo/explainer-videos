@@ -42,7 +42,7 @@ class Quantum(VoiceoverScene):
                     readout(r"P(\text{good}) = \sin^2\big((2m + 1)\theta\big) =",
                             lambda: np.sin((2 * round(m.get_value()) + 1) * th) ** 2, digits=3, font_size=28, color=GOOD),
                     ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.8).shift(UP * 1.2)
-        top = MathTex(rf"a = \sin^2\theta = {q['a']}\ \ (\text{{toy mean of a bounded payoff, scaled to }}[0, 1])", font_size=30,
+        top = MathTex(rf"a = \sin^2\theta = {q['a']}\ \ (\text{{toy bounded mean in }}[0, 1])", font_size=30,
                       color=OPT).to_edge(UP, buff=0.4)
         refl = wrapped_label(r"Grover's operator $Q$: reflect about $|\text{bad}\rangle$, then about the prepared "
                              r"state. Two reflections are a rotation by twice the angle between their mirrors: $2\theta$",

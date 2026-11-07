@@ -119,7 +119,7 @@ These values identify the saved experiment. They are not promises for other prod
 
 - Glasserman, *Monte Carlo Methods in Financial Engineering* (2003); Savine, *Modern Computational Finance* (2018); Andersen and Piterbarg, *Interest Rate Modeling*, volume I; Duffy, *Finite Difference Methods in Financial Engineering*; Oosterlee and Grzelak, *Mathematical Modeling and Computation in Finance*.
 - [Glasserman and Yu, “Number of Paths versus Number of Basis Functions in American Option Pricing” (2004)](https://business.columbia.edu/sites/default/files-efs/pubfiles/1372/Glasserman_number_of_paths.pdf), DOI 10.1214/105051604000000846. Worst-case polynomial settings, not a universal per-option budget.
-- [Pan and Owen, “Super-polynomial accuracy of one dimensional randomized nets using the median of means”](https://arxiv.org/abs/2111.12676), v3 July 2022, published 2023. Analytic derivative bounds and growing repetitions are essential to the stated asymptotics.
+- [Pan and Owen, “Super-polynomial accuracy of one dimensional randomized nets using the median of means”](https://arxiv.org/abs/2111.12676), v3 July 2022, published 2023. The one-dimensional theorem assumes derivative bounds of the form |f⁽ᵏ⁾|≤Aαᵏk! with α<2, and a median of 2k−1 replicates with k=Ω(m) for n=2ᵐ points. Eleven fixed replicates do not satisfy that growing-repetition asymptotic condition.
 - [Junike, “On the number of terms in the COS method for European option pricing” (2024)](https://link.springer.com/article/10.1007/s00211-024-01402-1). Error control is conditional on its regularity and bounds.
 - [Bayer, Pelizzari and Schoenmakers, “Primal and dual optimal stopping with signatures”](https://arxiv.org/abs/2312.03444v2), revised February 2025.
 - [Glau, Kressner and Statti, “Low-Rank Tensor Approximation for Chebyshev Interpolation in Parametric Option Pricing” (2020)](https://doi.org/10.1137/19M1244172); [author preprint](https://arxiv.org/abs/1902.04367).
@@ -130,7 +130,7 @@ These values identify the saved experiment. They are not promises for other prod
 - [University REF case study on Maxeler/JPMorgan](https://impact.ref.ac.uk/casestudies/CaseStudy.aspx?Id=42142), citing Weston et al. (2012), DOI 10.1002/cpe.1778. The eight-hour to under-four-minute example is specific to the described computation.
 - [Official STAC-A2 report](https://docs.stacresearch.com/news/2014/09/08/stac-reports-intels-new-haswell-server-chip-and-without-xeon-phi-stac-a2). Multi-asset, path-dependent Heston Greeks with early exercise; results concern specified implementations and include STAC-audited work.
 - [OCC margin methodology](https://www.theocc.com/risk-management/margin-methodology). STANS is a full-portfolio Monte Carlo system introduced in 2006.
-- [ISDA SIMM 2.9+2606 publication](https://www.isda.org/?p=1283022). Methodology publication is distinct from a firm's implementation or jurisdictional applicability. FRTB standardized market-risk capital also includes default and residual-risk components beyond its sensitivities-based method.
+- [ISDA SIMM 2.9+2606 publication](https://www.isda.org/?p=1283022). Methodology publication is distinct from a firm's implementation or jurisdictional applicability. [Basel market-risk standard, MAR20.4](https://www.bis.org/publications/201901-standards-minimum-capital-requirements-market-risk.pdf): standardized capital sums its sensitivities-based requirement, default-risk charge and residual-risk add-on. Local applicability and effective dates require the applicable jurisdictional rules.
 
 ## Local verification
 

@@ -54,9 +54,15 @@ class ADI(VoiceoverScene, ThreeDScene):
         names = [label(t, font_size=26, color=c).to_corner(UR, buff=0.4) for t, c in
                  ((r"price", OPT), (r"delta $\partial_S u$", DELTA), (r"gamma $\partial_{SS} u$", QC.GAMMA),
                   (r"variance-state derivative $\partial_v u$", QC.VEGA))]
+        def tex_number(value):
+            if value == 0 or 0.001 <= abs(value) < 1000:
+                return f"{value:.3g}"
+            mantissa, exponent = f"{value:.2e}".split("e")
+            return mantissa + r"\times 10^{" + str(int(exponent)) + "}"
+
         for i, key in enumerate(("u", "delta", "gamma", "vega")):
             actual = np.asarray(ag[key])
-            names[i] = VGroup(names[i], label(rf"actual range: ${actual.min():.3g}$ to ${actual.max():.3g}$",
+            names[i] = VGroup(names[i], label(rf"actual range: ${tex_number(actual.min())}$ to ${tex_number(actual.max())}$",
                                              font_size=22, color=GREY_A)).arrange(DOWN, aligned_edge=RIGHT, buff=0.15).to_corner(UR, buff=0.4)
         stage = [label(r"sweep 1: implicit along $S$, one row of the grid at a time", font_size=22, color=QC.THETA),
                  label(r"sweep 2: implicit along $v$, one column at a time", font_size=22, color=GOOD)]

@@ -112,26 +112,37 @@ class Outro(VoiceoverScene):
             (r"LSM says 6.06, the dual bound 6.41. What next?",
              r"separate outer uncertainty, inner upward bias and dual looseness; increase inner work as a diagnostic, then evaluate policy and martingale approximations"),
         ]
-        cards = VGroup(*[desk_question(q, a_, width=12.6, font_size=22) for q, a_ in D]).arrange(DOWN, buff=0.22)
-        if cards.height > 7.4:
-            cards.scale_to_fit_height(7.4)
+        cards = [desk_question(question, answer, width=12.6, font_size=30).move_to(ORIGIN) for question, answer in D]
         with self.voiceover(
             "Four desk questions. For an unbiased iid estimator under a normal approximation, a target sampling half-width uses variance times one point nine six squared divided by target squared. One cent is one basis point only on a one-hundred-dollar notional; the units must be specified. Bias remains separate. <bookmark mark='a'/> Reverse work is proportional to a scalar-output tape, with memory and implementation costs. <bookmark mark='b'/> Crank–Nicolson can weakly damp high frequencies; a suitable implicit start can improve behaviour. <bookmark mark='c'/> A wide observed dual gap mixes policy quality, dual approximation, inner bias and outer uncertainty. Increasing inner work is a diagnostic, not proof that all remaining gap is policy loss. Worked solutions are in the notes."
         ) as vo:
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             for k, mk in enumerate("abc", 1):
                 vo.wait_until(mk)
-                self.play(FadeIn(cards[k], shift=UP * 0.2))
+                self.play(ReplacementTransform(cards[k - 1], cards[k]))
         self.wait(0.5)
         self.clear_scene()
 
     def problems(self):
-        ps = problem_set(PROBLEMS, font_size=18)
+        pages = []
+        for start in (0, 5):
+            head = label(rf"Problems {start + 1}--{start + 5}", font_size=34)
+            rows = VGroup(*[VGroup(MathTex(rf"{i}.", font_size=24, color=QC.IDEA),
+                                  wrapped_label(text, 12.0, 24, WHITE)).arrange(RIGHT, buff=0.2, aligned_edge=UP)
+                           for i, text in enumerate(PROBLEMS[start:start + 5], start + 1)])
+            rows.arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+            page = VGroup(head, rows).arrange(DOWN, buff=0.4)
+            head.set_x(0)
+            if page.height > 7.1:
+                page.scale_to_fit_height(7.1)
+            pages.append(page.move_to(ORIGIN))
         with self.voiceover(
             'Ten problems cover fixed-coefficient control variates, normal-shift importance sampling, finite-grid optional stopping, heat-equation stability, reverse-tape work, a hybrid gamma estimator, conditional multilevel complexity and the FFT grid constraint. The last two derive a single Gram-diagonal moment diagnostic and a one-date margin-conditioned price-loss bound. State the assumptions as part of each solution. Worked English and Chinese solutions are in the notes.'
-        ):
-            self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))
-            self.wait(3)
+        ) as vo:
+            self.play(FadeIn(pages[0]), run_time=1.5)
+            self.wait(max(1.0, vo.remaining() * 0.45))
+            self.play(ReplacementTransform(pages[0], pages[1]))
+        self.wait(3.0)
         self.clear_scene()
 
     def payoffs(self):
