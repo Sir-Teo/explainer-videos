@@ -103,8 +103,8 @@ class Frontier(VoiceoverScene):
                              r"\ suggest patterns, \ and tell you where a proof must work hardest", 12.4, font_size=21,
                              color=WHITE).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "One honest way to start is with the small cases. <bookmark mark='a'/> Goldbach conjectured in 1742 that "
-            f"every even number above two is a sum of two primes. Our sieve checks every even number up to "
+            "One honest way to start is with the small cases. <bookmark mark='a'/> In letters of 1742, Goldbach and "
+            f"Euler arrived at the conjecture that every even number above two is a sum of two primes. Our sieve checks every even number up to "
             f"{g['limit']:,} in under a second, and finds that the hardest is {g['worst']:,}, whose smallest prime "
             "partner is the largest. <bookmark mark='b'/> The Collatz problem, from 1937, says that halving even "
             "numbers and tripling-plus-one the odd ones always reaches one. Every start below a million does; the "
