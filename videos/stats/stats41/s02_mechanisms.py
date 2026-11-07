@@ -148,7 +148,7 @@ class Mechanisms(VoiceoverScene):
             "mask, integrates over the missing values. <bookmark mark='b'/> Under missing at random, the mechanism "
             "depends only on observed values, so it comes out of the integral. <bookmark mark='c'/> The likelihood "
             "factors into a part for the mechanism and the ordinary likelihood of the observed data. <bookmark "
-            "mark='d'/> If, in addition, the their parameters are distinct, with a variation-independent parameter "
+            "mark='d'/> If, in addition, their parameters are distinct, with a variation-independent parameter "
             "space, we can ignore the mechanism entirely and maximize the observed-data likelihood under a correctly "
             "specified observed-data model. Bayesian ignorability also needs the relevant prior factorization. Under "
             "MNAR, the mechanism must be modelled."
