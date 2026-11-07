@@ -33,13 +33,16 @@ class Wavelets(VoiceoverScene):
         whys = [why(r"dilate by $2^j$, \ shift by $k$"), why(r"Haar (1910); \ smoother: \ Daubechies (1988)"),
                 why(r"a coarse picture plus details at every scale"), why(r"Mallat's pyramid")]
         with self.voiceover(
-            "<bookmark mark='a'/> Kernels and splines smooth by the same amount everywhere. Wavelets don't have to. A wavelet "
-            "basis is one small wave, dilated by powers of two and shifted along. <bookmark mark='b'/> The simplest is Alfréd "
-            "Haar's of 1910, a step up then down; Ingrid Daubechies built smooth ones in 1988, and statkit uses her four-tap "
-            "filter. <bookmark mark='c'/> Any signal is a coarse picture plus detail coefficients at every scale and "
-            "location. <bookmark mark='d'/> The basis is orthonormal, so white noise maps to white noise of the same size, "
-            "and Stéphane Mallat's pyramid computes it in order n."
-        ) as vo:
+            "<bookmark mark='a'/> Basic fixed-bandwidth kernels and fixed-penalty splines use global tuning. Wavelet "
+            "thresholding offers another way to adapt locally. A wavelet basis is one small wave, dilated by powers "
+            "of two and shifted along. <bookmark mark='b'/> The simplest is Alfréd Haar's of 1910, a step up then "
+            "down; Ingrid Daubechies built smooth ones in 1988, and statkit uses her four-tap filter. <bookmark "
+            "mark='c'/> Any signal is a coarse picture plus detail coefficients at every scale and location. "
+            "<bookmark mark='d'/> the periodic basis is orthonormal, so iid Gaussian noise maps to iid Gaussian noise"
+            " with the same variance, and Stéphane Mallat's pyramid computes it in order n."        ) as vo:
+            intro=label('An orthonormal basis separates a coarse signal from local details',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -94,17 +97,18 @@ class Wavelets(VoiceoverScene):
                     if abs(hgt) > 0.004:
                         grp.add(Line(ax.c2p(xk, base), ax.c2p(xk, base + hgt), color=col, stroke_width=sw))
         rows = fit_rows(VGroup(
-            label(r"blocks: \ detail coefficients by scale", font_size=22),
+            label(r"blocks: \ detail coefficients; sticks vertically clipped", font_size=22),
             label(rf"purple: \ the signal's: \ {d['big_coefs']} of 1,016 large", font_size=22, color=WAVC),
             label(r"grey: \ the noisy data's: \ noise everywhere", font_size=22, color=GREY_B),
             label(r"sparse signal, \ dense noise", font_size=22, color=PATH),
         ), 3.4, 0.42, [5.2, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Why wavelets work: look at the blocks signal's detail coefficients, coarse scales at the "
-            "bottom, fine at the top. <bookmark mark='b'/> The signal's own coefficients are sparse: only seventy-six of "
-            "about a thousand exceed the noise level, clustered at the jumps. <bookmark mark='c'/> The noise spreads evenly "
-            "over every coefficient, because the basis is orthonormal. <bookmark mark='d'/> So keep the big coefficients and "
-            "kill the small ones."
+            "<bookmark mark='a'/> Why wavelets work: look at the blocks signal's detail coefficients, coarse scales "
+            "at the bottom, fine at the top. <bookmark mark='b'/> The signal's own coefficients are sparse: only "
+            "seventy-six of about a thousand exceed the unit-noise universal threshold, clustered at the jumps. The "
+            "sticks are vertically clipped for display; the count uses the original coefficients. <bookmark "
+            "mark='c'/> The noise spreads evenly over every coefficient, because the basis is orthonormal. <bookmark "
+            "mark='d'/> So keep the big coefficients and kill the small ones."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A))
@@ -126,15 +130,19 @@ class Wavelets(VoiceoverScene):
             cmath(r"\text{SureShrink}", r":", r"t_j = \arg\min_t \mathrm{SURE}(t) \text{ at each scale}", font_size=30),
         ]
         rows[2][2].set_color(WAVC)
-        whys = [why(r"soft thresholding: \ shrink, \ or kill"), why(r"the finest scale is almost all noise"),
+        whys = [why(r"soft thresholding: \ shrink, \ or kill"), why(r"requires little signal in the finest details"),
                 why(r"VisuShrink: \ Donoho \& Johnstone (1994)"), why(r"Part 25's Stein estimate: \ Donoho \& Johnstone (1995)")]
         with self.voiceover(
-            "<bookmark mark='a'/> Soft thresholding: coefficients below t are set to zero, the rest pulled towards zero by t. "
-            "<bookmark mark='b'/> The noise level comes from the finest scale, nearly all noise, by the median absolute "
-            "coefficient. <bookmark mark='c'/> VisuShrink uses one universal threshold, sigma times root two log n. "
-            "<bookmark mark='d'/> SureShrink chooses a threshold at each scale by minimizing Stein's unbiased risk estimate, "
-            "Part 25's SURE, falling back to the universal one where the coefficients look sparse."
+            "<bookmark mark='a'/> Soft thresholding: coefficients below t are set to zero, the rest pulled towards "
+            "zero by t. <bookmark mark='b'/> If the finest detail scale is mostly Gaussian noise, its median absolute"
+            " coefficient divided by point six seven four five estimates sigma. Fine-scale signal can contaminate "
+            "this estimate. <bookmark mark='c'/> VisuShrink uses one universal threshold, sigma times root two log n."
+            " <bookmark mark='d'/> SureShrink chooses a threshold at each scale by minimizing Stein's unbiased risk "
+            "estimate, Part 25's SURE, falling back to the universal one where the coefficients look sparse."
         ) as vo:
+            intro=label('Thresholding trades coefficient noise against shrinkage bias',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -151,15 +159,16 @@ class Wavelets(VoiceoverScene):
             r[3].set_color(WAVC)
         tb.move_to([0, 0.8, 0])
         foot = fit_rows(VGroup(
-            label(r"$P(\max_i |z_i| > \sqrt{2 \log n}) \to 0$: \ pure noise is almost surely killed", font_size=22),
-            label(r"a threshold chosen so that noise never survives, \ at the price of shrinking every real coefficient", font_size=22, color=PATH),
+            label(r"$P(\max_i |z_i| > \sqrt{2 \log n}) \to 0$: \ known $\sigma$: noise killed with probability tending to one", font_size=22),
+            label(r"finite-sample exceedances remain possible; \ retained coefficients are also shrunk", font_size=22, color=PATH),
         ), 12.0, 0.22, [0, -1.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Where root two log n comes from: it is the size of the largest of n independent standard "
-            "normals. <bookmark mark='b'/> In two hundred simulations at each n, the largest absolute value sits just below "
-            "it, and the chance of exceeding it shrinks to zero. So the universal threshold kills pure noise with high "
-            "probability, the guarantee that the estimate is at least as smooth as the truth, at the price of shrinking every "
-            "real coefficient by three point seven."
+            "<bookmark mark='a'/> Where root two log n comes from: it is the size of the largest of n independent "
+            "standard normals. <bookmark mark='b'/> In two hundred simulations at each n, the largest absolute value "
+            "sits just below it, and the chance of exceeding it shrinks to zero. So the universal threshold kills "
+            "pure noise with high probability, a known-noise asymptotic statement, not a literal guarantee of "
+            "smoothness or of zero false retained coefficients at every finite sample size. At n of a thousand and "
+            "twenty-four, a unit-noise threshold is about three point seven."
         ) as vo:
             self.add(seeded_tag())
             vo.wait_until("a")
@@ -214,17 +223,18 @@ class Wavelets(VoiceoverScene):
             r[4].set_color(SPLC)
         tb.move_to([0, 0.8, 0])
         foot = fit_rows(VGroup(
-            label(r"mean squared error per point; \ $n = 1{,}024$, \ noise SD 1, \ SNR 7", font_size=22),
+            label(r"one noise realization per signal; \ $n = 1{,}024$, \ noise SD 1, \ SNR 7", font_size=22),
             label(r"wavelets win where the signal jumps; \ the spline holds its own where it is smooth", font_size=22, color=PATH),
         ), 12.0, 0.22, [0, -1.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The scores, as mean squared error per point; the noise alone scores one. "
-            "<bookmark mark='b'/> VisuShrink is too conservative at this high signal-to-noise ratio: shrinking every large "
-            "coefficient by three point seven costs it more than it saves on blocks, bumps and Doppler. "
-            "<bookmark mark='c'/> SureShrink is best on blocks and bumps, which jump and spike. <bookmark mark='d'/> On the "
-            "smooth heavisine it ties with the spline, and on the Doppler, smooth but with changing frequency, the spline "
-            "edges it. Donoho and Johnstone proved the deeper result: wavelet thresholding is nearly minimax over whole "
-            "families of function classes at once, adapting to smoothness it doesn't know."
+            "<bookmark mark='a'/> The scores, as mean squared error per point; the noise alone scores one. <bookmark "
+            "mark='b'/> VisuShrink is too conservative at this high signal-to-noise ratio: shrinking every large "
+            "coefficient by three point seven costs it more than it saves on blocks, bumps and Doppler. <bookmark "
+            "mark='c'/> SureShrink is best on blocks and bumps, which jump and spike. <bookmark mark='d'/> On the "
+            "piecewise smooth heavisine its error is close to the spline's, and on the Doppler, smooth but with "
+            "changing frequency, the spline edges it. Appropriately chosen wavelet procedures achieve adaptive "
+            "near-minimax bounds over specified Besov smoothness classes. This single noise realization illustrates "
+            "behavior, rather than proving a universal ranking."
         ) as vo:
             self.add(seeded_tag())
             vo.wait_until("a")

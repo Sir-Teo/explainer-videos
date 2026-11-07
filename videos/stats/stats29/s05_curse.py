@@ -39,6 +39,9 @@ class Curse(VoiceoverScene):
             "d. In one dimension, minus point eight. In ten, minus point two nine. Richard Bellman named the problem the curse "
             "of dimensionality in 1961."
         ) as vo:
+            intro=label('A d-dimensional local window has volume proportional to h to the d',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -147,16 +150,17 @@ class Curse(VoiceoverScene):
     def escape(self):
         rows = fit_rows(VGroup(
             label(r"assume structure: \ additive models \ (chapter ten)", font_size=24, color=SPLC),
-            label(r"single and multiple index models: \ $f(x) = g(\beta^\top x)$", font_size=24, color=KDEC),
+            label(r"single index: \ $f(x) = g(\beta^\top x)$; \ multiple: $g(B^\top x)$", font_size=24, color=KDEC),
             label(r"sparsity: \ only a few variables matter \ (Part 32)", font_size=24, color=WAVC),
             label(r"smoothness: \ more derivatives, \ faster rates \ (Part 50)", font_size=24, color=PATH),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The escapes all assume structure. Additive models, chapter ten, estimate a sum of "
-            "one-dimensional curves, each at the one-dimensional rate. <bookmark mark='b'/> Index models smooth along a few "
-            "estimated directions. <bookmark mark='c'/> Sparsity assumes only a few variables matter, Part 32. "
-            "<bookmark mark='d'/> And smoother truths permit faster rates: with s derivatives the rate is n to the minus two "
-            "s over two s plus d, Charles Stone's result, which Part 50 proves optimal."
+            "<bookmark mark='a'/> The escapes all assume structure. With a fixed number of components and suitable "
+            "design and smoothness conditions, additive models can recover one-dimensional component rates. <bookmark"
+            " mark='b'/> Index models smooth along a few estimated directions. <bookmark mark='c'/> Sparsity assumes "
+            "only a few variables matter, Part 32. <bookmark mark='d'/> And smoother truths permit faster rates: over"
+            " suitable bounded smoothness classes, the minimax squared-error rate is n to the minus two s over two s "
+            "plus d, with regularity and design conditions."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -174,13 +178,16 @@ class Curse(VoiceoverScene):
         whys = [why(r"a standard normal cloud"), why(r"Part 6's chi-squared"), why(r"a thin shell of radius $\sqrt d$"),
                 why(r"Silverman's table estimated $f(0)$")]
         with self.voiceover(
-            "<bookmark mark='a'/> Even a normal cloud is mostly far from its centre. The squared distance of a standard "
-            "normal point from the origin is chi-squared with d degrees of freedom. <bookmark mark='b'/> Its mean is d, its "
-            "standard deviation root two d. <bookmark mark='c'/> So the distance itself is about root d, give or take "
-            "point seven, whatever d is: in high dimensions the points live in a thin shell. <bookmark mark='d'/> The "
-            "density is highest at the centre, where Silverman's table estimated it, and yet almost no observations fall "
-            "anywhere near it."
+            "<bookmark mark='a'/> Even a normal cloud is mostly far from its centre. The squared distance of a "
+            "standard normal point from the origin is chi-squared with d degrees of freedom. <bookmark mark='b'/> Its"
+            " mean is d, its standard deviation root two d. <bookmark mark='c'/> So the distance itself is about root"
+            " d, with asymptotic standard deviation one over root two, about point seven, as d grows: in high "
+            "dimensions the points live in a thin shell. <bookmark mark='d'/> The density is highest at the centre, "
+            "where Silverman's table estimated it, and yet almost no observations fall anywhere near it."
         ) as vo:
+            intro=label('Gaussian radii concentrate near the square root of dimension',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

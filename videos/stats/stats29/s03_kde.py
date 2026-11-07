@@ -78,6 +78,9 @@ class KDE(VoiceoverScene):
             "and positive in valleys: smoothing flattens. <bookmark mark='d'/> Integrated and squared: a quarter h to the "
             "fourth mu two squared R of f double prime."
         ) as vo:
+            intro=label('A symmetric kernel cancels the first-order interior slope term',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -101,6 +104,9 @@ class KDE(VoiceoverScene):
             "<bookmark mark='d'/> n h is roughly the number of observations within a bandwidth of x: the effective sample "
             "size of a local average, as for the histogram."
         ) as vo:
+            intro=label('Independent bump heights determine sampling variance',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -118,13 +124,17 @@ class KDE(VoiceoverScene):
         whys = [why(r"variance $\propto 1/(nh)$, \ squared bias $\propto h^4$"), why(r"the fifth-root bandwidth"),
                 why(r"a product: \ the kernel's part times the density's"), why(r"$n^{-4/5}$ is faster")]
         with self.voiceover(
-            "<bookmark mark='a'/> Add them. Variance falls like one over n h; squared bias grows like h to the fourth, not "
-            "the histogram's h squared. <bookmark mark='b'/> Setting the derivative to zero gives the best bandwidth, which "
-            "shrinks like n to the minus one fifth. <bookmark mark='c'/> The minimal error is a constant depending on the "
-            "kernel, times one depending on the density's roughness, times n to the minus four fifths. "
-            "<bookmark mark='d'/> Against the histogram's minus two thirds, that is a real gain, and Part 50 proves that no "
-            "estimator can beat n to the minus four fifths for densities with two derivatives."
+            "<bookmark mark='a'/> Add them. Variance falls like one over n h; squared bias grows like h to the "
+            "fourth, not the histogram's h squared. <bookmark mark='b'/> Setting the derivative to zero gives the "
+            "best bandwidth, which shrinks like n to the minus one fifth. <bookmark mark='c'/> The minimal error is a"
+            " constant depending on the kernel, times one depending on the density's roughness, times n to the minus "
+            "four fifths. <bookmark mark='d'/> Against the histogram's minus two thirds, that is a real gain, and "
+            "Part 50 proves that the worst-case integrated squared-error rate over suitable bounded two-derivative "
+            "classes cannot be improved. This is not a pointwise lower bound for every particular density."
         ) as vo:
+            intro=label('Twice-smooth density estimation has a fifth-root bandwidth',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -146,16 +156,17 @@ class KDE(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(rf"$n = 1{{,}}000$, \ $h^* = {d['best_1000']['amise_h']:.3f}$", font_size=22),
             label(r"gold: \ the truth", font_size=22, color=TRUE),
-            label(r"blue: \ $E\hat f$, \ $\pm 2$ SD", font_size=22, color=KDEC),
+            label(r"blue: \ approximate $E\hat f$, \ $\pm 2$ SD", font_size=22, color=KDEC),
             label(r"red: \ the bias $\frac12 h^2 f''$, \ times 5", font_size=22, color=BIASC),
             label(r"peaks cut, \ valleys filled", font_size=22, color=GREY_A),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Pictured for a thousand points at the optimal bandwidth. <bookmark mark='b'/> Gold is the "
-            "truth. <bookmark mark='c'/> Blue is the estimate's average, with a band of two standard deviations: widest at "
-            "the peaks, where there's most data and so most absolute noise. <bookmark mark='d'/> Red is the bias, magnified five times: negative "
-            "at the two peaks, positive in the valley and the shoulders. <bookmark mark='e'/> The optimal bandwidth "
-            "deliberately leaves in bias comparable to the noise, a point chapter eleven will make costly."
+            "<bookmark mark='a'/> Pictured for a thousand points at the optimal bandwidth. <bookmark mark='b'/> Gold "
+            "is the truth. <bookmark mark='c'/> Blue uses the leading bias and standard-deviation approximations, "
+            "with a band of two standard deviations: widest at the peaks, where there's most data and so most "
+            "absolute noise. <bookmark mark='d'/> Red is the bias, magnified five times: negative at the two peaks, "
+            "positive in the valley and the shoulders. <bookmark mark='e'/> The optimal bandwidth deliberately leaves"
+            " in bias comparable to the noise, a point chapter eleven will make costly."
         ) as vo:
             self.add(seeded_tag())
             self.play(FadeIn(A), Create(zero))
@@ -192,8 +203,8 @@ class KDE(VoiceoverScene):
         others = VGroup(pl("mise_100", GREY_B, 2), pl("mise_10000", GREY_B, 2))
         rows = fit_rows(VGroup(
             label(r"$n = 1{,}000$: \ the exact MISE \ (Marron \& Wand 1992)", font_size=22, color=KDEC),
-            label(r"teal: \ integrated variance, \ slope $-1$", font_size=22, color=VARC),
-            label(r"red: \ integrated squared bias, \ slope $4$", font_size=22, color=BIASC),
+            label(r"teal: \ leading variance term, \ slope $-1$", font_size=22, color=VARC),
+            label(r"red: \ leading squared bias, \ slope $4$", font_size=22, color=BIASC),
             label(r"white dashed: \ AMISE, \ close near the optimum", font_size=22),
             label(r"grey: \ $n = 100$ and $10{,}000$", font_size=22, color=GREY_B),
         ), 4.3, 0.42, [4.5, 0.3, 0])
@@ -237,6 +248,9 @@ class KDE(VoiceoverScene):
             "<bookmark mark='d'/> Normalized and truncated at zero: three quarters of one minus u squared, Vassiliy "
             "Epanechnikov's kernel of 1969."
         ) as vo:
+            intro=label('Kernel optimization is constrained by positivity and normalization',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

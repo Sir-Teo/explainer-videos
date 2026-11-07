@@ -24,21 +24,25 @@ class Splines(VoiceoverScene):
     def problem(self):
         rows = [
             cmath(r"\min_g", r"\ ", r"\textstyle\sum_i (y_i - g(x_i))^2 + \lambda \int g''(t)^2\, dt", font_size=30),
-            cmath(r"\lambda \to 0", r":", r"\text{the smoothest curve through every point}", font_size=30),
+            cmath(r"\lambda \to 0", r":", r"\text{interpolation at distinct $x$; \ averages at ties}", font_size=30),
             cmath(r"\lambda \to \infty", r":", r"g'' = 0: \ \text{the least-squares line}", font_size=30),
-            cmath(r"\text{search}", r":", r"\text{over all twice-differentiable } g", font_size=30),
+            cmath(r"\text{search}", r":", r"\text{over } g \text{ with square-integrable weak }g''", font_size=30),
         ]
         rows[0][2].set_color(SPLC)
-        whys = [why(r"fit plus a roughness penalty"), why(r"an interpolant"), why(r"lines cost nothing"),
+        whys = [why(r"fit plus a roughness penalty"), why(r"the $\lambda\downarrow0$ limit"), why(r"lines cost nothing"),
                 why(r"an infinite-dimensional problem")]
         with self.voiceover(
-            "<bookmark mark='a'/> Instead of a local average, penalize roughness. Among all curves, minimize the residual sum "
-            "of squares plus lambda times the integrated squared second derivative, the bending energy. "
-            "<bookmark mark='b'/> With lambda near zero the solution is the smoothest curve through every point. "
-            "<bookmark mark='c'/> As lambda grows, curvature becomes unaffordable and the solution tends to the "
-            "least-squares line, which has no curvature at all. <bookmark mark='d'/> The search is over all twice "
-            "differentiable functions, an infinite-dimensional space. Remarkably, the answer is finite-dimensional."
+            "<bookmark mark='a'/> Instead of a local average, penalize roughness. Among all curves, minimize the "
+            "residual sum of squares plus lambda times the integrated squared second derivative, the bending energy. "
+            "<bookmark mark='b'/> As positive lambda tends to zero, distinct observations are interpolated; tied x "
+            "values are fitted by their averages. <bookmark mark='c'/> As lambda grows, curvature becomes "
+            "unaffordable and the solution tends to the least-squares line, which has no curvature at all. <bookmark "
+            "mark='d'/> The search is over functions with square-integrable weak second derivative, an "
+            "infinite-dimensional space. Remarkably, the answer is finite-dimensional."
         ) as vo:
+            intro=label('A roughness penalty trades data fit against bending energy',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -65,6 +69,9 @@ class Splines(VoiceoverScene):
             "<bookmark mark='d'/> Every candidate is beaten by a natural cubic spline, so the minimizer is one, with knots at "
             "the data: the theorem of Isaac Schoenberg and Christian Reinsch."
         ) as vo:
+            intro=label('Natural cubic splines minimize roughness at fixed knot values',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -76,19 +83,24 @@ class Splines(VoiceoverScene):
             cmath(r"\textstyle\int s''^2", r"=", r"g^\top K g, \ \ K = Q R^{-1} Q^\top", font_size=30),
             cmath(r"\hat g", r"=", r"\arg\min \|y - g\|^2 + \lambda g^\top K g = (I + \lambda K)^{-1} y", font_size=30),
             cmath(r"S_\lambda", r"=", r"(I + \lambda K)^{-1}: \ \text{the smoother matrix}", font_size=30),
-            cmath(r"\text{cost}", r":", r"O(n): \ Q, R \text{ are banded}", font_size=30),
+            cmath(r"\text{cost}", r":", r"O(n) \text{ with banded solves; teaching code is dense}", font_size=30),
         ]
         rows[1][2].set_color(SPLC)
         whys = [why(r"$g$: \ the spline's values at the knots"), why(r"a ridge regression in disguise"),
-                why(r"$\mathrm{df} = \mathrm{tr}\, S_\lambda$, \ Part 28"), why(r"Reinsch's algorithm: \ tridiagonal solves")]
+                why(r"$\mathrm{df} = \mathrm{tr}\, S_\lambda$, \ Part 28"), why(r"banded Reinsch solver; \ dense reference implementation here")]
         with self.voiceover(
-            "<bookmark mark='a'/> A natural cubic spline is determined by its values at the knots, and its bending energy is "
-            "a quadratic form in them, g transpose K g, with K built from two banded matrices, Peter Green and Bernard "
-            "Silverman's Q and R. <bookmark mark='b'/> The infinite problem becomes a finite penalized least squares, with "
-            "solution I plus lambda K, inverse, times y. <bookmark mark='c'/> The smoother matrix S; its trace is the "
-            "degrees of freedom of Part 28. <bookmark mark='d'/> Because Q and R are banded, Reinsch's algorithm costs only "
-            "order n operations. Statkit's spline matches SciPy's to ten decimal places."
+            "<bookmark mark='a'/> A natural cubic spline is determined by its values at the knots, and its bending "
+            "energy is a quadratic form in them, g transpose K g, with K built from two banded matrices, Peter Green "
+            "and Bernard Silverman's Q and R. <bookmark mark='b'/> The infinite problem becomes a finite penalized "
+            "least squares, with solution I plus lambda K, inverse, times y. <bookmark mark='c'/> The smoother matrix"
+            " S; its trace is the degrees of freedom of Part 28. <bookmark mark='d'/> A banded Reinsch implementation"
+            " can solve a fixed-lambda fit in order n operations after sorting. Our teaching implementation forms "
+            "dense matrices; tests compare its values with SciPy, rather than claiming linear complexity for this "
+            "code."
         ) as vo:
+            intro=label('A finite quadratic penalty represents the infinite-dimensional problem',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -187,11 +199,15 @@ class Splines(VoiceoverScene):
                 why(r"the same idea: \ shrink the rough directions most")]
         with self.voiceover(
             "<bookmark mark='a'/> So the fit is: project the data on each basis curve, shrink by its factor, add up. "
-            "<bookmark mark='b'/> The degrees of freedom are the sum of the factors, between two, for the line, and n, for "
-            "interpolation. <bookmark mark='c'/> The eigenvalues grow like the fourth power of the number of oscillations, so "
-            "the shrinkage switches on sharply. <bookmark mark='d'/> It is Part 25's ridge regression, which shrinks each "
-            "principal direction, with the roughness penalty deciding which directions are rough."
+            "<bookmark mark='b'/> The degrees of freedom are the sum of the factors, between two, for the line, and "
+            "n, for interpolation. <bookmark mark='c'/> Under regular designs the eigenvalues grow roughly like the "
+            "fourth power of the oscillation index. Irregular knot spacing changes the spectrum. <bookmark mark='d'/>"
+            " It is Part 25's ridge regression, which shrinks each principal direction, with the roughness penalty "
+            "deciding which directions are rough."
         ) as vo:
+            intro=label('The penalty eigenbasis reveals which directions are shrunk',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

@@ -65,6 +65,21 @@ def nest(obj):
     return obj
 
 
+def silverman_bootstrap(x, k, B, g, grid=None):
+    """Finite-bootstrap estimate; Silverman's raw test still needs calibration qualifications.
+
+    Adding one avoids reporting an impossible zero Monte Carlo tail probability.
+    This does not make the smoothed bootstrap an exact finite-sample level test.
+    """
+    if B < 1:
+        raise ValueError("at least one bootstrap sample is required")
+    result = Sm.silverman_test(x, k, B, g, grid)
+    count = int(round(result["p"] * B))
+    return dict(result, p=(count+1)/(B+1), exceedances=count,
+                mc_se=math.sqrt((count+1)/(B+1)*(1-(count+1)/(B+1))/(B+1)),
+                calibration="raw smoothed-bootstrap estimate; no Hall-York calibration")
+
+
 def compute_faithful():
     e, w = museum.faithful()
     grid = np.linspace(1.0, 6.0, 401)
@@ -77,7 +92,7 @@ def compute_faithful():
         kd[f"h{h:g}"] = Sm.kde(e, grid, h)
     crit = {k: Sm.critical_bandwidth(e, k, grid) for k in (1, 2, 3, 4)}
     g = rng(1981)
-    tests = {k: Sm.silverman_test(e, k, 500, g, grid) for k in (1, 2, 3)}
+    tests = {k: silverman_bootstrap(e, k, 500, g, grid) for k in (1, 2, 3)}
     hist = {}
     for bw in (0.5, 0.25):
         for off in (0.0, 0.25 * bw, 0.5 * bw, 0.75 * bw):
@@ -85,7 +100,7 @@ def compute_faithful():
             hist[f"{bw:g}_{off:g}"] = {"edges": edges, "dens": Sm.histogram_density(e, edges)}
     modes = {k: Sm.count_modes(v) for k, v in kd.items()}
     return nest({"x": e, "waiting": w, "grid": grid, "h": hs, "kde": kd, "lscv_h": lg, "lscv": lv, "critical": crit,
-                 "tests": {k: {"h": v["h"], "p": v["p"]} for k, v in tests.items()}, "hist": hist, "modes": modes,
+                 "tests": tests, "hist": hist, "modes": modes,
                  "n": len(e), "short_share": float(np.mean(e < 3)), "mean": float(e.mean()), "sd": float(e.std(ddof=1))})
 
 
@@ -178,7 +193,7 @@ def compute_curse():
         X = g.uniform(0, 1, (1000, d))
         D = np.sqrt(((X[:200, None, :] - X[None, :, :]) ** 2).sum(-1))
         D[np.arange(200), np.arange(200)] = np.inf
-        nn[d] = {"nearest": float(np.median(D.min(1))), "farthest": float(np.median(D.max(1) if d else 0)),
+        nn[d] = {"nearest": float(np.median(D.min(1))), "farthest": float(np.median(np.where(np.isfinite(D), D, 0).max(1))),
                  "ratio": float(np.median(D.min(1) / np.where(np.isfinite(D), D, 0).max(1)))}
     rates = {d: 4 / (4 + d) for d in range(1, 11)}
     return nest({"table": table, "ball": vol, "nn": nn, "rates": rates})
@@ -209,6 +224,20 @@ def compute_locpoly():
                  "loess_robust": lr, "e": e, "w": w, "ee": ee, "fw": fw})
 
 
+def spline_reml(sp, lam):
+    """Profile Gaussian REML including within-tie contrasts and known precision weights."""
+    if lam <= 0 or len(sp.y) <= 2:
+        raise ValueError("positive penalty and at least three observations required")
+    rootw = np.sqrt(sp.W)
+    d, U = np.linalg.eigh(sp.K/rootw[:,None]/rootw[None,:])
+    v = 1 + 1/(lam*d[2:])
+    z = U.T @ (rootw*sp.ybar)
+    within = np.sum(sp.w*(sp.y-sp.ybar[sp.inv])**2)
+    m = len(sp.y)-2
+    s2 = (np.sum(z[2:]**2/v)+within)/m
+    return float(.5*(np.log(v).sum()+m*np.log(s2)+m))
+
+
 def compute_spline():
     t, a = museum.mcycle()
     sp = Sm.SmoothingSpline(t, a)
@@ -221,9 +250,9 @@ def compute_spline():
     gcv = [sp.gcv(l) for l in grid]
     dfs = [sp.df(l) for l in grid]
     lg = float(grid[int(np.argmin(gcv))])
-    # REML on the distinct times, weights as tie counts (an approximation with ties: use the unique-x model)
+    # Full Gaussian REML retains the replicate contrasts at tied crash times.
     spu = Sm.SmoothingSpline(sp.t, sp.ybar)
-    reml = [spu.reml(l) for l in grid]
+    reml = [spline_reml(sp, l) for l in grid]
     lr = float(grid[int(np.argmin(reml))])
     # the Demmler--Reinsch basis on the unique times, unit weights
     d, U = spu.eigen()
@@ -231,8 +260,8 @@ def compute_spline():
     shrink = {"df8": 1 / (1 + spu.lam_for_df(8) * d), "df25": 1 / (1 + spu.lam_for_df(25) * d)}
     resid = a - sp.fit(lg)[sp.inv]
     return nest({"t": t, "a": a, "tt": tt, "fits": fits, "grid": grid, "gcv": gcv, "df": dfs, "lam_gcv": lg,
-                 "df_gcv": sp.df(lg), "fit_gcv": sp.predict(lg, tt), "reml": reml, "lam_reml": lr, "df_reml": spu.df(lr),
-                 "fit_reml": spu.predict(lr, tt), "eig": d, "basis": basis, "knots": sp.t, "shrink": shrink,
+                 "df_gcv": sp.df(lg), "fit_gcv": sp.predict(lg, tt), "reml": reml, "lam_reml": lr, "df_reml": sp.df(lr),
+                 "fit_reml": sp.predict(lr, tt), "eig": d, "basis": basis, "knots": sp.t, "shrink": shrink,
                  "sigma_gcv": float(np.sqrt(np.sum(resid ** 2) / (len(a) - sp.df(lg)))), "n_unique": len(sp.t)})
 
 
@@ -343,7 +372,7 @@ def compute_gam():
     X = np.column_stack([d["temp"], d["wind"], d["solar"]])
     names = ["temp", "wind", "solar"]
     lams = [Sm.SmoothingSpline(X[:, j], y).lam_for_df(4.0) for j in range(3)]
-    b = Sm.backfit(X, y, lams)
+    b = Sm.backfit(X, y, lams, iters=200)
     n = len(y)
     lin = np.column_stack([np.ones(n), X])
     bl, *_ = np.linalg.lstsq(lin, y, rcond=None)
@@ -360,17 +389,27 @@ def compute_gam():
     e_add, e_lin = [], []
     for te in folds:
         tr = np.setdiff1d(np.arange(n), te)
-        bt = Sm.backfit(X[tr], y[tr], lams)
+        # Re-establish the stated four-df component rule on training observations only.
+        fold_lams = [Sm.SmoothingSpline(X[tr, j], y[tr]).lam_for_df(4.0) for j in range(3)]
+        bt = Sm.backfit(X[tr], y[tr], fold_lams, iters=200)
+        if bt["iterations"] == 200:
+            raise RuntimeError("additive CV fit did not converge")
         pred = np.full(len(te), bt["alpha"])
         for j in range(3):
             o = np.argsort(X[tr, j])
-            pred += np.interp(X[te, j], X[tr][o, j], bt["f"][o, j])
-        e_add.append(np.mean((y[te] - pred) ** 2))
+            # Each fitted component is a natural cubic spline, including linear extrapolation.
+            knots, inverse = np.unique(X[tr, j], return_inverse=True)
+            comp = np.bincount(inverse, weights=bt["f"][:, j]) / np.bincount(inverse)
+            Q, R = Sm._QR(knots)
+            pred += Sm.natural_spline_eval(knots, comp, np.linalg.solve(R, Q.T @ comp), X[te, j])
+        e_add.extend((y[te] - pred) ** 2)
         blt, *_ = np.linalg.lstsq(lin[tr], y[tr], rcond=None)
-        e_lin.append(np.mean((y[te] - lin[te] @ blt) ** 2))
+        e_lin.extend((y[te] - lin[te] @ blt) ** 2)
     return nest({"n": n, "names": names, "comps": comps, "r2_add": float(1 - ra @ ra / tss), "r2_lin": float(1 - rl @ rl / tss),
                  "iterations": b["iterations"], "cv_add": float(np.mean(e_add)), "cv_lin": float(np.mean(e_lin)),
-                 "coef_lin": bl[1:]})
+                 "coef_lin": bl[1:], "cv_case_add": e_add, "cv_case_lin": e_lin,
+                 "cv_paired_delta": float(np.mean(np.asarray(e_add)-e_lin)),
+                 "cv_paired_se": float(np.std(np.asarray(e_add)-e_lin, ddof=1)/math.sqrt(n))})
 
 
 def compute_rbc():
@@ -429,7 +468,7 @@ def compute_shape():
     f, fp = math.exp(-1), -math.exp(-1)
     chern = 2 * 0.52 * abs(f * fp / 2) ** (1 / 3)
     return nest({"x": x, "mu": mu, "y": y, "iso": iso, "rates": rates, "z": z, "gren_t": tt, "gren": Sm.grenander_at(G, tt),
-                 "chernoff_sd": chern, "n_blocks": int(len(np.unique(np.round(iso, 10))))})
+                 "gren_knots": G["knots"], "gren_density": G["density"], "chernoff_sd": chern, "n_blocks": int(len(np.unique(np.round(iso, 10))))})
 
 
 ITEMS = {

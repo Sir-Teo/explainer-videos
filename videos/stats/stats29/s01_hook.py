@@ -23,15 +23,16 @@ class Hook(VoiceoverScene):
                           r"whether noise alone could have made it appear that soon",
                           color=PATH, width=11.0, font_size=23).move_to([0, 1.0, 0])
         rows = fit_rows(VGroup(
-            label(r"Old Faithful, \ Yellowstone: \ 272 eruptions, \ August 1978 and 1979", font_size=24),
+            label(r"Old Faithful, \ Yellowstone: \ 272 eruptions, \ R\texttt{ datasets::faithful}", font_size=24),
             label(r"how long does an eruption last?", font_size=24, color=PATH),
         ), 12.0, 0.35, [0, -1.6, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Old Faithful, in Yellowstone, erupts every hour or so. In August 1978 and 1979 rangers "
-            "logged two hundred and seventy-two eruptions, how long each lasted and how long until the next. "
-            "<bookmark mark='b'/> How long does an eruption last? Not a mean and a standard deviation: the answer is a whole "
-            "distribution, and the question this part asks is how to estimate a curve. <bookmark mark='c'/> In 1981 Bernard "
-            "Silverman asked a sharper version: how many humps does the distribution have?"
+            "<bookmark mark='a'/> Old Faithful, in Yellowstone, erupts every hour or so. The R faithful data contain "
+            "two hundred and seventy-two eruption durations and waits to the next eruption. We use the documented "
+            "data without attributing an unverified collection date. <bookmark mark='b'/> How long does an eruption "
+            "last? Not a mean and a standard deviation: the answer is a whole distribution, and the question this "
+            "part asks is how to estimate a curve. <bookmark mark='c'/> In 1981 Bernard Silverman asked a sharper "
+            "version: how many humps does the distribution have?"
         ) as vo:
             self.play(FadeIn(tl))
             vo.wait_until("a")
@@ -52,7 +53,7 @@ class Hook(VoiceoverScene):
         for key in ("0.5_0", "0.5_0.125", "0.5_0.25", "0.5_0.375", "0.25_0", "0.25_0.125"):
             h = d["hist"][key]
             e = np.asarray(h["edges"])
-            dens = np.minimum(np.asarray(h["dens"]), 0.89)
+            dens = np.asarray(h["dens"])
             hs[key] = hist_bars(ax, e, dens, color=HISTC, opacity=0.75)
         rg = rug(ax, x)
         rows = fit_rows(VGroup(
@@ -142,6 +143,9 @@ class Hook(VoiceoverScene):
             "would be by chance."
         ) as vo:
             self.add(faithful_tag())
+            intro=label('Gaussian KDE mode counts decrease with bandwidth in one dimension',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -152,21 +156,23 @@ class Hook(VoiceoverScene):
         d = load("faithful")
         t = d["tests"]
         hdr = [r"\textbf{$H_0$: at most $k$ modes}", r"\textbf{critical} $h_k$", r"\textbf{bootstrap $p$-value (500)}", r"\textbf{verdict}"]
-        body = [[f"$k = {k}$", f"{t[k]['h']:.3f}", f"{t[k]['p']:.2f}", v] for k, v in
+        body = [[f"$k = {k}$", f"{t[k]['h']:.3f}", f"{t[k]['p']:.3f}", v] for k, v in
                 (("1", r"rejected"), ("2", r"not rejected"), ("3", r"not rejected"))]
         tb = table_rows([hdr] + body, font_size=26, col_buff=0.9, row_buff=0.32, colors=[GREY_A, RES, HIT, HIT])
         tb.move_to([0, 0.8, 0])
         foot = fit_rows(VGroup(
             label(r"smoothed bootstrap from $\hat f_{h_k}$, \ rescaled to the sample variance", font_size=22),
-            label(r"two humps, \ short and long eruptions: \ the third is within the noise", font_size=22, color=PATH),
+            label(r"two humps, \ short and long eruptions: \ no compelling evidence for a third mode", font_size=22, color=PATH),
         ), 12.0, 0.22, [0, -1.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Silverman's test: simulate from the k-mode estimate itself, by resampling the data and "
-            "adding kernel noise, and see how often the simulated data need more smoothing than h k to reach k modes. "
-            "<bookmark mark='b'/> One mode: never, in five hundred tries. Rejected. <bookmark mark='c'/> Two modes: half the "
-            "time, so the data are typical of a two-humped distribution. <bookmark mark='d'/> Three: ninety-three percent. "
-            "Old Faithful has two kinds of eruption, short and long; the third hump is noise. Getting there needed every "
-            "idea in this part: how a curve estimate's error depends on its smoothing."
+            "<bookmark mark='a'/> Silverman's test: simulate from the k-mode estimate itself, by resampling the data "
+            "and adding kernel noise, and see how often the simulated data need more smoothing than h k to reach k "
+            "modes. <bookmark mark='b'/> One mode: never, in five hundred tries. Rejected. <bookmark mark='c'/> Two "
+            "modes: half the time, so this calculation does not reject at most two modes. <bookmark mark='d'/> Three:"
+            " ninety-three percent. The two broad humps are clear; the test supplies no compelling evidence for an "
+            "additional mode. These are raw smoothed-bootstrap results, whose nominal levels need calibration; "
+            "non-rejection does not prove the number of modes. Getting there needed every idea in this part: how a "
+            "curve estimate's error depends on its smoothing."
         ) as vo:
             self.add(faithful_tag())
             vo.wait_until("a")
@@ -185,11 +191,12 @@ class Hook(VoiceoverScene):
             label(r"the right amount: \ a rate, \ $n^{-4/5}$, \ and it decays with dimension", font_size=26, color=PATH),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Part 28 chose among models with a fixed number of parameters. A curve has infinitely many, "
-            "and no finite family need contain it. <bookmark mark='b'/> Every method in this part smooths: by bin width, "
-            "bandwidth or penalty. <bookmark mark='c'/> Too little smoothing and you see noise; too much and you flatten real "
-            "structure. <bookmark mark='d'/> The right amount can be derived, and it gives a rate, n to the minus four "
-            "fifths for a density instead of one over n, which gets dramatically worse as the dimension grows."
+            "<bookmark mark='a'/> Part 28 chose among models with a fixed number of parameters. A curve has "
+            "infinitely many, and no finite family need contain it. <bookmark mark='b'/> Every method in this part "
+            "smooths: by bin width, bandwidth or penalty. <bookmark mark='c'/> Too little smoothing and you see "
+            "noise; too much and you flatten real structure. <bookmark mark='d'/> For a twice-smooth density class, "
+            "optimal worst-case integrated squared error has rate n to the minus four fifths. The rate depends on "
+            "smoothness and deteriorates with dimension."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

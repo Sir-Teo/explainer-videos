@@ -39,6 +39,9 @@ class Lambda(VoiceoverScene):
             "<bookmark mark='c'/> It aims at prediction error. <bookmark mark='d'/> Its weakness is variability: its "
             "minimum can be flat, and now and then it chooses a nearly interpolating spline."
         ) as vo:
+            intro=label('GCV replaces individual leverages by their average',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -53,16 +56,20 @@ class Lambda(VoiceoverScene):
             cmath(r"\text{REML}", r":", r"\text{estimate it like any variance component}", font_size=30),
         ]
         rows[3][2].set_color(SPLC)
-        whys = [why(r"lines fixed; \ wiggles random, \ in the Demmler--Reinsch basis"), why(r"Part 25's BLUPs"),
+        whys = [why(r"lines fixed; \ $Z_j=u_j/\sqrt{d_j}$, \ random coefficients"), why(r"Part 25's BLUPs"),
                 why(r"noise over signal"), why(r"Wahba (1985): \ generalized ML; \ Speed (1991)")]
         with self.voiceover(
-            "<bookmark mark='a'/> Second, Part 25's tools. Write the spline as a mixed model: the constant and line as fixed "
-            "effects, and every wiggly basis component as a random effect with variance sigma squared over lambda. "
-            "<bookmark mark='b'/> The best linear unbiased predictor of the curve is then exactly the smoothing spline. "
-            "<bookmark mark='c'/> Lambda is a ratio of variances, noise over signal. <bookmark mark='d'/> So it can be "
-            "estimated by restricted maximum likelihood like any variance component, Grace Wahba's generalized maximum "
-            "likelihood of 1985, and the reason mixed-model software fits splines."
+            "<bookmark mark='a'/> Second, Part 25's tools. Write the spline as a mixed model: the constant and line "
+            "as fixed effects, and rescaled wiggly basis columns u j divided by root d j, with independent random "
+            "coefficients of variance sigma squared over lambda. <bookmark mark='b'/> The best linear unbiased "
+            "predictor of the curve is then exactly the smoothing spline. <bookmark mark='c'/> Lambda is a ratio of "
+            "variances, noise over signal. <bookmark mark='d'/> So it can be estimated by restricted maximum "
+            "likelihood like any variance component, Grace Wahba's generalized maximum likelihood of 1985, and the "
+            "reason mixed-model software fits splines."
         ) as vo:
+            intro=label('Rescaled spline basis coefficients form a variance-component model',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -82,21 +89,22 @@ class Lambda(VoiceoverScene):
         A = axes([4, 40], [0, 1.1], x_length=7.4, y_length=4.4, xlabel=r"degrees of freedom", ylabel=r"criterion (rescaled)",
                  xticks=[5, 10, 20, 30, 40], yticks=[], center=[-2.0, 0.3, 0])
         ax = A.ax
-        lg = polyline(ax, df[keep], np.minimum(gs, 1.1), SPLC, 3)
-        lr = polyline(ax, df[keep], np.minimum(rs, 1.1), NWC, 3)
+        lg = polyline(ax, df[keep], gs, SPLC, 3)
+        lr = polyline(ax, df[keep], rs, NWC, 3)
         dg = Dot(ax.c2p(d["df_gcv"], 0), radius=0.08, color=SPLC)
         dr = Dot(ax.c2p(d["df_reml"], 0), radius=0.08, color=NWC)
         rows = fit_rows(VGroup(
             label(r"the motorcycle data", font_size=22),
             label(rf"green: \ GCV: \ minimum at df {d['df_gcv']:.1f}", font_size=22, color=SPLC),
             label(rf"orange: \ REML: \ minimum at df {d['df_reml']:.1f}", font_size=22, color=NWC),
-            label(r"(REML on the 94 distinct times)", font_size=20, color=GREY_B),
+            label(r"REML includes within-time replicate contrasts", font_size=20, color=GREY_B),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> On the motorcycle data, both criteria against degrees of freedom. "
-            "<bookmark mark='b'/> GCV's minimum is at about twelve and a half. <bookmark mark='c'/> REML's at about fourteen, "
-            "<bookmark mark='d'/> computed on the ninety-four distinct times. Both say the dip, rebound and decay are real, "
-            "and that twenty-five degrees of freedom is too many."
+            "<bookmark mark='a'/> On the motorcycle data, both criteria against degrees of freedom. <bookmark "
+            "mark='b'/> GCV's minimum is at about twelve and a half. <bookmark mark='c'/> REML's at about fourteen, "
+            "<bookmark mark='d'/> computed from all observations, including independent replicate contrasts at tied "
+            "times. These criteria favor smoother fits in this example; they do not test whether the visible features"
+            " are real."
         ) as vo:
             self.add(mcycle_tag())
             self.play(FadeIn(A))
@@ -159,10 +167,11 @@ class Lambda(VoiceoverScene):
         with self.voiceover(
             "<bookmark mark='a'/> Which is better? Three hundred simulated data sets, scored against the true curve. "
             "<bookmark mark='b'/> The oracle, which knows the truth, picks around eleven degrees of freedom. "
-            "<bookmark mark='c'/> GCV centres there too, but its choices spread up to fourteen and a half: on some data sets "
-            "it undersmooths. <bookmark mark='d'/> REML's choices are tighter, and its average error, and especially its "
-            "worst five percent, are smaller. Philip Reiss and Todd Ogden explained why in 2009: GCV's criterion has multiple "
-            "minima more often, and REML is less variable. Modern software defaults to REML."
+            "<bookmark mark='c'/> GCV centres there too, but its choices spread up to fourteen and a half: on some "
+            "data sets it undersmooths. <bookmark mark='d'/> REML's choices are tighter, and its average error, and "
+            "especially its worst five percent, are smaller. Philip Reiss and Todd Ogden explained why in 2009: GCV's"
+            " criterion has multiple minima more often, and REML is less variable. REML is a common option in modern "
+            "GAM software; defaults depend on the package and version."
         ) as vo:
             self.add(seeded_tag())
             vo.wait_until("a")
@@ -176,15 +185,16 @@ class Lambda(VoiceoverScene):
     def which(self):
         rows = fit_rows(VGroup(
             label(r"GCV: \ targets prediction, \ no model for the curve", font_size=24, color=SPLC),
-            label(r"REML: \ a Bayesian model for the curve, \ more stable", font_size=24, color=NWC),
+            label(r"REML: \ a variance-component model; stable here", font_size=24, color=NWC),
             label(r"the mixed-model view gives intervals too: \ chapter eleven", font_size=24, color=PATH),
             label(r"and lets splines sit inside bigger models: \ GAMs, \ GLMMs", font_size=24, color=KDEC),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> GCV targets prediction and needs no model for the curve. <bookmark mark='b'/> REML treats "
-            "the curve's roughness as a random effect, which is more stable. <bookmark mark='c'/> The mixed-model view also "
-            "gives the spline a posterior, and so intervals, chapter eleven. <bookmark mark='d'/> And it lets smooth terms sit "
-            "inside larger models: additive models, generalized mixed models, Simon Wood's GAM software."
+            "<bookmark mark='a'/> GCV targets prediction and needs no model for the curve. <bookmark mark='b'/> REML "
+            "treats roughness through a variance-component model, and is more stable in this experiment, rather than "
+            "universally. <bookmark mark='c'/> The mixed-model view also gives the spline a posterior, and so "
+            "intervals, chapter eleven. <bookmark mark='d'/> And it lets smooth terms sit inside larger models: "
+            "additive models, generalized mixed models, Simon Wood's GAM software."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -196,20 +206,25 @@ class Lambda(VoiceoverScene):
             cmath(r"g \mid y", r"\sim", r"N\bigl(S_\lambda y, \ \sigma^2 S_\lambda\bigr)", font_size=32),
             cmath(r"\text{band}", r":", r"\hat g(x_i) \pm 1.96\, \hat\sigma \sqrt{S_{ii}}", font_size=30),
             cmath(r"\hat\sigma^2", r"=", r"\|y - S_\lambda y\|^2 / (n - \mathrm{tr}\, S_\lambda)", font_size=30),
-            cmath(r"\text{coverage}", r":", r"\approx 95\% \ \text{averaged over the } x_i", font_size=30),
+            cmath(r"\text{coverage}", r":", r"\text{approximate average coverage under conditions}", font_size=30),
         ]
         rows[0][2].set_color(SPLC)
         whys = [why(r"the posterior, \ with the improper prior on lines"), why(r"Wahba (1983)"),
-                why(r"the residual degrees of freedom"), why(r"Nychka (1988): \ across the function, \ not at each point")]
+                why(r"a smoothing approximation, not exact unbiased residual df"), why(r"Nychka (1988): \ across the function, \ not at each point")]
         with self.voiceover(
-            "<bookmark mark='a'/> The mixed-model view gives more than lambda. Under that prior the curve's posterior is "
-            "normal, centred on the spline, with covariance sigma squared times the smoother matrix itself. "
-            "<bookmark mark='b'/> So a band at each design point is the fit plus or minus one point nine six sigma hat root S "
-            "i i, Grace Wahba's Bayesian confidence interval. <bookmark mark='c'/> Sigma is estimated from the residuals "
-            "with n minus the trace of S degrees of freedom. <bookmark mark='d'/> Douglas Nychka showed why these bands work "
-            "from a frequentist view too: they cover about ninety-five percent of the curve on average across the design, "
-            "though not at every point, a theme chapter eleven takes up."
+            "<bookmark mark='a'/> The mixed-model view gives more than lambda. For fixed lambda and sigma, unit "
+            "weights and distinct x values, the Gaussian prior with flat linear component gives a normal posterior, "
+            "with mean S y and covariance sigma squared S. <bookmark mark='b'/> So a band at each design point is the"
+            " fit plus or minus one point nine six sigma hat root S i i, Grace Wahba's Bayesian confidence interval. "
+            "<bookmark mark='c'/> The displayed sigma estimate uses n minus trace S as a smoothing approximation; it "
+            "is not an exact unbiased residual degrees-of-freedom formula. <bookmark mark='d'/> Nychka studied "
+            "approximate average frequentist coverage under smoothness and smoothing assumptions. Neither arbitrary "
+            "fixed curves nor every location have guaranteed ninety-five percent coverage; plugging in smoothing and "
+            "noise estimates also omits their uncertainty."
         ) as vo:
+            intro=label('Conditional Gaussian intervals leave smoothing uncertainty outside the formula',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
