@@ -156,7 +156,7 @@ class Frontier(VoiceoverScene):
             "compiler that maps any loop nest onto a grid of cells as well as an expert does by hand. "
             "<bookmark mark='d'/> And serving large models at the speed of their arithmetic rather than their memory. "
             "<bookmark mark='e'/> This part's research problem returns to pebbles. In 1981 Hong Jia-Wei and H. T. "
-            "Kung proved how many words any matrix product must move between a small fast memory and a large slow "
+            "Kung proved how many words the classical matrix product must move between a small fast memory and a large slow "
             "one, with a game of red and blue pebbles. Find the same bound for a grid of cells, each with its own "
             "small memory, and a dataflow that meets it."
         ) as vo:

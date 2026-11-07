@@ -3,8 +3,8 @@ from __future__ import annotations
 import math
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs60.common import (BG, DATA, HEAD, KERN, LAM, NO, PART, YES, LogPlot, commas, grid_table, load,
-                                   module_box, say_dec, say_int)
+from videos.cs.cs60.common import (BG, DATA, FRACTION, HEAD, KERN, LAM, NO, PART, YES, LogPlot, commas, grid_table,
+                                   load, module_box, say_dec, say_int)
 
 class Tpu(VoiceoverScene):
     def construct(self):

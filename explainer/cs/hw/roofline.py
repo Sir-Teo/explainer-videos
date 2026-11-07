@@ -8,7 +8,8 @@ most
     min(P, I β)
 
 a sloped roof (memory-bound) meeting a flat one (compute-bound) at the ridge point I = P / β.  ``machine`` measures
-P (a large float64 matrix product through NumPy's BLAS, on all cores) and β (STREAM-style copy and add kernels on
+P (a large float64 matrix product through NumPy's BLAS, on one thread) and β (the best of STREAM-style copy, add,
+daxpy and dot kernels on
 arrays far larger than the last-level cache; McCalpin, "Memory bandwidth and machine balance", 1995, counting bytes
 as STREAM does, without write-allocate traffic).  ``kernels`` places measured kernels on it with intensities from
 their compulsory traffic: axpy, dot, matrix-vector, matrix-matrix at several sizes, a 5-point stencil, Part 52's BLAS

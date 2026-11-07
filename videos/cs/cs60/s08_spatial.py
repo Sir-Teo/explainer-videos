@@ -302,7 +302,7 @@ class Spatial(VoiceoverScene):
         with self.voiceover(
             "Now let it run. <bookmark mark='a'/> On every tick a new x enters, and every element passes its "
             "result on. The multiplier by three works on this x while the multiplier by "
-            "two works on an older one, held back a cycle by the delay. <bookmark mark='b'/> After four ticks the "
+            "two works on an older one, held back a cycle by the delay. <bookmark mark='b'/> On the fifth tick the "
             "first output reaches the store, and from then on one result leaves every cycle, where the processor "
             "needed eight instructions for each. <bookmark mark='c'/> This is a pipeline, Part 7's idea, but "
             "made out of the program itself."

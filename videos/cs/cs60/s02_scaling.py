@@ -60,7 +60,7 @@ class Scaling(VoiceoverScene):
         src = note(r"data: \ Karl Rupp's compilation \ (CC BY 4.0), \ as in Part 10; \ growth rates fitted there",
                    font_size=16).to_edge(DOWN, buff=0.15)
         with self.voiceover(
-            "Part 10 ended with this picture: fifty years of microprocessors, on a logarithmic scale. "
+            "Part 10 opened with this picture: fifty years of microprocessors, on a logarithmic scale. "
             "<bookmark mark='a'/> The transistors kept coming, doubling about every two years. <bookmark mark='b'/> "
             "For three decades a single thread got faster with them, <bookmark mark='c'/> and so did the clock, by "
             "about a third every year. <bookmark mark='d'/> Then, around 2005, the voltage stopped falling, Dennard "
@@ -215,7 +215,7 @@ class Scaling(VoiceoverScene):
             tile(r"less precision, \ when it is enough", r"8-bit integers where 32-bit floats were the habit",
                  HEAD, r"chapter 5"),
             tile(r"a domain-specific language", r"programs written so the parallelism is visible, \ such as "
-                 r"TensorFlow's graphs", LAM, r"chapter 10"),
+                 r"TensorFlow's graphs", LAM, r"chapter 10, \ for hardware: \ Chisel"),
         ).arrange_in_grid(2, 2, buff=(0.35, 0.35)).next_to(head, DOWN, buff=0.4)
         src = note(r"Turing lecture, \ June 2018; \ \textit{Communications of the ACM}, \ February 2019", font_size=16)
         src.to_edge(DOWN, buff=0.25)

@@ -57,7 +57,7 @@ class Outro(VoiceoverScene):
             (r"the ledger's last row", [61]),
         ], font_size=23)
         with self.voiceover(
-            "Where this comes back. The roofline's measurements were made on a busy machine, and Part 61, the last "
+            "Where this comes back. The roofline was measured once, on one machine, and Part 61, the last "
             "part, is about how to measure without fooling yourself. The open problems of this part join all the "
             "others on one map there. And the ledger, with its twenty-first row from this part's circuit, is read "
             "one last time."

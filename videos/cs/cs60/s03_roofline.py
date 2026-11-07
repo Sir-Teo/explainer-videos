@@ -205,7 +205,7 @@ class Roofline(VoiceoverScene):
             "matrix products of four sizes through NumPy's BLAS, on one core, and keep the best: about "
             f"{say(P)} billion operations a second. <bookmark mark='b'/> For the sloped roof, stream arrays of "
             f"{say_int(int(bw['array_mb']))} megabytes, as John McCalpin's STREAM benchmark does, too large for the "
-            f"caches. The four kernels disagree, by more than a factor of three; the roof is the best of them, about "
+            f"caches. The four kernels disagree, by a factor of about {say(max(bvals) / min(bvals))}; the roof is the best of them, about "
             f"{say(B)} gigabytes a second, and the others remind us it is an optimistic one. <bookmark mark='c'/> "
             f"Divide one by the other: the ridge sits at about {say(R)} operations per byte. A kernel needs at least "
             "that intensity before the processor, rather than memory, is what limits it."

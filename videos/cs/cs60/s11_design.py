@@ -363,7 +363,7 @@ class Design(VoiceoverScene):
             " and at twenty-four, that of a thirty-two-bit float. <bookmark mark='b'/> An n by n multiplier forms"
             " n squared partial products, so it should grow as n squared. <bookmark mark='c'/> Divide each count "
             "by n squared: about six and a half, every time. <bookmark mark='d'/> Three times the width costs "
-            f"{say_int(round(g['24']['gates']/g['8']['gates']))} times the gates, while the depth hardly moves. "
+            f"{say_int(round(g['24']['gates']/g['8']['gates']))} times the gates, while the depth grows only slowly. "
             "That is chapter five's case for eight bits, as a point in the design space."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(src))
