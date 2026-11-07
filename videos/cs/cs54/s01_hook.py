@@ -77,7 +77,7 @@ class Hook(VoiceoverScene):
             "Here is a bug of the famous kind. <bookmark mark='a'/> Binary search needs the midpoint to lie between "
             "low and high. The textbook line adds them and halves the sum. <bookmark mark='b'/> We turned that "
             "requirement into a logical formula over sixteen-bit integers and handed it to our own SAT solver from "
-            f"Part 26. In {bad['seconds']:.1f} seconds it found a counterexample: their sum overflows, wraps to a "
+            f"Part 26. In {bad['seconds']:.2f} seconds it found a counterexample: their sum overflows, wraps to a "
             "negative number, and the midpoint falls outside the range. <bookmark mark='c'/> The repaired line, "
             "which shifts the difference without a sign, makes the formula unsatisfiable: correct for every "
             "sixteen-bit input, a proof, not a test. <bookmark mark='d'/> Joshua Bloch reported in 2006 that this "
