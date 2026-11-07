@@ -38,16 +38,18 @@ class Outro(VoiceoverScene):
         head = label(r"Part 30, \ in twelve lines", font_size=38).to_edge(UP, buff=0.4)
         cols.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Part thirty in twelve lines. <bookmark mark='a'/> Tukey showed that one gross error in five hundred and seventy "
-            "is enough to make the standard deviation lose to a cruder rival. Newcomb's light gave robust estimates that "
-            "agreed with each other and still fell short of the truth. The Wilcoxon test is three over pi as efficient as "
-            "t at the normal and never below point eight six four. Hodges and Lehmann turned it into an estimate, the median "
-            "of the Walsh averages. Influence functions measure what one point can do, breakdown what a fraction can. "
-            "Huber's clipped psi is the minimax M-estimator. Robust scale comes from the MAD and Qn. Least trimmed squares "
-            "and MM regression ignore the giant stars. The minimum covariance determinant unmasks hidden outliers. The median "
-            "of means turns a finite variance into a sub-Gaussian guarantee. And on the World, robust intervals cost nothing "
-            "when the data are clean and save forty percent when errors are symmetric, while one-sided errors defeat them "
-            "all."
+            "Part thirty in twelve lines. <bookmark mark='a'/> Tukey showed that one gross error in five hundred and "
+            "seventy is enough to make the standard deviation lose to a cruder rival. Newcomb's light gave robust "
+            "estimates that agreed with each other and still fell short of the truth. The Wilcoxon test is three over"
+            " pi as efficient as t at the normal with a point eight six four lower local asymptotic bound under the "
+            "stated regular location assumptions. Hodges and Lehmann turned it into an estimate, the median of the "
+            "Walsh averages. Influence functions measure what one point can do, breakdown what a fraction can. "
+            "Huber's clipped psi is the minimax M-estimator. Robust scale comes from the MAD and Qn. Least trimmed "
+            "squares and MM regression ignore the giant stars. The minimum covariance determinant unmasks hidden "
+            "outliers. With iid sampling and a confidence-dependent feasible block count, median of means yields "
+            "sub-Gaussian deviation bounds from finite variance. And on the World, robust intervals have a small "
+            "width cost when these data are clean and are forty percent shorter under the simulated symmetric errors,"
+            " while one-sided errors defeat them all."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

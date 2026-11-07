@@ -27,18 +27,20 @@ class World(VoiceoverScene):
         d = load("board")
         rows = fit_rows(VGroup(
             label(rf"the World's adult women: \ mean height {d['mu']:.2f} cm", font_size=26),
-            label(rf"samples of {d['n']}; \ a 95\% interval for that mean; \ {d['reps']:,} times", font_size=26),
+            label(rf"samples of {d['n']}; \ nominal 95\% references, evaluated at the latent mean; \ {d['reps']:,} times", font_size=26),
             label(r"clean: \ heights as measured", font_size=26, color=HIT),
             label(r"gross errors: \ 10\% get a random error, \ $N(0, 40^2)$ cm", font_size=26, color=HUBC),
             label(r"unit errors: \ 10\% recorded in inches, \ not centimetres", font_size=26, color=RES),
         ), 12.4, 0.55, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The Board tests both kinds of interval on the World. The target: the mean height of its adult "
-            "women, a hundred and sixty-three centimetres. <bookmark mark='b'/> Draw thirty women, build a ninety-five "
-            "percent interval for the mean, two thousand times, under three regimes. <bookmark mark='c'/> Clean "
-            "measurements. <bookmark mark='d'/> Gross errors: a tenth of the readings get a large random error, symmetric, "
-            "standard deviation forty centimetres. <bookmark mark='e'/> And unit errors: a tenth are written down in inches, "
-            "a one-sided error of about a hundred centimetres."
+            "<bookmark mark='a'/> The Board tests both kinds of interval on the World. The target: the mean height of"
+            " its adult women, a hundred and sixty-three centimetres. <bookmark mark='b'/> Draw thirty women, apply "
+            "the usual t interval and the continuous-symmetry signed-rank reference, two thousand times. We score "
+            "both against the latent population mean; HL targets a pseudo-median under asymmetry, so its mean "
+            "coverage here is an empirical diagnostic, not a general guarantee. <bookmark mark='c'/> Clean "
+            "measurements. <bookmark mark='d'/> Gross errors: a tenth of the readings get a large random error, "
+            "symmetric, standard deviation forty centimetres. <bookmark mark='e'/> And unit errors: a tenth are "
+            "written down in inches, a one-sided error of about a hundred centimetres."
         ) as vo:
             self.add(world_tag())
             for k, m_ in enumerate("abcde"):
@@ -104,13 +106,14 @@ class World(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"robust methods cost little when the data are clean", font_size=24, color=HIT),
             label(r"they pay off when errors are symmetric and occasional", font_size=24, color=HUBC),
-            label(r"no estimator removes a systematic error: \ find it, \ and fix the data", font_size=24, color=RES),
+            label(r"resistant location fitting cannot identify an unknown common shift", font_size=24, color=RES),
             label(r"Newcomb's 33 and the inch-recorded heights: \ the same lesson", font_size=24, color=PATH),
         ), 12.4, 0.6, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> So robust methods cost little when the data are clean, <bookmark mark='b'/> and pay off when "
-            "errors are occasional and symmetric. <bookmark mark='c'/> But no estimator removes a systematic error: that has "
-            "to be found and fixed in the data. <bookmark mark='d'/> The inches written as centimetres and Newcomb's "
+            "<bookmark mark='a'/> So robust methods cost little when the data are clean, <bookmark mark='b'/> and pay"
+            " off when errors are occasional and symmetric. <bookmark mark='c'/> These resistant location estimators "
+            "do not identify an unknown common systematic shift; external calibration or an explicit identifiable "
+            "error model is needed. <bookmark mark='d'/> The inches written as centimetres and Newcomb's "
             "measurements, all short of thirty-three, teach the same lesson."
         ) as vo:
             for k, m_ in enumerate("abcd"):
@@ -155,21 +158,25 @@ class World(VoiceoverScene):
     def onesided(self):
         rows = [
             cmath(r"\text{symmetric errors}", r":", r"\text{the centre of symmetry is unchanged}", font_size=30),
-            cmath(r"\text{one-sided errors}", r":", r"\text{every location functional moves}", font_size=30),
+            cmath(r"\text{one-sided errors}", r":", r"\text{ordinary location functionals can shift}", font_size=30),
             cmath(r"\text{HL, \ 10\% at } {-100}", r":", r"\text{bias } \approx \text{ a few tenths of } \sigma", font_size=30),
             cmath(r"\text{interval}", r":", r"\text{width } \propto 1/\sqrt n, \ \text{bias fixed: \ coverage falls with } n", font_size=28),
         ]
         rows[3][2].set_color(RES)
-        whys = [why(r"robust estimates still aim at the truth"), why(r"there is no `uncontaminated centre' to find"),
+        whys = [why(r"robust estimates still aim at the truth"), why(r"clean center not identifiable without restrictions"),
                 why(r"chapter four's maximal bias"), why(r"more data, \ worse coverage")]
         with self.voiceover(
-            "<bookmark mark='a'/> Before the results, a prediction. When errors are symmetric, the centre of symmetry doesn't "
-            "move, so robust estimates still aim at the truth. <bookmark mark='b'/> When errors all point one way, every "
-            "location functional moves: there is no uncontaminated centre left in the distribution to find. "
-            "<bookmark mark='c'/> A robust estimate moves less, chapter four's bounded maximal bias, but it does move. "
-            "<bookmark mark='d'/> And because an interval shrinks like one over root n while the bias stays fixed, coverage "
-            "under one-sided contamination gets worse as the sample grows."
+            "<bookmark mark='a'/> Before the results, a prediction. When errors are symmetric, the centre of symmetry"
+            " doesn't move, so robust estimates still aim at the truth. <bookmark mark='b'/> Without restrictions on "
+            "one-sided contamination the clean center is not generally identifiable from the observed distribution "
+            "alone. These ordinary location functionals can shift. <bookmark mark='c'/> A robust estimate moves less,"
+            " chapter four's bounded maximal bias, but it does move. <bookmark mark='d'/> And because an interval "
+            "shrinks like one over root n while the bias stays fixed, coverage under one-sided contamination gets "
+            "worse as the sample grows."
         ) as vo:
+            intro=label('One-sided errors can shift the target of ordinary location fitting',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -192,6 +199,9 @@ class World(VoiceoverScene):
             "the classical and the robust analysis, as Tukey urged. <bookmark mark='d'/> When they agree, little is lost; when "
             "they differ, the difference is itself the finding, and the data deserve a closer look."
         ) as vo:
+            intro=label('Simulation coverage and real-data error diagnosis answer different questions',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

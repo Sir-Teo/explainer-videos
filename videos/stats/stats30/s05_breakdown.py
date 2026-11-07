@@ -27,19 +27,22 @@ class Breakdown(VoiceoverScene):
             cmath(r"\varepsilon^*_n(T, x)", r"=", r"\min\{\tfrac mn : \sup_{\text{replace } m} |T(y) - T(x)| = \infty\}", font_size=28),
             cmath(r"\text{mean}", r":", r"1/n \to 0", font_size=32),
             cmath(r"\text{median}", r":", r"\lfloor (n+1)/2 \rfloor / n \to \tfrac12", font_size=32),
-            cmath(r"\tfrac12", r":", r"\text{the most any equivariant estimator can have}", font_size=30),
+            cmath(r"\tfrac12", r":", r"\text{the asymptotic upper bound for location-equivariant estimators}", font_size=30),
         ]
         rows[2][2].set_color(MEDC)
         whys = [why(r"Donoho \& Huber (1983): \ finite-sample"), why(r"one point suffices"), why(r"half the data must go bad"),
                 why(r"beyond half, \ which half is the data?")]
         with self.voiceover(
-            "<bookmark mark='a'/> Influence is local: one point, a small mass. Breakdown is global: the smallest fraction of "
-            "the data that, replaced by arbitrary values, can carry the estimate arbitrarily far. Frank Hampel defined it in "
-            "1971, and David Donoho and Peter Huber gave this finite-sample form. <bookmark mark='b'/> The mean breaks down "
-            "with a single point. <bookmark mark='c'/> The median survives until half the data are bad. "
-            "<bookmark mark='d'/> And one half is the most any location estimator can survive: beyond it, nothing "
-            "distinguishes the good half from the bad."
+            "<bookmark mark='a'/> Influence is local: one point, a small mass. Breakdown is global: the smallest "
+            "fraction of the data that, replaced by arbitrary values, can carry the estimate arbitrarily far. Frank "
+            "Hampel defined it in 1971, and David Donoho and Peter Huber gave this finite-sample form. <bookmark "
+            "mark='b'/> The mean breaks down with a single point. <bookmark mark='c'/> The median survives until half"
+            " the data are bad. <bookmark mark='d'/> And one half is the asymptotic upper breakdown bound for "
+            "location-equivariant procedures: beyond it, nothing distinguishes the good half from the bad."
         ) as vo:
+            intro=label('Replacement breakdown measures global adversarial sensitivity',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -121,11 +124,15 @@ class Breakdown(VoiceoverScene):
         whys = [why(r"a pair is clean only if both are"), why(r"the median of the Walsh averages goes"),
                 why(r"clean share $(1 - \varepsilon)^2 = \frac12$"), why(r"Hodges--Lehmann's breakdown")]
         with self.voiceover(
-            "<bookmark mark='a'/> Where twenty-nine percent comes from. A Walsh average is clean only if both of its points "
-            "are. <bookmark mark='b'/> The estimate breaks when half of the Walsh averages are contaminated. "
-            "<bookmark mark='c'/> With a share epsilon bad, the clean pairs make up one minus epsilon squared of all pairs. "
-            "<bookmark mark='d'/> Setting that to a half gives one minus one over root two: twenty-nine point three percent."
+            "<bookmark mark='a'/> Where twenty-nine percent comes from. A Walsh average is clean only if both of its "
+            "points are. <bookmark mark='b'/> The estimate breaks when half of the Walsh averages are contaminated. "
+            "<bookmark mark='c'/> With a share epsilon bad, the clean-pair share is the square of one minus epsilon. "
+            "<bookmark mark='d'/> Setting that to a half gives one minus one over root two: twenty-nine point three "
+            "percent."
         ) as vo:
+            intro=label('A clean Walsh pair needs two uncontaminated observations',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -158,7 +165,7 @@ class Breakdown(VoiceoverScene):
         med = st.norm.ppf(1 / (2 * (1 - eps)))
 
         def hub(e, k=1.345):
-            f = lambda b: (1 - e) * (st.norm.cdf(k - b) - st.norm.cdf(-k - b)) * 0 + (1 - e) * _epsi(b, k) + e * k
+            f = lambda b: (1 - e) * _epsi(b, k) + e * k
             return optimize.brentq(f, 0, 30)
 
         def _epsi(b, k):
@@ -179,17 +186,19 @@ class Breakdown(VoiceoverScene):
             label(r"the worst shift a share $\varepsilon$ of contamination can cause", font_size=22),
             label(r"red: \ the mean: \ infinite for any $\varepsilon > 0$", font_size=22, color=MEANC),
             label(rf"green: \ the median, \ $\Phi^{{-1}}\bigl(\frac{{1}}{{2(1 - \varepsilon)}}\bigr)$: \ {med[np.searchsorted(eps, 0.1)]:.2f} at 10\%", font_size=22, color=MEDC),
-            label(rf"gold: \ Huber, \ $k = 1.345$: \ {hb[np.searchsorted(eps, 0.1)]:.2f} at 10\%", font_size=22, color=HUBC),
+            label(rf"gold: \ known-scale Huber, \ $k = 1.345$: \ {hb[np.searchsorted(eps, 0.1)]:.2f} at 10\%", font_size=22, color=HUBC),
             label(r"the median minimizes the maximal bias \ (Huber 1964)", font_size=22, color=GREY_A),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Below breakdown, how far can contamination push an estimate? The maximal bias curve plots "
-            "the worst shift for each share epsilon, the contaminant placed adversarially, here at plus infinity. "
-            "<bookmark mark='b'/> For the mean it is infinite for any epsilon at all. <bookmark mark='c'/> For the median it "
-            "is the normal quantile at one over two times one minus epsilon: point one four standard deviations at ten "
-            "percent, rising to infinity at a half. <bookmark mark='d'/> Huber's estimate is pushed a little further, point "
-            "one nine at ten percent, the price of its efficiency. <bookmark mark='e'/> Huber proved in 1964 that the median "
-            "has the smallest maximal bias of all: it is the minimax-bias estimator, as his psi is the minimax-variance one."
+            "<bookmark mark='a'/> Below breakdown, how far can contamination push an estimate? The maximal bias curve"
+            " plots the worst shift for each share epsilon, the contaminant placed adversarially, here at plus "
+            "infinity. <bookmark mark='b'/> For the mean it is infinite for any epsilon at all. <bookmark mark='c'/> "
+            "For the median it is the normal quantile at one over two times one minus epsilon: point one four "
+            "standard deviations at ten percent, rising to infinity at a half. <bookmark mark='d'/> Huber's estimate "
+            "is pushed a little further, point one nine at ten percent, the price of its efficiency. <bookmark "
+            "mark='e'/> Within the stated normal-location contamination framework and equivariant class, the median "
+            "minimizes maximal bias. This plot holds the scale known; it is not the maximal-bias curve of our "
+            "MAD-scaled sample Huber algorithm."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -208,19 +217,23 @@ class Breakdown(VoiceoverScene):
         rows = [
             cmath(r"\text{explosion}", r":", r"\hat\sigma \to \infty", font_size=32),
             cmath(r"\text{implosion}", r":", r"\hat\sigma \to 0", font_size=32),
-            cmath(r"\text{MAD}", r":", r"\text{implodes when half the data are tied}", font_size=30),
+            cmath(r"\text{MAD}", r":", r"\text{may implode when a majority coincide}", font_size=30),
             cmath(r"\text{for scale}", r":", r"\text{breakdown counts both directions}", font_size=30),
         ]
         rows[2][2].set_color(PATH)
         whys = [why(r"outliers inflate a scale"), why(r"inliers can collapse it"), why(r"rounded data: \ a real risk"),
                 why(r"Rousseeuw \& Croux (1993)")]
         with self.voiceover(
-            "<bookmark mark='a'/> For scale estimates, breakdown has two directions. Outliers can blow a scale up: explosion. "
-            "<bookmark mark='b'/> Or contamination can collapse it to zero: implosion. <bookmark mark='c'/> The MAD implodes "
-            "when half the observations are tied, which heavily rounded data can produce, and then every other point looks "
-            "infinitely far away. <bookmark mark='d'/> A scale's breakdown point is the smaller of the two, and Qn's design "
-            "guards against both."
+            "<bookmark mark='a'/> For scale estimates, breakdown has two directions. Outliers can blow a scale up: "
+            "explosion. <bookmark mark='b'/> Or contamination can collapse it to zero: implosion. <bookmark "
+            "mark='c'/> The MAD can implode when a majority of observations coincide, with exact finite-sample "
+            "thresholds depending on the median convention, which heavily rounded data can produce, and then every "
+            "other point looks infinitely far away. <bookmark mark='d'/> A scale's breakdown point is the smaller of "
+            "the two, and Qn's design guards against both."
         ) as vo:
+            intro=label('A scale can fail by growing without bound or by collapsing to zero',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

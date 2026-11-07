@@ -29,7 +29,7 @@ class Multivariate(VoiceoverScene):
             cmath(r"\text{swamping}", r":", r"\text{good points pushed out by the shifted centre}", font_size=30),
         ]
         rows[2][2].set_color(RES)
-        whys = [why(r"Mahalanobis distance, \ Part 5"), why(r"the normal-theory cut-off"),
+        whys = [why(r"Mahalanobis distance, \ Part 5"), why(r"a normal-reference diagnostic cut-off, not an exact fitted-data test"),
                 why(r"the outliers hide themselves"), why(r"and accuse the innocent")]
         with self.voiceover(
             "<bookmark mark='a'/> In many dimensions, outliers are judged by Mahalanobis distance from the mean, in the "
@@ -38,6 +38,9 @@ class Multivariate(VoiceoverScene):
             "itself, so its own distances shrink: masking. <bookmark mark='d'/> And the displaced centre can push genuine "
             "points beyond the cut-off: swamping."
         ) as vo:
+            intro=label('A distorted center and covariance can mask remote cases',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -55,13 +58,18 @@ class Multivariate(VoiceoverScene):
         whys = [why(r"Rousseeuw (1984): \ the tightest ellipsoid"), why(r"consistency factor from $\chi^2_p$"),
                 why(r"the determinant never increases: \ FAST-MCD (1999)"), why(r"affine equivariant")]
         with self.voiceover(
-            "<bookmark mark='a'/> Rousseeuw's minimum covariance determinant estimator looks for the h points, about half, "
-            "whose covariance matrix has the smallest determinant: the tightest ellipsoid holding half the data. "
-            "<bookmark mark='b'/> Their mean and rescaled covariance estimate the centre and shape. <bookmark mark='c'/> "
-            "FAST-MCD, Rousseeuw and Van Driessen's algorithm of 1999, improves random starts by concentration steps: keep the "
-            "h points closest under the current estimate, and the determinant can only fall. <bookmark mark='d'/> The "
-            "breakdown point approaches one half."
+            "<bookmark mark='a'/> Rousseeuw's minimum covariance determinant estimator looks for the h points, about "
+            "half, whose covariance matrix has the smallest determinant: the tightest ellipsoid holding half the "
+            "data. <bookmark mark='b'/> Their mean and rescaled covariance estimate the centre and shape. <bookmark "
+            "mark='c'/> FAST-MCD, Rousseeuw and Van Driessen's algorithm of 1999, improves random starts by "
+            "concentration steps: keep the h points closest under the current estimate, and the determinant can only "
+            "fall. <bookmark mark='d'/> For fixed dimension, general position and a suitable h, the exact MCD "
+            "breakdown approaches one half. Random starts and finite-sample covariance corrections affect the "
+            "teaching algorithm."
         ) as vo:
+            intro=label('A covariance determinant measures the concentration of a fitted subset',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -83,15 +91,17 @@ class Multivariate(VoiceoverScene):
             label(r"Hawkins, \ Bradu \& Kass: \ 75 points in 3 dimensions", font_size=22),
             label(rf"classical distances: \ only {len(d['classical_flagged'])} beyond the cut-off", font_size=22, color=GREY_A),
             label(r"red: \ cases 1--10, \ all masked", font_size=22, color=RES),
-            label(rf"MCD: \ all 14 planted points flagged, \ the rest kept", font_size=22, color=HLC),
+            label(rf"MCD: \ all 14 remote predictor cases flagged; \ response quality differs", font_size=22, color=HLC),
         ), 4.3, 0.42, [4.5, 0.3, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Hawkins, Bradu and Kass built a data set to defeat classical diagnostics: seventy-five "
-            "points in three dimensions, with fourteen planted outliers. The distance–distance plot puts each point's "
-            "classical distance against its robust one. <bookmark mark='b'/> Classical distances flag just two points, and "
-            "not the worst ones. <bookmark mark='c'/> The ten planted bad points, in red, have classical distances of about "
-            "two: perfectly masked. <bookmark mark='d'/> Their robust distances are around thirty, far beyond the cut-off, and "
-            "the MCD flags exactly the fourteen planted points and nothing else."
+            "<bookmark mark='a'/> Hawkins, Bradu and Kass built a data set to defeat classical diagnostics: "
+            "seventy-five points in three dimensions, with ten bad-leverage cases and four additional good-leverage "
+            "cases in the regression construction. We analyze the predictor geometry here. The distance–distance plot"
+            " puts each point's classical distance against its robust one. <bookmark mark='b'/> Classical distances "
+            "flag just two points, and not the worst ones. <bookmark mark='c'/> The ten planted bad points, in red, "
+            "have classical distances of about two: perfectly masked. <bookmark mark='d'/> Their robust distances are"
+            " around thirty, far beyond the cut-off, and the MCD flags all fourteen remote predictor cases in this "
+            "example. This does not classify all fourteen as bad response measurements."
         ) as vo:
             self.add(hbk_tag())
             self.play(FadeIn(A), Create(vline), Create(hline))
@@ -139,25 +149,25 @@ class Multivariate(VoiceoverScene):
             w, V = np.linalg.eigh(np.asarray(S)[:2, :2])
             t = np.linspace(0, 2 * np.pi, 120)
             E = (V @ np.diag(np.sqrt(np.maximum(w, 1e-12))) @ np.vstack([np.cos(t), np.sin(t)])).T * r + np.asarray(mu)[:2]
-            E = np.clip(E, -2, 40)
-            m = VMobject(stroke_color=col, stroke_width=3)
-            m.set_points_as_corners([ax.c2p(a, b) for a, b in E] + [ax.c2p(*E[0])])
-            return m
+            closed=np.vstack([E,E[0]])
+            return polyline(ax,closed[:,0],closed[:,1],col,3)
+
 
         ec = ell(d["loc_classical"], d["scatter_classical"], MEANC)
         er = ell(d["loc"], d["scatter"], HLC)
         rows = fit_rows(VGroup(
             label(r"two of the three coordinates", font_size=22),
             label(r"red: \ the classical 97.5\% ellipse: \ stretched to swallow the outliers", font_size=22, color=MEANC),
-            label(r"blue: \ the MCD's: \ tight around the 61 good points", font_size=22, color=HLC),
+            label(r"blue: \ the MCD's: \ tight around the 61 central predictor cases", font_size=22, color=HLC),
             label(r"the bad ten sit far outside it", font_size=22, color=RES),
         ), 4.6, 0.42, [4.2, 0.2, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Two of the three coordinates show why. <bookmark mark='b'/> The classical ninety-seven and a "
-            "half percent ellipse is stretched along the line towards the outliers, wide enough to swallow them. "
-            "<bookmark mark='c'/> The MCD's ellipse is a small tight disc around the sixty-one good points, "
-            "<bookmark mark='d'/> and the fourteen planted points lie far outside it. The outliers built the classical "
-            "ellipse that then declared them normal."
+            "<bookmark mark='a'/> Two of the three coordinates show why. <bookmark mark='b'/> The classical "
+            "ninety-seven and a half percent ellipse is stretched along the line towards the outliers, wide enough to"
+            " swallow them. <bookmark mark='c'/> The MCD's ellipse is a small tight disc around the sixty-one good "
+            "points, <bookmark mark='d'/> and the remote predictor cases lie outside it. A predictor outlier can "
+            "still follow the response model. The outliers built the classical ellipse that then declared them "
+            "normal."
         ) as vo:
             self.add(hbk_tag())
             self.play(FadeIn(A), FadeIn(pts))
@@ -182,12 +192,16 @@ class Multivariate(VoiceoverScene):
         whys = [why(r"the worst one-dimensional projection"), why(r"Stahel (1981); \ Donoho (1982)"),
                 why(r"affine equivariant"), why(r"but the supremum is costly: \ random directions")]
         with self.voiceover(
-            "<bookmark mark='a'/> A second route, from Werner Stahel and David Donoho: measure how outlying each point is in "
-            "its worst one-dimensional projection, standardized robustly by median and MAD. <bookmark mark='b'/> Down-weight "
-            "points by that outlyingness, <bookmark mark='c'/> and take the weighted mean and covariance. "
-            "<bookmark mark='d'/> The Stahel–Donoho estimator has breakdown near one half in any dimension, but the supremum "
-            "over all directions must be approximated by random ones, and the cost grows with dimension."
+            "<bookmark mark='a'/> A second route, from Werner Stahel and David Donoho: measure how outlying each "
+            "point is in its worst one-dimensional projection, standardized robustly by median and MAD. <bookmark "
+            "mark='b'/> Down-weight points by that outlyingness, <bookmark mark='c'/> and take the weighted mean and "
+            "covariance. <bookmark mark='d'/> Under suitable general-position and sample-size conditions the "
+            "exact-direction construction can approach one-half breakdown, but the supremum over all directions must "
+            "be approximated by random ones, and the cost grows with dimension."
         ) as vo:
+            intro=label('Directional resistant scales define projection outlyingness',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)

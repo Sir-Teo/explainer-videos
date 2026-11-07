@@ -29,7 +29,7 @@ import math
 from dataclasses import asdict
 
 import numpy as np
-from scipy import integrate, stats
+from scipy import integrate, stats, optimize
 
 from explainer.ai.cache import Cache
 from explainer.stats import museum
@@ -62,6 +62,57 @@ def nest(obj):
     return obj
 
 
+def sn_scale(x):
+    """Rousseeuw-Croux Sn with low outer and high inner medians, including finite corrections.
+
+    Matches the definition in robustbase's qn_sn.c and qnsn.R; the generic kit's
+    averaged even-sample medians define a different finite-sample statistic.
+    """
+    x=np.asarray(x,float);n=len(x)
+    if n<2:return 0. if n==1 else float("nan")
+    inner=np.partition(np.abs(x[:,None]-x[None,:]),n//2,axis=1)[:,n//2]
+    value=np.partition(inner,(n-1)//2)[(n-1)//2]
+    correction=([.743,1.851,.954,1.351,.993,1.198,1.005,1.131][n-2]
+                if n<=9 else n/(n-.9) if n%2 else 1.)
+    return float(1.1926*correction*value)
+
+
+def hl_interval(x,level=.95):
+    """Exact continuous-symmetry signed-rank reference, for all sample sizes used here.
+
+    Rounded historical data contain ties, so their nominal reference is not an
+    exact tie-adjusted confidence guarantee. Too-small samples need infinite bounds.
+    """
+    x=np.asarray(x,float)
+    if not len(x) or not 0<level<1:raise ValueError("nonempty sample and level in (0,1) required")
+    cdf=np.cumsum(R.signed_rank_null(len(x)))
+    k=int(np.searchsorted(cdf,(1-level)/2,side="right"))
+    if k==0:return -math.inf,math.inf
+    w=np.sort(R.walsh_averages(x))
+    return float(w[k-1]),float(w[len(w)-k])
+
+
+def catoni_with_bound(x,delta,variance):
+    """Two-sided Catoni tuning with a supplied variance upper bound.
+
+    The elementary exponential inequalities give error at most
+    sqrt(2 v log(2/delta)/(n-2 log(2/delta))) with probability at least 1-delta.
+    """
+    x=np.asarray(x,float);n=len(x);L=math.log(2/delta)
+    if not 0<delta<1 or not np.isfinite(variance) or variance<=0 or n<=2*L:
+        raise ValueError("positive variance bound and n > 2 log(2/delta) required")
+    alpha=math.sqrt(2*L*(n-2*L)/(n*n*variance))
+    def equation(theta):
+        u=alpha*(x-theta)
+        return np.sum(np.sign(u)*np.log1p(np.abs(u)+u*u/2))
+    return float(optimize.brentq(equation,x.min()-1,x.max()+1))
+
+
+def tukey_efficiency(e):
+    s2=1+8*e;m4=3+240*e;delta=math.sqrt(2/math.pi)*(1+2*e)
+    return ((m4/s2**2-1)/4)/(s2/delta**2-1)
+
+
 def compute_tukey():
     """ARE of the mean absolute deviation to the standard deviation as estimates of scale, F = (1 - e) N(0, 1) + e
     N(0, 9): [Var(s)/E(s)^2] / [Var(d)/E(d)^2] asymptotically = ((mu4/sigma^4 - 1)/4) / (sigma^2/delta^2 - 1)."""
@@ -73,7 +124,7 @@ def compute_tukey():
         dl = math.sqrt(2 / math.pi) * ((1 - e) + 3 * e)
         are.append(((m4 / s2 ** 2 - 1) / 4) / (s2 / dl ** 2 - 1))
     are = np.array(are)
-    cross = float(np.interp(1.0, are, eps))
+    cross = float(optimize.brentq(lambda e:tukey_efficiency(e)-1,0,.01))
     # a simulation check at e = 0.01, n = 100
     g = rng(1960)
     sd, md = [], []
@@ -96,7 +147,7 @@ def _estimates(x):
     # the distribution-free interval for the median from binomial order statistics
     k = int(stats.binom.ppf(0.025, n, 0.5))
     out["median"] = {"est": float(np.median(x)), "lo": float(xs[k - 1]), "hi": float(xs[n - k])}
-    lo, hi = R.hodges_lehmann_ci(x)
+    lo, hi = hl_interval(x)
     out["hl"] = {"est": R.hodges_lehmann(x), "lo": lo, "hi": hi}
     for a in (0.1, 0.2):
         out[f"trim{int(100 * a)}"] = {"est": R.trimmed_mean(x, a)}
@@ -199,7 +250,7 @@ def compute_huber():
 def compute_scale():
     x = museum.chem()
     out = {"x": x, "n": len(x), "mean": float(x.mean()), "sd": float(x.std(ddof=1)), "median": float(np.median(x)),
-           "mad": R.mad(x), "iqr": float(stats.iqr(x) / 1.349), "qn": R.qn_scale(x), "sn": R.sn_scale(x),
+           "mad": R.mad(x), "iqr": float(stats.iqr(x) / 1.349), "qn": R.qn_scale(x), "sn": sn_scale(x),
            "huber": R.m_location(x, "huber")["mu"], "hl": R.hodges_lehmann(x), "clean_mean": float(np.mean(x[x < 10])),
            "clean_sd": float(np.std(x[x < 10], ddof=1))}
     g = rng(1993)
@@ -209,7 +260,7 @@ def compute_scale():
         sims["sd"].append(z.std(ddof=1))
         sims["mad"].append(R.mad(z))
         sims["qn"].append(R.qn_scale(z))
-        sims["sn"].append(R.sn_scale(z))
+        sims["sn"].append(sn_scale(z))
         sims["iqr"].append(stats.iqr(z) / 1.349)
     v0 = np.var(np.log(sims["sd"]))
     out["eff"] = {k: float(v0 / np.var(np.log(v))) for k, v in sims.items()}
@@ -253,11 +304,11 @@ def compute_mom():
         errs["mean"].append(abs(z.mean() - mu))
         errs["trim5"].append(abs(R.trimmed_mean(z, 0.05) - mu))
         errs["mom"].append(abs(R.median_of_means(z, 20, g) - mu))
-        errs["catoni"].append(abs(R.catoni(z, 0.001) - mu))
+        errs["catoni"].append(abs(catoni_with_bound(z, 0.001, a/((a-1)**2*(a-2))) - mu))
     qs = (0.5, 0.9, 0.99, 0.999)
     out = {k: {f"{q:g}": float(np.quantile(v, q)) for q in qs} for k, v in errs.items()}
     out["bias"] = {}
-    return nest({"n": n, "R": R_, "alpha": a, "mu": mu, "q": out, "k": 20, "delta_k": float(math.exp(-20 / 8))})
+    return nest({"n": n, "R": R_, "alpha": a, "mu": mu, "variance_bound": a/((a-1)**2*(a-2)), "catoni_tuning": "known variance, two-sided delta=0.001", "q": out, "k": 20, "delta_k": float(math.exp(-20 / 8))})
 
 
 def compute_board():
@@ -280,7 +331,7 @@ def compute_board():
             m, s = x.mean(), x.std(ddof=1) / math.sqrt(n)
             hit["t"] += m - t * s <= mu <= m + t * s
             wid["t"].append(2 * t * s)
-            lo, hi = R.hodges_lehmann_ci(x)
+            lo, hi = hl_interval(x)
             hit["hl"] += lo <= mu <= hi
             wid["hl"].append(hi - lo)
         res[scen] = {k: {"cover": v / reps, "width": float(np.mean(wid[k]))} for k, v in hit.items()}
@@ -331,10 +382,12 @@ def compute_princeton():
     for dn, f in dists.items():
         X = f()
         var[dn] = {k: float(np.mean(np.array([e(row) for row in X]) ** 2)) for k, e in est.items()}
-    eff = {dn: {k: min(v.values()) / v[k] for k, v in [(kk, var[dn]) for kk in est]} for dn in dists}
     eff = {dn: {k: min(var[dn].values()) / var[dn][k] for k in est} for dn in dists}
+    # A finite Monte Carlo average cannot estimate an infinite second moment.
+    # The sample mean has infinite MSE under slash and Cauchy distributions.
+    for dn in ("slash","cauchy"):eff[dn]["mean"]=0.
     worst = {k: min(eff[dn][k] for dn in dists) for k in est}
-    return nest({"n": n, "R": R_, "var": var, "eff": eff, "worst": worst})
+    return nest({"n": n, "R": R_, "var": var, "eff": eff, "worst": worst, "infinite_mse": ["slash.mean","cauchy.mean"], "scope": "MSE ratios among seven estimators and five simulated distributions; not a global minimax bound"})
 
 
 def compute_corrupt():

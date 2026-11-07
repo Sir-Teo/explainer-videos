@@ -32,13 +32,17 @@ class HodgesLehmann(VoiceoverScene):
         whys = [why(r"the signed-rank statistic, \ as a count"), why(r"at the true centre: \ half of them"),
                 why(r"solve $W^+ = $ its expectation"), why(r"Hodges \& Lehmann (1963)")]
         with self.voiceover(
-            "<bookmark mark='a'/> Hodges and Lehmann turned the test into an estimate. The signed-rank statistic, testing "
-            "centre theta, counts the Walsh averages, the averages of all pairs of observations including each with itself, "
-            "that exceed theta. <bookmark mark='b'/> At the true centre of a symmetric distribution, half of them should. "
-            "<bookmark mark='c'/> So estimate the centre by the value that splits them in half: the median of the Walsh "
-            "averages. <bookmark mark='d'/> It inherits the test's efficiency: ninety-five and a half percent at the normal, "
-            "never below eighty-six point four, and often far above one."
+            "<bookmark mark='a'/> Hodges and Lehmann turned the test into an estimate. The signed-rank statistic, "
+            "testing centre theta, counts the Walsh averages, the averages of all pairs of observations including "
+            "each with itself, that exceed theta. <bookmark mark='b'/> At the true centre of a symmetric "
+            "distribution, half of them should. <bookmark mark='c'/> So estimate the centre by the value that splits "
+            "them in half: the median of the Walsh averages. <bookmark mark='d'/> It inherits the test's efficiency: "
+            "ninety-five and a half percent at the normal, under the regular continuous symmetric finite-variance "
+            "location assumptions, never below eighty-six point four, and sometimes far above one."
         ) as vo:
+            intro=label('The median of pairwise averages estimates a symmetry center',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -100,6 +104,9 @@ class HodgesLehmann(VoiceoverScene):
             "eight observations it runs from the fourth smallest Walsh average to the thirty-third, with coverage ninety-six "
             "point one percent: the discreteness of the null means exact levels jump."
         ) as vo:
+            intro=label('Inverting a continuous signed-rank reference gives ordered-pair bounds',font_size=36).move_to([0,3.3,0])
+            if intro.width>12.5:intro.width=12.5
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.9, buff=0.85, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -122,12 +129,13 @@ class HodgesLehmann(VoiceoverScene):
                             Dot(ax.c2p(v["est"], y), radius=0.08, color=WHITE)))
             labs.add(label(rf"{t}: \ {v['est']:.2f} \ [{v['lo']:.2f}, {v['hi']:.2f}]", font_size=19, color=col).next_to(ax.c2p(30, y), RIGHT, buff=0.25))
         with self.voiceover(
-            "<bookmark mark='a'/> On Newcomb's data. The t interval for the mean of all sixty-six runs from twenty-three point "
-            "six to twenty-eight point nine, widened by the two strays. <bookmark mark='b'/> Remove them by hand and it "
-            "jumps and shrinks. <bookmark mark='c'/> The median's distribution-free interval: twenty-six to twenty-nine. "
-            "<bookmark mark='d'/> Hodges–Lehmann's: twenty-six to twenty-eight and a half, almost the same whether the "
-            "strays are in or out. A robust interval does by itself what deleting outliers by hand does, without the "
-            "judgement call."
+            "<bookmark mark='a'/> On Newcomb's data. The t interval for the mean of all sixty-six runs from "
+            "twenty-three point six to twenty-eight point nine, widened by the two strays. <bookmark mark='b'/> "
+            "Remove them by hand and it jumps and shrinks. <bookmark mark='c'/> The median's distribution-free "
+            "interval: twenty-six to twenty-nine. <bookmark mark='d'/> Hodges–Lehmann's: twenty-six to twenty-eight "
+            "and a half, almost the same whether the strays are in or out. The robust and hand-trimmed intervals are "
+            "close in this example. The rounded historical data have ties, so the continuous signed-rank reference is"
+            " not an exact tie-adjusted guarantee."
         ) as vo:
             self.add(newcomb_tag())
             self.play(FadeIn(A))
@@ -179,15 +187,16 @@ class HodgesLehmann(VoiceoverScene):
         rows = fit_rows(VGroup(
             label(r"Darwin's 15 pairs of maize plants \ (Part 16)", font_size=22),
             label(rf"mean {m:.1f}, \ $t$ interval [{m - t * s:.1f}, {m + t * s:.1f}]", font_size=22, color=MEANC),
-            label(rf"Hodges--Lehmann {hl:.1f}, \ exact interval [{lo:.1f}, {hi:.1f}]", font_size=22, color=HLC),
+            label(rf"Hodges--Lehmann {hl:.1f}, \ signed-rank reference [{lo:.1f}, {hi:.1f}]", font_size=22, color=HLC),
             label(r"two negative pairs pull the mean down; \ HL is higher and its interval tighter", font_size=22, color=PATH),
         ), 12.0, 0.22, [0, -2.0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Darwin's maize, from Part 16: fifteen pairs, cross-fertilized minus self-fertilized height. "
-            "<bookmark mark='b'/> The mean difference is twenty-one, with a t interval from just above zero to forty-two. "
-            "<bookmark mark='c'/> Hodges–Lehmann's estimate is twenty-five, with an exact interval from four to "
-            "forty-one and a half. <bookmark mark='d'/> Two negative pairs pull the mean down and widen its interval; the robust "
-            "estimate sits with the bulk of the pairs, and its interval excludes zero by a wider margin."
+            "<bookmark mark='a'/> Darwin's maize, from Part 16: fifteen pairs, cross-fertilized minus self-fertilized"
+            " height. <bookmark mark='b'/> The mean difference is twenty-one, with a t interval from just above zero "
+            "to forty-two. <bookmark mark='c'/> Hodges–Lehmann's estimate is twenty-five, with a continuous "
+            "signed-rank reference interval from four to forty-one and a half; the rounded differences contain ties. "
+            "<bookmark mark='d'/> Two negative pairs pull the mean down and widen its interval; the robust estimate "
+            "sits with the bulk of the pairs, and its interval excludes zero by a wider margin."
         ) as vo:
             self.play(FadeIn(A), FadeIn(dots))
             vo.wait_until("a")
