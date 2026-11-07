@@ -1,5 +1,5 @@
 {
-  "fingerprint": "f12665929dfc90ddba66c3b6b4394aa47c6eb6a511abc1f8a0cc448538c22ebf",
+  "fingerprint": "53c34e9e72ea9acc321c6dada7049ad95c3f25ffea4c6ebe1362b08286d6afb3",
   "scope": "English render review; listening and bilingual production gates remain open",
   "records": [
     {
@@ -10,7 +10,7 @@
         "narration-translation": 4
       },
       "input_record": "renders/qa/series/stats9/en/Hook_motion/result.json",
-      "input_sha256": "316c49366e885025a063d8133d3d40b0303a202539e32821ff44e06b55c02dbc",
+      "input_sha256": "c43615243626724074154e3c81dfc092d89841f7b453205915681359ef3984ac",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 178 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 178 s\n"
     },
     {
@@ -21,7 +21,7 @@
         "narration-translation": 7
       },
       "input_record": "renders/qa/series/stats9/en/Examples_motion/result.json",
-      "input_sha256": "d7337989e4bedc23c62bd56d07bf2f66d88e62f80a8c0530e3abaf541ad2005f",
+      "input_sha256": "302466bac24cfc45a51b92cc528e680596497b4c51b81d228cf9b480cb9cd0fb",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 302 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 302 s\n"
     },
     {
@@ -32,7 +32,7 @@
         "narration-translation": 9
       },
       "input_record": "renders/qa/series/stats9/en/RaoBlackwell_motion/result.json",
-      "input_sha256": "174d3f6a2b8e26d69a0b14da777ffc3631f27f973b5ef4519eeef4bbe25aec8b",
+      "input_sha256": "7dff60d88fbd2bbaad17929dfb5339ff9c8be08614ad9ff487f0e0a1708d7035",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 396 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 396 s\n"
     },
     {
@@ -43,7 +43,7 @@
         "narration-translation": 9
       },
       "input_record": "renders/qa/series/stats9/en/CramerRao_motion/result.json",
-      "input_sha256": "86ad7094b31ad38f9dd8bb93d32e9a0fd3830fcb468609a56d0d94aa48b62c2e",
+      "input_sha256": "995f3feb386794e399c904f2e27c14ea4df0565a25320df64395c6dfdc486506",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 431 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 431 s\n"
     },
     {
@@ -54,7 +54,7 @@
         "narration-translation": 5
       },
       "input_record": "renders/qa/series/stats9/en/Compare_motion/result.json",
-      "input_sha256": "5da70d4cfe550e36afd83465b591fc2324d93b6aa71230f8b2196b12ee6740f4",
+      "input_sha256": "4510560fee9b152f3fbae1065a82e292416c648ceab6819a531eeef4788c8319",
       "dead_air": "blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 301 s\nsparse (< 0.30% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 301 s\n"
     }
   ]

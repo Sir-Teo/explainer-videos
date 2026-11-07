@@ -1,0 +1,27 @@
+{
+  "reason": "Shared Board preserves optional empirical Monte Carlo errors; legacy-row values are unchanged. Previous World programme correction retained.",
+  "previous_fingerprint": "f12665929dfc90ddba66c3b6b4394aa47c6eb6a511abc1f8a0cc448538c22ebf",
+  "current_fingerprint": "53c34e9e72ea9acc321c6dada7049ad95c3f25ffea4c6ebe1362b08286d6afb3",
+  "fresh_english_endpoint_scenes": 13,
+  "fresh_native_scenes": [
+    "Moments",
+    "Examples",
+    "Properties",
+    "Sufficiency",
+    "RaoBlackwell",
+    "UMVUE",
+    "CramerRao",
+    "Compare"
+  ],
+  "fresh_motion_scenes": [
+    "Hook",
+    "Examples",
+    "RaoBlackwell",
+    "CramerRao",
+    "Compare"
+  ],
+  "narration_matches_current_source": true,
+  "previous_visual_inspection_retained": true,
+  "current_checks": "Fresh rendering plus runtime/bounds/blank checks; fresh motion blank/sparse scans; fresh speech checks",
+  "production_approval": false
+}

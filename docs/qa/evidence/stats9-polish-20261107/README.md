@@ -7,3 +7,5 @@ The visual pass repairs empty narration introductions, keeps the opening objecti
 The 266.733-second narrated Compare preview matches the current narration and was inspected as a contact sheet. All five speech signal/alignment checks are clean, and its scan found no blank or sparse runs of at least 1.5 seconds. Receipts retain source/data provenance and translation warnings.
 
 This is an English source/visual pass. Chinese narration/captions, continuous listening/full playback, and final narrated masters remain open. No bilingual production approval is implied.
+
+[Shared-source refresh](shared-source-refresh.json): all endpoint/native/motion captures and speech checks rerun after the World programme-name and Board covariance corrections; narrated source matching verified.

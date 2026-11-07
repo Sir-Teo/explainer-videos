@@ -1,5 +1,5 @@
 {
-  "fingerprint": "f12665929dfc90ddba66c3b6b4394aa47c6eb6a511abc1f8a0cc448538c22ebf",
+  "fingerprint": "53c34e9e72ea9acc321c6dada7049ad95c3f25ffea4c6ebe1362b08286d6afb3",
   "scope": "English render review; listening and bilingual production gates remain open",
   "records": [
     {
@@ -11,7 +11,7 @@
         "untranslated-on-screen": 29
       },
       "input_record": "renders/qa/series/stats9/en/Hook/result.json",
-      "input_sha256": "ad98be71d731c2b0a50712cbc2bafcfb1c7575fd73d45ec416f7b16e8f43a64a"
+      "input_sha256": "0f06625ae2a8f83d0524295e915f62ec36005db2272fd45a4fbd718fd7549fa9"
     },
     {
       "scene": "Recipes",
@@ -22,7 +22,7 @@
         "untranslated-on-screen": 38
       },
       "input_record": "renders/qa/series/stats9/en/Recipes/result.json",
-      "input_sha256": "41de567200f139a2fe5992276a96b2b64c4da3a10c539eb89700ed975bac819d"
+      "input_sha256": "0a4f308b895e8a1ab710b2a157e827a33b667ee9510a14db18b450bc31d3ced7"
     },
     {
       "scene": "Moments",
@@ -33,7 +33,7 @@
         "untranslated-on-screen": 38
       },
       "input_record": "renders/qa/series/stats9/en/Moments/result.json",
-      "input_sha256": "7eb9634e3d7c4ccc141169f98537bcfd63c5dfb3baf46c6144cee246de6b0996"
+      "input_sha256": "f7cfe4069eddebeb2adf50fa99bd3f136adea8549409a8a165401ea8aa78270e"
     },
     {
       "scene": "Likelihood",
@@ -44,7 +44,7 @@
         "untranslated-on-screen": 43
       },
       "input_record": "renders/qa/series/stats9/en/Likelihood/result.json",
-      "input_sha256": "fb43c021019ebe11d269210d3be5c561f548a85711a556dc8a94d187c00a16b4"
+      "input_sha256": "0dd3ee233a6d761733836e60546b55c25a865c1757201706ff3877b9bf642725"
     },
     {
       "scene": "Examples",
@@ -55,7 +55,7 @@
         "untranslated-on-screen": 32
       },
       "input_record": "renders/qa/series/stats9/en/Examples/result.json",
-      "input_sha256": "a4fabbb431aa23a4fb8415067dc14f962ea5ec859f0755bb0301997110a2d7e2"
+      "input_sha256": "d86244e477761e385b6f566c1ae94fdc2591f3f924e549630a55670e90c2d398"
     },
     {
       "scene": "Properties",
@@ -66,7 +66,7 @@
         "untranslated-on-screen": 36
       },
       "input_record": "renders/qa/series/stats9/en/Properties/result.json",
-      "input_sha256": "d688e01e487bcab43fa90748b257d54b59e5e340b7b711b7c0f3afde531987f8"
+      "input_sha256": "c5a5fc4b67f4f2e31aca7324be0a97c9548462455b1b4bd1126954060907383d"
     },
     {
       "scene": "Sufficiency",
@@ -77,7 +77,7 @@
         "untranslated-on-screen": 47
       },
       "input_record": "renders/qa/series/stats9/en/Sufficiency/result.json",
-      "input_sha256": "01576a6816b8f21026b0ab44944eb92dedc02e0fa11a9373c3ee8c85099388bd"
+      "input_sha256": "fa48c99cebdc6a0b08568185c5566ed31f42da6b661a6512e9b5560a3456e556"
     },
     {
       "scene": "RaoBlackwell",
@@ -88,7 +88,7 @@
         "untranslated-on-screen": 49
       },
       "input_record": "renders/qa/series/stats9/en/RaoBlackwell/result.json",
-      "input_sha256": "36496bfef004248c3f98d9390d03b9f6a0630ac3af887069ec264ecdaea76249"
+      "input_sha256": "b784b747e3a90ef834a42c9684b9c7bf5d796e933eebdb0c4e76974a1e40fba2"
     },
     {
       "scene": "UMVUE",
@@ -99,7 +99,7 @@
         "untranslated-on-screen": 50
       },
       "input_record": "renders/qa/series/stats9/en/UMVUE/result.json",
-      "input_sha256": "475e013fd1650d15355b24724351f1643121735b9ea78e9d0c8f8a84f0d0f904"
+      "input_sha256": "6db1c1a1cdcd4512448b11fad55ad88adb456ea01cca5834c5b94336bdbc5c44"
     },
     {
       "scene": "Information",
@@ -110,7 +110,7 @@
         "untranslated-on-screen": 44
       },
       "input_record": "renders/qa/series/stats9/en/Information/result.json",
-      "input_sha256": "6cfba318ffd6efbc3cbb22c380d052c0b55da5047034669f61fc1e6f65dc49f4"
+      "input_sha256": "30df94eefe133df74b9e401308d1e8f7050d93e7be0d537ec1bc2f4a82c5a433"
     },
     {
       "scene": "CramerRao",
@@ -121,7 +121,7 @@
         "untranslated-on-screen": 56
       },
       "input_record": "renders/qa/series/stats9/en/CramerRao/result.json",
-      "input_sha256": "bbe326c3e8f1f7b43087a6419294ae966d9e8843e202b4b36bbc4601005d0ffa"
+      "input_sha256": "f09d4a2a2734232bfc985e794607667dacdf3c345650dcfc4fe83a42690813b1"
     },
     {
       "scene": "Compare",
@@ -132,7 +132,7 @@
         "untranslated-on-screen": 39
       },
       "input_record": "renders/qa/series/stats9/en/Compare/result.json",
-      "input_sha256": "40ede89d55b5bcd5ec6ae705667bc73ab29f5e80379e403b7193c5235ac4dabc"
+      "input_sha256": "6be62763e085affec912b390924cbc2ac0da745716dcd1be19e30ee333b8beee"
     },
     {
       "scene": "Outro",
@@ -143,7 +143,7 @@
         "untranslated-on-screen": 61
       },
       "input_record": "renders/qa/series/stats9/en/Outro/result.json",
-      "input_sha256": "54cab264ee65d9a33bb6ad1612038efb910346c3f80a2509087deac098a3bd94"
+      "input_sha256": "fe680d48b98c16771a39ffb45d0bcb437a93e6fbdc4a1031243836646bc38159"
     }
   ]
 }
