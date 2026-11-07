@@ -54,13 +54,13 @@ class Outro(VoiceoverScene):
     def payoffs(self):
         card = payoff_card([
             (r"what programs mean", [58]),
-            (r"learning in distributed systems", [59]),
+            (r"what many machines can compute together", [59]),
             (r"hardware for learning", [60]),
             (r"measuring results honestly", [61]),
             (r"the bridge to \textit{AI, Built}", [61]),
         ], font_size=23)
         with self.voiceover(
-            "Where this comes back. Part 58 asks what programs mean, learned ones included. Part 59 studies what many "
+            "Where this comes back. Part 58 asks what programs mean, and how to prove two of them the same. Part 59 studies what many "
             "machines can compute together. Part 60 builds the hardware that trains and runs learned models. And Part "
             "61 asks how to measure a result honestly, and returns to the bridge between this series and AI, Built."
         ):

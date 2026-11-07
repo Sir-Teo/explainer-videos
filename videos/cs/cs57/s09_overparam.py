@@ -113,8 +113,8 @@ class Overparam(VoiceoverScene):
             "interpolates, noise and all. <bookmark mark='b'/> The test error rises to fifty-two at the "
             "threshold, <bookmark mark='c'/> then falls, to point seven eight at two hundred parameters, "
             "below the one point oh three of the smallest model. Mikhail Belkin, Daniel Hsu, Siyuan Ma and "
-            "Soumik Mandal named this double descent in 2019. A classical textbook would have stopped at the "
-            "bottom of the first valley."
+            "Soumik Mandal named this double descent in 2019. In this simple setting there is no first valley at "
+            "all: a classical textbook would have stopped at the smallest model, and missed the better one beyond."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g), FadeIn(xl), FadeIn(cap), Create(thr), FadeIn(under), FadeIn(over))
             vo.wait_until("a")

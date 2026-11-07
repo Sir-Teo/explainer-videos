@@ -284,7 +284,7 @@ class Compression(VoiceoverScene):
             "mistakes, at most one over the margin squared, a hundred here, whatever the dimension. "
             "<bookmark mark='c'/> On two thousand points the VC dimension climbs to a thousand, <bookmark mark='d'/> "
             "while the scheme never needs more than thirty-eight. <bookmark mark='e'/> The compression bound stays"
-            " near a tenth or below, even in a thousand dimensions, where no VC bound says anything. "
+            " under about a seventh, even in a thousand dimensions, where no VC bound says anything. "
             "Margins, not dimensions, decide, because a large margin means a short description."
         ) as vo:
             self.play(FadeIn(head), FadeIn(leg), FadeIn(lg), Create(axis))

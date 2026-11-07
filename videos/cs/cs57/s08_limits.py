@@ -312,7 +312,7 @@ class Limits(VoiceoverScene):
             "<bookmark mark='b'/> A search over sets of three bits must try up to n choose three of them, and "
             "it did: fifteen hundred and eight of fifteen hundred and forty at n equal to twenty-two. "
             "<bookmark mark='c'/> Yet parity is easy for algebra. Each example is a linear equation over the "
-            "field of two elements, and Gaussian elimination, from Part 28, solves it from about two n examples "
+            "field of two elements, and Gaussian elimination, from Part 52, done over that field, solves it from about two n examples "
             "in under a millisecond. Parity is learnable, just not by statistics. <bookmark mark='d'/> Flip a "
             "few labels and elimination breaks. Learning parity with noise is believed hard; the best known "
             "algorithm, by Avrim Blum, Adam Kalai and Hal Wasserman, takes time two to the n over log n. "

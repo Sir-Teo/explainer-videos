@@ -389,7 +389,7 @@ class Boosting(VoiceoverScene):
         zl = DashedLine(a1.c2p(zero, 0), a1.c2p(zero, 0.3), color=GREY_B, stroke_width=1.5)
         best = min(range(T), key=lambda i: te[i])
         nums = wrapped_label(rf"test error {te[zero - 1]:.3f} at round {zero}, \ {te[best]:.3f} at round "
-                             rf"{best + 1}, \ {te[-1]:.3f} at round {T}: \ it does not rise", 5.6, font_size=18,
+                             rf"{best + 1}, \ {te[-1]:.3f} at round {T}: \ it barely rises", 5.6, font_size=18,
                              color=YES).next_to(g1, DOWN, buff=0.2).align_to(g1, LEFT)
         # the margin distribution: the fraction of training points with margin at most theta
         ks = [k for k in ("5", "20", "100", str(T)) if k in b["margins"]]

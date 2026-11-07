@@ -50,7 +50,7 @@ class Frontier(VoiceoverScene):
             wrapped_label(r"a \textbf{compression scheme of size $k$}: \ any sample shrinks to $k$ points from "
                           r"which a consistent hypothesis can be rebuilt; \ it implies a PAC bound \ (Littlestone and "
                           r"Warmuth 1986)", 6.0, font_size=19, color=GREY_A),
-            wrapped_label(r"Warmuth's conjecture \ (2003): \ every class of VC dimension $d$ has a scheme of size "
+            wrapped_label(r"the compression conjecture \ (Littlestone and Warmuth, \ 1986; \ Warmuth, \ 2003): \ every class of VC dimension $d$ has a scheme of size "
                           r"$O(d)$; \ Moran and Yehudayoff \ (2016): \ size $2^{O(d)}$ always exists", 6.0,
                           font_size=19, color=LAM),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(plane, RIGHT, buff=0.6)
@@ -81,7 +81,7 @@ class Frontier(VoiceoverScene):
         head = label(r"Learning without updating any weights", font_size=36).to_edge(UP, buff=0.3)
         tiles = VGroup(
             tile(r"in-context learning", r"a trained language model, \ shown a few examples in its prompt, \ "
-                 r"predicts the next one: \ learning happens inside one forward pass \ (\textit{AI, Built} 21)", DATA),
+                 r"predicts the next one: \ learning happens inside one forward pass \ (\textit{AI, Built} 13)", DATA),
             tile(r"what it might be", r"Garg et al. \ (2022): \ transformers trained on linear-regression prompts "
                  r"match least squares; \ constructions show attention can implement gradient steps", HEAD),
             tile(r"what theory lacks", r"bounds that explain when it works, \ how many examples a prompt needs, \ "

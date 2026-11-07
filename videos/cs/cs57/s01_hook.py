@@ -39,7 +39,7 @@ class Hook(VoiceoverScene):
         with self.voiceover(
             "Here is a puzzle that learning theory had to face. <bookmark mark='a'/> We fit fifty noisy examples with "
             "a linear model that uses p features. With few features the model is too simple. As p grows, the error on "
-            "new data first falls, then rises, the classical picture of overfitting. <bookmark mark='b'/> At p equal "
+            "new data rises, slowly and then steeply, the classical picture of overfitting. <bookmark mark='b'/> At p equal "
             "to fifty the model can fit anything, noise included, and the test error explodes. <bookmark mark='c'/> "
             "And then, past that point, adding still more parameters makes the error fall again, to below where it "
             f"started: at {best['p']} features it is lower than any model with fewer parameters than examples. "
