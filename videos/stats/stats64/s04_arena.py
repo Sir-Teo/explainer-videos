@@ -60,20 +60,16 @@ class Arena(LectureMixin, VoiceoverScene):
         rows = lb.rows(font_size=22)
         truth = VGroup(*[Line(ax.c2p(th[k], lb.y(i) - 0.3), ax.c2p(th[k], lb.y(i) + 0.3), color=WHITE, stroke_width=3)
                          for i, k in enumerate(lb.order)])
-        ties = lb.ties()
+        ties = VGroup(*[SurroundingRectangle(rows[list(lb.order).index(k)], color=S.ACCENT, buff=0.04) for k in d["rank_one"]])
+        ties.count = len(d["rank_one"])
         side = side_groups([
             [(rf"{d['n']:,} simulated battles".replace(",", "{,}"), WHITE), (r"8 models", GREY_A)],
             [(r"blue: \ fitted strengths", MODA), (r"with sandwich 95\% intervals", MODA)],
             [(r"white ticks: \ the true strengths", WHITE)],
-            [(rf"gold: \ {ties.count} models could be first", S.ACCENT)],
+            [(rf"gold: \ {ties.count} candidates in simultaneous rank-1 set", S.ACCENT)],
         ], pos=(4.9, 0.3, 0), width=3.6)
         with self.voiceover(
-            f"<bookmark mark='a'/> A simulated arena: eight models, {d['n']:,} battles between random pairs, and votes "
-            f"from the Bradley-Terry model with known strengths. <bookmark mark='b'/> The fitted strengths, with ninety-five "
-            f"percent intervals, sorted into a leaderboard. <bookmark mark='c'/> The true strengths, as white ticks, sit "
-            f"inside the intervals. <bookmark mark='d'/> The top two models are a quarter of a strength unit apart, but the "
-            f"honest rank-one set, the models whose intervals reach the leader's, holds {ties.count}. Six thousand votes "
-            f"cannot separate them."
+            "<bookmark mark='a'/> Eight simulated models compete in six thousand independent battles from a connected Bradley-Terry model. Strengths are relative to model A. <bookmark mark='b'/> The blue intervals are marginal sandwich Wald intervals, not simultaneous bands. The reference model is fixed at zero by parametrization, rather than known with infinite precision in an absolute scale. <bookmark mark='c'/> White ticks show the generating relative strengths. A single realized table need not contain every tick in every interval. <bookmark mark='d'/> Gold highlights a separate asymptotic confidence set for rank one, computed using Bonferroni simultaneous pairwise contrasts and the full covariance matrix. A candidate remains if no competitor has a positive lower bound over it. This corrects the earlier interval-overlap heuristic; it is still a large-sample construction, not an exact finite-sample rank theorem."
         ) as vo:
             self.play(FadeIn(A), FadeIn(seeded_tag()))
             vo.wait_until("a")
@@ -91,13 +87,7 @@ class Arena(LectureMixin, VoiceoverScene):
         d = load("arena")
         se, sw, bs = np.asarray(d["se"]), np.asarray(d["se_sandwich"]), np.asarray(d["se_boot"])
         self.lad_voiceover(
-            f"<bookmark mark='a'/> Three ways to get the intervals. <bookmark mark='b'/> The inverse Fisher information, "
-            f"which trusts the model: for the top model, a standard error of {se[7]:.3f}. <bookmark mark='c'/> The sandwich "
-            f"of Part twenty-two, which does not: {sw[7]:.3f}. And the bootstrap over battles, {bs[7]:.3f}. <bookmark "
-            f"mark='d'/> Here the model is true, and all three agree; over {d['reps']} fresh arenas, the sandwich interval "
-            f"for the gap between the top two models covered {100 * d['cov_sandwich']:.1f} percent of the time. In a real "
-            f"arena voters differ and prompts differ, the model is wrong, and the sandwich or the bootstrap is the safer "
-            f"choice. Chatbot Arena reports both.",
+            f"<bookmark mark='a'/> Three ways to get the intervals. <bookmark mark='b'/> The inverse Fisher information, which trusts the model: for the top model, a standard error of {se[7]:.3f}. <bookmark mark='c'/> An independent-battle sandwich, robust to some variance misspecification but still requiring a well-defined target: {sw[7]:.3f}. And the bootstrap over battles, {bs[7]:.3f}. <bookmark mark='d'/> Here the model is true, and all three agree; over {d['reps']} fresh arenas, the sandwich interval for the gap between the top two models covered {100 * d['cov_sandwich']:.1f} percent of the time. In a real arena voters differ and prompts differ, the model is wrong, and dependence may require clustering by voter or prompt. An ordinary sandwich or bootstrap over individual battles alone does not repair that dependence or self-selection. Chatbot Arena reports both.",
             [(r"\text{model-based}", r":", rf"\mathrm{{SE}}(\hat\theta_H) = {se[7]:.3f}", 40),
              (r"\text{sandwich}", r":", rf"{sw[7]:.3f}, \ \ \text{{bootstrap}}: {bs[7]:.3f}", 40),
              (r"\text{coverage}", r":", rf"{100 * d['cov_sandwich']:.1f}\% \ \text{{over {d['reps']} arenas}}", 40),
@@ -122,12 +112,7 @@ class Arena(LectureMixin, VoiceoverScene):
             [(r"Elo depends on the order", NAIVEC), (r"the likelihood does not", MODA)],
         ], pos=(4.9, 0.3, 0), width=3.6)
         with self.voiceover(
-            "<bookmark mark='a'/> Why not Elo's online ratings, which chess uses? <bookmark mark='b'/> Elo updates after "
-            "each game by a fixed step towards the surprise. Its ratings depend on the order in which the games were played. "
-            "Feed the same six thousand battles in fifty random orders, and each model's final Elo rating, in red, wanders "
-            "over a range wider than the likelihood's interval. <bookmark mark='c'/> For a fixed set of comparisons between "
-            "models that do not change, the order carries no information, and the maximum-likelihood fit uses all of them "
-            "at once. Chatbot Arena moved from online Elo to Bradley-Terry for this reason."
+            "<bookmark mark='a'/> Why not Elo's online ratings, which chess uses? <bookmark mark='b'/> Elo updates after each game by a fixed step towards the surprise. Its ratings depend on the order in which the games were played. Feed the same six thousand battles in fifty random orders, and the resulting min-to-max Elo ranges, shown in red, describe ordering sensitivity. They are not confidence intervals and need not exceed every likelihood interval. <bookmark mark='c'/> For a fixed set of comparisons between models that do not change, the order carries no information, and the maximum-likelihood fit uses all of them at once. Chatbot Arena moved from online Elo to Bradley-Terry for this reason."
         ) as vo:
             self.play(FadeIn(A), FadeIn(seeded_tag()))
             vo.wait_until("a")
@@ -166,7 +151,7 @@ class Arena(LectureMixin, VoiceoverScene):
             f"<bookmark mark='b'/> Plain Bradley-Terry puts D at {raw[3]:.2f}, near the top, though its true strength is "
             f"{th[3]:.2f}. <bookmark mark='c'/> Add the difference in length as a covariate, as Chatbot Arena's style "
             f"control did in August 2024, and D's strength drops to {ctl[3]:.2f}, with the length effect estimated at "
-            f"{d['gamma']:.2f} against a true {d['gamma_true']}. It is Part thirty-six's adjustment for a confounder, "
+            f"{d['gamma']:.2f} against a true {d['gamma_true']}. It estimates a conditional equal-length comparison in this correctly specified simulation. Length is itself an output of the model, so adjusting it is not automatically causal confounder control, "
             f"and it works only if length varies within each model's answers, so that it is not confused with the model "
             f"itself."
         ) as vo:

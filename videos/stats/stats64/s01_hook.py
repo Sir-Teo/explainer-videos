@@ -19,18 +19,13 @@ class Hook(LectureMixin, VoiceoverScene):
     def story(self):
         d = load("leaderboard")
         rows = fit_rows(VGroup(
-            label(r"a press release: \ our model scores 85.2\%, \ the previous best 84.7\%", font_size=28, color=WHITE),
+            label(r"a constructed example: \ our model scores 85.2\%, \ the previous best 84.7\%", font_size=28, color=WHITE),
             label(r"a benchmark of 1{,}000 questions; \ a new state of the art", font_size=26, color=GREY_A),
             label(r"how much of that half point is the model, \ and how much the questions?", font_size=26, color=MODB),
         ), 12.4, 0.45, [0, 0.4, 0])
         tag = simulated_tag(r"simulated: \ no real model is scored in this part")
         with self.voiceover(
-            "<bookmark mark='a'/> A familiar announcement. A new model scores 85.2 percent on a benchmark, against 84.7 "
-            "percent for the previous best: a new state of the art. <bookmark mark='b'/> The benchmark has a thousand "
-            "questions. <bookmark mark='c'/> How much of the half point is the model, and how much is the particular thousand "
-            "questions that happened to be written? This part answers that question, and its relatives, for a field that "
-            "now runs on leaderboards. Every model and benchmark in it is simulated, so every number is about the method, "
-            "not about any real system."
+            "<bookmark mark='a'/> A familiar announcement. A new model scores 85.2 percent on a benchmark, against 84.7 percent for the previous best: a new state of the art. <bookmark mark='b'/> The benchmark has a thousand questions. <bookmark mark='c'/> How much of the half point is the model, and how much is the particular thousand questions that happened to be written? This part answers that question, and its relatives, for a field that now runs on leaderboards. The opening table is explicitly constructed for illustration; the remaining examples are seeded simulations or exact calculations. None evaluates a real system."
         ) as vo:
             self.play(FadeIn(tag))
             for k, m_ in enumerate("abc"):
@@ -76,7 +71,7 @@ class Hook(LectureMixin, VoiceoverScene):
         d = load("leaderboard")
         self.lad_voiceover(
             f"<bookmark mark='a'/> Another way to see it. Suppose the two models really are 85.2 and 84.7 percent accurate on "
-            f"the population of questions the benchmark samples. <bookmark mark='b'/> Write a fresh thousand questions, "
+            f"the population of questions the benchmark samples. <bookmark mark='b'/> Write a fresh thousand independent questions under this same latent-probit joint model, "
             f"and score both again. <bookmark mark='c'/> In {d['reps']:,} simulated re-writings, the previous best comes out "
             f"ahead {100 * d['flip']:.0f} percent of the time. <bookmark mark='d'/> A third of the time, the announcement "
             f"would have gone the other way. A leaderboard is an estimate, and its order is a random variable.",

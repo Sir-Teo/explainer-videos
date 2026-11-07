@@ -24,25 +24,20 @@ class Watermark(LectureMixin, VoiceoverScene):
             f"<bookmark mark='a'/> Can text say which model wrote it? <bookmark mark='b'/> John Kirchenbauer and "
             f"colleagues' watermark, in 2023: before generating each token, hash the previous token to split the vocabulary "
             f"into a green list, a fraction gamma of it, and a red list. <bookmark mark='c'/> Add a bias delta to the green "
-            f"tokens' logits. When the model is uncertain, it now picks a green token more often than chance: with gamma of a "
+            f"tokens' logits. For a uniform high-entropy next-token distribution, or the stated idealization that pre-bias green probability is gamma, this makes green probability with gamma of a "
             f"quarter and delta of two, about {100 * d['green']:.0f} percent of the time instead of twenty-five. <bookmark "
-            f"mark='d'/> When the model is certain, the bias barely matters, so the text's quality is nearly unchanged. "
+            f"mark='d'/> When the model is certain, the bias barely matters, but quality preservation is an empirical question for this soft logit-bias scheme, not a consequence of entropy alone. "
             f"Anyone with the hash key can count the green tokens.",
             [(r"\text{green list}", r":", r"\text{hash of the previous token}, \ \text{fraction } \gamma", 40),
              (r"\text{bias}", r":", r"\text{logit}_g \ \mathrel{+}= \ \delta", 40),
              (r"P(\text{green})", r"=", rf"\frac{{\gamma e^\delta}}{{\gamma e^\delta + 1 - \gamma}} = {d['green']:.2f}", 40),
              (r"\text{detect}", r":", r"\text{count green tokens}", 40)],
-            [r"Kirchenbauer et al. (2023)", r"a soft watermark", r"high-entropy tokens", r"a keyed test"],
+            [r"Kirchenbauer et al. (2023)", r"a soft watermark", r"ideal pre-bias green mass $=\gamma$", r"a keyed test"],
             colors=[(2, MODB)])
 
     def test(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Detection is Part ten's test of a proportion. <bookmark mark='b'/> Under the null, text "
-            "written without the key, each token is green with probability gamma, independently, because the hash looks "
-            "random. <bookmark mark='c'/> So with T tokens and G green ones, the z statistic, G minus gamma T over the square "
-            "root of T gamma one minus gamma, is approximately standard normal. <bookmark mark='d'/> Declare text "
-            "watermarked when z exceeds four: a false-positive rate of three in a hundred thousand, small enough to accuse "
-            "no one lightly. The null is exact by design: the test needs no model of human writing.",
+            "<bookmark mark='a'/> Our idealized detector tests a proportion. <bookmark mark='b'/> Assume independent green indicators with null probability gamma. Then the green count is exactly binomial and the standardized z statistic is approximately normal for suitable sample sizes. <bookmark mark='c'/> A rule z greater than four has a length-dependent exact binomial tail. The Gaussian reference tail is about three in a hundred thousand, but short texts can differ substantially. A p-value is not the probability the author used AI, and base rates matter. <bookmark mark='d'/> Real keyed generation has context dependence, repeated contexts, key reuse and adversarial selection. Hashing alone does not prove independent indicators or a model-free binomial null for all human text. Calibrate the actual keyed detector and account for repetitions and scanning multiplicity.",
             [(r"H_0", r":", r"G \sim \mathrm{Bin}(T, \gamma)", 40),
              (r"z", r"=", r"\frac{G - \gamma T}{\sqrt{T\gamma(1 - \gamma)}}", 40),
              (r"\text{reject}", r":", r"z > 4", 40),
@@ -70,13 +65,7 @@ class Watermark(LectureMixin, VoiceoverScene):
             [(rf"red: \ half the tokens rewritten", NAIVEC), (rf"{100 * d['edited'][k40]:.0f}\% at 40, \ {100 * d['edited'][k160]:.0f}\% at 160", NAIVEC)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> The power of the test, computed exactly from the binomial, against the length of the "
-            f"text. <bookmark mark='b'/> If every token is one where the model was uncertain, forty tokens are detected "
-            f"{100 * d['full'][k40]:.1f} percent of the time. <bookmark mark='c'/> Real text has many nearly forced tokens, "
-            f"where the watermark cannot act: with only forty percent uncertain, it takes about a hundred and sixty tokens "
-            f"to reach {100 * d['low_entropy'][k160]:.0f} percent. <bookmark mark='d'/> And if someone rewrites half the "
-            f"tokens, the signal halves: {100 * d['edited'][k40]:.0f} percent at forty tokens. Power, as always, is about "
-            f"the effect size and the sample size, here the green excess per token and the number of tokens."
+            f"<bookmark mark='a'/> The power under an ideal independent-token mixture, computed exactly from its binomial distribution, against the length of the text. <bookmark mark='b'/> If every token is one where the model was uncertain, forty tokens are detected {100 * d['full'][k40]:.1f} percent of the time. <bookmark mark='c'/> In this toy each token independently belongs to an informative component with probability forty percent, and the remaining tokens have baseline green probability. This is not a theorem for arbitrary low-entropy text; under this mixture, it takes about a hundred and sixty tokens to reach {100 * d['low_entropy'][k160]:.0f} percent. <bookmark mark='d'/> And if someone rewrites half the tokens, the signal halves: {100 * d['edited'][k40]:.0f} percent at forty tokens. Power, as always, is about the effect size and the sample size, here the green excess per token and the number of tokens."
         ) as vo:
             self.play(FadeIn(A), FadeIn(exact_tag()))
             vo.wait_until("a")
@@ -94,13 +83,7 @@ class Watermark(LectureMixin, VoiceoverScene):
         d = load("watermark")
         k10 = list(d["T"]).index(10)
         self.lad_voiceover(
-            f"<bookmark mark='a'/> Two statistical details. <bookmark mark='b'/> For short texts the normal approximation "
-            f"is poor: at ten tokens, the exact false-positive rate of the z greater than four rule is "
-            f"{d['exact_fpr'][k10]:.4f}, more than ten times the nominal three in a hundred thousand. Use the exact binomial "
-            f"tail, Part fourteen's lesson. <bookmark mark='c'/> And repeated phrases break independence: the same pair of "
-            f"tokens gives the same green list every time, so only distinct token pairs should be counted. <bookmark "
-            f"mark='d'/> Scott Aaronson's scheme, and the distortion-free schemes that followed, use the key to drive the "
-            f"sampling itself, so the watermarked model's output has exactly the original distribution for each token.",
+            f"<bookmark mark='a'/> Two statistical details. <bookmark mark='b'/> For short texts the normal approximation is poor: at ten tokens, the exact false-positive rate of the z greater than four rule is {d['exact_fpr'][k10]:.4f}, more than ten times the nominal three in a hundred thousand. Use the exact binomial tail, Part fourteen's lesson. <bookmark mark='c'/> And repeated phrases break independence: repeated contexts can reuse a green list. Deduplicating repeated token pairs is one mitigation, rather than a universal independence proof. <bookmark mark='d'/> Scott Aaronson's scheme, and the distortion-free schemes that followed, use the key to drive the sampling itself, with non-distortion guarantees defined over the prescribed random key or sampling randomness. Conditional on a reused fixed key and repeated contexts, stronger independence claims need justification.",
             [(r"\text{short texts}", r":", rf"\text{{exact FPR at }} T = 10: \ {d['exact_fpr'][k10]:.4f}", 40),
              (r"\text{use}", r":", r"\text{the exact binomial tail}", 40),
              (r"\text{repeats}", r":", r"\text{count distinct pairs}", 40),
@@ -125,11 +108,7 @@ class Watermark(LectureMixin, VoiceoverScene):
 
     def deployed(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Watermarks are deployed. <bookmark mark='b'/> Sumanth Dathathri and colleagues at Google "
-            "DeepMind described SynthID-Text in Nature in 2024: a tournament-sampling watermark running on Gemini's "
-            "responses. <bookmark mark='c'/> In a live comparison over about twenty million responses, users' ratings of "
-            "watermarked and unwatermarked answers were indistinguishable: an A/B test of Part thirteen, used to show that "
-            "nothing happened. <bookmark mark='d'/> The authors note the same limit: rewriting the text weakens detection.",
+            "<bookmark mark='a'/> Watermarks are deployed. <bookmark mark='b'/> Sumanth Dathathri and colleagues at Google DeepMind described SynthID-Text in Nature in 2024: a tournament-sampling watermark running on Gemini's responses. <bookmark mark='c'/> In a live comparison over about twenty million responses, users' ratings of watermarked and unwatermarked answers were indistinguishable: an A/B test of Part thirteen, used to assess quality preservation on those feedback metrics. Failure to detect a difference does not by itself establish exact equivalence; the design, intervals and detectable effects matter. <bookmark mark='d'/> The authors note the same limit: rewriting the text weakens detection.",
             [(r"\text{SynthID-Text}", r":", r"\text{tournament sampling}", 40),
              (r"\text{deployed}", r":", r"\text{Gemini's responses}", 40),
              (r"\text{live test}", r":", r"\text{about 20 million responses}", 40),

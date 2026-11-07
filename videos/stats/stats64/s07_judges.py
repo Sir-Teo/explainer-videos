@@ -50,12 +50,7 @@ class Judges(LectureMixin, VoiceoverScene):
 
     def ppi(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Part thirty-four's prediction-powered inference fixes it with a few human labels. "
-            "<bookmark mark='b'/> Have people grade a small random sample, n of the answers, that the judge also grades. "
-            "<bookmark mark='c'/> The estimate is the judge's mean on the large set, plus the average correction, human "
-            "minus judge, on the small one: the rectifier. <bookmark mark='d'/> It is unbiased whatever the judge's errors, "
-            "and its variance adds the large set's judge variance to the small set's correction variance. A good judge has "
-            "small corrections, and then the interval is narrow; a bad judge only costs width, not validity.",
+            "<bookmark mark='a'/> Prediction-powered inference corrects a fixed judge using human labels. <bookmark mark='b'/> In this experiment the labeled and unlabeled samples are independent draws from the same population, and the predictor is fixed independently of them. <bookmark mark='c'/> Add the judge's mean on the large unlabeled set to the average human-minus-judge residual on the small labeled set. The two expectation terms cancel predictor bias, and independent-sample variance adds. <bookmark mark='d'/> This mean estimate is unbiased under that design regardless of predictor quality. The displayed normal interval is asymptotic, and a poor predictor can increase width. If the predictor is fitted on these labels, cross-fitting or other analysis is required. Sampling shifts, incorrect label-inclusion weights or dependent samples can invalidate the simple formula.",
             [(r"\text{humans}", r":", r"n \ \text{random answers, \ also judged}", 40),
              (r"\hat\mu_{\text{PPI}}", r"=", r"\bar f_N + \overline{(y - f)}_n", 40),
              (r"\text{unbiased}", r":", r"\text{for any judge}", 40),
@@ -102,13 +97,7 @@ class Judges(LectureMixin, VoiceoverScene):
 
     def dsl(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The same idea in regression. <bookmark mark='b'/> Social scientists now use language "
-            "models to code documents, such as whether a speech is populist, and then regress the codes on covariates. "
-            "<bookmark mark='c'/> Naoki Egami, Musashi Hinck, Brandon Stewart and Hanying Wei's design-based supervised "
-            "learning, in 2023, has experts code a random subsample with known probabilities, and combines the expert and "
-            "model codes in a doubly robust pseudo-outcome: Part thirty-six's AIPW, with the expert labels as the "
-            "treatment. <bookmark mark='d'/> Valid coefficients and intervals, whatever the model's coding errors, as long as "
-            "the subsample is random and its probabilities known.",
+            "<bookmark mark='a'/> The same idea in regression. <bookmark mark='b'/> Social scientists now use language models to code documents, such as whether a speech is populist, and then regress the codes on covariates. <bookmark mark='c'/> Naoki Egami, Musashi Hinck, Brandon Stewart and Hanying Wei's design-based supervised learning, in 2023, has experts code a random subsample with known probabilities, and combines the expert and model codes in a doubly robust pseudo-outcome: Part thirty-six's AIPW, with the expert labels as the treatment. <bookmark mark='d'/> Valid coefficients and intervals, under the specified random-label design, positive known inclusion probabilities, appropriate weighting, predictor-fitting control and asymptotic variance conditions. Label observation is a missing-data indicator, not a causal treatment.",
             [(r"\text{task}", r":", r"\text{regress model-made codes}", 40),
              (r"\text{DSL}", r":", r"\text{experts code a random subsample}", 40),
              (r"\tilde Y", r"=", r"\hat Y + \frac{R}{\pi}(Y - \hat Y)", 40),
@@ -118,11 +107,7 @@ class Judges(LectureMixin, VoiceoverScene):
 
     def cautions(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Two cautions. <bookmark mark='b'/> The human labels must be a random sample of the same "
-            "answers; humans grading only the hard cases break the design. <bookmark mark='c'/> And the human labels "
-            "themselves are measurements, with their own disagreement: the target is what a person would say, not the "
-            "truth. <bookmark mark='d'/> When people disagree, report their agreement, for example by Jacob Cohen's kappa, and treat the "
-            "rate at which people agree as a ceiling on any judge.",
+            "<bookmark mark='a'/> Two cautions. <bookmark mark='b'/> The human labels must be a random sample of the same answers; unweighted labels only from hard cases break this simple design. Deliberate unequal-probability labeling can be valid with positive known probabilities and suitable weighting. <bookmark mark='c'/> And the human labels themselves are measurements, with their own disagreement: the target is what a person would say, not the truth. <bookmark mark='d'/> When people disagree, report their agreement, for example by Jacob Cohen's kappa, and define the target rater or consensus process. Pairwise human agreement is not a universal accuracy ceiling: an aggregate judge can agree with a reliable consensus more than two noisy individual raters agree with one another.",
             [(r"\text{design}", r":", r"\text{a random human subsample}", 40),
              (r"\text{humans}", r":", r"\text{also measurements}", 40),
              (r"\text{estimand}", r":", r"\text{what a person would say}", 40),

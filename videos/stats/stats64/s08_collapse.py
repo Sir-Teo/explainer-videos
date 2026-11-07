@@ -36,13 +36,8 @@ class Collapse(LectureMixin, VoiceoverScene):
 
     def setup_(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Generation zero: n draws from a standard normal. <bookmark mark='b'/> Fit the mean and "
-            "variance by maximum likelihood, the sample mean and the average squared deviation. <bookmark mark='c'/> "
-            "Generation t plus one: n fresh draws from the fitted normal of generation t, and fit again. <bookmark "
-            "mark='d'/> By Cochran's theorem, n times the fitted variance over the true one is chi-squared with n "
-            "minus one degrees of freedom, so each generation multiplies the variance by an independent factor, chi-squared "
-            "over n.",
-            [(r"X^{(0)}_i", r"\sim", r"N(0, 1), \ \ i = 1, \dots, n", 40),
+            "<bookmark mark='a'/> Set the initial fitted Gaussian moments to mean zero and variance one, before the first recursive refit. This fixes the generation indexing. <bookmark mark='b'/> At each generation draw n independent points from the current Gaussian and fit their mean and maximum-likelihood variance. <bookmark mark='c'/> The next generation repeats that step, discarding earlier observations in the replacement experiment. The accumulation experiment instead retains a standardized initial sample with those same zero-and-one moments and appends all later draws. <bookmark mark='d'/> Under replacement, each variance update multiplies the previous variance by an independent chi-squared n-minus-one factor divided by n. Thus with variance one at time zero, the expectation after t refits is the displayed t-th power, without an extra unplotted initial shrinkage.",
+            [(r"\hat\mu_0,\hat\sigma_0^2", r"=", r"0,1", 40),
              (r"\hat\sigma_t^2", r"=", r"\frac1n \sum_i (X_i^{(t)} - \bar X^{(t)})^2", 40),
              (r"X^{(t+1)}_i", r"\sim", r"N(\hat\mu_t, \hat\sigma_t^2)", 40),
              (r"\hat\sigma_{t+1}^2", r"=", r"\hat\sigma_t^2 \cdot \chi^2_{n-1} / n", 40)],
@@ -106,7 +101,7 @@ class Collapse(LectureMixin, VoiceoverScene):
             f"three hundred generations the median is ten to the minus thirteen, and every lineage is below one percent of "
             f"where it started. <bookmark mark='c'/> The exact mean, nineteen twentieths to the t, decays far more slowly: "
             f"the mean is not the typical value. <bookmark mark='d'/> In green, a different practice: keep all earlier data, "
-            f"and add each generation's samples to the pool instead of replacing it. The variance barely moves."
+            f"and add each generation's samples to the pool instead of replacing it. The accumulation paths lose far less variance here; this does not guarantee recovery of every population feature or every rare event."
         ) as vo:
             self.play(FadeIn(A), FadeIn(seeded_tag()))
             vo.wait_until("a")
@@ -122,27 +117,17 @@ class Collapse(LectureMixin, VoiceoverScene):
 
     def tails(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> What it means for real models. <bookmark mark='b'/> Any estimator fitted to a finite "
-            "sample loses the tails first: rare events are missing from most samples, so the fit puts less mass there, so "
-            "the next sample has fewer still. A rich model loses its rare words, its unusual faces, its minority dialects. "
-            "<bookmark mark='c'/> Errors compound multiplicatively, generation after generation, and nothing pulls the fit "
-            "back towards the truth, because the truth is no longer in the data. <bookmark mark='d'/> The statistical "
-            "statement: refitting to your own output is a Markov chain whose only absorbing states are degenerate.",
+            "<bookmark mark='a'/> This is a mechanism, not a universal theorem for every synthetic-data pipeline. <bookmark mark='b'/> Finite resamples can omit rare events, and repeated fitting can amplify omissions; the effect depends on the estimator, regularization, sample size and access to real data. <bookmark mark='c'/> In this fixed-size Gaussian replacement chain, variance tends to zero almost surely. At finite times it remains positive almost surely; convergence is not finite-time absorption. <bookmark mark='d'/> Other estimators and refreshed real data can behave differently. Our multiplicative calculation explains this toy exactly, while the cited empirical studies examine richer models under particular training recipes.",
             [(r"\text{finite samples}", r":", r"\text{miss rare events}", 40),
              (r"\text{so}", r":", r"\text{the tails go first}", 40),
              (r"\text{no anchor}", r":", r"\text{the truth has left the data}", 40),
-             (r"\text{a Markov chain}", r":", r"\text{absorbed at degeneracy}", 40)],
+             (r"\text{a Markov chain}", r":", r"\text{converges toward degeneracy in this toy}", 40)],
             [r"unsampled events", r"rare words, \ rare faces", r"compounding", r"Part 44"],
             colors=[(1, NAIVEC)])
 
     def accumulate(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The cure follows from the toy. <bookmark mark='b'/> Matthias Gerstgrasser and colleagues "
-            "showed in 2024 that if real data are kept and synthetic data are added to it, rather than replacing it, the "
-            "error stays bounded, because each new generation is a shrinking fraction of the pool, and the errors it adds "
-            "form a convergent sum. <bookmark mark='c'/> Keep the real data, mark the synthetic, and weight towards the real. <bookmark "
-            "mark='d'/> And measure: Part sixty's shift diagnostics, run between generations, catch a narrowing distribution "
-            "early.",
+            "<bookmark mark='a'/> The cure follows from the toy. <bookmark mark='b'/> Matthias Gerstgrasser and colleagues showed in 2024 that if real data are kept and synthetic data are added to it, rather than replacing it, the error remains controlled under their specified accumulation models, because each new generation is a shrinking fraction of the pool, and the errors it adds form a convergent sum. <bookmark mark='c'/> Keep the real data, mark the synthetic, and weight towards the real. <bookmark mark='d'/> And measure: Part sixty's shift diagnostics, run between generations, catch a narrowing distribution early.",
             [(r"\text{replace}", r":", r"\text{collapse}", 40),
              (r"\text{accumulate}", r":", r"\text{bounded error}", 40),
              (r"\text{practice}", r":", r"\text{keep, \ mark, \ weight the real data}", 40),

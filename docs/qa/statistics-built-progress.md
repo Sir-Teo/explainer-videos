@@ -90,5 +90,5 @@ No part is signed off for bilingual production. The branch has zero narration_zh
 | 61 | `stats61` | 12 | English scientific source reviewed; sampled visual review pending; bilingual/listening/master approval open |
 | 62 | `stats62` | 12 | English scientific source reviewed; 20 checks pass; sampled visual review pending; bilingual/listening/master approval open |
 | 63 | `stats63` | 14 | English scientific source reviewed; 20 checks pass; sampled visual review pending; bilingual/listening/master approval open |
-| 64 | `stats64` | 15 | Not yet reviewed chapter by chapter |
+| 64 | `stats64` | 15 | English scientific source reviewed; 23 checks pass; sampled visual review pending; bilingual/listening/master approval open |
 | 65 | `stats65` | 12 | Not yet reviewed chapter by chapter |

@@ -38,7 +38,7 @@ class SBI(LectureMixin, VoiceoverScene):
             "prior and x from the simulator, and maximize the average log of q of theta given x. <bookmark mark='c'/> The "
             "expected objective is maximized by the true posterior: it is a proper scoring rule, Part twenty-four's log "
             "score, averaged over the prior predictive. <bookmark mark='d'/> But with a finite number of simulations and a "
-            "flexible network, the fit can overfit, and an overfitted density estimator is too narrow: it has learned the "
+            "flexible network, the fit can overfit, and an overfitted density estimator can be too narrow: it has learned the "
             "training simulations' noise as signal.",
             [(r"\text{objective}", r":", r"\max_\phi \ \frac1N \sum_i \log q_\phi(\theta_i \mid x_i)", 40),
              (r"\text{population optimum}", r":", r"q = p(\theta \mid x)", 40),
@@ -97,17 +97,11 @@ class SBI(LectureMixin, VoiceoverScene):
         side = side_groups([
             [(r"grey dashes: \ the promised 90\%", GREY_B), (r"20 fits $\times$ 2{,}000 tests per $N$", GREY_A)],
             [(rf"red: \ in-sample variance", NAIVEC), (rf"{100 * r0['insample']:.0f}\% at $N = {r0['n_sim']}$", NAIVEC)],
-            [(rf"green: \ held-out variance", HONC), (rf"{100 * r0['heldout']:.0f}\%: \ conservative", HONC)],
+            [(rf"green: \ held-out RMS heuristic", HONC), (rf"{100 * r0['heldout']:.0f}\%: \ conservative", HONC)],
             [(r"both reach 90\% as $N$ grows", GREY_A)],
         ])
         with self.voiceover(
-            f"<bookmark mark='a'/> Coverage of the ninety percent credible interval, against the number of training "
-            f"simulations, over fresh parameters and data. <bookmark mark='b'/> With the in-sample residual variance, the "
-            f"posterior is overconfident when simulations are scarce: {100 * r0['insample']:.0f} percent coverage with "
-            f"{r0['n_sim']} simulations. <bookmark mark='c'/> With the variance measured on held-out simulations, coverage "
-            f"is {100 * r0['heldout']:.0f} percent: conservative, which is the safe direction. <bookmark mark='d'/> Both "
-            f"converge to ninety percent as the simulations grow. The failure Hermans and colleagues found is Part "
-            f"nineteen's training error, mistaken for test error."
+            f"<bookmark mark='a'/> Coverage of the ninety percent credible interval, against the number of training simulations, over fresh parameters and data. <bookmark mark='b'/> With the in-sample residual variance, the posterior is overconfident when simulations are scarce: {100 * r0['insample']:.0f} percent coverage with {r0['n_sim']} simulations. <bookmark mark='c'/> With the variance measured on held-out simulations, coverage is {100 * r0['heldout']:.0f} percent: above nominal in this experiment. Both versions now share the same fitted mean and test draws; only the residual-variance sample differs. Held-out RMS residuals do not guarantee a calibrated conditional posterior or conservative coverage in every problem. <bookmark mark='d'/> Both converge to ninety percent as the simulations grow. This toy isolates one training-error mechanism; it does not explain every failure in the cited SBI study. Coverage here averages over the prior predictive, rather than being guaranteed at each fixed parameter."
         ) as vo:
             self.play(FadeIn(A), Create(nom), FadeIn(seeded_tag()))
             vo.wait_until("a")
@@ -123,12 +117,7 @@ class SBI(LectureMixin, VoiceoverScene):
 
     def sbc(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> The general check is Part twenty-six's simulation-based calibration. <bookmark "
-            "mark='b'/> Draw theta from the prior, simulate x, compute the approximate posterior, and record the rank of the "
-            "true theta among posterior draws. <bookmark mark='c'/> If the posterior is right, the ranks are uniform; a "
-            "U shape means overconfidence, a hump underconfidence, a slope bias. <bookmark mark='d'/> And when the "
-            "simulator itself is wrong about the world, no calibration on simulations can reveal it: Part twenty-eight's "
-            "model checking against real data is still required.",
+            "<bookmark mark='a'/> The general check is Part twenty-six's simulation-based calibration. <bookmark mark='b'/> Draw theta from the prior, simulate x, compute the approximate posterior, and record the rank of the true theta among posterior draws. <bookmark mark='c'/> Correct posterior draws give uniform ranks under the SBC experiment. U shapes, humps and slopes can suggest spread or bias errors, but do not uniquely diagnose them. Uniform ranks are necessary and not sufficient: returning the prior while ignoring data can also pass basic SBC. <bookmark mark='d'/> And when the simulator itself is wrong about the world, no calibration on simulations can reveal it: Part twenty-eight's model checking against real data is still required.",
             [(r"\text{SBC}", r":", r"\text{rank of the true } \theta \text{ among draws}", 40),
              (r"\text{calibrated}", r":", r"\text{uniform ranks}", 40),
              (r"\text{shapes}", r":", r"\text{U: \ overconfident; \ hump: \ under}", 40),

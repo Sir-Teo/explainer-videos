@@ -35,12 +35,12 @@ class Uncertainty(LectureMixin, VoiceoverScene):
         self.lad_voiceover(
             "<bookmark mark='a'/> Calibration can be lost. <bookmark mark='b'/> OpenAI's GPT-4 report showed the pretrained "
             "model well calibrated on a multiple-choice benchmark, and the model after training on human preferences less so. "
-            "<bookmark mark='c'/> A model trained to please is trained towards confident answers. <bookmark mark='d'/> So "
+            "<bookmark mark='c'/> Preference optimization need not preserve the pretraining calibration objective. The reported plot is an empirical comparison, not proof that every preference-training method rewards confidence or worsens calibration. <bookmark mark='d'/> So "
             "calibration must be checked on the deployed model, not inherited from the base model, and checked within "
             "subgroups of questions, Part sixty-three's multicalibration.",
             [(r"\text{pretrained}", r":", r"\text{calibrated}", 40),
              (r"\text{after preference training}", r":", r"\text{less so}", 40),
-             (r"\text{reason}", r":", r"\text{rewarded confidence}", 40),
+             (r"\text{reason}", r":", r"\text{different objective; calibration must be checked}", 40),
              (r"\text{check}", r":", r"\text{the deployed model, \ by subgroup}", 40)],
             [r"OpenAI (2023)", r"a reported plot", r"an incentive", r"Part 63"],
             colors=[(1, NAIVEC)])
@@ -53,7 +53,7 @@ class Uncertainty(LectureMixin, VoiceoverScene):
             "for each answer the smallest threshold above which every kept claim is true: the score of its most confident "
             "false claim. <bookmark mark='d'/> Take Part fifty-seven's conformal quantile of those thresholds. Filtering a "
             "new answer to the claims above it gives an answer that is entirely true with probability at least one minus "
-            "alpha, for exchangeable questions, whatever the model.",
+            "alpha, marginally over exchangeable complete responses and calibration data, with fixed scoring and reliable truth labels. It may keep no claims at all. It does not certify each individual answer or semantic truth when the checker is wrong.",
             [(r"\text{an answer}", r":", r"\text{claims, \ each with a score}", 40),
              (r"t_i", r"=", r"\max\{\text{score of a false claim in answer } i\}", 40),
              (r"\hat t", r"=", r"\lceil (n + 1)(1 - \alpha) \rceil\text{-th smallest } t_i", 40),
@@ -107,7 +107,7 @@ class Uncertainty(LectureMixin, VoiceoverScene):
             "acceptable one with guaranteed probability, and prunes redundant ones. <bookmark mark='c'/> For multiple-choice "
             "questions, ordinary prediction sets from Part fifty-seven apply directly, and the set's size is a measure of "
             "the model's uncertainty. <bookmark mark='d'/> All of them inherit Part fifty-seven's fine print: the guarantee "
-            "is marginal, over exchangeable questions, and must be recalibrated when the questions shift.",
+            "is marginal under its stated exchangeability and calibration design. A generic shift is not repaired merely by reusing old calibration; suitable new data or an explicit shift method is needed.",
             [(r"\text{conformal LM}", r":", r"\text{sample until acceptable}", 40),
              (r"\text{multiple choice}", r":", r"\text{prediction sets}", 40),
              (r"\text{set size}", r":", r"\text{an uncertainty measure}", 40),
@@ -117,11 +117,7 @@ class Uncertainty(LectureMixin, VoiceoverScene):
 
     def limits(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> What remains hard. <bookmark mark='b'/> Checking claims is itself expensive, so the "
-            "calibration set is small, and chapter six's judges are tempting; their errors then enter the guarantee. "
-            "<bookmark mark='c'/> Claims are not independent, and splitting an answer into claims is itself done by a "
-            "model. <bookmark mark='d'/> And a guarantee over typical questions says little about the rare question that "
-            "matters most, Part fifty-seven's conditional coverage problem, unsolved in general.",
+            "<bookmark mark='a'/> What remains hard. <bookmark mark='b'/> Checking claims is itself expensive, so the calibration set is small, and chapter six's judges are tempting; their errors then enter the guarantee. <bookmark mark='c'/> Claims can be dependent without breaking response-level conformal calibration. What matters is exchangeability of whole responses, a fixed decomposition/scoring pipeline and reliable labels. Splitting into claims can itself miss an assertion or alter meaning. <bookmark mark='d'/> And a guarantee over typical questions says little about the rare question that matters most, Part fifty-seven's conditional coverage problem, unsolved in general.",
             [(r"\text{checking}", r":", r"\text{expensive, \ or a judge}", 40),
              (r"\text{claims}", r":", r"\text{dependent, \ model-made}", 40),
              (r"\text{rare questions}", r":", r"\text{marginal is not conditional}", 40),

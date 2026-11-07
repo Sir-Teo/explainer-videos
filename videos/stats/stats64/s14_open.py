@@ -57,12 +57,7 @@ class OpenProblems(LectureMixin, VoiceoverScene):
 
     def op_construct(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Problem one: what benchmarks measure. <bookmark mark='b'/> A benchmark score is used as "
-            "evidence of reasoning, or coding ability, or knowledge: a latent construct, in Part forty-one's and "
-            "psychometrics' language. <bookmark mark='c'/> Whether a score measures its construct, and nothing else, is the "
-            "question of construct validity, which educational testing spent a century on, and which model evaluation has "
-            "barely begun. <bookmark mark='d'/> Measurement models for model abilities, with tests of whether a benchmark "
-            "measures what it claims, are open.",
+            "<bookmark mark='a'/> Problem one: what benchmarks measure. <bookmark mark='b'/> A benchmark score is used as evidence of reasoning, or coding ability, or knowledge: a latent construct, in Part forty-one's and psychometrics' language. <bookmark mark='c'/> Whether a score measures its construct, and nothing else, is the question of construct validity, which educational testing spent a century on, and which model evaluation has barely begun. <bookmark mark='d'/> IRT and other measurement models already address parts of this question. Validating and transporting constructs across changing model families and uses remains an active research problem.",
             [(r"\text{problem 1}", r":", r"\text{construct validity}", 40),
              (r"\text{scores as evidence}", r":", r"\text{of a latent ability}", 40),
              (r"\text{psychometrics}", r":", r"\text{a century of method}", 40),
@@ -74,7 +69,7 @@ class OpenProblems(LectureMixin, VoiceoverScene):
         self.lad_voiceover(
             "<bookmark mark='a'/> Problem two: benchmarks that outlive their usefulness. <bookmark mark='b'/> Models now "
             "saturate a new benchmark within a year or two, and test questions leak into training data. <bookmark mark='c'/> "
-            "Dynamic benchmarks, refreshed continually, solve leakage but destroy comparability across time: Part "
+            "Dynamic benchmarks, refreshed continually, can reduce leakage while complicating comparability across time: Part "
             "seventeen's problem of a changing measuring instrument. <bookmark mark='d'/> Designs for evaluation that stay "
             "comparable as the questions change, with linking and equating from testing, and that resist contamination, "
             "are open.",
@@ -105,7 +100,7 @@ class OpenProblems(LectureMixin, VoiceoverScene):
             "<bookmark mark='a'/> Problem four: statistics with models in every loop. <bookmark mark='b'/> Models label "
             "the data, generate the data, judge the outputs, and are trained on the judgements: chapter six, chapter seven and "
             "chapter three at once. <bookmark mark='c'/> Each step's errors can be correlated with the next step's, which "
-            "breaks the independence that prediction-powered inference and the surrogate index rely on. <bookmark "
+            "can break the sampling and conditional-mean assumptions used by a simple analysis. Prediction-powered inference permits predictor errors correlated with outcomes; the issue is uncontrolled fitting dependence, selection or shift, not any correlation of errors. <bookmark "
             "mark='d'/> Inference that remains valid when the measuring instruments are themselves trained on what they "
             "measure is open.",
             [(r"\text{problem 4}", r":", r"\text{models in every loop}", 40),
@@ -117,11 +112,7 @@ class OpenProblems(LectureMixin, VoiceoverScene):
 
     def op_conditional(self):
         self.lad_voiceover(
-            "<bookmark mark='a'/> Problem five: guarantees for this question. <bookmark mark='b'/> Every guarantee in this "
-            "part is marginal: on average over questions, users or markets. <bookmark mark='c'/> A person relying on one "
-            "answer wants a conditional statement, about their question, which Part fifty-seven proved impossible without "
-            "assumptions, in general. <bookmark mark='d'/> Which useful conditional guarantees are achievable for generative "
-            "models, over which classes of questions, and at what price in informativeness, is open.",
+            "<bookmark mark='a'/> Problem five: guarantees for this question. <bookmark mark='b'/> The conformal and coverage demonstrations average over their specified sampling experiments. Other guarantees, such as fixed-model testing bounds, condition on different objects; not every guarantee in this part is the same kind of marginal statement. <bookmark mark='c'/> A person relying on one answer wants a conditional statement, about their question, which Part fifty-seven proved impossible without assumptions, in general. <bookmark mark='d'/> Which useful conditional guarantees are achievable for generative models, over which classes of questions, and at what price in informativeness, is open.",
             [(r"\text{problem 5}", r":", r"\text{conditional guarantees}", 40),
              (r"\text{so far}", r":", r"\text{marginal, \ on average}", 40),
              (r"\text{impossible in general}", r":", r"\text{without assumptions}", 40),
