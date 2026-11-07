@@ -5,28 +5,11 @@ import numpy as np
 from explainer.stats.board import coverage_board, load_all
 from explainer.stats.kit import survey as Sv
 from videos.stats.stats18.common import *  # noqa: F403
-from videos.stats.stats18.compute import adults, age_band, digest_returns, inc_band
+from videos.stats.stats18.compute import adults, age_band, digest_returns, inc_band, raking_steps as margins_after
 
 INC = [r"under 30k", r"30--100k", r"over 100k"]
 AGE = [r"18--29", r"30--49", r"50--66", r"67+"]
 
-
-def margins_after(P, R, passes):
-    """Weighted income and age shares of the returns after a number of raking half-steps (0 = unweighted)."""
-    ib, ab = inc_band(P["income"][R]), age_band(P["age"][R])
-    ti = np.bincount(inc_band(P["income"]), minlength=3) / len(P["income"])
-    ta = np.bincount(age_band(P["age"]), minlength=4) / len(P["age"])
-    w = np.ones(R.sum())
-    out = []
-    for k in range(passes + 1):
-        out.append((np.bincount(ib, weights=w, minlength=3) / w.sum(), np.bincount(ab, weights=w, minlength=4) / w.sum()))
-        if k % 2 == 0:
-            cur = np.bincount(ib, weights=w, minlength=3) / w.sum()
-            w = w * (ti / cur)[ib]
-        else:
-            cur = np.bincount(ab, weights=w, minlength=4) / w.sum()
-            w = w * (ta / cur)[ab]
-    return out, ti, ta
 
 
 class Weighting(VoiceoverScene):
@@ -57,18 +40,22 @@ class Weighting(VoiceoverScene):
         rows[3][2].set_color(WEIGHT)
         whys = [why(r"three layers"), why(r"respondents stand in for similar nonrespondents"),
                 why(r"post-stratification, \ raking, \ GREG"), why(r"H\'ajek's weighted mean")]
+        intro = label('Survey weights combine design, response and calibration', font_size=36)
         with self.voiceover(
             "A real survey's weight has three layers. <bookmark mark='a'/> The design weight, one over the inclusion "
-            "probability; a nonresponse adjustment; and a calibration factor. <bookmark mark='b'/> The nonresponse adjustment "
-            "divides by the estimated response rate within cells of similar people, so that respondents stand in for the "
-            "nonrespondents who resemble them. <bookmark mark='c'/> Calibration then adjusts the weights so that weighted totals "
-            "match what a census says: by age, sex, region, education. <bookmark mark='d'/> Estimates are weighted means. "
-            "Weighting can't create information, but it can rebalance it."
+            "probability; a nonresponse adjustment; and a calibration factor. <bookmark mark='b'/> The nonresponse "
+            "adjustment divides by the estimated response rate within cells of similar people, so that respondents "
+            "stand in for the nonrespondents who resemble them. <bookmark mark='c'/> Calibration then adjusts the "
+            "weights so that weighted totals match what a census says: by age, sex, region, education. <bookmark "
+            "mark='d'/> Estimates are weighted means. Weighting can't create information, but it can rebalance it."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def cells(self):
@@ -81,19 +68,23 @@ class Weighting(VoiceoverScene):
         rows[2][2].set_color(WEIGHT)
         whys = [why(r"e.g. region and age from the frame"), why(r"the response rate in each cell"),
                 why(r"each responder stands for the nonresponders like them"), why(r"Part 14's logistic regression; \ Part 35 again")]
+        intro = label('Estimate response propensities from observed frame variables', font_size=36)
         with self.voiceover(
-            "How is the nonresponse adjustment made? <bookmark mark='a'/> Group everyone who was sampled into cells, using "
-            "information known for responders and nonresponders alike, such as region and age from the frame. "
-            "<bookmark mark='b'/> In each cell, the response rate is the share who answered. <bookmark mark='c'/> Each "
-            "responder's weight is multiplied by one over their cell's response rate, so that they stand in for the "
-            "nonresponders who resemble them. <bookmark mark='d'/> With many variables, a logistic regression of responding "
-            "on the frame variables, Part 14's model, gives each person a propensity, and its inverse is the weight. The same "
-            "idea, inverse probability weighting, returns in Part 35 for causal inference."
+            "How is the nonresponse adjustment made? <bookmark mark='a'/> Group everyone who was sampled into cells, "
+            "using information known for responders and nonresponders alike, such as region and age from the frame. "
+            "<bookmark mark='b'/> In each cell, the response rate is the share who answered. <bookmark mark='c'/> "
+            "Each responder's weight is multiplied by one over their cell's response rate, so that they stand in for "
+            "the nonresponders who resemble them. <bookmark mark='d'/> With many variables, a logistic regression of "
+            "responding on the frame variables, Part 14's model, gives each person a propensity, and its inverse is "
+            "the weight. The same idea, inverse probability weighting, returns in Part 35 for causal inference."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def bars(self, ax, shares, x0, color):
@@ -104,7 +95,7 @@ class Weighting(VoiceoverScene):
     def raking(self):
         P = adults()
         R = digest_returns(P)
-        steps, ti, ta = margins_after(P, R, 6)
+        steps, ti, ta = margins_after(P, R, 8)
         A = axes([-0.6, 2.6], [0, 0.75], x_length=5.0, y_length=3.4, xlabel=r"income band", ylabel=r"share",
                  yticks=[0, 0.25, 0.5, 0.75], center=[-3.4, 0.6, 0], font_size=18)
         B = axes([-0.6, 3.6], [0, 0.75], x_length=5.6, y_length=3.4, xlabel=r"age band", ylabel=r"share",
@@ -118,16 +109,16 @@ class Weighting(VoiceoverScene):
         key = VGroup(label(r"grey: \ the census", font_size=20, color=GREY_B), label(r"blue: \ the weighted returns", font_size=20,
                                                                                        color=WEIGHT)).arrange(RIGHT, buff=0.8).move_to([0, 3.2, 0])
         counter = label(r"unweighted", font_size=22, color=WEIGHT).move_to([0, -2.3, 0])
-        hist = load("rake")["hist"]
+        gap = max(np.max(np.abs(steps[-1][0]-ti)), np.max(np.abs(steps[-1][1]-ta)))
         with self.voiceover(
-            "<bookmark mark='a'/> Here's calibration by raking, on the World's Digest returns. The returns are far too rich and "
-            "too old: ten percent come from the bottom income band, against a third of the population, and twenty-four percent "
-            "are over sixty-seven, against eighteen. <bookmark mark='b'/> W. Edwards Deming and Frederick Stephan, preparing "
-            "the 1940 US census, invented the fix. Scale the weights so the income shares match the census exactly. "
-            "<bookmark mark='c'/> That knocks the age shares out a little, so now scale them to match age. "
-            "<bookmark mark='d'/> Income is slightly off again; repeat. <bookmark mark='e'/> The adjustments shrink rapidly: "
-            "after four rounds both margins match to within a ten-thousandth. It's iterative proportional fitting, and it "
-            "converges whenever a solution exists."
+            "<bookmark mark='a'/> Here's calibration by raking, on the World's Digest returns. The returns are far "
+            "too rich and too old: ten percent come from the bottom income band, against a third of the population, "
+            "and twenty-four percent are over sixty-seven, against eighteen. <bookmark mark='b'/> W. Edwards Deming "
+            "and Frederick Stephan, preparing the 1940 US census, invented the fix. Scale the weights so the income "
+            "shares match the census exactly. <bookmark mark='c'/> That knocks the age shares out a little, so now "
+            "scale them to match age. <bookmark mark='d'/> Income is slightly off again; repeat. <bookmark mark='e'/>"
+            " The adjustments shrink rapidly: after four rounds both margins match to within a ten-thousandth. It's "
+            "iterative proportional fitting, and it converges whenever a solution exists."
         ) as vo:
             self.play(FadeIn(A), FadeIn(B), FadeIn(ni), FadeIn(na), FadeIn(ti_b), FadeIn(ta_b), FadeIn(key))
             vo.wait_until("a")
@@ -139,10 +130,10 @@ class Weighting(VoiceoverScene):
                 txt = label([r"after matching income", r"after matching age", r"income again"][k], font_size=22, color=WEIGHT).move_to(counter)
                 self.play(Transform(si, new_i), Transform(sa, new_a), Transform(counter, txt), run_time=1.2)
             vo.wait_until("e")
-            for k in range(4, 7):
+            for k in range(4, 9):
                 self.play(Transform(si, self.bars(A.ax, steps[k][0], -0.18, WEIGHT)),
                           Transform(sa, self.bars(B.ax, steps[k][1], -0.18, WEIGHT)), run_time=0.5)
-            self.play(Transform(counter, MathTex(rf"\text{{largest gap after 4 rounds}}: {hist[3]:.0e}", font_size=24, color=WEIGHT)
+            self.play(Transform(counter, MathTex(rf"\text{{largest gap after 4 rounds}}: {gap:.0e}", font_size=24, color=WEIGHT)
                                 .move_to(counter)))
         self.clear_scene()
 
@@ -164,11 +155,11 @@ class Weighting(VoiceoverScene):
                     font_size=24, color=GREY_A),
         ), 12.4, 0.3, [0, -1.8, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The result. The raw returns said fifty-eight percent Blue. Raked to the census margins of "
-            "region, age and income, they say forty-nine. The truth is thirty-eight. <bookmark mark='b'/> Weighting removed "
-            "less than half the error. <bookmark mark='c'/> And it had a cost: the weights range from point one seven to "
-            "nearly eight, and Kish's effective sample size falls from thirty-four and a half thousand to seventeen thousand. "
-            "That's still plenty of precision. It's the bias that remains."
+            "<bookmark mark='a'/> The result. The raw returns said fifty-eight percent Blue. Raked to the census "
+            "margins of region, age and income, they say forty-nine. The truth is thirty-eight. <bookmark mark='b'/> "
+            "Weighting removed less than half the error. <bookmark mark='c'/> And it had a cost: the weights range "
+            "from point one seven to nearly eight, and Kish's effective sample size falls from thirty-four and a half"
+            " thousand to seventeen thousand. That's still plenty of precision. It's the bias that remains."
         ) as vo:
             self.play(FadeIn(A))
             vo.wait_until("a")
@@ -184,26 +175,30 @@ class Weighting(VoiceoverScene):
         rows = [
             cmath(r"\text{weighting assumes}", r":", r"\text{within a cell, \ responders resemble nonresponders}", font_size=28),
             cmath(r"\text{missing at random}", r":", r"P(\text{respond}) \text{ depends only on the cells}", font_size=28),
-            cmath(r"\text{the World}", r":", rf"\text{{Blue voters respond }} {100 * d['resp_blue']:.0f}\% \text{{ vs Red }} {100 * d['resp_red']:.0f}\%,\ \text{{at every income}}",
+            cmath(r"\text{the World}", r":", rf"\text{{Blue response exceeds Red within income, age and region cells}}",
                   font_size=26),
             cmath(r"\text{so}", r":", r"\text{no weighting on income, \ age or region can fix it}", font_size=28),
         ]
         rows[3][2].set_color(RES)
         whys = [why(r"the cell is all we can see"), why(r"Rubin's MAR (Part 41)"),
                 why(r"response depends on the answer itself"), why(r"missing not at random")]
+        intro = label('Weighting needs adequate information about response', font_size=36)
         with self.voiceover(
-            "Why can't weighting finish the job? <bookmark mark='a'/> It assumes that within each weighting cell, the people who "
-            "responded resemble the people who didn't. <bookmark mark='b'/> That's Donald Rubin's condition of missing at "
-            "random, which Part 41 makes precise: the chance of responding depends only on things we've weighted for. "
-            "<bookmark mark='c'/> On the World it's false. Blue voters return their ballots more often than Red voters at "
-            "every income, every age, in every region: the response depends on the answer itself. <bookmark mark='d'/> No "
-            "reweighting on income, age or region can correct that. The Digest's nonresponse was missing not at random, the "
-            "hardest kind."
+            "Why can't weighting finish the job? <bookmark mark='a'/> It assumes that within each weighting cell, the"
+            " people who responded resemble the people who didn't. <bookmark mark='b'/> That's Donald Rubin's "
+            "condition of missing at random, which Part 41 makes precise: the chance of responding depends only on "
+            "things we've weighted for. <bookmark mark='c'/> On the World it's false. Blue voters return their "
+            "ballots more often than Red voters at every income, every age, in every region: the response depends on "
+            "the answer itself. <bookmark mark='d'/> No reweighting on income, age or region can correct that. The "
+            "Digest's nonresponse was missing not at random, the hardest kind."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def board(self):
@@ -211,9 +206,9 @@ class Weighting(VoiceoverScene):
         b = coverage_board(rows, lit_part=18, placeholders=0, font_size=20, row_h=0.62)
         b.scale_to_fit_width(min(b.width, 13.0)).move_to(ORIGIN)
         with self.voiceover(
-            "<bookmark mark='a'/> On the Board, two hundred fresh mailings: the raked Digest returns, with a standard error that "
-            "accounts for the weights, cover the truth zero times. The weights made the interval honest about its variance and "
-            "left it eleven points away."
+            "<bookmark mark='a'/> On the Board, two hundred fresh mailings: the raked Digest returns, with a plug-in "
+            "independent-unit standard error using the weights, cover the truth zero times. That formula is not a "
+            "full design-based variance calculation, and cannot remove the eleven-point bias."
         ) as vo:
             self.play(FadeIn(b.head), FadeIn(b.axis), FadeIn(b.legend))
             vo.wait_until("a")
@@ -224,17 +219,19 @@ class Weighting(VoiceoverScene):
     def costs(self):
         rows = fit_rows(VGroup(
             label(r"weights correct for the variables you weight on, \ and only those", font_size=24),
-            label(r"variable weights cost precision: \ Kish's $n_{\text{eff}} = (\sum w)^2 / \sum w^2$", font_size=24, color=GREY_A),
+            label(r"Kish weight-only diagnostic: \ Kish's $n_{\text{eff}} = (\sum w)^2 / \sum w^2$", font_size=24, color=GREY_A),
             label(r"choose weighting variables that predict both response and the answer", font_size=24, color=HIT),
             label(r"a probability sample with weights beats a huge self-selected one", font_size=24, color=OBS),
             label(r"the 2016 polls missed one such variable: \ education", font_size=24, color=RES),
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> So: weights correct for the variables you weight on, and only those. <bookmark mark='b'/> "
-            "Variable weights cost precision, measured by Kish's effective sample size. <bookmark mark='c'/> The best weighting "
-            "variables predict both who responds and what they answer. <bookmark mark='d'/> A probability sample, weighted for "
-            "its modest nonresponse, beats a huge self-selected one. <bookmark mark='e'/> And forgetting one such variable has "
-            "consequences, as the American polls of 2016 found with education, which is the last chapter's story."
+            "<bookmark mark='a'/> So: weights correct for the variables you weight on, and only those. <bookmark "
+            "mark='b'/> Kish's effective sample size describes weight dispersion under a working independent, "
+            "equal-variance model. It does not measure selection bias or the precision gains from useful calibration "
+            "variables. <bookmark mark='c'/> The best weighting variables predict both who responds and what they "
+            "answer. <bookmark mark='d'/> A probability sample, weighted for its modest nonresponse, beats a huge "
+            "self-selected one. <bookmark mark='e'/> And forgetting one such variable has consequences, as the "
+            "American polls of 2016 found with education, which is the last chapter's story."
         ) as vo:
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)

@@ -22,10 +22,10 @@ From there the part covers:
 - **Simple random sampling.** The fpc derived; 2,000 polls of 1,000 (SD 1.52 points); why ±3 points needs about 1,100
   people whatever N; the fpc in a town of 1,114 (coverage 93.7% with it, 98.5% without); systematic sampling.
 - **Stratification.** Mean income by register band; Neyman allocation derived (80 / 423 / 497 against proportional
-  334 / 591 / 75); SE 1.80 (SRS), 1.45 (proportional), 0.76 (Neyman); stratifying the vote by region gains only
+  334 / 591 / 75); SE 1.80 (SRS), 1.44 (proportional), 0.76 (Neyman); stratifying the vote by region gains only
   1.5%; post-stratification.
 - **Clusters and stages.** 20 towns × 50 adults; ICC 0.0156; Kish's design effect 1.76 (n_eff 567); naive vs
-  cluster SE; probability proportional to size (Hansen & Hurwitz 1943) 174 times more precise for total income;
+  cluster SE; probability proportional to size (Hansen & Hurwitz 1943) a standard deviation 174 times smaller for total income;
   multistage designs and replicate weights; two Board rows.
 - **Horvitz–Thompson.** Unbiased for any design, checked over all 32 Poisson samples; the variance; Basu's elephants
   (1971); Hájek's estimator.
@@ -50,7 +50,7 @@ Every number on screen is computed in [`compute.py`](compute.py) or inline in a 
   - `turnout`.
 
   Adding it changes no earlier block.
-- **`statkit.survey`** ([`explainer/stats/kit/survey.py`](../../../explainer/stats/kit/survey.py)), checked in
+- **`statkit.survey`** ([`explainer/stats/kit/survey.py`](../../../../explainer/stats/kit/survey.py)), checked in
   `tests/test_stats_kit_survey.py`:
   - the SRS mean with the fpc;
   - proportional and Neyman allocation, and stratified variances and means;
@@ -91,8 +91,8 @@ python tools/lecture_length.py stats18 --floor 50
 | 2 | Meng's identity | ρ = 0.0902, f = 0.0467, √((1−f)/f) = 4.52, σ = 0.486 → 0.1980; n_eff 6 and 50; Board 94.6%, 0% |
 | 3 | Design-based inference | 29 of 214 districts (Gini & Galvani) |
 | 4 | Simple random sampling | SD 1.52 vs 1.54; n ≈ 1,100 for ±3; town of 1,114: 93.7% vs 98.5% |
-| 5 | Stratification | S_h 5.8, 17.2, 159.5; SE 1.80 / 1.45 / 0.76 (simulated 1.67 / 1.44 / 0.76); region strata gain 1.5% |
-| 6 | Clusters and stages | ICC 0.0156, deff 1.76, n_eff 567; one sample 37.3%, SE 1.53 naive vs 1.59; Board 84.4%, 93.4%; PPS SD 0.22 M vs 38.1 M (174×) |
+| 5 | Stratification | S_h 5.8, 17.2, 159.5; SE 1.80 / 1.44 / 0.76 (simulated 1.67 / 1.44 / 0.76); region strata gain 1.5% |
+| 6 | Clusters and stages | ICC 0.0156, deff 1.76, n_eff 567; one sample 37.3%, SE 1.53 naive vs 1.59; Board 84.4%, 93.4%; PPS SD 0.22 M vs 38.1 M (SD ratio 174) |
 | 7 | Horvitz–Thompson | 32 samples average exactly 24 |
 | 8 | Ratio and regression estimators | Laplace 2,037,615 / 71,866 = 28.35 → 28.35 million; register ratio estimate 50.04 vs truth 49.48; SD 0.91 vs 3.04 |
 | 9 | Weighting | raw 58.0% → raked 49.1%; weights 0.17–7.8; n_eff 16,941; Board 0% |
@@ -141,7 +141,7 @@ Neyman's allocation has 20% less variance.
 **4. An effective sample size.**
 
 *Solution.* n_eff = f/(1 − f)/ρ² = (0.01/0.99)/0.0001 ≈ 101. Whatever the population's size, the self-selected 1% is
-worth about a hundred random people.
+comparable to about a hundred random people on this squared-error scale, ignoring the comparison SRS's finite-population correction.
 
 **5. A design effect.**
 
@@ -191,3 +191,13 @@ holds for any design, provided every πᵢ > 0; otherwise some units can never b
 | the efficiency of weighting estimators | 49 |
 | privacy for censuses | 63 |
 | the Coverage Board | every part; 65 |
+
+## Review clarifications
+
+The cluster simulation deliberately samples towns uniformly and then 50 adults per town. Its unweighted mean overrepresents small towns; the narration identifies the residual bias. The equal-cluster design effect is a working approximation, and the town-based SE does not correct unequal inclusion probabilities.
+
+The zero-variance Horvitz–Thompson ideal requires a fixed sample size and feasible positive inclusion probabilities proportional to the outcome. Independent Poisson inclusion still has random-size variance. The ratio plot now uses the exact cached sample behind its estimate; off-viewport points are omitted rather than relocated, and curves are clipped geometrically.
+
+The raking animation performs four complete income/age rounds and reports their own discrepancy. The final Digest fit separately uses region, age and income. MAR in continuous predictors does not make coarse marginal raking exact. Kish's weight-only diagnostic and a plug-in weighted SE do not establish freedom from selection bias or a valid full design-based variance.
+
+Historical checks: [Wang et al. (2015)](https://5harad.com/papers/forecasting-with-nonrepresentative-polls.pdf) distinguishes 750,148 interviews from 345,858 distinct Xbox respondents. [Meng (2018), author project summary](https://cces.gov.harvard.edu/publications/statistical-paradises-and-paradoxes-big-data-i-law-large-populations-big-data) describes the 2.3-million example as a hypothetical one-percent sample implied by the estimated defect correlation.

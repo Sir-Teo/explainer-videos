@@ -35,12 +35,12 @@ class Strata(VoiceoverScene):
         whys = [why(r"using what the frame already tells us"), why(r"an SRS in each stratum, \ combined"),
                 why(r"strata are sampled independently"), why(r"the between-strata variation is removed by design")]
         with self.voiceover(
-            "<bookmark mark='a'/> If the frame tells us something about everyone, we can use it before sampling. Split the "
-            "population into groups, called strata, whose sizes we know. <bookmark mark='b'/> Take a simple random sample in "
-            "each, and combine the stratum means with their population weights. <bookmark mark='c'/> The strata are sampled "
-            "independently, so the variance is a weighted sum of within-stratum variances. <bookmark mark='d'/> The differences "
-            "between strata, which an SRS has to estimate along with everything else, contribute nothing: the design has "
-            "fixed each stratum's share exactly."
+            "<bookmark mark='a'/> If the frame tells us something about everyone, we can use it before sampling. "
+            "Split the population into groups, called strata, whose sizes we know. <bookmark mark='b'/> Take a simple"
+            " random sample in each, and combine the stratum means with their population weights. <bookmark "
+            "mark='c'/> The strata are sampled independently, so the variance is a weighted sum of within-stratum "
+            "variances. <bookmark mark='d'/> The differences between strata, which an SRS has to estimate along with "
+            "everything else, contribute nothing: the design has fixed each stratum's share exactly."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -60,10 +60,10 @@ class Strata(VoiceoverScene):
         ), 12.4, 0.3, [0, -2.0, 0])
         with self.voiceover(
             "An example where it matters. Suppose we want the World's mean income, from a sample of a thousand, "
-            "<bookmark mark='a'/> and the tax register tells us everyone's income band: under thirty thousand, thirty to a "
-            "hundred, over a hundred. <bookmark mark='b'/> The bands differ enormously. The top band holds seven and a half "
-            "percent of adults, but its standard deviation is a hundred and sixty thousand, twenty-eight times the bottom "
-            "band's, because the Pareto tail of Part 1 lives there."
+            "<bookmark mark='a'/> and the tax register tells us everyone's income band: under thirty thousand, thirty"
+            " to a hundred, over a hundred. <bookmark mark='b'/> The bands differ enormously. The top band holds "
+            "seven and a half percent of adults, but its standard deviation is a hundred and sixty thousand, "
+            "twenty-eight times the bottom band's, because the Pareto tail of Part 1 lives there."
         ) as vo:
             self.play(FadeIn(tab[0]), LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.3))
             vo.wait_until("a")
@@ -80,20 +80,25 @@ class Strata(VoiceoverScene):
             cmath(r"\text{proportional}", r":", r"n_h = n\,N_h/N", font_size=30),
         ]
         rows[2][2].set_color(OBS)
-        whys = [why(r"ignore the fpc; \ fix the total"), why(r"a Lagrange multiplier"),
+        whys = [why(r"equal costs; feasible allocations; fpc adds a constant"), why(r"a Lagrange multiplier"),
                 why(r"Neyman allocation (Tschuprow 1923; \ Neyman 1934)"), why(r"the same if every $S_h$ is equal")]
+        intro = label('Allocate more observations to larger, more variable strata', font_size=36)
         with self.voiceover(
-            "How many to take from each band? <bookmark mark='a'/> Minimize the variance for a fixed total sample size. "
-            "<bookmark mark='b'/> With a Lagrange multiplier, each stratum's term must have the same marginal value, "
-            "<bookmark mark='c'/> which gives n h proportional to the stratum's size times its standard deviation. Alexander "
-            "Tschuprow found it in 1923, and Neyman, independently, in 1934. <bookmark mark='d'/> Proportional allocation, "
-            "sampling each stratum in proportion to its size, is the special case where every stratum is equally variable. "
-            "Neyman's rule says: sample more where the population is more variable."
+            "How many to take from each band? <bookmark mark='a'/> Minimize the variance for a fixed total sample "
+            "size. <bookmark mark='b'/> With a Lagrange multiplier, each stratum's term must have the same marginal "
+            "value, <bookmark mark='c'/> which gives n h proportional to the stratum's size times its standard "
+            "deviation. Alexander Tschuprow found it in 1923, and Neyman, independently, in 1934. <bookmark "
+            "mark='d'/> Proportional allocation, sampling each stratum in proportion to its size, is the special case"
+            " where every stratum is equally variable. Neyman's rule says: sample more where the population is more "
+            "variable."
         ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def allocations(self):
@@ -116,12 +121,12 @@ class Strata(VoiceoverScene):
             label(r"each of them then carries a small weight", font_size=20, color=GREY_A),
         ), 4.2, 0.4, [4.8, 0.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Proportional allocation takes three hundred and thirty-four from the bottom band, five "
-            "hundred and ninety-one from the middle and seventy-five from the top. <bookmark mark='b'/> Neyman's allocation "
-            "takes eighty, four hundred and twenty-three, and four hundred and ninety-seven: <bookmark mark='c'/> half the "
-            "sample from the richest seven and a half percent of adults, where all the uncertainty is. "
-            "<bookmark mark='d'/> It isn't a biased sample: each of them carries a small weight in the estimate, their "
-            "stratum's share divided by its sample size."
+            "<bookmark mark='a'/> Proportional allocation takes three hundred and thirty-four from the bottom band, "
+            "five hundred and ninety-one from the middle and seventy-five from the top. <bookmark mark='b'/> Neyman's"
+            " allocation takes eighty, four hundred and twenty-three, and four hundred and ninety-seven: <bookmark "
+            "mark='c'/> half the sample from the richest seven and a half percent of adults, where all the "
+            "uncertainty is. <bookmark mark='d'/> It isn't a biased sample: each of them carries a small weight in "
+            "the estimate, their stratum's share divided by its sample size."
         ) as vo:
             self.play(FadeIn(A), FadeIn(names))
             vo.wait_until("a")
@@ -148,12 +153,13 @@ class Strata(VoiceoverScene):
             label(r"the SRS's simulated SD is below its formula: \ the heavy tail again", font_size=20, color=GREY_B),
         ), 12.4, 0.3, [0, -2.0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The results. A simple random sample of a thousand estimates mean income with a standard error "
-            "of one point eight thousand. Stratifying with proportional allocation brings it to one point four five. "
-            "Neyman's allocation: point seven six, <bookmark mark='b'/> less than half the SRS's, as good as a simple random "
-            "sample of about fifty-six hundred. The simulation over three thousand samples agrees with the formulas. "
-            "<bookmark mark='c'/> The SRS's simulated spread is a little below its formula, because with the Pareto tail a few "
-            "enormous incomes dominate the variance; the stratified designs control exactly that."
+            "<bookmark mark='a'/> The results. A simple random sample of a thousand estimates mean income with a "
+            "standard error of one point eight thousand. Stratifying with proportional allocation brings it to one "
+            "point four five. Neyman's allocation: point seven six, <bookmark mark='b'/> less than half the SRS's, as"
+            " good as a simple random sample of about fifty-six hundred. The simulation over three thousand samples "
+            "agrees with the formulas. <bookmark mark='c'/> The SRS's simulated spread is a little below its formula,"
+            " because with the Pareto tail a few enormous incomes dominate the variance; the stratified designs "
+            "control exactly that."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tab[0]), LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.4), run_time=2.5)
@@ -181,12 +187,13 @@ class Strata(VoiceoverScene):
         whys = [why(r"real differences between regions"), why(r"per respondent"), why(r"proportional allocation, \ per respondent"),
                 why(r"tiny: \ the regions differ far less than people do")]
         with self.voiceover(
-            "Stratification isn't always dramatic. <bookmark mark='a'/> Stratify the vote by the World's ten regions: Blue's "
-            "share ranges from thirty to forty-six percent across them, a real difference. <bookmark mark='b'/> An SRS's "
-            "variance per respondent is p times one minus p. <bookmark mark='c'/> A proportionally stratified sample's is the "
-            "weighted average of the within-region values, <bookmark mark='d'/> and the gain is just one and a half percent. "
-            "However different the regions' averages, the people within each region differ far more. Stratification pays when "
-            "the strata explain a large share of the variance, as the income bands did for income."
+            "Stratification isn't always dramatic. <bookmark mark='a'/> Stratify the vote by the World's ten regions:"
+            " Blue's share ranges from thirty to forty-six percent across them, a real difference. <bookmark "
+            "mark='b'/> An SRS's variance per respondent is p times one minus p. <bookmark mark='c'/> A "
+            "proportionally stratified sample's is the weighted average of the within-region values, <bookmark "
+            "mark='d'/> and the gain is just one and a half percent. However different the regions' averages, the "
+            "people within each region differ far more. Stratification pays when the strata explain a large share of "
+            "the variance, as the income bands did for income."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -205,12 +212,13 @@ class Strata(VoiceoverScene):
         whys = [why(r"e.g. age or region, \ asked in the interview"), why(r"each group weighted to its true share"),
                 why(r"the stratified estimator, \ after the fact"), why(r"from a census: \ chapter nine builds on it")]
         with self.voiceover(
-            "<bookmark mark='a'/> Often the grouping is known only after the interview: a person's age, or region, isn't on "
-            "the frame. Then we post-stratify. <bookmark mark='b'/> Give each respondent a weight: their group's population share "
-            "divided by its share of the sample. <bookmark mark='c'/> The weighted mean is the stratified estimator, built after "
-            "the fact, and nearly as good as stratifying in advance. <bookmark mark='d'/> It needs the groups' population "
-            "shares, usually from a census. Chapter nine extends it to many variables at once, and to samples that weren't "
-            "random to begin with."
+            "<bookmark mark='a'/> Often the grouping is known only after the interview: a person's age, or region, "
+            "isn't on the frame. Then we post-stratify. <bookmark mark='b'/> Give each respondent a weight: their "
+            "group's population share divided by its share of the sample. <bookmark mark='c'/> The weighted mean uses"
+            " the same stratum shares, after the fact. Its random cell sizes change the variance; it can work well "
+            "when all cells are adequately populated and response is ignorable within them. <bookmark mark='d'/> It "
+            "needs the groups' population shares, usually from a census. Chapter nine extends it to many variables at"
+            " once, and to samples that weren't random to begin with."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):

@@ -26,12 +26,13 @@ class Hook(VoiceoverScene):
             label(r"it had called every election since 1916", font_size=24, color=GREY_A),
         ), 12.4, 0.3, [0, -1.5, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> In the autumn of 1936 the Literary Digest, an American weekly magazine, ran the largest "
-            "opinion poll ever taken. It mailed ten million mock ballots to people on lists of telephone subscribers and car "
-            "owners, and to its own readers, and about two point four million came back. They favoured the Republican "
-            "challenger, Alf Landon, over President Franklin Roosevelt, by fifty-seven percent to forty-three. "
-            "<bookmark mark='b'/> With two point four million responses, the sampling error was negligible. "
-            "<bookmark mark='c'/> And the Digest had correctly called every presidential election since 1916."
+            "<bookmark mark='a'/> In the autumn of 1936 the Literary Digest, an American weekly magazine, ran the "
+            "largest opinion poll ever taken. It mailed ten million mock ballots to people on lists of telephone "
+            "subscribers and car owners, and to its own readers, and about two point four million came back. They "
+            "favoured the Republican challenger, Alf Landon, over President Franklin Roosevelt, by fifty-seven "
+            "percent to forty-three. <bookmark mark='b'/> Under a simple-random-sampling formula, two point four "
+            "million responses would imply a tiny margin of error. <bookmark mark='c'/> And the Digest had correctly "
+            "called every presidential election since 1916."
         ) as vo:
             self.play(FadeIn(tl))
             vo.wait_until("a")
@@ -45,26 +46,26 @@ class Hook(VoiceoverScene):
     def result(self):
         bars = VGroup(
             share_bar(0.57, width=8.0, center=[0.6, 1.4, 0]),
-            share_bar(0.37, width=8.0, center=[0.6, 0.0, 0]),
+            share_bar(36.54 / (36.54 + 60.80), width=8.0, center=[0.6, 0.0, 0]),
             share_bar(0.44, width=8.0, center=[0.6, -1.4, 0]),
         )
         names = VGroup(label(r"\emph{Literary Digest}", font_size=24).next_to(bars[0], LEFT, buff=0.3),
                        label(r"the election", font_size=24).next_to(bars[1], LEFT, buff=0.3),
                        label(r"Gallup", font_size=24).next_to(bars[2], LEFT, buff=0.3))
-        vals = VGroup(label(r"Landon 57\%", font_size=22).move_to(bars[0][0]), label(r"Landon 37\%", font_size=22).move_to(bars[1][0]),
+        vals = VGroup(label(r"Landon 57\%", font_size=22).move_to(bars[0][0]), label(r"Landon 37.5\%", font_size=22).move_to(bars[1][0]),
                       label(r"Landon 44\%", font_size=22).move_to(bars[2][0]))
         foot = fit_rows(VGroup(
-            label(r"Roosevelt: \ 61\% of the vote, \ 46 of 48 states", font_size=24, color=RED),
+            label(r"Roosevelt: \ 61\% of all votes, \ 46 states; bars normalize the two candidates", font_size=24, color=RED),
             label(r"George Gallup, \ with about 50,000 chosen by quota, \ called the winner", font_size=22, color=GREY_A),
         ), 12.4, 0.25, [0, -2.8, 0])
         tag = historical_tag(r"Squire (1988); \ official returns", corner=UR)
         with self.voiceover(
-            "<bookmark mark='a'/> Here is the Digest's forecast, with Landon, the challenger, in blue. <bookmark mark='b'/> And here's the election. "
-            "Roosevelt won about sixty-one percent of the vote, and forty-six of the forty-eight states: one of the largest "
-            "landslides in American history. The Digest was wrong by about twenty points. <bookmark mark='c'/> A young "
-            "pollster called George Gallup, with a sample of about fifty thousand chosen by quotas to mirror the electorate, "
-            "predicted Roosevelt's victory, and even predicted, in advance, the Digest's mistake. Within two years the Digest "
-            "was gone."
+            "<bookmark mark='a'/> Here is the Digest's forecast, with Landon, the challenger, in blue. <bookmark "
+            "mark='b'/> And here's the election. Roosevelt won about sixty-one percent of the vote, and forty-six of "
+            "the forty-eight states: one of the largest landslides in American history. The Digest was wrong by about"
+            " twenty points. <bookmark mark='c'/> A young pollster called George Gallup, with a sample of about fifty"
+            " thousand chosen by quotas to mirror the electorate, predicted Roosevelt's victory, and even predicted, "
+            "in advance, the Digest's mistake. Within two years the Digest was gone."
         ) as vo:
             self.add(tag)
             vo.wait_until("a")
@@ -86,11 +87,12 @@ class Hook(VoiceoverScene):
         ), 4.6, 0.4, [4.6, 0.2, 0])
         tag = simulated_tag(r"the World's survey block", corner=DR)
         with self.voiceover(
-            "<bookmark mark='a'/> We can rerun 1936 on the World. Its seven hundred and forty-one thousand adults live in two "
-            "hundred towns on an island, here sized by population and coloured by region. <bookmark mark='b'/> They're "
-            "voting in an election between a challenger, Blue, and the incumbent, Red. <bookmark mark='c'/> Because the World "
-            "is ours, we know every vote: Blue has thirty-eight point two percent. <bookmark mark='d'/> And the World now has "
-            "a polling firm that can run any survey we design, honest or not."
+            "<bookmark mark='a'/> We can rerun 1936 on the World. Its seven hundred and forty-one thousand adults "
+            "live in two hundred towns on an island, here sized by population and coloured by region. <bookmark "
+            "mark='b'/> They're voting in an election between a challenger, Blue, and the incumbent, Red. <bookmark "
+            "mark='c'/> Because the World is ours, we know every vote: Blue has thirty-eight point two percent. "
+            "<bookmark mark='d'/> And the World now has a polling firm that can run any survey we design, honest or "
+            "not."
         ) as vo:
             self.add(tag)
             vo.wait_until("a")
@@ -122,13 +124,13 @@ class Hook(VoiceoverScene):
         ), 12.4, 0.2, [0, -1.6, 0])
         tag = simulated_tag(r"the World's Digest", corner=DR)
         with self.voiceover(
-            "<bookmark mark='a'/> The World's Digest works the same way. Start from all the adults. <bookmark mark='b'/> Mail a "
-            "ballot to everyone on the island's telephone and car registers: two hundred and eight thousand people, the "
-            "better-off ones. <bookmark mark='c'/> About one in six sends it back: thirty-four and a half thousand ballots. "
-            "<bookmark mark='d'/> Among all adults, Blue has thirty-eight percent. Among the listed, forty-seven. Among those "
-            "who returned a ballot, fifty-eight: a confident Blue victory, and wrong by twenty points. "
-            "<bookmark mark='e'/> Meanwhile a simple random sample of just a thousand adults says thirty-eight percent, with "
-            "an interval of thirty-five to forty-one, which contains the truth."
+            "<bookmark mark='a'/> The World's Digest works the same way. Start from all the adults. <bookmark "
+            "mark='b'/> Mail a ballot to everyone on the island's telephone and car registers: two hundred and eight "
+            "thousand people, the better-off ones. <bookmark mark='c'/> About one in six sends it back: thirty-four "
+            "and a half thousand ballots. <bookmark mark='d'/> Among all adults, Blue has thirty-eight percent. Among"
+            " the listed, forty-seven. Among those who returned a ballot, fifty-eight: a confident Blue victory, and "
+            "wrong by twenty points. <bookmark mark='e'/> Meanwhile a simple random sample of just a thousand adults "
+            "says thirty-eight percent, with an interval of thirty-five to forty-one, which contains the truth."
         ) as vo:
             self.add(tag)
             vo.wait_until("a")
@@ -152,9 +154,10 @@ class Hook(VoiceoverScene):
             label(r"and why can't a huge one?", font_size=26, color=OBS),
         ), 12.4, 0.5, [0, 0, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Thirty-four thousand ballots, wrong by twenty points. <bookmark mark='b'/> A thousand random "
-            "people, right to within three. <bookmark mark='c'/> How can so few speak for so many, <bookmark mark='d'/> and why "
-            "can't the many speak for themselves? The answers are about how the sample was chosen, not how big it is."
+            "<bookmark mark='a'/> Thirty-four thousand ballots, wrong by twenty points. <bookmark mark='b'/> A "
+            "thousand random people, right to within three. <bookmark mark='c'/> How can so few speak for so many, "
+            "<bookmark mark='d'/> and why can't the many speak for themselves? The answers are about how the sample "
+            "was chosen, not how big it is."
         ) as vo:
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
@@ -173,11 +176,11 @@ class Hook(VoiceoverScene):
         prereq = note(r"prerequisites: \ Parts 8 and 11").to_corner(DL, buff=0.3)
         built = note(r"built: \ \texttt{statkit.survey}; \ the World's polling firm; \ the island map").to_corner(DR, buff=0.3)
         with self.voiceover(
-            "<bookmark mark='a'/> Part eighteen: who did you ask? <bookmark mark='b'/> We'll separate the Digest's two "
-            "mistakes and measure them with Xiao-Li Meng's identity; see why a probability sample needs no model of the "
-            "population; build simple random, stratified and cluster samples; meet unequal-probability estimators and Basu's "
-            "elephants; use auxiliary information, weighting and raking; and look at what went wrong with the polls of 1948, "
-            "2016 and 2020."
+            "<bookmark mark='a'/> Part eighteen: who did you ask? <bookmark mark='b'/> We'll separate the Digest's "
+            "two mistakes and measure them with Xiao-Li Meng's identity; see why a probability sample needs no model "
+            "of the population; build simple random, stratified and cluster samples; meet unequal-probability "
+            "estimators and Basu's elephants; use auxiliary information, weighting and raking; and look at what went "
+            "wrong with the polls of 1948, 2016 and 2020."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(head, shift=UP * 0.2))

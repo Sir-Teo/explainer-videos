@@ -35,14 +35,15 @@ class Ratio(VoiceoverScene):
             MathTex(rf"\text{{population}} \approx {d['estimate'] / 1e6:.2f}\ \text{{million}}", font_size=32, color=HIT),
         ), 12.4, 0.32, [0, -1.4, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> The idea is old. Around 1802 Pierre-Simon Laplace estimated the population of France for "
-            "Napoleon's government, without a census. Every parish registered its births, so the total number of births was "
-            "known. What was missing was the number of people per birth. <bookmark mark='b'/> So Laplace had the population "
-            "counted in a sample of communes spread across the country: two million and thirty-seven thousand people, with "
-            "seventy-one thousand eight hundred and sixty-six births a year. <bookmark mark='c'/> That's twenty-eight point three "
-            "five people for each birth. <bookmark mark='d'/> France registered about a million births a year, "
-            "<bookmark mark='e'/> so the population was about twenty-eight point three five million. Laplace even attached a "
-            "probability to his error, one of the first margins of error ever computed for a sample."
+            "<bookmark mark='a'/> The idea is old. Around 1802 Pierre-Simon Laplace estimated the population of "
+            "France for Napoleon's government, without a census. Every parish registered its births, so the total "
+            "number of births was known. What was missing was the number of people per birth. <bookmark mark='b'/> So"
+            " Laplace had the population counted in a sample of communes spread across the country: two million and "
+            "thirty-seven thousand people, with seventy-one thousand eight hundred and sixty-six births a year. "
+            "<bookmark mark='c'/> That's twenty-eight point three five people for each birth. <bookmark mark='d'/> "
+            "France registered about a million births a year, <bookmark mark='e'/> so the population was about "
+            "twenty-eight point three five million. Laplace even attached a probability to his error, one of the "
+            "first margins of error ever computed for a sample."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(hc, shift=UP * 0.2))
@@ -62,11 +63,11 @@ class Ratio(VoiceoverScene):
         whys = [why(r"unknown for France; \ known for the sample"), why(r"people per birth, \ in the sample"),
                 why(r"$X$, \ all births, \ known exactly"), why(r"births track population closely")]
         with self.voiceover(
-            "<bookmark mark='a'/> In general: we want the total of y, the population, and we know the total of an auxiliary "
-            "variable x, births, for everyone. <bookmark mark='b'/> Estimate the ratio of y to x from the sample, "
-            "<bookmark mark='c'/> and multiply by the known total of x. <bookmark mark='d'/> It works well when y is roughly "
-            "proportional to x, a line through the origin, because then the ratio barely varies from one unit to the next, and "
-            "a sample pins it down precisely."
+            "<bookmark mark='a'/> In general: we want the total of y, the population, and we know the total of an "
+            "auxiliary variable x, births, for everyone. <bookmark mark='b'/> Estimate the ratio of y to x from the "
+            "sample, <bookmark mark='c'/> and multiply by the known total of x. <bookmark mark='d'/> It works well "
+            "when y is roughly proportional to x, a line through the origin, because then the ratio barely varies "
+            "from one unit to the next, and a sample pins it down precisely."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -84,17 +85,21 @@ class Ratio(VoiceoverScene):
         rows[1][2].set_color(OBS)
         whys = [why(r"capture--recapture"), why(r"Petersen's estimator"), why(r"the marked fish are the births"),
                 why(r"so Laplace's method is often called the first capture--recapture")]
+        intro = label('A known total can be scaled using a sample ratio', font_size=36)
         with self.voiceover(
-            "Laplace's estimate has a familiar shape. <bookmark mark='a'/> In Part 3 we estimated the fish in the World's lake: "
-            "mark M fish, release them, and later catch C, of which R are marked. <bookmark mark='b'/> The estimate of the "
-            "total is M times C over R. <bookmark mark='c'/> Laplace's births play the part of the marked fish: a total known "
-            "exactly, scaled up by the ratio of people to births found in the sample. <bookmark mark='d'/> Both are ratio "
-            "estimators, which is why Laplace's survey is often described as the first capture–recapture study."
-        ) as vo:
+            "Laplace's estimate has a familiar shape. <bookmark mark='a'/> In Part 3 we estimated the fish in the "
+            "World's lake: mark M fish, release them, and later catch C, of which R are marked. <bookmark mark='b'/> "
+            "The estimate of the total is M times C over R. <bookmark mark='c'/> Laplace's births play the part of "
+            "the marked fish: a total known exactly, scaled up by the ratio of people to births found in the sample. "
+            "<bookmark mark='d'/> Both are ratio estimators, which is why Laplace's survey is often described as the "
+            "first capture–recapture study."       ) as vo:
+            self.play(FadeIn(intro))
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
+                if k == 0:
+                    self.play(FadeOut(intro), run_time=0.25)
         self.clear_scene()
 
     def estimator(self):
@@ -108,12 +113,13 @@ class Ratio(VoiceoverScene):
         whys = [why(r"for a mean"), why(r"the delta method (Part 9): \ only the residual spread counts"),
                 why(r"the plain mean's variance"), why(r"a ratio of means isn't the mean of a ratio")]
         with self.voiceover(
-            "<bookmark mark='a'/> For a mean, the ratio estimator is the sample mean of y over the sample mean of x, times the "
-            "known population mean of x. <bookmark mark='b'/> By Part 9's delta method, its variance depends only on the spread "
-            "of the residuals from the line y equals R x, <bookmark mark='c'/> where the plain mean's variance depends on the "
-            "whole spread of y. When x explains most of y, the gain is large. <bookmark mark='d'/> The price is a small bias, of "
-            "order one over n, because a ratio of means isn't unbiased for the ratio, but for any reasonable sample it's "
-            "negligible."
+            "<bookmark mark='a'/> For a mean, the ratio estimator is the sample mean of y over the sample mean of x, "
+            "times the known population mean of x. <bookmark mark='b'/> By Part 9's delta method, its variance "
+            "depends only on the spread of the residuals from the line y equals R x, <bookmark mark='c'/> where the "
+            "plain mean's variance depends on the whole spread of y. When x explains most of y, the gain is large. "
+            "<bookmark mark='d'/> The price is a small bias, of order one over n, because a ratio of means isn't "
+            "unbiased for the ratio, under regularity and a population auxiliary mean bounded away from zero. It need"
+            " not be negligible for small, skewed samples or an unstable denominator."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
@@ -126,14 +132,14 @@ class Ratio(VoiceoverScene):
         P = adults()
         y = P["income"]
         last = np.exp(np.log(y) + np.random.Generator(np.random.PCG64(5)).normal(0, 0.25, len(y)))
-        g = np.random.Generator(np.random.PCG64(41))
-        k = g.choice(len(y), 400, replace=False)
-        A = axes([0, 200], [0, 200], x_length=4.8, y_length=4.4, xlabel=r"last year's income (the register)", ylabel=r"this year's",
+        k = np.asarray(d["one_indices"], dtype=int)
+        A = axes([0, 200], [0, 200], x_length=4.8, y_length=4.4, xlabel=r"last year's income (viewport 0--200k)", ylabel=r"this year's",
                  xticks=[0, 100, 200], yticks=[0, 100, 200], center=[-3.8, 0.2, 0], font_size=18)
         ax = A.ax
-        dots = scatter(ax, np.minimum(last[k], 199), np.minimum(y[k], 199), color=OBS, radius=0.045, opacity=0.7)
+        visible = (last[k] <= 200) & (y[k] <= 200)
+        dots = scatter(ax, last[k][visible], y[k][visible], color=OBS, radius=0.045, opacity=0.7)
         R = d["one"]["ratio"]
-        ln = Line(ax.c2p(0, 0), ax.c2p(200, 200 * R), color=FIT, stroke_width=3)
+        ln = curve(ax, [0, 200], [0, 200*R], FIT, 3)
         rows = fit_rows(VGroup(
             label(r"the tax register has last year's income for everyone", font_size=22),
             MathTex(rf"\text{{corr}} = {d['corr_last']:.2f}", font_size=28),
@@ -143,13 +149,14 @@ class Ratio(VoiceoverScene):
         ), 5.4, 0.4, [3.6, 0.2, 0])
         tag = simulated_tag(r"the World's register", corner=DR)
         with self.voiceover(
-            "<bookmark mark='a'/> On the World: suppose the tax register holds everyone's income for last year, known exactly, "
-            "and we survey this year's. <bookmark mark='b'/> The two correlate at point nine five. <bookmark mark='c'/> One "
-            "sample of four hundred: its plain mean is forty-six point six five thousand, and this year's incomes run at "
-            "ninety-eight percent of last year's in the sample. <bookmark mark='d'/> The ratio estimate multiplies that by the "
-            "register's known mean: fifty point oh four. <bookmark mark='e'/> The truth is forty-nine point four eight. The "
-            "plain mean was off by almost three thousand, because this sample happened to miss a few high earners; the ratio "
-            "estimator corrected for that, since the same people were missing from last year's register too."
+            "<bookmark mark='a'/> On the World: suppose the tax register holds everyone's income for last year, known"
+            " exactly, and we survey this year's. <bookmark mark='b'/> The two correlate at point nine five. "
+            "<bookmark mark='c'/> One sample of four hundred: its plain mean is forty-six point six five thousand, "
+            "and this year's incomes run at ninety-eight percent of last year's in the sample. <bookmark mark='d'/> "
+            "The ratio estimate multiplies that by the register's known mean: fifty point oh four. <bookmark "
+            "mark='e'/> The truth is forty-nine point four eight. The plain mean was off by almost three thousand, "
+            "because this sample happened to miss a few high earners; the ratio estimator corrected for that, since "
+            "the same people were missing from last year's register too."
         ) as vo:
             self.play(FadeIn(A), FadeIn(tag))
             vo.wait_until("a")
@@ -178,10 +185,10 @@ class Ratio(VoiceoverScene):
             label(r"its bias: \ 0.03, \ invisible next to its SD", font_size=22, color=GREY_A),
         ), 12.4, 0.3, [0, -1.9, 0])
         with self.voiceover(
-            "<bookmark mark='a'/> Over three thousand samples, the plain mean has a standard deviation of three point oh four "
-            "thousand. <bookmark mark='b'/> The ratio estimator's is point nine one: <bookmark mark='c'/> as precise as a plain "
-            "sample eleven times the size. Its small bias, three hundredths, is invisible beside that. Auxiliary information "
-            "known for the whole population is the cheapest precision there is."
+            "<bookmark mark='a'/> Over three thousand samples, the plain mean has a standard deviation of three point"
+            " oh four thousand. <bookmark mark='b'/> The ratio estimator's is point nine one: <bookmark mark='c'/> as"
+            " precise as a plain sample eleven times the size. Its small bias, three hundredths, is invisible beside "
+            "that. Auxiliary information known for the whole population is the cheapest precision there is."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tab[0]), FadeIn(tab[1]), FadeIn(foot[0]))
@@ -196,19 +203,21 @@ class Ratio(VoiceoverScene):
             cmath(r"\hat{\bar y}_{\text{reg}}", r"=", r"\bar y + b\,(\bar X - \bar x)", font_size=32),
             cmath(r"b", r"=", r"\text{the sample slope of } y \text{ on } x", font_size=30),
             cmath(r"\text{many } x", r":", r"\text{GREG: \ weights } w_i \text{ with } \textstyle\sum_s w_i x_i = X", font_size=30),
-            cmath(r"\text{model-assisted}", r":", r"\text{valid by design, \ efficient if the model fits}", font_size=30),
+            cmath(r"\text{model-assisted}", r":", r"\text{design-consistent under regularity; \ efficient with a useful model}", font_size=30),
         ]
         rows[3][2].set_color(OBS)
         whys = [why(r"correct the mean by how far $\bar x$ missed"), why(r"Part 12's least squares"),
                 why(r"calibration: \ S\"arndal, \ Swensson \& Wretman (1992)"), why(r"the best of both views of chapter three")]
         with self.voiceover(
-            "<bookmark mark='a'/> When the relation isn't a line through the origin, use the regression estimator: correct the "
-            "sample mean of y by the slope times how far the sample mean of x missed the known population mean. "
-            "<bookmark mark='b'/> The slope is Part 12's least squares. <bookmark mark='c'/> With several auxiliary variables "
-            "this becomes the generalized regression estimator, GREG, equivalent to choosing weights for the respondents so that "
-            "the weighted sample reproduces every known population total: calibration. <bookmark mark='d'/> It's called "
-            "model-assisted: the estimator is valid by the design whether or not the regression model is true, and efficient when "
-            "it is. It unites chapter three's two views."
+            "<bookmark mark='a'/> When the relation isn't a line through the origin, use the regression estimator: "
+            "correct the sample mean of y by the slope times how far the sample mean of x missed the known population"
+            " mean. <bookmark mark='b'/> The slope is Part 12's least squares. <bookmark mark='c'/> With several "
+            "auxiliary variables this becomes the generalized regression estimator, GREG, equivalent to choosing "
+            "weights for the respondents so that the weighted sample reproduces every known population total: "
+            "calibration. <bookmark mark='d'/> It's called model-assisted: the estimator is design-consistent under "
+            "suitable regularity even if the working regression is wrong, and can be more efficient when auxiliary "
+            "variables predict the outcome well. It is not generally exactly unbiased in a finite sample. It unites "
+            "chapter three's two views."
         ) as vo:
             step = ladder(self, rows, whys, keep=4, top=2.6, x=-0.4, buff=0.7, edge=6.9)
             for k, m_ in enumerate("abcd"):
