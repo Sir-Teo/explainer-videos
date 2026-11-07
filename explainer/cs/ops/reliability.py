@@ -88,7 +88,7 @@ def renewal(mtbf_h: float = 720.0, mttr_h: float = 2.0, years: float = 200.0, se
             first_year.append((t, t + u, t + u + d))
         up_time += min(u, max(0.0, horizon - t))
         t += u + d
-    measured = up_time / max(t, horizon)
+    measured = up_time / horizon               # both up time and the clock stop at the horizon
     return {"mtbf_h": mtbf_h, "mttr_h": mttr_h, "formula": mtbf_h / (mtbf_h + mttr_h), "measured": measured,
             "first_year": first_year[:40], "failures_first_year": len(first_year)}
 
