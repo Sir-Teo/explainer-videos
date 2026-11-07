@@ -143,7 +143,7 @@ class TracyWidom(VoiceoverScene):
 
     def beyond(self):
         rows = fit_rows(VGroup(
-            label(r"Tracy--Widom is everywhere:", font_size=28, color=GREY_A),
+            label(r"Applications of Tracy--Widom fluctuations", font_size=36, color=GREY_A),
             label(r"the longest increasing subsequence of a random permutation (Baik, \ Deift \& Johansson 1999)", font_size=26, color=BULKC),
             label(r"growing interfaces, \ queues in tandem, \ the KPZ universality class", font_size=26, color=BULKC),
             label(r"in statistics: \ how many factors? \ signals in arrays, \ finance, \ genetics", font_size=26, color=SPIKEC),

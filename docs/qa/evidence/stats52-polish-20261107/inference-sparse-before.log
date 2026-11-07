@@ -1,0 +1,4 @@
+blank (< 0.05% of pixels drawn), runs >= 1.5 s: 0, 0.0 s of 329 s
+sparse (< 0.30% of pixels drawn), runs >= 1.5 s: 2, 5.2 s of 329 s
+   1:52.75   3.0 s   [  +112.8 s]
+   4:45.25   2.2 s   [  +285.2 s]

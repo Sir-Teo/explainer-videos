@@ -68,7 +68,7 @@ class Inference(VoiceoverScene):
 
     def theory(self):
         rows = fit_rows(VGroup(
-            label(r"what makes it work:", font_size=28, color=GREY_A),
+            label(r"Why the debiased lasso has a small bias remainder", font_size=36, color=GREY_A),
             label(r"the lasso's $\ell_1$ error, \ $s\sqrt{\log p/n}$, \ from chapter 1", font_size=26, color=LASSOC),
             label(r"the nodewise error, \ $\|\theta_j^\top\hat\Sigma - e_j^\top\|_\infty \lesssim \sqrt{\log p/n}$", font_size=26, color=BNDC2),
             label(r"their product is the bias, \ by H\"older: \ $\sqrt n \times s\log p/n$", font_size=26, color=SPIKEC),
@@ -175,7 +175,7 @@ class Inference(VoiceoverScene):
 
     def caveats(self):
         rows = fit_rows(VGroup(
-            label(r"the fine print:", font_size=28, color=GREY_A),
+            label(r"Conditions and limits of debiased lasso inference", font_size=36, color=GREY_A),
             label(r"the sparsity needed, \ $s\log p/\sqrt n\to0\text{ and inverse/noise conditions}$, \ is stronger than estimation's $s \ll n/\log p$", font_size=26, color=BADC),
             label(r"coverage can fall short in finite samples, \ especially for large, \ correlated effects", font_size=26, color=BADC),
             label(r"intervals hold one coordinate at a time: \ many at once needs Part 33's corrections", font_size=26, color=SPIKEC),

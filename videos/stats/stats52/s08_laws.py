@@ -141,7 +141,7 @@ class Laws(VoiceoverScene):
 
     def universality(self):
         rows = fit_rows(VGroup(
-            label(r"the laws are universal:", font_size=28, color=GREY_A),
+            label(r"Universality of random-matrix bulk laws", font_size=36, color=GREY_A),
             label(r"i.i.d. standardized covariance entries; \ independent Wigner upper triangle: \ the same semicircle, \ the same MP law", font_size=26, color=BULKC),
             label(r"general $\Sigma$: \ the Marchenko--Pastur equation for $m$, \ solved numerically (Silverstein 1995)", font_size=26, color=BULKC),
             label(r"but heavy tails change the edges: \ with infinite fourth moments, \ outliers escape", font_size=26, color=BADC),
