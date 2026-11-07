@@ -56,7 +56,7 @@ class Hook(VoiceoverScene):
         rows[1][-1].set_color(TESTPT)
         rows[3][-1].set_color(MISSC)
         whys = [why(r"a normal plus a far-away atom"), why(r"the mean never changes"), why(r"the atom is rarely seen"), why(r"the sample looks like $N(0, 1)$")]
-        head = label('Family', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        head = label('A rare atom changes the mean while most samples miss it', font_size=36, color=WHITE).move_to([0, 3.3, 0])
         if head.width > 12.5: head.width = 12.5
         self.add(head)
         with self.voiceover(
@@ -82,7 +82,7 @@ class Hook(VoiceoverScene):
         ]
         rows[2][-1].set_color(COVC)
         whys = [why(r"a statistician's oldest tool"), why(r"order statistics"), why(r"the probability integral transform"), why(r"seventy years later")]
-        head = label('History', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        head = label('Order statistics give distribution-free tolerance intervals', font_size=36, color=WHITE).move_to([0, 3.3, 0])
         if head.width > 12.5: head.width = 12.5
         self.add(head)
         with self.voiceover(
@@ -138,7 +138,7 @@ class Hook(VoiceoverScene):
         rows[1][-1].set_color(MISSC)
         rows[2][-1].set_color(MISSC)
         whys = [why(r"almost every sample is normal"), why(r"the simulated 14\%"), why(r"smaller still"), why(r"a far atom carries it")]
-        head = label('Worked bs', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        head = label('At n = 50, most samples miss the rare atom', font_size=36, color=WHITE).move_to([0, 3.3, 0])
         if head.width > 12.5: head.width = 12.5
         self.add(head)
         with self.voiceover(
@@ -164,7 +164,7 @@ class Hook(VoiceoverScene):
 
     def turn(self):
         rows = fit_rows(VGroup(
-            label(r"what changed?", font_size=28, color=GREY_A),
+            label(r"Prediction targets the next observation, not the mean", font_size=36, color=WHITE),
             label(r"the mean: \ a functional of $P$ that a rare event can move without limit", font_size=26, color=MISSC),
             label(r"the next observation: \ exchangeable with the ones we have", font_size=26, color=COVC),
             label(r"its rank among them is uniform, \ whatever $P$ is", font_size=26, color=COVC),
@@ -188,7 +188,7 @@ class Hook(VoiceoverScene):
         rows[0][-1].set_color(MISSC)
         rows[2][-1].set_color(COVC)
         whys = [why(r"Bahadur \& Savage's second theorem"), why(r"too rich a family"), why(r"Part 16"), why(r"medians are robust")]
-        head = label('Testing', font_size=32, color=TESTPT).move_to([0, 3.3, 0])
+        head = label('Mean tests require more than a finite-mean assumption', font_size=36, color=WHITE).move_to([0, 3.3, 0])
         if head.width > 12.5: head.width = 12.5
         self.add(head)
         with self.voiceover(
