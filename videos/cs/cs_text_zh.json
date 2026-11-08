@@ -25293,7 +25293,20 @@
     "<nav><a href=\"/\">Home</a></nav>": "<nav><a href=\"/\">Home</a></nav>",
     "function render() { /* draw */ }": "function render() { /* draw */ }",
     "LAM": "LAM",
-    "DOM \\#1": "DOM \\#1"
+    "DOM \\#1": "DOM \\#1",
+    "16.7 ms": "16.7 ms",
+    "33.3 ms": "33.3 ms",
+    "50.0 ms": "50.0 ms",
+    "135 ms": "135 ms",
+    "235 ms": "235 ms",
+    "345 ms": "345 ms",
+    "335 ms": "335 ms",
+    "355 ms": "355 ms",
+    "245 ms": "245 ms",
+    "500 ms": "500 ms",
+    "25 ms": "25 ms",
+    "block box": "块盒",
+    "URL scheme": "协议"
   },
   "phrases": {},
   "patterns": [
