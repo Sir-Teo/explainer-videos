@@ -264,7 +264,7 @@ class Fiedler(VoiceoverScene):
         tags[1].next_to(steps[2], DOWN, buff=0.08).align_to(steps[2], LEFT)
         n = 12
         lam2 = float(np.linalg.eigvalsh(lap(adjacency(n, edges)))[1])
-        check = label(rf"here: \ $\tfrac{{12}}{{4}} \times {lam2:.2f} = {n * lam2 / 4:.2f} \le 1$, \ the bridge",
+        check = label(rf"here: \ $\tfrac{{12}}{{4}} \times {lam2:.3f} = {n * lam2 / 4:.2f} \le 1$, \ the bridge",
                       font_size=20, color=GREY_A).to_edge(DOWN, buff=0.45).shift(RIGHT * 3.0)
         with self.voiceover(
             "Why should an eigenvector know where to cut? Write a cut as a vector: minus one on one side, plus one "

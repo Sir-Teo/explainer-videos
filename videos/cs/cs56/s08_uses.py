@@ -428,7 +428,7 @@ class Uses(VoiceoverScene):
             g, DOWN, buff=0.3)
         ill = note(r"illustrative: \ a 3-colouring as constraints", font_size=16).next_to(cap, DOWN, buff=0.1)
         names = [(r"make it an expander", r"gap $\div$ a constant", KERN),
-                 (r"walks of length $t$", r"gap $\times$ grows with $t$", YES),
+                 (r"walks of length $t$", r"gap $\times$ a factor growing with $t$", YES),
                  (r"shrink the alphabet", r"gap $\div$ a constant", LAM)]
         boxes = VGroup()
         for nm, eff, col in names:
