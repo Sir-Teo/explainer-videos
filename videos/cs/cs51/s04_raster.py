@@ -279,7 +279,7 @@ class Raster(VoiceoverScene):
         Group(a, b).arrange(RIGHT, buff=0.35).to_edge(LEFT, buff=0.4).shift(UP * 0.6)
         ca = label(rf"painter's order: \ {z['painter_wrong']} pixels wrong", font_size=19, color=NO).next_to(
             a, DOWN, buff=0.15)
-        cb = label(rf"z-buffer: \ {z['zbuffer_wrong']} pixel wrong", font_size=19, color=YES).next_to(b, DOWN,
+        cb = label(rf"z-buffer: \ {z['zbuffer_wrong']} pixel{'' if z['zbuffer_wrong'] == 1 else 's'} wrong", font_size=19, color=YES).next_to(b, DOWN,
                                                                                                       buff=0.15)
         code = code_block(["for each fragment (x, y, z, c):", "  if z < depth[y][x]:", "    depth[y][x] = z",
                            "    colour[y][x] = c"], size=17).to_edge(RIGHT, buff=0.45).shift(UP * 1.6)

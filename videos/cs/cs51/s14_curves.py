@@ -361,7 +361,9 @@ class Curves(VoiceoverScene):
     # ------------------------------------------------------------------ the letters on this screen
     def fonts(self):
         head = label(r"Every letter here is B\'ezier curves", font_size=36).to_edge(UP, buff=0.3)
-        word = Tex(r"Light", font_size=210, color=WHITE).move_to([-3.0, -0.2, 0])
+        from explainer.zh_text import verbatim
+        with verbatim():  # the word is the specimen whose curves are counted: it stays as written
+            word = Tex(r"Light", font_size=210, color=WHITE).move_to([-3.0, -0.2, 0])
         outline = word.copy().set_fill(opacity=0).set_stroke(color=WHITE, width=2)
         anchors, handles, legs = VGroup(), VGroup(), VGroup()
         n_word = 0
