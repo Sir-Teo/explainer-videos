@@ -84,11 +84,11 @@ class Logic(VoiceoverScene):
             "no unicorns to be anything else. It sounds like a trick, but programs rely on it constantly. A loop that "
             "runs zero times satisfies every promise about each of its iterations."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(tt))
             vo.wait_until("a")
-            self.play(FadeIn(tt))
+            self.play(FadeIn(promise))
             vo.wait_until("b")
-            self.play(Create(hl), FadeIn(promise))
+            self.play(Create(hl))
             vo.wait_until("c")
             self.play(Create(lows))
             vo.wait_until("d")

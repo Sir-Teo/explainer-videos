@@ -38,11 +38,11 @@ class Hook(VoiceoverScene):
             "<bookmark mark='c'/> The puzzle-maker Sam Loyd later claimed he had offered a thousand dollars to anyone "
             "who could put them right. Nobody collected. People spent weeks on it."
         ) as vo:
-            self.play(FadeIn(hc, shift=RIGHT * 0.2))
+            self.play(FadeIn(hc, shift=RIGHT * 0.2), FadeIn(board, lag_ratio=0.05), run_time=1.6)
             vo.wait_until("a")
-            self.play(FadeIn(board, lag_ratio=0.05), run_time=1.6)
+            self.play(Circumscribe(board.frame, color=HEAD, buff=0.08))
             vo.wait_until("b")
-            self.play(Indicate(board.tile[14], color=HEAD), Indicate(board.tile[15], color=HEAD), FadeIn(ask))
+            self.play(Circumscribe(VGroup(board.tile[14], board.tile[15]), color=HEAD, buff=0.08), FadeIn(ask))
             vo.wait_until("c")
             self.play(FadeIn(prize, shift=UP * 0.1), FadeIn(src))
         self.wait(0.3)
@@ -184,8 +184,8 @@ class Hook(VoiceoverScene):
             "<bookmark mark='c'/> For the real puzzle, the reachable half is more than ten trillion positions. A search "
             "would take a while. The proof took four lines."
         ) as vo:
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(b, shift=UP * 0.15) for b in boards], lag_ratio=0.4), run_time=2.4)
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(Create(ax), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.03),
                       FadeIn(xl), run_time=2.4)

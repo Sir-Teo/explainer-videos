@@ -89,7 +89,7 @@ class Structural(VoiceoverScene):
     def proof_strings(self):
         head = label(r"Structural induction", font_size=38).to_edge(UP, buff=0.4)
         claim = label(r"claim: \ every balanced string, \ read left to right, \\ never has more closes than opens, \ "
-                      r"and ends even", font_size=30, color=DATA).next_to(head, DOWN, buff=0.4)
+                      r"and ends at zero", font_size=30, color=DATA).next_to(head, DOWN, buff=0.4)
         steps = VGroup(*[label(t, font_size=25, color=c) for t, c in (
             (r"rule 1: \ $\varepsilon$: \ the count starts and ends at $0$", YES),
             (r"rule 2: \ \texttt{(}$\,s\,$\texttt{)}$\,t$: \ assume the claim for $s$ and $t$", GREY_A),
@@ -135,7 +135,7 @@ class Structural(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def trees(self):
-        head = label(r"Binary trees: \ leaves $=$ internal nodes $+ 1$", font_size=38).to_edge(UP, buff=0.35)
+        head = label(r"Full binary trees: \ leaves $=$ internal nodes $+ 1$", font_size=38).to_edge(UP, buff=0.35)
         rules = VGroup(label(r"a leaf \ \ is a tree", font_size=28, color=YES),
                        label(r"a node with two trees below \ is a tree", font_size=28, color=CTRL)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.2).to_corner(UL, buff=0.5).shift(DOWN * 0.8)
@@ -158,8 +158,8 @@ class Structural(VoiceoverScene):
                    font_size=22).next_to(proof, UP, buff=0.25)
         cur = trees[0]
         with self.voiceover(
-            "Trees are the other great recursive structure. <bookmark mark='a'/> A tree is either a leaf, or a node "
-            "with two trees hanging below it. <bookmark mark='b'/> Build some and count. One leaf, no internal nodes. "
+            "Trees are the other great recursive structure. <bookmark mark='a'/> Here we use full binary trees: either a leaf, "
+            "or a node with exactly two full binary subtrees. <bookmark mark='b'/> Build some and count. One leaf, no internal nodes. "
             "Grow it: two leaves, one node. Three and two. Four and three. Whatever shape, the leaves outnumber the "
             "internal nodes by exactly one. <bookmark mark='c'/> The proof follows the definition. A leaf: one leaf, "
             "zero nodes. A node: its leaves are the leaves of its two subtrees; by the hypothesis each has one more leaf "
@@ -202,6 +202,7 @@ class Structural(VoiceoverScene):
         defn = VGroup(*[MathTex(t, font_size=32) for t in (
             r"\mathrm{val}(n) = n",
             r"\mathrm{val}(e_1 + e_2) = \mathrm{val}(e_1) + \mathrm{val}(e_2)",
+            r"\mathrm{val}(e_1 - e_2) = \mathrm{val}(e_1) - \mathrm{val}(e_2)",
             r"\mathrm{val}(e_1 \times e_2) = \mathrm{val}(e_1) \times \mathrm{val}(e_2)",
         )]).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(RIGHT * 3.3 + UP * 0.6)
         later = VGroup(note(r"parse trees and evaluators: \ Part 12", font_size=24),
@@ -211,7 +212,7 @@ class Structural(VoiceoverScene):
             "The structure that matters most to us is the expression. <bookmark mark='a'/> Two plus three, times seven "
             "minus one, is a tree: operators at the nodes, numbers at the leaves. <bookmark mark='b'/> Its meaning is "
             "defined by recursion on the same structure. The value of a number is itself. The value of a sum is the "
-            "sum of the values of its parts, and the same for a product. <bookmark mark='c'/> Evaluate bottom up: five, "
+            "sum of the values of its parts, and similarly for a difference and a product. <bookmark mark='c'/> Evaluate bottom up: five, "
             "six, thirty. <bookmark mark='d'/> Every interpreter is this definition, written as a program, and every "
             "fact about such programs, that evaluation always finishes, that a well-typed program never goes wrong, is "
             "proved by structural induction on this tree. Part 12 builds the parser that makes the tree; Part 14 "
@@ -224,7 +225,7 @@ class Structural(VoiceoverScene):
             self.play(FadeIn(defn, lag_ratio=0.3))
             vo.wait_until("c")
             for k in ("+", "-", "*"):
-                self.play(Indicate(nodes[k], color=HEAD), FadeIn(vtags[k], scale=1.3), run_time=0.8)
+                self.play(Circumscribe(nodes[k], color=HEAD, buff=0.04), FadeIn(vtags[k], scale=1.3), run_time=0.8)
             vo.wait_until("d")
             self.play(FadeIn(later))
         self.wait(0.3)

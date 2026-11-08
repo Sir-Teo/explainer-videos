@@ -1,0 +1,9 @@
+{
+  "strings": {
+    "Full binary trees: \\ leaves $=$ internal nodes $+ 1$": "严格二叉树：\\ 叶子数 $=$ 内部结点数 $+ 1$",
+    "claim: \\ every balanced string, \\ read left to right, \\\\ never has more closes than opens, \\ and ends at zero": "命题：\\ 每个配平的串，从左往右读，\\\\ 右括号从不多于左括号，\\ 括号计数最后回到零",
+    "so they are the same size, \\ without first finding a bijection": "所以它们一样大，\\ 无须先找出双射",
+    "full binary \\\\ trees": "严格二叉树",
+    "each internal node is a triangle; \\ each open bracket a step up": "每个内部结点是一个三角形；\\ 每个左括号是向上一步"
+  }
+}

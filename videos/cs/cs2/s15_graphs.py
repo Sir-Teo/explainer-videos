@@ -71,9 +71,10 @@ class Graphs(VoiceoverScene):
             "Königsberg all four touch an odd number. No such walk exists. That was 1736, and it was the first theorem "
             "of graph theory."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(VGroup(*nodes.values())), FadeIn(VGroup(*names.values())),
+                      FadeIn(txt[0]))
             vo.wait_until("a")
-            self.play(FadeIn(VGroup(*nodes.values())), FadeIn(VGroup(*names.values())), FadeIn(txt[0]))
+            self.play(Indicate(txt[0], color=HEAD, scale_factor=1.03))
             vo.wait_until("b")
             self.play(LaggedStart(*[Create(b) for b in bridges], lag_ratio=0.15), run_time=2.0)
             vo.wait_until("c")

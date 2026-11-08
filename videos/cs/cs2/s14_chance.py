@@ -68,9 +68,9 @@ class Chance(VoiceoverScene):
             "two times in three. The host's choice gave you information, because it was not random. Whenever a "
             "probability argument feels slippery, list the outcomes, or simulate."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(doors))
             vo.wait_until("a")
-            self.play(FadeIn(doors), FadeIn(rules[0]))
+            self.play(FadeIn(rules[0]))
             self.play(FadeIn(pick), FadeIn(rules[1]))
             self.play(doors[2][0].animate.set_fill(NO, 0.25), FadeIn(goat), FadeIn(rules[2]))
             vo.wait_until("b")
@@ -90,7 +90,7 @@ class Chance(VoiceoverScene):
         setup = label(r"a disease affects $1\%$; \ the test catches $99\%$ of cases, \ but flags $5\%$ of the healthy",
                       font_size=26, color=GREY_A).next_to(head, DOWN, buff=0.3)
         # an area diagram of 10,000 people
-        W, H = 7.0, 3.6
+        W, H = 6.0, 3.6
         o = np.array([-4.6, -2.6, 0])
         sick_w = W * 0.01 * 4  # exaggerated width so the sick column is visible
         well_w = W - sick_w
@@ -108,9 +108,9 @@ class Chance(VoiceoverScene):
         l4 = label(rf"{f['well_pos']} test positive", font_size=22, color=BACKGROUND).move_to(well_pos)
         cap = note(r"out of $10{,}000$ people \ (column widths exaggerated, heights to scale; \ the yellow strip "
                    r"three times taller)", font_size=18).next_to(VGroup(sick, well), DOWN, buff=0.12)
-        q = MathTex(r"P(\text{sick} \mid +) = \frac{99}{99 + 495} = \frac16", font_size=40, color=YES).move_to(
-            RIGHT * 4.4 + UP * 0.6)
-        rule = MathTex(r"P(A \mid B) = \frac{P(B \mid A)\, P(A)}{P(B)}", font_size=36, color=CTRL).next_to(q, DOWN,
+        q = MathTex(r"P(\text{sick} \mid +) = \frac{99}{99 + 495} = \frac16", font_size=36, color=YES).move_to(
+            RIGHT * 4.2 + UP * 0.6)
+        rule = MathTex(r"P(A \mid B) = \frac{P(B \mid A)\, P(A)}{P(B)}", font_size=34, color=CTRL).next_to(q, DOWN,
                                                                                                     buff=0.5)
         rl = note(r"Bayes' rule: \ the same count, \ in symbols", font_size=22).next_to(rule, DOWN, buff=0.15)
         with self.voiceover(

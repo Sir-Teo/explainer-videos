@@ -99,7 +99,7 @@ class Recurrences(VoiceoverScene):
         cols_x = [-3.6 + 2.2 * i for i in range(5)]
         rows_y = [2.1, 0.75, -0.75, -2.3]
         names = VGroup(*[label(t, font_size=22, color=c) for t, c in (
-            (r"brackets", DATA), (r"binary trees", CTRL), (r"triangulations", FUNC), (r"mountain ranges", INF))])
+            (r"brackets", DATA), (r"full binary \\ trees", CTRL), (r"triangulations", FUNC), (r"mountain ranges", INF))])
         for nm, y in zip(names, rows_y):
             nm.move_to([-5.9, y, 0])
         grid = []
@@ -112,13 +112,13 @@ class Recurrences(VoiceoverScene):
             grid.append((w, t, tri, m))
         bij = VGroup(note(r"\texttt{(}$A$\texttt{)}$B$ $\leftrightarrow$ a root with $A$ on the left, $B$ on the right",
                           font_size=20),
-                     note(r"each tree node is a triangle; \ each open bracket a step up", font_size=20)).arrange(
+                     note(r"each internal node is a triangle; \ each open bracket a step up", font_size=20)).arrange(
             RIGHT, buff=0.8).to_edge(DOWN, buff=0.15)
         with self.voiceover(
             "Chapter four's balanced brackets had a count: one, one, two, five. Those numbers count a surprising "
             "number of other things. <bookmark mark='a'/> Here are the five bracket strings with three pairs. "
-            "<bookmark mark='b'/> Each one is a binary tree: open bracket, A, close bracket, B, becomes a root with A "
-            "hanging to the left and B to the right. Five trees with three nodes. <bookmark mark='c'/> Each tree is a way "
+            "<bookmark mark='b'/> Each one is a full binary tree: open bracket, A, close bracket, B, becomes a root with A "
+            "hanging to the left and B to the right. Five trees with three internal nodes. <bookmark mark='c'/> Each tree is a way "
             "to cut a pentagon into triangles with diagonals that do not cross: the root is the triangle on the bottom "
             "edge, and its subtrees triangulate the two sides. Five triangulations. <bookmark mark='d'/> And each bracket "
             "string is a mountain range: up for an open bracket, down for a close, never below sea level. Five again. "

@@ -1,10 +1,35 @@
 # Computer Science, Built — sequential polish
 
 Work on `computer-science-built`, one video at a time, with separate commits.
-Current video: **cs2, Proof and Counting**. CS1's source/preview polish checkpoint
-is complete at the scope below. Its production release gates remain open; this
+Current video: **cs3, Logic from Switches**. CS1 and CS2 source/preview polish checkpoints
+are complete at the scopes below. Their production release gates remain open; this
 ledger does not treat sampled previews as listening or final-production approval.
 The syllabus's earlier draft-preview claims are separate.
+
+## Final CS2 preview checkpoint, 8 November 2026
+
+- Clarified the odd-number and square-root-of-two proofs, full-binary-tree
+  hypotheses and Catalan counts, bracket invariant, bijection conclusion and
+  recursive subtraction rule in both languages. Preserved operator labels and
+  improved opening reveals and Bayes column spacing.
+- All 34 current silent motion cases pass with zero warnings: 351 English and
+  349 Chinese captured states. All 123,998 frames decode successfully.
+- All 34 current overview sheets are reviewed: 19 freshly inspected and 15
+  exact PNG matches to inspected baseline sheets, covering 1,360 samples.
+  Six current endpoint pilots also pass with zero warnings.
+- All 97 English Kokoro narration blocks have source-bound automated
+  signal/alignment reports with zero issues and waveform hashes.
+- Four focused native clips decode 3,387 frames; 96 overview samples and four
+  native stills were inspected. Two complete narrated English Hook/Proofs
+  previews decode 6,558 frames plus audio; 80 samples were inspected and all
+  40 bookmark calls were requested within 250 ms of their targets.
+- All 12 data files from 11 computations remain unchanged. Five counting tests
+  passed; translation coverage is 97/97 blocks with synchronized changed cues.
+
+[Verified CS2 evidence](evidence/cs2-polish-20261108/README.md).
+Continuous narrated listening, Chinese speech/listening review, and whole-video
+native production review remain open release gates. Sampled visuals and
+signal checks do not constitute listening or production approval.
 
 ## Final CS1 preview checkpoint, 8 November 2026
 

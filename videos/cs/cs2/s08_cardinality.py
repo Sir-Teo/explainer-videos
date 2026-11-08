@@ -133,15 +133,15 @@ class Cardinality(VoiceoverScene):
         VGroup(f, g).arrange(RIGHT, buff=2.0).to_edge(DOWN, buff=1.2)
         fn = note(r"$(0,1)$ into $[0,1]$", font_size=22).next_to(f, DOWN, buff=0.12)
         gn = note(r"$[0,1]$ into $[\tfrac14, \tfrac34] \subset (0,1)$", font_size=22).next_to(g, DOWN, buff=0.12)
-        concl = label(r"so they are the same size, \ though no simple formula pairs them", font_size=26,
+        concl = label(r"so they are the same size, \ without first finding a bijection", font_size=26,
                       color=YES).to_edge(DOWN, buff=0.25)
         with self.voiceover(
             "Finding an exact bijection can be hard. A theorem makes it unnecessary. <bookmark mark='a'/> If A fits "
             "one-to-one inside B, and B fits one-to-one inside A, then there is a bijection between them. "
             "<bookmark mark='b'/> Example: the open interval from zero to one, and the closed one, which also contains "
             "its two endpoints. <bookmark mark='c'/> The open one sits inside the closed one, unchanged. The closed one "
-            "shrinks into the middle half of the open one. So they are the same size, even though writing down a "
-            "pairing between them takes real ingenuity. The proof follows each element back and forth through the two "
+            "shrinks into the middle half of the open one. So they are the same size, without our first having "
+            "to write a bijection between them. The proof follows each element back and forth through the two "
             "maps and builds the pairing from those chains."
         ) as vo:
             self.play(FadeIn(head))

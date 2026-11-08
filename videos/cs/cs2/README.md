@@ -68,7 +68,7 @@ counting, remainders, chance and graphs. Every search, count and simulation runs
 ## Build
 
 ```bash
-python -m videos.cs.cs2.compute            # every number in the part (about half a minute)
+python -m videos.cs.cs2.compute            # every number in the part; Ramsey enumeration can take several minutes
 python tools/build.py cs2 -q l             # a 480p preview
 python tools/build.py cs2                  # 1080p
 ```

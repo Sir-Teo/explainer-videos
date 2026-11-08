@@ -48,10 +48,10 @@ class Induction(VoiceoverScene):
             "step. <bookmark mark='d'/> Then every domino falls. Nothing is checked infinitely many times; two finite "
             "arguments cover them all."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), LaggedStart(*[FadeIn(d, shift=UP * 0.2) for d in ds], lag_ratio=0.06),
+                      FadeIn(nums), FadeIn(dots))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(d, shift=UP * 0.2) for d in ds], lag_ratio=0.06), FadeIn(nums),
-                      FadeIn(dots))
+            self.play(Indicate(nums, color=HEAD, scale_factor=1.05))
             vo.wait_until("b")
             self.play(FadeIn(base), ds[0].animate.set_stroke(YES))
             vo.wait_until("c")

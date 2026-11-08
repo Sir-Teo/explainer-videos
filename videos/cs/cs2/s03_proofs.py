@@ -55,9 +55,10 @@ class Proofs(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(a), FadeIn(b), FadeIn(la), FadeIn(lb))
             vo.wait_until("b")
+            self.play(FadeOut(la), FadeOut(lb), run_time=0.4)
             tgt = b.extra.get_center() + DOWN * 0.46
-            self.play(a.extra.animate.move_to(tgt + RIGHT * 0.0).set_color(YES), b.extra.animate.set_color(YES),
-                      run_time=1.4)
+            self.play(a.extra.animate.move_to(tgt).set_color(YES), b.extra.animate.set_color(YES),
+                      run_time=1.0)
             vo.wait_until("c")
             self.play(Write(alg), FadeIn(defn))
         self.wait(0.3)
@@ -128,7 +129,7 @@ class Proofs(VoiceoverScene):
             "lowest terms. Squaring, p squared is two q squared. <bookmark mark='b'/> Here is that equation as a "
             "picture. A square of side p has the same area as two squares of side q. <bookmark mark='c'/> Put the two "
             "smaller squares in opposite corners of the big one. They overlap in the middle, and they leave two corners "
-            "uncovered. Since the areas match, the overlap counts twice exactly what is left uncovered. "
+            "uncovered. Since the areas match, the overlap has exactly the combined area of the two uncovered corners. "
             "<bookmark mark='d'/> But that is the same equation again, with smaller whole numbers: a square equal to "
             "two smaller squares. <bookmark mark='e'/> Repeat, and the numbers shrink forever, which whole numbers "
             "cannot do. So there was no p and q to begin with. The usual proof uses parity, the hook's tool, in the "
