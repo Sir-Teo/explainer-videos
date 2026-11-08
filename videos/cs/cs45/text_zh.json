@@ -1,0 +1,25 @@
+{
+ "strings": {
+  "controller": "控制器",
+  "demand": "需求",
+  "commit": "提交",
+  "apply": "应用",
+  "create": "创建",
+  "the code": "代码",
+  "function": "函数",
+  "job": "作业",
+  "durability": "持久性",
+  "block": "块",
+  "object": "对象",
+  "reader": "读取者",
+  "switch": "交换机",
+  "runs": "运行",
+  "worker": "worker",
+  "network": "network",
+  "queue": "queue",
+  "service": "service",
+  "first fit": "首次适应",
+  "next fit": "下次适应",
+  "best fit": "最佳适应"
+ }
+}
