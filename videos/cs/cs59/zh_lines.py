@@ -142,8 +142,8 @@ ZH = {
         "<bookmark mark='c'/>这个进程在两者中做出同样的决定，而一致性把所有人都拖着一起走，<bookmark mark='d'/>所以沿着这条链，决定从不改变：零等于一。"
         "<bookmark mark='e'/>这条链每次改变一个输入，先让那个进程崩溃，并且每次移除一条消息。最后一轮的消息只改变它接收者的视野；更早的消息，要先在下一轮让它的接收者沉默才能移除，代价是再多一次崩溃。"
         "每轮一次崩溃：f 次崩溃覆盖 f 轮，永远覆盖不了 f 加一轮。",
-    "Now let processes lie. Lamport, Shostak and Pease proved in":
-        "现在让进程撒谎。兰波特、Shostak 和 Pease 在1982年证明，拜占庭一致需要多于三 f 个进程；最干净的证明来自1986年的费希尔（Fischer）、林奇和 Merritt，是一个六边形。"
+    "Now let processes lie. Pease, Shostak and Lamport proved in":
+        "现在让进程撒谎。Pease、Shostak 和兰波特在1980年证明，拜占庭一致需要多于三 f 个进程；最干净的证明来自1986年的费希尔（Fischer）、林奇和 Merritt，是一个六边形。"
         "<bookmark mark='a'/>取任何一个为三个进程 A、B、C 设计、要扛住一个撒谎者的协议。<bookmark mark='b'/>把六个诚实的副本连成一个环，零副本的输入是零，一副本的输入是一，"
         "每个副本都把它在环上的两个邻居当作另外两个进程。<bookmark mark='c'/>任意两个邻居看到的，恰好是它们在一个三进程执行中会看到的，在那个执行里，第三个进程撒谎，对每一方扮演不同的副本。"
         "所以有效性使 A 零和 B 零决定零，使 B 一决定一，而一致性使每一对邻居相同。<bookmark mark='d'/>绕环一周，零等于一。"

@@ -38,8 +38,8 @@ class Sync(VoiceoverScene):
 
     def card(self):
         card = chapter_card(4, r"Synchronous agreement and its bounds", r"How many rounds, \ and how many honest "
-                            r"processes?", lit=(1982, 1983, 1986),
-                            extra=((1982, r"Lamport, \ Shostak and Pease: \ $n > 3f$"),
+                            r"processes?", lit=(1980, 1983, 1986),
+                            extra=((1980, r"Pease, \ Shostak and Lamport: \ $n > 3f$"),
                                    (1983, r"Dolev and Strong: \ signatures"),
                                    (1986, r"Fischer, \ Lynch and Merritt: \ the hexagon")), part=PART)
         with self.voiceover("Chapter four. Synchronous agreement and its bounds."):
@@ -289,12 +289,12 @@ class Sync(VoiceoverScene):
                     color=GREY_B)
         eg = VGroup(eq, eqw).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.75)
         src = note(r"$n \le 3f$: \ split the processes into three groups of at most $f$ and argue the same way \ "
-                   r"(Lamport, \ Shostak and Pease 1982; \ this proof Fischer, \ Lynch and Merritt 1986)",
+                   r"(Pease, \ Shostak and Lamport 1980; \ this proof Fischer, \ Lynch and Merritt 1986)",
                    font_size=16).to_edge(DOWN, buff=0.25)
         if src.width > 12.6:
             src.width = 12.6
         with self.voiceover(
-            "Now let processes lie. Lamport, Shostak and Pease proved in 1982 that Byzantine agreement needs more "
+            "Now let processes lie. Pease, Shostak and Lamport proved in 1980 that Byzantine agreement needs more "
             "than three f processes; the cleanest proof, by Fischer, Lynch and Merritt in 1986, is a hexagon. "
             "<bookmark mark='a'/> Take any protocol for three processes, A, B and C, meant to survive one liar. "
             "<bookmark mark='b'/> Wire six honest copies into a ring, the zero copies with input zero and the one "

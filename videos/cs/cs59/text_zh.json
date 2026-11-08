@@ -1,0 +1,12 @@
+{
+ "strings": {
+  "colours": "颜色数",
+  "agents": "个体",
+  "to": "接收方",
+  "from": "发送方",
+  "run": "执行",
+  "step": "步骤",
+  "0-valent": "0 价",
+  "1-valent": "1 价"
+ }
+}
