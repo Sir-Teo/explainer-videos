@@ -60,6 +60,7 @@ class Methods(VoiceoverScene):
             label(rf"split conformal \ (20 to fit, \ 20 to calibrate): \ {100 * d['split']['coverage']:.1f}\%, \ {d['split']['len']:.2f}", font_size=28, color=CALC),
             label(rf"in this simulation, \ full is {100 * (1 - d['full']['len'] / d['split']['len']):.0f}\% shorter, \ because no data are set aside", font_size=28, color=TESTPT),
         ), 12.4, 0.6, [0, 0, 0])
+        self.add(rows[0])
         with self.voiceover(
             f"<bookmark mark='a'/> A comparison: ridge regression with forty observations and five features, two hundred "
             f"repetitions. <bookmark mark='b'/> Full conformal covers {100 * d['full']['coverage']:.1f} percent, with median "
@@ -71,7 +72,8 @@ class Methods(VoiceoverScene):
             self.play(FadeIn(simulated_tag(r"simulated")))
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
-                self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
+                if k:
+                    self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
 
     def homotopy(self):
