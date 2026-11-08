@@ -77,8 +77,8 @@ class Conjugacy(VoiceoverScene):
     def gamma_poisson(self):
         d = load("conjugate")
         sh, rt = d["gp"]["post"]
-        A = axes([0, 1.5], [0, 7], x_length=6.8, y_length=4.2, xlabel=r"$\lambda$, \ deaths per corps per year", ylabel=r"density",
-                 xticks=[0, 0.5, 1, 1.5], yticks=[0, 2, 4, 6], center=[-2.4, 0.2, 0])
+        A = axes([0, 1.5], [0, 8], x_length=6.8, y_length=4.2, xlabel=r"$\lambda$, \ deaths per corps per year", ylabel=r"density",
+                 xticks=[0, 0.5, 1, 1.5], yticks=[0, 2, 4, 6, 8], center=[-2.4, 0.2, 0])
         ax = A.ax
         xs = np.linspace(0.001, 1.5, 300)
         pr = density(ax, xs, stats.gamma(1, scale=1).pdf(xs), PRIOR)
