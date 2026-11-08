@@ -302,7 +302,7 @@ class Shortener(VoiceoverScene):
                           fmt_=lambda v: f"{v:.0f}\\%", font_size=17)
         ct = label(r"hit rate against cache size \ (share of links)", font_size=18, color=GREY_A)
         cg = VGroup(ct, chart).arrange(DOWN, buff=0.3).move_to([2.9, 1.0, 0])
-        cnote = note(rf"Part 48's W-TinyLFU, \ Zipf traffic over {items:,} items".replace(",", "{,}"),
+        cnote = note(rf"Part 48's W-TinyLFU, \ Zipf traffic over {format(items, ',').replace(',', '{,}')} items",
                      font_size=16).next_to(cg, DOWN, buff=0.2)
         foot = wrapped_label(r"the trade-off: \ \texttt{301} lets browsers and CDNs absorb the load, \ but the "
                              r"service loses later clicks and cannot change the target; \ \texttt{302}, \ or a "

@@ -1,0 +1,21 @@
+{
+ "strings": {
+  "parser": "解析器",
+  "dispatch": "派单",
+  "price": "价格",
+  "demand": "需求",
+  "author": "作者",
+  "reader": "读者",
+  "you": "你",
+  "cache": "缓存",
+  "customer": "顾客",
+  "sum": "合计",
+  "settled": "已结算",
+  "right": "正确",
+  "rate": "基于速率",
+  "buffer": "基于缓冲区",
+  "seconds": "秒",
+  "eventual": "最终一致",
+  "name": "说出"
+ }
+}

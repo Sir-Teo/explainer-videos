@@ -198,7 +198,7 @@ class Dispatch(VoiceoverScene):
         chart.to_edge(DOWN, buff=0.55).set_x(-2.4)
         cap = wrapped_label(rf"{d['riders']} riders and {d['drivers']} drivers at random in a "
                             rf"{d['city_km']:.0f} km city, \ pickup distance as the crow flies, \ averaged over 200 "
-                            r"rounds; \ batched = the assignment problem, \ solved exactly \ (after Kuhn) \ "
+                            r"rounds; \ batched = the assignment problem, \ solved exactly \ "
                             r"(Kuhn 1955, \ Part 18)", 4.6, font_size=18, color=WHITE)
         cap.next_to(chart, RIGHT, buff=0.6).align_to(chart, DOWN)
         with self.voiceover(
