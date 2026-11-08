@@ -33,3 +33,17 @@ def timeline_bar(x0: float, x1: float, y: float, color, h=0.32, scale=1.0, label
             t.move_to(r)
             return VGroup(r, t)
     return VGroup(r)
+
+
+def data_mono(text: str, **kw):
+    """mono() for text that is data (a program's output, a stored value): it stays as written in every language."""
+    from explainer.zh_text import verbatim
+    with verbatim():
+        return mono(text, **kw)
+
+
+def data_tag(text: str, **kw):
+    """tag_box() for text that is data: it stays as written in every language."""
+    from explainer.zh_text import verbatim
+    with verbatim():
+        return tag_box(text, **kw)

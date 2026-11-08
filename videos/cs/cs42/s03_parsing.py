@@ -96,7 +96,7 @@ class Parsing(VoiceoverScene):
 
     def card(self):
         card = chapter_card(2, r"Parsing HTML", r"How do you parse a language in which nothing is an error?",
-                            lit=(1951, 2014), extra=((2014, r"HTML5: \ the parsing algorithm a standard"),),
+                            lit=(1951, 2014), extra=((2014, r"HTML5: \ the parsing algorithm becomes a standard"),),
                             part=PART)
         with self.voiceover("Chapter two. Parsing HTML."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))

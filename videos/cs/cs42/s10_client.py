@@ -294,7 +294,7 @@ class Client(VoiceoverScene):
             tab.cells[r][2].set_color(YES)
         lines = VGroup(
             wrapped_label(r"each is per origin \ (Chapter 11); \ a synchronous read blocks the main thread, \ "
-                          r"Chapter 6's one long task", 12.4, font_size=20, color=WHITE),
+                          r"Chapter 5's one long task", 12.4, font_size=20, color=WHITE),
             wrapped_label(r"browsers may evict an origin's storage when the disk fills, \ unless the page asks for "
                           r"persistent storage", 12.4, font_size=20, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(tab, DOWN, buff=0.6)

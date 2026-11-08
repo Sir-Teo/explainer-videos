@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from explainer.cs import *  # noqa: F403
+from explainer.zh_text import verbatim
 from videos.cs.cs42.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, code_block, load, mono, tag_box
 
 SERIF = "DejaVu Serif"
@@ -30,7 +31,8 @@ class _Setter:
         """A word box of px pixels with its left edge at x and its baseline band centred on y."""
         box = Rectangle(width=px * self.s, height=self.h, stroke_color=color, stroke_width=0.8, fill_color=color,
                         fill_opacity=0.14).move_to([x + px * self.s / 2, y, 0])
-        t = Text(w, font=SERIF, font_size=self.fs, color=text_color)
+        with verbatim():  # the paragraph is data: Darcy's words stay as written in every language
+            t = Text(w, font=SERIF, font_size=self.fs, color=text_color)
         drop = self.d_g if set(w) & DESC else (self.d_c if set(w) & COMMA else 0.0)
         base = y - self.h / 2 + 0.03 + self.d_g
         t.move_to([box.get_center()[0], 0, 0]).align_to([0, base - drop, 0], DOWN)
@@ -105,12 +107,13 @@ class Layout(VoiceoverScene):
             b.move_to([fx + fw / 2, y - b.height / 2, 0])
             y -= b.height + 0.25
         bnames = VGroup(*[label(t, font_size=16, color=GREY_B).next_to(b, LEFT, buff=0.1) for t, b in
-                          zip((r"block", r"block", r"block"), blk)])
+                          zip((r"block box", r"block box", r"block box"), blk)])
         words = "inline boxes flow along a line and wrap onto the next line box when the line is full".split()
         pad, lh, inl = 0.15, 0.42, VGroup()
         x, row = fx + pad, 0
         for w in words:
-            t = Text(w, font=SERIF, font_size=18, color=WHITE)
+            with verbatim():  # a demonstration sentence, set word by word: it stays English
+                t = Text(w, font=SERIF, font_size=18, color=WHITE)
             wd = t.width + 0.12
             if x + wd > fx + fw - pad:
                 x, row = fx + pad, row + 1

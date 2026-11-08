@@ -49,7 +49,7 @@ class Security(VoiceoverScene):
         head = label(r"The same-origin policy", font_size=36).to_edge(UP, buff=0.3)
         url = Text("https://a.example:443/cart?id=7", font="DejaVu Sans Mono", font_size=30,
                    t2c={"https": DATA, "a.example": LAM, ":443": KERN, "/cart?id=7": GREY_C}).move_to([0, 1.95, 0])
-        parts = [(url[0:5], DATA, r"scheme", DOWN), (url[8:17], LAM, r"host", DOWN),
+        parts = [(url[0:5], DATA, r"URL scheme", DOWN), (url[8:17], LAM, r"host", DOWN),
                  (url[18:21], KERN, r"port\\(443 if omitted)", DOWN), (url[21:], GREY_C, r"path: \ not part of "
                                                                                        r"the origin", UP)]
         braces = VGroup()

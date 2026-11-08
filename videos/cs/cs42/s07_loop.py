@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs42.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, code_block, load, module_box, tag_box
+from videos.cs.cs42.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, code_block, load, module_box, tag_box, data_tag
 
 SYNC, MICRO, TASK, RAF = GREY_A, LAM, DATA, YES
 
@@ -117,7 +117,7 @@ class Loop(VoiceoverScene):
 
         def emit(s):
             assert want[len(logged)] == s, (want, s)
-            t = tag_box(s, color=WHITE, size=20, w=0.8).move_to(
+            t = data_tag(s, color=WHITE, size=20, w=0.8).move_to(
                 lg[0].get_left() + RIGHT * (0.6 + 1.0 * len(logged)))
             logged.add(t)
             return FadeIn(t, shift=DOWN * 0.2)
@@ -189,7 +189,7 @@ class Loop(VoiceoverScene):
         def show(name):
             lines, src = PROGRAMS[name]
             code = code_block(lines, size=16).move_to([-3.0, 0.2, 0]).align_to([-6.6, 0, 0], LEFT)
-            out = VGroup(*[tag_box(s, color=src[s], size=17) for s in o[name]]).arrange(DOWN, buff=0.12,
+            out = VGroup(*[data_tag(s, color=src[s], size=17) for s in o[name]]).arrange(DOWN, buff=0.12,
                                                                                          aligned_edge=LEFT)
             nums = VGroup(*[label(f"{i + 1}", font_size=17, color=GREY_B).next_to(t, LEFT, buff=0.15)
                             for i, t in enumerate(out)])

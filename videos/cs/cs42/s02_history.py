@@ -304,7 +304,7 @@ class History(VoiceoverScene):
         notes = VGroup(
             wrapped_label(r"Safari and WebKit \ (Apple, 2003); \ Firefox 1.0 \ (Mozilla, November 2004)", 12.4,
                           font_size=19, color=DATA),
-            wrapped_label(r"V8 compiles JavaScript to machine code \ (the JIT compilers of Part 15, \ inside in "
+            wrapped_label(r"V8 compiles JavaScript to machine code \ (the JIT compilers of Part 15, \ opened up in "
                           r"Chapter 7); \ separate processes come from Part 31", 12.4, font_size=19, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.5)
         with self.voiceover(

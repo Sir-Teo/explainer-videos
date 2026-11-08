@@ -5,7 +5,7 @@ import math
 
 from explainer.cs import *  # noqa: F403
 from videos.cs.cs42.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, axes, grid_table, load, module_box, mono,
-                                   tag_box, trace)
+                                   tag_box, trace, data_mono)
 
 
 def _row(text, w=2.3, ticked=False, color=GREY_B):
@@ -302,7 +302,7 @@ class Frameworks(VoiceoverScene):
             col = DATA if k in ("first", "last", "count") else (KERN if k == "header" else LAM)
             colour[k] = col
             nodes[k] = module_box(rf"\texttt{{{k}}}", col, w=1.6, h=0.5, font=19).move_to([x, y, 0])
-            vals[k] = mono(vals0[k], size=16, color=GREY_A).next_to(nodes[k], DOWN, buff=0.1)
+            vals[k] = data_mono(vals0[k], size=16, color=GREY_A).next_to(nodes[k], DOWN, buff=0.1)
         edges = {}
         for k, ds in s["deps"].items():
             for d in ds:
@@ -315,11 +315,11 @@ class Frameworks(VoiceoverScene):
         def wave(src, value, vnew):
             order = s["reran"][src]
             anims1 = [Indicate(nodes[src], color=HEAD),
-                      Transform(vals[src], mono(value, size=16, color=HEAD).next_to(nodes[src], DOWN, buff=0.1))]
+                      Transform(vals[src], data_mono(value, size=16, color=HEAD).next_to(nodes[src], DOWN, buff=0.1))]
             anims2 = []
             for k in order:
                 anims2.append(nodes[k][0].animate.set_stroke(HEAD, width=4))
-                anims2.append(Transform(vals[k], mono(vnew[k], size=16, color=HEAD).next_to(nodes[k], DOWN,
+                anims2.append(Transform(vals[k], data_mono(vnew[k], size=16, color=HEAD).next_to(nodes[k], DOWN,
                                                                                            buff=0.1)))
             hot = [edges[e] for e in edges if e[1] in order and (e[0] == src or e[0] in order)]
             return anims1, [e.animate.set_color(HEAD) for e in hot], anims2, order
