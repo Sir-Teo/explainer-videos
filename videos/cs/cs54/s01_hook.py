@@ -64,7 +64,7 @@ class Hook(VoiceoverScene):
             code, LEFT)
         s = ce["lo"] + ce["hi"]
         wrapped = s - 65536 if s >= 32768 else s
-        r1 = wrapped_label(rf"SAT, \ in {bad['seconds']:.2f} s: \ $lo = {ce['lo']:,}$, \ $hi = {ce['hi']:,}$; \ "
+        r1 = wrapped_label(rf"SAT, \ in {bad['seconds']:.2f} s: \ $lo = {format(ce['lo'], ',').replace(',', '{,}')}$, \ $hi = {format(ce['hi'], ',').replace(',', '{,}')}$; \ "
                            rf"their sum {s:,} wraps to {wrapped:,} in 16 bits", 6.2, font_size=20,
                            color=NO).next_to(code[0], RIGHT, buff=0.6)
         r2 = wrapped_label(rf"UNSAT: \ proved for every 16-bit $lo < hi$ \ ({good['vars']:,} variables, \ "

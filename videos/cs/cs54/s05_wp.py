@@ -352,8 +352,8 @@ class Wp(VoiceoverScene):
             chart, UP, buff=0.35)
         assert all(all(s == "valid" for s in r["status"]) for r in sc)
         notes = VGroup(
-            wrapped_label(r"comparing two multipliers is the classic hard case for SAT: \ each two bits of word "
-                          r"cost several times as long", 5.6, font_size=20, color=HEAD),
+            wrapped_label(r"comparing two multipliers is the classic hard case for SAT: \ every two more bits of word "
+                          r"length cost several times as long", 5.6, font_size=20, color=HEAD),
             wrapped_label(r"\textbf{SMT} solvers such as Z3 \ (de Moura and Bj{\o}rner, \ Microsoft Research, \ "
                           r"2008) \ pair a SAT search with decision procedures for arithmetic, \ arrays and "
                           r"bit-vectors; \ Dafny hands its conditions to Z3", 5.6, font_size=20, color=YES),

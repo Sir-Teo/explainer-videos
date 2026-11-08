@@ -245,7 +245,7 @@ class Types(VoiceoverScene):
                            rf"{good['clauses']:,} clauses, \ {good['seconds']:.2f} s): \ it type-checks", 6.2,
                            font_size=19, color=YES)
         badc = mono(f"mid = {bad['mid']}", size=22, color=NO)
-        badl = wrapped_label(rf"\textbf{{invalid}}: \ $lo = {ce['lo']:,}$, \ $hi = {ce['hi']:,}$ \ "
+        badl = wrapped_label(rf"\textbf{{invalid}}: \ $lo = {format(ce['lo'], ',').replace(',', '{,}')}$, \ $hi = {format(ce['hi'], ',').replace(',', '{,}')}$ \ "
                              r"overflows the sum: \ a \textbf{type error}, \ at compile time", 6.2, font_size=19,
                              color=NO)
         okg = VGroup(ok).next_to(col, DOWN, buff=0.4).align_to(col, LEFT)
