@@ -158,8 +158,8 @@ class Ids(VoiceoverScene):
                 t.next_to(r, LEFT, buff=0.1)
             tags.add(t)
         years = 2 ** 41 / 1000 / 86400 / 365.25
-        derived = label(rf"$2^{{41}}$ ms $\approx$ {years:.1f} years; \ $2^{{12}} = {2 ** 12:,}$ IDs per "
-                        rf"millisecond per machine; \ $2^{{10}} = {2 ** 10:,}$ machines", font_size=20,
+        derived = label(rf"$2^{{41}}$ ms $\approx$ {years:.1f} years; \ $2^{{12}} = 4{{,}}096$ IDs per "
+                        rf"millisecond per machine; \ $2^{{10}} = 1{{,}}024$ machines", font_size=20,
                         color=WHITE).next_to(bins, DOWN, buff=0.3)
         sf = label(r"Snowflake \ (Twitter, \ 2010): \ three IDs on machine 7: \ two in one millisecond, \ one in the next",
                    font_size=18, color=GREY_A).next_to(derived, DOWN, buff=0.2)

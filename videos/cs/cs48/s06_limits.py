@@ -40,7 +40,7 @@ class Limits(VoiceoverScene):
         fill = always_redraw(lambda: Rectangle(
             width=W - 0.08, height=max(0.001, (H - 0.1) * level.get_value() / BURST), stroke_width=0,
             fill_color=YES, fill_opacity=0.55).align_to([cx, by + 0.04, 0], DOWN).set_x(cx))
-        count = always_redraw(lambda: label(rf"{level.get_value():.0f} tokens", font_size=19, color=YES).next_to(
+        count = always_redraw(lambda: label(rf"{level.get_value():.0f} token{'' if round(level.get_value()) == 1 else 's'}", font_size=19, color=YES).next_to(
             walls, DOWN, buff=0.15))
         tap = VGroup(Arrow([cx, by + H + 0.9, 0], [cx, by + H + 0.1, 0], buff=0, color=YES, stroke_width=3),
                      label(rf"$\rho$: \ {LP['limit']} a minute", font_size=18, color=YES))
