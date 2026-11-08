@@ -1,0 +1,11 @@
+{
+ "strings": {
+  "weight": "权重",
+  "leader": "领先者",
+  "truth": "真值",
+  "search": "搜索",
+  "complexity": "复杂度",
+  "validate": "验证",
+  "size": "数据量"
+ }
+}

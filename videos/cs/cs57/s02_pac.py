@@ -442,7 +442,7 @@ class Pac(VoiceoverScene):
         real = Rectangle(width=W * r10["realized"] / r10["all"], height=0.55, stroke_width=0, fill_color=YES,
                          fill_opacity=0.9)
         VGroup(full, real).arrange(DOWN, buff=0.75, aligned_edge=LEFT).move_to([0.3, -1.0, 0])
-        fl = label(rf"all labellings of {r10['m']} points: \ $2^{{{r10['m']}}} = {r10['all']:,}$", font_size=20,
+        fl = label(rf"all labellings of {r10['m']} points: \ $2^{{{r10['m']}}} = {format(r10['all'], ',').replace(',', '{,}')}$", font_size=20,
                    color=GREY_A).next_to(full, UP, buff=0.12).align_to(full, LEFT)
         rl = label(rf"those half-planes can produce: \ {r10['realized']}", font_size=20, color=YES).next_to(
             real, RIGHT, buff=0.2)

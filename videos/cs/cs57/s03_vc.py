@@ -378,7 +378,7 @@ class Vc(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(xl, DOWN, buff=0.2).align_to(ax, LEFT)
         big = rr[-1]
         ratio = vc(big["m"]) / big["p95"]
-        note_ = wrapped_label(rf"at $m = {big['m']:,}$: \ VC bound {vc(big['m']):.3f}, \ measured {big['p95']:.4f}: "
+        note_ = wrapped_label(rf"at $m = {format(big['m'], ',').replace(',', '{,}')}$: \ VC bound {vc(big['m']):.3f}, \ measured {big['p95']:.4f}: "
                               rf"\ {ratio:.0f}$\times$ loose, \ knowing only $d$", 5.6, font_size=18,
                               color=WHITE).next_to(legend, DOWN, buff=0.2).align_to(ax, LEFT)
         with self.voiceover(
