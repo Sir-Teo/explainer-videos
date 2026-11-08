@@ -144,13 +144,13 @@ class Outro(VoiceoverScene):
 
     def goodbye(self):
         card = reference_card(
-            [r"Anderson, \\ \\textit{Security Engineering} \\ (3rd ed.); \\ Bishop, \\ \\textit{Computer Security}",
-             r"Abelson and Sussman; \\ Bryant and O'Hallaron; \\ Hennessy and Patterson; \\ Sipser; \\ CLRS"],
-            [r"Thompson \\ (1984); \\ Wheeler \\ (2009); \\ Saltzer and Schroeder \\ (1975)",
-             r"Shacham \\ (2007); \\ Kocher et al. \\ (2019); \\ Lowe \\ (1996)",
-             r"Lampson \\ (1974); \\ Harrison, \\ Ruzzo and Ullman \\ (1976)",
-             r"Szekeres et al. \\ (2013); \\ Jung et al. \\ (2018)"])
-        nxt = label(r"Next: \\ Act XI, \\ the research frontier", font_size=30, color=HEAD).to_edge(UP, buff=0.3)
+            [r"Anderson, \ \textit{Security Engineering} \ (3rd ed.); \ Bishop, \ \textit{Computer Security}",
+             r"Abelson and Sussman; \ Bryant and O'Hallaron; \ Hennessy and Patterson; \ Sipser; \ CLRS"],
+            [r"Thompson \ (1984); \ Wheeler \ (2009); \ Saltzer and Schroeder \ (1975)",
+             r"Shacham \ (2007); \ Kocher et al. \ (2019); \ Lowe \ (1996)",
+             r"Lampson \ (1974); \ Harrison, \ Ruzzo and Ullman \ (1976)",
+             r"Szekeres et al. \ (2013); \ Jung et al. \ (2018)"])
+        nxt = label(r"Next: \ Act XI, \ the research frontier", font_size=30, color=HEAD).to_edge(UP, buff=0.3)
         credit = note(rf"narration: \\ {narration_credit()}", font_size=18).to_edge(DOWN, buff=0.15)
         with self.voiceover(
             "This is where the degree ends. The final reading list is on screen and in the notes: the books that "
