@@ -256,4 +256,4 @@ The rest of the part's numbers, chapter by chapter:
 
 ## QA scope
 
-The [scientific review and verification receipts](../../../docs/qa/evidence/stats44-polish-20261107/source-review.md) document regenerated inputs, independent reference checks and corrected theorem conditions. English endpoint, native-resolution, motion and narrated-preview review remains in progress. Chinese narration/caption tables, full listening and final narrated masters remain open production gates.
+The [scientific review and verification receipts](../../../docs/qa/evidence/stats44-polish-20261107/source-review.md) document regenerated inputs, independent reference checks and corrected theorem conditions. The recorded English endpoint/native/motion and representative narrated-preview checkpoint is complete. Chinese narration/caption tables, full listening and final narrated masters remain open production gates.

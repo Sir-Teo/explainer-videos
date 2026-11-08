@@ -302,4 +302,4 @@ Robbins frequency ratios are plug-in estimates, not unbiased estimators. Posteri
 
 Coverage Board rows retain actual independent sample counts and empirical Monte Carlo uncertainty, including the two instrument-selected subsets. The interval example uses positive-part James–Stein. SURE assumptions, selection optimism, noisy batting validation targets and the distinction between expected risk and realized error are explicit. The SURE scatter shows all 400 replicates, including negative risk estimates.
 
-See the [scientific review and verification receipts](../../../docs/qa/evidence/stats45-polish-20261107/source-review.md). English endpoint, native, motion and narrated-preview review is in progress. Chinese narration/caption tables, continuous listening and final bilingual masters remain open.
+See the [scientific review and verification receipts](../../../docs/qa/evidence/stats45-polish-20261107/source-review.md). The recorded English endpoint/native/motion and representative narrated-preview checkpoint is complete. Chinese narration/caption tables, continuous listening and final bilingual masters remain open.
