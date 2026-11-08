@@ -66,12 +66,12 @@ class FullBoard(LectureMixin, VoiceoverScene):
             "shifted sample of Part sixty, this part's unweighted intervals. <bookmark mark='e'/> And noise left out of the "
             "model: measurement error in Part forty-one, privacy noise in Part sixty-three, a judge's errors in Part "
             "sixty-four.",
-            [(r"what breaks a promise:", GREY_A),
+            [(r"Why statistical promises fail in the Coverage Board", WHITE),
              (r"ignored dependence: \ clusters, \ random walks, \ benchmark passages", S.RESID),
              (r"selection and adaptivity: \ peeking, \ winners, \ bandits", S.RESID),
              (r"the wrong population: \ opt-in polls, \ shifted samples", S.RESID),
              (r"noise left out: \ measurement error, \ privacy noise, \ judges", S.RESID)],
-            buff=0.42, font_size=25, head_size=32)
+            buff=0.42, font_size=25, head_size=36)
 
     def keeps(self):
         self.list_voiceover(
@@ -81,12 +81,12 @@ class FullBoard(LectureMixin, VoiceoverScene):
             "<bookmark mark='d'/> Robust variances that do not trust the model: the sandwich, cluster-robust errors, the "
             "bootstrap of clusters. <bookmark mark='e'/> And honest bookkeeping of what was chosen from the data: sample "
             "splitting, selective inference, anytime-valid tests.",
-            [(r"what keeps a promise:", GREY_A),
+            [(r"Designs and assumptions that preserve statistical guarantees", WHITE),
              (r"randomization: \ the design's own probabilities", S.KEPT),
              (r"exchangeability: \ permutations, \ conformal, \ weights", S.KEPT),
              (r"robust variances: \ sandwich, \ clusters, \ the bootstrap", S.KEPT),
              (r"honest selection: \ splitting, \ conditioning, \ anytime-valid", S.KEPT)],
-            buff=0.42, font_size=25, head_size=32)
+            buff=0.42, font_size=25, head_size=36)
 
     def lesson(self):
         f = load("fullboard")
@@ -103,7 +103,7 @@ class FullBoard(LectureMixin, VoiceoverScene):
         f = load("fullboard")
         bs = f["by_stage"]
         names = {"1": r"I \ foundations", "2": r"II \ methods", "3": r"III \ the MSc", "4": r"IV \ theory", "5": r"V \ the frontier"}
-        lines = [(r"the Board by stage: \ kept, \ conservative, \ broken", GREY_A)]
+        lines = [(r"The Coverage Board by stage: kept, conservative and broken", WHITE)]
         for k in ("1", "2", "3", "4", "5"):
             c = bs.get(k, {})
             lines.append((rf"{names[k]}: \ {c.get('kept', 0)}, \ {c.get('conservative', 0)}, \ {c.get('broken', 0)}", WHITE))
@@ -115,7 +115,7 @@ class FullBoard(LectureMixin, VoiceoverScene):
             "<bookmark mark='e'/> The theory stage tested what theorems promise in finite samples, and found many "
             "conservative rows, the price of worst-case guarantees. <bookmark mark='f'/> And the frontier tested the newest "
             "methods against the naive ones they replace.",
-            lines, buff=0.38, font_size=25, head_size=30)
+            lines, buff=0.38, font_size=25, head_size=36)
 
     def memorable(self):
         f = load("fullboard")
@@ -139,13 +139,13 @@ class FullBoard(LectureMixin, VoiceoverScene):
             f"<bookmark mark='f'/> And, from off the Board, Part sixty-four's reused holdout reported {reused:.1f} "
             f"percent accuracy for a coin flip. These are selected examples from particular simulation designs, "
             f"not universal numerical failure rates for those methods.",
-            [(r"results to remember:", GREY_A),
+            [(r"Five results to remember from the full Coverage Board", WHITE),
              (rf"Part 41: \ the opt-in poll, \ {poll:.1f}\% coverage", S.RESID),
              (rf"Part 40: \ immortal time, \ {immortal:.1f}\% coverage", S.RESID),
              (rf"Part 35: \ peeking five times, \ size {peek:.1f}\%", S.RESID),
              (rf"Part 35: \ pupil-level school-trial CI, \ {pupil:.1f}\% coverage", S.RESID),
              (rf"Part 64: \ reused holdout, \ {reused:.1f}\% for a coin flip", S.RESID)],
-            buff=0.38, font_size=25, head_size=30)
+            buff=0.38, font_size=25, head_size=36)
 
     def cannot(self):
         self.lad_voiceover(

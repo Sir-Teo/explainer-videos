@@ -21,12 +21,12 @@ class WhereNext(LectureMixin, VoiceoverScene):
             "Miguel Hernan and James Robins's Causal Inference: What If, and Guido Imbens and Donald Rubin's book. <bookmark "
             "mark='e'/> And for the frontier: Anastasios Angelopoulos, Rina Foygel Barber and Stephen Bates's book on "
             "conformal prediction, and the arXiv's statistics listings, every morning.",
-            [(r"beyond the series:", GREY_A),
+            [(r"Further reading: theory, modelling, causes and the frontier", WHITE),
              (r"theory: \ van der Vaart; \ Wainwright", S.EST),
              (r"modelling: \ Gelman et al.; \ Hastie, \ Tibshirani \& Friedman", S.KEPT),
              (r"causes: \ Hern\'an \& Robins; \ Imbens \& Rubin", S.ALT),
              (r"the frontier: \ Angelopoulos, \ Barber \& Bates; \ arXiv stat", S.ACCENT)],
-            buff=0.42, font_size=25, head_size=32)
+            buff=0.42, font_size=25, head_size=36)
 
     def journals(self):
         self.lad_voiceover(
@@ -58,13 +58,13 @@ class WhereNext(LectureMixin, VoiceoverScene):
     def problems_left(self):
         self.list_voiceover(
             "<bookmark mark='a'/> The open problems the last ten parts left, as directions within active literatures, not claims that every subproblem lacks existing results. <bookmark mark='b'/> Inference after selection with learned models, and conditional guarantees beyond the marginal. <bookmark mark='c'/> Anytime-valid inference for complex models, and adaptive experiments with honest intervals. <bookmark mark='d'/> Robustness to shift and contamination at once, and transport with estimated maps. <bookmark mark='e'/> Causal inference with learned adjustment sets, interference at scale, privacy beyond the mean, and statistics with models in every loop. <bookmark mark='f'/> And this dissertation's own: extensions beyond this proof for dependent weight fitting, and sharper score-aware analyses. Existing cross-fitting and robustness results should be checked before claiming novelty.",
-            [(r"open, \ from Parts 56--65:", GREY_A),
+            [(r"Research directions beyond the 65-part series", WHITE),
              (r"selection with learned models; \ conditional guarantees", S.EST),
              (r"anytime-valid inference for complex models", S.KEPT),
              (r"shift and contamination together; \ estimated transport", S.ALT),
              (r"learned adjustment; \ interference; \ privacy; \ models in the loop", S.PRIOR),
              (r"this thesis: \ cross-fitted weights; \ a score-aware bound", S.ACCENT)],
-            buff=0.38, font_size=25, head_size=32)
+            buff=0.38, font_size=25, head_size=36)
 
     def replicate(self):
         self.lad_voiceover(

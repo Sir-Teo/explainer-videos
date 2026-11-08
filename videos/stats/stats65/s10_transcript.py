@@ -70,12 +70,12 @@ class TranscriptComplete(LectureMixin, VoiceoverScene):
             "computation, smoothing, robustness, many variables and many questions, causes, space and time. <bookmark "
             "mark='e'/> Stage four, the theory a doctorate rests on; and stage five, the research frontier and this "
             "dissertation.",
-            [(r"the five stages:", GREY_A),
+            [(r"The curriculum: foundations, methods, theory and research", WHITE),
              (r"I \ (1--10): \ foundations", S.EST),
              (r"II \ (11--20): \ methods, \ and the BSc", S.KEPT),
              (r"III \ (21--42): \ the MSc", S.ALT),
              (r"IV--V \ (43--65): \ theory, \ the frontier, \ the PhD", S.ACCENT)],
-            buff=0.42, font_size=25, head_size=32)
+            buff=0.42, font_size=25, head_size=36)
 
     def instruments(self):
         self.list_voiceover(
@@ -86,12 +86,12 @@ class TranscriptComplete(LectureMixin, VoiceoverScene):
             "rain, the permutation machine, the likelihood landscape, the trade-off plot, the leaderboard. <bookmark "
             "mark='e'/> And statkit, a statistics library of more than fifty modules, from random number generators to "
             "conformal prediction and privacy accounting, with numerical tests and audits of the examples used in this series. Tests can be incomplete and do not prove every function correct.",
-            [(r"the instruments:", GREY_A),
+            [(r"Statistical instruments built throughout the series", WHITE),
              (r"the World \ and the Museum", S.EST),
              (r"the Coverage Board; \ the exact probability engine", S.KEPT),
              (r"Galton board, \ tank factory, \ interval rain, \ trade-off plot, \ leaderboard", S.ALT),
              (r"\texttt{statkit}: \ more than fifty tested modules", S.ACCENT)],
-            buff=0.42, font_size=25, head_size=32)
+            buff=0.42, font_size=25, head_size=36)
 
     def numbers(self):
         f = load("fullboard")
