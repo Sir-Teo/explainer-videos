@@ -7,6 +7,13 @@ GROUPS = {"animal": (["cat", "dog", "mouse", "bird"], WORD), "royal": (["king", 
           "person": (["holmes", "watson", "frodo", "darwin", "newton", "dickens"], TRUTH)}
 
 
+def lexeme(text, **kwargs):
+    """The model's English corpus words are data in both editions."""
+    text = text.replace(r"\ ", " ").replace("$-$", "−").replace("$+$", "+")
+    # Manim Text and Tex use different font-size scales; match the surrounding Tex.
+    return data_text(" ".join(text.split()), font="Latin Modern Roman", **kwargs).scale(0.75)
+
+
 class Vectors(VoiceoverScene):
     def construct(self):
         card = chapter_card(12, r"You shall know a word", r"Is meaning distribution?", lit=(1954, 1957),
@@ -41,8 +48,8 @@ class Vectors(VoiceoverScene):
             "compress the counts, similarity of meaning becomes nearness in a space. <bookmark mark='e'/>Part 3 of the "
             "AI series built word vectors this way, and every language model since extends the idea."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(g[0]))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(g[1]))
             vo.wait_until("c")
@@ -64,7 +71,7 @@ class Vectors(VoiceoverScene):
                        (r"compress to six dimensions by singular value decomposition, \ and compare by cosine", USE)], font_size=20,
                       aligned_edge=LEFT, width=6.4, buff=0.28).move_to([-3.2, 0.6, 0])
         hd = [r"\text{word}", r"\text{nearest nouns}"]
-        cells = [[label(w, font_size=20, color=TRUTH), label(r", \ ".join(f"{n} ({s:.2f})" for n, s in nb), font_size=18)]
+        cells = [[lexeme(w, font_size=20, color=TRUTH), lexeme(r", \ ".join(f"{n} ({s:.2f})" for n, s in nb), font_size=18)]
                  for w, nb in d["nearest"].items()]
         grid = ValueGrid(hd, cells, col_w=[1.6, 4.6], cell_h=0.48, font_size=19).move_to([3.6, 0.4, 0])
         nb = {w: [x[0] for x in v] for w, v in d["nearest"].items()}
@@ -116,10 +123,14 @@ class Vectors(VoiceoverScene):
             tight = max(np.linalg.norm(q - cen) for q in pts_g) < 0.6
             g = VGroup(*[Dot(q, radius=0.06, color=col) for q in pts_g])
             if tight:
-                g.add(label(r", \ ".join(w for w in ws if w in xy), font_size=15, color=col).next_to(g, UP, buff=0.1))
+                g.add(lexeme(r", \ ".join(w for w in ws if w in xy), font_size=15, color=col).next_to(g, UP, buff=0.1))
             else:
                 for j, (w, q) in enumerate(zip([w for w in ws if w in xy], pts_g)):
-                    g.add(label(w, font_size=15, color=col).next_to(q, [UR, DR, UL, DL, RIGHT, LEFT][j % 6], buff=0.05))
+                    direction = LEFT if w == "darwin" else [UR, DR, UL, DL, RIGHT, LEFT][j % 6]
+                    g.add(lexeme(w, font_size=15, color=col).next_to(q, direction, buff=0.12 if w == "darwin" else 0.05))
+            for tag in g[len(pts_g):]:
+                if tag.get_left()[0] < -6.8:
+                    tag.shift(RIGHT * (-6.8 - tag.get_left()[0]))
             dots.add(g)
         legend = VGroup(*[label(n, font_size=19, color=c) for n, (ws, c) in GROUPS.items()]).arrange(
             DOWN, buff=0.22, aligned_edge=LEFT).move_to([5.6, 0.8, 0])
@@ -146,14 +157,14 @@ class Vectors(VoiceoverScene):
         rows_d = d["rows"]
         assert d["right"] == 1 and rows_d[0]["got"][0] == "queen"
         assert rows_d[1]["got"][0] == "rome" and rows_d[2]["got"][0] == "london" and rows_d[2]["got"][1] == "berlin"
-        eq = MathTex(r"\vec{v}_{\text{king}} - \vec{v}_{\text{prince}} + \vec{v}_{\text{princess}} \;\approx\; "
+        eq = MathTex(r"\vec{v}_{\mathrm{king}} - \vec{v}_{\mathrm{prince}} + \vec{v}_{\mathrm{princess}} \;\approx\; "
                      r"\vec{v}_{\,?}", font_size=34, color=USE).move_to([0, 2.1, 0])
         hd = [r"a - b + c", r"\text{expected}", r"\text{nearest three}", r"\text{right?}"]
         cells = []
         for r in rows_d:
-            cells.append([label(rf"{r['a']} $-$ {r['b']} $+$ {r['c']}", font_size=19, color=WORD),
-                          label(r["want"], font_size=19, color=OK),
-                          label(r", \ ".join(r["got"]), font_size=19, color=GREY_A),
+            cells.append([lexeme(rf"{r['a']} $-$ {r['b']} $+$ {r['c']}", font_size=19, color=WORD),
+                          lexeme(r["want"], font_size=19, color=OK),
+                          lexeme(r", \ ".join(r["got"]), font_size=19, color=GREY_A),
                           MathTex(r"\checkmark" if r["right"] else r"\times", font_size=26,
                                   color=OK if r["right"] else BAD)])
         grid = ValueGrid(hd, cells, col_w=[4.4, 1.8, 3.6, 0.8], cell_h=0.55, font_size=20).move_to([0, 0.2, 0])

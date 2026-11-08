@@ -29,12 +29,42 @@ Items:
 
 from __future__ import annotations
 
+import json
+
 from explainer.ai.cache import Cache
+from explainer.cache_lock import locked_item
 from explainer.philosophy.reasoner import evo as Ev
 from explainer.philosophy.reasoner import prop
 
-CACHE = Cache("philosophy19")
-load = CACHE.load
+def _rps_current(path) -> bool:
+    try:
+        data = json.loads(path.read_text())
+    except (OSError, ValueError):
+        return False
+    return (isinstance(data, dict) and data.get("schema") == 2 and
+            all(isinstance(data.get(key), dict) and data[key].get("eps") == eps
+                for key, eps in (("neutral", 0.0), ("in", -0.3), ("out", 0.3))))
+
+
+class _EvolutionCache(Cache):
+    """Upgrade legacy RPS caches whose inward and outward branches were reversed."""
+
+    @locked_item(lambda self, name: self.path(name))
+    def load(self, name):
+        if name == "rps" and not _rps_current(self.path(name)):
+            self.save(name, compute_rps())
+        return super().load(name)
+
+
+CACHE = _EvolutionCache("philosophy19")
+
+
+def load(name):
+    return CACHE.load(name)
+
+
+def cache_current(name):
+    return name != "rps" or _rps_current(CACHE.path(name))
 
 
 def compute_paley() -> dict:
@@ -54,7 +84,7 @@ def compute_hawkdove() -> dict:
 
 
 def compute_rps() -> dict:
-    return {"neutral": Ev.rps(eps=0.0), "in": Ev.rps(eps=0.3), "out": Ev.rps(eps=-0.3)}
+    return {"schema": 2, "neutral": Ev.rps(eps=0.0), "in": Ev.rps(eps=-0.3), "out": Ev.rps(eps=0.3)}
 
 
 def compute_kin() -> dict:

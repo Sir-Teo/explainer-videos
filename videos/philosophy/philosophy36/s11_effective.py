@@ -19,7 +19,7 @@ class Effective(VoiceoverScene):
         head = label(r"Measuring health: \ QALYs and DALYs", font_size=30, color=CONN).to_edge(UP, buff=0.35)
         f1 = MathTex(r"\text{QALYs} \;=\; \sum_{\text{years}} q_t, \qquad q_t \in [0, 1]:\; 0 \text{ dead},\; "
                      r"1 \text{ full health}", font_size=32, color=WELL)
-        f2 = MathTex(r"\text{DALYs} \;=\; \text{years of life lost} \;+\; \text{years lived with disability}",
+        f2 = MathTex(r"\mathrm{DALYs} = \mathrm{YLL} + \sum_t d_t\,\Delta t, \qquad 0 \le d_t \le 1",
                      font_size=32, color=RISK)
         f3 = MathTex(r"\text{cost-effectiveness} \;=\; \frac{\Delta\,\text{cost}}{\Delta\,\text{QALYs}}", font_size=34,
                      color=MONEY)
@@ -31,11 +31,14 @@ class Effective(VoiceoverScene):
         with self.voiceover(
             "Health systems must weigh lives every day, and they do it with a common currency. "
             "<bookmark mark='a'/>A quality-adjusted life year counts each year of life weighted by its quality, from "
-            "zero for death to one for full health. The weights come from surveys, by the time trade-off, how many "
+            "zero for death to one for full health on this simplified scale. The weights come from surveys, by the "
+            "time trade-off, how many "
             "years of full health would you accept in place of ten with this condition, or by the standard gamble, "
             "Part 33's lotteries. <bookmark mark='b'/>The disability-adjusted life year, used by the World Health "
-            "Organization and the Global Burden of Disease, counts years of life lost plus years lived with "
-            "disability. <bookmark mark='c'/>Cost-effectiveness is extra cost over extra QALYs. "
+            "Organization and the Global Burden of Disease, counts years of life lost, YLL, plus years lived with "
+            "disability weighted by its severity. Here d is the disability weight, from zero for full health to "
+            "one for a state equivalent to death, multiplied by the duration in years. <bookmark mark='c'/>"
+            "Cost-effectiveness is extra cost over extra QALYs. "
             "<bookmark mark='d'/>The currency lets a health service compare hip replacements, vaccines and bed nets. "
             "And every weight is a value judgment: critics point out that QALYs count a year lived with a disability "
             "as worth less."

@@ -31,8 +31,8 @@ ZH = {
         "看看谁是对的。<bookmark mark='b'/>用拉丁文说，只有一个词：calculemus。这个系列要把这个梦想当真。",
     "Here is a dispute that ran for two thousand years.":
         "这里有一场持续了两千年的争论。<bookmark mark='a'/>所有独角兽都是独角的。所有独角兽都是马。所以有些马是独角的。"
-        "<bookmark mark='b'/>这个论证有效吗？<bookmark mark='c'/>从亚里士多德到十九世纪，逻辑学家都说有效：它具有一种有效的形式，"
-        "中世纪的学生把它记作Darapti。<bookmark mark='d'/>而每一本现代逻辑教科书都说无效。",
+        "<bookmark mark='b'/>这个论证有效吗？<bookmark mark='c'/>在传统三段论中，假定独角兽存在时，这个形式有效："
+        "中世纪的学生把它记作Darapti。<bookmark mark='d'/>在允许独角兽这一类为空的现代经典逻辑中，它无效。",
     "Who is right? Leibniz's answer would have been: let us calculate.":
         "谁对？莱布尼茨的回答会是：让我们来算一算。<bookmark mark='a'/>在第9章，我们会把这个论证拿去对照独角兽、马和独角之物的"
         "每一种可能的安排，精确地找出两派在哪里分道扬镳。并不是哪一方推理得不好，而是他们所说的“所有”意思不同。"
@@ -217,15 +217,15 @@ ZH = {
     # ------------------------------------------------------------------ Import
     "Chapter nine. Empty terms.":
         "第9章。空词项。",
-    "The Latin verse names twenty-four moods; our machine passed fifteen.":
-        "拉丁口诀列出了二十四个式；我们的机器通过了十五个。另外九个中包括Darapti，也就是独角兽论证。<bookmark mark='a'/>所有M是P；所有M是S；"
+    "Traditional syllogistic includes Darapti, the unicorn argument;":
+        "传统三段论包括Darapti，也就是独角兽论证；按现代的读法，我们的机器通过了十五个式，Darapti不在其中。<bookmark mark='a'/>所有M是P；所有M是S；"
         "所以有些S是P。<bookmark mark='b'/>机器找到的反模型是最简单的一种安排：每个区域都是空的。<bookmark mark='c'/>如果根本没有独角兽，"
         "那么没有一头独角兽不是马，也没有一头独角兽不是独角的：按现代的读法，两个前提都是真的，空洞地真。但没有任何东西是独角的马，所以结论是假的。",
-    'f"Now give the machine Aristotle\'s background assumption':
-        "现在把亚里士多德的背景假设交给机器：每个词项都指称某种东西；没有一个圆是空的。<bookmark mark='a'/>把全部二百五十六个式重新跑一遍。"
+    'f"Now give the machine an existence assumption':
+        "现在给机器加上一个存在假设：每个词项都指称某种东西；没有一个圆是空的。<bookmark mark='a'/>把全部二百五十六个式重新跑一遍。"
         "<bookmark mark='b'/>现在有{len(trad)}个通过：原来的{len(boolean)}个，再加上{len(extra)}个，每一个都需要某个词项非空。"
-        "<bookmark mark='c'/>而这二十四个，恰好就是中世纪口诀里的那些式。传统并不粗心。它在一个从未明说的假设下正确地计算着，"
-        "因为它从未设想过一种关于可能不存在之物的逻辑。",
+        "<bookmark mark='c'/>把差等关系得到的较弱结论也算进去，传统的完整计数是二十四个。不同历史理论对存在假设的处理并不相同。"
+        "我们的计算精确显示了哪一个额外假设使这些推理保真；它并不能裁定对亚里士多德的每一种历史解释。",
     "So the opening dispute becomes a Price List of four claims.":
         "于是，开场时的争论变成了一张有四个主张的代价清单。<bookmark mark='a'/>两个前提为真。Darapti有效。结论不为真。这四个主张不一致；"
         "有四条出路，其中三条都有真正的逻辑学家走过。",

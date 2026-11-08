@@ -35,8 +35,8 @@ class Consequence(VoiceoverScene):
             "premises true and the conclusion false. <bookmark mark='d'/>But this needs a division of the "
             "vocabulary. 'All', 'is' and 'so' must be held fixed. Which words are the logical constants, and why?"
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(hcs))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(arg[0]))
             vo.wait_until("c")

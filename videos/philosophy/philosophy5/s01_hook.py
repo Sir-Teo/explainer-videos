@@ -87,8 +87,8 @@ class Hook(VoiceoverScene):
             "finds no way to make them all true. Yet drop any single one, and the rest are consistent. "
             "<bookmark mark='e'/>That is this part's brick in the Wall."
         ) as vo:
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(h, scale=0.6) for h in heads], lag_ratio=0.06), run_time=2.5)
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(heads[0].face.animate.set_stroke(OK).set_fill(OK, 0.3), FadeIn(ab),
                       heads[-1].face.animate.set_stroke(BAD).set_fill(BAD, 0.3), FadeIn(bb))

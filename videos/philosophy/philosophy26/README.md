@@ -27,7 +27,7 @@ Wigner's friend with the measurement that tells unitary evolution from collapse 
 as a second **Price List**. The free will theorem, device-independent
 cryptography, certified randomness, and the interpretation-neutrality of quantum computing.
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/quantum.py` (with
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/quantum.py` (with
 `prop` for the Price Lists), tested in `tests/philosophy/test_quantum.py` and cached by [`compute.py`](compute.py).
 
 ## Build it

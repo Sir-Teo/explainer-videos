@@ -162,11 +162,10 @@ class Realism(VoiceoverScene):
         t = VGroup(Circle(radius=0.7, color=OUGHT, fill_opacity=0.15), label(r"Twin Earth", font_size=20, color=OUGHT))
         e.move_to([-4.0, 1.0, 0])
         t.move_to([-1.0, 1.0, 0])
-        le = label(r"`good' regulated by consequentialist properties", font_size=17, color=IS).next_to(e, DOWN,
-                                                                                                    buff=0.2)
-        lt = label(r"`good' regulated by deontological properties", font_size=17, color=OUGHT).next_to(t, DOWN,
-                                                                                                    buff=0.2).shift(
-            RIGHT * 0.4)
+        le = wrapped_label(r"`good' regulated by consequentialist properties", 2.7, 17, IS).next_to(
+            e, DOWN, buff=0.2)
+        lt = wrapped_label(r"`good' regulated by deontological properties", 2.7, 17, OUGHT).next_to(
+            t, DOWN, buff=0.2)
         side = stack([(r"`water' and `twater': \ different meanings, \ no real disagreement \ (Putnam)", GREY_A),
                       (r"`good' and `twin good': \ the two peoples still seem to disagree when they argue", OUGHT),
                       (r"so the meaning of `good' is not fixed by what causally regulates it", BAD),

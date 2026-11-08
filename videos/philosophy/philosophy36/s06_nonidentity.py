@@ -40,8 +40,8 @@ class NonIdentity(VoiceoverScene):
             "life is not good for the person who would live it, why is a miserable life bad for the person who "
             "would live that one?"
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             for mk, r in zip("bcde", g):
                 vo.wait_until(mk)
                 self.play(FadeIn(r))

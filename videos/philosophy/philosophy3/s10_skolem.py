@@ -37,8 +37,8 @@ class Skolem(VoiceoverScene):
             "larger infinite size too. <bookmark mark='d'/>Put together: no first-order theory with an infinite "
             "model can fix how big its models are."
         ) as vo:
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(h, shift=DOWN * 0.2) for h in hcs], lag_ratio=0.3))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(down, shift=UP * 0.2))
             vo.wait_until("c")
@@ -88,8 +88,8 @@ class Skolem(VoiceoverScene):
             "are true. Logicians call it a Skolem hull. Everything a first-order sentence can demand, a countable "
             "world can supply."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(cloud), FadeIn(haze), FadeIn(cl))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(seed, scale=2), FadeIn(steps[0]))
             vo.wait_until("c")
@@ -161,8 +161,8 @@ class Skolem(VoiceoverScene):
             "'set of reals' has only countably many members, and we can list them. A model that believes in the "
             "uncountable, built from countably many things. This is Skolem's paradox."
         ) as vo:
-            vo.wait_until("a")
             self.play(Create(M), FadeIn(ml))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(Create(R), FadeIn(rl))
             vo.wait_until("c")

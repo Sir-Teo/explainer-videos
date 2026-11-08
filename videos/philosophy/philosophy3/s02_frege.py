@@ -96,8 +96,9 @@ class Frege(VoiceoverScene):
             "<bookmark mark='d'/>And nothing limits a function to one argument. 'Loves' takes two, 'between' takes "
             "three. The relations that defeated Aristotle are just functions of several arguments."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(old))
+            vo.wait_until("a")
+            self.play(Indicate(old, color=P.CLAIM))
             vo.wait_until("b")
             self.play(FadeIn(new))
             vo.wait_until("c")

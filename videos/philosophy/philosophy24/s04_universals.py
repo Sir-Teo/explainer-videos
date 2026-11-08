@@ -108,8 +108,8 @@ class Universals(VoiceoverScene):
             "other unsolved. <bookmark mark='e'/>Armstrong's late answer was that N is the relation whose instances "
             "are causings, and that we meet causing directly, when we push and pull things ourselves."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             for mk, r in zip("bcde", rows):
                 vo.wait_until(mk)
                 self.play(FadeIn(r))

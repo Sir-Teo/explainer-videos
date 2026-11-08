@@ -126,8 +126,8 @@ class Second(VoiceoverScene):
             "either that sentence or its rival is a 'logical truth', and no one knows which. We return to this in "
             "Part 9."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q, shift=UP * 0.2))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(Write(chv[0]), FadeIn(chv[1]))
             vo.wait_until("c")
@@ -183,8 +183,8 @@ class Second(VoiceoverScene):
             "To be, he wrote, is to be a value of a variable, or to be some values of some variables. "
             "<bookmark mark='e'/>That slogan rewrites a famous one, which is the subject of Chapter fourteen."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(s))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(Write(gk))
             vo.wait_until("c")

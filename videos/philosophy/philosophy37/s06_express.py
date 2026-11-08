@@ -35,8 +35,8 @@ class Express(VoiceoverScene):
             "and Moore's open question too: if no natural fact can settle whether something is good, perhaps that is "
             "because goodness is not a fact at all."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             for mk, r in zip("bcd", rows):
                 vo.wait_until(mk)
                 self.play(FadeIn(r))

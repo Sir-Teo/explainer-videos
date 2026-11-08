@@ -37,8 +37,9 @@ class Import(VoiceoverScene):
                       label(r"`some horses are one-horned': \ nothing is \ $\times$", font_size=24, color=BAD)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.18).next_to(world, DOWN, buff=0.4).align_to(world, LEFT)
         with self.voiceover(
-            "The Latin verse names twenty-four moods; our machine passed fifteen. The other nine include Darapti, the "
-            "unicorn argument. <bookmark mark='a'/>All M are P; all M are S; so some S are P. <bookmark mark='b'/>"
+            "Traditional syllogistic includes Darapti, the unicorn argument; our machine passed fifteen moods on "
+            "the modern reading, and Darapti was not among them. <bookmark mark='a'/>All M are P; all M are S; "
+            "so some S are P. <bookmark mark='b'/>"
             "The countermodel the machine finds is the simplest arrangement there is: every region empty. "
             "<bookmark mark='c'/>If there are no unicorns at all, then no unicorn fails to be a horse, and no unicorn "
             "fails to be one-horned: in the modern reading, both premises are true, vacuously. But nothing is a "
@@ -75,12 +76,13 @@ class Import(VoiceoverScene):
         names = sorted(n for f, m, n in d["traditional"] if (f, m) in extra)
         nl = label(r",\ ".join(names), font_size=22, color=GOAL).next_to(cnt, DOWN, buff=0.3)
         with self.voiceover(
-            "Now give the machine Aristotle's background assumption: every term names something; no circle is "
+            "Now give the machine an existence assumption: every term names something; no circle is "
             "empty. <bookmark mark='a'/>Rerun all two hundred and fifty-six moods. "
             f"<bookmark mark='b'/>Now {len(trad)} pass: the original {len(boolean)}, and {len(extra)} more, each of "
-            "which needs some term to be inhabited. <bookmark mark='c'/>And these twenty-four are exactly the moods "
-            "of the medieval verse. The tradition was not careless. It was calculating correctly, under an "
-            "assumption it never stated, because it never imagined a logic about things that might not exist."
+            "which needs some term to be inhabited. <bookmark mark='c'/>The full traditional count, including "
+            "weaker conclusions by subalternation, is twenty-four. Historical treatments differ about existence "
+            "assumptions. Our calculation shows exactly which extra assumption makes these inferences "
+            "truth-preserving; it does not settle every historical reading of Aristotle."
         ) as vo:
             self.play(FadeIn(rule), FadeIn(cells))
             vo.wait_until("a")
@@ -107,7 +109,7 @@ class Import(VoiceoverScene):
 
         def show(k):
             name, holders = POS[k]
-            return pl.position((k,), name, holders, width=4.0)[0]
+            return pl.position((k,), name, holders, width=2.4)[0]
 
         with self.voiceover(
             "Modern logic, from Boole and Frege on, gives up the validity of Darapti: 'all' makes no claim that "

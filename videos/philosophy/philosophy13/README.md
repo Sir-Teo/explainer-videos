@@ -15,7 +15,7 @@ belief, and naked statistical evidence; Sleeping Beauty, simulated, with its bet
 selection, SSA and SIA on toy universes, the Doomsday argument, the presumptuous philosopher and fine-tuning; and
 Bayesian networks, the cost of exact inference, logical omniscience and Bayesian brains.
 
-Every number on screen is computed by the Reasoner's credence laboratory (`explainer/philosophy/reasoner/credence.py`):
+The worked model results are computed by the Reasoner's credence laboratory (`explainer/philosophy/reasoner/credence.py`):
 the Dutch-book LP over any finite set of worlds; Euclidean projection onto the simplex and the dominance check; four
 scoring rules, best reports and synthetic forecasters with calibration bins; Lewis's diachronic book and Jeffrey's
 rule; the maximum-entropy die; three chord ensembles simulated 100,000 times each and the cube factory; dilation over a

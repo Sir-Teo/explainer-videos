@@ -31,7 +31,7 @@ of copyable minds, software forks, and model versions as ships of Theseus (a wei
 random updates: similarity to the original falls below one half by the twenty-fourth, while each version stays within
 0.97 of the last).
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/persist.py`, tested
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/persist.py`, tested
 in `tests/philosophy/test_persist.py` and cached by [`compute.py`](compute.py).
 
 ## Build it

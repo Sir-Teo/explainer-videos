@@ -27,7 +27,7 @@ model reaches. Lewis signalling games learned by Roth–Erev reinforcement (Skyr
 above 90% success and 172 above 99%; with three states 169 succeed and 26 stick near two thirds in partial pooling;
 the information the learned signals carry (0.98 of 1 bit; 1.52 of 1.58; the pooled runs 0.90); Lewis's conventions
 and Skyrms's informational content. Distributional semantics built: Saussure, Harris and Firth, a
-small corpus turned into positive-PMI word vectors and a truncated SVD, nearest neighbours (cat → dog; king → queen)
+small corpus turned into positive-PMI word vectors and a truncated SVD, nearest neighbours (cat → dog; king → prince)
 the space of words, and analogies as directions (king − prince + princess → queen; the city–country analogies fail on so small a corpus). The octopus (Bender and Koller), Harnad's grounding problem, conceptual role and the replies,
 Brandom's deontic scorekeeping built (commitments and entitlements over a six-move conversation), a **Price List** of four inconsistent
 claims; probing the Reasoner's own vectors (kinds: 15 of 17 held-out words;
@@ -35,7 +35,7 @@ fiction against fact: 0 of 6, because the corpus does not mark it), and Othello-
 implicature benchmarks, a pragmatic captioner (the green square called 'green' two to one), and Grice's maxims as
 requirements for assistants.
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/pragmatics.py` (with
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/pragmatics.py` (with
 `prop` for the Price List), tested in `tests/philosophy/test_pragmatics.py` and cached by [`compute.py`](compute.py).
 
 ## Build it
@@ -68,6 +68,10 @@ python tools/qa_scene.py philosophy28 RSA              # one chapter, silent, wi
 | 14 | `Probe` | Li et al. (2023). | two probes: kinds and fiction |
 | 15 | `Machines` | Ruis et al. (2023); Hu et al. (2023); Andreas and Klein (2016); Cohn-Gordon et al. (2018). | a literal and a pragmatic captioner |
 | 16 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
+
+The word-vector tables and plots keep the toy corpus's English words verbatim in
+both editions. These are the model's inputs and outputs; headings, category labels
+and explanations are translated.
 
 ## Sources
 

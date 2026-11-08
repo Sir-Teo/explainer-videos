@@ -114,8 +114,8 @@ class Intuition(VoiceoverScene):
             "from two to four. <bookmark mark='e'/>So each finite chain proves too much, and intuitionistic logic "
             "needs infinitely many values, or a different semantics altogether."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(tab))
+            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(v) for v in verdicts], lag_ratio=0.3))
             vo.wait_until("b")
             self.play(FadeIn(thm))

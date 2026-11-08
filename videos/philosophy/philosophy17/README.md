@@ -22,7 +22,7 @@ and difference in differences (Card and Krueger, +2.7); causal inference at work
 learning, invariant causal prediction, and language models); and Kim's exclusion argument as a Price List, with
 Yablo's pigeon.
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/causal.py` (structural
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/causal.py` (structural
 models, d-separation, the do-calculus's side conditions, Halpern–Pearl, PC), tested in
 `tests/philosophy/test_causal.py` and cached by [`compute.py`](compute.py).
 

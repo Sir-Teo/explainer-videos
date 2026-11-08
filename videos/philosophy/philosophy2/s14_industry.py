@@ -158,8 +158,9 @@ class Industry(VoiceoverScene):
             "cubes, in dimension seven, in 2020. Each is a theorem that no person has checked line by line, "
             "certified instead by a proof checker small enough to verify on its own."
         ) as vo:
+            self.play(FadeIn(hcs[0], shift=DOWN * 0.2))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(h, shift=DOWN * 0.2) for h in hcs], lag_ratio=0.3))
+            self.play(LaggedStart(*[FadeIn(h, shift=DOWN * 0.2) for h in hcs[1:]], lag_ratio=0.3))
             self.play(LaggedStart(*[FadeIn(x) for x in strip], lag_ratio=0.003), FadeIn(sl), run_time=2)
         self.play(FadeOut(strip), FadeOut(sl))
         with self.voiceover(

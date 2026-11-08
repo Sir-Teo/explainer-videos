@@ -105,8 +105,8 @@ class Recurrence(VoiceoverScene):
             "proof: if the world has a finite amount of force and infinite time, its states must recur. The Reasoner "
             "can test both halves of that."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(rows[0]))
             vo.wait_until("c")

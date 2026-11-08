@@ -71,8 +71,9 @@ class Euthyphro(VoiceoverScene):
             "argument is subtler. Euthyphro already agrees that the gods love the pious because it is pious. Then, "
             "Socrates shows, 'pious' and 'god-loved' cannot be the same thing."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(left, shift=RIGHT * 0.2))
+            vo.wait_until("a")
+            self.play(Indicate(left, color=P.CLAIM))
             vo.wait_until("b")
             self.play(FadeIn(right, shift=LEFT * 0.2), GrowArrow(arr))
             vo.wait_until("c")

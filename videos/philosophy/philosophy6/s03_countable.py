@@ -58,8 +58,8 @@ class Countable(VoiceoverScene):
             "pairs the grid with the natural numbers, one to one. <bookmark mark='d'/>So the pairs of natural numbers "
             "are no more numerous than the natural numbers. A set that can be listed like this is called countable."
         ) as vo:
-            vo.wait_until("a")
             self.play(Create(grid), FadeIn(xl), FadeIn(yl), FadeIn(bl), FadeIn(al))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(LaggedStart(*[Create(x) for x in path], lag_ratio=0.6),
                       LaggedStart(*[FadeIn(cells[p][1]) for p in order], lag_ratio=0.08), run_time=4)
@@ -104,8 +104,8 @@ class Countable(VoiceoverScene):
             "by row. That is a list of all the positive fractions: the fractions are countable. Cantor proved it in "
             "1874, with a cruder list."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(rule), FadeIn(nodes[(0, 0)]))
+            vo.wait_until("a")
             for depth in range(1, len(levels)):
                 self.play(*[FadeIn(nodes[(depth, i)]) for i in range(len(levels[depth]))],
                           *[Create(e) for e in edges if True][2 ** depth - 2: 2 ** (depth + 1) - 2], run_time=0.9)

@@ -55,8 +55,8 @@ class CH(VoiceoverScene):
             "<bookmark mark='c'/>So if the axioms are consistent, they remain consistent with the continuum "
             "hypothesis added. They cannot refute it."
         ) as vo:
-            vo.wait_until("a")
             self.play(Create(V), FadeIn(vl), Create(L), FadeIn(ll), FadeIn(defs))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(res[0]))
             vo.wait_until("c")

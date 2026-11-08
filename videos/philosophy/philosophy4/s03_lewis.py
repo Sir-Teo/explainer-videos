@@ -68,8 +68,8 @@ class Lewis(VoiceoverScene):
             "has paradoxes of its own: an impossible proposition strictly implies everything. Logics that refuse even "
             "this are relevance logics, in Part 5."
         ) as vo:
-            vo.wait_until("a")
             self.play(Write(defn), FadeIn(dl))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("c")
@@ -173,8 +173,8 @@ class Lewis(VoiceoverScene):
             "the logic of topology. <bookmark mark='c'/>Kuratowski's fourteen sets are S4's fourteen modalities. "
             "The box was not only about metaphysics; it had a geometry."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(hcs[0], shift=DOWN * 0.2))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(hcs[1], shift=DOWN * 0.2), LaggedStart(*[FadeIn(r) for r in rd], lag_ratio=0.3))
             vo.wait_until("c")

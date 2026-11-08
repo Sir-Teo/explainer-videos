@@ -138,7 +138,7 @@ class Boole(VoiceoverScene):
         whys = [why(r"the law of duality"), why(r"subtract $x^2$"), why(r"factor: nothing is both $x$ and not $x$")]
         for r in rows:
             r.set_x(-3.4)
-        step = ladder(self, rows, whys, keep=3, top=0.8, x=-3.9, edge=2.0)
+        step = ladder(self, rows, whys, keep=3, top=0.8, x=-1.5, edge=6.6)
         with self.voiceover(
             "One of Boole's laws is unlike ordinary algebra. The white things that are white are just the white "
             "things: x times x is x. Boole called it the law of duality. <bookmark mark='a'/>As an equation about "
@@ -158,8 +158,9 @@ class Boole(VoiceoverScene):
             "from both sides. <bookmark mark='c'/>Factor. x times one minus x is zero: the class of things that are "
             "both x and not x is empty. Nothing is both white and not white. A law of thought, derived by algebra."
         ) as vo:
-            self.play(FadeOut(law), FadeOut(words))
             vo.wait_until("a")
+            self.play(FadeOut(law), FadeOut(words), FadeOut(G), FadeOut(line), FadeOut(par),
+                      FadeOut(lp), FadeOut(ll), FadeOut(dots), FadeOut(dl))
             step(0)
             vo.wait_until("b")
             step(1)

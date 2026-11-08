@@ -27,7 +27,7 @@ class Argument(VoiceoverScene):
 
     def parts(self):
         d = load("forms")["forms"]
-        a = text_arg(d[0]["premises"], d[0]["conclusion"]).move_to([-2.2, 0.6, 0])
+        a = text_arg(d[0]["premises"], d[0]["conclusion"]).move_to([-1.7, 0.6, 0])
         pl = brace_note(a.rows, r"premises", direction=LEFT, color=P.CLAIM)
         cl = brace_note(a.concl, r"conclusion", direction=LEFT, color=GOAL)
         dfn = definition_card(r"Argument", r"a set of premises offered in support of a conclusion", width=5.4,
@@ -73,8 +73,9 @@ class Argument(VoiceoverScene):
             "flawless; a premise is false. Valid, but not sound. <bookmark mark='e'/>Validity only ever rules out "
             "one combination: true premises with a false conclusion."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(v, shift=LEFT * 0.2))
+            vo.wait_until("a")
+            self.play(Indicate(v, color=OK))
             vo.wait_until("b")
             self.play(FadeIn(s, shift=LEFT * 0.2))
             vo.wait_until("c")
@@ -96,6 +97,9 @@ class Argument(VoiceoverScene):
                      font_size=30, color=OK).next_to(good, DOWN, buff=0.5)
         sb = MathTex(r"\text{All } P \text{ are } M;\ \text{all } S \text{ are } M;\ \text{so all } S \text{ are } P",
                      font_size=30, color=BAD).next_to(bad, DOWN, buff=0.5)
+        for form in (sg, sb):
+            if form.width > 6.0:
+                form.scale_to_fit_width(6.0)
         cm = label(r"same form as: \ all cats are mortals; all dogs are mortals; so all dogs are cats", font_size=24,
                    color=BAD).to_edge(DOWN, buff=1.2)
         rule = label(r"to refute a form: \ one instance with true premises and a false conclusion", font_size=28,

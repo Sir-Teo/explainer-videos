@@ -80,8 +80,8 @@ class Hook(VoiceoverScene):
             "and Paul Cohen's theorem of 1963, which shows that the standard axioms cannot decide how many real "
             "numbers there are."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(tab))
+            vo.wait_until("a")
             self.play(LaggedStart(*[Create(r) for r in diag], lag_ratio=0.15))
             self.play(FadeIn(new), FadeIn(nl))
             vo.wait_until("b")

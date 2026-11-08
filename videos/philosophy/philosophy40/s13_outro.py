@@ -81,9 +81,9 @@ class Outro(VoiceoverScene):
 
     def problems(self):
         ps = problem_set([
-            r"Show that no power of $3/2$ equals a power of $2$.",
+            r"$\forall n,m\in\mathbb{N}_{>0}:\ (3/2)^n\ne2^m$.",
             r"How many cents is the syntonic comma $81/80$?",
-            r"Explain why two harmonic tones at ratio 3:2 share every second partial of the lower tone.",
+            r"$f_2/f_1=3/2:\quad \{(n,m)\in\mathbb{N}_{>0}^2 : nf_1=mf_2\}=\;?$",
             r"Which wallpaper groups have no mirrors and no glides?",
             r"Why does averaging remove a critic's noise but not a shared prejudice?",
             r"State the paradox of taste as an inconsistent triad, \ and say which claim Kant denies.",

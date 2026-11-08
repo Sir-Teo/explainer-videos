@@ -51,8 +51,8 @@ class Hotel(VoiceoverScene):
             "the moral that comparisons of size simply do not apply to infinite totals. <bookmark mark='c'/>Cantor's "
             "revolution was to treat the infinite as actual, a completed set, an object with a size of its own."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(hcs[0]), FadeIn(pot))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(hcs[1]))
             vo.wait_until("c")

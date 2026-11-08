@@ -36,8 +36,8 @@ class Hume(VoiceoverScene):
             "it. The thesis read into the paragraph, that no ought follows from premises containing only is, came to "
             "be called Hume's law."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(foot))
         self.clear_scene()

@@ -89,8 +89,8 @@ class Hook(VoiceoverScene):
             "axioms match which shapes of arrows, check a real concurrent program with it, and find the place "
             "where modal logic and first-order logic part ways: this part's brick in the Wall."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(g.discs), LaggedStart(*[Create(a) for a in g.arrows], lag_ratio=0.2))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(rules))
             vo.wait_until("c")

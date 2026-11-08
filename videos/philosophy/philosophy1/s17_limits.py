@@ -98,8 +98,9 @@ class Limits(VoiceoverScene):
             "is the subject of Part 3. Mathematics is full of sentences like these: for every epsilon there is a "
             "delta. A logic that cannot express them cannot express mathematics."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(a[0]))
+            vo.wait_until("a")
+            self.play(Indicate(a[0], color=P.CLAIM))
             vo.wait_until("b")
             self.play(FadeIn(b[0]))
             vo.wait_until("g1")
@@ -130,8 +131,9 @@ class Limits(VoiceoverScene):
             "quantifiers and relations. Together they are the machinery of reason that Leibniz dreamed of, and the "
             "first place where we will see exactly how far it reaches."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(two[0], shift=RIGHT * 0.2))
+            vo.wait_until("a")
+            self.play(Indicate(two[0], color=P.CLAIM))
             vo.wait_until("b")
             self.play(FadeIn(two[1], shift=RIGHT * 0.2))
         self.clear_scene()

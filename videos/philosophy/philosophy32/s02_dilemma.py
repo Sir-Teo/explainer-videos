@@ -32,8 +32,8 @@ class Dilemma(VoiceoverScene):
             "would fix every later state, <bookmark mark='c'/>including the state of your brain at the moment you "
             "decide what to do."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(rows[0]))
             vo.wait_until("c")

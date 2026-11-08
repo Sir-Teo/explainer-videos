@@ -80,9 +80,9 @@ class QML(VoiceoverScene):
             "holds when every world has the same domain, and fails when domains can grow. Accepting it means believing "
             "in a fixed stock of possible things: necessitism, as Timothy Williamson defends it."
         ) as vo:
-            vo.wait_until("a")
             self.play(Create(w0[0]), FadeIn(w0[1]), Create(w1[0]), FadeIn(w1[1]), GrowArrow(ar), FadeIn(a0),
                       FadeIn(a1[:2]), FadeIn(b1[:2]))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(a1[2]), FadeIn(b1[2]))
             vo.wait_until("c")
@@ -145,8 +145,8 @@ class QML(VoiceoverScene):
             "thing in every world, so the identity is necessary, though we learn it by observation. Necessary truths "
             "known a posteriori: a central idea of Part 22."
         ) as vo:
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(s_, shift=DOWN * 0.15) for s_ in steps], lag_ratio=0.4), FadeIn(sl))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(hp[:2]))
             vo.wait_until("c")

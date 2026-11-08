@@ -17,20 +17,21 @@ class Criteria(VoiceoverScene):
     def three(self):
         head = history_card(2016, r"Hardt, \ Price and Srebro", r"``Equality of Opportunity in Supervised Learning''", width=6.0, color=HIST).to_corner(UL, buff=0.3)
         rows = [
-                (r"independence", r"$\hat Y \perp A$: \ each group is labelled high risk at the same rate \ (demographic parity)", FAIRC),
-                (r"separation", r"$\hat Y \perp A \mid Y$: \ equal false-positive and false-negative rates \ (equalized odds)", RESP),
-                (r"sufficiency", r"$Y \perp A \mid R$: \ a score means the same in every group \ (calibration; \ predictive parity)", EXPL),
+                (r"independence", r"$R \perp A$", FAIRC),
+                (r"separation", r"$R \perp A \mid Y$", RESP),
+                (r"sufficiency", r"$Y \perp A \mid R$", EXPL),
                 (r"the vocabulary", r"Barocas, \ Hardt and Narayanan, \ \textit{Fairness and Machine Learning}: \ fairness as conditional independence", GOAL)]
         g = rows_table(rows, top=1.0, gap=0.5, width=8.4, x_text=-2.0, label_size=20, text_size=20)
         with self.voiceover(
             "Each side of the dispute was using a precise criterion, and they can be stated as conditional "
             "independence, following Solon Barocas, Moritz Hardt and Arvind Narayanan. Write A for the group, Y for "
-            "the outcome, R for the score and Y hat for the decision. <bookmark mark='a'/>Independence: the decision "
-            "is independent of the group, so each group is labelled high risk at the same rate, demographic parity. "
-            "<bookmark mark='b'/>Separation: the decision is independent of the group given the outcome, so the "
-            "groups have equal false-positive and false-negative rates; this is what ProPublica checked. <bookmark "
-            "mark='c'/>Sufficiency: the outcome is independent of the group given the score, so a score means the "
-            "same in every group; this is what Northpointe checked. <bookmark mark='d'/>Each criterion is a different "
+            "the outcome and R for the prediction. Use the same R throughout; for a binary decision, take R to be "
+            "Y hat. <bookmark mark='a'/>Independence: the distribution of predictions is the same across groups. "
+            "For binary decisions, this is demographic parity. <bookmark mark='b'/>Separation: predictions are "
+            "independent of group given the outcome. For binary decisions, this is equal false-positive and "
+            "false-negative rates, the comparison ProPublica made. <bookmark mark='c'/>Sufficiency: the outcome is "
+            "independent of group given the prediction. Calibration is a common way to achieve this for probability "
+            "scores. <bookmark mark='d'/>Each criterion is a different "
             "answer to the question what fairness asks of a prediction."
         ) as vo:
             self.play(FadeIn(head))
@@ -143,24 +144,26 @@ class Criteria(VoiceoverScene):
         self.clear_scene()
 
     def pairs(self):
-        head = label(r"Any two collide \ (Barocas, \ Hardt and Narayanan)", font_size=30, color=CONN).to_edge(UP, buff=0.35)
+        head = VGroup(*[label(t, font_size=30, color=CONN) for t in
+                        (r"independence", r"separation", r"sufficiency")]).arrange(RIGHT, buff=0.5).to_edge(UP, buff=0.35)
         rows = [
-                (r"independence and sufficiency", r"if the base rates differ, \ a score that means the same in every group cannot be handed out at equal rates", FAIRC),
-                (r"independence and separation", r"if the base rates differ and the score is informative at all, \ equal rates and equal errors cannot both hold", RESP),
-                (r"separation and sufficiency", r"if the base rates differ and prediction is imperfect, \ equal errors and equal meaning cannot both hold: \ chapter three", EXPL),
-                (r"so", r"with unequal base rates, \ every pair of the three criteria is incompatible", GOAL)]
+                (r"independence and sufficiency", r"$p_A\ne p_B,\quad R\perp A\ \Longrightarrow\ Y\not\!\perp A\mid R$", FAIRC),
+                (r"independence and separation", r"$p_A\ne p_B,\quad R\perp A,\quad R\perp A\mid Y\ \Longrightarrow\ R\perp Y$", RESP),
+                (r"separation and sufficiency", r"$p_A\ne p_B,\quad R\perp A\mid Y,\quad Y\perp A\mid R\ \Longrightarrow\ H(Y\mid R)=0$", EXPL),
+                (r"so", r"$R=Y:\quad R\perp A\mid Y,\quad Y\perp A\mid R$", GOAL)]
         g = rows_table(rows, top=1.5, gap=0.5, width=8.4, x_text=-2.0, label_size=20, text_size=20)
         with self.voiceover(
-            "How do the three criteria relate? Barocas, Hardt and Narayanan prove that, once base rates differ, every "
-            "pair of them conflicts. <bookmark mark='a'/>Independence and sufficiency: if a score means the same "
-            "thing in every group and the groups differ in base rate, their scores must differ too, so they cannot be "
-            "labelled at equal rates. <bookmark mark='b'/>Independence and separation: if the score carries any "
-            "information about the outcome, equal labelling rates and equal error rates cannot both hold when the "
-            "base rates differ. <bookmark mark='c'/>Separation and sufficiency: if the base rates differ and "
-            "prediction is imperfect, equal error rates and equal meaning cannot both hold. That is the theorem of "
-            "chapter three, and the dispute between ProPublica and Northpointe. <bookmark mark='d'/>So with unequal "
-            "base rates there is no way to satisfy two of the three at once, let alone all three. Every deployed "
-            "system has chosen, whether it says so or not."
+            "How do the three criteria relate? Apply them to the same prediction R. For binary outcomes with "
+            "different, nondegenerate base rates, p A and p B, the cases differ. <bookmark mark='a'/>Independence "
+            "and sufficiency would force equal base rates, so they cannot coexist here. <bookmark mark='b'/>"
+            "Independence and separation together force the prediction to carry no information about the outcome. "
+            "An uninformative prediction is an exception to the usual conflict. <bookmark mark='c'/>Separation "
+            "and sufficiency force the outcome to be perfectly recoverable from the prediction: zero conditional "
+            "entropy. A calibrated probability score would have to predict perfectly. <bookmark mark='d'/>So "
+            "perfect prediction can satisfy separation and sufficiency, while an uninformative prediction can "
+            "satisfy independence and separation. Also distinguish a score from its thresholded or post-processed "
+            "decision: a calibrated score can coexist with an adjusted decision, because they are different "
+            "predictions. Chapter three makes the score-level balance theorem precise."
         ) as vo:
             self.play(FadeIn(head))
             for mk, r in zip("abcd", g):

@@ -40,8 +40,9 @@ class Meno(VoiceoverScene):
             "either pointless or impossible. It is a real problem, and it returns, as the paradox of analysis, "
             "whenever philosophers try to define a concept they already use."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q, shift=DOWN * 0.2))
+            vo.wait_until("a")
+            self.play(Indicate(q, color=HIST))
             vo.wait_until("b")
             self.play(FadeIn(horns[0]))
             vo.wait_until("c")
@@ -143,8 +144,12 @@ class Meno(VoiceoverScene):
             "terms. The supposition refutes itself. A reductio, and the side of the doubled square is a new kind of "
             "number."
         ) as vo:
+            step(0)
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
-                step(k)
+                if k == 0:
+                    self.play(Indicate(rows[0], color=GOAL))
+                else:
+                    step(k)
             self.play(FadeIn(leg))
         self.clear_scene()

@@ -40,8 +40,8 @@ class Hoare(VoiceoverScene):
             "invariant, a condition the body preserves. Then it still holds when the loop stops, together with the "
             "negation of the loop's test."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(hcs), Write(tri[0]), FadeIn(tri[1]))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(rules[0]), FadeIn(rl[0]), FadeIn(rules[1]), FadeIn(rl[1]))
             vo.wait_until("c")
@@ -74,8 +74,8 @@ class Hoare(VoiceoverScene):
             f"check, the Reasoner ran the loop for n up to {d['n_max']} and tested the invariant at all {d['checks']} "
             "points where it should hold."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(prog))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(inv))
             vo.wait_until("c")

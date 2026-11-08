@@ -39,8 +39,8 @@ class Ancient(VoiceoverScene):
             "yet true or false, though scholars still dispute what he meant. Chapter eleven will give two precise "
             "answers."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(hc))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(t0), Create(b1), Create(b2), FadeIn(t1), FadeIn(t2), FadeIn(lab))
             vo.wait_until("c")

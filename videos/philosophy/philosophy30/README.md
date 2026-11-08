@@ -33,7 +33,7 @@ and Baroni's networks. And representation in networks: the extended mind revisit
 network whose hidden layer carries x perfectly while the output ignores it (a probe reads x at 100%; after the probe's
 direction is removed a new probe is at 49.3%, and the task is still at 100%).
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/mind.py` (with `prop` for
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/mind.py` (with `prop` for
 the Price List), tested in `tests/philosophy/test_mind.py` and cached by [`compute.py`](compute.py).
 
 ## Build it

@@ -35,8 +35,8 @@ class Lob(VoiceoverScene):
             "the logic of provability: every modal law of 'provable' is a theorem of GL. <bookmark mark='d'/>Gödel's "
             "incompleteness theorems become one-line theorems of this logic, in Part 7."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(hcs[0], shift=DOWN * 0.2))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(Write(ax[0]), FadeIn(ax[1]))
             vo.wait_until("c")
@@ -66,8 +66,8 @@ class Lob(VoiceoverScene):
             "incompleteness theorem, a consistent arithmetic cannot prove its own consistency, as a one-line "
             "consequence of a modal axiom. Part 7 builds the theorem itself."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(steps[0]), FadeIn(steps[1]))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(steps[2]), FadeIn(steps[3]))
             vo.wait_until("c")
@@ -99,8 +99,8 @@ class Lob(VoiceoverScene):
             "axiom is valid on three, nineteen and two hundred and nineteen, <bookmark mark='d'/>which are exactly "
             "the strict partial orders, on every frame."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(thm))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(fin))
             vo.wait_until("c")
@@ -174,8 +174,8 @@ class Lob(VoiceoverScene):
             "escape. <bookmark mark='c'/>Today the algorithm runs inside tools that translate modal problems into "
             "first-order ones for the provers of Part 3."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(thm, shift=UP * 0.2))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(ex))
             vo.wait_until("c")

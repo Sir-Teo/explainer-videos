@@ -219,8 +219,8 @@ class Rules(VoiceoverScene):
         left = panel(m["before"], m["rounds_before"], r"21 voters", m["winner_before"], -3.4)
         right = panel(m["after"], m["rounds_after"], r"2 voters move C up", m["winner_after"], 3.4)
         arrow = Arrow([-0.6, 0.6, 0], [0.6, 0.6, 0], color=CYC, stroke_width=5)
-        foot = label(r"found by searching every tie-free electorate up to 25 voters; \ the smallest has 21",
-                     font_size=20, color=GREY_A).to_edge(DOWN, buff=0.35)
+        foot = MathTex(r"n=21, \qquad C:\ 14>7 \quad\longrightarrow\quad 10<11",
+                       font_size=26, color=GREY_A).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "Instant runoff has a stranger flaw, which the Reasoner finds by search. <bookmark mark='a'/>Twenty one "
             "voters: six rank A, C, B; five B, A, C; two B, C, A; and eight C, B, A. In the first round A has six, B "
@@ -228,8 +228,9 @@ class Rules(VoiceoverScene):
             "mark='b'/>Now two of the B, C, A voters decide they like C even more, and move C to the top. C has "
             "gained support, and nothing else has changed. <bookmark mark='c'/>The first round is now A six, B five, "
             "C ten. B is eliminated, B's five ballots go to A, and A beats C eleven to ten. More votes for C made C "
-            "lose. <bookmark mark='d'/>This is called a failure of monotonicity, and the search shows the smallest "
-            "tie-free example needs twenty one voters. Plurality and Borda never do this."
+            "lose. <bookmark mark='d'/>This is a failure of monotonicity. The search checks three candidates, odd "
+            "electorates, distinct totals in every round, and raises the winner on one ballot type at a time. "
+            "Its first witness has twenty one voters. Plurality and Borda never do this."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

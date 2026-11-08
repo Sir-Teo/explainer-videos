@@ -31,8 +31,8 @@ class Theories(VoiceoverScene):
             "with actualities. <bookmark mark='c'/>And Tarski described his T-schema as an attempt to make "
             "Aristotle's idea precise."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(mo))
             vo.wait_until("c")

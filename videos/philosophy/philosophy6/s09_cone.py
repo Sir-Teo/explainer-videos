@@ -61,8 +61,8 @@ class Cone(VoiceoverScene):
             "ordinal, which climb up the middle of the cone like a spine. At a limit stage, take the union of what "
             "came before. This cone, V, is the cumulative hierarchy, and every set of ZFC lives somewhere in it."
         ) as vo:
-            vo.wait_until("a")
             self.play(Create(c), FadeIn(st[0]))
+            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(s_) for s_ in st[1:]], lag_ratio=0.3), FadeIn(rule[0]))
             vo.wait_until("b")
             self.play(FadeIn(dots), FadeIn(w))

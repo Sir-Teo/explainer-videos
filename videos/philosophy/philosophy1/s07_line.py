@@ -50,8 +50,8 @@ class Line(VoiceoverScene):
             "objects, grasped by thought; and at the top the Forms themselves, grasped by understanding. Each level "
             "is the reality of which the level below is an image."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.3))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(l_, shift=RIGHT * 0.2) for l_ in labels_], lag_ratio=0.35))

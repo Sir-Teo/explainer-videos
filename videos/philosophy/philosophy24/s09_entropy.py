@@ -31,8 +31,8 @@ class Entropy(VoiceoverScene):
             "well in both directions. How can a one-way law come out of two-way laws? Ludwig Boltzmann spent his "
             "life on that question."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             for mk, r in zip("bcd", rows):
                 vo.wait_until(mk)
                 self.play(FadeIn(r))

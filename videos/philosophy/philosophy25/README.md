@@ -22,7 +22,7 @@ as speculative, spacetime from entanglement (Maldacena; Ryu and Takayanagi; Van 
 (Bombelli, Lee, Meyer and Sorkin): four hundred events sprinkled into flat spacetime, the coordinates forgotten, and
 the dimension (2, 3, 4) recovered from the causal order alone by the Myrheim–Meyer estimator.
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/spacetime.py` (with
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/spacetime.py` (with
 `prop` for the Price List), tested in `tests/philosophy/test_spacetime.py` and cached by [`compute.py`](compute.py).
 
 ## Build it

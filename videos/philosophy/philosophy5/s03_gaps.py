@@ -41,8 +41,8 @@ class Gaps(VoiceoverScene):
             "counts as holding. That is LP, the logic of paradox, proposed by Florencio Asenjo in 1966 and named "
             "and defended by Graham Priest in 1979. <bookmark mark='c'/>Same tables, opposite logics."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(left), Create(bar))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(right))
             vo.wait_until("c")
@@ -112,8 +112,8 @@ class Gaps(VoiceoverScene):
             "half, so it holds; p holds; q does not. An LP reasoner who accepts a conditional cannot simply detach "
             "its consequent."
         ) as vo:
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(x, shift=RIGHT * 0.15) for x in k3], lag_ratio=0.35), run_time=3)
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(x, shift=RIGHT * 0.15) for x in lp[:3]], lag_ratio=0.35), run_time=2.5)
             vo.wait_until("c")
@@ -146,8 +146,8 @@ class Gaps(VoiceoverScene):
             "conclusion always does. Yet it fails in the four-valued logic of the next chapter, which contains "
             "gaps and gluts at once: p both true and false, q neither."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(thm))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(chk))
             vo.wait_until("c")

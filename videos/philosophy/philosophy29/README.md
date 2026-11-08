@@ -25,8 +25,8 @@ a reversible cellular automaton on 11 cells returns after 93 steps (return times
 cells), and Simmel's wheels (rates 1, 2, 1/π) come within 0.0000096 of a turn by time 355 and never return. The
 hermeneutic circle from Schleiermacher to Gadamer, with an iteration of part and whole as an analogy (a text that can
 answer back corrects any prejudice; a wholly ambiguous one leaves it as it was), and its critics. Saussure's signs and
-differences, made exact on Part 28's word vectors (a random rotation changes every coordinate, correlation −0.14, and
-no cosine or neighbour; Procrustes recovers it from 8 anchors to 10⁻¹⁵; five groups of words share a point), Derrida's
+differences, made exact on Part 28's word vectors (a random rotation changes the coordinates, with their measured correlation shown,
+and no cosine or neighbour; Procrustes recovers it from 8 anchors to 10⁻¹⁵; several groups of words share a point), Derrida's
 différance stated carefully, a closed dictionary in which every chain of definitions ends in a circle and 3 of 18
 words must be grounded from outside, and the critics. Foucault's discipline, the Panopticon, power/knowledge and
 biopower, a threshold gamed by 3049 of 20 000 people (acceptances 6179 → 9228, only 67% of them qualified), Goodhart,
@@ -36,7 +36,7 @@ being-time and Nāgārjuna. And the analytic–continental divide: Davos, Carnap
 and the bridges (Dreyfus–McDowell, naturalized phenomenology, neurophenomenology, heterophenomenology, Winograd and
 Flores, predictive processing).
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/phenomenology.py`
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/phenomenology.py`
 (with `pragmatics` for the word vectors and `prop` for the Price List), tested in
 `tests/philosophy/test_phenomenology.py` and cached by [`compute.py`](compute.py).
 

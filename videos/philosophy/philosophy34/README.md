@@ -38,7 +38,7 @@ stable matchings, and strategy-proof for students but not schools (Roth 1982); r
 exchange. The social contract: a **Price List** for the dilemma (other-regarding preferences; cooperative rationality;
 collectively self-defeating rationality), Gauthier (1986), Binmore, Skyrms and Rawls, and four ways out.
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/games.py` (with `prop`
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/games.py` (with `prop`
 for the Price List), tested in `tests/philosophy/test_games.py` and cached by [`compute.py`](compute.py).
 
 ## Build it

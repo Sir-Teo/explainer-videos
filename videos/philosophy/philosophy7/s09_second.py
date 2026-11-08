@@ -39,8 +39,8 @@ class Second(VoiceoverScene):
             "own consistency. And since Hilbert's finitary methods can all be formalized in PA, a "
             "finitary proof that PA is consistent is impossible."
         ) as vo:
-            vo.wait_until("a")
             self.play(Write(con))
+            vo.wait_until("a")
             for mk, st in zip("bcd", (steps[0], VGroup(steps[1], steps[2]), steps[3])):
                 vo.wait_until(mk)
                 self.play(FadeIn(st, shift=DOWN * 0.1))

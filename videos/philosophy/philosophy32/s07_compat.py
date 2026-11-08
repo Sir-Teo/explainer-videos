@@ -169,7 +169,7 @@ class Compatibilism(VoiceoverScene):
         rgb = np.kron(rgb, np.ones((8, 8, 1), dtype=np.uint8))
         img = ImageMobject(rgb)
         img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["nearest"])
-        img.height = 4.6
+        img.width = 6.6
         img.move_to([-3.0, -0.4, 0])
         cell = img.height / T
         agent = Square(side_length=cell * 1.4, color=WILL, stroke_width=3).move_to(

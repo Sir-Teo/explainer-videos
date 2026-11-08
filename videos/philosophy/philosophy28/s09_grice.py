@@ -35,8 +35,8 @@ class Grice(VoiceoverScene):
             "for. <bookmark mark='d'/>Relation: be relevant. <bookmark mark='e'/>Manner: be perspicuous; avoid "
             "obscurity and ambiguity; be brief and orderly."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             for mk, r in zip("bcde", g):
                 vo.wait_until(mk)
                 self.play(FadeIn(r))

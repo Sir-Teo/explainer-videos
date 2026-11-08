@@ -241,8 +241,8 @@ class Counterparts(VoiceoverScene):
             "could. <bookmark mark='e'/>Allan Gibbard's contingent identity of Lumpl and Goliath stops being a "
             "paradox. Counterpart theory pays for that with the necessity of identity."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             for mk, r in zip("bcde", rows):
                 vo.wait_until(mk)
                 self.play(FadeIn(r))

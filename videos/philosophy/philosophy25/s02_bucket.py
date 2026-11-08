@@ -34,8 +34,8 @@ class Bucket(VoiceoverScene):
             "about motion relative to space itself? <bookmark mark='e'/>Newton's answer was that some motions show "
             "themselves by their effects, and his example was a bucket of water."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             for mk, r in zip("bcde", rows):
                 vo.wait_until(mk)
                 self.play(FadeIn(r))

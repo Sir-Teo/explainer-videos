@@ -100,8 +100,8 @@ class Block(VoiceoverScene):
             "to explain a perception. <bookmark mark='b'/>Leibniz's mill is the ancestor of every argument in this "
             "chapter."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(foot))
         self.clear_scene()

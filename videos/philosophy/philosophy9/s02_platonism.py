@@ -62,8 +62,8 @@ class Platonism(VoiceoverScene):
             "<bookmark mark='b'/>Mathematical intuition, on this view, is a faculty like sight, aimed at the "
             "abstract. Part 6 showed how Gödel hoped it would one day settle the continuum hypothesis."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(pts))
         self.clear_scene()

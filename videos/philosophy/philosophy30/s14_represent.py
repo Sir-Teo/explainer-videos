@@ -52,7 +52,7 @@ class Represent(VoiceoverScene):
             (r"exploitation", r"the system \textit{uses} the correlation to achieve it", OK),
             (r"varitel semantics", r"content is the correlation that explains the system's success at its task", GOAL),
         ]
-        g = rows_table(rows, top=1.0, gap=0.5)
+        g = rows_table(rows, top=1.0, gap=0.5, label_width=3.3)
         with self.voiceover(
             "Nicholas Shea's book of 2018 combines Dretske and Millikan. <bookmark mark='a'/>A state carries "
             "information if it correlates with something in the world. <bookmark mark='b'/>The system has a task "

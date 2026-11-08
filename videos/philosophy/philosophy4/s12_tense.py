@@ -108,9 +108,9 @@ class Tense(VoiceoverScene):
             "<bookmark mark='c'/>The Ockhamist reading: the sentence is true or false only relative to a history, a "
             "complete way the future might go."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(t0), Create(h1), Create(h2), FadeIn(t1), FadeIn(t2), Create(ext1), Create(ext2),
                       FadeIn(lb))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(rd[0]))
             vo.wait_until("c")

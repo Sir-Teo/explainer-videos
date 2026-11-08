@@ -26,7 +26,7 @@ confirmation; inductive risk (Rudner) as a decision whose threshold moves with t
 Douglas, and Longino's social objectivity; and AI scientists (a miniature BACON rediscovers Kepler's third law;
 AlphaFold, FunSearch, AlphaEvolve) and explanation from black boxes.
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/science.py`, tested in
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/science.py`, tested in
 `tests/philosophy/test_science.py` and cached by [`compute.py`](compute.py).
 
 ## Build it

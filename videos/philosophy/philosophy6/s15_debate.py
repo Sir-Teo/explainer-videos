@@ -59,8 +59,8 @@ class Debate(VoiceoverScene):
             "<bookmark mark='c'/>Choice is independent of the other axioms. Whether to accept it is a decision, and "
             "the reasons must come from somewhere other than proof."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(hcs[0]))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(hcs[1]))
             vo.wait_until("c")
@@ -119,8 +119,8 @@ class Debate(VoiceoverScene):
             "non-measurable sets, which no physical cutting could produce, and rejecting it would cost bases of "
             "vector spaces, maximal ideals, and much else."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(t) for t in today], lag_ratio=0.4))
         self.clear_scene()

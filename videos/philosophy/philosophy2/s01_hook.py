@@ -210,7 +210,7 @@ class Hook(VoiceoverScene):
             vo.wait_until("a")
             self.play(Indicate(w.brick[1], color=P.WALL))
             vo.wait_until("b")
-            self.play(q[0].animate.set_stroke(P.CONCL, width=3), FadeIn(qm))
+            self.play(q[0].animate.set_stroke(P.CONCL, width=3), FadeOut(q[1]), FadeIn(qm))
         self.clear_scene()
         with self.voiceover(
             "The second is the Price List. When Socrates showed someone that their beliefs contradicted each other, he "

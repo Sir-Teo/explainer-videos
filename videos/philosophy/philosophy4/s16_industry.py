@@ -35,8 +35,8 @@ class Industry(VoiceoverScene):
             "translates temporal formulas into SAT. Today processors, their floating-point units and their cache "
             "protocols are checked against temporal specifications before they are made."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(hcs[0], shift=DOWN * 0.2))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(hcs[1], shift=DOWN * 0.2))
             vo.wait_until("c")
@@ -93,7 +93,8 @@ class Industry(VoiceoverScene):
             "That problem, saying exactly what we want, returns at the very end of this series, in Part 42."
         ) as vo:
             for mk, r in zip("abcd", rows):
-                vo.wait_until(mk)
+                if mk != 'a':
+                    vo.wait_until(mk)
                 self.play(FadeIn(r, shift=UP * 0.15))
         self.clear_scene()
 

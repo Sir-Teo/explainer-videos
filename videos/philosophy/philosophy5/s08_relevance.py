@@ -33,8 +33,8 @@ class Relevance(VoiceoverScene):
             "syntactic one, proved by Belnap in 1960: in a relevant logic, if A implies B is a theorem, then A and B "
             "share at least one atom. The moon and arithmetic share nothing."
         ) as vo:
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(e) for e in ex], lag_ratio=0.4))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(hc))
             vo.wait_until("c")
@@ -68,8 +68,8 @@ class Relevance(VoiceoverScene):
             "first approximation. It still proves that a contradiction implies a tautology about something else "
             "entirely. Anderson and Belnap's logic R needs a richer semantics, and it took more than a decade to find."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(tab))
+            vo.wait_until("a")
             self.play(FadeIn(grid.head), FadeIn(grid.rows_bg), FadeIn(grid.rule),
                       *[FadeIn(grid.cell[r][c]) for r in range(len(rows)) for c in (0, 1)])
             vo.wait_until("b")

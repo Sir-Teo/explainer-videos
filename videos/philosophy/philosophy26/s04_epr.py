@@ -33,8 +33,8 @@ class EPR(VoiceoverScene):
             "away. <bookmark mark='d'/>And define completeness: a theory is complete if every element of reality has "
             "a counterpart in it."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             for mk, r in zip("bcd", rows):
                 vo.wait_until(mk)
                 self.play(FadeIn(r))

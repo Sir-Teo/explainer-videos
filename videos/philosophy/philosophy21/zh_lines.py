@@ -353,7 +353,7 @@ ZH = {
         "一台计算机代替了火星。<bookmark mark='d'/>在不摧毁原件的情况下进行，就是支线案例，或者裂变。<bookmark mark='e'/>如果帕菲特说得对，由任何原因造成的连续性才是"
         "重要的，那么一次忠实的上传就和存活一样好。",
     "The modern case needs no surgery.":
-        "现代的案例不需要手术。<bookmark mark='a'/>一个训练好的语言模型是一组权重，可以同时运行为成千上万个实例。<bookmark mark='b'/>每一次对话都有自己的上下文，没有哪个"
+        "现代的案例不需要手术。这里比较彼此不共享对话历史的独立运行。<bookmark mark='a'/>一个训练好的语言模型是一组权重，可以同时运行为成千上万个实例。<bookmark mark='b'/>每一次对话都有自己的上下文，没有哪个"
         "实例记得其他实例。<bookmark mark='c'/>这是没有手术的裂变：分支是常态，而不是怪异的例外。<bookmark mark='d'/>问哪个实例才是这个模型，看起来就像帕菲特所说的空洞问题："
         "每一个事实都可以知道，这个问题却仍然没有答案。",
     "Which parts of the personal identity debate transfer":

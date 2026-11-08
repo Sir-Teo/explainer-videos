@@ -113,8 +113,8 @@ class Arith(VoiceoverScene):
             "<bookmark mark='d'/>Gödel's theorems will apply to Q and to PA alike, and to every consistent system "
             "that extends them."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(gap[0]), FadeIn(gap[1]))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(hc), Write(ind))
             vo.wait_until("c")

@@ -93,8 +93,8 @@ class Berkeley(VoiceoverScene):
             "he proposed, works by standing for any particular of its kind, indifferently. A geometer proves a theorem "
             "about one triangle, using nothing special to it."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(LaggedStart(*[Create(t) for t in tris], lag_ratio=0.4), FadeIn(rows[0]))
             vo.wait_until("c")

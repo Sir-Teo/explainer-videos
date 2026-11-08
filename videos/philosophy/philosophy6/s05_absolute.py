@@ -94,8 +94,8 @@ class Absolute(VoiceoverScene):
             "accord. <bookmark mark='b'/>The diagonal, he argued, shows that no list of real numbers is complete. "
             "To read it as revealing a larger completed totality is a picture we add to the proof."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.5))
         self.clear_scene()

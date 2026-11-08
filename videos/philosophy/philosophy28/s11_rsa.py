@@ -79,10 +79,10 @@ class RSA(VoiceoverScene):
                       VGroup(Square(0.6, color=OK, fill_opacity=0.8))).arrange(RIGHT, buff=0.6).move_to([-4.6, 2.1, 0])
         words, objects = d["words"], d["objects"]
         short = [r"blue sq.", r"blue circ.", r"green sq."]
-        L0 = matrix(r"$L_0$: \ literal listener", d["L0"], words, short, WORD, -6.0, 0.6)
+        L0 = matrix(r"$L_0$: \ literal listener", d["L0"], words, short, WORD, -5.75, 0.6, cw=1.1)
         S1T = [list(x) for x in zip(*d["S1"])]                      # utterances x states, for display
-        S1 = matrix(r"$S_1$: \ speaker \ (columns sum to 1)", S1T, words, short, USE, -1.6, 0.6)
-        L1 = matrix(r"$L_1$: \ pragmatic listener", d["L1"], words, short, HEAR, 2.8, 0.6, hi=(0, 0))
+        S1 = matrix(r"$S_1$: \ speaker \ (columns sum to 1)", S1T, words, short, USE, -1.6, 0.6, cw=1.1)
+        L1 = matrix(r"$L_1$: \ pragmatic listener", d["L1"], words, short, HEAR, 2.8, 0.6, cw=1.1, hi=(0, 0))
         assert d["L1"][0][0] == 0.6 and d["L1"][0][1] == 0.4 and d["L0"][0][0] == 0.5
         foot = stack([(r"`blue', \ literally: \ either blue object, \ 50/50", WORD),
                       (r"but a speaker meaning the blue circle had a better word, \ `circle'", USE),

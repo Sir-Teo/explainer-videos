@@ -59,9 +59,13 @@ class Completeness(VoiceoverScene):
             "valuation that makes all of it true. <bookmark mark='d'/>Then some valuation makes the premises true and "
             "phi false, and the argument is not valid. That is completeness, read backwards."
         ) as vo:
+            step(0)
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
-                step(k)
+                if k == 0:
+                    self.play(Indicate(rows[0], color=CONN))
+                else:
+                    step(k)
                 if k == 2:
                     box = SurroundingRectangle(VGroup(rows[2], whys[2]), color=GOAL, buff=0.15, corner_radius=0.08)
                     self.play(Create(box))

@@ -30,7 +30,7 @@ Possible worlds at work: verification, epistemic protocols, counterfactual fairn
 credit decision found by searching 462 worlds (four tie for closest: Lewis against Stalnaker, and actionable recourse);
 and Sato's distribution semantics on a ProbLog program (eight worlds; P(calls) = 0.196).
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/worlds.py`, tested in
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/worlds.py`, tested in
 `tests/philosophy/test_worlds.py` and cached by [`compute.py`](compute.py).
 
 ## Build it

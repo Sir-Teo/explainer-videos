@@ -38,8 +38,10 @@ class Copies(VoiceoverScene):
             "original, it is the branch-line case, or fission. <bookmark mark='e'/>If Parfit is right that continuity "
             "by any cause is what matters, a faithful upload is as good as survival."
         ) as vo:
-            self.play(FadeIn(head))
-            for mk, r in zip("abcde", g):
+            self.play(FadeIn(head), FadeIn(g[0]))
+            vo.wait_until("a")
+            self.play(Indicate(g[0], color=UNIV, scale_factor=1.02))
+            for mk, r in zip("bcde", g[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(r))
         self.clear_scene()
@@ -64,7 +66,8 @@ class Copies(VoiceoverScene):
                       (r"`which one is the model?' \ looks like an empty question, \ in Parfit's sense", GOAL)],
                      font_size=19, aligned_edge=LEFT, width=5.8).move_to([3.7, -0.2, 0])
         with self.voiceover(
-            "The modern case needs no surgery. <bookmark mark='a'/>A trained language model is a single set of "
+            "The modern case needs no surgery. Here we compare independent runs that do not share conversation "
+            "histories. <bookmark mark='a'/>A trained language model is a single set of "
             "weights, which can run as thousands of simultaneous instances. <bookmark mark='b'/>Each conversation has "
             "its own context, and no instance remembers the others. <bookmark mark='c'/>That is fission without an "
             "operation: branching is the ordinary condition, not a bizarre exception. <bookmark mark='d'/>Asking which "

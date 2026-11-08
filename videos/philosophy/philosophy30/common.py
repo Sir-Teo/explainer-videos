@@ -35,10 +35,12 @@ def stack(lines, font_size=24, buff=0.22, width=None, aligned_edge=ORIGIN) -> VG
     return g.arrange(DOWN, buff=buff, aligned_edge=aligned_edge)
 
 
-def rows_table(rows, x_label=-6.4, x_text=-2.6, top=1.7, gap=0.45, label_size=22, text_size=21, width=8.8):
+def rows_table(rows, x_label=-6.4, x_text=-2.6, top=1.7, gap=0.45, label_size=22, text_size=21, width=8.8,
+               label_width=None):
     g = VGroup()
     for a, b, c in rows:
-        x = label(a, font_size=label_size, color=c)
+        x = (wrapped_label(a, label_width, label_size, c) if label_width
+             else label(a, font_size=label_size, color=c))
         y = wrapped_label(b, width, text_size, WHITE)
         x.move_to([x_label + x.width / 2, top - x.height / 2, 0])
         y.move_to([x_text + y.width / 2, top - y.height / 2, 0])

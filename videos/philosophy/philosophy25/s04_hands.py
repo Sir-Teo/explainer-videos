@@ -32,7 +32,7 @@ class Hands(VoiceoverScene):
         rows = stack([(r"every internal relation is the same: \ lengths, \ angles, \ distances", WHITE),
                       (r"yet no motion in the plane lays one exactly on the other", BAD),
                       (r"Kant \ (1768): \ the difference is a relation to space itself", SPACE)], font_size=21,
-                     aligned_edge=LEFT, width=6.6, buff=0.25).move_to([0, 1.6, 0])
+                     aligned_edge=LEFT, width=6.6, buff=0.25).move_to([3.5, 2.6, 0])
         with self.voiceover(
             "In 1768 Immanuel Kant found a new argument for Newton. <bookmark mark='a'/>Take a left hand and a right "
             "hand, exact mirror images. <bookmark mark='b'/>Every relation among the parts of one is the same as "

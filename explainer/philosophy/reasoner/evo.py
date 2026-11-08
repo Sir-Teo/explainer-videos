@@ -93,8 +93,8 @@ def hawk_dove(V: float = 2.0, C: float = 3.0) -> dict:
 
 
 def rps(steps: int = 3000, eps: float = 0.0) -> dict:
-    """Rock-paper-scissors on the simplex: with eps = 0 orbits are closed cycles around (1/3, 1/3, 1/3); with a
-    small reward for ties (eps > 0) they spiral inward; with a penalty they spiral out to the boundary."""
+    """Rock-paper-scissors on the simplex: eps = 0 gives closed cycles around (1/3, 1/3, 1/3). Penalizing ties
+    (eps < 0) makes them spiral inward; rewarding ties (eps > 0) makes them spiral out to the boundary."""
     A = np.array([[eps, -1, 1], [1, eps, -1], [-1, 1, eps]], float)
     return {"eps": eps, "traj": replicator(A, [0.6, 0.25, 0.15], steps=steps, dt=0.01)[::6]}
 

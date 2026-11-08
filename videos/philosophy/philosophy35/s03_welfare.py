@@ -55,7 +55,7 @@ class Welfare(VoiceoverScene):
                       (r"we want to be a certain kind of person, \ and to be in contact with reality", VIRT),
                       (r"so hedonism is false, \ if we would not plug in", HARM),
                       (r"De Brigard \ (2010): \ told they are already in a machine, \ many would stay: \ status quo "
-                       r"bias?", GREY_A)], font_size=19, buff=0.22).to_edge(DOWN, buff=0.9)
+                       r"bias?", GREY_A)], font_size=19, buff=0.22).to_edge(DOWN, buff=1.8)
         bars = VGroup()
         for k, (n, col) in enumerate((("experience machine: no", VIRT), ("experience machine: yes", GOOD))):
             w = 5.0 * sv[n]

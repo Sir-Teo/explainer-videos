@@ -57,20 +57,21 @@ class Privacy(VoiceoverScene):
         sh = VMobject(color=PRIV, stroke_width=2.5).set_points_as_corners([ax.c2p(x, y) for x, y in zip(xs, m1["shifted"])])
         sh.set_stroke(opacity=0.6)
         f = MathTex(r"\mathcal{M}(D) = \mathrm{count}(D) + \mathrm{Lap}(1/\varepsilon)", font_size=30).move_to([3.7, 2.2, 0])
-        f2 = MathTex(r"\frac{P[\mathcal{M}(D) = o]}{P[\mathcal{M}(D') = o]} \;\le\; e^{\varepsilon}", font_size=32,
+        f2 = MathTex(r"\frac{p_{\mathcal{M}(D)}(o)}{p_{\mathcal{M}(D')}(o)} \;\le\; e^{\varepsilon}", font_size=32,
                      color=PRIV).move_to([3.7, 1.0, 0])
         leg = stack([(rf"$\varepsilon = {m['eps']:g}$: \ typical error {m['error']:g}", c) for m, c in zip(M, cols)],
                     font_size=19, buff=0.16, aligned_edge=LEFT).move_to([3.7, -0.7, 0])
         note = label(r"computed: \ the largest ratio of the two curves is exactly $e^{\varepsilon}$", font_size=19,
-                     color=GOAL).move_to([3.7, -2.3, 0])
+                     color=GOAL).move_to([4.05, -2.3, 0])
         with self.voiceover(
             "Differential privacy, defined by Cynthia Dwork, Frank McSherry, Kobbi Nissim and Adam Smith in 2006, "
             "makes privacy a precise promise. <bookmark mark='a'/>To release a count from a database, add random "
             "noise drawn from a Laplace distribution whose width is one over epsilon. <bookmark mark='b'/>Now compare "
             "two databases that differ in one person, whose true counts differ by one. The two output distributions, "
             "here for epsilon equal to one, are shifted copies of each other. <bookmark mark='c'/>At every possible "
-            "output, the probabilities differ by a factor of at most e to the epsilon; the Reasoner checks that the "
-            "largest ratio is exactly that. So whatever anyone learns from the output, they learn almost the same "
+            "output, the probability densities differ by a factor of at most e to the epsilon; the Reasoner checks "
+            "that the largest ratio is exactly that. This also bounds the probability ratio for any output range. "
+            "So whatever anyone learns from the output, they learn almost the same "
             "whether or not you are in the data. <bookmark mark='d'/>Smaller epsilon means wider noise: more privacy, "
             "and less accuracy. The typical error is one over epsilon: ten for epsilon a tenth, half for epsilon two."
         ) as vo:
@@ -134,23 +135,19 @@ class Privacy(VoiceoverScene):
         head = label(r"Too many accurate answers: \ reconstruction \ (Dinur and Nissim, \ 2003)", font_size=28,
                      color=CONN).to_edge(UP, buff=0.3)
         bars = VGroup()
-        x0 = -4.6
+        x0, dx = -5.8, 1.25
         for k, r0 in enumerate(R):
             h = r0["recovered"] * 4.0
             b = Rectangle(width=1.0, height=h, fill_color=BAD if r0["recovered"] == 1.0 else PRIV, fill_opacity=0.7,
-                          stroke_width=0).move_to([x0 + 1.5 * k, -2.4 + h / 2, 0])
+                          stroke_width=0).move_to([x0 + dx * k, -2.4 + h / 2, 0])
             bars.add(VGroup(b, label(f"{r0['recovered'] * 100:.0f}\\%", font_size=18).next_to(b, UP, buff=0.08),
                             label(f"{r0['noise']:g}", font_size=18, color=GREY_A).next_to(b, DOWN, buff=0.15)))
-        base = Line([x0 - 0.7, -2.4, 0], [x0 + 1.5 * 5 + 0.7, -2.4, 0], color=GREY_C)
-        xl = label(r"size of the noise added to each answer", font_size=18, color=GREY_A).move_to([x0 + 3.75, -3.3, 0])
+        base = Line([x0 - 0.7, -2.4, 0], [x0 + dx * (len(R) - 1) + 0.7, -2.4, 0], color=GREY_C)
+        xl = label(r"size of the noise added to each answer", font_size=18, color=GREY_A).move_to([x0 + dx * (len(R) - 1) / 2, -3.3, 0])
         side = stack([(r"64 secret bits; \ 256 random subset sums released", GREY_A),
                       (r"least squares, \ then rounding: \ every bit recovered when the noise is small", BAD),
                       (r"noise near $\sqrt{n} = 8$ is needed before the attack degrades", GOAL)],
-                     font_size=19, buff=0.22, aligned_edge=LEFT)
-        for s0 in side:
-            if s0.width > 4.2:
-                s0.width = 4.2
-        side.move_to([4.7, 0.3, 0])
+                     font_size=19, buff=0.22, aligned_edge=LEFT, width=4.2).move_to([4.7, 0.3, 0])
         with self.voiceover(
             "Why accept noise at all? Because without it, aggregates leak individuals. Irit Dinur and Kobbi Nissim "
             "showed in 2003 that answering too many questions too accurately lets an attacker rebuild the data. "

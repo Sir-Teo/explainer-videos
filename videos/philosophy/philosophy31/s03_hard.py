@@ -62,8 +62,8 @@ class Hard(VoiceoverScene):
             "function, so it is not obviously answered by finding the mechanism that performs one. Whether that "
             "appearance is to be trusted is what the next chapters argue about."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(rows[0]))
             vo.wait_until("c")

@@ -29,7 +29,7 @@ unknown). Ontologies in practice: the semantic web, the Gene Ontology, SNOMED CT
 flagging three errors in a taxonomy. Knowledge graphs: a two-dimensional TransE embedding that infers Tokyo is in
 Asia, confidently misplaces Lisbon, and answers nonsense; and what a language model commits to.
 
-Every number on screen is computed by the Reasoner's new modules `explainer/philosophy/reasoner/mereo.py` and
+The worked model results are computed by the Reasoner's new modules `explainer/philosophy/reasoner/mereo.py` and
 `explainer/philosophy/reasoner/dl.py`, tested in `tests/philosophy/test_mereo.py` and `tests/philosophy/test_dl.py`,
 and cached by [`compute.py`](compute.py).
 

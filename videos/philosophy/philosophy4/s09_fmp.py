@@ -52,9 +52,9 @@ class FMP(VoiceoverScene):
             "value at every world as at its class. Whatever the size of the original model, even infinite, the "
             "filtered one has at most two to the six worlds."
         ) as vo:
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(dd) for dd in dots], lag_ratio=0.05), FadeIn(ps),
                       LaggedStart(*[GrowArrow(a) for a in arrows], lag_ratio=0.05), Create(loop))
+            vo.wait_until("a")
             for dd in dots:
                 dd.set_stroke(WORLD)
             vo.wait_until("b")
@@ -73,9 +73,9 @@ class FMP(VoiceoverScene):
             label(r"so search every model up to that size: \ a decision procedure", font_size=24, color=OK)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.25).next_to(head, DOWN, buff=0.5)
         cx = VGroup(
-            VGroup(label(r"S5", font_size=28, color=GOAL), label(r"NP-complete, \ like SAT (Ladner 1977)",
+            VGroup(MathTex(r"\mathrm{SAT}(\mathrm{S5})", font_size=28, color=GOAL), label(r"NP-complete, \ like SAT (Ladner 1977)",
                                                                  font_size=24)),
-            VGroup(label(r"K, T, S4", font_size=28, color=GOAL), label(r"PSPACE-complete (Ladner 1977)",
+            VGroup(MathTex(r"\mathrm{SAT}(\mathrm{K,\ T,\ S4})", font_size=28, color=GOAL), label(r"PSPACE-complete (Ladner 1977)",
                                                                        font_size=24)),
             VGroup(label(r"first-order logic", font_size=28, color=BAD), label(r"undecidable (Part 3)",
                                                                                font_size=24))).arrange(
@@ -87,14 +87,16 @@ class FMP(VoiceoverScene):
         why = label(r"why the difference? \ modal formulas only look along arrows: \ the guarded fragment of Part 3",
                     font_size=24, color=GREY_A).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "This gives an algorithm. <bookmark mark='a'/>If a modal formula fails anywhere, it fails in a finite "
-            "model, of size bounded by the number of its subformulas. <bookmark mark='b'/>So to decide validity, "
-            "search every model up to that size. It is slow, but it always halts. <bookmark mark='c'/>Richard "
-            "Ladner measured the true cost in 1977: S5 is NP-complete, like SAT, and K, T and S4 are PSPACE-complete. "
-            "First-order logic, which contains all of them, is undecidable. <bookmark mark='d'/>The reason is that a "
+            "This gives an algorithm for the propositional systems K, T, S4 and S5. <bookmark mark='a'/>If a formula "
+            "in one of these systems fails anywhere, it fails in a finite model, of size bounded by the number "
+            "of its subformulas. <bookmark mark='b'/>So to decide validity, search every model of the appropriate "
+            "frame class up to that size. It is slow, but it always halts. <bookmark mark='c'/>Richard Ladner "
+            "measured the true cost in 1977: S5 satisfiability is NP-complete, like SAT; S5 validity is "
+            "coNP-complete. Both problems for K, T and S4 are PSPACE-complete. First-order logic, which contains "
+            "all of them, is undecidable. <bookmark mark='d'/>The reason is that a "
             "modal formula can only look along the arrows: it lives in the guarded fragment that Chapter ten of "
-            "Part 3 found decidable. Modal logic is a decidable island in first-order logic, and that is why "
-            "machines use it."
+            "Part 3 found decidable. These familiar systems form decidable islands in first-order logic. Other "
+            "modal logics can be undecidable; the language and frame conditions matter."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -186,8 +188,8 @@ class FMP(VoiceoverScene):
             "Add the rule that every world sees itself, and the same tree closes. Each frame condition is a tableau "
             "rule."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(left))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(g), FadeIn(gl))
             vo.wait_until("c")

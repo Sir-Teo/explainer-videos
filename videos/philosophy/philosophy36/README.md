@@ -30,7 +30,7 @@ critics (Srinivasan; Gabriel; Crary). Pricing lives: Schelling's statistical liv
 wage-risk trade-off; NICE's threshold and the rule of rescue (Jonsen 1986); QALYs against fair innings and priority
 (Harris 1987; Williams 1997); VSL transferred across incomes, and the equity weights that undo it; Anderson (1993).
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/population.py` (with
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/population.py` (with
 `prop` for the Price List), tested in `tests/philosophy/test_population.py` and cached by [`compute.py`](compute.py);
 cited figures (the birds, Stern's and the EPA's social costs of carbon, Ord's estimate, NICE's threshold, the range
 of US agencies' VSLs) are labelled as such.

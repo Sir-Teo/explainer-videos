@@ -133,8 +133,9 @@ class Llull(VoiceoverScene):
             "sentence, and cannot tell a true one from a false one. Llull's problem is the problem a logic must "
             "solve."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q, shift=UP * 0.2))
+            vo.wait_until("a")
+            self.play(Indicate(q, color=HIST))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(f) for f in frame], lag_ratio=0.02), FadeIn(lab))
         self.clear_scene()

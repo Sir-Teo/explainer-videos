@@ -137,8 +137,8 @@ class Corners(VoiceoverScene):
             "limits of concepts. <bookmark mark='c'/>The formal reading does not settle the interpretation. What it "
             "does show is that the four corners, and the rejection of all four, can be stated without inconsistency."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in reads], lag_ratio=0.4))
             vo.wait_until("c")

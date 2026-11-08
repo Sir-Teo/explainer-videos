@@ -31,7 +31,7 @@ Erdős's Book; Zeki et al. 2014) with **Euclid's and the √2 proofs shown**; Xi
 Guowei (1908), Cook Ding, Confucius and Xunzi on music, Ji Kang, wabi-sabi, and modern Chinese aesthetics (Cai
 Yuanpei, Zhu Guangqian, Zong Baihua, Li Zehou).
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/aesthetics.py` (with
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/aesthetics.py` (with
 `prop` for the Price List), tested in `tests/philosophy/test_aesthetics.py` and cached by [`compute.py`](compute.py).
 
 ## Build it
@@ -74,9 +74,9 @@ size.
 
 ## Problems (solutions in the notes)
 
-1. Show that no power of 3/2 equals a power of 2.
+1. Show that no positive integer power of 3/2 equals a positive integer power of 2.
 2. How many cents is the syntonic comma 81/80?
-3. Explain why two harmonic tones at ratio 3:2 share every second partial of the lower tone.
+3. For two harmonic tones with f₂/f₁ = 3/2, find all positive integer pairs (n, m) with nf₁ = mf₂. (n = 3k, m = 2k: every third partial of the lower tone matches every second partial of the higher.)
 4. Which wallpaper groups have no mirrors and no glides?
 5. Why does averaging remove a critic's noise but not a shared prejudice?
 6. State the paradox of taste as an inconsistent triad, and say which claim Kant denies.

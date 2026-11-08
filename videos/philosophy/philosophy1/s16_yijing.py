@@ -100,8 +100,9 @@ class Yijing(VoiceoverScene):
             "from nothing. Three centuries later every computer runs on his two digits, and on Boole's two truth "
             "values."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(claims[0]))
+            vo.wait_until("a")
+            self.play(Indicate(claims[0], color=OK))
             vo.wait_until("b")
             self.play(FadeIn(claims[1]), FadeIn(claims[2]))
             vo.wait_until("c")

@@ -122,11 +122,7 @@ class Goodhart(VoiceoverScene):
                       (rf"heavy tails: \ peak {g['heavy']['peak']:.2f} at $N = 8$, \ then back to {abs(H[-1]):.2f}", PROXYC),
                       (rf"meanwhile the pick's proxy score climbs to {g['heavy']['proxy'][-1]:.0f}", RISK),
                       (r"the shape of the error, \ not its size, \ decides", GOAL)],
-                     font_size=19, buff=0.32, aligned_edge=LEFT)
-        for s0 in side:
-            if s0.width > 4.3:
-                s0.width = 4.3
-        side.move_to([4.6, 0.2, 0])
+                     font_size=19, buff=0.32, aligned_edge=LEFT, width=4.3).move_to([4.6, 0.2, 0])
         with self.voiceover(
             "Now turn up the pressure. <bookmark mark='a'/>Compare N candidates and take the one with the best "
             "proxy, for N from one to eight thousand, three thousand trials each, and record the true value of the "

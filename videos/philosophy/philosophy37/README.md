@@ -29,7 +29,7 @@ theories of moral learning. Reflective equilibrium (Goodman 1955; Rawls 1971; Da
 on six trolley commitments: double effect and the three judgments survive (16 of 22); after Greene's reweighting, welfare
 and the switch (10); Singer's critique (1974); moral progress on each view.
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/metaethics.py` (with
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/metaethics.py` (with
 `prop` for the Price Lists and the satisfiability checks), tested in `tests/philosophy/test_metaethics.py` and cached
 by [`compute.py`](compute.py).
 

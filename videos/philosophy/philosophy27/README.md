@@ -27,7 +27,7 @@ discourse representation. Meaning in machines: the parser's logical forms compil
 benchmarks (FraCaS, Spider, SCAN, COGS, MED), an inference suite whose gold labels are theorems, and the reversal
 curse.
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/semantics.py` (with
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/semantics.py` (with
 `fol` for Russell's formulas and `prop` for the Price List), tested in `tests/philosophy/test_semantics.py` and cached
 by [`compute.py`](compute.py).
 

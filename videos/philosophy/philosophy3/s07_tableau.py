@@ -104,8 +104,8 @@ class Tableau(VoiceoverScene):
                       label(r"all $M$ are $P$; \ all $S$ are $M$;", font_size=24),
                       label(r"so all $S$ are $P$", font_size=24)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         side.to_corner(UR, buff=0.5)
-        res = label(rf"the Reasoner: \ {len(d['steps'])} steps, \ {d['branches']} branches, \ all closed \ "
-                    r"$\checkmark$", font_size=24, color=OK).next_to(side, DOWN, buff=0.5).align_to(side, LEFT)
+        res = wrapped_label(rf"the Reasoner: \ {len(d['steps'])} steps, \ {d['branches']} branches, \ all closed \ "
+                            r"$\checkmark$", 3.0, font_size=24, color=OK).next_to(side, DOWN, buff=0.5).align_to(side, LEFT)
         s = tree.steps
         with self.voiceover(
             "Here is Barbara, run as a tree. <bookmark mark='a'/>The two premises, and the denial of the conclusion: "

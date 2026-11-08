@@ -6,8 +6,8 @@ The COMPAS dispute (ProPublica and Northpointe, 2016) with both sides' numbers; 
 lending, hiring, health (Obermeyer et al. 2019) and faces (Buolamwini and Gebru 2018); the history of actuarial
 prediction (Burgess 1928; Meehl 1954; Grove et al. 2000; Harcourt's *Against Prediction*) and pretrial reform (New
 Jersey 2017; California's Proposition 25, 2020). Independence, separation and sufficiency (Barocas, Hardt and
-Narayanan), every pair incompatible once base rates differ, with **a threshold swept across two calibrated populations built by the Reasoner** (base rates 30% and
-50%; false-positive rates 10% and 31% at 0.5); what the label measures (Lum and Isaac; Ensign et al.; Jacobs and
+Narayanan), their incompatibilities and exceptional cases, with **a threshold swept across two calibrated populations built by the Reasoner** (base rates 30% and
+50%; false-positive rates about 10% and 30% at 0.5); what the label measures (Lum and Isaac; Ensign et al.; Jacobs and
 Wallach). **Chouldechova's identity derived on screen and checked**; **Kleinberg, Mullainathan and Raghavan's
 calibration and balance computed**, and **their impossibility proved in four lines and checked on the population**
 (base-rate odds 0.42 and 1.02 against y/(1−x) 0.43 and 0.99); a **Price List** for the trilemma — **the Wall's
@@ -33,7 +33,7 @@ reliabilism, Matthias's responsibility gap, many hands, meaningful human control
 AI Incident Database; moral crumple zones (Elish), automation bias, Green and Chen; NIST's AI RMF, ISO/IEC 42001 and
 Canada's Directive on Automated Decision-Making.
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/fairness.py` (with
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/fairness.py` (with
 `prop` for the Price List), tested in `tests/philosophy/test_fairness.py` and cached by [`compute.py`](compute.py).
 
 ## Build it
@@ -64,6 +64,8 @@ python tools/qa_scene.py philosophy41 Impossible       # one chapter, silent, wi
 | 12 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
 ## Notes
+
+The conditional-independence criteria apply to the same prediction variable. A calibrated score can coexist with a separately adjusted binary decision. The Kleinberg trilemma uses equal class-average scores, not error rates of a different thresholded decision; for a binary prediction, those averages are its true-positive and false-positive rates. Perfect predictions and uninformative predictions are explicit exceptional cases in the pairwise comparisons.
 
 The population has 20,000 people per group, each with a true risk drawn from a Beta distribution of concentration 4
 and mean 0.3 (group A) or 0.5 (group B), and an outcome drawn from that risk (seed 2016); the score is the true risk,

@@ -127,8 +127,8 @@ class ATP(VoiceoverScene):
             f"tableau took {tab['n_steps']}. Unification chooses the instances for us: it is lazy, and binds a "
             "variable only when a match forces it."
         ) as vo:
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r) for r in rows[:3]], lag_ratio=0.3), Create(bar))
+            vo.wait_until("a")
             for mk, i in zip("bcd", (3, 4, 5)):
                 vo.wait_until(mk)
                 self.play(FadeIn(rows[i], shift=DOWN * 0.15))
@@ -159,8 +159,8 @@ class ATP(VoiceoverScene):
             "to a SAT solver, and many modern provers do exactly that. The undecidability of Chapter ten lives in "
             "one place: no one can say in advance how many instances will be needed."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(thm, shift=UP * 0.2))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(ex[:2]))
             vo.wait_until("c")
@@ -188,8 +188,8 @@ class ATP(VoiceoverScene):
             "Laboratory, found the proof after about eight days of search. The New York Times reported it. A "
             "problem open for sixty-three years, settled by equational reasoning with unification at its heart."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(hcs[0], shift=DOWN * 0.2), LaggedStart(*[FadeIn(a) for a in ax], lag_ratio=0.3))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(al))
             vo.wait_until("c")

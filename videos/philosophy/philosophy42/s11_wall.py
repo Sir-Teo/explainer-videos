@@ -19,7 +19,13 @@ class Wall(VoiceoverScene):
         outline = wall(upto=0).scale(0.62).move_to([0, 0.4, 0])
         full = wall(upto=42, current=42).scale(0.62).move_to([0, 0.4, 0])
         card = wall_card(42, width=9.6, font_size=22).to_edge(DOWN, buff=0.25)
-        courses = [VGroup(*[full.brick[p] for p in range(r * 7 + 1, r * 7 + 8)]) for r in range(6)]
+        courses = [range(r * 7 + 1, r * 7 + 8) for r in range(6)]
+
+        def reveal(parts):
+            for p in parts:
+                outline.brick[p].set_opacity(0)
+            return LaggedStart(*[FadeIn(full.brick[p], shift=DOWN * 0.15) for p in parts], lag_ratio=0.12)
+
         with self.voiceover(
             "Every part of this series has added one brick to a wall. <bookmark mark='a'/>Each brick is a dream of "
             "settling some question by calculation, and the theorem that stops it. <bookmark mark='b'/>Zeno and "
@@ -33,10 +39,10 @@ class Wall(VoiceoverScene):
             self.play(FadeIn(outline))
             vo.wait_until("a")
             for c in courses[:2]:
-                self.play(LaggedStart(*[FadeIn(b, shift=DOWN * 0.15) for b in c], lag_ratio=0.12), run_time=1.2)
+                self.play(reveal(c), run_time=1.2)
             vo.wait_until("b")
             for c in courses[2:]:
-                self.play(LaggedStart(*[FadeIn(b, shift=DOWN * 0.15) for b in c], lag_ratio=0.12), run_time=1.2)
+                self.play(reveal(c), run_time=1.2)
             vo.wait_until("c")
             self.play(full.animate.scale(0.75).to_edge(UP, buff=0.3), FadeOut(outline))
             self.play(FadeIn(card), Indicate(full.brick[42], color=P.CONCL, scale_factor=1.15))

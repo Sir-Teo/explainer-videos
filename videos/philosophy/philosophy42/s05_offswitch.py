@@ -71,7 +71,7 @@ class OffSwitch(VoiceoverScene):
         for e in eqs:
             if e.width > 6.4:
                 e.width = 6.4
-        eqs.move_to([3.6, 2.35, 0])
+        eqs.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([3.6, 2.35, 0])
         noisy = MathTex(rf"\text{{a noisy human, }} P(\text{{allow}}) = \frac{{1}}{{1 + e^{{-\beta u}}}},\ \beta = 0.5:"
                         rf"\ \ \text{{wait}} = {exn['wait']:.2f} < {exn['act']:.2f}", font_size=24,
                         color=RISK).move_to([0, -3.2, 0])

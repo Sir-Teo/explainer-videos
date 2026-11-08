@@ -34,8 +34,8 @@ class Montague(VoiceoverScene):
             "interpretations compose by applying functions to arguments, in a typed lambda calculus. "
             "<bookmark mark='d'/>It is Frege's principle of compositionality turned into an algorithm."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             for mk, r in zip("bcd", rows):
                 vo.wait_until(mk)
                 self.play(FadeIn(r))

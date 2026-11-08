@@ -43,7 +43,7 @@ class Hook(VoiceoverScene):
         bar = Line(LEFT * 3.2, RIGHT * 3.2, color=GREY_B).next_to(prem[1], DOWN, buff=0.17).align_to(prem, LEFT)
         arg = VGroup(prem, bar).move_to([0, 1.3, 0])
         q = label(r"valid?", font_size=40, color=GREY_A).next_to(arg, RIGHT, buff=0.6)
-        left = VGroup(label(r"Aristotle to the 19th century:", font_size=26, color=HIST),
+        left = VGroup(label(r"Traditional syllogistic:", font_size=26, color=HIST),
                       label(r"valid \ (\textit{Darapti})", font_size=34, color=OK)).arrange(DOWN, buff=0.15)
         right = VGroup(label(r"Boole, Frege, modern logic:", font_size=26, color=HIST),
                        label(r"invalid", font_size=34, color=BAD)).arrange(DOWN, buff=0.15)
@@ -53,9 +53,9 @@ class Hook(VoiceoverScene):
         with self.voiceover(
             "Here is a dispute that ran for two thousand years. <bookmark mark='a'/>All unicorns are one-horned. All "
             "unicorns are horses. So some horses are one-horned. <bookmark mark='b'/>Is the argument valid? "
-            "<bookmark mark='c'/>From Aristotle until the nineteenth century, logicians said yes: it has a valid "
-            "form, which medieval students learned under the name Darapti. <bookmark mark='d'/>Every modern logic "
-            "textbook says no."
+            "<bookmark mark='c'/>In traditional syllogistic, with unicorns assumed to exist, the form is valid: "
+            "medieval students learned it under the name Darapti. <bookmark mark='d'/>In modern classical logic, "
+            "which allows an empty class of unicorns, it is invalid."
         ) as vo:
             self.play(FadeIn(prem[0], shift=RIGHT * 0.2))
             vo.wait_until("a")

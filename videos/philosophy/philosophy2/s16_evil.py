@@ -45,8 +45,9 @@ class Evil(VoiceoverScene):
             "sharpened it into a charge of inconsistency. The theist's beliefs, he said, are not merely unsupported "
             "but positively irrational: they contradict one another."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q, shift=UP * 0.2))
+            vo.wait_until("a")
+            self.play(Indicate(q, color=HIST))
             vo.wait_until("b")
             self.play(FadeIn(hc, shift=UP * 0.2))
         self.clear_scene()

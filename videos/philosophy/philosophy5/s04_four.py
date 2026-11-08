@@ -103,8 +103,8 @@ class Four(VoiceoverScene):
             "including that the safe is open. <bookmark mark='f'/>In the four-valued logic the conflict stays "
             "local: 'the safe is not locked' comes out F."
         ) as vo:
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(t) for t in told], lag_ratio=0.3))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(atoms))
             vo.wait_until("c")
@@ -145,8 +145,8 @@ class Four(VoiceoverScene):
             "<bookmark mark='e'/>A set with two such orders is a bilattice, a structure Matthew Ginsberg and "
             "Melvin Fitting developed for reasoning in artificial intelligence."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(tr))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(meet))
             vo.wait_until("c")
@@ -186,8 +186,8 @@ class Four(VoiceoverScene):
             "'and' and 'or'. <bookmark mark='e'/>The name, first-degree entailment, comes from Anderson and "
             "Belnap: these are exactly the valid conditionals with no conditional inside them."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(head))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(s_, shift=RIGHT * 0.15) for s_ in sub], lag_ratio=0.4))
             vo.wait_until("c")

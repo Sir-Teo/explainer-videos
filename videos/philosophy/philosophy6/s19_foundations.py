@@ -35,8 +35,8 @@ class Foundations(VoiceoverScene):
             "common court of appeal: when mathematicians disagree about whether a proof is correct, they can in "
             "principle reduce it to the axioms."
         ) as vo:
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(s_, shift=UP * 0.15) for s_ in stack], lag_ratio=0.3), run_time=3)
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(s_) for s_ in side], lag_ratio=0.4))
         self.clear_scene()

@@ -101,8 +101,9 @@ class Greeks(VoiceoverScene):
             "own, but a universalized savouring of emotion. <bookmark mark='d'/>That is close to Kant's disinterested "
             "pleasure: emotion freed from personal stake."
         ) as vo:
-            self.play(FadeIn(head))
-            for mk, r in zip("abcd", g):
+            self.play(FadeIn(head), FadeIn(g[0]))
+            vo.wait_until("a")
+            for mk, r in zip("bcd", g[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(r))
         self.clear_scene()

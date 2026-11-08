@@ -67,8 +67,9 @@ class Tarski(VoiceoverScene):
             "and Di. <bookmark mark='c'/>And one relation, loves, drawn as arrows: Ann loves Bo, Bo loves Cy, Cy "
             "loves Ann, and Di loves Cy. Notice that nobody's love is returned."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(defn))
+            vo.wait_until("a")
+            self.play(Indicate(defn, color=P.CLAIM))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(n, scale=0.8) for n in g.nodes], lag_ratio=0.2), Write(dom))
             vo.wait_until("c")
@@ -278,8 +279,9 @@ class Tarski(VoiceoverScene):
             "far larger. <bookmark mark='c'/>There is no truth table with a row for each. So it is not at all "
             "obvious that validity can be checked by anything finite. That question drives the rest of this part."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(defs[0]))
+            vo.wait_until("a")
+            self.play(Indicate(defs[0], color=P.CLAIM))
             self.play(FadeIn(defs[1]))
             vo.wait_until("b")
             self.play(FadeIn(sizes[:2]))

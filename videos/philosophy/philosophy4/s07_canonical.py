@@ -32,8 +32,8 @@ class Canonical(VoiceoverScene):
             "validity. For completeness, we use Henkin's idea from Part 3 once more: build the model out of the "
             "logic itself."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(two[0]))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(two[1]))
             vo.wait_until("c")
@@ -67,8 +67,8 @@ class Canonical(VoiceoverScene):
             "says 'possibly r', there really is a visible world containing r. With the truth lemma, any formula K "
             "cannot prove is false somewhere in the canonical model, so it is not valid."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(w), FadeIn(cap[0]))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(GrowArrow(a1), GrowArrow(a2), FadeIn(v1), FadeIn(v2), FadeIn(cap[1]))
             vo.wait_until("c")

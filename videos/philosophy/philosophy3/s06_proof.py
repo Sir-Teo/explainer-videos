@@ -225,25 +225,27 @@ class Proof(VoiceoverScene):
                           r"\Gamma \Rightarrow \Delta", r"\mathrm{Cut}", r"use a lemma $A$", font_size=34)
         cut.move_to([-3.2, -0.1, 0])
         haupt = theorem_card(r"Cut elimination (\textit{Hauptsatz})", r"every proof can be rebuilt without Cut: "
-                             r"then every formula in it is a subformula of what it proves", who=r"Gentzen 1935",
+                             r"only subformulas of the final sequent remain, up to term substitution", who=r"Gentzen 1935",
                              width=6.4, font_size=22).move_to([3.3, -0.1, 0])
         price = label(r"the price: \ cut-free proofs can be vastly longer \ (Statman 1979, Orevkov 1979)",
                       font_size=24, color=BAD).to_edge(DOWN, buff=1.0)
-        use = label(r"the payoff: \ proof search, \ because there is nothing to guess but pieces of the goal",
+        use = label(r"the payoff: \ search over the goal's formula shapes; \ terms can still grow without bound",
                     font_size=24, color=OK).to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "Gentzen's paper did something deeper. <bookmark mark='a'/>He also wrote proofs as trees of sequents: "
             "statements that if everything on the left is true, something on the right is. "
             "<bookmark mark='b'/>One rule, cut, lets a proof go through a lemma, a formula A that is proved and then "
             "used. <bookmark mark='c'/>Gentzen's main theorem says cut can always be eliminated: any proof can be "
-            "rebuilt without lemmas, and then every formula in it is a piece of the conclusion. "
+            "rebuilt without cut lemmas, using pieces of its final premises and conclusion, with term "
+            "substitutions for quantifiers. "
             "<bookmark mark='d'/>The price is length: without lemmas, some proofs grow beyond any tower of "
-            "exponentials. <bookmark mark='e'/>The payoff is search. If a proof only ever uses pieces of what it "
-            "proves, a machine can look for one by taking the goal apart. That is exactly what the next chapter's "
-            "trees do."
+            "exponentials. <bookmark mark='e'/>The payoff is search over those formula shapes. A machine still "
+            "has to choose terms, so the search can go on forever. The next chapter's trees show both the power "
+            "and that limit."
         ) as vo:
-            vo.wait_until("a")
             self.play(Write(seq), FadeIn(sl))
+            vo.wait_until("a")
+            self.play(Indicate(seq, color=P.CLAIM))
             vo.wait_until("b")
             self.play(FadeIn(cut))
             vo.wait_until("c")

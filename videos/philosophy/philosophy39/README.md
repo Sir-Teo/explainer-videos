@@ -7,7 +7,7 @@ probability of no Condorcet winner under impartial culture**, exact for 3 to 31 
 limit (1952, 8.77%), and simulated for 3 to 7 candidates (8.5% to 37%); Riker's claimed cycles, Mackie (2003),
 Regenwetter et al. (2006). **Five rules, five winners** (plurality A, runoff B, instant runoff C, Borda D, Condorcet
 E), instant runoff round by round, the head-to-head matrix (Copeland, Kemeny, Schulze), agenda control (McKelvey 1976;
-Riker 1982), **instant runoff's non-monotonicity found by search** (smallest tie-free case: 21 voters), Young's
+Riker 1982), **instant runoff's non-monotonicity found by search** (a 21-voter witness in the restricted search), Young's
 consistency (1975), Saari, Young's Kemeny (1988), STV, Droop and list systems. **May's theorem** (1952) by exhaustive
 search (59,049 rules, 1 survivor) and its proof; Dasgupta–Maskin (2008). **Arrow's theorem** (1951): the conditions,
 **the Borda count breaking IIA** (withdraw C and D and E swap), Geanakoplos's pivotal voter (2005) drawn,
@@ -31,7 +31,7 @@ and social choice for AI: **Bradley–Terry fitted to hidden-group comparisons r
 (Siththaranjan, Laidlaw and Hadfield-Menell 2023), Conitzer et al. (2024), Ge et al. (2024), collective
 constitutions (2023), generative social choice and AI mediation (2024).
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/vote.py` (with
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/vote.py` (with
 `prop.cdcl` for the SAT proofs), tested in `tests/philosophy/test_vote.py` and cached by [`compute.py`](compute.py).
 
 ## Build it
@@ -62,6 +62,9 @@ python tools/qa_scene.py philosophy39 Machine          # one chapter, silent, wi
 | 12 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
 ## Notes
+
+The monotonicity search uses three candidates, odd electorates, distinct totals in every round, and promotes the
+winner to the top on one ballot type at a time. Its first witness has 21 voters; the minimum applies to these search restrictions.
 
 Ties are broken alphabetically throughout (the manipulation counts depend on this). The impartial-culture simulation
 uses 20,000 elections of 101 voters for each number of candidates (seeds 1785 + m). The SAT encoding uses strict

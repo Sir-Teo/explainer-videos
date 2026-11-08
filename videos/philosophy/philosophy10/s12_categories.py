@@ -77,8 +77,8 @@ class Categories(VoiceoverScene):
             "so Hume's problem dissolves: every event has a cause is not something we learn from experience, and "
             "could never learn. It is a condition of having experience at all."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             for mk, s_ in zip("bcdef", steps):
                 vo.wait_until(mk)
                 self.play(FadeIn(s_, shift=RIGHT * 0.1))

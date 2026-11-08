@@ -35,8 +35,8 @@ class Bisim(VoiceoverScene):
             "bisimilar worlds satisfy exactly the same modal formulas. <bookmark mark='c'/>The proof is an "
             "induction on formulas; the box case uses the back and forth conditions."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(defn))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(thm, shift=UP * 0.2))
             vo.wait_until("c")
@@ -69,8 +69,8 @@ class Bisim(VoiceoverScene):
             "the original. Process algebra and model checkers use exactly this to shrink systems before checking "
             "them."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(g))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(LaggedStart(*[Create(r) for r in rings], lag_ratio=0.15))
             vo.wait_until("c")
@@ -95,8 +95,8 @@ class Bisim(VoiceoverScene):
             "<bookmark mark='c'/>So no modal formula can say 'this world sees itself', since that is true on the left "
             "and false on the right, and none can count the length of a cycle."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(L), FadeIn(C))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(LaggedStart(*[Create(x) for x in lines], lag_ratio=0.3))
             vo.wait_until("c")
@@ -125,8 +125,8 @@ class Bisim(VoiceoverScene):
             "logic is the bisimulation-invariant part of first-order logic, a characterization in the spirit of "
             "Lindström's theorem."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(st))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(sl))
             vo.wait_until("c")

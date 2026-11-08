@@ -32,8 +32,8 @@ class Minds(VoiceoverScene):
             "sentence is true. <bookmark mark='d'/>So I can do something F cannot, and I am not F. Since F was "
             "arbitrary, I am no machine at all."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(hcs))
+            vo.wait_until("a")
             for mk, r in zip("bcd", (VGroup(rows[0], rows[1]), rows[2], rows[3])):
                 vo.wait_until(mk)
                 self.play(FadeIn(r, shift=RIGHT * 0.1))

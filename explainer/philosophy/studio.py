@@ -205,11 +205,31 @@ def timeline(lit=(), width=12.6, show_labels=True, font_size=17) -> VGroup:
         if on and show_labels:
             t = label(rf"{year_tex(yr)}\; {name}", font_size=font_size, color=P.HIST)
             t.next_to(d, UP if side > 0 else DOWN, buff=0.14 if side > 0 else 0.4)
+            t.timeline_year = yr
             side = -side
             labels.add(t)
             anchors.append(d)
     for row in (1, -1):
         same = sorted([t for t in labels if np.sign(t.get_y()) == row], key=lambda t: t.get_x())
+
+        def date_only(t):
+            # Recent years collect events from many parts of the course. The
+            # chapter's history cards supply its context; the strip must remain
+            # readable instead of printing that year's entire bibliography.
+            short = label(year_tex(t.timeline_year), font_size=font_size, color=P.HIST)
+            short.move_to(t)
+            short.timeline_year = t.timeline_year
+            labels.submobjects[labels.submobjects.index(t)] = short
+            same[same.index(t)] = short
+
+        for t in same:
+            if t.width > 5.8:
+                date_only(t)
+        for t in sorted(same, key=lambda t: t.width, reverse=True):
+            total = sum(lab.width for lab in same) + 0.2 * max(len(same) - 1, 0)
+            if total <= 13.6:
+                break
+            date_only(t)
         total = sum(t.width for t in same) + 0.2 * max(len(same) - 1, 0)
         if total > 13.6:  # long year labels: shrink the row so it fits the frame
             k = (13.6 - 0.2 * max(len(same) - 1, 0)) / sum(t.width for t in same)
@@ -217,6 +237,10 @@ def timeline(lit=(), width=12.6, show_labels=True, font_size=17) -> VGroup:
                 x, y = t.get_center()[0], t.get_center()[1]
                 t.scale(k)
                 t.move_to([x, y, 0])
+        # Clamp the first label before packing: moving it alone afterwards can
+        # push it into its neighbour, especially with wider Chinese dates.
+        if same and same[0].get_left()[0] < -6.9:
+            same[0].shift(RIGHT * (-6.9 - same[0].get_left()[0]))
         for a, b in zip(same, same[1:]):
             gap = b.get_left()[0] - a.get_right()[0]
             if gap < 0.2:
@@ -227,8 +251,6 @@ def timeline(lit=(), width=12.6, show_labels=True, font_size=17) -> VGroup:
                 gap = same[i + 1].get_left()[0] - same[i].get_right()[0]
                 if gap < 0.2:
                     same[i].shift(LEFT * (0.2 - gap))
-        if same and same[0].get_left()[0] < -6.9:
-            same[0].shift(RIGHT * (-6.9 - same[0].get_left()[0]))
     leaders = VGroup()
     for t, d in zip(labels, anchors):
         if abs(t.get_x() - d.get_x()) > 0.1:

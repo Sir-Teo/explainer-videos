@@ -56,8 +56,7 @@ class Zombies(VoiceoverScene):
             me, DOWN, buff=0.3)
         zl = wrapped_label(r"your zombie twin: \ every atom, \ every word, \ and nothing", 4.2, 19,
                            GREY_A).next_to(z, DOWN, buff=0.3)
-        rows = stack([(r"Kirk \ (1974): \ the philosophical zombie", HIST),
-                      (r"it says `I see red' \ and means nothing by it, \ feels nothing", GREY_A)], font_size=20,
+        rows = stack([(r"Kirk \ (1974): \ the philosophical zombie", HIST)], font_size=20,
                      buff=0.2).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "The sharpest form of the hard problem is a thought experiment. <bookmark mark='a'/>Imagine a being "
@@ -76,7 +75,7 @@ class Zombies(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(rows[0]))
             vo.wait_until("d")
-            self.play(FadeIn(rows[1]), Indicate(z, color=GREY_B))
+            self.play(Indicate(z, color=GREY_B))
         self.clear_scene()
 
     def twod(self):

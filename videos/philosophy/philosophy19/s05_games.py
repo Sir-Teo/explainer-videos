@@ -86,7 +86,7 @@ class Games(VoiceoverScene):
             "against the mutant than the mutant does against itself. A population playing x cannot be invaded by a "
             "small number of mutants. <bookmark mark='d'/>The Reasoner checks the hawk-dove mix. At two thirds "
             "hawks, both strategies earn the same against the population, so the second condition decides, and it "
-            "holds against both possible mutants. <bookmark mark='e'/>Nobody calculates anything. The stability "
+            "holds against both pure mutant strategies. <bookmark mark='e'/>Nobody calculates anything. The stability "
             "is achieved by differential reproduction, with no foresight at all."
         ) as vo:
             self.play(FadeIn(head))
@@ -107,8 +107,12 @@ class Games(VoiceoverScene):
         head = label(r"Rock, \ paper, \ scissors, \ and lizards", font_size=30, color=CONN).to_edge(UP, buff=0.3)
         sims = [Simplex([r"rock", r"paper", r"scissors"], center=[-4.4 + 4.4 * i, 0.3, 0], side=3.4,
                         colors=(ORG, GENE, ALT), font_size=17) for i in range(3)]
-        keys = [("neutral", r"zero-sum: \ closed cycles", GREY_A), ("in", r"ties rewarded: \ spiral in", OK),
-                ("out", r"ties punished: \ spiral out", BAD)]
+        # Keep each lower-corner label within its panel's horizontal extent.
+        for s in sims:
+            s.names[1].next_to(s.v[1], DOWN, buff=0.18).align_to(s.v[1], LEFT)
+            s.names[2].next_to(s.v[2], DOWN, buff=0.18).align_to(s.v[2], RIGHT)
+        keys = [("neutral", r"zero-sum: \ closed cycles", GREY_A), ("in", r"ties punished: \ spiral in", OK),
+                ("out", r"ties rewarded: \ spiral out", BAD)]
         paths = VGroup(*[s.path(d[k]["traj"], c, width=2) for s, (k, _, c) in zip(sims, keys)])
         caps = VGroup(*[label(t, font_size=18, color=c).next_to(s, DOWN, buff=0.25) for s, (_, t, c) in zip(sims, keys)])
         centre = VGroup(*[Dot(s.p2c([1 / 3, 1 / 3, 1 / 3]), radius=0.05, color=GOAL) for s in sims])
@@ -120,9 +124,10 @@ class Games(VoiceoverScene):
             "With three strategies the state is a point in a triangle, the simplex, whose corners are the pure "
             "populations. <bookmark mark='a'/>In rock-paper-scissors each strategy beats one and loses to another. "
             "If ties pay nothing, the replicator dynamics cycle forever around the centre. "
-            "<bookmark mark='b'/>Reward ties a little, and the cycles spiral in to an equal mix. "
-            "<bookmark mark='c'/>Punish ties, and they spiral out toward the edges, where each strategy in turn "
-            "nearly disappears. <bookmark mark='d'/>In the zero-sum game there is no evolutionarily stable strategy "
+            "<bookmark mark='b'/>Penalize ties a little, and the cycles spiral in to an equal mix: a strategy does "
+            "worse as its own kind becomes common. <bookmark mark='c'/>Reward ties, and they spiral out toward "
+            "the edges, where each strategy in turn nearly disappears: encounters with its own kind now help "
+            "the common strategy. <bookmark mark='d'/>In the zero-sum game there is no evolutionarily stable strategy "
             "at all. <bookmark mark='e'/>Nature plays this game. Male side-blotched lizards come in three throat "
             "colours, each beating one rival strategy and losing to the other, and Barry Sinervo and Curtis Lively "
             "found their frequencies cycling every few years."

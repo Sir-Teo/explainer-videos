@@ -102,8 +102,8 @@ class Panpsychism(VoiceoverScene):
             "panpsychism what the hard problem is to physicalism: an entailment, from parts to a whole, that seems "
             "to fail. The view trades one gap for another, and its defenders argue the new one is smaller."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(m) for m in men], lag_ratio=0.2), run_time=2.5)
             vo.wait_until("c")

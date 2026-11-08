@@ -32,7 +32,7 @@ Nagel 1976): six of ten thousand equally careless drivers kill a child; four kin
 (6 units on 6 drivers) and by risk (0.0005 on each, 5 in all), with a victim 99.33% certain (Zimmerman 2002). Responsibility gaps for
 learning machines (Matthias 2004; Sparrow 2007) and ways to close them.
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/freewill.py` (with
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/freewill.py` (with
 `prop` for the Price List), tested in `tests/philosophy/test_freewill.py` and cached by [`compute.py`](compute.py).
 
 ## Build it

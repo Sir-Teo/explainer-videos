@@ -44,11 +44,12 @@ python tools/build.py philosophy1                    # 1080p30
 | 9 | `Import` | the empty world refutes Darapti; existential import gives the 24 traditional moods; **a Price List** for the unicorns (modern logic, the tradition, Strawson's presupposition). | the empty countermodel; 24 = 15 + 9 |
 | 10 | `Mohists` | Mozi and the Later Mohists; *bian*; parallelizing inference and its failure (*Xiaoqu*: loving her brother is not loving a handsome man); Gongsun Long's white horse (identity vs inclusion). | — |
 | 11 | `Nyaya` | the five members; *vyāpti*; the kitchen and the lake; Dignāga's three marks (Part 15). | — |
-| 12 | `Llull` | the nine principles; the first figure's 36 chords; the fourth figure's three wheels (729 settings) and 84-column Table; Leibniz's *De arte combinatoria* (1666). | C(9,2) = 36, C(9,3) = 84, 9³ = 729 |
-| 13 | `Leibniz` | characteristic numbers (1679); divisibility for "all"; the two-number repair; Leibniz's arithmetic models the syllogism exactly (Łukasiewicz 1951; Sotirov 1999). | five sentences in illustrative numbers; all 256 moods against 19,683 assignments: exactly the 24 traditional moods survive |
-| 14 | `Yijing` | binary arithmetic (1679); Bouvet's diagram (1701); Shao Yong's order read as 0–63; what the correspondence does and does not show; *omnibus ex nihilo ducendis sufficit unum*. | the 64 hexagrams generated from their binary numerals |
-| 15 | `Limits` | De Morgan's relations; nested quantifiers; the split into Parts 2 and 3. | — |
-| 16 | `Outro` | recap; the Reasoner; the Wall; problems; payoffs; references. | — |
+| 12 | `Arabic` | The translation movement from Alexandria through Syriac into Arabic; the Baghdad debate of 932; al-Fārābī on logic and grammar; Avicenna on modal and temporal syllogisms. | — |
+| 13 | `Llull` | the nine principles; the first figure's 36 chords; the fourth figure's three wheels (729 settings) and 84-column Table; Leibniz's *De arte combinatoria* (1666). | C(9,2) = 36, C(9,3) = 84, 9³ = 729 |
+| 14 | `Leibniz` | characteristic numbers (1679); divisibility for "all"; the two-number repair; Leibniz's arithmetic models the syllogism exactly (Łukasiewicz 1951; Sotirov 1999). | five sentences in illustrative numbers; all 256 moods against 19,683 assignments: exactly the 24 traditional moods survive |
+| 15 | `Yijing` | binary arithmetic (1679); Bouvet's diagram (1701); Shao Yong's order read as 0–63; what the correspondence does and does not show; *omnibus ex nihilo ducendis sufficit unum*. | the 64 hexagrams generated from their binary numerals |
+| 16 | `Limits` | De Morgan's relations; nested quantifiers; the split into Parts 2 and 3. | — |
+| 17 | `Outro` | recap; the Reasoner; the Wall; problems; payoffs; references. | — |
 
 ## Sources
 

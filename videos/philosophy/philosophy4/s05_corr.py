@@ -33,8 +33,8 @@ class Corr(VoiceoverScene):
             "becomes possible: on which frames is 'if necessarily p, then p' valid? <bookmark mark='c'/>Because we "
             "quantify over every valuation, the answer can only depend on the arrows."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(defn))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(Write(q))
             vo.wait_until("c")
@@ -119,7 +119,8 @@ class Corr(VoiceoverScene):
             "sees every world. That is S5, Leibniz's picture, where possible means possible from anywhere."
         ) as vo:
             for mk, (nm, R, txt) in zip("abcd", stages):
-                vo.wait_until(mk)
+                if mk != 'a':
+                    vo.wait_until(mk)
                 g2 = WorldGraph([0, 1, 2], R, {}, pos=TRI, center=[0, -0.3, 0], scale_pos=1.0)
                 c2 = label(txt, font_size=28, color=GOAL).to_edge(DOWN, buff=0.6)
                 if g is None:

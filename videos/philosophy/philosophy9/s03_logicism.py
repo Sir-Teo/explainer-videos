@@ -49,8 +49,8 @@ class Logicism(VoiceoverScene):
             "<bookmark mark='c'/>If Frege was right, mathematics is known a priori because logic is, and we need no "
             "special faculty to know it."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(left))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(right))
             vo.wait_until("c")
@@ -125,8 +125,8 @@ class Logicism(VoiceoverScene):
             "Pascal's triangle. <bookmark mark='d'/>And Frege's successor relation runs from each number to the "
             "next: n plus one is the number of a concept that has one more object than a concept with n."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(hp), FadeIn(gloss))
             vo.wait_until("c")

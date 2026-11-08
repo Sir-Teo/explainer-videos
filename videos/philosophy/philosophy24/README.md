@@ -23,7 +23,7 @@ measurement, Bennett's exorcism; the AND gate's 1.19 lost bits, the Toffoli gate
 today's chips sit above the floor. The other arrows (radiative, causal, counterfactual, epistemic) and Lewis's
 asymmetry of traces.
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/physlaws.py` (with
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/physlaws.py` (with
 `prop` for the Price List), tested in `tests/philosophy/test_physlaws.py` and cached by [`compute.py`](compute.py).
 
 ## Build it

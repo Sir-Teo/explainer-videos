@@ -73,10 +73,11 @@ class Hook(VoiceoverScene):
             "writes philosophy: Bertrand Russell's analysis of 'the present king of France is bald' is one sentence "
             "of first-order logic. <bookmark mark='c'/>This power has a price. Its brick in the Wall: in full "
             "first-order logic no machine can decide validity. Every valid argument can be confirmed by calculation, "
-            "but some invalid ones can never be refuted by it."
+            "but on an invalid argument, proof search may run forever without returning a negative answer."
         ) as vo:
-            vo.wait_until("a")
             self.play(Write(cont), FadeIn(cl))
+            vo.wait_until("a")
+            self.play(Indicate(cont, color=CONN))
             vo.wait_until("b")
             self.play(Write(rus), FadeIn(rl))
             vo.wait_until("c")

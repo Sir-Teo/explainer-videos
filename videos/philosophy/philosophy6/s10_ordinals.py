@@ -155,9 +155,9 @@ class Ordinals(VoiceoverScene):
             "induction. If a property passes from all the ordinals below any given one to that one, it holds for "
             "all of them, because a least counterexample cannot exist."
         ) as vo:
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(x, shift=UP * 0.1) for x in ladder], lag_ratio=0.12), FadeIn(lts),
                       run_time=3.5)
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(Write(eps))
             vo.wait_until("c")

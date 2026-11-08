@@ -32,8 +32,8 @@ class Kant(VoiceoverScene):
             "mathematics and Newton's physics seemed both necessary and about the world. <bookmark mark='d'/>So where "
             "does their necessity come from, if not from experience, and not from mere definitions?"
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             for mk, r in zip("bcd", rows):
                 vo.wait_until(mk)
                 self.play(FadeIn(r))

@@ -37,7 +37,7 @@ class Leibniz(VoiceoverScene):
 
     def stats(self):
         d = load("reasoner")
-        assert d["modules"] == 47 and d["tests"] == 269 and 23_500 < d["lines"] < 24_500 and d["functions"] > 1000
+        assert d["modules"] == 47 and d["tests"] == 271 and 23_500 < d["lines"] < 24_500 and d["functions"] > 1000
         head = label(r"The Reasoner, \ by the numbers", font_size=32, color=CONN).to_edge(UP, buff=0.35)
         nums = VGroup()
         for v, t, c in ((d["modules"], r"modules", ROBOT), (d["lines"], r"lines of code", TRUEV),
@@ -51,11 +51,11 @@ class Leibniz(VoiceoverScene):
             names.width = 13
         with self.voiceover(
             "First, what was built. <bookmark mark='a'/>The Reasoner now has forty seven modules: some twenty four "
-            "thousand lines of code, more than a thousand public functions, and two hundred and sixty nine tests "
+            "thousand lines of code, more than a thousand public functions, and two hundred and seventy one tests "
             "that check its results. <bookmark mark='b'/>It decides arguments in propositional and first-order "
             "logic, checks modal frames, does Bayesian updating, causal inference and decision theory, counts "
-            "votes, divides cakes, audits fairness, and now solves the off-switch game. Every number on screen in "
-            "this series was computed by it, and can be computed again."
+            "votes, divides cakes, audits fairness, and now solves the off-switch game. The numerical results in this "
+            "series' worked models were computed by it and can be computed again."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

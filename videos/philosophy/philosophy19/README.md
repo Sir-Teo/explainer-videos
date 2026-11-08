@@ -25,7 +25,7 @@ life: Schrödinger, entropy budgets for a body and a planet, five definitions ag
 one example. Artificial life: von Neumann's constructor, Conway's glider, Lenia's equation, and a creature the
 Reasoner found itself and films on screen (mass 430 → 47.3, steady to 0.7%, gliding at 0.47 cells per step).
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/evo.py`, tested in
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/evo.py`, tested in
 `tests/philosophy/test_evo.py` and cached by [`compute.py`](compute.py).
 
 ## Build it

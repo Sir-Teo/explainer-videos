@@ -21,7 +21,7 @@ peeking (31% false wins) against an e-process (4%), and group-sequential boundar
 testing by betting, Kelly's growth rate, Ville's inequality proved and checked, and why e-values compose; and AIC
 against BIC (Forster and Sober), with AIC's estimate tracking predictive accuracy.
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/stats.py` (no SciPy:
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/stats.py` (no SciPy:
 its own normal and Student-t distributions), tested in `tests/philosophy/test_stats.py` and cached by
 [`compute.py`](compute.py).
 

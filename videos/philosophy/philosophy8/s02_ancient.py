@@ -35,8 +35,8 @@ class Ancient(VoiceoverScene):
             "<bookmark mark='d'/>That one is not yet a paradox. If some Cretan, once, told the truth, the prophet's "
             "saying is simply false. The real liar leaves no such exit."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(cards[0]))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(cards[1]))
             vo.wait_until("c")

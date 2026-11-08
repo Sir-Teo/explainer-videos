@@ -34,8 +34,9 @@ class Compact(VoiceoverScene):
             "sentences, and those few already have no model. <bookmark mark='c'/>This is the compactness theorem, "
             "and it is the most-used tool in model theory. It is also where first-order logic starts to look strange."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(thm, shift=UP * 0.2))
+            vo.wait_until("a")
+            self.play(Indicate(thm, color=P.CONCL))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(p) for p in pf], lag_ratio=0.5), run_time=3)
             vo.wait_until("c")
@@ -56,7 +57,7 @@ class Compact(VoiceoverScene):
         grid = ValueGrid(hd, rows, col_w=[1.2] + [0.8] * len(d["sizes"]), font_size=24).move_to([-2.4, -1.2, 0])
         right = VGroup(label(r"each finite set of them: \ a finite model", font_size=24, color=OK),
                        label(r"all of them together: \ only infinite models", font_size=24, color=BAD),
-                       label(r"so `infinitely many' takes infinitely many sentences", font_size=24,
+                       label(r"in pure equality: \\ infinitude needs an infinite theory", font_size=24,
                              color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(grid, RIGHT, buff=0.8)
         with self.voiceover(
             "First, counting again. <bookmark mark='a'/>For each number n there is a sentence lambda n that says "
@@ -64,10 +65,12 @@ class Compact(VoiceoverScene):
             "sizes one to six: lambda n is true exactly in the structures with at least n objects. "
             "<bookmark mark='c'/>Any finite collection of these sentences has a finite model: just take enough "
             "objects. <bookmark mark='d'/>All of them together say 'there are infinitely many things', and have "
-            "only infinite models. One sentence cannot say it, but infinitely many can."
+            "only infinite models. Using equality alone, no single sentence expresses that property, but this "
+            "infinite set does."
         ) as vo:
-            vo.wait_until("a")
             self.play(Write(lam[0]), Write(lam[1]), FadeIn(lam[2]))
+            vo.wait_until("a")
+            self.play(Indicate(lam, color=P.CONCL))
             vo.wait_until("b")
             self.play(FadeIn(grid.head), FadeIn(grid.rows_bg), FadeIn(grid.rule))
             self.play(LaggedStart(*[FadeIn(grid.row(r)) for r in range(len(rows))], lag_ratio=0.25))

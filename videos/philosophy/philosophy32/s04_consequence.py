@@ -32,8 +32,8 @@ class Consequence(VoiceoverScene):
             "<bookmark mark='c'/>The laws are not up to us. <bookmark mark='d'/>So nothing that follows from them is "
             "up to us, and if determinism is true, that is everything."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             for mk, r in zip("bcd", rows):
                 vo.wait_until(mk)
                 self.play(FadeIn(r))

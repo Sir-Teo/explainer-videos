@@ -146,8 +146,8 @@ class Regularity(VoiceoverScene):
             "<bookmark mark='c'/>For Lewis the laws are not extra ingredients in the mosaic. They are the best "
             "summary of it. The next chapter builds that idea and puts a number on what best means."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(c) for c in cells], lag_ratio=0.005), run_time=2.5)
             vo.wait_until("c")

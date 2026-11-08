@@ -127,8 +127,8 @@ class Univalence(VoiceoverScene):
             "in a single collaborative book during a special year at the Institute for Advanced Study in Princeton, "
             "published in 2013."
         ) as vo:
-            vo.wait_until("a")
             self.play(Write(ua), FadeIn(gl), run_time=2)
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r) for r in tr], lag_ratio=0.6), run_time=5)
             vo.wait_until("c")

@@ -32,7 +32,7 @@ Birch's eight criteria (2021) and the UK Sentience Act (2022). Machines: Butlin,
 properties (2023), applied to the Reasoner's own toys (two each, six in all), the gaming problem for self-reports, and
 Long, Sebo et al. (2024) on AI welfare.
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/consciousness.py`
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/consciousness.py`
 (with `prop` for the Price List and `modal` for the modal check), tested in `tests/philosophy/test_consciousness.py`
 and cached by [`compute.py`](compute.py).
 

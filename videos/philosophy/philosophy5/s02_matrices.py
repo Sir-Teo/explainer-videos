@@ -148,8 +148,8 @@ class Matrices(VoiceoverScene):
             "to the power of the number of atoms. <bookmark mark='e'/>So consequence is decidable, and the "
             "Reasoner's new module does it the obvious way: it writes down every row."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(dc))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(Write(cons))
             vo.wait_until("c")

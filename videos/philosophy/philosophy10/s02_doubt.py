@@ -75,8 +75,8 @@ class Doubt(VoiceoverScene):
             "every quality the senses report, yet we judge it the same wax. It is grasped by the intellect, not by "
             "the senses."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             for mk, r in zip("bcde", rows):
                 vo.wait_until(mk)
                 self.play(FadeIn(r))

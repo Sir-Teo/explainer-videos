@@ -35,8 +35,8 @@ class Utility(VoiceoverScene):
             "following pains; <bookmark mark='d'/>and its extent, how many people it reaches. <bookmark mark='e'/>Each "
             "person counts for one, and no one for more than one: the egalitarian core of utilitarianism."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             for mk, r in zip("bcde", rows):
                 vo.wait_until(mk)
                 self.play(FadeIn(r))

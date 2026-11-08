@@ -72,7 +72,7 @@ class Equilibrium(VoiceoverScene):
                         (r"DDE: \ double effect \ (2)", REAL), (r"S: \ switching is permitted \ (4)", OUGHT),
                         (r"F: \ pushing is forbidden \ (5)", OUGHT), (r"H: \ the surgeon may not harvest \ (5)", OUGHT),
                         (r"red: \ the pairs that cannot both be kept, \ given what each principle implies", BAD)],
-                       font_size=17, aligned_edge=LEFT, buff=0.16).move_to([4.4, 0.2, 0])
+                       font_size=17, aligned_edge=LEFT, width=4.8, buff=0.16).move_to([4.4, 0.2, 0])
         drop = VGroup(*[Cross(nodes[k], stroke_color=BAD, stroke_width=4, scale_factor=0.8) for k in d["drop"]])
         res = label(r"the heaviest consistent set: \ DDE, \ S, \ F, \ H: \ weight 16 of 22", font_size=19,
                     color=GOAL).to_edge(DOWN, buff=0.4)

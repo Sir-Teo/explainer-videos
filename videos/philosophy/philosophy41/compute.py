@@ -27,7 +27,7 @@ load = CACHE.load
 
 TRILEMMA = [
     ("CAL", r"the score is calibrated in each group"),
-    ("BAL", r"error rates are equal across groups"),
+    ("BAL", r"$x_A=x_B,\quad y_A=y_B$"),
     ("BASE", r"the groups' base rates differ"),
     ("IMPERF", r"prediction is imperfect"),
 ]

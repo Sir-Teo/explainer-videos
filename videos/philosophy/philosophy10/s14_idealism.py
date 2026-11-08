@@ -89,8 +89,8 @@ class Idealism(VoiceoverScene):
             "themselves. <bookmark mark='d'/>And morality, Kant argued in his second Critique, requires that we think "
             "of ourselves as free. Part 35 takes up his ethics."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(rows[0]), FadeIn(rows[1]))
             vo.wait_until("c")

@@ -49,8 +49,8 @@ class Axioms(VoiceoverScene):
             "Zermelo took the other road: write down axioms that say exactly which sets exist, and derive the rest. "
             "His road became the foundation of modern mathematics."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(hcs[0]), LaggedStart(*[Create(t) for t in types], lag_ratio=0.2), FadeIn(tl), FadeIn(tcap))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(hcs[1]), FadeIn(zcap))
         self.clear_scene()

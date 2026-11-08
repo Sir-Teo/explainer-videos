@@ -78,16 +78,12 @@ class Explain(VoiceoverScene):
             b = Rectangle(width=w, height=0.42, fill_color=FAIRC if ph > 0 else BAD, fill_opacity=0.75, stroke_width=0)
             b.move_to([x0 + (w / 2 if ph > 0 else -w / 2), y, 0])
             bars.add(VGroup(b, label(nm, font_size=19, color=GREY_A).move_to([x0 - 2.6, y, 0]),
-                            label(f"{ph:+.2f}", font_size=19).next_to(b, RIGHT if ph > 0 else LEFT, buff=0.12)))
+                            label(f"{ph:+.2f}", font_size=19).move_to([0.2, y, 0])))
         zero = Line([x0, y0 + 0.4, 0], [x0, y0 - 1.8, 0], color=GREY_C)
         side = stack([(r"Shapley values: \ average contribution over all orders of adding the features", EXPL),
                       (rf"they add up to the score: \ $0.45 + 0.20 - 0.60 = {e['f'] - e['f0']:.2f}$", FAIRC),
                       (r"Lundberg and Lee \ (2017): \ SHAP, \ the cooperative game of Part 34, \ for predictions",
-                       GREY_A)], font_size=19, buff=0.22, aligned_edge=LEFT)
-        for s0 in side:
-            if s0.width > 5.0:
-                s0.width = 5.0
-        side.move_to([4.0, -0.4, 0])
+                       GREY_A)], font_size=19, buff=0.22, aligned_edge=LEFT, width=5.0).move_to([4.0, -0.4, 0])
         cfs = e["counterfactuals"]
         cft = label(r"counterfactuals: \ " + r"; \ ".join(f"{c['feature']} {c['change']:+.1f}" for c in cfs) +
                     r" \ would each have been enough", font_size=20, color=EXPL).to_edge(DOWN, buff=0.45)

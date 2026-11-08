@@ -35,7 +35,7 @@ Buchak's risk-weighted counterexample and the off-switch game (Hadfield-Menell e
 (Kraitchik 1953): a proper prior makes switching gain exactly 0 on average; Broome's prior (1995) makes it gain at every
 amount, because the expected amount is infinite.
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/decision.py` (with
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/decision.py` (with
 `prop` for the Price List), tested in `tests/philosophy/test_decision.py` and cached by [`compute.py`](compute.py).
 
 ## Build it

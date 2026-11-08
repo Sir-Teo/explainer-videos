@@ -103,9 +103,9 @@ class Undecidable(VoiceoverScene):
             "contains every program. So H cannot exist: halting is undecidable. It is the same diagonal that "
             "Cantor used for the reals."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(rows_l), FadeIn(cols_l), FadeIn(ax),
                       LaggedStart(*[FadeIn(c) for c in cells], lag_ratio=0.02))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(txt[0]))
             vo.wait_until("c")
@@ -139,8 +139,8 @@ class Undecidable(VoiceoverScene):
             "exactly when the machine halts. <bookmark mark='c'/>So a procedure that decided validity would decide "
             "halting, and nothing can. That is the answer to the Entscheidungsproblem."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(m), GrowArrow(ar), FadeIn(al), FadeIn(s))
+            vo.wait_until("a")
             self.play(FadeIn(desc[0]))
             vo.wait_until("b")
             self.play(Write(desc[1]))
@@ -178,8 +178,8 @@ class Undecidable(VoiceoverScene):
             "started. <bookmark mark='e'/>So its negation is invalid, and yet every countermodel is infinite. No "
             "finite search will ever exhibit one."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(left))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(right))
             vo.wait_until("c")

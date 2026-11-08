@@ -128,8 +128,8 @@ class Kyoto(VoiceoverScene):
             "<bookmark mark='d'/>His four-cornered logic, is, is not, both, neither, was Part 5's. "
             "<bookmark mark='e'/>Seven centuries before Being and Time, being had been thought as time."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             for mk, r in zip("bcde", rows):
                 vo.wait_until(mk)
                 self.play(FadeIn(r))

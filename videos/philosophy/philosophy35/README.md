@@ -34,7 +34,7 @@ Ord 2020): expected choiceworthiness on the footbridge flips with normalization,
 while a voting parliament pushes (Newberry and Ord 2021), and the value of moral information is 0.8, four times the
 best choice now.
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/ethics.py` (with `prop`
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/ethics.py` (with `prop`
 for the Price List), tested in `tests/philosophy/test_ethics.py` and cached by [`compute.py`](compute.py).
 
 ## Build it

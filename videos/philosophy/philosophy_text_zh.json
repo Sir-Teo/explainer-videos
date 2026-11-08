@@ -11040,8 +11040,8 @@
     "paper": "布",
     "scissors": "剪刀",
     "zero-sum: \\ closed cycles": "零和：\\ 闭合循环",
-    "ties rewarded: \\ spiral in": "奖励平局：\\ 螺旋向内",
-    "ties punished: \\ spiral out": "惩罚平局：\\ 螺旋向外",
+    "ties punished: \\ spiral in": "惩罚平局：\\ 螺旋向内",
+    "ties rewarded: \\ spiral out": "奖励平局：\\ 螺旋向外",
     "no ESS in the zero-sum game: \\ the frequencies cycle forever": "零和博弈中没有演化稳定策略：\\ 频率永远循环",
     "side-blotched lizards \\ (Sinervo and Lively, \\ 1996): \\ three male morphs that beat one another in a circle, \\ cycling every few years": "侧斑蜥蜴 \\ （西纳沃和莱夫利，\\ 1996）：\\ 三种雄性形态循环相克，\\ 每隔几年循环一次",
     "David Lewis; \\ Brian Skyrms \\ (2010)": "大卫·刘易斯；\\ 布莱恩·斯科姆斯 \\ （2010）",
@@ -25051,7 +25051,11 @@
     "lock-in": "锁定",
     "a powerful system that fixes today's values could prevent the moral progress Part 37 described": "一个固定了今天价值的强大系统，\\ 可能阻止第 37 部分描述的道德进步",
     "constitutions": "宪法",
-    "principles written in words and applied by the model: \\ rule following again \\ (Part 28)": "用文字写下、\\ 由模型应用的原则：\\ 又是遵守规则的问题 \\ （第 28 部分）"
+    "principles written in words and applied by the model: \\ rule following again \\ (Part 28)": "用文字写下、\\ 由模型应用的原则：\\ 又是遵守规则的问题 \\ （第 28 部分）",
+    "Traditional syllogistic:": "传统三段论：",
+    "every proof can be rebuilt without Cut: only subformulas of the final sequent remain, up to term substitution": "每个证明都可以不用切规则重建：只保留最终矢列的子公式，允许项代换",
+    "the payoff: \\ search over the goal's formula shapes; \\ terms can still grow without bound": "回报：\\ 搜索目标的公式形状；\\ 项仍可能无限增长",
+    "in pure equality: \\\\ infinitude needs an infinite theory": "仅用等号：\\\\ 无穷性需要无穷公理组"
   },
   "patterns": [
     [

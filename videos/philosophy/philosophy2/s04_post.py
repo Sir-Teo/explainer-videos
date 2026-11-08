@@ -110,8 +110,9 @@ class Post(VoiceoverScene):
             "And or is the nand of two negations. <bookmark mark='f'/>Each identity checks in all four rows. Charles "
             "Sanders Peirce had found this in 1880, in a manuscript nobody read for fifty years."
         ) as vo:
-            vo.wait_until("a")
             self.play(Write(dm), FadeIn(dmw))
+            vo.wait_until("a")
+            self.play(Indicate(dm, color=CONN))
             vo.wait_until("b")
             self.play(FadeIn(hc, shift=RIGHT * 0.2))
             for k, mk in enumerate("cde"):

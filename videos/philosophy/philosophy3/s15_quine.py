@@ -53,8 +53,8 @@ class Quine(VoiceoverScene):
             "<bookmark mark='d'/>Quine called this riddle Plato's beard: historically, he said, it has proved "
             "tough, frequently dulling the edge of Occam's razor."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(s))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(puzzle[0]), FadeIn(puzzle[1]))
             vo.wait_until("c")
@@ -128,8 +128,8 @@ class Quine(VoiceoverScene):
             "quantifies over species, so whoever asserts it is committed to species, which are abstract objects. "
             "Quine's slogan: to be is to be the value of a variable."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q, shift=UP * 0.2))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(Write(f), FadeIn(fl))
             vo.wait_until("c")
@@ -159,8 +159,8 @@ class Quine(VoiceoverScene):
             "objects, outside space and time. This is the indispensability argument of Quine and Hilary Putnam, and "
             "it is one of the main arguments of Part 9."
         ) as vo:
-            vo.wait_until("a")
             self.play(Write(f))
+            vo.wait_until("a")
             for mk, st in zip("bcd", steps):
                 vo.wait_until(mk)
                 self.play(FadeIn(st, shift=RIGHT * 0.2))

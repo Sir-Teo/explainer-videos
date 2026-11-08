@@ -39,8 +39,9 @@ class Complete(VoiceoverScene):
             "rules of proof catch every valid formula. <bookmark mark='d'/>The next year Kurt Gödel, a 23-year-old "
             "student in Vienna, answered yes, in his doctoral thesis."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(two[0]))
+            vo.wait_until("a")
+            self.play(Indicate(two[0], color=P.CLAIM))
             vo.wait_until("b")
             self.play(FadeIn(two[1]), Write(q))
             vo.wait_until("c")
@@ -67,8 +68,9 @@ class Complete(VoiceoverScene):
             "from gamma, then gamma together with not-phi is consistent, and a model of that set is exactly a "
             "countermodel to the argument."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(thm, shift=UP * 0.2))
+            vo.wait_until("a")
+            self.play(Indicate(thm, color=P.CONCL))
             vo.wait_until("b")
             self.play(FadeIn(eq))
             vo.wait_until("c")
@@ -213,8 +215,9 @@ class Complete(VoiceoverScene):
             "others, and completeness only promises proofs of what follows. <bookmark mark='d'/>The strange models "
             "where it fails are the subject of the next chapter, and the theorem itself of Part 7."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(left))
+            vo.wait_until("a")
+            self.play(Indicate(left, color=P.CLAIM))
             vo.wait_until("b")
             self.play(Create(bar), FadeIn(right))
             vo.wait_until("c")

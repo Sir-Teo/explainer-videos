@@ -71,8 +71,8 @@ class Harmony(VoiceoverScene):
         f2 = label(r"the Pythagorean comma: \ 23.46 cents \ (a semitone is 100)", font_size=21,
                    color=BAD).next_to(f1, DOWN, buff=0.35)
         f3 = MathTex(r"\text{cents}(r) = 1200 \log_2 r", font_size=30, color=GREY_A).next_to(f2, DOWN, buff=0.45)
-        f4 = label(r"no power of $3/2$ is a power of $2$: \ the circle of fifths cannot close", font_size=21,
-                   color=GOAL).next_to(f3, DOWN, buff=0.4)
+        f4 = MathTex(r"n,m\in\mathbb{N}_{>0}\quad\Longrightarrow\quad(3/2)^n\ne2^m",
+                     font_size=26, color=GOAL).next_to(f3, DOWN, buff=0.4)
         with self.voiceover(
             "Pythagoras, legend says, heard harmony in a smithy and found it in numbers. Strings whose lengths are in "
             "ratio two to one sound an octave; three to two, a fifth; four to three, a fourth. <bookmark "
@@ -82,8 +82,9 @@ class Harmony(VoiceoverScene):
             "<bookmark mark='c'/>Three halves to the twelfth, divided by two to the seventh, is three to the twelfth "
             "over two to the nineteenth, about one point zero one three six. <bookmark mark='d'/>The overshoot is the "
             "Pythagorean comma, twenty three and a half cents, almost a quarter of a semitone. <bookmark mark='e'/>No "
-            "power of three halves is a power of two, because one is odd and the other even, so the circle of fifths "
-            "can never close. Every tuning system is a compromise with this fact."
+            "positive integer power of three halves equals a positive integer power of two. Clearing denominators would "
+            "give three to the n equal to two to the n plus m: an odd number equal to an even number. The circle of "
+            "fifths cannot close exactly. Every tuning system is a compromise with this fact."
         ) as vo:
             self.play(FadeIn(head), Create(circle))
             vo.wait_until("a")

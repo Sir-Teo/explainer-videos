@@ -87,8 +87,8 @@ class Diagonal(VoiceoverScene):
             "were f of d, then d would belong to D exactly when it does not. So f misses D, and no function from X "
             "covers all its subsets."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(thm))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(X), LaggedStart(*[GrowArrow(a) for a in arrows], lag_ratio=0.2), FadeIn(F))
             vo.wait_until("c")
@@ -147,8 +147,8 @@ class Diagonal(VoiceoverScene):
             "itself will keep returning: in Russell's paradox, in a moment; in the halting problem of Part 3; and in "
             "Gödel's theorems of Part 7."
         ) as vo:
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(x) for x in lad], lag_ratio=0.4), FadeIn(lts), run_time=3)
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(cap))
             vo.wait_until("c")

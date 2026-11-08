@@ -67,9 +67,9 @@ class Kripke(VoiceoverScene):
             "phi is true at some world it can see. <bookmark mark='e'/>Everything else works exactly as in Part 2, "
             "one world at a time. It is Tarski's definition again, with worlds in place of objects."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(defs[0]), FadeIn(VGroup(*[g.world[w][0] for w in g.world], *[g.name[w] for w in g.name])),
                       LaggedStart(*[Create(a) for a in g.arrows], lag_ratio=0.2))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(defs[1]), FadeIn(VGroup(*g.inside.values())))
             vo.wait_until("c")
@@ -129,8 +129,8 @@ class Kripke(VoiceoverScene):
             "nothing is possible. <bookmark mark='d'/>So 'necessarily p implies possibly p' fails at a dead end. That "
             "axiom, D, says exactly that every world sees some world, and Chapter ten will need it for obligation."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(g))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(rows[0]), FadeIn(rows[1]))
             vo.wait_until("c")

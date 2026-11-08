@@ -93,8 +93,8 @@ class Russell(VoiceoverScene):
             "appendix that begins: hardly anything more unfortunate can befall a scientific writer than to have one "
             "of the foundations of his edifice shaken after the work is finished."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q1))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(q2))
         self.clear_scene()

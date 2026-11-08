@@ -35,8 +35,12 @@ class Impossible(VoiceoverScene):
                   label(f"{idf[g]:.4f}", font_size=19, color=EXPL), label(f"{r[g]['fpr']:.4f}", font_size=19)]
                  for g in "AB"]
         grid = ValueGrid(hd, cells, col_w=[1.4, 1.4, 1.4, 1.4, 3.4, 2.6], cell_h=0.5, font_size=18).move_to([0, -2.0, 0])
-        foot = label(r"equal PPV and FNR, \ unequal $p$: \ then FPR must differ", font_size=21,
-                     color=BAD).to_edge(DOWN, buff=0.25)
+        foot = MathTex(r"\mathrm{PPV}_A=\mathrm{PPV}_B=q\in(0,1),\quad"
+                       r"\mathrm{FNR}_A=\mathrm{FNR}_B<1,\quad p_A\ne p_B"
+                       r"\ \Longrightarrow\ \mathrm{FPR}_A\ne\mathrm{FPR}_B",
+                       font_size=23, color=BAD).to_edge(DOWN, buff=0.25)
+        if foot.width > 13.3:
+            foot.width = 13.3
         with self.voiceover(
             "Alexandra Chouldechova showed in 2017 why the two analyses had to disagree. It takes three lines of "
             "algebra. <bookmark mark='a'/>Start from the definitions: the base rate p, the precision, the "
@@ -46,9 +50,10 @@ class Impossible(VoiceoverScene):
             "as one minus p times N. <bookmark mark='c'/>Divide, and the false-positive rate equals p over one minus "
             "p, times one minus the precision over the precision, times one minus the false-negative rate. <bookmark "
             "mark='d'/>The Reasoner checks it on its population: the identity reproduces each group's false-positive "
-            "rate. <bookmark mark='e'/>So if two groups have the same precision and the same false-negative rate, but "
-            "different base rates, their false-positive rates must differ. Only perfect prediction, or equal base "
-            "rates, escapes."
+            "rate. <bookmark mark='e'/>For base rates strictly between zero and one, equal precision strictly "
+            "between zero and one, and a common false-negative rate below one, different base rates force different "
+            "false-positive rates. Perfect precision is an exception: there are no false positives, even if some "
+            "positives are missed."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -126,12 +131,14 @@ class Impossible(VoiceoverScene):
                                                        r"rates themselves"),
                      (("IMPERF",), r"perfect prediction", r"never available")]
         with self.voiceover(
-            "Four claims cannot all be true. <bookmark mark='a'/>The score is calibrated in each group; the groups' "
-            "error rates are equal; their base rates differ; and prediction is imperfect. <bookmark mark='b'/>Every "
-            "deployed system gives one up. <bookmark mark='c'/>Most risk scores keep calibration and accept unequal "
-            "error rates, as Northpointe did, and as Brian Hedden has defended. <bookmark mark='d'/>Moritz Hardt, "
-            "Eric Price and Nathan Srebro showed in 2016 how to post-process any classifier to equalize error rates, "
-            "giving up calibration. <bookmark mark='e'/>Some propose changing the target: predicting an outcome less "
+            "Four claims cannot all be true. <bookmark mark='a'/>The score is calibrated in each group; its average "
+            "is equal across groups within each outcome class, x A equals x B and y A equals y B; the base rates "
+            "differ; and prediction is imperfect. <bookmark mark='b'/>Kleinberg's theorem forces one to go. "
+            "<bookmark mark='c'/>Keeping calibrated scores, as Northpointe did, can leave these class averages "
+            "unequal. <bookmark mark='d'/>For a binary decision, the two class averages are the true-positive and "
+            "false-positive rates. Hardt, Price and Srebro's post-processing equalizes those rates; the resulting "
+            "binary output loses calibration in this case. This differs from retaining a calibrated score "
+            "alongside a separate adjusted decision. <bookmark mark='e'/>Some propose changing the target: predicting an outcome less "
             "shaped by biased measurement, or changing the conditions that make base rates differ. <bookmark "
             "mark='f'/>Perfect prediction is never on offer."
         ) as vo:
@@ -153,16 +160,19 @@ class Impossible(VoiceoverScene):
     def wall_brick(self):
         w = wall(upto=41, current=41).scale(0.44).to_edge(LEFT, buff=0.3).shift(DOWN * 0.3)
         card = wall_card(41, width=6.2, font_size=22).to_edge(RIGHT, buff=0.3)
+        assumptions = MathTex(r"0<p_A,p_B<1,\qquad\Pr(0<R<1)>0", font_size=20,
+                              color=GREY_A).next_to(card, DOWN, buff=0.22)
         with self.voiceover(
             "This is the forty first brick in the Wall. <bookmark mark='a'/>The dream was a classifier fair by every "
-            "measure: calibrated, with equal error rates, and treating each group alike. Kleinberg, Mullainathan and "
-            "Raghavan, and Chouldechova, proved that when base rates differ and prediction is imperfect, calibration "
-            "and balanced error rates cannot both hold. <bookmark mark='b'/>What it forces is a choice of which "
+            "measure: calibrated, with equal class-average scores, and treating each group alike. Kleinberg, "
+            "Mullainathan and Raghavan proved that when base rates differ and prediction is imperfect, calibration "
+            "and both class balances cannot all hold. Chouldechova's identity shows a related trade-off for "
+            "classification. <bookmark mark='b'/>What it forces is a choice of which "
             "fairness to have, and that choice is moral, not technical."
         ) as vo:
             self.play(FadeIn(w))
             vo.wait_until("a")
-            self.play(FadeIn(card), Indicate(w.brick[41], color=P.CONCL, scale_factor=1.06))
+            self.play(FadeIn(card), FadeIn(assumptions), Indicate(w.brick[41], color=P.CONCL, scale_factor=1.06))
             vo.wait_until("b")
             self.wait(0.5)
         self.clear_scene()

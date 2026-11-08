@@ -76,8 +76,8 @@ class Sorites(VoiceoverScene):
             "<bookmark mark='e'/>Modus ponens, applied n times, carries baldness down the line, all the way to the "
             "man who plainly is not bald."
         ) as vo:
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(h) for h in heads], lag_ratio=0.08), FadeIn(idx))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(prem[0]), FadeIn(prem[1]), heads[0].face.animate.set_stroke(OK).set_fill(OK, 0.3))
             vo.wait_until("c")
@@ -117,8 +117,8 @@ class Sorites(VoiceoverScene):
             "sorites is a minimal inconsistent set, and the trouble is that the line it forces us to draw could be "
             "anywhere. Nothing in the meaning of 'bald' picks a place."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(rows), FadeIn(all_))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(m) for m in marks], lag_ratio=0.15))
             vo.wait_until("c")

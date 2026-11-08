@@ -110,8 +110,8 @@ class Temporal(VoiceoverScene):
             "ends. <bookmark mark='c'/>Bowen Alpern and Fred Schneider proved in 1985 that every property of runs is "
             "a combination of the two."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(two[0]))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(two[1]))
             vo.wait_until("c")

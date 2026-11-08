@@ -90,8 +90,8 @@ class Quantum(VoiceoverScene):
             "and every truth table, fails. The Reasoner computes the subspaces directly: one dimension on the left, "
             "zero on the right."
         ) as vo:
-            vo.wait_until("a")
             self.play(Create(p), Create(q), Create(r), FadeIn(lp), FadeIn(lq), FadeIn(lr), FadeIn(lab))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(plane.animate.set_fill(opacity=0.15), FadeIn(eqs[0]))
             vo.wait_until("c")

@@ -87,7 +87,8 @@ class Paracon(VoiceoverScene):
             "logics, for example to query inconsistent data, reject the second."
         ) as vo:
             for mk, h in zip("abc", hcs):
-                vo.wait_until(mk)
+                if mk != 'a':
+                    vo.wait_until(mk)
                 self.play(FadeIn(h, shift=DOWN * 0.2))
             vo.wait_until("d")
             self.play(FadeIn(defs))

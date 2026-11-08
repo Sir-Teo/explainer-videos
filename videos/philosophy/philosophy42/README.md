@@ -32,10 +32,10 @@ uncertainty (Butlin, Long et al.; Long, Sebo et al.; Birch; Schwitzgebel and Gar
 **The Wall, complete**: forty-two bricks laid course by course and **sorted by what they force** (proof runs out;
 evidence underdetermines; aggregation fails; facts do not fix meaning or value; a paradox forces a new concept); a
 **Price List** for alignment and the philosophical bets of artificial intelligence. And back to Leibniz:
-**the Reasoner by the numbers** (47 modules, about 24,000 lines, 269 tests), what calculation achieved and what it
+**the Reasoner by the numbers** (47 modules, about 24,000 lines, 271 test functions), what calculation achieved and what it
 never will, the series map, and what to read next.
 
-Every number on screen is computed by the Reasoner's last module `explainer/philosophy/reasoner/alignment.py` (with
+The worked model results are computed by the Reasoner's last module `explainer/philosophy/reasoner/alignment.py` (with
 `prop` for the Price List), tested in `tests/philosophy/test_alignment.py` and cached by [`compute.py`](compute.py).
 
 ## Build it

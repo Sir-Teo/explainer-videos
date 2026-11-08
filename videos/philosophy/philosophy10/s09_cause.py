@@ -156,8 +156,8 @@ class Cause(VoiceoverScene):
             "perceptions, in perpetual flux. <bookmark mark='c'/>Descartes's first certainty has become a bundle. "
             "Part 21, on personal identity, takes it up."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             self.play(FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(FadeIn(rows[1]))

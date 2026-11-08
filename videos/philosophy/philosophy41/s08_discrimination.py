@@ -110,11 +110,7 @@ class Discrimination(VoiceoverScene):
                       (rf"reoffence by neighbourhood: \ {zr['0'] * 100:.0f}\% and {zr['1'] * 100:.0f}\%", GREY_A),
                       (r"rule: \ label the riskier neighbourhood high risk", EXPL),
                       (r"the gap in labels is wider than the gap in behaviour", BAD)],
-                     font_size=20, buff=0.3, aligned_edge=LEFT)
-        for s0 in side:
-            if s0.width > 5.6:
-                s0.width = 5.6
-        side.move_to([3.3, 0.0, 0])
+                     font_size=20, buff=0.3, aligned_edge=LEFT, width=5.6).move_to([3.3, 0.0, 0])
         with self.voiceover(
             "A common first answer is to leave the group out of the model: fairness through unawareness. The "
             "Reasoner tests it. <bookmark mark='a'/>Its model never sees the group. It sees only a neighbourhood, "

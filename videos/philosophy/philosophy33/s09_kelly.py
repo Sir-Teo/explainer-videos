@@ -159,7 +159,6 @@ class Kelly(VoiceoverScene):
         f = MathTex(r"\mathbb{E}[W_n] = W_0\,\big(1 + f(2p-1)\big)^n", font_size=30, color=MONEY).next_to(
             grid, DOWN, buff=0.4)
         foot = stack([(r"expected wealth rises with $f$ all the way: \ $10^{49}$ at $f = 0.6$", MONEY),
-                      (r"that expectation is carried by a vanishingly rare path that never loses", RISK),
                       (r"maximize $\mathbb{E}[W]$ and you are ruined almost surely: \ the St Petersburg lesson "
                        r"again", GOAL)], font_size=19, buff=0.2).to_edge(DOWN, buff=0.35)
         with self.voiceover(
@@ -167,8 +166,8 @@ class Kelly(VoiceoverScene):
             "plus f times the edge, so expected wealth after a thousand bets rises with f all the way: ten to the "
             "forty nine times the stake at six tenths. <bookmark mark='b'/>Yet the median, the fortune of the "
             "typical gambler, is ten to the minus thirty seven, and all thousand simulated gamblers are ruined. "
-            "<bookmark mark='c'/>The expectation is carried by a path so rare that no simulation will ever meet it: "
-            "the one that wins nearly every bet. <bookmark mark='d'/>An agent who maximizes expected money in "
+            "<bookmark mark='c'/>The expectation is carried by extremely rare histories with many more wins than a "
+            "typical gambler sees. <bookmark mark='d'/>An agent who maximizes expected money in "
             "repeated bets is ruined almost surely. Paul Samuelson objected that Kelly is only right for log "
             "utility, and he was correct as a matter of theory. In practice, what one cares about over a lifetime of "
             "bets is the typical outcome, and that is what Kelly maximizes."
@@ -183,9 +182,9 @@ class Kelly(VoiceoverScene):
             for k in range(4):
                 self.play(FadeIn(grid.cell[k][2]), FadeIn(grid.cell[k][3]), run_time=0.4)
             vo.wait_until("c")
-            self.play(FadeIn(foot[1]))
+            self.play(Indicate(grid.cell[3][1], color=MONEY))
             vo.wait_until("d")
-            self.play(FadeIn(foot[2]))
+            self.play(FadeIn(foot[1]))
         self.clear_scene()
 
     def practice(self):

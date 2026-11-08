@@ -30,7 +30,7 @@ Chan (2014), Bai (2019) and Bell (2015). Justice beyond borders: Beitz (1979), P
 (2005), Blake (2001), Cohen and Sabel (2006), Carens (1987), Wellman (2008), just savings, Shue (1993), Gardiner
 (2011), and justice for machines: Gabriel (2020) and Weidinger et al. (2023).
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/justice.py` (with
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/justice.py` (with
 `prop` for the Price List), tested in `tests/philosophy/test_justice.py` and cached by [`compute.py`](compute.py).
 
 ## Build it

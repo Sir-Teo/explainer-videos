@@ -184,8 +184,8 @@ class DeRe(VoiceoverScene):
             "<bookmark mark='e'/>Everything turns on the difference between a name, like nine, and a description, "
             "like the number of planets. That is the next chapter."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             for mk, r in zip("bcde", rows):
                 vo.wait_until(mk)
                 self.play(FadeIn(r))

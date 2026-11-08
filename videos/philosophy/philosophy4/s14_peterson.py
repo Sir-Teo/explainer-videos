@@ -57,8 +57,8 @@ class Peterson(VoiceoverScene):
             "flag. The flag says 'I want in'; the turn says 'after you'. Is it correct? With two processes "
             "interleaving their steps, intuition is unreliable. So check every possible interleaving."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(hc))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(cg))
             vo.wait_until("c")

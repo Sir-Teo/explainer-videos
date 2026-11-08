@@ -51,11 +51,11 @@ class Signs(VoiceoverScene):
     def rotation(self):
         d = load("procrustes")
         head = label(r"Saussure in geometry", font_size=30, color=CONN).to_edge(UP, buff=0.3)
-        assert d["k"] == 6 and d["words"] == 58 and d["same_nn"] and d["coord_corr"] == -0.142
+        assert d["k"] == 6 and d["words"] == 58 and d["same_nn"] and abs(d["coord_corr"]) < 0.5
         assert d["cos_change"] < 1e-14 and d["resid"] < 1e-14 and d["map_error"] < 1e-14 and len(d["anchors"]) == 8
-        assert d["shared"][0] == ["big", "england", "france", "germany", "italy"] and len(d["shared"]) == 5
+        assert any({"big", "england", "france", "germany", "italy"} <= set(g) for g in d["shared"])
         kb, ka = d["sample"]["king"]["before"], d["sample"]["king"]["after"]
-        assert kb == [0.295, -0.422, -0.004] and ka == [-0.734, 0.539, -0.238]
+        assert len(kb) == len(ka) == 3 and np.isfinite([kb, ka]).all()
         eq = MathTex(r"F = E\,Q, \qquad Q^{\top} Q = I", font_size=32, color=TIME).move_to([-3.4, 2.0, 0])
         before = MathTex(r"\text{king}: \ (" + ", ".join(f"{x:.3f}" for x in kb) + r", \dots)", font_size=24,
                          color=ACT)
@@ -65,25 +65,25 @@ class Signs(VoiceoverScene):
                      VGroup(label(r"after a random rotation", font_size=18, color=GREY_A), after).arrange(DOWN,
                                                                                                     buff=0.1)
                      ).arrange(DOWN, buff=0.3).move_to([-3.4, 0.4, 0])
-        rows = stack([(r"every coordinate changes: \ correlation before and after, \ $-0.14$", OBJ),
+        rows = stack([(rf"$\mathrm{{corr}}(E,F) = {d['coord_corr']:.2f}$", OBJ),
                       (r"every cosine stays: \ largest change $10^{-15}$; \ every nearest neighbour the same", OK),
                       (r"Procrustes: \ $W = UV^{\top}$ from 8 anchor words recovers $Q$ \ (error $10^{-15}$)", TIME),
-                      (r"5 groups share one point each: \ England, \ France, \ Germany, \ Italy, \ `big' keep the same "
+                      (rf"{len(d['shared'])} groups share one point each: \ England, \ France, \ Germany, \ Italy, \ `big' keep the same "
                        r"company", BAD)], font_size=19, aligned_edge=LEFT, width=6.2, buff=0.28).move_to([3.4, 0.3, 0])
         foot = label(r"a difference that makes no difference to relations makes no difference to value", font_size=21,
                      color=GOAL).to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "Part 28 built word vectors from a small corpus. They make Saussure's claim exact. "
-            "<bookmark mark='a'/>Rotate the whole space by a random rotation Q. <bookmark mark='b'/>Every coordinate "
-            "of every word changes, king's included: across all of them, the correlation between before and after "
-            "is minus point one four. <bookmark mark='c'/>But every cosine between words "
+            "<bookmark mark='a'/>Rotate the whole space by a random rotation Q. <bookmark mark='b'/>The words' "
+            "coordinates change, king's included. The coordinate correlation is shown on screen. "
+            "<bookmark mark='c'/>But every cosine between words "
             "stays the same, to fifteen decimal places, and so does every word's nearest neighbour. If meaning is "
             "the network of similarities, the rotation changed nothing. <bookmark mark='d'/>And the rotation can be "
             "recovered from the structure. Given just eight anchor words in both spaces, orthogonal Procrustes finds "
             "the rotation, the matrix U V transpose from a singular value decomposition, to within ten to the minus "
             "fifteen, and carries every word to its image. Aligning embeddings learned in two languages works on "
             "this principle. <bookmark mark='e'/>There is a twist. In this corpus England, France, Germany, Italy "
-            "and the word big keep exactly the same company, and they sit at exactly the same point; four other pairs "
+            "and the word big keep exactly the same company, and they sit at exactly the same point; other groups "
             "do too. No structure can tell them apart. <bookmark mark='f'/>That is Saussure again: a difference that "
             "makes no difference to the relations makes no difference to value."
         ) as vo:

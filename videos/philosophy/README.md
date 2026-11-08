@@ -4,7 +4,10 @@
 `videos/philosophy/`; each part's README lists its chapters, what is computed on screen, and its problems. The
 chapter-by-chapter syllabus, the lecture standard every part meets and the progress table are in
 [`SYLLABUS.md`](SYLLABUS.md). Shared instruments are in `explainer/philosophy/`, and the Reasoner, the library that
-computes every number on screen, is in `explainer/philosophy/reasoner/` (47 modules), tested in `tests/philosophy/`.
+computes the worked numerical models, is in `explainer/philosophy/reasoner/` (47 modules), tested in `tests/philosophy/`.
+
+The [series QA and polish notes](../../docs/qa/philosophy-series-polish.md) record repairs, verification scope,
+and commands for regenerating the scene evidence.
 
 This is a forty-two-part course in philosophy, in English and Chinese, running from the first arguments to the frontier of
 research and to the places where philosophy is now engineering. It covers logic and the limits of proof, knowledge

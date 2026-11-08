@@ -86,8 +86,8 @@ class Structure(VoiceoverScene):
             "So every truth of arithmetic, such as which numbers are even, holds in both alike. Arithmetic cannot "
             "tell them apart, and does not need to."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(side[0]), FadeIn(grid.head), FadeIn(grid.rows_bg), FadeIn(grid.rule),
                       LaggedStart(*[FadeIn(VGroup(*grid.cell[r][:3])) for r in range(len(rows))], lag_ratio=0.2),

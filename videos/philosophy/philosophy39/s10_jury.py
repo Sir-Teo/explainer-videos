@@ -63,11 +63,7 @@ class Jury(VoiceoverScene):
                       (r"30\% copy an opinion leader who is right 60\% of the time: \ stuck near 0.60", CYC),
                       (r"given the leader, \ voters are right with 0.72 or 0.42: \ the crowd follows the leader",
                        GREY_A)],
-                     font_size=19, buff=0.3, aligned_edge=LEFT)
-        for s in side:
-            if s.width > 4.6:
-                s.width = 4.6
-        side.move_to([4.6, -0.2, 0])
+                     font_size=19, buff=0.3, aligned_edge=LEFT, width=4.4).move_to([4.5, -0.2, 0])
         with self.voiceover(
             "Condorcet had a second, more hopeful theorem. Suppose a question has a right answer, and each voter is "
             "independently more likely than not to get it right. <bookmark mark='a'/>Then the probability that the "
@@ -120,11 +116,7 @@ class Jury(VoiceoverScene):
                        r"10 use all 12", GOAL),
                       (r"smooth \ (a 25-point average): \ the advantage vanishes", MAJ),
                       (r"Thompson \ (2014): \ the theorem is trivial, \ and the slogan does not follow", BAD)],
-                     font_size=18, buff=0.24, aligned_edge=LEFT)
-        for s in side:
-            if s.width > 5.6:
-                s.width = 5.6
-        side.move_to([3.7, -0.3, 0])
+                     font_size=18, buff=0.24, aligned_edge=LEFT, width=5.6).move_to([3.7, -0.3, 0])
         with self.voiceover(
             "A second argument for crowds concerns diversity. Lu Hong and Scott Page argued in 2004 that diversity "
             "trumps ability, and the Reasoner rebuilds their model. <bookmark mark='a'/>Values are scattered at "

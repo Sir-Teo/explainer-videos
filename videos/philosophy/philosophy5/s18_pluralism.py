@@ -28,8 +28,8 @@ class Pluralism(VoiceoverScene):
             "there is no real disagreement to have: a deviant logician who rejects excluded middle has simply "
             "changed the meaning of 'not'. Change of logic, change of subject."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(quine))
         self.clear_scene()

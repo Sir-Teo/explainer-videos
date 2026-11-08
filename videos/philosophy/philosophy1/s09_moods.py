@@ -42,8 +42,9 @@ class Moods(VoiceoverScene):
             "Barbara: all M are P, all S are M, so all S are P. Which of the two hundred and fifty-six are valid? For "
             "two thousand years the answer was learned by heart."
         ) as vo:
+            self.play(FadeIn(figs[0], shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(f, shift=UP * 0.2) for f in figs], lag_ratio=0.25))
+            self.play(LaggedStart(*[FadeIn(f, shift=UP * 0.2) for f in figs[1:]], lag_ratio=0.25))
             vo.wait_until("b")
             self.play(Write(count))
             vo.wait_until("c")

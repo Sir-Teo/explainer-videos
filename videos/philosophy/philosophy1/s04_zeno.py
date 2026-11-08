@@ -34,8 +34,9 @@ class Zeno(VoiceoverScene):
             "the arrow, and the stadium. Each argues, step by careful step, that something we see every day cannot "
             "happen."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(hcs[0], shift=DOWN * 0.2))
+            vo.wait_until("a")
+            self.play(Indicate(hcs[0], color=HIST))
             vo.wait_until("b")
             self.play(FadeIn(hcs[1], shift=DOWN * 0.2))
             vo.wait_until("c")
@@ -59,6 +60,7 @@ class Zeno(VoiceoverScene):
         ach = Dot([X(0), -0.5, 0], radius=0.13, color=P.CLAIM)
         tor = Dot([X(100), -0.5, 0], radius=0.11, color=P.TRUE)
         la = label(r"Achilles, \ 10 m/s", font_size=24, color=P.CLAIM).next_to(ach, UP, buff=0.25)
+        la.to_edge(LEFT, buff=0.4)
         lt = label(r"tortoise, \ 1 m/s", font_size=24, color=P.TRUE).next_to(tor, UP, buff=0.25)
         rows = VGroup()
         for s in st[:5]:
@@ -119,8 +121,9 @@ class Zeno(VoiceoverScene):
             "<bookmark mark='d'/>The tool that makes this precise, the limit, took until the nineteenth century, "
             "with Cauchy and Weierstrass. Zeno's challenge took two thousand years to meet."
         ) as vo:
+            self.play(Write(series[:9]))
             vo.wait_until("a")
-            self.play(Write(series))
+            self.play(Write(series[9:]))
             vo.wait_until("b")
             self.play(FadeIn(G), LaggedStart(*[FadeIn(p, scale=1.4) for p in pts], lag_ratio=0.12), Create(lim),
                       FadeIn(ll))

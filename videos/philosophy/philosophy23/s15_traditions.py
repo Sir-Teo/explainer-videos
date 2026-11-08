@@ -125,8 +125,8 @@ class Traditions(VoiceoverScene):
             "Part 21, offers no first cause, only conditions. <bookmark mark='e'/>Most of the arguments in this part "
             "assume that the answer, if there is one, is a person. These traditions question that assumption."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(q))
+            vo.wait_until("a")
             for mk, r in zip("bcde", rows):
                 vo.wait_until(mk)
                 self.play(FadeIn(r))

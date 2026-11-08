@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 
 from explainer.philosophy.reasoner import evo as Ev
 
@@ -43,6 +44,45 @@ def test_code_and_parsimony():
 def test_rps_cycles():
     t = np.array(Ev.rps()["traj"])
     assert np.allclose(t.sum(1), 1) and t.min() > 0
+    assert np.ptp(t.prod(axis=1)) < 1e-10
+
+
+@pytest.mark.parametrize("eps, direction", [(-0.3, 1), (0.3, -1)])
+def test_rps_tie_payoff_controls_stability(eps, direction):
+    t = np.array(Ev.rps(eps=eps)["traj"])
+    product = t.prod(axis=1)
+    # d log(x1*x2*x3)/dt = eps * (1 - 3*sum(x_i**2)).
+    # The product approaches its maximum at the centre only for a tie penalty.
+    assert np.all(direction * np.diff(product) >= -1e-12)
+    assert direction * (product[-1] - product[0]) > 0.005
+
+
+def test_rps_legacy_cache_rejected_in_read_only_qa_and_upgraded_for_build(tmp_path, monkeypatch):
+    from videos.philosophy.philosophy19 import compute
+    from tools.qa_series import StaleDataError, require_current_cache
+
+    cache = compute._EvolutionCache("philosophy19")
+    cache.dir = tmp_path
+    monkeypatch.setattr(compute, "CACHE", cache)
+    cache.save("rps", {"in": {"eps": 0.3}, "out": {"eps": -0.3}})
+    before = cache.path("rps").read_bytes()
+    assert not compute.cache_current("rps")
+    original_load = cache.load
+
+    def guarded_load(name):
+        require_current_cache(compute, "philosophy19", cache.path(name), name)
+        return original_load(name)
+
+    with monkeypatch.context() as guard:
+        guard.setattr(cache, "load", guarded_load)
+        with pytest.raises(StaleDataError):
+            compute.load("rps")
+        assert cache.path("rps").read_bytes() == before
+
+    data = compute.load("rps")
+    assert compute.cache_current("rps")
+    assert data["in"]["eps"] == -0.3 and data["out"]["eps"] == 0.3
+    assert np.prod(data["in"]["traj"][-1]) > np.prod(data["in"]["traj"][0])
 
 
 def test_life_definitions_and_entropy():

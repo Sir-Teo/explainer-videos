@@ -135,8 +135,8 @@ class Lindstrom(VoiceoverScene):
             for w in row] for m, row in zip(d["sizes"], g3)]
         grid = ValueGrid(hd, body, col_w=[0.6] + [0.36] * len(d["sizes"]), cell_h=0.34, font_size=20)
         grid.move_to([4.7, -0.2, 0])
-        gl = label(r"3 rounds: \ the duplicator wins (green) when $m = n$ or both $\geq 7$", font_size=20,
-                   color=GREY_A).next_to(grid, DOWN, buff=0.25)
+        gl = wrapped_label(r"3 rounds: \ the duplicator wins (green) when $m = n$ or both $\geq 7$", 4.3,
+                           font_size=20, color=GREY_A).next_to(grid, DOWN, buff=0.25)
         moral = label(r"so no first-order sentence says `even length': \ 8 and 9 agree on every sentence of depth 3, "
                       r"$2^k$ and $2^k + 1$ at depth $k$", font_size=22, color=BAD).to_edge(DOWN, buff=0.35)
         with self.voiceover(

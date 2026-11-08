@@ -29,7 +29,7 @@ branching time built (the Peircean and Ockhamist verdicts on the sea battle). Re
 perception of God, Schellenberg's hiddenness argument, and religious disagreement. Udayana's Nyāya proofs,
 Dharmakīrti's dilemma for a permanent creator (checked for consistency), Avicenna's Necessary Existent, and the Dao.
 
-Every number on screen is computed by the Reasoner's new module `explainer/philosophy/reasoner/theism.py` (with
+The worked model results are computed by the Reasoner's new module `explainer/philosophy/reasoner/theism.py` (with
 `prop` for the consistency checks), tested in `tests/philosophy/test_theism.py` and cached by
 [`compute.py`](compute.py).
 

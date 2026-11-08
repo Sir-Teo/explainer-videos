@@ -113,7 +113,7 @@ class Soundness(VoiceoverScene):
     def unsound(self):
         u = load("soundness")["unsound"]
         am = ArgumentMap(["A -> B", "B"], "A", width=4.4, font_size=40, center=[-3.2, 0.8, 0])
-        v = am.verdict(font_size=28)
+        v = am.verdict(font_size=28).next_to(am, DOWN, buff=0.4).align_to(am, LEFT)
         tag = label(r"a rule we must not add", font_size=28, color=BAD).next_to(am, UP, buff=0.4)
         cm = u["countermodel"]
         assert not u["sound"] and cm == {"A": False, "B": True}
