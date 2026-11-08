@@ -169,7 +169,7 @@ class Bandits(VoiceoverScene):
         gl = label(r"guardrails: \ must not get worse", font_size=18, color=NO).next_to(band, DOWN, buff=0.1)
         ill = note(r"illustrative metrics", font_size=17).to_corner(UR, buff=0.3).shift(DOWN * 0.5)
         foot = wrapped_label(r"ship when the overall evaluation criterion improves \ (Kohavi) \ and no guardrail "
-                             r"regresses; \ latency is a guardrail because Part 37 showed what it costs", 12.4,
+                             r"regresses; \ latency is a guardrail because Part 42 showed what it costs", 12.4,
                              font_size=20, color=WHITE).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "An experiment must know what better means. <bookmark mark='a'/> Companies choose a north-star "
