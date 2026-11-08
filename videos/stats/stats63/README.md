@@ -26,7 +26,7 @@ python tools/build.py stats63 -q l
 python tools/lecture_length.py stats63 --floor 50
 ```
 
-All 14 chapters reviewed, all 12 inputs regenerated and **20 checks pass** (14 local, six legacy). Estimated English narration: **69.9 minutes**. [Evidence](../../../docs/qa/evidence/stats63-polish-20261107/README.md). Sampled English visual review is pending; Chinese narration/captions, continuous listening/playback and final masters remain open.
+All 14 chapters reviewed, all 12 inputs regenerated and **20 checks pass** (14 local, six legacy). Estimated English narration: **69.9 minutes**. [Evidence](../../../docs/qa/evidence/stats63-polish-20261107/README.md). The recorded English sampled visual checkpoint is complete; Chinese narration/captions, continuous listening/playback and final masters remain open.
 
 ## Sources
 
