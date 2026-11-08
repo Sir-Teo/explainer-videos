@@ -204,7 +204,7 @@ class Ddc(VoiceoverScene):
         with self.voiceover(
             "Now the binary from the last chapter. <bookmark mark='a'/> Stage one: the suspect, compiling the clean "
             "source, inserts its trojan, and gives eleven hundred and nineteen bytes; the independent compiler gives "
-            "an honest four hundred and ninety-eight. <bookmark mark='b'/> Stage two: the suspect's line reproduces "
+            "an honest four hundred and ninety-eight. <bookmark mark='b'/> Stage two: the suspect's lineage reproduces "
             "the trojan again, while X, an honest compiler built by an honest compiler, produces the honest "
             "binary. <bookmark mark='c'/> They differ. <bookmark mark='d'/> Trojan detected. The trojan could fool "
             "any amount of reading, but it cannot be in a compiler it never touched."
