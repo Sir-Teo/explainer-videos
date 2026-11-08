@@ -28,6 +28,9 @@ class AI3QAIntegrityTests(unittest.TestCase):
     def run_worker_fixture(self, directory, existing):
         """Run the real worker through a fake scene that reads via common.load."""
         from explainer.voiceover import VoiceoverScene
+        from manim.mobject.text import tex_mobject
+
+        original_tex_to_svg = tex_mobject.tex_to_svg_file
 
         events = []
 
@@ -76,6 +79,7 @@ class AI3QAIntegrityTests(unittest.TestCase):
                     patch.object(VoiceoverScene, "wait", VoiceoverScene.wait), patch.dict(os.environ), \
                     contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
                 code = qa_series.worker(args)
+                self.assertIs(tex_mobject.tex_to_svg_file, original_tex_to_svg)
             result = json.loads((Path(directory) / "out/ai3/en/Fixture/result.json").read_text())
         importlib.reload(common)
         return code, result, events

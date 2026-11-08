@@ -5,6 +5,7 @@
     python tools/qa_report.py stats1
 """
 
+import argparse
 import html
 import hashlib
 import importlib
@@ -17,6 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from tools.make import all_videos  # noqa: E402
+from explainer.paths import video_package  # noqa: E402
 from tools.qa_series import OUT, check_status, fingerprint, inputs_current, preflight_passed, runtime_completed  # noqa: E402
 
 
@@ -40,6 +42,23 @@ def audio_checks_completed(audio):
             and not any(line.get("issues") or line.get("asr_review_leads") for line in lines))
 
 
+def visual_evidence_reviewed(folder, proof, motion=False):
+    """Bind a sampled-frame review to current image bytes and capture membership."""
+    sheet = folder / ("motion_sheet.png" if motion else "sheet.png")
+    if sheet.exists() and proof.get("sheet_sha256") == hashlib.sha256(sheet.read_bytes()).hexdigest():
+        return True
+    if motion:
+        return False
+    sampled = proof.get("frame_sha256", {})
+    result = folder / "result.json"
+    if not sampled or not result.exists():
+        return False
+    current = {f["file"] for f in json.loads(result.read_text()).get("frames", [])}
+    return all(name in current and (folder / name).is_file()
+               and hashlib.sha256((folder / name).read_bytes()).hexdigest() == digest
+               for name, digest in sampled.items())
+
+
 def main(video=None, series="ai"):
     from explainer.paths import video_dir, video_package
 
@@ -53,8 +72,8 @@ def main(video=None, series="ai"):
     def sheet_reviewed(video, lang, scene, motion=False):
         kind = "motion" if motion else "endpoints"
         proof = proofs.get(f"{video}/{lang}/{scene}/{kind}", {})
-        image = OUT / video / lang / (scene + ("_motion" if motion else "")) / ("motion_sheet.png" if motion else "sheet.png")
-        return image.exists() and proof.get("sheet_sha256") == hashlib.sha256(image.read_bytes()).hexdigest()
+        folder = OUT / video / lang / (scene + ("_motion" if motion else ""))
+        return visual_evidence_reviewed(folder, proof, motion)
     blocks, checked, total, issues = [], 0, 0, 0
     visual_checked, motion_checked, motion_clean, audio_checked, audio_clean = 0, 0, 0, 0, 0
     for video in ([video] if video else all_videos(series)):
@@ -157,10 +176,11 @@ summary{padding:18px;cursor:pointer;font-weight:650}table{border-collapse:collap
 td,th{text-align:left;padding:12px;border-top:1px solid #334155;vertical-align:top}small{display:block;color:#9baabc}
 a{color:#8ecaff}.good{color:#9ad886}.pending{color:#e5ba75}th{color:#9baabc}
 </style>'''
-    page += f'<h1>{html.escape(series.upper())} series QA evidence</h1>'
+    display = 'AI' if series == 'ai' else series.title()
+    page += f'<h1>{html.escape(display)} series QA evidence</h1>'
     page += (f'<p>Endpoint preflight: {checked} of {total} language/chapter cases attempted; '
              f'{total - issues} current cases without automated warnings; {issues} untested or needing follow-up.</p>'
-             f'<p>Sampled-frame review: {visual_checked}/{total} current endpoint sheets. '
+             f'<p>Sampled-frame review: {visual_checked}/{total} current endpoint cases. '
              f'Silent motion renders: {motion_checked}/{total} attempted, {motion_clean} current without automated warnings. '
              f'Audio checks: {audio_checked}/{total} attempted, {audio_clean} current and complete without automated issues or ASR leads. '
              'Full playback review, listening, and production approval remain pending. Expand a part for its evidence.</p>'
@@ -168,7 +188,7 @@ a{color:#8ecaff}.good{color:#9ad886}.pending{color:#e5ba75}th{color:#9baabc}
              'Narrated playback and final-resolution masters require separate verification. '
              'Earlier-source records remain visible and are marked explicitly.</p>')
     legacy_path = OUT / "legacy_exports.json"
-    if legacy_path.exists():
+    if series == "ai" and legacy_path.exists():
         exports = json.loads(legacy_path.read_text())
         page += (f'<details><summary>{len(exports)} legacy 4K exports — rebuild required</summary>'
                  '<p>The migration renamed files. Embedded titles and chapter coverage below belong to earlier '
@@ -180,7 +200,7 @@ a{color:#8ecaff}.good{color:#9ad886}.pending{color:#e5ba75}th{color:#9baabc}
                      f'<td>{export["embedded_chapters"]} / {export["current_manifest_chapters"]}</td></tr>')
         page += '</table></details>'
     audio_path = OUT / "audio_cache_review.json"
-    if audio_path.exists():
+    if series == "ai" and audio_path.exists():
         audio = json.loads(audio_path.read_text())
         lines = sum(p["lines"] for p in audio["parts"].values())
         cached = sum(p["cached"] for p in audio["parts"].values())
@@ -194,8 +214,6 @@ a{color:#8ecaff}.good{color:#9ad886}.pending{color:#e5ba75}th{color:#9baabc}
 
 
 if __name__ == "__main__":
-    import argparse
-
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("video", nargs="?")
     parser.add_argument("--series", default="ai")

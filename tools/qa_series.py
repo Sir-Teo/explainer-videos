@@ -316,6 +316,33 @@ def worker(args):
         local_cache.load = load_local
 
     start = time.monotonic()
+    # Reuse complete, content-addressed SVGs without sharing TeX's scratch
+    # directory: Manim's cleanup removes other compilations' temporary files.
+    tex_pool = OUT / "tex_pool" / args.lang
+    tex_pool.mkdir(parents=True, exist_ok=True)
+    tex_dir = folder / "Tex"
+    tex_dir.mkdir(parents=True, exist_ok=True)
+    from manim.mobject.text import tex_mobject
+    from manim.utils.tex_file_writing import generate_tex_file
+
+    original_tex_to_svg = tex_mobject.tex_to_svg_file
+
+    def pooled_tex_to_svg(expression, environment=None, tex_template=None):
+        svg = generate_tex_file(expression, environment, tex_template).with_suffix(".svg")
+        pooled = tex_pool / svg.name
+        if not svg.exists() and pooled.exists():
+            try:
+                os.link(pooled, svg)
+            except FileExistsError:
+                pass
+        output = original_tex_to_svg(expression, environment, tex_template)
+        try:
+            os.link(output, pooled)
+        except FileExistsError:
+            pass
+        return output
+
+    tex_mobject.tex_to_svg_file = pooled_tex_to_svg
     try:
         manifest = importlib.import_module(f"{video_package(args.video)}.manifest")
         module = next(m for m, cls, _ in manifest.SCENES if cls == args.worker)
@@ -402,7 +429,16 @@ def worker(args):
                               "missing-data" if "QA needs computed data:" in str(exc) else "failed"),
                       error=f"{type(exc).__name__}: {exc}", traceback=traceback.format_exc())
         traceback.print_exc()
+    finally:
+        # Keep the pool scoped to this worker, including failed renders. Callers
+        # may run another worker or typeset text after its output is removed.
+        tex_mobject.tex_to_svg_file = original_tex_to_svg
     result["elapsed"] = round(time.monotonic() - start, 2)
+    for svg in tex_dir.glob("*.svg"):
+        try:
+            os.link(svg, tex_pool / svg.name)
+        except FileExistsError:
+            pass
     if runtime_completed(result) and result["fingerprint"] != fingerprint(args.video):
         result["warnings"].append({"kind": "source-changed-during-render"})
     if runtime_completed(result) and not inputs_current(result):

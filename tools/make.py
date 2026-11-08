@@ -42,7 +42,7 @@ from explainer.paths import video_dir, video_package  # noqa: E402
 
 VIDEOS = ROOT / "videos"
 LOGS = ROOT / "renders" / "make"
-BILINGUAL = {"ai", "analysis"}  # series with a Chinese edition (and Qwen3-TTS narration)
+BILINGUAL = {"ai", "analysis", "philosophy"}  # series with a Chinese edition (and Qwen3-TTS narration)
 
 # Raw files consumed without a load() call are invisible to the import scanner.
 # Part 6 reads the five downloaded novels before its first numerical item.

@@ -57,11 +57,18 @@ def _table() -> dict:
 
 
 def _scene() -> str:
-    for fr in inspect.stack()[2:12]:
-        obj = fr.frame.f_locals.get("self")
-        if isinstance(obj, Scene):
-            return type(obj).__name__
-    return ""
+    frame = inspect.currentframe()
+    try:
+        for _ in range(16):
+            frame = frame.f_back
+            if frame is None:
+                break
+            obj = frame.f_locals.get("self")
+            if isinstance(obj, Scene):
+                return type(obj).__name__
+        return ""
+    finally:
+        del frame
 
 
 _TABLE: dict | None = None
@@ -98,8 +105,14 @@ def _by_numbers() -> dict:
     if _BY_NUMBERS is None:
         _BY_NUMBERS = {}
         for en, zh in (_TABLE or {}).get("strings", {}).items():
-            ne = _NUM.findall(en)
-            nz = _NUM.findall(zh)
+            def canonical(number):
+                plain = number.replace("{,}", ",")
+                if re.fullmatch(r"-?\d{1,3}(?:,\d{3})+(?:\.\d+)?", plain):
+                    return plain.replace(",", "")
+                return plain
+
+            ne = [canonical(n) for n in _NUM.findall(en)]
+            nz = [canonical(n) for n in _NUM.findall(zh)]
             if not ne:
                 continue
             if nz == ne:
@@ -171,9 +184,20 @@ def install(base_template) -> None:
                            r'\xeCJKDeclareCharClass{CJK}{"0391 -> "03A9, "03B1 -> "03C9}')
 
     def record(s, kind, math_mode):
-        for fr in inspect.stack()[2:8]:  # wrapped_label measures partial lines: keep only its whole text
-            if fr.function == "wrapped_label" and s != fr.frame.f_locals.get("text"):
-                return
+        # Width probes are not on-screen captions. Walk frames without building
+        # source-code contexts for every glyph and every intermediate prefix.
+        frame = inspect.currentframe()
+        try:
+            for _ in range(16):
+                frame = frame.f_back
+                if frame is None:
+                    break
+                if frame.f_code.co_name == "_wrapped_lines":
+                    return
+                if frame.f_code.co_name == "wrapped_label" and s != frame.f_locals.get("text"):
+                    return
+        finally:
+            del frame
         with open(COLLECT, "a") as f:
             f.write(json.dumps({"s": s, "kind": kind, "scene": _scene(),
                                 "needs": needs_translation(s, math_mode)}, ensure_ascii=False) + "\n")

@@ -360,15 +360,7 @@ def wrapped_label(text: str, max_width: float, font_size=22, color=WHITE) -> Tex
     if t.width <= max_width:
         return t
     words = _tex_words(text)
-    lines, cur = [], words[0][1]
-    for sep, w in words[1:]:
-        trial = cur + sep + w
-        if label(trial, font_size=font_size).width <= max_width:
-            cur = trial
-        else:
-            lines.append(cur)
-            cur = w
-    lines.append(cur)
+    lines = _wrapped_lines(words, max_width, lambda s: label(s, font_size=font_size).width)
     if len(lines) == 1:
         t.width = max_width
         return t
@@ -376,6 +368,50 @@ def wrapped_label(text: str, max_width: float, font_size=22, color=WHITE) -> Tex
     if t.width > max_width:
         t.width = max_width
     return t
+
+
+def _wrapped_lines(words, max_width, measure):
+    """Greedy word wrapping with logarithmic width probes per line.
+
+    Width grows as words are appended to ordinary prose. Searching for the last
+    fitting prefix avoids compiling a TeX document for every Chinese character.
+    An oversized individual word remains intact, as in the original wrapper.
+    """
+    lines, start = [], 0
+    # For plain CJK paragraphs, estimate with one ideograph's advance, then
+    # measure both sides of the proposed break. This still chooses the exact
+    # greedy break, including proportional punctuation, with fewer XeTeX runs.
+    plain_cjk = bool(words) and all(
+        all("\u4e00" <= c <= "\u9fff" or "\u3000" <= c <= "\u303f" or
+            "\uff00" <= c <= "\uffef" or c in "‘’“”…" for c in word)
+        for _, word in words)
+    advance = measure("国国") - measure("国") if plain_cjk else 0
+    while start < len(words):
+        def text(end):
+            return words[start][1] + "".join(sep + word for sep, word in words[start + 1:end])
+
+        lo, hi = start + 1, len(words)
+        if advance > 0:
+            count = len(words[start][1])
+            while lo < len(words) and count + len(words[lo][0] + words[lo][1]) <= max_width / advance:
+                count += len(words[lo][0] + words[lo][1])
+                lo += 1
+            while lo > start + 1 and measure(text(lo)) > max_width:
+                lo -= 1
+            while lo < len(words) and measure(text(lo + 1)) <= max_width:
+                lo += 1
+            lines.append(text(lo))
+            start = lo
+            continue
+        while lo < hi:
+            mid = (lo + hi + 1) // 2
+            if measure(text(mid)) <= max_width:
+                lo = mid
+            else:
+                hi = mid - 1
+        lines.append(text(lo))
+        start = lo
+    return lines
 
 
 def museum_card(name: str, who: str, breaks: str, where: str = "", width=4.6, font_size=22) -> VGroup:
