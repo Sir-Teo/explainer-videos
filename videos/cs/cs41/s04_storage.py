@@ -74,7 +74,7 @@ class Storage(VoiceoverScene):
                           r"everywhere at once; \ costs: \ custom tooling, \ builds that must be incremental", 12.4,
                           font_size=22, color=YES),
             wrapped_label(r"\textbf{polyrepos}: \ independent histories and releases, \ at the price of versioning "
-                          r"between them \ --- \ Chapter 6's dependency problem", 12.4, font_size=22, color=DATA),
+                          r"between them \ --- \ Chapter 5's dependency problem", 12.4, font_size=22, color=DATA),
             wrapped_label(r"git at scale: \ shallow clones \ (recent history only), \ partial clones \ (blobs on "
                           r"demand), \ sparse checkouts \ (some directories)", 12.4, font_size=22, color=LAM),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.38).next_to(head, DOWN, buff=0.55)
