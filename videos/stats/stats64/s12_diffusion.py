@@ -18,6 +18,10 @@ class Diffusion(LectureMixin, VoiceoverScene):
         self.rates()
 
     def idea(self):
+        head = label(r"Diffusion learns the score of a noisy data distribution", font_size=36, color=WHITE).move_to([0, 3.4, 0])
+        if head.width > 12.5:
+            head.width = 12.5
+        self.add(head)
         self.lad_voiceover(
             "<bookmark mark='a'/> A diffusion model generates images by starting from noise and removing it step by step. "
             "<bookmark mark='b'/> Forward: add Gaussian noise to a data point, more and more, until nothing of it is left. "
@@ -33,6 +37,10 @@ class Diffusion(LectureMixin, VoiceoverScene):
             colors=[(2, JUDGEC)])
 
     def tweedie_(self):
+        head = label(r"Tweedie's formula: the Bayes denoiser behind diffusion", font_size=36, color=WHITE).move_to([0, 3.4, 0])
+        if head.width > 12.5:
+            head.width = 12.5
+        self.add(head)
         self.lad_voiceover(
             "<bookmark mark='a'/> The link to statistics is Part twenty-five's Tweedie formula. <bookmark mark='b'/> If y is x plus normal noise of variance sigma squared, the posterior mean of x given y is y plus sigma squared times the score of y's marginal density. <bookmark mark='c'/> So learning the score is learning the Bayes denoiser, and the training loss, denoising score matching, is the mean squared error of a denoiser, Part forty-five's Bayes risk. <bookmark mark='d'/> Robbins's empirical Bayes estimated the same quantity from data in 1956, in the empirical-Bayes estimation tradition. Robbins's 1956 work was not the later baseball-data example.",
             [(r"y", r"=", r"x + \sigma Z", 40),
