@@ -81,7 +81,7 @@ class ADMM(VoiceoverScene):
         y = np.asarray(d["y"])
         t = np.arange(len(y))
         A = axes([0, len(y)], [-2.5, 3.5], x_length=9.6, y_length=4.4, xlabel=r"position", ylabel=r"signal",
-                 xticks=[0, 30, 60, 90, 120], yticks=[-2, 0, 2], center=[-0.8, 0.5, 0])
+                 xticks=[0, 30, 60, 90, 120], yticks=[-2, 0, 2], center=[-0.8, 0.7, 0])
         ax = A.ax
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.035, color=GREY_B) for a, b in zip(t, y)])
         truth = polyline(ax, t, d["truth"], TRUE, 2.5)
@@ -93,7 +93,7 @@ class ADMM(VoiceoverScene):
             label(r"red: \ $\lambda = 0.5$: \ too many jumps", font_size=22, color=GRAD),
             label(r"gold: \ $\lambda = 3$: \ the broad levels, \ with shrinkage and residual small jumps", font_size=22, color=PATH),
             label(r"blue: \ $\lambda = 20$: \ nearly flat", font_size=22, color=NEWT),
-        ), 12.0, 0.2, [0, -2.6, 0])
+        ), 12.0, 0.14, [0, -2.9, 0])
         with self.voiceover(
             "<bookmark mark='a'/> Here's a signal with four levels and noise, a hundred and twenty points, simulated."
             " <bookmark mark='b'/> With a small lambda the fused lasso follows the noise, with many small jumps. "
