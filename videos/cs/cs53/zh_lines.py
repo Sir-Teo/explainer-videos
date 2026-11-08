@@ -192,7 +192,7 @@ ZH = {
     "In 1994 Daniel Simon found a problem with an exponential":
         "1994年，Daniel Simon 找到了一个有指数级差距的问题。<bookmark mark='a'/>一个定义在 n 位字符串上的函数，被承诺以一种特殊的方式二对一：两个输入发生碰撞，"
         "恰好当它们按异或相差一个隐藏字符串 s。求 s。<bookmark mark='b'/>这是三位时的八个输入。每种颜色是一对：x 和 x 异或 s。<bookmark mark='c'/>在经典计算里，"
-        "唯一的线索是碰撞，即两个输入有相同的输出；它们的异或就是 s。q 次查询大约有 q 平方除以2个配对，每一对是碰撞的概率是2的 n 减1次方分之一。<bookmark mark='d'/>所以第一次碰撞大约需要"
+        "唯一的线索是碰撞，即两个输入有相同的输出；它们的异或就是 s。q 次查询大约有 q 平方除以2个配对，每一对是碰撞的概率是2的 n 次方减1分之一。<bookmark mark='d'/>所以第一次碰撞大约需要"
         "2的二分之 n 次方次查询。这就是第17部分的生日界，而 Simon 证明，没有任何经典算法，哪怕是随机化的，能做得好很多。",
     "Simon's circuit has two registers. <bookmark mark='a'/>":
         "Simon 的电路有两个寄存器。<bookmark mark='a'/>Hadamard 把第一个寄存器铺开到每一个输入上，一次查询把 f(x) 写进第二个寄存器。"

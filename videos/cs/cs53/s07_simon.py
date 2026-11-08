@@ -197,7 +197,7 @@ class Simon(VoiceoverScene):
             "a hidden string s, under exclusive-or. Find s. <bookmark mark='b'/> Here are the eight inputs for three "
             "bits. Each colour is a pair, x and x exclusive-or s. <bookmark mark='c'/> Classically the only clue is a "
             "collision, two inputs with the same output; their exclusive-or is s. With q queries there are about q "
-            "squared over two pairs, each a collision with probability one in two to the n minus one. "
+            "squared over two pairs, each a collision with probability one in one less than two to the n. "
             "<bookmark mark='d'/> So the first collision needs about two to the n over two queries. That is Part "
             "17's birthday bound, and Simon proved that no classical algorithm, even a randomized one, does much "
             "better."

@@ -202,7 +202,7 @@ class Bqp(VoiceoverScene):
         notes = VGroup(
             wrapped_label(r"factoring and discrete log: \ in BQP and in NP, \ not believed NP-complete", 5.6,
                           font_size=19, color=YES),
-            wrapped_label(rf"brute force gains only a square root: \ $2^{{16}} = {gs['N']:,}$ assignments, \ "
+            wrapped_label(rf"brute force gains only a square root: \ $2^{{16}} = {format(gs['N'], ',').replace(',', '{,}')}$ assignments, \ "
                           rf"{gs['iterations']} Grover rounds \ (chapter 10); \ relative to a random oracle, \ "
                           r"$\mathrm{NP} \not\subseteq \mathrm{BQP}$ \ (Bennett et al., \ 1997)", 5.6, font_size=19,
                           color=NO),
