@@ -174,7 +174,7 @@ _TENS = dict(zip("twenty thirty forty fifty sixty seventy eighty ninety".split()
 def spoken_int(v: str) -> int | None:
     """A whole number spelled out in English ('one hundred and ten', 'twenty-three thousand'), or None."""
     words = v.lower().replace("-", " ").replace(",", " ").split()
-    if not words or any(w not in _ONES and w not in _TENS and w not in ("hundred", "thousand", "million", "and")
+    if not words or any(w not in _ONES and w not in _TENS and w not in ("hundred", "thousand", "million", "billion", "and")
                         for w in words) or words[0] == "and" or words[-1] == "and":
         return None
     total = part = 0
@@ -185,10 +185,25 @@ def spoken_int(v: str) -> int | None:
             part += _TENS[w]
         elif w == "hundred":
             part = (part or 1) * 100
-        elif w in ("thousand", "million"):
-            total += (part or 1) * (1000 if w == "thousand" else 1_000_000)
+        elif w in ("thousand", "million", "billion"):
+            total += (part or 1) * {"thousand": 10 ** 3, "million": 10 ** 6, "billion": 10 ** 9}[w]
             part = 0
     return total + part
+
+
+def spoken_number(v: str) -> str | None:
+    """A number spelled out in English, whole ('one hundred and ten') or with spoken decimals ('two point eight
+    five'), as digits; None if ``v`` is anything else."""
+    whole, _, frac = v.partition(" point ")
+    n = spoken_int(whole)
+    if n is None:
+        return None
+    if not frac:
+        return str(n)
+    digits = frac.split()
+    if not digits or any(d not in _ONES[:10] for d in digits):
+        return None
+    return f"{n}." + "".join(str(_ONES.index(d)) for d in digits)
 
 
 class Translator:
@@ -205,9 +220,9 @@ class Translator:
             z = self(v, depth + 1)
             if z is not None:
                 return z
-        n = spoken_int(v)
+        n = spoken_number(v)
         if n is not None:
-            return str(n)                                  # a number spelled out for the English voice: digits in Chinese
+            return n                                  # a number spelled out for the English voice: digits in Chinese
         return v.replace(",", "") if re.fullmatch(r"-?\d{1,3}(,\d{3})+(\.\d+)?", v) else v
 
     def __call__(self, en: str, depth: int = 0) -> str | None:
