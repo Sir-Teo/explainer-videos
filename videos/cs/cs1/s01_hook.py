@@ -40,6 +40,7 @@ class Hook(VoiceoverScene):
             self.play(FadeIn(rule[0]), FadeIn(rule[1]))
             vo.wait_until("b")
             self.play(FadeIn(rule[2]))
+        subtraction = None
         with self.voiceover(
             "Twenty-four and eighteen. The left pile is bigger, so take eighteen pebbles from it. <bookmark mark='a'/> "
             "Six and eighteen: now the right is bigger; take six from it. <bookmark mark='b'/> Six and twelve: take six "
@@ -58,11 +59,17 @@ class Hook(VoiceoverScene):
                     tgt = cr
                     new = b1
                 moved = VGroup(*gone)
+                # Keep the arithmetic in the gap between the piles, so the
+                # viewer can connect each physical removal to its number.
+                equation = MathTex(rf"{max(a0, b0)} - {min(a0, b0)} = {new}",
+                                   font_size=30, color=HEAD).move_to(DOWN * 1.8)
+                reveal = FadeIn(equation) if subtraction is None else ReplacementTransform(subtraction, equation)
+                self.play(reveal, run_time=0.4)
+                subtraction = equation
                 self.play(moved.animate.set_color(HEAD), run_time=0.4)
                 self.play(LaggedStart(*[FadeOut(q, shift=DOWN * 1.4) for q in moved], lag_ratio=0.02),
                           ChangeDecimalToValue(tgt, new), run_time=1.2)
-                if mk != "c":
-                    vo.wait_until(mk)
+                vo.wait_until(mk)
             self.play(Indicate(cl, color=HEAD), Indicate(cr, color=HEAD))
         ans = label(r"$6 = \gcd(24, 18)$", font_size=50, color=YES).move_to(UP * 2.6)
         euclid = note(r"Euclid, \textit{Elements}, Book VII, Proposition 2 \ (about 300 BC)", font_size=24)
@@ -73,7 +80,7 @@ class Hook(VoiceoverScene):
             "down about twenty-three hundred years ago. And the player needed no idea what a divisor is. They only "
             "had to follow the rule."
         ) as vo:
-            self.play(FadeOut(rule))
+            self.play(FadeOut(rule), FadeOut(subtraction))
             vo.wait_until("a")
             self.play(Write(ans))
             vo.wait_until("b")
