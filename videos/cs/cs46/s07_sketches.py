@@ -217,7 +217,7 @@ class Sketches(VoiceoverScene):
             "Zohar Karnin, Kevin Lang and Edo Liberty, keeps levels of samples, each level's items standing for "
             f"twice as many values as the level below. Over {q['n']:,} simulated latencies, keeping {r0['stored']} "
             "items, its median is close. <bookmark mark='b'/> But at the far tail its ninety-nine point nine "
-            f"percentile is {r0['estimates']['0.999']:.0f} against a true {ex['0.999']:.0f}: half a per cent wrong in "
+            f"percentile is {r0['estimates']['0.999']:.0f} against a true {ex['0.999']:.0f}: less than one per cent wrong in "
             "rank, yet more than twice too low in value. <bookmark mark='c'/> Ted Dunning and Otmar Ertl's t-digest "
             "attacks the tail directly, with clusters that are large near the median and tiny near the extremes. "
             "KLL guarantees rank; t-digest is accurate where latency questions are asked."

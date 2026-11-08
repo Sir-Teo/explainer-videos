@@ -207,7 +207,7 @@ ZH = {
     'f"Latency is judged by its median and its':
         "评判延迟，看的是它的中位数和第99百分位数。<bookmark mark='a'/>Zohar Karnin、Kevin Lang 和 Edo Liberty 的 KLL 草图保留若干层样本，每一层的元素所代表的值，"
         "是下一层的两倍。在{q['n']:,}个模拟的延迟上，只保留{r0['stored']}个元素，它的中位数就很接近。<bookmark mark='b'/>但在远端的尾部，"
-        "它的第99.9百分位数是{r0['estimates']['0.999']:.0f}，而真实值是{ex['0.999']:.0f}：按秩只错了百分之零点五，按值却不到真实值的一半。"
+        "它的第99.9百分位数是{r0['estimates']['0.999']:.0f}，而真实值是{ex['0.999']:.0f}：按秩错得不到百分之一，按值却不到真实值的一半。"
         "<bookmark mark='c'/>Ted Dunning 和 Otmar Ertl 的 t-digest 直接对付尾部，它的簇在中位数附近很大，在两端极小。KLL 保证的是秩；"
         "t-digest 则在延迟问题所关心的地方准确。",
     "Joining two streams is harder than joining two tables,":

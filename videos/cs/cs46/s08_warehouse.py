@@ -8,7 +8,9 @@ from videos.cs.cs46.common import (BG, DATA, HEAD, KERN, LAM, NO, PART, YES, cod
 def table_card(title, fields, color, w=2.4):
     """A table drawn as a card: its name, then its columns (keys in the table's colour)."""
     t = label(title, font_size=20, color=color)
-    fs = VGroup(*[mono(f, size=16, color=color if f.endswith("_key") else WHITE) for f in fields])
+    from explainer.zh_text import verbatim
+    with verbatim():  # column names are identifiers: they stay as written in every language
+        fs = VGroup(*[mono(f, size=16, color=color if f.endswith("_key") else WHITE) for f in fields])
     fs.arrange(DOWN, aligned_edge=LEFT, buff=0.08)
     body = VGroup(t, fs).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
     r = RoundedRectangle(width=max(w, body.width + 0.4), height=body.height + 0.32, corner_radius=0.1,
