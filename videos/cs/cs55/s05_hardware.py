@@ -37,7 +37,7 @@ class Hardware(VoiceoverScene):
             cells.append(row)
         aggr, victim = (1, 3), 2
         tags = VGroup(label(r"aggressor", font_size=18, color=NO).next_to(cells[1][-1], RIGHT, buff=0.2),
-                      label(r"victim", font_size=18, color=HEAD).next_to(cells[2][-1], RIGHT, buff=0.2),
+                      label(r"victim row", font_size=18, color=HEAD).next_to(cells[2][-1], RIGHT, buff=0.2),
                       label(r"aggressor", font_size=18, color=NO).next_to(cells[3][-1], RIGHT, buff=0.2))
         notes = VGroup(
             wrapped_label(r"open two rows, \ again and again, \ as fast as you can", 5.0, font_size=19, color=GREY_A),

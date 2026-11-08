@@ -253,7 +253,7 @@ class Networks(VoiceoverScene):
         rng.shuffle(order2)
         cap = label(rf"the {others} other networks of Part 36's simulated internet", font_size=17,
                     color=GREY_B).next_to(dots, DOWN, buff=0.25)
-        sch = label(r"which dots is schematic; \ counts are simulated", font_size=16, color=GREY_B).next_to(
+        sch = label(r"which dots are drawn is schematic; \ counts are simulated", font_size=16, color=GREY_B).next_to(
             cap, DOWN, buff=0.08)
         steps = VGroup(
             wrapped_label(r"the owner announces \texttt{208.65.152.0/22}: \ everyone routes to it", 5.6,
@@ -262,7 +262,7 @@ class Networks(VoiceoverScene):
                           font_size=19, color=KERN),
             wrapped_label(rf"a stranger announces \texttt{{208.65.153.0/24}} inside it: \ longest prefix wins, \ "
                           rf"{sub} of {others}", 5.6, font_size=19, color=NO),
-            wrapped_label(rf"a quarter of networks drop routes their RPKI signatures contradict: \ {rov} of {others}",
+            wrapped_label(rf"a quarter of networks drop routes their RPKI signatures contradict: \ {rov} of {others} still fooled",
                           5.6, font_size=19, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).move_to([3.4, 0.35, 0])
         foot = label(r"the prefixes of Pakistan Telecom's 2008 YouTube hijack", font_size=17,
