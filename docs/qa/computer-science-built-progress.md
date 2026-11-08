@@ -1,12 +1,44 @@
 # Computer Science, Built — sequential polish
 
-Work on `computer-science-built`, one video at a time. Current video: **cs1,
-What Is a Computation?** Do not advance to cs2 yet. This ledger describes the new
-polish pass; the syllabus's earlier draft-preview claims are separate.
+Work on `computer-science-built`, one video at a time, with separate commits.
+Current video: **cs2, Proof and Counting**. CS1's source/preview polish checkpoint
+is complete at the scope below. Its production release gates remain open; this
+ledger does not treat sampled previews as listening or final-production approval.
+The syllabus's earlier draft-preview claims are separate.
 
-## Latest checkpoint, 8 November 2026 — semantic and motion repairs
+## Final CS1 preview checkpoint, 8 November 2026
 
-The current source has **34 clean endpoint cases: 17 English (320 states) and
+- 34 current endpoint cases pass with zero warnings: English 319 states and
+  Chinese 320 states. Every chapter's visual overview was inspected.
+- 34 current silent 480p15 motion previews: 17 English and 17 Chinese. All 1,360
+  sampled contact-sheet frames were inspected. Every movie decodes successfully:
+  117,504 frames total. English has zero warnings. Chinese has 16 zero-warning
+  cases and one reviewed Frontier transition alert.
+- The Chinese pass caught a seven-second heading-only hold before the million-
+  round data table. Show the table during its introduction. The remaining
+  two-second scanner alert spans the section fade and table reveal; the saved
+  12-frame sequence was inspected. Raw `needs-review` status remains intact.
+- All 113 English Kokoro `af_heart` narration blocks have current, completed
+  automated signal/alignment reports with zero issues, plus waveform hashes.
+- Complete English Hook/Algorithms narrated previews decode with audio and have
+  inspected 40-frame overviews. A real-speech scheduling replay checks 38
+  bookmark calls with none requested more than 250 ms late. Listening is pending.
+- Three focused Chinese 1080p15 clips have inspected contact sheets/native stills
+  and 2,030 decoded frames. All 195 selected temporal samples from the English
+  Euclid clip were reviewed as thumbnails across 25 sheets.
+- All 24 numerical data hashes remain unchanged. No simulator or math code was
+  changed; the earlier 22 passing tests remain linked evidence.
+
+[Final source-bound evidence](evidence/cs1-semantics-20261108/README.md).
+
+CS1 release work still open: continuous narrated audiovisual/listening review
+beyond the two English opening chapters, Chinese speech/listening approval, and
+native-resolution review of the whole video beyond focused pilots. No published
+or final-production video is claimed.
+
+## Earlier semantic checkpoint — `b9332b7b`
+
+That checkpoint had **34 clean endpoint cases: 17 English (320 states) and
 17 Chinese (321 states)**. Every chapter's contact-sheet overview was inspected,
 including the Chinese closing credits. All 17 source-current English silent
 motion previews have zero warnings and no blank/sparse runs of at least 1.5 s.
@@ -27,10 +59,9 @@ Additional repairs after the opening checkpoint:
 - Include Act XI's research parts in the tour and correct the stale Part 55
   ending reference. Translation source coverage is 113/113 blocks.
 
-All 24 numerical JSON/NPZ files retain their earlier hashes. Fifteen real English
-Kokoro utterances from Hook/Algorithms have current, completed automated audio
-reports with zero signal/alignment issues. Full listening and narrated playback
-are still open.
+At that checkpoint, all 24 numerical files retained their earlier hashes. Fifteen
+English Kokoro utterances had completed automated reports with zero issues. The
+final checkpoint above supersedes that bounded audio coverage.
 
 [Latest source-bound evidence](evidence/cs1-semantics-20261108/README.md).
 
@@ -60,28 +91,28 @@ Evidence, exact source/data hashes, reports and reproduction commands:
 
 ## Continue here
 
-1. Continue Chinese motion review and broader native-resolution checks. English
-   motion contact sheets were inspected for all 17 scenes; no continuous-playback
-   approval is claimed. The focused native Euclid decoder generated 195 samples,
-   whose exhaustive perceptual review remains open.
-2. Complete narrated synchronization and listening checks, retaining the exact
-   backend/voice and coverage. The existing Kokoro pilot covers only the English
-   pebble demonstration; no Qwen or Chinese listening approval is implied.
-3. Keep cs1's production gates open until those checks are complete, then advance
-   to cs2. The two source polish checkpoints preserve bounded QA evidence.
+1. Run cs2's numerical computations and existing counting tests; preserve their
+   evidence. Read its source and begin with the 15-puzzle opening.
+2. Review cs2's English/Chinese endpoints, then motion and educational accuracy.
+   Repair concrete defects and recheck affected evidence before committing.
+3. Keep release gates distinct from this source/preview polish pass. CS1's open
+   listening and native-production work remains listed above.
 
-Activate the existing toolchain first:
+Activate the existing toolchain first, then start cs2:
 
 ```bash
 source /workspace/environment/activate.sh
-.venv/bin/python tools/qa_series.py cs1 --lang en --cached-only --resume --timeout 900
-.venv/bin/python tools/qa_series.py cs1 --lang zh --cached-only --resume --timeout 900
-.venv/bin/python tools/qa_series.py cs1 --lang en --motion --cached-only --resume --timeout 900
-PYTHONPATH=. .venv/bin/python docs/qa/evidence/cs1-semantics-20261108/decode_movies.py
+.venv/bin/python -m videos.cs.cs2.compute
+.venv/bin/python -m unittest discover -s tests -p test_cs2_counting.py -q
+.venv/bin/python tools/qa_series.py cs2 --lang en --cached-only --resume --timeout 900
+.venv/bin/python tools/qa_series.py cs2 --lang zh --cached-only --resume --timeout 900
 ```
+
+Inspect endpoints before the full motion pass. CS1 reproduction commands remain
+in its linked evidence packet.
 
 The shell activation supplies the existing user-local `dvisvgm` and Chinese TeX
 resources. Without it the first render failed with a missing `dvisvgm`; that
 environment issue was resolved without changing project source.
 
-cs2–cs61 remain queued for this polish pass. No whole-video completion is claimed.
+cs2 is active; cs3–cs61 remain queued. No whole-course or production completion is claimed.

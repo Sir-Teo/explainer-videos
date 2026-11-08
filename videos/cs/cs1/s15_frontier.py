@@ -228,7 +228,6 @@ class Frontier(VoiceoverScene):
             "wiped out."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r) for r in first], lag_ratio=0.12), run_time=2.5)
             vo.wait_until("b")
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl))
