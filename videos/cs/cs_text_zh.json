@@ -40614,7 +40614,20 @@
     "https://api.bank.example/": "https://api.bank.example/",
     "' OR '1'='1": "' OR '1'='1",
     "279 B  d56462af": "279 B  d56462af",
-    "victim row": "受害行"
+    "victim row": "受害行",
+    "Compute the entropy of a 30-bit ASLR offset, \\ and the expected attempts with and without re-randomization.": "计算 30 位 ASLR 偏移的熵，\\ 以及有无重新随机化时的期望尝试次数。",
+    "Trace Lowe's attack on Needham--Schroeder, \\ and show why naming $B$ in message 2 stops it.": "追踪 Lowe 对 Needham--Schroeder 协议的攻击，\\ 并说明为什么在消息 2 中写入 $B$ 的名字就能挡住它。",
+    "Show that SQL with bound parameters cannot be injected, \\ by an argument about the parser.": "证明使用绑定参数的 SQL 无法被注入，\\ 论证依据解析器的行为。",
+    "\\textit{Build.} \\ Trojan our compiler in a new way, \\ and show diverse double-compiling still detects it.": "\\textit{动手。} \\ 用一种新的方式给我们的编译器植入木马，\\ 并说明多样化双重编译仍能检测到它。",
+    "$\\bigstar$ \\textit{Research.} \\ A provably correct, \\ reproducible stack from an auditable seed.": "$\\bigstar$ \\textit{研究。} \\ 从一个可审计的种子出发，\\ 构建可证明正确、可重现的软件栈。",
+    "Anderson, \\ \\textit{Security Engineering} \\ (3rd ed.); \\ Bishop, \\ \\textit{Computer Security}": "Anderson，\\ \\textit{Security Engineering} \\ （第3版）；\\ Bishop，\\ \\textit{Computer Security}",
+    "Abelson and Sussman; \\ Bryant and O'Hallaron; \\ Hennessy and Patterson; \\ Sipser; \\ CLRS": "Abelson 和 Sussman；\\ Bryant 和 O'Hallaron；\\ Hennessy 和 Patterson；\\ Sipser；\\ CLRS",
+    "Thompson \\ (1984); \\ Wheeler \\ (2009); \\ Saltzer and Schroeder \\ (1975)": "Thompson \\ （1984）；\\ Wheeler \\ （2009）；\\ Saltzer 和 Schroeder \\ （1975）",
+    "Shacham \\ (2007); \\ Kocher et al. \\ (2019); \\ Lowe \\ (1996)": "Shacham \\ （2007）；\\ Kocher 等 \\ （2019）；\\ Lowe \\ （1996）",
+    "Lampson \\ (1974); \\ Harrison, \\ Ruzzo and Ullman \\ (1976)": "Lampson \\ （1974）；\\ Harrison，\\ Ruzzo 和 Ullman \\ （1976）",
+    "Szekeres et al. \\ (2013); \\ Jung et al. \\ (2018)": "Szekeres 等 \\ （2013）；\\ Jung 等 \\ （2018）",
+    "Next: \\ Act XI, \\ the research frontier": "下一次：\\ 第十一幕，\\ 研究前沿",
+    "narration: \\\\ Kokoro-82M": "旁白：\\ Kokoro-82M"
   },
   "phrases": {},
   "patterns": [
