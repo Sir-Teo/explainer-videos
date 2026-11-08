@@ -159,7 +159,7 @@ class Serving(VoiceoverScene):
         curve = ax.plot(lambda n: 1 - 0.99 ** n, x_range=[0, 100], color=NO, stroke_width=3)
         n = ValueTracker(1)
         dot = always_redraw(lambda: Dot(ax.c2p(n.get_value(), 1 - 0.99 ** n.get_value()), radius=0.08, color=HEAD))
-        read = always_redraw(lambda: label(rf"{n.get_value():.0f} servers: \ "
+        read = always_redraw(lambda: label(rf"{n.get_value():.0f} server{'' if round(n.get_value()) == 1 else 's'}: \ "
                                            rf"{100 * (1 - 0.99 ** n.get_value()):.0f}\% slow", font_size=20,
                                            color=HEAD).move_to(ax.c2p(4, 0.92), aligned_edge=LEFT))
         notes = VGroup(

@@ -264,7 +264,7 @@ class Compression(VoiceoverScene):
             xc = x0 + (q + 0.5) * M * bw
             masses.add(label(rf"$q = {q}$: \ {m:.2f}", font_size=18, color=(DATA, LAM, KERN)[q]).move_to(
                 [xc, base_y + h0 * (1 - p) ** (q * M) + 0.35, 0]))
-        cap = wrapped_label(rf"gaps of \texttt{{whale}} if each passage holds it independently, \ $p = {f}/{N:,}$, "
+        cap = wrapped_label(rf"gaps of \texttt{{whale}} if each passage holds it independently, \ $p = {f}/{format(N, ',').replace(',', '{,}')}$, "
                             rf"\ in blocks of $M = {M}$: \ each block holds about half the one before", 5.9,
                             font_size=18, color=GREY_A).next_to(axis, DOWN, buff=0.5).align_to(axis, LEFT)
         ill = note(r"the geometric model, \ not the measured gaps", font_size=17).next_to(cap, DOWN, buff=0.15)
