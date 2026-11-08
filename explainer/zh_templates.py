@@ -211,6 +211,37 @@ def spoken_number(v: str) -> str | None:
     return f"{n}." + "".join(str(_ONES.index(d)) for d in digits)
 
 
+_ORDINAL = {"first": "one", "second": "two", "third": "three", "fifth": "five", "eighth": "eight", "ninth": "nine",
+            "twelfth": "twelve"}
+_UNITS = {"milliseconds": "毫秒", "millisecond": "毫秒", "seconds": "秒", "second": "秒", "percent": "%"}
+
+
+def spoken_ordinal(v: str) -> str | None:
+    """An ordinal spelled out in English ('twenty-first', 'hundredth') as digits, or None."""
+    m = re.fullmatch(r"(.*?[ -]?)([a-z]+)", v)
+    if not m:
+        return None
+    head, last = m.groups()
+    if last in _ORDINAL:
+        base = _ORDINAL[last]
+    elif last.endswith("ieth"):
+        base = last[:-4] + "y"
+    elif last.endswith("th"):
+        base = last[:-2]
+    else:
+        return None
+    return spoken_number(head + base)
+
+
+def spoken_quantity(v: str) -> str | None:
+    """A spelled-out number with a unit ('nine hundred and seven milliseconds') in Chinese digits and unit."""
+    num, _, unit = v.rpartition(" ")
+    if unit not in _UNITS:
+        return None
+    n = spoken_number(num)
+    return None if n is None else n + _UNITS[unit]
+
+
 def spoken_list(v: str) -> str | None:
     """A comma-separated list of spelled-out numbers ('twelve, plus forty, plus six' or 'one, two and three') as
     digits joined the Chinese way (12加40加6, 1、2和3); None if ``v`` is anything else."""
@@ -251,8 +282,9 @@ class Translator:
             if z is not None:
                 return z
         n = spoken_number(v)
-        if n is None:
-            n = spoken_list(v)
+        for alt in (spoken_list, spoken_quantity, spoken_ordinal):
+            if n is None:
+                n = alt(v)
         if n is not None:
             return n                                  # a number spelled out for the English voice: digits in Chinese
         return v.replace(",", "") if re.fullmatch(r"-?\d{1,3}(,\d{3})+(\.\d+)?", v) else v
