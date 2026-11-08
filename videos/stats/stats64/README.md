@@ -28,7 +28,7 @@ python tools/build.py stats64 -q l
 python tools/lecture_length.py stats64 --floor 50
 ```
 
-All 15 chapters reviewed; all 15 inputs regenerated; **23 checks pass** (16 audited local, seven legacy). Initial numerical-check failures and successful refinements are retained in the [evidence](../../../docs/qa/evidence/stats64-polish-20261107/README.md). Narration estimate 64.0 minutes. English sampled visual review pending; Chinese narration/caption tables, continuous listening/playback and final masters remain open.
+All 15 chapters reviewed; all 15 inputs regenerated; **23 checks pass** (16 audited local, seven legacy). Initial numerical-check failures and successful refinements are retained in the [evidence](../../../docs/qa/evidence/stats64-polish-20261107/README.md). Narration estimate 64.0 minutes. English sampled visual review complete; Chinese narration/caption tables, continuous listening/playback and final masters remain open.
 
 ## Sources
 
