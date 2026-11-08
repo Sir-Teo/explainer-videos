@@ -130,8 +130,8 @@ class Reductions(VoiceoverScene):
         left = VGroup(label(r"about the text: \ decidable", font_size=30, color=YES),
                       label(r"does it contain a \texttt{while} loop? \\ is it under 100 lines?", font_size=26,
                             color=GREY_A)).arrange(DOWN, buff=0.25)
-        right = VGroup(label(r"about the behaviour: \ undecidable", font_size=30, color=LIMIT),
-                       label(r"does it ever loop forever? \\ does it ever print a password?", font_size=26,
+        right = VGroup(label(r"about the function: \ undecidable", font_size=30, color=LIMIT),
+                       label(r"halts on every input? \\ outputs only zero?", font_size=26,
                              color=GREY_A)).arrange(DOWN, buff=0.25)
         left.move_to(LEFT * 3.4 + DOWN * 0.6)
         right.move_to(RIGHT * 3.4 + DOWN * 0.6)
@@ -139,13 +139,13 @@ class Reductions(VoiceoverScene):
         foot = note(r"non-trivial: \ true of some programs and false of others; \ proved in Part 25", font_size=22)
         foot.to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "In 1953 Henry Rice proved the general law. <bookmark mark='a'/> Any question about what a program does, as "
-            "opposed to how it is written, is undecidable, unless the answer is the same for every program. "
+            "In 1953 Henry Rice proved the general law. <bookmark mark='a'/> Any non-trivial property of the partial "
+            "function a program computes is undecidable. Non-trivial means true of some computed functions and false "
+            "of others. "
             "<bookmark mark='b'/> Questions about the text are fine: does it contain a while loop, is it under a hundred "
-            "lines. <bookmark mark='c'/> Questions about behaviour are not: does it ever loop forever, does it ever "
-            "print a password. We prove Rice's theorem in Part 25."
+            "lines. <bookmark mark='c'/> Questions about the computed function are different: does it halt on every "
+            "input, and does it return zero whenever it halts? We prove Rice's theorem in Part 25."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(thm, shift=DOWN * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(left))
@@ -172,7 +172,6 @@ class Reductions(VoiceoverScene):
             "approximating, by restricting what programs may do, and by asking people to supply proofs, which is how "
             "Part 54 verifies software anyway."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.4), run_time=3.0)
             vo.wait_until("b")

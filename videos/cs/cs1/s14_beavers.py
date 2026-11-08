@@ -134,7 +134,6 @@ class Beavers(VoiceoverScene, MovingCameraScene):
             "Allen Brady in 1983, who also proved nothing does better. <bookmark mark='c'/> One, six, twenty-one, one "
             "hundred and seven. And for five states, for decades, nobody knew."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(im3), Create(f3), FadeIn(l3))
             vo.wait_until("b")
             self.play(FadeIn(im4), Create(f4), FadeIn(l4))
@@ -242,7 +241,6 @@ class Beavers(VoiceoverScene, MovingCameraScene):
             "halting problem, which the last chapter showed is impossible. <bookmark mark='d'/> In fact S grows faster "
             "than any function a computer can compute: faster than exponentials, towers of exponentials, anything."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(thm, shift=DOWN * 0.2))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(s, shift=RIGHT * 0.15) for s in steps[:4]], lag_ratio=0.5), run_time=3.2)

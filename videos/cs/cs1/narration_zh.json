@@ -50,11 +50,6 @@
    "en": "Eight years later, a twenty-three-year-old in Cambridge, Alan Turing, sent off his answer. <bookmark mark='a'/> The answer was no. No such procedure can exist. <bookmark mark='b'/> But to prove that, Turing first had to say exactly what a mechanical procedure is. His definition was a machine: a tape of symbols, a head that reads and writes one of them at a time, and a finite table of rules. <bookmark mark='c'/> He invented it to show what machines cannot do. It became the blueprint of every computer built since.",
    "zh": "八年后，剑桥一位23岁的年轻人阿兰·图灵寄出了他的答案。<bookmark mark='a'/>答案是“不能”。这样的程序不可能存在。<bookmark mark='b'/>但为了证明这一点，图灵必须先说清楚，机械的程序到底是什么。他给出的定义是一台机器：一条写着符号的纸带，一个每次读写一个符号的读写头，和一张有限的规则表。<bookmark mark='c'/>他发明这台机器，是为了说明机器做不到什么。结果它成了此后每一台计算机的蓝图。"
   },
-  "c2f6533a93d2": {
-   "scene": "Hook",
-   "en": "This is Part 1 of Computer Science, Built: fifty-five lectures that start here, with the question of what computing is, build a working computer from a single kind of gate, and climb all the way to the systems that run the internet. <bookmark mark='a'/> In this part: algorithms before there were machines, and the engines of Babbage and Lovelace; Hilbert's question, and Turing's machine, which we will program by hand; why extra tapes and other designs add no power, and the universal machine that can run any other; the lambda calculus, counter machines and cellular automata, and the Church-Turing thesis; why there are more problems than programs, the halting problem, and the busy beavers. And at the end, what this series will build.",
-   "zh": "这是《计算机科学，从零搭建》的第1部分。全系列61讲，从这里出发，从“什么是计算”这个问题开始，用一种逻辑门搭出一台能工作的计算机，一直爬到支撑互联网的那些系统。<bookmark mark='a'/>这一部分讲：机器出现之前的算法，巴贝奇和洛夫莱斯的计算引擎；希尔伯特的问题，以及图灵机，我们会亲手给它编程；为什么增加纸带或换别的设计都不会增加能力，以及能运行任何其他机器的通用机；λ演算、计数器机和元胞自动机，以及丘奇–图灵论题；为什么问题比程序多，停机问题，还有忙碌海狸。最后，是这个系列将要搭建的东西。"
-  },
   "e26c9b47db11": {
    "scene": "Algorithms",
    "en": "Chapter one. Algorithms before machines.",
@@ -450,11 +445,6 @@
    "en": "The same trick spreads impossibility everywhere. <bookmark mark='a'/> Does a machine ever write a one? Rig it to write a one exactly when it would have halted. Does it accept nothing at all? Do two programs compute the same thing? Will this program ever divide by zero? Is it the shortest program that does its job? <bookmark mark='b'/> Each comes with its own reduction from halting, and none has a decider.",
    "zh": "同样的技巧把不可能性传播到各处。<bookmark mark='a'/>一台机器会不会写出一个1？把它改装成恰好在本该停机的时候写一个1。它是不是什么都不接受？两个程序算的是不是同一个东西？这个程序会不会除以零？它是不是完成这项工作的最短程序？<bookmark mark='b'/>每一个都有自己的、从停机问题出发的归约，没有一个有判定器。"
   },
-  "82d2fd7ff9e6": {
-   "scene": "Reductions",
-   "en": "In 1953 Henry Rice proved the general law. <bookmark mark='a'/> Any question about what a program does, as opposed to how it is written, is undecidable, unless the answer is the same for every program. <bookmark mark='b'/> Questions about the text are fine: does it contain a while loop, is it under a hundred lines. <bookmark mark='c'/> Questions about behaviour are not: does it ever loop forever, does it ever print a password. We prove Rice's theorem in Part 25.",
-   "zh": "1953年，亨利·莱斯证明了普遍的规律。<bookmark mark='a'/>任何关于程序做什么、而不是关于它怎么写的问题，都是不可判定的，除非这个问题对每个程序的答案都一样。<bookmark mark='b'/>关于文本的问题没问题：它包不包含while循环，是不是少于一百行。<bookmark mark='c'/>关于行为的问题就不行了：它会不会永远循环，会不会打印出密码。我们会在第25部分证明莱斯定理。"
-  },
   "fb03be041dce": {
    "scene": "Reductions",
    "en": "This is not only theory. <bookmark mark='a'/> It is why no virus scanner can detect every virus, which Fred Cohen proved in 1987. It is why every static analyzer and linter either misses some bugs or complains about some correct code. It is why compilers cannot always find the best program, and why tests can show bugs but never prove their absence in general. <bookmark mark='b'/> Engineers live with this by approximating, by restricting what programs may do, and by asking people to supply proofs, which is how Part 54 verifies software anyway.",
@@ -540,11 +530,6 @@
    "en": "Here is what this part found. <bookmark mark='a'/> Computing is following finite rules on symbols, and every reasonable way of saying that precisely gives the same answer. <bookmark mark='b'/> One machine, given a description, can do what any machine does. <bookmark mark='c'/> And some questions, including whether a program halts, no machine can answer.",
    "zh": "这一部分的发现是这些。<bookmark mark='a'/>计算就是在符号上遵守有限的规则，而把这句话说精确的每一种合理方式，给出的答案都一样。<bookmark mark='b'/>一台机器，只要给出描述，就能做任何机器所做的事。<bookmark mark='c'/>而有些问题，包括一个程序会不会停机，没有任何机器能回答。"
   },
-  "e82aa0c5ddf6": {
-   "scene": "Series",
-   "en": "Now we build. This is the tower the series climbs. <bookmark mark='a'/> At the bottom, mathematics and logic, where this part stands, with the limits beside it. <bookmark mark='b'/> Act one builds a computer from switches: gates, arithmetic, memory, an instruction set. <bookmark mark='c'/> Act two makes it fast. <bookmark mark='d'/> Act three teaches it languages. <bookmark mark='e'/> Act four is algorithms. <bookmark mark='f'/> Act five returns to the limits, and turns them into cryptography. <bookmark mark='g'/> Act six shares one machine among many programs, act seven connects many machines, <bookmark mark='h'/> acts eight and nine are how industry builds and runs software at scale, <bookmark mark='i'/> and act ten looks at the horizons, and at whether we can trust the whole thing.",
-   "zh": "现在开始搭建。这是这个系列要攀登的塔。<bookmark mark='a'/>最底层是数学和逻辑，这一部分就站在这里，旁边是极限。<bookmark mark='b'/>第一幕用开关搭出一台计算机：逻辑门、算术、存储器、指令集。<bookmark mark='c'/>第二幕让它变快。<bookmark mark='d'/>第三幕教它语言。<bookmark mark='e'/>第四幕是算法。<bookmark mark='f'/>第五幕回到极限，并把它们变成密码学。<bookmark mark='g'/>第六幕让一台机器由许多程序共享，第七幕把许多机器连起来，<bookmark mark='h'/>第八幕和第九幕讲业界如何大规模地构建和运行软件，<bookmark mark='i'/>第十幕眺望前沿，并追问我们能否信任这一整套东西。"
-  },
   "c40a7f30cebd": {
    "scene": "Series",
    "en": "The machine we build has a name: Pebble, after the calculi of the opening. Here is a preview. <bookmark mark='a'/> This is Euclid's algorithm from chapter one, in Pebble's own machine language: load the two numbers, then subtract, compare and swap, in a loop. <bookmark mark='b'/> The program runs on this series' Pebble emulator. Watch the registers: a zero and a one hold the two numbers, and t zero is scratch. <bookmark mark='c'/> After 60 instructions, a zero holds 21: the same twenty-one the rectangle gave us. In Part 6 we build this exact machine out of NAND gates, and it runs this exact program.",
@@ -554,11 +539,6 @@
    "scene": "Series",
    "en": "And one task will travel with us through every layer. The Job: count the words in thirty novels, the same thirty that AI, Built reads, and list the twenty most common. <bookmark mark='a'/> Each part that changes how fast or how cheaply the Job can be done adds a row to this ledger, with the time it takes: first on Pebble, gate by gate, in Part 6, then with pipelines, caches and more cores, a compiler, better algorithms, a database, a network, and finally a cluster and a cloud bill. <bookmark mark='b'/> The ledger will settle a question with data: which matters more, better hardware or better ideas?",
    "zh": "还有一项任务会陪我们走过每一层。那项任务：数出三十本小说里的词，就是《人工智能，从零搭建》读的那三十本，列出最常见的二十个。<bookmark mark='a'/>每当某一部分改变了完成这项任务的速度或成本，它就在这本账上添一行，写上所需的时间：先是第6部分，在Pebble上一个门一个门地跑，然后是流水线、缓存和更多核心，编译器，更好的算法，数据库，网络，最后是集群和一张云账单。<bookmark mark='b'/>这本账会用数据回答一个问题：更好的硬件和更好的想法，哪个更重要？"
-  },
-  "a53eb70ee3fa": {
-   "scene": "Series",
-   "en": "In practice, the ideas of this part are everywhere. Emulators and virtual machines are universal machines in software. Every interpreter is a description and a machine that runs it. Universality turns up in places nobody planned, which is a security problem, because anything universal can be made to run code nobody intended; we come back to that at the very end, in Part 55. And undecidability is why every tool that checks programs has to approximate.",
-   "zh": "在实践中，这一部分的思想无处不在。模拟器和虚拟机是软件中的通用机。每一个解释器都是一份描述加上一台运行它的机器。通用性会出现在没人计划过的地方，这是个安全问题，因为任何通用的东西，都能被用来运行没人想要的代码；我们会在最后的第55部分回到这一点。而不可判定性，正是每一个检查程序的工具都只能近似的原因。"
   },
   "507ff9fbe826": {
    "scene": "Outro",
@@ -584,6 +564,26 @@
    "scene": "Outro",
    "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
    "zh": "这一部分依据的书和论文都在屏幕上，也在笔记里。感谢观看。"
+  },
+  "a50338864888": {
+   "scene": "Reductions",
+   "en": "In 1953 Henry Rice proved the general law. <bookmark mark='a'/> Any non-trivial property of the partial function a program computes is undecidable. Non-trivial means true of some computed functions and false of others. <bookmark mark='b'/> Questions about the text are fine: does it contain a while loop, is it under a hundred lines. <bookmark mark='c'/> Questions about the computed function are different: does it halt on every input, and does it return zero whenever it halts? We prove Rice's theorem in Part 25.",
+   "zh": "1953年，亨利·莱斯证明了普遍的规律。<bookmark mark='a'/>程序所计算的偏函数的任何非平凡性质，都是不可判定的。非平凡，就是这个性质对某些可计算函数成立，对另一些不成立。<bookmark mark='b'/>关于文本的问题没问题：它包不包含while循环，是不是少于一百行。<bookmark mark='c'/>关于所计算函数的问题则不同：它是否对每个输入都停机？它每次停机时是否都返回零？我们会在第25部分证明莱斯定理。"
+  },
+  "a03b7e186966": {
+   "scene": "Hook",
+   "en": "This is Part 1 of Computer Science, Built: sixty-one lectures that start here, with the question of what computing is, build a working computer from a single kind of gate, and climb all the way to the systems that run the internet. <bookmark mark='a'/> In this part: algorithms before there were machines, and the engines of Babbage and Lovelace; Hilbert's question, and Turing's machine, which we will program by hand; why extra tapes and other designs add no power, and the universal machine that can run any other; the lambda calculus, counter machines and cellular automata, and the Church-Turing thesis; why there are more problems than programs, the halting problem, and the busy beavers. And at the end, what this series will build.",
+   "zh": "这是《计算机科学，从零搭建》的第1部分。全系列61讲，从这里出发，从“什么是计算”这个问题开始，用一种逻辑门搭出一台能工作的计算机，一直爬到支撑互联网的那些系统。<bookmark mark='a'/>这一部分讲：机器出现之前的算法，巴贝奇和洛夫莱斯的计算引擎；希尔伯特的问题，以及图灵机，我们会亲手给它编程；为什么增加纸带或换别的设计都不会增加能力，以及能运行任何其他机器的通用机；λ演算、计数器机和元胞自动机，以及丘奇–图灵论题；为什么问题比程序多，停机问题，还有忙碌海狸。最后，是这个系列将要搭建的东西。"
+  },
+  "4be8f32266ed": {
+   "scene": "Series",
+   "en": "In practice, the ideas of this part are everywhere. Emulators and virtual machines are universal machines in software. Every interpreter is a description and a machine that runs it. Universality turns up in places nobody planned, which is a security problem, because anything universal can be made to run code nobody intended; we come back to that in Part 55. And undecidability is why every tool that checks programs has to approximate.",
+   "zh": "在实践中，这一部分的思想无处不在。模拟器和虚拟机是软件中的通用机。每一个解释器都是一份描述加上一台运行它的机器。通用性会出现在没人计划过的地方，这是个安全问题，因为任何通用的东西，都能被用来运行没人想要的代码；我们会在第55部分回到这一点。而不可判定性，正是每一个检查程序的工具都只能近似的原因。"
+  },
+  "2600df4859e2": {
+   "scene": "Series",
+   "en": "Now we build. This is the tower the series climbs. <bookmark mark='a'/> At the bottom, mathematics and logic, where this part stands, with the limits beside it. <bookmark mark='b'/> Act one builds a computer from switches: gates, arithmetic, memory, an instruction set. <bookmark mark='c'/> Act two makes it fast. <bookmark mark='d'/> Act three teaches it languages. <bookmark mark='e'/> Act four is algorithms. <bookmark mark='f'/> Act five returns to the limits, and turns them into cryptography. <bookmark mark='g'/> Act six shares one machine among many programs, act seven connects many machines, <bookmark mark='h'/> acts eight and nine are how industry builds and runs software at scale, <bookmark mark='i'/> and act ten looks at the horizons, and at whether we can trust the whole thing. <bookmark mark='j'/> Act eleven revisits these ideas at research depth: spectral graphs, learning theory, semantics, distributed computing, specialized hardware, and how to do research.",
+   "zh": "现在开始搭建。这是这个系列要攀登的塔。<bookmark mark='a'/>最底层是数学和逻辑，这一部分就站在这里，旁边是极限。<bookmark mark='b'/>第一幕用开关搭出一台计算机：逻辑门、算术、存储器、指令集。<bookmark mark='c'/>第二幕让它变快。<bookmark mark='d'/>第三幕教它语言。<bookmark mark='e'/>第四幕是算法。<bookmark mark='f'/>第五幕回到极限，并把它们变成密码学。<bookmark mark='g'/>第六幕让一台机器由许多程序共享，第七幕把许多机器连起来，<bookmark mark='h'/>第八幕和第九幕讲业界如何大规模地构建和运行软件，<bookmark mark='i'/>第十幕眺望前沿，并追问我们能否信任这一整套东西。<bookmark mark='j'/>第十一幕以研究的深度重新审视这些思想：谱图理论、学习理论、语义学、分布式计算、专用硬件，以及如何开展研究。"
   }
  },
  "title_en": "Computer Science, Built: Part 1, What Is a Computation?",

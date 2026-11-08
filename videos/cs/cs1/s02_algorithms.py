@@ -98,13 +98,15 @@ class Algorithms(VoiceoverScene, MovingCameraScene):
             vo.wait_until("a")
             self.play(Create(strip3))
             vo.wait_until("b")
-            self.play(FadeOut(eqs[:2]), FadeOut(wl), FadeOut(hl),
-                      frame_to(self, strip3, width=4.2), run_time=1.8)
+            # Remove full-view annotations before magnifying the sliver:
+            # fading them during the camera move creates huge clipped ghosts.
+            self.play(FadeOut(eqs[:2]), FadeOut(wl), FadeOut(hl), run_time=0.4)
+            self.play(frame_to(self, strip3, width=4.2), run_time=1.4)
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(r) for r in r3], lag_ratio=0.15), run_time=1.6)
             vo.wait_until("d")
-            self.play(frame_home(self), FadeIn(wl), FadeIn(hl),
-                      FadeIn(eqs[:2]), Write(eqs[2]), run_time=1.6)
+            self.play(frame_home(self), run_time=1.0)
+            self.play(FadeIn(wl), FadeIn(hl), FadeIn(eqs[:2]), Write(eqs[2]), run_time=0.6)
             box = SurroundingRectangle(eqs[2][4], color=YES, buff=0.08)
             g = label(rf"$\gcd(1071, 462) = {d['gcd']}$", font_size=40, color=YES).next_to(eqs, DOWN, buff=0.45)
             g.align_to(eqs, LEFT)

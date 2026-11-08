@@ -193,9 +193,8 @@ class Halting(VoiceoverScene):
             "in the diagonal place. D is not on the list. But the list contains every machine, and D would be a machine "
             "if H existed. So H does not exist."
         ) as vo:
-            self.play(FadeIn(tag))
-            vo.wait_until("a")
-            self.play(FadeIn(grid, lag_ratio=0.01), FadeIn(colh), FadeIn(rowh), FadeIn(key))
+            self.play(FadeIn(tag), FadeIn(grid, lag_ratio=0.01),
+                      FadeIn(colh), FadeIn(rowh), FadeIn(key))
             vo.wait_until("b")
             self.play(LaggedStart(*[Create(b) for b in diag], lag_ratio=0.15))
             vo.wait_until("c")

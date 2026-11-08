@@ -49,7 +49,8 @@ class Series(VoiceoverScene):
             "program halts, no machine can answer."
         ) as vo:
             for mk, l in zip("abc", lines):
-                vo.wait_until(mk)
+                if mk != "a":
+                    vo.wait_until(mk)
                 self.play(FadeIn(l, shift=UP * 0.15))
         self.wait(0.3)
         self.clear_scene()
@@ -65,6 +66,8 @@ class Series(VoiceoverScene):
             t.move_to([3.0, float(np.mean(ys)), 0]).set_x(1.6 + t.width / 2 + 0.5)
             acts.add(t)
         acts.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(tw, RIGHT, buff=1.0)
+        research = label(r"XI. \ The Research Frontier (56--61)", font_size=22, color=HEAD)
+        research.next_to(acts, DOWN, buff=0.35).align_to(acts, LEFT)
         here = label(r"Part 1 stands here: \ the ground floor of ideas", font_size=24, color=C.CS_INF)
         here.next_to(tw.layer["math"], DOWN, buff=0.15)
 
@@ -79,7 +82,9 @@ class Series(VoiceoverScene):
             "<bookmark mark='f'/> Act five returns to the limits, and turns them into cryptography. "
             "<bookmark mark='g'/> Act six shares one machine among many programs, act seven connects many machines, "
             "<bookmark mark='h'/> acts eight and nine are how industry builds and runs software at scale, "
-            "<bookmark mark='i'/> and act ten looks at the horizons, and at whether we can trust the whole thing."
+            "<bookmark mark='i'/> and act ten looks at the horizons, and at whether we can trust the whole thing. "
+            "<bookmark mark='j'/> Act eleven revisits these ideas at research depth: spectral graphs, learning theory, "
+            "semantics, distributed computing, specialized hardware, and how to do research."
         ) as vo:
             self.play(FadeIn(tw))
             vo.wait_until("a")
@@ -93,6 +98,8 @@ class Series(VoiceoverScene):
                     self.play(Transform(tw, lit_tower(tuple(lit))), FadeIn(acts[k]), FadeIn(acts[8]), run_time=0.8)
                 else:
                     self.play(Transform(tw, lit_tower(tuple(lit))), FadeIn(acts[k]), run_time=0.8)
+            vo.wait_until("j")
+            self.play(FadeIn(research, shift=UP * 0.15))
         self.wait(0.3)
         self.clear_scene()
 
@@ -204,7 +211,7 @@ class Series(VoiceoverScene):
             "In practice, the ideas of this part are everywhere. Emulators and virtual machines are universal machines "
             "in software. Every interpreter is a description and a machine that runs it. Universality turns up in "
             "places nobody planned, which is a security problem, because anything universal can be made to run code "
-            "nobody intended; we come back to that at the very end, in Part 55. And undecidability is why every tool "
+            "nobody intended; we come back to that in Part 55. And undecidability is why every tool "
             "that checks programs has to approximate."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],

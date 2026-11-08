@@ -115,7 +115,6 @@ class Universal(VoiceoverScene):
             "and three tapes. The first holds the description. The second is M's tape. The third holds M's current "
             "state, in unary."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(defn, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(Write(eq), FadeIn(hc))
@@ -277,9 +276,9 @@ class Universal(VoiceoverScene):
             "a description. Emulators, the Java virtual machine and Python's interpreter are universal machines written "
             "in software, running on universal machines made of silicon."
         ) as vo:
-            self.play(FadeIn(before[0]))
+            self.play(FadeIn(before[0]), FadeIn(before[1], shift=RIGHT * 0.2))
             vo.wait_until("a")
-            self.play(FadeIn(before[1], shift=RIGHT * 0.2))
+            self.play(Indicate(before[1], color=DATA, scale_factor=1.02))
             vo.wait_until("b")
             self.play(GrowArrow(arr), FadeIn(after, shift=LEFT * 0.2))
             vo.wait_until("c")
