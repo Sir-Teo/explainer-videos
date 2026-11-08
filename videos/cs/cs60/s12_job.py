@@ -143,7 +143,7 @@ class Job(VoiceoverScene):
                       .move_to([x0 + logic * sc + m * sc / 2, y, 0]))
                 b.add(label(r"table read", font_size=18, color=BLACK).move_to(b[1]))
             bars.add(b)
-            names.add(label(rf"{n}: \ {st[n]['depth']} gates deep", font_size=19, color=c).next_to([x0, y, 0], LEFT,
+            names.add(label(rf"{n}: \ {st[n]['depth']} gate{'' if st[n]['depth'] == 1 else 's'} deep", font_size=19, color=c).next_to([x0, y, 0], LEFT,
                                                                                                  buff=0.2))
             vals.add(label(rf"{st[n]['ps']:.0f} ps", font_size=19, color=c).next_to(b, RIGHT, buff=0.12))
         per = tm["period_ps"]
@@ -360,7 +360,7 @@ class Job(VoiceoverScene):
         tab.next_to(eqs, DOWN, buff=0.35).align_to(eqs, LEFT)
         r20 = next(r for r in rows if r["index_bits"] == 20)
         top_from = min(r["entries"] for r in rows if r["top_exact"])
-        verdict = wrapped_label(rf"at $2^{{20}}$ entries \ ({r20['kbytes'] / 1024:.1f} MB): \ "
+        verdict = wrapped_label(rf"at $2^{{20}}$ entries \ ({r20['kbytes'] / 1024:.1f} MiB): \ "
                                 rf"{cm(r20['lost_occurrences'])} of {cm(r20['words'])} occurrences lost "
                                 rf"\ ({100 * r20['lost_occurrences'] / r20['words']:.1f}\%); \ the top twenty is "
                                 rf"exact from {cm(top_from)} entries up", 5.0, font_size=18, color=HEAD)

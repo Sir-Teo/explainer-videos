@@ -24,7 +24,7 @@ ZH = {
     'f"Here is what things cost on a chip, in energy.':
         "这是芯片上各种事情的代价，用能量来算。<bookmark mark='a'/>把两个八位整数相加，大约要0.03皮焦耳。三十二位加法，0.1皮焦耳。八位乘法，0.2。三十二位浮点乘法，将近4。"
         "<bookmark mark='b'/>现在去取这些数。从芯片上一块小存储器读出六十四位，要10皮焦耳，比上面任何一种运算都贵。从一兆字节的片上存储器读，要100。"
-        "<bookmark mark='c'/>而从芯片外的 DRAM 读，要1000到2500：一次读取，相当于多达{round(ratio, -4):,.0f}次八位加法。"
+        "<bookmark mark='c'/>而从芯片外的 DRAM 读，要1300到2600：一次读取，相当于多达{round(ratio, -4):,.0f}次八位加法。"
         "<bookmark mark='d'/>通用处理器的大部分能量既不花在运算上，也不花在取数上：它花在取指令、译码和调度指令上，以及在指令之间搬运数据。2010年，Rehan Hameed 和同事测量了一个视频编码器："
         "一块专为这一项工作而造的芯片，用的能量比运行它的通用核心少大约五百倍。",
     "This part's machine is very different from Pebble. <bookmark":
