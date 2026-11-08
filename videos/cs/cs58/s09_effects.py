@@ -157,7 +157,7 @@ class Effects(VoiceoverScene):
         d1 = MathTex(r"12 \div b", BIND, r"\lambda", r"q", r".\ ", r"\mathsf{return}\,(q+1)", font_size=32)
         d1[1].set_color(HEAD)
         der = VGroup(d0, MathTex(r"=", font_size=32), d1).arrange(RIGHT, buff=0.35).to_edge(DOWN, buff=0.75)
-        dl = label(r"Wadler \ (1992): \ a \textsf{do} block is bind, \ written sideways", font_size=19,
+        dl = label(r"after Wadler \ (1992), \ Haskell's \textsf{do} block is bind, \ written sideways", font_size=19,
                    color=GREY_B).next_to(der, DOWN, buff=0.15)
         with self.voiceover(
             "A monad is three things. <bookmark mark='a'/> A type constructor T, and return, which turns a value "
@@ -201,7 +201,7 @@ class Effects(VoiceoverScene):
         binds = [[r"\mathsf{Nothing}" + BIND + r"k = \mathsf{Nothing}", r"\mathsf{Just}\,a" + BIND + r"k = k\,a"],
                  [r"m" + BIND + r"k = \lambda s.\ \mathbf{let}\ (a, s') = m\,s", r"\mathbf{in}\ k\,a\,s'"],
                  [r"m" + BIND + r"k = \mathsf{concat}\,(\mathsf{map}\,k\,m)"]]
-        progs = [["12 / b", "+ 1"], ["tick", "tick", "10 * s"], ["choose b", "12 / b"]]
+        progs = [["12 / b", "+ 1"], ["tick", "tick", "10 * count"], ["choose b", "12 / b"]]
         tops, pipes = [], []
         for x, c, t, d, bl, pr in zip(xs, cols, titles, tdefs, binds, progs):
             g = VGroup(label(t, font_size=23, color=c), MathTex(d, font_size=27, color=WHITE))
