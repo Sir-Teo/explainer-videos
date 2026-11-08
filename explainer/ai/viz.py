@@ -44,6 +44,8 @@ def cmath(*tex: str, colors: dict | None = None, font_size=44, color=WHITE, **kw
     m = MathTex(*tex, font_size=font_size, color=color, **kw)
     if colors:
         table = {_key(k): v for k, v in colors.items()}
+        from explainer import zh_text  # a translated build sets each term in its own language: match that too
+        table.update({_key(zh_text.translate(k)): v for k, v in colors.items()})
         for part in m.submobjects:
             s = getattr(part, "tex_string", None)
             if s is not None and _key(s) in table:

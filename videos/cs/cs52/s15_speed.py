@@ -126,7 +126,7 @@ class Speed(VoiceoverScene):
                     label(r"\texttt{gemv}", font_size=18, color=LAM).next_to(dots["gemv"], RIGHT, buff=0.15),
                     label(r"\texttt{gemm}", font_size=18, color=YES).next_to(dots["gemm"][0], DOWN, buff=0.15))
         big = rows_[-1]
-        tab = grid_table([r"$n = %s$" % f"{big['n']:,}", r"GFLOP/s"],
+        tab = grid_table([r"$n = %s$" % f"{big['n']:,}".replace(",", "{,}"), r"GFLOP/s"],
                          [[r"\texttt{axpy}", f"{big['axpy_gflops']:.2f}"],
                           [r"\texttt{gemv}", f"{big['gemv_gflops']:.2f}"],
                           [r"\texttt{gemm}", f"{big['gemm_gflops']:.1f}"]],
