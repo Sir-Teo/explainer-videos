@@ -150,7 +150,7 @@ class Pebble(VoiceoverScene):
             (("algo",), r"Parts 16--24: \ algorithms, \ the hash table, \ sketches"),
             (("os", "data"), r"Parts 31--35: \ PebbleOS, \ a file system, \ a database"),
             (("net", "dist"), r"Parts 36--39: \ our TCP, \ Raft, \ MapReduce"),
-            (("cloud", "apps"), r"Parts 40--51: \ the web, \ services, \ the cloud, \ search"),
+            (("cloud", "apps"), r"Parts 40--50: \ the web, \ services, \ the cloud, \ search"),
         ]
         notes = []
         for ks, text in groups:

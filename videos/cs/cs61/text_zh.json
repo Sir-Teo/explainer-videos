@@ -1,0 +1,19 @@
+{
+ "strings": {
+  "abstract": "摘要",
+  "references": "参考文献",
+  "reviews": "审稿意见",
+  "accept": "接收",
+  "journal": "期刊",
+  "test": "检验",
+  "claim": "主张",
+  "verdict": "评定",
+  "cache": "缓存",
+  "neither": "两者皆非",
+  "dropped": "已移除",
+  "generalization": "泛化",
+  "today": "现状",
+  "\\text{sum}": "\\text{和}",
+  "17\\quad a hash table": "17\\quad 哈希表"
+ }
+}
