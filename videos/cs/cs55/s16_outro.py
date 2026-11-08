@@ -123,14 +123,14 @@ class Outro(VoiceoverScene):
 
     def problems(self):
         ps = problem_set([
-            r"Compute the entropy of a 30-bit ASLR offset, \\ and the expected attempts with and without "
+            r"Compute the entropy of a 30-bit ASLR offset, \ and the expected attempts with and without "
             r"re-randomization.",
             r"Find the gadgets for a ROP chain that writes one byte to the console on Pebble.",
-            r"Trace Lowe's attack on Needham--Schroeder, \\ and show why naming $B$ in message 2 stops it.",
-            r"Show that SQL with bound parameters cannot be injected, \\ by an argument about the parser.",
-            r"\\textit{Build.} \\ Trojan our compiler in a new way, \\ and show diverse double-compiling still "
+            r"Trace Lowe's attack on Needham--Schroeder, \ and show why naming $B$ in message 2 stops it.",
+            r"Show that SQL with bound parameters cannot be injected, \ by an argument about the parser.",
+            r"\textit{Build.} \ Trojan our compiler in a new way, \ and show diverse double-compiling still "
             r"detects it.",
-            r"$\\bigstar$ \\textit{Research.} \\ A provably correct, \\ reproducible stack from an auditable seed.",
+            r"$\bigstar$ \textit{Research.} \ A provably correct, \ reproducible stack from an auditable seed.",
         ], font_size=22)
         with self.voiceover(
             "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build "
