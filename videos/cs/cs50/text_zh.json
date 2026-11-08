@@ -1,0 +1,32 @@
+{
+ "strings": {
+  "left": "剩余",
+  "then": "处理",
+  "page": "呼叫",
+  "pages": "呼叫次数",
+  "ticket": "工单",
+  "users": "用户",
+  "partition": "网络分区",
+  "open": "断开",
+  "seconds": "秒",
+  "timing": "时序",
+  "operations": "运维",
+  "commit": "提交",
+  "counter": "计数器",
+  "true": "真实值",
+  "never": "永不",
+  "exponential": "指数退避",
+  "tail": "尾部采样",
+  "abort": "中止",
+  "database": "数据库",
+  "servers": "服务器数",
+  "method": "method",
+  "status": "status",
+  "route": "route",
+  "instance": "instance",
+  "auth": "auth",
+  "model": "model",
+  "render": "render",
+  "2011\\; Netflix: \\ Chaos Monkey": "2011\\; Netflix：Chaos Monkey"
+ }
+}
