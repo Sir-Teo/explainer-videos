@@ -173,10 +173,15 @@ _TENS = dict(zip("twenty thirty forty fifty sixty seventy eighty ninety".split()
 
 def spoken_int(v: str) -> int | None:
     """A whole number spelled out in English ('one hundred and ten', 'twenty-three thousand'), or None."""
-    words = v.lower().replace("-", " ").replace(",", " ").split()
+    if "," in v:
+        return None                                       # a list, not one number
+    words = v.lower().replace("-", " ").split()
     if not words or any(w not in _ONES and w not in _TENS and w not in ("hundred", "thousand", "million", "billion", "and")
                         for w in words) or words[0] == "and" or words[-1] == "and":
         return None
+    if any(w == "and" and words[i - 1] not in ("hundred", "thousand", "million", "billion")
+           for i, w in enumerate(words)):
+        return None                                       # 'two and three' is a list, not five
     total = part = 0
     for w in words:
         if w in _ONES:
@@ -206,6 +211,31 @@ def spoken_number(v: str) -> str | None:
     return f"{n}." + "".join(str(_ONES.index(d)) for d in digits)
 
 
+def spoken_list(v: str) -> str | None:
+    """A comma-separated list of spelled-out numbers ('twelve, plus forty, plus six' or 'one, two and three') as
+    digits joined the Chinese way (12加40加6, 1、2和3); None if ``v`` is anything else."""
+    parts = v.split(", ")
+    if len(parts) < 2:
+        return None
+    out = []
+    for i, p in enumerate(parts):
+        sep = "、" if i else ""
+        for word, zh in (("plus ", "加"), ("and ", "和")):
+            if i and p.startswith(word):
+                p, sep = p[len(word):], zh
+        if i == len(parts) - 1 and " and " in p and spoken_number(p) is None:
+            a, _, b = p.rpartition(" and ")
+            if spoken_number(a) is None or spoken_number(b) is None:
+                return None
+            out += [sep, spoken_number(a), "和", spoken_number(b)]
+            continue
+        n = spoken_number(p)
+        if n is None:
+            return None
+        out += [sep, n]
+    return "".join(out)
+
+
 class Translator:
     def __init__(self, video: str):
         t = table(video)
@@ -221,6 +251,8 @@ class Translator:
             if z is not None:
                 return z
         n = spoken_number(v)
+        if n is None:
+            n = spoken_list(v)
         if n is not None:
             return n                                  # a number spelled out for the English voice: digits in Chinese
         return v.replace(",", "") if re.fullmatch(r"-?\d{1,3}(,\d{3})+(\.\d+)?", v) else v
