@@ -52,8 +52,15 @@ def table_path() -> Path:
 
 
 def _table() -> dict:
+    """The series table, with the video's own videos/<series>/<video>/text_zh.json (if any) taking precedence: a
+    short word ("open", "key", "load") can mean one thing in one part and another in the next."""
     path = table_path()
-    return json.loads(path.read_text()) if path.exists() else {}
+    table = json.loads(path.read_text()) if path.exists() else {}
+    if os.environ.get("EXPLAINER_VIDEO"):
+        own = video_dir(os.environ["EXPLAINER_VIDEO"]) / "text_zh.json"
+        if own.exists():
+            table = dict(table, strings={**table.get("strings", {}), **json.loads(own.read_text())["strings"]})
+    return table
 
 
 def _scene() -> str:

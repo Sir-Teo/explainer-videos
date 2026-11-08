@@ -426,8 +426,8 @@
   },
   "ec7cf4bcaf6b": {
    "scene": "Time",
-   "en": "Clocks also meet chapter five's idempotency keys. <bookmark mark='a'/> A key is kept for a limited time, here ten minutes, and a request that arrives after it expires is treated as new. <bookmark mark='b'/> If the service that checks the key runs two minutes fast, the key expires early, and a retry at nine minutes is charged a second time. <bookmark mark='c'/> So let one clock decide expiry, keep keys far longer than any client retries, and where order across machines matters, use Part 38's hybrid logical clocks rather than trusting wall clocks to agree.",
-   "zh": "时钟还会碰上第五章的幂等键。<bookmark mark='a'/>一个键只保留有限的时间，这里是10分钟，键过期之后才到达的请求会被当作新请求。<bookmark mark='b'/>如果检查键的那个服务快了2分钟，键就会提前过期，第9分钟的一次重试就会被扣第二次款。<bookmark mark='c'/>所以，让一个时钟来决定过期，把键保留得远比任何客户端的重试都久；而在跨机器的顺序很重要的地方，使用第38部分的混合逻辑时钟，而不是指望墙上时钟彼此一致。"
+   "en": "Clocks also meet chapter five's idempotency keys. <bookmark mark='a'/> A key is kept for a limited time, here ten minutes, and a request that arrives after it expires is treated as new. <bookmark mark='b'/> If the service that checks the key runs two minutes fast, the key expires early, and a retry at nine minutes is charged a second time. <bookmark mark='c'/> So let one clock decide expiry, keep keys far longer than any client retries, and where order across machines matters, use Part 39's hybrid logical clocks rather than trusting wall clocks to agree.",
+   "zh": "时钟还会碰上第五章的幂等键。<bookmark mark='a'/>一个键只保留有限的时间，这里是10分钟，键过期之后才到达的请求会被当作新请求。<bookmark mark='b'/>如果检查键的那个服务快了2分钟，键就会提前过期，第9分钟的一次重试就会被扣第二次款。<bookmark mark='c'/>所以，让一个时钟来决定过期，把键保留得远比任何客户端的重试都久；而在跨机器的顺序很重要的地方，使用第39部分的混合逻辑时钟，而不是指望墙上时钟彼此一致。"
   },
   "123ca3c85e31": {
    "scene": "Job",

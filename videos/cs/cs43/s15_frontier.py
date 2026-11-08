@@ -91,7 +91,7 @@ class Frontier(VoiceoverScene):
                           rf"dedup, \ a violation in {len(mc['plain']['trace'])} steps", 6.6, font_size=19,
                           color=YES),
             wrapped_label(r"the state space grows exponentially with the size of the system: \ model checkers "
-                          r"\ (TLA$^+$, \ Part 33) \ check small instances exhaustively", 6.6, font_size=19,
+                          r"\ (Part 33; \ TLA$^+$, \ Part 54) \ check small instances exhaustively", 6.6, font_size=19,
                           color=WHITE),
             wrapped_label(r"Amazon's engineers used TLA$^+$ on DynamoDB, \ S3 and others, \ and found subtle bugs "
                           r"no test had \ (Newcombe et al., \ 2015)", 6.6, font_size=19, color=HEAD),

@@ -351,7 +351,7 @@ class Time(VoiceoverScene):
         notes = VGroup(
             wrapped_label(r"let one clock decide expiry, \ the one that stored the key; \ keep keys far longer than "
                           r"clients retry, \ plus any skew", 12.4, font_size=20, color=YES),
-            wrapped_label(r"where order across machines matters, \ use Part 38's hybrid logical clocks, \ not wall "
+            wrapped_label(r"where order across machines matters, \ use Part 39's hybrid logical clocks, \ not wall "
                           r"clocks that are assumed to agree", 12.4, font_size=20, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(DOWN, buff=0.4)
         with self.voiceover(
@@ -359,7 +359,7 @@ class Time(VoiceoverScene):
             " here ten minutes, and a request that arrives after it expires is treated as new. <bookmark mark='b'/> "
             "If the service that checks the key runs two minutes fast, the key expires early, and a retry at nine "
             "minutes is charged a second time. <bookmark mark='c'/> So let one clock decide expiry, keep keys far "
-            "longer than any client retries, and where order across machines matters, use Part 38's hybrid logical "
+            "longer than any client retries, and where order across machines matters, use Part 39's hybrid logical "
             "clocks rather than trusting wall clocks to agree."
         ) as vo:
             self.play(FadeIn(head), Create(axis), FadeIn(tk), FadeIn(unit), FadeIn(ill), FadeIn(na), FadeIn(nb))
