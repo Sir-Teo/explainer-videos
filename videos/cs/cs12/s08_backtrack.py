@@ -56,20 +56,23 @@ class Backtrack(VoiceoverScene):
         expl = VGroup(
             label(r"the outer \texttt{+} may cut the $a$'s into groups in $2^{n-1}$ ways, \ and each one fails at the "
                   r"end", font_size=21, color=GREY_A),
-            label(r"a backtracker cannot know they all fail the same way: \ it tries every one", font_size=21,
+            label("a naive backtracker revisits these partitions; real engines may optimize them away", font_size=21,
                   color=NO),
             label(r"an NFA simulation tries them all \textit{at once}: \ they are the same few states", font_size=21,
                   color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Python, Perl, Java, JavaScript and PCRE do not simulate an automaton. They backtrack. <bookmark "
-            "mark='a'/> To match a plus, plus, then b, against four a's, the engine has to decide how the outer "
-            "plus groups the a's. It tries one grouping, all four a's in one group, and then looks for a b. There "
-            "is none, so it backs up and tries another grouping. <bookmark mark='b'/> There are two to the n minus "
-            "one ways to cut n a's into groups, and every one of them fails in exactly the same place. <bookmark "
-            "mark='c'/> The backtracker has no way to know that: it tries them all, one by one. <bookmark "
-            "mark='d'/> Thompson's simulation follows every grouping at once, and they collapse into the same "
-            "handful of states."
+            (
+            "Many familiar regex engines use backtracking, with optimizations that vary by engine and pattern. "
+            "<bookmark mark='a'/> Our deliberately simple matcher tries ways of partitioning four a's among the "
+            "repeated groups of parenthesized a-plus, followed by b. With no b, each completed partition fails. "
+            "<bookmark mark='b'/> For n positive a's there are two to the n minus one partitions into nonempty "
+            "consecutive groups: choose a cut or no cut at each gap. <bookmark mark='c'/> A naive backtracker can "
+            "revisit these possibilities one by one. This explains an exponential failure mode; it does not say "
+            "every real engine explores every partition for every expression. <bookmark mark='d'/> Thompson's "
+            "simulation instead merges paths that reach the same state at the same input position. Many possible "
+            "histories collapse into a bounded set of active states."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(pat))
             vo.wait_until("a")
@@ -100,25 +103,29 @@ class Backtrack(VoiceoverScene):
             [ax.c2p(r["n"], math.log10(r["thompson"])) for r in b["ours"]])
         btl = label(r"our backtracker: \ steps double per \texttt{a}", font_size=18, color=NO).next_to(
             ax.c2p(13, 6.6), UP, buff=0.0)
-        thl = label(r"our NFA simulation: \ linear", font_size=18, color=YES).next_to(ax.c2p(14, 2.5), UP, buff=0.0)
+        thl = label("NFA active-set proxy", font_size=18, color=YES).next_to(ax, DOWN, buff=.8).align_to(ax, LEFT)
         last = rows[-1]
         side = VGroup(
             label(rf"backtracker, \ $n = {last['n']}$: \ {last['steps']:,} steps", font_size=19, color=NO),
             label(r"Python \texttt{re}, \ $n = 28$: \ " + f"{[r for r in b['python'] if r['n'] == 28][0]['s']:.1f}"
                   r" s", font_size=19, color=NO),
-            label(r"Perl, \ $n = 30$: \ instant: \ it caches positions \\ it has already tried, \ a patch for "
-                  r"exactly this", font_size=19, color=CTRL),
-            label(rf"GNU grep, \ $n = 10^6$: \ {b['grep'][-1]['s'] * 1000:.1f} ms \ (a DFA)", font_size=19,
+            label(rf"Perl, $n={b['perl'][-1]['n']}$: {1e6*b['perl'][-1]['s']:.0f} microseconds"
+                  r" \\ optimization on this case; not a universal bound", font_size=19, color=CTRL),
+            label(rf"GNU grep adjusted, \ $n = 10^6$: \ {b['grep'][-1]['s'] * 1000:.1f} ms \ (a DFA)", font_size=19,
                   color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(ax, RIGHT, buff=0.6).shift(UP * 0.4)
         with self.voiceover(
-            "We measured it. <bookmark mark='a'/> Our own backtracker, counting steps: they double with every a, "
-            "past twenty-nine million at n equals twenty-two. Thompson's simulation on the same inputs grows in a "
-            "straight line. <bookmark mark='b'/> Python's engine behaves like ours: eight seconds at twenty-eight. "
-            "<bookmark mark='c'/> Perl answers instantly, because its engine remembers positions it has already "
-            "tried in situations like this one: a patch added for exactly this problem, not a different algorithm. "
-            "<bookmark mark='d'/> And GNU grep, which compiles the pattern to an automaton, handles a million a's "
-            "in a millisecond and a half."
+            (
+            "The counters and timings show different aspects of the same failing pattern. <bookmark mark='a'/> "
+            "Our deliberately naive backtracker counts more than twenty-nine million steps at length twenty-two, "
+            "while the NFA active-set counter grows linearly. That counter is a work proxy, not an instruction "
+            "count. <bookmark mark='b'/> The displayed Python measurements also show rapid growth; their seconds "
+            "belong to this host and engine version. <bookmark mark='c'/> Perl is fast on this case because its "
+            "optimizations avoid much of the naive search. This observation gives no linear guarantee for every "
+            "Perl pattern. <bookmark mark='d'/> GNU grep handles the million-character input efficiently here. "
+            "Its baseline-subtracted estimate is noisy, especially near zero. Compare the trend and the execution "
+            "strategy, rather than treating any one duration as a universal constant."
+        )
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(yl), FadeIn(xt), FadeIn(xl))
             vo.wait_until("a")
@@ -137,45 +144,32 @@ class Backtrack(VoiceoverScene):
     def outages(self):
         cf = load("cloudflare")
         head = label(r"Not exponential, \ and still fatal", font_size=34).to_edge(UP, buff=0.3)
-        pat = VGroup(label(r"the heart of Cloudflare's rule:", font_size=21, color=GREY_A),
+        pat = VGroup(label("simplified overlapping-repetition experiment:", font_size=21, color=GREY_A),
                      Text(".*.*=.*", font="DejaVu Sans Mono", font_size=30, color=HEAD)).arrange(RIGHT, buff=0.3)
         pat.next_to(head, DOWN, buff=0.35)
-        why = label(r"on a line with no \texttt{=}: \ every start, \ every split between the two \texttt{.*}: \ "
-                    r"$\sim n^3$ tries", font_size=21, color=GREY_A).next_to(pat, DOWN, buff=0.2)
-        rows = [[f"{r['n']:,}", f"{r['python']:.2f} s" if r["python"] is not None else "—",
+        why = label("unanchored naive search, no equals sign: starting positions and overlapping splits give cubic work", font_size=21, color=GREY_A).next_to(pat, DOWN, buff=0.2)
+        rows = [[f"{r['n']:,}", f"{r['python']:.2f} s" if r["python"] is not None else "timeout at 60 s",
                  f"{1000 * r['grep']:.2f} ms"] for r in cf["rows"]]
-        t = grid_table([r"characters", r"Python \texttt{re}", r"GNU grep"], rows, [2.6, 2.8, 2.8], row_h=0.5,
+        t = grid_table([r"characters", r"Python \texttt{re}", r"grep adjusted"], rows, [2.6, 2.8, 2.8], row_h=0.5,
                        font_size=21, colors=[[GREY_A, NO, YES]] * len(rows), mono_cols=()).next_to(why, DOWN,
                                                                                                     buff=0.4)
-        x8 = label(r"double the line, \ $\times 8$ the time", font_size=20, color=NO).next_to(t, DOWN, buff=0.2)
+        x8 = label("cubic trend on uncensored samples; timeout denotes a waiting limit", font_size=20, color=NO).next_to(t, DOWN, buff=0.2)
         more = VGroup(
             label(r"20 July 2016: \ Stack Overflow down for 34 minutes: \ trimming spaces from a post with 20,000 "
                   r"of them \ (quadratic)", font_size=19, color=GREY_A),
-            label(r"Russ Cox, \ 2007: \ ``Regular expression matching can be simple and fast'' \ $\to$ \ RE2, \ "
-                  r"Go's and Rust's engines: \ automata, \ guaranteed linear", font_size=19, color=YES),
+            label("Cox (2007), RE2: automata and linear input time for fixed supported patterns", font_size=19, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "The Cloudflare rule was not even exponential. <bookmark mark='a'/> At its heart was dot star, dot "
-            "star, equals, dot star. On a line with no equals sign, a backtracker tries every starting point and "
-            "every way of dividing the line between the two dot stars: about n cubed attempts. <bookmark mark='b'/> "
-            "On this computer, Python takes a tenth of a second on a thousand characters, and nearly a minute on "
-            "eight thousand: double the line, eight times the time. grep does not notice. <bookmark mark='c'/> "
-            "Three years earlier, Stack Overflow went down for thirty-four minutes because a regular expression "
-            "that trimmed white space met a post containing twenty thousand spaces. <bookmark mark='d'/> In 2007 "
-            "Russ Cox wrote the article that brought Thompson's method back into fashion, and his RE2 library, "
-            "like the regular expression engines of Go and Rust, uses automata and guarantees linear time."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(pat), FadeIn(why))
-            vo.wait_until("b")
+        with self.voiceover("Polynomial search can also exhaust a service. <bookmark mark='a'/> Our simplified pattern is dot-star, dot-star, equals, dot-star, searched without anchoring in text lacking equals. A naive search explores starting positions and overlapping splits, giving cubic growth for this experiment. This is an illustration of the outage mechanism, not a claim that every engine executes the original rule identically. <bookmark mark='b'/> Read the measured Python durations and any timeout limits in the table. The GNU grep column is a noisy baseline-subtracted comparison. <bookmark mark='c'/> Stack Overflow's 2016 whitespace-regex outage supplies another example of a small rule interacting badly with long input. <bookmark mark='d'/> Automata engines such as RE2 offer linear input-time guarantees for fixed supported patterns. Pattern size, compilation, memory limits and supported features still matter; backreferences are outside RE2's supported language.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(pat), FadeIn(why), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(VGroup(*t.cells[0])), FadeIn(t.rule))
-            self.play(LaggedStart(*[FadeIn(VGroup(*t.cells[r])) for r in range(1, len(t.cells))], lag_ratio=0.4),
-                      run_time=3)
+            self.play(LaggedStart(*[FadeIn(VGroup(*t.cells[r])) for r in range(1, len(t.cells))], lag_ratio=0.4), run_time=3)
             self.play(FadeIn(x8))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(more[0]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(more[1]))
         self.wait(0.3)
         self.clear_scene()
@@ -196,30 +190,18 @@ class Backtrack(VoiceoverScene):
         leg = label(r"matches $1^k$ exactly when $k$ is composite: \ red matched, \ green did not --- \ the primes",
                     font_size=20, color=GREY_A).next_to(cells, DOWN, buff=0.25)
         pts = VGroup(
-            label(r"\texttt{\textbackslash 1} must repeat what the group matched: \ no finite automaton can "
-                  r"remember that", font_size=20, color=GREY_A),
-            label(r"matching with back-references is NP-complete \ (Aho, \ 1990): \ no fast algorithm is known for "
-                  r"any engine", font_size=20, color=NO),
-            label(r"so: \ automata when you can, \ backtracking only when the pattern needs it", font_size=21,
+            label("general backreferences can compare unbounded substrings and describe nonregular languages", font_size=20, color=GREY_A),
+            label("backreference matching: NP-complete with both pattern and text as inputs (combined complexity)", font_size=20, color=NO),
+            label("choose features, semantics and resource bounds; backtracking is one execution strategy", font_size=21,
                   color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Why does anyone backtrack, then? <bookmark mark='a'/> Because practical regular expressions can do "
-            "things regular expressions cannot. This one says: a group of two or more ones, then the same group, "
-            "repeated. <bookmark mark='b'/> Run on k ones, it matches exactly when k can be split into equal groups "
-            "of two or more, that is, when k is composite. It is a primality test. <bookmark mark='c'/> A back "
-            "reference must repeat exactly what an earlier group matched, which no finite automaton can remember, "
-            "so this is not a regular language at all. <bookmark mark='d'/> And matching with back-references is "
-            "NP-complete, as Alfred Aho showed: no engine of any kind is known to do it fast. <bookmark mark='e'/> "
-            "The modern answer is to use an automaton whenever the pattern allows it, and to backtrack only when "
-            "it must."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(pat))
-            vo.wait_until("b")
+        with self.voiceover("Why retain backtracking engines? Their features and matching semantics can be useful, but some features go beyond regular languages. <bookmark mark='a'/> This whole-string matcher captures at least two ones and then repeats exactly that captured group. <bookmark mark='b'/> For unary strings of length k at least two, it matches precisely the composite lengths: k has at least two equal groups, each of size at least two. Handle zero and one separately before calling its negation a primality test. <bookmark mark='c'/> A backreference can require an arbitrarily long earlier substring to recur. General backreference patterns can therefore describe nonregular languages; this does not mean every pattern containing one is nonregular. <bookmark mark='d'/> With both the pattern and text supplied as inputs, matching standard backreference expressions is NP-complete. This combined-complexity statement is not a lower bound for every fixed pattern. <bookmark mark='e'/> Choose an engine by its supported features, semantics and resource guarantees. Backtracking is one implementation choice, not the definition of every extended regex language.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(pat), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(LaggedStart(*[FadeIn(c) for c in cells], lag_ratio=0.04), FadeIn(leg), run_time=3)
-            for mk, p in zip("cde", pts):
+            for mk, p in zip('cde', pts):
                 vo.wait_until(mk)
                 self.play(FadeIn(p, shift=RIGHT * 0.1))
         self.wait(0.3)

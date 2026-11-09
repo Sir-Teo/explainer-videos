@@ -30,6 +30,19 @@ class Regex(unittest.TestCase):
                 self.assertEqual(R.matches_by_derivatives(n, s), want, (p, s))
                 self.assertEqual(d.run(s), want, (p, s))
 
+    def test_control_character_escapes_against_python(self):
+        for pattern in [r"\n", r"\r", r"\t", r"[\n\r\t]+", r"a\nb", r"\n|\r"]:
+            node = R.parse(pattern)
+            nfa = R.thompson(node)
+            dfa = A.from_regex(pattern, "abnrt\n\r\t")
+            for text in ["", "n", "r", "t", "\n", "\r", "\t", "\n\r", "a\nb", "anb"]:
+                expected = re.fullmatch(pattern, text) is not None
+                with self.subTest(pattern=pattern, text=text):
+                    self.assertEqual(nfa.run(text)[0], expected)
+                    self.assertEqual(R.backtrack(node, text)[0], expected)
+                    self.assertEqual(R.matches_by_derivatives(node, text), expected)
+                    self.assertEqual(dfa.run(text), expected)
+
     def test_search(self):
         m = R.compile("ab+c")
         self.assertTrue(m.search("xxabbbcyy")[0])
@@ -52,6 +65,28 @@ class Regex(unittest.TestCase):
 
 
 class Automata(unittest.TestCase):
+    def test_wildcard_determinization_requires_an_alphabet(self):
+        for pattern in [".", "[^a]", "a.*b"]:
+            with self.subTest(pattern=pattern):
+                with self.assertRaisesRegex(ValueError, "explicit finite alphabet"):
+                    A.from_regex(pattern)
+                dfa = A.from_regex(pattern, "abx")
+                for n in range(4):
+                    for text in map("".join, itertools.product("abx", repeat=n)):
+                        self.assertEqual(dfa.run(text), re.fullmatch(pattern, text) is not None)
+
+    def test_boolean_products_with_different_alphabets(self):
+        a, b = A.from_regex("a+"), A.from_regex("b+")
+        for operation in [lambda x,y:x and y, lambda x,y:x or y,
+                          lambda x,y:x != y, lambda x,y:x and not y]:
+            combined = A.product(a, b, operation)
+            self.assertEqual(set(combined.alphabet), {"a", "b"})
+            for n in range(4):
+                for text in map("".join, itertools.product("ab", repeat=n)):
+                    left = re.fullmatch("a+", text) is not None
+                    right = re.fullmatch("b+", text) is not None
+                    self.assertEqual(combined.run(text), operation(left, right), text)
+
     def test_nth_from_end_needs_two_to_the_n(self):
         for n in range(1, 9):
             nfa = R.compile(A.nth_from_end(n))

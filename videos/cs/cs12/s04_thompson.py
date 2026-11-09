@@ -71,23 +71,16 @@ class Thompson(VoiceoverScene):
             f = fragment(k)
             g.add(VGroup(f, label(name, font_size=20, color=GREY_A).next_to(f, DOWN, buff=0.3)))
         g.arrange_in_grid(2, 2, buff=(1.6, 0.9)).next_to(head, DOWN, buff=0.6)
-        nd = label(r"$\varepsilon$-edges are free moves: \ the machine may be in many states at once \ "
-                   r"--- \ it is \textit{nondeterministic}", font_size=21, color=HEAD).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "In 1968 Ken Thompson, who would go on to write Unix, published a way to run regular expressions. "
-            "<bookmark mark='a'/> Build a small machine for each piece of the expression, each with one way in and "
-            "one way out. A single symbol is one arrow. <bookmark mark='b'/> To concatenate, join the first "
-            "machine's exit to the second's entrance, with an arrow labelled epsilon, which can be taken without "
-            "reading anything. <bookmark mark='c'/> For a union, split into both machines with epsilon arrows, and "
-            "merge their exits. <bookmark mark='d'/> For a star, add an arrow back to the start, and one that skips "
-            "the machine altogether. <bookmark mark='e'/> Because epsilon arrows are free, the machine can be in "
-            "several states at once. That makes it nondeterministic, an NFA."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, x in zip("abcd", g):
-                vo.wait_until(mk)
+        nd = label("$\\varepsilon$ consumes no input symbol; computing epsilon closure still costs work", font_size=21, color=HEAD).to_edge(DOWN, buff=0.4)
+        with self.voiceover("Thompson's 1968 construction builds an automaton from fragments. <bookmark mark='a'/> A fragment has one entrance and one exit; a symbol supplies a labeled transition. <bookmark mark='b'/> Concatenation connects an exit to the next entrance with epsilon: a transition consuming no input symbol. <bookmark mark='c'/> Union uses epsilon transitions to choose either fragment and then merge. <bookmark mark='d'/> Star allows both another repetition and an exit without a repetition. <bookmark mark='e'/> Nondeterminism means several paths may be possible for the same input. A simulator tracks all reachable states, including epsilon closure. Those transitions consume no input, but computing that closure still costs work.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            for mk, x in zip('abcd', g):
+                if mk != 'a':
+                    vo.wait_until(mk)
                 self.play(FadeIn(x))
-            vo.wait_until("e")
+                if mk == 'a':
+                    vo.wait_until(mk)
+            vo.wait_until('e')
             self.play(FadeIn(nd))
         self.wait(0.3)
         self.clear_scene()
@@ -121,38 +114,29 @@ class Thompson(VoiceoverScene):
             return anims
         res = label(r"after the last \texttt{b}, \ the set contains state 13, \ the accepting state: \ a match",
                     font_size=21, color=YES).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Here is the machine Thompson's construction builds for a b star a b b: any a's and b's, ending in a b "
-            "b. <bookmark mark='a'/> Fourteen states: the star's loop on the left, then the three symbols in a row. "
-            "<bookmark mark='b'/> To run it, keep the set of every state the machine could be in. At the start, "
-            "that is state zero and everything reachable from it by free moves. <bookmark mark='c'/> Then for each "
-            "character, move every state in the set across an arrow with that character, and add the free moves "
-            "again. The set grows and shrinks, but it can never hold more than fourteen states. <bookmark "
-            "mark='d'/> When the input ends, accept if the accepting state is in the set."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(sd), FadeIn(braces))
-            vo.wait_until("b")
+        with self.voiceover("Here is the construction for parenthesized a-or-b, starred, followed by a b b: any binary-alphabet prefix, then the suffix a b b. <bookmark mark='a'/> This implementation produces fourteen states, including the repetition and the three final symbol fragments. <bookmark mark='b'/> Its starting set contains the start state and every state reachable using only epsilon transitions. <bookmark mark='c'/> For each input character, follow matching transitions from the active set, then compute epsilon closure again. Duplicate paths reaching the same state are merged; the active set has at most fourteen states. <bookmark mark='d'/> After the entire input is consumed, accept exactly when the accepting state is active. This is whole-string membership, distinct from searching for a matching substring.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(sd), FadeIn(braces), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             setl = mk(0)
             self.play(FadeIn(cells), *light(0), FadeIn(setl))
-            vo.wait_until("c")
+            vo.wait_until('c')
             for k in range(len(text)):
                 ptr.next_to(cells[k], UP, buff=0.06)
                 new = mk(k + 1)
                 self.play(FadeIn(ptr) if k == 0 else ptr.animate.next_to(cells[k], UP, buff=0.06), run_time=0.25)
                 self.play(*light(k + 1), Transform(setl, new), cells[k].animate.set_color(GREY_C), run_time=0.6)
-            vo.wait_until("d")
-            self.play(FadeIn(res), Indicate(sd.node["13"], color=YES))
+            vo.wait_until('d')
+            self.play(FadeIn(res), Indicate(sd.node['13'], color=YES))
         self.wait(0.3)
         self.clear_scene()
 
     def linear(self):
         b = load("blowup")
-        head = label(r"Linear time, \ whatever the pattern", font_size=36).to_edge(UP, buff=0.35)
+        head = label("Fixed pattern: linear input-time upper bound", font_size=36).to_edge(UP, buff=0.35)
         pts = VGroup(
-            label(r"$m$ states, \ $n$ characters: \ at most $m$ states touched per character \ $\Rightarrow$ \ "
-                  r"$O(mn)$ time, \ no backing up", font_size=22, color=GREY_A),
+            label("bounded-degree Thompson NFA: $O(mn)$ time, $O(m)$ active storage", font_size=22, color=GREY_A),
             label(r"Thompson compiled the sets into IBM 7094 machine code, \ for the QED editor; \ \texttt{grep} "
                   r"(1973) grew out of the same editors", font_size=21, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(head, DOWN, buff=0.45)
@@ -161,22 +145,13 @@ class Thompson(VoiceoverScene):
                        font_size=21, colors=[[GREY_A, YES]] * len(rows), mono_cols=()).next_to(pts, DOWN, buff=0.5)
         cap = label(rf"\texttt{{(a+)+b}} as a {b['nfa_states']}-state NFA: \ ten times the input, \ about ten times "
                     r"the time", font_size=21, color=YES).next_to(t, DOWN, buff=0.35)
-        with self.voiceover(
-            "The cost of this method is easy to bound. <bookmark mark='a'/> With m states and n characters of "
-            "input, each character touches at most m states, so the time is proportional to m times n, and the "
-            "machine never has to go back and try again. <bookmark mark='b'/> Thompson's own version compiled the "
-            "state sets into IBM 7094 machine code inside the QED text editor, and grep, in 1973, grew out of the "
-            "same line of editors. "
-            "<bookmark mark='c'/> Here is our simulation, in plain Python, on the pattern from the start of the "
-            "part. Ten times as many a's take about ten times as long. A hundred thousand a's take a fifth of a "
-            "second, where Python's own engine needs eight seconds for twenty-eight."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(pts[0]))
-            vo.wait_until("b")
+        with self.voiceover("The construction gives a useful cost bound. <bookmark mark='a'/> For a Thompson NFA with m states and bounded outgoing degree, visit each active state and each state reached in epsilon closure only a bounded number of times per input character. With n characters, O m n time and O m active storage suffice. This is an upper bound; a particular input may visit fewer states. <bookmark mark='b'/> Thompson used generated IBM 7094 code in the QED editor. Later Unix text tools developed from this line of work; modern engines add their own optimizations and feature choices. <bookmark mark='c'/> The displayed host timings compare our Python simulator with the host backtracking engine on this failing pattern. Inspect their trend and units rather than treating a measured duration as a portable constant. State-work counts and elapsed time answer different questions.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(pts[0]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(pts[1]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(VGroup(*t.cells[0])), FadeIn(t.rule))
             self.play(LaggedStart(*[FadeIn(VGroup(*t.cells[r])) for r in range(1, len(t.cells))], lag_ratio=0.3))
             self.play(FadeIn(cap))

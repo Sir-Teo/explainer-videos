@@ -63,22 +63,13 @@ class Regex(VoiceoverScene):
             r[0].align_to([-6.3, 0, 0], LEFT)
             r[1].align_to([-1.2, 0, 0], LEFT)
             r[2].align_to([3.9, 0, 0], LEFT)
-        with self.voiceover(
-            "A regular expression builds a language from single symbols with three operations, which Stephen "
-            "Kleene wrote down in 1951 while studying models of neurons. <bookmark mark='a'/> Union: a string from "
-            "either side. Concatenation: a string from the first, then one from the second. And star: any number "
-            "of strings from the same expression, one after another, including none. <bookmark mark='b'/> "
-            "Everything else in practical regex syntax, plus, question mark, character classes, the dot, is "
-            "shorthand for these. <bookmark mark='c'/> With them we can describe binary strings ending in one; an "
-            "a, then any mixture of b's and c's, then a d; the identifiers of the Pebble language; and, less "
-            "obviously, the binary numbers divisible by three. Where that last one comes from is chapter five."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(o, shift=RIGHT * 0.1) for o in ops], lag_ratio=0.5), run_time=3)
-            vo.wait_until("b")
+        with self.voiceover("Mathematical regular expressions build languages using three operations, developed by Kleene in his work on finite automata. <bookmark mark='a'/> Union chooses a string from either language. Concatenation joins a string from each. Star joins any finite number of strings from one language, including zero. <bookmark mark='b'/> Ordinary plus, question mark, finite character classes and dot are expressible with these operations over the chosen alphabet. Practical extensions such as backreferences require a separate discussion. <bookmark mark='c'/> The examples include suffixes, identifiers and binary divisibility by three. Our divisibility convention allows leading zeros and also accepts the empty word as representing zero; requiring at least one digit would change that language slightly.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(o, shift=RIGHT * 0.1) for o in ops], lag_ratio=0.5), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(base))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.5), run_time=4)
         self.wait(0.3)
         self.clear_scene()
@@ -97,22 +88,14 @@ class Regex(VoiceoverScene):
             states.append(str((2 * int(states[-1]) + int(c)) % 3))
         verdict = label(r"$1001_2 = 9$: \ it ends in the accepting state 0 \ $\Rightarrow$ \ divisible by 3",
                         font_size=22, color=YES).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "And here is a machine. <bookmark mark='a'/> A finite automaton with three states, one for each "
-            "possible remainder when a binary number read so far is divided by three. <bookmark mark='b'/> Reading "
-            "one more bit doubles the number and adds the bit, so the remainder r becomes two r plus b, modulo "
-            "three. That is the whole machine: a fixed memory of three states, however long the input. <bookmark "
-            "mark='c'/> Feed it one, zero, zero, one. It moves to one, to two, to one, and back to zero, the "
-            "accepting state: nine is divisible by three. Exactly the strings that the strange regular expression "
-            "on the last slide describes. Is that a coincidence?"
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(sd))
-            vo.wait_until("b")
+        with self.voiceover("And here is a machine. <bookmark mark='a'/> A finite automaton with three states, one for each possible remainder when a binary number read so far is divided by three. <bookmark mark='b'/> Reading one more bit doubles the number and adds the bit, so the remainder r becomes two r plus b, modulo three. That is the whole machine: a fixed memory of three states, however long the input. <bookmark mark='c'/> Feed it one, zero, zero, one. It moves to one, to two, to one, and back to zero, the accepting state: nine is divisible by three. Exactly the strings that the strange regular expression on the last slide describes. Is that a coincidence?") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(sd), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(rule))
-            vo.wait_until("c")
-            self.play(FadeIn(cells), FadeIn(ptr), sd.light("0"))
+            vo.wait_until('c')
+            self.play(FadeIn(cells), FadeIn(ptr), sd.light('0'))
             for k, c in enumerate(word):
                 self.play(ptr.animate.next_to(cells[k], UP, buff=0.08), run_time=0.3)
                 self.play(sd.light(states[k + 1]), cells[k].animate.set_color(GREY_B), run_time=0.5)

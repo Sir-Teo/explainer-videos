@@ -62,30 +62,19 @@ class General(VoiceoverScene):
                   color=GREY_A),
             label(r"the start symbol in the top cell: \ the sentence is in the language", font_size=19, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_corner(UL, buff=0.35).shift(DOWN * 1.15)
-        with self.voiceover(
-            "Is there a parsing method that works for every context-free grammar? Yes, and it is dynamic "
-            "programming, the subject of Part 19. <bookmark mark='a'/> First rewrite the grammar so that every rule "
-            "makes either two nonterminals or one token, Chomsky normal form. <bookmark mark='b'/> Then build a "
-            "triangular table. The cell in row l and column i lists every nonterminal that can derive the l tokens "
-            "starting at position i. The bottom row comes straight from the tokens. <bookmark mark='c'/> Each "
-            "higher cell is filled from pairs of cells below it, by splitting its span in two and looking for a "
-            "rule A goes to B C. <bookmark mark='d'/> If the start symbol appears in the top cell, the whole "
-            "sentence is in the language. This is the algorithm of John Cocke, Daniel Younger and Tadao Kasami, "
-            "from the 1960s, and it takes time proportional to n cubed."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(cnf))
-            vo.wait_until("b")
+        with self.voiceover("General context-free recognition can be organized as dynamic programming. <bookmark mark='a'/> Convert the grammar to Chomsky normal form: rules producing two nonterminals or one terminal, with the empty-string case handled separately. Grammar conversion can change size and derivation multiplicities even while preserving the language. <bookmark mark='b'/> In the CYK table, a cell records which nonterminals derive a particular input span. Single-token spans supply the first row. <bookmark mark='c'/> For each larger span, try its split points and rules of the form A to B C. Combine the corresponding smaller cells. <bookmark mark='d'/> The start symbol in the full-span cell means acceptance. For a fixed grammar this gives an O n cubed worst-case upper bound; grammar size contributes when the grammar is also part of the input. The table can retain parse information, but enumerating every tree of an ambiguous grammar can cost much more.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(cnf), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(tokrow), FadeIn(expl[0]))
-            self.play(LaggedStart(*[FadeIn(cells[(i, 1)]) for i in range(n)], lag_ratio=0.2))
-            vo.wait_until("c")
+            self.play(LaggedStart(*[FadeIn(cells[i, 1]) for i in range(n)], lag_ratio=0.2))
+            vo.wait_until('c')
             self.play(FadeIn(expl[1]))
             for l in range(2, n + 1):
-                self.play(LaggedStart(*[FadeIn(cells[(i, l)]) for i in range(n - l + 1)], lag_ratio=0.2),
-                          run_time=0.9)
-            vo.wait_until("d")
-            self.play(FadeIn(expl[2]), Indicate(cells[(0, n)], color=YES))
+                self.play(LaggedStart(*[FadeIn(cells[i, l]) for i in range(n - l + 1)], lag_ratio=0.2), run_time=0.9)
+            vo.wait_until('d')
+            self.play(FadeIn(expl[2]), Indicate(cells[0, n], color=YES))
         self.wait(0.3)
         self.clear_scene()
 
@@ -118,27 +107,17 @@ class General(VoiceoverScene):
                   r"the next token $\to$ move the dot", font_size=19, color=CTRL),
             label(r"\textbf{complete}: \ a finished item advances the items that were waiting for it", font_size=19,
                   color=DATA),
-            label(r"any grammar, \ ambiguous or left-recursive; \ $n^3$ at worst, \ linear on the grammars "
-                  r"programmers write", font_size=20, color=YES),
+            label("any CFG, including left recursion: cubic worst-case bound for fixed grammar; faster on suitable classes", font_size=20, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Jay Earley's parser, from 1970, is the other general method, and in practice the better one. <bookmark "
-            "mark='a'/> It works from left to right, keeping a set of items: a rule, a dot showing how much of it "
-            "has been seen, and the position where it started. <bookmark mark='b'/> Three operations fill each set. "
-            "Predict: if the dot is before a nonterminal, add that nonterminal's rules. Scan: if the dot is before "
-            "the next token, move it past. <bookmark mark='c'/> Complete: when an item is finished, advance every "
-            "item that was waiting for it. <bookmark mark='d'/> After the last token, a finished start item means "
-            "success. Earley's method handles any grammar at all, ambiguous or left-recursive, in cubic time at "
-            "worst, and much faster on the grammars that people actually write."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(cols[0]), FadeIn(ops[0]))
-            vo.wait_until("b")
+        with self.voiceover("Earley's method works directly with context-free grammar rules, including left recursion and ambiguity. <bookmark mark='a'/> At each input position it stores items: a rule, a dot marking progress, and the position where that rule began. <bookmark mark='b'/> Prediction adds rules for an expected nonterminal. Scanning advances a dot across a matching input token. <bookmark mark='c'/> Completion advances items waiting for a nonterminal that has just finished. Duplicate items must be merged, and nullable rules need careful handling. <bookmark mark='d'/> A completed start item spanning the entire input means acceptance. For fixed grammars, the standard worst-case bound is cubic, improving to quadratic for unambiguous grammars; suitable specialized implementations achieve linear bounds on important deterministic families. Those time bounds concern the complete algorithm, not just the number of stored items.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(cols[0]), FadeIn(ops[0]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(cols[1]), FadeIn(cols[2]), FadeIn(ops[1]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(cols[3]), FadeIn(ops[2]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(ops[3]))
         self.wait(0.3)
         self.clear_scene()
@@ -155,7 +134,7 @@ class General(VoiceoverScene):
         u = VMobject(color=YES, stroke_width=4).set_points_as_corners([ax.c2p(r["n"], r["earley_items"]) for r in tm])
         a = VMobject(color=NO, stroke_width=4).set_points_as_corners(
             [ax.c2p(r["n"], r["earley_ambiguous_items"]) for r in tm])
-        ul = label(r"$E, T, F$ grammar: \ linear", font_size=19, color=YES).next_to(ax.c2p(60, tm[-1]["earley_items"]),
+        ul = label("$E,T,F$: near-linear items (this sample)", font_size=19, color=YES).next_to(ax.c2p(60, tm[-1]["earley_items"]),
                                                                                   UP, buff=0.15)
         al = label(r"$E \to E + E \mid E * E \mid \dots$: \ quadratic", font_size=19, color=NO).next_to(
             ax.c2p(42, 1800), LEFT, buff=0.1)
@@ -164,19 +143,15 @@ class General(VoiceoverScene):
             label(rf"{last['n']} tokens:", font_size=20, color=GREY_B),
             label(rf"Earley, \ unambiguous: \ {last['earley_items']} items", font_size=20, color=YES),
             label(rf"Earley, \ ambiguous: \ {last['earley_ambiguous_items']:,} items", font_size=20, color=NO),
-            label(rf"CYK: \ {1000 * last['cyk']:.1f} ms, \ cubic either way", font_size=20, color=CTRL),
+            label(rf"CYK: \ {1000 * last['cyk']:.1f} ms \\ fixed-grammar cubic upper bound", font_size=20, color=CTRL),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(ax, RIGHT, buff=0.6)
         with self.voiceover(
-            "We measured both on sums of ids, from five tokens to sixty-five. <bookmark mark='a'/> On the layered, "
-            "unambiguous grammar, Earley's parser creates a few items per token: a straight line. <bookmark "
-            "mark='b'/> On the ambiguous grammar, where every split of the sum is a possible tree, the items grow "
-            "much faster: two thousand three hundred at sixty-five tokens. <bookmark mark='c'/> CYK does cubic work "
-            "either way. General parsing is possible, but a compiler wants something faster and simpler, for "
-            "grammars designed to allow it: the next two chapters."
+            "These curves count stored Earley items, separately from elapsed time. <bookmark mark='a'/> On sums of identifiers in our layered expression grammar, the sampled item counts grow approximately linearly with token count. <bookmark mark='b'/> On the ambiguous grammar, the counts grow faster: the sixty-five-token sample stores two thousand three hundred and seventy-seven items. More parse trees need not mean that every tree is explicitly enumerated. <bookmark mark='c'/> The side panel also records a CYK duration from this host. Its cubic worst-case bound is a mathematical statement for fixed grammars; a finite item-count plot does not prove a runtime bound. Restricted predictive and LR grammars let the next chapters use simpler, linear-time parsing strategies."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl))
+            self.play(Create(u), FadeIn(ul), FadeIn(side[0]), FadeIn(side[1]), run_time=.6)
             vo.wait_until("a")
-            self.play(Create(u), FadeIn(ul), FadeIn(side[0]), FadeIn(side[1]))
+            self.play(Indicate(u, color=YES), run_time=.4)
             vo.wait_until("b")
             self.play(Create(a), FadeIn(al), FadeIn(side[2]))
             vo.wait_until("c")

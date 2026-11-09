@@ -95,23 +95,27 @@ class BottomUp(VoiceoverScene):
             label(r"states 5 and 10, \ in red: \ ``reduce $E \to T$'' \ or \ ``shift \texttt{*}''? \ LR(0) cannot "
                   r"tell", font_size=19, color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Donald Knuth showed in 1965 how to make the decision mechanical. <bookmark mark='a'/> An item is a "
-            "rule with a dot in it, marking how much of the rule is already on the stack. A state is the set of "
-            "all items that could be in progress at once. For our grammar there are twelve states. <bookmark "
-            "mark='b'/> The remarkable fact is that the stack can be tracked by a finite automaton: the numbers on "
-            "the stack are a path through these states, and the state on top says what to do. <bookmark mark='c'/> "
-            "But in two of them, shown in red, a T has just been completed, and the machine cannot tell whether to "
-            "reduce it, or to shift a times sign that may follow. Using no lookahead, LR zero, the grammar has "
-            "conflicts."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(boxes[0]), FadeIn(pts[0]))
+        transitions = {(a, symbol): b for a, symbol, b in lr["lr0"]["trans"]}
+        path_states = [0]
+        for symbol in ["T", "*", "F"]:
+            path_states.append(transitions[path_states[-1], symbol])
+        path = StateDiagram({str(q): (x, -1.8) for q, x in zip(path_states, [-4.1, -1.4, 1.3, 4.0])},
+                            [(str(a), str(b), symbol, 0) for a, b, symbol in
+                             zip(path_states, path_states[1:], ["T", "*", "F"])],
+                            radius=.2, font_size=16, edge_font=16, color=YES)
+        # The hidden glow starts at the origin; use only visible nodes/edges for layout.
+        path_layout = VGroup(path.edges, path.nodes)
+        path.shift(UP * (boxes.get_bottom()[1] - 0.18 - path_layout.get_top()[1]))
+        with self.voiceover("LR items make the shift-or-reduce decision mechanical. <bookmark mark='a'/> An item is a production with a dot marking progress. Each state collects items that can be active together; this grammar has twelve such states. <bookmark mark='b'/> Read a viable stack prefix through the automaton. The connected example follows T, then star, then F; the state numbers under the item boxes are the corresponding stack path. The current state summarizes what prefixes can follow. <bookmark mark='c'/> In the two red states, a completed E-to-T item requests reduction, while another item permits shifting star. LR zero supplies no lookahead to distinguish those actions, so the table has conflicts.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(boxes[0]), FadeIn(pts[0]), run_time=0.6)
+            vo.wait_until('a')
             self.play(LaggedStart(*[FadeIn(b) for b in boxes[1:]], lag_ratio=0.15), run_time=3)
-            vo.wait_until("b")
-            self.play(FadeIn(pts[1]))
-            vo.wait_until("c")
+            vo.wait_until('b')
+            self.play(FadeIn(pts[1]), FadeIn(path))
+            for state in path_states:
+                self.play(Indicate(boxes[state], color=YES), run_time=0.4)
+            vo.wait_until('c')
             self.play(FadeIn(pts[2]), *[Indicate(boxes[k], color=NO) for k in conf])
         self.wait(0.3)
         self.clear_scene()
@@ -122,7 +126,7 @@ class BottomUp(VoiceoverScene):
         rows = [[r"LR(0)", r"no lookahead", str(lr["lr0_states"]), str(len(lr["lr0"]["conflicts"]))],
                 [r"SLR \ (DeRemer, \ 1971)", r"reduce only on FOLLOW", str(lr["lr0_states"]), str(lr["slr"]["conflicts"])],
                 [r"LR(1) \ (Knuth, \ 1965)", r"each item carries its lookahead", str(lr["lr1_states"]), "0"],
-                [r"LALR \ (DeRemer, \ 1969)", r"LR(1), \ states with equal items merged", str(lr["lalr_states"]), "0"]]
+                [r"LALR \ (DeRemer, \ 1969)", "LR(1) states with equal LR(0) cores merged", str(lr["lalr_states"]), "0"]]
         t = grid_table([r"method", r"how it decides", r"states", r"conflicts"], rows, [3.4, 4.6, 1.5, 1.8],
                        row_h=0.55, font_size=20, colors=[[HEAD, GREY_A, CTRL, NO]] * 4, mono_cols=()).next_to(
             head, DOWN, buff=0.4)
@@ -131,18 +135,22 @@ class BottomUp(VoiceoverScene):
                       label(rf"SLR: \ a shift/reduce conflict on \texttt{{=}}; \ LALR: \ none, \ in "
                             rf"{lr['lslr_lalr_states']} states", font_size=19, color=GREY_A)).arrange(DOWN, buff=0.12)
         lslr.next_to(t, DOWN, buff=0.45)
-        sw = label(r"LALR: \ almost all the power of LR(1), \ in the size of LR(0) \ --- \ what yacc and bison build",
+        sw = label("LALR merges LR(0) cores: fewer states than LR(1), but merging can introduce conflicts",
                    font_size=21, color=YES).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "The cure is to look at the next token before deciding. <bookmark mark='a'/> The simplest version, "
-            "SLR, reduces by a rule only if the next token can follow the rule's left side. After a T, a times "
-            "sign cannot follow an E, so the conflict disappears. <bookmark mark='b'/> Knuth's full method, LR one, "
-            "carries a lookahead token inside every item. It handles every deterministic context-free language, "
-            "but even this small grammar grows from twelve states to twenty-two, and real languages to thousands. "
-            "<bookmark mark='c'/> Frank DeRemer's LALR merges the LR one states that contain the same items, "
-            "getting back to twelve. It is strictly stronger than SLR: this grammar for assignments through "
-            "pointers defeats SLR, but not LALR. <bookmark mark='d'/> LALR is the method yacc made famous in 1975, "
-            "and bison still uses it today."
+            (
+            "Lookahead can resolve these conflicts. <bookmark mark='a'/> SLR allows a reduction only when the "
+            "next token belongs to FOLLOW of the rule's left side. In this expression grammar, that removes the "
+            "LR zero conflicts. <bookmark mark='b'/> Canonical LR one attaches lookahead to items. This example "
+            "grows from twelve states to twenty-two. With standard end-marker conventions, LR grammars "
+            "characterize deterministic context-free languages, but not every grammar describing such a language "
+            "is already LR one. <bookmark mark='c'/> LALR merges canonical states with the same LR zero core and "
+            "combines lookaheads. It returns this example to twelve states, and handles the assignment grammar "
+            "that defeats SLR. Merging can introduce conflicts in other grammars that canonical LR one handles. "
+            "<bookmark mark='d'/> Yacc popularized LALR. Bison supports LALR and other construction modes; the "
+            "comparison here uses the selected LALR configuration rather than a claim about every Bison "
+            "invocation."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*t.cells[0])), FadeIn(t.rule), FadeIn(VGroup(*t.cells[1])))
             vo.wait_until("a")
@@ -176,12 +184,16 @@ class BottomUp(VoiceoverScene):
                   r"exactly C's rule", font_size=20, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "We checked our parser generator against bison, on this computer. <bookmark mark='a'/> For each "
-            "grammar, bison builds exactly one state more than ours, an extra state it uses after shifting the end "
-            "of input. <bookmark mark='b'/> And on the dangling else, both report the same single shift-reduce "
-            "conflict. <bookmark mark='c'/> The conflict is the ambiguity from chapter nine: with an else coming "
-            "after an inner if, reduce the if, or shift the else? Bison resolves it by shifting, which attaches the "
-            "else to the nearest if: exactly the rule C uses."
+            (
+            "Bison supplies an external cross-check on these grammar tables. <bookmark mark='a'/> In the selected "
+            "configurations, its state counts are one above ours because of its extra end-of-input acceptance "
+            "state. Agreement in counts is useful evidence, but does not by itself prove the transition tables "
+            "are identical. <bookmark mark='b'/> On the dangling-else grammar, both tools report one shift-reduce "
+            "conflict. <bookmark mark='c'/> With else as lookahead, reducing the inner if competes with shifting "
+            "else. Bison's default shift resolution attaches it to the nearest unmatched if. A language can "
+            "express that convention through grammar design, parser precedence or other specification rules; the "
+            "ambiguous grammar alone allows both trees."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*t.cells[0])), FadeIn(t.rule))
             vo.wait_until("a")

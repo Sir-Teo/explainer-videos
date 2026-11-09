@@ -44,24 +44,13 @@ class Grammars(VoiceoverScene):
             label(r"John Backus and Peter Naur, \ 1960: \ the same idea, \ ``BNF'', \ defines ALGOL 60 \ --- \ "
                   r"the first major language defined by a formal grammar", font_size=20, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Nesting needs a more powerful description: a grammar. <bookmark mark='a'/> Here is a grammar for "
-            "arithmetic expressions. It has three rules, each with alternatives separated by a bar. <bookmark "
-            "mark='b'/> E, T and F are nonterminals: names for kinds of phrase, an expression, a term and a "
-            "factor. Plus, times, the brackets and id are terminals: the tokens the lexer produces. A rule says "
-            "that wherever its left side appears, it may be replaced by its right side, whatever surrounds it; "
-            "that is what context-free means. Notice the third rule: an expression in brackets is a factor, so the "
-            "grammar can nest without limit. <bookmark mark='c'/> Noam Chomsky defined such grammars in 1956 as a "
-            "model of human language. Four years later John Backus and Peter Naur used the same idea to define "
-            "ALGOL 60, the first major programming language defined by a formal grammar, and nearly every language "
-            "since has had one."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(x) for x in g], lag_ratio=0.3))
-            vo.wait_until("b")
+        with self.voiceover("Nesting needs a more powerful description: a grammar. <bookmark mark='a'/> Here is a grammar for arithmetic expressions. It has three rules, each with alternatives separated by a bar. <bookmark mark='b'/> E, T and F are nonterminals: names for kinds of phrase, an expression, a term and a factor. Plus, times, the brackets and id are terminals: the tokens the lexer produces. A rule says that wherever its left side appears, it may be replaced by its right side, whatever surrounds it; that is what context-free means. Notice the third rule: an expression in brackets is a factor, so the grammar can nest without limit. <bookmark mark='c'/> Noam Chomsky defined such grammars in 1956 as a model of human language. Four years later John Backus and Peter Naur used the same idea to define ALGOL 60, the first major programming language defined by a formal grammar, and nearly every language since has had one.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(x) for x in g], lag_ratio=0.3), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(LaggedStart(*[FadeIn(p) for p in parts], lag_ratio=0.6), run_time=5)
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(hist))
         self.wait(0.3)
         self.clear_scene()
@@ -147,29 +136,19 @@ class Grammars(VoiceoverScene):
         VGroup(a, b).arrange(RIGHT, buff=1.5).next_to(src, DOWN, buff=0.5)
         two = label(r"two trees: \ CYK counts 2", font_size=20, color=NO).next_to(VGroup(a, b), DOWN, buff=0.3)
         fixes = VGroup(
-            label(r"C, \ Java, \ Pascal: \ a rule outside the grammar \ --- \ \texttt{else} belongs to the nearest "
-                  r"\texttt{if}", font_size=20, color=GREY_A),
+            label("nearest-unmatched-if convention: express it by grammar design or parser resolution", font_size=20, color=GREY_A),
             label(r"the Pebble language: \ every branch is a \texttt{\{ block \}}, \ so the question never arises",
                   font_size=20, color=YES),
             label(r"and in general? \ ``Is this grammar ambiguous?'' \ is \textit{undecidable} \ (1962; \ Part 25)",
                   font_size=20, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "The most famous ambiguity in programming is the dangling else. <bookmark mark='a'/> In if c then if c "
-            "then x else x, does the else belong to the inner if, or the outer one? <bookmark mark='b'/> The usual "
-            "grammar allows both, and CYK finds two trees. <bookmark mark='c'/> C, Java and Pascal settle it with a "
-            "rule outside the grammar: an else belongs to the nearest if. <bookmark mark='d'/> The Pebble language "
-            "avoids the question by requiring braces around every branch. <bookmark mark='e'/> Can a program "
-            "always detect ambiguity for us? No. Whether a context-free grammar is ambiguous is undecidable, as "
-            "Cantor, Floyd, and Chomsky and Schützenberger showed in the early 1960s; we will see what that means "
-            "in Part 25."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(src))
-            vo.wait_until("b")
+        with self.voiceover("The dangling else illustrates a grammar choice. <bookmark mark='a'/> In if c then if c then x else x, the else could attach to the inner or outer if. <bookmark mark='b'/> This ambiguous grammar permits both trees; the finite enumeration displays the two choices. <bookmark mark='c'/> Many language specifications choose the nearest unmatched if. That convention can be expressed by a suitable grammar or by parser resolution rules; it is not supplied by this ambiguous grammar alone. <bookmark mark='d'/> Pebble avoids the choice by requiring braces around each branch. <bookmark mark='e'/> Finding two trees proves a particular grammar ambiguous. Deciding whether an arbitrary context-free grammar is ambiguous is undecidable. Failure to find a counterexample by finite testing would not prove unambiguity.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(src), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(a), FadeIn(b), FadeIn(two))
-            for mk, f in zip("cde", fixes):
+            for mk, f in zip('cde', fixes):
                 vo.wait_until(mk)
                 self.play(FadeIn(f, shift=RIGHT * 0.1))
         self.wait(0.3)

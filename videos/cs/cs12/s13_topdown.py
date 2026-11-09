@@ -36,22 +36,13 @@ class TopDown(VoiceoverScene):
                     color=YES).to_edge(LEFT, buff=0.6).to_edge(DOWN, buff=0.7)
         gl = label(r"the same thing as a loop: \ what hand-written parsers do", font_size=19, color=GREY_B).next_to(
             good, RIGHT, buff=0.5)
-        with self.voiceover(
-            "The simplest way to write a parser is by hand, top down. <bookmark mark='a'/> Write one function for "
-            "each nonterminal, which reads exactly the tokens of that kind of phrase, calling the other functions "
-            "for the phrases inside it. But try it on our grammar. E is E plus T, so the function for E first "
-            "calls the function for E, which calls the function for E, forever, without reading a single token. "
-            "<bookmark mark='b'/> The cure is to rewrite left recursion as right recursion: an expression is a "
-            "term followed by a tail of plus-terms, which may be empty. <bookmark mark='c'/> Or, as hand-written "
-            "parsers really do it, as a loop: parse a term, then as long as the next token is a plus, take it and "
-            "parse another term."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(bad), FadeIn(bl))
-            vo.wait_until("b")
+        with self.voiceover("The simplest way to write a parser is by hand, top down. <bookmark mark='a'/> Write one function for each nonterminal, which reads exactly the tokens of that kind of phrase, calling the other functions for the phrases inside it. But try it on our grammar. E is E plus T, so the function for E first calls the function for E, which calls the function for E, forever, without reading a single token. <bookmark mark='b'/> The cure is to rewrite left recursion as right recursion: an expression is a term followed by a tail of plus-terms, which may be empty. <bookmark mark='c'/> Or, as hand-written parsers really do it, as a loop: parse a term, then as long as the next token is a plus, take it and parse another term.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(bad), FadeIn(bl), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(fixed), FadeIn(fl))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(good), FadeIn(gl))
         self.wait(0.3)
         self.clear_scene()
@@ -84,22 +75,13 @@ class TopDown(VoiceoverScene):
             label(rf"one entry per cell: \ the grammar is LL(1) \ (the left-recursive one had "
                   rf"{l['left_recursive_conflicts']} clashes)", font_size=19, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "To make the choices automatic, compute two sets. <bookmark mark='a'/> FIRST of a phrase is the set "
-            "of tokens it can begin with: a term can begin with an id or an opening bracket. FOLLOW of a "
-            "nonterminal is the set of tokens that can appear right after it: after an expression, a closing "
-            "bracket or the end. <bookmark mark='b'/> From these, fill a table. In the row for each nonterminal and "
-            "the column for each token, write the rule to use when that nonterminal is expected and that token is "
-            "next. A rule that can produce nothing goes under the tokens that can follow. <bookmark mark='c'/> If "
-            "every cell holds at most one rule, the parser never has to guess: the grammar is LL one, for Left to "
-            "right, Leftmost derivation, one token of lookahead. The left-recursive grammar had four clashing cells."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(ff), FadeIn(pts[0]))
-            vo.wait_until("b")
+        with self.voiceover("To make the choices automatic, compute two sets. <bookmark mark='a'/> FIRST of a phrase is the set of tokens it can begin with: a term can begin with an id or an opening bracket. FOLLOW of a nonterminal is the set of tokens that can appear right after it: after an expression, a closing bracket or the end. <bookmark mark='b'/> From these, fill a table. In the row for each nonterminal and the column for each token, write the rule to use when that nonterminal is expected and that token is next. A rule that can produce nothing goes under the tokens that can follow. <bookmark mark='c'/> If every cell holds at most one rule, the parser never has to guess: the grammar is LL one, for Left to right, Leftmost derivation, one token of lookahead. The left-recursive grammar had four clashing cells.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(ff), FadeIn(pts[0]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(tab), FadeIn(pts[1]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(pts[2]))
         self.wait(0.3)
         self.clear_scene()
@@ -116,12 +98,16 @@ class TopDown(VoiceoverScene):
         more = label(rf"\dots \ {len(l['trace'])} steps in all; \ accepted", font_size=19, color=GREY_B).next_to(
             t, DOWN, buff=0.15)
         with self.voiceover(
-            "Here it is running. <bookmark mark='a'/> The parser keeps a stack of what it still expects to see, "
-            "starting with E. At each step, if the top is a nonterminal, the table says which rule to expand it "
-            "with; if it is a token, it must match the next input token. <bookmark mark='b'/> No backtracking, no "
-            "guessing: one look at the next token decides every step, so the time is linear in the input. "
-            "<bookmark mark='c'/> Most hand-written compilers, including GCC and Clang for C and C plus plus, are "
-            "recursive descent parsers of this kind, with a little extra lookahead where the language demands it."
+            (
+            "Here is the predictive parser on this LL one grammar. <bookmark mark='a'/> Its stack records what "
+            "remains to be recognized, beginning with the start nonterminal. A nonterminal expands using the "
+            "table entry for the lookahead token; a terminal must match that token. <bookmark mark='b'/> For this "
+            "fixed, conflict-free grammar, parsing takes linear time in input length. The table removes guessing; "
+            "error handling and semantic checks are separate concerns. <bookmark mark='c'/> Hand-written "
+            "recursive descent is also widely used in production compilers. C and C plus plus front ends such as "
+            "GCC and Clang add semantic disambiguation, richer lookahead and other machinery. Calling them "
+            "recursive descent does not make their full languages or implementations LL one."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*t.cells[0])), FadeIn(t.rule))
             vo.wait_until("a")
@@ -152,23 +138,13 @@ class TopDown(VoiceoverScene):
         t = tree(ast_tree(P.parse_expr(e)), dx=0.7, dy=0.6, font_size=18).next_to(src, DOWN, buff=0.45)
         tl = Text(e + "   →   " + pb["pratt"][e], font="DejaVu Sans Mono", font_size=17, color=YES).to_edge(
             DOWN, buff=0.35)
-        with self.voiceover(
-            "Expressions with many precedence levels make long, tedious grammars: one nonterminal per level. Vaughan "
-            "Pratt's method, from 1973, replaces them with numbers. <bookmark mark='a'/> Each operator gets a "
-            "binding power: or binds weakest, then and, comparisons, plus and minus, times and divide, prefix "
-            "operators, and strongest of all calls, indexing and field access. <bookmark mark='b'/> The whole "
-            "expression parser is one loop. Parse a prefix; then, as long as the next operator binds more tightly "
-            "than the caller's limit, take it and parse its right side with that operator's power as the new "
-            "limit. <bookmark mark='c'/> On a plus b times c minus d, the times grabs b and c before the plus can, "
-            "and the minus, at the same power as the plus, waits its turn, so subtraction groups to the left. This "
-            "is the expression parser of the Pebble language, and of many real compilers."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(bpl), LaggedStart(*[FadeIn(b) for b in bp], lag_ratio=0.2))
-            vo.wait_until("b")
+        with self.voiceover("Expressions with many precedence levels make long, tedious grammars: one nonterminal per level. Vaughan Pratt's method, from 1973, replaces them with numbers. <bookmark mark='a'/> Each operator gets a binding power: or binds weakest, then and, comparisons, plus and minus, times and divide, prefix operators, and strongest of all calls, indexing and field access. <bookmark mark='b'/> The whole expression parser is one loop. Parse a prefix; then, as long as the next operator binds more tightly than the caller's limit, take it and parse its right side with that operator's power as the new limit. <bookmark mark='c'/> On a plus b times c minus d, the times grabs b and c before the plus can, and the minus, at the same power as the plus, waits its turn, so subtraction groups to the left. This is the expression parser of the Pebble language, and of many real compilers.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(bpl), LaggedStart(*[FadeIn(b) for b in bp], lag_ratio=0.2), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(src))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(t), FadeIn(tl))
         self.wait(0.3)
         self.clear_scene()

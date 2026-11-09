@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import numpy as np
 
+from explainer import zh_text
+
 from explainer.cs import *  # noqa: F403
 from videos.cs.cs6.common import box, fmt, sci  # noqa: F401
 from videos.cs.cs7.common import mono  # noqa: F401
@@ -37,12 +39,18 @@ def kind_of(kind: str) -> str:
     return "operator"
 
 
+def literal_text(text, **kwargs):
+    """A literal token, grammar symbol or program output; translate its explanation separately."""
+    with zh_text.verbatim():
+        return Text(text, **kwargs)
+
+
 def chips(tokens, font_size=16, buff=0.08, max_width=13.0):
     """A row (wrapped into lines) of token chips: (kind, text) pairs, coloured by kind."""
     rows, row, w = VGroup(), VGroup(), 0.0
     for kind, text in tokens:
         c = KIND_COLORS[kind_of(kind)]
-        t = Text(text, font="DejaVu Sans Mono", font_size=font_size, color=c)
+        t = literal_text(text, font="DejaVu Sans Mono", font_size=font_size, color=c)
         r = RoundedRectangle(width=t.width + 0.18, height=0.42, corner_radius=0.06, stroke_color=c, stroke_width=1.2,
                              fill_color=c, fill_opacity=0.12)
         chip = VGroup(r, t.move_to(r))
@@ -68,13 +76,13 @@ def tree(t, dx=0.75, dy=0.75, font_size=20, leaf_color=CODE, node_color=GREY_A, 
 
     def place(x, depth, left):
         if isinstance(x, str):
-            m = Text(x, font="DejaVu Sans Mono", font_size=font_size, color=leaf_color)
+            m = literal_text(x, font="DejaVu Sans Mono", font_size=font_size, color=leaf_color)
             pos = np.array([(left + 0.5) * dx, -depth * dy, 0])
             m.move_to(pos)
             nodes.append((m, depth))
             return m
         lab, kids = x
-        m = Text(lab, font="DejaVu Sans Mono", font_size=font_size, color=node_color)
+        m = literal_text(lab, font="DejaVu Sans Mono", font_size=font_size, color=node_color)
         nodes.append((m, depth))
         kms = []
         cur = left
@@ -85,7 +93,7 @@ def tree(t, dx=0.75, dy=0.75, font_size=20, leaf_color=CODE, node_color=GREY_A, 
             m.move_to([np.mean([k.get_x() for k in kms]), -depth * dy, 0])
         else:
             m.move_to([(left + 0.5) * dx, -depth * dy, 0])
-            e = Text("ε", font_size=font_size - 2, color=GREY_C).move_to([(left + 0.5) * dx, -(depth + 1) * dy, 0])
+            e = literal_text("ε", font_size=font_size - 2, color=GREY_C).move_to([(left + 0.5) * dx, -(depth + 1) * dy, 0])
             nodes.append((e, depth + 1))
             kms.append(e)
         for k in kms:

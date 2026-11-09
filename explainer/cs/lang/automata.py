@@ -53,8 +53,12 @@ class DFA:
 
 
 def subset(nfa: R.NFA, alphabet=None) -> DFA:
-    """The subset construction: each DFA state is the set of NFA states the simulation could be in."""
-    alphabet = sorted(alphabet if alphabet is not None else nfa.alphabet())
+    """Determinize over a finite alphabet. Wildcards / negated classes require it explicitly:
+    the finite set of positive literals cannot describe their character universe.
+    """
+    if alphabet is None and any(cs.neg for es in nfa.edges for cs, _ in es):
+        raise ValueError("an explicit finite alphabet is required for wildcard or negated character classes")
+    alphabet = sorted(set(alphabet if alphabet is not None else nfa.alphabet()))
     start = nfa.closure({nfa.start})
     index = {start: 0}
     sets = [start]
@@ -139,7 +143,8 @@ def complement(d: DFA) -> DFA:
 
 
 def product(a: DFA, b: DFA, op=lambda x, y: x and y) -> DFA:
-    alphabet = sorted(set(a.alphabet) & set(b.alphabet))
+    """Boolean combination over the union alphabet, extending missing symbols with rejecting sinks."""
+    alphabet = sorted(set(a.alphabet) | set(b.alphabet))
     index = {(a.start, b.start): 0}
     pairs = [(a.start, b.start)]
     delta = []
@@ -149,7 +154,8 @@ def product(a: DFA, b: DFA, op=lambda x, y: x and y) -> DFA:
         k += 1
         row = {}
         for c in alphabet:
-            p = (a.delta[s][c], b.delta[t][c])
+            p = (a.delta[s].get(c, -1) if s >= 0 else -1,
+                 b.delta[t].get(c, -1) if t >= 0 else -1)
             if p not in index:
                 index[p] = len(pairs)
                 pairs.append(p)

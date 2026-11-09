@@ -175,7 +175,7 @@ def parse(pattern: str) -> Node:
                      "s": " \t\n\r"}
             if c in table:
                 return Chars(frozenset(table[c]), label="\\" + c)
-            return Chars(frozenset({"\n": "\n", "t": "\t"}.get(c, c)), label="\\" + c)
+            return Chars(frozenset({"n": "\n", "t": "\t", "r": "\r"}.get(c, c)), label="\\" + c)
         if ch in "*+?":
             raise RegexError(f"nothing to repeat at {pos} in {pattern!r}")
         return lit(eat())
@@ -266,7 +266,7 @@ class NFA:
         return self.closure({t for s in states for (cs, t) in self.edges[s] if cs.ok(c)})
 
     def run(self, text: str, trace: bool = False):
-        """Whole-string match.  Returns (matched, work, trace) where work counts state visits."""
+        """Whole-string match.  Returns (matched, work, trace). Work sums active-set sizes plus one per step; it is a proxy, not every internal operation."""
         cur = self.closure({self.start})
         work = len(cur)
         seq = [cur] if trace else None
@@ -339,7 +339,7 @@ def thompson(n: Node) -> NFA:
             m.eps[t1] += [s1, t]
             return s, t
         if isinstance(x, Backref):
-            raise RegexError("back-references are not regular: no automaton can match them")
+            raise RegexError("this Thompson compiler does not support back-references")
         raise TypeError(x)
 
     m.start, m.accept = build(n)
@@ -359,7 +359,7 @@ class StepLimit(Exception):
 
 def backtrack(n: Node, text: str, limit: int = 10 ** 8, anchored: bool = True) -> tuple[bool, int]:
     """Match by trying alternatives in order (greedy stars first) and backing up on failure.  Returns (matched,
-    steps).  Continuation-passing, so it explores exactly the choices a real backtracking engine would."""
+    steps).  Continuation-passing naive search; production engines may prune these choices with optimizations."""
     steps = 0
     caps: dict[int, tuple[int, int]] = {}
 

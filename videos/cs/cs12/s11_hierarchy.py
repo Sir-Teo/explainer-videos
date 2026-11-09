@@ -89,22 +89,26 @@ class Hierarchy(VoiceoverScene):
         pts = VGroup(
             label(r"palindromes: \ push the first half, \ pop against the second \ --- \ but where is the middle?",
                   font_size=21, color=GREY_A),
-            label(r"a nondeterministic PDA \textit{guesses} it, \ and some guess works; \ no deterministic PDA can "
-                  r"recognize palindromes", font_size=21, color=NO),
+            label("unmarked palindromes over $\\{a,b\\}$: NPDA guesses the midpoint; no DPDA recognizes this language", font_size=21, color=NO),
             label(r"context-free grammars $\iff$ nondeterministic PDAs \ (Chomsky, \ Evey, \ Schützenberger, \ "
                   r"1962--63)", font_size=21, color=HEAD),
-            label(r"deterministic PDAs: \ a smaller class, \ exactly the languages LR parsers handle \ (chapter 13)",
+            label("deterministic PDA languages correspond to LR languages under standard end-marker conventions",
                   font_size=21, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(g, DOWN, buff=0.55)
         with self.voiceover(
-            "For finite automata, nondeterminism added convenience but no power. For pushdown automata, it adds "
-            "power. <bookmark mark='a'/> To check a palindrome, push the first half and pop it against the second. "
-            "But where is the middle? <bookmark mark='b'/> A nondeterministic machine guesses, and accepts if any "
-            "guess works; our simulation searches all the guesses. No deterministic pushdown automaton can "
-            "recognize palindromes at all. <bookmark mark='c'/> Nondeterministic pushdown automata recognize "
-            "exactly the languages that context-free grammars generate. <bookmark mark='d'/> The deterministic "
-            "ones recognize a smaller class, and it is exactly the class that the fast parsers of chapter thirteen "
-            "can handle, which is why programming languages are designed to fall inside it."
+            (
+            "Nondeterminism does not enlarge the regular languages, but it does enlarge what a single-stack "
+            "automaton can recognize. <bookmark mark='a'/> Consider unmarked palindromes over a and b. A stack "
+            "can store a first half and compare it with the reverse of the second, but the midpoint is not "
+            "announced. <bookmark mark='b'/> A nondeterministic pushdown automaton can guess that midpoint; our "
+            "simulator explores guesses and accepts when one succeeds. This unmarked two-symbol palindrome "
+            "language is not deterministic context-free. A visible middle separator, or a unary alphabet, changes "
+            "that claim. <bookmark mark='c'/> Nondeterministic pushdown automata recognize exactly the "
+            "context-free languages. <bookmark mark='d'/> Deterministic pushdown automata recognize a proper "
+            "subclass. With the usual end-marker conventions, LR methods characterize deterministic context-free "
+            "languages, while a particular grammar may still have conflicts. Programming-language syntax often "
+            "aims for a deterministic core."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(g))
             for mk, p in zip("abcd", pts):
@@ -136,29 +140,19 @@ class Hierarchy(VoiceoverScene):
         for r in g:
             for x, pos in zip(r[1], (-6.0, -2.9, -0.3, 2.6)):
                 x.align_to([pos, 0, 0], LEFT)
-        pump = label(r"a second pumping lemma shows $a^n b^n c^n$ is not context-free: \ one stack cannot count "
-                     r"twice", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.9)
-        prog = label(r"so a compiler uses regular expressions for tokens, \ a grammar for structure, \ and code for "
-                     r"the rest \ (Part 13's type checker)", font_size=20, color=HEAD).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Chomsky arranged these classes in a hierarchy, each defined by the form of its grammar rules and "
-            "matched by a kind of machine. <bookmark mark='a'/> At the bottom, regular languages and finite "
-            "automata: the tokens of a programming language. <bookmark mark='b'/> Then context-free languages and "
-            "pushdown automata: the structure of programs. <bookmark mark='c'/> Then context-sensitive languages, "
-            "recognized by machines with memory proportional to their input. A to the n b to the n c to the n "
-            "lives here; a second pumping lemma shows that a single stack cannot count twice. So does the rule "
-            "that a variable must be declared before it is used. <bookmark mark='d'/> And at the top, everything a "
-            "Turing machine can search for. <bookmark mark='e'/> A compiler takes the hint: regular expressions "
-            "for the tokens, a context-free grammar for the structure, and ordinary code, the type checker of "
-            "Part 13, for the rest."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, r in zip("abcd", g):
-                vo.wait_until(mk)
+        pump = label("$\\{a^n b^n c^n:n\\ge0\\}$ is not context-free, by the CFL pumping lemma", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.9)
+        prog = label("compiler stages: tokens, syntax, then names and types (compiler Part 13; type theory Part 14)", font_size=20, color=HEAD).to_edge(DOWN, buff=0.35)
+        with self.voiceover("The hierarchy relates grammar restrictions to machine resources. <bookmark mark='a'/> Regular languages correspond to finite automata. They describe the token forms used here. <bookmark mark='b'/> Context-free languages correspond to nondeterministic pushdown automata, including unbounded nested syntax. <bookmark mark='c'/> Context-sensitive languages correspond to linear-bounded machines, under the usual empty-word conventions. Equal runs of a's, b's and c's give a standard language in this class that is not context-free; the context-free pumping lemma supplies a proof. <bookmark mark='d'/> Recursively enumerable languages are recognized by Turing machines. Recognition may run forever on strings outside the language. No finite workspace limit is fixed in advance. <bookmark mark='e'/> Compiler design separates these responsibilities: tokenization, syntax, then name and type checks. Part thirteen implements a small compiler checker; Part fourteen studies types more deeply. The hierarchy guides this separation without assigning every production-language feature a simple grammar class.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            for mk, r in zip('abcd', g):
+                if mk != 'a':
+                    vo.wait_until(mk)
                 self.play(FadeIn(r, shift=UP * 0.1))
-                if mk == "c":
+                if mk == 'c':
                     self.play(FadeIn(pump))
-            vo.wait_until("e")
+                if mk == 'a':
+                    vo.wait_until(mk)
+            vo.wait_until('e')
             self.play(FadeIn(prog))
         self.wait(0.3)
         self.clear_scene()
@@ -170,10 +164,9 @@ class Hierarchy(VoiceoverScene):
                                                                                       "// multiplies"], size=17),
              r"the same tokens parse two ways: \ the parser asks the symbol table \ (the ``lexer hack'')", CTRL),
             (r"C++", code(["a < b > c;   // a comparison, or a template?"], size=17),
-             r"templates can compute anything, \ so deciding how to parse C++ is undecidable", NO),
+             "unbounded template computation makes some semantic decisions undecidable; real compilers have limits", NO),
             (r"Perl", code(["whatever / 25 ; # / ;", "   die \"this dies!\";"], size=17),
-             r"a function's prototype changes how the next \texttt{/} parses: \ parsing Perl is undecidable "
-             r"(Kegler, \ 2008)", FUNC),
+             "Perl compilation can execute unrestricted code; resulting semantic decisions exceed fixed-CFG recognition", FUNC),
         ]
         g = VGroup()
         for name, src, why, c in cases:
@@ -185,22 +178,15 @@ class Hierarchy(VoiceoverScene):
         g.arrange(DOWN, aligned_edge=LEFT, buff=0.4).next_to(head, DOWN, buff=0.4).to_edge(LEFT, buff=0.6)
         lesson = label(r"the hierarchy is a design tool: \ the Pebble language stays inside the context-free, \ "
                        r"LALR(1) world on purpose", font_size=21, color=YES).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "Real languages do not always respect the hierarchy. <bookmark mark='a'/> In C, a star b semicolon "
-            "declares a pointer if a names a type, and multiplies if it does not. The grammar cannot tell; so C "
-            "parsers ask the symbol table while they parse, a trick known as the lexer hack. <bookmark mark='b'/> "
-            "In C plus plus, whether a less-than sign opens a template can depend on what templates compute, and "
-            "templates can compute anything, so deciding how to parse C plus plus is undecidable. <bookmark "
-            "mark='c'/> Perl is worse: how a slash parses depends on a function's declaration, which can depend on "
-            "running code, and Jeffrey Kegler showed in 2008 that parsing Perl is undecidable too. <bookmark "
-            "mark='d'/> The hierarchy is therefore a design tool. The Pebble language stays inside the "
-            "context-free, LALR world on purpose."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, r in zip("abc", g):
-                vo.wait_until(mk)
+        with self.voiceover("Production languages often need information beyond a context-free syntax table. <bookmark mark='a'/> In C, a star b semicolon can declare a pointer when a is a typedef name, or form an expression otherwise. Parsers commonly consult a symbol table; one implementation technique is called the lexer hack. <bookmark mark='b'/> In C plus plus, template-dependent names can affect disambiguation. Unrestricted template computation makes some semantic decisions undecidable in an idealized unbounded model; this is more specific than saying every syntactic parsing task is undecidable. Real implementations impose resource limits. <bookmark mark='c'/> Perl can execute code during compilation, and declarations can change how later text is interpreted. Its unrestricted compilation model has analogous limits, beyond recognizing strings with a fixed grammar. <bookmark mark='d'/> The hierarchy remains useful for separating responsibilities. Pebble uses a deliberately simple context-free syntax, with a conflict-free LALR grammar; later passes check names, types and other semantic conditions.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            for mk, r in zip('abc', g):
+                if mk != 'a':
+                    vo.wait_until(mk)
                 self.play(FadeIn(r, shift=RIGHT * 0.1))
-            vo.wait_until("d")
+                if mk == 'a':
+                    vo.wait_until(mk)
+            vo.wait_until('d')
             self.play(FadeIn(lesson))
         self.wait(0.3)
         self.clear_scene()

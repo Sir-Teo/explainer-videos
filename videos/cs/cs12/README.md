@@ -11,44 +11,22 @@ language: tokens, AST, recursive-descent and Pratt parser, its grammar, and the 
 `tests/test_cs12_lang.py` against Python's `re`, brute-force enumeration and textbook counts; the LR tables are also
 checked against bison on this machine. Every number is computed in `compute.py`.
 
-* **Six characters that stop a computer.** `(a+)+b` on a string of a's: Python's `re` takes ×4 per two more a's
-  (7.8 s at 28), GNU grep 1.5 ms for a million; the Cloudflare outage of 2 July 2019. The Job in the Pebble language,
-  2,285 characters, 651 tokens, a 371-node tree.
-* **1. Languages as sets of strings.** Alphabets, strings, languages; recognizing against parsing; the ladder of
-  memory (finite, a stack, linear, unbounded).
-* **2. Regular expressions and automata.** Kleene's three operations (1951); the divisible-by-3 DFA run on `1001`;
-  Kleene's theorem as a triangle.
-* **3. Thompson's construction.** One fragment per operator; the 14-state NFA for `(a|b)*abb` run on `babbabb` with
-  its state sets; O(mn) time, measured linear.
-* **4. The subset construction and minimization.** Rabin and Scott (1959): 5 DFA states for `(a|b)*abb`, Moore's
-  refinement to 4; the n-th-from-end language, 2ⁿ states (4,096 at n = 12), and the Myhill–Nerode proof checked on
-  every pair for n = 3.
-* **5. Kleene's theorem.** State elimination turns the divisible-by-3 DFA into `(0|1(01*0)*1)*`, checked on
-  1 … 4,095; closure under complement and intersection; decidable equivalence.
-* **6. What regular languages cannot do.** The pumping lemma (Bar-Hillel, Perles and Shamir 1961) and its pigeonhole
-  proof; aⁿbⁿ refuted on all 15 splits for p = 5; nesting is out of reach.
-* **7. Backtracking engines.** 2ⁿ⁻¹ groupings; our backtracker at 29,360,126 steps for n = 22; Python, Perl's cache,
-  grep; `.*.*=.*`: 0.12 s → 56 s from 1,000 to 8,000 characters (×8 per doubling), grep unmoved; Stack Overflow 2016;
-  Cox 2007 and RE2; back-references (`(11+)\1+` finds composites) and NP-completeness.
-* **8. Lexing the Pebble language.** Seven token rules, keywords by lookup, maximal munch (`x-->y` is x, -, ->, y), a
-  30-state combined DFA from 96 NFA states; the Job's 651 tokens.
-* **9. Context-free grammars.** Chomsky (1956), Backus and Naur (ALGOL 60); a leftmost derivation and its tree;
-  ambiguity counted by CYK (the Catalan numbers, 58,786 trees for 12 operands); the dangling else.
-* **10. Stacks and the Chomsky hierarchy.** A pushdown automaton for aⁿbⁿ, run step by step; palindromes need
-  nondeterminism; the four types and their machines.
-* **11. Parsing any grammar: CYK and Earley.** The CYK triangle for `id + id * id`; Earley's items; item counts
-  measured, linear on the layered grammar and quadratic on the ambiguous one.
-* **12. Top-down parsing.** Recursive descent and left recursion; FIRST, FOLLOW and the LL(1) table; a 17-step trace;
-  Pratt's binding powers, the Pebble language's expression parser.
-* **13. Bottom-up parsing.** Shift and reduce on `id * id + id`; the 12-state LR(0) automaton and its two conflicts;
-  SLR, LR(1) (22 states) and LALR (12); a grammar SLR cannot handle; bison agrees state for state (plus its accept
-  state) and on the dangling-else conflict.
-* **14. The Pebble language, parsed.** Name-first declarations and mandatory braces; 79 rules, a conflict-free
-  146-state LALR table (bison: 147); the AST of lookup's loop; error messages.
-* **15. Frontier: how fast can we parse?** Thompson's work measured as m × n; Myers, and Backurs and Indyk under
-  SETH; Valiant's reduction to matrix multiplication, Lee's converse, Abboud–Backurs–Williams; derivatives, which
-  give the minimal DFA on every example, and their revival in .NET's engine.
-* **Recap, where this comes back, in practice, problems.**
+* **Six characters and an expensive rejection.** `(a+)+b` on failing all-a inputs; recorded Python growth, a 30-second timeout, and a noisy process-baseline-subtracted grep comparison. Cloudflare's 2019 outage motivates a separately labeled simplified experiment.
+* **1. Languages.** Finite alphabets, finite strings and possibly infinite languages; recognition versus parsing; syntax acceptance versus semantic checks; memory models without fixed workspace bounds.
+* **2. Regular expressions.** Union, concatenation and star over a chosen alphabet. Ordinary syntax is regular; practical backreferences require separate treatment. The binary-divisibility example accepts epsilon and leading zeros by convention.
+* **3. Thompson.** A 14-state NFA for `(a|b)*abb`, its epsilon closure and active-set trace on `babbabb`. Epsilon consumes no input but takes computation. A bounded-degree Thompson construction gives O(mn) time and O(m) active storage; measured counters are work proxies.
+* **4. Subsets and minimization.** Five reachable DFA states reduce to four. Minimal complete DFAs are unique up to renaming over a fixed alphabet. The n-th-from-end lower bound uses pairwise distinguishability; the n=3 enumeration checks 28 witnesses. Lazy caching helps the chosen book sample without removing exponential worst cases.
+* **5. Kleene.** State elimination, complete-DFA complement, product intersection and decidable equivalence. A finite round-trip test checks an implementation; the construction supplies the general argument.
+* **6. Pumping.** An arbitrary-p contradiction for aⁿbⁿ, illustrated by all 15 splits at p=5. Balanced parentheses are ruled out using intersection with opens-then-closes; a nonregular subset alone would not suffice. Fixed nesting depth changes the language.
+* **7. Engine strategies.** Partition enumeration explains one naive exponential failure mode. Real engines optimize differently. The simplified unanchored Python `.*.*=.*` experiment shows superlinear behavior, with censored measurements labeled. The unary composite matcher assumes length at least two. Backreference NP-completeness is a combined pattern-and-text statement.
+* **8. Lexing.** Seven token rules, longest-match policy and identifier-to-keyword lookup. The combined 96-state NFA has 30 reachable DFA states on the sampled alphabet. The Job has 2,285 characters, 651 tokens and locations/lexemes retained for the parser. Literal code tokens stay exact in both languages. Python's indentation uses a stack.
+* **9. Grammars.** Derivations, parse trees, precedence, Catalan counts and dangling else. A nearest-else convention can be encoded through grammar design or parser resolution. Arbitrary CFG ambiguity is undecidable.
+* **10. Hierarchy.** A stack for aⁿbⁿ and nondeterministic midpoint guessing for unmarked binary palindromes. Marked or unary palindromes differ. Production-language semantic disambiguation and unrestricted compile-time computation exceed a fixed CFG recognizer; actual compilers impose resource limits.
+* **11. General CFG parsing.** CYK's triangle and Earley's items. Bounds assume a fixed grammar; empty-input CNF needs special handling. Item counts, elapsed time and worst-case bounds are distinct.
+* **12. Top down.** Recursive descent, FIRST/FOLLOW, a conflict-free LL(1) table and 17-step trace, plus Pratt binding powers. Production recursive-descent front ends need not be LL(1).
+* **13. Bottom up.** LR(0), SLR, LR(1) and LALR; merging equal LR(0) cores can introduce conflicts. Bison's selected tables agree in counts and conflicts, with its additional acceptance state. This is not a proof of table isomorphism.
+* **14. Pebble.** A 79-rule, 146-state conflict-free LALR grammar (Bison: 147), the Job's 371-node AST and four error examples. The detection token need not locate the original mistake; syntax does not establish type correctness.
+* **15. Frontier.** Honest log-millisecond timing axes and a fitted finite-sample slope. Specify regex pattern families, membership versus search, SETH quantifiers and computational models. The bounded-depth homogeneous membership classification was completed in 2017, with an intermediate Word Break case. Valiant, Lee and clique reductions have distinct model/grammar-size assumptions. Residual languages give the minimal derivative DFA; raw expression syntax needs normalization or equivalence reasoning. .NET's nonbacktracking guarantee concerns supported fixed patterns.
 
 ## Build
 
@@ -82,9 +60,7 @@ automata, grammars and tables are exact.
 
 3. **Balanced parentheses.** Show that S → S S | ( S ) | ε is ambiguous, and write an unambiguous grammar.
 
-   *Solution.* `()()()` has two trees, (S S) S and S (S S), and CYK on the grammar's normal form counts exactly 2; the
-   empty string even has infinitely many derivations, through S → S S → S. The grammar S → ( S ) S | ε is
-   unambiguous: the first parenthesis of a non-empty string has a unique matching partner, which fixes the split.
+   *Solution.* There are different binary groupings of the three pairs, already proving ambiguity. In fact the original grammar has infinitely many parse trees for every word it generates: insert `S → S S` and derive ε on one branch, arbitrarily often. A language-preserving CNF conversion need not preserve those tree multiplicities; a finite CYK count for the converted grammar is not a count for this original grammar. The grammar `S → ( S ) S | ε` is unambiguous because a nonempty word's first opening parenthesis has a unique matching partner, fixing the recursive split.
 
 4. **LL(1).** Compute FIRST and FOLLOW for S → ( S ) S | ε, and decide whether it is LL(1).
 
@@ -97,20 +73,12 @@ automata, grammars and tables are exact.
    *Solution.* Lexer: add `+=` and `++` to the operator rule before `+` (maximal munch then does the rest) and `for`
    to the keywords. Grammar: `Stmt → for Simple ; Expr ; Simple Block | … | Simple ;` with
    `Simple → Expr | Expr = Expr | Expr += Expr | Expr ++`. Our LALR construction on the extended grammar finds 156
-   states and no conflicts (SLR has none either), so yes. Parser: in `Parser.stmt`, parse an expression and then look
-   for `=`, `+=` or `++`; a `for` desugars to `Simple; while Expr { Block; Simple }`, which Part 13's compiler then
-   needs no new machinery for.
+   states and no conflicts (SLR has none either), so this particular extension is LALR(1). Parser: in `Parser.stmt`, parse an expression and then look
+   for `=`, `+=` or `++`; a `for` can lower to initialization, condition and body/update control flow. Preserve loop scope, and make `continue` execute the update before retesting; blindly replacing it with a while loop would skip that update. The expressions and assignments also need the language's later semantic checks.
 
-6. ★ **Research: which patterns are hard?** For which regular expressions can matching be done in time O(n + m), and
-   for which does SETH forbid it? Complete the classification.
+6. ★ **Investigate: which regex problem is hard?** Reproduce one complexity result, stating its exact input model.
 
-   *Where to start.* Backurs and Indyk, "Which regular expression patterns are hard to match?" (FOCS 2016), classify
-   patterns by the depth and operator types of their syntax trees, proving SETH-hardness for many and giving
-   near-linear algorithms for others. Bringmann, Grønlund and Larsen, "A dichotomy for regular expression membership
-   testing" (FOCS 2017), complete the picture for a large class. (a) Reproduce one hardness reduction: encode an
-   Orthogonal Vectors instance as a pattern and a text. (b) Use `compute_frontier`'s grid as a test bed: find a
-   pattern type whose measured work grows more slowly than m × n under our simulation, and explain why. (c) Read
-   the open cases in the 2017 paper and attack the smallest one.
+   *Where to start.* Read Backurs–Indyk (2016) together with Bringmann–Grønlund–Larsen (2017). The latter completes a classification of bounded-depth homogeneous **membership** types, including an intermediate Word Break case; do not present that classification as still unfinished. (a) State the pattern type, whether the task is membership or substring matching, and whether pattern size is fixed or variable. (b) Reproduce a small reduction or implement the corresponding easy-case algorithm. (c) Compare predictions with the simulator grid, explaining why finite active-set counts establish neither a general lower bound nor an engine-runtime guarantee. Further research must identify a specific extension outside the completed classification and check current literature before calling it open.
 
 ## 习题与解答
 
@@ -128,8 +96,7 @@ automata, grammars and tables are exact.
 
 3. **括号匹配。** 证明 S → S S | ( S ) | ε 是有歧义的，并写出一个无歧义的文法。
 
-   *解答。* `()()()` 有两棵树，(S S) S 和 S (S S)，在它的范式上运行 CYK 恰好数出 2；空串甚至有无穷多种推导，经由
-   S → S S → S。文法 S → ( S ) S | ε 无歧义：非空串的第一个括号有唯一的配对括号，它决定了切分。
+   *解答。* 三对括号可以有不同的二叉分组，这已经证明歧义。事实上，原文法生成的每个串都有无穷多棵语法树：反复插入 `S → S S`，并让一侧导出 ε。保持语言的 CNF 转换未必保持这些树的重数；转换后文法的有限 CYK 计数，不是原文法的计数。`S → ( S ) S | ε` 无歧义，因为非空串的第一个左括号有唯一的配对右括号，唯一决定递归切分。
 
 4. **LL(1)。** 计算 S → ( S ) S | ε 的 FIRST 和 FOLLOW，判断它是否 LL(1)。
 
@@ -141,16 +108,11 @@ automata, grammars and tables are exact.
    *解答。* 词法：在运算符规则里把 `+=` 和 `++` 放在 `+` 之前（其余交给最长匹配），把 `for` 加进关键字。文法：
    `Stmt → for Simple ; Expr ; Simple Block | … | Simple ;`，`Simple → Expr | Expr = Expr | Expr += Expr | Expr ++`。
    我们的 LALR 构造在扩展后的文法上得到 156 个状态、没有冲突（SLR 也没有），所以是。语法分析器：在 `Parser.stmt` 里
-   先分析一个表达式，再看后面是 `=`、`+=` 还是 `++`；`for` 可以脱糖成 `Simple; while Expr { Block; Simple }`，这样第13部分
-   的编译器不需要任何新机制。
+   先分析一个表达式，再看后面是 `=`、`+=` 还是 `++`；`for` 可以降低为初始化、条件与循环体及更新控制流，但必须保持作用域，并让 `continue` 先执行更新再检查条件；直接替换为 while 会跳过这一步。表达式和赋值还需后续语义检查。
 
-6. ★ **研究：哪些模式难？** 哪些正则表达式能在 O(n + m) 时间内匹配，哪些被 SETH 禁止？完成这个分类。
+6. ★ **研究：哪一种正则问题困难？** 重现一项复杂度结果，并明确输入模型。
 
-   *从哪里开始。* Backurs 与 Indyk，《Which regular expression patterns are hard to match?》（FOCS 2016），按语法树的深度
-   和运算符种类给模式分类，证明许多模式是 SETH 难的，另一些有近线性算法。Bringmann、Grønlund 与 Larsen，《A dichotomy
-   for regular expression membership testing》（FOCS 2017），对一大类模式完成了分类。（a）重现一个难度归约：把一个正交
-   向量实例编码成一个模式和一段文本。（b）把 `compute_frontier` 的网格当作试验台：找出一种模式，它在我们的模拟中测得的
-   工作量增长得比 m × n 慢，并解释原因。（c）读 2017 年论文中的开放情形，从最小的一个入手。
+   *从哪里开始。* 对照阅读 Backurs–Indyk（2016）与 Bringmann–Grønlund–Larsen（2017）。后者完成了有界深度齐次模式的**成员判定**类型分类，其中包含处于中间复杂度的 Word Break；不能把这个分类说成尚未完成。（a）说明模式类型、整串成员判定还是子串匹配，以及模式大小固定还是随输入变化。（b）重现一个小型归约，或实现相应容易类别的算法。（c）与模拟器网格比较，解释为什么有限活跃集合计数既不能证明一般下界，也不能保证引擎耗时。进一步研究必须选定已经完成的分类以外的具体扩展，并检查当前文献后才称其为开放问题。
 
 ## Glossary additions
 

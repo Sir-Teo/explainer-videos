@@ -20,13 +20,13 @@ class Hook(VoiceoverScene):
         sub = label(r"matched against \texttt{aaa\dots a}, \ with no \texttt{b}: \ the answer is ``no''", font_size=22,
                     color=GREY_A).next_to(pat, DOWN, buff=0.2)
         rows = [r for r in b["python"] if r["s"] is not None]
-        ax = Axes(x_range=[13, 29, 2], y_range=[0, 5.5, 1], x_length=6.0, y_length=3.4, tips=False,
+        ax = Axes(x_range=[rows[0]["n"] - 1, max(r["n"] for r in b["python"]) + 1, 2], y_range=[0, 5.5, 1], x_length=6.0, y_length=3.4, tips=False,
                   axis_config={"color": GREY_C, "font_size": 16}).to_edge(LEFT, buff=1.0).shift(DOWN * 1.2)
         ylab = VGroup(*[label(t, font_size=14, color=GREY_B).next_to(ax.c2p(13, v + 4), LEFT, buff=0.12)
                         for v, t in ((-3, r"1 ms"), (-1, r"0.1 s"), (0, r"1 s"), (1, r"10 s"))])
         xl = label(r"number of \texttt{a}'s", font_size=17, color=GREY_B).next_to(ax, DOWN, buff=0.15)
         xt = VGroup(*[label(str(n), font_size=14, color=GREY_B).next_to(ax.c2p(n, 0), DOWN, buff=0.1)
-                      for n in range(14, 29, 4)])
+                      for n in range(rows[0]["n"], max(r["n"] for r in b["python"]) + 1, 4)])
         import math
         pts = [ax.c2p(r["n"], math.log10(r["s"]) + 4) for r in rows]
         py = VMobject(color=NO, stroke_width=4).set_points_as_corners(pts)
@@ -34,26 +34,32 @@ class Hook(VoiceoverScene):
         pyl = label(r"Python's \texttt{re}: \ ${\times}4$ per two \texttt{a}'s", font_size=19, color=NO).next_to(
             pts[-1], LEFT, buff=0.25).shift(UP * 0.2)
         g = b["grep"][-1]
-        gl = label(rf"GNU grep, \ a million \texttt{{a}}'s: \ {g['s'] * 1000:.1f} ms", font_size=19, color=YES)
+        gl = label(rf"GNU grep adjusted, \ a million \texttt{{a}}'s: \ {g['s'] * 1000:.1f} ms", font_size=19, color=YES)
         gl.next_to(ax, RIGHT, buff=0.5).align_to(ax, UP)
         last = rows[-1]
-        big = label(rf"{last['n']} \texttt{{a}}'s: \ {last['s']:.1f} s; \ 30: \ over 30 s", font_size=19,
-                    color=NO).next_to(gl, DOWN, buff=0.35).align_to(gl, LEFT)
+        censored = [r for r in b["python"] if r["s"] is None]
+        result_text = rf"{last['n']} \texttt{{a}}'s: {last['s']:.1f} s"
+        if censored:
+            result_text += rf"; {censored[0]['n']}: timeout at 30 s"
+        big = label(result_text, font_size=19, color=NO).next_to(gl, DOWN, buff=.35).align_to(gl, LEFT)
         cfl = VGroup(label(r"2 July 2019: \ Cloudflare", font_size=22, color=HEAD),
                      label(r"one new firewall rule containing \texttt{.*(?:.*=.*)}", font_size=18, color=GREY_A),
                      label(r"every CPU serving its web traffic, \ worldwide, \\ at 100\% \ for 27 minutes",
                            font_size=18, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(big, DOWN, buff=0.45)
         cfl.align_to(gl, LEFT)
         with self.voiceover(
-            "Here are six characters: a pattern. One or more a's, repeated one or more times, then a b. <bookmark "
-            "mark='a'/> Ask Python whether a string of a's, with no b, matches it. The answer is obviously no. "
-            "<bookmark mark='b'/> But the time it takes to say no, measured on this computer, multiplies by four "
-            "for every two more a's. Twenty-eight a's take eight seconds; thirty take longer than we were willing "
-            "to wait. <bookmark mark='c'/> GNU grep answers the same question for a million a's in about a "
-            "millisecond. <bookmark mark='d'/> This is not a curiosity. On the second of July 2019, Cloudflare "
-            "deployed one new rule to its web firewall. It contained a regular expression of this kind, and for "
-            "twenty-seven minutes every processor serving its traffic, around the world, was at full load, trying "
-            "to match it."
+            (
+            "Six characters expose an expensive way to say no. The pattern means one or more a's, repeated, "
+            "followed by b. <bookmark mark='a'/> Match it against a string containing only a's. No match exists. "
+            "<bookmark mark='b'/> On this failing family, the recorded Python timings grow roughly fourfold for "
+            "every two added a's. Read the measured values on the graph; a timeout records a limit, not a "
+            "completed duration. <bookmark mark='c'/> GNU grep handles a much longer input efficiently here. Its "
+            "displayed estimate subtracts a separately measured process baseline and clamps negative differences "
+            "to zero; it is a noisy timing proxy, not an exact engine-only cost. <bookmark mark='d'/> In July "
+            "2019, a new Cloudflare firewall rule with overlapping repetitions exhausted CPU across its network. "
+            "The outage lasted twenty-seven minutes. We will separate that incident from our simplified "
+            "experiment and explain how the search space grows."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(pat))
             vo.wait_until("a")
@@ -85,21 +91,13 @@ class Hook(VoiceoverScene):
                    r"(regular expressions)", font_size=19, color=CTRL).next_to(toks, DOWN, buff=0.25)
         trl = label(rf"tokens into a tree: \ {pb['nodes']} nodes \ (a grammar)", font_size=19, color=YES).next_to(
             tl, DOWN, buff=0.15)
-        with self.voiceover(
-            "And this part has a job of its own to do. <bookmark mark='a'/> Here is the Job again, written this "
-            "time in a programming language: the Pebble language, which we design in this part and compile in "
-            "the next. Before any compiler can translate it, something has to read it. <bookmark mark='b'/> First "
-            "its characters are grouped into words, called tokens, and the rules for tokens are regular "
-            "expressions. <bookmark mark='c'/> Then the tokens are fitted to a grammar, which turns a flat list "
-            "into a tree. Both steps rest on one of the most beautiful theories in computer science: languages, and "
-            "the machines that recognize them."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(src), FadeIn(sl))
-            vo.wait_until("b")
+        with self.voiceover("And this part has a job of its own to do. <bookmark mark='a'/> Here is the Job again, written this time in a programming language: the Pebble language, which we design in this part and compile in the next. Before any compiler can translate it, something has to read it. <bookmark mark='b'/> First its characters are grouped into words, called tokens, and the rules for tokens are regular expressions. <bookmark mark='c'/> Then the tokens are fitted to a grammar, which turns a flat list into a tree. Both steps rest on one of the most beautiful theories in computer science: languages, and the machines that recognize them.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(src), FadeIn(sl), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(LaggedStart(*[FadeIn(c) for row in toks for c in row], lag_ratio=0.04), FadeIn(tl), run_time=3)
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(trl))
         self.wait(0.3)
         self.clear_scene()
@@ -110,18 +108,21 @@ class Hook(VoiceoverScene):
         facts = VGroup(
             label(r"regular expressions, \ finite automata, \ and the constructions that join them", font_size=27,
                   color=DATA),
-            label(r"why \texttt{(a+)+b} is slow in Python and instant in grep", font_size=27, color=NO),
+            label("why this failing pattern is fast in grep and expensive in Python", font_size=27, color=NO),
             label(r"what no finite machine can recognize, \ and the stack that fixes it", font_size=27, color=CTRL),
-            label(r"grammars, \ and four ways to parse them", font_size=27, color=YES),
+            label("grammars and several top-down / bottom-up parsing methods", font_size=27, color=YES),
             label(r"the Pebble language: \ its lexer, \ its grammar, \ its parser", font_size=27, color=FUNC),
         ).arrange(DOWN, buff=0.38).move_to(DOWN * 0.1)
         with self.voiceover(
-            "Here is where we are going. <bookmark mark='a'/> Regular expressions and finite automata, and the "
-            "constructions that turn each into the other. <bookmark mark='b'/> Why one pattern is instant in grep "
-            "and exponential in Python. <bookmark mark='c'/> What no finite machine can ever recognize, with a "
-            "proof, and the single stack that fixes it. <bookmark mark='d'/> Grammars, and four ways to parse "
-            "them, from top down and from bottom up. <bookmark mark='e'/> And the Pebble language itself: its "
-            "lexer, its grammar, and its parser, run on the Job."
+            (
+            "We will connect five views of reading a program. <bookmark mark='a'/> Regular expressions and finite "
+            "automata describe the same languages, with explicit constructions between them. <bookmark mark='b'/> "
+            "Engine strategy explains why this failing pattern is fast in grep and expensive in the measured "
+            "Python engine. <bookmark mark='c'/> A proof shows why finite memory cannot handle arbitrary nesting; "
+            "a stack supplies the missing memory. <bookmark mark='d'/> Grammars then turn tokens into trees, "
+            "using several top-down and bottom-up parsing methods. <bookmark mark='e'/> Finally, the Pebble lexer "
+            "and parser read the Job, ready for the compiler in the next part."
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, f in zip("abcde", facts):

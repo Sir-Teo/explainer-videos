@@ -42,30 +42,18 @@ class Pumping(VoiceoverScene):
                   r"repeats \ (pigeonhole)", font_size=20, color=GREY_A),
             label(r"the part read between the two visits, \ $y$, \ is a loop: \ go round it any number of times",
                   font_size=20, color=GREY_A),
-            label(r"if $L$ is regular, \ every long $s \in L$ splits as $xyz$, \ $|xy| \le p$, \ $|y| > 0$, \ with "
-                  r"$x y^i z \in L$ for all $i \ge 0$", font_size=21, color=HEAD),
+            label("if $L$ is regular: $\\exists p\\,\\forall s\\in L,\\ |s|\\ge p:\\ \\exists x,y,z,\\ s=xyz,\\ |xy|\\le p,\\ |y|>0,\\ \\forall i\\ge0:\\ xy^iz\\in L$", font_size=21, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Is every language regular? No, and the proof is a counting argument. <bookmark mark='a'/> Suppose a "
-            "deterministic machine with p states reads a string of length p or more. After p symbols it has "
-            "visited p plus one states, so by the pigeonhole principle it has been in some state twice. <bookmark "
-            "mark='b'/> Call the part of the string read before the first visit x, the part between the two "
-            "visits y, and the rest z. Reading y takes the machine round a loop, back to where it was. <bookmark "
-            "mark='c'/> So it cannot tell the difference if we go round that loop twice, or ten times, or not at "
-            "all: x y y z, and x z, end in the same state as x y z. <bookmark mark='d'/> That is the pumping lemma, "
-            "from Yehoshua Bar-Hillel, Micha Perles and Eli Shamir in 1961: in a regular language, every long "
-            "enough string has a short, non-empty piece near its start that can be pumped."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(c) for c in circ], lag_ratio=0.15), FadeIn(arrows), FadeIn(stmt[0]))
-            self.play(Create(link), FadeIn(same), Indicate(circ[loop_from], color=NO), Indicate(circ[loop_to],
-                                                                                              color=NO))
-            vo.wait_until("b")
+        with self.voiceover("Is every language regular? No, and the proof is a counting argument. <bookmark mark='a'/> Suppose a deterministic machine with p states reads a string of length p or more. After p symbols it has visited p plus one states, so by the pigeonhole principle it has been in some state twice. <bookmark mark='b'/> Call the part of the string read before the first visit x, the part between the two visits y, and the rest z. Reading y takes the machine round a loop, back to where it was. <bookmark mark='c'/> So it cannot tell the difference if we go round that loop twice, or ten times, or not at all: x y y z, and x z, end in the same state as x y z. <bookmark mark='d'/> That is the pumping lemma, from Yehoshua Bar-Hillel, Micha Perles and Eli Shamir in 1961: in a regular language, every long enough string has a short, non-empty piece near its start that can be pumped.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(c) for c in circ], lag_ratio=0.15), FadeIn(arrows), FadeIn(stmt[0]), run_time=0.6)
+            vo.wait_until('a')
+            self.play(Create(link), FadeIn(same), Indicate(circ[loop_from], color=NO), Indicate(circ[loop_to], color=NO))
+            vo.wait_until('b')
             self.play(FadeIn(bx), FadeIn(bl), FadeIn(stmt[1]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(Indicate(bl[1], color=HEAD, scale_factor=1.6))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(stmt[2]))
         self.wait(0.3)
         self.clear_scene()
@@ -94,51 +82,46 @@ class Pumping(VoiceoverScene):
                    font_size=20, color=NO).next_to(grid, DOWN, buff=0.25)
         concl = label(r"no split can be pumped \ $\Rightarrow$ \ no finite automaton recognizes $a^n b^n$", font_size=23,
                       color=YES).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Now watch it fail. <bookmark mark='a'/> Suppose some machine with p states recognized a to the n, b "
-            "to the n. Take the string of p a's followed by p b's; here p is five. <bookmark mark='b'/> The lemma "
-            "says it splits into x y z with x y no longer than p, so y lies entirely inside the a's. <bookmark "
-            "mark='c'/> Here are all fifteen ways to choose such a y, each pumped once more. Every one of them has "
-            "more a's than b's, so it is not in the language; yet the machine would accept it. <bookmark mark='d'/> "
-            "The contradiction shows that no finite automaton, of any size, recognizes this language. A finite "
-            "machine cannot count without limit."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(letters), FadeIn(sl))
-            vo.wait_until("b")
+        with self.voiceover("Now use the lemma to rule out a language. <bookmark mark='a'/> Suppose a DFA with p states recognizes a to the n followed by b to the n. Choose p a's followed by p b's; the picture illustrates p equals five. <bookmark mark='b'/> Every allowed split has x y of length at most p and a nonempty y, so y contains only a's. <bookmark mark='c'/> Pumping y twice adds at least one a and no b. All fifteen splits in this picture fail, and the same argument works for every p, without enumerating its splits. <bookmark mark='d'/> The assumed DFA would accept a string outside the language. That contradiction rules out every finite number of states; the finite picture illustrates the general proof.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(letters), FadeIn(sl), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(GrowFromCenter(bp), FadeIn(bpl))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(LaggedStart(*[FadeIn(g) for g in grid], lag_ratio=0.12), run_time=4)
             self.play(FadeIn(gl))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(concl))
         self.wait(0.3)
         self.clear_scene()
 
     def consequence(self):
-        head = label(r"Anything that nests is out of reach", font_size=36).to_edge(UP, buff=0.3)
+        head = label("Unbounded nesting exceeds finite memory", font_size=36).to_edge(UP, buff=0.3)
         pts = VGroup(
-            label(r"balanced parentheses: \ \texttt{(((} \dots \texttt{)))} \ is $a^n b^n$ in disguise", font_size=22,
+            label("balanced parentheses $\\cap\\ \\mathtt{(}^*\\mathtt{)}^* = \\{\\mathtt{(}^n\\mathtt{)}^n:n\\ge0\\}$", font_size=22,
                   color=GREY_A),
-            label(r"so are nested blocks, \ \texttt{if} inside \texttt{while} inside \texttt{fn}, \ and nested "
-                  r"HTML tags", font_size=22, color=GREY_A),
+            label("closure under intersection transfers the contradiction; bounded depth is a different language", font_size=22, color=GREY_A),
             label(r"the Myhill--Nerode view: \ $a$, $aa$, $aaa$, \dots \ are pairwise distinguishable \ "
                   r"($a^i b^i \in L$, \ $a^j b^i \notin L$): \ infinitely many states needed", font_size=21,
                   color=DATA),
-            label(r"regular expressions can \textit{tokenize} a program, \ but not \textit{parse} it", font_size=24,
+            label("finite automata handle token forms; unbounded nesting needs more memory", font_size=24,
                   color=HEAD),
             label(r"the fix: \ give the machine a stack \ (chapter 10)", font_size=22, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "This has practical consequences. <bookmark mark='a'/> Balanced parentheses contain a to the n b to the "
-            "n in disguise: n opening brackets must be followed by n closing ones. <bookmark mark='b'/> So no "
-            "regular expression can check nested blocks in a program, or nested tags in a web page. <bookmark "
-            "mark='c'/> The Myhill–Nerode theorem gives the same answer from the other side: the strings a, a a, a "
-            "a a and so on all need different states, because only the right number of b's completes each one, "
-            "and there are infinitely many of them. <bookmark mark='d'/> So regular expressions are exactly right "
-            "for chopping a program into tokens, and exactly wrong for understanding its structure. <bookmark "
-            "mark='e'/> For that, the machine needs a stack, which is chapter ten."
+            (
+            "The distinction matters when reading programs. <bookmark mark='a'/> If balanced parentheses were "
+            "regular, intersecting them with the regular pattern opening-brackets-star then closing-brackets-star "
+            "would leave equal numbers of opens and closes, a language the same pumping argument rules out. "
+            "<bookmark mark='b'/> Ordinary finite automata therefore cannot validate arbitrary nesting. A fixed "
+            "depth limit changes the language, and engines with recursion or other extensions go beyond "
+            "mathematical regular expressions. <bookmark mark='c'/> Myhill and Nerode give another proof for a to "
+            "the n b to the n: different counts of initial a's require different states, since a suitable suffix "
+            "of b's distinguishes each pair. <bookmark mark='d'/> Regular expressions are useful for this "
+            "language's token forms; recognizing its unbounded nested syntax needs more memory. <bookmark "
+            "mark='e'/> A stack supplies that memory in chapter ten."
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, p in zip("abcde", pts):

@@ -86,19 +86,23 @@ class Outro(VoiceoverScene):
 
     def practice(self):
         card = practice_card([
-            (r"regex engines", r"RE2, \ Go, \ Rust: \ linear time; \ PCRE, \ Python, \ Java: \ backtracking"),
+            (r"regex engines", "fixed supported patterns: input-linear automata engines; backtracking engines need resource bounds"),
             (r"ReDoS", r"never run an untrusted pattern on a backtracker; \ set timeouts"),
             (r"parser generators", r"bison, \ ANTLR \ (LL(*)), \ tree-sitter \ (incremental, \ for editors)"),
-            (r"hand-written", r"GCC, \ Clang, \ Go, \ Rust: \ recursive descent with Pratt-style expressions"),
+            (r"hand-written", "handwritten recursive descent often combines precedence parsing with semantic disambiguation"),
             (r"formats", r"JSON, \ YAML, \ protocol parsers: \ where security bugs live"),
         ])
         with self.voiceover(
-            "In practice. Choose a regular expression engine knowing which kind it is: RE2, Go and Rust guarantee "
-            "linear time, while PCRE, Python and Java backtrack. Never run a pattern supplied by a user on a "
-            "backtracking engine without a time limit. Parser generators range from bison to ANTLR to tree-sitter, "
-            "which reparses incrementally as you type in an editor. Most production compilers are hand-written "
-            "recursive descent parsers. And parsers for data formats and network protocols are where a great many "
-            "security bugs live."
+            (
+            "In practice, choose an engine by its supported features, complexity guarantees and resource limits. "
+            "Automata engines such as RE2 provide linear input-time behavior for fixed supported patterns. "
+            "Backtracking engines include optimizations, but some patterns still create very large searches; use "
+            "input limits and effective cancellation or time limits when accepting untrusted patterns. Parser "
+            "generators and handwritten parsers make different tradeoffs. Bison, ANTLR and tree-sitter serve "
+            "different parsing and editing needs. Production front ends often combine recursive descent with "
+            "semantic disambiguation. Parsers for data and protocols also need careful validation: a successful "
+            "syntax parse is only one stage."
+        )
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.35), run_time=3.0)
@@ -116,14 +120,16 @@ class Outro(VoiceoverScene):
             r"Compute FIRST and FOLLOW for the grammar of problem 3's answer, \ and decide whether it is LL(1).",
             r"\textit{Build.} \ Add \texttt{for} loops and the operators \texttt{+=} and \texttt{++} to the Pebble "
             r"language: \ lexer, \ grammar, \ parser. \ Does the grammar stay LALR(1)?",
-            r"$\bigstar$ \textit{Research.} \ For which regular expressions can matching be done in time "
-            r"$O(n + m)$, \ and for which does SETH forbid it? \ Complete the classification.",
+            "$\\bigstar$ \\textit{Investigate.} Reproduce one regex complexity result; state pattern type, matching task and model assumptions.",
         ], font_size=22)
         with self.voiceover(
-            "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build "
-            "problem: extend the Pebble language with for loops and two new operators, through every stage, and "
-            "find out whether its grammar is still LALR. The last, marked with a star, is a research problem: its "
-            "answer is not known, and the notes say where to start."
+            (
+            "Six problems connect the constructions to practice. Pause on any one. The fifth extends Pebble with "
+            "for loops and two operators, carrying the change through lexing, grammar and parsing. The starred "
+            "investigation reproduces a regular-expression complexity result and checks its assumptions. The "
+            "notes distinguish the completed bounded-depth classification from further questions, and separate "
+            "measured simulator work from a mathematical lower bound."
+        )
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)

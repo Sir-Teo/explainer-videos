@@ -54,22 +54,13 @@ class Languages(VoiceoverScene):
             g, UP, buff=0.15)
         hdr[0].align_to([-0.6, 0, 0], LEFT)
         hdr[1].align_to([3.6, 0, 0], LEFT)
-        with self.voiceover(
-            "Computer science gives the word language a precise and very general meaning. <bookmark mark='a'/> "
-            "Fix an alphabet, a finite set of symbols, say zero and one. A string is a finite sequence of them, "
-            "including the empty string. A language is any set of strings at all. <bookmark mark='b'/> The binary "
-            "numbers divisible by three are a language. So are the balanced strings of parentheses; the strings of "
-            "some a's followed by exactly as many b's; the palindromes. <bookmark mark='c'/> And so are the valid "
-            "programs of a programming language: the Job is in the language of Pebble programs, and a line with a "
-            "missing parenthesis is not."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(d) for d in defs], lag_ratio=0.4), run_time=2.5)
-            vo.wait_until("b")
-            self.play(FadeIn(hdr), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in g[:4]], lag_ratio=0.4),
-                      run_time=4)
-            vo.wait_until("c")
+        with self.voiceover("A formal language is a set of strings. <bookmark mark='a'/> First fix a finite alphabet, such as zero and one. A string is a finite sequence of symbols; epsilon is the empty string. A language may contain finitely or infinitely many strings. <bookmark mark='b'/> Examples include binary multiples of three, balanced parentheses, equal runs of a's and b's, and palindromes. <bookmark mark='c'/> A programming language also has a syntactic language: strings admitted by its grammar. The Job is such a Pebble program; a missing parenthesis may break its syntax. Type rules and other semantic checks impose additional conditions, beyond what this parser establishes.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(d) for d in defs], lag_ratio=0.4), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
+            self.play(FadeIn(hdr), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in g[:4]], lag_ratio=0.4), run_time=4)
+            vo.wait_until('c')
             self.play(FadeIn(g[4], shift=RIGHT * 0.1))
         self.wait(0.3)
         self.clear_scene()
@@ -90,17 +81,11 @@ class Languages(VoiceoverScene):
                                                                                                    buff=0.25)
         n2 = label(r"a structure: \ \textit{how} is it in the language? \ ($\times$ binds tighter than $+$)",
                    font_size=20, color=YES).next_to(row2, DOWN, buff=0.25)
-        with self.voiceover(
-            "There are two things we might want to do with a language. <bookmark mark='a'/> A recognizer answers a "
-            "yes-or-no question: is this string in the language? <bookmark mark='b'/> A parser does more: it says "
-            "how the string belongs, by building its structure. For this expression, the tree says that the "
-            "multiplication happens first, and the addition last. A compiler needs the tree; but recognizing comes "
-            "first, and it is already deep."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(row1), FadeIn(n1))
-            vo.wait_until("b")
+        with self.voiceover("There are two things we might want to do with a language. <bookmark mark='a'/> A recognizer answers a yes-or-no question: is this string in the language? <bookmark mark='b'/> A parser does more: it says how the string belongs, by building its structure. For this expression, the tree says that the multiplication happens first, and the addition last. A compiler needs the tree; but recognizing comes first, and it is already deep.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(row1), FadeIn(n1), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(row2), FadeIn(n2))
         self.wait(0.3)
         self.clear_scene()
@@ -126,22 +111,16 @@ class Languages(VoiceoverScene):
         g.arrange(UP, buff=0.12).next_to(head, DOWN, buff=0.55)
         theme = label(r"the theme of this part: \ \textit{what a machine can recognize depends on what it can "
                       r"remember}", font_size=22, color=HEAD).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "The question that organizes this part is: how much memory does a recognizer need? <bookmark mark='a'/> "
-            "Some languages need only a fixed amount, however long the input: to check divisibility by three you "
-            "only need to remember the remainder so far. That is a finite automaton, from Part 5. <bookmark "
-            "mark='b'/> Balanced parentheses need more: you have to count how many are open, without limit. A "
-            "single stack is enough. <bookmark mark='c'/> Some languages need memory in proportion to the input, "
-            "and the most powerful machine, the Turing machine of Part 1, has unlimited memory. <bookmark mark='d'/> "
-            "This ladder, which Noam Chomsky described in 1956, is the backbone of the part: what a machine can "
-            "recognize depends on what it can remember."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, r in zip("abc", g):
-                vo.wait_until(mk)
+        with self.voiceover("What must a recognizer remember? <bookmark mark='a'/> Divisibility by three needs only the current remainder: finitely many states suffice for inputs of any length. <bookmark mark='b'/> Arbitrarily nested parentheses require an unbounded count of opens. A stack is sufficient. <bookmark mark='c'/> Linear-bounded machines have workspace proportional to input length. A Turing machine has no fixed finite workspace bound, although any finite computation visits only finitely many cells. <bookmark mark='d'/> The Chomsky hierarchy connects language classes to these machine models. More permitted memory changes what can be recognized; it does not mean every computation finishes.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            for mk, r in zip('abc', g):
+                if mk != 'a':
+                    vo.wait_until(mk)
                 self.play(FadeIn(r, shift=UP * 0.1))
+                if mk == 'a':
+                    vo.wait_until(mk)
             self.play(FadeIn(g[3], shift=UP * 0.1))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(theme))
         self.wait(0.3)
         self.clear_scene()

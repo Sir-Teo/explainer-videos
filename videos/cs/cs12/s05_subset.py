@@ -50,28 +50,19 @@ class Subset(VoiceoverScene):
         order = ["A", "B", "C", "D", "E"]
         note_ = label(r"Rabin and Scott, \ 1959: \ every NFA has an equivalent DFA", font_size=20,
                       color=HEAD).to_corner(DL, buff=0.35)
-        with self.voiceover(
-            "The simulation of the last chapter suggests something. At any moment the NFA is in some set of "
-            "states, and which set it is in next depends only on that set and the next character. <bookmark "
-            "mark='a'/> So make each set one state of a new, deterministic machine. The start state A is the set "
-            "the simulation started with. <bookmark mark='b'/> From A, reading an a or a b gives two new sets, B "
-            "and C; from those, more; and so on, until no new sets appear. For a b star a b b, only five of the "
-            "sixteen thousand possible subsets ever turn up. <bookmark mark='c'/> A set is accepting if it "
-            "contains the NFA's accepting state, here only E. This is the subset construction, published by "
-            "Michael Rabin and Dana Scott in 1959; it was part of the work that won them the Turing Award."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(sd.node["A"]), FadeIn(names[0]))
-            vo.wait_until("b")
+        with self.voiceover("The active-set simulation suggests a deterministic construction. <bookmark mark='a'/> Make each reachable NFA state set one DFA state. State A represents the epsilon closure of the NFA start. <bookmark mark='b'/> Reading a or b determines the next set uniquely. Continue exploring until no unseen sets remain. For parenthesized a-or-b, starred, followed by a b b, this construction reaches only five of the fourteen-state NFA's sixteen thousand three hundred and eighty-four possible subsets. <bookmark mark='c'/> A DFA state accepts precisely when its set contains the NFA accept state; here only E does. Rabin and Scott's subset construction establishes that nondeterminism adds no expressive power to finite automata, although it can make them much more compact.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(sd.node['A']), FadeIn(names[0]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             for X in order[1:]:
                 k = NAMES.index(X)
                 es = [e for e in sd.edge if e.dst == X and NAMES.index(e.src) < k]
                 self.play(FadeIn(sd.node[X]), *[FadeIn(e) for e in es], FadeIn(names[k]), run_time=0.8)
-            rest = [e for e in sd.edge if not (NAMES.index(e.src) < NAMES.index(e.dst))]
+            rest = [e for e in sd.edge if not NAMES.index(e.src) < NAMES.index(e.dst)]
             self.play(*[FadeIn(e) for e in rest])
-            vo.wait_until("c")
-            self.play(Indicate(sd.node["E"], color=YES), FadeIn(note_))
+            vo.wait_until('c')
+            self.play(Indicate(sd.node['E'], color=YES), FadeIn(note_))
         self.wait(0.3)
         self.clear_scene()
 
@@ -96,16 +87,18 @@ class Subset(VoiceoverScene):
             return [sd.node[NAMES[i]].circle.animate.set_fill(palette[r[i] % len(palette)], opacity=0.45)
                     for i in range(5)]
         res = label(rf"{s['dfa']['n']} states $\to$ {s['minimal']['n']}: \ the smallest DFA for this language, \ "
-                    r"and it is unique", font_size=21, color=HEAD).next_to(steps, UP, buff=0.3)
+                    r"unique up to state renaming (fixed alphabet)", font_size=21, color=HEAD).next_to(steps, UP, buff=0.3)
         with self.voiceover(
-            "The machine is correct, but not always as small as it could be. <bookmark mark='a'/> Two states are "
-            "equivalent if every possible remaining input leads both to accept or both to reject. Edward Moore's "
-            "algorithm finds them. Start by separating the accepting states from the rest. <bookmark mark='b'/> "
-            "Then look at where each state's arrows go. D, on a b, reaches the accepting group; A, B and C do not. "
-            "So D is different: split it off. <bookmark mark='c'/> Now B reaches D on a b, and A and C do not: "
-            "split again. <bookmark mark='d'/> Now nothing splits. A and C go to the same groups on every symbol, "
-            "so no string can ever tell them apart, and they merge. <bookmark mark='e'/> Four states: and the "
-            "Myhill–Nerode theorem says this minimal machine is unique, the same whichever way you started."
+            (
+            "Correct machines may contain redundant states. <bookmark mark='a'/> Two states are equivalent when "
+            "every remaining input makes both accept or both reject. Begin Moore's refinement by separating "
+            "accepting states from rejecting states. <bookmark mark='b'/> State D reaches the accepting group on "
+            "b; A, B and C do not. Split D off. <bookmark mark='c'/> Now B reaches D on b, while A and C do not. "
+            "Split again. <bookmark mark='d'/> Refinement stops when transitions always lead to the same groups. "
+            "A and C remain equivalent and can merge. <bookmark mark='e'/> The result has four reachable states. "
+            "Over a fixed alphabet, the minimal complete DFA is unique up to renaming states; the state names and "
+            "drawing need not be identical."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(sd))
             vo.wait_until("a")
@@ -149,21 +142,14 @@ class Subset(VoiceoverScene):
                      label(rf"subset construction: \ {last['dfa']:,}", font_size=20, color=CTRL),
                      label(rf"minimized: \ {last['minimal']:,} $= 2^{{12}}$", font_size=20, color=NO)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.15).next_to(ax, RIGHT, buff=0.9).shift(UP * 0.4)
-        with self.voiceover(
-            "Determinism has a price. <bookmark mark='a'/> Take the strings of zeros and ones whose n-th symbol "
-            "from the end is a one. An NFA for it is tiny: it guesses when the last n symbols begin, and checks. "
-            "It needs n plus one states. <bookmark mark='b'/> But the smallest deterministic machine has two to the "
-            "n. We built them all here: <bookmark mark='c'/> for n equals twelve, the subset construction gives "
-            "four thousand and ninety-seven states, and minimizing removes just one of them. The guess an NFA gets "
-            "for free, a DFA has to pay for in memory."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(lang), FadeIn(rx))
+        with self.voiceover("Determinism has a price. <bookmark mark='a'/> Take the strings of zeros and ones whose n-th symbol from the end is a one. An NFA for it is tiny: it guesses when the last n symbols begin, and checks. It needs n plus one states. <bookmark mark='b'/> But the smallest deterministic machine has two to the n. We built them all here: <bookmark mark='c'/> for n equals twelve, the subset construction gives four thousand and ninety-seven states, and minimizing removes just one of them. The guess an NFA gets for free, a DFA has to pay for in memory.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(lang), FadeIn(rx), run_time=0.6)
+            vo.wait_until('a')
             self.play(Create(ax), FadeIn(yl), FadeIn(xl), FadeIn(xt), Create(nfa), FadeIn(nl))
-            vo.wait_until("b")
+            vo.wait_until('b')
             self.play(Create(dfa), FadeIn(dl), run_time=2)
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(LaggedStart(*[FadeIn(x) for x in tab], lag_ratio=0.3))
         self.wait(0.3)
         self.clear_scene()
@@ -192,20 +178,15 @@ class Subset(VoiceoverScene):
                        mono_cols=(0, 1, 2)).next_to(pts, DOWN, buff=0.4)
         cap = label(rf"all {len(m['table'])} pairs of 3-bit strings checked: \ every one is told apart", font_size=19,
                     color=GREY_B).next_to(t, DOWN, buff=0.15)
-        with self.voiceover(
-            "And no cleverer machine exists; the reason is the Myhill–Nerode theorem. <bookmark mark='a'/> Take "
-            "any two different strings of n bits, and suppose they first differ at position i. <bookmark mark='b'/> "
-            "Append i zeros. Now that position is exactly n-th from the end: a one in one string and a zero in the "
-            "other. <bookmark mark='c'/> So one extended string is in the language and the other is not, and a "
-            "machine that had reached the same state after both would give the same answer to both. It must keep "
-            "them apart. <bookmark mark='d'/> Two to the n strings, every pair distinguishable: at least two to the "
-            "n states. We checked every pair for n equals three."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, p in zip("abc", pts):
-                vo.wait_until(mk)
+        with self.voiceover("A distinguishability argument proves the deterministic-state lower bound. <bookmark mark='a'/> Choose any two different strings of n bits. Number positions from zero at the left, and let i be a position where the strings differ. <bookmark mark='b'/> Append exactly i zeros. The differing bit is now the n-th bit from the end: the extended length is n plus i and that bit's zero-based index is i. <bookmark mark='c'/> One extension belongs to the language and the other does not. A deterministic machine must therefore be in different states after the two original strings. <bookmark mark='d'/> There are two to the n such prefixes, pairwise distinguishable, so at least two to the n states are necessary. The n equals three enumeration checks the implementation of these witnesses; the argument proves the result for every n.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            for mk, p in zip('abc', pts):
+                if mk != 'a':
+                    vo.wait_until(mk)
                 self.play(FadeIn(p, shift=RIGHT * 0.1))
-            vo.wait_until("d")
+                if mk == 'a':
+                    vo.wait_until(mk)
+            vo.wait_until('d')
             self.play(FadeIn(pts[3]), FadeIn(t), FadeIn(cap))
         self.wait(0.3)
         self.clear_scene()
@@ -214,8 +195,7 @@ class Subset(VoiceoverScene):
         lz = load("lazy")
         head = label(r"In practice: \ build the DFA lazily", font_size=34).to_edge(UP, buff=0.3)
         pts = VGroup(
-            label(r"grep and RE2 run the NFA simulation, \ but remember every state set they meet, \ with its "
-                  r"transitions: \ a DFA built on demand", font_size=20, color=GREY_A),
+            label("lazy DFA strategy: cache encountered state sets and transitions; engine paths and budgets vary", font_size=20, color=GREY_A),
             label(rf"on the first {lz['chars']:,} characters of \textit{{Pride and Prejudice}}: \ ``the $n$-th "
                   r"character back is \texttt{e}''", font_size=20, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(head, DOWN, buff=0.4)
@@ -227,27 +207,16 @@ class Subset(VoiceoverScene):
         ok = all(r["hits"] == r["check"] for r in lz["rows"])
         cap = label(rf"every match checked against counting the \texttt{{e}}'s directly: \ "
                     rf"{'all agree' if ok else 'disagree'}", font_size=19, color=GREY_B).next_to(t, DOWN, buff=0.2)
-        punch = label(r"the worst case is real, \ but text is not the worst case: \ a cache of a few thousand states "
-                      r"is enough", font_size=21, color=YES).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "Real engines use a compromise. <bookmark mark='a'/> GNU grep and Google's RE2 run the NFA simulation, "
-            "but remember each state set they meet, along with its transitions, so that the next time the text "
-            "reaches it the step is a single table lookup. The DFA is built lazily, only where the text goes. "
-            "<bookmark mark='b'/> We tried it on the first three hundred thousand characters of Pride and "
-            "Prejudice, with the pattern: the n-th character back is an e. <bookmark mark='c'/> For n equals "
-            "twelve, the text reaches six hundred and eighty-two of the four thousand and ninety-six possible "
-            "states; for sixteen, about three thousand of sixty-five thousand. <bookmark mark='d'/> The worst case "
-            "is real, but ordinary text is not the worst case, and a cache of a few thousand states is enough."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(pts[0]))
-            vo.wait_until("b")
+        punch = label("this text visits fewer states; exponential worst cases remain, and caches need budgets", font_size=21, color=YES).to_edge(DOWN, buff=0.4)
+        with self.voiceover("Lazy determinization can trade time for memory. <bookmark mark='a'/> Cache an encountered NFA state set and its transitions. A repeated transition can then use a table lookup. Engines such as RE2 can use this strategy alongside other execution paths, subject to memory budgets. <bookmark mark='b'/> Our experiment reads the first three hundred thousand characters of Pride and Prejudice, asking whether the n-th character from the end is e. <bookmark mark='c'/> The table shows how many distinct sets this particular text reaches, compared with the exponential space of possible histories. <bookmark mark='d'/> Caching helps on this sample. It does not remove the exponential worst case or guarantee that a few thousand states suffice for other patterns and texts. Real engines need cache limits and fallback strategies.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(pts[0]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(pts[1]), FadeIn(VGroup(*t.cells[0])), FadeIn(t.rule))
-            vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(VGroup(*t.cells[r])) for r in range(1, len(t.cells))], lag_ratio=0.4),
-                      FadeIn(cap), run_time=3)
-            vo.wait_until("d")
+            vo.wait_until('c')
+            self.play(LaggedStart(*[FadeIn(VGroup(*t.cells[r])) for r in range(1, len(t.cells))], lag_ratio=0.4), FadeIn(cap), run_time=3)
+            vo.wait_until('d')
             self.play(FadeIn(punch))
         self.wait(0.3)
         self.clear_scene()
