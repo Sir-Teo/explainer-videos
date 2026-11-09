@@ -55,9 +55,9 @@ class Nerode(VoiceoverScene):
             "<bookmark mark='b'/> It works, but it is wasteful. Is six states the fewest a machine for this language "
             "can have? A theorem from 1958 answers that question exactly, for every language at once."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(sd.nodes))
             vo.wait_until("a")
-            self.play(FadeIn(sd.nodes), LaggedStart(*[Create(e) for e in sd.edges], lag_ratio=0.06), run_time=3.0)
+            self.play(LaggedStart(*[Create(e) for e in sd.edges], lag_ratio=0.06), run_time=3.0)
             self.play(LaggedStart(*[FadeIn(t) for t in txt[:3]], lag_ratio=0.3))
             vo.wait_until("b")
             self.play(FadeIn(txt[3]))
@@ -95,21 +95,22 @@ class Nerode(VoiceoverScene):
         ex = label(r"for multiples of 3: \ the classes are the remainders 0, 1, 2 \ $\Rightarrow$ \ 3 states", font_size=26,
                    color=HEAD).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "John Myhill and Anil Nerode looked at a language from the outside, with no machine at all. "
-            "<bookmark mark='a'/> Call two prefixes equivalent if no continuation can tell them apart: for every "
-            "suffix z, x z is in the language exactly when y z is. <bookmark mark='b'/> Their theorem says a language "
-            "can be recognized by a finite automaton exactly when this equivalence has finitely many classes, and "
+            "John Myhill and Anil Nerode looked at a language from the outside, with no machine at all. <bookmark "
+            "mark='a'/> Call two prefixes equivalent if no continuation can tell them apart: for every suffix z, "
+            "x z is in the language exactly when y z is. <bookmark mark='b'/> Their theorem says a language can "
+            "be recognized by a finite automaton exactly when this equivalence has finitely many classes, and "
             "then the smallest automaton has one state per class, no more and no fewer. <bookmark mark='c'/> The "
             "proof is short. Any machine must send two inequivalent prefixes to different states, because if they "
-            "reached the same state every suffix would treat them alike; so a machine has at least as many states as "
-            "there are classes. And the classes themselves form a machine: reading a bit takes the class of x to the "
-            "class of x followed by that bit. <bookmark mark='d'/> For multiples of three, two prefixes are "
-            "equivalent exactly when they leave the same remainder mod three. Three classes, so three states suffice, "
-            "and the six-state machine has three it does not need."
+            "reached the same state every suffix would treat them alike; so a machine has at least as many states "
+            "as there are classes. And the classes themselves form a machine: reading a bit takes the class of x "
+            "to the class of x followed by that bit. This is well defined: equivalent prefixes remain equivalent "
+            "after the same appended bit. <bookmark mark='d'/> For multiples of three, two prefixes are "
+            "equivalent exactly when they leave the same remainder mod three. Three classes, so three states "
+            "suffice, and the six-state machine has three it does not need."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(defn))
             vo.wait_until("a")
-            self.play(FadeIn(defn[0]), Write(defn[1]))
+            self.play(Indicate(defn[1], scale_factor=1.03))
             vo.wait_until("b")
             self.play(FadeIn(thm))
             vo.wait_until("c")
@@ -142,16 +143,17 @@ class Nerode(VoiceoverScene):
                     for s in range(6)]
 
         with self.voiceover(
-            "There is an algorithm that finds those classes in any machine. <bookmark mark='a'/> Start by splitting "
-            "the states into two blocks: accepting and rejecting. No suffix can make those equivalent. "
-            "<bookmark mark='b'/> Then look at each block and ask, for each input bit, which block each state goes "
-            "to. States that disagree must be split, because some suffix tells them apart. Here states one and four "
-            "behave alike, and so do two and five, but differently from one and four, so the rejecting block splits "
-            "in two. <bookmark mark='c'/> Repeat until no block splits. The three blocks that remain, zero and three, "
-            "one and four, two and five, are exactly the remainders mod three. <bookmark mark='d'/> Merge each block "
-            "into a single state and you have the minimal machine. Edward Moore's method, used here, is simple; John "
-            "Hopcroft's refinement of 1971 does the same in n log n time, and is what tools use to shrink the "
-            "automata inside every regular-expression engine and lexer."
+            "There is an algorithm that finds those classes in any machine. <bookmark mark='a'/> Start by "
+            "splitting the states into two blocks: accepting and rejecting. The empty suffix already "
+            "distinguishes those two blocks. <bookmark mark='b'/> Then look at each block and ask, for each input "
+            "bit, which block each state goes to. States that disagree must be split, because some suffix tells "
+            "them apart. Here states one and four behave alike, and so do two and five, but differently from one "
+            "and four, so the rejecting block splits in two. <bookmark mark='c'/> Repeat until no block splits. "
+            "The three blocks that remain, zero and three, one and four, two and five, are exactly the remainders "
+            "mod three. <bookmark mark='d'/> Merge each block into a single state and you have the minimal "
+            "machine. Edward Moore's method, used here, is simple; John Hopcroft's refinement of 1971 runs in n "
+            "log n time for a fixed alphabet. Such algorithms minimize deterministic automata used in lexers and "
+            "regular-language tools; not every regular-expression engine uses a minimal DFA."
         ) as vo:
             self.play(FadeIn(head), FadeIn(sd))
             vo.wait_until("a")
@@ -194,16 +196,18 @@ class Nerode(VoiceoverScene):
                     font_size=24, color=NO).to_edge(DOWN, buff=0.25)
         with self.voiceover(
             "This is the first rung of a ladder that the series climbs in Part 12. <bookmark mark='a'/> Finite "
-            "automata, with a fixed amount of memory, recognize the regular languages: the patterns of regular "
-            "expressions and of every lexer. Add a stack and you get the machines that parse programming languages. "
-            "Add an unbounded tape and you are back at Part 1's Turing machine, which can do anything computable. "
-            "<bookmark mark='b'/> Myhill–Nerode also marks the ladder's first edge. The language of some zeros "
-            "followed by the same number of ones has infinitely many classes, since zero to the i and zero to the j "
-            "are told apart by the suffix one to the i. So no finite machine, however clever, can recognize it."
+            "automata, with a fixed amount of memory, recognize the regular languages: the patterns of classical "
+            "regular expressions and finite-state lexers. Features such as backreferences extend some practical "
+            "regex engines beyond regular languages. Add a stack and you get the machines that parse programming "
+            "languages. Add an unbounded tape and you are back at Part 1's Turing machine, which can do anything "
+            "computable. <bookmark mark='b'/> Myhill–Nerode also marks the ladder's first edge. The language of "
+            "some zeros followed by the same number of ones has infinitely many classes, since zero to the i and "
+            "zero to the j are told apart by the suffix one to the i. So no finite machine, however clever, can "
+            "recognize it."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), DrawBorderThenFill(inner), FadeIn(tl[2]), FadeIn(exs[0]))
             vo.wait_until("a")
-            self.play(DrawBorderThenFill(inner), FadeIn(tl[2]), FadeIn(exs[0]))
+            self.play(Indicate(inner, scale_factor=1.02))
             self.play(DrawBorderThenFill(mid), FadeIn(tl[1]), FadeIn(exs[1]))
             self.play(DrawBorderThenFill(outer), FadeIn(tl[0]), FadeIn(exs[2]))
             self.bring_to_front(mid, inner, tl, exs)

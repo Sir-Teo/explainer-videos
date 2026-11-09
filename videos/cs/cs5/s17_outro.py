@@ -59,11 +59,12 @@ class Outro(VoiceoverScene):
         ).arrange_in_grid(rows=2, cols=3, buff=(0.35, 0.35)).move_to(DOWN * 0.2)
         head = label(rf"Part {PART}: \ Memory and Time", font_size=38).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "What we built in this part. Feedback, and the SR latch that holds a bit. The latch as a dynamical system, "
-            "with two wells and a saddle, and metastability, whose undecided tail falls off exponentially and never "
-            "reaches zero. Flip-flops, the clock, setup and hold, and the synchronizer. Finite-state machines, and the "
-            "Myhill-Nerode theorem that gives the smallest one. Shift registers that count through every non-zero "
-            "state, Pebble's register file, and memory chips that must rewrite their bits to keep them."
+            "What we built in this part. Feedback, and the SR latch that holds a bit. The latch as a dynamical "
+            "system, with two wells and a saddle, and metastability, whose idealized undecided probability has an "
+            "exponential tail with no fixed settling-time bound. Flip-flops, the clock, setup and hold, and the "
+            "synchronizer. Finite-state machines, and the Myhill-Nerode theorem that gives the smallest one. "
+            "Primitive-feedback LFSRs that visit every nonzero state from a nonzero seed, Pebble's register file, "
+            "and memory chips that must rewrite their bits to keep them."
         ):
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
@@ -98,16 +99,15 @@ class Outro(VoiceoverScene):
                                         r"tools in every chip project"),
             (r"servers", r"ECC memory corrects single-bit flips; \ refresh, \ TRR \ and memory scrubbing"),
             (r"embedded firmware", r"state machines run protocols, \ user interfaces \ and motor controllers"),
-            (r"protocol code", r"TCP's connection states, \ HTTP parsers, \ regular-expression engines: \ finite "
-                               r"automata in software"),
+            (r"protocol code", 'TCP connection states, parsing and regex tools: finite-state components within larger programs'),
             (r"FPGAs", r"lookup tables and flip-flops; \ one-hot state machines"),
         ])
         with self.voiceover(
-            "In practice: every chip with more than one clock has dozens of clock-domain crossings, each with a "
-            "synchronizer or a Gray-coded queue, and special tools check them all. Servers use error-correcting "
-            "memory, which repairs single flipped bits, and scrub their memory in the background. Embedded firmware "
-            "is built from state machines, and so are network protocols, parsers and regular-expression engines, "
-            "which are finite automata written in software."
+            "In practice: unrelated clock-domain crossings need appropriate synchronizers, handshakes or "
+            "asynchronous FIFOs, with dedicated checks. Servers use error-correcting memory, which repairs single "
+            "flipped bits, and scrub their memory in the background. Embedded firmware is built from state "
+            "machines, and so are network protocols, parsers and regular-expression engines, which often contain "
+            "finite-state components; full parsers and protocol implementations can require more memory."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.35), run_time=3.0)
@@ -125,13 +125,13 @@ class Outro(VoiceoverScene):
             r"Use Myhill--Nerode to show that no finite automaton recognizes the palindromes over $\{0, 1\}$.",
             r"\textit{Build.} \ With \texttt{explainer/cs/pebble/seq.py}, \ find the period of every 5-bit LFSR, \ and "
             r"check that exactly $\varphi(31)/5 = 6$ are maximal.",
-            r"$\bigstar$ \textit{Research.} \ Prove that a deterministic tracker which keeps every row below $T$ needs "
-            r"about $W/T$ counters. \ Open: \ a randomized one with far fewer bits, \ safe against an adaptive attacker.",
+            '$\\bigstar$ \\textit{Research.} In one window of $W$ events, prove the toy tracker bound; \\\\ test $[0,0]+[1]^{20}$ with one counter and trigger 2. What must a physical guarantee also model?',
         ], font_size=22)
         with self.voiceover(
             "Seven problems, with full solutions in the part's notes. Pause on any of them. The sixth is a build "
-            "problem: it asks you to use this series' sequential-circuit library yourself. The last, marked with a "
-            "star, is a research problem: a lower bound you can prove, and a better defence nobody has."
+            "problem: it asks you to use this series' sequential-circuit library yourself. The last, marked with "
+            "a star, is a research problem: a bounded-model counting proof, a counter-reset regression, and the "
+            "harder question of which assumptions a physical defence must satisfy."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)
@@ -166,7 +166,10 @@ class Outro(VoiceoverScene):
              r"``Metastability and synchronizers'' (2011)",
              r"Dennard, DRAM cell patent (1968); \ Kim et al., ``Flipping bits in memory without accessing them'' (2014)",
              r"Seaborn and Dullien, Project Zero (2015); \ Frigo et al., ``TRRespass'' (2020)",
-             r"Muller and Bartky, ``A theory of asynchronous circuits'' (1959)"])
+             r"Muller and Bartky, ``A theory of asynchronous circuits'' (1959)",
+             r"Lamport, Buridan's principle (1984 manuscript; published 2012)",
+             r"Park et al., Graphene (2020); Bostanci et al., CoMeT (2024)",
+             r"Qu and Saileshwar, AutoPRAC (June 2026 preprint)"])
         credit = note(rf"narration: \ {narration_credit()}", font_size=18).to_edge(DOWN, buff=0.15)
         with self.voiceover("The books and papers this part follows are on screen and in the notes. Thank you for "
                             "watching."):

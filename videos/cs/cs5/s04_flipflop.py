@@ -48,19 +48,21 @@ class FlipFlop(VoiceoverScene):
                     color=CODE).move_to(RIGHT * 2.6 + UP * 0.4))
         notes = VGroup(label(r"$E = 1$: \ transparent, \ $Q$ follows $D$", font_size=26, color=CLOCK),
                        label(r"$E = 0$: \ closed, \ $Q$ holds", font_size=26, color=YES),
-                       label(r"and the forbidden input can never happen", font_size=22, color=GREY_B)).arrange(
+                       label(r"stable Boolean inputs: mutually exclusive requests", font_size=22, color=GREY_B)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.18).move_to(LEFT * 3.0 + UP * 1.5)
         with self.voiceover(
-            "An SR latch needs two inputs and has a forbidden one. Two more NAND gates fix both. "
-            "<bookmark mark='a'/> Feed the latch from a data input D and an enable E, so that set is D and E, and "
-            "reset is not D and E. <bookmark mark='b'/> While the enable is one, the latch is transparent: Q follows D, "
-            "a few gate delays behind. While the enable is zero, the door is shut, and Q holds whatever D was at the "
-            "moment it closed, no matter what D does afterwards. And since set and reset can never both be active, "
-            "the forbidden input has disappeared. This is the D latch, simulated here gate by gate."
+            "An SR latch needs two inputs and has a forbidden one. Gate the data and its complement into the set "
+            "and reset inputs. <bookmark mark='a'/> Feed the latch from a data input D and an enable E, so that "
+            "set is D and E, and reset is not D and E. <bookmark mark='b'/> While the enable is one, the latch is "
+            "transparent: Q follows D, a few gate delays behind. While the enable is zero, the door is shut, and "
+            "Q holds whatever D was at the moment it closed, no matter what D does afterwards. For stable Boolean "
+            "inputs, those set and reset requests are mutually exclusive. Real transitions still have gate "
+            "delays, and data must meet setup and hold around closing. This is the D latch, simulated here gate "
+            "by gate."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(blk))
             vo.wait_until("a")
-            self.play(FadeIn(blk))
+            self.play(Indicate(blk, scale_factor=1.03))
             vo.wait_until("b")
             self.play(FadeIn(shades), LaggedStart(*[Create(w) for w in ws], lag_ratio=0.2), run_time=3.0)
             self.play(LaggedStart(*[FadeIn(n) for n in notes], lag_ratio=0.3))
@@ -92,15 +94,16 @@ class FlipFlop(VoiceoverScene):
         cap = label(r"$Q$ takes the value $D$ had at the rising edge, \ and holds it for a whole cycle", font_size=26,
                     color=HEAD).to_edge(DOWN, buff=0.1)
         with self.voiceover(
-            "A latch is transparent for as long as its enable is high, and that is a problem when its output feeds "
-            "logic that feeds back into its input: the signal can race round the loop many times while the door is "
-            "open. <bookmark mark='a'/> The cure is two latches in a row, enabled by opposite phases of a clock. While "
-            "the clock is low, the first, the master, follows D, and the second, the slave, holds. When the clock "
-            "rises, the master shuts, capturing D, and the slave opens, passing the captured value to Q. "
-            "<bookmark mark='b'/> The two are never open at once, so nothing races through. Here it is, simulated: "
-            "D changes freely, but Q changes only just after each rising edge, to the value D had at that edge. "
-            "<bookmark mark='c'/> This is the edge-triggered D flip-flop, and it turns continuous time into discrete "
-            "steps."
+            "A latch is transparent for as long as its enable is high, and that is a problem when its output "
+            "feeds logic that feeds back into its input: the signal can race round the loop many times while the "
+            "door is open. <bookmark mark='a'/> The cure is two latches in a row, enabled by opposite phases of a "
+            "clock. While the clock is low, the first, the master, follows D, and the second, the slave, holds. "
+            "When the clock rises, the master shuts, capturing D, and the slave opens, passing the captured value "
+            "to Q. <bookmark mark='b'/> In the ideal opposite-phase model, the two are not transparent together. "
+            "Real designs must control phase overlap and satisfy their timing constraints. Here it is, simulated: "
+            "With data stable around the sampling edge, Q takes the captured value after the rising edge. "
+            "<bookmark mark='c'/> This is the edge-triggered D flip-flop, and it turns continuous time into "
+            "discrete steps."
         ) as vo:
             race = fsm_block(0.9).move_to(UP * 0.4)
             race[6].become(MathTex(r"\text{latch: open}", font_size=22, color=NO).move_to(race.reg))
@@ -147,17 +150,18 @@ class FlipFlop(VoiceoverScene):
                      color=HEAD).to_edge(DOWN, buff=0.25)
         with self.voiceover(
             "Put flip-flops side by side on the same clock and you have a register. <bookmark mark='a'/> Eight "
-            "flip-flops make an eight-bit register; every bit of it changes at the same instant, on the clock's rising "
-            "edge, and holds still for the rest of the cycle. <bookmark mark='b'/> Now the shape of almost every "
-            "digital system: registers hold the state; combinational logic, the circuits of Parts 3 and 4, computes "
-            "the next state from the current state and the inputs; and at each clock edge the registers load it. "
-            "Between edges the logic can glitch as much as it likes, because nobody is looking. "
-            "<bookmark mark='c'/> This series' hardware library simulates exactly this picture, one clock cycle at a "
-            "time, and Pebble is built in it."
+            "flip-flops make an eight-bit register; each bit samples on the same rising edge and its output "
+            "settles after its clock-to-Q delay. <bookmark mark='b'/> Now the shape of almost every digital "
+            "system: registers hold the state; combinational logic, the circuits of Parts 3 and 4, computes the "
+            "next state from the current state and the inputs; and at each clock edge the registers load it. "
+            "Between edges the combinational outputs may glitch, but the values sampled by registers must settle "
+            "for their setup and hold windows. Outputs used asynchronously need separate care. <bookmark "
+            "mark='c'/> This series' hardware library simulates exactly this picture, one clock cycle at a time, "
+            "and Pebble is built in it."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(ffs), Create(clk), Create(taps), FadeIn(cl), FadeIn(rl))
             vo.wait_until("a")
-            self.play(FadeIn(ffs, lag_ratio=0.1), Create(clk), Create(taps), FadeIn(cl), FadeIn(rl))
+            self.play(Indicate(ffs, scale_factor=1.03))
             vo.wait_until("b")
             self.play(FadeIn(reg), FadeIn(logic), GrowArrow(a1), Create(back), GrowArrow(ins), FadeIn(il))
             vo.wait_until("c")

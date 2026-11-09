@@ -58,9 +58,9 @@ class RegFile(VoiceoverScene):
             "<bookmark mark='c'/> To read, two trees of multiplexers, each thirty-two bits wide, pick out the two "
             "registers named by the read addresses, both in the same cycle."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(regs))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r) for r in regs], lag_ratio=0.05), run_time=1.6)
+            self.play(Indicate(regs, scale_factor=1.02))
             vo.wait_until("b")
             self.play(FadeIn(dec), FadeIn(wa), FadeIn(wd), Create(wlines), FadeIn(note1))
             vo.wait_until("c")
@@ -158,18 +158,19 @@ class RegFile(VoiceoverScene):
                        zip(bar, parts)])
         bcap = note(rf"where the {fmt(d['gates'])} gates go", font_size=20).next_to(bar, UP, buff=0.12)
         with self.voiceover(
-            "In the series' library this register file is real. <bookmark mark='a'/> Four hundred and eighty "
-            "flip-flops, and a little under six thousand gates of decoding and multiplexing around them. Two hundred "
-            "and fifty-six copies were run for sixty-four cycles of random reads and writes, and every value read "
-            "matched a Python model that simply keeps sixteen variables. <bookmark mark='b'/> Notice where the gates "
-            "go. Every extra read port is another multiplexer tree, about two thousand gates; every extra write port "
-            "is another decoder and wider multiplexers on all four hundred and eighty bits. Processors that execute "
-            "several instructions per cycle need many ports, and their register files become some of the largest and "
-            "hottest structures on the chip, as Parts 7 and 8 will show."
+            "In the series' library this register file is a checked circuit model. These are counts in our chosen "
+            "gate basis, not a transistor-area estimate. <bookmark mark='a'/> Four hundred and eighty flip-flops, "
+            "and a little under six thousand gates of decoding and multiplexing around them. Two hundred and "
+            "fifty-six copies were run for sixty-four cycles of random reads and writes, and every value read "
+            "matched a Python model that simply keeps sixteen variables. <bookmark mark='b'/> Notice where the "
+            "gates go. Every extra read port is another multiplexer tree, about two thousand gates; every extra "
+            "write port is another decoder and wider multiplexers on all four hundred and eighty bits. Processors "
+            "that execute several instructions per cycle need many ports, and their register files become some of "
+            "the largest and hottest structures on the chip, as Parts 7 and 8 will show."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(nums))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(n) for n in nums], lag_ratio=0.4), run_time=2.4)
+            self.play(Indicate(nums, scale_factor=1.02))
             vo.wait_until("b")
             self.play(FadeIn(bcap), LaggedStart(*[GrowFromEdge(b, LEFT) for b in bar], lag_ratio=0.5), FadeIn(cnt),
                       run_time=2.0)

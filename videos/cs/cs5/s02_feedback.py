@@ -133,14 +133,15 @@ class Feedback(VoiceoverScene):
                            r"\ to make random bits", font_size=24, color=HEAD)).arrange(DOWN, buff=0.25).to_edge(DOWN,
                                                                                                          buff=0.45)
         with self.voiceover(
-            "Two gates in a loop make a memory. Three inverters in a loop make something else. "
-            "<bookmark mark='a'/> Each inverter wants its output to be the opposite of its input, and with an odd "
-            "number of them, going all the way round contradicts itself: there is no consistent state. So the ring "
-            "never settles. A change runs round and round it, and each signal flips every three gate delays, "
-            "repeating every six. <bookmark mark='b'/> This ring oscillator is how chip makers measure the speed of "
-            "a new manufacturing process, it is a cheap on-chip clock, and the jitter of free-running rings is one of "
-            "the sources of true random numbers inside processors. Loops, it turns out, are where circuits get "
-            "interesting."
+            "Two gates in a loop make a memory. Three inverters in a loop make something else. <bookmark "
+            "mark='a'/> Each inverter wants its output to be the opposite of its input, and with an odd number of "
+            "them, going all the way round contradicts itself: there is no consistent binary state. In this "
+            "unit-delay model, the ring oscillates. A physical ring needs sufficient gain and suitable delays; it "
+            "also has an unstable analog operating point. A change runs round and round it, and each signal flips "
+            "every three gate delays, repeating every six. <bookmark mark='b'/> This ring oscillator is how chip "
+            "makers measure the speed of a new manufacturing process, it is a cheap on-chip clock, and the jitter "
+            "of free-running rings is one of the sources of true random numbers inside processors. Loops, it "
+            "turns out, are where circuits get interesting."
         ) as vo:
             self.play(FadeIn(head), FadeIn(gs), Create(ws), Create(back))
             vo.wait_until("a")

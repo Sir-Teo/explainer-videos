@@ -34,8 +34,34 @@ from explainer.ai.cache import Cache
 from explainer.cs.pebble import seq as S
 from explainer.cs.pebble.hdl import Circuit
 
-CACHE = Cache("cs5")
-load = CACHE.load
+class MemoryCache(Cache):
+    def load(self, name):
+        if name == "hammerdefence" and not cache_current(name):
+            from explainer.cache_lock import cache_lock
+            with cache_lock(self.path(name)):
+                if not cache_current(name):
+                    self.save(name, compute_hammerdefence())
+        return super().load(name)
+
+
+CACHE = MemoryCache("cs5")
+HAMMER_SCHEMA = 2
+
+
+def cache_current(name):
+    path = CACHE.path(name)
+    if not path.exists():
+        return False
+    if name != "hammerdefence":
+        return True
+    import json
+    return json.loads(path.read_text()).get("schema") == HAMMER_SCHEMA
+
+
+def load(name):
+    # Resolve the instance method at call time so cached-only QA can guard it
+    # before any automatic schema upgrade takes place.
+    return CACHE.load(name)
 
 
 # ---------------------------------------------------------------------------
@@ -415,9 +441,16 @@ THRESHOLDS = [         # (year, activations of one aggressor row before a flip, 
 
 
 def misra_gries(stream, k: int, threshold: int):
-    """Misra and Gries (1982): k counters; an item's estimate undercounts it by at most n / (k + 1).  A row whose
-    estimate reaches ``threshold`` has its neighbours refreshed and its counter reset (Graphene's use, 2020).
-    Returns how many times each row was activated between refreshes of its neighbours, at most."""
+    """A bounded-window teaching model inspired by Misra--Gries.
+
+    Every live counter is positive. At ``threshold``, model an immediate victim
+    refresh and remove that aggressor's counter. Within n input activations, the
+    undercount since its last mitigation is at most floor(n/(k+1)). This does not
+    model physical victim contributions, rolling refresh windows or queues, and
+    is not Graphene's spillover-counter implementation.
+    """
+    if k < 1 or threshold < 1:
+        raise ValueError("positive counter count and refresh threshold required")
     counters: dict[int, int] = {}
     since = {}
     worst = {}
@@ -434,7 +467,9 @@ def misra_gries(stream, k: int, threshold: int):
                 if counters[q] == 0:
                     del counters[q]
         if counters.get(r, 0) >= threshold:
-            counters[r] = 0
+            # A retained zero can become negative on the next full-table miss,
+            # occupying a slot forever. Refresh must free the counter.
+            del counters[r]
             since[r] = 0
     return worst
 
@@ -442,11 +477,13 @@ def misra_gries(stream, k: int, threshold: int):
 def compute_hammerdefence() -> dict:
     window = int(REFRESH_S / T_RC_S)            # activations one bank can make between refreshes
     year = 365 * 24 * 3600
+    annual_opportunities = math.ceil(year / T_RC_S)
     para = []
     for t in (139_000, 50_000, 10_000, 4_800, 2_000, 1_000, 500):
-        attempts = year / (t * T_RC_S)          # back-to-back attempts in a year
-        # (1 - p)^t * attempts <= 1e-2: one success per century of continuous hammering, at most
-        p = 1 - (1e-2 / attempts) ** (1 / t)
+        # Every activation can end a run of t missed mitigations. Counting only
+        # disjoint t-activation attempts misses overlapping opportunities. The
+        # union bound does not require those runs to be independent.
+        p = -math.expm1(math.log(1e-2 / annual_opportunities) / t)
         para.append({"t": t, "p": p})
     # trigger a refresh at t/2; Misra-Gries undercounts by at most window/(k+1), so k >= 2 window / t keeps every
     # row below t between refreshes of its neighbours
@@ -466,7 +503,8 @@ def compute_hammerdefence() -> dict:
         worst = misra_gries(stream.tolist(), k, t // 2)
         top = max(worst[a] for a in aggressors)
         sim.append({"k": k, "max_unrefreshed": int(top), "flips": bool(top >= t), "bound": t // 2 + window // (k + 1)})
-    return {"window": window, "thresholds": THRESHOLDS, "para": para, "counters": counters, "sim_t": t,
+    return {"schema": HAMMER_SCHEMA, "window": window, "annual_opportunities": annual_opportunities,
+            "thresholds": THRESHOLDS, "para": para, "counters": counters, "sim_t": t,
             "sim_aggressors": len(aggressors), "sim": sim}
 
 
@@ -477,4 +515,10 @@ ITEMS = {
 }
 
 if __name__ == "__main__":
+    import sys
+    requested = [x for x in sys.argv[1:] if not x.startswith("-")]
+    if not {"--force", "--help", "-h"}.intersection(sys.argv[1:]):
+        if (not requested or "hammerdefence" in requested) and CACHE.path("hammerdefence").exists():
+            if not cache_current("hammerdefence"):
+                load("hammerdefence")
     CACHE.main(ITEMS, __doc__)

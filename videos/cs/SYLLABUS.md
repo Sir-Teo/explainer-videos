@@ -656,7 +656,8 @@ that remember turn out to be the first rung of a theory of languages.
 8. The register file from decoders, multiplexers and flip-flops; what each extra port costs.
 9. Memory arrays:
    - the 6T SRAM cell (cross-coupled inverters again), word and bit lines, sense amplifiers;
-   - the 1T1C DRAM cell, destructive reads, refresh every 64 ms, row buffers;
+   - the 1T1C DRAM cell, destructive sensing and restoration, a common 64 ms refresh interval at normal
+     temperature (device dependent), row buffers;
    - why DRAM is dense and slow. Part 9 builds on this.
 10. Rowhammer (2014): hammering one DRAM row flips bits in its neighbours, and the hardware abstraction leaks (Part
     42 returns to it).
@@ -664,10 +665,13 @@ that remember turn out to be the first rung of a theory of languages.
 12. ROMs, PLAs, FPGAs: memory as logic; a preview of microcode.
 13. History: mercury delay lines (EDSAC), Williams tubes, core memory (Forrester, Whirlwind 1953), the Intel 1103
     DRAM (1970); flash previewed for Part 34.
-14. Outro.
+14. Frontier: a bounded-window counting model, an annual union bound covering overlapping runs,
+    counter-reset regression and the physical assumptions required by Rowhammer defences. Graphene, CoMeT, PRAC
+    and the explicitly dated June 2026 AutoPRAC preprint.
+15. Outro.
 
 *Computed:* the cross-coupled-inverter ODE phase portrait; a metastability histogram; Myhill–Nerode minimization;
-LFSR periods for every polynomial of degree ≤ 8; the register file in the simulator.
+LFSR periods for monic degree 2–8 polynomials with constant term 1; the register file in the simulator.
 *Visuals:* a ball rolling into one of two wells or balancing on the saddle; setup and hold windows on a waveform;
 the DRAM capacitor leaking charge until refresh.
 *In practice:* clock-domain crossings in chip design, DRAM refresh and ECC in servers, Rowhammer mitigations, state machines in embedded firmware and protocol code.

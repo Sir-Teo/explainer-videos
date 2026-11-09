@@ -37,15 +37,17 @@ class Logic(VoiceoverScene):
             (r"the cost: \ every step waits for the slowest path, \ and the clock tree burns power", NO),
         )]).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Almost every digital system obeys a few strict rules. <bookmark mark='a'/> Every flip-flop shares one "
-            "clock. Every loop passes through a register. Every path meets its setup and hold times, and every input "
-            "from outside goes through a synchronizer. <bookmark mark='b'/> Obey them, and a chip of billions of "
-            "transistors behaves exactly like a finite-state machine, taking one clean step per tick, simulated "
-            "cycle by cycle the way this series simulates Pebble. That predictability is worth an enormous amount. "
-            "<bookmark mark='c'/> The price is that every step waits for the slowest path, even when the work this "
-            "cycle was easy, and the clock network that reaches every flip-flop can burn a third of a chip's power. "
-            "Modern chips soften both costs: clock gating switches the clock off to idle blocks, and different parts "
-            "of a chip run on different clocks, joined by the synchronizers of chapter five."
+            "Within a simple synchronous clock domain, the design discipline is a few strict rules. <bookmark "
+            "mark='a'/> Every flip-flop shares one clock. Every loop passes through a register. Every path meets "
+            "its setup and hold times, and every crossing from an unrelated clock domain uses an appropriate "
+            "synchronization protocol. <bookmark mark='b'/> Obey them, and a chip of billions of transistors "
+            "behaves exactly like a finite-state machine, taking one clean step per tick, simulated cycle by "
+            "cycle the way this series simulates Pebble. That predictability is worth an enormous amount. "
+            "<bookmark mark='c'/> The price is that every step waits for the slowest path, even when the work "
+            "this cycle was easy, and the clock network that reaches every flip-flop can consume a substantial "
+            "fraction of dynamic power, depending on the chip. Modern chips soften both costs: clock gating "
+            "switches the clock off to idle blocks, and different parts of a chip run on different clocks, joined "
+            "by the synchronizers of chapter five."
         ) as vo:
             self.play(FadeIn(head), FadeIn(blk))
             vo.wait_until("a")
@@ -87,18 +89,19 @@ class Logic(VoiceoverScene):
                      r"arbiters \ (Muller, 1950s)", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "There is another way: circuits with no clock at all, which signal to each other when they are done. "
-            "<bookmark mark='a'/> Their basic element, invented by David Muller in the 1950s, is the C-element. When "
-            "both inputs are one, its output becomes one; when both are zero, zero; when they disagree, it holds its "
-            "last value. It is a tiny state machine, and like the latch it needs feedback inside. "
-            "<bookmark mark='b'/> In effect it waits for both of its inputs to agree before it acts, which is exactly "
-            "what a handshake needs: I am ready, you are ready, go. Asynchronous circuits built this way run each step "
-            "as fast as that step allows and use no power while idle. They are hard to design and test, so they "
-            "survive mainly in niches: ultra-low-power chips, the arbiters that decide which of two requests came "
-            "first, and the boundaries between clock domains."
+            "<bookmark mark='a'/> Their basic element, invented by David Muller in the 1950s, is the C-element. "
+            "When both inputs are one, its output becomes one; when both are zero, zero; when they disagree, it "
+            "holds its last value. It is a tiny state machine, and like the latch it needs feedback inside. "
+            "<bookmark mark='b'/> In effect it waits for both of its inputs to agree before it acts, which is "
+            "exactly what a handshake needs: I am ready, you are ready, go. Asynchronous circuits built this way "
+            "run each step as fast as that step allows and avoid clock-driven switching while idle, though "
+            "leakage and other static power remain. They are hard to design and test, so they survive mainly in "
+            "niches: ultra-low-power chips, the arbiters that decide which of two requests came first, and the "
+            "boundaries between clock domains."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(c), Create(ins), Create(out), FadeIn(labs), FadeIn(tt))
             vo.wait_until("a")
-            self.play(FadeIn(c), Create(ins), Create(out), FadeIn(labs), FadeIn(tt, lag_ratio=0.3))
+            self.play(Indicate(c, scale_factor=1.03))
             vo.wait_until("b")
             self.play(LaggedStart(*[Create(w) for w in ws], lag_ratio=0.2), run_time=2.5)
             self.play(FadeIn(foot))
@@ -144,10 +147,9 @@ class Logic(VoiceoverScene):
             "the step within it, to generate the signals that steer their datapaths. That is microcode, and Part 6 "
             "builds Pebble's control the same way, or with plain logic, and compares the two."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rl), FadeIn(cols), FadeIn(rom), FadeIn(rom_note))
             vo.wait_until("a")
-            self.play(FadeIn(rl), FadeIn(cols), LaggedStart(*[FadeIn(r) for r in rom], lag_ratio=0.15),
-                      FadeIn(rom_note))
+            self.play(Indicate(cols, scale_factor=1.03))
             self.play(FadeIn(probe), Create(hl), FadeIn(items[0]))
             vo.wait_until("b")
             self.play(FadeIn(items[1]), FadeIn(items[2]))

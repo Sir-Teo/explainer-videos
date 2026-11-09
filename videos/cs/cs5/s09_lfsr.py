@@ -51,9 +51,9 @@ class Lfsr(VoiceoverScene):
             "registers to turn parallel words into a stream of bits and back. And with one small change, a shift "
             "register becomes something remarkable."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(ctr), FadeIn(cl))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(c) for c in ctr], lag_ratio=0.08), FadeIn(cl), run_time=2.5)
+            self.play(Indicate(ctr, scale_factor=1.02))
             vo.wait_until("b")
             self.play(FadeIn(regs), Create(arrows), GrowArrow(sin), FadeIn(sl))
             self.play(FadeIn(uses))
@@ -156,21 +156,22 @@ class Lfsr(VoiceoverScene):
         sl = MathTex(r"x^3", font_size=32, color=CODE).next_to(boxes, LEFT, buff=0.5)
         red = MathTex(r"x^4 \equiv x^3 + 1", font_size=30, color=NO).next_to(ghost, RIGHT, buff=0.35)
         with self.voiceover(
-            "The explanation is algebra over the field with two elements, where one plus one is zero and adding is "
-            "exclusive-or. <bookmark mark='a'/> Read the register's bits as the coefficients of a polynomial; this is "
-            "cleanest for the same taps wired in the so-called Galois form, which folds the exclusive-or into the "
-            "shift. <bookmark mark='b'/> One clock step multiplies that polynomial by x, shifting every coefficient "
-            "up, and the feedback reduces the result modulo the tap polynomial, exactly as an integer is reduced "
-            "modulo a number. <bookmark mark='c'/> So the states the register visits are the powers of x, and its "
-            "period is the smallest power of x that comes back to one; either wiring has the same period. "
-            "<bookmark mark='d'/> The period is the maximum, two to the n minus one, exactly when the polynomial is "
-            "primitive: when the powers of x run through every non-zero element of the finite field with two to the "
-            "n elements. Solomon Golomb worked out this theory in the 1950s, and these registers have generated "
-            "codes, ciphers and test patterns ever since."
+            "The explanation is algebra over the field with two elements, where one plus one is zero and adding "
+            "is exclusive-or. <bookmark mark='a'/> Read the register's bits as the coefficients of a polynomial; "
+            "this is cleanest for the same taps wired in the so-called Galois form, which folds the exclusive-or "
+            "into the shift. <bookmark mark='b'/> One clock step multiplies that polynomial by x, shifting every "
+            "coefficient up, and the feedback reduces the result modulo the tap polynomial, exactly as an integer "
+            "is reduced modulo a number. This quotient is a field when the polynomial is irreducible; reducible "
+            "polynomials need not give a field. <bookmark mark='c'/> So the states the register visits are the "
+            "powers of x, and its period is the smallest power of x that comes back to one; either wiring has the "
+            "same period. <bookmark mark='d'/> The period is the maximum, two to the n minus one, exactly when "
+            "the polynomial is primitive: when the powers of x run through every non-zero element of the finite "
+            "field with two to the n elements. Solomon Golomb worked out this theory in the 1950s, and these "
+            "registers have generated codes, ciphers and test patterns ever since."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(lines[0]), FadeIn(lines[1]))
             vo.wait_until("a")
-            self.play(FadeIn(lines[0]), Write(lines[1]))
+            self.play(Indicate(lines[1], scale_factor=1.03))
             self.play(FadeIn(boxes), FadeIn(pw), FadeIn(bm), FadeIn(sl))
             vo.wait_until("b")
             self.play(FadeIn(lines[2]), Create(ghost), FadeIn(pw4))
@@ -205,7 +206,7 @@ class Lfsr(VoiceoverScene):
     # ------------------------------------------------------------------
     def table(self):
         d = load("lfsr")
-        head = label(r"Every feedback polynomial, \ degrees 2 to 8", font_size=36).to_edge(UP, buff=0.35)
+        head = label(r"Monic $p(x)$, degree 2--8, constant term 1", font_size=36).to_edge(UP, buff=0.35)
         hdr = VGroup(*[label(t, font_size=22, color=GREY_B) for t in (r"degree $n$", r"polynomials", r"maximal (period "
                                                                        r"$2^n - 1$)", r"$\varphi(2^n - 1)/n$")])
         rows = VGroup(hdr)
@@ -225,18 +226,19 @@ class Lfsr(VoiceoverScene):
                   color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Here is every possible feedback polynomial up to degree eight, each simulated until it repeats. "
-            "<bookmark mark='a'/> At degree eight there are a hundred and twenty-eight of them, and sixteen give the "
+            "Here are all monic feedback polynomials of degrees two through eight with constant coefficient one, "
+            "so the shift is invertible, each simulated from a nonzero seed until it repeats. <bookmark "
+            "mark='a'/> At degree eight there are a hundred and twenty-eight of them, and sixteen give the "
             "maximal period of two hundred and fifty-five. In every row the count matches the formula from field "
-            "theory: Euler's phi of two to the n minus one, divided by n. <bookmark mark='b'/> These little machines "
-            "are everywhere. The checksums that catch errors on disks and networks divide by such polynomials, in "
-            "Part 28. Stream ciphers were built from them, and Part 29 shows why their linearity makes them easy to "
-            "break. Serial links scramble their bits with them, GPS satellites are told apart by them, and chips test "
-            "themselves with them."
+            "theory: Euler's phi of two to the n minus one, divided by n. <bookmark mark='b'/> These little "
+            "machines are everywhere. The checksums that catch errors on disks and networks divide by such "
+            "polynomials, in Part 28. Stream ciphers were built from them, and Part 29 shows why their linearity "
+            "makes them easy to break. Serial links scramble their bits with them, GPS satellites are told apart "
+            "by them, and chips test themselves with them."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(hdr))
+            self.play(FadeIn(head), FadeIn(hdr), FadeIn(rows[1:]))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r) for r in rows[1:]], lag_ratio=0.25), run_time=2.4)
+            self.play(Indicate(rows[1:], scale_factor=1.02))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(u) for u in uses], lag_ratio=0.4))
         self.wait(0.3)

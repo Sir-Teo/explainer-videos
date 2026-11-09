@@ -56,19 +56,20 @@ class Sram(VoiceoverScene):
         vbl = MathTex(r"V", font_size=24, color=DATA).next_to(bl, RIGHT, buff=0.12).shift(DOWN * 1.2)
         vblb = MathTex(r"V - \delta", font_size=24, color=NO).next_to(blb, LEFT, buff=0.12).shift(DOWN * 1.2)
         with self.voiceover(
-            "A register file of flip-flops is fast but large. For memories of millions of bits, the cell is cut down "
-            "to the bare minimum. <bookmark mark='a'/> At its heart is chapter two's latch again: two cross-coupled "
-            "inverters, four transistors, with two stable states. <bookmark mark='b'/> Two more transistors, switched "
-            "by a word line, connect the two sides of the latch to a pair of bit lines. Six transistors in all: the "
-            "static RAM cell, which holds its bit for as long as the power is on. <bookmark mark='c'/> To read, both "
-            "bit lines are charged up, and the word line opens the cell; the cell pulls one of them down slightly. "
-            "That tiny difference is too weak to use directly, so a sense amplifier, which is yet another "
-            "cross-coupled latch, balanced right on its saddle, falls one way or the other and turns it into a full "
-            "zero or one. To write, strong drivers force the bit lines, and the cell's small inverters give in."
+            "A register file of flip-flops is fast but large. For memories of millions of bits, a common compact "
+            "choice is the six-transistor cell shown here. <bookmark mark='a'/> At its heart is chapter two's "
+            "latch again: two cross-coupled inverters, four transistors, with two stable states. <bookmark "
+            "mark='b'/> Two more transistors, switched by a word line, connect the two sides of the latch to a "
+            "pair of bit lines. Six transistors in all: the static RAM cell, which retains its bit while powered "
+            "within its operating margins. <bookmark mark='c'/> To read, both bit lines are charged up, and the "
+            "word line opens the cell; the cell pulls one of them down slightly. That tiny difference is too weak "
+            "to use directly, so a sense amplifier, which is yet another cross-coupled latch, balanced right on "
+            "its saddle, falls one way or the other and turns it into a full zero or one. To write, strong "
+            "drivers force the bit lines, and the cell's small inverters give in."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(g1), FadeIn(g2), Create(loop), FadeIn(notes[0]))
             vo.wait_until("a")
-            self.play(FadeIn(g1), FadeIn(g2), Create(loop), FadeIn(notes[0]))
+            self.play(Indicate(VGroup(g1, g2, loop), scale_factor=1.03))
             vo.wait_until("b")
             self.play(Create(bl), Create(blb), Create(wl), FadeIn(acc1), FadeIn(acc2), Create(links), FadeIn(labs),
                       FadeIn(notes[1]))
@@ -105,7 +106,7 @@ class Sram(VoiceoverScene):
         tr = VGroup(path(0.02), path(-0.02), path(0.002))
         st = VGroup(*[Dot(ax.c2p(*p), radius=0.1, color=YES) for p in d["stable"]])
         steps = VGroup(
-            label(r"1. \ precharge: \ both sides held \\ at exactly the middle, \ the saddle", font_size=24,
+            label(r"1. \ precharge: \ normalized model: balanced \\ near the unstable operating point", font_size=24,
                   color=GREY_A),
             label(r"2. \ the cell nudges the bit lines \\ a few percent apart", font_size=24, color=GREY_A),
             label(r"3. \ release: \ the latch falls toward the side \\ it was nudged to, \ amplifying the "
@@ -114,14 +115,16 @@ class Sram(VoiceoverScene):
                   r"$t = \tfrac{1}{\lambda}\ln(1/\delta_0)$", font_size=24, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).move_to(RIGHT * 2.9 + DOWN * 0.3)
         with self.voiceover(
-            "The sense amplifier is a beautiful reuse of chapter two. <bookmark mark='a'/> It is a latch too, but one "
-            "that is deliberately parked on its saddle: both sides are first held at exactly the middle voltage. "
-            "<bookmark mark='b'/> Then the bit lines, nudged a few percent apart by the cell, are connected to it. "
-            "<bookmark mark='c'/> When it is released, the instability that makes metastability dangerous does useful "
-            "work: the imbalance grows exponentially, and the latch falls quickly to the side it was nudged towards, "
-            "turning a whisper into a full zero or one. A smaller nudge simply takes longer to resolve, which is "
-            "chapter five's tail again, and why memory designers specify the smallest signal their amplifiers can "
-            "read in time."
+            "An idealized regenerative sense amplifier reuses chapter two's instability. <bookmark mark='a'/> It "
+            "is a latch too, but one that is deliberately parked on its saddle: the two internal nodes are first "
+            "balanced near an unstable operating point. Real circuits choose suitable bias and common-mode "
+            "voltages; this normalized phase portrait illustrates the regeneration. <bookmark mark='b'/> Then the "
+            "bit lines, nudged a few percent apart by the cell, are connected to it. <bookmark mark='c'/> When it "
+            "is released, the instability that makes metastability dangerous does useful work: the imbalance "
+            "grows exponentially, and the latch falls quickly to the side it was nudged towards, turning a "
+            "whisper into a full zero or one. A smaller nudge simply takes longer to resolve, which is chapter "
+            "five's tail again, and why memory designers specify the smallest signal their amplifiers can read in "
+            "time."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(axl), Create(diag), FadeIn(st))
             vo.wait_until("a")
@@ -166,14 +169,15 @@ class Sram(VoiceoverScene):
                   color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(grid, RIGHT, buff=0.7).shift(DOWN * 0.2)
         with self.voiceover(
-            "Memories put their cells in a grid. <bookmark mark='a'/> The address splits in two. The high part goes to "
-            "a row decoder, which raises one word line, and every cell in that row connects to its bit lines at once. "
-            "<bookmark mark='b'/> A row of sense amplifiers reads them all, and a multiplexer picks out the bits that "
-            "were asked for. <bookmark mark='c'/> The caches inside every processor are static RAM built this way, "
-            "millions of cells, and Part 9 is about how they are organized. A large server processor carries hundreds of "
-            "megabytes of it, billions of these cells, and still finds them too few. Fast as it is, static RAM is big: "
-            "six transistors and their wiring for every bit, so on many chips the caches take more area than the "
-            "processor cores themselves. Main memory needs something much denser."
+            "Memories put their cells in a grid. <bookmark mark='a'/> The address splits in two. The high part "
+            "goes to a row decoder, which raises one word line, and every cell in that row connects to its bit "
+            "lines at once. <bookmark mark='b'/> A row of sense amplifiers reads them all, and a multiplexer "
+            "picks out the bits that were asked for. <bookmark mark='c'/> Many processor caches use SRAM arrays "
+            "like this, though some use other memory technologies, millions of cells, and Part 9 is about how "
+            "they are organized. A large server processor carries hundreds of megabytes of it, billions of these "
+            "cells, and still finds them too few. Fast as it is, static RAM is big: six transistors and their "
+            "wiring for every bit, so on many chips the caches take more area than the processor cores "
+            "themselves. Main memory needs something much denser."
         ) as vo:
             self.play(FadeIn(head), FadeIn(grid, lag_ratio=0.005))
             vo.wait_until("a")

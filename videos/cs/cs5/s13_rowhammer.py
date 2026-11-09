@@ -111,18 +111,18 @@ class Rowhammer(VoiceoverScene):
             (r"a reliability margin \\ quietly became a security boundary", YES),
         )]).arrange(DOWN, aligned_edge=LEFT, buff=0.28).move_to(RIGHT * 3.75 + DOWN * 0.1)
         with self.voiceover(
-            "Why did this appear only around 2010? <bookmark mark='a'/> Because each generation of DRAM shrinks the "
-            "cells and packs the rows closer, and a cell now holds only tens of thousands of electrons, or fewer. "
-            "<bookmark mark='b'/> Opening a row swings its word line from zero to full voltage, and the electrical "
-            "coupling into the neighbouring rows, together with charge trapped in the silicon between them, speeds "
-            "up their leakage a little every time. <bookmark mark='c'/> The sixty-four millisecond refresh interval "
-            "was chosen for ordinary leakage, with a safety margin, never imagining that a program might open the "
-            "same neighbouring row hundreds of thousands of times inside one interval. A reliability margin had "
-            "quietly become a security boundary, and nobody had been guarding it."
+            "Why did this appear only around 2010? <bookmark mark='a'/> Scaling often shrinks cells and packs "
+            "rows closer, though vulnerability varies by device and mitigation, and a cell now holds only tens of "
+            "thousands of electrons, or fewer. <bookmark mark='b'/> Opening a row swings its word line from zero "
+            "to full voltage, and the electrical coupling into the neighbouring rows, together with charge "
+            "trapped in the silicon between them, speeds up their leakage a little every time. <bookmark "
+            "mark='c'/> The sixty-four millisecond refresh interval was chosen for ordinary leakage, with a "
+            "safety margin, which does not by itself guarantee safety against repeated neighboring-row activity. "
+            "A reliability margin had quietly become a security boundary, and nobody had been guarding it."
         ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl), Create(thr), FadeIn(tl))
+            self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl), Create(thr), FadeIn(tl), Create(calm), FadeIn(cl))
             vo.wait_until("a")
-            self.play(FadeIn(pts[0]), FadeIn(pts[1]), Create(calm), FadeIn(cl), run_time=2.0)
+            self.play(FadeIn(pts[0]), FadeIn(pts[1]), Indicate(calm, scale_factor=1.02))
             vo.wait_until("b")
             self.play(FadeIn(pts[2]), Create(ham), FadeIn(hl), run_time=2.5)
             self.play(FadeIn(flip, scale=2), FadeIn(fl))
@@ -160,16 +160,17 @@ class Rowhammer(VoiceoverScene):
                        font_size=26, color=HEAD).to_edge(DOWN, buff=0.35)
         lines = VGroup(*rows[1:], lesson)
         with self.voiceover(
-            "At first it looked like a reliability problem. It is a security problem. <bookmark mark='a'/> In 2015 "
-            "Mark Seaborn and Thomas Dullien at Google's Project Zero hammered rows until a bit flipped inside a page "
-            "table, the structure Part 32 uses to keep programs out of each other's memory, and took over the "
-            "machine. <bookmark mark='b'/> Others did it from JavaScript running in a web page, and from an ordinary "
-            "Android app. <bookmark mark='c'/> The defences are refreshing more often, counting activations and "
-            "refreshing a hammered row's neighbours early, and error-correcting codes. <bookmark mark='d'/> Each has "
-            "been worked around: in 2020, new access patterns still flipped bits in memory that had all of them. "
-            "<bookmark mark='e'/> The deeper lesson runs through the whole series. Every layer promises something "
-            "simple; memory promises to hold what you wrote. Rowhammer is what happens when the physics underneath "
-            "an abstraction leaks through it, and Part 42 meets its relatives."
+            "At first it looked like a reliability problem. It is a security problem. <bookmark mark='a'/> In "
+            "2015 Mark Seaborn and Thomas Dullien at Google's Project Zero hammered rows until a bit flipped "
+            "inside a page table, the structure Part 32 uses to keep programs out of each other's memory, and "
+            "took over the machine. <bookmark mark='b'/> Others did it from JavaScript running in a web page, and "
+            "from an ordinary Android app. <bookmark mark='c'/> The defences are refreshing more often, counting "
+            "activations and refreshing a hammered row's neighbours early, and error-correcting codes. <bookmark "
+            "mark='d'/> These measures need precise scope. TRRespass in 2020 defeated several deployed DDR4 "
+            "tracking schemes; that does not show that every refresh policy, counter design or error-correcting "
+            "code fails. <bookmark mark='e'/> The deeper lesson runs through the whole series. Every layer "
+            "promises something simple; memory promises to hold what you wrote. Rowhammer is what happens when "
+            "the physics underneath an abstraction leaks through it, and Part 42 meets its relatives."
         ) as vo:
             self.play(FadeIn(head), Create(spine), FadeIn(rows[0]))
             for mk, l in zip("abcde", lines):

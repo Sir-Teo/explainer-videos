@@ -51,10 +51,10 @@ class History(VoiceoverScene):
             "<bookmark mark='d'/> Flash memory, which keeps its charge without power, arrived in the 1980s; it is the "
             "storage of Part 34."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows[0]))
             for mk, r in zip("abcd", (rows[0], rows[1], VGroup(rows[2], rows[3]), rows[4])):
                 vo.wait_until(mk)
-                self.play(FadeIn(r, shift=RIGHT * 0.15), run_time=1.0)
+                self.play(Indicate(r, scale_factor=1.02) if mk == "a" else FadeIn(r, shift=RIGHT * 0.15), run_time=1.0)
         self.wait(0.3)
         self.clear_scene()
 
@@ -134,16 +134,16 @@ class History(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32)
         notes.next_to(xw, RIGHT, buff=0.6).shift(DOWN * 0.1)
         with self.voiceover(
-            "Core memory deserves a closer look, because its ideas are still in every memory chip. "
-            "<bookmark mark='a'/> Each bit was a tiny ring of ferrite, magnetized clockwise or anticlockwise, threaded "
-            "on a grid of wires. <bookmark mark='b'/> To select one core, send half the current needed to flip a core "
-            "down its row wire and half down its column wire. Only the core at the crossing feels the full current "
-            "and flips: the first two-dimensional address decoder, made of physics. "
-            "<bookmark mark='c'/> Reading worked by trying to flip the core to zero and sensing whether it pulsed, "
-            "which destroyed the value, so every read was followed by a write-back, exactly as in DRAM today. "
-            "<bookmark mark='d'/> Unlike DRAM, core kept its bits with the power off. It was threaded by hand, often by "
-            "women from the textile industry, and the Apollo guidance computer's programs were woven permanently into "
-            "a related form, rope memory, wire by wire."
+            "Core memory deserves a closer look, because its ideas are still in every memory chip. <bookmark "
+            "mark='a'/> Each bit was a tiny ring of ferrite, magnetized clockwise or anticlockwise, threaded on a "
+            "grid of wires. <bookmark mark='b'/> To select one core, send half the current needed to flip a core "
+            "down its row wire and half down its column wire. Only the core at the crossing feels the full "
+            "current and flips: two-dimensional selection implemented directly by the magnetic threshold. "
+            "<bookmark mark='c'/> Reading worked by trying to flip the core to zero and sensing whether it "
+            "pulsed, which destroyed the value, so every read was followed by a write-back, exactly as in DRAM "
+            "today. <bookmark mark='d'/> Unlike DRAM, core kept its bits with the power off. Many core arrays "
+            "were laboriously assembled by hand, and the Apollo guidance computer's programs were woven "
+            "permanently into a related form, rope memory, wire by wire."
         ) as vo:
             self.play(FadeIn(head), Create(xw), Create(yw), FadeIn(grid))
             vo.wait_until("a")

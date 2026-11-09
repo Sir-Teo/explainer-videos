@@ -10,20 +10,20 @@ simulated gate by gate with unit delays (`Loop` in `explainer/cs/pebble/seq.py`)
 * **A circuit that remembers.** Combinational circuits forget; two NANDs in a loop hold a bit; a ball between two
   valleys and on the ridge; objectives.
 * **1. Feedback.** The SR latch, wire by wire (set, reset, hold, the forbidden input); tick-by-tick waveforms,
-  including the symmetric release that oscillates forever in the unit-delay model; the ring oscillator (period 2k).
+  including the symmetric release that oscillates forever in the unit-delay model; the ring oscillator (period 2k in the binary unit-delay model, with physical oscillation requiring gain and delay).
 * **2. Two wells and a saddle.** The cross-coupled inverters as τv̇₁ = f(v₂) − v₁, τv̇₂ = f(v₁) − v₂; the phase
   portrait (vector field, nullclines, trajectories) with two stable states and a saddle on the diagonal; the Jacobian
-  at the saddle, eigenvalues −4 and +2, and t_resolve ≈ (τ/λ) ln(Δ/|δ|).
+  at the saddle, RC-normalized eigenvalues −4 and +2, and t_resolve ≈ (τ/λ) ln(Δ/|δ|).
 * **3. Latches, flip-flops and the clock.** The D latch (transparent and closed, simulated); the master–slave
   edge-triggered flip-flop (Q takes D at the rising edge); registers; the synchronous picture (state, logic, next
   state).
 * **4. How fast can the clock go?** Setup, hold, clock-to-Q on a waveform; f_max = 1/(t_cq + t_logic + t_setup) on a
-  budget bar; Pebble's ALU between registers (≈ 2.8 GHz); clock skew, and why a hold violation cannot be fixed by
+  budget bar; an assumed 290 ps worst-case logic budget (≈ 2.8 GHz with the stated register delays); clock skew, and why a hold violation cannot be fixed by
   slowing the clock.
 * **5. Metastability.** A D change at the edge makes the simulated master oscillate; 40,000 random arrivals
   integrated through the latch equations: a histogram with an exponential tail, P(t > T) ∝ e^{−λT}; MTBF =
-  e^{t_r/τ}/(T₀ f_clk f_data): one flip-flop fails every 10 hours, two every 6 × 10¹⁸ years (Chaney and Molnar,
-  1973).
+  e^{t_r/τ}/(T₀ f_clk f_data): illustrative constants yield about 10 hours versus 6 × 10¹⁸ years. The finite sample illustrates a tail,
+  not an astronomical reliability certificate; single-bit synchronizers do not solve bus coherence or pulse capture.
 * **6. Finite-state machines.** A Moore detector for 1011, run on a stream; Mealy against Moore; binary, Gray and
   one-hot encodings synthesized with Quine–McCluskey (with don't-cares), built and simulated: 3/3/5 flip-flops,
   14/24/15 gates.
@@ -31,15 +31,17 @@ simulated gate by gate with unit delays (`Loop` in `explainer/cs/pebble/seq.py`)
   (1958), proved; partition refinement merging it to 3 states; Hopcroft's n log n (1971); {0ⁿ1ⁿ} is not regular; the
   ladder to Parts 12, 25 and 1.
 * **8. Counters and shift registers.** The counter; the shift register; a 4-bit LFSR running through all 15 non-zero
-  states; LFSRs as multiplication by x in GF(2ⁿ) and primitive polynomials; every feedback polynomial of degree 2–8,
+  states; LFSRs as multiplication by x modulo a monic polynomial with constant term 1 (a field only when irreducible);
+  primitive polynomials and nonzero seeds give full period; every such feedback polynomial of degree 2–8,
   simulated: the maximal ones number φ(2ⁿ − 1)/n (16 at degree 8); CRCs, stream ciphers, scramblers, GPS, BIST.
 * **9. Pebble's register file.** Sixteen 32-bit registers (r0 hard-wired to 0), a decoder for the write port, a
   multiplexer per bit to load or keep, two 16-to-1 multiplexer trees for the read ports: 480 flip-flops and 5,824
-  gates, verified against a Python model; what each extra port costs.
+  gates in the chosen gate basis, verified against a Python model; what each extra port costs.
 * **10. Static memory.** The 6T SRAM cell (cross-coupled inverters and two access transistors), bit lines, word
   lines and sense amplifiers; cells in a grid.
-* **11. Dynamic memory.** Dennard's 1T1C cell (1966), destructive reads and write-back, the Intel 1103 (1970); charge
-  leaking and refresh every 64 ms; activate, read, precharge and the row buffer; dense and slow.
+* **11. Dynamic memory.** Dennard's 1T1C idea (1966), destructive sensing and immediate restoration, Intel 1103's early 3T cell
+  (1970); a common 64 ms refresh interval at normal temperature (device dependent); activate, read, precharge and
+  row buffers. DDR4 defaults to burst length 8; DDR5 to 16. The 20× area comparison is an illustrative cell model.
 * **12. When memory leaks.** Rowhammer (Kim et al., 2014: 110 of 129 DDR3 modules, as few as 139,000 activations);
   Project Zero's page-table exploit (2015), JavaScript and Android (2016), TRR and TRRespass (2020); leaky
   abstractions.
@@ -47,14 +49,18 @@ simulated gate by gate with unit delays (`Loop` in `explainer/cs/pebble/seq.py`)
   handshakes; ROMs, PLAs and FPGAs as memory doing logic; microcode previewed.
 * **14. Remembering, before chips.** Mercury delay lines (EDSAC), Williams tubes (the Manchester Baby), core memory
   (Forrester, Whirlwind 1953; coincident-current selection and destructive reads), the Intel 1103, flash.
-* **15. Frontier: defending memory.** Falling Rowhammer thresholds (139,000 activations in 2014; about 10,000 for new
-  DDR4 and 4,800 for the most vulnerable chips in 2020, Kim et al.) against W = 1,383,783 activations per bank per
-  64 ms refresh window. PARA's coin toss: (1 − p)^T ≤ 10⁻² per year of attack gives p = 0.02% at T = 139,000, 0.3% at
-  10,000, 3% at 1,000. Misra–Gries counting (1982): the estimate undercounts by at most W/(k + 1), so refreshing at T/2
-  is safe with k ≥ 2W/T counters (20, 277, 577, 2,768 as T falls); Graphene (2020). A simulated 20-sided attack: 4 or
-  16 counters let each aggressor reach 60,739 unrefreshed activations; 64 survive by luck, 277 by proof; TRRespass
-  (2020). Half-Double (2021), RowPress (2023), DDR5's PRAC (2024), count-min trackers (CoMeT, 2024); the open problem
-  of a provably safe, cheap defence.
+* **15. Frontier: defending memory.** Historical thresholds: 139,000 toggles (2014); as few as 4,800 activations
+  **per aggressor in a two-aggressor experiment** (2020), with mitigations disabled. A teaching model uses
+  W = 1,383,783 activations per bank per 64 ms. Independent coins refresh all modeled victim neighbours.
+  With N = ceil(seconds per year / t_RC), the union bound N(1 − p)^T ≤ 10⁻² covers overlapping runs:
+  p ≈ 0.03%, 0.4%, 3.8% at T = 139,000, 10,000, 1,000. This all-neighbour variant differs from original PARA.
+  Positive Misra–Gries counters are removed after immediate modeled refresh. In one aligned window the
+  undercount is at most floor(W/(k + 1)); k ≥ 2W/T is sufficient, not a minimum or a physical DRAM guarantee.
+  Four or 16 counters allow 60,739 unrefreshed activations on the chosen trace; 64 and 277 stay below T on that
+  trace. Graphene (Park et al., 2020) uses additional spillover machinery. CoMeT (2024) never undercounts under
+  its specified update/reset rules; collisions can cause extra refreshes. Half-Double, RowPress and PRAC expose
+  further physical/model constraints. AutoPRAC (June 2026 preprint) reports a reset-policy flaw; this lesson
+  attributes that finding without independently auditing the paper's proof.
 * **Recap, where this comes back, in practice, problems.**
 
 ## Build
@@ -70,8 +76,8 @@ python tools/build.py cs5                  # 1080p
 1. **A NOR latch.** Build an SR latch from two NOR gates. Which input is forbidden now, and what do the outputs do?
 
    *Solution.* Q = NOR(R, Q̄), Q̄ = NOR(S, Q), with active-high inputs: S = 1 forces Q̄ = 0 and then Q = 1; R = 1 forces
-   Q = 0; S = R = 0 holds. The forbidden input is **S = R = 1**, which forces **both outputs to 0**; releasing both at
-   once leaves the latch on its saddle, exactly as with the NAND latch.
+   Q = 0; S = R = 0 holds. The forbidden input is **S = R = 1**, which forces **both outputs to 0**; an exactly symmetric analog release can remain at the unstable equilibrium; the binary unit-delay model
+   can oscillate instead. Real mismatch and noise usually break the symmetry.
 
 2. **The fastest clock.** t_cq = 50 ps, t_setup = 30 ps, slowest logic path 420 ps. What is f_max? What if the clock
    reaches the second register 20 ps late?
@@ -85,7 +91,8 @@ python tools/build.py cs5                  # 1080p
 
    *Solution.* T₀ f_clk f_data = 20·10⁻¹² · 2·10⁹ · 5·10⁷ = 2·10⁶ s⁻¹, and 1000 years ≈ 3.16·10¹⁰ s. So
    e^{t_r/τ} ≥ 6.3·10¹⁶, t_r ≥ 25 ps · ln(6.3·10¹⁶) ≈ 25 · 38.7 ps ≈ **0.97 ns**: about two 0.5 ns clock cycles, so
-   three flip-flops in a row (two cycles of resolution time) rather than two.
+   three flip-flops in this idealized budget (two cycles of resolution time). Real paths must subtract register
+   and routing delays and use characterized constants; this is not an implementation sign-off.
 
 4. **A Moore machine.** Draw a Moore machine that outputs 1 when the number of 1s read so far is divisible by 3. Is it
    minimal?
@@ -109,27 +116,26 @@ python tools/build.py cs5                  # 1080p
    times **31**; the maximal tap sets are {4, 1}, {4, 2}, {4, 0, 1, 2}, {4, 0, 1, 3}, {4, 0, 2, 3} and {4, 1, 2, 3}.
    31 is prime, so φ(31)/5 = 30/5 = **6**.
 
-7. **★ Research: how many counters?** Prove that a deterministic tracker which guarantees that no row is activated T
-   times between refreshes of its neighbours, in a window of W activations, needs about W/T counters. Open: a
-   randomized tracker with far fewer bits that is safe even against an attacker who adapts to its behaviour.
+7. **★ Research: verify a bounded-window tracker.** Prove the undercount bound in the stated finite model.
+   Test `[0,0] + [1]*20` with one counter and trigger 2. What must a physical guarantee also model?
 
-   *What is known, and where to start.* The lower bound is an adversary argument. With fewer than W/T counters, an
-   attacker cycles through W/T + 1 rows in turn: at every moment some row has no counter, and the attacker can arrange
-   (as in our simulation, `compute_hammerdefence` in `videos/cs/cs5/compute.py`) that the rows evicted are the ones
-   about to be needed, so a row's activations are forgotten before they reach T/2. Made precise, this is the classic
-   Ω(1/ε) space lower bound for deterministic frequent-items algorithms, with ε = T/W, which Misra–Gries meets. The
-   open half: randomized trackers (sampling as in PARA, count-min sketches as in CoMeT) use less state, but their
-   guarantees usually assume an attacker who cannot see the randomness; an attacker who observes refresh timing, the
-   channel PRAC's back-off signal opens, may adapt. A tracker whose guarantee holds against adaptive attackers with
-   o(W/T) bits, or a proof that none exists, would be a real result. The literature to start from: Park, Litz and
-   Kasikci, "Graphene" (MICRO 2020); Bostancı et al., "CoMeT" (HPCA 2024); and the analyses of PRAC from 2024 on.
+   *Solution and starting point.* Every full-table decrement consumes k tracked events plus the incoming event,
+   so there are at most floor(W/(k+1)) decrements. For each row, since its last immediate modeled victim refresh,
+   the true count exceeds its estimate by at most this total. Triggering at T/2 therefore keeps the count at
+   most T when floor(W/(k+1)) ≤ T/2. This is a sufficient bound inside one aligned window, not a universal
+   counter lower bound. Delete a row's counter after refresh: retaining a zero can produce a negative ghost
+   entry on the next full-table miss. The regression stream then gives maximum unrefreshed counts `{0:2,1:2}`;
+   the defective version gives `{0:2,1:20}`. A physical proof must also account for multiple aggressors, window
+   alignment, reset policies, refresh queues, row-open time and device assumptions. Compare Graphene's spillover
+   table and CoMeT's count-min upper estimates; investigate formally checked guarantees and their implementation
+   cost. AutoPRAC (Qu and Saileshwar, June 2026 preprint) is a dated reported example of reset-policy analysis.
 
 ## 习题与解答
 
 1. **或非锁存器。** 用两个或非门搭一个 SR 锁存器。现在哪个输入是禁止的？输出会怎样？
 
    *解答。* Q = NOR(R, Q̄)，Q̄ = NOR(S, Q)，输入高电平有效：S = 1 迫使 Q̄ = 0，进而 Q = 1；R = 1 迫使 Q = 0；S = R = 0
-   时保持。禁止的输入是 **S = R = 1**，它迫使**两个输出都为 0**；同时释放两者，锁存器就停在鞍点上，和与非锁存器完全一样。
+   时保持。禁止的输入是 **S = R = 1**，它迫使**两个输出都为 0**；在理想模拟模型中完全对称地释放，可停在不稳定平衡点；二值单位延迟模型则可能振荡。实际失配与噪声通常会打破对称性。
 
 2. **最快的时钟。** t_cq = 50 ps，t_setup = 30 ps，最慢的逻辑路径为 420 ps。f_max 是多少？如果时钟到达第二个寄存器晚了 20 ps
    呢？
@@ -142,7 +148,7 @@ python tools/build.py cs5                  # 1080p
 
    *解答。* T₀ f_clk f_data = 20·10⁻¹² · 2·10⁹ · 5·10⁷ = 2·10⁶ s⁻¹，1000 年 ≈ 3.16·10¹⁰ s。所以 e^{t_r/τ} ≥ 6.3·10¹⁶，
    t_r ≥ 25 ps · ln(6.3·10¹⁶) ≈ 25 · 38.7 ps ≈ **0.97 ns**：约两个 0.5 ns 的时钟周期，因此要用三个串联的触发器（两个周期的
-   决断时间），而不是两个。
+   决断时间）。这是理想预算；实际路径还须扣除寄存器与布线延迟，使用实测常数，并验证实现。
 
 4. **摩尔机。** 画一个摩尔机：当已读到的 1 的个数能被 3 整除时输出 1。它是最小的吗？
 
@@ -162,16 +168,17 @@ python tools/build.py cs5                  # 1080p
    运行到回到起点。周期为 **5、6、8、12、14、14、15、15、21、21**，以及六个 **31**；达到最大周期的抽头集合是 {4, 1}、
    {4, 2}、{4, 0, 1, 2}、{4, 0, 1, 3}、{4, 0, 2, 3} 和 {4, 1, 2, 3}。31 是素数，所以 φ(31)/5 = 30/5 = **6**。
 
-7. **★ 研究题：需要多少个计数器？** 证明：在 W 次激活的窗口内，若一个确定性的跟踪器保证没有任何行在它的邻居两次刷新之间被激活 T 次，
-   它大约需要 W/T 个计数器。未解：一个用少得多的比特、即使面对会根据其行为调整策略的攻击者也安全的随机化跟踪器。
+7. **★ 研究题：验证有限窗口跟踪器。** 证明所述有限模型中的低估界。用一个计数器、触发值 2 测试
+   `[0,0] + [1]*20`。物理保证还需建模哪些因素？
 
-   *已知什么，从哪里入手。* 下界用的是对手论证。计数器少于 W/T 个时，攻击者轮流激活 W/T + 1 行：任何时刻总有某一行没有计数器，攻击者
-   可以安排（就像我们在 `videos/cs/cs5/compute.py` 的 `compute_hammerdefence` 里的模拟那样）让被逐出的恰好是即将用到的行，于是一行的
-   激活次数在达到 T/2 之前就被遗忘。把它写严格，就是确定性频繁项算法经典的 Ω(1/ε) 空间下界，其中 ε = T/W，Misra–Gries 恰好达到它。
-   未解的那一半：随机化跟踪器（像 PARA 那样采样，像 CoMeT 那样用 count-min sketch）占用的状态更少，但它们的保证通常假设攻击者看不到
-   随机性；一个能观察刷新时机的攻击者，也就是 PRAC 的退避信号所打开的那个信道，可能会调整策略。一个用 o(W/T) 比特、对自适应攻击者
-   仍然成立的跟踪器，或者一个证明它不存在的论证，都会是真正的成果。可以从这些文献入手：Park、Litz 与 Kasikci 的 “Graphene”
-   （MICRO 2020）；Bostancı 等的 “CoMeT”（HPCA 2024）；以及2024年以来对 PRAC 的分析。
+   *解答与起点。* 每次全表递减消耗 k 个已跟踪事件和当前输入事件，所以最多发生 floor(W/(k+1)) 次。
+   自一行上次在模型中立即触发受害行刷新以来，它的实际计数与估计值之差不超过该总次数。因此，当
+   floor(W/(k+1)) ≤ T/2 时，在 T/2 触发刷新可将实际计数限制在 T 内。这是一个对齐窗口内的充分条件，
+   并非通用的计数器数量下界。刷新后必须删除该行计数器：若保留零项，下次表满且未命中时会产生负数幽灵项。
+   回归序列中各行未刷新计数的最大值应为 `{0:2,1:2}`；有缺陷的版本得到 `{0:2,1:20}`。
+   物理证明还需考虑多个攻击行、窗口对齐、重置策略、刷新队列、行开启时长和器件假设。比较 Graphene 的溢出表
+   与 CoMeT 的 count-min 上估计，并研究形式化验证保证及其实现开销。Qu 与 Saileshwar 的 AutoPRAC
+   （2026 年 6 月预印本）是报告重置策略分析的一个有明确日期的案例。
 
 ## Glossary additions
 
@@ -196,3 +203,11 @@ automaton transformations" (1958); Muller & Bartky (1959); Hopcroft, "An n log n
 finite automaton" (1971); Chaney & Molnar, "Anomalous behavior of synchronizer and arbiter circuits" (1973); Dennard,
 DRAM patent (1968); Ginosar, "Metastability and synchronizers: a tutorial" (2011); Kim et al., "Flipping bits in
 memory without accessing them" (2014); Seaborn & Dullien (2015); Frigo et al., "TRRespass" (2020).
+
+Primary checks for this revision: [IBM DRAM history](https://www.ibm.com/history/dram);
+[Micron DDR5 features](https://www.micron.com/content/dam/micron/global/public/products/white-paper/ddr5-new-features-white-paper.pdf);
+[Lamport's dated manuscript](https://lamport.azurewebsites.net/pubs/buridan.pdf) (1984; published 2012);
+[Kim et al. 2020](https://arxiv.org/abs/2005.13121);
+[Graphene](https://microarch.org/micro53/papers/738300a001.pdf);
+[CoMeT](https://arxiv.org/html/2402.18769v1);
+[AutoPRAC](https://arxiv.org/abs/2606.23905) (submitted 22 June 2026; preprint attribution).

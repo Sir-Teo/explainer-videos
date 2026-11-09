@@ -1,10 +1,32 @@
 # Computer Science, Built — sequential polish
 
 Work on `computer-science-built`, one video at a time, with separate commits.
-Current video: **cs5, Memory and Time**. CS1–CS4 source/preview polish checkpoints
+Current video: **cs6, The Stored-Program Computer**. CS1–CS5 source/preview polish checkpoints
 are complete at the scopes below. Their production release gates remain open; this
 ledger does not treat sampled previews as listening or final-production approval.
 The syllabus's earlier draft-preview claims are separate.
+
+## Final CS5 preview checkpoint, 9 November 2026
+
+- Correct timing, metastability, automata/LFSR hypotheses and DRAM history/operation in both languages.
+  Repair the annual overlapping-run probability bound and counter-reset ghost bug; scope Rowhammer models,
+  Graphene/CoMeT claims and the dated AutoPRAC preprint. Replace the unsupported lower-bound exercise.
+- Improve 30 section introductions and bilingual caption layouts. All 34 endpoint and 34 motion cases pass
+  with zero warnings; 211/211 endpoint states and 211/211 motion states
+  (English/Chinese). Every endpoint sheet and all 1,360 motion samples are covered
+  (32 endpoint/8 motion exact-image inheritances; remaining sheets freshly inspected); 102,329 movie frames decode.
+- Five native clips decode 5,552 frames with 120 samples/five stills inspected. All 77 English
+  speech blocks pass automated signal/alignment checks (50.80 minutes). Two `TRRespass` phonemizer
+  segmentation leads retain full cached text-token coverage; pronunciation/listening remains open. Two narrated Hook/Frontier previews
+  decode 7,656 frames plus audio; 80 samples/two stills inspected; all 26 cue requests within 250 ms.
+- Thirteen tests, independent mathematical checks and isolated cache upgrade/rejection checks pass.
+  Only the reviewed defence data item changes; the other eight hashes remain unchanged. Translation is 77/77;
+  568 caption strings have zero untranslated explanations, with 13 retained entries reviewed.
+  The source-length estimate is 60.0 minutes.
+
+[Verified CS5 evidence](evidence/cs5-polish-20261109/README.md).
+Continuous narrated listening, Chinese speech/listening, whole-video native production review and runtime at the
+selected narration pace remain open release gates.
 
 ## Final CS4 preview checkpoint, 9 November 2026
 
@@ -169,20 +191,18 @@ Evidence, exact source/data hashes, reports and reproduction commands:
 
 ## Continue here
 
-1. Run cs5's numerical computations and existing memory tests; preserve the
-   baseline evidence and inspect its feedback, timing and defence-model claims.
-2. Review English/Chinese endpoint and motion previews, repair concrete defects,
-   and bind the final checks to the exact source before the next separate commit.
+1. Run cs6's computations and processor tests; preserve its baseline and inspect the stored-program,
+   ISA, instruction-cycle, simulator and frontier claims.
+2. Review English/Chinese endpoint and motion previews, repair concrete defects, and bind final checks
+   to exact source and data before the next separate commit and normal push.
 3. Keep production release gates distinct from source/preview checkpoints.
 
 ```bash
 source /workspace/environment/activate.sh
-.venv/bin/python -m videos.cs.cs5.compute
-.venv/bin/python -m unittest discover -s tests -p test_cs5_memory.py -q
-.venv/bin/python tools/qa_series.py cs5 --lang en --cached-only --timeout 1200
-.venv/bin/python tools/qa_series.py cs5 --lang zh --cached-only --timeout 1200
+.venv/bin/python -m videos.cs.cs6.compute
+.venv/bin/python tools/qa_series.py cs6 --lang en --cached-only --timeout 1200
+.venv/bin/python tools/qa_series.py cs6 --lang zh --cached-only --timeout 1200
 ```
 
-The activation supplies the local renderer, neural narration, dvisvgm and Chinese
-TeX resources. CS5 is next; CS6–CS61 remain queued. No whole-course or production
-completion is claimed.
+The activation supplies the renderer, neural narration, dvisvgm and Chinese TeX resources.
+CS6 is next; CS7–CS61 remain queued. No whole-course or production completion is claimed.

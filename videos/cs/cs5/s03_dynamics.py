@@ -58,9 +58,9 @@ class Dynamics(VoiceoverScene):
             "curve, a little gentler than a real one so that the picture is easy to see. The latch is now a "
             "dynamical system with two variables, and we can draw its whole behaviour at once."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(g1), FadeIn(g2), Create(w), FadeIn(l1), FadeIn(l2))
             vo.wait_until("a")
-            self.play(FadeIn(g1), FadeIn(g2), Create(w), FadeIn(l1), FadeIn(l2))
+            self.play(Indicate(VGroup(g1, g2, w), scale_factor=1.03))
             vo.wait_until("b")
             self.play(Write(eqs), FadeIn(why))
             vo.wait_until("c")
@@ -101,25 +101,26 @@ class Dynamics(VoiceoverScene):
         st = VGroup(*[Dot(ax.c2p(*p), radius=0.11, color=YES) for p in d["stable"]])
         sad = Dot(ax.c2p(0.5, 0.5), radius=0.11, color=NO)
         side = VGroup(
-            label(r"two stable states: \ $(0, 1)$ and $(1, 0)$", font_size=26, color=YES),
+            label(r"two stable states: \ approximately $(0, 1)$ and $(1, 0)$", font_size=26, color=YES),
             label(r"one saddle: \ $v_1 = v_2 = \tfrac12$", font_size=26, color=NO),
             label(r"the diagonal is the watershed: \\ start above it and you end at $(0, 1)$, \\ below it at $(1, 0)$",
                   font_size=24, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(RIGHT * 3.6 + UP * 0.4)
         with self.voiceover(
-            "Every point of this square is a possible state of the latch: a voltage on each wire. "
-            "<bookmark mark='a'/> At every point, the equations give a direction of motion, drawn as a small arrow. "
-            "<bookmark mark='b'/> The two curves where one voltage stops changing cross in three places, and those "
-            "are the equilibria. <bookmark mark='c'/> Start the latch anywhere and follow the arrows. Almost every "
-            "start ends in one of two corners: v one low and v two high, or the reverse. Those are the two stable "
-            "states, the zero and the one. <bookmark mark='d'/> The third crossing, in the middle, is a saddle: the "
-            "arrows lead into it along the diagonal and away from it in every other direction. The diagonal is the "
-            "watershed between the two basins. A latch that starts exactly on it, as the symmetric release of the "
-            "last chapter did, slides into the saddle and has no reason to leave."
+            "Every point of this square is a possible state of the latch: a voltage on each wire. <bookmark "
+            "mark='a'/> At every point, the equations give a direction of motion, drawn as a small arrow. "
+            "<bookmark mark='b'/> The two curves where one voltage stops changing cross in three places, and "
+            "those are the equilibria. <bookmark mark='c'/> Start the latch anywhere and follow the arrows. "
+            "Almost every start ends in one of two corners: v one low and v two high, or the reverse. Those are "
+            "the two stable states, the zero and the one. <bookmark mark='d'/> The third crossing, in the middle, "
+            "is a saddle: the arrows lead into it along the diagonal and away from it in every other direction. "
+            "The diagonal is the watershed between the two basins. A latch that starts exactly on it, as an "
+            "exactly symmetric analog release would, unlike the digital model's oscillation, slides into the "
+            "saddle and has no reason to leave."
         ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(labs))
+            self.play(FadeIn(head), Create(ax), FadeIn(labs), FadeIn(arrows))
             vo.wait_until("a")
-            self.play(LaggedStart(*[GrowArrow(a) for a in arrows], lag_ratio=0.002), run_time=2.0)
+            self.play(Indicate(arrows, scale_factor=1.02))
             vo.wait_until("b")
             self.play(Create(null1), Create(null2), FadeIn(nl), run_time=1.6)
             vo.wait_until("c")
@@ -138,9 +139,9 @@ class Dynamics(VoiceoverScene):
         J = MathTex(r"J = \begin{pmatrix} -1 & f'(\tfrac12) \\ f'(\tfrac12) & -1 \end{pmatrix}, \qquad f'(\tfrac12) = -3",
                     font_size=38, color=CODE).move_to(UP * 1.8)
         eig = VGroup(
-            MathTex(r"\lambda = -1 - |f'| = -4 \quad \text{along } v_1 + v_2: \ \text{pulled back to the diagonal}",
+            MathTex(r"\lambda = -1 - |f'| = -4 \quad \text{along } v_1 + v_2: \ \text{common-mode perturbations decay}",
                     font_size=32, color=YES),
-            MathTex(r"\lambda = |f'| - 1 = +2 \quad \text{along } v_1 - v_2: \ \text{pushed off it}", font_size=32,
+            MathTex(r"\lambda = |f'| - 1 = +2 \quad \text{along } v_1 - v_2: \ \text{voltage imbalance grows}", font_size=32,
                     color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(UP * 0.2)
         grow = MathTex(r"v_1 - v_2 \approx \delta\, e^{\lambda t / \tau} \quad \Rightarrow \quad t_{\text{resolve}} "
@@ -149,20 +150,20 @@ class Dynamics(VoiceoverScene):
         foot = label(r"a tiny imbalance $\delta$ takes a long time to grow: \ as $\delta \to 0$, \ $t \to \infty$",
                      font_size=28, color=NO).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Zoom in on the saddle, where everything about metastability is decided. <bookmark mark='a'/> Near it the "
-            "equations are almost linear, and their matrix has the inverter's slope off the diagonal. "
-            "<bookmark mark='b'/> Its two eigenvalues tell the story. Along the diagonal, where both voltages move "
-            "together, the eigenvalue is minus four: any common motion dies out. Across the diagonal, along the "
-            "difference of the voltages, it is plus two: any imbalance grows exponentially. "
-            "<bookmark mark='c'/> So an imbalance delta grows like delta times e to the lambda t, and the time to "
-            "reach a clean zero or one is the logarithm of one over delta, divided by lambda. A latch that starts a "
-            "little off balance resolves quickly. One that starts very nearly balanced takes longer, and as the "
-            "imbalance shrinks to zero the time grows without bound. A steeper inverter, a larger lambda, makes it "
-            "faster, but never instant."
+            "Zoom in on the saddle, where everything about metastability is decided. <bookmark mark='a'/> Near it "
+            "the equations are almost linear, and their matrix has the inverter's slope off the diagonal. "
+            "<bookmark mark='b'/> Its two eigenvalues, measured in units of the gate RC time, tell the story. "
+            "Along the diagonal, where both voltages move together, the eigenvalue is minus four: any common "
+            "motion dies out. Across the diagonal, along the difference of the voltages, it is plus two: any "
+            "imbalance grows exponentially. <bookmark mark='c'/> So an imbalance delta grows like delta times e "
+            "to the lambda t, and the time to reach a clean zero or one is the logarithm of one over delta, "
+            "divided by lambda. A latch that starts a little off balance resolves quickly. One that starts very "
+            "nearly balanced takes longer, and as the imbalance shrinks to zero the time grows without bound. A "
+            "steeper inverter, a larger lambda, makes it faster, but never instant."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(J))
             vo.wait_until("a")
-            self.play(Write(J))
+            self.play(Indicate(J, scale_factor=1.03))
             vo.wait_until("b")
             self.play(FadeIn(eig[0]))
             self.play(FadeIn(eig[1]))

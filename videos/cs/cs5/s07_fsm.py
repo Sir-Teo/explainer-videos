@@ -42,15 +42,15 @@ class Fsm(VoiceoverScene):
         mm = label(r"Moore: \ the output depends on the state \ (1 only in \texttt{1011}); \quad Mealy: \ on the state "
                    r"and the input", font_size=24, color=HEAD).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "A register and some logic make a finite-state machine: a circuit with a few bits of memory that reacts "
-            "to a stream of inputs, one per clock cycle. <bookmark mark='a'/> Here is one that watches a stream of "
-            "bits and raises its output whenever the last four were one, zero, one, one. Each state stands for how "
-            "much of the pattern has just been seen: nothing, a one, one zero, one zero one, or the whole pattern. "
-            "<bookmark mark='b'/> The arrows say where each input bit leads. A wrong bit does not always start from "
-            "scratch: after one zero one, a zero leaves one zero, which is still the start of a match. "
-            "<bookmark mark='c'/> Its output depends only on the state, which makes it a Moore machine, after Edward "
-            "Moore's 1956 paper; George Mealy's machines of 1955 let the output depend on the input too, reacting "
-            "one cycle sooner."
+            "A register and some logic make a finite-state machine: a circuit with a few bits of memory that "
+            "reacts to a stream of inputs, one per clock cycle. <bookmark mark='a'/> Here is one that watches a "
+            "stream of bits and raises its output whenever the last four were one, zero, one, one. Each state "
+            "stands for how much of the pattern has just been seen: nothing, a one, one zero, one zero one, or "
+            "the whole pattern. <bookmark mark='b'/> The arrows say where each input bit leads. A wrong bit does "
+            "not always start from scratch: after one zero one, a zero leaves one zero, which is still the start "
+            "of a match. <bookmark mark='c'/> Its output depends only on the state, which makes it a Moore "
+            "machine, after Edward Moore's 1956 paper; George Mealy's machines of 1955 let the output depend on "
+            "the input too, so the response can occur within the cycle."
         ) as vo:
             blk = fsm_block(0.95).move_to(UP * 0.3)
             self.play(FadeIn(head), FadeIn(blk))
@@ -107,24 +107,26 @@ class Fsm(VoiceoverScene):
         txt = VGroup(
             label(r"edges carry input / output: \ the 1 is produced \textit{on the transition} that completes 1011",
                   font_size=24, color=GREY_A),
-            label(r"4 states instead of 5, \ and the output appears one cycle sooner", font_size=26, color=YES),
+            label(r"4 states instead of 5, \ response timing depends on the output interface", font_size=26, color=YES),
             label(r"but it follows the input combinationally, \ glitches and all: \ often a register is added after it",
                   font_size=22, color=GREY_B),
         ).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "George Mealy's style puts the output on the transitions instead of the states. "
-            "<bookmark mark='a'/> Each arrow now carries two labels, the input bit that takes it and the output bit it "
-            "produces. The detector no longer needs a state meaning the whole pattern has been seen: from one zero "
-            "one, a one completes the pattern, and the output is raised on that very transition, as the machine moves "
-            "back to the state that remembers a single one. <bookmark mark='b'/> Four states instead of five, and the "
-            "answer comes one clock cycle sooner. <bookmark mark='c'/> The price is that a Mealy output depends "
-            "directly on the input, through logic, within the cycle, so it can glitch; designers often register it, "
-            "which gives back the cycle they saved. Every Moore machine has a Mealy equivalent and vice versa, so the "
-            "choice is about timing and size, not about what can be computed."
+            "George Mealy's style puts the output on the transitions instead of the states. <bookmark mark='a'/> "
+            "Each arrow now carries two labels, the input bit that takes it and the output bit it produces. The "
+            "detector no longer needs a state meaning the whole pattern has been seen: from one zero one, a one "
+            "completes the pattern, and the output is raised on that very transition, as the machine moves back "
+            "to the state that remembers a single one. <bookmark mark='b'/> Four states instead of five. With the "
+            "output timing drawn here, the combinational Mealy indication can precede the Moore state output; an "
+            "inherent one-cycle saving is not guaranteed for every interface. <bookmark mark='c'/> The price is "
+            "that a Mealy output depends directly on the input, through logic, within the cycle, so it can "
+            "glitch; designers often register it, which gives back the cycle they saved. Every Moore machine has "
+            "a Mealy equivalent and vice versa, so the choice is about timing and size, not about what can be "
+            "computed."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(sd.nodes))
             vo.wait_until("a")
-            self.play(FadeIn(sd.nodes), LaggedStart(*[Create(e) for e in sd.edges], lag_ratio=0.12), run_time=3.0)
+            self.play(LaggedStart(*[Create(e) for e in sd.edges], lag_ratio=0.12), run_time=3.0)
             self.play(Create(hl), FadeIn(txt[0]))
             vo.wait_until("b")
             self.play(FadeIn(txt[1]))
@@ -155,20 +157,21 @@ class Fsm(VoiceoverScene):
             label(r"each version simulated on 64 random streams of 400 bits: \ $\checkmark$", font_size=22, color=YES),
             label(r"one-hot: \ more flip-flops, \ simpler logic; \\ FPGAs, rich in flip-flops, \ prefer it", font_size=24,
                   color=HEAD),
-            label(r"Gray: \ neighbouring codes differ in one bit, \\ which helps when a state crosses clock domains",
+            label(r"Gray counters: one-bit increments; \\ arbitrary FSM transitions may change several bits",
                   font_size=24, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(RIGHT * 0.0 + DOWN * 0.3, aligned_edge=LEFT)
         with self.voiceover(
-            "To build the machine, give each state a binary code and store the code in flip-flops. "
-            "<bookmark mark='a'/> The choice of codes matters. Numbering the states in binary needs three "
-            "flip-flops. A Gray code, where consecutive codes differ in one bit, also needs three. One-hot gives each "
-            "state its own flip-flop, five in all, with exactly one of them on. <bookmark mark='b'/> For each "
-            "encoding, the next-state and output logic was minimized, with the unused codes as don't-cares, built "
-            "as gates, and simulated against the specification. Here binary is cheapest, fourteen gates; one-hot "
-            "pays two extra flip-flops for logic almost as small; Gray, with this numbering, is worst. "
-            "<bookmark mark='c'/> There is no universal winner. On FPGAs, which have flip-flops to spare, one-hot is "
-            "the usual choice; Gray codes shine when a state value has to cross between clock domains, because only "
-            "one bit changes at a time."
+            "To build the machine, give each state a binary code and store the code in flip-flops. <bookmark "
+            "mark='a'/> The choice of codes matters. Numbering the states in binary needs three flip-flops. A "
+            "Gray code, where consecutive codes differ in one bit, also needs three. One-hot gives each state its "
+            "own flip-flop, five in all, with exactly one of them on. <bookmark mark='b'/> For each encoding, the "
+            "next-state and output logic was minimized, with the unused codes as don't-cares, built as gates, and "
+            "simulated against the specification. Here binary is cheapest, fourteen gates; one-hot pays two extra "
+            "flip-flops for logic almost as small; Gray, with this numbering, is worst. <bookmark mark='c'/> "
+            "There is no universal winner. One-hot is often useful on FPGAs with plentiful flip-flops. Gray "
+            "counters are useful across clock domains when each increment changes only one bit and timing "
+            "constraints are respected. Assigning Gray labels to an arbitrary state graph does not make every "
+            "transition change one bit."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[:6]))
             vo.wait_until("b")

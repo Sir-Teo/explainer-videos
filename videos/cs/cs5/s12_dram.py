@@ -47,26 +47,26 @@ class Dram(VoiceoverScene):
         notes = VGroup(
             label(r"the bit is charge on a tiny capacitor \\ (about 10 femtofarads)", font_size=22, color=YES),
             label(r"reading connects it to the much larger bit line: \\ the voltage moves by a small fraction of a "
-                  r"volt, \\ and the charge is gone", font_size=22, color=NO),
+                  r"volt, \\ and the stored level is disturbed", font_size=22, color=NO),
             label(r"so every read is destructive: \\ the sense amplifier writes the value back", font_size=22,
                   color=HEAD),
-            label(r"Robert Dennard, \ IBM, \ 1966; \\ the Intel 1103, \ the first commercial DRAM, \ 1970", font_size=20,
+            label(r"Dennard: 1T1C idea, 1966; \\ Intel 1103: early 3T cell, 1970", font_size=20,
                   color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to(RIGHT * 1.4 + UP * 0.4, aligned_edge=LEFT)
         with self.voiceover(
             "In 1966 Robert Dennard at IBM found a much smaller way to store a bit. <bookmark mark='a'/> One "
-            "transistor, used as a switch, and one capacitor. The bit is the charge on the capacitor: charged is one, "
-            "empty is zero. <bookmark mark='b'/> To read it, raise the word line and connect the capacitor to the bit "
-            "line. But the bit line is far larger than the cell, so the charge spreads out and moves its voltage by "
-            "only a small fraction of a volt. A sense amplifier detects that. <bookmark mark='c'/> And the cell's charge "
-            "is now gone: reading destroys the value, so the sense amplifier writes it straight back. This is dynamic "
-            "RAM. Intel's 1103, the first commercial DRAM chip, appeared in 1970 and quickly replaced the magnetic "
-            "memories of chapter fourteen."
+            "transistor, used as a switch, and one capacitor. The bit is the charge on the capacitor: charged is "
+            "one, empty is zero. <bookmark mark='b'/> To read it, raise the word line and connect the capacitor "
+            "to the bit line. But the bit line is far larger than the cell, so the charge spreads out and moves "
+            "its voltage by only a small fraction of a volt. A sense amplifier detects that. <bookmark mark='c'/> "
+            "Reading has redistributed the cell's charge and disturbed its stored level, so the sense amplifier "
+            "restores it immediately. This is dynamic RAM. Intel's successful 1103 appeared in 1970, using an "
+            "early three-transistor cell. The one-transistor, one-capacitor cell became the dominant dense design "
+            "later, as semiconductor memory displaced core."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Create(bl), Create(wl), FadeIn(tr), Create(links), FadeIn(cap), FadeIn(gnd), FadeIn(labs), FadeIn(notes[0]))
             vo.wait_until("a")
-            self.play(Create(bl), Create(wl), FadeIn(tr), Create(links), FadeIn(cap), FadeIn(gnd), FadeIn(labs),
-                      FadeIn(notes[0]))
+            self.play(Indicate(cap, scale_factor=1.05))
             self.play(LaggedStart(*[FadeIn(c, scale=1.5) for c in charge], lag_ratio=0.1))
             vo.wait_until("b")
             self.play(wl.animate.set_stroke(width=6), tr.animate.set_fill(HEAD, 0.5))
@@ -97,21 +97,23 @@ class Dram(VoiceoverScene):
         ref = VMobject(color=YES, stroke_width=3).set_points_as_corners([ax.c2p(a, b) for a, b in zip(t, d["v_ref"])])
         nl = label(r"left alone", font_size=22, color=GREY_B).next_to(ax.c2p(200, float(np.exp(-0.2 / d['tau']))),
                                                                     DOWN, buff=0.1)
-        rl = label(r"refreshed every 64 ms", font_size=24, color=YES).next_to(ax.c2p(150, 1.0), UP, buff=0.1)
-        side = VGroup(label(r"refresh: \ read every row \\ and write it back", font_size=24, color=GREY_A),
-                      label(r"a few percent of the memory's time \\ and power, \ forever", font_size=24,
+        rl = label(r"model: refreshed every 64 ms", font_size=24, color=YES).next_to(ax.c2p(150, 1.0), UP, buff=0.1)
+        side = VGroup(label('refresh: internal row sensing \\\\ and charge restoration', font_size=24, color=GREY_A),
+                      label('cost depends on device, \\\\ temperature and workload', font_size=24,
                             color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.3).shift(DOWN * 1.5)
         with self.voiceover(
-            "There is a second problem. <bookmark mark='a'/> A capacitor that small is not perfectly isolated, and its "
-            "charge leaks away, in a fraction of a second for the weakest cells. Left alone, a one would slowly turn "
-            "into a zero. <bookmark mark='b'/> So the memory refreshes itself: the controller reads every row and "
-            "writes it back, on a fixed schedule, the standard being every sixty-four milliseconds, and the charge is "
-            "topped up long before it falls below the threshold. That is why it is called dynamic: the bits survive "
-            "only because they are constantly rewritten, at a cost of a few percent of the memory's time and power."
+            "There is a second problem. <bookmark mark='a'/> A capacitor that small is not perfectly isolated, "
+            "and its charge leaks away, in a fraction of a second for the weakest cells. Left alone, a one would "
+            "slowly turn into a zero. <bookmark mark='b'/> So the memory refreshes itself: the controller "
+            "schedules refresh commands, and the chip's internal circuits sense and restore each row, on a fixed "
+            "schedule, using sixty-four milliseconds as a common normal-temperature example. The required "
+            "interval depends on device and temperature, and the charge is topped up long before it falls below "
+            "the threshold. That is why it is called dynamic: the bits survive only because they are constantly "
+            "rewritten, with time and energy costs that depend on the device, temperature and workload."
         ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl), Create(thr), FadeIn(tl))
+            self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl), Create(thr), FadeIn(tl), Create(no), FadeIn(nl))
             vo.wait_until("a")
-            self.play(Create(no), FadeIn(nl), run_time=2.0)
+            self.play(Indicate(no, scale_factor=1.02))
             vo.wait_until("b")
             self.play(Create(ref), FadeIn(rl), run_time=2.5)
             self.play(FadeIn(side))
@@ -126,12 +128,12 @@ class Dram(VoiceoverScene):
         sq_s = Square(side_s, stroke_color=YES, stroke_width=2.5, fill_color=YES, fill_opacity=0.25)
         sq_d = Square(side_s * np.sqrt(6 / 140), stroke_color=DATA, stroke_width=2.5, fill_color=DATA, fill_opacity=0.5)
         cells = VGroup(sq_s, sq_d).arrange(RIGHT, buff=1.4, aligned_edge=DOWN).move_to(LEFT * 4.5 + UP * 1.3)
-        cl = VGroup(label(r"SRAM \\ 6 transistors, \ $\approx 140\,F^2$ \\ about 1 ns", font_size=22, color=YES)
+        cl = VGroup(label(r"SRAM \\ 6T \\ $\sim140\,F^2$ \\ example: 1 ns", font_size=22, color=YES)
                     .next_to(sq_s, DOWN, buff=0.2),
-                    label(r"DRAM \\ 1T $+$ 1C, \ $6\,F^2$ \\ tens of ns", font_size=22, color=DATA)
+                    label(r"DRAM \\ 1T $+$ 1C \\ $6\,F^2$ \\ tens of ns", font_size=22, color=DATA)
                     .next_to(sq_d, DOWN, buff=0.2))
         cl[1].align_to(cl[0], UP)
-        cap = note(r"cell areas to scale", font_size=20).next_to(cells, UP, buff=0.2)
+        cap = note('illustrative cell-area model', font_size=20).next_to(cells, UP, buff=0.2)
         # a bank, its row buffer and its column multiplexer
         nr, nc = 8, 16
         bank = VGroup(*[Square(0.22, stroke_color=GREY_D, stroke_width=0.8, fill_color=DATA, fill_opacity=0.25)
@@ -149,7 +151,7 @@ class Dram(VoiceoverScene):
             label(r"activate: \ open a whole row, \ thousands of bits, \ into the row buffer", font_size=24,
                   color=HEAD),
             label(r"read: \ take columns from the open row \ (fast while it stays open)", font_size=24, color=GREY_A),
-            label(r"precharge: \ close the row, \ writing it back, \ before opening another", font_size=24,
+            label('precharge: close the active row; equalize bit lines for the next activation', font_size=24,
                   color=GREY_A),
             label(r"so memory is fast for neighbouring addresses \ and slow for scattered ones: \ Part 9's caches "
                   r"exploit exactly this", font_size=23, color=YES),
@@ -161,16 +163,19 @@ class Dram(VoiceoverScene):
             return src, copies
 
         with self.voiceover(
-            "That trade, a cell twenty times smaller than static RAM's in exchange for complexity, is why main memory "
-            "is DRAM. <bookmark mark='a'/> A static cell answers in about a nanosecond; DRAM takes tens. "
-            "<bookmark mark='b'/> A DRAM access opens an entire row of thousands of bits into a row buffer of sense "
-            "amplifiers, reads the columns it wants from that buffer, and later closes the row, writing it back. "
-            "Reading more of an open row is quick; reaching a different row means closing and opening, which is slow. "
-            "So a processor that reads memory in order runs fast, and one that jumps around waits. Real chips split "
-            "their rows into independent banks, each with its own open row, and memory controllers reorder waiting "
-            "requests so that as many as possible hit a row that is already open; a DDR module streams data in bursts "
-            "of eight words per request for the same reason. Part 9 builds the cache hierarchy that hides as much of "
-            "this as possible."
+            "DRAM trades a much smaller cell for additional control complexity. In the illustrative area model "
+            "shown here, its cell is about twenty times smaller than SRAM's. This density helps make DRAM "
+            "suitable for main memory. <bookmark mark='a'/> Small SRAM arrays can respond in nanoseconds; opening "
+            "a DRAM row often takes tens. Array size and technology matter. <bookmark mark='b'/> A DRAM access "
+            "opens an entire row of thousands of bits into a row buffer of sense amplifiers, reads the columns it "
+            "wants from that buffer, while the sense amplifiers restore the cells. Precharge then prepares the "
+            "bank for another row. Reading more of an open row is quick; reaching a different row means closing "
+            "and opening, which is slow. So a processor that reads memory in order runs fast, and one that jumps "
+            "around waits. Real chips split their rows into independent banks, each with its own open row, and "
+            "memory controllers reorder waiting requests so that as many as possible hit a row that is already "
+            "open; DDR4 commonly uses bursts of eight transfers, and DDR5 defaults to sixteen; burst transfers "
+            "amortize command and array overhead. Part 9 builds the cache hierarchy that hides as much of this as "
+            "possible."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cap), GrowFromCenter(sq_s), GrowFromCenter(sq_d))
             vo.wait_until("a")

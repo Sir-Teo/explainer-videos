@@ -87,22 +87,27 @@ class Timing(VoiceoverScene):
             x += w
         period = BraceBetweenPoints([-4.6, -0.6, 0], [x, -0.6, 0], direction=DOWN, color=CLOCK)
         pl = MathTex(r"T_{clk}", font_size=30, color=CLOCK).next_to(period, DOWN, buff=0.1)
-        f = MathTex(r"f_{max} = \frac{1}{t_{cq} + t_{logic,\,max} + t_{setup}}", font_size=40, color=HEAD).move_to(
-            DOWN * 2.2 + LEFT * 2.5)
-        ex = VGroup(label(r"Pebble's ALU: \ 29 gate delays $\times$ 10 ps \ $=$ 290 ps", font_size=24, color=GREY_A),
+        f = MathTex(r"f_{max} = \frac{1}{t_{cq} + t_{logic,\,max} + t_{setup}}", font_size=36, color=HEAD).move_to(
+            DOWN * 2.2 + LEFT * 2.8)
+        ex = VGroup(label(r"toy budget: \ assume $t_{logic,max}=290$ ps", font_size=24, color=GREY_A),
                     label(r"$+$ 40 ps $t_{cq}$ $+$ 30 ps $t_{setup}$ \ $=$ 360 ps", font_size=24, color=GREY_A),
-                    label(r"$\Rightarrow$ \ at most about 2.8 GHz", font_size=28, color=YES)).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.15).move_to(RIGHT * 3.6 + DOWN * 2.1)
+                    label(r"$\Rightarrow$ \ about 2.8 GHz in this assumed model", font_size=28, color=YES)).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.15)
+        if ex.width > 6.0:
+            ex.scale_to_fit_width(6.0)
+        ex.to_edge(RIGHT, buff=0.4).set_y(-2.1)
         with self.voiceover(
             "Now the clock. <bookmark mark='a'/> Between two registers sits some combinational logic. At a rising "
-            "edge, the first register launches new values; they appear after the clock-to-Q delay, ripple through the "
-            "logic, and must arrive at the second register at least a setup time before the next edge. "
-            "<bookmark mark='b'/> So one clock period has to hold three things end to end: clock-to-Q, the slowest "
-            "path through the logic, and the setup time. The fastest clock the circuit can take is one over their "
-            "sum. <bookmark mark='c'/> Put Pebble's ALU between two registers: twenty-nine gate delays, at about ten "
-            "picoseconds each, plus the flip-flops' own overheads, comes to three hundred and sixty picoseconds, a "
-            "clock of at most about two point eight gigahertz. Every gate delay saved in Part 4 shows up here, and Part "
-            "7 will cut the path into pieces to go faster still."
+            "edge, the first register launches new values; they appear after the clock-to-Q delay, ripple through "
+            "the logic, and must arrive at the second register at least a setup time before the next edge. "
+            "<bookmark mark='b'/> So one clock period has to hold three things end to end: clock-to-Q, the "
+            "slowest path through the logic, and the setup time. The fastest clock the circuit can take is one "
+            "over their sum. <bookmark mark='c'/> For a toy budget, assume a worst-case logic delay of two "
+            "hundred and ninety picoseconds, forty picoseconds clock-to-Q and thirty for setup. The total is "
+            "three hundred and sixty picoseconds, or about two point eight gigahertz in that assumed model. Part "
+            "4 observed twenty-nine gate delays on tested ALU inputs; that measurement does not certify a "
+            "worst-case delay or a silicon clock rate. Every gate delay saved in Part 4 shows up here, and Part 7 "
+            "will cut the path into pieces to go faster still."
         ) as vo:
             self.play(FadeIn(head), FadeIn(r1), FadeIn(lg), FadeIn(r2), GrowArrow(a1), GrowArrow(a2))
             vo.wait_until("a")
@@ -117,9 +122,9 @@ class Timing(VoiceoverScene):
     # ------------------------------------------------------------------
     def skew(self):
         head = label(r"Clock skew, \ and the bug a slower clock cannot fix", font_size=34).to_edge(UP, buff=0.35)
-        setup = MathTex(r"\text{setup: } \ t_{cq} + t_{logic,\,max} + t_{setup} \le T_{clk} + \delta", font_size=34,
+        setup = MathTex(r"\text{setup: } \ t_{cq,max} + t_{logic,\,max} + t_{setup} \le T_{clk} + \delta", font_size=34,
                         color=GREY_A).move_to(UP * 2.2)
-        hold = MathTex(r"\text{hold: } \ t_{cq} + t_{logic,\,min} \ge t_{hold} + \delta", font_size=34,
+        hold = MathTex(r"\text{hold: } \ t_{cq,min} + t_{logic,\,min} \ge t_{hold} + \delta", font_size=34,
                        color=NO).next_to(setup, DOWN, buff=0.3)
         d = label(r"$\delta$: \ how much later the clock reaches the second register", font_size=24,
                   color=CLOCK).next_to(hold, DOWN, buff=0.3)
@@ -142,19 +147,19 @@ class Timing(VoiceoverScene):
         bl = MathTex(r"\delta", font_size=26, color=CLOCK).next_to(br, DOWN, buff=0.05)
         with self.voiceover(
             "One more effect, because a clock signal is a wire too. <bookmark mark='a'/> It reaches different "
-            "registers at slightly different times; call the difference delta, the clock skew. A late clock at the "
-            "second register gives the data more time to arrive, which helps the setup inequality. "
-            "<bookmark mark='b'/> But it hurts the second one, the hold condition: the fastest path from the first "
-            "register must not change the second register's input before that register has finished capturing its "
-            "old value. <bookmark mark='c'/> Notice what is missing from that inequality: the clock period. A setup "
-            "violation can always be cured by running the clock slower. A hold violation cannot; the chip is broken "
-            "at any speed. So design tools insert extra delay into paths that are too fast, and engineers build "
-            "balanced trees of wires that deliver the clock to billions of transistors within a few picoseconds of "
-            "each other."
+            "registers at slightly different times; call the difference delta, the clock skew. A late clock at "
+            "the second register gives the data more time to arrive, which helps the setup inequality. <bookmark "
+            "mark='b'/> But it hurts the second one, the hold condition: the fastest path from the first register "
+            "must not change the second register's input before that register has finished capturing its old "
+            "value. <bookmark mark='c'/> Notice what is missing from that inequality: the clock period. In this "
+            "timing model, a longer period relaxes setup. It does not relax hold. Use maximum clock-to-Q and "
+            "logic delays for setup, and minimum delays for hold; a hold failure needs a path or clocking change. "
+            "So design tools insert extra delay into paths that are too fast, and engineers build balanced trees "
+            "of wires that deliver the clock to billions of transistors within a few picoseconds of each other."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Create(w1), Create(w2))
             vo.wait_until("a")
-            self.play(Create(w1), Create(w2), run_time=1.5)
+            self.play(Indicate(VGroup(w1, w2), scale_factor=1.02))
             self.play(Create(guide), GrowFromCenter(br), FadeIn(bl))
             self.play(FadeIn(d), Write(setup))
             vo.wait_until("b")

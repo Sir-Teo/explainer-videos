@@ -52,17 +52,15 @@ class Hook(VoiceoverScene):
             cap, DOWN, buff=0.25)
         with self.voiceover(
             "The trick is a loop. <bookmark mark='a'/> Take two NAND gates, and wire each one's output into the "
-            "other's input. Every circuit so far flowed from inputs to outputs; this one feeds back on itself, and "
-            "that changes everything. <bookmark mark='b'/> Push it one way and it stays that way; push it the other "
-            "way and it stays the other way. With its inputs left alone, it remembers which way it was pushed last. "
-            "It is the simplest memory there is, and every register, cache and memory chip descends from it."
+            "other's input. Every circuit so far flowed from inputs to outputs; this one feeds back on itself, "
+            "and that changes everything. <bookmark mark='b'/> Push it one way and it stays that way; push it the "
+            "other way and it stays the other way. With its inputs left alone, it remembers which way it was "
+            "pushed last. This bistable feedback is the basis of latches and static memory. Dynamic memory will "
+            "use a different mechanism: stored charge that must be refreshed."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(lat), FadeIn(cap))
             vo.wait_until("a")
-            self.play(FadeIn(lat.g1), FadeIn(lat.g2), FadeIn(lat.s_in), FadeIn(lat.r_in), FadeIn(lat.q_out),
-                      FadeIn(lat.qn_out), FadeIn(lat.labs))
-            self.play(Create(lat.w1), Create(lat.w2), run_time=1.5)
-            self.play(FadeIn(cap))
+            self.play(Indicate(lat, scale_factor=1.03))
             vo.wait_until("b")
             self.play(FadeIn(hold))
         self.wait(0.3)
@@ -84,12 +82,13 @@ class Hook(VoiceoverScene):
         foot = label(r"metastability: \ how long it stays up there \ has no upper bound", font_size=28,
                      color=HEAD).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Memory brings something else into the story: time, and a strange risk. <bookmark mark='a'/> A latch is "
-            "like a ball in a landscape with two valleys. Left is zero, right is one, and the ball rests in one of "
-            "them. <bookmark mark='b'/> Between them is a ridge. A ball pushed exactly hard enough can come to rest on "
-            "top, balanced, belonging to neither valley, and wait there for an amount of time that has no upper "
-            "bound. Real flip-flops do this. It is called metastability, and every computer that listens to the "
-            "outside world has to live with it."
+            "Memory brings something else into the story: time, and a strange risk. <bookmark mark='a'/> A latch "
+            "is like a ball in a landscape with two valleys. Left is zero, right is one, and the ball rests in "
+            "one of them. <bookmark mark='b'/> Between them is a ridge. In the ideal symmetric model, a ball can "
+            "balance on top indefinitely. A real latch can hover near its unstable decision point before noise "
+            "and imbalance resolve it. There is no fixed settling-time bound that works for every possible input "
+            "arrival. It is called metastability, and every computer that listens to the outside world has to "
+            "live with it."
         ) as vo:
             self.play(FadeIn(head), Create(curve), FadeIn(l0), FadeIn(l1))
             self.add(ball)

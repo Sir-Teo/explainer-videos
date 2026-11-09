@@ -4,6 +4,7 @@ state-machine computations of videos/cs/cs5/compute.py."""
 from __future__ import annotations
 
 import itertools
+import math
 import unittest
 
 import numpy as np
@@ -99,6 +100,31 @@ class Theory(unittest.TestCase):
         from videos.cs.cs5.compute import encodings, synth
         for name, enc in encodings().items():
             self.assertTrue(synth(enc)["verified"], name)
+
+
+class MitigationModel(unittest.TestCase):
+    def test_refresh_frees_counter_for_another_row(self):
+        from videos.cs.cs5.compute import misra_gries
+
+        # Retaining the first row's zero counter lets it become negative and
+        # permanently prevents the second row from being tracked.
+        self.assertEqual(misra_gries([0, 0] + [1] * 20, 1, 2), {0: 2, 1: 2})
+
+    def test_bounded_window_guarantee_on_every_short_stream(self):
+        from videos.cs.cs5.compute import misra_gries
+
+        # W=8, k=3, trigger=3: at most floor(8/4)=2 decrements.
+        # Thus no row exceeds 3+2 activations before modeled mitigation.
+        for stream in itertools.product(range(4), repeat=8):
+            self.assertLessEqual(max(misra_gries(stream, 3, 3).values()), 5, stream)
+
+    def test_annual_coin_bound_covers_all_run_endings(self):
+        from videos.cs.cs5.compute import T_RC_S, compute_hammerdefence
+
+        opportunities = math.ceil(365 * 24 * 3600 / T_RC_S)
+        for row in compute_hammerdefence()["para"]:
+            log_bound = math.log(opportunities) + row["t"] * math.log1p(-row["p"])
+            self.assertLessEqual(log_bound, math.log(.01) + 1e-12, row)
 
 
 if __name__ == "__main__":

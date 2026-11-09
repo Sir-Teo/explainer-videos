@@ -42,7 +42,7 @@ class Meta(VoiceoverScene):
                     wave(d["Q"], x0=x0, y=-1.7, dx=dx, color=NO, name="Q"))
         e = DashedLine([x0 + dx * 6, 1.8, 0], [x0 + dx * 6, -1.9, 0], color=CLOCK, stroke_width=2)
         txt = VGroup(label(r"the same flip-flop as chapter 3, \ simulated gate by gate", font_size=24, color=GREY_A),
-                     label(r"the master oscillates before it settles: \ $Q$ is neither 0 nor 1 for several gate delays",
+                     label(r"the master oscillates before it settles: \ $Q$ is not stable for several gate delays \ (digital model)",
                            font_size=26, color=NO)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.5)
         rng = np.random.default_rng(5)
         ck = wave([k % 2 for k in range(22)], x0=-5.5, y=1.2, dx=0.5, h=0.5, color=CLOCK, name=r"\text{clk}")
@@ -59,14 +59,15 @@ class Meta(VoiceoverScene):
         tl.set_x(0)
         intro = VGroup(ck, ticks, tl)
         with self.voiceover(
-            "Inside a single clocked circuit, setup and hold can always be met: the designer controls every path. "
-            "But signals from outside, a key press, a network packet, a sensor, arrive whenever they like. "
-            "<bookmark mark='a'/> Here is the flip-flop of chapter three again, simulated gate by gate, with D "
-            "changing on the very tick of the clock edge. <bookmark mark='b'/> The master latch is caught half shut, "
-            "with its two halves fighting, and in this model they oscillate for several gate delays before the slave "
-            "copies out a value. For that time, Q is not a valid zero or one. In a real circuit the voltages hover "
-            "near the saddle instead of oscillating, but the effect is the same: an output that is late by an amount "
-            "nobody chose."
+            "Inside a single clocked circuit, designers choose the period and paths to meet setup and hold over "
+            "the specified operating conditions. But signals from outside, a key press, a network packet, a "
+            "sensor, arrive whenever they like. <bookmark mark='a'/> Here is the flip-flop of chapter three "
+            "again, simulated gate by gate, with D changing on the very tick of the clock edge. <bookmark "
+            "mark='b'/> The master latch is caught half shut, with its two halves fighting, and in this model "
+            "they oscillate for several gate delays before the slave copies out a value. For that time, the "
+            "binary waveform is not a stable value that downstream logic can safely sample. In a real circuit the "
+            "voltages hover near the saddle instead of oscillating, but the effect is the same: an output that is "
+            "late by an amount nobody chose."
         ) as vo:
             self.play(FadeIn(head), Create(ck))
             self.play(LaggedStart(*[GrowFromPoint(t, t.get_bottom()) for t in ticks], lag_ratio=0.25), run_time=3.5)
@@ -106,17 +107,19 @@ class Meta(VoiceoverScene):
         l2 = MathTex(r"P(t > T) \propto e^{-\lambda T}", font_size=32, color=NO).next_to(ax2.c2p(5, -1), UR, buff=0.1)
         t2 = note(r"fraction still undecided \ (log scale)", font_size=20).next_to(ax2, UP, buff=0.1)
         with self.voiceover(
-            "How late? Use the dynamical system of chapter two. <bookmark mark='a'/> A data edge arrives at a random "
-            "moment near the clock edge and leaves the latch with a small random imbalance. Here are forty thousand "
-            "such arrivals, each integrated until the latch reaches a clean value. Most decide quickly. But the "
-            "histogram has a long tail. <bookmark mark='b'/> Plot the fraction still undecided on a logarithmic "
-            "scale, and the tail is a straight line: the probability of taking longer than T falls like e to the "
-            "minus lambda T, with lambda the saddle's unstable eigenvalue. Waiting one more unit of time makes failure "
-            "e squared, about seven, times less likely; but no amount of waiting makes it impossible."
+            "How late? Use the dynamical system of chapter two. <bookmark mark='a'/> A data edge arrives at a "
+            "random moment near the clock edge and leaves the latch with a small random imbalance. Here are forty "
+            "thousand uniformly sampled initial imbalances, integrated through the illustrative analog model "
+            "until they resolve. Most decide quickly. But the histogram has a long tail. <bookmark mark='b'/> "
+            "Plot the fraction still undecided on a logarithmic scale, and the tail is a straight line: the "
+            "probability of taking longer than T falls like e to the minus lambda T, with lambda the saddle's "
+            "unstable eigenvalue. Waiting one more unit of time makes failure e squared, about seven, times less "
+            "likely; The analytic saddle model has an unbounded tail; these finite samples illustrate it without "
+            "validating astronomical failure rates."
         ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl))
+            self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(bars))
             vo.wait_until("a")
-            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.04), run_time=2.5)
+            self.play(Indicate(bars, scale_factor=1.02))
             vo.wait_until("b")
             self.play(Create(ax2), FadeIn(yl2), FadeIn(t2))
             self.play(Create(curve), FadeIn(l2), run_time=1.6)
@@ -166,14 +169,14 @@ class Meta(VoiceoverScene):
         with self.voiceover(
             "Engineers turn this into a single number. <bookmark mark='a'/> The mean time between failures grows "
             "exponentially with the time t r allowed for resolving, divided by the latch's time constant tau, and "
-            "falls with how often the data changes inside the dangerous window around the clock edge. "
-            "<bookmark mark='b'/> With typical numbers, twenty-picosecond constants, a one gigahertz clock and data "
-            "changing a hundred million times a second, a single flip-flop given half a nanosecond to settle fails "
-            "about once every ten hours. For a chip that runs for years, that is a disaster."
+            "falls with how often the data changes inside the dangerous window around the clock edge. <bookmark "
+            "mark='b'/> With illustrative textbook-scale numbers, twenty-picosecond constants, a one gigahertz "
+            "clock and data changing a hundred million times a second, a single flip-flop given half a nanosecond "
+            "to settle fails about once every ten hours. For a chip that runs for years, that is a disaster."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(f), FadeIn(terms))
             vo.wait_until("a")
-            self.play(Write(f), FadeIn(terms))
+            self.play(Indicate(f, scale_factor=1.03))
             self.play(Create(ax), FadeIn(ylab), FadeIn(axl), FadeIn(refs))
             self.play(Create(curve), FadeIn(slope), run_time=1.6)
             vo.wait_until("b")
@@ -193,26 +196,28 @@ class Meta(VoiceoverScene):
         a2 = Arrow(f2.get_right(), f2.get_right() + RIGHT * 1.6, buff=0, color=WIRE, stroke_width=3)
         l0 = label(r"from outside", font_size=22, color=DATA).next_to(a0, UP, buff=0.1)
         l1 = label(r"may hover \\ for a while", font_size=20, color=NO).next_to(a1, UP, buff=0.1)
-        l2 = label(r"safe", font_size=22, color=YES).next_to(a2, UP, buff=0.1)
+        l2 = label(r"sampled", font_size=22, color=YES).next_to(a2, UP, buff=0.1)
         res = VGroup(
             label(rf"a whole extra clock cycle to resolve: \ $t_r = 1.5$ ns", font_size=26, color=GREY_A),
             MathTex(rf"e^{{1.5\,\text{{ns}} / 20\,\text{{ps}}}} = e^{{75}} \quad \Rightarrow \quad \text{{MTBF}} \approx "
                     rf"{sci(m['two_years'], 1)} \ \text{{years}}", font_size=34, color=YES),
             label(r"hundreds of millions of times the age of the universe, \ for one cycle of latency", font_size=26,
                   color=HEAD),
-            note(r"every clock-domain crossing on every chip is built this way; \ getting it wrong is a classic, \\ "
-                 r"rare, \ unreproducible hardware bug", font_size=22),
+            note(r"single-bit control example; \ buses and pulses need appropriate protocols; \\ "
+                 r"illustrative constants, not an implemented path budget", font_size=22),
         ).arrange(DOWN, buff=0.28).to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "The cure is cheap. <bookmark mark='a'/> Send the outside signal through two flip-flops in a row. The "
             "first one may go metastable. But nobody looks at its output until the next clock edge, a whole cycle "
-            "later, and only the second flip-flop does. <bookmark mark='b'/> That extra cycle multiplies the time "
+            "later, and only the second flip-flop does. <bookmark mark='b'/> That extra cycle adds to the time "
             "allowed to resolve, and because the failure rate falls exponentially with that time, the mean time "
-            "between failures becomes about ten to the eighteen years, hundreds of millions of times the age of the "
-            "universe, for the price of one cycle of delay. <bookmark mark='c'/> Every place where signals cross from one clock to "
-            "another on every chip uses a synchronizer like this. Thomas Chaney and Charles Molnar measured the "
-            "effect convincingly in 1973, after years in which many engineers refused to believe in it; forgetting "
-            "it still produces the rarest and most maddening hardware bugs."
+            "between failures becomes about ten to the eighteen years, hundreds of millions of times the age of "
+            "the universe, for the price of one cycle of delay. <bookmark mark='c'/> This is a common pattern for "
+            "a single-bit control signal. Real settling time comes from the implemented path budget. Pulses and "
+            "multi-bit data need suitable handshakes, encodings or asynchronous FIFOs; independently "
+            "synchronizing every bus bit does not preserve a word. Thomas Chaney and Charles Molnar measured the "
+            "effect convincingly in 1973, after years in which many engineers refused to believe in it; "
+            "forgetting it still produces the rarest and most maddening hardware bugs."
         ) as vo:
             self.play(FadeIn(head), FadeIn(f1), FadeIn(f2), GrowArrow(a0), GrowArrow(a1), GrowArrow(a2), FadeIn(l0))
             vo.wait_until("a")
@@ -238,29 +243,29 @@ class Meta(VoiceoverScene):
         xl = note(r"when the input changed, \ relative to the clock edge", font_size=20).next_to(ax, DOWN, buff=0.35)
         yl = note(r"time to decide", font_size=20).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
         q = VGroup(
-            label(r"Buridan's principle \ (Lamport, 1984):", font_size=26, color=HEAD),
-            label(r"a discrete decision \ based on an input \\ with a continuous range of values \\ cannot be made "
-                  r"within a bounded time", font_size=26, color=GREY_A),
-            label(r"the decision time is a continuous function of the input; \\ if it jumps from 0 to 1, \ somewhere "
-                  r"in between \\ it must take arbitrarily long", font_size=22, color=GREY_B),
+            label("Buridan's principle \\\\ Lamport: 1984 manuscript; \\\\ published 2012", font_size=26, color=HEAD),
+            label('continuous-state model: \\\\ both stable decisions are required; \\\\ some inputs take arbitrarily long', font_size=26, color=GREY_A),
+            label('continuous input dependence + opposite stable outputs \\\\ $\\Rightarrow$ intermediate inputs remain undecided', font_size=22, color=GREY_B),
             label(r"synchronizers, \ arbiters \ and every network card \\ live with it; \ they cannot remove it",
                   font_size=24, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).move_to(RIGHT * 3.0 + DOWN * 0.2)
         with self.voiceover(
-            "It is tempting to think a better flip-flop could eliminate metastability. It cannot, and the reason is "
-            "a theorem. <bookmark mark='a'/> Plot the time a latch takes to decide against the moment the input "
-            "changed, relative to the clock. Far from the edge it decides quickly. Near the edge it takes longer, and "
-            "right at one critical moment, the time is unbounded. <bookmark mark='b'/> Leslie Lamport called this "
-            "Buridan's principle, after the donkey that starved halfway between two bales of hay: a discrete decision "
-            "based on an input with a continuous range of values cannot always be made in a bounded time. The "
-            "argument is continuity. The physical state of any device depends continuously on its input, so if one "
-            "input leads to zero and another to one, some input in between leads to a state that is neither, for as "
-            "long as you care to wait. <bookmark mark='c'/> Engineers cannot remove the risk, only make it "
-            "astronomically small, and that is exactly what the synchronizer does."
+            "It is tempting to think a better flip-flop could eliminate metastability. It cannot, and a "
+            "continuous-state model explains why. <bookmark mark='a'/> Plot the time a latch takes to decide "
+            "against the moment the input changed, relative to the clock. Far from the edge it decides quickly. "
+            "Near the edge it takes longer, and right at one critical moment, the time is unbounded. <bookmark "
+            "mark='b'/> Leslie Lamport's 1984 manuscript, published in 2012, calls this Buridan's principle, "
+            "after the donkey that starved halfway between two bales of hay: a discrete decision based on an "
+            "input with a continuous range of values cannot always be made in a bounded time. The argument is "
+            "continuity. For this argument, assume continuous dependence of the device state on its input and a "
+            "requirement to return the appropriate stable decision for either input class, so if one input leads "
+            "to zero and another to one, some input in between leads to a state that is neither, for as long as "
+            "you care to wait. <bookmark mark='c'/> Engineers cannot remove the risk, only make it astronomically "
+            "small, and that is exactly what the synchronizer does."
         ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl))
+            self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl), Create(left), Create(right))
             vo.wait_until("a")
-            self.play(Create(left), Create(right), run_time=2.0)
+            self.play(Indicate(VGroup(left, right), scale_factor=1.02))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(x) for x in q[:3]], lag_ratio=0.4), run_time=2.4)
             vo.wait_until("c")
