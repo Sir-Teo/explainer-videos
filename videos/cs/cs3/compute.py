@@ -31,7 +31,17 @@ import numpy as np
 from explainer.ai.cache import Cache
 from explainer.cs.pebble.hdl import Circuit, exhaustive, unpack
 
-CACHE = Cache("cs3")
+class LogicCache(Cache):
+    def load(self, name):
+        if name == "census" and not cache_current(name):
+            from explainer.cache_lock import cache_lock
+            with cache_lock(self.path(name)):
+                if not cache_current(name):
+                    self.save(name, compute_census())
+        return super().load(name)
+
+
+CACHE = LogicCache("cs3")
 CENSUS_SCHEMA = 2
 
 
@@ -46,11 +56,7 @@ def cache_current(name):
 
 
 def load(name):
-    if name == "census" and not cache_current(name):
-        from explainer.cache_lock import cache_lock
-        with cache_lock(CACHE.path(name)):
-            if not cache_current(name):
-                CACHE.save(name, compute_census())
+    # Cached-only QA guards this instance entry before any schema upgrade.
     return CACHE.load(name)
 
 

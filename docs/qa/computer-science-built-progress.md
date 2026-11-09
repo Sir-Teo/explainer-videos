@@ -6,6 +6,15 @@ are complete at the scopes below. Their production release gates remain open; th
 ledger does not treat sampled previews as listening or final-production approval.
 The syllabus's earlier draft-preview claims are separate.
 
+## CS3 cached-only entry follow-up, 9 November 2026
+
+A regression exposed an upgrade running before the cached-only guard. Move the schema upgrade into the cache
+instance loader so stale data is rejected first. All ten logic/cache tests pass; an isolated real-producer
+upgrade/rejection check passes. All numerical producer ASTs and 11 active data hashes remain unchanged.
+This is a loader correctness follow-up; earlier media receipts stay tied to their checkpoint commits.
+
+[CS3 cache-entry evidence](evidence/cs3-cache-entry-20261109/README.md).
+
 ## Final CS5 preview checkpoint, 9 November 2026
 
 - Correct timing, metastability, automata/LFSR hypotheses and DRAM history/operation in both languages.

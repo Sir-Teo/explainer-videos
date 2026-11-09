@@ -1,6 +1,9 @@
 """Computer Science, Built, Part 3: the circuits behind the scenes, and the problem answers."""
 
 import itertools
+from pathlib import Path
+from tempfile import TemporaryDirectory
+from unittest.mock import patch
 import unittest
 
 import numpy as np
@@ -82,6 +85,29 @@ class Part3(unittest.TestCase):
         g = c.compute_glitch()
         self.assertIn(0, g["before"]["f"])
         self.assertNotIn(0, g["after"]["f"])
+
+
+class CacheEntry(unittest.TestCase):
+    def test_cached_only_rejects_stale_before_upgrading(self):
+        from tools.qa_series import StaleDataError, require_current_cache
+
+        with TemporaryDirectory() as tmp:
+            cache = type(c.CACHE)("cs3")
+            cache.dir = Path(tmp)
+            stale = b'{"schema":1,"stale":true}'
+            cache.path("census").write_bytes(stale)
+            original_load = cache.load
+
+            def guarded(name):
+                require_current_cache(c, "cs3", cache.path(name), name)
+                return original_load(name)
+
+            with patch.object(c, "CACHE", cache), patch.object(cache, "load", guarded):
+                with patch.object(c, "compute_census", return_value={"schema": c.CENSUS_SCHEMA}) as producer:
+                    with self.assertRaises(StaleDataError):
+                        c.load("census")
+                    producer.assert_not_called()
+            self.assertEqual(cache.path("census").read_bytes(), stale)
 
 
 if __name__ == "__main__":
