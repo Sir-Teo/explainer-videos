@@ -35,7 +35,7 @@ class Positional(VoiceoverScene):
         vals = VGroup(*[MathTex(str(2 ** (n - 1 - i)), font_size=22, color=HEAD).next_to(cells[i], DOWN, buff=0.15)
                         for i in range(n) if bits[i] == "1"])
         total = MathTex(r"1024 + 512 + 256 + 128 + 64 + 32 + 8 + 2 = 2026", font_size=36, color=YES).move_to(DOWN * 1.6)
-        rule = MathTex(r"n \text{ bits: } 2^n \text{ values, } 0 \dots 2^n - 1; \qquad N \text{ needs } "
+        rule = MathTex(r"n \text{ bits: } 2^n \text{ values, } 0 \dots 2^n - 1; \qquad N>0 \text{ needs } "
                        r"\lfloor \log_2 N \rfloor + 1 \text{ bits}", font_size=34, color=CODE).to_edge(DOWN, buff=0.6)
         with self.voiceover(
             "Two thousand and twenty-six means two thousands, no hundreds, two tens and six ones. A digit's value "
@@ -44,7 +44,7 @@ class Positional(VoiceoverScene):
             "is a zero or a one: a bit. <bookmark mark='b'/> Two thousand and twenty-six is eleven bits: the places "
             "worth one thousand and twenty-four, five hundred and twelve, and so on, wherever there is a one. "
             "<bookmark mark='c'/> Add those up, and you get the number back. <bookmark mark='d'/> With n bits there "
-            "are two to the n patterns, so they can count from zero to two to the n minus one; and a number N needs "
+            "are two to the n patterns, so they can count from zero to two to the n minus one; and a positive integer N needs "
             "about log base two of N bits. Gottfried Leibniz worked all of this out in 1679, and thought it so elegant "
             "that he saw creation in it: everything from one and nothing."
         ) as vo:
@@ -92,15 +92,15 @@ class Positional(VoiceoverScene):
         with self.voiceover(
             "Why two, and not ten? Because of noise. <bookmark mark='a'/> A wire's voltage is never exactly what it "
             "should be: neighbouring wires, heat and the supply all jiggle it. With two levels, a zero and a one, "
-            "there is half the supply voltage between them, and Part 3's inverter snaps anything near a level back to "
-            "it. <bookmark mark='b'/> With ten levels, each gets a tenth of the range, and the same jiggle carries a "
-            "three into a four. Every gate would need ten thresholds, and each stage would add error rather than remove "
-            "it. Two levels is the most robust choice there is, and it pays for itself many times over: we simply use "
-            "more wires."
+            "our drawing gives each a band half the supply range wide. Part 3's inverter restores a noisy level. "
+            "<bookmark mark='b'/> With ten levels, each band is only a tenth of the range, and the same noise can "
+            "carry a three into a four. Distinguishing ten levels needs nine decision boundaries. Multilevel "
+            "circuits can restore signals too, but their smaller noise margins make the job harder. Binary buys "
+            "robustness by using more wires."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(VGroup(b2, p2)))
             vo.wait_until("a")
-            self.play(FadeIn(b2), FadeIn(p2, lag_ratio=0.01), FadeIn(l2))
+            self.play(Indicate(b2, scale_factor=1.03), FadeIn(l2))
             vo.wait_until("b")
             self.play(FadeIn(b10), FadeIn(p10, lag_ratio=0.01), FadeIn(l10), FadeIn(foot))
         self.wait(0.3)
@@ -136,9 +136,9 @@ class Positional(VoiceoverScene):
             "shifts every bit one place to the right, and the remainder is the bit that falls off the end. Every "
             "routine that prints a number, in any base, is this loop."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows[:2]))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r, shift=DOWN * 0.1) for r in rows], lag_ratio=0.25), run_time=3.5)
+            self.play(Indicate(rows[:2], scale_factor=1.03), LaggedStart(*[FadeIn(r, shift=DOWN * 0.1) for r in rows[2:]], lag_ratio=0.25), run_time=3.0)
             vo.wait_until("b")
             self.play(GrowArrow(arrow), FadeIn(read))
             vo.wait_until("c")

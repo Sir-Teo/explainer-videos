@@ -32,7 +32,7 @@ class Hook(VoiceoverScene):
             return VGroup(num, cells).arrange(DOWN, buff=0.45).move_to(UP * 0.3)
 
         od = always_redraw(odometer)
-        cap = label(r"views of one video, \ kept in a signed 32-bit integer", font_size=28, color=GREY_A).to_edge(
+        cap = label(r"illustrative signed 32-bit view counter", font_size=28, color=GREY_A).to_edge(
             DOWN, buff=1.3)
         lim = MathTex(r"2^{31} - 1 = " + fmt(mx), font_size=36, color=COST).next_to(cap, DOWN, buff=0.25)
         with self.voiceover(
@@ -40,8 +40,8 @@ class Hook(VoiceoverScene):
             "counter was ever designed to hold. <bookmark mark='a'/> The count had been kept in a signed "
             "thirty-two-bit integer, and the largest number that fits is two to the thirty-one, minus one: two "
             "billion, one hundred and forty-seven million and some. <bookmark mark='b'/> One more than that, and such "
-            "a counter does not grow. It wraps around, to minus two billion. YouTube had switched to sixty-four bits "
-            "just in time, which will last a while."
+            "a counter does not grow. It wraps around, to minus two billion. This animation models a signed two's-complement counter. YouTube had already "
+            "upgraded to sixty-four bits before the milestone, which will last a while."
         ) as vo:
             self.play(FadeIn(head), FadeIn(od))
             vo.wait_until("a")
@@ -66,16 +66,20 @@ class Hook(VoiceoverScene):
                                               fill_opacity=0.85).move_to(ax.n2p(0), aligned_edge=LEFT).shift(UP * 0.6))
         mark = DashedLine(ax.n2p(days) + UP * 1.4, ax.n2p(days) + DOWN * 0.1, color=NO)
         mtxt = MathTex(r"\frac{2^{31}\ \text{centiseconds}}{8{,}640{,}000\ \text{per day}} = " + f"{days:.2f}"
-                       + r"\ \text{days}", font_size=34, color=NO).next_to(mark, UP, buff=0.2).shift(LEFT * 2.6)
-        what = label(r"a Boeing 787's generator controllers \ would all shut down at once", font_size=28,
+                       + r"\ \text{days}", font_size=30, color=NO).next_to(mark, UP, buff=0.2).shift(LEFT * 2.6)
+        what = label(r"FAA: counter overflow after 248 days \ could shut down all generator control units", font_size=28,
                      color=GREY_A).to_edge(DOWN, buff=0.5)
+        model = note(r"illustrative 32-bit centisecond model; FAA did not specify counter width or units",
+                     font_size=18).next_to(what, UP, buff=0.2)
         with self.voiceover(
             "In May 2015 the Federal Aviation Administration told airlines to switch their Boeing 787s off and on "
             "again, regularly. <bookmark mark='a'/> Each of the plane's electrical generators was run "
-            "by a controller that counted time in hundredths of a second, in a signed thirty-two-bit integer. "
-            "<bookmark mark='b'/> After two to the thirty-one hundredths of a second, which is two hundred and "
-            "forty-eight days, that counter overflows, and the controllers, all powered up together, would all fail "
-            "together, in flight."
+            "by a control unit. The FAA reported that an internal counter could overflow after two hundred and "
+            "forty-eight days of continuous power, putting the units into failsafe mode. "
+            "<bookmark mark='b'/> To see the scale, imagine a signed thirty-two-bit counter ticking in hundredths "
+            "of a second: its limit is two hundred and forty-eight point five five days. That is an illustrative "
+            "model; the directive does not specify the actual width or units. Units powered up together could "
+            "shut down together, causing loss of electrical power."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(axl))
             vo.wait_until("a")
@@ -83,7 +87,7 @@ class Hook(VoiceoverScene):
             self.play(t.animate.set_value(days - 0.01), run_time=4.0, rate_func=linear)
             vo.wait_until("b")
             self.play(Create(mark), FadeIn(mtxt), t.animate.set_value(days + 0.5), run_time=1.0)
-            self.play(FadeIn(what))
+            self.play(FadeIn(what), FadeIn(model))
         self.wait(0.4)
         self.clear_scene()
 
@@ -93,12 +97,12 @@ class Hook(VoiceoverScene):
         prompt = VGroup(Text(">>> 0.1 + 0.2", font="DejaVu Sans Mono", font_size=40, color=CODE),
                         Text(d["point_three"], font="DejaVu Sans Mono", font_size=40, color=NO)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.3).move_to(UP * 0.8)
-        q = label(r"and every language with floating point agrees", font_size=28, color=GREY_A).next_to(prompt, DOWN,
+        q = label(r"Python and JavaScript: binary64 arithmetic", font_size=28, color=GREY_A).next_to(prompt, DOWN,
                                                                                                     buff=0.8)
         with self.voiceover(
-            "And on any computer you own, ask for zero point one plus zero point two. <bookmark mark='a'/> The answer "
+            "In Python or JavaScript, ask for zero point one plus zero point two. <bookmark mark='a'/> The answer "
             "is not zero point three. It is zero point three, then fifteen zeros, then a four. Python says so, "
-            "JavaScript says so, and so does the chip underneath them. None of them is broken."
+            "JavaScript says so: these expressions use binary64 floating point. Other formats can round differently. None of them is broken."
         ) as vo:
             self.play(FadeIn(prompt[0]))
             vo.wait_until("a")
@@ -138,9 +142,9 @@ class Hook(VoiceoverScene):
             "add, multiply and divide, as fast as gates allow, and the number formats that every calculation in the "
             "rest of the series runs on, with the ways they can bite."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(VGroup(ring, ticks)))
             vo.wait_until("a")
-            self.play(Create(ring), FadeIn(ticks), FadeIn(cl))
+            self.play(Indicate(ring, scale_factor=1.03), FadeIn(cl))
             vo.wait_until("b")
             self.play(Create(line), LaggedStart(*[Create(t) for t in dots], lag_ratio=0.05), FadeIn(rl), run_time=2.0)
         self.wait(0.4)

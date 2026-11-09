@@ -33,8 +33,11 @@ class Wilkinson(VoiceoverScene):
                       label(r"backward stable: \ the exact answer \\ to a slightly different question", font_size=24,
                             color=GREY_A)).arrange(DOWN, buff=0.25).move_to(RIGHT * 3.4 + UP * 0.6)
         rule = MathTex(r"\text{error} \;\lesssim\; \kappa \times u", font_size=46, color=NO).move_to(DOWN * 2.0)
-        ex = note(r"chapter 11's $(1 - \cos x)/x^2$ is well conditioned ($\kappa \approx 1$): \ the formula was the "
-                  r"unstable part", font_size=22).next_to(rule, DOWN, buff=0.3)
+        ex = VGroup(
+            MathTex(r"f=\frac{1-\cos x}{x^2}:\quad \kappa=|x\cot(x/2)-2|\sim x^2/6\to0",
+                    font_size=28, color=YES),
+            note(r"near zero: a well-conditioned problem, \ an unstable formula", font_size=22),
+        ).arrange(DOWN, buff=0.15).next_to(rule, DOWN, buff=0.25)
         with self.voiceover(
             "When a computed answer is wrong, there are two different suspects. <bookmark mark='a'/> The first is the "
             "problem itself. Its condition number measures how much a small relative change in the input can change "
@@ -42,13 +45,13 @@ class Wilkinson(VoiceoverScene):
             "changes the difference enormously. <bookmark mark='b'/> The second is the algorithm. A backward-stable "
             "algorithm returns the exact answer to a slightly perturbed question, perturbed by about u. "
             "<bookmark mark='c'/> Put together, the error of a stable algorithm is about the condition number times u. "
-            "Chapter eleven's function was perfectly well conditioned; the formula was unstable, and rewriting it "
-            "fixed everything. But if the problem itself is ill conditioned, no algorithm and no rewriting can save "
-            "you. James Wilkinson found that out, painfully, in 1959."
+            "For chapter eleven's function, the relative condition number is the absolute value of x cotangent of "
+            "x over two, minus two. Near zero it is about x squared over six, tending to zero. The problem is "
+            "well conditioned there; the naive formula is unstable. Rewriting it restores accuracy. But if the problem itself is ill conditioned, no algorithm can recover information already lost in the input. James Wilkinson found that out, painfully, in 1959."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(cond))
             vo.wait_until("a")
-            self.play(FadeIn(cond, lag_ratio=0.2))
+            self.play(Indicate(cond, scale_factor=1.03))
             vo.wait_until("b")
             self.play(FadeIn(stab, lag_ratio=0.2))
             vo.wait_until("c")
@@ -81,7 +84,7 @@ class Wilkinson(VoiceoverScene):
 
         dots = always_redraw(roots)
         pert = MathTex(r"-210 \;\to\; -210 - 2^{-23}", font_size=34, color=NO).to_corner(UR, buff=0.4).shift(DOWN * 0.9)
-        pl = note(r"a change of $1.2 \times 10^{-7}$ \ in one coefficient", font_size=22).next_to(pert, DOWN, buff=0.1)
+        pl = note(r"a change of $1.2 \times 10^{-7}$ \ in one coefficient", font_size=22).next_to(pert, DOWN, buff=0.1).align_to(pert, RIGHT)
         res = label(r"roots $16.73 \pm 2.81\,i$, \ $19.50 \pm 1.94\,i$, \ ... \ (computed with 60 digits)",
                     font_size=24, color=NO).to_edge(DOWN, buff=0.25)
         with self.voiceover(
@@ -134,9 +137,9 @@ class Wilkinson(VoiceoverScene):
             "roots do not just shift but leave the line. The problem of finding roots from coefficients is ill "
             "conditioned, and nothing about the algorithm can fix that."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(f))
             vo.wait_until("a")
-            self.play(Write(f), FadeIn(how))
+            self.play(Indicate(f, scale_factor=1.02), FadeIn(how))
             vo.wait_until("b")
             self.play(Create(ax), FadeIn(yl), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.08),
                       run_time=2.5)
@@ -150,22 +153,24 @@ class Wilkinson(VoiceoverScene):
         head = label(r"What numerical software learned", font_size=38).to_edge(UP, buff=0.4)
         lines = VGroup(*[label(t, font_size=28, color=c) for t, c in (
             (r"never find eigenvalues through the characteristic polynomial", GREY_A),
-            (r"backward-stable algorithms everywhere: \ QR, \ LU with pivoting, \ the FFT", YES),
+            (r"QR and FFT: \ stable algorithms; \ pivoted LU: \ watch element growth", YES),
             (r"report the condition number, \ not just the answer", HEAD),
             (r"LAPACK, \ numpy, \ MATLAB, \ and every ML framework rest on this theory", GREY_A),
             (r"more in Part 52, \ \textit{Computing with Real Numbers}", GREY_B),
         )]).arrange(DOWN, aligned_edge=LEFT, buff=0.38).move_to(DOWN * 0.1)
         with self.voiceover(
             "Wilkinson turned that shock into a discipline. <bookmark mark='a'/> Never compute eigenvalues by forming "
-            "a characteristic polynomial and finding its roots: the coefficients destroy the information. "
-            "<bookmark mark='b'/> Use algorithms that are backward stable, like the QR algorithm, Gaussian elimination "
-            "with pivoting and the fast Fourier transform. <bookmark mark='c'/> And report how well conditioned a "
+            "a characteristic polynomial and finding its roots in ordinary floating point: rounding the coefficients "
+            "can destroy the information. <bookmark mark='b'/> Choose stable algorithms. Gaussian elimination "
+            "with pivoting usually works well, but its error bound depends on element growth. QR and the fast Fourier transform have stronger stability guarantees. <bookmark mark='c'/> And report how well conditioned a "
             "problem is along with its answer. <bookmark mark='d'/> Every numerical library we use, LAPACK under "
             "numpy and MATLAB, and the linear algebra inside every machine learning framework, is built on his "
             "theory, and Part 52 of this series returns to it in depth."
         ) as vo:
-            self.play(FadeIn(head))
-            for mk, l in zip("abcd", lines[:4]):
+            self.play(FadeIn(head), FadeIn(lines[0]))
+            vo.wait_until("a")
+            self.play(Indicate(lines[0], scale_factor=1.02))
+            for mk, l in zip("bcd", lines[1:4]):
                 vo.wait_until(mk)
                 self.play(FadeIn(l, shift=RIGHT * 0.1))
             self.play(FadeIn(lines[4]))

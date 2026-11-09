@@ -94,7 +94,7 @@ class Clock(VoiceoverScene):
                     color=GREY_A).next_to(ex, DOWN, buff=0.4)
         with self.voiceover(
             "Now the trick that every computer uses for negative numbers. <bookmark mark='a'/> Keep the clock, and "
-            "relabel the bottom half: fifteen is one step before zero, so call it minus one; fourteen is minus two; "
+            "relabel patterns eight through fifteen: fifteen is one step before zero, so call it minus one; fourteen is minus two; "
             "down to eight, which becomes minus eight. <bookmark mark='b'/> Thirteen is now minus three, and turning "
             "five clicks still lands on two. Minus three plus five is two. Nothing changed but the labels: the same "
             "bits, and the same adder, serve signed and unsigned numbers. <bookmark mark='c'/> In formulas, the top bit "
@@ -150,9 +150,9 @@ class Clock(VoiceoverScene):
             "the most negative number has no positive partner. Negate minus one hundred and twenty-eight in eight "
             "bits, and you get minus one hundred and twenty-eight back."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(proof[0]))
             vo.wait_until("a")
-            self.play(Write(proof[0]))
+            self.play(Indicate(proof[0], scale_factor=1.03))
             self.play(FadeIn(proof[1]))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r) for r in rows[:3]], lag_ratio=0.4), run_time=2.0)

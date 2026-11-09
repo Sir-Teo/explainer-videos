@@ -143,9 +143,9 @@ class Ripple(VoiceoverScene):
             "combines the two possible carries, which can never both be one. Five gates. This is the full adder, and "
             "it is the atom of computer arithmetic."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(ht))
             vo.wait_until("a")
-            self.play(FadeIn(ht), FadeIn(hx))
+            self.play(Indicate(ht, scale_factor=1.03), FadeIn(hx))
             vo.wait_until("b")
             self.play(FadeIn(ft), FadeIn(fx))
             vo.wait_until("c")
@@ -178,15 +178,14 @@ class Ripple(VoiceoverScene):
         with self.voiceover(
             "Now copy the full adder, once per bit, and chain them. <bookmark mark='a'/> Bit zero on the right takes "
             "a carry in; each adder's carry out becomes the next one's carry in; the last carry out is the top bit of "
-            "the answer, or, in a register of fixed width, the overflow. <bookmark mark='b'/> This is the ripple-carry "
-            "adder: n full adders, five n gates. <bookmark mark='c'/> And it subtracts for free. Since minus b is not b "
+            "the answer, or, in a register of fixed width, unsigned overflow. <bookmark mark='b'/> This is the ripple-carry "
+            "adder: n full adders, five n gates. <bookmark mark='c'/> And the same carry chain can subtract. Since minus b is not b "
             "plus one, a minus b is a plus not b plus one: put an exclusive-or on each b input to invert it, and feed "
             "a one into the carry. One circuit, two operations, signed or unsigned."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(VGroup(boxes, cw, cin, cout, ab, ends)))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(b) for b in boxes], lag_ratio=0.1), Create(cw), Create(cin), Create(cout),
-                      FadeIn(ab), FadeIn(ends), run_time=2.5)
+            self.play(Indicate(cw, scale_factor=1.02))
             vo.wait_until("b")
             self.play(FadeIn(cost))
             vo.wait_until("c")
@@ -219,9 +218,9 @@ class Ripple(VoiceoverScene):
             "<bookmark mark='d'/> At k equal to n, it says the adder's outputs are exactly a plus b plus the carry in. "
             "Correct for every one of the two to the two n plus one inputs, and we never had to try them."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(claim))
             vo.wait_until("a")
-            self.play(Write(claim), FadeIn(cap))
+            self.play(Indicate(claim, scale_factor=1.02), FadeIn(cap))
             vo.wait_until("b")
             self.play(FadeIn(base))
             vo.wait_until("c")

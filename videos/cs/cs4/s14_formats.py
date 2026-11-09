@@ -81,31 +81,31 @@ class Formats(VoiceoverScene):
         bars = VGroup(b32, b16, h16).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(LEFT * 2.0 + UP * 1.4)
         for b in bars:
             b[1].align_to(bars[0][1], LEFT)
-        same = label(r"bfloat16 is the top half of a float32: \ the same 8-bit exponent", font_size=26,
+        same = label(r"bfloat16 shares float32's high-bit layout; \ conversion usually rounds", font_size=26,
                      color=YES).next_to(bars, DOWN, buff=0.4)
         pts = VGroup(
-            label(r"gradients span many decades: \ binary16 underflows them to zero, \ bfloat16 does not", font_size=24,
+            label(r"bfloat16's wider exponent range reduces gradient underflow", font_size=24,
                   color=GREY_A),
-            label(r"a network's weights tolerate noise: \ 2 or 3 digits are enough", font_size=24, color=GREY_A),
-            label(r"half the bits: \ twice the numbers per memory transfer, \ and multipliers a quarter the size",
+            label(r"many models tolerate low precision; \ training still needs care", font_size=24, color=GREY_A),
+            label(r"half the bits: \ twice the values per transfer; \ smaller multipliers",
                   font_size=24, color=HEAD),
             label(r"FP8 (2022): \ E4M3 for weights and activations, \ E5M2 for gradients", font_size=24, color=INF),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "Machine learning answered that question in an unusual way. <bookmark mark='a'/> Google Brain's bfloat16 "
-            "is simply the top half of a single-precision float: the same eight exponent bits, and only seven bits "
-            "of fraction. IEEE's half precision made the opposite choice, five exponent bits and ten of fraction. "
-            "<bookmark mark='b'/> For training neural networks, bfloat16 wins. Gradients span many decades, and half "
-            "precision's small range flushes the small ones to zero, while a network is surprisingly tolerant of noise "
-            "in its weights, so two or three digits are enough. <bookmark mark='c'/> Fewer bits also means more "
-            "numbers per transfer from memory, which is usually the real bottleneck, and a multiplier's area grows "
+            "shares the high-bit layout of a single-precision float: eight exponent bits and seven fraction bits. "
+            "Conversion normally rounds, rather than just discarding the low bits. IEEE's half precision made the opposite choice, five exponent bits and ten of fraction. "
+            "<bookmark mark='b'/> For many neural networks, bfloat16 is useful. Gradients span many decades, and its "
+            "wide exponent range reduces underflow compared with binary16. Many models tolerate low precision, "
+            "but not every quantity does; accumulation and training recipes still matter. <bookmark mark='c'/> Fewer bits also means more "
+            "numbers per transfer from memory, which is usually the real bottleneck, and a significand multiplier's area grows roughly "
             "with the square of the fraction width. In 2022 the industry agreed on two eight-bit formats, one with "
             "more precision for weights and activations and one with more range for gradients. Part 17 of AI, Built "
             "trains a model in these formats and measures what they cost."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(bars))
             vo.wait_until("a")
-            self.play(FadeIn(bars, lag_ratio=0.3), FadeIn(same))
+            self.play(Indicate(bars, scale_factor=1.02), FadeIn(same))
             vo.wait_until("b")
             self.play(FadeIn(pts[0]), FadeIn(pts[1]))
             vo.wait_until("c")
@@ -123,7 +123,7 @@ class Formats(VoiceoverScene):
                     label(r"but each $x$ is treated as independent: \ the dependency problem", font_size=22,
                           color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to(UP * 0.9).to_edge(LEFT, buff=0.5)
         po = VGroup(label(r"posits \ (Gustafson, 2017)", font_size=28, color=FUNC),
-                    label(r"a variable-length exponent: \ more fraction bits near 1, \\ fewer far away \ (tapered "
+                    label(r"a variable-length regime for scale: \ more fraction bits near 1, \\ fewer far away \ (tapered "
                           r"precision)", font_size=22, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to(
             RIGHT * 3.2 + UP * 1.5)
         po.to_edge(RIGHT, buff=0.5)
@@ -140,14 +140,14 @@ class Formats(VoiceoverScene):
             "bound, and uses IEEE's directed rounding modes to round each end outward, so the true value is guaranteed "
             "to lie inside. Its weakness is that it forgets where numbers came from: x minus x, for x between one and "
             "two, comes out as minus one to one, not zero. <bookmark mark='b'/> John Gustafson's posits, from 2017, "
-            "use a variable-length exponent, spending more bits on precision near one and fewer far away. "
+            "use a variable-length regime to encode scale, spending more bits on precision near one and fewer far away. "
             "<bookmark mark='c'/> And when exactness matters more than speed, integers can simply grow, as Python's do: "
             "two to the hundred, all thirty-one digits of it. Multiplying such numbers the schoolbook way takes time "
             "proportional to the square of their length; a cleverer method, Karatsuba's, waits for Part 19."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(iv))
             vo.wait_until("a")
-            self.play(FadeIn(iv, lag_ratio=0.2), run_time=2.4)
+            self.play(Indicate(iv, scale_factor=1.03))
             vo.wait_until("b")
             self.play(FadeIn(po, lag_ratio=0.2))
             vo.wait_until("c")

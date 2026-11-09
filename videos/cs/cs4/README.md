@@ -24,7 +24,7 @@ gate by gate with `Circuit.settle` (unit delays, which sees through false paths)
   composition and associative; the ripple chain, Kogge–Stone (1973), Brent–Kung (1982) and Sklansky (1960) drawn on
   16 positions (15/49/26/32 combines, depth 15/4/7/4, fan-out 2/2/2/9); Snir's size + depth ≥ 2n − 2 (1986).
 * **5. The adders, raced.** Carry-select (O(√n)); carry-skip, whose deepest path (81 gates at 32 bits) is false and
-  whose measured delay is 29; delay and gates for six designs from 4 to 64 bits; 64 bits: ripple 320 gates / 129
+  whose largest observed delay in these test vectors is 29; delay and gates for six designs from 4 to 64 bits; 64 bits: ripple 320 gates / 129
   delays, Kogge–Stone 1,094 / 15.
 * **6. Multiplication.** Shift and add; the array multiplier (O(n)); carry-save addition as 3:2 compression; the
   Wallace tree (1964) compressing 8 → 6 → 4 → 3 → 2, and Dadda's (1965); Booth recoding (1951; radix 4, MacSorley
@@ -39,7 +39,7 @@ gate by gate with `Circuit.settle` (unit delays, which sees through false paths)
   bits and on 20,000 random and worst-case inputs at 32 bits against the emulator's semantics; 1,900 gates, measured
   delay 29 (78 with a ripple adder).
 * **9. Fixed point.** Q formats; money in integer cents; 0.1 = 0.0(0011)₂; dynamic range: Q16.16 covers 9 decades,
-  float32 76.
+  float32 normal values span about 76 decades (subnormals extend the range with reduced precision).
 * **10. Floating point.** IEEE 754 (1985, Kahan): sign, biased exponent, hidden bit; 0.1 as stored; every value of a
   6-bit float, bands doubling in spacing, subnormals; ulp and machine epsilon, the relative-spacing sawtooth;
   2²⁴ + 1 is not a float32; ±0, ±∞, NaN, gradual underflow; correctly rounded operations, ties to even.
@@ -55,13 +55,17 @@ gate by gate with `Circuit.settle` (unit delays, which sees through false paths)
   for eˣ against Taylor's (17× smaller error, equioscillating); CORDIC (Volder, 1959) rotating by arctan 2⁻ⁱ with
   shifts and adds, run for 16 steps; the HP-35.
 * **15. Frontier: arithmetic's open questions.** Multiplication measured on this machine: CPython's integers
-  (Karatsuba) against `decimal`'s number-theoretic transform, about 5–6 times faster at a million digits (the
-  measured slopes are on screen and vary from run to run). The race to n log n: Karatsuba (1960), Toom–Cook,
-  Schönhage–Strassen (1971), Fürer (2007), Harvey and van der Hoeven (2019), galactic beyond 2^(1729¹²) bits; a lower
-  bound only under the network-coding conjecture (Afshani, Freksen, Kamma and Larsen, 2019). Correctly rounded
-  functions: NumPy's float32 `exp` on this machine misses the correctly rounded value for 39% of 10 million inputs
-  (by 1 ulp, rarely 2; 200 misses rechecked at 200 bits with mpmath); the table-maker's dilemma; Lefèvre and Muller's
-  worst-case searches; CORE-MATH and its adoption in glibc.
+  (Karatsuba) against `decimal`'s number-theoretic transform, faster at a million digits (the measured ratio and
+  slopes are on screen and vary by machine and run). The race to n log n: Karatsuba (1960), Toom–Cook,
+  Schönhage–Strassen (1971), Fürer (2007), Harvey and van der Hoeven (2019). The galactic crossover
+  2^(1729¹²) is an illustrative asymptotic estimate, not a measured threshold. An unconditional linear lower bound
+  is known; the network-coding conjecture implies Ω(n log n) **size for constant-degree Boolean circuits**
+  (Afshani, Freksen, Kamma and Larsen, 2019), rather than an unconditional runtime bound.
+  NumPy's float32 `exp` disagrees with a float64-then-float32 reference on about 39% of 10 million sampled inputs
+  on this machine (by 1 ulp, rarely 2); 200 disagreements are rechecked at 200 bits. This does not certify all
+  reference values. The table-maker's dilemma; structured worst-case searches; CORE-MATH's existing binary32
+  and many binary64 routines, proofs for several binary64 functions, and the project's November 2026 report of
+  seven binary64 functions integrated into glibc 2.43. Complete certified coverage, speed and adoption remain active work.
 * **Recap, where this comes back, in practice, problems.**
 
 ## Build
@@ -100,13 +104,13 @@ python tools/build.py cs4                  # 1080p
    left side is x + y + z, the right side is the word of parities plus twice the word of majorities. No carry moves
    between columns, so the step takes one full-adder delay for any n.
 
-5. **Floats.** How many float32 values lie in [1, 2)? Why is 0.5 + 0.25 = 0.75 exact, but 0.1 + 0.2 ≠ 0.3?
+5. **Floats.** How many float32 values lie in [1, 2)? In Python binary64, why is 0.5 + 0.25 = 0.75 exact, but 0.1 + 0.2 ≠ 0.3?
 
    *Solution.* In [1, 2) the exponent is fixed and the 23 fraction bits are free: **2²³ = 8,388,608** values (the same
    number in every binade [2ᵉ, 2ᵉ⁺¹) of normal numbers). 0.5, 0.25 and 0.75 are dyadic (denominators powers of two),
    exactly representable, and so is their exact sum, so correct rounding returns it unchanged. 0.1, 0.2 and 0.3 have
    infinite binary expansions; each is stored rounded, and the rounded 0.1 plus the rounded 0.2 is a different double
-   from the rounded 0.3 (0.30000000000000004 against 0.29999999999999998…).
+   from the rounded 0.3 (0.30000000000000004 against 0.29999999999999998…). This inequality is format-dependent: the corresponding float32 additions compare equal.
 
 6. **Build: a carry-select adder.** With `explainer/cs/pebble/blocks.py`, build an 8-bit carry-select adder with
    blocks of 2, 3 and 3 bits; verify it on all inputs; compare it with ripple and Kogge–Stone.
@@ -115,20 +119,28 @@ python tools/build.py cs4                  # 1080p
    everywhere. Measured: **94 gates, settling in 12 gate delays**, against the ripple adder's 40 gates and 17 delays
    and Kogge–Stone's 70 gates and 9 delays (the default block sizes 1, 2, 3, 2 give 105 gates and also 12).
 
-7. **★ Research: the hardest float32 exponential.** Find the float32 x whose eˣ lies nearest a rounding midpoint. How
-   many bits must an `expf` compute to round every input correctly?
+7. **★ Research: hard float32 exponential inputs.** Screen float32 inputs in [−87.33, 88.72] for eˣ
+   close to a rounding midpoint. Recheck the candidates at high precision. What would certify that none was missed?
 
-   *Solution, and what remains open.* `compute_hardround` in `videos/cs/cs4/compute.py` screens all 2,237,667,740
-   float32 inputs in [−87.33, 88.72] in float64 (whose own error is below 2⁻²⁸ of a float32 ulp), then re-measures the
-   200 nearest candidates at 300 bits with mpmath. The hardest is **x = −14.56709** (the float32 nearest it): e^x lies
-   **2.36 × 10⁻⁹ of an ulp** from a midpoint, so deciding its rounding needs about **52.7 bits**, 28.7 more than the
-   24 of the answer. The next are −0.0073526 (51.7 bits) and 1.5199 × 10⁻⁵ (51.6). So evaluating eˣ in double
-   precision is *not quite* enough to round every float32 result correctly: a double-precision polynomial has an error
-   of an ulp or more, about 2⁻⁵², and the worst case needs 2⁻⁵²·⁷. CORE-MATH's `expf` handles this by a fast path with
-   a rigorous error bound and a slower, more precise path for the rare inputs where the fast one cannot decide. For
-   double precision itself, the same exhaustive search covers 2⁶⁴ inputs, beyond brute force; Lefèvre and Muller
-   reduced it with lattice methods to find the worst cases of exp and other functions. Doing the same, with proofs,
-   for every function the standard recommends, and making each correctly rounded double function fast, is open.
+   *Experiment, and its limits.* `compute_hardround` screens 2,237,667,740 bit patterns in this interval using
+   NumPy float64 `exp` (endpoints rounded to float32), then re-measures 200 candidates at 300 bits with mpmath. The count includes both signed
+   zeros. It does not cover the entire float32 domain, including inputs whose exponentials are subnormal.
+   No rigorous error bound for the float64 screen is established here, so its shortlist is an experiment,
+   not a proof of the global hardest case.
+
+   The closest shortlisted candidate is **x = −14.56709003448486328125**, with eˣ only **2.36 × 10⁻⁹ float32
+   ulp** from a midpoint. The metric `24 − log₂(distance)` is about **52.7 bits**, a useful indication of the
+   accuracy budget rather than an exact minimum precision theorem. The next candidates are −0.0073526 (51.7)
+   and 1.5199 × 10⁻⁵ (51.6). At the first candidate the midpoint is about **1.265 binary64 ulps** away;
+   correctly rounding eˣ to binary64 and then float32 gives the correct float32 result. Thus this candidate
+   does **not** establish that binary64 precision is insufficient. A particular fast approximation still needs
+   a certified total error bound; an interval enclosing a midpoint must trigger refinement or a fallback.
+
+   To turn the experiment into a certificate, bound the screening error and candidate-selection margin,
+   cover excluded domains and special cases, and validate high-precision rounding with error enclosures.
+   Structured searches and lattice methods can prune enormous ranges; evaluating every input individually
+   is not the only method. CORE-MATH already supplies many correctly rounded binary64 routines. Extending
+   certified coverage and improving performance and adoption remain active work.
 
 ## 习题与解答
 
@@ -154,12 +166,12 @@ python tools/build.py cs4                  # 1080p
    真值表。把第 i 列乘以 2ⁱ 再对 i 求和：左边是 x + y + z，右边是奇偶组成的字加上两倍的多数组成的字。各列之间没有进位移动，所以
    这一步对任何 n 都只需一个全加器的延迟。
 
-5. **浮点数。** [1, 2) 中有多少个 float32 值？为什么 0.5 + 0.25 = 0.75 是精确的，而 0.1 + 0.2 ≠ 0.3？
+5. **浮点数。** [1, 2) 中有多少个 float32 值？在 Python 的 binary64 算术中，为什么 0.5 + 0.25 = 0.75 是精确的，而 0.1 + 0.2 ≠ 0.3？
 
    *解答。* 在 [1, 2) 中指数固定，23 个小数位任取：共 **2²³ = 8,388,608** 个值（每个规格化的区间 [2ᵉ, 2ᵉ⁺¹) 都一样多）。
    0.5、0.25 和 0.75 都是二进分数（分母是 2 的幂），可以精确表示，它们的精确和也可以，所以正确舍入原样返回。0.1、0.2 和 0.3
    的二进制展开都是无限的；各自舍入后存储，舍入后的 0.1 加舍入后的 0.2，是一个与舍入后的 0.3 不同的双精度数
-   （0.30000000000000004 对 0.29999999999999998…）。
+   （0.30000000000000004 对 0.29999999999999998…）。这个不等式依赖格式：对应的 float32 加法结果与 float32 的 0.3 相等。
 
 6. **动手：进位选择加法器。** 用 `explainer/cs/pebble/blocks.py` 搭一个 8 位进位选择加法器，块大小为 2、3、3 位；在所有输入上
    验证；并与行波加法器和 Kogge–Stone 比较。
@@ -168,16 +180,22 @@ python tools/build.py cs4                  # 1080p
    门，12 个门延迟后稳定**；行波加法器为 40 个门、17 个延迟，Kogge–Stone 为 70 个门、9 个延迟（默认块大小 1、2、3、2 为 105 个
    门，也是 12 个延迟）。
 
-7. **★ 研究题：最难舍入的单精度指数。** 找出使 eˣ 最接近舍入中点的 float32 x。一个 `expf` 必须计算多少位，才能把每个输入都正确舍入？
+7. **★ 研究题：难舍入的单精度指数输入。** 在 [−87.33, 88.72] 内筛查使 eˣ 接近舍入中点的 float32 输入，
+   再用高精度复核候选。要证明没有遗漏，还需要什么？
 
-   *解答，以及仍然未解的部分。* `videos/cs/cs4/compute.py` 里的 `compute_hardround` 用 float64 筛查 [−87.33, 88.72] 内全部
-   2,237,667,740 个 float32 输入（float64 自身的误差小于 float32 一个 ulp 的 2⁻²⁸），再用 mpmath 以 300 位精度重新测量最接近的 200 个
-   候选。最难的是 **x = −14.56709**（离它最近的 float32）：e^x 离中点只有 **一个 ulp 的 2.36 × 10⁻⁹**，判断它的舍入大约需要 **52.7 位**，
-   比答案的 24 位多 28.7 位。其次是 −0.0073526（51.7 位）和 1.5199 × 10⁻⁵（51.6 位）。所以用双精度计算 eˣ，*不足以*把每个单精度结果都正确
-   舍入：一个双精度多项式的误差有一个 ulp 甚至更多，约 2⁻⁵²，而最坏情形需要 2⁻⁵²·⁷。CORE-MATH 的 `expf` 的做法是：一条带严格误差界的快速
-   路径，加上一条更慢、更精确的路径，专门处理快速路径无法判断的少数输入。对双精度本身，同样的穷举要覆盖 2⁶⁴ 个输入，超出了蛮力的能力；
-   勒费夫尔和米勒用格方法缩小了搜索范围，找到了 exp 等函数的最坏情形。对标准建议的每一个函数都做到这一点并给出证明，并让每一个正确舍入
-   的双精度函数都很快，仍是未解问题。
+   *实验与局限。* `compute_hardround` 用 NumPy float64 `exp` 筛查这个区间内的 2,237,667,740 个位模式，
+   端点先舍入到 float32，包括正负两个零，再用 mpmath 以 300 位精度复核 200 个候选。它不覆盖整个 float32 定义域，包括指数结果为非规格化数的区域。
+   这里没有建立 float64 筛查误差的严格界，所以候选表是实验结果，不是全域最难情形的证明。
+
+   候选中最近的是 **x = −14.56709003448486328125**，eˣ 离中点只有 **2.36 × 10⁻⁹ 个 float32 ulp**。
+   `24 − log₂(距离)` 约为 **52.7 位**，用于表示精度预算，不能当作最小精度的精确定理。其次为 −0.0073526（51.7）
+   和 1.5199 × 10⁻⁵（51.6）。第一个候选的中点距离约为 **1.265 个 binary64 ulp**；先把精确指数正确舍入到 binary64，
+   再舍入到 float32，会得到正确结果。因此，这个候选**不能证明双精度不足**。具体快速近似仍需严格的总误差界；
+   如果误差区间跨过中点，就必须提高精度或走后备路径。
+
+   要把实验变成证书，需证明筛查误差和候选选取裕量，覆盖遗漏区域与特殊值，并用误差包围验证高精度舍入。
+   结构化搜索和格方法能排除大片范围，不必逐一计算每个输入。CORE-MATH 已提供许多正确舍入的 binary64 例程；
+   扩展有证明的覆盖范围、提升性能和推广采用，仍是活跃工作。
 
 ## Glossary additions
 
@@ -203,3 +221,10 @@ Kogge & Stone (1973); Brent & Kung (1982); Payne & Hanek (1983); Wilkinson, *Rou
 floating-point arithmetic" (1991); GAO IMTEC-92-26 (1992); Lions et al., *Ariane 5 Flight 501 Failure* (1996);
 Edelman, "The mathematics of the Pentium division bug" (1997); Gustafson & Yonemoto (2017); Micikevicius et al., "FP8
 formats for deep learning" (2022); IEEE 754 (1985, 2008, 2019); Volder (1959).
+
+Technical scope checked on 9 November 2026: the FAA's [2015 directive](https://public-inspection.federalregister.gov/2015-10066.pdf)
+reports a 248-day internal GCU counter overflow but does not specify its width or units; the centisecond example is illustrative.
+The conditional circuit bound is stated in the [ICALP 2019 paper](https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.ICALP.2019.10).
+Current function coverage and integration claims come from [CORE-MATH](https://core-math.gitlabpages.inria.fr/) and its
+[FAQ](https://core-math.gitlabpages.inria.fr/faq.html), not an independent proof audit.
+Python's [`math.fsum` documentation](https://docs.python.org/3.12/library/math.html#math.fsum) records the possible double-rounding exception.

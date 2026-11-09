@@ -29,13 +29,13 @@ class Error(VoiceoverScene):
         us = MathTex(r"u = 2^{-24} \approx 6 \times 10^{-8} \ (\text{float32}), \qquad u = 2^{-53} \approx 1.1 \times "
                      r"10^{-16} \ (\text{float64})", font_size=30, color=GREY_A).next_to(m, DOWN, buff=0.4)
         bad = VGroup(
-            label(r"each operation is nearly exact, \ relative to its own result", font_size=28, color=YES),
+            label(r"no overflow or underflow: \ each operation is nearly exact", font_size=28, color=YES),
             label(r"the danger is in what the errors do next:", font_size=28, color=GREY_A),
             label(r"subtracting nearly equal numbers \ amplifies them", font_size=28, color=NO),
             label(r"adding many numbers \ accumulates them", font_size=28, color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to(DOWN * 1.4)
         with self.voiceover(
-            "The rounding rule gives a simple model for every operation. <bookmark mark='a'/> The computed result is "
+            "Away from overflow and underflow, the rounding rule gives a simple relative-error model. <bookmark mark='a'/> The computed result is "
             "the exact result times one plus delta, where delta is at most u in size: about six parts in a hundred "
             "million for single precision, about one in ten million billion for double. <bookmark mark='b'/> So every "
             "single operation is very accurate, relative to its own answer. Trouble only comes from what later "
@@ -43,9 +43,9 @@ class Error(VoiceoverScene):
             "turns small relative errors into huge ones. And adding up very many numbers lets errors pile up. "
             "James Wilkinson built the whole of numerical analysis on this model in the 1960s."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(m))
             vo.wait_until("a")
-            self.play(Write(m), FadeIn(us))
+            self.play(Indicate(m, scale_factor=1.02), FadeIn(us))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(b) for b in bad], lag_ratio=0.4), run_time=2.5)
         self.wait(0.3)
@@ -84,7 +84,7 @@ class Error(VoiceoverScene):
             "minus cos x subtracts two numbers whose leading digits agree. Those digits cancel, and what is left is "
             "mostly the rounding error in cos x, now magnified by one over x squared. At ten to the minus eight, cos x "
             "rounds to exactly one. <bookmark mark='d'/> The cure is algebra, not more bits: rewrite one minus cos x "
-            "as two sine squared of x over two, which subtracts nothing, and the answer is right everywhere."
+            "as two sine squared of x over two, which subtracts nothing, and the answer stays accurate for small nonzero x."
         ) as vo:
             self.play(FadeIn(head), Write(f1))
             vo.wait_until("b")
@@ -136,9 +136,9 @@ class Error(VoiceoverScene):
             "around ten to the minus five, a hundred times u. <bookmark mark='b'/> Adding in pairs, then pairs of "
             "pairs, a tree like chapter four's, keeps the error growing only like log n; numpy does this by default. "
             "<bookmark mark='c'/> William Kahan's compensated summation, from 1965, does better with four lines. It "
-            "keeps a second variable, c, holding exactly the low bits that the last addition threw away, and feeds "
+            "keeps a second variable, c, approximating the low bits that the last addition threw away, and feeds "
             "them back into the next one. Its error bound does not grow with n at all, to first order, and the curve "
-            "is flat. Python's math dot fsum goes further still and returns the correctly rounded sum."
+            "is flat. Python's math dot fsum tracks partial sums for very high accuracy; some platforms can still double-round the last bit."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(t))
             vo.wait_until("a")
@@ -179,9 +179,9 @@ class Error(VoiceoverScene):
             "twenty-fifth of February 1991 the battery failed to intercept a Scud, and twenty-eight soldiers were "
             "killed. The corrected software, already on its way, arrived the next day."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(VGroup(steps[0], steps[1])))
             vo.wait_until("a")
-            self.play(FadeIn(steps[0]), FadeIn(steps[1]))
+            self.play(Indicate(VGroup(steps[0], steps[1]), scale_factor=1.03))
             vo.wait_until("b")
             self.play(FadeIn(steps[2]), FadeIn(steps[3]))
             vo.wait_until("c")
@@ -216,9 +216,9 @@ class Error(VoiceoverScene):
             "code, had already failed in the same way. Thirty-seven seconds after launch the rocket veered and broke "
             "up. The fix would have been one range check, the lesson of chapter two."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(conv[:2]))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(c) for c in conv], lag_ratio=0.4), run_time=2.0)
+            self.play(FadeIn(conv[2]))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(s) for s in story], lag_ratio=0.5), run_time=3.0)
         self.wait(0.3)

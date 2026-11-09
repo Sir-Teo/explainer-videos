@@ -110,9 +110,9 @@ class Divide(VoiceoverScene):
             "bits of the divisor, are enough to look the digit up in a small table, while the full subtraction "
             "happens in carry-save form, with no carries to wait for."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rec))
             vo.wait_until("a")
-            self.play(Write(rec), FadeIn(inv))
+            self.play(Indicate(rec, scale_factor=1.02), FadeIn(inv))
             vo.wait_until("b")
             self.play(Create(ax), FadeIn(axl), LaggedStart(*[Create(b) for b in bands], lag_ratio=0.15), run_time=2.5)
             vo.wait_until("c")
@@ -265,9 +265,9 @@ class Divide(VoiceoverScene):
             "Robert Goldschmidt's variant multiplies the numerator and the denominator by the same factors in "
             "parallel, and floating-point units use these methods for division and square roots."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(it))
             vo.wait_until("a")
-            self.play(Write(it))
+            self.play(Indicate(it, scale_factor=1.03))
             vo.wait_until("b")
             self.play(FadeIn(why), FadeIn(der))
             vo.wait_until("c")

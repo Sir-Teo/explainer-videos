@@ -75,10 +75,9 @@ class Race(VoiceoverScene):
             "is about the square root of two n, and the delay grows like the square root of n. This is the "
             "carry-select adder, from 1962, at the cost of doing most of the work twice."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(VGroup(blocks, labs)))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(b) for b in blocks], lag_ratio=0.2), FadeIn(labs), FadeIn(why[0]),
-                      run_time=2.0)
+            self.play(Indicate(blocks, scale_factor=1.02), FadeIn(why[0]))
             vo.wait_until("b")
             self.play(FadeIn(muxes), Create(links), FadeIn(why[1]))
             vo.wait_until("c")
@@ -106,7 +105,7 @@ class Race(VoiceoverScene):
         cmp = VGroup(
             label(rf"32 bits: \ the longest path through the gates is \ {r32['carry-skip']['depth']} deep", font_size=28,
                   color=NO),
-            label(rf"but no input ever uses it: \ the measured delay is \ {r32['carry-skip']['settle']}", font_size=28,
+            label(rf"that path is false: \ largest observed delay \ {r32['carry-skip']['settle']}", font_size=28,
                   color=YES),
             note(r"a long carry skips the middle blocks; \ a block that ripples did not need its carry-in: \ a "
                  r"\textit{false path}", font_size=22),
@@ -117,8 +116,8 @@ class Race(VoiceoverScene):
             "multiplexer passes the block's carry-in straight to its carry-out, skipping the ripple inside. "
             "<bookmark mark='b'/> This adder holds a lesson about timing. Count the longest path through its gates, "
             "and at thirty-two bits it is eighty-one deep, worse than the ripple adder. But simulate it, with every "
-            "gate taking one unit of time, on worst-case and random inputs, and nothing ever takes longer than "
-            "twenty-nine. <bookmark mark='c'/> The long path is false: whenever a carry would ripple through a block, "
+            "gate taking one unit of time, on chosen carry patterns and random inputs: the largest delay observed is "
+            "twenty-nine. Sampling is not a proof of the maximum. <bookmark mark='c'/> The long path is false: whenever a carry would ripple through a block, "
             "that block was generating or killing its own carry anyway. Timing tools that only count gates "
             "overestimate such circuits, and a whole subfield, false-path analysis, exists to find them."
         ) as vo:
@@ -183,7 +182,7 @@ class Race(VoiceoverScene):
         r64 = {r["kind"]: r for r in d["rows"] if r["n"] == 64}
         head = label(r"64-bit adders, \ side by side", font_size=36).to_edge(UP, buff=0.35)
         rows = VGroup(VGroup(*[label(t, font_size=24, color=GREY_B) for t in (r"design", r"gates",
-                                                                              r"deepest path", r"measured delay")]))
+                                                                              r"deepest path", r"observed delay")]))
         for kind in NAMES:
             r = r64[kind]
             rows.add(VGroup(label(NAMES[kind], font_size=26, color=KIND_COLOR[kind]),

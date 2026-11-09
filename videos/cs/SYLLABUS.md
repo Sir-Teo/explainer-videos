@@ -139,7 +139,7 @@ Frontier topic; each is refined in that part's frontier sweep.
 | 1 | how BB(5) was proved (non-halting certificates, deciders); BB(6) in Knuth's arrows; Antihydra, run and decoded, and the gambler's-ruin heuristic; machines beyond ZFC (7,910 → 432 states) |
 | 2 | Ramsey numbers: R(3,3) by pigeonhole and exhaustion, the Paley graph on 17, Erdős's bounds, the 2023–24 exponential improvements; explicit constructions and Paley clique numbers (computed) |
 | 3 | exact minimum circuits for every 3-input function (computed); the census wall at five inputs; gate elimination, the 3.1n bound (2022) and a reported 4n − O(log n) bound (November 2026 preprint); MCSP and meta-complexity |
-| 4 | integer multiplication measured on this machine and the race to n log n; correct rounding of eˣ measured, the table-maker's dilemma, CORE-MATH; the hardest float32 eˣ (computed) |
+| 4 | integer multiplication measured on this machine and the race to n log n; correct rounding of eˣ measured, the table-maker's dilemma, CORE-MATH; a bounded float32 eˣ midpoint screen with high-precision candidate checks (experimental, not a global certificate) |
 | 5 | falling Rowhammer thresholds; PARA's probability and Misra–Gries counting, derived; a many-sided attack simulated; Half-Double, RowPress, PRAC |
 | 6 | mutation analysis of random co-simulation (computed); coverage-guided CPU fuzzing (DifuzzRTL, Cascade); Sail, Kami, Silver; verifying speculative cores |
 | 7 | the limits of branch prediction, computed: idealised PPM against TAGE at every storage budget; the perceptron's linear blind spot; TAGE-SC-L, BranchNet; the data-centre front-end bottleneck |

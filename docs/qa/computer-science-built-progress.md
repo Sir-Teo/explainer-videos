@@ -1,10 +1,36 @@
 # Computer Science, Built — sequential polish
 
 Work on `computer-science-built`, one video at a time, with separate commits.
-Current video: **cs4, Arithmetic**. CS1–CS3 source/preview polish checkpoints
+Current video: **cs5, Memory and Time**. CS1–CS4 source/preview polish checkpoints
 are complete at the scopes below. Their production release gates remain open; this
 ledger does not treat sampled previews as listening or final-production approval.
 The syllabus's earlier draft-preview claims are separate.
+
+## Final CS4 preview checkpoint, 9 November 2026
+
+- Correct conditioning versus stability, signed fixed-point weights, reproducible
+  Python 3.12 examples and floating-point hypotheses in both languages. Scope the
+  exponential screens and multiplication bound accurately; update dated
+  CORE-MATH attribution and distinguish illustrative counter models from records.
+- Bring diagrams into 31 section introductions plus four prefix-network starts;
+  repair Chinese captions, sparse holds and small text-placement defects.
+- All 34 current bilingual endpoint cases and all 34 motion cases pass with zero
+  warnings: 283 captured states per language. Every endpoint sheet and all 1,360
+  motion overview appearances were inspected. All 121,067 movie frames decode.
+- Five focused native clips decode 4,549 frames, with 120 overview appearances
+  and five full-size stills inspected. All 93 English speech blocks pass current
+  automated signal/alignment checks with waveform hashes, covering 57.68 minutes
+  of speech. Two narrated Hook/Conditioning previews decode 6,021 frames plus
+  audio; 80 samples and two stills were inspected, with all 21 cue requests on time.
+- All 12 numerical data hashes remain unchanged; 12 arithmetic tests pass.
+  Actual bilingual translation coverage is 93/93 blocks. Of 607 caption strings,
+  two raw identifier/algorithm-name leads are reviewed with zero untranslated
+  explanations; 27 retained English entries are reviewed. The source-length
+  estimate is 69.7 minutes.
+
+[Verified CS4 evidence](evidence/cs4-polish-20261109/README.md).
+Continuous narrated listening, Chinese speech/listening, whole-video native
+production review and runtime at the selected voice pace remain open gates.
 
 ## Final CS3 preview checkpoint, 9 November 2026
 
@@ -143,20 +169,20 @@ Evidence, exact source/data hashes, reports and reproduction commands:
 
 ## Continue here
 
-1. Run cs4's numerical computations and existing arithmetic tests; preserve the
-   baseline evidence and inspect its opening and arithmetic/numerical claims.
+1. Run cs5's numerical computations and existing memory tests; preserve the
+   baseline evidence and inspect its feedback, timing and defence-model claims.
 2. Review English/Chinese endpoint and motion previews, repair concrete defects,
    and bind the final checks to the exact source before the next separate commit.
 3. Keep production release gates distinct from source/preview checkpoints.
 
 ```bash
 source /workspace/environment/activate.sh
-.venv/bin/python -m videos.cs.cs4.compute
-.venv/bin/python -m unittest discover -s tests -p test_cs4_arithmetic.py -q
-.venv/bin/python tools/qa_series.py cs4 --lang en --cached-only --timeout 1200
-.venv/bin/python tools/qa_series.py cs4 --lang zh --cached-only --timeout 1200
+.venv/bin/python -m videos.cs.cs5.compute
+.venv/bin/python -m unittest discover -s tests -p test_cs5_memory.py -q
+.venv/bin/python tools/qa_series.py cs5 --lang en --cached-only --timeout 1200
+.venv/bin/python tools/qa_series.py cs5 --lang zh --cached-only --timeout 1200
 ```
 
 The activation supplies the local renderer, neural narration, dvisvgm and Chinese
-TeX resources. CS4 is next; CS5–CS61 remain queued. No whole-course or production
+TeX resources. CS5 is next; CS6–CS61 remain queued. No whole-course or production
 completion is claimed.

@@ -70,7 +70,7 @@ class Outro(VoiceoverScene):
             "and unsigned numbers. The ripple-carry adder, and the associative carry operator that turns addition into "
             "a parallel prefix, logarithmic in depth. Multipliers as trees of carry-save adders, and division by SRT, "
             "with the table that cost Intel half a billion dollars. Pebble's ALU, built and verified. And floating "
-            "point: a ruler with the same relative precision everywhere, correctly rounded operations, and the "
+            "point: a ruler with roughly constant relative precision in the normal range, correctly rounded operations, and the "
             "difference between an unstable formula and an ill-conditioned problem."
         ):
             self.play(FadeIn(head))
@@ -106,15 +106,15 @@ class Outro(VoiceoverScene):
                                   r"\ Rust's checked arithmetic, \ sanitizers"),
             (r"money", r"integer cents or decimal types: \ SQL \texttt{NUMERIC}, \ Java's \texttt{BigDecimal}, \ "
                        r"Python's \texttt{decimal}"),
-            (r"numerical libraries", r"LAPACK and BLAS under numpy, \ correctly rounded \texttt{math.fsum}, \ libm's "
+            (r"numerical libraries", r"LAPACK and BLAS under numpy, \ high-accuracy \texttt{math.fsum}, \ libm's "
                                      r"minimax polynomials"),
             (r"machine learning", r"bfloat16 and FP8 on GPUs and TPUs, \ mixed precision with loss scaling"),
             (r"hardware testing", r"after FDIV: \ formal proofs of floating-point units at Intel and AMD"),
         ])
         with self.voiceover(
             "In practice: integer overflow is still a common cause of security holes, when a length wraps around and "
-            "a buffer is allocated too small, which is why Rust checks arithmetic and why sanitizers exist. Money is "
-            "kept in integers or decimal types, never in binary floats. Numerical libraries, from LAPACK to the "
+            "a buffer is allocated too small, which is why Rust provides checked operations and enables overflow checks in default debug builds, and why sanitizers exist. Money is "
+            "often represented with integer minor units or decimal types, with explicit rounding rules. Numerical libraries, from LAPACK to the "
             "maths library behind every sine, are built on Wilkinson's analysis and minimax polynomials. Machine "
             "learning trains in bfloat16 and FP8. And since the FDIV bug, chip makers prove their floating-point "
             "units correct by machine."
@@ -133,18 +133,18 @@ class Outro(VoiceoverScene):
             r"Show that a Kogge--Stone network on $n = 2^k$ positions has $n k - n + 1$ combines \ (49 for $n = 16$).",
             r"Show that, bit by bit, \ $x + y + z = (x \oplus y \oplus z) + 2\,\mathrm{maj}(x, y, z)$: \ carry-save "
             r"addition.",
-            r"How many float32 values lie in $[1, 2)$? \ Why is $0.5 + 0.25 = 0.75$ exact, \ but $0.1 + 0.2 \ne 0.3$?",
+            r"How many float32 values lie in $[1, 2)$? \ In Python binary64, why is $0.5+0.25=0.75$, \ but $0.1+0.2\ne0.3$?",
             r"\textit{Build.} \ With \texttt{explainer/cs/pebble/blocks.py}, \ make an 8-bit carry-select adder with "
             r"blocks of 2, 3 and 3 bits; \ verify it on all inputs \ and compare its gates and delay with ripple and "
             r"Kogge--Stone.",
-            r"$\bigstar$ \textit{Research.} \ Find the \texttt{float32} $x$ whose $e^x$ lies nearest a rounding "
-            r"midpoint. \ How many bits must an \texttt{expf} compute to round every input correctly?",
+            r"$\bigstar$ \textit{Research.} \ Screen \texttt{float32} inputs in $[-87.33,88.72]$ for $e^x$ near "
+            r"a midpoint. \ Recheck candidates; \ what would certify the search?",
         ], font_size=22)
         with self.voiceover(
             "Seven problems, with full solutions in the part's notes. Pause on any of them. The sixth is a build "
             "problem: it asks you to use this series' arithmetic library yourself. The last, marked with a star, is a "
-            "research problem: a search over every single-precision number, the kind that underlies correctly "
-            "rounded libraries."
+            "research problem: a bounded search for hard single-precision exponential inputs. Separate the fast "
+            "screen from high-precision candidate checks, and ask what would certify its coverage."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)

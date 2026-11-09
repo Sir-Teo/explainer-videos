@@ -28,7 +28,7 @@ class Functions(VoiceoverScene):
         head = label(r"Step one: \ make the argument small", font_size=38).to_edge(UP, buff=0.35)
         e1 = MathTex(r"e^x = 2^k \cdot e^r, \qquad x = k \ln 2 + r, \quad |r| \le \tfrac{\ln 2}{2}", font_size=38,
                      color=CODE).move_to(UP * 1.6)
-        e1n = label(r"$2^k$ is free: \ add $k$ to the exponent field", font_size=24, color=GREY_A).next_to(e1, DOWN,
+        e1n = label(r"$2^k$: \ adjust exponent for normal, in-range results", font_size=24, color=GREY_A).next_to(e1, DOWN,
                                                                                                    buff=0.2)
         e2 = MathTex(r"\sin x = \pm \sin r \text{ or } \pm \cos r, \qquad x = k \tfrac{\pi}{2} + r, \quad |r| \le "
                      r"\tfrac{\pi}{4}", font_size=38, color=CODE).move_to(DOWN * 0.3)
@@ -40,15 +40,15 @@ class Functions(VoiceoverScene):
             "A chip can only add, multiply and divide, so every other function must be built from those. The first "
             "step is always to make the argument small. <bookmark mark='a'/> For the exponential, write x as k times "
             "log two plus a small remainder r; then e to the x is two to the k times e to the r, and multiplying by two "
-            "to the k just adds k to the exponent field. <bookmark mark='b'/> For the sine, subtract a multiple of pi "
+            "to the k adjusts the exponent for normal, in-range results. Subnormal rounding and overflow need special handling. <bookmark mark='b'/> For the sine, subtract a multiple of pi "
             "over two, and the problem becomes a sine or cosine of something less than pi over four. It sounds easy, "
             "but for an argument like ten to the twenty-two, the subtraction needs pi to over a hundred bits, or the "
             "remainder is pure noise; Mary Payne and Robert Hanek showed how to do it in 1983. "
             "<bookmark mark='c'/> For the logarithm, the float's own exponent field already did most of the work."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(e1))
             vo.wait_until("a")
-            self.play(Write(e1), FadeIn(e1n))
+            self.play(Indicate(e1, scale_factor=1.02), FadeIn(e1n))
             vo.wait_until("b")
             self.play(Write(e2), FadeIn(e2n))
             vo.wait_until("c")
@@ -91,8 +91,9 @@ class Functions(VoiceoverScene):
             "error, spreads its error evenly. Its error curve touches its maximum six times, alternating in sign: "
             "Chebyshev's equioscillation theorem says that is exactly what the best polynomial looks like. "
             "<bookmark mark='c'/> With the same five coefficients, the error is seventeen times smaller. Evgeny Remez's "
-            "exchange algorithm, from 1934, finds it, and it is how the coefficients in every maths library are chosen, "
-            "with the final evaluation arranged by Horner's rule: four multiplications and four additions."
+            "exchange algorithm, from 1934, finds it. Libraries often use near-minimax polynomials, with coefficient "
+            "rounding constraints, tables or rational approximations. Our degree-four polynomial can use "
+            "Horner's rule: four multiplications and four additions."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(yl), FadeIn(ylab), FadeIn(xlab))
             vo.wait_until("a")

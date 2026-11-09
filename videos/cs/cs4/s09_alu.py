@@ -59,16 +59,15 @@ class Alu(VoiceoverScene):
             "operations its instruction set asks for. <bookmark mark='a'/> An adder, which also "
             "subtracts by inverting b and setting the carry in. A logic unit, which is just one and, one or and one "
             "exclusive-or per bit. A barrel shifter, from Part 3, extended to shift right as well, filling with zeros "
-            "or with copies of the sign bit. And comparisons, which need no new hardware at all, as we will see. "
+            "or with copies of the sign bit. And comparisons, which reuse the adder's flags with a little extra logic, as we will see. "
             "<bookmark mark='b'/> All of them compute at once, on every instruction, and a four-bit operation code "
             "selects which answer leaves, through a multiplexer on every output bit. Two flags come out too: whether "
             "the result is zero, which branches will test, and whether a signed add overflowed. "
             "<bookmark mark='c'/> Ten operations in all, exactly the ones Pebble's emulator implements."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(ins))
+            self.play(FadeIn(head), FadeIn(ins), FadeIn(units))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(u, shift=DOWN * 0.1) for u in units], lag_ratio=0.3), Create(feeds),
-                      run_time=2.4)
+            self.play(Create(feeds), Indicate(units, scale_factor=1.02), run_time=1.5)
             vo.wait_until("b")
             self.play(Create(down), FadeIn(mux), FadeIn(mt), FadeIn(op))
             self.play(GrowArrow(oarr), FadeIn(out))
@@ -106,9 +105,9 @@ class Alu(VoiceoverScene):
             "<bookmark mark='c'/> Getting this wrong is a classic bug in hand-written assembly: comparing by the sign "
             "of a difference works until the numbers get large."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows[0]))
             vo.wait_until("a")
-            self.play(FadeIn(rows[0]))
+            self.play(Indicate(rows[0], scale_factor=1.03))
             self.play(FadeIn(rows[1]))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(e) for e in ex], lag_ratio=0.4), run_time=2.5)
@@ -130,7 +129,7 @@ class Alu(VoiceoverScene):
                   r"\ $\checkmark$", font_size=28, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(UP * 1.6)
         hdr = VGroup(*[label(t, font_size=24, color=GREY_B) for t in (r"32-bit ALU with", r"gates", r"as NANDs",
-                                                                      r"deepest path", r"measured delay")])
+                                                                      r"deepest path", r"observed delay")])
         tab = VGroup(hdr)
         for name, r in ((r"a ripple adder", rp), (r"Kogge--Stone", ks)):
             tab.add(VGroup(label(name, font_size=26, color=NO if r is rp else YES),
@@ -153,14 +152,14 @@ class Alu(VoiceoverScene):
             "ten operations. The thirty-two-bit version was checked on twenty thousand inputs, random ones and "
             "worst-case carries and borrows, against exactly what Pebble's emulator computes. "
             "<bookmark mark='b'/> With a ripple adder inside, the thirty-two-bit ALU has about sixteen hundred gates "
-            "and takes seventy-eight gate delays. With Kogge-Stone, about three hundred gates more, and twenty-nine "
-            "delays. <bookmark mark='c'/> The fast adder costs a fifth more gates and makes the whole unit almost "
+            "and its largest observed delay in these tests is seventy-eight. With Kogge-Stone, about three hundred "
+            "gates more, the observed delay is twenty-nine. <bookmark mark='c'/> The fast adder costs a fifth more gates and makes the whole unit almost "
             "three times faster, because addition was the slowest thing in it. Rewritten in NAND gates alone, it is "
             "about four and a half thousand of them. In Part 6 this circuit becomes the heart of Pebble."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(checks[0]))
             vo.wait_until("a")
-            self.play(FadeIn(checks[0]))
+            self.play(Indicate(checks[0], scale_factor=1.03))
             self.play(FadeIn(checks[1]))
             vo.wait_until("b")
             self.play(FadeIn(tab[0]), LaggedStart(*[FadeIn(r) for r in tab[1:]], lag_ratio=0.4), run_time=2.0)

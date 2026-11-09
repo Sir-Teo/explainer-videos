@@ -97,10 +97,10 @@ class Frontier(VoiceoverScene):
         notes = VGroup(
             label(r"Sch\"onhage and Strassen conjectured $n \log n$ in 1971; \ Harvey and van der Hoeven reached it with "
                   r"a 1729-dimensional Fourier transform", font_size=20, color=GREY_A),
-            label(r"it wins only for numbers with more than $2^{1729^{12}}$ bits: \ a \textit{galactic} algorithm, \ "
+            label(r"an illustrative asymptotic crossover estimate is $2^{1729^{12}}$ bits: \ a \textit{galactic} algorithm, \ "
                   r"important for what it proves", font_size=20, color=LIMIT),
-            label(r"is $n \log n$ optimal? \ Only conditionally: \ it follows from a conjecture about network coding \ "
-                  r"(Afshani, Freksen, Kamma and Larsen, \ 2019)", font_size=20, color=HEAD),
+            label(r"unconditional: $\Omega(n)$; \ conditional: $\Omega(n\log n)$ circuit size \ "
+                  r"for constant-degree Boolean circuits \ (Afshani et al., 2019; network coding conjecture)", font_size=20, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "The theory went further than any library. <bookmark mark='a'/> Anatoly Karatsuba broke the square in 1960, "
@@ -108,14 +108,15 @@ class Frontier(VoiceoverScene):
             "fast Fourier transform to reach n log n times log log n, and conjectured that n log n was the truth. "
             "<bookmark mark='b'/> Martin Fürer improved the last factor in 2007, and in 2019 David Harvey and Joris van "
             "der Hoeven reached n log n itself, with a Fourier transform in one thousand seven hundred and twenty-nine "
-            "dimensions. <bookmark mark='c'/> Their algorithm only wins for numbers with more than two to the "
-            "seventeen-twenty-nine to the twelfth bits, far more than there are atoms; it matters for what it proves, "
-            "not for what it runs. <bookmark mark='d'/> Is n log n the best possible? Nobody can prove it. The only "
-            "lower bound, from 2019, holds if a conjecture about information flow in networks is true."
+            "dimensions. <bookmark mark='c'/> An illustrative asymptotic crossover estimate is two to the "
+            "seventeen-twenty-nine to the twelfth bits, far beyond practical sizes. That is not a measured or "
+            "exact threshold. <bookmark mark='d'/> Is n log n optimal? We have a linear unconditional lower "
+            "bound. A 2019 result gives n log n circuit size for constant-degree Boolean circuits, conditional "
+            "on a conjecture about network coding. It is not an unconditional runtime bound."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(tab[:3]))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in tab[:4]], lag_ratio=0.3), run_time=2.5)
+            self.play(Indicate(tab[:3], scale_factor=1.02), FadeIn(tab[3]))
             vo.wait_until("b")
             self.play(FadeIn(tab[4]), FadeIn(tab[5]), FadeIn(notes[0]))
             vo.wait_until("c")
@@ -147,10 +148,10 @@ class Frontier(VoiceoverScene):
                 [-2.1, y, 0], LEFT, buff=0.1), r, label(rf"{100 * v:.1f}\%", font_size=20, color=GREY_A).next_to(
                 r, RIGHT, buff=0.12)))
         cap = label(rf"NumPy {d['numpy']}'s \texttt{{float32}} \texttt{{exp}} \ on ${fmt(d['exp_n'])}$ random inputs, \ "
-                    rf"against the correctly rounded value \\ (checked to 200 bits with \texttt{{mpmath}} on "
-                    rf"{d['exp_checked']} of the misses: \ {d['exp_agree']} agree)", font_size=18,
+                    rf"against float64 exp rounded to float32 \\ ({d['exp_checked']} disagreements rechecked with "
+                    rf"200-bit \texttt{{mpmath}}: \ {d['exp_agree']} confirm the reference)", font_size=18,
                     color=GREY_B).next_to(bars, DOWN, buff=0.35)
-        why = label(r"fast vectorized code \ (Part 10's SIMD) \ trades the last bit for speed", font_size=22,
+        why = label(r"accuracy and speed depend on the library, \ CPU and vector path", font_size=22,
                     color=HEAD).to_edge(DOWN, buff=0.35)
         pct = f"{100 * d['exp_frac']:.0f}"
         mx = d["exp_max_ulp"]
@@ -159,14 +160,15 @@ class Frontier(VoiceoverScene):
             "addition, subtraction, multiplication, division and square root to be correctly rounded: the exact answer, "
             "rounded once. For the exponential, the logarithm and the sines it only recommends it. "
             "<bookmark mark='b'/> So we tested the single-precision exponential of NumPy, on this machine, on ten "
-            "million random inputs, against the correctly rounded answer, which we checked at two hundred bits "
-            f"of precision. <bookmark mark='c'/> About {pct} percent of its answers are not the correctly rounded one, "
-            f"off by one unit in the last place or, rarely, {mx}. <bookmark mark='d'/> That is a deliberate trade: "
-            "vectorized code, which Part 10 explains, is several times faster if it is allowed to miss the last bit."
+            "million random inputs, against a float64 exponential rounded to float32. We rechecked two hundred "
+            "disagreements at two hundred bits; that validates those cases, not every reference value. "
+            f"<bookmark mark='c'/> About {pct} percent disagree with the reference, by one unit in the last "
+            f"place or, rarely, {mx}. <bookmark mark='d'/> Accuracy and speed depend on the library, CPU and "
+            "vector path. These measurements show why a last-bit guarantee needs more than random testing."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rule[0]))
             vo.wait_until("a")
-            self.play(FadeIn(rule[0]))
+            self.play(Indicate(rule[0], scale_factor=1.03))
             self.play(FadeIn(rule[1]))
             vo.wait_until("b")
             self.play(FadeIn(cap))
@@ -191,27 +193,28 @@ class Frontier(VoiceoverScene):
         pts = VGroup(
             label(r"to round correctly you must know which side of halfway $e^x$ lies: \\ when it lies very close, \ "
                   r"you need many more bits than the answer has", font_size=22, color=GREY_A),
-            label(r"how many? \ only an exhaustive search over every input can say: \ Lef\`evre and Muller \ (1990s "
-                  r"onward) \\ found the worst cases for double precision, \ needing more than twice its 53 bits",
+            label(r"how many? \ rigorous error bounds and worst-case searches; \ structured methods can prune huge ranges "
+                  r"\\ some binary64 cases need over 106 bits to resolve the midpoint",
                   font_size=22, color=GREY_A),
-            label(r"CORE-MATH \ (Sibidanov, Zimmermann and others, \ 2022--): \ correctly rounded functions as fast as "
-                  r"the usual ones; \\ since 2024--25 glibc, \ the C library under Linux, \ has been adopting them",
+            label(r"CORE-MATH: \ binary32 and many binary64 routines already exist; \ proofs for several binary64 functions "
+                  r"\\ project report, Nov. 2026: seven binary64 functions integrated into glibc 2.43",
                   font_size=22, color=YES),
-            label(r"open: \ correctly rounded double-precision functions, \ proved, \ fast, \ for every function in the "
-                  r"standard", font_size=22, color=HEAD),
+            label(r"research continues: \ complete certified coverage, \ fast implementations and wider adoption", font_size=22, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "Why is correct rounding hard? <bookmark mark='a'/> Rounding means deciding which of two neighbouring "
             "floats the true value is nearer to, which side of halfway it lies. When it lies extremely close to "
             "halfway, you have to compute many more digits than the answer itself has before you know. This is the "
             "table-maker's dilemma, as old as printed tables of logarithms. <bookmark mark='b'/> How many more? "
-            "Nothing short of an exhaustive search over every input can say, and Vincent Lefèvre and Jean-Michel "
-            "Muller ran such searches, finding that the worst cases in double precision need more than twice its "
-            "fifty-three bits. <bookmark mark='c'/> With those worst cases known, correctly rounded functions can be "
-            "fast: the CORE-MATH project has written them for single precision at the speed of ordinary libraries, and "
-            "since 2024 the GNU C library has been adopting them. <bookmark mark='d'/> Doing the same for every "
-            "double-precision function, fast and with proofs, is open, and finding a hard case yourself is this "
-            "part's research problem."
+            "Rigorous error bounds and worst-case searches can answer that. Structured methods can exclude whole "
+            "ranges rather than evaluate every input. Work by Vincent Lefèvre, Jean-Michel Muller and others "
+            "found binary64 cases requiring more than twice its fifty-three bits to resolve. "
+            "<bookmark mark='c'/> CORE-MATH already provides single-precision and many double-precision "
+            "routines, with proofs for several binary64 functions. As of November 2026, the project reports "
+            "seven binary64 functions integrated into GNU libc two point forty-three. "
+            "<bookmark mark='d'/> Complete certified coverage, speed and wider adoption remain active work. "
+            "This part's research problem explores a bounded search for hard single-precision inputs, and asks "
+            "what extra evidence would make the search a certificate."
         ) as vo:
             self.play(FadeIn(head), Create(line), FadeIn(fl))
             vo.wait_until("a")

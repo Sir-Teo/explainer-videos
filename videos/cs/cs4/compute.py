@@ -601,9 +601,13 @@ def compute_frontier() -> dict:
 
 
 def compute_hardround() -> dict:
-    """The float32 input whose e^x lies nearest a rounding midpoint (the research problem's answer).  Every float32
-    in [-87.33, 88.72] is screened in float64 (error below 2^-28 of a float32 ulp), and the 200 nearest candidates are
-    re-measured at 300 bits with mpmath."""
+    """Shortlist hard float32 exponential inputs in a bounded interval.
+
+    Screen [-87.33, 88.72] (endpoints rounded to float32) with NumPy
+    float64 exp, then re-measure 200
+    candidates at 300 bits. Neither the screen's approximation error nor
+    coverage outside this interval is certified by this experiment.
+    """
     import mpmath
 
     lo, hi = np.float32(-87.33), np.float32(88.72)

@@ -77,7 +77,7 @@ class Multiply(VoiceoverScene):
         notes = VGroup(label(r"each partial product: \ $a$ or 0, \ shifted", font_size=26, color=HEAD),
                        label(r"a bit times a bit is an AND: \ $n^2$ AND gates", font_size=26, color=GREY_A),
                        label(r"then add $n$ numbers", font_size=26, color=GREY_A)).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.25).move_to(RIGHT * 4.4 + DOWN * 0.4)
+            DOWN, aligned_edge=LEFT, buff=0.25).move_to(RIGHT * 4.15 + DOWN * 0.4)
         with self.voiceover(
             "Multiplication in binary is the schoolbook method with the times table thrown away. "
             "<bookmark mark='a'/> To multiply eleven by thirteen, go through the bits of thirteen from the right. "
@@ -124,13 +124,12 @@ class Multiply(VoiceoverScene):
             "that takes the running sum from the row above, adds the next partial product, and passes the result "
             "down. <bookmark mark='b'/> It is regular and easy to lay out on a chip, which is why early multipliers "
             "looked like this. But the carries ripple along each row and the sums ripple down the rows, and the delay "
-            "grows in step with n: for sixteen-bit numbers, eighty-eight gate delays. A processor that wanted to "
+            "grows in step with n: for our sixteen-bit circuit, we observed eighty-eight gate delays in the test vectors. A processor that wanted to "
             "multiply in one cycle needed a better idea."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(rw) for rw in rows], lag_ratio=0.2), Create(arrows), FadeIn(txt[0]),
-                      run_time=2.6)
+            self.play(Create(arrows), FadeIn(txt[0]), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(txt[1]), FadeIn(txt[2]))
         self.wait(0.3)
@@ -213,9 +212,9 @@ class Multiply(VoiceoverScene):
             "the array needed eighty-eight. Luigi Dadda's refinement of 1965 compresses only as much as each stage "
             "requires, and saves gates for the same depth."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(VGroup(mats[0], cap[0])))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(m) for m in mats[0]], lag_ratio=0.01), FadeIn(cap[0]), run_time=2.0)
+            self.play(Indicate(mats[0], scale_factor=1.03))
             vo.wait_until("b")
             cur = mats[0]
             for k in range(1, len(stages)):

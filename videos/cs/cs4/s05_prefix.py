@@ -102,20 +102,20 @@ class Prefix(VoiceoverScene):
         read = label(r"``a carry reaches position 4 if some position generated one, \\ and every position after it "
                      r"propagated''", font_size=26, color=GREY_A).next_to(lines, DOWN, buff=0.45)
         cost = label(r"two levels of gates for every carry, \ but the terms grow like $n^2$, \ and the gates need "
-                     r"$n$ inputs", font_size=26, color=NO).to_edge(DOWN, buff=0.5)
+                     r"$O(n)$ inputs", font_size=26, color=NO).to_edge(DOWN, buff=0.5)
         with self.voiceover(
             "One idea is to unroll the recurrence. <bookmark mark='a'/> The carry into position one is g zero, or p "
             "zero and the carry in. Substitute that into the next one, and the next. <bookmark mark='b'/> The carry "
             "into position four reads like a sentence: a carry arrives if some position generated one and every "
             "position after it propagated it. <bookmark mark='c'/> In principle every carry is now two levels of gates, "
-            "an and of p's and a g, then an or. In practice the formula for carry n has n terms with up to n inputs "
+            "an and of p's and a g, then an or. In practice including the incoming carry, carry n has n plus one terms with up to n plus one inputs "
             "each, and gates with dozens of inputs are slow. Real carry-lookahead adders use this for groups of four "
             "bits, then treat each group as one big position and do it again. That repetition is the real idea, and "
             "it has a beautiful algebra."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(lines[0]))
             vo.wait_until("a")
-            self.play(FadeIn(lines[0]))
+            self.play(Indicate(lines[0], scale_factor=1.03))
             self.play(FadeIn(lines[1]), FadeIn(lines[2]))
             vo.wait_until("b")
             self.play(FadeIn(lines[3]), FadeIn(read))
@@ -165,9 +165,9 @@ class Prefix(VoiceoverScene):
             "means the carries are prefix combinations, like running totals, and running totals of an associative "
             "operation can be computed by a tree instead of a chain, in logarithmic depth."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(fns))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(f) for f in fns], lag_ratio=0.3), FadeIn(cap), run_time=2.0)
+            self.play(Indicate(fns, scale_factor=1.03), FadeIn(cap))
             vo.wait_until("b")
             self.play(Write(op), FadeIn(opl))
             vo.wait_until("c")
@@ -188,9 +188,10 @@ class Prefix(VoiceoverScene):
 
     def play_net(self, vo, parts):
         head, rails, tops, per_level, outs, stats = parts
-        self.play(FadeIn(head), FadeIn(rails), FadeIn(tops))
+        self.play(FadeIn(head), FadeIn(rails), FadeIn(tops), FadeIn(per_level[0]))
         vo.wait_until("a")
-        for g in per_level:
+        self.play(Indicate(per_level[0], scale_factor=1.02))
+        for g in per_level[1:]:
             self.play(LaggedStart(*[Create(m) for m in g], lag_ratio=0.02), run_time=0.6)
         self.play(FadeIn(outs))
         vo.wait_until("b")

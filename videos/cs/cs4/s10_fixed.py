@@ -26,24 +26,25 @@ class Fixed(VoiceoverScene):
         cells = bit_cells(bits, cell=0.6, font_size=36).move_to(UP * 1.4)
         point = Dot(radius=0.07, color=HEAD).move_to((cells[3].get_right() + cells[4].get_left()) / 2 + DOWN * 0.28)
         w = VGroup(*[MathTex(t, font_size=24, color=GREY_B).next_to(cells[i], UP, buff=0.15)
-                     for i, t in enumerate([r"8", r"4", r"2", r"1", r"\tfrac12", r"\tfrac14", r"\tfrac18", r"\tfrac1{16}"])])
+                     for i, t in enumerate([r"-8", r"4", r"2", r"1", r"\tfrac12", r"\tfrac14", r"\tfrac18", r"\tfrac1{16}"])])
         val = MathTex(r"0101.1010_2 = 4 + 1 + \tfrac12 + \tfrac18 = 5.625 = \tfrac{90}{16}", font_size=38,
                       color=YES).move_to(UP * 0.0)
         rules = VGroup(
-            MathTex(r"Q4.4: \quad x = \frac{\text{an 8-bit integer}}{2^4}", font_size=34, color=CODE),
-            label(r"add and subtract: \ exactly integer arithmetic", font_size=26, color=GREY_A),
+            MathTex(r"\text{signed Q4.4: } x = \frac{\text{a signed 8-bit integer}}{2^4}", font_size=34, color=CODE),
+            label(r"add/subtract: \ same integer circuit; \ choose an overflow policy", font_size=26, color=GREY_A),
             MathTex(r"\text{multiply: } \frac{A}{2^4} \cdot \frac{B}{2^4} = \frac{A B / 2^4}{2^4} \ \Rightarrow "
-                    r"\text{ multiply the integers, shift right by } 4", font_size=30, color=GREY_A),
+                    r"\text{ wide product, round, rescale by } 2^4", font_size=30, color=GREY_A),
         ).arrange(DOWN, buff=0.3).move_to(DOWN * 1.9)
         with self.voiceover(
             "The integer hardware we have built can hold fractions, with one agreement. <bookmark mark='a'/> Decide "
             "that the binary point sits in a fixed place, say four bits from the right. The places to its left are "
-            "worth eight, four, two and one; to its right, a half, a quarter, an eighth and a sixteenth. "
+            "worth minus eight, four, two and one in signed two's complement; to its right, a half, a quarter, an eighth and a sixteenth. "
             "<bookmark mark='b'/> Then these eight bits mean five point six two five, which is the integer ninety "
-            "divided by sixteen. <bookmark mark='c'/> This is fixed point, and its format is written Q four point four. "
-            "Adding and subtracting are exactly the integer operations, on the same adder. Multiplying two such numbers "
-            "multiplies their scale factors too, so multiply the integers and shift the result right by four. "
-            "Nothing new is needed in the hardware."
+            "divided by sixteen. <bookmark mark='c'/> This is signed Q four point four, counting the sign among the "
+            "four integer bits. Conventions differ, so state yours. Addition and subtraction use the same integer "
+            "circuits, with a chosen overflow policy. Multiplication needs a wide integer product, rescaled by "
+            "sixteen, with explicit rounding and overflow rules. The scale is an agreement; it does not remove "
+            "the need to manage precision."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cells))
             vo.wait_until("a")
@@ -58,9 +59,9 @@ class Fixed(VoiceoverScene):
     # ------------------------------------------------------------------
     def money(self):
         head = label(r"Money is counted in cents", font_size=38).to_edge(UP, buff=0.35)
-        left = VGroup(label(r"floating point", font_size=28, color=NO),
+        left = VGroup(label(r"Python binary64", font_size=28, color=NO),
                       Text("0.10 + 0.20 == 0.30\n→ False", font="DejaVu Sans Mono", font_size=26, color=GREY_A),
-                      Text("sum([0.10] * 10)\n→ 0.9999999999999999", font="DejaVu Sans Mono", font_size=26,
+                      Text("s = 0.0\nfor _ in range(10): s += 0.10\n→ 0.9999999999999999", font="DejaVu Sans Mono", font_size=26,
                            color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(LEFT * 3.4 + UP * 0.4)
         right = VGroup(label(r"integer cents", font_size=28, color=YES),
                        Text("10 + 20 == 30\n→ True", font="DejaVu Sans Mono", font_size=26, color=GREY_A),
@@ -71,17 +72,17 @@ class Fixed(VoiceoverScene):
         rule = note(r"banks, payment systems and databases store money as integers \ (or decimal types), \ and fix "
                     r"the rounding rule in writing", font_size=22).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Fixed point has one place where it is not optional: money. <bookmark mark='a'/> In floating point, ten "
-            "cents plus twenty cents is not thirty cents, and ten dimes do not make a dollar; they make zero point nine "
-            "nine nine, and so on. <bookmark mark='b'/> Counted as integers, in cents, every sum is exact. "
+            "Money makes the representation choice visible. <bookmark mark='a'/> In Python binary64, zero point one "
+            "plus zero point two differs from the stored zero point three. An explicit loop adding a tenth ten "
+            "times falls just below one. Python's built-in sum can do better, so here we show the loop itself. <bookmark mark='b'/> Counted as integers, in cents, every sum is exact. "
             "<bookmark mark='c'/> The root cause is that one tenth has no finite expansion in binary, just as one third "
             "has none in decimal: it is zero point zero, then zero zero one one, repeating forever, and any format "
             "with finitely many bits must round it. So financial software keeps money in integer cents, or in decimal "
             "types, and writes down exactly how and when to round."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(left[:2]))
             vo.wait_until("a")
-            self.play(FadeIn(left, lag_ratio=0.3), run_time=2.0)
+            self.play(FadeIn(left[2]), run_time=1.0)
             vo.wait_until("b")
             self.play(FadeIn(right, lag_ratio=0.3), run_time=2.0)
             vo.wait_until("c")
@@ -109,7 +110,7 @@ class Fixed(VoiceoverScene):
                    color=NO).next_to(win, DOWN, buff=0.2)
         fwin = Rectangle(width=ax.n2p(38.5)[0] - ax.n2p(-37.9)[0], height=0.5, stroke_color=YES, stroke_width=2.5,
                          fill_color=YES, fill_opacity=0.18).move_to((ax.n2p(-37.9) + ax.n2p(38.5)) / 2 + DOWN * 2.2)
-        fl = label(r"a 32-bit float: \ $10^{-38}$ to $10^{38}$, \ with about 7 digits everywhere", font_size=24,
+        fl = label(r"float32 normal range: \ $10^{-38}$ to $10^{38}$, \ about 7 significant digits", font_size=24,
                    color=YES).next_to(fwin, DOWN, buff=0.2)
         with self.voiceover(
             "What fixed point cannot do is range. <bookmark mark='a'/> Science deals with numbers from the mass of an "
@@ -120,7 +121,7 @@ class Fixed(VoiceoverScene):
             "exactly this format, and signal processors and embedded chips still live in it. "
             "<bookmark mark='c'/> To cover all of science you would need two hundred bits. Instead, let the point "
             "float: store the digits and, separately, where the point goes. A thirty-two-bit floating-point number "
-            "spans seventy-six decades with about seven significant digits at every scale. That is the next chapter."
+            "has a normal range spanning seventy-six decades with about seven significant digits. Subnormals extend it towards zero with less precision. That is the next chapter."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(ticks))
             vo.wait_until("a")

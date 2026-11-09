@@ -28,7 +28,7 @@ class Floats(VoiceoverScene):
         d = load("floats")
         f = d["f32"][0]
         head = label(r"IEEE 754: \ scientific notation, \ in binary", font_size=36).to_edge(UP, buff=0.35)
-        form = MathTex(r"x = (-1)^{s} \times 1.f \times 2^{\,e - 127}", font_size=46, color=CODE).move_to(UP * 2.1)
+        form = MathTex(r"x = (-1)^{s} \times 1.f \times 2^{\,e - 127},\quad 1\le e\le254", font_size=46, color=CODE).move_to(UP * 2.1)
         bits = f["bits"]
         cols = [SIGN] + [EXP] * 8 + [FRAC] * 23
         cells = bit_cells(bits, cell=0.36, font_size=22, colors=cols).move_to(UP * 0.7)
@@ -40,24 +40,24 @@ class Floats(VoiceoverScene):
         val = MathTex(rf"0.1 \;\to\; 1.6000000238\ldots \times 2^{{-4}} = {f['exact']}", font_size=30,
                       color=YES).move_to(DOWN * 1.5)
         notes = VGroup(
-            label(r"the leading 1 is never stored: \ 24 significant bits in 23", font_size=24, color=GREY_A),
-            label(r"the exponent is biased by 127, \ so the bits sort like the numbers", font_size=24, color=GREY_A),
+            label(r"normal numbers: \ hidden leading 1; \ 24 significant bits in 23", font_size=24, color=GREY_A),
+            label(r"bias 127: \ unsigned bits sort nonnegative finite values", font_size=24, color=GREY_A),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "In 1985 the IEEE published a standard, led by William Kahan of Berkeley, that ended a decade of every "
             "company doing floating point its own way. <bookmark mark='a'/> A number is stored like scientific "
-            "notation, in binary: a sign, an exponent and a fraction. The value is plus or minus one point f, times two "
+            "notation, in binary: a sign, an exponent and a fraction. For normal numbers, the value is plus or minus one point f, times two "
             "to the power e minus a bias. <bookmark mark='b'/> In thirty-two bits: one bit of sign, eight of "
             "exponent, twenty-three of fraction. <bookmark mark='c'/> Here is zero point one. Its exponent field says "
             "two to the minus four; its fraction says one point six, nearly. The number actually stored is zero point "
             "one, zero zero zero, zero zero zero, one four nine and more: the closest float to a tenth, but not a "
             "tenth. <bookmark mark='d'/> Two tricks make the format efficient. The leading one of a normalized number "
             "is always one, so it is not stored, buying a free bit. And the exponent is stored with a bias, so that "
-            "comparing two positive floats as integers gives the right answer."
+            "comparing nonnegative finite floats as unsigned bit patterns gives the right order; NaNs are excluded."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(form))
             vo.wait_until("a")
-            self.play(Write(form))
+            self.play(Indicate(form, scale_factor=1.03))
             vo.wait_until("b")
             self.play(FadeIn(cells), Create(braces))
             vo.wait_until("c")
@@ -126,7 +126,7 @@ class Floats(VoiceoverScene):
             MathTex(r"\mathrm{ulp}(1) = 2^{-23} \approx 1.19 \times 10^{-7}", font_size=30, color=GREY_A),
             MathTex(r"\varepsilon_{32} = 2^{-23}, \quad \varepsilon_{64} = 2^{-52} \approx 2.2 \times 10^{-16}",
                     font_size=30, color=GREY_A),
-            MathTex(r"u = \tfrac12 \varepsilon: \ |\text{relative rounding error}| \le u", font_size=30, color=HEAD),
+            MathTex(r"u = \tfrac12 \varepsilon:\ |\text{relative error}|\le u\ \text{(normal range)}", font_size=28, color=HEAD),
             MathTex(r"2^{24} + 1 = 16{,}777{,}217 \ \to\ 16{,}777{,}216", font_size=30, color=NO),
             label(r"the first integer a 32-bit float cannot hold", font_size=22, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).move_to(RIGHT * 1.2 + UP * 0.2, aligned_edge=LEFT)
@@ -134,10 +134,10 @@ class Floats(VoiceoverScene):
             "The gap between a float and the next one up is called an ulp, a unit in the last place. "
             "<bookmark mark='a'/> In thirty-two-bit floats, the ulp of one is two to the minus twenty-three, about "
             "one ten-millionth; between two and four it is twice that, and so on. Divide the ulp by the number itself, "
-            "and you get a sawtooth that never leaves a factor of two: every float, large or small, is stored with the "
+            "and you get a sawtooth that never leaves a factor of two: normal floats, large or small, have approximately the "
             "same relative precision. <bookmark mark='b'/> Two to the minus twenty-three is the format's machine "
             "epsilon. Half of it, called u, bounds the relative error of rounding any real number to the nearest "
-            "float. For sixty-four-bit doubles, epsilon is about two times ten to the minus sixteen: sixteen decimal "
+            "float, provided we stay in the normal range and avoid overflow. For sixty-four-bit doubles, epsilon is about two times ten to the minus sixteen: sixteen decimal "
             "digits. <bookmark mark='c'/> One consequence surprises people. Above two to the twenty-four, sixteen "
             "million, a thirty-two-bit float's ulp is two, and the odd integers are simply gone: sixteen million, seven "
             "hundred and seventy-seven thousand, two hundred and seventeen rounds to the even number below it."
@@ -177,7 +177,7 @@ class Floats(VoiceoverScene):
         nl = note(r"the only value not equal to itself: \ \texttt{x != x} \ tests for NaN", font_size=22).next_to(
             nan, DOWN, buff=0.2)
         grad = MathTex(r"x - y = 0 \iff x = y", font_size=34, color=INF).move_to(RIGHT * 3.4 + DOWN * 1.9)
-        gl = note(r"true only because subnormals \ underflow gradually", font_size=22).next_to(grad, DOWN, buff=0.2)
+        gl = note(r"finite operands, gradual underflow: \ distinct values stay distinct", font_size=22).next_to(grad, DOWN, buff=0.2)
         with self.voiceover(
             "The two extreme exponent patterns are reserved. <bookmark mark='a'/> An exponent of all zeros, with a "
             "zero fraction, is zero, and since the sign bit is separate there are two zeros, plus and minus, which "
@@ -187,7 +187,7 @@ class Floats(VoiceoverScene):
             "to zero over zero or the square root of minus one. NaNs flow through any later arithmetic, so an error is "
             "never silently replaced by a plausible number. <bookmark mark='c'/> A NaN is the only value that is not "
             "equal to itself, which is how programs test for one. And the subnormals buy a guarantee that sounds "
-            "obvious but fails without them: x minus y is zero only when x equals y. Kahan fought for this gradual "
+            "obvious but fails without them: for finite operands, x minus y is zero only when x equals y. Kahan fought for this gradual "
             "underflow against fierce opposition, because it cost hardware. The standard is a large part of why he "
             "received the Turing Award in 1989."
         ) as vo:
@@ -234,9 +234,9 @@ class Floats(VoiceoverScene):
             "up to one rounding, with a relative error no bigger than u. The next chapter is about what happens when "
             "many such small errors meet."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rule))
             vo.wait_until("a")
-            self.play(Write(rule), FadeIn(cap))
+            self.play(Indicate(rule, scale_factor=1.02), FadeIn(cap))
             vo.wait_until("b")
             self.play(Create(ax), FadeIn(marks), FadeIn(ml), FadeIn(dot), FadeIn(arrow))
             self.play(true_.animate.set_value(2.35), run_time=2.0)
