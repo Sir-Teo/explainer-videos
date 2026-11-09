@@ -27,8 +27,8 @@ class Power(VoiceoverScene):
         head = label(r"Where a chip's power goes", font_size=36).to_edge(UP, buff=0.35)
         eq = MathTex(r"P", r"\;=\;", r"\alpha", r"\,", r"C", r"\,", r"V^2", r"\,", r"f", r"\;+\;", r"V I_{\text{leak}}",
                      font_size=60).shift(UP * 1.2)
-        parts = [(2, r"$\alpha$: \ the fraction of transistors switching each cycle", GREY_A),
-                 (4, r"$C$: \ the capacitance each switch charges and discharges", DATA),
+        parts = [(2, r"$\alpha$: \ switching activity", GREY_A),
+                 (4, r"$C$: \ effective switched capacitance", DATA),
                  (6, r"$V$: \ the supply voltage, \ squared", NO),
                  (8, r"$f$: \ the clock frequency", CTRL),
                  (10, r"leakage: \ current that flows even when nothing switches", FUNC)]
@@ -38,13 +38,15 @@ class Power(VoiceoverScene):
         why = note(r"every switch moves charge $CV$ through a voltage $V$: \ energy $CV^2$ per cycle, \ $f$ cycles a "
                    r"second", font_size=19).to_edge(DOWN, buff=0.35)
         with self.voiceover(
+            (
             "Where does a chip's power go? Mostly into one formula. <bookmark mark='a'/> Each time a transistor "
             "switches, it charges or discharges a tiny capacitance C through the supply voltage V, and that costs "
-            "energy C V squared. <bookmark mark='b'/> A fraction alpha of the transistors switch each cycle, "
-            "<bookmark mark='c'/> and there are f cycles a second. So the dynamic power is alpha C V squared f. "
-            "<bookmark mark='d'/> On top of that is leakage: transistors are not perfect switches, and some current "
-            "flows through them even when they are off. Remember the V squared, and remember leakage; between them "
-            "they stopped the clock."
+            "energy C V squared. <bookmark mark='b'/> Alpha represents switching activity, with C interpreted as "
+            "the corresponding effective capacitance, <bookmark mark='c'/> and there are f cycles a second. So "
+            "the dynamic power is alpha C V squared f. <bookmark mark='d'/> On top of that is leakage: "
+            "transistors are not perfect switches, and some current flows through them even when they are off. "
+            "The strong voltage dependence and leakage explain why simple frequency scaling became much harder."
+        )
         ) as vo:
             self.play(FadeIn(head), Write(eq))
             vo.wait_until("a")
@@ -74,15 +76,18 @@ class Power(VoiceoverScene):
                       label(r"the free lunch: \\ every new chip faster, \\ at the same watts", font_size=22,
                             color=GREY_A)).arrange(DOWN, buff=0.3, aligned_edge=LEFT).next_to(t, RIGHT, buff=0.6)
         with self.voiceover(
-            "In 1974 Robert Dennard and his colleagues at IBM worked out what happens when you shrink a transistor. "
-            "Scale every dimension down by a factor kappa. <bookmark mark='a'/> Scale the voltage down by the same "
-            "factor, so the electric fields inside stay the same. Then the capacitance falls by kappa too, and the "
-            "transistor switches kappa times faster, so the clock can rise by kappa. <bookmark mark='b'/> Put those "
-            "into the formula: the power of one transistor falls by kappa squared. <bookmark mark='c'/> But kappa "
-            "squared as many fit in the same area. So the power per square millimetre stays exactly the same. "
-            "<bookmark mark='d'/> With kappa about one point four each generation, every two years brought twice the "
-            "transistors, running forty percent faster, for the same power. For thirty years, programs got faster "
-            "without anyone changing them."
+            (
+            "In 1974 Robert Dennard and his colleagues at IBM worked out what happens when you shrink a "
+            "transistor. Scale every dimension down by a factor kappa. <bookmark mark='a'/> Scale the voltage "
+            "down by the same factor, so the electric fields inside stay the same. Then the capacitance falls by "
+            "kappa too, and the transistor switches kappa times faster, so the clock can rise by kappa. <bookmark "
+            "mark='b'/> Put those into the formula: the power of one transistor falls by kappa squared. <bookmark "
+            "mark='c'/> But kappa squared as many fit in the same area. So the power per square millimetre stays "
+            "the same in this ideal constant-field model, holding switching activity fixed. <bookmark mark='d'/> "
+            "With kappa about one point four each generation, the model suggests twice the transistors and forty "
+            "percent more frequency at constant power density. Real improvements also depended on circuits, "
+            "architecture and software; the scaling rule explains one major source of that progress."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(t.cells[0][0]), FadeIn(t.cells[0][1]), FadeIn(t.rule), FadeIn(side[0]))
             vo.wait_until("a")
@@ -116,22 +121,26 @@ class Power(VoiceoverScene):
             label(r"to switch fast, \ $V$ must stay well above the threshold $V_{\text{th}}$", font_size=22,
                   color=GREY_A),
             label(r"lower $V_{\text{th}}$ \ $\to$ \ exponentially more leakage", font_size=22, color=FUNC),
-            label(r"so from about 2005 \ $V$ stopped falling, \ near 1 volt", font_size=22, color=NO),
+            label(r"voltage scaling slowed; \ actual $V$ varies by chip and operating point", font_size=22, color=NO),
             label(r"then each generation: \ power per area $\times\,\kappa^2$ \ if the clock still rose", font_size=22,
                   color=NO),
-            label(r"a chip can shed about 100 W: \ the clock had to stop", font_size=24, color=HEAD),
+            label(r"cooling and energy budgets constrain rapid clock scaling", font_size=22, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(ax, RIGHT, buff=0.8).shift(UP * 0.3)
         with self.voiceover(
+            (
             "Why did it end? Because the voltage stopped falling. <bookmark mark='a'/> A transistor switches fast "
-            "only if the supply voltage is well above its threshold voltage, the point where it turns on. So to lower "
-            "V, you must lower the threshold too. <bookmark mark='b'/> But below its threshold a transistor is not "
-            "quite off: the current through it falls only tenfold for every sixty to a hundred millivolts, a limit "
-            "set by the thermal energy of electrons at room temperature. Lower the threshold, and leakage grows exponentially. "
-            "<bookmark mark='c'/> By about 2005 supply voltages had settled near one volt, and they have barely moved "
-            "since. <bookmark mark='d'/> With the voltage fixed, the formula turns against you: each generation packs "
-            "twice the transistors into the same area, and if the clock still rose, the power per area would grow. "
-            "<bookmark mark='e'/> A chip can only shed about a hundred watts of heat before it needs exotic cooling. "
-            "So the clock stopped."
+            "only if the supply voltage is well above its threshold voltage, the point where it turns on. So to "
+            "lower V, you must lower the threshold too. <bookmark mark='b'/> But below its threshold a transistor "
+            "is not quite off: the current through it falls only tenfold for every sixty to a hundred millivolts, "
+            "the familiar thermal subthreshold slope for conventional field-effect transistors at room "
+            "temperature. Lower the threshold, and leakage grows exponentially. <bookmark mark='c'/> By about "
+            "2005 supply voltages had settled near one volt, and further reductions became much harder; operating "
+            "voltages still vary by process and operating point. <bookmark mark='d'/> With the voltage fixed, the "
+            "formula turns against you: each generation packs twice the transistors into the same area, and if "
+            "the clock still rose, the power per area would grow. <bookmark mark='e'/> A hundred watts is a "
+            "useful historical desktop scale, not a universal limit: modern servers and accelerators can consume "
+            "much more. Cooling and energy budgets helped end rapid clock scaling."
+        )
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl))
             self.play(Create(curve), Create(vth), FadeIn(vl), FadeIn(cap))
@@ -150,22 +159,25 @@ class Power(VoiceoverScene):
         ch = bar_chart(vals, [r"one core \ power", r"one core \ speed", r"two at $0.8f$ \ power",
                               r"two at $0.8f$ \ speed"], [CTRL, YES, CTRL, YES], height=2.6, bar_w=1.0, gap=0.9,
                        font_size=20, fmt_=lambda v: f"{v:.2f}").move_to(DOWN * 0.7)
-        punch = label(r"the same power, \ 60\% more work \ (if the work can be split)", font_size=26,
+        punch = label(r"toy dynamic-power model: \ about the same power, \ 60\% more throughput", font_size=24,
                       color=YES).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "So the industry turned the formula around. <bookmark mark='a'/> Within the range where a chip works, the "
-            "highest clock it can run is roughly proportional to its voltage. So lowering both together cuts power "
-            "with the cube of the clock. <bookmark mark='b'/> Take one core at full speed: one unit of power, one "
-            "unit of work a second. <bookmark mark='c'/> Now two cores, each at eighty percent of the clock and "
-            "voltage: each draws point eight cubed, about half the power, so the pair draws about the same as the one. "
-            "But together they do one point six units of work. <bookmark mark='d'/> Sixty percent more, for the same "
-            "watts, with one condition that changes everything: the work has to be divided between them. In 2005 "
-            "both Intel and AMD shipped their first dual-core processors, and the rest of this part is about that "
-            "condition."
+            (
+            "So the industry turned the formula around. <bookmark mark='a'/> For a simple illustration, suppose "
+            "frequency is proportional to voltage and ignore leakage and other fixed costs. This is an "
+            "approximation, especially poor near threshold. So lowering both together cuts power with the cube of "
+            "the clock. <bookmark mark='b'/> Take one core at full speed: one unit of power, one unit of work a "
+            "second. <bookmark mark='c'/> Now two cores, each at eighty percent of the clock and voltage: each "
+            "draws point eight cubed, about half the power, so the pair draws about the same as the one. But "
+            "together they do one point six units of work. <bookmark mark='d'/> Sixty percent more, for "
+            "approximately the same dynamic power in this toy model, with one condition that changes everything: "
+            "the work has to be divided between them. In 2005 both Intel and AMD shipped their first dual-core "
+            "processors, and the rest of this part is about that condition."
+        )
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(eq))
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(Write(eq), run_time=0.6)
+            vo.wait_until('a')
             vo.wait_until("b")
             self.play(FadeIn(ch[0]), *[GrowFromEdge(ch.bars[k], DOWN) for k in (0, 1)],
                       *[FadeIn(ch.vals[k]) for k in (0, 1)], *[FadeIn(ch.names[k]) for k in (0, 1)])
@@ -198,25 +210,29 @@ class Power(VoiceoverScene):
         grids.arrange(RIGHT, buff=0.5).move_to(UP * 0.2)
         model = note(r"a toy model: \ twice the transistors each generation, \ energy per switch down only "
                      r"$1.4\times$, \ a fixed power budget", font_size=18).next_to(grids, DOWN, buff=0.35)
-        cite = label(r"Esmaeilzadeh et al., \ 2011: \ at 8 nm, \ more than half of a chip must be dark at any moment",
-                     font_size=22, color=HEAD).next_to(model, DOWN, buff=0.35)
+        cite = wrapped_label(r"Esmaeilzadeh et al., \ 2011 forecast: \ over half dark at 8 nm under their assumptions; "
+                             r"not a universal product measurement", 11.8, font_size=21, color=HEAD).next_to(model, DOWN, buff=0.35)
         ans = label(r"the answer since: \ specialized circuits that are dark until needed \ (Part 60)", font_size=22,
                     color=DATA).next_to(cite, DOWN, buff=0.25)
         with self.voiceover(
-            "And even more cores only postpone the problem. <bookmark mark='a'/> Each generation still doubles the "
-            "transistors in the same area, but with the voltage stuck, the energy of one switch falls by only about "
-            "forty percent. With a fixed power budget, the fraction of the chip that can switch at full speed shrinks "
-            "every generation: half after two generations, a quarter after four, an eighth after six. The rest must "
-            "stay dark. <bookmark "
-            "mark='b'/> In 2011 Hadi Esmaeilzadeh and his colleagues estimated that at eight nanometres, more than "
-            "half of a chip would have to be unpowered at any moment. <bookmark mark='c'/> The response has been "
-            "specialization: chips full of circuits for one job each, video, encryption, matrix multiplication, which "
-            "sit dark until their job comes. That is the story of Part 60. This part is about the general-purpose "
-            "answer: many cores, and how to use them."
+            (
+            "And even more cores only postpone the problem. <bookmark mark='a'/> In this toy extrapolation, "
+            "transistor density doubles each generation while energy per switch falls by a factor of one point "
+            "four, about twenty-nine percent. With a fixed power budget, the fraction of the chip that can switch "
+            "at full speed shrinks every generation: half after two generations, a quarter after four, an eighth "
+            "after six. The rest cannot all switch at that assumed rate; dark does not necessarily mean literally "
+            "powered off. <bookmark mark='b'/> In 2011 Hadi Esmaeilzadeh and his colleagues projected, under "
+            "their scaling and architecture assumptions, that at eight nanometres, more than half of a chip could "
+            "not be active simultaneously within the modeled power budget. This was a forecast, not a measurement "
+            "of every eight-nanometre product. <bookmark mark='c'/> The response has been specialization: chips "
+            "full of circuits for one job each, video, encryption, matrix multiplication, which sit dark until "
+            "their job comes. That is the story of Part 60. This part is about the general-purpose answer: many "
+            "cores, and how to use them."
+        )
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(g) for g in grids], lag_ratio=0.5), FadeIn(model), run_time=3)
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(g) for g in grids], lag_ratio=0.5), FadeIn(model), run_time=0.6)
+            vo.wait_until('a')
             vo.wait_until("b")
             self.play(FadeIn(cite))
             vo.wait_until("c")

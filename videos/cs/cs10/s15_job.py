@@ -29,7 +29,7 @@ class Job(VoiceoverScene):
         cnt = [c / MHZ for c in four["shard_cycles"]]
         part = [c / MHZ for c in four["part_merge"]]
         total = four["seconds"]["partitioned"]
-        head = label(r"Four Pebble cores, \ step by step", font_size=34).to_edge(UP, buff=0.3)
+        head = label(r"Four Pebble cores: \ conditional compute-cost projection", font_size=31).to_edge(UP, buff=0.3)
         scale = 0.75
         x0 = -5.4
         gn, gc, gm = VGroup(), VGroup(), VGroup()
@@ -56,14 +56,18 @@ class Job(VoiceoverScene):
                   r"(smaller pieces and work stealing would even it out)", font_size=21, color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Now the full picture on four of Part 8's cores. <bookmark mark='a'/> Each core counts its quarter of "
-            "the books. They do not finish together: the last quarter holds books with the largest vocabularies, so "
-            "its table grows longest. <bookmark mark='b'/> Then the partitioned merge, a fraction of a second. "
-            "<bookmark mark='c'/> In all, about twelve seconds, against fifty-seven on one core: four point eight "
-            "times faster. <bookmark mark='d'/> The total work is less than one core's, because the four tables are "
-            "shorter. <bookmark mark='e'/> And some of the time is wasted: three cores sit idle while the slowest "
-            "finishes. Cutting the text into many smaller pieces and letting idle cores steal them, the scheduler of "
-            "chapter nine, would even that out."
+            (
+            "Now the conditional compute-cost projection on four of Part 8's cores, at the assumed clock. "
+            "<bookmark mark='a'/> Each core counts its word-aligned quarter of the text. They do not finish "
+            "together: the last quarter holds books with the largest vocabularies, so its table grows longest. "
+            "<bookmark mark='b'/> Then the partitioned merge, a fraction of a second. <bookmark mark='c'/> In "
+            "all, about twelve seconds, against fifty-seven on one core: four point eight times faster. <bookmark "
+            "mark='d'/> The total work is less than one core's, because the four tables are shorter. <bookmark "
+            "mark='e'/> And some of the time is wasted: three cores sit idle while the slowest finishes. Cutting "
+            "the text into many smaller pieces and letting idle cores steal them, the scheduler of chapter nine, "
+            "can reduce this imbalance, but smaller private tables and extra merges also change the work. The "
+            "notes compute the 64-piece case separately; this is not a pure scheduling-only comparison."
+        )
         ) as vo:
             self.play(FadeIn(head), Create(axis), FadeIn(ticks))
             vo.wait_until("a")
@@ -80,7 +84,7 @@ class Job(VoiceoverScene):
     def native(self):
         jc = {(r["threads"], r["simd"]): r for r in load("jobc")["rows"]}
         th = load("threads")["rows"]
-        head = label(r"And on this computer's four cores", font_size=34).to_edge(UP, buff=0.3)
+        head = label(r"Measured on this host: \ threads and AVX2", font_size=34).to_edge(UP, buff=0.3)
         rows = []
         base = jc[(1, False)]["seconds"]
         for (t, s) in ((1, False), (1, True), (2, False), (2, True), (4, False), (4, True)):
@@ -92,20 +96,15 @@ class Job(VoiceoverScene):
                        [1.4, 1.5, 1.7, 1.7, 1.8, 1.7], row_h=0.48, font_size=21, colors=colors,
                        mono_cols=()).move_to(UP * 0.4)
         cap = VGroup(
-            label(r"the same algorithm as Pebble's, \ in C; \ the top twenty checked against the reference",
+            label(r"linear-scan strategy, \ different C layout; \ top twenty checked; \ best of two runs",
                   font_size=19, color=GREY_B),
-            label(rf"this machine's four cores, \ measured on pure arithmetic: \ {th[-1]['throughput']:.1f} times one",
+            label(rf"four unpinned threads, \ pure arithmetic throughput: \ {th[-1]['throughput']:.1f} times one",
                   font_size=19, color=GREY_B),
             label(rf"four cores and 32-wide vectors together: \ {base / jc[(4, True)]['seconds']:.0f} times faster "
                   r"than one plain core", font_size=24, color=HEAD),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "The same experiment, for real, on this computer, with the C version of the Job. <bookmark mark='a'/> "
-            f"One thread, scalar: {base:.0f} seconds. With AVX2, {jc[(1, True)]['seconds']:.0f}. Two threads, then "
-            f"four: the four-thread scalar version takes {jc[(4, False)]['seconds']:.1f} seconds, again a little "
-            "more than four times faster, for the same reason as on Pebble. <bookmark mark='b'/> And four threads "
-            f"with vectors: {jc[(4, True)]['seconds']:.1f} seconds, {base / jc[(4, True)]['seconds']:.0f} times faster "
-            "than where we started. Parallelism across cores and parallelism within a core multiply."
+            f"Now measured host runs of the C implementation, with the same counting strategy but a different layout and instruction stream. Threads are not pinned; host or container CPU limits can constrain the result. <bookmark mark='a'/> One thread, scalar: {base:.0f} seconds. With AVX2, {jc[1, True]['seconds']:.0f}. Two threads, then four: the four-thread scalar version takes {jc[4, False]['seconds']:.1f} seconds, a measured speedup of {base / jc[4, False]['seconds']:.2f}. Frequency, scheduling, memory behavior and reduced dictionary work all affect this result. <bookmark mark='b'/> And four threads with vectors: {jc[4, True]['seconds']:.1f} seconds, {base / jc[4, True]['seconds']:.0f} times faster than where we started. Combining thread and vector parallelism helps here; their gains need not multiply independently on every workload. The timer covers counting and merging, excludes corpus loading and final top-twenty printing, and reports the faster of two runs."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*t.cells[0])), FadeIn(t.rule), FadeIn(cap[0]), FadeIn(cap[1]))
             vo.wait_until("a")
@@ -128,13 +127,16 @@ class Job(VoiceoverScene):
                     r"partly by splitting the work, \ partly by shrinking it", font_size=25, color=COST).to_edge(
             DOWN, buff=0.35)
         with self.voiceover(
+            (
             "So the ledger gets its fifth row. Thirty novels: four and a half minutes on Part 6's single-cycle "
-            "Pebble, two and a half with a pipeline, under a minute out of order, the same with real caches, and now "
-            "twelve seconds on four cores. <bookmark mark='a'/> But be honest about where this one came from. Part of "
-            "it is parallelism. Part is that splitting the text shortened the tables, which means the Job's real "
-            "problem is still its algorithm: every word pays for a scan of the vocabulary. That ends this act. Act "
-            "Three teaches the machine to understand a language, and in Act Four, Parts 16 and 17 replace the scan "
-            "itself."
+            "Pebble, two and a half with a pipeline, under a minute out of order, a conditional memory-cost "
+            "estimate in Part 9, and now twelve seconds on four cores. <bookmark mark='a'/> But be honest about "
+            "where this one came from. It remains a feature-model projection with routing, communication and "
+            "shared-resource costs omitted. Part of the modeled gain is parallelism. Part is that splitting the "
+            "text shortened the tables, which means the Job's real problem is still its algorithm: every word "
+            "pays for a scan of the vocabulary. That ends this act. Act Three teaches the machine to understand a "
+            "language, and in Act Four, Parts 16 and 17 replace the scan itself."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab.axis), LaggedStart(*[FadeIn(r) for r in tab.rows], lag_ratio=0.1))
             vo.wait_until("a")

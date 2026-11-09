@@ -33,7 +33,9 @@ Items:
 
 from __future__ import annotations
 
+import argparse
 import json
+import platform
 import subprocess
 import tempfile
 import time
@@ -43,20 +45,43 @@ from pathlib import Path
 import numpy as np
 
 from explainer.ai.cache import Cache
+from explainer.cache_lock import cache_lock
 from explainer.cs.pebble import coherence as Co
 from explainer.cs.pebble import parallel as Pa
 from explainer.cs.pebble import programs as P
 
 CACHE = Cache("cs10")
-load = CACHE.load
 MHZ = 884.9557522123894  # Part 7's clock, kept by the ledger
 
 
-def _run_c(src: str, args=(), opt="-O2", repeat=1) -> list[str]:
+def current_data(name, data):
+    """Old racy C measurements must not appear under repaired scene labels."""
+    if name in ("litmus", "atomics"):
+        return data.get("access_schema") == "defined-atomics-v1"
+    if name == "split":
+        return data.get("projection_schema") == "feature-cost-v1"
+    if name == "workspan":
+        return all("projected_makespan" in r and "span" not in r for r in data.get("job", [])) and bool(data.get("job"))
+    return True
+
+
+def cache_current(name):
+    p = CACHE.path(name)
+    return p.is_file() and current_data(name, json.loads(p.read_text()))
+
+
+def load(name):
+    data = CACHE.load(name)
+    if not current_data(name, data):
+        raise RuntimeError(f"Legacy cs10/{name} data; refresh with python -m videos.cs.cs10.compute --force {name}")
+    return data
+
+
+def _run_c(src: str, args=(), opt="-O2", repeat=1, extra=()) -> list[str]:
     with tempfile.TemporaryDirectory() as d:
         c, exe = Path(d) / "m.c", Path(d) / "m"
         c.write_text(src)
-        subprocess.run(["gcc", opt, "-march=native", "-pthread", "-o", str(exe), str(c), "-lm"], check=True)
+        subprocess.run(["gcc", opt, *extra, "-march=native", "-pthread", "-o", str(exe), str(c), "-lm"], check=True)
         return [subprocess.run([str(exe), *map(str, args)], check=True, capture_output=True, text=True).stdout
                 for _ in range(repeat)]
 
@@ -268,8 +293,13 @@ def compute_split() -> dict:
     (CACHE.dir / "ledger.json").write_text(json.dumps(ledger, indent=1))
     return {"one": {"cycles": one, "seconds": one / (MHZ * 1e6), "distinct": f1["distinct"], "words": f1["words"],
                     "bytes": f1["bytes"],
-                    "scanned": f1["scanned"]}, "rows": rows, "ledger": ledger, "note": "row 3's real-memory cost "
-            "(+0.05%) is not added: each core's table is smaller still"}
+                    "scanned": f1["scanned"]}, "rows": rows, "ledger": ledger,
+            "projection_schema": "feature-cost-v1", "speedup_reference_part": 8,
+            "included": ["fitted shard counting", "selected merge lookups and insertions"],
+            "excluded": ["routing and hash/filter scans", "communication", "coherence", "bandwidth contention",
+                         "barriers and scheduling overhead", "final selection and output", "Part 9 memory estimate"],
+            "note": "Conditional compute-cost projection at the assumed clock; smaller tables do not prove "
+                    "memory costs negligible. No multicore runtime measurement or prediction error bound."}
 
 
 # ---------------------------------------------------------------------------
@@ -336,20 +366,24 @@ LITMUS = r"""
 #else
 #define F() __asm__ __volatile__("" ::: "memory")
 #endif
-static volatile int x, y, r0, r1;
+static atomic_int x, y;
+static int r0, r1;  // worker writes are published to main through done0/done1
 static atomic_long go0, go1, done0, done1;
 static long iters;
 static void *t0(void *a) { for (long i = 1; i <= iters; i++) {
-  while (atomic_load_explicit(&go0, memory_order_acquire) != i); x = 1; F(); r0 = y;
+  while (atomic_load_explicit(&go0, memory_order_acquire) != i);
+  atomic_store_explicit(&x, 1, memory_order_relaxed); F(); r0 = atomic_load_explicit(&y, memory_order_relaxed);
   atomic_store_explicit(&done0, i, memory_order_release); } return 0; }
 static void *t1(void *a) { for (long i = 1; i <= iters; i++) {
-  while (atomic_load_explicit(&go1, memory_order_acquire) != i); y = 1; F(); r1 = x;
+  while (atomic_load_explicit(&go1, memory_order_acquire) != i);
+  atomic_store_explicit(&y, 1, memory_order_relaxed); F(); r1 = atomic_load_explicit(&x, memory_order_relaxed);
   atomic_store_explicit(&done1, i, memory_order_release); } return 0; }
 int main(int argc, char **argv) {
   iters = atol(argv[1]); long c[4] = {0};
   pthread_t a, b; pthread_create(&a, 0, t0, 0); pthread_create(&b, 0, t1, 0);
   for (long i = 1; i <= iters; i++) {
-    x = 0; y = 0; atomic_thread_fence(memory_order_seq_cst);
+    atomic_store_explicit(&x, 0, memory_order_relaxed); atomic_store_explicit(&y, 0, memory_order_relaxed);
+    atomic_thread_fence(memory_order_seq_cst);
     atomic_store_explicit(&go0, i, memory_order_release); atomic_store_explicit(&go1, i, memory_order_release);
     while (atomic_load_explicit(&done0, memory_order_acquire) != i || atomic_load_explicit(&done1, memory_order_acquire) != i);
     c[2 * r0 + r1]++; }
@@ -359,8 +393,12 @@ int main(int argc, char **argv) {
 
 
 def compute_litmus() -> dict:
+    if platform.machine().lower() not in ("x86_64", "amd64"):
+        raise RuntimeError("The mfence experiment requires x86-64")
     n = 1_000_000
-    out = {"simulated": {m: Co.litmus_sb(m, trials=200_000) for m in ("sc", "tso")}, "trials": n}
+    out = {"simulated": {m: Co.litmus_sb(m, trials=200_000) for m in ("sc", "tso")}, "trials": n,
+           "access_schema": "defined-atomics-v1", "accesses": "C11 relaxed atomics; x86 mfence variant",
+           "placement": "two worker threads, no core affinity; acquire/release trial handshake"}
     for name, opt in (("plain", []), ("mfence", ["-DFENCE"])):
         with tempfile.TemporaryDirectory() as d:
             c, exe = Path(d) / "m.c", Path(d) / "m"
@@ -369,6 +407,7 @@ def compute_litmus() -> dict:
             v = list(map(int, subprocess.run([str(exe), str(n)], check=True, capture_output=True,
                                              text=True).stdout.split()))
         out[name] = {"r0=0, r1=0": v[0], "r0=0, r1=1": v[1], "r0=1, r1=0": v[2], "r0=1, r1=1": v[3]}
+        assert sum(v) == n and (name != "mfence" or v[0] == 0)
     return out
 
 
@@ -376,31 +415,37 @@ ATOMICS = r"""
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdatomic.h>
 #include <time.h>
+#ifndef N
 #define N 10000000L
-static volatile long plain; static long atom, cas, locked, tas_count; static volatile int tas_lock;
+#endif
+static atomic_long plain;
+static long atom, cas, locked, tas_count;
+static atomic_flag tas_lock = ATOMIC_FLAG_INIT;
 static pthread_mutex_t mu = PTHREAD_MUTEX_INITIALIZER; static int mode;
 static void *work(void *a) {
   for (long i = 0; i < N; i++) switch (mode) {
-    case 0: plain = plain + 1; break;
+    case 0: { long v = atomic_load_explicit(&plain, memory_order_relaxed);
+              atomic_store_explicit(&plain, v + 1, memory_order_relaxed); } break;
     case 1: __atomic_fetch_add(&atom, 1, __ATOMIC_SEQ_CST); break;
     case 2: { long v = __atomic_load_n(&cas, __ATOMIC_RELAXED);
               while (!__atomic_compare_exchange_n(&cas, &v, v + 1, 1, __ATOMIC_SEQ_CST, __ATOMIC_RELAXED)); } break;
     case 3: pthread_mutex_lock(&mu); locked++; pthread_mutex_unlock(&mu); break;
-    case 4: while (__atomic_test_and_set((void *)&tas_lock, __ATOMIC_ACQUIRE)); tas_count++;
-            __atomic_clear((void *)&tas_lock, __ATOMIC_RELEASE); break; }
+    case 4: while (atomic_flag_test_and_set_explicit(&tas_lock, memory_order_acquire)); tas_count++;
+            atomic_flag_clear_explicit(&tas_lock, memory_order_release); break; }
   return 0; }
 static double now(void) { struct timespec t; clock_gettime(CLOCK_MONOTONIC, &t); return t.tv_sec + 1e-9 * t.tv_nsec; }
 int main(int argc, char **argv) { int n = atoi(argv[1]); mode = atoi(argv[2]); pthread_t t[64]; double t0 = now();
   for (long k = 0; k < n; k++) pthread_create(&t[k], 0, work, 0);
   for (int k = 0; k < n; k++) pthread_join(t[k], 0);
-  long v[] = {plain, atom, cas, locked, tas_count};
+  long v[] = {atomic_load_explicit(&plain, memory_order_relaxed), atom, cas, locked, tas_count};
   printf("%ld %.3f\n", v[mode], (now() - t0) * 1e9 / (N * n)); return 0; }
 """
 
 
 def compute_atomics() -> dict:
-    names = ["plain", "fetch-and-add", "compare-and-swap loop", "mutex", "test-and-set spinlock"]
+    names = ["split relaxed load/store", "fetch-and-add", "compare-and-swap loop", "mutex", "test-and-set spinlock"]
     rows = []
     for mode, name in enumerate(names):
         r = {"name": name}
@@ -408,8 +453,12 @@ def compute_atomics() -> dict:
             runs = [s.split() for s in _run_c(ATOMICS, [n, mode], repeat=3)]
             r[f"t{n}"] = {"count": [int(x[0]) for x in runs], "ns": min(float(x[1]) for x in runs),
                           "expected": 10_000_000 * n}
+            if mode != 0 or n == 1:
+                assert all(int(x[0]) == 10_000_000 * n for x in runs), (name, n, runs)
         rows.append(r)
-    return {"rows": rows}
+    return {"rows": rows, "access_schema": "defined-atomics-v1",
+            "unit": "elapsed nanoseconds divided by all N * threads increments; best of three runs",
+            "split_counter": "individual relaxed accesses are atomic; the combined increment is not"}
 
 
 # ---------------------------------------------------------------------------
@@ -572,12 +621,14 @@ def compute_workspan() -> dict:
                     "ratio_to_lower": max(r["makespan"] / max(r["t1"] / p, r["tinf"]) for r in rs)}
     one = rows[0]["t1"], rows[0]["tinf"]
     ex = [{"p": r["p"], "makespan": r["makespan"]} for r in rows if r["seed"] == 0]
-    # the parallel Job: work and span (in seconds), from split
+    # Each p changes the computation's private tables and merge work. Its
+    # p-processor phase estimate is not an unlimited-processor DAG span.
     sp = load("split")
     job = []
     for r in sp["rows"]:
-        job.append({"p": r["p"], "work": r["work_seconds"], "span": r["seconds"]["partitioned"]})
-    return {"small": small, "random": {"t1": one[0], "tinf": one[1], "example": ex, "worst": worst}, "job": job}
+        job.append({"p": r["p"], "work": r["work_seconds"], "projected_makespan": r["seconds"]["partitioned"]})
+    return {"small": small, "random": {"t1": one[0], "tinf": one[1], "example": ex, "worst": worst}, "job": job,
+            "job_scope": "Changing p changes the computation; projected_makespan is a phase-model estimate, not T_infinity."}
 
 
 def compute_stealing() -> dict:
@@ -800,5 +851,26 @@ def compute_pieces() -> dict:
 ITEMS["pieces"] = compute_pieces
 
 
+def main(argv=None):
+    """Explicit computation refreshes legacy items; read-only loads reject them."""
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("names", nargs="*")
+    parser.add_argument("--force", action="store_true")
+    args = parser.parse_args(argv)
+    names = args.names or list(ITEMS)
+    if unknown := [name for name in names if name not in ITEMS]:
+        parser.error("unknown items: " + ", ".join(unknown))
+    CACHE.items = ITEMS
+    for name in names:
+        with cache_lock(CACHE.path(name)):
+            if not args.force and cache_current(name):
+                print(f"  cached  {name}", flush=True)
+                continue
+            start = time.time()
+            print(f"  compute {name} ...", flush=True)
+            CACHE.save(name, ITEMS[name]())
+            print(f"  done    {name} in {time.time()-start:.0f}s", flush=True)
+
+
 if __name__ == "__main__":
-    CACHE.main(ITEMS, __doc__)
+    main()

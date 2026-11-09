@@ -60,19 +60,21 @@ class Models(VoiceoverScene):
         ex = label(r"the OR of $n$ bits: \ $O(1)$ steps on a CRCW PRAM \ (every 1 writes 1), \ "
                    r"$\Theta(\log n)$ on a CREW one", font_size=21, color=HEAD).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "To design parallel algorithms without a particular machine, theorists use models. <bookmark mark='a'/> "
-            "The first, the parallel random-access machine of Steven Fortune and James Wyllie in 1978, is the "
-            "idealist's machine: p processors in lockstep, sharing one memory in which any cell can be read or "
-            "written in a single step, with no caches and no network. <bookmark mark='b'/> Its variants differ only "
-            "in what happens when processors collide: exclusive read and write, concurrent reads, or concurrent "
-            "writes too. <bookmark mark='c'/> And the differences are real. The OR of n bits takes constant time if "
-            "concurrent writes are allowed, since every processor holding a one simply writes one to the answer, but "
-            "provably needs logarithmic time without them. The PRAM made work and span precise, but it ignores the "
-            "one thing real machines cannot: communication costs time."
+            (
+            "Parallel-algorithm models make their assumptions explicit. <bookmark mark='a'/> A classical PRAM has "
+            "p synchronous processors and ideal unit-time access to shared cells, without charging for caches or "
+            "a network. Fortune and Wyllie's 1978 work is one early reference. <bookmark mark='b'/> EREW forbids "
+            "concurrent reads and writes to one cell; CREW permits shared reads; CRCW also permits shared writes "
+            "under a specified conflict rule. <bookmark mark='c'/> With n processors and common-value concurrent "
+            "writes, initialize an answer to zero and let every one-bit write one: OR takes constant time. In the "
+            "standard bounded-fan-in exclusive-write setting it requires logarithmic time. Processor count, word "
+            "operations and write-conflict rules matter. PRAM is a useful abstraction, while real communication "
+            "still has a cost."
+        )
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(procs), FadeIn(pl), Create(links), FadeIn(mem), FadeIn(ml))
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(procs), FadeIn(pl), Create(links), FadeIn(mem), FadeIn(ml), run_time=0.6)
+            vo.wait_until('a')
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(k) for k in kinds], lag_ratio=0.4))
             vo.wait_until("c")
@@ -109,20 +111,23 @@ class Models(VoiceoverScene):
         mpi = label(r"in practice: \ MPI's collectives, \ broadcast, \ reduce, \ all-reduce \ (\textit{AI, Built} 18)",
                     font_size=20, color=YES).next_to(logp, DOWN, buff=0.25)
         with self.voiceover(
-            "In 1990 Leslie Valiant proposed a model that charges for communication, bulk-synchronous parallelism. "
-            "<bookmark mark='a'/> A computation is a series of supersteps. In each, every processor computes on its "
-            "own data, then sends messages, and then all wait at a barrier until every message has arrived. "
-            "<bookmark mark='b'/> A superstep costs the largest local work, plus g times the largest number of words "
-            "any processor sends or receives, plus the cost of the barrier. Two numbers, g and l, summarize the "
-            "whole network. <bookmark mark='c'/> LogP, from David Culler and colleagues in 1993, prices each message "
-            "individually: its latency, the processor's overhead to send it, and the gap between messages. <bookmark "
-            "mark='d'/> Real clusters are programmed with MPI, whose collective operations, broadcast, reduce and "
-            "all-reduce, are the BSP model in a library. The all-reduce is how AI, Built's Part 18 trains one model "
-            "on many GPUs."
+            (
+            "In 1990 Leslie Valiant proposed a model that charges for communication, bulk-synchronous "
+            "parallelism. <bookmark mark='a'/> A computation is a series of supersteps. In each, every processor "
+            "computes on its own data, then sends messages, and then all wait at a barrier until every message "
+            "has arrived. <bookmark mark='b'/> A superstep costs the largest local work, plus g times the largest "
+            "number of words any processor sends or receives, plus the cost of the barrier. Two numbers, g and l, "
+            "summarize the whole network. <bookmark mark='c'/> LogP, from David Culler and colleagues in 1993, "
+            "prices each message individually: its latency, the processor's overhead to send it, and the gap "
+            "between messages. <bookmark mark='d'/> Many clusters use MPI. Broadcast, reduce and all-reduce can "
+            "implement bulk-synchronous phases, but MPI also supports point-to-point and asynchronous "
+            "communication; it is not identical to BSP. The all-reduce is how AI, Built's Part 18 trains one "
+            "model on many GPUs."
+        )
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(g), FadeIn(labs), run_time=2)
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(g), FadeIn(labs), run_time=0.6)
+            vo.wait_until('a')
             vo.wait_until("b")
             self.play(Write(cost), FadeIn(cl))
             vo.wait_until("c")
@@ -176,9 +181,9 @@ class Models(VoiceoverScene):
             "halves passes through the root. <bookmark mark='b'/> Charles Leiserson's fat tree fixes that by making "
             "the links thicker toward the root, and today's data-centre networks are built that way."
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(f) for f in figs], lag_ratio=0.4), run_time=4)
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(f) for f in figs], lag_ratio=0.4), run_time=0.6)
+            vo.wait_until('a')
             vo.wait_until("b")
             self.play(FadeIn(fat))
         self.wait(0.3)
@@ -198,21 +203,25 @@ class Models(VoiceoverScene):
         t = grid_table(hdr, rows, [2.0, 1.0, 1.0, 1.4, 1.5, 2.1, 2.2], row_h=0.48, font_size=19, colors=colors,
                        mono_cols=()).move_to(UP * 0.4)
         defs = VGroup(
-            label(r"\textit{diameter}: \ the most hops between two nodes", font_size=20, color=CTRL),
+            label(r"\textit{diameter}: \ largest shortest-path hop count; \ latency also depends on links and traffic", font_size=20, color=CTRL),
             label(r"\textit{bisection width}: \ the fewest links that cut the nodes into two halves \ (found here by "
                   r"trying every split)", font_size=20, color=YES),
-            label(r"an all-to-all exchange must push half the data across the bisection", font_size=20,
+            label(r"uniform all-to-all traffic stresses the cut; \ tree row: \ 8 processor leaves + 7 switches", font_size=20,
                   color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Two numbers summarize a network. <bookmark mark='a'/> The diameter is the most hops between any two "
-            "nodes: the worst latency. <bookmark mark='b'/> The bisection width is the smallest number of links you "
-            "must cut to split the nodes into two equal halves. We found it for each sixteen-node network by trying "
-            "all six thousand four hundred and thirty-five ways of splitting it. <bookmark mark='c'/> It matters "
-            "because in an all-to-all exchange, like the shuffle that sorts data between machines, half the data "
-            "must cross that cut. A ring has a bisection of two links however large it grows; a hypercube of a "
-            "thousand and twenty-four nodes, five hundred and twelve. The tree's bisection is a single link, which is "
-            "exactly what the fat tree repairs."
+            (
+            "Two graph properties help compare these ideal networks. <bookmark mark='a'/> Diameter is the largest "
+            "shortest-path hop count. It is not latency by itself: link speed, contention and routing also "
+            "matter. <bookmark mark='b'/> Bisection width is the fewest links crossing an equal split of "
+            "processor nodes. For each sixteen-processor graph we test six thousand four hundred and thirty-five "
+            "unique balanced splits. The tree row instead has eight processor leaves and seven internal switches, "
+            "whose side assignments are also searched. <bookmark mark='c'/> Uniform all-to-all traffic sends a "
+            "substantial fraction across such a cut, approximately half at large scale, so cut capacity limits "
+            "throughput. A ring has width two, a 1024-node hypercube width 512, and this binary tree width one. A "
+            "sufficiently provisioned fat tree increases capacity toward the root; its performance depends on its "
+            "actual wiring and oversubscription."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*t.cells[0])), FadeIn(t.rule))
             self.play(LaggedStart(*[FadeIn(VGroup(*t.cells[r])) for r in range(1, len(t.cells))], lag_ratio=0.3))
@@ -243,18 +252,22 @@ class Models(VoiceoverScene):
             dots.add(VGroup(d, t))
         fit = DashedLine(ax.c2p(1976, np.log10(160e6)), ax.c2p(2024, np.log10(1.742e18)), color=GREY_D)
         gain = (1.742e18 / 160e6) ** (1 / 48)
-        cap = label(rf"ten billion times faster in 48 years: \ $\times {gain:.2f}$ a year, \ nearly all of it from "
-                    r"parallelism", font_size=21, color=HEAD).to_edge(DOWN, buff=0.3)
+        cap = label(r"dated throughput milestones: \ early peak figures, \ later HPL; \ not one fixed application",
+                    font_size=21, color=HEAD).to_edge(DOWN, buff=0.3)
         fr = note(rf"Frontier \ (2022): \ {tp['frontier_cores']:,} cores, \ {tp['frontier_power_mw']:.0f} MW", font_size=17
                   ).next_to(cap, UP, buff=0.12)
         with self.voiceover(
-            "And the machines themselves. <bookmark mark='a'/> In 1976 the Cray-1 peaked at a hundred and sixty "
-            "million floating-point operations a second. ASCI Red, in 1997, was the first to pass a trillion on the "
-            "LINPACK benchmark; Roadrunner, in 2008, a thousand trillion. In 2022 Frontier, at Oak Ridge, passed a "
-            "quintillion, an exaflop, and in 2024 El Capitan reached one point seven. <bookmark mark='b'/> Ten "
-            "billion times faster in forty-eight years, about sixty percent a year, and since 2005 nearly all of it "
-            "from parallelism: Frontier has almost nine million cores, mostly in GPUs, and draws twenty-one "
-            "megawatts."
+            (
+            "These are selected historical milestones through 2024, not a claim about the current ranking. "
+            "<bookmark mark='a'/> In 1976 the Cray-1 peaked at a hundred and sixty million floating-point "
+            "operations a second. ASCI Red, in 1997, was the first to pass a trillion on the LINPACK benchmark; "
+            "Roadrunner, in 2008, a thousand trillion. In 2022 Frontier, at Oak Ridge, passed a quintillion, an "
+            "exaflop, and in 2024 El Capitan reached one point seven. <bookmark mark='b'/> The endpoints differ "
+            "by about ten billion in reported operations per second, but mix early peak specifications with later "
+            "HPL measurements. Parallelism, vectors, specialized arithmetic and other improvements all "
+            "contribute; this is not the speedup of one fixed application: Frontier has almost nine million "
+            "cores, mostly in GPUs, and draws twenty-one megawatts."
+        )
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt))
             vo.wait_until("a")

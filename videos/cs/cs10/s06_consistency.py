@@ -49,9 +49,9 @@ class Consistency(VoiceoverScene):
             "called store buffering. Thread zero sets x to one, then reads y. Thread one sets y to one, then reads x. "
             "Both start at zero. <bookmark mark='c'/> Can both threads read zero?"
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(quote))
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(quote), run_time=0.6)
+            vo.wait_until('a')
             vo.wait_until("b")
             self.play(FadeIn(t0), FadeIn(t1), FadeIn(n0), FadeIn(n1), FadeIn(init))
             vo.wait_until("c")
@@ -100,9 +100,9 @@ class Consistency(VoiceoverScene):
             "thread's load comes after it, so at least one thread reads one. Both reading zero is impossible. Our "
             "simulator, running two hundred thousand random interleavings, agrees: it never happens."
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.3), run_time=3)
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.3), run_time=0.6)
+            vo.wait_until('a')
             vo.wait_until("b")
             self.play(FadeIn(punch))
         self.wait(0.3)
@@ -141,15 +141,18 @@ class Consistency(VoiceoverScene):
         tso = label(r"\textit{total store order} \ (x86): \ stores leave in order, \ but a load may pass an earlier "
                     r"store", font_size=22, color=HEAD).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Real processors do not wait for stores. <bookmark mark='a'/> When a core executes a store, it puts the "
-            "address and value in a small queue, the store buffer, and carries on; the store reaches the cache when "
-            "its line arrives, perhaps a hundred cycles later. Part 8's core did the same. <bookmark mark='b'/> So "
-            "thread zero's store of x sits in core zero's buffer, and thread one's store of y in core one's. "
-            "<bookmark mark='c'/> Now each core loads the other variable. Neither store has reached memory, so both "
-            "loads read zero. <bookmark mark='d'/> Then the buffers drain, and memory ends with both ones, too late. "
-            "Each core still sees its own store, because its loads check its own buffer first. But other cores see it "
-            "late. <bookmark mark='e'/> This is the memory model of x86, called total store order: stores become "
-            "visible in program order, but a load can overtake an earlier store to a different address."
+            (
+            "Real processors do not wait for stores. <bookmark mark='a'/> When a core executes a store, it puts "
+            "the address and value in a small queue, the store buffer, and carries on; the store reaches the "
+            "cache when its line arrives, perhaps a hundred cycles later. Part 8's teaching core also used "
+            "buffered stores, without implementing a complete multicore TSO model. <bookmark mark='b'/> So thread "
+            "zero's store of x sits in core zero's buffer, and thread one's store of y in core one's. <bookmark "
+            "mark='c'/> Now each core loads the other variable. Neither store has reached memory, so both loads "
+            "read zero. <bookmark mark='d'/> Then the buffers drain, and memory ends with both ones, too late. "
+            "Each core still sees its own store, because its loads check its own buffer first. But other cores "
+            "see it late. <bookmark mark='e'/> This is the memory model of x86, called total store order: stores "
+            "become visible in program order, but a load can overtake an earlier store to a different address."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(cores), FadeIn(mem), FadeIn(ml))
             vo.wait_until("a")
@@ -183,7 +186,7 @@ class Consistency(VoiceoverScene):
         c2 = bar_chart(fence, names, [YES, GREY_B, GREY_B, GREY_B], height=2.6, bar_w=0.8, gap=0.5, vmax=1.0,
                        font_size=17, fmt_=lambda v: rf"{100 * v:.1f}\%")
         VGroup(c1, c2).arrange(RIGHT, buff=1.2).move_to(DOWN * 0.4)
-        t1 = label(r"plain loads and stores", font_size=22, color=NO).next_to(c1, UP, buff=0.4)
+        t1 = label(r"relaxed atomic loads and stores", font_size=21, color=NO).next_to(c1, UP, buff=0.4)
         t2 = VGroup(label(r"with a fence between them", font_size=22, color=YES),
                     Text("x = 1;  mfence;  r0 = y;", font="DejaVu Sans Mono", font_size=16, color=CODE)).arrange(
             DOWN, buff=0.08).next_to(c2, UP, buff=0.25)
@@ -193,18 +196,11 @@ class Consistency(VoiceoverScene):
         note_ = note(r"how often depends on timing: \ the threads start each trial together, \ so their loads race "
                      r"their stores", font_size=16).next_to(punch, UP, buff=0.1)
         with self.voiceover(
-            "This is not a thought experiment. We ran the test on this computer a million times, two threads on two "
-            "cores, starting each trial together. <bookmark mark='a'/> With ordinary loads and stores, both threads "
-            f"read zero in {both:,} of the million trials. How often depends on timing; that it happens at all is "
-            "the point. <bookmark mark='b'/> Now put a fence between each thread's store and its load: on x86 the "
-            "instruction mfence, which waits until the store buffer has drained. The forbidden outcome disappears: "
-            "zero times in a million. Fences restore sequential consistency, at a price of tens of cycles each, so "
-            "they go only where the program needs them."
+            f"We ran this test a million times with two worker threads. They are released each trial by an acquire-release handshake, without pinning them to particular cores. <bookmark mark='a'/> The shared x and y use separate relaxed atomic loads and stores: these are defined C operations, not volatile data races. Both reads were zero in {both:,} trials. The observed frequency depends on timing and scheduling; an allowed outcome need not appear in every run. <bookmark mark='b'/> The second run inserts x86 mfence after each worker's store. Under the stated ordinary-memory assumptions, that blocks this store-buffering outcome. The chart reports what was observed. A fence here orders these accesses; arbitrary fences do not automatically make a whole C or C++ program sequentially consistent."
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(t1), FadeIn(c1[0]), FadeIn(c1.names), *[GrowFromEdge(b, DOWN) for b in c1.bars],
-                      FadeIn(c1.vals))
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(t1), FadeIn(c1[0]), FadeIn(c1.names), *[GrowFromEdge(b, DOWN) for b in c1.bars], FadeIn(c1.vals), run_time=0.6)
+            vo.wait_until('a')
             self.play(FadeIn(punch), FadeIn(note_))
             vo.wait_until("b")
             self.play(FadeIn(t2), FadeIn(c2[0]), FadeIn(c2.names), *[GrowFromEdge(b, DOWN) for b in c2.bars],
@@ -225,25 +221,27 @@ class Consistency(VoiceoverScene):
         cap = note(r"an earlier access, \ then a later one, \ to different addresses: \ may the later one become "
                    r"visible first?", font_size=18).next_to(t, DOWN, buff=0.3)
         pts = VGroup(
-            label(r"weak models keep only what the program depends on, \ plus what fences and acquire/release ask for",
+            label(r"overview only: \ dependencies, same-address rules and architecture details still apply",
                   font_size=21, color=GREY_A),
             label(r"C and C++ (2011), \ Java (2004): \ one portable model, \ mapped to each machine's fences",
                   font_size=21, color=DATA),
-            label(r"the rule for programmers: \ data-race-free programs get sequential consistency \ (Part 33)",
+            label(r"relaxed atomics can be race-free yet non-SC; \ use the language's synchronization rules \ (Part 33)",
                   font_size=21, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(cap, DOWN, buff=0.35)
         with self.voiceover(
-            "Every processor family makes its own choice. <bookmark mark='a'/> Take two accesses to different "
-            "addresses, an earlier one and a later one, and ask whether the later may become visible to other cores "
-            "first. Sequential consistency forbids every swap. x86's total store order allows just one: a later load "
-            "passing an earlier store, the store buffer we just saw. Arm, POWER and RISC-V allow all four, keeping "
-            "only the order that data dependencies and explicit instructions demand. <bookmark mark='b'/> On those "
-            "machines, fences and special acquire and release instructions put back the order a program needs. "
-            "<bookmark mark='c'/> Programmers should not have to know this table, and since 2011 C and C++, and Java "
-            "before them, have a memory model of their own, which compilers map onto each machine's fences. "
-            "<bookmark mark='d'/> Its promise is the one to remember: a program with no data races, where every "
-            "shared access is properly synchronized, behaves as if it were sequentially consistent. Part 33 takes "
-            "this apart in detail."
+            (
+            "This table is a first approximation for ordinary memory accesses to different addresses, without "
+            "dependencies or ordering instructions. <bookmark mark='a'/> SC admits a program-order-preserving "
+            "interleaving. x86 TSO permits a later load to pass an earlier store to a different address. Baseline "
+            "Arm, POWER and RISC-V RVWMO permit more reorderings, with important dependency, same-address and "
+            "architecture-specific constraints; the table is not a complete specification. <bookmark mark='b'/> "
+            "Acquire, release and fences establish selected ordering relationships. Their meanings differ between "
+            "language rules and machine instructions. <bookmark mark='c'/> C, C++ and Java define language memory "
+            "models, and compilers must implement their guarantees on each target. <bookmark mark='d'/> Proper "
+            "locking can give an SC-style reasoning discipline. But merely having no non-atomic data race does "
+            "not make arbitrary C++ relaxed-atomic code SC: our store-buffering test is the counterexample. Part "
+            "33 develops the precise conditions."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*t.cells[0])), FadeIn(t.rule), FadeIn(cap))
             vo.wait_until("a")

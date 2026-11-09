@@ -200,7 +200,8 @@ def blelloch(xs: list, op=lambda a, b: a + b, identity=0) -> dict:
     """Blelloch's work-efficient exclusive scan (1990), for n a power of two: an up-sweep builds partial sums in a
     tree, a down-sweep pushes prefixes back down.  2(n - 1) operations, 2 log2 n steps."""
     n = len(xs)
-    assert n & (n - 1) == 0
+    if n < 1 or n & (n - 1):
+        raise ValueError("Blelloch scan needs a nonempty power-of-two input")
     a = list(xs)
     up = [list(a)]
     ops = 0
@@ -218,7 +219,9 @@ def blelloch(xs: list, op=lambda a, b: a + b, identity=0) -> dict:
         for i in range(2 * d - 1, n, 2 * d):
             t = a[i - d]
             a[i - d] = a[i]
-            a[i] = op(t, a[i])
+            # The parent prefix precedes this left-subtree total. Associativity
+            # permits regrouping, not swapping operands (e.g. concatenation).
+            a[i] = op(a[i], t)
             ops += 1
         down.append(list(a))
         d //= 2

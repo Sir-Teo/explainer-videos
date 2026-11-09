@@ -41,17 +41,15 @@ class Simd(VoiceoverScene):
             g, LEFT, buff=0.2)
         xl = VGroup(xl, yl)
         with self.voiceover(
-            "In 1966 Michael Flynn sorted computers by two questions: how many instruction streams, and how many data "
-            "streams. <bookmark mark='a'/> One of each is an ordinary core. <bookmark mark='b'/> Many instruction "
-            "streams, each with its own data, is what we have been building: several cores, or several machines. "
-            "<bookmark mark='c'/> But there is a cheaper kind of parallelism: one instruction applied to many data at "
-            "once. Single instruction, multiple data, SIMD. One decoder, one instruction fetched, and eight or "
-            "sixteen or thirty-two arithmetic units doing the same thing to different numbers."
+            "In 1966 Michael Flynn classified computers by instruction streams and data streams. <bookmark mark='a'/> One instruction stream and one data stream is the simple SISD abstraction. A modern CPU can combine this execution model with vector instructions and other forms of parallelism. <bookmark mark='b'/> Multiple independent instruction streams working on different data give MIMD: multiple cores or machines. <bookmark mark='c'/> SIMD applies one instruction to a vector of logical data lanes. It amortizes instruction control across those elements, but thirty-two lanes do not necessarily mean thirty-two independent physical arithmetic units or completion in one cycle. The implementation chooses how wide instructions map onto its execution hardware."
         ) as vo:
-            self.play(FadeIn(head))
-            for mk, k in zip("abc", (0, 3, 1)):
-                vo.wait_until(mk)
-                self.play(FadeIn(g[k]))
+            self.play(FadeIn(head), run_time=0.5)
+            for mk, k in zip('abc', (0, 3, 1)):
+                if mk != 'a':
+                    vo.wait_until(mk)
+                self.play(FadeIn(g[k]), run_time=0.6 if mk == 'a' else 1.0)
+                if mk == 'a':
+                    vo.wait_until(mk)
             self.play(FadeIn(g[2]), FadeIn(xl))
         self.wait(0.3)
         self.clear_scene()
@@ -80,19 +78,22 @@ class Simd(VoiceoverScene):
         cray = note(r"the Cray-1: \ 80 MHz, \ 160 megaflops at peak, \ results chained from one vector unit into the "
                     r"next", font_size=18).to_edge(DOWN, buff=0.3)
         with self.voiceover(
+            (
             "The idea is old. <bookmark mark='a'/> Seymour Cray's Cray-1, in 1976, had eight vector registers of "
             "sixty-four numbers each, and one instruction could add two whole vectors, with the results streaming "
-            "from one unit straight into the next. At eighty megahertz it reached a hundred and sixty million "
-            "floating-point operations a second, the fastest computer of its day. <bookmark mark='b'/> Twenty years "
-            "later SIMD came to the desktop as short vectors packed into wide registers: Intel's MMX, sixty-four bits, "
-            "then SSE, AVX and AVX-512, doubling the width each time. Arm's phones have NEON. <bookmark mark='c'/> "
-            "The newest designs, Arm's SVE and RISC-V's vector extension, return to Cray's idea: the program does "
-            "not say how wide the vectors are, and each chip chooses, so the same code runs on narrow and wide "
-            "machines alike."
+            "from one unit straight into the next. At eighty megahertz its peak was a hundred and sixty million "
+            "floating-point operations a second; that is a peak throughput figure, not an application "
+            "measurement. <bookmark mark='b'/> Twenty years later SIMD came to the desktop as short vectors "
+            "packed into wide registers: Intel's MMX, sixty-four bits, then SSE, AVX and AVX-512, doubling the "
+            "width each time. Arm's phones have NEON. <bookmark mark='c'/> The newest designs, Arm's SVE and "
+            "RISC-V's vector extension, support vector-length-agnostic programming: loops query or adapt to the "
+            "available vector length. That differs from the Cray-1, whose vector-register capacity was fixed at "
+            "sixty-four elements."
+        )
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(rows[0]), FadeIn(cray))
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(rows[0]), FadeIn(cray), run_time=0.6)
+            vo.wait_until('a')
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r) for r in rows[1:6]], lag_ratio=0.3), run_time=2.5)
             vo.wait_until("c")
@@ -142,9 +143,9 @@ class Simd(VoiceoverScene):
             "by letter. One iteration "
             "of the loop now does the work of thirty-two."
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(row), FadeIn(rl))
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(row), FadeIn(rl), run_time=0.6)
+            vo.wait_until('a')
             vo.wait_until("b")
             self.play(FadeIn(bc), FadeIn(bl))
             vo.wait_until("c")
@@ -165,21 +166,14 @@ class Simd(VoiceoverScene):
         why = VGroup(
             label(rf"{a / b:.1f} times faster, \ not 32", font_size=26, color=HEAD),
             label(r"same-length entries are still \\ compared letter by letter", font_size=20, color=GREY_A),
-            label(r"the 58 KB of lengths stream \\ from L2, \ not L1", font_size=20, color=GREY_A),
+            label(r"the lengths array uses cache capacity; \\ serving levels were not isolated", font_size=20, color=GREY_A),
             label(r"the rest of the program \ (reading, \\ appending) \ is not vectorized: \\ Amdahl again",
                   font_size=20, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(ch, RIGHT, buff=0.8)
-        auto = note(r"the same algorithm as Pebble's program, \ the same top twenty: \ checked against the reference",
+        auto = note(r"linear-scan strategy, \ different layout; \ top twenty checked against the reference",
                     font_size=17).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "We wrote the Job in C with exactly Pebble's algorithm, ran it on all thirty novels on this computer, "
-            "and checked its top twenty against the reference. <bookmark mark='a'/> The scalar version, one entry per "
-            f"iteration, takes {a:.0f} seconds. <bookmark mark='b'/> The AVX2 version takes {b:.0f}. <bookmark "
-            f"mark='c'/> {a / b:.0f} times faster, not thirty-two, and the reasons are instructive. Entries with the "
-            "same length as the word still need a letter-by-letter comparison. The lengths array, fifty-eight "
-            "kilobytes, is too big for the first-level cache and streams from the second. And the rest of the "
-            "program is not vectorized at all. Compilers can vectorize simple loops by themselves, but not this one, "
-            "which stops as soon as it finds a match; here the speedup had to be written by hand."
+            f"We wrote the Job in C with the same linear-scan dictionary strategy but a different data layout and implementation, ran it on all thirty novels on this computer, and checked its top twenty against the reference. <bookmark mark='a'/> The scalar version, one entry per iteration, takes {a:.0f} seconds. <bookmark mark='b'/> The AVX2 version takes {b:.0f}. <bookmark mark='c'/> {a / b:.0f} times faster, not thirty-two, and the reasons are instructive. Entries with the same length as the word still need a letter-by-letter comparison. The lengths array also consumes cache capacity; this benchmark does not isolate which level serves each access. And the rest of the program is not vectorized at all. Early exits and candidate comparisons make automatic vectorization harder. Here we explicitly use AVX2 intrinsics; this result does not prove that every compiler must fail to vectorize such a loop."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ch[0]), FadeIn(ch.names), FadeIn(auto))
             vo.wait_until("a")

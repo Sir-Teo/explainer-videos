@@ -34,21 +34,24 @@ class Multicore(VoiceoverScene):
         l3t = label(r"shared last-level cache", font_size=20, color=DATA).move_to(l3)
         mem = RoundedRectangle(width=cores.width, height=0.7, corner_radius=0.08, stroke_color=NO,
                                stroke_width=2).next_to(l3, DOWN, buff=0.4)
-        memt = label(r"one memory: \ every core can load and store every address", font_size=20, color=NO).move_to(mem)
+        memt = label(r"shared address space, \ subject to protection and ordering rules", font_size=20, color=NO).move_to(mem)
         links = VGroup(*[Line(b.get_bottom(), [b.get_x(), l3.get_top()[1], 0], color=GREY_C, stroke_width=2)
                          for b in l1], Line(l3.get_bottom(), mem.get_top(), color=GREY_C, stroke_width=3))
         with self.voiceover(
-            "A multicore chip is several complete processors on one piece of silicon. <bookmark mark='a'/> Each core "
-            "has its own pipeline, its own registers, and its own small caches. <bookmark mark='b'/> They share a "
-            "larger cache, and behind it one memory: any core can load or store any address. That sharing is the "
-            "convenience and the danger. It is convenient because threads of one program can pass data by simply "
-            "writing it to memory. It is dangerous because each core keeps copies of memory in its private caches, "
-            "and two cores can disagree about what an address holds. Chapters three to six are about that danger. "
-            "First, the Job."
+            (
+            "A multicore chip is several complete processors on one piece of silicon. <bookmark mark='a'/> In our "
+            "example, each core has its own pipeline, registers and private caches; actual sharing hierarchies "
+            "vary. <bookmark mark='b'/> They share a larger cache, and behind it one memory: the threads share an "
+            "address space, subject to protection and the machine memory model. That sharing is the convenience "
+            "and the danger. It is convenient because threads of one program can pass data by simply writing it "
+            "to memory. It is dangerous because each core keeps copies of memory in its private caches, and two "
+            "cores can disagree about what an address holds. Chapters three to six are about that danger. First, "
+            "the Job."
+        )
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(c) for c in cores], lag_ratio=0.2), FadeIn(l1), FadeIn(l1t))
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(c) for c in cores], lag_ratio=0.2), FadeIn(l1), FadeIn(l1t), run_time=0.6)
+            vo.wait_until('a')
             vo.wait_until("b")
             self.play(Create(links), FadeIn(l3), FadeIn(l3t), FadeIn(mem), FadeIn(memt))
         self.wait(0.3)
@@ -75,15 +78,21 @@ class Multicore(VoiceoverScene):
             t[1].move_to(t[0])
         comb = label(r"then: \ combine four tables into one, \ and print the top twenty", font_size=24,
                      color=HEAD).to_edge(DOWN, buff=0.5)
-        rule = note(r"nothing is shared while counting: \ no core ever writes what another reads", font_size=19
+        rule = note(r"private counting tables; \ shared read-only input; \ merge synchronization still required", font_size=19
                     ).next_to(comb, UP, buff=0.25)
         with self.voiceover(
-            "Here is the plan. <bookmark mark='a'/> Cut the text into four pieces of equal size, at word boundaries. "
-            "<bookmark mark='b'/> Each core counts the words of its piece, with exactly Part 6's program, in a table "
-            "of its own. While they count, no core ever writes anything another core reads, so none of the trouble "
-            "of the next few chapters can arise. <bookmark mark='c'/> Then the four tables must be combined into one, "
-            "and the top twenty printed. We price all of this on four of Part 8's cores at Pebble's clock, with the "
-            "same model of the core that gave the ledger its fifty-seven seconds."
+            (
+            "Here is the plan. <bookmark mark='a'/> Cut the text into four pieces of equal size, at word "
+            "boundaries. <bookmark mark='b'/> Each core counts the words of its piece, using Part 6's linear-scan "
+            "counting algorithm in an abstract feature model, in a table of its own. While they count, no core "
+            "ever writes anything another core reads, which removes conflicting table updates. Shared input, "
+            "allocation, boundaries and the final synchronization still need care. <bookmark mark='c'/> Then the "
+            "four tables must be combined into one, before selecting the top twenty. The estimate prices counting "
+            "and selected merge insertions on four of Part 8's cores at Pebble's clock, with the same model of "
+            "the core that gave the ledger its fifty-seven seconds. It omits routing and hashing scans, "
+            "communication, coherence, bandwidth contention, barriers and final output; it is a conditional "
+            "compute-cost projection, not a full multicore execution."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(text), FadeIn(tl))
             vo.wait_until("a")
@@ -113,15 +122,10 @@ class Multicore(VoiceoverScene):
                         stroke_width=2.5)
         qlab = label(rf"a quarter of one core's time: \ {q:.1f} s", font_size=20, color=HEAD).next_to(ql, UP,
                                                                                                      buff=0.1)
-        why = label(rf"each quarter's table holds about half the {one['distinct']:,} distinct words: \ every scan is "
-                    r"shorter", font_size=22, color=YES).to_edge(DOWN, buff=0.3)
+        why = label(rf"private tables: \ {min(four['shard_distinct']):,}--{max(four['shard_distinct']):,} entries; \ "
+                    r"many lookup prefixes shrink", font_size=22, color=YES).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            f"Here is how long each core takes to count its quarter. <bookmark mark='a'/> If the work simply divided, "
-            f"each would take a quarter of fifty-seven seconds, about fourteen. <bookmark mark='b'/> Every core is "
-            f"faster than that. The slowest takes {max(secs):.0f} seconds. <bookmark mark='c'/> The reason is the "
-            f"table. The Job's time is mostly spent scanning its table, and a quarter of the text contains not a "
-            f"quarter of the vocabulary but about half of it. So each core's table is half as long, each scan is "
-            f"half as long, and the four cores together do less work than one core alone."
+            f"Each bar is one shard's fitted counting time. <bookmark mark='a'/> Perfect division of fifty-seven seconds would give about fourteen seconds per core. <bookmark mark='b'/> The projected slowest shard takes {max(secs):.0f} seconds, below that reference. <bookmark mark='c'/> A quarter of this text contains roughly half the full vocabulary. Smaller private tables reduce many lookup prefixes, so the total scan work falls. Common words can still be found near the front; not every lookup becomes exactly half as long. The feature model prices the actual shard features rather than assuming a universal factor of two."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ch[0]), FadeIn(ch.names))
             vo.wait_until("a")
@@ -215,18 +219,22 @@ class Multicore(VoiceoverScene):
             ax, RIGHT, buff=0.5).shift(UP * 0.8)
         lname = label(r"Heaps' law \ (1978): \ distinct words grow \\ like a power of the text, \ less than 1",
                       font_size=20, color=GREY_A).next_to(law, DOWN, buff=0.3)
-        warn = label(r"so the speedup beyond 4 is an artefact of a quadratic algorithm: \ Part 16 removes it",
+        warn = label(r"superlinear model gain: \ shrinking tables reduces scan work; \ Part 16 changes the algorithm",
                      font_size=22, color=NO).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Why does a quarter of the text hold half the vocabulary? <bookmark mark='a'/> Count the distinct words "
-            "in a thirty-second of the corpus, a sixteenth, an eighth, and so on. The count grows, but more and more "
-            "slowly: common words appear in every piece, and only rare ones are new. <bookmark mark='b'/> This is "
-            "Heaps' law, named for Harold Heaps in 1978: the number of distinct words in a text of n words grows "
-            "roughly like n to a power below one, about one half for English. <bookmark mark='c'/> So be careful "
-            "with the Job's superlinear speedup. It is real, but it comes from the Job's quadratic algorithm, which "
-            "pays for every word with a scan of the whole table. Splitting the text makes the tables shorter, which "
-            "is the same as making the algorithm better. In Part 16 a better algorithm removes the scan, and with it "
-            "this free gift."
+            (
+            "Why does a quarter of the text hold half the vocabulary? <bookmark mark='a'/> Count the distinct "
+            "words in a thirty-second of the corpus, a sixteenth, an eighth, and so on. The count grows, but more "
+            "and more slowly: common words appear in every piece, and only rare ones are new. <bookmark "
+            "mark='b'/> This is Heaps' law, named for Harold Heaps in 1978: the number of distinct words in a "
+            "text of n words grows roughly like n to a power below one, often around one half in illustrative "
+            "English corpora, with the fitted exponent depending on corpus and tokenization. <bookmark mark='c'/> "
+            "So be careful with the Job's superlinear speedup. In this model it comes from reducing the work of a "
+            "linear-scan dictionary: each lookup visits a prefix, possibly the whole vocabulary. This can become "
+            "quadratic in the worst case; the observed corpus need not follow an exact quadratic law. Splitting "
+            "the text makes the tables shorter, which is the same as making the algorithm better. In Part 16 a "
+            "better algorithm removes the scan, and with it this free gift."
+        )
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl))
             vo.wait_until("a")

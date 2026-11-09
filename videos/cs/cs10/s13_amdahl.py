@@ -37,7 +37,7 @@ class Amdahl(VoiceoverScene):
         head = label(r"Amdahl's law \ (1967)", font_size=36).to_edge(UP, buff=0.3)
         eq = MathTex(r"S(p) = \frac{1}{s + \frac{1 - s}{p}} \;\longrightarrow\; \frac{1}{s}", font_size=42,
                      color=HEAD).to_edge(RIGHT, buff=0.6).shift(UP * 1.6)
-        der = VGroup(label(r"a fraction $s$ of the work is serial", font_size=20, color=GREY_A),
+        der = VGroup(label(r"$s$: \ serial fraction of one-processor time", font_size=20, color=GREY_A),
                      label(r"time on $p$ processors: \ $s + (1 - s)/p$", font_size=20, color=GREY_A),
                      label(r"however many processors, \ at most $1/s$", font_size=20, color=NO)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.18).next_to(eq, DOWN, buff=0.35)
@@ -55,12 +55,15 @@ class Amdahl(VoiceoverScene):
         ideal = DashedLine(ax.c2p(0, 0), ax.c2p(10, 10), color=GREY_D, stroke_width=2)
         il = label(r"ideal", font_size=16, color=GREY_B).next_to(ax.c2p(8.5, 8.5), LEFT, buff=0.1)
         with self.voiceover(
+            (
             "In 1967 Gene Amdahl, the architect of IBM's System/360, argued that parallel machines would always "
-            "disappoint. <bookmark mark='a'/> Suppose a fraction s of a program's work must run serially, and the "
-            "rest divides perfectly among p processors. On one processor the time is one. On p it is s, plus one "
-            "minus s over p. <bookmark mark='b'/> The speedup is one over that, and as p grows it approaches one over "
-            "s, and no further. <bookmark mark='c'/> One percent serial, and a thousand processors give barely "
-            "ninety-one times. Ten percent serial, and you never pass ten. Twenty-five percent, never four."
+            "disappoint. <bookmark mark='a'/> Suppose a fraction s of the fixed program's one-processor running "
+            "time is serial, and the rest divides perfectly among p identical processors, with no extra overhead. "
+            "On one processor the time is one. On p it is s, plus one minus s over p. <bookmark mark='b'/> The "
+            "speedup is one over that, and as p grows it approaches one over s, and no further. <bookmark "
+            "mark='c'/> One percent serial, and a thousand processors give barely ninety-one times. Ten percent "
+            "serial, and you never pass ten. Twenty-five percent, never four."
+        )
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(deco), Create(ideal), FadeIn(il))
             vo.wait_until("a")
@@ -87,24 +90,30 @@ class Amdahl(VoiceoverScene):
         bars.arrange(RIGHT, buff=0.6, aligned_edge=DOWN).move_to(DOWN * 0.6)
         cap = VGroup(label(r"keep the \textit{time} fixed, \ and grow the problem with the machine", font_size=22,
                            color=GREY_A),
-                     label(r"strong scaling: \ the same problem, \ faster \ (Amdahl) \qquad weak scaling: \ a bigger "
-                           r"problem, \ the same time \ (Gustafson)", font_size=20, color=DATA)).arrange(
+                     label(r"strong: \ fixed problem size; \ weak: \ fixed work per processor \ (ideal time stays flat)",
+                           font_size=20, color=DATA)).arrange(
             DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
         ser = label(r"serial part", font_size=17, color=NO).next_to(bars[0][0], LEFT, buff=0.15)
         par = label(r"parallel part", font_size=17, color=YES).next_to(bars[0][1], LEFT, buff=0.15)
         with self.voiceover(
-            "Twenty years later John Gustafson, at Sandia National Laboratories, pointed out what Amdahl had assumed: "
-            "that the problem stays the same size. <bookmark mark='a'/> People who buy a thousand processors do not "
-            "run yesterday's problem faster. They run a bigger problem in the same time: a finer weather grid, a "
-            "larger simulation. The serial part, setting up and reading input, barely grows, while the parallel part "
-            "grows with the machine. <bookmark mark='b'/> Measured that way, the scaled speedup is s plus one minus "
-            "s times p, which grows without limit. <bookmark mark='c'/> Both are right; they answer different "
-            "questions. Amdahl's is called strong scaling: the same problem, solved faster. Gustafson's is weak "
-            "scaling: a bigger problem, solved in the same time. Supercomputers live by weak scaling."
+            (
+            "Twenty years later John Gustafson, at Sandia National Laboratories, pointed out what Amdahl had "
+            "assumed: that the problem stays the same size. <bookmark mark='a'/> People who buy a thousand "
+            "processors do not run yesterday's problem faster. They run a bigger problem in the same time: a "
+            "finer weather grid, a larger simulation. The idealized assumption is that serial time stays roughly "
+            "fixed while useful parallel work grows; real input and communication costs may also grow. <bookmark "
+            "mark='b'/> Measured that way, s is now the serial fraction of the measured parallel runtime, not the "
+            "same numerical fraction as in the fixed one-core problem. The scaled speedup is s plus p times one "
+            "minus s under those assumptions. <bookmark mark='c'/> Both are right; they answer different "
+            "questions. Amdahl's is called strong scaling: the same problem, solved faster. Gustafson motivates "
+            "scaled-size reasoning. Weak scaling conventionally holds work per processor fixed and measures how "
+            "runtime changes; constant runtime is its ideal outcome, not its definition. Supercomputers live by "
+            "weak scaling."
+        )
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(b) for b in bars], lag_ratio=0.3), FadeIn(ser), FadeIn(par), run_time=2.5)
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(b) for b in bars], lag_ratio=0.3), FadeIn(ser), FadeIn(par), run_time=0.6)
+            vo.wait_until('a')
             vo.wait_until("b")
             self.play(Write(eq))
             vo.wait_until("c")
@@ -136,14 +145,7 @@ class Amdahl(VoiceoverScene):
                   color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_corner(UR, buff=0.4).shift(DOWN * 1.2)
         with self.voiceover(
-            "Here is the Job, scaled from one Pebble core to thirty-two, the same thirty novels each time: strong "
-            "scaling. <bookmark mark='a'/> With the merge on one core, the speedup climbs to about three and then "
-            "falls. That is worse than Amdahl's law, because the serial part is not fixed: more cores mean more "
-            "tables to merge. <bookmark mark='b'/> A tree of merges does a little better at the largest sizes, but not "
-            "much. <bookmark mark='c'/> And with the merge partitioned by word, the speedup runs above the ideal line "
-            f"all the way, {job[-1]['partitioned']:.0f} times on thirty-two cores, because each core's table keeps "
-            "getting shorter. Remember where that comes from: a quadratic algorithm. Amdahl's law assumes the total "
-            "work is fixed; here, splitting the data reduced it."
+            f"Here is the Job, scaled from one Pebble core to thirty-two, the same thirty novels each time: strong scaling. <bookmark mark='a'/> With the merge on one core, the speedup climbs to about three and then falls. That is worse than Amdahl's law, because the serial part is not fixed: more cores mean more tables to merge. <bookmark mark='b'/> A tree of merges does a little better at the largest sizes, but not much. <bookmark mark='c'/> And with the merge partitioned by word, the conditional compute-cost speedup can exceed p, {job[-1]['partitioned']:.0f} times on thirty-two cores, because the scan-based algorithm changes its total work as tables shrink. Routing, communication and shared-resource costs are still excluded. Remember where that comes from: an algorithm whose worst case is quadratic, rather than an immutable amount of work. Amdahl's law assumes the total work is fixed; here, splitting the data reduced it."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(deco), Create(ideal), FadeIn(il))
             for mk, l in zip("abc", lines):

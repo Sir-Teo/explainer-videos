@@ -98,9 +98,9 @@ class Scan(VoiceoverScene):
             "this operator. The carry-lookahead adders of Part 4, Kogge-Stone, Sklansky, Brent-Kung, were parallel "
             "prefix circuits all along, and Brent of Brent-Kung is the Brent of the last chapter's theorem."
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(ra), FadeIn(rb), FadeIn(la), FadeIn(lb))
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(ra), FadeIn(rb), FadeIn(la), FadeIn(lb), run_time=0.6)
+            vo.wait_until('a')
             vo.wait_until("b")
             self.play(FadeIn(rg), FadeIn(lg))
             vo.wait_until("c")
@@ -184,15 +184,19 @@ class Scan(VoiceoverScene):
         res = note(r"the result is the \textit{exclusive} scan: \ each position gets the sum of everything before it",
                    font_size=17).next_to(cost, UP, buff=0.12)
         with self.voiceover(
-            "In 1990 Guy Blelloch showed how to scan with no wasted work, using a tree in two passes. <bookmark "
+            (
+            "In 1990 Guy Blelloch showed how to scan with linear work, using a tree in two passes. <bookmark "
             "mark='a'/> The up-sweep adds neighbours in pairs, then pairs of pairs, building the partial sums of "
-            "larger and larger blocks, exactly as you would add up the whole list in parallel. <bookmark mark='b'/> "
-            "Then clear the last element, and sweep back down. At each level, every node passes its value to its "
-            "left child and gives its right child the sum of that value and the left child's old block sum. "
-            "<bookmark mark='c'/> At the bottom, each position holds the sum of everything before it. Two passes "
-            "over a tree: two n additions in all, and a span of two log n. <bookmark mark='d'/> Blelloch's point was "
-            "larger than the algorithm: with a fast scan as a primitive, many problems that look sequential become "
-            "parallel."
+            "larger and larger blocks, exactly as you would add up the whole list in parallel. <bookmark "
+            "mark='b'/> Then clear the last element, and sweep back down. At each level, every node passes its "
+            "value to its left child and gives its right child the sum of that value and the left child's old "
+            "block sum. <bookmark mark='c'/> At the bottom, each position holds the sum of everything before it. "
+            "For a power-of-two n, the two sweeps use exactly n minus one additions in each sweep, two n minus "
+            "two altogether, and two log-base-two n levels in this model. That is linear work, about twice the "
+            "serial addition count; exclusive scan also needs an identity element. <bookmark mark='d'/> "
+            "Blelloch's point was larger than the algorithm: with a fast scan as a primitive, many problems that "
+            "look sequential become parallel."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[0]), FadeIn(tags[0]))
             vo.wait_until("a")
@@ -239,17 +243,20 @@ class Scan(VoiceoverScene):
                      r"recurrences, \ GPU libraries' every primitive", font_size=21, color=GREY_A).to_edge(DOWN,
                                                                                                    buff=0.35)
         with self.voiceover(
+            (
             "Here is the most common use. <bookmark mark='a'/> Keep only the words of seven letters or more, in "
             "parallel. <bookmark mark='b'/> Mark each word with a one if it stays, a zero if not. <bookmark "
-            "mark='c'/> An exclusive scan of the marks gives each kept word its position in the output: the number "
-            "of kept words before it. <bookmark mark='d'/> Now every word can be written to its place at once, with "
-            "no coordination at all. <bookmark mark='e'/> The same trick drives radix sort, which splits keys by "
-            "each bit in turn, quicksort's partition step, and tokenizing text in parallel. On a GPU, nearly every "
-            "library primitive is a scan underneath."
+            "mark='c'/> An exclusive scan of the marks gives each kept word its position in the output: the "
+            "number of kept words before it. <bookmark mark='d'/> Now every word can be written to its place at "
+            "once, without write conflicts, after the scan and required synchronization complete. <bookmark "
+            "mark='e'/> The same trick drives radix sort, which splits keys by each bit in turn, quicksort's "
+            "partition step, and tokenizing text in parallel. On a GPU, scan is a building block of many library "
+            "primitives, alongside reduction, sorting and other techniques."
+        )
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(ws), FadeIn(lab[0]))
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(ws), FadeIn(lab[0]), run_time=0.6)
+            vo.wait_until('a')
             vo.wait_until("b")
             self.play(FadeIn(fl), FadeIn(lab[1]))
             vo.wait_until("c")

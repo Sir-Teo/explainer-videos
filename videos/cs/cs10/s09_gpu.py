@@ -41,24 +41,28 @@ class Gpu(VoiceoverScene):
                                             stroke_color=YES, stroke_width=1), sm))
         sms.arrange_in_grid(4, 4, buff=0.12).move_to(gb)
         gpu = VGroup(gb, sms, label(r"a GPU: \ thousands of simple lanes", font_size=22, color=YES).next_to(
-            gb, UP, buff=0.15), label(r"in order, \ no prediction, \ small caches: \\ as many threads as possible",
+            gb, UP, buff=0.15), label(r"warp scheduling, \ latency hiding: \\ throughput across many threads",
                                       font_size=18, color=GREY_A).next_to(gb, DOWN, buff=0.15))
         VGroup(cpu, gpu).arrange(RIGHT, buff=1.0).shift(DOWN * 0.15)
-        nums = note(r"Nvidia H100 \ (2022): \ 132 streaming multiprocessors, \ 16,896 lanes, \ 3.35 TB/s of HBM \ "
+        nums = note(r"Nvidia H100 SXM \ (2022): \ 132 streaming multiprocessors, \ 16,896 FP32 lanes, \ 3.35 TB/s HBM \ "
                     r"(\textit{AI, Built} 17)", font_size=17).to_edge(DOWN, buff=0.2)
         with self.voiceover(
+            (
             "A graphics processor makes the opposite bargain from a CPU. <bookmark mark='a'/> A CPU spends its "
             "transistors on making a few threads as fast as possible: out-of-order execution, branch prediction, "
-            "deep caches, everything in Parts 7, 8 and 9. <bookmark mark='b'/> A GPU spends them on arithmetic. It "
-            "has thousands of simple lanes, grouped into streaming multiprocessors, with no prediction, no reordering "
-            "and small caches. Each thread is slow. But there are tens of thousands of threads, and when one waits "
-            "for memory, the hardware simply runs another, the multithreading of Part 8 taken to the extreme. "
-            "<bookmark mark='c'/> A recent data-centre GPU has a hundred and thirty-two multiprocessors and nearly "
-            "seventeen thousand lanes, fed by stacked memory at over three terabytes a second."
+            "deep caches, everything in Parts 7, 8 and 9. <bookmark mark='b'/> A GPU spends them on arithmetic. "
+            "It has thousands of simple lanes, grouped into streaming multiprocessors, using throughput-oriented "
+            "warp scheduling rather than the large speculative out-of-order machinery of a CPU. Modern GPUs still "
+            "have substantial caches and sophisticated scheduling. But there are tens of thousands of threads, "
+            "and when one waits for memory, the hardware simply runs another, the multithreading of Part 8 taken "
+            "to the extreme. <bookmark mark='c'/> As a dated hardware example, the 2022 Nvidia H100 SXM has a "
+            "hundred and thirty-two multiprocessors and nearly seventeen thousand lanes, fed by stacked memory at "
+            "over three terabytes a second."
+        )
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(cpu))
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(cpu), run_time=0.6)
+            vo.wait_until('a')
             vo.wait_until("b")
             self.play(FadeIn(gpu))
             vo.wait_until("c")
@@ -85,17 +89,21 @@ class Gpu(VoiceoverScene):
         cost = label(r"divergence: \ a warp takes the time of every path any of its lanes takes", font_size=23,
                      color=HEAD).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "The programming model is called single instruction, multiple threads. <bookmark mark='a'/> You write the "
-            "code for one thread, as if it ran alone, and launch thousands of copies, each with its own index. "
-            "<bookmark mark='b'/> The hardware groups them in warps of thirty-two, which share one instruction "
-            "stream: at each step, the same instruction for all thirty-two lanes. <bookmark mark='c'/> So what "
-            "happens at an if? Some lanes want one branch and some the other. The warp runs the first branch with "
-            "the other lanes switched off, <bookmark mark='d'/> then the second branch with the first lanes switched "
-            "off. <bookmark mark='e'/> This is divergence: a warp pays for every path that any of its lanes takes."
+            (
+            "The programming model is called single instruction, multiple threads. <bookmark mark='a'/> You write "
+            "the code for one thread, as if it ran alone, and launch thousands of copies, each with its own "
+            "index. <bookmark mark='b'/> In this Nvidia-style example, the hardware groups them in warps of "
+            "thirty-two, which share one instruction stream: at each step, the same instruction for all "
+            "thirty-two lanes. <bookmark mark='c'/> So what happens at an if? Some lanes want one branch and some "
+            "the other. The warp runs the first branch with the other lanes switched off, <bookmark mark='d'/> "
+            "then the second branch with the first lanes switched off. <bookmark mark='e'/> This is the "
+            "masked-execution picture of divergence. Actual scheduling, predication and reconvergence depend on "
+            "the GPU; other vendors can use different subgroup widths."
+        )
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(code))
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(code), run_time=0.6)
+            vo.wait_until('a')
             vo.wait_until("b")
             self.play(FadeIn(lanes), FadeIn(ll))
             vo.wait_until("c")
@@ -123,31 +131,23 @@ class Gpu(VoiceoverScene):
         full = Rectangle(width=W * 32, height=H, stroke_color=NO, stroke_width=2).move_to(
             [-6.0 + 15.5 * W, -2.2 + H / 2, 0])
         fl = label(r"the warp runs until its longest scan ends", font_size=19, color=NO).next_to(full, UP, buff=0.1)
-        lab = label(r"one warp: \ entries each lane's lookup scans", font_size=18, color=GREY_B).next_to(
+        lab = label(r"recorded scan lengths in a 32-lane proxy; \ no GPU execution", font_size=18, color=GREY_B).next_to(
             full, DOWN, buff=0.15)
         eff = float(np.mean(ex) / mx)
         side = VGroup(
             label(rf"this warp: \ {100 * eff:.0f}\% of the \\ lanes' time is useful", font_size=22, color=NO),
             label(rf"all {g['lookups'] / 1e6:.1f} million \\ lookups: \ {100 * g['efficiency']:.0f}\%", font_size=22,
                   color=NO),
-            label(rf"grouped by scan length \\ first: \ {100 * g['efficiency_sorted']:.2f}\%", font_size=22, color=YES),
+            label(rf"oracle grouping by length: \\ {100 * g['efficiency_sorted']:.2f}\% \ (cost excluded)", font_size=21, color=YES),
             label(r"GPU code keeps a warp's \\ lanes alike: \ sort the work, \\ avoid branches", font_size=20,
                   color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(full, RIGHT, buff=0.45)
         with self.voiceover(
-            "Imagine running the Job's lookups on a GPU, one word per lane, thirty-two to a warp. <bookmark mark='a'/> "
-            "Here is one real warp: for each of its thirty-two words, how many table entries the lookup must scan. A "
-            "common word is found near the front; a rare one, near the end of a table of tens of thousands. "
-            "<bookmark mark='b'/> The warp cannot finish until its longest scan does, and meanwhile the lanes that "
-            f"finished early sit idle. Only {100 * eff:.0f} percent of this warp's lane time does useful work. "
-            f"<bookmark mark='c'/> Over all four and a half million lookups, {100 * g['efficiency']:.0f} percent. "
-            "<bookmark mark='d'/> If the lookups were first grouped so that each warp's scans had similar lengths, "
-            "nearly all of it. That is the craft of GPU programming: arrange the work so that the thirty-two lanes of "
-            "a warp do the same thing."
+            f"Imagine running the Job's lookups on a GPU, one word per lane, thirty-two to a warp. <bookmark mark='a'/> Here is one group from the recorded scan-length sequence, not an executed GPU warp: for each of its thirty-two words, how many table entries the lookup must scan. A common word is found near the front; a rare one, near the end of a table of tens of thousands. <bookmark mark='b'/> The warp cannot finish until its longest scan does, and meanwhile the lanes that finished early sit idle. Only {100 * eff:.0f} percent of this warp's lane time does useful work. <bookmark mark='c'/> Over all four and a half million lookups, {100 * g['efficiency']:.0f} percent. <bookmark mark='d'/> If an oracle first grouped the lookups by their already-known scan lengths, nearly all of this lane-count proxy would be useful. That excludes finding those lengths, regrouping, memory traffic and maintaining correct shared counts; it is not an achievable speedup claim. That is the craft of GPU programming: arrange the work so that the thirty-two lanes of a warp do the same thing."
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.03), FadeIn(lab), run_time=2)
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.03), FadeIn(lab), run_time=0.6)
+            vo.wait_until('a')
             vo.wait_until("b")
             self.play(Create(full), FadeIn(fl), FadeIn(side[0]))
             vo.wait_until("c")
@@ -175,18 +175,23 @@ class Gpu(VoiceoverScene):
         cite = note(r"how a neural network uses one: \ \textit{AI, Built}, \ Part 17", font_size=18).to_edge(DOWN,
                                                                                                          buff=0.3)
         with self.voiceover(
+            (
             "So GPUs shine on a particular kind of work. <bookmark mark='a'/> The same arithmetic on millions of "
-            "independent items: pixels, particles, the entries of a matrix. <bookmark mark='b'/> Memory read in wide, "
-            "regular blocks, so that the thirty-two loads of a warp merge into a few cache lines. <bookmark "
+            "independent items: pixels, particles, the entries of a matrix. <bookmark mark='b'/> Memory read in "
+            "wide, regular blocks, so that the thirty-two loads of a warp merge into a few cache lines. <bookmark "
             "mark='c'/> And matrix multiplication above all: modern GPUs have tensor cores that multiply small "
             "matrices in a single instruction, which is why they run the neural networks of AI, Built. <bookmark "
             "mark='d'/> The Job, as written, is the opposite: one long chain of lookups, each a scan whose length "
-            "depends on the data. <bookmark mark='e'/> A GPU would count words another way, by sorting them and "
-            "counting the runs, which is exactly the algorithm of Part 16."
+            "depends on the data. <bookmark mark='e'/> One GPU-friendly alternative is sorting words and counting "
+            "the runs; hashing is another option, and Part 16 develops the sorting approach."
+        )
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cite))
-            for mk, p in zip("abcde", pts):
-                vo.wait_until(mk)
-                self.play(FadeIn(p, shift=RIGHT * 0.1))
+            self.play(FadeIn(head), FadeIn(cite), run_time=0.5)
+            for mk, p in zip('abcde', pts):
+                if mk != 'a':
+                    vo.wait_until(mk)
+                self.play(FadeIn(p, shift=RIGHT * 0.1), run_time=0.6 if mk == 'a' else 1.0)
+                if mk == 'a':
+                    vo.wait_until(mk)
         self.wait(0.3)
         self.clear_scene()

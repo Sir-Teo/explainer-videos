@@ -2,7 +2,11 @@
 
 import itertools
 import random
+import platform
+from pathlib import Path
+import tempfile
 import unittest
+from unittest import mock
 
 from explainer.cs.pebble import parallel as Pa
 from explainer.cs.pebble.coherence import MESI, litmus_sb
@@ -71,6 +75,24 @@ class TestSchedules(unittest.TestCase):
 
 
 class TestScan(unittest.TestCase):
+    def test_noncommutative_scan_preserves_operand_order(self):
+        xs = list("abcdefgh")
+        expected = ["".join(xs[:i]) for i in range(len(xs))]
+        self.assertEqual(Pa.blelloch(xs, op=lambda a, b: a + b, identity="")["result"], expected)
+        # Generate/propagate composition is also associative but not commutative.
+        gp = [(0, 1), (1, 0), (0, 0), (0, 1), (1, 0), (0, 1), (0, 0), (1, 0)]
+        compose = lambda lo, hi: (hi[0] | hi[1] & lo[0], hi[1] & lo[1])
+        cur, expected = (0, 1), []
+        for pair in gp:
+            expected.append(cur)
+            cur = compose(cur, pair)
+        self.assertEqual(Pa.blelloch(gp, op=compose, identity=(0, 1))["result"], expected)
+
+    def test_blelloch_rejects_empty_or_non_power_of_two(self):
+        for xs in ([], [1, 2, 3]):
+            with self.assertRaises(ValueError):
+                Pa.blelloch(xs)
+
     def test_scans(self):
         rng = random.Random(1)
         xs = [rng.randrange(100) for _ in range(64)]
@@ -115,6 +137,68 @@ class TestTopologies(unittest.TestCase):
         self.assertEqual(Pa.bisection(Pa.mesh(4, wrap=True), 16), 8)
         self.assertEqual(Pa.bisection(Pa.tree(8), 8), 1)
         self.assertEqual(Pa.diameter(Pa.hypercube(4)), 4)
+
+
+class TestCompiledDemonstrations(unittest.TestCase):
+    def test_counter_variants_check_actual_compiled_counts(self):
+        from videos.cs.cs10 import compute as C
+
+        for mode in range(5):
+            with self.subTest(mode=mode):
+                output = C._run_c(C.ATOMICS, [4, mode], extra=["-DN=20000"])[0]
+                count, _ = output.split()
+                if mode:
+                    self.assertEqual(int(count), 80000)
+                else:
+                    self.assertGreater(int(count), 0)
+                    self.assertLessEqual(int(count), 80000)
+
+    @unittest.skipUnless(platform.machine().lower() in ("x86_64", "amd64"), "x86 mfence experiment")
+    def test_compiled_litmus_counts_and_fenced_outcome(self):
+        from videos.cs.cs10 import compute as C
+
+        for fence in (False, True):
+            output = C._run_c(C.LITMUS, [20000], extra=["-DFENCE"] if fence else [])[0]
+            counts = list(map(int, output.split()))
+            self.assertEqual(sum(counts), 20000)
+            if fence:
+                self.assertEqual(counts[0], 0)
+
+
+class TestMeasurementCache(unittest.TestCase):
+    def test_read_only_legacy_measurements_are_rejected_unchanged(self):
+        import json
+        from explainer.ai.cache import Cache
+        from videos.cs.cs10 import compute as C
+
+        for name in ("litmus", "atomics", "split", "workspan"):
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as d:
+                cache = Cache("cs10")
+                cache.dir = Path(d)
+                cache.path(name).write_text(json.dumps({"rows": []}))
+                original = cache.path(name).read_bytes()
+                with mock.patch.object(C, "CACHE", cache):
+                    self.assertFalse(C.cache_current(name))
+                    with self.assertRaisesRegex(RuntimeError, "Legacy cs10/" + name):
+                        C.load(name)
+                self.assertEqual(cache.path(name).read_bytes(), original)
+
+    def test_compute_refreshes_legacy_and_reuses_current_measurement(self):
+        import json
+        from explainer.ai.cache import Cache
+        from videos.cs.cs10 import compute as C
+
+        with tempfile.TemporaryDirectory() as d:
+            cache = Cache("cs10")
+            cache.dir = Path(d)
+            cache.path("atomics").write_text(json.dumps({"rows": []}))
+            fresh = {"rows": [], "access_schema": "defined-atomics-v1"}
+            producer = mock.Mock(return_value=fresh)
+            with mock.patch.object(C, "CACHE", cache), mock.patch.object(C, "ITEMS", {"atomics": producer}):
+                C.main([])
+                C.main(["atomics"])
+                self.assertEqual(C.load("atomics"), fresh)
+            producer.assert_called_once()
 
 
 if __name__ == "__main__":

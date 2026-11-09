@@ -4,6 +4,7 @@ import numpy as np
 
 from explainer.cs import *  # noqa: F403
 from videos.cs.cs10.common import (BG, CODE, CORE_COLORS, CTRL, DATA, FUNC, HEAD, NO, PART, YES, load, mono)
+from videos.cs.cs9.common import plot_range
 
 
 class FalseShare(VoiceoverScene):
@@ -38,16 +39,20 @@ class FalseShare(VoiceoverScene):
         br = Brace(line, DOWN, color=HEAD)
         bl = label(r"one 64-byte line: \ the unit coherence works in", font_size=20, color=HEAD).next_to(br, DOWN,
                                                                                                          buff=0.1)
-        ping = label(r"every increment needs the line Modified \ $\to$ \ it bounces between the four caches",
+        ping = label(r"shared-line writes need ownership; \ ownership moves when another core requests it",
                      font_size=22, color=NO).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Here is a trap that catches experienced programmers. Four threads each count something, in an array of "
-            "four counters, one per thread. <bookmark mark='a'/> No two threads ever touch the same counter, so "
-            "there is no real sharing at all. <bookmark mark='b'/> But coherence does not work in variables. It "
-            "works in cache lines, and all four counters fit in one sixty-four-byte line. <bookmark mark='c'/> To "
-            "increment its counter, a core needs that line in the Modified state, which means taking it away from "
-            "whichever core had it last. The line bounces from cache to cache, fifty million times per thread. "
-            "This is false sharing: the hardware sees sharing where the program has none."
+            (
+            "Here is a trap that catches experienced programmers. Four threads each count something, in an array "
+            "of four counters, one per thread. <bookmark mark='a'/> No two threads ever touch the same counter, "
+            "so there is no real sharing at all. <bookmark mark='b'/> But coherence does not work in variables. "
+            "It works in cache lines, and all four counters fit in one sixty-four-byte line. <bookmark mark='c'/> "
+            "To increment its counter, a core needs that line in the Modified state, which means taking it away "
+            "from whichever core had it last. Each thread performs fifty million atomic increments. Ownership "
+            "transfers when another core needs the line; several local increments may occur before it moves "
+            "again, so transfers need not equal increments. This is false sharing: the hardware sees sharing "
+            "where the program has none."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(code))
             vo.wait_until("a")
@@ -65,14 +70,15 @@ class FalseShare(VoiceoverScene):
     def measure(self):
         fs = load("falseshare")["rows"]
         head = label(r"Measured on this computer", font_size=34).to_edge(UP, buff=0.3)
-        ax = Axes(x_range=[0.5, 4.5, 1], y_range=[0, 90, 20], x_length=7.5, y_length=4.0, tips=False,
+        ymax, ystep = plot_range([r[k] for r in fs for k in ("same", "padded")])
+        ax = Axes(x_range=[0.5, 4.5, 1], y_range=[0, ymax, ystep], x_length=7.5, y_length=4.0, tips=False,
                   axis_config={"color": GREY_C, "font_size": 16}).shift(DOWN * 0.3 + LEFT * 1.0)
         xt = VGroup(*[label(rf"{n}", font_size=18, color=GREY_B).next_to(ax.c2p(n, 0), DOWN, buff=0.12)
                       for n in (1, 2, 3, 4)])
-        yt = VGroup(*[label(rf"{v}", font_size=16, color=GREY_B).next_to(ax.c2p(0.5, v), LEFT, buff=0.1)
-                      for v in (0, 20, 40, 60, 80)])
+        yt = VGroup(*[label(rf"{v:g}", font_size=16, color=GREY_B).next_to(ax.c2p(0.5, v), LEFT, buff=0.1)
+                      for v in np.arange(0, ymax + ystep / 2, ystep)])
         xl = label(r"threads", font_size=18, color=GREY_B).next_to(ax.x_axis, DOWN, buff=0.45)
-        yl = label(r"nanoseconds per increment", font_size=18, color=GREY_B).next_to(ax, UP, buff=0.15).align_to(
+        yl = label(r"elapsed ns / increments per thread", font_size=18, color=GREY_B).next_to(ax, UP, buff=0.15).align_to(
             ax, LEFT)
         same = VMobject(color=NO, stroke_width=4).set_points_as_corners([ax.c2p(r["threads"], r["same"]) for r in fs])
         pad = VMobject(color=YES, stroke_width=4).set_points_as_corners([ax.c2p(r["threads"], r["padded"])
@@ -80,19 +86,13 @@ class FalseShare(VoiceoverScene):
         sd = VGroup(*[Dot(ax.c2p(r["threads"], r["same"]), color=NO, radius=0.07) for r in fs])
         pd = VGroup(*[Dot(ax.c2p(r["threads"], r["padded"]), color=YES, radius=0.07) for r in fs])
         ls = label(r"counters in one line", font_size=20, color=NO).next_to(ax.c2p(4, fs[3]["same"]), RIGHT, buff=0.15)
-        lp = label(r"a line each \ (padded to 64 bytes)", font_size=20, color=YES).next_to(
+        lp = label(r"separate 64-byte lines", font_size=20, color=YES).next_to(
             ax.c2p(4, fs[3]["padded"]), RIGHT, buff=0.15).shift(UP * 0.25)
         r4 = fs[3]["same"] / fs[3]["padded"]
         punch = label(rf"four threads: \ {fs[3]['same']:.0f} ns against {fs[3]['padded']:.1f} ns, \ {r4:.0f} times "
                       r"slower, \ for nothing", font_size=24, color=HEAD).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Here it is, measured on this computer. Each thread increments its own counter fifty million times, and "
-            "we time one increment. <bookmark mark='a'/> One thread alone: about seven nanoseconds, the cost of an "
-            "atomic add on a line the core already owns. <bookmark mark='b'/> Give each counter a line of its own, "
-            "by padding it to sixty-four bytes, and the time stays flat however many threads run: there is no "
-            "sharing, so there is no traffic. <bookmark mark='c'/> Put the four counters in one line, and every "
-            f"increment waits for the line to arrive from another core. With four threads, each increment takes "
-            f"{fs[3]['same']:.0f} nanoseconds, {r4:.0f} times longer, though no thread ever reads another's counter."
+            f"Here it is, measured on this computer. Each thread increments its own counter fifty million times, and we divide elapsed wall time by the fifty million increments per thread. This is a per-thread completion interval, not aggregate time per increment across all threads. <bookmark mark='a'/> One thread alone: {fs[0]['same']:.1f} nanoseconds in this run, the cost of an atomic add on a line the core already owns. <bookmark mark='b'/> Give each counter a line of its own, by padding it to sixty-four bytes, and the chart shows how much this run improves. Padding removes false sharing between counters, but scheduling, frequency and shared resources still affect time. <bookmark mark='c'/> Put the four counters in one line, and contending cores repeatedly transfer ownership. With four threads, each increment takes {fs[3]['same']:.0f} nanoseconds, {r4:.0f} times the padded four-thread interval, though no thread ever reads another's counter."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl))
             vo.wait_until("a")
@@ -130,9 +130,12 @@ class FalseShare(VoiceoverScene):
             "instructions touch them. <bookmark mark='f'/> The usual culprits are statistics counters, a lock "
             "stored next to the data it protects, and arrays of small per-thread structures."
         ) as vo:
-            self.play(FadeIn(head))
-            for mk, p in zip("abcdef", pts):
-                vo.wait_until(mk)
-                self.play(FadeIn(p, shift=RIGHT * 0.1))
+            self.play(FadeIn(head), run_time=0.5)
+            for mk, p in zip('abcdef', pts):
+                if mk != 'a':
+                    vo.wait_until(mk)
+                self.play(FadeIn(p, shift=RIGHT * 0.1), run_time=0.6 if mk == 'a' else 1.0)
+                if mk == 'a':
+                    vo.wait_until(mk)
         self.wait(0.3)
         self.clear_scene()

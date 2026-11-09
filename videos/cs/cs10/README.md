@@ -1,80 +1,78 @@
 # Computer Science, Built — Part 10: Parallel Machines
 
-Part 10 of a sixty-one-part course in computer science (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), the last part of Act II, *Making It Fast*. Around 2005 the clock stopped getting
-faster, and the transistors went into more cores. This part derives why, builds the machinery that makes shared memory
-work (`explainer/cs/pebble/coherence.py`: a MESI simulator checked for the single-writer invariant and the last-value
-rule on random traffic, and the store-buffering litmus test under SC and TSO), the theory of parallel algorithms
-(`explainer/cs/pebble/parallel.py`: work and span, greedy schedules against Brent's bound, randomized work stealing,
-Hillis–Steele and Blelloch scans, bitonic and odd-even merge networks with the 0–1 test, and interconnection networks
-with exact bisection widths, all checked in `tests/test_cs10_parallel.py`), measures shared memory on the computer that
-made the video, and runs the Job on four cores. Every number is computed in `compute.py`.
+The final part of Act II connects physical power limits, shared-memory protocols and parallel algorithms.
+See the [series plan](../README.md) and [syllabus](../SYLLABUS.md).
+The running example counts the same thirty-novel corpus, first with private shard dictionaries and then with a
+partitioned merge. A fitted cost projection and a compiled host benchmark are separate experiments.
 
-* **The clock stops.** Fifty years of microprocessors (Karl Rupp's compilation, CC BY 4.0): transistors still
-  doubling; the clock +33% a year from 1985 to 2004 and −0.7% a year since; power capped near 100 W; cores rising. The
-  Job, teased: more than four times faster on four cores.
-* **1. The power wall.** P = αCV²f + V·I_leak; Dennard scaling (1974) derived: shrink by κ, power per area constant;
-  why it ended (the subthreshold slope, 60–100 mV a decade; voltage stuck near 1 V); P ∝ f³, so two cores at 0.8 f do
-  1.6 times the work for the same power; dark silicon (a toy model, and Esmaeilzadeh et al. 2011: more than half dark
-  at 8 nm).
-* **2. Four cores, one Job.** Shared-memory multicores; the Job split into four shards counted in private tables
-  (priced on Part 8's core model at Pebble's 885 MHz): every shard finishes faster than a quarter of 57.3 s (10.0 to
-  11.2 s), because a quarter of the text holds about half the vocabulary. Combining: core 0 merges the others (8.2 s),
-  a tree of merges (8.7 s), or partitioned by a hash of the word (0.63 s). Heaps' law (1978), and why the superlinear
-  speedup is an artefact of a quadratic algorithm.
-* **3. Cache coherence.** The stale-copy problem; single writer or many readers, and the last value (Sorin, Hill and
-  Wood); MESI (Papamarcos and Patel 1984) as a state machine; one line through eight accesses by four cores, from the
-  simulator; directories; coherence misses (999 invalidations for two counters in one line, 0 in two lines).
-* **4. False sharing.** Four atomic counters in one 64-byte line, measured: 6.8 ns per increment alone, 79 ns with
-  four threads, against 6.8 ns padded (11.6 times); fixes, `perf c2c`.
-* **5. Memory consistency.** Lamport's sequential consistency (1979); the store-buffering test's six interleavings,
-  none giving r0 = r1 = 0; store buffers and TSO; on this computer, both threads read 0 in a large fraction of a
-  million trials, and in none with `mfence`; SC, x86-TSO and Arm/POWER/RISC-V in a table; C/C++11 and Java's models,
-  data-race-free programs.
-* **6. Atomic instructions.** A lost update; four threads × ten million plain increments reach 14 to 20 million of
-  40 million; test-and-set, fetch-and-add, compare-and-swap, LL/SC; their costs measured with one and four threads
-  (fetch-and-add 7 → 20 ns, CAS loop 13 → 37, mutex 23 → 61, test-and-set spinlock 9 → 108); Herlihy's consensus
-  hierarchy (1991).
-* **7. SIMD and vectors.** Flynn (1966); the Cray-1 (1976) to AVX-512, NEON, SVE and RISC-V V; the Job's length scan
-  32 entries per instruction with AVX2; the Job in C on this computer, one core: 30.1 s scalar, 10.2 s vectorized.
-* **8. GPUs in one chapter.** Few big cores against thousands of lanes; SIMT and warps; divergence; the Job's 4.6
-  million lookups in warps of 32: 12% of lane time useful as they come, 99.99% if grouped by scan length.
-* **9. Work, span and Brent's theorem.** T₁, T∞, parallelism; a 14-node example (work 14, span 7; greedy on two
-  processors 10 steps, the optimum 8 by exhaustive search); Brent's theorem T_p ≤ T₁/p + T∞ proved; on 40 random
-  computations of 2,000 nodes greedy never exceeds the bound and is at most 1.30 times the lower bound; work stealing
-  (Blumofe and Leiserson 1999) simulated on a fork-join tree: within T₁/p + 1.6 T∞.
-* **10. Parallel prefix.** Scans; Part 4's carry-lookahead adder as a scan of (g, p) pairs; Hillis–Steele (n log n
-  work) and Blelloch (2(n − 1) work, span 2 log n) step by step; stream compaction.
-* **11. Sorting networks.** Comparators, depth, data-obliviousness; Batcher's bitonic sorter on 8 wires (24
-  comparators, depth 6); the 0–1 principle proved; insertion and Batcher networks checked on all 2ⁿ 0–1 inputs for
-  n ≤ 10 (and all n! orders for n ≤ 8), against the best known sizes and depths; a broken network caught; AKS (1983).
-* **12. Amdahl and Gustafson.** Both derived; strong and weak scaling; the Job's strong scaling to 32 cores: a serial
-  merge peaks near 3.2×, a partitioned merge runs above the ideal line (34× at 32).
-* **13. Models and networks.** PRAM (EREW, CREW, CRCW); BSP (Valiant 1990) and LogP (Culler et al. 1993); MPI
-  collectives; ring, mesh, torus, hypercube and tree, their diameters and bisection widths found by trying every split
-  of 16 nodes; the fat tree; supercomputers from the Cray-1 (160 Mflop/s) to El Capitan (1.74 Eflop/s).
-* **14. The Job on four cores.** On four Pebble cores: 11.85 s, 4.84 times faster, with less total work than one
-  core; ledger row 4. On this computer in C: 30.1 s → 6.9 s with four threads → 2.1 s with four threads and AVX2
-  (14 times).
-* **15. Frontier: thin air, stealing, dark silicon.** The load-buffering test: only (0, 0) under every interleaving,
-  but any self-confirming guess under value speculation; out-of-thin-air values and the unsolved C/C++ memory model
-  (Batty et al. 2011, promising semantics 2017); what work-stealing bounds leave out (locality, space, heterogeneous
-  cores); near-threshold computing, 3-D stacking, Landauer's limit.
-* **Recap, where this comes back, in practice, problems.**
+## What the chapter builds
+
+| Chapter | Worked visualization and interpretation |
+| --- | --- |
+| Opening | Historical chip scatterplots; text shards feed four cores and private tables. Growth fits describe the dataset, not a law of nature. |
+| 1. Power | Dynamic power, ideal constant-field scaling, a leakage sketch and a toy dark-silicon grid. The cubic frequency example ignores leakage; the 2011 dark-silicon result is a forecast under assumptions. |
+| 2. Multicore | Private tables, shard-count bars and serial/tree/partitioned merge timelines. Smaller vocabularies reduce scan work, so total work changes with processor count. |
+| 3. Coherence | Broken stale copies, MESI state graph and eight individually cued accesses with values and permissions. A serialized simulator tests per-address coherence; this does not impose global SC. |
+| 4. False sharing | Four counters in one line versus separate 64-byte lines; measured curves fit the current data. Ownership transfers need not equal increments. |
+| 5. Consistency | All six SC interleavings, store-buffer paths and a defined C11 relaxed-atomic litmus test with an x86 `mfence` variant. Relaxed atomics can have no non-atomic data race and still be non-SC. |
+| 6. Atomics | Lost-update timelines built from separate relaxed accesses, correct compiled counters and the ideal wait-free consensus hierarchy. LL/SC reservations and coherent RMW ownership are different mechanisms. |
+| 7. SIMD | Instruction/data streams, historical vector widths, 32-byte length comparison and candidate mask. The C implementation uses a different layout from Pebble. |
+| 8. GPUs | Throughput-oriented hardware, masked lanes and a scan-length utilization proxy. Oracle grouping excludes the cost of obtaining lengths and grouping; no GPU execution is claimed. |
+| 9. Work/span | A 14-node DAG, greedy and optimal schedules, the unit-cost list-scheduling proof and random checks. Average parallelism is not instantaneous width; the work-stealing theorem has computation and scheduler assumptions. |
+| 10. Prefix | Carry generate/propagate pairs, Hillis–Steele, Blelloch and compaction. Associativity permits regrouping, not swapping operands. The generic down-sweep now preserves noncommutative order. |
+| 11. Sorting | An 8-wire network, zero-one proof and exhaustive small tests. At 1,024 wires, bitonic uses 28,160 comparators and odd-even merge 24,063; both have depth 55. Seventeen-wire depth 10 is proved optimal in the cited 2015 work. |
+| 12. Scaling | Amdahl uses the serial fraction of one-processor runtime; Gustafson uses the serial fraction of parallel runtime. Weak scaling fixes work per processor, with flat runtime an ideal outcome. |
+| 13. Models | PRAM access rules, BSP phases, network graphs/cuts and selected milestones through 2024. Hop count is not latency; early peak and later HPL numbers are not one application's speedup. |
+| 14. Job | Conditional projected phases and a separate host C table. Timers and omitted costs are stated explicitly. |
+| 15. Frontier | A deliberately permissive causal cycle, formal-model research, work-stealing locality/space questions and energy trade-offs. Landauer concerns ideal irreversible erasure, not every transistor transition. |
+
+The instruments are [coherence.py](../../../explainer/cs/pebble/coherence.py) and
+[parallel.py](../../../explainer/cs/pebble/parallel.py); checks live in
+[test_cs10_parallel.py](../../../tests/test_cs10_parallel.py). Narration and captions are bilingual.
+
+## Computations and measurement scope
+
+`compute.py` produces all numeric inputs. The four-core feature model gives about **11.85 s**, versus **57.32 s**
+for its Part 8 one-core reference, a **4.84×** conditional compute-cost ratio. It includes fitted shard counting
+and selected merge insertions. It excludes routing/hash/filter scans, communication, coherence, finite bandwidth,
+barriers, scheduling overhead, final selection/output and Part 9's separate memory estimate. Smaller private
+tables do not prove those costs negligible. This is not an executed multicore Pebble or a runtime error bound.
+The ledger retains Part 9's **57.36 s** memory projection as its preceding row; the speedup reference above is Part 8.
+
+`workspan.job[].projected_makespan` is a phase-model duration, not the unlimited-processor span of a fixed DAG:
+changing the shard count changes the computation. The independent 14-node example has work 14, span 7, a greedy
+two-processor schedule of 10 steps and an optimal schedule of 8.
+
+Host measurements belong to the environment that generated their cache. Threads are unpinned; frequency,
+scheduling, container limits and other activity affect results. The current run's C counting/merging times are
+23.70 s scalar on one thread, 8.23 s with one-thread AVX2, 6.22 s scalar on four threads and 1.93 s with four-thread
+AVX2. These are the faster of two runs, exclude file loading and final printing, and check the top twenty against
+the reference; they do not constitute a full per-word output comparison. Future runs can differ, and narration
+uses the measured ratios rather than assuming superlinear host speedup.
+
+The C11 counter and litmus examples use defined shared accesses. A relaxed load followed by a relaxed store can
+lose updates even though each access is atomic; an ordinary non-atomic racing C variable would be undefined.
+The other four counter variants check exact totals. The litmus `mfence` experiment is explicitly x86-specific;
+an allowed outcome's absence in a finite run is not a proof that the architecture forbids it.
+
+The false-sharing timer reports **elapsed ns / increments per thread**. The shared-counter timer instead reports
+**elapsed ns / all increments across all threads**. These are different denominators and should not be compared
+as if both were single-instruction latency. Per-thread completion intervals and aggregate throughput can both be useful.
 
 ## Build
 
 ```bash
-python -m videos.cs.cs10.compute           # every number in the part (about ten minutes; split and the C Job are the slow steps)
-python tools/build.py cs10 -q l            # a 480p preview
-python tools/build.py cs10                 # 1080p
+python -m videos.cs.cs10.compute                 # missing or legacy items; run host timings on an idle machine
+python -m videos.cs.cs10.compute --force litmus atomics
+python -m unittest tests.test_cs10_parallel
+python tools/build.py cs10 -q l                 # 480p preview
+python tools/build.py cs10                      # native production render
 ```
 
-The measurements (`threads`, `falseshare`, `litmus`, `atomics`, `jobc`) belong to whatever computer runs them, and
-they are sensitive to other work running at the same time: run them on an idle machine. How often the litmus test's
-forbidden outcome appears depends strongly on timing; that it appears at all, and never with a fence, does not. The
-Pebble numbers (`split`) use Part 8's cycle model of the out-of-order core and do not depend on the machine. Ledger
-rows 0 to 4 are written to `.cache/cs10/ledger.json`.
+The C/AVX2 and `mfence` demonstrations require a suitable x86 host. Numerical files are local generated inputs
+under `.cache/cs10/`. Old racy measurements and mislabeled projection records are rejected by read-only loads;
+explicit computation refreshes their schema. A render or sampled QA pass is separate from complete narrated
+listening and production review.
 
 ## Problems, with solutions
 
@@ -102,10 +100,10 @@ rows 0 to 4 are written to `.cache/cs10/ledger.json`.
 
    *Solution.* **Yes.** Thread 0's fence drains x = 1 to memory before it reads y, but thread 1's store y = 1 can still
    sit in thread 1's store buffer. Run thread 1 first: y = 1 enters its buffer and its load reads x = 0 from memory.
-   Then thread 0 stores x = 1, fences, and reads y = 0, because y = 1 is still buffered. Both read 0. The forbidden
-   outcome needs **both** threads' store–load pairs to be ordered: one fence each.
+   Then thread 0 stores x = 1, fences, and reads y = 0, because y = 1 is still buffered. Both read 0. In this fence construction, ordering **both** workers' store–load pairs is sufficient: one fence each.
+   This is a hardware-model argument; language synchronization must also be defined.
 
-4. **Counting scan work.** Show that the Hillis–Steele scan does n log₂ n − n + 1 additions, and Blelloch's 2(n − 1).
+4. **Counting scan work.** For a nonempty power-of-two input, show that the Hillis–Steele scan does n log₂ n − n + 1 additions, and Blelloch's 2(n − 1).
 
    *Solution.* At step k (k = 0 … log₂ n − 1) every element at index i ≥ 2ᵏ adds the one 2ᵏ to its left: n − 2ᵏ
    additions. Summing, n log₂ n − (1 + 2 + … + n/2) = **n log₂ n − (n − 1)**. For n = 8: 24 − 7 = 17, as computed.
@@ -119,9 +117,9 @@ rows 0 to 4 are written to `.cache/cs10/ledger.json`.
    a perfect quarter of the work: 64 pieces taken as cores come free leave almost no imbalance (four big shards left
    8%). The merge now combines 64 tables, so it grows from 0.63 s to **1.34 s**, but the total falls to **6.15 s**,
    against 11.85 s with four shards. The balance is only part of the gain: the 64 small tables are much shorter than
-   four big ones, so the counting itself does less work, the same algorithmic artefact as in chapter 2. Push the grain
-   to its limit, a table per word, and the "merge" becomes the whole computation: sorting the words and counting runs,
-   which is Part 16's algorithm.
+   four big ones, so the counting itself does less work, the reduced scan work discussed in chapter 2. Routing, communication, bandwidth and synchronization are still
+   excluded. A table per token moves the burden into merging; it does not automatically become sorting. Sorting
+   and hashing are separate algorithmic redesigns developed in Parts 16 and 17.
 
 6. ★ **Research: the work-stealing constant.** Our runs stay within T₁/p + 1.6 T∞. What is the tight constant for
    randomized stealing on balanced fork-join trees, and what does choosing victims by locality change?
@@ -159,7 +157,7 @@ rows 0 to 4 are written to `.cache/cs10/ledger.json`.
    先走：y = 1 进入它的缓冲，它的取数从存储器读到 x = 0。然后线程 0 存 x = 1、过栅栏、读 y = 0，因为 y = 1 还在缓冲里。两个都读
    到 0。要禁止这个结果，**两个**线程的存数—取数对都必须有序：每个线程一道栅栏。
 
-4. **数扫描的工作量。** 证明 Hillis–Steele 扫描做 n log₂ n − n + 1 次加法，Blelloch 的做 2(n − 1) 次。
+4. **数扫描的工作量。** 对非空、长度为二的幂的输入，证明 Hillis–Steele 扫描做 n log₂ n − n + 1 次加法，Blelloch 的做 2(n − 1) 次。
 
    *解答。* 第 k 步（k = 0 … log₂ n − 1）每个下标 i ≥ 2ᵏ 的元素加上它左边 2ᵏ 处的那个：n − 2ᵏ 次加法。求和得
    n log₂ n − (1 + 2 + … + n/2) = **n log₂ n − (n − 1)**。n = 8 时：24 − 7 = 17，与计算一致。Blelloch 的上扫在第 d 层做
@@ -169,8 +167,8 @@ rows 0 to 4 are written to `.cache/cs10/ledger.json`.
 
    *解答。* `python -m videos.cs.cs10.compute pieces`。计数：最忙的核 **4.82 秒**，完美四等分是 4.67 秒：64 块按核空闲的先后
    取走，几乎没有不均衡（四大块时是 8%）。合并现在要合 64 张表，从 0.63 秒增加到 **1.34 秒**，但总时间降到 **6.15 秒**，四大块时
-   是 11.85 秒。均衡只是收益的一部分：64 张小表比四张大表短得多，所以计数本身做的功更少，这和第 2 章是同一个算法上的假象。把粒度
-   推到极限，每个词一张表，“合并”就成了全部计算：把词排序再数连续段，正是第 16 部分的算法。
+   是 11.85 秒。均衡只是收益的一部分：64 张小表比四张大表短得多，所以计数本身做的功更少，这就是第 2 章讨论的扫描工作量减少。路由、通信、带宽和同步仍未计入。每个词元一张表会把负担转移到合并，
+   并不会自动变成排序；排序与哈希是第16、17部分另行发展的算法重设计。
 
 6. ★ **研究：工作窃取的常数。** 我们的模拟都落在 T₁/p + 1.6 T∞ 以内。在平衡的分叉—汇合树上，随机窃取的紧常数是多少？按局部性
    选择受害者会改变什么？
@@ -224,9 +222,15 @@ synchronization" (1991); Culler et al., "LogP: towards a realistic model of para
 Leiserson, "Scheduling multithreaded computations by work stealing" (1999); Acar, Blelloch & Blumofe, "The data
 locality of work stealing" (2000); Heaps, *Information Retrieval: Computational and Theoretical Aspects* (1978).
 
-*Recent.* Esmaeilzadeh, Blem, St. Amant, Sankaralingam & Burger, "Dark silicon and the end of multicore scaling", ISCA
+*Research and later work.* Esmaeilzadeh, Blem, St. Amant, Sankaralingam & Burger, "Dark silicon and the end of multicore scaling", ISCA
 (2011); Batty, Owens, Sarkar, Sewell & Weber, "Mathematizing C++ concurrency", POPL (2011); Boehm & Demsky,
 "Outlawing ghosts: avoiding out-of-thin-air results" (2014); Codish, Cruz-Filipe, Frank & Schneider-Kamp, "Twenty-five
 comparators is optimal when sorting nine inputs (and twenty-nine for ten)" (2014); Bundala & Závodný, "Optimal sorting
 networks" (2014); Kang, Hur, Lahav, Vafeiadis & Dreyer, "A promising semantics for relaxed-memory concurrency", POPL
 (2017). Data: Karl Rupp, *Microprocessor Trend Data* (CC BY 4.0), github.com/karlrupp/microprocessor-trend-data.
+
+Additional primary references used for this revision:
+
+- Ehlers and Müller, [New Bounds on Optimal Sorting Networks](https://arxiv.org/abs/1501.06946) (2015): seventeen-input depth optimality.
+- Stern et al., [WG21 P3692R3](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2025/p3692r3.pdf) (2025): a proposal with an implementation-based OOTA argument under stated assumptions; its existence does not establish standard adoption.
+- NVIDIA, [Hopper architecture](https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/) and [H100 specifications](https://www.nvidia.com/en-eu/data-center/h100/): dated H100 SXM illustration.

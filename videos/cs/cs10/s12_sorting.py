@@ -48,18 +48,21 @@ class Sorting(VoiceoverScene):
                   color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Sorting is the next test of parallel thinking, and its parallel form is beautiful. <bookmark mark='a'/> "
-            "The building block is a comparator: two wires in, and out come the same two values, the smaller on top "
-            "and the larger below. <bookmark mark='b'/> A sorting network is a fixed list of comparators, chosen "
-            "before seeing any data, that sorts every input. <bookmark mark='c'/> Comparators on different wires can "
-            "work at the same moment, so a network's depth, its number of layers, is its parallel time. <bookmark "
-            "mark='d'/> And because it does the same operations whatever the data, a network suits hardware, SIMD "
-            "registers and GPUs, where branches are expensive, and cryptography, where a program's timing must not "
-            "reveal what it is sorting."
+            (
+            "Sorting is the next test of parallel thinking, and its parallel form is beautiful. <bookmark "
+            "mark='a'/> The building block is a comparator: two wires in, and out come the same two values, the "
+            "smaller on top and the larger below. <bookmark mark='b'/> A sorting network is a fixed list of "
+            "comparators, chosen before seeing any data, that sorts every input. <bookmark mark='c'/> Comparators "
+            "on different wires can work at the same moment, so a network's depth, its number of layers, is its "
+            "parallel time. <bookmark mark='d'/> And because it does the same operations whatever the data, a "
+            "network suits hardware, SIMD registers and GPUs, where branches are expensive, and some "
+            "constant-time cryptographic code. A fixed comparison pattern helps, but comparators, memory accesses "
+            "and the surrounding implementation must also avoid secret-dependent timing."
+        )
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Create(w1), Create(w2), FadeIn(comp), FadeIn(ins))
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(Create(w1), Create(w2), FadeIn(comp), FadeIn(ins), run_time=0.6)
+            vo.wait_until('a')
             self.play(TransformFromCopy(ins, outs), FadeIn(cl))
             for mk, p in zip("bcd", pts[:3]):
                 vo.wait_until(mk)
@@ -136,9 +139,9 @@ class Sorting(VoiceoverScene):
             "one above a zero. <bookmark mark='f'/> So the network also fails on an input of zeros and ones. "
             "<bookmark mark='g'/> To check a network on n wires, two to the n inputs suffice, instead of n factorial."
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(thm))
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(thm), run_time=0.6)
+            vo.wait_until('a')
             for mk, s in zip("bcdef", steps):
                 vo.wait_until(mk)
                 self.play(FadeIn(s, shift=RIGHT * 0.1))
@@ -170,15 +173,17 @@ class Sorting(VoiceoverScene):
                     rf"{br['removed'][1]}: \ the 0--1 input {''.join(map(str, br['input']))} comes out "
                     rf"{''.join(map(str, br['output']))}", font_size=20, color=NO).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "With the principle, we checked networks exhaustively. <bookmark mark='a'/> For ten wires, one thousand "
-            "and twenty-four inputs instead of three point six million orders. For each n up to ten we built two "
-            "networks: the insertion network, which mimics insertion sort, and Batcher's odd-even merge network. "
-            "Both sort all zero-one inputs, and for eight wires or fewer we confirmed it on all orders too. Beside "
-            "them, the smallest sizes and depths known. <bookmark mark='b'/> That column is a research story of its "
-            "own: for ten wires or "
-            "fewer, the smallest sizes were only proved optimal in 2014, by a computer search that relied on this "
-            "same principle. <bookmark mark='c'/> And the principle catches mistakes. Remove a single comparator from "
-            "Batcher's network for eight wires, and the check immediately produces a zero-one input it fails to sort."
+            (
+            "With the principle, we checked networks exhaustively. <bookmark mark='a'/> For ten wires, one "
+            "thousand and twenty-four inputs instead of three point six million orders. For each n up to ten we "
+            "built two networks: the insertion network, which mimics insertion sort, and Batcher's odd-even merge "
+            "network. Both sort all zero-one inputs, and the Batcher networks through eight wires were separately "
+            "checked on every permutation. Beside them, the smallest sizes and depths known. <bookmark mark='b'/> "
+            "That column is a research story of its own: the remaining nine- and ten-wire minimum-size cases were "
+            "proved optimal in the 2014 work, by a computer search that relied on this same principle. <bookmark "
+            "mark='c'/> And the principle catches mistakes. Remove a single comparator from Batcher's network for "
+            "eight wires, and the check immediately produces a zero-one input it fails to sort."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*t.cells[0])), FadeIn(t.rule))
             vo.wait_until("a")
@@ -196,30 +201,39 @@ class Sorting(VoiceoverScene):
         big = load("sortnet")["big"]
         head = label(r"How shallow can a sorting network be?", font_size=34).to_edge(UP, buff=0.35)
         pts = VGroup(
-            label(rf"Batcher \ (1968): \ depth $O(\log^2 n)$: \ 1024 wires, \ {big['1024']['oem_depth']} layers, \ "
-                  rf"{big['1024']['oem_size']:,} comparators", font_size=22, color=DATA),
+            wrapped_label(rf"1024 wires: \ bitonic {big['1024']['bitonic_size']:,}, \ odd-even merge "
+                          rf"{big['1024']['oem_size']:,} comparators; \ both depth {big['1024']['oem_depth']}",
+                          12.0, font_size=22, color=DATA),
             label(r"Ajtai, \ Koml\'os and Szemer\'edi \ (1983): \ depth $O(\log n)$ \ is possible", font_size=22,
                   color=HEAD),
-            label(r"but with a constant in the thousands: \ Batcher's wins for every $n$ anyone sorts", font_size=22,
+            label(r"asymptotic optimality does not make AKS the practical default", font_size=22,
                   color=NO),
             label(r"in practice: \ bitonic networks in GPU sorts and in SIMD registers, \ merge sort around them",
                   font_size=22, color=YES),
-            label(r"optimal depths are known up to $n = 16$ \ (Bundala and Z\'avodn\'y, \ 2014): \ open beyond",
+            label(r"17 wires: \ depth 10 proved optimal \ (Ehlers and M\"uller, \ 2015)",
                   font_size=22, color=FUNC),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).move_to(DOWN * 0.1)
         with self.voiceover(
-            "How fast can a network sort? <bookmark mark='a'/> Batcher's networks have depth on the order of log n "
-            "squared: for a thousand and twenty-four wires, fifty-five layers and about twenty-four thousand "
-            "comparators. <bookmark mark='b'/> In 1983 Miklós Ajtai, János Komlós and Endre Szemerédi proved that "
-            "depth on the order of log n is possible, which is optimal. <bookmark mark='c'/> But the constant in their "
-            "construction is so large that Batcher's networks win for any n anyone will ever sort. <bookmark "
+            (
+            "How fast can a network sort? <bookmark mark='a'/> Batcher's networks have depth on the order of log "
+            "n squared: for a thousand and twenty-four wires, fifty-five layers; the bitonic construction here "
+            "has exactly twenty-eight thousand one hundred and sixty comparators. <bookmark mark='b'/> In 1983 "
+            "Miklós Ajtai, János Komlós and Endre Szemerédi proved that depth on the order of log n is possible, "
+            "which is optimal. <bookmark mark='c'/> But the constant in their construction is so large that the "
+            "asymptotic construction is not the practical default for ordinary problem sizes. <bookmark "
             "mark='d'/> So in practice, GPU sorting libraries and SIMD sorting routines use bitonic networks for "
             "small blocks, inside a merge sort. <bookmark mark='e'/> And the smallest exact questions are still "
-            "open: optimal depths are known only up to sixteen wires."
+            "open: even small optimality questions require substantial search. Seventeen-wire depth ten is proved "
+            "optimal in the cited Ehlers and Mueller work; our exhaustive checks cover only the small networks "
+            "listed in this chapter."
+        )
         ) as vo:
-            self.play(FadeIn(head))
-            for mk, p in zip("abcde", pts):
-                vo.wait_until(mk)
-                self.play(FadeIn(p, shift=RIGHT * 0.1))
+            self.play(FadeIn(head), run_time=0.5)
+            for mk, p in zip('abcde', pts):
+                if mk != 'a':
+                    vo.wait_until(mk)
+                self.play(FadeIn(p, shift=RIGHT * 0.1), run_time=0.6 if mk == 'a' else 1.0)
+                if mk == 'a':
+                    vo.wait_until(mk)
         self.wait(0.3)
         self.clear_scene()

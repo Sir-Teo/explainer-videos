@@ -27,7 +27,8 @@ class Atomics(VoiceoverScene):
     def lost(self):
         at = load("atomics")["rows"][0]["t4"]
         head = label(r"A lost update", font_size=36).to_edge(UP, buff=0.35)
-        code = mono("count = count + 1;     // load, add, store", 22).next_to(head, DOWN, buff=0.35)
+        code = mono("long v = atomic_load_explicit(&count, memory_order_relaxed);\n"
+                    "atomic_store_explicit(&count, v + 1, memory_order_relaxed);", 18).next_to(head, DOWN, buff=0.35)
         t0 = timeline(["load 5", "add: 6", "store 6"], CORE_COLORS[0], -4.6, 0.6, dx=1.7)
         t1 = timeline(["load 5", "add: 6", "store 6"], CORE_COLORS[1], -2.9, -0.4, dx=1.7)
         n0 = label(r"thread 0", font_size=20, color=CORE_COLORS[0]).next_to(t0, LEFT, buff=0.3)
@@ -40,17 +41,11 @@ class Atomics(VoiceoverScene):
                      rf"{min(at['count']):,} to {max(at['count']):,} \ of {at['expected']:,}", font_size=22,
                      color=HEAD).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Coherence keeps the caches in agreement about each line. It does not make a sequence of operations "
-            "indivisible. <bookmark mark='a'/> Adding one to a shared counter is three steps: load it, add, store it "
-            "back. <bookmark mark='b'/> Thread zero loads five. Before it stores, thread one also loads five. Both "
-            "add one; both store six. <bookmark mark='c'/> Two increments, and the counter went up by one. <bookmark "
-            "mark='d'/> On this computer, four threads each adding one to a shared counter ten million times end "
-            f"with a count of between {min(at['count']) / 1e6:.0f} and {max(at['count']) / 1e6:.0f} million, out of "
-            "forty. More than half of the updates simply vanish, and the result changes from run to run."
+            f"Coherence keeps the caches in agreement about each line. It does not make a sequence of operations indivisible. <bookmark mark='a'/> In our defined C demonstration, a relaxed atomic load, local addition and separate relaxed atomic store form three steps. Each access is atomic; their combination is not an atomic increment. <bookmark mark='b'/> Thread zero loads five. Before it stores, thread one also loads five. Both add one; both store six. <bookmark mark='c'/> Two increments, and the counter went up by one. <bookmark mark='d'/> On this computer, four threads each adding one to a shared counter ten million times end with a count of between {min(at['count']) / 1000000.0:.0f} and {max(at['count']) / 1000000.0:.0f} million, out of forty. The counts shown are measured outcomes, not a guaranteed lost fraction. Using an ordinary non-atomic C variable for this race would instead make the program undefined."
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(code))
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(code), run_time=0.6)
+            vo.wait_until('a')
             vo.wait_until("b")
             self.play(FadeIn(n0), FadeIn(n1), Create(tl), FadeIn(tll))
             for k in range(3):
@@ -71,31 +66,39 @@ class Atomics(VoiceoverScene):
             (r"compare-and-swap \ (IBM System/370, \ x86 \texttt{cmpxchg})",
              "if (*p == expected) { *p = new; return 1; } return 0;", CTRL),
             (r"load-linked, \ store-conditional \ (Arm, \ POWER, \ RISC-V)",
-             "v = LL(p);  ...;  ok = SC(p, v2);   // fails if p was written", FUNC),
+             "v = LL(p);  ...;  ok = SC(p, v2);   // may fail: retry", FUNC),
         ]
         rows = VGroup()
         for t, c, col in items:
             rows.add(VGroup(label(t, font_size=22, color=col), mono(c, 18)).arrange(DOWN, aligned_edge=LEFT,
                                                                                   buff=0.1))
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.32).move_to(DOWN * 0.15 + LEFT * 0.4)
-        how = note(r"the core holds the line Modified for the whole step, \ refusing to give it up until it is done",
+        how = note(r"abstract pseudocode: \ coherent RMW ownership and LL/SC reservations are different mechanisms",
                    font_size=18).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "The fix needs the hardware's help: instructions that read, modify and write a location as a single step "
-            "no other core can interrupt. <bookmark mark='a'/> The oldest is test-and-set, on IBM's System/360 in "
-            "1964: set a word to one and return what it held. A lock is a word that test-and-set turns from zero to "
-            "one; whoever got zero back holds the lock. <bookmark mark='b'/> Fetch-and-add adds to a word and returns "
-            "the old value: exactly the counter, in one instruction. <bookmark mark='c'/> Compare-and-swap stores a "
-            "new value only if the word still holds the value you expect, and reports whether it did. <bookmark "
-            "mark='d'/> And load-linked and store-conditional split it in two: the store succeeds only if no one "
-            "wrote the location since the load. <bookmark mark='e'/> Inside, they all work the same way: the core "
-            "takes the line in the Modified state and refuses to give it up until the step is complete. Atomicity is "
-            "built from coherence."
+            (
+            "The fix needs the hardware's help: instructions that read, modify and write a location as a single "
+            "step no other core can interrupt. <bookmark mark='a'/> The oldest is test-and-set, on IBM's "
+            "System/360 in 1964: atomically test and set the high bit of a byte, reporting its previous "
+            "condition. Our pseudocode shows an abstract lock flag. A lock is a word that test-and-set turns from "
+            "zero to one; whoever got zero back holds the lock. <bookmark mark='b'/> Fetch-and-add adds to a word "
+            "and returns the old value: exactly the counter, in one instruction. <bookmark mark='c'/> "
+            "Compare-and-swap stores a new value only if the word still holds the value you expect, and reports "
+            "whether it did. <bookmark mark='d'/> And load-linked and store-conditional split it in two: a "
+            "store-conditional can succeed only while its reservation remains valid. It may fail for other "
+            "reasons too, so code must retry. <bookmark mark='e'/> Implementations differ. A cache-coherent "
+            "read-modify-write can obtain exclusive ownership while updating the line; LL/SC uses reservations, "
+            "and some operations use other mechanisms. Coherence alone does not make a multi-instruction sequence "
+            "atomic."
+        )
         ) as vo:
-            self.play(FadeIn(head))
-            for mk, r in zip("abcd", rows):
-                vo.wait_until(mk)
-                self.play(FadeIn(r, shift=RIGHT * 0.1))
+            self.play(FadeIn(head), run_time=0.5)
+            for mk, r in zip('abcd', rows):
+                if mk != 'a':
+                    vo.wait_until(mk)
+                self.play(FadeIn(r, shift=RIGHT * 0.1), run_time=0.6 if mk == 'a' else 1.0)
+                if mk == 'a':
+                    vo.wait_until(mk)
             vo.wait_until("e")
             self.play(FadeIn(how))
         self.wait(0.3)
@@ -117,21 +120,13 @@ class Atomics(VoiceoverScene):
         g1 = label(r"one thread", font_size=22, color=GREY_A).next_to(VGroup(*c.bars[:4]), UP, buff=1.0)
         g4 = label(r"four threads, \ one counter", font_size=22, color=GREY_A).next_to(VGroup(*c.bars[4:]), UP,
                                                                                          buff=0.2)
-        yl = note(r"nanoseconds per increment \ (all four counts exact: \ 40,000,000)", font_size=18).to_edge(
+        yl = note(r"elapsed ns / all increments; \ correct four-thread totals: \ 40,000,000", font_size=18).to_edge(
             DOWN, buff=0.3)
         plain = rows[0]["t1"]["ns"]
-        cmp_ = label(rf"a plain, \ wrong, \ increment: \ {plain:.1f} ns", font_size=20, color=NO).next_to(head, DOWN,
+        cmp_ = label(rf"separate relaxed load/store: \ {plain:.1f} ns \ (not an atomic increment)", font_size=20, color=NO).next_to(head, DOWN,
                                                                                                           buff=0.2)
         with self.voiceover(
-            "What does correctness cost? Here are four correct counters, timed on this computer. <bookmark mark='a'/> "
-            f"First with one thread, where there is no contention at all. A plain increment takes {plain:.0f} "
-            "nanoseconds. Fetch-and-add takes about seven: the atomic step itself costs a few times a plain one. A "
-            "compare-and-swap loop costs more, and a mutex, which is an atomic instruction plus bookkeeping, more "
-            "again. <bookmark mark='b'/> Now four threads hammering the same counter. Everything slows, because the "
-            "line must travel between cores for every increment, as in the last chapter. Fetch-and-add stays the "
-            "cheapest, since each attempt always succeeds. The compare-and-swap loop retries whenever another core "
-            "got in first. And the simple spinlock, where waiting cores hammer the lock with test-and-set, is the "
-            "worst of all. The lesson is the Job's again: the fastest shared counter is one you do not share."
+            f"Here are four correct counters, timed on this host with their final counts checked. The vertical unit is elapsed nanoseconds per aggregate increment, unlike the previous chapter's per-thread interval. <bookmark mark='a'/> With one thread, the split relaxed load-store counter takes {plain:.0f} nanoseconds per increment. Fetch-and-add, a compare-and-swap retry loop, a mutex and a simple test-and-set spinlock have the costs in the chart. These timings include the surrounding loop and implementation overhead, not just instruction latency. <bookmark mark='b'/> Four threads contend for one counter. Ownership transfers, retries, scheduling and lock behavior all matter. Fetch-and-add performs one atomic update per call; CAS may retry, and a test-and-set spinlock may generate heavy traffic while waiting. The ranking belongs to this benchmark and this run. Reducing shared updates is often a larger improvement than choosing a cheaper primitive."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cmp_), FadeIn(yl), FadeIn(c[0]))
             vo.wait_until("a")
@@ -158,19 +153,25 @@ class Atomics(VoiceoverScene):
         why = note(r"so every modern instruction set has compare-and-swap or LL/SC; \ Part 33 builds lock-free "
                    r"structures with them", font_size=18).next_to(univ, DOWN, buff=0.3)
         with self.voiceover(
-            "There is a beautiful theory behind these instructions. <bookmark mark='a'/> In 1991 Maurice Herlihy asked "
-            "which of them can solve consensus: several threads each propose a value, and all must agree on one of "
-            "them, without any thread ever waiting for another, which might have stalled or crashed. <bookmark "
-            "mark='b'/> With ordinary reads and writes, not even two threads can do it. Test-and-set, fetch-and-add "
-            "and swap can do it for two threads, but provably not for three. Compare-and-swap, and load-linked with "
-            "store-conditional, can do it for any number. <bookmark mark='c'/> And Herlihy showed that consensus is "
-            "the key: a primitive that solves consensus for n threads can be used to build any shared data structure "
-            "for n threads, in a wait-free way. <bookmark mark='d'/> That is why every modern instruction set has "
-            "compare-and-swap or LL/SC, and Part 33 uses them to build data structures with no locks at all."
+            (
+            "There is a beautiful theory behind these instructions. <bookmark mark='a'/> In 1991 Maurice Herlihy "
+            "asked which of them can solve consensus: several threads each propose a value, and all must agree on "
+            "one of them, with every participating thread completing in finitely many of its own steps, even if "
+            "others stall: the deterministic wait-free shared-memory setting. <bookmark mark='b'/> With ordinary "
+            "reads and writes, not even two threads can do it. Test-and-set, fetch-and-add and swap can do it for "
+            "two threads, but provably not for three. Ideal compare-and-swap and suitable ideal LL/SC objects "
+            "have unbounded consensus number. Real weak-CAS and reservation instructions require their progress "
+            "assumptions to be checked. <bookmark mark='c'/> And Herlihy showed that consensus is the key: a "
+            "primitive that solves consensus for n threads can support a wait-free universal construction for n "
+            "threads, with read/write registers and repeated instances of the object. This is an existence "
+            "result, not a guarantee of practical efficiency. <bookmark mark='d'/> That is why every modern "
+            "instruction set has compare-and-swap or LL/SC, and Part 33 uses them to build data structures with "
+            "no locks at all."
+        )
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(q), run_time=0.6)
+            vo.wait_until('a')
             vo.wait_until("b")
             self.play(FadeIn(VGroup(*t.cells[0])), FadeIn(t.rule))
             for r in (1, 2, 3):

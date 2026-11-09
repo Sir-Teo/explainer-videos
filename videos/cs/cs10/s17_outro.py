@@ -57,13 +57,16 @@ class Outro(VoiceoverScene):
         ).arrange_in_grid(rows=2, cols=3, buff=(0.35, 0.35)).move_to(DOWN * 0.2)
         head = label(rf"Part {PART}: \ Parallel Machines", font_size=38).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "What we built in this part. The power wall, from one formula, and why it turned processors into "
-            "multicores. Cache coherence, with MESI simulated and checked, and false sharing measured: nearly twelve times "
-            "slower for nothing. Memory consistency, with the store-buffering test failing on this very computer "
-            "until a fence restored order. Atomic instructions, vectors and GPUs. The theory: work and span, Brent's "
-            "theorem proved and checked, parallel prefix, and sorting networks verified by the zero-one principle. "
-            "And the Job on four cores, nearly five times faster, partly by dividing the work and partly by "
-            "shrinking it."
+            (
+            "We connected three levels of parallel-machine reasoning. At the physical level, voltage and power "
+            "budgets constrain frequency scaling. At the shared-memory level, MESI tracks permissions, "
+            "false-sharing measurements show the cost of poor placement, and defined atomic litmus tests separate "
+            "coherence from ordering. At the algorithm level, work and span give bounds, scans turn dependencies "
+            "into parallel structure, and the zero-one principle verifies our small sorting networks. The "
+            "four-core Job estimate improves partly through parallel execution and partly through less dictionary "
+            "work, with several machine costs still omitted. Host C timings are separate measurements. Knowing "
+            "which kind of evidence supports each number is part of understanding the machine."
+        )
         ):
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
@@ -103,12 +106,16 @@ class Outro(VoiceoverScene):
             (r"debugging", r"ThreadSanitizer for races, \ \texttt{perf c2c} for false sharing"),
         ])
         with self.voiceover(
-            "In practice. Servers give each core its own thread pool and its own counters, and keep hot data out of "
-            "shared lines. Parallel libraries, OpenMP, Intel's TBB, Rust's Rayon, Java's fork-join, all schedule with "
-            "work stealing. SIMD code is written with intrinsics or portable vector types, and compilers report "
-            "which loops they vectorized. GPU kernels are written to keep loads coalesced and warps undivided. "
-            "Supercomputer codes live by MPI collectives and weak scaling. And the tools of the trade are "
-            "ThreadSanitizer, which finds data races, and perf c2c, which finds false sharing."
+            (
+            "In practice. Servers give each core its own thread pool and its own counters, and keep hot data out "
+            "of shared lines. Parallel libraries offer several scheduling policies. oneTBB, Rayon and Java "
+            "fork-join use forms of work stealing; OpenMP scheduling depends on the runtime and chosen construct. "
+            "SIMD code is written with intrinsics or portable vector types, and compilers report which loops they "
+            "vectorized. GPU kernels are written to keep loads coalesced and warps undivided. Supercomputer codes "
+            "live by MPI collectives and weak scaling. And the tools of the trade are ThreadSanitizer, which can "
+            "detect many data races, and perf c2c, which helps investigate cache-line contention when the host "
+            "and permissions support its counters. Neither is a complete proof of correctness or performance."
+        )
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.35), run_time=3.0)
@@ -131,9 +138,7 @@ class Outro(VoiceoverScene):
             r"victims by locality change?",
         ], font_size=22)
         with self.voiceover(
-            "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build "
-            "problem: balance the Job's four cores with smaller pieces of work. The last, marked with a star, is a "
-            "research problem: its full answer is not known, and the notes say where to start."
+            "The notes give six exercises and worked guidance. The fifth changes the Job from four large shards to sixty-four smaller pieces; compare both scheduling balance and the changed amount of dictionary work. The last is a research exercise on scheduler constants and locality. Specify the computation and scheduler before investigating a bound: a finite simulation does not establish a universal constant."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)
@@ -169,11 +174,14 @@ class Outro(VoiceoverScene):
              r"Papamarcos and Patel, ``A low-overhead coherence solution for multiprocessors'' (1984)",
              r"Brent, ``The parallel evaluation of general arithmetic expressions'' (1974)",
              r"Batcher, ``Sorting networks and their applications'' (1968)",
+             r"Ehlers and M\"uller, ``New bounds on optimal sorting networks'' (2015), arXiv:1501.06946",
              r"Blelloch, ``Prefix sums and their applications'' (1990); \ Valiant, ``A bridging model'' (1990)",
              r"Herlihy, ``Wait-free synchronization'' (1991)",
              r"Blumofe and Leiserson, ``Scheduling multithreaded computations by work stealing'' (1999)",
              r"Esmaeilzadeh et al., ``Dark silicon and the end of multicore scaling'' (2011)",
              r"Batty et al., ``Mathematizing C++ concurrency'' (2011); \ Kang et al., ``A promising semantics'' (2017)",
+             r"Stern et al., ``How to avoid OOTA without really trying'' (2025), WG21 P3692R3 (proposal)",
+             r"Landauer, ``Irreversibility and heat generation in the computing process'' (1961)",
              r"Rupp, \textit{Microprocessor Trend Data} (CC BY 4.0)"])
         credit = note(rf"narration: \ {narration_credit()}", font_size=18).to_edge(DOWN, buff=0.15)
         with self.voiceover("The books and papers this part follows are on screen and in the notes. Thank you for "

@@ -25,7 +25,7 @@ class Coherence(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def problem(self):
-        head = label(r"Two caches, \ one address", font_size=36).to_edge(UP, buff=0.35)
+        head = label(r"Without coherence: \ two stale private copies", font_size=34).to_edge(UP, buff=0.35)
         c0 = core_box(0).move_to(LEFT * 3 + UP * 1.4)
         c1 = core_box(1).move_to(RIGHT * 3 + UP * 1.4)
         mem = VGroup(RoundedRectangle(width=3.2, height=0.7, corner_radius=0.08, stroke_color=GREY_B),
@@ -49,12 +49,16 @@ class Coherence(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(head, DOWN, buff=0.15)
         v0n = Text("x = 1", font="DejaVu Sans Mono", font_size=20, color=DATA).move_to(b0)
         with self.voiceover(
-            "Here is the problem. Two cores, each with a private cache, and one variable x in memory, holding zero. "
-            "<bookmark mark='a'/> Both cores read x. Each cache now keeps its own copy. <bookmark mark='b'/> Core zero "
-            "writes one to x. With a write-back cache, the new value goes into core zero's cache, and memory still "
-            "says zero. <bookmark mark='c'/> Now core one reads x again. It finds x in its own cache, a hit, and gets "
-            "zero: a value that was overwritten some time ago. If x were a flag saying the data is ready, core one "
-            "would wait forever. Caches made private copies of a shared memory, and the copies have come apart."
+            (
+            "First imagine private caches without a working coherence protocol. Two cores, each with a private "
+            "cache, and one variable x in memory, holding zero. <bookmark mark='a'/> Both cores read x. Each "
+            "cache now keeps its own copy. <bookmark mark='b'/> Core zero writes one to x. With a write-back "
+            "cache, the new value goes into core zero's cache, and memory still says zero. <bookmark mark='c'/> "
+            "Now core one reads x again. It finds x in its own cache, a hit, and gets zero: a value that was "
+            "overwritten some time ago. If x were a flag saying the data is ready, a cached stale copy could "
+            "prevent progress. This deliberately broken example does not describe correctly synchronized code on "
+            "a coherent machine. Caches made private copies of a shared memory, and the copies have come apart."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(c0), FadeIn(c1), FadeIn(b0), FadeIn(b1), Create(lines), FadeIn(mem))
             vo.wait_until("a")
@@ -72,7 +76,7 @@ class Coherence(VoiceoverScene):
         rules = VGroup(
             label(r"\textit{single writer, \ or many readers}: \ at any moment, \ for each line, \ either one cache may "
                   r"write it, \ or any number may read it", font_size=23, color=DATA),
-            label(r"\textit{the last value}: \ a read returns the value of the most recent write to that address",
+            label(r"\textit{coherent order}: \ reads respect the per-address write order and required synchronization",
                   font_size=23, color=YES),
             label(r"to keep the first, \ a cache must hear what the others do: \ \textit{snooping} on a shared bus, \ "
                   r"or a \textit{directory}", font_size=23, color=GREY_A),
@@ -80,18 +84,24 @@ class Coherence(VoiceoverScene):
         cite = note(r"the invariants as Sorin, \ Hill and Wood state them, \ \textit{A Primer on Memory Consistency "
                     r"and Cache Coherence}", font_size=18).to_edge(DOWN, buff=0.4)
         with self.voiceover(
+            (
             "A coherence protocol makes the copies behave as if there were only one. It keeps two promises. "
-            "<bookmark mark='a'/> The first: at any moment, for each cache line, either a single cache is allowed to "
-            "write it, or any number of caches may read it, but never both. <bookmark mark='b'/> The second: a read "
-            "returns the value of the most recent write to that address. <bookmark mark='c'/> To keep them, every "
-            "cache must learn what the others are doing to the lines it holds. On a small chip every cache can watch, "
-            "or snoop on, a shared bus that carries every miss. On a big one, a directory keeps track of who holds "
-            "what."
+            "<bookmark mark='a'/> The first: at any moment, for each cache line, either a single cache is allowed "
+            "to write it, or any number of caches may read it, but never both. <bookmark mark='b'/> The second: "
+            "writes to one address have a coherent order, and reads respect that order and the required "
+            "synchronization. Our sequential simulator returns the last completed write. This does not impose a "
+            "single order across different addresses. <bookmark mark='c'/> To keep them, every cache must learn "
+            "what the others are doing to the lines it holds. On a small chip every cache can watch, or snoop on, "
+            "a shared bus that carries every miss. On a big one, a directory keeps track of who holds what."
+        )
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cite))
-            for mk, r in zip("abc", rules):
-                vo.wait_until(mk)
-                self.play(FadeIn(r, shift=RIGHT * 0.1))
+            self.play(FadeIn(head), FadeIn(cite), run_time=0.5)
+            for mk, r in zip('abc', rules):
+                if mk != 'a':
+                    vo.wait_until(mk)
+                self.play(FadeIn(r, shift=RIGHT * 0.1), run_time=0.6 if mk == 'a' else 1.0)
+                if mk == 'a':
+                    vo.wait_until(mk)
         self.wait(0.3)
         self.clear_scene()
 
@@ -168,18 +178,24 @@ class Coherence(VoiceoverScene):
         log = VGroup()
         cur = 0
         with self.voiceover(
-            "Watch one cache line through eight accesses by four cores. <bookmark mark='a'/> Core zero reads: no one "
-            "else has it, so it arrives Exclusive. Core one reads: now both are Shared. Core zero writes: it must "
-            "invalidate core one's copy, and becomes Modified. Core two reads: core zero supplies its dirty line, and "
-            "both are Shared. Core three writes: everyone else is invalidated. It writes again: a hit, no bus traffic "
-            "at all. Core one reads, and core three supplies it. Core two writes, and invalidates both. <bookmark "
-            "mark='b'/> The simulator behind this, with any number of cores and caches, is checked on twenty "
-            "thousand random accesses: never two writable copies, and every read sees the last write."
+            (
+            "Follow one line through eight accesses in our serialized MESI simulator. <bookmark mark='a'/> Core "
+            "zero reads zero: no other copy, so it gets Exclusive. <bookmark mark='c'/> Core one reads the same "
+            "zero, making both copies Shared. <bookmark mark='d'/> Core zero writes three: it invalidates core "
+            "one's copy and becomes Modified. <bookmark mark='e'/> Core two reads three: core zero supplies its "
+            "dirty data and both become Shared. <bookmark mark='f'/> Core three writes five, invalidating the "
+            "other two copies. <bookmark mark='g'/> It writes six next: a Modified hit, without a bus request. "
+            "<bookmark mark='h'/> Core one reads six, supplied by core three; both become Shared. <bookmark "
+            "mark='i'/> Core two writes eight, invalidating those two copies and becoming the sole owner. "
+            "<bookmark mark='b'/> The displayed values and permissions follow the simulator. Twenty thousand "
+            "random accesses also check single-writer permissions and returned values. Those tests are evidence "
+            "for this teaching implementation, not a proof of a real chip's complete protocol."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(cores), *[FadeIn(l) for l in lines], Create(bus), FadeIn(bl),
                       Create(links))
-            vo.wait_until("a")
             for k, st in enumerate(sc):
+                vo.wait_until(("a", "c", "d", "e", "f", "g", "h", "i")[k])
                 op = rf"core {st['core']}, \ {'a write' if st['op'] == 'write' else 'a read'}: \ " + st[
                     "event"].replace(";", r";\ ")
                 ev = label(op, font_size=22, color=CORE_COLORS[st["core"]]).move_to(DOWN * 1.1)
@@ -197,11 +213,11 @@ class Coherence(VoiceoverScene):
                 log.add(entry)
                 entry.move_to(DOWN * (1.75 + 0.27 * (k % 4)) + (LEFT * 3.3 if k < 4 else RIGHT * 2.8))
                 self.play(FadeIn(arrow), Transform(event, ev) if k else FadeIn(ev), *anims, FadeIn(entry),
-                          run_time=0.9)
+                          run_time=0.6)
                 if not k:
                     event = ev
-                self.wait(0.9)
-                self.play(FadeOut(arrow), run_time=0.3)
+                self.wait(0.5)
+                self.play(FadeOut(arrow), run_time=0.2)
             vo.wait_until("b")
             self.play(Indicate(VGroup(*lines), color=YES))
         self.wait(0.3)
@@ -214,7 +230,7 @@ class Coherence(VoiceoverScene):
         pts = VGroup(
             label(r"a bus carries one miss at a time, \ and every cache must look at every one: \ fine for a few "
                   r"cores", font_size=22, color=GREY_A),
-            label(r"a \textit{directory} beside memory keeps, \ per line, \ which caches hold it \ (a bit per core)",
+            label(r"a \textit{directory} records ownership and sharers; \ a bit per core is one possible design",
                   font_size=22, color=DATA),
             label(r"a miss asks the directory, \ which messages only the holders: \ point to point, \ over a network",
                   font_size=22, color=DATA),
@@ -226,22 +242,29 @@ class Coherence(VoiceoverScene):
                     rf"{s1['invalidations']} invalidations if the counters share a line, \ {s2['invalidations']} if "
                     r"not", font_size=22, color=HEAD).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Snooping has limits. <bookmark mark='a'/> A bus carries one transaction at a time, and every cache has "
-            "to check every one, which works for a handful of cores but not for a hundred. <bookmark mark='b'/> "
-            "Large chips keep a directory instead: next to memory, for every line, a record of which caches hold it, "
-            "one bit per core. <bookmark mark='c'/> A miss goes to the directory, which forwards it only to the "
+            (
+            "Snooping has limits. <bookmark mark='a'/> A bus carries one transaction at a time, and every cache "
+            "has to check every one, which works for a handful of cores but not for a hundred. <bookmark "
+            "mark='b'/> Large chips keep a directory instead: a directory at a home agent records ownership and "
+            "sharers. One bit per core is a simple design; sparse and compressed directories use other "
+            "representations. <bookmark mark='c'/> A miss goes to the directory, which forwards it only to the "
             "caches that hold the line, as point-to-point messages over an on-chip network. <bookmark mark='d'/> "
-            "Either way, sharing adds a fourth kind of miss to Part 9's three: the coherence miss, a line that was "
-            "in the cache until another core's write took it away. <bookmark mark='e'/> Our simulator shows how "
-            "lopsided this can be. Two cores take turns writing their own counters, five hundred times each. If the "
-            "two counters happen to sit in the same cache line, every write invalidates the other core's copy. If "
-            "they sit in different lines, there are no invalidations at all. The next chapter measures what that "
-            "costs on real hardware."
+            "Either way, sharing adds a fourth kind of miss to Part 9's three: the coherence miss, a line that "
+            "was in the cache until another core's write took it away. <bookmark mark='e'/> Our simulator shows "
+            "how lopsided this can be. Two cores take turns writing their own counters, five hundred times each. "
+            "If the two counters happen to sit in the same cache line, after the first write, each alternating "
+            "write invalidates the other copy: nine hundred and ninety-nine invalidations in this particular "
+            "schedule. If they sit in different lines, there are no invalidations at all. The next chapter "
+            "measures what that costs on real hardware."
+        )
         ) as vo:
-            self.play(FadeIn(head))
-            for mk, p in zip("abcd", pts):
-                vo.wait_until(mk)
-                self.play(FadeIn(p, shift=RIGHT * 0.1))
+            self.play(FadeIn(head), run_time=0.5)
+            for mk, p in zip('abcd', pts):
+                if mk != 'a':
+                    vo.wait_until(mk)
+                self.play(FadeIn(p, shift=RIGHT * 0.1), run_time=0.6 if mk == 'a' else 1.0)
+                if mk == 'a':
+                    vo.wait_until(mk)
             vo.wait_until("e")
             self.play(FadeIn(sim))
         self.wait(0.3)

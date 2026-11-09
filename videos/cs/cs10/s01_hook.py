@@ -3,7 +3,8 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs10.common import (BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, NO, PART, YES, load)
+from videos.cs.cs10.common import (BG, CLOCK, CODE, CORE_COLORS, COST, CTRL, DATA, FUNC, HEAD, NO, PART, YES,
+                                   core_box, load)
 
 SERIES = [("transistors", r"transistors \ (thousands)", DATA), ("specint", r"single-thread performance", YES),
           ("frequency", r"clock \ (MHz)", NO), ("watts", r"power \ (watts)", CTRL), ("cores", r"cores", FUNC)]
@@ -50,15 +51,19 @@ class Hook(VoiceoverScene):
         rate = label(rf"clock: \ +{100 * g['1985-2004']:.0f}\% a year to 2004, \ then {100 * g['2006-2021']:+.1f}\%",
                      font_size=22, color=NO).move_to(ax.c2p(1990, 6.6))
         with self.voiceover(
-            "Here are fifty years of microprocessors, each dot one chip, on a logarithmic scale. <bookmark mark='a'/> "
-            "The number of transistors on a chip doubled about every two years, as Gordon Moore predicted, and it "
-            "still does. <bookmark mark='b'/> The speed of a single thread followed it for thirty years. <bookmark "
-            "mark='c'/> So did the clock: from under a megahertz to over three gigahertz, a third faster every year. "
-            "<bookmark mark='d'/> And power rose with them, to about a hundred watts. <bookmark mark='e'/> Then, "
-            "around 2005, three of the curves bent. The clock stopped: since then it has not grown at all. Power hit a "
-            "ceiling. Single-thread speed slowed to a crawl. <bookmark mark='f'/> And a new curve appeared: the number "
-            "of cores. The transistors kept coming, and the only way left to use them was more processors on each "
-            "chip."
+            (
+            "Here are fifty years of microprocessors, each dot one chip, on a logarithmic scale. <bookmark "
+            "mark='a'/> Across this historical sample, transistor counts rise roughly exponentially. Moore "
+            "described a manufacturing trend, not a physical law or a promise for every chip. <bookmark "
+            "mark='b'/> The speed of a single thread followed it for thirty years. <bookmark mark='c'/> So did "
+            "the clock: from under a megahertz to over three gigahertz, roughly a third faster per year in the "
+            "fitted 1985 to 2004 sample. <bookmark mark='d'/> And power rose with them, to about a hundred watts. "
+            "<bookmark mark='e'/> Then, around 2005, three of the curves bent. Clock growth slowed sharply in the "
+            "later sample. Power budgets constrained further scaling, while single-thread performance continued "
+            "improving more slowly. <bookmark mark='f'/> And a new curve appeared: the number of cores. The "
+            "transistors kept coming, and designers increasingly spent them on more cores, larger caches and "
+            "specialized units."
+        )
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(src))
             for mk, (k, _, c) in zip("abcd", SERIES[:4]):
@@ -78,31 +83,56 @@ class Hook(VoiceoverScene):
     def job(self):
         sp = load("split")
         four = next(r for r in sp["rows"] if r["p"] == 4)
-        led = sp["ledger"]
         head = label(r"The Job, \ on more than one core", font_size=36).to_edge(UP, buff=0.35)
         lines = VGroup(
-            label(rf"one out-of-order Pebble core: \ {led[3]['seconds']:.1f} seconds for thirty novels", font_size=27,
+            label(rf"Part 8 fitted one-core baseline: \ {sp['one']['seconds']:.1f} seconds for thirty novels", font_size=26,
                   color=GREY_A),
-            label(r"four cores: \ split the books four ways, \ count, \ and combine the counts", font_size=27,
+            label(r"four cores: \ word-aligned text shards, \ private tables, \ then merge", font_size=25,
                   color=DATA),
             label(r"the obvious way to combine them \ throws away much of the gain", font_size=27, color=NO),
-            label(rf"done well: \ {four['speedup']['partitioned']:.1f} times faster \ on 4 cores", font_size=30,
+            label(rf"conditional compute-cost model: \ {four['speedup']['partitioned']:.1f} times faster \ on 4 cores", font_size=27,
                   color=YES),
             label(r"how can four cores be more than four times faster?", font_size=27, color=HEAD),
-        ).arrange(DOWN, buff=0.4).move_to(DOWN * 0.1)
+        )
+        for line, y in zip(lines, (2.65, 1.9, -1.45, -2.15, -2.9)):
+            line.move_to(UP * y)
+        baseline = Rectangle(width=10.2, height=0.1, stroke_width=0, fill_color=GREY_B,
+                             fill_opacity=0.6).move_to(UP * 2.25)
+        shards, cores, tables, links = VGroup(), VGroup(), VGroup(), VGroup()
+        for k, x in enumerate((-4.2, -1.4, 1.4, 4.2)):
+            color = CORE_COLORS[k]
+            piece = Rectangle(width=2.65, height=0.23, stroke_color=color, fill_color=color,
+                              fill_opacity=0.55).move_to([x, 1.25, 0])
+            core = core_box(k, w=2.0, h=0.65, font_size=20).move_to([x, 0.45, 0])
+            rows = VGroup(*[Rectangle(width=1.6, height=0.18, stroke_color=color, stroke_width=1.2,
+                                      fill_color=color, fill_opacity=0.12) for _ in range(3)]).arrange(DOWN, buff=0)
+            rows.move_to([x, -0.5, 0])
+            tag = label(r"private table", font_size=16, color=color).next_to(rows, DOWN, buff=0.1)
+            shards.add(piece); cores.add(core); tables.add(VGroup(rows, tag))
+            links.add(Arrow(piece.get_bottom(), core.get_top(), buff=0.04, color=color, stroke_width=2),
+                      Arrow(core.get_bottom(), rows.get_top(), buff=0.04, color=color, stroke_width=2))
         with self.voiceover(
-            "And the Job. <bookmark mark='a'/> On one of Part 8's out-of-order cores, with Part 9's real caches, "
-            "counting the words of thirty novels takes fifty-seven seconds. <bookmark mark='b'/> With four cores, the "
-            "plan is simple: give each core a quarter of the books, let each count its own, and combine the four sets "
-            "of counts. <bookmark mark='c'/> The obvious way of combining them throws away much of what the cores "
-            "gained. <bookmark mark='d'/> Done well, the four cores finish nearly five times faster than one. "
-            "<bookmark mark='e'/> More than four times faster, on four cores. By the end of this part you will know "
-            "how that is possible, and why it is a warning as much as a triumph."
+            (
+            "And the Job. <bookmark mark='a'/> On one of Part 8's out-of-order cores, the fitted corpus model "
+            "projects about fifty-seven seconds to count thirty novels. Part 9 added a conditional memory "
+            "estimate, not a physical multicore measurement. <bookmark mark='b'/> With four cores, the plan is "
+            "simple: give each core a word-aligned quarter of the text, let each count its own, and combine the "
+            "four sets of counts. <bookmark mark='c'/> The obvious way of combining them throws away much of what "
+            "the cores gained. <bookmark mark='d'/> With partitioned merging, the cost model projects nearly five "
+            "times the one-core speed. <bookmark mark='e'/> More than four times faster, on four cores. By the "
+            "end of this part you will know how changing the total work produces that apparent superlinear gain, "
+            "and which costs the projection leaves out."
+        )
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(lines[0]), FadeIn(baseline), run_time=0.65)
             for mk, l in zip("abcde", lines):
                 vo.wait_until(mk)
-                self.play(FadeIn(l, shift=UP * 0.1))
+                if mk == "a":
+                    self.play(Indicate(baseline, color=HEAD), run_time=0.5)
+                elif mk == "b":
+                    self.play(FadeIn(l), FadeIn(shards), FadeIn(cores), FadeIn(tables), Create(links), run_time=1.0)
+                else:
+                    self.play(FadeIn(l, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
 
@@ -119,18 +149,15 @@ class Hook(VoiceoverScene):
             label(r"the Job on four cores: \ ledger row 4", font_size=27, color=COST),
         ).arrange(DOWN, buff=0.38).move_to(DOWN * 0.1)
         with self.voiceover(
-            "Here is where this part goes. <bookmark mark='a'/> Why the clock stopped: the physics of the power wall. "
-            "<bookmark mark='b'/> What goes wrong when several cores share memory: caches that must be kept in "
-            "agreement, and memory operations that appear out of order, with both effects measured on this computer. "
-            "<bookmark mark='c'/> Parallelism inside one core: vector instructions, and the graphics processor. "
-            "<bookmark mark='d'/> The theory: work and span, Brent's theorem, the parallel prefix that Part 4's adder "
-            "already used, and networks that sort. <bookmark mark='e'/> And the Job on four cores, for the ledger's "
-            "next row."
+            "Here is the route from hardware limits to correct parallel programs. <bookmark mark='a'/> First, the power wall and why rapid clock scaling slowed. <bookmark mark='b'/> Then shared memory: a coherence protocol simulated step by step, followed by host measurements of false sharing and store buffering. <bookmark mark='c'/> Next, SIMD inside a core and the throughput-oriented GPU. <bookmark mark='d'/> Then the theory: work and span, a scheduling bound, scans and sorting networks. <bookmark mark='e'/> Finally, the Job on four cores: a conditional model and a separate compiled host experiment, with their costs kept explicit."
         ) as vo:
-            self.play(FadeIn(head))
-            for mk, f in zip("abcde", facts):
-                vo.wait_until(mk)
-                self.play(FadeIn(f, shift=UP * 0.1))
+            self.play(FadeIn(head), run_time=0.5)
+            for mk, f in zip('abcde', facts):
+                if mk != 'a':
+                    vo.wait_until(mk)
+                self.play(FadeIn(f, shift=UP * 0.1), run_time=0.6 if mk == 'a' else 1.0)
+                if mk == 'a':
+                    vo.wait_until(mk)
         self.wait(0.3)
         self.clear_scene()
 

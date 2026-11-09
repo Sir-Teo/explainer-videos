@@ -63,16 +63,19 @@ class WorkSpan(VoiceoverScene):
         ll = note(r"$p$ processors do at most $p$ units a step; \\ a path's nodes run one after another",
                   font_size=17).next_to(laws, DOWN, buff=0.15)
         with self.voiceover(
+            (
             "To reason about parallel programs without fixing a machine, draw the computation as a graph. "
-            "<bookmark mark='a'/> Each node is a unit of work. Each arrow says one node must finish before another "
-            "starts. On the left, four numbers summed as a tree; on the right, a chain of steps, each needing the "
-            "one before. <bookmark mark='b'/> Two numbers describe it. The work, T one, is the total number of "
-            "nodes: the time on one processor, here fourteen. <bookmark mark='c'/> The span, T infinity, is the "
-            "longest path: the time on infinitely many processors, here seven, along the chain. <bookmark mark='d'/> "
-            "Their ratio, the parallelism, says how many processors could usefully work at once: here two. "
-            "<bookmark mark='e'/> And they give two lower bounds for any machine with p processors. It can do at most "
-            "p nodes a step, so it needs at least T one over p steps. And the nodes of a path must run one after "
-            "another, so it needs at least T infinity."
+            "<bookmark mark='a'/> Each node is a unit of work. Each arrow says one node must finish before "
+            "another starts. On the left, four numbers summed as a tree; on the right, a chain of steps, each "
+            "needing the one before. <bookmark mark='b'/> Two numbers describe it. The work, T one, is the total "
+            "number of nodes: the time on one processor, here fourteen. <bookmark mark='c'/> The span, T "
+            "infinity, is the longest path: the time on infinitely many processors, here seven, along the chain. "
+            "<bookmark mark='d'/> Their ratio, the parallelism, is average available parallelism along an ideal "
+            "span-length execution, here two. Some steps can have more ready work; the ratio is not a maximum "
+            "instantaneous width. <bookmark mark='e'/> And they give two lower bounds for any machine with p "
+            "processors. It can do at most p nodes a step, so it needs at least T one over p steps. And the nodes "
+            "of a path must run one after another, so it needs at least T infinity."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*nodes.values())), Create(edges))
             vo.wait_until("a")
@@ -112,6 +115,9 @@ class WorkSpan(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*nodes.values())), Create(edges), FadeIn(rule))
             vo.wait_until("a")
+            frame = 1.0 / float(config.frame_rate)
+            budget = vo.start + vo.mark_time("b") - self.renderer.time
+            step_time = min(0.7, max(frame, budget / len(steps) - frame))
             for t, run in enumerate(steps):
                 anims = [nodes[v][0].animate.set_fill(cols[i], 0.6).set_stroke(cols[i]) for i, v in enumerate(run)]
                 e = label(rf"step {t + 1}: \ " + r", \ ".join(str(v) for v in run) + (
@@ -119,7 +125,7 @@ class WorkSpan(VoiceoverScene):
                 e.move_to([3.6, 1.3 - 0.36 * t, 0], aligned_edge=LEFT).set_x(2.0, LEFT)
                 e.align_to([2.0, 0, 0], LEFT)
                 log.add(e)
-                self.play(*anims, FadeIn(e), run_time=0.7)
+                self.play(*anims, FadeIn(e), run_time=step_time)
             vo.wait_until("b")
             self.play(*[Indicate(e, color=NO) for e, run in zip(log, steps) if len(run) < 2])
         self.wait(0.3)
@@ -158,9 +164,9 @@ class WorkSpan(VoiceoverScene):
             "step, and the theorem is proved. <bookmark mark='g'/> Since the larger of T one over p and T infinity is "
             "a lower bound for every schedule, greedy is always within a factor of two of the best possible."
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(thm), FadeIn(sub))
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(Write(thm), FadeIn(sub), run_time=0.6)
+            vo.wait_until('a')
             for mk, p in zip("bcdef", proof):
                 vo.wait_until(mk)
                 self.play(FadeIn(p, shift=RIGHT * 0.1))
@@ -205,13 +211,7 @@ class WorkSpan(VoiceoverScene):
                       label(rf"at worst {worst:.2f} times \\ the lower bound", font_size=20, color=HEAD)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.2).next_to(ax, RIGHT, buff=0.5)
         with self.voiceover(
-            "Here is the theorem checked on a larger computation: two thousand nodes, each depending on up to three "
-            f"recent ones, with a span of {tinf}. <bookmark mark='a'/> The grey curve is the lower bound, the larger "
-            "of T one over p and T infinity. The orange curve is Brent's upper bound. <bookmark mark='b'/> And the "
-            "green dots are a greedy schedule, from one processor to sixty-four. They sit right on the lower bound "
-            "until the parallelism, about fourteen, runs out, and from there on every schedule takes the span. "
-            f"<bookmark mark='c'/> Over forty random graphs, greedy was never above Brent's bound, and never more "
-            f"than {worst:.2f} times the lower bound."
+            f"Here is the theorem checked on a larger computation: two thousand nodes, each depending on up to three recent ones, with a span of {tinf}. <bookmark mark='a'/> The grey curve is the lower bound, the larger of T one over p and T infinity. The orange curve is Brent's upper bound. <bookmark mark='b'/> And the green dots are a greedy schedule, from one processor to sixty-four. These points approach the lower bound as processors are added, then flatten near the span. This is one graph and one priority order; another greedy schedule need not achieve the lower bound. <bookmark mark='c'/> Over forty random graphs, greedy was never above Brent's bound, and never more than {worst:.2f} times the lower bound."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl))
             vo.wait_until("a")
@@ -258,17 +258,7 @@ class WorkSpan(VoiceoverScene):
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(RIGHT, buff=0.4).shift(UP * 0.2)
         worst = max((r["makespan"] - st["t1"] / r["p"]) / st["tinf"] for r in rows[1:])
         with self.voiceover(
-            "Greedy assumes someone hands out the ready nodes. Real runtimes cannot afford a central list that every "
-            "core fights over, so they use work stealing. <bookmark mark='a'/> Each core keeps its own double-ended "
-            "queue of tasks and works on the newest. When a task spawns another, the new one goes on the same core's "
-            "queue. <bookmark mark='b'/> A core with nothing to do picks another core at random and steals the oldest "
-            "task from its queue, which tends to be a big one. <bookmark mark='c'/> In 1999 Robert Blumofe and "
-            "Charles Leiserson proved that this gives T one over p plus a constant times T infinity, in expectation, "
-            "and that the number of steals is proportional to p times the span: when there is plenty of parallelism, "
-            "cores almost never need to talk to each other. <bookmark mark='d'/> Our simulation of a fork-join "
-            f"computation agrees: the extra time stays under {worst + 0.05:.1f} spans, and steals are rare. <bookmark "
-            "mark='e'/> This is the scheduler inside Cilk, Intel's Threading Building Blocks, Java's fork-join pool, "
-            "Rust's Rayon, and Go."
+            f"Greedy assumes someone hands out the ready nodes. Real runtimes cannot afford a central list that every core fights over, so they use work stealing. <bookmark mark='a'/> Each core keeps its own double-ended queue of tasks and works on the newest. When a task spawns another, the new one goes on the same core's queue. <bookmark mark='b'/> A core with nothing to do picks another core at random and steals the oldest task from its queue, which tends to be a big one. <bookmark mark='c'/> In 1999 Robert Blumofe and Charles Leiserson proved, for fully strict computations under their scheduler and cost assumptions, an expected bound of T one over p plus a constant times T infinity, in expectation, with expected steal attempts bounded by order p times the span. This is an upper bound under a specific model, not a universal claim about communication. <bookmark mark='d'/> Our simplified deque simulation illustrates the scaling on one fork-join tree; it is not the full theorem model: the extra time stays under {worst + 0.05:.1f} spans, and steals are rare. <bookmark mark='e'/> Work stealing appears in Cilk, oneTBB, Java fork-join, Rayon and Go, with different task, queue and scheduling policies; the theorem does not automatically cover each runtime."
         ) as vo:
             self.play(FadeIn(head), FadeIn(deqs))
             vo.wait_until("a")

@@ -33,35 +33,48 @@ class Frontier(VoiceoverScene):
         n1 = label(r"thread 1", font_size=20, color=CORE_COLORS[1]).next_to(t1, LEFT, buff=0.3)
         init = label(r"$x = y = 0$; \ each thread copies one into the other", font_size=20, color=GREY_B).next_to(
             VGroup(t0, t1), RIGHT, buff=0.5)
+        cycle = VGroup(
+            Arrow(t0[0].get_right(), t0[1].get_left(), buff=0.02, color=DATA, stroke_width=2),
+            CurvedArrow(t0[1].get_bottom(), t1[0].get_top(), angle=-0.3, color=NO, stroke_width=2),
+            Arrow(t1[0].get_right(), t1[1].get_left(), buff=0.02, color=CTRL, stroke_width=2),
+            CurvedArrow(t1[1].get_right(), t0[0].get_top(), angle=PI * 0.75, color=NO, stroke_width=2),
+        )
+        cycle_note = label(r"toy circular justification; \ guessed value 42", font_size=17, color=NO).move_to(
+            LEFT * 2.3 + UP * 2.9)
         sc = ", ".join(f"({a}, {b})" for a, b in fr["sc"])
         spec = ", ".join(f"({a}, {b})" for a, b in fr["speculative"])
         res = VGroup(
             label(rf"every interleaving, \ in order: \ $(r_1, r_2) \in \{{{sc}\}}$", font_size=22, color=YES),
-            label(r"a machine that may guess a load's value and check it later \ (Part 8's value prediction):",
+            label(r"toy rule: \ expose a guessed store before confirming its source load",
                   font_size=22, color=GREY_A),
             wrapped_label(rf"guess 42, \ store it early, \ the other thread loads 42, \ copies it back: \ the guess "
                           rf"``confirms'' itself: \ $\{{{spec}\}}$", 12.0, font_size=22, color=NO),
-            wrapped_label(r"no real processor does this, \ yet the C++ standard's formal rules for relaxed atomics "
-                          r"do not forbid it", 12.0, font_size=22, color=HEAD),
+            wrapped_label(r"C++ discourages circular values; \ this toy enumerator is not a language model or "
+                          r"ordinary hardware speculation", 12.0, font_size=22, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(VGroup(n1, t1), DOWN, buff=0.6).to_edge(LEFT, buff=0.6)
         with self.voiceover(
-            "The first open problem is in the memory models of programming languages. <bookmark mark='a'/> Two "
-            "threads, x and y both zero. Thread zero copies x into y; thread one copies y into x. <bookmark "
-            "mark='b'/> Enumerate every interleaving and every value stays zero, which is obvious: there is no other "
-            "value anywhere. <bookmark mark='c'/> But now allow a machine to guess the value a load will return and "
-            "check it later, the value prediction of Part 8's Frontier. <bookmark mark='d'/> Guess forty-two. Store it "
-            "early. The other thread loads forty-two and stores it back, and when the first load finally reads x, it "
-            "finds forty-two: the guess confirms itself. Our enumerator finds outcomes like that for every guess. "
-            "<bookmark mark='e'/> No real processor does this. But the formal rules of C and C++ for relaxed atomic "
-            "operations, written down precisely by Mark Batty and colleagues in 2011, do not rule it out. Such "
-            "values are called out of thin air."
+            (
+            "A subtle research problem concerns causal cycles in language memory models. <bookmark mark='a'/> "
+            "Here x and y are initially zero, and all shared accesses mean relaxed atomic accesses. One thread "
+            "loads x and stores that value to y; the other loads y and copies it to x. <bookmark mark='b'/> Every "
+            "ordinary program-order interleaving keeps both values zero. <bookmark mark='c'/> Now consider a "
+            "deliberately permissive toy model that exposes a guessed store before confirming its source load. "
+            "This is stronger than ordinary internal value prediction. <bookmark mark='d'/> A guess of forty-two "
+            "can circulate through both threads and confirm itself. Our enumerator checks the candidate values "
+            "zero, one and forty-two; it illustrates the circular justification, not a complete language "
+            "semantics. <bookmark mark='e'/> Such out-of-thin-air cycles are discouraged by the C++ standard. "
+            "Conventional processors do not publish unconfirmed speculative store values this way. The difficult "
+            "question is how to specify causality precisely while preserving valid compiler transformations."
+        )
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(t0), FadeIn(t1), FadeIn(n0), FadeIn(n1), FadeIn(init))
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(t0), FadeIn(t1), FadeIn(n0), FadeIn(n1), FadeIn(init), run_time=0.6)
+            vo.wait_until('a')
             for mk, r in zip("bcde", res):
                 vo.wait_until(mk)
                 self.play(FadeIn(r, shift=RIGHT * 0.1))
+                if mk == "d":
+                    self.play(Create(cycle), FadeIn(cycle_note), run_time=0.8)
         self.wait(0.3)
         self.clear_scene()
 
@@ -71,34 +84,42 @@ class Frontier(VoiceoverScene):
         pts = VGroup(
             label(r"compilers \textit{should} be free to reorder independent loads and stores", font_size=22,
                   color=GREY_A),
-            label(r"but whether a store ``depends'' on a load can change under optimization: \\ "
-                  r"\texttt{y = r1 * 0;} \ depends on \texttt{r1} until the compiler simplifies it", font_size=22,
+            label(r"syntax is not semantic dependence: \\ "
+                  r"\texttt{y = r1 * 0;} \ mentions \texttt{r1}, \ but its value is independent of it", font_size=22,
                   color=GREY_A),
             label(r"so ``forbid stores that depend on unconfirmed loads'' is not a rule about the program text",
                   font_size=22, color=NO),
             label(r"C++14 added a sentence: \ implementations \textit{should} not produce such values \ (no definition)",
                   font_size=22, color=CTRL),
-            label(r"candidates: \ promising semantics \ (Kang et al., \ 2017), \ event structures, \ pomsets: \ none yet "
-                  r"adopted", font_size=22, color=DATA),
-            label(r"the open problem: \ a model that forbids thin air \ \textit{and} allows every optimization in use",
+            wrapped_label(r"research: \ promising semantics \ (Kang et al., \ 2017); \ implementation argument in "
+                          r"WG21 P3692R3 \ (Stern et al., \ 2025)", 12.0, font_size=22, color=DATA),
+            label(r"reconcile precise causality, \ valid transformations and real implementations",
                   font_size=23, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(DOWN * 0.1)
         with self.voiceover(
-            "Why not just forbid it? <bookmark mark='a'/> Because compilers must stay free to reorder loads and "
-            "stores that do not depend on each other; that freedom is much of what optimization is. <bookmark "
-            "mark='b'/> And whether a store depends on a load is not a fact about the program text. A store of r1 "
-            "times zero depends on r1, until the compiler simplifies it to a store of zero. <bookmark mark='c'/> So "
-            "a rule like never let a store depend on an unconfirmed load cannot be stated about the source program. "
-            "<bookmark mark='d'/> The 2014 C++ standard settled for one sentence saying implementations should not "
-            "produce such values, without defining them. <bookmark mark='e'/> Researchers have proposed precise "
-            "models, the promising semantics of Jeehoon Kang and colleagues in 2017 among them, but none has been "
-            "adopted. <bookmark mark='f'/> The open question: is there a memory model that forbids values from thin "
-            "air and still allows every optimization compilers actually perform?"
+            (
+            "Why is a precise rule difficult? <bookmark mark='a'/> Independent operations can often be reordered "
+            "safely, and a useful model should justify those transformations. <bookmark mark='b'/> Syntactic "
+            "dependence is not semantic dependence: r times zero mentions r, but its value is zero regardless of "
+            "r, even before a compiler simplifies it. <bookmark mark='c'/> A rule based only on which register "
+            "names appear in source text therefore misses the real question of causality. <bookmark mark='d'/> "
+            "C++14 introduced a recommendation against values that circularly depend on their own computation; "
+            "that statement is not a full operational account of dependence. <bookmark mark='e'/> Promising "
+            "semantics, proposed by Kang and colleagues in 2017, is one formal research approach. The 2025 WG21 "
+            "paper P3692R3 by Stern and colleagues instead argues for OOTA avoidance under stated "
+            "conventional-implementation and quasi-volatile assumptions. A proposal is not evidence of its "
+            "adoption into a standard. <bookmark mark='f'/> The research task is to reconcile precise language "
+            "guarantees, valid transformations and real implementations. Our toy cycle shows the issue; it does "
+            "not settle that task."
+        )
         ) as vo:
-            self.play(FadeIn(head))
-            for mk, p in zip("abcdef", pts):
-                vo.wait_until(mk)
-                self.play(FadeIn(p, shift=RIGHT * 0.1))
+            self.play(FadeIn(head), run_time=0.5)
+            for mk, p in zip('abcdef', pts):
+                if mk != 'a':
+                    vo.wait_until(mk)
+                self.play(FadeIn(p, shift=RIGHT * 0.1), run_time=0.6 if mk == 'a' else 1.0)
+                if mk == 'a':
+                    vo.wait_until(mk)
         self.wait(0.3)
         self.clear_scene()
 
@@ -154,30 +175,37 @@ class Frontier(VoiceoverScene):
     def open(self):
         head = label(r"And the power wall itself", font_size=36).to_edge(UP, buff=0.3)
         pts = VGroup(
-            label(r"near-threshold computing: \ run at a voltage just above $V_{\text{th}}$: \ about ten times less "
-                  r"energy, \ much slower", font_size=21, color=GREY_A),
+            label(r"near-threshold computing: \ energy, \ speed and noise-margin trade-offs", font_size=21, color=GREY_A),
             label(r"specialization: \ circuits for one job, \ dark until needed \ (Part 60)", font_size=21,
                   color=DATA),
             label(r"3-D stacking: \ memory on top of logic, \ shorter wires, \ and harder cooling", font_size=21,
                   color=GREY_A),
-            label(r"the floor: \ Landauer's $kT \ln 2$ per erased bit, \ about $3 \times 10^{-21}$ J at room "
-                  r"temperature: \ $10^4$ to $10^6$ times below today's switches", font_size=21, color=FUNC),
-            label(r"reversible and adiabatic logic aim under it: \ no product yet", font_size=21, color=HEAD),
+            wrapped_label(r"Landauer: \ $kT \ln 2$ minimum average heat for ideal erasure of an unknown unbiased bit; "
+                          r"not every transistor transition", 12.0, font_size=21, color=FUNC),
+            label(r"reversible and adiabatic designs reduce dissipation; \ resets and errors still count", font_size=21, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(DOWN * 0.1)
         with self.voiceover(
-            "And the power wall is a research frontier of its own. <bookmark mark='a'/> One idea is to run circuits "
-            "at a voltage barely above the threshold, which can save about ten times the energy per operation, at a "
-            "large cost in speed. <bookmark mark='b'/> Another is the specialization of Part 60. <bookmark "
-            "mark='c'/> Another is to stack chips in three dimensions, memory directly on logic, shortening wires but "
-            "making heat harder to remove. <bookmark mark='d'/> Underneath all of them sits a physical floor. In "
-            "1961 Rolf Landauer showed that erasing one bit must release at least k T log two of heat, about three "
-            "times ten to the minus twenty-one joules at room temperature. Today's switches spend between ten "
-            "thousand and a million times more, depending on what you count. <bookmark mark='e'/> Reversible and adiabatic logic aim to compute below even that floor, by "
-            "never erasing information. No product does it yet."
+            (
+            "Energy is another frontier with several different scales. <bookmark mark='a'/> Near-threshold "
+            "operation can reduce energy per operation for some circuits and workloads, trading away speed and "
+            "noise margin; the saving is not a universal factor of ten. <bookmark mark='b'/> Specialization can "
+            "avoid the overhead of a general-purpose processor, as Part 60 explores. <bookmark mark='c'/> "
+            "Three-dimensional integration can shorten connections, especially between memory and logic, while "
+            "raising thermal and manufacturing challenges. <bookmark mark='d'/> At the thermodynamic scale, "
+            "resetting one unknown unbiased bit in a reservoir at temperature T has a minimum average heat cost "
+            "of k T times natural log two in the ideal erasure setting, about three times ten to the minus "
+            "twenty-one joules at room temperature. That is not a lower bound on every transistor transition. "
+            "<bookmark mark='e'/> Reversible and adiabatic designs aim to reduce information loss and "
+            "dissipation. They do not violate Landauer's erasure bound; initialization, error correction and "
+            "eventual reset still require accounting. Practical energy efficiency remains a system problem."
+        )
         ) as vo:
-            self.play(FadeIn(head))
-            for mk, p in zip("abcde", pts):
-                vo.wait_until(mk)
-                self.play(FadeIn(p, shift=RIGHT * 0.1))
+            self.play(FadeIn(head), run_time=0.5)
+            for mk, p in zip('abcde', pts):
+                if mk != 'a':
+                    vo.wait_until(mk)
+                self.play(FadeIn(p, shift=RIGHT * 0.1), run_time=0.6 if mk == 'a' else 1.0)
+                if mk == 'a':
+                    vo.wait_until(mk)
         self.wait(0.3)
         self.clear_scene()
