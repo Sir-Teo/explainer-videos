@@ -6,6 +6,7 @@ from __future__ import annotations
 import itertools
 import random
 import unittest
+from unittest import mock
 
 import numpy as np
 
@@ -89,6 +90,20 @@ class Analyses(unittest.TestCase):
 
 
 class Caches(unittest.TestCase):
+    def test_plru_refills_the_invalidated_physical_way(self):
+        for invalidated in range(4):
+            with self.subTest(invalidated=invalidated):
+                c = SetAssoc(4 * 64, ways=4, policy="plru")
+                for line in range(4):
+                    c.access(line * 64)
+                c.flush_line(invalidated * 64)
+                c.access(4 * 64)
+                self.assertEqual(set(c.ways_of[0].values()), set(range(4)))
+                self.assertEqual(c.ways_of[0][4], invalidated)
+                for line in range(5, 25):
+                    c.access(line * 64)
+                    self.assertEqual(len(set(c.ways_of[0].values())), 4)
+
     def test_plru_with_two_ways_is_lru(self):
         rng = random.Random(7)
         a, b = SetAssoc(4 * 2 * 64, ways=2, policy="lru"), SetAssoc(4 * 2 * 64, ways=2, policy="plru")
@@ -123,6 +138,94 @@ class Caches(unittest.TestCase):
 
 
 class Scans(unittest.TestCase):
+    def test_compute_command_refreshes_legacy_but_reuses_current_data(self):
+        import json
+        import tempfile
+        from pathlib import Path
+        from explainer.ai.cache import Cache
+        from videos.cs.cs9 import compute as C
+
+        fresh = {"scalar_words": 8, "rows": [{"final_dirty_lines": 2}]}
+        with tempfile.TemporaryDirectory() as d:
+            cache = Cache("cs9")
+            cache.dir = Path(d)
+            cache.path("pebbles").write_text(json.dumps({"rows": [{"words": 42240}]}))
+            producer = mock.Mock(return_value=fresh)
+            with mock.patch.object(C, "CACHE", cache), mock.patch.object(C, "ITEMS", {"pebbles": producer}):
+                C.main([])
+                first = cache.path("pebbles").read_bytes()
+                C.main(["pebbles"])
+                self.assertEqual(cache.path("pebbles").read_bytes(), first)
+            producer.assert_called_once()
+            self.assertEqual(json.loads(first), fresh)
+
+    def test_predicted_scan_reads_match_the_emulator(self):
+        from videos.cs.cs9.compute import scan_ends
+
+        tape = (" ".join(chr(97 + i) for i in range(26)) + " a z aa ab az zz z").encode()
+        program = assemble(P.JOB_V0)
+        actual = memtrace(program.image, tape=tape)
+        length_pc = program.labels["scan"] + 4
+        ends = scan_ends(tape)
+        expected = [P.TABLE + 12 * i + 4 for end in ends for i in range(int(end) + 1)]
+        self.assertEqual(actual.addr[actual.pc == length_pc].tolist(), expected)
+        self.assertEqual(int(ends[0]), -1)
+        self.assertEqual(int(ends[1]), 0)
+
+    def test_legacy_projection_data_is_rejected_without_computation(self):
+        import json
+        import tempfile
+        from pathlib import Path
+        from explainer.ai.cache import Cache
+        from videos.cs.cs9 import compute as C
+
+        for name, old in [("scans", {"rows": [{"kb": 32, "keep_front": 0.7}]}),
+                          ("pebbles", {"rows": [{"words": 42240}]}),
+                          ("job_memory", {"windows": []}),
+                          ("job", {"clocks": {"this machine": {}}})]:
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as d:
+                cache = Cache("cs9")
+                cache.dir = Path(d)
+                path = cache.path(name)
+                original = json.dumps(old)
+                path.write_text(original)
+                with mock.patch.object(C, "CACHE", cache):
+                    with self.assertRaisesRegex(RuntimeError, "Legacy cs9/" + name):
+                        C.load(name)
+                self.assertEqual(path.read_text(), original)
+
+    def test_pinned_prefix_comparator_is_a_feasible_min_upper_bound(self):
+        from videos.cs.cs9.compute import pinned_scan_misses
+
+        rng = random.Random(81)
+        cases = [[1] * 30, [0] * 20, [-1] * 10, [8, -1, 0, 5, 2, 8]]
+        cases += [[rng.randrange(12) for _ in range(30)] for _ in range(10)]
+        for ends in cases:
+            seq = [ln for end in ends for ln in range(end + 1)]
+            for cap in (1, 2, 4, 16):
+                resident = set()
+                misses = 0
+                for ln in seq:
+                    if ln not in resident:
+                        misses += 1
+                        resident.add(ln)
+                    self.assertLessEqual(len(resident), cap)
+                    if ln >= cap - 1:
+                        resident.remove(ln)  # transient slot, explicitly discarded
+                self.assertEqual(pinned_scan_misses(np.array(ends), cap), (len(seq), misses))
+                self.assertLessEqual(belady(seq, cap), misses)
+
+    def test_abstract_corpus_table_and_pool_do_not_alias(self):
+        from videos.cs.cs9.compute import TABLE, window_events
+
+        words = [f"w{i:05d}".encode() for i in range(40000)]
+        words.append(words[0])
+        lines, is_pool = window_events(words, 40000, 1)
+        self.assertTrue(is_pool.any())
+        # The corpus projection relocates the pool beyond the entire grown
+        # table; otherwise unrelated objects become the same simulated line.
+        self.assertGreater(int(lines[is_pool].min()), (TABLE + 12 * 40000 - 1) // 64)
+
     def test_prefix_scan_misses_are_lru(self):
         from videos.cs.cs9.compute import lru_scan_misses
 

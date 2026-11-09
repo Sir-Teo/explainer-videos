@@ -22,7 +22,9 @@ class Direct(VoiceoverScene):
     def card(self):
         card = chapter_card(3, r"A direct-mapped cache", r"Where in the cache does an address go?", lit=(1965,),
                             extra=((1965, r"Wilkes: \ slave memories"),), part=PART)
-        with self.voiceover("Chapter three. A direct-mapped cache."):
+        with self.voiceover(
+            "Chapter three. A direct-mapped cache."
+        ):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
 
@@ -30,7 +32,7 @@ class Direct(VoiceoverScene):
     def split(self):
         head = label(r"An address, \ cut into three", font_size=36).to_edge(UP, buff=0.35)
         a = address_bits(0x00010A4C, 18, 8, 6, cell=0.3, font_size=15).move_to(UP * 0.9)
-        cap = label(r"a 32-bit address, \ for a 16 KB cache of 256 lines of 64 bytes", font_size=24,
+        cap = label(r"a 32-bit address, \ for a 16 KiB cache of 256 lines of 64 bytes", font_size=24,
                     color=GREY_A).next_to(a, UP, buff=0.35)
         expl = VGroup(
             label(r"offset: \ which byte inside the line \ ($2^6 = 64$ bytes)", font_size=24, color=FIELD_COLOR["offset"]),
@@ -40,19 +42,19 @@ class Direct(VoiceoverScene):
                   color=FIELD_COLOR["tag"]),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "The first caches appeared in the 1960s; Maurice Wilkes described the idea in 1965 as a slave memory, and "
-            "IBM's System/360 Model 85 shipped one in 1968. The simplest design is direct-mapped: every address has "
-            "exactly one place in the cache it can go. <bookmark mark='a'/> Take a sixteen-kilobyte cache of two "
-            "hundred fifty-six lines, each sixty-four bytes. An address is cut into three fields. <bookmark mark='b'/> "
-            "The lowest six bits are the offset: which byte within the sixty-four-byte line. <bookmark mark='c'/> The "
-            "next eight bits are the index: which of the two hundred fifty-six lines of the cache this address must "
-            "live in. <bookmark mark='d'/> The rest is the tag. Many addresses share an index, so the cache stores the "
-            "tag beside each line, and on every access compares it: same tag, a hit; different tag or an empty line, "
-            "a miss."
+            "The first caches appeared in the 1960s; Maurice Wilkes described the idea in 1965 as a slave memory, "
+            "and IBM's System/360 Model 85 shipped one in 1968. The simplest design is direct-mapped: every address "
+            "has exactly one place in the cache it can go. <bookmark mark='a'/> Take a sixteen-kilobyte cache of two "
+            "hundred fifty-six lines, each sixty-four bytes. An address is cut into three fields. <bookmark "
+            "mark='b'/> The lowest six bits are the offset: which byte within the sixty-four-byte line. <bookmark "
+            "mark='c'/> The next eight bits are the index: which of the two hundred fifty-six lines of the cache "
+            "this address must live in. <bookmark mark='d'/> The rest is the tag. Many addresses share an index, so "
+            "the cache stores the tag beside each line, and on every access compares it: same tag, a hit; different "
+            "tag or an empty line, a miss."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(cap), FadeIn(a.cells))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(a.braces[2]), FadeIn(expl[0]))
             vo.wait_until("c")
@@ -93,17 +95,17 @@ class Direct(VoiceoverScene):
         a6 = CurvedArrow(a.fields["offset"].get_right(), mux.get_right() + RIGHT * 0.05, angle=-1.2,
                          color=FIELD_COLOR["offset"], stroke_width=3)
         with self.voiceover(
-            "In hardware the lookup is a few gates, all working in parallel. <bookmark mark='a'/> The cache is a "
-            "small memory with one row per line: a valid bit, the stored tag, and the sixty-four bytes of data. The "
-            "index bits of the address select a row, exactly as Part 5's register file selected a register. <bookmark "
-            "mark='b'/> A comparator checks the row's stored tag against the address's tag, and an AND gate with the "
-            "valid bit says hit or miss. <bookmark mark='c'/> Meanwhile the offset bits steer a multiplexer that picks "
-            "the requested bytes out of the line. All three happen in the same cycle; that is why an L1 cache can "
-            "answer in four."
+            "A direct-mapped lookup combines an indexed data array with metadata checks. <bookmark mark='a'/> The "
+            "index selects one row containing data, a tag and a valid bit. Real implementations may also have "
+            "protection and coherence state. <bookmark mark='b'/> Compare the stored and requested tags, and require "
+            "the row to be valid before declaring a hit. <bookmark mark='c'/> The byte offset selects the requested "
+            "portion of the line. Array access, tag comparison, selection, wiring and address translation constrain "
+            "timing. Their overlap and pipelining depend on the design; this block diagram does not derive a "
+            "four-cycle L1 latency from one cycle of gates."
         ) as vo:
             self.play(FadeIn(head), FadeIn(a.cells), FadeIn(a.braces))
-            vo.wait_until("a")
             self.play(FadeIn(rows), FadeIn(heads))
+            vo.wait_until("a")
             self.play(GrowArrow(idx_arrow), FadeIn(sel))
             vo.wait_until("b")
             self.play(GrowArrow(a1), GrowArrow(a2), Create(cmp_), FadeIn(cl))
@@ -141,10 +143,10 @@ class Direct(VoiceoverScene):
             "three of index and four of offset. <bookmark mark='a'/> The first access, hex fourteen, has index one: "
             "the line is empty, a miss, and the line is filled. The second, hex eighteen, falls in the same "
             "sixteen-byte line: a hit, by spatial locality. <bookmark mark='b'/> Watch hex ninety-four. Its index is "
-            "also one, but its tag is different, so it throws out the line that hex fourteen brought in, and when hex "
-            "fourteen comes back, it misses again. <bookmark mark='c'/> Two busy addresses that share an index fight "
-            "over one line even when the rest of the cache is empty. That is the weakness of direct mapping, and the "
-            "next chapter's subject."
+            "also one, but its tag is different, so it throws out the line that hex fourteen brought in, and when "
+            "hex fourteen comes back, it misses again. <bookmark mark='c'/> Two busy addresses that share an index "
+            "fight over one line even when the rest of the cache is empty. That is the weakness of direct mapping, "
+            "and the next chapter's subject."
         ) as vo:
             self.play(FadeIn(head), FadeIn(sh), FadeIn(legend))
             vo.wait_until("a")
@@ -174,24 +176,28 @@ class Direct(VoiceoverScene):
         lines = VGroup(
             label(r"the word table starts at \texttt{0x10000}, \ the letters at \texttt{0x80000}", font_size=26,
                   color=GREY_A),
-            label(r"in a direct-mapped cache of 8 or 16 KB, \ both start in set 0: \ they collide, \ all the way up",
+            label("aligned bases can select the same sets; \\ offsets and access order matter",
                   font_size=26, color=NO),
-            label(rf"8 KB, \ direct-mapped: \ {a['misses']:,} misses", font_size=28, color=NO),
-            label(rf"8 KB, \ two lines per set: \ {b['misses']:,} \ (only the first touch of each line)",
+            label(rf"8 KiB, \ direct-mapped: \ {a['misses']:,} misses", font_size=28, color=NO),
+            label(rf"8 KiB, \ two lines per set: \ {b['misses']:,} \ (only the first touch of each line)",
                   font_size=28, color=YES),
         ).arrange(DOWN, buff=0.4).move_to(DOWN * 0.1)
         with self.voiceover(
-            "This is not a toy problem. <bookmark mark='a'/> The Job keeps its word table at hex ten thousand and the "
-            "letters of its words at hex eighty thousand. <bookmark mark='b'/> Both addresses are multiples of the "
-            "cache size, so in a direct-mapped cache of eight or sixteen kilobytes, the table and the letters map to "
-            "the same sets, line for line, and evict each other constantly. <bookmark mark='c'/> On the first "
-            "chapter, an eight-kilobyte direct-mapped cache misses fifteen thousand times. <bookmark mark='d'/> "
-            "Allow each set to hold two lines, and the same eight kilobytes miss ninety-two times: once for each "
-            "line the chapter ever touches."
+            "The chapter-1 trace also shows mapping conflicts. <bookmark mark='a'/> Its table starts at hexadecimal "
+            "ten thousand and its letter pool at hexadecimal eighty thousand. <bookmark mark='b'/> Those aligned "
+            "bases can select the same sets at the illustrated capacities. Which live lines actually collide depends "
+            "on their offsets and access order; the base addresses alone do not prove continuous eviction. <bookmark "
+            "mark='c'/> Replay the entire chapter trace through the direct-mapped eight-kibibyte cache and count the "
+            "displayed misses. <bookmark mark='d'/> Two ways at the same total capacity reduce the count to "
+            "ninety-two in this experiment. Increasing ways reduces the number of sets, so the complete mapping "
+            "changes too. This is a trace result rather than a universal monotonic rule."
         ) as vo:
             self.play(FadeIn(head))
             for mk, l in zip("abcd", lines):
-                vo.wait_until(mk)
+                if mk != 'a':
+                    vo.wait_until(mk)
                 self.play(FadeIn(l, shift=UP * 0.1))
+                if mk == 'a':
+                    vo.wait_until(mk)
         self.wait(0.3)
         self.clear_scene()

@@ -9,7 +9,7 @@ from videos.cs.cs6.common import box, fmt, sci  # noqa: F401
 from videos.cs.cs7.common import mono  # noqa: F401
 from videos.cs.cs8.common import bar_chart, grid_table  # noqa: F401
 
-from .compute import load  # noqa: F401
+from .compute import REFERENCE_GHZ, load  # noqa: F401
 
 PART = 9
 
@@ -27,18 +27,27 @@ CLOCK = C.CS_CLOCK
 HIST = C.HUMAN
 BG = "#121722"
 
+
+def plot_range(values, ticks=5):
+    """A padded linear range that keeps current host measurements inside the axes."""
+    peak = max(float(v) for v in values)
+    target = max(peak * 1.15, 1e-6)
+    unit = 10 ** np.floor(np.log10(target / ticks))
+    step = next(s * unit for s in (1, 2, 5, 10) if s * unit >= target / ticks)
+    return float(np.ceil(target / step) * step), float(step)
+
 LEVEL_COLOR = {"L1": YES, "L2": DATA, "L3": CTRL, "DRAM": NO}
 FIELD_COLOR = {"tag": CTRL, "index": DATA, "offset": YES}
 
 
 def size_label(b: int) -> str:
-    """Bytes as a short Tex label: 4 KB, 32 KB, 1 MB, 512 MB."""
+    """Bytes as a short Tex label: 4 KiB, 32 KiB, 1 MiB, 512 MiB."""
     if b >= 1 << 30:
-        return rf"{b >> 30} GB"
+        return rf"{b >> 30} GiB"
     if b >= 1 << 20:
-        return rf"{b >> 20} MB"
+        return rf"{b >> 20} MiB"
     if b >= 1 << 10:
-        return rf"{b >> 10} KB"
+        return rf"{b >> 10} KiB"
     return rf"{b} B"
 
 

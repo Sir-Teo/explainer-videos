@@ -25,6 +25,7 @@ Items:
 
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import re
@@ -36,9 +37,32 @@ from pathlib import Path
 import numpy as np
 
 from explainer.ai.cache import Cache
+from explainer.cache_lock import cache_lock
 
 CACHE = Cache("cs9")
-load = CACHE.load
+
+
+def current_data(name, data):
+    """Whether an item includes the corrected interpretation required by its scenes."""
+    current = True
+    if name == "scans":
+        current = (data.get("stream") == "length-field prefix reads"
+                   and all("pinned_lines" in row for row in data.get("rows", [])) and bool(data.get("rows")))
+    elif name == "pebbles":
+        current = "scalar_words" in data and all("final_dirty_lines" in row for row in data.get("rows", []))
+    elif name == "job_memory":
+        current = data.get("abstract_pool_base") == 1 << 24
+    elif name == "job":
+        current = "comparison clock" in data.get("clocks", {})
+    return current
+
+
+def load(name):
+    """Reject legacy numerical interpretations without silently rewriting a cache."""
+    data = CACHE.load(name)
+    if not current_data(name, data):
+        raise RuntimeError(f"Legacy cs9/{name} data; refresh with python -m videos.cs.cs9.compute --force {name}")
+    return data
 
 
 def _run_c(src: str, args=(), opt="-O2") -> str:
@@ -254,8 +278,10 @@ ITEMS = {"machine": compute_machine, "staircase": compute_staircase, "bandwidth"
 # the Job's table scans over the whole corpus, and their misses under LRU, exactly
 # ---------------------------------------------------------------------------
 def scan_ends(text: bytes) -> np.ndarray:
-    """For every word of the text, the index of the last table entry the Job's scan reads (the word's own entry, or
-    the last entry when the word is new and appended).  The table holds 12-byte entries in order of first use."""
+    """Last entry whose length JOB_V0 reads for each word, or -1 for an empty scan.
+    A new word scans only existing entries, then appends; it does not read its
+    future slot. The table holds 12-byte entries in order of first use.
+    """
     from explainer.cs.pebble import programs as P
 
     index: dict[bytes, int] = {}
@@ -263,36 +289,47 @@ def scan_ends(text: bytes) -> np.ndarray:
     for t, w in enumerate(P.job_words(text)):
         i = index.get(w)
         if i is None:
-            i = len(index)
-            index[w] = i
+            i = len(index) - 1
+            index[w] = len(index)
         ends[t] = i
     return ends
 
 
 def lru_scan_misses(ends_lines: np.ndarray, capacity: int) -> tuple[int, int]:
-    """Misses of a fully associative LRU cache of ``capacity`` lines on a sequence of prefix scans (scan t reads
-    lines 0 .. e_t).  Between the previous access to line l (by the latest earlier scan reaching l, ending at e') and
-    this one, exactly e' + 1 distinct lines are touched (this scan's lines below l and that scan's lines from l on),
-    so the access hits iff e' < capacity.  The latest scan reaching each line is read off a stack of earlier ends,
-    increasing from the top: O(1) amortized per scan.  Returns (accesses, misses), in lines."""
-    stack: list[int] = []  # ends of earlier scans, most recent on top, strictly increasing downwards
+    """Exact fully associative LRU counts for scans of lines 0 through e_t.
+
+    ``prefix`` is the last line of the cached prefix that can hit on the next
+    scan. A scan shorter than capacity preserves or extends this prefix. A
+    capacity-sized (or longer) scan evicts it; its remaining high lines cannot
+    hit on a subsequent prefix scan before intervening low lines evict them.
+    Empty scans have end -1. Time O(number of scans), extra space O(1).
+    Returns (accesses, misses), in lines.
+    """
+    assert capacity >= 1
+    prefix = -1
     accesses = misses = 0
     for e in ends_lines:
         e = int(e)
         accesses += e + 1
-        # lines reached by an earlier scan with end < capacity hit; others miss (or are first touches)
-        m = -1  # the largest earlier end below capacity, among the scans that are latest for some line
-        for s in reversed(stack):
-            if s < capacity:
-                m = s
-            else:
-                break
-        hits = min(e, m) + 1 if m >= 0 else 0
+        assert e >= -1
+        hits = min(e, prefix) + 1 if prefix >= 0 else 0
         misses += e + 1 - hits
-        while stack and stack[-1] <= e:
-            stack.pop()
-        stack.append(e)
+        prefix = -1 if e >= capacity else max(prefix, e)
     return accesses, misses
+
+
+def pinned_scan_misses(ends_lines: np.ndarray, capacity: int) -> tuple[int, int]:
+    """An achievable comparator with forced insertion: pin the first C-1 lines,
+    use the remaining slot for other lines and discard each such transient line
+    after use. This deliberately simple policy upper-bounds MIN's miss count;
+    it is not an implementation of MIN or a claim to optimal pinned behavior.
+    """
+    assert capacity >= 1
+    lengths = np.asarray(ends_lines, dtype=np.int64) + 1
+    assert np.all(lengths >= 0)
+    pinned = capacity - 1
+    cold = min(pinned, int(lengths.max())) if len(lengths) else 0
+    return int(lengths.sum()), int(np.maximum(0, lengths - pinned).sum()) + cold
 
 
 # ---------------------------------------------------------------------------
@@ -368,18 +405,24 @@ def compute_scans() -> dict:
     books = novels()
     full = P.job_tape("\n".join(books[n] for n in A.BOOKS))
     ends = scan_ends(full)
-    e_lines = (ends * 12 + 11) // 64
+    # The scanned length is the word at offset +4, not the entry's last
+    # byte at +11. Empty scans remain -1 and touch no line.
+    e_lines = (ends * 12 + 4) // 64
     caps_kb = [4, 8, 16, 32, 64, 128, 256, 512, 1024]
     rows = []
     total = int((e_lines + 1).sum())
     for kb in caps_kb:
         c = kb * 1024 // 64
         acc, mis = lru_scan_misses(e_lines, c)
-        keep_front = int(np.maximum(0, e_lines + 1 - c).sum()) + min(c, int(e_lines.max()) + 1)
-        rows.append({"kb": kb, "lru": mis / acc, "keep_front": keep_front / acc, "misses": mis})
-    lengths = np.bincount(np.minimum(ends // 256, 255), minlength=256).tolist()
-    return {"words": len(ends), "table_entries": int(ends.max()) + 1, "table_kb": (int(ends.max()) + 1) * 12 / 1024,
-            "line_reads": total, "rows": rows, "scan_hist256": lengths, "mean_scan": float(ends.mean() + 1)}
+        front_acc, keep_front = pinned_scan_misses(e_lines, c)
+        assert front_acc == acc
+        rows.append({"kb": kb, "lru": mis / acc, "keep_front": keep_front / acc, "misses": mis,
+                     "pinned_lines": c - 1})
+    lengths = np.bincount(np.minimum(np.maximum(ends, 0) // 256, 255), minlength=256).tolist()
+    entries = len(set(P.job_words(full)))
+    return {"words": len(ends), "table_entries": entries, "table_kb": entries * 12 / 1024,
+            "line_reads": total, "rows": rows, "scan_hist256": lengths, "mean_scan": float(ends.mean() + 1),
+            "empty_scans": int((ends < 0).sum()), "stream": "length-field prefix reads"}
 
 
 ITEMS.update({"trace": compute_trace, "policies": compute_policies, "threec": compute_threec,
@@ -389,7 +432,8 @@ ITEMS.update({"trace": compute_trace, "policies": compute_policies, "threec": co
 # ---------------------------------------------------------------------------
 # the price of a missed line, measured on Part 8's core with a realistic hierarchy
 # ---------------------------------------------------------------------------
-MHZ = 884.9557522123894  # Part 7's clock, kept by the ledger
+MHZ = 884.9557522123894  # Part 7's assumed teaching clock, kept by the ledger
+REFERENCE_GHZ = 2.8  # illustrative comparison, not a measured frequency of this host
 
 
 def pebble_hierarchy(prefetch: str | None = "stride", mhz: float = MHZ):
@@ -402,7 +446,10 @@ def pebble_hierarchy(prefetch: str | None = "stride", mhz: float = MHZ):
     def ns(kb):
         return min(st, key=lambda p: abs(p["bytes"] - kb * 1024))["ns"]
 
-    cyc = [max(1, int(np.ceil(ns(k) * mhz / 1000))) for k in (16, 512, 2048, 65536)]
+    # Sampled dependent-load delays are cumulative calibration proxies. Enforce
+    # nonnegative increments if measurement noise makes adjacent samples fall.
+    cyc = np.maximum.accumulate([max(1, int(np.ceil(ns(k) * mhz / 1000)))
+                                 for k in (16, 512, 2048, 65536)]).tolist()
     l1, l2, l3, dram = cyc
     return Hierarchy([SetAssoc(32 << 10, ways=8, hit=l1, name="L1"),
                       SetAssoc(1 << 20, ways=16, hit=l2 - l1, name="L2"),
@@ -473,7 +520,7 @@ ITEMS["scancost"] = compute_scancost
 # ---------------------------------------------------------------------------
 # the Job's line accesses at sampled points of the corpus run, through a three-level hierarchy
 # ---------------------------------------------------------------------------
-TABLE, POOL = 65536, 524288
+TABLE, POOL = 65536, 1 << 24  # relocated abstract corpus regions, not JOB_V0's executable layout
 
 
 def corpus_words() -> list[bytes]:
@@ -487,8 +534,9 @@ def corpus_words() -> list[bytes]:
 
 def window_events(words: list[bytes], start: int, count: int):
     """The cache lines the Job reads for words ``start`` .. ``start + count``: each table entry scanned (its line),
-    and, for each entry of the word's length, the pool line of its first letter (and the next letters while they
-    match).  Returns (lines, is_pool) in program order, with the table state as it is at ``start``."""
+    and, for each same-length entry, only the pool line of its first letter. Later matching letters, target-word
+    reads and stores are omitted. The disjoint relocated regions model a corpus table larger than JOB_V0's
+    fixed executable layout. Returns (lines, is_pool), with abstract table state as it is at ``start``."""
     index: dict[bytes, int] = {}
     offs: list[int] = []
     lens: list[int] = []
@@ -555,7 +603,8 @@ def compute_job_memory() -> dict:
                     if lvl > k:
                         st[name] += 1
         out.append({"frac": frac, "word": start, "events": int(len(lines) - cut), **stats})
-    return {"windows": out, "words": n}
+    return {"windows": out, "words": n, "abstract_pool_base": POOL,
+            "event_scope": "coalesced table visits and first pool letter only; no target reads, later letters or stores"}
 
 
 POOL_BENCH = """
@@ -643,7 +692,8 @@ def compute_job() -> dict:
     """Ledger row 3: the Job with this machine's memory hierarchy at Pebble's clock.  The extra cycles per scanned
     entry and per same-length entry (their letters read from the pool) are measured on the core in steady state,
     with the table and the pool in L2 as they are over the corpus, and weighted by the fraction of those reads that
-    miss L1 in the sampled windows.  The same at this machine's own clock shows the memory wall as a ratio."""
+    miss L1 in the sampled windows. The second clock is illustrative; the host may report no frequency.
+    Immediate free prefetching and the event/benchmark fit make this a conditional projection, not a corpus run."""
     import videos.ai.ai1.compute as A
     from explainer.cs.pebble import programs as P
     from videos.cs.cs6.compute import load as load6
@@ -681,7 +731,7 @@ def compute_job() -> dict:
             img[int(ptrs[i])] = ord("a") + i % 25
 
     out = {}
-    for name, mhz in (("pebble", MHZ), ("this machine", load("machine")["ghz"] * 1000)):
+    for name, mhz in (("pebble", MHZ), ("comparison clock", REFERENCE_GHZ * 1000)):
         row = {"mhz": mhz, "latencies": pebble_hierarchy(mhz=mhz)[1]}
         for pf in ("stride", None):
             key = "prefetch" if pf else "no prefetch"
@@ -701,7 +751,7 @@ def compute_job() -> dict:
     base = led[2]
     cycles = base["cycles"] + out["pebble"]["prefetch"]["extra_cycles"]
     seconds = cycles / (MHZ * 1e6)
-    led.append({"part": 9, "label": r"real caches", "seconds": seconds, "cycles": cycles, "clock_mhz": MHZ})
+    led.append({"part": 9, "label": r"memory projection", "seconds": seconds, "cycles": cycles, "clock_mhz": MHZ})
     CACHE.dir.mkdir(parents=True, exist_ok=True)
     (CACHE.dir / "ledger.json").write_text(json.dumps(led, indent=1))
     return {"clocks": out, "m_table": m_table, "m_pool": m_pool, "density": density, "ledger": led,
@@ -768,19 +818,27 @@ def compute_oblivious() -> dict:
 def compute_pebbles() -> dict:
     """Words moved between a fast memory of M words and slow memory by tiled matrix multiplies, against the red-blue
     pebble lower bound 2 n^3 / sqrt(M) - 2M (Hong and Kung 1981; the constant from Smith et al. 2019)."""
-    from explainer.cs.pebble.cache import miss_curve, stack_distances
+    from explainer.cs.pebble.cache import SetAssoc
 
     n = 64
-    M_words = 1024  # an 8 KB fast memory of doubles
-    lines_cap = M_words * 8 // 64
+    M_words = 1024  # total data-word budget: cache plus scalar operand/accumulator slots
+    scalar_words = 8
+    cache_words = M_words - scalar_words
+    lines_cap = cache_words // 8
     bound = 2 * n ** 3 / np.sqrt(M_words) - 2 * M_words
     rows = []
     for order, T in (("ijk", 0), ("ikj", 0), ("tiled", 4), ("tiled", 8), ("tiled", 16)):
-        tr = np.array(_matmul_trace(n, order, T=T or 8)) // 64
-        d = stack_distances(tr)
-        words = miss_curve(d, [lines_cap])[0] * len(tr) * 8
-        rows.append({"order": order, "T": T, "words": words})
-    return {"n": n, "M": M_words, "bound": bound, "rows": rows, "flops": 2 * n ** 3}
+        c = SetAssoc(cache_words * 8, line=64, ways=lines_cap)
+        for addr in _matmul_trace(n, order, T=T or 8):
+            c.access(addr, write=addr >= 16 * n * n)
+        final_dirty = sum(len(dirty) for dirty in c.dirty)
+        # Every miss fills a line (including write allocation); dirty evictions
+        # and a final drain put all output data in slow memory as the bound requires.
+        words = (c.misses + c.writebacks + final_dirty) * 8
+        rows.append({"order": order, "T": T, "words": words, "fill_lines": c.misses,
+                     "dirty_eviction_lines": c.writebacks, "final_dirty_lines": final_dirty})
+    return {"n": n, "M": M_words, "cache_words": cache_words, "scalar_words": scalar_words,
+            "bound": bound, "rows": rows, "flops": 2 * n ** 3}
 
 
 def compute_dram() -> dict:
@@ -960,5 +1018,28 @@ def compute_swprefetch() -> dict:
 ITEMS.update({"linesize": compute_linesize, "hugepages": compute_hugepages, "layout": compute_layout,
               "swprefetch": compute_swprefetch})
 
+def main(argv=None):
+    """An explicit compute command may refresh legacy items; read-only loads may not."""
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("names", nargs="*")
+    parser.add_argument("--force", action="store_true")
+    args = parser.parse_args(argv)
+    args.names = args.names or list(ITEMS)
+    unknown = [name for name in args.names if name not in ITEMS]
+    if unknown:
+        parser.error("unknown items: " + ", ".join(unknown))
+    CACHE.items = ITEMS
+    for name in args.names:
+        with cache_lock(CACHE.path(name)):
+            path = CACHE.path(name)
+            if path.exists() and not args.force and current_data(name, json.loads(path.read_text())):
+                print(f"  cached  {name}", flush=True)
+                continue
+            start = time.time()
+            print(f"  compute {name} ...", flush=True)
+            CACHE.save(name, ITEMS[name]())
+            print(f"  done    {name} in {time.time() - start:.0f}s", flush=True)
+
+
 if __name__ == "__main__":
-    CACHE.main(ITEMS, __doc__)
+    main()

@@ -110,7 +110,9 @@ class SetAssoc:
             if write and not self.allocate:
                 return False
             if len(ways) < self.ways:
-                way = len(ways)
+                # Invalidating a line can leave a hole anywhere in the set.
+                # The resident count is not necessarily a free physical way.
+                way = next(w for w in range(self.ways) if w not in ways.values())
             else:
                 way = self._plru_victim(s)
                 old = next(k for k, v in ways.items() if v == way)
@@ -151,9 +153,12 @@ class SetAssoc:
 
 class Hierarchy:
     """Levels of cache in front of DRAM.  ``access`` returns the latency: each level's hit time down to the level
-    that has the line, plus ``dram`` cycles if none does; every level the access missed in is filled (inclusive).
-    ``prefetch="next"`` brings the following line into the last level on every miss there; ``"stride"`` detects a
-    constant stride per access stream (here: per 4 KB page) and fetches ``degree`` lines ahead into every level."""
+    that has the line, plus ``dram`` cycles if none does. Missed levels allocate immediately; lower-level
+    evictions do not invalidate upper levels, so this is not a strict inclusive hierarchy. Dirty writebacks and
+    write-through traffic are counted by individual caches but are not propagated or priced here.
+    ``prefetch="next"`` considers the following line on every demand access; ``"stride"`` detects a constant
+    stride per 4 KB page and considers ``degree`` lines ahead. Prefetch fills are immediate and uncharged:
+    there are no request queues, finite transfer bandwidth, coherence or translation timings."""
 
     def __init__(self, levels: list, dram: int = 200, prefetch: str | None = None, degree: int = 2):
         self.levels, self.dram, self.prefetch, self.degree = levels, dram, prefetch, degree

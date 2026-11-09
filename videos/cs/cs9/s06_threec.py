@@ -16,35 +16,41 @@ class ThreeC(VoiceoverScene):
     def card(self):
         card = chapter_card(5, r"Three kinds of miss", r"Why did that access miss?", lit=(1987,),
                             extra=((1987, r"Hill's three Cs"),), part=PART)
-        with self.voiceover("Chapter five. Three kinds of miss."):
+        with self.voiceover(
+            "Chapter five. Three kinds of miss."
+        ):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
 
     def kinds(self):
         head = label(r"Mark Hill's three Cs \ (1987)", font_size=36).to_edge(UP, buff=0.4)
         items = VGroup(
-            label(r"\textit{compulsory}: \ the first touch of a line; \ no cache of any size avoids it", font_size=25,
+            label("first touch: \\ initially empty, \\ fixed line size, \\ no prior prefetch", font_size=25,
                   color=YES),
-            label(r"\textit{capacity}: \ a fully associative LRU cache of the same size misses it too: \ the working set "
-                  r"is too big", font_size=25, color=DATA),
-            label(r"\textit{conflict}: \ the rest: \ misses caused only by how lines are placed in sets", font_size=25,
+            label("capacity baseline: \\ repeated misses in same-capacity fully associative LRU", font_size=25, color=DATA),
+            label("per-miss conflict test differs from the signed aggregate delta below", font_size=25,
                   color=NO),
-            label(r"each kind has its own cure: \ bigger lines, \ a bigger cache, \ more ways", font_size=26,
+            label("delta = target misses minus fully associative LRU reference misses", font_size=26,
                   color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.38).move_to(DOWN * 0.1)
         with self.voiceover(
-            "In 1987 Mark Hill gave every miss one of three names, and each name points to a cure. <bookmark "
-            "mark='a'/> A compulsory miss is the first touch of a line: no cache, however big, could have had it. "
-            "Bigger lines reduce them, by bringing in more neighbours at once. <bookmark mark='b'/> A capacity miss "
-            "is one that a fully associative LRU cache of the same size would also suffer: the working set is simply "
-            "bigger than the cache. Only a bigger cache helps. <bookmark mark='c'/> And a conflict miss is everything "
-            "else: misses caused only by the restriction on where a line may go. More ways cure them. <bookmark "
-            "mark='d'/> Counting the three on a trace tells an architect which cure to buy."
+            "Miss categories depend on a reference model. <bookmark mark='a'/> A first reference to a line is "
+            "compulsory for an initially empty demand-only cache with this line size; prior prefetching or a "
+            "different line size changes the comparison. <bookmark mark='b'/> A fully associative LRU reference of "
+            "the same capacity supplies a capacity-miss baseline after first touches. Capacity is one possible "
+            "remedy; locality transformations and replacement changes can also help. <bookmark mark='c'/> For an "
+            "individual target-cache miss, a hit in that reference suggests a placement conflict. <bookmark "
+            "mark='d'/> The numerical table uses a signed aggregate difference instead. That accounting can be "
+            "negative, so it must not be presented as a partition of individual misses into three nonnegative "
+            "groups."
         ) as vo:
             self.play(FadeIn(head))
             for mk, it in zip("abcd", items):
-                vo.wait_until(mk)
+                if mk != 'a':
+                    vo.wait_until(mk)
                 self.play(FadeIn(it, shift=RIGHT * 0.1))
+                if mk == 'a':
+                    vo.wait_until(mk)
         self.wait(0.3)
         self.clear_scene()
 
@@ -55,28 +61,26 @@ class ThreeC(VoiceoverScene):
         for r in d:
             if r["kb"] not in (1, 4, 8):
                 continue
-            rows.append([rf"{r['kb']} KB", rf"{r['ways']}", rf"{r['misses']:,}", rf"{r['compulsory']}",
+            rows.append([rf"{r['kb']} KiB", rf"{r['ways']}", rf"{r['misses']:,}", rf"{r['compulsory']}",
                          rf"{r['capacity']:,}", rf"{r['conflict']:,}"])
             colors.append([WHITE, GREY_B, HEAD, YES, DATA, NO if r["conflict"] > 0 else CTRL])
-        t = grid_table([r"size", r"ways", r"misses", r"compulsory", r"capacity", r"conflict"], rows,
+        t = grid_table([r"size", r"ways", r"misses", r"compulsory", r"FA capacity", r"delta"], rows,
                        [1.4, 1.0, 1.8, 2.0, 1.8, 1.8], row_h=0.5, font_size=22, colors=colors, mono_cols=())
         t.move_to(DOWN * 0.2)
         notes = VGroup(
-            label(r"8 KB holds every line the chapter touches: \ only the 92 compulsory misses remain \ (with 2 ways)",
+            label(r"8 KiB holds every line the chapter touches: \ only the 92 compulsory misses remain \ (with 2 ways)",
                   font_size=22, color=YES),
-            label(r"a negative conflict count: \ the set-associative cache beat the fully associative one \ "
-                  r"(LRU is not optimal)", font_size=22, color=CTRL),
+            label("negative delta: \\ target has fewer misses than FA-LRU; \\ not negative miss events", font_size=22, color=CTRL),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Here are the three Cs for the Job's first chapter, in caches of one, four and eight kilobytes with one, "
-            "two and eight ways. <bookmark mark='a'/> The compulsory misses are always ninety-two: the chapter touches "
-            "ninety-two lines. At one kilobyte, capacity dominates: the working set does not fit. <bookmark "
-            "mark='b'/> At eight kilobytes everything fits, and with two or more ways only the compulsory misses are "
-            "left, while the direct-mapped cache still has fifteen thousand conflicts, the table and the letters "
-            "colliding. <bookmark mark='c'/> And some conflict counts are negative. That is not an error: a "
-            "set-associative LRU cache sometimes beats a fully associative one, because LRU is not the optimal "
-            "policy, and splitting the cache into sets happens to protect some lines from the scans. The three Cs are "
-            "a guide, not a law."
+            "The table compares the same chapter trace, line size and cold initial state. <bookmark mark='a'/> "
+            "Ninety-two distinct lines give ninety-two first-touch events. The capacity column comes from a fully "
+            "associative LRU reference, regardless of the target's number of ways. <bookmark mark='b'/> At eight "
+            "kibibytes, the two-way target has only first touches, while the direct-mapped target suffers many "
+            "additional misses. <bookmark mark='c'/> The displayed conflict entry is target misses minus first "
+            "touches minus reference capacity misses. A negative value means the target had fewer total misses than "
+            "the fully associative LRU reference. Set partitioning can protect some lines from scans; this signed "
+            "difference is useful comparison accounting, not a negative number of physical miss events."
         ) as vo:
             self.play(FadeIn(head), FadeIn(t))
             vo.wait_until("a")

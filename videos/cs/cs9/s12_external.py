@@ -16,7 +16,9 @@ class External(VoiceoverScene):
     def card(self):
         card = chapter_card(11, r"External memory and B-trees", r"What if the data is on a disk?", lit=(1972, 1988),
                             extra=((1972, r"Bayer and McCreight: \ B-trees"), (1988, r"Aggarwal and Vitter")), part=PART)
-        with self.voiceover("Chapter eleven. External memory and B-trees."):
+        with self.voiceover(
+            "Chapter eleven. External memory and B-trees."
+        ):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
 
@@ -25,29 +27,30 @@ class External(VoiceoverScene):
         items = VGroup(
             label(r"a memory of $M$ items; \ a disk read or written in blocks of $B$; \ cost = block transfers",
                   font_size=24, color=GREY_A),
-            label(r"scanning $N$ items: \ $N/B$ \qquad searching: \ $\log_B N$", font_size=26, color=DATA),
+            label(r"scanning: \ $\Theta(1+N/B)$; \ balanced search: \ $O(1+\log_B N)$", font_size=25, color=DATA),
+            label(r"$N\ge1$, $M\ge2B$; \ comparison-based, indivisible items", font_size=19, color=GREY_B),
         ).arrange(DOWN, buff=0.3).move_to(UP * 1.4)
-        sort = MathTex(r"\text{sorting: }\ \Theta\!\left(\frac{N}{B} \log_{M/B} \frac{N}{B}\right)", font_size=44,
+        sort = MathTex(r"\text{comparison sort: }\ \Theta\!\left(\left(1+\frac{N}{B}\right)\max\!\left\{1,\log_{M/B}\frac{N}{B}\right\}\right)", font_size=34,
                        color=HEAD).move_to(DOWN * 0.2)
         ex = VGroup(
             label(r"$N = 10^{10}$ records, \ $B = 10^5$ per block, \ $M = 10^9$ in memory", font_size=24,
                   color=GREY_B),
-            label(r"$\log_{M/B}(N/B) = \log_{10^4} 10^5 = 1.25$: \ about two passes over the data, \ not 33",
+            label(r"$M$ counts items; \ 10 initial runs, \ one merge round: \ two read/write passes",
                   font_size=24, color=YES),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Take the hierarchy one step further, to a disk, where a single access costs milliseconds and data moves in "
-            "big blocks. <bookmark mark='a'/> In 1988 Alok Aggarwal and Jeffrey Vitter made this a model: a memory "
-            "holding M items, a disk read and written in blocks of B items, and the cost of an algorithm is the number "
-            "of blocks it moves. Scanning N items costs N over B. <bookmark mark='b'/> And they proved the cost of "
-            "sorting, matching upper and lower bounds: N over B, times the logarithm of N over B, to the base M over "
-            "B. <bookmark mark='c'/> That base is enormous. Sorting ten billion records with a gigabyte of memory and "
-            "hundred-thousand-record blocks takes about two passes over the data, not the thirty-three that a binary "
-            "merge sort would. Every large database sort works this way."
+            "The external-memory model counts block transfers between a limited fast memory and a larger slow store. "
+            "It can describe more than a physical spinning disk. <bookmark mark='a'/> Memory holds M items and a "
+            "transfer moves B items. Scanning requires order one plus N over B transfers, with ceilings for short "
+            "inputs. <bookmark mark='b'/> The comparison-based, indivisible-record sorting bound includes a scan "
+            "term and a logarithm with base M over B, under the usual memory-size assumptions. This is not a lower "
+            "bound for every possible integer-sorting model. <bookmark mark='c'/> In this example M is one billion "
+            "items, not one gigabyte. Ten initial runs fit into one merge round: two passes, each reading and "
+            "writing the data, rather than two individual transfers per block."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(items))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(Write(sort))
             vo.wait_until("c")
@@ -66,18 +69,21 @@ class External(VoiceoverScene):
                    color=DATA).next_to(blocks, DOWN, buff=0.3)
         merged = Rectangle(width=blocks.width, height=0.5, stroke_color=YES, stroke_width=2, fill_color=YES,
                            fill_opacity=0.35).move_to(DOWN * 1.2)
-        arrows = VGroup(*[Arrow(r.get_bottom(), merged.get_top(), buff=0.1, color=GREY_C, stroke_width=2) for r in runs])
-        ml = label(r"pass 2: \ merge up to $M/B$ runs at once, \ one block of each in memory", font_size=22,
+        arrows = VGroup(*[Arrow(r.get_bottom(), merged.get_top() + RIGHT * (r.get_x() - merged.get_x()),
+                               buff=0.1, color=GREY_C, stroke_width=1.5, tip_length=0.10) for r in runs])
+        ml = label(r"merge fan-in $f \le \lfloor M/B\rfloor-1$: \ input blocks + output buffer", font_size=22,
                    color=YES).next_to(merged, DOWN, buff=0.3)
-        tot = label(r"passes $= 1 + \lceil \log_{M/B} (N/M) \rceil$: \ each reads and writes everything once",
+        tot = label(r"$R\ge1$, $f\ge2$: \ passes $=1+\lceil\log_f R\rceil$; \ read + write each pass",
                     font_size=24, color=HEAD).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "The algorithm that meets the sorting bound is external merge sort. <bookmark mark='a'/> First pass: read "
-            "as much as fits in memory, M items, sort it there, and write it back as a sorted run. That makes N over "
-            "M runs. <bookmark mark='b'/> Then merge: keep one block of each run in memory and repeatedly output the "
-            "smallest front item. With M over B blocks of room, M over B runs can be merged at once. <bookmark "
-            "mark='c'/> So the number of passes is one plus the logarithm, to the base M over B, of the number of "
-            "runs, and each pass reads and writes everything once. With a large memory that is usually two passes."
+            "External merge sort separates run generation from merging. <bookmark mark='a'/> Read an in-memory "
+            "batch, sort it and write a run. Ceilings and workspace determine the actual number of initial runs. "
+            "<bookmark mark='b'/> During merging, reserve input blocks and an output buffer. A simple fan-in is "
+            "floor M over B minus one, with more room potentially needed for metadata and computation. Refill an "
+            "input block when consumed and flush output blocks when full. <bookmark mark='c'/> Count one "
+            "run-generation pass plus enough merge rounds for the number of runs and chosen fan-in. Each complete "
+            "pass reads and writes the data. Whether two passes suffice depends on these quantities, not simply on "
+            "memory being large in absolute terms."
         ) as vo:
             self.play(FadeIn(head), FadeIn(blocks), FadeIn(lab0))
             vo.wait_until("a")
@@ -96,23 +102,25 @@ class External(VoiceoverScene):
         dots = label(r"$\cdots$", font_size=30, color=GREY_B).next_to(kids, RIGHT, buff=0.2)
         edges = VGroup(*[Line(root.get_bottom(), k.get_top(), color=GREY_D, stroke_width=2) for k in kids])
         facts = VGroup(
-            label(r"$B$ around 100 to 1000 keys per node: \ a billion keys in 3 or 4 levels", font_size=25,
+            label(r"height depends on fan-out, occupancy and cached upper nodes", font_size=25,
                   color=YES),
-            label(r"Bayer and McCreight, \ 1972: \ every database and file system index since", font_size=25,
+            label("Bayer and McCreight, \\ 1972; \\ common among several index families", font_size=25,
                   color=HIST),
             label(r"Parts 17 and 35 build them", font_size=25, color=HEAD),
         ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "For searching, the answer is the B-tree, invented by Rudolf Bayer and Edward McCreight in 1972. <bookmark "
-            "mark='a'/> Make each node of a search tree exactly one block, holding not one key but hundreds, with a "
-            "child between each pair. <bookmark mark='b'/> With a few hundred keys per node, a billion keys need only "
-            "three or four levels, so a lookup costs three or four block reads, and the top levels stay in memory "
-            "anyway. Every relational database index and nearly every file system uses a B-tree or a relative. "
-            "Parts 17 and 35 build them."
+            "B-trees organize search around blocks. Bayer and McCreight's work appeared in 1972. <bookmark "
+            "mark='a'/> A node groups many ordered keys and child pointers, with a node size chosen for a page or "
+            "other useful transfer unit. <bookmark mark='b'/> With maintained occupancy and fan-out on the order of "
+            "B, search height is on the order of one plus log base B of N. Cached upper nodes can reduce slow-store "
+            "reads, while variable-size records, updates and concurrency add design choices. B-tree relatives are "
+            "common in databases and file systems, alongside hash indexes, log-structured merge trees and other "
+            "structures. The drawing is a layout illustration, not a guarantee that every billion-key index has "
+            "exactly three or four physical reads."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(root), Create(edges), FadeIn(kids), FadeIn(dots))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(f) for f in facts], lag_ratio=0.4))
         self.wait(0.3)

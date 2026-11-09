@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.cs import *  # noqa: F403
 from videos.cs.cs9.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, LEVEL_COLOR, NO, PART, YES, fmt,
-                                  load, mono, size_label, staircase_axes)
+                                  load, mono, plot_range, size_label, staircase_axes)
 
 CHASE_C = ["for (i = 0; i < steps; i++)", "    p = *p;      /* the next address is in the line just read */"]
 
@@ -20,7 +20,9 @@ class Measured(VoiceoverScene):
     def card(self):
         card = chapter_card(7, r"This machine's staircase", r"How far away is each level, \ really?", lit=(2007,),
                             extra=((2007, r"Drepper: \ What every programmer should know"),), part=PART)
-        with self.voiceover("Chapter seven. This machine's staircase."):
+        with self.voiceover(
+            "Chapter seven. This machine's staircase."
+        ):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
 
@@ -37,21 +39,23 @@ class Measured(VoiceoverScene):
             a, b = ring[order[k]], ring[order[(k + 1) % n]]
             arrows.add(CurvedArrow(a.get_top(), b.get_top(), angle=-0.8 if order[(k + 1) % n] > order[k] else 0.8,
                                    color=DATA, stroke_width=2, tip_length=0.12))
-        cap = note(r"one pointer per 64-byte line, \ in a random cycle: \ no prefetcher can guess the next one",
+        cap = note("one pointer per 64-byte line; \\ random cycle suppresses ordinary stride prediction",
                    font_size=20).next_to(ring, DOWN, buff=0.35)
-        rule = label(r"each load needs the last one's value: \ no overlap, \ pure latency", font_size=26,
+        rule = label("serial dependent loads: \\ effective access time includes system effects", font_size=26,
                      color=HEAD).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "To measure how far away each level really is, we need a program whose every load must wait for the "
-            "previous one. <bookmark mark='a'/> Fill a block of memory with pointers, one per cache line, linked in a "
-            "random cycle, and follow them: each load's address is the value the last load returned. <bookmark "
-            "mark='b'/> Because the order is random, no prefetcher can guess the next line, and because each load "
-            "depends on the last, an out-of-order core cannot overlap them. The time per step is the latency of "
-            "wherever the line lives. Vary the size of the block, and the latency of each level appears in turn."
+            "Measure a dependent random walk through a chosen working-set size. <bookmark mark='a'/> Place one "
+            "pointer in each sixty-four-byte line and link the lines into a randomly permuted cycle. Each next "
+            "address comes from the previous load. The benchmark warms the cycle, repeats twenty million steps and "
+            "reports the best of three timed trials. <bookmark mark='b'/> This serial dependency suppresses overlap "
+            "between the measured loads, and the irregular order reduces ordinary stride-prefetch opportunities. It "
+            "does not defeat every possible temporal prefetcher. Loop overhead, address translation, cache "
+            "placement, virtualized scheduling and interference can still affect the result. The time per step is an "
+            "effective dependent-access measurement, not an isolated component delay."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(code), FadeIn(ring))
+            vo.wait_until("a")
             self.play(LaggedStart(*[Create(a) for a in arrows], lag_ratio=0.2), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(cap), FadeIn(rule))
@@ -64,40 +68,40 @@ class Measured(VoiceoverScene):
         m = st["machine"]
         pts = st["points"]
         head = label(rf"The staircase, \ measured on this computer", font_size=34).to_edge(UP, buff=0.25)
-        sub = note(rf"{m['cpu']}; \ lscpu: \ L1d {m['caches'].get('L1d', '?')}, \ L2 {m['caches'].get('L2', '?')}, \ "
-                   rf"L3 {m['caches'].get('L3', '?')}", font_size=18).next_to(head, DOWN, buff=0.1)
-        ax, ticks = staircase_axes(pts, x_length=10.8, y_length=4.2, ymax=350)
+        sub = note(rf"CPU: \ {m['cpu']} \\ reported totals: \ L1d {m['caches'].get('L1d', '?')}, \ L2 {m['caches'].get('L2', '?')}, \ "
+                   rf"L3 {m['caches'].get('L3', '?')}", font_size=16).next_to(head, DOWN, buff=0.1)
+        ymax, ystep = plot_range(p["ns"] for p in pts)
+        ax, ticks = staircase_axes(pts, x_length=10.8, y_length=4.2, ymax=ymax)
         g = VGroup(ax, ticks).move_to(DOWN * 0.45)
-        ax.y_axis.add_numbers([0, 100, 200, 300], font_size=16, num_decimal_places=0)
+        ax.y_axis.add_numbers(np.arange(0, ymax + ystep / 2, ystep).tolist(), font_size=16, num_decimal_places=0)
         yl = note(r"nanoseconds per load", font_size=18).next_to(ax, UP, buff=0.05).align_to(ax, LEFT)
         dots = VGroup(*[Dot(ax.c2p(np.log2(p["bytes"]), p["ns"]), radius=0.06, color=HEAD) for p in pts])
         line = VMobject(color=HEAD, stroke_width=3).set_points_as_corners([d.get_center() for d in dots])
         by = {p["bytes"]: p["ns"] for p in pts}
         ann = VGroup(
-            label(rf"L1: \ {by[16 << 10]:.1f} ns", font_size=20, color=YES).next_to(ax.c2p(13, by[16 << 10]), UP,
+            label(rf"16 KiB: \ {by[16 << 10]:.1f} ns", font_size=20, color=YES).next_to(ax.c2p(14, by[16 << 10]), UP,
                                                                                 buff=0.25),
-            label(rf"L2: \ {by[256 << 10]:.1f} ns", font_size=20, color=DATA).next_to(ax.c2p(18, by[256 << 10]), UP,
+            label(rf"256 KiB: \ {by[256 << 10]:.1f} ns", font_size=20, color=DATA).next_to(ax.c2p(18, by[256 << 10]), UP,
                                                                                   buff=0.5),
-            label(rf"{by[2 << 20]:.0f} ns", font_size=20, color=CTRL).next_to(ax.c2p(21, by[2 << 20]), LEFT,
-                                                                             buff=0.2),
-            label(rf"DRAM: \ {by[8 << 20]:.0f} ns", font_size=20, color=NO).next_to(ax.c2p(23, by[8 << 20]), UP,
+            label(rf"2 MiB: \ {by[2 << 20]:.0f} ns", font_size=20, color=CTRL).next_to(
+                ax.c2p(21, by[2 << 20]), UP, buff=0.85),
+            label(rf"8 MiB: \ {by[8 << 20]:.0f} ns", font_size=20, color=NO).next_to(ax.c2p(23, by[8 << 20]), UP,
                                                                                  buff=0.15),
-            label(rf"and page-table walks: \ {by[512 << 20]:.0f} ns", font_size=20, color=NO).next_to(
-                ax.c2p(29, by[512 << 20]), LEFT, buff=0.2),
+            label(rf"512 MiB: \ {by[512 << 20]:.0f} ns", font_size=20, color=NO).next_to(
+                ax.c2p(29, by[512 << 20]), UP, buff=0.25).shift(LEFT * 0.8),
         )
-        vm = label(r"lscpu says 33 MB of L3; \ this virtual machine falls off it near 4 MB", font_size=22,
+        vm = label("reported totals and timing transitions do not prove private available capacity", font_size=22,
                    color=GREY_A).to_edge(DOWN, buff=0.2)
         with self.voiceover(
-            "Here is the result, measured on the computer that made this video, a virtual machine on an Intel Xeon. "
-            "<bookmark mark='a'/> Up to thirty-two kilobytes, a load takes one and a half nanoseconds: the L1 cache, "
-            "about four cycles. <bookmark mark='b'/> Up to a megabyte, about four and a half: the L2. <bookmark "
-            "mark='c'/> At two megabytes, twenty-five nanoseconds, part of the shared last level. <bookmark "
-            "mark='d'/> And from four megabytes on, a hundred forty nanoseconds and climbing: DRAM. Past sixty-four "
-            "megabytes it climbs further, to over three hundred, because the address translations themselves stop "
-            "fitting in their own cache, the TLB, and every load first walks the page tables in memory. Part 32 "
-            "explains that. <bookmark mark='e'/> One surprise: the processor reports thirty-three megabytes of "
-            "third-level cache, but this machine falls off it near four. The cache is shared with whatever else runs "
-            "on the chip; measured numbers are the ones to trust."
+            "Read the host identity and the measured points together. The current data come from the processor named "
+            "above the plot; the source is not tied to an older Xeon run. <bookmark mark='a'/> Small working sets "
+            "have the lowest measured delay. <bookmark mark='b'/> Increasing the footprint exposes further plateaus "
+            "and transitions. <bookmark mark='c'/> A selected point is a sample at that footprint, not proof of one "
+            "exact cache-level boundary. <bookmark mark='d'/> The largest walks can combine last-level misses, "
+            "translation effects, system placement and interference. Timing alone does not identify their individual "
+            "contributions. <bookmark mark='e'/> The lscpu strings describe reported cache totals and instances, not "
+            "guaranteed private capacity available to this process. Use controlled experiments and performance "
+            "events to investigate a transition's cause."
         ) as vo:
             self.play(FadeIn(head), FadeIn(sub), Create(ax), FadeIn(ticks), FadeIn(yl))
             self.play(Create(line), LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.05), run_time=2.5)
@@ -115,38 +119,38 @@ class Measured(VoiceoverScene):
         d = load("hugepages")["points"]
         head = label(r"The top of the staircase: \ translation", font_size=34).to_edge(UP, buff=0.3)
         xs = [np.log2(p["bytes"]) for p in d]
-        ax = Axes(x_range=[min(xs), max(xs) + 0.3, 1], y_range=[0, 400, 100], x_length=9.5, y_length=3.8, tips=False,
+        ymax, ystep = plot_range(p[k] for p in d for k in ("small", "huge"))
+        ax = Axes(x_range=[min(xs), max(xs) + 0.3, 1], y_range=[0, ymax, ystep], x_length=9.5, y_length=3.8, tips=False,
                   axis_config={"color": GREY_C, "font_size": 16}).move_to(DOWN * 0.4 + LEFT * 0.6)
-        ax.y_axis.add_numbers([0, 100, 200, 300, 400], font_size=16, num_decimal_places=0)
+        ax.y_axis.add_numbers(np.arange(0, ymax + ystep / 2, ystep).tolist(), font_size=16, num_decimal_places=0)
         ticks = VGroup(*[label(size_label(p["bytes"]), font_size=15, color=GREY_B).next_to(
             ax.c2p(np.log2(p["bytes"]), 0), DOWN, buff=0.12) for p in d])
         small = VMobject(color=NO, stroke_width=4).set_points_as_corners(
             [ax.c2p(np.log2(p["bytes"]), p["small"]) for p in d])
         huge = VMobject(color=YES, stroke_width=4).set_points_as_corners(
             [ax.c2p(np.log2(p["bytes"]), p["huge"]) for p in d])
-        ls = label(r"4 KB pages", font_size=22, color=NO).next_to(small.get_end(), UP, buff=0.1)
-        lh = label(r"2 MB pages", font_size=22, color=YES).next_to(huge.get_end(), DOWN, buff=0.15)
+        ls = label("default allocation", font_size=22, color=NO).next_to(small.get_end(), UP, buff=0.1)
+        lh = label("huge-page advice", font_size=22, color=YES).next_to(huge.get_end(), DOWN, buff=0.15)
         yl = note(r"nanoseconds per dependent load", font_size=18).next_to(ax, UP, buff=0.05).align_to(ax, LEFT)
         facts = VGroup(
-            label(r"every address is translated, \ page by page; \ the TLB caches the translations", font_size=22,
+            label("page-size advice requested; \\ actual backing-page sizes were not verified", font_size=22,
                   color=GREY_A),
-            label(rf"at 512 MB: \ {d[-1]['small']:.0f} ns \ $\to$ \ {d[-1]['huge']:.0f} ns \ with huge pages",
+            label(rf"512 MiB: \ default {d[-1]['small']:.0f} ns, \ advised {d[-1]['huge']:.0f} ns",
                   font_size=24, color=HEAD),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "That last climb deserves a second look. Every address a program uses is virtual, and the hardware "
-            "translates it to a physical address, page by page, through tables that themselves live in memory. A "
-            "small cache of translations, the TLB, covers a few thousand four-kilobyte pages: a few megabytes. "
-            "<bookmark mark='a'/> Beyond that, a random load first misses in the TLB and walks the page tables, then "
-            "fetches the data. <bookmark mark='b'/> Ask the operating system for two-megabyte pages instead, and each "
-            "translation covers five hundred times as much memory. At five hundred twelve megabytes the latency "
-            "falls from three hundred seventy-six nanoseconds to a hundred seventy-seven: half of the time had been "
-            "spent finding where the data was. Databases and virtual machines use huge pages for exactly this "
-            "reason. Part 32 builds the tables."
+            "Address translation can affect a large dependent walk, so compare two allocation treatments. The first "
+            "uses the default allocation; the second requests transparent huge pages with madvise. <bookmark "
+            "mark='a'/> A translation-cache miss can require a page-table walk, but its entries may hit other "
+            "caches; not every access necessarily walks all the way to memory. <bookmark mark='b'/> A two-mebibyte "
+            "page covers five hundred twelve times the address range of a four-kibibyte page. That can increase "
+            "translation reach. Our benchmark records timings and the kernel's advice mode, but does not verify "
+            "actual backing-page sizes. The displayed difference therefore compares default and advised allocations, "
+            "not proven small-page and huge-page populations or an isolated translation cost."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(ticks), FadeIn(yl), FadeIn(facts[0]))
-            vo.wait_until("a")
             self.play(Create(small), FadeIn(ls), run_time=1.5)
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(Create(huge), FadeIn(lh), run_time=1.5)
             self.play(FadeIn(facts[1]))
@@ -158,32 +162,36 @@ class Measured(VoiceoverScene):
         b = load("bandwidth")["points"]
         head = label(r"Bandwidth: \ reading in order", font_size=36).to_edge(UP, buff=0.3)
         xs = [np.log2(p["bytes"]) for p in b]
-        ax = Axes(x_range=[min(xs), max(xs) + 0.5, 2], y_range=[0, 70, 10], x_length=10.5, y_length=4.2, tips=False,
-                  axis_config={"color": GREY_C, "font_size": 16}).move_to(DOWN * 0.4)
-        ax.y_axis.add_numbers([0, 20, 40, 60], font_size=16, num_decimal_places=0)
+        ymax, ystep = plot_range(p["gbs"] for p in b)
+        ax = Axes(x_range=[min(xs) - 1, max(xs) + 1, 2], y_range=[0, ymax, ystep], x_length=10.5, y_length=4.2, tips=False,
+                  axis_config={"color": GREY_C, "font_size": 16},
+                  x_axis_config={"include_ticks": False}).move_to(DOWN * 0.4)
+        ax.y_axis.add_numbers(np.arange(0, ymax + ystep / 2, ystep).tolist(), font_size=16, num_decimal_places=0)
         ticks = VGroup(*[label(size_label(p["bytes"]), font_size=15, color=GREY_B).next_to(
             ax.c2p(np.log2(p["bytes"]), 0), DOWN, buff=0.12) for p in b])
-        yl = note(r"gigabytes per second, \ one core", font_size=18).next_to(ax, UP, buff=0.05).align_to(ax, LEFT)
-        bars = VGroup(*[Rectangle(width=0.45, height=4.2 * p["gbs"] / 70, stroke_width=0,
+        yl = note(r"GB/s of logical reads, \ one C thread", font_size=18).next_to(ax, UP, buff=0.05).align_to(ax, LEFT)
+        bars = VGroup(*[Rectangle(width=0.45, height=4.2 * p["gbs"] / ymax, stroke_width=0,
                                   fill_color=YES if p["bytes"] <= 1 << 20 else (CTRL if p["bytes"] <= 8 << 20 else NO),
                                   fill_opacity=0.85).move_to(ax.c2p(np.log2(p["bytes"]), 0), aligned_edge=DOWN)
                         for p in b])
         vals = VGroup(*[label(f"{p['gbs']:.0f}", font_size=16, color=GREY_A).next_to(bar, UP, buff=0.05)
                         for p, bar in zip(b, bars)])
-        punch = label(r"in order, \ even DRAM delivers 9 GB/s: \ 64 bytes every 7 ns, \ though each one is 140 ns away",
+        punch = label("logical read throughput; \\ separate pointer-chase timing does not count in-flight requests",
                       font_size=24, color=HEAD).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "Latency is one number; bandwidth is the other. Read a block of memory in order, as fast as possible. "
-            "<bookmark mark='a'/> From the caches, about sixty gigabytes a second; from the middle level, about "
-            "thirty; from DRAM, about nine. <bookmark mark='b'/> Notice what that means. Nine gigabytes a second is a "
-            "sixty-four-byte line every seven nanoseconds, yet each line is a hundred forty nanoseconds away. Reading "
-            "in order, the hardware has twenty lines in flight at once, fetched ahead by the prefetcher before "
-            "anyone asks. Latency can be hidden; bandwidth cannot be exceeded. Remember that when the Job's table "
-            "scans meet real memory."
+            "Sequential throughput measures a different workload from the dependent random walk. This C loop sums a "
+            "repeatedly reused array, with several independent accumulators, and reports the best of five trials. "
+            "<bookmark mark='a'/> The bars show bytes read per second at each array footprint on this host. "
+            "Cache-resident trials can reuse previously fetched lines, so logical bytes processed are not "
+            "necessarily new DRAM traffic. <bookmark mark='b'/> Multiplying a compatible throughput by a compatible "
+            "latency estimates required average concurrency by Little's law. These separate workloads do not "
+            "directly count outstanding hardware requests or prove that a particular prefetcher caused the "
+            "throughput. Latency, available parallelism and sustainable bandwidth all constrain performance; measure "
+            "the workload you intend to optimize."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(ticks), FadeIn(yl))
-            vo.wait_until("a")
             self.play(LaggedStart(*[GrowFromEdge(x, DOWN) for x in bars], lag_ratio=0.1), FadeIn(vals))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(punch))
         self.wait(0.3)

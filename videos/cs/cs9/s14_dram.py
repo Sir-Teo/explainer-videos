@@ -17,7 +17,9 @@ class Dram(VoiceoverScene):
     def card(self):
         card = chapter_card(13, r"Inside DRAM", r"Why is main memory slow, \ and when is it fast?", lit=(1966,),
                             extra=((1966, r"Dennard's one-transistor cell"),), part=PART)
-        with self.voiceover("Chapter thirteen. Inside DRAM."):
+        with self.voiceover(
+            "Chapter thirteen. Inside DRAM."
+        ):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
 
@@ -27,24 +29,25 @@ class Dram(VoiceoverScene):
         rows.arrange(DOWN, buff=0.04).move_to(UP * 0.7 + LEFT * 2.0)
         buf = Rectangle(width=6.0, height=0.4, stroke_color=HEAD, stroke_width=2.5, fill_color=HEAD,
                         fill_opacity=0.15).next_to(rows, DOWN, buff=0.3)
-        bl = label(r"row buffer \ (8 KB)", font_size=20, color=HEAD).next_to(buf, DOWN, buff=0.1)
+        bl = label(r"row buffer \ (8 KiB)", font_size=20, color=HEAD).next_to(buf, DOWN, buff=0.1)
         steps = VGroup(
-            label(r"\textit{activate} \ (RAS): \ copy a whole row into the row buffer \ $\approx$ 14 ns", font_size=22,
+            label("\\textit{activate}: \\ sense and restore a row; \\ assigned $t_{RCD}=14$ ns", font_size=22,
                   color=DATA),
-            label(r"\textit{read} \ (CAS): \ take a column from the buffer \ $\approx$ 14 ns", font_size=22, color=YES),
-            label(r"\textit{precharge}: \ write the row back, \ ready the bank \ $\approx$ 14 ns", font_size=22,
+            label("\\textit{read}: \\ select columns; \\ assigned $t_{CAS}=14$ ns", font_size=22, color=YES),
+            label("\\textit{precharge}: \\ prepare bitlines; \\ assigned $t_{RP}=14$ ns", font_size=22,
                   color=NO),
-            label(r"each bit a capacitor that leaks: \ every row refreshed every 64 ms", font_size=22, color=GREY_A),
+            label("refresh interval depends on device, temperature and mode", font_size=22, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.35).shift(UP * 0.3)
         with self.voiceover(
-            "Why is DRAM slow? Part 5 built its cell: one transistor and one capacitor per bit, Robert Dennard's design "
-            "of 1966. Billions of them are arranged in banks, each a grid of rows. <bookmark mark='a'/> To read "
-            "anything, the bank first activates a row: the charge of every cell in it, eight kilobytes' worth, is "
-            "sensed and copied into a row buffer. That takes about fourteen nanoseconds. <bookmark mark='b'/> Then a "
-            "column is read out of the buffer: another fourteen or so. <bookmark mark='c'/> To read a different row, "
-            "the bank must first write the buffer back and precharge: fourteen more. <bookmark mark='d'/> And because "
-            "the capacitors leak, every row must be read and rewritten every sixty-four milliseconds, refresh, which "
-            "Part 5's Rowhammer chapter exploited."
+            "A DRAM bank contains arrays of cells and sense amplifiers that hold an open row. This diagram uses an "
+            "illustrative eight-kibibyte row and assigned timing values. <bookmark mark='a'/> Activation senses a "
+            "row's small charge differences and restores the cells while holding their values in the sense "
+            "amplifiers. <bookmark mark='b'/> A read command selects columns for transfer, subject to the device and "
+            "interface timings. <bookmark mark='c'/> To switch rows, the controller observes minimum active-time and "
+            "other constraints, closes the row and precharges the bitlines before a new activation. Precharge itself "
+            "is not simply a delayed cache-style write-back. <bookmark mark='d'/> Refresh restores charge "
+            "periodically, with intervals depending on device, temperature and mode. The fourteen-nanosecond numbers "
+            "and sixty-four-millisecond example are teaching choices, not universal end-to-end memory timings."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows), FadeIn(buf), FadeIn(bl))
             vo.wait_until("a")
@@ -64,23 +67,28 @@ class Dram(VoiceoverScene):
         d = load("dram")["rows"]
         head = label(r"Row-buffer hits, \ by access pattern", font_size=36).to_edge(UP, buff=0.35)
         keys = ["sequential", "stride 4 KB", "random"]
-        ch = bar_chart([100 * d[k] for k in keys], [r"sequential", r"every 4 KB", r"random"], [YES, CTRL, NO],
+        ch = bar_chart([100 * d[k] for k in keys], [r"sequential", r"every 4 KiB", r"random"], [YES, CTRL, NO],
                        height=3.4, bar_w=1.4, gap=1.4, font_size=22, fmt_=lambda v: rf"{v:.0f}\%").move_to(DOWN * 0.3)
-        cap = note(r"8 banks, \ 8 KB rows, \ the row left open after each access", font_size=18).next_to(ch, UP, buff=0.3)
-        punch = label(r"a row-buffer hit skips activate and precharge: \ about a third of the time", font_size=24,
+        cap = note(r"assigned model: \ 8 banks, \ 8 KiB rows, \ last row left open", font_size=18).next_to(ch, UP, buff=0.3)
+        punch = label("row hits avoid a row switch; \\ full timing and scheduling still matter", font_size=24,
                       color=HEAD).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "So DRAM has its own cache, the open row. A memory controller that leaves a row open after reading it "
-            "gets the next access to the same row with only the column read. <bookmark mark='a'/> Reading in order, "
-            "ninety-nine percent of accesses hit the open row. <bookmark mark='b'/> Jumping four kilobytes each time, "
-            "half do. <bookmark mark='c'/> At random, essentially none. <bookmark mark='d'/> The difference is the "
-            "activate and precharge, about two thirds of a random access's time inside the chip. Locality pays all "
-            "the way down."
+            "The open row makes access history matter inside DRAM. This toy model has eight banks, fixed "
+            "eight-kibibyte rows and a specified address-to-bank mapping, and leaves the last row open. <bookmark "
+            "mark='a'/> Sequential line addresses give the first hit fraction. <bookmark mark='b'/> A four-kibibyte "
+            "stride gives the second. <bookmark mark='c'/> Seeded random addresses give the third. These are "
+            "simulated row-buffer hits, not measured cache hits on the host. <bookmark mark='d'/> A row hit can "
+            "avoid closing and activating a different row, but real time also depends on bank parallelism, "
+            "controller scheduling, bus transfers, refresh and timing constraints. A universal one-third access time "
+            "cannot be inferred by adding three illustrative fourteen-nanosecond constants."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cap), FadeIn(ch[0]))
             for mk, k in zip("abc", range(3)):
-                vo.wait_until(mk)
+                if mk != 'a':
+                    vo.wait_until(mk)
                 self.play(GrowFromEdge(ch.bars[k], DOWN), FadeIn(ch.vals[k]), FadeIn(ch.names[k]))
+                if mk == 'a':
+                    vo.wait_until(mk)
             vo.wait_until("d")
             self.play(FadeIn(punch))
         self.wait(0.3)
@@ -90,23 +98,27 @@ class Dram(VoiceoverScene):
         head = label(r"Wider, \ closer, \ and translated", font_size=36).to_edge(UP, buff=0.4)
         items = VGroup(
             label(r"DDR5: \ two 32-bit channels per module, \ 16 or 32 banks per chip", font_size=24, color=GREY_A),
-            label(r"HBM: \ DRAM dies stacked beside the processor, \ 1024 wires per stack: \ the memory of every AI "
-                  r"accelerator \ (\textit{AI, Built} 17)", font_size=24, color=YES),
-            label(r"every address is virtual: \ translated through page tables, \ cached in the TLB \ (Part 32)",
+            label("HBM: \\ stacked DRAM and wide interfaces; \\ generation and accelerator choices vary", font_size=24, color=YES),
+            label("virtual-memory systems: \\ address translation and TLBs \\ (Part 32)",
                   font_size=24, color=CTRL),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).move_to(DOWN * 0.1)
         with self.voiceover(
-            "Modern memory keeps the cell and changes the plumbing. <bookmark mark='a'/> A DDR5 module splits into two "
-            "channels with many more banks, so more rows can be open at once. <bookmark mark='b'/> High-bandwidth "
-            "memory stacks DRAM dies on top of each other, beside the processor, joined by a thousand wires per stack "
-            "instead of sixty-four: the memory of every large AI accelerator, as AI, Built's seventeenth part showed. "
-            "<bookmark mark='c'/> And one more lookup hides in every access: the address a program uses is virtual, "
-            "and must be translated to a physical one through page tables, with its own small cache, the TLB. That "
-            "was the extra climb at the top of the staircase. Part 32 builds it."
+            "Memory interfaces and packaging change while the basic charge-storage idea remains. <bookmark "
+            "mark='a'/> A common non-ECC DDR5 DIMM has two thirty-two-bit subchannels; widths, bank organizations "
+            "and error-protection overhead depend on the device and module. <bookmark mark='b'/> High-bandwidth "
+            "memory stacks dies near a processor and uses a wide interface, with details varying by HBM generation "
+            "and package. Many accelerators use HBM; others use different memory systems. <bookmark mark='c'/> "
+            "Systems with virtual memory translate virtual addresses to physical addresses and cache translation "
+            "information in TLBs. Bare-metal and other addressing modes need not perform the same translation. The "
+            "measured staircase motivates a translation investigation, but does not alone prove its causes. Part 32 "
+            "develops those mechanisms."
         ) as vo:
             self.play(FadeIn(head))
             for mk, it in zip("abc", items):
-                vo.wait_until(mk)
+                if mk != 'a':
+                    vo.wait_until(mk)
                 self.play(FadeIn(it, shift=RIGHT * 0.1))
+                if mk == 'a':
+                    vo.wait_until(mk)
         self.wait(0.3)
         self.clear_scene()

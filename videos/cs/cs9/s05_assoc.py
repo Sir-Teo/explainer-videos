@@ -19,7 +19,9 @@ class Assoc(VoiceoverScene):
     def card(self):
         card = chapter_card(4, r"Associativity and replacement", r"When a line must go, which one?", lit=(1966,),
                             extra=((1966, r"Belady: \ the optimal policy"),), part=PART)
-        with self.voiceover("Chapter four. Associativity and replacement."):
+        with self.voiceover(
+            "Chapter four. Associativity and replacement."
+        ):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
 
@@ -35,21 +37,24 @@ class Assoc(VoiceoverScene):
         for g in (ga, gb, gc):
             g[1].next_to(g[0], DOWN, buff=0.3)
         row = VGroup(ga, gb, gc).arrange(RIGHT, buff=1.0, aligned_edge=UP).move_to(UP * 0.2)
-        cost = label(r"more ways: \ fewer conflicts, \ but every lookup compares more tags at once", font_size=24,
+        cost = label("more eligible ways; \\ mapping, replacement, latency and energy still matter", font_size=24,
                      color=HEAD).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "The cure for conflicts is to give each address a choice. Group the lines into sets; an address's index "
-            "picks a set, and the line may go in any of the set's ways. <bookmark mark='a'/> With one way per set, "
-            "this is the direct-mapped cache. <bookmark mark='b'/> With two ways, two lines that share an index can "
-            "live side by side. <bookmark mark='c'/> With all the lines in a single set, any address can go anywhere: "
-            "fully associative. <bookmark mark='d'/> More ways means fewer conflicts, but on every access the cache "
-            "must compare the tag against every way of the set at once, in parallel, which costs energy and time. "
-            "First-level caches today are typically eight- to twelve-way; larger, slower levels sixteen or more."
+            "Set associativity gives a line several eligible locations. <bookmark mark='a'/> One way per set is "
+            "direct mapping. <bookmark mark='b'/> Two ways allow two lines with the same set index to coexist. "
+            "<bookmark mark='c'/> Put every line in one set and the cache is fully associative. <bookmark mark='d'/> "
+            "More ways require additional tag checks or other lookup machinery, with design-dependent latency and "
+            "energy costs. At fixed total capacity the index changes as the number of sets falls. Actual "
+            "associativities vary by core and cache level, and more ways do not guarantee fewer misses under every "
+            "replacement policy and mapping."
         ) as vo:
             self.play(FadeIn(head))
             for mk, g in zip("abc", (ga, gb, gc)):
-                vo.wait_until(mk)
+                if mk != 'a':
+                    vo.wait_until(mk)
                 self.play(FadeIn(g, shift=UP * 0.1))
+                if mk == 'a':
+                    vo.wait_until(mk)
             vo.wait_until("d")
             self.play(FadeIn(cost))
         self.wait(0.3)
@@ -61,26 +66,28 @@ class Assoc(VoiceoverScene):
         items = VGroup(
             label(r"\textit{LRU}: \ the least recently used \ (a timestamp, \ or an order, \ per set)", font_size=25,
                   color=DATA),
-            label(r"\textit{tree pseudo-LRU}: \ $w - 1$ bits per set point away from recent use \ (what hardware "
-                  r"usually does)", font_size=25, color=CTRL),
+            label("\\textit{tree pseudo-LRU}: \\ $w - 1$ direction bits; \\ one recency approximation", font_size=25, color=CTRL),
             label(r"\textit{FIFO}: \ the oldest arrival; \quad \textit{random}: \ any", font_size=25, color=INF),
             label(r"\textit{Belady's optimum} \ (1966): \ the one used furthest in the future \ (needs a crystal ball)",
                   font_size=25, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(DOWN * 0.1)
         with self.voiceover(
-            "When an access misses and its set is full, one line must go. <bookmark mark='a'/> The natural choice is "
-            "the least recently used, LRU: the line whose last use is oldest, betting that the past predicts the "
-            "future. Keeping an exact order is costly in an eight-way set, <bookmark mark='b'/> so hardware usually "
-            "approximates it with a small tree of bits per set, each pointing away from the half used more recently: "
-            "pseudo-LRU. <bookmark mark='c'/> Simpler still: evict the line that arrived first, or any line at "
-            "random. <bookmark mark='d'/> And there is a perfect policy, found by László Bélády at IBM in 1966: evict "
-            "the line whose next use is furthest in the future. No real cache can know the future, but a simulator "
-            "replaying a trace can, which makes Belady's policy the yardstick for all the others."
+            "A miss to a full set requires a victim. <bookmark mark='a'/> LRU evicts the least recently referenced "
+            "resident line, using past recency as a heuristic. <bookmark mark='b'/> Tree pseudo-LRU maintains a "
+            "small direction tree; it approximates recency but does not reproduce exact LRU. Hardware also uses "
+            "other policies. <bookmark mark='c'/> FIFO tracks insertion order; random replacement chooses a resident "
+            "victim according to its random generator. <bookmark mark='d'/> Belady's MIN evicts the resident line "
+            "whose next reference is farthest away. Its optimality assumes a fixed trace, capacity, initially "
+            "specified state, uniform miss cost and the same forced-insertion rules. A fully associative MIN result "
+            "is not a like-for-like replacement-only comparison with a set-associative cache."
         ) as vo:
             self.play(FadeIn(head))
             for mk, it in zip("abcd", items):
-                vo.wait_until(mk)
+                if mk != 'a':
+                    vo.wait_until(mk)
                 self.play(FadeIn(it, shift=RIGHT * 0.1))
+                if mk == 'a':
+                    vo.wait_until(mk)
         self.wait(0.3)
         self.clear_scene()
 
@@ -105,13 +112,13 @@ class Assoc(VoiceoverScene):
                      font_size=24, color=HEAD).to_edge(DOWN, buff=0.35)
         seq = [0, 2, 1]
         with self.voiceover(
-            "Here is how hardware approximates LRU cheaply. For a four-way set, keep three bits in a little tree. "
-            "<bookmark mark='a'/> Each bit points towards the half of the set that was used less recently. Every "
-            "access flips the bits on its path to point away from itself. <bookmark mark='b'/> Use way zero, then two, "
-            "then one, and watch the bits. <bookmark mark='c'/> To choose a victim, follow the bits from the root: right, "
-            "then right again, to way three, the one never used. In general they lead to a way that has not been used "
-            "for a while, though not always the very least recent. "
-            "Three bits instead of a full ordering; for sixteen ways, fifteen bits instead of forty-five."
+            "A four-way set can represent approximate recency with three tree bits. <bookmark mark='a'/> Each bit "
+            "points toward a subtree to consider for replacement. Touching a way updates its path to point away from "
+            "that way. <bookmark mark='b'/> Follow the shown accesses to ways zero, two and one. Unvisited ways "
+            "still need valid-bit and free-slot handling. <bookmark mark='c'/> Once the set is full, follow the tree "
+            "to its candidate victim. It need not be the exact least recently used way. An arbitrary exact order of "
+            "sixteen ways has sixteen factorial possibilities, requiring at least forty-five bits to encode; a tree "
+            "uses fifteen direction bits. Real implementation state and update costs depend on the chosen encoding."
         ) as vo:
             self.play(FadeIn(head), Create(edges), Create(n0), Create(n1), Create(n2), FadeIn(ways), FadeIn(cur))
             vo.wait_until("a")
@@ -135,7 +142,7 @@ class Assoc(VoiceoverScene):
     # ------------------------------------------------------------------
     def measured(self):
         d = load("policies")["rows"]["4"]
-        head = label(r"On the Job's first chapter, \ a 4 KB cache, \ 8 ways", font_size=32).to_edge(UP, buff=0.35)
+        head = label(r"Chapter 1: \ 4 KiB; \ eight-way policies versus fully associative MIN", font_size=30).to_edge(UP, buff=0.35)
         keys = ["lru", "plru", "fifo", "random", "opt (fully associative)"]
         names = [r"LRU", r"pseudo-LRU", r"FIFO", r"random", r"Belady"]
         vals = [100 * d[k] for k in keys]
@@ -145,19 +152,23 @@ class Assoc(VoiceoverScene):
         punch = label(r"random beats LRU here: \ a scan longer than the cache is LRU's worst case", font_size=26,
                       color=HEAD).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "How much does the choice matter? Run the Job's first chapter through a four-kilobyte, eight-way cache. "
-            "<bookmark mark='a'/> LRU misses about four percent of the accesses, and pseudo-LRU and FIFO about the "
-            "same. <bookmark mark='b'/> Random replacement misses only two percent: it beats LRU. <bookmark mark='c'/> "
-            "And Belady's crystal ball, three quarters of a percent. <bookmark mark='d'/> Random wins because of the "
-            "Job's table scans. A scan that is a little longer than the cache is LRU's worst case: by the time the "
-            "scan comes round again, LRU has thrown out exactly the line it is about to need, every time. Random "
-            "keeps some lines by luck. We will meet this again, much larger, over all thirty novels."
+            "Replay the same chapter-1 data references from an empty four-kibibyte cache. <bookmark mark='a'/> The "
+            "LRU, pseudo-LRU and FIFO bars use eight-way sets. <bookmark mark='b'/> The seeded random policy has "
+            "fewer misses on this trace. A single seed is not a distribution-wide performance guarantee. <bookmark "
+            "mark='c'/> The MIN bar has the same capacity but is fully associative, so it also removes set-placement "
+            "restrictions. <bookmark mark='d'/> Repeated scans slightly longer than a cache can punish LRU: each "
+            "next reference finds its line just evicted. Random replacement sometimes preserves useful lines. "
+            "Performance still depends on scan lengths, intervening accesses, mapping and policy; measured miss "
+            "ratios do not directly give execution-time speedups."
         ) as vo:
             self.play(FadeIn(head), FadeIn(yl), FadeIn(ch[0]))
             for mk, ks in (("a", [0, 1, 2]), ("b", [3]), ("c", [4])):
-                vo.wait_until(mk)
+                if mk != 'a':
+                    vo.wait_until(mk)
                 self.play(*[GrowFromEdge(ch.bars[k], DOWN) for k in ks], *[FadeIn(ch.vals[k]) for k in ks],
                           *[FadeIn(ch.names[k]) for k in ks])
+                if mk == 'a':
+                    vo.wait_until(mk)
             vo.wait_until("d")
             self.play(FadeIn(punch))
         self.wait(0.3)
@@ -173,22 +184,26 @@ class Assoc(VoiceoverScene):
                   color=DATA),
             label(r"\textit{write-allocate}: \ a store that misses brings the line in \ (or not: \ "
                   r"\textit{no-write-allocate})", font_size=25, color=CTRL),
-            label(r"today's caches: \ write-back and write-allocate, \ with a small buffer of stores in flight",
+            label("common policies vary; \\ hierarchy timing omits full write/coherence traffic",
                   font_size=25, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(DOWN * 0.1)
         with self.voiceover(
-            "Stores raise two more questions. <bookmark mark='a'/> When a store hits, does the new value go on to the "
-            "next level at once? Write-through says yes: simple, and memory is always up to date, but every store "
-            "becomes traffic. <bookmark mark='b'/> Write-back says no: mark the line dirty, and write it out only "
-            "when it is evicted, so a line stored to a thousand times is written once. <bookmark mark='c'/> And when "
-            "a store misses, does the line come into the cache? Write-allocate says yes, betting the program will "
-            "touch it again. <bookmark mark='d'/> Almost every cache today is write-back and write-allocate. Our "
-            "simulator does both, and Part 10 will meet the harder question these choices raise: when several cores "
-            "each cache the same line, who sees which write?"
+            "Stores add propagation and allocation choices. <bookmark mark='a'/> Write-through sends a store toward "
+            "the next level, often through a buffer. It does not by itself make every copy or DRAM instantly "
+            "current. <bookmark mark='b'/> Write-back marks a line dirty and propagates it on eviction or another "
+            "required action, such as a flush or coherence request. Repeated updates can be combined while the line "
+            "remains resident. <bookmark mark='c'/> Write-allocate brings a missed store's line into the cache; "
+            "no-write-allocate can send the store onward instead. Partial stores and coherence ownership complicate "
+            "real traffic. <bookmark mark='d'/> Our single-cache simulator counts dirty evictions and write-through "
+            "events. The hierarchy's demand-latency model does not price complete write-back, coherence or bandwidth "
+            "traffic."
         ) as vo:
             self.play(FadeIn(head))
             for mk, it in zip("abcd", items):
-                vo.wait_until(mk)
+                if mk != 'a':
+                    vo.wait_until(mk)
                 self.play(FadeIn(it, shift=RIGHT * 0.1))
+                if mk == 'a':
+                    vo.wait_until(mk)
         self.wait(0.3)
         self.clear_scene()

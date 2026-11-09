@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs9.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, NO, PART, YES, bar_chart, fmt,
+from videos.cs.cs9.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, NO, PART, REFERENCE_GHZ, YES, bar_chart, fmt,
                                   load, sci, size_label)
 
 
@@ -16,19 +16,20 @@ class Job(VoiceoverScene):
         self.ledger()
 
     def card(self):
-        card = chapter_card(14, r"The Job meets memory", r"What do real caches cost the Job?", part=PART)
-        with self.voiceover("Chapter fourteen. The Job meets memory."):
+        card = chapter_card(14, r"The Job meets memory", "What does the sampled memory model project?", part=PART)
+        with self.voiceover(
+            "Chapter fourteen. The Job meets memory."
+        ):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
 
     # ------------------------------------------------------------------
     def scans(self):
         sc = load("scans")
-        head = label(r"Thirty novels: \ the table's misses, \ counted exactly", font_size=34).to_edge(UP, buff=0.3)
+        head = label("Table-length prefix stream: \\ exact LRU counting within this model", font_size=34).to_edge(UP, buff=0.3)
         idea = VGroup(
-            label(r"every scan reads lines $0, 1, \dots, e$ of the table", font_size=24, color=GREY_A),
-            label(r"line $\ell$ hits in an LRU cache of $C$ lines \ $\iff$ \ the last scan that reached $\ell$ was "
-                  r"shorter than $C$", font_size=24, color=HEAD),
+            label(r"nonempty length-field scan: \ lines $0,1,\dots,e$; \ empty scan: no lines", font_size=23, color=GREY_A),
+            label("repeated line $\\ell$ hits FA-LRU \\ $\\iff$ \\ previous covering scan had at most $C$ lines", font_size=24, color=HEAD),
             label(rf"so {sc['words'] / 1e6:.1f} million scans give all {sc['line_reads'] / 1e9:.1f} billion line reads' "
                   r"fates, \ in seconds", font_size=24, color=GREY_A),
         ).arrange(DOWN, buff=0.18).next_to(head, DOWN, buff=0.3)
@@ -43,24 +44,26 @@ class Job(VoiceoverScene):
         front = VMobject(color=YES, stroke_width=4).set_points_as_corners(
             [ax.c2p(k, r["keep_front"]) for k, r in enumerate(rows)])
         ll = label(r"LRU", font_size=20, color=NO).next_to(ax.c2p(3, rows[3]["lru"]), UP, buff=0.1)
-        lf = label(r"keep the front of the table", font_size=20, color=YES).next_to(ax.c2p(5, rows[5]["keep_front"]),
+        lf = label("pin $C-1$ lines; \\ one transient slot", font_size=20, color=YES).next_to(ax.c2p(5, rows[5]["keep_front"]),
                                                                                    LEFT, buff=0.1)
         with self.voiceover(
-            "Now the Job, over all thirty novels. Simulating three billion cache-line reads one by one would take "
-            "hours, but the table scans have a structure that gives the answer exactly. <bookmark mark='a'/> Every "
-            "scan reads the table's lines from the first up to some last line. <bookmark mark='b'/> Between one read of "
-            "line l and the next, the lines touched are exactly the lines of the previous scan that reached l. So in "
-            "an LRU cache of C lines, line l hits if and only if that scan was shorter than C. <bookmark mark='c'/> A "
-            "stack of recent scan lengths then gives the fate of every one of the three billion reads from four and a "
-            "half million scans, in seconds. <bookmark mark='d'/> The result: LRU misses almost every table read until "
-            "the cache holds the whole table, which is the scan pathology of chapter four at full scale. A cache that "
-            "simply kept the front of the table would do far better at every size: the Frontier chapter returns to "
-            "that."
+            "The table-only prefix model allows exact LRU counting without expanding billions of visits. <bookmark "
+            "mark='a'/> A scan touches lines zero through its end index. This is an abstract line stream, excluding "
+            "letter traffic and stores. <bookmark mark='b'/> Between two references to line l, let e be the end "
+            "index of the latest earlier scan that reached l. Exactly e distinct other lines intervene. A repeated "
+            "reference therefore hits a fully associative C-line LRU cache if e is less than C, equivalently if that "
+            "earlier covering scan had at most C lines. <bookmark mark='c'/> The cached-prefix method evaluates this model "
+            "over all recorded scan ends. <bookmark mark='d'/> The green comparator pins C minus one front lines and "
+            "uses one transient slot. Its achievable miss count upper-bounds MIN under matching forced-insertion "
+            "rules; it is not MIN's exact miss count."
         ) as vo:
             self.play(FadeIn(head))
             for mk, it in zip("abc", idea):
-                vo.wait_until(mk)
+                if mk != 'a':
+                    vo.wait_until(mk)
                 self.play(FadeIn(it))
+                if mk == 'a':
+                    vo.wait_until(mk)
             vo.wait_until("d")
             self.play(Create(ax), FadeIn(xt))
             self.play(Create(lru), FadeIn(ll), run_time=1.5)
@@ -76,24 +79,30 @@ class Job(VoiceoverScene):
         dram_s = sc["line_reads"] * lat[3] / (884.9557522123894e6)
         head = label(r"And with no cache at all?", font_size=36).to_edge(UP, buff=0.4)
         lines = VGroup(
-            label(rf"{sc['line_reads'] / 1e9:.1f} billion table-line reads \ $\times$ \ {lat[3]} cycles of DRAM",
+            label(rf"{sc['line_reads'] / 1e9:.1f} billion table-line visits \ $\times$ \ {lat[3]}-cycle large-set proxy",
                   font_size=26, color=NO),
-            label(rf"$\approx$ {dram_s / 60:.0f} minutes of waiting, \ against 57 seconds for the whole Job", font_size=28,
+            label(rf"$\approx$ {dram_s / 60:.0f} serial-delay minutes; \ compare with a separate fitted projection", font_size=25,
                   color=HEAD),
-            label(r"the caches are why the out-of-order core's 57 seconds are possible at all", font_size=24,
+            label("serial waiting budget, \\ not a measured no-cache corpus runtime", font_size=24,
                   color=YES),
         ).arrange(DOWN, buff=0.4).move_to(DOWN * 0.1)
         with self.voiceover(
-            "Before asking what the misses cost, ask what the caches are worth. <bookmark mark='a'/> If every one of "
-            "the three billion table-line reads went to DRAM, a hundred sixty-six cycles each at Pebble's clock, and "
-            "nothing overlapped, <bookmark mark='b'/> the reads alone would take about nine minutes, against "
-            "fifty-seven seconds for the whole Job. <bookmark mark='c'/> Even missing L1 nine times in ten, the "
-            "hierarchy turns that into almost nothing, because the second level holds the entire table."
+            "Here is a deliberately serialized waiting-budget calculation. <bookmark mark='a'/> Assign the selected "
+            "large-working-set delay to every abstract table-line visit, convert it at the assumed Pebble clock, and "
+            "allow no overlap. <bookmark mark='b'/> The product is the displayed number of minutes. It is neither a "
+            "measured no-cache corpus execution nor a general lower or upper bound for actual runtime: real transfer "
+            "size, reuse, bandwidth, parallelism and instruction work all matter. <bookmark mark='c'/> Compare it "
+            "with the fitted ledger only as an illustration of how assumptions change the apparent cost. The later "
+            "projection uses separate sampled events and simplified microbenchmarks; it does not prove that a "
+            "physical hierarchy makes this entire waiting budget disappear."
         ) as vo:
             self.play(FadeIn(head))
             for mk, l in zip("abc", lines):
-                vo.wait_until(mk)
+                if mk != 'a':
+                    vo.wait_until(mk)
                 self.play(FadeIn(l, shift=UP * 0.1))
+                if mk == 'a':
+                    vo.wait_until(mk)
         self.wait(0.3)
         self.clear_scene()
 
@@ -102,32 +111,35 @@ class Job(VoiceoverScene):
         j = load("job")
         head = label(r"What the misses cost", font_size=36).to_edge(UP, buff=0.35)
         p = j["clocks"]["pebble"]
-        n = j["clocks"]["this machine"]
+        n = j["clocks"]["comparison clock"]
         lines = VGroup(
-            label(rf"in the corpus run: \ {100 * j['m_table']:.0f}\% of table reads and {100 * j['m_pool']:.0f}\% of "
-                  r"letter reads miss L1", font_size=24, color=GREY_A),
-            label(rf"at Pebble's 885 MHz \ (latencies {', '.join(map(str, p['latencies']))} cycles): \ the core hides "
-                  rf"them: \ $+{100 * j['change']:.2f}\%$", font_size=24, color=YES),
+            label(rf"sampled events: \ {100 * j['m_table']:.0f}\% table and {100 * j['m_pool']:.0f}\% first-letter "
+                  r"events miss modeled L1", font_size=24, color=GREY_A),
+            label(rf"assumed 885 MHz \ (cumulative proxies {', '.join(map(str, p['latencies']))} cycles): \ "
+                  rf"fitted increment $+{100 * j['change']:.2f}\%$", font_size=23, color=YES),
             label(rf"turn off the prefetcher: \ $+{100 * j['no_prefetch_change']:.1f}\%$", font_size=24, color=CTRL),
-            label(rf"the same memory at this machine's 2.8 GHz \ ({', '.join(map(str, n['latencies']))} cycles): \ "
+            label(rf"illustrative {REFERENCE_GHZ:g} GHz \ ({', '.join(map(str, n['latencies']))} cycles): \ "
                   rf"$+{100 * n['prefetch']['extra_cycles'] / j['row2']['cycles']:.0f}\%$", font_size=24, color=NO),
         ).arrange(DOWN, buff=0.35).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What do all those misses cost? We measured it on Part 8's core, running the scan with this machine's "
-            "latencies converted to Pebble's clock, and the letter comparisons too, and weighted the results by how "
-            "often each kind of read misses in the corpus run. <bookmark mark='a'/> Over the run, ninety-one percent "
-            "of table reads and fifty-seven percent of letter reads miss the first-level cache. <bookmark mark='b'/> "
-            "And at eight hundred eighty-five megahertz, the core hides them: the second-level cache is five cycles "
-            "away, the out-of-order window covers that, and the prefetcher keeps ahead of the scan. The Job slows by "
-            "five hundredths of a percent. <bookmark mark='c'/> Without the prefetcher, two percent. <bookmark "
-            "mark='d'/> But give the same memory a core as fast as this machine's, two point eight gigahertz, and the "
-            "same nanoseconds become three times as many cycles: then the misses cost fourteen percent. The memory "
-            "wall, again, is a ratio."
+            "This projection combines four sampled corpus windows with synthetic scan and first-letter benchmarks on "
+            "the functional core. The abstract corpus table and pool are relocated into disjoint regions; this is "
+            "not a full execution of the unchanged Pebble memory image. <bookmark mark='a'/> The fractions describe "
+            "coalesced table events and first-letter pool events in those windows. Later matching bytes, target "
+            "reads and stores are omitted from that sampling model. <bookmark mark='b'/> Weight the measured model "
+            "increments at the assumed Pebble clock to obtain the displayed extra cycles. <bookmark mark='c'/> "
+            "Disabling the immediate free prefetch rule gives a separate projection. <bookmark mark='d'/> Repricing "
+            "the same timing proxies at an illustrative faster clock changes the cycle costs. Bandwidth, prefetch "
+            "lead time, queuing and complete write traffic are absent, so small fitted overheads are conditional "
+            "model results, not hardware guarantees."
         ) as vo:
             self.play(FadeIn(head))
             for mk, l in zip("abcd", lines):
-                vo.wait_until(mk)
+                if mk != 'a':
+                    vo.wait_until(mk)
                 self.play(FadeIn(l, shift=UP * 0.1))
+                if mk == 'a':
+                    vo.wait_until(mk)
         self.wait(0.3)
         self.clear_scene()
 
@@ -139,16 +151,17 @@ class Job(VoiceoverScene):
                                                                      (16, r"sort, then count"), (17, r"a hash table"))]
         led = ledger_table(rows, shown=4, highlight=(3,), font_size=21, row_h=0.4, label_width=4.8).move_to(DOWN * 0.3)
         res = label(rf"{human_time(j['ledger'][2]['seconds'])} $\to$ {human_time(j['ledger'][3]['seconds'])}: \ "
-                    r"real memory, \ almost free \ (for this program, \ at this clock)", font_size=26,
+                    r"conditional model increment; \ no full-corpus run or error bound", font_size=24,
                     color=COST).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "So the ledger's fourth row is almost exactly its third: fifty-seven seconds for thirty novels, with real "
-            "caches and real DRAM where Part 8 assumed every load took two cycles. <bookmark mark='a'/> This is not "
-            "the usual story, and it is worth saying why. The Job reads memory in the friendliest way there is, in "
-            "order, again and again, and Pebble's clock is slow. Programs that chase pointers, like a hash table or a "
-            "tree, behave like the staircase's random walk, and at a modern clock they would pay in full. The Job's "
-            "real problem is not where its data lives but how much of it it reads: three billion lines to count four "
-            "and a half million words. Only a better algorithm fixes that, and Parts 16 and 17 bring two."
+            "Row three adds the modeled memory increments to Part 8's fitted corpus cycle estimate and divides by "
+            "the same assumed clock. It remains a projection from counts, samples and short benchmarks, without a "
+            "full-corpus run or an error bound. <bookmark mark='a'/> The abstract table-only stream still exposes a "
+            "large amount of scanning work. Caching, overlap and prefetching affect the cost of that work under "
+            "different assumptions; they do not change how many table entries the algorithm examines. Better data "
+            "structures can reduce the work itself, which later parts investigate. Pointer-heavy programs, different "
+            "clocks and finite-bandwidth memory systems require their own models and measurements. The near-equal "
+            "ledger rows should motivate that investigation, not a conclusion that real memory is generally free."
         ) as vo:
             self.play(FadeIn(head), FadeIn(led.axis), LaggedStart(*[FadeIn(r) for r in led.rows], lag_ratio=0.1))
             vo.wait_until("a")
