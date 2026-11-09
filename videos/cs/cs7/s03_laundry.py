@@ -16,8 +16,7 @@ class Laundry(VoiceoverScene):
         self.depth()
 
     def card(self):
-        card = chapter_card(2, r"Pipelining, \ like laundry", r"How can every instruction finish sooner without any "
-                            r"getting faster?", part=PART)
+        card = chapter_card(2, r"Pipelining, \ like laundry", 'How can throughput rise without reducing latency?', part=PART)
         with self.voiceover("Chapter two. Pipelining, like laundry."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
@@ -43,7 +42,6 @@ class Laundry(VoiceoverScene):
             "instruction to finish sooner; it needs many of them to finish per second."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(x) for x in seq], lag_ratio=0.05), run_time=2.5)
             self.play(FadeIn(sl))
             vo.wait_until("b")
@@ -64,23 +62,20 @@ class Laundry(VoiceoverScene):
                     font_size=40, color=YES),
         ).arrange(DOWN, buff=0.45).move_to(UP * 0.3)
         notes = VGroup(
-            label(r"$t$: \ the work of one instruction; \ $o$: \ a pipeline register's overhead \ (setup and "
-                  r"clock-to-Q, \ 70 ps)", font_size=22, color=GREY_A),
+            label('$t$: logic work; $o$: assumed register overhead (70 ps); equal stages, no stalls', font_size=22, color=GREY_A),
             label(r"each register adds $o$ to the latency, \ and the speedup approaches $k$ only while $t/k \gg o$",
                   font_size=22, color=GREY_A),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "In a processor the steps are stages of logic. Suppose one instruction's work takes time t, and we cut it "
-            "into k equal stages. <bookmark mark='a'/> Each stage then takes t over k, plus a fixed overhead o for the "
-            "pipeline register at its end: the setup and clock-to-Q times of Part 5, seventy picoseconds here. That is "
-            "the cycle. <bookmark mark='b'/> The latency of one instruction grows: k cycles, so t plus k times o. "
-            "<bookmark mark='c'/> But one instruction finishes per cycle, so the speedup over doing it all in one "
-            "cycle is t plus o, over t over k plus o. It approaches k while the stages are long compared with the "
-            "overhead, and it can never exceed t over o, however many stages you cut: the registers themselves become "
-            "the bottleneck."
+            "Let one instruction's logic take time t, split into k equal stages. <bookmark mark='a'/> Assume each "
+            "pipeline register adds overhead o, seventy picoseconds in this teaching model. The cycle is t over k plus "
+            "o. <bookmark mark='b'/> One instruction's latency is k cycles: t plus k times o, so adding stages "
+            "increases it. <bookmark mark='c'/> Ideal steady-state throughput improves by t plus o divided by t over k "
+            "plus o, compared with the one-stage baseline. As k grows, this approaches one plus t over o, exactly the "
+            "limit in the equation. It approaches k only while stage work greatly exceeds register overhead. Balanced "
+            "stages and no stalls are essential assumptions."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(Write(f[0]))
             vo.wait_until("b")
             self.play(Write(f[1]))
@@ -108,7 +103,7 @@ class Laundry(VoiceoverScene):
                           [2.5, -2.0 + max(v["ps"] for v in st["stages"].values()) * scale, 0], color=NO,
                           stroke_width=2)
         notes = VGroup(
-            label(rf"the cycle: \ the slowest stage $+$ 70 ps \\ $=$ {fmt(st['period_ps'])} ps, \ "
+            label(rf"assumed cycle: \ the slowest stage $+$ 70 ps \\ $=$ {fmt(st['period_ps'])} ps, \ "
                   rf"{st['mhz']:.0f} MHz", font_size=24, color=CLOCK),
             label(rf"Part 6's single cycle: \ {fmt(st['single_ps'])} ps", font_size=22, color=GREY_A),
             label(rf"so the clock is {st['clock_ratio']:.2f} times faster, \ not 5", font_size=26, color=HEAD),
@@ -116,18 +111,16 @@ class Laundry(VoiceoverScene):
                   rf"{st['stages']['EX']['ps']:.0f} ps \ (Part 9 attacks the memories)", font_size=22, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35).shift(UP * 0.2)
         with self.voiceover(
-            "Real stages are never equal, and the clock must wait for the slowest. <bookmark mark='a'/> Here are "
-            "Pebble's five, timed with the gate delays of Part 5 and the netlists of Parts 4 and 6. Fetch and the data "
-            "memory stage each contain a one-nanosecond memory access. Decode and register read take about a hundred "
-            "picoseconds; the ALU stage, with Part 4's whole prefix adder, three hundred and fifty; write-back almost "
-            "nothing. <bookmark mark='b'/> So the cycle is the memory stage plus the register overhead: one point one "
-            "three nanoseconds, eight hundred and eighty-five megahertz. Against Part 6's two point six three, the "
-            "clock is two point three times faster, not five. <bookmark mark='c'/> The ALU stage could do three times "
-            "as much work in the time it is given. Balancing a pipeline means cutting where the time is, and here the "
-            "time is in the memories, which is why Part 9's caches matter so much."
+            "Stages need not be equal. <bookmark mark='a'/> These bars are a teaching budget: assumed one-nanosecond "
+            "memories, sampled unit-delay ALU settling, structural register-read depth, and estimated mux and control "
+            "costs. They are not physical timing results for a fabricated pipeline. <bookmark mark='b'/> Under those "
+            "assumptions, the slowest stage plus seventy picoseconds gives one point one three nanoseconds, about "
+            "eight hundred and eighty-five megahertz. The assumed single-cycle budget is two point six three "
+            "nanoseconds, so the clock ratio is about two point three, not five. <bookmark mark='c'/> The budget "
+            "suggests memory is the bottleneck. A real implementation needs timing analysis, routing and memory "
+            "characterization before claiming that clock."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(LaggedStart(*[GrowFromEdge(b[0], DOWN) for b in bars], lag_ratio=0.2),
                       *[FadeIn(b[1]) for b in bars], run_time=2.0)
             self.play(*[FadeIn(b[2]) for b in bars])
@@ -145,7 +138,7 @@ class Laundry(VoiceoverScene):
         head = label(r"How many stages?", font_size=38).to_edge(UP, buff=0.3)
         f = MathTex(r"T(k) = \left(\frac{t}{k} + o\right)\bigl(1 + b\,(k - 1)\bigr)", font_size=36,
                     color=CODE).move_to(UP * 2.2 + LEFT * 2.6)
-        fl = label(r"$b$: \ the fraction of instructions that waste the whole pipeline \\ (mispredicted branches)",
+        fl = label('$b$: fixed miss events per instruction; \\\\ assume each loses $k-1$ cycles',
                    font_size=20, color=GREY_A).next_to(f, DOWN, buff=0.15).align_to(f, LEFT)
         ks = np.array(d["k"])
         ts = np.array(d["time_ps"])
@@ -157,7 +150,7 @@ class Laundry(VoiceoverScene):
         curve = VMobject(color=YES, stroke_width=3).set_points_as_corners([ax.c2p(k, min(t, 900)) for k, t in
                                                                            zip(ks, ts)])
         kstar = d["kstar"]
-        dot = Dot(ax.c2p(kstar, d["t_at_kstar"]), color=HEAD, radius=0.08)
+        dot = Dot(ax.c2p(kstar, (d['L_ps'] / kstar + d['o_ps']) * (1 + d['b'] * (kstar - 1))), color=HEAD, radius=0.08)
         dl = label(rf"$k^* \approx {kstar:.0f}$", font_size=24, color=HEAD).next_to(dot, UP, buff=0.15)
         deriv = VGroup(
             MathTex(r"\frac{dT}{dk} = -\frac{t(1-b)}{k^2} + b\,o = 0", font_size=32, color=GREY_A),
@@ -165,22 +158,19 @@ class Laundry(VoiceoverScene):
             label(rf"with $t = {d['L_ps']:.0f}$ ps, \ $o = {d['o_ps']:.0f}$ ps \\ and the Job's measured "
                   rf"$b = {d['b']:.3f}$:", font_size=22, color=GREY_A),
             MathTex(rf"k^* \approx {kstar:.0f}", font_size=40, color=YES),
-            label(r"fewer if hazards are more common, \\ more if registers are cheaper", font_size=22, color=GREY_B),
+            label('fixed $b$, equal splits, penalty $k-1$: \\\\ continuous model optimum, not a hardware design', font_size=22, color=GREY_B),
         ).arrange(DOWN, buff=0.25).move_to(RIGHT * 3.8 + DOWN * 0.75)
         with self.voiceover(
-            "So why not cut the work into a hundred stages? Because deeper pipelines lose more when they guess wrong. "
-            "<bookmark mark='a'/> A mispredicted branch throws away everything fetched behind it, roughly one "
-            "instruction per stage. If a fraction b of instructions cause that, the time per instruction is the cycle, "
-            "t over k plus o, times one plus b times k minus one. <bookmark mark='b'/> Plot it with this part's "
-            "numbers. Few stages: the cycle is long. Many stages: the overhead and the flushes dominate. In between, a "
-            "minimum. <bookmark mark='c'/> Set the derivative to zero and the best depth comes out as the square root "
-            "of t times one minus b, over b times o. With Pebble's work per instruction, its register overhead, and "
-            "the misprediction rate measured on the Job, the optimum is about "
-            "thirty-seven stages, if the work could be cut that finely. Hold on to that number: in 2004 Intel shipped "
-            "a processor with thirty-one."
+            "Deeper is not always better. <bookmark mark='a'/> Consider a deliberately simple model: equally "
+            "splittable logic, fixed register overhead o, and a fixed fraction b of instructions each losing k minus "
+            "one cycles. Time per instruction is the cycle multiplied by one plus b times k minus one. <bookmark "
+            "mark='b'/> Holding b fixed produces this curve: short pipelines have long cycles; very deep ones pay "
+            "overhead and larger flushes. Real predictors and stage balances can change with depth. <bookmark "
+            "mark='c'/> Differentiating gives the displayed continuous optimum, about thirty-seven for these inputs. "
+            "An integer design must compare nearby feasible depths. This is a model exercise, not an optimal hardware "
+            "design or a prediction of Pentium 4's stage count."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(Write(f), FadeIn(fl))
             vo.wait_until("b")
             self.play(Create(ax), FadeIn(xl), FadeIn(yl))

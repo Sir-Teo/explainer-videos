@@ -55,7 +55,6 @@ class IronLaw(VoiceoverScene):
             "keeps the accounts honest."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(Write(eq1), run_time=2.5)
             vo.wait_until("b")
             self.play(TransformMatchingTex(eq1.copy(), eq2), run_time=1.5)
@@ -101,7 +100,6 @@ class IronLaw(VoiceoverScene):
             "pipelining: give up a little CPI to win a lot of clock."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(tab[:5]), FadeIn(tab[5:7]), FadeIn(tab[10:12]))
             vo.wait_until("b")
             self.play(FadeIn(tab[7:10]))
@@ -147,7 +145,6 @@ class IronLaw(VoiceoverScene):
             "Engineers took to calling MIPS a meaningless indicator of performance."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(task), FadeIn(cols[0][0]), FadeIn(cols[1][0]))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(x) for x in cols[0][1:4]], lag_ratio=0.3),

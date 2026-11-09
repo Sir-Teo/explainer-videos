@@ -49,7 +49,6 @@ class Control(VoiceoverScene):
             "anything, and fetch restarts at the target. <bookmark mark='c'/> Every taken branch costs two cycles."
         ) as vo:
             self.play(FadeIn(head), FadeIn(pc.heads), FadeIn(VGroup(*pc.rows.values())))
-            vo.wait_until("a")
             reveal(self, pc)
             vo.wait_until("b")
             self.play(FadeIn(notes[0]), FadeIn(notes[1]))
@@ -90,7 +89,6 @@ class Control(VoiceoverScene):
             "most studied problems in computer architecture."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(Write(eq))
             vo.wait_until("b")
             self.play(FadeIn(notes[0]))
@@ -120,24 +118,19 @@ class Control(VoiceoverScene):
         slot = VGroup(mono("beq  a0, a1, L", 18), mono("add  a2, a2, 1   # the delay slot: always runs", 18,
                                                       HIST)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
         slot.next_to(items[1], DOWN, buff=0.4)
-        later = label(r"delay slots fit one 5-stage pipeline exactly, \ and nothing after it: \ deeper and wider "
-                      r"machines \\ still had to honour them, \ and RISC-V and ARM left them out", font_size=22,
+        later = label('classic MIPS delay slots impose compatibility costs; \\\\ MIPS Release 6 removed them; RISC-V and ARM use other semantics', font_size=22,
                       color=GREY_B).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Designers have three ways out. <bookmark mark='a'/> Decide earlier: move the comparison into the decode "
-            "stage, so only one instruction is fetched in vain. That lengthens decode, and the values being compared "
-            "now have to be forwarded into decode too. <bookmark mark='b'/> Change the rules: the MIPS architecture of "
-            "1985 declared that the instruction after a branch always executes, whichever way the branch goes. The "
-            "compiler's job was to put something useful there, and it usually could. <bookmark mark='c'/> But the delay "
-            "slot is a fact about one particular five-stage pipeline, baked into the instruction set forever. Deeper "
-            "and wider machines still had to honour it, at real cost, and later instruction sets, RISC-V and ARM among "
-            "them, left it out. <bookmark mark='d'/> The third way won: guess. Fetch from wherever the branch will "
-            "probably go, check the guess when the branch is decided, and pay the penalty only when the guess was "
-            "wrong. The rest of this part is about guessing well."
+            "There are several ways to handle the unknown next address. <bookmark mark='a'/> Decide earlier: comparing "
+            "in decode can reduce the redirect penalty, at the cost of a longer decode path and extra forwarding. "
+            "<bookmark mark='b'/> Change the architectural schedule: ordinary branches in classic MIPS expose a delay "
+            "slot whose instruction executes whether the branch is taken or not. A compiler can sometimes fill it "
+            "usefully. <bookmark mark='c'/> That compatibility obligation complicated later implementations, but it "
+            "was not permanent across every MIPS revision: Release 6 removed delay slots. RISC-V and ARM use other "
+            "branch semantics. <bookmark mark='d'/> Or predict: fetch the likely path, then redirect and discard "
+            "younger work when the prediction is wrong. This is the approach we study next."
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(items[0]))
+            self.play(FadeIn(head), FadeIn(items[0]), run_time=0.7)
             vo.wait_until("b")
             self.play(FadeIn(items[1]), FadeIn(slot))
             vo.wait_until("c")

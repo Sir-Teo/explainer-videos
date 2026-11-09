@@ -66,11 +66,12 @@ class Outro(VoiceoverScene):
         ).arrange_in_grid(rows=2, cols=3, buff=(0.35, 0.35)).move_to(DOWN * 0.2)
         head = label(rf"Part {PART}: \ Pipelines", font_size=38).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "What we built in this part. The iron law, which says what any speed-up must change. A five-stage "
-            "pipeline, cut from Part 6's datapath, with a clock more than twice as fast. Its hazards, and the stalls "
-            "and forwarding paths that handle them, checked against the emulator on hundreds of random programs. "
-            "Branch predictors from a single bit to TAGE, and a perceptron, a small neural network learning where the "
-            "program goes, measured against the limit of what any of them could do. Precise exceptions. And the second row of the ledger: the same Job, almost twice as fast."
+            "What we built: the performance equation; a five-stage functional pipeline; and an explicitly assumed "
+            "clock budget. We visualized hazards, forwarding, load-use stalls, and precise architectural exceptions, "
+            "with finite emulator comparisons. We measured counter, TAGE and perceptron implementations on specified "
+            "traces, without claiming an absolute prediction limit. Short Job passages were simulated cycle by cycle; "
+            "the full-corpus ledger row is a fitted projection, nearly twice as fast under its assumptions. Multiple "
+            "instructions overlap, while this one-wide pipeline retires them in order."
         ):
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
@@ -79,7 +80,7 @@ class Outro(VoiceoverScene):
 
     def payoffs(self):
         card = payoff_card([
-            (r"one instruction at a time, \ in order: \ the next limit", [8]),
+            ('overlapping instructions, one-wide in-order retirement: the next limit', [8]),
             (r"the 1000 ps memory stages \ $\to$ \ caches", [9]),
             (r"the power wall \ $\to$ \ multicore and SIMD", [10]),
             (r"the load-use bubble \ $\to$ \ instruction scheduling", [13]),
@@ -87,12 +88,11 @@ class Outro(VoiceoverScene):
             (r"Amdahl's law, \ for parallel programs and for whole systems", [10, 39, 48]),
         ], font_size=26)
         with self.voiceover(
-            "Where this comes back. Our pipeline still runs one instruction at a time, in order, and waits whenever one "
-            "waits; Part 8 lets instructions overtake each other. Two of the five stages are a whole nanosecond of "
-            "memory, which Part 9's caches attack. The power wall leads to Part 10's multicore and vector machines. "
-            "The load-use bubble in the Job's loop is removed by Part 13's compiler, which reorders instructions to "
-            "hide it. Speculation leaves traces, and Part 8 and Part 55 show how Spectre reads them. And Amdahl's law "
-            "returns whenever we divide work among processors, or among machines."
+            'Where this comes back. Our pipeline overlaps instructions but retires at most one per cycle in order; '
+            "Part 8 lets independent instructions execute out of order. The assumed memory delays lead to Part 9's "
+            'caches. Power constraints motivate multicore and SIMD. Instruction scheduling can hide some load-use '
+            "bubbles when movement is safe. Speculation's microarchitectural traces connect to Spectre, and Amdahl's "
+            'fixed-work accounting returns in parallel and distributed systems.'
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.3), run_time=3.0)
@@ -104,7 +104,7 @@ class Outro(VoiceoverScene):
             (r"\texttt{perf stat}", r"cycles, \ instructions, \ IPC, \ branch-misses: \ the iron law, \ measured on "
                                     r"your own program"),
             (r"profilers", r"\texttt{perf record}, \ VTune, \ Instruments: \ find the $p$ of Amdahl's law first"),
-            (r"branch-free code", r"\texttt{cmov}, \ \texttt{csel}; \ \texttt{\_\_builtin\_expect}; \ sorting or "
+            ('hot-loop choices', r"\texttt{cmov}, \ \texttt{csel}; \ \texttt{\_\_builtin\_expect}; \ sorting or "
                                   r"partitioning data before a hot loop"),
             (r"microarchitecture docs", r"Agner Fog's tables, \ uops.info, \ vendor optimization manuals: \ "
                                         r"pipeline depths and penalties"),
@@ -112,12 +112,12 @@ class Outro(VoiceoverScene):
                                   r"readable on GitHub"),
         ])
         with self.voiceover(
-            "In practice. On Linux, perf stat runs any program and reports its cycles, instructions, instructions per "
-            "cycle and branch misses: the iron law, measured on your own code. Profilers like perf record, VTune and "
-            "Instruments find where the time goes, the p of Amdahl's law, which is always the first thing to know. "
-            "Hot loops are made branch-free with conditional moves, or by sorting or partitioning data first. Agner "
-            "Fog's tables and the vendors' optimization manuals list every real core's pipeline depths and penalties. "
-            "And open-source RISC-V cores, like Berkeley's Rocket and BOOM, have branch predictors you can read."
+            "In practice, measure first. Linux perf stat can report supported cycle, instruction and branch events "
+            "when permissions allow; results depend on the processor and operating system. Profilers help find "
+            "baseline time shares, and wall time differs from processor time. Conditional moves, safe if-conversion "
+            "and data reordering can help hot loops, but measure their extra work too. Vendor manuals and Agner Fog's "
+            "tables provide useful measured and documented costs, not every core's complete internal pipeline. "
+            "Open-source Rocket and BOOM offer concrete predictor implementations to inspect."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.35), run_time=3.0)
@@ -134,17 +134,15 @@ class Outro(VoiceoverScene):
             r"$t = 2560$ ps \ and $o = 70$ ps, \ what is $k^*$ for $b = 0.01$ \ and for $b = 0.1$?",
             r"80\% of a program can run in parallel. \ What speedup do 4, \ 16 and infinitely many processors give? "
             r"\ What if the problem grows so the serial time stays fixed \ (Gustafson)?",
-            r"\textit{Build.} \ In the Job's scan loop, \ move one instruction so the load-use bubble disappears. \ Run "
-            r"chapter 1 on the pipeline: \ how many cycles do you save, \ and what is the new CPI?",
-            r"$\bigstar$ \textit{Research.} \ On the Job's branches our TAGE gets 94.3\% in 9 KB, \ unlimited PPM 97.5\%. "
-            r"\ How much of the gap can 64 KB close? \ Which branches stay wrong, \ and could anything but history "
-            r"predict them?",
+            '\\textit{Build.} Schedule the Job scan loop to hide a load-use bubble. \\\\ First prove any hoisted load is safe in this layout; \\\\ then measure cycles, CPI and output on chapter 1.',
+            '$\\bigstar$ \\textit{Research.} Design a predictor with at most 64 KiB of total state. \\\\ Fix train/tune/heldout chapters; exclude future test labels. \\\\ Report heldout accuracy, full bit accounting and remaining errors.',
         ], font_size=22)
         with self.voiceover(
-            "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build problem: "
-            "do by hand, to the Job's inner loop, what Part 13's compiler will do automatically, and measure it on the "
-            "pipeline. The last, marked with a star, is a research problem. Nobody knows its full answer, and the notes "
-            "say where to start."
+            "Six problems are in the notes. The fifth schedules the Job's loop, with a required proof that a hoisted "
+            "load is safe under this memory layout. The starred exercise designs a predictor within sixty-four "
+            "kibibytes of fully accounted state. Choose training and tuning chapters first, then evaluate untouched "
+            "chapters with no encoded future outcomes. A known trace can be memorized, so replay accuracy alone is not "
+            "the research question. Report the protocol, remaining misses and what generalizes."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)
@@ -159,11 +157,11 @@ class Outro(VoiceoverScene):
         q = label(r"if one instruction waits, \ why should the ones after it?", font_size=30, color=HEAD).to_edge(
             DOWN, buff=0.8)
         with self.voiceover(
-            "Next time. When the load at the head of this sequence waits for memory, our pipeline waits with it, even "
-            "though the two instructions behind the add have nothing to do with the load. Part 8 lets them go first: "
-            "Tomasulo's algorithm, register renaming, the reorder buffer that keeps exceptions precise, and modern "
-            "cores with hundreds of instructions in flight. And then, in 2018, the discovery that all this guessing "
-            "can leak secrets."
+            "Next time: our pipeline overlaps instructions, but executes and retires in order. When an older operation "
+            "blocks progress, independent younger work may still be ready. Part 8 studies scheduling that work with "
+            "register renaming and a reorder buffer to preserve precise architectural state. Modern cores can keep "
+            "many instructions in flight. The 2018 Spectre disclosures also showed how some speculative activity can "
+            "leak information through microarchitectural effects, under specific attack conditions."
         ):
             self.play(FadeIn(nxt), LaggedStart(*[FadeIn(s, shift=RIGHT * 0.2) for s in order], lag_ratio=0.2))
             self.play(order[2].animate(path_arc=-PI / 2).move_to(slots[0]),

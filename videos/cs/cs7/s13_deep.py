@@ -14,7 +14,7 @@ class Deep(VoiceoverScene):
         self.power()
 
     def card(self):
-        card = chapter_card(12, r"Deeper, \ and the end of the race", r"Why did clock rates stop rising?",
+        card = chapter_card(12, r"Deeper, \ and the end of the race", 'Why did clock growth slow?',
                             lit=(2000, 2004), extra=((2000, r"Pentium 4: 20 stages"), (2004, r"31 stages; Tejas cancelled")), part=PART)
         with self.voiceover("Chapter twelve. Deeper, and the end of the race."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
@@ -43,20 +43,19 @@ class Deep(VoiceoverScene):
             label(r"deeper pipelines, \ shorter stages, \ higher clocks: \\ the number that sold computers", font_size=20,
                   color=GREY_A),
             label(r"2004: \ Intel cancels Tejas, \ the next, \ deeper Pentium 4", font_size=20, color=NO),
-            label(r"2006: \ Core 2, \ 14 stages, \ a lower clock, \ faster", font_size=20, color=YES),
+            label('2006: Core 2, about 14 stages; \\\\ lower clocks, faster on many workloads', font_size=20, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to(RIGHT * 4.0 + DOWN * 1.2)
         with self.voiceover(
-            "Chapter two's model says deeper pipelines pay, up to a point. In the 1990s the industry followed it. "
-            "<bookmark mark='a'/> Clock rates rose from sixty-six megahertz in 1993 to a gigahertz by 2000, partly from "
-            "faster transistors, and partly from cutting the work into more, shorter stages. <bookmark mark='b'/> "
-            "Intel's Pentium 4 of 2000 had twenty stages, and its 2004 Prescott version thirty-one, close to the "
-            "optimum our model found for Pebble, reaching three point eight gigahertz. Megahertz sold computers. "
-            "<bookmark mark='c'/> Then the race stopped. In 2004 Intel cancelled the Pentium 4's successor, and in 2006 "
-            "it replaced the whole line with the Core 2: fourteen stages, a lower clock, and faster programs. Clock "
-            "rates have crept up only slowly since. Something other than the pipeline model had become the limit."
+            "Pipeline depth is one factor in clock design, alongside technology, circuits and workload. <bookmark "
+            "mark='a'/> These approximate desktop clock examples show rapid growth through the 1990s. <bookmark "
+            "mark='b'/> Pentium 4 used deeper pipelines: roughly twenty stages in Willamette and thirty-one in "
+            "Prescott. That historical count does not validate our toy thirty-seven-stage optimum. <bookmark "
+            "mark='c'/> Intel cancelled Tejas in 2004, and Core 2 arrived in 2006 with a shorter pipeline and strong "
+            "performance at lower clocks on many workloads. Clock growth slowed markedly, rather than stopping "
+            "completely. Differences in architecture, technology and workload prevent attributing the comparison to "
+            "depth alone."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(yl))
-            vo.wait_until("a")
             self.play(Create(line), LaggedStart(*[FadeIn(p) for p in pts[:6]], lag_ratio=0.2), run_time=2.0)
             vo.wait_until("b")
             self.play(Create(line1), FadeIn(pts[6]), FadeIn(pl), FadeIn(stages[:3]), FadeIn(story[0]))
@@ -68,7 +67,7 @@ class Deep(VoiceoverScene):
     # ------------------------------------------------------------------
     def power(self):
         head = label(r"The power wall", font_size=38).to_edge(UP, buff=0.35)
-        eq = MathTex(r"P", r"\approx", r"\alpha", r"\,C\,", r"V^2", r"f", font_size=56).move_to(UP * 1.7)
+        eq = MathTex(r"P_{\rm dynamic}", r"\approx", r"\alpha", r"\,C\,", r"V^2", r"f", font_size=56).move_to(UP * 1.7)
         eq[0].set_color(NO)
         eq[4].set_color(HEAD)
         eq[5].set_color(CLOCK)
@@ -77,9 +76,8 @@ class Deep(VoiceoverScene):
                   r"$f$: \ the clock", font_size=22, color=GREY_A),
         ).next_to(eq, DOWN, buff=0.3)
         pts = VGroup(
-            label(r"Dennard scaling \ (1974): \ shrink a transistor, \ lower $V$ with it, \ and power per area stays "
-                  r"constant", font_size=24, color=YES),
-            label(r"by about 2005, \ $V$ could fall no further \ (leakage), \ so every extra GHz cost power", font_size=24,
+            label('ideal constant-field scaling: dimensions and voltage fall together; \\\\ dynamic model above excludes leakage', font_size=24, color=YES),
+            label('lower $V_{DD}$ slows devices; lower $V_T$ to keep speed raises leakage', font_size=24,
                   color=NO),
             label(r"a deep pipeline makes it worse: \ more registers clocked, \ more work thrown away per mistake",
                   font_size=24, color=NO),
@@ -87,20 +85,17 @@ class Deep(VoiceoverScene):
                   font_size=24, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "The limit was heat. <bookmark mark='a'/> The power a chip burns switching its wires is roughly the "
-            "activity, times the capacitance, times the voltage squared, times the clock frequency. "
-            "<bookmark mark='b'/> For thirty years, Dennard scaling, from Robert Dennard of Part 5's memory cell, kept "
-            "this in check: each new generation shrank the transistors and lowered the voltage with them, so a chip of "
-            "the same size used about the same power while running faster. <bookmark mark='c'/> Around 2005 the voltage "
-            "could not go much lower without the transistors leaking current even when off, and every extra gigahertz "
-            "now cost power directly, a hundred watts and more in a desktop chip. Deep pipelines made it worse: more "
-            "pipeline registers clocked every cycle, more speculative work thrown away. <bookmark mark='d'/> Moore's law "
-            "still delivered more transistors, so the industry spent them differently: several processor cores on one "
-            "chip, each at a modest clock, which is where Part 10 goes."
+            "Power constrained the race. <bookmark mark='a'/> Dynamic switching power is approximately activity times "
+            "capacitance times supply voltage squared times frequency. Leakage and other static power are additional "
+            "terms. <bookmark mark='b'/> Ideal constant-field Dennard scaling reduced dimensions and voltages "
+            "together, allowing faster devices without rising power density under its assumptions. <bookmark "
+            "mark='c'/> That scaling became harder. Lowering supply voltage reduces switching power but slows devices; "
+            "lowering threshold voltage to preserve speed raises subthreshold leakage. Variability and reliability "
+            "also constrain the choices. Deep pipelines add clocked registers and can waste more speculative work. "
+            "<bookmark mark='d'/> Designers increasingly spent transistor budgets on multiple cores and specialized "
+            "units. Those choices still require power management, and do not make clock frequency irrelevant."
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(eq), FadeIn(terms))
+            self.play(FadeIn(head), Write(eq), FadeIn(terms), run_time=0.8)
             vo.wait_until("b")
             self.play(FadeIn(pts[0]))
             vo.wait_until("c")

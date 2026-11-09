@@ -36,19 +36,19 @@ class Sorted(VoiceoverScene):
                 [-4.3 + 0.22 * k, y + (0.05 + 1.0 * x / 255) / 2, 0]) for k, x in enumerate(v)])
         a = strip(vals, -0.55)
         b = strip(np.sort(vals), -2.55)
-        la = label(r"random: \ the branch is a coin toss", font_size=22, color=NO).next_to(a, DOWN, buff=0.15)
+        la = label('fixed-seed irregular order: difficult for these predictors', font_size=22, color=NO).next_to(a, DOWN, buff=0.15)
         lb = label(r"sorted: \ not taken, \ then taken, \ for good", font_size=22, color=YES).next_to(b, DOWN,
                                                                                                 buff=0.15)
-        so = label(r"Stack Overflow, \ 2012: \ the site's most famous question", font_size=20, color=HIST).next_to(
+        so = label('Stack Overflow, 2012: a widely discussed performance question', font_size=20, color=HIST).next_to(
             code, DOWN, buff=0.35)
         with self.voiceover(
-            "In 2012 someone asked on Stack Overflow why this loop ran six times faster after the array was sorted. It "
-            "became the most famous question the site has ever had. <bookmark mark='a'/> The loop adds up the elements "
-            "of an array of bytes that are at least a hundred and twenty-eight. Sorting changes nothing about the work: "
-            "the same elements, the same additions. <bookmark mark='b'/> It changes the branch. On random data, whether "
-            "each element passes the test is a coin toss, and no predictor can learn a coin. <bookmark mark='c'/> On "
-            "sorted data, the branch goes one way for the first half of the array and the other way for the second "
-            "half, and even a two-bit counter gets it almost always right."
+            "A widely discussed 2012 Stack Overflow question asked why sorting an array sped up this loop. <bookmark "
+            "mark='a'/> The loop adds values at least a hundred and twenty-eight. Reordering the same values preserves "
+            "the sum and the number of additions; sorting itself has a cost, excluded from these repeated-loop "
+            "timings. <bookmark mark='b'/> Fixed-seed pseudorandom data makes the threshold outcomes irregular for "
+            "these predictors. That is an empirical difficulty, not an absolute information bound for a known repeated "
+            "array. <bookmark mark='c'/> Sorted data groups outcomes into long runs, which even a two-bit counter "
+            "predicts well. Compiler transformations and the target processor determine the actual speedup."
         ) as vo:
             self.play(FadeIn(head), FadeIn(code), FadeIn(so))
             vo.wait_until("b")
@@ -62,7 +62,7 @@ class Sorted(VoiceoverScene):
     def host(self):
         h = load("sorted")["host"]
         head = label(r"Measured on the machine that made this video", font_size=34).to_edge(UP, buff=0.35)
-        cpu = label(rf"{h['cpu']}; \ C, \ {h['n']:,} bytes $\times$ {h['reps']} passes".replace(",", "{,}"),
+        cpu = label(rf"{h['cpu']}; \ C; \ {h['n']:,} values $\times$ {h['reps']} passes".replace(",", "{,}"),
                     font_size=20, color=GREY_B).next_to(head, DOWN, buff=0.2)
         items = [("random", h["random"], NO), ("sorted", h["sorted"], YES)]
         scale = 7.0 / max(v for _, v, _ in items)
@@ -76,16 +76,16 @@ class Sorted(VoiceoverScene):
             bars.add(VGroup(nl, r, vl))
         res = VGroup(
             label(rf"{h['ratio']:.1f} times faster, \ sorted", font_size=32, color=HEAD),
-            label(r"a modern core loses 15 to 20 cycles per mispredicted branch, \\ and could have run several "
-                  r"instructions in each \ (Part 8)", font_size=22, color=GREY_A),
+            label('five-run medians; generation and sorting excluded; \\\\ timing alone does not isolate branch-prediction effects', font_size=22, color=GREY_A),
         ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Here is the experiment, run in C on the machine that computed this video. <bookmark mark='a'/> Thirty-two "
-            "thousand random bytes, summed three hundred times: forty-four milliseconds. The same bytes sorted: under "
-            "six. <bookmark mark='b'/> Sorting made the loop more than seven times faster, purely through branch "
-            "prediction. A modern core's pipeline is deep, and it runs several instructions per cycle, which Part 8 "
-            "explains, so each misprediction throws away fifteen or twenty cycles in which it could have done dozens of "
-            "instructions' work."
+            "These bars are measurements from this host, not the original question's machine. <bookmark mark='a'/> The "
+            "program scans thirty-two thousand seven hundred and sixty-eight values three hundred times, reusing the "
+            "same array. We report medians of five runs, check matching sums, and exclude generation and sorting. C "
+            "compiler flags disable vectorization and automatic if-conversion. <bookmark mark='b'/> Read the measured "
+            "times and ratio from the bars. The sorted loop is faster here, consistent with easier branch prediction, "
+            "but timing alone does not isolate its cause. Hardware performance counters and controlled compiler output "
+            "would strengthen that explanation. Other processors and builds can give different results."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cpu))
             vo.wait_until("a")
@@ -115,15 +115,14 @@ class Sorted(VoiceoverScene):
                   color=GREY_A),
         ).arrange(DOWN, buff=0.25).move_to(DOWN * 1.3)
         with self.voiceover(
-            "On Pebble's five-stage pipeline the same experiment, three thousand bytes summed twice, tells a milder "
-            "story. <bookmark mark='a'/> On random data, three thousand mispredictions; on sorted data, fourteen. "
-            "<bookmark mark='b'/> But a misprediction costs Pebble only two cycles, so sorting gains only thirteen "
-            "percent. The same program, the same predictions, and a seven-fold difference on one machine against a "
-            "thirteen percent one on the other. The deeper and wider the processor, the more a predictable branch is "
-            "worth."
+            "Now use Pebble's cycle model with three thousand values scanned twice. <bookmark mark='a'/> The irregular "
+            "order has about three thousand mispredictions; the sorted order has fourteen. Both produce the same sum. "
+            "<bookmark mark='b'/> Each modeled branch miss costs two cycles. The displayed cycle counts therefore "
+            "differ by only about thirteen percent. This compares two input orders within Pebble, not an identical "
+            "prediction stream across different processors. Deeper or wider machines can lose more useful work on a "
+            "redirect, but their predictors, caches and generated code also differ."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(rows[0]), FadeIn(rows[1]))
             vo.wait_until("b")
             self.play(FadeIn(res[0]))
@@ -142,25 +141,23 @@ class Sorted(VoiceoverScene):
             DOWN, aligned_edge=LEFT, buff=0.1).move_to(UP * 1.5)
         res = VGroup(
             label(rf"this machine: \ {h['random_branchless'] * 1e3:.1f} ms random, \ {h['sorted_branchless'] * 1e3:.1f} ms "
-                  r"sorted: \ the order no longer matters", font_size=24, color=YES),
+                  r"sorted: \ little order difference in this run", font_size=24, color=YES),
             label(rf"Pebble: \ {fmt(p['random, branchless']['cycles'])} cycles either way: \ more instructions, \ and "
                   r"its cheap mistakes were worth less", font_size=24, color=GREY_A),
             label(r"compilers emit conditional moves \ (\texttt{cmov}); \ databases, \ video codecs \ and trading "
                   r"systems \\ write branch-free inner loops on purpose", font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.28).move_to(DOWN * 1.2)
         with self.voiceover(
-            "If a branch cannot be predicted, remove it. <bookmark mark='a'/> The comparison produces a one or a zero; "
-            "subtracting one turns that into a mask of all zeros or all ones; and-ing the mask with the element gives "
-            "the element or nothing, which is simply added. No branch, so nothing to mispredict. "
-            "<bookmark mark='b'/> On the Xeon, the branch-free loop takes eleven milliseconds whichever order the data is "
-            "in: slower than the lucky sorted case, four times faster than the random one. On Pebble it is a little "
-            "slower in both cases, because it runs more instructions and Pebble's mistakes were cheap. "
-            "<bookmark mark='c'/> Real processors have conditional-move instructions for exactly this, compilers use "
-            "them when they can prove it safe, and the inner loops of databases, video codecs and trading systems are "
-            "often written without branches on purpose."
+            "A data-dependent branch can sometimes be replaced by arithmetic. <bookmark mark='a'/> Here the comparison "
+            "is x less than a hundred and twenty-eight. Subtract one from its zero-or-one result: small values get a "
+            "zero mask; large ones get all ones in the machine word. Masking x selects zero or x before adding. "
+            "<bookmark mark='b'/> The displayed host and Pebble timings show the trade-off. The host's order "
+            "sensitivity is much smaller; Pebble executes more instructions and is slower than its branched versions. "
+            "These are measured cases, not a rule that branchless code wins. <bookmark mark='c'/> Compilers may use "
+            "conditional moves or vectorization when semantics permit. Extra work, dependencies and safely evaluating "
+            "both paths still matter."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(c) for c in code], lag_ratio=0.3), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(res[0]))

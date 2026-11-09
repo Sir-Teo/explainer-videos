@@ -29,18 +29,19 @@ class Precise(VoiceoverScene):
         tk = VGroup(*[fig.token(s, t, CODE) for s, t in zip(order[::-1], toks[::-1])])
         bad = SurroundingRectangle(tk[2], buff=0.08, color=NO)
         q = VGroup(
-            label(r"the divide, \ in EX, \ finds its divisor is zero", font_size=24, color=NO),
+            label('Pebble policy: division by zero faults in EX; RISC-V M defines a result', font_size=24, color=NO),
             label(r"older instructions are half done; \ younger ones have started", font_size=24, color=GREY_A),
-            label(r"precise: \ every older instruction completes, \ no younger one changes anything, \\ and the saved "
-                  r"\texttt{pc} points at the divide", font_size=26, color=HEAD),
+            label('precise architectural state: older effects committed; \\\\ faulting instruction obeys its policy; no younger effects committed', font_size=26, color=HEAD),
         ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Part 6 promised that an exception stops the machine at a precise point. A pipeline makes that hard. "
-            "<bookmark mark='a'/> Here five instructions are in flight, and the divide in the execute stage discovers "
-            "that its divisor is zero. The store ahead of it is half done, and the store behind it has already been "
-            "fetched. <bookmark mark='b'/> A precise exception means: every instruction before the divide finishes, "
-            "none after it changes anything, and the machine reports the divide's own address, so that an operating "
-            "system could fix the problem and resume exactly there."
+            "An exception needs a precise architectural boundary. <bookmark mark='a'/> In this sketch, Pebble's custom "
+            "policy treats division by zero as a fault. The divide is in execute, with older and younger instructions "
+            "around it. RISC-V's M extension instead defines a result for division by zero. <bookmark mark='b'/> At a "
+            "precise fault, older instructions have committed their architectural effects; the faulting instruction "
+            "follows its defined side-effect policy, and younger instructions have not committed theirs. Pebble stops "
+            "and reports the divide's address. An operating system could use such a boundary for recovery, but this "
+            "simulator implements no operating-system resume mechanism. Cache and predictor effects are a separate "
+            "question."
         ) as vo:
             self.play(FadeIn(head), FadeIn(fig), FadeIn(tk))
             vo.wait_until("a")
@@ -61,8 +62,7 @@ class Precise(VoiceoverScene):
                   color=GREY_A),
             label(r"by then every older instruction has written its result, \\ and every younger one is behind it, \ "
                   r"and is flushed", font_size=24, color=YES),
-            label(r"nothing a younger instruction did may be visible: \ in Pebble, \ stores happen in MEM, \\ "
-                  r"after every older instruction is past the stages that can fault", font_size=22, color=GREY_B),
+            label("no younger architectural effects commit; stores occur in MEM \\\\ only after older instructions pass this model\\'s faulting stages", font_size=22, color=GREY_B),
         ).arrange(DOWN, buff=0.3).move_to(UP * 0.4)
         demo = VGroup(mono("sw   a0, 0(s0)      # done: memory holds 11", 18, YES),
                       mono("div  a2, a0, a1     # a1 = 0: stop here, pc reported", 18, NO),
@@ -70,17 +70,16 @@ class Precise(VoiceoverScene):
                                                                                     buff=0.08)
         demo.to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "The trick is to separate noticing a fault from acting on it. <bookmark mark='a'/> A stage that finds a "
-            "problem only marks the instruction: this one has failed, and why. <bookmark mark='b'/> The exception is "
-            "taken when the marked instruction reaches write-back. By then every older instruction has finished, and "
-            "every younger one is still behind it in the pipeline, where it can be flushed. "
-            "<bookmark mark='c'/> On Pebble's pipeline, this little program stores eleven, then divides by zero, then "
-            "stores again. The pipeline stops at the divide, reports its address, and memory holds the first store but "
-            "not the second, exactly as the emulator would. Part 8's out-of-order machine will need a whole new "
-            "structure to keep this promise."
+            "Separate detecting a fault from committing it. <bookmark mark='a'/> The model records a detected problem "
+            "with its instruction. <bookmark mark='b'/> When that instruction reaches write-back, it stops the machine "
+            "and discards younger work. Older operations have completed. Stores occur in MEM only after older "
+            "instructions have passed the stages where this model can discover a fault. <bookmark mark='c'/> In this "
+            "test, the first store commits, the divide faults, and the younger store does not change memory. The final "
+            "architectural state and fault address agree with the emulator. That is the tested promise; it does not "
+            "erase all microarchitectural traces of younger activity. Out-of-order execution needs additional "
+            "machinery to preserve the same boundary."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(steps[0]))
             vo.wait_until("b")
             self.play(FadeIn(steps[1]), FadeIn(steps[2]))
@@ -108,18 +107,17 @@ class Precise(VoiceoverScene):
         why = VGroup(
             label(r"the predicted \texttt{bnez} lets fetch read \texttt{load} again \ before the \texttt{sw} two "
                   r"instructions ahead has written it", font_size=22, color=GREY_A),
-            label(r"real processors promise nothing here \ until the program asks: \ RISC-V's \texttt{fence.i}, \ "
-                  r"x86's serializing instructions", font_size=22, color=HEAD),
+            label('RISC-V \\texttt{fence.i}: same-hart fetch ordering; \\\\ other harts, migration and x86 need their specified protocols', font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "One promise the pipeline does not keep, and Part 6 warned about it. <bookmark mark='a'/> This is Part 6's "
-            "self-modifying array sum: each trip round the loop rewrites the offset in its own load instruction. "
-            "<bookmark mark='b'/> The emulator and the gate-level machine get thirty-one. The pipeline, with its branch "
-            "predicted, gets twenty-six. <bookmark mark='c'/> The predicted branch sends fetch back to the load before "
-            "the store that rewrites it, two instructions ahead, has reached memory, so the pipeline runs the old "
-            "instruction. Without prediction, every trip mispredicts, the flush refetches the new word, and the answer "
-            "is right by accident. Real processors make no promise about code that rewrites itself until the program "
-            "asks for one, with RISC-V's fence instruction or x86's serializing instructions."
+            "Self-modifying code exposes another boundary. <bookmark mark='a'/> This loop changes the offset in its "
+            "own load. <bookmark mark='b'/> The sequential emulator and gate machine give thirty-one, while this "
+            "predicted pipeline gives twenty-six. <bookmark mark='c'/> Fetch can revisit the load before the older "
+            "store updates its encoding. Without prediction the redirect happens to refetch the newer word; that is "
+            "accidental. Instruction-fetch synchronization is ISA-specific. RISC-V fence dot i orders a hart's "
+            "already-visible prior stores before its later fetches; other harts and operating-system migration need "
+            "broader protocols. x86 also specifies self- and cross-modification rules. Our Pebble model implements no "
+            "instruction fence, so this example demonstrates its explicit limitation."
         ) as vo:
             self.play(FadeIn(head), FadeIn(code))
             vo.wait_until("b")

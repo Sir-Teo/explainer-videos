@@ -26,7 +26,7 @@ class Hook(VoiceoverScene):
             r = Rectangle(width=ps * scale, height=0.8, stroke_color=BG, stroke_width=2, fill_color=c, fill_opacity=0.55)
             bar.add(VGroup(r, label(t, font_size=20, color=WHITE).move_to(r)))
         bar.arrange(RIGHT, buff=0).move_to(UP * 1.1)
-        bl = label(rf"one clock cycle: \ {fmt(st['single_ps'])} ps", font_size=24, color=GREY_A).next_to(bar, UP,
+        bl = label(rf"assumed clock budget: \ {fmt(st['single_ps'])} ps", font_size=24, color=GREY_A).next_to(bar, UP,
                                                                                                  buff=0.2)
         uses = VGroup()
         for k, (name, busy) in enumerate(((r"\texttt{lw}", [1, 1, 1]), (r"\texttt{add}", [1, 1, 0]),
@@ -41,19 +41,17 @@ class Hook(VoiceoverScene):
                                    fill_opacity=0.6 if b else 0.15).move_to([x + w / 2, y, 0]))
                 x += w
             uses.add(VGroup(lab, segs))
-        note = label(r"each stage of the machine is busy for a third of the time, \ and idle the rest", font_size=26,
+        note = label('a fixed single-cycle budget leaves resources idle during other phases', font_size=26,
                      color=HEAD).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Part 6 built a computer, and it works. But watch how it spends its time. <bookmark mark='a'/> One clock "
-            "cycle must hold everything an instruction might need: fetching it from memory, decoding it and running "
-            "the ALU, and reading or writing data memory. With memories that take a nanosecond, that is a cycle of "
-            "two point six nanoseconds. <bookmark mark='b'/> A load uses all of it. An add never touches data memory, "
-            "and a branch neither, yet each waits out the whole cycle. <bookmark mark='c'/> Worse, at any moment most "
-            "of the machine is idle: while the data memory works, the instruction memory and the ALU sit doing "
-            "nothing, waiting for the next cycle to begin."
+            "Part 6's computer works, but its single-cycle schedule leaves resources waiting. <bookmark mark='a'/> Our "
+            "teaching budget allows one nanosecond for each memory access, plus logic and register overhead: two point "
+            "six three nanoseconds for a cycle. This is an assumed timing model, not a measured silicon clock. "
+            "<bookmark mark='b'/> A load uses both memory phases. An add and a branch skip data memory, yet still wait "
+            "for the same clock edge. <bookmark mark='c'/> The colored blocks show useful work at different times. "
+            "Could the next instruction use a resource as soon as the previous instruction leaves it?"
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(bl), LaggedStart(*[GrowFromEdge(b, LEFT) for b in bar], lag_ratio=0.3), run_time=2.0)
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(u) for u in uses], lag_ratio=0.4), run_time=2.0)
@@ -71,12 +69,12 @@ class Hook(VoiceoverScene):
         cols = [DATA, CTRL, FUNC, INF, YES]
         tokens = []
         with self.voiceover(
-            "The cure is the oldest trick in manufacturing. <bookmark mark='a'/> Cut the work into stages, put a "
-            "register between each pair, and let a new instruction enter the first stage while the others move on. "
-            "Five stages, five instructions in flight, every part of the machine busy in every cycle. "
-            "<bookmark mark='b'/> Each instruction still takes five steps from start to finish. But one finishes in "
-            "every cycle, and the cycle is now as short as the slowest stage, not the whole journey. This is "
-            "pipelining. IBM's Stretch did it in 1961, and nearly every microprocessor since the mid-1980s does."
+            "Overlap the work, as an assembly line does. <bookmark mark='a'/> Split it into five stages with registers "
+            "between them. In an ideal full pipeline, five instructions occupy different stages; this does not mean "
+            "every hardware unit is active. <bookmark mark='b'/> Each simple instruction still crosses five stages. "
+            "After filling, one can finish each cycle if no hazard stalls or redirects the stream. The cycle follows "
+            "the slowest stage plus register overhead. Pipelining has a long history, including IBM Stretch in 1961, "
+            "and is common in modern processors, although some small designs use other schedules."
         ) as vo:
             self.play(FadeIn(head), FadeIn(fig))
             vo.wait_until("a")
@@ -108,22 +106,22 @@ class Hook(VoiceoverScene):
         il = load("ironlaw")
         head = label(r"By the end of this part", font_size=40).to_edge(UP, buff=0.4)
         facts = VGroup(
-            label(rf"a five-stage Pebble: \ the clock {st['clock_ratio']:.2f} times faster, \ {st['mhz']:.0f} MHz",
+            label(rf"assumed five-stage budget: \ the clock {st['clock_ratio']:.2f} times faster, \ {st['mhz']:.0f} MHz",
                   font_size=28, color=YES),
             label(r"the price: \ hazards, \ when an instruction needs what another has not finished", font_size=28,
                   color=NO),
-            label(r"the hardest: \ branches, \ so the machine guesses, \ and the best guesser is a neural network",
+            label('branches: \\\\ counters, history tables and neural predictors',
                   font_size=28, color=FUNC),
             label(rf"the Job: \ CPI {il['rows']['pipeline']['cpi']:.2f}, \ {il['speedup']:.2f} times faster than "
                   r"Part 6: \ ledger row 1", font_size=28, color=COST),
         ).arrange(DOWN, buff=0.4).move_to(DOWN * 0.1)
         with self.voiceover(
-            "Here is where this part goes. <bookmark mark='a'/> A five-stage Pebble, whose clock runs more than twice as "
-            "fast as Part 6's. <bookmark mark='b'/> The price is a new class of problems, hazards, which arise when an "
-            "instruction needs something an earlier one has not finished. <bookmark mark='c'/> The hardest are "
-            "branches: the machine must fetch the next instruction before it knows which one that is, so it guesses, "
-            "and the best guessers turn out to be small learning machines, one of them a neural network. "
-            "<bookmark mark='d'/> And the Job, measured cycle by cycle, gives the second row of the ledger."
+            "Here is the route. <bookmark mark='a'/> Build a five-stage functional model, using an assumed clock "
+            "budget more than twice as fast as Part 6's. <bookmark mark='b'/> Learn how hazards limit that gain. "
+            "Forwarding solves some dependencies; other cases still stall. <bookmark mark='c'/> Predict branches with "
+            "counters, history tables and a perceptron, then compare their measured results. No single learning method "
+            "wins every case. <bookmark mark='d'/> Finally, simulate short Job passages and label the full-corpus "
+            "ledger row as an extrapolation. Keep measurements, assumptions and projections separate as we go."
         ) as vo:
             self.play(FadeIn(head))
             for mk, f in zip("abcd", facts):
@@ -145,13 +143,12 @@ class Hook(VoiceoverScene):
             r"the Job's CPI, \ the deep-pipeline era, \ Amdahl's law, \ the sorted-array puzzle",
         ], font_size=26).move_to(DOWN * 0.2)
         with self.voiceover(
-            "This is Part 7 of Computer Science, Built, the first part of the second act, Making It Fast. "
-            "<bookmark mark='a'/> In this part: the iron law of performance, and why counting instructions per second "
-            "misleads. Pipelining, its throughput and latency, and the best number of stages, derived. Pebble's five "
-            "stages, simulated cycle by cycle and checked against the emulator. The hazards: structural, data, which "
-            "forwarding cures, and control. Branch prediction, from two-bit counters to TAGE and the perceptron. Then "
-            "the Job's measured CPI, the deep-pipeline era and its end, Amdahl's law, and a famous puzzle about sorted "
-            "arrays."
+            "This is Part 7 of Computer Science, Built, opening the act Making It Fast. <bookmark mark='a'/> We derive "
+            "the performance equation, distinguish throughput from latency, and explore pipeline depth under stated "
+            "assumptions. We build a functional five-stage simulator and test selected cases against the emulator. "
+            "Then we visualize structural, data and control hazards, including where forwarding helps and where it "
+            "does not. Branch prediction leads from counters to TAGE and the perceptron. Finally come the Job "
+            "projection, clock and power trade-offs, Amdahl's law, and the sorted-array puzzle."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")

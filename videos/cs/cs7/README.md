@@ -1,61 +1,49 @@
 # Computer Science, Built — Part 7: Pipelines
 
-Part 7 of a sixty-one-part course in computer science (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), and the start of Act II, *Making It Fast*. Part 6's single-cycle Pebble makes every
-instruction wait for two memory accesses. This part cuts its datapath into five stages, so that five instructions are
-in flight at once, and then deals with everything that goes wrong: structural, data and control hazards, forwarding,
-the load-use stall, and branch prediction from a single bit to TAGE and a perceptron. The pipeline is a
-cycle-accurate simulator (`explainer/cs/pebble/pipe.py`), checked against the emulator on hundreds of random programs
-(`tests/test_cs7_pipeline.py`); the predictors are in `explainer/cs/pebble/predict.py`. Pebble also gains the M
-extension (multiply, divide, remainder) here. Every number is computed in `compute.py`.
+Part 7 of the sixty-one-part course ([plan](../README.md), [syllabus](../SYLLABUS.md)) opens Act II,
+*Making It Fast*. A functional cycle-by-cycle Pebble model overlaps instructions through five stages.
+Finite tests compare selected programs/configurations with the instruction emulator. It is not a physical gate
+pipeline: memory delays, mux/control estimates and register overhead define an **assumed teaching clock budget**.
+The M-extension latencies are modeled, motivated by earlier arithmetic circuits.
 
-* **Five instructions at once.** Part 6's machine spends most of each cycle waiting; the assembly-line cure; what the
-  part builds; objectives.
-* **1. The iron law.** Time = instructions × CPI × clock period, as a product of ratios; chapter 1 of the Job on Part
-  6's machine (827,576 instructions, CPI 1, 2,630 ps) and on the pipeline (CPI 1.203, 1,130 ps): 1.93 times faster.
-  The MIPS myth: printing 1 to 2,000 by subtraction runs at 814 MIPS, by division at 239 MIPS, and the division
-  version finishes first (0.33 ms against 0.52).
-* **2. Pipelining, like laundry.** Throughput against latency (Patterson and Hennessy's laundry); k equal stages and
-  the register overhead o; real stages are unequal (IF 1,030, ID 110, EX 350, MEM 1,060, WB 80 ps), so the clock is
-  1,130 ps, 885 MHz, 2.33 times Part 6's; the best depth, k* = √(t(1 − b)/(b·o)) ≈ 37 with the Job's measured b.
-* **3. Pebble's five stages.** IF, ID, EX, MEM, WB; the four pipeline registers and what each carries; the pipeline
-  chart; the simulator and its co-simulation against the emulator.
-* **4. Structural hazards.** Three kinds of hazard; one memory for fetch and data (and why Pebble has two: the
-  Harvard split, later split caches); the multi-cycle divider (16 cycles in EX) and the stalls it causes; the
-  multiplier fits in EX (32 gate delays against the ALU's 29).
-* **5. Data hazards and forwarding.** RAW dependences; stalling; forwarding from EX/MEM and MEM/WB, drawn on the
-  chart; the load-use stall; CPI on seven benchmarks with and without forwarding (the sieve: 2.26 → 1.45).
-* **6. Control hazards.** Predict-not-taken and the flush; the cost equation (branch fraction × miss rate ×
-  penalty); deciding earlier, MIPS's delay slot, and guessing.
-* **7. Predicting branches.** Static rules (always taken, backward taken); Smith's 1-bit table (1981); the loop
-  problem and the 2-bit saturating counter (Part 5's state machine); accuracy on the benchmarks' branch traces: the
-  Job 88.3% (1-bit) → 91.2% (2-bit); the threshold loop on random data stuck at 75%.
-* **8. Correlation, and a perceptron.** Global history; gshare and the tournament predictor (McFarling, 1993); TAGE
-  and geometric history lengths (Seznec and Michaud, 2006); the perceptron predictor (Jiménez and Lin, 2001), its
-  learned weights on the correlated benchmark and the Job; Fibonacci 50% (2-bit) → 98.4% (TAGE).
-* **9. Where the branch goes.** The branch target buffer; the return-address stack; recursive Fibonacci of 18 on
-  three front ends: CPI 1.48 with no BTB, 1.22 with one, 1.12 with a return stack too.
-* **10. Precise exceptions.** Record a fault, take it at write-back; divide by zero, stopped at exactly the right
-  store; Part 6's self-modifying array sum goes stale on the predicted pipeline (26 instead of 31), and `fence.i`.
-* **11. The Job on the pipeline.** The scan loop cycle by cycle (6 instructions, 7 cycles per entry); the CPI
-  taken apart (1.91 → 1.55 → 1.20 → 1.20); a linear model of the bubbles, checked to 0.1% on a 16 kB passage; thirty
-  novels: CPI 1.198, 1.28 × 10¹¹ cycles, 2.4 minutes at 885 MHz; ledger row 1, 1.94 times faster.
-* **12. Deeper, and the end of the race.** Clock rates 1993–2023; the Pentium 4's 20 and 31 stages; the cancelled
-  Tejas and the 14-stage Core 2; P ≈ αCV²f, Dennard scaling and its end around 2005; multicore (Part 10).
-* **13. Amdahl's law.** Derived; the curves for p = 0.5, 0.9, 0.95, 0.99; make the common case fast; Gustafson; the
-  Job's search is 99.7% of its instructions, so removing it could give up to 350 times.
-* **14. The sorted-array puzzle.** The 2012 Stack Overflow question, measured on this machine: 44.3 ms random, 5.9 ms
-  sorted (7.6 times); on Pebble only 1.13 times, since a mistake costs 2 cycles; branch-free code (10.9 ms either
-  way), conditional moves.
-* **15. Frontier: the limits of prediction.** A limit study (Wall, 1991) on the Job's 254,436 branches: our TAGE
-  from 1.5 KB to 521 KB (92.4% → 96.3%), the perceptron flat at 92.5% whatever its size, and an idealised PPM
-  predictor with unlimited storage at 97.5%. One unlimited table per history length peaks at 92.7% (h = 12): longer
-  histories learn more slowly (bias against variance), and hindsight bounds are meaningless. Prediction as compression
-  (Cleary and Witten's PPM, 1984; Chen, Coffey and Mudge, 1996); TAGE as a buildable PPM. The perceptron's blind spot,
-  built: a branch that is the XOR of two earlier ones (perceptron 49%, TAGE 91%, PPM 99.8%); Minsky and Papert;
-  piecewise-linear and multiperspective perceptrons, TAGE-SC-L. Open questions: hard-to-predict branches, offline
-  learning (BranchNet, 2020), front-end capacity at data-centre scale, and the unknown entropy rate.
-* **Recap, where this comes back, in practice, problems.**
+- **Performance accounting:** time = instructions × CPI × clock period. The same Job chapter uses 827,576
+  instructions; measured model CPI and assumed periods give its projected speedup. MIPS alone can mislead.
+- **Throughput versus latency:** equal stages give speedup `(t+o)/(t/k+o)` with limit **1+t/o**.
+  Register overhead increases instruction latency. The assumed five-stage period is 1,130 ps versus 2,630 ps
+  single-cycle. The depth optimum assumes equal splittable work, fixed miss fraction and `k−1` penalty;
+  compare feasible integer depths near the continuous optimum. Historical Pentium 4 depths do not validate it.
+- **Structural and data hazards:** one coherent byte array has two ideal logical access ports. Division occupies
+  EX for 16 modeled cycles. Forwarding prioritizes the newest producer, ignores zero-register writes and cannot
+  forward unavailable load data. A load produces at end-MEM while the next consumer needs start-EX in the same
+  cycle; these are different instants. Write-back-before-decode is a simulator policy.
+- **Branches and targets:** counter startup, aliasing, gshare, our bimodal/gshare tournament, simplified TAGE,
+  and indexed perceptron weights. A counter's failure does not test all local-history models. Classic MIPS delay
+  slots were removed in Release 6. Warm correct BTB hits and balanced recognized calls explain modeled benefits;
+  neither guarantees free branches or perfect returns.
+- **Precise exceptions:** committed architectural state has a precise boundary; cache/predictor effects are separate.
+  Pebble stops and reports a fault PC, with no OS resume implementation. Its divide-zero fault differs from
+  RISC-V M's defined result. `fence.i` orders same-hart instruction fetch; multicore/migration requires the
+  specified wider protocol. The deliberate stale-code example has no instruction-fence implementation.
+- **The Job:** six instructions/seven cycles describes the mismatched-length fast path with warm correct
+  prediction. Full search includes letter comparisons. The corpus row is a **fitted extrapolation** from 24
+  passages, checked on one 16,000-character heldout text (16,019 encoded bytes); that check supplies no full-corpus error bound. Projected
+  runtime also assumes the teaching clock.
+- **Power and Amdahl:** dynamic `αCV²f` excludes leakage. Lower VDD slows circuits; lower threshold to retain
+  speed raises leakage. Fixed-work Amdahl fractions are baseline **time** fractions. Search is 99.7% of single-cycle
+  instructions; deleting it at no replacement cost gives a roughly 350× ceiling only in that uniform-cost model,
+  not a measured pipeline bound. Pipeline speedup is clock ratio divided by CPI ratio.
+- **Sorted arrays:** fixed-seed irregular and sorted orders preserve the sum. Host bars read current cached
+  five-run medians; no historical Xeon timings are narrated. Sorting/generation are excluded; 300 passes reuse
+  the same array. Compiler options, output observability and machine dependence are recorded. Timing alone
+  does not isolate branch prediction. Branchless masking uses `(x<128)-1` in the word model and can do more work.
+- **Frontier:** report empirical one-trace curves and nominal packed table payload, excluding history, validity
+  and implementation overhead. PPM-style context tables grow over configured lengths up to 64. Its algorithm
+  differs from TAGE, so the gap does not isolate storage or establish an impossibility bound. Hindsight majority
+  is an offline oracle for a chosen feature class. Compression relates probabilities/log loss to code length,
+  not directly to an accuracy ceiling. XOR has no perfect fixed affine separator of its two input bits, but a
+  fixed line can classify 3/4 of uniform cases; this run's 49% is not a theorem. Piecewise-linear and
+  multiperspective predictors use different feature constructions. TAGE-SC-L combines components; BranchNet
+  evaluates offline convolutional training on unseen inputs. Research exercises specify heldout evaluation.
 
 ## Build
 
@@ -101,7 +89,7 @@ name from `/proc/cpuinfo`. Ledger rows 0 and 1 are written to `.cache/cs7/ledger
    *Solution.* Multiply out: T = t/k + o + bt − bt/k + bok − bo = t(1 − b)/k + bok + (o + bt − bo). The constant does
    not depend on k, so dT/dk = −t(1 − b)/k² + bo, which is zero at **k* = √(t(1 − b)/(b·o))**; the second derivative
    2t(1 − b)/k³ is positive, so it is a minimum. For b = 0.01: √(2560 × 0.99 / 0.7) ≈ **60 stages**; for b = 0.1:
-   √(2560 × 0.9 / 7) ≈ **18 stages**. Ten times more pipeline-wasting events cut the best depth by √10. The Job's
+   √(2560 × 0.9 / 7) ≈ **18 stages**. For small b the depth scales approximately as 1/√b; the exact expression also contains √(1−b). The Job's
    measured b = 0.0265 gives 37.
 
 4. **Amdahl and Gustafson.** 80% of a program can run in parallel. What speedup do 4, 16 and infinitely many
@@ -124,10 +112,10 @@ name from `/proc/cpuinfo`. Ledger rows 0 and 1 are written to `.cache/cs7/ledger
            bne  t1, a1, next    # needs t1 now: one bubble per entry
    ```
 
-   Swap the first two instructions, so the load is issued before the end-of-table test and the test fills the slot:
+   For this byte-array model, first prove that `t0+4` is aligned, remains in allocated readable memory even at the insertion slot, and has no MMIO side effects. Then swap the first two instructions so the test fills the slot. Hoisting a potentially faulting or out-of-bounds load is not generally valid:
 
    ```
-   scan:   lw   t1, 4(t0)       # read early; harmless past the end of the table
+   scan:   lw   t1, 4(t0)       # read early only after proving address safety
            beq  a2, s1, insert
            bne  t1, a1, next
    ```
@@ -141,8 +129,7 @@ name from `/proc/cpuinfo`. Ledger rows 0 and 1 are written to `.cache/cs7/ledger
    predictor 97.5%. How much of that gap can a 64 KB predictor close? Which branches stay wrong, and could anything but
    branch history predict them?
 
-   *What is known, and where to start.* This is an open-ended problem: nobody knows the best possible accuracy on
-   this trace. Start from `explainer/cs/pebble/predict.py` and the trace from `videos/cs/cs7/compute.py`
+   *What is known, and where to start.* This is a heldout generalization problem. The known 254,436 outcomes need only 31,805 bytes plus an index to replay perfectly, within 64 KiB; predict-before-update alone does not prevent encoded future labels. Choose separate training, tuning and untouched test chapters, prohibit future-label encoding in code or initial state, and count all tables, histories, tags, validity, weights and metadata in the budget. Start from `explainer/cs/pebble/predict.py` and the trace from `videos/cs/cs7/compute.py`
    (`trace_of(*benchmarks()["the Job, chapter 1"])`); `PR.accuracy` scores any object with `predict(pc)` and
    `update(pc, taken)`. Count mispredictions per static branch first. On this trace **68% of our TAGE's misses come
    from one branch**, the scan loop's length test `bne t1, a1, next` (9,846 of 14,412); the letter comparison in `cmp`
@@ -182,7 +169,7 @@ name from `/proc/cpuinfo`. Ledger rows 0 and 1 are written to `.cache/cs7/ledger
 
    *解答。* 展开：T = t(1 − b)/k + bok + (o + bt − bo)，常数项与 k 无关，所以 dT/dk = −t(1 − b)/k² + bo，在
    **k* = √(t(1 − b)/(b·o))** 处为零；二阶导数 2t(1 − b)/k³ 为正，所以是最小值。b = 0.01 时约 **60 级**；b = 0.1 时约
-   **18 级**。浪费整条流水线的事件多十倍，最佳深度缩小 √10 倍。用任务实测的 b = 0.0265 得到 37。
+   **18 级**。当 b 很小时，深度近似与 √b 成反比；精确式还含 √(1−b)。用任务实测的 b = 0.0265 得到 37。
 
 4. **阿姆达尔与古斯塔夫森。** 一个程序 80% 可以并行。4 个、16 个、无穷多个处理器各带来多少加速？如果问题随之变大、使串行时间保持
    不变（古斯塔夫森），又如何？
@@ -194,7 +181,7 @@ name from `/proc/cpuinfo`. Ledger rows 0 and 1 are written to `.cache/cs7/ledger
 5. **动手：藏起气泡。** 在任务的扫描循环里移动一条指令，让取数—使用气泡消失。在流水线上运行第 1 章：省下多少周期？新的 CPI
    是多少？
 
-   *解答。* 循环读出条目的长度后立刻检查它（代码见上文英文部分）。把前两条指令对调，让取数在"表结束了吗"的检查之前发出，由这个
+   *解答。* 循环读出条目的长度后立刻检查它（代码见上文英文部分）。先证明 `t0+4` 对齐、即使到插入位置仍在已分配可读内存中，且没有设备访问副作用。只有在这些条件下才能把前两条指令对调，让取数在"表结束了吗"的检查之前发出，由这个
    检查填补空档。在第 1 章上，用账本所用的流水线（转发、分支目标缓冲器、锦标赛预测器和返回地址栈），取数—使用停顿从 124,112 次
    降到 28,699 次，周期从 995,654 降到 **952,210（省下 43,444，4.4%）**，CPI 从 1.203 降到 **1.150**，代价是多执行 331 条指令
    （每往表里加一个词就多一次取数）。输出不变。第 13 部分的编译器会自己找到这样的移动：指令调度。
@@ -202,7 +189,7 @@ name from `/proc/cpuinfo`. Ledger rows 0 and 1 are written to `.cache/cs7/ledger
 6. **★ 研究题：缩小差距。** 在任务第 1 章的分支上，我们的 TAGE 用 9 KB 达到 94.3%，不限存储的 PPM 预测器达到 97.5%。一个 64 KB
    的预测器能把这个差距缩小多少？哪些分支仍然猜错？除了分支历史，还有什么能预测它们？
 
-   *已知什么，从哪里入手。* 这是一道开放题：没有人知道这条轨迹上可能达到的最好准确率。从 `explainer/cs/pebble/predict.py` 和
+   *已知什么，从哪里入手。* 这是留出泛化问题。已知的254,436次结果只需31,805字节加索引，就能在64二进制千字节内完美重放；先预测再更新本身不能阻止编码未来标签。必须分开训练、调参与未使用测试章节，禁止代码或初值编码未来测试结果，并把表、历史、标记、有效位、权重与元数据全计入预算。从 `explainer/cs/pebble/predict.py` 和
    `videos/cs/cs7/compute.py` 里的轨迹入手（`trace_of(*benchmarks()["the Job, chapter 1"])`）；`PR.accuracy` 可以给任何带
    `predict(pc)` 和 `update(pc, taken)` 的对象打分。先按静态分支统计预测错误。在这条轨迹上，**我们的 TAGE 有 68% 的错误来自同一条
    分支**，即扫描循环里的长度检查 `bne t1, a1, next`（14,412 次中的 9,846 次）；`cmp` 里的字母比较占 15%，字母还是分隔符的检查占
@@ -210,8 +197,7 @@ name from `/proc/cpuinfo`. Ledger rows 0 and 1 are written to `.cache/cs7/ledger
 
    文献中有三个方向。（1）*更好地利用历史*：塞兹内克 TAGE-SC-L 的完整 TAGE（更多的表、更长的标签、备选预测逻辑、统计校正器和循环
    预测器）是分支预测锦标赛 64 KB 赛道的标准基线。（2）*路径与位置*：扫描分支的结果是循环计数器 `a2` 和当前单词长度 `a1` 的函数，
-   而它们根本不在分支历史里。按数据值索引的预测器（Heil、Smith 和 Smith，《通过与数据值相关来改进分支预测器》，MICRO 1999）几乎可以
-   完美地预测它；问题在于这样的预测器在硬件上要花多少，以及它能否推广到这个程序之外。（3）*离线学习*：在一章上为每条难预测的分支训练
+   而它们根本不在分支历史里。按数据值索引的预测器（Heil、Smith 和 Smith，《通过与数据值相关来改进分支预测器》，MICRO 1999）可以提供有用特征；问题在于这样的预测器在硬件上要花多少，以及它能否推广到这个程序之外。（3）*离线学习*：在一章上为每条难预测的分支训练
    一个小模型，在另一章上测试（Zangeneh 等，BranchNet，MICRO 2020）。一个认真的回答应当报告在设计时*没有*用过的另一章上的准确率、按锦标赛
    规则以比特计算的存储，以及还剩下哪些错误。
 

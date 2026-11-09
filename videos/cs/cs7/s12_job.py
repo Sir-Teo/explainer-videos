@@ -34,20 +34,19 @@ class Job(VoiceoverScene):
                   font_size=22, color=FUNC),
             label(r"the jump back, \ \texttt{jal zero, scan}: \ free, \ from the branch target buffer", font_size=22,
                   color=YES),
-            label(r"so 6 instructions take 7 cycles per entry: \ CPI $\approx 1.17$ in the loop that is 99.7\% of the "
-                  r"work", font_size=22, color=HEAD),
+            label('mismatched-length fast path: 6 instructions, 7 cycles; \\\\ warm correct predictions; equal-length entries do more work', font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Now the Job. Its time is almost all spent in one loop, the scan of the word table, so look at that loop "
-            "on the pipeline. <bookmark mark='a'/> Each table entry costs six instructions. The load of the entry's "
-            "length is followed at once by the branch that tests it: a load-use hazard, one bubble on every entry. "
-            "<bookmark mark='b'/> The jump back to the top of the loop costs nothing, because the target buffer knows "
-            "it, and the loop's branches are well predicted. <bookmark mark='c'/> So six instructions take seven cycles, "
-            "a CPI of about one point one seven, in the loop that does ninety-nine point seven percent of the Job's "
-            "work. A compiler, or a careful programmer, could hide that bubble by moving one instruction; Part 13 will."
+            "Look closely at the Job's search loop. <bookmark mark='a'/> The displayed mismatched-length fast path has "
+            "six instructions. Loading the entry length immediately before testing it causes one load-use bubble. "
+            "Equal-length entries can enter the letter-comparison path and do more work. <bookmark mark='b'/> With "
+            "warm, correct direction and target predictions, the jump back adds no modeled redirect cost. <bookmark "
+            "mark='c'/> On that fast path, six instructions then take seven steady-state cycles. The larger "
+            "ninety-nine point seven percent figure covers the whole search in the single-cycle instruction count, not "
+            "only this path. Scheduling an independent, safe instruction between the load and use can hide the bubble; "
+            "moving a load past a bounds check first needs an address-safety proof."
         ) as vo:
             self.play(FadeIn(head), FadeIn(pc.heads), FadeIn(VGroup(*pc.rows.values())))
-            vo.wait_until("a")
             for c in range(pc.ncycles):
                 if c in pc.columns:
                     self.play(FadeIn(pc.columns[c]), run_time=0.15)
@@ -109,13 +108,13 @@ class Job(VoiceoverScene):
         st = load("stages")
         co = j["corpus"]
         ck = j["check"]
-        head = label(r"Thirty novels on the pipeline: \ ledger row 1", font_size=34).to_edge(UP, buff=0.3)
+        head = label(r"Projected thirty-novel run: \ ledger row 1", font_size=34).to_edge(UP, buff=0.3)
         steps = VGroup(
             label(r"the bubbles depend on the same events as the instructions \ (words, \ entries scanned, \ \ldots): "
                   r"\\ fit them on 24 passages, \ check on one four times longer", font_size=22, color=GREY_A),
             label(rf"the check: \ {fmt(ck['bubbles'])} bubbles measured, \ {fmt(ck['predicted'])} predicted \ "
                   rf"({100 * ck['error']:+.1f}\%)", font_size=22, color=YES),
-            label(rf"the corpus: \ CPI {co['cpi']:.3f}, \ ${sci(co['cycles'], 4)}$ cycles at {st['mhz']:.0f} MHz",
+            label(rf"projected corpus: \ CPI {co['cpi']:.3f}, \ ${sci(co['cycles'], 4)}$ cycles at {st['mhz']:.0f} MHz",
                   font_size=24, color=HEAD),
         ).arrange(DOWN, buff=0.22).move_to(UP * 1.5)
         rows = j["ledger"] + [{"part": p_, "label": t} for p_, t in ((8, r"out of order, \ four wide"), (9, r"caches"), (10, r"four cores"),
@@ -126,18 +125,17 @@ class Job(VoiceoverScene):
                     rf"{j['speedup']:.2f} times faster, \ for the same program", font_size=26,
                     color=COST).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "Simulating thirty novels cycle by cycle would take days, so, as in Part 6, we count instead. "
-            "<bookmark mark='a'/> The bubbles, like the instructions, come from events in the text: words, table entries "
-            "scanned, entries of the same length. A linear model of the bubbles in terms of those events is fitted on "
-            "twenty-four passages and checked on a passage four times longer than any of them. "
-            "<bookmark mark='b'/> It predicts that passage's one point three million bubbles to within a fraction of a percent. <bookmark mark='c'/> Applied "
-            "to the whole corpus, it gives a CPI just under one point two, and at eight hundred and eighty-five "
-            "megahertz the pipeline counts the thirty novels' words in about two and a half minutes, where the "
-            "single-cycle Pebble took nearly five. <bookmark mark='d'/> That is the second row of the ledger: almost "
-            "twice as fast, for exactly the same program. Better hardware; the same idea."
+            "The full-corpus pipeline row is a projection. <bookmark mark='a'/> Fit a linear bubble model to "
+            "twenty-four short passages, using text events such as scanned entries. This is different from Part 6's "
+            "instruction path-count formula. <bookmark mark='b'/> The displayed sixteen-thousand-character heldout "
+            'text, encoded as sixteen thousand and nineteen bytes, checks one prediction and reports its error. It '
+            "does not establish an error bound for the thirty novels. <bookmark mark='c'/> Combining the fitted "
+            'bubbles with the corpus instruction count and assumed eight-hundred-and-eighty-five-megahertz clock gives '
+            'the displayed CPI and projected minutes. We have not simulated the entire corpus cycle by cycle. '
+            "<bookmark mark='d'/> The ledger's speedup is therefore a model-based estimate for the same program. A "
+            'full run or broader validation could reveal a different result.'
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(steps[0]))
             vo.wait_until("b")
             self.play(FadeIn(steps[1]))

@@ -72,7 +72,6 @@ class Predict(VoiceoverScene):
             "depends on the text. To do better, a predictor has to watch what each branch actually does."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(i) for i in items], lag_ratio=0.5), run_time=2.5)
             vo.wait_until("b")
             self.play(FadeIn(res[0]))
@@ -104,7 +103,6 @@ class Predict(VoiceoverScene):
             "instruction memory."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(tab), FadeIn(tl))
             vo.wait_until("b")
             self.play(FadeIn(pc), FadeIn(idx), GrowArrow(arr), Indicate(tab[5], color=HEAD))
@@ -156,17 +154,15 @@ class Predict(VoiceoverScene):
         res = label(rf"wrong: \ 1-bit {m1} times, \ 2-bit {m2} \ in four trips round the loop", font_size=24,
                     color=HEAD).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "One bit has a flaw that shows up in every loop. <bookmark mark='a'/> Watch a loop that runs ten times: its "
-            "branch is taken nine times, then not taken once, again and again. The one-bit predictor gets the last trip "
-            "wrong, as anything would. But then it remembers not taken, so it also gets the first trip of the next "
-            "loop wrong: two mistakes per loop. <bookmark mark='b'/> The fix is hysteresis. Give each branch a two-bit "
-            "saturating counter, a four-state machine of the kind Part 5 built: taken moves it right, not taken moves "
-            "it left, and it predicts taken in the right-hand two states. A single surprise only moves it from "
-            "strongly to weakly taken, so the prediction does not change. <bookmark mark='c'/> On the loop, the two-bit "
-            "counter makes one mistake per loop instead of two. Two bits per branch became the standard for a decade."
+            "Consider a ten-iteration loop repeated four times. <bookmark mark='a'/> Its branch is taken nine times, "
+            "then not taken. A one-bit predictor forgets its usual direction after each exit, so it misses again when "
+            "the loop restarts. <bookmark mark='b'/> A two-bit saturating counter needs two contrary outcomes to "
+            "reverse its strong belief. After training, it usually misses only the exit, assuming no table aliasing. "
+            "<bookmark mark='c'/> The displayed trace includes startup: eight one-bit misses and five two-bit misses "
+            "in forty outcomes. Exit misses are not inevitable for every predictor: a loop predictor that learns the "
+            "trip count can anticipate them. Counter initialization, aliasing and changing loop lengths matter."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(labs), LaggedStart(*[FadeIn(r) for r in row_o], lag_ratio=0.02), run_time=1.5)
             self.play(LaggedStart(*[FadeIn(r) for r in rows["1-bit"]], lag_ratio=0.02), run_time=1.5)
             vo.wait_until("b")
@@ -183,20 +179,18 @@ class Predict(VoiceoverScene):
         head = label(r"Percent predicted correctly", font_size=36).to_edge(UP, buff=0.35)
         tab = acc_table(pr, ["always taken", "backward taken", "1-bit", "2-bit"], font_size=20, cw=1.9).move_to(
             DOWN * 0.1 + RIGHT * 0.6)
-        notes = label(r"learning wins on loops and on sorted data; \ on the Job, \ Fibonacci \ and the correlated "
-                      r"benchmark \\ a branch's own history is not enough", font_size=22, color=HEAD).to_edge(DOWN,
+        notes = label('one counter per branch misses these patterns; \\\\ this does not test every local-history predictor', font_size=22, color=HEAD).to_edge(DOWN,
                                                                                                 buff=0.35)
         with self.voiceover(
-            "Here are these four predictors on the benchmarks, each trained as it goes over the program's real branch "
-            "trace. <bookmark mark='a'/> Counters beat fixed rules almost everywhere, and the two-bit counter is never "
-            "much worse than the one-bit one. The threshold loop is the interesting pair: the same code, right "
-            "seventy-five percent of the time on random data and almost always on sorted data, a puzzle chapter "
-            "fourteen returns to. <bookmark mark='b'/> But on the Job, on Fibonacci and on the correlated benchmark, a "
-            "counter per branch stalls between fifty and ninety-one percent. For those branches, the branch's own past "
-            "says little. The next chapter looks at the past of the other branches."
+            "These predictors run online over the same benchmark traces, predicting before each update. <bookmark "
+            "mark='a'/> The table reports these runs, including startup and aliasing. The threshold benchmark's "
+            "aggregate accuracy is about seventy-five percent on irregular data because it includes predictable loop "
+            "branches as well as the difficult data branch. Sorting groups the data branch's outcomes. <bookmark "
+            "mark='b'/> A single counter per branch leaves substantial errors on some benchmarks. That does not prove "
+            "the branch's full local history is uninformative: a counter remembers much less than a history model. "
+            "Next we add information from other branches and compare again."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(tab, lag_ratio=0.02), run_time=2.5)
             vo.wait_until("b")
             self.play(FadeIn(notes))

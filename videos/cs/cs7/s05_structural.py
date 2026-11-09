@@ -42,9 +42,8 @@ class Structural(VoiceoverScene):
             "its place. Every cycle lost this way raises the CPI above one. The art of pipeline design is stalling as "
             "rarely as possible."
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(k, shift=UP * 0.2) for k in kinds], lag_ratio=0.5), run_time=3.0)
+            self.play(FadeIn(head),
+                      LaggedStart(*[FadeIn(k, shift=UP * 0.2) for k in kinds], lag_ratio=0.15), run_time=1.0)
             vo.wait_until("b")
             self.play(FadeIn(fix))
         self.wait(0.3)
@@ -64,17 +63,17 @@ class Structural(VoiceoverScene):
         res = VGroup(
             label(rf"in the Job, \ {100 * frac:.0f}\% of instructions are loads or stores: \ with one port, \ "
                   rf"CPI $+\,{frac:.2f}$", font_size=24, color=GREY_A),
-            label(r"the cure: \ separate instruction and data memories \ (in practice, \ two caches: \ Part 9)",
+            label('two logical ports over one coherent memory; \\\\ hardware often uses split instruction/data caches (Part 9)',
                   font_size=24, color=YES),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "The commonest structural hazard is memory. <bookmark mark='a'/> The fetch stage reads an instruction from "
-            "memory in every cycle, and the memory stage reads or writes data whenever a load or store reaches it. "
-            "With a single memory that serves one request per cycle, the two collide, and the fetch must wait. "
-            "<bookmark mark='b'/> In the Job, about a fifth of all instructions are loads or stores, so one shared "
-            "memory port would add about a fifth of a cycle to every instruction. <bookmark mark='c'/> The cure is to "
-            "duplicate the hardware: separate memories for instructions and data. Real processors keep one main memory "
-            "but give each stage its own cache in front of it, which is part of Part 9's story."
+            "Two stages may request memory in the same cycle. <bookmark mark='a'/> Fetch needs an instruction while "
+            "MEM may need a data load or store. One access port cannot serve both simultaneously. <bookmark mark='b'/> "
+            "If such stalls do not overlap other delays, their CPI contribution equals the fraction of instructions "
+            "accessing data memory. That estimate is shown for the Job. <bookmark mark='c'/> Our simulator instead "
+            "provides two ideal logical access ports over one coherent byte array, not disjoint instruction and data "
+            "copies. Split instruction and data caches are one common hardware solution. Real memory systems add cache "
+            "misses and other constraints."
         ) as vo:
             self.play(FadeIn(head), FadeIn(fig))
             vo.wait_until("a")
@@ -96,24 +95,22 @@ class Structural(VoiceoverScene):
         pc = PipeChart(d, cycles=min(d["cycles"], 26), cw=0.36, ch=0.42, font_size=12, label_size=15,
                        label_width=2.6).move_to(UP * 0.6)
         notes = VGroup(
-            label(r"Part 4's SRT divider: \ two quotient bits per cycle, \ 16 cycles, \ not pipelined", font_size=22,
+            label('modeled divide latency: 16 EX cycles; \\\\ motivated by a radix-4 divider, not a connected gate pipeline', font_size=22,
                   color=FUNC),
             label(r"while it works, \ EX is occupied, \ and everything behind waits", font_size=22, color=NO),
             label(rf"Part 4's multiplier, \ in contrast, \ settles in {st['mul_gates']} gate delays: \ it fits in EX "
                   r"\ (the memories set the cycle)", font_size=22, color=YES),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Part 7 also gives Pebble multiply and divide instructions, from Part 4's circuits, and the divider brings "
-            "a structural hazard of its own. <bookmark mark='a'/> Part 4's SRT divider produces two quotient bits per "
-            "cycle, so a thirty-two-bit division occupies the execute stage for sixteen cycles. It is not pipelined: "
-            "while it works, the instruction behind it cannot enter EX, and the whole front of the pipeline waits. "
-            "Here the add after the divide sits in decode for fifteen extra cycles. <bookmark mark='b'/> The "
-            "multiplier is different. Part 4's Dadda tree settles in a few dozen gate delays, comfortably inside a "
-            "cycle set by the memories, so a multiply costs no more than an add. Designers pipeline or duplicate the "
-            "units that are used often, and let the rare ones stall."
+            "Multi-cycle operations add another resource conflict. <bookmark mark='a'/> Our functional model assigns "
+            "division sixteen execute cycles, motivated by a radix-four divider producing two quotient bits per step. "
+            "It does not physically connect Part 4's divider to this simulator. While EX is occupied, following "
+            "instructions wait; the displayed add spends fifteen extra cycles in decode. <bookmark mark='b'/> "
+            "Multiplication is modeled as one execute cycle. The sampled Dadda-tree delay fits the assumed "
+            "memory-dominated budget, but that is not a routed timing guarantee. Real designs may pipeline, duplicate "
+            "or iteratively reuse these units, depending on throughput, area and power."
         ) as vo:
             self.play(FadeIn(head), FadeIn(pc.heads), FadeIn(VGroup(*pc.rows.values())))
-            vo.wait_until("a")
             for c in range(pc.ncycles):
                 if c in pc.columns:
                     self.play(FadeIn(pc.columns[c]), run_time=0.18)

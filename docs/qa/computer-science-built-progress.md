@@ -1,7 +1,7 @@
 # Computer Science, Built — sequential polish
 
 Work on `computer-science-built`, one video at a time, with separate commits.
-Current video: **cs7, Pipelines**. CS1–CS6 source/preview polish checkpoints
+Current video: **cs8, Out of Order**. CS1–CS7 source/preview polish checkpoints
 are complete at the scopes below. Their production release gates remain open; this
 ledger does not treat sampled previews as listening or final-production approval.
 The syllabus's earlier draft-preview claims are separate.
@@ -14,6 +14,26 @@ upgrade/rejection check passes. All numerical producer ASTs and 11 active data h
 This is a loader correctness follow-up; earlier media receipts stay tied to their checkpoint commits.
 
 [CS3 cache-entry evidence](evidence/cs3-cache-entry-20261109/README.md).
+
+## Final CS7 preview checkpoint, 9 November 2026
+
+- Correct the register-overhead limit, pipeline fill accounting, load-use timing, model assumptions, architectural
+  exceptions and predictor mechanisms. Scope corpus extrapolation, Amdahl instruction/time fractions, host timing,
+  XOR's 3/4 fixed-line result and heldout research evaluation. All 13 numerical data files and the producer remain unchanged.
+- Revise 48 bilingual narration pairs; improve 40 openings and three reveal timings; repair caption wrapping.
+  All 34 endpoint and 34 motion cases pass with zero warnings. All sheets/1,360 motion samples covered
+  (19 exact-PNG inheritances after current rerenders); 85,197 motion frames decode.
+- Six 1080p nominal-15fps clips: 4,468 decoded frames, 144 samples/six stills inspected. All 78 English speech
+  blocks pass signal/alignment checks (43.51 minutes); 125 cue requests meet 250 ms. Two real narrated
+  chapters: 5,728 decoded frames plus audio, 80 samples/two stills inspected; all 22 cues meet that bound.
+- Nine tests and independent numerical/execution witnesses pass, including the 43,444-cycle scheduling saving.
+  Translation: 78/78. All 670 captions reviewed, zero untranslated explanations;
+  131 retained English literals classified. One phonemizer segmentation lead
+  retains complete text-token coverage; listening remains unapproved.
+
+[Verified CS7 evidence](evidence/cs7-polish-20261109/README.md).
+Continuous narrated listening, Chinese speech/listening, whole-video native production review and runtime at the
+selected narration pace remain open release gates.
 
 ## Final CS6 preview checkpoint, 9 November 2026
 
@@ -223,19 +243,19 @@ Evidence, exact source/data hashes, reports and reproduction commands:
 
 ## Continue here
 
-1. Preserve CS7's baseline; run its computations and pipeline tests. Review pipeline hazards, predictor
-   models, precise exceptions, Job projections and frontier claims before freezing the revised source.
-2. Inspect bilingual endpoint and motion previews, repair concrete defects, and bind final source/data,
-   caption, speech, cue and focused native checks before a separate commit and normal push.
-3. Continue CS8–CS61 in order. Keep source/preview checkpoints distinct from production release approval.
+1. Preserve CS8's baseline; run its out-of-order core computations/tests. Review oracle/dependence assumptions,
+   renaming/retirement, memory ordering, modeled Spectre demonstrations, current-core claims and Job projections.
+2. Inspect bilingual endpoint/motion previews and focused native/narrated checks; bind final source/data, caption,
+   speech, cue and visual evidence before a separate commit and normal push.
+3. Continue CS9–CS61 in order, keeping source/preview checks distinct from production release approval.
 
 ```bash
 source /workspace/environment/activate.sh
-.venv/bin/python -m videos.cs.cs7.compute
-.venv/bin/python -m unittest discover -s tests -p test_cs7_pipeline.py -q
-.venv/bin/python tools/qa_series.py cs7 --lang en --cached-only --timeout 1200
-.venv/bin/python tools/qa_series.py cs7 --lang zh --cached-only --timeout 1200
+.venv/bin/python -m videos.cs.cs8.compute
+.venv/bin/python -m unittest discover -s tests -p test_cs8_ooo.py -q
+.venv/bin/python tools/qa_series.py cs8 --lang en --cached-only --timeout 1200
+.venv/bin/python tools/qa_series.py cs8 --lang zh --cached-only --timeout 1200
 ```
 
-The activation supplies the renderer, neural narration, dvisvgm and Chinese TeX resources.
-CS7 is next; CS8–CS61 remain queued. No whole-course or production completion is claimed.
+The activation supplies rendering, local neural narration and Chinese TeX resources.
+CS8 is next; CS9–CS61 remain queued. No whole-course or production completion is claimed.

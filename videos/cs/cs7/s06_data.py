@@ -36,22 +36,20 @@ class Data(VoiceoverScene):
         notes = VGroup(
             label(r"\texttt{sub} reads \texttt{a1} in ID, \ but \texttt{add} writes it only in WB, \ three cycles later",
                   font_size=22, color=GREY_A),
-            label(r"so \texttt{sub} waits in ID \ (the register file writes in the first half of a cycle, \ reads in "
-                  r"the second)", font_size=22, color=NO),
-            label(rf"{d['retired']} instructions, \ {d['cycles']} cycles: \ every dependent pair costs two bubbles",
+            label('\\texttt{sub} waits in ID; \\\\ model policy: write-back before decode in each cycle', font_size=22, color=NO),
+            label(rf"{d['retired']} instructions, \ {d['cycles']} cycles: \ shown adjacent ALU pairs cost two bubbles",
                   font_size=24, color=HEAD),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Programs are full of instructions that use the result of the one just before. <bookmark mark='a'/> Here "
-            "each instruction reads the register its predecessor wrote. The subtract reads a one in the decode stage, "
-            "but the add writes a one only in write-back, three stages later. This is a read-after-write hazard. "
-            "<bookmark mark='b'/> Without help, the only safe thing is to wait. The subtract sits in decode until the "
-            "add has written its result. Part 5's register file is written in the first half of a cycle and read in "
-            "the second, so the wait is two cycles rather than three. <bookmark mark='c'/> Every dependent pair costs "
-            "two bubbles, and in real code most instructions depend on a recent one."
+            "Instructions often use a recent result. <bookmark mark='a'/> In this example, the subtract reads register "
+            "a one in decode before the preceding add has written it back. That is a read-after-write hazard. "
+            "<bookmark mark='b'/> Without forwarding, hold the subtract until the value is in the register file. Our "
+            "simulator writes back before decoding in each cycle, allowing a write and a dependent read in that cycle. "
+            "This ordering is a model policy, not a physical half-cycle timing proof. <bookmark mark='c'/> The shown "
+            "adjacent ALU dependencies each need two bubbles. Other distances, operations and memory latencies can "
+            "require different waits."
         ) as vo:
             self.play(FadeIn(head), FadeIn(pc.heads), FadeIn(VGroup(*pc.rows.values())))
-            vo.wait_until("a")
             reveal(self, pc)
             vo.wait_until("b")
             self.play(FadeIn(notes[0]), FadeIn(notes[1]), LaggedStart(*[Indicate(b, color=NO) for b in pc.bubbles],
@@ -71,19 +69,17 @@ class Data(VoiceoverScene):
         notes = VGroup(
             label(r"the value exists \ at the end of EX: \\ send it straight back \\ to the next instruction's ALU input",
                   font_size=20, color=HEAD),
-            label(r"two paths: \ from EX/MEM \ and from MEM/WB; \\ a comparator on register numbers \\ drives each "
-                  r"multiplexer", font_size=20, color=GREY_A),
+            label('EX/MEM before MEM/WB; ignore $x0$; \\\\ do not forward an unavailable load result', font_size=20, color=GREY_A),
             label(rf"{d['retired']} instructions, \ {d['cycles']} cycles: \\ no bubbles at all", font_size=22, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to(RIGHT * 4.3 + DOWN * 1.6)
         with self.voiceover(
-            "But the subtract does not really need a one from the register file. It needs the number, and the number "
-            "exists as soon as the add leaves the ALU, a whole stage before it is written back. <bookmark mark='a'/> So "
-            "send it back directly. Two new paths carry results from the EX/MEM and MEM/WB pipeline registers to the "
-            "ALU's inputs, with a multiplexer on each input. <bookmark mark='b'/> A little logic compares register "
-            "numbers: if the instruction entering EX reads a register that the instruction one or two ahead is about "
-            "to write, it takes the forwarded value instead of the stale one it read in decode. "
-            "<bookmark mark='c'/> On the same program, every bubble disappears. The arrows on the chart are the "
-            "forwarded values, each going from the end of one instruction's ALU cycle to the start of the next one's."
+            "The consumer needs the value, not necessarily a register-file read. An ALU result already exists before "
+            "write-back. <bookmark mark='a'/> Forward it from EX/MEM or MEM/WB to the next instruction's execute "
+            "inputs. <bookmark mark='b'/> Compare source and destination numbers, ignore writes to register zero, and "
+            "prefer the newest matching producer in EX/MEM over an older MEM/WB result. An EX/MEM load holds an "
+            "address, not its loaded data, so that value cannot be forwarded as the answer. <bookmark mark='c'/> For "
+            "this ALU chain, all the dependency bubbles disappear. The arrows show the bypass paths. The next example "
+            "explains why forwarding cannot eliminate every data stall."
         ) as vo:
             self.play(FadeIn(head), FadeIn(pc.heads), FadeIn(VGroup(*pc.rows.values())), FadeIn(fig))
             vo.wait_until("a")
@@ -110,16 +106,15 @@ class Data(VoiceoverScene):
                   font_size=22, color=YES),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "One case is beyond forwarding. <bookmark mark='a'/> A load's value does not exist until the end of the "
-            "memory stage, but an instruction right behind it needs the value at the start of execute, which is the same "
-            "moment. No wire can send a value back in time. <bookmark mark='b'/> So the pipeline needs a hazard unit in "
-            "the decode stage: if the instruction in execute is a load, and it writes a register this instruction reads, "
-            "hold this instruction for one cycle and send a bubble down. After that one cycle, forwarding from MEM/WB "
-            "does the rest. <bookmark mark='c'/> Compilers fight back by scheduling: moving some independent instruction "
-            "into the slot between a load and its use, so the bubble does useful work. Part 13's compiler does this."
+            "A load reveals forwarding's limit. <bookmark mark='a'/> The following instruction needs the loaded value "
+            "at the start of its execute stage, but the load produces it only at the end of memory access. Those "
+            "events fall in the same cycle, at different instants: forwarding cannot send a value backward in time. "
+            "<bookmark mark='b'/> Hold fetch and decode for one cycle and insert a bubble into execute. <bookmark "
+            "mark='c'/> One cycle later the value is available from MEM/WB and the dependent operation can proceed. "
+            "This one-bubble result assumes our one-cycle memory and the shown consumer timing; other machines or "
+            "consumers can differ."
         ) as vo:
             self.play(FadeIn(head), FadeIn(pc.heads), FadeIn(VGroup(*pc.rows.values())))
-            vo.wait_until("a")
             reveal(self, pc, 0.3)
             self.play(FadeIn(notes[0]))
             vo.wait_until("b")

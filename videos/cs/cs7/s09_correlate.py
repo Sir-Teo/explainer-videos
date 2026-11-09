@@ -43,15 +43,14 @@ class Correlate(VoiceoverScene):
         ins = label(r"Yeh and Patt, \ 1991: \ two-level predictors, \ indexed by history", font_size=22,
                     color=HIST).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "A branch's own past is not the only clue. <bookmark mark='a'/> Branches in a program are often related. "
-            "If the first two branches here go one way, the third is already decided. A predictor that watches only "
-            "the third branch will never see that. <bookmark mark='b'/> So keep a record of the last few outcomes of "
-            "every branch, in order: a global history register, which is simply Part 5's shift register, shifting in a "
-            "one for each taken branch and a zero for each not taken. <bookmark mark='c'/> Tse-Yu Yeh and Yale Patt "
-            "showed in 1991 that tables indexed by this history predict far better: two-level adaptive prediction."
+            "A branch's own past is not the only clue. <bookmark mark='a'/> If the first two conditions here are "
+            'known, the third is determined. A counter watching only the third branch does not directly observe that '
+            "cross-branch information. <bookmark mark='b'/> Record recent outcomes in order in a global history shift "
+            "register: one for taken, zero for not taken. <bookmark mark='c'/> Yeh and Patt's 1991 work demonstrated "
+            'two-level adaptive prediction. Which information helps depends on the program, history representation, '
+            'table sharing and training.'
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(c) for c in code], lag_ratio=0.4), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(ghr), FadeIn(gl))
@@ -77,20 +76,18 @@ class Correlate(VoiceoverScene):
         tour = VGroup(
             label(r"gshare: \ one table of 2-bit counters, \ indexed by \texttt{pc} xor history: \\ one branch in "
                   r"different contexts gets different counters", font_size=22, color=GREY_A),
-            label(r"tournament: \ a local predictor and gshare side by side, \\ and a chooser, \ itself 2-bit counters, "
-                  r"\ learning which to trust for each branch \ (the Alpha 21264, \ 1998)", font_size=22, color=GREY_A),
+            label('our tournament: bimodal counters + gshare + chooser; \\\\ Alpha 21264 instead combined local-history and global-history predictors', font_size=22, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Scott McFarling turned this into two designs that dominated the 1990s. <bookmark mark='a'/> gshare mixes "
-            "the branch's address with the global history by an exclusive-or, and uses the result to pick a two-bit "
-            "counter. The same branch, reached by different paths through the program, gets different counters, each "
-            "learning what the branch does in that context. <bookmark mark='b'/> And since some branches are best "
-            "predicted by their own history and others by the global one, a tournament predictor runs both and a third "
-            "table of counters learns, branch by branch, which predictor to believe. Digital's Alpha 21264 shipped one "
-            "in 1998."
+            "Global history records recent branch outcomes. <bookmark mark='a'/> McFarling's gshare hashes that "
+            "history with the branch address using exclusive-or, then selects a two-bit counter. Different contexts "
+            "can select different counters; collisions can also make unrelated contexts share one. <bookmark "
+            "mark='b'/> Our tournament chooses between a per-address bimodal counter table and gshare, using another "
+            "table of counters. This illustrates adaptive choice. It is not a reproduction of Alpha 21264's historical "
+            "local-history and global-history predictor: a per-address direction counter is simpler than a "
+            "local-history predictor."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(rows[0]), FadeIn(rows[1]))
             self.play(Create(line), FadeIn(rows[2]))
             self.play(FadeIn(tab), GrowArrow(arr), FadeIn(tour[0]))
@@ -115,22 +112,20 @@ class Correlate(VoiceoverScene):
             label(r"the longest history whose tag matches makes the prediction", font_size=24, color=HEAD),
             label(r"on a mistake, \ allocate an entry with a longer history; \ useful bits decide what may be evicted",
                   font_size=22, color=GREY_A),
-            label(r"its descendants have won most branch prediction championships since, \ and run in most high-end cores",
+            label('TAGE is influential; our simplified implementation is not a commercial predictor',
                   font_size=22, color=YES),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "How long a history should a predictor use? Short ones learn quickly; long ones capture distant "
-            "correlations but need far more table entries. <bookmark mark='a'/> André Seznec and Pierre Michaud's TAGE "
-            "uses all of them. A plain table of counters is the base, and beside it sit tagged tables indexed with "
-            "histories of geometrically growing length: four, eight, sixteen, thirty-two, sixty-four outcomes. "
-            "<bookmark mark='b'/> The prediction comes from the longest history whose tag matches, and a table entry is "
-            "only allocated for a branch that a shorter history got wrong. Each branch ends up using exactly as much "
-            "history as it needs. <bookmark mark='c'/> TAGE and its descendants have won the branch prediction "
-            "championships since 2006, and some form of it predicts the branches in most high-performance processors "
-            "today. Pebble's library has a small one."
+            "Different branches benefit from different history lengths. <bookmark mark='a'/> Seznec and Michaud's TAGE "
+            "combines a base predictor with partially tagged components using geometrically spaced histories. Our "
+            "simplified version uses four through sixty-four outcomes. <bookmark mark='b'/> It selects the longest "
+            "matching tag and allocates longer-history entries after some misses. Partial tags can alias, capacity is "
+            "finite, and allocation does not guarantee exactly the minimum history a branch needs. Full designs add "
+            "confidence, alternate-provider and replacement policies. <bookmark mark='c'/> TAGE and its descendants "
+            "are influential competition and processor designs. We will compare our small implementation, keeping its "
+            "results distinct from commercial predictors and the full published algorithms."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.1) for t in tabs], lag_ratio=0.25), FadeIn(tags),
                       run_time=2.4)
             vo.wait_until("b")
@@ -164,20 +159,17 @@ class Correlate(VoiceoverScene):
                      r"one per table entry, \ a few hundred bytes of weights, \ answering in a cycle", font_size=22,
                      color=GREY_B).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "In 2001 Daniel Jiménez and Calvin Lin asked whether a branch predictor could simply learn, the way a "
-            "neural network does. <bookmark mark='a'/> Their predictor is a perceptron, the oldest neural network, the "
-            "one AI, Built began with. Its inputs are the last h branch outcomes, written as plus one for taken and "
-            "minus one for not, and each branch has its own weights. <bookmark mark='b'/> The output y is the weighted "
-            "sum, and the prediction is taken when y is not negative. <bookmark mark='c'/> Training is Rosenblatt's "
-            "rule: when the prediction was wrong, or right but not confidently, add the outcome times each input to its "
-            "weight. A history position that agrees with the branch gains weight; one that does not, loses it. "
-            "<bookmark mark='d'/> Because the weights grow linearly with h, a perceptron can use histories of thirty or "
-            "sixty branches where a table would need astronomically many entries. AMD's Zen processors use a perceptron "
-            "in their branch prediction. There is a neural network in the processor you are watching this on, and it "
-            "is learning your programs' branches."
+            "Jimenez and Lin proposed perceptron branch prediction in 2001. <bookmark mark='a'/> Represent each of the "
+            "last h outcomes as plus one or minus one. A hash of the branch address selects a weight vector, so "
+            "different branches can share and interfere with the same weights. <bookmark mark='b'/> Add a bias and the "
+            "weighted inputs; a nonnegative sum predicts taken. <bookmark mark='c'/> When wrong or insufficiently "
+            "confident, adjust weights toward the observed outcome. The heatmap next shows the weights this rule "
+            "learns. <bookmark mark='d'/> Parameter count grows linearly with history length, unlike a fully "
+            "enumerated context table. That comparison does not cover every table-based scheme. Perceptron-derived "
+            "predictors have appeared in real products, as Jimenez's 2016 paper notes; the exact predictor in an "
+            "unknown viewing device cannot be assumed."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(xs), FadeIn(xl))
             vo.wait_until("b")
             self.play(Create(ws), FadeIn(y), FadeIn(yl), GrowArrow(out), FadeIn(eqs[0]), FadeIn(eqs[1]))
@@ -236,7 +228,6 @@ class Correlate(VoiceoverScene):
             "and the weights alternate too."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(rows[0]), FadeIn(axis), FadeIn(al))
             vo.wait_until("b")
             self.play(FadeIn(rows[1]))
@@ -256,15 +247,14 @@ class Correlate(VoiceoverScene):
                       rf"\ mispredictions per thousand instructions \ {job['2-bit']['mpki']:.0f} $\to$ "
                       rf"{job['TAGE']['mpki']:.0f}", font_size=22, color=HEAD).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Here are the learning predictors side by side. <bookmark mark='a'/> Global history transforms Fibonacci, "
-            "whose branches depend on the depth of the recursion, and the correlated benchmark, where the perceptron "
-            "and TAGE come close to the best possible, since four of its six branches are genuinely random. "
-            "<bookmark mark='b'/> On the Job, TAGE is best, cutting the mispredictions per thousand instructions by a "
-            "third compared with two-bit counters. No predictor can do much with a branch that depends on random data, "
-            "as the threshold loop shows, and that is the subject of chapter fourteen."
+            "Compare the learning predictors on these traces. <bookmark mark='a'/> Global information helps Fibonacci "
+            "and the correlated benchmark, but the latter uses fixed-seed pseudorandom data, not genuine independent "
+            "coin flips. Its observed accuracy is not an information-theoretic ceiling. <bookmark mark='b'/> Our TAGE "
+            "is best on the shown Job trace and reduces misses relative to the two-bit predictor. Different data and "
+            "budgets can change that ranking. The irregular threshold stream is difficult for these online predictors; "
+            "that does not prove that no predictor with other information could learn it."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(tab, lag_ratio=0.02), run_time=2.5)
             vo.wait_until("b")
             self.play(FadeIn(notes))

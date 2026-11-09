@@ -36,15 +36,15 @@ class Five(VoiceoverScene):
         hist = label(r"the classic RISC pipeline: \ MIPS R2000 (1985), \ SPARC, \ the textbook machine of Patterson "
                      r"and Hennessy", font_size=22, color=GREY_B).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Take Part 6's datapath and cut it where the work naturally divides. <bookmark mark='a'/> Instruction "
-            "fetch. Instruction decode and register read. Execute, the ALU. Memory access. And write-back. Every "
-            "instruction passes through all five, in order, one stage per cycle, even when it has nothing to do in "
-            "one of them, as an add has nothing to do in the memory stage. <bookmark mark='b'/> This is the classic "
-            "five-stage RISC pipeline of the MIPS R2000 of 1985, of SPARC, and of the textbooks; Pebble's version "
-            "follows it almost exactly."
+            "Divide the datapath into five roles. <bookmark mark='a'/> Fetch the instruction, decode and read "
+            "registers, execute, access data memory, and write back. An ideal simple instruction advances one stage "
+            "each cycle, including stages where it has no active work. A load, add and branch use different resources. "
+            "Stalls and the later multi-cycle divider break that one-cycle-per-stage schedule. <bookmark mark='b'/> "
+            "This resembles the classic textbook RISC pipeline, with historical examples including MIPS and SPARC. "
+            "Pebble is an educational model; it does not reproduce all their implementation details or instruction-set "
+            "behavior."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             for s, d_ in zip(STAGES, descs):
                 self.play(FadeIn(fig.stage[s]), FadeIn(d_), run_time=0.6)
             self.play(FadeIn(VGroup(*fig.reg)), FadeIn(fig.reg_labels))
@@ -105,16 +105,16 @@ class Five(VoiceoverScene):
                     font_size=26, color=HEAD).to_edge(DOWN, buff=0.4)
         diag = VGroup(*[pc.cells[(s, c)] for (s, c) in pc.cells if c == 4])
         with self.voiceover(
-            "Architects draw a pipeline as a chart: instructions down the side, in program order, and clock cycles "
-            "across the top. <bookmark mark='a'/> Each instruction's row shows which stage it is in, cycle by cycle. "
-            "The first instruction is fetched in cycle one, decoded in cycle two, and so on; the second follows one "
-            "cycle behind. <bookmark mark='b'/> Read the chart down a column and you see the five instructions in "
-            "flight at one moment, one in each stage. <bookmark mark='c'/> It takes four cycles to fill the pipeline and "
-            "four to drain it, so n instructions take n plus four cycles, and with no hazards the CPI approaches one, "
-            "one instruction finished every cycle."
+            "Watch independent simple instructions move through the ideal pipeline. <bookmark mark='a'/> Instruction "
+            "one begins fetch in cycle one and reaches write-back in cycle five. Instruction two follows one cycle "
+            "later. Read down a column to see different instructions in flight together. <bookmark mark='b'/> The "
+            "highlighted column shows that overlap. <bookmark mark='c'/> With no stalls, n such instructions finish in "
+            "n plus four cycles. There is one total four-cycle overhead for filling and draining, not four cycles of "
+            "each added separately. Thus CPI is one plus four over n and approaches one for a long stream. "
+            "Dependencies, branches, memory conflicts and multi-cycle operations add to this ideal schedule; the later "
+            "divider is one example."
         ) as vo:
             self.play(FadeIn(head), FadeIn(pc.heads), FadeIn(cl), FadeIn(VGroup(*pc.rows.values())), FadeIn(rl))
-            vo.wait_until("a")
             for c in range(pc.ncycles):
                 if c in pc.columns:
                     self.play(FadeIn(pc.columns[c], shift=RIGHT * 0.1), run_time=0.35)
@@ -132,22 +132,21 @@ class Five(VoiceoverScene):
         pts = VGroup(
             label(r"the pipeline is simulated cycle by cycle: \ five stages, \ four pipeline registers, \\ and the "
                   r"hazard and forwarding logic of the next chapters", font_size=24, color=GREY_A),
-            label(r"against Part 6's emulator, \ on random programs, \ with every configuration: \\ the same "
-                  r"registers, \ memory, \ output \ and instruction count", font_size=24, color=YES),
+            label('finite tests against the emulator, on selected programs and configurations: \\\\ final registers, memory, output and instruction counts agree', font_size=24, color=YES),
             label(r"and an exact account of time: \\ cycles $=$ instructions $+\ 4\ +$ the bubbles it reports",
                   font_size=26, color=HEAD),
             label(r"one difference, \ on purpose: \ code that rewrites itself a few instructions ahead \\ goes stale, "
                   r"\ as Part 6 warned \ (chapter 10)", font_size=22, color=NO),
         ).arrange(DOWN, buff=0.35).move_to(DOWN * 0.1)
         with self.voiceover(
-            "Pebble's pipeline lives in the series' library as a cycle-by-cycle simulator: five stages, four pipeline "
-            "registers, and the hazard logic the next chapters build. <bookmark mark='a'/> It is tested the same way as "
-            "the gate-level machine: random programs, run on the pipeline and on Part 6's emulator, must end with the "
-            "same registers, memory, output and instruction count, in every configuration. "
-            "<bookmark mark='b'/> And the time is accounted for exactly. Every cycle beyond the instructions and the "
-            "four of filling the pipeline is a bubble, a cycle in which no instruction finished, and the simulator says "
-            "which hazard caused each one. <bookmark mark='c'/> One difference from the emulator is deliberate: Part 6's "
-            "self-modifying program now goes wrong, as Part 6's problem warned, and chapter ten shows why."
+            "The implementation is a functional cycle model, not a gate-level physical pipeline. <bookmark mark='a'/> "
+            "For selected programs and configurations, the tests compare its final registers, memory, output and "
+            "stopping address with the instruction emulator. The charts record which modeled instruction occupies each "
+            "stage. <bookmark mark='b'/> They exercise dependencies, branches and exceptions, and use modeled multiply "
+            "and divide latencies motivated by earlier circuits. These are finite tests, not an all-program proof or "
+            "timing certification. The simulator lets us explain every counted stall while keeping its hardware "
+            "assumptions visible. <bookmark mark='c'/> One deliberate difference is stale self-modifying code, "
+            "examined in chapter ten."
         ) as vo:
             self.play(FadeIn(head), FadeIn(pts[0]))
             vo.wait_until("a")

@@ -40,16 +40,14 @@ class Amdahl(VoiceoverScene):
             MathTex(r"\text{speedup} = \frac{1}{(1 - p) + p/n} \ \le \ \frac{1}{1 - p}", font_size=42, color=HEAD),
         ).arrange(DOWN, buff=0.35).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "In 1967 Gene Amdahl of IBM made an argument against building machines with many processors, and it "
-            "applies to every speed-up of anything. <bookmark mark='a'/> Suppose a fraction p of a program's time is "
-            "spent in the part you can improve, and you make that part n times faster. <bookmark mark='b'/> The rest, "
-            "one minus p, is untouched. So the new time is one minus p, plus p over n. <bookmark mark='c'/> The speedup "
-            "is one over that, and however large n becomes, it can never exceed one over one minus p. Make ninety "
-            "percent of a program infinitely fast, and it runs only ten times faster: the other ten percent is still "
-            "there."
+            "Amdahl's 1967 argument is a model for fixed work. <bookmark mark='a'/> Let p be the fraction of baseline "
+            "execution time improved by a factor n. Assume the remaining work and its cost stay fixed, with no new "
+            "overhead. <bookmark mark='b'/> The new time, relative to the old, is one minus p plus p over n. <bookmark "
+            "mark='c'/> Speedup is its reciprocal. For p less than one, the limit is one over one minus p. Make ninety "
+            "percent of the original time vanish, and the unchanged ten percent limits speedup to ten. Changing "
+            "problem size or adding costs requires a different accounting."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(bar), FadeIn(lab))
             vo.wait_until("b")
             self.play(FadeIn(slow), TransformFromCopy(part, fast), FadeIn(fl))
@@ -97,7 +95,6 @@ class Amdahl(VoiceoverScene):
             "turned out to be worth building after all."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(xl), FadeIn(yl))
-            vo.wait_until("a")
             self.play(LaggedStart(*[Create(c) for c in curves], lag_ratio=0.3), FadeIn(tags), run_time=3.0)
             vo.wait_until("b")
             self.play(FadeIn(notes[0]), FadeIn(notes[1]))
@@ -112,24 +109,23 @@ class Amdahl(VoiceoverScene):
         il = load("ironlaw")
         head = label(r"Amdahl and the Job", font_size=38).to_edge(UP, buff=0.35)
         rows = VGroup(
-            label(rf"the pipeline speeds up \textit{{every}} instruction: \ $p = 1$, \ {il['speedup']:.2f} times",
+            label(rf"same program: clock ratio / CPI ratio = \ {il['speedup']:.2f} times",
                   font_size=26, color=GREY_A),
             label(rf"the linear search is {100 * a['job_scan_share']:.1f}\% of the Job's instructions", font_size=26,
                   color=NO),
-            label(rf"an idea that removed the search entirely: \ at most $1/(1 - p) \approx {a['job_limit']:.0f}$ "
+            label(rf"ideal single-cycle ceiling, no replacement work: \ at most $1/(1 - p) \approx {a['job_limit']:.0f}$ "
                   r"times", font_size=26, color=YES),
-            label(r"a hardware trick reaches the whole program, \ but gently; \\ an algorithm reaches only the search, "
-                  r"\ but the search is nearly everything", font_size=24, color=HEAD),
+            label('pipeline: throughput, not shorter instruction latency; \\\\ algorithm changes require new instruction and time accounting', font_size=24, color=HEAD),
         ).arrange(DOWN, buff=0.35).move_to(DOWN * 0.1)
         with self.voiceover(
-            "Apply the law to the Job. <bookmark mark='a'/> The pipeline makes every instruction faster, so p is one, "
-            "and the gain is the clock times the CPI: one point nine. <bookmark mark='b'/> But almost all of the Job's "
-            "instructions are spent in one place: the linear search through the word table, ninety-nine point seven "
-            "percent of them. <bookmark mark='c'/> An idea that eliminated the search, as Part 17's hash table nearly "
-            "will, could therefore make the Job up to three hundred and fifty times faster, while touching less than "
-            "one percent of the program's text. <bookmark mark='d'/> That is the ledger's question in miniature. "
-            "Hardware improves everything a little; an algorithm improves one thing enormously, and when that one "
-            "thing is nearly all the time, the algorithm wins."
+            "Apply the accounting carefully. <bookmark mark='a'/> Pipelining improves throughput; it does not make "
+            "every individual instruction finish sooner. For the same instruction count, total speedup is the "
+            "clock-rate ratio divided by the CPI ratio. <bookmark mark='b'/> Linear search accounts for ninety-nine "
+            "point seven percent of this Job's single-cycle instructions. That is also its time share only in the "
+            "uniform-cost single-cycle model. <bookmark mark='c'/> Eliminating that work with no replacement cost "
+            "would give an ideal ceiling of about three hundred and fifty in that model. It is not a measured pipeline "
+            "speedup or a promise for a hash table. <bookmark mark='d'/> On a pipeline, measure the time share and new "
+            "costs again. Hardware schedules the work better; algorithms can change how much work remains."
         ) as vo:
             self.play(FadeIn(head))
             for mk, r in zip("abcd", rows):

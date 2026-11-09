@@ -40,21 +40,19 @@ class Targets(VoiceoverScene):
                   font_size=22, color=GREY_A),
             label(r"a hit, \ predicted taken: \ fetch from the target next cycle; \ a miss: \ \texttt{pc} $+ 4$",
                   font_size=22, color=GREY_A),
-            label(r"so even a \texttt{jal}, \ always taken, \ costs nothing once it is in the buffer", font_size=22,
+            label('a warm, correct BTB hit removes the modeled jump redirect; misses still cost', font_size=22,
                   color=YES),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "A prediction of taken is useless without the target address, and the target is computed from the "
-            "instruction's bits, which the fetch stage has not decoded yet. <bookmark mark='a'/> So the fetch stage "
-            "consults a second small memory, the branch target buffer, indexed by the program counter. Each entry "
-            "remembers that the instruction at this address was a branch or jump, of what kind, and where it went. "
-            "<bookmark mark='b'/> On a hit, the predictor decides taken or not, and if taken, the next fetch comes from "
-            "the stored target, in the very next cycle. On a miss, fetch simply continues at pc plus four. "
-            "<bookmark mark='c'/> That makes unconditional jumps free too. A jal is always taken, but without the buffer "
-            "even it would waste a cycle while decode works out the target."
+            "Direction alone is not enough: fetch also needs a target. <bookmark mark='a'/> A branch target buffer, "
+            "indexed by the program counter, remembers the kind and target of earlier control transfers. <bookmark "
+            "mark='b'/> On a hit with a correct taken prediction and correct target, our ideal front end fetches from "
+            "that target next cycle. On a miss it continues at pc plus four until a redirect. <bookmark mark='c'/> A "
+            "warm, correct BTB hit can therefore remove the modeled unconditional-jump redirect cost. Cold misses, "
+            "aliases, wrong indirect targets and real fetch-bandwidth constraints can still cost time. Free here is a "
+            "condition of this model, not a universal property of jumps."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(frame), FadeIn(tab))
             vo.wait_until("b")
             self.play(FadeIn(pc), GrowArrow(arr), Indicate(tab[2], color=HEAD))
@@ -80,19 +78,19 @@ class Targets(VoiceoverScene):
         notes = VGroup(
             label(r"a return's target is the call's \texttt{pc} $+ 4$, \ and calls nest: \ last called, \ first returned",
                   font_size=22, color=GREY_A),
-            label(r"push on every call, \ pop on every return: \ a 16-entry stack predicts nearly all of them",
+            label('push recognized calls, pop balanced returns; \\\\ a 16-entry stack helps here; overflow and recovery matter',
                   font_size=22, color=YES),
             label(r"the BTB alone remembers one target per return: \ the last one, \ usually wrong in recursion",
                   font_size=22, color=NO),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "One kind of jump defeats the target buffer: the return from a function. <bookmark mark='a'/> The same "
-            "return instruction goes back to wherever the function was called from, a different place each time, and "
-            "in a recursive function like Fibonacci, sometimes into the function itself. A buffer that remembers the "
-            "last target is usually wrong. <bookmark mark='b'/> But calls and returns nest: the last function called is "
-            "the first to return. So keep a small stack in the fetch stage. Every call pushes its return address; every "
-            "return pops one and uses it as the prediction. <bookmark mark='c'/> A sixteen-entry stack predicts nearly "
-            "every return, unless the recursion goes deeper than sixteen calls."
+            "A return can have many targets. <bookmark mark='a'/> The same instruction returns to different callers, "
+            "so remembering only its last target often fails in recursion. <bookmark mark='b'/> Recognized calls and "
+            "returns normally nest: push the return address on a small front-end stack at each call and pop it at a "
+            "return. <bookmark mark='c'/> A sixteen-entry stack works well on the balanced call patterns shown. Deeper "
+            "nesting can discard entries; unusual control transfers, context switches and speculative repair also "
+            "matter in real systems. Its residual misses must be measured rather than attributed to overflow from the "
+            "count alone."
         ) as vo:
             self.play(FadeIn(head), FadeIn(code))
             vo.wait_until("a")
@@ -126,11 +124,12 @@ class Targets(VoiceoverScene):
         note = label(r"the same program, \ the same predictor for conditional branches; \ only the front end differs",
                      font_size=22, color=GREY_B).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Here is recursive Fibonacci of eighteen, eighty-eight thousand instructions with eight thousand returns, "
-            "on three front ends. <bookmark mark='a'/> With no target buffer, every taken jump and every return costs a "
-            "redirect: CPI one point four eight. <bookmark mark='b'/> A target buffer fixes the jumps, but still "
-            "mispredicts most returns. <bookmark mark='c'/> Add the return-address stack and only a few hundred returns "
-            "go wrong, the ones deeper than its sixteen entries: CPI one point one two."
+            "Run the same recursive Fibonacci program on three modeled front ends. <bookmark mark='a'/> With no target "
+            "buffer, the table records redirects for jumps and returns. <bookmark mark='b'/> A BTB removes many jump "
+            "redirects, but a last-target entry still misses many returns. <bookmark mark='c'/> Adding a sixteen-entry "
+            "return stack cuts return misses to a few hundred and lowers CPI to about one point one two in this run. "
+            "That comparison isolates the modeled front-end choices; it does not establish a universal return-miss "
+            "rate or hardware speedup."
         ) as vo:
             self.play(FadeIn(head), FadeIn(note))
             for mk, r in zip("abc", rows):
