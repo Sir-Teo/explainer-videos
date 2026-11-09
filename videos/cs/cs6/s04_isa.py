@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer.cs import *  # noqa: F403
 from explainer.cs.pebble import isa as I
-from videos.cs.cs6.common import (BG, CODE, COST, CTRL, DATA, FIELD_COLORS, FUNC, HEAD, INF, NO, PART, YES, box,
+from videos.cs.cs6.common import (code_text, BG, CODE, COST, CTRL, DATA, FIELD_COLORS, FUNC, HEAD, INF, NO, PART, YES, box,
                                   fmt, load, word_bits)
 
 
@@ -59,13 +59,13 @@ class Isa(VoiceoverScene):
             "cells right next to the ALU, and few enough that four bits can name any of them. Register zero always "
             "reads zero, which turns out to be wonderfully useful: it is a free constant, and writing to it throws a "
             "result away. <bookmark mark='b'/> Memory is a long array of bytes, numbered from zero. A word is four "
-            "consecutive bytes at an address divisible by four, stored little end first, the convention of x86, ARM "
-            "and RISC-V. <bookmark mark='c'/> And there is the program counter, which no instruction reads or writes "
-            "directly: it moves on by itself, or jumps."
+            "consecutive bytes at an address divisible by four, stored little end first, the convention used here and "
+            "by x86; ARM and RISC-V also support little-endian systems. <bookmark mark='c'/> And there is the program "
+            "counter, which no instruction reads or writes directly: it moves on by itself, or jumps."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(rl), LaggedStart(*[FadeIn(r) for r in regs], lag_ratio=0.04), run_time=1.6)
+            vo.wait_until("a")
             self.play(FadeIn(rules[1]), FadeIn(rules[2]))
             vo.wait_until("b")
             self.play(FadeIn(byte_cells), FadeIn(addrs), FadeIn(rules[0]))
@@ -138,7 +138,7 @@ class Isa(VoiceoverScene):
         cols = VGroup()
         for title, ops, c in groups:
             items = VGroup(*[VGroup(MathTex(rf"\texttt{{{code[o]:2d}}}", font_size=24, color=GREY_B),
-                                    Text(o, font="DejaVu Sans Mono", font_size=22, color=c)).arrange(RIGHT, buff=0.22)
+                                    code_text(o, font_size=22, color=c)).arrange(RIGHT, buff=0.22)
                              for o in ops]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
             t = label(title, font_size=24, color=c)
             cols.add(VGroup(t, items).arrange(DOWN, aligned_edge=LEFT, buff=0.18))
@@ -163,9 +163,9 @@ class Isa(VoiceoverScene):
             "loud: opcode zero means nothing, so a program that jumps into empty memory stops at once instead of "
             "running garbage."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head),
+                      LaggedStart(*[FadeIn(c, shift=UP * 0.15) for c in cols], lag_ratio=0.3), run_time=2.0)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(c, shift=UP * 0.15) for c in cols], lag_ratio=0.3), run_time=3.0)
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r) for r in rules[:3]], lag_ratio=0.5), run_time=3.0)
             vo.wait_until("c")
@@ -191,8 +191,7 @@ class Isa(VoiceoverScene):
                 if j == 0 and i > 0:
                     m.align_to(np.array([xs[0] + 1.4, 0.0, 0.0]), RIGHT)
             table.add(r)
-        why = label(r"RISC-V scatters its immediate bits so that the sign bit is always bit 31, \ saving the hardware "
-                    r"a multiplexer; \\ Pebble keeps them together so that we can draw them", font_size=22,
+        why = label("RISC-V: \\ signed-immediate sign extension from bit 31; \\ branch/jump layouts reduce routing hardware \\\\ Pebble: \\ contiguous fields for teaching", font_size=22,
                     color=GREY_A).to_edge(DOWN, buff=0.35)
         hist = label(r"lineage: \ IBM 801 (1980), \ Berkeley RISC \ and Stanford MIPS (1981), \ RISC-V (2010)",
                      font_size=22, color=GREY_B).next_to(why, UP, buff=0.25)
@@ -201,15 +200,15 @@ class Isa(VoiceoverScene):
             "differences are deliberate. <bookmark mark='a'/> RISC-V has thirty-two registers and five-bit register "
             "fields; Pebble's sixteen leave room for longer constants. RISC-V packs several instructions under one "
             "opcode, told apart by extra function fields; Pebble gives each its own. <bookmark mark='b'/> And RISC-V "
-            "scatters the bits of its constants around the word, so that the sign bit is always bit thirty-one and the "
-            "hardware saves a multiplexer. That is a good engineering trade, and a terrible one for drawing, so Pebble "
-            "keeps each constant in one piece. <bookmark mark='c'/> Both descend from the reduced instruction set "
-            "computers of around 1980, IBM's 801, Berkeley's RISC and Stanford's MIPS, which bet that a few simple "
-            "instructions, run fast, beat many complicated ones."
+            "scatters the bits of its constants around the word, so sign extension can start from bit thirty-one for "
+            "signed immediates; the branch and jump layouts also reduce immediate-routing hardware. That is a good "
+            "engineering trade, and a terrible one for drawing, so Pebble keeps each constant in one piece. <bookmark "
+            "mark='c'/> Both descend from the reduced instruction set computers of around 1980, IBM's 801, Berkeley's "
+            "RISC and Stanford's MIPS, which bet that a few simple instructions, run fast, beat many complicated ones."
         ) as vo:
             self.play(FadeIn(head), FadeIn(table[0]))
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r) for r in table[1:5]], lag_ratio=0.3), run_time=2.0)
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r) for r in table[5:]], lag_ratio=0.3), FadeIn(why), run_time=2.0)
             vo.wait_until("c")

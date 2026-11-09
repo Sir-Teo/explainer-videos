@@ -70,8 +70,8 @@ class First(VoiceoverScene):
             "in a one."
         ) as vo:
             self.play(FadeIn(head), FadeIn(lines), FadeIn(regs))
-            vo.wait_until("a")
             self.play(Create(hl))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.add(cl)
             for k, r in enumerate(rows):
@@ -122,8 +122,8 @@ class First(VoiceoverScene):
             "divisor, exactly as Euclid's pebbles found it."
         ) as vo:
             self.play(FadeIn(head), FadeIn(lines))
-            vo.wait_until("a")
             self.play(Create(ax), FadeIn(xl))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(Create(s0), Create(s1), FadeIn(lab), run_time=5.0, rate_func=linear)
             vo.wait_until("c")
@@ -145,7 +145,7 @@ class First(VoiceoverScene):
                      Arrow(ex.get_right(), gl.get_left(), buff=0.2, color=GREY_B))
         eq = MathTex(r"=", font_size=60, color=YES).move_to(LEFT * 0.6 + UP * 0.1).rotate(PI / 2)
         res = VGroup(
-            label(rf"{st['table']['agree']} of {st['table']['programs']} programs: \\ every register, \ every byte of "
+            label(rf"{st['table']['agree']} of {st['table']['programs']} programs: \\ final registers, \ every byte of "
                   r"memory, \\ the step count", font_size=24, color=YES),
             label(rf"{fmt(st['table']['instructions'])} instructions; \ with both control units", font_size=24,
                   color=GREY_A),
@@ -157,16 +157,18 @@ class First(VoiceoverScene):
         with self.voiceover(
             "Two programs are not a proof. To trust the gate-level machine, the series' library tests it against an "
             "independent model. <bookmark mark='a'/> The emulator is a short Python program that states what each "
-            "instruction means, with no circuits at all. <bookmark mark='b'/> A generator writes random programs, "
-            "every kind of instruction, random registers and constants, branches and jumps, loads and stores of words "
+            "instruction means, with no circuits at all. <bookmark mark='b'/> A generator writes random programs, the "
+            "base instruction set with random registers and constants, branches and jumps, loads and stores of words "
             "and bytes. <bookmark mark='c'/> Both machines run three hundred of them, with both versions of the "
-            "control unit. Every register, every byte of memory and the number of steps agree, every time. "
-            "<bookmark mark='d'/> To make that affordable, the netlist is compiled to C, one line per gate, so the "
-            "gate-level Pebble runs a few thousand cycles a second: slow, but fast enough to run real programs."
+            "control unit. After each completed program, all registers, every memory byte, the program counter and the"
+            " step count agree. This is a final-state comparison, not a comparison at every instruction boundary or a "
+            "proof for all programs. <bookmark mark='d'/> To make that affordable, the netlist is compiled to C, one "
+            "line per gate, so the gate-level Pebble runs a few thousand cycles a second: slow, but fast enough to run"
+            " real programs."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(emu))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(el), FadeIn(ex, lag_ratio=0.05), FadeIn(gl), GrowArrow(arr[0]), GrowArrow(arr[1]))
             vo.wait_until("c")

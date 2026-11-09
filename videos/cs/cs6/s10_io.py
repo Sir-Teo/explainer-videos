@@ -56,22 +56,22 @@ class Io(VoiceoverScene):
         why = VGroup(
             label(r"no new instructions: \ \texttt{lw} and \texttt{sb} reach devices too", font_size=24, color=YES),
             label(r"the address decides who answers: \ memory, \ or a device", font_size=24, color=GREY_A),
-            label(r"DEC's PDP-11 (1970) put every device on its bus this way; \\ so does every microcontroller today",
+            label("DEC PDP-11 (1970): \\ memory-mapped device registers; \\\\ widely used in modern microcontrollers",
                   font_size=22, color=HIST),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to(RIGHT * 2.3 + DOWN * 1.5)
         with self.voiceover(
             "A computer that cannot print is not much use. Pebble talks to the world without any special instructions "
             "at all. <bookmark mark='a'/> Its addresses run from zero to four billion, but only the first megabyte "
             "here is memory. <bookmark mark='b'/> The top of the address space belongs to devices. Store a byte to "
-            "this address, and it appears on the console. Load from this one, and you get the next byte of input "
-            "from the tape, or minus one when it runs out. This one counts the instructions run so far. "
-            "<bookmark mark='c'/> This is memory-mapped input and output. The same loads and stores that reach "
-            "memory reach the devices, and the address alone decides who answers. DEC's PDP-11 made it famous in 1970, "
-            "and today every microcontroller works this way: switching on an LED is a store to the right address."
+            "this address, and it appears on the console. Load from this one, and you get the next byte of input from "
+            "the tape, or minus one when it runs out. This one counts the instructions run so far. <bookmark "
+            "mark='c'/> This is memory-mapped input and output. The same loads and stores that reach memory reach the "
+            "devices, and the address alone decides who answers. DEC's PDP-11 made it famous in 1970, and many modern "
+            "microcontrollers work this way: switching on an LED is a store to the right address."
         ) as vo:
             self.play(FadeIn(head), FadeIn(bar), FadeIn(ticks[0]), FadeIn(ticks[3]))
-            vo.wait_until("a")
             self.play(FadeIn(ram), FadeIn(rl), FadeIn(ticks[1]), FadeIn(unused))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(dev), FadeIn(ticks[2]), GrowArrow(link))
             self.play(LaggedStart(*[FadeIn(d) for d in devs], lag_ratio=0.5), run_time=2.4)
@@ -103,8 +103,8 @@ class Io(VoiceoverScene):
             "letters appear one at a time, five instructions apart, a hundred and two instructions in all."
         ) as vo:
             self.play(FadeIn(head), FadeIn(lines))
-            vo.wait_until("a")
             self.play(Create(lb), FadeIn(ll))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(screen), FadeIn(sl))
             self.play(AddTextLetterByLetter(chars, time_per_char=0.15))
@@ -125,21 +125,22 @@ class Io(VoiceoverScene):
                   r"key", font_size=24, color=GREY_A),
             label(r"the alternative: \ the device interrupts the processor \ (chapter 13, \ Part 31)", font_size=24,
                   color=HEAD),
-            label(r"device addresses must never be cached, \ or reordered: \ Part 9 marks them uncacheable", font_size=22,
+            label("device accesses need the required visibility and ordering; \\ ordinary RAM caching is unsafe here", font_size=22,
                   color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(DOWN * 1.2)
         with self.voiceover(
             "Reading works the same way. <bookmark mark='a'/> To get the next character, the program loads from the "
-            "tape's address, and checks for minus one, the end. The Job reads all of its input like this. "
-            "<bookmark mark='b'/> Asking a device over and over is called polling. It is perfect for a tape that always "
-            "has the next byte ready, and wasteful for a keyboard, where the program would spin for minutes between "
-            "keys. <bookmark mark='c'/> The alternative is to let the device interrupt the processor when something "
-            "happens, which chapter thirteen previews. And device addresses bring a subtlety: a cache, in Part 9, must "
-            "never keep a copy of one, because reading the tape twice must give two different bytes."
+            "tape's address, and checks for minus one, the end. The Job reads all of its input like this. <bookmark "
+            "mark='b'/> Asking a device over and over is called polling. It is perfect for a tape that always has the "
+            "next byte ready, and wasteful for a keyboard, where the program would spin for minutes between keys. "
+            "<bookmark mark='c'/> The alternative is to let the device interrupt the processor when something happens,"
+            " which chapter thirteen previews. And device addresses bring a subtlety: a cache, in Part 9, must never "
+            "keep a copy of one, because each read must consume the next input position, even when consecutive bytes "
+            "have equal values."
         ) as vo:
             self.play(FadeIn(head), FadeIn(code))
-            vo.wait_until("a")
             self.play(FadeIn(pts[0]))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(pts[1]))
             vo.wait_until("c")

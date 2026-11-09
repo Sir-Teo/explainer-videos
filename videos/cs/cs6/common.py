@@ -5,6 +5,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.cs import *  # noqa: F403
+from explainer.zh_text import verbatim
 from explainer.cs.gates import WIRE, gate, junction, wire  # noqa: F401
 
 from .compute import load  # noqa: F401
@@ -26,6 +27,11 @@ HIST = C.HUMAN
 BG = "#121722"
 
 FIELD_COLORS = {"op": CTRL, "rd": YES, "rs1": DATA, "rs2": INF, "imm": HEAD, "0": GREY_D}
+
+
+def code_text(text, **kwargs):
+    with verbatim():
+        return Text(text, font="DejaVu Sans Mono", **kwargs)
 
 
 def fmt(n) -> str:

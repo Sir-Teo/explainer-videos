@@ -47,17 +47,18 @@ class Counted(VoiceoverScene):
                       color=GREY_A).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "Now count the whole machine. <bookmark mark='a'/> The biggest block is not the ALU. It is the register "
-            "file's two read ports: thirty-two-bit multiplexer trees choosing among sixteen registers, three and a half "
-            "thousand gates. Next are the multiplexers that write a register or keep its value, then the ALU itself, "
-            "the two adders and multiplexers that choose the next program counter, and finally the control unit, a "
-            "few hundred gates, and the immediates, almost nothing. <bookmark mark='b'/> Eight thousand two hundred and "
-            "twenty-four gates and five hundred and twelve flip-flops. Most of a processor, it turns out, is choosing "
-            "and moving data, not computing on it."
+            "file's two read ports: thirty-two-bit multiplexer trees choosing among sixteen registers, about three "
+            "thousand logic gates. The four hundred and eighty register-state inputs belong to storage and are "
+            "excluded from that logic count. Next are the multiplexers that write a register or keep its value, then "
+            "the ALU itself, the two adders and multiplexers that choose the next program counter, and finally the "
+            "control unit, a few hundred gates, and the immediates, almost nothing. <bookmark mark='b'/> Eight "
+            "thousand two hundred and twenty-four gates and five hundred and twelve flip-flops. Most of a processor, "
+            "it turns out, is choosing and moving data, not computing on it."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(bars[0][0]), GrowFromEdge(bars[0][1], LEFT), FadeIn(bars[0][2]))
             vo.wait_until("a")
-            self.play(LaggedStart(*[AnimationGroup(FadeIn(b[0]), GrowFromEdge(b[1], LEFT), FadeIn(b[2])) for b in bars],
-                                  lag_ratio=0.35), run_time=4.0)
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(b[0]), GrowFromEdge(b[1], LEFT), FadeIn(b[2]))
+                                  for b in bars[1:]], lag_ratio=0.35), run_time=2.4)
             vo.wait_until("b")
             self.play(FadeIn(tl))
             self.play(FadeIn(notes))
@@ -70,7 +71,7 @@ class Counted(VoiceoverScene):
         head = label(r"Pebble among real processors", font_size=38).to_edge(UP, buff=0.35)
         peb = cp["transistors_logic"] + cp["transistors_ff"]
         items = [(r"MOS 6502 (1975)", 3510, GREY_B), (r"Intel 8086 (1978)", 29000, GREY_B),
-                 (r"Pebble-32, \ as CMOS", peb, HEAD), (r"Intel 80386 (1985)", 275000, GREY_B),
+                 ("Pebble: \\ synthetic logic estimate", peb, HEAD), (r"Intel 80386 (1985)", 275000, GREY_B),
                  (r"Apple M1 (2020), \ the whole chip", 16_000_000_000, GREY_B)]
         lo, hi = 3, 10.5
         x0, width = -2.0, 6.2
@@ -90,21 +91,22 @@ class Counted(VoiceoverScene):
                                    [x0 + (e - lo) / (hi - lo) * width, -1.6, 0])) for e in (3, 5, 7, 9)])
         how = label(rf"{fmt(cp['nand'])} two-input NAND equivalents $\times$ 4 transistors, \ plus "
                     rf"{cp['flip_flops']} flip-flops $\times$ 24", font_size=21, color=GREY_B).to_edge(DOWN, buff=0.9)
-        cav = label(r"Pebble's memory is outside this count; \ the M1's billions are mostly caches, \ GPU and "
-                    r"accelerators", font_size=21, color=GREY_B).to_edge(DOWN, buff=0.4)
+        cav = label("Pebble excludes memory, I/O, clocks, buffers and layout; \\\\ different counting scopes, \\ not an area comparison", font_size=21, color=GREY_B).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "How does that compare with real chips? <bookmark mark='a'/> Built in CMOS, with four transistors to each "
-            "two-input NAND and about two dozen to each flip-flop, Pebble would need about ninety thousand transistors. "
-            "<bookmark mark='b'/> The 6502, the processor of the Apple II and, in a variant, the Commodore 64, had three and a half "
-            "thousand, because it was eight bits wide and squeezed by brilliant hand design. Intel's 8086 had twenty-"
-            "nine thousand, and the 386, the first thirty-two-bit x86, two hundred and seventy-five thousand. "
-            "<bookmark mark='c'/> A modern laptop chip has sixteen billion, a hundred and eighty thousand Pebbles, and "
-            "most of them are caches, graphics, and the machinery of the next three parts, which spends transistors "
-            "lavishly to run one program faster."
+            "How does that compare with real chips? <bookmark mark='a'/> Our teaching count maps each two-input NAND "
+            "equivalent to four transistors and each flip-flop to twenty-four, giving about ninety thousand. This is a"
+            " synthetic logic estimate, excluding memory, I/O, clock distribution, buffers and physical layout; it is "
+            "not a fabricated chip count. <bookmark mark='b'/> The 6502, the processor of the Apple II and, in a "
+            "variant, the Commodore 64, had three and a half thousand, because it was eight bits wide and squeezed by "
+            "brilliant hand design. Intel's 8086 had twenty-nine thousand, and the 386, the first thirty-two-bit x86, "
+            "two hundred and seventy-five thousand. <bookmark mark='c'/> Apple's M1 was reported at sixteen billion "
+            "transistors for the whole system on a chip, including caches, graphics and accelerators. These bars show "
+            "orders of magnitude with different counting scopes, not how many working Pebbles fit on an M1 or a "
+            "physical area comparison."
         ) as vo:
             self.play(FadeIn(head), FadeIn(axis))
-            vo.wait_until("a")
             self.play(FadeIn(rows[2][0]), GrowFromEdge(rows[2][1], LEFT), FadeIn(rows[2][2]), FadeIn(how))
+            vo.wait_until("a")
             vo.wait_until("b")
             for k in (0, 1, 3):
                 self.play(FadeIn(rows[k][0]), GrowFromEdge(rows[k][1], LEFT), FadeIn(rows[k][2]), run_time=0.8)
@@ -127,7 +129,7 @@ class Counted(VoiceoverScene):
         )]).arrange(DOWN, aligned_edge=LEFT, buff=0.32).move_to(DOWN * 0.1)
         for r in rows:
             r[1].align_to(rows[0][1], LEFT).set_x(0.4, direction=LEFT)
-        foot = label(r"every one keeps the instruction set's promise, \ and runs the same programs faster", font_size=24,
+        foot = label("base-ISA programs remain compatible; \\ extensions add new instructions", font_size=24,
                      color=HEAD).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "Pebble is a complete computer, but a modest one, and the next acts add what real processors have. "
@@ -139,8 +141,8 @@ class Counted(VoiceoverScene):
             "Job's program will not change for the next three parts; only the machine under it will."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(rows[0]))
+            vo.wait_until("a")
             self.play(FadeIn(rows[1]))
             vo.wait_until("b")
             self.play(FadeIn(rows[2]))
@@ -179,25 +181,25 @@ class Counted(VoiceoverScene):
                    color=HEAD).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "Before we leave Act One, take the trip down the tower once, all the way. <bookmark mark='a'/> Here is "
-            "Pebble's datapath. Pick the ALU, and look inside. <bookmark mark='b'/> Its adder is a row of full "
-            "adders, one per bit, with carries rippling between them, or racing through a prefix tree, as in Part 4. "
-            "<bookmark mark='c'/> Pick one full adder: five gates. <bookmark mark='d'/> Pick one gate, built as NANDs, "
-            "and one NAND is four transistors, two pulling the output up and two pulling it down, as in Part 3. "
-            "<bookmark mark='e'/> And back up again: transistors make gates, gates make adders, adders make an ALU, and "
-            "an ALU, registers and a little control make a computer that runs any program you can write. Every layer "
-            "of that tower, in this series, is code you can read and run."
+            "Pebble's datapath. Pick the ALU, and look inside. <bookmark mark='b'/> Its adder is a row of full adders,"
+            " one per bit, with carries rippling between them, or racing through a prefix tree, as in Part 4. "
+            "<bookmark mark='c'/> Pick one full adder: five gates. <bookmark mark='d'/> Pick one gate, built as NANDs,"
+            " and one NAND is four transistors, two pulling the output up and two pulling it down, as in Part 3. "
+            "<bookmark mark='e'/> And back up again: transistors make gates, gates make adders, adders make an ALU, "
+            "and an ALU, registers and a little control make a computer that runs programs within its instruction set "
+            "and available memory. Every layer of that tower, in this series, is code you can read and run."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(dp))
+            vo.wait_until("a")
             self.play(Indicate(alu, color=HEAD, scale_factor=1.15))
             vo.wait_until("b")
             self.play(FadeOut(dp, scale=2.0), FadeIn(bits, scale=0.4), run_time=1.2)
             self.play(LaggedStart(*[GrowArrow(c) for c in carry], lag_ratio=0.15), FadeIn(bl))
             vo.wait_until("c")
-            self.play(Indicate(bits[3], color=HEAD, scale_factor=1.3))
-            self.play(FadeOut(VGroup(bits, carry, bl), scale=2.0), FadeIn(fa, scale=0.4), run_time=1.2)
-            self.play(FadeIn(fl))
+            self.play(Indicate(bits[3], color=HEAD, scale_factor=1.3), run_time=0.5)
+            self.play(FadeOut(VGroup(bits, carry, bl), scale=2.0), FadeIn(fa, scale=0.4), run_time=1.0)
+            self.play(FadeIn(fl), run_time=0.5)
             vo.wait_until("d")
             self.play(Indicate(g1, color=HEAD, scale_factor=1.3))
             self.play(FadeOut(VGroup(fa, fl), scale=2.0), FadeIn(cm, scale=0.4), run_time=1.2)

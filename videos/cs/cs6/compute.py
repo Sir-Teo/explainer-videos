@@ -35,8 +35,34 @@ from explainer.cs.pebble import programs as P
 from explainer.cs.pebble.fast import Fast
 from explainer.cs.pebble.randprog import random_program
 
-CACHE = Cache("cs6")
-load = CACHE.load
+ISA_SCHEMA = 2
+CPU_SCHEMA = 2
+
+
+class ProcessorCache(Cache):
+    def load(self, name):
+        if name in ("isa", "cpu") and not cache_current(name):
+            from explainer.cache_lock import cache_lock
+            with cache_lock(self.path(name)):
+                if not cache_current(name):
+                    self.save(name, compute_isa() if name == "isa" else compute_cpu())
+        return super().load(name)
+
+
+CACHE = ProcessorCache("cs6")
+
+
+def cache_current(name):
+    path = CACHE.path(name)
+    if not path.exists():
+        return False
+    schemas = {"isa": ISA_SCHEMA, "cpu": CPU_SCHEMA}
+    return name not in schemas or json.loads(path.read_text()).get("schema") == schemas[name]
+
+
+def load(name):
+    # Resolve the instance entry dynamically so cached-only QA guards upgrades first.
+    return CACHE.load(name)
 GATE_PS = 10  # one gate delay, as in Part 5's timing chapter
 _CPU: dict = {}
 
@@ -84,9 +110,9 @@ def compute_isa() -> dict:
         ("branch reach", r"$\pm$512 KiB", r"$\pm$4 KiB"),
         ("formats", "R, I, S, J", "R, I, S, B, U, J"),
         ("multiply, divide", "Part 7 (reserved)", "the M extension"),
-        ("stop", r"\texttt{halt}", r"\texttt{ecall} to an OS"),
+        ("stop / environment call", r"\texttt{halt} stops", r"\texttt{ecall} raises a trap"),
     ]
-    return {"examples": ex, "ops": ops, "rv": rv, "reserved": I.RESERVED, "n_ops": len(ops)}
+    return {"schema": ISA_SCHEMA, "examples": ex, "ops": ops, "rv": rv, "reserved": I.RESERVED, "n_ops": len(ops)}
 
 
 # ---------------------------------------------------------------------------
@@ -111,13 +137,17 @@ def compute_control() -> dict:
 # ---------------------------------------------------------------------------
 def compute_cpu() -> dict:
     s, f = cpu("table")
-    blocks = {k: b - a for k, (a, b) in s.blocks.items()}
+    # Block spans include 480 register-state INPUT nodes. Count the same gate
+    # kinds as Circuit.size(); storage is counted separately as flip-flops.
+    nongates = {"INPUT", "CONST0", "CONST1", "BUF"}
+    blocks = {k: sum(kind not in nongates for kind in s.c.kinds[a:b]) for k, (a, b) in s.blocks.items()}
     cp = C.critical_path(s, samples=4096)
     nand = s.c.to_nand().size()
     logic_ps = cp["settle_max"] * GATE_PS
     period_ps = logic_ps + 40 + 30  # clock-to-Q and setup, as in Part 5
     s2, _ = cpu("minimized")
-    return {"gates": s.c.size(), "counts": s.c.counts(), "blocks": blocks, "flip_flops": s.flip_flops,
+    return {"schema": CPU_SCHEMA, "gates": s.c.size(), "counts": s.c.counts(), "blocks": blocks,
+            "flip_flops": s.flip_flops,
             "nand": nand, "transistors_logic": 4 * nand, "transistors_ff": 24 * s.flip_flops,
             "depth": cp["depth"], "settle_max": cp["settle_max"], "settle_mean": cp["settle_mean"],
             "logic_ps": logic_ps, "period_ps": period_ps, "fmax_ghz": 1000 / period_ps,

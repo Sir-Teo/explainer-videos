@@ -59,8 +59,8 @@ class SelfMod(VoiceoverScene):
             "sum is thirty-one, on the emulator and on the gates."
         ) as vo:
             self.play(FadeIn(head), FadeIn(lines))
-            vo.wait_until("a")
             self.play(FadeIn(cells), FadeIn(al), Create(hl))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(wb), FadeIn(wl), FadeIn(ptr))
             self.add(tv)
@@ -85,23 +85,20 @@ class SelfMod(VoiceoverScene):
                   r"\ as Pebble's \texttt{lw t0, 8(s0)}, \ made the trick unnecessary", font_size=24, color=HIST),
             label(r"pipelines and caches fetch instructions early \ (Parts 7 and 9): \\ a rewritten instruction may "
                   r"already be on its way, \ stale", font_size=24, color=GREY_A),
-            label(r"if data can become code, \ an attacker who writes data can run code: \\ \textit{write xor execute}, "
-                  r"\ memory either writable or executable, \ never both \ (Part 55)", font_size=24, color=NO),
-            label(r"and yet: \ every JavaScript engine writes machine code as it runs \ (a JIT, \ Part 15), \\ then "
-                  r"flips the page from writable to executable", font_size=24, color=YES),
+            label("write xor execute: \\ restrict simultaneous write and execute permissions \\\\ a code-injection defence, \\ not complete attack prevention (Part 55)", font_size=24, color=NO),
+            label("a JIT can generate machine code at runtime, \\ then arrange executable permissions \\ (Part 15)", font_size=24, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(DOWN * 0.15)
         with self.voiceover(
             "Self-modifying code has almost disappeared, for three reasons. <bookmark mark='a'/> The first was "
             "invented in 1949 at Manchester: the B-lines, the first index registers, which add a register to an "
             "instruction's address. Pebble's loads work this way, base plus offset, so the trick is unnecessary. "
             "<bookmark mark='b'/> The second is speed. Pipelined processors and caches fetch instructions long before "
-            "they run, so a rewritten instruction may already be on its way in its old form. "
-            "<bookmark mark='c'/> The third is security. If data can turn into code, then an attacker who can write "
-            "data can run code, and that is how a great many attacks work. So modern systems mark memory either "
-            "writable or executable, never both: write xor execute, which Part 55 returns to. "
-            "<bookmark mark='d'/> And yet the idea lives on, carefully fenced. A JavaScript engine compiles hot code "
-            "to machine code while your page runs, writes it into memory as data, and only then flips that memory to "
-            "executable. Code is data, still."
+            "they run, so a rewritten instruction may already be on its way in its old form. <bookmark mark='c'/> The "
+            "third is security. Writable executable memory can make code injection easier. Many systems therefore "
+            "restrict pages from being writable and executable at the same time: write xor execute, which Part 55 "
+            "returns to. <bookmark mark='d'/> And yet the idea lives on, carefully fenced. A JavaScript engine with a "
+            "just-in-time compiler compiles hot code to machine code while your page runs, writes it into memory as "
+            "data, and only then flips that memory to executable. Code is data, still."
         ) as vo:
             self.play(FadeIn(head))
             for mk, p_ in zip("abcd", pts):

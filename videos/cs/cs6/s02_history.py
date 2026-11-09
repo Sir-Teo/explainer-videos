@@ -55,20 +55,20 @@ class History(VoiceoverScene):
         nn = label(r"its first programmers, \ worked out every wire from the logic diagrams", font_size=22,
                    color=GREY_B).next_to(names, DOWN, buff=0.12)
         with self.voiceover(
-            "In 1945, at the University of Pennsylvania, John Presper Eckert and John Mauchly finished ENIAC, the first "
-            "large general-purpose electronic computer. <bookmark mark='a'/> It filled a room: seventeen thousand "
-            "vacuum tubes, thirty tons, and it added five thousand numbers a second, a thousand times faster than the "
-            "relay machines before it. <bookmark mark='b'/> But it had no program in the sense we mean. Each problem "
-            "was set up by hand: units connected by cables, and switches set on every panel, so that numbers flowed "
-            "from accumulator to multiplier in the right order. A new problem took days of re-plugging. "
-            "<bookmark mark='c'/> The people who did it were six women hired as human computers: Kay McNulty, Betty "
-            "Jennings, Betty Snyder, Marlyn Wescoff, Fran Bilas and Ruth Lichterman. With no manuals, they learned "
-            "the machine from its logic diagrams and worked out every connection. They were not introduced when ENIAC "
-            "was shown to the press in 1946, and their work was recognised only decades later."
+            "In 1945, at the University of Pennsylvania, John Presper Eckert and John Mauchly finished ENIAC, an early"
+            " general-purpose electronic computer, publicly unveiled in 1946. <bookmark mark='a'/> It filled a room: "
+            "seventeen thousand vacuum tubes, thirty tons, and it added five thousand numbers a second, a thousand "
+            "times faster than the relay machines before it. <bookmark mark='b'/> But it had no program in the sense "
+            "we mean. Each problem was set up by hand: units connected by cables, and switches set on every panel, so "
+            "that numbers flowed from accumulator to multiplier in the right order. A new problem took days of "
+            "re-plugging. <bookmark mark='c'/> The people who did it were six women hired as human computers: Kay "
+            "McNulty, Betty Jennings, Betty Snyder, Marlyn Wescoff, Fran Bilas and Ruth Lichterman. With no manuals, "
+            "they learned the machine from its logic diagrams and worked out every connection. They were not "
+            "introduced when ENIAC was shown to the press in 1946, and their work was recognised only decades later."
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(p) for p in panels], lag_ratio=0.05), run_time=1.6)
-            vo.wait_until("a")
             self.play(FadeIn(stats[0]))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(LaggedStart(*[Create(c) for c in cables], lag_ratio=0.12), run_time=3.0)
             self.play(FadeIn(stats[1]))
@@ -112,8 +112,8 @@ class History(VoiceoverScene):
             "universal machine of 1936, from Part 1, already read its program from its own tape."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(ca), FadeIn(cc), FadeIn(io), FadeIn(mem.box), FadeIn(mem.text))
+            vo.wait_until("a")
             self.play(LaggedStart(*[GrowArrow(a) for a in arrows], lag_ratio=0.2))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r) for r in inside], lag_ratio=0.1), FadeIn(tags))
@@ -147,24 +147,24 @@ class History(VoiceoverScene):
         res = VGroup(
             label(r"answer: \ 131{,}072, \ after 52 minutes \\ and about 3.5 million instructions", font_size=26,
                   color=YES),
-            label(r"Williams, \ Kilburn \ and Tootill's \textit{Baby}: \ 7 instructions, \ 1 kilobit of memory",
+            label("Baby: \\ 7 instruction types, \\ 1 kilobit of memory",
                   font_size=22, color=GREY_B),
         ).arrange(DOWN, buff=0.25).move_to(RIGHT * 2.2 + DOWN * 2.0)
         with self.voiceover(
             "The first machine to actually run a program from its memory was small. <bookmark mark='a'/> At "
             "Manchester, Freddie Williams, Tom Kilburn and Geoff Tootill built a test bed for Williams's tube memory, "
-            "nicknamed the Baby: thirty-two words of thirty-two bits, stored as dots of charge on a screen. "
-            "<bookmark mark='b'/> On the twenty-first of June 1948, it ran Kilburn's first program: find the largest "
-            "proper factor of two to the eighteen. The Baby could not divide, or even add; it could only subtract. So "
-            "the program tried every number downwards, dividing by repeated subtraction. <bookmark mark='c'/> After "
-            "fifty-two minutes and about three and a half million instructions, the answer appeared on the screen: "
-            "a hundred and thirty-one thousand and seventy-two. Seven instructions, a kilobit of memory, and the first "
-            "program ever to run from the same store that held its data."
+            "nicknamed the Baby: thirty-two words of thirty-two bits, stored as dots of charge on a screen. <bookmark "
+            "mark='b'/> On the twenty-first of June 1948, it ran Kilburn's first program: find the largest proper "
+            "factor of two to the eighteen. The Baby could not divide, or even add; it could only subtract. So the "
+            "program tried every number downwards, dividing by repeated subtraction. <bookmark mark='c'/> After "
+            "fifty-two minutes and about three and a half million instructions, the answer appeared on the screen: a "
+            "hundred and thirty-one thousand and seventy-two. An instruction set of seven operations, a kilobit of "
+            "memory, and the first program ever to run from the same store that held its data."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(frame), LaggedStart(*[FadeIn(d) for d in grid], lag_ratio=0.0005), FadeIn(gl),
                       run_time=1.6)
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(p) for p in prob], lag_ratio=0.4), run_time=2.0)
             self.add(tv)
@@ -190,7 +190,7 @@ class History(VoiceoverScene):
         cl = label(r"jump, \ leaving the \\ return address", font_size=20, color=YES).next_to(call, UP, buff=0.1)
         bl = label(r"jump back to it", font_size=20, color=HEAD).next_to(back, DOWN, buff=0.1)
         notes = VGroup(
-            label(r"the \textit{Wheeler jump}: \ the first subroutine call \ (David Wheeler)", font_size=24, color=HIST),
+            label("the \\textit{Wheeler jump}: \\ an early subroutine technique \\ (David Wheeler)", font_size=24, color=HIST),
             label(r"a library of tested subroutines, \ and \textit{initial orders} that loaded programs from paper "
                   r"tape", font_size=22, color=GREY_A),
             label(r"Pebble's \texttt{jal} \ does the same in one instruction \ (Part 11)", font_size=22, color=YES),
@@ -206,8 +206,8 @@ class History(VoiceoverScene):
             "instruction does Wheeler's trick in a single step, and Part 11 builds the calling convention on it."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(sl), LaggedStart(*[FadeIn(s) for s in squares], lag_ratio=0.12), run_time=1.6)
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(main), FadeIn(sub))
             self.play(Create(call), FadeIn(cl))

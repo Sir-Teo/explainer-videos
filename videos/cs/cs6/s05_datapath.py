@@ -52,8 +52,8 @@ class Datapath(VoiceoverScene):
             "instruction, ready to be loaded at the next clock edge. <bookmark mark='c'/> That is the whole of fetch: "
             "a register, a memory, an adder, and a wire looping back."
         ) as vo:
-            vo.wait_until("a")
             self.play(*self.show(["pc", "imem"]), Create(dp.wires["pc_imem"]))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(dp.blocks["add4"]), Create(dp.wires["pc_add4"]), FadeIn(cap))
             vo.wait_until("c")
@@ -75,11 +75,11 @@ class Datapath(VoiceoverScene):
         cap = caption(r"R format: \ read two registers, \ add in the ALU, \ write the third")
         with self.voiceover(
             "Next, an instruction that adds two registers. <bookmark mark='a'/> The instruction's bits fan out. Two "
-            "four-bit fields go to the register file's read ports, which is Part 5's register file exactly. "
-            "<bookmark mark='b'/> The two values flow into Part 4's ALU, and a few bits from the control unit tell it "
-            "to add. <bookmark mark='c'/> The sum flows back around to the register file's write port, addressed by "
-            "the third field, and is written at the next clock edge, at the same moment as the program counter moves "
-            "on. Nothing in this machine happens between clock edges except electricity settling."
+            "four-bit fields go to the register file's read ports, which is Part 5's register file exactly. <bookmark "
+            "mark='b'/> The two values flow into Part 4's ALU, and a few bits from the control unit tell it to add. "
+            "<bookmark mark='c'/> The sum flows back around to the register file's write port, addressed by the third "
+            "field, and is written at the next clock edge, at the same moment as the program counter moves on. In this"
+            " synchronous model, combinational signals settle between edges; state is captured at the edges."
         ) as vo:
             self.play(FadeIn(tag))
             vo.wait_until("a")
@@ -255,15 +255,16 @@ class Datapath(VoiceoverScene):
         foot = label(r"grey: \ still settling; \ coloured: \ correct. \ The cycle must outlast the slowest row.",
                      font_size=22, color=GREY_B).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "It helps to watch one cycle in time. <bookmark mark='a'/> At the rising edge, the program counter and the "
-            "registers load their new values, and everything downstream starts to change. <bookmark mark='b'/> The "
-            "instruction word comes out of memory first, then the register file's outputs settle, then the ALU's result, "
-            "then, for a load, the data from memory, and last of all the value to be written back. Before each one "
-            "settles, the wires carry nonsense, glitches and half-finished sums, and nobody looks. "
-            "<bookmark mark='c'/> At the next rising edge, the register file and the program counter capture what is on "
-            "their inputs, and the cycle starts again. The only rule is the one from Part 5: the last row must settle "
-            "before the next edge, with the setup time to spare. The next chapter opens the one block we have treated "
-            "as a black box: the control unit."
+            "It helps to watch one cycle in time. <bookmark mark='a'/> At the rising edge, the program counter and the"
+            " registers load their new values, and everything downstream starts to change. <bookmark mark='b'/> The "
+            "instruction word comes out of memory first, then the register file's outputs settle, then the ALU's "
+            "result, then, for a load, the data from memory, and last of all the value to be written back. Before each"
+            " one settles, the wires may carry glitches and unfinished values; synchronous registers must sample only "
+            "after their timing requirements are met. <bookmark mark='c'/> At the next rising edge, the register file "
+            "and the program counter capture what is on their inputs, and the cycle starts again. Part 5's timing "
+            "rules still apply: values must settle before the next edge with setup margin, and remain stable for the "
+            "required hold window. This drawing illustrates the settling order, not a measured physical waveform. The "
+            "next chapter opens the one block we have treated as a black box: the control unit."
         ) as vo:
             self.play(FadeIn(head), FadeIn(edges), *[FadeIn(r[0]) for r in g])
             self.play(Create(g[0][1]))

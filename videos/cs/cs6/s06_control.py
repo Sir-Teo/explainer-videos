@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs6.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, NO, PART, YES, box, fmt, load)
+from videos.cs.cs6.common import (code_text, BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, NO, PART, YES, box, fmt, load)
 
 SIG_TEX = {"rw": r"\text{reg write}", "imm": r"\text{imm}", "aop0": r"\text{alu}_0", "aop1": r"\text{alu}_1",
            "aop2": r"\text{alu}_2", "aop3": r"\text{alu}_3", "sf": r"\text{S fmt}", "jf": r"\text{J fmt}",
@@ -19,7 +19,7 @@ def truth_grid(d, cw=0.3, ch=0.152):
     names = VGroup()
     for i, r in enumerate(rows):
         y = -i * ch
-        names.add(Text(r["op"], font="DejaVu Sans Mono", font_size=12, color=GREY_B).move_to([-0.45, y, 0],
+        names.add(code_text(r["op"], font_size=12, color=GREY_B).move_to([-0.45, y, 0],
                                                                                          aligned_edge=RIGHT))
         for j, b in enumerate(r["bits"]):
             sq = Rectangle(width=cw * 0.9, height=ch * 0.8, stroke_width=0, fill_color=HEAD if b else GREY_D,
@@ -80,8 +80,8 @@ class Control(VoiceoverScene):
             "loaded word on the write-back path. Every other opcode, thirty of the sixty-four, is illegal."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(expl[0]), FadeIn(expl[1]), FadeIn(g.heads, lag_ratio=0.05), FadeIn(g.names))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(c) for c in g.cells], lag_ratio=0.0015), run_time=2.5)
             vo.wait_until("c")
@@ -125,7 +125,7 @@ class Control(VoiceoverScene):
             VGroup(label(r"as minimized logic", font_size=26, color=HEAD),
                    label(rf"Quine--McCluskey (Part 3), \ the illegal opcodes as don't-cares: \ {st['minimized']['gates']} "
                          r"gates", font_size=22, color=GREY_A),
-                   label(r"smaller and faster, \ but every change means minimizing again", font_size=22,
+                   label("fewer gates here; \\ timing still needs its own analysis", font_size=22,
                          color=GREY_B)).arrange(DOWN, aligned_edge=LEFT, buff=0.1),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.5).move_to(RIGHT * 3.0 + UP * 0.4)
         same = label(r"both built, \ and both run the same 300 random programs \ with identical results", font_size=24,
@@ -141,8 +141,8 @@ class Control(VoiceoverScene):
             "processor run the same three hundred random programs, and end in exactly the same state."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(Create(ins), Create(lines), Create(outs), run_time=1.5)
+            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(dd, scale=2) for dd in dots], lag_ratio=0.01), FadeIn(pl), run_time=1.8)
             self.play(FadeIn(opts[0]))
             vo.wait_until("b")
@@ -195,8 +195,8 @@ class Control(VoiceoverScene):
             "control store would be one row each: thirty-four words of twenty bits."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(c) for c in grid], lag_ratio=0.01), FadeIn(nxt), FadeIn(gl), run_time=2.0)
+            vo.wait_until("a")
             self.play(FadeIn(pts[0]))
             vo.wait_until("b")
             self.play(GrowArrow(ptr))

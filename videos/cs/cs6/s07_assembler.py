@@ -54,8 +54,8 @@ class Assembler(VoiceoverScene):
             "they loaded the tape. Pebble's assembler, in the series' library, is a few hundred lines of Python."
         ) as vo:
             self.play(FadeIn(head), FadeIn(left, lag_ratio=0.1))
-            vo.wait_until("a")
             self.play(FadeIn(right, lag_ratio=0.15))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(GrowArrow(arr), FadeIn(al), FadeIn(notes[0]))
             vo.wait_until("c")
@@ -130,14 +130,14 @@ class Assembler(VoiceoverScene):
                      font_size=22, color=GREY_A).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "The second pass encodes. <bookmark mark='a'/> Each line becomes a word: look up the opcode, put each "
-            "register number in its field, and place the constant. <bookmark mark='b'/> A branch to a label stores not "
-            "the label's address but its distance from the branch, counted in instructions. The branch at twenty-four "
-            "goes back to sixteen, so its offset is minus two. Because the distance, not the address, is stored, the "
-            "same machine code works wherever in memory the program is loaded."
+            "register number in its field, and place the constant. <bookmark mark='b'/> A branch to a label stores not"
+            " the label's address but its distance from the branch, counted in instructions. The branch at twenty-four"
+            " goes back to sixteen, so its offset is minus two. Because the distance, not the address, is stored, this"
+            " internal branch keeps working if the whole block moves together and its relative layout stays fixed."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head),
+                      LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in rows], lag_ratio=0.2), run_time=1.6)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in rows], lag_ratio=0.2), run_time=2.4)
             vo.wait_until("b")
             self.play(Indicate(rows[bnez], color=YES), FadeIn(wb))
             self.play(Write(calc))
@@ -176,8 +176,8 @@ class Assembler(VoiceoverScene):
             "which is exactly why the architecture has one."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.25), run_time=3.0)
+            vo.wait_until("a")
             self.play(FadeIn(side[0]), FadeIn(side[1]))
             vo.wait_until("b")
             self.play(FadeIn(side[2]), FadeIn(side[3]))
@@ -201,30 +201,31 @@ class Assembler(VoiceoverScene):
                      Arrow(ob.get_right(), ln.get_left() + DOWN * 0.2, buff=0.1, color=GREY_B),
                      Arrow(ln.get_right(), img.get_left(), buff=0.1, color=GREY_B))
         tags = VGroup(label(r"assemble \\ each file", font_size=18, color=GREY_B).next_to(arr[0], UP, buff=0.05),
-                      label(r"fill the holes, \\ fix absolute addresses", font_size=18, color=GREY_B).next_to(
+                      label("patch symbol references \\\\ and relocations", font_size=18, color=GREY_B).next_to(
                           ln, UP, buff=0.15))
         notes = VGroup(
-            label(r"branches and \texttt{jal} are PC-relative: \ they work wherever the code lands", font_size=22,
+            label("PC-relative references stay fixed only when source and target move together", font_size=22,
                   color=GREY_A),
-            label(r"\texttt{la} builds an absolute address: \ the linker must patch it \ (a \textit{relocation})",
+            label("cross-object calls and absolute addresses can need relocation; \\ diagram: conventional toolchain",
                   font_size=22, color=GREY_A),
-            label(r"the loader copies the image into memory and sets \texttt{pc}; \ Pebble's is three lines of Python, "
-                  r"\ EDSAC's was wired into its initial orders", font_size=22, color=GREY_B),
+            label("Pebble currently assembles one image directly; \\ its loader copies it and sets \\texttt{pc}", font_size=22, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "Real programs are written in many files. <bookmark mark='a'/> Each file is assembled on its own, into an "
             "object file: the machine code, plus a list of the labels it defines, plus holes where it uses a label "
             "defined somewhere else, like a call to a print routine in another file. <bookmark mark='b'/> A linker "
-            "joins the object files into one image, decides where each piece goes, and fills in the holes. Branches "
-            "and jumps need no help, because they store distances. But an absolute address, the kind la builds, must "
-            "be patched once the linker knows where things landed: that patch is called a relocation. "
-            "<bookmark mark='c'/> Finally a loader copies the image into memory and points the program counter at its "
-            "first instruction. Pebble's loader is three lines of Python; EDSAC's was its initial orders, wired into "
-            "the machine. Part 11 returns to linking, and Part 41 to building programs from thousands of files."
+            "joins the object files into one image, decides where each piece goes, and fills in the holes. A relative "
+            "branch within a block needs no change when that block moves as a unit. A call to another object can still"
+            " need its relative offset patched, because the caller and target may move separately. Absolute addresses,"
+            " the kind la builds, also need patching. These fixes are relocations. The diagram explains a conventional"
+            " object-file workflow; Pebble's current assembler builds a single image directly. <bookmark mark='c'/> "
+            "Finally a loader copies the image into memory and points the program counter at its first instruction. "
+            "Pebble's loader is three lines of Python; EDSAC's was its initial orders, wired into the machine. Part 11"
+            " returns to linking, and Part 41 to building programs from thousands of files."
         ) as vo:
             self.play(FadeIn(head), FadeIn(a), FadeIn(b))
-            vo.wait_until("a")
             self.play(GrowArrow(arr[0]), GrowArrow(arr[1]), FadeIn(oa), FadeIn(ob), FadeIn(tags[0]))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(GrowArrow(arr[2]), GrowArrow(arr[3]), FadeIn(ln), FadeIn(tags[1]))
             self.play(GrowArrow(arr[4]), FadeIn(img))

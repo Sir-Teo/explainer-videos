@@ -48,8 +48,8 @@ class Cost(VoiceoverScene):
             "takes one cycle. The price is that the cycle must be long enough for the slowest instruction of all."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(Write(law), run_time=2.0)
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(b, shift=UP * 0.1) for b in braces], lag_ratio=0.4), run_time=2.0)
             vo.wait_until("c")
@@ -70,27 +70,28 @@ class Cost(VoiceoverScene):
         bar.arrange(RIGHT, buff=0).move_to(UP * 1.2)
         bl = label(r"a load's path through the cycle", font_size=22, color=GREY_A).next_to(bar, UP, buff=0.15)
         nums = VGroup(
-            label(rf"the netlist alone: \ deepest path {cp['depth']} gates; \ settled, \ at most {cp['settle_max']} "
+            label(rf"netlist: \ depth {cp['depth']}; \ sampled maximum {cp['settle_max']} "
                   r"gate delays", font_size=24, color=GREY_A),
-            label(rf"at 10 ps a gate, \ plus the flip-flops' 70 ps: \ {cp['period_ps']} ps, \ about "
+            label(rf"toy logic budget: \ 10 ps per gate + 70 ps registers: \ {cp['period_ps']} ps; "
                   rf"{cp['fmax_ghz']:.1f} GHz", font_size=24, color=CLOCK),
-            label(r"with two real memory accesses inside the cycle, \ each about a nanosecond: \\ well under 1 GHz, \ "
-                  r"and every \texttt{add} waits as long as a \texttt{lw}", font_size=24, color=NO),
+            label("assume two 1 ns accesses: \\ $T=2.63$ ns, \\ $f\\approx380$ MHz \\\\ illustrative budget; \\ not a certified hardware clock", font_size=24, color=NO),
         ).arrange(DOWN, buff=0.3).move_to(DOWN * 1.2)
         with self.voiceover(
             "The slowest instruction is the load. <bookmark mark='a'/> In one cycle it must fetch itself from memory, "
             "be decoded, read a register, add the offset in the ALU, read the data memory, and write the result back. "
-            "<bookmark mark='b'/> The series' library measures the logic part of that path in the netlist itself. "
-            "The deepest chain of gates is fifty-nine long; simulating thousands of random instructions with real gate "
-            "delays, the outputs settle within fifty-six. At ten picoseconds a gate, plus the flip-flop overheads of "
-            "Part 5, that is a cycle of about six hundred and thirty picoseconds. <bookmark mark='c'/> But the two "
-            "memory accesses are in the cycle too, and a real memory takes around a nanosecond. So the single-cycle "
-            "machine runs well under a gigahertz, and an add, which needs neither memory access, waits just as long as "
-            "a load. Part 7 fixes that by cutting the path into pieces."
+            "<bookmark mark='b'/> The series' library measures the logic part of that path in the netlist itself. The "
+            "deepest chain of gates is fifty-nine long; the unit-delay simulation observes at most fifty-six gate "
+            "delays across four thousand and ninety-six sampled inputs. That sample maximum is not a worst-case timing"
+            " proof. For a teaching budget, assume fifty-six ten-picosecond delays and seventy picoseconds of register"
+            " overhead: six hundred and thirty picoseconds before memory. <bookmark mark='c'/> But the two memory "
+            "accesses are in the cycle too, and our budget assumes one nanosecond for each. The assumed total is two "
+            "point six three nanoseconds, or about three hundred and eighty megahertz. This is a model, not a measured"
+            " silicon clock. An add still fetches its instruction, and waits through the cycle budget for a load's "
+            "data access too. Part 7 fixes that by cutting the path into pieces."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(bl),
+                      LaggedStart(*[GrowFromEdge(b, LEFT) for b in bar], lag_ratio=0.4), run_time=2.0)
             vo.wait_until("a")
-            self.play(FadeIn(bl), LaggedStart(*[GrowFromEdge(b, LEFT) for b in bar], lag_ratio=0.4), run_time=2.4)
             vo.wait_until("b")
             self.play(FadeIn(nums[0]))
             self.play(FadeIn(nums[1]))
@@ -134,8 +135,8 @@ class Cost(VoiceoverScene):
             "optimizations Part 13 builds."
         ) as vo:
             self.play(FadeIn(head), FadeIn(lines))
-            vo.wait_until("a")
             self.play(FadeIn(mem), FadeIn(ptr))
+            vo.wait_until("a")
             for k in range(1, 5):
                 self.play(ptr.animate.next_to(mem[k], UP, buff=0.04), run_time=0.3)
             vo.wait_until("b")
@@ -180,9 +181,9 @@ class Cost(VoiceoverScene):
             "programs mostly move data, compare it and branch, and that is what the hardware should do quickly."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(cap), LaggedStart(*[GrowFromEdge(b[1], LEFT) for b in bars], lag_ratio=0.1),
                       LaggedStart(*[FadeIn(b[0]) for b in bars], lag_ratio=0.1), run_time=2.4)
+            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(b[2]) for b in bars], lag_ratio=0.05))
             vo.wait_until("b")
             self.play(Indicate(bars[0], color=YES))

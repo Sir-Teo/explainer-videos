@@ -46,9 +46,9 @@ class Hook(VoiceoverScene):
             "<bookmark mark='c'/> The question for this part is what turns a pile of parts into a machine that runs "
             "programs."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tw))
+            self.play(FadeIn(head), FadeIn(tw),
+                      LaggedStart(*[FadeIn(p, shift=UP * 0.2) for p in parts], lag_ratio=0.35), run_time=2.4)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(p, shift=UP * 0.2) for p in parts], lag_ratio=0.35), run_time=2.4)
             vo.wait_until("b")
             self.play(FadeIn(cpu), FadeIn(cpu_l))
             self.play(*[p.animate.scale(0.8).move_to(cpu.get_center() + DOWN * 0.3 + RIGHT * (k - 1.5) * 1.95)
@@ -85,19 +85,19 @@ class Hook(VoiceoverScene):
                        label(r"the machine reads, \\ decodes and does \\ one word after another", font_size=24,
                              color=YES)).arrange(DOWN, buff=0.6, aligned_edge=LEFT).to_edge(RIGHT, buff=0.5)
         with self.voiceover(
-            "The answer is an idea from 1945, and it is the subject of this part. <bookmark mark='a'/> The program is "
-            "not wired in. It sits in memory, as numbers, beside the data it works on. These words are Part 1's "
-            "Euclid, the algorithm that found the greatest common divisor by repeated subtraction, written as Pebble "
-            "instructions. <bookmark mark='b'/> A register called the program counter holds the address of the next "
-            "instruction. The machine fetches that word, decodes what it asks for, does it, and moves on. "
-            "<bookmark mark='c'/> Because the program is just numbers in memory, a machine can load a new one in a "
-            "moment, and a program can even read or write programs. That single fact is why one machine can be a "
-            "word processor in the morning and a game in the afternoon."
+            "The answer is the stored-program idea, developed during the 1940s and explored in this part. <bookmark "
+            "mark='a'/> The program is not wired in. It sits in memory, as numbers, beside the data it works on. These"
+            " words are Part 1's Euclid, the algorithm that found the greatest common divisor by repeated subtraction,"
+            " written as Pebble instructions. <bookmark mark='b'/> A register called the program counter holds the "
+            "address of the next instruction. The machine fetches that word, decodes what it asks for, does it, and "
+            "moves on. <bookmark mark='c'/> Because the program is just numbers in memory, a machine can load a new "
+            "one in a moment, and a program can even read or write programs. That single fact is why one machine can "
+            "be a word processor in the morning and a game in the afternoon."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(mem), FadeIn(ml), LaggedStart(*[FadeIn(r[1]) for r in rows], lag_ratio=0.08),
                       run_time=1.6)
+            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r[0]) for r in rows], lag_ratio=0.05),
                       LaggedStart(*[FadeIn(r[2], shift=LEFT * 0.1) for r in rows], lag_ratio=0.08), run_time=1.6)
             vo.wait_until("b")
@@ -121,24 +121,24 @@ class Hook(VoiceoverScene):
             label(rf"a 32-bit processor: \ {fmt(cp['gates'])} gates \ and {cp['flip_flops']} flip-flops", font_size=30,
                   color=YES),
             label(r"its own instruction set, \ assembler \ and programs", font_size=30, color=CODE),
-            label(r"checked against an emulator: \ 300 random programs, \ every register and byte equal", font_size=28,
+            label("300 base-ISA programs: \\ final registers, memory, pc and step count agree", font_size=28,
                   color=GREY_A),
-            label(r"it runs a Turing machine; \ a Turing machine could run it", font_size=30, color=FUNC),
+            label("a bounded Turing-machine simulation; \\ a Turing machine can simulate Pebble", font_size=30, color=FUNC),
             label(rf"and the Job: \ ${sci(job['corpus']['cycles'], 3)}$ \ cycles \ for thirty novels", font_size=30,
                   color=COST),
         ).arrange(DOWN, buff=0.38).move_to(DOWN * 0.1)
         with self.voiceover(
-            "Here is where we are going. <bookmark mark='a'/> A thirty-two-bit processor of about eight thousand gates "
-            "and five hundred flip-flops, with its own instruction set, an assembler, and programs written for it. "
-            "<bookmark mark='b'/> Every piece is checked: the gate-level machine and a fast emulator run three hundred "
-            "random programs and end with every register and every byte of memory equal. <bookmark mark='c'/> It "
-            "will run a Turing machine, closing a loop from Part 1, and it will run the Job, the word count over "
-            "thirty novels that the series carries from part to part. Version zero is honest and naive, and it costs "
-            "a hundred and seven billion cycles."
+            "Here is where we are going. <bookmark mark='a'/> A thirty-two-bit processor of about eight thousand gates"
+            " and five hundred flip-flops, with its own instruction set, an assembler, and programs written for it. "
+            "<bookmark mark='b'/> Here is one important check: the gate-level machine and a fast emulator run three "
+            "hundred random programs and end with every register and every byte of memory equal. <bookmark mark='c'/> "
+            "It will simulate a Turing-machine example within its finite memory, returning to Part 1, and it will run "
+            "the Job, the word count over thirty novels that the series carries from part to part. Version zero is "
+            "honest and naive, and it costs a hundred and seven billion cycles."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(facts[0]), FadeIn(facts[1]))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(facts[2]))
             vo.wait_until("c")
@@ -157,7 +157,7 @@ class Hook(VoiceoverScene):
             r"the datapath and the control unit, \ built from Parts 3--5 \ and verified",
             r"the assembler, \ first programs, \ memory-mapped devices",
             r"the Job, version 0, \ and the first row of the ledger",
-            r"universality closed, \ code as data, \ interrupts, \ and the machine counted",
+            "bounded simulation, \\ code as data, \\ interrupts, \\ and the machine counted",
         ], font_size=26).move_to(DOWN * 0.2)
         with self.voiceover(
             "This is Part 6 of Computer Science, Built, the last part of the first act. <bookmark mark='a'/> In this "

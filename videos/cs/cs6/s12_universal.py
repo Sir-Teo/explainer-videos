@@ -55,23 +55,25 @@ class Universal(VoiceoverScene):
                   font_size=24, color=YES),
             label(rf"{fmt(b3['pebble_steps'])} Pebble instructions, \\ most of them counting the ones at the end",
                   font_size=20, color=GREY_A),
-            label(r"the same on the gate-level machine", font_size=20, color=GREY_A),
+            label("3-state example also checked at gate level", font_size=20, color=GREY_A),
             label(rf"the 4-state champion: \ {d['4']['steps']} steps, \ {d['4']['ones']} ones", font_size=22,
                   color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(RIGHT, buff=0.4).shift(DOWN * 1.5)
         with self.voiceover(
-            "Part 1 claimed that any reasonable computer can do exactly what a Turing machine can do, no more and no "
-            "less. Pebble is a reasonable computer, so let us check both directions. <bookmark mark='a'/> First, "
-            "Pebble can run a Turing machine. The tape is a row of bytes in memory, the head is a pointer, and the "
-            "machine's rules are a table of words. <bookmark mark='b'/> The interpreter is a loop of fifteen "
-            "instructions: load the symbol under the head, look up the rule for this state and symbol, write, move the "
-            "pointer left or right, and change state. <bookmark mark='c'/> Fed the three-state busy beaver from Part "
-            "1, it stops after twenty-one steps with five ones on the tape, exactly as before, on the emulator and on "
-            "the gates alike. The four-state champion takes a hundred and seven steps and leaves thirteen."
+            "Part 1 connected ideal computers with Turing machines. Our fixed thirty-two-bit Pebble has finite memory,"
+            " so it is a finite-state machine, not an unbounded universal computer. Let us demonstrate a bounded "
+            "simulation and then state the idealization needed. <bookmark mark='a'/> First, Pebble can run a Turing "
+            "machine. The tape is a row of bytes in memory, the head is a pointer, and the machine's rules are a table"
+            " of words. <bookmark mark='b'/> The interpreter is a loop of fifteen instructions: load the symbol under "
+            "the head, look up the rule for this state and symbol, write, move the pointer left or right, and change "
+            "state. <bookmark mark='c'/> Fed the three-state busy beaver from Part 1, it stops after twenty-one steps "
+            "with five ones on the tape, exactly as before, on the emulator and on the gates alike. On the emulator, "
+            "the four-state champion takes a hundred and seven steps and leaves thirteen; that larger case is not run "
+            "at gate level here."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(cells), FadeIn(syms), FadeIn(hd), FadeIn(st), FadeIn(tl))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(rules, lag_ratio=0.1))
             vo.wait_until("c")
@@ -112,25 +114,25 @@ class Universal(VoiceoverScene):
             label(r"each Pebble instruction: \ a finite, \ if long, \ sequence of Turing-machine steps", font_size=24,
                   color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).move_to(DOWN * 0.9)
-        concl = label(r"so they compute exactly the same functions: \ the Church--Turing thesis, \ checked on our own "
-                      r"machine", font_size=26, color=YES).to_edge(DOWN, buff=0.35)
-        diff = label(r"the difference is speed \ (and Pebble's memory is finite: \ a megabyte, \ not an infinite tape)",
+        concl = label("fixed Pebble: \\ finite state; \\ a Turing machine can simulate it", font_size=26, color=YES).to_edge(DOWN, buff=0.35)
+        diff = label("universality needs unbounded effective storage and addressing; \\ examples do not prove the thesis",
                      font_size=20, color=GREY_B).next_to(concl, UP, buff=0.15)
         with self.voiceover(
-            "The other direction is an argument rather than a demonstration, but it is short. "
-            "<bookmark mark='a'/> Write Pebble's entire state on a Turing machine's tape: the program counter, the "
-            "fifteen registers and all of memory, in binary. <bookmark mark='b'/> To run one Pebble instruction, the "
-            "Turing machine walks the tape to find the word the program counter points to, comparing addresses bit by "
-            "bit. Decoding it is a finite table, which a finite set of states can hold. Adding, comparing and copying "
-            "words are the kind of machines Part 1 built, like the binary adder. So each Pebble instruction becomes a "
-            "long but finite run of Turing-machine steps. <bookmark mark='c'/> Each can imitate the other. They "
-            "compute exactly the same functions; the difference is only speed, and that Pebble's memory is finite. "
-            "This is the Church–Turing thesis, checked on a machine we built ourselves, and it closes the loop that "
-            "Part 1 opened."
+            "The other direction is an argument rather than a demonstration, but it is short. <bookmark mark='a'/> "
+            "Write Pebble's entire state on a Turing machine's tape: the program counter, the fifteen registers and "
+            "all of memory, in binary. <bookmark mark='b'/> To run one Pebble instruction, the Turing machine walks "
+            "the tape to find the word the program counter points to, comparing addresses bit by bit. Decoding it is a"
+            " finite table, which a finite set of states can hold. Adding, comparing and copying words are the kind of"
+            " machines Part 1 built, like the binary adder. So each Pebble instruction becomes a long but finite run "
+            "of Turing-machine steps. <bookmark mark='c'/> A Turing machine can therefore simulate fixed Pebble. The "
+            "reverse claim needs an ideal machine family with unbounded effective storage and addressing, not merely "
+            "more RAM behind fixed thirty-two-bit addresses. Such an ideal interpreter can simulate any finite prefix "
+            "of a Turing-machine run. The examples illustrate the connection; they do not prove the Church–Turing "
+            "thesis."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(t) for t in tape], lag_ratio=0.3), FadeIn(tl))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(s_) for s_ in steps], lag_ratio=0.5), run_time=4.0)
             vo.wait_until("c")
@@ -144,10 +146,10 @@ class Universal(VoiceoverScene):
         j = load("job")
         g_rate = j["paragraph"]["steps"] / j["paragraph"]["seconds"]
         e_rate = j["chapter"]["steps"] / j["chapter"]["seconds"]
-        head = label(r"Three Pebbles, \ one program", font_size=38).to_edge(UP, buff=0.35)
+        head = label("Two measured methods, \\ one clock projection", font_size=38).to_edge(UP, buff=0.35)
         rows = [(r"gate by gate \ (the netlist, compiled to C)", g_rate, YES),
                 (r"the emulator \ (Python, an \texttt{if} per opcode)", e_rate, CODE),
-                (r"a silicon Pebble \ at 380 MHz \ (problem 3)", 3.8e8, HEAD)]
+                ("assumed silicon clock \\\\ 380 MHz (problem 3)", 3.8e8, HEAD)]
         lo, hi = 2, 9
         x0, width = -0.4, 5.0
         bars = VGroup()
@@ -160,21 +162,21 @@ class Universal(VoiceoverScene):
             vl = label(rf"{fmt(rate)} / s", font_size=19, color=GREY_A).next_to(r, RIGHT, buff=0.12)
             bars.add(VGroup(nl, r, vl))
         notes = VGroup(
-            label(r"every one gives the same answer, \ to the last bit and the last step", font_size=24, color=YES),
+            label("the shared paragraph: \\ gate netlist and emulator agree on output and steps", font_size=24, color=YES),
             label(r"QEMU runs ARM programs on x86 this way; \ console emulators run old games on new phones",
                   font_size=22, color=GREY_A),
-            label(r"each step down costs a factor of hundreds: \ the price of simulating, \ not of computing",
+            label("host-dependent measured rates; \\ hypothetical hardware bar is not a measurement",
                   font_size=22, color=GREY_B),
         ).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Universality has a very practical face: emulation. In this part, the same Pebble program has run on "
-            "three different machines. <bookmark mark='a'/> The gate-level netlist, every gate computed in C, manages "
-            "about two thousand instructions a second. The Python emulator, which just follows the instruction set's "
-            "rules, runs almost a million. A real silicon Pebble, at the clock rate of problem 3, would run hundreds of "
-            "millions. <bookmark mark='b'/> They print the same output in the same number of steps, every time. "
-            "That is how QEMU runs ARM programs on an x86 laptop, and how a phone runs games written for consoles of "
-            "the 1980s. <bookmark mark='c'/> Each layer of simulation costs a factor of hundreds in speed, and nothing "
-            "in what can be computed."
+            "Universality has a very practical face: emulation. Here are two measured execution methods and one "
+            "hypothetical hardware projection. <bookmark mark='a'/> The bars show host-dependent rates from the cached"
+            " paragraph and chapter runs: a C-evaluated gate netlist and a Python instruction emulator. The third bar "
+            "assumes the clock budget of problem 3. It is a projection, not a third machine we ran. <bookmark "
+            "mark='b'/> On the paragraph that both actually ran, output and step count agree. That is how QEMU runs "
+            "ARM programs on an x86 laptop, and how a phone runs games written for consoles of the 1980s. <bookmark "
+            "mark='c'/> These implementations have very different speeds. The test establishes agreement on the "
+            "example, rather than a universal speed ratio or proof of equivalence."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

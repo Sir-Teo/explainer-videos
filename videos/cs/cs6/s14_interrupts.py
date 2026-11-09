@@ -44,21 +44,22 @@ class Interrupts(VoiceoverScene):
         steps = VGroup(
             label(r"the device raises a signal; \ at the end of the current instruction the processor saves \texttt{pc}, "
                   r"\\ jumps to a \textit{handler}, \ and returns to exactly where it was", font_size=22, color=GREY_A),
-            label(r"DYSEAC (1954) \ was the first to wait for its devices this way", font_size=20, color=HIST),
+            label("DYSEAC (1954): \\ an early interrupt-capable system", font_size=20, color=HIST),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Polling asks a device again and again whether anything has happened. <bookmark mark='a'/> For a keyboard, "
-            "that means checking thousands of times for every key, and doing nothing useful in between. "
-            "<bookmark mark='b'/> The alternative turns it round. The processor gets on with its work, and when the "
-            "key is pressed, the device raises a signal. At the end of the instruction it is running, the processor "
-            "saves the program counter, jumps to a piece of code called a handler, deals with the key, and returns to "
-            "exactly where it was, as though nothing had happened. <bookmark mark='c'/> The idea appeared in the "
-            "mid-1950s, first in the DYSEAC of 1954, and it changed what computers could be: without interrupts there "
-            "is no operating system juggling many programs, which is Part 31's subject."
+            "Polling asks a device again and again whether anything has happened. <bookmark mark='a'/> For a keyboard,"
+            " that means checking thousands of times for every key, and doing nothing useful in between. <bookmark "
+            "mark='b'/> The alternative turns it round. The processor gets on with its work, and when the key is "
+            "pressed, the device raises a signal. At the end of the instruction it is running, the processor saves the"
+            " program counter, jumps to a piece of code called a handler, deals with the key, and returns to exactly "
+            "where it was, as though nothing had happened. <bookmark mark='c'/> The idea appeared in the mid-1950s, "
+            "with early systems including the DYSEAC of 1954, and it changed what computers could be: interrupts let "
+            "an operating system respond to devices and regain control without relying only on polling, which is Part "
+            "31's subject."
         ) as vo:
             self.play(FadeIn(head), Create(line1), Create(line2), FadeIn(l1), FadeIn(l2))
-            vo.wait_until("a")
             self.play(LaggedStart(*[Create(p) for p in polls], lag_ratio=0.03), run_time=2.0)
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(GrowFromEdge(work, LEFT), FadeIn(wl), run_time=1.2)
             self.play(FadeIn(keymark))
@@ -83,9 +84,9 @@ class Interrupts(VoiceoverScene):
             label(r"two new registers: \ where to return, \ and why we came", font_size=22, color=GREY_A),
             label(r"Pebble reserves opcodes for \texttt{ecall}, \ \texttt{eret}, \ \texttt{csrr} and "
                   r"\texttt{csrw} \ (Part 31)", font_size=22, color=GREY_A),
-            label(r"\textit{precise}: \ every earlier instruction finished, \ no later one started", font_size=24,
+            label("precise: \\ earlier instructions committed; \\\\ no later architectural effects visible", font_size=24,
                   color=HEAD),
-            label(r"trivial here, \ where one instruction runs at a time; \\ hard when five overlap \ (Parts 7 and 8)",
+            label("single cycle: \\ a simpler boundary, \\ still needs control; \\\\ overlap and speculation make recovery harder (Parts 7 and 8)",
                   font_size=22, color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(RIGHT * 3.0 + DOWN * 0.2)
         with self.voiceover(
@@ -95,10 +96,11 @@ class Interrupts(VoiceoverScene):
             "any registers it is going to use, does its work, restores them, and runs a return-from-exception "
             "instruction that puts the saved program counter back. <bookmark mark='b'/> Pebble's instruction set "
             "already reserves the opcodes for this, ready for Part 31. <bookmark mark='c'/> The subtle requirement is "
-            "that the interrupt be precise: every instruction before the saved point has completely finished, and "
-            "none after it has started, so the program can resume as if nothing happened. On a machine that runs one "
-            "instruction at a time this is free. On a pipeline with five instructions in flight, or an out-of-order "
-            "core with a hundred, it is one of the hardest things to get right."
+            "that the interrupt be precise: every instruction before the saved point has completely finished, and no "
+            "later instruction has made an architectural change visible, so the program can resume as if nothing "
+            "happened. A single-cycle machine makes this boundary simpler, though it still needs interrupt-control "
+            "hardware and correct saved-state handling. On a pipeline with five instructions in flight, or an "
+            "out-of-order core with a hundred, it is one of the hardest things to get right."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -119,7 +121,7 @@ class Interrupts(VoiceoverScene):
         rows = VGroup(*[VGroup(label(a, font_size=24, color=c), label(b, font_size=22, color=GREY_A)).arrange(
             RIGHT, buff=0.5) for a, b, c in (
             (r"illegal instruction", r"Pebble's control unit already flags it: \ the \texttt{ill} signal", NO),
-            (r"divide by zero", r"when Part 7 adds a divider", NO),
+            (r"divide by zero", r"Pebble choice; RISC-V defines a result", NO),
             (r"page fault", r"memory that isn't there yet: \ the operating system fetches it \ (Part 32)", HEAD),
             (r"system call", r"a program asks the operating system for a service, \ on purpose \ (Part 31)", YES),
         )]).arrange(DOWN, aligned_edge=LEFT, buff=0.4).move_to(DOWN * 0.1)
@@ -129,16 +131,18 @@ class Interrupts(VoiceoverScene):
                      color=GREY_B).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "The same mechanism handles events that come from inside. <bookmark mark='a'/> An instruction the machine "
-            "does not understand: Pebble's control unit already raises a signal for that, and today the machine "
-            "simply stops. A division by zero, once Part 7 adds a divider. <bookmark mark='b'/> A load from memory "
-            "that has been moved to disk, which the operating system quietly fetches before re-running the load. And a "
-            "system call, a deliberate interrupt by which a program asks the operating system to do something on its "
-            "behalf. <bookmark mark='c'/> These are called exceptions or traps, and they are how an operating system "
-            "takes control. Until Part 31, Pebble has none to return to, so it stops."
+            "does not understand: Pebble's control unit already raises a signal for that, and today the machine simply"
+            " stops. Pebble's emulator also stops on division by zero; an operating system could handle such an event."
+            " That is a Pebble design choice: RISC-V integer division instead defines a result without a "
+            "divide-by-zero trap. <bookmark mark='b'/> A load from memory that has been moved to disk, which the "
+            "operating system quietly fetches before re-running the load. And a system call, a synchronous exception "
+            "by which a program asks the operating system to do something on its behalf. <bookmark mark='c'/> These "
+            "are called exceptions or traps, and they are how an operating system takes control. Until Part 31, Pebble"
+            " has none to return to, so it stops."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(rows[0]))
+            vo.wait_until("a")
             self.play(FadeIn(rows[1]))
             vo.wait_until("b")
             self.play(FadeIn(rows[2]))

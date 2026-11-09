@@ -43,17 +43,17 @@ class Idea(VoiceoverScene):
         descs = VGroup(*[label(rf"{['1', '2', '3', '4'][k]}. \ " + d, font_size=27, color=names[k][1])
                          for k, (_, _, d) in enumerate(names)]).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
         descs.move_to(RIGHT * 3.4 + DOWN * 0.3)
-        rate = label(r"a modern core: \ several billion times a second, \ for years", font_size=26,
+        rate = label("an active modern core can retire billions of instructions per second", font_size=26,
                      color=HEAD).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Every stored-program computer does one thing, over and over. <bookmark mark='a'/> Fetch: read the word in "
-            "memory at the address held in the program counter. <bookmark mark='b'/> Decode: work out which "
+            "Every stored-program computer does one thing, over and over. <bookmark mark='a'/> Fetch: read the word in"
+            " memory at the address held in the program counter. <bookmark mark='b'/> Decode: work out which "
             "instruction that word is, and which registers and constants it names. <bookmark mark='c'/> Execute: do "
-            "it, an addition, a comparison, a load from memory or a store to it, and write the result. "
-            "<bookmark mark='d'/> Next: move the program counter on to the following word, or, if the instruction "
-            "was a jump or a branch that is taken, to somewhere else. Then start again. <bookmark mark='e'/> Your "
-            "phone's processor runs this loop billions of times a second, every second it is switched on. Everything "
-            "else in this series, from compilers to databases to the cloud, is built on top of it."
+            "it, an addition, a comparison, a load from memory or a store to it, and write the result. <bookmark "
+            "mark='d'/> Next: move the program counter on to the following word, or, if the instruction was a jump or "
+            "a branch that is taken, to somewhere else. Then start again. <bookmark mark='e'/> An active modern core "
+            "can retire billions of instructions per second, overlapping much of this work; idle cores may sleep. "
+            "Everything else in this series, from compilers to databases to the cloud, is built on top of it."
         ) as vo:
             self.play(FadeIn(head))
             for k, mk in enumerate("abcd"):
@@ -120,8 +120,8 @@ class Idea(VoiceoverScene):
             "program counter happens to reach them."
         ) as vo:
             self.play(FadeIn(head), FadeIn(frame), FadeIn(fl), FadeIn(mem), FadeIn(rl), FadeIn(rg))
-            vo.wait_until("a")
             self.play(GrowArrow(pc_arrow))
+            vo.wait_until("a")
             vo.wait_until("b")
             for k, (r_, v) in enumerate((("a0", 5), ("a1", 7))):
                 self.play(Indicate(mem[k], color=YES), run_time=0.6)
@@ -152,15 +152,15 @@ class Idea(VoiceoverScene):
         with self.voiceover(
             "The list of instructions a machine understands, and exactly what each one does, is its instruction set "
             "architecture. <bookmark mark='a'/> It is a contract. Above it, compilers and programs rely only on what "
-            "the instructions promise. <bookmark mark='b'/> Below it, the hardware is free to keep the promise any way "
-            "it likes. This part builds the simplest machine that does: one instruction per clock cycle. Part 7 "
-            "overlaps instructions like an assembly line, and Part 8 runs them out of order. "
-            "<bookmark mark='c'/> All three run exactly the same programs, which is why an instruction set can "
-            "outlive the hardware that first implemented it by decades: x86 software from 1978 still runs today."
+            "the instructions promise. <bookmark mark='b'/> Below it, the hardware is free to keep the promise any way"
+            " it likes. This part builds the simplest machine that does: one instruction per clock cycle. Part 7 "
+            "overlaps instructions like an assembly line, and Part 8 runs them out of order. <bookmark mark='c'/> All "
+            "three run exactly the same programs, which is why an instruction set can outlive the hardware that first "
+            "implemented it by decades: much early x86 code can still run in a suitable compatibility environment."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(isa), FadeIn(sw))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(h, shift=UP * 0.2) for h in hw], lag_ratio=0.3), run_time=1.8)
             vo.wait_until("c")
@@ -191,8 +191,8 @@ class Idea(VoiceoverScene):
             "so most of them never make the trip at all."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cpu), FadeIn(mem))
-            vo.wait_until("a")
             self.play(Create(bus), FadeIn(bl))
+            vo.wait_until("a")
             for k in range(6):
                 d = Dot(radius=0.09, color=CODE if k % 2 == 0 else DATA).move_to(bus[k % 2].get_end() if k % 2 == 0
                                                                                     else bus[1].get_end())

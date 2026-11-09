@@ -48,14 +48,14 @@ class Outro(VoiceoverScene):
         job = load("job")
         led = ledger_table([{"part": 6, "label": r"Pebble", "seconds": job["ledger"][0]["seconds"]}], font_size=18,
                            row_h=0.4, label_width=1.6, bar_width=3.0)
-        tm = MathTex(r"\text{Pebble} \leftrightarrow \text{Turing}", font_size=32, color=FUNC)
+        tm = MathTex("\\text{bounded TM simulation}", font_size=32, color=FUNC)
         tiles = Group(
             tile(wb, r"an instruction set, \ bit by bit", CODE),
             tile(dp, r"the single-cycle datapath", YES),
             tile(grid, r"control: \ a truth table", CTRL),
             tile(st, r"Euclid, \ gate by gate", DATA),
             tile(led, r"the Job: \ ledger row 0", COST),
-            tile(tm, r"universality, \ closed", FUNC),
+            tile(tm, "bounded simulation", FUNC),
         ).arrange_in_grid(rows=2, cols=3, buff=(0.35, 0.35)).move_to(DOWN * 0.2)
         head = label(rf"Part {PART}: \ The Stored-Program Computer", font_size=38).to_edge(UP, buff=0.3)
         with self.voiceover(
@@ -116,18 +116,14 @@ class Outro(VoiceoverScene):
         ps = problem_set([
             r"Encode \texttt{sub t0, a1, a2} \ and \ \texttt{sw t0, -8(sp)} \ in hexadecimal, \ field by field.",
             r"Write the control word for \texttt{jalr ra, 4(t1)}: \ which of the 20 signals are 1?",
-            r"Instruction and data memory take 1 ns each; \ the logic path is 56 gate delays of 10 ps, \ plus 70 ps of "
-            r"flip-flop overhead. \ What is $f_{max}$? \ How much faster could a machine run that never touched data "
-            r"memory?",
+            "Assume a worst-case teaching budget: \\ two 1 ns memories, \\ 560 ps logic, \\ 70 ps registers. \\ What clock does this model allow? \\ Omit the data access and compare.",
             r"Write a Pebble program that reverses a zero-terminated string in place. \ How many instructions does it "
             r"run for a string of $n$ letters?",
             r"Write a program that turns one of its own \texttt{beq} instructions into a \texttt{bne}. \ Why does this "
             r"work on single-cycle Pebble, \ and why might it fail on a pipeline?",
             r"\textit{Build.} \ Change \texttt{JOB\_V0} so that a word that is found swaps places with the entry above "
             r"it. \ Run both versions on chapter 1 with the emulator: \ how many instructions does the change save?",
-            r"$\bigstar$ \textit{Research.} \ Change \texttt{random\_program} so that all nine planted bugs of chapter "
-            r"15 are caught in 2{,}000 programs, \ without naming any of them. \ Open: \ a test generator with a proof of "
-            r"what it covers.",
+            "$\\bigstar$ \\textit{Research.} \\ Add boundary-value generation; \\ rerun all nine mutants. \\ Define operand classes and demonstrate coverage; \\ state what remains unproved.",
         ], font_size=22)
         with self.voiceover(
             "Seven problems, with full solutions in the part's notes. Pause on any of them. The sixth is a build "

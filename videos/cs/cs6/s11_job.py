@@ -32,7 +32,9 @@ class Job(VoiceoverScene):
     def algorithm(self):
         j = load("job")
         para = j["paragraph"]["text"]
-        words = re.findall(r"[a-z]+", para.lower())[:14]
+        # Eight words include both insertion and a repeated "a", within the
+        # aligned lookup explanation. More rows overran the next speech cue.
+        words = re.findall(r"[a-z]+", para.lower())[:8]
         head = label(r"Count the words: \ the simplest way", font_size=38).to_edge(UP, buff=0.35)
         tape_txt = para[:58]
         tape = VGroup(*[Text(ch if ch != " " else "·", font="DejaVu Sans Mono", font_size=20,
@@ -63,8 +65,8 @@ class Job(VoiceoverScene):
             "times. No sorting, no hashing, nothing clever: Parts 16 and 17 will supply the clever versions."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tape), FadeIn(tl))
-            vo.wait_until("a")
             self.play(FadeIn(table_head), FadeIn(cur), FadeIn(side[0]))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(side[1]))
             for k, w in enumerate(words):
@@ -77,13 +79,16 @@ class Job(VoiceoverScene):
                     ptr.next_to(first_row, LEFT, buff=0.15)
                     self.add(ptr)
                     for i in range(min(stop + (1 if hit else 0), len(entries))):
-                        self.play(ptr.animate.next_to(table_rows[i], LEFT, buff=0.15), run_time=0.08 if k > 4 else 0.2)
+                        self.play(ptr.animate.next_to(table_rows[i], LEFT, buff=0.15),
+                                  run_time=1 / 15 if k > 4 else 2 / 15)
                 if hit:
                     counts[w] += 1
                     i = entries.index(w)
                     row = table_rows[i]
                     nc = mono(str(counts[w]), 20, YES).move_to(row[1])
-                    self.play(Transform(row[1], nc), Indicate(row, color=YES), run_time=0.35)
+                    # A parent-row animation would overwrite the count's
+                    # simultaneous Transform. Highlight only the word label.
+                    self.play(Transform(row[1], nc), Indicate(row[0], color=YES), run_time=0.35)
                 else:
                     entries.append(w)
                     counts[w] = 1
@@ -122,9 +127,9 @@ class Job(VoiceoverScene):
             "letters. The whole program, reading, the table, and printing the counts in decimal by repeated "
             "subtraction, since Pebble has no divide instruction yet, is about a hundred lines."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(lines))
+            self.play(FadeIn(head), FadeIn(lines),
+                      LaggedStart(*[Create(b) for b in hb], lag_ratio=0.2), FadeIn(note[0]), run_time=1.5)
             vo.wait_until("a")
-            self.play(LaggedStart(*[Create(b) for b in hb], lag_ratio=0.2), FadeIn(note[0]))
             vo.wait_until("b")
             self.play(FadeIn(note[1]), FadeIn(foot))
         self.wait(0.3)
@@ -144,7 +149,7 @@ class Job(VoiceoverScene):
                          font_size=20, color=GREY_B)),
             VGroup(label(r"the whole first chapter, \ emulator", font_size=24, color=CODE),
                    label(rf"{fmt(c['bytes'])} bytes, \ {fmt(c['steps'])} instructions", font_size=24, color=GREY_A),
-                   label(r"the emulator and the gates agree \\ on every paragraph tried", font_size=20, color=GREY_B)),
+                   label("this paragraph: \\ equal output and step count \\\\ chapter: emulator only", font_size=20, color=GREY_B)),
         )
         for col in cols:
             col.arrange(DOWN, buff=0.15)
@@ -156,15 +161,15 @@ class Job(VoiceoverScene):
         with self.voiceover(
             "Time to run it. <bookmark mark='a'/> The opening paragraph of Pride and Prejudice, six hundred and "
             "thirteen bytes, on the gate-level machine: fifty-three thousand six hundred and sixty-five clock cycles, "
-            "half a minute of simulation, every gate in every cycle. <bookmark mark='b'/> The whole first chapter is "
-            "more than the gates can comfortably do, so it runs on the emulator: four thousand seven hundred bytes, "
-            "eight hundred and twenty-seven thousand instructions. On the paragraph, the two machines print exactly "
-            "the same thing in exactly the same number of steps. <bookmark mark='c'/> And here is what Pebble prints "
-            "for chapter one: you, of, to, a, the. It is a chapter of conversation between Mr and Mrs Bennet."
+            "with every gate evaluated in every cycle; the simulation time shown is specific to the recorded host run."
+            " <bookmark mark='b'/> The whole first chapter is more than the gates can comfortably do, so it runs on "
+            "the emulator: four thousand seven hundred bytes, eight hundred and twenty-seven thousand instructions. On"
+            " the paragraph, the two machines print exactly the same thing in exactly the same number of steps. "
+            "<bookmark mark='c'/> And here is what Pebble prints for chapter one: you, of, to, a, the. It is a chapter"
+            " of conversation between Mr and Mrs Bennet."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(para))
+            self.play(FadeIn(head), FadeIn(para), FadeIn(cols[0]))
             vo.wait_until("a")
-            self.play(FadeIn(cols[0]))
             vo.wait_until("b")
             self.play(FadeIn(cols[1]))
             vo.wait_until("c")
@@ -204,20 +209,21 @@ class Job(VoiceoverScene):
                   r"events in the text", font_size=22, color=GREY_A),
             label(rf"checked on {len(checks)} random passages: \ {exact} of {len(checks)} exactly equal", font_size=24,
                   color=YES),
-            label(r"the events take seconds to count in Python, \\ for any amount of text", font_size=22, color=GREY_A),
+            label("count text events directly; \\ avoid executing every Pebble instruction", font_size=22, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(RIGHT * 3.4 + DOWN * 1.3)
         with self.voiceover(
-            "Thirty novels on the emulator would take months. But we do not need to run them to know exactly how long "
-            "Pebble would take. <bookmark mark='a'/> Every path through the program costs a fixed number of "
-            "instructions: each byte read costs nine, each letter three more, each table entry scanned six, each "
-            "entry of the same length nine more, each matching letter eight. So the total is a sum over events in the "
-            "text, which Python can count directly. <bookmark mark='b'/> The formula is not an estimate. On twenty "
-            "random passages from the novels, it matches the emulator's instruction count exactly, every one, to the "
-            "last instruction."
+            "Running thirty novels instruction by instruction on this Python emulator would be expensive. But we do "
+            "not need to run them to know exactly how long Pebble would take. <bookmark mark='a'/> Every path through "
+            "the program costs a fixed number of instructions: each byte read costs nine, each letter three more, each"
+            " table entry scanned six, each entry of the same length nine more, each matching letter eight. So the "
+            "total is a sum over events in the text, which Python can count directly. <bookmark mark='b'/> The formula"
+            " is not an estimate. On twenty random passages from the novels, it matches the emulator's instruction "
+            "count exactly, every one, to the last instruction. These checks support the path-count derivation; they "
+            "are not a formal proof for every input."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(Write(eq), run_time=2.0)
+            vo.wait_until("a")
             self.play(FadeIn(terms), FadeIn(side[0]))
             vo.wait_until("b")
             self.play(Create(ax), FadeIn(xl), FadeIn(yl), Create(diag), FadeIn(ticks))
@@ -242,32 +248,34 @@ class Job(VoiceoverScene):
             label(rf"{100 * co['share']['scan'] / co['cycles']:.1f}\% of them inside the linear search", font_size=24,
                   color=NO),
         ).arrange(DOWN, buff=0.18).move_to(UP * 1.5)
-        rows = [{"part": 6, "label": r"Pebble, single cycle", "seconds": pr["single cycle"]}] + [
+        rows = [{"part": 6, "label": r"Pebble, assumed clock", "seconds": pr["single cycle"]}] + [
             {"part": p_, "label": t} for p_, t in ((7, r"a pipeline"), (9, r"caches"), (10, r"four cores"),
                                                    (13, r"an optimizing compiler"), (16, r"sort, then count"),
                                                    (17, r"a hash table"))]
         led = ledger_table(rows, shown=1, highlight=(0,), font_size=21, row_h=0.36, label_width=5.0).move_to(DOWN * 1.65)
         proj = VGroup(
-            label(rf"on the Z3's relays: \ {human_time(pr['Z3 relays (5.3 Hz)'])}", font_size=22, color=GREY_A),
-            label(rf"at ENIAC's speed: \ {human_time(pr['ENIAC (5,000 additions per second)'])}", font_size=22,
+            label(rf"rate analogy, \ 5.3/s: \ {human_time(pr['Z3 relays (5.3 Hz)'])}", font_size=22, color=GREY_A),
+            label(rf"rate analogy, \ 5,000/s: \ {human_time(pr['ENIAC (5,000 additions per second)'])}", font_size=22,
                   color=GREY_A),
-            label(rf"single-cycle Pebble, \ {j['clock_mhz']:.0f} MHz: \ {human_time(pr['single cycle'])}", font_size=22,
+            label(rf"assumed Pebble, \ {j['clock_mhz']:.0f} MHz: \ {human_time(pr['single cycle'])}", font_size=22,
                   color=YES),
-        ).arrange(RIGHT, buff=0.6).next_to(facts, DOWN, buff=0.25)
+        ).arrange(RIGHT, buff=0.45).next_to(facts, DOWN, buff=0.25)
         with self.voiceover(
             "So here is version zero on all thirty novels. <bookmark mark='a'/> Twenty-five million bytes; four and a "
             "half million words, of fifty-eight thousand different kinds. Because the table is searched from the top "
-            "every time, the program scans fifteen billion table entries. <bookmark mark='b'/> In total, a hundred and "
-            "seven billion Pebble cycles, more than four thousand per byte of text, and more than ninety-nine percent "
-            "of them inside the linear search. <bookmark mark='c'/> On the Z3's relays, that would take six centuries. "
-            "At ENIAC's speed, eight months. And on a real single-cycle Pebble, whose clock the memories hold to about "
-            "three hundred and eighty megahertz, under five minutes. <bookmark mark='d'/> That is "
-            "the first row of the ledger. Every later row will say what a better machine, or a better idea, buys; "
-            "and the numbers on this screen already hint which will matter more."
+            "every time, the program scans fifteen billion table entries. <bookmark mark='b'/> In total, a hundred and"
+            " seven billion Pebble cycles, more than four thousand per byte of text, and more than ninety-nine percent"
+            " of them inside the linear search. <bookmark mark='c'/> For scale, divide that same Pebble instruction "
+            "count by historical operation rates: at five point three operations per second, six centuries; at five "
+            "thousand, eight months. These are rate illustrations, not ports to the Z3 or ENIAC. Under our assumed "
+            "single-cycle budget of about three hundred and eighty megahertz, the projection is under five minutes; we"
+            " have not built that silicon machine. <bookmark mark='d'/> That is the first row of the ledger. Every "
+            "later row will say what a better machine, or a better idea, buys; and the numbers on this screen already "
+            "hint which will matter more."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(facts[0]))
+            vo.wait_until("a")
             self.play(FadeIn(facts[1]))
             vo.wait_until("b")
             self.play(FadeIn(facts[2]))

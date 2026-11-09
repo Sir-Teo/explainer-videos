@@ -1,11 +1,11 @@
 # Computer Science, Built — Part 6: The Stored-Program Computer
 
 Part 6 of a sixty-one-part course in computer science (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), and the end of Act I. ENIAC was programmed with cables; the EDVAC report put the
-program in memory, beside the data. This part builds that machine, Pebble, from the gates, adders and registers of
+[the syllabus](../SYLLABUS.md)), and the end of Act I. ENIAC was initially programmed with cables; the EDVAC report described
+instructions in memory beside data, drawing on the team’s discussions. This part builds that machine, Pebble, from the gates, adders and registers of
 Parts 3–5: an instruction set designed bit by bit, a single-cycle datapath and its control unit, an assembler, and
 programs. The gate-level CPU is one netlist (`explainer/cs/pebble/cpu.py`), compiled to C (`fast.py`) and checked
-against the instruction-level emulator (`emu.py`) on random programs. It runs Euclid, a Turing machine, and the Job,
+against the instruction-level emulator (`emu.py`) on random programs. It runs Euclid, bounded Turing-machine examples, and the Job,
 version 0, whose exact cycle count for thirty novels is the first row of the ledger. Every number is computed in
 `compute.py`.
 
@@ -29,31 +29,30 @@ version 0, whose exact cycle count for thirty novels is the first row of the led
 * **6. The assembler.** Mnemonics and labels (Kathleen Booth, 1947; EDSAC's initial orders); pass 1 and the symbol
   table; pass 2 and PC-relative offsets; pseudo-instructions and why the zero register makes half of them possible.
 * **7. First programs, gate by gate.** 1 + … + 10 traced on the gate-level machine; Euclid's registers as a
-  staircase over 60 cycles; 300 random programs, both control units, every register and byte equal to the emulator.
+  staircase over 60 cycles; 300 random programs, both control units, all final registers, memory bytes, program counters and step counts equal to the emulator. This checks completed program states, not each instruction boundary or all possible programs.
 * **8. What a program costs.** The iron law (instructions × CPI × cycle time); a load's path through the cycle, the
-  netlist's 59-gate depth and 56-gate settled delay, and why memory makes it far longer; the Job's instruction mix.
+  the netlist's structural depth of 59 and sampled maximum of 56 unit gate delays (4,096 inputs), neither a certified silicon clock nor a worst-case delay proof; an explicit teaching timing budget including memory; the Job's instruction mix.
 * **9. Talking to the world.** Memory-mapped devices (console, tape, cycle counter) and the PDP-11; printing a
   string; polling, and why device addresses must not be cached.
 * **10. The Job, version 0.** Linear search in an unsorted table, animated; the inner loop in assembly (6
   instructions per entry); a paragraph at gate level (613 bytes, 53,665 cycles) and chapter 1 on the emulator
   (827,576); an exact cycle formula, checked on 20 random passages; thirty novels: 1.069 × 10¹¹ cycles, 4,279 per
-  byte, 99.7% of them in the search; 640 years on the Z3, 8 months at ENIAC's speed, 4.7 minutes on a single-cycle Pebble at 380 MHz (the clock its memories allow); ledger row 0.
+  byte, 99.7% of them in the search; rate analogies of 640 years at 5.3 operations/s and 8 months at 5,000/s, not actual ports to Z3 or ENIAC; 4.7 minutes at an assumed 380 MHz Pebble clock, not measured silicon; ledger row 0.
 * **11. Pebble and the Turing machine.** A Turing-machine interpreter in Pebble assembly runs the 3-state busy beaver
-  (21 steps, 5 ones) and the 4-state one (107, 13); the converse simulation; Church–Turing, checked.
+  (21 steps, 5 ones) and the 4-state one (107, 13); the converse simulation argument. Fixed 32-bit Pebble is finite-state; universality requires an ideal family with unbounded effective storage and addressing. These examples do not prove the Church–Turing thesis. Only the 2- and 3-state examples are gate-checked; the 4-state case uses the emulator.
 * **12. Code is data.** Summing an array EDSAC-style by rewriting a load's offset field; index registers (the
   Manchester Mark 1's B-lines, 1949), stale prefetched instructions, write-xor-execute, and JIT compilers.
 * **13. When the world interrupts.** Polling against interrupts (DYSEAC, 1954); exceptions: illegal instructions,
   divide by zero, page faults, system calls.
-* **14. The whole machine, counted.** Gates by block (the register file's read ports are the biggest); ≈ 90,000
-  transistors in CMOS against the 6502, 8086, 80386 and a 16-billion-transistor laptop chip; a trip down the tower,
+* **14. The whole machine, counted.** Gates by block (the register file's read ports are the biggest); a synthetic estimate of ≈ 90,000 transistors (NAND equivalents × 4 plus flip-flops × 24), excluding memory, I/O, clocks, buffers and layout, against the 6502, 8086, 80386 and the whole 16-billion-transistor Apple M1 system on a chip (2020), with different counting scopes rather than an area comparison; a trip down the tower,
   datapath to transistors, and back.
-* **15. Frontier: is the processor right?** Mutation analysis of this part's random co-simulation: nine bugs planted
+* **15. Frontier: is the processor right?** A separate mutation study using the random generator with multiply/divide enabled (the gate CPU implements the base ISA): nine bugs planted
   one at a time in a copy of the emulator, each run against 2,000 random programs. A store that also writes the next
   byte is caught by 67% of them and shifts that read 4 bits of their amount by 54%; a byte load that forgets its sign
-  by 0.25%, a branch wrong only for two zeros by 2.7%; dividing −2³¹ by −1 by none (2⁻³² per divide). Detection
-  budgets, 1 − (1 − r)^N; Dijkstra (1969); the FDIV bug. Coverage-guided CPU fuzzing (DifuzzRTL, 2021; Cascade, 2024:
-  37 new bugs in 5 of 6 RISC-V CPUs). Sail, RISC-V's golden model; verified processors (Kami, 2017; CakeML's Silver,
-  2019); the open problem of verifying speculative, out-of-order cores.
+  by 0.25%, a branch wrong only for two zeros by 2.7%; dividing −2³¹ by −1 by 0 of these 2,000 programs. This does not establish zero hit probability. Independent uniform 32-bit operands would give 2⁻⁶⁴ for that pair; a uniform dividend with divisor fixed at −1 gives 2⁻³². Neither is the evolving generator’s distribution. Detection
+  budgets, 1 − (1 − r)^N, require independent tests and a fixed true per-test rate; empirical rates are illustrations. A directed boundary test distinguishes the mutant in one run. CPU fuzzing (DifuzzRTL, 2021; Cascade, 2024:
+  37 new bugs in 5 of 6 RISC-V CPUs). Sail, an executable formal reference for supported RISC-V features, not by itself a proof of a core; verified designs (Kami, 2017; Silver + CakeML,
+  2019). Abstract out-of-order proofs and selected industrial verification exist; scaling complete correctness and security arguments to complex implementations remains difficult.
 * **Recap, where this comes back, in practice, problems.**
 
 ## Build
@@ -82,12 +81,12 @@ written to `.cache/cs6/ledger.json`.
    (write back the link, pc + 4) and **jalr** (take the next pc from the ALU). The ALU operation is add (all four aop
    bits 0), and every other signal is 0: no memory access, no branch.
 
-3. **The single-cycle clock.** Instruction and data memory take 1 ns each; the logic path is 56 gate delays of 10 ps,
+3. **The single-cycle clock.** Assume a worst-case teaching budget: instruction and data memory take 1 ns each; logic takes 56 gate delays of 10 ps,
    plus 70 ps of flip-flop overhead. What is f_max? How much faster could a machine run that never touched data
    memory?
 
    *Solution.* The period must hold both memory accesses and the logic: 1 + 1 + 0.56 + 0.07 = 2.63 ns, so
-   **f_max ≈ 380 MHz**. Without the data memory the period is 1.63 ns, **613 MHz, 1.61 times faster**: the single-cycle
+   **f_max ≈ 380 MHz within this assumed model**. The sampled netlist maximum does not certify this budget for physical hardware. Without the data memory the period is 1.63 ns, **613 MHz, 1.61 times faster**: the single-cycle
    design makes every add pay for the loads. Part 7's pipeline instead gives each stage its own cycle.
 
 4. **Reverse a string.** Write a Pebble program that reverses a zero-terminated string in place. How many instructions
@@ -153,20 +152,11 @@ written to `.cache/cs6/ledger.json`.
    million (**3.4%**). The printed top twenty is identical. A small idea buys a little; Part 17's hash table removes the
    search altogether.
 
-7. **★ Research: tests that find what matters.** Change `random_program` (in `explainer/cs/pebble/randprog.py`) so
-   that all nine planted bugs of chapter 15 are caught within 2,000 programs, without special-casing any of them.
-   Open: a generator with a proof of what it covers.
+7. **★ Research: define what a generator covers.** Add boundary-value generation to `random_program`, then rerun all nine planted mutants on 2,000 fixed seeds. Define the operand classes your generator is intended to cover and report the evidence, including misses.
 
-   *What is known, and where to start.* `compute_mutants` in `videos/cs/cs6/compute.py` is the harness: it runs every
-   mutant against the programs and reports the share caught. The bugs random values miss live at boundaries, so bias
-   the operands: with probability one half, draw a register's starting value from a small set of interesting words
-   (0, 1, −1, 2³¹ − 1, −2³¹, 0x7F, 0x80, 0xFF), and store some of them to memory before the loads run. With eight
-   boundary values chosen half the time, both divide operands are the bad pair with probability (1/16)² = 1/256 per
-   divide, so a few hundred divides suffice; the byte-load and zero-branch bugs become common too. That is the
-   classical idea of boundary-value testing; coverage-guided fuzzers (DifuzzRTL, Cascade) learn such biases
-   automatically by rewarding programs that reach new hardware states. What nobody has is a generator with a
-   *guarantee*: a proof that every behaviour of a given kind (every pair of operand classes, every pipeline hazard of
-   Part 7) is exercised. Formal methods give guarantees for the design, not the tests; connecting the two is open.
+   *Starting point.* Include 0, 1, −1, 2³¹−1, −2³¹, 0x7F, 0x80 and 0xFF. Initializing a register does not ensure a later instruction consumes that value: instructions overwrite registers and the current generator forces division’s divisor odd. Instrument the values actually consumed by each opcode. Enumerate a finite set of ordered operand classes and check that each appears. A separate directed program with `li a0, 0x80000000; li a1, -1; div a2, a0, a1; halt` already distinguishes the overflow mutant: the reference returns 0x80000000 and the mutant returns 0. Do not label this directed example as a random-generator success.
+
+   Independent per-operand sampling would give a pair probability equal to the product of the two marginal probabilities; it does not give that probability for correlated evolving registers. Coverage-guided testing can help exploration, but does not imply discovery within a fixed time. Finite coverage guarantees and proof-guided test generation exist; scaling useful guarantees to realistic processor state spaces is the research challenge. Report the precise class coverage you established and the properties still unproved.
 
 ## 习题与解答
 
@@ -181,10 +171,10 @@ written to `.cache/cs6/ledger.json`.
    *解答。* **rw**（写寄存器）、**imm**（立即数作为算术逻辑单元的第二个操作数）、**wb1**（wb0 = 0，写回链接地址 pc + 4），以及
    **jalr**（下一个 pc 取自算术逻辑单元）。运算是加法（四个 aop 位全为 0），其余信号都为 0：不访问存储器，也不是分支。
 
-3. **单周期时钟。** 指令存储器和数据存储器各需 1 ns；逻辑路径为 56 个 10 ps 的门延迟，另加 70 ps 的触发器开销。f_max 是多少？
+3. **单周期时钟。** 假设一个最坏情况教学预算：两次存储器访问各需 1 ns，逻辑为 56 个 10 ps 的门延迟，另加 70 ps 的触发器开销。f_max 是多少？
    一台从不访问数据存储器的机器能快多少？
 
-   *解答。* 一个周期要容下两次存储器访问和逻辑：1 + 1 + 0.56 + 0.07 = 2.63 ns，所以 **f_max ≈ 380 MHz**。去掉数据存储器，周期为
+   *解答。* 一个周期要容下两次存储器访问和逻辑：1 + 1 + 0.56 + 0.07 = 2.63 ns，所以**在此假设模型中 f_max ≈ 380 MHz**。抽样网表最大值并不能验证真实芯片的这项预算。去掉数据存储器，周期为
    1.63 ns，即 **613 MHz，快 1.61 倍**：单周期设计让每一条加法都为取数指令买单。第 7 部分的流水线则让每一级各有自己的周期。
 
 4. **反转字符串。** 写一个 Pebble 程序，原地反转一个以零结尾的字符串。对 n 个字母它要执行多少条指令？
@@ -207,15 +197,11 @@ written to `.cache/cs6/ledger.json`.
    **822,271（0.6%）**；在小说的前 60 kB 上，从 2745 万降到 2653 万（**3.4%**）。打印出的前二十个词完全相同。小主意只换来一点点；
    第 17 部分的哈希表则彻底去掉了查找。
 
-7. **★ 研究题：能找到要紧错误的测试。** 修改 `random_program`（在 `explainer/cs/pebble/randprog.py` 里），让第 15 章植入的全部九个
-   错误都能在 2,000 个程序内被发现，且不为其中任何一个开特例。未解：一个能证明自己覆盖了什么的测试生成器。
+7. **★ 研究题：定义生成器覆盖了什么。** 在 `random_program` 中加入边界值生成，用两千个固定种子重跑全部九个变异体。定义预期覆盖的操作数类别，报告证据和仍然漏掉的情况。
 
-   *已知什么，从哪里入手。* `videos/cs/cs6/compute.py` 里的 `compute_mutants` 就是测试框架：它把每个变异体放在这些程序上运行，报告被发现
-   的比例。随机值漏掉的错误都藏在边界上，所以要让操作数有所偏向：以一半的概率，从一小组有意思的字（0、1、−1、2³¹ − 1、−2³¹、0x7F、
-   0x80、0xFF）里抽取寄存器的初值，并在取数指令运行之前把其中一些存进存储器。一半的时候从八个边界值里选，两个除法操作数恰好是那对坏值的
-   概率是每次除法 (1/16)² = 1/256，几百次除法就够了；字节取数和零值分支的错误也会变得常见。这就是经典的边界值测试思想；覆盖率引导的
-   模糊测试器（DifuzzRTL、Cascade）通过奖励触及新硬件状态的程序，自动学会这类偏向。还没有人做到的是带*保证*的生成器：证明某一类的每一种
-   行为（每一对操作数类别、第7部分的每一种流水线冒险）都被执行到了。形式化方法为设计提供保证，而不是为测试；把两者连接起来仍是未解问题。
+   *起点。* 可加入 0、1、−1、2³¹−1、−2³¹、0x7F、0x80、0xFF。但寄存器的初值不等于后来指令真正读到的值：中间指令会覆盖它，当前生成器还把除数强制变成奇数。因此要记录每种操作真正消耗的值，枚举有限的有序操作数类别，并检查是否全部出现。另一个定向程序 `li a0, 0x80000000; li a1, -1; div a2, a0, a1; halt` 能直接区分溢出变异体：参考实现返回 0x80000000，变异体返回 0。不要把它算成随机生成器已经发现了错误。
+
+   只有独立抽样，才能把两个边缘概率相乘；不能把这种计算套到相互关联、不断变化的寄存器上。覆盖率引导能帮助探索，但不保证固定时间内发现错误。有限覆盖保证和证明引导测试已经存在；研究难点在于把有用保证扩展到现实处理器状态空间。应明确已确立的类别覆盖，以及仍未证明的性质。
 
 ## Glossary additions
 
@@ -237,3 +223,12 @@ Papers and reports: von Neumann, *First Draft of a Report on the EDVAC* (1945); 
 (1947); Williams & Kilburn, "Electronic digital computers", *Nature* 162 (1948); Wilkes, "The best way to design an
 automatic calculating machine" (1951); Wilkes, Wheeler & Gill, *The Preparation of Programs for an Electronic Digital
 Computer* (1951); Patterson & Ditzel, "The case for the reduced instruction set computer" (1980).
+
+
+Primary references for the verification chapter:
+
+- Solt, Ceesay-Seitz & Razavi, *Cascade: CPU Fuzzing via Intricate Program Generation*, USENIX Security 2024 ([paper](https://comsec.ethz.ch/wp-content/files/cascade_sec24.pdf)). The paper reports 37 new bugs in 5 of 6 tested CPUs; Cascade’s program-construction approach is distinct from a generic coverage-feedback loop.
+- Hur et al., *DifuzzRTL: Differential Fuzz Testing to Find CPU Bugs*, NDSS 2021, cited and compared in Cascade.
+- Lööw et al., *Verified Compilation on a Verified Processor*, PLDI 2019 ([paper](https://cakeml.org/pldi19.pdf)); Silver is a proof-of-concept processor, with explicit initialization/environment assumptions.
+- [Kami project](https://github.com/mit-plv/kami), [RISC-V Sail model](https://github.com/riscv/sail-riscv), and [RISC-V integer divide semantics](https://github.com/riscv/riscv-isa-manual/blob/main/src/unpriv/m-st-ext.adoc). RISC-V division by zero defines results; Pebble’s stop is a local design choice.
+- [Cambridge EDSAC history](https://www.cl.cam.ac.uk/events/EDSAC99/history.html): first logged squares program, 6 May 1949, initial orders and subroutine work.
