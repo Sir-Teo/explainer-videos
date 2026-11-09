@@ -77,9 +77,9 @@ class Relays(VoiceoverScene):
             "exactly when current can flow. The dictionary works both ways: to analyse a circuit, write its expression; "
             "to design one, write the expression you want, simplify it with the laws, and translate back."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in rows], lag_ratio=0.3), run_time=3.0)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in rows], lag_ratio=0.3), run_time=3.0)
+            self.play(Circumscribe(rows[0], color=HEAD))
             vo.wait_until("b")
             self.play(FadeIn(so))
         self.wait(0.3)

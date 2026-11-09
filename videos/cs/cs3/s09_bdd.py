@@ -94,16 +94,16 @@ class Bdd(VoiceoverScene):
         cnt = label(r"15 nodes \ $\to$ \ 6", font_size=26, color=YES).next_to(bdd, DOWN, buff=0.3)
         with self.voiceover(
             "Truth tables and normal forms are either huge or not unique. In 1986 Randal Bryant made a data structure "
-            "that is often small and always unique. <bookmark mark='a'/> Start with a decision tree. Here is majority: "
+            "that is often small, and unique once the variable order is fixed. <bookmark mark='a'/> Start with a decision tree. Here is majority: "
             "test a, then b, then c, and read the answer at a leaf. Dashed lines are zero, solid lines one. It is just "
             "the truth table, spread out. <bookmark mark='b'/> Now apply two rules. Share any two identical pieces, so "
             "all the zero leaves become one leaf and all the ones another. And delete any test whose two branches lead "
             "to the same place, because it does not matter. <bookmark mark='c'/> Repeat until neither rule applies. "
             "What remains is a reduced ordered binary decision diagram: for majority, four tests instead of seven."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Create(edges), FadeIn(nodes), FadeIn(leaves), FadeIn(key), run_time=2.0)
             vo.wait_until("a")
-            self.play(Create(edges), FadeIn(nodes), FadeIn(leaves), FadeIn(key), run_time=2.0)
+            self.play(Circumscribe(nodes[0], color=HEAD))
             vo.wait_until("b")
             self.play(FadeIn(rules[0]), FadeIn(rules[1]))
             vo.wait_until("c")
@@ -190,7 +190,7 @@ class Bdd(VoiceoverScene):
             "reduced diagram. <bookmark mark='b'/> So to check that a clever optimized circuit computes the same "
             "function as its simple specification, build both diagrams in one shared table and compare two pointers. "
             "<bookmark mark='c'/> And, or and not on diagrams, and asking whether any input makes the function true, "
-            "are all fast, taking time proportional to the sizes of the diagrams involved. Counting how many inputs "
+            "are polynomial in diagram size; combining two may take the product of their node counts. Counting how many inputs "
             "make a function true is fast too: one pass over the nodes. That made decision diagrams the workhorse of "
             "chip verification in the 1990s. "
             "<bookmark mark='d'/> The catch never goes away: Bryant also proved that the middle output bit of a "
@@ -202,7 +202,7 @@ class Bdd(VoiceoverScene):
             self.play(FadeIn(bdd), FadeIn(lines[0], shift=RIGHT * 0.1))
             vo.wait_until("b")
             self.play(LaggedStart(*[GrowArrow(a) for a in ptrs], lag_ratio=0.4), FadeIn(lines[1], shift=RIGHT * 0.1))
-            self.play(FadeIn(pq), FadeIn(eq), Indicate(root, color=HEAD))
+            self.play(FadeIn(pq), FadeIn(eq), Circumscribe(root, color=HEAD))
             for mk, l in zip("cd", lines[2:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(l, shift=RIGHT * 0.1))

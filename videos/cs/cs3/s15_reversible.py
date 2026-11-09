@@ -116,13 +116,13 @@ class Reversible(VoiceoverScene):
             "there are, so it can be pictured as billiard balls bouncing through a maze, a model Fredkin and Toffoli "
             "proposed in 1982."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Write(rule), FadeIn(tof), FadeIn(tof_l))
             vo.wait_until("a")
-            self.play(Write(rule), FadeIn(tof), FadeIn(tof_l))
+            self.play(Circumscribe(tof, color=HEAD))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.12), FadeIn(txt[0]), run_time=2.0)
             vo.wait_until("c")
-            self.play(FadeIn(txt[1]), Indicate(VGroup(rows[6], rows[7]), color=HEAD))
+            self.play(FadeIn(txt[1]), Circumscribe(VGroup(rows[6], rows[7]), color=HEAD))
             self.play(FadeIn(txt[2]))
             vo.wait_until("d")
             self.play(FadeIn(fred), FadeIn(fred_l), FadeIn(txt[3]))
@@ -133,7 +133,7 @@ class Reversible(VoiceoverScene):
     def future(self):
         head = label(r"Why this comes back", font_size=38).to_edge(UP, buff=0.4)
         lines = VGroup(*[label(t, font_size=28, color=c) for t, c in (
-            (r"quantum computers must be reversible: \ their gates are rotations, \ which can always be undone",
+            (r"coherent quantum gates are unitary: \ each has an inverse; \ measurement and reset are different",
              INF),
             (r"the Toffoli gate is one of them, \ and Part 53 simulates a small quantum computer with it", HEAD),
             (r"the same move, \ keeping what you would have thrown away, \\ turns up in undo logs and journaling "
@@ -150,9 +150,9 @@ class Reversible(VoiceoverScene):
         rot = MathTex(r"U", font_size=32, color=HEAD).move_to(c0 + LEFT * 2.2 + UP * 0.4)
         inv = MathTex(r"U^{-1}", font_size=32, color=YES).move_to(c0 + LEFT * 2.2 + DOWN * 0.4)
         with self.voiceover(
-            "This is not just a curiosity. <bookmark mark='a'/> A quantum computer must be reversible: its gates are "
-            "rotations of a state, and every rotation can be undone. <bookmark mark='b'/> The Toffoli gate is one of its "
-            "standard gates, and in Part 53 we will simulate a small quantum computer, Toffoli gates included. "
+            "This is not just a curiosity. <bookmark mark='a'/> Coherent quantum gates are unitary transformations of "
+            "the state, so each has an inverse. Measurement and reset are different operations. <bookmark mark='b'/> The Toffoli gate is one of the "
+            "standard quantum gates, and in Part 53 we will simulate a small quantum computer, Toffoli gates included. "
             "<bookmark mark='c'/> And the idea of keeping what you would have thrown away, so you can go back, appears "
             "much higher up the tower, in the logs that let databases and file systems undo a crash."
         ) as vo:

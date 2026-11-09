@@ -44,7 +44,7 @@ class History(VoiceoverScene):
             r[1].move_to([-4.6, 2.1 - 0.85 * i, 0], aligned_edge=LEFT)
             r[2].move_to([-0.8, 2.1 - 0.85 * i, 0], aligned_edge=LEFT)
             rows.add(r)
-        foot = note(r"each was built from the same three ideas: \ binary, \ switches, \ and Boole's algebra",
+        foot = note(r"shared switching logic; \ binary machines and decimal ENIAC",
                     font_size=24, color=HEAD).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "Shannon's thesis arrived just as people started building computers from switches. "
@@ -54,7 +54,7 @@ class History(VoiceoverScene):
             "an electronic calculator with vacuum tubes. At Bletchley Park, Colossus used tubes to break German "
             "teleprinter ciphers. And in Philadelphia, ENIAC used seventeen and a half thousand of them and a hundred "
             "and fifty kilowatts. <bookmark mark='b'/> Different countries, different purposes, mostly in secret, and "
-            "all built on the same ideas: binary, switches, and Boole's algebra."
+            "all used switching logic. Many were binary, but ENIAC represented numbers in decimal."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -99,9 +99,9 @@ class History(VoiceoverScene):
             "left out of its history. <bookmark mark='c'/> What both machines lacked was the idea of Part 1's "
             "universal machine: a program stored as data in the computer's own memory. Part 6 gives Pebble exactly that."
         ) as vo:
-            self.play(FadeIn(head), Create(sep))
+            self.play(FadeIn(head), Create(sep), FadeIn(z, lag_ratio=0.2), run_time=2.0)
             vo.wait_until("a")
-            self.play(FadeIn(z, lag_ratio=0.2), run_time=2.0)
+            self.play(Circumscribe(z[0], color=HEAD))
             vo.wait_until("b")
             self.play(FadeIn(e, lag_ratio=0.2), run_time=2.0)
             vo.wait_until("c")
@@ -117,7 +117,7 @@ class History(VoiceoverScene):
                   x_axis_config={"numbers_to_include": [1970, 1980, 1990, 2000, 2010, 2020],
                                  "decimal_number_config": {"group_with_commas": False, "num_decimal_places": 0}},
                   y_axis_config={"numbers_to_include": list(range(3, 13))}).move_to(LEFT * 1.4 + DOWN * 0.3)
-        yl = note(r"$\log_{10}$ transistors per chip", font_size=20).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
+        yl = note(r"$\log_{10}$ transistors per processor", font_size=20).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
         dots = VGroup()
         labs = VGroup()
         for y, n, nm in CHIPS:
@@ -130,15 +130,15 @@ class History(VoiceoverScene):
         hc = history_card(1965, r"Gordon Moore", r"``Cramming more components onto integrated circuits'': \ the count "
                           r"doubles every year \ (revised in 1975 to every two)", width=3.9, font_size=22).move_to(
             RIGHT * 4.8 + UP * 1.0)
-        end = note(r"2,300 transistors in 1971; \ about 200 billion in 2024: \ every one a switch from chapter three",
+        end = note(r"B200: 208 billion across two dies; \ older points are single-die processors",
                    font_size=22).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "Then came the transistor in 1947 and the integrated circuit in 1958, and the switches started shrinking. "
             "<bookmark mark='a'/> In 1965 Gordon Moore, later a founder of Intel, noticed that the number of "
             "transistors on a chip was doubling every year, and predicted it would continue; in 1975 he revised it to "
             "every two years. <bookmark mark='b'/> Here are some landmark chips on a logarithmic scale, from Intel's "
-            "4004 in 1971, with two thousand three hundred transistors, to GPUs of 2024 with about two hundred billion. "
-            "<bookmark mark='c'/> Half a century of doubling every two years, almost exactly on the line. Each of those "
+            "4004 in 1971, with two thousand three hundred transistors, to the B200 of 2024, with two hundred and eight billion across two silicon dies. "
+            "<bookmark mark='c'/> The long-term trend is close to doubling every two years; packaging also matters at the latest point. Each of those "
             "transistors is the switch of chapter three, and each chip is, at heart, Shannon's algebra."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(yl))

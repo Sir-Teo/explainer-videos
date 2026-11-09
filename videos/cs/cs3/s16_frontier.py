@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs3.common import PART, load
+from videos.cs.cs3.common import PART, load, gate, wire
 
 GATE = C.CS_CONTROL
 WIRE = C.CS_DATA
@@ -38,10 +38,10 @@ class Frontier(VoiceoverScene):
     def census(self):
         d = load("census")
         head = label(r"Every function of three inputs, \ solved exactly", font_size=36).to_edge(UP, buff=0.3)
-        steps = VGroup(*[label(rf"{k + 1} gate{'s' if k else ''}: \ {n:,} distinct circuits".replace(",", "{,}"),
+        steps = VGroup(*[label(rf"{k + 1} gate{'s' if k else ''}: \ {n:,} distinct search states".replace(",", "{,}"),
                                font_size=22, color=GREY_A) for k, n in enumerate(d["states"])]).arrange(
             DOWN, aligned_edge=LEFT, buff=0.2).move_to(LEFT * 4.2 + UP * 0.6)
-        meth = label(r"breadth first: \ a circuit is the set of functions on its wires; \\ add every possible gate, \ "
+        meth = label(r"breadth first: \ a search state is the set of functions on its wires; \\ add every possible gate, \ "
                      r"keep each new set once", font_size=20, color=GREY_B).next_to(steps, UP, buff=0.35).align_to(
             steps, LEFT)
         hist = d["hist"]
@@ -63,23 +63,22 @@ class Frontier(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.3).align_to(steps, LEFT)
         with self.voiceover(
             "Chapter nine counted how many gates a typical function needs. For very small functions we can do better "
-            "than count: we can find the best circuit for every one. <bookmark mark='a'/> Treat a circuit as the set of "
-            "functions its wires compute. Start from the three inputs, add every possible two-input gate, and keep each "
-            "new set once. <bookmark mark='b'/> One gate gives thirty distinct circuits, two give eight hundred and "
-            "forty-three, three give twenty-two thousand, four give more than half a million, and at four gates every "
+            "than count: we can find the best circuit for every one. <bookmark mark='a'/> Treat a search state as the set of "
+            "functions its wires compute. Start from the three inputs and free constants, allow tied input pins, add every possible two-input gate, and keep each "
+            "new set once. <bookmark mark='b'/> With constants and source wires free, one gate gives thirty-three distinct search states, two give eight hundred and "
+            "twenty-eight, three give twenty thousand three hundred and sixty, four give over half a million, and at four gates every "
             "one of the two hundred and fifty-six functions of three inputs has appeared. <bookmark mark='c'/> So every "
             "function of three inputs needs at most four gates, and we know exactly how many each needs: parity of "
             "three needs two, the multiplexer three, and majority four, one of the twenty-four hardest. These are not "
             "estimates but proofs, by exhaustion."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(meth), FadeIn(bars), FadeIn(bl))
             vo.wait_until("a")
-            self.play(FadeIn(meth))
+            self.play(Circumscribe(bars[1], color=HEAD))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(s) for s in steps], lag_ratio=0.4), run_time=2.5)
             vo.wait_until("c")
-            self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(b[0], DOWN), FadeIn(b[1]), FadeIn(b[2]))
-                                    for b in bars], lag_ratio=0.2), FadeIn(bl), run_time=2.0)
+            self.play(Circumscribe(bars[4], color=LIMIT), run_time=2.0)
             self.play(FadeIn(named))
         self.wait(0.3)
         self.clear_scene()
@@ -93,7 +92,7 @@ class Frontier(VoiceoverScene):
         cols = [-4.6, -2.4, 0.2, 2.8]
         for x, h in zip(cols, hdr):
             h.move_to([x, 2.0, 0])
-        who = [r"here, \ in six seconds", r"Knuth \ (2005), \ by computer", r"by computer, \ 2019 \ (Knuth left a "
+        who = [r"here, \ exhaustive search", r"Knuth \ (2005), \ by computer", r"by computer, \ 2019 \ (Knuth left a "
                r"few cases)", r"unknown"]
         rows = VGroup()
         for k, ((n, mx, cnt), w) in enumerate(zip(d["known"], who)):
@@ -137,7 +136,7 @@ class Frontier(VoiceoverScene):
         head = label(r"How every linear lower bound is proved", font_size=36).to_edge(UP, buff=0.3)
         steps = VGroup(
             label(r"pick an input $x_i$ \ and fix it to a constant", font_size=24, color=WIRE),
-            label(r"gates fed by $x_i$ now compute a constant or a copy: \ remove them, \ and the gates they fed",
+            label(r"fixing $x_i$ yields constants, copies or negations: \ simplify, folding negations into later gates",
                   font_size=24, color=GATE),
             label(r"if the function is chosen so that some choice always removes \textit{three} gates \\ and leaves a "
                   r"function of the same kind, \ induction on $n$ gives", font_size=24, color=GREY_A),
@@ -145,25 +144,39 @@ class Frontier(VoiceoverScene):
         ).arrange(DOWN, buff=0.3).move_to(UP * 0.5)
         hist = VGroup(
             label(r"gate elimination: \ $2n$ \ (Kloss, \ Schnorr, \ 1960s--70s); \ $3n$ \ (Blum, \ 1984); \ "
-                  r"$(3 + \tfrac{1}{86})n$ \ (Find, Golovnev, Hirsch and Kulikov, \ 2016); \ $3.1n$ \ (Li and Yang, \ 2022)",
-                  font_size=20, color=HIST),
+                  r"\\ $(3 + \tfrac{1}{86})n$ \ (Find, Golovnev, Hirsch and Kulikov, \ 2016); \ $3.1n$ \ (Li and Yang, \ 2022)",
+                  font_size=18, color=HIST),
+            label(r"November 2026 preprint: \ $4n-O(\log n)$ \ reported by Mishra and Santhanam",
+                  font_size=20, color=HEAD),
             label(r"each step needs a function where no input is ``cheap'': \ the 2016 and 2022 bounds use affine "
                   r"dispersers, \\ functions that are not constant on any large affine subspace", font_size=20,
                   color=GREY_B),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.4)
+        example_gate = gate("AND", size=0.65).move_to(LEFT * 3.8 + UP * 1.65)
+        example = VGroup(example_gate,
+                         MathTex("x", font_size=28, color=WIRE).next_to(example_gate.inp[0](), LEFT, buff=0.45),
+                         MathTex("y", font_size=28, color=WIRE).next_to(example_gate.inp[1](), LEFT, buff=0.45),
+                         wire(example_gate.inp[0]() + LEFT * 0.35, example_gate.inp[0]()),
+                         wire(example_gate.inp[1]() + LEFT * 0.35, example_gate.inp[1]()),
+                         MathTex(r"x\,y", font_size=28, color=GATE).next_to(example_gate.out(), RIGHT, buff=0.25))
+        cases = VGroup(MathTex(r"x=0:\quad 0\wedge y=0", font_size=30, color=GATE),
+                       MathTex(r"x=1:\quad 1\wedge y=y", font_size=30, color=YES)).arrange(DOWN, buff=0.24)
+        cases.move_to(RIGHT * 2.5 + UP * 1.65)
+        steps.scale(0.88).move_to(DOWN * 0.65)
         with self.voiceover(
             "How are the lower bounds that do exist proved? Almost all of them by one idea, gate elimination. "
-            "<bookmark mark='a'/> Fix one input to a constant. <bookmark mark='b'/> Every gate that input fed now computes "
-            "a constant, or simply copies its other input, so it can be removed, and sometimes the gates it fed can be "
-            "removed too. <bookmark mark='c'/> Choose the function so cleverly that, whatever the circuit, some input "
+            "<bookmark mark='a'/> Fix one input to a constant. <bookmark mark='b'/> A gate that input fed becomes "
+            "a constant, a copy, or an inverted copy of its other input. Simplify constants and copies, and fold "
+            "inversions into following gates; sometimes further gates disappear too. <bookmark mark='c'/> Choose the function so cleverly that, whatever the circuit, some input "
             "can always be fixed to remove at least three gates, and what remains is a function of the same kind with "
             "one input fewer. Then induction on the number of inputs gives three n. <bookmark mark='d'/> Norbert Blum "
             "reached three n in 1984. It took thirty-two years to add one eighty-sixth of n, and six more to reach three "
             "point one n, each by a longer case analysis of how a minimal circuit can look, for functions called affine "
-            "dispersers, which stay non-constant on every large affine subspace. Three eliminated gates per input is "
-            "a long way from two to the n over n."
+            "dispersers, which stay non-constant on every large affine subspace. A November 2026 preprint by "
+            "Mishra and Santhanam reports four n minus a logarithmic term, by eliminating independent parameters "
+            "rather than only fixing input variables. The bound is still linear, a long way from two to the n over n."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(example), FadeIn(cases))
             for mk, st in zip("abc", steps[:3]):
                 vo.wait_until(mk)
                 self.play(FadeIn(st, shift=UP * 0.1))
@@ -171,6 +184,7 @@ class Frontier(VoiceoverScene):
             vo.wait_until("d")
             self.play(FadeIn(hist[0]))
             self.play(FadeIn(hist[1]))
+            self.play(FadeIn(hist[2]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -206,9 +220,9 @@ class Frontier(VoiceoverScene):
             "field, meta-complexity, asks how hard it is to tell how hard something is, and it is one of the most "
             "active in theory today."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(defn[0]), FadeIn(defn[1]))
             vo.wait_until("a")
-            self.play(FadeIn(defn[0]), FadeIn(defn[1]))
+            self.play(Circumscribe(defn, color=HEAD))
             for mk, f in zip("bcde", (facts[0:2], facts[2], facts[3], facts[4])):
                 vo.wait_until(mk)
                 self.play(FadeIn(f, shift=UP * 0.1))

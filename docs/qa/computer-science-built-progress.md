@@ -1,10 +1,37 @@
 # Computer Science, Built — sequential polish
 
 Work on `computer-science-built`, one video at a time, with separate commits.
-Current video: **cs3, Logic from Switches**. CS1 and CS2 source/preview polish checkpoints
+Current video: **cs4, Arithmetic**. CS1–CS3 source/preview polish checkpoints
 are complete at the scopes below. Their production release gates remain open; this
 ledger does not treat sampled previews as listening or final-production approval.
 The syllabus's earlier draft-preview claims are separate.
+
+## Final CS3 preview checkpoint, 9 November 2026
+
+- Fix the exact circuit census: tied pins and free constants now match its stated
+  model. Histogram `[5,33,114,80,24]` and search-state counts are independently
+  reproduced. Nine logic tests and the legacy-cache upgrade check pass.
+- Add switching and gate-restriction examples, improve early visual reveals,
+  remove Chinese clipping/sparse holds, and correct circuit/BDD/CMOS/hazard,
+  minimization, historical and quantum-gate explanations in both languages.
+- Update the dated circuit lower-bound discussion to attribute the November 2026
+  `4n-O(log n)` report explicitly as a preprint; its proof is not independently
+  verified here.
+- All 34 current bilingual motion cases pass with zero warnings: 246 English
+  and 249 Chinese captured states, 100,545 decoded frames. All 1,360
+  overview appearances are covered (4 fresh sheets, 30 exact-image inheritances).
+  Four current endpoint pilots also pass with zero warnings.
+- All 88 current English speech blocks pass automated signal/alignment checks.
+  Five native clips decode 4,492 frames with 120 samples/five native stills
+  covered; two narrated Hook/Frontier previews decode 6,136 frames plus audio,
+  with 80 samples covered and 25 cue requests within 250 ms.
+- Translation coverage is 88/88 actual bilingual blocks. The caption check has
+  zero untranslated strings; the source-length estimate is 55.6 minutes.
+
+[Verified CS3 evidence](evidence/cs3-polish-20261108/README.md).
+Continuous narrated listening, Chinese speech/listening, whole-video native
+production review and runtime at the selected voice pace remain open. Sampled
+visuals and signal checks do not constitute listening or production approval.
 
 ## Final CS2 preview checkpoint, 8 November 2026
 
@@ -116,28 +143,20 @@ Evidence, exact source/data hashes, reports and reproduction commands:
 
 ## Continue here
 
-1. Run cs2's numerical computations and existing counting tests; preserve their
-   evidence. Read its source and begin with the 15-puzzle opening.
-2. Review cs2's English/Chinese endpoints, then motion and educational accuracy.
-   Repair concrete defects and recheck affected evidence before committing.
-3. Keep release gates distinct from this source/preview polish pass. CS1's open
-   listening and native-production work remains listed above.
-
-Activate the existing toolchain first, then start cs2:
+1. Run cs4's numerical computations and existing arithmetic tests; preserve the
+   baseline evidence and inspect its opening and arithmetic/numerical claims.
+2. Review English/Chinese endpoint and motion previews, repair concrete defects,
+   and bind the final checks to the exact source before the next separate commit.
+3. Keep production release gates distinct from source/preview checkpoints.
 
 ```bash
 source /workspace/environment/activate.sh
-.venv/bin/python -m videos.cs.cs2.compute
-.venv/bin/python -m unittest discover -s tests -p test_cs2_counting.py -q
-.venv/bin/python tools/qa_series.py cs2 --lang en --cached-only --resume --timeout 900
-.venv/bin/python tools/qa_series.py cs2 --lang zh --cached-only --resume --timeout 900
+.venv/bin/python -m videos.cs.cs4.compute
+.venv/bin/python -m unittest discover -s tests -p test_cs4_arithmetic.py -q
+.venv/bin/python tools/qa_series.py cs4 --lang en --cached-only --timeout 1200
+.venv/bin/python tools/qa_series.py cs4 --lang zh --cached-only --timeout 1200
 ```
 
-Inspect endpoints before the full motion pass. CS1 reproduction commands remain
-in its linked evidence packet.
-
-The shell activation supplies the existing user-local `dvisvgm` and Chinese TeX
-resources. Without it the first render failed with a missing `dvisvgm`; that
-environment issue was resolved without changing project source.
-
-cs2 is active; cs3–cs61 remain queued. No whole-course or production completion is claimed.
+The activation supplies the local renderer, neural narration, dvisvgm and Chinese
+TeX resources. CS4 is next; CS5–CS61 remain queued. No whole-course or production
+completion is claimed.

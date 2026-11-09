@@ -1,0 +1,31 @@
+{
+  "strings": {
+    "at a stable 0 or 1: \\\\ no ideal DC path; \\ real devices still leak": "稳定的 0 或 1：\\\\ 理想电路无直流通路；\\ 真实器件仍会漏电",
+    "given a DNF: \\ ``is there an equivalent DNF with $\\le k$ terms?'' \\\\ is $\\Sigma_2^p$-complete \\ (Umans, 2001): \\ harder than NP, \\ as far as anyone knows": "给定析取范式：\\ 是否存在项数 $\\le k$ 的等价析取范式？\\\\ 这是 $\\Sigma_2^p$ 完全问题\\ （乌曼斯，2001）",
+    "AND/OR/NOT basis: \\ a \\textit{formula} is a tree, with no shared outputs": "固定使用与、或、非门：\\ 公式是一棵树，不共享输出",
+    "AND/OR/NOT formulas: \\ $\\ge n^2$ leaves; \\ attained when $n = 2^k$ \\ (Khrapchenko, 1971)": "与、或、非公式：\\ 至少 $n^2$ 个叶子；\\ $n=2^k$ 时可达到\\ （赫拉普琴科，1971）",
+    "circuit: \\ 3 XORs \\ $=$ 12 AND/OR/NOT gates": "电路：\\ 3 个异或门\\ $=$ 12 个与、或、非门",
+    "if small circuits are a vanishing fraction of all functions, \\ almost all functions need larger circuits": "若小电路占全部函数的比例趋于零，\\ 几乎所有函数都需要更大的电路",
+    "\\frac{\\#\\{\\text{functions with size}\\le s\\}}{2^{2^n}} \\le 2^{\\,s\\log_2(16(n+s)^2)-2^n}": "\\frac{\\#\\{\\text{电路规模}\\le s\\text{的函数}\\}}{2^{2^n}} \\le 2^{\\,s\\log_2(16(n+s)^2)-2^n}",
+    "$a$ falls: \\ $ab$ drops after one delay, \\\\ but $\\bar a$ rises one delay late": "$a$ 下降：\\ $ab$ 经过一个延迟后下降，\\\\ 取反路径再晚一个延迟",
+    "two-level SOP, one changing input: \\\\ cover adjacent 1s together to avoid static-1 hazards": "两级与或式，单个输入变化：\\\\ 相邻的 1 由同一圈覆盖，避免静态 1 险象",
+    "Switching power in CMOS": "CMOS 的切换功率",
+    "model current: both transistors conduct": "模型电流：两个晶体管同时导通",
+    "stable 0 or 1: \\ no ideal DC path; \\ real devices leak": "稳定的 0 或 1：\\ 理想电路无直流通路；\\ 真实器件漏电",
+    "$\\log_{10}$ transistors per processor": "每个处理器晶体管数的 $\\log_{10}$",
+    "B200: 208 billion across two dies; \\ older points are single-die processors": "B200：两个裸片合计 2,080 亿；\\ 较早的数据点为单裸片处理器",
+    "shared switching logic; \\ binary machines and decimal ENIAC": "共同使用开关逻辑；\\ 二进制机器与十进制 ENIAC",
+    "coherent quantum gates are unitary: \\ each has an inverse; \\ measurement and reset are different": "相干量子门是酉变换：\\ 每个门都有逆；\\ 测量与复位是不同的操作",
+    "breadth first: \\ a search state is the set of functions on its wires; \\\\ add every possible gate, \\ keep each new set once": "广度优先：搜索状态是导线上的函数集合；\\\\ 加上每一种门，每个新集合只保留一次",
+    "fixing $x_i$ yields constants, copies or negations: \\ simplify, folding negations into later gates": "固定 $x_i$ 后得到常数、副本或取反：\\ 化简，并把取反吸收到后续门中",
+    "here, \\ exhaustive search": "这里，\\ 穷举搜索",
+    "1 gate: \\ 33 distinct search states": "1 个门：33 个不同的搜索状态",
+    "2 gates: \\ 828 distinct search states": "2 个门：828 个不同的搜索状态",
+    "3 gates: \\ 20{,}360 distinct search states": "3 个门：20{,}360 个不同的搜索状态",
+    "4 gates: \\ 528{,}991 distinct search states": "4 个门：528{,}991 个不同的搜索状态",
+    "leading terms at $n = 100$ inputs \\ (log scale; lower-order terms omitted)": "$n=100$ 时的主项\\ （对数刻度，省略低阶项）",
+    "reported: \\ $4n-O(\\log n)$ \\\\ Mishra and Santhanam, \\ November 2026 preprint": "报告的下界：\\ $4n-O(\\log n)$ \\\\ Mishra 与 Santhanam，\\ 2026年11月预印本",
+    "gate elimination: \\ $2n$ \\ (Kloss, \\ Schnorr, \\ 1960s--70s); \\ $3n$ \\ (Blum, \\ 1984); \\ \\\\ $(3 + \\tfrac{1}{86})n$ \\ (Find, Golovnev, Hirsch and Kulikov, \\ 2016); \\ $3.1n$ \\ (Li and Yang, \\ 2022)": "门消去：\\ $2n$\\ （Kloss、Schnorr，1960--70年代）；\\ $3n$\\ （Blum，1984）；\\\\ $(3+\\tfrac1{86})n$\\ （Find 等，2016）；\\ $3.1n$\\ （Li 与 Yang，2022）",
+    "November 2026 preprint: \\ $4n-O(\\log n)$ \\ reported by Mishra and Santhanam": "2026年11月预印本：\\ Mishra 与 Santhanam 报告 $4n-O(\\log n)$"
+  }
+}

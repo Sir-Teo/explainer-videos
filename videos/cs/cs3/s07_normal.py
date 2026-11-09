@@ -196,7 +196,7 @@ class Normal(VoiceoverScene):
         head = label(r"How hard is it to find the smallest formula?", font_size=36).to_edge(UP, buff=0.4)
         lines = VGroup(*[label(t, font_size=28, color=c) for t, c in (
             (r"given a truth table: \ the minimal two-level form is NP-hard \ (Masek, 1979)", GREY_A),
-            (r"given a formula: \ ``is there an equivalent one of size $\le k$?'' \\ is $\Sigma_2^p$-complete \ "
+            (r"given a DNF: \ ``is there an equivalent DNF with $\le k$ terms?'' \\ is $\Sigma_2^p$-complete \ "
              r"(Umans, 2001): \ harder than NP, \ as far as anyone knows", LIMIT),
             (r"so real tools use heuristics: \ Espresso (Berkeley, 1980s), \ ABC, \ Yosys", YES),
         )]).arrange(DOWN, aligned_edge=LEFT, buff=0.5).move_to(DOWN * 0.1)
@@ -204,13 +204,14 @@ class Normal(VoiceoverScene):
         with self.voiceover(
             "So how hard is it to find the smallest formula for a function? <bookmark mark='a'/> Even for two-level "
             "forms, starting from the truth table, it is NP-hard, a word Part 26 makes precise: no efficient method is "
-            "known, and probably none exists. <bookmark mark='b'/> Starting from a formula, asking whether a smaller "
-            "equivalent one exists is even harder, complete for the second level of the polynomial hierarchy. "
+            "known, and probably none exists. <bookmark mark='b'/> Starting from a DNF, asking whether an equivalent DNF with fewer terms "
+            "exists is even harder, complete for the second level of the polynomial hierarchy. "
             "<bookmark mark='c'/> So the logic synthesis tools that design real chips use clever heuristics, and do "
             "not promise the smallest circuit. They are extremely good at it anyway."
         ) as vo:
-            self.play(FadeIn(head))
-            for mk, l in zip("abc", lines):
+            self.play(FadeIn(head), FadeIn(lines[0]))
+            vo.wait_until("a")
+            for mk, l in zip("bc", lines[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(l, shift=RIGHT * 0.1))
             self.play(FadeIn(later))

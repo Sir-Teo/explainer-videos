@@ -32,7 +32,7 @@ large circuit, and nobody can name one that does. Every circuit here is a netlis
   equivalence a pointer comparison; multiplication defeats every order (Bryant, 1991).
 * **9. How many gates?** Size and depth (parity as a chain and as a tree); Shannon's counting argument (1949) and the
   computed curves; Lupanov's matching upper bound (1958); formulas against circuits (Khrapchenko's n²); the
-  explicit-function gap (≈ 3.1n, Li & Yang 2022), P versus NP, and Håstad's constant-depth bound.
+  explicit-function gap (3.1n, Li & Yang 2022; a November 2026 preprint reports 4n − O(log n)), P versus NP, and Håstad's constant-depth bound.
 * **10. Gates take time.** Propagation delay and the critical path; a static hazard simulated with unit delays and
   removed by the consensus term; RC delay, fan-out and buffers; the clock budget.
 * **11. The blocks Pebble needs.** Comparator, priority encoder, barrel shifter (log₂ n stages), and a table of every
@@ -44,11 +44,11 @@ large circuit, and nobody can name one that does. Every circuit here is a netlis
 * **14. Gates that forget nothing.** Landauer's bound; the Toffoli gate (reversible and universal); Fredkin's gate;
   why quantum computing (Part 53) needs them.
 * **15. Frontier: the smallest circuit.** Exact minimum circuits: every 3-input function solved by breadth-first
-  search over circuits (30, 843, 21,778 and 569,780 distinct circuits of 1–4 gates; costs 0–4 for 5, 30, 117, 80 and
+  search over wire-function sets, with free constants and tied input pins (33, 828, 20,360 and 528,991 distinct search states of 1–4 gates; costs 0–4 for 5, 33, 114, 80 and
   24 functions; parity 2, the multiplexer 3, majority 4). The census beyond: 4 inputs, at most 7 gates (Knuth,
   2005); 5 inputs, at most 12 (the last cases settled by computer in 2019); 6 inputs unknown, at the limit of SAT
   solvers. Gate elimination, the method behind every linear lower bound: fix an input, remove at least three gates,
-  induct (Blum's 3n, 1984; (3 + 1/86)n, 2016; 3.1n, Li and Yang, 2022, for affine dispersers). The Minimum Circuit
+  induct (Blum's 3n, 1984; (3 + 1/86)n, 2016; 3.1n, Li and Yang, 2022, for affine dispersers); a November 2026 preprint by Mishra and Santhanam reports 4n − O(log n) using independent-parameter elimination. The Minimum Circuit
   Size Problem: in NP, NP-completeness open (Levin; Kabanets and Cai, 2000); partial MCSP
   NP-hard (Hirahara, 2022); one-way functions and time-bounded Kolmogorov complexity (Liu and Pass, 2020);
   meta-complexity.
@@ -185,3 +185,5 @@ two-terminal switching circuits" (1949); Post (1941); Karnaugh (1953); Lupanov (
 "Cramming more components onto integrated circuits" (1965); Khrapchenko (1971); Bennett (1973); Masek (1979);
 Toffoli (1980); Fredkin & Toffoli (1982); Bryant (1986, 1991); Håstad (1986); Rojas (1998); Umans (2001); Li & Yang,
 "3.1n − o(n) circuit lower bounds for explicit functions" (2022).
+
+Research update checked 9 November 2026: Mishra and Santhanam, [ECCC TR26-260, revision 1](https://eccc.weizmann.ac.il/report/2026/260/), posted 3 November 2026, reports a $4n-O(\log n)$ bound for explicit functions over all two-input Boolean gates. The video labels this as a preprint and omits lower-order terms in its gap illustration; this QA checks the attribution, not the paper’s proof.

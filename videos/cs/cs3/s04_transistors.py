@@ -55,8 +55,10 @@ class Transistors(VoiceoverScene):
             "MOSFET, from 1959, and from 1958 they were built many at a time on one slice of silicon: the integrated "
             "circuit."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(hdr))
-            for mk, r in zip("abc", tab):
+            self.play(FadeIn(head), FadeIn(hdr), FadeIn(tab[0]))
+            vo.wait_until("a")
+            self.play(Circumscribe(tab[0], color=HEAD))
+            for mk, r in zip("bc", tab[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(r, shift=RIGHT * 0.15))
             self.play(FadeIn(hc))
@@ -124,13 +126,13 @@ class Transistors(VoiceoverScene):
 
     def inverter(self):
         head = label(r"The CMOS inverter", font_size=38).to_edge(UP, buff=0.35)
-        inv = self.inverter_mob(LEFT * 3.6 + DOWN * 0.3)
+        inv = self.inverter_mob(LEFT * 3.0 + DOWN * 0.3)
         in_v = MathTex(r"\text{in} = 0", font_size=34, color=GREY_B).next_to(inv.inp, LEFT, buff=0.15)
         out_v = MathTex(r"\text{out} = 1", font_size=34, color=YES).next_to(inv.out, RIGHT, buff=0.15)
         txt = VGroup(*[label(t, font_size=27, color=c) for t, c in (
             (r"in $= 0$: \ the pMOS conducts, \ the nMOS does not: \\ out is pulled up to $V_{DD}$ \ $= 1$", GREY_A),
             (r"in $= 1$: \ the nMOS conducts, \ the pMOS does not: \\ out is pulled down to ground \ $= 0$", GREY_A),
-            (r"one of the two is always off: \\ no path from $V_{DD}$ to ground, \ no steady current", HEAD),
+            (r"at a stable 0 or 1: \\ no ideal DC path; \ real devices still leak", HEAD),
         )]).arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to(RIGHT * 3.5 + DOWN * 0.2)
         with self.voiceover(
             "Stack a p-type transistor on an n-type one, the p on top connected to the supply voltage, the n below "
@@ -138,9 +140,9 @@ class Transistors(VoiceoverScene):
             "inverter, the C standing for complementary. <bookmark mark='a'/> Input zero: the p transistor conducts and "
             "the n does not, so the output is connected to the supply: one. <bookmark mark='b'/> Input one: the n "
             "conducts and the p does not, so the output is connected to ground: zero. It computes not. "
-            "<bookmark mark='c'/> And in either state one of the two transistors is off, so there is no path from the "
-            "supply to ground, and no current flows at all while it sits still. That is why your phone does not "
-            "melt."
+            "<bookmark mark='c'/> At a stable zero or one, one transistor is off, so the ideal circuit has no path from the "
+            "supply to ground. Real transistors still leak, and switching consumes energy. That is why static CMOS is "
+            "so efficient."
         ) as vo:
             self.play(FadeIn(head), FadeIn(inv), FadeIn(in_v))
             vo.wait_until("a")
@@ -239,9 +241,9 @@ class Transistors(VoiceoverScene):
             "gates and arrive intact. Everything from here on counts in zeros and ones, and it is allowed to because of "
             "this curve."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(bars[0]))
             vo.wait_until("a")
-            self.play(FadeIn(bars[0]))
+            self.play(Circumscribe(bars[0], color=HEAD))
             vo.wait_until("b")
             for k in range(1, len(bars)):
                 self.play(FadeIn(arrows[k - 1]), FadeIn(bars[k], shift=RIGHT * 0.2), run_time=0.8)

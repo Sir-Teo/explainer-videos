@@ -29,6 +29,13 @@ class Hook(VoiceoverScene):
         q = label(r"``possibly the most important, \ and also the most famous, \\ master's thesis of the century''",
                   font_size=30, color=GREY_A).next_to(hc, DOWN, buff=0.7)
         src = note(r"Howard Gardner, \textit{The Mind's New Science} (1985)", font_size=22).next_to(q, DOWN, buff=0.2)
+        hc.shift(UP * 0.5)
+        preview, sa, sb, lp, ws = self.circuit(False)
+        preview.scale(0.6).move_to(LEFT * 2.4 + DOWN * 0.4)
+        eq = MathTex(r"A \wedge B", font_size=44, color=YES).move_to(RIGHT * 3.0 + DOWN * 0.4)
+        arrow = MathTex(r"\longleftrightarrow", font_size=44, color=HEAD).move_to(RIGHT * 0.7 + DOWN * 0.4)
+        q.move_to(DOWN * 2.45)
+        src.next_to(q, DOWN, buff=0.18)
         with self.voiceover(
             "In 1937 a twenty-one-year-old student at MIT, Claude Shannon, was looking after a room-sized machine "
             "built of gears, motors and hundreds of telephone relays, Vannevar Bush's differential analyzer. "
@@ -38,7 +45,9 @@ class Hook(VoiceoverScene):
             "possibly the most important master's thesis of the century. It is the reason every computer since has "
             "been designed with algebra."
         ) as vo:
-            self.play(FadeIn(hc, shift=UP * 0.2))
+            self.play(FadeIn(hc, shift=UP * 0.2), FadeIn(preview), FadeIn(eq), FadeIn(arrow))
+            vo.wait_until("a")
+            self.play(sa.set(True), sb.set(True), light(lp, True), ws.animate.set_stroke(ONE), run_time=1.0)
             vo.wait_until("b")
             self.play(FadeIn(q), FadeIn(src))
         self.wait(0.3)

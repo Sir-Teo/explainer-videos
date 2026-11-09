@@ -104,7 +104,7 @@ class Timing(VoiceoverScene):
         dip = next(t for t in range(1, len(b["f"])) if b["f"][t] == 0)
         box = Rectangle(width=0.62, height=0.8, stroke_color=NO, stroke_width=3).move_to(
             [x0 + (dip + 0.5) * 0.55, waves[4][0].get_center()[1], 0])
-        why = VGroup(label(r"$a$ falls: \ $ab$ drops at once, \\ but $\bar a$ rises one delay late", font_size=24,
+        why = VGroup(label(r"$a$ falls: \ $ab$ drops after one delay, \\ but $\bar a$ rises one delay late", font_size=24,
                            color=GREY_A),
                      label(r"for one delay, \ both terms are 0: \\ $f$ glitches to 0", font_size=24, color=NO)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.3).move_to(RIGHT * 4.6 + DOWN * 0.8)
@@ -112,7 +112,7 @@ class Timing(VoiceoverScene):
             "Delays cause stranger things than slowness. <bookmark mark='a'/> Take f equals a b plus not a c, with b "
             "and c held at one. Then f is a or not a, which is always one, whatever a does. <bookmark mark='b'/> Now "
             "simulate it with every gate taking one unit of time, and let a fall from one to zero. "
-            "<bookmark mark='c'/> The a b term drops immediately. But the not-a term needs the inverter to react first, "
+            "<bookmark mark='c'/> The a b term drops after one AND delay. But the not-a term needs the inverter to react first, "
             "so it rises one delay late. For that one moment, both terms are zero, and the output, which should never "
             "change, flickers to zero. This is a glitch, from a static hazard. If anything downstream is watching at "
             "that moment, it sees a wrong answer."
@@ -139,7 +139,7 @@ class Timing(VoiceoverScene):
                 (a["f"], r"f", HEAD)]
         waves = VGroup(*[waveform(v, x0, 0.8 - 0.9 * i - 0.6, color=c, label_tex=t) for i, (v, t, c) in
                          enumerate(rows)])
-        lesson = VGroup(label(r"a K-map with every adjacent pair of 1s \\ covered by one loop \ has no static hazard",
+        lesson = VGroup(label(r"two-level SOP, one changing input: \\ cover adjacent 1s together to avoid static-1 hazards",
                               font_size=24, color=GREY_A),
                         label(r"but the usual cure is the clock: \\ look at outputs only after everything settles "
                               r"\ (Part 5)", font_size=24, color=CLOCK)).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
@@ -147,7 +147,7 @@ class Timing(VoiceoverScene):
         with self.voiceover(
             "One fix is surprising. <bookmark mark='a'/> Add the term b c, which the laws of chapter one say is "
             "redundant: it changes nothing about the function. <bookmark mark='b'/> But during the transition it holds "
-            "the output up, and the glitch is gone. On a Karnaugh map, the rule is to cover every pair of neighbouring "
+            "the output up, and the glitch is gone. For a two-level sum of products and one changing input, cover every pair of neighbouring "
             "ones with a single loop. <bookmark mark='c'/> The more common cure is to stop caring: make every circuit "
             "settle before anybody looks at it, by reading outputs only at the tick of a clock. That is how Part 5 "
             "builds memory and time."

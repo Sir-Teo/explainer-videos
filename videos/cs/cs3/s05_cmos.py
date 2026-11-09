@@ -172,11 +172,11 @@ class Cmos(VoiceoverScene):
             "<bookmark mark='d'/> Real cell libraries are full of these compound gates, and a synthesis tool chooses "
             "among them the way a chess program chooses moves."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Write(f), Create(dn), FadeIn(ldn))
             vo.wait_until("a")
-            self.play(Write(f))
+            self.play(Circumscribe(f, color=HEAD))
             vo.wait_until("b")
-            self.play(Create(dn), FadeIn(ldn))
+            self.play(Circumscribe(dn, color=HEAD))
             vo.wait_until("c")
             self.play(Create(up), Create(c_up), FadeIn(lup))
             vo.wait_until("d")
@@ -222,14 +222,14 @@ class Cmos(VoiceoverScene):
     def power(self):
         d = load("cmos")
         vin, idd = np.asarray(d["vin"]), np.asarray(d["idd"])
-        head = label(r"Power is spent only when a gate switches", font_size=38).to_edge(UP, buff=0.35)
+        head = label(r"Switching power in CMOS", font_size=38).to_edge(UP, buff=0.35)
         ax = Axes(x_range=[0, 1, 0.25], y_range=[0, float(idd.max()) * 1.15, float(idd.max()) / 2], x_length=5.6,
                   y_length=3.4, tips=False, axis_config={"color": GREY_C, "font_size": 20},
                   x_axis_config={"numbers_to_include": [0, 0.5, 1]}).move_to(LEFT * 3.0 + DOWN * 0.3)
         path = VMobject(color=COST, stroke_width=4).set_points_as_corners([ax.c2p(x, y) for x, y in zip(vin, idd)])
         xl = MathTex(r"V_{\text{in}} / V_{DD}", font_size=26, color=GREY_B).next_to(ax, DOWN, buff=0.15)
-        yl = label(r"current from the supply", font_size=22, color=GREY_B).next_to(ax, UP, buff=0.15)
-        txt = VGroup(label(r"at 0 or at 1: \ one transistor is off, \ no current", font_size=26, color=YES),
+        yl = label(r"model current: both transistors conduct", font_size=22, color=GREY_B).next_to(ax, UP, buff=0.15)
+        txt = VGroup(label(r"stable 0 or 1: \ no ideal DC path; \ real devices leak", font_size=26, color=YES),
                      label(r"while switching: \ both briefly on, \\ and the next gate's input is charged", font_size=26,
                            color=COST),
                      MathTex(r"P \approx \alpha\, C\, V_{DD}^2\, f", font_size=42, color=HEAD),
@@ -239,9 +239,9 @@ class Cmos(VoiceoverScene):
         with self.voiceover(
             "One more property, and it is why CMOS won. <bookmark mark='a'/> The current the inverter draws from its "
             "supply, computed across the sweep, is zero at both ends and spikes only in the middle, while both "
-            "transistors are partly on. <bookmark mark='b'/> A CMOS circuit sitting still uses almost no power. It pays "
-            "when it switches: a little current while both transistors conduct, and the charge needed to flip the "
-            "wires and gates it drives. <bookmark mark='c'/> So the power is roughly the fraction of wires that switch, "
+            "transistors are partly on. <bookmark mark='b'/> In this ideal model, a stable CMOS gate draws no current; real gates still leak. Switching costs "
+            "energy in two ways: overlap current while both transistors conduct, and the charge needed to flip the "
+            "wires and gates it drives. <bookmark mark='c'/> The capacitive switching power is roughly the fraction of wires that switch, "
             "times their capacitance, times the supply voltage squared, times the clock frequency. That one formula "
             "explains why clocks stopped getting faster around 2005, and why chips grew many cores instead, which is "
             "Part 10."

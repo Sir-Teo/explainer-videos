@@ -138,7 +138,7 @@ Frontier topic; each is refined in that part's frontier sweep.
 |---|---|
 | 1 | how BB(5) was proved (non-halting certificates, deciders); BB(6) in Knuth's arrows; Antihydra, run and decoded, and the gambler's-ruin heuristic; machines beyond ZFC (7,910 → 432 states) |
 | 2 | Ramsey numbers: R(3,3) by pigeonhole and exhaustion, the Paley graph on 17, Erdős's bounds, the 2023–24 exponential improvements; explicit constructions and Paley clique numbers (computed) |
-| 3 | exact minimum circuits for every 3-input function (computed); the census wall at five inputs; gate elimination and the 3.1n record; MCSP and meta-complexity |
+| 3 | exact minimum circuits for every 3-input function (computed); the census wall at five inputs; gate elimination, the 3.1n bound (2022) and a reported 4n − O(log n) bound (November 2026 preprint); MCSP and meta-complexity |
 | 4 | integer multiplication measured on this machine and the race to n log n; correct rounding of eˣ measured, the table-maker's dilemma, CORE-MATH; the hardest float32 eˣ (computed) |
 | 5 | falling Rowhammer thresholds; PARA's probability and Misra–Gries counting, derived; a many-sided attack simulated; Half-Double, RowPress, PRAC |
 | 6 | mutation analysis of random co-simulation (computed); coverage-guided CPU fuzzing (DifuzzRTL, Cascade); Sail, Kami, Silver; verifying speculative cores |
@@ -569,7 +569,7 @@ one can point to a single one that does.
    - Shannon's counting argument (1949): almost all n-input functions need ≳ 2ⁿ/n gates (proved by counting
      circuits against functions);
    - Lupanov's matching upper bound;
-   - yet the best lower bound for an explicit function is about 3.1n. The gap returns in Part 27.
+   - yet explicit-function lower bounds remain linear: 3.1n (Li & Yang, 2022), with 4n − O(log n) reported by Mishra & Santhanam in a November 2026 preprint. The gap returns in Part 27.
 9. Formulas against circuits; parity needs 2ⁿ⁻¹ terms in depth two.
 10. Gates take time: propagation delay, the critical path, glitches and hazards, fan-out, RC delay. Our simulator with
     unit delays shows a glitch.
@@ -590,7 +590,7 @@ circuits of size s.
 *Reading:* Harris & Harris, *Digital Design and Computer Architecture* ch. 1–2; Nisan & Schocken, *The Elements of
 Computing Systems* ch. 1; Petzold, *Code*; Shannon 1938, 1949; Bryant 1986; Wegener, *The Complexity of Boolean
 Functions*; Jukna, *Boolean Function Complexity*; Knuth, TAOCP 4A §7.1; Weste & Harris, *CMOS VLSI Design* ch. 1;
-Li & Yang 2022 (3.1n).
+Li & Yang 2022 (3.1n); Mishra & Santhanam, [ECCC TR26-260 revision 1](https://eccc.weizmann.ac.il/report/2026/260/), November 2026 preprint (reports 4n − O(log n), attribution checked 9 November 2026).
 
 ### Part 4 · Arithmetic (~55)
 *Story:* A machine has only finitely many bits, so its integers live on a clock and its reals are a sparse,

@@ -86,9 +86,9 @@ class Simulator(VoiceoverScene):
             "gate can only read wires that already exist, the list is in an order where every gate comes after its "
             "inputs. So evaluating the whole circuit is one pass down the list."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(code))
             vo.wait_until("a")
-            self.play(FadeIn(code, lag_ratio=0.1))
+            self.play(Circumscribe(code, color=HEAD))
             vo.wait_until("b")
             self.play(FadeIn(hdr), LaggedStart(*[FadeIn(r) for r in table], lag_ratio=0.1), FadeIn(drawn), run_time=2.0)
             vo.wait_until("c")
@@ -130,9 +130,9 @@ class Simulator(VoiceoverScene):
             "a thousand and twenty-four words per wire, one pass, and a fraction of a second. This is bit-parallel "
             "simulation, and chip companies use the same idea, on far bigger machines, before they build anything."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(ra), FadeIn(rb), FadeIn(cap[0]))
             vo.wait_until("a")
-            self.play(FadeIn(ra), FadeIn(rb), FadeIn(cap[0]))
+            self.play(Circumscribe(ra, color=HEAD))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(s_) for s_ in rc[0]], lag_ratio=0.03), FadeIn(rc[1]), FadeIn(rc[2]),
                       FadeIn(cap[1]))

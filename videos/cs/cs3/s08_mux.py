@@ -101,8 +101,10 @@ class Mux(VoiceoverScene):
             "multiplexer, given the constants zero and one, is complete on its own, and Post's test agrees. This is why "
             "some chip families were built entirely from multiplexers."
         ) as vo:
-            self.play(FadeIn(head))
-            for mk, g_, l_ in zip("abc", groups, lab):
+            self.play(FadeIn(head), FadeIn(groups[0]), FadeIn(lab[0]))
+            vo.wait_until("a")
+            self.play(Circumscribe(groups[0], color=HEAD))
+            for mk, g_, l_ in zip("bc", groups[1:], lab[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(g_), FadeIn(l_))
             self.play(FadeIn(why))
@@ -126,11 +128,11 @@ class Mux(VoiceoverScene):
             "again, until no inputs are left. What remains at the leaves are constants, zeros and ones: the truth "
             "table itself, read off by a tree of multiplexers driven by the inputs."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), Write(f), FadeIn(expl), FadeIn(tree, lag_ratio=0.05), FadeIn(tl), run_time=2.4)
             vo.wait_until("a")
-            self.play(Write(f), FadeIn(expl))
+            self.play(Circumscribe(f, color=HEAD))
             vo.wait_until("b")
-            self.play(FadeIn(tree, lag_ratio=0.05), FadeIn(tl), run_time=2.4)
+            self.play(Circumscribe(tree, color=HEAD))
         self.wait(0.3)
         self.clear_scene()
 

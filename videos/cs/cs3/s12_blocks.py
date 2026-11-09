@@ -131,9 +131,10 @@ class Blocks(VoiceoverScene):
             "same time: three multiplexers deep for eight bits, five for thirty-two."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[0]), FadeIn(labels[0]))
-            vo.wait_until("b")
+            vo.wait_until("a")
             for k in range(1, 4):
                 self.play(GrowArrow(arrows[k - 1]), FadeIn(rows[k], shift=DOWN * 0.2), FadeIn(labels[k]), run_time=0.8)
+            vo.wait_until("b")
             self.play(Write(res))
             vo.wait_until("c")
             self.play(FadeIn(cost))

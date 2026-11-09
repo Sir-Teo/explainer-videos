@@ -69,14 +69,14 @@ class Complexity(VoiceoverScene):
             "Its depth, the longest path from an input to the output, is time: every gate on that path adds a delay. "
             "<bookmark mark='b'/> Parity of eight bits, as a chain of exclusive-ors: seven gates, seven deep. "
             "<bookmark mark='c'/> The same seven gates as a tree: three deep. Same size, less than half the time, "
-            "and the gap grows: a chain is n deep, a tree log n. Part 4's adders are a long fight to turn chains into "
+            "and the gap grows: a chain is n minus one deep, a balanced tree ceiling log base two of n. Part 4's adders are a long fight to turn chains into "
             "trees."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(c1, lag_ratio=0.05), FadeIn(l1))
             vo.wait_until("a")
             self.play(FadeIn(defs))
             vo.wait_until("b")
-            self.play(FadeIn(c1, lag_ratio=0.05), FadeIn(l1))
+            self.play(Circumscribe(c1, color=HEAD))
             vo.wait_until("c")
             self.play(FadeIn(c2, lag_ratio=0.05), FadeIn(l2))
         self.wait(0.3)
@@ -92,10 +92,10 @@ class Complexity(VoiceoverScene):
             RIGHT * 3.0 + UP * 0.9)
         why = note(r"each gate: \ one of 16 kinds, \ and two inputs chosen from the $n + s$ wires", font_size=22)
         why.next_to(rhs, DOWN, buff=0.2)
-        concl = VGroup(label(r"if circuits are fewer than functions, \ most functions have no circuit that small",
+        concl = VGroup(label(r"if small circuits are a vanishing fraction of all functions, \ almost all functions need larger circuits",
                              font_size=28, color=HEAD),
-                       MathTex(r"s\,\log_2\!\big(16 (n+s)^2\big) < 2^n \ \ \Rightarrow \ \ s \gtrsim \frac{2^n}{2n}",
-                               font_size=38, color=YES),
+                       MathTex(r"\frac{\#\{\text{functions with size}\le s\}}{2^{2^n}} \le 2^{\,s\log_2(16(n+s)^2)-2^n}",
+                               font_size=32, color=YES),
                        label(r"so almost every function needs exponentially many gates", font_size=28, color=NO)).arrange(
             DOWN, buff=0.35).move_to(DOWN * 1.8)
         with self.voiceover(
@@ -103,14 +103,14 @@ class Complexity(VoiceoverScene):
             "He counted. <bookmark mark='a'/> A function of n inputs is a truth table with two to the n rows, so there "
             "are two to the two to the n functions. For twenty inputs, a number with three hundred and fifteen thousand "
             "digits. <bookmark mark='b'/> A circuit with s gates is a list of s choices: a kind of gate, and two input "
-            "wires. So there are at most about n plus s squared, to the s, of them. <bookmark mark='c'/> If there are "
-            "fewer small circuits than functions, most functions have no small circuit. Solving the inequality: "
-            "almost every function of n inputs needs on the order of two to the n over n gates. Exponential. A random "
+            "wires. So there are at most about n plus s squared, to the s, of them. <bookmark mark='c'/> If the count of "
+            "small circuits is a vanishing fraction of the function count, almost all functions need larger circuits. "
+            "Almost every function of n inputs needs on the order of two to the n over n gates. Exponential. A random "
             "truth table is, almost surely, hopelessly hard."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(lhs))
             vo.wait_until("a")
-            self.play(FadeIn(lhs))
+            self.play(Circumscribe(lhs, color=HEAD))
             vo.wait_until("b")
             self.play(FadeIn(rhs), FadeIn(why))
             vo.wait_until("c")
@@ -166,7 +166,7 @@ class Complexity(VoiceoverScene):
     # ------------------------------------------------------------------
     def formulas(self):
         head = label(r"Formulas against circuits", font_size=38).to_edge(UP, buff=0.35)
-        defs = VGroup(label(r"a \textit{formula} never reuses a gate's output: \ it is a tree", font_size=26,
+        defs = VGroup(label(r"AND/OR/NOT basis: \ a \textit{formula} is a tree, with no shared outputs", font_size=26,
                             color=GREY_A),
                       label(r"a \textit{circuit} may share: \ one output can feed many gates", font_size=26,
                             color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(head, DOWN, buff=0.3)
@@ -208,25 +208,25 @@ class Complexity(VoiceoverScene):
                 ins.add(Line(pin() + LEFT * 0.3, pin(), color=WIRE, stroke_width=2))
         circ = VGroup(g1, g2, g3, ins, wire(g1.out(), g3.inp[0]()), wire(g2.out(), g3.inp[1]()),
                       Line(g3.out(), g3.out() + RIGHT * 0.4, color=WIRE, stroke_width=2))
-        clab = label(r"circuit: \ 3 XORs \ $\approx 4n$ gates", font_size=26, color=YES).next_to(circ, DOWN, buff=0.45)
-        khr = label(r"parity as a formula: \ $\ge n^2$ leaves \ (Khrapchenko, 1971), \ and $n^2$ suffice", font_size=26,
+        clab = label(r"circuit: \ 3 XORs \ $=$ 12 AND/OR/NOT gates", font_size=26, color=YES).next_to(circ, DOWN, buff=0.45)
+        khr = label(r"AND/OR/NOT formulas: \ $\ge n^2$ leaves; \ attained when $n = 2^k$ \ (Khrapchenko, 1971)", font_size=26,
                     color=NO).to_edge(DOWN, buff=0.3).shift(UP * 0.0)
         tail = label(r"sharing can save a polynomial; \ whether it ever saves more \ is open", font_size=26,
                      color=HEAD).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "There is a second way to measure. <bookmark mark='a'/> A formula is a circuit in which every gate's output "
+            "There is a second way to measure. <bookmark mark='a'/> Fix the same basis of and, or and not for both. A formula is a circuit in which every gate's output "
             "is used only once, so it is a tree, like the expressions of Part 2. A circuit may reuse a result as often "
             "as it likes. <bookmark mark='b'/> Sharing matters. Parity of n bits needs only about four n gates of and, "
             "or and not as a circuit. <bookmark mark='c'/> But as a formula, Valery Khrapchenko proved in 1971 that it "
-            "needs at least n squared leaves, and n squared is enough. <bookmark mark='d'/> So sharing can save a "
+            "needs at least n squared leaves. Powers of two attain that bound; for general n the order is quadratic. <bookmark mark='d'/> So sharing can save a "
             "polynomial factor. Whether it can ever save more than that, for some function, is another open question, "
             "and it is tangled up with whether problems can be solved quickly in parallel, which Part 10 meets."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(circ, lag_ratio=0.05), FadeIn(clab))
             vo.wait_until("a")
             self.play(FadeIn(defs))
             vo.wait_until("b")
-            self.play(FadeIn(circ, lag_ratio=0.05), FadeIn(clab))
+            self.play(Circumscribe(circ, color=HEAD))
             vo.wait_until("c")
             self.play(Create(edges), FadeIn(nodes), run_time=1.6)
             self.play(LaggedStart(*[FadeIn(m, shift=UP * 0.1) for m in leaves], lag_ratio=0.06), FadeIn(flab))
@@ -241,21 +241,21 @@ class Complexity(VoiceoverScene):
         head = label(r"The embarrassing gap", font_size=38).to_edge(UP, buff=0.4)
         n = 100
         most = math.log10(2 ** n / n)
-        proved = math.log10(3.1 * n)
+        leading = math.log10(4 * n)
         scale, x0, y0 = 0.36, -5.6, 0.15
         axis = NumberLine(x_range=[0, 30, 5], length=30 * scale, color=GREY_C, include_ticks=True,
                           stroke_width=2).move_to([x0 + 15 * scale, y0, 0])
         ticks = VGroup(*[MathTex(rf"10^{{{k}}}", font_size=22, color=GREY_B).next_to(axis.n2p(k), DOWN, buff=0.15)
                          for k in range(0, 31, 5)])
-        cap = note(rf"gates needed by a function of $n = {n}$ inputs \ (log scale)", font_size=22).next_to(
+        cap = note(rf"leading terms at $n = {n}$ inputs \ (log scale; lower-order terms omitted)", font_size=22).next_to(
             axis, DOWN, buff=0.6).align_to(axis, LEFT)
         bar_most = Rectangle(width=most * scale, height=0.34, stroke_width=0, fill_color=FUNC, fill_opacity=0.85)
         bar_most.move_to(axis.n2p(0) + UP * 1.55, aligned_edge=LEFT)
-        bar_pr = Rectangle(width=proved * scale, height=0.34, stroke_width=0, fill_color=LIMIT, fill_opacity=0.9)
+        bar_pr = Rectangle(width=leading * scale, height=0.34, stroke_width=0, fill_color=LIMIT, fill_opacity=0.9)
         bar_pr.move_to(axis.n2p(0) + UP * 0.75, aligned_edge=LEFT)
         l_most = label(rf"almost every function: \ $\approx 2^n/n \approx 10^{{{most:.0f}}}$", font_size=26,
                        color=FUNC).next_to(bar_most, UP, buff=0.15).align_to(bar_most, LEFT)
-        l_pr = label(rf"best proved for an explicit function: \ $3.1\,n \approx {3.1 * n:.0f}$", font_size=26,
+        l_pr = label(r"reported: \ $4n-O(\log n)$ \\ Mishra and Santhanam, \ November 2026 preprint", font_size=24,
                      color=LIMIT).next_to(bar_pr, RIGHT, buff=0.25)
         lines = VGroup(*[label(t, font_size=26, color=c) for t, c in (
             (r"a superpolynomial lower bound for one function in NP \ would prove P $\ne$ NP", HEAD),
@@ -264,8 +264,9 @@ class Complexity(VoiceoverScene):
         )]).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(DOWN, buff=0.35).align_to(axis, LEFT)
         with self.voiceover(
             "And now the embarrassment. <bookmark mark='a'/> Almost every function needs exponentially many gates. "
-            "<bookmark mark='b'/> Yet name a specific function, one you can actually write down and check, and nobody "
-            "has proved it needs more than about three point one times n gates. That record is from 2022. "
+            "<bookmark mark='b'/> Yet for explicit functions the lower bounds remain linear. Li and Yang reached "
+            "three point one n in 2022. A November 2026 preprint by Om Swostik Mishra and Rahul Santhanam reports "
+            "four n minus a logarithmic term. Even that is tiny beside the exponential bound for almost every function. "
             "<bookmark mark='c'/> The reason it matters: proving that some problem in NP needs more than polynomially "
             "many gates would prove that P is not equal to NP, the most famous open problem in the field. "
             "<bookmark mark='d'/> In weaker models we can prove such things. Parity needs exponentially many terms in "

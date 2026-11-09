@@ -115,11 +115,6 @@
    "en": "For logic, a MOSFET is just a switch with three wires. <bookmark mark='a'/> In an n-type transistor, a high voltage on the gate connects the drain to the source; a low voltage disconnects them. The gate itself draws almost no current: it works like the coil of a relay, through an electric field instead of a magnet. <bookmark mark='b'/> A p-type transistor is the mirror image: it conducts when its gate is low. The little bubble on the symbol means not, as on a gate. <bookmark mark='c'/> Two kinds of switch, one that closes on one and one that closes on zero. Put them together and something remarkable happens.",
    "zh": "对逻辑来说，MOSFET 只是一个有三根引线的开关。<bookmark mark='a'/>在 n 型晶体管里，栅极加高电压，漏极和源极就接通；低电压则断开。栅极本身几乎不取电流：它像继电器的线圈，只不过靠的是电场而不是磁铁。<bookmark mark='b'/>p 型晶体管是它的镜像：栅极为低时导通。符号上的小圆圈表示“非”，和门上的一样。<bookmark mark='c'/>两种开关，一种遇一闭合，一种遇零闭合。把它们放在一起，就会发生了不起的事。"
   },
-  "5f6e81887ed9": {
-   "scene": "Transistors",
-   "en": "Stack a p-type transistor on an n-type one, the p on top connected to the supply voltage, the n below connected to ground, and join their gates as the input and their middle as the output. This is the CMOS inverter, the C standing for complementary. <bookmark mark='a'/> Input zero: the p transistor conducts and the n does not, so the output is connected to the supply: one. <bookmark mark='b'/> Input one: the n conducts and the p does not, so the output is connected to ground: zero. It computes not. <bookmark mark='c'/> And in either state one of the two transistors is off, so there is no path from the supply to ground, and no current flows at all while it sits still. That is why your phone does not melt.",
-   "zh": "把一个 p 型晶体管叠在一个 n 型晶体管上面，上面的 p 接电源电压，下面的 n 接地，两个栅极连在一起作输入，中间连接点作输出。这就是 CMOS 反相器，C 代表互补。<bookmark mark='a'/>输入为零：p 导通、n 不导通，所以输出接到电源：一。<bookmark mark='b'/>输入为一：n 导通、p 不导通，所以输出接地：零。它计算的是“非”。<bookmark mark='c'/>而且在任一状态下，两个晶体管中总有一个是关断的，所以从电源到地没有通路，静止时完全没有电流。这就是你的手机不会熔化的原因。"
-  },
   "b95042a9cc28": {
    "scene": "Transistors",
    "en": "Real voltages are not exactly zero and one, so look at everything in between. <bookmark mark='a'/> Sweep the input from ground to the supply, and plot the output, computed here from a standard model of the two transistors. It stays high, then plunges, then stays low. <bookmark mark='b'/> It crosses the diagonal at half the supply: the switching threshold. And in the middle it is very steep: a small change in the input makes a change in the output more than a hundred times bigger. <bookmark mark='c'/> The flat parts are the point. Anything below about forty-five percent of the supply is read as a clean zero, and anything above about fifty-five percent as a clean one. The gaps between what a gate guarantees to produce and what the next gate needs to see are the noise margins.",
@@ -154,11 +149,6 @@
    "scene": "Cmos",
    "en": "Count the transistors. <bookmark mark='a'/> An inverter takes two. NAND and NOR take four. And or or takes six, because CMOS naturally inverts: you build a NAND and then invert it. Exclusive-or takes eight or more. <bookmark mark='b'/> So the natural gates of CMOS are the inverting ones. And between those two, NAND wins: its series transistors are n-type, and electrons, which carry the current in n-type transistors, move two to three times faster than the holes in p-type ones. A modern chip is mostly NAND gates and inverters, which is why the next chapter asks whether NAND alone is enough.",
    "zh": "数一数晶体管。<bookmark mark='a'/>反相器要两个。与非和或非要四个。与或者或要六个，因为 CMOS 天生会取反：你先搭一个与非，再取反。异或要八个或更多。<bookmark mark='b'/>所以 CMOS 的天然门是带取反的那些。而在这两者之间，与非门胜出：它的串联晶体管是 n 型的，而在 n 型晶体管中载流的电子，比 p 型中的空穴快两到三倍。现代芯片大多由与非门和反相器组成，所以下一章要问：只用与非门够不够？"
-  },
-  "4909580538c5": {
-   "scene": "Cmos",
-   "en": "One more property, and it is why CMOS won. <bookmark mark='a'/> The current the inverter draws from its supply, computed across the sweep, is zero at both ends and spikes only in the middle, while both transistors are partly on. <bookmark mark='b'/> A CMOS circuit sitting still uses almost no power. It pays when it switches: a little current while both transistors conduct, and the charge needed to flip the wires and gates it drives. <bookmark mark='c'/> So the power is roughly the fraction of wires that switch, times their capacitance, times the supply voltage squared, times the clock frequency. That one formula explains why clocks stopped getting faster around 2005, and why chips grew many cores instead, which is Part 10.",
-   "zh": "还有一个性质，正是它让 CMOS 胜出。<bookmark mark='a'/>反相器从电源取的电流，在整个扫描中计算出来，两端都是零，只在中间、两个晶体管都部分导通时出现一个尖峰。<bookmark mark='b'/>静止的 CMOS 电路几乎不耗电。它在切换时付出代价：两个晶体管同时导通时的一点电流，以及翻转它所驱动的导线和门所需的电荷。<bookmark mark='c'/>所以功率大约是：发生切换的导线比例，乘以它们的电容，乘以电源电压的平方，乘以时钟频率。这一个公式解释了为什么时钟在2005年前后不再变快，以及芯片为什么改为长出许多核心，那是第10部分。"
   },
   "ea8139311127": {
    "scene": "Complete",
@@ -205,11 +195,6 @@
    "en": "Normal forms can be terrible. <bookmark mark='a'/> Parity, which is one when an odd number of inputs are one, makes a perfect checkerboard on the map. No two ones are neighbours, nothing merges, and every one of the eight ones needs its own term. <bookmark mark='b'/> With n inputs the normal form needs two to the n minus one terms, which for sixty-four inputs is about nine billion billion terms. <bookmark mark='c'/> But a tree of n minus one exclusive-or gates computes it easily. The two-level form, an or of ands, is a poor model of what circuits can do; depth, how many layers deep a circuit is, changes everything, and chapter nine measures it.",
    "zh": "范式可能糟糕透顶。<bookmark mark='a'/>奇偶函数，在奇数个输入为一时为一，在图上形成完美的棋盘。没有两个一是相邻的，什么都合并不了，八个一每个都需要自己的一项。<bookmark mark='b'/>n 个输入时，范式需要 2 的 n 减一次方项，六十四个输入时大约是九百亿亿项。<bookmark mark='c'/>但一棵由 n 减一个异或门组成的树轻松就能算出它。两级形式，即与项的或，很不适合描述电路的能力；深度，也就是电路有几层，改变一切，第9章会度量它。"
   },
-  "b3905a2d31dc": {
-   "scene": "Normal",
-   "en": "So how hard is it to find the smallest formula for a function? <bookmark mark='a'/> Even for two-level forms, starting from the truth table, it is NP-hard, a word Part 26 makes precise: no efficient method is known, and probably none exists. <bookmark mark='b'/> Starting from a formula, asking whether a smaller equivalent one exists is even harder, complete for the second level of the polynomial hierarchy. <bookmark mark='c'/> So the logic synthesis tools that design real chips use clever heuristics, and do not promise the smallest circuit. They are extremely good at it anyway.",
-   "zh": "那么，找一个函数的最小公式有多难？<bookmark mark='a'/>即使是两级形式，从真值表出发，它也是 NP 难的，这个词第26部分会讲精确：没有已知的高效方法，而且很可能根本不存在。<bookmark mark='b'/>从一个公式出发，问是否存在更小的等价公式，就更难了，它对多项式层级的第二层是完全的。<bookmark mark='c'/>所以设计真实芯片的逻辑综合工具用巧妙的启发式方法，并不保证得到最小的电路。尽管如此，它们做得极好。"
-  },
   "8aa8978cc186": {
    "scene": "Mux",
    "en": "Chapter seven. Choosing with gates.",
@@ -245,50 +230,20 @@
    "en": "Chapter eight. Decision diagrams.",
    "zh": "第8章。决策图。"
   },
-  "0ca7c8bc2310": {
-   "scene": "Bdd",
-   "en": "Truth tables and normal forms are either huge or not unique. In 1986 Randal Bryant made a data structure that is often small and always unique. <bookmark mark='a'/> Start with a decision tree. Here is majority: test a, then b, then c, and read the answer at a leaf. Dashed lines are zero, solid lines one. It is just the truth table, spread out. <bookmark mark='b'/> Now apply two rules. Share any two identical pieces, so all the zero leaves become one leaf and all the ones another. And delete any test whose two branches lead to the same place, because it does not matter. <bookmark mark='c'/> Repeat until neither rule applies. What remains is a reduced ordered binary decision diagram: for majority, four tests instead of seven.",
-   "zh": "真值表和范式要么巨大，要么不唯一。1986年，兰德尔·布莱恩特提出了一种通常很小、而且总是唯一的数据结构。<bookmark mark='a'/>从一棵决策树开始。这是多数函数：先测 a，再测 b，再测 c，在叶子上读出答案。虚线是零，实线是一。它不过是摊开的真值表。<bookmark mark='b'/>现在应用两条规则。共享任意两个相同的部分，于是所有的零叶子变成一个叶子，所有的一叶子变成另一个。删去任何两个分支通向同一处的测试，因为它无关紧要。<bookmark mark='c'/>重复，直到两条规则都不再适用。剩下的就是简化有序二元决策图：对多数函数，四个测试而不是七个。"
-  },
   "f1082806ccda": {
    "scene": "Bdd",
    "en": "There is a catch. <bookmark mark='a'/> Take x one and x two, or x three and x four, or x five and x six. Test the variables in their natural order, and the diagram is a neat ladder: eight nodes. <bookmark mark='b'/> Test all the odd ones first, then the even ones, and the diagram has to remember which of the first three were one before it can see their partners: sixteen nodes. <bookmark mark='c'/> Computed for more pairs, the good order grows by two nodes per pair; the bad order doubles. With fourteen variables, sixteen nodes against two hundred and fifty-six. Finding the best order is itself NP-hard, so real tools reorder heuristically as they go.",
    "zh": "这里有个陷阱。<bookmark mark='a'/>取 x1 且 x2，或 x3 且 x4，或 x5 且 x6。按自然顺序测试变量，图是一架整齐的梯子：八个结点。<bookmark mark='b'/>先测所有奇数号的，再测偶数号的，图就必须记住前三个里哪些是一，才能看到它们的搭档：十六个结点。<bookmark mark='c'/>对更多的对计算：好的顺序每多一对只多两个结点；坏的顺序则翻倍。十四个变量时，十六个结点对两百五十六个。找最好的顺序本身是 NP 难的，所以实际工具一边算一边启发式地重排。"
-  },
-  "aff8560c5780": {
-   "scene": "Bdd",
-   "en": "Why go to this trouble? <bookmark mark='a'/> Because with the order fixed, every function has exactly one reduced diagram. <bookmark mark='b'/> So to check that a clever optimized circuit computes the same function as its simple specification, build both diagrams in one shared table and compare two pointers. <bookmark mark='c'/> And, or and not on diagrams, and asking whether any input makes the function true, are all fast, taking time proportional to the sizes of the diagrams involved. Counting how many inputs make a function true is fast too: one pass over the nodes. That made decision diagrams the workhorse of chip verification in the 1990s. <bookmark mark='d'/> The catch never goes away: Bryant also proved that the middle output bit of a multiplier has an exponentially large diagram under every possible order. Part 54 uses them anyway, where they work, and Part 26 meets the other great approach, satisfiability solvers.",
-   "zh": "为什么要费这个事？<bookmark mark='a'/>因为顺序固定后，每个函数恰好有一个简化图。<bookmark mark='b'/>所以要检查一个巧妙优化过的电路是否和它简单的规格说明计算同一个函数，就在一张共享表里建出两个图，比较两个指针。<bookmark mark='c'/>在图上做且、或、非，以及问是否有某个输入使函数为真，都很快，时间与涉及的图的大小成正比。数出有多少个输入使函数为真也很快：扫一遍结点就行。这让决策图成了20世纪90年代芯片验证的主力。<bookmark mark='d'/>陷阱始终存在：布莱恩特还证明，乘法器中间那一位输出，在每一种可能的顺序下都有指数大的图。第54部分在它们管用的地方照样使用它们，第26部分则会遇到另一种伟大的方法，可满足性求解器。"
   },
   "b029c1dbbe2c": {
    "scene": "Complexity",
    "en": "Chapter nine. How many gates?",
    "zh": "第9章。需要多少个门？"
   },
-  "4e7bb7151b77": {
-   "scene": "Complexity",
-   "en": "A circuit has two costs. <bookmark mark='a'/> Its size, the number of gates, is area on the chip and power. Its depth, the longest path from an input to the output, is time: every gate on that path adds a delay. <bookmark mark='b'/> Parity of eight bits, as a chain of exclusive-ors: seven gates, seven deep. <bookmark mark='c'/> The same seven gates as a tree: three deep. Same size, less than half the time, and the gap grows: a chain is n deep, a tree log n. Part 4's adders are a long fight to turn chains into trees.",
-   "zh": "电路有两种代价。<bookmark mark='a'/>它的规模，也就是门的个数，是芯片面积和功耗。它的深度，从输入到输出的最长路径，是时间：路径上每个门都增加一份延迟。<bookmark mark='b'/>八位奇偶，做成一串异或门：七个门，七层深。<bookmark mark='c'/>同样七个门做成一棵树：三层深。规模相同，时间不到一半，而且差距会增长：一条链有 n 层深，一棵树只有 log n。第4部分的加法器，就是一场把链变成树的漫长战斗。"
-  },
-  "263d49f8be6c": {
-   "scene": "Complexity",
-   "en": "How many gates does a typical function need? Shannon answered in 1949 without designing a single circuit. He counted. <bookmark mark='a'/> A function of n inputs is a truth table with two to the n rows, so there are two to the two to the n functions. For twenty inputs, a number with three hundred and fifteen thousand digits. <bookmark mark='b'/> A circuit with s gates is a list of s choices: a kind of gate, and two input wires. So there are at most about n plus s squared, to the s, of them. <bookmark mark='c'/> If there are fewer small circuits than functions, most functions have no small circuit. Solving the inequality: almost every function of n inputs needs on the order of two to the n over n gates. Exponential. A random truth table is, almost surely, hopelessly hard.",
-   "zh": "一个典型的函数需要多少个门？香农在1949年没有设计任何电路就回答了。他数了数。<bookmark mark='a'/>n 个输入的函数是一张有 2 的 n 次方行的真值表，所以共有 2 的 2 的 n 次方个函数。二十个输入时，这是一个三十一万五千位的数。<bookmark mark='b'/>有 s 个门的电路是 s 个选择组成的清单：一种门，加两根输入线。所以这样的电路至多大约有 n 加 s 的平方的 s 次方个。<bookmark mark='c'/>如果小电路比函数少，大多数函数就没有小电路。解这个不等式：几乎每个 n 输入函数都需要大约 2 的 n 次方除以 n 个门。指数级。一张随机的真值表，几乎肯定是无可救药地难。"
-  },
   "1471c13063ba": {
    "scene": "Complexity",
    "en": "Here are the numbers, computed. <bookmark mark='a'/> The gates most functions need grow like two to the n over n: for thirty inputs, tens of millions of gates. <bookmark mark='b'/> Compare a circuit that grows like n, the kind engineers actually build, down at the bottom. <bookmark mark='c'/> And it is tight: Oleg Lupanov showed in 1958 that about two to the n over n gates are always enough, for any function. Almost every function sits at that worst case. The functions we can build are the rare exceptions.",
    "zh": "这是算出来的数字。<bookmark mark='a'/>大多数函数需要的门数按 2 的 n 次方除以 n 增长：三十个输入时，几千万个门。<bookmark mark='b'/>对比一个按 n 增长的电路，也就是工程师实际搭的那种，在最下面。<bookmark mark='c'/>而且这是紧的：奥列格·卢帕诺夫在1958年证明，大约 2 的 n 次方除以 n 个门对任何函数都总是够的。几乎每个函数都处在这个最坏情形。我们能搭出来的函数，才是罕见的例外。"
-  },
-  "155c02e0c0ef": {
-   "scene": "Complexity",
-   "en": "There is a second way to measure. <bookmark mark='a'/> A formula is a circuit in which every gate's output is used only once, so it is a tree, like the expressions of Part 2. A circuit may reuse a result as often as it likes. <bookmark mark='b'/> Sharing matters. Parity of n bits needs only about four n gates of and, or and not as a circuit. <bookmark mark='c'/> But as a formula, Valery Khrapchenko proved in 1971 that it needs at least n squared leaves, and n squared is enough. <bookmark mark='d'/> So sharing can save a polynomial factor. Whether it can ever save more than that, for some function, is another open question, and it is tangled up with whether problems can be solved quickly in parallel, which Part 10 meets.",
-   "zh": "还有第二种度量方式。<bookmark mark='a'/>公式是这样一种电路：每个门的输出只用一次，所以它是一棵树，就像第2部分的表达式。电路则可以随意重复使用一个结果。<bookmark mark='b'/>共享很重要。n 位奇偶作为电路，只需要大约 4n 个与、或、非门。<bookmark mark='c'/>但作为公式，瓦列里·赫拉普琴科在1971年证明，它至少需要 n 平方个叶子，而 n 平方也够了。<bookmark mark='d'/>所以共享能省下一个多项式因子。对某个函数，它是否能省下更多，是另一个悬而未决的问题，它和问题能否快速并行求解纠缠在一起，第10部分会遇到它。"
-  },
-  "5153e02849a5": {
-   "scene": "Complexity",
-   "en": "And now the embarrassment. <bookmark mark='a'/> Almost every function needs exponentially many gates. <bookmark mark='b'/> Yet name a specific function, one you can actually write down and check, and nobody has proved it needs more than about three point one times n gates. That record is from 2022. <bookmark mark='c'/> The reason it matters: proving that some problem in NP needs more than polynomially many gates would prove that P is not equal to NP, the most famous open problem in the field. <bookmark mark='d'/> In weaker models we can prove such things. Parity needs exponentially many terms in depth two, as chapter six showed, and Johan Håstad proved it needs exponential size in any constant depth. Part 27 explains why the general case has resisted every technique so far.",
-   "zh": "现在说说尴尬之处。<bookmark mark='a'/>几乎每个函数都需要指数多个门。<bookmark mark='b'/>可是说出一个具体的函数，一个你真能写下来并检验的函数，却没有人证明过它需要超过大约 3.1 乘 n 个门。这个纪录来自2022年。<bookmark mark='c'/>这之所以重要，是因为证明 NP 中某个问题需要超多项式个门，就证明了 P 不等于 NP，这个领域最著名的未解问题。<bookmark mark='d'/>在更弱的模型里我们能证明这样的事。奇偶在深度二需要指数多项，正如第6章所示，约翰·霍斯塔德证明了它在任何常数深度下都需要指数规模。第27部分会解释，为什么一般情形至今抵挡住了每一种技巧。"
   },
   "7a581ba30b85": {
    "scene": "Timing",
@@ -299,16 +254,6 @@
    "scene": "Timing",
    "en": "So far a gate's output changed the instant its inputs did. Real gates take time: a few picoseconds to charge the wire they drive. <bookmark mark='a'/> In a circuit, a change at an input ripples forward gate by gate. <bookmark mark='b'/> The output is not settled until the change has travelled the longest path, here four gates deep. That path is the critical path, and it sets how fast the whole circuit can run. <bookmark mark='c'/> Every block in this part is counted in depth as well as size, because in Part 5 the critical path becomes the length of Pebble's clock cycle. For scale: a four gigahertz clock ticks every two hundred and fifty picoseconds, and a fast gate takes around ten, so a processor gets only a couple of dozen gate delays per cycle. Every design decision in act two is about living inside that budget.",
    "zh": "到目前为止，门的输入一变，输出立刻就变。真实的门需要时间：几皮秒来给它驱动的导线充电。<bookmark mark='a'/>在电路里，一个输入的变化一个门一个门地向前传播。<bookmark mark='b'/>直到这个变化走完最长的路径，这里是四个门深，输出才稳定。这条路径就是关键路径，它决定了整个电路能跑多快。<bookmark mark='c'/>这一部分的每个部件都既算规模也算深度，因为在第5部分，关键路径会变成 Pebble 时钟周期的长度。打个比方：四吉赫的时钟每二百五十皮秒跳一次，一个快门大约要十皮秒，所以处理器每个周期只有二十来个门延迟可用。第二幕的每一个设计决策，都是为了在这个预算里过日子。"
-  },
-  "bcc8a007bc38": {
-   "scene": "Timing",
-   "en": "Delays cause stranger things than slowness. <bookmark mark='a'/> Take f equals a b plus not a c, with b and c held at one. Then f is a or not a, which is always one, whatever a does. <bookmark mark='b'/> Now simulate it with every gate taking one unit of time, and let a fall from one to zero. <bookmark mark='c'/> The a b term drops immediately. But the not-a term needs the inverter to react first, so it rises one delay late. For that one moment, both terms are zero, and the output, which should never change, flickers to zero. This is a glitch, from a static hazard. If anything downstream is watching at that moment, it sees a wrong answer.",
-   "zh": "延迟带来的不只是慢，还有更奇怪的事。<bookmark mark='a'/>取 f 等于 a b 加非 a c，b 和 c 保持为一。那么 f 就是 a 或非 a，无论 a 怎样都恒为一。<bookmark mark='b'/>现在模拟它，每个门耗时一个单位，让 a 从一降到零。<bookmark mark='c'/>a b 这一项立刻变低。但非 a 这一项要等反相器先反应，所以晚一个延迟才升高。在那一瞬间，两项都是零，本该永不改变的输出，闪了一下变成零。这就是毛刺，来自静态险象。如果下游有什么东西恰好在那一刻观察，它就会看到错误的答案。"
-  },
-  "2a7933fc47f9": {
-   "scene": "Timing",
-   "en": "One fix is surprising. <bookmark mark='a'/> Add the term b c, which the laws of chapter one say is redundant: it changes nothing about the function. <bookmark mark='b'/> But during the transition it holds the output up, and the glitch is gone. On a Karnaugh map, the rule is to cover every pair of neighbouring ones with a single loop. <bookmark mark='c'/> The more common cure is to stop caring: make every circuit settle before anybody looks at it, by reading outputs only at the tick of a clock. That is how Part 5 builds memory and time.",
-   "zh": "有一种修法出人意料。<bookmark mark='a'/>加上 b c 这一项，第1章的定律说它是多余的：它丝毫不改变函数。<bookmark mark='b'/>但在跳变期间，它把输出撑住，毛刺就消失了。在卡诺图上，规则是用一个圈覆盖每一对相邻的一。<bookmark mark='c'/>更常见的办法是不再在乎：让每个电路在任何人观察之前先稳定下来，只在时钟跳动时读取输出。这就是第5部分搭建存储和时间的方式。"
   },
   "e6a4053dff39": {
    "scene": "Timing",
@@ -370,20 +315,10 @@
    "en": "Chapter thirteen. Machines of switches.",
    "zh": "第13章。开关搭成的机器。"
   },
-  "b4b44013a35d": {
-   "scene": "History",
-   "en": "Shannon's thesis arrived just as people started building computers from switches. <bookmark mark='a'/> In 1937 George Stibitz at Bell Labs wired a relay adder on his kitchen table. In Berlin, Konrad Zuse built the Z1, binary and mechanical, and then in 1941 the Z3, with two thousand six hundred relays, the first working programmable computer. In Iowa, John Atanasoff and Clifford Berry built an electronic calculator with vacuum tubes. At Bletchley Park, Colossus used tubes to break German teleprinter ciphers. And in Philadelphia, ENIAC used seventeen and a half thousand of them and a hundred and fifty kilowatts. <bookmark mark='b'/> Different countries, different purposes, mostly in secret, and all built on the same ideas: binary, switches, and Boole's algebra.",
-   "zh": "香农的论文问世时，人们正开始用开关造计算机。<bookmark mark='a'/>1937年，贝尔实验室的乔治·斯蒂比茨在他的厨房桌子上接出了一个继电器加法器。在柏林，康拉德·楚泽造出了 Z1，二进制、机械式，然后在1941年造出 Z3，有两千六百个继电器，是第一台能工作的可编程计算机。在爱荷华，约翰·阿塔纳索夫和克利福德·贝里用真空管造了一台电子计算器。在布莱切利园，巨人机用真空管破译德国的电传密码。在费城，ENIAC 用了一万七千五百个真空管和一百五十千瓦。<bookmark mark='b'/>不同的国家，不同的目的，大多在秘密中进行，而全都建立在同样的想法上：二进制、开关和布尔代数。"
-  },
   "b8a941fc76b7": {
    "scene": "History",
    "en": "Two of these machines are worth a closer look. <bookmark mark='a'/> Zuse's Z3 worked in binary floating point, twenty-two bits per number, and managed about five additions a second. Its program was punched into discarded cinema film. It was destroyed in an air raid in 1943, and in 1998 Raúl Rojas showed that, with some contortions, it could in principle compute anything a Turing machine can. <bookmark mark='b'/> ENIAC was decimal and a thousand times faster, but it was programmed by plugging cables and setting switches, which could take days. The six women who first worked out how to do that, Kay McNulty, Betty Jennings, Betty Snyder, Marlyn Wescoff, Fran Bilas and Ruth Lichterman, were for decades left out of its history. <bookmark mark='c'/> What both machines lacked was the idea of Part 1's universal machine: a program stored as data in the computer's own memory. Part 6 gives Pebble exactly that.",
    "zh": "其中两台机器值得细看。<bookmark mark='a'/>楚泽的 Z3 用二进制浮点数，每个数二十二位，每秒大约能做五次加法。它的程序打孔在废弃的电影胶片上。它在1943年的一次空袭中被毁，1998年劳尔·罗哈斯证明，经过一些曲折，它在原则上能计算图灵机能计算的任何东西。<bookmark mark='b'/>ENIAC 是十进制的，快一千倍，但它靠插接电缆和设置开关来编程，可能要花好几天。最早摸索出怎么做的六位女性，凯·麦克纳尔蒂、贝蒂·詹宁斯、贝蒂·斯奈德、玛琳·韦斯科夫、弗兰·比拉斯和露丝·利希特曼，几十年来一直被排除在它的历史之外。<bookmark mark='c'/>两台机器都缺少第1部分通用机的那个想法：把程序作为数据存放在计算机自己的存储器里。第6部分正好给 Pebble 这一点。"
-  },
-  "3550d1a6762c": {
-   "scene": "History",
-   "en": "Then came the transistor in 1947 and the integrated circuit in 1958, and the switches started shrinking. <bookmark mark='a'/> In 1965 Gordon Moore, later a founder of Intel, noticed that the number of transistors on a chip was doubling every year, and predicted it would continue; in 1975 he revised it to every two years. <bookmark mark='b'/> Here are some landmark chips on a logarithmic scale, from Intel's 4004 in 1971, with two thousand three hundred transistors, to GPUs of 2024 with about two hundred billion. <bookmark mark='c'/> Half a century of doubling every two years, almost exactly on the line. Each of those transistors is the switch of chapter three, and each chip is, at heart, Shannon's algebra.",
-   "zh": "接着是1947年的晶体管和1958年的集成电路，开关开始缩小。<bookmark mark='a'/>1965年，后来成为英特尔创始人之一的戈登·摩尔注意到，芯片上的晶体管数每年翻一番，并预言这会继续下去；1975年他修正为每两年一番。<bookmark mark='b'/>这里是一些标志性芯片，画在对数坐标上，从1971年英特尔的4004，两千三百个晶体管，到2024年约两千亿个晶体管的 GPU。<bookmark mark='c'/>半个世纪，每两年翻一番，几乎恰好落在直线上。其中每个晶体管都是第3章的那个开关，而每块芯片，本质上都是香农的代数。"
   },
   "2584c358c0f3": {
    "scene": "Reversible",
@@ -400,30 +335,15 @@
    "en": "Can you compute without forgetting? <bookmark mark='a'/> Tommaso Toffoli's gate has three inputs and three outputs. The first two pass straight through; the third is flipped exactly when the first two are both one. <bookmark mark='b'/> Its table is a shuffle of the eight states: every output comes from exactly one input, so nothing is lost, and applying it twice gives back what you started with. <bookmark mark='c'/> Feed it a constant one on the third wire, and the third output is not a and b: a NAND. So by chapter five, reversible gates can compute anything, as Charles Bennett showed in 1973, as long as you keep the extra outputs instead of throwing them away. <bookmark mark='d'/> Edward Fredkin's gate is another: it swaps its last two wires when the first is one, and it never changes how many ones there are, so it can be pictured as billiard balls bouncing through a maze, a model Fredkin and Toffoli proposed in 1982.",
    "zh": "能不能计算而不遗忘？<bookmark mark='a'/>托马索·托福利的门有三个输入和三个输出。前两个直接通过；第三个在前两个都为一时恰好翻转。<bookmark mark='b'/>它的表是八个状态的一次洗牌：每个输出恰好来自一个输入，所以什么都没丢，连用两次就回到起点。<bookmark mark='c'/>在第三根线上输入常数一，第三个输出就是 a 且 b 的非：一个与非门。所以由第5章，可逆门能计算任何东西，正如查尔斯·贝内特在1973年所证明的，只要你保留额外的输出而不把它们扔掉。<bookmark mark='d'/>爱德华·弗雷德金的门是另一种：当第一根线为一时交换后两根线，而且它从不改变一的个数，所以可以想象成在迷宫里弹跳的台球，这是弗雷德金和托福利在1982年提出的模型。"
   },
-  "8583dca30657": {
-   "scene": "Reversible",
-   "en": "This is not just a curiosity. <bookmark mark='a'/> A quantum computer must be reversible: its gates are rotations of a state, and every rotation can be undone. <bookmark mark='b'/> The Toffoli gate is one of its standard gates, and in Part 53 we will simulate a small quantum computer, Toffoli gates included. <bookmark mark='c'/> And the idea of keeping what you would have thrown away, so you can go back, appears much higher up the tower, in the logs that let databases and file systems undo a crash.",
-   "zh": "这不只是个奇谈。<bookmark mark='a'/>量子计算机必须是可逆的：它的门是对状态的旋转，而每一个旋转都能撤销。<bookmark mark='b'/>托福利门是它的标准门之一，在第53部分我们会模拟一台小小的量子计算机，托福利门也在其中。<bookmark mark='c'/>而保留本会扔掉的东西、好让你能够回退的想法，在塔的高处还会出现，在让数据库和文件系统从崩溃中恢复的日志里。"
-  },
   "17747155adb1": {
    "scene": "Frontier",
    "en": "Chapter fifteen. Frontier: the smallest circuit.",
    "zh": "第15章。前沿：最小的电路。"
   },
-  "fcd9a995b9bb": {
-   "scene": "Frontier",
-   "en": "Chapter nine counted how many gates a typical function needs. For very small functions we can do better than count: we can find the best circuit for every one. <bookmark mark='a'/> Treat a circuit as the set of functions its wires compute. Start from the three inputs, add every possible two-input gate, and keep each new set once. <bookmark mark='b'/> One gate gives thirty distinct circuits, two give eight hundred and forty-three, three give twenty-two thousand, four give more than half a million, and at four gates every one of the two hundred and fifty-six functions of three inputs has appeared. <bookmark mark='c'/> So every function of three inputs needs at most four gates, and we know exactly how many each needs: parity of three needs two, the multiplexer three, and majority four, one of the twenty-four hardest. These are not estimates but proofs, by exhaustion.",
-   "zh": "第9章数过一个典型函数需要多少个门。对非常小的函数，我们可以做得比计数更好：为每一个函数找出最好的电路。<bookmark mark='a'/>把电路看作它的导线所计算的函数的集合。从三个输入出发，加上每一种可能的二输入门，每个新集合只保留一次。<bookmark mark='b'/>一个门得到三十个不同的电路，两个门得到八百四十三个，三个门两万两千个，四个门超过五十万个，而到了四个门，三个输入的全部二百五十六个函数都出现了。<bookmark mark='c'/>所以三个输入的每个函数至多需要四个门，而且我们确切知道每个函数需要几个：三输入的奇偶需要两个，多路选择器三个，多数函数四个，它是最难的二十四个之一。这些不是估计，而是证明，靠的是穷举。"
-  },
   "7e3d9ea09057": {
    "scene": "Frontier",
    "en": "This cannot go much further. <bookmark mark='a'/> Four inputs give sixty-five thousand functions, and Donald Knuth computed all of their exact costs in 2005: the hardest need seven gates. Five inputs give four billion functions; Knuth settled almost all of them, and the last few were finished by computer in 2019: the hardest needs twelve. <bookmark mark='b'/> At six inputs there are eighteen quintillion functions, and nobody knows the hardest cost. <bookmark mark='c'/> The number of functions squares with every input added. Modern SAT solvers, which Part 26 builds, can find circuits of ten or twelve gates, but proving that no twelve-gate circuit exists for a single six-input function is already at their limit. Exact knowledge of circuit size ends at five inputs.",
    "zh": "这走不了多远。<bookmark mark='a'/>四个输入有六万五千个函数，高德纳在2005年算出了它们全部的确切代价：最难的需要七个门。五个输入有四十亿个函数；高德纳解决了几乎所有的，最后几个在2019年由计算机完成：最难的需要十二个。<bookmark mark='b'/>到六个输入，有一千八百亿亿个函数，没有人知道最难的代价是多少。<bookmark mark='c'/>每增加一个输入，函数的个数就平方一次。现代的 SAT 求解器，第26部分会搭建它，能找到十到十二个门的电路，但要证明某一个六输入函数不存在十二个门的电路，就已经到了它们的极限。关于电路规模的精确知识止步于五个输入。"
-  },
-  "97599f398039": {
-   "scene": "Frontier",
-   "en": "How are the lower bounds that do exist proved? Almost all of them by one idea, gate elimination. <bookmark mark='a'/> Fix one input to a constant. <bookmark mark='b'/> Every gate that input fed now computes a constant, or simply copies its other input, so it can be removed, and sometimes the gates it fed can be removed too. <bookmark mark='c'/> Choose the function so cleverly that, whatever the circuit, some input can always be fixed to remove at least three gates, and what remains is a function of the same kind with one input fewer. Then induction on the number of inputs gives three n. <bookmark mark='d'/> Norbert Blum reached three n in 1984. It took thirty-two years to add one eighty-sixth of n, and six more to reach three point one n, each by a longer case analysis of how a minimal circuit can look, for functions called affine dispersers, which stay non-constant on every large affine subspace. Three eliminated gates per input is a long way from two to the n over n.",
-   "zh": "那些确实存在的下界是怎么证明的？几乎都靠同一个想法：门消去。<bookmark mark='a'/>把一个输入固定为常数。<bookmark mark='b'/>这个输入所驱动的每一个门，现在要么计算一个常数，要么只是照抄它的另一个输入，于是可以去掉，有时它驱动的门也能一并去掉。<bookmark mark='c'/>把函数选得足够巧妙，使得无论电路是什么样，总能固定某个输入去掉至少三个门，而剩下的是同一类、少一个输入的函数。那么对输入个数做归纳，就得到三 n。<bookmark mark='d'/>诺伯特·布卢姆在1984年达到了三 n。此后花了三十二年才多加了八十六分之一个 n，又过了六年才到三点一 n，每一步都靠对最小电路可能长什么样做更长的情形分析，针对的是一类叫仿射分散器的函数，它们在每个大的仿射子空间上都不是常数。每个输入消去三个门，离二的 n 次方除以 n 还差得很远。"
   },
   "bbbb284d15f3": {
    "scene": "Frontier",
@@ -459,6 +379,86 @@
    "scene": "Outro",
    "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
    "zh": "这一部分依据的书和论文都在屏幕上，也在笔记里。感谢观看。"
+  },
+  "7350c0797a1c": {
+   "scene": "Transistors",
+   "en": "Stack a p-type transistor on an n-type one, the p on top connected to the supply voltage, the n below connected to ground, and join their gates as the input and their middle as the output. This is the CMOS inverter, the C standing for complementary. <bookmark mark='a'/> Input zero: the p transistor conducts and the n does not, so the output is connected to the supply: one. <bookmark mark='b'/> Input one: the n conducts and the p does not, so the output is connected to ground: zero. It computes not. <bookmark mark='c'/> At a stable zero or one, one transistor is off, so the ideal circuit has no path from the supply to ground. Real transistors still leak, and switching consumes energy. That is why static CMOS is so efficient.",
+   "zh": "把一个 p 型晶体管叠在一个 n 型晶体管上面，上面的 p 接电源电压，下面的 n 接地，两个栅极连在一起作输入，中间连接点作输出。这就是 CMOS 反相器，C 代表互补。<bookmark mark='a'/>输入为零：p 导通、n 不导通，所以输出接到电源：一。<bookmark mark='b'/>输入为一：n 导通、p 不导通，所以输出接地：零。它计算的是“非”。<bookmark mark='c'/>在稳定的零或一状态下，有一个晶体管关断，因此理想电路没有从电源到地的通路。真实晶体管仍会漏电，切换也消耗能量。这正是静态 CMOS 高效的原因。"
+  },
+  "a396e9416d37": {
+   "scene": "Normal",
+   "en": "So how hard is it to find the smallest formula for a function? <bookmark mark='a'/> Even for two-level forms, starting from the truth table, it is NP-hard, a word Part 26 makes precise: no efficient method is known, and probably none exists. <bookmark mark='b'/> Starting from a DNF, asking whether an equivalent DNF with fewer terms exists is even harder, complete for the second level of the polynomial hierarchy. <bookmark mark='c'/> So the logic synthesis tools that design real chips use clever heuristics, and do not promise the smallest circuit. They are extremely good at it anyway.",
+   "zh": "那么，找一个函数的最小公式有多难？<bookmark mark='a'/>即使是两级形式，从真值表出发，它也是 NP 难的，这个词第26部分会讲精确：没有已知的高效方法，而且很可能根本不存在。<bookmark mark='b'/>从一个析取范式出发，问是否存在项数更少的等价析取范式，就更难了，它对多项式层级的第二层是完全的。<bookmark mark='c'/>所以设计真实芯片的逻辑综合工具用巧妙的启发式方法，并不保证得到最小的电路。尽管如此，它们做得极好。"
+  },
+  "2effb0a6f6d9": {
+   "scene": "Bdd",
+   "en": "Truth tables and normal forms are either huge or not unique. In 1986 Randal Bryant made a data structure that is often small, and unique once the variable order is fixed. <bookmark mark='a'/> Start with a decision tree. Here is majority: test a, then b, then c, and read the answer at a leaf. Dashed lines are zero, solid lines one. It is just the truth table, spread out. <bookmark mark='b'/> Now apply two rules. Share any two identical pieces, so all the zero leaves become one leaf and all the ones another. And delete any test whose two branches lead to the same place, because it does not matter. <bookmark mark='c'/> Repeat until neither rule applies. What remains is a reduced ordered binary decision diagram: for majority, four tests instead of seven.",
+   "zh": "真值表和范式要么巨大，要么不唯一。1986年，兰德尔·布莱恩特提出了一种通常很小、并且在变量顺序固定后唯一的数据结构。<bookmark mark='a'/>从一棵决策树开始。这是多数函数：先测 a，再测 b，再测 c，在叶子上读出答案。虚线是零，实线是一。它不过是摊开的真值表。<bookmark mark='b'/>现在应用两条规则。共享任意两个相同的部分，于是所有的零叶子变成一个叶子，所有的一叶子变成另一个。删去任何两个分支通向同一处的测试，因为它无关紧要。<bookmark mark='c'/>重复，直到两条规则都不再适用。剩下的就是简化有序二元决策图：对多数函数，四个测试而不是七个。"
+  },
+  "0c62c811c789": {
+   "scene": "Bdd",
+   "en": "Why go to this trouble? <bookmark mark='a'/> Because with the order fixed, every function has exactly one reduced diagram. <bookmark mark='b'/> So to check that a clever optimized circuit computes the same function as its simple specification, build both diagrams in one shared table and compare two pointers. <bookmark mark='c'/> And, or and not on diagrams, and asking whether any input makes the function true, are polynomial in diagram size; combining two may take the product of their node counts. Counting how many inputs make a function true is fast too: one pass over the nodes. That made decision diagrams the workhorse of chip verification in the 1990s. <bookmark mark='d'/> The catch never goes away: Bryant also proved that the middle output bit of a multiplier has an exponentially large diagram under every possible order. Part 54 uses them anyway, where they work, and Part 26 meets the other great approach, satisfiability solvers.",
+   "zh": "为什么要费这个事？<bookmark mark='a'/>因为顺序固定后，每个函数恰好有一个简化图。<bookmark mark='b'/>所以要检查一个巧妙优化过的电路是否和它简单的规格说明计算同一个函数，就在一张共享表里建出两个图，比较两个指针。<bookmark mark='c'/>在图上做且、或、非，以及问是否有某个输入使函数为真，时间是图大小的多项式；组合两个图，最坏可能需要与两图结点数乘积成正比的时间。数出有多少个输入使函数为真也很快：扫一遍结点就行。这让决策图成了20世纪90年代芯片验证的主力。<bookmark mark='d'/>陷阱始终存在：布莱恩特还证明，乘法器中间那一位输出，在每一种可能的顺序下都有指数大的图。第54部分在它们管用的地方照样使用它们，第26部分则会遇到另一种伟大的方法，可满足性求解器。"
+  },
+  "7f6a83823712": {
+   "scene": "Complexity",
+   "en": "A circuit has two costs. <bookmark mark='a'/> Its size, the number of gates, is area on the chip and power. Its depth, the longest path from an input to the output, is time: every gate on that path adds a delay. <bookmark mark='b'/> Parity of eight bits, as a chain of exclusive-ors: seven gates, seven deep. <bookmark mark='c'/> The same seven gates as a tree: three deep. Same size, less than half the time, and the gap grows: a chain is n minus one deep, a balanced tree ceiling log base two of n. Part 4's adders are a long fight to turn chains into trees.",
+   "zh": "电路有两种代价。<bookmark mark='a'/>它的规模，也就是门的个数，是芯片面积和功耗。它的深度，从输入到输出的最长路径，是时间：路径上每个门都增加一份延迟。<bookmark mark='b'/>八位奇偶，做成一串异或门：七个门，七层深。<bookmark mark='c'/>同样七个门做成一棵树：三层深。规模相同，时间不到一半，而且差距会增长：一条链有 n 减一层深，一棵平衡树的深度是以二为底的 n 的对数向上取整。第4部分的加法器，就是一场把链变成树的漫长战斗。"
+  },
+  "f12bac9aef71": {
+   "scene": "Complexity",
+   "en": "How many gates does a typical function need? Shannon answered in 1949 without designing a single circuit. He counted. <bookmark mark='a'/> A function of n inputs is a truth table with two to the n rows, so there are two to the two to the n functions. For twenty inputs, a number with three hundred and fifteen thousand digits. <bookmark mark='b'/> A circuit with s gates is a list of s choices: a kind of gate, and two input wires. So there are at most about n plus s squared, to the s, of them. <bookmark mark='c'/> If the count of small circuits is a vanishing fraction of the function count, almost all functions need larger circuits. Almost every function of n inputs needs on the order of two to the n over n gates. Exponential. A random truth table is, almost surely, hopelessly hard.",
+   "zh": "一个典型的函数需要多少个门？香农在1949年没有设计任何电路就回答了。他数了数。<bookmark mark='a'/>n 个输入的函数是一张有 2 的 n 次方行的真值表，所以共有 2 的 2 的 n 次方个函数。二十个输入时，这是一个三十一万五千位的数。<bookmark mark='b'/>有 s 个门的电路是 s 个选择组成的清单：一种门，加两根输入线。所以这样的电路至多大约有 n 加 s 的平方的 s 次方个。<bookmark mark='c'/>如果小电路的数量只占全部函数数量中趋于零的比例，几乎所有函数就都需要更大的电路。几乎每个 n 输入函数都需要大约 2 的 n 次方除以 n 个门。指数级。一张随机的真值表，几乎肯定是无可救药地难。"
+  },
+  "a92eaf214d45": {
+   "scene": "Complexity",
+   "en": "There is a second way to measure. <bookmark mark='a'/> Fix the same basis of and, or and not for both. A formula is a circuit in which every gate's output is used only once, so it is a tree, like the expressions of Part 2. A circuit may reuse a result as often as it likes. <bookmark mark='b'/> Sharing matters. Parity of n bits needs only about four n gates of and, or and not as a circuit. <bookmark mark='c'/> But as a formula, Valery Khrapchenko proved in 1971 that it needs at least n squared leaves. Powers of two attain that bound; for general n the order is quadratic. <bookmark mark='d'/> So sharing can save a polynomial factor. Whether it can ever save more than that, for some function, is another open question, and it is tangled up with whether problems can be solved quickly in parallel, which Part 10 meets.",
+   "zh": "还有第二种度量方式。<bookmark mark='a'/>对两者都固定使用与、或、非门。公式是这样一种电路：每个门的输出只用一次，所以它是一棵树，就像第2部分的表达式。电路则可以随意重复使用一个结果。<bookmark mark='b'/>共享很重要。n 位奇偶作为电路，只需要大约 4n 个与、或、非门。<bookmark mark='c'/>但作为公式，瓦列里·赫拉普琴科在1971年证明，它至少需要 n 平方个叶子，当 n 是二的幂时可以达到这个下界；对一般的 n，数量级是平方级。<bookmark mark='d'/>所以共享能省下一个多项式因子。对某个函数，它是否能省下更多，是另一个悬而未决的问题，它和问题能否快速并行求解纠缠在一起，第10部分会遇到它。"
+  },
+  "649ec247c7a9": {
+   "scene": "Timing",
+   "en": "Delays cause stranger things than slowness. <bookmark mark='a'/> Take f equals a b plus not a c, with b and c held at one. Then f is a or not a, which is always one, whatever a does. <bookmark mark='b'/> Now simulate it with every gate taking one unit of time, and let a fall from one to zero. <bookmark mark='c'/> The a b term drops after one AND delay. But the not-a term needs the inverter to react first, so it rises one delay late. For that one moment, both terms are zero, and the output, which should never change, flickers to zero. This is a glitch, from a static hazard. If anything downstream is watching at that moment, it sees a wrong answer.",
+   "zh": "延迟带来的不只是慢，还有更奇怪的事。<bookmark mark='a'/>取 f 等于 a b 加非 a c，b 和 c 保持为一。那么 f 就是 a 或非 a，无论 a 怎样都恒为一。<bookmark mark='b'/>现在模拟它，每个门耗时一个单位，让 a 从一降到零。<bookmark mark='c'/>a b 这一项在一个与门延迟后变低。但非 a 这一项要等反相器先反应，所以晚一个延迟才升高。在那一瞬间，两项都是零，本该永不改变的输出，闪了一下变成零。这就是毛刺，来自静态险象。如果下游有什么东西恰好在那一刻观察，它就会看到错误的答案。"
+  },
+  "c4a02282e29f": {
+   "scene": "Timing",
+   "en": "One fix is surprising. <bookmark mark='a'/> Add the term b c, which the laws of chapter one say is redundant: it changes nothing about the function. <bookmark mark='b'/> But during the transition it holds the output up, and the glitch is gone. For a two-level sum of products and one changing input, cover every pair of neighbouring ones with a single loop. <bookmark mark='c'/> The more common cure is to stop caring: make every circuit settle before anybody looks at it, by reading outputs only at the tick of a clock. That is how Part 5 builds memory and time.",
+   "zh": "有一种修法出人意料。<bookmark mark='a'/>加上 b c 这一项，第1章的定律说它是多余的：它丝毫不改变函数。<bookmark mark='b'/>但在跳变期间，它把输出撑住，毛刺就消失了。对两级与或式电路、且只有一个输入变化时，要用同一个圈覆盖每一对相邻的一。<bookmark mark='c'/>更常见的办法是不再在乎：让每个电路在任何人观察之前先稳定下来，只在时钟跳动时读取输出。这就是第5部分搭建存储和时间的方式。"
+  },
+  "430b724a8031": {
+   "scene": "Cmos",
+   "en": "One more property, and it is why CMOS won. <bookmark mark='a'/> The current the inverter draws from its supply, computed across the sweep, is zero at both ends and spikes only in the middle, while both transistors are partly on. <bookmark mark='b'/> In this ideal model, a stable CMOS gate draws no current; real gates still leak. Switching costs energy in two ways: overlap current while both transistors conduct, and the charge needed to flip the wires and gates it drives. <bookmark mark='c'/> The capacitive switching power is roughly the fraction of wires that switch, times their capacitance, times the supply voltage squared, times the clock frequency. That one formula explains why clocks stopped getting faster around 2005, and why chips grew many cores instead, which is Part 10.",
+   "zh": "还有一个性质，正是它让 CMOS 胜出。<bookmark mark='a'/>反相器从电源取的电流，在整个扫描中计算出来，两端都是零，只在中间、两个晶体管都部分导通时出现一个尖峰。<bookmark mark='b'/>这个理想模型中，稳定的 CMOS 门没有电流；真实器件仍会漏电。切换能耗有两部分：两个晶体管同时导通时的一点电流，以及翻转它所驱动的导线和门所需的电荷。<bookmark mark='c'/>电容切换功率大约是：发生切换的导线比例，乘以它们的电容，乘以电源电压的平方，乘以时钟频率。这一个公式解释了为什么时钟在2005年前后不再变快，以及芯片为什么改为长出许多核心，那是第10部分。"
+  },
+  "5af183e8f2f0": {
+   "scene": "History",
+   "en": "Shannon's thesis arrived just as people started building computers from switches. <bookmark mark='a'/> In 1937 George Stibitz at Bell Labs wired a relay adder on his kitchen table. In Berlin, Konrad Zuse built the Z1, binary and mechanical, and then in 1941 the Z3, with two thousand six hundred relays, the first working programmable computer. In Iowa, John Atanasoff and Clifford Berry built an electronic calculator with vacuum tubes. At Bletchley Park, Colossus used tubes to break German teleprinter ciphers. And in Philadelphia, ENIAC used seventeen and a half thousand of them and a hundred and fifty kilowatts. <bookmark mark='b'/> Different countries, different purposes, mostly in secret, and all used switching logic. Many were binary, but ENIAC represented numbers in decimal.",
+   "zh": "香农的论文问世时，人们正开始用开关造计算机。<bookmark mark='a'/>1937年，贝尔实验室的乔治·斯蒂比茨在他的厨房桌子上接出了一个继电器加法器。在柏林，康拉德·楚泽造出了 Z1，二进制、机械式，然后在1941年造出 Z3，有两千六百个继电器，是第一台能工作的可编程计算机。在爱荷华，约翰·阿塔纳索夫和克利福德·贝里用真空管造了一台电子计算器。在布莱切利园，巨人机用真空管破译德国的电传密码。在费城，ENIAC 用了一万七千五百个真空管和一百五十千瓦。<bookmark mark='b'/>不同的国家，不同的目的，大多在秘密中进行，而全都使用开关逻辑。许多采用二进制，但 ENIAC 用十进制表示数。"
+  },
+  "3514fd1824a7": {
+   "scene": "History",
+   "en": "Then came the transistor in 1947 and the integrated circuit in 1958, and the switches started shrinking. <bookmark mark='a'/> In 1965 Gordon Moore, later a founder of Intel, noticed that the number of transistors on a chip was doubling every year, and predicted it would continue; in 1975 he revised it to every two years. <bookmark mark='b'/> Here are some landmark chips on a logarithmic scale, from Intel's 4004 in 1971, with two thousand three hundred transistors, to the B200 of 2024, with two hundred and eight billion across two silicon dies. <bookmark mark='c'/> The long-term trend is close to doubling every two years; packaging also matters at the latest point. Each of those transistors is the switch of chapter three, and each chip is, at heart, Shannon's algebra.",
+   "zh": "接着是1947年的晶体管和1958年的集成电路，开关开始缩小。<bookmark mark='a'/>1965年，后来成为英特尔创始人之一的戈登·摩尔注意到，芯片上的晶体管数每年翻一番，并预言这会继续下去；1975年他修正为每两年一番。<bookmark mark='b'/>这里是一些标志性芯片，画在对数坐标上，从1971年英特尔的4004，两千三百个晶体管，到2024年的 B200，两个硅裸片合计两千零八十亿个晶体管。<bookmark mark='c'/>长期趋势接近每两年翻一番；对最新的数据点，封装方式也很重要。其中每个晶体管都是第3章的那个开关，而每块芯片，本质上都是香农的代数。"
+  },
+  "61f221e36292": {
+   "scene": "Reversible",
+   "en": "This is not just a curiosity. <bookmark mark='a'/> Coherent quantum gates are unitary transformations of the state, so each has an inverse. Measurement and reset are different operations. <bookmark mark='b'/> The Toffoli gate is one of the standard quantum gates, and in Part 53 we will simulate a small quantum computer, Toffoli gates included. <bookmark mark='c'/> And the idea of keeping what you would have thrown away, so you can go back, appears much higher up the tower, in the logs that let databases and file systems undo a crash.",
+   "zh": "这不只是个奇谈。<bookmark mark='a'/>相干量子门是状态的酉变换，因此每个门都有逆变换。测量和复位是不同的操作。<bookmark mark='b'/>托福利门是一种标准量子门，在第53部分我们会模拟一台小小的量子计算机，托福利门也在其中。<bookmark mark='c'/>而保留本会扔掉的东西、好让你能够回退的想法，在塔的高处还会出现，在让数据库和文件系统从崩溃中恢复的日志里。"
+  },
+  "1e656704937d": {
+   "scene": "Frontier",
+   "en": "Chapter nine counted how many gates a typical function needs. For very small functions we can do better than count: we can find the best circuit for every one. <bookmark mark='a'/> Treat a search state as the set of functions its wires compute. Start from the three inputs and free constants, allow tied input pins, add every possible two-input gate, and keep each new set once. <bookmark mark='b'/> With constants and source wires free, one gate gives thirty-three distinct search states, two give eight hundred and twenty-eight, three give twenty thousand three hundred and sixty, four give over half a million, and at four gates every one of the two hundred and fifty-six functions of three inputs has appeared. <bookmark mark='c'/> So every function of three inputs needs at most four gates, and we know exactly how many each needs: parity of three needs two, the multiplexer three, and majority four, one of the twenty-four hardest. These are not estimates but proofs, by exhaustion.",
+   "zh": "第9章数过一个典型函数需要多少个门。对非常小的函数，我们可以做得比计数更好：为每一个函数找出最好的电路。<bookmark mark='a'/>把搜索状态看作导线上计算的函数的集合。从三个输入和免费的常数出发，允许一个门的两个输入脚连接同一根线，加上每一种可能的二输入门，每个新集合只保留一次。<bookmark mark='b'/>常数和输入线免费时，一个门得到三十三个不同的搜索状态，两个门得到八百二十八个，三个门两万零三百六十个，四个门超过五十万个，而到了四个门，三个输入的全部二百五十六个函数都出现了。<bookmark mark='c'/>所以三个输入的每个函数至多需要四个门，而且我们确切知道每个函数需要几个：三输入的奇偶需要两个，多路选择器三个，多数函数四个，它是最难的二十四个之一。这些不是估计，而是证明，靠的是穷举。"
+  },
+  "413a5c896178": {
+   "scene": "Complexity",
+   "en": "And now the embarrassment. <bookmark mark='a'/> Almost every function needs exponentially many gates. <bookmark mark='b'/> Yet for explicit functions the lower bounds remain linear. Li and Yang reached three point one n in 2022. A November 2026 preprint by Om Swostik Mishra and Rahul Santhanam reports four n minus a logarithmic term. Even that is tiny beside the exponential bound for almost every function. <bookmark mark='c'/> The reason it matters: proving that some problem in NP needs more than polynomially many gates would prove that P is not equal to NP, the most famous open problem in the field. <bookmark mark='d'/> In weaker models we can prove such things. Parity needs exponentially many terms in depth two, as chapter six showed, and Johan Håstad proved it needs exponential size in any constant depth. Part 27 explains why the general case has resisted every technique so far.",
+   "zh": "现在说说尴尬之处。<bookmark mark='a'/>几乎每个函数都需要指数多个门。<bookmark mark='b'/>可是，对于显式函数，下界仍然只是线性的。Li 与 Yang 在2022年达到了三点一 n。Om Swostik Mishra 与 Rahul Santhanam 的2026年11月预印本报告了四 n 减去一个对数项的下界。即便如此，和几乎所有函数的指数下界相比，它仍然很小。<bookmark mark='c'/>这之所以重要，是因为证明 NP 中某个问题需要超多项式个门，就证明了 P 不等于 NP，这个领域最著名的未解问题。<bookmark mark='d'/>在更弱的模型里我们能证明这样的事。奇偶在深度二需要指数多项，正如第6章所示，约翰·霍斯塔德证明了它在任何常数深度下都需要指数规模。第27部分会解释，为什么一般情形至今抵挡住了每一种技巧。"
+  },
+  "e56626b66317": {
+   "scene": "Frontier",
+   "en": "How are the lower bounds that do exist proved? Almost all of them by one idea, gate elimination. <bookmark mark='a'/> Fix one input to a constant. <bookmark mark='b'/> A gate that input fed becomes a constant, a copy, or an inverted copy of its other input. Simplify constants and copies, and fold inversions into following gates; sometimes further gates disappear too. <bookmark mark='c'/> Choose the function so cleverly that, whatever the circuit, some input can always be fixed to remove at least three gates, and what remains is a function of the same kind with one input fewer. Then induction on the number of inputs gives three n. <bookmark mark='d'/> Norbert Blum reached three n in 1984. It took thirty-two years to add one eighty-sixth of n, and six more to reach three point one n, each by a longer case analysis of how a minimal circuit can look, for functions called affine dispersers, which stay non-constant on every large affine subspace. A November 2026 preprint by Mishra and Santhanam reports four n minus a logarithmic term, by eliminating independent parameters rather than only fixing input variables. The bound is still linear, a long way from two to the n over n.",
+   "zh": "那些确实存在的下界是怎么证明的？几乎都靠同一个想法：门消去。<bookmark mark='a'/>把一个输入固定为常数。<bookmark mark='b'/>这个输入所驱动的门，现在变成常数、另一个输入的副本、或取反副本。化简常数和副本，把取反吸收到后续门中；有时更多的门也会随之消失。<bookmark mark='c'/>把函数选得足够巧妙，使得无论电路是什么样，总能固定某个输入去掉至少三个门，而剩下的是同一类、少一个输入的函数。那么对输入个数做归纳，就得到三 n。<bookmark mark='d'/>诺伯特·布卢姆在1984年达到了三 n。此后花了三十二年才多加了八十六分之一个 n，又过了六年才到三点一 n，每一步都靠对最小电路可能长什么样做更长的情形分析，针对的是一类叫仿射分散器的函数，它们在每个大的仿射子空间上都不是常数。Mishra 与 Santhanam 的2026年11月预印本报告了四 n 减去一个对数项的下界：消去的是独立参数，而不只是固定输入变量。这个下界仍然是线性的，离二的 n 次方除以 n 还差得很远。"
   }
  },
  "title_en": "Computer Science, Built: Part 3, Logic from Switches",

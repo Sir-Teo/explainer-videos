@@ -56,6 +56,24 @@ class Part3(unittest.TestCase):
         self.assertEqual(rows["4-bit comparator"]["gates"], 21)
         self.assertEqual(rows["8-bit parity tree"]["depth"], 3)
 
+    def test_census_includes_one_gate_negations(self):
+        # Independent one-gate oracle: evaluate all 16 gate truth tables by row.
+        # Constants/input wires cost zero; both pins may choose the same wire.
+        full = 255
+        inputs = [sum(1 << row for row in range(8) if row >> bit & 1) for bit in range(3)]
+        free = {0, full, *inputs}
+        one_gate = set(free)
+        for a, b, table in itertools.product(free, free, range(16)):
+            one_gate.add(sum(((table >> (2 * ((a >> row) & 1) + ((b >> row) & 1))) & 1) << row
+                             for row in range(8)))
+        got = c.compute_census()
+        self.assertEqual(got["not_costs"], [1, 1, 1])
+        self.assertEqual(got["hist"][1], len(one_gate - free))
+        self.assertEqual(got["hist"], [5, 33, 114, 80, 24])
+        # Full independent enumeration saved with the QA evidence packet.
+        self.assertEqual(got["states"], [33, 828, 20360, 528991])
+        self.assertEqual(sum(got["hist"]), 256)
+
     def test_bdd_orders(self):
         out = c.compute_bdd()
         self.assertTrue(all(r["good"] == 2 * r["k"] + 2 and r["bad"] == 2 ** (r["k"] + 1) for r in out["rows"]))

@@ -32,7 +32,26 @@ from explainer.ai.cache import Cache
 from explainer.cs.pebble.hdl import Circuit, exhaustive, unpack
 
 CACHE = Cache("cs3")
-load = CACHE.load
+CENSUS_SCHEMA = 2
+
+
+def cache_current(name):
+    path = CACHE.path(name)
+    if not path.exists():
+        return False
+    if name != "census":
+        return True
+    import json
+    return json.loads(path.read_text()).get("schema") == CENSUS_SCHEMA
+
+
+def load(name):
+    if name == "census" and not cache_current(name):
+        from explainer.cache_lock import cache_lock
+        with cache_lock(CACHE.path(name)):
+            if not cache_current(name):
+                CACHE.save(name, compute_census())
+    return CACHE.load(name)
 
 
 # ---------------------------------------------------------------------------
@@ -503,7 +522,8 @@ def compute_blocks() -> dict:
 # ---------------------------------------------------------------------------
 def compute_census() -> dict:
     """The exact minimum number of two-input gates (any of the ten non-trivial ones) for every 3-input function.
-    Breadth-first over circuits: a circuit is the set of functions its wires compute, so level s holds every
+    Constants and input wires are free; both gate pins may read the same wire.
+    Breadth-first over wire-function sets: level s holds every
     distinct set reachable with s gates, and a function's cost is the first level at which it appears."""
     n = 3
     full = (1 << (1 << n)) - 1
@@ -512,7 +532,7 @@ def compute_census() -> dict:
            lambda a, b: full & ~(a | b), lambda a, b: full & ~(a ^ b), lambda a, b: a & ~b & full,
            lambda a, b: ~a & b & full, lambda a, b: (a | ~b) & full, lambda a, b: (~a | b) & full]
     cost = {0: 0, full: 0, **{x: 0 for x in xs}}
-    level, states = {frozenset(xs)}, []
+    level, states = {frozenset([0, full, *xs])}, []
     s = 0
     while len(cost) < 1 << (1 << n):
         s += 1
@@ -520,7 +540,7 @@ def compute_census() -> dict:
         for st in level:
             ws = list(st)
             for i in range(len(ws)):
-                for j in range(i + 1, len(ws)):
+                for j in range(i, len(ws)):
                     for op in ops:
                         f = op(ws[i], ws[j])
                         if f in st:
@@ -533,7 +553,9 @@ def compute_census() -> dict:
     a, b, c = xs[0], xs[1], xs[2]
     named = {"x xor y xor z": a ^ b ^ c, "majority": (a & b) | (a & c) | (b & c), "x and y and z": a & b & c,
              "if x then y else z": (a & b) | (full & ~a & c)}
-    return {"hist": hist, "states": states, "named": {k: cost[v] for k, v in named.items()},
+    return {"schema": CENSUS_SCHEMA, "hist": hist, "states": states,
+            "not_costs": [cost[full ^ x] for x in xs],
+            "named": {k: cost[v] for k, v in named.items()},
             # published: the largest exact costs for 4 and 5 inputs (Knuth, TAOCP 7.1.2, 2005-08; the last
             # 5-input holdouts settled by computer in 2019) and the number of functions
             "known": [(3, "4", "256"), (4, "7", "65{,}536"), (5, "12", "4.3 \\times 10^{9}"),

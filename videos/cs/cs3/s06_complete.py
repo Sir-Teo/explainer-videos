@@ -76,9 +76,9 @@ class Complete(VoiceoverScene):
             "gates, for every one of the sixteen functions of two inputs. Not needs one, and needs two, or three, "
             "exclusive-or four, and the hardest, exclusive-nor, five."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(not_c), FadeIn(l1))
             vo.wait_until("a")
-            self.play(FadeIn(not_c), FadeIn(l1))
+            self.play(Circumscribe(not_c, color=HEAD))
             vo.wait_until("b")
             self.play(FadeIn(and_c), FadeIn(l2))
             vo.wait_until("c")
@@ -216,11 +216,11 @@ class Complete(VoiceoverScene):
             "when each trap is escaped by some gate in it. Among single two-input gates, only NAND and NOR escape all "
             "five."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(hdr), LaggedStart(*[FadeIn(r) for r in tab[1:]], lag_ratio=0.2), run_time=2.4)
             vo.wait_until("a")
-            self.play(FadeIn(expl, lag_ratio=0.2), FadeIn(hdr))
+            self.play(FadeIn(expl, lag_ratio=0.2))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(r) for r in tab[1:]], lag_ratio=0.2), run_time=2.4)
+            self.play(Circumscribe(tab[1 + show.index("AND")], color=HEAD))
             vo.wait_until("c")
             self.play(FadeIn(thm), *[Indicate(tab[1 + show.index(n)][0], color=YES) for n in ("NAND", "NOR")])
         self.wait(0.3)

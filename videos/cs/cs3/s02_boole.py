@@ -84,9 +84,9 @@ class Boole(VoiceoverScene):
             "z. Two thousand years of memorized rules for valid arguments became a few lines of algebra that a clerk, "
             "or a machine, could check."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows, lag_ratio=0.4))
             vo.wait_until("a")
-            self.play(FadeIn(rows, lag_ratio=0.4))
+            self.play(Circumscribe(rows[0], color=HEAD))
             vo.wait_until("b")
             self.play(FadeIn(chain[0]))
             for k in range(1, 5):
@@ -129,9 +129,9 @@ class Boole(VoiceoverScene):
             "<bookmark mark='d'/> One law has no counterpart in ordinary arithmetic: or distributes over and. x plus y "
             "z equals x plus y, times x plus z. With numbers that is false. Here it is true."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in rows[:4]], lag_ratio=0.25))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in rows[:4]], lag_ratio=0.25))
+            self.play(Circumscribe(rows[0], color=HEAD))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in rows[4:]], lag_ratio=0.25))
             vo.wait_until("c")
@@ -213,9 +213,8 @@ class Boole(VoiceoverScene):
             "removes gates from a circuit, and logic synthesis tools, which turn a hardware description into a chip, "
             "are at heart very fast, very clever users of these laws."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(steps[0]))
             vo.wait_until("a")
-            self.play(FadeIn(steps[0]))
             for s, w in zip(steps[1:], why):
                 self.play(FadeIn(s, shift=DOWN * 0.1), FadeIn(w), run_time=0.7)
             vo.wait_until("b")
