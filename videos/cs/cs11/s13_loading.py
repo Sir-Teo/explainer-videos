@@ -70,20 +70,11 @@ class Loading(VoiceoverScene):
             label(r"code can run but not be written", font_size=19, color=DATA),
             label(r"data and stack can be written \\ but not run \ (chapter 14)", font_size=19, color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.4)
-        with self.voiceover(
-            "Here is a real process on this computer, as Linux describes it in the file proc self maps. <bookmark "
-            "mark='a'/> At the bottom, the program itself: its constants, its code, its data. Above them the heap, "
-            "which grows upward as malloc asks for more. Far above, the C library and the dynamic linker, mapped "
-            "into the space. And at the top, the stack, which grows downward. The gaps between are vast, terabytes "
-            "of addresses that are simply not mapped. <bookmark mark='b'/> Each region has its own permissions. "
-            "Code may be executed but not written. Data and the stack may be written, but not executed, which will "
-            "matter in chapter fourteen."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(g, shift=UP * 0.1) for g in reversed(list(strip))], lag_ratio=0.3),
-                      FadeIn(gaps), run_time=4)
-            vo.wait_until("b")
+        with self.voiceover("This is a schematic built from one Linux process's proc self maps snapshot. <bookmark mark='a'/> It orders selected mappings by virtual address: executable segments, a brk heap region, libraries and stack. Large allocations can use other mappings, and the layout is neither universal nor drawn to scale. Mapping virtual space does not mean every byte occupies physical RAM. <bookmark mark='b'/> The actual snapshot records permissions per mapping. In this build the code is executable and not writable; ordinary data and stack are writable and not executable. The schematic groups library mappings for readability, although those mappings have different permissions. Part 32 connects virtual mappings to physical pages.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(g, shift=UP * 0.1) for g in reversed(list(strip))], lag_ratio=0.3), FadeIn(gaps), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(side))
         self.wait(0.3)
         self.clear_scene()
@@ -96,22 +87,29 @@ class Loading(VoiceoverScene):
                        font_size=19, colors=[[GREY_A, CODE, CODE, CODE]] * len(rows), mono_cols=(1, 2, 3)).move_to(
             UP * 0.6)
         pts = VGroup(
-            label(r"\textit{address-space layout randomization}: \ every region starts somewhere new each run",
+            label("ASLR randomizes selected regions; PIE, platform and configuration determine coverage",
                   font_size=21, color=HEAD),
-            label(r"so an attacker cannot know where the stack, \ the heap or libc will be", font_size=21,
+            label("less predictable addresses; leaks and repeated guesses can weaken protection", font_size=21,
                   color=YES),
         ).arrange(DOWN, buff=0.15).next_to(t, DOWN, buff=0.4)
         fixed = None
         if a["fixed"]:
             fixed = note(rf"with randomization switched off \ (\texttt{{setarch -R}}): \ the stack at "
                          rf"\texttt{{{a['fixed'][0][3]}}} every time", font_size=18).to_edge(DOWN, buff=0.35)
+        else:
+            fixed = note(r"setarch -R was rejected here; fixed-address comparison unavailable", font_size=18).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Run a program that prints where things are, three times. <bookmark mark='a'/> The address of main, of "
-            "a global variable, of a heap block, of a local variable on the stack, and of the C library's printf. "
-            "Every run, every one is different. <bookmark mark='b'/> This is address-space layout randomization. It "
-            "was introduced by the PaX project in 2001 and is on by default everywhere now. Its point is security: "
-            "an attack that needs to know where something is, like the one in chapter fourteen, has to guess. "
-            "<bookmark mark='c'/> Switch it off, and the stack is at the same address every time."
+            (
+            "The compiled probe prints five kinds of address across three runs. <bookmark mark='a'/> Here the PIE "
+            "program, global, heap, stack and printf addresses vary. The executable's PIE configuration matters: "
+            "non-PIE text can remain fixed while other regions move. <bookmark mark='b'/> Address-space layout "
+            "randomization makes useful addresses less predictable; the PaX project introduced an influential "
+            "implementation in 2001. Coverage and entropy depend on platform and configuration. Leaks, limited "
+            "entropy and repeated guesses can weaken it. <bookmark mark='c'/> The final panel records whether "
+            "disabling randomization with setarch was permitted. This environment may reject that request. A "
+            "rejected request is not evidence of a successful fixed-address comparison, and ASLR does not itself "
+            "prevent an out-of-bounds write."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*t.cells[0])), FadeIn(t.rule))
             vo.wait_until("a")
@@ -138,20 +136,14 @@ class Loading(VoiceoverScene):
         arrows = VGroup(CurvedArrow(stack[3].get_right(), stack[0].get_right(), angle=0.8, color=DATA),
                         CurvedArrow(stack[4].get_right(), stack[1].get_right(), angle=0.8, color=DATA))
         pts = VGroup(
-            label(r"the loader copies the strings to the top of the stack, \\ then an array of pointers to them, "
-                  r"\ then the count", font_size=20, color=GREY_A),
+            label("simplified argument-only initial stack; \\\\ Linux also has environment pointers and an auxiliary vector", font_size=20, color=GREY_A),
             label(r"\texttt{\_start} \ (not \texttt{main}) \ runs first: \\ it finds them and calls "
                   r"\texttt{main(argc, argv)}", font_size=20, color=FUNC),
-            label(r"Pebble's loader does exactly this: \\ \texttt{a0} = argc, \ \texttt{a1} = argv", font_size=20,
+            label("Pebble implements this argument-only layout: \\\\ \\texttt{a0} = argc, \\texttt{a1} = argv", font_size=20,
                   color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.5)
         with self.voiceover(
-            "Last, how does main get its arguments? <bookmark mark='a'/> When you type job pride dot text, the "
-            "operating system's loader copies the strings to the very top of the new process's stack, then below them "
-            "an array of pointers to the strings, ending in a null, and below that their count. <bookmark mark='b'/> "
-            "The first code to run is not main but a small routine called start, which finds those values and calls "
-            "main with them. <bookmark mark='c'/> Pebble's loader, the last function in our linker, builds exactly "
-            "this layout, and passes the count and the array in a0 and a1."
+            "The initial stack is an interface between the operating system and runtime startup. <bookmark mark='a'/> Our diagram simplifies a Unix-style arrangement to argument strings, an array of pointers ending in null, and an argument count. A real Linux initial stack also includes environment pointers and an auxiliary vector, with architecture-specific alignment. <bookmark mark='b'/> The entry routine runs before main and passes the arguments according to the platform's conventions. It is runtime startup, not a universal direct loader call to main. <bookmark mark='c'/> Pebble's small loader implements the argument-only teaching layout and supplies argc and argv in a0 and a1. Its tests check the strings and pointer array; it is not a complete implementation of Linux process startup."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cmd))
             vo.wait_until("a")

@@ -52,12 +52,15 @@ class Outro(VoiceoverScene):
         ).arrange_in_grid(rows=2, cols=3, buff=(0.35, 0.35)).move_to(DOWN * 0.2)
         head = label(rf"Part {PART}: \ The Running Program", font_size=38).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "What we built in this part. A program's life from source to process. Bytes, alignment and arrays, and "
-            "control flow as branches and jump tables. The call stack, its frames, and the calling convention that "
-            "lets separate functions cooperate. Five allocators run on a real program's hundred and forty-six "
-            "thousand allocations, with Knuth's rule and Robson's bound confirmed by simulation. A linker and loader "
-            "for Pebble, and the same machinery measured on this computer, through dynamic linking and a randomized "
-            "address space. And what goes wrong: undefined behaviour, and the stack smash, with four defences."
+            (
+            "We followed a program from source to a process. The diagrams connected byte layout and pointer "
+            "arithmetic to branches, frames and calling conventions. Five simulated allocators replayed one "
+            "recorded Perl trace. Knuth's balance argument matched that workload approximately, while an "
+            "adversarial trace illustrated the worst-case question without proving a general theorem. Pebble "
+            "gained a linker and loader; compiled host examples exposed object sections, dynamic references and "
+            "virtual mappings. Finally, a toy stack overwrite showed how distinct defenses interrupt different "
+            "parts of an attack."
+        )
         ):
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
@@ -74,11 +77,13 @@ class Outro(VoiceoverScene):
             (r"return-oriented programming, \ trusting trust", [55]),
         ], font_size=25)
         with self.voiceover(
-            "Where this comes back. The compiler that writes code like ours is Part 13. Garbage collectors, which "
-            "can move objects and so escape Robson's bound, are Part 15. Exceptional control flow, signals and "
-            "system calls are Part 31, and the pages behind the address space are Part 32. Proving programs and "
-            "compilers correct is Part 54, and attacks that reuse a program's own code, and the question of whether "
-            "you can trust your compiler at all, are Part 55."
+            (
+            "These mechanisms return throughout the course. Part 13 builds a compiler that emits structured calls "
+            "and references. Part 15 builds runtime reclamation, including moving collectors whose assumptions "
+            "differ from nonmoving allocation. Part 31 adds exceptional control flow, signals and system calls, "
+            "and Part 32 connects virtual addresses to pages. Part 54 studies program and compiler correctness "
+            "under explicit semantics. Part 55 studies code-reuse attacks and the trust placed in our tools."
+        )
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.3), run_time=3.0)
@@ -91,15 +96,18 @@ class Outro(VoiceoverScene):
             (r"memory errors", r"AddressSanitizer, \ Valgrind, \ UBSan"),
             (r"builds", r"undefined references, \ duplicate symbols, \ link order, \ \texttt{-fPIC}"),
             (r"performance", r"allocator choice: \ jemalloc, \ tcmalloc, \ mimalloc"),
-            (r"security", r"stack protectors, \ NX, \ ASLR, \ PIE, \ CFI: \ on by default"),
+            (r"security", r"stack protectors, \ NX, \ ASLR, \ PIE, \ CFI: \ inspect actual build coverage"),
         ])
         with self.voiceover(
-            "In practice. A debugger's backtrace is a walk up the stack's frames. AddressSanitizer, Valgrind and the "
-            "undefined-behaviour sanitizer find the bugs of chapters thirteen and fourteen as they happen. Most build "
-            "errors are linker errors: undefined references, duplicate symbols, libraries in the wrong order. "
-            "Swapping the allocator is one of the cheapest performance wins in large servers. And stack protectors, "
-            "no-execute pages, randomization and control-flow integrity are switched on by default by every "
-            "mainstream toolchain."
+            (
+            "In practice, inspect a backtrace with the build's symbols and unwinding information. Use sanitizers "
+            "and memory-checking tools to find exercised classes of errors, while recognizing their "
+            "instrumentation and coverage limits. Read linker diagnostics separately from compiler diagnostics: "
+            "undefined references, duplicate symbols and archive ordering are concrete clues. Benchmark allocator "
+            "choices on representative workloads before claiming a speedup. Check which stack, page, "
+            "randomization and control-flow defenses your platform and build actually enable; defaults and "
+            "coverage vary."
+        )
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.35), run_time=3.0)
@@ -118,14 +126,16 @@ class Outro(VoiceoverScene):
             r"\texttt{lui} and \texttt{ori} immediates become?",
             r"\textit{Build.} \ Write first-fit \texttt{malloc} and \texttt{free} with boundary tags in Pebble "
             r"assembly, \ replay Perl's first 10,000 events on the emulator, \ and compare with \texttt{heap.py}.",
-            r"$\bigstar$ \textit{Research.} \ First fit's worst-case heap lies between about $\tfrac12 M \log_2 n$ "
-            r"and $M \log_2 n$. \ Where exactly, \ and does best fit do better or worse?",
+            '$\\bigstar$ \\textit{Research.} \\ State a nonmoving-allocation model, compare known bounds for first fit and best fit, and test small adversarial cases. What would require a proof?',
         ], font_size=22)
         with self.voiceover(
-            "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build "
-            "problem: write a real allocator in Pebble assembly and test it against the simulator on Perl's trace. "
-            "The last, marked with a star, is a research problem: its answer is not known, and the notes say where "
-            "to start."
+            (
+            "The notes give six exercises and worked guidance. The fifth implements an allocator in Pebble "
+            "assembly and compares a trace replay under identical header, alignment and splitting rules. The "
+            "research exercise asks you to state a precise nonmoving-allocation model, locate the relevant upper "
+            "and lower bounds, and explore small adversarial cases. A simulation can reveal a counterexample or "
+            "motivate a conjecture; it cannot establish a universal worst-case theorem by itself."
+        )
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)

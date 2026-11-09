@@ -33,20 +33,13 @@ class Objects(VoiceoverScene):
         cmd = code(["gcc -O2 -c main.c     # -> main.o", "gcc -O2 -c lib.c      # -> lib.o",
                     "gcc main.o lib.o -o prog", f"./prog                # prints: {e['run']}"], size=16).to_edge(
             RIGHT, buff=0.5).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "Now the same story on a real machine. <bookmark mark='a'/> Two C files. main uses a function, count, "
-            "and a variable, total, that live in the other file, and it has data of its own: a pointer to a string, "
-            "and a counter private to the file. <bookmark mark='b'/> lib defines count and total, and one weak "
-            "variable we will come back to. <bookmark mark='c'/> Each file is compiled on its own into an object "
-            "file, and then the two are linked into a program. We compiled them on this computer and read the "
-            "object files with the standard tool, readelf."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(a))
-            vo.wait_until("b")
+        with self.voiceover("Now the same story on a real machine. <bookmark mark='a'/> Two C files. main uses a function, count, and a variable, total, that live in the other file, and it has data of its own: a pointer to a string, and a counter private to the file. <bookmark mark='b'/> lib defines count and total, and one weak variable we will come back to. <bookmark mark='c'/> Each file is compiled on its own into an object file, and then the two are linked into a program. We compiled them on this computer and read the object files with the standard tool, readelf.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(a), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(b))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(cmd))
         self.wait(0.3)
         self.clear_scene()
@@ -108,22 +101,11 @@ class Objects(VoiceoverScene):
                      r"\ 64: \ a whole address", font_size=16).to_edge(DOWN, buff=0.3)
         aside = note(r"\texttt{lib.o} calls \texttt{strlen}: \ gcc recognised the counting loop", font_size=16).next_to(
             kinds, UP, buff=0.1)
-        with self.voiceover(
-            "The symbol table says what each file offers and what it needs. <bookmark mark='a'/> main dot o defines "
-            "main and greeting as global symbols, visible to other files, and the counter as local. It lists total, "
-            "count and the C library's printf as undefined: used here, defined elsewhere. lib dot o defines count "
-            "and total, globally, and verbose as weak. And it needs strlen: the optimizer recognised count's loop as "
-            "a string length and replaced it with a call to the library. <bookmark mark='b'/> The relocations say "
-            "exactly which bytes depend on which symbol, and how: here, a 32-bit distance from the instruction to "
-            "the target, a call that may go through a table we meet in chapter eleven, or a whole 64-bit address "
-            "for the pointer."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(VGroup(*t.cells[0])), FadeIn(t.rule),
-                      LaggedStart(*[FadeIn(VGroup(*t.cells[r])) for r in range(1, len(t.cells))], lag_ratio=0.2),
-                      FadeIn(aside), run_time=4)
-            vo.wait_until("b")
+        with self.voiceover("The symbol table says what each file offers and what it needs. <bookmark mark='a'/> main dot o defines main and greeting as global symbols, visible to other files, and the counter as local. It lists total, count and the C library's printf as undefined: used here, defined elsewhere. lib dot o defines count and total, globally, and verbose as weak. And it needs strlen: the optimizer recognised count's loop as a string length and replaced it with a call to the library. <bookmark mark='b'/> The relocations say exactly which bytes depend on which symbol, and how: here, a 32-bit distance from the instruction to the target, a call that may go through a table we meet in chapter eleven, or a whole 64-bit address for the pointer.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(VGroup(*t.cells[0])), FadeIn(t.rule), LaggedStart(*[FadeIn(VGroup(*t.cells[r])) for r in range(1, len(t.cells))], lag_ratio=0.2), FadeIn(aside), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(t2), FadeIn(kinds))
         self.wait(0.3)
         self.clear_scene()
@@ -132,7 +114,7 @@ class Objects(VoiceoverScene):
         e = load("elf")
         head = label(r"The linker's rules", font_size=34).to_edge(UP, buff=0.35)
         pts = VGroup(
-            label(r"every undefined symbol must be defined exactly once somewhere", font_size=22, color=GREY_A),
+            label("referenced strong symbols need a selected definition; unresolved weak symbols have special rules", font_size=22, color=GREY_A),
             label(r"two \textit{strong} definitions of one name: \ an error", font_size=22, color=NO),
             label(r"one strong and any number of \textit{weak}: \ the strong one wins", font_size=22, color=YES),
             label(r"only weak ones: \ any one of them \ (the first, \ in practice)", font_size=22, color=CTRL),
@@ -144,20 +126,15 @@ class Objects(VoiceoverScene):
         errs.arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(pts, DOWN, buff=0.5)
         use = note(r"weak symbols let a library offer a default that a program may replace: \ a default "
                    r"\texttt{malloc}, \ a default handler", font_size=18).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "From these tables the linker applies a few rules. <bookmark mark='a'/> Every symbol some file needs "
-            "must be defined somewhere. <bookmark mark='b'/> Two strong definitions of one name are an error. "
-            "<bookmark mark='c'/> A strong definition beats any number of weak ones, <bookmark mark='d'/> and if "
-            "there are only weak ones, one is chosen. <bookmark mark='e'/> Leave out lib dot o and this machine's "
-            "linker reports the undefined references; include it twice and it reports a multiple definition. "
-            "Weak symbols exist so that a library can provide a default that a program may override, like a default "
-            "error handler, or even malloc itself."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, p in zip("abcd", pts):
-                vo.wait_until(mk)
+        with self.voiceover("For this static-link example, distinguish definitions from references and binding strength. <bookmark mark='a'/> An ordinary referenced strong symbol must resolve to a definition in the final link. Unresolved weak references have special platform rules and can resolve to zero. <bookmark mark='b'/> Multiple ordinary strong definitions are an error in this example. <bookmark mark='c'/> A selected strong definition takes precedence over weak definitions. <bookmark mark='d'/> If only weak definitions exist, the linker selects one under its rules; source code should not depend on an unspecified choice among differing implementations. <bookmark mark='e'/> Leaving out lib produces undefined references; including it twice produces duplicate strong definitions. Weak defaults are one override mechanism. Dynamic symbol interposition and library-specific hooks have related but different resolution rules.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            for mk, p in zip('abcd', pts):
+                if mk != 'a':
+                    vo.wait_until(mk)
                 self.play(FadeIn(p, shift=RIGHT * 0.1))
-            vo.wait_until("e")
+                if mk == 'a':
+                    vo.wait_until(mk)
+            vo.wait_until('e')
             self.play(FadeIn(errs), FadeIn(use))
         self.wait(0.3)
         self.clear_scene()

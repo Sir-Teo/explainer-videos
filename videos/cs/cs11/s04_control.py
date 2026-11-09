@@ -31,20 +31,13 @@ class Control(VoiceoverScene):
             label(r"a range test in two instructions: \ subtract, \ then compare unsigned", font_size=21,
                   color=DATA),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "Structured control flow disappears in machine code: everything becomes a branch. <bookmark mark='a'/> "
-            "Here are two pieces of the Job, in C-like source on the left and Pebble on the right. <bookmark "
-            "mark='b'/> An if becomes a conditional branch around its body. And notice the trick for the range test: "
-            "subtract A, and then one unsigned comparison against 26 asks both questions at once, because anything "
-            "below A wraps round to a huge unsigned number. Compilers do this routinely. <bookmark mark='c'/> A "
-            "loop becomes a test at the top that leaves, and a jump back at the bottom."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(src), FadeIn(asm))
-            vo.wait_until("b")
+        with self.voiceover("Structured control flow disappears in machine code: everything becomes a branch. <bookmark mark='a'/> Here are two pieces of the Job, in C-like source on the left and Pebble on the right. <bookmark mark='b'/> An if becomes a conditional branch around its body. And notice the trick for the range test: subtract A, and then one unsigned comparison against 26 asks both questions at once, because anything below A wraps round to a huge unsigned number. Compilers do this routinely. <bookmark mark='c'/> A loop becomes a test at the top that leaves, and a jump back at the bottom.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(src), FadeIn(asm), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(pts[0]), FadeIn(pts[2]), *[Indicate(asm[k], color=DATA) for k in range(4)])
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(pts[1]), *[Indicate(asm[k], color=CTRL) for k in (5, 7, 8)])
         self.wait(0.3)
         self.clear_scene()
@@ -69,25 +62,16 @@ class Control(VoiceoverScene):
         notes = VGroup(
             label(r"1. \ is \texttt{c} between 0 and 7? \ if not, \ return", font_size=19, color=GREY_A),
             label(r"2. \ load entry \texttt{c} of the table \texttt{.L4}", font_size=19, color=DATA),
-            label(r"3. \ jump to the address it gives: \ one indirect jump, \ whatever the case", font_size=19,
+            label("3. \\ in-range case: add base and offset, then one indirect jump", font_size=19,
                   color=CTRL),
             label(r"each case ends in \texttt{jmp}, \ not \texttt{call}: \ a tail call \ (chapter 5)", font_size=19,
                   color=FUNC),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(src, DOWN, buff=0.5).align_to(src, LEFT)
-        with self.voiceover(
-            "A switch statement with dense cases gets something better than a chain of ifs. <bookmark mark='a'/> "
-            "Here is a switch with eight cases, compiled on this computer by gcc with optimization. <bookmark "
-            "mark='b'/> First a single bounds check: is c between zero and seven? <bookmark mark='c'/> Then it "
-            "loads entry c from a table that the compiler wrote into read-only data, <bookmark mark='d'/> and "
-            "jumps to the address the entry gives. Whatever the case, two loads and one indirect jump: a jump "
-            "table. <bookmark mark='e'/> And look at the cases themselves. Each ends with a plain jump to its "
-            "function, not a call: because nothing is left to do afterwards, the compiler lets that function return "
-            "directly to our caller. That is a tail call, and chapter five comes back to it."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(src), FadeIn(asm))
-            for mk, n in zip("bcde", notes):
+        with self.voiceover("Dense switch cases can use a jump table. <bookmark mark='a'/> This is the actual gcc output for eight cases on our x86-64 host. Different targets, options and case patterns can produce a different lowering. <bookmark mark='b'/> One unsigned bounds comparison rejects values outside zero through seven. <bookmark mark='c'/> The code loads a signed relative offset from the table, then adds the table's base address. Computing an address with lea is not a second data-memory load. <bookmark mark='d'/> An indirect jump transfers control to the selected case. The instruction count alone does not determine latency: prediction and memory matter too. <bookmark mark='e'/> Each case ends with a jump to its function because that call is in tail position. Its result goes straight back to our caller; chapter five explains when this transformation is valid.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(src), FadeIn(asm), run_time=0.6)
+            vo.wait_until('a')
+            for mk, n in zip('bcde', notes):
                 vo.wait_until(mk)
                 self.play(FadeIn(n))
         self.wait(0.3)

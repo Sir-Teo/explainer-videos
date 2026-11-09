@@ -33,22 +33,23 @@ class Stack(VoiceoverScene):
         t = grid_table([r"registers", r"hold", r"must save them"], rows, [2.6, 5.2, 3.6], row_h=0.55, font_size=21,
                        colors=colors, mono_cols=()).move_to(UP * 0.4)
         why = VGroup(
-            label(r"a contract, \ not a law of the hardware: \ every function compiled anywhere obeys it", font_size=21,
+            label("an ABI contract: independently compiled functions must agree", font_size=21,
                   color=GREY_A),
-            label(r"real ones: \ the System V ABI \ (Linux, \ macOS), \ Microsoft x64, \ the RISC-V psABI",
+            label("platform-specific: System V AMD64, Microsoft x64, RISC-V psABI, Apple conventions",
                   font_size=21, color=FUNC),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "For functions written separately, perhaps by different people with different compilers, to call each "
-            "other, they must agree on the rules: a calling convention. Here is Pebble's. <bookmark mark='a'/> "
-            "Arguments go in a0 to a5, and the result comes back in a0. The call instruction puts the return "
-            "address in ra. <bookmark mark='b'/> The registers are split in two. t0 to t3 are temporaries: a "
-            "function may destroy them, so a caller that needs one after a call must save it itself. s0 to s2 "
-            "are the opposite: a function that wants to use one must save the old value and restore it before "
-            "returning, so callers can rely on them. And the stack pointer stays aligned to sixteen bytes. "
-            "<bookmark mark='c'/> None of this is enforced by the hardware. It is a contract, and real systems "
-            "write theirs down: the System V application binary interface for Linux and macOS, Microsoft's for "
-            "Windows, the RISC-V psABI."
+            (
+            "Separately compiled functions need a shared calling convention. This table specifies Pebble's "
+            "contract. <bookmark mark='a'/> Arguments use a0 through a5, a0 returns a value, and call writes the "
+            "return address into ra. <bookmark mark='b'/> A caller preserves any t-register or argument register "
+            "whose old value it still needs after a call. A callee that changes s0 through s2 restores their "
+            "incoming values before returning. Stack alignment must meet the convention at the required "
+            "boundaries. <bookmark mark='c'/> The hardware executes instructions; interoperability depends on "
+            "following the same ABI. Real conventions depend on architecture and operating system: System V AMD64 "
+            "on many Unix systems, Microsoft x64, RISC-V's psABI and Apple's platform conventions. Mixing "
+            "conventions requires an explicit bridge."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*t.cells[0])), FadeIn(t.rule))
             vo.wait_until("a")
@@ -81,13 +82,7 @@ class Stack(VoiceoverScene):
         down = label(r"addresses fall \\ as the stack grows", font_size=17, color=GREY_B).next_to(stack, DOWN,
                                                                                                buff=0.2)
         with self.voiceover(
-            "Here is what a function does with that contract. <bookmark mark='a'/> lookup will use s0, s1 and s2, "
-            "and it calls alloc, which overwrites ra. So on entry it moves the stack pointer down sixteen bytes and "
-            "saves all four there. That block is its stack frame, or activation record. <bookmark mark='b'/> Above "
-            "it sits the frame of the function that called it, main, holding main's word buffer. <bookmark "
-            "mark='c'/> On the way out, lookup restores the four registers, moves the stack pointer back up, and "
-            "returns. Every call pushes a frame and every return pops one, so the stack always mirrors the chain of "
-            "calls in progress."
+            "Here is lookup's explicit Pebble frame. <bookmark mark='a'/> The function changes s0, s1 and s2 and calls alloc, which changes ra. It subtracts sixteen from sp and saves those four registers in the new frame. <bookmark mark='b'/> Above it is main's frame, containing the input word buffer. This drawing follows this program's downward-growing stack. <bookmark mark='c'/> Before returning, lookup restores the registers and releases its frame. These ordinary calls make the stack reflect the active call chain. Leaf functions and optimized tail calls can avoid a new frame; the next chapter compares those cases."
         ) as vo:
             self.play(FadeIn(head), FadeIn(lst))
             vo.wait_until("a")
@@ -116,22 +111,14 @@ class Stack(VoiceoverScene):
         yl = label(r"stack depth \ (bytes)", font_size=16, color=GREY_B).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
         res = label(rf"result {st['result']:,} $= 10!$; \ deepest {st['deepest']} bytes \ $= 10$ frames of 16",
                     font_size=22, color=YES).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "Watch it on a recursive function, the factorial. <bookmark mark='a'/> fact of ten calls fact of nine, "
-            "which calls fact of eight, and so on down to one, each call pushing a frame holding its own n and its "
-            "return address. <bookmark mark='b'/> Here is the stack's depth, measured on Pebble's emulator "
-            "instruction by instruction: it climbs to ten frames, then, as each call returns and multiplies, it "
-            "unwinds to nothing. <bookmark mark='c'/> The result is ten factorial, and the deepest the stack went "
-            "was a hundred and sixty bytes."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(f, shift=DOWN * 0.1) for f in frames], lag_ratio=0.15), run_time=3)
-            vo.wait_until("b")
+        with self.voiceover("Watch it on a recursive function, the factorial. <bookmark mark='a'/> fact of ten calls fact of nine, which calls fact of eight, and so on down to one, each call pushing a frame holding its own n and its return address. <bookmark mark='b'/> Here is the stack's depth, measured on Pebble's emulator instruction by instruction: it climbs to ten frames, then, as each call returns and multiplies, it unwinds to nothing. <bookmark mark='c'/> The result is ten factorial, and the deepest the stack went was a hundred and sixty bytes.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(f, shift=DOWN * 0.1) for f in frames], lag_ratio=0.15), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(Create(ax), FadeIn(xl), FadeIn(yl))
-            self.play(Create(curve), LaggedStart(*[FadeOut(f) for f in reversed(frames)], lag_ratio=0.15),
-                      run_time=4)
-            vo.wait_until("c")
+            self.play(Create(curve), LaggedStart(*[FadeOut(f) for f in reversed(frames)], lag_ratio=0.15), run_time=4)
+            vo.wait_until('c')
             self.play(FadeIn(res))
         self.wait(0.3)
         self.clear_scene()
@@ -164,26 +151,15 @@ class Stack(VoiceoverScene):
                           color=GREY_A if ra == fact_ra else FUNC).next_to(b, RIGHT, buff=0.2))
         size = label(rf"{bt['frame_bytes']} bytes apart: \ one frame each", font_size=18, color=YES).next_to(
             sps, UP, buff=0.25).align_to(sps, LEFT)
-        with self.voiceover(
-            "A debugger reads the same structure on a real machine. <bookmark mark='a'/> We compiled a C "
-            "factorial on this computer, ran it under gdb, and stopped it at its deepest call, fact of one. "
-            "<bookmark mark='b'/> Asked for a backtrace, gdb lists six frames: five calls of fact and main. "
-            "<bookmark mark='c'/> It finds them by walking the stack. Each frame keeps its caller's frame address "
-            "and its own return address, so from the stack pointer the debugger can step from frame to frame. The "
-            "stack pointers it reports are thirty-two bytes apart, one frame of fact each. <bookmark mark='d'/> "
-            "And the saved return addresses tell the story of the calls: four of them point to the same "
-            "instruction in fact, the one just after the recursive call; the fifth returns into main, and main's "
-            "into the C library that started it. That is all a backtrace is."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(lst[0]), FadeIn(lst[1]))
-            vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(l) for l in lst[2:]], lag_ratio=0.2),
-                      LaggedStart(*[FadeIn(b) for b in boxes], lag_ratio=0.2), run_time=2.5)
-            vo.wait_until("c")
+        with self.voiceover("A debugger reads the same structure on a real machine. <bookmark mark='a'/> We compiled a C factorial on this computer, ran it under gdb, and stopped it at its deepest call, fact of one. <bookmark mark='b'/> Asked for a backtrace, gdb lists six frames: five calls of fact and main. <bookmark mark='c'/> It finds them by walking the stack. Each frame keeps its caller's frame address and its own return address, so from the stack pointer the debugger can step from frame to frame. The stack pointers it reports are thirty-two bytes apart, one frame of fact each. <bookmark mark='d'/> And the saved return addresses tell the story of the calls: four of them point to the same instruction in fact, the one just after the recursive call; the fifth returns into main, and main's into the C library that started it. That is all a backtrace is.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(lst[0]), FadeIn(lst[1]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
+            self.play(LaggedStart(*[FadeIn(l) for l in lst[2:]], lag_ratio=0.2), LaggedStart(*[FadeIn(b) for b in boxes], lag_ratio=0.2), run_time=2.5)
+            vo.wait_until('c')
             self.play(LaggedStart(*[FadeIn(t) for t in sps], lag_ratio=0.15), FadeIn(size), run_time=2)
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(LaggedStart(*[FadeIn(t) for t in ras], lag_ratio=0.2), run_time=2.5)
         self.wait(0.3)
         self.clear_scene()

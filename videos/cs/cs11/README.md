@@ -30,28 +30,52 @@ with readelf; every number is computed in `compute.py`.
 * **7. Five allocators.** First fit, next fit, best fit, segregated fits and the buddy system on that trace:
   fragmentation 1.13, 1.14, 1.13, 1.13 and 1.79; 3.3, 16.7, 2.1, 0.9 and 2.2 blocks examined per request; the buddy
   system (Knowlton 1965); ptmalloc, jemalloc, tcmalloc, mimalloc.
-* **8. Knuth's rule and Robson's bound.** The fifty-percent rule derived and checked (holes/N 0.438, 0.399, 0.383
-  against p/2 0.435, 0.401, 0.383); a Robson adversary drives first fit to M(½ log₂ n + 1), 4.5 M at n = 128 units.
+* **8. Knuth's rule and Robson's bounds.** Derive the approximate hole-count relation under stationary,
+  uniformly random deletion and immediate coalescing, neglecting boundary/growth effects. The stored `p` uses the
+  full run while hole averages use the post-warm-up window. Replay an eight-phase adversarial trace on first fit
+  and best fit: total block sizes 32–4,096 bytes (ratio 128), heap/M 1–4.5. The matching reference curve is an
+  illustration, not an exact finite universal theorem or a proof against every allocator.
 * **9. Object files.** ELF sections, symbols and relocations of two C files compiled here; gcc turning a counting loop
   into `strlen`; strong and weak symbols; the linker's errors.
 * **10. Linking, step by step.** Pebble's linker on the Job: resolution, layout (text, data, 384 KB of bss), the 16
   relocations patched; static archives and link order (`main.o libjob.a` takes only `count.o`, 16 KB against
   112 KB; `libjob.a main.o` fails with an undefined reference).
-* **11. Dynamic linking.** hello.c static (767 KB) against dynamic (16 KB); start-up 1.34 against 1.45 ms; the GOT,
-  the PLT and lazy binding; interposition with LD_PRELOAD.
-* **12. Loading and the address space.** /proc/self/maps; ASLR across three runs, and fixed with `setarch -R`;
+* **11. Dynamic linking.** This host's hello binaries occupy 741 KiB static and
+  16 KiB dynamic. Recorded best batch-average launches are 0.63
+  and 0.90 ms, including process creation/execution; the difference does not isolate linking.
+  PIC includes PC-relative references and GOT indirection. The PLT diagram illustrates optional lazy binding;
+  eager binding and compiler/linker options change it. Interposition records the Perl trace.
+* **12. Loading and the address space.** /proc/self/maps; ASLR across three PIE runs; `setarch -R` is rejected in this environment, so no fixed-address result is claimed;
   argv and argc on the stack, as Pebble's loader builds them.
 * **13. Undefined behaviour.** `x + 1 > x` folded to 1; a wrapping loop running 3 times at -O0 and 2 at -O2; a null
   check deleted at -O2; the 2009 Linux TUN bug; UBSan and AddressSanitizer catching an overflow, a heap overrun, a
-  use after free and a stack overrun; red zones, quarantine and shadow memory; the cost (2.0× on a word count, 12×
-  on a malloc-only loop).
-* **14. Smashing the stack.** The frame; an 81-byte payload (shellcode, padding, the buffer's address); the Morris worm
+  use after free and a stack overrun; red zones, quarantine and shadow memory; workload-specific overhead measured here. The shadow check handles partial groups; the standard ASan runtime is a
+  testing tool, not a production-hardened security runtime.
+* **14. Smashing the stack.** The frame; an 81-byte toy Pebble input (72 code bytes, padding, a saved address and newline); the Morris worm
   (1988), Aleph One (1996); a canary, a no-execute stack, randomization, bounds; return-oriented programming.
 * **15. The Job, linked.** Version 1 against version 0: identical output; +4% on a paragraph, −6% on chapter 1, −11%
   on 20,000 bytes; 320 bytes of stack at most.
 * **16. Frontier: bounds, semantics, capabilities.** A CHERI-style capability machine traps the attack on its 65th
   byte; CompCert, Cerberus and pointer provenance; open questions about allocators' worst cases and use-after-free.
 * **Recap, where this comes back, in practice, problems.**
+
+## Interpretation and measurement scope
+
+The numerical cache is a recorded experiment, not a cross-platform promise. All twenty original JSON payloads are
+preserved during this polish. Binary sizes are KiB (1,024 bytes); heap charts use decimal MB. Host instruction
+selection, addresses, launch/sanitizer times and ABI layout belong to the recorded compiler/platform. ASLR is
+not a bounds check. The capability model is a small spatial check, not complete CHERI or temporal revocation.
+CompCert's semantic-preservation theorem has a supported language, verified passes and trusted boundaries.
+
+Heap ratio means **peak heap / peak requested live bytes**, including headers, alignment, rounding and holes;
+the two peaks need not be simultaneous. Blocks examined per allocation are simulated operations, not elapsed
+speed. Boundary tags are a conceptual design; the Python simulator uses dictionaries/lists and does not charge
+a literal footer. Buddy payload requests include the 8-byte header and 16-byte alignment before power-of-two
+rounding: 16 bytes needs a 32-byte block, while 25 or 30 bytes needs 64. The diagrams and narration now agree.
+
+The startup stack drawing intentionally omits Linux environment pointers and auxiliary-vector details. The GOT/PLT
+view shows one lazy-binding path. Runtime, compiler, library and defense behavior depends on configuration;
+passing a finite simulator or sanitizer run is not a proof of correctness for all programs.
 
 ## Build
 
@@ -88,8 +112,8 @@ that run them; `heap` records its trace once into `.cache/cs11/perl.mtrace` and 
 
 3. **Holes.** A first-fit heap holds 1,000 blocks, and 80% of allocations split their hole. About how many holes?
 
-   *Solution.* Knuth's rule: ½ p N = ½ × 0.8 × 1,000 = **400**, which is what chapter 8's simulation measured
-   (399).
+   *Solution.* Knuth's rule: ½ p N = ½ × 0.8 × 1,000 = **about 400**, assuming uniformly selected frees, stationarity and negligible boundary/growth effects.
+   This estimates hole count, not wasted bytes. The displayed 399 is a finite-sample mean for this workload.
 
 4. **A relocation.** `la t0, sym` with `sym` at `0x12345`: what do the immediates become?
 
@@ -109,18 +133,16 @@ that run them; `heap` records its trace once into `.cache/cs11/perl.mtrace` and 
    difference is a bug in one of them. The emulator runs about a million instructions a second, so the replay takes
    a few seconds.
 
-6. ★ **Research: first fit's worst case.** First fit's worst-case heap lies between about ½ M log₂ n and M log₂ n.
-   Where exactly, and does best fit do better or worse?
+6. ★ **Research: define the allocation model before comparing bounds.** State the live-storage bound,
+   minimum allocation unit, maximum block size, online information and whether live blocks may move. Compare
+   Robson's 1971/1974 general bounds with his 1977 policy-specific first-fit/best-fit results. What does the
+   chapter's eight-phase trace actually establish?
 
-   *Where to start.* Robson's general lower bound (1971, 1974) applies to every allocator; our chapter 8 adversary
-   meets it with first fit, which shows the lower side is achievable for first fit. Robson's "Worst case
-   fragmentation of first fit and best fit storage allocation strategies" (The Computer Journal, 1977) gives upper
-   bounds for first fit and shows that best fit's worst case grows much faster with n. (a) Try to make
-   `compute_robson`'s adversary stronger against first fit: exploit its address order, for instance by freeing so
-   that holes of the next size exist but sit above blocks that first fit will split first. (b) Search small cases
-   exhaustively: for M and n of a few units, enumerate adversary strategies by computer and find the true worst case
-   for first fit and best fit; compare with the formulas. (c) Luby, Naor and Orda ("Tight bounds for dynamic storage
-   allocation", 1996) and later work refine the constants for general allocators; read them for the proof techniques.
+   *Worked guidance.* The replay establishes measured behavior for two particular implementations on one trace.
+   Its curve is not a proof of a universal finite formula. Enumerate tiny legal traces while checking live-storage
+   limits, block disjointness and units; a counterexample can disprove a proposed upper bound, while an apparent
+   pattern still needs proof. Separate general lower bounds from policy-specific upper bounds and account for
+   finite-size corrections. Moving or fragmented allocation and constrained lifetimes change the model.
 
 ## 习题与解答
 
@@ -136,7 +158,7 @@ that run them; `heap` records its trace once into `.cache/cs11/perl.mtrace` and 
 
 3. **空洞。** 一个首次适配的堆里有 1,000 个块，80% 的分配会切开它的空洞。大约有多少个空洞？
 
-   *解答。* 克努特法则：½ p N = ½ × 0.8 × 1,000 = **400**，正是第 8 章模拟测到的（399）。
+   *解答。* 克努特法则：½ p N = ½ × 0.8 × 1,000 = **约 400**，前提是均匀选择释放、近似平稳，且忽略边界与堆扩展。它估计空洞个数而非浪费字节；399 是该负载下的有限样本均值。
 
 4. **一次重定位。** `sym` 在 `0x12345` 时，`la t0, sym` 的立即数变成什么？
 
@@ -152,15 +174,13 @@ that run them; `heap` records its trace once into `.cache/cs11/perl.mtrace` and 
    （操作、编号、大小）的带子，在 Pebble 程序的 `.bss` 里放一张编号 → 指针的表。头部、对齐和切分规则与 `heap.FirstFit`
    相同的话，最高水位应当与 `heap.py` 完全一致；任何差别都是其中一方的错误。
 
-6. ★ **研究：首次适配的最坏情况。** 首次适配的最坏堆大小介于大约 ½ M log₂ n 和 M log₂ n 之间。究竟在哪里？最佳适配
-   更好还是更差？
+6. ★ **研究：比较界之前先定义分配模型。** 明确活动存储上限、最小分配单位、最大块大小、在线信息，
+   以及是否允许移动活动块。比较罗布森1971/1974年的一般界与1977年的首次适配、最佳适配专门结果。
+   本章八阶段轨迹实际证明了什么？
 
-   *从哪里开始。* Robson 的一般下界（1971、1974）对每个分配器都成立；第 8 章的对手用首次适配达到了它，说明对首次适配
-   而言下界一侧是可达的。Robson 的《Worst case fragmentation of first fit and best fit storage allocation strategies》
-   （The Computer Journal，1977）给出了首次适配的上界，并表明最佳适配的最坏情况随 n 增长得快得多。（a）试着让
-   `compute_robson` 的对手对首次适配更强：利用它的地址次序。（b）对小的情形做穷举：M 和 n 只有几个单位时，用计算机
-   枚举对手策略，求出首次适配和最佳适配真正的最坏情况，与公式比较。（c）Luby、Naor 与 Orda（“Tight bounds for dynamic
-   storage allocation”，1996）及后续工作细化了一般分配器的常数，读它们学习证明技巧。
+   *解答指导。* 重放只确立两种具体实现对一条轨迹的测量，不是普遍有限公式的证明。枚举微小合法轨迹，
+   检查活动存储上限、块不重叠及单位。反例能推翻候选上界，而观察到规律仍需证明。区分一般下界与特定策略
+   上界，并计入有限大小修正。允许移动、允许请求分片或限制生命周期，都会改变模型。
 
 ## Glossary additions
 

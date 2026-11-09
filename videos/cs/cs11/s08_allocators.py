@@ -92,11 +92,11 @@ class Allocators(VoiceoverScene):
         ch = bar_chart(frag, [r["name"] for r in rows], [POL[r["name"]][0] for r in rows], height=3.0, bar_w=0.9,
                        gap=0.7, vmax=2.0, fmt_=lambda v: f"{v:.2f}", font_size=19).to_edge(LEFT, buff=0.8).shift(
             DOWN * 0.4)
-        cl = label(r"heap needed \ $\div$ \ the most bytes ever live", font_size=18, color=GREY_B).next_to(ch, UP,
+        cl = label("peak heap bytes $\\div$ peak requested live bytes \\\\ includes headers, alignment, rounding and holes", font_size=18, color=GREY_B).next_to(ch, UP,
                                                                                                          buff=0.2)
         y0 = ch.bars[0].get_bottom()[1]
         one = DashedLine([ch.get_left()[0], y0 + 1.5, 0], [ch.get_right()[0], y0 + 1.5, 0], color=GREY_B)
-        ol = label(r"1: \ perfect", font_size=16, color=GREY_B).next_to(one, RIGHT, buff=0.1)
+        ol = label("1: lower reference", font_size=16, color=GREY_B).next_to(one, RIGHT, buff=0.1)
         steps = VGroup(label(r"blocks examined \\ per \texttt{malloc}", font_size=18, color=GREY_B))
         for r in rows:
             steps.add(label(rf"{r['name']}: \ {r['steps']:.1f}", font_size=20, color=POL[r["name"]][0]))
@@ -105,26 +105,15 @@ class Allocators(VoiceoverScene):
         punch = label(rf"peak live {best['peak_live'] / 1e6:.2f} MB: \ first fit needs "
                       rf"{best['peak_heap'] / 1e6:.2f} MB, \ the buddy system {rows[-1]['peak_heap'] / 1e6:.2f} MB",
                       font_size=21, color=HEAD).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Here are the results. <bookmark mark='a'/> The measure is fragmentation: the heap each allocator "
-            "needed, divided by the most bytes the program ever had live at once. One would be perfect. <bookmark "
-            "mark='b'/> First fit, best fit and segregated fits all land at about one point one three: thirteen "
-            "percent overhead, most of it headers and rounding on Perl's tiny blocks, not wasted holes. Next fit is "
-            "a little worse. The buddy system needs nearly eighty percent more, because rounding every request up to "
-            "a power of two wastes a quarter of each block on average. <bookmark mark='c'/> Speed is a different "
-            "story. Next fit, meant to be fast, examines seventeen blocks per request on this trace; segregated "
-            "fits examines fewer than one, because the right list is usually non-empty at its head. <bookmark "
-            "mark='d'/> That combination, little waste and almost no searching, is why real allocators are built "
-            "on size classes."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(ch[0]), FadeIn(ch.names), FadeIn(cl), Create(one), FadeIn(ol))
-            vo.wait_until("b")
-            self.play(*[GrowFromEdge(b, DOWN) for b in ch.bars], FadeIn(ch.vals))
-            vo.wait_until("c")
+        with self.voiceover("These results describe one recorded trace and our simulator's rules. <bookmark mark='a'/> The ratio is peak heap size divided by peak requested live bytes. These peaks need not occur at the same instant. The ratio includes metadata, alignment, rounding and unused holes; it is not external fragmentation alone. <bookmark mark='b'/> First fit, best fit and segregated fits are near 1.13 here. Next fit is slightly larger, and buddy is about 1.82, or 82 percent above peak requested live bytes. The trace does not isolate how much each overhead contributes. A universal quarter-waste rule would require a request-size distribution. <bookmark mark='c'/> The other panel counts blocks examined per allocation. Next fit examines about eighteen, and segregated fits fewer than one on average because some requests extend the heap without a search. These are operation counts, not measured execution times. <bookmark mark='d'/> Size classes can reduce searching, but real performance also depends on synchronization, locality, metadata and workload. One trace does not rank every allocator for every program.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(ch[0]), FadeIn(ch.names), FadeIn(cl), Create(one), FadeIn(ol), *[GrowFromEdge(b, DOWN) for b in ch.bars], FadeIn(ch.vals), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
+            self.play(Indicate(ch.bars[-1], color=HEAD), run_time=0.6)
+            vo.wait_until('c')
             self.play(FadeIn(steps))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(punch))
         self.wait(0.3)
         self.clear_scene()
@@ -136,7 +125,7 @@ class Allocators(VoiceoverScene):
         scale = 1.3
         r0 = Rectangle(width=8 * scale, height=0.5, stroke_color=GREY_B).move_to([x0 + 4 * scale, 1.6, 0])
         t0 = label(r"256 bytes", font_size=17, color=GREY_B).move_to(r0)
-        rows = [[(0, 4, "free"), (4, 4, "free")], [(0, 2, ""), (2, 2, "free")], [(0, 1, "used: 30 B"),
+        rows = [[(0, 4, "free"), (4, 4, "free")], [(0, 2, ""), (2, 2, "free")], [(0, 1, "used: 16 B"),
                                                                                     (1, 1, "free")]]
         y = 0.9
         for row in rows:
@@ -149,24 +138,28 @@ class Allocators(VoiceoverScene):
             lv.add(g)
             y -= 0.7
         pts = VGroup(
-            label(r"a request for 30 bytes: \ split 256 into halves until a 32-byte block fits", font_size=21,
+            label("16-byte payload $+ 8$-byte header, aligned: a 32-byte block", font_size=21,
                   color=GREY_A),
-            label(r"a block's buddy is at its address $\oplus$ its size: \ one XOR finds it", font_size=21,
+            label("arena-relative buddy address $=$ block address $\\oplus$ block size", font_size=21,
                   color=HEAD),
-            label(r"free: \ if the buddy is free too, \ merge, \ and try again one level up", font_size=21,
+            label("free: merge only with a free buddy of the same size; repeat upward", font_size=21,
                   color=GREY_A),
-            label(r"fast and simple, \ but a 33-byte request takes 64: \ internal fragmentation", font_size=21,
+            label("25-byte payload $+ 8$-byte header needs 64 bytes here: internal waste", font_size=21,
                   color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "The buddy system, from Kenneth Knowlton in 1965, trades space for simplicity. <bookmark mark='a'/> "
-            "Every block is a power of two. A request for thirty bytes splits a block in half, and in half again, "
-            "until a thirty-two-byte block fits. <bookmark mark='b'/> Each half's partner, its buddy, sits at its "
-            "own address with one bit flipped, the bit of the block's size, so a single exclusive-or finds it. "
-            "<bookmark mark='c'/> When a block is freed and its buddy is free too, the two merge into their parent, "
-            "and the check repeats one level up. <bookmark mark='d'/> All of this is fast. The cost is rounding: a "
-            "request of thirty-three bytes gets sixty-four. Waste inside a block is internal fragmentation; waste "
-            "between blocks, which first fit suffers from, is external."
+            (
+            "A binary buddy allocator splits power-of-two blocks. <bookmark mark='a'/> In our simulator a "
+            "sixteen-byte payload needs an eight-byte header and alignment, so it occupies a thirty-two-byte "
+            "block. Split 256 into 128, 64 and 32, leaving the other half free at each level. <bookmark "
+            "mark='b'/> With addresses measured relative to an aligned arena, a block's buddy is its address "
+            "exclusive-or its block size. This identifies its partner, not an arbitrary adjacent free block. "
+            "<bookmark mark='c'/> Merge only when that partner is free and has the same size; repeat at the next "
+            "level. <bookmark mark='d'/> The arithmetic is simple, but splitting, lookup and merging still have "
+            "costs. A twenty-five-byte payload plus the header crosses the thirty-two-byte class and needs "
+            "sixty-four bytes here. Waste within an allocated block is internal fragmentation; separated free "
+            "holes contribute external fragmentation."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(r0), FadeIn(t0))
             vo.wait_until("a")
@@ -187,9 +180,8 @@ class Allocators(VoiceoverScene):
         pts = VGroup(
             label(r"glibc's \texttt{malloc} \ (ptmalloc, \ after Doug Lea's dlmalloc): \ size-class bins, \ boundary "
                   r"tags, \ coalescing", font_size=21, color=DATA),
-            label(r"jemalloc, \ tcmalloc, \ mimalloc: \ size classes in pages of equal blocks, \ and a cache per "
-                  r"thread", font_size=21, color=YES),
-            label(r"big requests skip the heap: \ \texttt{mmap} straight from the operating system \ (Part 32)",
+            label("jemalloc, tcmalloc, mimalloc: size classes and local fast paths; ownership varies", font_size=21, color=YES),
+            label("large requests may use separate OS mappings; thresholds depend on policy",
                   font_size=21, color=FUNC),
             label(r"why per-thread caches: \ Part 10's lesson, \ a shared free list is a contended line", font_size=21,
                   color=CTRL),
@@ -215,14 +207,19 @@ class Allocators(VoiceoverScene):
         links = VGroup(*[Arrow(c.get_left(), pages[k][1].get_right(), buff=0.1, color=CTRL, stroke_width=2,
                                max_tip_length_to_length_ratio=0.1) for k, c in enumerate(caches)])
         with self.voiceover(
-            "Real allocators combine these ideas. <bookmark mark='a'/> The C library on this machine uses ptmalloc, "
-            "descended from Doug Lea's allocator: bins of free blocks by size, boundary tags and coalescing. "
-            "<bookmark mark='b'/> Newer allocators, jemalloc, tcmalloc and mimalloc, carve pages into blocks of one "
-            "size class each and give every thread its own cache of free blocks. <bookmark mark='c'/> Very large "
-            "requests skip the heap entirely and get fresh pages from the operating system, which is Part 32's "
-            "subject. <bookmark mark='d'/> The per-thread caches are Part 10's lesson again: a single shared free "
-            "list would be a cache line every core fights over. <bookmark mark='e'/> And in languages with garbage "
-            "collection, the runtime decides when to free, which Part 15 builds."
+            (
+            "Production allocators combine policies with concurrency and locality mechanisms. <bookmark "
+            "mark='a'/> glibc's ptmalloc uses size-organized bins, coalescing and boundary metadata, with caches "
+            "and multiple arenas. Details vary by release. <bookmark mark='b'/> jemalloc, tcmalloc and mimalloc "
+            "use size classes and local fast paths. Their ownership differs: some configurations use thread "
+            "caches, others CPU-local or page-local structures. They are not identical designs. <bookmark "
+            "mark='c'/> Large requests may use separate operating-system mappings rather than extending a "
+            "contiguous brk heap, depending on policy and thresholds. <bookmark mark='d'/> Local caches can "
+            "reduce shared-list contention, at a cost in retained memory and cross-thread transfer complexity. "
+            "Part 10's coherence lessons explain one part of that tradeoff. <bookmark mark='e'/> "
+            "Garbage-collected runtimes decide when unreachable objects can be reclaimed, while still relying on "
+            "allocation machinery. Part 15 builds those mechanisms."
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, p in zip("abcde", pts):

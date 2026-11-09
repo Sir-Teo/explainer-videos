@@ -30,8 +30,7 @@ class Heap(VoiceoverScene):
                   font_size=22, color=GREY_A),
             label(r"\texttt{p = malloc(n)}: \ $n$ bytes, \ somewhere, \ until \ \texttt{free(p)}", font_size=24,
                   color=YES),
-            label(r"the allocator's problem: \ requests arrive in any order and size; \ it must place each one "
-                  r"\textit{now}, \ and can never move it", font_size=22, color=HEAD),
+            label("online, nonmoving allocation: place requests without knowing future lifetimes", font_size=22, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(head, DOWN, buff=0.45)
         # lifetimes: stack frames nest inside calls; heap blocks outlive the call that made them
         x0, x1 = -5.2, 5.6
@@ -57,13 +56,17 @@ class Heap(VoiceoverScene):
             [x0 - 1.6, 0, 0], LEFT).set_y(-0.75)
         life = VGroup(axis, tl, mainbar, mt, calls, ct, st)
         with self.voiceover(
-            "The stack is perfect for data that lives exactly as long as a function call. <bookmark mark='a'/> But "
-            "much data is not like that. <bookmark mark='b'/> The Job's table outlives every call that adds to it, "
-            "and nobody knows in advance how big it will grow. <bookmark mark='c'/> For that there is the heap: ask "
-            "malloc for n bytes, and you get a pointer to them, valid until you hand them back with free. "
-            "<bookmark mark='d'/> Behind those two functions is a hard problem. Requests arrive in any order and any "
-            "size. The allocator must decide where each one goes at once, without knowing the future, and once it "
-            "has handed out an address it can never move the block, because the program holds pointers to it."
+            (
+            "The stack naturally serves data whose lifetime follows a call. <bookmark mark='a'/> Many objects "
+            "have different lifetimes. <bookmark mark='b'/> The Job's word table survives the functions that add "
+            "entries, and its eventual size depends on input. <bookmark mark='c'/> Dynamic allocation requests "
+            "storage whose lifetime lasts until it is released. In C, malloc may fail and return null; a "
+            "successful allocation does not initialize its bytes. After free, aliases no longer authorize access "
+            "to that object. <bookmark mark='d'/> Our allocator handles requests online, without future "
+            "knowledge. With ordinary raw pointers it cannot transparently relocate a live block: existing "
+            "pointers would still name its old location. Moving collectors and handle-based systems use extra "
+            "machinery to update or redirect references."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(pts[0], shift=RIGHT * 0.1), FadeIn(life))
             vo.wait_until("a")
@@ -107,28 +110,18 @@ class Heap(VoiceoverScene):
         merged = Rectangle(width=2.0 + 2.5, height=0.8, stroke_color=YES, stroke_width=2.5, fill_color=GREY_E,
                            fill_opacity=0.25).move_to(VGroup(heap[3][0], heap[4][0]))
         ml = label(r"C and its free neighbour: \ one free block", font_size=19, color=YES).move_to(merged)
-        with self.voiceover(
-            "Here is the classic design. <bookmark mark='a'/> The heap is one stretch of memory cut into blocks, "
-            "each starting with a small header that records its size and whether it is in use. <bookmark "
-            "mark='b'/> The free blocks are linked together into a list. <bookmark mark='c'/> To allocate, walk the "
-            "list for a block that is big enough, hand out the front of it, and leave the rest on the list. "
-            "<bookmark mark='d'/> To free, mark the block free, and if its neighbours are free too, merge them into "
-            "one larger block, so that the heap does not crumble into pieces too small to use. <bookmark "
-            "mark='e'/> Finding the next neighbour is easy, since its header follows ours. Finding the previous one "
-            "is the clever part: Donald Knuth's boundary tags, in 1968, copy each block's size into its last word "
-            "too, so the block before is one step away."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(heap), FadeIn(tagl))
-            vo.wait_until("b")
+        with self.voiceover("This diagram explains a classic free-list design. <bookmark mark='a'/> Divide storage into blocks with metadata recording size and allocation state. <bookmark mark='b'/> Link the free blocks into a searchable structure. <bookmark mark='c'/> To allocate, find a sufficiently large hole and split it if the remainder can form a useful free block. The request must first account for metadata and alignment. <bookmark mark='d'/> To free, coalesce adjacent free blocks. This reduces separated holes but cannot combine holes across a live object. <bookmark mark='e'/> Boundary tags record information at block boundaries so a neighbor can be found efficiently. The Python simulator represents those relationships with dictionaries and ordered lists: its eight-byte-header accounting does not charge a literal footer or reproduce native execution time.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(heap), FadeIn(tagl), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(Create(flink), FadeIn(fl))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(steps[0]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(steps[1]), Indicate(heap[3], color=NO))
             self.play(FadeOut(heap[3]), FadeOut(heap[4]), FadeIn(merged), FadeIn(ml))
-            vo.wait_until("e")
+            vo.wait_until('e')
             self.play(FadeIn(steps[2]))
         self.wait(0.3)
         self.clear_scene()
@@ -156,25 +149,16 @@ class Heap(VoiceoverScene):
                                                                                                     buff=0.15)
         tot = label(rf"{h['allocs']:,} allocations, \ {h['frees']:,} frees", font_size=21, color=HEAD).to_edge(
             DOWN, buff=0.25)
-        with self.voiceover(
-            "To compare allocators honestly we need real requests, not made-up ones. <bookmark mark='a'/> So we "
-            "recorded a real program: Perl, counting the words of Pride and Prejudice, which builds a hash table "
-            "much like the one Part 17 will build. We wrote our own malloc that logs every request and then calls "
-            "the real one, and slipped it in front of the C library, a trick chapter eleven explains. <bookmark "
-            f"mark='b'/> Over a hundred and forty thousand allocations, and most of them tiny: sixteen bytes or "
-            "less, the size of a short word and its bookkeeping. <bookmark mark='c'/> And the live data climbs as "
-            "the table fills, to about two megabytes. <bookmark mark='d'/> Now we can replay this exact sequence "
-            "through allocators of our own."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(prog), FadeIn(how))
-            vo.wait_until("b")
-            self.play(FadeIn(ch[0]), FadeIn(ch.names), FadeIn(cl), *[GrowFromEdge(b, DOWN) for b in ch.bars],
-                      FadeIn(ch.vals))
-            vo.wait_until("c")
+        with self.voiceover(f"To compare allocators honestly we need real requests, not made-up ones. <bookmark mark='a'/> So we recorded a real program: Perl, counting the words of Pride and Prejudice, which builds a hash table much like the one Part 17 will build. We wrote our own malloc that logs every request and then calls the real one, and slipped it in front of the C library, a trick chapter eleven explains. <bookmark mark='b'/> Over a hundred and forty thousand allocations, and most of them tiny: sixteen bytes or less, the size of a short word and its bookkeeping. <bookmark mark='c'/> And the live data climbs as the table fills, to about two megabytes. <bookmark mark='d'/> Now we can replay this exact sequence through allocators of our own.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(prog), FadeIn(how), run_time=0.6)
+            self.play(FadeIn(ch[0]), FadeIn(ch.names), FadeIn(cl), *[GrowFromEdge(b, DOWN) for b in ch.bars], FadeIn(ch.vals), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
+            self.play(Indicate(VGroup(*ch.bars), color=HEAD), run_time=0.6)
+            vo.wait_until('c')
             self.play(Create(ax), FadeIn(al), Create(live), run_time=2)
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(tot))
         self.wait(0.3)
         self.clear_scene()

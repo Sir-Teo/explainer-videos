@@ -49,20 +49,13 @@ class Linking(VoiceoverScene):
             DOWN, aligned_edge=LEFT, buff=0.1).next_to(res, RIGHT, buff=0.8).align_to(res, UP)
         if err.get_right()[0] > 6.8:
             err.scale_to_fit_width(6.8 - err.get_left()[0])
-        with self.voiceover(
-            "Now our own linker, on the Job's four object files. <bookmark mark='a'/> Each file says what it "
-            "defines and what it needs. main defines start and needs getc, lookup and report. The table defines "
-            "lookup and report and needs alloc, putc and printnum. alloc and io need nothing. <bookmark mark='b'/> "
-            "The first job is to match every need to exactly one definition. Here, every name is defined once, so "
-            "each gets an address. <bookmark mark='c'/> Leave out the allocator, or include it twice, and Pebble's "
-            "linker refuses, with the same two complaints this machine's linker gave."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(c) for c in cols], lag_ratio=0.3), run_time=3)
-            vo.wait_until("b")
+        with self.voiceover("Now our own linker, on the Job's four object files. <bookmark mark='a'/> Each file says what it defines and what it needs. main defines start and needs getc, lookup and report. The table defines lookup and report and needs alloc, putc and printnum. alloc and io need nothing. <bookmark mark='b'/> The first job is to match every need to exactly one definition. Here, every name is defined once, so each gets an address. <bookmark mark='c'/> Leave out the allocator, or include it twice, and Pebble's linker refuses, with the same two complaints this machine's linker gave.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(c) for c in cols], lag_ratio=0.3), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(res))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(err))
         self.wait(0.3)
         self.clear_scene()
@@ -101,21 +94,13 @@ class Linking(VoiceoverScene):
             if idx:
                 legend[k].set_y(VGroup(*[blocks[i] for i in idx]).get_y())
         legend[3].next_to(legend[2], DOWN, buff=0.6).align_to(legend[2], LEFT)
-        with self.voiceover(
-            "Step two: decide where everything goes. <bookmark mark='a'/> The linker lays out all the files' code "
-            "first, one after another in the order the files were given, each aligned to sixteen bytes. Then all "
-            "their data. <bookmark mark='b'/> Then the bss sections, which take addresses but no bytes in the file: "
-            "here, the allocator's three hundred and eighty-four kilobytes of heap. <bookmark mark='c'/> So the "
-            "program file is eight hundred and sixty-four bytes, but the program in memory is almost four hundred "
-            "kilobytes. Now that every section has an address, so does every symbol."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(b, shift=RIGHT * 0.1) for b in blocks[:-1]], lag_ratio=0.3),
-                      FadeIn(legend[0]), FadeIn(legend[1]), run_time=3)
-            vo.wait_until("b")
+        with self.voiceover("Step two: decide where everything goes. <bookmark mark='a'/> The linker lays out all the files' code first, one after another in the order the files were given, each aligned to sixteen bytes. Then all their data. <bookmark mark='b'/> Then the bss sections, which take addresses but no bytes in the file: here, the allocator's three hundred and eighty-four kilobytes of heap. <bookmark mark='c'/> So the program file is eight hundred and sixty-four bytes, but the program in memory is almost four hundred kilobytes. Now that every section has an address, so does every symbol.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(b, shift=RIGHT * 0.1) for b in blocks[:-1]], lag_ratio=0.3), FadeIn(legend[0]), FadeIn(legend[1]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(blocks[-1]), FadeIn(legend[2]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(legend[3]))
         self.wait(0.3)
         self.clear_scene()
@@ -143,26 +128,15 @@ class Linking(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(RIGHT, buff=0.4).shift(UP * 0.3)
         done = label(r"then run it: \ the same twenty words as Part 6's program", font_size=21, color=YES).to_edge(
             DOWN, buff=0.3).to_edge(RIGHT, buff=0.5)
-        with self.voiceover(
-            f"Step three: fill the holes. <bookmark mark='a'/> There are {len(ps)} relocations across the four "
-            "files. Each says where the hole is, what kind of hole, and which symbol's address belongs in it. "
-            "<bookmark mark='b'/> Take one: the table code loads the address of its list head with la, which the "
-            f"assembler emitted as a lui and an ori with zeros. head now lives at {hl['target']}. The linker splits "
-            f"that into its top twenty-two bits, {hi}, and its low ten, {lo}, and writes them into the two "
-            "instructions. <bookmark mark='c'/> For a call, it writes the distance from the call to the function, "
-            "counted in instructions, into the jump's 22-bit field. <bookmark mark='d'/> That is all a static linker "
-            "does. Load the result and run it, and the four files behave as one program."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(VGroup(*t.cells[0])), FadeIn(t.rule),
-                      LaggedStart(*[FadeIn(VGroup(*t.cells[r])) for r in range(1, len(t.cells))], lag_ratio=0.1),
-                      run_time=3)
-            vo.wait_until("b")
+        with self.voiceover(f"Step three: fill the holes. <bookmark mark='a'/> There are {len(ps)} relocations across the four files. Each says where the hole is, what kind of hole, and which symbol's address belongs in it. <bookmark mark='b'/> Take one: the table code loads the address of its list head with la, which the assembler emitted as a lui and an ori with zeros. head now lives at {hl['target']}. The linker splits that into its top twenty-two bits, {hi}, and its low ten, {lo}, and writes them into the two instructions. <bookmark mark='c'/> For a call, it writes the distance from the call to the function, counted in instructions, into the jump's 22-bit field. <bookmark mark='d'/> That is all a static linker does. Load the result and run it, and the four files behave as one program.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(VGroup(*t.cells[0])), FadeIn(t.rule), LaggedStart(*[FadeIn(VGroup(*t.cells[r])) for r in range(1, len(t.cells))], lag_ratio=0.1), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(LaggedStart(*[FadeIn(x) for x in ex[:4]], lag_ratio=0.4), run_time=3)
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(ex[4]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(done))
         self.wait(0.3)
         self.clear_scene()
@@ -209,31 +183,20 @@ class Linking(VoiceoverScene):
             DOWN, aligned_edge=LEFT, buff=0.08).next_to(und2, DOWN, buff=0.12).align_to(und2, LEFT)
         rule = label(r"the rule: \ libraries after the files that use them, \ in dependency order", font_size=22,
                      color=HEAD).to_edge(DOWN, buff=0.45)
-        with self.voiceover(
-            "Real programs also link against libraries, and a static library is simply an archive of object files. "
-            "<bookmark mark='a'/> Here is one we built, lib job dot a, holding two members: count dot o, and unused "
-            "dot o, which carries a hundred-kilobyte table. <bookmark mark='b'/> The linker reads its inputs left "
-            "to right, keeping a list of the names still undefined. After main dot o, that list holds count. "
-            "<bookmark mark='c'/> In the archive it takes only the members that define a name on the list: count "
-            f"dot o comes in, unused dot o stays out. The program is {kb_ar} kilobytes; listing all three object "
-            f"files instead gives {kb_obj}. <bookmark mark='d'/> Now put the library first. When the linker reads "
-            "it, nothing is undefined yet, so it takes nothing; then main dot o needs count, too late. Undefined "
-            "reference to count. <bookmark mark='e'/> That is why, on a command line, libraries go after the files "
-            "that use them."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(cmd1), FadeIn(row1))
-            vo.wait_until("b")
+        with self.voiceover(f"Real programs also link against libraries, and a static library is simply an archive of object files. <bookmark mark='a'/> Here is one we built, lib job dot a, holding two members: count dot o, and unused dot o, which carries a hundred-kilobyte table. <bookmark mark='b'/> The linker reads its inputs left to right, keeping a list of the names still undefined. After main dot o, that list holds count. <bookmark mark='c'/> In the archive it takes only the members that define a name on the list: count dot o comes in, unused dot o stays out. The program is {kb_ar} kilobytes; listing all three object files instead gives {kb_obj}. <bookmark mark='d'/> Now put the library first. When the linker reads it, nothing is undefined yet, so it takes nothing; then main dot o needs count, too late. Undefined reference to count. <bookmark mark='e'/> That is why, on a command line, libraries go after the files that use them.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(cmd1), FadeIn(row1), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(Indicate(mo1, color=FILE_COLORS[0]), FadeIn(und1))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(co1[0].animate.set_fill(YES, opacity=0.45), uo1.animate.set_opacity(0.3))
             self.play(FadeIn(took))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(cmd2), FadeIn(row2))
             self.play(FadeIn(und2), co2.animate.set_opacity(0.3), uo2.animate.set_opacity(0.3))
             self.play(FadeIn(err))
-            vo.wait_until("e")
+            vo.wait_until('e')
             self.play(FadeIn(rule))
         self.wait(0.3)
         self.clear_scene()

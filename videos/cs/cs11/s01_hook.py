@@ -32,22 +32,13 @@ class Hook(VoiceoverScene):
         res = label(rf"chapter 1: \ the same top twenty as Part 6's program, \ "
                     rf"{job['v1']:,} instructions against {job['v0']:,}", font_size=22, color=YES).to_edge(DOWN,
                                                                                                     buff=0.35)
-        with self.voiceover(
-            "Until now every Pebble program has been one file of assembly, written by hand, that the machine runs "
-            "from address zero. Real programs are not like that. <bookmark mark='a'/> Here is the Job again, "
-            "written the way a compiler would write it: four separate files. The main loop; the word table, now a "
-            "linked list of nodes on a heap; a memory allocator; and the input and output routines. Each is "
-            "assembled on its own, and each has holes in it: places where it uses a name, like lookup or alloc, "
-            "whose address it cannot know. <bookmark mark='b'/> A linker fills the holes and joins the four into "
-            "one program. <bookmark mark='c'/> It prints exactly the same twenty words as Part 6's program, and on "
-            "the first chapter it is even a little faster."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.2) for t in tiles], lag_ratio=0.25))
-            vo.wait_until("b")
+        with self.voiceover("Until now every Pebble program has been one file of assembly, written by hand, that the machine runs from address zero. Real programs are not like that. <bookmark mark='a'/> Here is the Job again, written the way a compiler would write it: four separate files. The main loop; the word table, now a linked list of nodes on a heap; a memory allocator; and the input and output routines. Each is assembled on its own, and each has holes in it: places where it uses a name, like lookup or alloc, whose address it cannot know. <bookmark mark='b'/> A linker fills the holes and joins the four into one program. <bookmark mark='c'/> It prints exactly the same twenty words as Part 6's program, and on the first chapter it is even a little faster.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.2) for t in tiles], lag_ratio=0.25), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(GrowArrow(arrow), FadeIn(linked))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(res))
         self.wait(0.3)
         self.clear_scene()
@@ -66,23 +57,15 @@ class Hook(VoiceoverScene):
         VGroup(ok, bad).arrange(DOWN, buff=0.4, aligned_edge=LEFT).next_to(prog, DOWN, buff=0.6)
         why = label(r"the input overwrote the return address on the stack, \ and the processor jumped into it",
                     font_size=22, color=HEAD).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "And here is a program that does something its author never wrote. <bookmark mark='a'/> It asks for a "
-            "name and says hello, copying the name into a buffer of sixty-four bytes. <bookmark mark='b'/> Give it "
-            "a name, and it greets you. <bookmark mark='c'/> Give it eighty-one carefully chosen bytes, and it "
-            "prints pwned, a word that appears nowhere in the program. <bookmark mark='d'/> The input ran past the "
-            "end of the buffer, overwrote the address the function was going to return to, and the processor "
-            "returned into the input itself. To see how, and how to stop it, we need to know how a running program "
-            "is laid out in memory."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(prog))
-            vo.wait_until("b")
+        with self.voiceover("And here is a program that does something its author never wrote. <bookmark mark='a'/> It asks for a name and says hello, copying the name into a buffer of sixty-four bytes. <bookmark mark='b'/> Give it a name, and it greets you. <bookmark mark='c'/> Give it eighty-one carefully chosen bytes, and it prints pwned, a word that appears nowhere in the program. <bookmark mark='d'/> The input ran past the end of the buffer, overwrote the address the function was going to return to, and the processor returned into the input itself. To see how, and how to stop it, we need to know how a running program is laid out in memory.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(prog), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(ok))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(bad))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(why))
         self.wait(0.3)
         self.clear_scene()
@@ -101,13 +84,7 @@ class Hook(VoiceoverScene):
             label(r"undefined behaviour, \ and the stack smash: \ attack and defences", font_size=27, color=NO),
         ).arrange(DOWN, buff=0.38).move_to(DOWN * 0.1)
         with self.voiceover(
-            "Here is where this part goes. <bookmark mark='a'/> How a program's data sits in memory: bytes and "
-            "words, alignment, arrays and pointers. <bookmark mark='b'/> How procedures work: the call stack, its "
-            "frames, and the conventions that let separately written functions call each other. <bookmark "
-            "mark='c'/> The heap, with five memory allocators run on a real program's allocations, and the theorems "
-            "that say how well any allocator can do. <bookmark mark='d'/> Object files, linking and loading, on "
-            "Pebble and on this computer. <bookmark mark='e'/> And what goes wrong: undefined behaviour, and the "
-            "stack smash, with the defences every program now ships with."
+            "The route through this part connects representation to behavior. <bookmark mark='a'/> Bytes, alignment, arrays and typed pointers explain where data goes. <bookmark mark='b'/> Calling conventions and frames explain how separately compiled functions cooperate. <bookmark mark='c'/> A recorded allocation trace lets us compare five simulated policies under explicit accounting rules. <bookmark mark='d'/> Object files, linking and loading connect Pebble's small implementation to compiled host examples. <bookmark mark='e'/> Finally, undefined behavior and a toy stack overwrite show why bounds, lifetime rules and defense coverage matter. Each measurement belongs to its stated program, model and build."
         ) as vo:
             self.play(FadeIn(head))
             for mk, f in zip("abcde", facts):

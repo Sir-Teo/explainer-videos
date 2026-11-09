@@ -26,7 +26,7 @@ class Life(VoiceoverScene):
                  (r"assembler", r"assembly to machine words, \ with holes for unknown addresses \ (Part 6)", CTRL,
                   r"main.o"),
                  (r"linker", r"joins object files, \ fills the holes", FUNC, r"job"),
-                 (r"loader", r"copies the program into memory, \ sets up the stack, \ jumps to it", HEAD,
+                 (r"loader", "maps segments, initializes memory and stack, transfers control", HEAD,
                   r"a process")]
         rows = VGroup()
         for name, what, c, art in steps:
@@ -38,14 +38,18 @@ class Life(VoiceoverScene):
             r[2].next_to(r[1], RIGHT, buff=0.3)
         rows.arrange(DOWN, buff=0.28, aligned_edge=LEFT).move_to(DOWN * 0.15 + LEFT * 0.3)
         with self.voiceover(
-            "A program goes through five hands on its way to running. <bookmark mark='a'/> It starts as source "
-            "code, text that a person wrote. <bookmark mark='b'/> A compiler translates it into assembly language; "
-            "Part 13 builds one. <bookmark mark='c'/> An assembler, which Part 6 built, turns the assembly into "
-            "machine words, but it works on one file at a time, so wherever the file uses a name defined somewhere "
-            "else it must leave a hole, and a note saying what goes there. That is an object file. <bookmark "
-            "mark='d'/> The linker reads all the object files, decides where everything goes, and fills every "
-            "hole. <bookmark mark='e'/> Finally the operating system's loader copies the program into memory, sets "
-            "up a stack with the program's arguments, and jumps to its first instruction. Now it is a process."
+            (
+            "Follow the build pipeline from text to a process. <bookmark mark='a'/> Source code describes the "
+            "program in a language. <bookmark mark='b'/> A compiler can translate it into assembly; Part 13 "
+            "builds that stage. Real toolchains may combine stages or use an intermediate representation. "
+            "<bookmark mark='c'/> The assembler encodes instructions and records unresolved symbols as "
+            "relocations in an object file. <bookmark mark='d'/> The linker combines objects and libraries, lays "
+            "out sections and resolves references that can be fixed at link time. Dynamic references can remain "
+            "for later. <bookmark mark='e'/> On Linux, the loader maps the executable's segments, arranges "
+            "zero-filled memory and an initial stack, and transfers control to the entry point or dynamic linker. "
+            "Runtime startup eventually calls main. Mapping need not read every file page immediately; demand "
+            "paging comes in Part 32."
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, r in zip("abcde", rows):

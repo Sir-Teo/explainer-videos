@@ -26,12 +26,12 @@ class Frontier(VoiceoverScene):
                      region(1.6, 0.6, r"length", CTRL, font_size=18), region(2.0, 0.6, r"permissions", FUNC,
                                                                             font_size=18),
                      region(1.0, 0.6, r"tag", NO, font_size=18)).arrange(RIGHT, buff=0).next_to(head, DOWN, buff=0.5)
-        pl = label(r"a CHERI capability: \ 128 bits, \ plus a hidden tag bit the program cannot forge", font_size=19,
+        pl = label("conceptual fields; Morello: 128-bit compressed capability plus a protected tag", font_size=19,
                    color=GREY_A).next_to(ptr, DOWN, buff=0.15)
         pts = VGroup(
-            label(r"every load and store is checked against the bounds of the pointer it uses", font_size=21,
+            label("capability-based accesses check bounds and permissions; hybrid modes also allow ordinary pointers", font_size=21,
                   color=GREY_A),
-            label(r"pointers can only be derived from pointers, \ and only made smaller", font_size=21, color=GREY_A),
+            label("derivation cannot increase authority; the cursor can move under the rules", font_size=21, color=GREY_A),
             label(r"on our Pebble, \ in miniature: \ greet's buffer pointer gets bounds $[sp, sp + 64)$", font_size=21,
                   color=DATA),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(pl, DOWN, buff=0.4)
@@ -40,26 +40,15 @@ class Frontier(VoiceoverScene):
                      label(r"the 65th byte, \ before the return address is touched; \ \texttt{Ada} is greeted as "
                            r"before", font_size=19, color=YES)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(
             DOWN, buff=0.35)
-        with self.voiceover(
-            "The defences of chapter fourteen all work around the real problem: a pointer in C is just a number, "
-            "and nothing knows how big the object behind it is. <bookmark mark='a'/> The CHERI project, from the "
-            "University of Cambridge and SRI since 2010, changes the hardware so that a pointer is a capability: an "
-            "address together with the bounds and permissions of the object, and a hidden tag bit that the program "
-            "cannot forge. <bookmark mark='b'/> Every load and store is checked against the bounds of the pointer it "
-            "uses, and a new pointer can only be made from an existing one, never larger. Arm built a prototype "
-            "processor, Morello, in 2022. <bookmark mark='c'/> We added a miniature version to Pebble's emulator: "
-            "when greet takes its buffer's address, the pointer gets bounds of sixty-four bytes, and the bounds "
-            "travel with it. <bookmark mark='d'/> Run the attack again, and the machine traps on the sixty-fifth "
-            "byte, before the return address is reached; an honest name is greeted as before."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(ptr), FadeIn(pl))
-            vo.wait_until("b")
+        with self.voiceover("Ordinary address arithmetic does not automatically enforce object bounds. <bookmark mark='a'/> CHERI associates capabilities with address, bounds, permissions and a protected validity tag. This diagram is conceptual; encodings vary. Morello uses 128-bit capabilities plus a tag, with compressed bounds rather than these literal separate fields. <bookmark mark='b'/> Capability-based accesses check authority. Derivation cannot increase authority beyond what is held, although the cursor can move within the rules; bounds need not become strictly smaller on every operation. Hybrid systems can also retain ordinary pointers. Arm's Morello prototype arrived in 2022. <bookmark mark='c'/> Pebble's miniature model attaches exact sixty-four-byte bounds to greet's buffer pointer. It is a teaching model, not a complete CHERI implementation. <bookmark mark='d'/> It traps this attack at the sixty-fifth byte and still greets Ada. Spatial bounds alone do not generally solve use-after-free: temporal safety needs additional mechanisms.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(ptr), FadeIn(pl), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(pts[0]), FadeIn(pts[1]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(pts[2]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(res))
         self.wait(0.3)
         self.clear_scene()
@@ -69,26 +58,28 @@ class Frontier(VoiceoverScene):
         pts = VGroup(
             label(r"to prove a compiler correct you need a precise meaning for the source, \ undefined behaviour "
                   r"included", font_size=21, color=GREY_A),
-            label(r"CompCert \ (Leroy, \ 2006 onward): \ a C compiler proved in Coq to preserve the meaning of "
-                  r"every defined program", font_size=21, color=YES),
+            label("CompCert: semantic preservation for verified passes and supported C, under explicit assumptions", font_size=21, color=YES),
             label(r"Cerberus \ (Memarian, \ Sewell and others, \ 2016 onward): \ an executable semantics of C as "
                   r"real code uses it", font_size=21, color=DATA),
-            label(r"the hard part: \ \textit{pointer provenance}, \ which object a pointer may legally reach, \ "
-                  r"now being standardized", font_size=21, color=HEAD),
+            label("pointer provenance: which storage instance may a pointer access? standards work continues", font_size=21, color=HEAD),
             label(r"open: \ a semantics that the standard, \ compilers \textit{and} existing code all agree with",
                   font_size=22, color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).move_to(DOWN * 0.1)
         with self.voiceover(
-            "The second frontier is meaning. <bookmark mark='a'/> To prove that a compiler is correct, you need a "
-            "precise definition of what the source program means, undefined behaviour and all. <bookmark "
-            "mark='b'/> Xavier Leroy's CompCert, begun in 2006, is a C compiler whose every pass is proved, in the "
-            "Coq proof assistant, to preserve the meaning of every program that has no undefined behaviour; tests "
-            "that find bugs in every other compiler have found none in its proved parts. <bookmark mark='c'/> The "
-            "Cerberus project of Kayvan Memarian, Peter Sewell and colleagues built an executable semantics of C as "
-            "programmers actually use it. <bookmark mark='d'/> The hardest question turned out to be pointer "
-            "provenance: which object a pointer is allowed to reach, even when two pointers hold the same address. "
-            "A model of it is now being standardized. <bookmark mark='e'/> Still open is a semantics that the "
-            "standard, the optimizers and the billions of lines of existing code can all live with."
+            (
+            "Compiler correctness requires an explicit source semantics and a stated proof boundary. <bookmark "
+            "mark='a'/> The theorem connects behaviors in source and target languages, including how undefined "
+            "source behavior limits the guarantee. <bookmark mark='b'/> CompCert proves semantic preservation for "
+            "its verified compilation passes and supported C subset. Its theorem relies on assumptions about "
+            "unverified interfaces and tools; it is not a proof of every C program or every surrounding "
+            "component. <bookmark mark='c'/> Cerberus explores executable models of C, including the difficult "
+            "interactions of pointers, objects and real implementation practice. <bookmark mark='d'/> Pointer "
+            "provenance asks which storage instance a pointer may access, even when numeric addresses coincide. "
+            "Standards work and implementation models continue to refine these rules; a proposal is not "
+            "automatically an adopted standard. <bookmark mark='e'/> Research compares formal guarantees, "
+            "compatibility with existing code and optimizer behavior. We should name the particular semantics and "
+            "version before claiming that all three agree."
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, p in zip("abcde", pts):
@@ -101,24 +92,25 @@ class Frontier(VoiceoverScene):
         fr = load("frontier")
         head = label(r"And the allocator's open questions", font_size=34).to_edge(UP, buff=0.35)
         pts = VGroup(
-            label(r"Robson's bound is tight for \textit{some} allocator; \ for first fit and best fit the exact "
-                  r"worst case is still open", font_size=21, color=GREY_A),
-            label(r"real programs are nowhere near the worst case: \ Johnstone and Wilson \ (1998) found "
-                  r"fragmentation of a few percent", font_size=21, color=YES),
-            label(r"why, \ in theory? \ No model of ``realistic'' programs explains it", font_size=21, color=HEAD),
-            label(r"and memory safety for allocators: \ use-after-free is the commonest severe bug in C++ code; \ "
-                  r"quarantines, \ type-segregated heaps, \ MiraclePtr", font_size=21, color=NO),
+            label("worst-case bounds depend on allocation model and policy; our replay tests two implementations", font_size=21, color=GREY_A),
+            label("Johnstone and Wilson (1998): low fragmentation on studied policies and workloads", font_size=21, color=YES),
+            label("research: predictive models of lifetimes, size distributions, locality and concurrency", font_size=21, color=HEAD),
+            label("temporal safety needs more than spatial bounds: quarantines, type segregation, checked references", font_size=21, color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).move_to(DOWN * 0.1)
         with self.voiceover(
-            "And the allocators of chapters six to eight have frontiers of their own. <bookmark mark='a'/> Robson's "
-            "bound is achieved by a carefully designed allocator, but for the policies everyone uses, first fit and "
-            "best fit, the exact worst case is still not known. <bookmark mark='b'/> Meanwhile real programs are "
-            "nowhere near the worst case. Mark Johnstone and Paul Wilson measured real programs in 1998 "
-            "and found that good policies waste only a few percent, as we saw with Perl. <bookmark mark='c'/> Why "
-            "real programs are so kind has never been explained by a model. <bookmark mark='d'/> And allocators are "
-            "now a security battleground: using memory after freeing it is among the commonest severe bugs in large "
-            "C and C++ programs, and browsers now defend with quarantines that delay reuse, heaps segregated by type, "
-            "and smart pointers like Chrome's MiraclePtr."
+            (
+            "Allocator research depends strongly on the model and workload. <bookmark mark='a'/> Robson's lower "
+            "bounds and policy-specific upper and lower bounds require their own hypotheses; our eight-phase "
+            "trace establishes only the displayed measurements for our implementations. <bookmark mark='b'/> "
+            "Johnstone and Wilson's 1998 study found low fragmentation for selected policies and measured "
+            "programs. Our Perl replay is one additional workload, and its peak ratio includes headers and "
+            "alignment. Neither establishes that all programs stay near the average. <bookmark mark='c'/> "
+            "Lifetime correlations, size distributions, locality and concurrency help explain behavior; finding "
+            "useful predictive models remains a research question, rather than a claim that no model exists. "
+            "<bookmark mark='d'/> Temporal safety is another challenge. Quarantines delay reuse, type segregation "
+            "limits some reuse patterns, and checked smart-pointer schemes protect selected references. Each has "
+            "coverage and overhead limits; a spatial capability by itself does not revoke every stale reference."
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, p in zip("abcd", pts):

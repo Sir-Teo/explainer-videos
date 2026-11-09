@@ -49,25 +49,15 @@ class Data(VoiceoverScene):
                     ).next_to(g2, DOWN, buff=0.25)
         cohen = label(r"the names: \ Danny Cohen \ (1980), \ after the egg-breaking wars of \textit{Gulliver's "
                       r"Travels}", font_size=20, color=HEAD).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Memory is a row of bytes, but most values are bigger than a byte. <bookmark mark='a'/> A 32-bit word "
-            "takes four of them, and someone has to decide their order. <bookmark mark='b'/> Big-endian machines "
-            "store the most significant byte first, the way we write numbers; network protocols do the same. "
-            "<bookmark mark='c'/> Little-endian machines store the least significant byte first. x86, Arm in its "
-            "usual mode, RISC-V and Pebble are all little-endian, and this computer confirms it: the four bytes of "
-            "zero A zero B zero C zero D sit in memory as zero D, zero C, zero B, zero A. <bookmark mark='d'/> The "
-            "names come from a 1980 memo by Danny Cohen, after the war in Gulliver's Travels over which end of an "
-            "egg to break. Neither order is better; mixing them up is a classic bug whenever bytes cross a network "
-            "or a file."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(val))
-            vo.wait_until("b")
+        with self.voiceover("Memory has byte addresses, while many values span several bytes. <bookmark mark='a'/> A 32-bit word occupies four bytes; endianness specifies their order. <bookmark mark='b'/> Big-endian puts the most significant byte at the lowest address. Many network protocols use this network byte order; each protocol defines its own encoding. <bookmark mark='c'/> Little-endian puts the least significant byte first. x86, the usual Arm configuration and our Pebble use it. The compiled host probe displays zero D, zero C, zero B, zero A for hexadecimal zero A zero B zero C zero D. <bookmark mark='d'/> Danny Cohen's 1980 essay borrowed the names from Gulliver's Travels. Neither order changes the value when decoded consistently; a format mismatch changes what the same bytes mean.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(Write(val), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(g1))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(g2), FadeIn(meas))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(cohen))
         self.wait(0.3)
         self.clear_scene()
@@ -76,8 +66,7 @@ class Data(VoiceoverScene):
         lay = load("layout")
         a, b, n = lay["a"], lay["b"], lay["node"]
         head = label(r"Alignment and padding", font_size=34).to_edge(UP, buff=0.3)
-        rule = label(r"a value of $k$ bytes sits at an address divisible by $k$: \ one cache line, \ one bus "
-                     r"transfer", font_size=21, color=GREY_A).next_to(head, DOWN, buff=0.25)
+        rule = label("alignment follows the ABI; \\\\ access cost also depends on boundaries and hardware", font_size=21, color=GREY_A).next_to(head, DOWN, buff=0.25)
 
         def strip(size, fields, title, src):
             cells = []
@@ -110,25 +99,15 @@ class Data(VoiceoverScene):
         VGroup(sa, sb, sn).arrange(DOWN, buff=0.45, aligned_edge=LEFT).next_to(rule, DOWN, buff=0.4)
         cap = note(r"sizes and offsets compiled and measured on this machine \ (x86-64: \ 8-byte pointers)",
                    font_size=17).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Values also have to sit at sensible addresses. <bookmark mark='a'/> A four-byte integer normally "
-            "lives at an address divisible by four, so that it never straddles two cache lines and can be fetched "
-            "in one transfer; Pebble's own loads demand it. <bookmark mark='b'/> So a compiler pads structures. A "
-            "character, an integer and a character take six bytes of data, but laid out in that order they take "
-            f"{a[0]}: three bytes of padding after the first character so the integer is aligned, and three at the "
-            "end so that an array of these stays aligned too. <bookmark mark='c'/> Put the largest field first and "
-            f"the same data fits in {b[0]}. <bookmark mark='d'/> The Job's list node, two pointers and two integers, "
-            f"is {n[0]} bytes on this 64-bit machine and sixteen on Pebble, where a pointer is four bytes. These "
-            "sizes were measured here, by compiling the structures and asking."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(rule))
-            vo.wait_until("b")
-            self.play(FadeIn(sa))
-            vo.wait_until("c")
+        with self.voiceover(f"Alignment is part of a machine and language implementation's layout rules. <bookmark mark='a'/> Here a four-byte integer has four-byte alignment. This often makes access simpler and can avoid crossing a normally aligned cache line, but it does not guarantee a particular number of transfers. Pebble requires aligned word accesses; x86 also supports many unaligned accesses. <bookmark mark='b'/> In this compiled structure, char, int, char occupy {a[0]} bytes: padding aligns the integer, then trailing padding aligns consecutive array elements. <bookmark mark='c'/> Reordering the integer first reduces the size to {b[0]}. This is a layout change, so an external binary format must agree. <bookmark mark='d'/> The two-pointer, two-integer node occupies {n[0]} bytes under this host ABI and sixteen on Pebble. Pointer width, alignment and ABI determine these sizes; they are not universal C constants.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(rule), FadeIn(sa), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
+            self.play(Indicate(sa[1], color=HEAD), run_time=0.6)
+            vo.wait_until('c')
             self.play(FadeIn(sb))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(sn), FadeIn(cap))
         self.wait(0.3)
         self.clear_scene()
@@ -151,30 +130,22 @@ class Data(VoiceoverScene):
         flat.arrange(RIGHT, buff=0).next_to(grid, RIGHT, buff=0.8)
         fl = label(r"in memory: \ row after row \ (row-major)", font_size=20, color=GREY_A).next_to(flat, UP,
                                                                                                   buff=0.15)
-        eq = MathTex(r"\&a[i][j] = a + 4\,(4i + j)", font_size=36, color=HEAD).next_to(flat, DOWN, buff=0.45)
+        eq = MathTex("\\operatorname{byteaddr}(a[i][j]) = \\mathrm{base} + 4\\,(4i + j)", font_size=36, color=HEAD).next_to(flat, DOWN, buff=0.45)
         pts = VGroup(
-            label(r"a pointer is an address; \ \texttt{p + 1} adds the size of what it points to", font_size=21,
+            label("typed pointer arithmetic scales by element size; \\\\ object bounds and lifetime still apply", font_size=21,
                   color=GREY_A),
             label(r"\texttt{a[i]} is \texttt{*(a + i)}: \ indexing is pointer arithmetic", font_size=21, color=DATA),
-            label(r"nothing checks that \texttt{i} is inside the array: \ chapter 14", font_size=21, color=NO),
+            label("basic Pebble does not check logical array bounds: chapter 14", font_size=21, color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "Arrays are the simplest structure of all. <bookmark mark='a'/> A two-dimensional array of three rows "
-            "and four columns <bookmark mark='b'/> is stored as one row after another, row-major order, in C and in "
-            "most languages; Fortran stores columns instead. <bookmark mark='c'/> So the address of element i, j is "
-            "the start of the array plus four bytes times four i plus j. <bookmark mark='d'/> A pointer is just an "
-            "address, and adding one to a pointer adds the size of the thing it points to. Indexing an array is "
-            "pointer arithmetic: a of i means the contents of a plus i. And nothing in the hardware checks that i "
-            "is inside the array. Chapter fourteen shows what that costs."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(grid), FadeIn(gl))
-            vo.wait_until("b")
+        with self.voiceover("An array gives indexing a regular address calculation. <bookmark mark='a'/> Take a C array with three rows and four columns of four-byte integers. <bookmark mark='b'/> Its rows are consecutive: row-major order. Fortran normally uses column-major order; other languages may instead store references to separate row objects. <bookmark mark='c'/> Within this C array, element i, j starts at base plus four times the quantity four i plus j. <bookmark mark='d'/> In C, adding one to a typed pointer advances by the size of its element, and a of i is defined through pointer addition and dereference. These operations have object-bound and lifetime rules: a pointer is more than an unrestricted permission to access any numeric address. Our basic Pebble hardware does not check an array's logical bounds; the Frontier adds a toy capability check.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(grid), FadeIn(gl), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(TransformFromCopy(grid, flat), FadeIn(fl))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(Write(eq))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.5), run_time=3)
         self.wait(0.3)
         self.clear_scene()

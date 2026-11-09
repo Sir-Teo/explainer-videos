@@ -1,7 +1,7 @@
 # Computer Science, Built — sequential polish
 
 Work on `computer-science-built`, one video at a time, with separate commits.
-Current video: **cs11, The Running Program**. CS1–CS10 source/preview polish checkpoints
+Current video: **cs12, Languages and Automata**. CS1–CS11 source/preview polish checkpoints
 are complete at the scopes below. Their production release gates remain open; this
 ledger does not treat sampled previews as listening or final-production approval.
 The syllabus's earlier draft-preview claims are separate.
@@ -14,6 +14,29 @@ upgrade/rejection check passes. All numerical producer ASTs and 11 active data h
 This is a loader correctness follow-up; earlier media receipts stay tied to their checkpoint commits.
 
 [CS3 cache-entry evidence](evidence/cs3-cache-entry-20261109/README.md).
+
+## Final CS11 preview checkpoint, 9 November 2026
+
+- Correct the buddy payload/header example, heap-ratio accounting, statistical
+  assumptions, adversarial-proof scope, ABI/pointer/loader rules, dynamic linking,
+  ASan shadow checks and security/research guarantees. All twenty original data hashes remain.
+- Revise 35 bilingual sections and 31 openings. All 36 endpoint and 36 motion
+  overviews reviewed: 1,440 motion samples, 34 exact-PNG endpoint
+  inheritances after fresh final renders. 89,566 motion frames decode;
+  0 raw motion warnings retain explicit dispositions.
+  Four final reveal-order repairs and three contextual caption corrections have
+  fresh full-freeze renders; every raw receipt has the current source key.
+- Twelve native clips: 10,535 decoded frames, 288 samples/twelve stills inspected.
+  All 77 English speech blocks pass signal/alignment (45.80 minutes);
+  208 chapter cues meet 250 ms. Two narrated chapters decode 4,762
+  frames plus audio; 80 samples/two stills and 25 pilot cues checked.
+- Eleven tests and fifteen numerical/model groups pass. Translation 77/77;
+  914 captions reviewed, zero untranslated explanations;
+  300 retained originals classified. Listening remains open.
+
+[Verified CS11 evidence](evidence/cs11-polish-20261109/README.md).
+Continuous narrated listening, Chinese speech/listening, whole-video native
+production review and runtime at the selected narration pace remain open release gates.
 
 ## Final CS10 preview checkpoint, 9 November 2026
 
@@ -306,8 +329,9 @@ Evidence, exact source/data hashes, reports and reproduction commands:
 
 ## Continue here
 
-1. Preserve CS11's baseline, inspect its build/runtime computations and tests, and
-   review source-to-process stages, linking/loading, ABI, stack frames and executable claims.
-2. Polish bilingual explanation and visualization; inspect endpoint/motion/native/narrated
-   evidence and validate numerical, speech and cue integrity before its separate commit/push.
-3. Continue CS12–CS61 in order, keeping preview evidence distinct from production release approval.
+1. Preserve CS12's baseline and run its automata/parser computations and tests
+   on an otherwise idle host; Bison is installed in the workspace sysroot.
+2. Review quantifiers, grammar/regex complexity assumptions, exact automata,
+   parser tables, measured engine behavior and research scope; polish bilingual
+   narration and visual progression, then verify and commit this video separately.
+3. Continue CS13–CS61 in order, keeping preview evidence distinct from production release approval.

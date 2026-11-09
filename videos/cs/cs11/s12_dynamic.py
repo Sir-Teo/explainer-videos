@@ -23,39 +23,27 @@ class Dynamic(VoiceoverScene):
         dy, st = d["dynamic"], d["static"]
         head = label(r"\texttt{hello.c}, \ linked two ways on this machine", font_size=32).to_edge(UP, buff=0.3)
         ch = bar_chart([st["bytes"] / 1024, dy["bytes"] / 1024], [r"static", r"dynamic"], [NO, YES], height=3.0,
-                       bar_w=1.3, gap=1.2, fmt_=lambda v: f"{v:,.0f} KB", font_size=20).to_edge(LEFT, buff=1.2).shift(
+                       bar_w=1.3, gap=1.2, fmt_=lambda v: f"{v:,.0f} KiB", font_size=20).to_edge(LEFT, buff=1.2).shift(
             DOWN * 0.3)
         side = VGroup(
             label(r"static: \ the C library's code copied into the file", font_size=21, color=NO),
             label(rf"dynamic: \ a note saying \texttt{{{dy['needed'][0]}}} is needed, \\ and one import: "
                   rf"\texttt{{{dy['plt'][0].replace('_', chr(92) + '_')}}}", font_size=21, color=YES),
-            label(rf"start-up: \ {st['start_ms']:.2f} ms static, \ {dy['start_ms']:.2f} ms dynamic \\ (finding and "
-                  r"mapping the library costs a little)", font_size=21, color=GREY_A),
-            label(r"one copy of libc in memory, \ shared by every process; \\ fix a bug once, \ every program has "
-                  r"the fix", font_size=21, color=HEAD),
+            label(rf"batch launch: \ {st['start_ms']:.2f} ms static, \ {dy['start_ms']:.2f} ms dynamic \\ (process creation and execution included; "
+                  r"not isolated linker time)", font_size=21, color=GREY_A),
+            label("read-only library pages can be shared; \\\\ updates require compatibility and process lifecycle handling", font_size=21, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.5).shift(DOWN * 0.2)
         ldd = code(d["ldd"], size=14, color=GREY_B).to_edge(DOWN, buff=0.25)
-        with self.voiceover(
-            "A two-line program that prints hello, linked two ways on this computer. <bookmark mark='a'/> Linked "
-            f"statically, the parts of the C library it uses are copied into the file: {st['bytes'] / 1024:.0f} "
-            f"kilobytes. Linked dynamically, the file is {dy['bytes'] / 1024:.0f} kilobytes, <bookmark mark='b'/> "
-            "because it holds only a note that it needs the C library, and a list of the functions it will take "
-            "from it: here, just puts, with a version tag saying which interface of glibc it expects. <bookmark mark='c'/> The price is "
-            "a little start-up work, finding and mapping the library, about a tenth of a millisecond here. "
-            "<bookmark mark='d'/> The gains are large: one copy of the library in memory, shared by every process "
-            "that uses it, and a security fix to the library fixes every program at once. ldd lists what a program "
-            "will load."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(ch[0]), FadeIn(ch.names), GrowFromEdge(ch.bars[0], DOWN), FadeIn(ch.vals[0]),
-                      FadeIn(side[0]))
+        with self.voiceover(f"We compiled the same hello program with static and dynamic glibc linking. <bookmark mark='a'/> The static executable is {st['bytes'] / 1024:.0f} kibibytes; the dynamic executable is {dy['bytes'] / 1024:.0f}. These are file sizes for this toolchain and build. <bookmark mark='b'/> The dynamic file records a dependency on libc and versioned imports, including puts. The library's code is stored separately. <bookmark mark='c'/> Our best batch-average launch measurements include process creation and execution, not just dynamic-linker work. Their difference is not an isolated measurement of relocation overhead. <bookmark mark='d'/> Read-only library pages can be shared among processes using the same library file. Replacing a compatible shared library can benefit subsequently started dynamic programs; static binaries, private copies, incompatible interfaces and already running processes need separate consideration. ldd reports the dependencies resolved in this environment.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(ch[0]), FadeIn(ch.names), GrowFromEdge(ch.bars[0], DOWN), FadeIn(ch.vals[0]), FadeIn(side[0]), run_time=0.6)
+            vo.wait_until('a')
             self.play(GrowFromEdge(ch.bars[1], DOWN), FadeIn(ch.vals[1]))
-            vo.wait_until("b")
+            vo.wait_until('b')
             self.play(FadeIn(side[1]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(side[2]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(side[3]), FadeIn(ldd))
         self.wait(0.3)
         self.clear_scene()
@@ -74,23 +62,23 @@ class Dynamic(VoiceoverScene):
         got2 = region(3.0, 0.7, r"GOT: \ \texttt{puts} $\to$ libc", FUNC, font_size=20).move_to(got)
         a5 = CurvedArrow(got.get_bottom() + RIGHT * 0.5, lib.get_top() + RIGHT * 0.5, angle=-0.6, color=YES)
         pts = VGroup(
-            label(r"a shared library loads at a different address in every process: \ its code cannot contain "
-                  r"addresses", font_size=20, color=GREY_A),
-            label(r"so every address it needs lives in a table of data, \ the \textit{GOT}, \ filled in at load "
-                  r"time", font_size=20, color=FUNC),
-            label(r"calls go through little stubs, \ the \textit{PLT}; \ the first call asks the dynamic linker, \ "
-                  r"later ones jump straight there", font_size=20, color=CTRL),
+            label("position-independent code supports different load addresses", font_size=20, color=GREY_A),
+            label("local references can be PC-relative; dynamic references can use the GOT", font_size=20, color=FUNC),
+            label("traditional PLT/GOT path: lazy or eager binding; compiler and linker options matter", font_size=20, color=CTRL),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "How does a call reach a library whose address is not known until the program runs? <bookmark "
-            "mark='a'/> A shared library is loaded at a different address in different processes, so its code "
-            "cannot contain absolute addresses. It is compiled as position-independent code: every address it needs "
-            "is kept in a table of data, the global offset table, which the loader fills in. <bookmark mark='b'/> "
-            "Calls into another library go through a small stub in the procedure linkage table, which jumps to "
-            "whatever the table holds. <bookmark mark='c'/> On the first call the table points back into the dynamic "
-            "linker, which looks the function up, writes its real address into the table, <bookmark mark='d'/> and "
-            "jumps there. Every later call goes through the stub straight to the function. This is lazy binding, and "
-            "it is the reason for the PLT32 relocation we saw on count."
+            (
+            "Position-independent code can run at different load addresses. <bookmark mark='a'/> On this x86-64 "
+            "example, many local references use instruction-pointer-relative addressing. References requiring "
+            "dynamic resolution can use the global offset table, filled or relocated by the loader. Not every "
+            "address lives in that table. <bookmark mark='b'/> A traditional external function call can pass "
+            "through a procedure linkage table stub and a GOT slot. <bookmark mark='c'/> With lazy binding "
+            "enabled, the first call invokes the dynamic resolver, which looks up the symbol and updates the "
+            "slot. <bookmark mark='d'/> Later calls use the resolved destination. Eager binding resolves such "
+            "slots at startup, and options such as no-PLT generate other call sequences. A PLT32 relocation in an "
+            "object permits linker handling of a call; it does not prove that the final call must use lazy "
+            "binding."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(pts[0]))
             vo.wait_until("a")

@@ -85,28 +85,17 @@ class Smash(VoiceoverScene):
             label(r"the address is known in advance: \ nothing randomizes Pebble's stack", font_size=20,
                   color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(DOWN, buff=0.4).to_edge(RIGHT, buff=0.4)
-        with self.voiceover(
-            f"So here is the attack. <bookmark mark='a'/> Its first part is code: {nb // 4} Pebble instructions "
-            f"that print the letters p w n e d and stop, {nb} bytes. <bookmark mark='b'/> Then {pad} bytes of "
-            "padding, to fill the rest of the buffer and the gap: seventy-six bytes so far. <bookmark mark='c'/> "
-            "Then four bytes that "
-            "land exactly on the saved return address: the address of the buffer itself. <bookmark mark='d'/> gets "
-            "copies all of it. greet prints its greeting, restores the return address from the stack, which is now "
-            "ours, and returns, into the buffer, where our code runs. <bookmark mark='e'/> On the emulator it prints "
-            "pwned. The attacker needed one fact, where the stack is, and on a machine with no randomization that "
-            "never changes. This is how the Morris worm spread through the internet's fingerd servers in 1988, and "
-            "Aleph One's 1996 article, Smashing the Stack for Fun and Profit, taught it to everyone."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(shell), FadeIn(sl), FadeIn(parts[0]))
-            vo.wait_until("b")
+        with self.voiceover(f"So here is the attack. <bookmark mark='a'/> Its first part is code: {nb // 4} Pebble instructions that print the letters p w n e d and stop, {nb} bytes. <bookmark mark='b'/> Then {pad} bytes of padding, to fill the rest of the buffer and the gap: seventy-six bytes so far. <bookmark mark='c'/> Then four bytes that land exactly on the saved return address: the address of the buffer itself. <bookmark mark='d'/> gets copies all of it. greet prints its greeting, restores the return address from the stack, which is now ours, and returns, into the buffer, where our code runs. <bookmark mark='e'/> On the emulator it prints pwned. The attacker needed one fact, where the stack is, and on a machine with no randomization that never changes. This is how the Morris worm spread through the internet's fingerd servers in 1988, and Aleph One's 1996 article, Smashing the Stack for Fun and Profit, taught it to everyone.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(shell), FadeIn(sl), FadeIn(parts[0]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(parts[1]), FadeIn(brace))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(parts[2]), FadeIn(parts[3]), FadeIn(b2))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(steps[0]), FadeIn(steps[1]))
-            vo.wait_until("e")
+            vo.wait_until('e')
             self.play(FadeIn(steps[2]), FadeIn(steps[3]))
         self.wait(0.3)
         self.clear_scene()
@@ -143,16 +132,19 @@ class Smash(VoiceoverScene):
         rop = label(r"attackers answered with \textit{return-oriented programming}: \ reuse code already there \ "
                     r"(Part 55)", font_size=20, color=NO).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Every program on this computer ships with defences against exactly this, and we built each one into "
-            "Pebble. <bookmark mark='a'/> A stack canary: the function stores a secret word just below the return "
-            "address, and checks it before returning. The overflow cannot reach the return address without "
-            "trampling the canary, so the program stops with a report instead of jumping. <bookmark mark='b'/> A "
-            "no-execute stack: the stack's pages may be written but not run, so jumping into the buffer faults. "
-            "<bookmark mark='c'/> Randomization: the stack is somewhere new every run, so the attacker's address is "
-            "a guess. <bookmark mark='d'/> And bounds on every pointer, which catch the very first byte out of "
-            "bounds; that one is the Frontier chapter. <bookmark mark='e'/> None is perfect alone. Attackers "
-            "answered the no-execute stack by stitching together fragments of code already in the program, "
-            "return-oriented programming, which Part 55 takes up."
+            (
+            "Modern toolchains offer several defenses, with coverage determined by the build and platform. Our "
+            "Pebble variants illustrate their mechanisms. <bookmark mark='a'/> A canary checked before return can "
+            "detect this contiguous overwrite, provided the attacker cannot reproduce the expected value. It does "
+            "not protect every memory access. <bookmark mark='b'/> A non-executable stack stops this attempt to "
+            "execute injected stack bytes. It does not stop the overwrite itself. <bookmark mark='c'/> ASLR makes "
+            "the injected destination harder to predict; it needs sufficient entropy and resistance to leaks. "
+            "<bookmark mark='d'/> A bounds-carrying pointer can reject the first write outside this buffer; the "
+            "Frontier adds a miniature check. <bookmark mark='e'/> These defenses address different failure "
+            "modes. Code-reuse attacks can use executable fragments already present, including return-oriented "
+            "programming. Layered mitigation complements bounds and lifetime safety; no universal claim that "
+            "every binary enables all of these is warranted."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(hdr))
             for mk, r in zip("abcd", g):

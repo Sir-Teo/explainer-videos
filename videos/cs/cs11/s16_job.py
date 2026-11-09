@@ -37,22 +37,13 @@ class Job(VoiceoverScene):
         nl = label(r"a node", font_size=17, color=GREY_B).next_to(node, LEFT, buff=0.2)
         conv = note(r"every function follows chapter 4's convention: \ frames, \ saved registers, \ aligned "
                     r"\texttt{sp}", font_size=18).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Here is the Job written the way a compiler would write it. <bookmark mark='a'/> main reads letters into "
-            "a buffer in its own stack frame. The table is a linked list of sixteen-byte nodes on the heap, kept in "
-            "the order words were first seen, so ties break exactly as before. The allocator just bumps a pointer "
-            "through three hundred and eighty-four kilobytes of bss, never freeing anything, which is all the Job "
-            "needs. And the input and output routines include printnum, which keeps its digits in a small buffer in "
-            "its frame. <bookmark mark='b'/> Each node holds a pointer to the next, a pointer to the word's letters, "
-            "its length and its count. <bookmark mark='c'/> And every function obeys the calling convention of "
-            "chapter four."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(t) for t in tiles], lag_ratio=0.4), run_time=4)
-            vo.wait_until("b")
+        with self.voiceover("Here is the Job written the way a compiler would write it. <bookmark mark='a'/> main reads letters into a buffer in its own stack frame. The table is a linked list of sixteen-byte nodes on the heap, kept in the order words were first seen, so ties break exactly as before. The allocator just bumps a pointer through three hundred and eighty-four kilobytes of bss, never freeing anything, which is all the Job needs. And the input and output routines include printnum, which keeps its digits in a small buffer in its frame. <bookmark mark='b'/> Each node holds a pointer to the next, a pointer to the word's letters, its length and its count. <bookmark mark='c'/> And every function obeys the calling convention of chapter four.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(t) for t in tiles], lag_ratio=0.4), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(node), FadeIn(nl))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(conv))
         self.wait(0.3)
         self.clear_scene()

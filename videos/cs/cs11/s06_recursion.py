@@ -31,23 +31,13 @@ class Recursion(VoiceoverScene):
                        row_h=0.42, font_size=21, colors=colors, mono_cols=()).next_to(defn, DOWN, buff=0.4)
         cap = label(r"$A(4, 2)$ has 19,729 digits: \ no computer will ever finish it this way", font_size=21,
                     color=NO).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Recursion can make the stack enormous. <bookmark mark='a'/> Wilhelm Ackermann's function, from 1928, is "
-            "defined by three short rules, and Part 25 explains why it matters: it is computable, but it grows "
-            "faster than anything a fixed number of loops can compute. <bookmark mark='b'/> We ran it on Pebble. "
-            "A of three, six is just five hundred and nine, but computing it takes a hundred and seventy-two "
-            "thousand calls, and at its deepest the stack holds five hundred and eleven frames. Each step up in n "
-            "roughly quadruples the calls and doubles the depth. <bookmark mark='c'/> A of four, two has nearly "
-            "twenty thousand digits. Recursion like this is limited not by time alone but by the stack."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(defn))
-            vo.wait_until("b")
-            self.play(FadeIn(VGroup(*t.cells[0])), FadeIn(t.rule),
-                      LaggedStart(*[FadeIn(VGroup(*t.cells[r])) for r in range(1, len(t.cells))], lag_ratio=0.25),
-                      run_time=3)
-            vo.wait_until("c")
+        with self.voiceover("A small recursive definition can demand a large call tree. <bookmark mark='a'/> This two-argument Ackermann variant has three rules. As a function of both arguments it is computable but not primitive recursive: no fixed nesting of bounded loops computes all its values. That is a computability classification, not a ban on while-loop implementations. <bookmark mark='b'/> Our Pebble run for A of three, six returns 509 after 172,233 calls, with 511 frames at maximum depth. Work counts every call; depth counts only the longest active chain. <bookmark mark='c'/> A of four, two equals two to the 65,536 minus three, a value with 19,729 decimal digits. The experiment demonstrates both enormous work and stack demand; it does not compute that larger case by naive recursion.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(Write(defn), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
+            self.play(FadeIn(VGroup(*t.cells[0])), FadeIn(t.rule), LaggedStart(*[FadeIn(VGroup(*t.cells[r])) for r in range(1, len(t.cells))], lag_ratio=0.25), run_time=3)
+            vo.wait_until('c')
             self.play(FadeIn(cap))
         self.wait(0.3)
         self.clear_scene()
@@ -55,7 +45,7 @@ class Recursion(VoiceoverScene):
     def tail(self):
         st = load("stack")
         a, b = st["sum"], st["sum_tail"]
-        head = label(r"A tail call needs no frame", font_size=34).to_edge(UP, buff=0.3)
+        head = label("An eligible tail call can reuse a frame", font_size=34).to_edge(UP, buff=0.3)
         src = VGroup(code(["sum(n, acc):", "    if n == 0: return acc", "    return sum(n - 1, acc + n)"], size=19,
                           color=YES),
                      label(r"the recursive call is the last thing it does", font_size=19, color=GREY_A)).arrange(
@@ -72,22 +62,13 @@ class Recursion(VoiceoverScene):
         l2 = label(rf"as a jump: \ {b['deepest']} bytes, \ {b['steps']:,} instructions", font_size=18,
                    color=YES).next_to(ax.c2p(b["steps"], 0), UR, buff=0.1)
         yl = label(r"stack depth, \ $n = 100$", font_size=16, color=GREY_B).next_to(ax, LEFT, buff=0.1).shift(UP * 0.9)
-        with self.voiceover(
-            "Some recursion can be made free. <bookmark mark='a'/> Here the recursive call is the very last thing "
-            "the function does; its result is returned unchanged. That is a tail call. <bookmark mark='b'/> There "
-            "is then no reason to come back: the frame holds nothing anyone needs. So instead of calling, the "
-            "function can simply jump to itself, and when the innermost one returns, it returns straight to the "
-            "original caller. <bookmark mark='c'/> On Pebble, summing a hundred numbers the first way uses "
-            f"{a['deepest']:,} bytes of stack and {a['steps']:,} instructions; the second, no stack at all and less than half "
-            "the instructions. Scheme requires this optimization; C compilers do it when they can, as the jump "
-            "table of the last chapter showed; Python, deliberately, never does."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(src))
-            vo.wait_until("b")
+        with self.voiceover(f"A tail call can reuse a frame when nothing remains to do after it. <bookmark mark='a'/> This recursive call returns its result directly: no addition, cleanup or other pending operation follows it. <bookmark mark='b'/> In this Pebble example the arguments can be updated and control can jump back without saving another return address. General tail calls also have to respect calling conventions and language cleanup rules. <bookmark mark='c'/> Our ordinary sum uses {a['deepest']:,} bytes of stack and {a['steps']:,} instructions; this hand-written tail version uses no additional stack. Scheme requires proper tail recursion. C compilers may optimize eligible calls, but the language does not guarantee it. CPython does not generally eliminate Python tail-call frames.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(src), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(two))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(Create(ax), FadeIn(yl))
             self.play(Create(c1), FadeIn(l1), run_time=2)
             self.play(Create(c2), FadeIn(l2), run_time=1.5)
@@ -97,11 +78,11 @@ class Recursion(VoiceoverScene):
     def limits(self):
         head = label(r"When the stack runs out", font_size=34).to_edge(UP, buff=0.35)
         pts = VGroup(
-            label(r"a thread's stack is fixed when it starts: \ 8 MB by default on Linux, \ 1 MB on Windows",
+            label("stack size is configurable; \\\\ 8 MiB Linux main-stack and 1 MiB Windows defaults are common examples",
                   font_size=22, color=GREY_A),
             label(r"below it, \ an unmapped \textit{guard page}: \ touching it is a segmentation fault", font_size=22,
                   color=NO),
-            label(r"Python stops at 1000 frames by default; \ Java throws \texttt{StackOverflowError}", font_size=22,
+            label("CPython: configurable recursion limit, commonly near 1000; Java: StackOverflowError", font_size=22,
                   color=GREY_A),
             label(r"mutual recursion counts too: \ \texttt{even(n)} calls \texttt{odd(n-1)} calls \texttt{even(n-2)} "
                   r"\dots", font_size=22, color=DATA),
@@ -116,7 +97,7 @@ class Recursion(VoiceoverScene):
         guard = region(2.2, 0.55, r"guard page", NO, font_size=16, fill=0.35)
         other = region(2.2, 0.8, r"other mappings", GREY_C, font_size=16, fill=0.08)
         col = VGroup(top, stk, guard, other).arrange(DOWN, buff=0).to_edge(RIGHT, buff=1.3).shift(DOWN * 0.2)
-        size = label(r"8 MB", font_size=20, color=NO).next_to(stk, LEFT, buff=0.15)
+        size = label(r"8 MiB", font_size=20, color=NO).next_to(stk, LEFT, buff=0.15)
         nf = 10
         fh = stk.height / nf
         frames = VGroup(*[Rectangle(width=2.2, height=fh, stroke_color=GREY_D, stroke_width=1,
@@ -126,14 +107,17 @@ class Recursion(VoiceoverScene):
                           fill_opacity=0.6).move_to(guard.get_top() + DOWN * fh / 2)
         boom = label(r"\texttt{SIGSEGV}", font_size=22, color=NO).next_to(guard, LEFT, buff=0.15)
         with self.voiceover(
-            "What happens when the stack runs out? <bookmark mark='a'/> A thread's stack has a fixed size, chosen "
-            "when it starts: eight megabytes by default on Linux, one on Windows. <bookmark mark='b'/> Below it the "
-            "operating system leaves a guard page that is not mapped at all, so running past the end is caught as "
-            "a segmentation fault rather than silently trampling other memory. <bookmark mark='c'/> Languages "
-            "with their own runtimes catch it earlier: Python stops at a thousand frames, Java throws a stack "
-            "overflow error. <bookmark mark='d'/> Two functions calling each other count just as much as one "
-            "calling itself. <bookmark mark='e'/> The cure for deep recursion is to keep the pending work in an "
-            "explicit stack on the heap, or to turn it into a loop."
+            (
+            "Stack limits depend on the process, thread and runtime. <bookmark mark='a'/> Eight megabytes is a "
+            "common Linux soft limit for the main thread's stack, and one megabyte a common Windows executable "
+            "default; neither is a universal constant, and thread stacks can be configured. <bookmark mark='b'/> "
+            "Guard pages can make an access beyond a stack boundary fault. Large unchecked jumps can skip a "
+            "guard, so stack probing and stack-clash protections matter too. <bookmark mark='c'/> CPython has a "
+            "configurable recursion limit, commonly around a thousand. Java can report StackOverflowError; the "
+            "available depth depends on stack size and frame sizes. <bookmark mark='d'/> Mutual recursion "
+            "consumes frames just as direct recursion does. <bookmark mark='e'/> An explicit heap worklist or an "
+            "iterative algorithm can control call-stack growth, but it still needs memory for pending work."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(col))
             vo.wait_until("a")
