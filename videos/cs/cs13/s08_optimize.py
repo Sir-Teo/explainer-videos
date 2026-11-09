@@ -50,23 +50,15 @@ class Optimize(VoiceoverScene):
             label(r"$\phi(3, 3) = 3$, \ \ $\phi(3, 4) = \bot$, \ \ $\phi(3, \top) = 3$: \ the meet", font_size=21,
                   color=GREY_A),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.6)
-        with self.voiceover(
-            "The first optimization asks which values are constants. It is another dataflow problem, with a "
-            "different lattice. <bookmark mark='a'/> At the top, a value we have not yet seen evidence about. In "
-            "the middle, every particular constant. At the bottom, a value that varies at run time. <bookmark "
-            "mark='b'/> Each SSA name starts at the top and can only move down, so it changes at most twice, and "
-            "the analysis must stop. <bookmark mark='c'/> A phi of three and three is three. A phi of three and "
-            "four varies. And a phi of three and an input not yet seen is, for now, three: optimistic, until "
-            "proved otherwise."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(top))
+        with self.voiceover("Constant propagation uses another finite-height lattice. <bookmark mark='a'/> This diagram chooses the dual ordering to the earlier growing liveness sets. Top means that no executable evidence has arrived yet. A particular constant is in the middle; bottom means conflicting values or a value that varies. <bookmark mark='b'/> The analysis moves downward: an SSA name changes at most from unseen to a constant to varying. That bounds value changes, while a worklist also tracks executable edges. Reversing the order would describe the same information process as an ascent from bottom. <bookmark mark='c'/> Merge three with three and obtain three. Merge three with four and obtain varying. Merge three with an input whose edge is not yet known executable, and provisionally retain three. If more executable evidence arrives, the value must be revised. This optimism belongs to the analysis, not permission to assume a runtime value without proof.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(top), run_time=0.6)
+            vo.wait_until('a')
             self.play(LaggedStart(*[FadeIn(c) for c in consts], lag_ratio=0.15), Create(lines[:5]))
             self.play(FadeIn(bot), Create(lines[5:]))
-            vo.wait_until("b")
+            vo.wait_until('b')
             self.play(FadeIn(rules[0]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(rules[1]))
         self.wait(0.3)
         self.clear_scene()
@@ -89,23 +81,26 @@ class Optimize(VoiceoverScene):
         after = blocks_view(o["sccp_after"], size=14, colors={"entry": YES, "then2": YES, "endif3": YES})
         aft = VGroup(after["then2"], after["endif3"]).arrange(DOWN, buff=0.4).move_to([5.2, 0.2, 0])
         vals = VGroup(mono("a = 4", 15, YES), mono("b = 32", 15, YES), mono("b > 16 = 1", 15, YES),
-                      mono("else4: never runs", 15, NO), mono("c.4 = φ(c.3, —) = x + 32", 15, YES)).arrange(
+                      label(r"\texttt{else4}: never executes", font_size=15, color=NO), mono("c.4 = φ(c.3, —) = x + 32", 15, YES)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.12).next_to(src, DOWN, buff=0.45).align_to(src, LEFT)
         r0, r1, pct = measured(p["rows"], 3, 4)
         meas = label(rf"on the Job: \ {r0:,} $\to$ {r1:,} instructions \ ({pct:+.1f}\%): \ the Job has few "
                      r"constants", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Here is a function made for the purpose. a is four, b is a times eight, and if b is more than sixteen, "
-            "c is x plus b, otherwise x minus one. <bookmark mark='a'/> In SSA form it has four blocks and a phi at "
-            "the join. <bookmark mark='b'/> The analysis finds that a is four, so b is thirty-two, so the "
-            "comparison is true. <bookmark mark='c'/> And it tracks which edges can execute at the same time as "
-            "which values are constant. Since the comparison is always true, the edge to else is never taken: "
-            "else never runs. <bookmark mark='d'/> So the phi at the join may ignore the operand arriving from "
-            "else, and c dot four is simply x plus thirty-two. <bookmark mark='e'/> What remains is two "
+            (
+            "Here is a function made for the purpose. a is four, b is a times eight, and if b is more than "
+            "sixteen, c is x plus b, otherwise x minus one. <bookmark mark='a'/> In SSA form it has four blocks "
+            "and a phi at the join. <bookmark mark='b'/> The analysis finds that a is four, so b is thirty-two, "
+            "so the comparison is true. <bookmark mark='c'/> And it tracks which edges can execute at the same "
+            "time as which values are constant. Since the comparison is always true, the edge to else is never "
+            "taken: else never runs. <bookmark mark='d'/> So the phi at the join may ignore the operand arriving "
+            "from else, and c dot four is simply x plus thirty-two. <bookmark mark='e'/> What remains is two "
             "instructions: x plus thirty-two, times two. Doing both jobs at once, constants and reachable code, "
-            "finds more than running either one first. This is Wegman and Zadeck's algorithm, from 1991. <bookmark "
-            "mark='f'/> On the Job itself it barely matters: real programs have few constants for it to find, "
-            "until inlining and loop transformations expose them."
+            "finds more than running either one first. This is Wegman and Zadeck's algorithm, from 1991. "
+            "<bookmark mark='f'/> On this Job and at this point in the pass order, the measured change is small. "
+            "Other programs can expose many constants, and inlining or loop transformations can create further "
+            "opportunities."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(src))
             vo.wait_until("a")
@@ -140,14 +135,18 @@ class Optimize(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to(RIGHT * 2.8 + DOWN * 0.1)
         dead = [0, 1, 2, 3]
         with self.voiceover(
-            "Two humble passes do much of the cleaning up. <bookmark mark='a'/> Copy propagation: after b equals "
-            "t one, every use of b may use t one instead, and in SSA that is always safe, because neither name is "
-            "ever assigned again. <bookmark mark='b'/> Dead code elimination works like a garbage collector over "
-            "instructions. <bookmark mark='c'/> Mark the instructions whose effects are visible: returns, stores, "
-            "calls and branches. Then mark whatever they use, and whatever those use, back along the def-use "
-            "links. <bookmark mark='d'/> Anything unmarked is swept away. Once SCCP has replaced b by the constant "
-            "thirty-two, nothing uses a, t one, b or c dot one any more, and they all go. <bookmark mark='e'/> Part "
-            "15 will collect garbage in memory with the same mark-and-sweep idea."
+            (
+            "Two cleanup passes use those value links. <bookmark mark='a'/> Copy propagation replaces a use of an "
+            "SSA copy by its source, because the copied names do not acquire later assignments. <bookmark "
+            "mark='b'/> Dead code elimination can resemble a garbage collector over instructions. <bookmark "
+            "mark='c'/> Start from instructions whose behavior must remain: returns, memory effects, calls and "
+            "required control flow. An operation that can trap may also need preservation unless the semantics or "
+            "a proof allows removing it. Follow their dependencies backward through the def-use links. <bookmark "
+            "mark='d'/> Unneeded computations can then disappear. In the constant example, folding the branch and "
+            "values makes several old arithmetic definitions unused. Our simple pass keeps control-flow roots "
+            "conservatively rather than proving every possible dead branch itself. <bookmark mark='e'/> Part 15 "
+            "develops the related mark-and-sweep idea for objects in memory."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(lst))
             vo.wait_until("a")
@@ -177,22 +176,25 @@ class Optimize(VoiceoverScene):
         how = VGroup(
             label(r"key each instruction by \ (operation, \ operand values)", font_size=20, color=GREY_A),
             label(r"a key seen before: \ reuse the earlier name", font_size=20, color=GREY_A),
-            label(r"in SSA a name never changes, \ so the key can never go stale", font_size=20, color=HEAD),
+            label("SSA keeps operand identities stable; reuse still needs a dominating definition", font_size=20, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=1.0)
         r0, r1, pct = measured(p["rows"], 4, 5)
         meas = label(rf"on the array Job: \ {r0:,} $\to$ {r1:,} instructions \ ({pct:+.0f}\%): \ "
                      r"\texttt{table[i]}'s address, \ computed once", font_size=20, color=YES).to_edge(DOWN,
                                                                                                     buff=0.35)
         with self.voiceover(
-            "Next, value numbering. This little function computes i times four three times: once to index p, "
-            "once for x, once for y. <bookmark mark='a'/> Give every instruction a key: its operation and the "
-            "values of its operands. Walking through the code, keep a table of the keys seen so far. <bookmark "
-            "mark='b'/> The second i times four has the same key as the first, so it is the same value, and its "
-            "uses can use t one. The third, likewise. <bookmark mark='c'/> In SSA this is particularly simple, "
-            "because a name never changes, so an entry in the table can never become stale. The global version "
-            "walks the dominator tree, so that a value computed in a block is reused in every block it dominates. "
-            "<bookmark mark='d'/> On the array Job this pass is worth twenty percent. Every mention of table of i "
-            "recomputed i times twelve plus the table's address, and now each is computed once."
+            (
+            "Value numbering reuses an already available computation. This example forms i times four repeatedly. "
+            "<bookmark mark='a'/> A key records a supported operation and its operand values. For selected "
+            "commutative operations, canonical operand order exposes another equality. <bookmark mark='b'/> When "
+            "the key matches an available earlier instruction, replace the later uses with that earlier result. "
+            "<bookmark mark='c'/> Our global pass scopes the table while walking the dominator tree, so the "
+            "reused definition is available on every path to its new use. SSA keeps operand identities stable, "
+            "but does not make memory immutable. This pass does not merge loads; calls, traps and memory effects "
+            "require their own legality arguments. <bookmark mark='d'/> On this recorded array Job, eliminating "
+            "repeated table-address arithmetic reduces the instruction count by the amount shown. The percentage "
+            "measures this workload and pass ordering, rather than all programs or elapsed time."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(src))
             vo.wait_until("a")
@@ -227,23 +229,14 @@ class Optimize(VoiceoverScene):
             b.align_to(gl, LEFT)
         foot = label(r"chapter 14: \ a solver checks such rules for all $2^{32}$ inputs at once", font_size=21,
                      color=HEAD).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "Many small rewrites are pure algebra. <bookmark mark='a'/> Multiplying by eight is a shift left by "
-            "three, which is cheaper. Multiplying by one, or adding zero, does nothing. Our strength pass also "
-            "moves constants to the right, so that value numbering sees four times x and x times four as the "
-            "same. <bookmark mark='b'/> But machine integers are not the integers of school. Dividing by two is "
-            "not a shift right by one: minus one divided by two is zero, rounding toward zero, but minus one "
-            "shifted right is still minus one. x plus one is not always more than x, because it can overflow. "
-            "Every rewrite rule has to be true for all four billion values of x, including the awkward ones. "
-            "<bookmark mark='c'/> In chapter fourteen a solver will check such rules for all of them at once."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(g) for g in good], lag_ratio=0.3), FadeIn(gl), run_time=2)
-            vo.wait_until("b")
+        with self.voiceover("Many small rewrites are pure algebra. <bookmark mark='a'/> Multiplying by eight is a shift left by three, which is cheaper. Multiplying by one, or adding zero, does nothing. Our strength pass also moves constants to the right, so that value numbering sees four times x and x times four as the same. <bookmark mark='b'/> But machine integers are not the integers of school. Dividing by two is not a shift right by one: minus one divided by two is zero, rounding toward zero, but minus one shifted right is still minus one. x plus one is not always more than x, because it can overflow. Every rewrite rule has to be true for all four billion values of x, including the awkward ones. <bookmark mark='c'/> In chapter fourteen a solver will check such rules for all of them at once.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(g) for g in good], lag_ratio=0.3), FadeIn(gl), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             for r, b in zip(bad, bl):
                 self.play(FadeIn(r), FadeIn(b), run_time=0.8)
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(foot))
         self.wait(0.3)
         self.clear_scene()
@@ -267,32 +260,22 @@ class Optimize(VoiceoverScene):
                   color=GREY_A),
             label(r"the best order depends on the program; \ finding it is itself a search problem", font_size=21,
                   color=GREY_A),
-            label(rf"clang \texttt{{-O2}}: \ {lv['passes']} pass runs of {lv['distinct']} different passes",
+            label(rf"opt \texttt{{-O2}} pipeline text: \ {lv['passes']} parsed names, \ {lv['distinct']} distinct",
                   font_size=22, color=FUNC),
             label(r"chosen by decades of measurement; \ machine learning now tunes some (chapter 15)",
                   font_size=21, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(cap, DOWN, buff=0.6)
-        with self.voiceover(
-            "Optimizations are run one after another, in a fixed order. <bookmark mark='a'/> Ours runs eleven "
-            "passes at level two, some of them twice. <bookmark mark='b'/> The order matters, because each pass "
-            "creates work for others. Constant propagation leaves copies behind, value numbering leaves dead "
-            "code, and moving code out of loops creates new chances for value numbering. <bookmark mark='c'/> The "
-            "best order depends on the program, and finding it is a search problem of its own, called phase "
-            "ordering. <bookmark mark='d'/> Clang at level two runs eighty-eight passes, drawn from sixty different "
-            "ones, in an order refined by decades of measurement. <bookmark mark='e'/> Machine learning now tunes "
-            "some of these decisions, as the frontier chapter will show."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(c, shift=RIGHT * 0.1) for c in chips], lag_ratio=0.15), FadeIn(cap),
-                      run_time=2.5)
-            vo.wait_until("b")
+        with self.voiceover(f"Passes run in an order, and sometimes repeat. <bookmark mark='a'/> Our level-two pipeline lists {len(PIPELINE)} pass invocations. <bookmark mark='b'/> A pass creates opportunities for others: constant propagation can leave copies, value numbering can leave unused code, and loop motion changes which expressions dominate later uses. <bookmark mark='c'/> Selecting a useful sequence is the phase-ordering problem. The best choice depends on the input and the cost objective. <bookmark mark='d'/> For the recorded LLVM version and pipeline-printing command, our parser counts {lv['passes']} pass-name occurrences and {lv['distinct']} distinct names. This is a textual pipeline statistic, not a count of every per-function runtime invocation or a universal Clang constant. <bookmark mark='e'/> Production pipelines combine engineering measurements and heuristics; some decisions can also use learned policies.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(c, shift=RIGHT * 0.1) for c in chips], lag_ratio=0.15), FadeIn(cap), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(pts[0]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(pts[1]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(pts[2]))
-            vo.wait_until("e")
+            vo.wait_until('e')
             self.play(FadeIn(pts[3]))
         self.wait(0.3)
         self.clear_scene()

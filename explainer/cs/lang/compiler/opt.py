@@ -8,8 +8,9 @@
 * :func:`gvn`: value numbering over the dominator tree: a pure computation already available in a dominating block
   is replaced by that earlier value (commutative operands sorted).
 * :func:`licm`: loop-invariant code motion: natural loops found from back edges (an edge to a block that dominates
-  its source); pure instructions whose operands come from outside the loop move to a preheader.  Loads move too
-  when the loop has no call and no store of the same width (the type-based aliasing rule, as C's strict aliasing).
+  its source); total pure instructions whose operands come from outside the loop move to a preheader.
+  Loads move only from the header before any potentially trapping/effectful instruction, and only when the loop
+  has no stores or calls/IO. Different access widths alone do not prove nonaliasing in byte-addressed memory.
 * :func:`strength`: multiplication by a power of two becomes a shift; ``x * 1``, ``x + 0`` and friends disappear.
 * :func:`inline`: before SSA, small non-recursive functions are copied into their callers.
 """
@@ -322,18 +323,25 @@ def licm(f: Func, stats: dict | None = None) -> int:
         lab = f.labels()
         inside = {d for l in body for d in (i.dst for i in lab[l].ins) if d}
         has_call = any(i.op in ("call", "getc", "putc") for l in body for i in lab[l].ins)
-        store_sizes = {i.k[0] for l in body for i in lab[l].ins if i.op == "store"}
+        has_store = any(i.op == "store" for l in body for i in lab[l].ins)
         changed = True
         while changed:
             changed = False
             for l in sorted(body):
                 b = lab[l]
                 keep = []
+                # Entering the preheader guarantees reaching the loop header, not an
+                # arbitrary body block. A load must also retain the order of earlier
+                # effects/traps. Revisit after moving a load to preserve load order.
+                total_prefix = True
                 for i in b.ins:
-                    movable = i.op in ("bin", "un", "gaddr", "faddr", "const") and not (
+                    total = i.op in ("const", "copy", "phi", "bin", "un", "gaddr", "faddr") and not (
                         i.op == "bin" and i.k in ("div", "rem"))
-                    if i.op == "load" and not has_call and i.k[0] not in store_sizes:
+                    movable = total and i.op not in ("copy", "phi")
+                    if (i.op == "load" and l == header and total_prefix
+                            and not has_call and not has_store):
                         movable = True
+                    total_prefix = total_prefix and total
                     if movable and all(not is_var(a) or a not in inside for a in i.args):
                         pre.ins.insert(len(pre.ins) - 1, i)
                         inside.discard(i.dst)

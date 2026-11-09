@@ -1,210 +1,192 @@
 # Computer Science, Built — Part 13: The Compiler
 
-Part 13 of a sixty-one-part course in computer science (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), in Act III, *Speaking to the Machine*. Part 12 taught the machine to read the Pebble
-language; this part teaches it to write Pebble machine code. The compiler lives in `explainer/cs/lang/compiler/`:
-`check.py` (names, scopes, types, struct layout), `lower.py` and `ir.py` (three-address code and control-flow
-graphs), `interp.py` (the reference interpreter), `ssa.py` (dominators, frontiers, SSA construction and
-destruction), `opt.py` (copy propagation, SCCP, DCE, GVN, natural loops, LICM, induction-variable strength reduction,
-algebra, inlining), `codegen.py` (maximal-munch selection with compare-and-branch fusion, liveness, Chaitin–Briggs
-colouring with coalescing and rematerialization, spilling, jump threading, emission), `driver.py` (levels `-O0` …
-`-O3`), `analysis.py` (Kildall's solver with traces, chordality, a list scheduler), `fuzz.py` (random programs,
-differential testing) and `superopt.py` (an enumerative superoptimizer and a rule checker, both backed by z3). About
-2,500 lines, tested in `tests/test_cs13_compiler.py` against the interpreter, the reference word count, the
-definition of dominance and the fuzzer. Every number is computed in `compute.py`.
+Part 13 of the [sixty-one-part course](../README.md), in Act III, *Speaking to the Machine*.
+Part 12 built the reader for Pebble; this part builds the compiler, follows its intermediate representations,
+and tests whether the generated machine code preserves the program's behavior.
 
-* **A program that writes programs.** The Job's scan loop by hand (Part 6), in the Pebble language (Part 12), and as
-  our compiler writes it: 827,576 instructions by hand on the first chapter, 4,466,758 unoptimized, 730,195 optimized
-  (12% fewer than by hand).
-* **1. FORTRAN, and the shape of a compiler.** Hopper's A-0 (1952); Backus's team, the IBM 704, April 1957, about 18
-  person-years, and the quotation about "half as fast"; front, middle and back ends; M + N instead of M × N (UNCOL
-  1958, GCC, LLVM); the list Job through every stage: 2,285 characters, 651 tokens, 371 nodes, 207 IR instructions in
-  61 blocks, 20 φs, 315 after `-O3`, 235 machine instructions, 956 bytes.
-* **2. Names, scopes and types.** The symbol table as a stack of scopes; typing rules as inference rules; four
-  programs our checker rejects, with its messages; `Node` is 16 bytes and `Entry` 12; globals, virtual registers and
-  address-taken locals.
-* **3. Three-address code and the control-flow graph.** `s = s + a[i]` lowered; `total` as seven blocks; leaders,
-  basic blocks, Frances Allen's CFG; clang's LLVM IR for the same function.
-* **4. Dominators.** The definition, tested against "delete d, is n still reachable?"; the fixed-point equations
-  solved in 2 passes (every function of the Job also takes 2); the dominator tree; dominance frontiers.
-* **5. Static single assignment.** Renaming; φ at joins and loop headers; placement at the iterated dominance
-  frontier (Cytron et al. 1991), pruned; renaming down the dominator tree; clang's `mem2reg` puts the same 3 φs in
-  the same places.
-* **6. Dataflow analysis and fixed points.** Liveness equations; the iteration on `total` (14 visits, 12 updates);
-  reaching definitions and available expressions; the lattice of 16 subsets, height 4; Knaster–Tarski and Kleene;
-  meet-over-paths and Kam & Ullman.
-* **7. Optimizations on SSA.** The constant lattice; SCCP folds a function to `x + 32` and deletes a branch; dead code
-  as mark and sweep; value numbering (−20% on the array Job); algebra and its traps; phase ordering, and clang
-  `-O2`'s 88 pass runs of 60 passes.
-* **8. Loops.** Back edges and natural loops (the array Job's `word`: an outer loop of 10 blocks, an inner of 3);
-  loop inversion (−6.5% array, −12.5% list); LICM, 4 instructions hoisted (−10.6%); induction-variable strength
-  reduction (−36%), which rediscovers Part 6's pointer; unrolling, vectorization, the polyhedral model.
-* **9. Inlining and aliasing.** `same` copied into `lookup` (−3.7% on the list Job, nothing to inline in the array
-  Job); the call graph and summaries; type-based, address-taken and points-to alias analysis; Rice's theorem and why
-  every analysis is conservative.
-* **10. Instruction selection.** Tiles; maximal munch; Aho–Johnson dynamic programming and iburg; DAGs are NP-hard;
-  `same` selected, with compare-and-branch fusion.
-* **11. Register allocation.** Interference; `total`'s graph (17 nodes, 41 edges, ω = 5, coloured with 5);
-  Chaitin's simplify, spill, select; Briggs and George coalescing; rematerialization; NP-hard in general; SSA graphs
-  are chordal (Hack, Grund & Goos 2006), checked on every function of the Job, and four of five stop being chordal
-  after out-of-SSA (a 4-hole in `same`); the register sweep (13 → 4 registers: 767,276 → 1,148,719 instructions);
-  linear scan.
-* **12. Scheduling and the pipeline.** The dependence DAG of the inner loop and a false WAR dependence; list
-  scheduling; on Part 7's pipeline the compiled Job runs 12% fewer instructions and 12% more cycles when branches are
-  predicted not taken, and 9% fewer cycles with a two-bit predictor; software pipelining.
-* **13. The Job, compiled.** Every pass in turn; `-O0` … `-O3` against the hand-written programs of Parts 6 and 11;
-  on Part 8's out-of-order core, 11% fewer instructions and about the same cycles (+1.5%); ledger row 5: 58 s on one
-  core (4.2 min unoptimized); gcc on the C Job of Part 10: 215 ms at `-O0`, 115 ms at `-O1`, nothing more at
-  `-O2`/`-O3`.
-* **14. Is the compiler right?** Csmith (325+ bugs in gcc and LLVM; none in CompCert's proved parts); our fuzzer: 240
-  programs, 190 compared at four levels, 0 mismatches, and the two bugs it found during development; z3 on five
-  rewrite rules (three false, with counterexamples); Alive; translation validation; CompCert.
-* **15. Frontier: searching for the best program.** The full employment theorem; Massalin's superoptimizer rebuilt:
-  shortest proved Pebble programs for eight functions (|x| in 3, min in 4 after 4 minutes); STOKE, Souper, AlphaDev;
-  equality saturation and e-graphs (egg, Cranelift); MLGO; open problems.
-* **Recap, where this comes back, in practice, problems.**
+The compiler is in `explainer/cs/lang/compiler/`: name/type checking and layout, CFG lowering, an IR interpreter,
+dominators and SSA, optimization passes, instruction selection, register allocation, scheduling, differential
+fuzzing and bounded enumerative search with separate SMT validation. The chapter uses actual traces and graphs
+from these implementations. Tests live in `tests/test_cs13_compiler.py`.
 
-## Build
+The seventeen scenes cover the scan-loop hook; compiler history and pipeline; semantic checking; IR and CFGs;
+dominators; SSA; dataflow fixed points; optimization; loops; inlining and aliasing; instruction selection;
+register allocation; scheduling; the compiled Job; correctness; the research frontier; and worked problems.
+
+## Measurements and interpretation
+
+These are the repaired local data, not universal compiler performance claims.
+
+| Quantity | Recorded result | Scope |
+| --- | ---: | --- |
+| First-chapter array scan, hand written | 827,576 instructions | Pebble physical execution |
+| Same scan, compiled `-O0` | 4,466,758 instructions | Same workload |
+| Same scan, compiled `-O2` / `-O3` | 853,694 instructions | About 3.2% above hand written |
+| List Job, compiled `-O2` / `-O3` | 768,386 / 739,791 instructions | First chapter |
+| Pipeline input | 2,285 characters; 651 tokens; 371 AST nodes | List Job |
+| Lowered / final IR | 207 instructions in 61 blocks / 311 instructions | Final count includes the compiler pipeline's transformations |
+| Emitted code | 238 instruction words; 952 bytes | Physical 32-bit words before `_brk`, including runtime code; 234 indented listing lines is a different statistic |
+| Liveness trace | 14 visits; 12 updates | The displayed `total` CFG |
+| Allocation example | 17 vertices; 41 edges; clique and coloring size 5 | The displayed interference graph |
+| LICM example | 2 pure IR operations hoisted | No conditional load is speculated |
+| Register sweep, 13 → 4 registers | 768,386 → 1,156,277 instructions | Current list-Job run |
+| Six-passage out-of-order core comparison | Compiled cycles / hand cycles = 1.0666 | Aggregate cycle counts, not mean passage ratios |
+| Ledger projection | 61.18 seconds compiled; 57.4 seconds hand written | Scaled from simulated cycles; not a measured production wall time |
+| Host GCC 14.2.0 C Job | 220.5 / 127.5 / 145.1 / 116.5 ms | `-O0`…`-O3`, recorded local best of three |
+| LLVM 19.1.7 | 3 `mem2reg` φs; 90 parsed pipeline names, 61 distinct | Printed `opt -O2` pipeline text; not executed per-function pass counts |
+| Differential sample | 240 generated; 190 compared at four levels; 50 excluded; 0 mismatches | Exclusions hit the reference step limit; no correctness proof |
+
+Instruction counts, pipeline cycles, projected ledger time, host timings and code size measure different things.
+The compiled program can execute more instructions and still exhibit a different pipeline cost. The six measured
+passages are the comparison population; the ledger extrapolation assumes that their relative cycle cost transfers.
+
+The search chapter displays eight candidates of lengths 1, 1, 2, 2, 3, 3, 3 and 4. Finite test observations prune
+the search; this pruning is incomplete. Each displayed candidate is separately validated under its SMT word model.
+The approximately 310-second search-plus-proof total belongs to the recorded host. These are validated candidates,
+not proofs of shortest code. Absolute value at `INT_MIN` follows Pebble's wrap-around definition.
+
+## Semantic boundaries
+
+* Dominance refers to reachable CFG nodes. A dominance frontier requires that the node does **not strictly dominate**
+  the destination, so a loop header can belong to its own frontier. Renaming walks the actual dominator tree;
+  instruction order and φ-edge uses still matter.
+* Monotone does not mean inflationary. Bottom initialization, a fair worklist and finite lattice height establish
+  convergence here. Equality with meet-over-paths needs the stated distributivity assumptions and concerns syntactic
+  CFG paths, including infeasible ones.
+* Strict SSA interference is chordal under the uniform-register model. Coloring an explicit chordal graph and
+  solving spilling, coalescing, instruction constraints or full allocation have different complexity bounds.
+* Greedy maximal munch is a heuristic with arbitrary tile costs. Tree dynamic programming is optimal only for its
+  specified tree/tile cost model; the general DAG problem has additional sharing choices.
+* Memory transformations require both memory and control/trap safety. Different access widths can overlap. The
+  repaired LICM keeps conditional loads guarded and only moves a header load under conservative effect checks.
+  C's character alias exception, `restrict` contracts and Rust references require their own language rules.
+* Rice/halting arguments concern unbounded program models. They are not undecidability proofs for a fixed finite
+  machine. CompCert's proved translation begins at its specified AST and ends at assembly, with an explicit trusted
+  boundary. The fuzzer's bounded sample and historical Csmith/Alive results are evidence with separate scopes.
+
+## Build and cache provenance
 
 ```bash
-python -m videos.cs.cs13.compute           # every number in the part (about 20 minutes: superopt and fuzz dominate)
-python tools/build.py cs13 -q l            # a 480p preview
-python tools/build.py cs13                 # 1080p
+python -m videos.cs.cs13.compute
+python tools/build.py cs13 -q l
+python tools/build.py cs13
+python -m unittest tests.test_cs13_compiler
 ```
 
-The `gcc`, `llvm` and `superopt` timings belong to the computer that runs them (the clang and gcc versions are
-recorded); instruction and cycle counts come from the Pebble emulator, Part 7's pipeline and Part 8's core, and are
-exact.
+Fourteen compiler-dependent data caches carry a revision hash over `compute.py` and the compiler source. Normal
+loads regenerate stale entries; cached-only QA rejects them before mutation. Host GCC, LLVM and superoptimization
+records retain their recorded tools and timing context. Re-measure those deliberately with, for example,
+`python -m videos.cs.cs13.compute --force gcc`. Computation requires the relevant local tools and Z3.
+A cached numeric artifact is not by itself evidence that a changed compiler was re-executed.
 
 ## Problems, with solutions
 
-1. **Dominators and φs by hand.** Compute the dominator tree and dominance frontiers of a `while` loop containing an
-   `if` with an early `return`, and place the φs for a variable assigned in both branches.
+1. **Dominators and φs.** Use edges E→H, H→B/X, B→T/F, T→R/J, F→J, J→H; R and X return.
+   Compute the dominator tree and frontiers. Initialize `v` in E, assign it in T/F and use it in X.
 
-   *Solution.* Blocks: `entry → head`; `head → body | exit`; `body → then | else`; `then → ret` (the early return)
-   and `then → join`; `else → join`; `join → head`. The dominator tree is entry → head → {exit, body}, body → {then,
-   else, join}, then → ret. Frontiers: DF(then) = DF(else) = {join} (each reaches join, which the other also
-   reaches); DF(join) = DF(body) = {head} (the back edge); DF(head) = {head}; DF(ret) = DF(exit) = ∅. A variable
-   assigned in both branches gets a φ at join (the frontier of the assignments) and then, because that φ is itself
-   an assignment, a φ at head (the frontier of join); if the variable is not live at head, pruned SSA drops the
-   second φ. The early return adds no φ: `ret` has a single predecessor.
+   *Solution.* Immediate-dominator edges are E→H, H→B/X, B→T/F/J, T→R.
+   DF(T)=DF(F)={J}; DF(J)=DF(B)=DF(H)={H}; DF(E)=DF(R)=DF(X)=∅.
+   Iterated-frontier placement puts φs at J and H. With the stated use at X, `v` is live at H, so pruning keeps
+   the header φ. If that incoming value is never used before redefinition, a suitably changed example can prune it.
+   R has one predecessor and adds no merge. The two outgoing T edges are CFG edges, not sequential execution.
 
-2. **Liveness by hand.** Run liveness on a three-block loop and show that the result is the least solution.
+2. **Least liveness solution.** B1 initializes `s=0; i=0`; B2 tests `i<n`, goes to B3 or X;
+   B3 executes `s=s+i; i=i+1` then returns to B2; X uses `s` and returns. Solve backward liveness.
 
-   *Solution.* Take `B1: s = 0; i = 0` → `B2: if i < n` → `B3: s = s + i; i = i + 1` → B2, and B2 → exit using `s`. use/def:
-   B1 defines s, i; B2 uses i, n; B3 uses s, i and defines s, i; exit uses s. Starting from empty sets and visiting
-   backward: IN(exit) = {s}; IN(B3) = {s, i}; IN(B2) = {i, n, s}; then OUT(B3) = IN(B2) adds n to IN(B3) =
-   {s, i, n}; IN(B1) = {n}: only the parameter. A second sweep changes nothing. Any solution must contain these sets: each element is
-   forced by a use reachable without an intervening definition, by induction on the number of iterations (Kleene's
-   chain F^k(⊥) is below every fixed point, since F is monotone and ⊥ is below everything). So the iteration's
-   answer is the least fixed point; adding, say, `t` to every set gives a larger solution that is still consistent
-   but useless.
+   *Solution.* IN(X)={s}, OUT(X)=∅, IN(B2)=IN(B3)={s,i,n}, IN(B1)={n}.
+   OUT(B1)=OUT(B2)=OUT(B3)={s,i,n}. Starting at bottom and applying the monotone equations reaches these sets.
+   Every use reachable without a redefinition forces its variable into the corresponding set; induction on
+   iterations shows that the result lies below every fixed point. To exhibit a larger fixed point, include an
+   unused parameter `t` in the universe and add it to IN and OUT of B1/B2/B3 only. The back edge sustains it, while
+   the exit boundary stays OUT(X)=∅ and IN(X)={s}. Adding it to every set would violate that boundary.
 
-3. **x·c / c.** Show that `x * 3 / 3 → x` is false on 32-bit integers, and find for which c the rule is sound.
+3. **Word arithmetic.** For which nonzero signed 32-bit constants c is `(x*c)/c = x` valid for every word x?
 
-   *Solution.* With x = −1,859,365,541 (the solver's counterexample), 3x wraps around 2³² and the division no longer
-   undoes it. In general the rule fails as soon as c·x can overflow, which happens for some x whenever |c| ≥ 2. For
-   c = 1 it is trivial; for c = −1 it holds too, under the machine's wrap-around semantics, because −(−x) = x even at
-   x = −2³¹ (where −x = x and x / −1 = x). Checked with z3 for every c from −8 to 8 and for ±2³¹: only ±1 survive.
-   The rule *is* sound on mathematical integers, which is exactly why compilers for C may use it on signed values
-   (signed overflow is undefined) but not on unsigned ones, and why a solver, not intuition, should decide.
+   *Solution.* Under Pebble's wrapping multiply and division toward zero, including wrapping `INT_MIN/-1`,
+   exactly c=1 and c=−1 work. For |c|≥2, any wrapped product has magnitude at most 2³¹; division cannot reach
+   x=2³¹−1. For c=3 and x=2³¹−1, the product wraps to 2³¹−3, and the quotient is 715,827,881.
+   Mathematical integer multiplication followed by exact division does cancel. C signed-overflow and division
+   undefined behavior permit different transformations on defined executions; unsigned modular arithmetic also
+   does not justify this cancellation. State the language model before proving a rewrite.
 
-4. **Simplification.** Prove that if simplification removes every node, each with fewer than k neighbours when
-   removed, the graph is k-colourable; then show that Chaitin's method spills on a 4-cycle with k = 2.
+4. **Simplification and optimistic coloring.** Prove the degree-<k removal rule and analyze a 4-cycle for k=2.
 
-   *Solution.* Induction on the number of nodes, in reverse order of removal: when a node is put back, it has fewer
-   than k neighbours among the nodes already coloured, so at least one of the k colours is free. On a 4-cycle every
-   node has degree 2 = k, so simplification cannot start and Chaitin's method must spill, although the cycle is
-   bipartite and needs only 2 colours. Briggs's *optimistic* colouring fixes this: push the node anyway, and spill
-   only if, when it is popped, no colour is actually free. On the 4-cycle, opposite nodes then share colours and
-   nothing spills.
+   *Solution.* Restore removed vertices in reverse order. Each has fewer than k already-colored neighbors, so a
+   color remains. A 4-cycle has degree k everywhere, so conservative simplification stalls and a basic spill
+   decision may choose a value even though the graph is bipartite. Optimistically pushing one vertex permits the
+   rest to simplify and succeeds on this graph. This example does not make optimistic coloring optimal on arbitrary
+   graphs or with architectural register constraints.
 
-5. **Build: loads in value numbering.** Our GVN never merges two loads of the same address (`total`'s `%t10` and
-   `%t14` both load `[%iv2]`). Add it, safely, using the type-based rule of chapter 9, and test it.
+5. **Build: load value numbering.** Design a safe first implementation, then explain what changes across blocks.
 
-   *Solution.* Give each load the key (load, size, address value, memory version), where the memory version is a
-   counter bumped by every store of the same size and by every call (and by `getc`/`putc`), within one basic block;
-   across blocks, walk the dominator tree and bump the version on entry to any block that is a join point with a
-   store on some incoming path (or, simplest and still useful, reset at every block boundary). Two loads with equal
-   keys are the same value. In `total`, the then-block's load is dominated by the body's load of the same address
-   with no store between, so it becomes a use of `%t10`, saving one load per positive element. Run
-   `tests/test_cs13_compiler.py`, which checks the Job at every level against the reference count, and
-   `python -m videos.cs.cs13.compute --force fuzz`: any mismatch is a bug in the new rule (the most likely one is
-   forgetting that a byte store and a word load may overlap when the word is being built from bytes, which the
-   size rule excludes only because the Pebble language has no casts).
+   *Solution.* Within one block, key a load by width, address value and memory version. Reuse a dominating earlier
+   load only if no intervening store may overlap it and no call or relevant I/O/effect invalidates the observation.
+   A conservative implementation invalidates on **every** store, regardless of width, and resets at each block
+   boundary. This version does not remove a load in a different block. To reuse the body load inside its dominated
+   then block, track sound memory versions through edges and joins (or use a memory-SSA/alias analysis), as well as
+   control and trap legality. A join is not handled by merely incrementing a traversal-local counter.
+   Test byte-store/word-load overlap, word-store/byte-load overlap, calls, joins, zero-trip loops and conditional
+   invalid pointers, then compare interpreter and physical execution. The current regression suite includes the
+   LICM overlap and guarded-null failures; finite fuzzing supplements these tests without proving the new pass.
 
-6. **★ Research: spilling on SSA.** On SSA programs colouring is easy but optimal spilling is NP-hard. Find a
-   polynomial algorithm with a proven approximation ratio, or show that none exists.
+6. **★ Research: precisely scoped spilling.** Reproduce a known fixed-k algorithm before defining an extension.
 
-   *Where to start.* What is known: SSA interference graphs are chordal and colour optimally in linear time (Hack,
-   Grund & Goos 2006; Bouchez, Darte & Rastello; Brisk et al.); deciding the cheapest set of values to spill
-   ("spill everywhere") is NP-hard even on SSA programs (Bouchez, Darte & Rastello, "On the complexity of spill
-   everywhere under SSA form", 2007), and so is optimal coalescing. Spill-everywhere is a maximum-weight
-   k-colourable subgraph problem: polynomial on interval graphs (straight-line code), hard on chordal graphs when k
-   is part of the input (Yannakakis & Gavril 1987). Local allocation with load costs is NP-hard but has
-   approximation algorithms (Farach-Colton & Liberatore 2000). (a) Reproduce the NP-hardness reduction for spill
-   everywhere on chordal graphs. (b) For fixed k, design a dynamic program over a clique tree of the interference
-   graph and measure it on the Job's functions with `regalloc`'s sweep as a benchmark. (c) Ask whether a constant
-   ratio is possible when costs are weighted by loop depth, the case compilers actually face.
+   *Solution and starting point.* For weighted spill-everywhere **without holes** on a chordal interference graph,
+   a clique-tree dynamic program is polynomial for each fixed register count k. At each clique, retain a subset of
+   at most k vertices; require agreement on the parent separator, combine compatible child states, and charge each
+   retained vertex's weight exactly once, at its highest containing clique. Running intersection makes those local
+   choices consistent. Maximizing retained weight gives exact minimum spill cost W−retained weight. The number of
+   states grows like a power with exponent k, so this is not a polynomial bound when k is input.
+   Holes, mandatory short ranges, reload placement, coalescing and machine constraints change the problem; consult
+   the relevant theorem before transferring a bound. A retained-weight approximation does not transfer its ratio
+   to spill cost: W=100, optimum retained=99 gives spill=1, whereas retained=50 gives spill=50 despite retaining
+   more than half the optimum. Implement the known DP, compare it on small exhaustively solved instances, then
+   specify one extension and review its literature before calling it open.
 
 ## 习题与解答
 
-1. **手算支配者与 φ。** 对一个内含带提前 `return` 的 `if` 的 `while` 循环，计算支配树和支配边界，并为一个在两个分支中
-   都被赋值的变量放置 φ。
+1. **支配树与 φ。** 边为 E→H，H→B/X，B→T/F，T→R/J，F→J，J→H；R、X 返回。
+   E 初始化 v，T/F 赋值，X 使用。直接支配树为 E→H，H→B/X，B→T/F/J，T→R。
+   DF(T)=DF(F)={J}，DF(J)=DF(B)=DF(H)={H}，其余为空。迭代支配边界在 J、H 放 φ；由于 X 使用 v，
+   v 在 H 活跃，剪枝仍保留循环头 φ。R 只有一个前驱，不增加合流。T 的两条出边表示分支，并非顺序执行。
 
-   *解答。* 基本块：`entry → head`；`head → body | exit`；`body → then | else`；`then → ret`（提前返回）和
-   `then → join`；`else → join`；`join → head`。支配树为 entry → head → {exit, body}，body → {then, else, join}，
-   then → ret。支配边界：DF(then) = DF(else) = {join}（两者都能到达 join，而另一条路径也能到达它）；DF(join) =
-   DF(body) = {head}（回边）；DF(head) = {head}；DF(ret) = DF(exit) = ∅。在两个分支中都被赋值的变量，在 join 处得到
-   一个 φ（赋值所在块的边界）；由于这个 φ 本身也是一次赋值，head 处还要一个 φ（join 的边界）；若该变量在 head 处
-   不活跃，剪枝 SSA 会去掉第二个 φ。提前返回不增加 φ：`ret` 只有一个前驱。
+2. **最小活跃性解。** B1 初始化 s、i；B2 测试 i<n，进入 B3 或 X；B3 累加并递增后回 B2；X 使用 s。
+   IN(X)={s}、OUT(X)=∅、IN(B2)=IN(B3)={s,i,n}、IN(B1)={n}；三个非出口块的 OUT 均为 {s,i,n}。
+   从空集开始的单调迭代得到最小不动点。若全集包含未使用参数 t，只把它加入三个非出口块的 IN/OUT，回边可以
+   维持这个更大的不动点；X 的边界不变。给所有集合都加 t 会破坏出口方程。
 
-2. **手算活跃性。** 在一个三块循环上运行活跃性分析，并说明结果是最小解。
+3. **机器字运算。** 在 Pebble 的 32 位回绕乘法、向零截断除法和 INT_MIN/−1 回绕规则下，
+   对所有 x 都有 (x*c)/c=x 的非零常量只有 ±1。|c|≥2 时，回绕乘积的绝对值最多为 2³¹，商不可能达到
+   x=2³¹−1。c=3 时乘积为 2³¹−3，商为 715,827,881。数学整数、C 的有符号未定义行为、无符号模运算
+   属于不同模型，不能混用证明。
 
-   *解答。* 取 `B1: s = 0; i = 0` → `B2: if i < n` → `B3: s = s + i; i = i + 1` → B2，以及 B2 → exit（使用 `s`）。
-   use/def：B1 定义 s、i；B2 使用 i、n；B3 使用 s、i 并定义 s、i；exit 使用 s。从空集出发、逆向访问：IN(exit) = {s}；
-   IN(B3) = {s, i}；IN(B2) = {i, n, s}；随后 OUT(B3) = IN(B2) 使 IN(B3) 增加 n，成为 {s, i, n}；IN(B1) = {n}：只剩参数。
-   再扫一遍没有变化。任何解都必须包含这些集合：每个元素都由一条不经过重新定义就能到达的使用所强制，对迭代次数归纳
-   即得（因为 F 单调、⊥ 在一切之下，Kleene 链 F^k(⊥) 位于每个不动点之下）。所以迭代的结果是最小不动点；比如给每个
-   集合都加上 `t`，得到的解更大，仍然自洽，却毫无用处。
+4. **化简与乐观着色。** 逆序放回度数小于 k 时移走的结点，总有空闲颜色。k=2 的四圈所有度数都等于 k，
+   保守化简无法开始，可能选择溢出；但图本身可二着色。乐观压栈一个点后，其余点可化简，本例无需溢出。
+   这不证明乐观算法在任意图或带机器约束时最优。
 
-3. **x·c / c。** 证明 `x * 3 / 3 → x` 在 32 位整数上不成立，并找出使该规则成立的 c。
+5. **动手：读取的值编号。** 同一基本块内，用读取宽度、地址值和内存版本作键。只有更早读取支配当前读取，
+   且其间没有可能重叠的写入、调用或相关副作用，才可复用。保守版本遇到任何宽度的写入都失效，并在块边界重置；
+   它不会消除跨块读取。跨块需要沿边和合流传播可靠的内存版本，配合支配、别名及控制/陷阱条件；遍历时随意增加
+   一个计数器并不足够。测试不同宽度重叠、调用、合流、零次循环和条件保护的无效指针，再比较解释器与机器执行。
+   有限模糊测试只能补充证据，不能证明新优化正确。
 
-   *解答。* 取 x = −1,859,365,541（求解器给出的反例），3x 在 2³² 上回绕，除法就无法还原。一般地，只要 c·x 可能溢出，
-   规则就失效，而 |c| ≥ 2 时总有这样的 x。c = 1 显然成立；c = −1 在机器的回绕语义下也成立，因为即使 x = −2³¹ 时
-   −(−x) = x（此时 −x = x，x / −1 = x）。用 z3 对 −8 到 8 的每个 c 以及 ±2³¹ 检验：只有 ±1 通过。该规则在数学整数上
-   *是*成立的，这正是 C 编译器可以在有符号值上使用它（有符号溢出是未定义行为）、却不能在无符号值上使用它的原因，也
-   说明应该由求解器而不是直觉来裁决。
+6. **★ 研究：精确定义溢出问题。** 对弦图上有权、无空洞的处处溢出，固定 k 的团树动态规划已经是已知结果。
+   每个团保留至多 k 个点，父子分隔集上的选择必须一致，每个点的权重只在最高包含团计一次。最大保留权重给出
+   精确溢出代价 W−保留权重；状态数的指数依赖 k，不能据此声称 k 作为输入时也为多项式。
+   空洞、必须保留的短活跃段、重载位置、合并和机器约束会改变问题。保留权重的近似比不等于溢出代价近似比：
+   W=100、最优保留99时只溢出1，保留50却溢出50。先实现已知算法并对小图穷举验证，再定义扩展、查阅文献，
+   判断是否仍为开放问题。
 
-4. **化简。** 证明：如果化简能移走所有结点，且每个结点被移走时邻居都少于 k 个，那么图是 k 可着色的；再说明 k = 2 时
-   Chaitin 方法在一个 4 圈上会溢出。
+## Primary checks for the scoped claims
 
-   *解答。* 按移走的逆序对结点数归纳：一个结点放回时，在已着色的结点中它的邻居少于 k 个，所以 k 种颜色中至少有一种
-   空闲。在 4 圈上每个结点的度都是 2 = k，化简无从开始，Chaitin 方法只能溢出，尽管这个圈是二部图、只需 2 种颜色。
-   Briggs 的*乐观*着色解决了这个问题：照样把结点压栈，只有在弹出时确实没有空闲颜色才溢出。在 4 圈上，相对的两个结点
-   于是共用颜色，什么都不溢出。
-
-5. **动手：值编号中的读内存。** 我们的 GVN 从不合并两次读同一地址（`total` 的 `%t10` 和 `%t14` 都读 `[%iv2]`）。
-   用第 9 章基于类型的规则安全地加上这一功能，并测试它。
-
-   *解答。* 给每次读内存一个键（load、宽度、地址的值、内存版本），其中内存版本是一个计数器，在同一基本块内每遇到一次
-   同宽度的写内存、每次调用（以及 `getc`/`putc`）就加一；跨基本块时沿支配树行走，进入任何某条入边上有写内存的汇合块时
-   增加版本（或者最简单而仍然有用的做法：在每个块边界重置）。键相同的两次读内存是同一个值。在 `total` 中，then 块的读
-   被 body 块对同一地址的读所支配，其间没有写，于是它变成对 `%t10` 的使用，每个正元素省一次读。运行
-   `tests/test_cs13_compiler.py`（它在每个级别上对照参考计数检查 Job）和
-   `python -m videos.cs.cs13.compute --force fuzz`：任何不一致都是新规则的错误（最可能的是忘了：当一个字由字节拼成
-   时，写字节和读字可能重叠；宽度规则之所以能排除它，只是因为 Pebble 语言没有类型转换）。
-
-6. **★ 研究：SSA 上的溢出。** 在 SSA 程序上，着色容易，但最优溢出是 NP 难的。找出一个有可证近似比的多项式算法，或者
-   证明不存在。
-
-   *从哪里开始。* 已知：SSA 冲突图是弦图，可在线性时间内最优着色（Hack、Grund 与 Goos 2006；Bouchez、Darte 与
-   Rastello；Brisk 等）；决定溢出哪些值代价最小（“处处溢出”）即使在 SSA 程序上也是 NP 难的（Bouchez、Darte 与
-   Rastello，《On the complexity of spill everywhere under SSA form》，2007），最优合并也是。处处溢出是一个最大权
-   k 可着色子图问题：在区间图（直线代码）上是多项式的，在弦图上当 k 作为输入时是困难的（Yannakakis 与 Gavril
-   1987）。带读内存代价的局部分配是 NP 难的，但有近似算法（Farach-Colton 与 Liberatore 2000）。（a）重现弦图上处处
-   溢出的 NP 难归约。（b）对固定的 k，在冲突图的团树上设计一个动态规划，并以 `regalloc` 的寄存器扫描为基准在 Job 的
-   函数上测量。（c）问：当代价按循环深度加权（编译器实际面对的情形）时，能否达到常数近似比？
+* [Strict SSA and register allocation](https://homepages.dcc.ufmg.br/~fernando/publications/papers/FOSSACS06.pdf)
+* [Spill-everywhere complexity and fixed-k cases](https://arxiv.org/abs/0710.3642)
+* [CompCert proof and trusted boundary](https://compcert.org/man/manual001.html)
+* [LLVM parameter attributes and dereferenceability](https://llvm.org/docs/LangRef.html#parameter-attributes)
+* [MLGO's documented objectives](https://llvm.org/docs/MLGO.html)
+* [Csmith's historical study](https://www.flux.utah.edu/paper/yang-pldi11)
+* [Alive's historical study](https://people.cs.rutgers.edu/~sn349/papers/alive-pldi15.pdf)
+* [AlphaDev's task and deployment scope](https://pmc.ncbi.nlm.nih.gov/articles/PMC10247365/)
 
 ## Glossary additions
 

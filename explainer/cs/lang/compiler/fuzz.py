@@ -1,8 +1,10 @@
-"""Random programs for differential testing, in the spirit of Csmith (Yang, Chen, Eide and Regehr, 2011): every
-program generated here is well defined in the Pebble language (loops are bounded, indices are reduced into range,
-pointers only ever point at globals or into arrays that are alive), so any two correct implementations must print
-the same bytes.  :func:`differential` runs one program through the IR interpreter and through the compiler at
-every level on the emulator, and reports any disagreement (Part 13, chapter 15).
+"""Random compiler tests inspired by Csmith (Yang, Chen, Eide and Regehr, 2011).
+
+Indices are normalized into range and square-plus-one divisors stay nonzero under 32-bit wrapping: a square
+is 0 or 1 modulo four, so adding one cannot give 0 or -1 modulo 2^32. Arithmetic may still wrap. Generated
+loop bodies can assign induction variables, so syntactically small bounds do not guarantee termination.
+:func:`differential` excludes any reference execution that raises Stuck, recording the reason, then compares
+the reference output with each requested compiled level. Finite passing samples do not prove correctness.
 """
 from __future__ import annotations
 
@@ -38,7 +40,7 @@ class Gen:
             return self.lit()
         if r < 0.65:
             op = self.r.choice(["+", "-", "*", "/", "%", "+", "-", "*"])
-            if op in ("/", "%"):          # e*e + 1 is never 0 or -1 modulo 2^32: no trap, no overflow
+            if op in ("/", "%"):          # e*e + 1 is 1 or 2 mod 4: nonzero even after wrapping
                 d2 = self.expr(scope, d - 1, fi)
                 return f"({self.expr(scope, d - 1, fi)} {op} ({d2} * {d2} + 1))"
             return f"({self.expr(scope, d - 1, fi)} {op} {self.expr(scope, d - 1, fi)})"

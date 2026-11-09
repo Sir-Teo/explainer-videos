@@ -44,20 +44,23 @@ class IR(VoiceoverScene):
         for r in rows:
             r[1].move_to([r[0].get_left()[0] + 3.0, r[0].get_y(), 0], aligned_edge=LEFT)
         rows.move_to([2.2, 0.3, 0])
-        cap = label(r"three addresses: \ a result and at most two operands", font_size=22, color=HEAD).to_edge(
+        cap = label("arithmetic core: one result and at most two inputs", font_size=22, color=HEAD).to_edge(
             DOWN, buff=1.0)
         cap2 = label(r"\texttt{\%t}: \ temporaries, \ as many as we like \ --- \ registers of an imaginary machine",
                      font_size=20, color=GREY_A).next_to(cap, DOWN, buff=0.2)
         with self.voiceover(
-            "The middle end does not work on trees. It works on a flat list of simple instructions, each doing one "
-            "thing. <bookmark mark='a'/> Take s equals s plus a of i. Its tree has an assignment at the top, an "
-            "addition below it, and an array index below that. <bookmark mark='b'/> Lowering walks the tree from "
-            "the leaves up and gives every intermediate result a name. First scale the index: an integer is four "
-            "bytes, so multiply i by four. Add that to a, for the element's address. Load from memory. Add. And "
-            "assign. <bookmark mark='c'/> This is three-address code: every instruction has a result and at most "
-            "two operands. <bookmark mark='d'/> The percent names are temporaries, as many as we like. They are the "
-            "registers of an imaginary machine with no limit on registers, and the back end will have to fit them "
-            "into Pebble's real ones."
+            (
+            "Our middle end uses simple instructions grouped into basic blocks. Other compilers may use different "
+            "tree or graph representations. <bookmark mark='a'/> Take s equals s plus a of i. Its syntax tree "
+            "contains an assignment, an addition and an array index. <bookmark mark='b'/> Lowering gives the "
+            "intermediate results names: scale i by four for an integer element, add the array address, load, add "
+            "to s, and assign the result. <bookmark mark='c'/> The arithmetic has the familiar three-address "
+            "shape: a destination and up to two inputs. Calls, branches, stores and later phi functions have "
+            "their own operand conventions; the name is not a universal arity rule for every IR instruction. "
+            "<bookmark mark='d'/> The percent names denote values or virtual registers. We can introduce as many "
+            "as the translation needs, leaving the problem of fitting live values into physical registers to the "
+            "back end."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(expr))
             vo.wait_until("a")
@@ -119,7 +122,7 @@ class IR(VoiceoverScene):
         head = label(r"Basic blocks, \ and the graph", font_size=30).to_corner(UL, buff=0.35)
         defs = VGroup(
             label(r"a \textbf{basic block}: \ a straight run of instructions", font_size=20, color=GREY_A),
-            label(r"entered only at the top, \ left only at the bottom", font_size=20, color=GREY_A),
+            label("normal flow: top entry, bottom transfer; traps or nonreturning calls can interrupt", font_size=20, color=GREY_A),
             label(r"a \textbf{leader} starts one: \ the first instruction,", font_size=20, color=GREY_A),
             label(r"every jump target, \ and whatever follows a jump", font_size=20, color=GREY_A),
             label(r"the \textbf{control-flow graph}: \ blocks as nodes,", font_size=20, color=HEAD),
@@ -132,15 +135,18 @@ class IR(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(defs, DOWN, buff=0.5).align_to(defs, LEFT)
         back = cfg.edges[("endif6", "while1")]
         with self.voiceover(
-            "Those pieces have a name. <bookmark mark='a'/> A basic block is a straight run of instructions, "
-            "entered only at its top and left only at its bottom: once the first instruction runs, they all do. "
-            "To find the blocks, mark the leaders: the first instruction, every jump target, and every instruction "
-            "right after a jump. Each leader starts a block. <bookmark mark='b'/> The control-flow graph has the "
-            "blocks as its nodes and an edge wherever control can pass from one to the next. Frances Allen worked "
-            "out this representation, and the analyses built on it, at IBM around 1970. <bookmark mark='c'/> The "
-            "whole list version of the Job lowers to two hundred and seven instructions in sixty-one blocks. "
-            "<bookmark mark='d'/> And a loop is a cycle in the graph. The optimizer will spend most of its effort "
-            "on cycles like this one, because that is where a program spends its time."
+            (
+            "The graph's straight-line pieces are basic blocks. <bookmark mark='a'/> Under normal control flow, "
+            "entry is at the first instruction and transfer is at the terminator. A trap, exception or "
+            "nonreturning call can prevent later instructions from running, so entering a block does not "
+            "unconditionally guarantee that every instruction finishes. Leaders include the first instruction, "
+            "branch targets and instructions after transfers; richer exception models add their own boundaries. "
+            "<bookmark mark='b'/> A control-flow graph has blocks as nodes and possible transfers as edges. "
+            "Frances Allen's work helped establish compiler control-flow analysis. <bookmark mark='c'/> The "
+            "displayed whole-Job counts come from our actual lowered representation. <bookmark mark='d'/> Cycles "
+            "identify repeated control paths. Dominance later isolates natural loops; profiling and input "
+            "behavior determine which cycles dominate the execution cost."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(cfg))
             vo.wait_until("a")
@@ -169,22 +175,15 @@ class IR(VoiceoverScene):
         lo.align_to(ours, LEFT)
         lt = label(r"LLVM IR, \ from clang, \ for the same function written in C", font_size=20,
                    color=FUNC).next_to(theirs, UP, buff=0.12).align_to(theirs, LEFT)
-        foot = label(r"GCC's GIMPLE, \ Java's bytecode, \ LLVM IR: \ three-address code with types", font_size=21,
+        foot = label("GIMPLE and LLVM: register-like IR; Java bytecode: stack-based", font_size=21,
                      color=HEAD).to_edge(DOWN, buff=0.45)
-        with self.voiceover(
-            "Industrial compilers look the same inside. <bookmark mark='a'/> Here is our body block, <bookmark "
-            "mark='b'/> and here is the LLVM IR that clang produces for the same function written in C. It "
-            "sign-extends the index to sixty-four bits, computes the element's address with an instruction called "
-            "getelementptr, which scales by the element size for us, loads, compares and branches. The same five "
-            "steps. <bookmark mark='c'/> GCC's GIMPLE, Java's bytecode and LLVM IR are all three-address code, or "
-            "close to it, with a type on every value."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(lo), FadeIn(ours))
-            vo.wait_until("b")
+        with self.voiceover("We can compare the same function in an industrial compiler. <bookmark mark='a'/> Here is our body block. <bookmark mark='b'/> Beside it is the LLVM IR emitted by the recorded Clang build for the C version. It extends the index for this target's pointer arithmetic, computes an element address with getelementptr, loads, compares and branches. The address calculation does not itself access memory. <bookmark mark='c'/> GCC's GIMPLE and LLVM IR also expose simple operations and explicit control flow, though their instructions, types and semantics differ. Java bytecode is stack based; a JIT can translate it into a different internal representation for optimization.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(lo), FadeIn(ours), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(lt), FadeIn(theirs))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(foot))
         self.wait(0.3)
         self.clear_scene()

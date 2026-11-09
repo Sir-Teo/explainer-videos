@@ -117,20 +117,13 @@ class ISel(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(steps, DOWN, buff=0.5).align_to(steps, LEFT)
         note = label(r"greedy, \ linear time, \ and what our compiler does", font_size=22, color=HEAD).to_edge(
             DOWN, buff=0.6)
-        with self.voiceover(
-            "How should the tiles be chosen? The simplest method is called maximal munch. <bookmark mark='a'/> "
-            "Start at the root of the tree, choose the largest tile that matches there, and recurse on whatever "
-            "subtrees hang below the tile's leaves. Then emit the instructions in reverse, so that operands are "
-            "computed before the operations that use them. <bookmark mark='b'/> For a load from p plus twelve, the "
-            "largest tile is the load with an offset, one instruction, rather than an add followed by a load. "
-            "<bookmark mark='c'/> It is greedy and takes linear time, and it is what our compiler does."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(s) for s in steps], lag_ratio=0.5), run_time=4)
-            vo.wait_until("b")
+        with self.voiceover("How should the tiles be chosen? The simplest method is called maximal munch. <bookmark mark='a'/> Start at the root of the tree, choose the largest tile that matches there, and recurse on whatever subtrees hang below the tile's leaves. Then emit the instructions in reverse, so that operands are computed before the operations that use them. <bookmark mark='b'/> For a load from p plus twelve, the largest tile is the load with an offset, one instruction, rather than an add followed by a load. <bookmark mark='c'/> It is greedy and takes linear time, and it is what our compiler does.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(s) for s in steps], lag_ratio=0.5), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(ex))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(note))
         self.wait(0.3)
         self.clear_scene()
@@ -146,31 +139,18 @@ class ISel(VoiceoverScene):
                   color=GREY_A),
             label(r"Aho and Johnson, \ 1976; \ generated from a grammar of tiles: \ BURS, \ iburg \ (1992)",
                   font_size=22, color=GREY_A),
-            label(r"munch's result is \textit{locally} optimal: \ no two tiles merge into a cheaper one; \ on a RISC "
-                  r"machine, \ rarely worse", font_size=21, color=YES),
+            label("greedy matching need not minimize cost for arbitrary tile sets", font_size=21, color=YES),
             label(r"real IRs are DAGs, \ not trees: \ optimal DAG tiling is NP-hard", font_size=21, color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(eq, DOWN, buff=0.5)
-        with self.voiceover(
-            "Greedy choices are not always the cheapest. <bookmark mark='a'/> The cheapest tiling can be found by "
-            "dynamic programming: the best cost of covering the subtree at v is the minimum, over every tile "
-            "that matches at v, of that tile's cost plus the best costs of the subtrees at its leaves. <bookmark "
-            "mark='b'/> Computed bottom-up, each subtree is solved once, and for a fixed set of tiles the whole "
-            "tree takes linear time. Aho and Johnson gave the method in 1976, and tools like iburg generate such "
-            "selectors from a grammar of tiles. <bookmark mark='c'/> Maximal munch's answer is only locally "
-            "optimal: no two of its tiles could merge into a cheaper one. On a simple RISC machine like Pebble, "
-            "with few and uniform instructions, that is rarely worse than the true optimum. "
-            "<bookmark mark='d'/> One caution: real IRs are graphs that share subexpressions, not trees, and tiling "
-            "a directed acyclic graph optimally is NP-hard. So production compilers, LLVM included, cut the graph "
-            "into trees or use good heuristics."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(eq), run_time=2)
-            vo.wait_until("b")
+        with self.voiceover("The largest matching tile need not have the lowest total cost. <bookmark mark='a'/> For a tree and a specified set of legal tiles, dynamic programming records the cheapest way to produce each required result form at a node: the tile's cost plus the best costs of its uncovered subtrees. <bookmark mark='b'/> Compute those states bottom-up. With fixed patterns and bounded matching work, this takes linear time in the tree size. Aho and Johnson developed optimal expression-tree selection, and tools such as iburg generate selectors from rules. <bookmark mark='c'/> Maximal munch uses a simpler greedy choice. Its quality depends on the tiles and costs; it does not establish minimum cost for arbitrary instruction sets. <bookmark mark='d'/> Shared subexpressions turn a tree into a DAG. General optimal DAG covering is NP-hard under the relevant selection models, so practical compilers combine decomposition and heuristics. That hardness claim does not make every restricted DAG case hard.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(Write(eq), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(pts[:3]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(pts[3]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(pts[4]))
         self.wait(0.3)
         self.clear_scene()

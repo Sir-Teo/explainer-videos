@@ -28,44 +28,37 @@ class Frontier(VoiceoverScene):
         pts = VGroup(
             label(r"they apply rules that usually help; \ nothing says the result is the best", font_size=22,
                   color=GREY_A),
-            label(r"and no compiler can always find the best:", font_size=22, color=GREY_A),
+            label("exact semantic questions can be undecidable in an unbounded language", font_size=22, color=GREY_A),
         ).arrange(DOWN, buff=0.2).next_to(head, DOWN, buff=0.5)
-        loop = code(["loop:  j loop"], size=24, color=YES).next_to(pts, DOWN, buff=0.5)
+        loop = VGroup(code(["simulate M silently;", "print(1);"], size=22, color=DATA),
+                      MathTex(r"\stackrel{?}{\equiv}", font_size=36, color=HEAD),
+                      code(["loop:  j loop"], size=22, color=YES)).arrange(
+                          RIGHT, buff=0.65).next_to(pts, DOWN, buff=0.45)
         why = VGroup(
-            label(r"the smallest program that runs forever and prints nothing", font_size=21, color=GREY_A),
-            label(r"a compiler that always found the smallest program \ would output this exactly when the input "
-                  r"never halts", font_size=21, color=GREY_A),
-            label(r"so it would decide the halting problem: \ impossible \ (Part 25)", font_size=22, color=NO),
+            label(r"unbounded semantics: the left program prints if and only if $M$ halts", font_size=21, color=GREY_A),
+            label(r"equivalent to the silent loop if and only if $M$ never halts", font_size=21, color=GREY_A),
+            label(r"an exact equivalence decider would decide halting (Part 25)", font_size=22, color=NO),
             label(r"``the full employment theorem for compiler writers''", font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.2).next_to(loop, DOWN, buff=0.4)
-        with self.voiceover(
-            "Despite the name, an optimizing compiler does not optimize. <bookmark mark='a'/> It applies rules "
-            "that usually help, and nothing guarantees that the result is the best program possible. <bookmark "
-            "mark='b'/> In fact no compiler can always find the best. Consider this program: one instruction that "
-            "jumps to itself. It is the smallest program that runs forever and prints nothing. <bookmark "
-            "mark='c'/> A compiler that always produced the smallest equivalent program would output exactly this "
-            "whenever its input never halts, and so it would decide the halting problem. <bookmark mark='d'/> "
-            "Andrew Appel calls this the full employment theorem for compiler writers: there will always be a "
-            "better optimizer to build. But for short pieces of code, we can search."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(pts[0]))
-            vo.wait_until("b")
+        with self.voiceover("An optimizing compiler usually improves a program according to selected costs; it does not promise the best equivalent program. <bookmark mark='a'/> Even deciding whether a particular replacement is legal can be impossible in a general language with unbounded computation. <bookmark mark='b'/> Consider a program that simulates an arbitrary machine M and prints a character if M halts. A silent infinite loop has the same observable behavior precisely when M never halts. <bookmark mark='c'/> An always-correct decision procedure for that equivalence would decide halting. This argument needs the unbounded semantic model; a fixed finite-memory Pebble machine has a finite state space, even if exhaustive analysis is impractical. It also does not assume an optimizer chooses one canonical spelling among equally short programs. <bookmark mark='d'/> Appel's full-employment theme is that compiler improvement keeps confronting such limits. For small restricted instruction fragments, however, candidate search and proof can still be useful.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(pts[0]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(pts[1]), FadeIn(loop), FadeIn(why[0]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(why[1:3]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(why[3]))
         self.wait(0.3)
         self.clear_scene()
 
     def superopt(self):
         so = load("superopt")
-        head = label(r"Superoptimization: \ try every program, \ shortest first", font_size=32).to_edge(UP, buff=0.3)
+        head = label("Superoptimization: search candidates, then prove them", font_size=32).to_edge(UP, buff=0.3)
         steps = VGroup(
             label(r"1. \ enumerate Pebble sequences of length 1, 2, 3, ...", font_size=20, color=GREY_A),
-            label(r"2. \ run each on 32 test inputs; \ discard any that differ from the target", font_size=20,
+            label("2. \\ filter on a fixed finite test set; observation pruning is incomplete", font_size=20,
                   color=GREY_A),
             label(r"3. \ prove the survivors with z3, \ for all $2^{32}$ inputs", font_size=20, color=GREY_A),
             label(r"Massalin, \ 1987: \ found tricks no human had", font_size=20, color=HEAD),
@@ -75,33 +68,22 @@ class Frontier(VoiceoverScene):
             rows.append([t["name"], str(t["length"]), "; ".join(" ".join(x.split()) for x in t["program"]),
                          f"{t['seconds']:.2f} s"])
             cols.append([WHITE, YES, WHITE, GREY_B])
-        tab = grid_table([r"target", r"length", r"shortest Pebble program \ (proved)", r"search"], rows,
+        tab = grid_table([r"target", r"length", "found Pebble candidate (SMT-proved)", r"search + SMT"], rows,
                          widths=[2.3, 1.1, 7.4, 1.4], row_h=0.42, font_size=17, colors=cols,
                          mono_cols=(0, 2)).next_to(steps, DOWN, buff=0.35).set_x(0)
         absrow = [k for k, t in enumerate(so["targets"]) if t["name"] == "|x|"][0]
-        explain = label(r"$|x|$: \ $m = x \gg 31$ \ is 0 or $-1$; \ then \ $(x + m) \oplus m$: \ for $x < 0$, \ subtract one "
-                        r"and flip every bit, \ which is $-x$", font_size=19, color=HEAD).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "In 1987 Henry Massalin built the first superoptimizer. <bookmark mark='a'/> Enumerate every instruction "
-            "sequence of length one, then two, then three. Run each on a few dozen test inputs, and throw away any "
-            "that disagrees with the target function. <bookmark mark='b'/> Then prove the survivors correct for "
-            "every input. Massalin checked his mostly by hand; we can ask z3. <bookmark mark='c'/> Ours finds "
-            "the shortest Pebble programs for these small functions. Is x nonzero: one instruction. Is x equal to "
-            "y: two. Clear the lowest set bit: two. <bookmark mark='d'/> Absolute value without a branch: three. "
-            "Shift right by thirty-one, which gives zero or minus one; add it; exclusive-or with it. For a negative "
-            "x, that subtracts one and flips every bit, which is negation. Signed division by two, correct for "
-            "negative numbers: three. And the minimum of two numbers, with no branch: four, using a multiply."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(steps[:2]))
-            vo.wait_until("b")
+        explain = label("$|x|$: \\ $(x+(x\\gg31))\\oplus(x\\gg31)$; \\ wraps at $x=-2^{31}$", font_size=19, color=HEAD).to_edge(DOWN, buff=0.3)
+        with self.voiceover("Massalin's 1987 superoptimizer searched small instruction sequences. Our demonstration borrows that idea, with an important limit. <bookmark mark='a'/> It searches increasing candidate lengths over selected register operations, immediate forms and available values. Finite test inputs reject many candidates quickly. <bookmark mark='b'/> A separate z3 check asks whether each survivor equals its specification for every encoded thirty-two-bit input. That proof concerns the arithmetic fragment and specified output, not memory, calling conventions or an entire compiler. <bookmark mark='c'/> The table shows short sequences whose equivalence checks succeeded. Our pruning merges prefixes that agree only on finite tests, so the search can miss useful alternatives. The first found length is not a certificate of global shortestness, even though an accepted equivalence proof is meaningful. <bookmark mark='d'/> The absolute-value sequence uses arithmetic sign shift, addition and exclusive-or. At the most negative signed word, the mathematical positive answer is unrepresentable; the specification returns the wrapped word. Signed division by two instead needs rounding toward zero. The min sequence is checked against signed comparison, including extreme inputs.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(steps[:2]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(steps[2:]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(tab.rule), *[FadeIn(c) for c in tab.cells[0]])
             for r in tab.cells[1:5]:
                 self.play(*[FadeIn(c) for c in r], run_time=0.5)
-            vo.wait_until("d")
+            vo.wait_until('d')
             for r in tab.cells[5:]:
                 self.play(*[FadeIn(c) for c in r], run_time=0.5)
             self.play(Indicate(VGroup(*tab.cells[absrow + 1]), color=HEAD), FadeIn(explain))
@@ -110,47 +92,42 @@ class Frontier(VoiceoverScene):
 
     def cost(self):
         so = load("superopt")
-        head = label(r"The price: \ exponential", font_size=34).to_edge(UP, buff=0.3)
+        head = label(r"Candidate-search cost on this host", font_size=34).to_edge(UP, buff=0.3)
         best = {}
         for t in so["targets"]:
             best[t["length"]] = max(best.get(t["length"], 0), t["seconds"])
         ks = sorted(best)
         ch = VGroup()
-        ax = Axes(x_range=[0.5, 4.5, 1], y_range=[0, 6, 1], x_length=5.5, y_length=4.0,
+        import math
+        assert all(value > 0 for value in best.values())
+        y_max = max(6, math.ceil(max(3 + math.log10(value) for value in best.values()) + 0.75))
+        ax = Axes(x_range=[0.5, 4.5, 1], y_range=[0, y_max, 1], x_length=5.5, y_length=4.0,
                   axis_config={"color": GREY_D, "include_ticks": True},
                   y_axis_config={"include_numbers": False}).move_to(LEFT * 2.6 + DOWN * 0.3)
         ylab = VGroup(*[label(t, font_size=15, color=GREY_B).next_to(ax.c2p(0.5, y), LEFT, buff=0.1)
                         for y, t in ((1, r"10 ms"), (3, r"1 s"), (5, r"100 s"))])
         xlab = VGroup(*[label(str(k), font_size=16, color=GREY_B).next_to(ax.c2p(k, 0), DOWN, buff=0.1)
                         for k in ks])
-        xt = label(r"program length", font_size=17, color=GREY_B).next_to(ax, DOWN, buff=0.45)
+        xt = label(r"found body length (different target functions)", font_size=17, color=GREY_B).next_to(ax, DOWN, buff=0.45)
         import math
         dots = VGroup(*[Dot(ax.c2p(k, 3 + math.log10(best[k])), color=NO, radius=0.08) for k in ks])
         line = VMobject(color=NO, stroke_width=2).set_points_as_corners([d.get_center() for d in dots])
         vals = VGroup(*[label(f"{best[k]:.3f} s" if best[k] < 1 else f"{best[k]:.0f} s", font_size=15,
                               color=NO).next_to(dots[i], UP + LEFT * 0.3, buff=0.1) for i, k in enumerate(ks)])
         side = VGroup(
-            label(r"each instruction: \ about 20 operations $\times$ every pair of registers so far", font_size=19,
+            label("11 register operations + selected immediate forms; restricted search vocabulary", font_size=19,
                   color=GREY_A),
-            label(r"so each extra instruction multiplies the search by hundreds", font_size=19, color=GREY_A),
+            label("more available operands increase the branching of the candidate search", font_size=19, color=GREY_A),
             label(r"pruning helps: \ skip any value already computed \ (observational equivalence)", font_size=19,
                   color=GREY_A),
-            label(r"but brute force stops at about 5 instructions", font_size=21, color=NO),
+            label("this run searches through length 4; no universal five-instruction cutoff", font_size=21, color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.4)
-        with self.voiceover(
-            "The catch is the cost. <bookmark mark='a'/> The longest search at each length: a few milliseconds for "
-            "one instruction, under a second for three, and four minutes for the four-instruction minimum, on a "
-            "logarithmic scale. <bookmark mark='b'/> Each new instruction can be any of twenty operations, on any "
-            "pair of the registers computed so far, so each extra instruction multiplies the search by hundreds. "
-            "Pruning helps: a sequence whose new value was already computed some shorter way is skipped. But brute "
-            "force runs out at about five instructions, far short of a whole function."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Create(ax), FadeIn(ylab), FadeIn(xlab), FadeIn(xt))
-            self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.4), Create(line), FadeIn(vals),
-                      run_time=2.5)
-            vo.wait_until("b")
+        with self.voiceover("Search has a measurable cost. <bookmark mark='a'/> This plot groups the recorded runs by their reported candidate length and takes the longest elapsed time in each group. The vertical axis is logarithmic. These are host measurements for these target functions and this implementation, including the work performed by its proof checks. They are not universal times for all programs of a given length. <bookmark mark='b'/> Each extra candidate instruction introduces choices of operation, operands and selected immediate constants. The search grows rapidly, while finite-test pruning reduces work at the price of completeness. We stop at the configured length bound. Neither four observed lengths nor that chosen limit proves a universal five-instruction barrier.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(Create(ax), FadeIn(ylab), FadeIn(xlab), FadeIn(xt), run_time=0.6)
+            vo.wait_until('a')
+            self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.4), Create(line), FadeIn(vals), run_time=2.5)
+            vo.wait_until('b')
             self.play(LaggedStart(*[FadeIn(s) for s in side], lag_ratio=0.6), run_time=5)
         self.wait(0.3)
         self.clear_scene()
@@ -162,7 +139,7 @@ class Frontier(VoiceoverScene):
                    label(r"Schkufza, Sharma, Aiken, \ 2013", font_size=18, color=GREY_B),
                    label(r"a random walk over x86 programs (Markov chain Monte Carlo), \ cost $=$ wrongness on "
                          r"tests $+$ estimated time;", font_size=19, color=GREY_A),
-                   label(r"found loops faster than \texttt{gcc -O3} and as fast as expert assembly", font_size=19,
+                   label("reported gains on selected kernels, compilers and evaluation machines", font_size=19,
                          color=GREY_A)),
             VGroup(label(r"Souper", font_size=24, color=CTRL),
                    label(r"Sasnauskas, Regehr et al., \ 2017", font_size=18, color=GREY_B),
@@ -174,7 +151,7 @@ class Frontier(VoiceoverScene):
                    label(r"Mankowitz et al., \ 2023", font_size=18, color=GREY_B),
                    label(r"reinforcement learning over assembly for sorting 3 to 5 numbers;", font_size=19,
                          color=GREY_A),
-                   label(r"shorter routines, \ merged into LLVM's C++ library", font_size=19, color=GREY_A)),
+                   label("particular routines improved; derived code entered LLVM libc++", font_size=19, color=GREY_A)),
         )
         for r in rows:
             r[0].move_to([-5.4, 0, 0], aligned_edge=LEFT)
@@ -185,16 +162,20 @@ class Frontier(VoiceoverScene):
             r[0].set_x(-5.4 + r[0].width / 2)
             VGroup(r[1], r[2], r[3]).set_x(-3.2 + VGroup(r[1], r[2], r[3]).width / 2)
         with self.voiceover(
-            "Smarter search goes further. <bookmark mark='a'/> STOKE, from Stanford in 2013, takes a random walk "
-            "through the space of x86 programs. Each step changes one instruction, and a step is kept with a "
-            "probability that depends on a cost: how wrong the program is on the tests, plus how slow it is "
-            "estimated to be. Walking downhill, mostly, it found loop bodies faster than gcc at its highest level, "
-            "and as fast as expert hand-written assembly. <bookmark mark='b'/> Souper, from 2017, uses an SMT "
-            "solver to synthesize smaller replacements for pieces of LLVM IR, and reports what it finds as "
-            "optimizations the compiler is missing. Many have since been added to LLVM by hand. <bookmark "
-            "mark='c'/> And AlphaDev, from DeepMind in 2023, used reinforcement learning to search assembly "
-            "programs that sort three, four and five numbers. Its routines were shorter than the human ones, and "
-            "they are now in LLVM's C++ library."
+            (
+            "Search can use stronger guidance than plain enumeration. <bookmark mark='a'/> STOKE, introduced in "
+            "2013, explores x86 program fragments stochastically, using test errors and a performance objective "
+            "to guide proposals. Its reported gains belong to selected kernels, comparison compilers and "
+            "evaluation machines. Testing and the applicable validation method remain essential. <bookmark "
+            "mark='b'/> Souper uses solver-guided synthesis to find replacements for fragments of LLVM "
+            "intermediate code. Such findings can expose missed optimizations; neither search method promises the "
+            "best program for every function. <bookmark mark='c'/> AlphaDev's 2023 study searched assembly "
+            "routines for small sorting tasks. It improved particular three- and five-element instruction "
+            "sequences and matched the comparison length for four elements. Derived C++ routines entered LLVM's "
+            "libc++ sorting implementation. The measured latency and library gains depend on the study's routines "
+            "and workloads; this does not prove universal shortest sorting or a speedup for every input and "
+            "machine."
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, r in zip("abc", rows):
@@ -215,7 +196,7 @@ class Frontier(VoiceoverScene):
         return g
 
     def egraph(self):
-        head = label(r"Equality saturation: \ keep every version at once", font_size=32).to_edge(UP, buff=0.3)
+        head = label("Equality saturation: retain equivalent alternatives", font_size=32).to_edge(UP, buff=0.3)
         start = mono("(a * 2) * 2", 24, CODE).next_to(head, DOWN, buff=0.35)
         rules = VGroup(*[mono(r, 15, GREY_A) for r in ("x * 2  →  x << 1", "(x * y) * z  →  x * (y * z)",
                                                        "2 * 2  →  4", "x * 4  →  x << 2")]).arrange(
@@ -242,26 +223,29 @@ class Frontier(VoiceoverScene):
         notes = VGroup(
             label(r"an \textbf{e-graph}: \ each dashed class holds expressions known to be equal", font_size=19,
                   color=GREY_A),
-            label(r"apply every rule everywhere, \ until nothing new appears; \ then extract the cheapest",
+            label("apply sound rules subject to resource limits; extract under a stated cost model",
                   font_size=19, color=GREY_A),
-            label(r"no phase-ordering problem: \ nothing is ever thrown away", font_size=19, color=YES),
+            label("retained alternatives reduce commitment to an early rewrite order", font_size=19, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_edge(DOWN, buff=0.2).to_edge(RIGHT, buff=0.3)
         for n in notes:
             if n.width > 6.0:
                 n.width = 6.0
         with self.voiceover(
-            "A newer idea attacks the phase-ordering problem of chapter seven head on. <bookmark mark='a'/> Take a "
-            "times two, times two, and four rewrite rules, all true for thirty-two-bit integers. <bookmark "
-            "mark='b'/> Apply one rule at a time and the order matters. Turn the inner multiply into a shift first, "
-            "and you end with two shifts; the rule that would have combined the multiplies no longer applies. "
-            "<bookmark mark='c'/> Equality saturation never chooses. It keeps an e-graph, in which each class "
-            "holds expressions already known to be equal. a times two and a shifted by one share a class. So do two "
-            "times two, and four. <bookmark mark='d'/> The whole expression's class collects every version the "
-            "rules can reach: c one times two, c one shifted by one, a times c four, and a shifted by two. Rules are "
-            "applied everywhere, again and again, until nothing new appears. <bookmark mark='e'/> Then the "
-            "cheapest version is extracted: a single shift by two. Tate and others introduced the idea in 2009, "
-            "and the egg library of 2021 made it fast; it is now used in compilers for hardware, for "
-            "floating-point accuracy, and in Cranelift, a production code generator."
+            (
+            "Equality saturation keeps alternatives instead of committing to the first rewrite. <bookmark "
+            "mark='a'/> In this example, a times two times two uses rules valid for our wrapping thirty-two-bit "
+            "words. Other integer and floating-point semantics require their own rules. <bookmark mark='b'/> A "
+            "one-way pass might turn the inner multiply into a shift before a multiplication-combining rule sees "
+            "it. That illustrates a phase-ordering choice. <bookmark mark='c'/> An e-graph stores equivalence "
+            "classes and shared expression structure. It can retain a times two and a shifted left by one as "
+            "alternatives in one class. <bookmark mark='d'/> Rewriting expands and merges these classes. Our "
+            "small example reaches the displayed alternatives, but general saturation need not terminate or stay "
+            "small. Practical systems stop at time, size or iteration limits. <bookmark mark='e'/> Extraction "
+            "chooses a represented expression under a specified cost model; here a single shift by two wins. "
+            "Optimal tree-cost extraction is different from optimizing shared programs or proving global "
+            "machine-code optimality. Tate and colleagues introduced equality saturation, and egg made it "
+            "practical for many applications with domain-specific rewrite rules."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(start))
             vo.wait_until("a")
@@ -284,21 +268,26 @@ class Frontier(VoiceoverScene):
                   font_size=21, color=GREY_A),
             label(r"\textbf{MLGO} \ (Trofin et al., \ Google, \ 2021): \ a learned inlining policy in LLVM, \ "
                   r"trained by reinforcement learning", font_size=20, color=GREY_A),
-            label(r"a few percent smaller code, \ in production; \ later a learned register-eviction policy",
+            label("documented MLGO objectives: inlining for size; register eviction for performance",
                   font_size=20, color=YES),
             label(r"the hard part: \ the guess must be cheap, \ and stay good when the code changes", font_size=20,
                   color=NO),
             label(r"how such policies are trained: \ \textit{AI, Built}", font_size=20, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(head, DOWN, buff=0.6)
         with self.voiceover(
-            "The other direction is to learn. <bookmark mark='a'/> A compiler is full of guesses. Inline this "
-            "call? Spill which value? Unroll this loop how far? Each is a hand-tuned heuristic. <bookmark "
-            "mark='b'/> In 2021 Google's MLGO project replaced LLVM's inlining heuristic with a small neural "
-            "network, trained by reinforcement learning to make code smaller, and later did the same for which "
-            "value the register allocator evicts. <bookmark mark='c'/> It saves a few percent of code size in "
-            "production. <bookmark mark='d'/> The difficulties are practical: the guess must be fast, since it "
-            "runs millions of times, and it must stay good as the programs being compiled change. <bookmark "
-            "mark='e'/> How such policies are trained is the subject of our companion series, AI, Built."
+            (
+            "Another direction is to learn selected optimization choices. <bookmark mark='a'/> Compilers contain "
+            "heuristics for inlining, register eviction and loop transformations. A learned policy can replace "
+            "one of those choices while the compiler still enforces its correctness constraints. <bookmark "
+            "mark='b'/> Google's MLGO project introduced learned inlining decisions aimed at smaller code. LLVM's "
+            "current documentation also describes a learned greedy register-allocation eviction policy aimed at "
+            "performance. Those are different objectives. <bookmark mark='c'/> Reported code-size savings concern "
+            "particular trained models, software corpora and deployments; they are not a promise for every "
+            "program or for the register policy. <bookmark mark='d'/> The practical challenge is to make each "
+            "decision cheap, measure the result on the target workload, and keep the policy useful as code and "
+            "compilers change. <bookmark mark='e'/> Our companion series, AI, Built, develops the learning "
+            "methods behind such policies."
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, p in zip("abcde", pts):
@@ -310,32 +299,25 @@ class Frontier(VoiceoverScene):
     def open(self):
         head = label(r"Open questions", font_size=36).to_edge(UP, buff=0.35)
         qs = VGroup(
-            label(r"SSA graphs colour easily, \ but spilling and coalescing on them are NP-hard: \ what can be "
-                  r"approximated, \ and how well?", font_size=21, color=GREY_A),
+            label("spilling research: distinguish fixed/input register counts, holes and cost models", font_size=21, color=GREY_A),
             label(r"extracting the cheapest program from an e-graph is NP-hard when costs are shared: \ which "
                   r"cost models are tractable?", font_size=21, color=GREY_A),
-            label(r"a verified compiler as fast as \texttt{-O3}: \ CompCert performs roughly like \texttt{gcc -O1}",
+            label("verified optimization: compare supported features, targets and measured workloads",
                   font_size=21, color=GREY_A),
-            label(r"superoptimizing whole loops, \ not just five instructions: \ search, \ proof, \ or learning?",
+            label("loop synthesis adds state, memory, invariants and termination questions",
                   font_size=21, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(head, DOWN, buff=0.6)
         star = label(r"$\bigstar$ \ the part's research problem takes the first one", font_size=22,
                      color=HEAD).to_edge(DOWN, buff=0.6)
-        with self.voiceover(
-            "Here is where the field stands. <bookmark mark='a'/> SSA programs colour optimally in linear time, "
-            "but deciding what to spill, and which copies to coalesce, remains NP-hard even on SSA. How well can "
-            "these be approximated? <bookmark mark='b'/> Extracting the cheapest program from an e-graph is "
-            "NP-hard once parts can be shared; which cost models are tractable? <bookmark mark='c'/> CompCert is "
-            "proved correct, but its code runs at about the speed of gcc at level one. Can a verified compiler "
-            "match level three? <bookmark mark='d'/> And can we superoptimize whole loops rather than five "
-            "instructions, by search, by proof, or by learning? <bookmark mark='e'/> The research problem of this "
-            "part takes up the first of these."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, q in zip("abcd", qs):
-                vo.wait_until(mk)
+        with self.voiceover("These directions require carefully stated problems. <bookmark mark='a'/> Strict SSA makes uniform-register graph coloring tractable. Spill selection and copy coalescing add different optimization problems. For spill-everywhere without holes, a fixed number of registers already has known polynomial algorithms; allowing that number as input can make the chordal-graph problem hard. The notes separate these cases. <bookmark mark='b'/> E-graph extraction depends on whether costs count expression occurrences or shared computations. Some formulations admit simple dynamic programming; sharing and extra constraints can create harder problems. <bookmark mark='c'/> Verified optimization also faces an engineering frontier: supported language features, target coverage, proof effort, compilation time and generated-code performance. CompCert's published speed comparisons name particular targets and compiler versions. They are not a universal ranking against current optimization levels. <bookmark mark='d'/> Extending synthesis and validation to loops adds state, memory, invariants and termination questions. No five-instruction cutoff defines that entire field. <bookmark mark='e'/> Our starred exercise starts by reproducing a known restricted spilling result, then asks for a precisely scoped research investigation.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            for mk, q in zip('abcd', qs):
+                if mk != 'a':
+                    vo.wait_until(mk)
                 self.play(FadeIn(q, shift=RIGHT * 0.1))
-            vo.wait_until("e")
+                if mk == 'a':
+                    vo.wait_until(mk)
+            vo.wait_until('e')
             self.play(FadeIn(star))
         self.wait(0.3)
         self.clear_scene()

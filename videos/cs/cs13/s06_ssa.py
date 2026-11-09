@@ -34,24 +34,15 @@ class SSA(VoiceoverScene):
                          for a, b in ((2, 4), (3, 4))])
         join = label(r"but at a join, \ which definition arrives depends on the path taken", font_size=22,
                      color=NO).next_to(q, DOWN, buff=0.35)
-        with self.voiceover(
-            "In our IR the variable s is assigned in three places: in the entry, in then, and in else. To know "
-            "anything about a use of s, the compiler must first work out which assignments could have produced its "
-            "value. <bookmark mark='a'/> In straight-line code there is a simple cure. <bookmark mark='b'/> Give "
-            "every assignment a fresh name, s one, s two, s three, and rewrite each use to the name that reaches "
-            "it. <bookmark mark='c'/> Now every name is defined exactly once, and every use points at exactly one "
-            "definition. Facts about s three are facts about one instruction, true wherever s three appears. "
-            "<bookmark mark='d'/> The difficulty is where control flow joins. After an if, which name holds s? It "
-            "depends on which branch ran."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(before))
-            vo.wait_until("b")
+        with self.voiceover("In our IR the variable s is assigned in three places: in the entry, in then, and in else. To know anything about a use of s, the compiler must first work out which assignments could have produced its value. <bookmark mark='a'/> In straight-line code there is a simple cure. <bookmark mark='b'/> Give every assignment a fresh name, s one, s two, s three, and rewrite each use to the name that reaches it. <bookmark mark='c'/> Now every name is defined exactly once, and every use points at exactly one definition. Facts about s three are facts about one instruction, true wherever s three appears. <bookmark mark='d'/> The difficulty is where control flow joins. After an if, which name holds s? It depends on which branch ran.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(before), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(GrowArrow(arr), FadeIn(after))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(q), Create(links))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(join))
         self.wait(0.3)
         self.clear_scene()
@@ -80,14 +71,17 @@ class SSA(VoiceoverScene):
                                                                             if bb["label"] == b)["ins"]])
                             if "φ" in txt])
         with self.voiceover(
-            "SSA's answer is a new kind of instruction, the phi function. <bookmark mark='a'/> Here is total "
-            "in SSA form. At endif, s dot five is defined as phi of s dot four from then, and s dot three from "
-            "else. <bookmark mark='b'/> Read it as: s dot five is s dot four if control arrived from then, and s dot "
-            "three if it arrived from else. A phi is not an instruction any machine has. It is a note about "
-            "edges, and before the back end runs it will become copies. <bookmark mark='c'/> The loop header "
-            "needs phis too. i dot two is i dot one the first time we reach the test, coming from the entry, and "
-            "i dot three every later time, coming back around from endif. The same holds for s. <bookmark "
-            "mark='d'/> Three phis in all, for two variables."
+            (
+            "SSA represents a control-flow join with a phi function. <bookmark mark='a'/> In total, the join's s "
+            "dot five selects s dot four from then or s dot three from else. <bookmark mark='b'/> The operand is "
+            "selected by the incoming edge. A phi does not evaluate both alternatives as an ordinary function "
+            "call would, and all phis at a block entry take their incoming values simultaneously. They are "
+            "bookkeeping for values, rather than a Pebble machine instruction. <bookmark mark='c'/> The loop "
+            "header has the same issue: i dot two takes i dot one from entry on the first visit and i dot three "
+            "from the back edge on later visits. The running sum needs another phi. <bookmark mark='d'/> This "
+            "example has three phis for two source variables. When leaving SSA, the compiler must implement edge "
+            "copies safely, including critical edges and simultaneous-copy cycles."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(cfg))
             vo.wait_until("a")
@@ -181,28 +175,40 @@ class SSA(VoiceoverScene):
         stack_s.arrange(UP, buff=0.0).move_to([4.6, -1.0, 0])
         st_t = label(r"the stack for $s$, \ inside \texttt{then5}", font_size=18, color=YES).next_to(stack_s, DOWN,
                                                                                                   buff=0.15)
-        why = label(r"a name defined in $d$ is visible exactly in the blocks $d$ dominates", font_size=22,
+        why = label(r"a definition must dominate each use; respect instruction order and phi edges", font_size=22,
                     color=HEAD).to_edge(DOWN, buff=0.45)
-        with self.voiceover(
-            "With the phis placed, the names are filled in by a single walk. <bookmark mark='a'/> Keep a stack of "
-            "names for each variable. Entering a block, each definition pushes a fresh name, and each use takes "
-            "whatever name is on top. <bookmark mark='b'/> At the end of the block, fill in this block's operand "
-            "of each phi in its successors. Then visit the block's children in the dominator tree, and pop the "
-            "names on the way back out. <bookmark mark='c'/> Inside then five the stack for s holds s dot one from "
-            "the entry, s dot two from the header's phi, and on top s dot four, then's own definition. <bookmark "
-            "mark='d'/> Why the dominator tree? Because a definition in d is available, along every path, exactly "
-            "in the blocks that d dominates. The tree is the program's scope structure, recovered from its graph."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r) for r in steps[:3]], lag_ratio=0.4), run_time=2)
-            vo.wait_until("b")
+        tree_positions = {"entry": (-4.4, -0.35), "while1": (-4.4, -1.25),
+                          "body2": (-4.4, -2.15), "endwhile3": (-1.8, -2.15),
+                          "then5": (-6.0, -3.0), "else7": (-4.4, -3.0), "endif6": (-2.8, -3.0)}
+        tree_nodes = {}
+        for name, (x, y) in tree_positions.items():
+            rect = RoundedRectangle(width=1.3, height=0.42, corner_radius=0.06,
+                                    stroke_color=DATA, fill_color=DATA, fill_opacity=0.12)
+            rect.move_to([x, y, 0])
+            tree_nodes[name] = VGroup(rect, mono(name, 12, WHITE).move_to(rect))
+        tree_edges = {(a, b): Arrow(tree_nodes[a][0].get_bottom(), tree_nodes[b][0].get_top(),
+                                    buff=0.04, color=GREY_D, stroke_width=1.8, tip_length=0.1)
+                      for a, children in load("dom")["tree"].items() for b in children}
+        tree_view = VGroup(*tree_edges.values(), *tree_nodes.values())
+        active_path = ("entry", "while1", "body2", "then5")
+        origins = dict(entry="s.1", while1="s.2", then5="s.4")
+        origin_tags = VGroup(*[mono(value, 13, YES).next_to(tree_nodes[name],
+                              UP if name == "then5" else RIGHT, buff=0.12)
+                              for name, value in origins.items()])
+        with self.voiceover("Renaming follows the dominator tree with a stack for each source variable. <bookmark mark='a'/> On entering a block, push a fresh SSA name for each definition. A use reads the current top, respecting instruction order inside the block. <bookmark mark='b'/> Fill this block's incoming operands in successor phis, visit dominator-tree children, then pop the names introduced here when returning. A phi use belongs to its incoming edge. <bookmark mark='c'/> Follow the highlighted path from entry through while one and body two to then five. The stack for s contains s dot one from entry, s dot two from the header phi, and s dot four from the current branch. On return, the branch's name is popped before a sibling is visited. <bookmark mark='d'/> Dominance ensures that a reused definition is available on every path to its use, with instruction and phi-edge positions handled correctly. The tree supplies the nested traversal structure; it does not turn arbitrary memory or side effects into immutable values.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(r) for r in steps[:3]], lag_ratio=0.4), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(LaggedStart(*[FadeIn(r) for r in steps[3:]], lag_ratio=0.4), run_time=1.5)
-            vo.wait_until("c")
-            self.play(FadeIn(st_t))
+            vo.wait_until('c')
+            self.play(FadeIn(tree_view), FadeIn(st_t))
+            for left, right in zip(active_path, active_path[1:]):
+                self.play(tree_nodes[left][0].animate.set_stroke(YES, 3), tree_edges[left, right].animate.set_color(YES), run_time=0.35)
+            self.play(tree_nodes['then5'][0].animate.set_stroke(YES, 3), FadeIn(origin_tags))
             for g in stack_s:
                 self.play(FadeIn(g, shift=DOWN * 0.2), run_time=0.5)
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(why))
         self.wait(0.3)
         self.clear_scene()
@@ -228,22 +234,13 @@ class SSA(VoiceoverScene):
             pts, LEFT)
         out = label(r"leaving SSA: \ each $\phi$ becomes a copy on each incoming edge", font_size=21,
                     color=HEAD).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "Why go to this trouble? <bookmark mark='a'/> Because once every use has exactly one definition, the "
-            "links from definitions to uses are just pointers, and a fact about a name, say that it is a constant, "
-            "is true everywhere the name appears. The analyses of the next chapters can follow these links "
-            "directly, instead of sweeping over every block again and again. <bookmark mark='b'/> Industrial "
-            "compilers agree. This is LLVM's pass called mem2reg, run by clang on the same function written in C. "
-            "Its phis sit in the same places: two at the loop header, for s and i, and one at the join after the "
-            "if. <bookmark mark='c'/> And when optimization is done, the phis are taken out again: each becomes a "
-            "copy placed on its incoming edge, which the register allocator will try to make disappear."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.5), run_time=3)
-            vo.wait_until("b")
+        with self.voiceover("Why go to this trouble? <bookmark mark='a'/> Because once every use has exactly one definition, the links from definitions to uses are just pointers, and a fact about a name, say that it is a constant, is true everywhere the name appears. The analyses of the next chapters can follow these links directly, instead of sweeping over every block again and again. <bookmark mark='b'/> Industrial compilers agree. This is LLVM's pass called mem2reg, run by clang on the same function written in C. Its phis sit in the same places: two at the loop header, for s and i, and one at the join after the if. <bookmark mark='c'/> And when optimization is done, the phis are taken out again: each becomes a copy placed on its incoming edge, which the register allocator will try to make disappear.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.5), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(g))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(out))
         self.wait(0.3)
         self.clear_scene()

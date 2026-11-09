@@ -44,27 +44,17 @@ class Dataflow(VoiceoverScene):
             label(r"why: \ a register holding a dead value is free for something else \ (chapter 11)",
                   font_size=21, color=FUNC),
         ).arrange(DOWN, buff=0.2).next_to(eqs, DOWN, buff=0.5)
-        with self.voiceover(
-            "The compiler's main tool for reasoning about a whole function is dataflow analysis. The first example "
-            "is liveness. <bookmark mark='a'/> A variable is live at a point if some path from that point uses it "
-            "before assigning it again. Its current value might still be needed. <bookmark mark='b'/> Two "
-            "equations say this for every block. A variable is live at the end of b if it is live at the start of "
-            "some successor. <bookmark mark='c'/> And it is live at the start of b if b uses it before assigning "
-            "it, or it is live at the end and b does not assign it. <bookmark mark='d'/> Information flows "
-            "backward here, from each use to the definitions before it. <bookmark mark='e'/> The answer matters "
-            "for register allocation: a register holding a value that is no longer live is free for something "
-            "else."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(defn))
-            vo.wait_until("b")
+        with self.voiceover("The compiler's main tool for reasoning about a whole function is dataflow analysis. The first example is liveness. <bookmark mark='a'/> A variable is live at a point if some path from that point uses it before assigning it again. Its current value might still be needed. <bookmark mark='b'/> Two equations say this for every block. A variable is live at the end of b if it is live at the start of some successor. <bookmark mark='c'/> And it is live at the start of b if b uses it before assigning it, or it is live at the end and b does not assign it. <bookmark mark='d'/> Information flows backward here, from each use to the definitions before it. <bookmark mark='e'/> The answer matters for register allocation: a register holding a value that is no longer live is free for something else.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(defn), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(Write(eqs[0]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(Write(eqs[1]), FadeIn(notes[0]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(notes[1]))
-            vo.wait_until("e")
+            vo.wait_until('e')
             self.play(FadeIn(notes[2]))
         self.wait(0.3)
         self.clear_scene()
@@ -186,30 +176,21 @@ class Dataflow(VoiceoverScene):
                         for a, b in zip(chain, chain[1:])])
         side = VGroup(
             label(r"sets of variables, \ ordered by $\subseteq$", font_size=21, color=GREY_A),
-            label(r"each visit can only move a set \textbf{up}", font_size=21, color=GREY_A),
+            label("bottom initialization + monotone updates: sets only grow", font_size=21, color=GREY_A),
             label(r"\texttt{IN(endif6)}: \ $\{\} \to \{i\} \to \{a, i, n, s\}$", font_size=21, color=YES),
-            label(r"the height is 4: \ no set can grow more than 4 times", font_size=21, color=HEAD),
+            label("at most four strict additions to a variable set", font_size=21, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.3).shift(DOWN * 0.3)
-        with self.voiceover(
-            "Why must this iteration stop, and why is the answer right? Gary Kildall, in 1973, gave the framework. "
-            "<bookmark mark='a'/> The possible facts at a point, here the sets of live variables, form a lattice. "
-            "For four variables there are sixteen sets, ordered by inclusion, from the empty set at the bottom to "
-            "all four at the top. <bookmark mark='b'/> The equations only ever add variables: they are monotone, so "
-            "each visit moves a set up the lattice, or leaves it where it is. <bookmark mark='c'/> Endif's set "
-            "went from empty, to i alone, to all four. <bookmark mark='d'/> The lattice has height four, so no set "
-            "can grow more than four times, and the whole iteration must stop. The same argument works for any "
-            "analysis whose facts form a lattice of finite height and whose equations are monotone."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Create(edges), *[FadeIn(n) for n in nodes.values()], FadeIn(side[0]), run_time=2)
-            vo.wait_until("b")
+        with self.voiceover("Why does this liveness iteration stop? Kildall's framework makes the reason precise. <bookmark mark='a'/> The possible sets of four live variables form a lattice with sixteen elements, ordered by inclusion. Empty is bottom; all four variables are top. <bookmark mark='b'/> Each transfer function is monotone: enlarging the incoming facts cannot shrink its result. Because we start at bottom and revisit affected equations, induction shows that our successive facts only grow. Monotone does not mean an arbitrary starting value must grow. <bookmark mark='c'/> Endif's set grows from empty, to i alone, to all four variables. <bookmark mark='d'/> There can be at most four strict additions to any set. A fair worklist therefore terminates on this finite-height lattice, and an empty worklist means every equation is satisfied.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(Create(edges), *[FadeIn(n) for n in nodes.values()], FadeIn(side[0]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(side[1]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(side[2]), nodes[chain[0]].animate.set_color(YES))
             for h, s in zip(hops, chain[1:]):
                 self.play(GrowArrow(h), nodes[s].animate.set_color(YES))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(side[3]))
         self.wait(0.3)
         self.clear_scene()
@@ -232,34 +213,22 @@ class Dataflow(VoiceoverScene):
                   r"reason", font_size=21, color=YES),
         ).arrange(DOWN, buff=0.15).next_to(kt, DOWN, buff=0.45)
         mop = VGroup(
-            label(r"the ideal: \ what holds along every actual path \ (meet over all paths)", font_size=20,
+            label("path solution: combine all syntactic CFG paths, including infeasible ones", font_size=20,
                   color=GREY_A),
-            label(r"equal to the fixed point when the equations distribute over the join \ (liveness: \ yes)",
+            label("distributivity gives fixed point = path solution under the framework assumptions",
                   font_size=20, color=GREY_A),
-            label(r"otherwise a safe approximation \ (constant propagation: \ Kam and Ullman, \ 1977)", font_size=20,
+            label("sound transfer functions can lose precision; feasible paths require further reasoning", font_size=20,
                   color=NO),
         ).arrange(DOWN, buff=0.12).next_to(ours, DOWN, buff=0.4)
-        with self.voiceover(
-            "Two theorems stand behind this. <bookmark mark='a'/> Knaster and Tarski proved that a monotone function "
-            "on a complete lattice has a least fixed point. Kleene's version says how to find it: start at the "
-            "bottom and apply the function again and again; the climb reaches the least fixed point. <bookmark "
-            "mark='b'/> For us, the function is one application of all the equations, and the bottom is every set "
-            "empty. So the iteration found the smallest sets that satisfy the equations. Nothing is live without "
-            "a reason. <bookmark mark='c'/> Is the fixed point the truth? The ideal answer would combine what holds "
-            "along every path the program can actually take. When the equations distribute over the join, as "
-            "liveness's do, the fixed point equals that ideal exactly. When they do not, as for constant "
-            "propagation, it is a safe approximation: never wrong, sometimes less precise. Kam and Ullman showed "
-            "this in 1977. And knowing exactly which paths can actually run is undecidable, a theme we return to "
-            "in chapter nine."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(kt[:2]))
+        with self.voiceover("There are two different guarantees to separate. <bookmark mark='a'/> Knaster and Tarski give a least fixed point for a monotone function on a complete lattice. On our finite-height lattice, iteration from bottom reaches it after finitely many changes. The general infinite-lattice version of Kleene iteration needs an additional continuity condition. <bookmark mark='b'/> For liveness this is the smallest collection of sets satisfying the equations. No variable is included unless the equations force it from bottom. Other analyses may draw their information order in the opposite direction; the constant lattice next chapter does. <bookmark mark='c'/> Distributive transfer functions make this fixed-point solution equal the combination over all syntactic paths in the control-flow graph. Those paths can include infeasible ones. It is not exact knowledge of every execution. Non-distributive frameworks may lose further precision, while a sound analysis still overapproximates the behaviors relevant to its optimization.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(kt[:2]), run_time=0.6)
+            vo.wait_until('a')
             self.play(Write(kt[2]), run_time=2)
             self.play(FadeIn(kt[3]))
-            vo.wait_until("b")
+            vo.wait_until('b')
             self.play(LaggedStart(*[FadeIn(o) for o in ours], lag_ratio=0.5), run_time=2)
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(LaggedStart(*[FadeIn(m) for m in mop], lag_ratio=0.5), run_time=3)
         self.wait(0.3)
         self.clear_scene()

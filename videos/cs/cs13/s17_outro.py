@@ -49,14 +49,18 @@ class Outro(VoiceoverScene):
         ).arrange_in_grid(rows=2, cols=3, buff=(0.35, 0.35)).move_to(DOWN * 0.2)
         head = label(rf"Part {PART}: \ The Compiler", font_size=38).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "What we built in this part. FORTRAN's promise, and the three-part shape of every compiler since. A "
-            "checker for names, scopes, types and layouts. Three-address code, basic blocks and control-flow "
-            "graphs; dominators, and the dominance frontiers where SSA places its phis. Dataflow analysis, as a "
-            "least fixed point on a lattice. Constant propagation, value numbering, dead code elimination, loop "
-            "inversion, invariant code motion, strength reduction and inlining, each measured on the Job. "
-            "Instruction selection by tiling, register allocation by colouring, and the chordal graphs that make "
-            "it easy in SSA. Scheduling, and the predictor a compiler takes for granted. A fuzzer and a solver to "
-            "check it all, and a superoptimizer to search for what the rules miss."
+            (
+            "We built a path from parsed source to Pebble machine code. A checker resolves names, scopes, types "
+            "and layouts. Intermediate instructions and control-flow graphs make dependencies explicit. "
+            "Dominators and frontiers support static single assignment, while dataflow equations compute "
+            "conservative facts. We measured constant propagation, value numbering, dead-code elimination, loop "
+            "transformations and inlining on a specified Job workload. Instruction selection chooses tiles; "
+            "allocation maps live values to constrained storage; scheduling trades dependencies against machine "
+            "resources. Strict SSA gives a particularly tractable graph-coloring model, not a complete solution "
+            "to every allocation cost. Differential tests, semantic regression cases and encoded solver proofs "
+            "supply different kinds of evidence. Candidate search then explores some transformations our "
+            "hand-written rules miss."
+        )
         ):
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
@@ -99,13 +103,17 @@ class Outro(VoiceoverScene):
             (r"the job", r"compiler engineers: \ LLVM, \ GCC, \ GPU and ML compilers \ (XLA, \ MLIR, \ Triton)"),
         ])
         with self.voiceover(
-            "In practice. Ship at level two, debug at level zero, and use level three only where a measurement "
-            "says it helps. Read what the compiler produced: Compiler Explorer shows the assembly for any line of "
-            "source, and gcc and clang will report which optimizations fired and which were missed. Help the "
-            "optimizer with restrict, const and static, and with profile-guided and link-time optimization. "
-            "Browsers and the Java and dot NET runtimes compile in tiers, interpreting first and compiling what "
-            "turns out to be hot. And compiler engineering is a career of its own, now especially for GPUs and "
-            "machine learning, in projects like XLA, MLIR and Triton."
+            (
+            "In practice, choose optimization and debugging settings for the workload and toolchain, then "
+            "measure. O zero favors straightforward debugging; O two is a common release starting point, while O "
+            "three, profile-guided optimization and link-time optimization can help or hurt a particular build. "
+            "Read generated assembly and optimization reports to understand a missed opportunity. Express only "
+            "contracts the program actually satisfies: C restrict has aliasing obligations, and const and static "
+            "have several meanings that do not automatically imply independent memory. Managed runtimes can "
+            "interpret, compile and recompile hot code in tiers, with startup and steady-state tradeoffs. "
+            "Compiler work also serves accelerators and machine learning, through projects such as XLA, MLIR and "
+            "Triton."
+        )
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.35), run_time=3.0)
@@ -123,16 +131,19 @@ class Outro(VoiceoverScene):
             r"$x \cdot c / c \to x$ is sound.",
             r"Prove that if simplification removes every node, \ each with fewer than $k$ neighbours when removed, "
             r"\ the graph is $k$-colourable; \ then show that Chaitin's method spills on a 4-cycle with $k = 2$.",
-            r"\textit{Build.} \ Add common-subexpression elimination of loads to our GVN, \ using the type-based "
-            r"rule of chapter 9. \ Measure it on the Job, \ and check it with the fuzzer.",
-            r"$\bigstar$ \textit{Research.} \ On SSA programs, \ colouring is easy but optimal spilling is "
-            r"NP-hard. \ Find a polynomial algorithm with a proven approximation ratio, \ or show none exists.",
+            "\\textit{Build.} Merge loads only with valid memory and control proofs; test overlapping widths and guarded accesses.",
+            "$\\bigstar$ \\textit{Investigate.} Reproduce fixed-register spill-everywhere DP; define a precise extension and review known results.",
         ], font_size=22)
         with self.voiceover(
-            "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build "
-            "problem: our value numbering never merges two loads of the same address, which the demo function "
-            "showed. Teach it to, safely, measure it, and let the fuzzer judge. The last, marked with a star, is a "
-            "research problem: its answer is not known, and the notes say where to start."
+            (
+            "The notes contain six problems with worked guidance. Pause on any one. The fifth is a build problem: "
+            "merge repeated loads only when the address and intervening memory effects justify it. Include "
+            "overlapping byte and word accesses, guarded loads and negative cases, then compare outputs before "
+            "measuring gains. The starred problem distinguishes a known fixed-register spill-everywhere algorithm "
+            "from a research extension. First reproduce the restricted result. Then define the cost, register "
+            "model and desired guarantee before investigating the literature. The exercise does not label that "
+            "already-solved special case an open problem."
+        )
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)

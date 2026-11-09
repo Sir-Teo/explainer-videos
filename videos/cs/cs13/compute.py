@@ -24,7 +24,7 @@ Items:
     job        compiled against hand-written on the emulator and on Part 8's core; ledger row 5
     gcc        the C Job of Part 10 at gcc -O0 … -O3 on this machine
     fuzz       random programs, every level against the interpreter
-    superopt   shortest instruction sequences, found by search and proved by z3; rules checked
+    superopt   finite-test candidates separately proved by z3; incomplete search, no minimality certificate
     llvm       the same small function through clang: LLVM IR in SSA form and at -O2; LLVM's -O2 pass count
 """
 
@@ -40,8 +40,75 @@ from pathlib import Path
 
 from explainer.ai.cache import Cache
 
-CACHE = Cache("cs13")
-load = CACHE.load
+COMPILER_ITEMS = frozenset(("pipeline", "semantic", "ir", "dom", "ssa", "dataflow", "opts", "passes",
+                            "loops", "isel", "regalloc", "sched", "job", "fuzz"))
+
+
+def compiler_data_revision():
+    """Bind compiler measurements to this producer and the compiler implementation."""
+    import hashlib
+    from explainer.cs.lang.compiler import opt
+    digest = hashlib.sha256()
+    for source in [Path(__file__), *sorted(Path(opt.__file__).parent.glob("*.py"))]:
+        digest.update(source.name.encode())
+        digest.update(b"\0")
+        digest.update(source.read_bytes())
+    return digest.hexdigest()
+
+
+def cache_current(name):
+    path = CACHE.path(name)
+    if not path.exists():
+        return False
+    if name not in COMPILER_ITEMS:
+        return True
+    try:
+        return json.loads(path.read_text()).get("_compiler_data_revision") == compiler_data_revision()
+    except (OSError, ValueError, AttributeError):
+        return False
+
+
+class CompilerCache(Cache):
+    def save(self, name, out):
+        if name in COMPILER_ITEMS:
+            out = dict(out, _compiler_data_revision=compiler_data_revision())
+        return super().save(name, out)
+
+    def load(self, name):
+        from explainer.cache_lock import cache_lock
+        if name in COMPILER_ITEMS and not cache_current(name):
+            with cache_lock(self.path(name)):
+                if not cache_current(name):
+                    self.save(name, ITEMS[name]())
+        return super().load(name)
+
+    def main(self, items, doc=None):
+        # The regular CLI also checks revisions before declaring an item cached.
+        import argparse
+        from explainer.cache_lock import cache_lock
+        parser = argparse.ArgumentParser(description=doc, formatter_class=argparse.RawDescriptionHelpFormatter)
+        parser.add_argument("names", nargs="*", default=list(items))
+        parser.add_argument("--force", action="store_true")
+        args = parser.parse_args()
+        self.items = items
+        self.dir.mkdir(parents=True, exist_ok=True)
+        for name in args.names:
+            with cache_lock(self.path(name)):
+                if self.path(name).exists() and cache_current(name) and not args.force:
+                    print(f"  cached  {name}", flush=True)
+                    continue
+                start = time.monotonic()
+                print(f"  compute {name} ...", flush=True)
+                self.save(name, items[name]())
+                print(f"  done    {name} in {time.monotonic() - start:.0f}s", flush=True)
+
+
+CACHE = CompilerCache("cs13")
+
+
+def load(name):
+    # Resolve the instance dynamically: cached-only QA rejects stale input before upgrade.
+    return CACHE.load(name)
 
 DEMO = r"""
 fn total(a: *int, n: int) -> int {
@@ -138,9 +205,13 @@ def compute_pipeline() -> dict:
         phis += st["phis"]
     c = D.compile_program(P.JOB, 3)
     asm_lines = [l for l in c.asm.splitlines() if l.startswith("        ")]
+    code_words = c.program.labels["_brk"] // 4
     return {"chars": len(P.JOB), "tokens": len(toks) - 1, "nodes": P.count_nodes(prog), "ir": ir, "blocks": blocks,
-            "phis": phis, "ir_optimized": c.stats["ir_final"], "asm": len(asm_lines),
-            "bytes": c.stats["code_words"] * 4, "functions": [f.name for f in m.funcs]}
+            "phis": phis, "ir_optimized": c.stats["ir_final"], "asm": code_words,
+            "listing_lines": len(asm_lines), "bytes": code_words * 4,
+            "code_count_scope": "32-bit instruction words before _brk, including the small runtime; "
+                                "listing_lines counts indented source lines and is a different statistic",
+            "functions": [f.name for f in m.funcs]}
 
 
 def compute_semantic() -> dict:
@@ -536,8 +607,11 @@ def compute_gcc() -> dict:
 def compute_fuzz() -> dict:
     from explainer.cs.lang.compiler import fuzz as F
 
+    from collections import Counter
+
     ran = stuck = 0
     bad = []
+    excluded = []
     t = time.time()
     sizes = []
     for seed in range(240):
@@ -546,6 +620,7 @@ def compute_fuzz() -> dict:
         r = F.differential(src, max_steps=3_000_000)
         if r["ok"] is None:
             stuck += 1
+            excluded.append({"seed": 1000 + seed, "reason": r["ref"]})
             continue
         ran += 1
         if not r["ok"]:
@@ -553,6 +628,12 @@ def compute_fuzz() -> dict:
     sample = F.program(1000, funcs=2).splitlines()
     return {"ran": ran, "stuck": stuck, "mismatches": bad, "seconds": time.time() - t,
             "lines": sum(sizes) / len(sizes), "sample": sample[:40],
+            "reference_exclusions": excluded,
+            "exclusion_counts": dict(Counter(row["reason"] for row in excluded)),
+            "sampling": {"first_seed": 1000, "count": 240, "reference_step_limit": 3_000_000,
+                         "compiled_step_limit": 24_000_000, "levels": [0, 1, 2, 3]},
+            "historical_claim_scope": "The following source-coded development anecdotes are not findings of this run; "
+                                      "directed load-hoisting regressions are separately documented and tested.",
             "found_during_development": [
                 {"what": "a parameter assigned in the entry block was not renamed into SSA, so copy propagation "
                          "replaced uses that came before the assignment", "pass": "SSA construction",

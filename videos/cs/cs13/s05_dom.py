@@ -104,40 +104,26 @@ class Dominators(VoiceoverScene):
         rows = [[b, ", ".join(preds[b]) or "--", "{" + ", ".join(sets[b][::-1]) + "}"] for b in ORDER]
         tab = grid_table(["block", "predecessors", "dominators"], rows, widths=[1.7, 2.4, 3.6], row_h=0.42,
                          font_size=15, mono_cols=(0, 1, 2)).move_to([2.6, -0.6, 0])
-        rpo = label(r"visit in reverse postorder: \ a block after its predecessors, \ back edges aside",
+        rpo = label("reverse postorder helps; irreducible graphs need additional care",
                     font_size=19, color=GREY_A).next_to(tab, DOWN, buff=0.25)
         note = label(rf"passes until nothing changes: \ {d['passes']} \ (one to settle, \ one to confirm)",
                      font_size=20, color=YES).next_to(rpo, DOWN, buff=0.15)
         job = label(r"every function of the Job: \ " + ", ".join(rf"\texttt{{{r['func']}}} {r['passes']}"
                                                                  for r in d["job"]), font_size=18,
                     color=GREY_B).next_to(note, DOWN, buff=0.12)
-        with self.voiceover(
-            "How does a compiler find dominators? With an equation. <bookmark mark='a'/> The entry is dominated "
-            "only by itself. Any other block n is dominated by itself and by whatever dominates all of its "
-            "predecessors: the intersection of their sets. <bookmark mark='b'/> The equation is circular, because "
-            "of the loop: while one's set depends on endif's, which depends on while one's. So start by assuming "
-            "every block is dominated by everything, and apply the equation, block after block, until nothing "
-            "changes. <bookmark mark='c'/> Visit the blocks in reverse postorder, so that each comes after its "
-            "predecessors, apart from back edges. Then for this function the first pass already gets every set "
-            "right, and a second pass confirms it. <bookmark mark='d'/> The same holds for every function of the "
-            "Job. The number of passes depends on how loops are nested, not on the size of the program. This is "
-            "the simple algorithm of Cooper, Harvey and Kennedy, from 2001. Lengauer and Tarjan's algorithm of 1979 "
-            "is almost linear in theory, and in practice the simple one is usually as fast. <bookmark mark='e'/> "
-            "We will meet this pattern again in chapter six: an equation over sets, solved by iterating to a fixed "
-            "point."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(eq), run_time=2)
-            vo.wait_until("b")
+        with self.voiceover("Dominance has a useful set equation. <bookmark mark='a'/> The reachable entry is dominated only by itself. For another reachable block n, intersect the dominator sets of its reachable predecessors, then add n. <bookmark mark='b'/> A loop makes those equations circular. Initialize the entry to itself and the other sets to all reachable blocks, then repeatedly intersect until no set changes. This is a descending finite iteration. <bookmark mark='c'/> Reverse postorder is a useful visiting order. In reducible graphs it respects the forward structure apart from loop back edges; an arbitrary irreducible graph needs more care. The displayed example stabilizes quickly. <bookmark mark='d'/> Our implementation uses the related Cooper, Harvey and Kennedy method: intersect immediate-dominator tree paths, rather than explicitly storing every dominator set. Its measured rounds are observations about these graphs. They are not a size-independent bound for every program. Lengauer and Tarjan provide a different, nearly linear theoretical approach. <bookmark mark='e'/> The recurring pattern is an equation solved by iteration to a fixed point.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(Write(eq), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(cfg), FadeIn(tab.rule), *[FadeIn(c) for c in tab.cells[0]])
             for r in tab.cells[1:]:
                 self.play(*[FadeIn(c) for c in r[:2]], run_time=0.3)
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(rpo))
             for k, r in enumerate(tab.cells[1:]):
                 self.play(FadeIn(r[2]), Indicate(cfg.blocks[ORDER[k]].box, color=HEAD), run_time=0.6)
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(note), FadeIn(job))
         self.wait(0.4)
         self.clear_scene()
@@ -158,7 +144,7 @@ class Dominators(VoiceoverScene):
         lines = VGroup(*[Line(nodes[a][0].get_bottom(), nodes[c][0].get_top(), color=YES, stroke_width=2)
                          for a, cs in kids.items() for c in cs])
         cap = VGroup(
-            label(r"each block's parent: \ its \textbf{immediate} dominator, \ the closest one", font_size=21,
+            label("reachable non-entry block: parent is its nearest strict dominator", font_size=21,
                   color=GREY_A),
             label(r"\texttt{endif6} hangs from \texttt{body2}: \ neither branch dominates it", font_size=21,
                   color=GREY_A),
@@ -166,12 +152,16 @@ class Dominators(VoiceoverScene):
                   color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).to_edge(DOWN, buff=0.35).shift(RIGHT * 1.3)
         with self.voiceover(
-            "The dominators of a block always form a chain: entry, then the loop test, then the body, and so on. "
-            "<bookmark mark='a'/> So each block has a closest dominator, its immediate dominator, and drawing an "
-            "edge from each block's immediate dominator to it gives a tree. <bookmark mark='b'/> Notice where endif "
-            "hangs: from body two, not from then or else, because neither branch dominates it. <bookmark mark='c'/> "
-            "Now d dominates n exactly when d is an ancestor of n in this tree, and a whole table of sets has "
-            "become one parent pointer per block. Most of what follows is a walk over this tree."
+            (
+            "For a block reachable from entry, its dominators form a chain under domination. <bookmark mark='a'/> "
+            "Every reachable block except entry therefore has a closest strict dominator, its immediate "
+            "dominator. Drawing an edge from that parent to the block gives the dominator tree, rooted at entry. "
+            "<bookmark mark='b'/> Notice where endif hangs: from body two, rather than then or else, because "
+            "neither branch dominates the join. <bookmark mark='c'/> Now d dominates n exactly when d is n or an "
+            "ancestor of n in this tree. A table of dominator sets has become one parent pointer per non-root "
+            "block. The compiler uses this structure to place phis and to track which definitions are available "
+            "along every incoming path."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(cfg))
             vo.wait_until("a")
@@ -200,15 +190,18 @@ class Dominators(VoiceoverScene):
         why = label(r"the first place where another path joins: \ a value from $d$ meets a value from elsewhere",
                     font_size=20, color=HEAD).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "One more idea, and it is the one SSA needs. <bookmark mark='a'/> The dominance frontier of a block d "
-            "is the set of blocks just beyond the region d dominates: blocks n where d dominates a predecessor of "
-            "n, but not n itself. <bookmark mark='b'/> Then five's frontier is endif. Then five dominates itself, a "
-            "predecessor of endif, but endif can also be reached through else. <bookmark mark='c'/> Body two's "
-            "frontier is the loop test, while one, reached again around the back edge. And while one is in its own "
-            "frontier: the loop header is where the loop's own path comes back to meet the path from the entry. "
-            "<bookmark mark='d'/> The frontier is the first place where another path joins. Anything computed in d "
-            "meets, there, whatever was computed on some path that avoided d. That is exactly where a variable "
-            "might have two different values, depending on how we arrived."
+            (
+            "One more idea, and it is the one SSA needs. <bookmark mark='a'/> The dominance frontier of d "
+            "contains blocks n where d dominates a predecessor of n, but does not strictly dominate n. Strictly "
+            "matters: a block dominates itself, yet a loop header can belong to its own frontier. <bookmark "
+            "mark='b'/> Then five's frontier is endif. Then five dominates itself, a predecessor of endif, but a "
+            "path through else reaches endif without visiting then. <bookmark mark='c'/> Body two's frontier "
+            "contains the loop test, while one, reached around the back edge. While one is also in its own "
+            "frontier: it dominates the back-edge predecessor, without strictly dominating itself. <bookmark "
+            "mark='d'/> These are join points where definitions from different incoming paths may meet. Taking "
+            "the frontier again for newly inserted definitions tells SSA where further phi functions may be "
+            "needed."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(cfg))
             vo.wait_until("a")

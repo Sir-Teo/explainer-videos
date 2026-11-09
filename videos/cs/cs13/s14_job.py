@@ -54,18 +54,7 @@ class Job(VoiceoverScene):
                     color=GREY_B).next_to(key, DOWN, buff=0.12)
         r = rows
         with self.voiceover(
-            "Now the whole compiler, measured. We compiled both versions of the Job with one pass after another "
-            "switched on, and counted the instructions each executes on the first chapter of Pride and Prejudice. "
-            "<bookmark mark='a'/> With no optimization, every variable lives in memory, and the array Job runs four "
-            "and a half million instructions. <bookmark mark='b'/> Register allocation alone cuts that by almost "
-            "two thirds. <bookmark mark='c'/> Loop inversion takes a little more. Converting to SSA makes things "
-            "slightly worse, because the copies it leaves behind are not all coalesced away, and constant "
-            "propagation finds almost nothing. <bookmark mark='d'/> Value numbering takes a fifth. Moving invariant "
-            "code out of the loop takes a tenth. <bookmark mark='e'/> And strength reduction of the table index "
-            "takes over a third, landing below the dashed line: the hand-written program of Part 6. Inlining "
-            "helps only the list Job, which calls same in its loop. <bookmark mark='f'/> Notice that the order of "
-            "the bars is not the order of importance. Two passes, registers and induction variables, did most of "
-            "the work; the others prepared the ground for them."
+            f"This experiment enables transformations cumulatively on both Job versions and counts instructions on the same first-chapter input. <bookmark mark='a'/> The unoptimized array configuration executes {r[0]['array']:,} instructions. <bookmark mark='b'/> Register allocation brings it to {r[1]['array']:,}. <bookmark mark='c'/> The next bars add inversion, SSA and constant propagation. Their changes reflect the actual combination, including copies left after SSA destruction. <bookmark mark='d'/> Value numbering changes the preceding array count by {100 * (r[5]['array'] / r[4]['array'] - 1):+.1f} percent, and the repaired invariant-code pass changes it by {100 * (r[6]['array'] / r[5]['array'] - 1):+.1f} percent. <bookmark mark='e'/> Strength reduction then changes it by {100 * (r[7]['array'] / r[6]['array'] - 1):+.1f} percent. The final array count is {r[-1]['array']:,}, beside the dashed hand-written baseline of {p['hand']:,}. Inlining changes the list version here while leaving the array count unchanged. <bookmark mark='f'/> This order is an experiment, not a universal ranking of passes. Legality, register pressure, code shape and earlier transformations interact. A correct compiler may miss an optimization; an unsafe shortcut does not count as a valid speed improvement."
         ) as vo:
             self.play(FadeIn(head), FadeIn(key), FadeIn(cap))
             vo.wait_until("a")
@@ -103,18 +92,11 @@ class Job(VoiceoverScene):
             label(r"\texttt{-O3}: \ and inlining", font_size=19, color=GREY_A),
             label(rf"list Job: \ {e['list -O0']:,} \ $\to$ \ {e['list -O3']:,}", font_size=19, color=FUNC),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(RIGHT, buff=0.4)
-        with self.voiceover(
-            "Like gcc and clang, our compiler groups its passes into levels. <bookmark mark='a'/> Level zero keeps "
-            "every variable in memory, so a debugger can always find it, and runs six times as many instructions "
-            "as level two. Level one allocates registers. Level two adds loop inversion, SSA and every pass we have "
-            "seen. Level three adds inlining, which leaves the array Job unchanged. <bookmark mark='b'/> Against "
-            "these, the hand-written program of Part 6, and its linked version from Part 11, which used a library "
-            "routine for printing. The compiled program executes fewer instructions than either."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(ch.bars[:4]), FadeIn(ch.vals[:4]), FadeIn(ch.names[:4]), FadeIn(lv), run_time=2)
-            vo.wait_until("b")
+        with self.voiceover("Our compiler groups transformations into named levels. <bookmark mark='a'/> In this implementation, level zero gives source variables stack storage; level one allocates registers; level two adds loop inversion, SSA and the optimization pipeline; level three also inlines selected functions. The array Job's final bars coincide in this run. GCC and Clang use their own version-dependent sets of transformations, so matching level names do not imply matching pipelines. Stack storage alone also does not provide a complete source debugger. <bookmark mark='b'/> Compare these bars with the hand-written Part 6 program and its linked Part 11 variant. They report executed instructions on one input, including the implementations' actual overhead. The cycle comparison is a separate experiment.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(ch.bars[:4]), FadeIn(ch.vals[:4]), FadeIn(ch.names[:4]), FadeIn(lv), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(ch.bars[4:]), FadeIn(ch.vals[4:]), FadeIn(ch.names[4:]))
         self.wait(0.3)
         self.clear_scene()
@@ -126,27 +108,23 @@ class Job(VoiceoverScene):
         for r in j["core"]:
             rows.append([f"{r['bytes']:,}", f"{r['hand_instr']:,}", f"{r['O2_instr']:,}", f"{r['hand']:,}",
                          f"{r['O2']:,}", f"{100 * (r['O2'] / r['hand'] - 1):+.1f}\\%"])
-            cols.append([GREY_A, WHITE, YES, WHITE, WHITE, NO if r["O2"] > r["hand"] else YES])
+            cols.append([GREY_A, WHITE, NO if r["O2_instr"] > r["hand_instr"] else YES,
+                         WHITE, WHITE, NO if r["O2"] > r["hand"] else YES])
         tab = grid_table([r"passage", r"instr., \ hand", r"instr., \ \texttt{-O2}", r"cycles, \ hand",
                           r"cycles, \ \texttt{-O2}", r"cycles"], rows, widths=[1.5, 2.0, 2.0, 2.0, 2.0, 1.4],
                          row_h=0.45, font_size=18, colors=cols, mono_cols=()).next_to(head, DOWN, buff=0.45)
         pts = VGroup(
-            label(r"11\% fewer instructions, \ the same cycles to within 2\%", font_size=22, color=HEAD),
-            label(r"the core overlaps the hand-written program's extra instructions for free", font_size=20,
+            label("six sampled passages: compare instruction totals and simulated cycles", font_size=22, color=HEAD),
+            label("overlap can hide some instruction work; dependency chains remain", font_size=20,
                   color=GREY_A),
-            label(r"both programs wait on the same chain of loads, \ table entry after table entry", font_size=20,
+            label("these totals suggest dependencies; they do not isolate every causal bottleneck", font_size=20,
                   color=GREY_A),
-            label(rf"and \texttt{{-O0}} would be {j['ratio_o0']:.1f} times slower", font_size=21, color=NO),
+            label(rf"unoptimized aggregate cycle cost: {j['ratio_o0']:.1f} times hand-written", font_size=21, color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(tab, DOWN, buff=0.4)
         with self.voiceover(
-            "But instructions are not time. On the out-of-order core of Part 8, on six passages of text: "
-            "<bookmark mark='a'/> the compiled program executes eleven percent fewer instructions, and takes about "
-            "the same number of cycles, one or two percent more. <bookmark mark='b'/> The core runs several "
-            "instructions per cycle, so the hand-written program's extra instructions cost almost nothing: they "
-            "run in the shadow of loads. Both programs wait on the same chain of loads, one table entry after "
-            "another, and that chain is the same length however the instructions around it are written. <bookmark "
-            "mark='c'/> And level zero, by comparison, is four point four times slower. Optimization matters; the "
-            "last ten percent of it, on a modern core, often does not."
+            (
+            "Instruction count is not elapsed time. This table uses Part 8's simulated out-of-order core and six text passages. <bookmark mark='a'/> The table records both instruction totals and cycles for each implementation; compare their actual differences on every passage. Compare each row and the aggregate ratio rather than assuming one fixed percentage for every input. <bookmark mark='b'/> Overlap and dependency chains help explain why eliminating instructions may save few cycles. The observations are consistent with important load dependencies; these totals alone are not a full causal performance-counter study. <bookmark mark='c'/> The unoptimized comparison has a much larger aggregate cycle cost. Optimization matters on this workload, but neither the last few percent nor the same bottleneck must generalize to another program, machine or input distribution."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab))
             vo.wait_until("a")
@@ -172,13 +150,7 @@ class Job(VoiceoverScene):
                   color=NO),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "So the ledger gets its sixth row. <bookmark mark='a'/> The Job compiled from the Pebble language, on "
-            "one core of Part 8's machine, would take about fifty-eight seconds on all thirty novels, against "
-            "fifty-seven for the hand-written program. Unoptimized, it would take over four minutes. <bookmark "
-            "mark='b'/> This row is not about speed. It is FORTRAN's promise, kept: the program now comes from a "
-            "readable source, with names, types and loops, and it runs as fast as our best hand-written "
-            "assembly. The speed-ups to come, in Parts 16 and 17, will come from changing the algorithm, and the "
-            "compiler will carry them to the machine."
+            f"The sixth ledger row is a projection from the recorded model. <bookmark mark='a'/> We multiply the earlier hand-written row's corpus estimate by the ratio of total compiled to hand-written cycles across six sampled passages. This gives {led[5]['seconds']:.1f} seconds for compiled code, versus {led[3]['seconds']:.1f} seconds for the hand-written baseline; the unoptimized projection is {led[5]['o0_seconds']:.1f} seconds. These are extrapolated times under the earlier clock and cost assumptions, not a full-corpus hardware timing. <bookmark mark='b'/> The practical achievement is a readable source program that approaches this hand-written implementation on the selected machine model. Later algorithm changes can alter the amount of work much more substantially. New inputs or machines require new measurements."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab.axis), LaggedStart(*[FadeIn(r) for r in tab.rows], lag_ratio=0.1))
             vo.wait_until("a")
@@ -197,27 +169,23 @@ class Job(VoiceoverScene):
         cap = label(rf"\textit{{Pride and Prejudice}}, \ {g['bytes'] / 1e3:.0f} KB, \ one thread; \ best of 3",
                     font_size=17, color=GREY_B).next_to(ch, DOWN, buff=0.4)
         pts = VGroup(
-            label(r"\texttt{-O1} \ halves the time: \ registers, \ mostly", font_size=21, color=YES),
-            label(r"\texttt{-O2} and \texttt{-O3} \ add nothing here: \ the scan waits on memory", font_size=21,
+            label("compare the recorded best-of-three host times", font_size=21, color=YES),
+            label("level ordering can vary with host, compiler version and workload", font_size=21,
                   color=GREY_A),
-            label(r"the same shape as our compiler's, \ on a real machine", font_size=21, color=HEAD),
+            label("elapsed time is distinct from instruction counts and simulated cycles", font_size=21, color=HEAD),
             label(g["gcc"].split(" (")[0] + " " + g["gcc"].split()[-1], font_size=16, color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.5)
-        with self.voiceover(
-            "The same pattern holds on a real machine. <bookmark mark='a'/> Here is the C version of the Job, from "
-            "Part 10, compiled by gcc at each level and run on this computer over the whole of Pride and Prejudice. "
-            "Level zero takes two hundred and fifteen milliseconds. Level one, a hundred and fifteen: registers, "
-            "mostly. <bookmark mark='b'/> Levels two and three add nothing, and are even a little slower. The Job "
-            "scans its table, and the scan waits on memory, which no compiler can make shorter. <bookmark "
-            "mark='c'/> A real compiler, a real processor, and the same lesson."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(ch), FadeIn(cap))
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        if pts.width > 5.2:
+            pts.scale_to_fit_width(5.2)
+        pts.to_edge(RIGHT, buff=0.5)
+        with self.voiceover(f"The host experiment uses the C Job from Part 10 and the recorded GCC version. <bookmark mark='a'/> Each bar is the best of three one-thread runs on the same input. Level zero records {g['rows'][0]['seconds'] * 1000:.1f} milliseconds; level one records {g['rows'][1]['seconds'] * 1000:.1f}. <bookmark mark='b'/> Levels two and three record {g['rows'][2]['seconds'] * 1000:.1f} and {g['rows'][3]['seconds'] * 1000:.1f} milliseconds. Read this run's ordering from the bars; it can change across hosts and repetitions. Optimization levels change several decisions, so these timings alone do not isolate register allocation or prove a particular memory bottleneck. <bookmark mark='c'/> They do show why choosing a level should include measurement of the real workload. Instruction counts, simulated cycles and host elapsed time are related evidence with different boundaries.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(ch), FadeIn(cap), run_time=0.6)
+            vo.wait_until('a')
             self.play(FadeIn(pts[0]))
-            vo.wait_until("b")
+            vo.wait_until('b')
             self.play(FadeIn(pts[1]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(pts[2:]))
         self.wait(0.3)
         self.clear_scene()

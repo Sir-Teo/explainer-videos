@@ -53,26 +53,17 @@ class Loops(VoiceoverScene):
         nest = VGroup(content, obox, ol).next_to(defs, DOWN, buff=0.5)
         cap = label(r"the array Job's \texttt{word}: \ two loops, \ one inside the other", font_size=20,
                     color=HEAD).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "A program spends almost all its time in loops, so a compiler first has to find them. In a graph, "
-            "that takes the dominators. <bookmark mark='a'/> A back edge is an edge from n to h where h dominates "
-            "n: an edge that jumps back to something that must already have run. <bookmark mark='b'/> Its natural "
-            "loop is h together with every block that can reach n without passing through h. <bookmark mark='c'/> "
-            "And h is the loop's header, the only way in from outside. <bookmark mark='d'/> In the array Job's word "
-            "function the compiler finds two natural loops. The outer one scans the table, ten blocks with header "
-            "body five. <bookmark mark='e'/> Inside it, the inner loop compares letters, three blocks with header "
-            "body twenty-two. Loops found this way nest neatly, and the innermost run most often."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(defs[0]))
-            vo.wait_until("b")
+        with self.voiceover("Profiling often identifies loops as important costs. Dominance helps locate one useful class of loops. <bookmark mark='a'/> A back edge n to h has a target h that dominates its source n. <bookmark mark='b'/> Its natural loop contains h and the blocks that can reach n without passing through h; include n itself. <bookmark mark='c'/> The header h is the single entry from outside that natural loop. Irreducible control flow can have multiple-entry cycles that this representation does not capture as one natural loop. <bookmark mark='d'/> In the recorded array Job's word function, the highlighted outer loop scans table entries. <bookmark mark='e'/> Its inner loop compares letters. The displayed block sets come from the actual control-flow graph. Nested loops often multiply execution counts, but early exits, input sizes and paths determine which blocks really run most.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(defs[0]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(defs[1]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(defs[2]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(Create(obox), FadeIn(ol), FadeIn(ob), FadeIn(cap))
-            vo.wait_until("e")
+            vo.wait_until('e')
             self.play(FadeIn(inner_g))
         self.wait(0.3)
         self.clear_scene()
@@ -100,22 +91,13 @@ class Loops(VoiceoverScene):
         t2 = label(r"one branch per iteration", font_size=20, color=YES).next_to(c2, UP, buff=0.3)
         meas = label(rf"on the array Job: \ {pct(p['rows'], 1, 2):+.1f}\% instructions; \ on the list Job: \ "
                      rf"{pct(p['rows'], 1, 2, 'list'):+.1f}\%", font_size=21, color=YES).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "The simplest loop transformation changes only the shape. <bookmark mark='a'/> A while loop, lowered "
-            "naively, tests at the top. Each iteration runs the body, jumps back up, and tests again: two "
-            "branches every time round. <bookmark mark='b'/> Inverting the loop puts a single guard in front, for "
-            "the case of zero iterations, and moves the test to the bottom, where it branches straight back into "
-            "the body. One branch per iteration. A C programmer would recognize this as turning a while loop into "
-            "an if around a do-while. <bookmark mark='c'/> On the array Job this saves six and a half percent of "
-            "all instructions, and on the list Job, twelve and a half. It also gives every loop a preheader, a block that "
-            "runs once just before the loop, which the next transformation needs."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(c1), Create(back1), FadeIn(t1))
-            vo.wait_until("b")
+        with self.voiceover(f"Loop inversion changes the control-flow shape. <bookmark mark='a'/> In the left sketch, the body jumps to a top test, and the test chooses whether to enter again. <bookmark mark='b'/> In the right sketch, an initial guard preserves the zero-iteration case. The repeated body ends in the conditional back branch. This can remove an unconditional jump from the repeated path, while changing code size and branch behavior. The guard must preserve the original conditions and effects. <bookmark mark='c'/> In this pass sequence, the executed instruction count changes by {pct(p['rows'], 1, 2):+.1f} percent for the array Job and {pct(p['rows'], 1, 2, 'list'):+.1f} percent for the list Job. The transformed loops also provide entry blocks useful for later code motion. Whether fewer instructions save cycles still depends on the machine.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(c1), Create(back1), FadeIn(t1), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(c2), Create(back2), FadeIn(t2))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(meas))
         self.wait(0.3)
         self.clear_scene()
@@ -124,10 +106,12 @@ class Loops(VoiceoverScene):
         lp = load("loops")
         p = load("passes")
         head = label(r"Loop-invariant code motion", font_size=34).to_edge(UP, buff=0.3)
-        pre = asm_after(lp["asm"]["with"], "word.body5_pre", 6)
+        pre_block = next(b for b in lp["after_licm"]["blocks"] if b["label"] == "body5_pre")
+        pre = [pre_block["label"] + ":"] + [line for line in pre_block["ins"] if not line.startswith("br ")]
         pre_c = code(pre, size=17, color=CODE).next_to(head, DOWN, buff=0.5).to_edge(LEFT, buff=0.8)
-        notes = {1: r"\texttt{w[0]}: \ the word's first letter", 2: r"the table's address",
-                 3: r"\texttt{entries}", 4: r"is $0 < n$? \ (the inner loop's first test)"}
+        notes = {k: (r"the table's address" if "= &table" in line else
+                     r"is $0 < n$? (the inner loop's first test)" if "= 0 < %n" in line else
+                     r"an invariant value") for k, line in enumerate(pre[1:], 1)}
         tags = VGroup(*[label(t, font_size=18, color=YES).next_to(pre_c[k], RIGHT, buff=0.5) for k, t in
                         notes.items()])
         for t in tags:
@@ -137,32 +121,35 @@ class Loops(VoiceoverScene):
                   r"invariant", font_size=21, color=GREY_A),
             label(r"move it to the preheader: \ computed once, \ not once per table entry", font_size=21,
                   color=GREY_A),
-            label(r"a load may move only if nothing in the loop could store there, \ and nothing is called",
+            label("our load rule: header prefix; no earlier trap/effect; no loop stores or calls",
                   font_size=21, color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(pre_c, DOWN, buff=0.6).to_edge(LEFT, buff=0.8)
         meas = label(rf"{lp['stats']['hoisted']} instructions hoisted; \ on the array Job: \ "
                      rf"{pct(p['rows'], 5, 6):+.1f}\% instructions", font_size=21, color=YES).to_edge(DOWN,
                                                                                                 buff=0.4)
-        with self.voiceover(
-            "Inside the outer loop, some values are the same on every iteration. <bookmark mark='a'/> An "
-            "instruction is loop-invariant if each of its operands is defined outside the loop, or is itself "
-            "invariant. <bookmark mark='b'/> Such an instruction can move to the preheader, computed once instead "
-            "of once per table entry. In word, the compiler hoists four. The first letter of the new word. The "
-            "table's address. The number of entries. And whether zero is less than n, the inner loop's first "
-            "test. <bookmark mark='c'/> Loads need care. Moving a load is safe only if nothing inside the loop "
-            "could store to that memory, and no call could. Here the loop contains no store at all: the one store, "
-            "counting a word it found, is followed at once by a return, outside the loop. <bookmark mark='d'/> "
-            "Worth eleven percent of the array Job's instructions."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(rules[0]))
-            vo.wait_until("b")
+        guard = region(3.0, 0.55, r"$i=1$?", CTRL, font_size=20).move_to([2.8, -0.8, 0])
+        conditional_load = region(3.0, 0.55, r"load \texttt{*p}", DATA, font_size=20).move_to([2.8, -1.9, 0])
+        skipped = region(2.3, 0.55, r"skip the load", YES, font_size=20).move_to([-1.0, -1.9, 0])
+        guarded_edge = Arrow(guard.get_bottom(), conditional_load.get_top(), buff=0.06,
+                             color=GREY_D, stroke_width=1.5, tip_length=0.12)
+        skip_edge = Arrow(guard.get_left(), skipped.get_top(), buff=0.06,
+                         color=YES, stroke_width=2.5, tip_length=0.12)
+        case = label(r"$i=0$, \ $p=\texttt{null}$: the skipped load must stay skipped",
+                     font_size=19, color=YES).move_to([1.0, -2.65, 0])
+        true_label = label(r"true", font_size=15, color=GREY_B).next_to(guarded_edge, RIGHT, buff=0.07)
+        false_label = label(r"false", font_size=15, color=YES).next_to(skip_edge, UP, buff=0.07)
+        guard_view = VGroup(guard, conditional_load, skipped, guarded_edge, skip_edge,
+                            true_label, false_label, case)
+        with self.voiceover(f"Some computations produce the same value on every iteration. <bookmark mark='a'/> Operand invariance is the starting point: each input comes from outside the loop or from another invariant computation. <bookmark mark='b'/> Moving a total, effect-free instruction into the preheader can replace repeated work with one computation. The recorded word-function example hoists {lp['stats']['hoisted']} instructions; follow their destinations in the intermediate-code panel. <bookmark mark='c'/> Loads require two separate arguments: the memory must not change, and moving the access must not introduce a trap on a path that previously skipped it. Our repaired pass allows only header loads before any potentially trapping or effectful instruction, with invariant addresses and no loop stores or calls. It does not assume different widths cannot overlap. A conditional body load remains guarded, even when its address is invariant. <bookmark mark='d'/> In this array-Job pass comparison, the instruction count changes by {pct(p['rows'], 5, 6):+.1f} percent. The result measures this program, not a general promise about loops.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(rules[0]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(pre_c), FadeIn(rules[1]))
             self.play(LaggedStart(*[FadeIn(t) for t in tags], lag_ratio=0.6), run_time=4)
-            vo.wait_until("c")
-            self.play(FadeIn(rules[2]), Indicate(pre_c[3], color=NO))
-            vo.wait_until("d")
+            vo.wait_until('c')
+            self.play(FadeIn(rules[2]), FadeIn(guard_view), Indicate(pre_c, color=NO))
+            vo.wait_until('d')
             self.play(FadeIn(meas))
         self.wait(0.3)
         self.clear_scene()
@@ -193,28 +180,17 @@ class Loops(VoiceoverScene):
         meas = label(rf"on the array Job: \ {p['rows'][6]['array']:,} $\to$ {p['rows'][7]['array']:,} \ "
                      rf"({pct(p['rows'], 6, 7):+.0f}\%): \ the pointer Part 6 wrote by hand", font_size=21,
                      color=YES).to_edge(DOWN, buff=0.45)
-        with self.voiceover(
-            "The biggest win in the array Job is subtler. <bookmark mark='a'/> Each time round the scan, the code "
-            "still computes the address of table of i from scratch: load twelve, multiply by i, add the table's "
-            "address. <bookmark mark='b'/> But i goes up by one each time, so twelve i plus the table's address "
-            "goes up by exactly twelve. i is an induction variable, and the address is an induction variable "
-            "derived from it. <bookmark mark='c'/> So keep the address in a register of its own, start it at the "
-            "table, and add twelve each time round. Four instructions, one of them a slow multiply, become one "
-            "add. This is strength reduction of induction variables, one of the oldest loop optimizations: the "
-            "FORTRAN I compiler already did a version of it. <bookmark mark='d'/> On the array Job it removes over "
-            "a third of all instructions. And the result is exactly the pointer we wrote by hand in Part 6, which "
-            "is how the compiler came to beat us: it found our trick, and did everything else a little better."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(left), FadeIn(lt))
+        with self.voiceover(f"An induction recurrence can replace repeated address arithmetic. <bookmark mark='a'/> The left panel recomputes an indexed table address inside the scan. <bookmark mark='b'/> If i increases by one, table plus twelve times i increases by twelve, under this machine's word and address semantics. <bookmark mark='c'/> Carry that derived address as another loop value and advance it by twelve. The compiler must initialize it correctly, preserve exits and updates, and retain valid memory accesses. This is induction-variable strength reduction. The right panel shows the pointer recurrence in the actual generated code. <bookmark mark='d'/> In this pass comparison, the array Job changes from {p['rows'][6]['array']:,} to {p['rows'][7]['array']:,} executed instructions, or {pct(p['rows'], 6, 7):+.1f} percent. It recovers the hand-written loop's pointer idea; the full compiled program still has its own overhead and need not beat that baseline.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(left), FadeIn(lt), run_time=0.6)
+            vo.wait_until('a')
             self.play(Create(hl_l))
-            vo.wait_until("b")
+            vo.wait_until('b')
             self.play(FadeIn(rule[0]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(rule[1]), FadeIn(right), FadeIn(rt))
             self.play(Create(hl_r))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeOut(rule), FadeIn(meas))
         self.wait(0.3)
         self.clear_scene()
@@ -238,22 +214,13 @@ class Loops(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(ul, DOWN, buff=0.4)
         note = label(r"not in our compiler: \ Pebble has no SIMD, \ and the Job's loops exit early", font_size=20,
                      color=HEAD).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "Production compilers have many more loop transformations. <bookmark mark='a'/> Unrolling copies the "
-            "body several times, so the loop tests once per four iterations instead of every one, and the "
-            "scheduler has more independent work to interleave; the price is more code. <bookmark mark='b'/> "
-            "Vectorization goes further and does four additions in one SIMD instruction, as in Part 10. "
-            "Interchange and tiling reorder nested loops to suit the cache, as in Part 9. The polyhedral model "
-            "treats a loop nest as a set of integer points in a polyhedron, and its transformations as affine "
-            "maps, which lets a compiler search among them. <bookmark mark='c'/> Our compiler does none of these: "
-            "Pebble has no vector instructions, and the Job's loops exit as soon as they find what they want."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(orig), GrowArrow(arr), FadeIn(unr), FadeIn(ul))
-            vo.wait_until("b")
+        with self.voiceover("Production compilers consider many other loop transformations. <bookmark mark='a'/> Unrolling copies a body, potentially reducing repeated tests and exposing independent work. The implementation still needs correct handling of leftover iterations, exits and effects; more code can also be costly. <bookmark mark='b'/> SIMD vectorization groups compatible operations into lanes. Interchange and tiling can improve locality when dependencies permit. Polyhedral methods model suitable affine loop domains and accesses as integer sets, then search legal transformations. Arbitrary pointer-dependent control flow does not automatically fit that model. <bookmark mark='c'/> Our compiler implements none of these additional methods. Pebble lacks SIMD instructions. Early exits in the Job make several transformations more complicated, but do not establish that all unrolling or loop restructuring is impossible.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(orig), GrowArrow(arr), FadeIn(unr), FadeIn(ul), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(LaggedStart(*[FadeIn(m) for m in more], lag_ratio=0.5), run_time=3)
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(note))
         self.wait(0.3)
         self.clear_scene()

@@ -58,26 +58,15 @@ class Schedule(VoiceoverScene):
             label(r"a false dependence, \ created by register allocation reusing \texttt{t3}", font_size=20,
                   color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.35).to_edge(LEFT, buff=0.8)
-        with self.voiceover(
-            "The last job of the back end is to choose an order for the instructions within each block. <bookmark "
-            "mark='a'/> Here is the inner loop of word: compare one letter. Add, load a byte, add, load a byte, "
-            "branch if equal. <bookmark mark='b'/> Draw an edge from one instruction to another when the second "
-            "must wait for the first. The first add produces the address the first load uses. <bookmark mark='c'/> "
-            "The branch needs both loaded bytes, and on Part 7's pipeline a load's result arrives a cycle late: "
-            "a branch right after the load it depends on stalls. <bookmark mark='d'/> And one edge is different. "
-            "Instruction three overwrites t three, which instruction two reads. Three must wait for two, not "
-            "because of any value, but because the register allocator chose to reuse t three. A false dependence, "
-            "and an example of the two phases fighting: allocate first and you constrain the schedule; schedule "
-            "first and you may need more registers."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(cap), FadeIn(lst))
-            vo.wait_until("b")
+        with self.voiceover("The last job of the back end is to choose an order for the instructions within each block. <bookmark mark='a'/> Here is the inner loop of word: compare one letter. Add, load a byte, add, load a byte, branch if equal. <bookmark mark='b'/> Draw an edge from one instruction to another when the second must wait for the first. The first add produces the address the first load uses. <bookmark mark='c'/> The branch needs both loaded bytes, and on Part 7's pipeline a load's result arrives a cycle late: a branch right after the load it depends on stalls. <bookmark mark='d'/> And one edge is different. Instruction three overwrites t three, which instruction two reads. Three must wait for two, not because of any value, but because the register allocator chose to reuse t three. A false dependence, and an example of the two phases fighting: allocate first and you constrain the schedule; schedule first and you may need more registers.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(cap), FadeIn(lst), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(*[FadeIn(n) for n in nodes.values()], FadeIn(es[0]), FadeIn(es[2]), FadeIn(notes[0]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(es[3]), FadeIn(es[4]), FadeIn(notes[1]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(es[1]), FadeIn(notes[2:]))
         self.wait(0.3)
         self.clear_scene()
@@ -112,20 +101,11 @@ class Schedule(VoiceoverScene):
                              label(r"a block of five", font_size=20, color=HEAD),
                              label(r"has nothing to hide behind", font_size=20, color=HEAD)).arrange(
                 DOWN, aligned_edge=LEFT, buff=0.08).next_to(VGroup(a, b), RIGHT, buff=0.6)
-        with self.voiceover(
-            "The standard method is list scheduling. <bookmark mark='a'/> Keep a list of the instructions that "
-            "are ready, because everything they wait for has been placed. Each cycle, place the ready instruction "
-            "with the longest path to the end of the block, so the critical path starts as early as possible and "
-            "independent work fills the gaps. Finding the very best order is NP-hard in general, and this greedy "
-            "rule is what nearly everyone uses. <bookmark mark='b'/> In our block it cannot help much. Even with a "
-            "spare register, removing the false dependence, the second load must still come right before the "
-            "branch that needs it. A block of five instructions in a single chain has nothing to hide the delay "
-            "behind. To do better, a scheduler must look across blocks, and across loop iterations."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(s) for s in steps], lag_ratio=0.5), run_time=4)
-            vo.wait_until("b")
+        with self.voiceover("The standard method is list scheduling. <bookmark mark='a'/> Keep a list of the instructions that are ready, because everything they wait for has been placed. Each cycle, place the ready instruction with the longest path to the end of the block, so the critical path starts as early as possible and independent work fills the gaps. Finding the very best order is NP-hard in general, and this greedy rule is what nearly everyone uses. <bookmark mark='b'/> In our block it cannot help much. Even with a spare register, removing the false dependence, the second load must still come right before the branch that needs it. A block of five instructions in a single chain has nothing to hide the delay behind. To do better, a scheduler must look across blocks, and across loop iterations.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(s) for s in steps], lag_ratio=0.5), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(a), FadeIn(al))
             self.play(FadeIn(b), FadeIn(bl))
             self.play(FadeIn(verdict))
@@ -156,31 +136,20 @@ class Schedule(VoiceoverScene):
         pts = VGroup(
             label(rf"scheduling removed {a['load_use'] - a2['load_use']} stalls out of {a['load_use']:,}: "
                   r"\ the Job's loops are chains", font_size=20, color=GREY_A),
-            label(rf"the compiled Job runs {100 * (1 - a['instructions'] / h['instructions']):.0f}\% fewer "
-                  rf"instructions, \ yet {100 * (a['cycles'] / h['cycles'] - 1):.0f}\% \textit{{more}} cycles", font_size=21,
+            label(rf"relative to hand-written: instructions {100 * (a['instructions'] / h['instructions'] - 1):+.1f}\%; cycles {100 * (a['cycles'] / h['cycles'] - 1):+.1f}\%", font_size=21,
                   color=NO),
             label(r"why: \ inverted loops branch \textit{backward} every iteration, \ and this pipeline predicts "
                   r"``not taken''", font_size=20, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(cap, DOWN, buff=0.4)
-        with self.voiceover(
-            "How much does any of this matter? We ran the compiled Job on Part 7's pipeline, on a passage of three "
-            "thousand bytes. <bookmark mark='a'/> The table shows the hand-written program, the compiled array "
-            "version, the same scheduled, and the compiled list version. <bookmark mark='b'/> Scheduling removed "
-            "fifty-two stalls out of eighty-three thousand: the Job's inner loops are chains of dependent loads, "
-            "with nothing to interleave. <bookmark mark='c'/> And something stranger. The compiled program executes "
-            "twelve percent fewer instructions than the hand-written one, yet takes twelve percent more cycles. "
-            "<bookmark mark='d'/> The culprit is loop inversion. An inverted loop ends with a backward branch "
-            "that is taken on every iteration but the last, and this pipeline, as Part 7 first built it, always "
-            "predicts that a branch is not taken. Every iteration pays a flush."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(tab), FadeIn(cap))
-            vo.wait_until("b")
+        with self.voiceover(f"Now measure the generated code on Part 7's simulated pipeline, using the same {s['bytes']:,}-byte passage. <bookmark mark='a'/> Compare the hand-written program, the compiled array program, its scheduled form and the compiled list program. <bookmark mark='b'/> Scheduling removes {a['load_use'] - a2['load_use']:,} of the compiled array program's {a['load_use']:,} load-use stall cycles. The remaining dependency chains limit this local scheduler's opportunities. <bookmark mark='c'/> Relative to hand-written code, the compiled array instruction count changes by {100 * (a['instructions'] / h['instructions'] - 1):+.1f} percent, while its cycle count changes by {100 * (a['cycles'] / h['cycles'] - 1):+.1f} percent. <bookmark mark='d'/> In this configuration, every conditional branch is predicted not taken. The inverted loops repeatedly take their conditional back branches, creating flushes. The next comparison changes the predictor while keeping this program and input fixed.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(tab), FadeIn(cap), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(pts[0]), Indicate(VGroup(*tab.cells[3]), color=YES))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(pts[1]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(pts[2]), *[Indicate(tab.cells[k][3], color=NO) for k in (2, 3, 4)])
         self.wait(0.3)
         self.clear_scene()
@@ -203,29 +172,21 @@ class Schedule(VoiceoverScene):
                          colors=cols, mono_cols=()).next_to(head, DOWN, buff=0.6)
         cap = label(r"cycles on the same passage", font_size=18, color=GREY_B).next_to(tab, DOWN, buff=0.15)
         pts = VGroup(
-            label(r"with any real predictor, \ the backward branches are learned, \ and the compiler wins", font_size=21,
+            label("on this input, the recorded predictors change the cycle comparison", font_size=21,
                   color=YES),
-            label(r"compilers are tuned for the hardware they expect: \ inverted loops assume prediction", font_size=21,
+            label("loop inversion trades branch behavior, instruction count and code size", font_size=21,
                   color=GREY_A),
             label(r"and hardware is designed for the code compilers emit: \ the two evolve together", font_size=21,
                   color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(cap, DOWN, buff=0.5)
-        with self.voiceover(
-            "So give the pipeline the predictors Part 7 went on to build. <bookmark mark='a'/> With a two-bit "
-            "counter per branch, the backward branches are learned after a couple of iterations. The compiled "
-            "array Job now takes nine percent fewer cycles than the hand-written one. A tournament predictor "
-            "gains a little more. <bookmark mark='b'/> The lesson is that a compiler always assumes a machine. "
-            "Loop inversion is good only on a machine that predicts branches. <bookmark mark='c'/> And machines "
-            "are designed for the code that compilers emit. The two evolve together, which is why a "
-            "microarchitecture and its compiler are usually built by the same company."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(tab), FadeIn(cap))
+        with self.voiceover("Now change this simulated pipeline's branch predictor. <bookmark mark='a'/> A two-bit counter can learn the frequently taken loop-back branches, and the recorded cycle counts change. The tournament predictor gives another measured comparison. These gains belong to these programs, inputs and machine configurations. <bookmark mark='b'/> Loop inversion trades tests, jumps, code size and branch behavior. Prediction is one part of that tradeoff; an architecture with a different branch cost may still benefit for other reasons. <bookmark mark='c'/> Compiler heuristics and microarchitecture therefore need compatible cost models. Hardware teams, compiler projects and application developers contribute to that agreement, and they need not belong to the same company.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(tab), FadeIn(cap), run_time=0.6)
+            vo.wait_until('a')
             self.play(FadeIn(pts[0]))
-            vo.wait_until("b")
+            vo.wait_until('b')
             self.play(FadeIn(pts[1]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(pts[2]))
         self.wait(0.3)
         self.clear_scene()
@@ -253,23 +214,13 @@ class Schedule(VoiceoverScene):
             label(r"an out-of-order core does it in hardware, \ at run time \ (Part 8): \ static scheduling matters "
                   r"less there", font_size=20, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "The way past a chain inside one iteration is to overlap different iterations. <bookmark mark='a'/> "
-            "Suppose each iteration loads, adds and stores. Start iteration two while iteration one is still "
-            "adding, and iteration three while one stores and two adds. <bookmark mark='b'/> In the steady state, "
-            "every cycle does a load for one iteration, an add for the previous one, and a store for the one before "
-            "that, like the stages of Part 7's pipeline. <bookmark mark='c'/> This is software pipelining, or "
-            "modulo scheduling, from Rau and Glaeser in 1981 and Monica Lam in 1988. It is essential on in-order "
-            "and VLIW machines, which do exactly what the compiler says. An out-of-order core, as in Part 8, "
-            "finds the same overlap by itself at run time, which is one reason static scheduling matters less on "
-            "the processors in laptops and phones."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(g) for g in grid], lag_ratio=0.12), run_time=3)
-            vo.wait_until("b")
+        with self.voiceover("Independent work from different iterations can sometimes overlap. <bookmark mark='a'/> Suppose an iteration loads, adds and stores, and its dependencies permit the next iteration's load before the previous store finishes. Starting iterations at regular intervals creates a software pipeline. <bookmark mark='b'/> On a machine with enough issue width and the required functional units, the steady state can contain a load, an add and a store from different iterations at once. Memory aliases, loop-carried dependencies and available registers limit that overlap; a load-add-store sketch alone does not prove it is legal. <bookmark mark='c'/> Modulo scheduling and related software-pipelining methods are especially useful where hardware exposes scheduling decisions, including VLIW targets. Out-of-order hardware can discover some overlap dynamically, but finite windows, dependencies and resource limits mean it need not reproduce the same schedule or make static optimization irrelevant.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(g) for g in grid], lag_ratio=0.12), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(Create(steady), FadeIn(sl))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.5), run_time=3)
         self.wait(0.3)
         self.clear_scene()

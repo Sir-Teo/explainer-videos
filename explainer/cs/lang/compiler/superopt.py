@@ -1,9 +1,10 @@
 """A superoptimizer and a rule checker for Part 13's Frontier chapter.
 
-* :func:`search` enumerates every Pebble instruction sequence up to a given length over the inputs' registers,
-  shortest first (Massalin 1987), keeping only sequences that agree with the target on a set of test inputs,
-  and pruning any new value already computed (observational equivalence).  Each candidate it returns is then
-  *proved* equal to the target for all 2³² (or 2⁶⁴) inputs by the SMT solver z3: testing finds it, logic checks it.
+* :func:`search` explores a restricted Pebble instruction vocabulary in increasing body length, keeping
+  candidates that agree with the target on finite test inputs. Prefixes with equal test observations are merged;
+  that pruning is incomplete, so a first-found length is not a minimum-length certificate. The caller must use
+  :func:`prove` to check each candidate against a 32-bit SMT specification. Testing finds candidates; logic checks
+  the encoded function, not timing, memory, physical registers or a complete external toolchain.
 * :func:`check_rule` proves or refutes a rewrite rule over 32-bit machine integers (the idea of Alive, Lopes et al.
   2015, which found bugs in LLVM's peephole optimizer this way): ``x * 8 → x << 3`` holds for every x;
   ``x / 2 → x >> 1`` does not, and z3 says which x breaks it.
@@ -58,8 +59,11 @@ EDGE = [0, 1, 2, 3, 7, 0x7FFF_FFFF, 0x8000_0000, 0x8000_0001, 0xFFFF_FFFF, 0xFFF
 
 
 def search(target, arity: int = 1, max_len: int = 3, ops=None, tests=None, limit: int = 5):
-    """Shortest sequences computing target(*inputs) (inputs as unsigned 32-bit ints).  Returns (length, programs);
-    a program is a list of (op, dst, a, b_or_imm) over registers x, y, zero, t1, t2..."""
+    """Return finite-test candidates at the first found length, with no minimality/completeness guarantee.
+
+    Inputs are unsigned 32-bit words. A program lists (op, dst, a, b_or_imm) over registers x, y, zero,
+    t1, t2... The caller must separately prove semantic equivalence with :func:`prove`.
+    """
     import random
     rng = random.Random(1)
     if tests is None:

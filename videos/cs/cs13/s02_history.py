@@ -44,39 +44,26 @@ class History(VoiceoverScene):
             label(r"--- John Backus, \ 1978", font_size=18, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).to_edge(DOWN, buff=0.45)
         frame = SurroundingRectangle(quote, color=HEAD, buff=0.2, corner_radius=0.1, stroke_width=1.5)
-        with self.voiceover(
-            "In the early nineteen fifties, programs were written in machine code, by hand. <bookmark mark='a'/> In "
-            "1952 Grace Hopper's A-0 system stitched together subroutines from a library by number, and she called "
-            "it a compiler: it compiled a program out of pieces. <bookmark mark='b'/> But most programmers were sure "
-            "that anything automatic would produce code far too slow to use. Machine time cost more than programmer "
-            "time, and the experts wrote tight code. <bookmark mark='c'/> John Backus's team at IBM set out to prove "
-            "them wrong. Their FORTRAN compiler for the IBM 704 was delivered in April 1957, after about eighteen "
-            "person-years of work, and most of that work went into optimization. It even simulated the flow of the "
-            "program to estimate which loops ran most often, and gave those loops the machine's three index "
-            "registers. <bookmark mark='d'/> Backus explained why, twenty years later: if FORTRAN produced programs "
-            "only half as fast as hand-coded ones, nobody would have used it. The language was the easy part. The "
-            "hard part was the promise that the code would be nearly as good as an expert's. That promise is the "
-            "subject of this part."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(a0, shift=RIGHT * 0.1))
-            vo.wait_until("b")
+        with self.voiceover("In the early nineteen fifties, programs were written in machine code, by hand. <bookmark mark='a'/> In 1952 Grace Hopper's A-0 system stitched together subroutines from a library by number, and she called it a compiler: it compiled a program out of pieces. <bookmark mark='b'/> But most programmers were sure that anything automatic would produce code far too slow to use. Machine time cost more than programmer time, and the experts wrote tight code. <bookmark mark='c'/> John Backus's team at IBM set out to prove them wrong. Their FORTRAN compiler for the IBM 704 was delivered in April 1957, after about eighteen person-years of work, and most of that work went into optimization. It even simulated the flow of the program to estimate which loops ran most often, and gave those loops the machine's three index registers. <bookmark mark='d'/> Backus explained why, twenty years later: if FORTRAN produced programs only half as fast as hand-coded ones, nobody would have used it. The language was the easy part. The hard part was the promise that the code would be nearly as good as an expert's. That promise is the subject of this part.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(a0, shift=RIGHT * 0.1), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(doubt, shift=RIGHT * 0.1))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in ft], lag_ratio=0.5), run_time=2.5)
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(quote), Create(frame))
         self.wait(0.5)
         self.clear_scene()
 
     def shape(self):
-        head = label(r"Every compiler since: \ three ends", font_size=36).to_edge(UP, buff=0.35)
+        head = label("A common compiler architecture", font_size=36).to_edge(UP, buff=0.35)
         spec = [
             (r"front end", DATA, [r"lexing and parsing \ (Part 12)", r"names, \ scopes, \ types",
                                  r"lowering to an IR"], r"knows the language"),
             (r"middle end", YES, [r"the control-flow graph", r"SSA, \ dataflow", r"optimizations"],
-             r"knows neither"),
+             "shared analyses"),
             (r"back end", FUNC, [r"instruction selection", r"register allocation", r"scheduling, \ emission"],
              r"knows the machine"),
         ]
@@ -96,23 +83,15 @@ class History(VoiceoverScene):
                                                                                                buff=0.35)
         foot = label(r"each stage is a function from one representation of the program to another", font_size=22,
                      color=HEAD).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "Almost every compiler since has the same shape: three parts. <bookmark mark='a'/> The front end knows "
-            "the language. It lexes and parses, as in Part 12, checks names, scopes and types, and lowers the tree "
-            "into an intermediate representation, the IR. <bookmark mark='b'/> The middle end knows neither the "
-            "language nor the machine. It turns the IR into a control-flow graph, analyses it, and optimizes it. "
-            "<bookmark mark='c'/> The back end knows the machine. It chooses instructions, assigns registers, orders "
-            "the instructions for the pipeline, and writes out machine code. <bookmark mark='d'/> Each stage is a "
-            "function from one representation of the program to another, and each one must preserve the meaning."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(src), FadeIn(cols[0]))
-            vo.wait_until("b")
+        with self.voiceover("A common compiler architecture has three broad parts. <bookmark mark='a'/> The front end understands the source language. It lexes and parses, checks names and types, and translates the tree into an intermediate representation, or IR. <bookmark mark='b'/> The middle end analyzes and transforms that representation. Shared optimizations can serve several languages and machines, although some still depend on source semantics or target costs. <bookmark mark='c'/> The back end chooses target instructions, assigns registers, schedules work and emits assembly or machine code. Real compilers may interleave these stages or use several IRs. <bookmark mark='d'/> The organizing principle is a sequence of representations with precise meanings. Each translation must preserve the behaviors required by the source and target semantics.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(src), FadeIn(cols[0]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(GrowArrow(arrows[0]), FadeIn(ir_l), FadeIn(cols[1]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(GrowArrow(arrows[1]), FadeIn(out), FadeIn(cols[2]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(foot))
         self.wait(0.3)
         self.clear_scene()
@@ -137,25 +116,17 @@ class History(VoiceoverScene):
                    color=YES).next_to(VGroup(L2, M2), DOWN, buff=0.35)
         hist = label(r"proposed as UNCOL in 1958; \ made real by GCC (1987) and LLVM (2004)", font_size=21,
                      color=GREY_A).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "Why put a middle in at all? <bookmark mark='a'/> Suppose you have five languages and four machines. "
-            "Compiling each language straight to each machine takes twenty compilers, and an optimization must be "
-            "written twenty times. <bookmark mark='b'/> With a shared intermediate representation, each language "
-            "needs only a front end and each machine a back end: nine halves, and every optimization written once, "
-            "in the middle. <bookmark mark='c'/> The idea was proposed in 1958 under the name UNCOL, a universal "
-            "computer-oriented language, and it took decades to work in practice. GCC made it real in 1987, and "
-            "LLVM, from 2004, is the IR behind Clang, Rust, Swift and many more."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(L1), FadeIn(M1))
+        with self.voiceover("Why use a shared intermediate representation? <bookmark mark='a'/> Five languages and four machines suggest twenty direct translation combinations. Maintaining each separately would duplicate much of the work. <bookmark mark='b'/> A shared IR lets us organize the interfaces as five front ends and four back ends, with reusable analyses and optimizations in between. Nine interfaces do not imply nine equal-sized jobs: language features, runtime support and target constraints still need engineering. <bookmark mark='c'/> UNCOL proposed a universal intermediate language in 1958. Later retargetable systems, including GCC and LLVM, made related ideas practical at scale. Modern language implementations can share compiler infrastructure without having identical semantics or optimization needs.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(L1), FadeIn(M1), run_time=0.6)
+            vo.wait_until('a')
             self.play(Create(mesh), run_time=1.5)
             self.play(FadeIn(t1))
-            vo.wait_until("b")
+            vo.wait_until('b')
             self.play(FadeIn(L2), FadeIn(M2), FadeIn(hub))
             self.play(Create(spokes), run_time=1.2)
             self.play(FadeIn(t2))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(hist))
         self.wait(0.3)
         self.clear_scene()
@@ -194,31 +165,19 @@ class History(VoiceoverScene):
         spine = Arrow(rows[0].get_left() + LEFT * 0.35 + UP * 0.1, rows[-1].get_left() + LEFT * 0.35 + DOWN * 0.1,
                       buff=0, color=GREY_D, stroke_width=2, max_tip_length_to_length_ratio=0.04)
         spine.set_x(-5.55)
-        foot = label(r"about 2,500 lines of Python, \ and every number in this part comes from running it",
+        foot = label("reproducible compiler demonstrations; historical and research claims have cited sources",
                      font_size=24, color=HEAD).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "Here is the compiler we build, and the linked-list Job of Part 12 passing through it. <bookmark "
-            "mark='a'/> Two thousand two hundred characters of source become six hundred and fifty-one tokens, and "
-            "a tree of three hundred and seventy-one nodes: that was Part 12. <bookmark mark='b'/> The checker "
-            "assigns every name a meaning and every expression a type. Lowering produces two hundred and seven IR "
-            "instructions in sixty-one basic blocks. Conversion to SSA adds twenty phi functions, a new kind of "
-            "instruction we will meet in chapter five. <bookmark mark='c'/> The optimizer, at its highest level, "
-            "leaves three hundred and fifteen: more than it started with, because it copies function bodies into "
-            "their callers and duplicates loop tests, trading size for speed. <bookmark mark='d'/> And the back end "
-            "writes two hundred and thirty-five Pebble instructions, nine hundred and fifty-six bytes. <bookmark "
-            "mark='e'/> The whole compiler is about two and a half thousand lines of Python, and every number in "
-            "this part comes from running it."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r) for r in rows[:3]], lag_ratio=0.4), GrowArrow(spine), run_time=2)
-            vo.wait_until("b")
+        with self.voiceover(f"Here is the linked-list Job passing through our compiler. <bookmark mark='a'/> Its {p['chars']:,} source characters become {p['tokens']} tokens and {p['nodes']} syntax-tree nodes. <bookmark mark='b'/> After checking names and types, lowering produces {p['ir']} intermediate instructions in {p['blocks']} blocks. SSA construction inserts {p['phis']} phis. <bookmark mark='c'/> The final recorded optimizer configuration leaves {p['ir_optimized']} intermediate instructions. Inlining, loop tests and other transformations can increase static size while trying to improve execution; smaller source or IR is not the sole objective. <bookmark mark='d'/> The backend emits {p['asm']} machine instructions occupying {p['bytes']:,} bytes in this recorded count. The instructions execute repeatedly, so static code size differs from dynamic work. <bookmark mark='e'/> These demonstrations are reproducible computations. Historical events and general mathematical results require their cited sources and assumptions as well.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(r) for r in rows[:3]], lag_ratio=0.4), GrowArrow(spine), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(LaggedStart(*[FadeIn(r) for r in rows[3:6]], lag_ratio=0.5), run_time=3)
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(rows[6]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(rows[7]))
-            vo.wait_until("e")
+            vo.wait_until('e')
             self.play(FadeIn(foot))
         self.wait(0.4)
         self.clear_scene()

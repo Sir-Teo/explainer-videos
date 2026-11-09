@@ -6,9 +6,10 @@ import numpy as np
 
 from explainer.cs import *  # noqa: F403
 from videos.cs.cs6.common import box, fmt, sci  # noqa: F401
-from videos.cs.cs7.common import mono  # noqa: F401
-from videos.cs.cs8.common import bar_chart, grid_table  # noqa: F401
-from videos.cs.cs11.common import code, region  # noqa: F401
+from videos.cs.cs7.common import mono as _mono
+from videos.cs.cs8.common import bar_chart  # noqa: F401
+from videos.cs.cs11.common import region  # noqa: F401
+from explainer import zh_text
 
 from .compute import load  # noqa: F401
 
@@ -25,6 +26,51 @@ NO = C.CS_FALSE
 BG = "#121722"
 PALETTE = [DATA, CTRL, YES, FUNC, HEAD, NO, "#9b8cd6", "#5fb7a8", "#d68c9b", "#8cb3d6", "#c9b26b", "#7fb069",
            "#b07fb0"]
+
+
+
+def literal_text(text, **kwargs):
+    """Source tokens, IR operands and machine output are data, not UI prose."""
+    with zh_text.verbatim():
+        return Text(text, **kwargs)
+
+
+def mono(s, size=19, color=CODE):
+    with zh_text.verbatim():
+        return _mono(s, size, color)
+
+
+def code(lines, size=18, color=CODE, buff=0.07):
+    return VGroup(*[mono(l if l else " ", size, color) for l in lines]).arrange(
+        DOWN, aligned_edge=LEFT, buff=buff)
+
+
+def grid_table(header, rows, widths, row_h=0.42, font_size=18, header_color=GREY_B, colors=None, mono_cols=(0,)):
+    """``header``: column titles (Tex); ``rows``: lists of strings (Tex, or monospaced in ``mono_cols``).
+    Returns a VGroup with ``.cells[r][c]`` (r = 0 is the header) and ``.rule``."""
+    g = VGroup()
+    g.cells = []
+    xs = np.cumsum([0] + list(widths[:-1])) + np.array(widths) / 2
+    for r, row in enumerate([header] + rows):
+        line = []
+        for c, txt in enumerate(row):
+            if r > 0 and c in mono_cols:
+                m = (literal_text(txt, font="DejaVu Sans Mono", font_size=font_size - 3, color=CODE) if txt.strip()
+                     else VectorizedPoint())
+            else:
+                col = header_color if r == 0 else (colors[r - 1][c] if colors else WHITE)
+                m = label(txt, font_size=font_size, color=col) if txt else VectorizedPoint()
+            if m.width > widths[c] - 0.1:
+                m.width = widths[c] - 0.1
+            m.move_to([xs[c], -r * row_h, 0])
+            if r > 0 and c in mono_cols:
+                m.align_to([xs[c] - widths[c] / 2 + 0.05, 0, 0], LEFT)
+            line.append(m)
+            g.add(m)
+        g.cells.append(line)
+    g.rule = Line([0, -row_h / 2, 0], [sum(widths), -row_h / 2, 0], color=GREY_D, stroke_width=1.5)
+    g.add(g.rule)
+    return g
 
 
 def ir_block(label: str, lines: list, color=DATA, size=15, width=None):
@@ -66,7 +112,7 @@ def graph(nodes: list, edges: list, colors: dict | None = None, radius=2.6, node
         c = PALETTE[colors[n] % len(PALETTE)] if colors and n in colors else GREY_C
         circ = Circle(radius=node_r, stroke_color=c, stroke_width=2, fill_color=c,
                       fill_opacity=0.35 if colors else 0.1).move_to(pos[n])
-        t = Text(n.replace("%", ""), font="DejaVu Sans Mono", font_size=font_size, color=WHITE)
+        t = literal_text(n.replace("%", ""), font="DejaVu Sans Mono", font_size=font_size, color=WHITE)
         if t.width > node_r * 1.8:
             t.scale_to_fit_width(node_r * 1.8)
         ns[n] = VGroup(circ, t.move_to(circ))

@@ -1,7 +1,7 @@
 # Computer Science, Built — sequential polish
 
 Work on `computer-science-built`, one video at a time, with separate commits.
-Current video: **cs13, The Compiler**. CS1–CS12 source/preview polish checkpoints
+Current video: **cs14, Lambda and Types**. CS1–CS13 source/preview polish checkpoints
 are complete at the scopes below. Their production release gates remain open; this
 ledger does not treat sampled previews as listening or final-production approval.
 The syllabus's earlier draft-preview claims are separate.
@@ -14,6 +14,28 @@ upgrade/rejection check passes. All numerical producer ASTs and 11 active data h
 This is a loader correctness follow-up; earlier media receipts stay tied to their checkpoint commits.
 
 [CS3 cache-entry evidence](evidence/cs3-cache-entry-20261109/README.md).
+
+## Final CS13 preview checkpoint, 9 November 2026
+
+- Repair LICM's skipped conditional loads and overlapping byte/word stores, with directed semantic regressions.
+  Reconcile compiler measurements, physical instruction-word counts and fourteen guarded cache revisions.
+  All eighteen original payloads remain archived; thirteen tests and seventeen independent numerical groups pass,
+  including 1,120 physical ISA candidate cases.
+- Revise 56 bilingual narration sections, 50 early reveals and six bilingual exercises. Add actual SSA renaming,
+  safe LICM and halting-equivalence visuals; clarify dataflow, chordality, aliasing, optimization and research scope.
+- All 34 endpoint and 34 motion overviews reviewed: 1,360 motion samples, 32 endpoint and 29 motion
+  identical-PNG inheritances after fresh final renders, 139,293 decoded motion frames. One bounded Chinese title-only
+  transition has an explicit hash-bound disposition. A host-chart caption collision was repaired and rerendered.
+- Fourteen native clips: 12,331 decoded frames, 336 samples/fourteen stills inspected. All 98 English
+  speech blocks pass signal/alignment (71.29 minutes); 297 cues meet 250 ms.
+  Two narrated chapters decode 11,921 frames plus audio; 80 samples/two stills and 49 pilot cues checked.
+- Translation and canonical source pairs each 98/98; 845 captured caption strings, no unresolved translation
+  leads and 52 retained originals individually classified. Phonemizer text-token coverage is complete;
+  pronunciation and continuous listening remain open.
+
+[Verified CS13 evidence](evidence/cs13-polish-20261109/README.md).
+Continuous narrated listening, Chinese speech/listening, whole-video native production review and runtime at
+the selected narration pace remain open release gates.
 
 ## Final CS12 preview checkpoint, 9 November 2026
 

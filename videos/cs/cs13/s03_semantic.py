@@ -105,27 +105,16 @@ class Semantic(VoiceoverScene):
             rows, UP, buff=0.12).align_to(rows, LEFT)
         nxt = label(r"what types can promise, \ and inferring them unwritten: \ Part 14", font_size=20,
                     color=HEAD).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Next, every expression gets a type. <bookmark mark='a'/> The rules are written like this: above the "
-            "line, what must already be known; below, what follows. If e one and e two are integers, so is their "
-            "sum. If p points to things of type T and i is an integer, then p of i is a T. If e points to a "
-            "struct with a field f of type T, then e dot f is a T. <bookmark mark='b'/> The Greek gamma is the "
-            "symbol table we just built. The checker applies these rules bottom-up, over the tree. <bookmark "
-            "mark='c'/> Here are four programs our checker rejects, with its messages. An integer cannot hold null. "
-            "A name that was never declared. A field on a pointer to an int, which has no fields. A call with the "
-            "wrong number of arguments. Each would otherwise have become wrong machine code, found, if at all, by "
-            "a crash. <bookmark mark='d'/> What a type system can promise, and how types can be inferred without "
-            "being written, is the subject of Part 14."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r) for r in rules], lag_ratio=0.5), run_time=3)
-            vo.wait_until("b")
+        with self.voiceover("The checker assigns types according to the language's rules. <bookmark mark='a'/> Above each line are premises; below it is the conclusion. Two integer operands produce an integer sum. Indexing a pointer to T by an integer produces an element of type T. Selecting a declared struct field uses that field's type. <bookmark mark='b'/> Gamma records the typing environment, including the current names and their types. Our checker applies these rules while traversing the syntax tree. <bookmark mark='c'/> These four rejected fragments initialize an integer with null, use an undeclared name, select a nonexistent field, or pass the wrong argument count. The messages are our checker's actual output. Without the required checks, an implementation might reject them elsewhere, crash or compute a wrong result; a runtime crash is not guaranteed. <bookmark mark='d'/> Part 14 studies the guarantees of particular type systems and how some types can be inferred.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(r) for r in rules], lag_ratio=0.5), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(gam))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(cap))
             self.play(LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.5), run_time=3)
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(nxt))
         self.wait(0.3)
         self.clear_scene()
@@ -164,26 +153,15 @@ class Semantic(VoiceoverScene):
         acc2 = VGroup(mono("table[i].length", 18, CODE), MathTex(r"\to", font_size=30),
                       mono("lw  t, 4(table + 12*i)", 18, FUNC)).arrange(RIGHT, buff=0.3)
         accs = VGroup(acc, acc2).arrange(DOWN, buff=0.2, aligned_edge=LEFT).to_edge(DOWN, buff=0.45)
-        with self.voiceover(
-            "The checker also decides how big each thing is, and where each part of it lives. <bookmark mark='a'/> "
-            "On Pebble, integers and pointers are four bytes and must sit at addresses divisible by four; a "
-            "character is one byte. A struct's fields are laid out in order, each at the next multiple of its "
-            "alignment, and the struct's size is rounded up so that arrays of it stay aligned. <bookmark mark='b'/> "
-            "The list Job's Node is sixteen bytes: next at zero, letters at four, length at eight, count at twelve. "
-            "<bookmark mark='c'/> The array Job's Entry is twelve bytes, exactly the layout Part 6 chose by hand. "
-            "<bookmark mark='d'/> From now on a field is only an offset. p dot count becomes a load from twelve "
-            "bytes past p, and table of i dot length a load from four bytes past the table plus twelve times i. "
-            "The names are gone; the numbers remain."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r) for r in rules], lag_ratio=0.4), run_time=2)
-            vo.wait_until("b")
-            self.play(FadeIn(node[0]), LaggedStart(*[FadeIn(c) for c in node[1]], lag_ratio=0.3), FadeIn(node[2]),
-                      run_time=2)
-            vo.wait_until("c")
+        with self.voiceover("The checker also decides how big each thing is, and where each part of it lives. <bookmark mark='a'/> On Pebble, integers and pointers are four bytes and must sit at addresses divisible by four; a character is one byte. A struct's fields are laid out in order, each at the next multiple of its alignment, and the struct's size is rounded up so that arrays of it stay aligned. <bookmark mark='b'/> The list Job's Node is sixteen bytes: next at zero, letters at four, length at eight, count at twelve. <bookmark mark='c'/> The array Job's Entry is twelve bytes, exactly the layout Part 6 chose by hand. <bookmark mark='d'/> From now on a field is only an offset. p dot count becomes a load from twelve bytes past p, and table of i dot length a load from four bytes past the table plus twelve times i. The names are gone; the numbers remain.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(r) for r in rules], lag_ratio=0.4), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
+            self.play(FadeIn(node[0]), LaggedStart(*[FadeIn(c) for c in node[1]], lag_ratio=0.3), FadeIn(node[2]), run_time=2)
+            vo.wait_until('c')
             self.play(FadeIn(ent))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(acc))
             self.play(FadeIn(acc2))
         self.wait(0.3)
@@ -197,7 +175,7 @@ class Semantic(VoiceoverScene):
             (r"locals", r"\texttt{p}, \ \texttt{i}, \ \texttt{n}", r"a virtual register: \ the back end decides",
              YES),
             (r"address taken", r"\texttt{word} \ in \texttt{main}: \ \texttt{\&word[0]}",
-             r"must live in memory, \ in the stack frame", FUNC),
+             "addressable storage in this implementation", FUNC),
             (r"arrays and structs", r"\texttt{digits[12]}", r"in memory, \ in the stack frame", CTRL),
         ]
         rows = VGroup()
@@ -213,24 +191,17 @@ class Semantic(VoiceoverScene):
             r[0].align_to([-6.3, 0, 0], LEFT)
             r[1].align_to([-3.2, 0, 0], LEFT)
             r[2].align_to([1.4, 0, 0], LEFT)
-        foot = label(r"a local whose address is never taken is just a value: \ the optimizer may do anything with it",
+        foot = label("virtual values may be transformed while preserving defined behavior",
                      font_size=21, color=HEAD).to_edge(DOWN, buff=0.6)
-        with self.voiceover(
-            "Last, the checker records where each variable will live. <bookmark mark='a'/> Globals get fixed "
-            "addresses in the data section, just as Part 11's linker laid them out. <bookmark mark='b'/> Ordinary "
-            "locals become virtual registers, as many as we like; the back end decides later which real register, "
-            "or which stack slot, each one gets. <bookmark mark='c'/> But if a program takes a local's address, "
-            "like main's word buffer, passed to lookup by its address, then that local must live in memory, because "
-            "another function may read it through the pointer. <bookmark mark='d'/> Arrays and structs live in the "
-            "stack frame too. <bookmark mark='e'/> The distinction matters enormously. A local whose address is "
-            "never taken is just a value: nothing outside the function can see it, so the optimizer is free to "
-            "move it, copy it, or delete it."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, r in zip("abcd", rows):
-                vo.wait_until(mk)
+        with self.voiceover("Our checker also records how locals can be represented. <bookmark mark='a'/> Globals receive storage in the data section, with addresses resolved by the compiler and linker. <bookmark mark='b'/> Ordinary scalar locals become virtual registers. Later, the back end assigns physical registers or stack slots. This is an implementation choice, not a claim that every optimization level keeps them in registers. <bookmark mark='c'/> If a local's address is passed elsewhere, its contents may be accessed through a pointer. Our compiler gives such locals memory storage; a more sophisticated compiler could promote them after proving the pointer uses harmless. <bookmark mark='d'/> Our arrays and structs also use stack storage when local. <bookmark mark='e'/> Separating scalar values from observable memory makes analysis simpler. Moving or deleting a computation still requires preserving its effects, possible traps and required result.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            for mk, r in zip('abcd', rows):
+                if mk != 'a':
+                    vo.wait_until(mk)
                 self.play(FadeIn(r, shift=RIGHT * 0.1))
-            vo.wait_until("e")
+                if mk == 'a':
+                    vo.wait_until(mk)
+            vo.wait_until('e')
             self.play(FadeIn(foot))
         self.wait(0.3)
         self.clear_scene()

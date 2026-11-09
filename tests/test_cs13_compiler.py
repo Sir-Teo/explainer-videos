@@ -64,6 +64,55 @@ class Middle(unittest.TestCase):
                     S.from_ssa(f)
                 self.assertEqual(bytes(IT.run(m, tape).out), ref)
 
+    def test_optimizer_keeps_guarded_loads_guarded(self):
+        # The loop is entered, but its inner condition is false. Hoisting *p
+        # would introduce a trap into this well-typed, defined source program.
+        src = """
+        fn guarded(p: *int, n: int) -> int {
+            var i: int = 0;
+            var total: int = 0;
+            while i < n {
+                if i == 1 { total = total + *p; }
+                i = i + 1;
+            }
+            return total;
+        }
+        fn main() -> int { return guarded(null, 1); }
+        """
+        for rotate in (False, True):
+            with self.subTest(rotate=rotate):
+                m = module(src, rotate)
+                self.assertEqual(IT.run(m).result, 0)
+                for f in m.funcs:
+                    S.to_ssa(f)
+                    O.optimize(f)
+                    S.from_ssa(f)
+                self.assertEqual(IT.run(m).result, 0)
+
+    def test_licm_respects_overlapping_access_widths(self):
+        from explainer.cs.lang.compiler.ir import Block, Func, I, Module
+
+        # Load in the header, not a conditional body: the alias rule itself
+        # must reject hoisting, independently of the control-flow restriction.
+        for store_width, load_width in ((1, 4), (4, 1)):
+            with self.subTest(store=store_width, load=load_width):
+                m = Module([Func('main', [], [
+                    Block('entry', [I('gaddr', '%p', k='word'), I('br', k='header')]),
+                    Block('header', [I('phi', '%i', [0, '%next'], ['entry', 'body']),
+                                     I('phi', '%sum', [0, '%acc'], ['entry', 'body']),
+                                     I('load', '%word', ['%p'], (load_width, 0)),
+                                     I('bin', '%more', ['%i', 2], 'lt'),
+                                     I('cbr', args=['%more'], k=('body', 'exit'))]),
+                    Block('body', [I('bin', '%acc', ['%sum', '%word'], 'add'),
+                                   I('bin', '%next', ['%i', 1], 'add'),
+                                   I('store', args=['%p', '%next'], k=(store_width, 0)),
+                                   I('br', k='header')]),
+                    Block('exit', [I('ret', args=['%sum'])]),
+                ])], {'word': (4, 4, 0)})
+                self.assertEqual(IT.run(m).result, 1)
+                O.licm(m.funcs[0])
+                self.assertEqual(IT.run(m).result, 1)
+
     def test_dominators_against_definition(self):
         m = module(P.JOB, True)
         for f in m.funcs:
@@ -136,6 +185,55 @@ class Super(unittest.TestCase):
         ok, cex = SO.check_rule(lambda x: x / 2, lambda x: x >> 1)
         self.assertFalse(ok)
         self.assertEqual((cex[0] // 2 if cex[0] >= 0 else -((-cex[0]) // 2)) == cex[0] >> 1, False)
+
+
+
+class CacheSafety(unittest.TestCase):
+    def test_compiler_cache_entry_and_cli_revision_checks(self):
+        import contextlib
+        import hashlib
+        import io
+        import json
+        import sys
+        import tempfile
+        from pathlib import Path
+        from unittest.mock import patch
+        from tools.qa_series import StaleDataError, require_current_cache
+        from videos.cs.cs13 import compute as C13
+
+        calls = []
+        def produce():
+            calls.append(True)
+            return {"observed": 7}
+
+        with tempfile.TemporaryDirectory() as folder:
+            cache = C13.CompilerCache("cs13")
+            cache.dir = Path(folder)
+            with patch.object(C13, "CACHE", cache), patch.dict(C13.ITEMS, {"passes": produce}):
+                target = cache.path("passes")
+                target.write_text('{"observed": 99}')
+                original = hashlib.sha256(target.read_bytes()).hexdigest()
+                with self.assertRaises(StaleDataError):
+                    require_current_cache(C13, "cs13", target, "passes")
+                self.assertEqual(calls, [])
+                self.assertEqual(hashlib.sha256(target.read_bytes()).hexdigest(), original)
+                with patch.object(sys, "argv", ["compute.py", "passes"]), contextlib.redirect_stdout(io.StringIO()):
+                    cache.main(C13.ITEMS)
+                    cache.main(C13.ITEMS)
+                self.assertEqual(len(calls), 1)
+                self.assertTrue(C13.cache_current("passes"))
+                self.assertEqual(C13.load("passes")["observed"], 7)
+                data = json.loads(target.read_text())
+                data["_compiler_data_revision"] = "a different compiler revision"
+                target.write_text(json.dumps(data))
+                before_rejection = target.read_bytes()
+                with self.assertRaises(StaleDataError):
+                    require_current_cache(C13, "cs13", target, "passes")
+                self.assertEqual(target.read_bytes(), before_rejection)
+                self.assertEqual(len(calls), 1)
+                self.assertEqual(C13.load("passes")["observed"], 7)
+                self.assertEqual(len(calls), 2)
+                self.assertTrue(C13.cache_current("passes"))
 
 
 if __name__ == "__main__":

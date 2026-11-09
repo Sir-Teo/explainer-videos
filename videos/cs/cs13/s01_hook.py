@@ -38,28 +38,18 @@ class Hook(VoiceoverScene):
             label(rf"on the first chapter of \textit{{Pride and Prejudice}}: \ by hand \ {p['hand']:,} instructions",
                   font_size=24, color=DATA),
             label(rf"compiled, \ no optimization: \ {rows[0]['array']:,}", font_size=24, color=NO),
-            label(rf"compiled, \ optimized: \ {rows[-1]['array']:,} \ --- \ "
-                  rf"{100 * (1 - rows[-1]['array'] / p['hand']):.0f}\% fewer than by hand", font_size=24, color=YES),
+            label(rf"compiled, \ optimized: \ {rows[-1]['array']:,}; \ {100 * (rows[-1]['array'] / p['hand'] - 1):+.1f}\% relative to hand-written", font_size=24, color=YES if rows[-1]['array'] < p['hand'] else NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "In Part 6 we wrote the Job's inner loop by hand, in Pebble assembly. <bookmark mark='a'/> Each table "
-            "entry is twelve bytes, so the loop keeps a pointer and steps it by twelve. <bookmark mark='b'/> In Part "
-            "12 we wrote the same loop in the Pebble language, as you would in C: an index, and the table indexed by "
-            "it. <bookmark mark='c'/> This is what our compiler, built in this part, turns it into. It found the "
-            "pointer by itself. <bookmark mark='d'/> On the first chapter of Pride and Prejudice, the hand-written "
-            "program executes eight hundred and twenty-eight thousand instructions. Compiled with no optimization, "
-            "the same algorithm takes four and a half million. Optimized, seven hundred and thirty thousand: twelve "
-            "percent fewer than we managed by hand."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(hand), FadeIn(hl))
+        with self.voiceover(f"In Part 6 we wrote the Job's inner loop in Pebble assembly. <bookmark mark='a'/> Each array entry occupies twelve bytes, so the hand-written loop advances a pointer by twelve. <bookmark mark='b'/> The high-level source instead indexes table entries. <bookmark mark='c'/> Our compiler recovers a pointer recurrence from that index. Compare the highlighted address updates. <bookmark mark='d'/> On this first-chapter input, the hand-written program executes {p['hand']:,} instructions. The unoptimized array program executes {rows[0]['array']:,}, and the final measured configuration executes {rows[-1]['array']:,}. Relative to the hand-written version, that is a change of {100 * (rows[-1]['array'] / p['hand'] - 1):+.1f} percent on this workload. These are executed instruction counts; pipeline cycles and elapsed time come later.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(hand), FadeIn(hl), run_time=0.6)
+            vo.wait_until('a')
             self.play(Indicate(hand[6], color=DATA))
-            vo.wait_until("b")
+            vo.wait_until('b')
             self.play(FadeIn(src), FadeIn(sl))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(comp), FadeIn(cl))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(LaggedStart(*[FadeIn(r) for r in res], lag_ratio=0.5), run_time=3)
         self.wait(0.3)
         self.clear_scene()
@@ -103,12 +93,15 @@ class Hook(VoiceoverScene):
             r"the Job compiled; \ fuzzing, \ verification, \ superoptimization",
         ], font_size=26).move_to(DOWN * 0.2)
         with self.voiceover(
+            (
             "This is Part 13 of Computer Science, Built, in Act Three, Speaking to the Machine. <bookmark "
-            "mark='a'/> In this part: FORTRAN's promise, and the shape of every compiler since. Semantic analysis, "
-            "three-address code and control-flow graphs. Dominators, static single assignment, and dataflow on "
-            "lattices. Constant propagation, value numbering, loop optimizations and inlining. Instruction "
-            "selection, register allocation and scheduling. And the Job compiled, with fuzzing, verification and "
-            "superoptimization."
+            "mark='a'/> We follow a common compiler architecture: checking names and types, lowering into "
+            "intermediate code, analyzing its control-flow graph, transforming that code, and selecting machine "
+            "instructions. Dominators and static single assignment connect the graph to dataflow equations. We "
+            "measure individual optimizations on the Job, then study register allocation and scheduling. Finally, "
+            "testing, proof and candidate search tell us different things about the result. Each has a model and "
+            "a limit."
+        )
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")
