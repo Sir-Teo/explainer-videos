@@ -1,213 +1,153 @@
 # Computer Science, Built — Part 8: Out of Order
 
-Part 8 of a sixty-one-part course in computer science (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), the second part of Act II, *Making It Fast*. Part 7's pipeline starts its instructions
-in program order, so when one waits, all wait. This part lets instructions run as soon as their operands are ready:
-the dataflow limit that bounds any such machine, register renaming, the CDC 6600's scoreboard and Tomasulo's
-algorithm, the reorder buffer that keeps exceptions precise, speculation, memory disambiguation, and the price of
-guessing: Spectre, run on our own machine. The out-of-order core is a cycle-by-cycle simulator
-(`explainer/cs/pebble/ooo.py`), checked against the emulator in every configuration (`tests/test_cs8_ooo.py`); the
-limit study's oracle scheduler is `explainer/cs/pebble/limits.py`; the attack is `programs.spectre`. Every number is
-computed in `compute.py`.
+Part 8 of the sixty-one-part course ([series plan](../README.md), [syllabus](../SYLLABUS.md)) studies dependency
+scheduling, register renaming, retirement, speculation and memory ordering using an executable teaching model.
+The functional core is `explainer/cs/pebble/ooo.py`; the offline trace scheduler is
+`explainer/cs/pebble/limits.py`. These implement different scheduling models. `compute.py` produces the chapter's
+numerical data, and `tests/test_cs8_ooo.py` checks selected configurations against the emulator.
 
-* **Waiting in line.** One cache miss on an in-order machine (81 cycles for 16 instructions) and out of order (70,
-  the independent work hidden under the miss); the Job's first chapter on Part 7's pipeline (IPC 0.83), on our core
-  in order (0.78) and out of order (1.89, 2.42 times fewer cycles); the reorder buffer's occupancy: 128 entries, 10.7
-  in use on average, never full.
-* **1. The dataflow limit.** The scan loop; four trips as a dataflow graph; the critical path (6 cycles, through
-  `addi t0, t0, 12`) against the pipeline's 28; schedules at widths 1, 2, 4, 8 (24, 12, 7, 6 cycles); work and span,
-  max(N/W, L) ≤ T_W ≤ N/W + L (Graham, 1966); in a loop the chain sets a rate: 6 instructions a cycle at best.
-* **2. False dependences, and renaming.** RAW, WAR and WAW; on the Job, 981,268 true dependences against 915,048
-  false ones; the register alias table and physical registers; the oracle with and without renaming: IPC 2,399
-  against 3.68.
-* **3. The scoreboard.** The CDC 6600 (1964; Cray and Thornton), its ten units, Watson's memo; issue, read
-  operands, execute, write result, with WAW, RAW and WAR checked at each; Hennessy and Patterson's example, cycle by
-  cycle, reproduced exactly (62 cycles; the add waits from 16 to 22 for the divide to read `a1`).
-* **4. Tomasulo's algorithm.** The IBM 360/91 (1967) and its four floating-point registers; reservation stations,
-  tags, the common data bus; the same example, station by station: 56 cycles, the add broadcast in cycle 10; the
-  catch: results reach the registers out of order, so exceptions are imprecise.
-* **5. The reorder buffer.** Smith and Pleszkun (1985): in order, out of order, in order; the ring, filled at the
-  tail and emptied at the head, recorded from the core in the scan loop (with a wrong path dropped); a precise divide
-  by zero; the modern pipeline; result-in-ROB (Pentium Pro) against a merged physical register file (R10000, 21264).
-* **6. Wider, and the ILP wall.** Wall's 1991 study repeated on the Job: the oracle 2,399, no renaming 3.68,
-  conservative memory 62.3, a real predictor 3.41, no speculation 0.47; width and window: with real branches the
-  window does not matter (3.4 at any size), with perfect branches 8.3 (window 128) and 30 (2,048); our core 0.86, 1.24,
-  1.89, 1.97 at widths 1 to 8, flat in ROB size; 3.16 and 3.53 with perfect prediction.
-* **7. Speculation.** Predict, run ahead, keep the receipts; a misprediction recorded (11 wrong-path instructions,
-  the next right-path fetch 8 cycles after the branch's); four predictors on the Job (always taken 0.69, 2-bit 1.87,
-  tournament 1.89, perfect 3.16); 22,296 mispredictions throw away 253,764 instructions (31% extra work) and run
-  28,905 wrong-path loads; one wrong guess per 37 instructions; CPI = CPI_perfect + rate × P gives P ≈ 7.9 cycles.
-* **8. Loads, stores, and their order.** Memory dependences are hidden behind address arithmetic; load and store
-  queues and store-to-load forwarding; conservative, speculative and wait-table disambiguation (the Alpha 21264); a
-  memory-order violation recorded (the load reads 0, is squashed, reads 77); counting 1,500 cache-missing samples:
-  97,740 cycles conservative, 7,652 speculative (23 violations), 7,408 with the wait table, 13 times faster; on the
-  Job no difference (154,835 loads, 5,270 stores).
-* **9. Spectre.** Flush+Reload (Yarom and Falkner, 2014); the bounds-check gadget; the attack on our core (train, flush
-  the bound, call out of bounds, time the probe): one line at 5 cycles among 254 at 63; the secret "PEBBLE" in 109,424
-  cycles; a speculation barrier (12.1 cycles a call against 4.0) and an index mask (5.0) both stop it; Spectre and
-  Meltdown (2018), and the fixes in kernels, compilers, browsers and chips.
-* **10. The compiler's alternative: VLIW.** The cost of scheduling hardware; the scan loop in four-wide bundles (3
-  cycles a trip, 6 of 12 slots `nop`); software pipelining, II ≥ max(⌈6/4⌉, 1) = 2; why VLIW lost the desktop (unknown
-  latencies, data-dependent branches, binary compatibility, Itanium's history); DSPs and accelerators.
-* **11. RISC and CISC.** The iron law's two sides; the VAX, Cocke's 801, Berkeley RISC, Stanford MIPS (1980–1981);
-  the Job's instruction mix; 59% of its loads feed one instruction and die, so x86 would need 11% fewer instructions;
-  micro-ops since the Pentium Pro, fusion, the decoder's cost; x86, Arm, RISC-V; the 2017 Turing Award.
-* **12. Simultaneous multithreading.** Empty issue slots; Tullsen, Eggers and Levy (1995); what is per thread and
-  what is shared; in the limit study, two threads give +40% at 4 wide and +80% at 8 wide; Hyper-Threading, POWER5,
-  POWER8; the price, including timing channels between threads.
-* **13. Modern cores in numbers.** Reorder-buffer sizes from the Pentium Pro (40) to Golden Cove (512), Zen 5 (448)
-  and Apple's M1 (about 630, measured); why so big (DRAM latency, prediction quality); decode widths 3 to 8; reading
-  real cores (manuals, Agner Fog, uops.info, independent measurement, `perf`).
-* **14. The Job out of order.** CPI 0.529 taken apart: 0.25 width, 0.067 dependences and front end, 0.212 wrong
-  guesses (40% of the time); 24 passages fitted, checked on 16 KB of *Moby-Dick* (−0.09%); thirty novels: IPC 2.11,
-  5.07 × 10¹⁰ cycles, 57 seconds at Part 7's 885 MHz; ledger row 2, 2.52 times faster.
-* **15. Frontier: past the dataflow limit, safely.** Value prediction (Lipasti, Wilkerson and Shen, 1996) in the limit
-  study: perfect prediction of every load would give +19% (3.34 → 3.98), a stride predictor loses at every confidence
-  threshold (its confident guesses are 60–90% right); Perais and Seznec (2014). Secure speculation: our rule (a load
-  in the shadow of an unresolved branch keeps its value until every older branch has executed, in the spirit of STT
-  and NDA, 2019) blocks the gadget and costs 3.5% on the Job; open questions: proofs (speculative non-interference),
-  the cost floor, other channels, and the parallelism still unused.
-* **Recap, where this comes back, in practice, problems.**
+## Chapter guide
 
-## Build
+- **Hook.** A one-entry issue queue forces in-order starts; increasing it to 64 exposes overlap and increases
+  queue capacity together. The short cold-load example takes 81 versus 70 modeled cycles. On chapter 1, retired
+  IPC is 0.78 versus 1.89; Part 7's 0.83 comes from a separate pipeline. Whole-run mean ROB occupancy is 10.7 of
+  128 entries; the plot shows a 600-cycle sample, not a complete execution.
+- **1. Dataflow.** Four scan trips have N = 24 instructions, weighted latency work A = 28 and span L = 6.
+  The unlimited-unit scheduler limits new starts per cycle: widths 1, 2, 4, 8 take 24, 12, 7, 6 cycles.
+  Its lower bound is max(⌈N/W⌉, L). Graham's nonpreemptive W-processor bound is separately
+  T_G ≤ A/W + (1 − 1/W)L, using occupied processor time rather than start slots.
+- **2. Renaming.** Source-operand uses and name-reuse events have explicit counting conventions. Distinct live
+  versions remove register WAR/WAW hazards; physical registers are later reclaimed safely. The offline oracle's
+  2,399 versus 3.68 IPC uses future paths, trace-supplied inputs and memory word addresses, unlimited resources,
+  and omitted realistic device/I/O ordering. It is not a feasible hardware speedup or an algorithmic lower bound.
+- **3–4. Scoreboard and Tomasulo.** Stage-specific hazards, reservation-station tags and broadcasts are animated
+  through a textbook example (62 versus 56 cycles). In-order dispatch and finite station pressure still matter.
+  Renaming alone does not provide precise architectural exceptions.
+- **5. Reorder buffer.** The retirement ring and exception timeline separate architectural commit from physical
+  execution/cache effects. Pebble deliberately faults on divide by zero; this differs from RISC-V M. The model's
+  width W applies to fetch, rename and retirement, with up to W ALUs and two memory ports, W+2 total issue slots.
+- **6. ILP limits.** Sensitivity bars and start-distance curves describe the offline scheduler. Its `window`
+  constrains start times by instruction-index distance, not by the oldest unfinished instruction or a physical
+  ROB. Functional-core width/capacity sweeps are a separate experiment; retired IPC is not slot utilization.
+- **7. Speculation.** A recorded wrong path is squashed and fetched again. The chapter-1 tournament run counts
+  22,296 redirects and 253,764 squashed renamed entries, including some wrong-path redirects; entries are not
+  execution starts. The fitted effective penalty, about 7.9 cycles, is counterfactual configuration accounting.
+  The 37 retired instructions per counted redirect do not determine ROB occupancy or a lookahead ceiling.
+- **8. Memory ordering.** Byte-range overlap, youngest older stores, forwarding and late-address replay are
+  distinguished. A fixed 1,500-sample histogram takes 97,740 / 7,652 / 7,408 cycles under conservative,
+  speculative and wait-table policies; the speculative run has 23 dynamic violations. All three take 437,580
+  cycles on chapter 1, with 154,835 loads and 5,270 stores covering counts, metadata and copied letters.
+- **9. Spectre.** The simulated byte array places secret bytes outside a policy bound, without hardware permission
+  isolation. The experiment flushes probes, trains six times (warming line 0), evicts the bound, executes a custom
+  timer barrier, attacks, then times lines 1–255. Hit/miss intervals are 5/63 cycles; six rounds decode PEBBLE in
+  109,424 cycles. The decoder excludes zero. Barrier, mask and control-shadow variants give all-63 tested probe
+  intervals. This finite gadget result is not a proof against every channel. Barriers are ISA-specific; masking
+  needs unsigned comparisons, a nonempty valid fallback and preserved dependencies.
+- **10. VLIW.** Bundles and colored software-pipelined iterations illustrate resource/data schedules on a fixed
+  path. They are not an executable control-flow translation: same-bundle operand versions, guards, exits and
+  branches need ISA rules. Variable latency, interlocks and compatibility costs depend on the implementation.
+- **11. RISC/CISC.** Runtime depends on instruction count, CPI and clock. `lw` plus a combined compare/branch can
+  correspond to `cmp [mem]` plus `jne`: two instructions on each side. The 90,726 heuristic load-use/name-liveness
+  candidates do not establish legal translations or instruction savings. Internal micro-ops are implementation
+  operations, and load-operation micro-fusion differs from compare/branch macro-fusion.
+- **12. SMT.** An offline two-trace start-slot schedule illustrates aggregate throughput (+40% at four slots,
+  +80% at eight in the selected study). It is not a functional SMT core or a per-thread latency/fairness guarantee.
+- **13. Core measurements.** A 1995–2024 historical selection uses differing counted units. Firestorm's estimated
+  coalesced groups and rename-retire entries are shown separately. Widths at different stages, workload-dependent
+  branch accuracy, physical memory delays and measurement definitions must be distinguished.
+- **14. Job projection.** CPI components compare configurations rather than partition unique causes. A fit to 24
+  passages uses encoded-byte features. The heldout 16,000-character passage is 16,019 bytes: 3,290,777 measured
+  cycles versus 3,287,720 predicted (−0.09%). The corpus row projects 50,727,519,299 cycles, 57.32 seconds at an
+  assumed 884.96 MHz, 2.52 times faster than the pipeline projection. No full-corpus run, error bound or physical
+  out-of-order clock validation is supplied.
+- **15. Frontier.** Value prediction needs accuracy, coverage, availability and recovery. Perfect load guesses
+  improve the selected eight-slot oracle schedule by 19%; the stride heuristic loses at the shown thresholds.
+  There is no universal 99% threshold. The control-shadow rule blocks this decoder at a 3.55% chapter-1 cost;
+  STT, NDA, Dolma and ProSpeCT have distinct mechanisms, policies and proof scopes.
+- **Outro.** Animated recap, course connections, practical tools, exercises and the next part's illustrative memory
+  hierarchy. Matrix-multiplication data-movement bounds depend on the computation model and memory assumptions.
+
+## Build and verification
 
 ```bash
-python -m videos.cs.cs8.compute            # every number in the part (about half an hour on four cores: the sweep and the Job's fit are slow)
-python tools/build.py cs8 -q l             # a 480p preview
-python tools/build.py cs8                  # 1080p
+python -m videos.cs.cs8.compute
+python -m videos.cs.cs8.compute --force spectre  # refresh the corrected timer-site parser
+python -m unittest discover -s tests -p test_cs8_ooo.py -q
+python tools/build.py cs8 -q l
+python tools/build.py cs8
 ```
 
-The core runs about 35,000 instructions a second, so the corpus is projected, as in Part 7, from passages. Ledger
-rows 0 to 2 are written to `.cache/cs8/ledger.json`. The ledger keeps Part 7's clock; a real out-of-order core needs
-more pipeline stages to hold it, which the scenes say.
+The corpus is projected from passages. Ledger rows 0–2 live in `.cache/cs8/ledger.json`; the clock is an assumed
+teaching budget inherited from Part 7. Host simulation throughput is not a silicon timing measurement.
+
+The [9 November 2026 QA packet](../../../docs/qa/evidence/cs8-polish-20261109/README.md) binds the source/preview
+checkpoint to bilingual captures, numerical witnesses, English speech signals, actual cue requests and selected
+native/narrated clips. The Spectre parser now identifies the two timed probe instruction PCs: extra timer reads
+inserted by fenced training previously shifted fixed-size chunks. Only `mitigations.fence.fast[0]` changes, 2 → 1;
+simulated execution and all other numerical fields are unchanged. Continuous narrated listening, Chinese speech,
+whole-video native review and production runtime approval remain open.
 
 ## Problems, with solutions
 
-1. **Work and span.** Draw the dataflow graph of `lw a0, 0(s0)`; `lw a1, 4(s0)`; `add a2, a0, a1`; `mul a3, a2, a2`;
-   `add a4, a0, a3` (load 2 cycles, multiply 3, add 1). Find L, and check max(N/W, L) ≤ T_W ≤ N/W + L for W = 1, 2.
+1. **Work and span.** Use `lw a0, 0(s0)`; `lw a1, 4(s0)`; `add a2, a0, a1`; `mul a3, a2, a2`;
+   `add a4, a0, a3`, with load/multiply/add latencies 2/3/1. Find N, A and L, then distinguish the two width models.
 
-   *Solution.* Edges: both loads → `add a2`; `add a2` → `mul`; `mul` → `add a4`; the first load → `add a4`. Earliest
-   starts: loads 0, `add a2` 2, `mul` 3, `add a4` 6, finishing at 7, so **L = 7**, through either load, the add and the
-   multiply. N = 5. W = 1: the loads at 0 and 1, the add at 3, the multiply at 4, the last add at 7: **T₁ = 8**, and
-   max(5, 7) = 7 ≤ 8 ≤ 12. W = 2: both loads at 0, then as the critical path: **T₂ = 7**, and 7 ≤ 7 ≤ 9.5. The
-   multiply dominates: more width cannot help.
+   *Solution.* N = 5, A = 9, L = 7. Both loads feed the first add, then multiply, then final add; the first load
+   also feeds the final add. With W new starts per cycle and otherwise unlimited resources, T₁ = 8 and T₂ = 7;
+   each satisfies max(⌈N/W⌉, L) ≤ T_W. For W nonpreemptive processors occupied for the operation's full latency,
+   greedy T_G is 9 at W = 1 and 7 at W = 2, within Graham's bounds 9 and 8 respectively.
 
-2. **Renaming the textbook example.** Rename the example of chapters 3 and 4 into physical registers `p10`, `p11`, ….
-   Which dependences survive?
+2. **Renaming.** Rename the textbook example with p10, p11, ….
 
-   *Solution.* `lw p10, 0(s0)`; `lw p11, 4(s1)`; `mul p12, p11, a3`; `sub p13, p10, p11`; `div p14, p12, p10`;
-   `add p15, p13, p11` (with a1 → p15 in the alias table at the end). Only the true dependences remain: the second
-   load to the multiply, the subtract and the add; the first load to the subtract and the divide; the multiply to the
-   divide; the subtract to the add. The write-after-read between the divide (reading the old `a1`) and the add
-   (writing the new one) is gone, because they now name `p10` and `p15`. This is why Tomasulo's add broadcast in cycle
-   10 and the scoreboard's waited until 22.
+   *Solution.* `lw p10, 0(s0)`; `lw p11, 4(s1)`; `mul p12, p11, a3`; `sub p13, p10, p11`;
+   `div p14, p12, p10`; `add p15, p13, p11`. True value dependencies survive. The divide reads the older p10
+   while the add writes p15, removing the architectural-name WAR hazard. Reclaim names only when safe.
 
-3. **Mispredictions and the window.** A core mispredicts once every 40 instructions, has CPI 0.3 with perfect
-   prediction and a 15-cycle penalty. What is its CPI? About how much of a 512-entry window does it use?
+3. **Penalty accounting.** A defined model has perfect-prediction CPI 0.3, one miss per 40 retired instructions
+   and an additive 15-cycle effective penalty. Determine CPI. Can these values determine ROB occupancy?
 
-   *Solution.* CPI = 0.3 + (1/40) × 15 = **0.675**: wrong guesses take 56% of the time. Between two wrong guesses the
-   core runs about 40 right-path instructions, so the useful part of the window is of that order, **under a tenth of
-   512**; the rest fills with wrong-path work or stays empty. The window pays only during long-latency misses, which
-   is exactly why real cores are built so large (chapter 13); otherwise prediction matters more. Our core on the Job:
-   one per 37, P ≈ 7.9, CPI 0.317 + 0.212.
+   *Solution.* CPI = 0.3 + 15/40 = 0.675. The additive term is 55.6% of this accounting total. It does not determine
+   occupancy: dependency chains, unresolved-operation duration, fetch/issue/retire widths, recovery and memory
+   behavior also matter. An average inter-miss instruction count is not a hard lookahead bound.
 
-4. **Why the mask works.** Why does the index mask stop Spectre although the bounds check is still mispredicted? For
-   an array of size 2ᵏ, why is `x & (size - 1)` not a complete fix?
+4. **Masking.** Compare a bound-dependent mask with `x & (size - 1)` for unsigned x and a nonempty 2ᵏ-byte array.
 
-   *Solution.* The mask is computed from x and the bound by `sltu`, `sub` and `and`: arithmetic, with a data
-   dependence on the bound, not a control dependence. The core speculates on branches, not on data, so on the wrong
-   path the masked index is the true result of the comparison: 0 whenever x ≥ size. The secret is never loaded. (A
-   core with value prediction could break this, which is one reason value prediction worries security researchers.)
-   `x & (size - 1)` keeps every index inside an array of exactly 2ᵏ bytes, so it is safe there; but if the array is
-   shorter than the power of two it occupies (size 10 in a 16-byte block), indices 10 to 15 still reach whatever lies
-   after it. And an optimizing compiler that can prove x < size on the architectural path may delete the mask
-   altogether, which is why Linux's `array_index_nospec` is written so that the compiler cannot see through it.
+   *Solution.* In this model, `sltu`, `sub`, `and` make the dependent access wait for the bound comparison's value;
+   invalid x maps to the valid fallback index 0. Modulo masking also stays inside that exact power-of-two array,
+   but wraps invalid requests rather than validating them. For a shorter logical array it may expose invalid
+   logical elements. Either mechanism needs the intended policy, valid fallback and compiler/ISA dependency
+   guarantees. This model does not implement value prediction; general side-channel security needs a threat model.
 
-5. **Build: Part 7's fix, out of order.** Part 7's problem 5 moved the load in the scan loop above the end-of-table
-   test, hiding the load-use bubble and saving 4.4% on the pipeline. Make the same change and run chapter 1 on our
-   out-of-order core. What does it save now, and why?
+5. **Hoist the scan load.** Repeat Part 7's transformation on chapter 1 after checking address/exception safety.
 
-   *Solution.* In `JOB_V0`, swap `beq a2, s1, insert` and `lw t1, 4(t0)` at `scan` (the load may now run one entry
-   past the end of the table, which is harmless: the slot is empty memory). On the core: **437,580 → 437,072 cycles,
-   0.1%**, for 331 more instructions; the output is unchanged. The out-of-order core already starts the load as soon
-   as `t0` is known, whatever its place in the code, so a compiler's static reordering buys almost nothing: the
-   scheduling the compiler did by hand for the pipeline, the hardware does for itself. What limits the core is the
-   length test's mispredictions, which no reordering removes.
+   *Solution.* The stored experiment takes 437,580 → 437,072 cycles (about 0.12%), with 331 extra retired
+   instructions and unchanged output. The specified extra read stays in allocated model memory. Out-of-order
+   scheduling already overlaps much of this load's latency; this result is conditional on the program, inputs,
+   memory and prediction policy, and does not authorize arbitrary speculative loads.
 
-6. **★ Research: how cheap can safe speculation be?** Our secure rule blocks the gadget for 3.5% on the Job. Does it
-   block every speculative leak through the cache in our model? Find a program where it costs more than 30%, and a
-   rule that blocks the same leaks for less.
+6. **Research.** Define protected/public inputs, permitted observations and a non-speculative baseline. Search for
+   a leak or a workload costing over 30% under `secure=True`, then compare a more selective rule.
 
-   *What is known, and where to start.* This is open in general. The rule is `OutOfOrder(..., secure=True)`; the
-   gadget is `programs.spectre`, and `compute._spectre(secret, secure=True)` returns the probe times. Two observations
-   to begin with. (a) The rule delays loads' *values*, not loads: a speculative load still fills the cache with the
-   line it reads. That is safe only if the load's *address* cannot depend on speculatively loaded data, which the rule
-   guarantees because the address's producers are held back; a proof would show that every cache fill on a wrong path
-   is at an address computed from non-speculative values (the "speculative non-interference" of Guarnieri et al.,
-   S&P 2020, makes this precise for programs). (b) The rule is expensive where loads feed loads under hard branches:
-   a pointer chase whose loop body branches on each node's value costs **23%** under the rule (19,378 → 23,919 cycles,
-   3,000 nodes). Longer chains and less predictable branches push it higher. Cheaper rules from the literature:
-   Speculative Taint Tracking (Yu et al., MICRO 2019) releases a value as soon as the *loads that produced it* are
-   non-speculative, not every older branch; NDA (Weisse et al., MICRO 2019) offers a family of such policies;
-   InvisiSpec (Yan et al., MICRO 2018) lets speculative loads run but hides their cache fills until they are safe;
-   Speculative Privacy Tracking (Choudhary et al., MICRO 2021) lets values flow when the program would have leaked
-   them anyway. A careful answer implements one of these in `ooo.py`, shows the gadget still blocked, and reports
-   the cost on the Job, the pointer chase and the histogram of chapter 8.
+   *Starting point.* The rule withholds completed load values while an older branch is unresolved; cache fills
+   still occur. The supplied gadget's decoder fails, and a 3,000-node pointer chase costs 19,378 → 23,919 cycles
+   (23.4%). Neither observation proves security, guarantees a larger slowdown on longer chains, nor predicts the
+   cost of a literature design. Test counterexamples and overhead separately; a general proof needs the defined
+   observation/threat model and full microarchitectural behavior.
 
 ## 习题与解答
 
-1. **工作量与跨度。** 画出 `lw a0, 0(s0)`、`lw a1, 4(s0)`、`add a2, a0, a1`、`mul a3, a2, a2`、`add a4, a0, a3` 的数据流图（取数
-   2 个周期，乘法 3 个，加法 1 个）。求 L，并对 W = 1、2 验证 max(N/W, L) ≤ T_W ≤ N/W + L。
-
-   *解答。* 边：两条取数 → `add a2`；`add a2` → `mul`；`mul` → `add a4`；第一条取数 → `add a4`。最早开始时间：取数 0，`add a2` 2，
-   `mul` 3，`add a4` 6，在 7 结束，所以 **L = 7**。N = 5。W = 1：两条取数在 0 和 1，加法在 3，乘法在 4，最后的加法在 7，
-   **T₁ = 8**，且 max(5, 7) = 7 ≤ 8 ≤ 12。W = 2：两条取数都在 0，然后沿关键路径走：**T₂ = 7**，且 7 ≤ 7 ≤ 9.5。乘法占了主导：再宽
-   也没用。
-
-2. **给教科书的例子重命名。** 把第 3、4 章的例子重命名到物理寄存器 `p10`、`p11`……哪些依赖还在？
-
-   *解答。* `lw p10, 0(s0)`；`lw p11, 4(s1)`；`mul p12, p11, a3`；`sub p13, p10, p11`；`div p14, p12, p10`；`add p15, p13, p11`。
-   只剩真依赖：第二条取数到乘法、减法和加法；第一条取数到减法和除法；乘法到除法；减法到加法。除法（读旧的 `a1`）和加法（写新的
-   `a1`）之间的读后写消失了，因为它们现在分别叫 `p10` 和 `p15`。这就是为什么托马苏洛算法里加法在第 10 周期广播，而记分牌要等到第
-   22 周期。
-
-3. **预测错误与窗口。** 一个核每 40 条指令猜错一次，完美预测时 CPI 为 0.3，代价 15 个周期。它的 CPI 是多少？512 项的窗口大约用了
-   多少？
-
-   *解答。* CPI = 0.3 + (1/40) × 15 = **0.675**：猜错占了 56% 的时间。两次猜错之间，核大约执行 40 条正确路径上的指令，所以窗口中
-   有用的部分就是这个量级，**不到 512 的十分之一**；其余的装着错误路径上的工作，或者空着。窗口只在长延迟的缺失期间才划算，这正是
-   真实的核做得这么大的原因（第 13 章）；除此之外，预测更重要。我们的核跑任务：每 37 条一次，P ≈ 7.9，CPI 0.317 + 0.212。
-
-4. **掩码为什么有效。** 边界检查仍然被猜错，为什么下标掩码能挡住幽灵攻击？对大小为 2ᵏ 的数组，为什么 `x & (size - 1)` 不是完整的
-   修复？
-
-   *解答。* 掩码由 x 和边界通过 `sltu`、`sub`、`and` 算出：这是算术，对边界是数据依赖，而不是控制依赖。核对分支做推测，对数据不做，
-   所以在错误路径上，掩码后的下标就是比较的真实结果：只要 x ≥ size 就是 0。秘密从不会被读出。（有数值预测的核可能打破这一点，这也是
-   安全研究者担心数值预测的一个原因。）`x & (size - 1)` 把每个下标都限制在恰好 2ᵏ 字节的数组之内，所以在那里是安全的；但如果数组比它
-   所占的二的幂短（16 字节块里只有 10 字节），下标 10 到 15 仍然能碰到数组后面的东西。而且优化编译器如果能证明在体系结构路径上
-   x < size，可能把掩码整个删掉，所以 Linux 的 `array_index_nospec` 写得让编译器看不穿。
-
-5. **动手：第 7 部分的修复，放到乱序核上。** 第 7 部分的第 5 题把扫描循环里的取数移到"表结束了吗"的检查之前，藏起取数—使用气泡，在
-   流水线上省下 4.4%。做同样的改动，在乱序核上运行第 1 章。现在省下多少？为什么？
-
-   *解答。* 在 `JOB_V0` 里，把 `scan` 处的 `beq a2, s1, insert` 和 `lw t1, 4(t0)` 对调（取数现在可能越过表尾一个条目，这无害：那个
-   位置是空内存）。在核上：**437,580 → 437,072 个周期，0.1%**，多执行 331 条指令；输出不变。乱序核一旦知道 `t0` 就会发出这条取数，
-   不管它在代码里排在哪里，所以编译器的静态重排几乎什么也换不来：编译器替流水线手工做的调度，硬件自己就做了。限制这个核的是长度检查的
-   预测错误，任何重排都去不掉。
-
-6. **★ 研究题：安全的推测能有多便宜？** 我们的安全规则以任务上 3.5% 的代价挡住了这个攻击片段。在我们的模型里，它能挡住所有通过
-   缓存的推测泄露吗？找一个让它的代价超过 30% 的程序，再找一条代价更低、挡住同样泄露的规则。
-
-   *已知什么，从哪里入手。* 一般情况下这是开放问题。规则是 `OutOfOrder(..., secure=True)`；攻击片段是 `programs.spectre`，
-   `compute._spectre(secret, secure=True)` 返回探测时间。先看两点。（a）这条规则推迟的是取数的*值*，不是取数本身：推测执行的取数仍然
-   会把它读的那一行装进缓存。这只有在取数的*地址*不可能依赖推测读出的数据时才安全，而规则保证了这一点，因为地址的生产者被扣住了；
-   证明需要说明错误路径上的每一次缓存填充都发生在由非推测值算出的地址上（Guarnieri 等人在 S&P 2020 提出的"推测非干涉"对程序给出了
-   精确的表述）。（b）在难预测的分支下、取数喂取数的地方，这条规则很贵：一个循环体按每个节点的值分支的指针追逐，在规则下代价 **23%**
-   （19,378 → 23,919 个周期，3,000 个节点）。更长的链、更难预测的分支会让它更高。文献中更便宜的规则：推测污点追踪（Yu 等，MICRO 2019）
-   在*产生该值的取数*不再是推测的时候就放行，而不是等所有更早的分支；NDA（Weisse 等，MICRO 2019）给出了一族这样的策略；InvisiSpec
-   （Yan 等，MICRO 2018）让推测的取数执行，但把它们的缓存填充藏起来，直到安全；推测隐私追踪（Choudhary 等，MICRO 2021）在程序本来就会
-   泄露这些值时让它们流动。一个认真的回答应当在 `ooo.py` 里实现其中之一，证明攻击片段仍被挡住，并报告在任务、指针追逐和第 8 章计数
-   程序上的代价。
+1. **工作量与跨度。** 上述五条指令有 N = 5、A = 9、L = 7。每周期限制新启动数、其余资源无限时，T₁ = 8、T₂ = 7，
+   满足 max(⌈N/W⌉, L) ≤ T_W。若 W 个处理器在指令整个延迟内被占用，则贪心调度分别为 9 和 7，Graham 上界分别为 9 和 8。
+2. **重命名。** 依次使用 p10–p15，得到上面的指令序列。真实值依赖仍在；除法读取旧版本 p10，加法写入 p15，名称反依赖消失。
+   物理名称只能在安全时回收。
+3. **预测代价。** 指定加法记账模型给出 CPI = 0.3 + 15/40 = 0.675，附加项占总量 55.6%。这些平均数不能确定 ROB 占用；
+   依赖、未完成操作、宽度、恢复和内存行为同样重要。
+4. **掩码。** 无符号、非空且大小恰为 2ᵏ 字节时，两种掩码都把下标限制在数组内。依赖比较的掩码把无效请求映射到合法的零下标；
+   模数掩码会回绕，并不验证原请求。较短逻辑数组仍可能暴露无效元素；还须保持编译器与 ISA 要求的数据依赖。
+5. **提前取数。** 先证明指定额外读的地址与异常安全。该实验周期为 437,580 → 437,072，约省 0.12%，多退休 331 条指令，输出相同。
+   乱序调度已重叠大部分延迟；结论受程序、输入、内存与预测策略约束。
+6. **研究题。** 明确秘密、公开输入、可见观察与非推测基线，再寻找泄露反例或超过 30% 的开销。规则扣住取数值，却仍会填充缓存；
+   指定攻击解码失败与一次指针追逐的 23.4% 开销都不是一般安全证明，也不能预测文献方案的成本。
 
 ## Glossary additions
 
@@ -257,5 +197,12 @@ kernel memory from user space", USENIX Security (2018); Yan et al., "InvisiSpec"
 their source", MICRO (2019); Guarnieri et al., "Spectector: principled detection of speculative information flows",
 IEEE S&P (2020); Choudhary et al., "Speculative privacy tracking (SPT)", MICRO (2021).
 
-Core data (chapter 13): Intel and AMD disclosures as reported in their optimization manuals and at Hot Chips; the
-Apple M1's window is not published and is quoted from Dougall Johnson's measurements and AnandTech's analysis.
+Core data (chapter 13) are a historical selection, not a current-core survey. Counted operation units vary.
+Apple Firestorm is separate: Dougall Johnson's reverse-engineered notes distinguish about 330 coalesced retire
+groups from about 623 rename-retire entries. See [his notes](https://dougallj.github.io/applecpu/firestorm.html).
+
+Additional research: Loughlin et al., *Dolma: Securing speculation with the principle of transient
+non-observability*, USENIX Security (2021); Daniel et al., *ProSpeCT: Provably secure speculation for the
+constant-time policy*, USENIX Security (2023). These are distinct mechanisms and threat models; this chapter's
+control-shadow experiment reproduces neither complete design. The QA packet records exactly which primary
+excerpts were inspected.

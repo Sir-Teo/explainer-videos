@@ -19,7 +19,7 @@ class Hook(VoiceoverScene):
     # ------------------------------------------------------------------
     def waiting(self):
         d = load("hook")["miss"]["in order"]
-        head = label(r"In order: \ when one instruction waits, \ everything behind it waits", font_size=34).to_edge(
+        head = label("One-entry issue queue: \\ a blocked head delays later dispatch", font_size=34).to_edge(
             UP, buff=0.3)
         ch = OooChart(d["timeline"], cw=0.098, ch=0.3, label_width=2.4, label_size=14, c0=0, heads_every=10)
         ch.move_to(DOWN * 0.35)
@@ -28,13 +28,15 @@ class Hook(VoiceoverScene):
         miss = label(r"a cache miss: \ 60 cycles", font_size=22, color=INF).next_to(ch.bars[4], UP, buff=0.04)
         total = label(rf"{d['cycles']} cycles", font_size=26, color=NO).next_to(ch, RIGHT, buff=0.2).shift(DOWN * 1.8)
         with self.voiceover(
-            "Here is a short piece of code on a machine that, like Part 7's pipeline, starts its instructions in "
-            "program order. Each row is an instruction; time runs to the right, one column a cycle. <bookmark mark='a'/> "
-            "The fifth instruction is a load, and its data is not in the cache: memory takes sixty cycles to answer. "
-            "<bookmark mark='b'/> The add after it needs the loaded value, so it waits. That is unavoidable. "
-            "<bookmark mark='c'/> But look at everything after the add. None of it uses the load. These instructions "
-            "could have run at once, yet an in-order machine cannot start them until the add has started, so they all "
-            "sit out the miss. <bookmark mark='d'/> Eighty-one cycles, for sixteen instructions."
+            "Start with a short program on this part's functional core, constrained to a one-entry issue queue. "
+            "That forces instructions to start in program order. Rows are instructions; time runs to the right. "
+            "<bookmark mark='a'/> The fifth instruction loads from a cold cache line. We assign a sixty-cycle miss "
+            "latency in this model. <bookmark mark='b'/> The next add needs that value and must wait. <bookmark "
+            "mark='c'/> Several later instructions do not depend on the missing value. They still have their own "
+            "dependencies and resource requirements, but this in-order configuration cannot pass the waiting add. "
+            "Their useful work is delayed behind it. <bookmark mark='d'/> This recorded run takes eighty-one cycles "
+            "for sixteen instructions, including setup and halt. It illustrates head-of-line blocking under the "
+            "model's chosen resources and timing."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ch.heads), LaggedStart(*[FadeIn(r) for r in ch.rows], lag_ratio=0.05))
             self.play(FadeIn(leg), LaggedStart(*[FadeIn(VGroup(ch.bars[i], ch.commits[i])) for i in range(4)],
@@ -55,27 +57,28 @@ class Hook(VoiceoverScene):
     # ------------------------------------------------------------------
     def overtake(self):
         d = load("hook")["miss"]["out of order"]
-        head = label(r"Out of order: \ start each instruction when its operands are ready", font_size=32).to_edge(
+        head = label("Out of order: \\ ready work competes for finite resources", font_size=32).to_edge(
             UP, buff=0.25)
         ch = OooChart(d["timeline"], cw=0.098, ch=0.3, label_width=2.4, label_size=14, c0=0, heads_every=10)
         ch.scale(0.62).to_corner(DR, buff=0.3).shift(UP * 0.2)
         total = label(rf"{d['cycles']} cycles", font_size=24, color=YES).next_to(ch, UP, buff=0.12).align_to(ch, RIGHT)
         keys = VGroup(
             label(r"the independent work runs \textit{during} the miss", font_size=24, color=FUNC),
-            label(r"results still enter the registers in program order", font_size=24, color=YES),
+            label("architectural results retire in program order", font_size=24, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_corner(DL, buff=0.4)
         with self.voiceover(
-            "Now the same code on a machine that does not wait its turn. <bookmark mark='a'/> Every instruction "
-            "starts as soon as its operands are ready. The load misses, as before, and the add waits for it, as before. "
-            "But the ten instructions after the add have nothing to wait for, so they run in the next few cycles, "
-            "underneath the miss. <bookmark mark='b'/> They finish long before the load, then wait, in the blue, for "
-            "their turn to commit, because the machine still makes its results official in program order. When the "
-            "load's data arrives, the add runs and everything commits in a rush. <bookmark mark='c'/> Seventy cycles "
-            "instead of eighty-one, and every cycle of independent work was hidden behind the miss."
+            "Now use the normal issue queue and ready-instruction selection on the same functional core. <bookmark "
+            "mark='a'/> An instruction can start when its operands, execution resources and ordering rules allow. "
+            "The load still misses, and its dependent add still waits. Later independent work can overlap the miss, "
+            "while dependencies among those later instructions remain. <bookmark mark='b'/> Completed results wait "
+            "for in-order architectural retirement, shown in blue. When the load finishes, the waiting add executes "
+            "and the core retires the completed work in order. <bookmark mark='c'/> This run takes seventy cycles "
+            "instead of eighty-one. The comparison changes queue capacity and scheduling freedom; it does not make "
+            "every later instruction immediately ready or reproduce every feature of a physical processor."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(ch.heads), LaggedStart(*[FadeIn(r) for r in ch.rows], lag_ratio=0.04))
+            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(b) for b in ch.bars], lag_ratio=0.08), run_time=2.0)
             self.play(FadeIn(keys[0]))
             vo.wait_until("b")
@@ -98,22 +101,27 @@ class Hook(VoiceoverScene):
                        for x, c, b in zip((h["pipeline"]["ipc"], h["in_order"]["ipc"], h["ooo"]["ipc"]),
                                           (GREY_B, NO, YES), ch.bars)])
         sp = h["in_order"]["cycles"] / h["ooo"]["cycles"]
-        verdict = label(rf"the same instructions, \ the same core: \ {sp:.2f} times fewer cycles", font_size=28,
+        verdict = label(rf"issue queue 1 $\to$ 64: \ {sp:.2f} times fewer cycles; capacity and scheduling change", font_size=28,
                         color=HEAD).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Scale that up to the Job. Its first chapter runs eight hundred twenty-seven thousand instructions. "
-            "<bookmark mark='a'/> Part 7's pipeline took about a million cycles: an IPC, instructions per cycle, of "
-            "zero point eight three. <bookmark mark='b'/> This part's core, forced to start its instructions one at a "
-            "time and in program order, does a little worse: its front end is deeper than the pipeline's, so a wrong "
-            "guess about a branch costs it more. <bookmark mark='c'/> The same core, allowed to look ahead and start "
-            "up to four ready instructions a cycle, takes four hundred thirty-eight thousand cycles. An IPC of almost "
-            "one point nine. <bookmark mark='d'/> Nothing about the instructions changed, nor the adders, nor "
-            "the memory. Only the order in which work is started."
+            "The Job's first chapter retires eight hundred twenty-seven thousand five hundred seventy-six "
+            "instructions in each configuration. <bookmark mark='a'/> Part 7's functional pipeline used about a "
+            "million cycles, or zero point eight three retired instructions per cycle. <bookmark mark='b'/> This "
+            "part's core with a one-entry issue queue takes about one point zero six million cycles. Its front end "
+            "and recovery rules differ from that pipeline. <bookmark mark='c'/> The normal sixty-four-entry queue "
+            "permits ready work to pass blocked instructions. It finishes in four hundred thirty-seven thousand "
+            "five hundred eighty cycles, about one point eight nine retired instructions per cycle. <bookmark "
+            "mark='d'/> The program and execution-unit configuration are shared between these last two runs. Queue "
+            "capacity and the resulting scheduling opportunities change together. These are model cycle counts; a "
+            "silicon frequency and hardware speedup have not been measured."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cyc))
             for k, mk in enumerate("abc"):
-                vo.wait_until(mk)
+                if mk != "a":
+                    vo.wait_until(mk)
                 self.play(GrowFromEdge(ch.bars[k], DOWN), FadeIn(ch.names[k]), FadeIn(ch.vals[k]), FadeIn(ipc[k]))
+                if mk == "a":
+                    vo.wait_until(mk)
             self.add(ch[0])
             vo.wait_until("d")
             self.play(FadeIn(verdict))
@@ -134,18 +142,20 @@ class Hook(VoiceoverScene):
         capl = label(r"the reorder buffer holds 128", font_size=20, color=NO).next_to(cap, UP, buff=0.06).align_to(
             cap, RIGHT)
         xl = note(r"600 cycles of the Job", font_size=20).next_to(ax, DOWN, buff=0.15)
-        stat = label(rf"on average {occ['mean']:.1f} in flight; \ never once full", font_size=28,
+        stat = label(rf"whole-run mean: {occ['mean']:.1f} in flight; \ zero full-capacity cycles", font_size=28,
                      color=HEAD).to_edge(DOWN, buff=0.3)
-        real = label(r"Intel's Golden Cove (2021): \ 512 entries", font_size=24, color=GREY_A).next_to(stat, UP,
+        real = label("Golden Cove (2021): \\ 512 ROB entries; \\ operation units vary", font_size=24, color=GREY_A).next_to(stat, UP,
                                                                                                     buff=0.2)
         with self.voiceover(
-            "The machine that did this can hold a hundred twenty-eight instructions in flight at once, in a "
-            "structure called the reorder buffer. <bookmark mark='a'/> Here is how many it actually holds, cycle by "
-            "cycle, over six hundred cycles of the Job. <bookmark mark='b'/> It climbs, and then it crashes to zero; "
-            "climbs and crashes. On average, about eleven instructions are in flight, and the buffer is never once "
-            "full. <bookmark mark='c'/> Real cores keep far more: Intel's Golden Cove core of 2021 has five hundred "
-            "twelve entries. Why build such a huge window, and what keeps knocking ours down to zero? Both answers "
-            "are in this part, and the second one is the most important fact about modern processors."
+            "The reorder buffer can hold a hundred twenty-eight in-flight instructions. <bookmark mark='a'/> This "
+            "plot shows one six-hundred-cycle sample from the Job run. <bookmark mark='b'/> Occupancy rises and "
+            "falls as instructions arrive, retire or are squashed. Separately, the histogram over the whole run "
+            "gives a mean of ten point seven entries and no cycle at the full capacity. The plotted sample and "
+            "whole-run statistics have different scopes. <bookmark mark='c'/> Real implementations can hold much "
+            "more: Intel's 2021 Golden Cove disclosure gives a five-hundred-twelve-entry reorder buffer. Its "
+            "entries count implementation operations, so they are not automatically equivalent to our model's "
+            "architectural instructions. We will investigate why larger windows can help some workloads and why "
+            "this particular run uses so little of its buffer."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xl))
             vo.wait_until("a")
@@ -162,27 +172,31 @@ class Hook(VoiceoverScene):
     def preview(self):
         head = label(r"By the end of this part", font_size=40).to_edge(UP, buff=0.4)
         facts = VGroup(
-            label(r"the dataflow limit: \ how fast a program \textit{could} run", font_size=28, color=FUNC),
+            label("dataflow limits under stated oracle assumptions", font_size=28, color=FUNC),
             label(r"Tomasulo's algorithm, \ renaming, \ and the reorder buffer, \ built and checked", font_size=28,
                   color=YES),
             label(r"speculation: \ running hundreds of instructions on a guess", font_size=28, color=CTRL),
-            label(r"Spectre: \ a secret read through a bounds check, \ on our own machine", font_size=28, color=NO),
-            label(r"the Job: \ ledger row 2", font_size=28, color=COST),
+            label("Spectre: \\ bounds-check bypass in a simulated cache/core", font_size=28, color=NO),
+            label("the Job: \\ fitted corpus projection, \\ ledger row 2", font_size=28, color=COST),
         ).arrange(DOWN, buff=0.38).move_to(DOWN * 0.1)
         with self.voiceover(
-            "Here is where this part goes. <bookmark mark='a'/> First, a limit: given a program, how fast could any "
-            "machine run it, if only the true dependences between its instructions mattered? <bookmark mark='b'/> "
-            "Then the machines that approach that limit: the scoreboard of 1964, Tomasulo's algorithm of 1967, "
-            "register renaming, and the reorder buffer, built here and checked against the emulator. <bookmark "
-            "mark='c'/> Then speculation, the guess that lets a core run hundreds of instructions ahead of what it "
-            "knows. <bookmark mark='d'/> Then the price of guessing: in 2018 it was shown that the guesses leave "
-            "traces a program can read, and we will read a secret on our own machine. <bookmark mark='e'/> And the "
-            "Job, run on the new core, for the next row of the ledger."
+            "Here is the route through this part. <bookmark mark='a'/> First, a dataflow model: how quickly a known "
+            "execution trace can be scheduled under explicit latency and resource assumptions. <bookmark mark='b'/> "
+            "Then historical scheduling mechanisms: the scoreboard, Tomasulo's algorithm, renaming and precise "
+            "retirement, illustrated with functional models and finite emulator comparisons. <bookmark mark='c'/> "
+            "Then branch speculation, which lets ready work run before earlier control decisions are resolved. "
+            "<bookmark mark='d'/> A modeled Spectre bounds-check-bypass experiment will show how wrong-path loads "
+            "can influence a simulated cache. It reads data in the model's shared memory, not host hardware "
+            "secrets. <bookmark mark='e'/> Finally, measured model cycles on passages support the next fitted "
+            "full-corpus projection in the Job ledger."
         ) as vo:
             self.play(FadeIn(head))
             for mk, f in zip("abcde", facts):
-                vo.wait_until(mk)
+                if mk != "a":
+                    vo.wait_until(mk)
                 self.play(FadeIn(f, shift=UP * 0.1))
+                if mk == "a":
+                    vo.wait_until(mk)
         self.wait(0.3)
         self.clear_scene()
 
@@ -199,13 +213,13 @@ class Hook(VoiceoverScene):
             r"Spectre; \ VLIW; \ RISC and CISC; \ multithreading; \ the Job, \ ledger row 2",
         ], font_size=26).move_to(DOWN * 0.2)
         with self.voiceover(
-            "This is Part 8 of Computer Science, Built, the second part of Act Two, Making It Fast. <bookmark "
-            "mark='a'/> In this part: the dataflow graph of a program, its critical path, and the limit it sets. True "
-            "and false dependences, and register renaming, which removes the false ones. The scoreboard of the CDC "
-            "6600 and Tomasulo's algorithm, cycle by cycle. The reorder buffer, which lets a machine execute out of "
-            "order yet keep its exceptions precise. Superscalar issue and the wall it hits, speculation, and the "
-            "ordering of loads and stores. Then Spectre, the compiler's alternative called VLIW, the old argument "
-            "between RISC and CISC, multithreading, and the Job."
+            "This is Part 8 of Computer Science, Built, in Act Two, Making It Fast. <bookmark mark='a'/> We will "
+            "connect a program's dataflow graph and weighted critical path to carefully scoped scheduling limits. "
+            "We will separate true register dependencies from name hazards, then follow the scoreboard, Tomasulo's "
+            "algorithm, renaming and the reorder buffer. We will distinguish execution from architectural "
+            "retirement, and examine finite resources, prediction and memory ordering. The later chapters cover a "
+            "simulated Spectre experiment, VLIW scheduling, RISC and CISC, an oracle multithreading study and the "
+            "Job's projected corpus runtime."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")

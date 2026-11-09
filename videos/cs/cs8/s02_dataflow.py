@@ -23,7 +23,7 @@ class Dataflow(VoiceoverScene):
         self.bounds()
 
     def card(self):
-        card = chapter_card(1, r"The dataflow limit", r"How fast could a program possibly run?", lit=(1966, 1974),
+        card = chapter_card(1, r"The dataflow limit", "What do explicit dependencies and resources permit?", lit=(1966, 1974),
                             extra=((1966, r"Graham's bound"), (1974, r"Dennis's dataflow machine")), part=PART)
         with self.voiceover("Chapter one. The dataflow limit."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
@@ -34,18 +34,19 @@ class Dataflow(VoiceoverScene):
         head = label(r"The loop where the Job spends its time", font_size=36).to_edge(UP, buff=0.35)
         code = VGroup(*[mono(s, 20) for s in SCAN]).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to(UP * 0.6)
         facts = VGroup(
-            label(r"six instructions per table entry, \ for every word read", font_size=24, color=GREY_A),
-            label(r"Part 7's pipeline: \ 7 cycles a trip \ (a load-use bubble)", font_size=24, color=NO),
-            label(r"question: \ how few cycles could \textit{any} machine take?", font_size=26, color=HEAD),
+            label("six instructions: \\ the mismatched-length fast path", font_size=24, color=GREY_A),
+            label("pipeline: \\ 7 steady-state cycles; \\ warm correct prediction", font_size=24, color=NO),
+            label("question: how fast under the stated oracle model?", font_size=26, color=HEAD),
         ).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "In Part 7 we found where the Job spends its time: in one small loop, the scan of the word table. For "
-            "every word it reads, the Job walks the table entry by entry, skipping each entry whose length differs "
-            "from the word's. <bookmark mark='a'/> Six instructions a trip: test whether the table is finished, load "
-            "this entry's length, compare it, step to the next entry, count, and jump back. <bookmark mark='b'/> On "
-            "the pipeline a trip took seven cycles. <bookmark mark='c'/> So here is this chapter's question. Forget "
-            "pipelines and forget hardware. If a machine could start any instruction the moment its inputs exist, "
-            "how fast could this loop go?"
+            "This is the Job's table-scan fast path when an entry's length differs from the word being searched. "
+            "Matching lengths need additional letter comparisons, and reaching the insertion point follows another "
+            "path. <bookmark mark='a'/> The displayed path has six instructions: table-end test, length load, "
+            "comparison, two increments and a jump. <bookmark mark='b'/> With warm correct direction and target "
+            "prediction, Part 7's pipeline takes seven steady-state cycles per such trip, including a load-use "
+            "bubble. <bookmark mark='c'/> Now hold this known path fixed. Give its instructions explicit latencies "
+            "and ask how overlapping their true dependencies changes the schedule. This idealization assumes the "
+            "future path and relevant memory information are already known."
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(c) for c in code], lag_ratio=0.15))
             vo.wait_until("a")
@@ -70,7 +71,7 @@ class Dataflow(VoiceoverScene):
                               label(t, font_size=17, color=GREY_A)).arrange(RIGHT, buff=0.1)
                        for t, c in ((r"load", KIND_COLOR["load"]), (r"branch", KIND_COLOR["branch"]),
                                     (r"arithmetic", KIND_COLOR["alu"]))]).arrange(RIGHT, buff=0.4)
-        jumps = note(r"(and four jumps, \ which depend on nothing)", font_size=18)
+        jumps = note("(four register-independent jumps; \\ path supplied by the oracle)", font_size=18)
         foot = VGroup(leg, jumps).arrange(RIGHT, buff=0.8).to_edge(DOWN, buff=0.15)
         trips = VGroup()
         for k in range(4):
@@ -80,20 +81,20 @@ class Dataflow(VoiceoverScene):
         crit = label(rf"the critical path: \ {cp_len} cycles, \ through \texttt{{addi t0, t0, 12}}", font_size=26,
                      color=HEAD).next_to(head, DOWN, buff=0.12)
         with self.voiceover(
-            "Draw each instruction as a node, and an arrow from the instruction that produces a value to each one "
-            "that uses it. This is the program's dataflow graph: the only order that really matters. <bookmark "
-            "mark='a'/> Here are four trips round the loop, each instruction placed in the earliest cycle it could "
-            "start. Loads take two cycles, everything else one. The four jumps depend on nothing at all, so they are "
-            "left out of the picture. <bookmark mark='b'/> The load of an entry's length needs only the entry's "
-            "address, and the branch needs only the load. <bookmark mark='c'/> And the address of the next entry "
-            "needs only the address of this one. That is the chain that runs through all four trips: one add per "
-            "trip, each waiting for the last. <bookmark mark='d'/> The longest chain of dependences through the graph "
-            "is called the critical path. Here it is six cycles long, so no machine, however wide, can do these four "
-            "trips in fewer than six cycles. The pipeline took twenty-eight."
+            "Each node is an instruction. An arrow connects a value's producer to an instruction that uses it. "
+            "These arrows describe register data dependencies for this fixed path; real execution also has memory, "
+            "control, resource and exception constraints. <bookmark mark='a'/> Place four trips at their earliest "
+            "starts with unlimited resources. Loads take two cycles and the other displayed operations take one. "
+            "The jumps have no register predecessors in this oracle graph. <bookmark mark='b'/> A length load needs "
+            "its entry address, and the comparison waits for that load. <bookmark mark='c'/> The next entry address "
+            "comes from a one-cycle increment of the previous address. <bookmark mark='d'/> The highlighted longest "
+            "weighted chain, ending at the last comparison, spans six cycles. Under these dependencies and "
+            "latencies, no valid schedule finishes the four trips sooner. The corresponding single-start, in-order "
+            "schedule takes twenty-eight cycles; this is a scoped schedule comparison."
         ) as vo:
             self.play(FadeIn(head), FadeIn(foot))
-            vo.wait_until("a")
             self.play(FadeIn(axis), LaggedStart(*[FadeIn(t) for t in trips], lag_ratio=0.4), run_time=2.5)
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(Create(g.edge_group), run_time=2.0)
             vo.wait_until("c")
@@ -128,18 +129,20 @@ class Dataflow(VoiceoverScene):
         for k, c in cap.items():
             c.next_to(grids[k], DOWN, buff=0.3).align_to(grids[k], LEFT)
         with self.voiceover(
-            "The critical path assumes a machine that can start as many instructions in a cycle as it likes. Real "
-            "machines have a width: so many instructions a cycle, and no more. Picture the machine as a grid, one "
-            "row for each slot, one column for each cycle. <bookmark mark='a'/> One wide, the twenty-four "
-            "instructions, jumps included, need twenty-four cycles. <bookmark mark='b'/> Two wide: twelve. <bookmark "
-            "mark='c'/> Four wide: seven, one more than the critical path. <bookmark mark='d'/> Eight wide: six, and "
-            "now most slots are empty; the width no longer matters, only the chain does. <bookmark mark='e'/> Two "
-            "things bound the time, then: the work divided by the width, and the length of the longest chain."
+            "In this ideal scheduler, width W limits how many operations may start each cycle. It does not limit "
+            "how many earlier operations remain in flight, and execution units are otherwise unlimited. <bookmark "
+            "mark='a'/> One start slot gives twenty-four cycles for twenty-four instructions, including jumps. "
+            "<bookmark mark='b'/> Two slots give twelve cycles. <bookmark mark='c'/> Four give seven. <bookmark "
+            "mark='d'/> Eight give six, reaching this graph's weighted critical path. These are the computed "
+            "schedules for four fixed fast-path trips. <bookmark mark='e'/> Two immediate lower bounds apply: at "
+            "least the instruction count divided by start width, rounded up, and at least the longest dependency "
+            "chain. Real cores need additional front-end, unit, ordering and retirement constraints."
         ) as vo:
             self.play(FadeIn(head))
             prev = None
             for mk, key, row in (("a", "1", 0), ("b", "2", 1), ("c", "4", 2), ("d", "8", 3)):
-                vo.wait_until(mk)
+                if mk != "a":
+                    vo.wait_until(mk)
                 gr = grids[key]
                 if prev is None:
                     self.play(FadeIn(gr.frame), LaggedStart(*[FadeIn(gr.cells[i]) for i in range(24)],
@@ -153,6 +156,8 @@ class Dataflow(VoiceoverScene):
                     p.frame = gr.frame
                     cap[key] = cap[prev]
                 prev = key
+                if mk == "a":
+                    vo.wait_until(mk)
             vo.wait_until("e")
             self.play(FadeIn(table[4]), FadeIn(table[5]))
         self.wait(0.3)
@@ -162,38 +167,40 @@ class Dataflow(VoiceoverScene):
     def bounds(self):
         d = load("dataflow")
         head = label(r"Work, \ span, \ and width", font_size=38).to_edge(UP, buff=0.35)
-        law = MathTex(r"\max\!\left(\frac{N}{W},\; L\right)", r"\;\le\;", r"T_W", r"\;\le\;", r"\frac{N}{W} + L",
-                      font_size=52).move_to(UP * 1.4)
-        law[0].set_color(FUNC)
-        law[4].set_color(CTRL)
+        law = MathTex(r"\max\!\left(\left\lceil\frac{N}{W}\right\rceil,\; L\right) \le T_W",
+                      font_size=42, color=FUNC).move_to(UP * 1.85)
+        graham = MathTex(r"T_G \le \frac{A}{W}+\left(1-\frac{1}{W}\right)L",
+                         font_size=40, color=CTRL).move_to(UP * 0.2)
         keys = VGroup(
-            label(r"$N$: \ instructions \ (the work) \qquad $L$: \ the critical path \ (the span) \qquad $W$: \ "
-                  r"the width", font_size=24, color=GREY_A),
-            label(r"left: \ no machine can do better \qquad right: \ any greedy machine does at least this well",
-                  font_size=24, color=GREY_A),
-        ).arrange(DOWN, buff=0.2).next_to(law, DOWN, buff=0.4)
-        check = VGroup(*[label(rf"$W = {w}$: \ ${max(24 / w, 6):g} \le {d['widths'][str(w)]['cycles']} \le "
-                               rf"{24 / w + 6:g}$", font_size=24, color=c)
-                         for w, c in ((1, GREY_B), (2, GREY_B), (4, HEAD), (8, GREY_B))]).arrange(DOWN, buff=0.12)
-        check.next_to(keys, DOWN, buff=0.35)
-        loop = label(r"in a loop, \ the chain sets a rate: \ one trip per cycle \ $\Rightarrow$ \ 6 instructions per "
-                     r"cycle, \ against the pipeline's 0.86", font_size=24, color=YES).to_edge(DOWN, buff=0.35)
+            label(r"start-slot model: $N=24$ instructions, $L=6$ cycles; $W$ starts/cycle",
+                  font_size=22, color=GREY_A).next_to(law, DOWN, buff=0.22),
+            label(r"Graham: nonpreemptive jobs on $W$ processors; $A=28$ processing cycles",
+                  font_size=22, color=GREY_A).next_to(graham, DOWN, buff=0.22),
+        )
+        check = VGroup(*[MathTex(rf"W={w}:\quad {max((24+w-1)//w,6)}\le {d['widths'][str(w)]['cycles']}",
+                                  font_size=26, color=c)
+                         for w, c in ((1, GREY_B), (2, GREY_B), (4, HEAD), (8, GREY_B))]).arrange(RIGHT, buff=0.45)
+        check.move_to(DOWN * 1.6)
+        loop = label(r"fixed fast path, unlimited resources and known path: \\ one trip/cycle after startup; not whole-program IPC",
+                     font_size=23, color=YES).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Those two bounds have names. The number of instructions is the work, N. The critical path is the span, "
-            "L. With a width W, <bookmark mark='a'/> no schedule can take fewer cycles than the work divided by the "
-            "width, and none can beat the span. <bookmark mark='b'/> And there is a matching upper bound, proved by "
-            "Ronald Graham in 1966 for scheduling jobs on machines: any greedy schedule, one that never leaves a "
-            "slot idle while some instruction is ready, finishes within N over W plus L. The greedy schedule is never "
-            "worse than twice the best. <bookmark mark='c'/> Our four trips obey both, at every width. <bookmark "
-            "mark='d'/> And in a loop the span becomes a rate. The longest chain gains one add per trip, so in the "
-            "steady state the loop could run one trip per cycle, six instructions a cycle. The pipeline manages zero "
-            "point eight six. Between those numbers lies everything this part is about."
+            "Keep the resource model explicit. N counts instructions, L is the longest latency-weighted path, and W "
+            "is the number of starts permitted each cycle. <bookmark mark='a'/> Every schedule in this start-slot "
+            "model needs at least the larger of ceiling N over W and L. <bookmark mark='b'/> Graham's classic "
+            "list-scheduling result concerns nonpreemptive jobs occupying W processors. Its work is A, the sum of "
+            "processing times, and a greedy schedule takes at most A over W plus one minus one over W times L. With "
+            "two-cycle loads, A and the instruction count N differ. Do not substitute one for the other when "
+            "changing resource models. <bookmark mark='c'/> Our four-trip schedules satisfy the displayed "
+            "start-slot lower bounds; they have twenty-four instructions and a six-cycle span. <bookmark mark='d'/> "
+            "Across many fixed fast-path trips, the address recurrence permits one trip per cycle in the "
+            "unlimited-resource, perfect-path idealization: six instructions per cycle after startup. This is a "
+            "model opportunity, not a guarantee for the whole table search."
         ) as vo:
             self.play(FadeIn(head))
+            self.play(FadeIn(law), FadeIn(keys[0]))
             vo.wait_until("a")
-            self.play(FadeIn(law[0]), FadeIn(law[1]), FadeIn(law[2]), FadeIn(keys[0]))
             vo.wait_until("b")
-            self.play(FadeIn(law[3]), FadeIn(law[4]), FadeIn(keys[1]))
+            self.play(FadeIn(graham), FadeIn(keys[1]))
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(c) for c in check], lag_ratio=0.2))
             vo.wait_until("d")

@@ -1,484 +1,484 @@
 {
- "title": "计算机科学，从零搭建 · 第8部分：乱序执行",
- "chapters": {
-  "Hook": "排队等待",
-  "Dataflow": "1. 数据流极限",
-  "Rename": "2. 假依赖与重命名",
-  "Scoreboard": "3. 记分牌",
-  "Tomasulo": "4. 托马苏洛算法",
-  "Rob": "5. 重排序缓冲区",
-  "Ilp": "6. 更宽，以及指令级并行之墙",
-  "Speculate": "7. 推测执行",
-  "Memory": "8. 取数、存数与它们的顺序",
-  "Spectre": "9. 幽灵",
-  "Vliw": "10. 编译器的另一条路：超长指令字",
-  "Risc": "11. 精简与复杂指令集",
-  "Smt": "12. 同时多线程",
-  "Cores": "13. 用数字看现代处理器核",
-  "Job": "14. 乱序执行的任务",
-  "Frontier": "15. 前沿：越过数据流极限，而且安全",
-  "Outro": "回顾、习题，以及它们会在哪里再出现"
- },
- "lines": {
-  "50f2c32bcf67": {
-   "scene": "Hook",
-   "en": "Here is a short piece of code on a machine that, like Part 7's pipeline, starts its instructions in program order. Each row is an instruction; time runs to the right, one column a cycle. <bookmark mark='a'/> The fifth instruction is a load, and its data is not in the cache: memory takes sixty cycles to answer. <bookmark mark='b'/> The add after it needs the loaded value, so it waits. That is unavoidable. <bookmark mark='c'/> But look at everything after the add. None of it uses the load. These instructions could have run at once, yet an in-order machine cannot start them until the add has started, so they all sit out the miss. <bookmark mark='d'/> Eighty-one cycles, for sixteen instructions.",
-   "zh": "这是一小段代码，运行在一台像第7部分的流水线那样按程序顺序开始执行指令的机器上。每一行是一条指令；时间向右走，一列是一个周期。<bookmark mark='a'/>第五条指令是一次取数，而它的数据不在缓存里：存储器要六十个周期才回答。<bookmark mark='b'/>它后面的加法需要读出的值，所以只能等。这无法避免。<bookmark mark='c'/>但看看加法后面的所有指令。它们没有一条用到这次取数。这些指令本可以马上执行，可一台按顺序执行的机器在加法开始之前不能开始它们，于是它们全都陪着这次缺失一起等。<bookmark mark='d'/>八十一个周期，只为了十六条指令。"
-  },
-  "e9e8674e2740": {
-   "scene": "Hook",
-   "en": "Now the same code on a machine that does not wait its turn. <bookmark mark='a'/> Every instruction starts as soon as its operands are ready. The load misses, as before, and the add waits for it, as before. But the ten instructions after the add have nothing to wait for, so they run in the next few cycles, underneath the miss. <bookmark mark='b'/> They finish long before the load, then wait, in the blue, for their turn to commit, because the machine still makes its results official in program order. When the load's data arrives, the add runs and everything commits in a rush. <bookmark mark='c'/> Seventy cycles instead of eighty-one, and every cycle of independent work was hidden behind the miss.",
-   "zh": "现在把同样的代码放到一台不按次序排队的机器上。<bookmark mark='a'/>每条指令一旦操作数就绪就开始执行。取数照样缺失，加法照样等它。但加法后面的十条指令没有什么要等的，所以它们在接下来几个周期里就执行完了，就在缺失的底下。<bookmark mark='b'/>它们远早于取数完成，然后在蓝色里等着轮到自己提交，因为机器仍然按程序顺序让结果生效。取数的数据一到，加法执行，所有指令一拥而上地提交。<bookmark mark='c'/>七十个周期而不是八十一个，而且每个周期的独立工作都藏在了缺失的背后。"
-  },
-  "89f8b526cec9": {
-   "scene": "Hook",
-   "en": "Scale that up to the Job. Its first chapter runs eight hundred twenty-seven thousand instructions. <bookmark mark='a'/> Part 7's pipeline took about a million cycles: an IPC, instructions per cycle, of zero point eight three. <bookmark mark='b'/> This part's core, forced to start its instructions one at a time and in program order, does a little worse: its front end is deeper than the pipeline's, so a wrong guess about a branch costs it more. <bookmark mark='c'/> The same core, allowed to look ahead and start up to four ready instructions a cycle, takes four hundred thirty-eight thousand cycles. An IPC of almost one point nine. <bookmark mark='d'/> Nothing about the instructions changed, nor the adders, nor the memory. Only the order in which work is started.",
-   "zh": "把它放大到任务上。任务的第一章执行八十二万七千条指令。<bookmark mark='a'/>第7部分的流水线用了大约一百万个周期：每周期指令数，也就是 IPC，为零点八三。<bookmark mark='b'/>这一部分的处理器核，如果强迫它一条一条、按程序顺序开始执行指令，会稍差一点：它的前端比流水线更深，所以一次分支猜错代价更大。<bookmark mark='c'/>同一个核，允许它向前看、每个周期开始最多四条就绪的指令，只用四十三万八千个周期。IPC 接近一点九。<bookmark mark='d'/>指令没有变，存储器也没有变。变的只是机器一次能开始多少工作，以及按什么顺序。"
-  },
-  "4af9b2f9bb3a": {
-   "scene": "Hook",
-   "en": "The machine that did this can hold a hundred twenty-eight instructions in flight at once, in a structure called the reorder buffer. <bookmark mark='a'/> Here is how many it actually holds, cycle by cycle, over six hundred cycles of the Job. <bookmark mark='b'/> It climbs, and then it crashes to zero; climbs and crashes. On average, about eleven instructions are in flight, and the buffer is never once full. <bookmark mark='c'/> Real cores keep far more: Intel's Golden Cove core of 2021 has five hundred twelve entries. Why build such a huge window, and what keeps knocking ours down to zero? Both answers are in this part, and the second one is the most important fact about modern processors.",
-   "zh": "做到这一点的机器可以同时容纳一百二十八条在途的指令，放在一个叫重排序缓冲区的结构里。<bookmark mark='a'/>这是它在任务的六百个周期里实际容纳的数量，一个周期一个周期地画出来。<bookmark mark='b'/>它爬上去，然后跌到零；再爬上去，再跌下来。平均只有大约十一条指令在途，缓冲区一次也没有满过。<bookmark mark='c'/>真实的处理器核容纳得多得多：英特尔 2021 年的 Golden Cove 核有五百一十二项。为什么要造这么大的窗口？又是什么不停地把我们的窗口打回零？两个答案都在这一部分里，而第二个是关于现代处理器最重要的事实。"
-  },
-  "72fe3772899d": {
-   "scene": "Hook",
-   "en": "Here is where this part goes. <bookmark mark='a'/> First, a limit: given a program, how fast could any machine run it, if only the true dependences between its instructions mattered? <bookmark mark='b'/> Then the machines that approach that limit: the scoreboard of 1964, Tomasulo's algorithm of 1967, register renaming, and the reorder buffer, built here and checked against the emulator. <bookmark mark='c'/> Then speculation, the guess that lets a core run hundreds of instructions ahead of what it knows. <bookmark mark='d'/> Then the price of guessing: in 2018 it was shown that the guesses leave traces a program can read, and we will read a secret on our own machine. <bookmark mark='e'/> And the Job, run on the new core, for the next row of the ledger.",
-   "zh": "这一部分要去的地方是这样的。<bookmark mark='a'/>首先是一个极限：给定一个程序，如果只有指令之间的真依赖起作用，任何机器最快能跑多快？<bookmark mark='b'/>然后是逼近这个极限的机器：1964 年的记分牌，1967 年的托马苏洛算法，寄存器重命名，以及重排序缓冲区，在这里造出来，并与仿真器核对。<bookmark mark='c'/>然后是推测执行，正是这种猜测让一个核能在它确知的东西前面跑出几百条指令。<bookmark mark='d'/>然后是猜测的代价：2018 年人们证明，这些猜测会留下程序能读出的痕迹，我们将在自己的机器上读出一个秘密。<bookmark mark='e'/>最后，任务在新核上运行，给出账本的下一行。"
-  },
-  "4b2b46958f4b": {
-   "scene": "Hook",
-   "en": "This is Part 8 of Computer Science, Built, the second part of Act Two, Making It Fast. <bookmark mark='a'/> In this part: the dataflow graph of a program, its critical path, and the limit it sets. True and false dependences, and register renaming, which removes the false ones. The scoreboard of the CDC 6600 and Tomasulo's algorithm, cycle by cycle. The reorder buffer, which lets a machine execute out of order yet keep its exceptions precise. Superscalar issue and the wall it hits, speculation, and the ordering of loads and stores. Then Spectre, the compiler's alternative called VLIW, the old argument between RISC and CISC, multithreading, and the Job.",
-   "zh": "这是《计算机科学，从零搭建》的第8部分，第二幕“让它变快”的第二部分。<bookmark mark='a'/>这一部分讲：程序的数据流图、它的关键路径，以及它设下的极限。真依赖与假依赖，以及消除假依赖的寄存器重命名。CDC 6600 的记分牌和托马苏洛算法，一个周期一个周期地看。重排序缓冲区，它让机器乱序执行却保持异常精确。超标量发射和它撞上的墙、推测执行，以及取数与存数的顺序。然后是幽灵漏洞、编译器的另一条路超长指令字、精简与复杂指令集之间的老争论、多线程，以及任务。"
-  },
-  "9de935fb47ec": {
-   "scene": "Dataflow",
-   "en": "Chapter one. The dataflow limit.",
-   "zh": "第一章。数据流极限。"
-  },
-  "e024745e0d91": {
-   "scene": "Dataflow",
-   "en": "In Part 7 we found where the Job spends its time: in one small loop, the scan of the word table. For every word it reads, the Job walks the table entry by entry, skipping each entry whose length differs from the word's. <bookmark mark='a'/> Six instructions a trip: test whether the table is finished, load this entry's length, compare it, step to the next entry, count, and jump back. <bookmark mark='b'/> On the pipeline a trip took seven cycles. <bookmark mark='c'/> So here is this chapter's question. Forget pipelines and forget hardware. If a machine could start any instruction the moment its inputs exist, how fast could this loop go?",
-   "zh": "在第7部分我们找到了任务把时间花在哪里：一个小循环，对单词表的扫描。每读一个词，任务就逐项走过整张表，跳过长度和这个词不同的每一项。<bookmark mark='a'/>每趟六条指令：检查表是否走完，取出这一项的长度，比较它，走到下一项，计数，跳回去。<bookmark mark='b'/>在流水线上一趟要七个周期。<bookmark mark='c'/>于是这一章的问题是：忘掉流水线，也忘掉硬件。如果一台机器能在任何一条指令的输入出现的那一刻就开始它，这个循环最快能跑多快？"
-  },
-  "c26c4c457d25": {
-   "scene": "Dataflow",
-   "en": "Draw each instruction as a node, and an arrow from the instruction that produces a value to each one that uses it. This is the program's dataflow graph: the only order that really matters. <bookmark mark='a'/> Here are four trips round the loop, each instruction placed in the earliest cycle it could start. Loads take two cycles, everything else one. The four jumps depend on nothing at all, so they are left out of the picture. <bookmark mark='b'/> The load of an entry's length needs only the entry's address, and the branch needs only the load. <bookmark mark='c'/> And the address of the next entry needs only the address of this one. That is the chain that runs through all four trips: one add per trip, each waiting for the last. <bookmark mark='d'/> The longest chain of dependences through the graph is called the critical path. Here it is six cycles long, so no machine, however wide, can do these four trips in fewer than six cycles. The pipeline took twenty-eight.",
-   "zh": "把每条指令画成一个节点，从产生一个值的指令向每条用到它的指令画一个箭头。这就是程序的数据流图：唯一真正重要的顺序。<bookmark mark='a'/>这里是循环的四趟，每条指令都放在它最早可以开始的周期里。取数要两个周期，其余都是一个。四条跳转指令什么也不依赖，所以没有画进图里。<bookmark mark='b'/>取出一项长度的取数只需要这一项的地址，而分支只需要取数。<bookmark mark='c'/>下一项的地址只需要这一项的地址。这就是贯穿四趟的那条链：每趟一次加法，每次都等上一次。<bookmark mark='d'/>图中最长的依赖链叫关键路径。这里它长六个周期，所以没有机器，不管多宽，能用少于六个周期做完这四趟。流水线用了二十八个。"
-  },
-  "707879eaa3d0": {
-   "scene": "Dataflow",
-   "en": "The critical path assumes a machine that can start as many instructions in a cycle as it likes. Real machines have a width: so many instructions a cycle, and no more. Picture the machine as a grid, one row for each slot, one column for each cycle. <bookmark mark='a'/> One wide, the twenty-four instructions, jumps included, need twenty-four cycles. <bookmark mark='b'/> Two wide: twelve. <bookmark mark='c'/> Four wide: seven, one more than the critical path. <bookmark mark='d'/> Eight wide: six, and now most slots are empty; the width no longer matters, only the chain does. <bookmark mark='e'/> Two things bound the time, then: the work divided by the width, and the length of the longest chain.",
-   "zh": "关键路径假设机器一个周期想开始多少条指令都行。真实的机器有宽度：每个周期最多开始那么多条。把机器想象成一张网格，每个发射槽一行，每个周期一列。<bookmark mark='a'/>一条宽时，二十四条指令，连同跳转在内，需要二十四个周期。<bookmark mark='b'/>两条宽：十二个。<bookmark mark='c'/>四条宽：七个，比关键路径多一个。<bookmark mark='d'/>八条宽：六个，而且现在大多数槽都空着；宽度不再重要，只有那条链重要。<bookmark mark='e'/>所以时间受两样东西约束：工作量除以宽度，以及最长链的长度。"
-  },
-  "adace92e5532": {
-   "scene": "Dataflow",
-   "en": "Those two bounds have names. The number of instructions is the work, N. The critical path is the span, L. With a width W, <bookmark mark='a'/> no schedule can take fewer cycles than the work divided by the width, and none can beat the span. <bookmark mark='b'/> And there is a matching upper bound, proved by Ronald Graham in 1966 for scheduling jobs on machines: any greedy schedule, one that never leaves a slot idle while some instruction is ready, finishes within N over W plus L. The greedy schedule is never worse than twice the best. <bookmark mark='c'/> Our four trips obey both, at every width. <bookmark mark='d'/> And in a loop the span becomes a rate. The longest chain gains one add per trip, so in the steady state the loop could run one trip per cycle, six instructions a cycle. The pipeline manages zero point eight six. Between those numbers lies everything this part is about.",
-   "zh": "这两个界都有名字。指令的条数是工作量，N。关键路径是跨度，L。宽度为 W 时，<bookmark mark='a'/>没有调度能比工作量除以宽度更快，也没有调度能胜过跨度。<bookmark mark='b'/>还有一个对应的上界，由罗纳德·格雷厄姆在 1966 年为机器上的作业调度证明：任何贪心调度，也就是只要有就绪的指令就从不让槽空着的调度，都在 N 除以 W 加 L 之内完成。贪心调度从来不会比最好的差两倍以上。<bookmark mark='c'/>我们的四趟在每个宽度上都满足这两个界。<bookmark mark='d'/>在循环里，跨度变成了速率。最长的链每趟多一次加法，所以在稳定状态下循环可以每周期跑一趟，每周期六条指令。流水线只做到零点八六。这一部分要讲的一切，都在这两个数字之间。"
-  },
-  "a45babf4c08c": {
-   "scene": "Rename",
-   "en": "Chapter two. False dependences, and renaming.",
-   "zh": "第二章。假依赖与重命名。"
-  },
-  "2ca093a2b5a1": {
-   "scene": "Rename",
-   "en": "Not every ordering between two instructions is real. Take these five. <bookmark mark='a'/> The first loads a0 and the second adds it to itself. The add needs the value the load produced: a read after a write, a true dependence. Data flows along it, and no machine can run the add first. <bookmark mark='b'/> Now the third instruction loads a new value into a0. It must not overwrite a0 before the add has read the old one: a write after a read. <bookmark mark='c'/> And it must not land before the first load either, or the first load's later write would clobber it: a write after a write. <bookmark mark='d'/> But look at what these last two are about. No value passes from one instruction to the other. They exist only because two different values happen to share one register's name. The second half of this code, which works on a completely new value, is chained to the first half by nothing but a name.",
-   "zh": "两条指令之间的顺序并不都是真的。看这五条。<bookmark mark='a'/>第一条把值取进 a0，第二条把它和自己相加。加法需要取数产生的那个值：写后读，一个真依赖。数据沿着它流动，没有机器能先执行加法。<bookmark mark='b'/>现在第三条指令把一个新值取进 a0。在加法读走旧值之前，它不能覆盖 a0：读后写。<bookmark mark='c'/>它也不能落在第一条取数之前，否则第一条取数后来的写会把它冲掉：写后写。<bookmark mark='d'/>但看看后两种讲的是什么。没有任何值从一条指令传到另一条。它们之所以存在，只是因为两个不同的值碰巧共用了一个寄存器的名字。这段代码的后一半处理的是一个全新的值，把它和前一半拴在一起的，只有一个名字。"
-  },
-  "febf4620a4a5": {
-   "scene": "Rename",
-   "en": "How common are the false ones? Count them over the eight hundred twenty-seven thousand instructions of the Job's first chapter. <bookmark mark='a'/> Nine hundred eighty thousand true dependences, values flowing from one instruction to another. <bookmark mark='b'/> And more than nine hundred thousand false ones, half of them writes after reads and half writes after writes. <bookmark mark='c'/> They are everywhere for a simple reason: Pebble has only fifteen registers to name values with, so every register holds a long succession of different values, and each reuse ties the new value to the old.",
-   "zh": "假依赖有多常见？在任务第一章的八十二万七千条指令上数一数。<bookmark mark='a'/>九十八万个真依赖，也就是从一条指令流向另一条的值。<bookmark mark='b'/>还有九十多万个假依赖，一半是读后写，一半是写后写。<bookmark mark='c'/>它们无处不在，原因很简单：Pebble 只有十五个寄存器可以给值命名，所以每个寄存器都先后装着一长串不同的值，每次重用都把新值和旧值拴在一起。"
-  },
-  "8714d45e8bf4": {
-   "scene": "Rename",
-   "en": "The cure is to stop sharing names. <bookmark mark='a'/> Give the machine many more registers than the instruction set names: physical registers, p twenty, p twenty-one, and so on. Keep a small table, the register alias table, that says which physical register currently holds each architectural one. <bookmark mark='b'/> As each instruction arrives, in program order, its sources are looked up in the table, and its destination gets a fresh physical register, which the table then records. The load writes p twenty; the add reads p twenty and writes p twenty-one. <bookmark mark='c'/> The second load of a0 gets p twenty-two, a different register, so it can run whenever it likes: there is no old value for it to destroy. <bookmark mark='d'/> After renaming, no physical register is written twice. The anti and output dependences are gone, and the two halves of the code, two independent chains, can run side by side. Only the arrows that carry data are left.",
-   "zh": "解药是不再共用名字。<bookmark mark='a'/>给机器比指令集所命名的多得多的寄存器：物理寄存器，p 二十、p 二十一，等等。再保留一张小表，寄存器别名表，记录每个体系结构寄存器现在由哪个物理寄存器保存。<bookmark mark='b'/>每条指令按程序顺序到来时，在表里查出它的源操作数，再给它的目的寄存器分配一个新的物理寄存器，并记进表里。取数写 p 二十；加法读 p 二十，写 p 二十一。<bookmark mark='c'/>第二次取数到 a0 得到 p 二十二，一个不同的寄存器，所以它想什么时候执行都行：没有旧值会被它毁掉。<bookmark mark='d'/>重命名之后，没有哪个物理寄存器被写两次。反依赖和输出依赖都消失了，代码的两半，两条独立的链，可以并排执行。只剩下传送数据的箭头。"
-  },
-  "06f69f54d296": {
-   "scene": "Rename",
-   "en": "How much does that matter? Imagine an oracle: a machine with unlimited width that knows the whole run in advance, so it can start every instruction the moment its inputs exist. <bookmark mark='a'/> With every value in its own register, it runs the Job's first chapter at two thousand four hundred instructions per cycle. Different words' searches through the table do not depend on each other, so the oracle runs hundreds of them at once. <bookmark mark='b'/> Hold the same oracle to the false dependences, so that a register may not be rewritten until its old value is dead, and it manages three point seven. <bookmark mark='c'/> Renaming is worth a factor of more than six hundred, in the limit. Real machines are nowhere near either number, and chapter six will say why. But every fast general-purpose core built since the mid-1990s renames its registers.",
-   "zh": "这有多重要？想象一个先知：一台宽度无限、事先知道整个运行过程的机器，所以它可以在每条指令的输入出现的那一刻就开始它。<bookmark mark='a'/>每个值都有自己的寄存器时，它以每周期两千四百条指令的速度跑完任务第一章。不同单词在表里的查找互不依赖，所以先知同时跑几百个。<bookmark mark='b'/>让同一个先知遵守假依赖，也就是一个寄存器要等它的旧值不再有用才能改写，它只做到三点七。<bookmark mark='c'/>在极限情形下，重命名值六百多倍。真实的机器离这两个数都很远，第六章会说明原因。但二十世纪九十年代中期以来造出的每一个快速通用处理器核，都对寄存器做重命名。"
-  },
-  "0a115e0e3f12": {
-   "scene": "Scoreboard",
-   "en": "Chapter three. The scoreboard.",
-   "zh": "第三章。记分牌。"
-  },
-  "3fb8bb0062fb": {
-   "scene": "Scoreboard",
-   "en": "The first machine to let instructions overtake each other was the Control Data 6600, delivered in 1964, designed by Seymour Cray with James Thornton. <bookmark mark='a'/> It had ten functional units: adders, two multipliers, a divider, units for shifts, logic, branches and address arithmetic, all able to work at once. <bookmark mark='b'/> The trouble with ten units is keeping them busy without getting the answers wrong. Thornton's solution was a central piece of bookkeeping called the scoreboard, which tracks every instruction in flight, every unit, and every register a unit is about to write. <bookmark mark='c'/> With a hundred-nanosecond clock it did up to three million operations a second, and it was the fastest computer in the world for five years. IBM's president, Thomas Watson Junior, wrote a famous memo asking how a laboratory of thirty-four people, including the janitor, had beaten IBM. Cray is said to have replied that Mr. Watson had answered his own question.",
-   "zh": "第一台让指令互相超车的机器，是 1964 年交付的控制数据公司 6600，由西摩·克雷和詹姆斯·桑顿设计。<bookmark mark='a'/>它有十个功能部件：加法器、两个乘法器、一个除法器，还有做移位、逻辑、分支和地址运算的部件，全都可以同时工作。<bookmark mark='b'/>十个部件的麻烦在于，既要让它们都忙起来，又不能算错。桑顿的办法是一份集中的账本，叫记分牌，它记录每条在途的指令、每个部件，以及每个部件将要写的每个寄存器。<bookmark mark='c'/>它的时钟是一百纳秒，每秒最多做三百万次运算，在五年里一直是世界上最快的计算机。IBM 总裁小托马斯·沃森写过一份著名的备忘录，问一个连看门人在内只有三十四人的实验室，怎么会打败 IBM。据说克雷回答，沃森先生已经回答了他自己的问题。"
-  },
-  "729bae0cc384": {
-   "scene": "Scoreboard",
-   "en": "Each instruction passes through four steps, and the scoreboard checks one kind of hazard at each. <bookmark mark='a'/> Issue happens in program order. An instruction issues when its kind of unit is free, and when no instruction already in flight is going to write the same register; that is the write after write hazard, and the 6600 simply refuses to have two writers of one name. <bookmark mark='b'/> Next, read operands. The instruction waits at its unit until every register it reads has been written by whoever was producing it: the true dependence. <bookmark mark='c'/> Then it executes, taking as many cycles as its unit needs. <bookmark mark='d'/> Last, write result. Before overwriting its destination, it waits until every earlier instruction that still needs the old value has read it: the write after read hazard. <bookmark mark='e'/> Notice that values travel only through the registers. Every hazard is a wait; nothing is renamed.",
-   "zh": "每条指令经过四步，记分牌在每一步检查一种冒险。<bookmark mark='a'/>发射按程序顺序进行。当一条指令所需种类的部件空闲，而且没有在途的指令将要写同一个寄存器时，它才发射；这就是写后写冒险，6600 干脆不允许同一个名字同时有两个写者。<bookmark mark='b'/>接着是读操作数。指令在它的部件前等着，直到它读的每个寄存器都已被产生它的指令写好：真依赖。<bookmark mark='c'/>然后它执行，部件需要几个周期就花几个周期。<bookmark mark='d'/>最后是写结果。在覆盖目的寄存器之前，它要等每条还需要旧值的更早的指令都读完：读后写冒险。<bookmark mark='e'/>注意，值只通过寄存器传递。每种冒险都是一次等待；没有任何东西被重命名。"
-  },
-  "898946206c1a": {
-   "scene": "Scoreboard",
-   "en": "Here is the standard example from Hennessy and Patterson's textbook, written in Pebble's registers, with their latencies: a load takes one cycle, an add two, a multiply ten, a divide forty. <bookmark mark='a'/> Watch the scoreboard fill in the cycle at which each instruction completes each step. The first load issues in cycle one, reads in two, executes in three, writes in four. <bookmark mark='b'/> The second load cannot even issue until cycle five: there is only one integer unit, and the first load holds it until its result is written. <bookmark mark='c'/> The multiply and the subtract both wait for the second load, then read their operands together in cycle nine. The divide needs the multiply's result, so it waits at its unit until cycle twenty-one. <bookmark mark='d'/> And the last add. It issues in thirteen, when the adder is free, and its result is ready by sixteen. But it writes a1, and the divide, an earlier instruction, has not yet read the old a1. So the add sits on its finished result until cycle twenty-two. <bookmark mark='e'/> The whole thing takes sixty-two cycles.",
-   "zh": "这是轩尼诗和帕特森教科书里的标准例子，用 Pebble 的寄存器写出，采用他们的延迟：取数一个周期，加法两个，乘法十个，除法四十个。<bookmark mark='a'/>看记分牌填出每条指令完成每一步的周期。第一条取数在第一周期发射，第二周期读操作数，第三周期执行，第四周期写回。<bookmark mark='b'/>第二条取数直到第五周期才能发射：只有一个整数部件，第一条取数一直占着它，直到结果写完。<bookmark mark='c'/>乘法和减法都在等第二条取数，然后在第九周期一起读操作数。除法需要乘法的结果，所以在它的部件前一直等到第二十一周期。<bookmark mark='d'/>还有最后的加法。它在第十三周期加法器空出时发射，结果在第十六周期就算好了。但它要写 a1，而更早的除法还没有读旧的 a1。于是加法守着算好的结果，一直等到第二十二周期。<bookmark mark='e'/>整段一共六十二个周期。"
-  },
-  "d96c244c8b7e": {
-   "scene": "Scoreboard",
-   "en": "The scoreboard was a brilliant first step, and it has three limits. <bookmark mark='a'/> It handles false dependences by waiting. Two writers of one register cannot both be in flight, and a finished result can be held up, as our add was, by an earlier reader of the old value. <bookmark mark='b'/> Values pass only through the register file, so a result must be written before its user can read it. <bookmark mark='c'/> And issue is in order, so when one instruction cannot issue, nothing behind it can. <bookmark mark='d'/> Three years later, a team at IBM removed all three limits at once.",
-   "zh": "记分牌是出色的第一步，但它有三个局限。<bookmark mark='a'/>它靠等待来处理假依赖。同一个寄存器的两个写者不能同时在途，一个算好的结果也可能被某个读旧值的更早的指令拖住，就像我们的加法那样。<bookmark mark='b'/>值只能经过寄存器堆传递，所以结果必须先写进去，使用者才能读。<bookmark mark='c'/>而且发射是按顺序的，一条指令发射不了，它后面的都发射不了。<bookmark mark='d'/>三年之后，IBM 的一个团队一举去掉了这三个局限。"
-  },
-  "2a4a2bcd325a": {
-   "scene": "Tomasulo",
-   "en": "Chapter four. Tomasulo's algorithm.",
-   "zh": "第四章。托马苏洛算法。"
-  },
-  "bb5446a0fd84": {
-   "scene": "Tomasulo",
-   "en": "In 1967 IBM shipped the System/360 Model 91, a machine built for scientific computing. <bookmark mark='a'/> Its floating-point unit had a problem far worse than Pebble's: only four floating-point registers in the instruction set, so the same few names were reused constantly, and a scoreboard would have stalled on false dependences all the time. <bookmark mark='b'/> Robert Tomasulo's answer was to stop naming values by registers at all. A value in flight is named by the reservation station, a small waiting area in front of a functional unit, of the instruction that will produce it. <bookmark mark='c'/> An instruction waiting in a station holds, for each operand, either the value itself or the tag of the station that will produce it. <bookmark mark='d'/> And when a unit finishes, it broadcasts the result and its tag on a common data bus. Every station and the register file listen, and whoever is waiting for that tag takes the value. This is register renaming, done in 1967 with a handful of tags.",
-   "zh": "1967 年，IBM 交付了 System/360 Model 91，一台为科学计算而造的机器。<bookmark mark='a'/>它的浮点部件有一个比 Pebble 糟糕得多的问题：指令集里只有四个浮点寄存器，同样几个名字被不断重用，记分牌会一直卡在假依赖上。<bookmark mark='b'/>罗伯特·托马苏洛的答案是干脆不再用寄存器给值命名。一个在途的值，用将要产生它的那条指令所在的保留站来命名；保留站是功能部件前面一个小小的等候区。<bookmark mark='c'/>在保留站里等待的指令，对每个操作数要么持有值本身，要么持有将要产生它的保留站的标签。<bookmark mark='d'/>部件完成时，把结果和它的标签广播到一条公共数据总线上。每个保留站和寄存器堆都在听，谁在等这个标签，谁就把值取走。这就是寄存器重命名，1967 年就用一把标签做到了。"
-  },
-  "0f643d3960c0": {
-   "scene": "Tomasulo",
-   "en": "Here is the machine. On the left, the instructions waiting to issue, in order. In the middle, the reservation stations: three for loads, three in front of the adder, two in front of the multiplier and divider. Below them the units, and under everything the common data bus, which runs back to every station and to the registers. <bookmark mark='a'/> Cycle one: the first load issues into Load1, and the register a1 now records that its next value will come from Load1. Cycle two: the second load issues, and a2 points at Load2. <bookmark mark='b'/> Cycle three: the multiply issues. Its operand a2 is not ready, so the station takes the tag Load2 instead. And the first load broadcasts: tag Load1 and its value go out on the bus, and a1 takes it. <bookmark mark='c'/> Cycle four: Load2 broadcasts, and the multiply, which was waiting for that tag, captures the value. The subtract issues with both its values in hand. <bookmark mark='d'/> Cycle five: the divide issues, waiting on tag Mult1, and holding the current value of a1. Cycle six: the last add issues. It will write a1, so a1 now points at Add2, but the divide does not care: it has already copied the old a1. That is the write after read hazard, gone. <bookmark mark='e'/> The subtract broadcasts in cycle seven, the add starts in the next cycle, and it broadcasts in cycle ten, while the multiply is still working. <bookmark mark='f'/> The multiply finishes in fifteen and its broadcast wakes the divide, which takes forty cycles and broadcasts in fifty-six.",
-   "zh": "这就是这台机器。左边是等待发射的指令，按顺序排着。中间是保留站：三个给取数，三个在加法器前，两个在乘除法器前。下面是功能部件，最底下是公共数据总线，它通回每个保留站和寄存器。<bookmark mark='a'/>第一周期：第一条取数发射进 Load1，寄存器 a1 记下它的下一个值将来自 Load1。第二周期：第二条取数发射，a2 指向 Load2。<bookmark mark='b'/>第三周期：乘法发射。它的操作数 a2 还没好，所以保留站记下标签 Load2。同时第一条取数广播：标签 Load1 和它的值出现在总线上，a1 把它取走。<bookmark mark='c'/>第四周期：Load2 广播，一直在等这个标签的乘法捕获了这个值。减法发射，两个值都已在手。<bookmark mark='d'/>第五周期：除法发射，等着标签 Mult1，并持有 a1 的当前值。第六周期：最后的加法发射。它会写 a1，所以 a1 现在指向 Add2，但除法不在乎：它已经抄下了旧的 a1。这就是读后写冒险，消失了。<bookmark mark='e'/>减法在第七周期广播，加法在下一个周期开始，并在第十周期广播，那时乘法还在算。<bookmark mark='f'/>乘法在第十五周期完成，它的广播唤醒了除法，除法花四十个周期，在第五十六周期广播。"
-  },
-  "e0dfd84bbf48": {
-   "scene": "Tomasulo",
-   "en": "Side by side. <bookmark mark='a'/> Most results arrive a little earlier, because the bus hands a value straight to the stations waiting for it, with no write and read through the register file. <bookmark mark='b'/> And the last add finishes twelve cycles sooner: under Tomasulo nobody waits for an earlier reader, because every reader has already copied what it needs. <bookmark mark='c'/> Fifty-six cycles instead of sixty-two. The divide's forty cycles dominate both, as they should: that is this example's critical path.",
-   "zh": "并排对比。<bookmark mark='a'/>大多数结果都早到一点，因为总线把值直接交给等着它的保留站，不用经过寄存器堆写一次再读一次。<bookmark mark='b'/>最后的加法早了十二个周期完成：在托马苏洛算法下，没有谁要等更早的读者，因为每个读者都已经抄下了它需要的东西。<bookmark mark='c'/>五十六个周期而不是六十二个。除法的四十个周期在两者中都占主导，这理所当然：那是这个例子的关键路径。"
-  },
-  "c33a1c572f54": {
-   "scene": "Tomasulo",
-   "en": "There is a catch, and it is serious. <bookmark mark='a'/> Here is when each instruction's result reached the registers: the add in cycle ten, the divide in fifty-six. Program order says the divide comes first. <bookmark mark='b'/> Now suppose the divide divides by zero. The machine discovers this in cycle fifty-five, and wants to stop with every earlier instruction done and every later one untouched, so the operating system can report the error, or fix it and resume. <bookmark mark='c'/> But the add, a later instruction, overwrote a1 forty-five cycles ago. There is no moment between the divide and the add at which the registers were ever in a consistent state. The exception is imprecise. The Model 91 lived with this; its manuals warned programmers that a floating-point error could be reported some instructions late. For general-purpose machines with virtual memory, where any load may fault and must be restarted, it is not acceptable. The fix took eighteen years.",
-   "zh": "这里有个问题，而且很严重。<bookmark mark='a'/>这是每条指令的结果到达寄存器的时间：加法在第十周期，除法在第五十六周期。程序顺序说除法在前。<bookmark mark='b'/>现在假设除法除以零。机器在第五十五周期发现这一点，它想停在这样一个状态：所有更早的指令都已完成，所有更晚的指令都没动过，这样操作系统才能报告错误，或者修好它再继续。<bookmark mark='c'/>但加法，一条更晚的指令，四十五个周期前就已经覆盖了 a1。在除法和加法之间，寄存器从来没有处于一个一致的状态。这个异常是不精确的。Model 91 就这样将就着用；它的手册警告程序员，浮点错误可能会晚几条指令才报告。对于有虚拟存储器、任何一次取数都可能出错并且必须重新开始的通用机器来说，这是不能接受的。修好它花了十八年。"
-  },
-  "7e3ad69ac2d2": {
-   "scene": "Rob",
-   "en": "Chapter five. The reorder buffer.",
-   "zh": "第五章。重排序缓冲区。"
-  },
-  "2529457e41ac": {
-   "scene": "Rob",
-   "en": "In 1985 James Smith and Andrew Pleszkun proposed the fix, and every out-of-order core since has used it. <bookmark mark='a'/> Bring instructions in, in program order. Let them execute in whatever order their operands allow. But then put them back in order before anything they did becomes official. <bookmark mark='b'/> The last step is called commit, or retirement. Until an instruction commits, its result is held aside, visible to the instructions that need it but not yet written into the architectural registers or memory. <bookmark mark='c'/> Commit happens strictly oldest first. So at any moment, the official state of the machine is exactly what it would be if the instructions had run one at a time, in order, up to the oldest one still in flight.",
-   "zh": "1985 年，詹姆斯·史密斯和安德鲁·普莱什昆提出了修复办法，此后的每一个乱序核都在用它。<bookmark mark='a'/>按程序顺序把指令带进来。让它们按操作数允许的任何顺序执行。但在它们做的任何事情生效之前，把它们重新排回顺序。<bookmark mark='b'/>最后一步叫提交，或者叫退休。一条指令提交之前，它的结果被放在一边，需要它的指令看得见，但还没有写进体系结构寄存器或存储器。<bookmark mark='c'/>提交严格从最老的开始。所以任何时刻，机器的正式状态都恰好等于这些指令一次一条、按顺序执行到仍在途的最老那条为止时的样子。"
-  },
-  "919597d449ae": {
-   "scene": "Rob",
-   "en": "Here is the structure that does this, the reorder buffer, drawn as what it is: a ring of slots. <bookmark mark='a'/> These are about thirty cycles of the core running the Job's scan loop. Each cycle, up to four instructions are renamed and take slots at the tail, in program order. They wait, in orange, for their operands; execute, in green; and when finished, turn blue and wait. <bookmark mark='b'/> Each cycle, up to four finished instructions leave from the head, but only from the head: a finished instruction behind an unfinished one must wait for it. <bookmark mark='c'/> Watch the grey ones. The machine guessed wrong about a branch and fetched down a wrong path. When the branch executes and the mistake is found, everything younger than it is simply dropped from the ring: none of it had committed, so none of it ever happened. The tail jumps back to just after the branch, and fetching resumes on the right path.",
-   "zh": "这就是做这件事的结构，重排序缓冲区，画成它本来的样子：一个由槽组成的环。<bookmark mark='a'/>这是处理器核运行任务扫描循环时大约三十个周期的情形。每个周期，最多四条指令被重命名，按程序顺序占据尾部的槽。它们在橙色里等操作数；在绿色里执行；完成后变成蓝色等着。<bookmark mark='b'/>每个周期，最多四条完成的指令从头部离开，但只能从头部：一条完成的指令如果排在一条没完成的后面，就必须等它。<bookmark mark='c'/>注意那些灰色的。机器对一个分支猜错了，沿着错误的路径取了指令。分支执行、发现错误时，比它年轻的一切都直接从环里丢掉：它们都还没提交，所以都不曾发生。尾指针跳回到分支后面，取指从正确的路径重新开始。"
-  },
-  "5b372bb30a83": {
-   "scene": "Rob",
-   "en": "Now the problem that defeated the Model 91. Here a divide by zero sits in the middle of some code, followed by instructions that use other values. <bookmark mark='a'/> The divide is slow: sixteen cycles. <bookmark mark='b'/> Meanwhile the four instructions after it execute and finish, including a store. They are done, in blue, but they are behind the divide in the reorder buffer, so they wait. <bookmark mark='c'/> When the divide reaches the head, the machine finds that it faulted. And at that moment everything older has committed and nothing younger has: so it discards the younger instructions, and reports the exception with the state exactly as it was just before the divide. <bookmark mark='d'/> The store before the divide reached memory. The store after it, which had already computed its address and data, never did. The exception is precise, though execution was not in order.",
-   "zh": "现在来看难倒 Model 91 的那个问题。这里一条除以零的除法夹在一段代码中间，后面跟着一些用其他值的指令。<bookmark mark='a'/>除法很慢：十六个周期。<bookmark mark='b'/>与此同时，它后面的四条指令执行完了，其中包括一次存数。它们已经完成，显示为蓝色，但在重排序缓冲区里排在除法后面，所以只能等。<bookmark mark='c'/>除法到达头部时，机器发现它出错了。而此刻，所有更老的指令都已提交，所有更年轻的都没有：于是机器丢弃年轻的指令，报告这个异常，状态恰好是除法之前的样子。<bookmark mark='d'/>除法之前的存数到达了存储器。除法之后的存数，虽然已经算好了地址和数据，从来没有到达。尽管执行不是按顺序的，异常却是精确的。"
-  },
-  "544ca6846fcf": {
-   "scene": "Rob",
-   "en": "Put together, the pieces make the pipeline that nearly every fast processor has used since the mid-1990s. <bookmark mark='a'/> Fetch, following the branch predictor's guesses. Decode. Rename, through the register alias table and a list of free physical registers. Dispatch, which gives each instruction its slot in the reorder buffer, the issue queue, and, for loads and stores, the load-store queue. <bookmark mark='b'/> Then, out of order: issue, oldest ready instruction first, to an execution unit; execute; and write back, broadcasting the result's tag to everyone waiting for it. <bookmark mark='c'/> And commit, in order, from the head of the reorder buffer. <bookmark mark='d'/> There are two ways to keep the values. Our core, like Intel's Pentium Pro of 1995, keeps each result in its reorder-buffer entry and copies it to the architectural registers at commit. The MIPS R10000 and the Alpha 21264, and most designs since, keep every value in one large physical register file and let the table of names do all the work: commit just declares a mapping final, and frees the register that held the old value.",
-   "zh": "把这些部件拼在一起，就是二十世纪九十年代中期以来几乎每个快速处理器都在用的流水线。<bookmark mark='a'/>取指，跟着分支预测器的猜测走。译码。重命名，经过寄存器别名表和一张空闲物理寄存器列表。分派，给每条指令在重排序缓冲区、发射队列里分配位置，取数和存数还要在取数存数队列里分配一项。<bookmark mark='b'/>然后是乱序的部分：发射，最老的就绪指令先走，送到一个执行部件；执行；写回，把结果的标签广播给所有等着它的指令。<bookmark mark='c'/>最后是提交，按顺序，从重排序缓冲区的头部进行。<bookmark mark='d'/>保存值有两种办法。我们的核，像英特尔 1995 年的 Pentium Pro 一样，把每个结果放在它的重排序缓冲区项里，提交时再复制到体系结构寄存器。MIPS R10000 和 Alpha 21264，以及此后的大多数设计，把所有值放在一个大的物理寄存器堆里，让名字表做全部的工作：提交只是宣布一个映射最终生效，并释放保存旧值的那个寄存器。"
-  },
-  "689bb6a06aa8": {
-   "scene": "Rob",
-   "en": "This core is not a diagram; it is a program, about seven hundred lines, that simulates the machine cycle by cycle. <bookmark mark='a'/> It is checked the way every part of Pebble is checked: on a hundred twenty random programs, in six different configurations, and on the Job, it must finish with exactly the registers, memory, output and instruction count that the emulator gives. <bookmark mark='b'/> And the awkward cases have their own tests: the divide by zero, the store that must never reach memory, the load that must wait. <bookmark mark='c'/> One more property will matter later. The core computes every value for real, including on wrong paths that are later thrown away. Those wrong paths really load from memory. Remember that when we reach chapter nine.",
-   "zh": "这个核不是一张示意图；它是一个程序，大约七百行，一个周期一个周期地模拟这台机器。<bookmark mark='a'/>它的检验方式和 Pebble 的每个部件一样：在一百二十个随机程序上，用六种不同的配置，再加上任务，它结束时的寄存器、存储器、输出和指令条数都必须和仿真器给出的完全一致。<bookmark mark='b'/>那些棘手的情形各有自己的测试：除以零，绝不能到达存储器的存数，必须等待的取数。<bookmark mark='c'/>还有一个性质以后会很重要。这个核真的计算每一个值，包括在后来被扔掉的错误路径上。那些错误路径真的会从存储器取数。到第九章时请记住这一点。"
-  },
-  "fa716bb495a4": {
-   "scene": "Ilp",
-   "en": "Chapter six. Wider, and the wall.",
-   "zh": "第六章。更宽，以及那堵墙。"
-  },
-  "e9368fcf8510": {
-   "scene": "Ilp",
-   "en": "In 1991 David Wall, at Digital's research lab, asked how much parallelism real programs contain. Earlier studies had found less than two instructions per cycle inside a basic block, but dozens, by Riseman and Foster's count in 1972, if a machine could see through every branch. Wall's method was the oracle we met in chapter two: record a program's run, schedule every instruction as early as its dependences allow, then take the oracle's powers away one at a time. We repeat it on the Job. <bookmark mark='a'/> With every power: two thousand four hundred instructions a cycle. <bookmark mark='b'/> Without renaming: three point seven. <bookmark mark='c'/> With renaming, but making every load wait until every earlier store's address is known: sixty-two. Memory ordering costs a lot, but not everything. <bookmark mark='d'/> And now keep renaming and perfect memory, but replace the oracle's knowledge of branches with Part 7's tournament predictor, so that each wrong guess blocks everything after it until it is resolved: three point four. <bookmark mark='e'/> With no guessing at all, stopping at every branch: under one half.",
-   "zh": "1991 年，数字设备公司研究实验室的大卫·沃尔问：真实的程序里有多少并行性？更早的研究发现，基本块内部每周期不到两条指令，但如果机器能看穿每个分支，按里斯曼和福斯特 1972 年的统计就有几十条。沃尔的方法正是我们在第二章见过的先知：记录一个程序的运行，把每条指令安排在依赖允许的最早时刻，然后一次拿走先知的一种能力。我们在任务上重复这个研究。<bookmark mark='a'/>拥有全部能力时：每周期两千四百条指令。<bookmark mark='b'/>没有重命名：三点七。<bookmark mark='c'/>有重命名，但让每次取数都等到所有更早的存数地址都已知：六十二。存储器顺序代价很大，但不是一切。<bookmark mark='d'/>现在保留重命名和完美的存储器，但把先知对分支的知识换成第7部分的锦标赛预测器，于是每次猜错都会挡住它后面的一切，直到它被解决：三点四。<bookmark mark='e'/>完全不猜，在每个分支前停下：不到二分之一。"
-  },
-  "c244fa8e1366": {
-   "scene": "Ilp",
-   "en": "Now give the oracle real limits: a width, and a window, the number of instructions ahead of the oldest unfinished one that it may look at. A reorder buffer is exactly such a window. <bookmark mark='a'/> With the real predictor, here is instructions per cycle against width, for windows from thirty-two instructions to infinity. The curves lie on top of each other. They climb to about three point three at eight wide and stop. A bigger window is useless, because the machine never gets far ahead before a wrong guess knocks it back. <bookmark mark='b'/> Now make the branches perfect. With a window of one hundred twenty-eight, the curve keeps climbing, to eight. <bookmark mark='c'/> With a window of two thousand and forty-eight, to thirty. The parallelism is there; it is the branches that hide it.",
-   "zh": "现在给先知真实的限制：一个宽度，和一个窗口，也就是它可以越过最老的未完成指令向前看多少条。重排序缓冲区正是这样一个窗口。<bookmark mark='a'/>用真实的预测器，这是每周期指令数随宽度的变化，窗口从三十二条到无穷大。这些曲线叠在一起。它们在八条宽时爬到大约三点三，然后停住。更大的窗口没有用，因为机器还没走远，一次猜错就把它打了回来。<bookmark mark='b'/>现在让分支完美。窗口为一百二十八时，曲线继续往上，到八。<bookmark mark='c'/>窗口为两千零四十八时，到三十。并行性就在那里；是分支把它藏了起来。"
-  },
-  "24d8353304d2": {
-   "scene": "Ilp",
-   "en": "Our real core tells the same story. <bookmark mark='a'/> Each cell is the Job's instructions per cycle, for a width and a reorder-buffer size. Going from one to two to four wide helps a lot: zero point eight six, one point two four, one point eight nine. Eight wide adds almost nothing. <bookmark mark='b'/> And across each row, the buffer size changes nothing at all beyond thirty-two entries. Remember the hook: the buffer held about eleven instructions on average. <bookmark mark='c'/> With perfect prediction the same core reaches three point one six at four wide and three point five at eight. What stops it there is the front end and the memory ports: it fetches past at most one taken branch a cycle, and the scan loop takes a jump every six instructions.",
-   "zh": "我们真实的核讲的是同一个故事。<bookmark mark='a'/>每个格子是任务在某个宽度和某个重排序缓冲区大小下的每周期指令数。从一条宽到两条再到四条帮助很大：零点八六、一点二四、一点八九。八条宽几乎什么也没多。<bookmark mark='b'/>沿着每一行，缓冲区超过三十二项之后大小毫无影响。还记得开头：缓冲区平均只装着大约十一条指令。<bookmark mark='c'/>完美预测时，同一个核在四条宽时达到三点一六，在八条宽时达到三点五。挡住它的是前端和访存端口：它每个周期最多取过一个跳转的分支，而扫描循环每六条指令就有一次跳转。"
-  },
-  "a855c1a2ae74": {
-   "scene": "Ilp",
-   "en": "This is the instruction-level parallelism wall. <bookmark mark='a'/> The parallelism is real: in the Job, thousands of instructions could run at once. <bookmark mark='b'/> But a machine can only exploit what lies within the stretch of program it can predict correctly, and with real branch prediction that stretch is short. <bookmark mark='c'/> Meanwhile each extra unit of width costs more than the last: every new instruction must compare its sources with every other instruction renamed in the same cycle, and every result must be broadcast to every waiting station. <bookmark mark='d'/> So, in the 2000s, designers stopped near four to eight wide and spent their transistors on more cores instead. That is Part 10. But first, the prediction itself: how a machine runs a hundred instructions ahead on a guess.",
-   "zh": "这就是指令级并行之墙。<bookmark mark='a'/>并行性是真实的：在任务里，成千上万条指令本可以同时执行。<bookmark mark='b'/>但机器只能利用它能正确预测的那段程序里的并行性，而用真实的分支预测，这一段很短。<bookmark mark='c'/>同时，每多一点宽度，代价都比上一点更大：每条新指令必须把它的源操作数和同一周期重命名的所有其他指令比较，每个结果都必须广播给每个等待中的保留站。<bookmark mark='d'/>所以在二十一世纪头十年，设计者在四到八条宽附近停了下来，把晶体管花在更多的核上。那是第10部分。但首先是预测本身：一台机器怎样凭一个猜测跑到一百条指令之前。"
-  },
-  "25acd87da857": {
-   "scene": "Speculate",
-   "en": "Chapter seven. Speculation.",
-   "zh": "第七章。推测执行。"
-  },
-  "bb87d9f1bdbd": {
-   "scene": "Speculate",
-   "en": "Part 7's pipeline guessed branches so that fetch never had to wait. The reorder buffer turns that small trick into a large one. <bookmark mark='a'/> The predictor guesses every branch, and fetch follows the guess. <bookmark mark='b'/> Everything after the branch is renamed and executed as usual. It is speculative: done on the strength of a guess. <bookmark mark='c'/> The reorder buffer makes this safe, because nothing can commit past a branch that has not been resolved. All speculative work stays in the buffer, unofficial. <bookmark mark='d'/> When the branch finally executes, either the guess was right, and there is nothing to do, or it was wrong: then every younger instruction is dropped, the register alias table is put back as it was at the branch, and fetching restarts at the correct target. Real cores take a snapshot of the alias table at every branch, so the repair takes a single cycle.",
-   "zh": "第7部分的流水线猜测分支，好让取指永远不必等待。重排序缓冲区把这个小把戏变成了大把戏。<bookmark mark='a'/>预测器猜测每一个分支，取指跟着猜测走。<bookmark mark='b'/>分支之后的一切照常重命名和执行。这些是推测执行的：凭一个猜测做下的事。<bookmark mark='c'/>重排序缓冲区让这件事安全，因为没有指令能越过一个尚未解决的分支提交。所有推测的工作都留在缓冲区里，不算数。<bookmark mark='d'/>分支终于执行时，要么猜对了，什么也不用做；要么猜错了：那么每条更年轻的指令都被丢弃，寄存器别名表恢复成分支时的样子，取指从正确的目标重新开始。真实的核在每个分支处给别名表拍一张快照，所以修复只要一个周期。"
-  },
-  "c0968545aedc": {
-   "scene": "Speculate",
-   "en": "Here is one, from the core running the Job. Each bar starts when the instruction was fetched; grey is fetch and decode. <bookmark mark='a'/> This is the scan loop's branch on the entry's length. The predictor guessed that the lengths matched, so fetch went on into the letter-comparing code. <bookmark mark='b'/> Eleven instructions down the wrong path were fetched, renamed, and some even executed. <bookmark mark='c'/> Then the branch executed and found the lengths were different. Everything after it was dropped, struck through here; none of it had committed, so none of it counts. <bookmark mark='d'/> Fetch restarted at the right place, and the next instructions arrived about eight cycles after the branch itself had. Those eight cycles, the misprediction penalty, are the price of a wrong guess: in today's deep cores, about fifteen to twenty.",
-   "zh": "这是一次，来自运行任务的处理器核。每根条从指令被取进来时开始；灰色是取指和译码。<bookmark mark='a'/>这是扫描循环里检查表项长度的分支。预测器猜长度相同，于是取指继续进入比较字母的代码。<bookmark mark='b'/>错误路径上的十一条指令被取进、重命名，有些甚至已经执行。<bookmark mark='c'/>然后分支执行，发现长度不同。它后面的一切都被丢弃，在这里被划掉；它们都还没提交，所以都不算数。<bookmark mark='d'/>取指在正确的地方重新开始，接下来的指令比分支本身晚了大约八个周期到达。这八个周期，也就是预测错误的代价，是一次猜错的价格：在今天的深流水线核里，大约是十五到二十个周期。"
-  },
-  "b222f233949b": {
-   "scene": "Speculate",
-   "en": "How much does the guessing matter? Run the Job's first chapter on the same core with four predictors. <bookmark mark='a'/> Guess every branch taken, and the core manages zero point six nine instructions per cycle: worse than the in-order pipeline. <bookmark mark='b'/> A two-bit counter: one point eight seven. The tournament: one point eight nine. <bookmark mark='c'/> A perfect predictor: three point one six. The branches cost the core forty percent of its speed. <bookmark mark='d'/> With the tournament predictor, twenty-two thousand wrong guesses threw away two hundred fifty thousand instructions: thirty percent more work than the program needed, all of it wasted. Including twenty-nine thousand loads, on paths the program never took. Hold on to that number.",
-   "zh": "猜测有多重要？在同一个核上用四种预测器运行任务第一章。<bookmark mark='a'/>每个分支都猜跳转，核只有每周期零点六九条指令：比按顺序的流水线还差。<bookmark mark='b'/>两位计数器：一点八七。锦标赛预测器：一点八九。<bookmark mark='c'/>完美预测器：三点一六。分支让这个核损失了百分之四十的速度。<bookmark mark='d'/>用锦标赛预测器时，两万两千次猜错扔掉了二十五万条指令：比程序需要的多出百分之三十的工作，全部白做。其中包括两万九千次取数，发生在程序从未走过的路径上。记住这个数字。"
-  },
-  "a84c9f767d76": {
-   "scene": "Speculate",
-   "en": "Two lines of arithmetic explain the empty window from the hook. <bookmark mark='a'/> The chapter has eight hundred twenty-seven thousand instructions and twenty-two thousand wrong guesses: one every thirty-seven instructions. However large the window, the machine can only ever be about thirty-seven instructions ahead on the right path before it is thrown back. <bookmark mark='b'/> And the cost of each throw: the time per instruction is what it would be with perfect prediction, plus the rate of wrong guesses times a penalty P. <bookmark mark='c'/> Put in the measured numbers, and the penalty comes out at about eight cycles, just what the recording showed. <bookmark mark='d'/> So the window fills for a few dozen instructions, then drains, again and again. Better prediction is worth more than a bigger window, and that is why real cores spend so much on predictors.",
-   "zh": "两行算术就能解释开头那个空荡荡的窗口。<bookmark mark='a'/>这一章有八十二万七千条指令和两万两千次猜错：每三十七条指令一次。不管窗口多大，机器在正确的路径上最多只能领先大约三十七条指令，然后就被打回去。<bookmark mark='b'/>每次被打回去的代价：每条指令的时间等于完美预测时的时间，加上猜错的频率乘以代价 P。<bookmark mark='c'/>代入测得的数字，代价大约是八个周期，正是录下来的那一次显示的。<bookmark mark='d'/>所以窗口装进几十条指令，然后清空，一遍又一遍。更好的预测比更大的窗口更值钱，这就是为什么真实的核在预测器上花这么多。"
-  },
-  "a94d52503631": {
-   "scene": "Memory",
-   "en": "Chapter eight. Loads, stores, and their order.",
-   "zh": "第八章。取数、存数与它们的顺序。"
-  },
-  "1833e22564de": {
-   "scene": "Memory",
-   "en": "Renaming removed the false dependences between registers, because a register's name is right there in the instruction, and can be checked as soon as it is decoded. Memory is harder. <bookmark mark='a'/> Here a store writes to an address in a3, which is still being computed, and a load right after it reads from s0 plus four, which is already known. <bookmark mark='b'/> If the two addresses are the same, the load must wait for the store and take the store's value. <bookmark mark='c'/> If they are different, the load could go at once. <bookmark mark='d'/> And the machine cannot tell which, until the store's address is known. Dependences through memory are hidden behind arithmetic.",
-   "zh": "重命名消除了寄存器之间的假依赖，因为寄存器的名字就写在指令里，一译码就能检查。存储器难得多。<bookmark mark='a'/>这里一条存数写到 a3 里的地址，而 a3 还在计算中；紧跟着的一条取数从 s0 加四读，这个地址已经知道了。<bookmark mark='b'/>如果两个地址相同，取数必须等存数，并取走存数的值。<bookmark mark='c'/>如果不同，取数可以马上走。<bookmark mark='d'/>而在存数的地址算出来之前，机器无法知道是哪一种。经过存储器的依赖藏在算术后面。"
-  },
-  "7599782ca45d": {
-   "scene": "Memory",
-   "en": "So a core keeps its memory operations in two queues, in program order. <bookmark mark='a'/> Stores wait in the store queue until they commit; only then do they write memory, so a store on a wrong path never touches it. <bookmark mark='b'/> A load, when it executes, searches the older stores. If the youngest older store to the same address has its data, the load takes the value straight from the queue: store-to-load forwarding. <bookmark mark='c'/> The hard case is the first entry, a store whose address is unknown. There are three policies. Wait, conservatively, while any older store's address is unknown. Or speculate: go ahead, and check later. Or do what the Alpha 21264 did in 1998: speculate, but remember the loads that have been caught out before, and make only those wait.",
-   "zh": "所以处理器核把它的访存操作按程序顺序放在两个队列里。<bookmark mark='a'/>存数在存数队列里等到提交；只有那时才写存储器，所以错误路径上的存数永远碰不到它。<bookmark mark='b'/>取数执行时，搜索更老的存数。如果对同一地址的最年轻的更老存数已经有了数据，取数直接从队列里拿走这个值：存数到取数转发。<bookmark mark='c'/>难办的是第一项，一条地址未知的存数。有三种策略。保守地等，只要有更老的存数地址未知就等。或者推测：先走，以后再检查。或者像 1998 年的Alpha 21264 那样：推测，但记住以前被抓到过的那些取数，只让它们等。"
-  },
-  "a42e404506f1": {
-   "scene": "Memory",
-   "en": "Here is speculation caught out, on our core. A divide produces the store's address offset, so the store cannot compute its address for sixteen cycles. <bookmark mark='a'/> The load after it, whose address is known, does not wait. It reads its word from memory at once, and gets zero. <bookmark mark='b'/> Sixteen cycles later the store's address arrives, and the store queue checks every younger load that has already run. One of them read the very word this store writes. <bookmark mark='c'/> That load's value is wrong, and so is anything computed from it. So the load and everything after it are squashed and fetched again, exactly as after a wrong branch. <bookmark mark='d'/> The second time, the store has committed, and the load reads seventy-seven. Here the gamble lost, and cost six cycles.",
-   "zh": "这是在我们的核上被抓到的一次推测。一次除法产生存数地址的偏移量，所以存数在十六个周期里算不出它的地址。<bookmark mark='a'/>后面那条地址已知的取数不等。它立刻从存储器读出它的字，得到零。<bookmark mark='b'/>十六个周期后，存数的地址到了，存数队列检查每一条已经执行过的更年轻的取数。其中一条读的正是这条存数要写的字。<bookmark mark='c'/>那条取数的值是错的，用它算出的一切也是错的。所以这条取数和它后面的一切都被清除，重新取进来，和分支猜错之后一模一样。<bookmark mark='d'/>第二次，存数已经提交，取数读到七十七。这一次赌输了，代价是六个周期。"
-  },
-  "2820bea963e2": {
-   "scene": "Memory",
-   "en": "When does it matter? Here is a loop that counts samples into buckets, where every sample misses the cache. <bookmark mark='a'/> The store at the bottom writes a count whose address depends on the sample, so its address is unknown for sixty cycles. The next trip's sample load, which has nothing to do with the counts, comes right after it. <bookmark mark='b'/> A conservative machine makes every load wait for that store's address: each miss in turn, ninety-eight thousand cycles for fifteen hundred samples. <bookmark mark='c'/> A speculative machine lets the sample loads run ahead, so a dozen misses overlap: seven and a half thousand cycles. Twenty-three times, two count loads collided with stores to the same bucket, and had to be redone. <bookmark mark='d'/> The wait table learns, after one collision, that the count load is the risky one, and makes only it wait, while the sample loads still run ahead. Thirteen times faster than waiting. Real cores predict memory dependences in just this way; Intel's count each recovery from a wrong guess as a machine clear, a number any programmer can read from the performance counters.",
-   "zh": "什么时候这件事要紧？这是一个把样本计数到桶里的循环，每个样本都会缓存缺失。<bookmark mark='a'/>底部的存数写一个计数，它的地址取决于样本，所以六十个周期里地址都未知。下一趟的样本取数和计数毫无关系，却紧跟在它后面。<bookmark mark='b'/>保守的机器让每次取数都等这条存数的地址：缺失一个接一个，一千五百个样本用九万八千个周期。<bookmark mark='c'/>推测的机器让样本取数先跑，于是十几次缺失重叠在一起：七千五百个周期。有二十三次，两次计数取数和写同一个桶的存数撞上了，只好重做。<bookmark mark='d'/>等待表在撞过一次之后就学会，计数取数才是有风险的那个，只让它等，样本取数照样先跑。比一直等快十三倍。真实的核正是这样预测存储器依赖的；英特尔的核把每次从错误猜测中恢复记为一次机器清除，任何程序员都可以从性能计数器里读到这个数。"
-  },
-  "a7dc510ac4f9": {
-   "scene": "Memory",
-   "en": "And on the Job? <bookmark mark='a'/> All three policies give exactly the same cycle count. <bookmark mark='b'/> The Job does a hundred fifty-five thousand loads in its first chapter but only five thousand stores, one or two each time it counts a word, and their addresses are known early. There is nothing to wait for. A machine's features earn their keep on some programs and sit idle on others, which is why architects measure on many.",
-   "zh": "那么任务呢？<bookmark mark='a'/>三种策略给出完全相同的周期数。<bookmark mark='b'/>任务在第一章里做了十五万五千次取数，但只有五千次存数，每数一个词一两次，而且它们的地址很早就知道了。没有什么可等的。机器的一项特性在某些程序上物有所值，在另一些程序上闲着，这就是为什么设计者要在许多程序上测量。"
-  },
-  "57161e64e402": {
-   "scene": "Spectre",
-   "en": "Chapter nine. Spectre.",
-   "zh": "第九章。幽灵。"
-  },
-  "2867987e3d7b": {
-   "scene": "Spectre",
-   "en": "Before the attack, the channel it uses. Part 9 will build caches properly; for now, one fact. A read that finds its data in the cache takes two cycles on our core; one that must go to memory takes sixty. <bookmark mark='a'/> Lay out a probe array: two hundred fifty-six cache lines, one for each possible value of a byte. Flush them all from the cache. <bookmark mark='b'/> Now let some other code run, and suppose it reads line eleven. <bookmark mark='c'/> Afterwards, time a read of every line. Two hundred fifty-five of them take sixty cycles. One takes two. <bookmark mark='d'/> The timing reveals which line was touched, and so which byte value the other code used, though nobody told us. This is Flush plus Reload, described by Yuval Yarom and Katrina Falkner in 2014. Timing attacks on caches go back further: in 2005 they were used to steal encryption keys.",
-   "zh": "在讲攻击之前，先讲它用的信道。第9部分会好好地造缓存；现在只需要一个事实。在我们的核上，一次在缓存里找到数据的读要两个周期；一次必须去存储器的读要六十个周期。<bookmark mark='a'/>摆出一个探测数组：两百五十六个缓存行，每个可能的字节值一行。把它们全部从缓存里冲掉。<bookmark mark='b'/>现在让另一段代码运行，假设它读了第十一行。<bookmark mark='c'/>之后，给每一行的读取计时。两百五十五行要六十个周期。有一行只要两个。<bookmark mark='d'/>计时暴露了哪一行被碰过，因而暴露了另一段代码用的是哪个字节值，尽管没有人告诉我们。这就是冲刷加重载，由约瓦尔·亚罗姆和卡特里娜·福克纳在 2014 年描述。针对缓存的计时攻击还要更早：2005 年它们就被用来窃取加密密钥。"
-  },
-  "817aff14e149": {
-   "scene": "Spectre",
-   "en": "Now the victim. It is the most ordinary code in the world: a bounds check. <bookmark mark='a'/> If x is less than the size of array one, read array one at x, and use the byte to index another array. <bookmark mark='b'/> In Pebble's instructions: load the size, compare, and only if x is in bounds, load the byte and then the probe line it selects. <bookmark mark='c'/> Just past the end of array one, in the same address space, sits a secret: here, six letters. The bounds check is exactly what stops anyone calling this code from reading them. Architecturally, it is perfect: run it on the emulator with any x, and it never touches the secret.",
-   "zh": "现在是受害者。它是世界上最普通的代码：一次边界检查。<bookmark mark='a'/>如果 x 小于数组一的大小，就读出数组一的第 x 个字节，再用这个字节去索引另一个数组。<bookmark mark='b'/>用 Pebble 的指令写：取出大小，比较，只有当 x 在界内时，才取出那个字节，再取出它选中的探测行。<bookmark mark='c'/>紧挨着数组一的末尾，在同一个地址空间里，放着一个秘密：这里是六个字母。边界检查正是阻止调用者读到它们的东西。从体系结构上看，它无懈可击：在仿真器上用任何 x 运行它，它都从不碰那个秘密。"
-  },
-  "39a8ae4d0c6d": {
-   "scene": "Spectre",
-   "en": "Here is the attack, as it runs on our out-of-order core. <bookmark mark='a'/> First, train the branch predictor: call the victim six times with x in bounds, so the bounds check learns to expect in bounds. <bookmark mark='b'/> Then flush the probe lines from the cache, and flush array one's size as well. Our core has a model instruction for that, like x86's flush instruction. <bookmark mark='c'/> Now call the victim with x equal to sixteen, past the end. The load of the size misses: sixty cycles before the comparison can run. The predictor guesses in bounds, as it was trained to. So for sixty cycles the core runs ahead, speculatively: it loads array one at sixteen, which is the secret letter P, shifts it, and loads the probe line P times sixty-four. That load misses too, and brings the line into the cache. <bookmark mark='d'/> Then the size arrives, the comparison fails, and the core squashes everything after the branch. Registers go back to how they were. As far as the program can tell, the secret was never read. But the probe line is still in the cache.",
-   "zh": "这就是在我们的乱序核上运行的攻击。<bookmark mark='a'/>首先，训练分支预测器：用界内的 x 调用受害者六次，让边界检查学会预期在界内。<bookmark mark='b'/>然后把探测行从缓存里冲掉，连数组一的大小也冲掉。我们的核有一条模型指令做这件事，就像 x86 的冲刷指令。<bookmark mark='c'/>现在用等于十六的 x 调用受害者，越过了末尾。取大小的操作缺失：比较还要六十个周期才能执行。预测器照它被训练的那样，猜在界内。于是在这六十个周期里，核推测地往前跑：它取出数组一的第十六个字节，也就是秘密的字母 P，移位，再取出第 P 乘六十四号探测行。这次取数也缺失了，把那一行带进了缓存。<bookmark mark='d'/>然后大小到了，比较失败，核清除了分支之后的一切。寄存器恢复原样。就程序所能知道的而言，秘密从来没有被读过。但那条探测行仍然在缓存里。"
-  },
-  "b931cb478acc": {
-   "scene": "Spectre",
-   "en": "Now the attacker times a read of every probe line, using the cycle counter. <bookmark mark='a'/> Here are the times our core measured in the first round. Two hundred fifty-four lines take sixty-three cycles: memory. <bookmark mark='b'/> One takes five: line eighty, which is the code of the letter P. <bookmark mark='c'/> Repeat with x equal to seventeen, eighteen, and so on, one round per byte. In a hundred nine thousand cycles, the attack prints the secret, letter by letter. A program that the bounds check should have stopped has read memory it was never allowed to read, through instructions that, architecturally, never ran.",
-   "zh": "现在攻击者用周期计数器给每一条探测行的读取计时。<bookmark mark='a'/>这是我们的核在第一轮测得的时间。两百五十四行要六十三个周期：存储器。<bookmark mark='b'/>有一行只要五个：第八十行，正是字母 P 的编码。<bookmark mark='c'/>让 x 等于十七、十八，依此类推，每个字节一轮。在十万九千个周期里，攻击一个字母一个字母地打印出秘密。一个本应被边界检查挡住的程序，读到了它永远不该读的存储器，而且是通过一些在体系结构上从未执行过的指令。"
-  },
-  "782a5600ba38": {
-   "scene": "Spectre",
-   "en": "There are two classic fixes, and our core can measure both. <bookmark mark='a'/> The first is a speculation barrier after the check: an instruction that nothing younger may pass until it commits. On x86 it is l-fence; on our core, a read of the cycle counter. <bookmark mark='b'/> The second is cleverer. Compute, without any branch, a mask that is all ones if x is in bounds and zero if not, and and it into x. On a wrong path the index becomes zero, which reads nothing secret. Linux does exactly this, in a macro called array index no spec. <bookmark mark='c'/> Both stop the leak: the probe shows no fast line. <bookmark mark='d'/> But look at the price. Called in a loop, the victim costs four cycles a call. With the barrier, twelve: the barrier stops all overlap, not only the dangerous kind. With the mask, five. <bookmark mark='e'/> The mask blocks only the value that could leak, so it is what kernels use where they can, and it must be written by hand, at every bounds check that matters.",
-   "zh": "有两种经典的修复，我们的核都能测量。<bookmark mark='a'/>第一种是在检查之后放一道推测屏障：一条在它提交之前任何更年轻的指令都不能越过的指令。在 x86 上它是 lfence；在我们的核上，是读一次周期计数器。<bookmark mark='b'/>第二种更巧妙。不用任何分支，算出一个掩码：x 在界内时全为一，否则为零，再把它和 x 做与运算。在错误路径上，下标变成零，读不到任何秘密。Linux 正是这样做的，用一个叫 array_index_nospec 的宏。<bookmark mark='c'/>两种都挡住了泄露：探测显示没有快的那一行。<bookmark mark='d'/>但看看代价。在循环里调用，受害者每次调用花四个周期。加上屏障，十二个：屏障阻止了一切重叠，而不只是危险的那种。加上掩码，五个。<bookmark mark='e'/>掩码只挡住可能泄露的那个值，所以内核在能用的地方用它，而且必须手工写在每一个要紧的边界检查上。"
-  },
-  "1c3c4f33c36d": {
-   "scene": "Spectre",
-   "en": "This is the attack published in January 2018 as Spectre, found independently by Paul Kocher and colleagues and by Jann Horn of Google's Project Zero, together with a second variant that mistrains indirect branches instead. <bookmark mark='a'/> Published with it was Meltdown, by Moritz Lipp and others: on many Intel cores a load from kernel memory, which should have faulted, passed its value to the instructions after it before the fault took effect, so any program could read the kernel. <bookmark mark='b'/> The fixes came at every level. Operating systems gave the kernel its own page tables. Compilers learned new ways to make indirect calls. Browsers made their timers coarser and put each site in its own process. Chips were redesigned. <bookmark mark='c'/> Meltdown was a bug in some designs. Spectre is not a bug at all: it is what speculation does, and out-of-order cores from Intel, AMD, Arm and IBM were all affected. Part 55 returns to it. The Frontier chapter asks whether speculation can be made safe.",
-   "zh": "这就是 2018 年 1 月以幽灵之名公布的攻击，由保罗·科赫及其同事和谷歌零号项目的扬·霍恩各自独立发现，同时公布的还有另一个变种，它改为误训间接分支。<bookmark mark='a'/>与它一起公布的是熔断，由莫里茨·利普等人发现：在许多英特尔核上，一次从内核存储器的取数本应出错，却在错误生效之前就把它的值传给了后面的指令，于是任何程序都能读内核。<bookmark mark='b'/>修复出现在每一个层次上。操作系统给内核单独的页表。编译器学会了新的间接调用写法。浏览器把计时器变粗，并把每个网站放进单独的进程。芯片被重新设计。<bookmark mark='c'/>熔断是某些设计里的缺陷。幽灵根本不是缺陷：它就是推测执行本身会做的事，英特尔、AMD、Arm 和 IBM 的乱序核都受到了影响。第55部分会回到它。前沿一章会问：推测执行能不能变得安全。"
-  },
-  "95c111fe5111": {
-   "scene": "Vliw",
-   "en": "Chapter ten. The compiler's alternative.",
-   "zh": "第十章。编译器的另一条路。"
-  },
-  "48932dadbe68": {
-   "scene": "Vliw",
-   "en": "Everything we have built so far finds parallelism at run time, in hardware, and that hardware is costly. <bookmark mark='a'/> Renaming W instructions in one cycle means comparing each one's sources with the destinations of all the others renamed alongside it: work that grows as the square of the width. <bookmark mark='b'/> Every result's tag must be compared with every operand waiting in the issue queue. <bookmark mark='c'/> And every cycle, the oldest ready instructions must be picked out of dozens, in a fraction of a nanosecond. <bookmark mark='d'/> So from the early 1980s, Joseph Fisher at Yale and others argued for the opposite design. Let the compiler, which can study the whole program at leisure, find the independent operations and pack them into one very long instruction word, a bundle with one slot for each unit. The hardware then needs no scheduling at all.",
-   "zh": "到目前为止我们造的一切都在运行时、用硬件寻找并行性，而这样的硬件很贵。<bookmark mark='a'/>在一个周期里重命名 W 条指令，意味着把每条指令的源操作数和同时重命名的所有其他指令的目的寄存器比较：工作量随宽度的平方增长。<bookmark mark='b'/>每个结果的标签都必须和发射队列里每个等待中的操作数比较。<bookmark mark='c'/>而且每个周期都要在几分之一纳秒里从几十条指令中挑出最老的就绪指令。<bookmark mark='d'/>所以从二十世纪八十年代初起，耶鲁的约瑟夫·费希尔等人主张相反的设计。让编译器，它可以从容地研究整个程序，找出相互独立的操作，把它们打包进一个超长指令字，一个为每个部件留一个槽的指令束。这样硬件就完全不需要调度。"
-  },
-  "43fab8b1c25b": {
-   "scene": "Vliw",
-   "en": "Here is the Job's scan loop, compiled for a four-wide VLIW machine. <bookmark mark='a'/> The first bundle holds four operations that need nothing from each other: the end-of-table test, the load of the entry's length, and the two increments, which may share a bundle with the instructions reading the old values. <bookmark mark='b'/> The second bundle is empty. The compiler knows a load takes two cycles, and nothing else in this trip is ready, so it must fill the slots with no-ops. <bookmark mark='c'/> The third holds the length test and the jump back. Three cycles a trip, against the pipeline's seven, with no scheduling hardware at all. But half the slots are wasted.",
-   "zh": "这是为一台四槽超长指令字机器编译的任务扫描循环。<bookmark mark='a'/>第一个指令束装着四个互不依赖的操作：表尾检查、取表项长度，以及两次递增；递增可以和读旧值的指令放在同一个束里。<bookmark mark='b'/>第二个指令束是空的。编译器知道取数要两个周期，这一趟里没有别的就绪，所以只能用空操作填满这些槽。<bookmark mark='c'/>第三个装着长度检查和跳回。一趟三个周期，而流水线要七个，而且完全没有调度硬件。但一半的槽浪费了。"
-  },
-  "f847dff85530": {
-   "scene": "Vliw",
-   "en": "A compiler can do better, by overlapping trips: software pipelining, worked out by Bob Rau and others around 1981, and by Monica Lam in 1988. <bookmark mark='a'/> Start a new trip every two cycles. Trip two begins while trip one is still finishing, in the slots trip one leaves free, and so on: in the steady state each bundle mixes the start of one trip with the end of the one before. <bookmark mark='b'/> Two cycles is as fast as this loop can go on four slots. The interval between trips is bounded by the resources, six operations into four slots, and by the loop-carried chain, the add to t0, which needs one cycle. The larger bound wins: two. That is three instructions a cycle on the loop's common path, with none of the out-of-order hardware. Part 13's compiler will do this kind of scheduling.",
-   "zh": "编译器还能做得更好，办法是让各趟重叠：软件流水，由鲍勃·劳等人在 1981 年前后、莫妮卡·林在 1988 年发展起来。<bookmark mark='a'/>每两个周期开始新的一趟。第二趟在第一趟还没结束时就开始，用第一趟留下的空槽，依此类推：在稳定状态下，每个指令束把一趟的开头和前一趟的结尾混在一起。<bookmark mark='b'/>两个周期是这个循环在四个槽上能达到的最快速度。两趟之间的间隔受资源约束，六个操作装进四个槽，也受循环携带的那条链约束，就是对 t0 的加法，它需要一个周期。较大的那个界胜出：二。这是在循环的常见路径上每周期三条指令，完全不需要乱序硬件。第13部分的编译器会做这种调度。"
-  },
-  "c1b63d099c4e": {
-   "scene": "Vliw",
-   "en": "Then why does your laptop not work this way? <bookmark mark='a'/> Because the compiler must plan for latencies it cannot know. It assumed a load takes two cycles. When a load misses the cache and takes sixty, a VLIW machine, marching in lockstep, stalls every slot of every bundle behind it, which is exactly the in-order problem of the hook. The out-of-order core simply finds other work. <bookmark mark='b'/> It also cannot know branches that depend on data, like our length test, so it must guess at compile time, or execute both sides under predicates and throw one away. <bookmark mark='c'/> And code scheduled for one width and one set of latencies is wrong for the next generation of chips. <bookmark mark='d'/> Intel and Hewlett-Packard bet heavily on this design, as EPIC, in the Itanium of 2001, with features to soften each problem. It arrived late, and in 2003 AMD's sixty-four-bit x86 ran existing software fast; the last Itaniums shipped in 2021. <bookmark mark='e'/> VLIW lives on where programs are known and latencies fixed: in digital signal processors, and in some machine-learning accelerators.",
-   "zh": "那为什么你的笔记本电脑不是这样工作的？<bookmark mark='a'/>因为编译器必须为它不可能知道的延迟做计划。它假设一次取数要两个周期。当一次取数缓存缺失、要六十个周期时，一台步调一致前进的超长指令字机器会让它后面每个指令束的每个槽都停下，这正是开头那个按顺序执行的问题。乱序核则只是去找别的事做。<bookmark mark='b'/>它也不可能知道依赖数据的分支，比如我们的长度检查，所以只能在编译时猜，或者在谓词控制下把两边都执行，再扔掉一边。<bookmark mark='c'/>而且为一种宽度和一组延迟调度好的代码，对下一代芯片就是错的。<bookmark mark='d'/>英特尔和惠普在这种设计上下了重注，称为 EPIC，在 2001 年的 Itanium 里推出，并加了缓解每个问题的特性。它来得太晚，而 2003 年 AMD 的六十四位 x86 让现有软件跑得飞快；最后一批 Itanium 在 2021 年出货。<bookmark mark='e'/>超长指令字在程序已知、延迟固定的地方活了下来：在数字信号处理器里，以及在一些机器学习加速器里。"
-  },
-  "abfad968b671": {
-   "scene": "Risc",
-   "en": "Chapter eleven. RISC and CISC.",
-   "zh": "第十一章。精简与复杂指令集。"
-  },
-  "f29ba6b2e672": {
-   "scene": "Risc",
-   "en": "Pebble has a reduced instruction set: every instruction does one simple thing, and only loads and stores touch memory. That was once a heresy. <bookmark mark='a'/> Recall the iron law from Part 7: time is instructions, times cycles per instruction, times the clock period. <bookmark mark='b'/> The machines of the 1970s, like Digital's VAX, attacked the first factor. They offered rich instructions, adding memory to memory, even evaluating a polynomial in one instruction, so programs needed fewer of them. Each was run by microcode, a little program inside the processor, and took many cycles. <bookmark mark='c'/> John Cocke at IBM noticed that compilers hardly used the rich instructions. His 801 project, and then David Patterson's RISC at Berkeley and John Hennessy's MIPS at Stanford, attacked the other two factors instead: simple instructions, each one cycle in a pipeline, with a fast clock. More instructions, but each far cheaper. <bookmark mark='d'/> Patterson and Ditzel's paper, The Case for the Reduced Instruction Set Computer, appeared in 1980, and the argument raged for a decade.",
-   "zh": "Pebble 用的是精简指令集：每条指令只做一件简单的事，只有取数和存数碰存储器。这曾经是一种异端。<bookmark mark='a'/>回忆第7部分的铁律：时间等于指令条数，乘以每条指令的周期数，乘以时钟周期。<bookmark mark='b'/>二十世纪七十年代的机器，比如数字设备公司的 VAX，攻的是第一个因子。它们提供丰富的指令，从存储器加到存储器，甚至一条指令求一个多项式的值，于是程序需要的指令更少。每条指令由微码，也就是处理器内部的一个小程序来执行，要花许多周期。<bookmark mark='c'/>IBM 的约翰·科克注意到，编译器几乎不用那些丰富的指令。他的 801 项目，以及随后伯克利大卫·帕特森的 RISC 和斯坦福约翰·轩尼诗的 MIPS，转而攻另外两个因子：简单的指令，每条在流水线里一个周期，配上快的时钟。指令更多，但每条便宜得多。<bookmark mark='d'/>帕特森和迪泽尔的论文《精简指令集计算机的理由》发表于 1980 年，这场争论持续了十年。"
-  },
-  "fe9cd0bf3782": {
-   "scene": "Risc",
-   "en": "What does the Job look like as a RISC program? <bookmark mark='a'/> Over its first chapter: about a third arithmetic, a third branches, a fifth loads, an eighth jumps, and hardly any stores. <bookmark mark='b'/> A CISC machine like x86 can take an operand straight from memory. The scan loop's load of an entry's length, used once by the comparison and then dead, would be part of a single x86 compare. <bookmark mark='c'/> Counting over the whole trace, fifty-nine percent of the Job's loads are used exactly this way, so an x86 version would need about eleven percent fewer instructions. That is the CISC advantage, measured: real, and modest.",
-   "zh": "作为一个精简指令集程序，任务是什么样子？<bookmark mark='a'/>在它的第一章里：大约三分之一是算术，三分之一是分支，五分之一是取数，八分之一是跳转，存数几乎没有。<bookmark mark='b'/>像 x86 这样的复杂指令集机器可以直接从存储器取操作数。扫描循环里取表项长度的那次取数，只被比较用一次就不再需要，在 x86 里会成为一条比较指令的一部分。<bookmark mark='c'/>在整条轨迹上数一数，任务的取数里有百分之五十九是这样用的，所以 x86 版本大约少需要百分之十一的指令。这就是测出来的复杂指令集优势：真实，而且不大。"
-  },
-  "ea794f122ebb": {
-   "scene": "Risc",
-   "en": "The argument ended in a merger. <bookmark mark='a'/> Since Intel's Pentium Pro in 1995, x86 processors have translated each instruction, as it is decoded, into simple micro-operations. An add to memory becomes a load, an add, and a store. <bookmark mark='b'/> Everything after the decoder is an out-of-order RISC machine like ours, renaming and scheduling micro-ops. <bookmark mark='c'/> Modern decoders even fuse pairs back together: a compare and the branch on it travel through the core as one. <bookmark mark='d'/> What remains of the old difference is mostly the decoder. x86 instructions range from one byte to fifteen, so finding where each starts, several at a time, is hard work that a fixed-length instruction set never needs.",
-   "zh": "这场争论以合并告终。<bookmark mark='a'/>自 1995 年英特尔的 Pentium Pro 起，x86 处理器在译码时把每条指令翻译成简单的微操作。一条加到存储器的加法变成一次取数、一次加法和一次存数。<bookmark mark='b'/>译码器之后的一切都是一台像我们这样的乱序精简指令集机器，对微操作做重命名和调度。<bookmark mark='c'/>现代的译码器甚至把成对的指令重新融合：一次比较和依据它的分支作为一个整体穿过处理器核。<bookmark mark='d'/>旧差别留下来的主要是译码器。x86 指令从一个字节到十五个字节不等，所以一次找出好几条指令各自从哪里开始是件苦差事，而定长指令集根本不需要。"
-  },
-  "f2227c367a37": {
-   "scene": "Risc",
-   "en": "Where did the instruction sets go? <bookmark mark='a'/> x86 kept the personal computer and the server, carrying every instruction since 1978 for compatibility. <bookmark mark='b'/> Arm, a RISC designed at Acorn in 1985 by Sophie Wilson and Steve Furber, took phones, then tablets, and in 2020 Apple's laptops. <bookmark mark='c'/> RISC-V, begun at Berkeley in 2010, is an open instruction set that anyone may implement without a licence; Pebble's design borrows from it. <bookmark mark='d'/> And in 2017 John Hennessy and David Patterson received the Turing Award, for the quantitative approach to computer design that this whole act follows: measure, then build.",
-   "zh": "这些指令集后来去了哪里？<bookmark mark='a'/>x86 守住了个人电脑和服务器，为了兼容带着 1978 年以来的每一条指令。<bookmark mark='b'/>Arm，1985 年由索菲·威尔逊和史蒂夫·弗伯在 Acorn 设计的精简指令集，拿下了手机，然后是平板，2020 年又拿下了苹果的笔记本电脑。<bookmark mark='c'/>RISC-V，2010 年始于伯克利，是一个开放的指令集，任何人都可以不经许可地实现它；Pebble 的设计借鉴了它。<bookmark mark='d'/>2017 年，约翰·轩尼诗和大卫·帕特森获得图灵奖，表彰他们对计算机设计的定量方法，这正是整个这一幕所遵循的：先测量，再建造。"
-  },
-  "96425ebb2de5": {
-   "scene": "Smt",
-   "en": "Chapter twelve. Simultaneous multithreading.",
-   "zh": "第十二章。同时多线程。"
-  },
-  "fd5cd3d1dde5": {
-   "scene": "Smt",
-   "en": "Chapter six ended with a machine that has more width than one program can use. Here are a four-wide machine's issue slots, four per cycle, over twenty-four cycles of the Job. <bookmark mark='a'/> Filled squares are slots that started an instruction. Some cycles use all four; many use one or two; some none, while a misprediction is repaired. <bookmark mark='b'/> On our real core, the Job reaches one point nine instructions per cycle out of four: more than half the issue slots go unused, cycle after cycle. <bookmark mark='c'/> The hardware is built, powered and waiting. One program simply cannot fill it.",
-   "zh": "第六章结束时，我们有一台宽度超过一个程序所能利用的机器。这是一台四槽机器的发射槽，每周期四个，在任务的二十四个周期里。<bookmark mark='a'/>填满的方格是开始了一条指令的槽。有些周期四个都用上了；许多周期用一两个；有些一个也没有，那是在修复一次猜错。<bookmark mark='b'/>在我们真实的核上，任务达到每周期一点九条指令，而上限是四：一半以上的发射槽一个周期又一个周期地空着。<bookmark mark='c'/>硬件已经造好、通了电、在等着。只是一个程序填不满它。"
-  },
-  "4aecd6dede6d": {
-   "scene": "Smt",
-   "en": "In 1995 Dean Tullsen, Susan Eggers and Henry Levy proposed the obvious, radical fix: let a second program use the same core at the same time. <bookmark mark='a'/> Here the Job runs on two different books, as two threads sharing one four-wide core. Their instructions mix freely in the issue slots, and the second thread fills many of the holes the first one leaves. <bookmark mark='b'/> Each thread needs only its own program counter, its own register alias table, and its own branch history. Everything expensive is shared: the issue queue, the functional units, the caches, and the reorder buffer, split between them. Because renaming keeps the threads' registers apart, the scheduler does not even need to know which instruction belongs to whom. <bookmark mark='c'/> And when one thread guesses a branch wrong, only its own instructions are thrown away; the other thread carries on.",
-   "zh": "1995 年，迪恩·塔尔森、苏珊·埃格斯和亨利·利维提出了一个显而易见又激进的办法：让第二个程序同时使用同一个核。<bookmark mark='a'/>这里任务在两本不同的书上运行，作为两个线程共用一个四槽核。它们的指令在发射槽里自由混合，第二个线程填上了第一个留下的许多空洞。<bookmark mark='b'/>每个线程只需要自己的程序计数器、自己的寄存器别名表和自己的分支历史。所有昂贵的东西都是共用的：发射队列、功能部件、缓存，以及在两者之间分开的重排序缓冲区。因为重命名把两个线程的寄存器分开了，调度器甚至不需要知道哪条指令属于谁。<bookmark mark='c'/>当一个线程猜错分支时，只有它自己的指令被扔掉；另一个线程继续执行。"
-  },
-  "5ed3693f68df": {
-   "scene": "Smt",
-   "en": "How much does it help? The oracle scheduler with real branch prediction can answer. <bookmark mark='a'/> Four wide, with a window of a hundred twenty-eight: one thread manages two point seven instructions per cycle; two threads, each with half the window, three point seven together, forty percent more. <bookmark mark='b'/> Eight wide, with a window of two hundred fifty-six, the gain is eighty percent: the wider the machine, the more a single thread wastes, and the more a second thread recovers. <bookmark mark='c'/> Intel shipped two-thread SMT as Hyper-Threading in 2002, IBM in the POWER5 in 2004, and IBM's POWER8 runs eight threads per core. The price is that each thread runs slower than it would alone, and that threads sharing a core can watch each other: one can time its own use of the units to learn what the other is doing. After 2018 some systems turned SMT off for exactly that reason.",
-   "zh": "它能帮多少？用带真实分支预测的先知调度器就能回答。<bookmark mark='a'/>四条宽、窗口一百二十八：一个线程每周期两点七条指令；两个线程，各用一半窗口，合起来三点七，多出百分之四十。<bookmark mark='b'/>八条宽、窗口二百五十六，提升是百分之八十：机器越宽，单个线程浪费得越多，第二个线程收回得越多。<bookmark mark='c'/>英特尔在2002 年以超线程之名推出双线程的同时多线程，IBM 在 2004 年的 POWER5 里推出，IBM 的 POWER8 每个核跑八个线程。代价是每个线程都比单独运行时慢，而且共用一个核的线程可以互相窥视：一个线程可以给自己使用部件的时间计时，从而得知另一个在做什么。2018 年之后，有些系统正是因为这个原因关掉了同时多线程。"
-  },
-  "bdcf77415f40": {
-   "scene": "Cores",
-   "en": "Chapter thirteen. Modern cores in numbers.",
-   "zh": "第十三章。用数字看现代处理器核。"
-  },
-  "735d24470fef": {
-   "scene": "Cores",
-   "en": "How far have real machines taken all this? Here is the size of the reorder buffer, the window of instructions in flight, in cores from 1995 to 2024. <bookmark mark='a'/> Intel's Pentium Pro, the first mass-market out-of-order x86: forty instructions. The MIPS R10000 and the Alpha 21264, the great RISC designs of the late 1990s: thirty-two and eighty. <bookmark mark='b'/> Through the 2000s and 2010s the window grew steadily: about two hundred in Haswell, Skylake and AMD's first Zen. <bookmark mark='c'/> And then it took off. Intel's Sunny Cove, three hundred fifty-two; Golden Cove, in 2021, five hundred twelve; AMD's Zen 5, four hundred forty-eight. Apple's M1 core of 2020 publishes no number, but careful measurement puts its window at about six hundred thirty. <bookmark mark='d'/> Our core's hundred twenty-eight sits in the middle of the history, and we have seen that on the Job even that is rarely full.",
-   "zh": "真实的机器把这一切推到了多远？这是 1995 年到 2024 年间各个处理器核的重排序缓冲区大小，也就是在途指令的窗口。<bookmark mark='a'/>英特尔的 Pentium Pro，第一款面向大众市场的乱序 x86：四十条指令。MIPS R10000 和 Alpha 21264，二十世纪九十年代末伟大的精简指令集设计：三十二和八十。<bookmark mark='b'/>整个二十一世纪头二十年，窗口稳步增长：Haswell、Skylake 和 AMD 的第一代 Zen 大约两百。<bookmark mark='c'/>然后它猛增。英特尔的 Sunny Cove 三百五十二；2021 年的 Golden Cove 五百一十二；AMD 的 Zen 5 四百四十八。苹果 2020 年的 M1 核没有公布数字，但仔细的测量把它的窗口定在大约六百三十。<bookmark mark='d'/>我们的核的一百二十八位于这段历史的中间，而我们已经看到，在任务上即便这么大也很少装满。"
-  },
-  "fbbb6e6a7fe6": {
-   "scene": "Cores",
-   "en": "Why build windows of hundreds when, as chapter seven showed, a wrong guess drains them? <bookmark mark='a'/> Because of memory. A load that misses every cache waits hundreds of cycles for DRAM, and a core that wants to keep working through such a miss needs hundreds of other instructions to do. Part 9 measures that wait. <bookmark mark='b'/> A big window only pays if the core predicts well enough to fill it, which is why predictors grew alongside: modern TAGE-style predictors miss only a few branches in every thousand instructions on typical code, far fewer than the Job's data-dependent length test. <bookmark mark='c'/> Decode widths grew too: three instructions a cycle in the Pentium Pro, four in Core 2, six in Golden Cove, eight in Apple's M1. <bookmark mark='d'/> The price is area and power. The rename tables, the issue queues and the wakeup logic are among the largest and hottest structures on a modern chip, and they are why Part 10's power wall arrived when it did.",
-   "zh": "既然第七章表明一次猜错就会把窗口清空，为什么还要造几百项的窗口？<bookmark mark='a'/>因为存储器。一次错过所有缓存的取数要等动态随机存储器几百个周期，一个想在这样的缺失期间继续工作的核，需要几百条别的指令可做。第9部分会测量这段等待。<bookmark mark='b'/>大窗口只有在核预测得足够好、能填满它时才划算，所以预测器也随之成长：现代 TAGE 类预测器在典型代码上每一千条指令只猜错几个分支，远少于任务里依赖数据的长度检查。<bookmark mark='c'/>译码宽度也在增长：Pentium Pro 每周期三条，Core 2 四条，Golden Cove 六条，苹果 M1 八条。<bookmark mark='d'/>代价是面积和功耗。重命名表、发射队列和唤醒逻辑是现代芯片上最大、最热的结构之一，也正是它们让第10部分的功耗墙在那个时候到来。"
-  },
-  "bc3e6fda60a4": {
-   "scene": "Cores",
-   "en": "Nobody has to take these numbers on faith. <bookmark mark='a'/> The vendors publish optimization manuals describing their cores. Agner Fog's guides, updated for decades, describe nearly every x86 core's pipeline. The uops.info project measured the latency, throughput and execution ports of every x86 instruction on every recent core. Independent writers measure the structures vendors do not disclose. <bookmark mark='b'/> And on any Linux machine, perf stat reads the core's own counters: instructions, cycles, branch misses, machine clears. Everything in this part can be seen on the computer in front of you.",
-   "zh": "没有人需要凭信任接受这些数字。<bookmark mark='a'/>厂商发布描述自己处理器核的优化手册。阿格纳·福格的指南几十年来不断更新，描述了几乎每一款 x86 核的流水线。uops.info 项目测量了每款近期核上每条 x86 指令的延迟、吞吐量和执行端口。独立的作者测量厂商不公开的结构。<bookmark mark='b'/>在任何一台 Linux 机器上，perf stat 都能读出核自己的计数器：指令数、周期数、分支预测失误、机器清除。这一部分的一切，都能在你面前的这台计算机上看到。"
-  },
-  "b9c57bdf8b6c": {
-   "scene": "Job",
-   "en": "Chapter fourteen. The Job out of order.",
-   "zh": "第十四章。乱序执行的任务。"
-  },
-  "83ef0d3e2bac": {
-   "scene": "Job",
-   "en": "Where do the cycles go now? Measure cycles per instruction on the first chapter, and split it. <bookmark mark='a'/> A four-wide core could at best spend a quarter of a cycle on each instruction. <bookmark mark='b'/> With perfect prediction it spends about a third: the rest of that is true dependences, the one-taken-branch fetch limit, and the memory ports. <bookmark mark='c'/> With the real predictor, another fifth of a cycle per instruction goes to wrong guesses. <bookmark mark='d'/> Part 7's pipeline, for comparison, spent one point two. <bookmark mark='e'/> So forty percent of the core's time goes to recovering from mispredictions, nearly all of them in one branch: the scan loop's test of whether an entry has the word's length. That branch depends on the text, and no history predicts it well. The fix is not in the hardware; it is in the program, and Part 17 makes it.",
-   "zh": "现在周期都去哪儿了？在第一章上测量每条指令的周期数，再把它拆开。<bookmark mark='a'/>一个四槽核最多只能在每条指令上花四分之一个周期。<bookmark mark='b'/>完美预测时它花大约三分之一：多出来的是真依赖、每周期一个跳转的取指限制，以及访存端口。<bookmark mark='c'/>用真实的预测器，每条指令又有五分之一个周期花在猜错上。<bookmark mark='d'/>作为对比，第7部分的流水线花一点二。<bookmark mark='e'/>所以核百分之四十的时间花在从预测错误中恢复，几乎全来自一个分支：扫描循环里检查表项长度是否与单词相同的那个。这个分支取决于文本，没有哪种历史能把它预测好。修复不在硬件里，而在程序里，第17部分会做到。"
-  },
-  "6917ceba2973": {
-   "scene": "Job",
-   "en": "Simulating thirty novels on this core, cycle by cycle, would take about a month: it runs about thirty-five thousand instructions a second. So, as in Part 7, we count. <bookmark mark='a'/> Twenty-four passages of four hundred to four thousand bytes, from random books, are run on the core. <bookmark mark='b'/> Their cycle counts are fitted as a linear function of the events in each text that the Job's work depends on: the words, the entries scanned, the entries of the same length, and so on. <bookmark mark='c'/> Then the model is checked on a passage four times longer than any it was fitted on, sixteen thousand bytes of Moby-Dick: six and a half million instructions, three point three million cycles, predicted to within a tenth of a percent.",
-   "zh": "在这个核上一个周期一个周期地模拟三十部小说，大约要一个月：它每秒只跑大约三万五千条指令。所以，像第7部分那样，我们改为计数。<bookmark mark='a'/>从随机的书里取二十四段四百到四千字节的文字，在核上运行。<bookmark mark='b'/>把它们的周期数拟合成每段文本中那些决定任务工作量的事件的线性函数：单词、扫描过的表项、长度相同的表项，等等。<bookmark mark='c'/>然后在一段比拟合所用的任何一段都长四倍的文字上检验这个模型，《白鲸》的一万六千字节：六百五十万条指令，三百三十万个周期，预测误差在千分之一以内。"
-  },
-  "95d90738fde5": {
-   "scene": "Job",
-   "en": "Applied to the whole corpus, the model gives a hundred seven billion instructions in fifty-one billion cycles: two point one instructions per cycle. <bookmark mark='a'/> We keep Part 7's clock of eight hundred eighty-five megahertz. That is generous: renaming, wakeup and the reorder buffer add logic, and a real out-of-order core needs more pipeline stages to hold the same clock. Part 10 returns to clocks. <bookmark mark='b'/> The thirty novels now take fifty-seven seconds, against two minutes twenty-five on the pipeline and four minutes forty on the single-cycle Pebble. <bookmark mark='c'/> That is the third row of the ledger: two and a half times faster again, for exactly the same program. The rows still to come are caches, more cores, a compiler, and then, at last, better algorithms.",
-   "zh": "用到整个语料上，模型给出一千零七十亿条指令、五百一十亿个周期：每周期二点一条指令。<bookmark mark='a'/>我们沿用第7部分八百八十五兆赫的时钟。这是宽厚的假设：重命名、唤醒和重排序缓冲区都会增加逻辑，一个真实的乱序核需要更多的流水级才能保持同样的时钟。第10部分会回到时钟。<bookmark mark='b'/>三十部小说现在需要五十七秒，而流水线需要两分二十五秒，单周期的 Pebble 需要四分四十秒。<bookmark mark='c'/>这是账本的第三行：又快了两倍半，程序完全相同。接下来的几行是缓存、更多的核、编译器，最后终于是更好的算法。"
-  },
-  "b6f77108d6e8": {
-   "scene": "Frontier",
-   "en": "Chapter fifteen. Frontier: past the dataflow limit, safely.",
-   "zh": "第十五章。前沿：越过数据流极限，而且安全。"
-  },
-  "a9f5d07c57d4": {
-   "scene": "Frontier",
-   "en": "Two questions are open at the edge of this part. The first: can a machine beat the dataflow limit itself? The critical path is a chain of true dependences, and nothing we have built can shorten it. <bookmark mark='a'/> Unless the machine guesses values, not just branches. If a load usually returns the same value as last time, or the last value plus a fixed step, predict it, let the instructions that need it start at once, and check when the real value arrives. Mikko Lipasti and his colleagues proposed this in 1996. <bookmark mark='b'/> We tried it on the Job, in the limit study, with a stride predictor for each load that only guesses after it has been right several times in a row. <bookmark mark='c'/> Without prediction, three point three four instructions per cycle. A predictor that never erred would give three point nine eight. <bookmark mark='d'/> And the real predictor, at every confidence level, makes the machine slower. Its confident guesses are right only sixty to ninety percent of the time, and each wrong one costs a full recovery, which outweighs the dependences broken by the right ones.",
-   "zh": "在这一部分的边缘，有两个悬而未决的问题。第一个：一台机器能不能打破数据流极限本身？关键路径是一条真依赖链，我们造的任何东西都缩短不了它。<bookmark mark='a'/>除非机器猜的不只是分支，还有值。如果一次取数通常返回和上次相同的值，或者上次的值加一个固定步长，那就预测它，让需要它的指令马上开始，等真值到了再检查。米科·利帕斯蒂和同事在 1996 年提出了这个想法。<bookmark mark='b'/>我们在极限研究里对任务试了一下，给每条取数配一个步长预测器，它只在连续猜对几次之后才开始猜。<bookmark mark='c'/>不做预测时，每周期三点三四条指令。一个从不出错的预测器会给出三点九八。<bookmark mark='d'/>而真实的预测器在每一个置信水平上都让机器变慢。它有把握的猜测只有百分之六十到九十是对的，每次猜错都要一次完整的恢复，代价超过了猜对时打破的依赖。"
-  },
-  "e634552adf2a": {
-   "scene": "Frontier",
-   "en": "That matches what researchers found. <bookmark mark='a'/> A value predictor must be right far more than ninety-nine percent of the time to pay its way. <bookmark mark='b'/> In 2014 Arthur Perais and André Seznec showed a design that does it, using very high confidence thresholds and repairing mistakes cheaply at commit, and revived a field many had given up. <bookmark mark='c'/> On the Job, though, even perfect value prediction would buy only nineteen percent, because the branches, not the loads, set the limit. <bookmark mark='d'/> Which programs have values worth guessing, and whether a core can find them cheaply, is still an open question.",
-   "zh": "这和研究者的发现相符。<bookmark mark='a'/>一个数值预测器的正确率必须远高于百分之九十九才划得来。<bookmark mark='b'/>2014 年，阿瑟·佩雷和安德烈·塞兹内克展示了一个做到这一点的设计，用非常高的置信阈值，并在提交时廉价地修复错误，复兴了一个许多人已经放弃的领域。<bookmark mark='c'/>不过在任务上，即使完美的数值预测也只能换来百分之十九，因为设定极限的是分支，而不是取数。<bookmark mark='d'/>哪些程序有值得猜的值，核能不能廉价地找到它们，仍然是一个开放的问题。"
-  },
-  "8c78503f1f4b": {
-   "scene": "Frontier",
-   "en": "The second question: can speculation be made safe, without giving up its speed? Spectre works because a speculatively loaded value is passed on to a second load whose address it chooses, and that second load leaves a footprint in the cache. <bookmark mark='a'/> So here is a rule for our core, in the spirit of two 2019 proposals, Speculative Taint Tracking and NDA. A load that completes while some older branch is still unresolved keeps its value to itself: nothing that depends on it may run until every older branch has executed. <bookmark mark='b'/> Run the attack against this core: the probe shows no fast line, and nothing leaks. <bookmark mark='c'/> Run the Job: three and a half percent slower. <bookmark mark='d'/> Cheap, here, because the speculation that remains is the useful kind: arithmetic, branches, and loads whose addresses are already known can all still run ahead.",
-   "zh": "第二个问题：推测执行能不能在不放弃速度的前提下变得安全？幽灵之所以奏效，是因为一个推测读出的值被传给了第二次取数，由它选择第二次取数的地址，而第二次取数在缓存里留下了足迹。<bookmark mark='a'/>所以这里给我们的核定一条规则，借鉴 2019 年的两个提案：推测污点追踪和 NDA。一次在某个更老的分支尚未解决时完成的取数，把它的值留给自己：依赖它的任何东西都不能执行，直到每个更老的分支都执行完。<bookmark mark='b'/>用这个核去跑攻击：探测显示没有快的那一行，什么也没泄露。<bookmark mark='c'/>跑任务：慢百分之三点五。<bookmark mark='d'/>在这里之所以便宜，是因为剩下的推测都是有用的那种：算术、分支，以及地址已经知道的取数，都还可以往前跑。"
-  },
-  "92b6f9da63c8": {
-   "scene": "Frontier",
-   "en": "Here is where the research stands. <bookmark mark='a'/> Does a rule like ours block every leak of speculatively loaded data, or only the one we tried? Since 2020, researchers have defined what it means for a program to be safe under speculation, speculative non-interference, and built tools that check it; proving a whole core safe is still out of reach. <bookmark mark='b'/> What does safety cost? Published hardware schemes report from a few percent to tens of percent, depending on how much they protect. Nobody knows the floor. <bookmark mark='c'/> The cache is not the only channel: execution ports, the predictors themselves, and power draw have all been used to leak. <bookmark mark='d'/> And the oldest question of all: the Job contains two thousand four hundred instructions per cycle of parallelism, and we use two. Runahead execution, windows of thousands of instructions, and dataflow machines have all tried to reach it. The problem with a star at the end of this part starts here.",
-   "zh": "研究的现状是这样的。<bookmark mark='a'/>像我们这样的规则，能挡住每一种推测读出数据的泄露，还是只挡住了我们试过的这一种？自 2020 年起，研究者定义了一个程序在推测下安全意味着什么，即推测非干涉，并造出了检查它的工具；证明一整个核是安全的，仍然遥不可及。<bookmark mark='b'/>安全要付出多少代价？已发表的硬件方案报告的代价从百分之几到百分之几十，取决于它们保护多少。没有人知道下限在哪里。<bookmark mark='c'/>缓存不是唯一的信道：执行端口、预测器本身，乃至功耗，都曾被用来泄露信息。<bookmark mark='d'/>还有最老的问题：任务里有每周期两千四百条指令的并行性，我们只用了两条。超前执行、几千条指令的窗口和数据流机器都曾试图够到它。这一部分最后那道带星号的题，就从这里开始。"
-  },
-  "8a90cc3b1ee3": {
-   "scene": "Outro",
-   "en": "What we built in this part. The dataflow graph, and the limit its critical path sets on any machine. Register renaming, which removes every false dependence. The scoreboard and Tomasulo's algorithm, cycle by cycle. A real out-of-order core with a reorder buffer, checked against the emulator, whose exceptions stay precise. The wall it hits: parallelism by the thousand, hidden behind branches nobody can predict. Spectre, run on our own machine, and two fixes measured. And the next row of the ledger: the same Job, two and a half times faster again.",
-   "zh": "我们在这一部分造了什么。数据流图，以及它的关键路径给任何机器设下的极限。寄存器重命名，它消除了每一个假依赖。记分牌和托马苏洛算法，一个周期一个周期地看。一个带重排序缓冲区的真实乱序核，与仿真器核对过，它的异常保持精确。它撞上的墙：成千上万的并行性，藏在没人能预测的分支后面。在我们自己的机器上跑的幽灵攻击，以及测量过的两种修复。还有账本的下一行：同一个任务，又快了两倍半。"
-  },
-  "fccebeeebeff": {
-   "scene": "Outro",
-   "en": "Where this comes back. The big windows exist to hide memory's latency, which Part 9 measures and caches attack. The ILP wall, and the power that width costs, lead to Part 10's multicore and vector machines. Static scheduling and software pipelining are Part 13's compiler at work. The branch no predictor can learn is removed by changing the algorithm, in Parts 16 and 17. A core that reorders loads and stores raises the question of what other threads can see, which is Part 33's memory models. Spectre and Meltdown return with the kernel, virtual memory, and Part 55. And VLIW's second life is in the domain-specific hardware of Part 60.",
-   "zh": "这些会在哪里再出现。大窗口是为了藏起存储器的延迟，第9部分测量它，缓存对付它。指令级并行之墙，以及宽度要付出的功耗，通向第10部分的多核和向量机器。静态调度和软件流水是第13部分编译器的工作。没有预测器能学会的那个分支，要靠改变算法来去掉，在第16和第17部分。一个重排取数和存数的核引出了其他线程能看到什么的问题，那是第33部分的存储器模型。幽灵和熔断会随着内核、虚拟存储器以及第55部分回来。而超长指令字的第二次生命，在第60部分的领域专用硬件里。"
-  },
-  "e024d6904e3b": {
-   "scene": "Outro",
-   "en": "In practice. CPU design teams at Apple, Arm, AMD, Intel and Qualcomm tune predictors, schedulers and windows on simulators like ours, at a vastly larger scale. Performance engineers read IPC, branch misses and machine clears from the counters, and use top-down analysis to see where issue slots go. Spectre mitigations live in every kernel, in browsers' site isolation, and in clouds' policies on sharing cores. Open out-of-order RISC-V cores, like Berkeley's BOOM and China's XiangShan, can be read line by line. And research uses simulators such as gem5 and ChampSim.",
-   "zh": "实践中。苹果、Arm、AMD、英特尔和高通的处理器设计团队，在像我们这样的模拟器上调整预测器、调度器和窗口，只是规模大得多。性能工程师从计数器里读出每周期指令数、分支预测失误和机器清除，用自顶向下的分析看发射槽都去了哪里。幽灵的缓解措施存在于每个内核里、浏览器的站点隔离里，以及云平台关于共享处理器核的策略里。开源的乱序 RISC-V 核，比如伯克利的 BOOM 和中国的香山，可以一行一行地读。研究则使用 gem5 和 ChampSim 这样的模拟器。"
-  },
-  "2e9f188b732f": {
-   "scene": "Outro",
-   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build problem: take Part 7's hand-scheduling fix to the out-of-order core, and see what it is worth there. The last, marked with a star, is a research problem: nobody knows its full answer, and the notes say where to start.",
-   "zh": "六道习题，完整解答在这一部分的笔记里。可以在任何一道上暂停。第五道是动手题：把第7部分手工调度的那个修复搬到乱序核上，看看它在那里值多少。最后一道标了星号，是研究题：没有人知道它的完整答案，笔记里说明了从哪里入手。"
-  },
-  "3a3bd0c7de5b": {
-   "scene": "Outro",
-   "en": "Next time. Two of Pebble's five stages were a whole nanosecond of memory, and a real DRAM access takes hundreds of cycles. Part 9 builds the memory hierarchy: caches, locality, the miss rate curves of the Job, a latency staircase measured on this very computer, and a theorem about pebbles that says how much data any matrix multiply must move.",
-   "zh": "下一次。Pebble 的五个流水级里有两个是整整一纳秒的存储器访问，而一次真实的动态随机存储器访问要几百个周期。第9部分建造存储层次：缓存、局部性、任务的缺失率曲线、在这台计算机上实测的延迟阶梯，以及一个关于卵石的定理，它说明任何矩阵乘法必须搬动多少数据。"
-  },
-  "9bd24692775d": {
-   "scene": "Outro",
-   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
-   "zh": "这一部分依据的书和论文都在屏幕上，也在笔记里。感谢观看。"
+  "title": "计算机科学，从零搭建 · 第8部分：乱序执行",
+  "chapters": {
+    "Hook": "排队等待",
+    "Dataflow": "1. 数据流极限",
+    "Rename": "2. 假依赖与重命名",
+    "Scoreboard": "3. 记分牌",
+    "Tomasulo": "4. 托马苏洛算法",
+    "Rob": "5. 重排序缓冲区",
+    "Ilp": "6. 更宽，以及指令级并行之墙",
+    "Speculate": "7. 推测执行",
+    "Memory": "8. 取数、存数与它们的顺序",
+    "Spectre": "9. 幽灵",
+    "Vliw": "10. 编译器的另一条路：超长指令字",
+    "Risc": "11. 精简与复杂指令集",
+    "Smt": "12. 同时多线程",
+    "Cores": "13. 用数字看现代处理器核",
+    "Job": "14. 乱序执行的任务",
+    "Frontier": "15. 前沿：越过数据流极限，而且安全",
+    "Outro": "回顾、习题，以及它们会在哪里再出现"
+  },
+  "lines": {
+    "9de935fb47ec": {
+      "scene": "Dataflow",
+      "en": "Chapter one. The dataflow limit.",
+      "zh": "第一章。数据流极限。"
+    },
+    "a45babf4c08c": {
+      "scene": "Rename",
+      "en": "Chapter two. False dependences, and renaming.",
+      "zh": "第二章。假依赖与重命名。"
+    },
+    "0a115e0e3f12": {
+      "scene": "Scoreboard",
+      "en": "Chapter three. The scoreboard.",
+      "zh": "第三章。记分牌。"
+    },
+    "729bae0cc384": {
+      "scene": "Scoreboard",
+      "en": "Each instruction passes through four steps, and the scoreboard checks one kind of hazard at each. <bookmark mark='a'/> Issue happens in program order. An instruction issues when its kind of unit is free, and when no instruction already in flight is going to write the same register; that is the write after write hazard, and the 6600 simply refuses to have two writers of one name. <bookmark mark='b'/> Next, read operands. The instruction waits at its unit until every register it reads has been written by whoever was producing it: the true dependence. <bookmark mark='c'/> Then it executes, taking as many cycles as its unit needs. <bookmark mark='d'/> Last, write result. Before overwriting its destination, it waits until every earlier instruction that still needs the old value has read it: the write after read hazard. <bookmark mark='e'/> Notice that values travel only through the registers. Every hazard is a wait; nothing is renamed.",
+      "zh": "每条指令经过四步，记分牌在每一步检查一种冒险。<bookmark mark='a'/>发射按程序顺序进行。当一条指令所需种类的部件空闲，而且没有在途的指令将要写同一个寄存器时，它才发射；这就是写后写冒险，6600 干脆不允许同一个名字同时有两个写者。<bookmark mark='b'/>接着是读操作数。指令在它的部件前等着，直到它读的每个寄存器都已被产生它的指令写好：真依赖。<bookmark mark='c'/>然后它执行，部件需要几个周期就花几个周期。<bookmark mark='d'/>最后是写结果。在覆盖目的寄存器之前，它要等每条还需要旧值的更早的指令都读完：读后写冒险。<bookmark mark='e'/>注意，值只通过寄存器传递。每种冒险都是一次等待；没有任何东西被重命名。"
+    },
+    "898946206c1a": {
+      "scene": "Scoreboard",
+      "en": "Here is the standard example from Hennessy and Patterson's textbook, written in Pebble's registers, with their latencies: a load takes one cycle, an add two, a multiply ten, a divide forty. <bookmark mark='a'/> Watch the scoreboard fill in the cycle at which each instruction completes each step. The first load issues in cycle one, reads in two, executes in three, writes in four. <bookmark mark='b'/> The second load cannot even issue until cycle five: there is only one integer unit, and the first load holds it until its result is written. <bookmark mark='c'/> The multiply and the subtract both wait for the second load, then read their operands together in cycle nine. The divide needs the multiply's result, so it waits at its unit until cycle twenty-one. <bookmark mark='d'/> And the last add. It issues in thirteen, when the adder is free, and its result is ready by sixteen. But it writes a1, and the divide, an earlier instruction, has not yet read the old a1. So the add sits on its finished result until cycle twenty-two. <bookmark mark='e'/> The whole thing takes sixty-two cycles.",
+      "zh": "这是轩尼诗和帕特森教科书里的标准例子，用 Pebble 的寄存器写出，采用他们的延迟：取数一个周期，加法两个，乘法十个，除法四十个。<bookmark mark='a'/>看记分牌填出每条指令完成每一步的周期。第一条取数在第一周期发射，第二周期读操作数，第三周期执行，第四周期写回。<bookmark mark='b'/>第二条取数直到第五周期才能发射：只有一个整数部件，第一条取数一直占着它，直到结果写完。<bookmark mark='c'/>乘法和减法都在等第二条取数，然后在第九周期一起读操作数。除法需要乘法的结果，所以在它的部件前一直等到第二十一周期。<bookmark mark='d'/>还有最后的加法。它在第十三周期加法器空出时发射，结果在第十六周期就算好了。但它要写 a1，而更早的除法还没有读旧的 a1。于是加法守着算好的结果，一直等到第二十二周期。<bookmark mark='e'/>整段一共六十二个周期。"
+    },
+    "2a4a2bcd325a": {
+      "scene": "Tomasulo",
+      "en": "Chapter four. Tomasulo's algorithm.",
+      "zh": "第四章。托马苏洛算法。"
+    },
+    "bb5446a0fd84": {
+      "scene": "Tomasulo",
+      "en": "In 1967 IBM shipped the System/360 Model 91, a machine built for scientific computing. <bookmark mark='a'/> Its floating-point unit had a problem far worse than Pebble's: only four floating-point registers in the instruction set, so the same few names were reused constantly, and a scoreboard would have stalled on false dependences all the time. <bookmark mark='b'/> Robert Tomasulo's answer was to stop naming values by registers at all. A value in flight is named by the reservation station, a small waiting area in front of a functional unit, of the instruction that will produce it. <bookmark mark='c'/> An instruction waiting in a station holds, for each operand, either the value itself or the tag of the station that will produce it. <bookmark mark='d'/> And when a unit finishes, it broadcasts the result and its tag on a common data bus. Every station and the register file listen, and whoever is waiting for that tag takes the value. This is register renaming, done in 1967 with a handful of tags.",
+      "zh": "1967 年，IBM 交付了 System/360 Model 91，一台为科学计算而造的机器。<bookmark mark='a'/>它的浮点部件有一个比 Pebble 糟糕得多的问题：指令集里只有四个浮点寄存器，同样几个名字被不断重用，记分牌会一直卡在假依赖上。<bookmark mark='b'/>罗伯特·托马苏洛的答案是干脆不再用寄存器给值命名。一个在途的值，用将要产生它的那条指令所在的保留站来命名；保留站是功能部件前面一个小小的等候区。<bookmark mark='c'/>在保留站里等待的指令，对每个操作数要么持有值本身，要么持有将要产生它的保留站的标签。<bookmark mark='d'/>部件完成时，把结果和它的标签广播到一条公共数据总线上。每个保留站和寄存器堆都在听，谁在等这个标签，谁就把值取走。这就是寄存器重命名，1967 年就用一把标签做到了。"
+    },
+    "0f643d3960c0": {
+      "scene": "Tomasulo",
+      "en": "Here is the machine. On the left, the instructions waiting to issue, in order. In the middle, the reservation stations: three for loads, three in front of the adder, two in front of the multiplier and divider. Below them the units, and under everything the common data bus, which runs back to every station and to the registers. <bookmark mark='a'/> Cycle one: the first load issues into Load1, and the register a1 now records that its next value will come from Load1. Cycle two: the second load issues, and a2 points at Load2. <bookmark mark='b'/> Cycle three: the multiply issues. Its operand a2 is not ready, so the station takes the tag Load2 instead. And the first load broadcasts: tag Load1 and its value go out on the bus, and a1 takes it. <bookmark mark='c'/> Cycle four: Load2 broadcasts, and the multiply, which was waiting for that tag, captures the value. The subtract issues with both its values in hand. <bookmark mark='d'/> Cycle five: the divide issues, waiting on tag Mult1, and holding the current value of a1. Cycle six: the last add issues. It will write a1, so a1 now points at Add2, but the divide does not care: it has already copied the old a1. That is the write after read hazard, gone. <bookmark mark='e'/> The subtract broadcasts in cycle seven, the add starts in the next cycle, and it broadcasts in cycle ten, while the multiply is still working. <bookmark mark='f'/> The multiply finishes in fifteen and its broadcast wakes the divide, which takes forty cycles and broadcasts in fifty-six.",
+      "zh": "这就是这台机器。左边是等待发射的指令，按顺序排着。中间是保留站：三个给取数，三个在加法器前，两个在乘除法器前。下面是功能部件，最底下是公共数据总线，它通回每个保留站和寄存器。<bookmark mark='a'/>第一周期：第一条取数发射进 Load1，寄存器 a1 记下它的下一个值将来自 Load1。第二周期：第二条取数发射，a2 指向 Load2。<bookmark mark='b'/>第三周期：乘法发射。它的操作数 a2 还没好，所以保留站记下标签 Load2。同时第一条取数广播：标签 Load1 和它的值出现在总线上，a1 把它取走。<bookmark mark='c'/>第四周期：Load2 广播，一直在等这个标签的乘法捕获了这个值。减法发射，两个值都已在手。<bookmark mark='d'/>第五周期：除法发射，等着标签 Mult1，并持有 a1 的当前值。第六周期：最后的加法发射。它会写 a1，所以 a1 现在指向 Add2，但除法不在乎：它已经抄下了旧的 a1。这就是读后写冒险，消失了。<bookmark mark='e'/>减法在第七周期广播，加法在下一个周期开始，并在第十周期广播，那时乘法还在算。<bookmark mark='f'/>乘法在第十五周期完成，它的广播唤醒了除法，除法花四十个周期，在第五十六周期广播。"
+    },
+    "e0dfd84bbf48": {
+      "scene": "Tomasulo",
+      "en": "Side by side. <bookmark mark='a'/> Most results arrive a little earlier, because the bus hands a value straight to the stations waiting for it, with no write and read through the register file. <bookmark mark='b'/> And the last add finishes twelve cycles sooner: under Tomasulo nobody waits for an earlier reader, because every reader has already copied what it needs. <bookmark mark='c'/> Fifty-six cycles instead of sixty-two. The divide's forty cycles dominate both, as they should: that is this example's critical path.",
+      "zh": "并排对比。<bookmark mark='a'/>大多数结果都早到一点，因为总线把值直接交给等着它的保留站，不用经过寄存器堆写一次再读一次。<bookmark mark='b'/>最后的加法早了十二个周期完成：在托马苏洛算法下，没有谁要等更早的读者，因为每个读者都已经抄下了它需要的东西。<bookmark mark='c'/>五十六个周期而不是六十二个。除法的四十个周期在两者中都占主导，这理所当然：那是这个例子的关键路径。"
+    },
+    "7e3ad69ac2d2": {
+      "scene": "Rob",
+      "en": "Chapter five. The reorder buffer.",
+      "zh": "第五章。重排序缓冲区。"
+    },
+    "fa716bb495a4": {
+      "scene": "Ilp",
+      "en": "Chapter six. Wider, and the wall.",
+      "zh": "第六章。更宽，以及那堵墙。"
+    },
+    "25acd87da857": {
+      "scene": "Speculate",
+      "en": "Chapter seven. Speculation.",
+      "zh": "第七章。推测执行。"
+    },
+    "a94d52503631": {
+      "scene": "Memory",
+      "en": "Chapter eight. Loads, stores, and their order.",
+      "zh": "第八章。取数、存数与它们的顺序。"
+    },
+    "57161e64e402": {
+      "scene": "Spectre",
+      "en": "Chapter nine. Spectre.",
+      "zh": "第九章。幽灵。"
+    },
+    "95c111fe5111": {
+      "scene": "Vliw",
+      "en": "Chapter ten. The compiler's alternative.",
+      "zh": "第十章。编译器的另一条路。"
+    },
+    "abfad968b671": {
+      "scene": "Risc",
+      "en": "Chapter eleven. RISC and CISC.",
+      "zh": "第十一章。精简与复杂指令集。"
+    },
+    "96425ebb2de5": {
+      "scene": "Smt",
+      "en": "Chapter twelve. Simultaneous multithreading.",
+      "zh": "第十二章。同时多线程。"
+    },
+    "bdcf77415f40": {
+      "scene": "Cores",
+      "en": "Chapter thirteen. Modern cores in numbers.",
+      "zh": "第十三章。用数字看现代处理器核。"
+    },
+    "b9c57bdf8b6c": {
+      "scene": "Job",
+      "en": "Chapter fourteen. The Job out of order.",
+      "zh": "第十四章。乱序执行的任务。"
+    },
+    "b6f77108d6e8": {
+      "scene": "Frontier",
+      "en": "Chapter fifteen. Frontier: past the dataflow limit, safely.",
+      "zh": "第十五章。前沿：越过数据流极限，而且安全。"
+    },
+    "9bd24692775d": {
+      "scene": "Outro",
+      "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+      "zh": "这一部分依据的书和论文都在屏幕上，也在笔记里。感谢观看。"
+    },
+    "9f88051c154a": {
+      "scene": "Hook",
+      "en": "Start with a short program on this part's functional core, constrained to a one-entry issue queue. That forces instructions to start in program order. Rows are instructions; time runs to the right. <bookmark mark='a'/> The fifth instruction loads from a cold cache line. We assign a sixty-cycle miss latency in this model. <bookmark mark='b'/> The next add needs that value and must wait. <bookmark mark='c'/> Several later instructions do not depend on the missing value. They still have their own dependencies and resource requirements, but this in-order configuration cannot pass the waiting add. Their useful work is delayed behind it. <bookmark mark='d'/> This recorded run takes eighty-one cycles for sixteen instructions, including setup and halt. It illustrates head-of-line blocking under the model's chosen resources and timing.",
+      "zh": "先把一个短程序放到本部分的功能模型核上，把发射队列限制为一个表项。这迫使指令按程序顺序开始。每行一条指令，时间向右走。<bookmark mark='a'/>第五条指令从一个冷缓存行取数。模型为这次缺失指定六十个周期的延迟。<bookmark mark='b'/>紧接的加法需要这个值，只能等待。<bookmark mark='c'/>后面有几条指令不依赖这个缺失值。它们仍有自己的数据依赖和资源要求，但这个按序配置无法越过正在等待的加法，于是有用的工作被挡在后面。<bookmark mark='d'/>这次记录共用八十一个周期，执行十六条指令，包含初始化与停机。它展示的是所选资源和时序模型下的队首阻塞。"
+    },
+    "4d342f9a3955": {
+      "scene": "Hook",
+      "en": "Now use the normal issue queue and ready-instruction selection on the same functional core. <bookmark mark='a'/> An instruction can start when its operands, execution resources and ordering rules allow. The load still misses, and its dependent add still waits. Later independent work can overlap the miss, while dependencies among those later instructions remain. <bookmark mark='b'/> Completed results wait for in-order architectural retirement, shown in blue. When the load finishes, the waiting add executes and the core retires the completed work in order. <bookmark mark='c'/> This run takes seventy cycles instead of eighty-one. The comparison changes queue capacity and scheduling freedom; it does not make every later instruction immediately ready or reproduce every feature of a physical processor.",
+      "zh": "现在让同一个功能模型核使用正常的发射队列，并选择就绪指令。<bookmark mark='a'/>只有操作数、执行资源和顺序规则都允许时，指令才能开始。取数仍会缺失，依赖它的加法仍会等待。后面独立的工作可以与缺失重叠，但这些后续指令彼此之间的依赖仍然存在。<bookmark mark='b'/>完成的结果等待按序成为体系结构状态，图中用蓝色表示。取数结束后，等待的加法执行，模型核依次提交已完成的工作。<bookmark mark='c'/>这次用了七十个周期，而不是八十一个。对比改变了队列容量与调度自由度；它没有让所有后续指令立刻就绪，也没有复现物理处理器的全部特征。"
+    },
+    "2f02e98f3de1": {
+      "scene": "Hook",
+      "en": "The Job's first chapter retires eight hundred twenty-seven thousand five hundred seventy-six instructions in each configuration. <bookmark mark='a'/> Part 7's functional pipeline used about a million cycles, or zero point eight three retired instructions per cycle. <bookmark mark='b'/> This part's core with a one-entry issue queue takes about one point zero six million cycles. Its front end and recovery rules differ from that pipeline. <bookmark mark='c'/> The normal sixty-four-entry queue permits ready work to pass blocked instructions. It finishes in four hundred thirty-seven thousand five hundred eighty cycles, about one point eight nine retired instructions per cycle. <bookmark mark='d'/> The program and execution-unit configuration are shared between these last two runs. Queue capacity and the resulting scheduling opportunities change together. These are model cycle counts; a silicon frequency and hardware speedup have not been measured.",
+      "zh": "任务第一章在每个配置下都提交八十二万七千五百七十六条指令。<bookmark mark='a'/>第七部分的功能流水线大约用了一百万个周期，每周期提交零点八三条指令。<bookmark mark='b'/>本部分模型核把发射队列限制为一个表项时，约用一百零六万个周期。它的前端与恢复规则不同于那条流水线。<bookmark mark='c'/>正常的六十四项队列允许就绪工作越过被阻塞的指令，用四十三万七千五百八十个周期完成，平均每周期提交约一点八九条指令。<bookmark mark='d'/>后两个运行使用相同程序与执行部件配置，同时改变了队列容量及由此产生的调度机会。这些是模型周期数，并没有测量硅片频率或硬件加速比。"
+    },
+    "dba9d72133db": {
+      "scene": "Hook",
+      "en": "The reorder buffer can hold a hundred twenty-eight in-flight instructions. <bookmark mark='a'/> This plot shows one six-hundred-cycle sample from the Job run. <bookmark mark='b'/> Occupancy rises and falls as instructions arrive, retire or are squashed. Separately, the histogram over the whole run gives a mean of ten point seven entries and no cycle at the full capacity. The plotted sample and whole-run statistics have different scopes. <bookmark mark='c'/> Real implementations can hold much more: Intel's 2021 Golden Cove disclosure gives a five-hundred-twelve-entry reorder buffer. Its entries count implementation operations, so they are not automatically equivalent to our model's architectural instructions. We will investigate why larger windows can help some workloads and why this particular run uses so little of its buffer.",
+      "zh": "重排序缓冲区最多容纳一百二十八条在途指令。<bookmark mark='a'/>这张图截取任务运行中的六百个周期。<bookmark mark='b'/>指令进入、提交或被清除时，占用量随之升降。另一个覆盖完整运行的直方图给出平均十点七项，而且没有任何周期达到容量上限。图中的片段与全程统计范围不同。<bookmark mark='c'/>实际实现可能容纳更多：英特尔二零二一年公开的 Golden Cove 核有五百一十二项重排序缓冲区。实际表项计算的是实现内部操作，并不自动等价于模型中的体系结构指令。接下来要研究大窗口何时有用，以及为什么这次运行只用了很小一部分容量。"
+    },
+    "619e8d3ac021": {
+      "scene": "Hook",
+      "en": "Here is the route through this part. <bookmark mark='a'/> First, a dataflow model: how quickly a known execution trace can be scheduled under explicit latency and resource assumptions. <bookmark mark='b'/> Then historical scheduling mechanisms: the scoreboard, Tomasulo's algorithm, renaming and precise retirement, illustrated with functional models and finite emulator comparisons. <bookmark mark='c'/> Then branch speculation, which lets ready work run before earlier control decisions are resolved. <bookmark mark='d'/> A modeled Spectre bounds-check-bypass experiment will show how wrong-path loads can influence a simulated cache. It reads data in the model's shared memory, not host hardware secrets. <bookmark mark='e'/> Finally, measured model cycles on passages support the next fitted full-corpus projection in the Job ledger.",
+      "zh": "本部分的路线如下。<bookmark mark='a'/>先建立数据流模型：在明确的延迟和资源假设下，已知执行轨迹能被安排得多快。<bookmark mark='b'/>再看历史上的调度机制：记分牌、托马苏洛算法、重命名与精确提交，用功能模型及有限的模拟器对照测试来说明。<bookmark mark='c'/>然后是分支推测：先前的控制决定尚未解决时，就绪工作也能先执行。<bookmark mark='d'/>一个模型化的幽灵越界检查绕过实验会展示错误路径上的取数如何影响模拟缓存。读取的是模型共享内存中的数据，不是宿主硬件里的秘密。<bookmark mark='e'/>最后，根据文本片段的实测模型周期，拟合任务账本中的下一项全语料预测。"
+    },
+    "a5de9bb7619b": {
+      "scene": "Hook",
+      "en": "This is Part 8 of Computer Science, Built, in Act Two, Making It Fast. <bookmark mark='a'/> We will connect a program's dataflow graph and weighted critical path to carefully scoped scheduling limits. We will separate true register dependencies from name hazards, then follow the scoreboard, Tomasulo's algorithm, renaming and the reorder buffer. We will distinguish execution from architectural retirement, and examine finite resources, prediction and memory ordering. The later chapters cover a simulated Spectre experiment, VLIW scheduling, RISC and CISC, an oracle multithreading study and the Job's projected corpus runtime.",
+      "zh": "这是《计算机科学，从零搭建》第八部分，属于第二幕“让它更快”。<bookmark mark='a'/>我们把程序的数据流图和带权关键路径，与明确限定模型的调度界限连接起来。先区分真正的寄存器数据依赖与名称冒险，再依次研究记分牌、托马苏洛算法、重命名和重排序缓冲区。我们会区分执行与体系结构提交，考察有限资源、预测和内存顺序。后面的章节还包括模拟的幽灵实验、超长指令字调度、精简与复杂指令集、先知式多线程研究，以及任务全语料运行时间的预测。"
+    },
+    "5326943c6215": {
+      "scene": "Dataflow",
+      "en": "This is the Job's table-scan fast path when an entry's length differs from the word being searched. Matching lengths need additional letter comparisons, and reaching the insertion point follows another path. <bookmark mark='a'/> The displayed path has six instructions: table-end test, length load, comparison, two increments and a jump. <bookmark mark='b'/> With warm correct direction and target prediction, Part 7's pipeline takes seven steady-state cycles per such trip, including a load-use bubble. <bookmark mark='c'/> Now hold this known path fixed. Give its instructions explicit latencies and ask how overlapping their true dependencies changes the schedule. This idealization assumes the future path and relevant memory information are already known.",
+      "zh": "这是任务扫描词表时，条目长度与待查单词不同的快速路径。长度相同还要比较字母，到达插入位置也会走另一条路径。<bookmark mark='a'/>图中这条路径有六条指令：检查表尾、取出长度、比较、两次递增和一次跳转。<bookmark mark='b'/>方向与目标预测已经预热且正确时，第七部分的流水线每趟稳态需要七个周期，其中包含一次取数后使用的气泡。<bookmark mark='c'/>现在固定这条已知路径，为指令指定延迟，研究真正的数据依赖相互重叠后如何改变调度。这个理想化模型预先知道未来路径及相关内存信息。"
+    },
+    "0ec2fb9bdab3": {
+      "scene": "Dataflow",
+      "en": "Each node is an instruction. An arrow connects a value's producer to an instruction that uses it. These arrows describe register data dependencies for this fixed path; real execution also has memory, control, resource and exception constraints. <bookmark mark='a'/> Place four trips at their earliest starts with unlimited resources. Loads take two cycles and the other displayed operations take one. The jumps have no register predecessors in this oracle graph. <bookmark mark='b'/> A length load needs its entry address, and the comparison waits for that load. <bookmark mark='c'/> The next entry address comes from a one-cycle increment of the previous address. <bookmark mark='d'/> The highlighted longest weighted chain, ending at the last comparison, spans six cycles. Under these dependencies and latencies, no valid schedule finishes the four trips sooner. The corresponding single-start, in-order schedule takes twenty-eight cycles; this is a scoped schedule comparison.",
+      "zh": "每个节点是一条指令，箭头把值的产生者连到使用它的指令。这些箭头描述固定路径上的寄存器数据依赖；实际执行还受内存、控制、资源和异常规则限制。<bookmark mark='a'/>假设资源无限，把四趟循环放到最早开始的时刻。取数延迟两个周期，其余图中操作延迟一个周期。在这个先知图中，跳转没有寄存器前驱。<bookmark mark='b'/>取出长度需要条目地址，比较则等待取数。<bookmark mark='c'/>下个条目的地址由前一个地址经过一次单周期递增得到。<bookmark mark='d'/>高亮的最长带权链终止于最后一次比较，跨度为六个周期。在这些依赖与延迟下，合法调度无法更早完成四趟循环。对应的按序、每周期单次启动调度需要二十八个周期；这个对比仅适用于所述模型。"
+    },
+    "5d33e6e01342": {
+      "scene": "Dataflow",
+      "en": "In this ideal scheduler, width W limits how many operations may start each cycle. It does not limit how many earlier operations remain in flight, and execution units are otherwise unlimited. <bookmark mark='a'/> One start slot gives twenty-four cycles for twenty-four instructions, including jumps. <bookmark mark='b'/> Two slots give twelve cycles. <bookmark mark='c'/> Four give seven. <bookmark mark='d'/> Eight give six, reaching this graph's weighted critical path. These are the computed schedules for four fixed fast-path trips. <bookmark mark='e'/> Two immediate lower bounds apply: at least the instruction count divided by start width, rounded up, and at least the longest dependency chain. Real cores need additional front-end, unit, ordering and retirement constraints.",
+      "zh": "在这个理想调度器里，宽度 W 限制每周期能启动多少个操作。它不限制之前启动的在途操作数量，其余执行资源假设无限。<bookmark mark='a'/>每周期一个启动槽时，二十四条指令连同跳转共需二十四个周期。<bookmark mark='b'/>两个槽需要十二个周期。<bookmark mark='c'/>四个槽需要七个周期。<bookmark mark='d'/>八个槽需要六个周期，达到这张图的带权关键路径。这些是固定四趟快速路径的计算结果。<bookmark mark='e'/>立刻可以得到两个下界：至少需要指令数除以启动宽度后向上取整的周期数，也至少需要最长依赖链的跨度。真实处理器还受前端、执行部件、顺序和提交规则限制。"
+    },
+    "abe056d66a6c": {
+      "scene": "Dataflow",
+      "en": "Keep the resource model explicit. N counts instructions, L is the longest latency-weighted path, and W is the number of starts permitted each cycle. <bookmark mark='a'/> Every schedule in this start-slot model needs at least the larger of ceiling N over W and L. <bookmark mark='b'/> Graham's classic list-scheduling result concerns nonpreemptive jobs occupying W processors. Its work is A, the sum of processing times, and a greedy schedule takes at most A over W plus one minus one over W times L. With two-cycle loads, A and the instruction count N differ. Do not substitute one for the other when changing resource models. <bookmark mark='c'/> Our four-trip schedules satisfy the displayed start-slot lower bounds; they have twenty-four instructions and a six-cycle span. <bookmark mark='d'/> Across many fixed fast-path trips, the address recurrence permits one trip per cycle in the unlimited-resource, perfect-path idealization: six instructions per cycle after startup. This is a model opportunity, not a guarantee for the whole table search.",
+      "zh": "必须明确资源模型。N 是指令数，L 是按延迟加权的最长路径，W 是每周期允许的启动次数。<bookmark mark='a'/>在启动槽模型中，每个调度至少需要 N 除以 W 向上取整与 L 之中的较大值。<bookmark mark='b'/>格雷厄姆的经典列表调度结果讨论的是占用 W 个处理器的不可抢占任务。工作量 A 是处理时间之和，贪心调度的时间至多为 A 除以 W，加上一减 W 分之一再乘 L。存在两周期取数时，A 与指令数 N 不相同，不能在改变资源模型时混用。<bookmark mark='c'/>我们的四趟调度满足图中的启动槽下界：二十四条指令，关键路径跨度六个周期。<bookmark mark='d'/>对许多趟固定快速路径，地址递推在资源无限、路径完全已知的理想条件下允许每周期一趟，启动阶段后每周期六条指令。这是模型中的机会，不是整个词表搜索的性能保证。"
+    },
+    "a0fa5daef7d1": {
+      "scene": "Rename",
+      "en": "Count register uses over the Job's eight hundred twenty-seven thousand instructions. The counting convention matters. <bookmark mark='a'/> About nine hundred eighty-one thousand source-operand uses refer to an earlier writer; repeated operands count separately. <bookmark mark='b'/> The other bars count roughly four hundred fifty-seven thousand read-since-write reuse events, and about as many successive-writer events. They are not all possible pairs of dependent instructions. <bookmark mark='c'/> Pebble has fifteen writable architectural registers plus a constant zero register. Reusing those writable names creates anti and output hazards. Renaming separates live register versions, while genuine value dependencies and memory or control constraints remain.",
+      "zh": "现在统计任务八十二万多条指令中的寄存器使用情况，统计约定很关键。<bookmark mark='a'/>约九十八万一千次源操作数使用指向先前的写入者；重复操作数分别计数。<bookmark mark='b'/>另外两条柱分别统计约四十五万七千次写入后曾被读取的名称重用事件，以及数量相近的连续写入事件。它们不是所有可能的指令依赖对。<bookmark mark='c'/>Pebble 有十五个可写的体系结构寄存器，另外还有常量零寄存器。重用可写名称会产生反依赖和输出冒险。重命名分开仍然存活的寄存器版本，但真正的值依赖、内存与控制约束仍然存在。"
+    },
+    "4c1b5bff59b5": {
+      "scene": "Rename",
+      "en": "Give each live destination version a separate physical name. <bookmark mark='a'/> A register alias table maps architectural names to their current physical versions. Source operands capture either an existing value or its producing version. <bookmark mark='b'/> Process instructions in order: look up sources first, allocate a fresh destination version, then update the mapping. Here the first load writes p twenty, and its add reads that version while writing p twenty-one. <bookmark mark='c'/> The later load writes p twenty-two. It cannot overwrite the earlier load's value, though its own address, memory and execution-resource constraints still apply. <bookmark mark='d'/> The displayed live versions have distinct names, removing register anti and output hazards. Physical registers are safely reclaimed and reused later; they are not unique forever. The two value chains can overlap when their remaining constraints permit.",
+      "zh": "给每个仍然存活的目标版本一个独立物理名称。<bookmark mark='a'/>寄存器别名表把体系结构名称映射到当前物理版本。源操作数记录已有值，或记录将产生该值的版本。<bookmark mark='b'/>按序处理指令：先查找源，再分配新的目标版本，最后更新映射。这里第一次取数写入物理寄存器二十，加法读取这个版本并写入物理寄存器二十一。<bookmark mark='c'/>后一次取数写入物理寄存器二十二，不会覆盖前一次取数的值，但仍须遵守自己的地址、内存和执行资源约束。<bookmark mark='d'/>图中存活版本的名称各不相同，寄存器反依赖与输出冒险因而消失。物理寄存器之后会在安全回收时重新使用，并非永远只写一次。其余约束允许时，两条值链就能重叠执行。"
+    },
+    "bf252687d400": {
+      "scene": "Rename",
+      "en": "This comparison uses an offline scheduler of the complete recorded execution, not a functional processor. It knows future paths and memory word addresses, assumes the listed operation latencies, and has unlimited start width and lookahead. It also omits realistic device and I/O ordering. <bookmark mark='a'/> With separate register versions, that particular oracle schedule averages about two thousand four hundred instructions per modeled cycle. It can overlap work whose future inputs were supplied by the recorded trace. <bookmark mark='b'/> Adding the scheduler's register-name constraints reduces this to about three point seven. <bookmark mark='c'/> The ratio shows how strongly these artificial name constraints affect this oracle. It is not a feasible hardware speedup, a bound across algorithms, or a claim that real cores approach either number. Register renaming is widely used in high-performance out-of-order designs because it removes name hazards within finite resources.",
+      "zh": "这个对比使用完整执行记录的离线调度器，不是功能处理器。它预先知道未来路径与内存字地址，采用列出的操作延迟，启动宽度和向前查看距离都无限，并且省略真实设备与输入输出的顺序要求。<bookmark mark='a'/>分开寄存器版本后，这个特定先知调度平均每个模型周期约执行两千四百条指令。轨迹已经提供未来输入，因此它能把相关工作提前重叠。<bookmark mark='b'/>加入调度器定义的寄存器名称约束后，结果降至约三点七。<bookmark mark='c'/>这个比值说明这些人为名称约束对该先知模型的影响，不是可实现的硬件加速比，不是跨算法的界限，也不是说真实处理器接近其中任何一个数字。高性能乱序设计广泛使用重命名，是为了在有限资源中消除名称冒险。"
+    },
+    "5750c42e58f6": {
+      "scene": "Scoreboard",
+      "en": "The Control Data 6600, delivered in 1964, is a landmark in dynamic instruction scheduling, associated with Seymour Cray and James Thornton. <bookmark mark='a'/> Its ten functional units could overlap different operations, subject to dependencies and shared resources. <bookmark mark='b'/> The scoreboard tracked functional-unit availability, pending register writers and operand readiness. That bookkeeping let instructions execute out of order while protecting their register dependencies. <bookmark mark='c'/> The machine used a hundred-nanosecond clock. Historical peak floating-point rates and application throughput are different measures, so we will focus on its scheduling mechanism rather than a universal performance ranking. The important question is how several units cooperate without changing the program's results.",
+      "zh": "一九六四年交付的控制数据公司六六零零，是动态指令调度的重要里程碑，与西摩·克雷和詹姆斯·桑顿联系在一起。<bookmark mark='a'/>它的十个功能部件能重叠处理不同操作，但仍受依赖和共享资源限制。<bookmark mark='b'/>记分牌记录功能部件是否可用、哪些指令准备写寄存器，以及操作数是否就绪。这些记录使指令能乱序执行，同时保护寄存器依赖。<bookmark mark='c'/>这台机器采用一百纳秒时钟。历史上的浮点峰值与应用吞吐量不是同一个指标，所以这里关注调度机制，而不作通用性能排名。关键问题是多个部件如何合作而不改变程序结果。"
+    },
+    "acf76c82b98d": {
+      "scene": "Scoreboard",
+      "en": "This scoreboard handles several hazards by waiting. <bookmark mark='a'/> A pending writer blocks another writer of the same register, and an earlier reader can delay a later writeback. <bookmark mark='b'/> In this model, results reach their users through register writes and subsequent operand reads. <bookmark mark='c'/> Dispatch is in program order: if the next instruction cannot reserve its required unit, later instructions cannot dispatch past it. <bookmark mark='d'/> Tomasulo's algorithm adds reservation stations, producer tags and direct result broadcast. Those remove register-name hazards and decouple dispatch from immediate unit availability. Traditional Tomasulo still dispatches in order, and still stalls when the needed station is full. It does not remove every limit listed here.",
+      "zh": "这个记分牌通过等待处理几类冒险。<bookmark mark='a'/>已有写入者会阻止另一个指令写同一寄存器，先前的读取者也可能延迟后面的写回。<bookmark mark='b'/>在这里的模型中，结果先写寄存器，使用者随后再读取操作数。<bookmark mark='c'/>派发按程序顺序进行：下一条指令无法预留所需部件时，后续指令不能越过它派发。<bookmark mark='d'/>托马苏洛算法加入保留站、产生者标签与直接结果广播，从而消除寄存器名称冒险，并让派发不必等待执行部件立即空闲。但传统托马苏洛仍按序派发，所需保留站满时仍会停顿，并没有消除这里列出的全部限制。"
+    },
+    "f7253a493207": {
+      "scene": "Tomasulo",
+      "en": "Out-of-order writeback creates an exception problem if architectural results become visible immediately. <bookmark mark='a'/> In this teaching schedule, the younger add writes in cycle ten, before the older divide broadcasts in cycle fifty-six. <bookmark mark='b'/> Suppose our illustrative divide-zero policy reports a fault when the divide finishes. Pebble uses such a fault policy, unlike RISC-V M's defined integer divide-zero result. <bookmark mark='c'/> The younger add has already changed architectural state, so simply stopping cannot expose the state immediately before the divide. This is an imprecise exception. The historical Model 91 had imprecise floating-point interruptions; that is a separate ISA-specific behavior, not this integer example. Precise recovery has several possible implementations. Next we will separate execution from architectural retirement using a reorder buffer.",
+      "zh": "如果乱序写回立即改变体系结构结果，就会产生异常处理问题。<bookmark mark='a'/>在这个教学时序中，较年轻的加法在第十周期写回，比第五十六周期才广播的较老除法更早。<bookmark mark='b'/>假设示例采用除零时报告故障的策略。Pebble 确实使用这种策略，而 RISC-V M 对整数除零定义了结果，不触发这种故障。<bookmark mark='c'/>较年轻的加法已经改变体系结构状态，所以直接停机无法给出除法执行前的状态，这就是不精确异常。历史上的 Model 91 存在不精确浮点中断，那是另一种与指令集有关的行为，不是这里的整数示例。精确恢复有多种实现方式。接下来用重排序缓冲区把执行与体系结构提交分开。"
+    },
+    "b0bd1ada9816": {
+      "scene": "Rob",
+      "en": "Smith and Pleszkun's 1985 work studied several ways to provide precise interrupts in pipelined processors. The reorder buffer is one important approach. <bookmark mark='a'/> Dispatch instructions in order, execute them when their operands, resources and ordering constraints permit, and retire architectural effects in program order. <bookmark mark='b'/> Execution results may already be in temporary storage or a physical register file, and dependent instructions may use them before retirement. Retirement makes the architectural result official; it is not necessarily the first physical write. <bookmark mark='c'/> A precise exception exposes a valid architectural prefix of the program, with the faulting instruction handled according to its specified policy. Cache and predictor effects require separate reasoning. Precise architectural state alone does not guarantee secrecy.",
+      "zh": "史密斯与普莱兹昆在一九八五年的研究讨论了流水线处理器实现精确中断的多种方案，重排序缓冲区是其中一个重要方法。<bookmark mark='a'/>按序派发指令，操作数、资源和顺序约束允许时执行，再按程序顺序提交体系结构效果。<bookmark mark='b'/>执行结果可能已经写入临时存储或物理寄存器文件，依赖它的指令也可能在提交前使用结果。提交让体系结构结果正式生效，不一定是第一次物理写入。<bookmark mark='c'/>精确异常给出程序的一个合法体系结构前缀，故障指令按规定策略处理。缓存和预测器效果需要另行分析，仅有精确体系结构状态并不保证秘密安全。"
+    },
+    "b677c9717885": {
+      "scene": "Rob",
+      "en": "We draw this reorder buffer as a ring of slots. <bookmark mark='a'/> The animation follows a short recorded scan-loop window. Up to four instructions are renamed into tail slots each cycle. Orange means waiting, green executing, and blue complete but waiting to retire. <bookmark mark='b'/> Up to four completed instructions retire from the head in order. A completed younger instruction cannot retire around an unfinished older one. <bookmark mark='c'/> A branch redirect discards its younger entries and restarts fetch. Their architectural destinations were never committed, but their execution was real within the model: loads may already have changed the simulated cache. The ring records retirement order; it does not erase every microarchitectural trace of squashed work.",
+      "zh": "把这个重排序缓冲区画成一圈表项。<bookmark mark='a'/>动画对应一段记录下来的扫描循环。每周期最多四条指令重命名后进入尾部：橙色表示等待，绿色表示执行，蓝色表示完成但尚未提交。<bookmark mark='b'/>每周期最多四条已完成指令从头部按序提交。较年轻指令即使完成，也不能越过尚未完成的较老指令提交。<bookmark mark='c'/>分支重定向会丢弃后续表项并重新取指。它们的体系结构目标没有提交，但在模型中确实执行过工作，取数可能已经改变模拟缓存。这个环记录提交顺序，并不会擦除被清除工作的全部微体系结构痕迹。"
+    },
+    "de5b94292197": {
+      "scene": "Rob",
+      "en": "Here is Pebble's deliberate divide-zero fault policy. <bookmark mark='a'/> Division has a modeled sixteen-cycle latency. The fault is recorded with its instruction instead of being reported immediately. <bookmark mark='b'/> Younger operations can compute results, including a store's address and data. They wait behind the divide and cannot commit architectural effects. <bookmark mark='c'/> When the fault reaches the head, older instructions have retired, the faulting divide does not write a result, and younger instructions are discarded. Pebble stops and reports the fault; it does not implement an operating-system resume path. <bookmark mark='d'/> The older store has written eleven to memory. The younger store has not committed its write. That is precise architectural state under this policy. Remaining cache or predictor effects are a separate question, and RISC-V M defines a different result for integer division by zero.",
+      "zh": "这里采用 Pebble 明确指定的除零故障策略。<bookmark mark='a'/>模型中的除法延迟十六个周期，故障随指令记录，不立即报告。<bookmark mark='b'/>较年轻的操作可以计算结果，包括存数地址和数据，但它们排在除法之后，不能提交体系结构效果。<bookmark mark='c'/>故障到达头部时，较老指令已提交，故障除法不写结果，较年轻指令被丢弃。Pebble 停机并报告故障，并没有实现操作系统恢复执行的路径。<bookmark mark='d'/>较老存数已把十一写入内存，较年轻存数则没有提交写入。这是在该策略下的精确体系结构状态。缓存或预测器残留效果是另一个问题，而 RISC-V M 对整数除零定义了不同结果。"
+    },
+    "5223fbc5f7d2": {
+      "scene": "Rob",
+      "en": "This diagram separates stages often found in out-of-order cores. <bookmark mark='a'/> Fetch follows a predicted path, decode identifies operations, and ordered rename and dispatch allocate tracking resources. Our width parameter limits fetch, rename and retirement to four per cycle. <bookmark mark='b'/> Ready operations compete for execution resources. This implementation can start up to six total operations in a cycle, with at most four ALU starts and two memory operations, plus its multiplier and divider restrictions. Width must therefore name a particular stage. <bookmark mark='c'/> Completed results wake dependents; architectural retirement remains ordered. Oldest-ready selection is our policy, not a requirement for every processor. <bookmark mark='d'/> Our model holds results in instruction records and copies register results at retirement. Other designs write speculative physical registers earlier and commit mappings later. Their reorder buffers track more than just pointers: completion, exception and recovery metadata also matter.",
+      "zh": "这张图分开了乱序核中常见的几个阶段。<bookmark mark='a'/>取指沿预测路径前进，译码识别操作，按序重命名与派发分配跟踪资源。这里的宽度参数限制每周期取指、重命名和提交最多各四条。<bookmark mark='b'/>就绪操作竞争执行资源。这个实现每周期最多启动六个操作，其中算术逻辑操作最多四个、内存操作最多两个，还受乘法器与除法器的限制。因此讨论宽度时必须说明具体阶段。<bookmark mark='c'/>完成的结果唤醒依赖者，体系结构提交仍按序。优先选择最老就绪指令是本模型的策略，并非所有处理器的硬性要求。<bookmark mark='d'/>本模型把结果放在指令记录中，提交时复制寄存器结果。另一些设计先写推测物理寄存器，再提交映射。它们的重排序缓冲区不只保存指针，还需要完成、异常与恢复元数据。"
+    },
+    "623b43a75686": {
+      "scene": "Rob",
+      "en": "The cycle-by-cycle functional core is implemented in the repository. Its values are computed by the simulator, rather than read from the offline scheduling oracle. <bookmark mark='a'/> The current test suite compares a hundred twenty generated programs across six configurations with the instruction emulator. A Job paragraph is checked in two predictor configurations. Final registers, memory, output and committed instruction counts must match. These finite tests are evidence, not a proof for every program. <bookmark mark='b'/> Directed cases exercise divide-zero state, memory-order replay, partial store forwarding and this modeled Spectre gadget. <bookmark mark='c'/> Wrong-path loads access the model's byte array and optional cache. That distinction between uncommitted architectural work and persistent modeled cache effects will drive the security chapter.",
+      "zh": "仓库中实现了逐周期功能模型核。它的值由模拟器计算，而不是从离线调度先知里读取。<bookmark mark='a'/>当前测试把一百二十个生成程序在六种配置下与指令模拟器对照，并把一个任务段落在两种预测配置下对照。最终寄存器、内存、输出与提交指令数必须相同。这些有限测试提供证据，并不是对所有程序的证明。<bookmark mark='b'/>定向用例还检查除零状态、内存顺序重放、部分存数转发，以及这个模型化的幽灵片段。<bookmark mark='c'/>错误路径上的取数访问模型字节数组和可选缓存。未提交的体系结构工作与保留的模型缓存效果之间的区别，是安全章节的关键。"
+    },
+    "c680b1fa38ff": {
+      "scene": "Ilp",
+      "en": "Limit studies inspired by David Wall's 1991 work schedule a recorded execution under progressively changed assumptions. Our bars change one assumption at a time from the same baseline; they are not cumulative stages. <bookmark mark='a'/> Unlimited start width and lookahead, fixed latencies, perfect path and word-address knowledge, register renaming and omitted realistic I/O ordering produce about twenty-four hundred instructions per modeled cycle on this trace. <bookmark mark='b'/> Adding register-name constraints alone gives about three point seven. <bookmark mark='c'/> Making loads wait for earlier store addresses instead gives about sixty-two. <bookmark mark='d'/> Keeping the other oracle powers but adding tournament-predicted control barriers gives about three point four. <bookmark mark='e'/> Barriers at every branch and jump give under one half. These are sensitivities of a particular trace scheduler, not attainable processor specifications or universal program limits.",
+      "zh": "受大卫·沃尔一九九一年研究启发的极限研究，会改变假设并调度已记录的执行。这里每条柱都相对同一基线只改变一种假设，不是逐步累加限制。<bookmark mark='a'/>无限启动宽度与向前查看、固定延迟、完整路径与字地址信息、寄存器重命名，以及省略真实输入输出顺序，使这条轨迹达到每个模型周期约两千四百条指令。<bookmark mark='b'/>只加入寄存器名称约束，得到约三点七。<bookmark mark='c'/>改为让取数等待先前存数地址，则约为六十二。<bookmark mark='d'/>保留其他先知能力，加入锦标赛预测控制屏障，约为三点四。<bookmark mark='e'/>在每个分支和跳转处都设置屏障，结果低于零点五。这些是特定轨迹调度器对假设的敏感性，不是可实现处理器的规格，也不是程序的普遍极限。"
+    },
+    "f63e25924327": {
+      "scene": "Ilp",
+      "en": "Now vary start width and the scheduler's window parameter. This parameter constrains an instruction's start relative to the start of an earlier trace position. It does not wait for the oldest unfinished operation to retire, so it is not a physical reorder-buffer capacity. <bookmark mark='a'/> With the modeled predictor barriers, curves for the tested window parameters almost overlap and flatten near three point four. That shows little benefit from this parameter on this trace under these assumptions. <bookmark mark='b'/> With perfect control, a parameter of one hundred twenty-eight permits considerably more overlap. <bookmark mark='c'/> Two thousand forty-eight permits still more. Control assumptions interact strongly with start-width and lookahead assumptions here. The result does not prove that larger buffers are useless on other programs, or that the oracle's distant future inputs can be supplied by hardware.",
+      "zh": "现在改变启动宽度和调度器的窗口参数。这个参数把某条指令的启动时刻限制在先前某个轨迹位置的启动之后；它不等待最老未完成操作提交，因此不是物理重排序缓冲区容量。<bookmark mark='a'/>加入模型中的预测屏障后，所测试窗口参数的曲线几乎重合，并在约三点四处变平。这说明在这条轨迹和这些假设下，该参数带来的收益很小。<bookmark mark='b'/>控制完全已知时，参数一百二十八允许更多重叠。<bookmark mark='c'/>参数两千零四十八允许更多。这里控制假设与启动宽度、向前查看假设有很强的相互作用。结果没有证明更大缓冲区对别的程序无用，也没有证明硬件能够提供先知所用的遥远未来输入。"
+    },
+    "7428c694b839": {
+      "scene": "Ilp",
+      "en": "Compare that oracle with the functional core's actual model runs. <bookmark mark='a'/> Each heatmap cell reports retired IPC while varying the front-end and retirement width, reorder-buffer capacity and proportional queue sizes. The four-width configuration is about one point eight nine; eight increases it only slightly on this chapter. Execution starts have their own unit and port limits. <bookmark mark='b'/> Increasing these capacities beyond the smaller tested settings brings little benefit here. That is a workload-specific observation, consistent with low whole-run occupancy. <bookmark mark='c'/> Oracle-assisted correct-path prediction improves IPC substantially, but the implementation can still redirect after speculative memory-order mistakes. Front-end taken-branch bandwidth, memory ports and other resources remain constraints; this sweep alone does not uniquely assign the remaining gap to one of them.",
+      "zh": "再把这个先知与功能模型核的实际运行比较。<bookmark mark='a'/>热图每格报告提交指令的平均每周期数量，同时改变前端与提交宽度、重排序缓冲区容量，以及按比例设置的队列容量。四宽配置约为一点八九，八宽在本章只多一点。执行启动另有部件与端口限制。<bookmark mark='b'/>超过较小的已测配置后，增加这些容量收益很小。这是特定工作负载的现象，与全程占用较低相符。<bookmark mark='c'/>正确路径先知辅助预测会明显提高吞吐，但推测内存顺序出错后，实现仍可能重定向。前端每周期可越过的已取分支数量、内存端口及其他资源仍有限制；仅靠这张扫描图不能把剩余差距唯一归因于某一种资源。"
+    },
+    "68f0a505179a": {
+      "scene": "Ilp",
+      "en": "This illustrates an instruction-level parallelism trade-off. <bookmark mark='a'/> An offline oracle exposes large overlap by supplying knowledge and resources that a real core lacks. Its twenty-four-hundred figure is not independently available hardware parallelism. <bookmark mark='b'/> Finite lookahead, prediction, memory ordering and front-end bandwidth restrict useful overlap in the functional model. Larger windows can still help other workloads, especially when they expose independent misses or long-latency work. <bookmark mark='c'/> Increasing width also adds bypass, selection, port, wiring and energy costs. Those costs depend on the implementation; not every design uses one fully connected broadcast structure. <bookmark mark='d'/> Designers balance wider cores, caches, multiple cores and other techniques. Fetch, decode, issue and retirement widths are different metrics, and there is no universal four-to-eight-wide stopping point.",
+      "zh": "这里展示的是指令级并行的权衡。<bookmark mark='a'/>离线先知提供真实处理器缺少的知识和资源，从而暴露大量重叠。两千四百这个数字不是硬件可独立获得的并行度。<bookmark mark='b'/>有限的向前查看、预测、内存顺序和前端带宽限制了功能模型中的有用重叠。更大窗口仍可能帮助别的负载，尤其是能发现独立缺失或长延迟工作时。<bookmark mark='c'/>增加宽度还会带来旁路、选择、端口、布线与能耗成本，具体取决于实现，并非每种设计都使用一个全连接广播结构。<bookmark mark='d'/>设计者在更宽的核、缓存、多核和其他技术之间权衡。取指、译码、发射与提交宽度是不同指标，不存在通用的四到八宽终点。"
+    },
+    "a2cb58fd8e3b": {
+      "scene": "Speculate",
+      "en": "Prediction lets fetch proceed before a branch resolves. <bookmark mark='a'/> Fetch follows a predicted direction and target, within its bandwidth limits. <bookmark mark='b'/> Younger operations may be renamed and execute when their operands, resources and ordering rules allow. <bookmark mark='c'/> Ordered retirement prevents younger architectural effects from committing past an unresolved older branch. It does not keep every physical result or cache effect inside the reorder buffer. <bookmark mark='d'/> A wrong direction or target discards younger work, repairs register mappings and recovery state, and redirects fetch. Our simulator rebuilds its alias table from surviving entries. Physical processors use different mixtures of checkpoints and rollback; checkpoint availability and front-end refill affect recovery time. A single-cycle universal repair rule would be misleading.",
+      "zh": "预测让取指能够在分支解决之前继续。<bookmark mark='a'/>取指在带宽限制内沿预测方向和目标前进。<bookmark mark='b'/>较年轻操作可以重命名，并在操作数、资源和顺序规则允许时执行。<bookmark mark='c'/>按序提交阻止较年轻体系结构效果越过未解决的较老分支生效，但不会把所有物理结果和缓存效果都关在重排序缓冲区里。<bookmark mark='d'/>方向或目标出错时，模型丢弃较年轻工作，修复寄存器映射与恢复状态，并重定向取指。本模拟器从保留表项重建别名表。物理处理器会组合使用检查点和回滚，检查点数量与前端重新填充都会影响恢复时间，不能说所有实现都在一个周期内恢复。"
+    },
+    "316a284077e6": {
+      "scene": "Speculate",
+      "en": "This is a recorded branch redirect in the functional core. Grey covers fetch and decode; the other colors distinguish waiting, execution, completion and retirement. <bookmark mark='a'/> The prediction follows a same-length entry into the letter-comparison path. <bookmark mark='b'/> Eleven displayed younger entries are later squashed. They reached different stages; some executed and some only waited. <bookmark mark='c'/> The resolved branch selects the different-length path. No younger entry has retired, but its resource use and any modeled cache effects still matter. <bookmark mark='d'/> The chart measures about eight cycles from the branch's rename to the first refetched instruction's rename. That interval includes branch execution and front-end progress. Recovery penalty depends on the timestamps and configuration; it is not a universal constant for all branches or processors.",
+      "zh": "这是功能模型核中记录的一次分支重定向。灰色表示取指与译码，其他颜色区分等待、执行、完成与提交。<bookmark mark='a'/>预测沿相同长度条目进入字母比较路径。<bookmark mark='b'/>图中十一项较年轻指令随后被清除，它们到达的阶段不同，有些执行了，有些只是在等待。<bookmark mark='c'/>实际分支选择长度不同的路径。较年轻表项没有提交，但占用的资源及模型缓存效果仍然重要。<bookmark mark='d'/>图中从分支重命名到第一条重新取入指令重命名，约隔八个周期。这段时间包含分支执行和前端推进。恢复代价取决于时间戳定义与配置，并不是所有分支或处理器的通用常数。"
+    },
+    "c4b374b38af7": {
+      "scene": "Speculate",
+      "en": "Two useful ratios summarize these runs, but neither is a hard lookahead bound. <bookmark mark='a'/> Retired instructions divided by the model's counted branch redirects is about thirty-seven. Redirects include some wrong-path branches, so this is an aggregate ratio, not the exact spacing of correct-path prediction misses. Miss spacing and branch-resolution latency vary; a core can have several unresolved branches in flight. <bookmark mark='b'/> Define an effective penalty P from the CPI difference between tournament and oracle-assisted runs, normalized by that redirect rate. <bookmark mark='c'/> The resulting P is about seven point nine cycles. It summarizes the entire configuration comparison, including interactions with resource use, cache state and memory-order recovery; it is not a unique measured cost of every redirect. <bookmark mark='d'/> The low mean occupancy and flat capacity sweep are observations about this workload. Better prediction helps here, while a larger window can help under other dependencies and miss patterns.",
+      "zh": "两个比值能概括这些运行，但都不是向前查看距离的硬上限。<bookmark mark='a'/>提交指令数除以模型统计的分支重定向次数，约为三十七。重定向还包含部分错误路径分支，所以这只是汇总比值，不是正确路径预测失误的精确间距。失误间隔与分支解决延迟各不相同，一个核也可以同时容纳多个尚未解决的分支。<bookmark mark='b'/>把锦标赛与先知辅助运行之间的每指令周期差，用该重定向率归一化，定义有效代价 P。<bookmark mark='c'/>得到的 P 约为七点九个周期。它概括整个配置对比，包括资源、缓存状态和内存顺序恢复之间的相互作用，不是每次重定向唯一的实测代价。<bookmark mark='d'/>平均占用低、容量扫描曲线平坦，都是这个负载的观察结果。更好预测在这里有帮助，而其他依赖和缺失模式下，更大窗口也可能有帮助。"
+    },
+    "d617f086ab89": {
+      "scene": "Memory",
+      "en": "Register names are available at decode, but effective memory addresses may depend on unfinished arithmetic. <bookmark mark='a'/> Here an older store waits for its address in a3, while a younger load already knows s0 plus four. <bookmark mark='b'/> If their byte ranges overlap, the load must observe the correct older store's bytes, perhaps through forwarding or after waiting. Equal starting addresses are only one overlap case. <bookmark mark='c'/> Disjoint byte ranges remove this particular dependency, though resources and other ordering rules still apply. <bookmark mark='d'/> Until the store address is known, the core must either wait conservatively or speculate and later check. That is the memory-disambiguation problem in this single-core model.",
+      "zh": "寄存器名称在译码时已知，但有效内存地址可能依赖尚未完成的计算。<bookmark mark='a'/>这里较老存数等待寄存器 a3 中的地址，较年轻取数已知地址为 s0 加四。<bookmark mark='b'/>如果它们访问的字节范围重叠，取数必须看到正确的较老存数所写的字节，可能通过转发，也可能先等待。起始地址相等只是重叠的一种情况。<bookmark mark='c'/>字节范围互不相交时，这一项依赖消失，但资源和其他顺序规则仍然有效。<bookmark mark='d'/>存数地址尚未确定时，核必须保守等待，或者先推测、之后再检查。这就是这个单核模型中的内存消歧问题。"
+    },
+    "882854b4db46": {
+      "scene": "Memory",
+      "en": "The load and store queues retain program-order relationships among memory operations. <bookmark mark='a'/> In this simulator, stores compute address and data early but write the byte array only at retirement. A squashed store does not commit that write. Real processors can have earlier store-related cache or coherence effects, which this rule does not model. <bookmark mark='b'/> A load searches for the youngest relevant older store. If that store covers all requested bytes and its data is ready, it can forward the value. This implementation waits on partial overlaps rather than merging several stores. <bookmark mark='c'/> Conservative disambiguation waits for unknown older store addresses. Speculative disambiguation proceeds and checks later. The load-PC wait table conservatively retrains previously violating loads; it is a simplified policy inspired by historical load-wait predictors, not a complete store-set predictor.",
+      "zh": "取数与存数队列保留内存操作之间的程序顺序。<bookmark mark='a'/>本模拟器可以提前计算存数地址和数据，但只在提交时写字节数组。被清除的存数不会提交该写入。真实处理器可能更早产生与存数有关的缓存或一致性效果，这条模型规则没有覆盖那些效果。<bookmark mark='b'/>取数寻找最近且相关的较老存数。如果它覆盖全部所需字节，而且数据已就绪，就能转发结果。本实现遇到部分重叠会等待，不会合并多个存数。<bookmark mark='c'/>保守策略等待地址未知的较老存数；推测策略先执行、之后检查。按取数位置索引的等待表会让曾违规的取数转为保守等待。这是受历史取数等待预测器启发的简化策略，不是完整的存数集合预测器。"
+    },
+    "9a3d8e41e36f": {
+      "scene": "Memory",
+      "en": "This recorded example makes the ordering mistake visible. <bookmark mark='a'/> A younger load executes before the older store's address is ready and reads zero from memory. <bookmark mark='b'/> The delayed address resolves to the same word, which the older store must write with seventy-seven. <bookmark mark='c'/> The model detects the overlapping younger load, squashes it and its dependents, and refetches. The corrected load obtains seventy-seven after the required older-store ordering is respected. In this recording the store retires before the replayed load starts; forwarding can satisfy other valid cases before a store retires. <bookmark mark='d'/> The speculative run takes thirty-five cycles and the conservative one twenty-nine. Speculation is not always faster: a wrong guess can cost more than the waiting it avoided.",
+      "zh": "这个记录下来的例子让顺序错误清楚可见。<bookmark mark='a'/>较年轻取数在较老存数地址就绪之前执行，从内存读到零。<bookmark mark='b'/>延迟的地址最终指向同一个字，较老存数必须把七十七写到那里。<bookmark mark='c'/>模型发现重叠的较年轻取数，清除它和依赖者，然后重新取指。修正后的取数遵守较老存数顺序，得到七十七。在这段记录中，存数先提交，重放的取数随后才启动；其他合法情形也可能在存数提交之前通过转发满足取数。<bookmark mark='d'/>推测运行用三十五个周期，保守运行用二十九个周期。推测并非总是更快：猜错的代价可能超过省下的等待。"
+    },
+    "7a32e7ec219e": {
+      "scene": "Memory",
+      "en": "Now use a histogram workload with fifteen hundred fixed-seed samples. Each sample sits on a separate modeled cache line, and its value selects the counter to update. <bookmark mark='a'/> A sample miss delays the older store's counter address. Waiting behind every such unknown address makes this conservative run expensive. <bookmark mark='b'/> Speculating allows later loads to overlap those misses, greatly reducing this workload's modeled cycles. <bookmark mark='c'/> The twenty-three violations are dynamic detected events across the run, not twenty-three distinct static load instructions. The wait-table run changes which loads wait after observed violations. <bookmark mark='d'/> These results depend on the generated samples, cache model and queue policy. Real processor memory-order recovery events have architecture-specific counters and meanings; availability and access permissions must be checked on the particular machine.",
+      "zh": "现在换成包含一千五百个固定种子样本的直方图负载。每个样本位于独立的模型缓存行，它的值决定更新哪个计数器。<bookmark mark='a'/>样本缺失会延迟较老存数的计数器地址。若等待每个这样的未知地址，保守运行就会很慢。<bookmark mark='b'/>推测允许后续取数与这些缺失重叠，大幅减少这个负载的模型周期。<bookmark mark='c'/>二十三次违规是完整运行中检测到的动态事件，不是二十三条不同的静态取数指令。等待表运行会根据已观察到的违规，改变哪些取数需要等待。<bookmark mark='d'/>结果取决于生成样本、缓存模型和队列策略。真实处理器的内存顺序恢复事件具有架构特定的计数器与含义，必须检查具体机器是否支持，以及是否有访问权限。"
+    },
+    "5e5a09ffa455": {
+      "scene": "Memory",
+      "en": "The Job's first chapter behaves differently. <bookmark mark='a'/> All three tested disambiguation policies give the same four hundred thirty-seven thousand five hundred eighty model cycles. <bookmark mark='b'/> Its recorded trace has a hundred fifty-four thousand eight hundred thirty-five loads and five thousand two hundred seventy stores. Stores update counts, table metadata and the letter pool. These runs show no benefit from changing the tested policy; they do not prove that every load is independent or that memory disambiguation never matters. Different workloads expose different bottlenecks.",
+      "zh": "任务第一章的情况不同。<bookmark mark='a'/>三种已测试消歧策略都得到相同的四十三万七千五百八十个模型周期。<bookmark mark='b'/>记录的轨迹包含十五万四千八百三十五次取数和五千二百七十次存数。存数既更新计数，也写词表元数据和字母池。这些运行没有从改变所测策略中获益，但没有证明所有取数都独立，也没有证明内存消歧永远不重要。不同负载暴露不同瓶颈。"
+    },
+    "47fe3c172be2": {
+      "scene": "Spectre",
+      "en": "We will demonstrate a cache timing channel entirely inside the functional simulator. The victim and observer share its byte-array memory and a probe array. The observer can evict and time probe lines using model devices. <bookmark mark='a'/> Allocate two hundred fifty-six probe lines, one for each possible byte value. The diagram shows sixteen of them. <bookmark mark='b'/> A victim access leaves its selected line in the modeled cache. Access assigns a two-cycle hit or sixty-cycle miss and allocates a missed line immediately; it is a simplified cache model. <bookmark mark='c'/> Timing later accesses distinguishes a warm line from cold ones; the measured interval includes the timer and surrounding instructions. <bookmark mark='d'/> Flush-and-reload-style attacks exploit this kind of observable shared state on suitable hardware. Our demonstration supplies those sharing and timing assumptions explicitly and does not extract secrets from the host processor.",
+      "zh": "我们完全在功能模拟器内演示缓存计时通道。受害代码与观察者共享模型字节数组和探测数组，观察者可以通过模型设备逐出缓存行并计时。<bookmark mark='a'/>分配二百五十六条探测行，对应每个可能字节值，图中只画十六条。<bookmark mark='b'/>受害代码的访问会让选中的行留在模拟缓存里。模型指定命中两个周期、缺失六十个周期，并在缺失访问时立即分配缓存行；这是简化缓存模型。<bookmark mark='c'/>之后计时访问，就能区分热行和冷行。测量区间还包含计时器与周围指令。<bookmark mark='d'/>在条件合适的硬件上，冲刷后重载一类攻击会利用这种可观察的共享状态。本演示明确提供共享与计时条件，并不从宿主处理器中提取秘密。"
+    },
+    "0b1e4df53fe7": {
+      "scene": "Spectre",
+      "en": "The victim interface accepts an unsigned word-sized index and a nonempty sixteen-byte array. <bookmark mark='a'/> On architectural execution, the unsigned bounds check rejects indices at or above the array size. An accepted byte selects one probe line. <bookmark mark='b'/> The assembly uses an unsigned branch, then loads the byte and shifts it by six to select a sixty-four-byte line. The adjacent secret is outside the victim interface's permitted array, but inside the same modeled address space. This is a software bounds policy, not a hardware page-permission boundary. <bookmark mark='c'/> The secret bytes spell PEBBLE and begin at index sixteen. Correct architectural control flow rejects those indices. The experiment asks whether transient execution can nevertheless encode their values in the simulated cache.",
+      "zh": "受害接口接收一个无符号机器字索引，数组非空，长度为十六字节。<bookmark mark='a'/>按体系结构执行时，无符号边界检查会拒绝大于等于数组大小的索引，被接受的字节用于选择探测行。<bookmark mark='b'/>汇编先执行无符号分支，再取出字节并左移六位，选择六十四字节的缓存行。相邻秘密位于受害接口允许数组之外，但仍在同一个模型地址空间内。这是软件边界策略，不是硬件页权限边界。<bookmark mark='c'/>秘密字节拼成 PEBBLE，从索引十六开始。正确的体系结构控制流会拒绝这些索引。实验要问的是，瞬态执行是否仍能把它们编码进模拟缓存。"
+    },
+    "dd34602e34e6": {
+      "scene": "Spectre",
+      "en": "Follow the actual program order in the simulated attack. <bookmark mark='a'/> First flush all probe lines, then make six in-bounds training calls. The allowed array contains zeros, so those calls warm probe line zero. <bookmark mark='b'/> Next evict the size variable and execute the model's timer barrier before the attack call. The next bounds check must wait for the modeled miss. <bookmark mark='c'/> Call with index sixteen, then successive secret positions. Prediction follows the in-bounds path while the size is delayed. A transient byte load reads P and a dependent access selects its probe line. The timing diagram illustrates that overlap; it is not a gate-level timing trace. <bookmark mark='d'/> Once the size arrives, the branch rejects the index and squashes younger architectural results. The selected probe line remains warm in this model. That observable cache effect is exactly why saying the access never happened would be wrong.",
+      "zh": "按模拟攻击程序的实际顺序来走。<bookmark mark='a'/>先逐出全部探测行，再调用六次合法索引进行训练。合法数组里全是零，因此训练会把探测行零变热。<bookmark mark='b'/>然后逐出大小变量，并在攻击调用前执行模型计时器屏障。下一次边界检查必须等待模型缺失。<bookmark mark='c'/>用索引十六调用，之后依次使用秘密位置。大小尚未返回时，预测沿合法路径前进，瞬态字节取数读出 P，依赖访问选择它对应的探测行。时序图示意这种重叠，不是门级时序记录。<bookmark mark='d'/>大小返回后，分支拒绝该索引，清除较年轻的体系结构结果。但模型中被选中的探测行仍是热的。正因为这个缓存效果可被观察，不能说那次访问从未发生。"
+    },
+    "d8cd3d7d2a26": {
+      "scene": "Spectre",
+      "en": "The actual attack probes indices one through two hundred fifty-five. Line zero is intentionally omitted because the training calls warm it, so this simple decoder cannot recover a zero-valued secret byte. <bookmark mark='a'/> Each plotted measurement is the difference between two model-counter reads around one probe access. <bookmark mark='b'/> In the first round, line eighty, ASCII P, is the uniquely fast tested line. It takes five measured cycles versus sixty-three for the other tested lines, including timing overhead. <bookmark mark='c'/> Repeating the procedure recovers the six supplied nonzero secret bytes, PEBBLE, in this model. That is a concrete simulated witness under the stated shared-memory and timing capabilities, not evidence of a leak from arbitrary host memory.",
+      "zh": "实际攻击只探测索引一到二百五十五。训练会把行零变热，所以故意排除它；这个简单解码器因而无法恢复值为零的秘密字节。<bookmark mark='a'/>图中每次测量都是围绕一次探测访问，读取两次模型计数器后求差。<bookmark mark='b'/>第一轮唯一快的已测行是八十，即 ASCII 的 P。包含计时开销后，它用五个周期，其他已测行用六十三个周期。<bookmark mark='c'/>重复这个过程，就能在模型中恢复给定的六个非零秘密字节 PEBBLE。这是在已说明的共享内存与计时能力下的具体模拟例证，不是从任意宿主内存泄漏的证据。"
+    },
+    "24b17dd6278f": {
+      "scene": "Spectre",
+      "en": "Compare two mitigations for this gadget. <bookmark mark='a'/> The first inserts our custom serializing timer read after the check. In this program its known device address lets the model recognize the barrier and prevent younger issue until it retires. This is not a universal description of x86 RDTSC or LFENCE; real barriers require the specified ISA and vendor protocol. <bookmark mark='b'/> The second makes the array index depend on the unsigned bounds result: all ones for an allowed index, zero otherwise. <bookmark mark='c'/> Here array element zero exists, so the out-of-bounds transient path is redirected to a valid element. Compilers and hardware must preserve the dependency for such hardening to work. <bookmark mark='d'/> Both tested runs fail to recover the supplied secret from the nonzero probe lines. That finite result is not a proof against every speculative channel. <bookmark mark='e'/> The benign-call costs shown below are specific to this program and model. Real applications need their own correctness, performance and threat-model evaluation.",
+      "zh": "比较这个片段的两种缓解办法。<bookmark mark='a'/>第一种在检查后插入自定义串行化计时器读取。这个程序中的设备地址已知，模型能识别屏障，并阻止较年轻指令发射，直到它提交。这不是对 x86 计时指令或 LFENCE 的通用描述，真实屏障必须遵循指令集和厂商规定的协议。<bookmark mark='b'/>第二种让数组索引依赖无符号边界比较结果：合法时掩码全一，否则全零。<bookmark mark='c'/>这里数组元素零确实存在，所以越界瞬态路径会转到合法元素。编译器和硬件必须保留依赖，这种加固才有效。<bookmark mark='d'/>两个已测试运行都无法从非零探测行恢复给定秘密，但有限结果并不是对所有推测通道的证明。<bookmark mark='e'/>下面的正常调用成本仅适用于本程序和模型。真实应用需要单独评估正确性、性能与威胁模型。"
+    },
+    "99c3f9af5c70": {
+      "scene": "Spectre",
+      "en": "Spectre and Meltdown were publicly disclosed in January 2018, with variants affecting different processor implementations. <bookmark mark='a'/> Spectre-style attacks manipulate predictions to induce transient computations that reveal information through observable microarchitectural state. Our example is bounds-check bypass, not every Spectre variant. <bookmark mark='b'/> Meltdown's original attack exploited delayed enforcement of access restrictions on affected processors. Its prerequisites and mitigations differ from this shared-address-space victim-interface experiment. <bookmark mark='c'/> Operating systems, browsers, compilers and processors have adopted multiple defenses, including isolation, hardening and prediction controls. Their applicability depends on architecture, version, configuration and threat model. Speculation does not by itself imply that every implementation is vulnerable to every attack, and precise architectural exceptions alone do not establish security.",
+      "zh": "幽灵与熔断在二零一八年一月公开披露，不同变体影响不同处理器实现。<bookmark mark='a'/>幽灵类攻击操纵预测，诱发瞬态计算，再通过可观察的微体系结构状态泄漏信息。这里的例子是边界检查绕过，不代表全部幽灵变体。<bookmark mark='b'/>最初的熔断攻击利用受影响处理器延迟落实访问限制的行为，其前提和缓解方法，与这里共享地址空间的受害接口实验不同。<bookmark mark='c'/>操作系统、浏览器、编译器和处理器采用了隔离、加固、预测控制等多种防御，适用性取决于架构、版本、配置和威胁模型。采用推测执行，不表示每种实现都会受到每种攻击；仅有精确体系结构异常，也不能证明安全。"
+    },
+    "5993afa02224": {
+      "scene": "Vliw",
+      "en": "Dynamic scheduling spends hardware on dependency checking, wakeup and selection. <bookmark mark='a'/> A straightforward W-wide rename stage compares destinations and sources within the incoming group, giving a quadratic family of comparisons. Implementations can organize that logic differently. <bookmark mark='b'/> Waiting instructions must learn when their operands become available, and ready operations must compete for resources. <bookmark mark='c'/> Very Long Instruction Word designs move more scheduling decisions into the compiler, which places operations into explicit issue groups. <bookmark mark='d'/> The hardware still decodes, executes and handles the ISA's timing, memory and exception rules. Some designs retain interlocks, caches and variable-latency operations. Static scheduling changes where decisions are made; it does not eliminate every hardware scheduling or correctness mechanism.",
+      "zh": "动态调度需要硬件检查依赖、唤醒指令并选择操作。<bookmark mark='a'/>直接实现的 W 宽重命名阶段会比较同批输入中的目标与源，形成一组二次规模的比较，但实现可以采用不同组织方式。<bookmark mark='b'/>等待指令需要知道操作数何时可用，就绪操作还必须竞争资源。<bookmark mark='c'/>超长指令字设计把更多调度决定交给编译器，把操作放进明确的发射组。<bookmark mark='d'/>硬件仍须译码、执行，并落实指令集的时序、内存与异常规则。有些设计保留互锁、缓存和变延迟操作。静态调度改变的是决定发生在哪里，并没有消除所有硬件调度或正确性机制。"
+    },
+    "a9c69be5a68d": {
+      "scene": "Vliw",
+      "en": "Use the six-operation mismatched-length path as a scheduling illustration with four start slots. This is not an executable VLIW translation of the whole search. <bookmark mark='a'/> Under the chart's same-bundle read-before-write convention, the load and table-end test read old register versions while the increments produce later versions. That convention must be part of a real target's semantics. <bookmark mark='b'/> With a two-cycle load and these fixed data dependencies, the comparison cannot start in the next cycle, leaving an empty bundle in this candidate schedule. <bookmark mark='c'/> The displayed operations occupy three cycles and six of twelve slots. Actual exits, multiple control operations in a bundle, safe early loads and side effects need a complete control and guard policy before this could replace the original program.",
+      "zh": "用长度不匹配路径的六个操作，演示四个启动槽的调度。这不是整个搜索的可执行超长指令字翻译。<bookmark mark='a'/>图中约定同一束先读后写，因此取数与表尾检查读取旧寄存器版本，递增产生后续版本。真实目标必须明确支持这样的语义。<bookmark mark='b'/>取数延迟两个周期，在固定数据依赖下，比较不能紧接下一周期启动，这个候选调度因此空出一束。<bookmark mark='c'/>图中操作占三个周期，十二个槽里用了六个。实际退出、一束中的多个控制操作、提前取数的安全性与副作用，都需要完整的控制和保护策略，才能代替原程序。"
+    },
+    "ae91fffc480a": {
+      "scene": "Vliw",
+      "en": "Software pipelining overlaps operations from successive loop trips. The colors distinguish trips in this fixed-path scheduling illustration. <bookmark mark='a'/> Address increments permit some work for the next trip to begin before the previous trip's load-dependent comparison finishes. Here the modulo placement satisfies the displayed data and start-slot constraints. <bookmark mark='b'/> Six operations and four slots give a resource initiation-interval lower bound of two cycles; the one-cycle address recurrence gives another lower bound of one. Their maximum is two. A complete loop implementation must also preserve live versions, define control within bundles, handle startup and drain, guard speculative loads, and recover on exits. The picture does not verify those full-program requirements or establish an achieved hardware throughput.",
+      "zh": "软件流水把连续几趟循环的操作重叠起来，颜色在这张固定路径调度图中区分不同趟次。<bookmark mark='a'/>地址递增使下一趟部分工作能够早于上一趟依赖取数的比较开始。这里的模排布满足图中的数据与启动槽约束。<bookmark mark='b'/>六个操作、四个槽，给出的资源启动间隔下界是两个周期；单周期地址递推给出另一个下界，一个周期。二者最大值为二。完整循环实现还须保留存活版本、规定束内控制、处理启动与排空、保护推测取数，并在退出时恢复。这张图没有验证那些全程序要求，也没有证明实际硬件达到该吞吐量。"
+    },
+    "32f88984fc65": {
+      "scene": "Vliw",
+      "en": "Static and dynamic scheduling make different trade-offs. <bookmark mark='a'/> Cache misses and variable execution times can invalidate a compiler's preferred timing. Depending on the ISA, interlocks or other mechanisms preserve correctness, sometimes by stalling. <bookmark mark='b'/> Data-dependent branches require control flow, predication, speculation or guarded schedules; a compiler need not know every runtime outcome in advance. <bookmark mark='c'/> A schedule tuned for one implementation can perform poorly on another. Compatible hardware can preserve the program's meaning without recompilation; a changed width does not automatically make old code wrong. <bookmark mark='d'/> Itanium's EPIC approach included features such as predication and advanced loads and faced several commercial and technical challenges. One simple bundle chart cannot explain its whole history. <bookmark mark='e'/> VLIW remains useful in some DSPs and accelerators, where workload knowledge and implementation choices can make static scheduling attractive, even when real systems still contain caches or variable-latency events.",
+      "zh": "静态与动态调度有不同权衡。<bookmark mark='a'/>缓存缺失和变化的执行时间会破坏编译器偏好的时序。指令集不同，互锁或其他机制会负责保持正确性，有时需要停顿。<bookmark mark='b'/>依赖数据的分支需要控制流、谓词、推测或受保护调度；编译器不必预先知道每次运行结果。<bookmark mark='c'/>针对一种实现优化的调度，在另一种实现上可能表现不好，但兼容硬件可以在不重新编译的情况下保持程序含义。宽度改变不会自动让旧代码出错。<bookmark mark='d'/>安腾的显式并行方法包含谓词与高级取数等特性，并面临多方面商业和技术挑战，一张简单指令束图无法解释全部历史。<bookmark mark='e'/>超长指令字仍用于一些数字信号处理器与加速器。对负载的了解和实现选择，可能使静态调度有吸引力，即使系统仍有缓存或变延迟事件。"
+    },
+    "692c459865ad": {
+      "scene": "Risc",
+      "en": "Return to execution time: instruction count times cycles per instruction times clock period. <bookmark mark='a'/> Rich instructions can express more work per architectural instruction, reducing the count for some programs. Their implementation may use direct hardware or microcode; not every complex instruction is slow or microcoded. <bookmark mark='b'/> RISC projects emphasized simpler operations, regular encoding and efficient pipelines. The goal of starting or completing one operation per cycle is a throughput goal, not a claim that every load, divide or other instruction has one-cycle latency. <bookmark mark='c'/> Compiler quality, memory behavior and implementation choices affect all three factors in the equation, so instruction-set labels alone do not determine performance. <bookmark mark='d'/> IBM 801, Berkeley RISC and Stanford MIPS are influential examples. Their lessons concern measured workload and implementation trade-offs, rather than a universal rule that fewer instructions or simpler instructions must always win.",
+      "zh": "回到执行时间：指令数乘每指令周期，再乘时钟周期。<bookmark mark='a'/>丰富指令可以在一条体系结构指令中表达更多工作，为某些程序减少指令数。实现可能使用直接硬件或微码，并非每条复杂指令都慢或都用微码。<bookmark mark='b'/>精简指令集项目强调较简单的操作、规整编码与高效流水线。每周期启动或完成一个操作是吞吐目标，不是说每次取数、除法或其他指令的延迟都只有一个周期。<bookmark mark='c'/>编译器质量、内存行为与实现选择会影响公式中的三个因子，仅凭指令集标签不能确定性能。<bookmark mark='d'/>IBM 801、伯克利精简指令集和斯坦福 MIPS 是有影响的例子。它们的经验在于测量负载与实现权衡，不是“指令更少”或“指令更简单”就永远更快的通用法则。"
+    },
+    "7e1963aca2b8": {
+      "scene": "Risc",
+      "en": "This is the Job's dynamic instruction mix on Pebble, not a measured translation to another ISA. <bookmark mark='a'/> Its arithmetic, branches, loads and jumps dominate the recorded chapter. <bookmark mark='b'/> An x86 compare can read a memory operand directly, but the conditional jump still remains. Our Pebble load followed by a combined compare-and-branch can therefore map to a memory compare plus a jump: two architectural instructions, not one. <bookmark mark='c'/> The trace heuristic finds ninety thousand seven hundred twenty-six loads whose result feeds the next instruction and soon becomes dead. That is about fifty-nine percent of the loads. It is a local use pattern, not a count of legal folded x86 instructions or an eleven-percent instruction reduction. Addressing, flags, branches, register allocation and actual code generation must be included in such a comparison.",
+      "zh": "这是任务在 Pebble 上的动态指令组成，不是翻译到另一种指令集后的实测结果。<bookmark mark='a'/>记录的这一章主要由算术、分支、取数和跳转组成。<bookmark mark='b'/>x86 比较可以直接读取内存操作数，但条件跳转仍然存在。因此 Pebble 的取数加一条比较分支，可能对应内存比较加跳转，仍是两条体系结构指令，不是一条。<bookmark mark='c'/>轨迹启发式找到九万零七百二十六次取数，其结果供下一条指令使用，并很快失效，约占全部取数的百分之五十九。这是局部使用模式，不是合法 x86 折叠指令数量，也不是指令减少百分之十一。真正比较还必须考虑寻址、标志、分支、寄存器分配与实际代码生成。"
+    },
+    "67f141f1744a": {
+      "scene": "Risc",
+      "en": "Many modern x86 implementations decode architectural instructions into internal micro-operations. <bookmark mark='a'/> This conceptual read-modify-write example separates memory reading, arithmetic and memory writing; exact micro-operations and flags behavior depend on the implementation. <bookmark mark='b'/> An out-of-order design can rename and schedule those internal operations. They are not literally a separate RISC instruction set, and not every x86 processor uses the same organization. <bookmark mark='c'/> Some designs fuse a load with an operation for part of the pipeline; macro-fusion of a compare and conditional branch is a different mechanism. Architectural instruction counts, reorder-buffer entries and execution operations can therefore differ. <bookmark mark='d'/> Encoding is another independent choice. x86 uses variable-length encodings; some RISC ISAs also mix lengths, including Thumb and compressed RISC-V. A base instruction-set category does not specify every pipeline detail.",
+      "zh": "许多现代 x86 实现把体系结构指令译成内部微操作。<bookmark mark='a'/>这个概念性的读改写例子把内存读取、算术与内存写入分开；具体微操作和标志行为取决于实现。<bookmark mark='b'/>乱序设计可以对内部操作重命名和调度。它们并不真的是另一套精简指令集，也不是所有 x86 处理器都采用相同组织。<bookmark mark='c'/>某些设计会在部分流水线中把取数与运算融合，而比较和条件跳转的宏融合是另一种机制。因此体系结构指令数、重排序表项数与执行操作数可能不同。<bookmark mark='d'/>编码是另一个独立选择。x86 使用变长编码，有些精简指令集也混合长度，例如 Thumb 与压缩 RISC-V。指令集的基本类别不能决定全部流水线细节。"
+    },
+    "54eef854d93c": {
+      "scene": "Risc",
+      "en": "Instruction sets preserve software investments while implementations evolve. <bookmark mark='a'/> x86 compatibility is extensive, but availability depends on execution mode, extensions and operating-system support; not literally every instruction from 1978 runs unchanged in every modern mode. <bookmark mark='b'/> Arm designs span many implementations and markets, with distinct instruction-set states and encoding choices. <bookmark mark='c'/> RISC-V provides an open ISA that can be implemented without an ISA license royalty. That does not remove every other IP, implementation or compliance cost. <bookmark mark='d'/> MIPS and other architectures also shaped processors and teaching systems. Across these families, evaluate the generated program and the specific implementation using instruction counts, timing and resource measurements, rather than treating RISC or CISC as a complete performance prediction.",
+      "zh": "指令集保护已有软件投入，具体实现则不断变化。<bookmark mark='a'/>x86 兼容范围很广，但可用性取决于执行模式、扩展和操作系统支持，并非一九七八年以来的每条指令都能在所有现代模式下原样执行。<bookmark mark='b'/>Arm 设计涵盖许多实现与市场，具有不同指令集状态和编码选择。<bookmark mark='c'/>RISC-V 是开放指令集，可以不支付指令集许可版税而实现，但不表示不存在其他知识产权、实现或合规成本。<bookmark mark='d'/>MIPS 等架构也影响了处理器和教学系统。比较这些家族时，应测量生成程序与具体实现的指令数、时序及资源，而不是把精简或复杂标签当成完整性能预测。"
+    },
+    "d8152adc94ff": {
+      "scene": "Smt",
+      "en": "This grid shows starts in a twenty-four-cycle sample from the offline trace scheduler, with four start slots per cycle. It is not an issue-activity recording from the functional core. <bookmark mark='a'/> Fifty-eight of its ninety-six displayed slots contain scheduled instructions. The empty cells are directly counted in this particular sample. <bookmark mark='b'/> Separately, the functional core retires about one point nine instructions per cycle. Retired IPC cannot tell us how many issue slots were used: wrong-path and replayed operations may execute without retiring. Our implementation also has a different total execution-start limit from its four-wide front end. <bookmark mark='c'/> The useful question is whether another independent thread can share resources and improve aggregate throughput, under an explicitly stated scheduling model. Neither the grid nor retired IPC measures powered idle hardware or energy consumption.",
+      "zh": "这张格子图来自离线轨迹调度器的二十四周期片段，每周期四个启动槽，并不是功能模型核的发射活动记录。<bookmark mark='a'/>图中九十六个槽，有五十八个安排了指令，空格是这个特定片段里直接统计出来的。<bookmark mark='b'/>另一个统计是功能模型核每周期提交约一点九条指令。提交吞吐无法告诉我们用了多少发射槽，因为错误路径和重放操作可能执行却不提交。而本实现的总执行启动上限，也不同于四宽前端。<bookmark mark='c'/>有用的问题是：在明确的调度模型中，另一条独立线程能否共享资源，提高总吞吐。格子图与提交吞吐都没有测量空闲硬件是否通电，也没有测量能耗。"
+    },
+    "1200f8276653": {
+      "scene": "Smt",
+      "en": "Simultaneous multithreading lets operations from different threads share execution resources. Tullsen, Eggers and Levy's 1995 paper is an influential study of this approach. <bookmark mark='a'/> Here we interleave two known Job traces in an offline oracle scheduler, sharing four start slots and giving each thread its own dependency state, control barriers and half of the start-distance allowance. This is not a functionally verified SMT implementation of Pebble. <bookmark mark='b'/> Real SMT needs per-thread architectural, retirement, exception and recovery state, plus ownership information for shared queues. PCs, register mappings and branch history alone are not enough. Sharing and partitioning policies vary by design. <bookmark mark='c'/> The colored grid illustrates how one thread can use cycles where another lacks ready work. Actual fairness, cache contention, recovery and isolation require a fuller machine and workload analysis.",
+      "zh": "同时多线程让不同线程的操作共享执行资源。图尔森、埃格斯和利维一九九五年的论文，是这条路线的重要研究。<bookmark mark='a'/>这里用离线先知调度器交错安排两条已知任务轨迹，共享四个启动槽，每个线程保留自己的依赖状态、控制屏障，以及一半的启动距离额度。这不是经过功能验证的 Pebble 同时多线程实现。<bookmark mark='b'/>真实同时多线程还需要每线程的体系结构、提交、异常和恢复状态，以及共享队列的归属信息。只有程序计数器、寄存器映射与分支历史远远不够，不同设计的共享和划分策略也不同。<bookmark mark='c'/>彩色格子说明一个线程如何利用另一线程缺少就绪工作的周期。实际公平性、缓存争用、恢复与隔离，都需要更完整的机器和负载分析。"
+    },
+    "d2a2a5ac6dda": {
+      "scene": "Smt",
+      "en": "These bars report combined throughput in the same offline scheduling study. The traces are truncated to equal instruction counts, and both must finish. <bookmark mark='a'/> With four start slots and the stated lookahead allowance, one trace averages about two point seven instructions per cycle; the two together reach about three point seven. <bookmark mark='b'/> At eight slots, the aggregate improvement is larger for these particular traces and assumptions. This is not a universal scaling rule or a measurement of a production SMT processor. <bookmark mark='c'/> Real sharing can improve aggregate throughput while slowing an individual thread, and results depend on workload, partitioning and contention. Fairness, latency, energy and security are separate evaluation axes. Timing interactions between threads can also expose information, so throughput alone is not a complete design objective.",
+      "zh": "柱状图报告同一个离线调度研究中的合计吞吐。两条轨迹被截成相同指令数，并且都必须完成。<bookmark mark='a'/>采用四个启动槽和已说明的向前查看额度时，一条轨迹平均每周期约二点七条指令，两条合计约三点七。<bookmark mark='b'/>八个槽时，这些特定轨迹与假设下的合计增益更大。这不是通用扩展规律，也不是量产同时多线程处理器的测量。<bookmark mark='c'/>真实共享可能提高总吞吐，同时拖慢单条线程，结果取决于负载、划分与争用。公平性、延迟、能耗和安全是不同评估维度，线程间计时交互也可能暴露信息，所以吞吐不是完整的设计目标。"
+    },
+    "ac884872debf": {
+      "scene": "Rename",
+      "en": "These five instructions illustrate register dependencies and name hazards. <bookmark mark='a'/> The first load produces the value used by the following add. Without value prediction, that add must wait for its actual input: a read-after-write dependence. <bookmark mark='b'/> The second load reuses a0. If all versions shared one storage location, it must not overwrite the old value before the earlier add reads it: a write-after-read hazard. <bookmark mark='c'/> The two loads also reuse the destination name, creating a write-after-write hazard in such an organization. <bookmark mark='d'/> Those last hazards arise from storage-name reuse, not a value passing between the operations. Separate live versions remove them. The genuine producer-consumer chains, and any memory, control or resource constraints, still have to be respected.",
+      "zh": "这五条指令说明寄存器数据依赖与名称冒险。<bookmark mark='a'/>第一次取数产生随后加法使用的值。不采用值预测时，加法必须等待实际输入，这就是写后读依赖。<bookmark mark='b'/>第二次取数重用 a0。如果所有版本共享一个存储位置，就不能在先前加法读取旧值之前覆盖它，这就是读后写冒险。<bookmark mark='c'/>两次取数也重用目标名称，在这种组织中造成写后写冒险。<bookmark mark='d'/>后两种冒险来自存储名称重用，不是操作之间传递了值。分开存活版本就能消除它们，但真正的产生者与使用者链，以及内存、控制或资源约束仍必须遵守。"
+    },
+    "8573dffc90f5": {
+      "scene": "Cores",
+      "en": "These are reported retirement-tracking capacities in a historical selection of cores from 1995 through 2024. The entries do not all count the same thing: architectural instructions, micro-operations and fused operations must be distinguished. <bookmark mark='a'/> The early examples include Pentium Pro, MIPS R10000 and Alpha 21264. <bookmark mark='b'/> Later examples include Core 2, Sandy Bridge, Haswell, Skylake and Zen. Their capacities increased as implementations changed, but capacity alone does not predict workload performance. <bookmark mark='c'/> Sunny Cove, Golden Cove, Zen 4 and Zen 5 extend this historical sample. Apple Firestorm is shown separately: Dougall Johnson's reverse-engineered notes describe about three hundred thirty coalesced retire groups and six hundred twenty-three rename-retire entries. A single six-hundred-thirty-instruction ROB dot would hide that distinction. <bookmark mark='d'/> Our model tracks a hundred twenty-eight architectural instructions and is never full on this chapter; its entries are not directly interchangeable with every hardware entry on the plot.",
+      "zh": "图中选取一九九五至二零二四年的历史处理器，展示公开报告的提交跟踪容量。表项计算的对象并不完全相同，需要区分体系结构指令、微操作和融合操作。<bookmark mark='a'/>早期例子包括 Pentium Pro、MIPS R10000 与 Alpha 21264。<bookmark mark='b'/>之后有 Core 2、Sandy Bridge、Haswell、Skylake 和 Zen。容量随着实现变化而增加，但仅凭容量不能预测负载性能。<bookmark mark='c'/>Sunny Cove、Golden Cove、Zen 4 与 Zen 5 延伸了这组历史样本。苹果 Firestorm 单独说明：道格尔·约翰逊的逆向测量笔记描述约三百三十个合并提交组，以及六百二十三个重命名提交表项。把它画成一个六百三十条指令的重排序点，会掩盖这种区别。<bookmark mark='d'/>本模型跟踪一百二十八条体系结构指令，在这一章从未占满，但它的表项不能与图中所有硬件表项直接互换。"
+    },
+    "174886e74868": {
+      "scene": "Cores",
+      "en": "Larger windows can expose independent work while a long-latency operation waits. <bookmark mark='a'/> As an illustration, a memory access lasting three hundred core cycles represents twelve hundred potential start opportunities at four per cycle. Whether they exist and can be reached depends on dependencies, prediction and resources; DRAM latency in cycles also depends on the clock and memory system. <bookmark mark='b'/> Branch accuracy varies with workload, predictor and measurement definition. A few misses per thousand instructions is not a universal property of typical code. <bookmark mark='c'/> Fetch, decode, dispatch, issue and retirement widths must be specified separately. Encoding, fusion and instruction mix change the operations counted at each stage. <bookmark mark='d'/> Larger tracking and selection structures cost area and energy. Banking, clustering, gating and other implementation choices change those costs. This discussion does not measure which structure is hottest or establish one universal best window size.",
+      "zh": "长延迟操作等待时，更大窗口可能发现独立工作。<bookmark mark='a'/>例如一次内存访问若持续三百个核周期，每周期四次启动就对应一千二百个潜在机会。但这些工作是否存在、能否到达，取决于依赖、预测和资源；以周期计的动态内存延迟也取决于时钟与存储系统。<bookmark mark='b'/>分支准确率随负载、预测器与统计定义而变，每千条指令只错几次，并不是所谓典型代码的通用性质。<bookmark mark='c'/>取指、译码、派发、发射与提交宽度必须分别说明。编码、融合与指令组合会改变各阶段统计的操作数量。<bookmark mark='d'/>更大的跟踪和选择结构需要面积与能量，分组、聚类、门控等实现选择会改变成本。这里没有测量哪个结构最热，也没有确定一个通用最佳窗口大小。"
+    },
+    "106ca1227065": {
+      "scene": "Cores",
+      "en": "Check numbers against the source and the exact core model. <bookmark mark='a'/> Vendor manuals describe supported architectures and implementation guidance. Agner Fog's guide and independent measurements cover many designs. The uops.info project reports measured instruction properties for most instructions on many recent x86 microarchitectures, not every instruction on every processor. Reverse-engineered capacities should be labeled as estimates and their counted structures identified. <bookmark mark='b'/> Linux perf can expose supported performance events when hardware, kernel configuration and permissions allow. Events and definitions differ across vendors and models. Counters can test selected performance hypotheses, but they do not reveal every internal state shown by this simulator.",
+      "zh": "核对数字时，要检查来源与准确的核型号。<bookmark mark='a'/>厂商手册提供支持架构和实现指南，阿格纳·福格的指南与独立测量覆盖许多设计。uops.info 为许多较新的 x86 微架构报告大多数指令的实测性质，并非覆盖每台处理器上的每条指令。逆向得到的容量应标成估计，并明确统计的是哪一种结构。<bookmark mark='b'/>硬件、内核配置和权限允许时，Linux perf 可以读取支持的性能事件。事件及定义随厂商和型号变化。计数器能检验部分性能假设，但无法展示模拟器中可见的每一项内部状态。"
+    },
+    "4065a63d6f7a": {
+      "scene": "Job",
+      "en": "This stack is an accounting comparison, not a unique causal decomposition. <bookmark mark='a'/> Four-wide architectural retirement gives an ideal lower floor of one quarter cycle per retired instruction. It is not the total execution-start limit. <bookmark mark='b'/> The oracle-assisted run uses about zero point three one seven cycles per instruction; its gap above that floor includes the model's dependency, front-end and resource constraints. <bookmark mark='c'/> The tournament run uses about zero point five two nine. Their difference is a configuration gap, not a separately measured amount of time spent only on branches. <bookmark mark='d'/> Part 7's pipeline is another configuration, with about one point two cycles per instruction. <bookmark mark='e'/> The oracle-assisted core uses about forty percent fewer cycles than the tournament core on this chapter, with interactions among prediction, queues and memory recovery. The length test is important in the measured trace, but these comparisons do not prove its outcomes are unlearnable or assign every saved cycle to it.",
+      "zh": "这组堆叠图是记账式对比，不是唯一的因果分解。<bookmark mark='a'/>体系结构每周期最多提交四条指令，对应每条提交指令四分之一周期的理想下限，并不是总执行启动上限。<bookmark mark='b'/>先知辅助运行每条指令约用零点三一七周期，高于下限的差距包含模型的数据依赖、前端与资源约束。<bookmark mark='c'/>锦标赛运行约为零点五二九，两者之差是配置差距，不是单独测出的纯分支耗时。<bookmark mark='d'/>第七部分流水线是另一配置，每条指令约一点二周期。<bookmark mark='e'/>本章先知辅助核比锦标赛核少用约百分之四十周期，其中包含预测、队列和内存恢复之间的相互作用。长度检查在记录轨迹中很重要，但这些对比没有证明其结果无法学习，也不能把每个节省周期都归给它。"
+    },
+    "f529f4885c09": {
+      "scene": "Job",
+      "en": "A full cycle-by-cycle simulation of the corpus is expensive, so use a fitted projection and expose its limits. <bookmark mark='a'/> The training set contains twenty-four randomly selected text slices, four hundred to four thousand characters long. The actual inputs and byte-count features are UTF-8 encoded; the slice length metadata is not always the encoded byte length. <bookmark mark='b'/> Fit model cycles as a linear function of text features, including word counts, scanned entries and letter comparisons. <bookmark mark='c'/> One separate Moby-Dick slice has sixteen thousand characters and sixteen thousand nineteen encoded bytes. It takes about three point two nine million simulated cycles, and this fit predicts it within about zero point zero nine percent. That is one heldout check, not a full-corpus error bound or evidence that all unseen texts behave equally well. Host simulation speed also depends on machine and configuration.",
+      "zh": "逐周期模拟全部语料成本较高，因此采用拟合预测，并明确它的限制。<bookmark mark='a'/>训练集包含随机选择的二十四个文本片段，每段四百到四千字符。实际输入和字节数特征采用 UTF-8 编码，片段长度元数据不一定等于编码字节数。<bookmark mark='b'/>用文本特征线性拟合模型周期，包括单词数、扫描条目与字母比较等。<bookmark mark='c'/>另一个《白鲸》片段有一万六千字符，编码后是一万六千零一十九字节。它需要约三百二十九万个模拟周期，拟合预测的误差约为百分之零点零九。这只有一个留出检查，不是全语料误差上界，也不能证明所有未见文本都一样准确。宿主模拟速度还取决于机器与配置。"
+    },
+    "f29650729894": {
+      "scene": "Job",
+      "en": "Apply the fitted cycle model to the corpus's counted text features. <bookmark mark='a'/> It projects about fifty point seven billion cycles for about a hundred six point nine billion architectural instructions, an average IPC near two point one. Those corpus cycles were not obtained by running every instruction through this core. <bookmark mark='b'/> Converting them to time additionally assumes Part 7's teaching clock budget, about eight hundred eighty-five megahertz. This out-of-order design has no gate-level timing result establishing that frequency. The projected runtime is about fifty-seven seconds. <bookmark mark='c'/> At the shared assumed clock, the previous fitted pipeline row is about two and a half times slower. Both the cycle extrapolation and frequency assumptions travel with that ratio. The ledger is a transparent model comparison, not a measured complete-corpus hardware benchmark.",
+      "zh": "把拟合周期模型应用到语料统计出的文本特征。<bookmark mark='a'/>约一千零六十九亿条体系结构指令，预测需要约五百零七亿周期，平均每周期约二点一条。全语料周期并不是让每条指令都在这个核上运行得到的。<bookmark mark='b'/>把周期换成时间，还须采用第七部分的教学时钟预算，约八百八十五兆赫。这个乱序设计并没有门级时序结果来确定该频率，预测运行时间约五十七秒。<bookmark mark='c'/>在共同假定时钟下，前一项拟合流水线时间约慢二点五倍。比值同时带有周期外推与频率假设。账本提供透明的模型比较，不是完整语料的实测硬件基准。"
+    },
+    "99f68fba3c12": {
+      "scene": "Frontier",
+      "en": "Value prediction changes the dependency model by guessing a load's result before it is verified. <bookmark mark='a'/> Dependents can tentatively use a predicted value, then correctness requires validation and recovery if it was wrong. This can pass a dependency bound derived for waiting on actual values because the assumptions changed. <bookmark mark='b'/> Here a per-load-PC stride predictor learns from the recorded trace, with a confidence threshold. It is an offline scheduling study, including trace-supplied inputs, not an implemented functional value-predicting core. <bookmark mark='c'/> At eight start slots, the no-value-prediction baseline is about three point three four IPC; an oracle that guesses every load correctly reaches about three point nine eight under the other retained assumptions. <bookmark mark='d'/> The real heuristic predicts only a subset and makes mistakes, so its schedules are slower than the baseline at the shown thresholds. Correctness, coverage, prediction availability, I/O ordering and recovery cost must all be addressed before translating this exercise into hardware.",
+      "zh": "值预测在验证之前猜取数结果，因此改变了数据依赖模型。<bookmark mark='a'/>依赖者可以暂时使用预测值，但正确性要求之后验证，猜错时恢复。它可以越过“必须等待实际值”这一假设下的依赖界限，因为假设已经改变。<bookmark mark='b'/>这里按取数指令位置建立步长预测器，从记录轨迹学习，并使用置信阈值。这是包含轨迹预先提供输入的离线调度研究，不是已实现的功能性值预测核。<bookmark mark='c'/>八个启动槽时，不作值预测的基线约为每周期三点三四条；保留其他假设、每次都猜对取数的先知约为三点九八。<bookmark mark='d'/>实际启发式只预测一部分，而且会出错，因此图中各阈值下都比基线慢。要把练习转成硬件，必须处理正确性、覆盖率、预测何时可用、输入输出顺序与恢复成本。"
+    },
+    "f176c31ce715": {
+      "scene": "Frontier",
+      "en": "Accuracy alone does not determine whether value prediction pays. <bookmark mark='a'/> Benefit depends on which loads are covered, when predictions arrive, how much dependent work they unlock, and the cost of validation and mistakes. There is no universal ninety-nine-percent threshold. <bookmark mark='b'/> High-confidence value-prediction work, including Perais and Seznec's 2014 research, studies particular mechanisms and recovery choices. Our simple scheduler is not a reproduction of those designs. <bookmark mark='c'/> In the shown eight-slot configuration, perfect load guesses improve this trace schedule by about nineteen percent, while the simple stride heuristic loses performance. Both statements are conditional on the rest of the scheduler's assumptions, including its prediction barriers and idealized memory information. <bookmark mark='d'/> A useful research question is which workload, coverage and recovery policy produces net benefit under a realistic functional model.",
+      "zh": "仅有准确率不能决定值预测是否值得。<bookmark mark='a'/>收益取决于覆盖哪些取数、预测何时到达、能解锁多少依赖工作，以及验证与猜错成本，不存在通用的百分之九十九门槛。<bookmark mark='b'/>包括佩赖斯与塞兹内克二零一四年研究在内的高置信值预测工作，讨论具体机制与恢复选择，本简化调度器不是那些设计的复现。<bookmark mark='c'/>图中的八槽配置里，完美猜取数能把这条轨迹调度提高约百分之十九，简单步长启发式反而变慢。两项结论都依赖调度器其余假设，包括预测屏障与理想化内存信息。<bookmark mark='d'/>有用的研究问题是：在现实的功能模型下，哪些负载、覆盖率和恢复策略能带来净收益。"
+    },
+    "447c7b549ade": {
+      "scene": "Frontier",
+      "en": "Our optional rule delays broadcasting a completed load's value while an older branch or indirect jump remains unresolved. <bookmark mark='a'/> That prevents dependent operations from using that value during the unresolved control speculation in this model. It is inspired by information-flow defenses, but does not implement complete STT or NDA algorithms. <bookmark mark='b'/> In the supplied Spectre experiment, the tested nonzero probe lines no longer reveal PEBBLE. This is a finite gadget result, not a proof of noninterference for every program or channel. <bookmark mark='c'/> On the Job chapter, model cycles increase from four hundred thirty-seven thousand five hundred eighty to four hundred fifty-three thousand one hundred twelve, about three point five percent. That cost is specific to this trace and implementation. <bookmark mark='d'/> Fault speculation, memory-alias speculation, preexisting register secrets, stores and other channels require separate analysis. We must state the attacker, permitted observations and protected data before making a security guarantee.",
+      "zh": "可选规则会在较老分支或间接跳转尚未解决时，延迟广播已完成取数的值。<bookmark mark='a'/>这样在模型中的未解决控制推测期间，依赖操作无法使用该值。它受信息流防御启发，但没有实现完整的 STT 或 NDA 算法。<bookmark mark='b'/>在给定幽灵实验中，已测试的非零探测行不再泄漏 PEBBLE。这是有限片段的结果，不是对所有程序或通道的无干扰证明。<bookmark mark='c'/>任务这一章的模型周期从四十三万七千五百八十增加到四十五万三千一百一十二，约慢百分之三点五，成本仅对应这条轨迹和实现。<bookmark mark='d'/>故障推测、内存别名推测、寄存器中已有秘密、存数及其他通道都需要分别分析。作出安全保证前，必须先说明攻击者、允许观察的内容与要保护的数据。"
+    },
+    "d17e38d7bc4d": {
+      "scene": "Frontier",
+      "en": "Secure speculation is an active research area with formal results under explicit models. <bookmark mark='a'/> ProSpeCT, published in 2023, gives a formal processor model and a constant-time-policy security proof, plus a RISC-V hardware prototype. Its theorem has specified program and observation assumptions; it is not a proof that arbitrary physical systems have no side channels. <bookmark mark='b'/> Dolma's 2021 transient-non-observability design examines broader data sources and store-related attacks, with overheads measured on its chosen workloads and threat models. Such papers show why a successful gadget test is weaker than a stated security theorem. <bookmark mark='c'/> Compare like observations, attacker powers, protected inputs and baseline behavior before comparing guarantees or costs. There is no single minimum security overhead without those definitions. <bookmark mark='d'/> Likewise, the earlier oracle IPC is a trace-and-assumption result, not an implementation target guaranteed by a universal parallelism theorem. Good research turns an explicit model into a precise claim, then tests where that claim stops applying.",
+      "zh": "安全推测是活跃研究领域，已经在明确模型下取得形式化结果。<bookmark mark='a'/>二零二三年的 ProSpeCT 提供形式化处理器模型、针对常数时间策略的安全证明，以及 RISC-V 硬件原型。定理具有特定的程序与观察假设，并不是说任意物理系统都没有侧信道。<bookmark mark='b'/>二零二一年的 Dolma 通过瞬态不可观察性研究更广的数据来源与存数相关攻击，并在选定负载和威胁模型下测量开销。这些论文说明，成功通过一个片段测试，远弱于陈述清楚的安全定理。<bookmark mark='c'/>比较保证和成本前，先对齐观察内容、攻击者能力、受保护输入与基线行为。没有这些定义，就不存在单一的最低安全开销。<bookmark mark='d'/>同样，先前的先知吞吐取决于轨迹与假设，不是通用并行定理保证能实现的目标。好的研究先把明确模型变成精确结论，再检验结论适用到哪里。"
+    },
+    "837e318cf736": {
+      "scene": "Outro",
+      "en": "This part connected dependency graphs to scheduling under stated latencies and resources, then separated register-name hazards from real value dependencies. We followed scoreboards, producer tags and precise architectural retirement, and checked a functional out-of-order model against the emulator on finite tests. Trace-oracle studies exposed the importance of their own knowledge, resource and ordering assumptions. A simulated Spectre gadget showed that squashed architectural work can leave observable cache effects, while two mitigations stopped that supplied witness under the model's rules. Finally, passage simulations supported a fitted full-corpus ledger projection at an assumed clock. Each conclusion travels with that evidence and scope.",
+      "zh": "本部分把依赖图与明确延迟和资源条件下的调度连接起来，区分寄存器名称冒险和真正的值依赖。我们研究记分牌、产生者标签与精确体系结构提交，并通过有限测试把功能乱序模型与指令模拟器对照。轨迹先知研究说明，它们自己的知识、资源与顺序假设非常关键。模拟幽灵片段展示了被清除的体系结构工作如何留下可观察缓存效果，两种缓解方法在模型规则下阻止了给定例证。最后，根据片段模拟，在假定时钟下拟合全语料账本预测。每个结论都应带着相应证据与适用范围。"
+    },
+    "c14c521a3692": {
+      "scene": "Outro",
+      "en": "These ideas return in several later parts. Larger windows interact with cache misses and memory-level parallelism in Part 9. Width, energy and multiple cores interact in Part 10. Static scheduling and software pipelining return with compiler transformations. The Job's repeated length checks motivate different data structures and algorithms; a measured predictor's difficulty does not prove a branch unlearnable. Reordering loads and stores connects to concurrency and memory models, where single-thread correctness and inter-thread visibility are different questions. The simulated security example leads into threat models and operating-system defenses, and static scheduling reappears in specialized hardware. The common habit is to connect a mechanism to a measured workload and explicit assumptions.",
+      "zh": "这些想法会在后面的课程再次出现。第九部分讨论大窗口与缓存缺失、内存级并行的关系，第十部分连接宽度、能量和多核。静态调度与软件流水会在编译器变换中回来。任务反复检查长度，也会引出不同数据结构和算法；某个已测预测器觉得困难，不代表分支无法学习。取数与存数重排连接并发和内存模型，单线程正确性与线程间可见性是不同问题。模拟安全例子通向威胁模型和操作系统防御，静态调度也会在专用硬件中重现。共同习惯是把机制与实测负载、明确假设联系起来。"
+    },
+    "5cff4afc34aa": {
+      "scene": "Outro",
+      "en": "In practice, use implementation manuals and measurements together. Linux perf and top-down analysis expose supported event categories when hardware and permissions allow, but event meanings differ across cores. Production processors combine related scheduling ideas with many details omitted by Pebble. BOOM and other open designs let you inspect an implementation, while gem5 and trace simulators answer different modeling questions. Compiler and kernel hardening can mitigate particular speculative attacks under specified conditions; their names are not blanket security guarantees. When a counter, simulator or diagram supports a claim, state what it measures and what assumptions connect that measurement to the question.",
+      "zh": "实践中，要把实现手册与测量结合起来。硬件和权限允许时，Linux perf 与自顶向下分析能展示支持的事件类别，但事件含义随处理器核变化。量产处理器把相关调度思想与 Pebble 省略的大量细节结合起来。BOOM 等开放设计便于查看具体实现，gem5 和轨迹模拟器则回答不同的建模问题。编译器与内核加固能在规定条件下缓解特定推测攻击，但名称不是包罗一切的安全保证。用计数器、模拟器或图支持结论时，要说明它测量什么，以及哪些假设把测量与问题联系起来。"
+    },
+    "1cb41a09beb4": {
+      "scene": "Outro",
+      "en": "The exercises ask you to build dependency schedules, distinguish instruction-count start limits from weighted processing-work bounds, and rename live register versions. Treat the CPI penalty calculation as a defined accounting model rather than a universal causal law. Before hoisting a load, prove its address and exception safety. For the research exercise, define protected data, public inputs, permitted observations and a non-speculative baseline, then search for a counterexample to our control-shadow rule. A finite successful test and a general security proof are different deliverables.",
+      "zh": "习题要求构造依赖调度，区分指令数决定的启动下界与带权处理工作量的界限，并为存活寄存器版本重命名。每指令周期代价计算应视作明确的记账模型，而非普遍因果定律。提前取数前，先证明地址与异常安全。研究题先定义受保护数据、公开输入、允许观察内容与非推测基线，再寻找控制阴影规则的反例。有限测试成功与一般安全证明，是不同的交付结果。"
+    },
+    "d697630b05bf": {
+      "scene": "Outro",
+      "en": "Next, the memory hierarchy. Part 7 assigned illustrative memory delays; physical DRAM latency in core cycles depends on clock, configuration and access pattern. Part 9 studies caches, locality and the Job's miss-rate curves, and measures a latency staircase on this host. It also develops data-movement bounds for classical matrix multiplication under a specified computation model and limited fast memory. Those assumptions matter: a bound for one algorithmic model is not automatically a theorem about every possible matrix multiplication algorithm.",
+      "zh": "下一部分是存储层次。第七部分指定了示意内存延迟，物理动态内存以核周期计的延迟，则取决于时钟、配置与访问模式。第九部分研究缓存、局部性和任务缺失率曲线，并在这台宿主机上测量延迟阶梯。还会在规定计算模型与有限快速内存条件下，推导经典矩阵乘法的数据移动界限。假设很重要：某种算法模型的界限，并不会自动成为关于所有矩阵乘法算法的定理。"
+    },
+    "1a64a4bdaec7": {
+      "scene": "Speculate",
+      "en": "These four functional-core runs differ in prediction policy. <bookmark mark='a'/> Always-taken prediction gives about zero point six nine retired instructions per cycle. <bookmark mark='b'/> Two-bit and tournament prediction give about one point eight seven and one point eight nine. <bookmark mark='c'/> The oracle-assisted setting gives about three point one six. It knows correct-path outcomes, yet this implementation still records two redirects and one memory-order violation, so its label must not imply zero recovery events. <bookmark mark='d'/> In the tournament run, the model counts twenty-two thousand two hundred ninety-six branch redirects and two hundred fifty-three thousand seven hundred sixty-four squashed renamed entries. That is about thirty-one percent of the retired count, not thirty-one percent extra executed instructions. Some entries never issued. Separately, twenty-eight thousand nine hundred five loads execute on wrong paths in the modeled memory system.",
+      "zh": "这四次功能模型运行采用不同预测策略。<bookmark mark='a'/>总是预测跳转时，平均每周期提交约零点六九条指令。<bookmark mark='b'/>两位计数器与锦标赛分别约为一点八七和一点八九。<bookmark mark='c'/>先知辅助配置约为三点一六。它知道正确路径结果，但本实现仍记录了两次重定向和一次内存顺序违例，所以标签不能暗示完全没有恢复事件。<bookmark mark='d'/>锦标赛运行记录了两万二千二百九十六次分支重定向，以及二十五万三千七百六十四个被清除的已重命名表项，约为提交数量的百分之三十一。这不是额外执行了百分之三十一的指令，因为有些表项根本没有发射。另外，模型内存系统中有二万八千九百零五次错误路径取数确实执行。"
+    }
+  },
+  "title_en": "Computer Science, Built: Part 8, Out of Order",
+  "chapters_en": {
+    "Hook": "Waiting in line",
+    "Dataflow": "1. The dataflow limit",
+    "Rename": "2. False dependences, and renaming",
+    "Scoreboard": "3. The scoreboard",
+    "Tomasulo": "4. Tomasulo's algorithm",
+    "Rob": "5. The reorder buffer",
+    "Ilp": "6. Wider, and the ILP wall",
+    "Speculate": "7. Speculation",
+    "Memory": "8. Loads, stores, and their order",
+    "Spectre": "9. Spectre",
+    "Vliw": "10. The compiler's alternative: VLIW",
+    "Risc": "11. RISC and CISC",
+    "Smt": "12. Simultaneous multithreading",
+    "Cores": "13. Modern cores in numbers",
+    "Job": "14. The Job out of order",
+    "Frontier": "15. Frontier: past the dataflow limit, safely",
+    "Outro": "Recap, problems, and where this comes back"
   }
- },
- "title_en": "Computer Science, Built: Part 8, Out of Order",
- "chapters_en": {
-  "Hook": "Waiting in line",
-  "Dataflow": "1. The dataflow limit",
-  "Rename": "2. False dependences, and renaming",
-  "Scoreboard": "3. The scoreboard",
-  "Tomasulo": "4. Tomasulo's algorithm",
-  "Rob": "5. The reorder buffer",
-  "Ilp": "6. Wider, and the ILP wall",
-  "Speculate": "7. Speculation",
-  "Memory": "8. Loads, stores, and their order",
-  "Spectre": "9. Spectre",
-  "Vliw": "10. The compiler's alternative: VLIW",
-  "Risc": "11. RISC and CISC",
-  "Smt": "12. Simultaneous multithreading",
-  "Cores": "13. Modern cores in numbers",
-  "Job": "14. The Job out of order",
-  "Frontier": "15. Frontier: past the dataflow limit, safely",
-  "Outro": "Recap, problems, and where this comes back"
- }
 }

@@ -32,24 +32,25 @@ class Memory(VoiceoverScene):
                       mono("lw   a5, 4(s0)     # s0 is known: the load could go now", 22)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.25).move_to(UP * 1.0)
         q = VGroup(
-            label(r"if \texttt{a3} $= $ \texttt{s0 + 4}: \ the load must wait for the store, \ and take its value",
+            label("overlapping byte ranges: \\ preserve the older store value",
                   font_size=24, color=NO),
-            label(r"if not: \ the load is free to go first", font_size=24, color=YES),
+            label("disjoint byte ranges: \\ this dependency is absent; \\ other rules remain", font_size=24, color=YES),
             label(r"the machine cannot know which \ until the store's address is computed", font_size=24,
                   color=HEAD),
         ).arrange(DOWN, buff=0.25).move_to(DOWN * 0.9)
         with self.voiceover(
-            "Renaming removed the false dependences between registers, because a register's name is right there in "
-            "the instruction, and can be checked as soon as it is decoded. Memory is harder. <bookmark mark='a'/> "
-            "Here a store writes to an address in a3, which is still being computed, and a load right after it "
-            "reads from s0 plus four, which is already known. <bookmark mark='b'/> If the two addresses are the "
-            "same, the load must wait for the store and take the store's value. <bookmark mark='c'/> If they are "
-            "different, the load could go at once. <bookmark mark='d'/> And the machine cannot tell which, until "
-            "the store's address is known. Dependences through memory are hidden behind arithmetic."
+            "Register names are available at decode, but effective memory addresses may depend on unfinished "
+            "arithmetic. <bookmark mark='a'/> Here an older store waits for its address in a3, while a younger load "
+            "already knows s0 plus four. <bookmark mark='b'/> If their byte ranges overlap, the load must observe "
+            "the correct older store's bytes, perhaps through forwarding or after waiting. Equal starting addresses "
+            "are only one overlap case. <bookmark mark='c'/> Disjoint byte ranges remove this particular "
+            "dependency, though resources and other ordering rules still apply. <bookmark mark='d'/> Until the "
+            "store address is known, the core must either wait conservatively or speculate and later check. That is "
+            "the memory-disambiguation problem in this single-core model."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(code))
+            vo.wait_until("a")
             for mk, x in zip("bcd", q):
                 vo.wait_until(mk)
                 self.play(FadeIn(x, shift=UP * 0.1))
@@ -79,22 +80,24 @@ class Memory(VoiceoverScene):
                   color=GREY_A),
             label(r"\textit{speculative}: \ go anyway; \ check when the store's address arrives", font_size=22,
                   color=GREY_A),
-            label(r"\textit{wait table} \ (Alpha 21264): \ speculate, \ except loads that were caught before",
+            label("load-PC wait table: \\ a simplified historical load-wait policy",
                   font_size=22, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "So a core keeps its memory operations in two queues, in program order. <bookmark mark='a'/> Stores wait "
-            "in the store queue until they commit; only then do they write memory, so a store on a wrong path never "
-            "touches it. <bookmark mark='b'/> A load, when it executes, searches the older stores. If the youngest "
-            "older store to the same address has its data, the load takes the value straight from the queue: "
-            "store-to-load forwarding. <bookmark mark='c'/> The hard case is the first entry, a store whose address "
-            "is unknown. There are three policies. Wait, conservatively, while any older store's address is unknown. "
-            "Or speculate: go ahead, and check later. Or do what the Alpha 21264 did in 1998: speculate, but remember "
-            "the loads that have been caught out before, and make only those wait."
+            "The load and store queues retain program-order relationships among memory operations. <bookmark "
+            "mark='a'/> In this simulator, stores compute address and data early but write the byte array only at "
+            "retirement. A squashed store does not commit that write. Real processors can have earlier "
+            "store-related cache or coherence effects, which this rule does not model. <bookmark mark='b'/> A load "
+            "searches for the youngest relevant older store. If that store covers all requested bytes and its data "
+            "is ready, it can forward the value. This implementation waits on partial overlaps rather than merging "
+            "several stores. <bookmark mark='c'/> Conservative disambiguation waits for unknown older store "
+            "addresses. Speculative disambiguation proceeds and checks later. The load-PC wait table conservatively "
+            "retrains previously violating loads; it is a simplified policy inspired by historical load-wait "
+            "predictors, not a complete store-set predictor."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(sqg))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(ld), Create(arr), FadeIn(fw))
             vo.wait_until("c")
@@ -120,14 +123,15 @@ class Memory(VoiceoverScene):
                     rf"{d['conservative']['cycles']}", font_size=22, color=HEAD).next_to(notes, DOWN, buff=0.3).align_to(
             notes, LEFT)
         with self.voiceover(
-            "Here is speculation caught out, on our core. A divide produces the store's address offset, so the store "
-            "cannot compute its address for sixteen cycles. <bookmark mark='a'/> The load after it, whose address "
-            "is known, does not wait. It reads its word from memory at once, and gets zero. <bookmark mark='b'/> "
-            "Sixteen cycles later the store's address arrives, and the store queue checks every younger load that "
-            "has already run. One of them read the very word this store writes. <bookmark mark='c'/> That load's "
-            "value is wrong, and so is anything computed from it. So the load and everything after it are squashed "
-            "and fetched again, exactly as after a wrong branch. <bookmark mark='d'/> The second time, the store has "
-            "committed, and the load reads seventy-seven. Here the gamble lost, and cost six cycles."
+            "This recorded example makes the ordering mistake visible. <bookmark mark='a'/> A younger load executes "
+            "before the older store's address is ready and reads zero from memory. <bookmark mark='b'/> The delayed "
+            "address resolves to the same word, which the older store must write with seventy-seven. <bookmark "
+            "mark='c'/> The model detects the overlapping younger load, squashes it and its dependents, and "
+            "refetches. The corrected load obtains seventy-seven after the required older-store ordering is "
+            "respected. In this recording the store retires before the replayed load starts; forwarding can satisfy "
+            "other valid cases before a store retires. <bookmark mark='d'/> The speculative run takes thirty-five "
+            "cycles and the conservative one twenty-nine. Speculation is not always faster: a wrong guess can cost "
+            "more than the waiting it avoided."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ch.heads), FadeIn(leg),
                       LaggedStart(*[FadeIn(VGroup(ch.rows[i], ch.bars[i], ch.commits[i])) for i in range(6)],
@@ -171,18 +175,16 @@ class Memory(VoiceoverScene):
         punch = label(rf"{m['conservative']['cycles'] / m['wait-table']['cycles']:.0f} times faster, \ by guessing "
                       r"that a load and a store do not collide", font_size=24, color=HEAD).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "When does it matter? Here is a loop that counts samples into buckets, where every sample misses the "
-            "cache. <bookmark mark='a'/> The store at the bottom writes a count whose address depends on the "
-            "sample, so its address is unknown for sixty cycles. The next trip's sample load, which has nothing to do "
-            "with the counts, comes right after it. <bookmark mark='b'/> A conservative machine makes every load wait "
-            "for that store's address: each miss in turn, ninety-eight thousand cycles for fifteen hundred samples. "
-            "<bookmark mark='c'/> A speculative machine lets the sample loads run ahead, so a dozen misses overlap: "
-            "seven and a half thousand cycles. Twenty-three times, two count loads collided with stores to the same "
-            "bucket, and had to be redone. <bookmark mark='d'/> The wait table learns, after one collision, that the "
-            "count load is the risky one, and makes only it wait, while the sample loads still run ahead. Thirteen "
-            "times faster than waiting. Real cores predict memory dependences in just this way; Intel's count each "
-            "recovery from a wrong guess as a machine clear, a number any programmer can read from the performance "
-            "counters."
+            "Now use a histogram workload with fifteen hundred fixed-seed samples. Each sample sits on a separate "
+            "modeled cache line, and its value selects the counter to update. <bookmark mark='a'/> A sample miss "
+            "delays the older store's counter address. Waiting behind every such unknown address makes this "
+            "conservative run expensive. <bookmark mark='b'/> Speculating allows later loads to overlap those "
+            "misses, greatly reducing this workload's modeled cycles. <bookmark mark='c'/> The twenty-three "
+            "violations are dynamic detected events across the run, not twenty-three distinct static load "
+            "instructions. The wait-table run changes which loads wait after observed violations. <bookmark "
+            "mark='d'/> These results depend on the generated samples, cache model and queue policy. Real processor "
+            "memory-order recovery events have architecture-specific counters and meanings; availability and access "
+            "permissions must be checked on the particular machine."
         ) as vo:
             self.play(FadeIn(head), FadeIn(code))
             vo.wait_until("a")
@@ -207,19 +209,21 @@ class Memory(VoiceoverScene):
         ).arrange(DOWN, buff=0.25).move_to(UP * 0.6)
         why = VGroup(
             label(rf"{d['loads']:,} loads, \ but only {d['stores']:,} stores", font_size=26, color=INF),
-            label(r"the Job writes only when it counts a word: \ its loads almost never wait", font_size=26,
+            label("stores update counts, table metadata and letters; \\ no policy benefit here", font_size=26,
                   color=HEAD),
         ).arrange(DOWN, buff=0.2).next_to(lines, DOWN, buff=0.6)
         with self.voiceover(
-            "And on the Job? <bookmark mark='a'/> All three policies give exactly the same cycle count. <bookmark "
-            "mark='b'/> The Job does a hundred fifty-five thousand loads in its first chapter but only five thousand "
-            "stores, one or two each time it counts a word, and their addresses are known early. There is nothing to "
-            "wait for. A machine's features earn their keep on some programs and sit idle on others, which is why "
-            "architects measure on many."
+            "The Job's first chapter behaves differently. <bookmark mark='a'/> All three tested disambiguation "
+            "policies give the same four hundred thirty-seven thousand five hundred eighty model cycles. <bookmark "
+            "mark='b'/> Its recorded trace has a hundred fifty-four thousand eight hundred thirty-five loads and "
+            "five thousand two hundred seventy stores. Stores update counts, table metadata and the letter pool. "
+            "These runs show no benefit from changing the tested policy; they do not prove that every load is "
+            "independent or that memory disambiguation never matters. Different workloads expose different "
+            "bottlenecks."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(l) for l in lines], lag_ratio=0.3))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(why))
         self.wait(0.3)

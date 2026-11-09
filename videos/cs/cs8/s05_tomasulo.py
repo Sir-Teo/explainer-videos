@@ -52,8 +52,11 @@ class Tomasulo(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head))
             for mk, f in zip("abcd", facts):
-                vo.wait_until(mk)
+                if mk != "a":
+                    vo.wait_until(mk)
                 self.play(FadeIn(f, shift=UP * 0.1))
+                if mk == "a":
+                    vo.wait_until(mk)
         self.wait(0.3)
         self.clear_scene()
 
@@ -259,27 +262,27 @@ class Tomasulo(VoiceoverScene):
         others = note(r"(grey: \ the other four)", font_size=18).next_to(line.n2p(4), DOWN, buff=0.55)
         marks[0].add(others)
         q = VGroup(
-            label(r"suppose the divide divides by zero, \ in cycle 55", font_size=26, color=NO),
+            label("illustrative divide-zero fault in cycle 55; \\ Pebble policy", font_size=26, color=NO),
             label(r"by then the add, \ a later instruction, \ has already overwritten \texttt{a1}", font_size=26,
                   color=HEAD),
             label(r"the machine cannot stop \textit{between} two instructions: \ the exception is imprecise",
                   font_size=26, color=GREY_A),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "There is a catch, and it is serious. <bookmark mark='a'/> Here is when each instruction's result reached "
-            "the registers: the add in cycle ten, the divide in fifty-six. Program order says the divide comes "
-            "first. <bookmark mark='b'/> Now suppose the divide divides by zero. The machine discovers this in cycle "
-            "fifty-five, and wants to stop with every earlier instruction done and every later one untouched, so the "
-            "operating system can report the error, or fix it and resume. <bookmark mark='c'/> But the add, a later "
-            "instruction, overwrote a1 forty-five cycles ago. There is no moment between the divide and the add at "
-            "which the registers were ever in a consistent state. The exception is imprecise. The Model 91 lived with "
-            "this; its manuals warned programmers that a floating-point error could be reported some instructions "
-            "late. For general-purpose machines with virtual memory, where any load may fault and must be restarted, "
-            "it is not acceptable. The fix took eighteen years."
+            "Out-of-order writeback creates an exception problem if architectural results become visible "
+            "immediately. <bookmark mark='a'/> In this teaching schedule, the younger add writes in cycle ten, "
+            "before the older divide broadcasts in cycle fifty-six. <bookmark mark='b'/> Suppose our illustrative "
+            "divide-zero policy reports a fault when the divide finishes. Pebble uses such a fault policy, unlike "
+            "RISC-V M's defined integer divide-zero result. <bookmark mark='c'/> The younger add has already "
+            "changed architectural state, so simply stopping cannot expose the state immediately before the divide. "
+            "This is an imprecise exception. The historical Model 91 had imprecise floating-point interruptions; "
+            "that is a separate ISA-specific behavior, not this integer example. Precise recovery has several "
+            "possible implementations. Next we will separate execution from architectural retirement using a "
+            "reorder buffer."
         ) as vo:
             self.play(FadeIn(head), Create(line))
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(m, scale=1.4) for m in marks], lag_ratio=0.2))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(q[0]), Indicate(marks[4], color=NO))
             vo.wait_until("c")

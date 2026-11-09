@@ -56,25 +56,25 @@ class Frontier(VoiceoverScene):
         curve = VMobject(color=NO, stroke_width=3).set_points_as_corners([p.get_center() for p in pts])
         acc = VGroup(*[label(rf"{100 * th[k]['correct'] / th[k]['predicted']:.0f}\%", font_size=16, color=NO).next_to(
             pts[i], DOWN, buff=0.1) for i, k in enumerate(keys)])
-        side = note(r"oracle scheduler, \ 8 wide, \ window 256, \ real branches; \ a stride predictor per load; \ "
-                    r"red: \ IPC, \ and how often a confident guess was right", font_size=17).next_to(ax, UP, buff=0.12).align_to(
+        side = note("trace oracle: 8 starts/cycle; start distance 256; modeled control barriers \\\\ per-load stride predictions; red: IPC and conditional accuracy", font_size=17).next_to(ax, UP, buff=0.12).align_to(
             ax, LEFT)
         with self.voiceover(
-            "Two questions are open at the edge of this part. The first: can a machine beat the dataflow limit "
-            "itself? The critical path is a chain of true dependences, and nothing we have built can shorten it. "
-            "<bookmark mark='a'/> Unless the machine guesses values, not just branches. If a load usually returns the "
-            "same value as last time, or the last value plus a fixed step, predict it, let the instructions that "
-            "need it start at once, and check when the real value arrives. Mikko Lipasti and his colleagues proposed "
-            "this in 1996. <bookmark mark='b'/> We tried it on the Job, in the limit study, with a stride predictor "
-            "for each load that only guesses after it has been right several times in a row. <bookmark mark='c'/> "
-            "Without prediction, three point three four instructions per cycle. A predictor that never erred would "
-            "give three point nine eight. <bookmark mark='d'/> And the real predictor, at every confidence level, "
-            "makes the machine slower. Its confident guesses are right only sixty to ninety percent of the time, "
-            "and each wrong one costs a full recovery, which outweighs the dependences broken by the right ones."
+            "Value prediction changes the dependency model by guessing a load's result before it is verified. "
+            "<bookmark mark='a'/> Dependents can tentatively use a predicted value, then correctness requires "
+            "validation and recovery if it was wrong. This can pass a dependency bound derived for waiting on "
+            "actual values because the assumptions changed. <bookmark mark='b'/> Here a per-load-PC stride "
+            "predictor learns from the recorded trace, with a confidence threshold. It is an offline scheduling "
+            "study, including trace-supplied inputs, not an implemented functional value-predicting core. <bookmark "
+            "mark='c'/> At eight start slots, the no-value-prediction baseline is about three point three four IPC; "
+            "an oracle that guesses every load correctly reaches about three point nine eight under the other "
+            "retained assumptions. <bookmark mark='d'/> The real heuristic predicts only a subset and makes "
+            "mistakes, so its schedules are slower than the baseline at the shown thresholds. Correctness, "
+            "coverage, prediction availability, I/O ordering and recovery cost must all be addressed before "
+            "translating this exercise into hardware."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(i) for i in idea], lag_ratio=0.4))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(Create(ax), FadeIn(xt), FadeIn(xl), FadeIn(side))
             vo.wait_until("c")
@@ -89,27 +89,33 @@ class Frontier(VoiceoverScene):
         d = load("frontier")
         head = label(r"What it would take", font_size=38).to_edge(UP, buff=0.4)
         items = VGroup(
-            label(r"guesses must be right far more than 99\% of the time to pay", font_size=26, color=HEAD),
-            label(r"Perais and Seznec (2014): \ very high confidence, \ recovery only at commit", font_size=24,
+            label("benefit depends on accuracy, coverage, timing and recovery cost", font_size=26, color=HEAD),
+            label("high-confidence prediction and recovery are design choices, \\ not a universal threshold", font_size=24,
                   color=GREY_A),
-            label(r"on the Job, \ even perfect value prediction buys only 19\%: \ the branches still rule", font_size=24,
+            label("this 8-slot trace study: \\ oracle value guesses improve IPC by 19\\%", font_size=24,
                   color=NO),
             label(r"open: \ which programs have values worth guessing, \ and can a core find them cheaply?",
                   font_size=26, color=YES),
         ).arrange(DOWN, buff=0.38).move_to(DOWN * 0.1)
         with self.voiceover(
-            "That matches what researchers found. <bookmark mark='a'/> A value predictor must be right far more than "
-            "ninety-nine percent of the time to pay its way. <bookmark mark='b'/> In 2014 Arthur Perais and André "
-            "Seznec showed a design that does it, using very high confidence thresholds and repairing mistakes "
-            "cheaply at commit, and revived a field many had given up. <bookmark mark='c'/> On the Job, though, even "
-            "perfect value prediction would buy only nineteen percent, because the branches, not the loads, set the "
-            "limit. <bookmark mark='d'/> Which programs have values worth guessing, and whether a core can find "
-            "them cheaply, is still an open question."
+            "Accuracy alone does not determine whether value prediction pays. <bookmark mark='a'/> Benefit depends "
+            "on which loads are covered, when predictions arrive, how much dependent work they unlock, and the cost "
+            "of validation and mistakes. There is no universal ninety-nine-percent threshold. <bookmark mark='b'/> "
+            "High-confidence value-prediction work, including Perais and Seznec's 2014 research, studies particular "
+            "mechanisms and recovery choices. Our simple scheduler is not a reproduction of those designs. "
+            "<bookmark mark='c'/> In the shown eight-slot configuration, perfect load guesses improve this trace "
+            "schedule by about nineteen percent, while the simple stride heuristic loses performance. Both "
+            "statements are conditional on the rest of the scheduler's assumptions, including its prediction "
+            "barriers and idealized memory information. <bookmark mark='d'/> A useful research question is which "
+            "workload, coverage and recovery policy produces net benefit under a realistic functional model."
         ) as vo:
             self.play(FadeIn(head))
             for mk, it in zip("abcd", items):
-                vo.wait_until(mk)
+                if mk != "a":
+                    vo.wait_until(mk)
                 self.play(FadeIn(it, shift=UP * 0.1))
+                if mk == "a":
+                    vo.wait_until(mk)
         self.wait(0.3)
         self.clear_scene()
 
@@ -124,27 +130,28 @@ class Frontier(VoiceoverScene):
                   r"every older branch has executed", font_size=24, color=HEAD),
         ).arrange(DOWN, buff=0.18).next_to(head, DOWN, buff=0.4)
         res = VGroup(
-            label(r"the Spectre gadget: \ " + (r"no fast probe line, \ no leak" if all(
-                x == 1 for x in sp["secure"]["output"]) else r"still leaks"), font_size=26, color=YES),
-            label(rf"the Job: \ IPC {d['plain_ipc']:.3f} \ $\to$ \ {d['secure_ipc']:.3f}: \ "
+            label(r"supplied Spectre gadget: \ " + (r"no fast tested nonzero line" if all(
+                x == 1 for x in sp["secure"]["output"]) else r"decoder still distinguishes a value"), font_size=26, color=YES),
+            label(rf"chapter 1: \ IPC {d['plain_ipc']:.3f} \ $\to$ \ {d['secure_ipc']:.3f}: \ "
                   rf"{100 * d['cost']:.1f}\% slower", font_size=26, color=COST),
-            label(r"the speculation that remains is the harmless kind: \ arithmetic, \ branches, \ loads of known "
-                  r"addresses", font_size=22, color=GREY_A),
+            label("other data sources and channels still need analysis; \\ no general proof here", font_size=22, color=GREY_A),
         ).arrange(DOWN, buff=0.3).move_to(DOWN * 0.8)
         with self.voiceover(
-            "The second question: can speculation be made safe, without giving up its speed? Spectre works because "
-            "a speculatively loaded value is passed on to a second load whose address it chooses, and that second "
-            "load leaves a footprint in the cache. <bookmark mark='a'/> So here is a rule for our core, in the "
-            "spirit of two 2019 proposals, Speculative Taint Tracking and NDA. A load that completes while some older "
-            "branch is still unresolved keeps its value to itself: nothing that depends on it may run until every "
-            "older branch has executed. <bookmark mark='b'/> Run the attack against this core: the probe shows no "
-            "fast line, and nothing leaks. <bookmark mark='c'/> Run the Job: three and a half percent slower. "
-            "<bookmark mark='d'/> Cheap, here, because the speculation that remains is the useful kind: arithmetic, "
-            "branches, and loads whose addresses are already known can all still run ahead."
+            "Our optional rule delays broadcasting a completed load's value while an older branch or indirect jump "
+            "remains unresolved. <bookmark mark='a'/> That prevents dependent operations from using that value "
+            "during the unresolved control speculation in this model. It is inspired by information-flow defenses, "
+            "but does not implement complete STT or NDA algorithms. <bookmark mark='b'/> In the supplied Spectre "
+            "experiment, the tested nonzero probe lines no longer reveal PEBBLE. This is a finite gadget result, "
+            "not a proof of noninterference for every program or channel. <bookmark mark='c'/> On the Job chapter, "
+            "model cycles increase from four hundred thirty-seven thousand five hundred eighty to four hundred "
+            "fifty-three thousand one hundred twelve, about three point five percent. That cost is specific to this "
+            "trace and implementation. <bookmark mark='d'/> Fault speculation, memory-alias speculation, "
+            "preexisting register secrets, stores and other channels require separate analysis. We must state the "
+            "attacker, permitted observations and protected data before making a security guarantee."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(rule))
+            vo.wait_until("a")
             for mk, r in zip("bcd", res):
                 vo.wait_until(mk)
                 self.play(FadeIn(r, shift=UP * 0.1))
@@ -155,30 +162,33 @@ class Frontier(VoiceoverScene):
     def now(self):
         head = label(r"Open questions", font_size=40).to_edge(UP, buff=0.4)
         items = VGroup(
-            label(r"proof: \ does a rule like ours block \textit{every} speculative leak? \ (speculative "
-                  r"non-interference, \ 2020)", font_size=23, color=YES),
-            label(r"cost: \ published schemes cost from a few percent to tens of percent; \ what is the floor?",
+            label("ProSpeCT (2023): \\ formal constant-time-policy result and RISC-V prototype", font_size=23, color=YES),
+            label("Dolma (2021): \\ transient non-observability; \\ threat-model-specific cost",
                   font_size=23, color=COST),
             label(r"other channels: \ not only the cache, \ but ports, \ predictors, \ power", font_size=23,
                   color=NO),
-            label(r"and the 2,400 instructions per cycle of chapter two: \ runahead execution, \ thousand-instruction "
-                  r"windows, \ dataflow machines", font_size=23, color=HEAD),
+            label("the 2400-IPC oracle supplies future information; \\ hardware feasibility is separate", font_size=23, color=HEAD),
         ).arrange(DOWN, buff=0.38, aligned_edge=LEFT).move_to(DOWN * 0.1)
         with self.voiceover(
-            "Here is where the research stands. <bookmark mark='a'/> Does a rule like ours block every leak of "
-            "speculatively loaded data, or only the one we tried? Since 2020, researchers have defined what it means "
-            "for a program to be safe under speculation, speculative non-interference, and built tools that check "
-            "it; proving a whole core safe is still out of reach. <bookmark mark='b'/> What does safety cost? "
-            "Published hardware schemes report from a few percent to tens of percent, depending on how much they "
-            "protect. Nobody knows the floor. <bookmark mark='c'/> The cache is not the only channel: execution "
-            "ports, the predictors themselves, and power draw have all been used to leak. <bookmark mark='d'/> And "
-            "the oldest question of all: the Job contains two thousand four hundred instructions per cycle of "
-            "parallelism, and we use two. Runahead execution, windows of thousands of instructions, and dataflow "
-            "machines have all tried to reach it. The problem with a star at the end of this part starts here."
+            "Secure speculation is an active research area with formal results under explicit models. <bookmark "
+            "mark='a'/> ProSpeCT, published in 2023, gives a formal processor model and a constant-time-policy "
+            "security proof, plus a RISC-V hardware prototype. Its theorem has specified program and observation "
+            "assumptions; it is not a proof that arbitrary physical systems have no side channels. <bookmark "
+            "mark='b'/> Dolma's 2021 transient-non-observability design examines broader data sources and "
+            "store-related attacks, with overheads measured on its chosen workloads and threat models. Such papers "
+            "show why a successful gadget test is weaker than a stated security theorem. <bookmark mark='c'/> "
+            "Compare like observations, attacker powers, protected inputs and baseline behavior before comparing "
+            "guarantees or costs. There is no single minimum security overhead without those definitions. <bookmark "
+            "mark='d'/> Likewise, the earlier oracle IPC is a trace-and-assumption result, not an implementation "
+            "target guaranteed by a universal parallelism theorem. Good research turns an explicit model into a "
+            "precise claim, then tests where that claim stops applying."
         ) as vo:
             self.play(FadeIn(head))
             for mk, it in zip("abcd", items):
-                vo.wait_until(mk)
+                if mk != "a":
+                    vo.wait_until(mk)
                 self.play(FadeIn(it, shift=RIGHT * 0.1))
+                if mk == "a":
+                    vo.wait_until(mk)
         self.wait(0.3)
         self.clear_scene()

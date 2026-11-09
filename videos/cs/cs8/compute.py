@@ -44,7 +44,7 @@ from explainer.ai.cache import Cache
 from explainer.cs.pebble import assemble, run
 from explainer.cs.pebble import predict as PR
 from explainer.cs.pebble import programs as P
-from explainer.cs.pebble.isa import IO_CYCLES
+from explainer.cs.pebble.isa import IO_CYCLES, decode
 from explainer.cs.pebble.limits import LAT, Trace, schedule, trace
 from explainer.cs.pebble.ooo import Cache as DCache
 from explainer.cs.pebble.ooo import OutOfOrder
@@ -578,25 +578,34 @@ def compute_memory() -> dict:
 # Spectre
 # ---------------------------------------------------------------------------
 class TimedCore(OutOfOrder):
-    """The core, logging every read of the cycle counter (to recover the attack's probe times)."""
+    """Log completed counter reads with their instruction address, including barriers."""
 
-    def _device_load(self, addr):
-        v = super()._device_load(addr)
-        if addr == IO_CYCLES:
-            self.reads.append(v)
-        return v
+    def _load(self, u):
+        result = super()._load(u)
+        if result == "ok" and u.addr == IO_CYCLES:
+            self.reads.append((u.pc, u.result))
+        return result
 
 
 def _spectre(secret, mitigation=None, secure=False, predictor=None):
+    program = assemble(P.spectre(len(secret), mitigation))
+    probe_sites = [pc for pc, word, _ in program.listing
+                   if program.labels["time"] <= pc < program.labels["slower"] and decode(word).op == "lw"]
+    assert len(probe_sites) == 2
     c = TimedCore(P.spectre_image(secret, mitigation), cache=DCache(), timer="cycles",
                   predictor=predictor or PR.TwoBit(), training="commit", secure=secure)
     c.reads = []
     c.run()
-    r = c.reads
-    per = 1 + 2 * 255  # the barrier after the flush, then two reads per probe line
+    # The fence adds counter reads in the training calls. Select the two actual
+    # probe-measurement instructions instead of slicing every counter read.
+    probe_reads = [(pc, value) for pc, value in c.reads if pc in probe_sites]
+    assert len(probe_reads) == 2 * 255 * len(secret)
+    assert all(pc == probe_sites[i % 2] for i, (pc, _) in enumerate(probe_reads))
+    r = [value for _, value in probe_reads]
+    per = 2 * 255
     rounds = []
     for k in range(len(secret)):
-        blk = r[k * per + 1:(k + 1) * per]
+        blk = r[k * per:(k + 1) * per]
         rounds.append([blk[2 * j + 1] - blk[2 * j] for j in range(255)])
     return c, rounds
 

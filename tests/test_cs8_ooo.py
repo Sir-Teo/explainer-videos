@@ -104,6 +104,20 @@ class Agrees(unittest.TestCase):
 
 
 class Spectre(unittest.TestCase):
+    def test_probe_timings_exclude_fence_training_barriers(self):
+        from videos.cs.cs8.compute import _spectre
+
+        plain, plain_rounds = _spectre(b"P")
+        fenced, fenced_rounds = _spectre(b"P", "fence")
+        self.assertEqual(bytes(plain.output), b"P")
+        self.assertEqual(len(plain_rounds), 1)
+        self.assertEqual(len(fenced_rounds), 1)
+        self.assertEqual(len(fenced_rounds[0]), 255)
+        self.assertEqual(plain_rounds[0][ord("P") - 1], 5)
+        self.assertEqual(set(fenced_rounds[0]), {63})
+        # Equal probe times select line 1 in the actual attack's decoder.
+        self.assertEqual(list(fenced.output), [1])
+
     def test_leak_and_mitigations(self):
         secret = b"Pebble"
         leaked = OutOfOrder(P.spectre_image(secret), cache=Cache(), timer="cycles", predictor=PR.TwoBit(),

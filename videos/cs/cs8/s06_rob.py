@@ -47,25 +47,26 @@ class Rob(VoiceoverScene):
         arr = VGroup(Arrow(a.get_right(), b.get_left(), buff=0.08, color=GREY_C),
                      Arrow(b.get_right(), c.get_left(), buff=0.08, color=GREY_C))
         tags = VGroup(label(r"in program order", font_size=22, color=DATA).next_to(a, DOWN, buff=0.25),
-                      label(r"in any order: \ as operands arrive", font_size=22, color=FUNC).next_to(b, DOWN, buff=0.25),
+                      label("when operands, \\ resources and ordering permit", font_size=22, color=FUNC).next_to(b, DOWN, buff=0.25),
                       label(r"in program order", font_size=22, color=YES).next_to(c, DOWN, buff=0.25))
         rule = VGroup(
             label(r"an instruction's result is \textit{speculative} \ until it commits:", font_size=26, color=GREY_A),
-            label(r"registers, \ memory and devices change only at commit, \ oldest first", font_size=26, color=HEAD),
+            label("architectural effects retire oldest first; \\ cache effects are separate", font_size=26, color=HEAD),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.7)
         with self.voiceover(
-            "In 1985 James Smith and Andrew Pleszkun proposed the fix, and every out-of-order core since has used it. "
-            "<bookmark mark='a'/> Bring instructions in, in program order. Let them execute in whatever order their "
-            "operands allow. But then put them back in order before anything they did becomes official. <bookmark "
-            "mark='b'/> The last step is called commit, or retirement. Until an instruction commits, its result is "
-            "held aside, visible to the instructions that need it but not yet written into the architectural "
-            "registers or memory. <bookmark mark='c'/> Commit happens strictly oldest first. So at any moment, the "
-            "official state of the machine is exactly what it would be if the instructions had run one at a time, in "
-            "order, up to the oldest one still in flight."
+            "Smith and Pleszkun's 1985 work studied several ways to provide precise interrupts in pipelined "
+            "processors. The reorder buffer is one important approach. <bookmark mark='a'/> Dispatch instructions "
+            "in order, execute them when their operands, resources and ordering constraints permit, and retire "
+            "architectural effects in program order. <bookmark mark='b'/> Execution results may already be in "
+            "temporary storage or a physical register file, and dependent instructions may use them before "
+            "retirement. Retirement makes the architectural result official; it is not necessarily the first "
+            "physical write. <bookmark mark='c'/> A precise exception exposes a valid architectural prefix of the "
+            "program, with the faulting instruction handled according to its specified policy. Cache and predictor "
+            "effects require separate reasoning. Precise architectural state alone does not guarantee secrecy."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(a), FadeIn(tags[0]))
+            vo.wait_until("a")
             self.play(GrowArrow(arr[0]), FadeIn(b), FadeIn(tags[1]))
             vo.wait_until("b")
             self.play(GrowArrow(arr[1]), FadeIn(c), FadeIn(tags[2]))
@@ -112,16 +113,14 @@ class Rob(VoiceoverScene):
             return DATA
 
         with self.voiceover(
-            "Here is the structure that does this, the reorder buffer, drawn as what it is: a ring of slots. "
-            "<bookmark mark='a'/> These are about thirty cycles of the core running the Job's scan loop. Each cycle, "
-            "up to four instructions are renamed and take slots at the tail, in program order. They wait, in orange, "
-            "for their operands; execute, in green; and when finished, turn blue and wait. <bookmark mark='b'/> "
-            "Each cycle, up to four finished instructions leave from the head, but only from the head: a finished "
-            "instruction behind an unfinished one must wait for it. <bookmark mark='c'/> Watch the grey ones. The "
-            "machine guessed wrong about a branch and fetched down a wrong path. When the branch executes and the "
-            "mistake is found, everything younger than it is simply dropped from the ring: none of it had committed, "
-            "so none of it ever happened. The tail jumps back to just after the branch, and fetching resumes on the "
-            "right path."
+            "We draw this reorder buffer as a ring of slots. <bookmark mark='a'/> The animation follows a short "
+            "recorded scan-loop window. Up to four instructions are renamed into tail slots each cycle. Orange "
+            "means waiting, green executing, and blue complete but waiting to retire. <bookmark mark='b'/> Up to "
+            "four completed instructions retire from the head in order. A completed younger instruction cannot "
+            "retire around an unfinished older one. <bookmark mark='c'/> A branch redirect discards its younger "
+            "entries and restarts fetch. Their architectural destinations were never committed, but their execution "
+            "was real within the model: loads may already have changed the simulated cache. The ring records "
+            "retirement order; it does not erase every microarchitectural trace of squashed work."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ring), FadeIn(leg), FadeIn(clock), FadeIn(counter), FadeIn(hp), FadeIn(tp))
             self.add(fills, tags)  # above the ring's opaque slots
@@ -192,22 +191,23 @@ class Rob(VoiceoverScene):
         mark.shift(UP * 0.6)
         res = VGroup(
             label(rf"memory at \texttt{{0x800}}: \ {d['mem'][0]} \ (committed before)", font_size=22, color=YES),
-            label(rf"memory at \texttt{{0x804}}: \ {d['mem'][1]} \ (the later store never happened)", font_size=22,
+            label(rf"memory at \texttt{{0x804}}: \ {d['mem'][1]} \ (younger write uncommitted)", font_size=22,
                   color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(mark, DOWN, buff=0.35).align_to(mark, LEFT)
         if res.get_right()[0] > 7:
             res.shift(LEFT * (res.get_right()[0] - 6.9))
             mark.shift(LEFT * (mark.get_right()[0] - 6.9) if mark.get_right()[0] > 6.9 else 0)
         with self.voiceover(
-            "Now the problem that defeated the Model 91. Here a divide by zero sits in the middle of some code, "
-            "followed by instructions that use other values. <bookmark mark='a'/> The divide is slow: sixteen cycles. "
-            "<bookmark mark='b'/> Meanwhile the four instructions after it execute and finish, including a store. "
-            "They are done, in blue, but they are behind the divide in the reorder buffer, so they wait. <bookmark "
-            "mark='c'/> When the divide reaches the head, the machine finds that it faulted. And at that moment "
-            "everything older has committed and nothing younger has: so it discards the younger instructions, and "
-            "reports the exception with the state exactly as it was just before the divide. <bookmark mark='d'/> "
-            "The store before the divide reached memory. The store after it, which had already computed its address "
-            "and data, never did. The exception is precise, though execution was not in order."
+            "Here is Pebble's deliberate divide-zero fault policy. <bookmark mark='a'/> Division has a modeled "
+            "sixteen-cycle latency. The fault is recorded with its instruction instead of being reported "
+            "immediately. <bookmark mark='b'/> Younger operations can compute results, including a store's address "
+            "and data. They wait behind the divide and cannot commit architectural effects. <bookmark mark='c'/> "
+            "When the fault reaches the head, older instructions have retired, the faulting divide does not write a "
+            "result, and younger instructions are discarded. Pebble stops and reports the fault; it does not "
+            "implement an operating-system resume path. <bookmark mark='d'/> The older store has written eleven to "
+            "memory. The younger store has not committed its write. That is precise architectural state under this "
+            "policy. Remaining cache or predictor effects are a separate question, and RISC-V M defines a different "
+            "result for integer division by zero."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ch.heads), LaggedStart(*[FadeIn(r) for r in ch.rows], lag_ratio=0.05),
                       FadeIn(leg))
@@ -244,26 +244,25 @@ class Rob(VoiceoverScene):
         two = VGroup(
             label(r"our core, \ like the Pentium Pro (1995): \ results wait in the reorder buffer, \ copied to the "
                   r"registers at commit", font_size=21, color=GREY_A),
-            label(r"MIPS R10000, \ Alpha 21264, \ most cores today: \ one big physical register file; \ the ROB "
-                  r"holds only pointers", font_size=21, color=GREY_A),
+            label("PRF designs write speculative values early; \\\\ the ROB also tracks completion, exceptions and recovery", font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.16).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Put together, the pieces make the pipeline that nearly every fast processor has used since the "
-            "mid-1990s. <bookmark mark='a'/> Fetch, following the branch predictor's guesses. Decode. Rename, through "
-            "the register alias table and a list of free physical registers. Dispatch, which gives each instruction "
-            "its slot in the reorder buffer, the issue queue, and, for loads and stores, the load-store queue. "
-            "<bookmark mark='b'/> Then, out of order: issue, oldest ready instruction first, to an execution unit; "
-            "execute; and write back, broadcasting the result's tag to everyone waiting for it. <bookmark mark='c'/> "
-            "And commit, in order, from the head of the reorder buffer. <bookmark mark='d'/> There are two ways to "
-            "keep the values. Our core, like Intel's Pentium Pro of 1995, keeps each result in its reorder-buffer "
-            "entry and copies it to the architectural registers at commit. The MIPS R10000 and the Alpha 21264, and "
-            "most designs since, keep every value in one large physical register file and let the table of names do "
-            "all the work: commit just declares a mapping final, and frees the register that held the old value."
+            "This diagram separates stages often found in out-of-order cores. <bookmark mark='a'/> Fetch follows a "
+            "predicted path, decode identifies operations, and ordered rename and dispatch allocate tracking "
+            "resources. Our width parameter limits fetch, rename and retirement to four per cycle. <bookmark "
+            "mark='b'/> Ready operations compete for execution resources. This implementation can start up to six "
+            "total operations in a cycle, with at most four ALU starts and two memory operations, plus its "
+            "multiplier and divider restrictions. Width must therefore name a particular stage. <bookmark "
+            "mark='c'/> Completed results wake dependents; architectural retirement remains ordered. Oldest-ready "
+            "selection is our policy, not a requirement for every processor. <bookmark mark='d'/> Our model holds "
+            "results in instruction records and copies register results at retirement. Other designs write "
+            "speculative physical registers earlier and commit mappings later. Their reorder buffers track more "
+            "than just pointers: completion, exception and recovery metadata also matter."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(VGroup(boxes[k], subs[k])) for k in range(4)], lag_ratio=0.25),
                       FadeIn(brace_in), FadeIn(t_in))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(VGroup(boxes[k], subs[k])) for k in range(4, 7)], lag_ratio=0.25),
                       FadeIn(brace_out), FadeIn(t_out))
@@ -284,18 +283,19 @@ class Rob(VoiceoverScene):
                   r"\ output \ and instruction count as the emulator", font_size=24, color=YES),
             label(r"a divide by zero, \ a store that must not happen, \ a load that must wait: \ all precise",
                   font_size=24, color=YES),
-            label(r"every value is computed for real, \ on the right path \textit{and} the wrong one", font_size=24,
+            label("values are computed in the model, \\ including on wrong paths", font_size=24,
                   color=HEAD),
         ).arrange(DOWN, buff=0.38).move_to(DOWN * 0.1)
         with self.voiceover(
-            "This core is not a diagram; it is a program, about seven hundred lines, that simulates the machine "
-            "cycle by cycle. <bookmark mark='a'/> It is checked the way every part of Pebble is checked: on a hundred "
-            "twenty random programs, in six different configurations, and on the Job, it must finish with exactly the "
-            "registers, memory, output and instruction count that the emulator gives. <bookmark mark='b'/> And the "
-            "awkward cases have their own tests: the divide by zero, the store that must never reach memory, the "
-            "load that must wait. <bookmark mark='c'/> One more property will matter later. The core computes every "
-            "value for real, including on wrong paths that are later thrown away. Those wrong paths really load from "
-            "memory. Remember that when we reach chapter nine."
+            "The cycle-by-cycle functional core is implemented in the repository. Its values are computed by the "
+            "simulator, rather than read from the offline scheduling oracle. <bookmark mark='a'/> The current test "
+            "suite compares a hundred twenty generated programs across six configurations with the instruction "
+            "emulator. A Job paragraph is checked in two predictor configurations. Final registers, memory, output "
+            "and committed instruction counts must match. These finite tests are evidence, not a proof for every "
+            "program. <bookmark mark='b'/> Directed cases exercise divide-zero state, memory-order replay, partial "
+            "store forwarding and this modeled Spectre gadget. <bookmark mark='c'/> Wrong-path loads access the "
+            "model's byte array and optional cache. That distinction between uncommitted architectural work and "
+            "persistent modeled cache effects will drive the security chapter."
         ) as vo:
             self.play(FadeIn(head), FadeIn(lines[0]))
             for mk, l in zip("abc", lines[1:]):

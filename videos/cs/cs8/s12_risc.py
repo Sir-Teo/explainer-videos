@@ -30,11 +30,11 @@ class Risc(VoiceoverScene):
             UP * 1.7)
         cisc = VGroup(label(r"CISC \ (VAX, \ 1977)", font_size=26, color=INF),
                       label(r"powerful instructions: \ fewer of them", font_size=22, color=GREY_A),
-                      label(r"each takes many cycles, \ through microcode", font_size=22, color=GREY_A)).arrange(
+                      label("implementation-dependent latency; \\ direct hardware or microcode", font_size=22, color=GREY_A)).arrange(
             DOWN, buff=0.15)
         risc = VGroup(label(r"RISC \ (IBM 801, \ Berkeley RISC, \ Stanford MIPS)", font_size=26, color=YES),
                       label(r"simple instructions: \ more of them", font_size=22, color=GREY_A),
-                      label(r"each one cycle, \ pipelined, \ a fast clock", font_size=22, color=GREY_A)).arrange(
+                      label("pipelined throughput differs from each operation latency", font_size=22, color=GREY_A)).arrange(
             DOWN, buff=0.15)
         cols = VGroup(cisc, risc).arrange(RIGHT, buff=1.2).move_to(DOWN * 0.3)
         arrows = VGroup(Arrow(cisc.get_top(), law[2].get_bottom(), buff=0.15, color=INF, stroke_width=3),
@@ -42,21 +42,21 @@ class Risc(VoiceoverScene):
         who = label(r"John Cocke (IBM, \ 1970s); \ David Patterson and David Ditzel (1980); \ John Hennessy (1981)",
                     font_size=22, color=HIST).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Pebble has a reduced instruction set: every instruction does one simple thing, and only loads and "
-            "stores touch memory. That was once a heresy. <bookmark mark='a'/> Recall the iron law from Part 7: time "
-            "is instructions, times cycles per instruction, times the clock period. <bookmark mark='b'/> The "
-            "machines of the 1970s, like Digital's VAX, attacked the first factor. They offered rich instructions, "
-            "adding memory to memory, even evaluating a polynomial in one instruction, so programs needed fewer of "
-            "them. Each was run by microcode, a little program inside the processor, and took many cycles. <bookmark "
-            "mark='c'/> John Cocke at IBM noticed that compilers hardly used the rich instructions. His 801 project, "
-            "and then David Patterson's RISC at Berkeley and John Hennessy's MIPS at Stanford, attacked the other "
-            "two factors instead: simple instructions, each one cycle in a pipeline, with a fast clock. More "
-            "instructions, but each far cheaper. <bookmark mark='d'/> Patterson and Ditzel's paper, The Case for the "
-            "Reduced Instruction Set Computer, appeared in 1980, and the argument raged for a decade."
+            "Return to execution time: instruction count times cycles per instruction times clock period. <bookmark "
+            "mark='a'/> Rich instructions can express more work per architectural instruction, reducing the count "
+            "for some programs. Their implementation may use direct hardware or microcode; not every complex "
+            "instruction is slow or microcoded. <bookmark mark='b'/> RISC projects emphasized simpler operations, "
+            "regular encoding and efficient pipelines. The goal of starting or completing one operation per cycle "
+            "is a throughput goal, not a claim that every load, divide or other instruction has one-cycle latency. "
+            "<bookmark mark='c'/> Compiler quality, memory behavior and implementation choices affect all three "
+            "factors in the equation, so instruction-set labels alone do not determine performance. <bookmark "
+            "mark='d'/> IBM 801, Berkeley RISC and Stanford MIPS are influential examples. Their lessons concern "
+            "measured workload and implementation trade-offs, rather than a universal rule that fewer instructions "
+            "or simpler instructions must always win."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(Write(law))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(cisc), GrowArrow(arrows[0]))
             vo.wait_until("c")
@@ -89,24 +89,27 @@ class Risc(VoiceoverScene):
         cap = note(rf"{n:,} instructions run; \ {d['static_instructions']} in the program, \ {d['code_bytes']} bytes",
                    font_size=20).next_to(bar, UP, buff=0.35)
         ex = VGroup(mono("lw   t1, 4(t0)", 22), mono("bne  t1, a1, next", 22)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
-        x86 = mono("cmp  ecx, [rax+4]  ; one x86 instruction", 22, color=INF)
+        x86 = VGroup(mono("cmp  ecx, [rax+4]", 22, color=INF),
+                     mono("jne  next", 22, color=INF)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         arr = MathTex(r"\longrightarrow", font_size=40, color=GREY_C)
         row = VGroup(ex, arr, x86).arrange(RIGHT, buff=0.4).move_to(DOWN * 0.6)
-        fold = label(rf"{d['foldable_loads']:,} of the {d['loads']:,} loads \ ({100 * (d['foldable_loads'] / d['loads']):.0f}\%) "
-                     rf"feed one instruction and die: \ x86 would need {100 * (d['foldable_loads'] / n):.0f}\% fewer "
-                     r"instructions", font_size=24, color=HEAD).to_edge(DOWN, buff=0.5)
+        fold = label(rf"{d['foldable_loads']:,} of {d['loads']:,} loads: local use/death candidates \\ "
+                     r"compare plus jump still counts as two; no instruction savings established",
+                     font_size=23, color=HEAD).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "What does the Job look like as a RISC program? <bookmark mark='a'/> Over its first chapter: about a "
-            "third arithmetic, a third branches, a fifth loads, an eighth jumps, and hardly any stores. <bookmark "
-            "mark='b'/> A CISC machine like x86 can take an operand straight from memory. The scan loop's load of an "
-            "entry's length, used once by the comparison and then dead, would be part of a single x86 compare. "
-            "<bookmark mark='c'/> Counting over the whole trace, fifty-nine percent of the Job's loads are used "
-            "exactly this way, so an x86 version would need about eleven percent fewer instructions. That is the "
-            "CISC advantage, measured: real, and modest."
+            "This is the Job's dynamic instruction mix on Pebble, not a measured translation to another ISA. "
+            "<bookmark mark='a'/> Its arithmetic, branches, loads and jumps dominate the recorded chapter. "
+            "<bookmark mark='b'/> An x86 compare can read a memory operand directly, but the conditional jump still "
+            "remains. Our Pebble load followed by a combined compare-and-branch can therefore map to a memory "
+            "compare plus a jump: two architectural instructions, not one. <bookmark mark='c'/> The trace heuristic "
+            "finds ninety thousand seven hundred twenty-six loads whose result feeds the next instruction and soon "
+            "becomes dead. That is about fifty-nine percent of the loads. It is a local use pattern, not a count of "
+            "legal folded x86 instructions or an eleven-percent instruction reduction. Addressing, flags, branches, "
+            "register allocation and actual code generation must be included in such a comparison."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cap))
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(b) for b in bar], lag_ratio=0.2))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(ex))
             self.play(GrowFromCenter(arr), FadeIn(x86))
@@ -117,35 +120,38 @@ class Risc(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def inside(self):
-        head = label(r"CISC outside, \ RISC inside", font_size=38).to_edge(UP, buff=0.35)
+        head = label("Architectural instructions and internal operations", font_size=38).to_edge(UP, buff=0.35)
         x86 = mono("add  [rbx+8], eax", 26, color=INF)
         uops = VGroup(mono("load   tmp  <- [rbx+8]", 22, color=YES), mono("add    tmp  <- tmp + eax", 22, color=YES),
                       mono("store  [rbx+8] <- tmp", 22, color=YES)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         row = VGroup(x86, MathTex(r"\xrightarrow{\text{decode}}", font_size=40, color=GREY_C), uops).arrange(
             RIGHT, buff=0.5).move_to(UP * 0.8)
         facts = VGroup(
-            label(r"since the Pentium Pro (1995), \ x86 cores translate each instruction into micro-operations",
+            label("many x86 implementations decode instructions into internal micro-operations",
                   font_size=24, color=GREY_A),
-            label(r"the out-of-order core renames and schedules the micro-ops: \ a RISC machine", font_size=24,
+            label("out-of-order designs can rename and schedule implementation-specific micro-ops", font_size=24,
                   color=YES),
-            label(r"and fuses some back together: \ a compare and its branch become one", font_size=24, color=GREY_A),
-            label(r"the cost of x86 today: \ a harder decoder \ (variable lengths, \ 1 to 15 bytes)", font_size=24,
+            label("load-operation micro-fusion differs from compare-branch macro-fusion", font_size=24, color=GREY_A),
+            label("x86 encodings: \\ 1 to 15 bytes; \\ some RISC ISAs also mix lengths", font_size=24,
                   color=NO),
         ).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "The argument ended in a merger. <bookmark mark='a'/> Since Intel's Pentium Pro in 1995, x86 processors "
-            "have translated each instruction, as it is decoded, into simple micro-operations. An add to memory "
-            "becomes a load, an add, and a store. <bookmark mark='b'/> Everything after the decoder is an "
-            "out-of-order RISC machine like ours, renaming and scheduling micro-ops. <bookmark mark='c'/> Modern "
-            "decoders even fuse pairs back together: a compare and the branch on it travel through the core as one. "
-            "<bookmark mark='d'/> What remains of the old difference is mostly the decoder. x86 instructions range "
-            "from one byte to fifteen, so finding where each starts, several at a time, is hard work that a "
-            "fixed-length instruction set never needs."
+            "Many modern x86 implementations decode architectural instructions into internal micro-operations. "
+            "<bookmark mark='a'/> This conceptual read-modify-write example separates memory reading, arithmetic "
+            "and memory writing; exact micro-operations and flags behavior depend on the implementation. <bookmark "
+            "mark='b'/> An out-of-order design can rename and schedule those internal operations. They are not "
+            "literally a separate RISC instruction set, and not every x86 processor uses the same organization. "
+            "<bookmark mark='c'/> Some designs fuse a load with an operation for part of the pipeline; macro-fusion "
+            "of a compare and conditional branch is a different mechanism. Architectural instruction counts, "
+            "reorder-buffer entries and execution operations can therefore differ. <bookmark mark='d'/> Encoding is "
+            "another independent choice. x86 uses variable-length encodings; some RISC ISAs also mix lengths, "
+            "including Thumb and compressed RISC-V. A base instruction-set category does not specify every pipeline "
+            "detail."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(FadeIn(row[0]), FadeIn(row[1]), LaggedStart(*[FadeIn(u) for u in uops], lag_ratio=0.3),
                       FadeIn(facts[0]))
+            vo.wait_until("a")
             for mk, f in zip("bcd", facts[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(f))
@@ -156,28 +162,34 @@ class Risc(VoiceoverScene):
     def today(self):
         head = label(r"Where the instruction sets went", font_size=36).to_edge(UP, buff=0.35)
         rows = VGroup(
-            label(r"x86: \ the PC and the server, \ every instruction since 1978 still runs", font_size=24, color=INF),
+            label("x86 compatibility: \\ extensive, \\ but mode and extension dependent", font_size=24, color=INF),
             label(r"Arm: \ Acorn's RISC of 1985 \ (Sophie Wilson, \ Steve Furber): \ phones, \ then Apple's Macs "
                   r"(2020)", font_size=24, color=YES),
-            label(r"RISC-V: \ Berkeley, \ 2010: \ an open instruction set, \ free to implement", font_size=24,
+            label("RISC-V: \\ open ISA; \\ no ISA royalty does not mean no other costs", font_size=24,
                   color=DATA),
             label(r"MIPS and its descendants: \ routers, \ game consoles, \ textbooks", font_size=24, color=GREY_A),
         ).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(UP * 0.2)
         award = label(r"2017 Turing Award: \ Hennessy and Patterson, \ for the quantitative approach to architecture",
                       font_size=24, color=HEAD).to_edge(DOWN, buff=0.55)
         with self.voiceover(
-            "Where did the instruction sets go? <bookmark mark='a'/> x86 kept the personal computer and the server, "
-            "carrying every instruction since 1978 for compatibility. <bookmark mark='b'/> Arm, a RISC designed at "
-            "Acorn in 1985 by Sophie Wilson and Steve Furber, took phones, then tablets, and in 2020 Apple's laptops. "
-            "<bookmark mark='c'/> RISC-V, begun at Berkeley in 2010, is an open instruction set that anyone may "
-            "implement without a licence; Pebble's design borrows from it. <bookmark mark='d'/> And in 2017 John "
-            "Hennessy and David Patterson received the Turing Award, for the quantitative approach to computer "
-            "design that this whole act follows: measure, then build."
+            "Instruction sets preserve software investments while implementations evolve. <bookmark mark='a'/> x86 "
+            "compatibility is extensive, but availability depends on execution mode, extensions and "
+            "operating-system support; not literally every instruction from 1978 runs unchanged in every modern "
+            "mode. <bookmark mark='b'/> Arm designs span many implementations and markets, with distinct "
+            "instruction-set states and encoding choices. <bookmark mark='c'/> RISC-V provides an open ISA that can "
+            "be implemented without an ISA license royalty. That does not remove every other IP, implementation or "
+            "compliance cost. <bookmark mark='d'/> MIPS and other architectures also shaped processors and teaching "
+            "systems. Across these families, evaluate the generated program and the specific implementation using "
+            "instruction counts, timing and resource measurements, rather than treating RISC or CISC as a complete "
+            "performance prediction."
         ) as vo:
             self.play(FadeIn(head))
             for mk, r in zip("abc", rows):
-                vo.wait_until(mk)
+                if mk != "a":
+                    vo.wait_until(mk)
                 self.play(FadeIn(r, shift=RIGHT * 0.1))
+                if mk == "a":
+                    vo.wait_until(mk)
             self.play(FadeIn(rows[3]))
             vo.wait_until("d")
             self.play(FadeIn(award))

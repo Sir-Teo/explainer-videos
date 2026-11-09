@@ -18,7 +18,7 @@ class Scoreboard(VoiceoverScene):
         self.limits()
 
     def card(self):
-        card = chapter_card(3, r"The scoreboard", r"How did the first out-of-order machine keep track?", lit=(1964,),
+        card = chapter_card(3, r"The scoreboard", "How does dynamic scheduling keep track?", lit=(1964,),
                             extra=((1964, r"CDC 6600: \ Thornton and Cray"),), part=PART)
         with self.voiceover("Chapter three. The scoreboard."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
@@ -34,27 +34,26 @@ class Scoreboard(VoiceoverScene):
         sb = box(5.0, 0.7, r"\text{the scoreboard}", HEAD, 26).next_to(boxes, DOWN, buff=0.5)
         lines = VGroup(*[Line(sb.get_top(), b.get_bottom(), color=GREY_D, stroke_width=1.5) for b in boxes])
         facts = VGroup(
-            label(r"ten functional units; \ a 100 ns clock; \ up to three million operations a second", font_size=24,
+            label("ten functional units; \\ 100 ns clock; \\ overlap subject to constraints", font_size=24,
                   color=GREY_A),
             label(r"designed by Seymour Cray, \ with James Thornton, \ in a lab in Chippewa Falls", font_size=24,
                   color=GREY_A),
-            label(r"the fastest computer in the world \ for five years", font_size=24, color=HIST),
+            label("a landmark in dynamic instruction scheduling", font_size=24, color=HIST),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "The first machine to let instructions overtake each other was the Control Data 6600, delivered in 1964, "
-            "designed by Seymour Cray with James Thornton. <bookmark mark='a'/> It had ten functional units: adders, "
-            "two multipliers, a divider, units for shifts, logic, branches and address arithmetic, all able to work at "
-            "once. <bookmark mark='b'/> The trouble with ten units is keeping them busy without getting the answers "
-            "wrong. Thornton's solution was a central piece of bookkeeping called the scoreboard, which tracks every "
-            "instruction in flight, every unit, and every register a unit is about to write. <bookmark mark='c'/> "
-            "With a hundred-nanosecond clock it did up to three million operations a second, and it was the fastest "
-            "computer in the world for five years. IBM's president, Thomas Watson Junior, wrote a famous memo asking "
-            "how a laboratory of thirty-four people, including the janitor, had beaten IBM. Cray is said to have "
-            "replied that Mr. Watson had answered his own question."
+            "The Control Data 6600, delivered in 1964, is a landmark in dynamic instruction scheduling, associated "
+            "with Seymour Cray and James Thornton. <bookmark mark='a'/> Its ten functional units could overlap "
+            "different operations, subject to dependencies and shared resources. <bookmark mark='b'/> The "
+            "scoreboard tracked functional-unit availability, pending register writers and operand readiness. That "
+            "bookkeeping let instructions execute out of order while protecting their register dependencies. "
+            "<bookmark mark='c'/> The machine used a hundred-nanosecond clock. Historical peak floating-point rates "
+            "and application throughput are different measures, so we will focus on its scheduling mechanism rather "
+            "than a universal performance ranking. The important question is how several units cooperate without "
+            "changing the program's results."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(b) for b in boxes], lag_ratio=0.08))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(sb), Create(lines))
             vo.wait_until("c")
@@ -181,19 +180,25 @@ class Scoreboard(VoiceoverScene):
                   color=CTRL),
             label(r"one instruction stuck at issue \ blocks every one behind it", font_size=26, color=INF),
         ).arrange(DOWN, buff=0.4, aligned_edge=LEFT).move_to(UP * 0.3)
-        nxt = label(r"three years later, \ IBM removed all three", font_size=30, color=HEAD).to_edge(DOWN, buff=0.6)
+        nxt = label("tags and broadcast help; \\ traditional dispatch remains in order", font_size=30, color=HEAD).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "The scoreboard was a brilliant first step, and it has three limits. <bookmark mark='a'/> It handles "
-            "false dependences by waiting. Two writers of one register cannot both be in flight, and a finished "
-            "result can be held up, as our add was, by an earlier reader of the old value. <bookmark mark='b'/> "
-            "Values pass only through the register file, so a result must be written before its user can read it. "
-            "<bookmark mark='c'/> And issue is in order, so when one instruction cannot issue, nothing behind it can. "
-            "<bookmark mark='d'/> Three years later, a team at IBM removed all three limits at once."
+            "This scoreboard handles several hazards by waiting. <bookmark mark='a'/> A pending writer blocks "
+            "another writer of the same register, and an earlier reader can delay a later writeback. <bookmark "
+            "mark='b'/> In this model, results reach their users through register writes and subsequent operand "
+            "reads. <bookmark mark='c'/> Dispatch is in program order: if the next instruction cannot reserve its "
+            "required unit, later instructions cannot dispatch past it. <bookmark mark='d'/> Tomasulo's algorithm "
+            "adds reservation stations, producer tags and direct result broadcast. Those remove register-name "
+            "hazards and decouple dispatch from immediate unit availability. Traditional Tomasulo still dispatches "
+            "in order, and still stalls when the needed station is full. It does not remove every limit listed "
+            "here."
         ) as vo:
             self.play(FadeIn(head))
             for mk, it in zip("abc", items):
-                vo.wait_until(mk)
+                if mk != "a":
+                    vo.wait_until(mk)
                 self.play(FadeIn(it, shift=RIGHT * 0.1))
+                if mk == "a":
+                    vo.wait_until(mk)
             vo.wait_until("d")
             self.play(FadeIn(nxt))
         self.wait(0.3)

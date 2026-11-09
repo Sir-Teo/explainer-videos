@@ -63,12 +63,14 @@ class Outro(VoiceoverScene):
         ).arrange_in_grid(rows=2, cols=3, buff=(0.35, 0.35)).move_to(DOWN * 0.2)
         head = label(rf"Part {PART}: \ Out of Order", font_size=38).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "What we built in this part. The dataflow graph, and the limit its critical path sets on any machine. "
-            "Register renaming, which removes every false dependence. The scoreboard and Tomasulo's algorithm, cycle "
-            "by cycle. A real out-of-order core with a reorder buffer, checked against the emulator, whose exceptions "
-            "stay precise. The wall it hits: parallelism by the thousand, hidden behind branches nobody can predict. "
-            "Spectre, run on our own machine, and two fixes measured. And the next row of the ledger: the same Job, "
-            "two and a half times faster again."
+            "This part connected dependency graphs to scheduling under stated latencies and resources, then "
+            "separated register-name hazards from real value dependencies. We followed scoreboards, producer tags "
+            "and precise architectural retirement, and checked a functional out-of-order model against the emulator "
+            "on finite tests. Trace-oracle studies exposed the importance of their own knowledge, resource and "
+            "ordering assumptions. A simulated Spectre gadget showed that squashed architectural work can leave "
+            "observable cache effects, while two mitigations stopped that supplied witness under the model's rules. "
+            "Finally, passage simulations supported a fitted full-corpus ledger projection at an assumed clock. "
+            "Each conclusion travels with that evidence and scope."
         ):
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
@@ -86,13 +88,15 @@ class Outro(VoiceoverScene):
             (r"VLIW's second life", [60]),
         ], font_size=25)
         with self.voiceover(
-            "Where this comes back. The big windows exist to hide memory's latency, which Part 9 measures and "
-            "caches attack. The ILP wall, and the power that width costs, lead to Part 10's multicore and vector "
-            "machines. Static scheduling and software pipelining are Part 13's compiler at work. The branch no "
-            "predictor can learn is removed by changing the algorithm, in Parts 16 and 17. A core that reorders "
-            "loads and stores raises the question of what other threads can see, which is Part 33's memory models. "
-            "Spectre and Meltdown return with the kernel, virtual memory, and Part 55. And VLIW's second life is in "
-            "the domain-specific hardware of Part 60."
+            "These ideas return in several later parts. Larger windows interact with cache misses and memory-level "
+            "parallelism in Part 9. Width, energy and multiple cores interact in Part 10. Static scheduling and "
+            "software pipelining return with compiler transformations. The Job's repeated length checks motivate "
+            "different data structures and algorithms; a measured predictor's difficulty does not prove a branch "
+            "unlearnable. Reordering loads and stores connects to concurrency and memory models, where "
+            "single-thread correctness and inter-thread visibility are different questions. The simulated security "
+            "example leads into threat models and operating-system defenses, and static scheduling reappears in "
+            "specialized hardware. The common habit is to connect a mechanism to a measured workload and explicit "
+            "assumptions."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.3), run_time=3.0)
@@ -111,12 +115,14 @@ class Outro(VoiceoverScene):
             (r"simulators", r"gem5, \ ChampSim: \ the tools architecture research uses"),
         ])
         with self.voiceover(
-            "In practice. CPU design teams at Apple, Arm, AMD, Intel and Qualcomm tune predictors, schedulers and "
-            "windows on simulators like ours, at a vastly larger scale. Performance engineers read IPC, branch misses "
-            "and machine clears from the counters, and use top-down analysis to see where issue slots go. Spectre "
-            "mitigations live in every kernel, in browsers' site isolation, and in clouds' policies on sharing cores. "
-            "Open out-of-order RISC-V cores, like Berkeley's BOOM and China's XiangShan, can be read line by line. "
-            "And research uses simulators such as gem5 and ChampSim."
+            "In practice, use implementation manuals and measurements together. Linux perf and top-down analysis "
+            "expose supported event categories when hardware and permissions allow, but event meanings differ "
+            "across cores. Production processors combine related scheduling ideas with many details omitted by "
+            "Pebble. BOOM and other open designs let you inspect an implementation, while gem5 and trace simulators "
+            "answer different modeling questions. Compiler and kernel hardening can mitigate particular speculative "
+            "attacks under specified conditions; their names are not blanket security guarantees. When a counter, "
+            "simulator or diagram supports a claim, state what it measures and what assumptions connect that "
+            "measurement to the question."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.35), run_time=3.0)
@@ -126,25 +132,27 @@ class Outro(VoiceoverScene):
     def problems(self):
         ps = problem_set([
             r"Draw the dataflow graph of \ \texttt{lw a0, 0(s0)}; \ \texttt{lw a1, 4(s0)}; \ \texttt{add a2, a0, a1}; \ "
-            r"\texttt{mul a3, a2, a2}; \ \texttt{add a4, a0, a3} \ (load 2, \ mul 3, \ add 1). \ Find $L$, \ and check "
-            r"$\max(N/W, L) \le T_W \le N/W + L$ for $W = 1, 2$.",
+            r"\texttt{mul a3, a2, a2}; \ \texttt{add a4, a0, a3} \ (load 2, \ mul 3, \ add 1). \ Find $N$, $A$ and $L$. Compare start-slot schedules with "
+            r"$\max(\lceil N/W\rceil,L)\le T_W$; separately test Graham\textquotesingle s weighted-work bound.",
             r"Rename the textbook example of chapters 3 and 4 into physical registers \ \texttt{p10, p11, \dots}. \ "
             r"Which dependences survive?",
             r"A core mispredicts once every 40 instructions, \ has CPI 0.3 with perfect prediction \ and a 15-cycle "
-            r"penalty. \ What is its CPI? \ About how much of a 512-entry window does it use?",
-            r"Why does the index mask stop Spectre although the bounds check is still mispredicted? \ For an array of "
-            r"size $2^k$, \ why is \ \texttt{x \& (size - 1)} \ not a complete fix?",
+            r"penalty in a defined accounting model. What is its CPI? Can this alone determine ROB occupancy?",
+            r"For unsigned $x$ and a nonempty array of size $2^k$, compare the dependency mask with "
+            r"\texttt{x \& (size - 1)}. Which indices reach memory, and how does each handle invalid requests?",
             r"\textit{Build.} \ Part 7's problem 5 hoisted one load to hide a bubble, \ saving 4.4\% on the pipeline. \ "
             r"Make the same change and run chapter 1 on our core. \ What does it save now, \ and why?",
-            r"$\bigstar$ \textit{Research.} \ Our secure rule blocks the gadget for 3.5\% on the Job. \ Does it block "
+            r"$\bigstar$ \textit{Research.} \ Our control-shadow rule blocks this decoder, costing 3.5\% on chapter 1. Does it block "
             r"every speculative leak through the cache in our model? \ Find a program where it costs over 30\%, \ "
             r"and a rule that blocks the same leaks for less.",
         ], font_size=22)
         with self.voiceover(
-            "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build "
-            "problem: take Part 7's hand-scheduling fix to the out-of-order core, and see what it is worth there. "
-            "The last, marked with a star, is a research problem: nobody knows its full answer, and the notes say "
-            "where to start."
+            "The exercises ask you to build dependency schedules, distinguish instruction-count start limits from "
+            "weighted processing-work bounds, and rename live register versions. Treat the CPI penalty calculation "
+            "as a defined accounting model rather than a universal causal law. Before hoisting a load, prove its "
+            "address and exception safety. For the research exercise, define protected data, public inputs, "
+            "permitted observations and a non-speculative baseline, then search for a counterexample to our "
+            "control-shadow rule. A finite successful test and a general security proof are different deliverables."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)
@@ -158,13 +166,15 @@ class Outro(VoiceoverScene):
         names = VGroup(*[label(t, font_size=20, color=GREY_A).next_to(b, DOWN, buff=0.12) for t, b in
                          zip((r"L1", r"L2", r"L3", r"DRAM"), bars)])
         fig = VGroup(bars, names).move_to(DOWN * 0.2)
-        q = label(r"the core can hold 500 instructions in flight; \ memory makes them wait 300 cycles", font_size=28,
+        q = label("illustrative latency hierarchy; \\ core-cycle costs depend on the system", font_size=28,
                   color=HEAD).to_edge(DOWN, buff=0.7)
         with self.voiceover(
-            "Next time. Two of Pebble's five stages were a whole nanosecond of memory, and a real DRAM access takes "
-            "hundreds of cycles. Part 9 builds the memory hierarchy: caches, locality, the miss rate curves of the "
-            "Job, a latency staircase measured on this very computer, and a theorem about pebbles that says how much "
-            "data any matrix multiply must move."
+            "Next, the memory hierarchy. Part 7 assigned illustrative memory delays; physical DRAM latency in core "
+            "cycles depends on clock, configuration and access pattern. Part 9 studies caches, locality and the "
+            "Job's miss-rate curves, and measures a latency staircase on this host. It also develops data-movement "
+            "bounds for classical matrix multiplication under a specified computation model and limited fast "
+            "memory. Those assumptions matter: a bound for one algorithmic model is not automatically a theorem "
+            "about every possible matrix multiplication algorithm."
         ):
             self.play(FadeIn(nxt), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.3), FadeIn(names))
             self.play(FadeIn(q))
@@ -186,7 +196,9 @@ class Outro(VoiceoverScene):
              r"Chrysos and Emer, ``Memory dependence prediction using store sets'', ISCA (1998)",
              r"Kocher et al., ``Spectre attacks'', S\&P (2019); \ Lipp et al., ``Meltdown'', USENIX Security (2018)",
              r"Lipasti, Wilkerson and Shen, ``Value locality and load value prediction'', ASPLOS (1996)",
-             r"Yu et al., ``Speculative taint tracking'', MICRO (2019); \ Guarnieri et al., ``Spectector'', S\&P (2020)"])
+             r"Yu et al., ``Speculative taint tracking'', MICRO (2019); \ Guarnieri et al., ``Spectector'', S\&P (2020)",
+             "Loughlin et al., ``Dolma: Securing speculation with the principle of transient non-observability'', USENIX Security (2021)",
+             "Daniel et al., ``ProSpeCT: Provably secure speculation for the constant-time policy'', USENIX Security (2023)"])
         credit = note(rf"narration: \ {narration_credit()}", font_size=18).to_edge(DOWN, buff=0.15)
         with self.voiceover("The books and papers this part follows are on screen and in the notes. Thank you for "
                             "watching."):

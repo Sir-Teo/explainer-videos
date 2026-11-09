@@ -26,9 +26,8 @@ class Ilp(VoiceoverScene):
     # ------------------------------------------------------------------
     def wall(self):
         d = load("limits")
-        head = label(r"A limit study: \ an oracle, \ handicapped one way at a time", font_size=32).to_edge(UP, buff=0.3)
-        names = [r"the oracle", r"no renaming", r"memory: \\ wait for \\ every store", r"branches: \\ a real \\ "
-                 r"predictor", r"branches: \\ no \\ speculation"]
+        head = label("Oracle sensitivity: \\ one baseline assumption changed per bar", font_size=32).to_edge(UP, buff=0.3)
+        names = [r"the oracle", r"no renaming", r"memory: \\ wait for \\ every store", "branches: \\\\ predictor \\\\ barriers", r"branches: \\ no \\ speculation"]
         vals = [e["ipc"] for e in d["each"]]
         cols = [YES, CTRL, INF, NO, NO]
         lo, hi = -0.5, 3.5
@@ -51,29 +50,31 @@ class Ilp(VoiceoverScene):
         yl = note(r"instructions per cycle \ (log scale), \ the Job's first chapter", font_size=20).next_to(
             fig, UP, buff=0.15).align_to(fig, LEFT)
         with self.voiceover(
-            "In 1991 David Wall, at Digital's research lab, asked how much parallelism real programs contain. Earlier "
-            "studies had found less than two instructions per cycle inside a basic block, but dozens, by Riseman and "
-            "Foster's count in 1972, if a machine could see through every branch. Wall's method was the oracle we "
-            "met in chapter two: record a program's run, schedule every instruction as early as its dependences "
-            "allow, then take the oracle's powers away one at a time. We repeat it on the Job. <bookmark mark='a'/> "
-            "With every power: two thousand four hundred instructions a cycle. <bookmark mark='b'/> Without "
-            "renaming: three point seven. <bookmark mark='c'/> With renaming, but making every load wait until every "
-            "earlier store's address is known: sixty-two. Memory ordering costs a lot, but not everything. <bookmark "
-            "mark='d'/> And now keep renaming and perfect memory, but replace the oracle's knowledge of branches with "
-            "Part 7's tournament predictor, so that each wrong guess blocks everything after it until it is resolved: "
-            "three point four. <bookmark mark='e'/> With no guessing at all, stopping at every branch: under one half."
+            "Limit studies inspired by David Wall's 1991 work schedule a recorded execution under progressively "
+            "changed assumptions. Our bars change one assumption at a time from the same baseline; they are not "
+            "cumulative stages. <bookmark mark='a'/> Unlimited start width and lookahead, fixed latencies, perfect "
+            "path and word-address knowledge, register renaming and omitted realistic I/O ordering produce about "
+            "twenty-four hundred instructions per modeled cycle on this trace. <bookmark mark='b'/> Adding "
+            "register-name constraints alone gives about three point seven. <bookmark mark='c'/> Making loads wait "
+            "for earlier store addresses instead gives about sixty-two. <bookmark mark='d'/> Keeping the other "
+            "oracle powers but adding tournament-predicted control barriers gives about three point four. <bookmark "
+            "mark='e'/> Barriers at every branch and jump give under one half. These are sensitivities of a "
+            "particular trace scheduler, not attainable processor specifications or universal program limits."
         ) as vo:
             self.play(FadeIn(head), FadeIn(axis), FadeIn(yl))
             for mk, b in zip("abcde", bars):
-                vo.wait_until(mk)
+                if mk != "a":
+                    vo.wait_until(mk)
                 self.play(GrowFromEdge(b[0], DOWN), FadeIn(b[1]), FadeIn(b[2]))
+                if mk == "a":
+                    vo.wait_until(mk)
         self.wait(0.3)
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def curves(self):
         d = load("limits")
-        head = label(r"Width and window: \ the oracle with real branches", font_size=34).to_edge(UP, buff=0.3)
+        head = label("Trace scheduler: \\ start width and start-distance parameter", font_size=34).to_edge(UP, buff=0.3)
         ws = d["widths"]
         ax = Axes(x_range=[0, 6, 1], y_range=[0, 32, 8], x_length=8.0, y_length=4.6, tips=False,
                   axis_config={"color": GREY_C, "font_size": 18}).move_to(LEFT * 1.3 + DOWN * 0.3)
@@ -90,25 +91,27 @@ class Ilp(VoiceoverScene):
         real = VGroup(*[curve(d["curves"][k], NO, 3) for k in ("32", "128", "512", "2048", "inf")])
         pb128 = curve(d["perfect_branches"]["128"], DATA)
         pb2048 = curve(d["perfect_branches"]["2048"], YES)
-        lr = label(r"real branch prediction: \ any window, \ 32 to $\infty$", font_size=20, color=NO).next_to(
+        lr = label(r"modeled control barriers: \ start distance 32 to $\infty$", font_size=20, color=NO).next_to(
             ax.c2p(6, d["curves"]["inf"][-1]), UP, buff=0.15).shift(LEFT * 1.2)
-        l128 = label(r"perfect branches, \ window 128", font_size=20, color=DATA).next_to(
+        l128 = label(r"known path, \ start distance 128", font_size=20, color=DATA).next_to(
             ax.c2p(6, d["perfect_branches"]["128"][-1]), UP, buff=0.1).shift(LEFT * 1.0)
-        l2048 = label(r"perfect branches, \ window 2048", font_size=20, color=YES).next_to(
+        l2048 = label(r"known path, \ start distance 2048", font_size=20, color=YES).next_to(
             ax.c2p(6, d["perfect_branches"]["2048"][-1]), LEFT, buff=0.15).shift(DOWN * 0.3)
         side = VGroup(
-            label(r"the window: \ how far ahead \\ the machine may look", font_size=22, color=GREY_A),
-            label(r"with real branches \\ it hardly matters", font_size=22, color=NO),
+            label(r"start distance: index-separated starts; \\ not an active ROB capacity", font_size=22, color=GREY_A),
+            label(r"with modeled control barriers \\ these curves nearly coincide", font_size=22, color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4).shift(UP * 0.5)
         with self.voiceover(
-            "Now give the oracle real limits: a width, and a window, the number of instructions ahead of the oldest "
-            "unfinished one that it may look at. A reorder buffer is exactly such a window. <bookmark mark='a'/> With "
-            "the real predictor, here is instructions per cycle against width, for windows from thirty-two "
-            "instructions to infinity. The curves lie on top of each other. They climb to about three point three at "
-            "eight wide and stop. A bigger window is useless, because the machine never gets far ahead before a wrong "
-            "guess knocks it back. <bookmark mark='b'/> Now make the branches perfect. With a window of one hundred "
-            "twenty-eight, the curve keeps climbing, to eight. <bookmark mark='c'/> With a window of two thousand and "
-            "forty-eight, to thirty. The parallelism is there; it is the branches that hide it."
+            "Now vary start width and the scheduler's window parameter. This parameter constrains an instruction's "
+            "start relative to the start of an earlier trace position. It does not wait for the oldest unfinished "
+            "operation to retire, so it is not a physical reorder-buffer capacity. <bookmark mark='a'/> With the "
+            "modeled predictor barriers, curves for the tested window parameters almost overlap and flatten near "
+            "three point four. That shows little benefit from this parameter on this trace under these assumptions. "
+            "<bookmark mark='b'/> With perfect control, a parameter of one hundred twenty-eight permits "
+            "considerably more overlap. <bookmark mark='c'/> Two thousand forty-eight permits still more. Control "
+            "assumptions interact strongly with start-width and lookahead assumptions here. The result does not "
+            "prove that larger buffers are useless on other programs, or that the oracle's distant future inputs "
+            "can be supplied by hardware."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(xl), FadeIn(yl), FadeIn(side[0]))
             vo.wait_until("a")
@@ -124,7 +127,7 @@ class Ilp(VoiceoverScene):
     # ------------------------------------------------------------------
     def core(self):
         d = load("sweep")
-        head = label(r"Our core: \ width against reorder-buffer size", font_size=34).to_edge(UP, buff=0.3)
+        head = label("Functional core: \\ front-end width and queue capacities", font_size=34).to_edge(UP, buff=0.3)
         runs = d["runs"]
         robs = [16, 32, 64, 128, 256, 512]
         widths = [1, 2, 4, 8]
@@ -143,23 +146,25 @@ class Ilp(VoiceoverScene):
         ct = note(r"reorder-buffer entries", font_size=20).move_to([2.5 * cw, 1.05, 0])
         tab = VGroup(grid, rl, cl, ct).move_to(UP * 0.4)
         pp = d["perfect_512"]
-        perf = label(rf"with perfect prediction \ (512 entries): \ {pp[0]:.2f}, \ {pp[1]:.2f}, \ {pp[2]:.2f}, \ "
+        perf = label(rf"oracle-assisted \ (512 ROB entries): \ {pp[0]:.2f}, \ {pp[1]:.2f}, \ {pp[2]:.2f}, \ "
                      rf"{pp[3]:.2f}", font_size=24, color=YES).next_to(tab, DOWN, buff=0.5)
-        why = label(r"the rest of the gap: \ one taken branch fetched per cycle, \ two memory ports", font_size=22,
+        why = label("constraints include one taken fetch branch/cycle and two memory ports", font_size=22,
                     color=GREY_B).next_to(perf, DOWN, buff=0.2)
         with self.voiceover(
-            "Our real core tells the same story. <bookmark mark='a'/> Each cell is the Job's instructions per cycle, "
-            "for a width and a reorder-buffer size. Going from one to two to four wide helps a lot: zero point eight "
-            "six, one point two four, one point eight nine. Eight wide adds almost nothing. <bookmark mark='b'/> And "
-            "across each row, the buffer size changes nothing at all beyond thirty-two entries. Remember the hook: the "
-            "buffer held about eleven instructions on average. <bookmark mark='c'/> With perfect prediction the same "
-            "core reaches three point one six at four wide and three point five at eight. What stops it there is the "
-            "front end and the memory ports: it fetches past at most one taken branch a cycle, and the scan loop "
-            "takes a jump every six instructions."
+            "Compare that oracle with the functional core's actual model runs. <bookmark mark='a'/> Each heatmap "
+            "cell reports retired IPC while varying the front-end and retirement width, reorder-buffer capacity and "
+            "proportional queue sizes. The four-width configuration is about one point eight nine; eight increases "
+            "it only slightly on this chapter. Execution starts have their own unit and port limits. <bookmark "
+            "mark='b'/> Increasing these capacities beyond the smaller tested settings brings little benefit here. "
+            "That is a workload-specific observation, consistent with low whole-run occupancy. <bookmark mark='c'/> "
+            "Oracle-assisted correct-path prediction improves IPC substantially, but the implementation can still "
+            "redirect after speculative memory-order mistakes. Front-end taken-branch bandwidth, memory ports and "
+            "other resources remain constraints; this sweep alone does not uniquely assign the remaining gap to one "
+            "of them."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rl), FadeIn(cl), FadeIn(ct))
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(g) for g in grid], lag_ratio=0.03), run_time=2.0)
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(*[Indicate(grid[2 * 6 + c], color=HEAD, scale_factor=1.05) for c in range(6)])
             vo.wait_until("c")
@@ -172,26 +177,31 @@ class Ilp(VoiceoverScene):
     def verdict(self):
         head = label(r"The ILP wall", font_size=40).to_edge(UP, buff=0.4)
         items = VGroup(
-            label(r"the parallelism is real: \ thousands of instructions could overlap", font_size=26, color=YES),
-            label(r"but a machine finds it only as far ahead as it can \textit{predict}", font_size=26, color=NO),
-            label(r"and each extra instruction of width costs more wires, \ ports and power than the last",
+            label("large oracle overlap relies on supplied future knowledge", font_size=26, color=YES),
+            label("prediction, dependencies, resources and ordering interact", font_size=26, color=NO),
+            label("selection and broadcast: \\\\ costs depend on organization and implementation",
                   font_size=26, color=COST),
-            label(r"so cores stopped near 4 to 8 wide, \ and turned to many cores \ (Part 10)", font_size=26,
+            label("width, caches, energy and multiple cores: \\ workload-dependent trade-offs", font_size=26,
                   color=HEAD),
         ).arrange(DOWN, buff=0.4).move_to(DOWN * 0.1)
         with self.voiceover(
-            "This is the instruction-level parallelism wall. <bookmark mark='a'/> The parallelism is real: in the "
-            "Job, thousands of instructions could run at once. <bookmark mark='b'/> But a machine can only exploit "
-            "what lies within the stretch of program it can predict correctly, and with real branch prediction that "
-            "stretch is short. <bookmark mark='c'/> Meanwhile each extra unit of width costs more than the last: "
-            "every new instruction must compare its sources with every other instruction renamed in the same cycle, "
-            "and every result must be broadcast to every waiting station. <bookmark mark='d'/> So, in the 2000s, "
-            "designers stopped near four to eight wide and spent their transistors on more cores instead. That is "
-            "Part 10. But first, the prediction itself: how a machine runs a hundred instructions ahead on a guess."
+            "This illustrates an instruction-level parallelism trade-off. <bookmark mark='a'/> An offline oracle "
+            "exposes large overlap by supplying knowledge and resources that a real core lacks. Its "
+            "twenty-four-hundred figure is not independently available hardware parallelism. <bookmark mark='b'/> "
+            "Finite lookahead, prediction, memory ordering and front-end bandwidth restrict useful overlap in the "
+            "functional model. Larger windows can still help other workloads, especially when they expose "
+            "independent misses or long-latency work. <bookmark mark='c'/> Increasing width also adds bypass, "
+            "selection, port, wiring and energy costs. Those costs depend on the implementation; not every design "
+            "uses one fully connected broadcast structure. <bookmark mark='d'/> Designers balance wider cores, "
+            "caches, multiple cores and other techniques. Fetch, decode, issue and retirement widths are different "
+            "metrics, and there is no universal four-to-eight-wide stopping point."
         ) as vo:
             self.play(FadeIn(head))
             for mk, it in zip("abcd", items):
-                vo.wait_until(mk)
+                if mk != "a":
+                    vo.wait_until(mk)
                 self.play(FadeIn(it, shift=UP * 0.1))
+                if mk == "a":
+                    vo.wait_until(mk)
         self.wait(0.3)
         self.clear_scene()

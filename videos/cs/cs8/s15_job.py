@@ -24,14 +24,14 @@ class Job(VoiceoverScene):
     def stack(self):
         sp = load("speculate")["rows"]
         h = load("hook")
-        head = label(r"The first chapter's cycles, \ accounted for", font_size=34).to_edge(UP, buff=0.3)
+        head = label("Chapter 1 CPI: counterfactual accounting, not unique causes", font_size=34).to_edge(UP, buff=0.3)
         n = sp["tournament"]["committed"]
         cpi_pipe = h["pipeline"]["cpi"]
         cpi_perf = 1 / sp["perfect"]["ipc"]
         cpi_real = 1 / sp["tournament"]["ipc"]
         ideal = 0.25
-        parts = [(r"4 a cycle: \ the width", ideal, GREY_B), (r"dependences, \ fetch, \ ports", cpi_perf - ideal, FUNC),
-                 (r"wrong guesses", cpi_real - cpi_perf, NO)]
+        parts = [(r"4-wide retirement \\ floor", ideal, GREY_B), (r"oracle-assisted \\ gap above floor", cpi_perf - ideal, FUNC),
+                 (r"configuration \\ gap", cpi_real - cpi_perf, NO)]
         S = 9.0
         bar = VGroup()
         x = 0
@@ -50,23 +50,29 @@ class Job(VoiceoverScene):
         pipe = Rectangle(width=S * cpi_pipe, height=0.5, stroke_width=0, fill_color=GREY_D, fill_opacity=0.6)
         pipe.next_to(bar, DOWN, buff=1.1).align_to(bar, LEFT)
         pl = label(rf"Part 7's pipeline: \ CPI {cpi_pipe:.3f}", font_size=22, color=GREY_A).move_to(pipe)
-        share = label(rf"{100 * ((cpi_real - cpi_perf) / cpi_real):.0f}\% of the core's time: \ recovering from the scan loop's "
-                      r"length test", font_size=24, color=NO).to_edge(DOWN, buff=0.6)
+        share = label(rf"oracle-assisted run: {100 * ((cpi_real - cpi_perf) / cpi_real):.0f}\% fewer cycles \\ "
+                      r"configuration comparison; not unique time spent on branches", font_size=24, color=NO).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "Where do the cycles go now? Measure cycles per instruction on the first chapter, and split it. "
-            "<bookmark mark='a'/> A four-wide core could at best spend a quarter of a cycle on each instruction. "
-            "<bookmark mark='b'/> With perfect prediction it spends about a third: the rest of that is true "
-            "dependences, the one-taken-branch fetch limit, and the memory ports. <bookmark mark='c'/> With the real "
-            "predictor, another fifth of a cycle per instruction goes to wrong guesses. <bookmark mark='d'/> Part "
-            "7's pipeline, for comparison, spent one point two. <bookmark mark='e'/> So forty percent of the core's "
-            "time goes to recovering from mispredictions, nearly all of them in one branch: the scan loop's test of "
-            "whether an entry has the word's length. That branch depends on the text, and no history predicts it "
-            "well. The fix is not in the hardware; it is in the program, and Part 17 makes it."
+            "This stack is an accounting comparison, not a unique causal decomposition. <bookmark mark='a'/> "
+            "Four-wide architectural retirement gives an ideal lower floor of one quarter cycle per retired "
+            "instruction. It is not the total execution-start limit. <bookmark mark='b'/> The oracle-assisted run "
+            "uses about zero point three one seven cycles per instruction; its gap above that floor includes the "
+            "model's dependency, front-end and resource constraints. <bookmark mark='c'/> The tournament run uses "
+            "about zero point five two nine. Their difference is a configuration gap, not a separately measured "
+            "amount of time spent only on branches. <bookmark mark='d'/> Part 7's pipeline is another "
+            "configuration, with about one point two cycles per instruction. <bookmark mark='e'/> The "
+            "oracle-assisted core uses about forty percent fewer cycles than the tournament core on this chapter, "
+            "with interactions among prediction, queues and memory recovery. The length test is important in the "
+            "measured trace, but these comparisons do not prove its outcomes are unlearnable or assign every saved "
+            "cycle to it."
         ) as vo:
             self.play(FadeIn(head))
             for mk, k in zip("abc", range(3)):
-                vo.wait_until(mk)
+                if mk != "a":
+                    vo.wait_until(mk)
                 self.play(GrowFromEdge(bar[k], LEFT))
+                if mk == "a":
+                    vo.wait_until(mk)
             self.play(FadeIn(tot))
             vo.wait_until("d")
             self.play(GrowFromEdge(pipe, LEFT), FadeIn(pl))
@@ -95,21 +101,23 @@ class Job(VoiceoverScene):
         gl = label(r"IPC 2", font_size=18, color=GREY_B).next_to(ax.c2p(4.4, 2.2), UP + LEFT, buff=0.05)
         cl = label(r"the check passage", font_size=18, color=YES).next_to(chk, LEFT, buff=0.15)
         side = VGroup(
-            label(r"24 passages of 400 to 4000 bytes, \\ run on the core", font_size=22, color=DATA),
+            label("24 slices of 400 to 4000 characters; \\\\ features count encoded bytes", font_size=22, color=DATA),
             label(r"cycles fitted as a linear function \\ of the text's events \ (words, \ entries scanned, \ \dots)",
                   font_size=22, color=GREY_A),
-            label(rf"checked on 16 KB of \textit{{Moby-Dick}}: \\ {ck['cycles']:,} cycles measured, \\ "
-                  rf"{ck['predicted']:,.0f} predicted \ ({100 * ck['error']:+.2f}\%)", font_size=22, color=YES),
+            label(rf"heldout: 16000 chars / 16019 bytes \\ measured: {ck['cycles']:,} cycles \\ "
+                  rf"predicted: {ck['predicted']:,.0f} ({100 * ck['error']:+.2f}\%)", font_size=22, color=YES),
         ).arrange(DOWN, buff=0.35, aligned_edge=LEFT).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Simulating thirty novels on this core, cycle by cycle, would take about a month: it runs about thirty-five thousand "
-            "instructions a second. So, as in Part 7, we count. <bookmark mark='a'/> Twenty-four passages of four "
-            "hundred to four thousand bytes, from random books, are run on the core. <bookmark mark='b'/> Their "
-            "cycle counts are fitted as a linear function of the events in each text that the Job's work depends on: "
-            "the words, the entries scanned, the entries of the same length, and so on. <bookmark mark='c'/> Then "
-            "the model is checked on a passage four times longer than any it was fitted on, sixteen thousand bytes "
-            "of Moby-Dick: six and a half million instructions, three point three million cycles, predicted to within "
-            "a tenth of a percent."
+            "A full cycle-by-cycle simulation of the corpus is expensive, so use a fitted projection and expose its "
+            "limits. <bookmark mark='a'/> The training set contains twenty-four randomly selected text slices, four "
+            "hundred to four thousand characters long. The actual inputs and byte-count features are UTF-8 encoded; "
+            "the slice length metadata is not always the encoded byte length. <bookmark mark='b'/> Fit model cycles "
+            "as a linear function of text features, including word counts, scanned entries and letter comparisons. "
+            "<bookmark mark='c'/> One separate Moby-Dick slice has sixteen thousand characters and sixteen thousand "
+            "nineteen encoded bytes. It takes about three point two nine million simulated cycles, and this fit "
+            "predicts it within about zero point zero nine percent. That is one heldout check, not a full-corpus "
+            "error bound or evidence that all unseen texts behave equally well. Host simulation speed also depends "
+            "on machine and configuration."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl), Create(guide), FadeIn(gl))
             vo.wait_until("a")
@@ -125,29 +133,30 @@ class Job(VoiceoverScene):
     def corpus(self):
         j = load("job")
         co = j["corpus"]
-        head = label(r"Thirty novels, \ out of order: \ ledger row 2", font_size=34).to_edge(UP, buff=0.3)
+        head = label("Projected corpus runtime: \\ ledger row 2", font_size=34).to_edge(UP, buff=0.3)
         steps = VGroup(
-            label(rf"the corpus: \ ${sci(co['instructions'], 4)}$ instructions, \ ${sci(co['cycles'], 4)}$ cycles: \ "
+            label(rf"projected corpus: \ ${sci(co['instructions'], 4)}$ instructions, \ ${sci(co['cycles'], 4)}$ cycles: \ "
                   rf"IPC {co['ipc']:.2f}", font_size=24, color=HEAD),
-            label(rf"at Part 7's clock, \ {j['clock_mhz']:.0f} MHz \ (an assumption: \ a real out-of-order core "
-                  r"needs more stages to keep it)", font_size=21, color=GREY_A),
+            label(rf"assumed teaching clock: {j['clock_mhz']:.0f} MHz; \ no out-of-order gate timing result", font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.2).move_to(UP * 1.9)
         rows = j["ledger"] + [{"part": p_, "label": t} for p_, t in ((9, r"caches"), (10, r"four cores"),
                                                                      (13, r"an optimizing compiler"),
                                                                      (16, r"sort, then count"), (17, r"a hash table"))]
         led = ledger_table(rows, shown=3, highlight=(2,), font_size=21, row_h=0.38, label_width=4.8).move_to(DOWN * 1.1)
         res = label(rf"{human_time(j['ledger'][1]['seconds'])} $\to$ {human_time(co['seconds'])}: \ "
-                    rf"{j['speedup']:.2f} times faster, \ for the same program", font_size=26,
+                    rf"{j['speedup']:.2f} times: fitted projections at the shared assumed clock", font_size=26,
                     color=COST).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "Applied to the whole corpus, the model gives a hundred seven billion instructions in fifty-one billion "
-            "cycles: two point one instructions per cycle. <bookmark mark='a'/> We keep Part 7's clock of eight "
-            "hundred eighty-five megahertz. That is generous: renaming, wakeup and the reorder buffer add logic, and "
-            "a real out-of-order core needs more pipeline stages to hold the same clock. Part 10 returns to clocks. "
-            "<bookmark mark='b'/> The thirty novels now take fifty-seven seconds, against two minutes twenty-five "
-            "on the pipeline and four minutes forty on the single-cycle Pebble. <bookmark mark='c'/> That is the "
-            "third row of the ledger: two and a half times faster again, for exactly the same program. The rows "
-            "still to come are caches, more cores, a compiler, and then, at last, better algorithms."
+            "Apply the fitted cycle model to the corpus's counted text features. <bookmark mark='a'/> It projects "
+            "about fifty point seven billion cycles for about a hundred six point nine billion architectural "
+            "instructions, an average IPC near two point one. Those corpus cycles were not obtained by running "
+            "every instruction through this core. <bookmark mark='b'/> Converting them to time additionally assumes "
+            "Part 7's teaching clock budget, about eight hundred eighty-five megahertz. This out-of-order design "
+            "has no gate-level timing result establishing that frequency. The projected runtime is about "
+            "fifty-seven seconds. <bookmark mark='c'/> At the shared assumed clock, the previous fitted pipeline "
+            "row is about two and a half times slower. Both the cycle extrapolation and frequency assumptions "
+            "travel with that ratio. The ledger is a transparent model comparison, not a measured complete-corpus "
+            "hardware benchmark."
         ) as vo:
             self.play(FadeIn(head), FadeIn(steps[0]))
             vo.wait_until("a")

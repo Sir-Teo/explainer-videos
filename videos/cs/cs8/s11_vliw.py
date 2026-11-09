@@ -75,23 +75,27 @@ class Vliw(VoiceoverScene):
         alt = VGroup(
             label(r"Very Long Instruction Word: \ the compiler packs independent operations into a bundle,", font_size=26,
                   color=HEAD),
-            label(r"one per unit; \ the hardware just runs bundle after bundle, \ in order", font_size=26, color=HEAD),
+            label("explicit issue groups; \\ hardware still enforces its ISA rules", font_size=26, color=HEAD),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.7)
         with self.voiceover(
-            "Everything we have built so far finds parallelism at run time, in hardware, and that hardware is costly. "
-            "<bookmark mark='a'/> Renaming W instructions in one cycle means comparing each one's sources with the "
-            "destinations of all the others renamed alongside it: work that grows as the square of the width. "
-            "<bookmark mark='b'/> Every result's tag must be compared with every operand waiting in the issue queue. "
-            "<bookmark mark='c'/> And every cycle, the oldest ready instructions must be picked out of dozens, in a "
-            "fraction of a nanosecond. <bookmark mark='d'/> So from the early 1980s, Joseph Fisher at Yale and others "
-            "argued for the opposite design. Let the compiler, which can study the whole program at leisure, find the "
-            "independent operations and pack them into one very long instruction word, a bundle with one slot for "
-            "each unit. The hardware then needs no scheduling at all."
+            "Dynamic scheduling spends hardware on dependency checking, wakeup and selection. <bookmark mark='a'/> "
+            "A straightforward W-wide rename stage compares destinations and sources within the incoming group, "
+            "giving a quadratic family of comparisons. Implementations can organize that logic differently. "
+            "<bookmark mark='b'/> Waiting instructions must learn when their operands become available, and ready "
+            "operations must compete for resources. <bookmark mark='c'/> Very Long Instruction Word designs move "
+            "more scheduling decisions into the compiler, which places operations into explicit issue groups. "
+            "<bookmark mark='d'/> The hardware still decodes, executes and handles the ISA's timing, memory and "
+            "exception rules. Some designs retain interlocks, caches and variable-latency operations. Static "
+            "scheduling changes where decisions are made; it does not eliminate every hardware scheduling or "
+            "correctness mechanism."
         ) as vo:
             self.play(FadeIn(head))
             for mk, c in zip("abc", costs):
-                vo.wait_until(mk)
+                if mk != "a":
+                    vo.wait_until(mk)
                 self.play(FadeIn(c, shift=RIGHT * 0.1))
+                if mk == "a":
+                    vo.wait_until(mk)
             vo.wait_until("d")
             self.play(FadeIn(alt))
         self.wait(0.3)
@@ -100,7 +104,7 @@ class Vliw(VoiceoverScene):
     # ------------------------------------------------------------------
     def bundles(self):
         d = load("vliw")
-        head = label(r"The scan loop, \ scheduled by a compiler, \ four slots wide", font_size=32).to_edge(UP, buff=0.3)
+        head = label("Fixed-path scheduling illustration: \\ four start slots", font_size=32).to_edge(UP, buff=0.3)
         ops = [o.split("#")[0].strip() for o in d["ops"]]
         g = bundle_grid(d["start"], ops, d["width"], d["block_cycles"], cw=3.0, ch=0.6, font_size=17).move_to(UP * 0.5)
         heads = VGroup(*[label(rf"bundle {c}", font_size=20, color=GREY_B).next_to(g.frame[c * d['width']], UP,
@@ -113,13 +117,15 @@ class Vliw(VoiceoverScene):
                   color=GREY_A),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "Here is the Job's scan loop, compiled for a four-wide VLIW machine. <bookmark mark='a'/> The first "
-            "bundle holds four operations that need nothing from each other: the end-of-table test, the load of the "
-            "entry's length, and the two increments, which may share a bundle with the instructions reading the old "
-            "values. <bookmark mark='b'/> The second bundle is empty. The compiler knows a load takes two cycles, "
-            "and nothing else in this trip is ready, so it must fill the slots with no-ops. <bookmark mark='c'/> The "
-            "third holds the length test and the jump back. Three cycles a trip, against the pipeline's seven, with "
-            "no scheduling hardware at all. But half the slots are wasted."
+            "Use the six-operation mismatched-length path as a scheduling illustration with four start slots. This "
+            "is not an executable VLIW translation of the whole search. <bookmark mark='a'/> Under the chart's "
+            "same-bundle read-before-write convention, the load and table-end test read old register versions while "
+            "the increments produce later versions. That convention must be part of a real target's semantics. "
+            "<bookmark mark='b'/> With a two-cycle load and these fixed data dependencies, the comparison cannot "
+            "start in the next cycle, leaving an empty bundle in this candidate schedule. <bookmark mark='c'/> The "
+            "displayed operations occupy three cycles and six of twelve slots. Actual exits, multiple control "
+            "operations in a bundle, safe early loads and side effects need a complete control and guard policy "
+            "before this could replace the original program."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g.frame), FadeIn(heads))
             vo.wait_until("a")
@@ -153,18 +159,19 @@ class Vliw(VoiceoverScene):
                         r"\ \underbrace{1}_{\texttt{t0} \,\to\, \texttt{t0}}\Big) = 2", font_size=34,
                         color=HEAD).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "A compiler can do better, by overlapping trips: software pipelining, worked out by Bob Rau and others "
-            "around 1981, and by Monica Lam in 1988. <bookmark mark='a'/> Start a new trip every two cycles. Trip "
-            "two begins while trip one is still finishing, in the slots trip one leaves free, and so on: in the "
-            "steady state each bundle mixes the start of one trip with the end of the one before. <bookmark mark='b'/> Two cycles is as fast "
-            "as this loop can go on four slots. The interval between trips is bounded by the resources, six "
-            "operations into four slots, and by the loop-carried chain, the add to t0, which needs one cycle. The "
-            "larger bound wins: two. That is three instructions a cycle on the loop's common path, with none of the "
-            "out-of-order hardware. Part 13's compiler will do this kind of scheduling."
+            "Software pipelining overlaps operations from successive loop trips. The colors distinguish trips in "
+            "this fixed-path scheduling illustration. <bookmark mark='a'/> Address increments permit some work for "
+            "the next trip to begin before the previous trip's load-dependent comparison finishes. Here the modulo "
+            "placement satisfies the displayed data and start-slot constraints. <bookmark mark='b'/> Six operations "
+            "and four slots give a resource initiation-interval lower bound of two cycles; the one-cycle address "
+            "recurrence gives another lower bound of one. Their maximum is two. A complete loop implementation must "
+            "also preserve live versions, define control within bundles, handle startup and drain, guard "
+            "speculative loads, and recover on exits. The picture does not verify those full-program requirements "
+            "or establish an achieved hardware throughput."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g.frame), FadeIn(heads))
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(c) for c in g.cells], lag_ratio=0.06), FadeIn(leg), run_time=3.0)
+            vo.wait_until("a")
             self.play(FadeIn(g.nops))
             vo.wait_until("b")
             self.play(Write(bound))
@@ -174,35 +181,39 @@ class Vliw(VoiceoverScene):
     # ------------------------------------------------------------------
     def why(self):
         h = load("hook")["miss"]
-        head = label(r"Why VLIW lost the desktop", font_size=36).to_edge(UP, buff=0.35)
+        head = label("Where static scheduling trades off", font_size=36).to_edge(UP, buff=0.35)
         items = VGroup(
-            label(r"the compiler cannot know which loads will miss: \ one miss stalls every slot of every bundle",
+            label("variable latency: \\ interlocks, stalls and other mechanisms depend on the ISA",
                   font_size=23, color=NO),
-            label(r"the bne in our loop: \ taken or not depends on the data; \ the schedule must assume", font_size=23,
+            label("data-dependent control: \\ branches, predicates or guarded speculation", font_size=23,
                   color=NO),
-            label(r"code is tied to one width and one set of latencies: \ new chips need recompiled programs",
+            label("compatibility can preserve meaning; \\ retuning may improve performance",
                   font_size=23, color=NO),
-            label(r"Intel and HP's Itanium (2001, \ EPIC): \ late, \ and x86-64 (AMD, 2003) ran the old code fast",
+            label("Itanium (2001, EPIC): \\ predication, advanced loads and wider trade-offs",
                   font_size=23, color=HIST),
-            label(r"VLIW thrives where code is known and latencies fixed: \ signal processors, \ some AI chips",
+            label("used in some DSPs and accelerators; \\ workload and implementation matter",
                   font_size=23, color=YES),
         ).arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to(DOWN * 0.1)
         with self.voiceover(
-            "Then why does your laptop not work this way? <bookmark mark='a'/> Because the compiler must plan for "
-            "latencies it cannot know. It assumed a load takes two cycles. When a load misses the cache and takes "
-            "sixty, a VLIW machine, marching in lockstep, stalls every slot of every bundle behind it, which is "
-            "exactly the in-order problem of the hook. The out-of-order core simply finds other work. <bookmark "
-            "mark='b'/> It also cannot know branches that depend on data, like our length test, so it must guess at "
-            "compile time, or execute both sides under predicates and throw one away. <bookmark mark='c'/> And code "
-            "scheduled for one width and one set of latencies is wrong for the next generation of chips. <bookmark "
-            "mark='d'/> Intel and Hewlett-Packard bet heavily on this design, as EPIC, in the Itanium of 2001, with "
-            "features to soften each problem. It arrived late, and in 2003 AMD's sixty-four-bit x86 ran existing "
-            "software fast; the last Itaniums shipped in 2021. <bookmark mark='e'/> VLIW lives on where programs "
-            "are known and latencies fixed: in digital signal processors, and in some machine-learning accelerators."
+            "Static and dynamic scheduling make different trade-offs. <bookmark mark='a'/> Cache misses and "
+            "variable execution times can invalidate a compiler's preferred timing. Depending on the ISA, "
+            "interlocks or other mechanisms preserve correctness, sometimes by stalling. <bookmark mark='b'/> "
+            "Data-dependent branches require control flow, predication, speculation or guarded schedules; a "
+            "compiler need not know every runtime outcome in advance. <bookmark mark='c'/> A schedule tuned for one "
+            "implementation can perform poorly on another. Compatible hardware can preserve the program's meaning "
+            "without recompilation; a changed width does not automatically make old code wrong. <bookmark "
+            "mark='d'/> Itanium's EPIC approach included features such as predication and advanced loads and faced "
+            "several commercial and technical challenges. One simple bundle chart cannot explain its whole history. "
+            "<bookmark mark='e'/> VLIW remains useful in some DSPs and accelerators, where workload knowledge and "
+            "implementation choices can make static scheduling attractive, even when real systems still contain "
+            "caches or variable-latency events."
         ) as vo:
             self.play(FadeIn(head))
             for mk, it in zip("abcde", items):
-                vo.wait_until(mk)
+                if mk != "a":
+                    vo.wait_until(mk)
                 self.play(FadeIn(it, shift=RIGHT * 0.1))
+                if mk == "a":
+                    vo.wait_until(mk)
         self.wait(0.3)
         self.clear_scene()
