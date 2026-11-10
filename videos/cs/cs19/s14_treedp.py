@@ -53,29 +53,38 @@ class TreeDp(VoiceoverScene):
             label(r"maximum-weight \textbf{independent set}: \ NP-hard on graphs, \ easy on trees", font_size=21,
                   color=HEAD),
             label(r"for each person $v$, \ two numbers, \ from the children up:", font_size=20, color=GREY_A),
-            MathTex(r"\text{in}(v) = w_v + \sum_c \text{out}(c), \qquad \text{out}(v) = \sum_c \max(\text{in}(c), "
-                    r"\text{out}(c))", font_size=24, color=LAM),
+            VGroup(
+                MathTex(r"\text{in}(v) = w_v + \sum_c \text{out}(c)", font_size=28, color=LAM),
+                MathTex(r"\text{out}(v) = \sum_c \max(\text{in}(c), \text{out}(c))", font_size=28, color=LAM),
+            ).arrange(DOWN, aligned_edge=LEFT, buff=0.14),
             label(rf"here: \ fun {d['best']}; \ {d['big_n']:,} people in {d['big_s']:.2f} s", font_size=22,
                   color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.35)
-        if side.width > 6.0:
-            side.scale_to_fit_width(6.0).to_edge(RIGHT, buff=0.35)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.55)
+        if side.width > 5.8:
+            side.scale_to_fit_width(5.8).to_edge(RIGHT, buff=0.55)
+        take={};skip={}
+        def evaluate(v):
+            for c in children.get(v,[]): evaluate(c)
+            take[v]=w[v]+sum(skip[c] for c in children.get(v,[]))
+            skip[v]=sum(max(take[c],skip[c]) for c in children.get(v,[]))
+        evaluate(0)
+        witness=MathTex(rf"\mathrm{{in}}(0)={take[0]},\quad\mathrm{{out}}(0)={skip[0]},\quad\max={max(take[0],skip[0])}",font_size=25,color=HEAD).to_edge(DOWN,buff=.35)
         with self.voiceover(
-            "On trees, the subproblems are subtrees. <bookmark mark='a'/> A company is planning a party. Each "
-            "employee has a fun score, written in their circle, and nobody may be invited together with their "
-            "direct boss. Who should come? <bookmark mark='b'/> This is the maximum-weight independent set, which "
-            "is NP-hard on general graphs. On a tree it is easy. <bookmark mark='c'/> For each person compute two "
-            "numbers, from the bottom of the tree up: the best total for their subtree if they come, and if they "
-            "do not. <bookmark mark='d'/> If they come, their reports cannot; if they stay home, each report's "
-            "subtree may do whichever is better. <bookmark mark='e'/> The best party here has a total of "
-            "forty-seven, and a company of two hundred thousand takes a third of a second."
+            "A tree lets us combine independent subtrees. <bookmark mark='a'/> Each employee has a fun score, and a "
+            "direct boss and report cannot both attend. <bookmark mark='b'/> This maximum-weight independent-set "
+            "problem is hard on general graphs but has a simple tree recurrence. <bookmark mark='c'/> Store a take "
+            "value and a skip value for every subtree. <bookmark mark='d'/> Taking a vertex forces each child to "
+            'skip; skipping it lets each child choose its better state. An iterative postorder handles deep paths '
+            "without raising the process recursion limit. <bookmark mark='e'/> The highlighted small-tree selection "
+            'is checked by exhaustive search. The large-tree time covers the complete public iterative solver on two '
+            'hundred thousand vertices, checked against a separate array recurrence; input generation is excluded.'
         ) as vo:
             self.play(FadeIn(head), Create(edges), *[FadeIn(nd) for nd in nodes.values()])
             for mk, s in zip("abcd", side[:4]):
                 vo.wait_until(mk)
                 self.play(FadeIn(s))
             vo.wait_until("e")
-            self.play(FadeIn(side[4]), *[nodes[v][0].animate.set_fill(YES, 0.5) for v in chosen])
+            self.play(FadeIn(side[4]),FadeIn(witness), *[nodes[v][0].animate.set_fill(YES, 0.5) for v in chosen])
         self.wait(0.3)
         self.clear_scene()
 
@@ -99,13 +108,13 @@ class TreeDp(VoiceoverScene):
                   color=LAM),
         ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.7)
         with self.voiceover(
-            "Several algorithms of Part 18 were dynamic programmes in disguise. <bookmark mark='a'/> Bellman–Ford's "
-            "subproblems are the best paths using at most k edges; Floyd–Warshall's, the best paths through the "
-            "first k vertices; Held–Karp's, the best path through a set of cities ending at a given one; and the "
-            "longest path in a DAG, the best path ending at each vertex in topological order. <bookmark "
-            "mark='b'/> Different subproblems, one method. <bookmark mark='c'/> Held–Karp shows the method's reach "
-            "and its limit: sixteen cities in a little over a second, against six hundred and fifty billion tours by brute "
-            "force. Still exponential, but exponentially better."
+            "Several graph algorithms use staged dynamic programming. <bookmark mark='a'/> Bellman-Ford limits the "
+            'number of edges; Floyd-Warshall limits permitted intermediate vertices; Held-Karp records a visited '
+            "subset and endpoint; DAG longest paths use a topological dependency order. <bookmark mark='b'/> These "
+            "state spaces differ, so their costs differ even though all reuse smaller answers. <bookmark mark='c'/> "
+            "Held-Karp has exponentially many subsets. Part eighteen's small checked example makes a dramatic "
+            'improvement over tour enumeration without turning the problem polynomial. Its time is a measurement from'
+            ' that episode, not a new timing in this table.'
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -123,28 +132,43 @@ class TreeDp(VoiceoverScene):
         pts = VGroup(
             label(r"\textbf{Viterbi} \ (1967): \ the likeliest hidden states behind observations: \ best path "
                   r"through a trellis \ (\textit{AI, Built}, \ Part 7)", font_size=21, color=DATA),
-            label(r"\textbf{CYK} \ (Cocke, \ Younger, \ Kasami, \ 1960s): \ can a grammar derive a string? \ "
-                  r"subproblems are substrings, \ $O(n^3)$ \ (Part 12)", font_size=21, color=YES),
-            label(r"\textbf{speedups}: \ the convex-hull trick, \ divide-and-conquer optimization, \ Knuth's "
-                  r"inequality: \ an $n^2$ or $n^3$ table, \ filled faster by structure", font_size=21, color=HEAD),
+            label('CYK: substring and grammar states; $O(n^3)$ for a fixed grammar in normal form', font_size=21, color=YES),
+            label('convex-hull, divide-and-conquer and Knuth optimizations require structural hypotheses', font_size=21, color=HEAD),
             label(r"the price: \ memory for the table; \ Hirschberg \ (1975) \ recovered edit scripts in linear "
                   r"space", font_size=21, color=LAM),
         ).arrange(DOWN, buff=0.45).next_to(head, DOWN, buff=0.7)
+        # An explicit layered state graph gives the introductory sentence a visual referent.
+        positions = {(t, state): [-3 + 2*t, -1.0 - .8*state, 0] for t in range(4) for state in range(3)}
+        edges = VGroup(*[Line(positions[t, a], positions[t+1, b], buff=.18,
+                              color=GREY_D, stroke_width=1)
+                         for t in range(3) for a in range(3) for b in range(3)])
+        nodes = VGroup(*[VGroup(Circle(radius=.18, stroke_color=DATA, fill_color=BG,
+                                       fill_opacity=1, stroke_width=1.5),
+                                MathTex(rf"s_{{{state}}}", font_size=16)).move_to(positions[t, state])
+                         for t in range(4) for state in range(3)])
+        route = [1, 0, 2, 1]
+        path = VGroup(*[Line(positions[t, route[t]], positions[t+1, route[t+1]],
+                            buff=.18, color=HEAD, stroke_width=3) for t in range(3)])
+        times = VGroup(*[MathTex(rf"t_{{{t}}}", font_size=19, color=GREY_A).move_to([-3+2*t, -3.0, 0])
+                        for t in range(4)])
+        trellis = VGroup(edges, path, nodes, times)
+        caption = label("Viterbi example: paths through successive hidden-state layers", font_size=17,
+                        color=DATA).to_edge(DOWN, buff=.32)
         with self.voiceover(
-            "Sequences are dynamic programming's home ground. <bookmark mark='a'/> Andrew Viterbi's algorithm of "
-            "1967 finds the likeliest sequence of hidden states behind a sequence of observations, as a best path "
-            "through a trellis; it decodes every mobile phone call, and AI, Built's seventh part used it for "
-            "speech. <bookmark mark='b'/> The Cocke–Younger–Kasami algorithm decides whether a grammar can "
-            "derive a string, using its substrings as subproblems, in cubic time, as Part 12 showed. <bookmark "
-            "mark='c'/> Many dynamic programmes can be sped up when the table has structure, like Knuth's "
-            "inequality: the convex-hull trick and divide-and-conquer optimization each shave a factor of n. "
-            "<bookmark mark='d'/> The price of the method is memory for the table. Dan Hirschberg showed in 1975 "
-            "that edit scripts can be recovered in linear space, combining dynamic programming with divide and "
-            "conquer."
+            "Sequence models offer further examples. <bookmark mark='a'/> Viterbi chooses a maximum-probability path "
+            'through a hidden-state trellis; it appears in communication decoding and speech models. <bookmark '
+            "mark='b'/> For a fixed context-free grammar in the required normal form, CYK combines substring and "
+            "grammar states; grammar size also matters when it is part of the input. <bookmark mark='c'/> Knuth "
+            'optimization, divide-and-conquer optimization and convex-hull methods accelerate particular recurrences '
+            'only when their structural hypotheses hold. They do not promise the same factor for every table. '
+            "<bookmark mark='d'/> Memory can sometimes be reduced too: Hirschberg's divide-and-conquer reconstruction"
+            ' recovers an alignment in linear auxiliary space while preserving quadratic time in the general case.'
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(trellis), FadeIn(caption))
             for mk, p in zip("abcd", pts):
                 vo.wait_until(mk)
                 self.play(FadeIn(p))
+                if mk == "a":
+                    self.play(ShowPassingFlash(path.copy().set_color(YES), time_width=.5), run_time=.8)
         self.wait(0.3)
         self.clear_scene()

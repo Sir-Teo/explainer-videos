@@ -29,6 +29,8 @@ Items:
 from __future__ import annotations
 
 import decimal
+import functools
+import json
 import math
 import random
 import sys
@@ -38,50 +40,87 @@ from collections import Counter
 import numpy as np
 
 from explainer.ai.cache import Cache
+from explainer.cache_lock import locked_item
+from .measurements import (protocol, integer_digest, check_digits, edit_reference, check_edit,
+                           knapsack_reference, check_knapsack, check_sudoku, prefix_maxsub, convolution_checker)
 
-CACHE = Cache("cs19")
-load = CACHE.load
+SCHEMAS = {name: 2 for name in ('pi','greedy','matroid','karatsuba','strassen','fft','closest','fib',
+                               'edit','knapsack','chain','tree','search','maxsub','fftcore')}
+
+class ParadigmCache(Cache):
+    @locked_item(lambda self,name:self.path(name))
+    def load(self,name):
+        if not cache_current(name,self.path(name)):
+            self.save(name,ITEMS[name]())
+        return super().load(name)
+
+CACHE = ParadigmCache("cs19")
+
+def cache_current(name,path=None):
+    path=CACHE.path(name) if path is None else path
+    return name not in SCHEMAS or (path.exists() and json.loads(path.read_text()).get('schema')==SCHEMAS[name])
+
+def load(name):
+    return CACHE.load(name)
 sys.set_int_max_str_digits(0)
 
 
-def _best(f, reps=3):
-    best = math.inf
-    out = None
+_TRIALS = []
+
+def _best(f, reps=3, *, check, label):
+    samples=[];out=None
     for _ in range(reps):
-        t0 = time.perf_counter()
-        out = f()
-        best = min(best, time.perf_counter() - t0)
-    return best, out
+        t0=time.perf_counter();value=f();samples.append(time.perf_counter()-t0)
+        check(value)  # validation is outside the reported operation time
+        out=value
+    _TRIALS.append(dict(operation=label,repeats=reps,samples=samples,seconds=min(samples),
+                        validation='every timed output checked outside timer'))
+    return min(samples),out
+
+
+def _equal(expected):
+    def check(actual):
+        assert actual==expected
+    return check
+
 
 
 def compute_pi() -> dict:
     from explainer.cs.algo import paradigms as P
-    t0 = time.perf_counter()
-    pi = P.chudnovsky(1_000_000)
-    t_pi = time.perf_counter() - t0
+    def certified_pi():
+        certificate={};value=P.chudnovsky(1_000_000,certificate=certificate)
+        return value,certificate
+    def check_pi(result):
+        value,certificate=result
+        assert certificate['lower_floor']==certificate['upper_floor']==value
+        assert str(value).startswith('314159265358979323846264338327950288419716939937510')
+    t_pi,(pi,pi_certificate)=_best(certified_pi,1,check=check_pi,label='one million decimal places: complete certified binary-split Chudnovsky')
     s = str(pi)
+    pi_certificate={k:v for k,v in pi_certificate.items() if k not in ('lower_floor','upper_floor')}
+    pi_certificate.update(integer_sha256=integer_digest(pi),floor_bounds_agree=True,decimal_places=1_000_000,
+                          total_digits_including_leading_three=len(s))
     rng = random.Random(19)
     rows = []
     for N in (1_000, 10_000, 100_000, 1_000_000):
         x, y = rng.randrange(10 ** (N - 1), 10 ** N), rng.randrange(10 ** (N - 1), 10 ** N)
-        t_int, prod = _best(lambda: x * y, 3 if N < 10 ** 6 else 1)
-        t_fft, pf = _best(lambda: P.fft_bigmul(x, y), 3 if N < 10 ** 6 else 1)
-        assert pf == prod
+        prod=x*y
+        t_int,_ = _best(lambda: x*y,3 if N<10**6 else 1,check=_equal(prod),label=f'{N} decimal digits: Python integer multiplication')
+        t_fft,pf = _best(lambda: P.fft_bigmul(x,y),3 if N<10**6 else 1,check=_equal(prod),label=f'{N} decimal digits: floating FFT including conversion, rounding and carry')
         ctx = decimal.Context(prec=2 * N + 10, Emax=decimal.MAX_EMAX)
         dx, dy = decimal.Decimal(x), decimal.Decimal(y)
-        t_dec, pd = _best(lambda: ctx.multiply(dx, dy), 3 if N < 10 ** 6 else 1)
+        t_dec,pd = _best(lambda: ctx.multiply(dx,dy),3 if N<10**6 else 1,check=lambda value: _equal(prod)(int(value)),label=f'{N} decimal digits: decimal.Context.multiply, operands preconverted')
         assert int(pd) == prod
-        rows.append({"digits": N, "python_int_s": t_int, "fft_s": t_fft, "decimal_s": t_dec})
+        rows.append({"digits": N, "python_int_s": t_int, "fft_s": t_fft, "decimal_s": t_dec,"product_sha256":integer_digest(prod),"input_sha256":[integer_digest(x),integer_digest(y)]})
         print(rows[-1])
     # grade school, measured where it finishes, then extrapolated as n^2
     school = []
     for N in (100, 200, 400, 800):
         a = P.to_digits(rng.randrange(10 ** N))
         b = P.to_digits(rng.randrange(10 ** N))
-        t, _ = _best(lambda: P.school_mul(a, b))
+        t,_ = _best(lambda:P.school_mul(a,b),check=lambda c:check_digits(c,P.from_digits(a)*P.from_digits(b)),label=f'{N} digits: grade-school coefficient convolution, operands preconverted')
         school.append({"digits": N, "s": t})
     rate = school[-1]["s"] / school[-1]["digits"] ** 2
-    return {"digits": 1_000_000, "seconds": t_pi, "head": s[:52], "tail": s[-10:], "rows": rows,
+    return {"pi_certificate":pi_certificate,"comparison_scope":"same integer inputs per end-to-end row; Python/decimal operands preconverted, FFT conversion+carry included; school projection and separate FFT-core arrays are distinct experiments","digits": 1_000_000, "seconds": t_pi, "head": s[:52], "tail": s[-10:], "rows": rows,
             "school": school, "school_rate": rate, "school_1m_s": rate * 1e12}
 
 
@@ -121,12 +160,18 @@ def compute_greedy() -> dict:
     freq[" "] = len(words) - 1                       # one space between words
     total = sum(freq.values())
     L = P.huffman(dict(freq))
+    import heapq
+    heap=list(freq.values());heapq.heapify(heap);merge_cost=0
+    while len(heap)>1:
+        value=heapq.heappop(heap)+heapq.heappop(heap);merge_cost+=value;heapq.heappush(heap,value)
+    assert sum(freq[s]*L[s] for s in freq)==merge_cost
+    assert math.isclose(sum(2.0**-length for length in L.values()),1.0,abs_tol=1e-12)
     avg = sum(freq[s] * L[s] for s in freq) / total
     H = -sum(c / total * math.log2(c / total) for c in freq.values())
     top = sorted(freq, key=lambda s: -freq[s])
     coins_us = all(len(P.coin_greedy(a, [1, 5, 10, 25])) == len(P.coin_dp(a, [1, 5, 10, 25])) for a in range(1, 100))
     fails = [a for a in range(1, 100) if len(P.coin_greedy(a, [1, 3, 4])) != len(P.coin_dp(a, [1, 3, 4]))]
-    return {"ivs": ivs, "pick": pick, "stats": stats, "trials": trials, "bad": bad_res, "symbols": len(freq),
+    return {"huffman_certificate":{"merge_cost":merge_cost,"kraft":sum(2.0**-length for length in L.values()),"symbols":len(freq)},"ivs": ivs, "pick": pick, "stats": stats, "trials": trials, "bad": bad_res, "symbols": len(freq),
             "letters": total, "avg_bits": avg, "entropy": H, "fixed_bits": math.ceil(math.log2(len(freq))),
             "codes": [[s, L[s], freq[s] / total] for s in top], "us_coins_optimal": coins_us,
             "coins134_fail": fails[:12], "coins134_fail_n": len(fails)}
@@ -170,12 +215,13 @@ def compute_karatsuba() -> dict:
         a = P.to_digits(rng.randrange(10 ** (n - 1), 10 ** n))
         b = P.to_digits(rng.randrange(10 ** (n - 1), 10 ** n))
         reps = 3 if n <= 1024 else 1
-        t_s, _ = _best(lambda: P.school_mul(a, b), reps)
-        c = [0]
-        P.karatsuba(a, b, c)
-        t_k1, _ = _best(lambda: P.karatsuba(a, b), reps)
-        t_k32, _ = _best(lambda: P.karatsuba(a, b, cutoff=32), reps)
-        rows.append({"n": n, "school_products": n * n, "kara_products": c[0], "school_s": t_s, "kara1_s": t_k1,
+        expected=P.from_digits(a)*P.from_digits(b)
+        verify=lambda value:check_digits(value,expected)
+        t_s,_ = _best(lambda:P.school_mul(a,b),reps,check=verify,label=f'{n} digits: school coefficient convolution')
+        c=[0];school_count=[0];P.school_mul(a,b,school_count);P.karatsuba(a,b,c)
+        t_k1,_ = _best(lambda:P.karatsuba(a,b),reps,check=verify,label=f'{n} digits: Karatsuba cutoff1 coefficient convolution')
+        t_k32,_ = _best(lambda:P.karatsuba(a,b,cutoff=32),reps,check=verify,label=f'{n} digits: Karatsuba cutoff32 coefficient convolution')
+        rows.append({"n": n,"rectangular_products":n*n,"input_sha256":[integer_digest(P.from_digits(a)),integer_digest(P.from_digits(b))],"product_sha256":integer_digest(expected),"school_products": school_count[0], "kara_products": c[0], "school_s": t_s, "kara1_s": t_k1,
                      "kara32_s": t_k32})
         print(rows[-1])
     cross = next((r["n"] for r in rows if r["kara32_s"] < r["school_s"]), None)
@@ -195,18 +241,24 @@ def compute_strassen() -> dict:
     for n in (512, 1024, 2048, 4096):
         A, B = rng.standard_normal((n, n)), rng.standard_normal((n, n))
         reps = 3 if n <= 2048 else 1
-        t_np, C = _best(lambda: A @ B, reps)
-        t_st, S = _best(lambda: P.strassen(A, B, cutoff=256), reps)
+        reference=A@B
+        def verify(value):
+            assert value.shape==(n,n) and np.all(np.isfinite(value))
+            assert np.allclose(value,reference,rtol=1e-8,atol=1e-8)
+        t_np,C = _best(lambda:A@B,reps,check=verify,label=f'{n}x{n}: NumPy matrix product')
+        t_st,S = _best(lambda:P.strassen(A,B,cutoff=256),reps,check=verify,label=f'{n}x{n}: Strassen over NumPy cutoff256')
         err_np = float(np.max(np.abs(C - S)) / np.max(np.abs(C)))
         timed.append({"n": n, "numpy_s": t_np, "strassen_s": t_st, "rel_diff": err_np})
         print(timed[-1])
-    # rounding: Strassen against the exact product of small integers stored as floats
+    # disagreement against an approximate extended-precision reference for the actual rounded float inputs
     A = rng.integers(-1000, 1000, (256, 256)).astype(np.float64) / 7
     B = rng.integers(-1000, 1000, (256, 256)).astype(np.float64) / 3
     exact = (A.astype(np.longdouble) @ B.astype(np.longdouble))
     e_np = float(np.max(np.abs(A @ B - exact)))
     e_st = float(np.max(np.abs(P.strassen(A, B, cutoff=8) - exact)))
-    return {"counts": counts, "timed": timed, "err_numpy": e_np, "err_strassen": e_st}
+    return {"counts":counts,"timed":timed,"err_numpy":e_np,"err_strassen":e_st,
+            "reference_scope":"NumPy longdouble accumulation of rounded float64 inputs is an approximate reference, not an exact product",
+            "reference_mantissa_bits":int(np.finfo(np.longdouble).nmant),"input_mantissa_bits":int(np.finfo(np.float64).nmant)}
 
 
 def compute_fft() -> dict:
@@ -218,21 +270,26 @@ def compute_fft() -> dict:
         a = [complex(rng.random(), 0) for _ in range(n)]
         c = [0]
         P.fft(a, c)
-        t_fft, F = _best(lambda: P.fft(a), 3)
+        reference=np.fft.fft(a)
+        def verify(value):assert np.allclose(value,reference,rtol=1e-9,atol=1e-9)
+        t_fft,F = _best(lambda:P.fft(a),3,check=verify,label=f'{n}: Python radix2 FFT')
         if n <= 2048:
-            t_dft, D = _best(lambda: P.dft(a), 1)
+            t_dft,D = _best(lambda:P.dft(a),1,check=verify,label=f'{n}: Python direct DFT')
             err = max(abs(x - y) for x, y in zip(F, D))
         else:
             t_dft, err = None, None
         arr = np.array(a)
-        t_np, _ = _best(lambda: np.fft.fft(arr), 5)
+        t_np,_ = _best(lambda:np.fft.fft(arr),5,check=verify,label=f'{n}: NumPy FFT')
         rows.append({"n": n, "butterflies": c[0], "dft_products": n * n, "dft_s": t_dft, "fft_s": t_fft,
                      "numpy_s": t_np, "max_diff": err})
         print(rows[-1])
     big = []
     for n in (2 ** 16, 2 ** 20, 2 ** 22):
         arr = np.random.default_rng(1).standard_normal(n)
-        t, _ = _best(lambda: np.fft.fft(arr), 3)
+        def verify(value):
+            assert np.allclose(np.fft.ifft(value).real,arr,rtol=1e-10,atol=1e-10)
+            assert np.isclose(np.sum(abs(value)**2)/n,np.sum(arr**2),rtol=1e-12)
+        t,_ = _best(lambda:np.fft.fft(arr),3,check=verify,label=f'{n}: NumPy FFT, inverse/Parseval checked')
         big.append({"n": n, "numpy_s": t})
     # polynomial product example for the screen
     p, q = [1, 2, 3], [4, 5]
@@ -246,10 +303,16 @@ def compute_closest() -> dict:
     rows = []
     for n in (100, 1000, 10_000, 100_000):
         pts = [(rng.random(), rng.random()) for _ in range(n)]
-        t, (d, pair, nd, smax) = _best(lambda: P.closest_pair(pts), 3 if n < 10 ** 5 else 1)
-        row = {"n": n, "dist_computations": nd, "brute_computations": n * (n - 1) // 2, "strip_max": smax, "s": t}
+        from scipy.spatial import cKDTree
+        reference=float(cKDTree(pts).query(pts,k=2)[0][:,1].min())
+        def verify(result):
+            distance,pair,_,strip=result
+            assert math.isclose(distance,reference,rel_tol=1e-12,abs_tol=1e-15) and strip<=7
+            assert math.isclose(math.dist(*pair),distance,rel_tol=1e-12,abs_tol=1e-15)
+        t,(d,pair,nd,smax) = _best(lambda:P.closest_pair(pts),3 if n<10**5 else 1,check=verify,label=f'{n} points: full closest-pair solve')
+        row = {"n": n, "dist_computations": nd, "brute_computations": n * (n - 1) // 2, "strip_max":smax,"s":t,"reference_distance":reference,"pair":pair,"reference":"SciPy cKDTree all-point nearest-neighbor query"}
         if n <= 1000:
-            row["brute_s"], (bd, _, _) = _best(lambda: P.closest_brute(pts), 1)
+            row['brute_s'],(bd,_,_) = _best(lambda:P.closest_brute(pts),1,check=lambda r:_equal(True)(math.isclose(r[0],reference,rel_tol=1e-12,abs_tol=1e-15)),label=f'{n} points: all-pairs closest reference')
             assert abs(bd - d) < 1e-12
         rows.append(row)
         print(row)
@@ -263,7 +326,7 @@ def compute_fib() -> dict:
     rows = []
     for n in (10, 15, 20, 25, 30):
         v, calls = P.fib_naive_calls(n)
-        t, _ = _best(lambda: P.fib_naive_calls(n), 1)
+        t,_ = _best(lambda:P.fib_naive_calls(n),1,check=_equal((v,calls)),label=f'Fibonacci{n}: complete naive recursion/count')
         _, mc = P.fib_memo_calls(n)
         rows.append({"n": n, "value": v, "naive_calls": calls, "memo_calls": mc, "naive_s": t})
     return {"rows": rows}
@@ -278,9 +341,11 @@ def compute_edit() -> dict:
     for n in (250, 500, 1000, 2000):
         x = "".join(rng.choice("acgt") for _ in range(n))
         y = "".join(rng.choice("acgt") for _ in range(n))
-        t, (DD, _, _) = _best(lambda: P.edit_distance(x, y), 1)
-        rows.append({"n": n, "cells": (n + 1) ** 2, "s": t, "distance": DD[-1][-1]})
+        reference=edit_reference(x,y)
+        t,(DD,_,_) = _best(lambda:P.edit_distance(x,y),1,check=lambda r:check_edit(x,y,r,reference),label=f'{n}x{n}: complete edit table and traceback')
+        rows.append({"n": n,"updated_cells":n*n,"reference_distance":reference,"cells": (n + 1) ** 2, "s": t, "distance": DD[-1][-1]})
         print(rows[-1])
+    check_edit(a,b,(D,ops,path),edit_reference(a,b))
     l, seq = P.lcs("ABCBDAB", "BDCABA")
     return {"a": a, "b": b, "D": D, "ops": ops, "path": path, "rows": rows, "lcs": [l, "".join(seq)]}
 
@@ -290,6 +355,7 @@ def compute_knapsack() -> dict:
     items = [(5, 10), (4, 40), (6, 30), (3, 50), (2, 15), (7, 45)]
     W = 12
     best, chosen, cells = P.knapsack(items, W)
+    check_knapsack(items,W,(best,chosen,cells),knapsack_reference(items,W))
     greedy = P.knapsack_greedy(items, W)
     rng = random.Random(23)
     worse, trials, worst = 0, 500, 1.0
@@ -302,15 +368,15 @@ def compute_knapsack() -> dict:
         worst = min(worst, g / b if b else 1.0)
     # pseudo-polynomial: 20 items; scale the weights (and W) by 10, 100, 1000 …: same problem, more cells
     base = [(rng.randrange(1, 30), rng.randrange(1, 60)) for _ in range(20)]
-    scale = []
+    scale=[];base_optimum=knapsack_reference(base,100)
     for s in (1, 10, 100, 1000, 10_000):
         its = [(w * s, v) for w, v in base]
         Wt = 100 * s
-        t, (b, _, c) = _best(lambda: P.knapsack(its, Wt), 1)
-        scale.append({"scale": s, "W": Wt, "bits": Wt.bit_length(), "cells": c, "s": t, "best": b})
+        t,(b,_,c) = _best(lambda:P.knapsack(its,Wt),1,check=lambda r:check_knapsack(its,Wt,r,base_optimum),label=f'20 items capacity{Wt}: full dense knapsack table and traceback')
+        scale.append({"scale": s, "W": Wt, "bits": Wt.bit_length(), "cells":c,"updated_cells":len(its)*(Wt+1),"s":t,"best":b})
         print(scale[-1])
     return {"items": items, "W": W, "best": best, "chosen": chosen, "cells": cells, "greedy": greedy,
-            "trials": trials, "greedy_worse": worse, "greedy_worst": worst, "scale": scale}
+            "trials":trials,"greedy_worse":worse,"greedy_worst":worst,"scale":scale,"scale_base_items":base,"scale_base_optimum":base_optimum}
 
 
 def compute_chain() -> dict:
@@ -332,8 +398,10 @@ def compute_chain() -> dict:
         p = [rng.random() for _ in range(n)]
         s = sum(p)
         p = [x / s for x in p]
-        t1, (e1, i1) = _best(lambda: P.optimal_bst(p), 1)
-        t2, (e2, i2) = _best(lambda: P.optimal_bst(p, knuth=True), 1)
+        reference=P.optimal_bst(p)[0]
+        verify=lambda result:_equal(True)(math.isclose(result[0],reference,rel_tol=1e-12,abs_tol=1e-12))
+        t1,(e1,i1) = _best(lambda:P.optimal_bst(p),1,check=verify,label=f'{n} successful-search keys: full root scan')
+        t2,(e2,i2) = _best(lambda:P.optimal_bst(p,knuth=True),1,check=verify,label=f'{n} successful-search keys: Knuth root range')
         assert abs(e1 - e2) < 1e-9
         bst.append({"n": n, "plain_iters": i1, "knuth_iters": i2, "plain_s": t1, "knuth_s": t2, "cost": e1})
         print(bst[-1])
@@ -392,9 +460,10 @@ def compute_tree() -> dict:
         for c in ch.get(v, []):
             take[v] += skip[c]
             skip[v] += max(take[c], skip[c])
-    t_big = time.perf_counter() - t0
+    reference=max(take[0],skip[0])
+    t_big,big_best=_best(lambda:P.tree_mis(ch,0,ww),1,check=_equal(reference),label=f'{big_n} tree vertices: complete iterative public instrument')
     return {"n": n, "parent": parent, "w": w, "best": best, "chosen": sorted(chosen), "big_n": big_n,
-            "big_s": t_big, "big_best": max(take[0], skip[0])}
+            "big_s":t_big,"big_best":big_best,"big_reference":reference,"big_edges":len(par)}
 
 
 ESCARGOT = "1....7.9..3..2...8..96..5....53..9...1..8...26....4...3......1..4......7..7...3.."
@@ -406,17 +475,20 @@ def compute_search() -> dict:
     from explainer.cs.algo import paradigms as P
     queens = []
     for n in range(4, 15):
-        t, (sols, nodes) = _best(lambda: P.queens(n), 1)
+        known={4:2,5:10,6:4,7:40,8:92,9:352,10:724,11:2680,12:14200,13:73712,14:365596}
+        t,(sols,nodes) = _best(lambda:P.queens(n),1,check=lambda r:_equal(known[n])(r[0]),label=f'{n} queens: enumerate all solutions')
         queens.append({"n": n, "solutions": sols, "nodes": nodes, "placements": n ** n, "s": t})
     q8_plain = P.queens(8, bitmask=False)
     sud = []
     for name, g in (("an easy newspaper puzzle", EASY), ("AI Escargot (Inkala, 2006)", ESCARGOT),
                     ("Inkala's 2012 puzzle", INKALA12)):
-        t1, (out, nodes, ups, nsol) = _best(lambda: P.solve_sudoku(g.replace(".", "0")), 1)
-        t2, (out2, nodes2) = _best(lambda: P.sudoku_naive(g), 1)
+        def check_dlx(result):
+            check_sudoku(g,result[0]);assert result[3]==1
+        t1,(out,nodes,ups,nsol) = _best(lambda:P.solve_sudoku(g.replace('.','0')),1,check=check_dlx,label=f'{name}: DLX with solution count capped at2')
+        t2,(out2,nodes2) = _best(lambda:P.sudoku_naive(g),1,check=lambda r:check_sudoku(g,r[0]),label=f'{name}: row-order naive first solution')
         assert out2 == out and nsol == 1
         sud.append({"name": name, "grid": g, "givens": sum(ch != "." for ch in g), "solution": out,
-                    "dlx_nodes": nodes, "dlx_updates": ups, "dlx_s": t1, "naive_nodes": nodes2, "naive_s": t2})
+                    "solution_count_cap":2,"solutions_found":nsol,"constraint_certificate":"all givens, rows, columns and boxes checked for both solvers","dlx_nodes":nodes,"dlx_updates":ups, "dlx_s": t1, "naive_nodes": nodes2, "naive_s": t2})
         print(sud[-1]["name"], nodes, nodes2, t1, t2)
     return {"queens": queens, "q8_plain_nodes": q8_plain[1], "sudoku": sud}
 
@@ -428,11 +500,11 @@ def compute_maxsub() -> dict:
     for n in (100, 200, 400, 1000, 10_000, 100_000, 1_000_000):
         a = [rng.randrange(-100, 101) for _ in range(n)]
         row = {"n": n}
-        ans = P.maxsub_kadane(a)
+        ans = prefix_maxsub(a)
         for name, f, cap in (("cubic", P.maxsub_cubic, 400), ("quadratic", P.maxsub_quadratic, 10_000),
                              ("divide", P.maxsub_divide, 1_000_000), ("kadane", P.maxsub_kadane, 1_000_000)):
             if n <= cap:
-                t, v = _best(lambda: f(a), 1 if n > 1000 else 3)
+                t,v = _best(lambda:f(a),1 if n>1000 else 3,check=_equal(ans),label=f'{n} nonempty numbers: {name} complete maximum subarray')
                 assert v == ans
                 row[name] = t
         rows.append(row)
@@ -453,22 +525,20 @@ def compute_fftcore() -> dict:
     for N in (10_000, 100_000, 1_000_000, 10_000_000):
         a = rng.integers(0, 10_000, N // 4).astype(np.float64)
         b = rng.integers(0, 10_000, N // 4).astype(np.float64)
-        n = 1
-        while n < len(a) + len(b):
-            n *= 2
-
+        check,certificate=convolution_checker(a,b)
+        n=certificate['padded_length']
         def conv():
             c = np.fft.irfft(np.fft.rfft(a, n) * np.fft.rfft(b, n), n)
             return np.rint(c)
-        t, c = _best(conv, 3)
+        t,c = _best(conv,3,check=check,label=f'{N} decimal-digit-equivalent arrays: two rFFT, pointwise product, inverse, rounding')
         raw = np.fft.irfft(np.fft.rfft(a, n) * np.fft.rfft(b, n), n)
-        resid = float(np.max(np.abs(raw - np.rint(raw))))      # must stay well below 0.5 to round exactly
+        resid = float(np.max(np.abs(raw - np.rint(raw))))  # diagnostic distance, not a true-error proof
         # exactness: compare a stretch against exact integer convolution
         k = 64
         exact = np.convolve(a[:k].astype(np.int64), b[:k].astype(np.int64))[:k]
         ok = bool(np.all(c[:k].astype(np.int64) == exact))
         rows.append({"digits": N, "fft_core_s": t, "exact_prefix": ok, "max_term": float(np.max(c)),
-                     "max_residual": resid})
+                     "max_residual":resid,"certificate":certificate,"fully_certified":True})
         print(rows[-1])
     return {"rows": rows}
 
@@ -479,6 +549,18 @@ ITEMS = {
     "edit": compute_edit, "knapsack": compute_knapsack, "chain": compute_chain, "tree": compute_tree,
     "search": compute_search, "maxsub": compute_maxsub, "fftcore": compute_fftcore,
 }
+
+def _checked_producer(name,function):
+    @functools.wraps(function)
+    def produce():
+        global _TRIALS
+        _TRIALS=[]
+        result=function()
+        result.update(schema=SCHEMAS[name],protocol=protocol(),timed_trials=list(_TRIALS))
+        return result
+    return produce
+
+ITEMS={name:_checked_producer(name,function) for name,function in ITEMS.items()}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

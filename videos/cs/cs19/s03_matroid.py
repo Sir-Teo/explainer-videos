@@ -76,36 +76,37 @@ class Matroid(VoiceoverScene):
         d = load("matroid")
         head = label(r"The greedy theorem \ (Rado, \ 1957; \ Edmonds, \ 1971)", font_size=34).to_edge(UP, buff=0.3)
         steps = VGroup(
-            label(r"greedy: \ heaviest element first, \ keep it if the set stays independent", font_size=22,
+            label('nonnegative weights: heaviest first; accept if independence remains', font_size=22,
                   color=GREY_A),
-            label(r"\textbf{theorem}: \ greedy finds a heaviest independent set for \textit{every} choice of weights "
-                  r"\ $\iff$ \ the structure is a matroid", font_size=22, color=YES),
+            label('hereditary system: greedy is optimal for every nonnegative weighting $\\Longleftrightarrow$ matroid', font_size=22, color=YES),
             label(r"proof: \ greedy picks $g_1, g_2, \ldots$; \ a best set has $o_1, o_2, \ldots$, \ both heaviest "
                   r"first", font_size=21, color=GREY_A),
             label(r"if $o_i$ were heavier than $g_i$: \ exchange $\{g_1..g_{i-1}\}$ with $\{o_1..o_i\}$ \ gives an "
                   r"$x$ at least as heavy as $o_i$", font_size=21, color=GREY_A),
             label(r"that $x$ could have joined before $g_i$, \ so greedy would have taken it: \ contradiction",
                   font_size=21, color=HEAD),
-            label(rf"forests are a matroid: \ Kruskal's algorithm \ (Part 18) \ is this greedy; \ "
+            label(rf"descending: maximum forest; ascending: minimum Kruskal forest; "
                   rf"{d['forest_ok']} of {d['trials']} random checks optimal", font_size=21, color=LAM),
         ).arrange(DOWN, buff=0.24).next_to(head, DOWN, buff=0.5)
+        signed = VGroup(MathTex(r"w(e)=-2:\quad w(\{e\})=-2 < w(\varnothing)=0",font_size=27,color=NO),
+                        label("signed weights: omit negative elements",font_size=20,color=GREY_A)).arrange(DOWN,buff=.12).to_edge(DOWN,buff=.35)
         with self.voiceover(
-            "Here is why the definition matters. <bookmark mark='a'/> The greedy algorithm for a weighted set: "
-            "consider elements heaviest first, and keep each one if the chosen set stays independent. <bookmark "
-            "mark='b'/> Richard Rado in 1957, and Jack Edmonds in 1971, proved that greedy finds a heaviest "
-            "independent set for every possible choice of weights exactly when the structure is a matroid. "
-            "<bookmark mark='c'/> One direction is short. List greedy's choices and a best set's elements, each "
-            "heaviest first. <bookmark mark='d'/> If at some position the best set's element were heavier, apply "
-            "the exchange rule to greedy's first i minus one choices and the best set's first i: some element at "
-            "least that heavy fits. <bookmark mark='e'/> Then greedy would have reached it before its i-th choice "
-            "and taken it, a contradiction. <bookmark mark='f'/> Forests are a matroid, and this greedy is Kruskal's "
-            "algorithm from Part 18. On four hundred random graphs, checked by brute force, it was optimal every "
-            "time."
+            "The greedy theorem needs its weight convention. <bookmark mark='a'/> For nonnegative weights, consider "
+            'elements from heaviest to lightest and keep each if independence is preserved. For arbitrary signed '
+            "weights, discard negative elements when the goal is any independent set. <bookmark mark='b'/> Among "
+            'finite hereditary independence systems, greedy is optimal for every nonnegative weighting exactly when '
+            "the system is a matroid. <bookmark mark='c'/> Compare greedy's and an optimum's elements in descending "
+            "order. <bookmark mark='d'/> Exchange says that an allegedly heavier next optimum element would have had "
+            "an eligible predecessor at least that heavy. <bookmark mark='e'/> Greedy would already have taken it, a "
+            "contradiction. <bookmark mark='f'/> On forests, descending order gives a maximum-weight forest. "
+            "Kruskal's minimum spanning tree uses ascending order. Our four hundred nonnegative test graphs are "
+            'checked by exhaustive enumeration.'
         ) as vo:
             self.play(FadeIn(head))
             for mk, s in zip("abcdef", steps):
                 vo.wait_until(mk)
                 self.play(FadeIn(s))
+                if mk == "a": self.play(FadeIn(signed))
         self.wait(0.3)
         self.clear_scene()
 
@@ -123,19 +124,19 @@ class Matroid(VoiceoverScene):
                   color=GREY_A),
             label(rf"on {d['trials']} random graphs: \\ greedy matching optimal {d['match_ok']} times, \\ "
                   rf"worst {100 * d['match_worst']:.0f}\% of the best", font_size=21, color=HEAD),
-            label(r"never below half: \\ each greedy edge blocks at most two best ones", font_size=21, color=LAM),
+            label('nonnegative weights: at least half; \\\\ each chosen edge receives at most two charges', font_size=21, color=LAM),
             label(r"exact matching needs more: \\ augmenting paths \ (Part 18; \ Edmonds, \ 1965)", font_size=21,
                   color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.5)
         with self.voiceover(
-            "And when the structure is not a matroid, greedy can be wrong. <bookmark mark='a'/> On this path, "
-            "greedy takes the heaviest edge, three, and then nothing else fits. <bookmark mark='b'/> The two edges "
-            "of weight two would have made four. Matchings break the exchange rule: the single middle edge cannot "
-            "borrow either end edge. <bookmark mark='c'/> On the same four hundred random graphs, greedy matching "
-            "was optimal only about three times in five, and once fell to sixty percent of the best. <bookmark "
-            "mark='d'/> It is never worse than half, because each edge it takes can block at most two edges of a "
-            "best matching. <bookmark mark='e'/> Exact maximum matching needs a cleverer idea, the augmenting paths "
-            "of Part 18, which Edmonds also extended to general graphs in 1965."
+            "Matchings show why the exchange axiom matters. <bookmark mark='a'/> Greedy takes the middle edge of "
+            "weight three and blocks both neighbors. <bookmark mark='b'/> The two outer edges total four. The smaller"
+            ' matching containing the middle edge cannot borrow either edge from the larger matching. <bookmark '
+            "mark='c'/> The random-instance success rate and worst ratio shown here describe these four hundred "
+            "nonnegative graphs, not a universal distribution. <bookmark mark='d'/> For nonnegative edge weights, "
+            'greedy always gets at least half the optimum: charge each rejected optimum edge to a greedy edge at '
+            "least as heavy; at most two charges meet one chosen edge. <bookmark mark='e'/> Exact cardinality and "
+            'weighted matching need further algorithms; a greedy approximation is not a proof of optimality.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(g))
             vo.wait_until("a")

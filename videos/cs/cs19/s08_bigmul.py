@@ -44,13 +44,14 @@ class BigMul(VoiceoverScene):
             label(r"3. \ round to integers, \ and carry", font_size=21, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "To multiply integers, treat them as polynomials. <bookmark mark='a'/> Three hundred and twenty-one is "
-            "one plus two x plus three x squared, at x equals ten. <bookmark mark='b'/> Multiply the polynomials, "
-            "by the FFT for long ones, and the coefficients come out as four, thirteen, twenty-two and fifteen. "
-            "<bookmark mark='c'/> They are too big to be digits, so carry: the result is seventeen thousand, three "
-            "hundred and thirty-four, which is three hundred and twenty-one times fifty-four. <bookmark mark='d'/> "
-            "In practice digits are grouped in blocks of four, transformed, multiplied pointwise and transformed "
-            "back; then the results are rounded to whole numbers and the carries propagated."
+            "An integer is a polynomial evaluated at the digit base. <bookmark mark='a'/> Three hundred and twenty-"
+            "one has coefficients one, two and three in increasing powers of ten. <bookmark mark='b'/> Multiplying by"
+            " four plus five x gives coefficients four, thirteen, twenty-two and fifteen. <bookmark mark='c'/> "
+            'Carrying gives seventeen thousand three hundred and thirty-four, exactly three hundred and twenty-one '
+            "times fifty-four. <bookmark mark='d'/> Our floating candidate groups four decimal digits per coefficient"
+            ' and zero-pads sufficiently to avoid circular aliasing. Conversion, transform, rounding and carry all '
+            'belong to its end-to-end time. Each timed integer result is independently compared with exact '
+            'multiplication.'
         ) as vo:
             self.play(FadeIn(head))
             for mk, e in zip("abc", eqs):
@@ -62,31 +63,38 @@ class BigMul(VoiceoverScene):
         self.clear_scene()
 
     def precision(self):
-        c = load("fftcore")
-        head = label(r"Is floating point exact enough?", font_size=34).to_edge(UP, buff=0.3)
-        def sci(v):
-            e = int(f"{v:e}".split("e")[1])
-            return rf"${v / 10 ** e:.1f} \times 10^{{{e}}}$"
-        rows = [[f"{r['digits']:,}", t(r["fft_core_s"]), sci(r["max_term"]), f"{r['max_residual']:.5f}"]
-                for r in c["rows"]]
-        tab = grid_table([r"digits", r"the transforms", r"largest coefficient", r"worst distance from an integer"],
-                         rows, widths=[2.4, 2.6, 3.0, 4.4], row_h=0.5, font_size=21,
-                         colors=[[WHITE, YES, GREY_A, HEAD]] * len(rows)).next_to(head, DOWN, buff=0.5)
-        pts = VGroup(
-            label(r"each output coefficient is an integer: \ rounding is exact while the error stays below $\frac12$",
-                  font_size=21, color=GREY_A),
-            label(r"the error grows with the length: \ about tenfold per tenfold here", font_size=21, color=HEAD),
-            label(r"at ten million digits: \ 0.05, \ still safe; \ beyond, \ use smaller blocks, \ or exact arithmetic",
-                  font_size=21, color=NO),
-        ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.5)
+        c=load("fftcore")
+        head=label("Certify every convolution coefficient",font_size=34).to_edge(UP,buff=.3)
+        rows=[[f"{r['digits']:,}",t(r['fft_core_s']),f"{r['certificate']['coefficients']:,}",f"{r['max_residual']:.5f}"] for r in c['rows']]
+        tab=grid_table(["decimal-digit equivalent","NumPy core + round","coefficients certified","nearest-integer distance"],rows,
+                       widths=[3.0,2.8,3.0,3.6],row_h=.48,font_size=20,
+                       colors=[[WHITE,YES,DATA,HEAD]]*len(rows)).next_to(head,DOWN,buff=.4)
+        diagnostic=label("a small rounding distance alone does not prove the correct integer",font_size=21,color=HEAD).next_to(tab,DOWN,buff=.28)
+        names=["rounded candidate","exact residues mod two primes","equal integer coefficients"]
+        boxes=VGroup(*[VGroup(RoundedRectangle(width=3.7,height=.76,corner_radius=.10,color=color,stroke_width=1.5,fill_color=BG,fill_opacity=1),
+                             label(name,font_size=19,color=color)).move_to([(i-1)*4.15,-.95,0])
+                       for i,(name,color) in enumerate(zip(names,[HEAD,LAM,YES]))])
+        for box in boxes:
+            if box[1].width>3.35:box[1].scale_to_fit_width(3.35)
+            box[1].move_to(box[0])
+        arrows=VGroup(*[Arrow(boxes[i][0].get_right(),boxes[i+1][0].get_left(),buff=.08,color=GREY_B) for i in range(2)])
+        proof=VGroup(boxes,arrows)
+        uniqueness=VGroup(
+            MathTex(r"0\le c_k,\widehat c_k\le \mathcal B<p_1p_2,\quad \widehat c_k\equiv c_k\pmod{p_1,p_2}\ \Longrightarrow\ \widehat c_k=c_k",font_size=27,color=YES),
+            MathTex(r"p_1=998244353,\quad p_2=469762049,\quad \mathcal B=\min(|A|,|B|)\max A\max B",font_size=23,color=LAM),
+            label("all coefficients and zero padding checked; reference and validation outside timer",font_size=20,color=GREY_A),
+        ).arrange(DOWN,buff=.18).to_edge(DOWN,buff=.3)
+        pts=[diagnostic,proof,uniqueness]
         with self.voiceover(
-            "Floating-point arithmetic is approximate, so is the answer right? <bookmark mark='a'/> Each "
-            "coefficient of the true product is a whole number, so rounding gives it exactly as long as the "
-            "accumulated error stays below one half. We measured the worst error over the whole product. "
-            "<bookmark mark='b'/> It grows with the length, about tenfold for every tenfold here. <bookmark "
-            "mark='c'/> At ten million digits it is five hundredths, comfortably safe, and the transforms take a "
-            "little over a second. Much further, and the error would reach one half. Then one uses smaller digit "
-            "blocks, or abandons floating point altogether."
+            "A floating value's distance to the nearest integer is not its distance to the correct integer. <bookmark"
+            " mark='a'/> The yellow column is only a rounding diagnostic: it could be small even if a coefficient "
+            "were wrong by one. <bookmark mark='b'/> To certify these particular experiments, an independent native "
+            'program computes every coefficient modulo two primes using exact integer transforms. <bookmark '
+            "mark='c'/> Each rounded candidate is nonnegative and below an explicit coefficient bound, and the "
+            'product of the primes is larger than that bound. Agreement in both residues therefore proves integer '
+            'equality for every coefficient, including the zero padding. Reference construction and checks are '
+            'outside the NumPy timer. This certifies these outputs, not all floating FFT multiplications at arbitrary'
+            ' lengths.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab))
             for mk, p in zip("abc", pts):
@@ -112,14 +120,15 @@ class BigMul(VoiceoverScene):
                          widths=[2.4, 3.6, 3.6], row_h=0.42, font_size=20,
                          colors=[[WHITE, DATA, LAM]] * len(rows)).next_to(pts, DOWN, buff=0.35)
         with self.voiceover(
-            "There is an exact version. <bookmark mark='a'/> Work modulo a prime such as this one, one hundred and "
-            "nineteen times two to the twenty-three, plus one. <bookmark mark='b'/> In that arithmetic there are "
-            "roots of unity too: suitable powers of three behave exactly like the points on the circle, squaring "
-            "onto each other in pairs. <bookmark mark='c'/> So the same butterflies run on whole numbers, with "
-            "nothing to round. This is the number-theoretic transform, and Part 30 will use it again for cryptography. "
-            "<bookmark mark='d'/> Python's decimal module multiplies huge numbers this way. On short numbers it is slower than "
-            "Python's Karatsuba integers; at a hundred thousand digits the two are level; at a million digits it "
-            "is four times faster, and the gap keeps widening."
+            "The number-theoretic transform makes the transform arithmetic exact. <bookmark mark='a'/> Choose a prime"
+            " whose multiplicative group contains a root of the required power-of-two order. <bookmark mark='b'/> For"
+            " this prime, three supplies suitable roots, and we check the length and root order. <bookmark mark='c'/>"
+            ' Butterflies then operate modulo the prime without rounding. Recovering unrestricted integer '
+            'coefficients still requires a coefficient bound or enough moduli; modular exactness alone is not integer'
+            " exactness. <bookmark mark='d'/> The decimal backend can use number-theoretic multiplication for large "
+            'operands. Its complete-product timings here use the same fixed values as Python integers, with '
+            'conversions excluded for both. Read the measured crossover from the table rather than extrapolating a '
+            'fixed speed ratio.'
         ) as vo:
             self.play(FadeIn(head))
             for mk, p in zip("abcd", pts):
@@ -144,19 +153,18 @@ class BigMul(VoiceoverScene):
                          mono_cols=(), colors=[[GREY_B, GREY_A, NO]] + [[GREY_B, GREY_A, GREY_A]] * 4 +
                          [[YES, YES, YES]]).next_to(head, DOWN, buff=0.5)
         pts = VGroup(
-            label(r"Sch\"onhage and Strassen conjectured $n \log n$ in 1971: \ proved 48 years later, \ and believed "
-                  r"optimal", font_size=21, color=HEAD),
-            label(rf"our million digits of $\pi$: \ {d['seconds']:.0f} s; \ the record, \ over two hundred trillion "
-                  r"digits \ (2024), \ rests on the same idea", font_size=21, color=LAM),
+            label('2019 theorem: $O(n\\log n)$ bit-complexity upper bound; no matching general lower bound claimed', font_size=21, color=HEAD),
+            label(rf"certified $\lfloor\pi 10^D\rfloor$, $D=10^6$: {d['seconds']:.0f} s; this run, not a record claim", font_size=21, color=LAM),
         ).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Here is the whole history of multiplication. <bookmark mark='a'/> The school method, then Karatsuba "
-            "and Toom and Cook. In 1971 Arnold Schönhage and Volker Strassen made the FFT exact over cleverly "
-            "chosen rings, reaching n log n log log n, and conjectured that n log n was the truth. Martin Fürer "
-            "came closer in 2007. <bookmark mark='b'/> In 2019 David Harvey and Joris van der Hoeven proved n log n, "
-            "forty-eight years after the conjecture. Most experts believe nothing faster is possible, though no one "
-            "can prove it. <bookmark mark='c'/> Our million digits of pi took sixteen seconds; the record, over "
-            "two hundred trillion digits in 2024, was computed with the same ideas, on a much larger computer."
+            "Keep the complexity model attached to the timeline. <bookmark mark='a'/> School multiplication, "
+            "Karatsuba and Toom-Cook reduce digit work. Schönhage and Strassen's 1971 ring-based transform gives a "
+            "bit-complexity bound of n log n log log n; Fürer's later construction improves the asymptotic factor. "
+            "<bookmark mark='b'/> Harvey and van der Hoeven proved an n log n bit-complexity upper bound in their "
+            '2019 work. This dated theorem is not a statement about the speed of our NumPy code or a survey of every '
+            "later claim. <bookmark mark='c'/> Our million-decimal-place pi calculation uses exact binary splitting "
+            'and certified final bounds. Its reported time belongs to this host and this implementation; the FFT-core'
+            ' measurement is a different experiment.'
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

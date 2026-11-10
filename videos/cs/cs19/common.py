@@ -123,3 +123,15 @@ def draw_graph(pos, edges, directed=False, color=DATA, r=0.26, font=18, weights=
         g.add(wl)
         g.weights = wl
     return g, nodes, es
+
+
+def concept_card(title, body, position, *, color=HEAD, width=5.8, height=1.42):
+    """A bounded two-line concept card; title and body retain caption capture."""
+    frame = RoundedRectangle(width=width, height=height, corner_radius=.12,
+                             stroke_color=color, stroke_width=1.4, fill_color=BG, fill_opacity=1)
+    text = VGroup(label(title, font_size=22, color=color),
+                  label(body, font_size=19, color=GREY_A)).arrange(DOWN, buff=.18)
+    if text.width > width-.45:
+        text.scale_to_fit_width(width-.45)
+    text.move_to(frame)
+    return VGroup(frame, text).move_to(position)

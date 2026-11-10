@@ -105,15 +105,16 @@ class Search(VoiceoverScene):
         pts = VGroup(
             label(rf"8 queens: \ {r8['nodes']:,} nodes, \ against {r8['placements']:,} placements", font_size=22,
                   color=YES),
-            label(r"still exponential: \ each extra queen multiplies the work by about five \ (bitmasks make each "
-                  r"node cheap)", font_size=21, color=NO),
+            label('partial nodes versus complete assignments; observed counts do not prove a growth law', font_size=21, color=NO),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "Counted on this machine. <bookmark mark='a'/> For eight queens, backtracking visits two thousand and "
-            "fifty-seven partial placements, out of almost seventeen million ways to put one queen in each row. "
-            "<bookmark mark='b'/> But pruning does not change the nature of the problem: the search still grows "
-            "exponentially, about five to six times per extra queen, and fourteen queens take twenty-seven million "
-            "nodes and sixteen seconds, even with each node checked by a few bit operations."
+            "These counts enumerate all solutions, rather than stopping at the first. <bookmark mark='a'/> For eight "
+            'queens the search visits two thousand and fifty-seven partial-placement nodes, including the root. The '
+            'comparison n to the n counts complete row-by-row assignments, so the two columns count different '
+            "objects. <bookmark mark='b'/> Pruning removes invalid branches but does not prove a polynomial worst-"
+            'case algorithm. The table reports the actual node counts and elapsed times through fourteen queens, with'
+            ' solution totals checked against known values. A bitmask makes each safe-column operation cheap; it does'
+            ' not turn an exponential search tree into a linear one.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab))
             vo.wait_until("a")
@@ -124,53 +125,53 @@ class Search(VoiceoverScene):
         self.clear_scene()
 
     def cover(self):
-        head = label(r"Exact cover, \ and dancing links", font_size=34).to_edge(UP, buff=0.3)
-        pts = VGroup(
-            label(r"\textbf{exact cover}: \ choose rows of a 0--1 matrix so that every column has exactly one 1",
-                  font_size=21, color=GREY_A),
-            label(r"Sudoku: \ 729 rows \ (cell, \ digit), \ 324 columns: \ each cell filled; \ each digit once per "
-                  r"row, \ column and box", font_size=21, color=HEAD),
-            label(r"Algorithm X: \ pick the column with \textbf{fewest} 1s, \ try each row in it, \ remove what it "
-                  r"conflicts with, \ recurse", font_size=21, color=GREY_A),
-            label(r"\textbf{dancing links}: \ remove $x$ from a doubly linked list, \ keeping $x$'s pointers:",
-                  font_size=21, color=YES),
-            MathTex(r"L[R[x]] \gets L[x], \quad R[L[x]] \gets R[x] \qquad \text{undo:} \quad L[R[x]] \gets x, \quad "
-                    r"R[L[x]] \gets x", font_size=28, color=LAM),
-            label(r"so backtracking restores the matrix in exactly the time it took to change it \ (Hitotumatu and "
-                  r"Noshita, \ 1979; \ Knuth, \ 2000)", font_size=20, color=GREY_B),
-        ).arrange(DOWN, buff=0.27).next_to(head, DOWN, buff=0.45)
-        # a tiny linked list: a <-> x <-> b, x unlinked and relinked
-        y = -3.2
-        a = VGroup(Square(0.5, color=DATA), mono("a", 16, WHITE)).move_to([-2.0, y, 0])
-        x = VGroup(Square(0.5, color=HEAD), mono("x", 16, WHITE)).move_to([0, y, 0])
-        b = VGroup(Square(0.5, color=DATA), mono("b", 16, WHITE)).move_to([2.0, y, 0])
-        ax_ = Arrow(a.get_right(), x.get_left(), buff=0.05, stroke_width=2, color=GREY_B)
-        xb = Arrow(x.get_right(), b.get_left(), buff=0.05, stroke_width=2, color=GREY_B)
-        ab = CurvedArrow(a.get_top(), b.get_top(), angle=-0.6, color=YES, stroke_width=2.5, tip_length=0.15)
+        head=label("Exact cover and reversible links",font_size=34).to_edge(UP,buff=.3)
+        pts=[
+            label("choose rows: exactly one 1 in every constraint column",font_size=22,color=HEAD).move_to([0,2.55,0]),
+            label("Sudoku before givens: 729 candidate rows, 324 constraints",font_size=21,color=GREY_A).move_to([0,1.98,0]),
+            label("Algorithm X: fewest-options column; try a row; remove conflicts; recurse",font_size=21,color=GREY_A).move_to([0,1.4,0]),
+            label("unlink x; retain its own links",font_size=21,color=YES).move_to([3.15,.45,0]),
+            MathTex(r"L[R[x]]\gets x,\quad R[L[x]]\gets x",font_size=24,color=LAM).move_to([3.15,-2.45,0]),
+            label("undo in reverse order, including early-stop returns",font_size=21,color=HEAD).to_edge(DOWN,buff=.28),
+        ]
+        tab=grid_table(["row","A","B","C"],[["r0","1","0","0"],["r1","0","1","1"],["r2","1","1","0"],["r3","0","0","1"]],
+                       widths=[1.0,.72,.72,.72],row_h=.45,font_size=20,mono_cols=()).move_to([-3.5,-.7,0])
+        cover=VGroup(*[SurroundingRectangle(VGroup(*tab.cells[i]),buff=.06,color=YES,stroke_width=2) for i in (1,2)])
+        cover_note=label("r0 + r1: each column covered once",font_size=18,color=YES).next_to(tab,DOWN,buff=.3)
+        y=-.9
+        a=VGroup(Square(.55,color=DATA),mono("a",18,WHITE)).move_to([1,y,0])
+        x=VGroup(Square(.55,color=HEAD),mono("x",18,WHITE)).move_to([3.15,y,0])
+        b=VGroup(Square(.55,color=DATA),mono("b",18,WHITE)).move_to([5.3,y,0])
+        links=VGroup(*[Arrow(u.get_right()+UP*.11,v.get_left()+UP*.11,buff=.06,color=GREY_B,stroke_width=2) for u,v in ((a,x),(x,b))],
+                     *[Arrow(v.get_left()+DOWN*.11,u.get_right()+DOWN*.11,buff=.06,color=GREY_B,stroke_width=2) for u,v in ((a,x),(x,b))])
+        bypass=VGroup(CurvedArrow(a.get_top(),b.get_top(),angle=-.55,color=YES,stroke_width=2,tip_length=.13),
+                      CurvedArrow(b.get_bottom(),a.get_bottom(),angle=-.55,color=LAM,stroke_width=2,tip_length=.13))
+        unlink=MathTex(r"L[R[x]]\gets L[x],\quad R[L[x]]\gets R[x]",font_size=22,color=YES).move_to([3.15,-1.8,0])
         with self.voiceover(
-            "Sudoku is a better showcase. <bookmark mark='a'/> It is an exact cover problem: choose some rows of a "
-            "zero–one matrix so that every column contains exactly one one. <bookmark mark='b'/> Each row is a "
-            "digit placed in a cell, seven hundred and twenty-nine of them, and each column is a constraint, three "
-            "hundred and twenty-four: every cell filled, and every digit once in every row, column and box. "
-            "<bookmark mark='c'/> Knuth's Algorithm X picks the constraint with the fewest options, tries each, "
-            "deletes everything that conflicts with it, and recurses. <bookmark mark='d'/> The trick that makes it "
-            "fast: to delete an element from a doubly linked list, point its neighbours at each other, but leave "
-            "the element's own pointers alone. <bookmark mark='e'/> Then undoing is two assignments, and the "
-            "element dances back into place. <bookmark mark='f'/> Backtracking restores the whole matrix in "
-            "exactly the time it took to change it. Knuth named the technique dancing links in 2000, crediting "
-            "Hitotumatu and Noshita, 1979."
+            "Exact cover chooses rows so every constraint column is covered exactly once. <bookmark mark='a'/> The "
+            "small binary matrix makes that condition visible. <bookmark mark='b'/> Sudoku has up to seven hundred "
+            'and twenty-nine candidate cell-digit rows and three hundred and twenty-four constraints, before givens '
+            "filter candidates. <bookmark mark='c'/> Algorithm X chooses a column with fewest remaining options, "
+            "tries a row and temporarily removes conflicts. <bookmark mark='d'/> Dancing Links unlinks a node by "
+            "reconnecting its neighbors while retaining its own links. <bookmark mark='e'/> Restore in reverse order,"
+            " and the original structure returns. <bookmark mark='f'/> Our solver now restores links even when a "
+            'solution limit stops search early, so the same object can be solved again. Its update counter includes '
+            'both cover and uncover pointer writes, excluding construction.'
         ) as vo:
-            self.play(FadeIn(head), FadeIn(a), FadeIn(x), FadeIn(b), Create(ax_), Create(xb))
-            for mk, p in zip("abcd", pts):
-                vo.wait_until(mk)
-                self.play(FadeIn(p))
-            self.play(Create(ab), x.animate.shift(DOWN * 0.45).set_opacity(0.5), FadeOut(ax_), FadeOut(xb))
+            self.play(FadeIn(head),FadeIn(tab),FadeIn(a),FadeIn(x),FadeIn(b),Create(links))
+            vo.wait_until("a")
+            self.play(FadeIn(pts[0]),Create(cover),FadeIn(cover_note))
+            vo.wait_until("b")
+            self.play(FadeIn(pts[1]))
+            vo.wait_until("c")
+            self.play(FadeIn(pts[2]))
+            vo.wait_until("d")
+            self.play(FadeIn(pts[3]),FadeIn(unlink),Create(bypass),FadeOut(links),x.animate.shift(DOWN*.5).set_opacity(.4))
             vo.wait_until("e")
-            self.play(FadeIn(pts[4]), FadeOut(ab), x.animate.shift(UP * 0.45).set_opacity(1), FadeIn(ax_),
-                      FadeIn(xb))
+            self.play(FadeIn(pts[4]),FadeOut(bypass),FadeIn(links),x.animate.shift(UP*.5).set_opacity(1))
             vo.wait_until("f")
             self.play(FadeIn(pts[5]))
-        self.wait(0.3)
+        self.wait(.3)
         self.clear_scene()
 
     def sudoku(self):
@@ -204,7 +205,7 @@ class Search(VoiceoverScene):
                          widths=[2.6, 1.0, 1.7, 1.4, 1.1], row_h=0.5, font_size=18, mono_cols=(),
                          colors=[[GREY_A, WHITE, NO, YES, LAM]] * 3).to_edge(RIGHT, buff=0.3).shift(UP * 1.2)
         pts = VGroup(
-            label(r"fewest options first is most of the gain: \\ hard puzzles force guesses, \ and DLX guesses well",
+            label('naive: first solution; DLX: exhaustion or two solutions \\\\ node definitions and stopping rules differ',
                   font_size=19, color=HEAD),
             label(r"the same engine tiles pentominoes; \\ generalized Sudoku is NP-complete \ (Part 26)",
                   font_size=19, color=GREY_A),
@@ -212,15 +213,15 @@ class Search(VoiceoverScene):
                   font_size=19, color=LAM),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(tab, DOWN, buff=0.45).align_to(tab, LEFT)
         with self.voiceover(
-            "Here is Arto Inkala's puzzle of 2012, often called the hardest Sudoku, with twenty-one givens, solved. "
-            "<bookmark mark='a'/> Plain backtracking, filling cells in reading order, needed fifty thousand "
-            "search nodes on it. Dancing links, always branching on the most constrained choice, needed under "
-            "three thousand, and seventy milliseconds. <bookmark mark='b'/> Most of the gain is the choice of "
-            "what to branch on: fewest options first. <bookmark mark='c'/> The same engine tiles boards with "
-            "pentominoes and solves scheduling puzzles, and Part 26 shows that Sudoku on larger boards is "
-            "NP-complete, so nothing fundamentally better than clever search is expected. <bookmark mark='d'/> When the goal is "
-            "the best solution rather than any, branch and bound adds an optimistic estimate to each node and "
-            "prunes what cannot win, the method of Part 23's integer programs."
+            "Here are three fixed Sudoku instances, including Inkala's 2012 puzzle with twenty-one givens. <bookmark "
+            "mark='a'/> The two solvers' node counts refer to their own search procedures. Naive search stops at its "
+            'first solution; Dancing Links searches until exhaustion or two solutions, allowing a uniqueness check. '
+            "Both outputs satisfy every given, row, column and box. <bookmark mark='b'/> Fewest-options branching is "
+            'a major part of the difference; the benchmark does not isolate it from representation and '
+            "implementation. <bookmark mark='c'/> A count of one after exhaustive termination certifies uniqueness; a"
+            ' count capped at two means at least two, not an exact total. Generalized Sudoku hardness does not '
+            "establish a worst-case bound from these three examples. <bookmark mark='d'/> Optimization search can add"
+            ' bounds to discard branches that cannot improve the incumbent, the subject of Part twenty-three.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(cells), FadeIn(thick), FadeIn(given))
             self.play(LaggedStart(*[FadeIn(f) for f in filled], lag_ratio=0.03), run_time=2.5)

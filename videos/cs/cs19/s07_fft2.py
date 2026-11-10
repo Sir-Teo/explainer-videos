@@ -43,15 +43,13 @@ class FftTwo(VoiceoverScene):
             label(r"1984: \ Heideman, \ Johnson and Burrus trace it back to Gauss", font_size=21, color=LAM),
         ).arrange(DOWN, buff=0.4).next_to(head, DOWN, buff=0.6)
         with self.voiceover(
-            "The algorithm was found twice. <bookmark mark='a'/> Around 1805 Carl Friedrich Gauss, fitting the "
-            "orbits of the newly found asteroids Pallas and Juno, split his trigonometric sums in exactly this way. "
-            "He never published it; it appeared after his death, in Latin, and was forgotten. <bookmark mark='b'/> "
-            "In 1963 the statistician John Tukey, sitting on President Kennedy's science advisory committee, "
-            "sketched the idea to Richard Garwin of IBM. <bookmark mark='c'/> Garwin wanted it for a pressing "
-            "reason: to detect Soviet nuclear tests from seismometer recordings, which meant Fourier transforms of "
-            "long signals, quickly. <bookmark mark='d'/> He had James Cooley program it, and Cooley and Tukey's "
-            "paper of 1965 became one of the most cited in mathematics. <bookmark mark='e'/> In 1984 Michael "
-            "Heideman, Don Johnson and Sidney Burrus found Gauss's version in his collected works."
+            "The FFT has a history of rediscovery. <bookmark mark='a'/> Gauss used an equivalent decomposition around"
+            " 1805 in trigonometric interpolation; his notes appeared posthumously. <bookmark mark='b'/> In the early"
+            ' nineteen-sixties John Tukey described the decomposition in a scientific-advisory setting. <bookmark '
+            "mark='c'/> Richard Garwin recognized its value for computing long Fourier transforms, including seismic "
+            "analysis. <bookmark mark='d'/> James Cooley implemented the method, and their 1965 paper made it widely "
+            "accessible. <bookmark mark='e'/> Heideman, Johnson and Burrus later documented Gauss's earlier work. The"
+            ' mathematics is the same recursive factorization, even when the application and implementation differ.'
         ) as vo:
             self.play(FadeIn(head))
             for mk, p in zip("abcde", pts):
@@ -85,24 +83,25 @@ class FftTwo(VoiceoverScene):
             label(r"inputs in \textbf{bit-reversed} order: \\ 1 = 001 goes to 4 = 100", font_size=20, color=GREY_A),
             label(r"each stage: \ $n/2$ butterflies, \\ one twiddle multiply and an add and subtract", font_size=20,
                   color=HEAD),
-            label(r"$\lg n$ stages: \ $\frac{n}{2} \lg n$ butterflies, \\ done in place", font_size=21, color=YES),
+            label('$\\lg n$ stages; $\\frac n2\\lg n$ butterflies \\\\ iterative form can be in-place; recursive code allocates', font_size=21, color=YES),
             label(r"the same wiring as Part 10's sorting networks \\ and parallel prefix", font_size=19, color=LAM),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.4)
+        butterfly=MathTex(r"u=3,\ wv=5\quad\longmapsto\quad(u+wv,u-wv)=(8,-2)",font_size=25,color=HEAD).to_edge(DOWN,buff=.35)
         with self.voiceover(
-            "Unroll the recursion and it becomes a network. <bookmark mark='a'/> The recursion splits by the last "
-            "bit of the index first, then the next, so the inputs arrive in bit-reversed order: index one, binary "
-            "zero zero one, sits where four, one zero zero, would. <bookmark mark='b'/> Then come log n stages. "
-            "In each, pairs of values are combined by a butterfly: one multiplication by a twiddle factor, one "
-            "addition, one subtraction. The first stage pairs neighbours, the next pairs at distance two, then four. "
-            "<bookmark mark='c'/> n over two butterflies per stage, log n stages, and every value is overwritten in "
-            "place, so the transform needs no extra memory. <bookmark mark='d'/> It is the same wiring as the "
-            "sorting networks and parallel prefix of Part 10, which is why FFTs run so well on parallel hardware."
+            "Unrolling the recursion gives a butterfly network. <bookmark mark='a'/> Here the inputs use bit-reversed"
+            " order: binary zero-zero-one reverses to one-zero-zero. <bookmark mark='b'/> There are log-base-two n "
+            'stages, each with n over two butterflies. A butterfly forms the sum and difference of one value and a '
+            "twiddle-scaled partner. <bookmark mark='c'/> An iterative implementation can overwrite this array in "
+            'place with little auxiliary storage. Our simple recursive Python implementation instead allocates slices'
+            " and result arrays; the diagram does not certify that implementation's memory use. <bookmark mark='d'/> "
+            'The staged communication pattern also suits parallel implementations, though layout and synchronization '
+            'costs still matter.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(nodes), FadeIn(inl), FadeIn(outl))
             vo.wait_until("a")
             self.play(FadeIn(bitrev), FadeIn(side[0]))
             vo.wait_until("b")
-            self.play(FadeIn(side[1]))
+            self.play(FadeIn(side[1]),FadeIn(butterfly))
             for s in stages:
                 self.play(Create(s), run_time=1.2)
             vo.wait_until("c")
@@ -136,9 +135,9 @@ class FftTwo(VoiceoverScene):
             "characters is the algebraic heart of Fourier analysis, from Analysis, Built's ninth part to Part 53's "
             "quantum computers."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head),FadeIn(eqs[0]))
             vo.wait_until("a")
-            self.play(FadeIn(eqs[0]))
+            self.play(Indicate(eqs[0],color=DATA))
             vo.wait_until("b")
             self.play(FadeIn(eqs[1]), FadeIn(why))
             vo.wait_until("c")
@@ -164,16 +163,17 @@ class FftTwo(VoiceoverScene):
                   color=YES),
             label(rf"numpy's compiled FFT: \ {words(big['n'])} points in {t(big['numpy_s'])}", font_size=21,
                   color=LAM),
-            label(r"every phone call, \ photograph, \ MRI scan and Wi-Fi packet passes through one", font_size=21,
+            label('applications include spectral imaging, OFDM communication and signal analysis', font_size=21,
                   color=HEAD),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Measured on this machine. <bookmark mark='a'/> The direct transform does n squared multiplications, "
-            "the fast one n over two log n butterflies. At two thousand points, written in the same plain Python, "
-            "they agree to ten decimal places and the fast one is almost three hundred times faster. <bookmark "
-            "mark='b'/> Numpy's compiled FFT transforms four million points in under half a second. <bookmark "
-            "mark='c'/> It runs inside every phone call, every compressed photograph, every MRI scan and every "
-            "Wi-Fi packet, which is why it is often called the most important algorithm of the twentieth century."
+            "The operation counts and stopwatch measure different things. <bookmark mark='a'/> Direct DFT uses n "
+            'squared coefficient products; radix-two FFT uses n over two times log-base-two n butterflies. Every '
+            "complete timed output agrees with NumPy within the stated numerical tolerance. <bookmark mark='b'/> The "
+            'large NumPy transforms also pass inverse-reconstruction and Parseval checks outside the timer. The table'
+            " records the actual repeated timings on this host. <bookmark mark='c'/> Fourier transforms are central "
+            'tools in signal processing, imaging and communications. Their usefulness does not imply that every codec'
+            ' or device uses this particular implementation.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab))
             for mk, p in zip("abc", pts):

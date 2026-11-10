@@ -37,7 +37,7 @@ class MaxSub(VoiceoverScene):
         best = SurroundingRectangle(cells[i0:j0 + 1], color=HEAD, buff=0.08, stroke_width=3)
         lab = label(rf"best: \ {d['show_best']}", font_size=24, color=HEAD).next_to(best, DOWN, buff=0.2)
         pts = VGroup(
-            label(r"which contiguous stretch has the largest sum? \ (the empty case aside)", font_size=22,
+            label('nonempty contiguous stretch; all-negative input returns its largest element', font_size=22,
                   color=GREY_A),
             label(r"1977: \ Ulf Grenander, \ finding the brightest rectangle in a digitized image; \ the 1-D case "
                   r"first", font_size=21, color=GREY_A),
@@ -45,12 +45,12 @@ class MaxSub(VoiceoverScene):
                   font_size=21, color=HEAD),
         ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.8)
         with self.voiceover(
-            "To close the paradigms, one small problem solved four ways. <bookmark mark='a'/> Given a sequence of "
-            "positive and negative numbers, which contiguous stretch has the largest sum? Here, the first six, "
-            "adding to eighteen. <bookmark mark='b'/> Ulf Grenander at Brown University posed it in 1977, as a "
-            "simplification of finding the brightest rectangle in a digitized picture. <bookmark mark='c'/> Jon "
-            "Bentley told the story in his column Programming Pearls: within a short time it had four algorithms, "
-            "each a different paradigm, and each asymptotically faster than the last."
+            "Choose a nonempty contiguous subarray of maximum sum. <bookmark mark='a'/> The checked example "
+            'highlights the first six values, totaling eighteen. Requiring nonempty matters: for an all-negative '
+            "input the answer is the largest element, not zero. <bookmark mark='b'/> The problem arose in work on "
+            "locating bright regions of digitized images. <bookmark mark='c'/> Bentley's Programming Pearls presents "
+            'several algorithms for it. Comparing the same objective across these methods lets us see how reusing '
+            'information changes the amount of work.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(cells))
             vo.wait_until("a")
@@ -79,6 +79,15 @@ class MaxSub(VoiceoverScene):
             "    cur = max(x, cur + x)",
             "    best = max(best, cur)",
         ], size=20).to_edge(RIGHT, buff=0.6).shift(DOWN * 1.6)
+        values=load("maxsub")["show"][:6]
+        current=[];best=[]
+        for value in values:
+            current.append(value if not current else max(value,current[-1]+value))
+            best.append(current[-1] if not best else max(best[-1],current[-1]))
+        trace=grid_table(["state"]+[str(v) for v in values],
+                         [["ending here"]+[str(v) for v in current],["best so far"]+[str(v) for v in best]],
+                         widths=[1.9]+[.58]*6,row_h=.44,font_size=17,mono_cols=()).move_to([3.5,1.3,0])
+        negative=MathTex(r"[-5,-2,-7]\quad\longrightarrow\quad -2",font_size=24,color=HEAD).next_to(kad,DOWN,buff=.35)
         with self.voiceover(
             "The four. <bookmark mark='a'/> Brute force tries every start and every end, and adds up each stretch: "
             "cubic. <bookmark mark='b'/> Keeping a running sum while the end moves avoids re-adding: quadratic. "
@@ -89,11 +98,11 @@ class MaxSub(VoiceoverScene):
             "the problem at a seminar: the best stretch ending at each position is either the number there alone, "
             "or the best stretch ending one earlier, extended. One pass, four lines."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(trace), FadeIn(algs[0]))
             for mk, a_ in zip("abcd", algs):
                 vo.wait_until(mk)
-                self.play(FadeIn(a_))
-            self.play(FadeIn(kad))
+                self.play(Indicate(a_, color=NO) if mk == "a" else FadeIn(a_))
+            self.play(FadeIn(kad), Indicate(trace, color=YES), FadeIn(negative))
         self.wait(0.3)
         self.clear_scene()
 
@@ -107,19 +116,20 @@ class MaxSub(VoiceoverScene):
             head, DOWN, buff=0.45)
         last = d["rows"][-1]
         pts = VGroup(
-            label(r"dashes: \ not attempted; \ the cubic method on a million numbers would take centuries",
+            label('dashes: unexecuted; million-element cubic growth is a model projection',
                   font_size=20, color=GREY_B),
             label(rf"a million numbers: \ Kadane {t(last['kadane'])}, \ divide and conquer {t(last['divide'])}",
                   font_size=22, color=YES),
-            label(r"the algorithm, \ not the machine, \ sets what is possible", font_size=22, color=HEAD),
+            label('same arrays at each size; independent prefix-minimum checks outside every timer', font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Measured, the four separate like the curves of Part 16. <bookmark mark='a'/> The cubic method needs "
-            "over half a second for four hundred numbers; on a million it would need centuries. <bookmark mark='b'/> "
-            "The quadratic one takes five seconds for ten thousand. Divide and conquer handles a million numbers in "
-            "six seconds, and Kadane's algorithm in under half a second. <bookmark mark='c'/> On the same machine, "
-            "in the same language, the difference between the slowest and the fastest is not a constant factor. "
-            "It is what can be done at all."
+            "All executed methods use the same array at a given size. <bookmark mark='a'/> Cubic runs stop at four "
+            'hundred elements; the million-element cubic number is an unexecuted growth-model projection, not a '
+            "runtime measurement. <bookmark mark='b'/> Quadratic, divide-and-conquer and Kadane runs stop at the "
+            'limits shown. Every timed answer agrees with a separate prefix-minimum formulation, checked after the '
+            "stopwatch stops. Raw repeats and minima are recorded. <bookmark mark='c'/> The measured gaps depend on "
+            'this implementation and host. The asymptotic difference follows from their work, not from fitting a few '
+            'timing rows or assigning a hardware cause.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab))
             for mk, p in zip("abc", pts):

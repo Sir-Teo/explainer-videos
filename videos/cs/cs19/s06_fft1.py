@@ -33,7 +33,7 @@ class FftOne(VoiceoverScene):
         vals = VGroup(
             label(r"\textbf{values}", font_size=24, color=YES),
             MathTex(r"A(x_0),\ A(x_1),\ \ldots,\ A(x_{2n-1})", font_size=32),
-            label(r"multiply two: \ $C(x_k) = A(x_k)\,B(x_k)$, \ pointwise: \ $2n$", font_size=21, color=YES),
+            label('multiply values: $C(x_k)=A(x_k)B(x_k)$ at $N\\ge 2n-1$ distinct points', font_size=21, color=YES),
         ).arrange(DOWN, buff=0.25)
         VGroup(coef, vals).arrange(RIGHT, buff=1.0).next_to(head, DOWN, buff=0.7)
         # a parabola through three points: three values determine it
@@ -48,15 +48,14 @@ class FftOne(VoiceoverScene):
                   color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(ax, RIGHT, buff=0.7)
         with self.voiceover(
-            "Multiplying polynomials is the same problem as multiplying numbers, without the carries: a number is "
-            "a polynomial evaluated at ten. <bookmark mark='a'/> Held as coefficients, two polynomials of n terms "
-            "multiply in n squared steps, every coefficient times every other. <bookmark mark='b'/> But a "
-            "polynomial can also be held as its values at enough points, and then multiplication is easy: the "
-            "product's value at each point is just the product of the values. Two n steps, not n squared. "
-            "<bookmark mark='c'/> Three points pin down a parabola, and in general n values pin down a polynomial "
-            "below degree n. <bookmark mark='d'/> So the plan is: evaluate, multiply pointwise, and interpolate "
-            "back. <bookmark mark='e'/> The catch is the evaluation. At arbitrary points, each value costs n "
-            "steps, and we are back to n squared. Everything depends on choosing the points."
+            "Polynomial multiplication separates the algebra from carries. <bookmark mark='a'/> Two coefficient "
+            'arrays of length n have a rectangular school product with n squared scalar multiplications. <bookmark '
+            "mark='b'/> At each evaluation point, the product value is just the two factor values multiplied "
+            "together. <bookmark mark='c'/> Distinct points determine a polynomial up to its degree bound. A product "
+            'of two degree-below-n factors has degree at most two n minus two, so it needs at least two n minus one '
+            "values. <bookmark mark='d'/> Pad to a suitable transform length, evaluate both factors, multiply "
+            "pointwise and interpolate. <bookmark mark='e'/> Arbitrary evaluation can still cost quadratic work. The "
+            "FFT's gain comes from choosing points that share recursive calculations."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -90,18 +89,17 @@ class FftOne(VoiceoverScene):
                   font_size=22, color=NO),
         ).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Here is the idea. <bookmark mark='a'/> Split a polynomial into its even and odd terms. Both halves "
-            "are polynomials in x squared, of half the degree. <bookmark mark='b'/> Now evaluate at a pair of "
-            "opposite points, plus x and minus x. <bookmark mark='c'/> The halves see the same input, x squared, "
-            "so the two values share all their work and differ only in a sign. <bookmark mark='d'/> Choosing the "
-            "points in plus–minus pairs halves the work at the top level. <bookmark mark='e'/> To repeat the "
-            "trick, the halves must be evaluated at the squares, half as many points, and those squares must "
-            "themselves come in plus–minus pairs. <bookmark mark='f'/> But a square of a real number is never "
-            "negative. Real numbers cannot do it."
+            "Split the coefficients by parity. <bookmark mark='a'/> The even and odd parts are polynomials in x "
+            "squared. <bookmark mark='b'/> Evaluate at opposite points, x and minus x. <bookmark mark='c'/> Both use "
+            "the same two half-polynomial values; only the sign of the odd contribution changes. <bookmark mark='d'/>"
+            " Each opposite pair therefore shares its recursive work. <bookmark mark='e'/> To keep halving, the "
+            "squared points must again form opposite pairs. <bookmark mark='f'/> A large set of distinct real points "
+            'cannot maintain this closure: real squares are nonnegative. Complex roots of unity supply the recursive '
+            'pairing we need.'
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head),FadeIn(eqs[0]))
             vo.wait_until("a")
-            self.play(FadeIn(eqs[0]))
+            self.play(Indicate(eqs[0],color=DATA))
             vo.wait_until("b")
             self.play(FadeIn(eqs[1]))
             vo.wait_until("c")
@@ -176,31 +174,34 @@ class FftOne(VoiceoverScene):
     def recursion(self):
         head = label(r"The whole algorithm", font_size=34).to_edge(UP, buff=0.3)
         prog = code([
-            "def fft(a):                      # len(a) a power of two",
+            "def fft(a):",
             "    n = len(a)",
             "    if n == 1: return a",
             "    even, odd = fft(a[0::2]), fft(a[1::2])",
             "    out = [0] * n",
             "    for k in range(n // 2):",
-            "        t = exp(-2j*pi*k/n) * odd[k]   # one twiddle",
+            "        t = exp(-2j*pi*k/n) * odd[k]",
             "        out[k]        = even[k] + t",
             "        out[k + n//2] = even[k] - t",
             "    return out",
-        ], size=20).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
+        ], size=20).scale_to_fit_width(7.4).to_edge(LEFT, buff=0.6).shift(DOWN * 0.2)
         pts = VGroup(
             label(r"ten lines, \ $n \log n$ time", font_size=24, color=YES),
             label(r"the inverse is the same transform \\ with $\omega^{-1}$, \ divided by $n$", font_size=22,
                   color=GREY_A),
-            label(r"evaluate, \ multiply, \ invert: \\ polynomials and integers in $O(n \log n)$", font_size=22,
+            label('evaluate, multiply, invert: polynomial convolution \\\\ $O(n\\log n)$ arithmetic; bit work is a different metric', font_size=22,
                   color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).to_edge(RIGHT, buff=0.5)
+        if pts.width > 4.9: pts.scale_to_fit_width(4.9)
+        pts.move_to([3.95,0,0])
         with self.voiceover(
-            "Here is the whole algorithm. <bookmark mark='a'/> Transform the even coefficients and the odd ones, "
-            "recursively. Then, for each k in the first half, multiply the odd value by a root of unity, called a "
-            "twiddle factor, and add and subtract: that gives two outputs at once. Ten lines, n log n time. "
-            "<bookmark mark='b'/> Going back is almost free: the inverse transform is the same algorithm run with "
-            "the inverse root, then divided by n. The next chapter shows why. <bookmark mark='c'/> Evaluate both "
-            "factors, multiply pointwise, transform back: polynomials, and with care integers, multiply in n log n."
+            "The literal code uses a negative-angle forward root, matching NumPy's convention. <bookmark mark='a'/> "
+            'For a nonempty power-of-two length, recursively transform even and odd coefficients, then combine each '
+            'pair with one twiddle multiplication, an addition and a subtraction. Empty input returns empty; '
+            "unsupported lengths are rejected. <bookmark mark='b'/> The inverse uses the opposite sign and divides by"
+            " the transform length. <bookmark mark='c'/> With sufficient zero padding this computes a linear "
+            'convolution in n log n arithmetic operations. Floating-point rounding and integer bit complexity are '
+            'separate questions; a short arithmetic count is not an exactness proof.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(prog))
             vo.wait_until("a")

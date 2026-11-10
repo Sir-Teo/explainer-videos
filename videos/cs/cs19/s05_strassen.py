@@ -11,7 +11,7 @@ OMEGA = [(1969, 2.8074, r"Strassen"), (1978, 2.796, r"Pan"), (1979, 2.780, r"Bin
          (1990, 2.3755, r"Coppersmith, \ Winograd"), (2010, 2.3737, r"Stothers"),
          (2012, 2.3729, r"Vassilevska Williams"), (2014, 2.37286, r"Le Gall"),
          (2020, 2.37286, r"Alman, \ Vassilevska Williams"), (2023, 2.37187, r"Duan, \ Wu, \ Zhou"),
-         (2024, 2.37134, r"Alman et al.")]
+         (2024, 2.371339, r"Alman et al."), (2026, 2.371177, r"Dupont et al.")]
 
 
 class Strassen(VoiceoverScene):
@@ -96,15 +96,16 @@ class Strassen(VoiceoverScene):
             label(rf"at $n = 1024$: \ {last['naive_mults'] / last['strassen_mults']:.1f}$\times$ fewer products, \ "
                   rf"but {last['strassen_adds'] / last['naive_adds']:.1f}$\times$ more additions", font_size=22,
                   color=HEAD),
-            label(r"the additions are $O(n^2)$ per level, \ so they lose in the end, \ but only for large $n$",
+            label('quadratic work at each node; summed over the tree: $\\Theta(n^{\\lg 7})$',
                   font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "Counted exactly, all the way down to single numbers. <bookmark mark='a'/> At a thousand by a thousand, "
-            "Strassen does a quarter as many multiplications, but one and a half times as many additions, eighteen "
-            "block additions per level instead of four. <bookmark mark='b'/> Asymptotically the additions do not "
-            "matter, since they are only n squared per level; but they show why the method pays only for large "
-            "matrices, and why real implementations stop recursing long before single numbers."
+            "This table counts a specified recursion down to scalar leaves. <bookmark mark='a'/> Each ordinary block "
+            'step uses eight products and four additions; Strassen uses seven products and eighteen additions or '
+            "subtractions. The totals include every recursion node. <bookmark mark='b'/> The linear combination work "
+            'is quadratic at one node, but summed over the tree it has the same n-to-log-base-two-seven exponent as '
+            'the leaf products. Reducing multiplication count does not automatically reduce elapsed time. The '
+            'practical implementation stops at blocks of size two hundred and fifty-six.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab))
             vo.wait_until("a")
@@ -136,32 +137,31 @@ class Strassen(VoiceoverScene):
                   color=GREY_A),
             label(r"1969: \ 2.807 \ (Strassen)", font_size=20, color=GREY_A),
             label(r"1990: \ 2.376 \ (Coppersmith and Winograd)", font_size=20, color=GREY_A),
-            label(r"2024: \ 2.3713 \ (Alman, \ Duan, \ Vassilevska Williams, \ Xu, \ Xu, \ Zhou)", font_size=20,
+            label('selected bounds: 2024 $<2.371339$; Aug 2026 $<2.371177$', font_size=20,
                   color=HEAD),
             label(r"the lower bound: \ only $\omega \ge 2$", font_size=21, color=YES),
-            label(r"the newer exponents are \textbf{galactic}: \ faster only for matrices too large to exist",
+            label('asymptotic bounds; our benchmark does not establish their crossover',
                   font_size=20, color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.35)
         if side.width > 5.2:
             side.scale_to_fit_width(5.2).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "Strassen's paper started a race that is still going. <bookmark mark='a'/> Call omega the best exponent "
-            "of matrix multiplication. <bookmark mark='b'/> Strassen brought it from three to two point eight "
-            "one. <bookmark mark='c'/> In 1990 Don Coppersmith and Shmuel Winograd reached two point three seven "
-            "six, by a far more indirect method, and nothing moved for twenty years. <bookmark mark='d'/> Since "
-            "2010 a series of papers, most recently by Josh Alman, Ran Duan, Virginia Vassilevska Williams and "
-            "three coauthors in 2024, have shaved it to two point three seven one three. <bookmark mark='e'/> The "
-            "only lower bound is the obvious one, two: an answer has n squared entries to write. Many researchers "
-            "suspect omega is two. <bookmark mark='f'/> None of the recent methods will ever run. Their constants "
-            "are so large that they win only on matrices too big to exist, which Richard Lipton and Ken Regan call "
-            "galactic algorithms."
+            "Omega is an asymptotic arithmetic exponent, not a stopwatch reading. <bookmark mark='a'/> It is the "
+            'infimum of exponents achievable for square matrix multiplication, allowing arbitrarily small positive '
+            "slack. <bookmark mark='b'/> Strassen gives log-base-two seven. <bookmark mark='c'/> The historical steps"
+            " here include Coppersmith and Winograd's 1990 construction. <bookmark mark='d'/> The dated selections "
+            "include Alman and coauthors' 2024 bound, and Dupont and coauthors' August 2026 refinement below two "
+            'point three seven one one seven seven. They are selected published claims, not an exhaustive latest-'
+            "record survey or an implementation in this course. <bookmark mark='e'/> Writing an explicit dense answer"
+            " already requires quadratic output size in the usual arithmetic model. <bookmark mark='f'/> An exponent "
+            'gain can coexist with enormous constants. Our small Strassen benchmark cannot establish a crossover for '
+            'those research constructions.'
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), Create(three), Create(two))
             vo.wait_until("a")
             self.play(FadeIn(side[0]))
             vo.wait_until("b")
-            self.play(Create(line), FadeIn(dots), run_time=3)
-            self.play(FadeIn(side[1]))
+            self.play(Create(line),FadeIn(dots),FadeIn(side[1]),run_time=vo.until("c",minimum=.1))
             vo.wait_until("c")
             self.play(FadeIn(side[2]))
             vo.wait_until("d")
@@ -183,24 +183,23 @@ class Strassen(VoiceoverScene):
                          widths=[1.8, 3.8, 3.8], row_h=0.5, font_size=21,
                          colors=[[WHITE, YES, NO]] * len(rows)).next_to(head, DOWN, buff=0.5)
         pts = VGroup(
-            label(r"a tuned $n^3$ product beats our Strassen at every size here: \ cache blocking, \ SIMD and four "
-                  r"cores \ (Parts 9 and 10)", font_size=20, color=GREY_A),
-            label(rf"and Strassen's rounding error was {d['err_strassen'] / d['err_numpy']:.0f}$\times$ larger in a "
-                  r"test: \ the subtractions cancel digits", font_size=20, color=NO),
-            label(r"used where it pays: \ very large matrices, \ exact arithmetic, \ some GPU libraries", font_size=20,
+            label('fixed inputs; every trial checked; actual BLAS backend and thread configuration recorded', font_size=20, color=GREY_A),
+            label(rf"Strassen/reference disagreement: {d['err_strassen']:.2e}; NumPy/reference: {d['err_numpy']:.2e}", font_size=20, color=NO),
+            label('extended-precision reference is approximate; disagreement is not certified true error', font_size=20,
                   color=HEAD),
             label(r"2022: \ AlphaTensor searched for schemes, \ found 47 products for $4 \times 4$ mod 2 \ "
                   r"(Strassen: \ 49) \ (\textit{AI, Built}, \ Part 26)", font_size=20, color=LAM),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "And in practice? <bookmark mark='a'/> We timed Strassen's recursion, handing blocks of two hundred and "
-            "fifty-six to numpy, against numpy's own product. The tuned cubic method won at every size, by three "
-            "to five times, because it uses the cache blocking, vector instructions and four cores of Parts 9 and "
-            "10, and does no extra additions. <bookmark mark='b'/> Strassen's subtractions also cost accuracy: in "
-            "a test its rounding error was ten times larger. <bookmark mark='c'/> It is used where it pays, on "
-            "very large matrices or exact arithmetic. <bookmark mark='d'/> The search for such schemes is not "
-            "over. In 2022 DeepMind's AlphaTensor, a reinforcement learner, found a way to multiply four by four "
-            "matrices with forty-seven products in arithmetic modulo two, where Strassen's method needs forty-nine."
+            "The benchmark compares complete matrix products on fixed float64 inputs. <bookmark mark='a'/> Strassen "
+            'delegates blocks of size two hundred and fifty-six to NumPy. Every timed output is checked; raw trials '
+            "and the actual BLAS backend and configured thread count are recorded. The table reports this host's "
+            "observations, not a universal winner or a measured explanation of cache behavior. <bookmark mark='b'/> "
+            'The separate accuracy example compares both results with an extended-precision accumulation of the '
+            'already rounded inputs. That reference is approximate: these are disagreements, not certified true '
+            "errors. <bookmark mark='c'/> Cutoff, conditioning, layout and backend affect the tradeoff. <bookmark "
+            "mark='d'/> AlphaTensor's 2022 forty-seven-product example concerns four-by-four multiplication modulo "
+            'two; that field qualification is essential.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab))
             for mk, p in zip("abcd", pts):

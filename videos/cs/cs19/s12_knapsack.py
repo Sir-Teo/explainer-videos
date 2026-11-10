@@ -103,13 +103,13 @@ class Knapsack(VoiceoverScene):
         head = label(r"$O(nW)$ is not polynomial", font_size=34).to_edge(UP, buff=0.3)
         rows = [[f"{r['W']:,}", str(r["bits"]), f"{r['cells']:,}",
                  f"{r['s'] * 1000:.1f} ms" if r["s"] < 1 else f"{r['s']:.2f} s", str(r["best"])] for r in d["scale"]]
-        tab = grid_table([r"capacity $W$", r"bits of $W$", r"table cells", r"time", r"best value"], rows,
+        tab = grid_table([r"capacity $W$", r"bits of $W$", 'allocated cells', r"time", r"best value"], rows,
                          widths=[2.6, 1.8, 2.8, 2.0, 2.0], row_h=0.48, font_size=20,
                          colors=[[WHITE, HEAD, GREY_A, NO, YES]] * len(rows)).next_to(head, DOWN, buff=0.5)
         pts = VGroup(
             label(r"the same twenty items, \ weights and capacity multiplied by 10, \ 100, \ \ldots: \ the same "
                   r"answer every time", font_size=21, color=GREY_A),
-            label(r"input size grows by about 3 bits per step; \ the work grows tenfold: \ exponential in the input",
+            label('each scaled number gains about $\\log_2 10$ bits per step; dense work grows roughly tenfold',
                   font_size=21, color=NO),
             label(r"\textbf{pseudo-polynomial}: \ polynomial in the \textit{value} of $W$, \ not its length",
                   font_size=22, color=HEAD),
@@ -117,15 +117,15 @@ class Knapsack(VoiceoverScene):
                   r"in polynomial time \ (Ibarra and Kim, \ 1975)", font_size=20, color=LAM),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "The table has n times W cells, which sounds polynomial. It is not. <bookmark mark='a'/> Here are the "
-            "same twenty items five times over, with every weight and the capacity multiplied by ten each time. "
-            "The problem and its answer never change. <bookmark mark='b'/> But each step adds about three bits to "
-            "the input and multiplies the work by ten: from a third of a millisecond to nearly five seconds. Time "
-            "proportional to the capacity is exponential in the number of digits used to write it. <bookmark "
-            "mark='c'/> Such an algorithm is called pseudo-polynomial: fast when the numbers are small. <bookmark "
-            "mark='d'/> No truly polynomial algorithm is known, and Richard Karp proved in 1972 that none exists "
-            "unless P equals NP, the subject of Part 26. Yet Oscar Ibarra and Chul Kim showed in 1975 that a "
-            "solution within any fixed percentage of the best can be found in polynomial time."
+            "The dense table is polynomial in the numeric capacity W. <bookmark mark='a'/> These twenty-item "
+            'instances multiply every weight and the capacity by the same scale, leaving the feasible subsets '
+            'unchanged. An independent sparse-frontier calculation verifies their common optimum. <bookmark '
+            "mark='b'/> We allocate n plus one rows of W plus one cells and update n times W plus one entries. "
+            'Multiplying a number by ten adds about log-base-two ten bits to that number, while this table grows '
+            "roughly tenfold. <bookmark mark='c'/> That is pseudo-polynomial: polynomial in a numeric magnitude, not "
+            "its binary encoding length. <bookmark mark='d'/> The general exact optimization problem is NP-hard. A "
+            'fully polynomial approximation scheme instead returns a near-optimum in time polynomial in the input '
+            'size and the reciprocal accuracy parameter, under the usual positive-data assumptions.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab))
             for mk, p in zip("abcd", pts):

@@ -32,18 +32,23 @@ class Hook(VoiceoverScene):
                          r"{(3k)!\,(k!)^3\,640320^{3k + 3/2}}", font_size=30, color=GREY_A).to_edge(DOWN, buff=1.5)
         t = label(rf"the Chudnovskys' series \ (1988), \ in Python, \ on this machine: \ {d['seconds']:.0f} seconds",
                   font_size=22, color=YES).next_to(series, DOWN, buff=0.3)
+        certificate = VGroup(
+            MathTex(r"L \le \pi\,10^D \le U,\qquad \lfloor L\rfloor=\lfloor U\rfloor",font_size=27,color=HEAD),
+            label("series bound + integer square-root bound + guard digits",font_size=19,color=GREY_A),
+        ).arrange(DOWN,buff=.12).to_edge(DOWN,buff=.22)
         with self.voiceover(
-            "Here are the first fifty digits of pi, and the last ten of the first million. <bookmark mark='a'/> "
-            "They came from this series, found by the brothers David and Gregory Chudnovsky in 1988, which adds "
-            "about fourteen correct digits per term. <bookmark mark='b'/> Seventy thousand terms, summed exactly "
-            "with whole numbers in plain Python on this machine, took sixteen seconds. The sum is the easy part. "
-            "The hard part is multiplying numbers a million digits long, again and again."
+            "Here are leading digits of pi, and the final ten after one million decimal places. <bookmark mark='a'/> "
+            "The Chudnovsky brothers' series adds roughly fourteen digits per term. Our binary splitting sums "
+            "rational terms with exact integers. <bookmark mark='b'/> A finite sum and an integer square root still "
+            'need error bounds. We bracket the infinite series between adjacent alternating partial sums, bracket the'
+            ' square root, and keep guard digits until both bounds give the same truncated integer. The displayed '
+            'time covers that certified calculation; decimal conversion is separate.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(lines), FadeIn(dots), FadeIn(tail))
             vo.wait_until("a")
             self.play(FadeIn(series))
             vo.wait_until("b")
-            self.play(FadeIn(t))
+            self.play(FadeIn(t),FadeIn(certificate))
         self.wait(0.3)
         self.clear_scene()
 
@@ -57,27 +62,34 @@ class Hook(VoiceoverScene):
             [r"grade school, \ digit by digit", r"$n^2$", rf"about {d['school_1m_s'] / 3600:.0f} hours \ (projected)"],
             [r"Python's integers: \ Karatsuba", r"$n^{1.58}$", dur(last["python_int_s"])],
             [r"Python's \texttt{decimal}: \ a number-theoretic transform", r"$n \log n$", dur(last["decimal_s"])],
-            [r"our FFT, \ the transform itself", r"$n \log n$", dur(core["fft_core_s"])],
+            [r"floating FFT: conversion, round, carry", r"$n \log n$ arithmetic", dur(last["fft_s"])],
         ]
         tab = grid_table([r"method", r"grows like", r"time"], rows, widths=[6.4, 2.0, 3.6], row_h=0.62, font_size=22,
                          mono_cols=(), colors=[[NO, NO, NO], [DATA, DATA, DATA], [LAM, LAM, LAM], [YES, YES, YES]])
         tab.next_to(head, DOWN, buff=0.6)
-        note_ = label(r"the same answer four ways: \ three ideas, \ chapters 3, \ 5--7", font_size=22,
+        note_ = label('complete products above; school row is an unexecuted model projection', font_size=22,
                       color=HEAD).next_to(tab, DOWN, buff=0.5)
+        core_panel = VGroup(
+            label("separate FFT core",font_size=22,color=YES),
+            mono(dur(core["fft_core_s"]),22,YES),
+            label("different arrays; conversion and carry excluded",font_size=21,color=GREY_A),
+        ).arrange(DOWN,buff=.12).next_to(note_,DOWN,buff=.35)
+        core_frame = SurroundingRectangle(core_panel,buff=.18,color=YES,stroke_width=1.2)
         with self.voiceover(
-            "So how long does it take to multiply two numbers of a million digits? <bookmark mark='a'/> The way "
-            "we learned at school, every digit times every digit, is a trillion small products: measured on smaller "
-            "numbers and projected, about twenty-seven hours in Python. <bookmark mark='b'/> Python's own integers "
-            "take under a second, because they use a trick found by a Moscow student in 1960. <bookmark mark='c'/> "
-            "Python's decimal module is four times faster again, with a transform over a finite field. <bookmark "
-            "mark='d'/> And the fast Fourier transform, the heart of this part, does the multiplication itself "
-            "in four hundredths of a second. <bookmark mark='e'/> Same numbers, same answer: the difference is "
-            "the idea."
+            "Compare the work carefully. <bookmark mark='a'/> Grade-school digit convolution has quadratic growth; "
+            "this million-digit time is an unexecuted projection from smaller tests. <bookmark mark='b'/> Python's "
+            'integer row is a complete multiplication of two fixed million-digit operands, already converted to '
+            "integers. <bookmark mark='c'/> The decimal row uses the same values with preconverted decimal operands; "
+            "every product is checked exactly outside the timer. <bookmark mark='d'/> The separate FFT-core row times"
+            ' convolution and rounding on different digit arrays. It excludes conversion and carry, so it is not an '
+            "end-to-end speed comparison. <bookmark mark='e'/> Algorithm, representation and timing boundary all "
+            'matter. Chapters three and seven separate them.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
             for mk, r in zip("abcd", tab.cells[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(VGroup(*r), shift=RIGHT * 0.1))
+                if mk == "d": self.play(FadeIn(core_panel),Create(core_frame))
             vo.wait_until("e")
             self.play(FadeIn(note_))
         self.wait(0.3)
@@ -94,13 +106,12 @@ class Hook(VoiceoverScene):
             (r"\textbf{search}", r"try, \ and undo what fails, \ cleverly", CTRL))]).arrange(DOWN, buff=0.45)
         rows.next_to(head, DOWN, buff=0.6)
         with self.voiceover(
-            "Most good algorithms come from a handful of ideas, and this part names them. <bookmark mark='a'/> "
-            "Greedy algorithms take the best-looking step each time; the work is in proving they never regret it, "
-            "and knowing when they would. <bookmark mark='b'/> Divide and conquer splits a problem, solves the "
-            "parts, and combines them; applied to the right points it gives the most important algorithm of the "
-            "twentieth century. <bookmark mark='c'/> Dynamic programming solves every subproblem once, in an order where "
-            "each answer is ready when it is needed. <bookmark mark='d'/> And when nothing cleverer is known, we "
-            "search, trying choices and undoing them, as cleverly as possible."
+            "Several ideas organize this part. <bookmark mark='a'/> Greedy chooses the best-looking next step; an "
+            "exchange proof tells us when that choice is safe. <bookmark mark='b'/> Divide and conquer splits a "
+            'problem, solves smaller pieces and combines their answers. The right decomposition gives Karatsuba, '
+            "Strassen and the FFT. <bookmark mark='c'/> Dynamic programming reuses subproblem answers in a valid "
+            "dependency order. <bookmark mark='d'/> Search explores choices and restores state when it backtracks. We"
+            ' will compare their mathematics, actual work and measured implementations.'
         ) as vo:
             self.play(FadeIn(head))
             for mk, r in zip("abcd", rows):

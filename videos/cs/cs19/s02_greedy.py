@@ -46,12 +46,12 @@ class Greedy(VoiceoverScene):
             label(r"sort once, \ scan once: \ $O(n \log n)$", font_size=21, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).to_edge(RIGHT, buff=0.5)
         with self.voiceover(
-            "One lecture room, and requests for meetings, each with a start and an end. <bookmark mark='a'/> We "
-            "want to fit in as many as possible without overlaps. <bookmark mark='b'/> A greedy rule: take the "
-            "meeting that finishes first, discard everything that overlaps it, and repeat with what is left. The "
-            "requests are sorted here by their finishing times. <bookmark mark='c'/> It chooses four meetings, and "
-            "no schedule does better. <bookmark mark='d'/> One sort and one scan. But why should a rule that never "
-            "looks ahead be optimal?"
+            'Each meeting has a start and an end; every meeting counts equally, and touching endpoints are allowed. '
+            "<bookmark mark='a'/> Choose the largest nonoverlapping subset. <bookmark mark='b'/> Sort by finishing "
+            'time and accept the next meeting whose start is at least the last accepted finish. Checking that one '
+            "boundary is enough because the accepted meetings are ordered. <bookmark mark='c'/> This instance admits "
+            "four meetings, matching the independently computed optimum. <bookmark mark='d'/> Sorting costs n log n "
+            'comparisons; the finish-rule scan is linear. Other plausible rules will fail.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(bars), Create(axis), FadeIn(ticks))
             vo.wait_until("a")
@@ -133,19 +133,18 @@ class Greedy(VoiceoverScene):
         coins = VGroup(
             label(r"coins $\{1, 3, 4\}$: \ greedy pays 6 as $4 + 1 + 1$, \ the best is $3 + 3$", font_size=21,
                   color=NO),
-            label(rf"greedy is wrong for {d['coins134_fail_n']} amounts below 100 \ (US coins: \ never)", font_size=20,
+            label(rf"amounts 1--99: greedy fails {d['coins134_fail_n']} times for 1,3,4; none for 1,5,10,25", font_size=20,
                   color=GREY_B),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Without a proof, greedy is a gamble. <bookmark mark='a'/> Here are four natural rules, each run on "
-            "two thousand random sets of meetings. Finishing first is always right, as proved. Fewest overlaps is "
-            "almost always right, and still wrong on a careful example of fifteen meetings. <bookmark mark='b'/> "
-            "Shortest first fails on three meetings: it takes the short one in the middle and blocks two. Starting "
-            "first fails often. <bookmark mark='c'/> Making change is the same story. With coins of one, three and "
-            "four, greedy pays six as four plus one plus one, where three plus three is better, and it is wrong "
-            "for a quarter of all amounts below a hundred. With American coins it is never wrong, and in 1994 Dexter "
-            "Kozen and Shmuel Zaks showed that if greedy ever fails for a set of coins, it already fails on some "
-            "amount below the two largest coins added together."
+            "A plausible rule still needs a proof. <bookmark mark='a'/> These four rules run on two thousand fixed "
+            'random instances. Earliest finish matches the optimum throughout; that experiment illustrates the '
+            "theorem. Fewest conflicts still fails on the displayed fifteen-meeting witness. <bookmark mark='b'/> "
+            'Shortest first chooses the middle interval and loses two compatible intervals. Starting first can lose '
+            "many. <bookmark mark='c'/> With coin values one, three and four, greedy pays six using three coins, "
+            'while dynamic programming finds two. The displayed failure count covers amounts one through ninety-nine.'
+            ' The one-five-ten-twenty-five system passes that finite range; the experiment alone does not prove '
+            'canonicality for all amounts.'
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -178,15 +177,14 @@ class Greedy(VoiceoverScene):
                   font_size=21, color=LAM),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.5)
         with self.voiceover(
-            "In 1952 David Huffman, a graduate student at MIT, was offered the choice of a final exam or a term "
-            "paper, and solved a problem his professor, Robert Fano, had not. <bookmark mark='a'/> To build the "
-            "shortest prefix code for a set of symbols, repeatedly merge the two rarest into one. <bookmark "
-            "mark='b'/> It is greedy, and an exchange argument proves it: some best code tree has the two rarest "
-            "symbols as the deepest pair of siblings, so merging them first loses nothing. <bookmark mark='c'/> "
-            "On the letters and spaces of our thirty novels, Huffman's code spends four point one two bits per "
-            "symbol, against five for a fixed-length code: two bits for a space, four for e and t, ten for q and "
-            "z. <bookmark mark='d'/> Shannon's entropy, the limit for any code that spends whole bits on each symbol "
-            "in isolation, is four point zero eight. AI, Built's first part met this game."
+            'Huffman coding minimizes the weighted length of a binary prefix code for known symbol frequencies. '
+            "<bookmark mark='a'/> Repeatedly merge the two lightest symbols or subtrees. <bookmark mark='b'/> Some "
+            'optimal binary code tree puts two least-frequent symbols as deepest siblings; contracting that pair '
+            "gives a smaller instance and the exchange proof. <bookmark mark='c'/> These frequencies come from "
+            "letters and single spaces between words in thirty novels. We check the complete code's Kraft sum and "
+            "weighted length against an independent merge-cost calculation. <bookmark mark='d'/> Entropy is a real-"
+            'valued lower bound, not necessarily an attainable average for a one-symbol binary prefix code. Block '
+            'coding can approach it under the corresponding source assumptions.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab))
             for mk, p in zip("abcd", pts):

@@ -99,23 +99,27 @@ class Closest(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         if steps.width > 6.8:
             steps.scale_to_fit_width(6.8).to_edge(RIGHT, buff=0.4)
+        halves=VGroup(Rectangle(width=2*s,height=2*s,stroke_width=0,fill_color=DATA,fill_opacity=.10).move_to(c0+LEFT*s),
+                       Rectangle(width=2*s,height=2*s,stroke_width=0,fill_color=LAM,fill_opacity=.10).move_to(c0+RIGHT*s)).set_z_index(-2)
+        invariant=label("within each recursive half: pair distance at least delta",font_size=19,color=DATA).to_edge(DOWN,buff=.4)
         with self.voiceover(
-            "The strip could hold almost every point, so why is it cheap? <bookmark mark='a'/> Sort the strip's "
-            "points from bottom to top, and compare each point only with the points above it, less than delta "
-            "higher. <bookmark mark='b'/> Those all lie in a box two delta wide and delta high, which cuts into "
-            "eight squares of side delta over two. <bookmark mark='c'/> Each square lies on one side of the line, "
-            "and any two points in it would be less than delta apart, closer than the best pair on that side. So "
-            "each square holds at most one point. <bookmark mark='d'/> Hence each point needs at most seven "
-            "comparisons, and the strip costs linear time. <bookmark mark='e'/> Two half-size problems and linear "
-            "work: n log n, by the same recurrence as merge sort and the FFT."
+            "The strip bound uses the recursive invariant, not the density of a typical picture. <bookmark mark='a'/>"
+            ' Maintain the points in y order by merging the two returned lists. Compare a point only with higher '
+            "points less than delta away vertically. <bookmark mark='b'/> The candidate rectangle is two delta wide "
+            "and delta high; split each half into four squares. <bookmark mark='c'/> Each square stays within one "
+            'recursive half, where distinct points are at least delta apart. Its diagonal is smaller than delta, so '
+            'it contains at most one point. Boundary and tie conventions must preserve that half assignment. '
+            "<bookmark mark='d'/> At most seven successors remain besides the current point. Duplicates can instead "
+            "certify distance zero immediately. <bookmark mark='e'/> Two half-size problems plus linear merging and "
+            'strip work give n log n time.'
         ) as vo:
-            self.play(FadeIn(head), Create(box), Create(mid), FadeIn(p), FadeIn(pl), FadeIn(dl))
+            self.play(FadeIn(head), Create(box), Create(mid), FadeIn(halves),FadeIn(p), FadeIn(pl), FadeIn(dl))
             vo.wait_until("a")
             self.play(FadeIn(steps[0]))
             vo.wait_until("b")
             self.play(Create(grid), FadeIn(sq), FadeIn(steps[1]))
             vo.wait_until("c")
-            self.play(FadeIn(steps[2]))
+            self.play(FadeIn(steps[2]),FadeIn(invariant))
             vo.wait_until("d")
             self.play(FadeIn(steps[3]))
             vo.wait_until("e")
@@ -143,12 +147,14 @@ class Closest(VoiceoverScene):
                   color=GREY_B),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "On random points, the counts tell the story. <bookmark mark='a'/> At a hundred thousand points, all "
-            "pairs would be five billion distances; divide and conquer computed a hundred and forty-two thousand. "
-            "In practice no point ever needed more than two comparisons in a strip; seven is only the worst case. "
-            "<bookmark mark='b'/> It took a little over a second, where all pairs would take a quarter of an hour. "
-            "<bookmark mark='c'/> Michael Rabin showed in 1976 that randomness does better still, expected linear "
-            "time, by hashing points into grid cells of the right size."
+            "For these fixed random inputs, count the actual distance evaluations. <bookmark mark='a'/> At a hundred "
+            'thousand points, the implementation uses about a hundred and forty-two thousand distances instead of '
+            'roughly five billion all-pairs candidates. Its observed strip maximum is two; the proof allows seven. '
+            "<bookmark mark='b'/> Every timed result, including the largest case, is checked against SciPy's all-"
+            'point nearest-neighbor query. Only the small all-pairs runs are timed; a large all-pairs time would be '
+            "an extrapolation. <bookmark mark='c'/> Randomized grid methods can obtain expected linear bounds in "
+            'suitable models with floor and hashing operations. That is a different guarantee from deterministic '
+            'comparison-based divide and conquer.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab))
             for mk, p in zip("abc", pts):

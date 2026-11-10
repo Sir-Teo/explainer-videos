@@ -31,6 +31,14 @@ def activity_selection(intervals, rule="finish"):
         order = sorted(intervals, key=conflicts)
     else:
         raise ValueError(rule)
+    if rule == "finish":
+        chosen = []
+        last_finish = -math.inf
+        for iv in order:
+            if iv[0] >= last_finish:
+                chosen.append(iv)
+                last_finish = iv[1]
+        return chosen
     chosen = []
     for iv in order:
         if all(iv[1] <= c[0] or c[1] <= iv[0] for c in chosen):
@@ -52,6 +60,10 @@ def max_compatible(intervals):
 
 def huffman(freq):
     """Huffman code lengths for a {symbol: weight} table (ties broken by insertion order)."""
+    if any(not math.isfinite(w) or w < 0 for w in freq.values()):
+        raise ValueError("Huffman weights must be finite and nonnegative")
+    if not freq:
+        return {}
     heap = [(w, i, {s: 0}) for i, (s, w) in enumerate(freq.items())]
     heapq.heapify(heap)
     k = len(heap)
@@ -67,7 +79,17 @@ def huffman(freq):
     return heap[0][2]
 
 
+def _coin_inputs(amount, coins):
+    if not isinstance(amount, int) or amount < 0:
+        raise ValueError("amount must be a nonnegative integer")
+    coins = list(coins)
+    if any(not isinstance(c, int) or c <= 0 for c in coins):
+        raise ValueError("coin denominations must be positive integers")
+    return coins
+
+
 def coin_greedy(amount, coins):
+    coins = _coin_inputs(amount, coins)
     out = []
     for c in sorted(coins, reverse=True):
         while amount >= c:
@@ -77,12 +99,15 @@ def coin_greedy(amount, coins):
 
 
 def coin_dp(amount, coins):
+    coins = _coin_inputs(amount, coins)
     best = [0] + [math.inf] * amount
     take = [0] * (amount + 1)
     for a in range(1, amount + 1):
         for c in coins:
             if c <= a and best[a - c] + 1 < best[a]:
                 best[a], take[a] = best[a - c] + 1, c
+    if math.isinf(best[amount]):
+        return None
     out = []
     while amount > 0:
         out.append(take[amount])
@@ -91,9 +116,15 @@ def coin_dp(amount, coins):
 
 
 def greedy_max_weight(elements, weight, independent):
-    """The matroid greedy: heaviest first, keep an element if the set stays independent."""
+    """Maximum-weight independent-set greedy; skip negative weights.
+
+    It is optimal for matroids; arbitrary independence systems need not be.
+    This chooses an independent set, not a mandatory full basis.
+    """
     chosen = []
     for e in sorted(elements, key=weight, reverse=True):
+        if weight(e) < 0:
+            continue
         if independent(chosen + [e]):
             chosen.append(e)
     return chosen
@@ -129,7 +160,7 @@ def matching_independent(edges):
 def max_weight_matching_brute(edges):
     """Exact maximum-weight matching by search (small graphs only)."""
     best = 0.0
-    edges = sorted(edges, key=lambda e: -e[2])
+    edges = sorted((e for e in edges if e[2] >= 0), key=lambda e: -e[2])
 
     def go(i, used, w):
         nonlocal best
@@ -148,6 +179,8 @@ def max_weight_matching_brute(edges):
 # ------------------------------------------------------------------------------------------------- multiplication
 def to_digits(x, base=10):
     """Little-endian digit list."""
+    if not isinstance(x, int) or x < 0 or not isinstance(base, int) or base < 2:
+        raise ValueError("require a nonnegative integer and integer base at least two")
     if x == 0:
         return [0]
     out = []
@@ -172,8 +205,8 @@ def school_mul(a, b, count=None):
             continue
         for j, y in enumerate(b):
             out[i + j] += x * y
-    if count is not None:
-        count[0] += len(a) * len(b)
+            if count is not None:
+                count[0] += 1
     return out
 
 
@@ -183,6 +216,8 @@ def _carry(ds, base=10):
         c += d
         out.append(c % base)
         c //= base
+    if c < 0:
+        raise ValueError("the represented value must be nonnegative")
     while c:
         out.append(c % base)
         c //= base
@@ -202,6 +237,8 @@ def _sub(a, b):
 
 def karatsuba(a, b, count=None, cutoff=1):
     """Karatsuba on (uncarried) little-endian digit lists: three half-size products instead of four."""
+    if not isinstance(cutoff, int) or cutoff < 1:
+        raise ValueError("cutoff must be a positive integer")
     n = max(len(a), len(b))
     if n <= cutoff:
         return school_mul(a, b, count)
@@ -234,6 +271,10 @@ def mul_count(n, method):
 def strassen(A, B, cutoff=64, count=None):
     """Strassen's seven products (numpy blocks; n a power of two).  ``count`` = [mults, adds] at scalar level for
     the recursion above the cutoff, with the cutoff blocks done by numpy and counted as n^3 mults."""
+    A, B = np.asarray(A), np.asarray(B)
+    if (A.ndim != 2 or B.ndim != 2 or A.shape != B.shape or A.shape[0] != A.shape[1]
+            or not A.shape[0] or A.shape[0] & (A.shape[0] - 1) or not isinstance(cutoff, int) or cutoff < 1):
+        raise ValueError("require equal square power-of-two matrices and positive integer cutoff")
     n = A.shape[0]
     if n <= cutoff:
         if count is not None:
@@ -284,6 +325,10 @@ def dft(a, count=None):
 
 def fft(a, count=None, invert=False):
     """Recursive radix-2 Cooley–Tukey; ``count[0]`` += butterflies (one complex multiply each)."""
+    if len(a) == 0:
+        return []
+    if len(a) & (len(a) - 1):
+        raise ValueError("radix-two FFT length must be a power of two")
     n = len(a)
     if n == 1:
         return list(a)
@@ -315,6 +360,8 @@ def bit_reverse(i, bits):
 
 def poly_mul_fft(p, q):
     """Coefficients of p*q by evaluating at roots of unity, multiplying pointwise, interpolating."""
+    if not p or not q:
+        return []
     n = 1
     while n < len(p) + len(q) - 1:
         n *= 2
@@ -325,8 +372,15 @@ def poly_mul_fft(p, q):
 
 
 def fft_bigmul(x, y, chunk=4):
-    """Multiply huge non-negative integers with numpy's float FFT on base-10^chunk digits (exact while the
-    convolution's entries stay below 2^53 / safety margin; chunk=4 is safe to tens of millions of digits)."""
+    """Experimental floating-FFT candidate for nonnegative integer multiplication.
+
+    Supported decimal chunks are 1..4 digits. Floating arithmetic does not give
+    a uniform exactness guarantee: callers must verify against exact arithmetic.
+    The course checks every timed end-to-end product outside the timed region.
+    """
+    if (not isinstance(x, int) or not isinstance(y, int) or min(x, y) < 0
+            or not isinstance(chunk, int) or not 1 <= chunk <= 4):
+        raise ValueError("require nonnegative integers and decimal chunk in1..4")
     import sys
     sys.set_int_max_str_digits(0)          # these are huge numbers on purpose
     sx, sy = str(x), str(y)
@@ -338,7 +392,10 @@ def fft_bigmul(x, y, chunk=4):
     while n < len(a) + len(b):
         n *= 2
     c = np.fft.irfft(np.fft.rfft(a, n) * np.fft.rfft(b, n), n)
-    c = np.rint(c[:len(a) + len(b)]).astype(np.int64)
+    c = np.rint(c[:len(a) + len(b)])
+    if not np.all(np.isfinite(c)) or np.min(c) < 0 or np.max(c) >= 2 ** 63:
+        raise ArithmeticError("FFT coefficients cannot be safely carried as int64")
+    c = c.astype(np.int64)
     base = 10 ** chunk
     out, carry = [], 0
     for v in c.tolist():
@@ -353,9 +410,28 @@ def fft_bigmul(x, y, chunk=4):
     return int(str(out[-1]) + "".join(str(d).zfill(chunk) for d in reversed(out[:-1])))
 
 
+@lru_cache(None)
+def _is_prime(n):
+    if not isinstance(n, int) or n < 2:
+        return False
+    if n % 2 == 0:
+        return n == 2
+    return all(n % p for p in range(3, math.isqrt(n) + 1, 2))
+
+
 def ntt(a, mod=998244353, root=3, invert=False):
     """Number-theoretic transform over Z/mod (mod = 119 * 2^23 + 1): the FFT with exact arithmetic."""
-    a = list(a)
+    if not _is_prime(mod) or not isinstance(root, int):
+        raise ValueError("require a prime modulus and integer root")
+    if len(a) == 0:
+        return []
+    n = len(a)
+    if n & (n - 1) or (mod - 1) % n:
+        raise ValueError("transform length must be a power of two dividing mod-1")
+    omega = pow(root, (mod - 1) // n, mod)
+    if pow(omega, n, mod) != 1 or (n > 1 and pow(omega, n // 2, mod) == 1):
+        raise ValueError("root does not induce the required transform order")
+    a = [x % mod for x in a]
     n = len(a)
     j = 0
     for i in range(1, n):
@@ -384,8 +460,16 @@ def ntt(a, mod=998244353, root=3, invert=False):
     return a
 
 
-def chudnovsky(digits):
-    """π to ``digits`` decimal places, as an integer 3141…, by the Chudnovsky series with binary splitting."""
+def chudnovsky(digits, *, certificate=None):
+    """Return floor(pi *10**digits), certified by an integer interval.
+
+    Consecutive alternating Chudnovsky partial sums bracket the positive series;
+    floor(sqrt(10005)*10**precision) and its successor bracket the square root.
+    Increase precision until both induced pi bounds have the same integer part.
+    Optional certificate receives the two matching floors, terms and guard digits.
+    """
+    if not isinstance(digits, int) or digits < 0:
+        raise ValueError("decimal places must be a nonnegative integer")
     C3_24 = 640320 ** 3 // 24
 
     def bs(a, b):
@@ -403,10 +487,30 @@ def chudnovsky(digits):
         P1, Q1, T1 = bs(a, m)
         P2, Q2, T2 = bs(m, b)
         return P1 * P2, Q1 * Q2, Q2 * T1 + P1 * T2
-    terms = int(digits / 14.181647462725477) + 2
-    _, Q, T = bs(0, terms)
-    one = 10 ** digits
-    return Q * 426880 * math.isqrt(10005 * one * one) // T
+
+    guard = 10
+    while True:
+        terms = (digits + guard) // 14 + 2
+        P, Q, T = bs(0, terms)
+        step_den = terms ** 3 * C3_24
+        numerator = T * step_den
+        next_term = P * (6 * terms - 5) * (2 * terms - 1) * (6 * terms - 1)
+        next_term *= 13591409 + 545140134 * terms
+        successor = numerator + (-next_term if terms & 1 else next_term)
+        lower_s, upper_s = sorted((numerator, successor))
+        denominator = Q * step_den
+        scale = 10 ** (digits + guard)
+        root = math.isqrt(10005 * scale * scale)
+        lower = 426880 * root * denominator // (10 ** guard * upper_s)
+        upper = 426880 * (root + 1) * denominator // (10 ** guard * lower_s)
+        if lower == upper:
+            if certificate is not None:
+                certificate.update(terms=terms, guard_digits=guard,
+                                   lower_floor=lower, upper_floor=upper,
+                                   alternating_series_and_integer_sqrt=True)
+            return lower
+        guard += 10
+
 
 
 # ------------------------------------------------------------------------------------------------- closest pair
@@ -464,6 +568,8 @@ def closest_pair(pts):
 
 # ------------------------------------------------------------------------------------------------- DP
 def fib_naive_calls(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("size must be a nonnegative integer")
     calls = [0]
 
     def f(k):
@@ -473,6 +579,8 @@ def fib_naive_calls(n):
 
 
 def fib_memo_calls(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("size must be a nonnegative integer")
     calls = [0]
     memo = {}
 
@@ -557,6 +665,10 @@ def knapsack_greedy(items, W):
 
 def matrix_chain(dims):
     """Cheapest parenthesization of A1 … An with Ai of size dims[i-1] x dims[i].  Returns (cost, bracket string)."""
+    if len(dims) < 2:
+        return 0, ""
+    if any(d <= 0 for d in dims):
+        raise ValueError("matrix dimensions must be positive")
     n = len(dims) - 1
     C = [[0] * n for _ in range(n)]
     S = [[0] * n for _ in range(n)]
@@ -612,18 +724,29 @@ def optimal_bst(p, knuth=False):
 
 
 def tree_mis(children, root, weight):
-    """Maximum-weight independent set on a tree, by DP: (with root, without root) at every vertex."""
-    import sys
-    sys.setrecursionlimit(max(10000, sys.getrecursionlimit()))
+    """Maximum-weight independent set on a rooted tree by iterative postorder.
 
-    def go(v):
-        take, skip = weight[v], 0
-        for c in children.get(v, []):
-            t, s = go(c)
-            take += s
-            skip += max(t, s)
-        return take, skip
-    return max(go(root))
+    The empty independent set is allowed. Reject cycles/shared children; every
+    reachable vertex has exactly one parent except the root. No recursion limit
+    or process-wide interpreter setting is changed.
+    """
+    seen, values, todo = set(), {}, [(root, False)]
+    while todo:
+        v, finished = todo.pop()
+        if finished:
+            take, skip = weight[v], 0
+            for c in children.get(v, []):
+                t, s = values[c]
+                take += s
+                skip += max(t, s)
+            values[v] = take, skip
+        else:
+            if v in seen:
+                raise ValueError("children must describe a rooted tree")
+            seen.add(v)
+            todo.append((v, True))
+            todo.extend((c, False) for c in reversed(children.get(v, [])))
+    return max(values[root])
 
 
 def tree_mis_brute(n, edges, weight):
@@ -649,6 +772,8 @@ def tree_mis_brute(n, edges, weight):
 # ------------------------------------------------------------------------------------------------- search
 def queens(n, bitmask=True):
     """Count n-queens solutions by backtracking; returns (solutions, nodes visited)."""
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("size must be a nonnegative integer")
     nodes = [0]
     if bitmask:
         full = (1 << n) - 1
@@ -746,11 +871,16 @@ class DLX:
             while j != i:
                 S[C[j]] += 1
                 D[U[j]] = U[D[j]] = j
+                self.updates += 2
                 j = L[j]
             i = U[i]
         R[L[c]] = L[R[c]] = c
+        self.updates += 2
 
     def solve(self, limit=1):
+        if not isinstance(limit, int) or limit < 1:
+            raise ValueError("solution limit must be positive")
+        self.nodes = self.updates = 0
         sols, cur = [], []
 
         def go():
@@ -772,13 +902,15 @@ class DLX:
                 while j != r:
                     self.cover(self.C[j])
                     j = self.R[j]
-                if go():
-                    return True
+                stopped = go()
                 j = self.L[r]
                 while j != r:
                     self.uncover(self.C[j])
                     j = self.L[j]
                 cur.pop()
+                if stopped:
+                    self.uncover(c)
+                    return True
                 r = self.D[r]
             self.uncover(c)
             return False
@@ -786,8 +918,26 @@ class DLX:
         return sols
 
 
+def _sudoku_grid(grid):
+    if not isinstance(grid, str) or len(grid) != 81 or any(c not in "0123456789." for c in grid):
+        raise ValueError("Sudoku grid must contain81 digits or dots")
+    g = [0 if c == "." else int(c) for c in grid]
+    units = [[9*r+c for c in range(9)] for r in range(9)]
+    units += [[9*r+c for r in range(9)] for c in range(9)]
+    units += [[9*(br+r)+bc+c for r in range(3) for c in range(3)]
+              for br in (0,3,6) for bc in (0,3,6)]
+    for unit in units:
+        values = [g[i] for i in unit if g[i]]
+        if len(set(values)) != len(values):
+            return None
+    return g
+
+
 def sudoku_rows(grid):
     """Exact-cover rows for a 9x9 sudoku (string of 81 digits, 0 or . for blanks): 324 columns."""
+    g = _sudoku_grid(grid)
+    if g is None:
+        raise ValueError("inconsistent Sudoku givens")
     rows, meaning = [], []
     for r in range(9):
         for c in range(9):
@@ -801,6 +951,8 @@ def sudoku_rows(grid):
 
 
 def solve_sudoku(grid):
+    if _sudoku_grid(grid) is None:
+        return None, 0, 0, 0
     rows, meaning = sudoku_rows(grid)
     x = DLX(324, rows)
     sols = x.solve(limit=2)
@@ -816,7 +968,9 @@ def solve_sudoku(grid):
 
 def sudoku_naive(grid):
     """Plain backtracking, cells in reading order: (solution, nodes)."""
-    g = [int(ch) if ch not in "." else 0 for ch in grid]
+    g = _sudoku_grid(grid)
+    if g is None:
+        return None, 0
     nodes = [0]
 
     def ok(i, d):
@@ -844,12 +998,14 @@ def sudoku_naive(grid):
                     return True
                 g[i] = 0
         return False
-    go(0)
-    return "".join(map(str, g)), nodes[0]
+    solved = go(0)
+    return ("".join(map(str, g)) if solved else None), nodes[0]
 
 
 # ------------------------------------------------------------------------------------------------- max subarray
 def maxsub_cubic(a):
+    if not a:
+        raise ValueError("maximum subarray requires a nonempty sequence")
     best = a[0]
     n = len(a)
     for i in range(n):
@@ -862,6 +1018,8 @@ def maxsub_cubic(a):
 
 
 def maxsub_quadratic(a):
+    if not a:
+        raise ValueError("maximum subarray requires a nonempty sequence")
     best = a[0]
     for i in range(len(a)):
         s = 0
@@ -873,6 +1031,8 @@ def maxsub_quadratic(a):
 
 
 def maxsub_divide(a, lo=0, hi=None):
+    if not a or lo < 0 or (hi is not None and (hi > len(a) or hi <= lo)):
+        raise ValueError("maximum subarray requires a nonempty valid interval")
     if hi is None:
         hi = len(a)
     if hi - lo == 1:
@@ -891,6 +1051,8 @@ def maxsub_divide(a, lo=0, hi=None):
 
 
 def maxsub_kadane(a):
+    if not a:
+        raise ValueError("maximum subarray requires a nonempty sequence")
     best = cur = a[0]
     for x in a[1:]:
         cur = max(x, cur + x)

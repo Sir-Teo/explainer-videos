@@ -53,17 +53,13 @@ class Outro(VoiceoverScene):
             (r"randomized algorithms: \ Freivalds, \ Karger, \ hashing", [20]),
             (r"strings: \ \texttt{diff} as a shortest path on the edit graph", [21]),
             (r"linear programming; \ branch and bound", [23]),
-            (r"knapsack, \ subset sum and Sudoku are NP-complete", [26]),
+            ('decision knapsack, subset sum and generalized Sudoku: NP-completeness', [26]),
             (r"fine-grained complexity: \ SETH and edit distance", [27]),
             (r"big-number arithmetic and the NTT for cryptography", [30]),
             (r"the quantum Fourier transform", [53]),
         ], font_size=24)
         with self.voiceover(
-            "Where this comes back. Part 20 adds a fifth paradigm, randomness. Part 21 turns edit distance into "
-            "diff, a shortest path on the edit graph. Part 23 is linear programming and branch and bound. Part 26 "
-            "proves that knapsack, subset sum and Sudoku are NP-complete, and Part 27 develops the fine-grained "
-            "complexity behind edit distance's quadratic barrier. Part 30's cryptography runs on big-number "
-            "arithmetic, and Part 53's quantum computers run the FFT's butterfly on amplitudes."
+            'Where this comes back. Part 20 adds randomness. Part 21 connects insert-delete scripts to paths on an edit graph and practical diff algorithms. Part 23 studies linear programming and branch and bound. Part 26 studies decision versions of knapsack and subset sum, and generalized Sudoku, as NP-complete problems. Part 27 develops conditional fine-grained hardness for exact worst-case edit distance. Part 30 uses big-integer arithmetic and modular transforms. Part 53 introduces the quantum Fourier transform, whose circuit and output access differ from a classical FFT.'
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.3), run_time=3.0)
@@ -72,18 +68,20 @@ class Outro(VoiceoverScene):
 
     def practice(self):
         card = practice_card([
-            (r"signals", r"FFTs in every phone, \ camera, \ radio and audio codec: \ FFTW, \ cuFFT"),
+            (r"signals", 'spectral imaging, OFDM and signal analysis; FFT libraries include FFTW and cuFFT'),
             (r"numbers", r"GMP: \ schoolbook, \ Karatsuba, \ Toom, \ then FFT, \ switching at tuned sizes"),
             (r"matrices", r"BLAS: \ cubic, \ blocked and vectorized; \ Strassen rarely"),
             (r"text", r"\texttt{diff}, \ spelling, \ DNA alignment: \ dynamic programming"),
             (r"solvers", r"SAT, \ integer programming and constraint solvers: \ search with pruning"),
         ])
         with self.voiceover(
-            "In practice. Fourier transforms run in every phone, camera, radio and audio codec, through libraries "
-            "such as FFTW and cuFFT. Big-number libraries such as GMP switch from the school method to Karatsuba, "
-            "Toom–Cook and the FFT at sizes tuned for each machine. Matrix libraries stay cubic, but blocked and "
-            "vectorized; Strassen is rare. Diff, spell checkers and DNA aligners are dynamic programmes, and SAT, "
-            "integer programming and constraint solvers are search with very clever pruning."
+            'In applications, the details return. Fourier-transform libraries serve signal processing, imaging and '
+            'communications. Big-number libraries switch among school multiplication, Karatsuba, Toom-Cook and '
+            'transform methods according to operand sizes and tuned thresholds. Matrix software combines layout, '
+            'blocking, vectorization, threading and sometimes fast algebraic schemes. Diff and sequence alignment use'
+            ' related dynamic programs with different objectives and accelerations. Constraint and integer-'
+            'programming solvers use search, propagation and bounds. The paradigm suggests a structure; correctness, '
+            'numerical behavior and measurement scope still need checking.'
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.35), run_time=3.0)
@@ -94,8 +92,7 @@ class Outro(VoiceoverScene):
         ps = problem_set([
             r"Prove that some optimal prefix code has the two rarest symbols as sibling leaves at the greatest "
             r"depth, \ and deduce that Huffman's algorithm is optimal.",
-            r"Solve $T(n) = 3T(n/2) + cn$, \ $T(1) = 1$, \ exactly for $n = 2^k$, \ and show that Karatsuba does "
-            r"exactly $3^k$ digit products.",
+            'Solve $T(n)=3T(n/2)+cn$, $T(1)=1$, for $n=2^k$; count $3^k$ full-tree leaves, and explain skipped zero products.',
             r"Prove $\sum_{k=0}^{n-1} \omega^{jk} = 0$ for $n \nmid j$, \ and deduce $F^{-1} = \frac{1}{n}\overline{F}$ "
             r"for the DFT matrix.",
             r"Prove the edit-distance recurrence correct, \ and recover an optimal edit script from the table in "
@@ -103,14 +100,15 @@ class Outro(VoiceoverScene):
             r"\textit{Build.} \ Implement the number-theoretic transform modulo $40961 = 5 \cdot 2^{13} + 1$ in the "
             r"Pebble language, \ multiply two 500-digit numbers on the emulator, \ and compare its instruction count "
             r"with Karatsuba.",
-            r"$\bigstar$ \textit{Research.} \ Prove that every linear circuit computing the $n$-point DFT needs "
-            r"$\Omega(n \log n)$ additions, \ without assuming bounded coefficients.",
+            '$\\bigstar$ \\textit{Research (open).} \\ Over $\\mathbb C$, must unrestricted linear circuits for the DFT need $\\Omega(n\\log n)$ arithmetic operations?',
         ], font_size=22)
         with self.voiceover(
-            "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build "
-            "problem: the number-theoretic transform in the Pebble language, multiplying five-hundred-digit numbers on "
-            "the emulator. The last, marked with a star, is a research problem: its answer is not known, and the "
-            "notes say where to start."
+            'The notes contain five worked exercises and a separate open research extension. Pause on any statement. '
+            'The build exercise implements a number-theoretic transform for a five-hundred-digit product, with a '
+            'transform length and coefficient bound that prevent modular ambiguity. Test it against an exact '
+            'reference before comparing instruction counts; no crossover is promised in advance. The starred question'
+            ' asks about the unrestricted linear-circuit model and explains how it differs from the known bounded-'
+            'coefficient result.'
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)

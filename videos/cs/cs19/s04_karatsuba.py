@@ -37,17 +37,19 @@ class Karatsuba(VoiceoverScene):
                   font_size=21, color=HEAD),
             label(r"the start of the theory of fast arithmetic", font_size=22, color=LAM),
         ).arrange(DOWN, buff=0.35).next_to(head, DOWN, buff=0.7)
+        school_grid=VGroup(*[Square(.17,stroke_color=DATA,stroke_width=1,fill_color=DATA,fill_opacity=.45)
+                             for _ in range(64)]).arrange_in_grid(rows=8,cols=8,buff=.025).move_to([0,-2.25,0])
+        grid_caption=label("8 by 8 candidate coefficient products",font_size=19,color=DATA).next_to(school_grid,DOWN,buff=.16)
         with self.voiceover(
-            "In the autumn of 1960 Andrey Kolmogorov, one of the great mathematicians of the twentieth century, ran a seminar "
-            "in Moscow on the complexity of arithmetic. <bookmark mark='a'/> He conjectured that multiplying two n "
-            "digit numbers needs on the order of n squared steps, as it always had. <bookmark mark='b'/> Nobody "
-            "doubted it. <bookmark mark='c'/> Within a week Anatoly Karatsuba, a twenty-three-year-old student, "
-            "brought him a method that takes about n to the one point five eight. <bookmark mark='d'/> Kolmogorov "
-            "was upset, announced the result at the next meeting, and ended the seminar. He wrote the paper "
-            "himself, published under Karatsuba's name and Yuri Ofman's in 1962. <bookmark mark='e'/> It began the "
-            "subject this part's opening table was about."
+            "Karatsuba recalled a Moscow seminar in 1960, led by Andrey Kolmogorov. <bookmark mark='a'/> The "
+            "challenge was whether multiplying n-digit integers really required quadratic work. <bookmark mark='b'/> "
+            'The familiar school algorithm did; that did not establish a lower bound for every algorithm. <bookmark '
+            "mark='c'/> Anatoly Karatsuba found a decomposition using three half-size products rather than four. "
+            "<bookmark mark='d'/> The result appeared in a 1962 paper by Karatsuba and Yuri Ofman. <bookmark "
+            "mark='e'/> Its lasting lesson is mathematical: a better algebraic identity can change the exponent, not "
+            'merely tune a constant.'
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head),FadeIn(school_grid),FadeIn(grid_caption))
             for mk, p in zip("abcde", pts):
                 vo.wait_until(mk)
                 self.play(FadeIn(p))
@@ -68,6 +70,11 @@ class Karatsuba(VoiceoverScene):
             MathTex(r"(12 + 34)(56 + 78) = 46 \times 134 = 6164, \quad 6164 - 672 - 2652 = 2840", font_size=30),
             MathTex(r"672\,0000 + 2840\,00 + 2652 = 7006652", font_size=30, color=YES),
         ).arrange(DOWN, buff=0.2).next_to(eqs, DOWN, buff=0.5)
+        split=VGroup(*[VGroup(RoundedRectangle(width=1.1,height=.62,corner_radius=.08,stroke_color=color,
+                                  fill_color=color,fill_opacity=.35),mono(value,24,WHITE))
+                            for value,color in zip(["12","34","56","78"],[DATA,DATA,YES,YES])])
+        for obj,xpos in zip(split,[-2.5,-1.2,1.2,2.5]):obj.move_to([xpos,-2.4,0])
+        split.add(MathTex(r"\times",font_size=32,color=HEAD).move_to([0,-2.4,0]))
         with self.voiceover(
             "Here is the trick. <bookmark mark='a'/> Split each number into a high half and a low half. <bookmark "
             "mark='b'/> The product needs four half-size products: high times high, low times low, and the two "
@@ -78,7 +85,7 @@ class Karatsuba(VoiceoverScene):
             "thirty-four, from which the middle term follows by subtraction. Three products give seven million "
             "and six thousand, six hundred and fifty-two."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head),FadeIn(split))
             vo.wait_until("a")
             self.play(FadeIn(eqs[0]))
             vo.wait_until("b")
@@ -86,6 +93,7 @@ class Karatsuba(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(eqs[2]))
             vo.wait_until("d")
+            self.remove(split)
             self.play(LaggedStart(*[FadeIn(e) for e in ex], lag_ratio=0.5), run_time=4)
         self.wait(0.3)
         self.clear_scene()
@@ -112,17 +120,17 @@ class Karatsuba(VoiceoverScene):
                   color=GREY_A),
         ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "The saving compounds. <bookmark mark='a'/> Each of the three half-size products is done the same way, "
-            "so the work forms a tree: one product, then three, then nine, then twenty-seven, each half the size of "
-            "the last. <bookmark mark='b'/> After log n levels there are three to the log n single-digit products, "
-            "which is n to the log of three, about n to the one point five eight five. <bookmark mark='c'/> With "
-            "four products per level the same tree would have n squared leaves. Saving one product in four at the "
-            "top saves almost everything at the bottom: for four thousand digits, half a million digit products "
-            "instead of sixteen million."
+            "The three-product decomposition recurses. <bookmark mark='a'/> One multiplication becomes three half-"
+            'size problems, then nine quarter-size problems and twenty-seven eighth-size problems. <bookmark '
+            "mark='b'/> For a power-of-two coefficient-array length, recursing to scalar leaves gives three to the "
+            'log-base-two n leaves. Additions cost linear work at each node, yielding the n-to-log-base-two-three '
+            'recurrence. Integer implementations also handle carries and the extra width of sums. <bookmark '
+            "mark='c'/> The rectangular school model has n squared products. Our measured school loop skips zero left"
+            ' digits, so the table distinguishes that model from its actual multiplication count.'
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head),FadeIn(levels))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(lv) for lv in levels], lag_ratio=0.5), run_time=3)
+            self.play(LaggedStart(*[Indicate(lv[0],color=HEAD) for lv in levels], lag_ratio=.25),run_time=2)
             vo.wait_until("b")
             self.play(FadeIn(eq[0]), FadeIn(eq[1]))
             vo.wait_until("c")
@@ -154,15 +162,15 @@ class Karatsuba(VoiceoverScene):
                   font_size=20, color=HEAD),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Here it is measured, on digit lists in Python. <bookmark mark='a'/> The products fall as predicted, "
-            "by a factor of thirty at four thousand digits. But the time does not, at first: recursing all the way "
-            "down to single digits, Karatsuba is slower than the school method even at four thousand digits, "
-            "because its additions, splits and function calls cost more than the products they save. <bookmark "
-            "mark='b'/> The cure is a cutoff. Switch to the school method for pieces below thirty-two digits, and "
-            "Karatsuba is ahead from sixty-four digits on, and almost four times faster at four thousand. "
-            "<bookmark mark='c'/> Python's own integers do exactly this, with a cutoff of seventy machine digits. "
-            "<bookmark mark='d'/> Splitting into three pieces instead of two, Andrei Toom and Stephen Cook found "
-            "five products where nine were needed, and the exponent fell again. The limit of the idea is the FFT."
+            'These runs use preconverted decimal digit arrays and return coefficient convolutions. <bookmark '
+            "mark='a'/> We carry and compare every timed result with Python's exact integer product after stopping "
+            "the timer. The counters record actual scalar products, including the school's skipped zero rows. "
+            "<bookmark mark='b'/> A cutoff of thirty-two reduces recursive overhead; the table shows the observed "
+            "crossover on this host rather than a hardware-independent threshold. <bookmark mark='c'/> CPython "
+            'similarly combines school multiplication and Karatsuba, but its machine-digit threshold is an '
+            "implementation choice, not thirty-two decimal digits. <bookmark mark='d'/> Toom-Cook uses evaluation and"
+            ' interpolation to reduce products further. The FFT takes that principle to many carefully chosen '
+            'evaluation points.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab))
             for mk, p in zip("abcd", pts):
