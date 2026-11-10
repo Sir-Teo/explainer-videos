@@ -8,9 +8,10 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
+from qa_fixture_paths import repo_file
 
 ROOT = Path(__file__).resolve().parents[1]
-HELPER = ROOT / 'docs/qa/evidence/production-handoff-parts1-3/verify_handoff.py'
+HELPER = ROOT / 'tests/fixtures/qa/production-handoff-parts1-3/verify_handoff.py'
 spec = importlib.util.spec_from_file_location('production_handoff_preflight', HELPER)
 preflight = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(preflight)
@@ -565,7 +566,7 @@ class ReviewedManifestIdentityTests(unittest.TestCase):
         self.assertFalse(overlay['production_acceptance']['repaired_part1_output_accepted'])
         self.assertEqual(overlay['optional_evidence_files'], [])
         for row in overlay['evidence_receipts']:
-            raw = (ROOT / row['path']).read_bytes()
+            raw = repo_file(row['path']).read_bytes()
             self.assertEqual((len(raw), sha(raw)), (row['bytes'], row['sha256']))
 
     def test_combined_manifest_binds_only_exact_two_sources_and_review_receipts(self):
@@ -583,7 +584,7 @@ class ReviewedManifestIdentityTests(unittest.TestCase):
         self.assertEqual(overlay['reviewed_patch_commits']['outro'], '6b86ee8b8c1a9a080c90b8d7f4d78880dcf724e0')
         self.assertEqual(overlay['optional_evidence_files'], [])
         for row in overlay['evidence_receipts']:
-            p = ROOT / row['path']
+            p = repo_file(row['path'])
             self.assertEqual(p.stat().st_size, row['bytes'])
             self.assertEqual(sha(p.read_bytes()), row['sha256'])
 

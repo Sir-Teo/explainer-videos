@@ -14,14 +14,14 @@ import unittest
 from explainer import lang
 
 ROOT = Path(__file__).resolve().parents[1]
-EVIDENCE = ROOT / 'docs/qa/evidence/v9-production-word-mapping-reconciliation'
+EVIDENCE = ROOT / 'tests/fixtures/qa/v9-production-word-mapping-reconciliation'
 RECEIPT = json.loads((EVIDENCE / 'production-receipt.json').read_text())
 
 
 def diagnostic(prefix=False):
     path = ('ai1-entropy-prefix-narrated-timing-repair/prefix-exact-diagnostic.json.gz'
             if prefix else 'ai1-crossentropy-narrated-timing-repair/exact-diagnostic.json.gz')
-    return json.loads(gzip.decompress((ROOT / 'docs/qa/evidence' / path).read_bytes()))
+    return json.loads(gzip.decompress((ROOT / 'tests/fixtures/qa' / path).read_bytes()))
 
 
 @lru_cache(maxsize=1)
@@ -62,7 +62,7 @@ class ProductionWordMapping(unittest.TestCase):
         self.assertEqual((len(raw), hashlib.sha256(raw).hexdigest()),
                          (14539, '57793eeddae6188ee631687dd18d606a7333fb210432cea2d1b085c05c4ce5f5'))
         self.assertEqual(RECEIPT['source_gate'], '810fe991600f98b2c14f3dcc4a501c329fb4e3af')
-        release = ROOT / 'docs/qa/evidence/production-handoff-parts1-3/manifest-prefix-crossentropy-arithmetic-part3-v9.json'
+        release = ROOT / 'tests/fixtures/qa/production-handoff-parts1-3/manifest-prefix-crossentropy-arithmetic-part3-v9.json'
         self.assertEqual(hashlib.sha256(release.read_bytes()).hexdigest(), RECEIPT['release_manifest_sha256'])
         for item in RECEIPT['actual_source_function_files']:
             source = (ROOT / item['path']).read_bytes()

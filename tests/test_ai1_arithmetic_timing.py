@@ -2,7 +2,7 @@ import ast,copy,gzip,hashlib,json,math,sys,unittest
 from pathlib import Path
 from types import SimpleNamespace
 import numpy as np
-R=Path(__file__).resolve().parents[1];D=R/'docs/qa/evidence/ai1-arithmetic-narrated-timing-repair'
+R=Path(__file__).resolve().parents[1];D=R/'tests/fixtures/qa/ai1-arithmetic-narrated-timing-repair'
 sys.path.insert(0,str(R/'tests'))
 from test_ai1_entropy_prefix_timing import actual_tracker,compile_nodes,function,Shape,Clock,tag
 DIAG=D/'exact-diagnostic.json.gz'

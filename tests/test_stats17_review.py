@@ -12,7 +12,7 @@ from videos.stats.stats17 import compute as C
 
 
 def test_archived_yule_values_and_correlations():
-    folder = Path(__file__).resolve().parents[1] / 'docs/qa/evidence/stats17-polish-20261107'
+    folder = Path(__file__).resolve().parents[1] / 'tests/fixtures/qa/stats17-polish-20261107'
     arrays = []
     for name, current in [('yule1.dat', museum.YULE_MORTALITY), ('yule2.dat', museum.YULE_CE_MARRIAGES)]:
         values = []

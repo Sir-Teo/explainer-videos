@@ -8,8 +8,9 @@ import shutil
 import unittest
 from unittest.mock import patch
 import test_production_handoff_surprise_overlay as previous
+from qa_fixture_paths import repo_file
 
-D=Path(__file__).resolve().parents[1]/'docs/qa/evidence/production-handoff-parts1-3'
+D=Path(__file__).resolve().parents[1]/'tests/fixtures/qa/production-handoff-parts1-3'
 ROOT=Path(__file__).resolve().parents[1]
 preflight=previous.preflight
 sha=lambda raw:hashlib.sha256(raw).hexdigest()
@@ -132,21 +133,25 @@ class NumericDwellReviewedManifestTests(unittest.TestCase):
         self.assertFalse(m['production_acceptance']['probability_numeric_dwell_output_accepted'])
         self.assertEqual(m['numeric_dwell_source_review']['minimum_finished_numeric_hold_seconds'],1.5)
         for row in m['numeric_dwell_evidence_receipts']:
-            raw=(ROOT/row['path']).read_bytes()
+            raw=repo_file(row['path']).read_bytes()
             self.assertEqual((len(raw),sha(raw)),(row['bytes'],row['sha256']))
 
     def test_all_prior_overlays_tests_inventories_and_historical_helper_stay_exact(self):
         historical=D/'historical/probability-numeric-dwell-v7-before'
         rows=json.loads((historical/'preserved-pins.json').read_text())['files']
-        replaceable={str((D/'verify_handoff.py').relative_to(ROOT)),
-                     str((D/'README.md').relative_to(ROOT)),
+        replaceable={'docs/qa/evidence/production-handoff-parts1-3/verify_handoff.py',
+                     'docs/qa/evidence/production-handoff-parts1-3/README.md',
+                     # Original test sources are verified from the archived copies below.
+                     'tests/test_production_handoff_overlay.py',
+                     'tests/test_production_handoff_probability_overlay.py',
+                     'tests/test_production_handoff_surprise_overlay.py',
                      'docs/qa/production-handoff-parts1-3.md'}
         for row in rows:
             if row['historical_path'] is not None:
-                raw=(ROOT/row['historical_path']).read_bytes()
+                raw=repo_file(row['historical_path']).read_bytes()
                 self.assertEqual((len(raw),sha(raw)),(row['bytes'],row['sha256']))
             if row['path'] not in replaceable:
-                raw=(ROOT/row['path']).read_bytes()
+                raw=repo_file(row['path']).read_bytes()
                 self.assertEqual((len(raw),sha(raw)),(row['bytes'],row['sha256']))
 
     def test_full_verify_and_other_guard_bodies_unchanged(self):

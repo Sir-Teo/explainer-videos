@@ -51,7 +51,7 @@ def test_representative_ppi_draws_target_empirical_population_with_iid_variance(
 
 
 def test_primary_breast_cancer_table_matches_museum():
-    d=json.loads(Path('docs/qa/evidence/stats34-polish-20261107/source-data.json').read_text())
+    d=json.loads(Path('tests/fixtures/qa/stats34-polish-20261107/source-data.json').read_text())
     assert (d['rows'],d['features'])==(569,30)
     assert d['feature_max_absolute_error']==0 and d['labels_equal']
 

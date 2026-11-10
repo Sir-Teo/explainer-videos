@@ -17,7 +17,7 @@ import test_ai1_entropy_prefix_timing as timing
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / 'videos/ai/ai1/s05_prefix.py'
-EVIDENCE = ROOT / 'docs/qa/evidence/ai1-entropy-prefix-narrated-timing-repair'
+EVIDENCE = ROOT / 'tests/fixtures/qa/ai1-entropy-prefix-narrated-timing-repair'
 BEFORE = gzip.decompress((EVIDENCE / 'prefix-source-after.py.gz').read_bytes()).decode()
 DIAGNOSTIC = timing.diagnostic('prefix')
 BLOCK = DIAGNOSTIC['narration_blocks'][3]

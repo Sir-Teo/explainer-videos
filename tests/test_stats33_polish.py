@@ -53,7 +53,7 @@ def test_local_fdr_density_matches_independent_poisson_glm():
 def test_prostate_reference_t_z_conversion():
     t,z=museum.prostate_z()
     np.testing.assert_allclose(z,stats.norm.ppf(stats.t.cdf(t,100)),rtol=0,atol=1e-6)
-    reference=json.loads(Path('docs/qa/evidence/stats33-polish-20261107/source-data.json').read_text())
+    reference=json.loads(Path('tests/fixtures/qa/stats33-polish-20261107/source-data.json').read_text())
     assert reference['genes']==6033 and reference['samples']==102
     assert reference['t_max_absolute_error']<6e-7 and reference['z_max_absolute_error']<6e-7
 

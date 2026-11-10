@@ -1,0 +1,73 @@
+[
+  {
+    "dataset": "meuse",
+    "rows": 155,
+    "columns_compared": [
+      "x",
+      "y",
+      "zinc",
+      "cadmium",
+      "copper",
+      "lead",
+      "elev",
+      "dist",
+      "ffreq",
+      "soil"
+    ],
+    "maximum_absolute_error_by_column": {
+      "x": 0.0,
+      "y": 0.0,
+      "zinc": 0.0,
+      "cadmium": 0.0,
+      "copper": 0.0,
+      "lead": 0.0,
+      "elev": 0.0,
+      "dist": 5.000000000032756e-06,
+      "ffreq": 0.0,
+      "soil": 0.0
+    },
+    "source": "https://raw.githubusercontent.com/cran/sp/master/data/meuse.rda",
+    "sha256": "851505e553ccc0bb0f3c750fdc7ab8594bc2f45e095f98e66d51e74b9ceda80e"
+  },
+  {
+    "dataset": "grid",
+    "rows": 3103,
+    "columns_compared": [
+      "x",
+      "y",
+      "dist",
+      "ffreq",
+      "soil"
+    ],
+    "maximum_absolute_error_by_column": {
+      "x": 0.0,
+      "y": 0.0,
+      "dist": 5.000000000032756e-06,
+      "ffreq": 0.0,
+      "soil": 0.0
+    },
+    "source": "https://raw.githubusercontent.com/cran/sp/master/data/meuse.grid.rda",
+    "sha256": "d5fc26dde8124570e8c1336cd593f124bea8a9f900a8f6a4027168062ec2ff11"
+  },
+  {
+    "dataset": "river",
+    "rows": 176,
+    "maximum_absolute_error": 0.5,
+    "source": "https://raw.githubusercontent.com/cran/sp/master/data/meuse.riv.rda",
+    "sha256": "7ff60d416616b7e925582aa65d73aa512a2e821f7de9d6af90f5d8e7585be548"
+  },
+  {
+    "dataset": "deaths",
+    "rows": 578,
+    "maximum_absolute_error": 4.999999999810711e-06,
+    "source": "https://raw.githubusercontent.com/cran/HistData/master/data/Snow.deaths.RData",
+    "sha256": "183af9d159d14eb125744e054eff7c8066fa11c309fba20bc0e65c33c1fb6358"
+  },
+  {
+    "dataset": "pumps",
+    "rows": 13,
+    "maximum_absolute_error": 3.900000001166859e-06,
+    "source": "https://raw.githubusercontent.com/cran/HistData/master/data/Snow.pumps.RData",
+    "sha256": "ce07da18f282b90e4f19755a2000e171ba6f4a398179915f894db9f6ada08415"
+  }
+]

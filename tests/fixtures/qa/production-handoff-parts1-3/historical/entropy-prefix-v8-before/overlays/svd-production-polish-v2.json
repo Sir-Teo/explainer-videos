@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "overlay_id": "svd-production-polish-v2",
+  "base_commit": "927fba668656a682b3e29a288de64130ddc680dd",
+  "reviewed_patch_commit": "d7a9b0acfb15ad9c371f14acae5d8acab2644d6f",
+  "evidence_commit": "86da3b0df913b80966cfba4547cbcb952e9a64a4",
+  "scope": "Exact one-file SVD replacement: includes reviewed v1 clean reveals plus measured native4K label inset and Chinese proper-name/semantic line wrapping. Every other base-tree/source/cache/dependency gate remains strict. No production movie or audio acceptance follows. Later Outro is intentionally outside this one-file overlay.",
+  "source_replacement": {
+    "before": {
+      "path": "videos/ai/ai3/s08_svd.py",
+      "bytes": 11730,
+      "sha256": "cd3b22f6f86ad33a548983025d490e53c322c5479803d0cb5292f8e3ab74dd10",
+      "git_mode": "100644",
+      "git_blob": "43fd7a7d8a4b21754550c8a09dea3ed387ac3a4c"
+    },
+    "after": {
+      "path": "videos/ai/ai3/s08_svd.py",
+      "bytes": 12273,
+      "sha256": "2c01a4a7b7acd7d51d05b3c8943b82337cb850776b309d552ba2719f12ead63b",
+      "git_mode": "100644",
+      "git_blob": "85d98e597659e3c3b5596efc8b57d1c72c0dca79"
+    }
+  },
+  "optional_evidence_files": [],
+  "evidence_reference": "docs/qa/evidence/ai3-svd-production-margin-polish/README.md",
+  "unchanged_inputs": "Narration/bookmark/play/wait AST and endpoint times/records identical; no scientific cache inputs consumed by SVD. Original v1 manifest remains immutable."
+}

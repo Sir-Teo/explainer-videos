@@ -15,7 +15,7 @@ import unittest
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
-EVIDENCE = ROOT / 'docs/qa/evidence/ai1-entropy-prefix-narrated-timing-repair'
+EVIDENCE = ROOT / 'tests/fixtures/qa/ai1-entropy-prefix-narrated-timing-repair'
 MARK = re.compile(r"<bookmark\s+mark=['\"]([^'\"]+)['\"]\s*/>")
 CASES = {
     'entropy': ('s04_entropy.py', '8206578d645fdeb4bfcea0e790f306d1ad7bb2e2ff279fbc338357d4843a570c',

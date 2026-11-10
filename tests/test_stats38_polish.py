@@ -87,7 +87,7 @@ def test_histogram_mass_keeps_out_of_view_draws_in_denominator():
 def test_primary_series_agree_with_independent_r_sources():
     import json
     from pathlib import Path
-    d=json.loads(Path('docs/qa/evidence/stats38-polish-20261107/source-data.json').read_text())
+    d=json.loads(Path('tests/fixtures/qa/stats38-polish-20261107/source-data.json').read_text())
     assert [r['rows'] for r in d]==[663,1860,100]
     assert d[0]['max_error']==d[2]['max_error']==0
     assert all(v==0 for v in d[1]['max_error'].values())

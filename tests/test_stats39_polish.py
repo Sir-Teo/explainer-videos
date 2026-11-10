@@ -64,7 +64,7 @@ def test_circulant_embedding_preserves_covariance_instead_of_clipping_negative_m
 def test_independent_spatial_source_tables_match_at_documented_storage_precision():
     import json
     from pathlib import Path
-    rows=json.loads(Path('docs/qa/evidence/stats39-polish-20261107/source-data.json').read_text())
+    rows=json.loads(Path('tests/fixtures/qa/stats39-polish-20261107/source-data.json').read_text())
     assert [r['rows'] for r in rows]==[155,3103,176,578,13]
     for row in rows[:2]:assert max(row['maximum_absolute_error_by_column'].values())<=5.00001e-6
     assert rows[2]['maximum_absolute_error']<=.5

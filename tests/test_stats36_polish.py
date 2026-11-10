@@ -55,7 +55,7 @@ def test_evalue_is_equal_strength_threshold_not_two_separate_lower_bounds():
 
 
 def test_nsw_primary_package_tables_agree_to_disclosed_cent_precision():
-    rows=json.loads(Path('docs/qa/evidence/stats36-polish-20261107/source-data.json').read_text())
+    rows=json.loads(Path('tests/fixtures/qa/stats36-polish-20261107/source-data.json').read_text())
     assert [r['rows'] for r in rows]==[445,429]
     for r in rows:
         assert np.max(r['maximum_absolute_errors'][:7])==0

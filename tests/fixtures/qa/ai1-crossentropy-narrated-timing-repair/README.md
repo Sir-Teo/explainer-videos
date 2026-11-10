@@ -1,0 +1,13 @@
+# CrossEntropy narrated cue timing repair
+
+The exact supplied EN production preflight source149412… and nine speech-master metadata identities are preserved. Actual original source spans reproduce1.36s,0.55s and1.15s requested cue overruns. Only decomposition intro and Gibbs c→d/d→e play durations now use their current utterance cues. No absolute scene timestamps, narration, marks, math, animation order, masters, data, shared helper or translation changes.
+
+Seven focused tests pass (3.381s). Real repository tracker and installed Manim frame progression/validation cover27 corrected spans at15/30/60fps with0/0.49/1frame arrival phases; all finish at least one frame before target. Shared ladder step/changed-term AST executes through a controlled object/clock interface, preserving actual0.6+1.2+0.5 and0.6+1.2+0.8 branches. No Scene/audio/model/render/decode was invoked. The local adapter restores original play ownership on success or exception. Physically impossible budgets retain positive one-frame plays and receive no synchronization guarantee.
+
+All nine narration blocks and22 supplied cue requests were inspected.21/22 requests reconstruct exactly from the supplied alignment using the repository tracker. Untouched decomposition cue c differs: host15.97s vs reconstructed14.50s, The raw proper name Kullback–Leibler is one whitespace token while supplied spoken Kullback Leibler is two; this proves the local index mismatch. The host tracker/normalization implementation was not supplied, so the cause of its different mapping remains unverified. This is retained explicitly, including the initial failed test log. All three repaired cue targets match exactly. No metadata was changed to force agreement.
+
+All four Gibbs rows remain, with at least1.5s source-clock reading residual after final completion; the full precise minimum is in repair-receipt.json. Decomposition's first formula persists alongside its copy. Source-clock retention is not visual readability or listening approval; short reveal stages require actual production review.
+
+Fixtures bind exact diagnostic, sources, patch, phase map and logs via lossless gzip and raw SHA maps. Nine master paths/hashes are supplied host metadata, not cloud audio-byte verification. Root owns strict v9 registration and the host must rerun exact actual production cue/visible-completion, pacing and listening gates. No staged/committed/pushed or rendered result is asserted here.
+
+Overall metadata-alignment gate is **OPEN / needs host reconciliation**. Source is cleared for controlled cached-master preflight only; it is not production approval. Both c authorities are preserved unchanged.

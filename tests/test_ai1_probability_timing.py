@@ -19,7 +19,7 @@ import numpy as np
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EVIDENCE = ROOT / "docs/qa/evidence/ai1-probability-narrated-timing-repair"
+EVIDENCE = ROOT / "tests/fixtures/qa/ai1-probability-narrated-timing-repair"
 SOURCE = ROOT / "videos/ai/ai1/s02_probability.py"
 DIAGNOSTIC = json.loads(gzip.decompress((EVIDENCE / "readable-diagnostic.json.gz").read_bytes()))
 BEFORE = gzip.decompress((EVIDENCE / "source-before.py.gz").read_bytes()).decode()

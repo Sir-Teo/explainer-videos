@@ -1,0 +1,9 @@
+{
+  "source": "https://raw.githubusercontent.com/scikit-learn/scikit-learn/main/sklearn/datasets/data/breast_cancer.csv",
+  "sha256": "fed3eb72d0575ef6192293f5093c6e801b1476b577d0386bf4455504522172ed",
+  "rows": 569,
+  "features": 30,
+  "feature_max_absolute_error": 0.0,
+  "labels_equal": true,
+  "label_mapping": "Museum malignant=1, scikit-learn benign=1; invert original target"
+}
