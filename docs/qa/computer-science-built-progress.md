@@ -1,7 +1,7 @@
 # Computer Science, Built — sequential polish
 
 Work on `computer-science-built`, one video at a time, with separate commits.
-Current video: **cs16, Counting Steps**. CS1–CS15 source/preview polish checkpoints
+Current video: **cs17, Data Structures**. CS1–CS16 source/preview polish checkpoints
 are complete at the scopes below. Their production release gates remain open; this
 ledger does not treat sampled previews as listening or final-production approval.
 The syllabus's earlier draft-preview claims are separate.
@@ -14,6 +14,33 @@ upgrade/rejection check passes. All numerical producer ASTs and 11 active data h
 This is a loader correctness follow-up; earlier media receipts stay tied to their checkpoint commits.
 
 [CS3 cache-entry evidence](evidence/cs3-cache-entry-20261109/README.md).
+
+## Final CS16 preview checkpoint, 10 November 2026
+
+- Repair actual median-of-three and small-group selection comparison accounting, integer floor/complement
+  recurrence keys, exact growth budgets, initial-state array potential and the invalid illustrated heap edge.
+  Check native sorts against full references with defined uint64 input generation, actual compiler/interpreter
+  metadata and minimum-of-three timings. Nine guarded producers change ten of eighteen payloads.
+  Fourteen tests and 24 independent numerical/model groups pass.
+- Compile the Job with corpus-sized arrays and calibrate that same image; correct the original program's
+  letter-comparison count. Keep full-corpus event counts, sampled emulator/core outputs, rank-19/25 correlated
+  instruction fit and IPC/time projections distinct. Revise 46 bilingual narration sections and the exercises.
+- Add full-domain growth axes, a worked quicksort interval, a 25-key protected-rank grid, initial-state potential
+  witness, in-frame recursion brace, numeric cost/noise axes, explicit timing protocols and scoped historical
+  complexity claims. Review 36 endpoint and 36 motion sheets (1,440 temporal samples);
+  85,827 motion frames decode. Review 22 native clips: 15,622 decoded
+  frames, 528 samples and 22 full-size stills.
+- Bring relevant tables, recurrence roots, level bars and formulas into six long introductory explanations;
+  cue the highlights after the content is already visible. Preserve the superseded motion reviews and six
+  completed native pilots in `iteration01/`; require fresh current-source renders for every final receipt.
+- All 80 English speech blocks pass signal/alignment (42.23 minutes), with all 204 cue requests
+  within 250 ms. Growth, Quick and Select narrated pilots decode 7,086 frames plus audio;
+  120 samples and 3 stills inspected. Exact source pairs and actual bilingual captures each cover 80/80 blocks.
+- 644 captured explanatory caption strings have no unresolved translation leads;
+  9 retained originals and 8 raw leads have individual dispositions.
+  Cached text-token integrity is complete; continuous listening and production release remain separate.
+
+[Verified CS16 evidence](evidence/cs16-polish-20261110/README.md).
 
 ## Final CS15 preview checkpoint, 10 November 2026
 
@@ -422,6 +449,6 @@ Evidence, exact source/data hashes, reports and reproduction commands:
 
 ## Continue here
 
-1. Preserve CS16's untouched source and baseline evidence; audit the counting/cost models and theorems.
-2. Polish bilingual explanations and worked visualizations, verify the source/preview evidence, and commit CS16 separately.
-3. Continue CS17–CS61 in order, keeping preview evidence distinct from production release approval.
+1. Preserve CS17's untouched source and baseline data; audit hash/tree/heap counters and the Job's fit/capacities.
+2. Polish bilingual explanations and worked visualizations, verify source/preview evidence, and commit CS17 separately.
+3. Continue CS18–CS61 in order, keeping preview evidence distinct from production release approval.

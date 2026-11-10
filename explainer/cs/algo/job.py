@@ -8,7 +8,7 @@ of the Job v0 (``programs.job_reference``).
 
     c = compile_job()                 # Part 13's compiler, -O2
     m = run(c, text)                  # the emulator; m.steps
-    features(text)                    # the counts that determine m.steps exactly (see fit / predict)
+    features(text)                    # event counts used to fit m.steps (see fit / predict)
 
 The running time is not a fixed multiple of the text any more, so the ledger cannot scale it by bytes. Instead the
 emulator's instruction count is fitted, by least squares on passages of many sizes, as a linear function of
@@ -138,9 +138,19 @@ fn main() -> int {
 """
 
 
-def compile_job(level: int = 2):
+def job_source(*,word_capacity=32768,letter_capacity=262144,distinct_capacity=16384):
+    """Size the static arrays explicitly; callers still must provide sufficient emulated RAM."""
+    sizes=(word_capacity,letter_capacity,distinct_capacity)
+    if any(not isinstance(n,int) or n<=0 for n in sizes):
+        raise ValueError("Job capacities must be positive integers")
+    return (JOB_SORT.replace("[262144]char",f"[{letter_capacity}]char")
+            .replace("[32768]int",f"[{word_capacity}]int")
+            .replace("[16384]int",f"[{distinct_capacity}]int"))
+
+
+def compile_job(level:int=2,**capacities):
     from explainer.cs.lang.compiler import driver as D
-    return D.compile_program(JOB_SORT, level)
+    return D.compile_program(job_source(**capacities),level)
 
 
 def run(c, text: bytes, **kw):

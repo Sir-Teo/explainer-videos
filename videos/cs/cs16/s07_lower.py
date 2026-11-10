@@ -120,16 +120,19 @@ class Lower(VoiceoverScene):
             label(r"the input is one of $n!$ orders: \ $\lg n!$ bits are needed to say which \ "
                   r"(\textit{AI, Built}, \ Part 1)", font_size=22, color=GREY_A),
             label(r"so every comparison sort makes $\Omega(n \log n)$ comparisons, \ in the worst case \textit{and} on "
-                  r"average", font_size=22, color=YES),
+                  r"average over uniform distinct-key permutations", font_size=22, color=YES),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "The same argument works for any n. <bookmark mark='a'/> A sort must distinguish n factorial orders, "
-            "so its tree has height at least log n factorial, which by Stirling is n log n minus about one point "
-            "four four n. <bookmark mark='b'/> Read it as information, the way AI, Built read it in its first part. "
-            "A comparison has two outcomes, so it tells us at most one bit. Identifying one order among n "
-            "factorial takes log n factorial bits. <bookmark mark='c'/> No comparison sort can do better, not just "
-            "in the worst case, but even on average, since the average depth of a tree's leaves is at least the "
-            "same logarithm. Merge sort and heapsort are optimal, up to the constant."
+            (
+            "Now assume n distinct keys and a binary comparison model. <bookmark mark='a'/> A correct sort must "
+            "distinguish n factorial input orders, requiring at least that many leaves. Its worst-case depth is "
+            "at least log base two of n factorial. Stirling gives n log n minus about one point four four n, plus "
+            "lower-order terms. <bookmark mark='b'/> Each binary answer supplies at most one bit of information. "
+            "<bookmark mark='c'/> If all distinct-key permutations are equally likely, the average leaf depth is "
+            "also at least log n factorial. The distribution matters: a promise that input is already sorted "
+            "changes the average-case question. In this unrestricted comparison problem, merge sort and heapsort "
+            "have optimal asymptotic worst-case growth."
+        )
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -149,23 +152,25 @@ class Lower(VoiceoverScene):
             label(r"both at once, \ naively: \ $2n - 3$", font_size=21, color=GREY_A),
             label(r"better: \ compare in pairs ($n/2$), \ then the winners for the max and the losers for the min",
                   font_size=21, color=YES),
-            MathTex(r"\tfrac{n}{2} + 2\left(\tfrac{n}{2} - 1\right) = \left\lceil \tfrac{3n}{2} \right\rceil - 2",
+            MathTex(r"\lfloor n/2\rfloor+2(\lceil n/2\rceil-1)=\lceil3n/2\rceil-2\quad(n\ge1)",
                     font_size=34, color=YES),
             label(r"the adversary: \ answer each comparison to destroy as little ``uncertainty'' as possible; \ "
-                  r"each answer removes at most two of the $2n - 2$ units needed", font_size=20, color=GREY_A),
+                  r"only untouched pairs need yield two new facts; \ at most $\lfloor n/2\rfloor$ such pairs", font_size=20, color=GREY_A),
             label(r"so $\lceil 3n/2 \rceil - 2$ is optimal \ (Pohl, \ 1972): \ problem 3", font_size=21, color=HEAD),
         ).arrange(DOWN, buff=0.2).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Decision trees are one way to prove lower bounds. Another is to imagine an adversary who answers the "
-            "algorithm's comparisons as unhelpfully as possible. <bookmark mark='a'/> Finding the maximum needs n "
-            "minus one comparisons, because every other element must lose at least once. <bookmark mark='b'/> "
-            "Finding the minimum and the maximum separately costs about two n. <bookmark mark='c'/> But compare the "
-            "elements in pairs first: the winners compete for the maximum, the losers for the minimum. <bookmark "
-            "mark='d'/> That is three n over two minus two comparisons. <bookmark mark='e'/> An adversary shows "
-            "nothing does better. Every element except the eventual maximum must lose once, and every element "
-            "except the minimum must win once: two n minus two units of information, and the adversary can always "
-            "answer so that a comparison yields at most two, and usually one. <bookmark mark='f'/> Ira Pohl proved "
-            "the bound tight in 1972. Problem three asks you to complete the argument."
+            (
+            "An adversary can also prove a lower bound. <bookmark mark='a'/> To find the maximum among distinct "
+            "items, every other item must lose a comparison: n minus one are necessary and sufficient. <bookmark "
+            "mark='b'/> Separate scans for minimum and maximum cost nearly twice n. <bookmark mark='c'/> Pair the "
+            "items first. Search the winners for the maximum and the losers for the minimum; an unpaired item "
+            "participates in both searches. <bookmark mark='d'/> The count is floor of n over two plus twice "
+            "ceiling of n over two minus one: ceiling of three n over two minus two, valid for odd and even n. "
+            "<bookmark mark='e'/> For the lower bound, all but the maximum must lose, and all but the minimum "
+            "must win. Only comparisons between two untouched items need provide two new facts; the adversary can "
+            "limit the others to one. At most floor of n over two comparisons join untouched pairs. <bookmark "
+            "mark='f'/> Counting those facts yields the same bound. Problem three completes the proof."
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, p in zip("abcdef", pts):

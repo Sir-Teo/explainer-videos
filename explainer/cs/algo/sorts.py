@@ -1,7 +1,7 @@
 """Sorting and selection, instrumented (Part 16).
 
 Every comparison sort takes a list and returns ``(sorted_list, stats)`` where ``stats["cmp"]`` counts comparisons
-between elements (the cost the lower bound is about); some also count moves, swaps or recursion depth.  Each is
+between elements; quicksort/selection charge one logical three-way partition comparison per nonpivot key, not individual Python predicates. Other counters use the stated less-than/less-or-equal key tests. Some also count moves, swaps or recursion depth.  Each is
 written for clarity first and checked against ``sorted`` in tests/test_cs16_sorts.py.
 
     out, st = merge_sort(xs)              # st["cmp"], st["levels"]: the work at each level of the recursion tree
@@ -141,12 +141,15 @@ def heapsort(xs):
 
 def quicksort(xs, pivot="random", rng=None, cutoff=0):
     """Lomuto-free, three-way partition (equal keys grouped).  ``pivot``: "first", "random" or "median3".
-    Counts one comparison per element per partition (the classical model)."""
+    Counts one logical three-way comparison per nonpivot element per partition.
+    Median-of-three also counts the actual insertion-sort comparisons on its three sampled keys.
+    These are key-comparison model counts, not host Python predicate/instruction counts."""
     import sys
     sys.setrecursionlimit(max(sys.getrecursionlimit(), 4 * len(xs) + 1000))
     rng = rng or random.Random(0)
     c = Count()
     depth = [0]
+    pivot_comparisons = [0]
 
     def choose(a):
         if pivot == "first":
@@ -154,8 +157,10 @@ def quicksort(xs, pivot="random", rng=None, cutoff=0):
         if pivot == "random":
             return a[rng.randrange(len(a))]
         x, y, z = a[0], a[len(a) // 2], a[-1]
-        c.n += 3
-        return sorted((x, y, z))[1]
+        ordered, stats = insertion_sort((x, y, z))
+        c.n += stats["cmp"]
+        pivot_comparisons[0] += stats["cmp"]
+        return ordered[1]
 
     def go(a, d):
         depth[0] = max(depth[0], d)
@@ -174,7 +179,8 @@ def quicksort(xs, pivot="random", rng=None, cutoff=0):
         c.n -= 1                     # the pivot is not compared with itself
         return go(lo, d + 1) + eq + go(hi, d + 1)
     out = go(list(xs), 0)
-    return out, {"cmp": c.n, "depth": depth[0]}
+    return out, {"cmp": c.n, "depth": depth[0], "pivot_cmp": pivot_comparisons[0],
+                 "partition_cmp": c.n - pivot_comparisons[0]}
 
 
 def quicksort_expected(n: int) -> float:
@@ -283,6 +289,12 @@ def timsort_cmp(xs) -> int:
 
 # -- selection ----------------------------------------------------------------------------------------------------
 def quickselect(xs, k, rng=None):
+    """Uniform pivots; one logical three-way comparison per nonpivot key.
+
+    Distinct-key expectation formulas refer to this partition model, not Python predicates.
+    """
+    if not 0 <= k < len(xs):
+        raise ValueError("selection rank outside the input")
     rng = rng or random.Random(0)
     c = Count()
     a = list(xs)
@@ -303,32 +315,34 @@ def quickselect(xs, k, rng=None):
             a = hi
 
 
-def median_of_medians(xs, k):
-    """Blum, Floyd, Pratt, Rivest and Tarjan (1973): groups of five, recursive median of medians as the pivot."""
-    c = Count()
+def median_of_medians(xs,k):
+    """Groups of five with actual small-group insertion-sort comparisons.
 
-    def select(a, k):
-        if len(a) <= 5:
-            s = sorted(a)
-            c.n += len(a) * max(len(a) - 1, 0) // 2
-            return s[k]
-        meds = []
-        for i in range(0, len(a), 5):
-            g = sorted(a[i:i + 5])
-            c.n += 7 if len(g) == 5 else len(g) * (len(g) - 1) // 2
-            meds.append(g[len(g) // 2])
-        p = select(meds, len(meds) // 2)
-        lo = [x for x in a if x < p]
-        eq = [x for x in a if x == p]
-        hi = [x for x in a if x > p]
-        c.n += len(a) - 1
-        if k < len(lo):
-            return select(lo, k)
-        if k < len(lo) + len(eq):
-            return p
-        return select(hi, k - len(lo) - len(eq))
-    v = select(list(xs), k)
-    return v, {"cmp": c.n}
+    Partition cost is one logical three-way key comparison per nonpivot key.
+    Counts deliberately exclude Python predicates, moves and bookkeeping operations.
+    """
+    if not 0<=k<len(xs):raise ValueError("selection rank outside the input")
+    group=Count();partition=[0]
+    def small_sort(a):
+        a=list(a)
+        for i in range(1,len(a)):
+            x=a[i];j=i-1
+            while j>=0 and group.lt(x,a[j]):a[j+1]=a[j];j-=1
+            a[j+1]=x
+        return a
+    def select(a,k):
+        if len(a)<=5:return small_sort(a)[k]
+        medians=[]
+        for i in range(0,len(a),5):
+            g=small_sort(a[i:i+5]);medians.append(g[len(g)//2])
+        p=select(medians,len(medians)//2)
+        lo=[x for x in a if x<p];eq=[x for x in a if x==p];hi=[x for x in a if x>p]
+        partition[0]+=len(a)-1
+        if k<len(lo):return select(lo,k)
+        if k<len(lo)+len(eq):return p
+        return select(hi,k-len(lo)-len(eq))
+    value=select(list(xs),k)
+    return value,dict(cmp=group.n+partition[0],group_cmp=group.n,partition_cmp=partition[0])
 
 
 # -- decision trees -------------------------------------------------------------------------------------------------
@@ -365,7 +379,8 @@ def decision_tree(sort, n: int):
 # -- amortization ---------------------------------------------------------------------------------------------------
 def dynamic_array(n: int, factor: float = 2.0):
     """Appends into an array that grows by ``factor`` when full: total element copies, and whether a new block could
-    ever fit into the space freed by all earlier blocks (the reason for factors below the golden ratio)."""
+    ever pass the aggregate-size necessary condition for fitting in all previously freed blocks.
+    This ignores adjacency, fragmentation and other allocations; it is not a reuse guarantee."""
     cap, size, copies = 1, 0, 0
     freed = 0
     reuse = []

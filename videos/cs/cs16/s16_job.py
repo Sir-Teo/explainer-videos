@@ -41,17 +41,19 @@ class Job(VoiceoverScene):
         if snippet.width > 12.0:
             snippet.scale_to_fit_width(12.0)
         snippet.next_to(steps, DOWN, buff=0.4)
-        note = label(r"compiled by Part 13's compiler, \ \texttt{-O2}; \ checked against the reference on 43 passages",
+        note = label(r"corpus-sized arrays, one compiled image; 40 emulator and 3 core passages checked against the reference",
                      font_size=19, color=GREY_B).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Now the Job, rewritten around a sort. <bookmark mark='a'/> As it reads the text it records every word "
-            "as an occurrence: where its letters begin, and how many there are. <bookmark mark='b'/> Then it sorts "
-            "the occurrences with a stable, bottom-up merge sort, comparing letters. <bookmark mark='c'/> After the "
-            "sort, equal words are neighbours, so one pass turns each run into a count, and because the sort was "
-            "stable, the first member of each run is the word's first appearance. <bookmark mark='d'/> Picking the "
-            "twenty largest counts, ties broken by first appearance, gives exactly the output of version zero. It "
-            "is written in the Pebble language, compiled by our compiler, and checked against the reference on "
-            "every passage we ran."
+            (
+            "Version one sorts occurrences, then counts equal runs. <bookmark mark='a'/> Each occurrence records "
+            "its letters' start and length. <bookmark mark='b'/> A stable bottom-up merge sort orders them by "
+            "letters. <bookmark mark='c'/> Equal words become neighbors; stability preserves the first occurrence "
+            "needed for tie breaking. <bookmark mark='d'/> Selecting the twenty largest counts therefore "
+            "reproduces version zero's output. For the corpus projection, we enlarge the arrays explicitly and "
+            "use that same compiled image for calibration passages and core samples. Their outputs are checked "
+            "against the reference. The whole corpus is counted by the native event model; it is not fully "
+            "executed on the emulator."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(snippet))
             for mk, s in zip("abcd", steps):
@@ -65,35 +67,38 @@ class Job(VoiceoverScene):
         d = load("job")
         f = d["features"]
         v0 = d["v0"]
-        head = label(r"All thirty novels, \ counted exactly", font_size=34).to_edge(UP, buff=0.3)
+        head = label(r"Corpus event counts; \ instructions and time projected", font_size=34).to_edge(UP, buff=0.3)
         tab = grid_table([r"on all thirty novels", r"the Job v0 \ (search)", r"the Job v1 \ (sort)"], [
             [r"words", words(f["words"]), words(f["words"])],
             [r"distinct words", words(v0["distinct"]), words(f["runs"])],
             [r"key comparisons", big(v0["scanned"]), big(f["sort_cmp"] + f["scan_cmp"])],
-            [r"letters compared inside them", big(v0["same_length"]), big(f["k_steps"])],
+            [r"letters compared inside them", big(v0["letter_cmp"]), big(f["k_steps"])],
         ], widths=[5.0, 3.4, 3.4], row_h=0.5, font_size=20, mono_cols=(),
             colors=[[WHITE, WHITE, WHITE], [WHITE, WHITE, WHITE], [WHITE, NO, YES], [WHITE, NO, YES]]).next_to(
             head, DOWN, buff=0.45)
         pts = VGroup(
             label(r"v0 compares each word with the table entries before it; \ v1 makes $\approx n \lg n$ "
                   r"comparisons", font_size=20, color=GREY_A),
-            label(rf"instructions: \ a linear model in {len(d['model']['names']) - 1} counted events, \ fitted on 30 "
-                  rf"passages, \ within {100 * d['held_err']:.1f}\% on 10 more", font_size=20, color=GREY_A),
-            label(rf"applied to the novels: \ {big(d['instructions'])} Pebble instructions; \ on Part 8's core at "
+            label(rf"instruction fit: \ a linear model in {len(d['model']['names']) - 1} counted events, \ fitted on 30 "
+                  rf"passages, \ maximum error {100 * d['held_err']:.1f}\% on these 10 held-out passages", font_size=20, color=GREY_A),
+            label(rf"projected corpus instructions: \ {big(d['instructions'])}; \ sampled IPC "
                   rf"{d['ipc']:.2f} per cycle", font_size=20, color=YES),
             label(r"the comparisons and letters are counted by a C program that follows v1 step for step", font_size=18,
                   color=GREY_B),
         ).arrange(DOWN, buff=0.13).next_to(tab, DOWN, buff=0.4)
+        capacity=label(rf"arrays: {words(d['capacities']['word_capacity'])} occurrences; {words(d['capacities']['letter_capacity'])} letters; {d['memory_bytes']//(1<<20)} MiB modeled RAM",font_size=17,color=GREY_B).to_edge(DOWN,buff=0.3)
         with self.voiceover(
-            "How long would it take on all thirty novels? <bookmark mark='a'/> The table compares the two versions' "
-            "work on the whole corpus. Both read four point six million words. Version zero searches its table for "
-            "each one: fifteen billion key comparisons. Version one sorts: about a hundred million. <bookmark "
-            "mark='b'/> To turn the counts into time, we fitted the emulator's instruction count, on thirty "
-            "passages, as a linear function of the events the program performs: comparisons, letters compared, "
-            "elements moved, and so on. On ten passages it had not seen, the prediction is within half a percent. "
-            "<bookmark mark='c'/> A small C program counts the same events on the whole corpus, step for step, in "
-            "two seconds. The model then gives ten billion instructions, which Part 8's out-of-order core runs at "
-            "about two and a quarter per cycle."
+            (
+            "Separate exact event counts from projected runtime. <bookmark mark='a'/> The native model follows "
+            "the sort-and-count control flow on the full corpus and checks the final word-count output. In "
+            "version zero, the corrected letter-comparison count includes matched prefixes and the first "
+            "mismatch; a same-length table entry is not itself one letter comparison. <bookmark mark='b'/> We fit "
+            "instruction counts from thirty actual emulator passages and test ten held-out passages. The "
+            "displayed maximum error applies only to those tests, not every possible text. <bookmark mark='c'/> "
+            "Applying the fit to corpus events estimates instructions. Dividing by IPC measured on three core "
+            "passages estimates cycles, then time at the stated clock. Neither corpus instructions nor its IPC "
+            "has been measured by a full-corpus core run."
+        )
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -101,7 +106,7 @@ class Job(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(pts[1]))
             vo.wait_until("c")
-            self.play(FadeIn(pts[2:]))
+            self.play(FadeIn(pts[2:]),FadeIn(capacity))
         self.wait(0.3)
         self.clear_scene()
 
@@ -125,37 +130,42 @@ class Job(VoiceoverScene):
                 v = sum(parts.get(k, 0) for k in keys)
                 used |= set(keys)
             vals.append(v)
-        head = label(r"Where the instructions go", font_size=34).to_edge(UP, buff=0.3)
+        head = label(r"Grouped terms of the fitted instruction model", font_size=34).to_edge(UP, buff=0.3)
         W = 7.5
         rows = VGroup()
         for (name, _, col), v in zip(groups, vals):
-            share = max(v / tot, 0)
-            bar = Rectangle(width=max(W * share, 0.04), height=0.45, stroke_width=0, fill_color=col, fill_opacity=0.85)
+            share = v / tot
+            bar = Rectangle(width=max(W * abs(share), 0.04), height=0.45, stroke_width=0, fill_color=col, fill_opacity=0.85)
             rows.add(VGroup(label(name, font_size=21, color=WHITE), bar,
-                            label(rf"{100 * share:.0f}\%", font_size=20, color=col)))
+                            label(rf"{100 * share:.1f}\%", font_size=20, color=col)))
         for k, r in enumerate(rows):
             y = 1.6 - 0.75 * k
-            r[1].move_to([-1.6 + r[1].width / 2, y, 0])
+            r[1].move_to([-1.6 + (1 if vals[k]>=0 else -1)*r[1].width / 2, y, 0])
             r[0].move_to([-1.9 - r[0].width / 2, y, 0])
             r[2].next_to(r[1], RIGHT, buff=0.15)
         if rows.width > 13:
             rows.scale_to_fit_width(13)
         pts = VGroup(
-            label(r"half the work is comparing words; \ the letters themselves are a quarter", font_size=21,
+            label(r"correlated feature terms; \ grouped shares are not traced instruction categories", font_size=21,
                   color=GREY_A),
-            label(r"a fifth is copying each pass back: \ swapping the two arrays instead would save it all",
+            label(r"candidate: alternate source/scratch arrays, \ then remeasure the changed program",
                   font_size=21, color=NO),
-            label(r"the model says not only how long, \ but where to look next", font_size=22, color=HEAD),
+            label(r"fitted attribution does not establish a percentage saving in instructions or seconds", font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.14).to_edge(DOWN, buff=0.4)
+        rank=label(rf"design rank {m['rank']}/{m['columns']}; correlated coefficients do not identify unique causal shares",font_size=18,color=GREY_B).next_to(head,DOWN,buff=0.25)
         with self.voiceover(
-            "The fitted model does more than predict a total; it says where the time goes. <bookmark mark='a'/> "
-            "About half of the ten billion instructions are spent calling the comparison function and returning "
-            "from it, and a quarter on the letters it compares. <bookmark mark='b'/> A fifth is spent copying each "
-            "merged pass from the scratch array back into the main one. Alternating the roles of the two arrays "
-            "would remove that entirely: a twenty percent saving, found by counting. <bookmark mark='c'/> That is "
-            "the habit this part is about: count the steps, and the counts tell you where to look."
+            (
+            "A fitted decomposition suggests where to investigate. <bookmark mark='a'/> These bars group "
+            "coefficient times corpus event count, not traced instruction categories. Correlated features can "
+            "admit different coefficient allocations with similar total predictions. <bookmark mark='b'/> The "
+            "copy-back term motivates a concrete experiment: alternate the two arrays instead of copying a full "
+            "pass back. But removing a fitted term does not establish the same percentage reduction in "
+            "instructions or seconds. That needs a changed program, checked output and a new measurement. "
+            "<bookmark mark='c'/> Use the model to propose and test an optimization, while keeping attribution "
+            "uncertainty visible."
+        )
         ) as vo:
-            self.play(FadeIn(head), *[FadeIn(r[0]) for r in rows])
+            self.play(FadeIn(head),FadeIn(rank), *[FadeIn(r[0]) for r in rows])
             self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(r[1], LEFT), FadeIn(r[2])) for r in rows],
                                   lag_ratio=0.3), run_time=2.5)
             vo.wait_until("a")
@@ -175,16 +185,20 @@ class Job(VoiceoverScene):
         tab = ledger_table(rows, shown=len(led), highlight=(len(led) - 1,), font_size=21, row_h=0.42,
                            label_width=4.8).move_to(DOWN * 0.3)
         res = VGroup(
-            label(rf"sort, then count: \ {human_time(d['seconds'])} \ on one core", font_size=24, color=COST),
+            label(rf"projected: \ {human_time(d['seconds'])}; \ passage-sampled IPC, one modeled core", font_size=24, color=COST),
             label(rf"{d['speedup_vs_row5']:.0f}$\times$ faster than the same machine searching; \ "
                   rf"{d['speedup_vs_row4']:.1f}$\times$ faster than four cores", font_size=22, color=YES),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "And so the ledger gets row seven. <bookmark mark='a'/> Sorting, then counting, on one core of Part 8's "
-            "machine: about five seconds for all thirty novels. <bookmark mark='b'/> Eleven times faster than the "
-            "same compiled program searching a list, and more than twice as fast as the four cores of Part 10, "
-            "running the old algorithm. One idea beat every core we built. And n log n is not the end. A hash "
-            "table, in Part 17, does the counting in expected linear time."
+            (
+            "The ledger gains an explicitly projected row. <bookmark mark='a'/> It combines full-corpus event "
+            "counts, the held-out instruction fit and passage-sampled IPC on one modeled core. Its arrays and "
+            "emulated memory are sized for the corpus, while the full corpus remains unexecuted on that core. "
+            "<bookmark mark='b'/> Read the estimated time and speedups on screen. They compare the stated models "
+            "and assumptions; they are not elapsed timings of full-corpus runs. The important algorithmic change "
+            "is replacing repeated vocabulary scans with sorting. Part 17 asks whether hashing can remove that "
+            "sorting step too."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab.axis), LaggedStart(*[FadeIn(r) for r in tab.rows], lag_ratio=0.1))
             vo.wait_until("a")

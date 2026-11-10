@@ -5,9 +5,9 @@
 
 Results are cached in ``.cache/cs16/<name>.json``; scenes call ``load(name)``.  The instruments are
 ``explainer/cs/algo/sorts.py`` (every sort and selection algorithm, counting its comparisons) and
-``explainer/cs/algo/job.py`` (the Job v1, sort then count, in the Pebble language, with the exact model of its
+``explainer/cs/algo/job.py`` (the Job v1, sort then count, in the Pebble language, with a fitted model of its
 instruction count and a C program that counts the same events on all thirty novels); tested in
-tests/test_cs16_sorts.py.  Items that time code (``ram``, ``linear``, ``practice``) run on this machine.
+tests/test_cs16_sorts.py.  Items that time code (``ram``, ``linear``) run on this machine; ``practice`` counts comparisons.
 
 Items:
     hook       the ledger so far; the Job v0's cost per byte as the text grows
@@ -43,9 +43,32 @@ from pathlib import Path
 import numpy as np
 
 from explainer.ai.cache import Cache
+from explainer.cache_lock import locked_item
+from .measurements import native_sort_measurements, squaring_measurements, uneven_recurrence
 
-CACHE = Cache("cs16")
-load = CACHE.load
+SCHEMAS={name:2 for name in ('ram','growth','master','quick','linear','select','amortized','practice','job')}
+# Exact asymptotic exponents replace rounded-exponent Theta equalities.
+SCHEMAS["master"]=3
+
+
+class CountingCache(Cache):
+    @locked_item(lambda self,name:self.path(name))
+    def load(self,name):
+        if not cache_current(name,self.path(name)):
+            self.save(name,ITEMS[name]())
+        return super().load(name)
+
+
+CACHE=CountingCache("cs16")
+
+
+def cache_current(name,path=None):
+    path=CACHE.path(name) if path is None else path
+    return name not in SCHEMAS or (path.exists() and json.loads(path.read_text()).get('schema')==SCHEMAS[name])
+
+
+def load(name):
+    return CACHE.load(name)
 
 
 def _full_text():
@@ -72,16 +95,8 @@ def compute_hook() -> dict:
     return {"ledger": led, "growth": rows}
 
 
-def compute_ram() -> dict:
-    rows = []
-    x = 3
-    for k in range(1, 22):
-        t0 = time.perf_counter()
-        y = x * x
-        dt = time.perf_counter() - t0
-        x = y
-        rows.append({"step": k, "bits": x.bit_length(), "seconds": dt})
-    return {"rows": rows, "python": shutil.which("python3.12") or "python3"}
+def compute_ram()->dict:
+    return dict(schema=SCHEMAS['ram'],**squaring_measurements())
 
 
 def compute_growth() -> dict:
@@ -100,8 +115,11 @@ def compute_growth() -> dict:
         out = {}
         for label, secs in (("second", 1.0), ("day", 86400.0), ("year", 3.15e7)):
             steps = secs * 1e9
+            if name=="lg n":
+                out[label]={"base":2,"exponent":int(steps),"representation":"exact symbolic power"}
+                continue
             lo, hi = 1, 2
-            while f(hi) <= steps and hi < 10 ** 18:
+            while f(hi) <= steps:
                 hi *= 2
             while lo < hi - 1:
                 m = (lo + hi) // 2
@@ -111,7 +129,7 @@ def compute_growth() -> dict:
                     hi = m
             out[label] = lo
         budget[name] = out
-    return {"ns": ns, "table": {k: [min(v, 1e300) for v in vs] for k, vs in table.items()}, "stirling": stir,
+    return {"schema":SCHEMAS["growth"], "ns": ns, "table": {k: [min(v, 1e300) for v in vs] for k, vs in table.items()}, "stirling": stir,
             "budget": budget}
 
 
@@ -169,26 +187,17 @@ def compute_master() -> dict:
         {"name": "merge sort", "rec": r"T(n) = 2T(n/2) + n", "a": 2, "b": 2, "f": "n", "case": 2,
          "sol": r"\Theta(n \log n)", "levels": levels(2, 2, lambda m: m)},
         {"name": "Karatsuba", "rec": r"T(n) = 3T(n/2) + n", "a": 3, "b": 2, "f": "n", "case": 1,
-         "sol": r"\Theta(n^{\log_2 3}) = \Theta(n^{1.585})", "levels": levels(3, 2, lambda m: m)},
+         "sol": r"\Theta(n^{\log_2 3})", "levels": levels(3, 2, lambda m: m)},
         {"name": "Strassen", "rec": r"T(n) = 7T(n/2) + n^2", "a": 7, "b": 2, "f": "n^2", "case": 1,
-         "sol": r"\Theta(n^{\log_2 7}) = \Theta(n^{2.807})", "levels": levels(7, 2, lambda m: m * m)},
+         "sol": r"\Theta(n^{\log_2 7})", "levels": levels(7, 2, lambda m: m * m)},
         {"name": "a heavy combine", "rec": r"T(n) = 2T(n/2) + n^2", "a": 2, "b": 2, "f": "n^2", "case": 3,
          "sol": r"\Theta(n^2)", "levels": levels(2, 2, lambda m: m * m)},
     ]
-    # Akra–Bazzi: T(n) = T(n/3) + T(2n/3) + n, solved numerically
-    memo = {}
-
-    def T(n):
-        if n <= 1:
-            return 1.0
-        k = int(n)
-        if k in memo:
-            return memo[k]
-        v = T(n / 3) + T(2 * n / 3) + n
-        memo[k] = v
-        return v
-    ab = [{"n": n, "T": T(n), "ratio": T(n) / (n * math.log2(n))} for n in (10, 100, 1000, 10 ** 4, 10 ** 5, 10 ** 6)]
-    return {"cases": cases, "akra_bazzi": ab}
+    # Concrete rounded illustration; no fractional subproblems are conflated.
+    ab=[dict(n=n,T=uneven_recurrence(n),ratio=uneven_recurrence(n)/(n*math.log2(n)))
+        for n in (10,100,1000,10**4,10**5,10**6)]
+    return dict(schema=SCHEMAS['master'],cases=cases,akra_bazzi=ab,
+                recurrence='T(n)=n for n<=2; otherwise T(floor(n/3))+T(n-floor(n/3))+n')
 
 
 def compute_lower() -> dict:
@@ -242,7 +251,7 @@ def compute_quick() -> dict:
     for rule in ("first", "median3", "random"):
         pivots[rule] = {"sorted": S.quicksort(sorted_in, rule, random.Random(1))[1]["cmp"],
                         "random": S.quicksort(rand_in, rule, random.Random(1))[1]["cmp"]}
-    return {"rows": rows, "pivots": pivots, "pivot_n": n, "constant": 2 / math.log2(math.e)}
+    return {"schema":SCHEMAS["quick"], "comparison_model":"one logical partition comparison per nonpivot; actual median3 insertion-sort comparisons", "rows": rows, "pivots": pivots, "pivot_n": n, "constant": 2 / math.log2(math.e)}
 
 
 def compute_concentration() -> dict:
@@ -262,81 +271,9 @@ def compute_concentration() -> dict:
             "tails": tails, "max": float(a.max()), "min": float(a.min()), "worst": n * (n - 1) / 2}
 
 
-LINEAR_C = r"""
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <string.h>
-#include <time.h>
-static double now(void){ struct timespec t; clock_gettime(CLOCK_MONOTONIC, &t); return t.tv_sec + t.tv_nsec / 1e9; }
-static int cmp(const void *a, const void *b){ uint32_t x = *(const uint32_t*)a, y = *(const uint32_t*)b; return (x > y) - (x < y); }
-static void radix(uint32_t *a, uint32_t *t, size_t n){
-  for (int s = 0; s < 32; s += 8) {
-    size_t c[257] = {0};
-    for (size_t i = 0; i < n; i++) c[((a[i] >> s) & 255) + 1]++;
-    for (int k = 0; k < 256; k++) c[k + 1] += c[k];
-    for (size_t i = 0; i < n; i++) t[c[(a[i] >> s) & 255]++] = a[i];
-    memcpy(a, t, n * sizeof *a);
-  }
-}
-static void counting(uint32_t *a, size_t n, uint32_t k){
-  size_t *c = calloc(k, sizeof *c);
-  for (size_t i = 0; i < n; i++) c[a[i]]++;
-  size_t o = 0; for (uint32_t v = 0; v < k; v++) for (size_t j = 0; j < c[v]; j++) a[o++] = v;
-  free(c);
-}
-int main(int argc, char **argv){
-  size_t n = (size_t)atol(argv[1]);
-  uint32_t *a = malloc(n * 4), *b = malloc(n * 4), *t = malloc(n * 4);
-  uint64_t s = 88172645463325252ULL;
-  for (size_t i = 0; i < n; i++) { s ^= s << 13; s ^= s >> 7; s ^= s << 17; a[i] = (uint32_t)s; }
-  memcpy(b, a, n * 4); double t0 = now(); qsort(b, n, 4, cmp); double tq = now() - t0;
-  memcpy(t, b, n * 4);
-  memcpy(b, a, n * 4); t0 = now(); radix(b, t + 0, n); double tr = now() - t0;
-  for (size_t i = 1; i < n; i++) if (b[i - 1] > b[i]) { printf("radix wrong\n"); return 1; }
-  for (size_t i = 0; i < n; i++) b[i] = a[i] & 65535;
-  t0 = now(); counting(b, n, 65536); double tc = now() - t0;
-  printf("%.6f %.6f %.6f\n", tq, tr, tc);
-}
-"""
-
-LINEAR_CPP = r"""
-#include <algorithm>
-#include <chrono>
-#include <cstdint>
-#include <cstdio>
-#include <cstdlib>
-#include <vector>
-int main(int argc, char **argv){
-  size_t n = (size_t)atol(argv[1]);
-  std::vector<uint32_t> a(n);
-  uint64_t s = 88172645463325252ULL;
-  for (auto &x : a) { s ^= s << 13; s ^= s >> 7; s ^= s << 17; x = (uint32_t)s; }
-  auto t0 = std::chrono::steady_clock::now(); std::sort(a.begin(), a.end());
-  double t = std::chrono::duration<double>(std::chrono::steady_clock::now() - t0).count();
-  printf("%.6f\n", t);
-}
-"""
-
-
-def compute_linear() -> dict:
-    rows = []
-    with tempfile.TemporaryDirectory() as d:
-        Path(d, "l.c").write_text(LINEAR_C)
-        Path(d, "l.cpp").write_text(LINEAR_CPP)
-        subprocess.run(["gcc", "-O2", "-o", "l", "l.c"], cwd=d, check=True)
-        subprocess.run(["g++", "-O2", "-o", "lp", "l.cpp"], cwd=d, check=True)
-        for n in (10 ** 5, 10 ** 6, 10 ** 7):
-            best = None
-            for _ in range(3):
-                q, r, c = map(float, subprocess.run(["./l", str(n)], cwd=d, capture_output=True, text=True,
-                                                    check=True).stdout.split())
-                sp = float(subprocess.run(["./lp", str(n)], cwd=d, capture_output=True, text=True, check=True).stdout)
-                cur = {"n": n, "qsort": q, "std_sort": sp, "radix": r, "counting": c}
-                best = cur if best is None else {k: min(best[k], cur[k]) for k in cur}
-            rows.append(best)
-            print(best)
-    return {"rows": rows, "gcc": subprocess.run(["gcc", "--version"], capture_output=True, text=True).stdout.splitlines()[0]}
+# Sources and complete result checks are kept in measurements.py.
+def compute_linear()->dict:
+    return dict(schema=SCHEMAS['linear'],**native_sort_measurements())
 
 
 def compute_select() -> dict:
@@ -349,9 +286,10 @@ def compute_select() -> dict:
         qs = [S.quickselect(xs, k, random.Random(r))[1]["cmp"] for r in range(20)]
         mv, st = S.median_of_medians(xs, k)
         assert mv == sorted(xs)[k]
-        rows.append({"n": n, "quick": sum(qs) / len(qs), "mom": st["cmp"], "sort": n * math.log2(n)})
+        rows.append({"n": n, "quick": sum(qs) / len(qs), "mom": st["cmp"], "mom_group":st["group_cmp"], "mom_partition":st["partition_cmp"], "sort": n * math.log2(n)})
         print(rows[-1])
-    return {"rows": rows, "quick_theory": 2 + 2 * math.log(2)}
+    return {"schema":SCHEMAS["select"], "rows": rows, "quick_theory": 2 + 2 * math.log(2),
+            "model":"actual small-group less-than comparisons plus one logical three-way comparison per nonpivot per partition; median expectation coefficient is asymptotic"}
 
 
 def compute_gf() -> dict:
@@ -380,8 +318,8 @@ def compute_amortized() -> dict:
             cost += size
             cap *= 2
         size += 1
-        seq.append({"i": i, "cost": cost, "cap": cap, "phi": 2 * size - cap})
-    return {"seq": seq, "two": S.dynamic_array(10 ** 6, 2.0), "one_half": S.dynamic_array(10 ** 6, 1.5),
+        seq.append({"i": i, "cost": cost, "cap": cap, "phi": max(0,2 * size - cap)})
+    return {"schema":SCHEMAS["amortized"], "initial":{"size":0,"cap":1,"phi":0}, "reuse_scope":"aggregate freed-size test only; adjacency/fragmentation excluded", "seq": seq, "two": S.dynamic_array(10 ** 6, 2.0), "one_half": S.dynamic_array(10 ** 6, 1.5),
             "golden": (1 + math.sqrt(5)) / 2}
 
 
@@ -391,65 +329,63 @@ def compute_practice() -> dict:
     n = 100_000
     data = {"random": [rng.random() for _ in range(n)], "sorted": list(range(n)), "reversed": list(range(n, 0, -1)),
             "ten runs": sum((sorted(rng.random() for _ in range(n // 10)) for _ in range(10)), []),
-            "sorted, 1% shuffled": None}
+            "sorted, n/100 swaps": None}
     s = list(range(n))
     for _ in range(n // 100):
         i, j = rng.randrange(n), rng.randrange(n)
         s[i], s[j] = s[j], s[i]
-    data["sorted, 1% shuffled"] = s
+    data["sorted, n/100 swaps"] = s
     rows = []
     for name, xs in data.items():
         rows.append({"input": name, "timsort": S.timsort_cmp(xs), "merge": S.merge_sort(xs)[1]["cmp"],
                      "nlgn": n * math.log2(n)})
         print(rows[-1])
     runs = S.replacement_selection([rng.random() for _ in range(200_000)], 1000)
-    return {"rows": rows, "n": n, "rs_runs": len(runs), "rs_mean": sum(runs[1:-1]) / max(len(runs) - 2, 1),
+    import sys
+    return {"schema":SCHEMAS["practice"], "python":sys.version,"executable":sys.executable, "transpositions":n//100, "measurement":"comparison wrapper, not elapsed runtime", "rows": rows, "n": n, "rs_runs": len(runs), "rs_mean": sum(runs[1:-1]) / max(len(runs) - 2, 1),
             "rs_m": 1000, "rs_records": 200_000}
 
 
-def compute_job() -> dict:
-    """Ledger row 7: the Job v1 compiled from the Pebble language.  Instructions for the thirty novels from the exact
-    model fitted on passages; cycles at the IPC measured on Part 8's core."""
+def compute_job()->dict:
+    """Count corpus events; project instructions and cycles using checked samples of one corpus-sized image."""
+    import hashlib
     from explainer.cs.algo import job as J
     from explainer.cs.pebble import programs as PR
     from videos.cs.cs8.compute import core
     from videos.cs.cs13.compute import _tapes
-    c = J.compile_job()
-    samples = []
-    for t in _tapes(40, 100, 3000, seed=16):
-        m = J.run(c, t)
-        assert bytes(m.output) == PR.job_reference(t)
-        samples.append((J.features(t), m.steps))
-    model = J.fit(samples[:30])
-    held = [{"bytes": f["bytes"], "steps": s, "predicted": J.predict(model, f)} for f, s in samples[30:]]
-    held_err = max(abs(h["predicted"] - h["steps"]) / h["steps"] for h in held)
-    full = _full_text()
-    ff, out = J.features_native(full)
-    assert out == PR.job_reference(full)
-    instr = J.predict(model, ff)
-    # IPC on the out-of-order core, on the passages that priced rows 3 and 5
-    cyc = ins = 0
-    for t in _tapes(6, 1200, 2600)[:3]:
-        q = core(c.program.image, t)
-        assert bytes(q.output) == PR.job_reference(t)
-        cyc += q.cycles
-        ins += q.committed
-    ipc = ins / cyc
-    led = json.loads((Cache("cs15").dir / "ledger.json").read_text())[:7]
-    row5 = led[5]
-    cycles = instr / ipc
-    seconds = cycles / (row5["clock_mhz"] * 1e6)
-    led.append({"part": 16, "label": r"sort, then count", "seconds": seconds, "cycles": cycles,
-                "clock_mhz": row5["clock_mhz"], "instructions": instr, "ipc": ipc})
-    CACHE.dir.mkdir(parents=True, exist_ok=True)
-    (CACHE.dir / "ledger.json").write_text(json.dumps(led, indent=1))
-    c6 = json.loads((Cache("cs6").dir / "job.json").read_text())["corpus"]["features"]
-    return {"model": model, "held": held, "held_err": held_err, "train_err": model["max_rel_err"],
-            "features": ff, "instructions": instr, "ipc": ipc, "seconds": seconds, "ledger": led,
-            "v0": {"scanned": c6["scanned"], "same_length": c6["same_length"], "words": c6["words"],
-                   "distinct": c6["distinct"]},
-            "speedup_vs_row5": row5["seconds"] / seconds, "speedup_vs_row4": led[4]["seconds"] / seconds,
-            "source": J.JOB_SORT.strip().splitlines()}
+    full=_full_text();ff,out=J.features_native(full);assert out==PR.job_reference(full)
+    capacities=dict(word_capacity=ff['words']+1,letter_capacity=ff['letters']+1,distinct_capacity=ff['runs']+1)
+    source=J.job_source(**capacities);c=J.compile_job(**capacities)
+    memory_bytes=1<<(len(c.program.image)+(1<<20)-1).bit_length()
+    assert len(c.program.image)<memory_bytes and memory_bytes<2**31
+    samples=[];actual=[]
+    for t in _tapes(40,100,3000,seed=16):
+        f=J.features(t)
+        assert f['words']<capacities['word_capacity'] and f['letters']<capacities['letter_capacity'] and f['runs']<capacities['distinct_capacity']
+        m=J.run(c,t,mem_size=memory_bytes);assert bytes(m.output)==PR.job_reference(t)
+        samples.append((f,m.steps));actual.append(dict(features=f,steps=m.steps,tape_sha256=hashlib.sha256(t).hexdigest(),output_sha256=hashlib.sha256(bytes(m.output)).hexdigest()))
+    model=J.fit(samples[:30]);assert all(math.isfinite(v) for v in model['coef'])
+    matrix=np.array([[1]+[f[k] for k in model['names'][1:]] for f,_ in samples[:30]],dtype=float)
+    model.update(rank=int(np.linalg.matrix_rank(matrix)),columns=matrix.shape[1],decomposition_scope='correlated least-squares coefficients are not uniquely attributable instruction/time categories')
+    held=[dict(bytes=f['bytes'],steps=n,predicted=J.predict(model,f)) for f,n in samples[30:]]
+    assert all(h['steps']>0 and math.isfinite(h['predicted']) and h['predicted']>0 for h in held)
+    held_err=max(abs(h['predicted']-h['steps'])/h['steps'] for h in held)
+    instr=J.predict(model,ff);assert math.isfinite(instr) and instr>0
+    ipc_samples=[];cycles_sample=instructions_sample=0
+    for t in _tapes(6,1200,2600)[:3]:
+        q=core(c.program.image,t,mem_size=memory_bytes);assert bytes(q.output)==PR.job_reference(t)
+        assert q.cycles>0 and q.committed>0
+        cycles_sample+=q.cycles;instructions_sample+=q.committed
+        ipc_samples.append(dict(bytes=len(t),cycles=q.cycles,committed=q.committed,tape_sha256=hashlib.sha256(t).hexdigest(),output_sha256=hashlib.sha256(bytes(q.output)).hexdigest()))
+    ipc=instructions_sample/cycles_sample
+    led=json.loads((Cache('cs15').dir/'ledger.json').read_text())[:7];row5=led[5]
+    cycles=instr/ipc;seconds=cycles/(row5['clock_mhz']*1e6)
+    led.append(dict(part=16,label=r"sort, then count",seconds=seconds,cycles=cycles,clock_mhz=row5['clock_mhz'],instructions=instr,ipc=ipc,scope='corpus event counts + fitted instructions + passage-sampled IPC; projection, not full execution',memory_bytes=memory_bytes))
+    CACHE.dir.mkdir(parents=True,exist_ok=True);(CACHE.dir/'ledger.json').write_text(json.dumps(led,indent=1))
+    c6=json.loads((Cache('cs6').dir/'job.json').read_text())['corpus']['features']
+    v0={k:c6[k] for k in ['scanned','same_length','matched','words','distinct']}
+    v0['letter_cmp']=c6['matched']+c6['same_length']-(c6['words']-c6['distinct'])
+    return dict(schema=SCHEMAS['job'],model=model,held=held,held_err=held_err,train_err=model['max_rel_err'],features=ff,instructions=instr,ipc=ipc,seconds=seconds,ledger=led,v0=v0,speedup_vs_row5=row5['seconds']/seconds,speedup_vs_row4=led[4]['seconds']/seconds,source=source.strip().splitlines(),capacities=capacities,memory_bytes=memory_bytes,image_bytes=len(c.program.image),image_sha256=hashlib.sha256(c.program.image).hexdigest(),source_sha256=hashlib.sha256(source.encode()).hexdigest(),emulator_samples=actual,ipc_samples=ipc_samples,corpus_output_sha256=hashlib.sha256(out).hexdigest(),full_exceeds_training_max=[k for k in model['names'][1:] if ff[k]>max(f[k] for f,_ in samples[:30])],scope='finite emulator fit/held-out errors and core samples; full-corpus instructions/cycles/time are unexecuted projections')
 
 
 def compute_frontier() -> dict:

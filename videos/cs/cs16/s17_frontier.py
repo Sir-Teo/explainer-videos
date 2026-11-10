@@ -28,6 +28,9 @@ class Frontier(VoiceoverScene):
         rows = [r for r in d["rows"] if r["sigma"] > 0]
         ax = Axes(x_range=[-4.2, 0.2, 1], y_range=[4, 6.5, 0.5], x_length=6.0, y_length=3.8,
                   axis_config={"color": GREY_D, "include_numbers": False}).to_edge(LEFT, buff=0.8).shift(DOWN * 0.3)
+        ax.y_axis.set_opacity(0)
+        left_axis=Line(ax.c2p(-4.2,4),ax.c2p(-4.2,6.5),color=GREY_D,stroke_width=2)
+        yt=VGroup(*[MathTex(rf"10^{{{v}}}",font_size=16,color=GREY_B).next_to(ax.c2p(-4.2,v),LEFT,buff=0.1) for v in (4,5,6)])
         pts = [ax.c2p(np.log10(r["sigma"]), np.log10(r["cmp"])) for r in rows]
         line = VMobject(color=YES, stroke_width=3).set_points_as_corners(pts)
         dots = VGroup(*[Dot(p, radius=0.06, color=YES) for p in pts])
@@ -50,10 +53,10 @@ class Frontier(VoiceoverScene):
             return VGroup(label(a, font_size=size, color=col), label(b, font_size=size, color=col)).arrange(
                 DOWN, aligned_edge=LEFT, buff=0.07)
         side = VGroup(
-            two(r"worst cases are often fragile:", r"perturb them slightly and they disappear", 21, GREY_A),
-            two(r"\textbf{smoothed analysis} \ (Spielman and Teng, \ 2001):", r"the worst input, \ after random noise",
+            two(r"sorted keys plus independent Gaussian noise", r"10 trials per noise level; one input family", 21, GREY_A),
+            two(r"\textbf{smoothed analysis} \ (Spielman and Teng, \ 2001):", r"worst input, then expected perturbation cost",
                 21, YES),
-            two(r"it explained why the simplex method,", r"exponential in the worst case, \ is fast in practice", 21,
+            two(r"a landmark application: simplex", r"within its theorem's perturbation model", 21,
                 GREY_A),
             label(r"G\"odel Prize, \ 2008", font_size=19, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
@@ -61,17 +64,18 @@ class Frontier(VoiceoverScene):
             side.scale_to_fit_width(5.6)
         side.to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "The worst case is a guarantee, and often a pessimistic one. The average assumes inputs are random, "
-            "which they are not. Is there something in between? <bookmark mark='a'/> Take quicksort with the "
-            "first element as pivot, on its worst input, a sorted array of two thousand keys. Now add a little "
-            "random noise to every key, and measure. <bookmark mark='b'/> With no noise: two million comparisons. "
-            "As the noise grows, the count falls, smoothly, all the way to the random-input average. A worst case "
-            "this fragile does not survive contact with real data. <bookmark mark='c'/> Daniel Spielman and Shang-"
-            "Hua Teng made this a theory in 2001: smoothed analysis measures the worst input after a random "
-            "perturbation. It explained why the simplex method for linear programming, exponential in the worst "
-            "case, is fast in practice, and won the Gödel Prize."
+            (
+            "Worst-case and average-case analysis ask different questions. <bookmark mark='a'/> This experiment "
+            "starts with one sorted input of two thousand keys, adds independent Gaussian noise with the shown "
+            "standard deviation, and averages ten seeded trials per noise level. <bookmark mark='b'/> For this "
+            "input family, the observed first-pivot comparison count falls toward the random-order benchmark. It "
+            "does not show that every real input is harmless, or that every noisy trial improves. <bookmark "
+            "mark='c'/> Formal smoothed analysis takes a worst case over the permitted initial inputs, then an "
+            "expectation over the specified perturbation. Spielman and Teng developed the framework for simplex. "
+            "Our single-family plot illustrates the idea; it does not compute that worst-case smoothed bound."
+        )
         ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(xl), FadeIn(yl))
+            self.play(FadeIn(head), Create(ax),Create(left_axis),FadeIn(yt), FadeIn(xt), FadeIn(xl), FadeIn(yl))
             vo.wait_until("a")
             self.play(Create(worst), FadeIn(wl), Create(avg), FadeIn(al), FadeIn(side[0]))
             vo.wait_until("b")
@@ -82,56 +86,54 @@ class Frontier(VoiceoverScene):
         self.clear_scene()
 
     def integers(self):
-        head = label(r"How fast can integers be sorted?", font_size=34).to_edge(UP, buff=0.3)
-        rows = [[r"comparison sorts", r"$\Theta(n \log n)$", r"proved optimal"],
-                [r"van Emde Boas trees \ (1975)", r"$O(n \log \log U)$", r"keys below $U$"],
-                [r"fusion trees \ (Fredman and Willard, \ 1990)", r"$O(n \log n / \log \log n)$", r"first below $n \log n$"],
-                [r"Andersson et al. \ (1995)", r"$O(n \log \log n)$", r"deterministic"],
-                [r"Han and Thorup \ (2002)", r"$O(n \sqrt{\log \log n})$", r"expected"],
-                [r"linear time?", r"$O(n)$", r"open"]]
-        tab = grid_table([r"result", r"time for $n$ word-size integers", r""], rows, widths=[5.2, 4.2, 2.8],
-                         row_h=0.5, font_size=20, mono_cols=(),
-                         colors=[[WHITE, WHITE, GREY_B]] * 5 + [[HEAD, HEAD, HEAD]]).next_to(head, DOWN, buff=0.5)
-        note = label(r"on the word-RAM, \ with words of $w \ge \log n$ bits and the usual arithmetic", font_size=20,
-                     color=GREY_B).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "Chapter ten's question has a long history. <bookmark mark='a'/> Comparison sorts are stuck at n log n. "
-            "Sorting word-sized integers on a word-RAM is not: van Emde Boas trees, Fredman and Willard's fusion "
-            "trees, the first to break n log n, then n log log n, and Han and Thorup's n times the square root of "
-            "log log n, in 2002. <bookmark mark='b'/> Whether n integers can always be sorted in linear time is "
-            "one of the oldest open questions in algorithms."
-        ) as vo:
+        head=label(r"Selected historical integer-sorting bounds",font_size=33).to_edge(UP,buff=0.3)
+        rows=[
+            [r"comparison model",r"$\Theta(n\log n)$",r"distinct keys; worst case"],
+            [r"van Emde Boas (1975)",r"$O(n\log\log U)$",r"universe below $U$; structure/space assumptions"],
+            [r"fusion trees (1990)",r"$O(n\log n/\log\log n)$",r"word operations beyond comparisons"],
+            [r"Andersson et al. (1995)",r"$O(n\log\log n)$",r"deterministic; arbitrary $w\ge\log n$"],
+            [r"Andersson et al. (1995)",r"$O(n)$ expected",r"randomized; $w\ge(\log n)^{2+\varepsilon}$"],
+            [r"Han and Thorup (2002)",r"$O(n\sqrt{\log\log n})$",r"expected time; specified word-RAM"],
+            [r"Belazzougui et al. (2014)",r"$O(n)$ expected",r"$w=\Omega(\log^2 n\log\log n)$"],
+            [r"research direction",r"remove restrictions",r"fix operations, word widths and randomness"],
+        ]
+        tab=grid_table([r"result",r"time",r"conditions matter"],rows,widths=[4.3,3.5,5.3],row_h=0.49,font_size=18,mono_cols=(),colors=[[WHITE,WHITE,GREY_B]]*7+[[HEAD,HEAD,HEAD]]).next_to(head,DOWN,buff=0.45)
+        note=VGroup(label(r"selected historical bounds; consult each paper's precise instruction and space model",font_size=18,color=GREY_B),
+                    label(r"fixed 32-bit radix sorting does not settle every growing-word-width model",font_size=19,color=HEAD)).arrange(DOWN,buff=0.15).to_edge(DOWN,buff=0.35)
+        with self.voiceover("Integer sorting depends on the precise machine model. <bookmark mark='a'/> The table collects historical word-RAM upper bounds, with their randomization and word-width conditions. Reading digits escapes the comparison lower bound, but fixed thirty-two-bit radix sort does not settle the asymptotic question for every growing word width. <bookmark mark='b'/> The author abstracts for the listed linear-time results require sufficiently large words; some results are expected-time randomized bounds. Our research question asks how such restrictions can be relaxed in an explicitly specified instruction model. These selected historical sources are not a complete survey of every recent result.") as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(FadeIn(tab.rule), *[FadeIn(c) for c in tab.cells[0]],
-                      LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:6]], lag_ratio=0.3), run_time=3)
+            self.play(FadeIn(tab.rule),*[FadeIn(c) for c in tab.cells[0]],LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:-1]],lag_ratio=0.12),run_time=1.8)
             vo.wait_until("b")
-            self.play(FadeIn(VGroup(*tab.cells[6])), FadeIn(note))
-        self.wait(0.3)
-        self.clear_scene()
+            self.play(FadeIn(VGroup(*tab.cells[-1])),FadeIn(note))
+        self.wait(0.3);self.clear_scene()
 
     def finegrained(self):
         head = label(r"Fine-grained complexity", font_size=34).to_edge(UP, buff=0.3)
-        rows = [[r"SETH: \ $k$-SAT needs $2^{(1 - o(1)) n}$ as $k$ grows", r"edit distance, \ longest common subsequence: "
+        rows = [[r"SETH: \ $k$-SAT needs $2^{(1 - o(1)) n}$ as $k$ grows", r"edit distance: "
                  r"\ no $n^{2 - \varepsilon}$ \ (Backurs and Indyk, \ 2015)"],
                 [r"3SUM: \ no $n^{2 - \varepsilon}$ algorithm", r"many problems in computational geometry"],
-                [r"APSP: \ no $n^{3 - \varepsilon}$ for all-pairs shortest paths", r"dozens of graph problems, \ "
-                 r"equivalent to each other"]]
+                [r"weighted APSP: no $n^{3-\varepsilon}$ in the specified model", r"specific graph-problem versions, \ "
+                 r"linked by exponent-sensitive reductions"]]
         tab = grid_table([r"if this conjecture holds", r"then these cannot be done faster"], rows, widths=[5.8, 6.6],
                          row_h=0.7, font_size=18, mono_cols=()).next_to(head, DOWN, buff=0.6)
         pts = VGroup(
             label(r"not ``polynomial or not'', \ but ``which polynomial'': \ reductions that preserve exponents",
                   font_size=21, color=GREY_A),
-            label(r"explains why forty years of effort never beat quadratic edit distance", font_size=21, color=YES),
+            label(r"conditional evidence for edit distance; \ not an unconditional quadratic lower bound", font_size=21, color=YES),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "The other frontier asks why some polynomial algorithms resist every improvement. <bookmark mark='a'/> "
-            "Fine-grained complexity starts from a few precise conjectures. The strong exponential time hypothesis "
-            "says satisfiability needs nearly two to the n time. The three-sum and all-pairs shortest paths "
-            "conjectures say certain quadratic and cubic algorithms are essentially optimal. <bookmark mark='b'/> "
-            "Then it builds reductions that keep track of exponents. Backurs and Indyk showed in 2015 that a truly "
-            "subquadratic algorithm for edit distance would break the first conjecture, which explains why forty years of effort never found one. <bookmark mark='c'/> The question is no longer whether a problem is "
-            "polynomial, but which polynomial."
+            (
+            "Some frontiers concern the exponent itself. <bookmark mark='a'/> Fine-grained complexity studies "
+            "conditional statements under precisely stated conjectures: satisfiability, three-sum, and weighted "
+            "all-pairs shortest paths, in their respective models. The forbidden improvements are by a fixed "
+            "power, not necessarily by logarithmic factors. <bookmark mark='b'/> Backurs and Indyk's "
+            "edit-distance reduction says that a truly subquadratic algorithm would refute the relevant strong "
+            "exponential-time hypothesis. This is conditional evidence, not an unconditional quadratic lower "
+            "bound or a proof that every conjecture is equivalent. <bookmark mark='c'/> Reductions connect "
+            "specific versions of problems. Their alphabet, weights, randomization and computational model "
+            "matter."
+        )
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -146,10 +148,10 @@ class Frontier(VoiceoverScene):
     def open(self):
         head = label(r"Open questions", font_size=36).to_edge(UP, buff=0.35)
         qs = VGroup(
-            label(r"can $n$ word-size integers be sorted in $O(n)$ time?", font_size=22, color=GREY_A),
-            label(r"the exact number of comparisons to sort $n$ items, \ for $n$ beyond about 20", font_size=22,
+            label(r"integer sorting across word widths: fix instructions and randomness first", font_size=22, color=GREY_A),
+            label(r"exact comparison optima beyond the small cases verified here", font_size=22,
                   color=GREY_A),
-            label(r"which conjectures of fine-grained complexity are true, \ and are they equivalent?", font_size=22,
+            label(r"which precise fine-grained conjectures admit reductions to each other?", font_size=22,
                   color=GREY_A),
             label(r"a theory of ``beyond the worst case'' that predicts real running times", font_size=22,
                   color=GREY_A),
@@ -157,12 +159,16 @@ class Frontier(VoiceoverScene):
         star = label(r"$\bigstar$ \ the part's research problem takes the first one", font_size=22,
                      color=HEAD).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "Here is where the field stands. <bookmark mark='a'/> Can integers be sorted in linear time on a "
-            "word-RAM? <bookmark mark='b'/> What is the exact number of comparisons needed to sort n items? It is "
-            "known only for small n, and computing it is a search problem in its own right. <bookmark mark='c'/> "
-            "Which of fine-grained complexity's conjectures are true, and are they secretly the same? <bookmark "
-            "mark='d'/> And can a theory beyond the worst case predict how long real programs take on real data? "
-            "<bookmark mark='e'/> This part's research problem takes up the first."
+            (
+            "Here are research directions, each needing a precise statement. <bookmark mark='a'/> Can "
+            "integer-sorting bounds be improved across word widths, with a fixed permitted instruction set and a "
+            "stated randomness guarantee? <bookmark mark='b'/> What are the exact optimal comparison counts "
+            "beyond the small cases we checked? <bookmark mark='c'/> Which specific fine-grained conjectures "
+            "admit reductions to each other? <bookmark mark='d'/> And which beyond-worst-case input models "
+            "predict a chosen real workload well enough to test? <bookmark mark='e'/> The starred exercise starts "
+            "by fixing a word-RAM model and checking the restrictions of known results, then proposing an "
+            "extension or a reproducible finite experiment."
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, q in zip("abcd", qs):

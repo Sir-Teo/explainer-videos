@@ -40,7 +40,8 @@ class Heap(VoiceoverScene):
 
     def shape(self):
         head = label(r"A heap: \ a tree stored in an array", font_size=34).to_edge(UP, buff=0.3)
-        vals = [9, 7, 8, 3, 5, 6, 2, 1, 4, 0]
+        vals = [9, 7, 8, 4, 5, 6, 2, 1, 3, 0]
+        assert all(vals[(k-1)//2] >= vals[k] for k in range(1,len(vals)))
         t = heap_tree(vals).move_to(LEFT * 2.6 + UP * 0.4)
         arr = VGroup(*[VGroup(Rectangle(width=0.55, height=0.45, color=GREY_B, stroke_width=1.5),
                               mono(str(v), 16, WHITE)) for v in vals])
@@ -59,12 +60,14 @@ class Heap(VoiceoverScene):
         if pts.width > 5.8:
             pts.scale_to_fit_width(5.8)
         with self.voiceover(
-            "J. W. J. Williams invented heapsort in 1964 around a data structure that is also his: the heap. "
-            "<bookmark mark='a'/> A heap is a binary tree with no pointers. Its nodes are stored in an array, level "
-            "by level, so the children of position i are at two i plus one and two i plus two. <bookmark "
-            "mark='b'/> It is kept in heap order: every parent is at least as large as its children. <bookmark "
-            "mark='c'/> So the largest element is always at the root, and because the tree is complete, its height "
-            "is the logarithm of n."
+            (
+            "A binary heap is a complete binary tree represented by an array. <bookmark mark='a'/> With "
+            "zero-based indexing, position i has children two i plus one and two i plus two when those positions "
+            "exist. <bookmark mark='b'/> In this max heap, every parent is at least as large as each child. Check "
+            "every edge in the displayed example, including the lowest row. <bookmark mark='c'/> The maximum is "
+            "at the root. For a nonempty heap the height is floor of log base two n; the complete shape supplies "
+            "that bound."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(t), FadeIn(arr), FadeIn(idx))
             vo.wait_until("a")
@@ -83,7 +86,7 @@ class Heap(VoiceoverScene):
             label(r"sift each node down, \ from the last parent back to the root", font_size=22, color=GREY_A),
             label(r"a node at height $h$ costs at most $2h$ comparisons; \ there are about $n / 2^{h+1}$ of them",
                   font_size=22, color=GREY_A),
-            MathTex(r"\sum_{h \ge 0} \frac{n}{2^{h+1}}\, 2h \;=\; n \sum_{h \ge 1} \frac{h}{2^h} \;=\; 2n",
+            MathTex(r"C_{\rm build}\le2\sum_{h\ge1}\left\lfloor n/2^h\right\rfloor<2n",
                     font_size=36, color=YES),
             label(r"most nodes are near the bottom, \ where sifting is cheap", font_size=20, color=GREY_B),
         ).arrange(DOWN, buff=0.22).next_to(head, DOWN, buff=0.45)
@@ -99,9 +102,9 @@ class Heap(VoiceoverScene):
             "two n comparisons: linear. Most nodes are near the bottom, where sifting is cheap. <bookmark "
             "mark='d'/> Measured, it costs under two comparisons per element at every size."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(steps[0]))
             vo.wait_until("a")
-            self.play(FadeIn(steps[0]))
+            self.play(Indicate(steps[0], color=YES))
             vo.wait_until("b")
             self.play(FadeIn(steps[1]))
             vo.wait_until("c")
@@ -122,21 +125,21 @@ class Heap(VoiceoverScene):
                   font_size=22, color=YES),
             label(rf"measured, \ $n = {words(r['n'])}$: \ {words(r['total'])} comparisons, \ about "
                   rf"{r['total'] / r['nlgn']:.2f} $n \lg n$", font_size=22, color=GREY_A),
-            label(r"in place, \ no extra memory; \ not stable; \ poor cache behaviour: \ the parent and its children "
-                  r"are far apart", font_size=21, color=GREY_A),
+            label(r"in place with $O(1)$ auxiliary storage; \ not stable; \ parent-child accesses can hurt locality", font_size=21, color=GREY_A),
             label(r"libraries keep it as the safety net: \ introsort switches to heapsort if quicksort goes badly",
                   font_size=21, color=HEAD),
         ).arrange(DOWN, buff=0.24).next_to(head, DOWN, buff=0.6)
         with self.voiceover(
-            "With the heap built, sorting is a loop. <bookmark mark='a'/> The maximum is at the root. Swap it to "
-            "the end of the array, shrink the heap by one, and sift the new root down to restore order. <bookmark "
-            "mark='b'/> Each of the n minus one rounds costs at most two log n comparisons, so heapsort is n log n "
-            "even in the worst case. <bookmark mark='c'/> Measured on sixty-five thousand elements, it makes about "
-            "one point eight times n log n comparisons, nearly twice merge sort. <bookmark mark='d'/> Its virtues "
-            "are elsewhere. It needs no extra memory, and its worst case is guaranteed. Its weakness is the memory "
-            "hierarchy: a parent and its children sit far apart in the array, so it misses the cache. <bookmark "
-            "mark='e'/> That is why libraries keep it as a safety net. Introsort, used in C++'s standard library, "
-            "runs quicksort, and switches to heapsort if the recursion gets too deep."
+            (
+            "Once the heap is built, repeat extraction. <bookmark mark='a'/> Swap the maximum at the root to the "
+            "end, shrink the active heap, then sift the new root down. <bookmark mark='b'/> There are n minus one "
+            "rounds, each using at most a logarithmic number of comparisons, so the worst-case count is O of n "
+            "log n. <bookmark mark='c'/> The table gives our implementation's finite random-input count, "
+            "including heap construction; its observed constant is not universal. <bookmark mark='d'/> Iterative "
+            "heapsort needs constant auxiliary storage and is not stable. Its irregular parent-child accesses can "
+            "hurt locality. <bookmark mark='e'/> Introsort uses heapsort as a worst-case fallback when "
+            "quicksort's recursion becomes too deep."
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, p in zip("abcde", pts):

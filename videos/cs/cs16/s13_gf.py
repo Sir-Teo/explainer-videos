@@ -40,8 +40,10 @@ class Generating(VoiceoverScene):
             "two geometric series. <bookmark mark='d'/> Read off the coefficient, and out comes Binet's formula, "
             "with the golden ratio. We checked it against the recurrence for every n up to sixty-one."
         ) as vo:
-            self.play(FadeIn(head))
-            for mk, s in zip("abcd", steps):
+            self.play(FadeIn(head), FadeIn(steps[0]))
+            vo.wait_until("a")
+            self.play(Indicate(steps[0], color=DATA))
+            for mk, s in zip("bcd", steps[1:]):
                 vo.wait_until(mk)
                 self.play(Write(s))
             self.play(FadeIn(chk))
@@ -52,11 +54,11 @@ class Generating(VoiceoverScene):
         d = load("gf")
         head = label(r"Catalan numbers, \ and reading the singularity", font_size=34).to_edge(UP, buff=0.3)
         steps = VGroup(
-            label(r"binary trees with $n$ nodes: \ " + r", \ ".join(str(c) for c in d["catalan"][:9]) + r", \ \ldots",
+            label(r"ordered binary trees, $n$ nonempty nodes: \ " + r", \ ".join(str(c) for c in d["catalan"][:9]) + r", \ \ldots",
                   font_size=22, color=GREY_A),
             MathTex(r"C(z) = 1 + z\,C(z)^2 \;\Longrightarrow\; C(z) = \frac{1 - \sqrt{1 - 4z}}{2z} \;\Longrightarrow\; "
                     r"C_n = \frac{1}{n+1}\binom{2n}{n}", font_size=30),
-            label(r"the square root vanishes at $z = 1/4$: \ that singularity fixes the growth", font_size=22,
+            label(r"location $1/4$ gives base $4$; \ local square-root type gives the $n^{-3/2}$ factor", font_size=22,
                   color=YES),
             MathTex(r"C_n \sim \frac{4^n}{\sqrt{\pi}\, n^{3/2}}", font_size=36, color=HEAD),
         ).arrange(DOWN, buff=0.25).next_to(head, DOWN, buff=0.45)
@@ -69,16 +71,17 @@ class Generating(VoiceoverScene):
         if note.width > 8.0:
             note.scale_to_fit_width(8.0)
         with self.voiceover(
-            "A harder example. <bookmark mark='a'/> The number of binary trees with n nodes: one, one, two, five, "
-            "fourteen, forty-two. These are the Catalan numbers, and they count recursion trees, bracketings and "
-            "many other things. <bookmark mark='b'/> A tree is empty, or a root with two subtrees, so the "
-            "generating function satisfies C equals one plus z C squared. Solve the quadratic, expand the square "
-            "root, and the closed form appears: one over n plus one, times two n choose n. <bookmark mark='c'/> "
-            "Even without the closed form, the function tells us how fast the numbers grow: the square root "
-            "vanishes at one quarter, and that point alone fixes the growth. <bookmark mark='d'/> Four to the n, "
-            "divided by the square root of pi times n to the three halves. The ratio of the true value to this "
-            "approximation creeps up to one. Flajolet and Sedgewick built a whole subject, analytic "
-            "combinatorics, on reading growth rates off singularities."
+            (
+            "Now count ordered binary trees with empty subtrees allowed. <bookmark mark='a'/> With n nonempty "
+            "nodes, their counts begin one, one, two, five, fourteen, forty-two. <bookmark mark='b'/> A tree is "
+            "empty, or a root with an ordered left and right subtree. Thus C equals one plus z C squared. Choose "
+            "the solution with C of zero equal to one, and its coefficients give the Catalan formula. <bookmark "
+            "mark='c'/> The nearest singularity is at one quarter. Its location gives the exponential base four; "
+            "its square-root form supplies the n to the minus three halves factor. Location alone would not "
+            "determine that power. <bookmark mark='d'/> Together they give four to the n over square root of pi "
+            "times n to the three halves. The displayed finite ratios approach one, illustrating the asymptotic "
+            "result."
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, s in zip("abcd", steps):

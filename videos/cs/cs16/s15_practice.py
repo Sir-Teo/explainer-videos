@@ -27,24 +27,28 @@ class Practice(VoiceoverScene):
                          widths=[3.8, 3.2, 3.0], row_h=0.48, font_size=20, mono_cols=(),
                          colors=[[WHITE, YES, GREY_B]] * len(rows)).next_to(head, DOWN, buff=0.45)
         pts = VGroup(
-            label(r"Timsort \ (Tim Peters, \ 2002): \ find the runs already in the data, \ extend short ones by "
+            label(r"Timsort family, powersort merge policy here: \ find runs, \ extend short ones by "
                   r"insertion sort, \ merge them cleverly", font_size=20, color=GREY_A),
             label(r"sorted or reversed input: \ $n - 1$ comparisons; \ ten runs: \ a few merges", font_size=21,
                   color=YES),
-            label(r"Python, \ Java's objects, \ Android, \ Swift and Rust's stable sort descend from it", font_size=20,
+            label(r"measured interpreter: \ " + d["python"].split(" (")[0]+r"; \ comparison wrapper, not elapsed time", font_size=20,
                   color=GREY_B),
-            label(r"unstable sorts went the other way: \ pdqsort \ (Orson Peters, \ 2021) \ in Rust and Go", font_size=20,
+            label(r"Rust changed both standard sorts in 1.81 (2024); \ inspected Go source uses a pdqsort variant", font_size=20,
                   color=GREY_B),
         ).arrange(DOWN, buff=0.13).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Real data is rarely random. It arrives sorted, or nearly sorted, or as several sorted pieces "
-            "concatenated. <bookmark mark='a'/> We counted the comparisons made by Python's own sort on a hundred "
-            "thousand items. On random input it does what merge sort does. On sorted or reversed input it makes "
-            "n minus one comparisons. On ten concatenated sorted runs, a few merges. <bookmark mark='b'/> That is "
-            "Timsort, written by Tim Peters for Python in 2002. It scans for runs that are already in order, "
-            "extends short ones with insertion sort, and merges runs of similar length so the merging stays "
-            "balanced. <bookmark mark='c'/> Its descendants sort objects in Java, Android, Swift and Rust. For "
-            "sorts that need not be stable, the newest standard is pattern-defeating quicksort, in Rust and Go."
+            (
+            "Existing order is useful information. <bookmark mark='a'/> We count comparisons made by this Python "
+            "interpreter's sorted function through a comparison wrapper. These are comparison counts, not elapsed "
+            "times. One input uses exactly a thousand random transpositions of an initially sorted "
+            "hundred-thousand-element array; that is not exactly one percent of positions shuffled. <bookmark "
+            "mark='b'/> Python's sort detects natural runs, extends short runs and merges them. Current "
+            "measurements here use the interpreter reported on screen; its modern merge policy is powersort, "
+            "within the Timsort family. <bookmark mark='c'/> Implementations evolve. Rust changed both standard "
+            "sorting implementations in version one point eight one, so the old Timsort and pattern-defeating "
+            "quicksort labels should not be read as current Rust guarantees. Go's inspected sort source uses a "
+            "pattern-defeating quicksort variant with a heapsort fallback."
+        )
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -72,18 +76,20 @@ class Practice(VoiceoverScene):
                   color=GREY_A),
             label(r"a crafted array overflowed the fixed-size run stack: \ an exception, \ in a library sort used by "
                   r"billions of devices", font_size=21, color=NO),
-            label(r"fixed in OpenJDK and CPython; \ Part 54: \ what proofs find that tests do not", font_size=21,
+            label(r"historical failure; \ later repairs and merge-policy changes; \ Part 54 returns to proof", font_size=21,
                   color=HEAD),
         ).arrange(DOWN, buff=0.16).next_to(inv, DOWN, buff=0.45)
         with self.voiceover(
-            "Even this code, among the most used in the world, hid a bug for more than a decade. <bookmark "
-            "mark='a'/> Timsort keeps a stack of runs waiting to be merged, with an invariant on their lengths: "
-            "each is longer than the next two together. That makes the lengths grow like Fibonacci numbers, so "
-            "the stack stays short, and Java allocated it with a fixed size. <bookmark mark='b'/> In 2015 Stijn de "
-            "Gouw and colleagues tried to prove Java's implementation correct with the KeY verifier, and could "
-            "not: the code restored the invariant only for the top three runs, and a merge could break it further "
-            "down. <bookmark mark='c'/> They built an input that overflowed the run stack and crashed the sort. "
-            "The fix went into OpenJDK and into CPython. Part 54 returns to what proofs find that tests miss."
+            (
+            "The historical Timsort bug shows why an invariant must hold everywhere it is needed. <bookmark "
+            "mark='a'/> The old merge policy intended run lengths to grow fast enough down the pending stack to "
+            "keep its height logarithmic. <bookmark mark='b'/> In 2015, de Gouw and colleagues found that local "
+            "repairs near the top did not always restore the required invariant deeper down. Their verification "
+            "work led to a constructed input that exhausted the allocated Java run stack. <bookmark mark='c'/> "
+            "Implementations adopted repairs, and merge policies later evolved; this is a historical case study, "
+            "not a claim that the measured modern Python sort still has that failure. Part 54 returns to the role "
+            "of machine-checked proofs."
+        )
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -103,7 +109,7 @@ class Practice(VoiceoverScene):
                   color=GREY_A),
             label(r"2. \ merge $k$ runs at once with a heap, \ one block of each in memory", font_size=22,
                   color=GREY_A),
-            label(r"\textbf{replacement selection}: \ a heap of $M$ records emits runs of $2M$ on random input "
+            label(r"\textbf{replacement selection}: \ iid continuous input, long-run expected run length about $2M$ "
                   r"\ (Knuth)", font_size=22, color=YES),
             label(rf"ours: \ $M = {words(d['rs_m'])}$, \ {words(d['rs_records'])} random records: \ {d['rs_runs']} runs, "
                   rf"\ the inner ones average {d['rs_mean']:,.0f}", font_size=22, color=YES),

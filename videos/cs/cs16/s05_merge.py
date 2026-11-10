@@ -96,22 +96,23 @@ class Merge(VoiceoverScene):
             boxes.add(row)
             s = MathTex(rf"{k} \times {size} = {n}", font_size=26, color=YES).move_to([W / 2 - 0.4, 2.0 - d * 0.95, 0])
             sums.add(s)
-        brace = BraceBetweenPoints(boxes[0].get_corner(UR) + RIGHT * 4.9, boxes[-1].get_corner(DR) + RIGHT * 4.9,
+        brace = BraceBetweenPoints([5.25, 2.25, 0], [5.25, -2.05, 0],
                                    direction=RIGHT, color=GREY_B)
-        bl = MathTex(r"\lg n + 1 \text{ levels}", font_size=24, color=GREY_B).next_to(brace, RIGHT, buff=0.1)
-        tot = MathTex(r"T(n) = n \lg n + n", font_size=36, color=HEAD).to_edge(DOWN, buff=0.4)
+        bl = MathTex(r"\substack{\lg n + 1\\\text{levels}}", font_size=18, color=GREY_B).next_to(brace, RIGHT, buff=0.12)
+        tot = MathTex(r"T(n) = n \lg n + n \quad(n=2^h,\ T(1)=1)", font_size=30, color=HEAD).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Merge sort, which John von Neumann wrote out in 1945, splits the array in half, sorts each half, and "
-            "merges the two sorted halves in linear time. Its cost satisfies T of n equals two T of n over two "
-            "plus n. <bookmark mark='a'/> Draw the recursion as a tree. The root does n work to merge. <bookmark "
-            "mark='b'/> Its two children each do n over two, n in all. Four grandchildren, n over four each: n "
-            "again. Every level costs n. <bookmark mark='c'/> And there are log n plus one levels, because the "
-            "sizes halve until they reach one. <bookmark mark='d'/> Sum the levels: n log n plus n. A tree turned a "
-            "recurrence into an addition."
+            (
+            "Merge sort splits, sorts each half, then merges. We will draw a simple work recurrence, with n a "
+            "power of two and base cost T of one equal to one. <bookmark mark='a'/> The root pays n for "
+            "combining. <bookmark mark='b'/> At each internal level the subproblem sizes sum to n, so the level "
+            "pays n again. <bookmark mark='c'/> There are log base two n internal levels, plus n leaves of unit "
+            "cost. <bookmark mark='d'/> The sum is n log n plus n. This is the chosen toll model; the exact "
+            "number of key comparisons is a different count, measured next."
+        )
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(boxes[0]), FadeIn(sums[0]))
             vo.wait_until("a")
-            self.play(FadeIn(boxes[0]), FadeIn(sums[0]))
+            self.play(Indicate(boxes[0], color=DATA), Indicate(sums[0], color=YES))
             vo.wait_until("b")
             for d in range(1, levels):
                 self.play(FadeIn(boxes[d]), FadeIn(sums[d]), run_time=0.7)
@@ -126,9 +127,9 @@ class Merge(VoiceoverScene):
         d = load("merge")
         head = label(r"Proving it, \ and measuring it", font_size=34).to_edge(UP, buff=0.3)
         proof = VGroup(
-            label(r"the \textbf{substitution method}: \ guess $T(n) \le c\, n \lg n$, \ then check the step",
+            label(r"include the base: \ guess $T(n) \le c\, n \lg n+n$, \ with $T(1)=1$",
                   font_size=22, color=GREY_A),
-            MathTex(r"T(n) \le 2\,c\,\tfrac{n}{2} \lg \tfrac{n}{2} + n = c\,n \lg n - c\,n + n \le c\,n \lg n "
+            MathTex(r"T(n) \le 2\left(c\,\tfrac{n}{2} \lg \tfrac{n}{2}+\tfrac n2\right)+n = c n\lg n-cn+2n \le c n\lg n+n "
                     r"\quad \text{when } c \ge 1", font_size=30),
         ).arrange(DOWN, buff=0.25).next_to(head, DOWN, buff=0.45)
         rows = [[words(r["n"]), words(r["cmp"]), words(r["worst"]), words(r["nlgn"]), words(lb)]
@@ -136,16 +137,16 @@ class Merge(VoiceoverScene):
         tab = grid_table([r"$n$", r"comparisons, \ random", r"worst case", r"$n \lg n$", r"$\lceil \lg n! \rceil$"],
                          rows, widths=[1.8, 2.8, 2.2, 2.2, 2.2], row_h=0.46, font_size=19).next_to(proof, DOWN,
                                                                                                buff=0.45)
-        pts = label(r"the worst case is $n \lg n - n + 1$; \ the last column is chapter 6's floor: \ merge sort is "
-                    r"within a few percent of it", font_size=21, color=HEAD).to_edge(DOWN, buff=0.4)
+        pts = label(r"worst case: $n\lg n-n+1$; \ gap to the information bound is $O(n)$, ratio tends to one", font_size=21, color=HEAD).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Trees suggest an answer; a proof confirms it. <bookmark mark='a'/> The substitution method guesses "
-            "the form, c n log n, and checks that the recurrence preserves it: two copies of c times n over two "
-            "log n over two, plus n, is c n log n minus c n plus n, which is at most c n log n whenever c is at "
-            "least one. <bookmark mark='b'/> Our merge sort counts its comparisons. On random input it makes a "
-            "little fewer than n log n; in the worst case exactly n log n minus n plus one. <bookmark mark='c'/> "
-            "The last column is the floor that chapter six proves no comparison sort can go below. Merge sort is "
-            "within a few percent of it."
+            (
+            "A guessed bound also needs a base case. <bookmark mark='a'/> For this recurrence use c n log n plus "
+            "n, which covers T of one equal to one. Substitute the bound into the two half-size calls: the extra "
+            "linear terms leave the inequality true when c is at least one. <bookmark mark='b'/> Our measured "
+            "sort counts key comparisons instead of charging n at every merge. For powers of two its worst case "
+            "is exactly n log n minus n plus one. <bookmark mark='c'/> Compare that with the information lower "
+            "bound in the last column. The gap is linear in n, so the ratio approaches one as n grows."
+        )
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

@@ -42,9 +42,9 @@ class Concentration(VoiceoverScene):
             "Summing it gives the same exact answer as before, two times n plus one times H n, minus four n. Two "
             "proofs, one number."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(steps[0]), FadeIn(steps[1]))
             vo.wait_until("a")
-            self.play(Write(steps[0]), FadeIn(steps[1]))
+            self.play(Indicate(steps[0], color=DATA))
             vo.wait_until("b")
             self.play(Write(steps[2]))
             vo.wait_until("c")
@@ -72,23 +72,28 @@ class Concentration(VoiceoverScene):
             mean, UP, buff=0.08)
         ticks = VGroup(*[label(f"{v:,}", font_size=15, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.1)
                          for v in range(10000, int(edges[-1]) + 1, 1000)])
+        yt = VGroup(*[mono(str(v), 14, GREY_B).next_to(ax.c2p(edges[0],v), LEFT, buff=0.08) for v in (0,mx//2,mx)])
+        yl = label(r"runs per bin", font_size=17,color=GREY_B).next_to(ax,UP,buff=0.13).align_to(ax,LEFT)
         xl = label(r"comparisons in one run", font_size=18, color=GREY_B).next_to(ticks, DOWN, buff=0.12)
         cap = VGroup(
-            label(rf"standard deviation {d['sd']:,.0f}: \ {d['sd_over_n']:.3f}\,$n$; \ theory: \ "
+            label(rf"standard deviation {d['sd']:,.0f}: \ {d['sd_over_n']:.3f}\,$n$; \ large-$n$ theory: \ "
                   rf"$\sqrt{{7 - 2\pi^2/3}}\,n = {d['theory_sd_over_n']:.3f}\,n$", font_size=21, color=GREY_A),
             label(rf"the worst run of ten thousand: \ {d['max']:,.0f}; \ the worst possible: \ {d['worst']:,.0f}",
                   font_size=21, color=NO),
         ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "An average is a promise about many runs. You will run your sort once. How far from the average can a "
-            "single run be? <bookmark mark='a'/> We sorted the same thousand elements ten thousand times, with "
-            "fresh random pivots each time, and counted comparisons. <bookmark mark='b'/> The runs pile up around "
-            "the mean, which matches the exact formula. <bookmark mark='c'/> The standard deviation is about "
-            "zero point six four n, as the theory predicts: the spread grows like n, while the mean grows like n "
-            "log n, so relative to the mean it shrinks. <bookmark mark='d'/> The worst of ten thousand runs made "
-            "fourteen and a half thousand comparisons. The worst possible run makes half a million."
+            (
+            "A mean does not describe every run. <bookmark mark='a'/> Here we sort the same thousand distinct "
+            "keys ten thousand times, using a separate deterministic seed for each sequence of uniform pivots. "
+            "The histogram counts runs in each comparison interval. <bookmark mark='b'/> The sample mean is close "
+            "to the exact expectation. <bookmark mark='c'/> The sample standard deviation is about zero point six "
+            "four n. The displayed theoretical coefficient is the large-n limit, not an exact finite-n standard "
+            "deviation. Relative to a mean growing like n log n, this spread eventually shrinks. <bookmark "
+            "mark='d'/> The largest observed count is far below the possible quadratic worst case. A finite "
+            "sample illustrates that difference; it cannot eliminate rare outcomes."
+        )
         ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(ticks), FadeIn(xl))
+            self.play(FadeIn(head), Create(ax), FadeIn(ticks), FadeIn(yt), FadeIn(yl), FadeIn(xl))
             vo.wait_until("a")
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.03), run_time=3)
             vo.wait_until("b")
@@ -110,19 +115,21 @@ class Concentration(VoiceoverScene):
         pts = VGroup(
             label(r"a tail bound \ (McDiarmid and Hayward, \ 1996): \ the chance of exceeding the mean by a "
                   r"factor $1 + \varepsilon$ is $n^{-\Omega(\varepsilon \ln \ln n)}$", font_size=21, color=YES),
-            label(r"in practice: \ a run twice the average almost never happens, \ for any input", font_size=22,
+            label(r"asymptotic probability bound under uniform pivots; \ rare finite outcomes remain possible", font_size=22,
                   color=HEAD),
-            label(r"randomized algorithms give a distribution, \ not a guarantee: \ Part 20 studies the tools",
+            label(r"probabilistic guarantees need a stated model: \ Part 20 studies the tools",
                   font_size=21, color=GREY_B),
         ).arrange(DOWN, buff=0.18).next_to(rows, DOWN, buff=0.5)
         with self.voiceover(
-            "How often does a run stray far? <bookmark mark='a'/> One standard deviation above the mean: fifteen "
-            "percent of runs. Two: four percent. Three: under one percent. Four: two runs in a thousand. The right "
-            "tail is longer than a bell curve's, but it falls fast. <bookmark mark='b'/> McDiarmid and Hayward "
-            "proved how fast in 1996: the chance of exceeding the mean by any fixed fraction vanishes faster than "
-            "any power of n. <bookmark mark='c'/> So a run that takes twice the average essentially never happens, "
-            "whatever the input. A randomized algorithm promises a distribution rather than a bound, and Part 20, "
-            "on randomness, studies the tools that measure such promises."
+            (
+            "Read the measured tail frequencies directly from the table. <bookmark mark='a'/> These are fractions "
+            "of ten thousand runs above the sample mean plus one, two, three or four sample standard deviations. "
+            "The four-deviation frequency in this sample is two in a thousand. <bookmark mark='b'/> For fixed "
+            "positive relative deviations, classical quicksort tail bounds decay faster than any inverse fixed "
+            "power of n, asymptotically. That theorem assumes the classical distinct-key model and uniform random "
+            "pivots. <bookmark mark='c'/> It gives a probabilistic guarantee, not impossibility of a slow finite "
+            "run. Part 20 develops the probability tools behind such claims."
+        )
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

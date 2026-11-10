@@ -37,7 +37,7 @@ class Quick(VoiceoverScene):
                      label(r"larger", font_size=19, color=CTRL))
         for g, part in ((lab[0], bars2.bars[:nsmall]), (lab[1], bars2.bars[nsmall + 1:])):
             g.next_to(bars2, DOWN, buff=0.2).set_x(VGroup(*part).get_x())
-        pts = label(r"one pass, \ $n - 1$ comparisons; \ then sort each side \ --- \ the pivot is already home",
+        pts = label(r"one pass, \ $n - 1$ logical partition comparisons; \ then sort each side \ --- \ the pivot is already home",
                     font_size=22, color=GREY_A).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "Tony Hoare invented quicksort in 1959, as a visiting student in Moscow, and published it in 1961. "
@@ -97,8 +97,8 @@ class Quick(VoiceoverScene):
                   font_size=21, color=GREY_A),
             label(r"when both stop, \ swap: \ each swap fixes two misplaced elements at once", font_size=21,
                   color=YES),
-            label(r"when they cross, \ everything left of $j$ is $\le$ the pivot, \ everything right of it is "
-                  r"$\ge$: \ no extra memory", font_size=21, color=HEAD),
+            label(r"when they cross, \ everything through $j$ is $\le$ the pivot, \ everything after it is "
+                  r"$\ge$: \ $O(1)$ auxiliary storage for partitioning", font_size=21, color=HEAD),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "Hoare's own partition needs no second array. <bookmark mark='a'/> Take the first element as the pivot. "
@@ -147,22 +147,24 @@ class Quick(VoiceoverScene):
             MathTex(r"\mathbb{E}[C_n] = \sum_{i<j} \frac{2}{j-i+1} = 2(n+1)H_n - 4n \;\approx\; 2n \ln n "
                     r"\;\approx\; 1.39\, n \lg n", font_size=32, color=HEAD),
         ).arrange(DOWN, buff=0.22).next_to(head, DOWN, buff=0.45)
+        rank_row=VGroup(*[VGroup(Circle(radius=0.23,color=GREY_D,stroke_width=1.4),MathTex(rf"z_{{{k}}}",font_size=20)) for k in range(1,9)])
+        for cell in rank_row:cell[1].move_to(cell[0])
+        rank_row.arrange(RIGHT,buff=0.42).move_to(DOWN*1.95)
+        interval=SurroundingRectangle(rank_row[2:6],buff=0.18,color=GREY_B,stroke_width=1.6)
+        rank_note=label(r"worked interval $i=3,j=6$: four possible first pivots; two endpoints",font_size=19,color=GREY_B).next_to(rank_row,DOWN,buff=0.45)
         with self.voiceover(
-            "Quicksort's average cost has a famously short derivation. <bookmark mark='a'/> Name the elements by "
-            "their rank in sorted order, z one up to z n, and choose every pivot uniformly at random. <bookmark "
-            "mark='b'/> Two elements z i and z j are compared at most once, and they are compared exactly when one "
-            "of them is the first pivot chosen from the range between them. <bookmark mark='c'/> If some element "
-            "strictly between them is chosen first, they land on opposite sides and never meet. If an element "
-            "outside the range is chosen, they stay together and wait. <bookmark mark='d'/> So the probability is "
-            "two out of the j minus i plus one elements in the range. <bookmark mark='e'/> Add over all pairs, and "
-            "the expected number of comparisons is two times n plus one times the harmonic number, minus four n: "
-            "about two n natural log n, or one point three nine n log base two n. Only thirty-nine percent above "
-            "the lower bound, on average."
+            "Quicksort's average cost has a famously short derivation. <bookmark mark='a'/> Name the elements by their rank in sorted order, z one up to z n, and choose every pivot uniformly at random. <bookmark mark='b'/> Two elements z i and z j are compared at most once, and they are compared exactly when one of them is the first pivot chosen from the range between them. <bookmark mark='c'/> If some element strictly between them is chosen first, they land on opposite sides and never meet. If an element outside the range is chosen, they stay together and wait. <bookmark mark='d'/> So the probability is two out of the j minus i plus one elements in the range. <bookmark mark='e'/> Add over all pairs, and the expected number of comparisons is two times n plus one times the harmonic number, minus four n: about two n natural log n, or one point three nine n log base two n. The leading-term ratio to the information bound approaches one point three nine."
         ) as vo:
             self.play(FadeIn(head))
             for mk, s in zip("abcde", steps[:2].submobjects + [steps[2], steps[3], steps[4]]):
                 vo.wait_until(mk)
-                self.play(FadeIn(s))
+                if mk=="a":
+                    self.play(FadeIn(s),FadeIn(rank_row),Create(interval),FadeIn(rank_note))
+                elif mk=="b":
+                    self.play(FadeIn(s),rank_row[2][0].animate.set_fill(YES,0.45),rank_row[5][0].animate.set_fill(YES,0.45))
+                elif mk=="c":
+                    self.play(FadeIn(s),rank_row[3][0].animate.set_fill(NO,0.25),rank_row[4][0].animate.set_fill(NO,0.25))
+                else:self.play(FadeIn(s))
         self.wait(0.3)
         self.clear_scene()
 
@@ -174,16 +176,21 @@ class Quick(VoiceoverScene):
         tab = grid_table([r"$n$", r"mean comparisons, \ random pivots", r"$2(n+1)H_n - 4n$", r"$n \lg n$"], rows,
                          widths=[1.8, 4.2, 3.2, 2.2], row_h=0.48, font_size=20,
                          colors=[[WHITE, YES, HEAD, GREY_B]] * len(rows)).next_to(head, DOWN, buff=0.5)
-        note = label(r"the formula is exact for the expectation; \ the measurements average 15 to 60 runs",
+        note = label(r"distinct keys; \ logical partition comparisons; \ sample means over 15 or 60 runs",
                      font_size=20, color=GREY_B).next_to(tab, DOWN, buff=0.35)
         with self.voiceover(
-            "Our quicksort counts its comparisons. <bookmark mark='a'/> Averaged over many runs with random pivots, "
-            "the counts match the exact formula to within a fraction of a percent, at every size. And they sit a "
-            "little above n log n: the thirty-nine percent that random pivots cost."
+            (
+            "Our measurement uses a declared partition model: one logical comparison with the pivot for every "
+            "nonpivot key. It does not count individual Python less-than and greater-than instructions. <bookmark "
+            "mark='a'/> The inputs have distinct keys and pivots are uniform. Each mean averages fifteen or sixty "
+            "runs, so finite sampling error remains; the displayed exact formula describes the expectation. The "
+            "leading term is two n natural log n. Its asymptotic ratio to n log base two n is about one point "
+            "three nine, though lower-order terms matter at these sizes."
+        )
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(tab), FadeIn(note))
             vo.wait_until("a")
-            self.play(FadeIn(tab), FadeIn(note))
+            self.play(Indicate(VGroup(*[row[1] for row in tab.cells[1:]]), color=YES))
         self.wait(0.3)
         self.clear_scene()
 
@@ -204,20 +211,23 @@ class Quick(VoiceoverScene):
                   font_size=21, color=NO),
             label(r"real inputs are often sorted, \ or nearly: \ a fixed rule invites the worst case", font_size=21,
                   color=GREY_A),
-            label(r"randomness moves the risk from the input to the coin flips, \ which no adversary controls",
+            label(r"fixed distinct-key input; \ independent uniform pivots; \ expectation over the random choices",
                   font_size=21, color=YES),
             label(r"dual-pivot quicksort \ (Yaroslavskiy, \ 2009): \ Java's sort for primitives since Java 7",
                   font_size=20, color=GREY_B),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "The analysis assumed random pivots. What if we take the first element, as the earliest versions did? "
-            "<bookmark mark='a'/> On random input it hardly matters. On sorted input it is a disaster: every "
-            "partition splits off nothing, and quicksort makes n times n minus one over two comparisons, two "
-            "million for two thousand elements. <bookmark mark='b'/> And sorted input is common. The median of the "
-            "first, middle and last elements fixes this case. <bookmark mark='c'/> A random pivot fixes every case "
-            "at once: the expected cost no longer depends on the input at all, only on coin flips no adversary can "
-            "see. <bookmark mark='d'/> Modern versions refine it further. Vladimir Yaroslavskiy's dual-pivot "
-            "quicksort has sorted Java's primitive arrays since Java 7."
+            (
+            "Pivot choice changes the risk. <bookmark mark='a'/> On sorted distinct keys, always taking the first "
+            "key creates sizes zero and n minus one, costing n times n minus one over two partition comparisons. "
+            "<bookmark mark='b'/> Median of the first, middle and last fixes this particular input. Its "
+            "pivot-selection comparisons are now counted by the actual three-key sorting routine, not a fixed "
+            "assigned charge. It still has adversarial inputs. <bookmark mark='c'/> For any fixed distinct-key "
+            "input, independent uniform random pivots give the same expected count. This assumes the input does "
+            "not adapt to revealed random choices. <bookmark mark='d'/> Production sorts add cutoffs, duplicate "
+            "handling and fallback rules. Java's primitive sorts have used dual-pivot quicksort, with details "
+            "depending on version and type."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab))
             for mk, pt in zip("abcd", pts):

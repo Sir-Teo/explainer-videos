@@ -50,7 +50,7 @@ class Master(VoiceoverScene):
         ).arrange(RIGHT, buff=0.6).next_to(crit, DOWN, buff=0.6)
         if cases.width > 13.2:
             cases.scale_to_fit_width(13.2)
-        note = label(r"Bentley, Haken and Saxe \ (1980); \ the name and the form from CLRS", font_size=19,
+        note = label(r"$a\ge1$, $b>1$; positive constant base, nonnegative toll; case 3 needs the shown regularity", font_size=19,
                      color=GREY_B).to_edge(DOWN, buff=0.5)
         with self.voiceover(
             "Most divide-and-conquer algorithms split a problem of size n into a pieces of size n over b, and spend "
@@ -88,7 +88,7 @@ class Master(VoiceoverScene):
         cols.arrange(RIGHT, buff=0.7, aligned_edge=UP).next_to(head, DOWN, buff=0.5)
         if cols.width > 13:
             cols.scale_to_fit_width(13)
-        note = label(r"each bar is one level's total work, \ root at the top, \ $n = 1024$", font_size=19,
+        note = label(r"first nine levels shown, root at top; total work per level, $n=1024$", font_size=19,
                      color=GREY_B).to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "Here are the three cases as pictures. Each bar is the total work of one level of the recursion tree, "
@@ -99,8 +99,10 @@ class Master(VoiceoverScene):
             "levels. <bookmark mark='c'/> And a combine step that costs n squared: each level is half the one "
             "above, a geometric series, so the root's n squared is the whole answer, up to a factor of two."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(note))
-            for mk, c in zip("abc", cols):
+            self.play(FadeIn(head), FadeIn(note), FadeIn(cols[0]))
+            vo.wait_until("a")
+            self.play(Indicate(cols[0], color=NO))
+            for mk, c in zip("bc", cols[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(c[0]), LaggedStart(*[GrowFromEdge(b, LEFT) for b in c[1]], lag_ratio=0.1),
                           FadeIn(c[2]), run_time=2)
@@ -110,7 +112,7 @@ class Master(VoiceoverScene):
     def proof(self):
         head = label(r"Why the three cases", font_size=34).to_edge(UP, buff=0.3)
         steps = VGroup(
-            MathTex(r"T(n) = \sum_{j=0}^{\log_b n} a^j\, f\!\left(\frac{n}{b^j}\right)", font_size=36),
+            MathTex(r"n=b^h:\quad T(n)=a^hT(1)+\sum_{j=0}^{h-1}a^j f\!\left(\frac n{b^j}\right)", font_size=36),
             label(r"level $j$ has $a^j$ subproblems of size $n/b^j$", font_size=21, color=GREY_B),
             label(r"if $f(n) = n^c$, \ level $j$ costs $n^c \left(a / b^c\right)^j$: \ a geometric series with "
                   r"ratio $r = a / b^c$", font_size=22, color=GREY_A),
@@ -122,13 +124,16 @@ class Master(VoiceoverScene):
                   color=HEAD),
         ).arrange(DOWN, buff=0.25).next_to(head, DOWN, buff=0.45)
         with self.voiceover(
-            "Why exactly three cases? <bookmark mark='a'/> Write the recursion tree as a sum: level j has a to the "
-            "j subproblems, each of size n over b to the j. <bookmark mark='b'/> When f is a power of n, n to the "
-            "c, level j costs n to the c times a over b to the c, to the power j. The levels form a geometric "
-            "series. <bookmark mark='c'/> A geometric series is dominated by its last term if the ratio is above "
-            "one, has all terms equal if the ratio is one, and is dominated by its first term if the ratio is "
-            "below one. <bookmark mark='d'/> And a over b to the c is greater than one exactly when c is less than "
-            "the log base b of a. The theorem's comparison is a geometric series in disguise."
+            (
+            "The geometry comes from a geometric series. <bookmark mark='a'/> Let n equal b to the h and retain "
+            "the leaf term explicitly. Internal level j costs a to the j times f of n over b to the j; the leaves "
+            "cost a to the h times the base cost. <bookmark mark='b'/> If f is n to the c, consecutive internal "
+            "levels have ratio a over b to the c. <bookmark mark='c'/> A ratio above one favors the bottom, one "
+            "gives equal levels, and a ratio below one favors the root. With positive constant base cost, the "
+            "leaves have the same asymptotic scale as the bottom. <bookmark mark='d'/> The ratio exceeds one "
+            "exactly when c is less than log base b of a. The theorem formalizes this picture, with its stated "
+            "regularity conditions."
+        )
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -148,26 +153,30 @@ class Master(VoiceoverScene):
         rows = [[c["name"], f"${c['rec']}$", str(c["case"]), f"${c['sol']}$"] for c in d["cases"]]
         tab = grid_table([r"algorithm", r"recurrence", r"case", r"solution"], rows, widths=[2.6, 4.0, 1.2, 4.0],
                          row_h=0.55, font_size=20, mono_cols=()).next_to(head, DOWN, buff=0.45)
+        exponents = MathTex(rf"\log_2 3\approx{math.log2(3):.3f},\quad\log_2 7\approx{math.log2(7):.3f}",
+                            font_size=23, color=GREY_B).next_to(tab, DOWN, buff=0.22)
         ab = d["akra_bazzi"]
         akra = VGroup(
             label(r"uneven splits: \ Akra--Bazzi \ (1998)", font_size=22, color=LAM),
-            MathTex(r"T(n) = T(n/3) + T(2n/3) + n \;\Rightarrow\; \Theta(n \log n)", font_size=28),
-            label(rf"computed: \ $T(n) / (n \lg n)$ \ = {ab[2]['ratio']:.3f}, \ {ab[4]['ratio']:.3f}, \ "
+            MathTex(r"T(n)=T(\lfloor n/3\rfloor)+T(n-\lfloor n/3\rfloor)+n", font_size=28),
+            label(rf"$T(n)=n$ for $n\le2$; \ computed $T(n)/(n\lg n)$ \ = {ab[2]['ratio']:.3f}, \ {ab[4]['ratio']:.3f}, \ "
                   rf"{ab[5]['ratio']:.3f} \ at $10^3, 10^5, 10^6$: \ settling to a constant", font_size=20,
                   color=GREY_A),
-        ).arrange(DOWN, buff=0.15).next_to(tab, DOWN, buff=0.45)
+        ).arrange(DOWN, buff=0.15).next_to(exponents, DOWN, buff=0.35)
         with self.voiceover(
-            "The theorem settles most of the recurrences an algorithms course meets. <bookmark mark='a'/> Binary "
-            "search: one half-size problem and constant work, case two, log n. Merge sort, case two again. "
-            "Karatsuba and Strassen's matrix multiplication, case one, where the leaves win, and their famous "
-            "exponents come straight out of the log of a. And a heavy combine step, case three. <bookmark mark='b'/> "
-            "When the pieces are unequal, the Akra–Bazzi method generalizes the theorem. Splitting into a third and "
-            "two thirds with linear work still gives n log n, and computing the recurrence directly shows the "
-            "ratio settling towards a constant."
+            (
+            "The table shows the standard three cases. <bookmark mark='a'/> Binary search and merge sort have "
+            "matching per-level work. Karatsuba and Strassen are leaf dominated; a quadratic combine with two "
+            "half-size calls is root dominated. <bookmark mark='b'/> For unequal splits, Akra and Bazzi provide a "
+            "broader method. Our numeric illustration now has explicit integer semantics: for n at most two, T "
+            "equals n; otherwise split into floor of n over three and the complementary size, and add n. These "
+            "actual subproblem sizes are memoized separately. The displayed ratio to n log n is a finite "
+            "numerical check of this example, alongside the asymptotic theorem."
+        )
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(FadeIn(tab))
+            self.play(FadeIn(tab), FadeIn(exponents))
             vo.wait_until("b")
             self.play(FadeIn(akra))
         self.wait(0.3)

@@ -38,13 +38,15 @@ class Outro(VoiceoverScene):
         ).arrange_in_grid(rows=2, cols=3, buff=(0.35, 0.35)).move_to(DOWN * 0.2)
         head = label(rf"Part {PART}: \ Counting Steps", font_size=38).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "What we built in this part. A model of computation, and the notation that ignores constants. "
-            "Insertion sort with its invariant and its inversions. Merge sort and the recursion tree, and the "
-            "master theorem that sums such trees. The lower bound every comparison sort obeys, and merge insertion, "
-            "which meets it for small n. Quicksort's average from one probability, and ten thousand runs showing "
-            "how tightly it holds. Sorting faster than n log n by reading keys, selection in linear time, "
-            "generating functions, amortized analysis, and the Job, sorted, eleven times faster than before on the "
-            "same core."
+            (
+            "We built a toolkit for counting the resource that matters. Invariants establish sorted output. "
+            "Recursion trees turn repeated work into a sum, with base costs retained. Comparison trees bound "
+            "sorting distinct keys; random pivots produce an analyzable distribution. Reading digits changes the "
+            "model, selection avoids sorting all ranks, generating functions expose coefficients, and amortized "
+            "analysis bounds whole sequences. The revised Job replaces repeated scans with a stable sort. Its "
+            "ledger improvement is a checked projection, with corpus counts, fitted instructions and sampled IPC "
+            "kept separate."
+        )
         ):
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
@@ -77,17 +79,19 @@ class Outro(VoiceoverScene):
     def practice(self):
         card = practice_card([
             (r"libraries", r"know your language's sort: \ stable or not, \ by key, \ worst case"),
-            (r"review", r"a loop inside a loop over the same data is $n^2$: \ the commonest performance bug"),
+            (r"review", r"sum actual iteration counts: \ nested syntax alone does not determine complexity"),
             (r"interviews", r"the first questions: \ complexity, \ an invariant, \ a recursion tree"),
-            (r"data", r"\texttt{ORDER BY} on big tables is an external merge sort"),
+            (r"data", r"database sorts depend on the execution plan, data size and memory budget"),
             (r"choosing", r"measure on real data: \ presorted input changes the winner"),
         ])
         with self.voiceover(
-            "In practice. Know your language's sort: whether it is stable, how it takes a key, what its worst case "
-            "is. In code review, a loop inside a loop over the same collection is quadratic, and it is the most "
-            "common performance bug there is: it is the Job v0. Interviews begin with exactly this chapter: a "
-            "complexity, an invariant, a recursion tree. Sorting a large table in a database is an external merge "
-            "sort. And when choosing, measure on real data, because presorted input changes the winner."
+            (
+            "In practice, know your library sort's stability, key interface and worst-case contract. When "
+            "reviewing nested loops, sum their actual iteration counts: nested syntax alone does not imply "
+            "quadratic work. Two-pointer scans or shrinking bounds can change the total. Database sorting may use "
+            "in-memory or external algorithms depending on the plan and data size. Measure representative inputs, "
+            "check the output, record the protocol, and distinguish an asymptotic bound from a finite timing."
+        )
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.35), run_time=3.0)
@@ -106,13 +110,16 @@ class Outro(VoiceoverScene):
             r"\textit{Build.} \ Rewrite the Job v1 with a radix sort on letters, \ in the Pebble language, \ and "
             r"compare its instruction count with the merge sort on our passages.",
             r"$\bigstar$ \textit{Research.} \ Sort $n$ word-size integers in $O(n)$ time on a word-RAM, \ or prove "
-            r"that no algorithm can, \ in a model that allows the usual arithmetic.",
+            r"that a specified restriction is necessary; \ fix word width, instructions and randomness first.",
         ], font_size=22)
         with self.voiceover(
-            "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build "
-            "problem: sort the Job's words with a radix sort instead, and measure it on Pebble against the merge "
-            "sort. The last, marked with a star, is a research problem: its answer is not known, and the notes say "
-            "where to start."
+            (
+            "The notes contain four worked analysis problems, a radix-sort build plan, and a research starting "
+            "point. The counting exercises state their distinct-key and random-pivot assumptions. The build "
+            "problem requires an implemented program, correct output and measured instruction counts. The starred "
+            "direction first fixes word width, instructions and randomness, then checks what the cited results "
+            "already establish before proposing an extension. It is not presented as a solved exercise."
+        )
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)
@@ -128,10 +135,7 @@ class Outro(VoiceoverScene):
         q = label(r"the Job is a dictionary problem: \ insert, \ look up, \ count", font_size=26,
                   color=GREY_A).to_edge(DOWN, buff=0.8)
         with self.voiceover(
-            "Next time. The Job is really a dictionary problem: insert a word, look it up, add one. Hashing does "
-            "it in expected constant time, if the hash function cannot be gamed; balanced trees guarantee their "
-            "time; and union–find runs in time bounded by the inverse of Ackermann's function. Part 17, Data "
-            "Structures."
+            "Next time: dictionaries. Insert a word, look it up, add one. Hashing gives expected constant probes under its hash and load assumptions; reading and hashing a string still costs its letters. Balanced search trees bound the number of comparisons logarithmically. With union by rank and path compression, union-find has an inverse-Ackermann amortized bound over operation sequences. Part 17, Data Structures, develops those guarantees and their conditions."
         ):
             self.play(FadeIn(nxt), LaggedStart(*[FadeIn(i) for i in items], lag_ratio=0.3))
             self.play(FadeIn(q))

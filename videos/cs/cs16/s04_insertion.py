@@ -39,24 +39,25 @@ class Insertion(VoiceoverScene):
         def color_prefix(i):
             return [b.animate.set_fill(YES if k < i else DATA, 0.85) for k, b in enumerate(bars.bars)]
         with self.voiceover(
-            "The simplest sort worth analysing is the one card players use. <bookmark mark='a'/> Take the next "
-            "element, and shift larger elements right until its place opens up. <bookmark mark='b'/> Watch the "
-            "green prefix: before each step, the first i elements are in order. That sentence is the loop's "
-            "invariant. <bookmark mark='c'/> It is true at the start, when the prefix has one element. Each step "
-            "keeps it true. And when the loop ends, with i equal to n, it says the whole array is sorted. This is "
-            "induction, applied to a loop, as Robert Floyd and Tony Hoare taught; Part 54 has machines check such "
-            "proofs."
+            (
+            "Insertion sort grows a sorted prefix. <bookmark mark='a'/> Save the next key, shift larger keys "
+            "right, then put the saved key in the gap. <bookmark mark='b'/> Before iteration i, the first i "
+            "positions contain the original first i elements in sorted order, and the rest of the array is "
+            "untouched. Watch that prefix grow after each completed insertion. <bookmark mark='c'/> It starts "
+            "with one element, each iteration preserves the property, and at i equals n it implies the entire "
+            "output is a sorted permutation. This is induction over a loop; Part 54 will make such proof "
+            "obligations explicit."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(src), FadeIn(bars))
             vo.wait_until("a")
-            self.play(*color_prefix(1))
+            self.play(*color_prefix(1), FadeIn(inv))
             vo.wait_until("b")
             for i, fr in enumerate(frames[1:], start=2):
                 new = value_bars(fr, width=0.55, gap=0.12, scale=0.42).move_to(bars)
                 for k, b in enumerate(new.bars):
                     b.set_fill(YES if k < i else DATA, 0.85)
                 self.play(Transform(bars, new), run_time=0.8)
-            self.play(FadeIn(inv))
             vo.wait_until("c")
             self.play(FadeIn(proof))
         self.wait(0.3)
@@ -79,14 +80,7 @@ class Insertion(VoiceoverScene):
                   rf"the bound of chapter 6 is {r['bound']}", font_size=20, color=GREY_B),
         ).arrange(DOWN, buff=0.24).next_to(head, DOWN, buff=0.6)
         with self.voiceover(
-            "One improvement is obvious. <bookmark mark='a'/> The prefix is sorted, so find each new element's "
-            "place by binary search instead of scanning. <bookmark mark='b'/> The comparisons drop to about n log "
-            "n. <bookmark mark='c'/> But the elements still have to be shifted to make room, and the shifts are "
-            "still the inversions: quadratic on average. <bookmark mark='d'/> Whether that matters depends on what "
-            "a step costs. When comparing is expensive, as with long strings, binary insertion wins; when moving "
-            "is, it does not help. Counting steps always begins with deciding which steps to count. <bookmark "
-            "mark='e'/> For twelve items it needs thirty-three comparisons in the worst case; chapter six will "
-            "show that no method can use fewer than twenty-nine."
+            "One improvement is obvious. <bookmark mark='a'/> The prefix is sorted, so find each new element's place by binary search instead of scanning. <bookmark mark='b'/> The comparisons drop to about n log n. <bookmark mark='c'/> But the elements still have to be shifted to make room, and the shifts are still the inversions: quadratic on average. <bookmark mark='d'/> Whether that matters depends on what a step costs. When comparing is expensive, as with long strings, binary insertion can save cost; expensive movement is not removed. Counting steps always begins with deciding which steps to count. <bookmark mark='e'/> For twelve items it needs thirty-three comparisons in the worst case; chapter six will show that no method can use fewer than twenty-nine."
         ) as vo:
             self.play(FadeIn(head))
             for mk, p in zip("abcde", pts):
@@ -100,7 +94,7 @@ class Insertion(VoiceoverScene):
         head = label(r"Counting the work: \ inversions", font_size=34).to_edge(UP, buff=0.3)
         defs = VGroup(
             label(r"an \textbf{inversion}: \ a pair $i < j$ with $a[i] > a[j]$", font_size=23, color=GREY_A),
-            label(r"each shift in the inner loop removes exactly one inversion", font_size=23, color=GREY_A),
+            label(r"exactly $I$ shifts; \ at most $I+n-1$ comparisons for $n\ge1$", font_size=23, color=GREY_A),
             MathTex(r"\mathbb{E}[\text{inversions}] = \binom{n}{2} \cdot \tfrac12 = \frac{n(n-1)}{4}", font_size=34,
                     color=YES),
             label(r"each pair is out of order with probability one half", font_size=19, color=GREY_B),
@@ -113,14 +107,16 @@ class Insertion(VoiceoverScene):
                     r"$\Theta(n)$ to $\Theta(n^2)$, \ and the average is quadratic", font_size=20,
                     color=HEAD).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "How much work does it do? <bookmark mark='a'/> Call a pair of positions an inversion if the earlier "
-            "element is larger. Each shift in the inner loop swaps one adjacent inverted pair, so it removes "
-            "exactly one inversion, and the total work is the number of inversions plus n. <bookmark mark='b'/> In "
-            "a random order each of the n choose two pairs is inverted with probability one half, so the expected "
-            "number is n times n minus one over four. <bookmark mark='c'/> Measured over random arrays, the "
-            "formula holds. <bookmark mark='d'/> On sorted input insertion sort is linear; on reversed input, and "
-            "on average, quadratic. It is the right choice for small or nearly sorted arrays, which is exactly how "
-            "real libraries use it."
+            (
+            "Count the shifts first. <bookmark mark='a'/> An inversion is a pair of positions whose keys are in "
+            "reverse order. Each shift past the saved key removes one inversion, so there are exactly I shifts. "
+            "Comparisons are at most I plus n minus one, and total work is Theta of n plus I. <bookmark "
+            "mark='b'/> For a uniform random permutation of distinct keys, each pair is inverted with probability "
+            "one half. Linearity of expectation gives n times n minus one over four inversions. <bookmark "
+            "mark='c'/> The table compares that expectation with finite sample averages, which need not equal it "
+            "exactly. <bookmark mark='d'/> Sorted input is linear, reverse order is quadratic, and nearly sorted "
+            "input can make insertion sort useful even though its worst case is quadratic."
+        )
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

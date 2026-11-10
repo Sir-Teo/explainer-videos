@@ -23,15 +23,19 @@ class Hook(VoiceoverScene):
         cap = label(rf"the best so far: \ {human_time(best)} \ (four cores, \ Part 10)", font_size=23,
                     color=COST).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "This is the ledger: the cost of counting the words of thirty novels, row by row. <bookmark mark='a'/> "
-            "Act Two made the machine faster: a pipeline, an out-of-order core, caches, four cores. Act Three made it "
-            "easier to program: a compiler, a type system, a runtime, each at some cost. <bookmark mark='b'/> The "
-            "best row so far is twelve seconds, on four cores. Every one of these rows ran the same algorithm. "
-            "Act Four asks a different question: can thinking beat silicon?"
+            (
+            "This ledger prices the same word-counting task on thirty novels. <bookmark mark='a'/> Act Two "
+            "improved the machine: pipeline, out-of-order execution, caches and four cores. Act Three added a "
+            "compiler, a type system and a runtime. These rows combine measured small runs with the stated corpus "
+            "projections. <bookmark mark='b'/> The best projected time so far is about twelve seconds on four "
+            "cores. The search algorithm is still the same. Act Four asks how much changing that algorithm can "
+            "buy."
+        )
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tab.axis))
+            self.play(FadeIn(head), FadeIn(tab.axis),
+                      LaggedStart(*[FadeIn(r) for r in tab.rows], lag_ratio=0.10), run_time=1.6)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r) for r in tab.rows], lag_ratio=0.15), run_time=3)
+            self.play(Indicate(tab.rows[-1], color=COST))
             vo.wait_until("b")
             self.play(FadeIn(cap))
         self.wait(0.3)
@@ -40,7 +44,7 @@ class Hook(VoiceoverScene):
     def quadratic(self):
         d = load("hook")
         g = d["growth"]
-        head = label(r"The Job v0 is quadratic", font_size=36).to_edge(UP, buff=0.35)
+        head = label(r"Repeated vocabulary scans can be quadratic", font_size=36).to_edge(UP, buff=0.35)
         xs = [np.log10(r["bytes"]) for r in g]
         ys = [np.log10(r["per_byte"]) for r in g]
         ax = Axes(x_range=[3.8, 7.6, 1], y_range=[1.5, 4.0, 0.5], x_length=7.0, y_length=4.0,
@@ -61,19 +65,20 @@ class Hook(VoiceoverScene):
                   font_size=21, color=GREY_A),
             label(r"the cost per byte keeps growing: \ the work grows faster than the text", font_size=21,
                   color=NO),
-            label(r"no hardware fixes that: \ a faster machine only moves the line down", font_size=21,
+            label(r"fixed-factor hardware speedups preserve this model's growth", font_size=21,
                   color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.35)
         if side.width > 5.2:
             side.scale_to_fit_width(5.2)
         with self.voiceover(
-            "Here is why the algorithm matters. <bookmark mark='a'/> The Job v0 keeps the words it has seen in a "
-            "list, and for every new word it searches the list from the front. <bookmark mark='b'/> On ten "
-            "kilobytes of text it costs about three hundred cycles per byte. On the whole corpus, over four thousand. The "
-            "cost per byte keeps rising, because the list keeps growing: the total work grows roughly like the "
-            "number of words times the number of distinct words. <bookmark mark='c'/> A faster machine moves this "
-            "line down. It cannot make it flat. Only a different algorithm can, and this part builds the tools to "
-            "say exactly how much better one is."
+            (
+            "Here is the search algorithm's growing cost. <bookmark mark='a'/> Version zero keeps distinct words "
+            "in a list and searches it for each occurrence. <bookmark mark='b'/> The modeled cycles per byte rise "
+            "across these corpus prefixes. The work depends on both the number of occurrences and the vocabulary: "
+            "with many distinct words, repeated full scans can take quadratic work. This corpus plot illustrates "
+            "growth; it is not a proof that every text has quadratic cost. <bookmark mark='c'/> Faster hardware "
+            "changes the constant. A different data structure or algorithm can change how the work grows."
+        )
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl))
             vo.wait_until("a")

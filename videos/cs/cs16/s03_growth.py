@@ -12,10 +12,12 @@ FN_TEX = {"lg n": r"\lg n", "n": r"n", "n lg n": r"n \lg n", "n^2": r"n^2", "n^3
 
 
 def _sci(n):
-    if n >= 10 ** 15:
-        e = int(math.log10(n))
-        return rf"$10^{{{e}}}$"
-    return f"{n:,}"
+    if n<10**6:return f"{n:,}"
+    exponent=len(str(n))-1
+    quantum=10**max(0,exponent-2)
+    rounded=((n+quantum//2)//quantum)*quantum
+    prefix=r"\approx " if rounded!=n else ""
+    return rf"${prefix}{rounded/10**exponent:.2f}\times10^{{{exponent}}}$"
 
 
 class Growth(VoiceoverScene):
@@ -43,19 +45,20 @@ class Growth(VoiceoverScene):
         ).arrange(DOWN, buff=0.35, aligned_edge=LEFT).next_to(head, DOWN, buff=0.5)
         ex = VGroup(
             MathTex(r"3n^2 + 100n + 7 = \Theta(n^2)", font_size=30, color=YES),
-            label(r"constants and lower-order terms disappear: \ they depend on the machine, \ the growth does not",
+            label(r"constants and lower-order terms are suppressed for the chosen algorithm and cost model",
                   font_size=21, color=GREY_A),
             label(r"Bachmann \ (1894) \ and Landau; \ Knuth \ (1976) \ fixed $\Omega$ and $\Theta$ as computer "
                   r"scientists use them", font_size=19, color=GREY_B),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Counting steps exactly is often possible, but rarely necessary. <bookmark mark='a'/> We say f is big O "
-            "of g if, beyond some point, f is at most a constant times g. <bookmark mark='b'/> Omega is the same "
-            "bound from below, and Theta means both: f and g grow at the same rate. Little o means f becomes "
-            "negligible next to g. <bookmark mark='c'/> So three n squared plus a hundred n plus seven is Theta of "
-            "n squared. The constants depend on the machine, the compiler, the programmer. The growth rate does "
-            "not, which is why it is what we compare. Paul Bachmann introduced the O in 1894; Donald Knuth fixed "
-            "the meanings of Omega and Theta that computer scientists use, in 1976."
+            (
+            "Asymptotic notation compares eventually nonnegative cost functions. <bookmark mark='a'/> Big O means "
+            "an eventual constant-factor upper bound, with one fixed constant and one threshold. <bookmark "
+            "mark='b'/> Omega gives a lower bound; Theta gives both. Little o says the ratio tends to zero when "
+            "the denominator is positive. <bookmark mark='c'/> Thus three n squared plus a hundred n plus seven "
+            "is Theta of n squared. This suppresses constants and lower-order terms for the chosen algorithm and "
+            "model. Changing the algorithm, representation or model can change the growth itself."
+        )
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -68,55 +71,46 @@ class Growth(VoiceoverScene):
         self.clear_scene()
 
     def ladder(self):
-        d = load("growth")
-        head = label(r"The ladder", font_size=34).to_edge(UP, buff=0.3)
-        ns = d["ns"]
-        ax = Axes(x_range=[0, 30, 5], y_range=[0, 30, 5], x_length=5.4, y_length=4.2,
-                  axis_config={"color": GREY_D, "include_numbers": False}).to_edge(LEFT, buff=0.7).shift(DOWN * 0.3)
-        curves = VGroup()
-        tags = VGroup()
-        for name, vals in d["table"].items():
-            pts = [ax.c2p(math.log10(n), math.log10(v)) for n, v in zip(ns, vals)
-                   if v > 0 and math.log10(v) <= 30 and math.log10(n) <= 30]
-            if len(pts) < 2:
-                continue
-            c = VMobject(color=FN_COLOR[name], stroke_width=3).set_points_as_corners(pts)
-            curves.add(c)
-            tags.add(MathTex(FN_TEX[name], font_size=24, color=FN_COLOR[name]).next_to(pts[-1], RIGHT, buff=0.08))
-        xl = label(r"$\log_{10} n$", font_size=18, color=GREY_B).next_to(ax, DOWN, buff=0.15)
-        yl = label(r"$\log_{10}$ steps", font_size=18, color=GREY_B).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
-        b = d["budget"]
-        rows = []
-        for name in ("n", "n lg n", "n^2", "n^3", "2^n"):
-            rows.append([rf"${FN_TEX[name]}$", _sci(b[name]["second"]), _sci(b[name]["day"]),
-                         _sci(b[name]["year"])])
-        tab = grid_table([r"steps", r"a second", r"a day", r"a year"], rows, widths=[1.5, 1.6, 1.8, 1.8],
-                         row_h=0.5, font_size=19, mono_cols=(),
-                         colors=[[FN_COLOR[n], WHITE, WHITE, WHITE] for n in ("n", "n lg n", "n^2", "n^3", "2^n")])
-        tl = label(r"the largest $n$ solvable at one step per nanosecond", font_size=19, color=GREY_B)
-        right = VGroup(tl, tab).arrange(DOWN, buff=0.2).to_edge(RIGHT, buff=0.4)
-        note = label(r"a thousand times faster hardware: \ $n^2$ gains a factor of 32; \ $2^n$ gains 10 more",
-                     font_size=21, color=HEAD).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "On a log–log plot every power of n is a straight line, steeper for higher powers, and the exponential "
-            "is a curve that leaves them all behind. <bookmark mark='a'/> Make it concrete with one step per "
-            "nanosecond. In a second, an n log n algorithm handles forty million items; a quadratic one, thirty "
-            "thousand; a cubic one, a thousand; an exponential one, twenty-nine. <bookmark mark='b'/> In a year, "
-            "the exponential algorithm reaches fifty-four. <bookmark mark='c'/> That is the lesson of the ledger "
-            "in one table. Hardware a thousand times faster lets a quadratic algorithm handle thirty-two times "
-            "more, and an exponential one ten more items. A better algorithm changes the line itself."
-        ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl))
-            self.play(LaggedStart(*[Create(c) for c in curves], lag_ratio=0.2), FadeIn(tags), run_time=3)
+        d=load("growth")
+        head=label(r"Growth rates, and an explicit step budget",font_size=34).to_edge(UP,buff=0.3)
+        ax=Axes(x_range=[0,10,2],y_range=[0,30,10],x_length=5.1,y_length=3.8,
+                axis_config={"color":GREY_D,"include_numbers":False}).move_to(LEFT*3.5+UP*0.2)
+        xt=VGroup(*[MathTex(rf"10^{{{v}}}",font_size=17,color=GREY_B).next_to(ax.c2p(v,0),DOWN,buff=0.1) for v in (0,3,6,9)])
+        yt=VGroup(*[MathTex(rf"10^{{{v}}}",font_size=17,color=GREY_B).next_to(ax.c2p(0,v),LEFT,buff=0.1) for v in (0,10,20,30)])
+        xl=label(r"input size $n$ (log scale)",font_size=18,color=GREY_B).next_to(xt,DOWN,buff=0.12)
+        yl=label(r"abstract steps (log scale)",font_size=18,color=GREY_B).next_to(ax,UP,buff=0.15).align_to(ax,LEFT)
+        functions={"lg n":lambda n:math.log10(math.log2(n)),"n":lambda n:math.log10(n),
+                   "n lg n":lambda n:math.log10(n*math.log2(n)),"n^2":lambda n:2*math.log10(n),
+                   "n^3":lambda n:3*math.log10(n),"2^n":lambda n:n*math.log10(2)}
+        curves=VGroup();tags=VGroup()
+        for name,f in functions.items():
+            points=[]
+            for n in np.geomspace(2,2**30,180):
+                x,y=math.log10(n),f(n)
+                if y>30:
+                    if name=="2^n":points.append(ax.c2p(math.log10(30/math.log10(2)),30))
+                    break
+                points.append(ax.c2p(x,y))
+            curves.add(VMobject(color=FN_COLOR[name],stroke_width=3).set_points_as_corners(points))
+            tags.add(MathTex(FN_TEX[name],font_size=24,color=FN_COLOR[name]))
+        tags.arrange_in_grid(rows=2,cols=3,buff=(0.55,0.2)).next_to(xl,DOWN,buff=0.25)
+        names=("n","n lg n","n^2","n^3","2^n")
+        rows=[[rf"${FN_TEX[name]}$",*[_sci(d["budget"][name][unit]) for unit in ("second","day","year")]] for name in names]
+        tab=grid_table([r"steps",r"1 second",r"1 day",r"1 year"],rows,widths=[1.3,1.7,1.8,1.8],row_h=0.54,font_size=18,mono_cols=(),colors=[[FN_COLOR[n],WHITE,WHITE,WHITE] for n in names])
+        title=label(r"maximum integer $n$, assuming 1 ns per step",font_size=20,color=GREY_A)
+        cap=label(r"$\approx$ marks display rounding; no machine overhead modeled",font_size=17,color=GREY_B)
+        right=VGroup(title,tab,cap).arrange(DOWN,buff=0.22).to_edge(RIGHT,buff=0.32).shift(UP*0.2)
+        note=label(r"$1000\times$ speed: $n^2$ permits about $32\times$ more items; $2^n$ about 10 more",font_size=21,color=HEAD).to_edge(DOWN,buff=0.35)
+        with self.voiceover("The axes now show base-ten logarithms of input size and step count. Powers become straight lines; the exponential bends upward. <bookmark mark='a'/> For the table, assume exactly one nanosecond per abstract step, with no extra overhead. Solve each displayed cost function against one second's budget. The entries are integer maxima, except where explicitly rounded for display. <bookmark mark='b'/> Even a year only permits fifty-four items when the cost is two to the n. These are consequences of the assumed functions, not timing predictions for real sorts. <bookmark mark='c'/> A thousandfold speedup expands a quadratic input limit by about thirty-two, and an exponential limit by about ten items. Changing growth can matter much more than changing a constant.") as vo:
+            self.play(FadeIn(head),Create(ax),FadeIn(xt),FadeIn(yt),FadeIn(xl),FadeIn(yl))
+            self.play(LaggedStart(*[Create(c) for c in curves],lag_ratio=0.08),FadeIn(tags),run_time=1.4)
             vo.wait_until("a")
-            self.play(FadeIn(tl), FadeIn(tab.rule), *[FadeIn(c) for c in tab.cells[0]],
-                      *[FadeIn(VGroup(r[0], r[1])) for r in tab.cells[1:]])
+            self.play(FadeIn(right))
             vo.wait_until("b")
-            self.play(*[FadeIn(VGroup(r[2], r[3])) for r in tab.cells[1:]])
+            self.play(Indicate(VGroup(*tab.cells[-1]),color=COST))
             vo.wait_until("c")
             self.play(FadeIn(note))
-        self.wait(0.3)
-        self.clear_scene()
+        self.wait(0.3);self.clear_scene()
 
     def stirling(self):
         d = load("growth")

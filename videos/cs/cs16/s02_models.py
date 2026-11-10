@@ -41,17 +41,19 @@ class Models(VoiceoverScene):
                   r"address)", font_size=21, color=GREY_A),
             label(r"Pebble is one: \ 32-bit words, \ and instructions that cost a cycle or a few", font_size=21,
                   color=YES),
-            label(r"we count steps, \ not seconds: \ the answer then holds for every machine of this kind",
+            label(r"state the word width and allowed operations; \ count within that model",
                   font_size=21, color=HEAD),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "To compare algorithms rather than machines, we need a machine simple enough to count on. <bookmark "
-            "mark='a'/> The random-access machine has memory cells with addresses, and a processor that reads a "
-            "cell, writes one, adds, compares or jumps, each in one step. <bookmark mark='b'/> The word-RAM adds "
-            "one honest detail: a cell holds w bits, and w is at least the logarithm of the input size, so that a "
-            "cell can hold an address. <bookmark mark='c'/> Pebble is such a machine, with thirty-two-bit words. "
-            "<bookmark mark='d'/> From now on we count steps, not seconds, and what we prove holds on every machine "
-            "of this kind, up to a constant factor."
+            (
+            "An algorithm needs a declared cost model. <bookmark mark='a'/> A RAM gives memory cells addresses "
+            "and charges for a specified set of instructions: reads, writes, arithmetic, comparisons and jumps. "
+            "<bookmark mark='b'/> A word-RAM holds w bits per cell. Its word must address the input, so w is at "
+            "least logarithmic in n; its allowed operations and their word widths are part of the definition. "
+            "<bookmark mark='c'/> Pebble is a concrete thirty-two-bit example within its address and arithmetic "
+            "limits. <bookmark mark='d'/> Counting those steps lets us compare algorithms in that model. Seconds "
+            "still depend on the implementation, memory hierarchy and machine."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(cells), FadeIn(addr), FadeIn(cpu), GrowArrow(ar))
             vo.wait_until("a")
@@ -78,6 +80,7 @@ class Models(VoiceoverScene):
         dots = VGroup(*[Dot(p, radius=0.05, color=NO) for p in pts])
         yt = VGroup(*[label(t, font_size=15, color=GREY_B).next_to(ax.c2p(8, v), LEFT, buff=0.1)
                       for v, t in ((-6, r"1 $\mu$s"), (-3, r"1 ms"), (0, r"1 s"))])
+        xt = VGroup(*[mono(str(k), 14, GREY_B).next_to(ax.c2p(k, -7), DOWN, buff=0.08) for k in (8,12,16,20)])
         xl = label(r"squaring number", font_size=17, color=GREY_B).next_to(ax, DOWN, buff=0.2)
         yl = label(r"time for that one multiplication, \ CPython, \ this machine", font_size=17,
                    color=GREY_B).next_to(ax, UP, buff=0.1)
@@ -87,26 +90,28 @@ class Models(VoiceoverScene):
             label(rf"step {last['step']}: \ a {words(last['bits'])}-bit number, \ "
                   rf"{human_time(last['seconds'])} for one ``step''", font_size=21, color=NO),
             VGroup(label(r"a unit-cost RAM with unbounded words", font_size=20, color=HEAD),
-                   label(r"could solve hard problems this way: \ the word-RAM forbids it", font_size=20,
+                   label(r"hides operand growth; \ multiword arithmetic needs its own cost", font_size=20,
                          color=HEAD)).arrange(DOWN, aligned_edge=LEFT, buff=0.08),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).to_edge(LEFT, buff=0.7).shift(DOWN * 0.6)
         if pts2.width > 5.4:
             pts2.scale_to_fit_width(5.4)
         with self.voiceover(
-            "Why insist on words of bounded size? <bookmark mark='a'/> Square a number again and again. If every "
-            "multiplication were one step, n squarings would cost n steps. But after n squarings the number has "
-            "about one point six times two to the n bits. <bookmark mark='b'/> We timed each multiplication in "
-            "Python on this machine. The early ones take microseconds. By the twenty-first, a single "
-            "multiplication of a three-million-bit number takes a tenth of a second, and each one costs about "
-            "three times the last. <bookmark mark='c'/> A model that charged one step for that "
-            "could do absurd things, packing whole computations into one giant number. The word-RAM rules it out: "
-            "a step works on a word, and a word is about as long as an address."
+            (
+            "Why bound the word size? <bookmark mark='a'/> Starting from three, square the result n times. The "
+            "answer is three raised to two to the n, with about one point six times two to the n bits. Calling "
+            "every multiplication one step hides an exponentially growing operand. <bookmark mark='b'/> Here are "
+            "host Python measurements: the minimum of three same-operand squarings at each step, with the result "
+            "checked outside the timer. Small values are dominated by timing and interpreter overhead; large "
+            "values require real multiword arithmetic. No fixed threefold timing ratio is promised. <bookmark "
+            "mark='c'/> A word-RAM operation handles a bounded number of words. An arbitrary-precision "
+            "multiplication needs its own cost analysis."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(src))
             vo.wait_until("a")
             self.play(FadeIn(pts2[0]))
             vo.wait_until("b")
-            self.play(Create(ax), FadeIn(yt), FadeIn(xl), FadeIn(yl))
+            self.play(Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(xl), FadeIn(yl))
             self.play(Create(line), FadeIn(dots), FadeIn(pts2[1]), run_time=2)
             vo.wait_until("c")
             self.play(FadeIn(pts2[2]))
@@ -117,8 +122,7 @@ class Models(VoiceoverScene):
         head = label(r"Other ways to count", font_size=34).to_edge(UP, buff=0.3)
         rows = VGroup(
             VGroup(label(r"Turing machine \ (Part 2)", font_size=22, color=LAM),
-                   label(r"a tape and a head: \ a RAM's $t$ steps take it about $t^3$ or less: \ polynomially "
-                         r"related", font_size=20, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.08),
+                   label(r"polynomial simulation overhead for standard logarithmic-word RAMs; \ bounded operands required", font_size=20, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.08),
             VGroup(label(r"comparison model", font_size=22, color=YES),
                    label(r"count only comparisons between keys: \ the model of chapter 6's lower bound", font_size=20,
                          color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.08),
@@ -132,14 +136,16 @@ class Models(VoiceoverScene):
         note = label(r"choose the model that matches the cost you care about", font_size=23,
                      color=HEAD).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "The RAM is not the only way to count. <bookmark mark='a'/> A Turing machine, from Part 2, is much "
-            "slower in absolute terms, but anything a RAM does in t steps it can do in a polynomial of t, so the "
-            "two agree about what is efficient. <bookmark mark='b'/> The comparison model counts only comparisons "
-            "between keys; chapter six proves its famous lower bound. <bookmark mark='c'/> The cell-probe model, "
-            "from Andrew Yao, counts only memory accesses and makes computation free, which is where the strongest "
-            "lower bounds for data structures come from. <bookmark mark='d'/> And the external-memory model counts "
-            "transfers of whole blocks, the cost that dominates when data lives in a cache or on a disk. <bookmark "
-            "mark='e'/> Each answers a different question. Choose the one that charges for what you care about."
+            (
+            "Different questions charge for different resources. <bookmark mark='a'/> A standard logarithmic-word "
+            "RAM with an effectively simulable instruction set can be simulated by a Turing machine with "
+            "polynomial overhead. That statement needs bounded operands; it does not grant free arithmetic on "
+            "arbitrary integers. <bookmark mark='b'/> The comparison model counts comparisons between keys. Its "
+            "lower bound will assume distinct keys. <bookmark mark='c'/> The cell-probe model charges for memory "
+            "accesses while allowing free computation between probes, which makes some lower bounds especially "
+            "strong. <bookmark mark='d'/> The external-memory model counts block transfers between memory levels. "
+            "<bookmark mark='e'/> Declare the resource before quoting the bound."
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, r in zip("abcd", rows):

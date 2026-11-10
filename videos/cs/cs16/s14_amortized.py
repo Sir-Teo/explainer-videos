@@ -34,8 +34,10 @@ class Amortized(VoiceoverScene):
                                fill_color=NO if s["cost"] > 1 else DATA, fill_opacity=0.85).move_to(
                 [(p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2, 0]))
         avg = DashedLine(ax.c2p(0, 3), ax.c2p(41, 3), color=YES, stroke_width=2)
-        al = label(r"3 per append, \ on average, \ always", font_size=18, color=YES).next_to(
+        al = label(r"total cost $<3n$ for every append prefix", font_size=18, color=YES).next_to(
             ax.c2p(25, 3), UP, buff=0.08)
+        xt = VGroup(*[mono(str(v),14,GREY_B).next_to(ax.c2p(v,0),DOWN,buff=0.08) for v in (1,8,16,24,32,40)])
+        yt = VGroup(*[mono(str(v),14,GREY_B).next_to(ax.c2p(0,v),LEFT,buff=0.08) for v in (0,8,16,24,32)])
         xl = label(r"the $i$-th append", font_size=18, color=GREY_B).next_to(ax, DOWN, buff=0.15)
         yl = label(r"its cost: \ 1, \ or 1 plus copying everything", font_size=18, color=GREY_B).next_to(
             ax, UP, buff=0.1).align_to(ax, LEFT)
@@ -48,7 +50,7 @@ class Amortized(VoiceoverScene):
             "per append. That is an amortized bound: not an average over random inputs, but a guarantee for every "
             "sequence."
         ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl))
+            self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl))
             vo.wait_until("a")
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.04), run_time=3)
             vo.wait_until("b")
@@ -98,7 +100,7 @@ class Amortized(VoiceoverScene):
             "one, so its amortized cost is two."
         ) as vo:
             self.play(FadeIn(head), FadeIn(hdr))
-            self.play(LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.12), run_time=4)
+            self.play(LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.12), run_time=1.4)
             for mk, p in zip("abcd", pts):
                 vo.wait_until(mk)
                 self.play(FadeIn(p))
@@ -115,26 +117,35 @@ class Amortized(VoiceoverScene):
                    label(r"charge 3 per append: \ 1 to insert, \ 2 saved, \ to pay for copying itself and one older "
                          r"element later", font_size=21, color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.08),
             VGroup(label(r"\textbf{potential}", font_size=23, color=LAM),
-                   MathTex(r"\Phi = 2\cdot\text{size} - \text{capacity} \ge 0, \qquad "
+                   MathTex(r"\Phi=\max(0,2\cdot\text{size}-\text{capacity})\ge0,\quad "
                            r"\text{amortized} = \text{actual} + \Delta\Phi \le 3", font_size=28)).arrange(
                 DOWN, aligned_edge=LEFT, buff=0.08),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.45).next_to(head, DOWN, buff=0.6)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).next_to(head, DOWN, buff=0.35)
+        if rows.width>13:rows.scale_to_fit_width(13)
+        witness=grid_table([r"append $n$","0","1","2","3","4","5"],[
+            [r"capacity","1","1","2","4","4","8"],
+            [r"potential $\Phi$","0","1","2","2","4","2"],
+            [r"actual $+\Delta\Phi$","--","2","3","3","3","3"],
+        ],widths=[2.2]+[0.8]*6,row_h=0.3,font_size=16,mono_cols=()).next_to(rows,DOWN,buff=0.25)
         note = label(r"Tarjan \ (1985) \ named the method; \ Part 17's splay trees and union--find need it",
                      font_size=20, color=GREY_B).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "There are three standard ways to prove such a bound. <bookmark mark='a'/> Aggregate: add up the whole "
-            "sequence. The copies are one plus two plus four, up to n, less than two n, so the total is under three "
-            "n. <bookmark mark='b'/> Accounting: charge every append three units. One pays for inserting the "
-            "element; two are saved, and when the array doubles, the saved units pay for copying. <bookmark "
-            "mark='c'/> Potential: define a potential, two times the size minus the capacity, that rises with "
-            "cheap appends and falls when the array doubles. Actual cost plus the change in potential is at most "
-            "three, every time. <bookmark mark='d'/> Robert Tarjan made the method a standard tool in 1985, and the "
-            "next part's splay trees and union–find depend on it."
+            (
+            "Three proofs describe the same guarantee. <bookmark mark='a'/> Aggregate the copies: one plus two "
+            "plus four, up to the last full capacity, is less than twice the number of appends. Include the "
+            "insertions and the total is below three n. <bookmark mark='b'/> Accounting charges three units per "
+            "append and saves the unused credit for later copying. <bookmark mark='c'/> For a potential proof "
+            "starting from size zero and capacity one, use the maximum of zero and twice the size minus capacity. "
+            "This potential starts at zero and stays nonnegative. Actual cost plus its change is at most three "
+            "for every append, including the first. <bookmark mark='d'/> Summing cancels the intermediate "
+            "potentials, giving a bound for every append sequence, without an input distribution."
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, r in zip("abc", rows):
                 vo.wait_until(mk)
                 self.play(FadeIn(r, shift=RIGHT * 0.1))
+                if mk=="c":self.play(FadeIn(witness))
             vo.wait_until("d")
             self.play(FadeIn(note))
         self.wait(0.3)
@@ -147,26 +158,27 @@ class Amortized(VoiceoverScene):
         tab = grid_table([r"a million appends", r"growth $\times 2$", r"growth $\times 1.5$"], [
             [r"element copies per append", f"{t['per_append']:.2f}", f"{h['per_append']:.2f}"],
             [r"times the array grew", str(t["growths"]), str(h["growths"])],
-            [r"times the new block fits in the space freed so far", str(t["could_reuse"]), str(h["could_reuse"])],
+            [r"times total freed size is at least the new request", str(t["could_reuse"]), str(h["could_reuse"])],
         ], widths=[6.6, 2.4, 2.4], row_h=0.5, font_size=20, mono_cols=(),
             colors=[[WHITE, YES, WHITE], [WHITE, WHITE, WHITE], [WHITE, NO, YES]]).next_to(head, DOWN, buff=0.5)
         pts = VGroup(
             label(r"with factor 2, \ each new block is larger than all the old ones put together: \ freed memory "
-                  r"can never be reused", font_size=21, color=NO),
-            label(rf"with any factor below the golden ratio, \ $\varphi = {d['golden']:.3f}$, \ it eventually can",
+                  r"alone is insufficient for the new request", font_size=21, color=NO),
+            label(rf"below $\varphi = {d['golden']:.3f}$: \ total size eventually suffices; \ fragmentation still matters",
                   font_size=21, color=YES),
-            label(r"Facebook's \texttt{folly::fbvector} and Microsoft's C++ library grow by 1.5; \ GCC's and Clang's "
-                  r"by 2", font_size=20, color=GREY_B),
+            label(r"an aggregate-size necessary condition, \ not an allocator-reuse guarantee", font_size=20, color=GREY_B),
         ).arrange(DOWN, buff=0.15).next_to(tab, DOWN, buff=0.45)
         with self.voiceover(
-            "Any constant factor gives constant amortized cost. So why do some libraries grow by one and a half? "
-            "<bookmark mark='a'/> We ran a million appends both ways. One and a half copies about twice as many "
-            "elements, and grows more often. <bookmark mark='b'/> But look at the last row. With doubling, each new "
-            "block is larger than all the blocks freed before it put together, so the allocator can never reuse "
-            "them for the array. With a factor below the golden ratio, one point six one eight, the freed blocks "
-            "eventually add up to enough, and memory is recycled. <bookmark mark='c'/> Facebook's fbvector and "
-            "Microsoft's standard library chose one and a half; GCC and Clang chose two. A trade between time and "
-            "memory, decided by a constant."
+            (
+            "A fixed growth factor greater than one gives constant amortized copying cost. <bookmark mark='a'/> "
+            "Our million-append examples compare factors two and one point five, including integer rounding. The "
+            "smaller factor copies more often. <bookmark mark='b'/> The last row only tests aggregate freed size. "
+            "For doubling, all previously freed blocks together are too small for the next request. Below the "
+            "golden ratio, their total can eventually be large enough. This does not guarantee that a real "
+            "allocator can reuse them: adjacency, fragmentation and other live allocations still matter. "
+            "<bookmark mark='c'/> Libraries choose growth policies under these competing costs, and the exact "
+            "policy depends on implementation and version."
+        )
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
