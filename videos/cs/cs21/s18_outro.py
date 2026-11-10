@@ -29,18 +29,15 @@ class Outro(VoiceoverScene):
     def recap(self):
         tiles = Group(
             tile(MathTex(r"\le 2n", font_size=48, color=DATA), r"KMP's automaton", DATA),
-            tile(MathTex(r"\approx n/m", font_size=48, color=YES), r"Boyer--Moore", YES),
+            tile(MathTex(r"\approx n/m", font_size=48, color=YES), 'Boyer--Moore: favorable text', YES),
             tile(MathTex(r"O(m \log n)", font_size=44, color=LAM), r"suffix arrays", LAM),
             tile(mono("annb$aa", 40, HEAD), r"the BWT and FM-index", HEAD),
             tile(MathTex(r"(L, D)", font_size=48, color=CTRL), r"Lempel--Ziv; \ ANS", CTRL),
-            tile(MathTex(r"O(ND)", font_size=48, color=COST), r"Myers' diff; \ rsync", COST),
+            tile(MathTex('O(N(D+1))', font_size=48, color=COST), 'Myers: \\ insertions/deletions', COST),
         ).arrange_in_grid(rows=2, cols=3, buff=(0.35, 0.35)).move_to(DOWN * 0.2)
         head = label(rf"Part {PART}: \ Strings", font_size=38).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "What we built in this part. Naive search and its worst case; rolling hashes; Knuth, Morris and Pratt's "
-            "automaton; Boyer and Moore's skips; Aho–Corasick for many patterns. Suffix trees and suffix arrays, "
-            "for all of the novels. The Burrows–Wheeler transform and the FM-index. Lempel–Ziv, Huffman and ANS. "
-            "Alignment, Myers' diff, rsync and content-defined chunking. Periods, palindromes and Lyndon words."
+            "What we built in this part. Naive search and its worst case; rolling hashes; Knuth, Morris and Pratt's automaton; Boyer and Moore's skips; Aho–Corasick for many patterns. A small suffix tree and a suffix array for all the novels. The Burrows–Wheeler transform and the FM-index. Lempel–Ziv, Huffman and ANS. Alignment, Myers' diff, rsync and content-defined chunking. Periods, palindromes and Lyndon words."
         ):
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
@@ -77,10 +74,7 @@ class Outro(VoiceoverScene):
             (r"sync", r"rsync, \ restic and Borg \ (content-defined chunks), \ Dropbox"),
         ])
         with self.voiceover(
-            "In practice. grep and ripgrep combine Boyer–Moore loops, automata and vector instructions. Every "
-            "compressed file you have met is Lempel–Ziv, a Burrows–Wheeler transform, or both, with Huffman or ANS "
-            "underneath. DNA aligners search FM-indexes and BLAST seeds. git diffs with Myers' algorithm and its "
-            "variants, and rsync and deduplicating backups ride on rolling hashes."
+            'In practice, search tools choose among literal matching, automata and vectorized routines. Familiar compressors combine dictionaries, transforms and entropy coders in different ways. DNA aligners use FM-indexes or seeds. Git offers several diff strategies. Rolling checksums and content-defined chunks support synchronization and deduplication, with stronger content verification where required.'
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.35), run_time=3.0)
@@ -98,14 +92,10 @@ class Outro(VoiceoverScene):
             r"Prove the Fine--Wilf theorem, \ and show the bound $p + q - \gcd(p, q)$ cannot be lowered.",
             r"\textit{Build.} \ Horspool's algorithm in the Pebble language: \ count \texttt{Queequeg} in the corpus "
             r"on the emulator, \ and compare its instructions per byte with Part 17's Job.",
-            r"$\bigstar$ \textit{Research.} \ A text index in $O(z)$ words, \ $z$ the number of LZ77 phrases, \ that "
-            r"counts the occurrences of any pattern in $O(m \operatorname{polylog} n)$ time, \ or a proof that none "
-            r"exists.",
+            '$\\bigstar$ \\textit{Research.} \\ Reproduce a repetitive-index tradeoff: \\ allocated space, \\ count and locate; \\ audit newer results and their assumptions.',
         ], font_size=22)
         with self.voiceover(
-            "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build "
-            "problem: Horspool's search in the Pebble language, run over the novels on the emulator. The last, "
-            "marked with a star, is a research problem: its answer is not known, and the notes say where to start."
+            'Six exercises are in the notes, with worked mathematical solutions and explicit build guidance. The fifth provides a tested streaming Horspool prototype; a Pebble port and emulator instruction counts remain work for the learner, not a measured result in this video. The starred project reproduces index tradeoffs and audits dated primary papers. It does not ask you to solve a supposedly open problem whose current status has not been established.'
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)

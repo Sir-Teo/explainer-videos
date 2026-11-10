@@ -8,10 +8,53 @@ prefix doubling in numpy, fast enough for the whole 25 MB corpus.
 from __future__ import annotations
 
 import heapq
+import operator
+from array import array
 import math
 from collections import Counter, deque
 
 import numpy as np
+
+
+
+def _integer(value, name, minimum=0, maximum=None):
+    if isinstance(value, (bool, np.bool_)):
+        raise ValueError(f"{name} must be an integer")
+    try:
+        result = operator.index(value)
+    except TypeError as exc:
+        raise ValueError(f"{name} must be an integer") from exc
+    if result < minimum or (maximum is not None and result > maximum):
+        raise ValueError(f"{name} is outside its supported range")
+    return result
+
+
+def _suffix_order(text, sa):
+    """Check a complete suffix order by first symbols and inverse ranks of tails."""
+    n = len(text)
+    a = np.asarray(sa)
+    if a.ndim != 1 or len(a) != n or a.dtype.kind not in 'iu':
+        raise ValueError("suffix array must contain one integer per text position")
+    a = a.astype(np.int64, copy=False)
+    if not n:
+        return a
+    if a.min() < 0 or a.max() >= n:
+        raise ValueError("suffix index outside text")
+    rank = np.full(n + 1, -1, dtype=np.int64)
+    rank[a] = np.arange(n)
+    if np.any(rank[:n] < 0):
+        raise ValueError("suffix array must be a permutation")
+    t = np.frombuffer(text, dtype=np.uint8)
+    first = t[a]
+    if np.any((first[1:] < first[:-1]) | ((first[1:] == first[:-1]) & (rank[a[1:] + 1] <= rank[a[:-1] + 1]))):
+        raise ValueError("suffix array is not lexicographically sorted")
+    return a
+
+
+def _terminal(text):
+    if not text or text.count(text[-1:]) != 1 or min(text) != text[-1]:
+        raise ValueError("text must end with a unique smallest sentinel")
+    return text[-1]
 
 
 # ------------------------------------------------------------------------------------------------- matching
@@ -36,6 +79,8 @@ def naive_fast(text: bytes, pat: bytes):
     number of characters compared is the length of the common prefix plus one (or m on a match)."""
     t = np.frombuffer(text, dtype=np.uint8)
     n, m = len(t), len(pat)
+    if m > n:
+        return [], 0
     N = n - m + 1
     alive = np.ones(N, dtype=bool)
     cmp = 0
@@ -48,7 +93,11 @@ def naive_fast(text: bytes, pat: bytes):
 def rabin_karp(text: bytes, pat: bytes, base: int = 256, mod: int = 1_000_000_007):
     """Rolling hash: compare characters only when the window's hash matches.  Returns (positions, character
     comparisons, spurious hash hits)."""
+    base = _integer(base, "base", 1)
+    mod = _integer(mod, "modulus", 2)
     n, m = len(text), len(pat)
+    if not m:
+        return list(range(n + 1)), 0, 0
     if m > n:
         return [], 0, 0
     hp = ht = 0
@@ -89,6 +138,8 @@ def kmp_failure(pat: bytes):
 
 
 def kmp(text: bytes, pat: bytes):
+    if not pat:
+        return list(range(len(text) + 1)), 0
     fail = kmp_failure(pat)
     m = len(pat)
     out, cmp, j = [], 0, 0
@@ -127,6 +178,8 @@ def horspool(text: bytes, pat: bytes):
     """Boyer-Moore-Horspool: compare right to left; on a mismatch shift by the bad-character rule applied to the
     window's last character."""
     n, m = len(text), len(pat)
+    if not m:
+        return list(range(n + 1)), 0, n + 1
     shift = {c: m - 1 - k for k, c in enumerate(pat[:-1])}
     out, cmp, i, windows = [], 0, 0, 0
     while i <= n - m:
@@ -198,6 +251,8 @@ class AhoCorasick:
         self.fail = [0]
         self.out = [[]]
         for p in patterns:
+            if not p:
+                raise ValueError("Aho-Corasick patterns must be nonempty")
             s = 0
             for c in p:
                 if c not in self.goto[s]:
@@ -240,6 +295,8 @@ def suffix_array(text: bytes) -> np.ndarray:
     """Prefix doubling (Manber and Myers 1990), with numpy sorts: ranks by the first k characters, then 2k."""
     t = np.frombuffer(text, dtype=np.uint8).astype(np.int64)
     n = len(t)
+    if not n:
+        return np.empty(0, dtype=np.int64)
     rank = t.copy()
     k = 1
     sa = np.argsort(rank, kind="stable")
@@ -264,6 +321,7 @@ def suffix_array_naive(text: bytes):
 def lcp_kasai(text: bytes, sa) -> np.ndarray:
     """lcp[i] = longest common prefix of the suffixes sa[i-1] and sa[i] (Kasai et al. 2001), in linear time."""
     n = len(text)
+    sa = _suffix_order(text, sa)
     rank = np.empty(n, dtype=np.int64)
     rank[np.asarray(sa)] = np.arange(n)
     lcp = np.zeros(n, dtype=np.int64)
@@ -329,7 +387,9 @@ def sa_search(text: bytes, sa, pat: bytes):
 def suffix_tree_edges(text: str):
     """A suffix tree for a short string (with '$'), built from the suffix array and LCP array: a list of
     (parent depth, child depth, edge label, leaf suffix or None) in DFS order, for drawing."""
-    t = text.encode()
+    if not text or text[-1] in text[:-1]:
+        raise ValueError("suffix tree needs a unique terminal character")
+    t = text
     sa = suffix_array_naive(t)
     lcp = [0] + [len(_common(t[sa[i - 1]:], t[sa[i]:])) for i in range(1, len(sa))]
     # build by the standard stack algorithm
@@ -374,12 +434,17 @@ def _common(a, b):
 # ------------------------------------------------------------------------------------------------- BWT and FM-index
 def bwt_from_sa(text: bytes, sa) -> bytes:
     """text must end with a unique smallest sentinel; L[i] = text[sa[i] - 1]."""
+    _terminal(text)
+    sa = _suffix_order(text, sa)
     t = np.frombuffer(text, dtype=np.uint8)
     return t[(np.asarray(sa) - 1) % len(t)].tobytes()
 
 
 def inverse_bwt(L: bytes, sentinel: int = 0) -> bytes:
     """The LF mapping: the i-th occurrence of c in L is the i-th occurrence of c in F."""
+    sentinel = _integer(sentinel, "sentinel", 0, 255)
+    if not L or L.count(bytes([sentinel])) != 1 or min(L) != sentinel:
+        raise ValueError("BWT needs a unique smallest sentinel")
     n = len(L)
     Lc = np.frombuffer(L, dtype=np.uint8)
     order = np.argsort(Lc, kind="stable")          # F position -> L position
@@ -387,7 +452,11 @@ def inverse_bwt(L: bytes, sentinel: int = 0) -> bytes:
     lf[order] = np.arange(n)                        # L position -> F position
     out = bytearray(n)
     i = int(np.flatnonzero(Lc == sentinel)[0])      # the row that ends with the sentinel is the text itself
+    visited = np.zeros(n, dtype=bool)
     for k in range(n - 1, -1, -1):
+        if visited[i]:
+            raise ValueError("BWT LF mapping is not a single cycle")
+        visited[i] = True
         out[k] = L[i]
         i = lf[i]
     return bytes(out)
@@ -398,6 +467,9 @@ class FMIndex:
     suffix array sampled every ``sa_step`` text positions."""
 
     def __init__(self, text: bytes, sa, step: int = 64, sa_step: int = 32):
+        step = _integer(step, "rank step", 1)
+        sa_step = _integer(sa_step, "suffix sampling step", 1)
+        self.sentinel = _terminal(text)
         self.n = len(text)
         self.L = np.frombuffer(bwt_from_sa(text, sa), dtype=np.uint8)
         counts = np.bincount(self.L, minlength=256)
@@ -408,7 +480,7 @@ class FMIndex:
         self.occ = {}
         for c in chars.tolist():
             cs = np.concatenate([[0], np.cumsum(self.L == c, dtype=np.int64)])
-            self.occ[c] = cs[::step].astype(np.int32)
+            self.occ[c] = cs[::step].astype(np.int32 if self.n < 2**31 else np.int64)
         sa = np.asarray(sa)
         keep = sa % sa_step == 0
         self.sa_rows = {int(r): int(p) for r, p in zip(np.flatnonzero(keep), sa[keep])}
@@ -417,11 +489,17 @@ class FMIndex:
 
     def rank(self, c: int, i: int) -> int:
         """Occurrences of c in L[0:i]."""
-        b = i // self.step
+        c = _integer(c, "byte", 0, 255)
+        i = _integer(i, "rank endpoint", 0, self.n)
         self.steps += 1
+        if c not in self.occ:
+            return 0
+        b = i // self.step
         return int(self.occ[c][b]) + int(np.count_nonzero(self.L[b * self.step:i] == c))
 
     def count(self, pat: bytes):
+        if self.sentinel in pat:
+            raise ValueError("query patterns must exclude the terminal sentinel")
         lo, hi = 0, self.n
         for c in reversed(pat):
             if c not in self.occ:
@@ -433,8 +511,11 @@ class FMIndex:
         return hi - lo, (lo, hi)
 
     def locate(self, row: int) -> int:
+        row = _integer(row, "suffix row", 0, self.n - 1)
         k = 0
         while row not in self.sa_rows:
+            if k >= self.sa_step:
+                raise ValueError("LF walk failed to reach its suffix sample")
             c = int(self.L[row])
             row = int(self.C[c]) + self.rank(c, row)
             k += 1
@@ -464,7 +545,12 @@ def move_to_front(b: bytes) -> np.ndarray:
 
 def entropy(symbols) -> float:
     """Zeroth-order empirical entropy in bits per symbol."""
-    c = np.bincount(np.asarray(symbols, dtype=np.int64))
+    values = np.asarray(symbols)
+    if not values.size:
+        return 0.0
+    if values.dtype.kind not in "iu" or values.min() < 0:
+        raise ValueError("entropy symbols must be nonnegative integers")
+    c = np.bincount(values.astype(np.int64, copy=False))
     p = c[c > 0] / c.sum()
     return float(-(p * np.log2(p)).sum())
 
@@ -473,6 +559,10 @@ def entropy(symbols) -> float:
 def lz77(data: bytes, window: int = 32768, max_len: int = 258, min_len: int = 3, chain: int = 32):
     """Greedy LZ77 with hash chains on 3-byte prefixes (DEFLATE's limits).  Tokens: ints (literals) or (length,
     distance) pairs."""
+    window = _integer(window, "window", 1, 32768)
+    max_len = _integer(max_len, "maximum match length", 3, 258)
+    min_len = _integer(min_len, "minimum match length", 3, max_len)
+    chain = _integer(chain, "chain budget", 1)
     n = len(data)
     head: dict = {}
     prev = [0] * n
@@ -515,6 +605,8 @@ def lz77_decode(tokens) -> bytes:
             out.append(t)
         else:
             L, D = t
+            L = _integer(L, "match length", 1)
+            D = _integer(D, "match distance", 1, len(out))
             s = len(out) - D
             for k in range(L):
                 out.append(out[s + k])
@@ -568,6 +660,8 @@ def deflate_size(tokens) -> dict:
             ll[t] += 1
         else:
             L, D = t
+            L = _integer(L, "DEFLATE length", 3, 258)
+            D = _integer(D, "DEFLATE distance", 1, 32768)
             b = _bucket(L, LEN_BASE)
             ll[257 + b] += 1
             extra += LEN_EXTRA[b]
@@ -615,14 +709,20 @@ class RANS:
     close it gets to the entropy."""
 
     def __init__(self, data: bytes, prob_bits: int = 12):
+        prob_bits = _integer(prob_bits, "probability bits", 1, 16)
+        if not data:
+            raise ValueError("rANS model needs at least one observed byte")
+        if len(set(data)) > 1 << prob_bits:
+            raise ValueError("model precision cannot give every observed byte a positive frequency")
         self.M = 1 << prob_bits
         cnt = np.bincount(np.frombuffer(data, dtype=np.uint8), minlength=256).astype(np.float64)
-        f = np.floor(cnt / cnt.sum() * self.M).astype(np.int64)
+        scaled = cnt / cnt.sum() * self.M
+        f = np.floor(scaled).astype(np.int64)
         f[(cnt > 0) & (f == 0)] = 1
         while f.sum() > self.M:
-            f[np.argmax(f)] -= 1
+            f[np.argmax(np.where(f > 1, f - scaled, -np.inf))] -= 1
         while f.sum() < self.M:
-            f[np.argmax(cnt - f)] += 1
+            f[np.argmax(np.where(cnt > 0, scaled - f, -np.inf))] += 1
         self.f = f.tolist()
         self.cum = np.concatenate([[0], np.cumsum(f)]).tolist()
         self.slot = []
@@ -631,6 +731,8 @@ class RANS:
         self.prob_bits = prob_bits
 
     def encode(self, data: bytes):
+        if any(self.f[s] == 0 for s in set(data)):
+            raise ValueError("input includes a byte absent from the rANS model")
         L = 1 << 23
         x = L
         out = []
@@ -647,12 +749,17 @@ class RANS:
         return bytes(reversed(out))
 
     def decode(self, enc: bytes, n: int) -> bytes:
+        n = _integer(n, "decoded byte count", 0)
+        if len(enc) < 4:
+            raise ValueError("rANS stream is missing its initial state")
         L = 1 << 23
         pos = 0
         x = 0
         for _ in range(4):
             x = (x << 8) | enc[pos]
             pos += 1
+        if x < L:
+            raise ValueError("invalid rANS initial state")
         out = bytearray()
         mask = self.M - 1
         for _ in range(n):
@@ -661,8 +768,12 @@ class RANS:
             out.append(s)
             x = self.f[s] * (x >> self.prob_bits) + r - self.cum[s]
             while x < L:
+                if pos >= len(enc):
+                    raise ValueError("truncated rANS stream")
                 x = (x << 8) | enc[pos]
                 pos += 1
+        if x != L or pos != len(enc):
+            raise ValueError("rANS stream does not match its decoded length")
         return bytes(out)
 
 
@@ -801,6 +912,9 @@ def patience_anchors(a, b):
 # ------------------------------------------------------------------------------------------------- rolling hashes
 def adler32_rolling(data: bytes, block: int):
     """rsync's weak checksum for every window of length ``block`` (numpy)."""
+    block = _integer(block, "block size", 1)
+    if block > len(data):
+        return np.empty(0, dtype=np.int64)
     t = np.frombuffer(data, dtype=np.uint8).astype(np.int64)
     c = np.concatenate([[0], np.cumsum(t)])
     a = (c[block:] - c[:-block]) % 65536
@@ -820,6 +934,9 @@ def gear_table(seed: int = 21):
 def cdc_chunks(data: bytes, mask_bits: int = 13, min_size: int = 2048, max_size: int = 65536, seed: int = 21):
     """Content-defined chunking with a gear hash (as in FastCDC): cut where the rolling hash's top bits are zero.
     Returns the chunk boundaries."""
+    mask_bits = _integer(mask_bits, "mask bits", 1, 32)
+    min_size = _integer(min_size, "minimum chunk size", 1)
+    max_size = _integer(max_size, "maximum chunk size", min_size)
     G = gear_table(seed).tolist()
     mask = ((1 << mask_bits) - 1) << (32 - mask_bits)
     cuts, h, start = [], 0, 0
@@ -837,6 +954,13 @@ def cdc_chunks(data: bytes, mask_bits: int = 13, min_size: int = 2048, max_size:
 
 def chunk_hashes(data: bytes, cuts):
     import hashlib
+    cuts = list(cuts)
+    previous = 0
+    for c in cuts:
+        c = _integer(c, "chunk endpoint", previous + 1, len(data))
+        previous = c
+    if previous != len(data):
+        raise ValueError("chunk endpoints must partition the entire input")
     out, s = [], 0
     for c in cuts:
         out.append(hashlib.blake2b(data[s:c], digest_size=8).digest())
@@ -847,11 +971,12 @@ def chunk_hashes(data: bytes, cuts):
 # ------------------------------------------------------------------------------------------------- periodicity
 def manacher(s: bytes, all_: bool = False):
     """Longest palindromic substring in linear time: (start, length); with ``all_``, every centre's radius."""
-    t = bytearray(b"^#")
+    # Values above 255 cannot collide with arbitrary input bytes.
+    t = array("H", [257, 256])
     for c in s:
         t.append(c)
-        t.append(35)
-    t.append(36)
+        t.append(256)
+    t.append(258)
     n = len(t)
     p = [0] * n
     c = r = 0
@@ -872,6 +997,8 @@ def manacher(s: bytes, all_: bool = False):
 
 def periods(s: bytes):
     """All periods p of s (s[i] = s[i + p] for all valid i), from the border chain of the failure function."""
+    if not s:
+        return []
     fail = kmp_failure(s)
     n = len(s)
     out = []

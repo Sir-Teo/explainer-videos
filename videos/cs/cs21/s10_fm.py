@@ -8,6 +8,7 @@ class FmIndex(VoiceoverScene):
     def construct(self):
         self.card()
         self.backward()
+        self.query_work()
         self.wavelet()
         self.measured()
 
@@ -70,6 +71,36 @@ class FmIndex(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
+    def query_work(self):
+        row = load("fm")["rows"][0]
+        head = label(r"Count and locate answer different questions",font_size=34).to_edge(UP,buff=0.4)
+        count = VGroup(
+            label(r"count \texttt{Queequeg}",font_size=23,color=DATA),
+            label(rf"{row['ranks']} rank requests",font_size=23,color=LAM),
+            label(rf"interval: {row['count']} matching rows",font_size=23,color=YES),
+        ).arrange(RIGHT,buff=1.0).move_to(UP*1.3)
+        locate = VGroup(
+            label(r"choose first 5 rows",font_size=23,color=DATA),
+            label(rf"LF walks: {row['locate_ranks']} rank requests",font_size=23,color=LAM),
+            label(r"5 checked text positions",font_size=23,color=YES),
+        ).arrange(RIGHT,buff=0.9).move_to(DOWN*0.5)
+        arrows = VGroup(*[Arrow(lane[i].get_right(),lane[i+1].get_left(),buff=0.1,color=GREY_B) for lane in (count,locate) for i in (0,1)])
+        notes = VGroup(
+            label(r"pattern search gives an interval; \ locating its rows adds output-dependent work",font_size=22,color=WHITE),
+            label(r"index build and input storage are separate costs; \ rank requests are not character comparisons",font_size=21,color=GREY_A),
+        ).arrange(DOWN,buff=0.25).to_edge(DOWN,buff=0.6)
+        with self.voiceover("The distinction is visible in the work itself. <bookmark mark='a'/> Counting Queequeg returns one suffix interval with two hundred and fifty-three rows. <bookmark mark='b'/> Locating asks which text position belongs to each selected row, so it follows LF links to stored samples. Here we locate only the first five rows, not all occurrences. <bookmark mark='c'/> The two lanes count their rank requests separately. <bookmark mark='d'/> Building the index and storing its input are separate costs, and one rank request is not one character comparison.") as vo:
+            self.play(FadeIn(head),FadeIn(count[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(count[1:]),Create(arrows[:2]))
+            vo.wait_until("b")
+            self.play(FadeIn(locate),Create(arrows[2:]))
+            vo.wait_until("c")
+            self.play(FadeIn(notes[0]),Indicate(count[1]),Indicate(locate[1]))
+            vo.wait_until("d")
+            self.play(FadeIn(notes[1]))
+        self.clear_scene()
+
     def wavelet(self):
         head = label(r"Rank queries in compressed space: \ the wavelet tree", font_size=32).to_edge(UP, buff=0.3)
         L = "annb$aa"
@@ -98,7 +129,7 @@ class FmIndex(VoiceoverScene):
             label(r"$\mathrm{rank}_n(L, i)$: \ a binary rank at each level, \\ following $n$ down", font_size=22,
                   color=LAM),
             label(r"binary rank in $O(1)$ with $o(n)$ extra bits \\ (Jacobson, \ 1989)", font_size=22, color=HEAD),
-            label(r"compress the bit vectors, \ or shape the tree \\ by frequency \ (Huffman): \ about $nH_k$ bits in all",
+            label('compressed wavelet vectors: \\ zero-order entropy plus redundancy; \\\\ higher-order bounds need more machinery',
                   font_size=22, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.4)
         if side.width > 6.2:
@@ -131,32 +162,22 @@ class FmIndex(VoiceoverScene):
     def measured(self):
         d = load("fm")
         head = label(r"The FM-index of the novels", font_size=34).to_edge(UP, buff=0.35)
-        rows = [[r["pattern"], words(r["count"]), f"{r['t_count'] * 1000:.2f} ms", f"{r['t_locate'] * 1000:.2f} ms"]
+        rows = [[r["pattern"], words(r["count"]), f"{r['t_count'] * 1000:.2f} ms", f"{r['t_locate'] * 1000:.2f} ms" if r['count'] else r"---"]
                 for r in d["rows"]]
-        tab = grid_table([r"pattern", r"count", r"counting", r"locating one"], rows, widths=[5.0, 1.8, 2.2, 2.4],
+        tab = grid_table([r"pattern", r"count", r"counting", 'locate mean (first 5)'], rows, widths=[5.0, 1.8, 2.2, 2.4],
                          row_h=0.4, font_size=20, mono_cols=(0,), colors=[[DATA, YES, HEAD, GREY_A]] * len(rows))
         tab.next_to(head, DOWN, buff=0.4).set_x(0)
         notes = VGroup(
-            label(r"locate: \ walk back with LF until a sampled suffix-array position \ (every 32nd)", font_size=20,
+            label('locate: \\ LF to a sample with text offset divisible by 32; \\ at most 31 LF steps', font_size=20,
                   color=WHITE),
-            label(rf"our teaching version keeps $L$ as plain bytes and rank counts every 64 rows: \ larger than the "
-                  rf"text", font_size=20, color=NO),
-            label(rf"real FM-indexes code $L$ with wavelet trees and entropy coding: \ near the compressed size \ "
-                  rf"(here, \ bzip2 of $L$: \ {d['bz2_bwt'] / 1e6:.1f} MB of {d['n'] / 1e6:.0f} MB)", font_size=20,
+            label(rf"teaching buffers + modeled samples: \ {sum(d['sizes'].values()) / 1e6:.1f} MB; \ Python overhead excluded", font_size=20, color=NO),
+            label(rf"BWT file reference: \ bzip2 {d['bz2_bwt'] / 1e6:.1f} MB; \ rank structures and locate samples cost extra", font_size=20,
                   color=YES),
             label(r"in practice: \ BWA and Bowtie align billions of DNA reads to the 3-gigabase human genome",
                   font_size=20, color=LAM),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Here it is on the whole corpus. <bookmark mark='a'/> Counting any pattern takes a fraction of a "
-            "millisecond, a couple of rank queries per character, whether the pattern occurs once or two hundred "
-            "thousand times. To find where an occurrence is, walk back with the LF mapping until reaching a row "
-            "whose suffix-array entry was kept; we kept every thirty-second. <bookmark mark='b'/> Our teaching "
-            "version stores the transform as plain bytes with rank counts every sixty-four rows, which is larger "
-            "than the text. <bookmark mark='c'/> Real FM-indexes store the transform compressed, with wavelet trees, "
-            "close to the size of the compressed text: the transform of the novels compresses to seven megabytes. "
-            "So the index is smaller than the book it searches. <bookmark mark='d'/> This is how DNA aligners like "
-            "BWA and Bowtie map billions of short reads against the human genome."
+            "Here is the teaching index on the whole corpus. <bookmark mark='a'/> Count timing is a single warm observation, with index construction excluded. Locating is separate: we check up to the first five matching rows and show mean time per returned location. A dash means no occurrence to locate. Samples are chosen by text offset divisible by thirty-two, so at most thirty-one LF steps reach one. <bookmark mark='b'/> The implementation stores plain BWT bytes, rank checkpoints and Python dictionaries. Its modeled storage excludes Python object overhead; it is larger than the text. <bookmark mark='c'/> Compressing the BWT is only one part of an index. The bzip2 size is a file-size reference, not the size of a fully functional FM-index: rank structures and locate samples still cost space. <bookmark mark='d'/> FM-indexes are used by DNA aligners such as BWA and Bowtie; production implementations add specialized layout and search strategies."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
             vo.wait_until("a")

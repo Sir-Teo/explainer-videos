@@ -11,6 +11,7 @@ class SuffixArray(VoiceoverScene):
         self.build()
         self.measured()
         self.repeats()
+        self.repeat_witness()
 
     def card(self):
         card = chapter_card(7, r"Suffix arrays", r"What if we just sort the suffixes?", lit=(1990,),
@@ -74,7 +75,7 @@ class SuffixArray(VoiceoverScene):
         head = label(r"The longest repeat in thirty novels", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
             label(r"the longest repeated substring: \ the largest value in the LCP array", font_size=22, color=WHITE),
-            label(r"for the whole corpus, \ comparing neighbouring suffixes in numpy, \ doubling the length checked",
+            label('extend every adjacent pair through its first mismatch; \\ verify the maximum independently',
                   font_size=20, color=GREY_A),
         ).arrange(DOWN, buff=0.2).next_to(head, DOWN, buff=0.4)
         txt = r["text"].replace("\n", " / ")[:150]
@@ -83,21 +84,13 @@ class SuffixArray(VoiceoverScene):
                                                                                          buff=0.12)
         box.next_to(lines, DOWN, buff=0.45)
         notes = VGroup(
-            label(r"a table of contents, \ overlapping itself: \ the list of chapter numbers repeats from one place to "
-                  r"the next", font_size=20, color=WHITE),
+            label('a table of contents repeats: \\ two copies of the chapter-number headings', font_size=20, color=WHITE),
             label(rf"in \textit{{Moby-Dick}} alone: \ {d['md_repeat_len']} characters, \ a chapter title printed twice",
                   font_size=20, color=GREY_A),
-            label(r"real prose almost never repeats: \ novelists don't copy themselves, \ which chapter 13 of Part 20 "
-                  r"found too", font_size=20, color=LAM),
+            label('this maximum concerns exact contiguous bytes; \\ near-duplicate passages are a different query', font_size=20, color=LAM),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "With the suffix array and its LCP array, the longest repeated substring is simply the largest common "
-            "prefix of two neighbours. <bookmark mark='a'/> For the whole corpus we computed it by comparing "
-            "neighbouring suffixes in numpy, doubling the length checked each round. <bookmark mark='b'/> The "
-            f"winner is {r['length']} characters long, and it is not prose: it is a run of chapter headings, "
-            "Chapter one, Chapter two, Chapter three, overlapping a copy of itself a few hundred characters later. "
-            "<bookmark mark='c'/> In Moby-Dick alone, the longest repeat is a chapter title printed twice. Real "
-            "prose almost never repeats, as Part 20's search for near-duplicates found too."
+            f"With the suffix array and its LCP array, the longest repeated substring is simply the largest common prefix of two neighbours. <bookmark mark='a'/> For the whole corpus we computed it by comparing neighbouring suffixes in numpy, extending every adjacent pair to its first mismatch, including the residual characters after any doubled block. <bookmark mark='b'/> The winner is {r['length']} characters long, and it is not prose: it is a run of chapter headings, Chapter one, Chapter two, Chapter three, reappearing a few hundred characters later. <bookmark mark='c'/> In Moby-Dick alone, the longest repeat is a chapter title printed twice. This is a maximum for exact contiguous bytes, not a claim that prose cannot be reused or paraphrased."
         ) as vo:
             self.play(FadeIn(head), FadeIn(lines[0]))
             vo.wait_until("a")
@@ -137,22 +130,12 @@ class SuffixArray(VoiceoverScene):
                   r"recursively", font_size=21, color=HEAD),
             label(r"the \textbf{LCP array}: \ common prefix of each sorted \\ neighbour pair, \ in linear time \ "
                   r"(Kasai et al., 2001)", font_size=21, color=YES),
-            label(r"suffix array + LCP array \ = \ everything the suffix tree \\ answered \ (Abouelhoda, Kurtz and "
-                  r"Ohlebusch, 2004)", font_size=20, color=GREY_A),
+            label('SA + LCP + auxiliary structures: \\\\ many suffix-tree queries; \\ representation-dependent space', font_size=20, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
         lines.width = min(lines.width, 6.6)
         lines.to_edge(RIGHT, buff=0.35).shift(DOWN * 0.2)
         with self.voiceover(
-            "How do you sort twenty-five million suffixes, each up to twenty-five million characters long? "
-            "<bookmark mark='a'/> Rank them first by one character. <bookmark mark='b'/> Then notice that ranking "
-            "by the first two k characters is the same as sorting pairs: the rank of the suffix's first k "
-            "characters, and the rank of the k characters after them, which is the rank of another suffix. "
-            "<bookmark mark='c'/> Double k until every suffix has its own rank: log n rounds of sorting. <bookmark "
-            "mark='d'/> Linear-time algorithms exist too; SA-IS, from 2009, sorts a sample of the suffixes "
-            "recursively and induces the rest, and it is what fast libraries use. <bookmark mark='e'/> Alongside, "
-            "keep the longest common prefix of each pair of neighbours in sorted order, which Kasai and colleagues "
-            "showed how to compute in linear time. <bookmark mark='f'/> With both arrays, every question the "
-            "suffix tree answered can be answered again, in a quarter of the memory."
+            "How do you sort twenty-five million suffixes, each up to twenty-five million characters long? <bookmark mark='a'/> Rank them first by one character. <bookmark mark='b'/> Then notice that ranking by the first two k characters is the same as sorting pairs: the rank of the suffix's first k characters, and the rank of the k characters after them, which is the rank of another suffix. <bookmark mark='c'/> Double k until every suffix has its own rank: log n rounds of sorting. <bookmark mark='d'/> Linear-time algorithms exist too; SA-IS, from 2009, sorts a sample of the suffixes recursively and induces the rest, and it is what fast libraries use. <bookmark mark='e'/> Alongside, keep the longest common prefix of each pair of neighbours in sorted order, which Kasai and colleagues showed how to compute in linear time. <bookmark mark='f'/> The arrays, with suitable auxiliary structures, recover many suffix-tree queries. Their space depends on entry widths and on which query operations are supported."
         ) as vo:
             self.play(FadeIn(head), FadeIn(colv[0]), FadeIn(colv[1]), FadeIn(tab.rule))
             vo.wait_until("a")
@@ -173,7 +156,7 @@ class SuffixArray(VoiceoverScene):
         stats = VGroup(
             label(rf"{words(d['n'])} suffixes, \ sorted by prefix doubling in numpy: \ {d['t_sa']:.0f} s", font_size=22,
                   color=WHITE),
-            label(rf"{d['bytes_sa'] / 1e6:.0f} MB: \ 4 bytes per character", font_size=22, color=LAM),
+            label(rf"cache array: {d['bytes_sa'] / 1e6:.0f} MB; \ 4-byte entries; \ text and build temporaries excluded", font_size=22, color=LAM),
         ).arrange(DOWN, buff=0.2).next_to(head, DOWN, buff=0.4)
         rows = [[s["pattern"], words(s["count"]), words(s["cmp"]), f"{s['bound']:.0f}"] for s in d["searches"]]
         tab = grid_table([r"pattern", r"occurrences", r"character comparisons", r"$2m \log_2 n$"], rows,
@@ -184,13 +167,7 @@ class SuffixArray(VoiceoverScene):
                     rf"{d['md_mean_lcp']:.1f} characters on average", font_size=21, color=YES).next_to(tab, DOWN,
                                                                                                      buff=0.5)
         with self.voiceover(
-            f"We built the suffix array of all {words(d['n'])} characters of the novels, by prefix doubling with "
-            "numpy's sorts, in under two minutes. <bookmark mark='a'/> It takes a hundred megabytes, four bytes "
-            "for every character. <bookmark mark='b'/> Now any pattern is a pair of binary searches: Queequeg's "
-            "two hundred and fifty-three occurrences were found with a hundred and sixty-seven character "
-            "comparisons, against twenty-five million for a scan. <bookmark mark='c'/> And Moby-Dick's LCP array "
-            "says that neighbouring suffixes share eight characters on average, which is why the binary search "
-            "rarely compares more than a few characters per step."
+            f"We built the suffix array of all {words(d['n'])} characters of the novels, by prefix doubling with numpy's sorts, in with the observed build time shown here. <bookmark mark='a'/> The cached array takes about a hundred megabytes with four-byte entries; that excludes the text and larger construction temporaries. <bookmark mark='b'/> Now any pattern is a pair of binary searches: Queequeg's two hundred and fifty-three occurrences were found with a hundred and sixty-seven character comparisons, against twenty-five million for a scan. <bookmark mark='c'/> And Moby-Dick's LCP array says that neighbouring suffixes share eight characters on average, which is why the binary search rarely compares more than a few characters per step."
         ) as vo:
             self.play(FadeIn(head), FadeIn(stats[0]))
             vo.wait_until("a")
@@ -201,6 +178,35 @@ class SuffixArray(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(lcp))
         self.wait(0.3)
+        self.clear_scene()
+
+
+    def repeat_witness(self):
+        d = load("repeats")
+        a, b = d["at"]
+        length = d["length"]
+        from videos.cs.cs21.compute import _full_text
+        text = _full_text()
+        assert text[a:a+length] == text[b:b+length]
+        head = label(r"A maximum needs a witness and a complete search", font_size=32).to_edge(UP,buff=0.4)
+        ranges = VGroup()
+        for row, start in enumerate((a,b)):
+            bar = Rectangle(width=9.0,height=0.5,stroke_color=YES,fill_color=YES,fill_opacity=0.22)
+            index = mono(f"[{start:,}, {start+length:,})",20,WHITE).next_to(bar,UP,buff=0.12)
+            stop = Square(side_length=0.5,stroke_color=NO,fill_color=NO,fill_opacity=0.2).next_to(bar,RIGHT,buff=0.08)
+            byte = mono(f"{text[start+length]}",20,NO).move_to(stop)
+            ranges.add(VGroup(bar,index,stop,byte))
+        ranges.arrange(DOWN,buff=0.8).move_to(UP*0.3)
+        equal = label(rf"{length} identical bytes in both intervals; \ the next bytes differ",font_size=24,color=YES).next_to(ranges,DOWN,buff=0.45)
+        certificate = label(r"all adjacent suffix pairs checked; \ independent native Kasai scan agrees",font_size=22,color=LAM).to_edge(DOWN,buff=0.5)
+        with self.voiceover("Here is the exact witness. <bookmark mark='a'/> These two half-open intervals contain the same four hundred and twenty-eight bytes. <bookmark mark='b'/> The next byte is different, so this pair cannot extend. <bookmark mark='c'/> A witness alone does not prove a global maximum: we also checked every adjacent pair in the certified suffix order, and an independent native Kasai implementation agrees.") as vo:
+            self.play(FadeIn(head),FadeIn(ranges[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(ranges[1]),FadeIn(equal))
+            vo.wait_until("b")
+            self.play(Indicate(ranges[0][2],color=NO),Indicate(ranges[1][2],color=NO))
+            vo.wait_until("c")
+            self.play(FadeIn(certificate))
         self.clear_scene()
 
 

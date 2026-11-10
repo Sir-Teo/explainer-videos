@@ -24,7 +24,7 @@ class Frontier(VoiceoverScene):
         d = load("period")
         head = label(r"When texts repeat themselves", font_size=34).to_edge(UP, buff=0.35)
         rows = [
-            [r"the novels \ (first 6.5 MB)", words(d["vers_n"]), words(d["novel_runs"]),
+            [rf"novels: first {(d['vers_n']-1)/1e6:.1f} MB + end marker", words(d["vers_n"]), words(d["novel_runs"]),
              f"{d['vers_n'] / d['novel_runs']:.1f}"],
             [rf"{d['versions']} versions of this course's syllabus", words(d["vers_n"]), words(d["vers_runs"]),
              f"{d['vers_n'] / d['vers_runs']:.0f}"],
@@ -33,12 +33,12 @@ class Frontier(VoiceoverScene):
                          font_size=21, mono_cols=(), colors=[[GREY_A, GREY_A, DATA, DATA], [YES, YES, YES, YES]])
         tab.next_to(head, DOWN, buff=0.5).set_x(0)
         notes = VGroup(
-            label(rf"\texttt{{xz}} squeezes the 27 versions to {d['vers_xz'] / 1000:.0f} KB: \ "
+            label(rf"\texttt{{xz}} squeezes {d['versions']} versions to {d['vers_xz'] / 1000:.0f} KB: \ "
                   rf"{d['vers_n'] / d['vers_xz']:.0f}$\times$", font_size=22, color=HEAD),
             label(r"collections like this are everywhere: \ versioned documents, \ source histories, \ and above all "
                   r"genomes", font_size=22, color=WHITE),
             label(r"a pangenome: \ thousands of human genomes, \ each 99.9\% like the others", font_size=22, color=LAM),
-            label(r"an FM-index costs about $nH_k$ bits: \ it compresses \textit{statistics}, \ not repetition",
+            label('fixed-order statistical entropy may miss long-range repetition; \\ run count measures something else',
                   font_size=22, color=NO),
         ).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.4)
         pal = [DATA, LAM, YES, HEAD, CTRL, GREY_B]
@@ -55,15 +55,7 @@ class Frontier(VoiceoverScene):
                    font_size=18, color=YES)
         VGroup(l1, s1, l2, s2).arrange(DOWN, buff=0.1).next_to(tab, DOWN, buff=0.35)
         with self.voiceover(
-            "The frontier concerns texts that repeat themselves. <bookmark mark='a'/> Count the runs in the "
-            "Burrows–Wheeler transform, r. For six and a half megabytes of the novels, there are about two "
-            "characters per run. For all twenty-seven versions of this course's syllabus, concatenated, the same "
-            "length of text has only a hundred and thirty thousand runs: fifty characters each. <bookmark "
-            "mark='b'/> xz compresses those versions sixty-fold. <bookmark mark='c'/> Collections like this are "
-            "everywhere: versioned documents, the history of every software project, and above all genomes. "
-            "<bookmark mark='d'/> A pangenome holds thousands of human genomes, each ninety-nine point nine percent "
-            "identical to the others. <bookmark mark='e'/> An FM-index's size tracks the text's statistical entropy, "
-            "which barely notices that one genome repeats another. For such collections it is far too big."
+            f"Repetition changes what a useful index should store. <bookmark mark='a'/> We concatenate {d['versions']} captured syllabus revisions in reverse chronological git traversal order, without separators, and append one unique end marker. The comparison uses the same number of bytes from the novels, plus that marker. The table reports complete BWT run counts, not an extrapolation from these two display strips. <bookmark mark='b'/> xz's emitted size is checked by decoding it; the compression ratio is for this exact snapshot. <bookmark mark='c'/> Versioned documents and source histories commonly contain this kind of reuse. <bookmark mark='d'/> Genomic collections are another motivation, although this experiment measures no genome data. <bookmark mark='e'/> Fixed-order statistical entropy can miss long-range copies. BWT run count and phrase count capture different kinds of repetitiveness."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
             vo.wait_until("a")
@@ -79,84 +71,63 @@ class Frontier(VoiceoverScene):
     def rindex(self):
         head = label(r"The r-index", font_size=36).to_edge(UP, buff=0.35)
         lines = VGroup(
-            label(r"store the BWT as $r$ runs; \ backward search needs rank only at run boundaries", font_size=22,
+            label('run-length BWT: \\ rank uses run prefixes and the partial run at each queried row', font_size=22,
                   color=WHITE),
             label(r"the hard part was \textbf{locate}: \ suffix-array samples cost $n / s$, \ not $O(r)$", font_size=22,
                   color=NO),
-            label(r"Gagie, \ Navarro and Prezza (2018): \ sample the suffix array only at run ends: \ $O(r)$ words, "
-                  r"\ each occurrence in $O(\log\log n)$", font_size=22, color=YES),
+            label('Gagie--Navarro--Prezza (2018/2020): \\ $O(r)$ words; \\ $O(\\log\\log n)$ per occurrence after search', font_size=22, color=YES),
             label(r"move structures \ (Nishimoto and Tabei, 2021): \ LF in constant time, \ in $O(r)$ space",
                   font_size=22, color=LAM),
             label(r"how big is $r$? \ Kempa and Kociumaka (2020): \ $r = O(z \log^2 n)$, \ $z$ = LZ77's phrases",
                   font_size=22, color=HEAD),
-            label(r"measures of repetitiveness: \ $\delta \le \gamma \le z \le r$ \ (Kociumaka, Navarro and Prezza)",
+            label('$\\delta\\le\\gamma\\le b\\le z$; \\ $r$ and $z$ are incomparable; \\ no universal $z\\le r$',
                   font_size=20, color=GREY_A),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "The answer is an index whose size depends on r. <bookmark mark='a'/> Store the transform as its runs, "
-            "and backward search works with rank queries at run boundaries only. <bookmark mark='b'/> The obstacle "
-            "for years was locating: suffix-array samples every s rows cost n over s, which is far more than r. "
-            "<bookmark mark='c'/> In 2018 Travis Gagie, Gonzalo Navarro and Nicola Prezza showed that sampling the "
-            "suffix array only at the ends of runs is enough, giving a full index in order r words that reports "
-            "each occurrence in log log n time. <bookmark mark='d'/> Later work makes each LF step constant time in "
-            "the same space. <bookmark mark='e'/> And how big is r, compared with Lempel–Ziv's number of phrases z? "
-            "Dominik Kempa and Tomasz Kociumaka proved in 2020 that r is at most z times log n squared, settling a "
-            "long-standing conjecture. <bookmark mark='f'/> A whole ladder of repetitiveness measures has grown up, "
-            "and the open question is how low on it a fast index can go."
+            "A run-length index stores structure proportional to r. <bookmark mark='a'/> Rank at any queried row combines counts before its run with the partial run; predecessor search finds that run. <bookmark mark='b'/> Periodic suffix-array samples alone cost n over s, so locating needs a different representation to fit run-bounded space. <bookmark mark='c'/> Gagie, Navarro and Prezza's 2018 work, published in 2020, uses run-boundary samples with additional structures. On their word-RAM model, order r words support locating at log log n per occurrence after the pattern-search cost. <bookmark mark='d'/> Later move structures support constant-time LF within order r space. These are theoretical results, not implementations measured in this part. <bookmark mark='e'/> Kempa and Kociumaka's 2020 result bounds r by order z times log squared n. Here z uses the paper's unbounded LZ77 convention, not our fixed-window parser's token count. <bookmark mark='f'/> Delta, attractors, macro schemes and LZ give one hierarchy. But r and z are incomparable; they do not form the simple ladder z less than or equal to r."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(lines[0]))
             for mk, ln in zip("abcdef", lines):
                 vo.wait_until(mk)
-                self.play(FadeIn(ln, shift=UP * 0.1))
+                self.play(Indicate(ln, color=WHITE) if mk == "a" else FadeIn(ln, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
 
     def lower(self):
         head = label(r"And the quadratic wall", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
-            label(r"edit distance, \ LCS, \ dynamic time warping: \ no $O(n^{2 - \varepsilon})$ under SETH \ "
-                  r"(Backurs and Indyk; \ Abboud et al.; \ 2015)", font_size=22, color=NO),
+            label('2015: \\ exact unit-cost edit distance has no truly subquadratic algorithm under SETH', font_size=22, color=NO),
             label(r"on compressible inputs: \ alignment speeds up with the compression \ (Crochemore, \ Landau and "
                   r"Ziv-Ukelson, \ 2003)", font_size=22, color=WHITE),
-            label(r"approximately: \ a constant factor in almost linear time \ (Andoni and Nosatzki, 2020)", font_size=22,
+            label('Andoni--Nosatzki (2020): \\ randomized factor $C_\\eta$, \\ time $n^{1+\\eta}$ for fixed $\\eta>0$', font_size=22,
                   color=YES),
-            label(r"and for small distances: \ $O(n + d^2)$ \ (Landau and Vishkin, 1988), \ Myers' $O(nd)$ in practice",
+            label('this part: \\ Myers uses $O(N(D+1))$, \\ insertion/deletion distance $D$; \\ distinct from Levenshtein',
                   font_size=22, color=LAM),
         ).arrange(DOWN, buff=0.4).next_to(head, DOWN, buff=0.6)
         with self.voiceover(
-            "The other frontier is the wall that chapter twelve ran into. <bookmark mark='a'/> Edit distance, "
-            "longest common subsequence and dynamic time warping have no truly subquadratic algorithms unless the "
-            "strong exponential time hypothesis fails. <bookmark mark='b'/> But inputs are often compressible, and "
-            "alignment can be sped up by working on Lempel–Ziv phrases instead of characters. <bookmark "
-            "mark='c'/> Approximation escapes the wall entirely: a constant-factor approximation in almost linear "
-            "time. <bookmark mark='d'/> And when the distance d is small, Landau and Vishkin's algorithm takes n "
-            "plus d squared, the theory behind diff's speed on similar files."
+            "Here are selected dated results, rather than a complete current frontier. <bookmark mark='a'/> Backurs and Indyk's 2015 conditional lower bound concerns exact unit-cost edit distance in the worst case. It is not a lower bound for every biological score or every compressible input. <bookmark mark='b'/> Compression can speed up alignment on structured instances. <bookmark mark='c'/> Andoni and Nosatzki's 2020 randomized approximation takes n to the one plus eta, for each fixed positive eta, with an approximation constant depending on eta. That is not a claim of n times polylog n time. <bookmark mark='d'/> Our implemented distance-sensitive method is Myers: order N times the quantity D plus one for insertion-and-deletion distance. Unit-cost Levenshtein distance also allows substitutions, so it is a different problem."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(lines[0]))
             for mk, ln in zip("abcd", lines):
                 vo.wait_until(mk)
-                self.play(FadeIn(ln, shift=UP * 0.1))
+                self.play(Indicate(ln, color=WHITE) if mk == "a" else FadeIn(ln, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
 
     def open_(self):
-        head = label(r"Open questions", font_size=36).to_edge(UP, buff=0.35)
+        head = label('Research directions: \\ verify the model and the date', font_size=36).to_edge(UP, buff=0.35)
         qs = VGroup(
-            label(r"a text index in $O(z)$ words that counts occurrences in $O(m \operatorname{polylog} n)$ time?",
+            label('compare actual index space, \\ construction, \\ count and locate costs separately',
                   font_size=23, color=GREY_A),
-            label(r"edit distance: \ a $(1 + \varepsilon)$-approximation in near-linear time?", font_size=23,
+            label('for approximation: \\ record factor, \\ exponent, \\ randomness and error probability', font_size=23,
                   color=GREY_A),
-            label(r"is the runs theorem's constant tight: \ how many maximal repetitions can a string have?",
+            label('for repetitiveness: \\ fix sentinels, \\ parse conventions, \\ units and input families',
                   font_size=23, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.45).next_to(head, DOWN, buff=0.6)
-        star = label(r"$\bigstar$ \ the part's research problem takes the first", font_size=22,
+        star = label('$\\bigstar$ \\ reproduce a dated tradeoff; \\ check newer primary work before claiming an open problem', font_size=22,
                      color=HEAD).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Here is where things stand. <bookmark mark='a'/> Is there an index whose size is the number of "
-            "Lempel–Ziv phrases and that counts any pattern's occurrences in time close to its length? <bookmark "
-            "mark='b'/> Can edit distance be approximated to within one plus epsilon in near-linear time? <bookmark "
-            "mark='c'/> And exactly how many maximal repetitions can a string of length n contain? Fewer than n, "
-            "but the right constant is unknown. <bookmark mark='d'/> This part's research problem takes the first."
+            "A useful research project begins with precise questions. <bookmark mark='a'/> Compare space and construction costs, then count and locate separately, on fixed text families. <bookmark mark='b'/> For any approximation result, record its factor, running-time exponent, randomness and success probability. <bookmark mark='c'/> For repetitive indexes, fix sentinels, parsing conventions and whether space means bits, machine words or allocated bytes. <bookmark mark='d'/> The starred exercise asks for a reproducible tradeoff study and a dated literature review. Before declaring a question open, check newer primary work; the historical results in this chapter are not a claim about the latest boundary."
         ) as vo:
             self.play(FadeIn(head))
             for mk, q in zip("abc", qs):

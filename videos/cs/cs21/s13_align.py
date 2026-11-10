@@ -155,49 +155,33 @@ class Align(VoiceoverScene):
                   font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Real gaps are not independent. <bookmark mark='a'/> Biology, and diff, prefer one long gap to many short "
-            "ones, so a gap of length l costs an opening charge plus a small charge per character. <bookmark "
-            "mark='b'/> A single table can't price that, because a cell doesn't know whether its neighbour was "
-            "already inside a gap. <bookmark mark='c'/> Osamu Gotoh's solution keeps three tables: M for alignments "
-            "ending in a pair of characters, <bookmark mark='d'/> X for those ending in a gap in one string, "
-            "<bookmark mark='e'/> and Y for a gap in the other. Moving within X or Y costs only the extension; "
-            "entering them from M pays the opening. <bookmark mark='f'/> The time is still the product of the "
-            "lengths, and Hirschberg's divide-and-conquer trick from Part 19 brings the memory down to linear."
+            "This screen illustrates affine scoring; our measured alignments use constant gap penalties. <bookmark mark='a'/> Biology, and diff, prefer one long gap to many short ones, so a gap of length l costs an opening charge plus a small charge per character. <bookmark mark='b'/> A single table can't price that, because a cell doesn't know whether its neighbour was already inside a gap. <bookmark mark='c'/> Osamu Gotoh's solution keeps three tables: M for alignments ending in a pair of characters, <bookmark mark='d'/> X for those ending in a gap in one string, <bookmark mark='e'/> and Y for a gap in the other. Moving within X or Y costs only the extension; entering them from M pays opening plus the first extension, matching the displayed o plus e times length convention. <bookmark mark='f'/> The time is still the product of the lengths, and Hirschberg's divide-and-conquer trick from Part 19 brings the memory down to linear."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(lines[0]))
             for mk, ln in zip("abcdef", lines):
                 vo.wait_until(mk)
-                self.play(FadeIn(ln, shift=UP * 0.1))
+                self.play(Indicate(ln, color=WHITE) if mk == "a" else FadeIn(ln, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
 
     def scale(self):
         head = label(r"Alignment at genome scale", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
-            label(r"a quadratic table is $10^{18}$ cells for two human genomes", font_size=22, color=NO),
-            label(r"BLAST \ (Altschul et al., 1990): \ find short exact seeds with a hash table, \ extend only "
-                  r"around them", font_size=22, color=DATA),
+            label('a full quadratic table: \\ about $10^{19}$ cells for two human genomes', font_size=22, color=NO),
+            label('BLAST-style seed-and-extend: \\ filter candidate regions; \\ heuristic filtering can miss an optimum', font_size=22, color=DATA),
             label(r"read aligners: \ seeds from the FM-index of chapter 9, \ then banded dynamic programming",
                   font_size=22, color=LAM),
             label(r"exact edit distance in $O(n^{2 - \varepsilon})$ would refute SETH \ (Backurs and Indyk, 2015; \ "
                   r"Part 27)", font_size=22, color=HEAD),
-            label(r"so in practice: \ heuristics with guarantees for similar strings, \ $O(nd)$ when the distance "
-                  r"$d$ is small", font_size=22, color=YES),
+            label('heuristic seeds can miss matches; \\ unit-cost banded DP is exact with a valid distance bound', font_size=22, color=YES),
         ).arrange(DOWN, buff=0.35).next_to(head, DOWN, buff=0.6)
         with self.voiceover(
-            "The table is quadratic, and genomes are long. <bookmark mark='a'/> Two human genomes would need ten to "
-            "the eighteen cells. <bookmark mark='b'/> BLAST, from 1990, one of the most cited papers in all of science, "
-            "finds short exact seeds with a hash table and extends alignments only around them. <bookmark "
-            "mark='c'/> Modern read aligners find their seeds with the FM-index of chapter nine. <bookmark "
-            "mark='d'/> And there is a reason to settle for heuristics: an exact edit-distance algorithm in truly "
-            "subquadratic time would refute the strong exponential time hypothesis, Part 19's frontier and Part "
-            "27's subject. <bookmark mark='e'/> What we can do is exploit similarity: when the distance d is small, "
-            "only a band of the table matters, and the work is n times d. The next chapter does exactly that."
+            "Full pairwise tables are quadratic. <bookmark mark='a'/> Two genomes of billions of bases require on the order of ten to the nineteen cells. <bookmark mark='b'/> BLAST-style seed-and-extend filters candidate regions, which can miss an optimum. <bookmark mark='c'/> FM-indexes help find candidate seeds in read aligners. <bookmark mark='d'/> The conditional lower bound concerns exact unit-cost edit distance in the worst case; it does not rule out fast structured instances. <bookmark mark='e'/> With a valid edit-distance bound k, unit-cost dynamic programming restricted to the corresponding band is exact, in order N times the quantity k plus one work. These are scaling strategies; our measured examples use complete tables. The next chapter uses Myers' distinct insertion-and-deletion distance."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(lines[0]))
             for mk, ln in zip("abcde", lines):
                 vo.wait_until(mk)
-                self.play(FadeIn(ln, shift=UP * 0.1))
+                self.play(Indicate(ln, color=WHITE) if mk == "a" else FadeIn(ln, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
 

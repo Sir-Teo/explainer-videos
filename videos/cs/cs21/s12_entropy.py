@@ -27,12 +27,12 @@ class Entropy(VoiceoverScene):
             label(r"Huffman (Part 19) gives every symbol a whole number of bits: \ within 1 bit of $H$ per symbol",
                   font_size=22, color=DATA),
         ).arrange(DOWN, buff=0.25).next_to(head, DOWN, buff=0.45)
-        rows = [[f"{r['p']:.2f}", f"{r['entropy']:.3f}", f"{r['huffman']:.0f}", f"{r['rans']:.3f}"] for r in d["skew"]]
+        rows = [[f"{r['p']:.2f}", f"{r['empirical_entropy']:.3f}", f"{r['huffman']:.0f}", f"{r['rans']:.3f}"] for r in d["skew"]]
         tab = grid_table([r"$\Pr[\text{one symbol}]$", r"entropy, \ bits", r"Huffman", r"rANS"], rows,
                          widths=[3.2, 2.6, 2.0, 2.0], row_h=0.44, font_size=21, mono_cols=(),
                          colors=[[GREY_A, YES, NO, LAM]] * len(rows)).next_to(lines, DOWN, buff=0.45)
         tab.set_x(0)
-        cap = label(r"200{,}000 symbols from a two-letter source, \ in bits per symbol", font_size=19, color=GREY_B
+        cap = label('200{,}000 seeded symbols; \\ empirical $H_0$; \\ rANS state included, \\ model/length excluded', font_size=19, color=GREY_B
                     ).next_to(tab, DOWN, buff=0.2)
         md = label(rf"\textit{{Moby-Dick}}'s bytes: \ entropy {d['h0']:.3f}, \ Huffman {d['huffman']:.3f}, \ rANS "
                    rf"{d['rans']:.3f} bits each: \ there, \ whole bits cost under 1\%", font_size=21, color=HEAD
@@ -71,11 +71,11 @@ class Entropy(VoiceoverScene):
             MathTex(r"x' = \Big\lfloor \frac{x}{f_s} \Big\rfloor M + (x \bmod f_s) + c_s", font_size=36, color=LAM),
             label(r"$f_s$: \ the symbol's frequency out of $M$; \ $c_s$: \ the frequencies before it", font_size=20,
                   color=GREY_A),
-            label(r"$\log_2 x$ grows by $\log_2 (M / f_s) \approx \log_2 (1/p_s)$: \ exactly the entropy", font_size=22,
+            label('asymptotically: \\ information cost $\\log_2(M/f_s)$; \\ finite-state increments vary', font_size=22,
                   color=YES),
             label(r"keep $x$ in a machine word by streaming out its low bytes; \ decode by running it backwards",
                   font_size=22, color=WHITE),
-            label(r"Duda (2009--2014): \ as tight as arithmetic coding, \ as fast as Huffman; \ zstd, \ LZFSE, \ JPEG XL",
+            label('Duda (2009--2014): \\ state-based entropy coding; \\ speed depends on model and implementation',
                   font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.22).next_to(head, DOWN, buff=0.35)
         f, c, M = {"a": 3, "b": 1}, {"a": 0, "b": 3}, 4
@@ -89,21 +89,12 @@ class Entropy(VoiceoverScene):
         cap = label(r"$M = 4$: \ $f_a = 3$, \ $f_b = 1$; \ start at $x = 4$", font_size=18, color=GREY_A)
         VGroup(tab, cap.next_to(tab, DOWN, buff=0.15)).to_edge(DOWN, buff=0.3).set_x(0)
         with self.voiceover(
-            "Arithmetic coding solved this in the 1970s by treating the whole message as one number, but it was "
-            "slow. <bookmark mark='a'/> Jarek Duda's asymmetric numeral systems keep the message as a single "
-            "integer x and push each symbol into it. <bookmark mark='b'/> Divide x by the symbol's frequency, "
-            "multiply by the total, and add the remainder and the symbol's offset. <bookmark mark='c'/> Here f is "
-            "the symbol's frequency out of M. <bookmark mark='d'/> Each step multiplies x by about one over the "
-            "symbol's probability, so the number of bits grows by exactly its information content. <bookmark "
-            "mark='e'/> In practice x stays inside a machine word by streaming out its low bytes, and decoding runs "
-            "the same arithmetic backwards. <bookmark mark='f'/> Duda's work, published between 2009 and 2014, made "
-            "entropy coding as tight as arithmetic coding and as fast as Huffman. It is inside zstd, Apple's LZFSE "
-            "and JPEG XL. We wrote a byte-wise version in forty lines; it round-trips every test."
+            "Arithmetic coding approaches fractional information costs by encoding a whole message through a numerical interval. <bookmark mark='a'/> Jarek Duda's asymmetric numeral systems keep the message as a single integer x and push each symbol into it. <bookmark mark='b'/> Divide x by the symbol's frequency, multiply by the total, and add the remainder and the symbol's offset. <bookmark mark='c'/> Here f is the symbol's frequency out of M. <bookmark mark='d'/> Each step multiplies x by about one over the symbol's probability, so the bit growth approaches its information content. The small trace shows finite-state increments are not exactly equal. <bookmark mark='e'/> In practice x stays inside a machine word by streaming out its low bytes, and decoding runs the same arithmetic backwards. <bookmark mark='f'/> Duda's work from 2009 to 2014 provides state-based entropy coding. Speed and compression depend on the model, precision and implementation. It is inside zstd, Apple's LZFSE and JPEG XL. Our byte-wise implementation round-trips the measured streams. Its frequency table and decoded length are external metadata, excluded from the displayed payload size."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(lines[0]))
             for mk, ln in zip("abcdef", lines):
                 vo.wait_until(mk)
-                self.play(FadeIn(ln, shift=UP * 0.1))
+                self.play(Indicate(ln, color=WHITE) if mk == "a" else FadeIn(ln, shift=UP * 0.1))
                 if mk == "b":
                     self.play(FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule), FadeIn(cap))
                 if mk == "d":
@@ -127,20 +118,11 @@ class Entropy(VoiceoverScene):
                     ).next_to(bars, UP, buff=0.3)
         notes = VGroup(
             label(r"better predictions, \ fewer bits: \ compression \textbf{is} prediction", font_size=22, color=HEAD),
-            label(r"PPM (1984), \ context mixing, \ \texttt{xz}'s LZMA; \ \textit{AI, Built} Part 1: \ language models "
-                  r"are the best text compressors we have", font_size=20, color=GREY_A),
-            label(r"zstd \ (Collet, \ 2016): \ LZ77 + Huffman + ANS, \ tuned for speed: \ the default in Linux and "
-                  r"Meta's servers", font_size=20, color=DATA),
+            label('PPM, \\ context mixing and language-model prediction: \\\\ account for model description, \\ framing and computation too', font_size=20, color=GREY_A),
+            label('zstd \\ (Collet, \\ 2016): \\ LZ77 + Huffman + ANS \\\\ used in the Linux kernel and Meta infrastructure', font_size=20, color=DATA),
         ).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "With a coder that reaches the entropy of whatever probabilities it is given, the only question left is "
-            "how good those probabilities are. <bookmark mark='a'/> Treat each byte of Moby-Dick on its own, and the "
-            "entropy is four point four bits. Given the previous byte, three point five. Given the previous two, two "
-            "point eight. <bookmark mark='b'/> Better prediction means fewer bits: compression is prediction. "
-            "<bookmark mark='c'/> That is the road from PPM through context mixing to the language models of the "
-            "AI series, whose first part found them to be the best compressors of text we have. <bookmark mark='d'/> At the other end, Yann "
-            "Collet's zstd combines Lempel–Ziv, Huffman and ANS, tuned for speed, and is now the default compressor "
-            "in much of the world's infrastructure."
+            "The model determines which events the coder can predict. <bookmark mark='a'/> For these Moby-Dick bytes, empirical entropy falls from about four point four bits with no context, to three point five with one previous byte, and two point eight with two. <bookmark mark='b'/> Better prediction can reduce payload cost. <bookmark mark='c'/> PPM, context mixing and language models supply richer predictions. Comparing complete compressors also requires their model descriptions, framing and computation; this part runs no language-model compression benchmark. <bookmark mark='d'/> zstd combines LZ parsing with Huffman and ANS coding, tuned for practical speed and compression tradeoffs."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cap))
             vo.wait_until("a")

@@ -50,16 +50,11 @@ class BoyerMoore(VoiceoverScene):
             label(r"look at the window's \textbf{last} character first", font_size=22, color=WHITE),
             label(r"if it doesn't occur in the pattern, \ no alignment covering it can match: \ jump $m$ places",
                   font_size=22, color=YES),
-            label(r"otherwise slide so the pattern's rightmost copy of it lines up \ (the bad-character rule)",
+            label("Horspool: \\ use the rightmost copy before the pattern's final position",
                   font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.7)
         with self.voiceover(
-            "In 1977 Robert Boyer and J Strother Moore turned the comparison around. <bookmark mark='a'/> Put the "
-            "pattern under the text and compare its last character first. <bookmark mark='b'/> Here the text has a "
-            "space where the pattern has g, and a space appears nowhere in Queequeg. So no alignment that covers "
-            "that space can match, and the pattern can jump its whole length. <bookmark mark='c'/> When the "
-            "character does occur in the pattern, slide just far enough to line up its rightmost copy. Watch how "
-            "few characters of the text are ever looked at."
+            "In 1977 Robert Boyer and J Strother Moore turned the comparison around. <bookmark mark='a'/> Put the pattern under the text and compare its last character first. <bookmark mark='b'/> Here the text has a space where the pattern has g, and a space appears nowhere in Queequeg. So no alignment that covers that space can match, and the pattern can jump its whole length. <bookmark mark='c'/> When the character does occur in the pattern, use its rightmost copy before the pattern's final position, as in the Horspool shifts animated here. Watch how few characters of the text are ever looked at."
         ) as vo:
             self.play(FadeIn(head), FadeIn(T), FadeIn(P))
             vo.wait_until("a")
@@ -83,28 +78,18 @@ class BoyerMoore(VoiceoverScene):
                   r"pattern", font_size=22, color=HEAD),
             label(r"\textbf{good suffix}: \ the matched suffix must appear again in the pattern: \ shift to its next "
                   r"copy, \ or to a border", font_size=22, color=LAM),
-            label(r"preprocessing: \ $O(m + \sigma)$; \ worst case $O(n + m)$ with Galil's rule; \ typical case "
-                  r"$O(n / m)$", font_size=22, color=WHITE),
+            label('Galil refinement: \\ linear worst case; \\ our implementation omits it and may take $O(nm)$', font_size=22, color=WHITE),
             label(r"Horspool (1980): \ keep only the bad-character rule, \ applied to the window's last character",
                   font_size=22, color=GREY_A),
-            label(r"why \texttt{grep} is fast: \ a Boyer--Moore loop that reads only a fraction of the bytes \ "
-                  r"(Mike Haertel, 2010)", font_size=22, color=YES),
+            label('Haertel (2010): \\ skipping helps GNU grep; \\ actual engines also depend on patterns and options', font_size=22, color=YES),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "The full algorithm has two rules. <bookmark mark='a'/> The bad-character rule lines up the "
-            "mismatched text character with its last occurrence in the pattern. <bookmark mark='b'/> The "
-            "good-suffix rule uses what did match: that suffix of the pattern must appear again further left, so "
-            "shift to its next copy. Take whichever shift is larger. <bookmark mark='c'/> The tables cost time "
-            "linear in the pattern and the alphabet, and with Galil's refinement even the worst case is linear. The "
-            "typical case is far better than linear: about n over m windows. <bookmark mark='d'/> Nigel Horspool "
-            "kept only the bad-character rule, and on ordinary text he lost almost nothing. <bookmark mark='e'/> "
-            "This is why grep is fast. Its author, Mike Haertel, explained in 2010 that it avoids looking at most of "
-            "the bytes at all."
+            "The full algorithm takes the larger of two safe shifts. <bookmark mark='a'/> The bad-character rule uses the mismatched text character. <bookmark mark='b'/> The good-suffix rule uses the suffix already matched, or a compatible border. <bookmark mark='c'/> Galil's refinement can guarantee a linear worst case. Our measured implementation omits that refinement, so it can still take n times m comparisons; favorable skipping on English is an observation, not a universal n-over-m theorem. <bookmark mark='d'/> Horspool uses only the window's last character for its shift. <bookmark mark='e'/> Mike Haertel explained how skipping helps GNU grep. Real search tools choose among several engines according to the pattern, options and platform."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(lines[0]))
             for mk, ln in zip("abcde", lines):
                 vo.wait_until(mk)
-                self.play(FadeIn(ln, shift=UP * 0.1))
+                self.play(Indicate(ln, color=WHITE) if mk == "a" else FadeIn(ln, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
 
@@ -185,14 +170,7 @@ class BoyerMoore(VoiceoverScene):
             side.width = 5.6
             side.to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "We measured three random patterns of each length in Moby-Dick. <bookmark mark='a'/> Knuth–Morris–"
-            "Pratt does about one comparison per character, whatever the length. <bookmark mark='b'/> Boyer–Moore "
-            "does about half a comparison per character for two-letter patterns, a sixth for eight letters, and a "
-            "twentieth for sixty-four: the longer the pattern, the less of the text it reads. <bookmark mark='c'/> "
-            "Horspool's simplification lies almost exactly on top of it. On English, the good-suffix rule rarely "
-            "matters. <bookmark mark='d'/> For Queequeg in the whole corpus, Boyer–Moore made three and a half "
-            "million comparisons, seven times fewer than the naive method, and grep searches the twenty-five "
-            "megabytes in about twenty milliseconds."
+            "We measured three random patterns of each length in Moby-Dick. <bookmark mark='a'/> Knuth–Morris–Pratt does about one comparison per character, whatever the length. <bookmark mark='b'/> Boyer–Moore does about half a comparison per character for two-letter patterns, a sixth for eight letters, and a twentieth for sixty-four: the longer the pattern, the less of the text it reads. <bookmark mark='c'/> Horspool's simplification lies almost exactly on top of it. On English, the good-suffix rule rarely matters. <bookmark mark='d'/> For Queequeg in the whole corpus, Boyer–Moore made three and a half million comparisons, seven times fewer than the naive method, and the table gives current host observations for grep and native byte counting, with every result checked. These timings are not controlled speedup estimates."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(xt))
             vo.wait_until("a")

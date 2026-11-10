@@ -1,10 +1,35 @@
 # Computer Science, Built — sequential polish
 
 Work on `computer-science-built`, one video at a time, with separate commits.
-Current video: **cs21, Strings**. CS1–CS20 source/preview polish checkpoints
+Current video: **cs22, Geometry**. CS1–CS21 source/preview polish checkpoints
 are complete at the scopes below. Their production release gates remain open; this
 ledger does not treat sampled previews as listening or final-production approval.
 The syllabus's earlier draft-preview claims are separate.
+
+## Final CS21 preview checkpoint, 10 November 2026
+
+- Repair matching boundary cases, sentinel/query/rank domains, full LCP extension and operation counters.
+  Seventeen schema-2 producers retain raw timing trials and post-timer references; all 17 payloads change.
+  All 23 tests, ten independent numerical/model groups and 901 native LCP/palindrome fixtures pass.
+- Verify the full suffix array and independent native corpus scans. The maximum exact repeat is 428 bytes
+  with checked intervals and unequal next bytes; Moby-Dick has 741,383,838,433 distinct original substrings
+  and a 19-letter longest normalized palindrome with at least four distinct letters. All 51 diffs are minimal.
+- Revise bilingual explanations and six worked exercises. Add count/locate work and maximum-repeat witnesses;
+  distinguish actual buffers, compressed files, modeled samples, codec framing, theorem domains and dated research.
+  Streaming Python Horspool reproduces 253 positions and 3,500,231 comparisons; no Pebble port is claimed.
+- Review all 36 endpoints and 36 silent motion overviews: 634 endpoint states, 1,440 temporal samples and
+  93,586 decoded frames. Every raw receipt has the frozen source fingerprint; 60 sampled reviews inherit
+  only through actual PNG equality. Two sparse-title alerts retain fresh exact-frame dispositions.
+- Review all 90 native 1080p15 clips: 67,807 frames, 2,160 samples and 90 native stills. Eighty-three complete
+  movie hashes preserve positive archived sampled reviews; seven corrected clips receive fresh review.
+  Three real English narrated pilots decode 9,095 frames plus audio; 120 samples/three stills receive fresh review.
+- All 81 English speech blocks pass automated signal/alignment (46.3525 minutes), and all 255 cue requests
+  meet 250 ms. Canonical source pairs and actual bilingual captures each cover 81/81 blocks. All 694 captions
+  have zero unresolved explanatory translation leads; all 104 retained originals are classified.
+
+[Verified CS21 evidence](evidence/cs21-polish-20261110/README.md).
+Continuous narrated listening, Chinese speech/listening, whole-video native production review and runtime at
+selected narration pace remain open release gates.
 
 ## Final CS20 preview checkpoint, 10 November 2026
 
@@ -548,8 +573,8 @@ Evidence, exact source/data hashes, reports and reproduction commands:
 
 ## Continue here
 
-1. Complete inspection of CS21's preserved bilingual original baseline before applying its isolated repairs.
-2. Verify string algorithms, exact search/count and suffix/repeat references, compression round trips and
-   measurement protocols; then polish bilingual visual explanations and perform the complete preview QA.
-3. Commit CS21 separately and continue CS22–CS61 in order, preserving the distinction between preview
-   checkpoints and final production release approval.
+1. Apply CS22's isolated geometry/provenance repairs after its 34 original bilingual endpoint reviews.
+2. Rebuild all CS22 numerical payloads, finish bilingual scope/visual repairs, and verify current previews,
+   native clips, English speech and cue scheduling with exact provenance.
+3. Commit CS22 separately and continue CS23–CS61 in order, preserving the distinction between preview
+   checks and the open production/listening gates.

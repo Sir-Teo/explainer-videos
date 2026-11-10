@@ -1,441 +1,430 @@
 {
- "title": "计算机科学，从零搭建 · 第21部分：字符串",
- "chapters": {
-  "Hook": "四种方法找 Queequeg",
-  "Naive": "1. 最直接的匹配",
-  "RabinKarp": "2. 滚动哈希",
-  "Kmp": "3. Knuth、Morris 与 Pratt：从不回头",
-  "BoyerMoore": "4. Boyer 与 Moore：向前跳",
-  "AhoCorasick": "5. 一次匹配许多模式",
-  "SuffixTree": "6. 后缀树",
-  "SuffixArray": "7. 后缀数组",
-  "Bwt": "8. Burrows–Wheeler 变换",
-  "FmIndex": "9. 搜索压缩文本：FM 索引",
-  "Lz": "10. 压缩（上）：Lempel 与 Ziv",
-  "Entropy": "11. 压缩（下）：给符号编码",
-  "Align": "12. 序列比对",
-  "Diff": "13. Myers 的 diff",
-  "Rsync": "14. 大规模的滚动哈希：rsync 与分块",
-  "Period": "15. 周期、回文与 Lyndon 词",
-  "Frontier": "16. 前沿：和信息量一样小的索引",
-  "Outro": "回顾、习题，以及它们会在哪里再出现"
- },
- "lines": {
-  "8d3859fd6220": {
-   "scene": "Hook",
-   "en": "Queequeg, the harpooner of Moby-Dick. Where does his name appear in the thirty novels, twenty-five megabytes of text? <bookmark mark='a'/> The obvious method compares the name against the text at every position: about twenty-five million character comparisons, roughly one per character. <bookmark mark='b'/> Knuth, Morris and Pratt's algorithm guarantees it never needs more than two per character, and never looks back. <bookmark mark='c'/> Boyer and Moore's algorithm looks at the end of the name first and skips ahead: three and a half million comparisons, seven times fewer. <bookmark mark='d'/> And an index built from a strange permutation of the text, the Burrows–Wheeler transform, answers with sixteen small table lookups, independent of the length of the novels. <bookmark mark='e'/> All four find the same 253 occurrences.",
-   "zh": "Queequeg，《白鲸》里的鱼叉手。他的名字在三十部小说、两千五百万字节的文本中出现在哪里？<bookmark mark='a'/>最直接的方法在每个位置把名字与文本比较：大约两千五百万次字符比较，差不多每个字符一次。<bookmark mark='b'/>Knuth、Morris 与 Pratt 的算法保证每个字符最多比较两次，而且从不回头。<bookmark mark='c'/>Boyer 与 Moore 的算法先看名字的末尾，然后向前跳：三百五十万次比较，少了七倍。<bookmark mark='d'/>而由文本的一种奇特排列，即 Burrows–Wheeler 变换，构造的索引，只用十六次小小的查表就能回答，与小说的长度无关。<bookmark mark='e'/>四种方法找到的都是同样的 253 处。"
-  },
-  "04a291bee191": {
-   "scene": "Hook",
-   "en": "Text is the oldest kind of data, and this part is about four things we do to it. <bookmark mark='a'/> We search it, with automata built from patterns and with indexes of every suffix. <bookmark mark='b'/> We compress it. zlib squeezes the novels to about a third, and a transform that sorts the text does better. <bookmark mark='c'/> We compare it: every git diff computes a shortest path on a grid, and we will run one on the history of this course's own syllabus. <bookmark mark='d'/> And we synchronize it, sending only what changed, found with the rolling hashes of Part 20.",
-   "zh": "文本是最古老的一种数据，这一部分讲我们对它做的四件事。<bookmark mark='a'/>我们搜索它，用由模式构造的自动机，以及所有后缀的索引。<bookmark mark='b'/>我们压缩它。zlib 把小说压到大约三分之一，而一种对文本排序的变换做得更好。<bookmark mark='c'/>我们比较它：每一次 git diff 都在网格上计算一条最短路径，我们会在这门课自己的教学大纲的历史上运行一次。<bookmark mark='d'/>我们还同步它，只发送变化的部分，用第20部分的滚动哈希找出来。"
-  },
-  "8221ef9b7e23": {
-   "scene": "Hook",
-   "en": "Part 21 of Computer Science, Built: Strings. <bookmark mark='a'/> In this part: five ways to find a pattern; suffix trees and suffix arrays, built for the whole corpus; the Burrows–Wheeler transform and the FM-index, which searches text without decompressing it; Lempel–Ziv compression and the entropy coders behind it; alignment, diff and rsync; periods and palindromes; and indexes as small as the information in the text.",
-   "zh": "计算机科学，从零搭建，第21部分：字符串。<bookmark mark='a'/>这一部分包括：找一个模式的五种方法；为整个语料构造的后缀树和后缀数组；Burrows–Wheeler 变换和 FM 索引，它不用解压就能搜索文本；Lempel–Ziv 压缩及其背后的熵编码器；比对、diff 和 rsync；周期与回文；以及和文本中的信息量一样小的索引。"
-  },
-  "7648094f602f": {
-   "scene": "Naive",
-   "en": "Chapter one. Matching, the obvious way.",
-   "zh": "第1章。最直接的匹配。"
-  },
-  "c731497f6155": {
-   "scene": "Naive",
-   "en": "Put the pattern under the text at the first position and compare left to right until a character differs. Then slide one place and start again. <bookmark mark='a'/> At most positions the first character already fails, so the work is close to one comparison per character of text. When the pattern does match, as at positions zero and seven here, we pay its whole length.",
-   "zh": "把模式放在文本的第一个位置下面，从左到右比较，直到某个字符不同。然后滑动一位，重新开始。<bookmark mark='a'/>在大多数位置，第一个字符就已经不同，所以工作量接近每个文本字符一次比较。当模式确实匹配时，比如这里的位置零和七，我们要付出它的全部长度。"
-  },
-  "7ce77ccaec58": {
-   "scene": "Naive",
-   "en": "On the whole corpus, 24,971,555 characters, the naive method costs very little more than one comparison per character for every pattern we tried. English text is kind to it: most positions fail at once, and even common words like the cost under one point one.",
-   "zh": "在整个语料，24971555 个字符上，对我们试过的每个模式，朴素方法的代价都只比每字符一次比较多一点点。英文文本对它很友好：大多数位置一开始就失败，就连 the 这样的常用词，代价也不到一点一。"
-  },
-  "433038de0157": {
-   "scene": "Naive",
-   "en": "Why is English so kind? <bookmark mark='a'/> At each alignment, the second character is compared only if the first matched, the third only if the first two did, and so on. <bookmark mark='b'/> So the comparisons per position are one, plus the frequency of the pattern's first letter, plus the frequency of its first two letters, and so on. Those frequencies fall quickly: few positions in a novel begin with Q, and fewer with Qu. <bookmark mark='c'/> Computed from the novels' own frequencies, the formula predicts the measured counts to the fourth decimal place. <bookmark mark='d'/> The word the costs most, because t begins seven percent of all positions and t h two percent more.",
-   "zh": "英文为什么这么友好？<bookmark mark='a'/>在每个对齐位置，只有第一个字符匹配了才比较第二个，前两个都匹配了才比较第三个，依此类推。<bookmark mark='b'/>所以每个位置的比较次数是一，加上模式第一个字母的频率，加上它前两个字母的频率，依此类推。这些频率下降得很快：小说中以 Q 开头的位置很少，以 Qu 开头的更少。<bookmark mark='c'/>用小说自己的频率来算，这个公式对实测次数的预测精确到小数点后第四位。<bookmark mark='d'/>the 这个词代价最高，因为所有位置中有百分之七以 t 开头，又有百分之二以 t h 开头。"
-  },
-  "a7781cafea60": {
-   "scene": "Naive",
-   "en": "The worst case is easy to build. <bookmark mark='a'/> Search for a run of a's ending in b inside a text of nothing but a's. Every alignment matches m minus one characters before it fails. <bookmark mark='b'/> The count is exactly n minus m plus one, times m: a hundred thousand characters and a thousand-letter pattern take ninety-nine million comparisons. <bookmark mark='c'/> DNA, with its four letters, binary files, and anyone who wants to slow a server down all find this case. The next three chapters remove it.",
-   "zh": "最坏情形很容易构造。<bookmark mark='a'/>在一段全是 a 的文本里，搜索一串以 b 结尾的 a。每个对齐位置都先匹配 m 减一个字符才失败。<bookmark mark='b'/>次数恰好是 n 减 m 加一，再乘 m：十万个字符、一千个字母的模式，要做九千九百万次比较。<bookmark mark='c'/>只有四个字母的 DNA、二进制文件，以及任何想拖慢服务器的人，都会遇到这种情形。接下来的三章会消除它。"
-  },
-  "98797d54fb7e": {
-   "scene": "RabinKarp",
-   "en": "Chapter two. Rolling hashes.",
-   "zh": "第2章。滚动哈希。"
-  },
-  "925f071ecd5f": {
-   "scene": "RabinKarp",
-   "en": "Richard Karp and Michael Rabin, in 1987, used Part 20's fingerprints. <bookmark mark='a'/> Read each window of m characters as a number in base b, modulo a prime p, and compare it with the pattern's number. <bookmark mark='b'/> Sliding the window by one place doesn't need a fresh sum: <bookmark mark='c'/> subtract the character that leaves, multiply by the base, and add the one that arrives. <bookmark mark='d'/> That is a constant amount of work per position, and characters are compared only when the two numbers agree. <bookmark mark='e'/> If the base is chosen at random, two different windows give the same number only if a nonzero polynomial of degree m minus one vanishes at that base, which Schwartz–Zippel says happens with probability at most m minus one over p.",
-   "zh": "1987年，Richard Karp 与 Michael Rabin 用上了第20部分的指纹。<bookmark mark='a'/>把每个 m 个字符的窗口读成一个以 b 为底、模一个素数 p 的数，与模式的数比较。<bookmark mark='b'/>窗口滑动一位并不需要重新求和：<bookmark mark='c'/>减去离开的字符，乘以底数，再加上进来的字符。<bookmark mark='d'/>每个位置只需常数的工作量，只有两个数相等时才比较字符。<bookmark mark='e'/>如果底数是随机选的，两个不同的窗口得到同一个数，仅当一个 m 减一次的非零多项式在这个底数处为零，Schwartz–Zippel 说这的概率至多是 m 减一除以 p。"
-  },
-  "ffb3a98f24fd": {
-   "scene": "RabinKarp",
-   "en": "Here is Queequeg in Moby-Dick, 1,217,697 characters, searched with fingerprints modulo primes of different sizes. <bookmark mark='a'/> With a modulus near a hundred, about one window in a hundred collides by chance: twelve thousand false alarms, almost exactly the n over p we'd expect. Each costs a few character comparisons, and never a wrong answer, because a fingerprint match is always checked. <bookmark mark='b'/> With a modulus of a million, the false alarms disappear, and the comparisons left are just the true matches being confirmed. <bookmark mark='c'/> The method's real strength is checking many patterns of the same length at once, by putting their fingerprints in a hash set, and it works in two dimensions for images. <bookmark mark='d'/> Its descendants run rsync and deduplicating backups, chapter fourteen.",
-   "zh": "这是用指纹在《白鲸》的 1217697 个字符中搜索 Queequeg，模数取不同大小的素数。<bookmark mark='a'/>模数在一百左右时，大约每一百个窗口就有一个偶然碰撞：一万两千次误报，几乎正好是我们预期的 n 除以 p。每次误报只花几次字符比较，从不导致错误答案，因为指纹相同时总要核对。<bookmark mark='b'/>模数达到一百万时，误报消失了，剩下的比较只是在确认真正的匹配。<bookmark mark='c'/>这种方法真正的长处是一次检查许多同样长度的模式：把它们的指纹放进一个哈希集合；它也能在二维上用于图像。<bookmark mark='d'/>它的后代运行着 rsync 和去重备份，即第十四章。"
-  },
-  "c16a9187663e": {
-   "scene": "Kmp",
-   "en": "Chapter three. Knuth, Morris and Pratt: never look back.",
-   "zh": "第3章。Knuth、Morris 与 Pratt：从不回头。"
-  },
-  "4de1622bd3dc": {
-   "scene": "Kmp",
-   "en": "Suppose j characters of the pattern have matched, and the next one fails. <bookmark mark='a'/> The naive method slides one place and re-reads text it has already seen. But those j characters of text are exactly the first j characters of the pattern, so we know them without looking. <bookmark mark='b'/> The only useful question is how far the pattern can shift so that what we have seen still matches. The answer is the longest proper prefix of those j characters that is also a suffix of them, called a border. <bookmark mark='c'/> Shift the pattern so the border lines up, and carry on comparing from the same text position. The text is read once, left to right, and never backed up. <bookmark mark='d'/> For the pattern a b a b a c a, after a b a b a the border is a b a, so we continue as if three characters had matched. The table is computed from the pattern alone, in linear time, by running the same idea on the pattern against itself.",
-   "zh": "假设模式的 j 个字符已经匹配，而下一个失败了。<bookmark mark='a'/>朴素方法滑动一位，重读已经看过的文本。但这 j 个文本字符正是模式的前 j 个字符，所以我们不用看就知道它们。<bookmark mark='b'/>唯一有用的问题是：模式可以移动多远，而已看到的部分仍然匹配？答案是这 j 个字符中既是真前缀又是后缀的最长者，叫作边界。<bookmark mark='c'/>移动模式使边界对齐，然后从同一个文本位置继续比较。文本只从左到右读一遍，从不回退。<bookmark mark='d'/>对模式 a b a b a c a，在 a b a b a 之后边界是 a b a，所以我们就当已经匹配了三个字符继续。这张表只由模式算出，用线性时间，方法是让模式对自己运行同样的想法。"
-  },
-  "916f19857123": {
-   "scene": "Kmp",
-   "en": "The failure table is really a finite automaton, the kind Part 12 built from regular expressions. <bookmark mark='a'/> State q means: the last q characters read match the first q of the pattern. Each matching character moves one state right. <bookmark mark='b'/> A mismatch follows the border back: from state five, a b means the last characters read are a b a b, state four. Every other transition returns to the start. <bookmark mark='c'/> Now feed it text, one character at a time, with no backtracking at all. When it reaches state seven, the pattern has just ended.",
-   "zh": "失配表其实是一个有限自动机，就是第12部分从正则表达式构造的那种。<bookmark mark='a'/>状态 q 的意思是：最后读到的 q 个字符与模式的前 q 个相同。每个匹配的字符使状态右移一格。<bookmark mark='b'/>失配时沿边界返回：在状态五读到 b，意味着最后读到的是 a b a b，即状态四。其他所有转移都回到起点。<bookmark mark='c'/>现在把文本一个字符一个字符地喂给它，完全不回溯。当它到达状态七时，模式刚好结束。"
-  },
-  "20fde72b33a9": {
-   "scene": "Kmp",
-   "en": "How much work is that? <bookmark mark='a'/> Every comparison either matches, and the text position moves right, or fails, and the pattern's starting position moves right. <bookmark mark='b'/> Each of those can move right at most n times, <bookmark mark='c'/> so there are at most two n comparisons in all, plus linear work to build the table. This is an amortized argument, like Part 16's doubling arrays: a single character can cost several comparisons, but never many on average. <bookmark mark='d'/> Chapter one's worst case, which cost the naive method ten million comparisons, costs 199,901. <bookmark mark='e'/> On the novels, Knuth–Morris–Pratt is no faster than naive search; it is never slower, whatever the text.",
-   "zh": "这要多少工作？<bookmark mark='a'/>每次比较要么匹配，文本位置右移；要么失败，模式的起始位置右移。<bookmark mark='b'/>两者都至多右移 n 次，<bookmark mark='c'/>所以总共至多两倍 n 次比较，再加上构造表的线性工作。这是一个摊还论证，就像第16部分的倍增数组：单个字符可能花好几次比较，但平均下来从不多。<bookmark mark='d'/>第一章的最坏情形让朴素方法花了一千万次比较，这里只要 199901 次。<bookmark mark='e'/>在小说上，Knuth–Morris–Pratt 并不比朴素搜索快；但无论文本是什么，它都从不更慢。"
-  },
-  "2c8987e3e2e2": {
-   "scene": "BoyerMoore",
-   "en": "Chapter four. Boyer and Moore: skip ahead.",
-   "zh": "第4章。Boyer 与 Moore：向前跳。"
-  },
-  "f65d2266322e": {
-   "scene": "BoyerMoore",
-   "en": "In 1977 Robert Boyer and J Strother Moore turned the comparison around. <bookmark mark='a'/> Put the pattern under the text and compare its last character first. <bookmark mark='b'/> Here the text has a space where the pattern has g, and a space appears nowhere in Queequeg. So no alignment that covers that space can match, and the pattern can jump its whole length. <bookmark mark='c'/> When the character does occur in the pattern, slide just far enough to line up its rightmost copy. Watch how few characters of the text are ever looked at.",
-   "zh": "1977年，Robert Boyer 与 J Strother Moore 把比较的方向反了过来。<bookmark mark='a'/>把模式放在文本下面，先比较它的最后一个字符。<bookmark mark='b'/>这里文本在模式的 g 处是一个空格，而空格在 Queequeg 中根本不出现。所以任何覆盖这个空格的对齐都不可能匹配，模式可以跳过它的整个长度。<bookmark mark='c'/>如果这个字符确实出现在模式中，就滑动到刚好让它最右边的那次出现对齐。看文本中被看过的字符有多少。"
-  },
-  "ced5b01ce53f": {
-   "scene": "BoyerMoore",
-   "en": "The full algorithm has two rules. <bookmark mark='a'/> The bad-character rule lines up the mismatched text character with its last occurrence in the pattern. <bookmark mark='b'/> The good-suffix rule uses what did match: that suffix of the pattern must appear again further left, so shift to its next copy. Take whichever shift is larger. <bookmark mark='c'/> The tables cost time linear in the pattern and the alphabet, and with Galil's refinement even the worst case is linear. The typical case is far better than linear: about n over m windows. <bookmark mark='d'/> Nigel Horspool kept only the bad-character rule, and on ordinary text he lost almost nothing. <bookmark mark='e'/> This is why grep is fast. Its author, Mike Haertel, explained in 2010 that it avoids looking at most of the bytes at all.",
-   "zh": "完整的算法有两条规则。<bookmark mark='a'/>坏字符规则把失配的文本字符与它在模式中最后一次出现对齐。<bookmark mark='b'/>好后缀规则利用已经匹配的部分：模式的这个后缀必定在更左边再次出现，所以移到它的下一个副本。取两者中较大的移动。<bookmark mark='c'/>这些表的代价与模式和字母表成线性，加上 Galil 的改进，连最坏情形也是线性的。典型情形远好于线性：大约 n 除以 m 个窗口。<bookmark mark='d'/>Nigel Horspool 只保留了坏字符规则，在普通文本上几乎没有损失。<bookmark mark='e'/>这就是 grep 快的原因。它的作者 Mike Haertel 在2010年解释说，它根本不去看大部分字节。"
-  },
-  "38e64082b768": {
-   "scene": "BoyerMoore",
-   "en": "The good-suffix rule deserves an example. <bookmark mark='a'/> Here the pattern ANPANMAN is lined up under the text, and comparing from the right, M A N matched before a mismatch. <bookmark mark='b'/> Whatever the next possible alignment is, the text there still ends in M A N, so the pattern must have a matching piece under it. <bookmark mark='c'/> ANPANMAN has no other M A N, but its prefix A N is a suffix of M A N, a border again, so the pattern can slide until that A N lines up. <bookmark mark='d'/> That is a shift of six instead of one, and here it lands on a match; and the whole table is computed from the pattern before the search starts. <bookmark mark='e'/> On English the bad-character rule does most of the work, because the alphabet is large; on DNA, with four letters, the good-suffix rule earns its keep.",
-   "zh": "好后缀规则值得举个例子。<bookmark mark='a'/>这里模式 ANPANMAN 对在文本下面，从右往左比较，M A N 匹配之后出现失配。<bookmark mark='b'/>无论下一个可能的对齐在哪里，那里的文本仍以 M A N 结尾，所以模式在它下面必须有匹配的部分。<bookmark mark='c'/>ANPANMAN 没有另一个 M A N，但它的前缀 A N 是 M A N 的后缀，又是一个边界，所以模式可以滑动到那个 A N 对齐。<bookmark mark='d'/>这是移动六位而不是一位，而且这里正好落在一个匹配上；整张表在搜索开始前就由模式算好。<bookmark mark='e'/>在英文上，坏字符规则做了大部分工作，因为字母表很大；在只有四个字母的 DNA 上，好后缀规则才显出价值。"
-  },
-  "85d27bd696af": {
-   "scene": "BoyerMoore",
-   "en": "We measured three random patterns of each length in Moby-Dick. <bookmark mark='a'/> Knuth–Morris–Pratt does about one comparison per character, whatever the length. <bookmark mark='b'/> Boyer–Moore does about half a comparison per character for two-letter patterns, a sixth for eight letters, and a twentieth for sixty-four: the longer the pattern, the less of the text it reads. <bookmark mark='c'/> Horspool's simplification lies almost exactly on top of it. On English, the good-suffix rule rarely matters. <bookmark mark='d'/> For Queequeg in the whole corpus, Boyer–Moore made three and a half million comparisons, seven times fewer than the naive method, and grep searches the twenty-five megabytes in about twenty milliseconds.",
-   "zh": "我们在《白鲸》中对每种长度测量了三个随机模式。<bookmark mark='a'/>Knuth–Morris–Pratt 每个字符大约比较一次，与长度无关。<bookmark mark='b'/>Boyer–Moore 对两个字母的模式每字符大约比较半次，八个字母时六分之一，六十四个字母时二十分之一：模式越长，读的文本越少。<bookmark mark='c'/>Horspool 的简化版几乎与它完全重合。在英文上，好后缀规则很少起作用。<bookmark mark='d'/>在整个语料中找 Queequeg，Boyer–Moore 做了三百五十万次比较，比朴素方法少七倍，而 grep 搜完两千五百万字节大约只要二十毫秒。"
-  },
-  "f0eaefd29549": {
-   "scene": "AhoCorasick",
-   "en": "Chapter five. Many patterns at once.",
-   "zh": "第5章。一次匹配许多模式。"
-  },
-  "fa2cb948b13d": {
-   "scene": "AhoCorasick",
-   "en": "Often we want many patterns at once: every virus signature, every banned word, every name in a list. Running one search per pattern reads the text again and again. <bookmark mark='a'/> In 1975 Alfred Aho and Margaret Corasick put all the patterns into one trie, a tree of their prefixes. <bookmark mark='b'/> Reading the text, we walk down the trie while characters match. On a mismatch, we follow a failure link to the longest proper suffix of what we've read that is still in the trie: from s h, the link goes to h. <bookmark mark='c'/> And each state lists every pattern that ends there: reaching s h e reports she, and also he. <bookmark mark='d'/> This is Knuth, Morris and Pratt's failure function, generalized from a line to a tree, and it reads the text exactly once.",
-   "zh": "我们常常想一次找许多模式：每个病毒特征码、每个禁用词、名单上的每个名字。每个模式搜一遍，就要一遍又一遍地读文本。<bookmark mark='a'/>1975年，Alfred Aho 与 Margaret Corasick 把所有模式放进一棵字典树，即它们前缀构成的树。<bookmark mark='b'/>读文本时，只要字符匹配就沿字典树往下走。失配时，沿失配链接走到已读部分仍在字典树中的最长真后缀：从 s h，链接指向 h。<bookmark mark='c'/>每个状态还列出在那里结束的所有模式：到达 s h e 时报告 she，也报告 he。<bookmark mark='d'/>这就是 Knuth、Morris 与 Pratt 的失配函数，从一条线推广到一棵树，而且文本只读一遍。"
-  },
-  "1b083a797bc4": {
-   "scene": "AhoCorasick",
-   "en": "How are the failure links found? <bookmark mark='a'/> Breadth-first, level by level from the root. A failure link always points to a shallower state, so by the time we reach a state, every state its link could need has been done. <bookmark mark='b'/> For a child t of state s, reached by character c, start from s's own failure link and keep following links until reaching a state that has a c child; <bookmark mark='c'/> t's link is that child. <bookmark mark='d'/> For s h e: s h links to h, and h has an e child, so s h e links to h e. <bookmark mark='e'/> Each state also inherits the outputs of the state it links to, which is how she reports he. <bookmark mark='f'/> The total work is linear in the total length of the patterns, by the same amortized argument as Knuth–Morris–Pratt.",
-   "zh": "失配链接是怎样找出来的？<bookmark mark='a'/>广度优先，从根开始一层一层地做。失配链接总是指向更浅的状态，所以到达一个状态时，它的链接可能需要的每个状态都已经处理过了。<bookmark mark='b'/>对状态 s 经字符 c 到达的孩子 t，从 s 自己的失配链接出发，不断沿链接走，直到某个状态有 c 孩子；<bookmark mark='c'/>t 的链接就是那个孩子。<bookmark mark='d'/>对 s h e：s h 链接到 h，而 h 有一个 e 孩子，所以 s h e 链接到 h e。<bookmark mark='e'/>每个状态还继承它所链接状态的输出，she 正是这样报告 he 的。<bookmark mark='f'/>总工作量与所有模式的总长度成线性，用的是与 Knuth–Morris–Pratt 相同的摊还论证。"
-  },
-  "634576080129": {
-   "scene": "AhoCorasick",
-   "en": "We built the automaton for 45 character names from the novels: Elizabeth, Ahab, Queequeg, Holmes, Raskolnikov and the rest. <bookmark mark='a'/> The trie has 231 states. One pass over the corpus took twenty-five million steps. <bookmark mark='b'/> Searching for each name separately would read the text forty-five times, more than a billion characters. <bookmark mark='c'/> These are substring counts, so Jo also counts John and Joe; a real tool would add word boundaries. <bookmark mark='d'/> The same automaton runs inside grep with many patterns, antivirus scanners and network intrusion detectors.",
-   "zh": "我们为小说中的 45 个人物名字构造了自动机：Elizabeth、Ahab、Queequeg、Holmes、Raskolnikov 等等。<bookmark mark='a'/>字典树有 231 个状态。在语料上走一遍用了两千五百万步。<bookmark mark='b'/>每个名字单独搜索，就要把文本读四十五遍，超过十亿个字符。<bookmark mark='c'/>这些是子串计数，所以 Jo 也算上了 John 和 Joe；真正的工具会加上词边界。<bookmark mark='d'/>同样的自动机运行在多模式的 grep、杀毒软件和网络入侵检测器里。"
-  },
-  "dbb206878401": {
-   "scene": "SuffixTree",
-   "en": "Chapter six. Suffix trees.",
-   "zh": "第6章。后缀树。"
-  },
-  "1859aacdf9e2": {
-   "scene": "SuffixTree",
-   "en": "What if the text, rather than the pattern, is fixed, and we will search it many times? <bookmark mark='a'/> Take every suffix of banana, with an end marker, and store them all in one tree. Each path from the root spells a substring, and each leaf is a whole suffix; the box says where it starts. <bookmark mark='b'/> The tree branches only where suffixes start to differ, so there are at most n leaves and fewer than n branching nodes. <bookmark mark='c'/> The edge labels are stored as two pointers into the text, so the whole tree takes linear space. <bookmark mark='d'/> To find a pattern, walk down from the root: m steps, however long the text, and the leaves below the end of the walk are its occurrences. A n a ends inside the branch with two leaves, at positions one and three.",
-   "zh": "如果固定不变的是文本而不是模式，而我们要搜索它许多次呢？<bookmark mark='a'/>取 banana 加上结束标记后的每个后缀，把它们全部存进一棵树。从根出发的每条路径拼出一个子串，每片叶子是一个完整的后缀；方框标明它从哪里开始。<bookmark mark='b'/>树只在后缀开始不同的地方分叉，所以至多有 n 片叶子，分叉节点少于 n 个。<bookmark mark='c'/>边上的标签存成指向文本的两个指针，所以整棵树只占线性空间。<bookmark mark='d'/>要找一个模式，就从根往下走：m 步，与文本多长无关，走到的位置下面的叶子就是它的出现位置。a n a 停在有两片叶子的分支里，位置一和三。"
-  },
-  "401d09cfdc72": {
-   "scene": "SuffixTree",
-   "en": "Building the tree naively, one suffix at a time, walks a quadratic number of characters. <bookmark mark='a'/> Esko Ukkonen's algorithm extends the tree one character at a time instead, turning the tree of the first i characters into the tree of the first i plus one. <bookmark mark='b'/> Two tricks make that cheap. Suffix links join the node for c followed by alpha to the node for alpha, so the algorithm can jump from one suffix to the next shorter one without walking down from the root: the failure links of chapter five again. <bookmark mark='c'/> And leaf edges are left open, ending at whatever the current end of the text is, so all the leaves grow by a character at once, for free. <bookmark mark='d'/> Each step either adds a leaf or follows a suffix link, and an amortized count shows linear work in all. <bookmark mark='e'/> The same links and the same accounting as Knuth–Morris–Pratt and Aho–Corasick: string algorithms keep rediscovering one idea.",
-   "zh": "朴素地一次插入一个后缀来构造这棵树，要走过平方级数量的字符。<bookmark mark='a'/>Esko Ukkonen 的算法改为一次扩展一个字符，把前 i 个字符的树变成前 i 加一个字符的树。<bookmark mark='b'/>两个技巧让这一步很便宜。后缀链接把 c 后接 alpha 的节点连到 alpha 的节点，于是算法可以从一个后缀跳到下一个更短的后缀，而不必从根往下走：这又是第五章的失配链接。<bookmark mark='c'/>叶子边保持开放，终点是文本当前的末尾，所以所有叶子一次同时长一个字符，不花任何代价。<bookmark mark='d'/>每一步要么加一片叶子，要么沿一条后缀链接走，摊还计数表明总工作量是线性的。<bookmark mark='e'/>与 Knuth–Morris–Pratt 和 Aho–Corasick 同样的链接、同样的记账：字符串算法一再重新发现同一个想法。"
-  },
-  "132638bac268": {
-   "scene": "SuffixTree",
-   "en": "Many questions become walks in this tree. <bookmark mark='a'/> The longest repeated substring is the deepest branching node. <bookmark mark='b'/> In Moby-Dick, it is a chapter title of a hundred characters, which appears in the table of contents and again at the head of its chapter. <bookmark mark='c'/> Put two texts in one tree, and the deepest node with leaves from both gives their longest common substring in linear time, which dynamic programming needs quadratic time for. <bookmark mark='d'/> The number of distinct substrings is just the total length of all the edges: <bookmark mark='e'/> for Moby-Dick, seven hundred and forty-one billion. <bookmark mark='f'/> Peter Weiner first built the tree in linear time in 1973; Esko Ukkonen's 1995 algorithm builds it online, a character at a time. <bookmark mark='g'/> The catch is memory: ten to twenty bytes for every character of text. For the novels, half a gigabyte. The next chapter keeps almost all the power in a fraction of the space.",
-   "zh": "许多问题都变成在这棵树上行走。<bookmark mark='a'/>最长重复子串就是最深的分叉节点。<bookmark mark='b'/>在《白鲸》中，它是一个一百个字符的章节标题，在目录里出现一次，又在该章开头出现一次。<bookmark mark='c'/>把两段文本放进同一棵树，同时有来自两者的叶子的最深节点给出它们的最长公共子串，用线性时间，而动态规划需要平方时间。<bookmark mark='d'/>不同子串的个数就是所有边的总长度：<bookmark mark='e'/>《白鲸》有七千四百一十亿个。<bookmark mark='f'/>Peter Weiner 在1973年第一个用线性时间构造出这棵树；Esko Ukkonen 1995年的算法在线构造，一次一个字符。<bookmark mark='g'/>代价是内存：文本的每个字符要十到二十个字节。对这些小说而言就是半个 GB。下一章用一小部分空间保留几乎全部的能力。"
-  },
-  "0832d09e0ceb": {
-   "scene": "SuffixArray",
-   "en": "Chapter seven. Suffix arrays.",
-   "zh": "第7章。后缀数组。"
-  },
-  "0092321d348f": {
-   "scene": "SuffixArray",
-   "en": "Udi Manber and Gene Myers kept the suffix tree's power with far less memory. <bookmark mark='a'/> Take every suffix of the text and sort them, in dictionary order. <bookmark mark='b'/> Then throw the suffixes away and keep only where each one starts: an array of n integers, the suffix array. <bookmark mark='c'/> Every occurrence of a pattern is the beginning of some suffix, and suffixes beginning with the same pattern are next to each other in sorted order. Here, the four suffixes that start with t. <bookmark mark='d'/> So two binary searches find the block, with m times log n character comparisons at most, and the block's size is the number of occurrences.",
-   "zh": "Udi Manber 与 Gene Myers 用少得多的内存保留了后缀树的能力。<bookmark mark='a'/>取文本的每个后缀，按字典序排序。<bookmark mark='b'/>然后丢掉后缀本身，只保留每个后缀从哪里开始：一个由 n 个整数组成的数组，就是后缀数组。<bookmark mark='c'/>模式的每次出现都是某个后缀的开头，而以同一个模式开头的后缀在排序后彼此相邻。这里是以 t 开头的四个后缀。<bookmark mark='d'/>所以两次二分查找就能找到这一段，至多 m 乘 log n 次字符比较，这一段的大小就是出现次数。"
-  },
-  "255b3e4b5c75": {
-   "scene": "SuffixArray",
-   "en": "How do you sort twenty-five million suffixes, each up to twenty-five million characters long? <bookmark mark='a'/> Rank them first by one character. <bookmark mark='b'/> Then notice that ranking by the first two k characters is the same as sorting pairs: the rank of the suffix's first k characters, and the rank of the k characters after them, which is the rank of another suffix. <bookmark mark='c'/> Double k until every suffix has its own rank: log n rounds of sorting. <bookmark mark='d'/> Linear-time algorithms exist too; SA-IS, from 2009, sorts a sample of the suffixes recursively and induces the rest, and it is what fast libraries use. <bookmark mark='e'/> Alongside, keep the longest common prefix of each pair of neighbours in sorted order, which Kasai and colleagues showed how to compute in linear time. <bookmark mark='f'/> With both arrays, every question the suffix tree answered can be answered again, in a quarter of the memory.",
-   "zh": "怎样给两千五百万个后缀排序，每个后缀最长可达两千五百万个字符？<bookmark mark='a'/>先按第一个字符给它们排名。<bookmark mark='b'/>然后注意到，按前两倍 k 个字符排名，就等于给数对排序：后缀前 k 个字符的排名，以及其后 k 个字符的排名，而后者正是另一个后缀的排名。<bookmark mark='c'/>不断让 k 加倍，直到每个后缀都有自己的排名：log n 轮排序。<bookmark mark='d'/>线性时间的算法也存在；2009年的 SA-IS 递归地给一部分后缀排序，再推导出其余的，快速的程序库用的就是它。<bookmark mark='e'/>同时，保存排序后每对相邻后缀的最长公共前缀，Kasai 等人说明了怎样用线性时间算出它。<bookmark mark='f'/>有了这两个数组，后缀树能回答的每个问题都能再次回答，而内存只要四分之一。"
-  },
-  "63a8855a9440": {
-   "scene": "SuffixArray",
-   "en": "We built the suffix array of all 24,971,556 characters of the novels, by prefix doubling with numpy's sorts, in under two minutes. <bookmark mark='a'/> It takes a hundred megabytes, four bytes for every character. <bookmark mark='b'/> Now any pattern is a pair of binary searches: Queequeg's two hundred and fifty-three occurrences were found with a hundred and sixty-seven character comparisons, against twenty-five million for a scan. <bookmark mark='c'/> And Moby-Dick's LCP array says that neighbouring suffixes share eight characters on average, which is why the binary search rarely compares more than a few characters per step.",
-   "zh": "我们为小说的全部 24971556 个字符构造了后缀数组，用 numpy 的排序做前缀倍增，不到两分钟。<bookmark mark='a'/>它占一百 MB，每个字符四个字节。<bookmark mark='b'/>现在任何模式都是一对二分查找：Queequeg 的两百五十三次出现只用了一百六十七次字符比较就找到了，而扫描一遍要两千五百万次。<bookmark mark='c'/>《白鲸》的 LCP 数组表明，相邻后缀平均共享八个字符，所以二分查找每一步很少比较超过几个字符。"
-  },
-  "bd555a8a694f": {
-   "scene": "SuffixArray",
-   "en": "With the suffix array and its LCP array, the longest repeated substring is simply the largest common prefix of two neighbours. <bookmark mark='a'/> For the whole corpus we computed it by comparing neighbouring suffixes in numpy, doubling the length checked each round. <bookmark mark='b'/> The winner is 383 characters long, and it is not prose: it is a run of chapter headings, Chapter one, Chapter two, Chapter three, overlapping a copy of itself a few hundred characters later. <bookmark mark='c'/> In Moby-Dick alone, the longest repeat is a chapter title printed twice. Real prose almost never repeats, as Part 20's search for near-duplicates found too.",
-   "zh": "有了后缀数组和它的 LCP 数组，最长重复子串就是两个相邻后缀的最长公共前缀中最大的那个。<bookmark mark='a'/>对整个语料，我们用 numpy 比较相邻后缀来计算它，每轮把检查的长度加倍。<bookmark mark='b'/>胜出者长 383 个字符，而且不是正文：它是一串章节标题，第一章、第二章、第三章，与几百个字符之后它自己的一份副本重叠。<bookmark mark='c'/>只看《白鲸》，最长的重复是印了两次的章节标题。真正的正文几乎从不重复，第20部分搜索近似重复时也发现了这一点。"
-  },
-  "73c2881db496": {
-   "scene": "Bwt",
-   "en": "Chapter eight. The Burrows–Wheeler transform.",
-   "zh": "第8章。Burrows–Wheeler 变换。"
-  },
-  "b7e699ebb931": {
-   "scene": "Bwt",
-   "en": "In 1994 Michael Burrows and David Wheeler published a transform that Wheeler had found years earlier. <bookmark mark='a'/> Write down every rotation of the text, here banana with an end marker. <bookmark mark='b'/> Sort the rotations. The first column is now just the letters of the text in order. <bookmark mark='c'/> The last column is the transform: a n n b, end marker, a a. <bookmark mark='d'/> Each character in the last column is the one that comes just before its row in the text. Rows that begin alike are sorted next to each other, <bookmark mark='e'/> so the characters before them cluster too. <bookmark mark='f'/> In Moby-Dick, nearly three in four of the rows beginning h e end in t, so the sorted text has long runs of the same letter.",
-   "zh": "1994年，Michael Burrows 与 David Wheeler 发表了 Wheeler 多年前就发现的一种变换。<bookmark mark='a'/>写下文本的每个旋转，这里是 banana 加上结束标记。<bookmark mark='b'/>给这些旋转排序。现在第一列就是文本的字母按顺序排好。<bookmark mark='c'/>最后一列就是变换的结果：a n n b、结束标记、a a。<bookmark mark='d'/>最后一列的每个字符，是文本中紧挨在它那一行之前的字符。开头相似的行排在一起，<bookmark mark='e'/>所以它们前面的字符也聚在一起。<bookmark mark='f'/>在《白鲸》中，以 h e 开头的行将近四分之三以 t 结尾，所以排序后的文本里有同一个字母的长串。"
-  },
-  "63a854255b61": {
-   "scene": "Bwt",
-   "en": "Sorting threw away the order of the text, or seemed to. <bookmark mark='a'/> The key fact: the k-th a in the last column and the k-th a in the first column are the same character of the text. <bookmark mark='b'/> Rows that start with a are sorted by what follows the a, and so are the rows that end with a, because the text after that a is the rest of each rotation. <bookmark mark='c'/> So start at the row ending with the end marker, which is the text itself. Read its last character, then jump along the arrow to the row that begins with that same character, and repeat. <bookmark mark='d'/> The text comes out backwards, one character per jump. <bookmark mark='e'/> We inverted the transform of all of Moby-Dick this way and got the novel back exactly.",
-   "zh": "排序丢掉了文本的顺序，至少看起来如此。<bookmark mark='a'/>关键事实是：最后一列的第 k 个 a 与第一列的第 k 个 a 是文本中同一个字符。<bookmark mark='b'/>以 a 开头的行按 a 后面的内容排序，以 a 结尾的行也是，因为那个 a 之后的文本正是每个旋转的其余部分。<bookmark mark='c'/>所以从以结束标记结尾的那一行出发，它就是文本本身。读它的最后一个字符，沿箭头跳到以同一个字符开头的那一行，然后重复。<bookmark mark='d'/>文本倒着出来，每跳一次一个字符。<bookmark mark='e'/>我们用这种方法反演了整部《白鲸》的变换，一字不差地得回了这部小说。"
-  },
-  "6d9af6491031": {
-   "scene": "Bwt",
-   "en": "Here is the opening of Moby-Dick, and a stretch of its transform. <bookmark mark='a'/> The transform is full of runs. Across the novel there are just over half a million runs for 1.2 million characters. <bookmark mark='b'/> Move-to-front coding replaces each character by its position in a list of recently seen characters, so a run becomes a string of zeros: <bookmark mark='c'/> the entropy drops from four point four bits per character to two point seven. <bookmark mark='d'/> That is the recipe of bzip2, which Julian Seward released in 1996: transform, move to front, then Huffman. On the novel it beats zlib's Lempel–Ziv by a quarter.",
-   "zh": "这是《白鲸》的开头，以及它的变换中的一段。<bookmark mark='a'/>变换里满是连续串。整部小说一百二十万个字符，只有五十多万个连续串。<bookmark mark='b'/>前移编码把每个字符替换为它在最近见过的字符列表中的位置，于是一个连续串变成一串零：<bookmark mark='c'/>熵从每字符四点四比特降到二点七。<bookmark mark='d'/>这就是 Julian Seward 在1996年发布的 bzip2 的配方：变换，前移，再加 Huffman。在这部小说上它比 zlib 的 Lempel–Ziv 好四分之一。"
-  },
-  "e42b947c88ad": {
-   "scene": "Bwt",
-   "en": "Why does sorting make text more predictable? <bookmark mark='a'/> The rows are sorted by what follows each position, and the last column holds what precedes it. <bookmark mark='b'/> So the transform lists the text's characters grouped by their context: first everything that comes before h e, then everything before h i, and so on. <bookmark mark='c'/> Inside each group one or two characters dominate. Before h e it is mostly t. <bookmark mark='d'/> A simple coder that adapts to the current group therefore pays about the k-th order entropy, the cost of predicting each character from the k characters next to it, and it does so for every k at once, without being told k. <bookmark mark='e'/> For Moby-Dick that is four point four bits with no context, three and a half with one character, two point eight with two. <bookmark mark='f'/> Giovanni Manzini made this precise in 2001.",
-   "zh": "为什么排序使文本更容易预测？<bookmark mark='a'/>行是按每个位置之后的内容排序的，而最后一列存的是它之前的内容。<bookmark mark='b'/>所以变换把文本的字符按上下文分组列出：先是所有出现在 h e 之前的字符，然后是所有在 h i 之前的，依此类推。<bookmark mark='c'/>每组之内有一两个字符占主导。在 h e 之前大多是 t。<bookmark mark='d'/>因此一个适应当前分组的简单编码器，大约付出 k 阶熵，即根据旁边 k 个字符预测每个字符的代价，而且它对所有 k 同时做到，不需要被告知 k。<bookmark mark='e'/>对《白鲸》，没有上下文时是四点四比特，有一个字符时三点五，有两个字符时二点八。<bookmark mark='f'/>Giovanni Manzini 在2001年把这一点精确化了。"
-  },
-  "e3cc9d14417b": {
-   "scene": "FmIndex",
-   "en": "Chapter nine. Searching compressed text: the FM-index.",
-   "zh": "第9章。搜索压缩文本：FM 索引。"
-  },
-  "cccf45cd2966": {
-   "scene": "FmIndex",
-   "en": "Paolo Ferragina and Giovanni Manzini saw in 2000 that the transform is itself an index. <bookmark mark='a'/> The sorted rows are the sorted suffixes of chapter seven, so all occurrences of a pattern are a block of consecutive rows. Find the block by reading the pattern backwards. <bookmark mark='b'/> Start with the last character, a: rows one to three begin with a. <bookmark mark='c'/> Which rows begin with n a? They are where the LF mapping sends those a rows whose last character is n, and two counts of n in the last column, before row one and before row four, say where they land: rows five and six. <bookmark mark='d'/> Once more for a n a: rows two and three. <bookmark mark='e'/> Two rows, two occurrences. Each character of the pattern costs two rank queries, whatever the length of the text.",
-   "zh": "2000年，Paolo Ferragina 与 Giovanni Manzini 看出这个变换本身就是一个索引。<bookmark mark='a'/>排好序的行就是第七章排好序的后缀，所以一个模式的所有出现是一段连续的行。倒着读模式就能找到这一段。<bookmark mark='b'/>从最后一个字符 a 开始：第一到三行以 a 开头。<bookmark mark='c'/>哪些行以 n a 开头？它们是 LF 映射把那些最后一个字符为 n 的 a 行送去的地方，而最后一列中 n 的两次计数，第一行之前和第四行之前，说明它们落在哪里：第五和第六行。<bookmark mark='d'/>对 a n a 再做一次：第二和第三行。<bookmark mark='e'/>两行，两次出现。模式的每个字符花两次 rank 查询，与文本多长无关。"
-  },
-  "6b366643c150": {
-   "scene": "FmIndex",
-   "en": "Real FM-indexes answer rank queries without storing the transform as bytes. <bookmark mark='a'/> A wavelet tree splits the alphabet in two and writes one bit per character: zero for the first half, one for the second. <bookmark mark='b'/> Then it does the same, recursively, for the characters of each half: log sigma levels of bit vectors. <bookmark mark='c'/> To count the n's before position i, ask how many ones come before i at the top, follow that count into the right child, and ask again. <bookmark mark='d'/> Guy Jacobson showed in 1989 how to answer a binary rank in constant time with only a sliver of extra bits. <bookmark mark='e'/> Compress the bit vectors, or shape the tree like a Huffman code, and the whole index takes about the compressed size of the text.",
-   "zh": "真正的 FM 索引回答 rank 查询时，并不把变换按字节存储。<bookmark mark='a'/>小波树把字母表一分为二，每个字符写一个比特：前一半写零，后一半写一。<bookmark mark='b'/>然后对每一半的字符递归地做同样的事：log sigma 层比特向量。<bookmark mark='c'/>要数位置 i 之前有多少个 n，就问顶层在 i 之前有多少个一，带着这个计数进入右孩子，再问一次。<bookmark mark='d'/>Guy Jacobson 在1989年说明了怎样只用极少的额外比特，在常数时间内回答二进制 rank。<bookmark mark='e'/>压缩这些比特向量，或者把树做成 Huffman 编码的形状，整个索引就只占大约文本压缩后的大小。"
-  },
-  "07e741654fb0": {
-   "scene": "FmIndex",
-   "en": "Here it is on the whole corpus. <bookmark mark='a'/> Counting any pattern takes a fraction of a millisecond, a couple of rank queries per character, whether the pattern occurs once or two hundred thousand times. To find where an occurrence is, walk back with the LF mapping until reaching a row whose suffix-array entry was kept; we kept every thirty-second. <bookmark mark='b'/> Our teaching version stores the transform as plain bytes with rank counts every sixty-four rows, which is larger than the text. <bookmark mark='c'/> Real FM-indexes store the transform compressed, with wavelet trees, close to the size of the compressed text: the transform of the novels compresses to seven megabytes. So the index is smaller than the book it searches. <bookmark mark='d'/> This is how DNA aligners like BWA and Bowtie map billions of short reads against the human genome.",
-   "zh": "这是它在整个语料上的表现。<bookmark mark='a'/>统计任何模式都只要不到一毫秒，每个字符几次 rank 查询，不管模式出现一次还是二十万次。要找出某次出现在哪里，就沿 LF 映射往回走，直到遇到一行保留了后缀数组条目；我们每三十二个保留一个。<bookmark mark='b'/>我们的教学版本把变换存成普通字节，每六十四行存一次 rank 计数，比文本还大。<bookmark mark='c'/>真正的 FM 索引用小波树把变换压缩存储，接近压缩文本的大小：这些小说的变换压缩到七 MB。所以索引比它所搜索的书还小。<bookmark mark='d'/>BWA 和 Bowtie 这样的 DNA 比对工具，正是这样把数十亿条短读段比对到人类基因组上的。"
-  },
-  "f86b7d6c008f": {
-   "scene": "Lz",
-   "en": "Chapter ten. Compression, part one: Lempel and Ziv.",
-   "zh": "第10章。压缩（上）：Lempel 与 Ziv。"
-  },
-  "89a17ed252d8": {
-   "scene": "Lz",
-   "en": "In 1977 Abraham Lempel and Jacob Ziv proposed the idea behind zip, gzip and PNG. <bookmark mark='a'/> Read the text left to right. Whenever the next stretch has appeared recently, don't write it again: write a pair, how long it is and how far back it was. Here is the opening of A Tale of Two Cities. It was the, of times, it was the: each repetition becomes an arc back to its first appearance. <bookmark mark='b'/> The search looks back over a window, thirty-two kilobytes in DEFLATE, and matches from three to two hundred and fifty-eight characters. <bookmark mark='c'/> Finding the longest match fast is a hashing problem: index every three-character prefix in the window, and follow the chain of earlier positions with the same prefix.",
-   "zh": "1977年，Abraham Lempel 与 Jacob Ziv 提出了 zip、gzip 和 PNG 背后的想法。<bookmark mark='a'/>从左到右读文本。只要接下来的一段最近出现过，就不再写它：写一个数对，它有多长、在多远之前。这是《双城记》的开头。It was the、of times、it was the：每一次重复都变成一条指回它首次出现的弧。<bookmark mark='b'/>搜索在一个窗口内往回看，DEFLATE 中是三十二 KB，匹配长度从三到二百五十八个字符。<bookmark mark='c'/>快速找到最长匹配是一个哈希问题：为窗口中每个三字符前缀建索引，沿着有相同前缀的较早位置组成的链走。"
-  },
-  "a6bcb3b37240": {
-   "scene": "Lz",
-   "en": "A year later Ziv and Lempel gave a second scheme. <bookmark mark='a'/> Keep a dictionary of phrases. Read the longest phrase already in it, write down its number, and add that phrase plus the next character as a new entry. <bookmark mark='b'/> The phrases grow one character at a time, so common stretches of text soon have a number of their own. <bookmark mark='c'/> Terry Welch's variant, LZW, starts with every single byte in the dictionary. It ran Unix's compress command and GIF images. <bookmark mark='d'/> Ziv and Lempel proved something remarkable: for any stationary ergodic source, the number of bits per character tends to the source's entropy rate, the best possible. <bookmark mark='e'/> The method is universal. It needs no model of the text, only enough of it.",
-   "zh": "一年后，Ziv 与 Lempel 给出了第二种方案。<bookmark mark='a'/>维护一个短语词典。读出词典中已有的最长短语，写下它的编号，再把这个短语加上下一个字符作为新条目加入词典。<bookmark mark='b'/>短语一次长一个字符，所以文本中常见的片段很快就有了自己的编号。<bookmark mark='c'/>Terry Welch 的变体 LZW 一开始就把每个单字节放进词典。Unix 的 compress 命令和 GIF 图像用的就是它。<bookmark mark='d'/>Ziv 与 Lempel 证明了一件了不起的事：对任何平稳遍历的信源，每字符的比特数趋于信源的熵率，即可能的最好结果。<bookmark mark='e'/>这种方法是通用的。它不需要文本的模型，只需要足够多的文本。"
-  },
-  "506a6e23d5d0": {
-   "scene": "Lz",
-   "en": "We wrote an LZ77 compressor with hash chains and priced its output with Huffman codes, as DEFLATE does, and ran it on three novels. <bookmark mark='a'/> On Moby-Dick it found two hundred and twenty thousand matches, about five characters long on average, and only twenty-three thousand characters it had to spell out. <bookmark mark='b'/> It lands within six percent of zlib at its strongest setting, which adds lazy matching, trying one position later before committing. LZW is about as good. <bookmark mark='c'/> bzip2, which sorts, does better on novels, and xz better still, by modelling what is likely to follow each match. <bookmark mark='d'/> DEFLATE, Lempel–Ziv plus Huffman, is inside every zip file, PNG image and compressed web page.",
-   "zh": "我们写了一个带哈希链的 LZ77 压缩器，像 DEFLATE 那样用 Huffman 编码给它的输出计价，在三部小说上运行。<bookmark mark='a'/>在《白鲸》上它找到二十二万个匹配，平均大约五个字符长，只有两万三千个字符需要直接写出。<bookmark mark='b'/>它与最强设置下的 zlib 相差不到百分之六，zlib 多了惰性匹配，在确定之前先试晚一个位置。LZW 差不多一样好。<bookmark mark='c'/>会排序的 bzip2 在小说上做得更好，xz 又更好，因为它对每个匹配之后可能出现什么建模。<bookmark mark='d'/>DEFLATE，即 Lempel–Ziv 加 Huffman，存在于每个 zip 文件、每张 PNG 图像和每个压缩过的网页中。"
-  },
-  "07acd8b989e4": {
-   "scene": "Lz",
-   "en": "DEFLATE, the format inside zip and gzip, puts Lempel–Ziv and Huffman together. <bookmark mark='a'/> Literal bytes and match lengths share one alphabet of two hundred and eighty-six symbols, and distances have their own thirty. <bookmark mark='b'/> Big values are coded as a bucket plus a few extra raw bits, so that the Huffman alphabets stay small. <bookmark mark='c'/> Each block of output carries its own pair of Huffman codes, which are themselves compressed. <bookmark mark='d'/> The compressor's cleverest trick is lazy matching: before committing to a match, it checks whether starting one character later would give a longer one. That is the main thing our simple version lacks. <bookmark mark='e'/> The levels from one to nine trade how hard the compressor searches against speed, while decompression is always quick, little more than copying bytes. <bookmark mark='f'/> Phil Katz designed it in 1993 for PKZIP; it was standardized in 1996 and has been everywhere since.",
-   "zh": "DEFLATE，zip 和 gzip 里面的格式，把 Lempel–Ziv 与 Huffman 结合在一起。<bookmark mark='a'/>字面字节和匹配长度共用一个有二百八十六个符号的字母表，距离有自己的三十个。<bookmark mark='b'/>大的数值编码成一个桶加几个额外的原始比特，使 Huffman 字母表保持很小。<bookmark mark='c'/>输出的每个块带着自己的一对 Huffman 编码，而这些编码本身也被压缩。<bookmark mark='d'/>压缩器最巧妙的技巧是惰性匹配：在确定一个匹配之前，先看晚一个字符开始是否会得到更长的匹配。这正是我们的简单版本主要缺少的。<bookmark mark='e'/>从一到九的级别在压缩器搜索得多努力与速度之间权衡，而解压总是很快，不过是复制字节。<bookmark mark='f'/>Phil Katz 在1993年为 PKZIP 设计了它；它在1996年成为标准，从此无处不在。"
-  },
-  "386a6a40ea3c": {
-   "scene": "Entropy",
-   "en": "Chapter eleven. Compression, part two: coding the symbols.",
-   "zh": "第11章。压缩（下）：给符号编码。"
-  },
-  "5714f9a58f7d": {
-   "scene": "Entropy",
-   "en": "Lempel–Ziv finds the repetition; then the symbols must be written in bits. <bookmark mark='a'/> Shannon says a symbol of probability p is worth log of one over p bits, and the average is the entropy. <bookmark mark='b'/> Huffman's code from Part 19 gives each symbol a whole number of bits, which is within one bit of that. <bookmark mark='c'/> Usually that is fine. But take a source where one symbol has probability ninety-five percent: its entropy is under three tenths of a bit per symbol, and Huffman still spends a whole bit on every symbol, more than three times too much. <bookmark mark='d'/> The last column, rANS, gets to within a fraction of a percent of the entropy, at every skew. <bookmark mark='e'/> On the bytes of Moby-Dick, where no symbol dominates, Huffman's whole bits cost less than one percent.",
-   "zh": "Lempel–Ziv 找出重复；然后还得把符号写成比特。<bookmark mark='a'/>Shannon 说，概率为 p 的符号值 log 一除以 p 个比特，平均值就是熵。<bookmark mark='b'/>第19部分的 Huffman 编码给每个符号整数个比特，与熵相差不到一比特。<bookmark mark='c'/>通常这就够了。但设想一个信源，其中一个符号的概率是百分之九十五：它的熵每符号不到十分之三比特，而 Huffman 仍然给每个符号花一整个比特，多了三倍以上。<bookmark mark='d'/>最后一列 rANS，在每种偏斜度下都只比熵多不到百分之一。<bookmark mark='e'/>在《白鲸》的字节上，没有哪个符号占主导，Huffman 的整数比特只多花不到百分之一。"
-  },
-  "4c35cd9bac5b": {
-   "scene": "Entropy",
-   "en": "Arithmetic coding solved this in the 1970s by treating the whole message as one number, but it was slow. <bookmark mark='a'/> Jarek Duda's asymmetric numeral systems keep the message as a single integer x and push each symbol into it. <bookmark mark='b'/> Divide x by the symbol's frequency, multiply by the total, and add the remainder and the symbol's offset. <bookmark mark='c'/> Here f is the symbol's frequency out of M. <bookmark mark='d'/> Each step multiplies x by about one over the symbol's probability, so the number of bits grows by exactly its information content. <bookmark mark='e'/> In practice x stays inside a machine word by streaming out its low bytes, and decoding runs the same arithmetic backwards. <bookmark mark='f'/> Duda's work, published between 2009 and 2014, made entropy coding as tight as arithmetic coding and as fast as Huffman. It is inside zstd, Apple's LZFSE and JPEG XL. We wrote a byte-wise version in forty lines; it round-trips every test.",
-   "zh": "算术编码在1970年代解决了这个问题，把整条消息当作一个数，但它很慢。<bookmark mark='a'/>Jarek Duda 的非对称数字系统把消息保存为一个整数 x，把每个符号推入其中。<bookmark mark='b'/>用 x 除以符号的频率，乘以总数，再加上余数和符号的偏移。<bookmark mark='c'/>这里 f 是符号在 M 中所占的频率。<bookmark mark='d'/>每一步大约把 x 乘以一除以符号的概率，所以比特数恰好增加它的信息量。<bookmark mark='e'/>实际中，x 通过不断输出低位字节而保持在一个机器字之内，解码则把同样的算术倒过来运行。<bookmark mark='f'/>Duda 在2009到2014年间发表的工作，使熵编码像算术编码一样紧凑，又像 Huffman 一样快。zstd、Apple 的 LZFSE 和 JPEG XL 里都有它。我们用四十行写了一个按字节工作的版本；它在每个测试上都能还原。"
-  },
-  "8456130a6806": {
-   "scene": "Entropy",
-   "en": "With a coder that reaches the entropy of whatever probabilities it is given, the only question left is how good those probabilities are. <bookmark mark='a'/> Treat each byte of Moby-Dick on its own, and the entropy is four point four bits. Given the previous byte, three point five. Given the previous two, two point eight. <bookmark mark='b'/> Better prediction means fewer bits: compression is prediction. <bookmark mark='c'/> That is the road from PPM through context mixing to the language models of the AI series, whose first part found them to be the best compressors of text we have. <bookmark mark='d'/> At the other end, Yann Collet's zstd combines Lempel–Ziv, Huffman and ANS, tuned for speed, and is now the default compressor in much of the world's infrastructure.",
-   "zh": "有了一个能达到所给概率之熵的编码器，剩下的唯一问题就是这些概率有多好。<bookmark mark='a'/>把《白鲸》的每个字节单独看，熵是四点四比特。知道前一个字节时三点五。知道前两个时二点八。<bookmark mark='b'/>预测越好，比特越少：压缩就是预测。<bookmark mark='c'/>这是一条从 PPM 经上下文混合通往 AI 系列中语言模型的路，那个系列的第一部分发现，它们是我们拥有的最好的文本压缩器。<bookmark mark='d'/>在另一端，Yann Collet 的 zstd 结合了 Lempel–Ziv、Huffman 和 ANS，为速度而调校，如今是世界上大量基础设施的默认压缩器。"
-  },
-  "d424796dbec4": {
-   "scene": "Align",
-   "en": "Chapter twelve. Alignment.",
-   "zh": "第12章。序列比对。"
-  },
-  "b5792bb87c4d": {
-   "scene": "Align",
-   "en": "Part 19's edit distance becomes, in biology, an alignment. <bookmark mark='a'/> Saul Needleman and Christian Wunsch, in 1970, filled the same table, but with scores to maximize: a reward for matching letters, penalties for mismatches and gaps. <bookmark mark='b'/> Each cell is the best of three: extend the alignment by a pair, or by a gap on either side. <bookmark mark='c'/> Here intention against execution, the example of Part 19. <bookmark mark='d'/> Real biology scores amino acids with substitution matrices learned from evolution, and charges more to open a gap than to extend one, because one long insertion is likelier than many short ones.",
-   "zh": "第19部分的编辑距离，在生物学中变成了比对。<bookmark mark='a'/>1970年，Saul Needleman 与 Christian Wunsch 填写了同样的表格，但是用要最大化的得分：字母匹配有奖励，失配和空位有罚分。<bookmark mark='b'/>每个格子取三者中最好的：用一对字符延长比对，或在任一边加一个空位。<bookmark mark='c'/>这里是 intention 对 execution，第19部分的例子。<bookmark mark='d'/>真正的生物学用从进化中学来的替换矩阵给氨基酸打分，而且开启一个空位比延长它罚得更多，因为一次长的插入比许多次短的更可能。"
-  },
-  "4def3e0bc892": {
-   "scene": "Align",
-   "en": "Often only part of two texts is related. <bookmark mark='a'/> Temple Smith and Michael Waterman added a fourth choice to every cell: zero, meaning start a fresh alignment here. <bookmark mark='b'/> The best local alignment is the highest cell anywhere in the table, traced back until the score drops to zero. <bookmark mark='c'/> Here are the two versions of the anonymous letter from The Count of Monte Cristo that Part 20's MinHash flagged. Smith–Waterman finds the stretch they share and lines it up, word for word, around the places where the second version was reworded.",
-   "zh": "两段文本常常只有一部分相关。<bookmark mark='a'/>Temple Smith 与 Michael Waterman 给每个格子加了第四个选择：零，意思是在这里重新开始一段比对。<bookmark mark='b'/>最好的局部比对是表中任何位置的最高格子，往回追溯直到得分降为零。<bookmark mark='c'/>这是《基督山伯爵》中那封匿名信的两个版本，第20部分的 MinHash 标出了它们。Smith–Waterman 找到它们共有的那一段，逐词对齐，绕过第二个版本改写过的地方。"
-  },
-  "dd4ed2d1f55f": {
-   "scene": "Align",
-   "en": "Real gaps are not independent. <bookmark mark='a'/> Biology, and diff, prefer one long gap to many short ones, so a gap of length l costs an opening charge plus a small charge per character. <bookmark mark='b'/> A single table can't price that, because a cell doesn't know whether its neighbour was already inside a gap. <bookmark mark='c'/> Osamu Gotoh's solution keeps three tables: M for alignments ending in a pair of characters, <bookmark mark='d'/> X for those ending in a gap in one string, <bookmark mark='e'/> and Y for a gap in the other. Moving within X or Y costs only the extension; entering them from M pays the opening. <bookmark mark='f'/> The time is still the product of the lengths, and Hirschberg's divide-and-conquer trick from Part 19 brings the memory down to linear.",
-   "zh": "真实的空位并不相互独立。<bookmark mark='a'/>生物学和 diff 都偏爱一个长空位而不是许多短空位，所以长度为 l 的空位花一笔开启费，再加每个字符一笔小费用。<bookmark mark='b'/>单张表格无法这样计价，因为一个格子不知道它的邻居是否已经在空位之中。<bookmark mark='c'/>Osamu Gotoh 的办法是保留三张表：M 表示以一对字符结尾的比对，<bookmark mark='d'/>X 表示以一个串中的空位结尾的，<bookmark mark='e'/>Y 表示另一个串中的空位。在 X 或 Y 之内移动只付延长费；从 M 进入它们要付开启费。<bookmark mark='f'/>时间仍是两个长度之积，第19部分 Hirschberg 的分治技巧把内存降到线性。"
-  },
-  "390e4a3ea03e": {
-   "scene": "Align",
-   "en": "The table is quadratic, and genomes are long. <bookmark mark='a'/> Two human genomes would need ten to the eighteen cells. <bookmark mark='b'/> BLAST, from 1990, one of the most cited papers in all of science, finds short exact seeds with a hash table and extends alignments only around them. <bookmark mark='c'/> Modern read aligners find their seeds with the FM-index of chapter nine. <bookmark mark='d'/> And there is a reason to settle for heuristics: an exact edit-distance algorithm in truly subquadratic time would refute the strong exponential time hypothesis, Part 19's frontier and Part 27's subject. <bookmark mark='e'/> What we can do is exploit similarity: when the distance d is small, only a band of the table matters, and the work is n times d. The next chapter does exactly that.",
-   "zh": "表格是平方级的，而基因组很长。<bookmark mark='a'/>两个人类基因组需要十的十八次方个格子。<bookmark mark='b'/>1990年的 BLAST，是全部科学中被引用最多的论文之一，它用哈希表找出短的精确种子，只在种子周围延长比对。<bookmark mark='c'/>现代的读段比对工具用第九章的 FM 索引找种子。<bookmark mark='d'/>满足于启发式方法是有原因的：真正次平方时间的精确编辑距离算法，会推翻强指数时间假设，即第19部分的前沿和第27部分的主题。<bookmark mark='e'/>我们能做的是利用相似性：当距离 d 很小时，只有表格的一条带有关，工作量是 n 乘 d。下一章正是这样做的。"
-  },
-  "304f67af667b": {
-   "scene": "Diff",
-   "en": "Chapter thirteen. Myers' diff.",
-   "zh": "第13章。Myers 的 diff。"
-  },
-  "9e9741a62eeb": {
-   "scene": "Diff",
-   "en": "Every git diff answers one question: what is the shortest list of line insertions and deletions that turns one file into another? Gene Myers drew it as a graph. <bookmark mark='a'/> Put the lines of the old file along the top and the new file down the side. <bookmark mark='b'/> A step right deletes a line of the old file, and a step down inserts a line of the new one; each costs one. <bookmark mark='c'/> Wherever two lines are equal there is a diagonal, which keeps the line and costs nothing. <bookmark mark='d'/> A diff is a path from the top-left corner to the bottom-right, and the best diff is the shortest path, Part 18's problem, on a grid. <bookmark mark='e'/> For Myers' own example, A B C A B B A against C B A B A C, five edits, and as many free diagonals as possible.",
-   "zh": "每次 git diff 都回答一个问题：把一个文件变成另一个，最短的行插入和删除列表是什么？Gene Myers 把它画成一张图。<bookmark mark='a'/>把旧文件的行放在上边，新文件的行放在左边。<bookmark mark='b'/>向右一步删除旧文件的一行，向下一步插入新文件的一行；每步花费一。<bookmark mark='c'/>只要两行相等就有一条对角线，它保留这一行，不花任何代价。<bookmark mark='d'/>一个 diff 是从左上角到右下角的一条路径，最好的 diff 就是最短路径，即第18部分的问题，在网格上。<bookmark mark='e'/>对 Myers 自己的例子，A B C A B B A 对 C B A B A C，五次编辑，并尽可能多地走免费的对角线。"
-  },
-  "3197c96cc899": {
-   "scene": "Diff",
-   "en": "Dijkstra's algorithm would work, but Myers found something better in 1986. <bookmark mark='a'/> Number the diagonals by x minus y. A path with D edits can only end on diagonals from minus D to D. <bookmark mark='b'/> For D equals zero, one, two and so on, keep, for each diagonal, only the path that has reached furthest along it. <bookmark mark='c'/> Each new path is the best neighbour's path plus one edit, followed by a slide down every free diagonal it can, which Myers called a snake. <bookmark mark='d'/> The first path to reach the corner is a shortest diff, after n plus m times D work, so similar files are fast. <bookmark mark='e'/> Patience diff, by Bram Cohen, first anchors on lines that appear exactly once in each file, which keeps code blocks together. <bookmark mark='f'/> And three-way merge, the heart of git merge, diffs both branches against their common ancestor and reports a conflict only where both changed the same lines.",
-   "zh": "Dijkstra 算法也行，但 Myers 在1986年找到了更好的办法。<bookmark mark='a'/>用 x 减 y 给对角线编号。有 D 次编辑的路径只能停在负 D 到 D 的对角线上。<bookmark mark='b'/>对 D 等于零、一、二，依此类推，每条对角线只保留沿它走得最远的那条路径。<bookmark mark='c'/>每条新路径是最好的邻居路径加一次编辑，然后沿它能走的每条免费对角线滑下去，Myers 称之为蛇。<bookmark mark='d'/>第一条到达角落的路径就是一个最短的 diff，用 n 加 m 再乘 D 的工作量，所以相似的文件很快。<bookmark mark='e'/>Bram Cohen 的 patience diff 先锚定在每个文件中恰好出现一次的行上，这能让代码块保持完整。<bookmark mark='f'/>而三方合并，git merge 的核心，把两个分支分别与它们的共同祖先做 diff，只在两边都改了同样的行时才报告冲突。"
-  },
-  "c3a52fb8bace": {
-   "scene": "Diff",
-   "en": "We ran our Myers diff on every change to this course's own syllabus, 27 versions of a file now over three thousand lines long. <bookmark mark='a'/> The first big rewrite changed fourteen hundred lines, and took half a second in Python. <bookmark mark='b'/> Most commits changed a handful of lines, and took milliseconds: the D in n times D at work. <bookmark mark='c'/> We checked every result against the classic quadratic longest-common-subsequence computation; all were minimal. <bookmark mark='d'/> Git's own diff, even with its minimal flag, came out two to four lines longer on 8 of the 26 changes. Git first sets aside lines it judges unhelpful, a speed heuristic that occasionally costs a line or two.",
-   "zh": "我们把自己的 Myers diff 运行在这门课自己教学大纲的每一次修改上，27 个版本，这个文件现在已超过三千行。<bookmark mark='a'/>第一次大改写改了一千四百行，在 Python 中用了半秒。<bookmark mark='b'/>大多数提交只改几行，只要几毫秒：n 乘 D 中的 D 在起作用。<bookmark mark='c'/>我们用经典的平方时间最长公共子序列计算核对了每个结果；全都是最小的。<bookmark mark='d'/>git 自己的 diff，即使加上 minimal 选项，在 26 次修改中有 8 次多出两到四行。git 先把它判断为无用的行放到一边，这种为速度而设的启发式偶尔会多花一两行。"
-  },
-  "cc2089d4415c": {
-   "scene": "Rsync",
-   "en": "Chapter fourteen. Rolling hashes at scale: rsync and chunking.",
-   "zh": "第14章。大规模的滚动哈希：rsync 与分块。"
-  },
-  "77e411c7f0ae": {
-   "scene": "Rsync",
-   "en": "You have last week's copy of a large file, and the server has today's, which differs by a sentence inserted in the middle. How do you update your copy without downloading all of it? <bookmark mark='a'/> The obvious plan cuts both files into fixed blocks and sends only the blocks whose hashes differ. <bookmark mark='b'/> But an insertion shifts everything after it. We inserted twenty-four bytes into the middle of Moby-Dick: <bookmark mark='c'/> half of the fixed blocks now differ, though almost nothing changed.",
-   "zh": "你有一个大文件上周的副本，服务器有今天的版本，区别只是中间插入了一句话。怎样更新你的副本而不必全部下载？<bookmark mark='a'/>直接的方案是把两个文件切成固定的块，只发送哈希不同的块。<bookmark mark='b'/>但插入会让它之后的一切都移位。我们在《白鲸》中间插入了二十四个字节：<bookmark mark='c'/>一半的固定块现在都不同了，尽管几乎什么都没变。"
-  },
-  "8d046d6e50cc": {
-   "scene": "Rsync",
-   "en": "Andrew Tridgell and Paul Mackerras's rsync, from 1996, fixes this with a rolling hash. <bookmark mark='a'/> The receiver hashes each of its blocks twice, once weakly and once strongly, and sends the list. <bookmark mark='b'/> The sender slides a window over its new file one byte at a time, looking for any old block at any offset. <bookmark mark='c'/> The weak checksum, two running sums, updates in constant time as the window slides, like chapter two's fingerprints. <bookmark mark='d'/> Only when the weak checksum matches is the expensive strong hash checked. <bookmark mark='e'/> For our edited Moby-Dick, 593 of the old blocks were found in place or shifted, and only about three kilobytes had to be sent as literal text.",
-   "zh": "Andrew Tridgell 与 Paul Mackerras 1996年的 rsync 用滚动哈希解决了这个问题。<bookmark mark='a'/>接收方对它的每个块算两次哈希，一次弱的，一次强的，然后发送这个列表。<bookmark mark='b'/>发送方在新文件上一次一个字节地滑动窗口，在任何偏移处寻找任何旧块。<bookmark mark='c'/>弱校验和由两个累加和组成，窗口滑动时用常数时间更新，就像第二章的指纹。<bookmark mark='d'/>只有弱校验和匹配时，才检查代价高的强哈希。<bookmark mark='e'/>对我们修改过的《白鲸》，593 个旧块在原位或移位后被找到，只有大约三 KB 需要作为字面文本发送。"
-  },
-  "b7c3dc917f07": {
-   "scene": "Rsync",
-   "en": "rsync needs the old file's block hashes, and a backup system with millions of files can't afford to keep them all. <bookmark mark='a'/> Content-defined chunking turns the idea around. Let the content choose where to cut: run a rolling hash over the bytes, and cut wherever its value ends in thirteen zeros, which with a minimum chunk size comes about every ten kilobytes. <bookmark mark='b'/> An insertion changes the hash only near it, so the cuts after it fall in the same places as before. <bookmark mark='c'/> Moby-Dick cut into 120 chunks; after our edit, exactly one chunk was new, fourteen kilobytes. <bookmark mark='d'/> Store each chunk once, under its hash, and a thousand nightly backups of a slowly changing disk cost little more than one. This is how deduplicating backup tools and cloud file sync work.",
-   "zh": "rsync 需要旧文件的块哈希，而一个有数百万文件的备份系统负担不起把它们全部保存。<bookmark mark='a'/>基于内容的分块把这个想法倒过来。让内容决定在哪里切：在字节上运行滚动哈希，在它的值以十三个零结尾的地方切开，加上最小块大小的限制，大约每十 KB 切一次。<bookmark mark='b'/>插入只改变它附近的哈希，所以它之后的切点落在与以前相同的地方。<bookmark mark='c'/>《白鲸》被切成 120 块；修改之后，恰好只有一块是新的，十四 KB。<bookmark mark='d'/>每块只按它的哈希存一次，一个缓慢变化的磁盘的一千次夜间备份，代价比一次多不了多少。去重备份工具和云文件同步就是这样工作的。"
-  },
-  "08b93a67c9b9": {
-   "scene": "Period",
-   "en": "Chapter fifteen. Periods, palindromes and Lyndon words.",
-   "zh": "第15章。周期、回文与 Lyndon 词。"
-  },
-  "70e7910f8e09": {
-   "scene": "Period",
-   "en": "Some structure lives inside a single string. <bookmark mark='a'/> A string has period p if every character equals the one p places later. This one has periods five and eight. <bookmark mark='b'/> The periods are exactly n minus the borders of chapter three, so the failure function lists them all. <bookmark mark='c'/> Nathan Fine and Herbert Wilf proved in 1965 that if a string has periods p and q and is at least p plus q minus their greatest common divisor long, it also has that divisor as a period. <bookmark mark='d'/> Five and eight have divisor one, so a string of twelve characters with both periods would be a single repeated letter; ours, of eleven, escapes, which shows the bound is tight. <bookmark mark='e'/> This lemma is what lets fast matchers skip ahead without missing anything; Crochemore and Perrin's two-way algorithm, inside the C library's memmem, depends on it.",
-   "zh": "有些结构存在于单个字符串之内。<bookmark mark='a'/>如果一个字符串的每个字符都等于 p 位之后的那个，它就有周期 p。这个串有周期五和八。<bookmark mark='b'/>周期恰好是 n 减去第三章的边界，所以失配函数把它们全部列了出来。<bookmark mark='c'/>Nathan Fine 与 Herbert Wilf 在1965年证明：如果一个字符串有周期 p 和 q，且长度至少是 p 加 q 减去它们的最大公约数，那么这个公约数也是它的周期。<bookmark mark='d'/>五和八的公约数是一，所以有这两个周期的十二个字符的串只能是同一个字母的重复；我们的串只有十一个字符，逃过了这一点，这说明这个界是紧的。<bookmark mark='e'/>正是这个引理让快速匹配器能向前跳而不漏掉任何东西；Crochemore 与 Perrin 的双向算法，即 C 库 memmem 内部的算法，就依赖于它。"
-  },
-  "e994cbe94c38": {
-   "scene": "Period",
-   "en": "What is the longest palindrome in the novels? <bookmark mark='a'/> Expanding around each possible centre is quadratic for a text like a run of a's. <bookmark mark='b'/> Glenn Manacher's 1975 algorithm notices that inside a palindrome already found, each centre mirrors one on the other side, so its radius can start from the mirror's instead of from zero. <bookmark mark='c'/> The right edge of the furthest palindrome only ever moves right, which makes the whole scan linear. <bookmark mark='d'/> We ran it over the letters of all thirty novels, nineteen million of them, ignoring runs of a single letter. The winner, at nineteen letters, is Lenehan in Ulysses: able was I ere I saw Elba.",
-   "zh": "这些小说中最长的回文是什么？<bookmark mark='a'/>围绕每个可能的中心向外扩展，对一串 a 这样的文本是平方级的。<bookmark mark='b'/>Glenn Manacher 1975年的算法注意到，在已经找到的回文之内，每个中心都对应另一侧的一个镜像，所以它的半径可以从镜像的半径开始，而不必从零开始。<bookmark mark='c'/>最远回文的右边界只会向右移动，这使整个扫描是线性的。<bookmark mark='d'/>我们在全部三十部小说的字母上运行它，共一千九百万个，忽略单个字母的连续串。胜出者有十九个字母，是《尤利西斯》里的 Lenehan：able was I ere I saw Elba。"
-  },
-  "9380b5a7df82": {
-   "scene": "Period",
-   "en": "One more piece of structure. <bookmark mark='a'/> A Lyndon word is strictly smaller, in dictionary order, than every one of its rotations. <bookmark mark='b'/> Kuo-Tsai Chen, Ralph Fox and Roger Lyndon proved that every string splits in exactly one way into Lyndon words that never increase. <bookmark mark='c'/> Banana is b, an, an, a. Mississippi is m, iss, iss, ipp, i. <bookmark mark='d'/> Jean-Pierre Duval found the factorization in linear time with constant extra memory. <bookmark mark='e'/> It sounds like a curiosity, but it gives a Burrows–Wheeler transform without an end marker, and Lyndon words were the key to the 2017 proof that a string of length n has fewer than n maximal repetitions.",
-   "zh": "再看一种结构。<bookmark mark='a'/>Lyndon 词按字典序严格小于它的每一个旋转。<bookmark mark='b'/>陈国才、Ralph Fox 与 Roger Lyndon 证明，每个字符串都能以唯一的方式分解为一串不递增的 Lyndon 词。<bookmark mark='c'/>banana 是 b、an、an、a。mississippi 是 m、iss、iss、ipp、i。<bookmark mark='d'/>Jean-Pierre Duval 用线性时间和常数额外内存找到了这种分解。<bookmark mark='e'/>这听起来像是一件奇事，但它给出了不需要结束标记的 Burrows–Wheeler 变换，而 Lyndon 词是2017年那个证明的关键：长度为 n 的字符串的极大重复少于 n 个。"
-  },
-  "3b24fcdfd36d": {
-   "scene": "Frontier",
-   "en": "Chapter sixteen. Frontier: indexes as small as the information.",
-   "zh": "第16章。前沿：和信息量一样小的索引。"
-  },
-  "0ffabf4985fb": {
-   "scene": "Frontier",
-   "en": "The frontier concerns texts that repeat themselves. <bookmark mark='a'/> Count the runs in the Burrows–Wheeler transform, r. For six and a half megabytes of the novels, there are about two characters per run. For all twenty-seven versions of this course's syllabus, concatenated, the same length of text has only a hundred and thirty thousand runs: fifty characters each. <bookmark mark='b'/> xz compresses those versions sixty-fold. <bookmark mark='c'/> Collections like this are everywhere: versioned documents, the history of every software project, and above all genomes. <bookmark mark='d'/> A pangenome holds thousands of human genomes, each ninety-nine point nine percent identical to the others. <bookmark mark='e'/> An FM-index's size tracks the text's statistical entropy, which barely notices that one genome repeats another. For such collections it is far too big.",
-   "zh": "前沿关注的是自我重复的文本。<bookmark mark='a'/>数一数 Burrows–Wheeler 变换中的连续串个数，记作 r。对六点五 MB 的小说，每个连续串大约两个字符。对这门课教学大纲全部二十七个版本拼接起来的同样长度的文本，只有十三万个连续串：每个五十个字符。<bookmark mark='b'/>xz 把这些版本压缩了六十倍。<bookmark mark='c'/>这样的集合到处都是：有版本的文档、每个软件项目的历史，最重要的是基因组。<bookmark mark='d'/>一个泛基因组包含数千个人类基因组，每个与其他的有百分之九十九点九相同。<bookmark mark='e'/>FM 索引的大小跟随文本的统计熵，而统计熵几乎察觉不到一个基因组重复了另一个。对这样的集合，它太大了。"
-  },
-  "85b835a0f07c": {
-   "scene": "Frontier",
-   "en": "The answer is an index whose size depends on r. <bookmark mark='a'/> Store the transform as its runs, and backward search works with rank queries at run boundaries only. <bookmark mark='b'/> The obstacle for years was locating: suffix-array samples every s rows cost n over s, which is far more than r. <bookmark mark='c'/> In 2018 Travis Gagie, Gonzalo Navarro and Nicola Prezza showed that sampling the suffix array only at the ends of runs is enough, giving a full index in order r words that reports each occurrence in log log n time. <bookmark mark='d'/> Later work makes each LF step constant time in the same space. <bookmark mark='e'/> And how big is r, compared with Lempel–Ziv's number of phrases z? Dominik Kempa and Tomasz Kociumaka proved in 2020 that r is at most z times log n squared, settling a long-standing conjecture. <bookmark mark='f'/> A whole ladder of repetitiveness measures has grown up, and the open question is how low on it a fast index can go.",
-   "zh": "答案是一种大小取决于 r 的索引。<bookmark mark='a'/>把变换存成它的连续串，向后搜索只需在连续串的边界上做 rank 查询。<bookmark mark='b'/>多年来的障碍是定位：每 s 行一个后缀数组样本，代价是 n 除以 s，远大于 r。<bookmark mark='c'/>2018年，Travis Gagie、Gonzalo Navarro 与 Nicola Prezza 证明，只在连续串的端点采样后缀数组就够了，得到一个 r 阶个字的完整索引，每次出现用 log log n 时间报告。<bookmark mark='d'/>后来的工作在同样的空间内让每一步 LF 只需常数时间。<bookmark mark='e'/>那么 r 与 Lempel–Ziv 的短语数 z 相比有多大？Dominik Kempa 与 Tomasz Kociumaka 在2020年证明 r 至多是 z 乘以 log n 的平方，解决了一个长期存在的猜想。<bookmark mark='f'/>一整个重复度度量的阶梯已经建立起来，开放的问题是快速索引能在上面降到多低。"
-  },
-  "392359a9ab1d": {
-   "scene": "Frontier",
-   "en": "The other frontier is the wall that chapter twelve ran into. <bookmark mark='a'/> Edit distance, longest common subsequence and dynamic time warping have no truly subquadratic algorithms unless the strong exponential time hypothesis fails. <bookmark mark='b'/> But inputs are often compressible, and alignment can be sped up by working on Lempel–Ziv phrases instead of characters. <bookmark mark='c'/> Approximation escapes the wall entirely: a constant-factor approximation in almost linear time. <bookmark mark='d'/> And when the distance d is small, Landau and Vishkin's algorithm takes n plus d squared, the theory behind diff's speed on similar files.",
-   "zh": "另一个前沿是第十二章撞上的那堵墙。<bookmark mark='a'/>除非强指数时间假设不成立，编辑距离、最长公共子序列和动态时间规整都没有真正次平方的算法。<bookmark mark='b'/>但输入常常是可压缩的，比对可以在 Lempel–Ziv 短语而不是字符上进行，从而加速。<bookmark mark='c'/>近似完全绕过了这堵墙：在几乎线性的时间内得到常数倍的近似。<bookmark mark='d'/>而当距离 d 很小时，Landau 与 Vishkin 的算法用 n 加 d 的平方时间，这正是 diff 在相似文件上很快背后的理论。"
-  },
-  "2aee05dca42a": {
-   "scene": "Frontier",
-   "en": "Here is where things stand. <bookmark mark='a'/> Is there an index whose size is the number of Lempel–Ziv phrases and that counts any pattern's occurrences in time close to its length? <bookmark mark='b'/> Can edit distance be approximated to within one plus epsilon in near-linear time? <bookmark mark='c'/> And exactly how many maximal repetitions can a string of length n contain? Fewer than n, but the right constant is unknown. <bookmark mark='d'/> This part's research problem takes the first.",
-   "zh": "现状如下。<bookmark mark='a'/>是否存在一种索引，大小为 Lempel–Ziv 短语的个数，并且统计任何模式出现次数的时间接近模式的长度？<bookmark mark='b'/>编辑距离能否在近线性时间内近似到一加 epsilon 倍以内？<bookmark mark='c'/>长度为 n 的字符串到底最多能有多少个极大重复？少于 n 个，但确切的常数未知。<bookmark mark='d'/>这一部分的研究题针对第一个问题。"
-  },
-  "3e1cadb65201": {
-   "scene": "Outro",
-   "en": "What we built in this part. Naive search and its worst case; rolling hashes; Knuth, Morris and Pratt's automaton; Boyer and Moore's skips; Aho–Corasick for many patterns. Suffix trees and suffix arrays, for all of the novels. The Burrows–Wheeler transform and the FM-index. Lempel–Ziv, Huffman and ANS. Alignment, Myers' diff, rsync and content-defined chunking. Periods, palindromes and Lyndon words.",
-   "zh": "这一部分我们构造了：朴素搜索及其最坏情形；滚动哈希；Knuth、Morris 与 Pratt 的自动机；Boyer 与 Moore 的跳跃；一次匹配许多模式的 Aho–Corasick。为全部小说构造的后缀树和后缀数组。Burrows–Wheeler 变换和 FM 索引。Lempel–Ziv、Huffman 和 ANS。比对、Myers 的 diff、rsync 和基于内容的分块。周期、回文与 Lyndon 词。"
-  },
-  "6790c8f2d076": {
-   "scene": "Outro",
-   "en": "Where this comes back. Part 27 proves the conditional lower bounds behind edit distance's quadratic wall. Part 28 adds noise to the information theory and builds error-correcting codes. Parts 34 and 35 compress storage engines and column stores. Part 41 builds git's merges on Myers' diff and its packfiles on delta compression. Part 47's search engine uses inverted indexes and near-duplicate detection, and Part 57 connects learning to compression.",
-   "zh": "它们会在哪里再出现。第27部分证明编辑距离平方之墙背后的条件下界。第28部分在信息论中加入噪声，构造纠错码。第34和35部分压缩存储引擎和列式存储。第41部分在 Myers 的 diff 之上构造 git 的合并，在增量压缩之上构造它的 packfile。第47部分的搜索引擎用到倒排索引和近似重复检测，第57部分把学习与压缩联系起来。"
-  },
-  "4894b4a13a3d": {
-   "scene": "Outro",
-   "en": "In practice. grep and ripgrep combine Boyer–Moore loops, automata and vector instructions. Every compressed file you have met is Lempel–Ziv, a Burrows–Wheeler transform, or both, with Huffman or ANS underneath. DNA aligners search FM-indexes and BLAST seeds. git diffs with Myers' algorithm and its variants, and rsync and deduplicating backups ride on rolling hashes.",
-   "zh": "在实践中。grep 和 ripgrep 结合了 Boyer–Moore 循环、自动机和向量指令。你见过的每个压缩文件，要么是 Lempel–Ziv，要么是 Burrows–Wheeler 变换，或者两者都有，底层是 Huffman 或 ANS。DNA 比对工具搜索 FM 索引并使用 BLAST 的种子。git 用 Myers 算法及其变体做 diff，rsync 和去重备份依靠滚动哈希。"
-  },
-  "cafca0bce073": {
-   "scene": "Outro",
-   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build problem: Horspool's search in the Pebble language, run over the novels on the emulator. The last, marked with a star, is a research problem: its answer is not known, and the notes say where to start.",
-   "zh": "六道题，完整解答在这一部分的笔记里。可以在任何一题上暂停。第五题是构造题：用 Pebble 语言写 Horspool 搜索，在模拟器上运行于这些小说。最后一题标有星号，是研究题：它的答案未知，笔记里说明了从哪里入手。"
-  },
-  "c62fdb20f721": {
-   "scene": "Outro",
-   "en": "Next time, geometry. It looks easy until a computer gets it wrong: a floating-point orientation test can say a point lies on both sides of a line. Get the predicates right and beautiful structure follows: convex hulls, Voronoi diagrams grown by a parabolic beach line, and Delaunay triangulations that are the shadow of a convex hull on a paraboloid. Part 22, Geometry.",
-   "zh": "下一次，几何。它看起来很简单，直到计算机算错：一个浮点数的方向测试可能会说某个点同时位于一条直线的两侧。把谓词做对，美丽的结构就随之而来：凸包、由抛物线海滩线生长出的 Voronoi 图，以及作为抛物面上凸包之投影的 Delaunay 三角剖分。第22部分，几何。"
-  },
-  "9bd24692775d": {
-   "scene": "Outro",
-   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
-   "zh": "这一部分所依据的书籍和论文显示在屏幕上，也列在笔记里。感谢观看。"
+  "title": "计算机科学，从零搭建 · 第21部分：字符串",
+  "chapters": {
+    "Hook": "四种方法找 Queequeg",
+    "Naive": "1. 最直接的匹配",
+    "RabinKarp": "2. 滚动哈希",
+    "Kmp": "3. Knuth、Morris 与 Pratt：从不回头",
+    "BoyerMoore": "4. Boyer 与 Moore：向前跳",
+    "AhoCorasick": "5. 一次匹配许多模式",
+    "SuffixTree": "6. 后缀树",
+    "SuffixArray": "7. 后缀数组",
+    "Bwt": "8. Burrows–Wheeler 变换",
+    "FmIndex": "9. 搜索压缩文本：FM 索引",
+    "Lz": "10. 压缩（上）：Lempel 与 Ziv",
+    "Entropy": "11. 压缩（下）：给符号编码",
+    "Align": "12. 序列比对",
+    "Diff": "13. Myers 的 diff",
+    "Rsync": "14. 大规模的滚动哈希：rsync 与分块",
+    "Period": "15. 周期、回文与 Lyndon 词",
+    "Frontier": "16. 前沿：和信息量一样小的索引",
+    "Outro": "回顾、习题，以及它们会在哪里再出现"
+  },
+  "lines": {
+    "2738b663bc83": {
+      "scene": "Hook",
+      "en": "Queequeg, the harpooner of Moby-Dick. Where does his name appear in the thirty novels, twenty-five megabytes of text? <bookmark mark='a'/> The obvious method compares the name against the text at every position: about twenty-five million character comparisons, roughly one per character. <bookmark mark='b'/> Knuth, Morris and Pratt's algorithm guarantees it never needs more than two per character, and never looks back. <bookmark mark='c'/> Boyer and Moore's algorithm looks at the end of the name first and skips ahead: three and a half million comparisons, seven times fewer. <bookmark mark='d'/> And an index built from a strange permutation of the text, the Burrows–Wheeler transform, counts with sixteen rank requests. A rank request can do more work than one character comparison; the index build and locating all positions are separate costs. <bookmark mark='e'/> All four agree on the count: 253 occurrences.",
+      "zh": "Queequeg，《白鲸》里的鱼叉手。他的名字在三十部小说、两千五百万字节的文本中出现在哪里？<bookmark mark='a'/>最直接的方法在每个位置把名字与文本比较：大约两千五百万次字符比较，差不多每个字符一次。<bookmark mark='b'/>Knuth、Morris 与 Pratt 的算法保证每个字符最多比较两次，而且从不回头。<bookmark mark='c'/>Boyer 与 Moore 的算法先看名字的末尾，然后向前跳：三百五十万次比较，少了七倍。<bookmark mark='d'/>而由文本的一种奇特排列，即 Burrows–Wheeler 变换，构造的索引，只用十六次 rank 请求就能计数。一次 rank 请求可能比一次字符比较做更多工作；索引构建和定位全部位置另有代价。<bookmark mark='e'/>四种方法的计数一致：253 处出现。"
+    },
+    "6a3e6eb5394b": {
+      "scene": "Hook",
+      "en": "Text is the oldest kind of data, and this part is about four things we do to it. <bookmark mark='a'/> We search it, with automata built from patterns and with indexes of every suffix. <bookmark mark='b'/> We compress it. zlib squeezes the novels to about a third, and sorting followed by coding can compress it further. <bookmark mark='c'/> We compare it: an exact shortest diff is a shortest path on a grid, and we will run one on the history of this course's own syllabus. <bookmark mark='d'/> And we synchronize it, sending only what changed, found with the rolling hashes of Part 20.",
+      "zh": "文本是最古老的一种数据，这一部分讲我们对它做的四件事。<bookmark mark='a'/>我们搜索它，用由模式构造的自动机，以及所有后缀的索引。<bookmark mark='b'/>我们压缩它。zlib 把小说压到大约三分之一，而排序后再编码还能进一步压缩。<bookmark mark='c'/>我们比较它：精确的最短 diff 对应网格上的一条最短路径，我们会在这门课自己的教学大纲的历史上运行一次。<bookmark mark='d'/>我们还同步它，只发送变化的部分，用第20部分的滚动哈希找出来。"
+    },
+    "448ebc4a707f": {
+      "scene": "Hook",
+      "en": "Part 21 of Computer Science, Built: Strings. <bookmark mark='a'/> In this part: five ways to find a pattern; a small suffix tree and a suffix array built for the whole corpus; the Burrows–Wheeler transform and the FM-index, which searches text without decompressing it; Lempel–Ziv compression and the entropy coders behind it; alignment, diff and rsync; periods and palindromes; and indexes as small as the information in the text.",
+      "zh": "计算机科学，从零搭建，第21部分：字符串。<bookmark mark='a'/>这一部分包括：找一个模式的五种方法；小例子的后缀树，以及为整个语料构造的后缀数组；Burrows–Wheeler 变换和 FM 索引，它不用解压就能搜索文本；Lempel–Ziv 压缩及其背后的熵编码器；比对、diff 和 rsync；周期与回文；以及和文本中的信息量一样小的索引。"
+    },
+    "7648094f602f": {
+      "scene": "Naive",
+      "en": "Chapter one. Matching, the obvious way.",
+      "zh": "第1章。最直接的匹配。"
+    },
+    "c731497f6155": {
+      "scene": "Naive",
+      "en": "Put the pattern under the text at the first position and compare left to right until a character differs. Then slide one place and start again. <bookmark mark='a'/> At most positions the first character already fails, so the work is close to one comparison per character of text. When the pattern does match, as at positions zero and seven here, we pay its whole length.",
+      "zh": "把模式放在文本的第一个位置下面，从左到右比较，直到某个字符不同。然后滑动一位，重新开始。<bookmark mark='a'/>在大多数位置，第一个字符就已经不同，所以工作量接近每个文本字符一次比较。当模式确实匹配时，比如这里的位置零和七，我们要付出它的全部长度。"
+    },
+    "7ce77ccaec58": {
+      "scene": "Naive",
+      "en": "On the whole corpus, 24,971,555 characters, the naive method costs very little more than one comparison per character for every pattern we tried. English text is kind to it: most positions fail at once, and even common words like the cost under one point one.",
+      "zh": "在整个语料，24971555 个字符上，对我们试过的每个模式，朴素方法的代价都只比每字符一次比较多一点点。英文文本对它很友好：大多数位置一开始就失败，就连 the 这样的常用词，代价也不到一点一。"
+    },
+    "eb9ddd4a628a": {
+      "scene": "Naive",
+      "en": "Why is English kind to this search? <bookmark mark='a'/> A second comparison happens only after the first character matches; a third needs the first two. <bookmark mark='b'/> Count those matching prefixes at complete alignments only, including overlaps. The empty prefix contributes A, where A is n minus m plus one, or zero if the pattern is longer. This is an exact finite count, not an independence assumption. <bookmark mark='c'/> Dividing by the text length gives the table, and the reference and instrument agree exactly before rounding. <bookmark mark='d'/> For aaaa and aa there are three alignments and two comparisons each: six. Counting prefixes beyond the final complete alignment would overcount.",
+      "zh": "英文为什么适合这种搜索？<bookmark mark='a'/>只有首字符匹配，才会比较第二个；前两个匹配，才会比较第三个。<bookmark mark='b'/>只在完整对齐位置统计这些匹配前缀，允许重叠。空前缀贡献 A；A 等于 n 减 m 加一，模式更长时为零。这是有限文本的精确计数，不需要独立性假设。<bookmark mark='c'/>再除以文本长度就得到表格；参考算法和仪器的整数计数在舍入前完全一致。<bookmark mark='d'/>aaaa 与 aa 有三个对齐位置，每处两次比较，共六次。把最后一个完整对齐之后的前缀也算进去就会多算。"
+    },
+    "ee03aead94f1": {
+      "scene": "Naive",
+      "en": "The worst case is easy to build. <bookmark mark='a'/> Search for a run of a's ending in b inside a text of nothing but a's. Every alignment matches m minus one characters before it fails. <bookmark mark='b'/> The count is exactly n minus m plus one, times m: a hundred thousand characters and a thousand-letter pattern take ninety-nine million comparisons. <bookmark mark='c'/> DNA, with its four letters, binary files, and anyone who wants to slow a server down all find this case. KMP removes this worst case; the other matchers need their own assumptions and refinements.",
+      "zh": "最坏情形很容易构造。<bookmark mark='a'/>在一段全是 a 的文本里，搜索一串以 b 结尾的 a。每个对齐位置都先匹配 m 减一个字符才失败。<bookmark mark='b'/>次数恰好是 n 减 m 加一，再乘 m：十万个字符、一千个字母的模式，要做九千九百万次比较。<bookmark mark='c'/>只有四个字母的 DNA、二进制文件，以及任何想拖慢服务器的人，都会遇到这种情形。KMP 消除了这种最坏情形；其他匹配器需要各自的假设与改进。"
+    },
+    "98797d54fb7e": {
+      "scene": "RabinKarp",
+      "en": "Chapter two. Rolling hashes.",
+      "zh": "第2章。滚动哈希。"
+    },
+    "01dd34940b64": {
+      "scene": "RabinKarp",
+      "en": "Richard Karp and Michael Rabin, in 1987, used Part 20's fingerprints. <bookmark mark='a'/> Read each window of m characters as a number in base b, modulo a prime p, and compare it with the pattern's number. <bookmark mark='b'/> Sliding the window by one place doesn't need a fresh sum: <bookmark mark='c'/> subtract the character that leaves, multiply by the base, and add the one that arrives. <bookmark mark='d'/> That is a constant amount of work per position, and characters are compared only when the two numbers agree. <bookmark mark='e'/> For two fixed unequal byte windows, choose a prime larger than 255 and a base uniformly in its field. They give the same number only if a nonzero polynomial of degree m minus one vanishes at that base, which Schwartz–Zippel says happens with probability at most m minus one over p.",
+      "zh": "1987年，Richard Karp 与 Michael Rabin 用上了第20部分的指纹。<bookmark mark='a'/>把每个 m 个字符的窗口读成一个以 b 为底、模一个素数 p 的数，与模式的数比较。<bookmark mark='b'/>窗口滑动一位并不需要重新求和：<bookmark mark='c'/>减去离开的字符，乘以底数，再加上进来的字符。<bookmark mark='d'/>每个位置只需常数的工作量，只有两个数相等时才比较字符。<bookmark mark='e'/>对两个固定而不同的字节窗口，选大于 255 的素数，并在其有限域上均匀选底数。它们得到同一个数，仅当一个 m 减一次的非零多项式在这个底数处为零，Schwartz–Zippel 说这的概率至多是 m 减一除以 p。"
+    },
+    "e7e85f09f9ce": {
+      "scene": "RabinKarp",
+      "en": "Here is Queequeg in Moby-Dick, 1,217,697 bytes. This experiment fixes the base at 256. <bookmark mark='a'/> The windows-over-modulus column is a heuristic reference, not a randomized expectation for this fixed text and base. The small modulus produces many false alarms; every one is rejected by exact byte comparisons. <bookmark mark='b'/> Larger moduli have fewer false alarms in these observations. Randomizing the base would give the polynomial bound from the previous screen, with a prime larger than the byte alphabet. <bookmark mark='c'/> Fingerprints can also screen many equal-length patterns at once, before exact verification, and extend to two-dimensional matching. <bookmark mark='d'/> Rolling updates return in rsync and deduplicating backups.",
+      "zh": "这里在《白鲸》的 1217697 个字节里搜索 Queequeg。实验把底数固定为 256。<bookmark mark='a'/>窗口数除以模数这一列只是启发式参照，并非这个固定文本与底数下的随机期望。小模数产生许多误报，每一次都由精确字节比较排除。<bookmark mark='b'/>这些观测中，大模数的误报更少。若在比字节字母表更大的素数域上随机选底数，才可使用上一屏的多项式概率界。<bookmark mark='c'/>指纹还可先筛选许多等长模式，再做精确核验，也能扩展到二维匹配。<bookmark mark='d'/>滚动更新会在 rsync 和去重备份中再次出现。"
+    },
+    "c16a9187663e": {
+      "scene": "Kmp",
+      "en": "Chapter three. Knuth, Morris and Pratt: never look back.",
+      "zh": "第3章。克努特、莫里斯与普拉特：从不回头。"
+    },
+    "4de1622bd3dc": {
+      "scene": "Kmp",
+      "en": "Suppose j characters of the pattern have matched, and the next one fails. <bookmark mark='a'/> The naive method slides one place and re-reads text it has already seen. But those j characters of text are exactly the first j characters of the pattern, so we know them without looking. <bookmark mark='b'/> The only useful question is how far the pattern can shift so that what we have seen still matches. The answer is the longest proper prefix of those j characters that is also a suffix of them, called a border. <bookmark mark='c'/> Shift the pattern so the border lines up, and carry on comparing from the same text position. The text is read once, left to right, and never backed up. <bookmark mark='d'/> For the pattern a b a b a c a, after a b a b a the border is a b a, so we continue as if three characters had matched. The table is computed from the pattern alone, in linear time, by running the same idea on the pattern against itself.",
+      "zh": "假设模式的 j 个字符已经匹配，而下一个失败了。<bookmark mark='a'/>朴素方法滑动一位，重读已经看过的文本。但这 j 个文本字符正是模式的前 j 个字符，所以我们不用看就知道它们。<bookmark mark='b'/>唯一有用的问题是：模式可以移动多远，而已看到的部分仍然匹配？答案是这 j 个字符中既是真前缀又是后缀的最长者，叫作边界。<bookmark mark='c'/>移动模式使边界对齐，然后从同一个文本位置继续比较。文本只从左到右读一遍，从不回退。<bookmark mark='d'/>对模式 a b a b a c a，在 a b a b a 之后边界是 a b a，所以我们就当已经匹配了三个字符继续。这张表只由模式算出，用线性时间，方法是让模式对自己运行同样的想法。"
+    },
+    "916f19857123": {
+      "scene": "Kmp",
+      "en": "The failure table is really a finite automaton, the kind Part 12 built from regular expressions. <bookmark mark='a'/> State q means: the last q characters read match the first q of the pattern. Each matching character moves one state right. <bookmark mark='b'/> A mismatch follows the border back: from state five, a b means the last characters read are a b a b, state four. Every other transition returns to the start. <bookmark mark='c'/> Now feed it text, one character at a time, with no backtracking at all. When it reaches state seven, the pattern has just ended.",
+      "zh": "失配表其实是一个有限自动机，就是第12部分从正则表达式构造的那种。<bookmark mark='a'/>状态 q 的意思是：最后读到的 q 个字符与模式的前 q 个相同。每个匹配的字符使状态右移一格。<bookmark mark='b'/>失配时沿边界返回：在状态五读到 b，意味着最后读到的是 a b a b，即状态四。其他所有转移都回到起点。<bookmark mark='c'/>现在把文本一个字符一个字符地喂给它，完全不回溯。当它到达状态七时，模式刚好结束。"
+    },
+    "20fde72b33a9": {
+      "scene": "Kmp",
+      "en": "How much work is that? <bookmark mark='a'/> Every comparison either matches, and the text position moves right, or fails, and the pattern's starting position moves right. <bookmark mark='b'/> Each of those can move right at most n times, <bookmark mark='c'/> so there are at most two n comparisons in all, plus linear work to build the table. This is an amortized argument, like Part 16's doubling arrays: a single character can cost several comparisons, but never many on average. <bookmark mark='d'/> Chapter one's worst case, which cost the naive method ten million comparisons, costs 199,901. <bookmark mark='e'/> On the novels, Knuth–Morris–Pratt is no faster than naive search; it is never slower, whatever the text.",
+      "zh": "这要多少工作？<bookmark mark='a'/>每次比较要么匹配，文本位置右移；要么失败，模式的起始位置右移。<bookmark mark='b'/>两者都至多右移 n 次，<bookmark mark='c'/>所以总共至多两倍 n 次比较，再加上构造表的线性工作。这是一个摊还论证，就像第16部分的倍增数组：单个字符可能花好几次比较，但平均下来从不多。<bookmark mark='d'/>第一章的最坏情形让朴素方法花了一千万次比较，这里只要 199901 次。<bookmark mark='e'/>在小说上，Knuth–Morris–Pratt 并不比朴素搜索快；但无论文本是什么，它都从不更慢。"
+    },
+    "2c8987e3e2e2": {
+      "scene": "BoyerMoore",
+      "en": "Chapter four. Boyer and Moore: skip ahead.",
+      "zh": "第4章。Boyer 与 Moore：向前跳。"
+    },
+    "9e5fec29278a": {
+      "scene": "BoyerMoore",
+      "en": "In 1977 Robert Boyer and J Strother Moore turned the comparison around. <bookmark mark='a'/> Put the pattern under the text and compare its last character first. <bookmark mark='b'/> Here the text has a space where the pattern has g, and a space appears nowhere in Queequeg. So no alignment that covers that space can match, and the pattern can jump its whole length. <bookmark mark='c'/> When the character does occur in the pattern, use its rightmost copy before the pattern's final position, as in the Horspool shifts animated here. Watch how few characters of the text are ever looked at.",
+      "zh": "1977年，Robert Boyer 与 J Strother Moore 把比较的方向反了过来。<bookmark mark='a'/>把模式放在文本下面，先比较它的最后一个字符。<bookmark mark='b'/>这里文本在模式的 g 处是一个空格，而空格在 Queequeg 中根本不出现。所以任何覆盖这个空格的对齐都不可能匹配，模式可以跳过它的整个长度。<bookmark mark='c'/>如果这个字符确实出现在模式中，就使用模式末位之前最右侧的副本，这正是这里动画中的 Horspool 位移。看文本中被看过的字符有多少。"
+    },
+    "3462c9d4f77f": {
+      "scene": "BoyerMoore",
+      "en": "The full algorithm takes the larger of two safe shifts. <bookmark mark='a'/> The bad-character rule uses the mismatched text character. <bookmark mark='b'/> The good-suffix rule uses the suffix already matched, or a compatible border. <bookmark mark='c'/> Galil's refinement can guarantee a linear worst case. Our measured implementation omits that refinement, so it can still take n times m comparisons; favorable skipping on English is an observation, not a universal n-over-m theorem. <bookmark mark='d'/> Horspool uses only the window's last character for its shift. <bookmark mark='e'/> Mike Haertel explained how skipping helps GNU grep. Real search tools choose among several engines according to the pattern, options and platform.",
+      "zh": "完整算法取两种安全位移中较大的一种。<bookmark mark='a'/>坏字符规则利用失配的文本字符。<bookmark mark='b'/>好后缀规则利用已经匹配的后缀，或相容的边界。<bookmark mark='c'/>Galil 改进可保证线性的最坏情形。这里测量的实现没有加入它，仍可能需要 n 乘 m 次比较；英文上的有效跳跃是观测结果，不是普遍的 n 除以 m 定理。<bookmark mark='d'/>Horspool 只用窗口最后一个字符决定位移。<bookmark mark='e'/>Mike Haertel 解释了跳跃怎样帮助 GNU grep。实际搜索工具根据模式、选项与平台在多个引擎之间选择。"
+    },
+    "38e64082b768": {
+      "scene": "BoyerMoore",
+      "en": "The good-suffix rule deserves an example. <bookmark mark='a'/> Here the pattern ANPANMAN is lined up under the text, and comparing from the right, M A N matched before a mismatch. <bookmark mark='b'/> Whatever the next possible alignment is, the text there still ends in M A N, so the pattern must have a matching piece under it. <bookmark mark='c'/> ANPANMAN has no other M A N, but its prefix A N is a suffix of M A N, a border again, so the pattern can slide until that A N lines up. <bookmark mark='d'/> That is a shift of six instead of one, and here it lands on a match; and the whole table is computed from the pattern before the search starts. <bookmark mark='e'/> On English the bad-character rule does most of the work, because the alphabet is large; on DNA, with four letters, the good-suffix rule earns its keep.",
+      "zh": "好后缀规则值得举个例子。<bookmark mark='a'/>这里模式 ANPANMAN 对在文本下面，从右往左比较，M A N 匹配之后出现失配。<bookmark mark='b'/>无论下一个可能的对齐在哪里，那里的文本仍以 M A N 结尾，所以模式在它下面必须有匹配的部分。<bookmark mark='c'/>ANPANMAN 没有另一个 M A N，但它的前缀 A N 是 M A N 的后缀，又是一个边界，所以模式可以滑动到那个 A N 对齐。<bookmark mark='d'/>这是移动六位而不是一位，而且这里正好落在一个匹配上；整张表在搜索开始前就由模式算好。<bookmark mark='e'/>在英文上，坏字符规则做了大部分工作，因为字母表很大；在只有四个字母的 DNA 上，好后缀规则才显出价值。"
+    },
+    "58fccbf92caf": {
+      "scene": "BoyerMoore",
+      "en": "We measured three random patterns of each length in Moby-Dick. <bookmark mark='a'/> Knuth–Morris–Pratt does about one comparison per character, whatever the length. <bookmark mark='b'/> Boyer–Moore does about half a comparison per character for two-letter patterns, a sixth for eight letters, and a twentieth for sixty-four: the longer the pattern, the less of the text it reads. <bookmark mark='c'/> Horspool's simplification lies almost exactly on top of it. On English, the good-suffix rule rarely matters. <bookmark mark='d'/> For Queequeg in the whole corpus, Boyer–Moore made three and a half million comparisons, seven times fewer than the naive method, and the table gives current host observations for grep and native byte counting, with every result checked. These timings are not controlled speedup estimates.",
+      "zh": "我们在《白鲸》中对每种长度测量了三个随机模式。<bookmark mark='a'/>Knuth–Morris–Pratt 每个字符大约比较一次，与长度无关。<bookmark mark='b'/>Boyer–Moore 对两个字母的模式每字符大约比较半次，八个字母时六分之一，六十四个字母时二十分之一：模式越长，读的文本越少。<bookmark mark='c'/>Horspool 的简化版几乎与它完全重合。在英文上，好后缀规则很少起作用。<bookmark mark='d'/>在整个语料中找 Queequeg，Boyer–Moore 做了三百五十万次比较，比朴素方法少七倍，表格给出当前机器上的 grep 与原生字节计数观测值，每个结果均已核验；这些时间不能作为受控的加速比估计。"
+    },
+    "f0eaefd29549": {
+      "scene": "AhoCorasick",
+      "en": "Chapter five. Many patterns at once.",
+      "zh": "第5章。一次匹配许多模式。"
+    },
+    "fa2cb948b13d": {
+      "scene": "AhoCorasick",
+      "en": "Often we want many patterns at once: every virus signature, every banned word, every name in a list. Running one search per pattern reads the text again and again. <bookmark mark='a'/> In 1975 Alfred Aho and Margaret Corasick put all the patterns into one trie, a tree of their prefixes. <bookmark mark='b'/> Reading the text, we walk down the trie while characters match. On a mismatch, we follow a failure link to the longest proper suffix of what we've read that is still in the trie: from s h, the link goes to h. <bookmark mark='c'/> And each state lists every pattern that ends there: reaching s h e reports she, and also he. <bookmark mark='d'/> This is Knuth, Morris and Pratt's failure function, generalized from a line to a tree, and it reads the text exactly once.",
+      "zh": "我们常常想一次找许多模式：每个病毒特征码、每个禁用词、名单上的每个名字。每个模式搜一遍，就要一遍又一遍地读文本。<bookmark mark='a'/>1975年，Alfred Aho 与 Margaret Corasick 把所有模式放进一棵字典树，即它们前缀构成的树。<bookmark mark='b'/>读文本时，只要字符匹配就沿字典树往下走。失配时，沿失配链接走到已读部分仍在字典树中的最长真后缀：从 s h，链接指向 h。<bookmark mark='c'/>每个状态还列出在那里结束的所有模式：到达 s h e 时报告 she，也报告 he。<bookmark mark='d'/>这就是 Knuth、Morris 与 Pratt 的失配函数，从一条线推广到一棵树，而且文本只读一遍。"
+    },
+    "3b23866d652b": {
+      "scene": "AhoCorasick",
+      "en": "How are the failure links found? <bookmark mark='a'/> Breadth-first, level by level from the root. A failure link always points to a shallower state, so by the time we reach a state, every state its link could need has been done. <bookmark mark='b'/> For a child t of state s, reached by character c, start from s's own failure link and keep following links until reaching a state that has a c child; <bookmark mark='c'/> t's link is that child. <bookmark mark='d'/> For s h e: s h links to h, and h has an e child, so s h e links to h e. <bookmark mark='e'/> Each state also inherits the outputs of the state it links to, which is how she reports he. <bookmark mark='f'/> Linear construction bounds need a specified transition and output representation. Our sparse teaching implementation follows fallback links and copies inherited output lists, so those costs must be counted explicitly.",
+      "zh": "失配链接是怎样找出来的？<bookmark mark='a'/>广度优先，从根开始一层一层地做。失配链接总是指向更浅的状态，所以到达一个状态时，它的链接可能需要的每个状态都已经处理过了。<bookmark mark='b'/>对状态 s 经字符 c 到达的孩子 t，从 s 自己的失配链接出发，不断沿链接走，直到某个状态有 c 孩子；<bookmark mark='c'/>t 的链接就是那个孩子。<bookmark mark='d'/>对 s h e：s h 链接到 h，而 h 有一个 e 孩子，所以 s h e 链接到 h e。<bookmark mark='e'/>每个状态还继承它所链接状态的输出，she 正是这样报告 he 的。<bookmark mark='f'/>线性构造界需要说明转移与输出的表示方式。这里的稀疏教学实现会沿失配链接查找，并复制继承的输出列表，这些代价必须明确计入。"
+    },
+    "1b3b49bff2a3": {
+      "scene": "AhoCorasick",
+      "en": "We built the automaton for 45 character names from the novels: Elizabeth, Ahab, Queequeg, Holmes, Raskolnikov and the rest. <bookmark mark='a'/> The trie has 231 states. The step count includes trie transitions and fallback traversals. Reporting all matched outputs adds work; the host time includes construction and search. <bookmark mark='b'/> Searching for each name separately would read the text forty-five times, more than a billion characters. <bookmark mark='c'/> These are substring counts, so Jo also counts John and Joe; a real tool would add word boundaries. <bookmark mark='d'/> The same automaton runs inside grep with many patterns, antivirus scanners and network intrusion detectors.",
+      "zh": "我们为小说中的 45 个人物名字构造了自动机：Elizabeth、Ahab、Queequeg、Holmes、Raskolnikov 等等。<bookmark mark='a'/>字典树有 231 个状态。步数包括字典树转移和失配跳转；报告所有匹配输出还要额外工作。这里的机器时间包括构造和搜索。<bookmark mark='b'/>每个名字单独搜索，就要把文本读四十五遍，超过十亿个字符。<bookmark mark='c'/>这些是子串计数，所以 Jo 也算上了 John 和 Joe；真正的工具会加上词边界。<bookmark mark='d'/>同样的自动机运行在多模式的 grep、杀毒软件和网络入侵检测器里。"
+    },
+    "dbb206878401": {
+      "scene": "SuffixTree",
+      "en": "Chapter six. Suffix trees.",
+      "zh": "第6章。后缀树。"
+    },
+    "e91555dba560": {
+      "scene": "SuffixTree",
+      "en": "Fix the text and search it repeatedly. <bookmark mark='a'/> Put every suffix of banana with a unique end marker into one compact tree. Each leaf gives its suffix's start. <bookmark mark='b'/> Branch only where suffixes differ, leaving at most n leaves and fewer than n branching nodes for the indexed text. <bookmark mark='c'/> The theoretical representation stores edge labels as intervals into the original text; our small drawing materializes labels for convenience. <bookmark mark='d'/> With constant-time child lookup, a pattern walk costs order m. Stored subtree sizes give its count; reporting all matching leaves adds work proportional to the output. Ana reaches the branch with starts one and three.",
+      "zh": "固定文本，反复搜索。<bookmark mark='a'/>把 banana 加唯一结束标记后的每个后缀放进一棵紧凑树，每片叶子给出后缀起点。<bookmark mark='b'/>只在后缀不同处分叉；对索引文本而言，至多有 n 片叶子，分叉节点少于 n 个。<bookmark mark='c'/>理论表示把边标签存成原文中的区间；这里的小图为方便会实际存下标签。<bookmark mark='d'/>孩子查找为常数时间时，模式沿树行走花 O(m)。存储的子树大小给出计数；报告所有匹配叶子还需与输出成比例的工作。ana 到达的分支对应起点一和三。"
+    },
+    "5152b03fad88": {
+      "scene": "SuffixTree",
+      "en": "Our small drawing is constructed from a suffix array and LCP values. Ukkonen is the theoretical online alternative: naive suffix insertion can walk a quadratic number of characters. <bookmark mark='a'/> Esko Ukkonen's algorithm extends the tree one character at a time instead, turning the tree of the first i characters into the tree of the first i plus one. <bookmark mark='b'/> Two tricks make that cheap. Suffix links join the node for c followed by alpha to the node for alpha, so the algorithm can jump from one suffix to the next shorter one without walking down from the root: a related suffix-shortening idea, although these links have a different invariant from Aho–Corasick. <bookmark mark='c'/> And leaf edges are left open, ending at whatever the current end of the text is, so all the leaves grow by a character at once, for free. <bookmark mark='d'/> The full construction also maintains an active point and skips whole edges. With constant-time child lookup, its amortized work is linear. <bookmark mark='e'/> The same links and the same accounting as Knuth–Morris–Pratt and Aho–Corasick: string algorithms keep rediscovering one idea.",
+      "zh": "这里的小树由后缀数组与 LCP 值构造。Ukkonen 是理论上的在线方案：朴素地逐个插入后缀可能走过平方级数量的字符。<bookmark mark='a'/>Esko Ukkonen 的算法改为一次扩展一个字符，把前 i 个字符的树变成前 i 加一个字符的树。<bookmark mark='b'/>两个技巧让这一步很便宜。后缀链接把 c 后接 alpha 的节点连到 alpha 的节点，于是算法可以从一个后缀跳到下一个更短的后缀，而不必从根往下走：这也是缩短后缀的相关思路，但不变量与 Aho–Corasick 的失配链接不同。<bookmark mark='c'/>叶子边保持开放，终点是文本当前的末尾，所以所有叶子一次同时长一个字符，不花任何代价。<bookmark mark='d'/>完整构造还维护活动点并跳过整条边。在孩子查找为常数时间时，摊还总工作量为线性。<bookmark mark='e'/>与 Knuth–Morris–Pratt 和 Aho–Corasick 同样的链接、同样的记账：字符串算法一再重新发现同一个想法。"
+    },
+    "e8e20dae1252": {
+      "scene": "SuffixTree",
+      "en": "Many questions become walks in this tree. <bookmark mark='a'/> The longest repeated substring is the deepest branching node. <bookmark mark='b'/> In Moby-Dick, it is a chapter title of a hundred characters, which appears in the table of contents and again at the head of its chapter. <bookmark mark='c'/> Put two texts in one tree, and the deepest node with leaves from both gives their longest common substring in linear time, which dynamic programming needs quadratic time for. <bookmark mark='d'/> For n original bytes plus one unique appended end marker, the edge-length sum includes n plus one extra terminated substrings. Subtract them to count the original text: <bookmark mark='e'/> for Moby-Dick, seven hundred and forty-one billion. <bookmark mark='f'/> Peter Weiner first built the tree in linear time in 1973; Esko Ukkonen's 1995 algorithm builds it online, a character at a time. <bookmark mark='g'/> The catch is representation: nodes, child structures and suffix links can take substantial memory. We do not measure a full-corpus suffix tree's allocated size here. The next chapter uses a compact integer array.",
+      "zh": "许多问题都变成在这棵树上行走。<bookmark mark='a'/>最长重复子串就是最深的分叉节点。<bookmark mark='b'/>在《白鲸》中，它是一个一百个字符的章节标题，在目录里出现一次，又在该章开头出现一次。<bookmark mark='c'/>把两段文本放进同一棵树，同时有来自两者的叶子的最深节点给出它们的最长公共子串，用线性时间，而动态规划需要平方时间。<bookmark mark='d'/>对 n 个原文字节加一个唯一结束标记，边长总和多算了 n 加一个含结束标记的子串。减去它们才是原文的不同子串数：<bookmark mark='e'/>《白鲸》有七千四百一十亿个。<bookmark mark='f'/>Peter Weiner 在1973年第一个用线性时间构造出这棵树；Esko Ukkonen 1995年的算法在线构造，一次一个字符。<bookmark mark='g'/>代价取决于表示：节点、孩子结构和后缀链接可能占用大量内存。这里没有测量完整语料后缀树的实际分配大小；下一章使用紧凑整数数组。"
+    },
+    "0832d09e0ceb": {
+      "scene": "SuffixArray",
+      "en": "Chapter seven. Suffix arrays.",
+      "zh": "第7章。后缀数组。"
+    },
+    "0092321d348f": {
+      "scene": "SuffixArray",
+      "en": "Udi Manber and Gene Myers kept the suffix tree's power with far less memory. <bookmark mark='a'/> Take every suffix of the text and sort them, in dictionary order. <bookmark mark='b'/> Then throw the suffixes away and keep only where each one starts: an array of n integers, the suffix array. <bookmark mark='c'/> Every occurrence of a pattern is the beginning of some suffix, and suffixes beginning with the same pattern are next to each other in sorted order. Here, the four suffixes that start with t. <bookmark mark='d'/> So two binary searches find the block, with m times log n character comparisons at most, and the block's size is the number of occurrences.",
+      "zh": "Udi Manber 与 Gene Myers 用少得多的内存保留了后缀树的能力。<bookmark mark='a'/>取文本的每个后缀，按字典序排序。<bookmark mark='b'/>然后丢掉后缀本身，只保留每个后缀从哪里开始：一个由 n 个整数组成的数组，就是后缀数组。<bookmark mark='c'/>模式的每次出现都是某个后缀的开头，而以同一个模式开头的后缀在排序后彼此相邻。这里是以 t 开头的四个后缀。<bookmark mark='d'/>所以两次二分查找就能找到这一段，至多 m 乘 log n 次字符比较，这一段的大小就是出现次数。"
+    },
+    "c88cec3a58fb": {
+      "scene": "SuffixArray",
+      "en": "How do you sort twenty-five million suffixes, each up to twenty-five million characters long? <bookmark mark='a'/> Rank them first by one character. <bookmark mark='b'/> Then notice that ranking by the first two k characters is the same as sorting pairs: the rank of the suffix's first k characters, and the rank of the k characters after them, which is the rank of another suffix. <bookmark mark='c'/> Double k until every suffix has its own rank: log n rounds of sorting. <bookmark mark='d'/> Linear-time algorithms exist too; SA-IS, from 2009, sorts a sample of the suffixes recursively and induces the rest, and it is what fast libraries use. <bookmark mark='e'/> Alongside, keep the longest common prefix of each pair of neighbours in sorted order, which Kasai and colleagues showed how to compute in linear time. <bookmark mark='f'/> The arrays, with suitable auxiliary structures, recover many suffix-tree queries. Their space depends on entry widths and on which query operations are supported.",
+      "zh": "怎样给两千五百万个后缀排序，每个后缀最长可达两千五百万个字符？<bookmark mark='a'/>先按第一个字符给它们排名。<bookmark mark='b'/>然后注意到，按前两倍 k 个字符排名，就等于给数对排序：后缀前 k 个字符的排名，以及其后 k 个字符的排名，而后者正是另一个后缀的排名。<bookmark mark='c'/>不断让 k 加倍，直到每个后缀都有自己的排名：log n 轮排序。<bookmark mark='d'/>线性时间的算法也存在；2009年的 SA-IS 递归地给一部分后缀排序，再推导出其余的，快速的程序库用的就是它。<bookmark mark='e'/>同时，保存排序后每对相邻后缀的最长公共前缀，Kasai 等人说明了怎样用线性时间算出它。<bookmark mark='f'/>这些数组配上适当辅助结构，可以恢复许多后缀树查询；空间取决于条目宽度与支持的操作。"
+    },
+    "6424794839d1": {
+      "scene": "SuffixArray",
+      "en": "We built the suffix array of all 24,971,556 characters of the novels, by prefix doubling with numpy's sorts, in with the observed build time shown here. <bookmark mark='a'/> The cached array takes about a hundred megabytes with four-byte entries; that excludes the text and larger construction temporaries. <bookmark mark='b'/> Now any pattern is a pair of binary searches: Queequeg's two hundred and fifty-three occurrences were found with a hundred and sixty-seven character comparisons, against twenty-five million for a scan. <bookmark mark='c'/> And Moby-Dick's LCP array says that neighbouring suffixes share eight characters on average, which is why the binary search rarely compares more than a few characters per step.",
+      "zh": "我们为小说的全部 24971556 个字符构造了后缀数组，用 numpy 的排序做前缀倍增，这里显示本机观测到的构造时间。<bookmark mark='a'/>缓存数组用四字节条目，占约一百 MB；这不包括原文与更大的构造临时数组。<bookmark mark='b'/>现在任何模式都是一对二分查找：Queequeg 的两百五十三次出现只用了一百六十七次字符比较就找到了，而扫描一遍要两千五百万次。<bookmark mark='c'/>《白鲸》的 LCP 数组表明，相邻后缀平均共享八个字符，所以二分查找每一步很少比较超过几个字符。"
+    },
+    "efeb52969e76": {
+      "scene": "SuffixArray",
+      "en": "With the suffix array and its LCP array, the longest repeated substring is simply the largest common prefix of two neighbours. <bookmark mark='a'/> For the whole corpus we computed it by comparing neighbouring suffixes in numpy, extending every adjacent pair to its first mismatch, including the residual characters after any doubled block. <bookmark mark='b'/> The winner is 428 characters long, and it is not prose: it is a run of chapter headings, Chapter one, Chapter two, Chapter three, reappearing a few hundred characters later. <bookmark mark='c'/> In Moby-Dick alone, the longest repeat is a chapter title printed twice. This is a maximum for exact contiguous bytes, not a claim that prose cannot be reused or paraphrased.",
+      "zh": "有了后缀数组和它的 LCP 数组，最长重复子串就是两个相邻后缀的最长公共前缀中最大的那个。<bookmark mark='a'/>对整个语料，我们用 numpy 比较相邻后缀来计算它，把每对相邻后缀延伸到首次失配，连倍增长块之后的残余字符也检查。<bookmark mark='b'/>胜出者长 428 个字符，而且不是正文：它是一串章节标题，第一章、第二章、第三章，又在几百个字符之后出现。<bookmark mark='c'/>只看《白鲸》，最长的重复是印了两次的章节标题。这是连续字节精确重复的最大值，并不是说正文不会被复用或改写。"
+    },
+    "ffd4877c37fa": {
+      "scene": "SuffixArray",
+      "en": "Here is the exact witness. <bookmark mark='a'/> These two half-open intervals contain the same four hundred and twenty-eight bytes. <bookmark mark='b'/> The next byte is different, so this pair cannot extend. <bookmark mark='c'/> A witness alone does not prove a global maximum: we also checked every adjacent pair in the certified suffix order, and an independent native Kasai implementation agrees.",
+      "zh": "这是精确见证。<bookmark mark='a'/>两个左闭右开区间含有相同的四百二十八个字节。<bookmark mark='b'/>下一个字节不同，因此这一对不能继续延伸。<bookmark mark='c'/>只有见证并不能证明全局最大值；我们还在已核验的后缀顺序中检查了每对相邻后缀，独立的原生 Kasai 实现也给出相同结果。"
+    },
+    "73c2881db496": {
+      "scene": "Bwt",
+      "en": "Chapter eight. The Burrows–Wheeler transform.",
+      "zh": "第8章。Burrows–Wheeler 变换。"
+    },
+    "b7e699ebb931": {
+      "scene": "Bwt",
+      "en": "In 1994 Michael Burrows and David Wheeler published a transform that Wheeler had found years earlier. <bookmark mark='a'/> Write down every rotation of the text, here banana with an end marker. <bookmark mark='b'/> Sort the rotations. The first column is now just the letters of the text in order. <bookmark mark='c'/> The last column is the transform: a n n b, end marker, a a. <bookmark mark='d'/> Each character in the last column is the one that comes just before its row in the text. Rows that begin alike are sorted next to each other, <bookmark mark='e'/> so the characters before them cluster too. <bookmark mark='f'/> In Moby-Dick, nearly three in four of the rows beginning h e end in t, so the sorted text has long runs of the same letter.",
+      "zh": "1994年，Michael Burrows 与 David Wheeler 发表了 Wheeler 多年前就发现的一种变换。<bookmark mark='a'/>写下文本的每个旋转，这里是 banana 加上结束标记。<bookmark mark='b'/>给这些旋转排序。现在第一列就是文本的字母按顺序排好。<bookmark mark='c'/>最后一列就是变换的结果：a n n b、结束标记、a a。<bookmark mark='d'/>最后一列的每个字符，是文本中紧挨在它那一行之前的字符。开头相似的行排在一起，<bookmark mark='e'/>所以它们前面的字符也聚在一起。<bookmark mark='f'/>在《白鲸》中，以 h e 开头的行将近四分之三以 t 结尾，所以排序后的文本里有同一个字母的长串。"
+    },
+    "63a854255b61": {
+      "scene": "Bwt",
+      "en": "Sorting threw away the order of the text, or seemed to. <bookmark mark='a'/> The key fact: the k-th a in the last column and the k-th a in the first column are the same character of the text. <bookmark mark='b'/> Rows that start with a are sorted by what follows the a, and so are the rows that end with a, because the text after that a is the rest of each rotation. <bookmark mark='c'/> So start at the row ending with the end marker, which is the text itself. Read its last character, then jump along the arrow to the row that begins with that same character, and repeat. <bookmark mark='d'/> The text comes out backwards, one character per jump. <bookmark mark='e'/> We inverted the transform of all of Moby-Dick this way and got the novel back exactly.",
+      "zh": "排序丢掉了文本的顺序，至少看起来如此。<bookmark mark='a'/>关键事实是：最后一列的第 k 个 a 与第一列的第 k 个 a 是文本中同一个字符。<bookmark mark='b'/>以 a 开头的行按 a 后面的内容排序，以 a 结尾的行也是，因为那个 a 之后的文本正是每个旋转的其余部分。<bookmark mark='c'/>所以从以结束标记结尾的那一行出发，它就是文本本身。读它的最后一个字符，沿箭头跳到以同一个字符开头的那一行，然后重复。<bookmark mark='d'/>文本倒着出来，每跳一次一个字符。<bookmark mark='e'/>我们用这种方法反演了整部《白鲸》的变换，一字不差地得回了这部小说。"
+    },
+    "6d9af6491031": {
+      "scene": "Bwt",
+      "en": "Here is the opening of Moby-Dick, and a stretch of its transform. <bookmark mark='a'/> The transform is full of runs. Across the novel there are just over half a million runs for 1.2 million characters. <bookmark mark='b'/> Move-to-front coding replaces each character by its position in a list of recently seen characters, so a run becomes a string of zeros: <bookmark mark='c'/> the entropy drops from four point four bits per character to two point seven. <bookmark mark='d'/> That is the recipe of bzip2, which Julian Seward released in 1996: transform, move to front, then Huffman. On the novel it beats zlib's Lempel–Ziv by a quarter.",
+      "zh": "这是《白鲸》的开头，以及它的变换中的一段。<bookmark mark='a'/>变换里满是连续串。整部小说一百二十万个字符，只有五十多万个连续串。<bookmark mark='b'/>前移编码把每个字符替换为它在最近见过的字符列表中的位置，于是一个连续串变成一串零：<bookmark mark='c'/>熵从每字符四点四比特降到二点七。<bookmark mark='d'/>这就是 Julian Seward 在1996年发布的 bzip2 的配方：变换，前移，再加 Huffman。在这部小说上它比 zlib 的 Lempel–Ziv 好四分之一。"
+    },
+    "c1e77bb9bc59": {
+      "scene": "Bwt",
+      "en": "Why does sorting help a later coder? <bookmark mark='a'/> Rows are sorted by what follows a position; the last column holds what precedes it. <bookmark mark='b'/> Characters before similar right contexts are grouped together: before he, before hi, and so on. <bookmark mark='c'/> Within those groups some characters dominate. Before he, t dominates here. <bookmark mark='d'/> The transform itself is a reversible permutation, so its zero-order histogram and entropy are unchanged. Compression comes from coding the resulting local structure. <bookmark mark='e'/> The lower-order conditional entropies shown below illustrate the value of context; they are not promised final file sizes. <bookmark mark='f'/> Manzini's 2001 analysis gives high-order entropy bounds for specified coding pipelines, with constants and overhead terms. Those terms matter for short texts and large context orders.",
+      "zh": "为什么排序能帮助后续编码？<bookmark mark='a'/>行按一个位置之后的内容排序，最后一列存放它之前的字符。<bookmark mark='b'/>相似右侧上下文之前的字符被聚在一起：he 之前、hi 之前，依此类推。<bookmark mark='c'/>组内往往有少数字符占优势；这里 he 之前主要是 t。<bookmark mark='d'/>变换本身是可逆排列，所以零阶直方图与熵不变。压缩来自对变换后局部结构的编码。<bookmark mark='e'/>下方的低阶条件熵说明上下文的价值，并非最终文件大小的保证。<bookmark mark='f'/>Manzini 在 2001 年为特定编码流水线给出了高阶熵界，其中包含常数与额外开销。短文本或较高上下文阶数下，这些项很重要。"
+    },
+    "e3cc9d14417b": {
+      "scene": "FmIndex",
+      "en": "Chapter nine. Searching compressed text: the FM-index.",
+      "zh": "第9章。搜索压缩文本：FM 索引。"
+    },
+    "cccf45cd2966": {
+      "scene": "FmIndex",
+      "en": "Paolo Ferragina and Giovanni Manzini saw in 2000 that the transform is itself an index. <bookmark mark='a'/> The sorted rows are the sorted suffixes of chapter seven, so all occurrences of a pattern are a block of consecutive rows. Find the block by reading the pattern backwards. <bookmark mark='b'/> Start with the last character, a: rows one to three begin with a. <bookmark mark='c'/> Which rows begin with n a? They are where the LF mapping sends those a rows whose last character is n, and two counts of n in the last column, before row one and before row four, say where they land: rows five and six. <bookmark mark='d'/> Once more for a n a: rows two and three. <bookmark mark='e'/> Two rows, two occurrences. Each character of the pattern costs two rank queries, whatever the length of the text.",
+      "zh": "2000年，Paolo Ferragina 与 Giovanni Manzini 看出这个变换本身就是一个索引。<bookmark mark='a'/>排好序的行就是第七章排好序的后缀，所以一个模式的所有出现是一段连续的行。倒着读模式就能找到这一段。<bookmark mark='b'/>从最后一个字符 a 开始：第一到三行以 a 开头。<bookmark mark='c'/>哪些行以 n a 开头？它们是 LF 映射把那些最后一个字符为 n 的 a 行送去的地方，而最后一列中 n 的两次计数，第一行之前和第四行之前，说明它们落在哪里：第五和第六行。<bookmark mark='d'/>对 a n a 再做一次：第二和第三行。<bookmark mark='e'/>两行，两次出现。模式的每个字符花两次 rank 查询，与文本多长无关。"
+    },
+    "e928a0ace71d": {
+      "scene": "FmIndex",
+      "en": "The distinction is visible in the work itself. <bookmark mark='a'/> Counting Queequeg returns one suffix interval with two hundred and fifty-three rows. <bookmark mark='b'/> Locating asks which text position belongs to each selected row, so it follows LF links to stored samples. Here we locate only the first five rows, not all occurrences. <bookmark mark='c'/> The two lanes count their rank requests separately. <bookmark mark='d'/> Building the index and storing its input are separate costs, and one rank request is not one character comparison.",
+      "zh": "从工作过程就能看出区别。<bookmark mark='a'/>对 Queequeg 计数，返回含有二百五十三行的后缀区间。<bookmark mark='b'/>定位则询问每个选定行对应哪个文本位置，需要沿 LF 链接走到存储的样本。这里只定位前五行，并未定位全部出现位置。<bookmark mark='c'/>两条流程分别统计 rank 请求。<bookmark mark='d'/>构造索引与保存输入另有代价；一次 rank 请求也不等于一次字符比较。"
+    },
+    "6b366643c150": {
+      "scene": "FmIndex",
+      "en": "Real FM-indexes answer rank queries without storing the transform as bytes. <bookmark mark='a'/> A wavelet tree splits the alphabet in two and writes one bit per character: zero for the first half, one for the second. <bookmark mark='b'/> Then it does the same, recursively, for the characters of each half: log sigma levels of bit vectors. <bookmark mark='c'/> To count the n's before position i, ask how many ones come before i at the top, follow that count into the right child, and ask again. <bookmark mark='d'/> Guy Jacobson showed in 1989 how to answer a binary rank in constant time with only a sliver of extra bits. <bookmark mark='e'/> Compress the bit vectors, or shape the tree like a Huffman code, and the whole index takes about the compressed size of the text.",
+      "zh": "真正的 FM 索引回答 rank 查询时，并不把变换按字节存储。<bookmark mark='a'/>小波树把字母表一分为二，每个字符写一个比特：前一半写零，后一半写一。<bookmark mark='b'/>然后对每一半的字符递归地做同样的事：log sigma 层比特向量。<bookmark mark='c'/>要数位置 i 之前有多少个 n，就问顶层在 i 之前有多少个一，带着这个计数进入右孩子，再问一次。<bookmark mark='d'/>Guy Jacobson 在1989年说明了怎样只用极少的额外比特，在常数时间内回答二进制 rank。<bookmark mark='e'/>压缩这些比特向量，或者把树做成 Huffman 编码的形状，整个索引就只占大约文本压缩后的大小。"
+    },
+    "829cbdad29d5": {
+      "scene": "FmIndex",
+      "en": "Here is the teaching index on the whole corpus. <bookmark mark='a'/> Count timing is a single warm observation, with index construction excluded. Locating is separate: we check up to the first five matching rows and show mean time per returned location. A dash means no occurrence to locate. Samples are chosen by text offset divisible by thirty-two, so at most thirty-one LF steps reach one. <bookmark mark='b'/> The implementation stores plain BWT bytes, rank checkpoints and Python dictionaries. Its modeled storage excludes Python object overhead; it is larger than the text. <bookmark mark='c'/> Compressing the BWT is only one part of an index. The bzip2 size is a file-size reference, not the size of a fully functional FM-index: rank structures and locate samples still cost space. <bookmark mark='d'/> FM-indexes are used by DNA aligners such as BWA and Bowtie; production implementations add specialized layout and search strategies.",
+      "zh": "这里是在全部语料上运行的教学索引。<bookmark mark='a'/>计数时间是一次热查询观测，不包括构建索引。定位单独测量：核验前至多五个匹配行，并显示每个返回位置的平均时间。横线表示没有可定位的命中。样本按文本偏移能被三十二整除来选，所以至多三十一步 LF 即可到达。<bookmark mark='b'/>实现保留原始 BWT 字节、rank 检查点与 Python 字典。空间模型不计 Python 对象开销，而且比原文更大。<bookmark mark='c'/>压缩 BWT 只是索引的一部分。bzip2 大小仅作文件大小参照，不能当作完整 FM 索引大小；rank 结构与定位样本仍需空间。<bookmark mark='d'/>BWA、Bowtie 等 DNA 比对器使用 FM 索引；生产实现还加入专门的布局与搜索策略。"
+    },
+    "f86b7d6c008f": {
+      "scene": "Lz",
+      "en": "Chapter ten. Compression, part one: Lempel and Ziv.",
+      "zh": "第10章。压缩（上）：Lempel 与 Ziv。"
+    },
+    "89a17ed252d8": {
+      "scene": "Lz",
+      "en": "In 1977 Abraham Lempel and Jacob Ziv proposed the idea behind zip, gzip and PNG. <bookmark mark='a'/> Read the text left to right. Whenever the next stretch has appeared recently, don't write it again: write a pair, how long it is and how far back it was. Here is the opening of A Tale of Two Cities. It was the, of times, it was the: each repetition becomes an arc back to its first appearance. <bookmark mark='b'/> The search looks back over a window, thirty-two kilobytes in DEFLATE, and matches from three to two hundred and fifty-eight characters. <bookmark mark='c'/> Finding the longest match fast is a hashing problem: index every three-character prefix in the window, and follow the chain of earlier positions with the same prefix.",
+      "zh": "1977年，Abraham Lempel 与 Jacob Ziv 提出了 zip、gzip 和 PNG 背后的想法。<bookmark mark='a'/>从左到右读文本。只要接下来的一段最近出现过，就不再写它：写一个数对，它有多长、在多远之前。这是《双城记》的开头。It was the、of times、it was the：每一次重复都变成一条指回它首次出现的弧。<bookmark mark='b'/>搜索在一个窗口内往回看，DEFLATE 中是三十二 KB，匹配长度从三到二百五十八个字符。<bookmark mark='c'/>快速找到最长匹配是一个哈希问题：为窗口中每个三字符前缀建索引，沿着有相同前缀的较早位置组成的链走。"
+    },
+    "0f43eb0f6a22": {
+      "scene": "Lz",
+      "en": "DEFLATE, the format inside zip and gzip, puts Lempel–Ziv and Huffman together. <bookmark mark='a'/> Literal bytes and match lengths share one alphabet of two hundred and eighty-six symbols, and distances have their own thirty. <bookmark mark='b'/> Big values are coded as a bucket plus a few extra raw bits, so that the Huffman alphabets stay small. <bookmark mark='c'/> Dynamic blocks carry a pair of compressed Huffman codebooks; fixed-code blocks and stored blocks are alternatives. <bookmark mark='d'/> The compressor's cleverest trick is lazy matching: before committing to a match, it checks whether starting one character later would give a longer one. Our instrument prices tokens only; it does not implement the full framing or block choices. <bookmark mark='e'/> The levels from one to nine trade how hard the compressor searches against speed, while decompression is always quick, little more than copying bytes. <bookmark mark='f'/> Phil Katz designed it in 1993 for PKZIP; it was standardized in 1996 and has been everywhere since.",
+      "zh": "DEFLATE，zip 和 gzip 里面的格式，把 Lempel–Ziv 与 Huffman 结合在一起。<bookmark mark='a'/>字面字节和匹配长度共用一个有二百八十六个符号的字母表，距离有自己的三十个。<bookmark mark='b'/>大的数值编码成一个桶加几个额外的原始比特，使 Huffman 字母表保持很小。<bookmark mark='c'/>动态块携带一对经过压缩的 Huffman 码表；也可以使用固定码块或原样块。<bookmark mark='d'/>压缩器最巧妙的技巧是惰性匹配：在确定一个匹配之前，先看晚一个字符开始是否会得到更长的匹配。这里的仪器只计算词元价格，没有实现完整帧格式与分块选择。<bookmark mark='e'/>从一到九的级别在压缩器搜索得多努力与速度之间权衡，而解压总是很快，不过是复制字节。<bookmark mark='f'/>Phil Katz 在1993年为 PKZIP 设计了它；它在1996年成为标准，从此无处不在。"
+    },
+    "e3e0cc0b79bf": {
+      "scene": "Lz",
+      "en": "A year later Ziv and Lempel gave a second scheme. <bookmark mark='a'/> Keep a dictionary of phrases. Read the longest phrase already in it, write down its number, and add that phrase plus the next character as a new entry. <bookmark mark='b'/> The phrases grow one character at a time, so common stretches of text soon have a number of their own. <bookmark mark='c'/> Terry Welch's variant, LZW, starts with every single byte in the dictionary. It ran Unix's compress command and GIF images. <bookmark mark='d'/> Ziv and Lempel proved something remarkable: for any stationary ergodic source, the number of bits per character tends to the source's entropy rate, the best possible. <bookmark mark='e'/> That asymptotic result concerns classic universal LZ schemes. It is not a guarantee for our fixed thirty-two-kilobyte window and bounded match search.",
+      "zh": "一年后，Ziv 与 Lempel 给出了第二种方案。<bookmark mark='a'/>维护一个短语词典。读出词典中已有的最长短语，写下它的编号，再把这个短语加上下一个字符作为新条目加入词典。<bookmark mark='b'/>短语一次长一个字符，所以文本中常见的片段很快就有了自己的编号。<bookmark mark='c'/>Terry Welch 的变体 LZW 一开始就把每个单字节放进词典。Unix 的 compress 命令和 GIF 图像用的就是它。<bookmark mark='d'/>Ziv 与 Lempel 证明了一件了不起的事：对任何平稳遍历的信源，每字符的比特数趋于信源的熵率，即可能的最好结果。<bookmark mark='e'/>这种这一渐近结论针对经典通用 LZ 方案，并非对这里固定三十二 KB 窗口与有限匹配搜索的保证。"
+    },
+    "0a6ea595b6ce": {
+      "scene": "Lz",
+      "en": "We parse three novels into literals and back-references, then estimate their payload bit costs. <bookmark mark='a'/> Every token stream is decoded and compared byte for byte with its input. The LZW codes also pass an independent decoder. <bookmark mark='b'/> These columns are models: they omit framing, transmitted codebooks and other metadata, and do not form a complete DEFLATE file. A close payload estimate is not an end-to-end compressor result. <bookmark mark='c'/> The zlib, bzip2 and xz columns are actual emitted files, each decoded and checked. Their relative sizes are observations on these novels, not a universal ranking. <bookmark mark='d'/> DEFLATE combines LZ back-references with Huffman coding; real formats also define how headers, codebooks, blocks and end markers are transmitted.",
+      "zh": "我们把三部小说解析成原样字节与回指，再估计载荷位数。<bookmark mark='a'/>每条词元流都被解码，并与输入逐字节比较。LZW 码也通过独立解码器核验。<bookmark mark='b'/>这些列是模型：省略帧、传输的码表及其他元数据，不能组成完整的 DEFLATE 文件。载荷估计接近，并不等于端到端压缩器的结果接近。<bookmark mark='c'/>zlib、bzip2 与 xz 列则是真正输出的文件，每个都已解码核验。大小关系是这些小说上的观测，不是普遍排名。<bookmark mark='d'/>DEFLATE 把 LZ 回指与 Huffman 编码结合；真正格式还定义头部、码表、分块与结束标记怎样传输。"
+    },
+    "386a6a40ea3c": {
+      "scene": "Entropy",
+      "en": "Chapter eleven. Compression, part two: coding the symbols.",
+      "zh": "第11章。压缩（下）：给符号编码。"
+    },
+    "5714f9a58f7d": {
+      "scene": "Entropy",
+      "en": "Lempel–Ziv finds the repetition; then the symbols must be written in bits. <bookmark mark='a'/> Shannon says a symbol of probability p is worth log of one over p bits, and the average is the entropy. <bookmark mark='b'/> Huffman's code from Part 19 gives each symbol a whole number of bits, which is within one bit of that. <bookmark mark='c'/> Usually that is fine. But take a source where one symbol has probability ninety-five percent: its entropy is under three tenths of a bit per symbol, and Huffman still spends a whole bit on every symbol, more than three times too much. <bookmark mark='d'/> The last column, rANS, gets to within a fraction of a percent of the entropy, at every skew. <bookmark mark='e'/> On the bytes of Moby-Dick, where no symbol dominates, Huffman's whole bits cost less than one percent.",
+      "zh": "Lempel–Ziv 找出重复；然后还得把符号写成比特。<bookmark mark='a'/>Shannon 说，概率为 p 的符号值 log 一除以 p 个比特，平均值就是熵。<bookmark mark='b'/>第19部分的 Huffman 编码给每个符号整数个比特，与熵相差不到一比特。<bookmark mark='c'/>通常这就够了。但设想一个信源，其中一个符号的概率是百分之九十五：它的熵每符号不到十分之三比特，而 Huffman 仍然给每个符号花一整个比特，多了三倍以上。<bookmark mark='d'/>最后一列 rANS，在每种偏斜度下都只比熵多不到百分之一。<bookmark mark='e'/>在《白鲸》的字节上，没有哪个符号占主导，Huffman 的整数比特只多花不到百分之一。"
+    },
+    "6d293023f310": {
+      "scene": "Entropy",
+      "en": "Arithmetic coding approaches fractional information costs by encoding a whole message through a numerical interval. <bookmark mark='a'/> Jarek Duda's asymmetric numeral systems keep the message as a single integer x and push each symbol into it. <bookmark mark='b'/> Divide x by the symbol's frequency, multiply by the total, and add the remainder and the symbol's offset. <bookmark mark='c'/> Here f is the symbol's frequency out of M. <bookmark mark='d'/> Each step multiplies x by about one over the symbol's probability, so the bit growth approaches its information content. The small trace shows finite-state increments are not exactly equal. <bookmark mark='e'/> In practice x stays inside a machine word by streaming out its low bytes, and decoding runs the same arithmetic backwards. <bookmark mark='f'/> Duda's work from 2009 to 2014 provides state-based entropy coding. Speed and compression depend on the model, precision and implementation. It is inside zstd, Apple's LZFSE and JPEG XL. Our byte-wise implementation round-trips the measured streams. Its frequency table and decoded length are external metadata, excluded from the displayed payload size.",
+      "zh": "算术编码通过数值区间编码整条消息，逼近非整数的信息代价。<bookmark mark='a'/>Jarek Duda 的非对称数字系统把消息保存为一个整数 x，把每个符号推入其中。<bookmark mark='b'/>用 x 除以符号的频率，乘以总数，再加上余数和符号的偏移。<bookmark mark='c'/>这里 f 是符号在 M 中所占的频率。<bookmark mark='d'/>每一步大约把 x 乘以一除以符号的概率，所以位数增长趋近其信息量。这个小轨迹也显示，有限状态的每步增量并不恰好相等。<bookmark mark='e'/>实际中，x 通过不断输出低位字节而保持在一个机器字之内，解码则把同样的算术倒过来运行。<bookmark mark='f'/>Duda 在2009到2014年的工作提供了基于状态的熵编码；速度与压缩效果取决于模型、精度和实现。zstd、Apple 的 LZFSE 和 JPEG XL 里都有它。这里的逐字节实现已往返还原被测数据流；频率表与解码长度是外部元数据，不计入显示的载荷大小。"
+    },
+    "0d748c366c19": {
+      "scene": "Entropy",
+      "en": "The model determines which events the coder can predict. <bookmark mark='a'/> For these Moby-Dick bytes, empirical entropy falls from about four point four bits with no context, to three point five with one previous byte, and two point eight with two. <bookmark mark='b'/> Better prediction can reduce payload cost. <bookmark mark='c'/> PPM, context mixing and language models supply richer predictions. Comparing complete compressors also requires their model descriptions, framing and computation; this part runs no language-model compression benchmark. <bookmark mark='d'/> zstd combines LZ parsing with Huffman and ANS coding, tuned for practical speed and compression tradeoffs.",
+      "zh": "模型决定编码器能预测哪些事件。<bookmark mark='a'/>对这些《白鲸》字节，不用上下文的经验熵约四点四位；知道前一字节时约三点五位，知道前两字节时约二点八位。<bookmark mark='b'/>更好的预测可以降低载荷代价。<bookmark mark='c'/>PPM、上下文混合和语言模型提供更丰富的预测；比较完整压缩器还应计入模型描述、帧格式与计算。本部分没有运行语言模型压缩基准。<bookmark mark='d'/>zstd 把 LZ 解析与 Huffman、ANS 编码结合，针对实际速度和压缩率的权衡调校。"
+    },
+    "d424796dbec4": {
+      "scene": "Align",
+      "en": "Chapter twelve. Alignment.",
+      "zh": "第12章。序列比对。"
+    },
+    "b5792bb87c4d": {
+      "scene": "Align",
+      "en": "Part 19's edit distance becomes, in biology, an alignment. <bookmark mark='a'/> Saul Needleman and Christian Wunsch, in 1970, filled the same table, but with scores to maximize: a reward for matching letters, penalties for mismatches and gaps. <bookmark mark='b'/> Each cell is the best of three: extend the alignment by a pair, or by a gap on either side. <bookmark mark='c'/> Here intention against execution, the example of Part 19. <bookmark mark='d'/> Real biology scores amino acids with substitution matrices learned from evolution, and charges more to open a gap than to extend one, because one long insertion is likelier than many short ones.",
+      "zh": "第19部分的编辑距离，在生物学中变成了比对。<bookmark mark='a'/>1970年，Saul Needleman 与 Christian Wunsch 填写了同样的表格，但是用要最大化的得分：字母匹配有奖励，失配和空位有罚分。<bookmark mark='b'/>每个格子取三者中最好的：用一对字符延长比对，或在任一边加一个空位。<bookmark mark='c'/>这里是 intention 对 execution，第19部分的例子。<bookmark mark='d'/>真正的生物学用从进化中学来的替换矩阵给氨基酸打分，而且开启一个空位比延长它罚得更多，因为一次长的插入比许多次短的更可能。"
+    },
+    "4def3e0bc892": {
+      "scene": "Align",
+      "en": "Often only part of two texts is related. <bookmark mark='a'/> Temple Smith and Michael Waterman added a fourth choice to every cell: zero, meaning start a fresh alignment here. <bookmark mark='b'/> The best local alignment is the highest cell anywhere in the table, traced back until the score drops to zero. <bookmark mark='c'/> Here are the two versions of the anonymous letter from The Count of Monte Cristo that Part 20's MinHash flagged. Smith–Waterman finds the stretch they share and lines it up, word for word, around the places where the second version was reworded.",
+      "zh": "两段文本常常只有一部分相关。<bookmark mark='a'/>Temple Smith 与 Michael Waterman 给每个格子加了第四个选择：零，意思是在这里重新开始一段比对。<bookmark mark='b'/>最好的局部比对是表中任何位置的最高格子，往回追溯直到得分降为零。<bookmark mark='c'/>这是《基督山伯爵》中那封匿名信的两个版本，第20部分的 MinHash 标出了它们。Smith–Waterman 找到它们共有的那一段，逐词对齐，绕过第二个版本改写过的地方。"
+    },
+    "2794712e0fbe": {
+      "scene": "Align",
+      "en": "This screen illustrates affine scoring; our measured alignments use constant gap penalties. <bookmark mark='a'/> Biology, and diff, prefer one long gap to many short ones, so a gap of length l costs an opening charge plus a small charge per character. <bookmark mark='b'/> A single table can't price that, because a cell doesn't know whether its neighbour was already inside a gap. <bookmark mark='c'/> Osamu Gotoh's solution keeps three tables: M for alignments ending in a pair of characters, <bookmark mark='d'/> X for those ending in a gap in one string, <bookmark mark='e'/> and Y for a gap in the other. Moving within X or Y costs only the extension; entering them from M pays opening plus the first extension, matching the displayed o plus e times length convention. <bookmark mark='f'/> The time is still the product of the lengths, and Hirschberg's divide-and-conquer trick from Part 19 brings the memory down to linear.",
+      "zh": "这一屏示意仿射评分；实测比对使用常数空位罚分。<bookmark mark='a'/>生物学和 diff 都偏爱一个长空位而不是许多短空位，所以长度为 l 的空位花一笔开启费，再加每个字符一笔小费用。<bookmark mark='b'/>单张表格无法这样计价，因为一个格子不知道它的邻居是否已经在空位之中。<bookmark mark='c'/>Osamu Gotoh 的办法是保留三张表：M 表示以一对字符结尾的比对，<bookmark mark='d'/>X 表示以一个串中的空位结尾的，<bookmark mark='e'/>Y 表示另一个串中的空位。在 X 或 Y 之内移动只付延长费；从 M 进入时付出开启加首次延伸的代价，对应所示的 o 加 e 乘长度的约定。<bookmark mark='f'/>时间仍是两个长度之积，第19部分 Hirschberg 的分治技巧把内存降到线性。"
+    },
+    "2de5961cff8d": {
+      "scene": "Align",
+      "en": "Full pairwise tables are quadratic. <bookmark mark='a'/> Two genomes of billions of bases require on the order of ten to the nineteen cells. <bookmark mark='b'/> BLAST-style seed-and-extend filters candidate regions, which can miss an optimum. <bookmark mark='c'/> FM-indexes help find candidate seeds in read aligners. <bookmark mark='d'/> The conditional lower bound concerns exact unit-cost edit distance in the worst case; it does not rule out fast structured instances. <bookmark mark='e'/> With a valid edit-distance bound k, unit-cost dynamic programming restricted to the corresponding band is exact, in order N times the quantity k plus one work. These are scaling strategies; our measured examples use complete tables. The next chapter uses Myers' distinct insertion-and-deletion distance.",
+      "zh": "完整的两两比较表是平方规模。<bookmark mark='a'/>两个数十亿碱基的基因组需要约十的十九次方个格子。<bookmark mark='b'/>BLAST 式种子延伸先筛选候选区域，可能漏掉最优解。<bookmark mark='c'/>FM 索引帮助读段比对器找候选种子。<bookmark mark='d'/>条件下界针对最坏情形下精确的单位代价编辑距离，不排除有结构实例的快速算法。<bookmark mark='e'/>给定有效编辑距离界 k，在相应带内运行单位代价动态规划是精确的，用时 O(N(k+1))。这些是扩展规模的策略；本部分实测使用完整表格。下一章 Myers 的插入删除距离是另一个模型。"
+    },
+    "304f67af667b": {
+      "scene": "Diff",
+      "en": "Chapter thirteen. Myers' diff.",
+      "zh": "第13章。Myers 的 diff。"
+    },
+    "9e9741a62eeb": {
+      "scene": "Diff",
+      "en": "Every git diff answers one question: what is the shortest list of line insertions and deletions that turns one file into another? Gene Myers drew it as a graph. <bookmark mark='a'/> Put the lines of the old file along the top and the new file down the side. <bookmark mark='b'/> A step right deletes a line of the old file, and a step down inserts a line of the new one; each costs one. <bookmark mark='c'/> Wherever two lines are equal there is a diagonal, which keeps the line and costs nothing. <bookmark mark='d'/> A diff is a path from the top-left corner to the bottom-right, and the best diff is the shortest path, Part 18's problem, on a grid. <bookmark mark='e'/> For Myers' own example, A B C A B B A against C B A B A C, five edits, and as many free diagonals as possible.",
+      "zh": "每次 git diff 都回答一个问题：把一个文件变成另一个，最短的行插入和删除列表是什么？Gene Myers 把它画成一张图。<bookmark mark='a'/>把旧文件的行放在上边，新文件的行放在左边。<bookmark mark='b'/>向右一步删除旧文件的一行，向下一步插入新文件的一行；每步花费一。<bookmark mark='c'/>只要两行相等就有一条对角线，它保留这一行，不花任何代价。<bookmark mark='d'/>一个 diff 是从左上角到右下角的一条路径，最好的 diff 就是最短路径，即第18部分的问题，在网格上。<bookmark mark='e'/>对 Myers 自己的例子，A B C A B B A 对 C B A B A C，五次编辑，并尽可能多地走免费的对角线。"
+    },
+    "212a1e78b683": {
+      "scene": "Diff",
+      "en": "Dijkstra's algorithm would work, but Myers found something better in 1986. <bookmark mark='a'/> Number the diagonals by x minus y. A path with D edits can only end on diagonals from minus D to D. <bookmark mark='b'/> For D equals zero, one, two and so on, keep, for each diagonal, only the path that has reached furthest along it. <bookmark mark='c'/> Each new path is the best neighbour's path plus one edit, followed by a slide down every free diagonal it can, which Myers called a snake. <bookmark mark='d'/> The first path to reach the corner is a shortest diff, after order N times the quantity D plus one work, where N is the two lengths added and D counts insertions and deletions, so similar files are fast. <bookmark mark='e'/> Patience diff, by Bram Cohen, first anchors on lines that appear exactly once in each file, which keeps code blocks together. <bookmark mark='f'/> And three-way merge, the heart of git merge, diffs both branches against their common ancestor and uses the overlapping edits to identify candidate conflicts; exact merge behavior depends on the merge strategy.",
+      "zh": "Dijkstra 算法也行，但 Myers 在1986年找到了更好的办法。<bookmark mark='a'/>用 x 减 y 给对角线编号。有 D 次编辑的路径只能停在负 D 到 D 的对角线上。<bookmark mark='b'/>对 D 等于零、一、二，依此类推，每条对角线只保留沿它走得最远的那条路径。<bookmark mark='c'/>每条新路径是最好的邻居路径加一次编辑，然后沿它能走的每条免费对角线滑下去，Myers 称之为蛇。<bookmark mark='d'/>第一条到达角落的路径就是一个最短的 diff，工作量是 N 乘以 D 加一的整体的数量级；N 为两串长度之和，D 计插入与删除，所以相似的文件很快。<bookmark mark='e'/>Bram Cohen 的 patience diff 先锚定在每个文件中恰好出现一次的行上，这能让代码块保持完整。<bookmark mark='f'/>而三方合并，git merge 的核心，把两个分支分别与它们的共同祖先做 diff，用重叠编辑识别候选冲突；具体合并行为取决于合并策略。"
+    },
+    "411f1288e89e": {
+      "scene": "Diff",
+      "en": "We ran Myers on adjacent pairs in the 52 captured syllabus revisions, in chronological order. Full commit IDs and content hashes fix the input history. <bookmark mark='a'/> The chart shows the exact insertion-and-deletion distances. The timing shown is a host observation for that pair. <bookmark mark='b'/> Similar adjacent revisions usually have smaller D. Identical files still need a linear scan, hence N times the quantity D plus one. <bookmark mark='c'/> Every script reconstructs both inputs, and every distance equals the independent quadratic LCS reference. A shortest script describes a possible transformation, not the author's causal edit history. <bookmark mark='d'/> Git's minimal diff has a different line count on 0 of these 51 pairs. Its preprocessing and heuristics can choose a different script. This is not evidence of corrupt output.",
+      "zh": "我们按时间顺序，对捕获的 52 个教学大纲版本的每对相邻版本运行 Myers。完整提交编号和内容哈希固定了历史输入。<bookmark mark='a'/>图表显示精确的插入删除距离；时间则是相应输入对的本机观测值。<bookmark mark='b'/>相近的相邻版本通常有较小的 D；完全相同的文件仍需线性扫描，所以写作 N 乘以 D 加一的整体。<bookmark mark='c'/>每条脚本都能重建两份输入，每个距离均等于独立的平方时间 LCS 参照。最短脚本描述一种可能的变换，不代表作者实际的编辑过程。<bookmark mark='d'/>这 51 对输入中，git 的 minimal diff 有 0 对的行数不同；预处理和启发式可能选择不同脚本，这不表明输出损坏。"
+    },
+    "cc2089d4415c": {
+      "scene": "Rsync",
+      "en": "Chapter fourteen. Rolling hashes at scale: rsync and chunking.",
+      "zh": "第14章。大规模的滚动哈希：rsync 与分块。"
+    },
+    "77e411c7f0ae": {
+      "scene": "Rsync",
+      "en": "You have last week's copy of a large file, and the server has today's, which differs by a sentence inserted in the middle. How do you update your copy without downloading all of it? <bookmark mark='a'/> The obvious plan cuts both files into fixed blocks and sends only the blocks whose hashes differ. <bookmark mark='b'/> But an insertion shifts everything after it. We inserted twenty-four bytes into the middle of Moby-Dick: <bookmark mark='c'/> half of the fixed blocks now differ, though almost nothing changed.",
+      "zh": "你有一个大文件上周的副本，服务器有今天的版本，区别只是中间插入了一句话。怎样更新你的副本而不必全部下载？<bookmark mark='a'/>直接的方案是把两个文件切成固定的块，只发送哈希不同的块。<bookmark mark='b'/>但插入会让它之后的一切都移位。我们在《白鲸》中间插入了二十四个字节：<bookmark mark='c'/>一半的固定块现在都不同了，尽管几乎什么都没变。"
+    },
+    "3580095e9032": {
+      "scene": "Rsync",
+      "en": "Andrew Tridgell and Paul Mackerras's rsync, from 1996, uses a rolling weak checksum to find candidates. Our instrument verifies candidates by full byte equality, standing in for a strong-hash check. <bookmark mark='a'/> The receiver hashes each of its blocks twice, once weakly and once strongly, and sends the list. <bookmark mark='b'/> The sender slides a window over its new file one byte at a time, looking for any old block at any offset. <bookmark mark='c'/> The weak checksum, two running sums, updates in constant time as the window slides, like chapter two's fingerprints. <bookmark mark='d'/> Only when the weak checksum matches is the expensive strong hash checked. <bookmark mark='e'/> For our edited Moby-Dick, 593 of the old blocks were found in place or shifted, and only about three kilobytes had to be sent as literal text.",
+      "zh": "Andrew Tridgell 与 Paul Mackerras 1996年的 rsync 用滚动弱校验和寻找候选；这里的仪器用完整字节相等核验候选，代替强哈希检查。<bookmark mark='a'/>接收方对它的每个块算两次哈希，一次弱的，一次强的，然后发送这个列表。<bookmark mark='b'/>发送方在新文件上一次一个字节地滑动窗口，在任何偏移处寻找任何旧块。<bookmark mark='c'/>弱校验和由两个累加和组成，窗口滑动时用常数时间更新，就像第二章的指纹。<bookmark mark='d'/>只有弱校验和匹配时，才检查代价高的强哈希。<bookmark mark='e'/>对我们修改过的《白鲸》，593 个旧块在原位或移位后被找到，只有大约三 KB 需要作为字面文本发送。"
+    },
+    "d5ae68c7c2d5": {
+      "scene": "Rsync",
+      "en": "rsync uses the old file's block hashes. Across a large backup collection, that metadata grows with the number of blocks. <bookmark mark='a'/> Content-defined chunking turns the idea around. Let the content choose where to cut: run a rolling hash over the bytes, and cut wherever its value ends in thirteen zeros, which with a minimum chunk size comes about every ten kilobytes. <bookmark mark='b'/> In this bounded gear-hash experiment, boundaries can resynchronize after the edit. In this instance, the later cuts return to the old content boundaries. <bookmark mark='c'/> Moby-Dick cut into 120 chunks; after our edit, exactly one chunk was new, fourteen kilobytes. <bookmark mark='d'/> Our sixty-four-bit chunk fingerprints are checked against complete byte chunks, so undetected collisions cannot explain the reported reuse. In a production system, store each chunk once under a suitable content hash, and a thousand nightly backups of a slowly changing disk cost little more than one. This is how deduplicating backup tools and cloud file sync work.",
+      "zh": "rsync 使用旧文件的块哈希。对于大型备份集合，这些元数据会随块数增长。<bookmark mark='a'/>基于内容的分块把这个想法倒过来。让内容决定在哪里切：在字节上运行滚动哈希，在它的值以十三个零结尾的地方切开，加上最小块大小的限制，大约每十 KB 切一次。<bookmark mark='b'/>在这个带大小界限的 gear-hash 实验中，分块边界可以在编辑后重新同步。在这个实例中，后面的切点回到了原来的内容边界。<bookmark mark='c'/>《白鲸》被切成 120 块；修改之后，恰好只有一块是新的，十四 KB。<bookmark mark='d'/>这里的六十四位块指纹已与完整字节块比对，未检测到的碰撞不会解释显示的复用量。生产系统中，每个块可按适当的内容哈希只存一次，一个缓慢变化的磁盘的一千次夜间备份，代价比一次多不了多少。去重备份工具和云文件同步就是这样工作的。"
+    },
+    "08b93a67c9b9": {
+      "scene": "Period",
+      "en": "Chapter fifteen. Periods, palindromes and Lyndon words.",
+      "zh": "第15章。周期、回文与 Lyndon 词。"
+    },
+    "8515b437a61c": {
+      "scene": "Period",
+      "en": "Some structure lives inside a single string. <bookmark mark='a'/> A string has period p if every character equals the one p places later. This one has periods five and eight. <bookmark mark='b'/> The periods are exactly n minus the borders of chapter three, so the failure function lists them all. <bookmark mark='c'/> Nathan Fine and Herbert Wilf proved in 1965 that if a string has periods p and q and is at least p plus q minus their greatest common divisor long, it also has that divisor as a period. <bookmark mark='d'/> Five and eight have divisor one, so a string of twelve characters with both periods would be a single repeated letter; ours, of eleven, escapes, which shows the bound is tight. <bookmark mark='e'/> Periodicity supports safe skips in methods such as Galil's refinement and two-way matching. The engines selected by actual libraries depend on the implementation and input.",
+      "zh": "有些结构存在于单个字符串之内。<bookmark mark='a'/>如果一个字符串的每个字符都等于 p 位之后的那个，它就有周期 p。这个串有周期五和八。<bookmark mark='b'/>周期恰好是 n 减去第三章的边界，所以失配函数把它们全部列了出来。<bookmark mark='c'/>Nathan Fine 与 Herbert Wilf 在1965年证明：如果一个字符串有周期 p 和 q，且长度至少是 p 加 q 减去它们的最大公约数，那么这个公约数也是它的周期。<bookmark mark='d'/>五和八的公约数是一，所以有这两个周期的十二个字符的串只能是同一个字母的重复；我们的串只有十一个字符，逃过了这一点，这说明这个界是紧的。<bookmark mark='e'/>周期性支持 Galil 改进和双向匹配等方法的安全跳跃；实际程序库选择的引擎取决于实现与输入。"
+    },
+    "8573caa5aed3": {
+      "scene": "Period",
+      "en": "What is the longest palindrome after keeping ASCII letters, lowercasing them and requiring at least four distinct letters? <bookmark mark='a'/> Expanding around each possible centre is quadratic for a text like a run of a's. <bookmark mark='b'/> Glenn Manacher's 1975 algorithm notices that inside a palindrome already found, each centre mirrors one on the other side, so reuse the mirror's radius only up to the known right boundary, then extend by fresh comparisons. <bookmark mark='c'/> The right edge of the furthest palindrome only ever moves right, which makes the whole scan linear. <bookmark mark='d'/> We ran it over the letters of all thirty novels, nineteen million of them, using that diversity filter. This is a query on normalized bytes, not contiguous original prose. The winner, at nineteen letters, is Lenehan in Ulysses: able was I ere I saw Elba.",
+      "zh": "只保留 ASCII 字母并转为小写，再要求至少四种不同字母，最长回文是什么？<bookmark mark='a'/>围绕每个可能的中心向外扩展，对一串 a 这样的文本是平方级的。<bookmark mark='b'/>Glenn Manacher 1975年的算法注意到，在已经找到的回文之内，每个中心都对应另一侧的一个镜像，所以复用镜像半径时必须截断到已知右边界，再通过新的比较继续扩展。<bookmark mark='c'/>最远回文的右边界只会向右移动，这使整个扫描是线性的。<bookmark mark='d'/>我们在全部三十部小说的字母上运行它，共一千九百万个，并使用这个多样性筛选条件。这是规范化字节上的查询，不是原文连续段落的查询。胜出者有十九个字母，是《尤利西斯》里的 Lenehan：able was I ere I saw Elba。"
+    },
+    "3d6533892df6": {
+      "scene": "Period",
+      "en": "One more piece of structure. <bookmark mark='a'/> A Lyndon word is strictly smaller, in dictionary order, than every nontrivial rotation. <bookmark mark='b'/> Kuo-Tsai Chen, Ralph Fox and Roger Lyndon proved that every string splits in exactly one way into Lyndon words that never increase. <bookmark mark='c'/> Banana is b, an, an, a. Mississippi is m, iss, iss, ipp, i. <bookmark mark='d'/> Jean-Pierre Duval found the factorization in linear time with constant working memory, excluding the returned factors. <bookmark mark='e'/> It sounds like a curiosity, but it gives a Burrows–Wheeler transform without an end marker, and Lyndon words were the key to the 2017 proof that a string of length n has fewer than n maximal repetitions.",
+      "zh": "再看一种结构。<bookmark mark='a'/>林登 词按字典序严格小于它的每一个非平凡旋转。<bookmark mark='b'/>陈国才、拉尔夫·福克斯 与 罗杰·林登 证明，每个字符串都能以唯一的方式分解为一串不递增的 林登 词。<bookmark mark='c'/>banana 是 b、an、an、a。mississippi 是 m、iss、iss、ipp、i。<bookmark mark='d'/>杜瓦尔 只用常数工作内存，不包括返回的因子。<bookmark mark='e'/>这听起来像是一件奇事，但它给出了不需要结束标记的 伯罗斯与惠勒 变换，而 林登 词是2017年那个证明的关键：长度为 n 的字符串的极大重复少于 n 个。"
+    },
+    "3b24fcdfd36d": {
+      "scene": "Frontier",
+      "en": "Chapter sixteen. Frontier: indexes as small as the information.",
+      "zh": "第16章。前沿：和信息量一样小的索引。"
+    },
+    "2f7bab7c1e56": {
+      "scene": "Frontier",
+      "en": "Repetition changes what a useful index should store. <bookmark mark='a'/> We concatenate 52 captured syllabus revisions in reverse chronological git traversal order, without separators, and append one unique end marker. The comparison uses the same number of bytes from the novels, plus that marker. The table reports complete BWT run counts, not an extrapolation from these two display strips. <bookmark mark='b'/> xz's emitted size is checked by decoding it; the compression ratio is for this exact snapshot. <bookmark mark='c'/> Versioned documents and source histories commonly contain this kind of reuse. <bookmark mark='d'/> Genomic collections are another motivation, although this experiment measures no genome data. <bookmark mark='e'/> Fixed-order statistical entropy can miss long-range copies. BWT run count and phrase count capture different kinds of repetitiveness.",
+      "zh": "重复会改变索引应该保存什么。<bookmark mark='a'/>我们按 git 历史遍历的逆时间顺序直接拼接捕获的 52 个教学大纲版本，不加分隔符，最后只加一个唯一结束标记。小说对照使用相同数量的字节并加同一标记。表格报告完整 BWT 的游程数，并非从下方两条展示片段外推。<bookmark mark='b'/>xz 的输出已经解码核验；压缩比针对这个精确快照。<bookmark mark='c'/>版本文档与源代码历史常有这种复用。<bookmark mark='d'/>基因组集合也是动机之一，但这个实验没有测量基因组数据。<bookmark mark='e'/>固定阶统计熵可能漏掉远距离复制。BWT 游程数与短语数刻画不同的重复结构。"
+    },
+    "0b2b5dbfd6aa": {
+      "scene": "Frontier",
+      "en": "A run-length index stores structure proportional to r. <bookmark mark='a'/> Rank at any queried row combines counts before its run with the partial run; predecessor search finds that run. <bookmark mark='b'/> Periodic suffix-array samples alone cost n over s, so locating needs a different representation to fit run-bounded space. <bookmark mark='c'/> Gagie, Navarro and Prezza's 2018 work, published in 2020, uses run-boundary samples with additional structures. On their word-RAM model, order r words support locating at log log n per occurrence after the pattern-search cost. <bookmark mark='d'/> Later move structures support constant-time LF within order r space. These are theoretical results, not implementations measured in this part. <bookmark mark='e'/> Kempa and Kociumaka's 2020 result bounds r by order z times log squared n. Here z uses the paper's unbounded LZ77 convention, not our fixed-window parser's token count. <bookmark mark='f'/> Delta, attractors, macro schemes and LZ give one hierarchy. But r and z are incomparable; they do not form the simple ladder z less than or equal to r.",
+      "zh": "游程长度索引保存与 r 成比例的结构。<bookmark mark='a'/>任意查询行的 rank 结合所在游程之前的计数与当前部分游程；前驱搜索用于找到该游程。<bookmark mark='b'/>周期性后缀数组样本本身占 n 除以 s 的空间，因此定位需要另一种表示才能适应游程空间界。<bookmark mark='c'/>Gagie、Navarro、Prezza 在 2018 年提出、2020 年发表的工作，把游程边界样本与额外结构结合。在论文的字 RAM 模型下，O(r) 个字可在模式搜索之后，以每次出现 log log n 的代价定位。<bookmark mark='d'/>后来的 move 结构可在 O(r) 空间内支持常数时间 LF。这些是理论结果，不是本部分测量的实现。<bookmark mark='e'/>Kempa 与 Kociumaka 的 2020 年结果证明 r 为 O(z log 平方 n)。这里 z 使用论文中无限窗口 LZ77 的约定，不是本部分固定窗口解析器的词元数。<bookmark mark='f'/>delta、吸引子、宏方案与 LZ 形成一条层级；但 r 与 z 不可比较，并不满足简单的 z 小于等于 r。"
+    },
+    "9f35a6236560": {
+      "scene": "Frontier",
+      "en": "Here are selected dated results, rather than a complete current frontier. <bookmark mark='a'/> Backurs and Indyk's 2015 conditional lower bound concerns exact unit-cost edit distance in the worst case. It is not a lower bound for every biological score or every compressible input. <bookmark mark='b'/> Compression can speed up alignment on structured instances. <bookmark mark='c'/> Andoni and Nosatzki's 2020 randomized approximation takes n to the one plus eta, for each fixed positive eta, with an approximation constant depending on eta. That is not a claim of n times polylog n time. <bookmark mark='d'/> Our implemented distance-sensitive method is Myers: order N times the quantity D plus one for insertion-and-deletion distance. Unit-cost Levenshtein distance also allows substitutions, so it is a different problem.",
+      "zh": "这里选取若干注明年代的结果，不把它们当作完整的当前前沿。<bookmark mark='a'/>Backurs 与 Indyk 在 2015 年的条件下界针对最坏情形下精确的单位代价编辑距离，不适用于所有生物学评分或每个可压缩输入。<bookmark mark='b'/>压缩可加速有结构实例的比对。<bookmark mark='c'/>Andoni 与 Nosatzki 在 2020 年的随机近似对每个固定正 eta 用时 n 的一加 eta 次方，近似常数依赖 eta；这并不是 n 乘多对数时间的结论。<bookmark mark='d'/>这里实现的距离敏感方法是 Myers：插入删除距离为 D 时，用时 O(N(D+1))。单位代价 Levenshtein 距离还允许替换，是另一个问题。"
+    },
+    "f9e51ab9aa23": {
+      "scene": "Frontier",
+      "en": "A useful research project begins with precise questions. <bookmark mark='a'/> Compare space and construction costs, then count and locate separately, on fixed text families. <bookmark mark='b'/> For any approximation result, record its factor, running-time exponent, randomness and success probability. <bookmark mark='c'/> For repetitive indexes, fix sentinels, parsing conventions and whether space means bits, machine words or allocated bytes. <bookmark mark='d'/> The starred exercise asks for a reproducible tradeoff study and a dated literature review. Before declaring a question open, check newer primary work; the historical results in this chapter are not a claim about the latest boundary.",
+      "zh": "有用的研究项目从精确提问开始。<bookmark mark='a'/>固定文本族，比较空间与构造代价，再分别测计数与定位。<bookmark mark='b'/>对任何近似结果，都记录近似因子、时间指数、随机性与成功概率。<bookmark mark='c'/>对重复文本索引，固定结束标记、解析约定，并说明空间单位是位、机器字还是实际分配的字节。<bookmark mark='d'/>星号习题要求可复现的权衡研究与有日期的文献审查。声称问题未解之前应检查更新的一手工作；本章历史结果并不代表最新边界。"
+    },
+    "a3eb809d996f": {
+      "scene": "Outro",
+      "en": "What we built in this part. Naive search and its worst case; rolling hashes; Knuth, Morris and Pratt's automaton; Boyer and Moore's skips; Aho–Corasick for many patterns. A small suffix tree and a suffix array for all the novels. The Burrows–Wheeler transform and the FM-index. Lempel–Ziv, Huffman and ANS. Alignment, Myers' diff, rsync and content-defined chunking. Periods, palindromes and Lyndon words.",
+      "zh": "这一部分我们构造了：朴素搜索及其最坏情形；滚动哈希；克努特、莫里斯与普拉特 的自动机；博耶与摩尔 的跳跃；一次匹配许多模式的 阿霍与科拉西克。小例子的后缀树，以及为全部小说构造的后缀数组。伯罗斯与惠勒 变换和 FM 索引。伦佩尔与齐夫、Huffman 和 ANS。比对、Myers 的 diff、rsync 和基于内容的分块。周期、回文与 林登 词。"
+    },
+    "6790c8f2d076": {
+      "scene": "Outro",
+      "en": "Where this comes back. Part 27 proves the conditional lower bounds behind edit distance's quadratic wall. Part 28 adds noise to the information theory and builds error-correcting codes. Parts 34 and 35 compress storage engines and column stores. Part 41 builds git's merges on Myers' diff and its packfiles on delta compression. Part 47's search engine uses inverted indexes and near-duplicate detection, and Part 57 connects learning to compression.",
+      "zh": "它们会在哪里再出现。第27部分证明编辑距离平方之墙背后的条件下界。第28部分在信息论中加入噪声，构造纠错码。第34和35部分压缩存储引擎和列式存储。第41部分在 Myers 的 diff 之上构造 git 的合并，在增量压缩之上构造它的 packfile。第47部分的搜索引擎用到倒排索引和近似重复检测，第57部分把学习与压缩联系起来。"
+    },
+    "9da84c0509ae": {
+      "scene": "Outro",
+      "en": "In practice, search tools choose among literal matching, automata and vectorized routines. Familiar compressors combine dictionaries, transforms and entropy coders in different ways. DNA aligners use FM-indexes or seeds. Git offers several diff strategies. Rolling checksums and content-defined chunks support synchronization and deduplication, with stronger content verification where required.",
+      "zh": "实际工具会在字面匹配、自动机与向量化例程之间选择。常见压缩器以不同方式结合字典、变换与熵编码器。DNA 比对器使用 FM 索引或种子。Git 提供多种 diff 策略。滚动校验和与基于内容的分块用于同步和去重，并在需要时加入更强的内容核验。"
+    },
+    "fe4ebddf2db6": {
+      "scene": "Outro",
+      "en": "Six exercises are in the notes, with worked mathematical solutions and explicit build guidance. The fifth provides a tested streaming Horspool prototype; a Pebble port and emulator instruction counts remain work for the learner, not a measured result in this video. The starred project reproduces index tradeoffs and audits dated primary papers. It does not ask you to solve a supposedly open problem whose current status has not been established.",
+      "zh": "笔记中有六道习题，包括数学题的完整解答与明确的构建指导。第五题给出已测试的流式 Horspool 原型；Pebble 移植与模拟器指令计数留给学习者完成，不是视频中的实测结果。星号项目复现索引权衡，并审查注明日期的一手论文；它不要求解决一个尚未核实当前状态的所谓未解问题。"
+    },
+    "c62fdb20f721": {
+      "scene": "Outro",
+      "en": "Next time, geometry. It looks easy until a computer gets it wrong: a floating-point orientation test can say a point lies on both sides of a line. Get the predicates right and beautiful structure follows: convex hulls, Voronoi diagrams grown by a parabolic beach line, and Delaunay triangulations that are the shadow of a convex hull on a paraboloid. Part 22, Geometry.",
+      "zh": "下一次，几何。它看起来很简单，直到计算机算错：一个浮点数的方向测试可能会说某个点同时位于一条直线的两侧。把谓词做对，美丽的结构就随之而来：凸包、由抛物线海滩线生长出的 Voronoi 图，以及作为抛物面上凸包之投影的 Delaunay 三角剖分。第22部分，几何。"
+    },
+    "9bd24692775d": {
+      "scene": "Outro",
+      "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+      "zh": "这一部分所依据的书籍和论文显示在屏幕上，也列在笔记里。感谢观看。"
+    }
   }
- },
- "title_en": "Computer Science, Built: Part 21, Strings",
- "chapters_en": {
-  "Hook": "Queequeg, four ways",
-  "Naive": "1. Matching, the obvious way",
-  "RabinKarp": "2. Rolling hashes",
-  "Kmp": "3. Knuth, Morris and Pratt: never look back",
-  "BoyerMoore": "4. Boyer and Moore: skip ahead",
-  "AhoCorasick": "5. Many patterns at once",
-  "SuffixTree": "6. Suffix trees",
-  "SuffixArray": "7. Suffix arrays",
-  "Bwt": "8. The Burrows-Wheeler transform",
-  "FmIndex": "9. Searching compressed text: the FM-index",
-  "Lz": "10. Compression, I: Lempel and Ziv",
-  "Entropy": "11. Compression, II: coding the symbols",
-  "Align": "12. Alignment",
-  "Diff": "13. Myers' diff",
-  "Rsync": "14. Rolling hashes at scale: rsync and chunking",
-  "Period": "15. Periods, palindromes and Lyndon words",
-  "Frontier": "16. Frontier: indexes as small as the information",
-  "Outro": "Recap, problems, and where this comes back"
- }
 }

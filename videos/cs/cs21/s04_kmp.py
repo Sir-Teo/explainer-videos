@@ -16,7 +16,7 @@ class Kmp(VoiceoverScene):
     def card(self):
         card = chapter_card(3, r"Knuth, \ Morris and Pratt: \ never look back", r"What does a mismatch teach us?",
                             lit=(1977,), extra=((1977, r"Knuth--Morris--Pratt"),), part=PART)
-        with self.voiceover("Chapter three. Knuth, Morris and Pratt: never look back."):
+        with self.voiceover('Chapter three. Knuth, Morris and Pratt: never look back.'):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
 

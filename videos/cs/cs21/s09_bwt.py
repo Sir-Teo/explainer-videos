@@ -157,11 +157,11 @@ class Bwt(VoiceoverScene):
             label(r"so $L$ is the text's characters grouped by their right context: \ all the characters before "
                   r"\texttt{he}, \ then before \texttt{hi}, \ \dots", font_size=22, color=LAM),
             label(r"within a group, \ one or two characters dominate: \ a predictable stream", font_size=22, color=YES),
-            MathTex(r"|\,\text{BWT compressed}\,| \;\approx\; n\,H_k \quad \text{for every } k \text{ at once}",
+            MathTex('H_0(\\operatorname{BWT}(T))=H_0(T)\\quad\\text{(a permutation)}',
                     font_size=34, color=HEAD),
             label(rf"\textit{{Moby-Dick}}: \ $H_0 = {e['h0']:.2f}$, \ $H_1 = {e['h1']:.2f}$, \ $H_2 = {e['h2']:.2f}$ "
                   r"bits per character \ (chapter 11)", font_size=20, color=GREY_A),
-            label(r"Manzini (2001): \ BWT + move-to-front + an order-0 coder stays within a constant of $nH_k$", font_size=20,
+            label('context-aware coding needs overhead terms; \\ the transform alone saves no bytes', font_size=20,
                   color=GREY_A),
         ).arrange(DOWN, buff=0.26)
         lines[:3].arrange(DOWN, buff=0.26).next_to(head, DOWN, buff=0.4)
@@ -188,15 +188,7 @@ class Bwt(VoiceoverScene):
             groups.add(VGroup(name, bar, pct).arrange(RIGHT, buff=0.25))
         groups.arrange(DOWN, buff=0.28, aligned_edge=LEFT).move_to(DOWN * 0.15)
         with self.voiceover(
-            "Why does sorting make text more predictable? <bookmark mark='a'/> The rows are sorted by what follows "
-            "each position, and the last column holds what precedes it. <bookmark mark='b'/> So the transform lists "
-            "the text's characters grouped by their context: first everything that comes before h e, then everything "
-            "before h i, and so on. <bookmark mark='c'/> Inside each group one or two characters dominate. Before h "
-            "e it is mostly t. <bookmark mark='d'/> A simple coder that adapts to the current group therefore pays "
-            "about the k-th order entropy, the cost of predicting each character from the k characters next to it, "
-            "and it does so for every k at once, without being told k. <bookmark mark='e'/> For Moby-Dick that is "
-            "four point four bits with no context, three and a half with one character, two point eight with two. "
-            "<bookmark mark='f'/> Giovanni Manzini made this precise in 2001."
+            "Why does sorting help a later coder? <bookmark mark='a'/> Rows are sorted by what follows a position; the last column holds what precedes it. <bookmark mark='b'/> Characters before similar right contexts are grouped together: before he, before hi, and so on. <bookmark mark='c'/> Within those groups some characters dominate. Before he, t dominates here. <bookmark mark='d'/> The transform itself is a reversible permutation, so its zero-order histogram and entropy are unchanged. Compression comes from coding the resulting local structure. <bookmark mark='e'/> The lower-order conditional entropies shown below illustrate the value of context; they are not promised final file sizes. <bookmark mark='f'/> Manzini's 2001 analysis gives high-order entropy bounds for specified coding pipelines, with constants and overhead terms. Those terms matter for short texts and large context orders."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

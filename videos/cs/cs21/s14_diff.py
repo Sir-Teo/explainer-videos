@@ -75,7 +75,7 @@ class Diff(VoiceoverScene):
     def greedy(self):
         d = load("diff")
         a, b = d["ex_a"], d["ex_b"]
-        head = label(r"$O(ND)$: \ follow the diagonals", font_size=34).to_edge(UP, buff=0.35)
+        head = label('$O(N(D+1))$: \\ follow the diagonals', font_size=34).to_edge(UP, buff=0.35)
         P, grid, diag, top, left = _graph(a, b)
         diag.set_stroke(opacity=0.5)
         ks = VGroup()
@@ -107,7 +107,7 @@ class Diff(VoiceoverScene):
                   font_size=21, color=LAM),
             label(r"extend it from the best neighbour by one edit, \\ then slide down free diagonals \ "
                   r"(a \textbf{snake})", font_size=21, color=YES),
-            label(r"stop when a path reaches the corner: \\ $O((n + m) D)$ time, \ fast when the files are similar",
+            label('$N=n+m$, \\ $D$ counts insertions/deletions: \\\\ $O(N(D+1))$ time; \\ stored trace $O(D^2)$',
                   font_size=21, color=HEAD),
             label(r"patience diff \ (Bram Cohen): \\ anchor first on lines that appear once in each file",
                   font_size=20, color=GREY_A),
@@ -117,16 +117,7 @@ class Diff(VoiceoverScene):
         lines.width = min(lines.width, 6.4)
         lines.to_edge(RIGHT, buff=0.35).shift(DOWN * 0.2)
         with self.voiceover(
-            "Dijkstra's algorithm would work, but Myers found something better in 1986. <bookmark mark='a'/> "
-            "Number the diagonals by x minus y. A path with D edits can only end on diagonals from minus D to D. "
-            "<bookmark mark='b'/> For D equals zero, one, two and so on, keep, for each diagonal, only the path "
-            "that has reached furthest along it. <bookmark mark='c'/> Each new path is the best neighbour's path "
-            "plus one edit, followed by a slide down every free diagonal it can, which Myers called a snake. "
-            "<bookmark mark='d'/> The first path to reach the corner is a shortest diff, after n plus m times D "
-            "work, so similar files are fast. <bookmark mark='e'/> Patience diff, by Bram Cohen, first anchors on "
-            "lines that appear exactly once in each file, which keeps code blocks together. <bookmark mark='f'/> "
-            "And three-way merge, the heart of git merge, diffs both branches against their common ancestor and "
-            "reports a conflict only where both changed the same lines."
+            "Dijkstra's algorithm would work, but Myers found something better in 1986. <bookmark mark='a'/> Number the diagonals by x minus y. A path with D edits can only end on diagonals from minus D to D. <bookmark mark='b'/> For D equals zero, one, two and so on, keep, for each diagonal, only the path that has reached furthest along it. <bookmark mark='c'/> Each new path is the best neighbour's path plus one edit, followed by a slide down every free diagonal it can, which Myers called a snake. <bookmark mark='d'/> The first path to reach the corner is a shortest diff, after order N times the quantity D plus one work, where N is the two lengths added and D counts insertions and deletions, so similar files are fast. <bookmark mark='e'/> Patience diff, by Bram Cohen, first anchors on lines that appear exactly once in each file, which keeps code blocks together. <bookmark mark='f'/> And three-way merge, the heart of git merge, diffs both branches against their common ancestor and uses the overlapping edits to identify candidate conflicts; exact merge behavior depends on the merge strategy."
         ) as vo:
             self.play(FadeIn(head), FadeIn(grid), FadeIn(diag), FadeIn(top), FadeIn(left))
             vo.wait_until("a")
@@ -172,24 +163,16 @@ class Diff(VoiceoverScene):
         side = VGroup(
             label(rf"the first rewrite: \ {words(first['D'])} edits \\ between {words(first['n'])} and "
                   rf"{words(first['m'])} lines, \ {first['seconds']:.2f} s", font_size=20, color=WHITE),
-            label(r"most commits change a few lines: \ milliseconds", font_size=20, color=YES),
+            label(r"checked edit distance $D$; \ timing is a host observation", font_size=20, color=YES),
             label(r"each $D$ checked against $n + m - 2\,\mathrm{LCS}$ \\ (quadratic DP): \ minimal", font_size=20,
                   color=LAM),
-            label(rf"\texttt{{git diff --minimal}} was 2--4 lines longer \\ on {diffs} of {len(rows)}: \ its "
-                  r"preprocessing is a heuristic", font_size=20, color=HEAD),
+            label(rf"\texttt{{git diff --minimal}}: \ {diffs} different distances among {len(rows)} pairs", font_size=20, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         if side.width > 5.6:
             side.width = 5.6
             side.to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            f"We ran our Myers diff on every change to this course's own syllabus, {d['revisions']} versions of a "
-            "file now over three thousand lines long. <bookmark mark='a'/> The first big rewrite changed fourteen "
-            "hundred lines, and took half a second in Python. <bookmark mark='b'/> Most commits changed a handful "
-            "of lines, and took milliseconds: the D in n times D at work. <bookmark mark='c'/> We checked every "
-            "result against the classic quadratic longest-common-subsequence computation; all were minimal. "
-            f"<bookmark mark='d'/> Git's own diff, even with its minimal flag, came out two to four lines longer on "
-            f"{diffs} of the {len(rows)} changes. Git first sets aside lines it judges unhelpful, a speed heuristic "
-            "that occasionally costs a line or two."
+            f"We ran Myers on adjacent pairs in the {d['revisions']} captured syllabus revisions, in chronological order. Full commit IDs and content hashes fix the input history. <bookmark mark='a'/> The chart shows the exact insertion-and-deletion distances. The timing shown is a host observation for that pair. <bookmark mark='b'/> Similar adjacent revisions usually have smaller D. Identical files still need a linear scan, hence N times the quantity D plus one. <bookmark mark='c'/> Every script reconstructs both inputs, and every distance equals the independent quadratic LCS reference. A shortest script describes a possible transformation, not the author's causal edit history. <bookmark mark='d'/> Git's minimal diff has a different line count on {diffs} of these {len(rows)} pairs. Its preprocessing and heuristics can choose a different script. This is not evidence of corrupt output."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(yl), FadeIn(xt), FadeIn(yt),
                       LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.05))

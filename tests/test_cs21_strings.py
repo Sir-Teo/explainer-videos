@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import itertools
 import random
 import unittest
 import zlib
@@ -136,6 +137,149 @@ class Strings(unittest.TestCase):
         f = S.duval("abracadabra")
         self.assertEqual("".join(f), "abracadabra")
         self.assertTrue(all(f[i] >= f[i + 1] for i in range(len(f) - 1)))
+
+
+
+
+def all_words(alphabet,length):
+ for n in range(length+1):
+  for t in itertools.product(alphabet,repeat=n):yield bytes(t)
+
+def positions(t,p):return [i for i in range(len(t)-len(p)+1) if t[i:i+len(p)]==p]
+
+class Regressions(unittest.TestCase):
+ def test_exhaustive_matchers_and_counts(self):
+  pats=list(all_words(b'ab',4))
+  for text in all_words(b'ab',6):
+   for pat in pats:
+    expected=positions(text,pat);self.assertEqual(S.naive_fast(text,pat),S.naive(text,pat))
+    for fn in [S.naive,S.rabin_karp,S.kmp,S.horspool,S.boyer_moore]:self.assertEqual(fn(text,pat)[0],expected,(fn.__name__,text,pat))
+    self.assertLessEqual(S.kmp(text,pat)[1],2*len(text))
+ def test_suffixes_and_lcp_exhaustive(self):
+  for text in all_words(b'ab',7):
+   sa=S.suffix_array(text);self.assertEqual(sa.tolist(),sorted(range(len(text)),key=lambda i:text[i:]))
+   lcp=S.lcp_kasai(text,sa)
+   for k in range(1,len(text)):
+    a,b=text[sa[k-1]:],text[sa[k]:];n=0
+    while n<min(len(a),len(b)) and a[n]==b[n]:n+=1
+    self.assertEqual(lcp[k],n)
+ def test_suffix_validation_all_permutations(self):
+  text=b'aaba\0';correct=S.suffix_array(text).tolist()
+  for perm in itertools.permutations(range(len(text))):
+   if list(perm)==correct:S.bwt_from_sa(text,perm)
+   else:
+    with self.assertRaises(ValueError):S.bwt_from_sa(text,perm)
+  for sa in [[0]*5,[-1,0,1,2,3],[0,1,2,3,8],[0.,1.,2.,3.,4.]]:
+   with self.assertRaises(ValueError):S.lcp_kasai(text,sa)
+ def test_fm_full_rank_and_locate(self):
+  for body in all_words(b'ab',6):
+   text=body+b'\0';sa=S.suffix_array(text);fm=S.FMIndex(text,sa,step=3,sa_step=4);L=S.bwt_from_sa(text,sa)
+   self.assertEqual(S.inverse_bwt(L),text)
+   for c in [0,97,98,255]:
+    for k in range(len(text)+1):self.assertEqual(fm.rank(c,k),L[:k].count(c))
+   self.assertEqual([fm.locate(i) for i in range(len(text))],sa.tolist())
+   for pat in all_words(b'ab',3):
+    n,(a,b)=fm.count(pat);expected=positions(body,pat);self.assertEqual(n,len(expected));self.assertEqual(sorted(fm.locate(i) for i in range(a,b)),expected)
+   for pat in [b'\0',b'\0a',b'a\0']:
+    with self.assertRaises(ValueError):fm.count(pat)
+ def test_sentinel_and_domains(self):
+  for text in [b'',b'aba',b'a\0a\0',b'\0a']:
+   with self.assertRaises(ValueError):S.bwt_from_sa(text,list(range(len(text))))
+  for L in [b'',b'aba',b'a\0a\0']:
+   with self.assertRaises(ValueError):S.inverse_bwt(L)
+  fm=S.FMIndex(b'ab\0',S.suffix_array(b'ab\0'))
+  for row in [-1,3,1.2,True]:
+   with self.assertRaises(ValueError):fm.locate(row)
+  with self.assertRaises(ValueError):fm.rank(97,4)
+  with self.assertRaises(ValueError):S.FMIndex(b'a\0',[1,0],0)
+  with self.assertRaises(ValueError):S.AhoCorasick([b''])
+ def test_manacher_all_sentinel_bytes(self):
+  for text in all_words(b'$^#a',6):
+   start,length=S.manacher(text);best=max((j-i for i in range(len(text)+1) for j in range(i,len(text)+1) if text[i:j]==text[i:j][::-1]),default=0)
+   self.assertEqual(length,best,text);self.assertEqual(text[start:start+length],text[start:start+length][::-1])
+ def test_rans_roundtrips_and_invalid_inputs(self):
+  rng=random.Random(21)
+  for data in [b'a',b'a'*100,bytes(range(256)),bytes(range(256))*4,bytes(rng.randrange(8) for _ in range(10000))]:
+   model=S.RANS(data)
+   self.assertEqual(sum(model.f),model.M);self.assertTrue(all(model.f[c]>0 for c in data))
+   for payload in [data,data[:3],data[::-1],b'']:
+    enc=model.encode(payload);self.assertEqual(model.decode(enc,len(payload)),payload)
+    # A unary model emits no per-symbol information; output length is external metadata.
+    if len(set(data)) > 1:
+     with self.assertRaises(ValueError):model.decode(enc,len(payload)+1)
+    with self.assertRaises(ValueError):model.decode(enc+b'X',len(payload))
+   with self.assertRaises(ValueError):model.decode(b'',1)
+  with self.assertRaises(ValueError):S.RANS(b'')
+  with self.assertRaises(ValueError):S.RANS(b'abc',1)
+  with self.assertRaises(ValueError):S.RANS(b'a').encode(b'b')
+  for bits in [0,17,1.2,True]:
+   with self.assertRaises(ValueError):S.RANS(b'a',bits)
+ def test_compression_and_chunk_domains(self):
+  for text in all_words(b'ab',7):self.assertEqual(S.lz77_decode(S.lz77(text)),text)
+  for tokens in [[(2,1)],[97,(3,2)],[97,(0,1)]]:
+   with self.assertRaises(ValueError):S.lz77_decode(tokens)
+  for tokens in [[(2,1)],[(259,1)],[(3,0)],[(3,32769)]]:
+   with self.assertRaises(ValueError):S.deflate_size(tokens)
+  for block in [0,-1,1.2]:
+   with self.assertRaises(ValueError):S.adler32_rolling(b'ab',block)
+  self.assertEqual(len(S.adler32_rolling(b'ab',3)),0)
+  for kw in [dict(mask_bits=0),dict(mask_bits=33),dict(min_size=0),dict(min_size=10,max_size=2)]:
+   with self.assertRaises(ValueError):S.cdc_chunks(b'ab',**kw)
+  for cuts in [[0,2],[2,1],[1],[3]]:
+   with self.assertRaises(ValueError):S.chunk_hashes(b'ab',cuts)
+  self.assertEqual(S.periods(b''),[]);self.assertEqual(S.entropy([]),0)
+  with self.assertRaises(ValueError):S.entropy([-1])
+ def test_unicode_suffix_tree(self):
+  edges,_=S.suffix_tree_edges('éé$');self.assertEqual(len([e for e in edges if e[3] is not None]),3)
+
+class MeasurementReferences(unittest.TestCase):
+    def test_exact_finite_prefix_comparisons(self):
+        from videos.cs.cs21.measurement_references import naive_comparisons_reference
+        for text in all_words(b"ab", 5):
+            for pat in all_words(b"ab", 3):
+                self.assertEqual(naive_comparisons_reference(text,pat),S.naive(text,pat)[1])
+        self.assertEqual(naive_comparisons_reference(b"aaaa",b"aa"),6)
+
+    def test_repeat_residual_and_complete_order(self):
+        from videos.cs.cs21.measurement_references import check_suffix_order,longest_repeat_reference
+        for text in [b"aaaaabaaaaac",b"banana",b"abcabca",b"abababa"]:
+            indexed=text+b"\0";sa=S.suffix_array(indexed);check_suffix_order(indexed,sa)
+            length,at=longest_repeat_reference(indexed,sa)
+            best=max((k for i in range(len(text)) for j in range(i+1,len(text)) for k in range(1,len(text)-j+1) if text[i:i+k]==text[j:j+k]),default=0)
+            self.assertEqual(length,best)
+            self.assertEqual(indexed[at[0]:at[0]+length],indexed[at[1]:at[1]+length])
+        with self.assertRaises(AssertionError):check_suffix_order(b"ba\0",[0,1,2])
+
+    def test_decoders_and_exact_reuse(self):
+        from videos.cs.cs21.measurement_references import exact_chunk_reuse,lzw_decode_reference,huffman_cost_reference
+        from collections import Counter
+        for text in all_words(b"ab",6):
+            codes,_=S.lzw(text);self.assertEqual(lzw_decode_reference(codes),text)
+            frequencies=Counter(text)
+            self.assertEqual(huffman_cost_reference(frequencies),sum(n*S.huffman_lengths(frequencies)[c] for c,n in frequencies.items()))
+        self.assertEqual(exact_chunk_reuse(b"abcd",[2,4],b"abXYcd",[2,4,6]),[1])
+
+    def test_alignment_and_border_references(self):
+        from videos.cs.cs21.measurement_references import alignment_reference,border_reference
+        for a in ["", "a", "aba", "aaa", "INTENTION"]:
+            self.assertEqual(border_reference(a.encode()),S.kmp_failure(a.encode()))
+            for b in ["", "b", "aab", "EXECUTION"]:
+                self.assertEqual(alignment_reference(a,b),S.needleman_wunsch(a,b).tolist())
+                self.assertEqual(alignment_reference(a,b,local=True),S.smith_waterman(a,b)[3].tolist())
+
+
+class StreamingHorspool(unittest.TestCase):
+    def test_stream_chunks_and_overlapping_matches(self):
+        from videos.cs.cs21.stream_horspool import search
+        for text in all_words(b"ab", 6):
+            for pat in all_words(b"ab", 3):
+                expected = brute(text, pat)
+                for width in [1, 2, 5]:
+                    chunks = [text[i:i+width] for i in range(0, len(text), width)]
+                    positions, reads, comparisons = search(iter(chunks), pat)
+                    self.assertEqual(positions, expected)
+                    self.assertEqual(reads, len(text))
+                    self.assertEqual(comparisons, S.horspool(text, pat)[1])
 
 
 if __name__ == "__main__":

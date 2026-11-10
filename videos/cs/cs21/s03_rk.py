@@ -28,8 +28,7 @@ class RabinKarp(VoiceoverScene):
             MathTex(r"h_{i+1} = \big( (h_i - t_i\, b^{\,m-1})\, b + t_{i+m} \big) \bmod p", font_size=36, color=YES),
             label(r"$O(1)$ per position; \ compare characters only when the fingerprints agree", font_size=22,
                   color=HEAD),
-            label(r"Part 20's fingerprints: \ with a random base, \ two different windows collide with probability "
-                  r"$\le (m-1)/p$ \ (Schwartz--Zippel)", font_size=20, color=GREY_A),
+            label('fixed unequal byte windows, \\ prime $p>255$, \\ uniform $b\\in\\mathbb F_p$: \\ collision $\\le(m-1)/p$', font_size=20, color=GREY_A),
         ).arrange(DOWN, buff=0.26).next_to(head, DOWN, buff=0.35)
         digits, m, p = "2359023141526739921", 5, 13
         strip = VGroup(*[VGroup(Square(side_length=0.48, stroke_color=GREY_B, stroke_width=1.5), mono(c, 22, WHITE))
@@ -46,14 +45,7 @@ class RabinKarp(VoiceoverScene):
         pt = label(rf"looking for $31415$: \ $31415 \bmod {p} = {31415 % p}$ \ (base $b = 10$, \ $m = {m}$)",
                    font_size=19, color=GREY_A).next_to(strip, UP, buff=0.2)
         with self.voiceover(
-            "Richard Karp and Michael Rabin, in 1987, used Part 20's fingerprints. <bookmark mark='a'/> Read each "
-            "window of m characters as a number in base b, modulo a prime p, and compare it with the pattern's "
-            "number. <bookmark mark='b'/> Sliding the window by one place doesn't need a fresh sum: <bookmark "
-            "mark='c'/> subtract the character that leaves, multiply by the base, and add the one that arrives. "
-            "<bookmark mark='d'/> That is a constant amount of work per position, and characters are compared only "
-            "when the two numbers agree. <bookmark mark='e'/> If the base is chosen at random, two different windows "
-            "give the same number only if a nonzero polynomial of degree m minus one vanishes at that base, which "
-            "Schwartz–Zippel says happens with probability at most m minus one over p."
+            "Richard Karp and Michael Rabin, in 1987, used Part 20's fingerprints. <bookmark mark='a'/> Read each window of m characters as a number in base b, modulo a prime p, and compare it with the pattern's number. <bookmark mark='b'/> Sliding the window by one place doesn't need a fresh sum: <bookmark mark='c'/> subtract the character that leaves, multiply by the base, and add the one that arrives. <bookmark mark='d'/> That is a constant amount of work per position, and characters are compared only when the two numbers agree. <bookmark mark='e'/> For two fixed unequal byte windows, choose a prime larger than 255 and a base uniformly in its field. They give the same number only if a nonzero polynomial of degree m minus one vanishes at that base, which Schwartz–Zippel says happens with probability at most m minus one over p."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -89,12 +81,12 @@ class RabinKarp(VoiceoverScene):
                      ).to_edge(UP, buff=0.35)
         rows = [[words(r["mod"]), words(r["spurious"]), f"{r['expected']:,.1f}", words(r["cmp"]), words(r["hits"])]
                 for r in d["rows"]]
-        tab = grid_table([r"modulus $p$", r"false alarms", r"expected $\approx n/p$", r"character comparisons",
+        tab = grid_table([r"modulus $p$", r"false alarms", 'heuristic windows/$p$', r"character comparisons",
                           r"found"], rows, widths=[2.4, 2.2, 2.8, 3.4, 1.4], row_h=0.44, font_size=20, mono_cols=(),
                          colors=[[LAM, NO, HEAD, GREY_A, YES]] * len(rows)).next_to(head, DOWN, buff=0.45)
         tab.set_x(0)
         notes = VGroup(
-            label(r"a false alarm costs a few comparisons, \ never a wrong answer: \ Las Vegas", font_size=21,
+            label('fixed base 256 here; \\ every fingerprint match is checked exactly', font_size=21,
                   color=WHITE),
             label(r"its strength: \ many patterns of one length at once \ (a hash set of fingerprints), \ and "
                   r"the 2D version for images", font_size=21, color=GREY_A),
@@ -102,15 +94,7 @@ class RabinKarp(VoiceoverScene):
                   color=CTRL),
         ).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            f"Here is Queequeg in Moby-Dick, {words(d['n'])} characters, searched with fingerprints modulo primes "
-            "of different sizes. <bookmark mark='a'/> With a modulus near a hundred, about one window in a hundred "
-            "collides by chance: twelve thousand false alarms, almost exactly the n over p we'd expect. Each costs a "
-            "few character comparisons, and never a wrong answer, because a fingerprint match is always checked. "
-            "<bookmark mark='b'/> With a modulus of a million, the false alarms disappear, and the comparisons left "
-            "are just the true matches being confirmed. <bookmark mark='c'/> The method's real strength is "
-            "checking many patterns of the same length at once, by putting their fingerprints in a hash set, and it "
-            "works in two dimensions for images. <bookmark mark='d'/> Its descendants run rsync and deduplicating "
-            "backups, chapter fourteen."
+            f"Here is Queequeg in Moby-Dick, {words(d['n'])} bytes. This experiment fixes the base at 256. <bookmark mark='a'/> The windows-over-modulus column is a heuristic reference, not a randomized expectation for this fixed text and base. The small modulus produces many false alarms; every one is rejected by exact byte comparisons. <bookmark mark='b'/> Larger moduli have fewer false alarms in these observations. Randomizing the base would give the polynomial bound from the previous screen, with a prime larger than the byte alphabet. <bookmark mark='c'/> Fingerprints can also screen many equal-length patterns at once, before exact verification, and extend to two-dimensional matching. <bookmark mark='d'/> Rolling updates return in rsync and deduplicating backups."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
             vo.wait_until("a")

@@ -81,7 +81,7 @@ class Lz(VoiceoverScene):
                   color=WHITE),
             label(r"large lengths and distances are buckets plus extra bits: \ distance 1{,}000 is bucket 19 plus 8 bits",
                   font_size=22, color=GREY_A),
-            label(r"each block carries its own two Huffman codes, \ themselves Huffman-coded", font_size=22, color=LAM),
+            label('dynamic blocks carry codebooks; \\ fixed-code and stored blocks are alternatives', font_size=22, color=LAM),
             label(r"\textbf{lazy matching}: \ before taking a match, \ check whether the next position starts a "
                   r"longer one", font_size=22, color=YES),
             label(r"levels 1--9 trade chain length and laziness for speed; \ decompression is always fast: \ "
@@ -90,21 +90,12 @@ class Lz(VoiceoverScene):
                   color=GREY_A),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "DEFLATE, the format inside zip and gzip, puts Lempel–Ziv and Huffman together. <bookmark mark='a'/> "
-            "Literal bytes and match lengths share one alphabet of two hundred and eighty-six symbols, and distances "
-            "have their own thirty. <bookmark mark='b'/> Big values are coded as a bucket plus a few extra raw bits, "
-            "so that the Huffman alphabets stay small. <bookmark mark='c'/> Each block of output carries its own "
-            "pair of Huffman codes, which are themselves compressed. <bookmark mark='d'/> The compressor's cleverest "
-            "trick is lazy matching: before committing to a match, it checks whether starting one character later "
-            "would give a longer one. That is the main thing our simple version lacks. <bookmark mark='e'/> The "
-            "levels from one to nine trade how hard the compressor searches against speed, while decompression is "
-            "always quick, little more than copying bytes. <bookmark mark='f'/> Phil Katz designed it in 1993 for "
-            "PKZIP; it was standardized in 1996 and has been everywhere since."
+            "DEFLATE, the format inside zip and gzip, puts Lempel–Ziv and Huffman together. <bookmark mark='a'/> Literal bytes and match lengths share one alphabet of two hundred and eighty-six symbols, and distances have their own thirty. <bookmark mark='b'/> Big values are coded as a bucket plus a few extra raw bits, so that the Huffman alphabets stay small. <bookmark mark='c'/> Dynamic blocks carry a pair of compressed Huffman codebooks; fixed-code blocks and stored blocks are alternatives. <bookmark mark='d'/> The compressor's cleverest trick is lazy matching: before committing to a match, it checks whether starting one character later would give a longer one. Our instrument prices tokens only; it does not implement the full framing or block choices. <bookmark mark='e'/> The levels from one to nine trade how hard the compressor searches against speed, while decompression is always quick, little more than copying bytes. <bookmark mark='f'/> Phil Katz designed it in 1993 for PKZIP; it was standardized in 1996 and has been everywhere since."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(lines[0]))
             for mk, ln in zip("abcdef", lines):
                 vo.wait_until(mk)
-                self.play(FadeIn(ln, shift=UP * 0.1))
+                self.play(Indicate(ln, color=WHITE) if mk == "a" else FadeIn(ln, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
 
@@ -117,9 +108,8 @@ class Lz(VoiceoverScene):
                   r"character each time", font_size=22, color=LAM),
             label(r"Welch (1984): \ start with all 256 bytes; \ Unix \texttt{compress}, \ GIF", font_size=22,
                   color=GREY_A),
-            label(r"Ziv and Lempel's theorem: \ for any stationary ergodic source, \ the bits per character tend to "
-                  r"the entropy rate", font_size=22, color=YES),
-            label(r"universal: \ no model of the source is needed, \ only enough text", font_size=22, color=HEAD),
+            label('classic universal LZ schemes: \\ asymptotic entropy rate for stationary ergodic sources', font_size=22, color=YES),
+            label('a fixed 32 KB window is a separate constraint; \\ no universality claim for this instrument', font_size=22, color=HEAD),
         )
         lines[:2].arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.45)
         lines[2:].arrange(DOWN, buff=0.3).to_edge(DOWN, buff=0.5)
@@ -149,14 +139,7 @@ class Lz(VoiceoverScene):
         cap = label(r"above: \ the phrase's number; \ below: \ what is written, \ (earlier phrase, next character)",
                     font_size=18, color=GREY_A).next_to(chips, DOWN, buff=0.3)
         with self.voiceover(
-            "A year later Ziv and Lempel gave a second scheme. <bookmark mark='a'/> Keep a dictionary of phrases. "
-            "Read the longest phrase already in it, write down its number, and add that phrase plus the next "
-            "character as a new entry. <bookmark mark='b'/> The phrases grow one character at a time, so common "
-            "stretches of text soon have a number of their own. <bookmark mark='c'/> Terry Welch's variant, LZW, "
-            "starts with every single byte in the dictionary. It ran Unix's compress command and GIF images. "
-            "<bookmark mark='d'/> Ziv and Lempel proved something remarkable: for any stationary ergodic source, "
-            "the number of bits per character tends to the source's entropy rate, the best possible. <bookmark "
-            "mark='e'/> The method is universal. It needs no model of the text, only enough of it."
+            "A year later Ziv and Lempel gave a second scheme. <bookmark mark='a'/> Keep a dictionary of phrases. Read the longest phrase already in it, write down its number, and add that phrase plus the next character as a new entry. <bookmark mark='b'/> The phrases grow one character at a time, so common stretches of text soon have a number of their own. <bookmark mark='c'/> Terry Welch's variant, LZW, starts with every single byte in the dictionary. It ran Unix's compress command and GIF images. <bookmark mark='d'/> Ziv and Lempel proved something remarkable: for any stationary ergodic source, the number of bits per character tends to the source's entropy rate, the best possible. <bookmark mark='e'/> That asymptotic result concerns classic universal LZ schemes. It is not a guarantee for our fixed thirty-two-kilobyte window and bounded match search."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -170,10 +153,10 @@ class Lz(VoiceoverScene):
 
     def measured(self):
         d = load("lz")
-        head = label(r"Our compressor against the real ones", font_size=34).to_edge(UP, buff=0.35)
+        head = label('Payload cost models against decoded codec files', font_size=34).to_edge(UP, buff=0.35)
         rows = [[r["book"], f"{r['n'] / 1000:.0f}", f"{r['ours'] / 1000:.0f}", f"{r['zlib'] / 1000:.0f}",
                  f"{r['lzw'] / 1000:.0f}", f"{r['bz2'] / 1000:.0f}", f"{r['xz'] / 1000:.0f}"] for r in d["rows"]]
-        tab = grid_table([r"KB", r"text", r"ours: \ LZ77 + Huffman", r"\texttt{zlib -9}", r"LZW", r"\texttt{bzip2}",
+        tab = grid_table([r"KB", r"text", 'LZ77 bit model', r"\texttt{zlib -9}", 'LZW model', r"\texttt{bzip2}",
                           r"\texttt{xz}"], rows, widths=[3.0, 1.2, 2.8, 1.6, 1.2, 1.4, 1.2], row_h=0.5,
                          font_size=19, mono_cols=(), colors=[[WHITE, GREY_A, YES, DATA, GREY_A, LAM, HEAD]] * len(rows))
         tab.next_to(head, DOWN, buff=0.5).set_x(0)
@@ -181,7 +164,7 @@ class Lz(VoiceoverScene):
         notes = VGroup(
             label(rf"\textit{{Moby-Dick}}: \ {words(md['matches'])} matches \ (mean {md['mean_len']:.1f} characters) "
                   rf"and {words(md['literals'])} literals", font_size=20, color=WHITE),
-            label(r"ours is DEFLATE without lazy matching or block splitting: \ within 6\% of \texttt{zlib}", font_size=20,
+            label('models omit framing and codebooks; \\ no DEFLATE stream is emitted; \\ tokens round-trip', font_size=20,
                   color=YES),
             label(r"\texttt{bzip2} sorts \ (chapter 8); \ \texttt{xz} \ (LZMA) \ models what follows each match",
                   font_size=20, color=GREY_A),
@@ -189,14 +172,7 @@ class Lz(VoiceoverScene):
                   r"\ HTTP", font_size=20, color=DATA),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "We wrote an LZ77 compressor with hash chains and priced its output with Huffman codes, as DEFLATE "
-            "does, and ran it on three novels. <bookmark mark='a'/> On Moby-Dick it found two hundred and twenty "
-            "thousand matches, about five characters long on average, and only twenty-three thousand characters "
-            "it had to spell out. <bookmark mark='b'/> It lands within six percent of zlib at its strongest "
-            "setting, which adds lazy matching, trying one position later before committing. LZW is about as "
-            "good. <bookmark mark='c'/> bzip2, which sorts, does better on novels, and xz better still, by modelling "
-            "what is likely to follow each match. <bookmark mark='d'/> DEFLATE, Lempel–Ziv plus Huffman, is "
-            "inside every zip file, PNG image and compressed web page."
+            "We parse three novels into literals and back-references, then estimate their payload bit costs. <bookmark mark='a'/> Every token stream is decoded and compared byte for byte with its input. The LZW codes also pass an independent decoder. <bookmark mark='b'/> These columns are models: they omit framing, transmitted codebooks and other metadata, and do not form a complete DEFLATE file. A close payload estimate is not an end-to-end compressor result. <bookmark mark='c'/> The zlib, bzip2 and xz columns are actual emitted files, each decoded and checked. Their relative sizes are observations on these novels, not a universal ranking. <bookmark mark='d'/> DEFLATE combines LZ back-references with Huffman coding; real formats also define how headers, codebooks, blocks and end markers are transmitted."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
             self.play(LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.3))

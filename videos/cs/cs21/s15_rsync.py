@@ -59,7 +59,7 @@ class Rsync(VoiceoverScene):
         lines = VGroup(
             label(r"the receiver sends a weak and a strong hash of each of its blocks", font_size=22, color=WHITE),
             label(r"the sender slides a window over the new file, \ one byte at a time", font_size=22, color=WHITE),
-            MathTex(r"a_{k+1} = a_k - t_k + t_{k+B}, \qquad b_{k+1} = b_k - B\,t_k + a_{k+1}", font_size=34, color=LAM),
+            MathTex('a_{k+1} \\equiv a_k-t_k+t_{k+B},\\quad b_{k+1}\\equiv b_k-Bt_k+a_{k+1}\\pmod{2^{16}}', font_size=30, color=LAM),
             label(r"the weak checksum rolls in $O(1)$; \ only on a weak match is the strong hash computed", font_size=22,
                   color=YES),
             label(rf"\textit{{Moby-Dick}}: \ {d['rsync_matched']} blocks found, \ {words(d['rsync_literal'])} literal "
@@ -75,17 +75,10 @@ class Rsync(VoiceoverScene):
         bar = VGroup(*blocks[:n // 2], lit, *blocks[n // 2:]).arrange(RIGHT, buff=0.02).move_to(DOWN * 2.55)
         win = Rectangle(width=bw + 0.06, height=0.56, stroke_color=YES, stroke_width=3).move_to(blocks[0])
         win.shift(LEFT * 0.12)
-        cap = label(r"the new file: \ every old block found again \ (blue), \ plus a few literal bytes \ (yellow)",
+        cap = label('schematic new file: \\ reused blocks \\ (blue) \\ and literal regions \\ (yellow)',
                     font_size=19, color=GREY_A).next_to(bar, DOWN, buff=0.15)
         with self.voiceover(
-            "Andrew Tridgell and Paul Mackerras's rsync, from 1996, fixes this with a rolling hash. <bookmark "
-            "mark='a'/> The receiver hashes each of its blocks twice, once weakly and once strongly, and sends the "
-            "list. <bookmark mark='b'/> The sender slides a window over its new file one byte at a time, looking "
-            "for any old block at any offset. <bookmark mark='c'/> The weak checksum, two running sums, updates in "
-            "constant time as the window slides, like chapter two's fingerprints. <bookmark mark='d'/> Only when "
-            "the weak checksum matches is the expensive strong hash checked. <bookmark mark='e'/> For our edited "
-            f"Moby-Dick, {d['rsync_matched']} of the old blocks were found in place or shifted, and only about "
-            "three kilobytes had to be sent as literal text."
+            f"Andrew Tridgell and Paul Mackerras's rsync, from 1996, uses a rolling weak checksum to find candidates. Our instrument verifies candidates by full byte equality, standing in for a strong-hash check. <bookmark mark='a'/> The receiver hashes each of its blocks twice, once weakly and once strongly, and sends the list. <bookmark mark='b'/> The sender slides a window over its new file one byte at a time, looking for any old block at any offset. <bookmark mark='c'/> The weak checksum, two running sums, updates in constant time as the window slides, like chapter two's fingerprints. <bookmark mark='d'/> Only when the weak checksum matches is the expensive strong hash checked. <bookmark mark='e'/> For our edited Moby-Dick, {d['rsync_matched']} of the old blocks were found in place or shifted, and only about three kilobytes had to be sent as literal text."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -109,11 +102,11 @@ class Rsync(VoiceoverScene):
         d = load("rsync")
         head = label(r"Content-defined chunking", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
-            label(r"rsync needs the old file's hashes; \ a backup of a million files can't afford them", font_size=22,
+            label('rsync uses old-file block hashes; \\ metadata grows with the collection', font_size=22,
                   color=WHITE),
             label(r"instead, \ let the \textbf{content} choose the cut points: \\ cut wherever a rolling hash of the "
                   r"last few bytes ends in 13 zeros", font_size=22, color=LAM),
-            label(r"an insertion moves only the cuts near it: \ the chunks after it are cut in the same places",
+            label('here, \\ cuts resynchronize after the edit; \\ confirmed against complete chunk bytes',
                   font_size=22, color=YES),
             label(rf"\textit{{Moby-Dick}}: \ {d['cdc_chunks']} chunks \ (mean {d['cdc_mean'] / 1000:.1f} KB); \ after "
                   rf"the edit, \ {d['cdc_new']} new chunk \ ({d['cdc_new_bytes'] / 1000:.0f} KB)", font_size=24,
@@ -140,15 +133,7 @@ class Rsync(VoiceoverScene):
         ln = label(r"the new file: \ the same cuts, \ except around the insertion", font_size=18,
                    color=GREY_A).next_to(new_c, DOWN, buff=0.1)
         with self.voiceover(
-            "rsync needs the old file's block hashes, and a backup system with millions of files can't afford to "
-            "keep them all. <bookmark mark='a'/> Content-defined chunking turns the idea around. Let the content "
-            "choose where to cut: run a rolling hash over the bytes, and cut wherever its value ends in thirteen "
-            "zeros, which with a minimum chunk size comes about every ten kilobytes. <bookmark mark='b'/> An insertion changes the hash only "
-            "near it, so the cuts after it fall in the same places as before. <bookmark mark='c'/> Moby-Dick cut "
-            f"into {d['cdc_chunks']} chunks; after our edit, exactly one chunk was new, fourteen kilobytes. "
-            "<bookmark mark='d'/> Store each chunk once, under its hash, and a thousand nightly backups of a "
-            "slowly changing disk cost little more than one. This is how deduplicating backup tools and cloud "
-            "file sync work."
+            f"rsync uses the old file's block hashes. Across a large backup collection, that metadata grows with the number of blocks. <bookmark mark='a'/> Content-defined chunking turns the idea around. Let the content choose where to cut: run a rolling hash over the bytes, and cut wherever its value ends in thirteen zeros, which with a minimum chunk size comes about every ten kilobytes. <bookmark mark='b'/> In this bounded gear-hash experiment, boundaries can resynchronize after the edit. In this instance, the later cuts return to the old content boundaries. <bookmark mark='c'/> Moby-Dick cut into {d['cdc_chunks']} chunks; after our edit, exactly one chunk was new, fourteen kilobytes. <bookmark mark='d'/> Our sixty-four-bit chunk fingerprints are checked against complete byte chunks, so undetected collisions cannot explain the reported reuse. In a production system, store each chunk once under a suitable content hash, and a thousand nightly backups of a slowly changing disk cost little more than one. This is how deduplicating backup tools and cloud file sync work."
         ) as vo:
             self.play(FadeIn(head), FadeIn(lines[0]))
             vo.wait_until("a")

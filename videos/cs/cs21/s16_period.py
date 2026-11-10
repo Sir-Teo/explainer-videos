@@ -43,19 +43,10 @@ class Period(VoiceoverScene):
                     r"\text{ is a period}", font_size=32, color=LAM),
             label(r"Fine and Wilf (1965): \ and this string, \ one character shorter than the bound, \ shows it is "
                   r"tight", font_size=21, color=HEAD),
-            label(r"used by every linear-time matcher that skips ahead safely \ (Galil's rule; \ Crochemore and "
-                  r"Perrin's two-way algorithm, \ inside glibc's \texttt{memmem})", font_size=20, color=GREY_A),
+            label("periodicity supports safe skips: \\ Galil's refinement and the two-way matching strategy", font_size=20, color=GREY_A),
         ).arrange(DOWN, buff=0.28).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Some structure lives inside a single string. <bookmark mark='a'/> A string has period p if every "
-            "character equals the one p places later. This one has periods five and eight. <bookmark mark='b'/> "
-            "The periods are exactly n minus the borders of chapter three, so the failure function lists them "
-            "all. <bookmark mark='c'/> Nathan Fine and Herbert Wilf proved in 1965 that if a string has periods p "
-            "and q and is at least p plus q minus their greatest common divisor long, it also has that divisor as "
-            "a period. <bookmark mark='d'/> Five and eight have divisor one, so a string of twelve characters "
-            "with both periods would be a single repeated letter; ours, of eleven, escapes, which shows the bound is "
-            "tight. <bookmark mark='e'/> This lemma is what lets fast matchers skip ahead without missing "
-            "anything; Crochemore and Perrin's two-way algorithm, inside the C library's memmem, depends on it."
+            "Some structure lives inside a single string. <bookmark mark='a'/> A string has period p if every character equals the one p places later. This one has periods five and eight. <bookmark mark='b'/> The periods are exactly n minus the borders of chapter three, so the failure function lists them all. <bookmark mark='c'/> Nathan Fine and Herbert Wilf proved in 1965 that if a string has periods p and q and is at least p plus q minus their greatest common divisor long, it also has that divisor as a period. <bookmark mark='d'/> Five and eight have divisor one, so a string of twelve characters with both periods would be a single repeated letter; ours, of eleven, escapes, which shows the bound is tight. <bookmark mark='e'/> Periodicity supports safe skips in methods such as Galil's refinement and two-way matching. The engines selected by actual libraries depend on the implementation and input."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cells))
             vo.wait_until("a")
@@ -69,11 +60,11 @@ class Period(VoiceoverScene):
 
     def palindromes(self):
         d = load("period")
-        head = label(r"The longest palindrome in thirty novels", font_size=34).to_edge(UP, buff=0.35)
+        head = label('Longest normalized palindrome, \\ at least 4 distinct letters', font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
             label(r"expanding around each of $2n$ centres is quadratic in the worst case \ (\texttt{aaaa}\dots)",
                   font_size=22, color=WHITE),
-            label(r"Manacher (1975): \ inside a known palindrome, \ a centre's radius starts from its \textbf{mirror}'s",
+            label('Manacher: \\ reuse the mirror radius, \\ clipped at the known right edge; \\ then extend',
                   font_size=22, color=LAM),
             label(r"the right edge of the known palindrome only moves right: \ $O(n)$", font_size=22, color=YES),
         ).arrange(DOWN, buff=0.25).next_to(head, DOWN, buff=0.45)
@@ -82,23 +73,17 @@ class Period(VoiceoverScene):
         src = label(r"Lenehan, \ in \textit{Ulysses} \ (1922)", font_size=22, color=GREY_A).next_to(big_, DOWN,
                                                                                                 buff=0.2)
         stats = label(rf"letters only: \ {words(d['scanned'])} of them, \ {d['t_manacher']:.0f} s in Python; \ "
-                      rf"{d['pal_len']} letters, \ \texttt{{{pal}}} \ (runs of one letter excluded)", font_size=20,
+                      rf"{d['pal_len']} letters, \ \texttt{{{pal}}} \ (at least 4 distinct letters)", font_size=20,
                       color=WHITE).to_edge(DOWN, buff=0.6)
         if stats.width > 13:
             stats.width = 13
         with self.voiceover(
-            "What is the longest palindrome in the novels? <bookmark mark='a'/> Expanding around each possible "
-            "centre is quadratic for a text like a run of a's. <bookmark mark='b'/> Glenn Manacher's 1975 algorithm "
-            "notices that inside a palindrome already found, each centre mirrors one on the other side, so its "
-            "radius can start from the mirror's instead of from zero. <bookmark mark='c'/> The right edge of the "
-            "furthest palindrome only ever moves right, which makes the whole scan linear. <bookmark mark='d'/> We "
-            "ran it over the letters of all thirty novels, nineteen million of them, ignoring runs of a single "
-            "letter. The winner, at nineteen letters, is Lenehan in Ulysses: able was I ere I saw Elba."
+            "What is the longest palindrome after keeping ASCII letters, lowercasing them and requiring at least four distinct letters? <bookmark mark='a'/> Expanding around each possible centre is quadratic for a text like a run of a's. <bookmark mark='b'/> Glenn Manacher's 1975 algorithm notices that inside a palindrome already found, each centre mirrors one on the other side, so reuse the mirror's radius only up to the known right boundary, then extend by fresh comparisons. <bookmark mark='c'/> The right edge of the furthest palindrome only ever moves right, which makes the whole scan linear. <bookmark mark='d'/> We ran it over the letters of all thirty novels, nineteen million of them, using that diversity filter. This is a query on normalized bytes, not contiguous original prose. The winner, at nineteen letters, is Lenehan in Ulysses: able was I ere I saw Elba."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(lines[0]))
             for mk, ln in zip("abc", lines):
                 vo.wait_until(mk)
-                self.play(FadeIn(ln, shift=UP * 0.1))
+                self.play(Indicate(ln, color=WHITE) if mk == "a" else FadeIn(ln, shift=UP * 0.1))
             vo.wait_until("d")
             self.play(FadeIn(stats))
             self.play(Write(big_), FadeIn(src))
@@ -112,26 +97,19 @@ class Period(VoiceoverScene):
         rows = VGroup(*[label(rf"\texttt{{{w}}} $=$ " + r" $\cdot$ ".join(rf"\texttt{{{f}}}" for f in fs), font_size=26,
                               color=c) for (w, fs), c in zip(ex.items(), (DATA, LAM, YES))]).arrange(DOWN, buff=0.3)
         lines = VGroup(
-            label(r"a \textbf{Lyndon word} is strictly smaller than all of its rotations: \ \texttt{an}, \ \texttt{iss}, "
-                  r"\ \texttt{abracad}", font_size=22, color=WHITE),
+            label('a Lyndon word is smaller than every nontrivial rotation: \\ \\texttt{an}, \\ \\texttt{iss}, \\ \\texttt{abracad}', font_size=22, color=WHITE),
             label(r"Chen, Fox and Lyndon (1958): \ every string factors \textbf{uniquely} into non-increasing Lyndon words",
                   font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.25).next_to(head, DOWN, buff=0.45)
         rows.next_to(lines, DOWN, buff=0.45)
         uses = VGroup(
-            label(r"Duval (1983): \ the factorization in linear time, \ with constant extra space", font_size=21,
+            label('Duval (1983): \\ linear time; \\ constant workspace excludes the emitted factors', font_size=21,
                   color=GREY_A),
             label(r"the bijective BWT needs no end marker; \ Lyndon arrays underlie recent linear-time suffix sorting and "
                   r"the proof of the runs theorem \ (Bannai et al., 2017)", font_size=20, color=GREY_A),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "One more piece of structure. <bookmark mark='a'/> A Lyndon word is strictly smaller, in dictionary "
-            "order, than every one of its rotations. <bookmark mark='b'/> Kuo-Tsai Chen, Ralph Fox and Roger Lyndon "
-            "proved that every string splits in exactly one way into Lyndon words that never increase. <bookmark "
-            "mark='c'/> Banana is b, an, an, a. Mississippi is m, iss, iss, ipp, i. <bookmark mark='d'/> Jean-Pierre "
-            "Duval found the factorization in linear time with constant extra memory. <bookmark mark='e'/> It sounds "
-            "like a curiosity, but it gives a Burrows–Wheeler transform without an end marker, and Lyndon words "
-            "were the key to the 2017 proof that a string of length n has fewer than n maximal repetitions."
+            "One more piece of structure. <bookmark mark='a'/> A Lyndon word is strictly smaller, in dictionary order, than every nontrivial rotation. <bookmark mark='b'/> Kuo-Tsai Chen, Ralph Fox and Roger Lyndon proved that every string splits in exactly one way into Lyndon words that never increase. <bookmark mark='c'/> Banana is b, an, an, a. Mississippi is m, iss, iss, ipp, i. <bookmark mark='d'/> Jean-Pierre Duval found the factorization in linear time with constant working memory, excluding the returned factors. <bookmark mark='e'/> It sounds like a curiosity, but it gives a Burrows–Wheeler transform without an end marker, and Lyndon words were the key to the 2017 proof that a string of length n has fewer than n maximal repetitions."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

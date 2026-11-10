@@ -75,7 +75,7 @@ class AhoCorasick(VoiceoverScene):
                   r"$\mathrm{fail}(\texttt{she}) = \texttt{he}$", font_size=21, color=YES),
             label(r"outputs are inherited along the link: \\ $\mathrm{out}(t) \mathrel{{+}{=}} \mathrm{out}(\mathrm{fail}(t))$",
                   font_size=21, color=WHITE),
-            label(r"total work: \ linear in the patterns' total length, \\ by KMP's amortized argument", font_size=21,
+            label('teaching implementation: \\ sparse fallback walks \\\\ and copied output lists; \\ account for both', font_size=21,
                   color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
         lines.width = min(lines.width, 6.4)
@@ -94,14 +94,7 @@ class AhoCorasick(VoiceoverScene):
                 k += 1
         e12 = next(e for e, (s_, ch, t) in zip(edges, d["edges"]) if (s_, t) == (1, 2))
         with self.voiceover(
-            "How are the failure links found? <bookmark mark='a'/> Breadth-first, level by level from the root. A "
-            "failure link always points to a shallower state, so by the time we reach a state, every state its link "
-            "could need has been done. <bookmark mark='b'/> For a child t of state s, reached by character c, start "
-            "from s's own failure link and keep following links until reaching a state that has a c child; <bookmark "
-            "mark='c'/> t's link is that child. <bookmark mark='d'/> For s h e: s h links to h, and h has an e "
-            "child, so s h e links to h e. <bookmark mark='e'/> Each state also inherits the outputs of the state it "
-            "links to, which is how she reports he. <bookmark mark='f'/> The total work is linear in the total "
-            "length of the patterns, by the same amortized argument as Knuth–Morris–Pratt."
+            "How are the failure links found? <bookmark mark='a'/> Breadth-first, level by level from the root. A failure link always points to a shallower state, so by the time we reach a state, every state its link could need has been done. <bookmark mark='b'/> For a child t of state s, reached by character c, start from s's own failure link and keep following links until reaching a state that has a c child; <bookmark mark='c'/> t's link is that child. <bookmark mark='d'/> For s h e: s h links to h, and h has an e child, so s h e links to h e. <bookmark mark='e'/> Each state also inherits the outputs of the state it links to, which is how she reports he. <bookmark mark='f'/> Linear construction bounds need a specified transition and output representation. Our sparse teaching implementation follows fallback links and copies inherited output lists, so those costs must be counted explicitly."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tree))
             vo.wait_until("a")
@@ -132,7 +125,7 @@ class AhoCorasick(VoiceoverScene):
                                                                                                     buff=0.35)
         stats = VGroup(
             label(rf"trie: \ {d['states']} states", font_size=22, color=DATA),
-            label(rf"one pass: \ {big(d['steps'])} steps \ ({d['seconds']:.1f} s in Python)", font_size=22, color=YES),
+            label(rf"one pass: \ {big(d['steps'])} transitions/fallbacks \ ({d['seconds']:.1f} s)", font_size=22, color=YES),
             label(rf"one search per name: \ {big(d['separate_reads'])} characters read", font_size=22, color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(LEFT, buff=0.8).shift(UP * 0.6)
         top = d["top"][:10]
@@ -148,13 +141,7 @@ class AhoCorasick(VoiceoverScene):
         uses = label(r"in practice: \ \texttt{fgrep} with many patterns, \ antivirus signatures, \ intrusion detection "
                      r"(Snort), \ tokenizers' vocabularies", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            f"We built the automaton for {d['patterns']} character names from the novels: Elizabeth, Ahab, "
-            f"Queequeg, Holmes, Raskolnikov and the rest. <bookmark mark='a'/> The trie has {d['states']} states. "
-            "One pass over the corpus took twenty-five million steps. <bookmark mark='b'/> Searching for each name "
-            "separately would read the text forty-five times, more than a billion characters. <bookmark "
-            "mark='c'/> These are substring counts, so Jo also counts John and Joe; a real tool would add word "
-            "boundaries. <bookmark mark='d'/> The same automaton runs inside grep with many patterns, antivirus "
-            "scanners and network intrusion detectors."
+            f"We built the automaton for {d['patterns']} character names from the novels: Elizabeth, Ahab, Queequeg, Holmes, Raskolnikov and the rest. <bookmark mark='a'/> The trie has {d['states']} states. The step count includes trie transitions and fallback traversals. Reporting all matched outputs adds work; the host time includes construction and search. <bookmark mark='b'/> Searching for each name separately would read the text forty-five times, more than a billion characters. <bookmark mark='c'/> These are substring counts, so Jo also counts John and Joe; a real tool would add word boundaries. <bookmark mark='d'/> The same automaton runs inside grep with many patterns, antivirus scanners and network intrusion detectors."
         ) as vo:
             self.play(FadeIn(head), FadeIn(stats[0]))
             vo.wait_until("a")

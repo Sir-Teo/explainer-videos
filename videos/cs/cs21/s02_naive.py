@@ -86,9 +86,8 @@ class Naive(VoiceoverScene):
         head = label(r"Why English is kind to the naive method", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
             label(r"an alignment compares character $j + 1$ only if the first $j$ matched", font_size=22, color=WHITE),
-            MathTex(r"\frac{\text{comparisons}}{n} \;=\; \sum_{j=0}^{m-1} \Pr[\text{the text matches } p_1 \dots p_j "
-                    r"\text{ here}] \;=\; 1 + f(p_1) + f(p_1 p_2) + \cdots", font_size=32, color=LAM),
-            label(r"$f(w)$: \ the frequency of the string $w$ in the text; \ it falls fast as $w$ grows", font_size=20,
+            MathTex('C=\\sum_{j=0}^{m-1}\\#\\{0\\le i<A:\\ t[i:i+j]=p[:j]\\},\\quad A=\\max(0,n-m+1)', font_size=32, color=LAM),
+            label('count overlapping prefixes, \\ restricted to the $A$ complete alignments; \\ the $j=0$ term is $A$', font_size=20,
                   color=GREY_A),
         ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.45)
         if lines[1].width > 12.4:
@@ -97,16 +96,9 @@ class Naive(VoiceoverScene):
         tab = grid_table([r"pattern", r"predicted from frequencies", r"measured"], rows, widths=[4.4, 4.2, 2.4],
                          row_h=0.42, font_size=20, mono_cols=(0,), colors=[[DATA, LAM, YES]] * len(rows))
         tab.next_to(lines, DOWN, buff=0.45).set_x(0)
-        foot = label(r"\texttt{the}: \ 1 for every position, \ plus 7\% of positions where \texttt{t} matches, \ plus "
-                     r"the \texttt{th}'s", font_size=20, color=HEAD).to_edge(DOWN, buff=0.4)
+        foot = label('check the boundary case: \\ \\texttt{aaaa} / \\texttt{aa}: \\ $3+3=6$ comparisons', font_size=20, color=HEAD).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Why is English so kind? <bookmark mark='a'/> At each alignment, the second character is compared only "
-            "if the first matched, the third only if the first two did, and so on. <bookmark mark='b'/> So the "
-            "comparisons per position are one, plus the frequency of the pattern's first letter, plus the frequency "
-            "of its first two letters, and so on. Those frequencies fall quickly: few positions in a novel begin "
-            "with Q, and fewer with Qu. <bookmark mark='c'/> Computed from the novels' own frequencies, the formula "
-            "predicts the measured counts to the fourth decimal place. <bookmark mark='d'/> The word the costs "
-            "most, because t begins seven percent of all positions and t h two percent more."
+            "Why is English kind to this search? <bookmark mark='a'/> A second comparison happens only after the first character matches; a third needs the first two. <bookmark mark='b'/> Count those matching prefixes at complete alignments only, including overlaps. The empty prefix contributes A, where A is n minus m plus one, or zero if the pattern is longer. This is an exact finite count, not an independence assumption. <bookmark mark='c'/> Dividing by the text length gives the table, and the reference and instrument agree exactly before rounding. <bookmark mark='d'/> For aaaa and aa there are three alignments and two comparisons each: six. Counting prefixes beyond the final complete alignment would overcount."
         ) as vo:
             self.play(FadeIn(head), FadeIn(lines[0]))
             vo.wait_until("a")
@@ -130,15 +122,10 @@ class Naive(VoiceoverScene):
                          rows, widths=[2.8, 3.4, 2.6, 2.6], row_h=0.42, font_size=20, mono_cols=(),
                          colors=[[GREY_A, GREY_A, NO, HEAD]] * len(rows)).next_to(P, DOWN, buff=0.6)
         tab.set_x(0)
-        note_ = label(r"each alignment matches $m - 1$ characters before failing: \ $\Theta(nm)$; \ DNA, \ binary "
+        note_ = label(r"each alignment matches $m - 1$ characters before failing: \ $\Theta((n-m+1)m)$; \ DNA, \ binary "
                       r"files and adversaries find this case", font_size=21, color=WHITE).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "The worst case is easy to build. <bookmark mark='a'/> Search for a run of a's ending in b inside a "
-            "text of nothing but a's. Every alignment matches m minus one characters before it fails. <bookmark "
-            "mark='b'/> The count is exactly n minus m plus one, times m: a hundred thousand characters and a "
-            "thousand-letter pattern take ninety-nine million comparisons. <bookmark mark='c'/> DNA, with its "
-            "four letters, binary files, and anyone who wants to slow a server down all find this case. The next "
-            "three chapters remove it."
+            "The worst case is easy to build. <bookmark mark='a'/> Search for a run of a's ending in b inside a text of nothing but a's. Every alignment matches m minus one characters before it fails. <bookmark mark='b'/> The count is exactly n minus m plus one, times m: a hundred thousand characters and a thousand-letter pattern take ninety-nine million comparisons. <bookmark mark='c'/> DNA, with its four letters, binary files, and anyone who wants to slow a server down all find this case. KMP removes this worst case; the other matchers need their own assumptions and refinements."
         ) as vo:
             self.play(FadeIn(head), FadeIn(T), FadeIn(P))
             vo.wait_until("a")
