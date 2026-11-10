@@ -12,7 +12,7 @@ SCENES = [
     ("s07_confluence", "Confluence", "6. Church–Rosser, and de Bruijn"),
     ("s08_types", "Types", "7. Simple types"),
     ("s09_safety", "Safety", "8. Well-typed programs cannot go wrong"),
-    ("s10_normal", "Normalization", "9. Every typed program stops"),
+    ("s10_normal", "Normalization", "9. Why the typed core terminates"),
     ("s11_hm", "Inference", "10. Hindley–Milner inference"),
     ("s12_systemf", "SystemF", "11. Polymorphism and free theorems"),
     ("s13_curry", "CurryHoward", "12. Propositions as types"),

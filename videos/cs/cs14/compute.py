@@ -20,7 +20,7 @@ Items:
     confluence the whole reduction graph of small terms; complete developments; de Bruijn indices
     stlc       a typing derivation; a small-step trace with its rules; ill-typed terms that get stuck
     safety     progress and preservation on thousands of random well-typed terms; how long they run
-    normal     random untyped terms that never stop, against random typed terms that always do; Ω is untypable
+    normal     untyped terms exhausting a finite step budget, compared with a typed sample; Ω is untypable
     hm         unification traced; let-polymorphism; errors; the Job's types; the doubly exponential let
     systemf    free theorems (map f ∘ rev = rev ∘ map f, …) checked on random lists in the λ-core
     curry      fifteen formulas: truth tables, programs found by proof search, Kripke countermodels
@@ -35,10 +35,33 @@ from __future__ import annotations
 import random
 import time
 
+import json
+from pathlib import Path
 from explainer.ai.cache import Cache
+from explainer.cache_lock import locked_item
 
-CACHE = Cache("cs14")
-load = CACHE.load
+SCHEMAS = {"fix": 2, "systemf": 2, "safety": 2}
+
+
+class TypesCache(Cache):
+    @locked_item(lambda self, name: self.path(name))
+    def load(self, name):
+        if name in SCHEMAS and not cache_current(name, self.path(name)):
+            self.save(name, ITEMS[name]())
+        return super().load(name)
+
+
+def cache_current(name, path=None):
+    path = CACHE.path(name) if path is None else path
+    return (name not in SCHEMAS or
+            (path.exists() and json.loads(path.read_text()).get("schema") == SCHEMAS[name]))
+
+CACHE = TypesCache("cs14")
+
+
+def load(name):
+    # Resolve the instance method at call time: cached-only QA must reject stale data first.
+    return CACHE.load(name)
 
 
 def _steps(t, strategy="normal", max_steps=5000):
@@ -120,20 +143,36 @@ def compute_fix() -> dict:
     for n in range(0, 5):
         k, t = _steps(R.apply(L("Y"), F, church(n)), "normal", 200000)
         rows.append({"n": n, "value": unchurch(t), "steps": k})
-    # under call-by-value Y loops before doing any work; Z does not
-    ycbv = R.lazy_eval
-    try:
-        R.lazy_eval(App(L("Y"), F), "value", fuel=20000)
-        y_value = "stops"
-    except R.Diverge:
-        y_value = "diverges"
-    try:
-        R.lazy_eval(App(L("Z"), F), "value", fuel=20000)
-        z_value = "stops"
-    except R.Diverge:
-        z_value = "diverges"
-    return {"unfold": [show(yf), show(s1), show(s2)], "fact": rows, "y_value": y_value, "z_value": z_value,
-            "Y": R.LIB["Y"], "Z": R.LIB["Z"]}
+    # Returning a closure is weaker than successfully evaluating a factorial call.
+    observations = {}
+    for name, term in (("Y F", App(L("Y"), F)), ("Z F", App(L("Z"), F)),
+                       ("Z F 0", R.apply(L("Z"), F, church(0)))):
+        try:
+            R.lazy_eval(term, "value", fuel=20000)
+            observations[name] = "closure returned"
+        except R.Diverge:
+            observations[name] = "fuel limit reached"
+    strict = []
+    for n in range(4):
+        value, stats = R.read_number(R.apply(L("Z"), delayed_factorial(), church(n)), "value")
+        strict.append({"n": n, "value": value, "beta": stats["beta"], "evals": stats["evals"]})
+    return {"schema": SCHEMAS["fix"], "unfold": [show(yf), show(s1), show(s2)], "fact": rows,
+            "closure_observations": observations, "fuel": 20000, "strict_fact": strict,
+            "strict_function": show(delayed_factorial()), "Y": R.LIB["Y"], "Z": R.LIB["Z"]}
+
+
+def delayed_factorial():
+    """A Church factorial functional with both conditional branches delayed for CBV."""
+    from explainer.cs.lam import Lam, Var, church
+    from explainer.cs.lang.lam import reduce as R
+    n, fact = Var("n"), Var("fact")
+    unit = Lam("u", Var("u"))
+    return Lam("fact", Lam("n", R.apply(
+        R.apply(R.lib("iszero"), n),
+        Lam("unused", church(1)),
+        Lam("unused", R.apply(R.lib("times"), n, R.apply(fact, R.apply(R.lib("pred"), n)))),
+        unit)))
+
 
 
 def compute_strategies() -> dict:
@@ -203,14 +242,19 @@ def compute_safety() -> dict:
     from explainer.cs.lang.lam import stlc as S
     t0 = time.time()
     r = S.safety(5000, 6, seed=14)
-    rng = random.Random(5)
+    rng = random.Random(14)
     hist = {}
     for i in range(5000):
-        T = [S.BOOL, S.NAT, S.arrow(S.NAT, S.NAT)][i % 3]
+        T = [S.BOOL, S.NAT, S.arrow(S.NAT, S.NAT), S.arrow(S.BOOL, S.NAT)][i % 4]
         t = S.gen(T, 6, rng)
         k = len(S.trace(t)) - 1
         hist[k] = hist.get(k, 0) + 1
     r["hist"] = sorted(hist.items())
+    assert sum(hist.values()) == r["terms"]
+    assert sum(k*v for k,v in hist.items()) == r["steps_checked"]
+    assert max(hist) == r["max_steps"]
+    r.update(schema=SCHEMAS["safety"], generator_seed=14, generator_depth=6,
+             type_cycle=["Bool", "Nat", "Nat->Nat", "Bool->Nat"])
     r["seconds"] = time.time() - t0
     return r
 
@@ -282,7 +326,7 @@ def compute_hm() -> dict:
 
 
 def compute_systemf() -> dict:
-    """Free theorems checked: for any f, map f (g l) = g (map f l) when g : 'a list -> 'a list."""
+    """Finite shape-only map-commutation checks and explicit failures outside parametricity."""
     from explainer.cs.lang.lam import ml as M
     lib = r"""
 let rec map f l = match l with [] -> [] | h :: t -> f h :: map f t
@@ -315,7 +359,23 @@ let rec dup l = match l with [] -> [] | h :: t -> h :: h :: dup t
     r = M.evaluate(p3, env={"f": lambda x: 2 * x, "l": M.from_list([1, 2, 3])})
     out.append({"g": "add one (int list -> int list)", "type": "int list -> int list", "trials": 1,
                 "held": int(M.to_list(r[0]) == M.to_list(r[1]))})
-    return {"rows": out}
+    # This toy core permits unrestricted structural equality. Its printed polymorphic
+    # type alone therefore does not establish System F relational parametricity.
+    source = EQUALITY_SELECTOR
+    types, _, _ = M.infer_program(M.parse(source + ";; g"))
+    pair = M.evaluate(M.parse(source + ";; (g l, g mapped)"),
+                      env={"l": M.from_list([1, 2]), "mapped": M.from_list([0, 0])})
+    left = [0 for _ in M.to_list(pair[0])]
+    right = M.to_list(pair[1])
+    out.append({"g": "g", "type": types[0][1], "trials": 1,
+                "held": int(left == right)})
+    return {"schema": SCHEMAS["systemf"], "rows": out,
+            "equality_counterexample": {"source": source, "input": [1, 2], "mapped_input": [0, 0],
+                                        "map_after_g": left, "g_after_map": right}}
+
+
+EQUALITY_SELECTOR = ("let g l = match l with [] -> [] | h :: t -> "
+                     "match t with [] -> [] | j :: rest -> if h = j then [h] else []\n")
 
 
 def compute_curry() -> dict:
@@ -456,4 +516,8 @@ ITEMS = {
 }
 
 if __name__ == "__main__":
+    # Upgrade only the three changed schemas; preserve the other fourteen original payloads.
+    for name in SCHEMAS:
+        if CACHE.path(name).exists() and not cache_current(name, CACHE.path(name)):
+            CACHE.load(name)
     CACHE.main(ITEMS, __doc__)

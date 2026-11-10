@@ -92,20 +92,13 @@ class Beta(VoiceoverScene):
         root_box = SurroundingRectangle(trees[0], color=HEAD, buff=0.1)
         dup = label(r"the argument is copied: \ \textit{two} redexes now, \ one for each use of $x$", font_size=21,
                     color=HEAD).to_edge(DOWN, buff=0.45)
-        with self.voiceover(
-            "Here is a step on the tree. <bookmark mark='a'/> The whole term is a redex: lambda x, x x, applied to "
-            "an argument that is itself a redex. <bookmark mark='b'/> Reducing the outer one substitutes the "
-            "argument for both occurrences of x. The argument has been copied, and its redex with it: now there "
-            "are two. <bookmark mark='c'/> Reduce the first copy, and one remains. This copying is the source of "
-            "most of what follows: of the cost differences between strategies, and of the reasons a compiler "
-            "shares work instead of repeating it."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(trees[0]), FadeIn(labels[0]), Create(root_box))
-            vo.wait_until("b")
+        with self.voiceover("Here is a step on the tree. <bookmark mark='a'/> The whole term is a redex: lambda x, x x, applied to an argument that is itself a redex. <bookmark mark='b'/> Reducing the outer one substitutes the argument for both occurrences of x. The argument has been copied, and its redex with it: now there are two. <bookmark mark='c'/> Reduce the first copy, and one remains. This copying is the source of most of what follows: of the cost differences between strategies, and of the reasons a compiler shares work instead of repeating it.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(trees[0]), FadeIn(labels[0]), Create(root_box), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(arrows[0]), FadeIn(trees[1]), FadeIn(labels[1]), FadeIn(dup))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(arrows[1]), FadeIn(trees[2]), FadeIn(labels[2]))
         self.wait(0.3)
         self.clear_scene()
@@ -124,21 +117,14 @@ class Beta(VoiceoverScene):
             steps.scale_to_fit_width(13)
         cap = label(r"the redex reduced next, \ in yellow; \ the last term has none: \ a \textbf{normal form}",
                     font_size=20, color=GREY_A).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Here is two plus three again, slowly. <bookmark mark='a'/> A numeral n is the function that applies f "
-            "to x n times, and plus takes m and n and applies f m times on top of n applications. <bookmark "
-            "mark='b'/> Each line reduces the redex shown in yellow. First plus swallows its arguments, one at a "
-            "time. Then three is applied to f and x, and expands into three applications of f, and two adds two "
-            "more on the outside. <bookmark mark='c'/> The last line has no redex left. It is a normal form: the "
-            "answer, five applications of f."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(defs))
-            vo.wait_until("b")
+        with self.voiceover("Here is two plus three again, slowly. <bookmark mark='a'/> A numeral n is the function that applies f to x n times, and plus takes m and n and applies f m times on top of n applications. <bookmark mark='b'/> Each line reduces the redex shown in yellow. First plus swallows its arguments, one at a time. Then three is applied to f and x, and expands into three applications of f, and two adds two more on the outside. <bookmark mark='c'/> The last line has no redex left. It is a normal form: the answer, five applications of f.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(defs), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             for s in steps[:-1]:
                 self.play(FadeIn(s, shift=DOWN * 0.05), run_time=0.8)
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(steps[-1]), FadeIn(cap))
         self.wait(0.3)
         self.clear_scene()
@@ -159,25 +145,17 @@ class Beta(VoiceoverScene):
         ).arrange(DOWN, buff=0.15).next_to(k, DOWN, buff=0.3)
         q = label(r"so the order of reduction matters: \ chapter 5", font_size=22, color=HEAD).to_edge(DOWN,
                                                                                                        buff=0.45)
-        with self.voiceover(
-            "Not every term has a normal form. <bookmark mark='a'/> Omega applies lambda x, x x to itself. "
-            "<bookmark mark='b'/> One step of beta reduction gives back exactly the same term, and the next step "
-            "the same again, forever. Omega has no normal form: it is the lambda calculus's infinite loop. "
-            "<bookmark mark='c'/> Worse, some terms have a normal form along one path and loop along another. Here "
-            "is a function that ignores its first argument, applied to omega and to z. <bookmark mark='d'/> "
-            "Reduce the outside first and the answer is z, in two steps. Insist on reducing omega first, and you "
-            "never finish. <bookmark mark='e'/> So the order of reduction matters. Chapter five studies it."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(om))
-            vo.wait_until("b")
+        with self.voiceover("Not every term has a normal form. <bookmark mark='a'/> Omega applies lambda x, x x to itself. <bookmark mark='b'/> One step of beta reduction gives back exactly the same term, and the next step the same again, forever. Omega has no normal form: it is the lambda calculus's infinite loop. <bookmark mark='c'/> Worse, some terms have a normal form along one path and loop along another. Here is a function that ignores its first argument, applied to omega and to z. <bookmark mark='d'/> Reduce the outside first and the answer is z, in two steps. Insist on reducing omega first, and you never finish. <bookmark mark='e'/> So the order of reduction matters. Chapter five studies it.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(Write(om), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(loop), FadeIn(note))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(k))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(ways))
-            vo.wait_until("e")
+            vo.wait_until('e')
             self.play(FadeIn(q))
         self.wait(0.3)
         self.clear_scene()

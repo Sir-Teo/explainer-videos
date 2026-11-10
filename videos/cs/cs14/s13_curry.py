@@ -105,13 +105,19 @@ class CurryHoward(VoiceoverScene):
                   color=NO),
         ).arrange(DOWN, buff=0.2).next_to(tab, DOWN, buff=0.5)
         with self.voiceover(
-            "Some theorems of ordinary logic have no program at all. <bookmark mark='a'/> Excluded middle, A or "
-            "not A. Double negation elimination. Peirce's law. And one half of de Morgan's laws. Every row of their "
-            "truth tables comes out true. <bookmark mark='b'/> But our prover finds no program for any of them, "
-            "and in a moment we will prove that none exists. The logic of programs is intuitionistic logic, in "
-            "which a proof must construct what it claims. <bookmark mark='c'/> Think about what a program of type "
-            "A or not A would have to do: return either evidence for A, or a refutation of A, and say which. For "
-            "every proposition A. It would decide everything."
+            (
+            "Classical truth and constructive inhabitation differ in the stated logical core. <bookmark "
+            "mark='a'/> Excluded middle, double-negation elimination, Peirce's law and the displayed half of de "
+            "Morgan's law all pass classical truth tables. Here A and B are arbitrary proposition variables. "
+            "<bookmark mark='b'/> Our proof search finds no pure intuitionistic proof terms for them. A failed "
+            "finite search alone would not prove nonexistence. The next panel supplies Kripke countermodels, and "
+            "soundness of the logical rules turns those models into a non-inhabitation argument for this "
+            "calculus. General recursion, control operators or additional axioms change that calculus. <bookmark "
+            "mark='c'/> A constructive proof of A or not A must provide either evidence for A or a refutation, "
+            "together with the selected alternative. There is no uniform term supplying that choice for every "
+            "arbitrary A under these rules. Particular propositions can still have decidable proofs or "
+            "refutations; this claim does not deny ordinary decision algorithms."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab))
             vo.wait_until("a")
@@ -174,30 +180,22 @@ class CurryHoward(VoiceoverScene):
         pts = VGroup(
             label(r"Peirce's law \textit{is} the type of call-with-current-continuation \ (Griffin, \ 1990)",
                   font_size=23, color=GREY_A),
-            label(r"a program that can jump back in time \ proves what a pure function cannot", font_size=23,
+            label("a captured continuation transfers control; it does not undo prior effects", font_size=23,
                   color=GREY_A),
             label(r"the continuation: \ ``the rest of the program'', \ made into a value \ (Part 15)", font_size=22,
                   color=YES),
             label(r"and propositions as types are the foundation of proof assistants: \ Lean, \ Rocq \ (Part 54)",
                   font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.3).next_to(t, DOWN, buff=0.6)
-        with self.voiceover(
-            "There is a twist. <bookmark mark='a'/> In 1990 Timothy Griffin noticed that Peirce's law, which no "
-            "pure function can prove, is exactly the type of an operator called call with current continuation. "
-            "<bookmark mark='b'/> It captures the rest of the computation as a function, so a program can jump "
-            "back and try again: it can promise an A, and if it is ever called on to deliver, change its answer. "
-            "Classical logic corresponds to programs with control. <bookmark mark='c'/> Part 15 builds "
-            "continuations. <bookmark mark='d'/> And propositions as types are the foundation of the proof "
-            "assistants of Part 54, where checking a proof is type checking a program."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(t), FadeIn(pts[0]))
-            vo.wait_until("b")
+        with self.voiceover("Control operators change the logical calculus. <bookmark mark='a'/> Griffin's 1990 work connects a typed control operator with classical reasoning. The displayed Peirce type is uninhabited in the pure intuitionistic calculus, but a suitable call-with-current-continuation operator provides it in an extended control calculus. <bookmark mark='b'/> Operationally, call cc captures the current continuation: what the program would do next. Invoking that captured continuation supplies a result and transfers control to that saved context. It does not reverse time, roll back arbitrary effects or erase earlier output. The typing and evaluation rules determine the corresponding classical interpretation. <bookmark mark='c'/> Part 15 builds continuations and shows their execution directly. <bookmark mark='d'/> Proof assistants also use propositions as types, with a specified trusted kernel, rules and axioms. Checking a proof term establishes a proposition relative to those assumptions; the presence of a control operator in a programming language does not automatically extend a proof assistant's logic.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(Write(t), FadeIn(pts[0]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(pts[1]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(pts[2]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(pts[3]))
         self.wait(0.3)
         self.clear_scene()

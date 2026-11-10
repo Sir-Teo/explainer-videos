@@ -38,23 +38,15 @@ class Church(VoiceoverScene):
             defs, DOWN, buff=0.45)
         cap = label(r"computed by our reducer: \ every answer is \textsf{true} or \textsf{false} itself",
                     font_size=19, color=GREY_B).next_to(tab, DOWN, buff=0.15)
-        with self.voiceover(
-            "If the language has nothing but functions, then data must be functions too. Church showed how. "
-            "<bookmark mark='a'/> A boolean is a choice between two things. True takes two arguments and returns "
-            "the first; false returns the second. <bookmark mark='b'/> Then if b then x else y needs no special "
-            "rule at all: it is just b applied to x and y. <bookmark mark='c'/> And p and q is p applied to q and "
-            "p: if p is true it chooses q, and if p is false it chooses p, which is false. Or is the mirror image. "
-            "<bookmark mark='d'/> Our reducer confirms all four rows of each table, in four steps each, and every "
-            "answer comes out as the function true or the function false itself."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(defs[0]))
-            vo.wait_until("b")
+        with self.voiceover("If the language has nothing but functions, then data must be functions too. Church showed how. <bookmark mark='a'/> A boolean is a choice between two things. True takes two arguments and returns the first; false returns the second. <bookmark mark='b'/> Then if b then x else y needs no special rule at all: it is just b applied to x and y. <bookmark mark='c'/> And p and q is p applied to q and p: if p is true it chooses q, and if p is false it chooses p, which is false. Or is the mirror image. <bookmark mark='d'/> Our reducer confirms all four rows of each table, in four steps each, and every answer comes out as the function true or the function false itself.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(defs[0]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(defs[1]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(defs[2]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(tab), FadeIn(cap))
         self.wait(0.3)
         self.clear_scene()
@@ -106,19 +98,15 @@ class Church(VoiceoverScene):
         tab = grid_table([r"operation", r"arguments", r"normal form", r"$\beta$-steps"], rows,
                          widths=[2.2, 2.0, 2.0, 1.8], row_h=0.45, font_size=21, mono_cols=(0, 1, 2)).next_to(
             defs, DOWN, buff=0.6)
-        with self.voiceover(
-            "With repetition, arithmetic falls out. <bookmark mark='a'/> Plus m n applies f m more times on top of "
-            "n applications. <bookmark mark='b'/> Times m n takes the function apply f n times, and repeats that m "
-            "times. <bookmark mark='c'/> And power is the strangest and shortest of all: n applied to m. Apply the "
-            "function times m, n times over, starting from one. <bookmark mark='d'/> Our reducer computes three "
-            "plus four, three times four and two to the third, in six, nine and sixteen beta steps, and each "
-            "normal form is exactly the expected numeral."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, d in zip("abc", defs):
-                vo.wait_until(mk)
+        with self.voiceover("With repetition, arithmetic falls out. <bookmark mark='a'/> Plus m n applies f m more times on top of n applications. <bookmark mark='b'/> Times m n takes the function apply f n times, and repeats that m times. <bookmark mark='c'/> And power is the strangest and shortest of all: n applied to m. Apply the function times m, n times over, starting from one. <bookmark mark='d'/> Our reducer computes three plus four, three times four and two to the third, in six, nine and sixteen beta steps, and each normal form is exactly the expected numeral.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            for mk, d in zip('abc', defs):
+                if mk != 'a':
+                    vo.wait_until(mk)
                 self.play(FadeIn(d, shift=RIGHT * 0.1))
-            vo.wait_until("d")
+                if mk == 'a':
+                    vo.wait_until(mk)
+            vo.wait_until('d')
             self.play(FadeIn(tab))
         self.wait(0.3)
         self.clear_scene()
@@ -139,24 +127,15 @@ class Church(VoiceoverScene):
                        gap=0.25, fmt_=lambda v: f"{v:.0f}", font_size=16).next_to(trick, DOWN, buff=0.5)
         cl = label(r"$\beta$-steps for $\mathsf{pred}\;\underline{n}$: \ linear in $n$", font_size=19,
                    color=GREY_B).next_to(ch, DOWN, buff=0.15)
-        with self.voiceover(
-            "Pairs come just as easily. <bookmark mark='a'/> A pair of a and b is a function waiting for a "
-            "selector s, which it hands a and b. First passes the selector true, and second passes false. "
-            "<bookmark mark='b'/> Subtraction is harder. A numeral can apply f n times, but there is no way to "
-            "unapply it. Stephen Kleene found the answer in 1932, reportedly while at the dentist. <bookmark "
-            "mark='c'/> Count with pairs instead. Start from zero, zero, and n times replace the pair a, b by b, b "
-            "plus one. After n steps the pair is n minus one, n, and its first half is the predecessor. <bookmark "
-            "mark='d'/> It works, but slowly: our reducer needs ten more steps for every one added to n. Church "
-            "numerals are a proof of what is possible, not an efficient representation."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(pair))
-            vo.wait_until("b")
+        with self.voiceover("Pairs encode two values behind a selector. <bookmark mark='a'/> First applies the pair to true; second applies it to false. These are functions selecting one component. <bookmark mark='b'/> For predecessor, counting forward is easier than undoing a function application. Kleene's construction carries two consecutive counts. <bookmark mark='c'/> Start at zero, zero, and update a, b to b, successor b, once per input iteration. For a positive numeral n the first component ends at n minus one. At zero it stays zero, so predecessor saturates rather than producing a negative numeral. <bookmark mark='d'/> Our full normal-order reducer uses nine beta steps for zero, then ten n plus six for the displayed positive numerals. Those counts belong to this encoding and reduction strategy. They count beta contractions, not the cost of copying syntax trees, memory allocation or machine time.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(pair), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(trick[0]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(trick[1]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(ch), FadeIn(cl))
         self.wait(0.3)
         self.clear_scene()
@@ -176,20 +155,13 @@ class Church(VoiceoverScene):
             label(r"so booleans, \ numbers, \ pairs, \ lists: \ all from $\lambda$, \ variables and application",
                   font_size=24, color=HEAD),
         ).arrange(DOWN, buff=0.25).next_to(defs, DOWN, buff=0.55)
-        with self.voiceover(
-            "Lists follow the same pattern. <bookmark mark='a'/> A list is a function of two arguments, c and n. "
-            "The empty list returns n. A list with head h and tail t applies c to h and to whatever the tail "
-            "produces. So the list one, two, three is c one, c two, c three, n. <bookmark mark='b'/> A list is its "
-            "own loop: hand it addition for c and zero for n, and it sums itself. The same idea made the numerals "
-            "work: a data structure is defined by what you can do with it. <bookmark mark='c'/> Booleans, "
-            "numbers, pairs and lists, built from lambda, variables and application, and nothing else."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(defs))
-            vo.wait_until("b")
+        with self.voiceover("Lists follow the same pattern. <bookmark mark='a'/> A list is a function of two arguments, c and n. The empty list returns n. A list with head h and tail t applies c to h and to whatever the tail produces. So the list one, two, three is c one, c two, c three, n. <bookmark mark='b'/> A list is its own loop: hand it addition for c and zero for n, and it sums itself. The same idea made the numerals work: a data structure is defined by what you can do with it. <bookmark mark='c'/> Booleans, numbers, pairs and lists, built from lambda, variables and application, and nothing else.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(defs), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(uses[:2]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(uses[2]))
         self.wait(0.3)
         self.clear_scene()

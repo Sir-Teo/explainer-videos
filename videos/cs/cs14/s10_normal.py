@@ -13,9 +13,11 @@ class Normalization(VoiceoverScene):
         self.price()
 
     def card(self):
-        card = chapter_card(9, r"Every typed program stops", r"What do types cost?", lit=(1967,),
+        card = chapter_card(9, "Why the typed core terminates", r"What do types cost?", lit=(1967,),
                             extra=((1967, r"Tait: \ strong normalization"),), part=PART)
-        with self.voiceover("Chapter nine. Every typed program stops."):
+        with self.voiceover((
+            "Chapter nine. Why the typed core terminates."
+        )):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
 
@@ -31,12 +33,17 @@ class Normalization(VoiceoverScene):
             label(rf"our inference engine: \ \texttt{{{n['omega_error']}}}", font_size=20, color=GREY_B),
         ).arrange(DOWN, buff=0.25).next_to(t, DOWN, buff=0.5)
         with self.voiceover(
-            "Try to give a type to the heart of omega, lambda x, x x. <bookmark mark='a'/> x is applied to "
-            "something, so it must be a function, of some type A to B. <bookmark mark='b'/> But x is also what it is "
-            "applied to, so x must have type A. <bookmark mark='c'/> Then A equals A to B, which equals A to B, to "
-            "B, and so on forever. <bookmark mark='d'/> No finite type is a solution. <bookmark mark='e'/> Our "
-            "inference engine, the one from the hook, gives up with exactly this complaint: an infinite type. Omega "
-            "has no type, and neither does the Y combinator."
+            (
+            "Try typing lambda x, x x with finite simple types. <bookmark mark='a'/> In its function position, x "
+            "must have some arrow type A to B. <bookmark mark='b'/> The same x is also its own argument, which "
+            "must have type A. Simple typing gives that binder one monomorphic type. <bookmark mark='c'/> "
+            "Unification therefore demands A equals A to B, with A occurring inside its own proposed definition. "
+            "<bookmark mark='d'/> No finite simple type solves this equation. Recursive-type systems or richer "
+            "polymorphic rules are different systems and require their own reasoning. <bookmark mark='e'/> Our "
+            "Hindley Milner engine rejects this application with its occurs check. Omega and Y are untypable in "
+            "the recursion-free simply typed calculus. Their rejection is a fact about this typing discipline; it "
+            "is not a claim that every language with static types rejects all self-application or recursion."
+        )
         ) as vo:
             self.play(FadeIn(head), Write(t))
             for mk, s in zip("abcde", steps):
@@ -61,24 +68,15 @@ class Normalization(VoiceoverScene):
             label(r"the method of \textbf{logical relations}: \ the workhorse of type theory since", font_size=21,
                   color=GREY_B),
         ).arrange(DOWN, buff=0.22).next_to(thm, DOWN, buff=0.5)
-        with self.voiceover(
-            "In fact no typed term runs forever. <bookmark mark='a'/> William Tait proved in 1967 that every "
-            "well-typed term of the simply typed calculus reaches a normal form, whichever order of reduction you "
-            "choose. <bookmark mark='b'/> The obvious proof by induction on the size of the term fails, because a "
-            "beta step can make a term bigger, by copying its argument. <bookmark mark='c'/> Tait's idea was to "
-            "prove something stronger, defined by induction on the type. A number is good if it terminates. A "
-            "function is good if it sends every good argument to a good result. <bookmark mark='d'/> Then show that "
-            "every typed term is good, and every good term terminates. This method, now called logical relations, "
-            "has been the workhorse of type theory ever since."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(thm))
-            vo.wait_until("b")
+        with self.voiceover("In fact no typed term runs forever. <bookmark mark='a'/> William Tait proved in 1967 that every well-typed term of the simply typed calculus reaches a normal form, whichever order of reduction you choose. <bookmark mark='b'/> The obvious proof by induction on the size of the term fails, because a beta step can make a term bigger, by copying its argument. <bookmark mark='c'/> Tait's idea was to prove something stronger, defined by induction on the type. A number is good if it terminates. A function is good if it sends every good argument to a good result. <bookmark mark='d'/> Then show that every typed term is good, and every good term terminates. This method, now called logical relations, has been the workhorse of type theory ever since.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(thm), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(why[0]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(why[1:4]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(why[4:]))
         self.wait(0.3)
         self.clear_scene()
@@ -93,24 +91,18 @@ class Normalization(VoiceoverScene):
         yl = label(r"random terms still running after 400 steps", font_size=18, color=GREY_B).next_to(bars, UP,
                                                                                                   buff=0.3)
         side = VGroup(
-            label(rf"untyped: \ {un:,} random closed terms, \ {n['untyped_no_stop']} never finished", font_size=21,
+            label(rf"untyped: \ {un:,} random closed terms, \ {n['untyped_no_stop']} reached the limit", font_size=21,
                   color=NO),
             label(rf"typed: \ {s['terms']:,} terms, \ all finished, \ the longest in {s['max_steps']} steps",
                   font_size=21, color=YES),
             label(r"no finite test proves termination; \ for the typed ones, \ the theorem does", font_size=21,
                   color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.5).shift(UP * 0.2)
-        with self.voiceover(
-            "The difference shows up in a simple experiment. <bookmark mark='a'/> We generated two thousand random "
-            "untyped terms and ran each for up to four hundred steps of normal order: one hundred and thirty-six "
-            "were still running. <bookmark mark='b'/> Of the five thousand typed terms from the last chapter, not "
-            "one ran long. For those, the theorem tells us what no amount of testing could: every one of them "
-            "would have stopped."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(bars.bars[0]), FadeIn(bars.vals[0]), FadeIn(bars.names[0]), FadeIn(yl), FadeIn(side[0]))
-            vo.wait_until("b")
+        with self.voiceover("The experiment compares two generated populations. <bookmark mark='a'/> Of two thousand random closed untyped terms, one hundred and thirty-six do not finish within four hundred normal-order steps. That means the budget was exhausted; it does not independently prove that each of those terms diverges. The sampling grammar and seed define this population. <bookmark mark='b'/> All five thousand terms in the separate well-typed sample finish within the evaluator's limits. No finite experiment establishes universal termination. For the recursion-free simply typed calculus, strong normalization supplies the general theorem. The bar chart reports the samples; the proof explains the model's guarantee.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(bars.bars[0]), FadeIn(bars.vals[0]), FadeIn(bars.names[0]), FadeIn(yl), FadeIn(side[0]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(bars.bars[1]), FadeIn(bars.vals[1]), FadeIn(bars.names[1]), FadeIn(side[1:]))
         self.wait(0.3)
         self.clear_scene()
@@ -118,10 +110,9 @@ class Normalization(VoiceoverScene):
     def price(self):
         head = label(r"The price: \ not every program can be written", font_size=34).to_edge(UP, buff=0.3)
         pts = VGroup(
-            label(r"every typed program stops, \ so the calculus cannot express a program that does not", font_size=22,
+            label("the simply typed core without general recursion is strongly normalizing", font_size=22,
                   color=GREY_A),
-            label(r"so it cannot be Turing complete: \ it cannot even interpret itself \ (diagonalization, \ "
-                  r"Part 25)", font_size=22, color=NO),
+            label("no uniform-code self-evaluator satisfying the diagonalization assumptions", font_size=22, color=NO),
             label(r"languages add general recursion back:", font_size=22, color=GREY_A),
         ).arrange(DOWN, buff=0.25).next_to(head, DOWN, buff=0.5)
         fix = MathTex(r"\frac{\Gamma \vdash f : T \to T}{\Gamma \vdash \mathsf{fix}\;f : T}\;\textsc{Fix}", font_size=36,
@@ -131,25 +122,16 @@ class Normalization(VoiceoverScene):
                    label(r"\textsf{fix}: \ any recursion; \ programs may loop", font_size=19, color=GREY_A)).arrange(
                 DOWN, buff=0.12),
             VGroup(region(4.4, 0.6, r"Agda, \ Coq/Rocq, \ Lean", HEAD, font_size=20),
-                   label(r"only recursion that provably ends: \ a type is a theorem \ (ch. 12)", font_size=19,
+                   label("total logical core; partial, unsafe and noncomputable facilities have separate rules", font_size=19,
                          color=GREY_A)).arrange(DOWN, buff=0.12),
         ).arrange(RIGHT, buff=0.8).next_to(fix, DOWN, buff=0.5)
-        with self.voiceover(
-            "Termination has a price. <bookmark mark='a'/> If every typed program stops, then the calculus cannot "
-            "express a program that runs forever, and so it is not Turing complete. It cannot even contain an "
-            "interpreter for itself, by the diagonal argument of Part 25. <bookmark mark='b'/> Programming "
-            "languages buy general recursion back with a fixed-point operator, fix, whose rule says that fix of a "
-            "function from T to T has type T. <bookmark mark='c'/> ML, Haskell and OCaml include it, and their "
-            "programs may loop. Proof assistants like Agda, Rocq and Lean refuse it, and accept only recursion that "
-            "provably terminates, for a reason chapter twelve will make clear: in those languages a type is a "
-            "theorem, and a looping program would prove anything."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(pts[:2]))
-            vo.wait_until("b")
+        with self.voiceover("Strong normalization has a precise boundary. <bookmark mark='a'/> The simply typed calculus without general recursion cannot express a divergent computation, so it is not Turing complete. Diagonal arguments also restrict universal evaluation with a common type of program codes. Encoding assumptions matter: differently typed notions of self-interpretation need separate treatment. <bookmark mark='b'/> A general fixed-point operator changes the calculus. Given a function from T to T, fix produces a T, and its unfolding can continue forever. Safety can survive this extension even though termination does not. <bookmark mark='c'/> ML, Haskell and OCaml support general recursion. Proof assistants keep their trusted logical core consistent by restricting recursive definitions or requiring termination arguments. Their executable facilities can also include partial, unsafe or noncomputable features with carefully separated trust rules. The theorem concerns the specified core, not every command a proof-assistant installation can execute.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(pts[:2]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(pts[2]), Write(fix))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(two))
         self.wait(0.3)
         self.clear_scene()

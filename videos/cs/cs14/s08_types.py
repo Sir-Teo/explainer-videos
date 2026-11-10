@@ -32,22 +32,13 @@ class Types(VoiceoverScene):
             label(r"in a real machine: \ a crash, \ or worse, \ a silent wrong answer", font_size=22, color=GREY_A),
             label(r"``Well-typed programs cannot go wrong'' \ --- \ Robin Milner, \ 1978", font_size=24, color=HEAD),
         ).arrange(DOWN, buff=0.25).next_to(tab, DOWN, buff=0.5)
-        with self.voiceover(
-            "Add booleans and numbers to the calculus, and some programs make no sense. <bookmark mark='a'/> If "
-            "zero then true else false. The successor of true. The predecessor of a boolean. True applied to "
-            "zero. Is zero of a function. <bookmark mark='b'/> Each one stops somewhere that is not an answer, "
-            "with no rule to apply. It is stuck. On a real machine, the same mistake is a crash, or worse, a "
-            "silent wrong answer computed from bits that meant something else. <bookmark mark='c'/> Types rule "
-            "such programs out before they run. Robin Milner put it in a slogan in 1978: well-typed programs "
-            "cannot go wrong. The next two chapters prove it."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(tab.rule), *[FadeIn(c) for c in tab.cells[0]],
-                      LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.3), run_time=3)
-            vo.wait_until("b")
+        with self.voiceover("Add booleans and numbers to the calculus, and some programs make no sense. <bookmark mark='a'/> If zero then true else false. The successor of true. The predecessor of a boolean. True applied to zero. Is zero of a function. <bookmark mark='b'/> Each one stops somewhere that is not an answer, with no rule to apply. It is stuck. On a real machine, the same mistake is a crash, or worse, a silent wrong answer computed from bits that meant something else. <bookmark mark='c'/> Types rule such programs out before they run. Robin Milner put it in a slogan in 1978: well-typed programs cannot go wrong. The next two chapters prove it.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(tab.rule), *[FadeIn(c) for c in tab.cells[0]], LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.3), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(pts[:2]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(pts[2]))
         self.wait(0.3)
         self.clear_scene()
@@ -67,22 +58,15 @@ class Types(VoiceoverScene):
                   r"\ takes two numbers", font_size=23, color=GREY_A),
             label(r"Church, \ 1940: \ types were invented to keep logic consistent", font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.25).next_to(g, DOWN, buff=0.6)
-        with self.voiceover(
-            "The simply typed lambda calculus adds types to the language. <bookmark mark='a'/> A type is bool, or "
-            "nat, or a function type A arrow B. <bookmark mark='b'/> Terms are as before, with booleans, "
-            "numbers and their operations, except that every lambda states the type of its parameter. <bookmark "
-            "mark='c'/> A arrow B is the type of functions from A to B. Arrows group to the right, so nat to nat "
-            "to nat is a function of two numbers. <bookmark mark='d'/> Church introduced this system in 1940, not "
-            "for programming, but to keep logic consistent: the untyped calculus could express paradoxes."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(g[0]))
-            vo.wait_until("b")
+        with self.voiceover("The simply typed lambda calculus adds types to the language. <bookmark mark='a'/> A type is bool, or nat, or a function type A arrow B. <bookmark mark='b'/> Terms are as before, with booleans, numbers and their operations, except that every lambda states the type of its parameter. <bookmark mark='c'/> A arrow B is the type of functions from A to B. Arrows group to the right, so nat to nat to nat is a function of two numbers. <bookmark mark='d'/> Church introduced this system in 1940, not for programming, but to keep logic consistent: the untyped calculus could express paradoxes.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(Write(g[0]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(Write(g[1]), FadeIn(pts[0]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(pts[1]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(pts[2]))
         self.wait(0.3)
         self.clear_scene()
@@ -109,23 +93,15 @@ class Types(VoiceoverScene):
             label(r"\textsc{App}: \ a function from $A$ accepts only an $A$", font_size=21, color=GREY_A),
             label(r"\textsc{If}: \ both branches must have the same type", font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.15, aligned_edge=LEFT).next_to(rs2, DOWN, buff=0.5)
-        with self.voiceover(
-            "The type checker applies a handful of rules, written as in Part 13: what must be known above the "
-            "line, what follows below. <bookmark mark='a'/> A variable has the type the context gives it. "
-            "<bookmark mark='b'/> To type a function, assume its parameter has the declared type, and type the "
-            "body; the function's type is the arrow from one to the other. <bookmark mark='c'/> A function from A "
-            "to B, applied to an A, gives a B, and only an A will do. <bookmark mark='d'/> The successor of a "
-            "number is a number, and an if needs a boolean condition and two branches of the same type. That is "
-            "the whole checker."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(rs[0]))
-            vo.wait_until("b")
+        with self.voiceover("The type checker applies a handful of rules, written as in Part 13: what must be known above the line, what follows below. <bookmark mark='a'/> A variable has the type the context gives it. <bookmark mark='b'/> To type a function, assume its parameter has the declared type, and type the body; the function's type is the arrow from one to the other. <bookmark mark='c'/> A function from A to B, applied to an A, gives a B, and only an A will do. <bookmark mark='d'/> The successor of a number is a number, and an if needs a boolean condition and two branches of the same type. That is the whole checker.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(rs[0]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(rs[1]), FadeIn(pts[0]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(rs[2]), FadeIn(pts[1]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(rs2), FadeIn(pts[2]))
         self.wait(0.3)
         self.clear_scene()
@@ -143,20 +119,12 @@ class Types(VoiceoverScene):
             label(rf"generated by our checker; \ for \ \texttt{{twice succ 3}} \ the tree has {d['size']} rules",
                   font_size=21, color=GREY_B),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "Typing a whole term builds a tree of rules, called a derivation. <bookmark mark='a'/> Here our checker "
-            "types lambda x of type nat, successor of x, applied to two. At the bottom is the conclusion: the term "
-            "has type nat, by the application rule. Above it, its two premises: the function has type nat to nat, "
-            "by the abstraction rule, which in turn rests on typing successor of x with x assumed to be a nat. And "
-            "the argument two is a nat, as the successor of the successor of zero. <bookmark mark='b'/> Every "
-            "well-typed term has such a tree, and the checker's work is exactly to build it. For a term that "
-            "applies twice to successor and three, the tree has sixteen rules."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(tree.concl), Create(tree.line), FadeIn(tree.rule))
+        with self.voiceover("Typing a whole term builds a tree of rules, called a derivation. <bookmark mark='a'/> Here our checker types lambda x of type nat, successor of x, applied to two. At the bottom is the conclusion: the term has type nat, by the application rule. Above it, its two premises: the function has type nat to nat, by the abstraction rule, which in turn rests on typing successor of x with x assumed to be a nat. And the argument two is a nat, as the successor of the successor of zero. <bookmark mark='b'/> Every well-typed term has such a tree, and the checker's work is exactly to build it. For a term that applies twice to successor and three, the tree has sixteen rules.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(tree.concl), Create(tree.line), FadeIn(tree.rule), run_time=0.6)
+            vo.wait_until('a')
             self.play(FadeIn(tree.prem), run_time=2)
-            vo.wait_until("b")
+            vo.wait_until('b')
             self.play(FadeIn(cap))
         self.wait(0.3)
         self.clear_scene()

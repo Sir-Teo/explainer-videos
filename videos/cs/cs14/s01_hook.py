@@ -64,21 +64,16 @@ class Hook(VoiceoverScene):
             label(rf"{len(h['plus']) - 1} steps of one rule, \ and the answer is the numeral 5: \ apply $f$ five "
                   r"times", font_size=22, color=YES),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.45)
-        with self.voiceover(
-            "And underneath the lambda core there is something even smaller. <bookmark mark='a'/> Here is two plus "
-            "three, written with functions and nothing else: no numbers, no addition, only functions applied to "
-            "functions. <bookmark mark='b'/> One rule, applied again and again, rewrites it, <bookmark mark='c'/> "
-            "until it stops. And the result is the number five, or rather, a function that applies f to x five "
-            "times. Alonzo Church found in the nineteen thirties that this one rule is enough to compute anything "
-            "that can be computed. Part 1 met his lambda calculus; this part takes it seriously."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(steps[0]), FadeIn(cap[0]))
-            vo.wait_until("b")
+        with self.voiceover("And underneath the lambda core there is something even smaller. <bookmark mark='a'/> Here is two plus three, written with functions and nothing else: no numbers, no addition, only functions applied to functions. <bookmark mark='b'/> One rule, applied again and again, rewrites it, <bookmark mark='c'/> until it stops. And the result is the number five, or rather, a function that applies f to x five times. Alonzo Church found in the nineteen thirties that this one rule is enough to compute anything that can be computed. Part 1 met his lambda calculus; this part takes it seriously.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(steps[0]), FadeIn(cap[0]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
+            # Fit the intermediate reductions before the spoken result cue.
+            step_time = min(0.7, max(0.05, vo.mark_time('c') - vo.elapsed() - 0.1) / max(1, len(steps) - 2))
             for s, a in zip(steps[1:-1], arrows[:-1]):
-                self.play(FadeIn(s), FadeIn(a), run_time=0.7)
-            vo.wait_until("c")
+                self.play(FadeIn(s), FadeIn(a), run_time=step_time)
+            vo.wait_until('c')
             self.play(FadeIn(steps[-1]), FadeIn(arrows[-1]), FadeIn(cap[1]))
         self.wait(0.3)
         self.clear_scene()
@@ -93,12 +88,17 @@ class Hook(VoiceoverScene):
             label(r"why a type is a theorem, \ and a program its proof", font_size=27, color=HEAD),
         ).arrange(DOWN, buff=0.38).move_to(DOWN * 0.1)
         with self.voiceover(
-            "Here is where we are going. <bookmark mark='a'/> Numbers, booleans, lists and recursion, built from "
-            "functions alone. <bookmark mark='b'/> Why the order in which we evaluate can decide whether a program "
-            "finishes, and why it can never change the answer. <bookmark mark='c'/> Types, and a proof that "
-            "well-typed programs cannot go wrong. <bookmark mark='d'/> How a machine infers types that nobody "
-            "wrote. <bookmark mark='e'/> And the deepest surprise in the subject: that a type is a theorem, and a "
-            "program of that type is its proof."
+            (
+            "Here is the route through the lesson. <bookmark mark='a'/> Build numbers, booleans, lists and "
+            "recursion from functions in the pure untyped calculus. <bookmark mark='b'/> Compare full reduction "
+            "with weak evaluation: strategies can differ in termination and cost, while beta normal forms remain "
+            "unique when they exist. <bookmark mark='c'/> Add a specific simple type system and prove progress "
+            "and preservation for its closed programs. <bookmark mark='d'/> Infer principal types in a small ML "
+            "core, then examine which richer features change those guarantees. <bookmark mark='e'/> Finally, read "
+            "types as propositions and terms as evidence in a stated logical calculus. Keeping the model visible "
+            "lets these connections explain one another without promising the same theorem for every programming "
+            "language."
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, f in zip("abcde", facts):

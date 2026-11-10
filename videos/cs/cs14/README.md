@@ -7,7 +7,7 @@ type can be inferred without being written; and types turn out to be proposition
 instruments are Part 1's `explainer/cs/lam.py` (terms, substitution, normal order) and `explainer/cs/lang/lam/`:
 `reduce.py` (five strategies, an environment machine with thunks that counts sharing, the whole reduction graph,
 complete developments, de Bruijn indices, the Church encodings), `stlc.py` (the simply typed calculus with booleans
-and naturals: derivations, small-step evaluation, a random generator, the safety theorems checked), `ml.py` (the
+and naturals: derivations, small-step evaluation, a random generator, finite checks of the safety rules), `ml.py` (the
 λ-core, a small ML with Hindley–Milner inference by Algorithm W with levels, an evaluator, and the Job written in
 it) and `logic.py` (proof search as program search, truth tables, Kripke countermodels), tested in
 `tests/test_cs14_types.py`. Every number is computed in `compute.py`; `rustc` and `tsc` on this machine supply
@@ -20,9 +20,9 @@ chapters 13 and 14's compiler messages.
 * **2. Reduction and normal forms.** β-reduction; a step that copies a redex; 2 + 3 redex by redex; Ω; a term with
   a normal form along one path and an infinite path along another.
 * **3. Programming with nothing.** Booleans as choices (and/or checked); numerals as repetition, drawn as nested
-  boxes; plus, times and pow (6, 9 and 16 steps); pairs; Kleene's predecessor (9 + 10n steps); lists as folds.
+  boxes; plus, times and pow (6, 9 and 16 steps); pairs; Kleene's predecessor (9 steps at zero; 10n + 6 at positive n); lists as folds.
 * **4. Recursion without names.** Fixed points; Y unfolding; factorial through Y (24 for n = 4, in 10,384 steps);
-  Y diverges under call-by-value, Z does not; the recursion theorem previewed.
+  Y cannot return a closure under call-by-value; Z can, but strict factorial also needs delayed conditional branches. The repaired example computes 0! through 3! with actual CBV numeral readback.
 * **5. Evaluation strategies.** Normal, applicative, by name, by value, by need; K a Ω under each; sharing counted
   (43 against 33 β-steps when an argument is used three times); the standardization theorem.
 * **6. Church–Rosser, and de Bruijn.** The full reduction graph of a small term (6 terms, 7 steps, one normal
@@ -31,15 +31,14 @@ chapters 13 and 14's compiler messages.
   a small-step trace with its rules.
 * **8. Well-typed programs cannot go wrong.** Progress and preservation; the proofs' key cases (canonical forms,
   the substitution lemma); both checked on 5,000 random terms and 50,516 steps; safety in real languages.
-* **9. Every typed program stops.** Ω is untypable (`'a = 'a -> 'b`); Tait's strong normalization and logical
+* **9. Strong normalization in the recursion-free simply typed core.** Ω is untypable (`'a = 'a -> 'b`); Tait's strong normalization and logical
   relations; 136 of 2,000 random untyped terms still running after 400 steps, none of 5,000 typed ones; the price,
   and `fix`.
 * **10. Hindley–Milner inference.** Unification (Robinson 1965) and its occurs check; our engine's trace for
   `fun f x -> f (f x)`; let-polymorphism; the Job's eleven principal types; the nested-let worst case, 2^(2^n)
   leaves, DEXPTIME-complete.
 * **11. Polymorphism and free theorems.** System F; Church's encodings typed; parametricity; the free theorem
-  `map f ∘ g = g ∘ map f` tested on four polymorphic functions (200/200 each) and broken at once by a
-  monomorphic one.
+  `map f ∘ g = g ∘ map f` tested on four polymorphic functions (200/200 each) and broken by a monomorphic function. An additional equality-selector counterexample has the same printed polymorphic type in our toy core: unrestricted structural equality is outside pure System F parametricity. A commuting-square diagram shows the actual failure on [1,2] mapped to [0,0]. Real ML equality-type constraints need more modeling than this printer provides.
 * **12. Propositions as types.** The dictionary; programs found by proof search (S, K, composition,
   `¬¬(A ∨ ¬A)`); excluded middle, double negation, Peirce and de Morgan's half with no program; a two-world Kripke
   model; call/cc and Peirce's law (Griffin 1990).
@@ -47,7 +46,7 @@ chapters 13 and 14's compiler messages.
   affine and relevant combinators; rustc's E0382 and E0502.
 * **14. Data, subtyping and gradual types.** Algebraic data types and `option`; variance; TypeScript's covariant
   arrays accepted by `tsc --strict` and failing in node; `any`; Siek and Taha's gradual typing and its cost.
-* **15. Frontier: the edges of type theory.** Inference linear in practice (measured to 352 definitions);
+* **15. Frontier: the edges of type theory.** Single-host inference samples for 32 copies of eleven definitions (352 total), with a data-derived axis;
   refinement types and SMT; homotopy type theory, univalence and cubical type theory; effect handlers; open
   problems.
 * **Recap, where this comes back, in practice, problems.**
@@ -55,13 +54,13 @@ chapters 13 and 14's compiler messages.
 ## Build
 
 ```bash
-python -m videos.cs.cs14.compute           # every number in the part (under a minute)
+python -m videos.cs.cs14.compute           # compute missing items; timings depend on this host
 python tools/build.py cs14 -q l            # a 480p preview
 python tools/build.py cs14                 # 1080p
 ```
 
 The `rust` and `gradual` items call `rustc` and `tsc`/`node` on this machine and record their versions; the
-`frontier` timings belong to the computer that runs them. Everything else is exact.
+`frontier` timings belong to the computer that runs them. Finite random samples check implementations; they do not prove general theorems. Beta-step counts describe this encoding and evaluator, excluding syntax-copy, allocation and machine-time costs. RustBelt verifies a realistic subset and selected unsafe abstractions, not every Rust implementation. Strong normalization and parametricity claims retain their pure-core assumptions; explicit System F checking differs from unrestricted implicit inference.
 
 ## Problems, with solutions
 
@@ -75,13 +74,9 @@ The `rust` and `gradual` items call `rustc` and `tsc`/`node` on this machine and
    evaluated it twice; applicative order evaluated it once. Both reach the same normal form, as Church–Rosser
    promises. (Our reducer, `reduce.run`, gives 5 and 4.)
 
-2. **More arithmetic.** Define exp, iszero and sub on Church numerals, and explain why `sub m n` takes time
-   proportional to m · n.
+2. **More arithmetic, with a cost model.** Define exp, iszero and saturating sub on Church numerals. Count beta contractions for an algorithm that fully normalizes each predecessor result before the next application. Explain why a universal Theta(m*n) runtime claim is unjustified.
 
-   *Solution.* exp m n = n m (m to the n). iszero = λn. n (λz. false) true: applying "always false" zero times
-   leaves true. sub = λm n. n pred m. Each pred on a numeral k rebuilds k pairs (Kleene's trick), costing about
-   10k steps by our measurement, and sub applies pred n times to numbers no larger than m, so the cost is about
-   10 m n: Church numerals are unary, and pred has to count all the way up each time.
+   *Solution.* `exp = λm n. n m`, `iszero = λn. n (λz. false) true`, and `sub = λm n. n pred m`. The result is max(m−n,0). For this library's predecessor, full normal-order contraction counts are p(0)=9 and p(k)=10k+6 for positive k. Normalizing each intermediate numeral gives sum(p(max(m−i,0)), i=0..n−1). With r=min(m,n), this is r(10m+6)−5r(r−1)+9(n−r). Thus this particular contraction-count algorithm has order n+m*min(m,n) for nontrivial inputs, including saturation at zero. Counting the four outer beta contractions in the literal `sub` term matches our 63 sampled (m,n) pairs, but finite agreement is not a universal complexity proof for every reducer. At n=0 the term returns an already present numeral in four contractions; printing its m applications or copying syntax has another cost. State the representation, stopping criterion, sharing and unit cost before comparing implementations.
 
 3. **Two cases of progress.** Prove progress for If and Succ, stating the canonical forms lemma you need.
 
@@ -98,30 +93,13 @@ The `rust` and `gradual` items call `rustc` and `tsc`/`node` on this machine and
    `('a -> 'b) -> ('b -> 'a -> 'c) -> 'a -> 'c`, exactly what our engine reports, with the same three bindings in
    the same order.
 
-5. **Build: data types in the λ-core.** Add `type` declarations with constructors and exhaustive `match`, with
-   inference, and rewrite the Job's table with an `option`.
+5. **Build: a precisely scoped option type.** Add an `'a option = None | Some of 'a` declaration and matches in which each constructor is followed only by distinct variable binders. Infer types and rewrite the Job's lookup to return an option.
 
-   *Solution.* Parse `type t = A of τ | B of τ * τ | C` into a table of constructors with their argument types and
-   result type t (with parameters 'a for polymorphic types such as `'a option`). In inference, a constructor is a
-   function from its arguments to t, instantiated freshly at each use; a `match` infers the scrutinee's type,
-   unifies it with t, and types each branch with the constructor's fields bound; check exhaustiveness by
-   comparing the constructors named with those declared and report the missing ones. In the evaluator a
-   constructed value is a tagged tuple. For the Job, write `let rec find w table = match table with [] -> None |
-   p :: rest -> if fst p = w then Some p else find w rest` and rebuild `bump` from it; inference gives
-   `find : 'a -> ('a * 'b) list -> ('a * 'b) option`. Test against `job_reference` as `tests/test_cs14_types.py`
-   does.
+   *Solution.* Give `None` the scheme forall a. a option and `Some` the scheme forall a. a -> a option. Instantiate freshly at each use. In a match, unify the scrutinee with option tau, bind the `Some` field at tau, and unify branch result types. In this shallow pattern fragment, coverage means both None and Some occur, or a final wildcard covers the remainder; reject duplicates or report them as unreachable. Merely counting top-level constructors does **not** check nested patterns such as `Some (Some x)` exhaustively. An extension to nested patterns needs recursive pattern-matrix specialization and default cases. Evaluate options as tagged values. Implement `find : 'a -> ('a * 'b) list -> ('a * 'b) option`, then compare the rewritten Job with `job_reference` on empty input, repeated words, ties and absent keys. Equality constraints in a realistic ML require explicit treatment; our toy printer omits them. This is a build specification, not a claim that the current repository already implements user-defined ADTs.
 
-6. **★ Research: cheap sound gradual typing.** Design a sound gradual type system whose run-time checks cost a
-   provably bounded factor, or show that some program mix must pay unboundedly.
+6. **★ Investigation: space-efficient gradual checks.** Reproduce a known coercion-composition scheme for a small higher-order gradual calculus, then state and investigate one extension.
 
-   *Where to start.* Siek and Taha (2006) defined gradual typing and its consistency relation; Siek, Vitousek,
-   Cimini and Boyland (2015) gave the refined criteria (the "gradual guarantee"). Takikawa et al., "Is sound
-   gradual typing dead?" (POPL 2016), measured Typed Racket's lattice of partially typed configurations and found
-   slowdowns beyond 100×; Bauman et al. (2017) and Kuhlenschmidt, Almahallawi and Siek's Grift (2019) cut them with
-   space-efficient coercions and monotonic references; Greenman and Felleisen compare "natural", "transient" and
-   "erasure" semantics. Open: (a) a bound on the cost of the natural semantics in terms of program structure;
-   (b) a lower bound showing that wrapper chains must sometimes grow, for higher-order values crossing boundaries
-   repeatedly; (c) a compilation scheme, measured on the λ-core with an `any` type, that meets it.
+   *Where to start.* Fix the typed/untyped boundary semantics, observable errors, baseline program and cost model. A direct wrapper-chain implementation can accumulate proxies; known space-efficient coercions compose checks and prevent that growth. Reproduce that result before proposing a lower bound. Track maximum live coercion size, allocations, checks and runtime separately. Then choose one extension—such as mutable references with a specified semantics—and review existing results before claiming novelty. The 2016 Typed Racket study measured over 100× overhead in some tested configurations; that is a historical workload result, not a universal lower bound. A representation-space bound also does not establish a universal constant runtime-overhead factor. See Siek and Taha (2006), refined gradual criteria (2015), Grift (2019), and *Space-Efficient Gradual Typing in Coercion-Passing Style* (ECOOP 2020).
 
 ## 习题与解答
 
@@ -133,11 +111,9 @@ The `rust` and `gradual` items call `rustc` and `tsc`/`node` on this machine and
    所以求值了两次；应用序只求值一次。两者到达同一个范式，正如丘奇–罗瑟定理所保证的。（我们的归约器
    `reduce.run` 给出 5 和 4。）
 
-2. **更多的算术。** 在丘奇数上定义 exp、iszero 和 sub，并解释为什么 `sub m n` 的时间与 m · n 成正比。
+2. **带代价模型的算术。** 定义丘奇幂、零测试和饱和减法。采用每次求前驱后先完全正规化结果的算法，统计 β 收缩，说明为何不能笼统声称运行时间为 Theta(m*n)。
 
-   *解答。* exp m n = n m（m 的 n 次方）。iszero = λn. n (λz. false) true：把“总是 false”应用零次，留下 true。
-   sub = λm n. n pred m。每次对数 k 求 pred 都要重建 k 个序对（克莱尼的技巧），按我们的测量约需 10k 步；sub 对不超过
-   m 的数应用 n 次 pred，所以代价约为 10 m n：丘奇数是一进制的，pred 每次都得从头数上来。
+   *解答。* `exp = λm n. n m`，`iszero = λn. n (λz. false) true`，`sub = λm n. n pred m`，结果是 max(m−n,0)。本库的完全正规序前驱计数为 p(0)=9，正数时 p(k)=10k+6。每次先正规化中间数，计数是对 i=0..n−1 求和 p(max(m−i,0))。令 r=min(m,n)，得到 r(10m+6)−5r(r−1)+9(n−r)。对非平凡输入，这一特定收缩计数算法的阶是 n+m*min(m,n)，包含归零后的饱和行为。再加上字面 `sub` 项外层的四次收缩，与本次 63 组 (m,n) 样本一致，但有限一致不证明所有归约器的普遍复杂度。n=0 时四次收缩就返回已有数；输出 m 次应用、复制语法和分配内存另有代价。比较实现前应明确表示、停止标准、共享与单位代价。
 
 3. **进展性的两个情形。** 证明 If 和 Succ 两种情形下的进展性，并写出所需的典范形式引理。
 
@@ -152,24 +128,13 @@ The `rust` and `gradual` items call `rustc` and `tsc`/`node` on this machine and
    ε = γ → ζ。代入后：f : γ → δ，g : δ → γ → ζ，x : γ，结果为 ζ。改名之后，主类型是
    `('a -> 'b) -> ('b -> 'a -> 'c) -> 'a -> 'c`，与我们的引擎报告的完全一致，三次绑定的顺序也相同。
 
-5. **动手：λ-核心中的数据类型。** 加上带构造子的 `type` 声明和穷尽的 `match`，并支持推断；用 `option` 改写任务的表。
+5. **构建范围明确的 option 类型。** 加入 `'a option = None | Some of 'a`，先只允许构造子后接互异变量的浅层模式。支持类型推断，并让任务的查找返回 option。
 
-   *解答。* 把 `type t = A of τ | B of τ * τ | C` 解析成一张构造子表，记下各自的参数类型和结果类型 t（像 `'a option`
-   这样的多态类型带参数 'a）。推断时，构造子是从其参数到 t 的函数，每次使用都重新实例化；`match` 先推断被匹配值的
-   类型，与 t 合一，再在绑定好字段的情况下给每个分支定型；把出现过的构造子与声明的比较，报告遗漏的那些，以检查
-   穷尽性。在求值器里，构造出来的值是一个带标签的元组。对任务，写出 `let rec find w table = match table with [] ->
-   None | p :: rest -> if fst p = w then Some p else find w rest`，并用它重写 `bump`；推断给出
-   `find : 'a -> ('a * 'b) list -> ('a * 'b) option`。像 `tests/test_cs14_types.py` 那样对照 `job_reference` 测试。
+   *解答。* `None` 的方案为 forall a. a option，`Some` 为 forall a. a -> a option，每次使用重新实例化。匹配时，把被匹配值与 option tau 合一，给 Some 的字段绑定 tau，并合一各分支结果。这个浅层片段中，None 与 Some 均出现，或最后的通配分支覆盖余项，即为穷尽；重复分支应拒绝或报告不可达。仅数顶层构造子，不能判断 `Some (Some x)` 等嵌套模式是否穷尽；扩展需要递归的模式矩阵专化与默认情形。求值使用带标签的值。实现 `find : 'a -> ('a * 'b) list -> ('a * 'b) option` 后，用空输入、重复词、同频词和缺失键，对照 `job_reference`。真实 ML 还须明确处理相等约束，本玩具打印器没有显示它们。这是构建规格，不表示仓库已经实现用户自定义 ADT。
 
-6. **★ 研究：廉价的可靠渐进类型。** 设计一个可靠的渐进类型系统，其运行时检查的代价有可证明的常数上界；或者证明
-   某些程序组合必须付出无界的代价。
+6. **★ 研究：空间高效的渐进检查。** 为一个小型高阶渐进演算复现已知的强制组合方案，再定义一个扩展并调查。
 
-   *从哪里开始。* 西克与塔哈（2006）定义了渐进类型及其一致性关系；西克、维图塞克、奇米尼与博伊兰（2015）给出了
-   细化的判据（“渐进保证”）。高川等人的《Is sound gradual typing dead?》（POPL 2016）测量了 Typed Racket 部分定型
-   配置构成的格，发现了超过 100 倍的减速；鲍曼等（2017）以及库伦施密特、阿尔马哈拉维与西克的 Grift（2019）用空间
-   高效的强制和单调引用把它降了下来；格林曼与费莱森比较了 “natural”、“transient” 和 “erasure” 三种语义。尚未解决
-   的：（a）用程序结构给出 natural 语义代价的上界；（b）一个下界，证明当高阶值反复穿过边界时，包装链有时必然增长；
-   （c）一种编译方案，在带 `any` 类型的 λ-核心上测量，达到这个上界。
+   *从哪里开始。* 明确有类型与无类型边界的语义、可观察错误、基准程序及代价模型。直接使用包装链可能积累代理，但已有空间高效强制通过组合检查阻止这种增长；提出下界之前，先复现该结果。分别跟踪最大存活强制大小、分配次数、检查次数与运行时间。然后选择例如具有明确语义的可变引用扩展，调查已知结果后再主张新颖性。2016 年 Typed Racket 研究在部分被测配置中观察到超过 100 倍开销；这是历史负载结果，不是普遍下界。表示的空间上界也不等于运行时间具有普遍常数开销因子。可从 2006 年渐进类型、2015 年细化判据、Grift（2019）以及 ECOOP 2020 的强制传递风格空间高效渐进类型工作开始。
 
 ## Glossary additions
 

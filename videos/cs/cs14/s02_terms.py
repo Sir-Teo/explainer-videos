@@ -40,13 +40,16 @@ class Terms(VoiceoverScene):
         conv = label(r"conventions: \ $f\,a\,b$ means $(f\,a)\,b$; \ $\lambda x.$ reaches as far right as it can",
                      font_size=20, color=GREY_A).to_edge(DOWN, buff=0.4).to_edge(LEFT, buff=0.6)
         with self.voiceover(
-            "Church's lambda calculus has exactly three kinds of term. <bookmark mark='a'/> A variable. An "
-            "abstraction, lambda x dot t, which is a function with parameter x and body t, written without a name. "
-            "And an application, f applied to a. That is the entire language. <bookmark mark='b'/> Terms are "
-            "really trees. Here is lambda x, x x, applied to lambda y, y, applied to z. The application nodes are "
-            "drawn as at signs. <bookmark mark='c'/> Two conventions keep the writing short: application groups to "
-            "the left, so f a b means f a, then applied to b; and a lambda's body extends as far to the right as "
-            "it can."
+            (
+            "The untyped lambda calculus has three term constructors. <bookmark mark='a'/> A variable; an "
+            "abstraction, lambda x dot t, binding x in its body; and an application, one term applied to another. "
+            "<bookmark mark='b'/> Read the example's parentheses carefully. The left function is lambda x, x x. "
+            "Its single argument is the whole application of lambda y, y to z. The syntax tree makes that "
+            "grouping explicit, with at signs for applications. <bookmark mark='c'/> Application normally "
+            "associates to the left: f a b means the result of f a applied to b. A lambda body extends rightward "
+            "until a closing delimiter. Parentheses override those conventions. The tree, rather than an "
+            "ambiguous spoken string, determines what substitution will copy."
+        )
         ) as vo:
             self.play(FadeIn(head), Write(g))
             vo.wait_until("a")
@@ -117,25 +120,15 @@ class Terms(VoiceoverScene):
                     r"\mathrm{FV}(s)", font_size=30),
             label(r"otherwise rename $y$ to something fresh first", font_size=20, color=HEAD),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Computation in the lambda calculus is substitution: to apply a function, replace its parameter by the "
-            "argument. That is subtler than it looks. <bookmark mark='a'/> Take lambda x, lambda y, x: a function "
-            "that takes two arguments and returns the first. Apply it to a free variable y. <bookmark mark='b'/> "
-            "Replacing x by y naively gives lambda y, y: the identity function. The free y has been captured by "
-            "the inner lambda, and the meaning has changed. <bookmark mark='c'/> The correct answer renames the "
-            "bound y first, to y prime, and gives lambda y prime, y: still a function that ignores its argument "
-            "and returns y. <bookmark mark='d'/> Capture-avoiding substitution is defined by these rules, and the "
-            "last one carries the condition. Getting this right is the first bug every implementer of a "
-            "programming language meets, and the reason closures exist, as Part 15 will show."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(q), FadeIn(ql))
-            vo.wait_until("b")
+        with self.voiceover("Computation in the lambda calculus is substitution: to apply a function, replace its parameter by the argument. That is subtler than it looks. <bookmark mark='a'/> Take lambda x, lambda y, x: a function that takes two arguments and returns the first. Apply it to a free variable y. <bookmark mark='b'/> Replacing x by y naively gives lambda y, y: the identity function. The free y has been captured by the inner lambda, and the meaning has changed. <bookmark mark='c'/> The correct answer renames the bound y first, to y prime, and gives lambda y prime, y: still a function that ignores its argument and returns y. <bookmark mark='d'/> Capture-avoiding substitution is defined by these rules, and the last one carries the condition. Getting this right is the first bug every implementer of a programming language meets, and the reason closures exist, as Part 15 will show.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(q), FadeIn(ql), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(bad))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(good))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(LaggedStart(*[FadeIn(r) for r in rules], lag_ratio=0.4), run_time=2.5)
         self.wait(0.3)
         self.clear_scene()

@@ -35,22 +35,15 @@ class Dependent(VoiceoverScene):
             label(r"\textit{head} of an empty list is not a crash: \ it is a type error", font_size=21, color=YES),
             label(r"\textit{zip} cannot be called on lists of different lengths", font_size=21, color=YES),
         ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.45)
-        with self.voiceover(
-            "So far, types and values have lived apart. Dependent types let a type mention a value. <bookmark "
-            "mark='a'/> Vec A n is the type of lists of A of length exactly n: the length is part of the type. "
-            "<bookmark mark='b'/> Appending a vector of length m to one of length n gives length m plus n, and the "
-            "type checker verifies the arithmetic. <bookmark mark='c'/> Head accepts only vectors of length n plus "
-            "one. Taking the head of an empty list is no longer a crash at run time; it is a type error. <bookmark "
-            "mark='d'/> And zip demands two vectors of the same length."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(rows[0]), FadeIn(notes[0]))
-            vo.wait_until("b")
+        with self.voiceover("So far, types and values have lived apart. Dependent types let a type mention a value. <bookmark mark='a'/> Vec A n is the type of lists of A of length exactly n: the length is part of the type. <bookmark mark='b'/> Appending a vector of length m to one of length n gives length m plus n, and the type checker verifies the arithmetic. <bookmark mark='c'/> Head accepts only vectors of length n plus one. Taking the head of an empty list is no longer a crash at run time; it is a type error. <bookmark mark='d'/> And zip demands two vectors of the same length.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(Write(rows[0]), FadeIn(notes[0]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(Write(rows[1]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(Write(rows[2]), FadeIn(notes[1]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(Write(rows[3]), FadeIn(notes[2]))
         self.wait(0.3)
         self.clear_scene()
@@ -74,26 +67,15 @@ class Dependent(VoiceoverScene):
             label(r"types contain programs, \ so checking a type may run one: \ that is why they must terminate",
                   font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.22).next_to(VGroup(pi, sg), DOWN, buff=0.6)
-        with self.voiceover(
-            "Two type formers make this work. <bookmark mark='a'/> Pi: a function whose result type depends on the "
-            "value of its argument, such as one that takes n and returns a vector of length n. Under Curry and "
-            "Howard it is the universal quantifier, for all n. <bookmark mark='b'/> Sigma: a pair whose second "
-            "component's type depends on the first, such as a length together with a vector of that length. It is "
-            "the existential, there exists an n. <bookmark mark='c'/> Per Martin-Löf built a whole foundation for "
-            "constructive mathematics on these, between 1972 and 1984. Coquand and Huet's calculus of constructions "
-            "of 1988 became the proof assistant Coq, now called Rocq. Agda and Lean followed, and mathematicians "
-            "now formalize research proofs in Lean. <bookmark mark='d'/> Because types contain programs, checking a "
-            "type can mean running one. That is why these languages insist that every program terminates: "
-            "chapter nine's theorem, now a design requirement."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(pi))
-            vo.wait_until("b")
+        with self.voiceover("Dependent function and pair types express two forms of evidence. <bookmark mark='a'/> Pi is a function type whose result can depend on its argument, such as a function taking n and returning a vector of length n. It corresponds to universal quantification under the propositions-as-types interpretation. <bookmark mark='b'/> Sigma pairs a witness with evidence depending on that witness: a length together with a vector of that length. It corresponds to an existential statement with explicit data. <bookmark mark='c'/> Martin-Lof's type theories and the calculus of constructions helped build constructive foundations and proof assistants. Rocq, Agda and Lean provide different systems; their kernels and computational features should not be identified with one tiny calculus. <bookmark mark='d'/> When types contain programs, definitional equality may require computation. The trusted logical core needs controlled reduction and recursion to preserve its metatheory. Executable partial or unsafe facilities can exist outside that core, with explicit restrictions on their use in proofs.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(pi), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(sg))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(LaggedStart(*[FadeIn(h) for h in hist[:3]], lag_ratio=0.5), run_time=3)
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(hist[3]))
         self.wait(0.3)
         self.clear_scene()
@@ -156,28 +138,19 @@ class Dependent(VoiceoverScene):
                   color=GREY_A),
             label(r"borrows: \ many readers \textit{or} one writer, \ never both at once", font_size=21,
                   color=GREY_A),
-            label(r"no garbage collector, \ no use-after-free, \ no data races: \ checked before the program runs",
+            label("safe interfaces require valid unsafe implementations and runtime assumptions",
                   font_size=22, color=YES),
-            label(r.get("version", ""), font_size=16, color=GREY_B),
+            mono(r.get("version", "").split(" (")[0], 14, GREY_B),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "The most widely used language with such types is Rust. <bookmark mark='a'/> A String in Rust has one "
-            "owner. Assigning it to another variable moves it, and the old name may not be used again: an affine "
-            "type. Here rustc, on this machine, rejects the program with error E zero three eight two, borrow of "
-            "moved value. <bookmark mark='b'/> Instead of moving, a value can be borrowed: by any number of "
-            "readers, or by one writer, but never both at once. Pushing onto a vector while a reference into it is "
-            "alive would leave that reference dangling if the vector moved its storage, and rustc refuses. "
-            "<bookmark mark='c'/> The result is memory safety with no garbage collector, and no data races between "
-            "threads, all checked before the program runs. Part 55 returns to Rust when it asks what can be trusted."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(mv))
+        with self.voiceover("Rust makes ownership and borrowing concrete. <bookmark mark='a'/> The displayed String is not a Copy value. Assigning it to kept transfers ownership, so using the moved word is rejected with E zero three eight two. This is an affine discipline: a resource can be dropped as well as consumed once. Copy types follow different rules. <bookmark mark='b'/> The second example keeps a shared reference into a vector live while requesting a mutation that could reallocate its storage. The borrow checker rejects the conflict. Shared and exclusive access rules, lifetimes and library contracts work together; the slogan many readers or one writer is an introduction, not the entire aliasing model. <bookmark mark='c'/> These mechanisms support memory and data-race safety for safe code when unsafe dependencies uphold their obligations. They do not exclude memory leaks, deadlocks, logic errors or all thread races. The recorded compiler messages demonstrate these two examples on this Rust version.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(mv), run_time=0.6)
+            vo.wait_until('a')
             self.play(FadeIn(e1), FadeIn(pts[0]))
-            vo.wait_until("b")
+            vo.wait_until('b')
             self.play(FadeIn(bw))
             self.play(FadeIn(e2), FadeIn(pts[1]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(pts[2:]))
         self.wait(0.3)
         self.clear_scene()

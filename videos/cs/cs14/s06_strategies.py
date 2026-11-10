@@ -35,14 +35,19 @@ class Strategies(VoiceoverScene):
             g.add(r)
         g.arrange(DOWN, buff=0.28, aligned_edge=LEFT).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "A term usually contains several redexes, and the rule does not say which to reduce first. A strategy "
-            "decides. <bookmark mark='a'/> Normal order always takes the leftmost outermost redex, even inside a "
-            "lambda. <bookmark mark='b'/> Applicative order takes the leftmost innermost: arguments before the "
-            "function that receives them. <bookmark mark='c'/> Programming languages never reduce inside a lambda, "
-            "since a function body runs only when it is called. Call-by-name passes arguments unevaluated, as "
-            "ALGOL 60 did. <bookmark mark='d'/> Call-by-value evaluates every argument first: that is C, Java, "
-            "OCaml and Python. <bookmark mark='e'/> And call-by-need, or lazy evaluation, is call-by-name with "
-            "memory: an argument is evaluated the first time it is needed, and the result reused. That is Haskell."
+            (
+            "Reduction strategies choose which work to perform. <bookmark mark='a'/> Full normal order chooses "
+            "the leftmost outermost redex, including redexes under lambdas. <bookmark mark='b'/> Full applicative "
+            "order chooses the leftmost innermost redex, again including lambda bodies. <bookmark mark='c'/> Weak "
+            "evaluation stops beneath an unapplied lambda. Call-by-name passes the argument unevaluated and can "
+            "substitute or revisit it each time it is used. Our comparison uses this pure weak model. <bookmark "
+            "mark='d'/> Call-by-value evaluates an argument to a value before beta application. Many languages "
+            "use a form of this rule; their sequencing and effects add language-specific details. <bookmark "
+            "mark='e'/> Call-by-need adds sharing: a suspended argument is evaluated when demanded and its result "
+            "is reused. This is a model for lazy implementations such as Haskell, with separate costs for "
+            "allocation, forcing and retaining thunks. Weak-head results and full beta normal forms are different "
+            "stopping criteria."
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, r in zip("abcde", g):
@@ -137,20 +142,13 @@ class Strategies(VoiceoverScene):
             label(r"and whichever path finds a normal form, \ they all find the \textit{same} one: \ chapter 6",
                   font_size=23, color=YES),
         ).arrange(DOWN, buff=0.3).next_to(thm, DOWN, buff=0.6)
-        with self.voiceover(
-            "One theorem settles which strategy is safest. <bookmark mark='a'/> If a term has a normal form at "
-            "all, normal order will reach it. Curry and Feys proved this standardization theorem in 1958. <bookmark "
-            "mark='b'/> So normal order never misses an answer that exists. It may waste work, and real languages "
-            "mostly choose call-by-value for speed and predictability, accepting that some programs loop that "
-            "need not. <bookmark mark='c'/> But could two strategies find different answers? That is the subject "
-            "of the next chapter."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(thm))
-            vo.wait_until("b")
+        with self.voiceover("One theorem settles which strategy is safest. <bookmark mark='a'/> If a term has a normal form at all, normal order will reach it. Curry and Feys proved this standardization theorem in 1958. <bookmark mark='b'/> So normal order never misses an answer that exists. It may waste work, and real languages mostly choose call-by-value for speed and predictability, accepting that some programs loop that need not. <bookmark mark='c'/> But could two strategies find different answers? That is the subject of the next chapter.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(thm), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(pts[:2]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(pts[2]))
         self.wait(0.3)
         self.clear_scene()

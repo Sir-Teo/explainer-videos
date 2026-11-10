@@ -99,5 +99,58 @@ class CurryHoward(unittest.TestCase):
         self.assertIsNotNone(rows["not not excluded middle"]["program"])
 
 
+class TeachingModels(unittest.TestCase):
+    def test_safety_histogram_describes_the_checked_population(self):
+        from videos.cs.cs14.compute import compute_safety
+        data=compute_safety()
+        self.assertEqual(sum(v for _,v in data["hist"]),data["terms"])
+        self.assertEqual(sum(k*v for k,v in data["hist"]),data["steps_checked"])
+        self.assertEqual(max(k for k,_ in data["hist"]),data["max_steps"])
+        self.assertEqual((data["steps_checked"],data["max_steps"]),(50516,47))
+
+    def test_strict_factorial_requires_delayed_conditional_branches(self):
+        import math
+        from videos.cs.cs14.compute import delayed_factorial
+        for n in range(4):
+            value, _ = R.read_number(R.apply(R.lib("Z"), delayed_factorial(), church(n)), "value")
+            self.assertEqual(value, math.factorial(n))
+        # The same eager Church conditional fails even for zero without branch thunks.
+        eager = R.apply(R.lib("true"), church(1), R.lib("omega"))
+        with self.assertRaises(R.Diverge):
+            R.lazy_eval(eager, "value", fuel=1000)
+
+    def test_polymorphic_equality_breaks_unqualified_map_free_theorem(self):
+        from videos.cs.cs14.compute import EQUALITY_SELECTOR
+        types, _, _ = M.infer_program(M.parse(EQUALITY_SELECTOR + ";; g"))
+        self.assertEqual(types, [("g", "'a list -> 'a list")])
+        pair = M.evaluate(M.parse(EQUALITY_SELECTOR + ";; (g l, g mapped)"),
+                          env={"l": M.from_list([1,2]), "mapped": M.from_list([0,0])})
+        self.assertEqual([0 for _ in M.to_list(pair[0])], [])
+        self.assertEqual(M.to_list(pair[1]), [0])
+
+    def test_stale_teaching_data_is_rejected_before_upgrade(self):
+        import json,tempfile
+        from pathlib import Path
+        from unittest.mock import patch
+        from videos.cs.cs14 import compute as C14
+        from tools.qa_series import StaleDataError,require_current_cache
+        calls=[]
+        def produce():
+            calls.append(True)
+            return {"schema": C14.SCHEMAS["fix"], "observed": 7}
+        with tempfile.TemporaryDirectory() as folder:
+            cache=C14.TypesCache("cs14");cache.dir=Path(folder)
+            with patch.object(C14,"CACHE",cache),patch.dict(C14.ITEMS,{"fix":produce}):
+                target=cache.path("fix");target.write_text('{"old":99}')
+                before=target.read_bytes()
+                with self.assertRaises(StaleDataError):require_current_cache(C14,"cs14",target,"fix")
+                self.assertEqual(target.read_bytes(),before);self.assertEqual(calls,[])
+                self.assertEqual(C14.load("fix")["observed"],7)
+                self.assertEqual(C14.load("fix")["observed"],7)
+                self.assertEqual(len(calls),1)
+                self.assertTrue(C14.cache_current("fix"))
+                self.assertEqual(json.loads(target.read_text())["schema"],2)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -29,19 +29,25 @@ class Data(VoiceoverScene):
             label(r"a \textbf{sum} of \textbf{products}: \ one of several shapes, \ each with its fields", font_size=21,
                   color=GREY_A),
             label(r"Curry--Howard again: \ sums are $\lor$, \ products are $\land$", font_size=21, color=GREY_A),
-            label(r"\texttt{match} must cover every case: \ the compiler checks", font_size=21, color=YES),
+            label("exhaustiveness checking may warn; wildcard branches can hide newly added cases", font_size=19, color=YES),
             label(r"\texttt{option} instead of \texttt{null}: \ ``my billion-dollar mistake'' \ (Hoare, \ 2009)",
                   font_size=21, color=HEAD),
             label(r"make illegal states unrepresentable", font_size=22, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(src, RIGHT, buff=0.8)
         with self.voiceover(
-            "Real functional languages organise data as algebraic data types. <bookmark mark='a'/> A shape is "
-            "either a circle with a radius, or a rectangle with a width and a height: a sum of products. <bookmark "
-            "mark='b'/> These are Curry and Howard's or and and again, now as data. <bookmark mark='c'/> A match "
-            "takes a shape apart, case by case, and the compiler checks that every case is covered, so adding a "
-            "triangle later points you at every function that must change. <bookmark mark='d'/> An option type, "
-            "either nothing or something, replaces the null pointer, which its inventor, Tony Hoare, called his "
-            "billion-dollar mistake. <bookmark mark='e'/> The slogan: make illegal states unrepresentable."
+            (
+            "Algebraic data types describe alternatives and their fields. <bookmark mark='a'/> A shape can be a "
+            "circle with a radius or a rectangle with width and height: a sum of products. <bookmark mark='b'/> "
+            "The propositions-as-types dictionary interprets these constructors as choices and pairs, with the "
+            "logical assumptions stated earlier. <bookmark mark='c'/> Pattern matching inspects the constructor. "
+            "Exhaustiveness checking can report missing cases, but language settings, wildcards and guards affect "
+            "the guarantee. Adding a triangle does not force every match to change if a wildcard already handles "
+            "it. Nested patterns need more analysis than counting constructor names. <bookmark mark='d'/> An "
+            "option type makes absence an explicit alternative. It can rule out an unhandled null dereference "
+            "when programs respect its interface; extracting a value can still require handling the empty case. "
+            "<bookmark mark='e'/> Make illegal states unrepresentable is a useful design goal. A type can encode "
+            "a chosen invariant, not automatically every property the application needs."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(src[:3]))
             vo.wait_until("a")
@@ -70,26 +76,18 @@ class Data(VoiceoverScene):
                   font_size=21, color=GREY_A),
             label(r"arguments: \ \textbf{contravariant} \ (a function that accepts any \texttt{Animal} accepts a "
                   r"\texttt{Dog})", font_size=21, color=GREY_A),
-            label(r"a mutable array is read \textit{and} written: \ it must be \textbf{invariant}", font_size=22,
+            label("unrestricted mutable arrays need invariant element types, or another safety mechanism", font_size=22,
                   color=HEAD),
         ).arrange(DOWN, buff=0.2).next_to(fn, DOWN, buff=0.4)
-        with self.voiceover(
-            "Object-oriented languages add subtyping. <bookmark mark='a'/> If S is a subtype of T, a term of type S "
-            "may be used wherever a T is expected: a dog wherever an animal is. <bookmark mark='b'/> For functions "
-            "the rule is subtle. A function from A to B can stand in for a function from A prime to B prime when "
-            "its result is more specific, and its argument more general. <bookmark mark='c'/> Results vary in the "
-            "same direction, covariantly. Arguments vary the opposite way, contravariantly. <bookmark mark='d'/> "
-            "And a mutable array is both read, like a result, and written, like an argument. So it must be "
-            "invariant: an array of dogs is not an array of animals."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(sub), FadeIn(sl))
-            vo.wait_until("b")
+        with self.voiceover("Subtyping specifies which replacements preserve an interface's guarantees. <bookmark mark='a'/> A value of subtype S can be used where a T is expected under the language's subtype rules. A Dog can supply an Animal interface. <bookmark mark='b'/> For ordinary function subtyping, the replacement accepts at least the promised inputs and returns a sufficiently specific result. A function that can handle every Animal can serve a caller that supplies only Dogs. <bookmark mark='c'/> Results are covariant; arguments are contravariant. The arrows in the rule point in opposite directions for that reason. <bookmark mark='d'/> An unchecked mutable array both produces and consumes elements. Allowing Dog arrays to be used as writable Animal arrays would let a caller insert a Cat. Invariance prevents that substitution. Read-only views or runtime store checks permit other designs, with different contracts and costs.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(Write(sub), FadeIn(sl), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(Write(fn))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(pts[:2]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(pts[2]))
         self.wait(0.3)
         self.clear_scene()
@@ -113,24 +111,15 @@ class Data(VoiceoverScene):
             label(r"a type system can be useful without being sound: \ but then it promises less", font_size=22,
                   color=HEAD),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Not every language follows the rule. <bookmark mark='a'/> Here is a short TypeScript program. An "
-            "array of dogs is assigned to a variable of type array of animals, a cat is pushed onto it, and then "
-            "the second element of the dog array is asked to bark. <bookmark mark='b'/> TypeScript's checker, in "
-            "its strictest mode, accepts it. <bookmark mark='c'/> And node, running the result on this machine, "
-            "fails: bark is not a function. <bookmark mark='d'/> TypeScript makes arrays covariant on purpose, "
-            "trading soundness for convenience. Java made the same choice for arrays in 1995, and pays for it by "
-            "checking every array store at run time. A type system can be useful without being sound, but then "
-            "it promises less."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(src))
-            vo.wait_until("b")
+        with self.voiceover("This recorded TypeScript example shows an intentional soundness tradeoff. <bookmark mark='a'/> The Dog array is assigned to an Animal-array variable. A Cat is pushed through that alias, and the original Dog-array expression later calls bark on the new element. <bookmark mark='b'/> The recorded compiler accepts it with exactly the displayed strict flag. Strict is a bundle of checks, not every possible checking option; additional indexed-access checks can report other concerns. <bookmark mark='c'/> Running the emitted JavaScript with the recorded Node version raises a TypeError because bark is not a function. The types were erased and supplied no runtime store barrier. <bookmark mark='d'/> Java's covariant reference arrays use a different contract: a runtime component-type check can reject an incompatible store. Compare the static rules and runtime checks together. Useful typing tools can deliberately offer less than the no-stuck-state theorem of a sound calculus.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(src), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(res[0]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(res[1:]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(pts))
         self.wait(0.3)
         self.clear_scene()
@@ -143,7 +132,7 @@ class Data(VoiceoverScene):
         out = label(rf"\texttt{{tsc --strict}}: \ no errors; \ \texttt{{node}} prints \texttt{{{a['stdout']}}}",
                     font_size=22, color=NO).next_to(src, DOWN, buff=0.3)
         pts = VGroup(
-            label(r"a type \texttt{any} \ (or $?$) \ that is compatible with everything \ (Siek and Taha, \ 2006)",
+            label("TypeScript \\texttt{any} disables checks; sound gradual models insert dynamic checks",
                   font_size=21, color=GREY_A),
             label(r"add types to an untyped program one function at a time: \ TypeScript, \ Python's hints, \ "
                   r"Hack", font_size=21, color=GREY_A),
@@ -151,18 +140,23 @@ class Data(VoiceoverScene):
                   r"checking off", font_size=21, color=NO),
             label(r"\textit{sound} gradual typing \ (Typed Racket): \ checks at every boundary, \ and they cost",
                   font_size=21, color=YES),
-            label(r"some mixtures ran over 100 times slower \ (Takikawa et al., \ 2016): \ an open problem",
+            label("2016 Typed Racket study: some tested configurations exceeded 100$\\times$ overhead",
                   font_size=21, color=HEAD),
         ).arrange(DOWN, buff=0.2).next_to(out, DOWN, buff=0.5)
         with self.voiceover(
-            "Finally, a compromise most working programmers now use. <bookmark mark='a'/> Gradual typing, "
-            "introduced by Jeremy Siek and Walid Taha in 2006, adds a type, written any or question mark, that is "
-            "compatible with everything, so that a program can be typed one function at a time. TypeScript, "
-            "Python's type hints and Hack work this way. <bookmark mark='b'/> In TypeScript the types are simply "
-            "erased, and any switches checking off: passing forty-two to a function that expects a string passes "
-            "the checker, and prints not a number. <bookmark mark='c'/> Sound gradual typing, as in Typed Racket, "
-            "inserts checks wherever typed and untyped code meet, and those checks cost: a 2016 study found some "
-            "mixtures over a hundred times slower. Making sound gradual typing cheap is still a research question."
+            (
+            "Gradual typing studies how precise and imprecise type information can coexist. <bookmark mark='a'/> "
+            "A gradual unknown type is related to other types by a consistency relation, with checks determined "
+            "by the chosen semantics. TypeScript's any, its unknown type and Python's optional type hints make "
+            "different choices; these mechanisms should not all be treated as one sound cast calculus. <bookmark "
+            "mark='b'/> In the displayed TypeScript program, any allows forty-two to pass to a string-typed "
+            "parameter. Erasure leaves ordinary JavaScript execution, and the result printed here is NaN. No "
+            "runtime string contract was inserted. <bookmark mark='c'/> Sound gradual systems can insert boundary "
+            "checks and higher-order wrappers. A 2016 Typed Racket study measured very large slowdowns for some "
+            "partially typed configurations. That is a historical workload result, not a bound for every current "
+            "implementation. Coercion composition and other techniques improve particular costs. The research "
+            "exercise asks for a stated semantics and baseline before discussing guarantees."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(src))
             vo.wait_until("a")

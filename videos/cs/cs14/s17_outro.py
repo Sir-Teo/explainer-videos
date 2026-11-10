@@ -40,13 +40,18 @@ class Outro(VoiceoverScene):
         ).arrange_in_grid(rows=2, cols=3, buff=(0.35, 0.35)).move_to(DOWN * 0.2)
         head = label(rf"Part {PART}: \ Lambda and Types", font_size=38).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "What we built in this part. Lambda terms, substitution without capture, and beta reduction. Booleans, "
-            "numbers, pairs and lists from functions alone, and recursion from the Y combinator. Strategies that "
-            "decide whether we finish, and the Church Rosser theorem that says they cannot change the answer. "
-            "Simple types, with progress, preservation and Tait's normalization theorem, checked on thousands of "
-            "random programs. Hindley Milner inference, which typed the Job with no annotations, and its doubly "
-            "exponential worst case. System F and free theorems. And propositions as types, with programs found "
-            "by proof search and Kripke models for the laws that have none."
+            (
+            "We built lambda terms and capture-avoiding substitution, then compared beta reduction with weak "
+            "evaluation. Church encodings supplied data, and fixed points supplied recursion, with delayed "
+            "branches needed for the strict factorial. Confluence made beta normal forms unique up to alpha "
+            "equivalence, while simple types supported progress, preservation and strong normalization in the "
+            "specified recursion-free calculus. Random runs checked implementations, not the general proofs. "
+            "Hindley Milner inferred the Job's types; shared type graphs distinguished representation blowup from "
+            "typability complexity. Pure System F supplied parametric free theorems, and unrestricted equality "
+            "showed why the same printed type in our toy ML core does not automatically supply them. "
+            "Propositions-as-types connected proof search with programs, with Kripke countermodels certifying the "
+            "displayed intuitionistic non-theorems."
+        )
         ):
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
@@ -84,12 +89,16 @@ class Outro(VoiceoverScene):
             (r"proofs", r"Lean's mathlib, \ CompCert, \ seL4: \ types as specifications"),
         ])
         with self.voiceover(
-            "In practice. Type inference is everywhere: fully in OCaml and Haskell, locally in Rust, Swift and "
-            "TypeScript. Generics in Java, C sharp, Go and Rust are parametric polymorphism, checked once for "
-            "every type. Sum types with pattern matching have spread to Rust, Swift, Kotlin, Scala and even "
-            "Python. Gradual type checkers let a team add types to a large codebase one file at a time. And the "
-            "same ideas, pushed to dependent types, verify mathematics, a C compiler and an operating system "
-            "kernel."
+            (
+            "In practice, inference and annotations are combined differently by OCaml, Haskell, Rust, Swift and "
+            "TypeScript. Generic parameters, bounds, interfaces and runtime operations determine what a "
+            "polymorphic function may observe; a generic-looking signature alone does not establish a pure System "
+            "F free theorem. Sum types and pattern matching help express application invariants, with "
+            "exhaustiveness guarantees that depend on the language and compiler settings. Optional or gradual "
+            "typing lets teams adopt checks incrementally, with different runtime contracts. Dependent proof "
+            "assistants can verify chosen mathematical and software properties, relative to explicit "
+            "specifications, kernels and trusted assumptions."
+        )
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.35), run_time=3.0)
@@ -100,20 +109,22 @@ class Outro(VoiceoverScene):
         ps = problem_set([
             r"Reduce $(\lambda x\,y.\; y\;x\;x)\;((\lambda z.\,z)\;a)\;(\lambda w.\,w)$ to normal form by normal order "
             r"and by applicative order, \ count the steps, \ and explain the difference.",
-            r"Define $\mathit{exp}$, \ $\mathit{iszero}$ and $\mathit{sub}$ on Church numerals, \ and explain why "
-            r"$\mathit{sub}\;m\;n$ takes time proportional to $m \cdot n$.",
+            "Define Church exponentiation, zero test and subtraction; measure a stated reduction strategy.",
             r"Prove progress for the cases \textsc{If} and \textsc{Succ}, \ stating the canonical forms lemma you need.",
             r"Infer by hand the principal type of $\lambda f\,g\,x.\; g\,(f\,x)\,x$, \ showing each unification.",
-            r"\textit{Build.} \ Add \texttt{type} declarations with constructors and exhaustive \texttt{match} to the "
-            r"$\lambda$-core, \ with inference. \ Rewrite the Job's table with an \texttt{option}.",
-            r"$\bigstar$ \textit{Research.} \ Design a sound gradual type system whose run-time checks cost a provably "
-            r"bounded factor, \ or show that some program mix must pay unboundedly.",
+            "\\textit{Build.} Add an option ADT; define the pattern fragment before checking exhaustiveness.",
+            "$\\bigstar$ \\textit{Investigate.} Reproduce space-efficient coercions; state a cost model and test a precise extension.",
         ], font_size=22)
         with self.voiceover(
-            "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build "
-            "problem: give the lambda core its own data types and pattern matching, with inference, and rewrite "
-            "part of the Job with them. The last, marked with a star, is a research problem: its answer is not "
-            "known, and the notes say where to start."
+            (
+            "The notes contain six worked exercises. Compare reduction orders with exact parentheses; measure a "
+            "stated Church-subtraction strategy; prove the progress cases; and infer a principal type while "
+            "respecting the environment. The build exercise starts with a precisely limited constructor-pattern "
+            "language before extending exhaustiveness checking. The starred investigation reproduces known "
+            "space-efficient gradual coercions, then asks for one explicit extension and cost claim. A research "
+            "prompt begins with definitions and a literature check; the presence of a star does not make an "
+            "already solved subproblem open."
+        )
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)

@@ -35,18 +35,11 @@ class Inference(VoiceoverScene):
             label(r"$f\,(f\,x)$ \ says \ $\alpha = \gamma \to \delta$", font_size=24, color=GREY_A),
             label(r"solve the equations: \ \textbf{unification}", font_size=26, color=HEAD),
         ).arrange(DOWN, buff=0.3).next_to(src, DOWN, buff=0.5)
-        with self.voiceover(
-            "In the hook, nobody wrote a type, yet the machine knew them all. Here is how. <bookmark mark='a'/> "
-            "Take the function that applies f twice. <bookmark mark='b'/> Give each unknown a type variable: f has "
-            "some type alpha, x some type beta. <bookmark mark='c'/> Every use adds an equation. f applied to x "
-            "says alpha must be a function from beta to some gamma. <bookmark mark='d'/> And f applied to f of x "
-            "says alpha is also a function from gamma to some delta. <bookmark mark='e'/> Inference is solving "
-            "these equations between types, which is called unification."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(src))
-            for mk, s in zip("bcde", steps):
+        with self.voiceover("In the hook, nobody wrote a type, yet the machine knew them all. Here is how. <bookmark mark='a'/> Take the function that applies f twice. <bookmark mark='b'/> Give each unknown a type variable: f has some type alpha, x some type beta. <bookmark mark='c'/> Every use adds an equation. f applied to x says alpha must be a function from beta to some gamma. <bookmark mark='d'/> And f applied to f of x says alpha is also a function from gamma to some delta. <bookmark mark='e'/> Inference is solving these equations between types, which is called unification.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(src), run_time=0.6)
+            vo.wait_until('a')
+            for mk, s in zip('bcde', steps):
                 vo.wait_until(mk)
                 self.play(FadeIn(s))
         self.wait(0.3)
@@ -65,20 +58,15 @@ class Inference(VoiceoverScene):
         ).arrange(DOWN, buff=0.3, aligned_edge=LEFT).next_to(head, DOWN, buff=0.6).to_edge(LEFT, buff=0.9)
         res = label(r"the result is the \textbf{most general} solution: \ every other solution is an instance of it",
                     font_size=23, color=HEAD).to_edge(DOWN, buff=0.7)
-        with self.voiceover(
-            "Alan Robinson gave the algorithm in 1965, for automated theorem proving. <bookmark mark='a'/> An "
-            "equation between a variable and a type binds the variable to that type, everywhere it appears. "
-            "<bookmark mark='b'/> An equation between two function types splits into two equations: arguments "
-            "equal, results equal. <bookmark mark='c'/> Two different type constructors, like int and bool, cannot "
-            "be equal: that is a type error. <bookmark mark='d'/> And a variable cannot be bound to a type that "
-            "contains it: that would be the infinite type of omega. <bookmark mark='e'/> When unification "
-            "succeeds, it finds the most general solution, of which every other solution is a special case."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, r in zip("abcd", rules):
-                vo.wait_until(mk)
+        with self.voiceover("Alan Robinson gave the algorithm in 1965, for automated theorem proving. <bookmark mark='a'/> An equation between a variable and a type binds the variable to that type, everywhere it appears. <bookmark mark='b'/> An equation between two function types splits into two equations: arguments equal, results equal. <bookmark mark='c'/> Two different type constructors, like int and bool, cannot be equal: that is a type error. <bookmark mark='d'/> And a variable cannot be bound to a type that contains it: that would be the infinite type of omega. <bookmark mark='e'/> When unification succeeds, it finds the most general solution, of which every other solution is a special case.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            for mk, r in zip('abcd', rules):
+                if mk != 'a':
+                    vo.wait_until(mk)
                 self.play(FadeIn(r, shift=RIGHT * 0.1))
-            vo.wait_until("e")
+                if mk == 'a':
+                    vo.wait_until(mk)
+            vo.wait_until('e')
             self.play(FadeIn(res))
         self.wait(0.3)
         self.clear_scene()
@@ -137,20 +125,25 @@ class Inference(VoiceoverScene):
         tab = grid_table([r"program", r"inferred"], rows, widths=[6.6, 4.6], row_h=0.6, font_size=21, colors=cols,
                          mono_cols=(0, 1)).next_to(head, DOWN, buff=0.6)
         pts = VGroup(
-            label(r"a \texttt{let}-bound name is \textbf{generalized}: \ \texttt{id} $: \forall \alpha.\; \alpha \to "
-                  r"\alpha$, \ fresh at each use", font_size=22, color=YES),
+            label("generalize type variables not free in the environment; instantiate freshly at each use", font_size=22, color=YES),
             label(r"a $\lambda$-bound name is not: \ one parameter, \ one type", font_size=22, color=NO),
-            label(r"the price of decidability: \ full polymorphism, \ System F, \ cannot be inferred \ (Wells, \ 1994)",
+            label("unrestricted implicit System F typability is undecidable; annotated checking differs",
                   font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.25).next_to(tab, DOWN, buff=0.5)
         with self.voiceover(
-            "One more ingredient makes this practical. <bookmark mark='a'/> Bind the identity function with let, "
-            "and use it on a number and on a boolean: the program has type int times bool. But pass the identity "
-            "in as a parameter, and use it the same two ways, and inference fails. <bookmark mark='b'/> A "
-            "let-bound name is generalized: once its type is found, the free type variables become for all, and "
-            "each use gets fresh copies. <bookmark mark='c'/> A lambda-bound parameter is not, because its uses "
-            "must agree. <bookmark mark='d'/> This restriction is the price of decidability. Joe Wells proved in "
-            "1994 that inference for full polymorphism, the next chapter's System F, is undecidable."
+            (
+            "Let-polymorphism adds a controlled form of reuse. <bookmark mark='a'/> Bind the identity with let "
+            "and use it at int and bool: the pair has type int times bool. A lambda parameter, used at both types "
+            "in ordinary Hindley Milner, is instead rejected. <bookmark mark='b'/> Generalization quantifies the "
+            "inferred type variables that are not free in the surrounding type environment. Variables tied to an "
+            "outer parameter must stay shared. Each use then instantiates the quantified variables freshly. "
+            "<bookmark mark='c'/> A lambda-bound parameter is monomorphic within its scope. This distinction is "
+            "enough for principal types and decidable inference in the pure Hindley Milner system; mutation "
+            "requires further restrictions such as ML's value restriction. <bookmark mark='d'/> Full implicit "
+            "System F typability is undecidable. More expressive annotated or restricted systems can still have "
+            "decidable checking or inference, so there is no single boundary saying that all richer polymorphism "
+            "is impossible."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab.rule), *[FadeIn(c) for c in tab.cells[0]])
             vo.wait_until("a")
@@ -174,18 +167,11 @@ class Inference(VoiceoverScene):
         cap = label(rf"{len(rows)} definitions, \ {h['job']['unify_calls']} unifications, \ no annotations; \ "
                     r"type variables mark what each function does not care about", font_size=20, color=HEAD).to_edge(
             DOWN, buff=0.35)
-        with self.voiceover(
-            "Here is the whole Job, as the hook promised. <bookmark mark='a'/> Eleven definitions, a few hundred "
-            "unifications, and not one annotation. Reverse works on lists of anything. Lower and is letter work on "
-            "character codes. Bump and count work for any type of word that supports equality, and insert and sort "
-            "for any pair whose second part is a count. <bookmark mark='b'/> The type variables are a precise "
-            "statement of what each function does not care about, discovered rather than declared."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(tab.rule), *[FadeIn(c) for c in tab.cells[0]],
-                      LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.2), run_time=4)
-            vo.wait_until("b")
+        with self.voiceover("Here is the whole Job, as the hook promised. <bookmark mark='a'/> Eleven definitions, a few hundred unifications, and not one annotation. Reverse works on lists of anything. Lower and is letter work on character codes. Bump and count work for any type of word that supports equality, and insert and sort for any pair whose second part is a count. <bookmark mark='b'/> The type variables are a precise statement of what each function does not care about, discovered rather than declared.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(tab.rule), *[FadeIn(c) for c in tab.cells[0]], LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.2), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(cap))
         self.wait(0.3)
         self.clear_scene()
@@ -210,24 +196,15 @@ class Inference(VoiceoverScene):
             label(r"in general, \ typability in ML is DEXPTIME-complete \ (Mairson; \ Kfoury, Tiuryn, Urzyczyn; \ "
                   r"1990)", font_size=21, color=HEAD),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Inference is fast on real programs, but it has a famous worst case. <bookmark mark='a'/> f zero pairs "
-            "its argument with itself. f one applies f zero twice, so its result is a pair of pairs. <bookmark "
-            "mark='b'/> Each new line applies the previous function twice, and the type squares in size: after n "
-            "lines, two to the two to the n leaves. <bookmark mark='c'/> Our engine keeps types as a shared graph, "
-            "so it handles even f five in under a millisecond, but written out, f five's type would have four "
-            "billion leaves. <bookmark mark='d'/> Mairson, and Kfoury, Tiuryn and Urzyczyn, proved in 1990 that "
-            "deciding whether an ML program is typable is complete for exponential time. Nobody writes such "
-            "programs, which is why the algorithm is used everywhere anyway."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(src[:2]), FadeIn(t1))
-            vo.wait_until("b")
+        with self.voiceover("Small source programs can describe enormous expanded types. <bookmark mark='a'/> In this family, f zero pairs its argument with itself. Each following function applies its predecessor twice. <bookmark mark='b'/> The number of leaves in the fully expanded result type squares at each level: two to the power two to the n. Count leaves, rather than source characters or stored graph nodes. <bookmark mark='c'/> Sharing keeps repeated subtypes in a graph. Our recorded inference handles the displayed f five without expanding its more than four billion result leaves; host timing is a separate measurement and can vary. This family illustrates representation blowup, not a proof that every implementation spends that much time. <bookmark mark='d'/> Deciding typability in the relevant unrestricted ML let-polymorphism problem is EXPTIME-complete, as the 1990 results show. That decision bound differs from printing a fully expanded principal type. Practical performance depends on the program family, shared representation and implementation.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(src[:2]), FadeIn(t1), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(src[2:]), FadeIn(tab), FadeIn(pts[0]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(pts[1]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(pts[2]))
         self.wait(0.3)
         self.clear_scene()

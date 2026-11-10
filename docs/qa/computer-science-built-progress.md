@@ -1,7 +1,7 @@
 # Computer Science, Built — sequential polish
 
 Work on `computer-science-built`, one video at a time, with separate commits.
-Current video: **cs14, Lambda and Types**. CS1–CS13 source/preview polish checkpoints
+Current video: **cs15, Runtimes**. CS1–CS14 source/preview polish checkpoints
 are complete at the scopes below. Their production release gates remain open; this
 ledger does not treat sampled previews as listening or final-production approval.
 The syllabus's earlier draft-preview claims are separate.
@@ -14,6 +14,27 @@ upgrade/rejection check passes. All numerical producer ASTs and 11 active data h
 This is a loader correctness follow-up; earlier media receipts stay tied to their checkpoint commits.
 
 [CS3 cache-entry evidence](evidence/cs3-cache-entry-20261109/README.md).
+
+## Final CS14 preview checkpoint, 10 November 2026
+
+- Correct strict Church factorial evaluation, demonstrate unrestricted equality's parametricity
+  counterexample, and reconcile the safety histogram with its reported sample. Three guarded cache
+  schemas change; fourteen of seventeen original payloads remain identical. Fourteen tests and
+  seventeen numerical/model groups pass, including 63 subtraction cases and independent graph/Kripke checks.
+- Revise 36 bilingual narration sections, 37 early reveals and the affected exercises. Add the delayed
+  branch router and noncommuting map square; fit measured axes and captions, preserve literal code,
+  and scope normalization, language safety, inference and research claims.
+- Review all 34 endpoint and 34 motion overviews: 1,360 motion samples, 32 endpoint/32 motion
+  identical-PNG inheritances after fresh renders, 109,979 decoded motion frames and 0 raw motion warnings.
+- Twelve native clips: 9,863 frames, 288 samples/twelve stills. All 91 English speech blocks pass
+  signal/alignment (55.03 minutes), and 245 cues meet 250 ms after repairing the opening.
+  Three narrated chapters decode 10,724 frames plus audio; 120 samples/three stills and 50 pilot cues checked.
+- Translation and canonical source pairs each 91/91; no unresolved explanatory caption leads;
+  7 retained originals individually classified. Complete cached text-token coverage.
+
+[Verified CS14 evidence](evidence/cs14-polish-20261109/README.md).
+Continuous narrated listening, Chinese speech/listening, whole-video native production review and runtime at
+the selected narration pace remain open release gates.
 
 ## Final CS13 preview checkpoint, 9 November 2026
 
@@ -378,9 +399,7 @@ Evidence, exact source/data hashes, reports and reproduction commands:
 
 ## Continue here
 
-1. Preserve CS13's source/data baseline and run its compiler computations and tests
-   on an otherwise idle host. Matching Clang/LLVM 19 tools are installed.
-2. Resolve the recorded dominance, lattice/path, memory-hoisting, SSA coloring,
-   measurement and proof-scope findings; polish bilingual visuals and narration,
-   then verify and commit this video separately.
-3. Continue CS14–CS61 in order, keeping preview evidence distinct from production release approval.
+1. Preserve CS15's untouched source and compute its runtime measurements on an otherwise idle host.
+2. Resolve sampled-lifetime, tail-call stack, collector/benchmark scope and WebAssembly findings;
+   polish bilingual visuals and narration, verify the evidence, and commit CS15 separately.
+3. Continue CS16–CS61 in order, keeping preview evidence distinct from production release approval.

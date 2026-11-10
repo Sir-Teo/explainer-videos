@@ -32,19 +32,13 @@ class Safety(VoiceoverScene):
         chain = MathTex(r"t_0 \to t_1 \to t_2 \to \cdots", font_size=38).next_to(pres, DOWN, buff=0.6)
         ch_l = label(r"every term along the way has type $T$ \ (preservation), \ so it is never stuck \ (progress)",
                      font_size=22, color=HEAD).next_to(chain, DOWN, buff=0.25)
-        with self.voiceover(
-            "Milner's slogan is a theorem with two halves. <bookmark mark='a'/> Progress: a closed well-typed term "
-            "is either a value, a finished answer, or it can take a step. It is never stuck. <bookmark mark='b'/> "
-            "Preservation: if a well-typed term takes a step, the result has the same type. <bookmark mark='c'/> "
-            "Put them together along any run of the program. Each term has type T, by preservation, so each one is "
-            "either an answer or can step again, by progress. A well-typed program never reaches a stuck state."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(prog))
-            vo.wait_until("b")
+        with self.voiceover("Milner's slogan is a theorem with two halves. <bookmark mark='a'/> Progress: a closed well-typed term is either a value, a finished answer, or it can take a step. It is never stuck. <bookmark mark='b'/> Preservation: if a well-typed term takes a step, the result has the same type. <bookmark mark='c'/> Put them together along any run of the program. Each term has type T, by preservation, so each one is either an answer or can step again, by progress. A well-typed program never reaches a stuck state.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(prog), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(pres))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(Write(chain), FadeIn(ch_l))
         self.wait(0.3)
         self.clear_scene()
@@ -64,21 +58,14 @@ class Safety(VoiceoverScene):
             label(r"the other cases are alike: \ types say which values can appear where", font_size=22,
                   color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(head, DOWN, buff=0.5).to_edge(LEFT, buff=0.8)
-        with self.voiceover(
-            "The proofs go by induction on the typing derivation, one case per rule. Here is the interesting case "
-            "of progress. <bookmark mark='a'/> The term is an application, f of a, where f has type A to B and a "
-            "has type A. <bookmark mark='b'/> By induction, f is a value or can step. If it can step, so can f of "
-            "a. <bookmark mark='c'/> If f is a value, then because its type is an arrow, it must be a lambda: the "
-            "only values of function type are functions. This little lemma, canonical forms, is where the types "
-            "do their work. <bookmark mark='d'/> Then the argument is a value or can step, and if it is a value, "
-            "the whole term is a redex. <bookmark mark='e'/> For an if, the condition is either a step away or a "
-            "value of type bool, which can only be true or false. In every case, the types say which values can "
-            "appear in which positions, and no stuck combination survives."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, s in zip("abcde", steps[:5]):
-                vo.wait_until(mk)
+        with self.voiceover("The proofs go by induction on the typing derivation, one case per rule. Here is the interesting case of progress. <bookmark mark='a'/> The term is an application, f of a, where f has type A to B and a has type A. <bookmark mark='b'/> By induction, f is a value or can step. If it can step, so can f of a. <bookmark mark='c'/> If f is a value, then because its type is an arrow, it must be a lambda: the only values of function type are functions. This little lemma, canonical forms, is where the types do their work. <bookmark mark='d'/> Then the argument is a value or can step, and if it is a value, the whole term is a redex. <bookmark mark='e'/> For an if, the condition is either a step away or a value of type bool, which can only be true or false. In every case, the types say which values can appear in which positions, and no stuck combination survives.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            for mk, s in zip('abcde', steps[:5]):
+                if mk != 'a':
+                    vo.wait_until(mk)
                 self.play(FadeIn(s, shift=RIGHT * 0.1))
+                if mk == 'a':
+                    vo.wait_until(mk)
             self.play(FadeIn(steps[5]))
         self.wait(0.3)
         self.clear_scene()
@@ -134,24 +121,17 @@ class Safety(VoiceoverScene):
             label(r"never stuck; \ type never changed", font_size=24, color=YES),
             label(rf"every one finished: \ at most {s['max_steps']} steps", font_size=22, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.5).shift(UP * 0.3)
-        note = label(r"testing is not proof, \ but a counterexample would have shown up here", font_size=19,
+        note = label("finite regression samples support an implementation check; the theorem needs a proof", font_size=19,
                      color=GREY_B).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "We can also check the theorems by machine, as Part 13 did with the compiler. <bookmark mark='a'/> Our "
-            "generator builds five thousand random closed terms, each well-typed by construction. <bookmark "
-            "mark='b'/> We ran every one to the end, over fifty thousand steps in all, and after each step "
-            "re-checked the type. <bookmark mark='c'/> No term ever got stuck, and no type ever changed. <bookmark "
-            "mark='d'/> And every single one finished, in at most forty-seven steps. That last fact is not a "
-            "coincidence of our generator. It is the next chapter's theorem."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(side[0]))
-            vo.wait_until("b")
+        with self.voiceover("Finite checks exercise the implementation of the safety rules. <bookmark mark='a'/> The generator constructs five thousand closed, well-typed terms from its stated grammar and seed. <bookmark mark='b'/> In the recorded run, all finish after fifty thousand five hundred and sixteen small steps in total, with typing checked after every step. <bookmark mark='c'/> No sampled state is stuck and no step changes its type. A failed case would expose a bug in the generator, checker or evaluator; passing this sample is not a proof of the general theorems. <bookmark mark='d'/> The longest sampled run takes forty-seven steps. That bound belongs only to these generated terms. The next chapter's normalization theorem explains why every term in the recursion-free typed calculus terminates, without giving this particular sample bound to all programs.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(side[0]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(side[1]), FadeIn(ch), FadeIn(xl))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(side[2]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(side[3]), FadeIn(note))
         self.wait(0.3)
         self.clear_scene()
@@ -161,24 +141,29 @@ class Safety(VoiceoverScene):
         rows = VGroup(
             label(r"Standard ML: \ a formal definition \ (Milner, Tofte, Harper, \ 1990), \ its safety later machine-"
                   r"checked", font_size=21, color=GREY_A),
-            label(r"Java and C\#: \ type-safe by design; \ the JVM's bytecode verifier checks loaded code", font_size=21,
+            label("Java and C\\#: managed type safety relies on the runtime and native-code boundary", font_size=21,
                   color=GREY_A),
-            label(r"Rust: \ safe Rust is memory-safe; \ RustBelt \ (Jung et al., \ 2018) \ proved it, \ "
-                  r"\texttt{unsafe} blocks included by contract", font_size=21, color=GREY_A),
+            label("RustBelt: a verified Rust subset, with obligations for unsafe libraries (2018)", font_size=21, color=GREY_A),
             label(r"C and C++: \ not safe: \ a well-typed program can still write past an array \ (Part 11)",
                   font_size=21, color=NO),
             label(r"``cannot go wrong'' means: \ never stuck. \ It does not mean: \ terminates, \ or is correct",
                   font_size=22, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).next_to(head, DOWN, buff=0.6).to_edge(LEFT, buff=0.7)
         with self.voiceover(
-            "How far does this reach in practice? <bookmark mark='a'/> Standard ML was given a complete formal "
-            "definition in 1990, and its safety has since been checked by machine. <bookmark mark='b'/> Java and C "
-            "sharp are type safe by design, and the Java virtual machine verifies the bytecode it loads. <bookmark "
-            "mark='c'/> Safe Rust is memory safe, and the RustBelt project proved it in 2018, with unsafe code "
-            "allowed inside libraries that promise to uphold the invariants. <bookmark mark='d'/> C and C plus "
-            "plus are not safe: a perfectly well-typed C program can write past the end of an array, as Part 11 "
-            "showed. <bookmark mark='e'/> And note what the slogan does not say. Cannot go wrong means never "
-            "stuck. It does not mean the program terminates, or that it computes what you wanted."
+            (
+            "Safety results belong to a language and its operational model. <bookmark mark='a'/> Standard ML has "
+            "a formal definition and machine-checked metatheoretic work; the precise theorem depends on the "
+            "modeled features. <bookmark mark='b'/> Managed Java and C sharp designs enforce important safety "
+            "properties, and the JVM verifies bytecode. Native interfaces, unsafe facilities and implementation "
+            "defects lie outside a simple blanket claim. <bookmark mark='c'/> RustBelt's 2018 work proves "
+            "soundness for a realistic Rust subset and verifies selected unsafe library abstractions against "
+            "explicit contracts. It is not a proof of every Rust feature, library or compiler version. Safe "
+            "clients rely on those contracts being upheld. <bookmark mark='d'/> C and C plus plus permit "
+            "well-typed programs with out-of-bounds accesses and other undefined behavior. Their static types do "
+            "not establish this lesson's safety guarantee. <bookmark mark='e'/> In our calculus, cannot go wrong "
+            "means no reachable stuck term. It does not establish termination, intended answers or the absence of "
+            "every operational failure in a production system."
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, r in zip("abcde", rows):
