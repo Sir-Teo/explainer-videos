@@ -31,21 +31,22 @@ class Outro(VoiceoverScene):
             tile(MathTex(r"1 - e^{-n^2/2m}", font_size=44, color=CTRL), r"the birthday bound", CTRL),
             tile(MathTex(r"\tfrac12\Bigl(1 + \tfrac{1}{(1-\alpha)^2}\Bigr)", font_size=40, color=DATA),
                  r"linear probing", DATA),
-            tile(MathTex(r"h \le 1.44 \lg n", font_size=44, color=LAM), r"balanced trees", LAM),
+            tile(MathTex(r"h < \frac{\lg(n+2)}{\lg\varphi}", font_size=44, color=LAM), r"balanced trees", LAM),
             tile(MathTex(r"3\bigl(r(t) - r(x)\bigr) + 1", font_size=38, color=YES), r"the access lemma", YES),
             tile(MathTex(r"O\bigl(m\,\alpha(n)\bigr)", font_size=44, color=HEAD), r"union--find", HEAD),
             tile(MathTex(rf"\text{{row 8: }} {load('job')['seconds']:.2f}\text{{ s}}", font_size=40, color=COST),
-                 r"the Job, \ hashed", COST),
+                 r"the Job, \ projected", COST),
         ).arrange_in_grid(rows=2, cols=3, buff=(0.35, 0.35)).move_to(DOWN * 0.2)
         head = label(rf"Part {PART}: \ Data Structures", font_size=38).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "What we built in this part. The dictionary, and the birthday bound that makes collisions certain. "
-            "Chaining with universal hashing, which no adversary can defeat, and the attack that defeats a fixed "
-            "hash. Linear probing and Knuth's formula, measured; cuckoo hashing's threshold at one half; perfect "
-            "hashing in linear space. Search trees, balanced by heights, by colours or by coin flips; splay trees "
-            "and their access lemma; B-trees for disks; Fibonacci heaps; union–find and the inverse Ackermann "
-            "function; tries and succinct trees; persistence. And the Job with a hash table, six times faster "
-            "than the sort."
+            "What this part connects. Birthday probabilities under independent uniform choices; universal"
+            " hashing for fixed keys independent of the chosen random function; collision resolution and "
+            "its load assumptions. Search trees preserve order, balanced trees control height, and "
+            "splaying uses a sequence potential rather than per-node depth halving. B-trees price block "
+            "transfers. Heap and union-find bounds require their operation models. Tries expose key "
+            "structure, and succinct theory distinguishes topology bits from navigation redundancy. "
+            "Finally, native event counts and sample-checked models project the Job's new ledger row. "
+            "Every number and bound carries its scope."
         ):
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
@@ -64,11 +65,11 @@ class Outro(VoiceoverScene):
             (r"inverted indexes", [47]),
         ], font_size=24)
         with self.voiceover(
-            "Where this comes back. Part 18's graph algorithms run on heaps and union–find. Part 20 builds Bloom "
-            "filters and sketches from universal hash families. Part 21 turns tries into suffix trees and "
-            "compressed indexes. Part 33 makes hash maps and skip lists safe for many threads. Parts 34 and 35 "
-            "build storage engines on log-structured merge trees and B-plus trees. Part 41's Git is a persistent "
-            "tree, and Part 47's search engine is an inverted index."
+            "Where this comes back. Part 18's graph algorithms run on heaps and union–find. Part 20 "
+            "builds Bloom filters and sketches from universal hash families. Part 21 turns tries into "
+            "suffix trees and compressed indexes. Part 33 makes hash maps and skip lists safe for many "
+            "threads. Parts 34 and 35 build storage engines on log-structured merge trees and B-plus "
+            "trees. Part 41's Git is a persistent tree, and Part 47's search engine is an inverted index."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.3), run_time=3.0)
@@ -79,17 +80,18 @@ class Outro(VoiceoverScene):
         card = practice_card([
             (r"choosing", r"hash map for lookups; \ ordered map for ranges and neighbours"),
             (r"security", r"untrusted keys need a keyed hash \ (SipHash): \ hash flooding is real"),
-            (r"performance", r"count cache lines, \ not just operations: \ open addressing beats chaining"),
-            (r"databases", r"every index is a B+-tree or a hash: \ know which your query uses"),
-            (r"interviews", r"heaps, \ tries and union--find solve half the classic problems"),
+            (r"performance", r"count cache lines, \ not just operations: \ measure equivalent complete tasks"),
+            (r"databases", r"B+-tree, \ hash, \ inverted, \ spatial, \ LSM: \ inspect the query plan"),
+            (r"interviews", r"recognize when heaps, \ tries or union--find fit the problem"),
         ])
         with self.voiceover(
-            "In practice. Choose a hash map for lookups and an ordered map when you need ranges or neighbours. Never "
-            "hash untrusted keys with a fixed function; hash flooding is a real attack. Count cache lines as well "
-            "as operations: an open-addressing table can be several times faster than a chained one. Every database "
-            "index is a B-plus tree or a hash, and a query plan tells you which. And in interviews, heaps, tries "
-            "and union–find solve half the classic problems."
-        ):
+            "In practice, match the interface to the workload. Use an ordered map when ranges or "
+            "neighbors matter. For untrusted keys, check the actual hash and attack defenses rather than "
+            "assuming the library randomizes everything. Measure complete equivalent tasks, including the"
+            " memory and update costs that matter to your service. Databases also use log-structured, "
+            "inverted, spatial and other indexes besides B-trees and hashing. Query plans reveal which "
+            "access path is actually used. Heaps, tries and union-find are tools to recognize, not "
+            "universal answers."       ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.35), run_time=3.0)
         self.wait(0.3)
@@ -110,10 +112,12 @@ class Outro(VoiceoverScene):
             r"search tree algorithm that is $o(\log \log n)$-competitive.",
         ], font_size=22)
         with self.voiceover(
-            "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build "
-            "problem: remove the division from the Job's hash and see what it does to the instructions per cycle. "
-            "The last, marked with a star, is a research problem: its answer is not known, and the notes say where "
-            "to start."
+            "Six exercises appear in the notes: four proof exercises, a build sketch, and a research "
+            "prompt. Pause on any of them. The build exercise replaces the per-letter division using "
+            "explicitly defined wrapping arithmetic, then checks the complete output and measures core "
+            "samples. It is a proposal, not a completed benchmark. The final exercise asks about dynamic "
+            "optimality; its notes outline how to explore small sequences, not a solution to an open "
+            "problem."
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)
@@ -129,10 +133,11 @@ class Outro(VoiceoverScene):
         q = label(r"the shape of road maps, \ the internet and compilers", font_size=26, color=GREY_A).to_edge(
             DOWN, buff=0.8)
         with self.voiceover(
-            "Next time. Euler invented the graph to walk the bridges of Königsberg, and graphs are now the shape of "
-            "road maps, the internet and compilers. Breadth-first and depth-first search; Dijkstra's algorithm on "
-            "this part's heaps, and the recent proof that it is universally optimal; spanning trees with "
-            "union–find; and flows and cuts, two faces of one theorem. Part 18, Graphs."
+            "Next time. Euler invented the graph to walk the bridges of Königsberg, and graphs are now "
+            "the shape of road maps, the internet and compilers. Breadth-first and depth-first search; "
+            "Dijkstra's algorithm on this part's heaps, and the recent proof that it is universally "
+            "optimal; spanning trees with union–find; and flows and cuts, two faces of one theorem. Part "
+            "18, Graphs."
         ):
             self.play(FadeIn(nxt), LaggedStart(*[FadeIn(i) for i in items], lag_ratio=0.3))
             self.play(FadeIn(q))
@@ -156,7 +161,7 @@ class Outro(VoiceoverScene):
              r"Farach-Colton, Krapivin and Kuszmaul (2025); \ Demaine et al. (2004); \ Kraska et al. (2018)"])
         credit = note(rf"narration: \ {narration_credit()}", font_size=18).to_edge(DOWN, buff=0.15)
         with self.voiceover("The books and papers this part follows are on screen and in the notes. Thank you for "
-                            "watching."):
+            "watching."):
             self.play(FadeIn(card), FadeIn(credit))
         self.wait(4.0)
         self.clear_scene()

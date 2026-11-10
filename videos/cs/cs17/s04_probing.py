@@ -43,14 +43,14 @@ class Probing(VoiceoverScene):
             label(r"but runs of full slots merge and grow: \ \textbf{primary clustering}", font_size=21, color=NO),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Chains cost a pointer per key and a jump in memory per step. Open addressing keeps every key in the "
-            "table itself. <bookmark mark='a'/> On a collision, linear probing tries the next slot, and the next, "
-            "until it finds a free one; a find follows the same path until it finds the key or an empty slot. "
-            "<bookmark mark='b'/> It is one array with no pointers, and the next probe is almost always in the "
-            "same cache line, which is why it is so fast in practice. <bookmark mark='c'/> Its weakness is "
-            "visible in these snapshots of a sixty-four-slot table filling up. Full slots form runs, and a key "
-            "that lands anywhere in a run joins its end, so long runs grow faster than short ones and merge. "
-            "This is primary clustering."
+            "Chains cost a pointer per key and a jump in memory per step. Open addressing keeps every key"
+            " in the table itself. <bookmark mark='a'/> On a collision, linear probing tries the next "
+            "slot, and the next, until it finds a free one; a find follows the same path until it finds "
+            "the key or an empty slot. <bookmark mark='b'/> It is one array with no pointers, and the "
+            "next probe is almost always in the same cache line, which is why it is so fast in practice. "
+            "<bookmark mark='c'/> Its weakness is visible in these snapshots of a sixty-four-slot table "
+            "filling up. Full slots form runs, and a key that lands anywhere in a run joins its end, so "
+            "long runs grow faster than short ones and merge. This is primary clustering."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -76,19 +76,20 @@ class Probing(VoiceoverScene):
                   color=HEAD),
             label(r"the square is the price of clustering: \ near full, \ linear probing degrades much faster",
                   font_size=22, color=GREY_A),
-            label(r"Knuth wrote it up in 1963, \ his first analysis of an algorithm; \ such analysis became a "
-                  r"theme of \textit{The Art of Computer Programming}", font_size=20, color=GREY_B),
+            label(r"large-table references: \ independent uniform homes; \ fixed load below one; "
+                  r"not exact finite-table identities for this affine hash family", font_size=20, color=GREY_B),
         ).arrange(DOWN, buff=0.22).next_to(f, DOWN, buff=0.55)
         with self.voiceover(
-            "How bad is clustering? Donald Knuth worked it out in 1963, in a note he later called his first "
-            "analysis of an algorithm. <bookmark mark='a'/> A successful search costs on average one half of one "
-            "plus one over one minus alpha probes. <bookmark mark='b'/> An unsuccessful search, which is also the "
-            "cost of an insert, costs one half of one plus one over one minus alpha, squared. <bookmark mark='c'/> "
-            "Compare uniform probing, where every key follows its own random sequence of slots: one over one "
-            "minus alpha. <bookmark mark='d'/> At half full, linear probing costs one and a half and two and a "
-            "half probes. At ninety percent full, an insert costs fifty. <bookmark mark='e'/> The square is the "
-            "price of clustering. Keep the table at most half to three quarters full, and linear probing is "
-            "both simple and fast."
+            "Knuth analyzed linear probing under random home addresses. <bookmark mark='a'/> The first "
+            "expression is the large-table expected successful-search reference at load alpha. <bookmark "
+            "mark='b'/> The second is the unsuccessful-search or insertion reference, which grows with "
+            "the square of one over the free fraction. These are not exact finite-table identities for "
+            "every fixed hash. <bookmark mark='c'/> Uniform permutation probing is a separate model; its "
+            "reciprocal-free-fraction expression is also an asymptotic reference, with finite "
+            "corrections. <bookmark mark='d'/> At half load the linear references are one point five and "
+            "two point five; at ninety percent they are five point five and fifty point five. <bookmark "
+            "mark='e'/> The rapid growth explains why leaving free space matters. Resizing, deletions, "
+            "key hashing and adversarial choices need their own accounting."
         ) as vo:
             self.play(FadeIn(head))
             for mk, x in zip("abc", f):
@@ -126,21 +127,28 @@ class Probing(VoiceoverScene):
         key = VGroup(
             label(r"linear probing, \ insert: \ measured \ (dashed: \ Knuth)", font_size=19, color=NO),
             label(r"linear probing, \ successful find", font_size=19, color=YES),
-            label(r"double hashing, \ insert: \ close to $1/(1-\alpha)$", font_size=19, color=LAM),
+            label(r"double hashing: \ observed misses; \ not uniform permutations", font_size=19, color=LAM),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.5).shift(UP * 0.6)
         r5 = next(r for r in rows if r["alpha"] == 0.5)
         r8 = next(r for r in rows if r["alpha"] == 0.8)
         nums = label(rf"at $\alpha = 0.5$: \ {r5['linear_miss']:.2f} \ (Knuth {r5['knuth_miss']:.2f}); \ "
                      rf"at $0.8$: \ {r8['linear_miss']:.1f} \ ({r8['knuth_miss']:.1f})", font_size=19,
                      color=GREY_A).next_to(key, DOWN, buff=0.4).align_to(key, LEFT)
+        panel = VGroup(key, nums)
+        if panel.width > 5.7:
+            panel.scale_to_fit_width(5.7)
+        panel.to_edge(RIGHT, buff=0.45)
         with self.voiceover(
-            "Does the formula hold? <bookmark mark='a'/> We filled a table of sixteen thousand slots to each load "
-            "factor, with a random universal hash, and counted probes. The red curve is the cost of an insert, "
-            "and the dashed curve under it is Knuth's formula. <bookmark mark='b'/> They agree closely up to "
-            "about eighty percent; beyond that, a single long cluster dominates and the measurement becomes "
-            "noisy, as the theory's variance predicts. <bookmark mark='c'/> Successful finds, in green, stay "
-            "cheap much longer. <bookmark mark='d'/> Double hashing, which steps through the table by a second "
-            "hash, breaks up clusters, and its inserts follow the uniform probing curve."
+            "Here is a finite seeded illustration, not a proof of the random-home model. <bookmark "
+            "mark='a'/> Each load uses a new key set and a universal affine hash, which controls pair "
+            "collisions but does not supply fully independent home addresses. The red observations count "
+            "unsuccessful searches at fixed load; they are the probe cost of one more insert before the "
+            "table changes. <bookmark mark='b'/> Actual n over m is recorded, and the reference formulas "
+            "use that value. A single table per load cannot establish a confidence interval or explain a "
+            "deviation's cause. <bookmark mark='c'/> Successful searches are sampled uniformly from "
+            "resident keys. <bookmark mark='d'/> Double hashing uses a second step size. It may resemble "
+            "a uniform-probing reference here, but it does not generate an independent uniform "
+            "permutation for each key."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl))
             vo.wait_until("a")
@@ -163,25 +171,42 @@ class Probing(VoiceoverScene):
              str(r["linear_max"] + 1)],
             [r"Robin Hood", f"{r['robin_mean']:.2f}", f"{r['robin_var']:.1f}", str(r["robin_max"] + 1)],
         ], widths=[3.6, 2.6, 2.4, 2.0], row_h=0.6, font_size=22, mono_cols=(),
-            colors=[[NO, WHITE, NO, NO], [YES, WHITE, YES, YES]]).next_to(head, DOWN, buff=0.6)
+            colors=[[NO, WHITE, NO, NO], [YES, WHITE, YES, YES]]).next_to(head, DOWN, buff=0.42)
         pts = VGroup(
             label(r"on a collision, \ the key farther from its home slot keeps the slot; \ the other moves on",
                   font_size=22, color=GREY_A),
-            label(r"the same average, \ but the far-flung keys are pulled in: \ every find costs about the same",
+            label(r"identical keys/order/home hash: \ same displacement sum; \ observed spread differs",
                   font_size=22, color=YES),
-            label(r"its descendants: \ Google's Swiss tables \ (2017) \ and Rust's \texttt{HashMap} probe 16 slots "
-                  r"at once with SIMD", font_size=20, color=GREY_B),
-        ).arrange(DOWN, buff=0.22).next_to(tab, DOWN, buff=0.55)
+            label(r"grouped-control-byte tables are a distinct design; \ vector widths depend on the implementation "
+                  r"and target hardware", font_size=20, color=GREY_B),
+        ).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.3)
+        # keys 0..4 have shared homes [0,0,1,0,2].
+        from explainer.cs.algo import ds as D
+        home = lambda k: [0, 0, 1, 0, 2][k]
+        lp, rh = D.LinearProbing(8, home), D.RobinHood(8, home)
+        for k in range(5):
+            lp.insert(k); rh.insert(k)
+        examples = VGroup()
+        for name, table, color in [('LP', lp, NO), ('RH', rh, YES)]:
+            values = [(v[0] if isinstance(v, tuple) else v) for v in table.t]
+            row = slots([v is not None for v in values], w=0.55, h=0.42, color=color)
+            labels = VGroup(*[mono(str(v), 17, WHITE).move_to(row[i]) for i,v in enumerate(values) if v is not None])
+            tag = mono(name, 18, color).next_to(row, LEFT, buff=0.16)
+            examples.add(VGroup(row, labels, tag))
+        examples.arrange(DOWN, buff=0.2).move_to(DOWN * 0.5)
+        witness_note = label(r"keys 0..4: \ homes 0,0,1,0,2; \ same occupied slots and total displacement",
+                             font_size=19, color=HEAD).next_to(examples, DOWN, buff=0.18)
         with self.voiceover(
-            "One refinement changes not the average but the spread. <bookmark mark='a'/> In Robin Hood hashing, "
-            "from Pedro Celis's 1986 thesis, when an inserted key meets a key that is closer to its own home slot, "
-            "it takes the slot and the richer key moves on. <bookmark mark='b'/> At ninety percent full, the mean "
-            "number of probes is the same as plain linear probing, but the variance collapses and the worst find "
-            "is a fraction as long. <bookmark mark='c'/> Modern tables go further: Google's Swiss tables, and Rust's "
-            "standard hash map, keep a byte of each hash beside the slots and compare sixteen of them at once "
-            "with one vector instruction."
+            "One refinement redistributes displacement. <bookmark mark='a'/> Robin Hood hashing lets the "
+            "key farther from its home slot displace the key closer to home, then carries the displaced "
+            "key onward. <bookmark mark='b'/> For a controlled comparison we use identical keys, "
+            "insertion order and home hash. Both tables occupy exactly the same slots and have the same "
+            "total displacement, so their mean successful scan length agrees exactly. The variance and "
+            "maximum differ as displayed. <bookmark mark='c'/> That does not make every lookup equal, and"
+            " implementations can use an additional early-stop rule. Modern grouped-control-byte tables "
+            "are another design choice; they should not all be identified with this Robin Hood rule."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(examples), FadeIn(witness_note))
             vo.wait_until("a")
             self.play(FadeIn(pts[0]))
             vo.wait_until("b")

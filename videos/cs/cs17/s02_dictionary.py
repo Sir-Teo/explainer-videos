@@ -42,13 +42,14 @@ class Dictionary(VoiceoverScene):
                   font_size=20, color=GREY_B),
         ).arrange(DOWN, buff=0.18).next_to(tab, DOWN, buff=0.5)
         with self.voiceover(
-            "A dictionary is defined by what it does, not how. <bookmark mark='a'/> The Job v0 kept an unsorted "
-            "list: insert is instant, find scans everything. A sorted array finds by binary search but must shift "
-            "to insert. A balanced search tree does both in logarithmic time and keeps the keys in order. A hash "
-            "table does both in constant time on average, and gives up the order. <bookmark mark='b'/> That "
-            "separation, an abstract data type with interchangeable implementations, is due to Barbara Liskov "
-            "and Stephen Zilles in 1974, and it is how libraries let you choose the structure after writing the "
-            "code."
+            "A dictionary specifies operations before choosing a representation. <bookmark mark='a'/> An "
+            "unsorted list can append a new entry in constant amortized time, but locating a key scans "
+            "the list. A sorted array uses logarithmic comparisons to search and linear shifting to "
+            "insert. A balanced tree offers logarithmic operations and sorted traversal. Hash tables "
+            "offer expected constant table work under hashing and load assumptions; resizing adds an "
+            "amortized qualification. Hashing a long string still reads its characters. <bookmark "
+            "mark='b'/> Abstract data types let us choose the representation behind that interface. "
+            "Liskov and Zilles helped formalize this separation in 1974."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -71,12 +72,13 @@ class Dictionary(VoiceoverScene):
         note_ = label(r"two keys with the same slot: \ a \textbf{collision}", font_size=22, color=NO).to_edge(
             DOWN, buff=0.6)
         with self.voiceover(
-            "The idea is older than most of computing: Hans Peter Luhn proposed it at IBM in 1953. <bookmark "
-            "mark='a'/> Turn the key into a number with a hash function, and use that number, reduced to the "
-            "table's size, as the place to store it. <bookmark mark='b'/> Then finding a key is computing its "
-            "hash and looking in one place, whatever the size of the table. <bookmark mark='c'/> The catch is "
-            "that two keys can land in the same slot. Everything in the next three chapters is about what to do "
-            "then, and the first question is how soon it happens."
+            "The idea is older than most of computing: Hans Peter Luhn proposed it at IBM in 1953. "
+            "<bookmark mark='a'/> Turn the key into a number with a hash function, and use that number, "
+            "reduced to the table's size, as the place to store it. <bookmark mark='b'/> Then finding a "
+            "key is computing its hash and looking in one place, whatever the size of the table. "
+            "<bookmark mark='c'/> The catch is that two keys can land in the same slot. Everything in the"
+            " next three chapters is about what to do then, and the first question is how soon it "
+            "happens."
         ) as vo:
             self.play(FadeIn(head), FadeIn(words_), FadeIn(table), FadeIn(idx))
             vo.wait_until("a")
@@ -86,10 +88,10 @@ class Dictionary(VoiceoverScene):
             for w_, s in zip(words_, hv):
                 tgt = table[s]
                 col = NO if s in seen else DATA
-                sc = min(0.8, 0.66 / w_.width)
-                self.play(w_.animate.scale(sc).move_to(tgt.get_center() + UP * (0.55 if s in seen else 0)),
+                sc = min(1.0, 0.66 / w_.width)
+                self.play(w_.animate.scale(sc).move_to(tgt.get_center() + UP * (0.55 + 0.38 * seen.get(s, 0))),
                           tgt.animate.set_fill(col, 0.85), run_time=0.6)
-                seen[s] = True
+                seen[s] = seen.get(s, 0) + 1
             vo.wait_until("c")
             self.play(FadeIn(note_))
         self.wait(0.3)
@@ -113,19 +115,20 @@ class Dictionary(VoiceoverScene):
         side = VGroup(
             MathTex(r"\Pr[\text{no collision}] = \prod_{i=0}^{n-1}\Bigl(1 - \frac{i}{m}\Bigr)", font_size=30),
             MathTex(r"\approx \exp\Bigl(-\sum_i \frac{i}{m}\Bigr) = e^{-n(n-1)/2m}", font_size=30),
-            label(r"so collisions are likely once $n \approx \sqrt{m}$", font_size=22, color=YES),
+            label(r"independent uniform choices: \ collisions likely around $\sqrt m$", font_size=22, color=YES),
             label(r"$1 - x \le e^{-x}$, \ and it is nearly equal for small $x$", font_size=19, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.5)
         if side.width > 6.0:
             side.scale_to_fit_width(6.0)
         with self.voiceover(
-            "Suppose keys land in m slots uniformly at random. <bookmark mark='a'/> The chance that n keys all "
-            "miss each other is a product: the second avoids the first, the third avoids two, and so on. "
-            "<bookmark mark='b'/> Each factor is close to e to the minus i over m, so the product is about e to "
-            "the minus n squared over two m. <bookmark mark='c'/> With three hundred and sixty-five birthdays, "
-            "twenty-three people already share one more often than not. <bookmark mark='d'/> In general, "
-            "collisions become likely when the number of keys reaches the square root of the number of slots. A "
-            "hash table always has collisions; it has to live with them."
+            "Suppose each key independently chooses one of m slots uniformly. <bookmark mark='a'/> For n "
+            "at most m, the chance of no collision is this product: each new key avoids every earlier "
+            "choice. <bookmark mark='b'/> The exponential approximation retains n times n minus one over "
+            "two m. It is accurate when the small-factor approximation is appropriate; the exponential "
+            "also gives a one-sided bound. <bookmark mark='c'/> Under the equal, independent birthday "
+            "model, twenty-three people have about a fifty point seven percent chance of a shared "
+            "birthday. <bookmark mark='d'/> Collisions become likely around the square-root scale. Likely"
+            " is not certain, and a deterministic hash requires a separate analysis."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl))
             vo.wait_until("a")
@@ -149,24 +152,26 @@ class Dictionary(VoiceoverScene):
             [rf"reduced to $m = 2^{{17}}$ = {words(d['m'])} slots", f"{d['expected_pairs']:,.0f}",
              words(d["slot_pairs"])],
         ]
-        tab = grid_table([r"", r"colliding pairs, \ predicted", r"measured"], rows, widths=[6.6, 3.2, 2.4],
+        tab = grid_table([r"", r"uniform-hash expected pairs", r"fixed-hash observed pairs"], rows, widths=[6.6, 3.2, 2.4],
                          row_h=0.6, font_size=21, mono_cols=(),
                          colors=[[WHITE, GREY_A, HEAD], [WHITE, GREY_A, NO]]).next_to(head, DOWN, buff=0.7)
         pts = VGroup(
             MathTex(r"\mathbb{E}[\text{colliding pairs}] = \binom{n}{2}\frac{1}{m}", font_size=32),
-            label(r"the full hash almost never collides; \ the slot it picks often does", font_size=22,
+            label(r"fixed polynomial hash observations; \ uniform expectation is a separate model", font_size=22,
                   color=GREY_A),
             label(r"so a table must compare the keys themselves, \ and decide where the second one goes",
                   font_size=22, color=YES),
         ).arrange(DOWN, buff=0.25).next_to(tab, DOWN, buff=0.5)
         with self.voiceover(
-            "Here is the same arithmetic on the Job's vocabulary, with the hash the Job will use. <bookmark "
-            "mark='a'/> Each pair of the fifty-eight thousand distinct words collides with probability one over "
-            "m, so the expected number of colliding pairs is n choose two over m. <bookmark mark='b'/> Modulo a "
-            "prime near seventeen million, about a hundred pairs are predicted, and we count the same order. "
-            "Reduced to a table of a hundred and thirty-one thousand slots, the prediction is about thirteen "
-            "thousand, and so is the count. <bookmark mark='c'/> So a table has to compare the keys themselves, "
-            "and needs a rule for where a second key goes."
+            "Here are two different quantities on the same vocabulary. <bookmark mark='a'/> Independent "
+            "uniform hashes would give n choose two over m expected colliding pairs. Our polynomial hash "
+            "is fixed, so its count is a deterministic observation, not a random-family guarantee. "
+            "<bookmark mark='b'/> On fifty-seven thousand eight hundred and ninety-five distinct words, "
+            "the full hash has one hundred and one colliding pairs. Reducing it to the slot table gives "
+            "twelve thousand four hundred and ninety-five pairs. Excess keys and colliding pairs are "
+            "different statistics if three keys share a value, even though the full-hash counts coincide "
+            "here. <bookmark mark='c'/> The table must compare complete keys and resolve collisions; a "
+            "matching hash alone never proves equality."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

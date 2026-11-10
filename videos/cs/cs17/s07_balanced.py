@@ -73,16 +73,17 @@ class Balanced(VoiceoverScene):
             label(r"three pointers change; \ $A$ rises one level, \ $C$ sinks one", font_size=22, color=GREY_A),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Every balanced tree is built from one operation. <bookmark mark='a'/> Here is a node y whose left "
-            "child x has subtrees A and B; y's right subtree is C. <bookmark mark='b'/> A right rotation makes x "
-            "the parent and y its right child, and the subtree B changes parents. <bookmark mark='c'/> The order "
-            "is preserved: everything in A is less than x, B lies between x and y, C is greater than y. It is "
-            "still a search tree. <bookmark mark='d'/> Only three pointers change, and the depths shift: A moves "
-            "up a level, C moves down. Balanced trees rotate to keep every path short."
+            "Every balanced tree is built from one operation. <bookmark mark='a'/> Here is a node y whose"
+            " left child x has subtrees A and B; y's right subtree is C. <bookmark mark='b'/> A right "
+            "rotation makes x the parent and y its right child, and the subtree B changes parents. "
+            "<bookmark mark='c'/> The order is preserved: everything in A is less than x, B lies between "
+            "x and y, C is greater than y. It is still a search tree. <bookmark mark='d'/> Only three "
+            "pointers change, and the depths shift: A moves up a level, C moves down. Balanced trees "
+            "rotate to keep every path short."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(left), Create(e1))
             vo.wait_until("a")
-            self.play(FadeIn(left), Create(e1))
+            self.play(Indicate(left, color=HEAD, scale_factor=1.04), run_time=0.7)
             vo.wait_until("b")
             self.play(GrowArrow(arrow), FadeIn(al))
             self.play(TransformFromCopy(left, right), Create(e2), run_time=1.5)
@@ -102,22 +103,22 @@ class Balanced(VoiceoverScene):
             label(r"after an insert, \ walk back up; \ one or two rotations restore the rule", font_size=22,
                   color=GREY_A),
             label(r"the thinnest AVL tree of height $h$: \ a \textbf{Fibonacci tree}", font_size=22, color=LAM),
-            MathTex(r"N(h) = N(h-1) + N(h-2) + 1 = F_{h+2} - 1 \;\Rightarrow\; h < 1.4405 \lg (n + 2)", font_size=32,
+            MathTex(r"N(h) = N(h-1) + N(h-2) + 1 = F_{h+2} - 1 \;\Rightarrow\; h < \frac{\lg(n+2)}{\lg\varphi}", font_size=32,
                     color=YES),
         ).arrange(DOWN, buff=0.26).next_to(head, DOWN, buff=0.45)
         fib = d["fib"]
         rows = [[str(r["h"]), words(r["min_nodes"])] for r in fib if r["h"] in (2, 4, 6, 8, 10, 15)]
-        tab = grid_table([r"height", r"fewest nodes"], rows, widths=[1.6, 2.4], row_h=0.38, font_size=18).next_to(
+        tab = grid_table([r"height (levels)", r"fewest nodes"], rows, widths=[1.6, 2.4], row_h=0.38, font_size=18).next_to(
             steps, DOWN, buff=0.35)
         with self.voiceover(
-            "The first balanced tree came from two Soviet mathematicians, Georgy Adelson-Velsky and Evgenii "
-            "Landis, in 1962. <bookmark mark='a'/> The rule: at every node, the heights of the two subtrees differ "
-            "by at most one. <bookmark mark='b'/> An insert may break the rule on the path back to the root, and one "
-            "or two rotations at the lowest broken node repair it. <bookmark mark='c'/> How tall can such a tree "
-            "be? Ask the opposite question: what is the fewest nodes a tree of height h can have? Its subtrees "
-            "must have heights h minus one and h minus two, each as thin as possible. <bookmark mark='d'/> That is "
-            "the Fibonacci recurrence, so the fewest nodes grow like the golden ratio to the h, and the height is "
-            "at most one point four four times log n. Guaranteed, whatever the order of insertion."
+            "AVL trees enforce a local height rule. <bookmark mark='a'/> Every node's two subtree heights"
+            " differ by at most one. <bookmark mark='b'/> After insertion, rotations restore that "
+            "invariant while preserving key order. <bookmark mark='c'/> Count height in node levels: an "
+            "empty tree has height zero and a leaf height one. The sparsest height-h tree has subtree "
+            "heights h minus one and h minus two. <bookmark mark='d'/> Thus its minimum node count is "
+            "Fibonacci h plus two, minus one. The exact logarithmic coefficient is one over log base two "
+            "of the golden ratio; one point four four zero five is only a rounded guide. This gives "
+            "logarithmic worst-case height, unlike a random-tree expectation."
         ) as vo:
             self.play(FadeIn(head))
             for mk, s in zip("abcd", steps):
@@ -164,16 +165,17 @@ class Balanced(VoiceoverScene):
                   color=GREY_B),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "The balanced tree in most standard libraries is the red–black tree, and it is easiest to understand "
-            "as something else. <bookmark mark='a'/> A two–three–four tree lets a node hold one, two or three "
-            "keys, and keeps every leaf at exactly the same depth: when a node overflows it splits and pushes a "
-            "key up. Perfectly balanced, but awkward to code. <bookmark mark='b'/> Leonidas Guibas and Robert "
-            "Sedgewick saw in 1978 that each big node can be drawn as a little binary tree, with its internal "
-            "links coloured red. <bookmark mark='c'/> The rules follow: no two red links in a row, and the same "
-            "number of black links on every path, because the black links are the two–three–four tree. <bookmark "
-            "mark='d'/> So the height is at most twice log n, and splitting a node is just flipping colours. "
-            "Java's TreeMap and C++'s std::map are red–black trees. <bookmark mark='e'/> Sedgewick's later "
-            "left-leaning variant writes insertion in a dozen lines."
+            "The balanced tree in most standard libraries is the red–black tree, and it is easiest to "
+            "understand as something else. <bookmark mark='a'/> A two–three–four tree lets a node hold "
+            "one, two or three keys, and keeps every leaf at exactly the same depth: when a node "
+            "overflows it splits and pushes a key up. Perfectly balanced, but awkward to code. <bookmark "
+            "mark='b'/> Leonidas Guibas and Robert Sedgewick saw in 1978 that each big node can be drawn "
+            "as a little binary tree, with its internal links coloured red. <bookmark mark='c'/> The "
+            "rules follow: no two red links in a row, and the same number of black links on every path, "
+            "because the black links are the two–three–four tree. <bookmark mark='d'/> So the height is "
+            "at most twice log n, and splitting a node is just flipping colours. Java's TreeMap and C++'s"
+            " std::map are red–black trees. <bookmark mark='e'/> Sedgewick's later left-leaning variant "
+            "writes insertion in a dozen lines."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -191,11 +193,11 @@ class Balanced(VoiceoverScene):
 
     def measured(self):
         d = load("balanced")
-        head = label(r"Heights, \ measured", font_size=34).to_edge(UP, buff=0.3)
+        head = label(r"Heights in node levels, \ measured", font_size=34).to_edge(UP, buff=0.3)
         b = load("bst")
         rows = []
         for r in d["rows"]:
-            bh = next((x["height"] for x in b["rows"] if x["n"] == r["n"]), None)
+            bh = next((x["height"] + 1 for x in b["rows"] if x["n"] == r["n"]), None)
             rows.append([words(r["n"]), f"{r['lg']:.1f}", f"{bh:.0f}" if bh else "--", str(r["avl_random_h"]),
                          str(r["llrb_random_h"]), words(r["n"])])
         tab = grid_table([r"$n$", r"$\lg n$", r"plain BST, \ random", r"AVL", r"red--black", r"plain BST, \ sorted"],
@@ -205,18 +207,21 @@ class Balanced(VoiceoverScene):
         pts = VGroup(
             label(rf"rotations per insert: \ AVL {r['avl_random_rot']:.2f}, \ red--black {r['llrb_random_rot']:.2f} "
                   r"\ (random keys)", font_size=21, color=GREY_A),
-            label(r"AVL is shorter, \ so finds are faster; \ red--black rotates less on deletes, \ so updates are "
-                  r"cheaper", font_size=21, color=GREY_A),
-            label(r"either way: \ $O(\log n)$ for every operation, \ for every input", font_size=23, color=YES),
+            label(r"heights/rotations are counters; \ layout and implementation determine elapsed "
+                  r"time", font_size=21, color=GREY_A),
+            label(r"ordinary dictionary operations: \ logarithmic height; \ reporting also pays output size", font_size=23, color=YES),
         ).arrange(DOWN, buff=0.2).next_to(tab, DOWN, buff=0.5)
         with self.voiceover(
-            "Here are the heights we measured. <bookmark mark='a'/> For a hundred thousand random keys a plain "
-            "search tree is about forty deep; the AVL tree twenty, close to log n; the red–black tree slightly "
-            "more. And with sorted keys the plain tree is a path of a hundred thousand, while both balanced trees "
-            "stay as short as ever. <bookmark mark='b'/> The balancing is cheap: about one rotation per insert. "
-            "<bookmark mark='c'/> AVL trees are shorter, so they find faster; red–black trees do less work when "
-            "keys are deleted, so they suit tables that change a lot. <bookmark mark='d'/> Either way, every "
-            "operation costs logarithmic time for every input: a guarantee where hashing offers an expectation."
+            "These are measured heights for seeded insertion orders. <bookmark mark='a'/> The "
+            "balanced-tree heights count node levels, so subtract one to compare with an edge depth. "
+            "Sorted insertion can make the plain tree linear while the balanced variants remain "
+            "logarithmic. <bookmark mark='b'/> The displayed rotations are insertion counters for these "
+            "implementations and workloads, not a deletion benchmark. <bookmark mark='c'/> A shorter "
+            "height can reduce visited nodes, but elapsed lookup or update time also depends on layout, "
+            "metadata, branches and the implementation. These counts alone do not prove which tree is "
+            "faster. <bookmark mark='d'/> AVL and red-black invariants provide logarithmic-height "
+            "guarantees for ordinary dictionary search, insert and delete with bounded-cost keys. "
+            "Traversal and range reporting still pay for the output."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

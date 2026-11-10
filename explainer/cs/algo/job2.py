@@ -8,7 +8,7 @@ so the report (twenty times, the largest count, ties to the lowest entry) prints
 
     c = compile_job()                 # Part 13's compiler, -O2
     m = run(c, text)                  # the emulator; m.steps
-    features(text)                    # the counts that determine m.steps exactly
+    features(text)                    # control-flow event counts for a fitted instruction model
     features_native(text)             # the same counts, by a C program that follows v2 step for step
 """
 from __future__ import annotations
@@ -124,9 +124,25 @@ NAMES = ["bytes", "capitals", "letters", "words", "probes", "hash_eq", "len_eq",
          "count_loops", "place_loops", "rep_stop"]
 
 
-def compile_job(level: int = 2):
+def job_source(*, letter_capacity=131072, slot_capacity=32768, distinct_capacity=16384):
+    """Size the static arrays explicitly; callers must ensure their input fits.
+
+    The letter pool also holds the current temporary word after the retained
+    distinct letters. Slot capacity must permit the final half-load growth.
+    """
+    sizes = (letter_capacity, slot_capacity, distinct_capacity)
+    if any(not isinstance(n, int) or n <= 0 for n in sizes):
+        raise ValueError("Job capacities must be positive integers")
+    if slot_capacity & (slot_capacity - 1) or slot_capacity < max(CAP0, 2 * distinct_capacity):
+        raise ValueError("slot capacity must be a power of two >= max(64, 2 * distinct capacity)")
+    return (JOB_HASH.replace('[131072]char', f'[{letter_capacity}]char')
+            .replace('[32768]int', f'[{slot_capacity}]int')
+            .replace('[16384]int', f'[{distinct_capacity}]int'))
+
+
+def compile_job(level: int = 2, **capacities):
     from explainer.cs.lang.compiler import driver as D
-    return D.compile_program(JOB_HASH, level)
+    return D.compile_program(job_source(**capacities), level)
 
 
 def run(c, text: bytes, **kw):

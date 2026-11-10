@@ -14,17 +14,19 @@ class Hook(VoiceoverScene):
     def ledger(self):
         d = load("hook")
         led = d["ledger"]
-        head = label(r"Row 7: \ sort, \ then count", font_size=36).to_edge(UP, buff=0.35)
+        head = label(r"Row 7 projection: \ sort, \ then count", font_size=36).to_edge(UP, buff=0.35)
         rows = led + [{"part": 17, "label": r"a hash table"}]
         tab = ledger_table(rows, shown=len(led), highlight=(len(led) - 1,), font_size=21, row_h=0.42,
                            label_width=4.8).move_to(DOWN * 0.3)
-        cap = label(rf"{human_time(d['v1_seconds'])} \ on one core: \ {big(d['v1_cmp'])} comparisons of words",
+        cap = label(rf"{human_time(d['v1_seconds'])} \ projected on one core: \ {big(d['v1_cmp'])} comparisons of words",
                     font_size=23, color=COST).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Where we left the ledger. <bookmark mark='a'/> Sorting the words, then counting runs of equal ones, "
-            "took five seconds on one core: faster than four cores running the old algorithm. <bookmark mark='b'/> "
-            "But the sort did a hundred million comparisons of words to answer a simpler question. The Job never "
-            "needed the words in order. It needed, for each word, to find its count."
+            "Where we left the ledger. <bookmark mark='a'/> Part sixteen projected about five seconds for"
+            " sorting then counting on one core, using full-corpus event counts, a passage-fitted "
+            "instruction model, and sampled core throughput. That was not a full-corpus machine "
+            "execution. <bookmark mark='b'/> The native event counter recorded just under one hundred "
+            "million word comparisons. But the Job never needed words in order. It needed to find each "
+            "word's count."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab.axis), FadeIn(tab.rows))
             vo.wait_until("a")
@@ -47,18 +49,20 @@ class Hook(VoiceoverScene):
             o.arrange(RIGHT, buff=0.6)
         ops.arrange(DOWN, aligned_edge=LEFT, buff=0.4).next_to(head, DOWN, buff=0.6)
         nums = VGroup(
-            label(rf"{words(d['words'])} finds, \ {words(d['distinct'])} inserts", font_size=24, color=DATA),
+            label(rf"{words(d['words'])} lookup-or-insert attempts, \ {words(d['distinct'])} inserts", font_size=24, color=DATA),
             label(r"a \textbf{dictionary}: \ the most used abstract data type in computing", font_size=24,
                   color=HEAD),
             label(r"can each operation take constant time, \ whatever the size?", font_size=26, color=YES),
         ).arrange(DOWN, buff=0.3).next_to(ops, DOWN, buff=0.7)
         with self.voiceover(
-            "Strip the Job to its operations. <bookmark mark='a'/> Insert a word the first time it appears. Find it "
-            "every other time. Add one to its count. <bookmark mark='b'/> Over the thirty novels, that is four "
-            "point six million finds and fifty-eight thousand inserts. <bookmark mark='c'/> A structure that "
-            "supports insert and find by key is a dictionary, perhaps the most used abstract data type there is. "
-            "<bookmark mark='d'/> The question of this part: can each operation take constant time, however many "
-            "words there are?"
+            "Strip the Job to its operations. <bookmark mark='a'/> For each word, look for an entry; "
+            "create it if absent, otherwise increment its count. <bookmark mark='b'/> This corpus has "
+            "four million six hundred and nine thousand nine hundred and fifty-four word occurrences and "
+            "fifty-seven thousand eight hundred and ninety-five distinct words. They give one "
+            "lookup-or-insert attempt per occurrence, not that many successful finds plus separate "
+            "inserts. <bookmark mark='c'/> A dictionary supports those keyed operations. <bookmark "
+            "mark='d'/> We ask whether the table work can be constant under appropriate assumptions, "
+            "while still paying to read and hash the characters."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -81,12 +85,13 @@ class Hook(VoiceoverScene):
             label(r"the Job with a hash table: \ ledger row 8", font_size=27, color=COST),
         ).arrange(DOWN, buff=0.38).move_to(DOWN * 0.1)
         with self.voiceover(
-            "Here is where we are going. <bookmark mark='a'/> Hashing, which makes insert and find constant time "
-            "on average, and the attack that breaks a careless hash function. <bookmark mark='b'/> Donald Knuth's "
-            "first analysis of an algorithm, linear probing, checked against measurement. <bookmark mark='c'/> "
-            "Balanced trees, which trade expectations for guarantees. <bookmark mark='d'/> Structures that are "
-            "fast only on average over a sequence: splay trees, Fibonacci heaps and union–find. <bookmark "
-            "mark='e'/> And the Job with a hash table: ledger row eight."
+            "Here is where we are going. <bookmark mark='a'/> Hashing, which makes insert and find "
+            "constant time on average, and the attack that breaks a careless hash function. <bookmark "
+            "mark='b'/> Donald Knuth's first analysis of an algorithm, linear probing, checked against "
+            "measurement. <bookmark mark='c'/> Balanced trees, which trade expectations for guarantees. "
+            "<bookmark mark='d'/> Structures that are fast only on average over a sequence: splay trees, "
+            "Fibonacci heaps and union–find. <bookmark mark='e'/> And the Job with a hash table: ledger "
+            "row eight."
         ) as vo:
             self.play(FadeIn(head))
             for mk, f in zip("abcde", facts):
@@ -107,10 +112,11 @@ class Hook(VoiceoverScene):
             r"hash tables in practice; \ the Job, \ hashed",
         ], font_size=26).move_to(DOWN * 0.2)
         with self.voiceover(
-            "Part 17 of Computer Science, Built: Data Structures. <bookmark mark='a'/> In this part: the dictionary "
-            "and the birthday bound; chaining, universal hashing, open addressing, cuckoo and perfect hashing; "
-            "binary search trees and the ways to keep them balanced; B-trees, priority queues and union–find; "
-            "tries, persistence and the memory hierarchy; and hash tables as real systems build them."
+            "Part 17 of Computer Science, Built: Data Structures. <bookmark mark='a'/> In this part: the "
+            "dictionary and the birthday bound; chaining, universal hashing, open addressing, cuckoo and "
+            "perfect hashing; binary search trees and the ways to keep them balanced; B-trees, priority "
+            "queues and union–find; tries, persistence and the memory hierarchy; and hash tables as real "
+            "systems build them."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")

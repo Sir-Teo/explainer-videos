@@ -35,7 +35,7 @@ class Splay(VoiceoverScene):
                      ((1, 4), (4, 2), (2, 3), (4, 5)), 1).move_to(RIGHT * 4.8 + UP * 0.3)
         arr = Arrow(before.get_right() + RIGHT * 0.1, after.get_left() + LEFT * 0.1, color=HEAD, buff=0.1)
         al = label(r"splay(1): \ two zig-zigs", font_size=18, color=HEAD).next_to(arr, UP, buff=0.08)
-        dl = label(r"depth 4 \ $\to$ \ the path's nodes now at depth $\le 3$", font_size=17, color=GREY_B).next_to(
+        dl = label(r"node 1: \ depth $4\to0$; \ node 3: \ depth $2\to3$", font_size=17, color=GREY_B).next_to(
             VGroup(before, after), DOWN, buff=0.3)
         cases = VGroup(
             VGroup(label(r"\textbf{zig}: \ $x$'s parent is the root", font_size=20, color=DATA),
@@ -53,20 +53,21 @@ class Splay(VoiceoverScene):
         side = VGroup(
             label(r"no balance information at all: \ no heights, \ no colours; \ a single access can cost $O(n)$",
                   font_size=21, color=GREY_A),
-            label(r"but zig-zig roughly halves the depth of every node on the path", font_size=21, color=YES),
-            label(r"so any $m$ accesses cost $O(m \log n)$ in all: \ \textbf{amortized} $O(\log n)$", font_size=22,
+            label(r"the accessed node rises; \ other path nodes can move down", font_size=21, color=YES),
+            label(r"arbitrary initial tree: \ $O((m+n)\log(n+1))$ for $m$ accesses", font_size=22,
                   color=HEAD),
         ).arrange(DOWN, buff=0.16).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Daniel Sleator and Robert Tarjan's splay tree, from 1985, keeps no balance information at all. "
-            "<bookmark mark='a'/> Instead, every time a node is accessed, it is rotated all the way to the root, "
-            "in steps of three kinds. Zig, when its parent is the root: one rotation. <bookmark mark='b'/> Zig-zig, "
-            "when the node and its parent are both left children, or both right: rotate the grandparent first, "
-            "then the parent. <bookmark mark='c'/> Zig-zag, when they bend: rotate the node up twice. <bookmark "
-            "mark='d'/> There are no heights or colours to maintain. A single access can be slow, if the node is "
-            "deep. <bookmark mark='e'/> But the zig-zig step, the one difference from simply rotating to the top, "
-            "roughly halves the depth of every node on the access path. <bookmark mark='f'/> The result is that "
-            "any sequence of m accesses costs at most order m log n in total: logarithmic amortized time."
+            "Sleator and Tarjan's splay tree stores no balance metadata. <bookmark mark='a'/> After an "
+            "access it rotates the node to the root. A zig is one rotation when the parent is the root. "
+            "<bookmark mark='b'/> In a zig-zig, node and parent face the same direction: rotate the "
+            "grandparent, then the parent. <bookmark mark='c'/> In a zig-zag they bend: rotate the "
+            "accessed node up twice. <bookmark mark='d'/> A single deep access can still take linear "
+            "work. <bookmark mark='e'/> In this five-node example, two zig-zigs move node one from depth "
+            "four to zero, but node three moves down from depth two to three. Splaying does not halve "
+            "every path node's depth. <bookmark mark='f'/> A potential argument bounds a whole sequence. "
+            "From an arbitrary initial tree we must include initial potential, giving order m plus n "
+            "times log of n plus one for m accesses."
         ) as vo:
             self.play(FadeIn(head), FadeIn(before))
             vo.wait_until("a")
@@ -86,35 +87,48 @@ class Splay(VoiceoverScene):
         self.clear_scene()
 
     def potential(self):
-        head = label(r"The access lemma, \ by potential", font_size=34).to_edge(UP, buff=0.3)
-        steps = VGroup(
-            label(r"give each node a weight $w$, \ and let $s(x)$ be the total weight of $x$'s subtree", font_size=22,
-                  color=GREY_A),
-            MathTex(r"\Phi = \sum_x \log_2 s(x)", font_size=36, color=LAM),
-            label(r"each splay step costs at most $3\bigl(r'(x) - r(x)\bigr)$ in amortized time, \ "
-                  r"where $r = \log_2 s$", font_size=22, color=GREY_A),
-            MathTex(r"\text{amortized cost of an access} \le 3\bigl(r(\text{root}) - r(x)\bigr) + 1 "
-                    r"= O\Bigl(\log \frac{W}{w(x)}\Bigr)", font_size=32, color=YES),
-            label(r"all weights 1: \ $O(\log n)$; \ $w(x)$ = how often $x$ is accessed: \ the entropy, \ "
-                  r"\textbf{static optimality}", font_size=21, color=HEAD),
-        ).arrange(DOWN, buff=0.28).next_to(head, DOWN, buff=0.45)
+        head = label(r"The access lemma: \ actual cost plus change in potential", font_size=32).to_edge(UP, buff=0.3)
+        premise = label(r"positive proof weights $w(x)>0$; \ subtree weight $s(x)$; \ $r(x)=\log_2 s(x)$",
+                        font_size=22, color=GREY_A).next_to(head, DOWN, buff=0.35)
+        phi = MathTex(r"\Phi(T)=\sum_x \log_2 s(x)", font_size=35, color=LAM).next_to(premise, DOWN, buff=0.25)
+        witness = grid_table([r"five-node example", r"before", r"after"], [
+            [r"subtree sizes, \ nodes 1,2,3,4,5", r"$1,2,3,4,5$", r"$5,2,1,4,1$"],
+            [r"potential $\Phi$", r"$\log_2 120$", r"$\log_2 40$"],
+        ], widths=[5.1, 3.3, 3.3], row_h=0.56, font_size=21, mono_cols=(),
+            colors=[[GREY_A, DATA, YES], [GREY_A, DATA, YES]]).next_to(phi, DOWN, buff=0.3)
+        actual = MathTex(r"4+\Delta\Phi=4-\log_2 3\approx2.415", font_size=33,
+                         color=HEAD).next_to(witness, DOWN, buff=0.25)
+        lemma = MathTex(r"\widehat c(x)\le 3\bigl(r(\mathrm{root})-r(x)\bigr)+1"
+                        r"=O\!\left(1+\log\frac{W}{w(x)}\right)", font_size=31,
+                        color=YES).next_to(actual, DOWN, buff=0.3)
+        notes = VGroup(
+            label(r"double rotations: \ $\widehat c\le3\Delta r(x)$; \ a final zig needs the extra $+1$",
+                  font_size=20, color=GREY_A),
+            label(r"unit weights, arbitrary initial tree: \ $O((m+n)\log(n+1))$ total for $m$ accesses",
+                  font_size=21, color=HEAD),
+            label(r"frequency weights: \ keep zero-frequency keys positive; \ include initialization potential",
+                  font_size=19, color=GREY_B),
+        ).arrange(DOWN, buff=0.14).to_edge(DOWN, buff=0.28)
         with self.voiceover(
-            "The proof is Part 16's potential method, with a clever potential. <bookmark mark='a'/> Give each node "
-            "a weight, and let s of x be the total weight in x's subtree. <bookmark mark='b'/> The potential is the "
-            "sum, over all nodes, of the logarithm of s. A tall, unbalanced tree has high potential: it has stored "
-            "up credit. <bookmark mark='c'/> A case analysis of the three steps shows that each costs at most three "
-            "times the increase in the rank of x, where rank is the log of s. <bookmark mark='d'/> The steps "
-            "telescope: a whole access costs at most three times the rank difference between the root and x, plus "
-            "one. That is the log of the total weight over x's weight. <bookmark mark='e'/> With all weights one, "
-            "it is log n. But the weights are only in the proof, not in the code, so we may choose them after the "
-            "fact. Choose each node's weight to be how often it is accessed, and the bound becomes the entropy "
-            "of the access sequence: a splay tree is as good as the best static tree for that sequence, without "
-            "knowing the frequencies."
+            "The proof uses actual work plus a change in potential. <bookmark mark='a'/> Give every node "
+            "a strictly positive weight. Subtree weight is s, rank is its logarithm, and potential is the"
+            " sum of those ranks. <bookmark mark='b'/> Revisit the five-node example with unit weights. "
+            "Before splaying, subtree sizes multiply to one hundred and twenty. Afterward they multiply "
+            "to forty. Four rotations therefore cost four minus log base two of three in amortized units,"
+            " about two point four. <bookmark mark='c'/> For a double rotation, the case analysis bounds "
+            "amortized cost by three times the accessed node's rank increase. A final single zig needs an"
+            " extra one. <bookmark mark='d'/> Telescoping gives the access lemma: at most three times the"
+            " initial root-to-node rank difference, plus one. With unit weights, arbitrary initial "
+            "potential adds an n log n term to the total bound. <bookmark mark='e'/> Weights belong to "
+            "the proof, so frequency-based positive weights yield static optimality with setup costs "
+            "included. Never assign weight zero and take its logarithm."
         ) as vo:
-            self.play(FadeIn(head))
-            for mk, s in zip("abcde", steps):
-                vo.wait_until(mk)
-                self.play(FadeIn(s))
+            self.play(FadeIn(head), FadeIn(premise))
+            vo.wait_until("a"); self.play(FadeIn(phi))
+            vo.wait_until("b"); self.play(FadeIn(witness), FadeIn(actual))
+            vo.wait_until("c"); self.play(FadeIn(notes[0]))
+            vo.wait_until("d"); self.play(FadeIn(lemma), FadeIn(notes[1]))
+            vo.wait_until("e"); self.play(FadeIn(notes[2]))
         self.wait(0.3)
         self.clear_scene()
 
@@ -126,7 +140,7 @@ class Splay(VoiceoverScene):
         rows = []
         for k, v in d["seqs"].items():
             rows.append([names[k], f"{v['splay']:.2f}", f"{v['balanced']:.2f}", f"{v['entropy']:.2f}"])
-        tab = grid_table([r"access sequence", r"splay: \ cost per access", r"AVL: \ depth", r"entropy (bits)"], rows,
+        tab = grid_table([r"access sequence", r"splay: \ visits + rotations", r"AVL: \ visited nodes", r"entropy (bits)"], rows,
                          widths=[3.6, 3.2, 2.4, 2.6], row_h=0.55, font_size=21, mono_cols=(),
                          colors=[[WHITE, YES, GREY_A, HEAD], [WHITE, NO, GREY_A, HEAD], [WHITE, YES, GREY_A, HEAD],
                                  [WHITE, YES, GREY_A, HEAD]]).next_to(head, DOWN, buff=0.55)
@@ -139,15 +153,16 @@ class Splay(VoiceoverScene):
                   r"of \textit{every} BST algorithm? \ Open.", font_size=21, color=HEAD),
         ).arrange(DOWN, buff=0.18).next_to(tab, DOWN, buff=0.45)
         with self.voiceover(
-            "Here is a splay tree against an AVL tree on four access sequences. <bookmark mark='a'/> Accessing "
-            "every key in order costs a constant per access in the splay tree, under five, against ten for the "
-            "balanced tree. <bookmark mark='b'/> Uniformly random accesses are the splay tree's worst case: it "
-            "keeps reorganising for nothing, and pays about forty percent more. <bookmark mark='c'/> But on skewed "
-            "or local sequences, where a few keys are popular, the splay tree's cost falls to near the entropy, "
-            "a few comparisons per access, far below log n. <bookmark mark='d'/> Sleator and Tarjan conjectured "
-            "more: that splay trees are within a constant factor of the best possible binary search tree "
-            "algorithm for every access sequence, even one that knows the future. Forty years later, that "
-            "dynamic optimality conjecture is still open."
+            "Here are four finite access workloads on the same two thousand keys. <bookmark mark='a'/> "
+            "Repeated sorted scans are inexpensive for the splay tree, consistent with the "
+            "sequential-access theorem. <bookmark mark='b'/> On this uniform random workload it does more"
+            " logical node work than AVL. That is a measured workload, not the worst possible sequence. "
+            "<bookmark mark='c'/> Skewed and hot-key workloads favor adaptation. The table's splay "
+            "counter counts node visits and rotations, whereas AVL counts visited nodes; neither is a "
+            "count of every Python predicate or a wall-clock benchmark. <bookmark mark='d'/> Dynamic "
+            "optimality asks for a constant comparison to the best offline binary-search-tree execution "
+            "on every sequence, with model and setup conventions. Selected 2026 progress appears in the "
+            "frontier chapter; it does not settle constant competitiveness."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

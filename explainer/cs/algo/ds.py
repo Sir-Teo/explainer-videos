@@ -17,7 +17,7 @@ Heaps:
 Others:
     UnionFind(n, rank, compress)         find path lengths; inverse Ackermann
     Trie                                 nodes, and a radix (compressed) count
-    RankSelect                           a bit vector with o(n) extra space for rank in O(1)
+    RankSelect                           fixed 512/64-bit rank directory; select is not implemented
     PersistentBST                        path copying: nodes copied per insert
 """
 
@@ -698,7 +698,11 @@ class PairingHeap:
 
 
 class FibHeap:
-    """Fredman & Tarjan (1987): lazy melding, cascading cuts; insert and decrease-key O(1) amortized."""
+    """Educational lazy melding and cascading cuts; counts actual key comparisons.
+
+    Python lists and list.remove do not implement the constant-time pointer
+    operations needed for theoretical Fibonacci-heap time bounds.
+    """
 
     class _N:
         __slots__ = ("key", "item", "parent", "kids", "mark")
@@ -714,9 +718,12 @@ class FibHeap:
         x = self._N(key, item)
         self.nodes[item] = x
         self.roots.append(x)
-        if self.min is None or key < self.min.key:
+        if self.min is None:
             self.min = x
-        self.cmp += 1
+        else:
+            self.cmp += 1
+            if key < self.min.key:
+                self.min = x
 
     def _cut(self, x):
         p = x.parent
@@ -730,7 +737,8 @@ class FibHeap:
         x = self.nodes[item]
         x.key = key
         p = x.parent
-        self.cmp += 1
+        if p is not None:
+            self.cmp += 1
         if p is not None and key < p.key:
             p = self._cut(x)
             while p.parent is not None:
@@ -769,9 +777,12 @@ class FibHeap:
         self.roots = list(by_rank.values())
         self.min = None
         for x in self.roots:
-            self.cmp += 1
-            if self.min is None or x.key < self.min.key:
+            if self.min is None:
                 self.min = x
+            else:
+                self.cmp += 1
+                if x.key < self.min.key:
+                    self.min = x
         return z.item, z.key
 
     def __len__(self):
@@ -891,10 +902,17 @@ class Trie:
 
 
 class RankSelect:
-    """A bit vector with rank in O(1): superblock counts every 512 bits and block counts every 64 (Jacobson 1989)."""
+    """Educational fixed 512/64-bit rank directory; select is not implemented.
+
+    Directory entries and a bounded 64-bit population count illustrate rank.
+    This fixed layout is not an asymptotic o(n)-bit construction, and Python
+    container memory is not the packed-bit estimate returned below.
+    """
 
     def __init__(self, bits: list[int]):
-        self.bits = bits
+        if any(b not in (0, 1) for b in bits):
+            raise ValueError("rank bit vector must contain only zeroes and ones")
+        self.bits = list(bits)
         self.n = len(bits)
         self.words = [sum(b << i for i, b in enumerate(bits[j:j + 64])) for j in range(0, self.n, 64)]
         self.super, self.block = [], []
@@ -903,16 +921,21 @@ class RankSelect:
             if w % 8 == 0:
                 self.super.append(c)
             self.block.append(c - self.super[-1])
-            c += bin(word).count("1")
+            c += word.bit_count()
+        self.total = c
 
     def rank(self, i: int) -> int:
-        """Ones in bits[0:i]."""
+        """Ones in bits[0:i], including both valid boundary positions 0 and n."""
+        if not isinstance(i, int) or not 0 <= i <= self.n:
+            raise ValueError("rank position must be an integer in [0, n]")
+        if i == self.n:
+            return self.total
         w, r = divmod(i, 64)
-        return self.super[w // 8] + self.block[w] + bin(self.words[w] & ((1 << r) - 1)).count("1") if w < len(
-            self.words) else self.super[-1] + self.block[-1] + bin(self.words[-1]).count("1")
+        return self.super[w // 8] + self.block[w] + (self.words[w] & ((1 << r) - 1)).bit_count()
 
     def overhead_bits(self) -> int:
-        return len(self.super) * 32 + len(self.block) * 9
+        """Logical packed directory estimate, excluding Python object overhead."""
+        return len(self.super) * max(32, self.n.bit_length()) + len(self.block) * 9
 
 
 class PersistentBST:

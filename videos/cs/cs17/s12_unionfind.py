@@ -38,7 +38,7 @@ class UnionFind(VoiceoverScene):
                   color=GREY_A),
             label(r"\textbf{find}$(x)$: \ follow parents to the root", font_size=22, color=DATA),
             label(r"\textbf{union}$(x, y)$: \ make one root point to the other", font_size=22, color=LAM),
-            label(r"\textbf{union by rank}: \ hang the shorter tree under the taller: \ height $\le \lg n$",
+            label(r"\textbf{union by rank}: \ link smaller rank under larger; \ rank bounds height after compression",
                   font_size=22, color=YES),
             label(r"uses: \ Kruskal's spanning trees \ (Part 18), \ type inference \ (Part 14), \ connected "
                   r"pixels, \ equivalent variables", font_size=20, color=GREY_B),
@@ -46,14 +46,14 @@ class UnionFind(VoiceoverScene):
         newe = Arrow(nodes[5].get_center(), nodes[1].get_center(), buff=0.28, stroke_width=2.4, color=LAM,
                      max_tip_length_to_length_ratio=0.08)
         with self.voiceover(
-            "Some problems need only to know which items belong together, and to merge groups. <bookmark "
-            "mark='a'/> Bernard Galler and Michael Fischer's structure, from 1964, stores each group as a tree in "
-            "which every node points to its parent; the root names the group. <bookmark mark='b'/> To find an "
-            "item's group, follow parents to the root. <bookmark mark='c'/> To merge two groups, make one root "
-            "point to the other. <bookmark mark='d'/> Done carelessly, trees become long paths. Union by rank hangs "
-            "the shorter tree under the taller one, and a tree's height can only grow when two equal trees merge, "
-            "so heights stay below log n. <bookmark mark='e'/> This structure finds spanning trees in Part 18, "
-            "unifies types in the inference of Part 14, and labels connected regions in images."
+            "Disjoint-set union tracks which items belong together. <bookmark mark='a'/> Each set is a "
+            "parent-pointer tree, with the root as representative. <bookmark mark='b'/> Find follows "
+            "parents to the root. <bookmark mark='c'/> Union links two distinct roots. <bookmark "
+            "mark='d'/> Union by rank attaches the smaller rank under the larger and increments rank only"
+            " when equal ranks merge. Without compression rank equals height; after compression it is an "
+            "upper bound, not necessarily the current height. A rank-r root represents at least two to "
+            "the r elements. <bookmark mark='e'/> Applications include Kruskal's spanning trees and "
+            "equivalence classes; richer type unification needs additional structure."
         ) as vo:
             self.play(FadeIn(head), *[FadeIn(n) for n in nodes.values()], Create(edges))
             for mk, p in zip("abcde", pts):
@@ -81,13 +81,14 @@ class UnionFind(VoiceoverScene):
         pts = VGroup(
             label(r"after finding the root, \ point every node on the path straight at it", font_size=22,
                   color=GREY_A),
-            label(r"later finds from any of them take one step", font_size=22, color=YES),
+            label(r"one upward edge from these nonroots, \ until a union moves the root", font_size=22, color=YES),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "The second idea costs one extra pass. <bookmark mark='a'/> After a find walks up to the root, walk the "
-            "path again and point every node on it directly at the root. <bookmark mark='b'/> The path flattens, "
-            "and every later find from those nodes takes a single step. The work of one slow find is an investment "
-            "that makes all its successors fast."
+            "Path compression makes an extra pass. <bookmark mark='a'/> After following parents to the "
+            "root, point every visited node directly at that root. <bookmark mark='b'/> While the root "
+            "stays the same, another find from those nonroot nodes traverses one edge. Later unions can "
+            "move the root and add work again. Compression helps a sequence of operations; it does not "
+            "promise every future find costs one step."
         ) as vo:
             self.play(FadeIn(head), FadeIn(before), Create(eb))
             vo.wait_until("a")
@@ -105,22 +106,23 @@ class UnionFind(VoiceoverScene):
         names = {"neither": r"neither", "rank": r"union by rank", "compression": r"path compression",
                  "both": r"both"}
         rows = [[names[r["name"]], f"{r['per_find']:,.2f}", words(r["max_depth"])] for r in d["rows"]]
-        tab = grid_table([r"", r"parent steps per find", r"deepest node"], rows, widths=[4.0, 3.6, 2.6], row_h=0.55,
+        tab = grid_table([r"", r"upward edges per find", r"deepest node"], rows, widths=[4.0, 3.6, 2.6], row_h=0.55,
                          font_size=22, mono_cols=(),
                          colors=[[NO, NO, NO], [GREY_A, YES, YES], [GREY_A, YES, YES], [HEAD, HEAD, HEAD]]).next_to(
             head, DOWN, buff=0.6)
         pts = VGroup(
-            label(r"each idea alone turns thousands of steps into a few", font_size=22, color=GREY_A),
-            label(r"together: \ $O(m\,\alpha(n))$ for $m$ operations \ (Tarjan, \ 1975), \ and that is optimal "
+            label(r"counts upward discovery edges only; \ excludes compression pass and writes", font_size=22, color=GREY_A),
+            label(r"together: \ amortized inverse-Ackermann bound with setup/model conventions "
                   r"\ (Fredman and Saks, \ 1989)", font_size=22, color=YES),
         ).arrange(DOWN, buff=0.22).next_to(tab, DOWN, buff=0.5)
         with self.voiceover(
-            "How much do the two ideas buy? <bookmark mark='a'/> With twenty thousand elements and forty thousand "
-            "random unions, the careless version builds trees thousands deep, and an average find walks over two "
-            "thousand parent pointers. Union by rank alone brings that down to about two. Path compression alone, "
-            "to under one and a half. Both together, to one. <bookmark mark='b'/> Robert Tarjan proved in 1975 "
-            "that with both, any m operations take m times alpha of n, where alpha is the inverse of Ackermann's "
-            "function, and Michael Fredman and Michael Saks later proved that no structure can do better."
+            "Here is one seeded sequence: forty thousand random unions, followed by forty thousand finds "
+            "on twenty thousand elements. <bookmark mark='a'/> The table counts upward parent edges "
+            "during those finds. It excludes the second compression pass, stores, and the earlier unions."
+            " Both heuristics dramatically reduce that particular counter. <bookmark mark='b'/> With "
+            "initialization and the usual operation-count conventions, union by rank plus compression has"
+            " an amortized inverse-Ackermann bound. Matching lower bounds are model-dependent sequence "
+            "results, not a claim that every individual operation must take that long on every input."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -138,8 +140,8 @@ class UnionFind(VoiceoverScene):
             MathTex(r"A(1,1) = 3,\ \ A(2,1) = 5,\ \ A(3,1) = 13,\ \ A(4,1) = 2^{16} - 3 = 65{,}533", font_size=30,
                     color=GREY_A),
             MathTex(r"A(4,2) = 2^{65536} - 3", font_size=30, color=NO),
-            MathTex(r"\alpha(n) = \min\{m : A(m, m) \ge n\} \le 4 \text{ for every } n \text{ that fits in our "
-                    r"universe}", font_size=30, color=YES),
+            MathTex(r"\alpha_{\rm demo}(n) = \min\{m : A(m, m) \ge n\},\quad \alpha_{\rm demo}(n)\le4\text{ for practical }n"
+                    r"", font_size=30, color=YES),
         ).arrange(DOWN, buff=0.35).next_to(head, DOWN, buff=0.5)
         ls = load("unionfind")["logstar"]
         tab = grid_table([r"$n$"] + [r["n"].replace("2^65536", r"$2^{65536}$") for r in ls],
@@ -148,15 +150,17 @@ class UnionFind(VoiceoverScene):
         note_ = label(r"$\log^*$ counts how often you take $\lg$ to reach 1: \ the simpler $O(m \log^* n)$ bound "
                       r"\ (Hopcroft and Ullman, \ 1973)", font_size=19, color=GREY_B).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Ackermann's function is the classic example of a computable function that grows faster than any "
-            "primitive recursive one. <bookmark mark='a'/> It is defined by three short rules. <bookmark mark='b'/> "
-            "A of one, one is three; A of two, one is five; A of three, one is thirteen; A of four, one is sixty-five "
-            "thousand. <bookmark mark='c'/> A of four, two is two to the sixty-five thousand five hundred and "
-            "thirty-six, minus three, a number with nearly twenty thousand digits. <bookmark mark='d'/> Its inverse, "
-            "alpha, is therefore at most four for any input that could exist in the physical universe. Union–find "
-            "is linear time in every practical sense, and yet, provably, not quite linear. <bookmark mark='e'/> An "
-            "easier bound, from John Hopcroft and Jeffrey Ullman, uses the iterated logarithm, which is at most five "
-            "for any n you will meet."
+            "Ackermann growth gives a useful scale comparison. <bookmark mark='a'/> Use exactly the "
+            "displayed recurrence; different texts define variants. <bookmark mark='b'/> Its small values"
+            " already jump from three to five to thirteen to sixty-five thousand five hundred and "
+            "thirty-three. <bookmark mark='c'/> The next displayed value is two to sixty-five thousand "
+            "five hundred and thirty-six, minus three. <bookmark mark='d'/> The displayed inverse is one "
+            "illustrative diagonal convention. Formal union-find bounds may use a two-parameter inverse "
+            "and setup terms; those conventions differ by small constants, not by practical growth. A "
+            "worst-case sequence lower bound does not make every operation superconstant. <bookmark "
+            "mark='e'/> The iterated logarithm is a simpler comparison: the table counts base-two "
+            "logarithms needed to reach one. Neither this tiny table nor a finite timing experiment "
+            "proves the asymptotic theorem."
         ) as vo:
             self.play(FadeIn(head))
             for mk, s in zip("abcd", defs):

@@ -44,14 +44,15 @@ class Randomized(VoiceoverScene):
                   color=GREY_B),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Chapter five showed that a search tree built in random order is shallow. Raimund Seidel and Cecilia "
-            "Aragon found a way to get random order whatever order the keys really arrive in. <bookmark "
-            "mark='a'/> Give each key a random priority when it is inserted. <bookmark mark='b'/> Keep the keys in "
-            "search-tree order and the priorities in heap order, every parent's priority above its children's. "
-            "Those two rules fix the shape completely. <bookmark mark='c'/> And that shape is exactly the tree you "
-            "would get by inserting the keys in order of priority, which is a random order. So a treap is always a "
-            "random binary search tree, with expected depth two natural log n, even for sorted input. <bookmark "
-            "mark='d'/> To insert, add the key as a leaf and rotate it up while its priority beats its parent's."
+            "Chapter five showed that a search tree built in random order is shallow. Raimund Seidel and "
+            "Cecilia Aragon found a way to get random order whatever order the keys really arrive in. "
+            "<bookmark mark='a'/> Give each key a random priority when it is inserted. <bookmark "
+            "mark='b'/> Keep the keys in search-tree order and the priorities in heap order, every "
+            "parent's priority above its children's. Those two rules fix the shape completely. <bookmark "
+            "mark='c'/> And that shape is exactly the tree you would get by inserting the keys in order "
+            "of priority, which is a random order. So a treap is always a random binary search tree, with"
+            " expected depth two natural log n, even for sorted input. <bookmark mark='d'/> To insert, "
+            "add the key as a leaf and rotate it up while its priority beats its parent's."
         ) as vo:
             self.play(FadeIn(head), Create(edges), *[FadeIn(n) for n in nodes.values()])
             for mk, p in zip("abcd", pts):
@@ -99,14 +100,15 @@ class Randomized(VoiceoverScene):
                   r"concurrent \ (Java's \texttt{ConcurrentSkipListMap})", font_size=21, color=YES),
         ).arrange(DOWN, buff=0.18).next_to(head, DOWN, buff=0.35)
         with self.voiceover(
-            "William Pugh's skip list gets the same expected behaviour without a tree at all. <bookmark mark='a'/> "
-            "Start with a sorted linked list. Flip a coin for each node: heads, it also joins a second, sparser "
-            "list above. Flip again for a third level, and so on. About half the nodes are on level two, a quarter "
-            "on level three. <bookmark mark='b'/> To search, run along the top level until the next key would "
-            "overshoot, drop a level, and repeat. Each level skips about half of what is left. <bookmark "
-            "mark='c'/> The expected search is about two log n steps, and each key costs two pointers on average. "
-            "There are no rotations, and that locality makes skip lists easy to update concurrently, which is "
-            "why Java's concurrent sorted map is one."
+            "William Pugh's skip list gets the same expected behaviour without a tree at all. <bookmark "
+            "mark='a'/> Start with a sorted linked list. Flip a coin for each node: heads, it also joins "
+            "a second, sparser list above. Flip again for a third level, and so on. About half the nodes "
+            "are on level two, a quarter on level three. <bookmark mark='b'/> To search, run along the "
+            "top level until the next key would overshoot, drop a level, and repeat. Each level skips "
+            "about half of what is left. <bookmark mark='c'/> The expected search is about two log n "
+            "steps, and each key costs two pointers on average. There are no rotations, and that locality"
+            " makes skip lists easy to update concurrently, which is why Java's concurrent sorted map is "
+            "one."
         ) as vo:
             self.play(FadeIn(head), FadeIn(headcol), FadeIn(cols[:]), Create(links), run_time=2)
             for mk, p in zip("abc", pts):
@@ -126,19 +128,21 @@ class Randomized(VoiceoverScene):
         pts = VGroup(
             label(r"the treap was fed the keys \textbf{in sorted order}: \ the random priorities undo it", font_size=22,
                   color=YES),
-            label(r"randomness inside the structure, \ not in the input: \ no adversary can choose a bad case",
+            label(r"randomness independent of fixed keys; \ adaptive attackers need stronger guarantees",
                   font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.2).next_to(tab, DOWN, buff=0.55)
         with self.voiceover(
-            "Measured, both behave as promised. <bookmark mark='a'/> The treaps were built from keys in sorted "
-            "order, the worst case for a plain tree, yet their average depth matches a random tree's. The skip "
-            "lists search in about two log n steps with two pointers per key. <bookmark mark='b'/> This is the same "
-            "lesson as quicksort's random pivot: when the randomness is inside the algorithm, no input can be "
-            "bad; there are only unlucky coin flips, and they are rare."
+            "These seeded measurements illustrate randomized shapes. <bookmark mark='a'/> Treaps receive "
+            "sorted keys, but random priorities independent of the keys choose their shape. With distinct"
+            " priorities, the shape is the BST obtained by inserting in priority order. <bookmark "
+            "mark='b'/> Expected logarithmic behavior is over the internal randomness for fixed keys or a"
+            " suitable nonadaptive operation sequence. It does not make every realized tree shallow or "
+            "defeat every attacker who learns its randomness. The skip-list comparison counts, treap edge"
+            " depths and node-level heights are different counters, as labeled."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(tab))
             vo.wait_until("a")
-            self.play(FadeIn(tab), FadeIn(pts[0]))
+            self.play(FadeIn(pts[0]))
             vo.wait_until("b")
             self.play(FadeIn(pts[1]))
         self.wait(0.3)

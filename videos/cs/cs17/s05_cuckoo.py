@@ -41,18 +41,19 @@ class Cuckoo(VoiceoverScene):
                   font_size=22, color=YES),
             label(r"insert $x$: \ put it in $T_1$; \ if that slot was taken, \ kick the old key to its other "
                   r"table, \ and repeat", font_size=21, color=GREY_A),
-            label(r"a cycle of kicks means a bad pair of functions: \ pick new ones and rebuild", font_size=21,
+            label(r"finite kick cutoff: \ rebuild safely; \ cutoff alone does not prove no placement exists", font_size=21,
                   color=NO),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.45)
         x = mono("X", 24, HEAD).next_to(t1[2], UP, buff=0.5)
         with self.voiceover(
-            "In 2001 Rasmus Pagh and Flemming Rodler found a way to make every lookup cost two probes, not "
-            "on average, but always. <bookmark mark='a'/> Keep two tables and two independent hash functions. "
-            "Every key lives either at h one of x in the first table, or at h two of x in the second. A find looks "
-            "in those two places and nowhere else. <bookmark mark='b'/> To insert, put the key in its first-table "
-            "slot. If that slot was taken, the old key is kicked out, like a cuckoo's egg, to its place in the "
-            "other table, possibly kicking out another. <bookmark mark='c'/> Usually the chain of kicks ends "
-            "quickly. If it runs into a cycle, the pair of hash functions is bad: choose new ones and rebuild."
+            "In 2001 Rasmus Pagh and Flemming Rodler found a way to make every lookup cost two probes, "
+            "not on average, but always. <bookmark mark='a'/> Keep two tables and two independent hash "
+            "functions. Every key lives either at h one of x in the first table, or at h two of x in the "
+            "second. A find looks in those two places and nowhere else. <bookmark mark='b'/> To insert, "
+            "put the key in its first-table slot. If that slot was taken, the old key is kicked out, like"
+            " a cuckoo's egg, to its place in the other table, possibly kicking out another. <bookmark "
+            "mark='c'/> Usually the chain of kicks ends quickly. If it runs into a cycle, the pair of "
+            "hash functions is bad: choose new ones and rebuild."
         ) as vo:
             self.play(FadeIn(head), FadeIn(t1), FadeIn(t2), FadeIn(l1), FadeIn(l2), FadeIn(a), FadeIn(b), FadeIn(c))
             vo.wait_until("a")
@@ -70,7 +71,7 @@ class Cuckoo(VoiceoverScene):
 
     def threshold(self):
         d = load("cuckoo")
-        head = label(r"The threshold at half full", font_size=34).to_edge(UP, buff=0.3)
+        head = label(r"Finite failures and an ideal-model threshold", font_size=34).to_edge(UP, buff=0.3)
         rows = d["rows"]
         ax = Axes(x_range=[0.28, 0.57, 0.05], y_range=[0, 1, 0.25], x_length=6.4, y_length=3.6,
                   axis_config={"color": GREY_D, "include_numbers": False}).to_edge(LEFT, buff=0.9).shift(DOWN * 0.3)
@@ -85,29 +86,30 @@ class Cuckoo(VoiceoverScene):
                       for v, t in ((0, "0"), (0.5, "50\\%"), (1, "100\\%"))])
         xl = label(rf"keys per slot, \ two tables of {words(d['m'])}", font_size=17, color=GREY_B).next_to(
             xt, DOWN, buff=0.1)
-        yl = label(r"insertions that hit a cycle, \ 40 trials", font_size=17, color=GREY_B).next_to(
+        yl = label(r"exceeded 500 kicks, \ 40 seeded trials", font_size=17, color=GREY_B).next_to(
             ax, UP, buff=0.1).align_to(ax, LEFT)
         side = VGroup(
             label(r"the \textbf{cuckoo graph}: \ a vertex per slot, \ an edge per key", font_size=21, color=GREY_A),
-            label(r"inserting succeeds while no component has more edges than vertices", font_size=21,
+            label(r"a placement exists iff every component has at most as many edges as vertices", font_size=21,
                   color=GREY_A),
-            label(r"a random graph with $n$ edges on $2m$ vertices grows such cycles at $n/2m = \tfrac12$ "
+            label(r"ideal independent choices: \ excess-edge components appear near load $1/2$ "
                   r"\ (Erd\H{o}s and R\'enyi, \ 1960)", font_size=20, color=HEAD),
-            label(r"in practice: \ four slots per bucket, \ or more hash functions, \ push the threshold past 95\%",
+            label(r"bucket sizes, \ number of choices and insertion policy change the model and threshold",
                   font_size=20, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.4)
         if side.width > 5.6:
             side.scale_to_fit_width(5.6).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Cuckoo hashing works only if the tables are not too full, and the limit is sharp. <bookmark "
-            "mark='a'/> We inserted keys into two tables of two thousand slots, forty times at each load, and "
-            "counted how often an insertion ran into a cycle. Below forty percent, never. Past one half, most of "
-            "the time. <bookmark mark='b'/> The reason is a graph. Make each slot a vertex and each key an edge "
-            "between its two possible slots. Insertion succeeds as long as no connected piece has more edges than "
-            "vertices. <bookmark mark='c'/> A random graph develops such pieces suddenly, when the number of edges "
-            "reaches half the number of vertices: Paul Erdős and Alfréd Rényi's threshold from 1960. <bookmark "
-            "mark='d'/> Real cuckoo tables put four keys in each bucket, or use more hash functions, and run safely "
-            "above ninety-five percent full."
+            "The classical two-choice cuckoo threshold is a random-graph statement, not a finite kick "
+            "limit. <bookmark mark='a'/> Here we run forty seeded trials per load on two tables of two "
+            "thousand slots, stopping when an insertion exceeds five hundred kicks. The plotted fraction "
+            "is that experimental failure event. <bookmark mark='b'/> Model each slot as a vertex and "
+            "each key's two choices as an edge. A placement can orient each edge toward a distinct "
+            "occupied vertex. <bookmark mark='c'/> In the ideal independent-choice model, excess edges in"
+            " a component obstruct placement, and the asymptotic threshold is near one half of total "
+            "slots. <bookmark mark='d'/> Our cutoff can stop a long insertion without proving such an "
+            "obstruction. A production implementation needs a safe rebuild or stash; this experiment "
+            "stops immediately on failure."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl))
             vo.wait_until("a")
@@ -128,7 +130,7 @@ class Cuckoo(VoiceoverScene):
             label(r"level 1: \ hash into $n$ buckets; \ bucket $i$ gets $b_i$ keys", font_size=22, color=DATA),
             label(r"level 2: \ bucket $i$ gets its own table of $b_i^2$ slots, \ and a hash with no collision there",
                   font_size=22, color=LAM),
-            MathTex(r"\mathbb{E}\Bigl[\sum_i b_i^2\Bigr] = n + 2\binom{n}{2}\frac1n < 2n", font_size=32, color=YES),
+            MathTex(r"\mathbb{E}\Bigl[\sum_i b_i^2\Bigr]\le n+2\binom n2\frac1n<2n", font_size=32, color=YES),
             label(r"and $b^2$ slots make $b$ keys collision-free with probability $> \tfrac12$: \ the birthday bound "
                   r"again", font_size=21, color=GREY_B),
         ).arrange(DOWN, buff=0.25).next_to(head, DOWN, buff=0.45)
@@ -136,22 +138,34 @@ class Cuckoo(VoiceoverScene):
                 d["fks"]]
         tab = grid_table([r"keys", r"slots in all", r"per key", r"largest bucket"], rows,
                          widths=[2.2, 2.6, 2.0, 2.6], row_h=0.45, font_size=19).next_to(steps, DOWN, buff=0.4)
+        sizes = [2, 1, 0, 3, 0, 0]
+        assert sum(sizes) == 6 and sum(b*b for b in sizes) == 14
+        example = VGroup(
+            VGroup(*[MathTex(rf"{b}^2={b*b}", font_size=27, color=DATA) for b in sizes]).arrange(RIGHT, buff=0.4),
+            label(r"one outcome: \ 6 keys, \ 6 buckets, \ 14 secondary slots; \ expectation averages random functions",
+                  font_size=19, color=HEAD),
+        ).arrange(DOWN, buff=0.18).move_to(DOWN * 2.7)
         with self.voiceover(
-            "If the set of keys is fixed in advance, like the keywords of a language or the words of a dictionary "
-            "on disk, we can do better still. <bookmark mark='a'/> Michael Fredman, János Komlós and Endre "
-            "Szemerédi showed in 1984 how to store n keys with no collisions at all, in linear space. <bookmark "
-            "mark='b'/> First hash into n buckets. <bookmark mark='c'/> Then give each bucket its own small table, "
-            "with room for the square of its size, and a hash function with no collisions inside it. <bookmark "
-            "mark='d'/> The squares add up to less than two n on average: the same counting of colliding pairs as "
-            "in chapter one. <bookmark mark='e'/> And a table with b squared slots holds b keys without a "
-            "collision more than half the time, so a few retries suffice. <bookmark mark='f'/> Measured, the "
-            "whole structure takes about three slots per key, and every lookup is two hashes and one comparison."
+            "A fixed key set permits a stronger lookup guarantee. <bookmark mark='a'/> FKS hashing "
+            "chooses functions during construction and retries until its tested conditions hold. The "
+            "abstract scheme has constant worst-case lookup with linear space under the stated word and "
+            "hashing model. <bookmark mark='b'/> First hash n keys into n buckets. In this six-key "
+            "example the bucket sizes are two, one, zero, three, zero, zero. <bookmark mark='c'/> "
+            "Allocate the square of each bucket's size for its secondary table: fourteen slots in this "
+            "particular outcome. <bookmark mark='d'/> Over the random first-level hash, universality "
+            "gives an upper bound below two n for the expected sum of squares. A single outcome can "
+            "exceed its expectation, so construction also retries a first level whose sum is too large. "
+            "<bookmark mark='e'/> A fresh universal secondary hash into b squared slots has collision "
+            "probability less than one half by a union bound. Retrying gives a collision-free mapping. "
+            "<bookmark mark='f'/> Our finite construction experiment checks these mappings and counts "
+            "slots and retries. It does not implement a stored dictionary query interface; the two-hash "
+            "lookup statement belongs to the complete FKS scheme."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(example))
             for mk, s in zip("abcde", steps):
                 vo.wait_until(mk)
                 self.play(FadeIn(s))
             vo.wait_until("f")
-            self.play(FadeIn(tab))
+            self.play(FadeOut(example), FadeIn(tab))
         self.wait(0.3)
         self.clear_scene()

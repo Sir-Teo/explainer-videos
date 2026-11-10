@@ -37,21 +37,22 @@ class Btree(VoiceoverScene):
         pts = VGroup(
             label(r"a node holds up to $2t - 1$ keys and $2t$ children \ (all but the root at least half full)",
                   font_size=22, color=GREY_A),
-            label(r"all leaves at the same depth: \ height $\le \log_t \frac{n+1}{2}$", font_size=22, color=YES),
+            label(r"all leaves at the same depth: \ edge height $\le \log_t \frac{n+1}{2}$", font_size=22, color=YES),
             label(r"chosen so that a node fills a disk block \ (4 KB): \ one read per level", font_size=22,
                   color=HEAD),
             label(r"the external-memory model of Part 16: \ count block transfers, \ not comparisons", font_size=21,
                   color=GREY_B),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Binary trees assume that following a pointer is cheap. On a disk, every node visited is a read that "
-            "takes thousands of times longer than a comparison. <bookmark mark='a'/> Rudolf Bayer and Edward "
-            "McCreight's B-tree, from 1970, makes the nodes wide. A node holds many keys in sorted order, and has "
-            "one child between each pair. Every node except the root is at least half full. <bookmark mark='b'/> "
-            "All leaves are at the same depth, so the height is the logarithm of n to the base of the fan-out. "
-            "<bookmark mark='c'/> The fan-out is chosen so that a node fills a disk block, and a search reads one "
-            "block per level. <bookmark mark='d'/> This is the external-memory model from Part 16: what matters is "
-            "the number of block transfers, and comparisons inside a block are nearly free."
+            "Binary trees assume that following a pointer is cheap. On a disk, every node visited is a "
+            "read that takes thousands of times longer than a comparison. <bookmark mark='a'/> Rudolf "
+            "Bayer and Edward McCreight's B-tree, from 1970, makes the nodes wide. A node holds many keys"
+            " in sorted order, and has one child between each pair. Every node except the root is at "
+            "least half full. <bookmark mark='b'/> All leaves are at the same depth, so the height is the"
+            " logarithm of n to the base of the fan-out. <bookmark mark='c'/> The fan-out is chosen so "
+            "that a node fills a disk block, and a search reads one block per level. <bookmark mark='d'/>"
+            " This is the external-memory model from Part 16: what matters is the number of block "
+            "transfers, and comparisons inside a block are nearly free."
         ) as vo:
             self.play(FadeIn(head), FadeIn(root), Create(edges), FadeIn(kids))
             for mk, p in zip("abcd", pts):
@@ -78,12 +79,12 @@ class Btree(VoiceoverScene):
                   color=LAM),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "How does a B-tree stay perfectly balanced? <bookmark mark='a'/> When a node is full and another key "
-            "arrives, the node splits into two half-full nodes, and its middle key moves up into the parent. "
-            "<bookmark mark='b'/> If the parent overflows it splits too, and if the root splits, a new root "
-            "appears above it. The tree grows at the top, never at the bottom, which is why every leaf is at the "
-            "same depth. <bookmark mark='c'/> With at most three keys per node, this is exactly the two–three–four "
-            "tree that red–black trees encode."
+            "How does a B-tree stay perfectly balanced? <bookmark mark='a'/> When a node is full and "
+            "another key arrives, the node splits into two half-full nodes, and its middle key moves up "
+            "into the parent. <bookmark mark='b'/> If the parent overflows it splits too, and if the root"
+            " splits, a new root appears above it. The tree grows at the top, never at the bottom, which "
+            "is why every leaf is at the same depth. <bookmark mark='c'/> With at most three keys per "
+            "node, this is exactly the two–three–four tree that red–black trees encode."
         ) as vo:
             self.play(FadeIn(head), FadeIn(full), FadeIn(new))
             vo.wait_until("a")
@@ -101,24 +102,26 @@ class Btree(VoiceoverScene):
         d = load("btree")
         head = label(rf"{words(d['n'])} keys, \ measured", font_size=34).to_edge(UP, buff=0.3)
         rows = [[str(r["t"]), str(2 * r["t"] - 1), str(r["height"]), words(r["nodes"])] for r in d["rows"]]
-        tab = grid_table([r"$t$", r"keys per node, \ at most", r"height", r"nodes"], rows,
+        tab = grid_table([r"$t$", r"keys per node, \ at most", r"height (levels)", r"nodes"], rows,
                          widths=[1.4, 3.4, 1.8, 2.4], row_h=0.48, font_size=20).next_to(head, DOWN, buff=0.5)
         pts = VGroup(
             label(rf"a billion keys, \ 4 KB blocks of 8-byte keys and pointers: \ fan-out {d['disk_fan']}, \ "
-                  rf"height {d['disk_height']}", font_size=22, color=YES),
+                  rf"capacity illustration: {d['disk_height']} node levels", font_size=22, color=YES),
             label(rf"a balanced binary tree would need {d['bst_height']} levels: \ {d['bst_height']} disk reads per "
-                  r"lookup instead of 1 or 2 \ (the top levels stay cached)", font_size=21, color=GREY_A),
-            label(r"every relational database and most file systems index with B+-trees: \ Part 35", font_size=21,
+                  r"lookup if uncached; \ top-level caching and occupancy change the count", font_size=21, color=GREY_A),
+            label(r"B+-trees are widely used; \ other index families also matter \ (Part 35)", font_size=21,
                   color=HEAD),
         ).arrange(DOWN, buff=0.2).next_to(tab, DOWN, buff=0.45)
         with self.voiceover(
-            "Here are B-trees of two hundred thousand keys with different node sizes. <bookmark mark='a'/> As the "
-            "nodes widen, the height falls from fourteen to three. <bookmark mark='b'/> On a real disk, with four "
-            "kilobyte blocks and eight-byte keys and pointers, a node has two hundred and fifty-six children, and a "
-            "billion keys fit in a tree of height four. A balanced binary tree would need thirty levels. Since the "
-            "top levels stay in memory, a B-tree lookup costs one or two disk reads. <bookmark mark='c'/> That is "
-            "why every relational database and most file systems are built on a variant, the B-plus tree, as Part "
-            "35 will show."
+            "Here are seeded B-trees with two hundred thousand keys. <bookmark mark='a'/> The measured "
+            "height column counts node levels, including the root. Larger nodes reduce the number of "
+            "blocks along a search path, while doing more work inside a node. <bookmark mark='b'/> A "
+            "rough billion-key capacity illustration uses fan-out two hundred and fifty-six; its four "
+            "levels are not a worst-case bound for every half-full tree. Occupancy, root exceptions and "
+            "cached top levels change the I/O count. <bookmark mark='c'/> B-plus trees are widely used in"
+            " databases and file systems, alongside log-structured, hash, inverted and spatial indexes. "
+            "The external-memory model prices block transfers; it does not erase computation within a "
+            "block."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

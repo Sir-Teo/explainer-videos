@@ -48,14 +48,14 @@ class Tries(VoiceoverScene):
                   color=LAM),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Hash tables and search trees treat a key as an opaque value to hash or compare. A trie, Edward "
-            "Fredkin's name from 1960, uses the key's letters as directions. <bookmark mark='a'/> The root has one "
-            "edge per possible first letter, each child one edge per second letter, and a word is a path; nodes "
-            "where a word ends are marked. Finding a word of L letters takes L steps, however many words are "
-            "stored. <bookmark mark='b'/> Words that share a prefix share a path, so a trie answers prefix queries "
-            "directly: autocomplete, and the longest-prefix match that routes every internet packet. <bookmark "
-            "mark='c'/> Chains of nodes with a single child waste space, and a radix tree merges each chain into "
-            "one edge labelled with a string."
+            "Hash tables and search trees treat a key as an opaque value to hash or compare. A trie, "
+            "Edward Fredkin's name from 1960, uses the key's letters as directions. <bookmark mark='a'/> "
+            "The root has one edge per possible first letter, each child one edge per second letter, and "
+            "a word is a path; nodes where a word ends are marked. Finding a word of L letters takes L "
+            "steps, however many words are stored. <bookmark mark='b'/> Words that share a prefix share a"
+            " path, so a trie answers prefix queries directly: autocomplete, and the longest-prefix match"
+            " that routes every internet packet. <bookmark mark='c'/> Chains of nodes with a single child"
+            " waste space, and a radix tree merges each chain into one edge labelled with a string."
         ) as vo:
             self.play(FadeIn(head), *[FadeIn(n) for n in nodes.values()], Create(edges), FadeIn(letters))
             for mk, p in zip("abc", pts):
@@ -84,11 +84,11 @@ class Tries(VoiceoverScene):
         ).arrange(DOWN, buff=0.22).next_to(tab, DOWN, buff=0.5)
         with self.voiceover(
             "Here is the Job's vocabulary, all fifty-eight thousand distinct words, in a trie. <bookmark "
-            "mark='a'/> The words have about four hundred and fifty thousand letters, but the trie needs far fewer "
-            "nodes, because so many words share beginnings. <bookmark mark='b'/> The radix tree needs fewer still, "
-            "under two nodes per word. <bookmark mark='c'/> Yet each node, stored the obvious way, costs a pointer "
-            "per child, eight bytes each. The last idea of this chapter is to store the tree's shape itself in a "
-            "couple of bits per node."
+            "mark='a'/> The words have about four hundred and fifty thousand letters, but the trie needs "
+            "far fewer nodes, because so many words share beginnings. <bookmark mark='b'/> The radix tree"
+            " needs fewer still, under two nodes per word. <bookmark mark='c'/> Yet each node, stored the"
+            " obvious way, costs a pointer per child, eight bytes each. The last idea of this chapter is "
+            "to store the tree's shape itself in a couple of bits per node."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab))
             for mk, p in zip("abc", pts):
@@ -99,45 +99,74 @@ class Tries(VoiceoverScene):
 
     def succinct(self):
         d = load("tries")
-        head = label(r"Succinct structures \ (Jacobson, \ 1989)", font_size=34).to_edge(UP, buff=0.3)
-        bits = "1101101001100100"
-        row = VGroup(*[VGroup(Square(side_length=0.48, stroke_color=GREY_B, stroke_width=1.4,
-                                     fill_color=DATA if b == "1" else BG, fill_opacity=0.6 if b == "1" else 1),
-                              mono(b, 18, WHITE)) for b in bits]).arrange(RIGHT, buff=0.04)
-        for c in row:
-            c[1].move_to(c[0])
-        row.next_to(head, DOWN, buff=0.6)
-        steps = VGroup(
-            label(r"a tree of $n$ nodes in $2n$ bits: \ write each node's children in unary, \ level by level "
-                  r"\ (LOUDS)", font_size=21, color=GREY_A),
-            MathTex(r"\mathrm{rank}(i) = \#\text{ones in } b[0..i), \qquad \mathrm{select}(j) = \text{position of "
-                    r"the } j\text{-th one}", font_size=30, color=DATA),
-            label(r"navigation is rank and select: \ the first child of node $i$ sits at $\mathrm{select}(i) + 1$",
-                  font_size=21, color=GREY_A),
-            label(r"rank in $O(1)$ time: \ a count every 512 bits, \ a smaller one every 64, \ a popcount for the "
-                  r"rest", font_size=21, color=YES),
-            label(rf"measured: \ {words(d['rank_bits'])} bits need {words(d['rank_overhead'])} extra "
-                  rf"({100 * d['rank_overhead'] / d['rank_bits']:.0f}\%), \ every rank checked", font_size=21,
-                  color=HEAD),
-            label(r"within $o(n)$ bits of the information-theoretic minimum: \ FM-indexes for genomes \ (Part 21)",
-                  font_size=20, color=GREY_B),
-        ).arrange(DOWN, buff=0.22).next_to(row, DOWN, buff=0.45)
+        head = label(r"LOUDS: \ one checked tree, \ two kinds of position", font_size=32).to_edge(UP, buff=0.3)
+        children = [[1, 2], [3, 4], [], [5], [], []]
+        bits = "".join("1" * len(kids) + "0" for kids in children)
+        assert bits == "11011001000" and len(bits) == 2 * len(children) - 1
+        positions = {0: [-4.6, 2.1], 1: [-5.4, 1.2], 2: [-3.7, 1.2],
+                     3: [-6.0, 0.3], 4: [-4.8, 0.3], 5: [-6.0, -0.6]}
+        nodes = {v: VGroup(Circle(radius=0.23, stroke_color=HEAD if v == 1 else DATA,
+                                  stroke_width=2, fill_color=BG, fill_opacity=1),
+                           mono(str(v), 18, WHITE)).move_to([*xy, 0]) for v, xy in positions.items()}
+        edges = VGroup(*[Line(nodes[v].get_center(), nodes[w].get_center(), buff=0.23,
+                              color=GREY_B, stroke_width=1.5)
+                         for v, kids in enumerate(children) for w in kids])
+        tree = VGroup(edges, *nodes.values())
+        tree_note = label(r"BFS node IDs: \ 0 through 5", font_size=18, color=GREY_B).next_to(tree, DOWN, buff=0.18)
+        groups = VGroup()
+        cursor = 0
+        for v, kids in enumerate(children):
+            cells = VGroup()
+            for b in "1" * len(kids) + "0":
+                cell = VGroup(Square(side_length=0.43, stroke_color=HEAD if v == 1 else GREY_B,
+                                     fill_color=DATA if b == "1" else BG, fill_opacity=0.5 if b == "1" else 1),
+                              mono(b, 18, WHITE))
+                cell[1].move_to(cell[0]); cells.add(cell)
+            cells.arrange(RIGHT, buff=0.02)
+            tag = mono(str(v), 16, HEAD if v == 1 else GREY_B).next_to(cells, UP, buff=0.09)
+            groups.add(VGroup(cells, tag))
+            cursor += len(kids) + 1
+        groups.arrange(RIGHT, buff=0.14).move_to([2.1, 1.65, 0])
+        encoding = label(r"each node: \ one 1 per child, \ then 0; \ $2n-1 = 11$ bits", font_size=19,
+                         color=DATA).next_to(groups, DOWN, buff=0.2)
+        definitions = VGroup(
+            MathTex(r"\operatorname{rank}_1(i)=\#1\text{s in }b[0:i]", font_size=26, color=DATA),
+            label(r"$\operatorname{select}_b(j)$: \ position of zero-based $j$th bit $b$", font_size=19, color=GREY_A),
+        ).arrange(DOWN, buff=0.16).next_to(encoding, DOWN, buff=0.32)
+        witness = VGroup(
+            MathTex(r"s_1=\operatorname{select}_0(0)+1=3", font_size=27, color=HEAD),
+            MathTex(r"\text{first child of node 1}=\operatorname{rank}_1(3)+1=3", font_size=27, color=YES),
+            MathTex(r"\text{parent}(5)=\operatorname{rank}_0(\operatorname{select}_1(4))=3", font_size=26, color=LAM),
+        ).arrange(DOWN, buff=0.17).move_to([0, -1.25, 0])
+        notes = VGroup(
+            label(r"built here: \ rank only; \ fixed 512/64-bit directory + bounded popcount", font_size=20, color=YES),
+            label(rf"{words(d['rank_queries_checked'])} rank queries checked, including both ends; \ "
+                  rf"{words(d['rank_overhead'])} logical directory bits for {words(d['rank_bits'])} input bits", font_size=19, color=HEAD),
+            label(r"packed-bit estimate excludes Python objects; \ fixed overhead is not $o(n)$; \ "
+                  r"succinct theory uses a different growing directory", font_size=18, color=GREY_B),
+        ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "Guy Jacobson showed in his 1989 thesis that a tree can be stored in about two bits per node and still "
-            "be navigated quickly. <bookmark mark='a'/> Write, for each node in level order, a one for each child "
-            "and then a zero. That string of two n bits determines the tree. <bookmark mark='b'/> Navigation then "
-            "reduces to two questions about the bit string. Rank of i: how many ones come before position i. "
-            "Select of j: where is the j-th one. <bookmark mark='c'/> A node's children are found by a select, and "
-            "its parent by a rank. <bookmark mark='d'/> Rank takes constant time with a small directory: a count "
-            "every five hundred and twelve bits, a finer count every sixty-four, and the processor's popcount "
-            "instruction for the remainder. <bookmark mark='e'/> We built one: the directory adds about a fifth to "
-            "the bits, and every rank we checked was right. <bookmark mark='f'/> Structures within a lower-order "
-            "term of the information-theoretic minimum are called succinct, and in Part 21 they index whole "
-            "genomes in less space than the genome itself."
+            "Succinct tree theory stores topology in about two bits per node, plus a lower-order "
+            "navigation index. <bookmark mark='a'/> Here is a concrete six-node tree. In breadth-first "
+            "order, write one for each child, then zero. Its eleven bits are exactly two n minus one. "
+            "<bookmark mark='b'/> Node IDs and bit positions are different. Rank counts ones before a bit"
+            " position; select gives the position of a numbered occurrence. Every index here starts at "
+            "zero. <bookmark mark='c'/> Node one's block starts at bit three. Two ones precede it, so its"
+            " first child has node ID three. The rank of zeroes before the one for node five gives its "
+            "parent, node three. <bookmark mark='d'/> Our code implements rank with counts every five "
+            "hundred and twelve bits, finer counts every sixty-four, and a bounded population count. It "
+            "does not implement select. <bookmark mark='e'/> All sixty-five thousand five hundred and "
+            "thirty-seven rank positions pass an independent prefix-sum check, including zero and the "
+            "full length. <bookmark mark='f'/> The displayed overhead is a logical packed-bit estimate, "
+            "excluding Python objects. This fixed directory is not Jacobson's lower-order construction. "
+            "Compressed indexes later exploit entropy or repetition; they need not shrink every input."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(row))
-            for mk, s in zip("abcdef", steps):
-                vo.wait_until(mk)
-                self.play(FadeIn(s))
+            self.play(FadeIn(head), FadeIn(tree), FadeIn(tree_note))
+            vo.wait_until("a"); self.play(FadeIn(groups), FadeIn(encoding))
+            vo.wait_until("b"); self.play(FadeIn(definitions))
+            vo.wait_until("c"); self.play(FadeOut(definitions), FadeIn(witness))
+            vo.wait_until("d"); self.play(FadeIn(notes[0]))
+            vo.wait_until("e"); self.play(FadeIn(notes[1]))
+            vo.wait_until("f"); self.play(FadeIn(notes[2]))
         self.wait(0.3)
         self.clear_scene()

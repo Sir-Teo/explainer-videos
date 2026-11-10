@@ -1,52 +1,72 @@
 # Computer Science, Built — Part 17: Data Structures
 
-Part 17 of a sixty-one-part course in computer science (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), the second part of Act IV, *Algorithms*. The Job is a dictionary problem: insert a
-word, find it, add one. This part builds the structures that answer it, proves what they cost, measures them, and
-gives the ledger its eighth row. The instruments are `explainer/cs/algo/ds.py` (universal hashing, chaining, linear
-probing, double hashing, uniform probing, Robin Hood, cuckoo and FKS perfect hashing; plain, AVL, left-leaning
-red–black, treap, splay and persistent search trees, skip lists and B-trees; binary, pairing and Fibonacci heaps
-with Dijkstra's algorithm; union–find; tries, radix trees and a rank directory, every one counting its work) and
-`explainer/cs/algo/job2.py` (the Job v2, a hash table in the Pebble language, with an exact model of its
-instruction count and a C program that counts the same events on all thirty novels), tested in
-`tests/test_cs17_ds.py`. Every number is computed in `compute.py`; `cache` and `practice` time code on this
-machine, and `job` runs the corpus through Part 9's caches.
+Part 17 of the [61-part series](../README.md), in [Act IV, Algorithms](../SYLLABUS.md).
+The running word-count task needs a dictionary rather than sorted output. This episode connects hashing,
+ordered trees, priority queues, disjoint sets, tries, persistence and the memory hierarchy through worked
+diagrams and instrumented implementations. English and Chinese narration use the same 81 source blocks.
 
-* **Can counting be constant-time?** Ledger row 7; what the Job really needs: 4.6 million finds and 57,895 inserts.
-* **1. The dictionary, and the birthday bound.** One interface, four implementations; Luhn's hashing (1953); the
-  birthday bound derived and drawn; collisions on our vocabulary (101 full-hash pairs predicted 100; 12,495 slot
-  pairs predicted 12,786).
-* **2. Chaining and universal hashing.** Chains against Poisson; Carter and Wegman's family, proved and checked; a
-  flooding attack on a fixed hash (2,000,000 probes against 2,000); Klink and Wälde (2011), SipHash.
-* **3. Open addressing.** Linear probing and its clusters; Knuth's formulas (1963) against measurement; double
-  hashing; Robin Hood hashing's variance; Swiss tables.
-* **4. Cuckoo hashing and perfect hashing.** Two probes per lookup; the failure threshold at load ½ and the
-  cuckoo graph; FKS perfect hashing in about three slots per key.
-* **5. Binary search trees.** Search and order; random trees' depth 2(1 + 1/n)Hₙ − 4, measured; sorted input; the
-  bijection with quicksort (24,944 comparisons both ways).
-* **6. Balanced trees: AVL and red–black.** Rotations; AVL and Fibonacci trees (h < 1.4405 lg(n + 2)); red–black
-  trees as 2–3–4 trees; heights and rotations measured.
-* **7. Treaps and skip lists.** Random priorities give a random tree for any input; skip lists' 2 lg n search.
-* **8. Splay trees.** Zig, zig-zig, zig-zag; the access lemma by potential; static optimality; splay against AVL on
-  four access sequences; dynamic optimality.
-* **9. B-trees.** Wide nodes; splitting at the root; heights for five fan-outs; a billion keys in four levels.
-* **10. Priority queues.** Binary, binomial, Fibonacci and pairing heaps; cascading cuts; Dijkstra with each heap,
-  counted; why the Fibonacci heap loses in practice.
-* **11. Union–find.** The forest; union by rank; path compression; 2,312 steps per find against 1.0; Ackermann's
-  function and α(n) ≤ 4; log*.
-* **12. Tries and succinct structures.** A trie of the vocabulary (154,595 nodes for 452,668 letters; a radix tree
-  of 70,968); rank and select in O(1) with a 20% directory; LOUDS.
-* **13. Persistence, and the memory hierarchy.** Path copying (21 nodes per version at n = 100,000); lookups timed
-  on this machine from a thousand keys to ten million (red–black tree 2.3 µs, sorted array 0.33 µs, chaining
-  74 ns, open addressing 31 ns).
-* **14. Hash tables in practice.** Python, Java, C++, Rust and Go; the Job natively (Python 0.91 s, C++
-  `unordered_map` 0.19 s, open addressing in C 0.11 s).
-* **15. The Job, hashed.** The Job v2; the corpus counted exactly (1.06 slots per word); an exact 27-event
-  instruction model (0.01% on held-out passages); where the time goes; the corpus through Part 9's caches (6%
-  added); ledger row 8 (0.81 s: 6.3× row 7, 72× row 5, 15× four cores); hardware's 24× against algorithms' 72×.
-* **16. Frontier: how good can a data structure be?** Yao's conjecture refuted (Farach-Colton, Krapivin and
-  Kuszmaul, 2025); dynamic optimality and tango trees; cell-probe lower bounds; learned indexes; open problems.
-  Outro.
+The visual examples include collision lanes, a 42-pair universal-family grid, matched-home Robin Hood tables,
+a BST/quicksort split, the actual five-node splay potential change, a cascading cut, and a valid six-node LOUDS
+tree beside its 11 encoding bits. A six-bucket FKS example distinguishes one outcome from an expectation.
+The instruments are [ds.py](../../../explainer/cs/algo/ds.py),
+[job2.py](../../../explainer/cs/algo/job2.py), [compute.py](compute.py) and
+[measurements.py](measurements.py); regressions are in
+[test_cs17_ds.py](../../../tests/test_cs17_ds.py).
+
+Measurements and models have different scopes:
+
+- The corpus has 24,971,555 bytes, 4,609,954 word occurrences and 57,895 distinct words. The fixed polynomial
+  hash produces 101 full-hash collision pairs and 12,495 reduced-slot pairs. Independent uniform-hash
+  expectations are separate reference quantities; pair counts and excess-key counts differ for triples.
+- Robin Hood and linear probing use the same keys, insertion order and home hash for the variance comparison.
+  Their occupied patterns, displacement sums and means agree. Other probing plots are finite seeded
+  illustrations; an affine universal family is not fully independent random hashing.
+- The lookup microbenchmark preserves zero and distinguishes keys 12 and 13. Duplicate keys use last assignment
+  wins in every implementation. Every result vector is checked outside the timer. Three raw repeats and actual
+  unique-key loads are retained; the reported value is each implementation's minimum. The largest open table is
+  29.8% full, not 50%. Lookup plus result-vector writes are timed; construction and verification are excluded.
+  Timing alone does not measure cache misses or establish a causal explanation.
+- Native word counters include allocation, tokenization, counting and top-20 selection, excluding file input,
+  compiler startup and output formatting. Every complete report matches the reference. On this host the minima
+  were about 1.073 s for Python (three repeats), 0.222 s for C++ and 0.103 s for C (five repeats each). These
+  compare complete implementations, not isolated collision schemes. Compiler/interpreter versions, source
+  hashes and all repeats are stored in the cached payloads. C++ prints timings to six significant digits.
+- The Job's static image explicitly accommodates this corpus: 452,740 letter bytes including a temporary-word
+  margin, 57,896 entry slots, 131,072 hash slots, a 1,904,816-byte image and 4 MiB modeled memory. The same image
+  runs every emulator/core sample. Full corpus native event counts reproduce the complete report; the full
+  corpus has **not** been executed by the emulator or core.
+- A 27-event least-squares instruction model uses 36 of 48 emulator passages, with 12 held out. The event matrix
+  has rank 22 of 28 columns including the intercept; correlated coefficients do not identify unique category
+  costs. The largest held-out relative error is about 0.0132%, and 22 full-corpus features exceed their training
+  maximum. Roughly 954.2 million full-corpus instructions are an extrapolation, not an exact executed count.
+- Three passage core samples give weighted IPC about 1.472. A separate partial data-access trace uses an assumed
+  array layout and toy caches. Adding its miss penalties to fitted instructions divided by sampled IPC projects
+  about 0.794 s at the ledger clock. It omits overlap, may count sampled stalls twice, and is not a proved upper
+  bound. The speed ratios inherit those assumptions and use different baselines.
+
+Theory is scoped beside its diagrams. Hash-table bounds require appropriate hashing, load and key-cost models;
+fixed keys must be independent of a chosen random family. The cuckoo curve records a 500-kick cutoff over 40
+seeded trials, not proof of a cycle or the asymptotic threshold. Its diagnostic insertion stops immediately on
+failure. The FKS experiment validates construction hashes and counts space/retries; it does not implement a
+stored dictionary query interface. Random BST depth is in edges, while balanced/B-tree height tables use node
+levels, with conversions explicit. Splay bounds include positive proof weights, final-zig +1 and initial
+potential. Pairing-heap bounds depend on the variant. Heap comparisons do not realize Python list costs;
+all displayed Dijkstra graphs are checked with independent heapq shortest paths, with a Bellman–Ford regression.
+Union-find counts upward discovery edges, excluding compression's second pass and stores; roots can move later.
+
+The fixed 512/64-bit rank directory checks every position, including 0 and n. Its 13,312-bit directory estimate
+for 65,536 input bits excludes Python object memory. It implements rank, not select, and fixed proportional
+redundancy is **not** an asymptotic o(n)-bit construction. LOUDS uses zero-based node and bit indices with
+rank/select conversions shown. Succinct theory and data-dependent compressed indexes are separate claims.
+
+The frontier distinguishes a fixed-occupancy uniform-permutation experiment (5,000 independent trials per point,
+exact finite expectation (m+1)/(f+1)) from theorem statements. No funnel, elastic or 2026 hashing implementation
+is benchmarked. The literature snapshot is dated 10 November 2026; selected statements/abstracts were checked,
+not every proof or the entire literature. Constant dynamic optimality is not resolved by the cited bounds.
+
+QA artifacts remain local under the Git-ignored `docs/qa/evidence/cs17-polish-20261110/`. The untouched source,
+19 baseline payloads and 36 explicitly inspected bilingual baseline sheets are preserved. The progress ledger records the current revised source/preview checkpoint. Continuous narrated playback/listening, synthesized Chinese speech and whole-video
+native production review remain separate release gates.
 
 ## Build
 
@@ -56,10 +76,10 @@ python tools/build.py cs17 -q l            # a 480p preview
 python tools/build.py cs17                 # 1080p
 ```
 
-## Problems, with solutions
+## Problems: proofs, a build sketch, and research notes
 
 1. **Universal hashing.** Prove that h_{a,b}(x) = ((ax + b) mod p) mod m, with a uniform in {1, …, p − 1} and b
-   uniform in {0, …, p − 1}, p prime and keys below p, satisfies Pr[h(x) = h(y)] ≤ 1/m for x ≠ y.
+   uniform in {0, …, p − 1}, p prime and distinct keys in {0, …, p − 1}, satisfies Pr[h(x) = h(y)] ≤ 1/m for x ≠ y.
 
    *Solution.* Let r = (ax + b) mod p and s = (ay + b) mod p. Then r − s ≡ a(x − y) (mod p), which is nonzero
    because p is prime and neither a nor x − y is divisible by p; so r ≠ s. Conversely, each pair r ≠ s comes from
@@ -91,20 +111,19 @@ python tools/build.py cs17                 # 1080p
    (at least) h − 2, each minimal: N(h) = N(h − 1) + N(h − 2) + 1, with N(1) = 1 and N(2) = 2. Then N(h) + 1 satisfies
    the Fibonacci recurrence with N(1) + 1 = 2 = F₃ and N(2) + 1 = 3 = F₄, so N(h) = F_{h+2} − 1. Since
    F_k > φ^k/√5 − 1, we get n + 2 ≥ N(h) + 2 = F_{h+2} + 1 > φ^{h+2}/√5, so h + 2 < log_φ(√5 (n + 2)), that is
-   h < log_φ(n + 2) + log_φ √5 − 2 = 1.4405 lg(n + 2) − 0.3277.
+   h < log_φ(n + 2) + log_φ √5 − 2 = lg(n + 2)/lg φ + log_φ √5 − 2. The leading coefficient 1/lg φ is approximately 1.44042; 1.4405 is a rounded, weaker upper coefficient.
 
 5. **Build: a hash without a division per letter.** Rewrite the Job v2 so that it divides once per word instead of
    once per letter, in the Pebble language, and measure its instructions per cycle and its ledger row on Part 8's
    core.
 
-   *Solution sketch.* Pebble's divider is unpipelined and takes 16 cycles, and the v2 hash puts a division on the
-   critical path of every letter (19.4 million of them on the corpus). Let the hash wrap instead: h = 31h + c with
-   32-bit arithmetic (one multiply per letter, which the core pipelines), and at the end of the word make it
-   non-negative (one h % P, adding P if the remainder is negative) and reduce it modulo the table size once: two divisions per word, 9.2
-   million instead of 24 million. Add the new events (wraps that went negative) to `features` and `FEATURES_C`, refit the
-   model as in `compute_job`, and price it with `core`. Expect the instruction count to fall a little and the IPC
-   to rise from 1.43 towards the sort's 2.24; report the new seconds, and check that the slot distribution is still
-   good (count probes per word, as in chapter 15).
+   *Build sketch, not a measured result.* Keep the multiplier 33 and define a 32-bit wrapping hash explicitly,
+   then normalize at the word boundary before slot reduction. Check Pebble's runtime and constant-folding
+   semantics at overflow; native C/C++ probes must use defined unsigned arithmetic. Replacing the hash changes
+   collisions and probe paths, so preserve full keys, test long words, ties and growth, and check every complete
+   output. Refit event counts with held-out samples of one corpus-sized image, then measure core samples.
+   Do not promise an IPC or runtime gain before those checks. The existing corpus has 19.4 million letters,
+   but this exercise has not produced a new ledger row.
 
 6. **★ Research: dynamic optimality.** Prove that splay trees are dynamically optimal (within O(1) of the best
    binary-search-tree algorithm on every access sequence), or give any BST algorithm that is o(log log n)-competitive.
@@ -148,16 +167,15 @@ python tools/build.py cs17                 # 1080p
    *解答。* 设 N(h) 是高度为 h 的 AVL 树最少的结点数。它的根的两棵子树高度为 h − 1 和（至少）h − 2，且各自最少：
    N(h) = N(h − 1) + N(h − 2) + 1，N(1) = 1，N(2) = 2。于是 N(h) + 1 满足斐波那契递推，N(1) + 1 = 2 = F₃，N(2) + 1 =
    3 = F₄，所以 N(h) = F_{h+2} − 1。由 F_k > φ^k/√5 − 1 得 n + 2 ≥ N(h) + 2 = F_{h+2} + 1 > φ^{h+2}/√5，故
-   h + 2 < log_φ(√5 (n + 2))，即 h < log_φ(n + 2) + log_φ √5 − 2 = 1.4405 lg(n + 2) − 0.3277。
+   h + 2 < log_φ(√5 (n + 2))，即 h < log_φ(n + 2) + log_φ √5 − 2 = lg(n + 2)/lg φ + log_φ √5 − 2。主项系数 1/lg φ 约为 1.44042，1.4405 只是取整后稍宽的上界系数。
 
 5. **动手：每个字母不做除法的哈希。** 用 Pebble 语言把任务 v2 改写成每个单词只做一次除法而不是每个字母一次，并在第8部分
    的核心上测量它的每周期指令数和账本行。
 
-   *解答要点。* Pebble 的除法器不流水、要 16 个周期，而 v2 的哈希在每个字母的关键路径上都放了一次除法（语料上共
-   1940 万个字母）。改为让哈希回绕：用 32 位算术 h = 31h + c（每个字母一次乘法，核心可以流水），在单词结束时把它变成
-   非负（做一次 h % P，余数为负就加上 P），再对表大小取一次模：每个单词两次除法，共 920 万次，而不是 2400 万次。把新事件（变负的回绕）
-   加进 `features` 和 `FEATURES_C`，像 `compute_job` 那样重新拟合模型，再用 `core` 定价。预计指令数略降，IPC 从 1.43
-   向排序的 2.24 靠近；报告新的秒数，并检查槽位分布仍然良好（像第15章那样数每个单词的探查数）。
+   *构建思路，并非实测结果。* 保留乘数 33，明确定义三十二位回绕哈希，在单词边界规范化后再约简到槽。
+   核对 Pebble 运行时和常量折叠的溢出语义；原生 C/C++ 探针使用有定义的无符号算术。改变哈希也会改变冲突与探查路径，
+   所以要保存完整键，测试长词、平局和扩容，并核对每次完整输出。使用同一个全语料容量镜像，重新拟合事件模型、留出验证，
+   再测核心段落。检验之前不要承诺 IPC 或时间提升。现有语料约有 1940 万字母，但这道练习没有生成新的账本行。
 
 6. **★ 研究：动态最优性。** 证明伸展树是动态最优的（在每个访问序列上与最好的二叉搜索树算法相差 O(1) 倍以内），或者给出
    任何一个 o(log log n) 竞争比的 BST 算法。
@@ -211,3 +229,35 @@ Bender, Conway, Farach-Colton, Kuszmaul & Tagliavini, "Tiny pointers" (2021); De
 (2009); Pătraşcu & Demaine, "Tight bounds for the partial-sums problem" (2004); Pătraşcu & Thorup, "Time-space
 trade-offs for predecessor search" (2006); Kraska, Beutel, Chi, Dean & Polyzotis, "The case for learned index
 structures" (2018).
+
+
+## Selected primary-source checks, 10 November 2026
+
+- [Optimal bounds for open addressing without reordering, v2](https://arxiv.org/html/2501.02305v2): selected
+  introduction and theorems. Per-key random probe sequences; query probe complexity is a key's sequence
+  position. Elastic's constant bound is amortized expected positive-query probes; the logarithmic bound is
+  worst-case **expected**, with load-range restrictions. Funnel's squared-log bounds have their own range.
+- [Full-occupancy hashing preprint](https://arxiv.org/abs/2503.13628): author abstract only; non-oblivious model,
+  hash assumptions and high-probability operations must accompany the claim.
+- [Incremental hashing preprint, 3 November 2026](https://arxiv.org/abs/2611.04186): author abstract only;
+  reordering and non-reordering results have different operation/expectation scopes.
+- [Braided cuckoo preprint, October 2026](https://arxiv.org/abs/2610.33229): author abstract only;
+  stated as forthcoming SODA 2027, not a completed 2027 publication.
+- [Splay competitive-bound preprint, July 2026](https://arxiv.org/abs/2607.18498) and
+  [Greedy competitive-bound preprint, August 2026](https://arxiv.org/abs/2608.04410): selected author abstracts,
+  not proof audits. The stated sublogarithmic bounds do not establish constant competitiveness. Tango is a
+  historical general-BST benchmark, not a claim that no later progress exists for these particular algorithms.
+- [Pătraşcu and Demaine, Logarithmic lower bounds in the cell-probe model](https://erikdemaine.org/papers/DynamicConnectivity_SICOMP/):
+  author bibliography/abstract; word size, randomization, amortization and update/query trade-offs matter.
+- [Rust HashMap documentation](https://doc.rust-lang.org/std/collections/struct.HashMap.html),
+  [Go Swiss-table design](https://go.dev/blog/swisstable),
+  [Abseil metadata design](https://abseil.io/about/design/swisstables),
+  [Java HashMap collision qualifications](https://docs.oracle.com/en/java/javase/18/docs/api/java.base/java/util/HashMap.html),
+  [Java 8 collection changes](https://docs.oracle.com/javase/8/docs/technotes/guides/collections/changes8.html), and
+  [CPython hash configuration](https://docs.python.org/3.13/using/configure.html): selected implementation/design
+  documentation. Java hashCode and ordinary C++ std::hash are not generally secret-key defenses; reference
+  stability does not mandate one specific chaining layout. Group widths and default hashes depend on platform,
+  version and configuration. The direct JEP 180 page returned 403, so the Java claim uses accessible official docs.
+
+中文范围说明：这些是注明日期的部分原始来源核对，不是穷尽综述或所有证明的审核。期望、摊还、以高概率、装填区间、
+是否允许重排，以及字长和操作集合都属于结论的一部分。预印本身份与未实现的新方案在画面及旁白中单独说明。

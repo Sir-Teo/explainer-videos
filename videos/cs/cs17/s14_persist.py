@@ -49,17 +49,18 @@ class Persist(VoiceoverScene):
                   font_size=22, color=GREY_A),
             label(r"every old version stays complete and searchable: \ \textbf{persistence}", font_size=22,
                   color=YES),
-            label(r"the default in functional languages \ (Part 14), \ Git's trees \ (Part 41), \ and "
+            label(r"common in functional programming \ (Part 14), \ Git's trees \ (Part 41), \ and "
                   r"copy-on-write databases", font_size=20, color=GREY_B),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Every structure so far changes in place, and the old state is lost. <bookmark mark='a'/> A persistent "
-            "structure keeps every version. The simplest method never changes a node at all. To insert ninety, "
-            "copy the nodes on the path from the root to where ninety goes, and let the copies point to the old, "
-            "unchanged subtrees. <bookmark mark='b'/> Now there are two roots. Each is a complete search tree, and "
-            "they share everything except one path. <bookmark mark='c'/> This is how functional languages, like "
-            "Part 14's, build all their data, and how Git stores the history of a file tree; James Driscoll, "
-            "Neil Sarnak, Daniel Sleator and Robert Tarjan made it a general theory in 1989."
+            "A mutable update normally discards the previous state. <bookmark mark='a'/> Path copying "
+            "preserves it: copy the search path to the new leaf, and let the copies point to unchanged "
+            "old subtrees. <bookmark mark='b'/> Two roots now describe two complete search trees sharing "
+            "most nodes. Old versions remain searchable. <bookmark mark='c'/> Persistent structures are "
+            "common in functional programming, copy-on-write systems and content-addressed trees such as "
+            "Git. They do not imply that every value in every functional language uses this particular "
+            "representation. Driscoll, Sarnak, Sleator and Tarjan developed a general persistence "
+            "framework in 1989."
         ) as vo:
             self.play(FadeIn(head), *[FadeIn(n) for n in old.values()], Create(oe), FadeIn(v0))
             vo.wait_until("a")
@@ -89,12 +90,12 @@ class Persist(VoiceoverScene):
                   font_size=20, color=GREY_B),
         ).arrange(DOWN, buff=0.2).next_to(tab, DOWN, buff=0.5)
         with self.voiceover(
-            "Is it expensive? <bookmark mark='a'/> We kept every version of a tree through a hundred thousand random "
-            "inserts. Each insert copied about twenty-one nodes, the length of one path, which is chapter five's "
-            "depth of a random tree. Copying the whole tree for each version would cost fifty thousand nodes per "
-            "insert. <bookmark mark='b'/> So a hundred thousand complete versions cost about twenty nodes each. "
-            "<bookmark mark='c'/> Chris Okasaki's book showed how far the idea goes: queues, heaps and more, "
-            "persistent and still efficient."
+            "Is it expensive? <bookmark mark='a'/> We kept every version of a tree through a hundred "
+            "thousand random inserts. Each insert copied about twenty-one nodes, the length of one path, "
+            "which is chapter five's depth of a random tree. Copying the whole tree for each version "
+            "would cost fifty thousand nodes per insert. <bookmark mark='b'/> So a hundred thousand "
+            "complete versions cost about twenty nodes each. <bookmark mark='c'/> Chris Okasaki's book "
+            "showed how far the idea goes: queues, heaps and more, persistent and still efficient."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -130,20 +131,25 @@ class Persist(VoiceoverScene):
         xl = label(r"keys", font_size=17, color=GREY_B).next_to(xt, DOWN, buff=0.1)
         yl = label(r"time per lookup, \ this machine, \ log scale", font_size=17, color=GREY_B).next_to(
             ax, UP, buff=0.1).align_to(ax, LEFT)
-        note_ = label(r"same asymptotic cost, \ different cache lines touched: \ "
-                      r"the tree is $7\times$ the array, \ chaining $2\times$ open addressing", font_size=21,
-                      color=HEAD).to_edge(DOWN, buff=0.35)
+        last = rows[-1]
+        note_ = VGroup(
+            label(rf"same checked values; \ open table load {100 * last['load']:.1f}\% at {words(last['capacity'])} slots",
+                  font_size=20, color=HEAD),
+            label(r"minimum of three repeats; \ lookup + result-vector write; \ no hardware-counter causal claim",
+                  font_size=19, color=GREY_B),
+        ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.28)
         with self.voiceover(
-            "Counting steps is not the whole story, as Part 9 warned. <bookmark mark='a'/> We timed lookups on "
-            "this machine in four structures, from a thousand keys to ten million. <bookmark mark='b'/> With a "
-            "thousand keys everything is in the cache. The tree and binary search take about forty nanoseconds, "
-            "mostly mispredicted branches; the hash tables, under ten. <bookmark mark='c'/> With ten million keys "
-            "the red–black tree chases a pointer, and usually a cache miss, at every level: over two microseconds "
-            "per lookup. Binary search touches fewer, more predictable lines: a third of a microsecond. The chained "
-            "table pays a miss or two, seventy-four nanoseconds; open addressing, one probe into one array, "
-            "thirty-one. <bookmark mark='d'/> The tree and the array are both logarithmic, yet seven times apart; "
-            "the two hash tables are both constant, yet more than twice apart. The difference is the number of "
-            "cache lines each one touches."
+            "Counting steps does not predict elapsed time by itself. <bookmark mark='a'/> These four "
+            "implementations answer the same seeded successful uint32 lookups, with last assignment "
+            "winning for duplicate keys. We check every returned value outside the timer, including "
+            "distinct keys twelve and thirteen. <bookmark mark='b'/> The timer includes lookups and "
+            "writing the result vector, and excludes construction, query generation, and verification. "
+            "Each point is the minimum of three repeats on this host. Actual unique-key counts and "
+            "open-table loads are recorded. <bookmark mark='c'/> The curves show different costs on this "
+            "workload, not a universal ranking. Layout, branches, allocation, hashing and cache behavior "
+            "can all matter. <bookmark mark='d'/> We did not collect hardware performance counters, so "
+            "these timings alone do not identify the number of cache misses or prove which mechanism "
+            "caused the gap."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl))
             vo.wait_until("a")

@@ -5,7 +5,7 @@
 
 Results are cached in ``.cache/cs17/<name>.json``; scenes call ``load(name)``.  The instruments are
 ``explainer/cs/algo/ds.py`` (hash tables, trees, heaps, union-find, tries, each counting its work) and
-``explainer/cs/algo/job2.py`` (the Job v2, a hash table in the Pebble language, with the exact model of its
+``explainer/cs/algo/job2.py`` (the Job v2, a hash table in the Pebble language, with a fitted model of its
 instruction count and a C program that counts the same events on all thirty novels); tested in
 tests/test_cs17_ds.py.  Items that time code (``cache``, ``practice``) run on this machine.
 
@@ -22,7 +22,7 @@ Items:
     btree      B-tree height against fan-out; nodes touched per search
     heaps      Dijkstra with binary, pairing and Fibonacci heaps: comparisons and decrease-keys
     unionfind  path lengths with and without rank and compression; Ackermann and log*
-    tries      a trie of the corpus vocabulary; the radix tree; rank in O(1) with o(n) bits
+    tries      a trie of the corpus vocabulary; the radix tree; a fixed rank directory with a logical packed-bit estimate
     persist    path copying: nodes copied per version
     cache      lookups timed on this machine: sorted array, std::map, std::unordered_map, open addressing
     practice   the Job natively: Python's dict, C++'s unordered_map, an open-addressing table in C
@@ -35,6 +35,8 @@ from __future__ import annotations
 import json
 import math
 import random
+import hashlib
+import sys
 import subprocess
 import tempfile
 import time
@@ -44,9 +46,29 @@ from pathlib import Path
 import numpy as np
 
 from explainer.ai.cache import Cache
+from explainer.cache_lock import locked_item
 
-CACHE = Cache("cs17")
-load = CACHE.load
+SCHEMAS = {name: 2 for name in ('birthday', 'probing', 'heaps', 'tries', 'cache', 'practice', 'job', 'frontier')}
+
+
+class DataStructureCache(Cache):
+    @locked_item(lambda self, name: self.path(name))
+    def load(self, name):
+        if not cache_current(name, self.path(name)):
+            self.save(name, ITEMS[name]())
+        return super().load(name)
+
+
+CACHE = DataStructureCache("cs17")
+
+
+def cache_current(name, path=None):
+    path = CACHE.path(name) if path is None else path
+    return name not in SCHEMAS or (path.exists() and json.loads(path.read_text()).get('schema') == SCHEMAS[name])
+
+
+def load(name):
+    return CACHE.load(name)
 P61 = (1 << 61) - 1
 
 
@@ -86,11 +108,13 @@ def compute_birthday() -> dict:
             x = (33 * x + c) % P
         return x
     hs = [h(w) for w in vocab]
-    full_coll = len(hs) - len(set(hs))
+    full_counts = Counter(hs)
+    full_coll = sum(c * (c - 1) // 2 for c in full_counts.values())
     m = 1 << 17
     slots = Counter(x % m for x in hs)
     n = len(vocab)
-    return {"rows": rows, "curve": curve, "distinct": n, "full_collisions": full_coll,
+    return {"schema": SCHEMAS["birthday"], "rows": rows, "curve": curve, "distinct": n, "full_collisions": full_coll,
+            "full_excess_keys": len(hs) - len(full_counts), "scope": "fixed polynomial hash observations; uniform independent hash expectation is a separate reference model",
             "expected_full": n * (n - 1) / (2 * P), "m": m, "slot_pairs": sum(c * (c - 1) // 2 for c in slots.values()),
             "expected_pairs": n * (n - 1) / (2 * m), "sqrt_m": math.sqrt(P)}
 
@@ -139,18 +163,24 @@ def compute_probing() -> dict:
             hit_keys = rng.sample(keys, min(3000, n))      # uniformly over the keys, not the first inserted
             row[name + "_hit"] = sum(t.find(k) for k in hit_keys) / len(hit_keys)
             row[name + "_miss"] = sum(t.find(k) for k in miss_keys) / 3000
-        rh = D.RobinHood(m, D.Universal(P61, m, rng))
+        # Controlled comparison: identical home addresses, key order and occupied slots.
+        home = D.Universal(P61, m, rng)
+        rh, t = D.RobinHood(m, home), D.LinearProbing(m, home)
         for k in keys:
             rh.insert(k)
-        d = rh.displacements()
-        t = D.LinearProbing(m, D.Universal(P61, m, rng))
-        for k in keys:
             t.insert(k)
+        d = rh.displacements()
         lp = [t.find(k) - 1 for k in keys]
-        row.update({"robin_mean": 1 + sum(d) / len(d), "robin_var": float(np.var(d)), "robin_max": max(d),
+        assert [x is not None for x in rh.t] == [x is not None for x in t.t]
+        assert sum(d) == sum(lp)
+        actual_alpha = n / m
+        row.update({"n": n, "actual_alpha": actual_alpha, "same_home_hash": True,
+                    "same_occupied_pattern": True, "displacement_sum": sum(d),
+                    "robin_mean": 1 + sum(d) / len(d), "robin_var": float(np.var(d)), "robin_max": max(d),
                     "linear_var": float(np.var(lp)), "linear_max": max(lp), "linear_mean": 1 + sum(lp) / len(lp),
-                    "knuth_hit": 0.5 * (1 + 1 / (1 - a)), "knuth_miss": 0.5 * (1 + 1 / (1 - a) ** 2),
-                    "uniform_hit": -math.log(1 - a) / a, "uniform_miss": 1 / (1 - a)})
+                    "knuth_hit": 0.5 * (1 + 1 / (1 - actual_alpha)),
+                    "knuth_miss": 0.5 * (1 + 1 / (1 - actual_alpha) ** 2),
+                    "uniform_hit": -math.log(1 - actual_alpha) / actual_alpha, "uniform_miss": 1 / (1 - actual_alpha)})
         rows.append(row)
         print(a, round(row["linear_miss"], 2), round(row["knuth_miss"], 2))
     # a picture of clustering: 64 slots, filled one key at a time to 70%
@@ -161,7 +191,7 @@ def compute_probing() -> dict:
         t.insert(k)
         if i in (10, 20, 30, 45):
             snaps.append({"n": i, "slots": [x is not None for x in t.t], "clusters": sorted(t.clusters(), reverse=True)})
-    return {"m": m, "rows": rows, "snaps": snaps}
+    return {"schema": SCHEMAS["probing"], "m": m, "rows": rows, "snaps": snaps, "scope": "finite seeded tables; Knuth/uniform formulas assume their respective random-hashing models; double hashing is not a uniform random permutation"}
 
 
 def compute_cuckoo() -> dict:
@@ -375,10 +405,11 @@ def compute_heaps() -> dict:
                     dk += v in dist
                     dist[v] = d + w
                     heapq.heappush(pq, (d + w, v))
+        assert ref == dist
         row["decrease"] = dk
         rows.append(row)
         print(row)
-    return {"rows": rows}
+    return {"schema": SCHEMAS["heaps"], "rows": rows, "scope": "actual heap key comparisons on three graphs, independently checked with heapq; Python list operations do not realize theoretical pointer costs"}
 
 
 def compute_unionfind() -> dict:
@@ -420,12 +451,17 @@ def compute_tries() -> dict:
     rng = random.Random(1)
     bits = [rng.randrange(2) for _ in range(1 << 16)]
     rs = D.RankSelect(bits)
-    ok = all(rs.rank(i) == sum(bits[:i]) for i in range(0, 1 << 16, 997))
+    prefix = [0]
+    for b in bits:
+        prefix.append(prefix[-1] + b)
+    ok = all(rs.rank(i) == prefix[i] for i in range(len(bits) + 1))
+    assert ok
     small = D.Trie()
     for w in ("the", "then", "there", "they", "this", "to", "tea", "ten"):
         small.insert(w)
-    return {"distinct": len(vocab), "letters": letters, "trie_nodes": t.nodes, "radix_nodes": t.radix_nodes(),
-            "rank_ok": ok, "rank_bits": len(bits), "rank_overhead": rs.overhead_bits(),
+    return {"schema": SCHEMAS["tries"], "distinct": len(vocab), "letters": letters, "trie_nodes": t.nodes, "radix_nodes": t.radix_nodes(),
+            "rank_ok": ok, "rank_queries_checked": len(bits) + 1, "rank_bits": len(bits), "rank_overhead": rs.overhead_bits(),
+            "scope": "fixed 512/64 rank directory; logical packed-bit estimate excludes Python objects; select not implemented; not an asymptotic o(n)-bit directory",
             "small_nodes": small.nodes, "small_radix": small.radix_nodes()}
 
 
@@ -450,38 +486,37 @@ def compute_persist() -> dict:
 CACHE_CPP = r"""
 #include <algorithm>
 #include <chrono>
-#include <cstdio>
+#include <cstdint>
 #include <cstdlib>
+#include <iomanip>
+#include <iostream>
+#include <limits>
 #include <map>
 #include <random>
 #include <unordered_map>
 #include <vector>
 using namespace std;
-static double now() { return chrono::duration<double>(chrono::steady_clock::now().time_since_epoch()).count(); }
-int main(int argc, char **argv) {
-  long n = atol(argv[1]); const long Q = 2000000;
-  mt19937_64 rng(7);
-  vector<unsigned> keys(n); for (auto &k : keys) k = (unsigned)rng();
-  vector<unsigned> q(Q); for (auto &x : q) x = keys[rng() % n];
-  volatile unsigned long sink = 0; double t;
-  // sorted array, binary search
-  vector<unsigned> a(keys); sort(a.begin(), a.end());
-  t = now(); for (auto x : q) sink += lower_bound(a.begin(), a.end(), x) - a.begin(); double t_arr = (now() - t) / Q;
-  // std::map: a red-black tree
-  map<unsigned, unsigned> m; for (long i = 0; i < n; i++) m[keys[i]] = i;
-  t = now(); for (auto x : q) sink += m.find(x)->second; double t_map = (now() - t) / Q;
-  // std::unordered_map: chaining
-  unordered_map<unsigned, unsigned> u; u.reserve(n); for (long i = 0; i < n; i++) u[keys[i]] = i;
-  t = now(); for (auto x : q) sink += u.find(x)->second; double t_um = (now() - t) / Q;
-  // open addressing, linear probing, load 1/2, keys in one array
-  long cap = 1; while (cap < 2 * n) cap <<= 1;
-  vector<unsigned> ok(cap, 0), ov(cap);
-  for (long i = 0; i < n; i++) { unsigned k = keys[i] | 1; long s = (k * 2654435761u) & (cap - 1);
-    while (ok[s] && ok[s] != k) s = (s + 1) & (cap - 1); ok[s] = k; ov[s] = i; }
-  t = now(); for (auto x : q) { unsigned k = x | 1; long s = (k * 2654435761u) & (cap - 1);
-    while (ok[s] != k) s = (s + 1) & (cap - 1); sink += ov[s]; } double t_oa = (now() - t) / Q;
-  printf("%g %g %g %g\n", t_arr * 1e9, t_map * 1e9, t_um * 1e9, t_oa * 1e9);
-  return 0;
+static double now(){return chrono::duration<double>(chrono::steady_clock::now().time_since_epoch()).count();}
+static uint64_t checksum(const vector<uint32_t>& a){uint64_t h=14695981039346656037ULL;for(auto x:a){h^=x;h*=1099511628211ULL;}return h;}
+int main(int argc,char**argv){
+ if(argc!=2)return 2;char*end=nullptr;long n=strtol(argv[1],&end,10);if(*end||n<2||n>10000000)return 2;
+ const long Q=2000000;mt19937_64 rng(7);vector<uint32_t>keys(n);for(auto&k:keys)k=(uint32_t)rng();keys[0]=12;keys[1]=13;
+ vector<uint32_t>q(Q);for(auto&x:q)x=keys[rng()%n];q[0]=12;q[1]=13;
+ // Last assignment wins identically for every container, including duplicate keys.
+ unordered_map<uint32_t,uint32_t>reference;reference.reserve(n);for(long i=0;i<n;i++)reference[keys[i]]=(uint32_t)i;
+ vector<uint32_t>expected(Q),out(Q);for(long i=0;i<Q;i++)expected[i]=reference.at(q[i]);uint64_t expected_hash=checksum(expected);
+ vector<pair<uint32_t,uint32_t>>a; a.reserve(n);for(long i=0;i<n;i++)a.emplace_back(keys[i],i);sort(a.begin(),a.end());
+ auto check=[&](){return out==expected&&checksum(out)==expected_hash;};
+ double t=now();for(long i=0;i<Q;i++){auto it=upper_bound(a.begin(),a.end(),make_pair(q[i],numeric_limits<uint32_t>::max()));out[i]=prev(it)->second;}double ta=(now()-t)/Q;bool ca=check();
+ map<uint32_t,uint32_t>m;for(long i=0;i<n;i++)m[keys[i]]=i;
+ t=now();for(long i=0;i<Q;i++)out[i]=m.find(q[i])->second;double tm=(now()-t)/Q;bool cm=check();
+ unordered_map<uint32_t,uint32_t>u;u.reserve(n);for(long i=0;i<n;i++)u[keys[i]]=i;
+ t=now();for(long i=0;i<Q;i++)out[i]=u.find(q[i])->second;double tu=(now()-t)/Q;bool cu=check();
+ size_t cap=1;while(cap<2*(size_t)n)cap<<=1;vector<uint32_t>ok(cap),ov(cap);vector<uint8_t>occupied(cap);
+ for(long i=0;i<n;i++){uint32_t k=keys[i];size_t s=(k*2654435761u)&(cap-1);while(occupied[s]&&ok[s]!=k)s=(s+1)&(cap-1);occupied[s]=1;ok[s]=k;ov[s]=i;}
+ t=now();for(long i=0;i<Q;i++){uint32_t k=q[i];size_t s=(k*2654435761u)&(cap-1);while(occupied[s]&&ok[s]!=k)s=(s+1)&(cap-1);if(!occupied[s])return 3;out[i]=ov[s];}double to=(now()-t)/Q;bool co=check();
+ cout<<setprecision(17)<<"{\"n\":"<<n<<",\"unique\":"<<reference.size()<<",\"queries\":"<<Q<<",\"capacity\":"<<cap<<",\"load\":"<<(double)reference.size()/cap<<",\"checksum\":\""<<expected_hash<<"\",\"checks\":["<<ca<<","<<cm<<","<<cu<<","<<co<<"],\"nanoseconds\":["<<ta*1e9<<","<<tm*1e9<<","<<tu*1e9<<","<<to*1e9<<"]}\n";
+ return !(ca&&cm&&cu&&co);
 }
 """
 
@@ -490,16 +525,26 @@ def compute_cache() -> dict:
     rows = []
     with tempfile.TemporaryDirectory() as d:
         Path(d, "c.cpp").write_text(CACHE_CPP)
-        subprocess.run(["g++", "-O2", "-o", "c", "c.cpp"], cwd=d, check=True)
+        subprocess.run(["g++", "-O2", "-std=c++17", "-o", "c", "c.cpp"], cwd=d, check=True)
         for n in (1000, 100000, 1000000, 10000000):
-            best = None
+            repeats = []
             for _ in range(3):
-                v = list(map(float, subprocess.run(["./c", str(n)], cwd=d, capture_output=True, text=True,
-                                                   check=True).stdout.split()))
-                best = v if best is None else [min(x, y) for x, y in zip(best, v)]
-            rows.append({"n": n, "array": best[0], "map": best[1], "unordered": best[2], "open": best[3]})
-            print(rows[-1])
-    return {"rows": rows, "gcc": subprocess.run(["g++", "--version"], capture_output=True, text=True).stdout.splitlines()[0]}
+                r = json.loads(subprocess.run(["./c", str(n)], cwd=d, capture_output=True,
+                                              text=True, check=True).stdout)
+                assert r['n'] == n and r['checks'] == [1, 1, 1, 1]
+                assert all(math.isfinite(t) and t > 0 for t in r['nanoseconds'])
+                repeats.append(r)
+            assert len({r['checksum'] for r in repeats}) == 1
+            row = {k: repeats[0][k] for k in ('n', 'unique', 'capacity', 'load', 'queries', 'checksum')}
+            row.update({name: min(r['nanoseconds'][i] for r in repeats)
+                        for i, name in enumerate(('array', 'map', 'unordered', 'open'))})
+            row['repeats'] = repeats
+            rows.append(row)
+            print(row)
+    return dict(schema=SCHEMAS['cache'], rows=rows,
+                gcc=subprocess.run(['g++', '--version'], capture_output=True, text=True, check=True).stdout.splitlines()[0],
+                source_sha256=hashlib.sha256(CACHE_CPP.encode()).hexdigest(),
+                protocol='2,000,000 seeded successful uint32 lookups; last assignment wins; keys 12/13 remain distinct; result-vector writes timed; build/query generation/full-vector verification excluded; minimum of three full-output-checked repeats; separate actual loads; one host')
 
 
 JOB_CPP = r"""
@@ -513,7 +558,9 @@ JOB_CPP = r"""
 #include <algorithm>
 using namespace std;
 int main(int argc, char **argv) {
-  FILE *f = fopen(argv[1], "rb"); fseek(f, 0, SEEK_END); long sz = ftell(f); fseek(f, 0, SEEK_SET);
+  if (argc != 2) return 2;
+  FILE *f = fopen(argv[1], "rb"); if (!f || fseek(f, 0, SEEK_END)) return 2;
+  long sz = ftell(f); if (sz < 0 || fseek(f, 0, SEEK_SET)) return 2;
   vector<unsigned char> t(sz); if (fread(t.data(), 1, sz, f) != (size_t)sz) return 1; fclose(f);
   auto t0 = chrono::steady_clock::now();
   unordered_map<string, pair<long, long>> m; m.reserve(1 << 17);
@@ -525,46 +572,44 @@ int main(int argc, char **argv) {
     else if (!w.empty()) { auto it = m.find(w); if (it == m.end()) m.emplace(w, make_pair(1L, ord++)); else it->second.first++; w.clear(); }
   }
   vector<tuple<long, long, string>> v; for (auto &e : m) v.emplace_back(-e.second.first, e.second.second, e.first);
-  partial_sort(v.begin(), v.begin() + 20, v.end());
+  size_t shown = min<size_t>(20, v.size());
+  partial_sort(v.begin(), v.begin() + shown, v.end());
   double s = chrono::duration<double>(chrono::steady_clock::now() - t0).count();
-  for (int i = 0; i < 20; i++) fprintf(stderr, "%s %ld\n", get<2>(v[i]).c_str(), -get<0>(v[i]));
+  for (size_t i = 0; i < shown; i++) fprintf(stderr, "%s %ld\n", get<2>(v[i]).c_str(), -get<0>(v[i]));
   printf("%g\n", s);
   return 0;
 }
 """
 
 JOB_OA_C = r"""
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-static double now() { struct timespec ts; clock_gettime(CLOCK_MONOTONIC, &ts); return ts.tv_sec + ts.tv_nsec * 1e-9; }
-int main(int argc, char **argv) {
-  FILE *f = fopen(argv[1], "rb"); fseek(f, 0, SEEK_END); long sz = ftell(f); fseek(f, 0, SEEK_SET);
-  unsigned char *t = malloc(sz); if (fread(t, 1, sz, f) != (size_t)sz) return 1; fclose(f);
-  double t0 = now();
-  long cap = 1 << 18; unsigned *slot = calloc(cap, 4); unsigned *eh = malloc(4 << 17), *es = malloc(4 << 17), *cnt = malloc(4 << 17);
-  unsigned char *el = malloc(1 << 17); unsigned char *pool = malloc(1 << 21); long used = 0, ne = 0;
-  unsigned char w[256]; int n = 0; unsigned h = 2166136261u;
-  for (long i = 0; i <= sz; i++) {
-    int c = i < sz ? t[i] : -1;
-    if (c >= 'A' && c <= 'Z') c += 32;
-    if (c >= 'a' && c <= 'z') { if (n < 255) w[n++] = c; h = (h ^ c) * 16777619u; }
-    else if (n) {
-      long s = h & (cap - 1);
-      for (;;) {
-        unsigned e = slot[s];
-        if (!e) { eh[ne] = h; es[ne] = used; el[ne] = n; cnt[ne] = 1; memcpy(pool + used, w, n); used += n; slot[s] = ++ne; break; }
-        e--; if (eh[e] == h && el[e] == n && !memcmp(pool + es[e], w, n)) { cnt[e]++; break; }
-        s = (s + 1) & (cap - 1);
-      }
-      n = 0; h = 2166136261u;
-    }
+typedef struct { uint32_t hash,start,len; uint64_t count; } Entry;
+static double now(void){struct timespec ts;if(clock_gettime(CLOCK_MONOTONIC,&ts))exit(2);return ts.tv_sec+ts.tv_nsec*1e-9;}
+static void* checked(void*p){if(!p)exit(2);return p;}
+int main(int argc,char**argv){
+ if(argc!=2)return 2;FILE*f=fopen(argv[1],"rb");if(!f)return 2;if(fseek(f,0,SEEK_END))return 2;long size=ftell(f);if(size<0||size>UINT32_MAX||fseek(f,0,SEEK_SET))return 2;
+ size_t sz=(size_t)size;unsigned char*t=checked(malloc(sz+1));if(fread(t,1,sz,f)!=sz)return 2;fclose(f);
+ double begin=now();size_t cap=64,allocated=16,ne=0,used=0,n=0;uint32_t*slot=checked(calloc(cap,sizeof(*slot)));Entry*entries=checked(malloc(allocated*sizeof(*entries)));unsigned char*pool=checked(malloc(sz+1)),*word=checked(malloc(sz+1));uint32_t h=2166136261u;
+ for(size_t i=0;i<=sz;i++){
+  int c=i<sz?t[i]:-1;if(c>='A'&&c<='Z')c+=32;
+  if(c>='a'&&c<='z'){word[n++]=(unsigned char)c;h=(h^(uint32_t)c)*16777619u;continue;}
+  if(!n)continue;size_t s=h&(cap-1);
+  while(slot[s]){Entry*e=&entries[slot[s]-1];if(e->hash==h&&e->len==n&&!memcmp(pool+e->start,word,n)){e->count++;break;}s=(s+1)&(cap-1);}
+  if(!slot[s]){
+   if(ne==allocated){allocated*=2;entries=checked(realloc(entries,allocated*sizeof(*entries)));}
+   if(used+n>sz||ne>=UINT32_MAX)return 3;entries[ne]=(Entry){h,(uint32_t)used,(uint32_t)n,1};memcpy(pool+used,word,n);used+=n;slot[s]=(uint32_t)++ne;
+   if(2*ne>cap){cap*=2;free(slot);slot=checked(calloc(cap,sizeof(*slot)));for(size_t e=0;e<ne;e++){size_t q=entries[e].hash&(cap-1);while(slot[q])q=(q+1)&(cap-1);slot[q]=(uint32_t)(e+1);}}
   }
-  for (int k = 0; k < 20; k++) { long best = 0, at = 0; for (long e = 0; e < ne; e++) if (cnt[e] > best) { best = cnt[e]; at = e; }
-    fwrite(pool + es[at], 1, el[at], stderr); fprintf(stderr, " %ld\n", best); cnt[at] = 0; }
-  printf("%g\n", now() - t0);
-  return 0;
+  n=0;h=2166136261u;
+ }
+ size_t selected[20],shown=0;uint64_t counts[20];for(size_t k=0;k<20;k++){uint64_t best=0;size_t at=0;for(size_t e=0;e<ne;e++)if(entries[e].count>best){best=entries[e].count;at=e;}if(!best)break;selected[shown]=at;counts[shown++]=best;entries[at].count=0;}
+ double elapsed=now()-begin;
+ for(size_t k=0;k<shown;k++){Entry*e=&entries[selected[k]];fwrite(pool+e->start,1,e->len,stderr);fprintf(stderr," %llu\n",(unsigned long long)counts[k]);}
+ printf("%.17g\n",elapsed);free(word);free(pool);free(entries);free(slot);free(t);return 0;
 }
 """
 
@@ -573,32 +618,40 @@ def compute_practice() -> dict:
     from explainer.cs.pebble import programs as PR
     full = _full_text()
     ref = PR.job_reference(full)
-    # Python: a dict
-    best_py = 1e9
+    py_repeats = []
     for _ in range(3):
         t0 = time.perf_counter()
         c = {}
         for w in PR.job_words(full):
             c[w] = c.get(w, 0) + 1
         top = sorted(c.items(), key=lambda kv: -kv[1])[:20]
-        best_py = min(best_py, time.perf_counter() - t0)
-    assert b"".join(w + b" " + str(k).encode() + b"\n" for w, k in top) == ref
-    out = {"python": best_py}
+        elapsed = time.perf_counter() - t0
+        actual = b"".join(w + b" " + str(k).encode() + b"\n" for w, k in top)
+        assert actual == ref
+        py_repeats.append(elapsed)
+    out = dict(schema=SCHEMAS['practice'], python=min(py_repeats), python_repeats=py_repeats)
     with tempfile.TemporaryDirectory() as d:
-        Path(d, "t").write_bytes(full)
-        Path(d, "j.cpp").write_text(JOB_CPP)
-        Path(d, "o.c").write_text(JOB_OA_C)
-        subprocess.run(["g++", "-O2", "-o", "j", "j.cpp"], cwd=d, check=True)
-        subprocess.run(["gcc", "-O2", "-o", "o", "o.c"], cwd=d, check=True)
-        for name, exe in (("unordered_map", "./j"), ("open addressing", "./o")):
-            ts = []
+        Path(d, 't').write_bytes(full)
+        Path(d, 'j.cpp').write_text(JOB_CPP)
+        Path(d, 'o.c').write_text(JOB_OA_C)
+        subprocess.run(['g++', '-O2', '-std=c++17', '-o', 'j', 'j.cpp'], cwd=d, check=True)
+        subprocess.run(['gcc', '-O2', '-o', 'o', 'o.c'], cwd=d, check=True)
+        for name, exe in (('unordered_map', './j'), ('open addressing', './o')):
+            repeats = []
             for _ in range(5):
-                r = subprocess.run([exe, "t"], cwd=d, capture_output=True, check=True)
-                ts.append(float(r.stdout))
-            out[name] = min(ts)
-            out[name + "_ok"] = r.stderr == ref
-    out["bytes"] = len(full)
-    out["python_version"] = subprocess.run(["python3", "--version"], capture_output=True, text=True).stdout.strip()
+                r = subprocess.run([exe, 't'], cwd=d, capture_output=True, check=True)
+                elapsed = float(r.stdout)
+                assert math.isfinite(elapsed) and elapsed > 0 and r.stderr == ref
+                repeats.append(elapsed)
+            out[name] = min(repeats)
+            out[name + '_repeats'] = repeats
+            out[name + '_ok'] = True
+    out.update(bytes=len(full), corpus_sha256=hashlib.sha256(full).hexdigest(),
+               output_sha256=hashlib.sha256(ref).hexdigest(), python_version=sys.version.splitlines()[0],
+               python_executable=sys.executable,
+               gcc=subprocess.run(['gcc', '--version'], capture_output=True, text=True, check=True).stdout.splitlines()[0],
+               cpp_sha256=hashlib.sha256(JOB_CPP.encode()).hexdigest(), c_sha256=hashlib.sha256(JOB_OA_C.encode()).hexdigest(),
+               protocol='counting/allocation/top-20 selection timed; file input/output formatting/compiler startup excluded; ties by first occurrence; Python min of 3 and native min of 5, every complete output checked; one host; language/algorithm/container differ')
     print(out)
     return out
 
@@ -679,23 +732,45 @@ def _passages(n=48, lo=60, hi=90000, seed=17):
 
 
 def compute_job() -> dict:
-    """Ledger row 8: the Job v2 compiled from the Pebble language.  Instructions for the thirty novels from the exact
-    model fitted on passages; cycles at the IPC measured on Part 8's core, plus every cache miss of the corpus run
-    through Part 9's hierarchy, each charged its full latency."""
+    """Project full-corpus costs from checked samples of one corpus-sized image and a partial cache model."""
     from explainer.cs.algo import job2 as J
     from explainer.cs.pebble import programs as PR
     from videos.cs.cs8.compute import core
     from videos.cs.cs9.compute import pebble_hierarchy
-    c = J.compile_job()
+    full = _full_text()
+    vocab = set(PR.job_words(full))
+    unique_letters = sum(map(len, vocab))
+    max_word = max(map(len, vocab), default=0)
+    distinct_capacity = len(vocab) + 1
+    slot_capacity = 1 << (2 * distinct_capacity - 1).bit_length()
+    capacities = dict(letter_capacity=unique_letters + max_word + 1,
+                      distinct_capacity=distinct_capacity, slot_capacity=slot_capacity)
+    source = J.job_source(**capacities)
+    c = J.compile_job(**capacities)
+    memory_bytes = 1 << (len(c.program.image) + (1 << 20) - 1).bit_length()
+    assert len(c.program.image) < memory_bytes < 2 ** 31
     tapes = _passages()
     samples = []
+    emulator_samples = []
     for t in tapes:
-        m = J.run(c, t)
+        m = J.run(c, t, mem_size=memory_bytes)
         assert bytes(m.output) == PR.job_reference(t)
-        samples.append((J.features(t), m.steps))
+        features = J.features(t)
+        native_features, native_out = J.features_native(t)
+        assert native_features == features and native_out == bytes(m.output)
+        samples.append((features, m.steps))
+        emulator_samples.append(dict(bytes=len(t), steps=m.steps, features=features,
+                                     tape_sha256=hashlib.sha256(t).hexdigest(),
+                                     output_sha256=hashlib.sha256(bytes(m.output)).hexdigest()))
     held_idx = [i for i in range(len(samples)) if i % 4 == 2]
     train = [s for i, s in enumerate(samples) if i not in held_idx]
     model = J.fit(train)
+    matrix = np.array([[1] + [f[k] for k in model['names'][1:]] for f, _ in train], dtype=float)
+    singular = np.linalg.svd(matrix, compute_uv=False)
+    model.update(rank=int(np.linalg.matrix_rank(matrix)), columns=matrix.shape[1],
+                 singular_values=singular.tolist(), condition_number=float(singular[0] / singular[-1]),
+                 decomposition_scope='correlated least-squares terms; nonunique category attribution, not measured causal costs')
+    assert all(math.isfinite(v) for v in model['coef'])
     held = [{"bytes": samples[i][0]["bytes"], "steps": samples[i][1], "predicted": J.predict(model, samples[i][0])}
             for i in held_idx]
     held_err = max(abs(h["predicted"] - h["steps"]) / h["steps"] for h in held)
@@ -703,6 +778,7 @@ def compute_job() -> dict:
     ff, out = J.features_native(full)
     assert out == PR.job_reference(full)
     instr = J.predict(model, ff)
+    assert instr > 0 and math.isfinite(instr)
     # where the instructions go, from the model's own terms
     coef = dict(zip(model["names"], model["coef"]))
     parts = {
@@ -717,11 +793,15 @@ def compute_job() -> dict:
     # IPC on the out-of-order core, on passages of 1-3 kB (as rows 3, 5 and 7 were priced)
     from videos.cs.cs13.compute import _tapes
     cyc = ins = 0
+    ipc_samples = []
     for t in _tapes(6, 1200, 2600)[:3]:
-        q = core(c.program.image, t)
+        q = core(c.program.image, t, mem_size=memory_bytes)
         assert bytes(q.output) == PR.job_reference(t)
         cyc += q.cycles
         ins += q.committed
+        ipc_samples.append(dict(bytes=len(t), cycles=q.cycles, committed=q.committed,
+                                tape_sha256=hashlib.sha256(t).hexdigest(),
+                                output_sha256=hashlib.sha256(bytes(q.output)).hexdigest()))
     ipc = ins / cyc
     # memory: the corpus run through Part 9's hierarchy
     lat = pebble_hierarchy()[1]      # cumulative cycles: L1, L2, L3, DRAM
@@ -737,11 +817,12 @@ def compute_job() -> dict:
     cycles = instr / ipc + stall
     seconds = cycles / (row7["clock_mhz"] * 1e6)
     led.append({"part": 17, "label": r"a hash table", "seconds": seconds, "cycles": cycles,
-                "clock_mhz": row7["clock_mhz"], "instructions": instr, "ipc": ipc, "stall_cycles": stall})
+                "clock_mhz": row7["clock_mhz"], "instructions": instr, "ipc": ipc, "stall_cycles": stall,
+                "memory_bytes": memory_bytes, "scope": "full native event counts + fitted instructions + sampled IPC + assumed cache trace; unexecuted additive projection"})
     CACHE.dir.mkdir(parents=True, exist_ok=True)
     (CACHE.dir / "ledger.json").write_text(json.dumps(led, indent=1))
-    probes_per_word = (ff["probes"] + ff["words"]) / ff["words"]
-    return {"model": model, "held": held, "held_err": held_err, "train_err": model["max_rel_err"],
+    probes_per_word = (ff["probes"] + ff["new"]) / ff["words"]
+    return {"schema": SCHEMAS["job"], "model": model, "held": held, "held_err": held_err, "train_err": model["max_rel_err"],
             "n_train": len(train), "n_held": len(held), "n_features": len(model["names"]) - 1,
             "features": ff, "instructions": instr, "ipc": ipc, "parts": parts, "seconds": seconds, "ledger": led,
             "memory": {"accesses": accs, "L1_miss": m1, "L2_miss": m2, "L3_miss": m3, "latencies": lat,
@@ -750,26 +831,18 @@ def compute_job() -> dict:
             "speedup_vs_row7": row7["seconds"] / seconds, "speedup_vs_row5": led[5]["seconds"] / seconds,
             "speedup_vs_row4": led[4]["seconds"] / seconds, "hardware_gain": led[0]["seconds"] / led[4]["seconds"],
             "algorithm_gain": led[5]["seconds"] / seconds, "v1_instructions": row7["instructions"],
-            "source": J.JOB_HASH.strip().splitlines()}
+            "source": source.strip().splitlines(), "capacities": capacities, "memory_bytes": memory_bytes,
+            "image_bytes": len(c.program.image), "image_sha256": hashlib.sha256(c.program.image).hexdigest(),
+            "source_sha256": hashlib.sha256(source.encode()).hexdigest(), "emulator_samples": emulator_samples,
+            "ipc_samples": ipc_samples, "corpus_sha256": hashlib.sha256(full).hexdigest(),
+            "corpus_output_sha256": hashlib.sha256(out).hexdigest(),
+            "full_exceeds_training_max": [k for k in model['names'][1:] if ff[k] > max(f[k] for f, _ in train)],
+            "scope": "48 finite emulator samples, 12 held out; full corpus event counts checked by native output; instructions/time not full execution; category shares nonunique; cache trace is partial assumed layout, not compiled execution; additive miss penalties may double count stalls and omit overlap"}
 
 
 def compute_frontier() -> dict:
-    from explainer.cs.algo import ds as D
-    # uniform probing: the expected cost of an insertion when a fraction delta of the slots is free is about 1/delta
-    rows = []
-    m = 1 << 13
-    rng = random.Random(11)
-    for delta in (0.5, 0.25, 0.1, 0.05, 0.02, 0.01):
-        t = D.DoubleHashing(m, D.Universal(P61, m, rng), D.Universal(P61, m, rng))
-        n = int((1 - delta) * m)
-        keys = rng.sample(range(10 ** 12), n)
-        for k in keys[:-200]:
-            t.insert(k)
-        last = [t.insert(k) for k in keys[-200:]]
-        rows.append({"delta": delta, "measured": sum(last) / len(last), "yao": 1 / delta,
-                     "funnel": math.log2(1 / delta) ** 2, "elastic": math.log2(1 / delta)})
-        print(rows[-1])
-    return {"rows": rows, "m": m}
+    from .measurements import uniform_probe_experiment
+    return dict(schema=SCHEMAS['frontier'], **uniform_probe_experiment())
 
 
 ITEMS = {

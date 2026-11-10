@@ -36,13 +36,14 @@ class Bst(VoiceoverScene):
                   color=HEAD),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Hash tables give up order: they cannot list keys alphabetically, or find the next key after a given "
-            "one. <bookmark mark='a'/> A binary search tree keeps it. Each node holds a key, with smaller keys in "
-            "its left subtree and larger ones in its right. <bookmark mark='b'/> To find a key, start at the root, "
-            "compare, and go left or right: one level per comparison. <bookmark mark='c'/> And walking the tree "
-            "left, node, right lists every key in sorted order, so the tree also answers range queries and finds "
-            "neighbours. <bookmark mark='d'/> The cost of a find is the depth of the key, and the shape of the "
-            "tree depends entirely on the order the keys arrived in."
+            "Hash tables give up order: they cannot list keys alphabetically, or find the next key after "
+            "a given one. <bookmark mark='a'/> A binary search tree keeps it. Each node holds a key, with"
+            " smaller keys in its left subtree and larger ones in its right. <bookmark mark='b'/> To find"
+            " a key, start at the root, compare, and go left or right: one level per comparison. "
+            "<bookmark mark='c'/> And walking the tree left, node, right lists every key in sorted order,"
+            " so the tree also answers range queries and finds neighbours. <bookmark mark='d'/> The cost "
+            "of a find is the depth of the key, and the shape of the tree depends entirely on the order "
+            "the keys arrived in."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -63,25 +64,26 @@ class Bst(VoiceoverScene):
         head = label(r"Random insertion order", font_size=34).to_edge(UP, buff=0.3)
         rows = [[words(r["n"]), f"{r['depth']:.2f}", f"{r['theory']:.2f}", f"{r['height']:.1f}",
                  f"{r['lg']:.1f}"] for r in d["rows"]]
-        tab = grid_table([r"$n$", r"average depth", r"$2(1 + \tfrac1n)H_n - 4$", r"height", r"$\lg n$"], rows,
+        tab = grid_table([r"$n$", r"average depth", r"$2(1 + \tfrac1n)H_n - 4$", r"height (edges)", r"$\lg n$"], rows,
                          widths=[2.0, 2.4, 3.6, 1.8, 1.6], row_h=0.48, font_size=20).next_to(head, DOWN, buff=0.5)
         pts = VGroup(
             label(r"the average depth is $2 \ln n + O(1) \approx 1.39 \lg n$: \ only 39\% worse than perfectly "
                   r"balanced", font_size=22, color=YES),
             label(r"the height, \ the worst key, \ is about $4.311 \ln n$ \ (Devroye, \ 1986)", font_size=21,
                   color=GREY_A),
-            label(rf"but insert the keys in sorted order: \ a path of height {words(d['sorted_height'])} for 1,000 "
+            label(rf"but insert the keys in sorted order: \ a path of edge depth {words(d['sorted_height'] - 1)} for 1,000 "
                   r"keys", font_size=22, color=NO),
         ).arrange(DOWN, buff=0.22).next_to(tab, DOWN, buff=0.45)
         with self.voiceover(
-            "If the keys arrive in random order, the tree is well behaved. <bookmark mark='a'/> We built trees from "
-            "a hundred to a hundred thousand random keys and measured the average depth of a node. It matches "
-            "the exact formula, two times one plus one over n times the harmonic number, minus four. <bookmark "
-            "mark='b'/> That is two natural log n, about one point three nine times log base two n: only "
-            "thirty-nine percent deeper than a perfectly balanced tree. <bookmark mark='c'/> The deepest node is "
-            "about twice as deep again, as Luc Devroye proved. <bookmark mark='d'/> But insert the same keys in "
-            "sorted order, and every key goes to the right of the last: the tree is a path, and every operation "
-            "is linear. Real keys often arrive sorted."
+            "Random insertion order gives an expectation, not a guarantee for every tree. <bookmark "
+            "mark='a'/> The table measures mean node depth in edges; the root has depth zero. The exact "
+            "expectation over all insertion orders is two times one plus one over n times the harmonic "
+            "number, minus four. <bookmark mark='b'/> As n grows its leading term is two natural log n. "
+            "The rounded one point three nine factor is a leading-term comparison with log base two n, "
+            "not a finite equality. <bookmark mark='c'/> Maximum depth also grows logarithmically under "
+            "random insertion, with a different leading constant. <bookmark mark='d'/> Sorted insertion "
+            "instead creates a chain: a thousand keys have maximum depth nine hundred and ninety-nine. "
+            "Deep searches cost linear work; a root search still costs one visited node."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -109,17 +111,23 @@ class Bst(VoiceoverScene):
             label(r"so Part 16's $2n \ln n$ is the total depth of a random BST, \ and chapter 7's treaps inherit it",
                   font_size=21, color=GREY_B),
         ).arrange(DOWN, buff=0.26).next_to(head, DOWN, buff=0.5)
+        witness = VGroup(
+            mono("4 | 2 6 1 3 5 7", 24, CODE),
+            MathTex(r"\{2,1,3\}\quad\leftarrow\quad4\quad\rightarrow\quad\{6,5,7\}", font_size=31, color=DATA),
+            label(r"BST root = first pivot; \ recurse on the same smaller/larger subsequences", font_size=20, color=HEAD),
+        ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "That two natural log n should look familiar. <bookmark mark='a'/> When the tree is built, the first "
-            "key becomes the root and is compared with every key that comes after it. <bookmark mark='b'/> When "
-            "quicksort runs with the first element as pivot, that element is compared with every other key. "
-            "<bookmark mark='c'/> Both then split the rest into the smaller and the larger keys and do the same "
-            "thing to each part, in the same order. <bookmark mark='d'/> So they compare exactly the same pairs. "
-            "A binary search tree is quicksort's recursion, frozen into a data structure. <bookmark mark='e'/> We "
-            "checked it on two thousand random keys: the counts are identical. <bookmark mark='f'/> Part 16's two "
-            "n natural log n is the total depth of a random tree."
+            "That two natural log n should look familiar. <bookmark mark='a'/> When the tree is built, "
+            "the first key becomes the root and is compared with every key that comes after it. <bookmark"
+            " mark='b'/> When quicksort runs with the first element as pivot, that element is compared "
+            "with every other key. <bookmark mark='c'/> Both then split the rest into the smaller and the"
+            " larger keys and do the same thing to each part, in the same order. <bookmark mark='d'/> So "
+            "they compare exactly the same pairs. A binary search tree is quicksort's recursion, frozen "
+            "into a data structure. <bookmark mark='e'/> We checked it on two thousand random keys: the "
+            "counts are identical. <bookmark mark='f'/> Part 16's two n natural log n is the total depth "
+            "of a random tree."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(witness))
             for mk, s in zip("abcdef", steps):
                 vo.wait_until(mk)
                 self.play(FadeIn(s))

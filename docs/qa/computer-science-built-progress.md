@@ -1,10 +1,35 @@
 # Computer Science, Built — sequential polish
 
 Work on `computer-science-built`, one video at a time, with separate commits.
-Current video: **cs17, Data Structures**. CS1–CS16 source/preview polish checkpoints
+Current video: **cs18, Graphs**. CS1–CS17 source/preview polish checkpoints
 are complete at the scopes below. Their production release gates remain open; this
 ledger does not treat sampled previews as listening or final-production approval.
 The syllabus's earlier draft-preview claims are separate.
+
+## Final CS17 preview checkpoint, 10 November 2026
+
+- Repair rank boundary handling, actual Fibonacci-heap comparison accounting, corpus-sized Job arrays,
+  full-key native hashing/lookup semantics, finite uniform-probing trials and correlated instruction-fit
+  interpretation. Eight guarded producer revisions change nine of nineteen payloads. Seventeen tests and
+  24 independent numerical/model groups pass, including native UBSan and exhaustive small probing cases.
+- Revise 44 bilingual narration sections and the exercises. Add checked universal-hash and Robin Hood
+  witnesses, the first-pivot BST/quicksort partition, five-node splay/potential arithmetic, Fibonacci cuts,
+  six-node LOUDS navigation, measured timing protocols and an explicit projection audit. Separate executed
+  corpus events, sampled emulator/core runs, the rank-22/28 fit and assumed cache-stall scenario.
+- Review all 36 endpoint and 36 motion overviews: 1,440 temporal samples, 91,494 decoded motion frames
+  and zero raw motion warnings. Four late visual introductions now reveal their explanatory content at entry.
+  Every final raw receipt has the frozen source fingerprint; 28 endpoint reviews inherit only after fresh
+  PNG equality. Superseded artifacts and repair findings remain archived without retagging receipts.
+- Review 34 native clips: 28,650 decoded frames, 816 samples and 34 full-size stills. Actual rerendered movie
+  hashes preserve 32 inspected clips; both added rotation clips receive fresh review. Cuckoo, Tries and Frontier
+  narrated pilots decode 8,242 frames plus audio; 120 samples/three stills and 45 pilot cues checked.
+- All 81 English speech blocks pass signal/alignment (45.735 minutes); 221 chapter cue requests meet 250 ms.
+  Exact canonical source pairs and actual bilingual captures each cover 81/81 blocks. All 699 captured caption
+  strings have no unresolved translation leads; 35 retained originals have individual classifications.
+
+[Verified CS17 evidence](evidence/cs17-polish-20261110/README.md).
+Continuous narrated listening, Chinese speech/listening, whole-video native production review and runtime at
+the selected narration pace remain open release gates.
 
 ## CS3 cached-only entry follow-up, 9 November 2026
 
