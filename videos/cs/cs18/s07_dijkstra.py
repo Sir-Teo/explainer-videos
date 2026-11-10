@@ -153,16 +153,15 @@ class Dijkstra(VoiceoverScene):
             col = interpolate_color(ManimColor(YES), ManimColor(NO), dist / maxd)
             dots.append(Dot(at(pos[tuple(u)]), radius=0.045, color=col))
         src = Dot(at(pos[tuple(d["source"])]), radius=0.1, color=WHITE)
-        pts = label(rf"{words(d['n'])} intersections, \ {words(d['m'])} roads; \ arterials \ (gold) \ are three "
-                    rf"times as fast", font_size=20, color=GREY_B).to_edge(DOWN, buff=0.3)
+        pts = label(f"{words(d['n'])} intersections, \\ {words(d['m'])} roads; \\ arterials \\ (gold) \\ cost $0.35$ times geometric length", font_size=20, color=GREY_B).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Here is the algorithm running on a city of two thousand four hundred intersections, from one starting "
-            "point. <bookmark mark='a'/> Each dot appears when its intersection is settled, coloured by its "
-            "distance. The settled region grows outwards like a ripple, always the nearest unsettled point next. "
-            "<bookmark mark='b'/> It is not a circle: the gold arterial roads are three times as fast, and the "
-            "wavefront runs ahead along them. <bookmark mark='c'/> To find the distance to one destination, "
-            "Dijkstra settles every intersection nearer than it, which is most of the city. Chapter nine shows how "
-            "map apps avoid that."
+            "Here is Dijkstra on a synthetic city of two thousand four hundred intersections. <bookmark "
+            "mark='a'/> A dot appears when an intersection is settled, coloured by its distance from the "
+            "source. <bookmark mark='b'/> Gold arterial edges cost zero point three five times their "
+            "geometric length, so the wavefront advances farther along them; these are synthetic travel "
+            "costs. <bookmark mark='c'/> A point-to-point query settles vertices in distance order until "
+            "the destination is selected. How much of the city that includes depends on the destination. "
+            "Chapter nine compares exact alternatives on fixed queries."
         ) as vo:
             self.play(FadeIn(head), FadeIn(roads), FadeIn(src), FadeIn(pts))
             vo.wait_until("a")

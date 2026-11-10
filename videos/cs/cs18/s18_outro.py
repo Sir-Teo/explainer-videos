@@ -33,18 +33,19 @@ class Outro(VoiceoverScene):
             tile(MathTex(r"[d(u), f(u)]", font_size=44, color=DATA), r"DFS's parentheses", DATA),
             tile(MathTex(r"d(y) \le \ell(P) < d(u)", font_size=36, color=YES), r"Dijkstra's invariant", YES),
             tile(MathTex(rf"{a['dijkstra'] / a['ch']:.0f}\times \text{{ fewer}}", font_size=40, color=LAM),
-                 r"contraction hierarchies", LAM),
+                 r"city expansion count", LAM),
             tile(MathTex(r"\max \text{flow} = \min \text{cut}", font_size=36, color=CTRL), r"flows", CTRL),
             tile(MathTex(r"V - E + F = 2", font_size=44, color=FUNC), r"planarity", FUNC),
         ).arrange_in_grid(rows=2, cols=3, buff=(0.35, 0.35)).move_to(DOWN * 0.2)
         head = label(rf"Part {PART}: \ Graphs", font_size=38).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "What we built in this part. Euler's theorem and Hierholzer's circuit. Breadth-first layers and "
-            "bipartiteness; depth-first parentheses, edge classes and cycles; topological order; strongly connected "
-            "components and 2-SAT. Dijkstra's invariant, Bellman–Ford and arbitrage, all pairs by dynamic "
-            "programming and reweighting, and route planning that settles twenty times fewer vertices than Dijkstra. Spanning trees from "
-            "the cut property, the max-flow min-cut theorem, stable matching, the gap between Euler and Hamilton, "
-            "PageRank, and four colours."
+            "We built checked examples of Euler circuits, breadth-first layers and bipartiteness; "
+            "depth-first intervals and edge classes; topological orders, strong components and two-SAT. "
+            "We proved Dijkstra's nonnegative-weight invariant, explored negative edges and reweighting, "
+            "and compared actual route-search expansions on one synthetic city. Spanning-tree exchanges, "
+            "feasible flows and matching certificates show how a proof can accompany an answer. Subset "
+            "dynamic programming, damped PageRank and planar colouring illustrate different guarantees. "
+            "Keep measured runs, illustrative models and research theorems distinct."
         ):
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
@@ -77,18 +78,20 @@ class Outro(VoiceoverScene):
 
     def practice(self):
         card = practice_card([
-            (r"routing", r"maps use contraction hierarchies and their descendants, \ not plain Dijkstra"),
-            (r"builds", r"every build tool is a topological sort with caching"),
-            (r"networks", r"OSPF runs Dijkstra on every router; \ BGP is a path-vector Bellman--Ford"),
+            (r"routing", "routing uses direct search or preprocessing, \\ according to updates and objectives"),
+            (r"builds", "dependency ordering plus caching and invalidation"),
+            (r"networks", "OSPF runs Dijkstra on every router; \\ BGP adds path attributes and routing policy"),
             (r"data", r"graph databases, \ fraud rings as cycles, \ social graphs as BFS"),
-            (r"interviews", r"BFS, \ DFS, \ topological sort, \ Dijkstra and union--find are half of them"),
+            (r"interviews", "BFS, \\ DFS, \\ topological sort, \\ Dijkstra and union--find are useful building blocks"),
         ])
         with self.voiceover(
-            "In practice. Map services answer routes with contraction hierarchies and their descendants, never "
-            "plain Dijkstra. Every build tool is a topological sort with a cache. Inside the internet, OSPF runs "
-            "Dijkstra on every router, and BGP is a path-vector cousin of Bellman–Ford. Graph databases find fraud "
-            "rings as cycles and friends of friends by breadth-first search. And breadth-first search, depth-first "
-            "search, topological sort, Dijkstra and union–find are half of all coding interviews."
+            "In practice, routing systems may use contraction hierarchies, landmark bounds, other "
+            "preprocessing or direct searches, depending on updates and objectives. Build systems combine"
+            " dependency ordering with caching and invalidation. OSPF uses shortest-path computation on "
+            "link-state data, while BGP adds path attributes and policy; it is not simply a shortest "
+            "numeric-distance solver. Graph databases and fraud analysis use reachability, cycles and "
+            "neighbourhood queries, though a cycle alone does not prove fraud. These algorithms are "
+            "useful building blocks whose application assumptions still need checking."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.35), run_time=3.0)
@@ -97,8 +100,7 @@ class Outro(VoiceoverScene):
 
     def problems(self):
         ps = problem_set([
-            r"Prove that a connected graph with all degrees even has an Euler circuit, \ and that Hierholzer's "
-            r"algorithm runs in $O(E)$.",
+            "Prove that a connected graph with all degrees even has an Euler circuit, \\ and that Hierholzer's algorithm uses expected $O(V+E)$ including validation.",
             r"Prove that BFS dequeues vertices in non-decreasing order of distance, \ and use it to show the BFS "
             r"tree contains shortest paths.",
             r"Show that Dijkstra can fail with a single negative edge, \ and that Johnson's reweighting $w + p(u) - "
@@ -106,8 +108,7 @@ class Outro(VoiceoverScene):
             r"Prove the cut property, \ and deduce that Kruskal's and Prim's algorithms are correct.",
             r"\textit{Build.} \ Implement Dijkstra in the Pebble language with Part 17's binary heap, \ run it on our city "
             r"grid on the emulator, \ and count instructions per edge.",
-            r"$\bigstar$ \textit{Research.} \ Single-source shortest paths in $O(m)$ time on directed graphs with "
-            r"non-negative real weights, \ or a lower bound that rules it out.",
+            "$\\bigstar$ \\textit{Research.} \\ Distance-only single-source shortest paths in $O(m+n)$ time on directed graphs with non-negative real weights in the comparison-addition model, \\ or a lower bound.",
         ], font_size=22)
         with self.voiceover(
             "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build "

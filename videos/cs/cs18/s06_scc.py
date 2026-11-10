@@ -105,8 +105,8 @@ class Scc(VoiceoverScene):
         sl = label(r"stack", font_size=19, color=GREY_B).move_to([1.9, 2.5, 0])
         steps = VGroup(
             label(r"number vertices in discovery order; \ keep the open ones on a stack", font_size=20, color=GREY_A),
-            MathTex(r"\mathrm{low}(v) = \text{smallest index reachable from } v\text{'s subtree by one edge back into "
-                    r"the stack}", font_size=26, color=LAM),
+            MathTex(r"\mathrm{low}(v)=\min\{\mathrm{index}(v),\ \mathrm{low}(c)\ (c:\mathrm{child}),\ "
+                    r"\mathrm{index}(w)\ (v\to w,\ w:\mathrm{active})\}", font_size=26, color=LAM),
             label(r"when a vertex finishes with $\mathrm{low}(v) = \mathrm{index}(v)$, \ it is the \textbf{root} of a "
                   r"component: \ pop the stack down to it", font_size=20, color=YES),
             label(r"components come out in reverse topological order of the condensation", font_size=20, color=HEAD),
@@ -115,15 +115,16 @@ class Scc(VoiceoverScene):
         ).arrange(DOWN, buff=0.17).to_edge(DOWN, buff=0.3)
         cols = [YES, LAM, CTRL]
         with self.voiceover(
-            "Robert Tarjan found the components in a single depth-first search. <bookmark mark='a'/> Number the "
-            "vertices in order of discovery, and keep the vertices of unfinished components on a stack. <bookmark "
-            "mark='b'/> For each vertex, compute its low link: the smallest number reachable from its subtree using "
-            "at most one edge back into the stack. <bookmark mark='c'/> When a vertex finishes and its low link is "
-            "its own number, nothing below it can climb higher: it is the first-discovered vertex of a component, "
-            "and the component is everything above it on the stack. <bookmark mark='d'/> The components emerge in "
-            "reverse topological order of the condensation, exactly what 2-SAT will need. <bookmark mark='e'/> "
-            "Sambasiva Rao Kosaraju's alternative uses two searches, the second on the reversed graph, and is just "
-            "as fast."
+            "Tarjan's algorithm finds components in one depth-first search. <bookmark mark='a'/> Assign "
+            "discovery indices and keep vertices of unfinished components on an active stack. <bookmark "
+            "mark='b'/> Initialize low of v to its own index. After a DFS child finishes, include that "
+            "child's low value; for an edge to an already discovered vertex still on the active stack, "
+            "include that vertex's discovery index. These are different update rules. <bookmark "
+            "mark='c'/> When low of v equals its index, pop the active stack through v: those vertices "
+            "form one component. <bookmark mark='d'/> Components emerge in reverse topological order of "
+            "the condensation. <bookmark mark='e'/> Kosaraju's alternative uses decreasing finish times, "
+            "followed by searches on the reversed graph. Both methods take order V plus E with adjacency "
+            "lists."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g), FadeIn(sl))
             vo.wait_until("a")
@@ -141,10 +142,10 @@ class Scc(VoiceoverScene):
                                       stroke_width=1.5), mono(str(v), 16, WHITE))
                     c.move_to([1.9 + 0.58 * len(cells), 1.9, 0])
                     cells.append((v, c))
-                    self.play(FadeIn(t), FadeIn(c), nodes[v][0].animate.set_stroke(HEAD, width=3), run_time=0.4)
+                    self.play(FadeIn(t), FadeIn(c), nodes[v][0].animate.set_stroke(HEAD, width=3), run_time=0.3)
                 elif kind == "low":
                     t = mono(f"{index[v]}/{val}", 15, LAM).move_to(tags[v])
-                    self.play(Transform(tags[v], t), run_time=0.35)
+                    self.play(Transform(tags[v], t), run_time=0.25)
                 else:
                     col = cols[ci]
                     ci += 1
@@ -153,7 +154,7 @@ class Scc(VoiceoverScene):
                     hull = SurroundingRectangle(VGroup(*[nodes[w] for w in v], *[tags[w] for w in v]), buff=0.12,
                                                 corner_radius=0.2, color=col, stroke_width=2)
                     self.play(*[FadeOut(c, shift=DOWN * 0.3) for c in out], Create(hull),
-                              *[nodes[w][0].animate.set_fill(col, 0.35) for w in v], run_time=0.6)
+                              *[nodes[w][0].animate.set_fill(col, 0.35) for w in v], run_time=0.5)
             vo.wait_until("d")
             self.play(FadeIn(steps[3]))
             vo.wait_until("e")
@@ -176,7 +177,7 @@ class Scc(VoiceoverScene):
                   r"the newest are reached by nobody", font_size=21, color=GREY_A),
             label(r"the real web in 1999 \ (Broder et al., \ 2000): \\ a \textbf{bow tie}, \ 28\% core, \ 21\% in, \ "
                   r"21\% out, \ the rest tendrils", font_size=21, color=HEAD),
-            label(r"one linear-time pass over two hundred million pages: \ Tarjan's algorithm at scale", font_size=20,
+            label(r"historical crawl statistics; \ our synthetic graph has a different component profile", font_size=20,
                   color=GREY_B),
         ).arrange(DOWN, buff=0.16).to_edge(DOWN, buff=0.3)
         y0 = (tab.get_bottom()[1] + pts.get_top()[1]) / 2
@@ -190,17 +191,19 @@ class Scc(VoiceoverScene):
         bow.add(label(r"IN \ 21\%", font_size=19).move_to(bow[0]), label(r"core \ 28\%", font_size=19).move_to(
             bow[1]), label(r"OUT \ 21\%", font_size=19).move_to(bow[2]))
         with self.voiceover(
-            "Components describe the large-scale shape of networks. <bookmark mark='a'/> We grew a synthetic web "
-            "of twenty thousand pages, where new pages link to popular old ones and a quarter of links are "
-            "returned, and computed its components. A giant core holds almost two fifths of the pages; all the "
-            "others can reach it, but nothing links to the newest ones. <bookmark mark='b'/> When Andrei Broder and "
-            "his colleagues did this to two hundred million real pages in 1999, they found a bow tie: a core of "
-            "just over a quarter, a fifth that leads into it, a fifth reachable from it, and tendrils. <bookmark "
-            "mark='c'/> It took one linear-time pass of this chapter's algorithm."
+            "Components reveal network structure, but a generator is not a web measurement. <bookmark "
+            "mark='a'/> This synthetic graph has twenty thousand pages. New pages prefer popular older "
+            "ones, and some links are returned. Its checked table has a large core, an incoming region, "
+            "and zero pages in the outgoing-only region. <bookmark mark='b'/> The separate bow-tie "
+            "diagram describes Broder and colleagues' May 1999 crawl, reported in 2000: about "
+            "twenty-eight percent core, twenty-one percent incoming and twenty-one percent outgoing, with"
+            " other regions outside them. <bookmark mark='c'/> Those are historical observations on a "
+            "different graph. Linear-time SCC algorithms explain why such decomposition is possible; this"
+            " episode neither reproduces that crawl nor measures today's web."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(tab))
             vo.wait_until("a")
-            self.play(FadeIn(tab), FadeIn(pts[0]))
+            self.play(FadeIn(pts[0]))
             vo.wait_until("b")
             self.play(FadeIn(pts[1]), FadeIn(bow))
             vo.wait_until("c")
@@ -238,24 +241,25 @@ class Scc(VoiceoverScene):
                   font_size=22, color=GREY_A),
             label(r"unsatisfiable \ $\iff$ \ some $x$ and $\lnot x$ \\ lie in the same component", font_size=22,
                   color=NO),
-            label(r"otherwise set $x$ true when its component \\ comes later in topological order: \\ here $x_1 = "
+            label(r"otherwise compare $x$ with $\neg x$: \ set $x$ true when its component \\ comes later than $\neg x$ in topological order: \\ here $x_1 = "
                   r"x_3 = \text{true}, \ x_2 = \text{false}$", font_size=21, color=YES),
             label(r"with three literals per clause \\ the problem is NP-complete \ (Part 26)", font_size=21,
                   color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.5).shift(DOWN * 0.6)
         with self.voiceover(
-            "Components also solve a logic problem. <bookmark mark='a'/> Here is a formula in which every clause is "
-            "the or of two literals. <bookmark mark='b'/> Each clause, a or b, says: if not a, then b, and if not b, "
-            "then a. Make a vertex for every literal and an edge for every implication. <bookmark mark='c'/> The "
-            "formula is unsatisfiable exactly when some variable and its negation imply each other, that is, lie in "
-            "the same strongly connected component. <bookmark mark='d'/> Otherwise, setting each variable true when "
-            "its component comes later in topological order gives a solution; here, x one and x three true, x two "
-            "false. <bookmark mark='e'/> With three literals per clause instead of two, no polynomial algorithm is "
-            "known, and Part 26 explains why that gap matters."
+            "Strong components solve two-SAT. <bookmark mark='a'/> Each clause here is a disjunction of "
+            "two literals. <bookmark mark='b'/> A or B yields the implications not A to B and not B to A."
+            " Put every literal and its negation in the implication graph. <bookmark mark='c'/> The "
+            "formula is unsatisfiable exactly when a variable shares a strong component with its "
+            "negation. <bookmark mark='d'/> Otherwise, choose a topological order of the condensation and"
+            " set x true precisely when x's component is later than the component of not x. Comparing "
+            "these two components is essential. Our checked example sets x one and x three true and x two"
+            " false. <bookmark mark='e'/> With three literals per clause, general satisfiability is "
+            "NP-complete; Part 26 explains the distinction."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(formula))
             vo.wait_until("a")
-            self.play(FadeIn(formula))
+            self.play(Indicate(formula, color=HEAD), run_time=.7)
             vo.wait_until("b")
             self.play(FadeIn(steps[0]), *[FadeIn(n) for n in nodes.values()])
             self.play(LaggedStart(*[GrowArrow(a_) if isinstance(a_, Arrow) else Create(a_) for a_ in arrows],

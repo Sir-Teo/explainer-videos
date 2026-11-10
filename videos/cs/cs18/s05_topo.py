@@ -117,20 +117,21 @@ class Topo(VoiceoverScene):
             (r"Part 13's compiler: \ basic blocks in reverse postorder for data-flow analysis", LAM),
             (r"package managers: \ install dependencies first; \ report cycles", CTRL),
             (r"course prerequisites, \ task scheduling, \ neural networks' forward pass", GREY_A),
-            (r"the longest path in a DAG \ = \ the critical path: \ the least time with unlimited workers", HEAD),
+            ("critical path: weighted task durations \\\\ unlimited workers; no extra resource or communication costs", HEAD),
         )]).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(head, DOWN, buff=0.6)
         with self.voiceover(
-            "Topological order is one of the most used algorithms in software. <bookmark mark='a'/> Build systems "
-            "use it to order compilation and to find what can run in parallel. Spreadsheets use it to recompute "
-            "cells after the cells they depend on. Part 13's compiler visited basic blocks in reverse postorder, "
-            "which is a topological order of the control-flow graph without its back edges. Package managers "
-            "install dependencies first and refuse cycles. <bookmark mark='b'/> And on a directed acyclic graph, "
-            "even the longest path is easy: in topological order, one pass finds the critical path, the least "
-            "time a project can take with unlimited workers."
+            "Topological order applies when dependencies form a directed acyclic graph. <bookmark "
+            "mark='a'/> It orders compilation prerequisites and acyclic spreadsheet recalculation. In a "
+            "DFS forest, decreasing finish time orders the graph after its back edges are removed; a "
+            "control-flow graph itself may still have loops. Package managers may need extra policy for "
+            "cycles, versions and optional dependencies. <bookmark mark='b'/> A longest path in a DAG is "
+            "also computed in one topological pass. With task durations as weights, unlimited workers and"
+            " no other resource or communication costs, the critical-path length is the minimum project "
+            "completion time."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows[:5]))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r) for r in rows[:5]], lag_ratio=0.4), run_time=4)
+            self.play(Indicate(rows[:5], color=DATA, scale_factor=1.02), run_time=.7)
             vo.wait_until("b")
             self.play(FadeIn(rows[5]))
         self.wait(0.3)

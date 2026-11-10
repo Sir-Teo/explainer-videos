@@ -35,7 +35,7 @@ class Planar(VoiceoverScene):
             label(r"a cube drawn flat: \ $8 - 12 + 6 = 2$ \\ (the outside is a face)", font_size=21, color=GREY_A),
             label(rf"our triangulated map: \ {d['V']} $-$ {d['E']} $+$ {d['F']} $=$ {d['euler']}", font_size=21,
                   color=GREY_A),
-            label(r"every face has at least 3 edges, \\ every edge borders 2 faces: \ $E \le 3V - 6$", font_size=21,
+            label("simple planar graph, \\ $V\\ge3$: \\ every face boundary has at least 3 incidences, \\\\ every edge borders 2 faces: \\ $E \\le 3V - 6$", font_size=21,
                   color=HEAD),
             label(r"so a planar graph is sparse, \\ and has a vertex of degree at most 5", font_size=21, color=YES),
             label(r"$K_5$ has $10 > 3 \cdot 5 - 6$ edges: \\ it cannot be drawn without crossings", font_size=21,
@@ -44,14 +44,16 @@ class Planar(VoiceoverScene):
         if steps.width > 6.6:
             steps.scale_to_fit_width(6.6).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "A graph is planar if it can be drawn on paper without crossing edges, like a road map without bridges. "
-            "<bookmark mark='a'/> Euler found the rule that governs every such drawing: vertices minus edges plus "
-            "faces equals two. A cube flattened out has eight vertices, twelve edges and six faces, counting the "
-            "outside. <bookmark mark='b'/> Our triangulated map satisfies it too. <bookmark mark='c'/> Since every "
-            "face has at least three sides and every edge borders two faces, a planar graph has at most three V "
-            "minus six edges. <bookmark mark='d'/> So planar graphs are sparse, and every one has a vertex with at "
-            "most five neighbours. <bookmark mark='e'/> And the complete graph on five vertices, with ten edges, "
-            "cannot be drawn in the plane at all."
+            "A planar graph admits a drawing with no edge crossings except at common endpoints. <bookmark"
+            " mark='a'/> For a connected plane graph, counting the outer face, Euler's formula is "
+            "vertices minus edges plus faces equals two. The cube gives eight minus twelve plus six. With"
+            " c components the corresponding total is one plus c. <bookmark mark='b'/> Our connected "
+            "triangulated grid is checked against the same formula. <bookmark mark='c'/> For a simple "
+            "planar graph with at least three vertices, counting face-boundary incidences gives at most "
+            "three V minus six edges; multiple edges and loops need different qualifications. <bookmark "
+            "mark='d'/> The average degree is below six, so some vertex has degree at most five; this "
+            "remains true in every simple planar subgraph. <bookmark mark='e'/> The complete graph on "
+            "five vertices violates the bound and is not planar."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g), FadeIn(f))
             for mk, s in zip("abcde", steps):
@@ -69,7 +71,7 @@ class Planar(VoiceoverScene):
                   color=GREY_A),
             label(r"four: \ Appel and Haken \ (1976), \ 1,936 configurations checked by computer: \\ the first major "
                   r"proof that needed one", font_size=21, color=HEAD),
-            label(r"Gonthier \ (2005): \ the whole proof checked in the Coq proof assistant \ (Part 54)", font_size=21,
+            label("Gonthier \\ (2005): \\ a formal four-colour proof checked in Coq \\ (Part 54)", font_size=21,
                   color=YES),
         ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.5)
         pal = [DATA, YES, NO, LAM]
@@ -82,15 +84,15 @@ class Planar(VoiceoverScene):
         rcap = label(r"four regions that all touch each other: \\ four colours are sometimes necessary",
                      font_size=19, color=GREY_B).next_to(regions, RIGHT, buff=0.5)
         with self.voiceover(
-            "The most famous problem about planar graphs began with a map. Colour each region so that regions "
-            "sharing a border differ; as a graph, regions are vertices and borders are edges, and the graph is "
-            "planar. <bookmark mark='a'/> In 1852 Francis Guthrie noticed that four colours were enough for the "
-            "counties of England, and asked whether four always suffice. <bookmark mark='b'/> Five colours are "
-            "provably enough, by an argument we will see in a moment. <bookmark mark='c'/> Four took until 1976, "
-            "when Kenneth Appel and Wolfgang Haken reduced the question to almost two thousand configurations and "
-            "checked them all by computer, the first major theorem whose proof needed one. Many mathematicians were "
-            "uneasy. <bookmark mark='d'/> In 2005 Georges Gonthier removed the doubt by checking the entire proof "
-            "in the Coq proof assistant, as Part 54 will explain."
+            "Map colouring requires regions sharing a border segment to differ; meeting only at a point "
+            "does not count. For ordinary connected regions the adjacency graph is planar. <bookmark "
+            "mark='a'/> Guthrie's 1852 question asked whether four colours always suffice. <bookmark "
+            "mark='b'/> The five-colour theorem has a short inductive proof using the low-degree vertex "
+            "and Kempe chains. <bookmark mark='c'/> Appel and Haken's 1976 four-colour proof used a "
+            "finite reducibility computation; it was not just a search for colourings of a few maps. "
+            "<bookmark mark='d'/> Gonthier's later Coq development formalized and machine-checked a "
+            "four-colour proof. Our backtracking illustration is separate from those theorem proofs, and "
+            "does not recreate their configuration checks."
         ) as vo:
             self.play(FadeIn(head), FadeIn(regions), FadeIn(rcap))
             for mk, s in zip("abcd", steps):
@@ -140,20 +142,18 @@ class Planar(VoiceoverScene):
         if steps.width > 6.6:
             steps.scale_to_fit_width(6.6).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "Here is the five-colour argument, and it uses planarity in a beautiful way. <bookmark mark='a'/> "
-            "Euler's formula gave every planar graph a vertex v with at most five neighbours. Remove it, and colour "
-            "the rest with five colours, by induction. <bookmark mark='b'/> If v's neighbours use four colours or "
-            "fewer, v takes the one left over. <bookmark mark='c'/> The hard case is five neighbours in five "
-            "colours. Alfred Kempe's idea: take the first neighbour, and every vertex of colours one or three that "
-            "can be reached from it by a path using only those two colours. If that chain does not reach the third "
-            "neighbour, swap ones and threes along it. The colouring stays proper, and the first neighbour is now "
-            "a three, so colour one is free for v. <bookmark mark='d'/> If the chain does reach the third "
-            "neighbour, it closes a loop through v. In the plane that loop has an inside and an outside, with the "
-            "second neighbour inside and the fourth outside. So a chain of colours two and four from the second "
-            "neighbour is trapped, cannot reach the fourth, and we swap that chain instead. <bookmark mark='e'/> "
-            "Either way, a colour is freed for v. <bookmark mark='f'/> Kempe published this argument in 1879 as a "
-            "proof of four colours. Eleven years later Percy Heawood found the case it missed, and the question "
-            "stayed open for eighty-six years."
+            "The five-colour proof uses the cyclic order of neighbours in a planar drawing. <bookmark "
+            "mark='a'/> Remove a vertex v of degree at most five and colour the smaller graph by "
+            "induction. <bookmark mark='b'/> If its neighbours use at most four colours, one of five is "
+            "free for v. <bookmark mark='c'/> Otherwise number the five differently coloured neighbours "
+            "around v. If the connected one-three colour component of neighbour one avoids neighbour "
+            "three, swap those two colours throughout that component. Colour one becomes free. <bookmark "
+            "mark='d'/> If the component connects neighbours one and three, choose a simple path in it. "
+            "Together with v it forms a separating cycle, so a two-four colour path cannot join "
+            "neighbours two and four without crossing. Swap the two-four component containing neighbour "
+            "two instead. <bookmark mark='e'/> A colour is free in either case. <bookmark mark='f'/> The "
+            "chain idea comes from Kempe; Heawood identified the flaw in Kempe's four-colour argument and"
+            " established the five-colour theorem."
         ) as vo:
             self.play(FadeIn(head), Create(ring), Create(spokes), FadeIn(ns), FadeIn(nl), FadeIn(v))
             vo.wait_until("a")

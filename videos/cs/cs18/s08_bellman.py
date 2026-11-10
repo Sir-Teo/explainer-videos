@@ -58,12 +58,11 @@ class Bellman(VoiceoverScene):
         head = label(r"Bellman--Ford: \ relax everything, \ $V - 1$ times", font_size=34).to_edge(UP, buff=0.3)
         steps = VGroup(
             label(r"round $k$: \ relax every edge once", font_size=23, color=GREY_A),
-            label(r"after round $k$, \ every shortest path with at most $k$ edges is found \\ (induction on $k$)",
+            label("after round $k$: \\ at least as good as every path with at most $k$ edges \\\\ (induction on $k$)",
                   font_size=22, color=GREY_A),
-            label(r"a shortest path has at most $V - 1$ edges, \ so $V - 1$ rounds suffice: \ $O(VE)$", font_size=22,
+            label("without a reachable negative cycle: \\ a simple shortest path uses at most $V-1$ edges \\\\ $V-1$ rounds suffice; \\ $O(VE)$", font_size=22,
                   color=YES),
-            label(r"a \textbf{negative cycle} makes ``shortest'' meaningless: \\ round $V$ still improves something, \ "
-                  r"and that detects it", font_size=22, color=NO),
+            label("source-reachable negative cycle: downstream distances have no lower bound \\\\ an improvement in round $V$ detects one", font_size=22, color=NO),
             label(r"distance-vector routing \ (RIP, \ Part 36) \ is Bellman--Ford spread across routers, \\ each "
                   r"relaxing its own links", font_size=20, color=GREY_B),
         ).arrange(DOWN, buff=0.2).next_to(head, DOWN, buff=0.4)
@@ -87,20 +86,20 @@ class Bellman(VoiceoverScene):
                     *[MathTex(rf"{u} \to {v}: \ {w}", font_size=26) for u, v, w in order]).arrange(
             DOWN, aligned_edge=LEFT, buff=0.1).next_to(tab, RIGHT, buff=0.7)
         with self.voiceover(
-            "Lester Ford in 1956 and Richard Bellman in 1958 gave an algorithm that tolerates negative edges. "
-            "<bookmark mark='a'/> Simply relax every edge, again and again. <bookmark mark='b'/> After the first round, "
-            "every shortest path that uses one edge is right; after round k, every shortest path with at most k "
-            "edges, by induction. <bookmark mark='c'/> A shortest path never needs more than V minus one edges, so "
-            "that many rounds suffice, for a total of V times E. <bookmark mark='d'/> If a cycle has negative total "
-            "length, going around it again and again makes paths arbitrarily short, and shortest is meaningless. The "
-            "algorithm detects this: one more round would still improve something. <bookmark mark='e'/> The internet's "
-            "early routing protocols ran exactly this computation spread across routers, each one relaxing its own "
-            "links, as Part 36 will show."
+            "Bellman-Ford permits negative edges. <bookmark mark='a'/> Repeatedly relax every directed "
+            "edge. <bookmark mark='b'/> After round k, distances are at least as good as every source "
+            "path using at most k edges. With in-place updates, a round may propagate farther; the table "
+            "shows this distinction. <bookmark mark='c'/> If no reachable negative cycle exists, a "
+            "shortest path can be simple and uses at most V minus one edges. That many rounds suffice, "
+            "giving order V times E. <bookmark mark='d'/> An improvement in one more round detects a "
+            "negative cycle reachable from the source. Only vertices downstream of such a cycle have "
+            "distances unbounded below; unrelated finite distances need not disappear. <bookmark "
+            "mark='e'/> Distributed distance-vector routing uses related relaxations, with separate "
+            "convergence and failure-handling issues."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(ex), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule), FadeIn(VGroup(*tab.cells[1])))
             vo.wait_until("a")
-            self.play(FadeIn(steps[0]), FadeIn(ex), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule),
-                      FadeIn(VGroup(*tab.cells[1])))
+            self.play(FadeIn(steps[0]))
             vo.wait_until("b")
             self.play(FadeIn(steps[1]))
             for row in tab.cells[2:]:
@@ -142,14 +141,16 @@ class Bellman(VoiceoverScene):
         ).arrange(DOWN, buff=0.18).next_to(cap, DOWN, buff=0.3)
         hot = [(cur.index(a_) + 1, cur.index(b_) + 1) for a_, b_ in zip(cyc, cyc[1:] + cyc[:1])]
         with self.voiceover(
-            "Here is a negative cycle with money attached. <bookmark mark='a'/> These are exchange rates between four "
-            "currencies; they are illustrative, not market data. Converting around a loop multiplies the amount by "
-            "the product of the rates, and if that product exceeds one, the loop makes money from nothing. "
-            "<bookmark mark='b'/> Take logarithms: a product above one is a sum of logs above zero, so weight each "
-            "edge by minus the log of its rate, and a profitable loop becomes a negative cycle. <bookmark mark='c'/> "
-            "Bellman–Ford's extra round finds one: yen to pounds to euros and back to yen. <bookmark mark='d'/> One "
-            "trip around it returns half a percent more than it started with, before fees. <bookmark mark='e'/> "
-            "Real markets close such gaps in microseconds, because trading firms run exactly this search."
+            "A rate product gives a negative-cycle example. <bookmark mark='a'/> These four-currency "
+            "rates are invented illustrations, not market observations. Multiplying rates around a loop "
+            "gives the gross conversion factor, before fees, spreads and execution constraints. <bookmark"
+            " mark='b'/> Weight each edge by minus the logarithm of its rate. A product greater than one "
+            "becomes a negative cycle because logarithms turn products into sums. <bookmark mark='c'/> "
+            "The checked example finds yen to pounds to euros and back to yen. <bookmark mark='d'/> Its "
+            "gross gain is about half a percent. The implementation uses floating arithmetic and a small "
+            "relaxation tolerance, so a nearly zero cycle needs numerical care. <bookmark mark='e'/> This"
+            " mathematical detector alone does not establish that a real sequence of trades can be "
+            "executed profitably."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab), FadeIn(cap))
             vo.wait_until("a")

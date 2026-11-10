@@ -16,10 +16,10 @@ class AStar(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(9, r"How a map answers in microseconds", r"Why search where the destination isn't?",
+        card = chapter_card(9, "Exact routes with less search", r"Why search where the destination isn't?",
                             lit=(1968,), extra=((1968, r"Hart, \ Nilsson and Raphael: \ A*"),
                                                 (2008, r"contraction hierarchies")), part=PART)
-        with self.voiceover("Chapter nine. How a map answers in microseconds."):
+        with self.voiceover("Chapter nine. Exact routes with less search."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
 
@@ -51,23 +51,24 @@ class AStar(VoiceoverScene):
             frame = Rectangle(width=6.3, height=4.9, stroke_color=GREY_D, stroke_width=1).move_to([ox, -0.4, 0])
             s = Dot(at(pos[tuple(d["s"])], ox), radius=0.09, color=WHITE)
             t = Dot(at(pos[tuple(d["t"])], ox), radius=0.09, color=NO)
-            lab = label(rf"{'Dijkstra' if name == 'dijkstra' else 'A*'}: \ {words(len(pts))} vertices reached",
+            lab = label(f"{('Dijkstra' if name == 'dijkstra' else 'A*')}: \\ {words(len(pts))} vertices expanded",
                         font_size=20, color=col).next_to(frame, UP, buff=0.12)
             sets.add(VGroup(frame, g, s, t, lab))
-        formula = MathTex(r"\text{priority} = d(v) + h(v), \qquad h(v) \le \text{true distance from } v "
-                          r"\text{ to } t", font_size=28, color=HEAD).to_edge(DOWN, buff=0.35)
+        formula = MathTex("\\text{priority} = d(v) + h(v), \\qquad h(v) \\le \\text{true distance from } v \\text{ to } t,\\quad h(t)=0", font_size=28, color=HEAD).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "To find one route, Dijkstra explores in every direction, including away from the destination. "
-            "<bookmark mark='a'/> On the left, one query across our city: the dots are every intersection it "
-            "reached. <bookmark mark='b'/> Peter Hart, Nils Nilsson and Bertram Raphael's A star, from 1968, adds "
-            "to each vertex's priority an estimate of the distance still to go. If the estimate never "
-            "overestimates, the answer is still exact. <bookmark mark='c'/> Here the estimate is the straight-line "
-            "distance at the speed of the fastest road, and the search, on the right, stays in a narrow band "
-            "between the two points. AI, Built's second part used the same algorithm for planning."
+            "A point-to-point search can use its destination. <bookmark mark='a'/> The left panel shows "
+            "intersections actually expanded by Dijkstra on this query, not every vertex merely "
+            "discovered. White is the source and red the target. <bookmark mark='b'/> A star prioritizes "
+            "distance so far plus a lower bound on the remaining distance. With nonnegative edges, an "
+            "admissible estimate, zero at the goal, and reopening when an improved path reaches a "
+            "previously expanded vertex, the answer is exact. <bookmark mark='c'/> Our straight-line "
+            "bound uses the cheapest cost per unit distance, zero point three five. It is also consistent"
+            " on every city edge, so this experiment needs no reopening. The right panel shows its actual"
+            " expansions."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(sets[0]))
             vo.wait_until("a")
-            self.play(FadeIn(sets[0]))
+            self.play(Indicate(sets[0], color=DATA, scale_factor=1.02), run_time=.7)
             vo.wait_until("b")
             self.play(FadeIn(formula))
             vo.wait_until("c")
@@ -81,9 +82,8 @@ class AStar(VoiceoverScene):
         head = label(r"Better estimates: \ landmarks \ (Goldberg and Harrelson, \ 2005)", font_size=32).to_edge(
             UP, buff=0.3)
         pos, at = self._city(d, k=0.74, oy=0.55)
-        a_ = self._panel(d, pos, at, -3.3, P["astar2"], YES, rf"A*, \ straight line: \ {words(len(P['astar2']))} "
-                         r"reached", 0.55, 4.8, 3.7, P["s2"], P["t2"])
-        b_ = self._panel(d, pos, at, 3.3, P["alt2"], LAM, rf"landmarks: \ {words(len(P['alt2']))} reached", 0.55,
+        a_ = self._panel(d, pos, at, -3.3, P["astar2"], YES, f"A*, \\ straight line: \\ {words(len(P['astar2']))} expanded", 0.55, 4.8, 3.7, P["s2"], P["t2"])
+        b_ = self._panel(d, pos, at, 3.3, P["alt2"], LAM, f"landmarks: \\ {words(len(P['alt2']))} expanded", 0.55,
                          4.8, 3.7, P["s2"], P["t2"])
         marks = VGroup(*[Square(side_length=0.2, color=HEAD, fill_color=HEAD, fill_opacity=1).move_to(
             at(pos[c], 3.3)) for c in ((0, 0), (79, 0), (0, 59), (79, 59))])
@@ -98,15 +98,16 @@ class AStar(VoiceoverScene):
                   color=HEAD),
         ).arrange(DOWN, buff=0.16).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "A straight line is a weak estimate in a city where the fast roads bend. On this diagonal trip, A star "
-            "with the straight-line estimate still wanders over most of the city. <bookmark mark='a'/> Andrew "
-            "Goldberg and Chris Harrelson's idea: pick a few landmarks, here the four corners of the map, and "
-            "precompute the exact distance from each landmark to every vertex. <bookmark mark='b'/> The triangle "
-            "inequality then gives a lower bound on the distance from any vertex to the target: the landmark's "
-            "distance to the target, minus its distance to the vertex. <bookmark mark='c'/> Taking the best bound "
-            "over all landmarks gives an estimate shaped by the real roads, and the same search now reaches a "
-            "fifth as many intersections. <bookmark mark='d'/> It costs a few numbers per vertex, and the search "
-            "itself is plain A star."
+            "Road structure can give a stronger estimate than a straight line. <bookmark mark='a'/> "
+            "Precompute distances to and from four landmarks once, and reuse those tables across queries."
+            " On this undirected city the two directions agree. <bookmark mark='b'/> The triangle "
+            "inequality bounds distance from v to the target below by distance from a landmark to the "
+            "target minus distance from that landmark to v; the reverse-direction difference gives "
+            "another bound. <bookmark mark='c'/> Take the largest valid bound over landmarks. The two "
+            "panels show actual expansions for the same diagonal query, with both final distances checked"
+            " equal. <bookmark mark='d'/> Tables cost order landmarks times vertices in storage. "
+            "Preprocessing cost and expanded-vertex count are different measurements; neither is a "
+            "query-latency benchmark."
         ) as vo:
             self.play(FadeIn(head), FadeIn(a_))
             vo.wait_until("a")
@@ -147,27 +148,25 @@ class AStar(VoiceoverScene):
         clab = label(rf"the same trip: \ {len(P['ch_s']) + len(P['ch_t'])} vertices settled, \ by two upward "
                      r"searches", font_size=19, color=YES).next_to(city, UP, buff=0.12)
         steps = VGroup(
-            label(r"order the vertices from least to most important \ (side streets first, \ junctions of major "
-                  r"roads last)", font_size=19, color=GREY_A),
+            label("order by shortcut difference and contracted neighbours; \\ not a supplied road-importance label", font_size=19, color=GREY_A),
             label(r"query: \ search \textbf{upward} only, \ from both ends; \ they meet near the top", font_size=19,
                   color=YES),
-            label(r"exact: \ every shortest path climbs and then descends in the order, \ with shortcuts standing "
-                  r"in for the vertices removed", font_size=19, color=GREY_A),
-            label(r"on continental road networks: \ a few hundred vertices per query, \ instead of millions",
+            label("exact: \\ some shortest route has an upward-then-downward representation \\ through shortcuts", font_size=19, color=GREY_A),
+            label("bounded witness search may add extra shortcuts; \\ graph and ordering affect performance",
                   font_size=20, color=HEAD),
         ).arrange(DOWN, buff=0.14).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "The method behind most route planners precomputes even more. <bookmark mark='a'/> Rank the "
-            "intersections by importance: quiet side streets first, junctions of major roads last. <bookmark "
-            "mark='b'/> Then remove them one at a time in that order. Whenever removing a vertex would destroy the "
-            "only shortest path between two of its neighbours, add a shortcut edge between them with the same "
-            "length. Here v is removed, and the road through it from u to w survives as a shortcut of length "
-            "three. <bookmark mark='c'/> A query searches only upward in the ranking, from both ends at once, and "
-            "the two searches meet near the top. On the diagonal trip they settle about a hundred intersections, "
-            "scattered, because the upward edges jump across the city. <bookmark mark='d'/> It is exact, because "
-            "every shortest path can be written as a climb followed by a descent, with shortcuts standing in for "
-            "the vertices removed along the way. <bookmark mark='e'/> On the road network of a continent, a query "
-            "settles a few hundred vertices instead of millions."
+            "Contraction hierarchies precompute shortcut edges. <bookmark mark='a'/> Choose a vertex "
+            "order; our implementation uses a heuristic based on added shortcuts and contracted "
+            "neighbours, not a supplied road-importance label. <bookmark mark='b'/> When contracting v, "
+            "preserve a path between each pair of remaining neighbours. If no equally short witness "
+            "avoiding v is found, add a shortcut. Here length one plus two becomes a shortcut of three, "
+            "while the alternative costs seven. <bookmark mark='c'/> The query searches upward in the "
+            "order from both endpoints. The dots show those two expansion sets on the same diagonal trip."
+            " <bookmark mark='d'/> Shortcuts ensure that some shortest route has an equivalent "
+            "upward-then-downward representation; not every original shortest path literally has that "
+            "shape. <bookmark mark='e'/> A bounded witness search can add extra shortcuts without losing "
+            "correctness. Performance depends on the graph, ordering and implementation."
         ) as vo:
             self.play(FadeIn(head), Create(toy), FadeIn(tl), FadeIn(dots), FadeIn(city))
             vo.wait_until("a")
@@ -203,24 +202,24 @@ class AStar(VoiceoverScene):
                   font_size=22, color=HEAD),
             label(rf"{a['dijkstra'] / a['ch']:.0f}$\times$ fewer vertices than Dijkstra, \\ every answer identical",
                   font_size=22, color=YES),
-            label(r"the gain grows with the network: \\ a hierarchy pays most \\ where there are highways",
+            label("one fixed synthetic city; \\\\ query latency and scaling \\\\ are unmeasured",
                   font_size=21, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.4)
         if side.width > 5.0:
             side.scale_to_fit_width(5.0).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Here are all of them on forty random queries across a city of four thousand eight hundred "
-            "intersections. <bookmark mark='a'/> Plain Dijkstra settles two and a half thousand vertices per query. "
-            "Searching from both ends halves that. A star, with the straight-line estimate, needs a quarter. "
-            "Landmarks need under a tenth. <bookmark mark='b'/> And the contraction hierarchy, after a short "
-            "preprocessing step, settles about a hundred, more than twenty times fewer than Dijkstra, with every "
-            "answer identical. <bookmark mark='c'/> The advantage grows with the size of the network, which is how "
-            "a phone can answer a cross-country query in a millisecond."
+            "These are forty fixed queries on one synthetic city of four thousand eight hundred "
+            "intersections. <bookmark mark='a'/> The bars count actual expanded vertices, averaged over "
+            "queries. Bidirectional searches count both sides; they may count an intersection twice. "
+            "<bookmark mark='b'/> We independently check every reported route distance against the plain "
+            "Dijkstra result. Landmark tables are reused, and hierarchy preprocessing is recorded "
+            "separately as one observed build. <bookmark mark='c'/> Fewer expansions explain a possible "
+            "source of savings, but do not measure response time. This experiment makes no claim about "
+            "phone latency or how the ratio scales to a continental network."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(ch[0]), FadeIn(ch.names), FadeIn(yl))
+            self.play(FadeIn(head), FadeIn(ch[0]), FadeIn(ch.names), FadeIn(yl), FadeIn(ch.bars[:4]), FadeIn(ch.vals[:4]))
             vo.wait_until("a")
-            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in ch.bars[:4]], lag_ratio=0.3),
-                      FadeIn(ch.vals[:4]), run_time=2.5)
+            self.play(Indicate(ch.bars[:4], color=DATA, scale_factor=1.02), run_time=.7)
             vo.wait_until("b")
             self.play(GrowFromEdge(ch.bars[4], DOWN), FadeIn(ch.vals[4]), FadeIn(side[:2]))
             vo.wait_until("c")

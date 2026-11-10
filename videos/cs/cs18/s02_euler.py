@@ -40,7 +40,7 @@ class Euler(VoiceoverScene):
                   color=GREY_A),
             label(r"so a closed walk using every edge once needs \textbf{every degree even}", font_size=22,
                   color=YES),
-            label(r"an open walk allows exactly two odd vertices, \ its two ends", font_size=22, color=GREY_A),
+            label(r"an open trail has exactly two odd endpoints; \ all edge-bearing vertices must connect", font_size=22, color=GREY_A),
             label(r"K\"onigsberg's degrees are 5, \ 3, \ 3, \ 3: \ four odd vertices, \ no walk", font_size=22,
                   color=NO),
             label(r"and the converse holds too: \ connected and all even \ $\Rightarrow$ \ a circuit exists",
@@ -49,14 +49,15 @@ class Euler(VoiceoverScene):
         if pts.width > 7.2:
             pts.scale_to_fit_width(7.2).to_edge(RIGHT, buff=0.5)
         with self.voiceover(
-            "Euler's argument takes one sentence. <bookmark mark='a'/> Whenever a walk passes through a land mass, "
-            "it arrives on one bridge and leaves on another, so each visit uses up two of its bridges. <bookmark "
-            "mark='b'/> A walk that returns to its start and crosses every bridge once therefore needs an even "
-            "number of bridges at every land mass. <bookmark mark='c'/> A walk that ends somewhere else can "
-            "afford two odd ones, its start and its end. <bookmark mark='d'/> Königsberg had one land mass with "
-            "five bridges and three with three: four odd degrees, so no such walk exists. <bookmark mark='e'/> "
-            "Euler also claimed the converse, that a connected graph with every degree even always has such a "
-            "circuit; Carl Hierholzer published the first proof in 1873."
+            "Euler's argument counts entrances and exits. <bookmark mark='a'/> Passing through a vertex "
+            "uses two incident edges, one arriving and one leaving. <bookmark mark='b'/> A closed trail "
+            "using every edge once therefore requires even degree everywhere; a loop contributes two to "
+            "degree. <bookmark mark='c'/> An open trail with different endpoints instead has exactly two "
+            "odd vertices. In either case all vertices incident to edges must lie in one connected "
+            "component. <bookmark mark='d'/> Königsberg has degrees five, three, three and three: four "
+            "odd vertices, so neither kind of trail can cross every bridge once. <bookmark mark='e'/> For"
+            " a connected graph, the even-degree condition is also sufficient. Hierholzer's construction,"
+            " published in 1873, gives the circuit explicitly."
         ) as vo:
             self.play(FadeIn(head), *[FadeIn(n) for n in nodes.values()], *[Create(es[k]) for k in
                                                                            (("K", "E"), ("N", "E"), ("S", "E"))],
@@ -84,23 +85,25 @@ class Euler(VoiceoverScene):
         gr.shift(LEFT * 2.2)
         circ = d["circuit"]
         steps = VGroup(
-            label(r"walk from any vertex, \ never reusing an edge, \\ until you are stuck: \\ with even degrees "
+            label(r"walk from a vertex with an edge, \ never reusing an edge, \\ until you are stuck: \\ with even degrees "
                   r"you are stuck only at the start", font_size=22, color=GREY_A),
             label(r"if edges remain, \ start a detour \\ from a vertex on the circuit, \ and splice it in",
                   font_size=22, color=GREY_A),
-            label(r"every edge is handled once: \ $O(E)$ time", font_size=24, color=YES),
+            label(r"paired edge identifiers; \ expected $O(V+E)$ including validation", font_size=24, color=YES),
             label(rf"here: \ {r' $\to$ '.join(str(c) for c in circ)}", font_size=22, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).to_edge(RIGHT, buff=0.5)
         if steps.width > 6.0:
             steps.scale_to_fit_width(6.0).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "The proof is an algorithm. <bookmark mark='a'/> Start anywhere and keep walking along unused edges. "
-            "Because every degree is even, whenever you enter a vertex there is an unused edge to leave by, except "
-            "at the vertex where you began. So you get stuck only back at the start, with a closed circuit. "
-            "<bookmark mark='b'/> If some edges are still unused, one of them touches the circuit; walk a detour "
-            "from there, and splice it in. <bookmark mark='c'/> Each edge is walked exactly once, so the whole "
-            "construction takes time proportional to the number of edges. <bookmark mark='d'/> Here is the circuit "
-            "it finds on this graph."
+            "The proof becomes a stack algorithm. <bookmark mark='a'/> Start at a vertex with an edge and"
+            " follow unused edges. At a vertex other than the start, entering consumes one of an even "
+            "number, so an unused exit remains whenever the walk would otherwise stop. The walk closes at"
+            " its start. <bookmark mark='b'/> If edges remain, connectivity gives a detour from a vertex "
+            "already on the circuit; splice that closed detour into it. <bookmark mark='c'/> Our "
+            "implementation pairs edge incidences with identifiers and skips used identifiers. It handles"
+            " each incidence a constant number of times, including validation: expected order V plus E "
+            "with hash tables, rather than repeatedly removing from the middle of a list. <bookmark "
+            "mark='d'/> The highlighted edges show the checked circuit on this graph."
         ) as vo:
             self.play(FadeIn(head), FadeIn(gr))
             vo.wait_until("a")
@@ -119,38 +122,31 @@ class Euler(VoiceoverScene):
 
     def representation(self):
         d = load("representation")
-        head = label(r"Storing a graph", font_size=34).to_edge(UP, buff=0.3)
-        rows = []
-        for r in d["rows"]:
-            rows.append([words(r["n"]), words(r["m"]), f"{r['list_bytes'] / 1e6:.2f} MB", f"{r['matrix_bytes'] / 1e6:.2f} MB",
-                         f"{1000 * r['list_s']:.1f} ms", f"{1000 * r['matrix_s']:.1f} ms"])
-        tab = grid_table([r"vertices", r"edges", r"lists", r"matrix \ (bits)", r"visit all, \ lists",
-                          r"visit all, \ matrix"], rows, widths=[1.8, 2.0, 1.8, 2.2, 2.4, 2.4], row_h=0.5, font_size=19,
-                         colors=[[WHITE, WHITE, YES, NO, YES, NO], [WHITE, WHITE, YES, NO, YES, NO],
-                                 [WHITE, WHITE, NO, YES, NO, YES]]).next_to(head, DOWN, buff=0.6)
-        pts = VGroup(
-            label(r"\textbf{adjacency lists}: \ each vertex keeps its neighbours: \ $O(V + E)$ space, \ visiting all "
-                  r"edges $O(V + E)$", font_size=21, color=YES),
-            label(r"\textbf{adjacency matrix}: \ a bit for every pair: \ $V^2$ bits, \ but ``is $uv$ an edge?'' in "
-                  r"one look", font_size=21, color=LAM),
-            label(r"real graphs are sparse: \ a road network averages under 3 roads per intersection", font_size=21,
-                  color=GREY_A),
-            label(r"dense graphs, \ like the last row, \ favour the matrix: \ Part 9's memory hierarchy decides "
-                  r"the constants", font_size=20, color=GREY_B),
-        ).arrange(DOWN, buff=0.2).next_to(tab, DOWN, buff=0.5)
-        with self.voiceover(
-            "Before searching graphs we have to store them, and there are two standard ways. <bookmark mark='a'/> "
-            "Adjacency lists give each vertex a list of its neighbours: space proportional to vertices plus edges, "
-            "and visiting every edge takes the same. <bookmark mark='b'/> An adjacency matrix keeps a bit for every "
-            "pair of vertices, so it costs V squared bits regardless of the edges, but it answers whether two "
-            "vertices are joined in a single look. <bookmark mark='c'/> Most real graphs are sparse: a road map has "
-            "fewer than three roads per intersection, so lists win by a wide margin, as the first two rows show. "
-            "<bookmark mark='d'/> The last row is a dense graph, three thousand vertices and a million and a half "
-            "edges, where the packed matrix is both smaller and faster to scan."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(tab))
-            for mk, p in zip("abcd", pts):
-                vo.wait_until(mk)
-                self.play(FadeIn(p))
-        self.wait(0.3)
+        head = label(r"Graph storage: models and actual allocations", font_size=34).to_edge(UP, buff=0.3)
+        rows = [[words(r['n']), words(r['m']), f"{r['list_bytes']/1e6:.2f}", f"{r['matrix_bytes']/1e6:.2f}",
+                 f"{r['actual_list_bytes']/1e6:.2f}", f"{r['matrix_array_bytes']/1e6:.2f}"] for r in d['rows']]
+        tab = grid_table([r"vertices", r"edges", r"ideal lists", r"packed bits", r"Python lists", r"NumPy bool"],
+                         rows, widths=[1.4,1.8,2.0,2.0,2.2,2.2], row_h=.47, font_size=20,
+                         colors=[[WHITE,WHITE,YES,LAM,DATA,HEAD]]*3).next_to(head, DOWN, buff=.4)
+        memory = label(r"MB; ideal models exclude object overhead; NumPy bool uses one byte per cell",
+                       font_size=20, color=GREY_A).next_to(tab, DOWN, buff=.2)
+        times = grid_table([r"vertices",r"Python entry visits",r"NumPy full-row counts",r"checked entries"],
+                           [[words(r['n']),f"{r['list_s']*1000:.2f} ms",f"{r['matrix_s']*1000:.2f} ms",words(r['visited'])]
+                            for r in d['rows']], widths=[1.8,3.0,3.4,2.5], row_h=.45, font_size=20,
+                           colors=[[WHITE,DATA,HEAD,YES]]*3).move_to(DOWN * .9)
+        protocol = label(r"minimum of three complete scans; same graph; both counts equal $2E$",
+                         font_size=20,color=YES).next_to(times,DOWN,buff=.2)
+        scope = label(r"different execution paths; packed-bit scan and cache-level causes are unmeasured",
+                      font_size=20,color=GREY_A).to_edge(DOWN,buff=.35)
+        with self.voiceover("Storage models and measured programs are different things. <bookmark mark='a'/> Adjacency lists need order V plus E entries. The first table estimates eight-byte neighbour entries and row references; it excludes Python object overhead. <bookmark mark='b'/> An ideal packed matrix uses one bit per ordered vertex pair. Our measured NumPy boolean matrix instead uses one byte per cell; its actual data allocation is shown separately. <bookmark mark='c'/> The timing table scans the complete graph three times and reports the minimum: Python visits every list entry, while NumPy counts each complete boolean row. Both must count exactly twice the undirected edges. <bookmark mark='d'/> The dense case favours this vectorized matrix scan on this host. It is not a measured packed-bit implementation, and these timings alone do not identify a cache-level cause.") as vo:
+            self.play(FadeIn(head),FadeIn(tab),FadeIn(memory))
+            vo.wait_until('a')
+            self.play(Indicate(VGroup(*[row[2] for row in tab.cells]),color=YES),run_time=.7)
+            vo.wait_until('b')
+            self.play(Indicate(VGroup(*[row[3] for row in tab.cells],*[row[5] for row in tab.cells]),color=HEAD),run_time=.7)
+            vo.wait_until('c')
+            self.play(FadeIn(times),FadeIn(protocol))
+            vo.wait_until('d')
+            self.play(FadeIn(scope))
+        self.wait(.3)
         self.clear_scene()

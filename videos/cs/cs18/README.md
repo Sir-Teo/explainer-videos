@@ -1,70 +1,81 @@
 # Computer Science, Built — Part 18: Graphs
 
-Part 18 of a sixty-one-part course in computer science (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), the third part of Act IV, *Algorithms*. Euler invented the graph to walk the bridges
-of Königsberg. This part explores graphs in the two basic ways and computes shortest paths, spanning trees, flows and
-matchings. It proves why each method is right, measures it, and ends at the results of 2022–25. The instrument is
-`explainer/cs/algo/graphs.py`: Hierholzer's circuit; breadth- and depth-first search with edge classes; Kahn's and
-DFS topological order; Tarjan's and Kosaraju's components with 2-SAT; Dijkstra, bidirectional, A*, landmarks (ALT)
-and contraction hierarchies; Bellman–Ford, Floyd–Warshall and Johnson; Kruskal, Prim and Borůvka; Edmonds–Karp;
-Gale–Shapley and the Hungarian algorithm; Held–Karp; PageRank; greedy and backtracking colouring; and generators
-for city grids and synthetic webs, every one counting its work. It is tested in `tests/test_cs18_graphs.py`. Every
-number is computed in `compute.py`.
+Part 18 of the sixty-one-part course. The lesson connects proofs to checked outputs: a circuit with an edge
+certificate, a shortest path with a settled-set invariant, a tree with an exchange argument, and a flow whose
+value equals a cut. English and Chinese narration share canonical source pairs. Visual previews, speech-signal
+checks and final listening/production approval have separate scopes.
 
-* **Seven bridges.** Königsberg in 1736; graphs as roads, the web, compilers and markets; what the part builds.
-* **1. Euler's bridges, and how to store a graph.** Degrees 5, 3, 3, 3: no walk; the even-degree theorem, proved;
-  Hierholzer's circuit; adjacency lists against a matrix, in bytes and time, from sparse to dense (1.5 million
-  edges on 3,000 vertices, where the matrix wins).
-* **2. Breadth-first search.** Layers; shortest paths by edge count in a 24 × 14 maze (67 layers, a 59-cell path);
-  bipartiteness and the odd cycle that refutes it.
-* **3. Depth-first search.** Discovery and finish times; the parenthesis theorem; tree, back, forward and cross
-  edges; a back edge is a cycle; the white-path theorem.
-* **4. Topological sort.** A build graph ordered by Kahn's queue and by DFS finish times; a cycle detected; DAGs in
-  make, spreadsheets and Part 13's compiler.
-* **5. Strongly connected components.** Tarjan's low-links; Kosaraju's two passes; the condensation is a DAG; a
-  20,000-page synthetic web's bow-tie (a core of 7,583 pages); 2-SAT by implication graph.
-* **6. Dijkstra's algorithm.** The café in Amsterdam (1956); the invariant, proved; the wavefront over a city of
-  2,400 intersections and 4,360 roads; heaps, and O(m + n log n) with Fibonacci heaps.
-* **7. Negative edges.** Why Dijkstra fails; Bellman–Ford and its V − 1 rounds; negative cycles; arbitrage as a
-  negative cycle in −log rates (JPY → GBP → EUR, a gain of 0.5% on illustrative rates); distance-vector routing.
-* **8. All pairs.** Floyd–Warshall as dynamic programming; Johnson's reweighting by potentials, proved (150
-  vertices, 894 edges, 231 negative; every reweighted edge non-negative; both methods agree); the min-plus product
-  and the APSP conjecture.
-* **9. How a map answers in microseconds.** On 4,800 intersections, average vertices settled per query:
-  Dijkstra 2,525, bidirectional 1,237, A* 657, landmarks 208, contraction hierarchies 113 (12,072 shortcuts, built
-  in 13 s in Python).
-* **10. Minimum spanning trees.** The cut and cycle properties, proved; Kruskal with Part 17's union–find, Prim,
-  and Borůvka's 1926 algorithm for the Moravian grid (4 rounds); all three agree on 120 points.
-* **11. Flows and cuts.** Augmenting paths and the residual graph; max flow 19 equals the cut 10 + 9; the
-  max-flow min-cut theorem, proved; an unlucky choice of paths takes 2,000 augmentations where Edmonds–Karp
-  takes 2.
-* **12. Matching.** Bipartite matching as flow; Hall and Kőnig; Gale–Shapley, with stability proved, and the
-  residency match; proposals against n Hₙ (531 at n = 100); the Hungarian algorithm (166 against greedy's 308).
-* **13. Easy and hard.** Hamilton's icosian game (all 30 cycles of the dodecahedron); Euler against Hamilton;
-  Held–Karp's O(2ⁿn²), timed (16 cities in about a second, each two more about six times slower), against
-  an Euler circuit of 180,000 edges in a fraction of a second.
-* **14. PageRank.** The random surfer; the stationary distribution; power iteration on 20,000 pages (52 rounds to
-  10⁻¹²); rank against in-degree.
-* **15. Planar graphs and four colours.** V − E + F = 2 (54 − 133 + 81); E ≤ 3V − 6 and K₅; Guthrie, Appel and
-  Haken, Gonthier; the five-colour proof by Kempe chains; our map coloured greedily with 5, then with 4, and 3
-  proved impossible.
-* **16. Frontier: shortest paths and flows, now.** Dijkstra universally optimal (Haeupler, Hladík, Rozhoň, Tarjan
-  and Tětek, 2024); the sorting barrier broken (Duan, Mao, Mao, Shu and Yin, 2025); negative weights in near-linear
-  time (2022); max flow in almost-linear time (Chen, Kyng, Liu, Peng, Probst Gutenberg and Sachdeva, 2022); open
-  problems. Outro.
+The instrument is `explainer/cs/algo/graphs.py`; independent output checks and measurement protocols are in
+`measurements.py`, producers in `compute.py`, and regressions in `tests/test_cs18_graphs.py`.
 
-## Build
+## What the chapters establish
+
+- Euler circuits in undirected multigraphs, including parallel edges, twice-listed loops, empty/edgeless inputs
+  and isolated vertices. Edge identifiers avoid reverse-list deletion. Non-isolated vertices must connect;
+  validation and traversal take expected O(V + E) using hash tables.
+- Adjacency-list and matrix models, BFS layers and odd-cycle witnesses, DFS intervals and edge classes,
+  topological ordering, Tarjan/Kosaraju components, and two-SAT by comparing each literal's component with its negation.
+- Nonnegative-weight Dijkstra, reachable negative-cycle detection, Floyd–Warshall, Johnson reweighting with a
+  collision-free fresh vertex, and min-plus products. Bellman–Ford uses floating arithmetic and a 1e-12 relaxation
+  tolerance; near-zero cycles require numerical care. Not every routine performs full input validation.
+- Point-to-point routing with bidirectional search, A*, reusable landmark distances and contraction hierarchies.
+  A* supports reopening for inconsistent admissible estimates with h(target) = 0. The city bounds are additionally
+  checked consistent, so its expansion counts have no reopening. Panel dots are actual expansions, not parent-map keys.
+- MST exchange arguments, with a **uniquely heaviest** cycle edge excluded from every MST; tied maxima need care.
+  Edmonds–Karp residual cancellation, capacity/conservation certificates, and max-flow/min-cut equality.
+- Unit-capacity matching, stable matching under strict complete balanced preferences, minimum-cost assignment,
+  checked Bellman–Held–Karp subset DP, damped PageRank with dangling redistribution, and planar/Kempe-chain proofs.
+
+## Measurements and model limits
+
+Ten schema revisions replace ten of sixteen original payloads; the original data and media remain in the local
+QA packet. Numerical producers verify complete outputs before reporting measurements. Cached-only QA rejects
+old schemas before entering the upgrading loader.
+
+| Experiment | What is actually observed | What the result does not establish |
+| --- | --- | --- |
+| Representation | Three complete scans of each fixed graph, minimum time; Python entry visits versus NumPy full boolean-row counts, both exactly 2E | A packed-bit benchmark or a cache-level causal explanation |
+| Storage | Ideal eight-byte list entries/row references and packed bits; separately, reachable Python allocations and actual NumPy byte data | Process RSS, allocator peak or a claim that NumPy bool packs bits |
+| All pairs | Same fixed potential-generated integer graph; all finite and unreachable pairs checked; three full runs per algorithm | A fallback graph with negative edges silently removed |
+| Routing | Forty fixed queries; all five route distances checked; actual expansions, with both sides counted for bidirectional methods | Query latency, phone performance or continental scaling |
+| Preprocessing | One hierarchy build and one reusable landmark-table build, stated separately | A repeated timing comparison or per-query preprocessing cost |
+| Stable matching | Five uniform strict-preference trials per size, including stability checks at n = 1,000 | An exact finite expected proposal count of nH_n; that column is a scale reference |
+| TSP / Euler | Three complete runs, minimum time; checked tour values and complete circuit edge multisets | A measured 50-city run; that number is an explicitly illustrative 2^n n² extrapolation |
+| PageRank | Probability mass, successive L1 changes and a separately checked stationarity residual | A guarantee of human relevance or that all page orderings have stabilized |
+
+On this retained run the dense 3,000-vertex graph has 1,500,000 undirected edges. Its ideal packed matrix is
+1.125 MB, while the measured NumPy boolean data occupies 9 MB. The random flow network has **379 distinct
+directed arcs after 400 attempted writes**, and its small example has certified flow/cut value 19. The routing
+means are about 2,525 / 1,237 / 657 / 212 / 113 expansions for Dijkstra / bidirectional / straight-line A* /
+landmarks / hierarchy, respectively. These are work counts on one synthetic graph.
+
+For damping d = 0.85, dangling mass D is redistributed uniformly. The PageRank equation includes
+`(1-d+dD)/n` plus linked incoming rank. Its plotted change C_k satisfies C_(k+1) ≤ d C_k. The dashed curve is
+scaled from the first measured change. A final stationarity residual R bounds stationary-vector error by
+R/(1-d); a small iterate change is a different quantity. The retained 20,000-page run takes 52 rounds.
+
+Historical web percentages from Broder et al.'s May 1999 crawl are distinct from the synthetic generator,
+whose outgoing-only component is empty. Fees, spreads and trade execution are omitted from the invented
+arbitrage example. A cycle in an application graph alone is not evidence of fraud. Real routing, residency
+matching and package managers add policies and constraints beyond these teaching models.
+
+## Build and checks
 
 ```bash
-python -m videos.cs.cs18.compute           # every number in the part (about a minute)
-python tools/build.py cs18 -q l            # a 480p preview
-python tools/build.py cs18                 # 1080p
+python -m videos.cs.cs18.compute
+python -m unittest tests.test_cs18_graphs -v
+python tools/build.py cs18 -q l
+python tools/build.py cs18
 ```
+
+After a producer schema change, recompute its affected items explicitly with `--force`. A native master is not
+approved by sampled previews; continuous audiovisual/listening review and Chinese synthesized-speech review
+remain separate release gates.
 
 ## Problems, with solutions
 
 1. **Euler circuits.** Prove that a connected graph in which every vertex has even degree has an Euler circuit, and
-   that Hierholzer's algorithm finds one in O(E).
+   that Hierholzer's algorithm finds one in O(V + E), including adjacency validation.
 
    *Solution.* Necessity first: a circuit leaves every vertex as often as it enters, so it uses an even number of
    edges at each vertex. For sufficiency, start anywhere and walk along unused edges. Each time the walk enters a
@@ -98,7 +109,7 @@ python tools/build.py cs18                 # 1080p
    changes by the same constant, so the shortest ones stay shortest, and cycles keep their weight, so negative
    cycles stay negative. Johnson takes p(v) = δ(q, v), distances from a new vertex q joined to every vertex by a
    zero edge, computed by Bellman–Ford. The triangle inequality δ(q, v) ≤ δ(q, u) + w(u, v) is exactly
-   w′(u, v) ≥ 0, so Dijkstra can then run from every vertex: O(VE + V(E + V log V)) in all.
+   w′(u, v) ≥ 0, so Dijkstra can then run from every vertex: O(VE + V(V + E) log(V + E)) in all.
 
 4. **The cut property.** Prove that for any cut of a connected weighted graph, a lightest edge crossing it belongs to
    some minimum spanning tree, and deduce that Kruskal's and Prim's algorithms are correct.
@@ -112,41 +123,32 @@ python tools/build.py cs18                 # 1080p
    everything else. By induction, every edge either algorithm adds keeps A inside some MST, and it ends with
    V − 1 edges, a spanning tree, so the tree is minimum.
 
-5. **Build: Dijkstra on Pebble.** Implement Dijkstra's algorithm in the Pebble language with Part 17's binary heap
-   (lazy deletion: push a new entry on every improvement and skip stale ones), run it on the 2,400-intersection
-   city from chapter 6 on the emulator, and count instructions per relaxed edge.
+5. **Build: Dijkstra on Pebble.** Implement a lazy binary-heap query on the emulator, using a compressed
+   sparse-row graph and precisely specified integer edge weights. Compare binary and four-ary heaps.
 
-   *Solution sketch.* Store the graph in compressed sparse rows: an offset array of n + 1 words and parallel
-   arrays of targets and integer road lengths (scale the lengths by 1,000 and round). Keep `dist` and a heap of
-   (distance, vertex) pairs in two parallel arrays, so a sift compares one word and moves two. The main loop pops
-   the minimum and skips it if its distance exceeds `dist[u]`; otherwise it scans u's row, and on each improvement
-   writes `dist[v]` and pushes. The emulator's counter then splits the instructions into three parts: the edge
-   scans (a handful of instructions per edge, about 8,720 edges, both directions of 4,360 roads), the pushes (one
-   per improvement, each a sift-up of at most lg of the heap size levels) and the pops (one per push, each a
-   sift-down of about 2 lg n comparisons). On a grid each vertex is improved little more than once, so expect the
-   pops to dominate, and expect tens of instructions per edge. Check the result by comparing every distance with
-   `graphs.dijkstra` on the same scaled weights. Then measure the 4-ary heap the same way: fewer levels, more
-   comparisons per level, and fewer instructions overall.
+   *Solution protocol.* Scale each synthetic road weight by 1,000 and round once; the reference must use those
+   same integers, not the original floats. Store row offsets, targets and weights, with capacities large enough
+   for every adjacency entry and every lazy heap push. On popping an entry, skip it if its stored distance is
+   stale. Count scans, pushes, pops, comparisons and retired instructions, and check every resulting distance
+   against an independent shortest-path reference. Keep initialization inside or outside both timing windows
+   consistently. A four-ary heap has fewer levels but compares more children per level; measure the resulting
+   instructions instead of predicting which wins. Use multiple graph sizes and report raw repeated runs.
 
-6. **★ Research: linear-time shortest paths.** Find single-source shortest paths on directed graphs with
-   non-negative real weights in O(m) time in the comparison-addition model, or prove a lower bound that rules it
-   out.
+6. **★ Research: linear-time distance-only shortest paths.** Find directed nonnegative-real single-source
+   distances in O(m + n) in the comparison-addition model, without requiring sorted output, or prove a lower
+   bound that rules it out. On a reachable graph with m = Ω(n), this is the usual O(m) target.
 
-   *Where to start.* The baselines: Dijkstra (1959) with Fibonacci heaps (Fredman and Tarjan, 1987), O(m + n log n).
-   That bound is optimal if the vertices must be output in sorted order, and universally optimal in that setting:
-   Haeupler, Hladík, Rozhoň, Tarjan and Tětek, "Universal optimality of Dijkstra via beyond-worst-case heaps"
-   (FOCS 2024). Without the sorting requirement: Duan, Mao, Mao, Shu and Yin, "Breaking the sorting barrier for
-   directed single-source shortest paths" (STOC 2025), O(m log^{2/3} n). For undirected graphs: Thorup, "Undirected
-   single-source shortest paths with positive integer weights in linear time" (1999), whose component hierarchy
-   avoids sorting; Pettie and Ramachandran (2005) for real weights, undirected. For integer weights, directed:
-   Thorup's O(m + n log log n) priority queue (2004). Open: (a) O(m) for directed real weights; (b) whether the
-   log^{2/3} n factor can fall to any slowly growing function, such as log log n; (c) here, measure: implement the
-   Duan et al. frontier-reduction step on the chapter 9 city and count how many vertices ever enter a sorted
-   structure, against Dijkstra's 2,400.
+   *Where to start.* Separate distance ordering from a distance vector. The 2024 universal-optimality theorem
+   fixes a graph and compares worst-case arc lengths for the ordering task, using a specified working-set heap.
+   The 2025 deterministic nonnegative-real result gives O(m log^(2/3) n). A 2026 improvement gives
+   O(m sqrt(log n) + sqrt(m n log n log log n)), simplifying on sparse graphs to O(m sqrt(log n log log n)).
+   Read the stated assumptions and proofs before implementing a frontier-reduction component; compare all
+   distances, not only the number of vertices entering an ordered structure. Thorup's classical linear result
+   uses undirected positive integer weights in a different machine model.
 
 ## 习题与解答
 
-1. **欧拉回路。** 证明：所有顶点度数都为偶数的连通图有欧拉回路，并且 Hierholzer 算法能在 O(E) 时间内找到它。
+1. **欧拉回路。** 证明：所有顶点度数都为偶数的连通图有欧拉回路，并且 Hierholzer 算法能在 O(V + E) 时间（包含邻接校验）内找到它。
 
    *解答。* 先证必要性：回路离开每个顶点的次数等于进入的次数，所以在每个顶点用掉偶数条边。再证充分性：从任意顶点出发，
    沿未用过的边走。每次走进一个不是起点的顶点 v 时，v 的边已用掉奇数条，所以还剩一条没用；因此只可能在起点卡住，走出的
@@ -171,7 +173,7 @@ python tools/build.py cs18                 # 1080p
    关于重新赋权，任取路径 P = v₀ → v₁ → … → v_k，p 项逐项相消：w′(P) = w(P) + p(v₀) − p(v_k)。从 v₀ 到 v_k 的每条路径都改变同一个
    常数，所以最短的仍是最短的；回路的权不变，所以负回路仍是负的。Johnson 取 p(v) = δ(q, v)，即从一个新顶点 q（用零权边连到
    每个顶点）出发、由 Bellman–Ford 算出的距离。三角不等式 δ(q, v) ≤ δ(q, u) + w(u, v) 正好就是 w′(u, v) ≥ 0，于是可以从每个顶点
-   运行 Dijkstra：总计 O(VE + V(E + V log V))。
+   运行 Dijkstra：总计 O(VE + V(V + E) log(V + E))。
 
 4. **割性质。** 证明：对连通带权图的任一割，穿过它的最轻边属于某棵最小生成树；并由此推出 Kruskal 算法和 Prim 算法正确。
 
@@ -181,28 +183,21 @@ python tools/build.py cs18                 # 1080p
    边。Kruskal 加入连接两个不同连通分量的最轻剩余边；它是穿过"其中一个分量与其余一切"之割的最轻边。归纳可知，两个算法
    加入的每条边都使 A 仍在某棵最小生成树之中，而它们结束时恰有 V − 1 条边，构成生成树，所以这棵树是最小的。
 
-5. **动手：在 Pebble 上跑 Dijkstra。** 用 Pebble 语言和第 17 部分的二叉堆实现 Dijkstra 算法（惰性删除：每次改进都压入新
-   条目，弹出时跳过过时的），在模拟器上对第 6 章有 2,400 个路口的城市运行，并统计每条松弛边的指令数。
+5. **动手：在 Pebble 上跑迪杰斯特拉。** 用压缩稀疏行存图，在模拟器上实现惰性二叉堆查询，并比较二叉堆和四叉堆。
 
-   *解答提要。* 用压缩稀疏行存图：n + 1 个字的偏移数组，加上并列的目标数组和整数路长数组（路长乘以 1,000 后取整）。`dist` 和
-   堆中的 (距离, 顶点) 对各用一个并列数组存放，这样一次下沉比较一个字、移动两个字。主循环弹出最小项，若其距离大于
-   `dist[u]` 就跳过；否则扫描 u 的那一行，每次改进就写 `dist[v]` 并压堆。模拟器的计数器可把指令分成三部分：边的扫描（每条
-   边几条指令，约 8,720 条边，即 4,360 条路的两个方向）、压堆（每次改进一次，每次上浮至多 lg（堆大小）层）和弹堆（每次压堆
-   对应一次，每次下沉约 2 lg n 次比较）。在网格上每个顶点很少被改进超过一次，所以预计弹堆占大头，每条边几十条指令。把每个
-   距离与 `graphs.dijkstra` 在同样缩放后的权上的结果比较，以检验正确性。然后用同样方法测量 4 叉堆：层数更少，每层比较更多，
-   总指令更少。
+   *解答方案。* 把每条合成道路权值乘一千后只取整一次，参考算法必须使用完全相同的整数，而非原浮点权值。
+   为全部邻接条目及所有惰性堆插入准备足够容量。弹出时，若存储距离已过期就跳过。分别数扫描、压入、弹出、比较和退休指令，
+   并把每个结果距离与独立参考比较。两种实现的计时窗口必须一致地包含或排除初始化。四叉堆层数较少，但每层比较更多子节点；
+   要测量指令数，而不是预言谁会赢。使用多个图规模，保存重复运行的原始结果。
 
-6. **★ 研究题：线性时间最短路径。** 在比较–加法模型下，对非负实数权的有向图在 O(m) 时间内求单源最短路径，或证明一个排除
-   这种可能的下界。
+6. **★ 研究题：只求距离的线性时间最短路径。** 在比较加法模型中，以 O(m+n) 时间求非负实数权有向单源距离，
+   不要求按距离排序输出，或证明排除这一算法的下界。在 m=Ω(n) 的可达图中，这就是通常的 O(m) 目标。
 
-   *从哪里开始。* 基线：Dijkstra（1959）配 Fibonacci 堆（Fredman 与 Tarjan，1987），O(m + n log n)。如果顶点必须按排好的顺序
-   输出，这个界是最优的，而且在该设定下是普适最优的：Haeupler、Hladík、Rozhoň、Tarjan 与 Tětek，"Universal optimality of
-   Dijkstra via beyond-worst-case heaps"（FOCS 2024）。不要求排序时：Duan、Mao、Mao、Shu 与 Yin，"Breaking the sorting barrier
-   for directed single-source shortest paths"（STOC 2025），O(m log^{2/3} n)。无向图：Thorup，"Undirected single-source
-   shortest paths with positive integer weights in linear time"（1999），其分量层次结构避开了排序；Pettie 与 Ramachandran
-   （2005）处理无向实数权。有向整数权：Thorup 的 O(m + n log log n) 优先队列（2004）。未解决：（a）有向实数权的 O(m)；
-   （b）log^{2/3} n 因子能否降到任意缓慢增长的函数，例如 log log n；（c）在这里动手测量：在第 9 章的城市上实现 Duan 等人的
-   前沿缩减步骤，统计有多少顶点进入过有序结构，与 Dijkstra 的 2,400 比较。
+   *起点。* 区分距离顺序与距离向量。2024年的普适最优性定理固定图、比较最坏弧长，针对排序任务并使用特定工作集堆。
+   2025年的确定性非负实数权结果为 O(m log^(2/3)n)。2026年的改进为
+   O(m sqrt(log n)+sqrt(mn log n log log n))，稀疏图可简化为 O(m sqrt(log n log log n))。
+   实现前沿缩减的一个环节前，应先阅读明确假设和证明；比较全部距离，而不只统计进入有序结构的顶点数。
+   索鲁普经典的线性结果针对另一机器模型中的无向正整数权图。
 
 ## Glossary additions
 
@@ -219,6 +214,31 @@ theorem · 推送–重标记 push–relabel · 二分匹配 bipartite matching 
 匈牙利算法 Hungarian algorithm · 哈密顿回路 Hamiltonian cycle · 旅行商问题 travelling salesman problem · 随机冲浪者 random
 surfer · 平稳分布 stationary distribution · 幂迭代 power iteration · 平面图 planar graph · 四色定理 four colour theorem · 肯普链
 Kempe chain · 普适最优 universal optimality
+
+## Selected primary research sources
+
+These are dated model statements checked for this lesson, not an exhaustive literature review or a full proof
+audit. None of the new theoretical algorithms is implemented by the city benchmark.
+
+- [Haeupler et al., universal optimality, 2024](https://arxiv.org/abs/2311.11793v4): distance ordering on a fixed
+  graph against worst-case arc lengths, with the specified working-set heap; do not transfer the claim to an ordinary heap or every output task.
+- [Duan, Jiayi Mao, Xiao Mao, Shu and Yin, 2025](https://arxiv.org/abs/2504.17033v2): deterministic directed
+  nonnegative-real distance computation in the comparison-addition model, O(m log^(2/3)n).
+- [Duan, Xiao Mao, Shu and Yin, 2026](https://arxiv.org/abs/2602.07868v2), with the
+  [official ICALP 2026 publication](https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.ICALP.2026.81): the improved directed bound above.
+- [Bernstein, Nanongkai and Wulff-Nilsen, 2022](https://arxiv.org/abs/2203.03456v6): randomized negative-**integer**
+  SSSP with O(m log^8 n log W) dependence; not arbitrary-real negative weights at the same cost.
+- [Chen et al., 2022](https://arxiv.org/abs/2203.00671v2): exact directed maximum/minimum-cost flow with
+  polynomially bounded integral capacities, costs and demands, in m^(1+o(1)) time in its setting. The dynamic
+  minimum-ratio-cycle update guarantee is amortized and subpolynomial; practical constants and arbitrary-real inputs are separate questions.
+- [Björklund, undirected Hamiltonicity, 2010](https://arxiv.org/abs/1008.0541): a randomized O*(1.657^n)
+  decision algorithm, distinct from general weighted TSP. [Dallant and Kozma, 2026](https://arxiv.org/abs/2604.05645)
+  improve TSP space-time tradeoffs; classical general-weight time O*((2-ε)^n) for fixed ε>0 is the question stated here.
+- [Broder et al., historical web structure](https://www.math.cmu.edu/~af1p/Teaching/INFONET/Papers/PowerLaw/GSW.html):
+  the historical crawl, not the synthetic generator's measurements.
+
+The classical bibliography follows below; newer research bounds do not retroactively change the scope of the
+implemented algorithms or the recorded experiments.
 
 ## Sources
 
@@ -242,10 +262,3 @@ Peranson (1999); Thorup (1999); Broder et al., "Graph structure in the web" (200
 the shortest path: A* search meets graph theory" (2005); Gonthier, "A computer-checked proof of the four colour
 theorem" (2005); Geisberger, Sanders, Schultes & Delling, "Contraction hierarchies" (2008); Bast et al., "Route
 planning in transportation networks" (2016).
-
-*Frontier.* Chen, Kyng, Liu, Peng, Probst Gutenberg & Sachdeva, "Maximum flow and minimum-cost flow in
-almost-linear time" (FOCS 2022); Bernstein, Nanongkai & Wulff-Nilsen, "Negative-weight single-source shortest paths
-in near-linear time" (FOCS 2022); Haeupler, Hladík, Rozhoň, Tarjan & Tětek, "Universal optimality of Dijkstra via
-beyond-worst-case heaps" (FOCS 2024); Duan, Mao, Mao, Shu & Yin, "Breaking the sorting barrier for directed
-single-source shortest paths" (STOC 2025); Williams, "Faster all-pairs shortest paths via circuit complexity"
-(2014); Vassilevska Williams & Williams, "Subcubic equivalences between path, matrix, and triangle problems" (2010).

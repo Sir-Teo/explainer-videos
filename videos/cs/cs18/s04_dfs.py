@@ -95,16 +95,16 @@ class Dfs(VoiceoverScene):
                   r"overlapping", font_size=22, color=YES),
             label(r"nested \ $\iff$ \ one is a descendant of the other in the DFS forest", font_size=22, color=GREY_A),
             label(r"\textbf{white-path theorem}: \ $v$ descends from $u$ \ $\iff$ \ when $u$ is discovered, \ a path "
-                  r"of undiscovered vertices leads to $v$", font_size=21, color=HEAD),
+                  r"whose vertices after $u$ are still undiscovered leads to $v$", font_size=21, color=HEAD),
         ).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Draw each vertex's lifetime, from discovery to finish, as an interval on the clock. <bookmark "
-            "mark='a'/> Any two intervals are either nested or disjoint; they never partly overlap, just like "
-            "matched parentheses. That is because the search finishes a vertex only after finishing everything "
-            "discovered from it. <bookmark mark='b'/> Nesting means ancestry: one interval inside another means "
-            "one vertex is a descendant of the other in the search tree. <bookmark mark='c'/> And the white-path "
-            "theorem says exactly which vertices end up as descendants: those reachable, at the moment of "
-            "discovery, along a path of vertices not yet discovered."
+            "Draw each vertex's lifetime from discovery to finish. <bookmark mark='a'/> Two DFS intervals"
+            " are either disjoint or one contains the other: never a partial overlap. The search finishes"
+            " a vertex only after completing its recursive descendants. <bookmark mark='b'/> Proper "
+            "interval containment is exactly strict ancestry in the DFS forest. <bookmark mark='c'/> The "
+            "white-path theorem makes this precise: v becomes a descendant of u exactly when, just as u "
+            "is discovered, a path from u to v has every vertex after u still undiscovered. The source u "
+            "itself has just changed colour; the theorem does not require it to remain white."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ticks))
             self.play(LaggedStart(*[FadeIn(b, shift=DOWN * 0.1) for b in bars], lag_ratio=0.2), run_time=2.5)
@@ -144,11 +144,14 @@ class Dfs(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head), FadeIn(g))
             vo.wait_until("a")
-            self.play(*anims, FadeIn(leg[0]))
+            self.play(*[es[tuple(key.split("->"))].animate.set_color(colours[c]).set_stroke(width=4)
+                        for key,c in d["classes"].items() if c == "tree"], FadeIn(leg[0]))
             vo.wait_until("b")
-            self.play(FadeIn(leg[1]))
+            self.play(*[es[tuple(key.split("->"))].animate.set_color(colours[c]).set_stroke(width=4)
+                        for key,c in d["classes"].items() if c == "back"], FadeIn(leg[1]))
             vo.wait_until("c")
-            self.play(FadeIn(leg[2:4]))
+            self.play(*[es[tuple(key.split("->"))].animate.set_color(colours[c]).set_stroke(width=3)
+                        for key,c in d["classes"].items() if c in ("forward","cross")], FadeIn(leg[2:4]))
             vo.wait_until("d")
             self.play(FadeIn(leg[4]))
             vo.wait_until("e")

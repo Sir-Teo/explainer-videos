@@ -1,10 +1,33 @@
 # Computer Science, Built — sequential polish
 
 Work on `computer-science-built`, one video at a time, with separate commits.
-Current video: **cs18, Graphs**. CS1–CS17 source/preview polish checkpoints
+Current video: **cs19, The Great Paradigms**. CS1–CS18 source/preview polish checkpoints
 are complete at the scopes below. Their production release gates remain open; this
 ledger does not treat sampled previews as listening or final-production approval.
 The syllabus's earlier draft-preview claims are separate.
+
+## Final CS18 preview checkpoint, 10 November 2026
+
+- Repair linear Euler edge bookkeeping, shortest-path heap/reopening/landmark edge cases, Johnson's fresh
+  source, flow source/target handling and small-instance guards. Ten guarded producer revisions change ten
+  of sixteen payloads. Seventeen tests and 26 independent numerical/model groups pass, including full routing,
+  matching, flow/cut, TSP, all-pairs and PageRank cross-checks.
+- Revise 44 bilingual narration sections and the exercises. Add centered allocation/scan tables, a separate
+  residual-cancellation witness, dangling PageRank mass and contraction/residual formulas, output-order example,
+  dated research cards and explicit flow models. Separate actual counts, theoretical models, preprocessing,
+  unmeasured latency and unexecuted extrapolation. Sixteen explanatory introductions reveal content earlier.
+- Review all 36 endpoint and 36 motion overviews: 1,440 temporal samples, 86,684 decoded motion frames
+  and zero raw motion warnings. Every final receipt has the frozen source fingerprint; 26 endpoint reviews
+  inherit only after fresh PNG equality with archived inspected artifacts. No raw receipt is retagged.
+- Review 36 native clips: 26,596 decoded frames, 864 samples and 36 full-size stills. Euler, PageRank and Frontier
+  narrated pilots decode 7,784 frames plus audio; 120 samples/three stills reviewed and pilot scheduling checked.
+- All 78 English speech blocks pass signal/alignment (43.841 minutes); 225 chapter cue requests meet 250 ms.
+  Canonical source pairs and actual bilingual captures each cover 78/78 blocks. All 624 captured caption strings
+  have no unresolved explanatory translation leads; 27 retained originals have individual classifications.
+
+[Verified CS18 evidence](evidence/cs18-polish-20261110/README.md).
+Continuous narrated listening, Chinese speech/listening, whole-video native production review and runtime at
+the selected narration pace remain open release gates.
 
 ## Final CS17 preview checkpoint, 10 November 2026
 
@@ -474,6 +497,6 @@ Evidence, exact source/data hashes, reports and reproduction commands:
 
 ## Continue here
 
-1. Preserve CS17's untouched source and baseline data; audit hash/tree/heap counters and the Job's fit/capacities.
-2. Polish bilingual explanations and worked visualizations, verify source/preview evidence, and commit CS17 separately.
-3. Continue CS18–CS61 in order, keeping preview evidence distinct from production release approval.
+1. Finish explicit inspection of CS19's retained untouched bilingual baseline; preserve its original data.
+2. Repair paradigm algorithms/measurement certificates and polish bilingual worked explanations; verify and commit CS19 separately.
+3. Continue CS20–CS61 in order, keeping preview evidence distinct from production release approval.

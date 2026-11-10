@@ -81,7 +81,7 @@ class Bfs(VoiceoverScene):
                   color=GREY_A),
             label(r"so a vertex first reached from layer $k$ is at distance exactly $k + 1$: \\ any shorter path "
                   r"would have reached it from an earlier layer", font_size=22, color=YES),
-            MathTex(r"\text{time } O(V + E): \ \text{each vertex enters the queue once, \ each edge is looked at twice}",
+            MathTex(r"\text{time } O(V + E): \ \text{each vertex enters the queue once, \ each adjacency entry is scanned once}",
                     font_size=30, color=HEAD),
             label(r"unweighted shortest paths, \ the six degrees of a social network, \ and Cheney's "
                   r"copying collector \ (Part 15)", font_size=20, color=GREY_B),
@@ -97,20 +97,22 @@ class Bfs(VoiceoverScene):
         inl = label(r"joins here", font_size=18, color=GREY_B).move_to([xs[7] + 0.9, -2.55, 0])
         qcap = label(r"the queue", font_size=18, color=GREY_B).next_to(q, UP, buff=0.15).align_to(q, LEFT)
         with self.voiceover(
-            "Why is the first path found a shortest one? <bookmark mark='a'/> Because the queue releases vertices "
-            "in order of distance. <bookmark mark='b'/> By induction, at every moment the queue holds some vertices "
-            "of layer k, followed by some of layer k plus one. <bookmark mark='c'/> A vertex first discovered while "
-            "handling layer k is at distance k plus one: if a shorter path existed, its last step would come from "
-            "an earlier layer, which would have discovered it sooner. <bookmark mark='d'/> Every vertex enters the "
-            "queue once and every edge is examined from both ends, so the time is linear in the size of the graph. "
-            "<bookmark mark='e'/> The same search measures degrees of separation in social networks, and it is how "
-            "Cheney's copying collector walked the heap in Part 15."
+            "Why is the first discovered path shortest in edge count? <bookmark mark='a'/> The FIFO queue"
+            " releases vertices in nondecreasing layer order. <bookmark mark='b'/> At any moment it "
+            "contains the remaining vertices of layer k followed by some of layer k plus one. <bookmark "
+            "mark='c'/> A vertex first discovered from layer k gets a path of k plus one edges. Any "
+            "shorter path would have reached it from an earlier layer, which was already processed: a "
+            "contradiction. <bookmark mark='d'/> Each reached vertex enters the queue once. Each directed"
+            " adjacency entry is scanned once; an undirected edge has two such entries. Including "
+            "initialization, the bound is order V plus E. <bookmark mark='e'/> These are unweighted "
+            "distances. The same traversal pattern appears in social-network separation and Part 15's "
+            "copying collector."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(q), FadeIn(outl), FadeIn(inl), FadeIn(qcap), FadeIn(steps[0]))
             vo.wait_until("a")
-            self.play(FadeIn(steps[0]))
+            self.play(Indicate(steps[0], color=HEAD), run_time=.7)
             vo.wait_until("b")
-            self.play(FadeIn(steps[1]), FadeIn(q), FadeIn(outl), FadeIn(inl), FadeIn(qcap))
+            self.play(FadeIn(steps[1]))
             vo.wait_until("c")
             self.play(FadeIn(steps[2]))
             for _ in range(2):              # dequeue a k, enqueue its new neighbours at k + 1
@@ -146,14 +148,15 @@ class Bfs(VoiceoverScene):
                   r"\ (chapter 12)", font_size=20, color=GREY_B),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Breadth-first layers answer a second question for free. <bookmark mark='a'/> Colour the layers "
-            "alternately. If every edge then joins two different colours, the graph is bipartite: its vertices "
-            "split into two sides with edges only between them. <bookmark mark='b'/> If some edge joins two "
-            "vertices of the same layer, the two paths from the start to them, plus that edge, form a cycle of odd "
-            "length, and an odd cycle can never be two-coloured. So the search either finds the colouring or "
-            "proves it impossible. <bookmark mark='c'/> Our maze, like every grid, is bipartite. <bookmark "
-            "mark='d'/> Two-colouring schedules things into two shifts, and chapter twelve's matching problems "
-            "need it."
+            "Breadth-first layers also test an undirected graph for bipartiteness. <bookmark mark='a'/> "
+            "Start a search in each component and alternate colours by layer. If every edge crosses "
+            "between colours, the two colour classes form a bipartition. <bookmark mark='b'/> Otherwise "
+            "an edge joins equal-depth vertices. Follow their parent paths only as far as their lowest "
+            "common ancestor, then add this edge: that is a simple odd cycle, which cannot be "
+            "two-coloured. <bookmark mark='c'/> The maze uses only horizontal and vertical grid edges, so"
+            " coordinate parity gives a bipartition. <bookmark mark='d'/> The test helps recognize "
+            "two-sided matching instances; a scheduling application also needs its conflicts to have "
+            "exactly this graph interpretation."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g1), FadeIn(g2))
             vo.wait_until("a")

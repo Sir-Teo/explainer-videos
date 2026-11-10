@@ -34,18 +34,18 @@ class AllPairs(VoiceoverScene):
                   r"programming} \ (Part 19)", font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.3).next_to(src, DOWN, buff=0.5)
         with self.voiceover(
-            "Sometimes we want the distance between every pair of vertices, for a routing table or a distance "
-            "matrix. <bookmark mark='a'/> Robert Floyd and Stephen Warshall's algorithm from 1962 is three nested "
-            "loops. <bookmark mark='b'/> The idea is to build up the set of vertices a path may pass through. Let d "
-            "k of i, j be the shortest path from i to j that uses only the first k vertices as waypoints. <bookmark "
-            "mark='c'/> Allowing one more waypoint, the best path either avoids it, or goes from i to the new "
-            "waypoint and from there to j. <bookmark mark='d'/> That is the whole proof. It runs in cubic time, "
-            "handles negative edges, and is the first example of dynamic programming in this course: Part 19 makes "
-            "the method general."
+            "Sometimes we need all pairwise distances. <bookmark mark='a'/> Floyd-Warshall uses three "
+            "nested loops over intermediate vertex k, source i and target j. <bookmark mark='b'/> Before "
+            "step k, d k of i, j is the shortest path allowing only vertices numbered below k as internal"
+            " waypoints. Initialize the diagonal to zero and other entries to edge weights or infinity. "
+            "<bookmark mark='c'/> When k becomes allowed, a shortest path either avoids k or splits there"
+            " into an i-to-k part and a k-to-j part. <bookmark mark='d'/> This recurrence gives cubic "
+            "time and quadratic space. Negative edges are allowed, but a reachable negative cycle can "
+            "make some pairwise distances unbounded; a negative final diagonal detects that obstruction."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(src))
             vo.wait_until("a")
-            self.play(FadeIn(src))
+            self.play(Indicate(src, color=DATA, scale_factor=1.02), run_time=.7)
             for mk, s in zip("bcd", (steps[0], steps[1:3], steps[3])):
                 vo.wait_until(mk)
                 self.play(FadeIn(s))
@@ -86,16 +86,17 @@ class AllPairs(VoiceoverScene):
                                                                                buff=0.12) for v in pos])
         new_w = VGroup(*[mono(str(Wp[e]), 15, YES).move_to(g.weights[i]) for i, e in enumerate(W)])
         with self.voiceover(
-            "For sparse graphs there is a faster way, if we can get rid of the negative edges. <bookmark "
-            "mark='a'/> Running Dijkstra from every vertex would cost V times E log V, much less than V cubed, but "
-            "Dijkstra needs non-negative weights. <bookmark mark='b'/> Donald Johnson's trick: add a new vertex "
-            "joined to everything by weight zero, and run Bellman–Ford once from it to get a potential p for every "
-            "vertex. <bookmark mark='c'/> Then reweight every edge: w prime is w plus p of u minus p of v. <bookmark "
-            "mark='d'/> That is never negative, because the potentials are shortest distances and obey the triangle "
-            "inequality. <bookmark mark='e'/> And along any path the potentials telescope: every path from s to t "
-            "changes by the same amount, p of s minus p of t, so the shortest paths are the same paths. <bookmark "
-            "mark='f'/> On our test graph, with two hundred and thirty-one negative edges, the reweighted graph has no "
-            "negative edge at all, and the answers match Floyd–Warshall's exactly."
+            "For a sparse graph without negative cycles, Johnson reweights before running Dijkstra. "
+            "<bookmark mark='a'/> Repeated binary-heap searches can exploit sparsity, while the initial "
+            "Bellman-Ford computation still has its own cost. <bookmark mark='b'/> Add a genuinely fresh "
+            "source, joined to every vertex by zero-weight edges, and compute its distances p. A negative"
+            " cycle aborts this construction. <bookmark mark='c'/> Reweight u-to-v by w plus p of u minus"
+            " p of v. <bookmark mark='d'/> The shortest-path triangle inequality makes every reweighted "
+            "edge nonnegative. <bookmark mark='e'/> Along a path, potentials telescope: every path with "
+            "the same endpoints changes by the same constant, preserving its shortest choices. <bookmark "
+            "mark='f'/> Our potential-generated test graph keeps its original negative edges. Every "
+            "finite distance and every unreachable pair agrees with Floyd-Warshall; no fallback changes "
+            "the input."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g))
             vo.wait_until("a")
@@ -119,27 +120,24 @@ class AllPairs(VoiceoverScene):
             MathTex(r"(A \star B)_{ij} = \min_k \bigl(A_{ik} + B_{kj}\bigr)", font_size=38, color=YES),
             label(r"the \textbf{min-plus} product: \ ordinary matrix multiplication with $(+, \times)$ replaced by "
                   r"$(\min, +)$", font_size=22, color=GREY_A),
-            label(r"$W^{\star k}$ holds the shortest paths of at most $k$ edges; \ squaring $\lg V$ times gives all of "
-                  r"them", font_size=22, color=GREY_A),
-            label(r"ordinary products have fast algorithms \ (Strassen, \ Part 16's master theorem); \ min-plus "
-                  r"products seem not to", font_size=22, color=HEAD),
-            label(r"\textbf{the APSP conjecture}: \ no $O(V^{3 - \varepsilon})$ algorithm for all-pairs shortest "
-                  r"paths \ (Part 16's frontier; \ Part 27)", font_size=21, color=NO),
+            label("with zero diagonal, \\ $W^{\\star k}$ holds walks of at most $k$ edges; \\ squaring $\\lg V$ times gives all of them", font_size=22, color=GREY_A),
+            label("ordinary products have fast algorithms; \\\\ subtraction-based tricks do not automatically give fast min-plus products", font_size=22, color=HEAD),
+            label("\\textbf{the APSP conjecture}: \\ general weighted APSP: \\ no $O(V^{3-\\varepsilon})$ in the stated model \\ (Part 16's frontier; \\ Part 27)", font_size=21, color=NO),
         ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.6)
         with self.voiceover(
-            "There is a deeper way to see all pairs. <bookmark mark='a'/> Define a product of matrices where the "
-            "entry for i, j is the minimum over k of a i k plus b k j. <bookmark mark='b'/> It is matrix "
-            "multiplication with plus and times replaced by min and plus. <bookmark mark='c'/> The weight matrix "
-            "raised to the k-th power in this algebra holds the shortest paths of at most k edges, and repeated "
-            "squaring gets all of them. <bookmark mark='d'/> Ordinary matrix products have sub-cubic algorithms, "
-            "Strassen's from Part 16 among them, but they rely on subtraction, which min does not have. <bookmark "
-            "mark='e'/> Whether all-pairs shortest paths can be done in truly sub-cubic time is a central "
-            "conjecture of fine-grained complexity, the one Part 16's frontier mentioned, and dozens of graph "
-            "problems are known to be exactly as hard."
+            "All-pairs distances also have an algebraic form. <bookmark mark='a'/> Define the i-j entry "
+            "of a product as the minimum over k of a i-k plus b k-j. <bookmark mark='b'/> This is the "
+            "min-plus product. <bookmark mark='c'/> With a zero diagonal, the k-th min-plus power "
+            "describes walks of at most k edges. Without negative cycles, V minus one edges suffice for "
+            "shortest paths, so repeated squaring reaches the answer. <bookmark mark='d'/> Fast ordinary "
+            "matrix multiplication does not automatically transfer: subtraction is not available in "
+            "min-plus arithmetic. <bookmark mark='e'/> The general weighted APSP conjecture rules out a "
+            "fixed polynomial improvement below cubic time in its stated model. Restricted weight ranges "
+            "and graph classes have different algorithms and are not ruled out by this broad slogan."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(steps[0]))
             for mk, s in zip("abcde", steps):
                 vo.wait_until(mk)
-                self.play(FadeIn(s))
+                self.play(Indicate(s, color=YES) if mk == "a" else FadeIn(s), run_time=.7)
         self.wait(0.3)
         self.clear_scene()

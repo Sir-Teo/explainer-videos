@@ -97,17 +97,17 @@ class Matching(VoiceoverScene):
         if steps.width > 5.4:
             steps.scale_to_fit_width(5.4).to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "Sometimes both sides have preferences, and a matching is useless if two people would rather leave "
-            "their partners for each other. <bookmark mark='a'/> David Gale and Lloyd Shapley's algorithm: every "
-            "unmatched proposer proposes to the most preferred receiver they have not yet tried. <bookmark "
-            "mark='b'/> Each receiver holds on to the best proposal so far and rejects the others, who move down "
-            "their lists. <bookmark mark='c'/> It ends when everyone is matched, here after eight proposals, and the "
-            "result is stable: there is no proposer and receiver who both prefer each other to their partners. "
-            "<bookmark mark='d'/> The proof is short. A receiver's partner only ever improves, and a proposer is "
-            "rejected only by a receiver who holds someone they prefer; so no blocking pair can survive. The result "
-            "is also the best stable matching for every proposer, which makes the choice of who proposes matter. "
-            "<bookmark mark='e'/> Alvin Roth redesigned the American medical residency match around it, and he and "
-            "Shapley shared the 2012 Nobel prize in economics."
+            "Stable matching is a preference problem, not minimum-cost assignment. Assume equally sized "
+            "sides with strict, complete preference lists. <bookmark mark='a'/> Each free proposer tries "
+            "the best receiver not yet approached. <bookmark mark='b'/> Receivers keep their best offer "
+            "so far and reject the rest. <bookmark mark='c'/> At termination everyone is matched and no "
+            "pair prefers each other to their current partners. The example's proposal count is computed "
+            "from these lists. <bookmark mark='d'/> A proposer who prefers another receiver must already "
+            "have tried that receiver and been rejected; that receiver's held partner only improves. This"
+            " rules out a blocking pair. The resulting stable matching is optimal for proposers among "
+            "stable matchings, not among every conceivable assignment. <bookmark mark='e'/> Deferred "
+            "acceptance influenced residency-market design, but actual residency systems add capacities, "
+            "couples and other rules beyond this simple model."
         ) as vo:
             self.play(FadeIn(head), FadeIn(Pl), FadeIn(Rl), FadeIn(cap))
             vo.wait_until("a")
@@ -131,24 +131,26 @@ class Matching(VoiceoverScene):
                           r"worst case $n^2$"], rows, widths=[2.4, 4.0, 3.0, 2.6], row_h=0.5, font_size=20,
                          colors=[[WHITE, YES, HEAD, NO]] * len(rows)).next_to(head, DOWN, buff=0.6)
         pts = VGroup(
-            label(r"with random preferences the count is about $n \ln n$: \ the coupon collector, \ as Knuth showed",
+            label("five independent seeds per size; \\ $nH_n$ is a scale reference, \\ not an exact finite expectation",
                   font_size=21, color=GREY_A),
             label(rf"the \textbf{{assignment problem}}, \ with costs: \ the Hungarian algorithm \ (Kuhn, \ 1955), \ "
                   rf"$O(n^3)$: \\ {d['hungarian_n']} $\times$ {d['hungarian_n']} in "
-                  rf"{1000 * d['hungarian_s']:.0f} ms, \ total {d['hungarian_total']} against greedy's "
+                  rf"{1000 * d['hungarian_s']:.0f} ms (one observed solve), \\ total {d['hungarian_total']} against greedy's "
                   rf"{d['greedy_total']}", font_size=20, color=LAM),
         ).arrange(DOWN, buff=0.22).next_to(tab, DOWN, buff=0.5)
         with self.voiceover(
-            "How long does it take? <bookmark mark='a'/> In the worst case n squared proposals. With random "
-            "preferences, we measured about n log n, the coupon collector's number, as Donald Knuth showed in his "
-            "lectures on stable marriage. <bookmark mark='b'/> If instead every pairing has a cost and we want the "
-            "cheapest perfect matching, that is the assignment problem, and Harold Kuhn's Hungarian algorithm "
-            "solves it in cubic time. On sixty by sixty random costs it finds a total of a hundred and sixty-six, "
-            "where choosing greedily row by row costs three hundred and eight."
+            "Count proposals before drawing conclusions. <bookmark mark='a'/> We generate independent "
+            "uniform complete preference permutations on both sides, use five fixed seeds per size and "
+            "verify stability even at size one thousand. The table reports the sample mean. The n times "
+            "harmonic-number column is an order n log n scale reference, not an exact finite expectation "
+            "for this experiment. <bookmark mark='b'/> Minimum-cost assignment is different. On our fixed"
+            " sixty-by-sixty cost matrix, the Hungarian algorithm returns a checked permutation and "
+            "total, compared with a row-wise greedy assignment. Cubic complexity describes growth; this "
+            "one matrix does not establish a universal timing or quality ratio."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(tab))
             vo.wait_until("a")
-            self.play(FadeIn(tab), FadeIn(pts[0]))
+            self.play(FadeIn(pts[0]))
             vo.wait_until("b")
             self.play(FadeIn(pts[1]))
         self.wait(0.3)

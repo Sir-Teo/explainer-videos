@@ -87,10 +87,9 @@ class Hook(VoiceoverScene):
             "And the questions are the same few: how to get from here to there, in what order, how cheaply, how "
             "much can flow, which things belong together. This part answers each one, with proofs."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(tab))
             vo.wait_until("a")
-            self.play(FadeIn(tab.rule), LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells], lag_ratio=0.3),
-                      run_time=4)
+            self.play(Indicate(tab, color=DATA, scale_factor=1.02), run_time=.7)
             vo.wait_until("b")
             self.play(Indicate(VGroup(*[r[3] for r in tab.cells[1:]]), color=YES))
         self.wait(0.3)
@@ -101,27 +100,28 @@ class Hook(VoiceoverScene):
         facts = VGroup(
             label(r"breadth and depth: \ the two ways to explore, \ and what each one proves", font_size=27,
                   color=DATA),
-            label(r"Dijkstra's algorithm, \ its invariant, \ and how map apps beat it a hundredfold", font_size=27,
+            label(r"Dijkstra's algorithm, \ its invariant, \ and exact routes with less search", font_size=27,
                   color=LAM),
             label(r"spanning trees, \ flows and cuts: \ the max-flow min-cut theorem, \ proved", font_size=27,
                   color=YES),
             label(r"stable matching, \ PageRank, \ and why Euler tours are easy and Hamilton's are not",
                   font_size=27, color=CTRL),
-            label(r"the 2020s: \ Dijkstra proved universally optimal, \ and then beaten", font_size=27, color=HEAD),
+            label(r"the 2020s: \ distance ordering and distance-only algorithms", font_size=27, color=HEAD),
         ).arrange(DOWN, buff=0.38).move_to(DOWN * 0.1)
         with self.voiceover(
-            "Here is where we are going. <bookmark mark='a'/> The two basic ways to explore a graph, breadth first "
-            "and depth first, and the structure each one reveals. <bookmark mark='b'/> Dijkstra's shortest-path "
-            "algorithm, proved by an invariant, and the tricks that let a map app answer a hundred times faster. "
-            "<bookmark mark='c'/> Spanning trees, flows and cuts, and a proof that the maximum flow equals the "
-            "minimum cut. <bookmark mark='d'/> Stable matching, PageRank, and why a walk over every edge is easy "
-            "while a walk through every vertex is not. <bookmark mark='e'/> And the last few years, in which "
-            "Dijkstra's algorithm was proved optimal in a strong sense, and then beaten."
+            "Here is where we are going. <bookmark mark='a'/> Breadth-first and depth-first exploration, "
+            "and the different structure each reveals. <bookmark mark='b'/> Dijkstra's shortest-path "
+            "invariant, then exact route searches that expand fewer intersections after preprocessing. "
+            "<bookmark mark='c'/> Spanning trees, flows and cuts, with a proof that maximum flow equals "
+            "minimum cut. <bookmark mark='d'/> Stable matching, PageRank, and the difference between "
+            "visiting every edge and visiting every vertex. <bookmark mark='e'/> Finally, two distinct "
+            "research tasks: sorting vertices by distance, and computing distances without sorting them. "
+            "Their bounds need not be the same."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(facts[0]))
             for mk, f in zip("abcde", facts):
                 vo.wait_until(mk)
-                self.play(FadeIn(f, shift=UP * 0.1))
+                self.play(Indicate(f, color=DATA) if mk == "a" else FadeIn(f, shift=UP * .1), run_time=.7)
         self.wait(0.3)
         self.clear_scene()
 

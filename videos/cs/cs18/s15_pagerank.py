@@ -34,12 +34,17 @@ class PageRank(VoiceoverScene):
                                 fill_opacity=0.25 + 0.5 * rank[u] / mx).move_to(pos[u]) for u in range(n)])
         arrows = VGroup(*[Arrow(pos[u], pos[v], buff=0.3, stroke_width=1.4, color=GREY_B,
                                 max_tip_length_to_length_ratio=0.1) for u in small for v in small[u]])
+        for u in small:
+            if not small[u]:nodes[u].set_stroke(HEAD,width=3)
+        dangling_caption=label(r"gold outline: no outgoing links; redistribute rank uniformly",
+                               font_size=18,color=HEAD).move_to([-3.7,-3.25,0])
+        if dangling_caption.width>6.0:dangling_caption.scale_to_fit_width(6.0)
         steps = VGroup(
             label(r"a surfer follows a random link with probability $d = 0.85$, \\ and jumps to a random page otherwise",
                   font_size=21, color=GREY_A),
-            MathTex(r"r(v) = \frac{1 - d}{n} + d \sum_{u \to v} \frac{r(u)}{\mathrm{outdeg}(u)}", font_size=34,
+            MathTex("r(v) = \\frac{1-d+dD}{n} + d \\sum_{u \\to v} \\frac{r(u)}{\\mathrm{outdeg}(u)}", font_size=30,
                     color=YES),
-            label(r"a page's rank: \\ the fraction of time the surfer spends there", font_size=21, color=GREY_A),
+            label("$D$: rank on pages with no outgoing links; \\\\ redistributed uniformly to all $n$ pages", font_size=21, color=GREY_A),
             label(r"important pages are those linked from important pages: \\ circular, \ but well defined", font_size=21,
                   color=HEAD),
             label(r"the stationary distribution of a Markov chain \\ (\textit{AI, Built}, \ Part 5)", font_size=20,
@@ -48,19 +53,20 @@ class PageRank(VoiceoverScene):
         if steps.width > 6.0:
             steps.scale_to_fit_width(6.0).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "In 1998 Sergey Brin and Larry Page asked how to rank web pages by importance, using only the links. "
-            "<bookmark mark='a'/> Imagine a surfer who, on each page, follows a random link with probability "
-            "eighty-five percent, and otherwise jumps to a page chosen at random. <bookmark mark='b'/> A page's "
-            "rank is the fraction of time this surfer spends on it in the long run, and it satisfies this equation: "
-            "a small share from the random jumps, plus a share of the rank of every page that links to it, divided "
-            "among that page's links. <bookmark mark='c'/> The circle sizes here are the ranks of a small web. "
-            "<bookmark mark='d'/> Important pages are those linked from important pages: a circular definition, "
-            "but a perfectly good one, because it describes the stationary distribution of a Markov chain, the "
-            "object AI, Built's fifth part studied."
+            "PageRank assigns a stationary probability in a specified random-surfer model. <bookmark "
+            "mark='a'/> With probability zero point eight five, follow a uniformly chosen outgoing link; "
+            "otherwise jump uniformly to any page. At a page with no outgoing links, distribute its rank "
+            "uniformly too. <bookmark mark='b'/> The equation includes all three contributions: "
+            "teleportation, linked incoming rank, and dangling-page rank. That last term is needed for "
+            "the small graph drawn here. <bookmark mark='c'/> Circle sizes encode the computed stationary"
+            " probabilities, not a direct measurement of human importance. <bookmark mark='d'/> For "
+            "damping strictly below one and uniform teleportation on a nonempty finite graph, the "
+            "stationary vector is unique and power iteration converges. It is a model with a mathematical"
+            " guarantee, rather than a guarantee of ranking quality."
         ) as vo:
             self.play(FadeIn(head), Create(arrows), FadeIn(nodes))
             vo.wait_until("a")
-            self.play(FadeIn(steps[0]))
+            self.play(FadeIn(steps[0]),FadeIn(dangling_caption))
             vo.wait_until("b")
             self.play(FadeIn(steps[1]))
             vo.wait_until("c")
@@ -86,31 +92,39 @@ class PageRank(VoiceoverScene):
         yt = VGroup(*[label(t, font_size=15, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1)
                       for v, t in ((0, "1"), (-6, r"$10^{-6}$"), (-12, r"$10^{-12}$"))])
         xl = label(r"iteration", font_size=17, color=GREY_B).next_to(xt, DOWN, buff=0.1)
-        yl = label(r"change in the rank vector, \ log scale", font_size=17, color=GREY_B).next_to(ax, UP, buff=0.1
+        yl = label("$L_1$ iterate change, \\ log scale", font_size=17, color=GREY_B).next_to(ax, UP, buff=0.1
                                                                                              ).align_to(ax, LEFT)
         side = VGroup(
             label(r"start uniform; \\ apply the equation to every page; \\ repeat", font_size=21, color=GREY_A),
-            label(r"the error shrinks by a factor $d$ each round \\ (dashed: \ $0.85^k$)", font_size=21, color=HEAD),
+            label("$C_{k+1}\\le d C_k$ in $L_1$; \\ $0\\le d<1$ \\\\ dashed: first change $\\times d^{k-1}$", font_size=21, color=HEAD),
             label(rf"{len(res)} rounds to $10^{{-12}}$, \\ each one pass over the {words(d['m'])} links", font_size=21,
                   color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).to_edge(RIGHT, buff=0.4)
         if side.width > 5.0:
             side.scale_to_fit_width(5.0).to_edge(RIGHT, buff=0.4)
+        check=d['certificates'][0]
+        fixed_point=VGroup(
+            label(rf"checked stationarity residual: {check['stationarity_l1']:.2e}",font_size=18,color=YES),
+            MathTex(r"\|r-r^*\|_1\le\frac{\|T(r)-r\|_1}{1-d}",font_size=27,color=HEAD),
+        ).arrange(DOWN,buff=.16).move_to([4.0,-2.65,0])
         with self.voiceover(
-            "How is the equation solved for billions of pages? <bookmark mark='a'/> Start with every page equal, "
-            "apply the equation to every page at once, and repeat. Each round is one pass over the links. <bookmark "
-            "mark='b'/> The jump probability guarantees convergence: the error shrinks by at least a factor of "
-            "zero point eight five per round, the dashed line. <bookmark mark='c'/> On our synthetic web of twenty "
-            "thousand pages, about fifty rounds bring the change below one part in a trillion, and in practice far "
-            "fewer rounds are enough to fix the order."
+            "Power iteration repeatedly applies the full surfer operator. <bookmark mark='a'/> Start with"
+            " uniform rank, scan every link and redistribute dangling mass in each round. The green curve"
+            " is the L1 change between successive vectors. <bookmark mark='b'/> Damping zero point eight "
+            "five gives an L1 contraction bound: changes are at most zero point eight five times the "
+            "preceding change. The dashed curve is a bound scaled from the first observed change, not an "
+            "exact error trajectory. <bookmark mark='c'/> We check the final vector with a separate "
+            "numerical operator, verify probability mass and compute its stationarity residual. Dividing "
+            "that residual by one minus damping bounds distance to the stationary vector. A small iterate"
+            " change is not itself proof that every pair of pages has a settled ordering."
         ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl))
+            self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl), Create(line))
             vo.wait_until("a")
-            self.play(FadeIn(side[0]), Create(line), run_time=2)
+            self.play(FadeIn(side[0]))
             vo.wait_until("b")
             self.play(Create(ref), FadeIn(side[1]))
             vo.wait_until("c")
-            self.play(FadeIn(side[2]))
+            self.play(FadeIn(side[2]),FadeIn(fixed_point))
         self.wait(0.3)
         self.clear_scene()
 
@@ -133,13 +147,14 @@ class PageRank(VoiceoverScene):
         if side.width > 6.0:
             side.scale_to_fit_width(6.0).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Which pages come out on top? <bookmark mark='a'/> On our synthetic web, nine of the ten highest-ranked "
-            "pages are also among the ten with most incoming links. <bookmark mark='b'/> That is because the web was "
-            "grown by popularity, so the oldest pages are both the most linked and the best linked. <bookmark "
-            "mark='c'/> On the real web the difference mattered: counting links was easy to fool, but a link from an "
-            "important page counts for more, which made the ranking hard to game. <bookmark mark='d'/> For a while. "
-            "Link farms learned to manufacture importance, and search ranking became the adversarial game that "
-            "Part 47 describes."
+            "This ranking belongs to a synthetic graph. <bookmark mark='a'/> The reported overlap "
+            "compares its top ten by PageRank with its top ten by incoming-link count. <bookmark "
+            "mark='b'/> Preferential attachment makes old popular pages attractive to new links, so this "
+            "generator naturally couples those two measures. It is not a measurement of today's web. "
+            "<bookmark mark='c'/> PageRank weights links according to the linking page's rank, which "
+            "differs from merely counting incoming links. <bookmark mark='d'/> That difference does not "
+            "make the system immune to manipulation: link farms and other adversarial strategies require "
+            "additional ranking signals and defenses, as Part 47 discusses."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab))
             for mk, s in zip("abcd", side):

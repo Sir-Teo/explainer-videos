@@ -45,6 +45,16 @@ class Flow(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4).shift(DOWN * 0.7)
         if pts.width > 6.0:
             pts.scale_to_fit_width(6.0).to_edge(RIGHT, buff=0.4)
+        # A separate unit-capacity edge makes cancellation concrete without altering the network above.
+        forward = Arrow([-5.3,-2.45,0],[-1.6,-2.45,0],buff=.18,color=GREY_D,stroke_width=2)
+        backward = Arrow([-1.6,-2.95,0],[-5.3,-2.95,0],buff=.18,color=HEAD,stroke_width=3)
+        residual = VGroup(
+            forward,backward,
+            mono('u',18,WHITE).move_to([-5.6,-2.7,0]),mono('v',18,WHITE).move_to([-1.3,-2.7,0]),
+            label(r"forward residual: $c-f=0$",font_size=18,color=GREY_A).move_to([-3.45,-2.15,0]),
+            label(r"reverse residual: $f=1$; cancel a previous unit",font_size=18,color=HEAD).move_to([-3.45,-3.25,0]),
+            label(r"separate unit-edge example: $c=1$, $f=1$",font_size=17,color=GREY_B).move_to([-3.45,-3.65,0]),
+        )
         cols = [YES, LAM, CTRL, DATA, HEAD]
         with self.voiceover(
             "A flow network is a graph of pipes, each with a capacity. <bookmark mark='a'/> The question is how much "
@@ -62,7 +72,7 @@ class Flow(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(pts[1]))
             vo.wait_until("c")
-            self.play(FadeIn(pts[2]))
+            self.play(FadeIn(pts[2]),FadeIn(residual))
             vo.wait_until("d")
             self.play(FadeIn(pts[3]))
             total = 0
@@ -99,16 +109,16 @@ class Flow(VoiceoverScene):
         if steps.width > 6.2:
             steps.scale_to_fit_width(6.2).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "When does the method stop, and is the answer the maximum? <bookmark mark='a'/> A cut divides the "
-            "vertices into two sides, the source on one and the sink on the other; its capacity is the total "
-            "capacity of the pipes crossing from the source's side to the sink's. <bookmark mark='b'/> Every unit of "
-            "flow must cross every cut, so no flow can exceed the capacity of any cut. <bookmark mark='c'/> Now "
-            "suppose no augmenting path remains. The vertices still reachable from s through pipes with spare "
-            "capacity form one side of a cut, and every pipe crossing it must be full, or the search would have "
-            "crossed it. <bookmark mark='d'/> So the flow equals the capacity of that cut: nineteen, the ten into a "
-            "plus the nine out of b. A flow equal to a cut must be the largest flow, and the cut the smallest cut. "
-            "<bookmark mark='e'/> This is the max-flow min-cut theorem, found in 1956 by Ford and Fulkerson, and "
-            "independently by Peter Elias, Amiel Feinstein and Claude Shannon."
+            "A flow and a cut can certify each other's optimality. <bookmark mark='a'/> A cut puts source"
+            " s on one side and sink t on the other; add capacities of original arcs directed across it "
+            "from the source side. <bookmark mark='b'/> Flow conservation makes the net flow crossing any"
+            " cut equal the source value, so that value cannot exceed cut capacity. <bookmark mark='c'/> "
+            "When the residual graph has no augmenting path, let S be its vertices reachable from s. "
+            "Every original arc leaving S is saturated, and any positive flow entering S would create a "
+            "residual arc leaving S, so no such return flow remains. <bookmark mark='d'/> Thus flow "
+            "equals cut capacity. Here both are nineteen: ten from s to a, plus nine from b to d. Our "
+            "output checks capacity constraints, conservation and this equality. <bookmark mark='e'/> "
+            "That is the max-flow min-cut certificate, rather than an inference from the picture alone."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g))
             vo.wait_until("a")
@@ -143,13 +153,17 @@ class Flow(VoiceoverScene):
         if pts.width > 6.4:
             pts.scale_to_fit_width(6.4).to_edge(RIGHT, buff=0.5)
         with self.voiceover(
-            "Ford and Fulkerson left the choice of path open, and it matters. <bookmark mark='a'/> In this network "
-            "the answer is two thousand. But a search that keeps routing through the middle edge, forwards and then "
-            "backwards, gains one unit each time. <bookmark mark='b'/> Choosing those paths takes two thousand "
-            "augmentations. With irrational capacities the method may never even stop. <bookmark mark='c'/> "
-            "Shortest paths take two. <bookmark mark='d'/> On a random network of sixty vertices, Edmonds–Karp "
-            "needs only six. <bookmark mark='e'/> Faster methods followed, Andrew Goldberg and Robert Tarjan's "
-            "push–relabel among them, and in 2022 a method in almost linear time, which chapter sixteen describes."
+            "An augmenting-path rule affects the amount of work. <bookmark mark='a'/> This network "
+            "carries two thousand units, but alternating zig-zag paths through its unit-capacity middle "
+            "edge add only one unit each. A backward residual arc cancels previous flow; it is not a new "
+            "original pipe. <bookmark mark='b'/> That prescribed unlucky sequence takes two thousand "
+            "augmentations. Integer capacities ensure progress in integral units; arbitrary irrational "
+            "capacities do not give the same termination guarantee for arbitrary path choices. <bookmark "
+            "mark='c'/> Breadth-first augmenting paths take two on this example. <bookmark mark='d'/> The"
+            " random sixty-vertex example separately reports its actual distinct directed arcs, not the "
+            "number of attempted dictionary writes, and has a checked flow/cut certificate. <bookmark "
+            "mark='e'/> The research chapter will distinguish almost-linear theoretical bounds from "
+            "practical implementations."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g))
             for mk, p in zip("abcde", pts):

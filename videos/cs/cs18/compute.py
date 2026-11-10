@@ -35,12 +35,33 @@ import random
 import time
 from collections import Counter
 
+from explainer.cache_lock import locked_item
+
 import numpy as np
 
 from explainer.ai.cache import Cache
 
-CACHE = Cache("cs18")
-load = CACHE.load
+SCHEMAS = {name: 2 for name in ('euler', 'representation', 'scc', 'allpairs', 'astar', 'mst', 'flow', 'matching', 'hard', 'pagerank')}
+
+
+class GraphCache(Cache):
+    @locked_item(lambda self, name: self.path(name))
+    def load(self, name):
+        if not cache_current(name, self.path(name)):
+            self.save(name, ITEMS[name]())
+        return super().load(name)
+
+
+CACHE = GraphCache("cs18")
+
+
+def cache_current(name, path=None):
+    path = CACHE.path(name) if path is None else path
+    return name not in SCHEMAS or (path.exists() and json.loads(path.read_text()).get('schema') == SCHEMAS[name])
+
+
+def load(name):
+    return CACHE.load(name)
 
 
 def compute_euler() -> dict:
@@ -53,11 +74,14 @@ def compute_euler() -> dict:
     # a graph with all even degrees: the circuit
     g = {0: [1, 3, 4, 5], 1: [0, 2], 2: [1, 3], 3: [0, 2, 4, 5], 4: [0, 3], 5: [0, 3]}
     circ = G.euler_circuit(g)
-    return {"konigsberg_degrees": deg, "konigsberg_circuit": G.euler_circuit(k), "house_degrees":
+    from .measurements import euler_certificate
+    certificate = euler_certificate(g, circ)
+    return {"schema": SCHEMAS["euler"], "certificate": certificate, "konigsberg_degrees": deg, "konigsberg_circuit": G.euler_circuit(k), "house_degrees":
             {u: len(v) for u, v in house.items()}, "graph": {str(u): v for u, v in g.items()}, "circuit": circ}
 
 
 def compute_representation() -> dict:
+    from .measurements import list_allocation_bytes, protocol
     rows = []
     for n, deg in ((1000, 5), (10000, 5), (3000, 1000)):
         rng = random.Random(n)
@@ -68,27 +92,32 @@ def compute_representation() -> dict:
             if a != b:
                 edges.add((min(a, b), max(a, b)))
         lists = [[] for _ in range(n)]
+        mat = np.zeros((n, n), dtype=bool)
         for a, b in edges:
             lists[a].append(b)
             lists[b].append(a)
-        t0 = time.perf_counter()
-        c = 0
-        for u in range(n):
-            for v in lists[u]:
-                c += 1
-        t_list = time.perf_counter() - t0
-        mat = np.zeros((n, n), dtype=bool)
-        for a, b in edges:
             mat[a, b] = mat[b, a] = True
-        t0 = time.perf_counter()
-        c2 = 0
-        for u in range(min(n, 2000)):
-            c2 += int(np.count_nonzero(mat[u]))
-        t_mat = (time.perf_counter() - t0) * n / min(n, 2000)
-        rows.append({"n": n, "m": m, "list_bytes": 8 * 2 * m + 8 * n, "matrix_bytes": n * n // 8,
-                     "list_s": t_list, "matrix_s": t_mat, "visited": c})
+        list_times, matrix_times = [], []
+        for _ in range(3):
+            t0 = time.perf_counter()
+            c = 0
+            for row in lists:
+                for _ in row:
+                    c += 1
+            list_times.append(time.perf_counter() - t0)
+            t0 = time.perf_counter()
+            c2 = sum(int(np.count_nonzero(row)) for row in mat)
+            matrix_times.append(time.perf_counter() - t0)
+            assert c == c2 == 2 * m
+        rows.append(dict(n=n, m=m, list_bytes=8 * (2 * m + n), matrix_bytes=(n * n + 7) // 8,
+                         actual_list_bytes=list_allocation_bytes(lists), matrix_array_bytes=int(mat.nbytes),
+                         list_s=min(list_times), matrix_s=min(matrix_times),
+                         list_samples=list_times, matrix_samples=matrix_times, visited=c,
+                         scanned_matrix_cells=n * n, scanned_matrix_rows=n))
         print(rows[-1])
-    return {"rows": rows}
+    return dict(schema=SCHEMAS['representation'], rows=rows, protocol=protocol(),
+                storage_scope='ideal 64-bit adjacency payload versus packed bits; actual Python reachable allocations versus NumPy bool data bytes',
+                timing_scope='complete Python adjacency visits versus NumPy count_nonzero per complete bool row; no row extrapolation; different execution paths, not a packed-bit benchmark')
 
 
 def maze(w, h, rng, loops=0.08):
@@ -201,7 +230,15 @@ def compute_scc() -> dict:
     in_ = len(bwd - core)
     sat = G.two_sat(3, [(1, 2), (-1, 3), (-2, -3), (2, 3)])
     unsat = G.two_sat(2, [(1, 2), (1, -2), (-1, 2), (-1, -2)])
-    return {"graph": {str(u): v for u, v in g.items()}, "comps": comps, "web_n": n, "core": len(core),
+    component_of = {u: i for i, component in enumerate(comps) for u in component}
+    condensation = sorted({(component_of[u], component_of[v]) for u in g for v in g[u]
+                           if component_of[u] != component_of[v]})
+    condensed = {i: [] for i in range(len(comps))}
+    for u, v in condensation:
+        condensed[u].append(v)
+    assert G.topo_kahn(condensed) is not None
+    assert core | (bwd - core) | (fwd - core) | (set(web) - (bwd | fwd)) == set(web)
+    return {"schema": SCHEMAS["scc"], "condensation": condensation, "graph": {str(u): v for u, v in g.items()}, "comps": comps, "web_n": n, "core": len(core),
             "in": in_, "out": out_, "other": n - len(core) - in_ - out_, "sizes": Counter(len(c) for c in sc).most_common(5),
             "sat": sat, "unsat": unsat}
 
@@ -243,9 +280,9 @@ def compute_bellman() -> dict:
 
 def compute_allpairs() -> dict:
     from explainer.cs.algo import graphs as G
+    from .measurements import allpairs_agree, protocol
     rng = random.Random(9)
     n = 150
-    # negative edges but no negative cycle: w = c + p(u) - p(v) with c >= 0 and random potentials p
     pot = [rng.randint(0, 30) for _ in range(n)]
     adj = {i: [] for i in range(n)}
     for _ in range(6 * n):
@@ -253,66 +290,76 @@ def compute_allpairs() -> dict:
         if a != b:
             adj[a].append((b, rng.randint(0, 20) + pot[a] - pot[b]))
     edges = [(u, v, w) for u in adj for v, w in adj[u]]
-    t0 = time.perf_counter()
-    fw = G.floyd_warshall(n, edges)
-    t_fw = time.perf_counter() - t0
-    neg = any(fw[i][i] < 0 for i in range(n))
-    if neg:
-        for u in adj:
-            adj[u] = [(v, abs(w)) for v, w in adj[u]]
-        edges = [(u, v, w) for u in adj for v, w in adj[u]]
+    fw_times, johnson_times = [], []
+    for _ in range(3):
+        t0 = time.perf_counter()
         fw = G.floyd_warshall(n, edges)
-    t0 = time.perf_counter()
-    J, minw = G.johnson(adj)
-    t_j = time.perf_counter() - t0
-    agree = all(abs(J[u].get(v, math.inf) - fw[u][v]) < 1e-9 for u in range(n) for v in range(n) if fw[u][v] < math.inf)
-    return {"n": n, "m": len(edges), "fw_s": t_fw, "johnson_s": t_j, "agree": agree, "negative_edges":
-            sum(1 for _, _, w in edges if w < 0), "min_reweighted": minw, "fw_ops": n ** 3}
+        fw_times.append(time.perf_counter() - t0)
+        assert all(fw[i][i] >= 0 for i in range(n)), 'potential construction must not create a negative cycle'
+        t0 = time.perf_counter()
+        result, minw = G.johnson(adj)
+        johnson_times.append(time.perf_counter() - t0)
+        check = allpairs_agree(fw, result)
+        assert minw >= 0
+    return dict(schema=SCHEMAS['allpairs'], n=n, m=len(edges), fw_s=min(fw_times), johnson_s=min(johnson_times),
+                fw_samples=fw_times, johnson_samples=johnson_times, protocol=protocol(), agree=True,
+                negative_edges=sum(w < 0 for _, _, w in edges), min_reweighted=minw, fw_ops=n ** 3,
+                verification=check, input_scope='same fixed directed multigraph with integer potential differences; all finite and unreachable pairs checked; no fallback graph mutation')
 
 
 def compute_astar() -> dict:
     from explainer.cs.algo import graphs as G
+    from .measurements import protocol
     adj, pos = _city(80, 60, seed=3)
     rng = random.Random(4)
     t0 = time.perf_counter()
     ch = G.CH(adj)
     ch_s = time.perf_counter() - t0
     corners = [(0, 0), (79, 0), (0, 59), (79, 59)]
+    t0 = time.perf_counter()
+    landmark_table = G.landmark_distances(adj, adj, corners)
+    landmark_s = time.perf_counter() - t0
     qs = [((rng.randrange(80), rng.randrange(60)), (rng.randrange(80), rng.randrange(60))) for _ in range(40)]
-    tot = Counter()
+    tot, records = Counter(), []
     for s, t in qs:
         d, _, n_d, _ = G.dijkstra(adj, s, t)
-        _, n_b = G.bidijkstra(adj, adj, s, t)
-        # admissible: straight-line distance at the fastest speed (arterials, 0.35 per unit)
-        da, _, n_a, _ = G.dijkstra(adj, s, t, h=lambda v, t=t: 0.35 * math.dist(pos[v], pos[t]))
-        assert abs(da[t] - d[t]) < 1e-9
-        hh = G.alt_heuristic(adj, adj, corners, t)
-        _, _, n_l, _ = G.dijkstra(adj, s, t, h=hh)
-        dl, _, n_l2, _ = G.dijkstra(adj, s, t, h=hh)
-        assert abs(dl[t] - d[t]) < 1e-9
+        db, n_b = G.bidijkstra(adj, adj, s, t)
+        straight = lambda v, t=t: .35 * math.dist(pos[v], pos[t])
+        hh = G.alt_heuristic(adj, adj, corners, t, distances=landmark_table)
+        for heuristic in [straight, hh]:
+            assert heuristic(t) == 0
+            assert all(heuristic(u) <= w + heuristic(v) + 1e-9 for u in adj for v, w in adj[u])
+        da, _, n_a, _ = G.dijkstra(adj, s, t, h=straight)
+        dl, _, n_l, _ = G.dijkstra(adj, s, t, h=hh)
         dc, n_c = ch.query(s, t)
-        assert abs(dc - d[t]) < 1e-9
-        tot.update({"dijkstra": n_d, "bidirectional": n_b, "astar": n_a, "alt": n_l, "ch": n_c})
-    # one query, for the picture: the settled sets
+        assert all(math.isclose(value, d[t], rel_tol=1e-11, abs_tol=1e-9) for value in [db, da[t], dl[t], dc])
+        counts = dict(dijkstra=n_d, bidirectional=n_b, astar=n_a, alt=n_l, ch=n_c)
+        tot.update(counts)
+        records.append(dict(source=list(s), target=list(t), distance=d[t], expansions=counts))
     s, t = (8, 30), (72, 32)
-    pics = {}
-    for name, h in (("dijkstra", None), ("astar", lambda v: 0.35 * math.dist(pos[v], pos[t]))):
-        dist, parent, _, _ = G.dijkstra(adj, s, t, h=h)
-        pics[name] = [list(u) for u in parent]
-    # a diagonal query, where the straight line is a poor guide: A* against landmarks, and the hierarchy
     s2, t2 = (6, 8), (72, 52)
-    for name, h in (("astar2", lambda v: 0.35 * math.dist(pos[v], pos[t2])),
-                    ("alt2", G.alt_heuristic(adj, adj, corners, t2))):
-        dist, parent, _, _ = G.dijkstra(adj, s2, t2, h=h)
-        pics[name] = [list(u) for u in parent]
+    pics, pic_distances = {}, {}
+    for name, source, target, heuristic in [
+        ('dijkstra', s, t, None), ('astar', s, t, lambda v: .35 * math.dist(pos[v], pos[t])),
+        ('astar2', s2, t2, lambda v: .35 * math.dist(pos[v], pos[t2])),
+        ('alt2', s2, t2, G.alt_heuristic(adj, adj, corners, t2, distances=landmark_table))]:
+        order = []
+        distance, _, expanded, _ = G.dijkstra(adj, source, target, h=heuristic, settled_order=order)
+        assert len(order) == len(set(order)) == expanded
+        assert math.isclose(distance[target], G.dijkstra(adj, source, target)[0][target], abs_tol=1e-9)
+        pics[name] = [list(u) for u in order]
+        pic_distances[name] = distance[target]
     dc, _ = ch.query(s2, t2)
-    assert abs(dc - G.dijkstra(adj, s2, t2)[0][t2]) < 1e-9
-    pics["ch_s"] = [list(u) for u in ch.last_settled[0]]
-    pics["ch_t"] = [list(u) for u in ch.last_settled[1]]
-    pics["s2"], pics["t2"] = list(s2), list(t2)
-    return {"n": len(adj), "queries": len(qs), "avg": {k: v / len(qs) for k, v in tot.items()},
-            "ch_build_s": ch_s, "shortcuts": ch.shortcuts, "pics": pics, "s": list(s), "t": list(t),
-            "pos": {f"{x},{y}": p for (x, y), p in pos.items()}}
+    assert math.isclose(dc, G.dijkstra(adj, s2, t2)[0][t2], abs_tol=1e-9)
+    pics['ch_s'] = [list(u) for u in sorted(ch.last_settled[0])]
+    pics['ch_t'] = [list(u) for u in sorted(ch.last_settled[1])]
+    pics['s2'], pics['t2'] = list(s2), list(t2)
+    return dict(schema=SCHEMAS['astar'], n=len(adj), queries=len(qs), avg={k: v / len(qs) for k, v in tot.items()},
+                query_records=records, ch_build_s=ch_s, landmark_build_s=landmark_s,
+                preprocessing_protocol=dict(protocol(1), statistic='one observed build; no timing comparison'),
+                shortcuts=ch.shortcuts, pics=pics, picture_distances=pic_distances, s=list(s), t=list(t),
+                pos={f'{x},{y}': p for (x, y), p in pos.items()},
+                scope='actual expansions on one fixed undirected nonnegative synthetic city; both heuristics checked consistent; all five distances checked on all forty queries; query latency unmeasured')
 
 
 def compute_mst() -> dict:
@@ -326,9 +373,12 @@ def compute_mst() -> dict:
         adj[i].append((j, w))
         adj[j].append((i, w))
     k, tree = G.kruskal(n, edges)
-    p, _ = G.prim(n, adj)
-    b, _, rounds = G.boruvka(n, edges)
-    return {"pts": pts, "tree": [[u, v] for u, v, _ in tree], "kruskal": k, "prim": p, "boruvka": b,
+    p, prim_tree = G.prim(n, adj)
+    b, boruvka_tree, rounds = G.boruvka(n, edges)
+    from .measurements import tree_certificate
+    certificates = [tree_certificate(n, result, value) for result, value in [(tree, k), (prim_tree, p), (boruvka_tree, b)]]
+    assert math.isclose(k, p, abs_tol=1e-9) and math.isclose(k, b, abs_tol=1e-9)
+    return {"schema": SCHEMAS["mst"], "certificates": certificates, "pts": pts, "tree": [[u, v] for u, v, _ in tree], "kruskal": k, "prim": p, "boruvka": b,
             "rounds": rounds, "n": n, "m": len(edges)}
 
 
@@ -353,7 +403,9 @@ def compute_flow() -> dict:
             res[(u, v)] -= bneck
             res[(v, u)] = res.get((v, u), 0) + bneck
         aug += 1
-    ek = len(G.edmonds_karp(bad, "s", "t")[1])
+    bad_value, bad_paths, bad_side = G.edmonds_karp(bad, "s", "t")
+    ek = len(bad_paths)
+    assert bad_value == 2000 and aug == 2000 and ek == 2
     # a larger random network: augmentations against the bound O(VE)
     rng = random.Random(3)
     n = 60
@@ -361,9 +413,13 @@ def compute_flow() -> dict:
     for _ in range(400):
         a, b = rng.sample(range(n), 2)
         big[a][b] = rng.randint(1, 50)
-    fb, pb, _ = G.edmonds_karp(big, 0, n - 1)
-    return {"cap": cap, "flow": f, "paths": paths, "side": sorted(side), "cut": cut, "bad_ff": aug, "bad_ek": ek,
-            "big_n": n, "big_m": 400, "big_flow": fb, "big_aug": len(pb)}
+    fb, pb, sb = G.edmonds_karp(big, 0, n - 1)
+    from .measurements import flow_certificate
+    certificates = [flow_certificate(cap, 's', 't', f, paths, side),
+                    flow_certificate(bad, 's', 't', bad_value, bad_paths, bad_side),
+                    flow_certificate(big, 0, n - 1, fb, pb, sb)]
+    return {"schema": SCHEMAS["flow"], "certificates": certificates, "cap": cap, "flow": f, "paths": paths, "side": sorted(side), "cut": cut, "bad_ff": aug, "bad_ek": ek,
+            "big_n": n, "big_m": sum(len(row) for row in big.values()), "attempted_arcs": 400, "big_flow": fb, "big_aug": len(pb)}
 
 
 def compute_matching() -> dict:
@@ -376,11 +432,10 @@ def compute_matching() -> dict:
             P = [rng.sample(range(n), n) for _ in range(n)]
             R = [rng.sample(range(n), n) for _ in range(n)]
             m, pr = G.gale_shapley(P, R)
-            if n <= 100:
-                assert G.is_stable(m, P, R)
+            assert len(m) == n and len(set(m.values())) == n and G.is_stable(m, P, R)
             props.append(pr)
         H = sum(1 / k for k in range(1, n + 1))
-        rows.append({"n": n, "proposals": sum(props) / len(props), "nHn": n * H, "worst": n * n})
+        rows.append({"n": n, "proposals": sum(props) / len(props), "proposal_samples": props, "trials": len(props), "all_stable": True, "nHn": n * H, "worst": n * n})
         print(rows[-1])
     # a small example to animate
     for seed in range(200):           # a small example in which the two sides' optimal matchings differ
@@ -397,9 +452,11 @@ def compute_matching() -> dict:
     t0 = time.perf_counter()
     total, assign = G.hungarian(cost)
     t_h = time.perf_counter() - t0
-    return {"rows": rows, "P": P, "R": R, "match": {str(k): v for k, v in m.items()}, "proposals": pr,
+    assert sorted(assign) == list(range(60)) and total == sum(cost[i][assign[i]] for i in range(60))
+    assert G.is_stable(m, P, R) and G.is_stable(mR, R, P)
+    return {"schema": SCHEMAS["matching"], "preference_model": "independent uniform strict complete preference permutations, five seeds per size; nHn is a scale reference, not an exact finite expectation", "rows": rows, "P": P, "R": R, "match": {str(k): v for k, v in m.items()}, "proposals": pr,
             "match_r": {str(k): v for k, v in mR.items()}, "hungarian_n": 60, "hungarian_total": total,
-            "hungarian_s": t_h, "greedy_total": _greedy_assign(cost)}
+            "hungarian_s": t_h, "hungarian_protocol": {"repeats": 1, "statistic": "one observed solve", "timing_scope": "single fixed 60-by-60 matrix on this host, not a repeated benchmark"}, "greedy_total": _greedy_assign(cost)}
 
 
 def _greedy_assign(cost):
@@ -414,28 +471,33 @@ def _greedy_assign(cost):
 
 def compute_hard() -> dict:
     from explainer.cs.algo import graphs as G
+    from .measurements import euler_certificate, tsp_reference, protocol
     rows = []
     for n in range(6, 17, 2):
         rng = random.Random(n)
         pts = [(rng.random(), rng.random()) for _ in range(n)]
         D = [[math.dist(a, b) for b in pts] for a in pts]
-        best = math.inf
-        for _ in range(3):                  # best of three: the machine is shared
+        reference = tsp_reference(D)
+        times, results = [], []
+        for _ in range(3):
             t0 = time.perf_counter()
-            G.held_karp(D)
-            best = min(best, time.perf_counter() - t0)
-        rows.append({"n": n, "held_karp_s": best, "brute": math.factorial(n - 1) / 2,
+            result = G.held_karp(D)
+            times.append(time.perf_counter() - t0)
+            assert math.isclose(result, reference, rel_tol=1e-12, abs_tol=1e-12)
+            results.append(result)
+        rows.append({"n": n, "held_karp_s": min(times), "samples": times, "results": results, "reference": reference, "brute": math.factorial(n - 1) / 2,
                      "hk_ops": 2 ** n * n * n})
         print(rows[-1])
     # Euler: a big even-degree graph (a torus grid), circuit in linear time
     w = 300
     g = {(x, y): [((x + 1) % w, y), ((x - 1) % w, y), (x, (y + 1) % w), (x, (y - 1) % w)] for x in range(w) for y in
          range(w)}
-    t_e = math.inf
+    euler_times = []
     for _ in range(3):
         t0 = time.perf_counter()
         c = G.euler_circuit(g)
-        t_e = min(t_e, time.perf_counter() - t0)
+        euler_times.append(time.perf_counter() - t0)
+        certificate = euler_certificate(g, c)
     # Hamilton's icosian game: the dodecahedron, drawn flat (outer pentagon, a ring of ten, inner pentagon)
     edges = [(i, (i + 1) % 5) for i in range(5)] + [(i, 5 + 2 * i) for i in range(5)]
     edges += [(5 + j, 5 + (j + 1) % 10) for j in range(10)] + [(15 + i, 6 + 2 * i) for i in range(5)]
@@ -461,7 +523,7 @@ def compute_hard() -> dict:
                 seen.discard(v)
     walk([0], {0})
     distinct = {frozenset(frozenset((c[i], c[(i + 1) % 20])) for i in range(20)) for c in cycles}
-    return {"rows": rows, "euler_edges": len(c) - 1, "euler_s": t_e, "dodeca_edges": edges,
+    return {"schema": SCHEMAS["hard"], "protocol": protocol(), "rows": rows, "euler_certificate": certificate, "euler_samples": euler_times, "euler_edges": len(c) - 1, "euler_s": min(euler_times), "dodeca_edges": edges,
             "dodeca_cycle": cycles[0], "dodeca_cycles": len(distinct)}
 
 
@@ -476,7 +538,9 @@ def compute_pagerank() -> dict:
     top_in = sorted(indeg, key=lambda u: -indeg[u])[:10]
     small = G.random_web(12, 2, random.Random(2))
     rs, _ = G.pagerank(small)
-    return {"n": n, "m": sum(len(v) for v in web.values()), "residuals": res, "top": [[u, r[u], indeg[u]] for u in top],
+    from .measurements import pagerank_certificate
+    certificates = [pagerank_certificate(web, r, res), pagerank_certificate(small, rs, G.pagerank(small)[1])]
+    return {"schema": SCHEMAS["pagerank"], "certificates": certificates, "n": n, "m": sum(len(v) for v in web.values()), "residuals": res, "top": [[u, r[u], indeg[u]] for u in top],
             "overlap_top10": len(set(top) & set(top_in)), "small": {str(u): v for u, v in small.items()},
             "small_rank": {str(u): v for u, v in rs.items()}}
 

@@ -42,23 +42,22 @@ class Mst(VoiceoverScene):
                   r"in some minimum tree", font_size=21, color=YES),
             label(r"proof: \ take a minimum tree without it \ (blue); \\ adding it closes a cycle, \ which crosses "
                   r"the split again \\ on an edge at least as heavy \ (9): \ swap them", font_size=20, color=GREY_A),
-            label(r"\textbf{cycle property}: \ the heaviest edge on a cycle \\ is in no minimum tree \ (distinct "
-                  r"weights)", font_size=21, color=NO),
-            label(r"every MST algorithm is a schedule of cut-property steps", font_size=21, color=HEAD),
+            label("\\textbf{cycle property}: \\ the uniquely heaviest edge on a cycle \\\\ belongs to no minimum tree; \\ ties require care", font_size=21, color=NO),
+            label("these three classic algorithms schedule safe cut choices", font_size=21, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         if steps.width > 6.2:
             steps.scale_to_fit_width(6.2).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "In 1926 the Czech mathematician Otakar Borůvka was asked how to wire the villages of Moravia into an "
-            "electrical grid with as little cable as possible. <bookmark mark='a'/> That is a minimum spanning tree: "
-            "a set of V minus one edges that connects every vertex, with no cycle, of least total weight. <bookmark "
-            "mark='b'/> Everything rests on the cut property. Split the vertices into two groups however you like; "
-            "the lightest edge crossing between them, here the four, belongs to some minimum tree. <bookmark "
-            "mark='c'/> Proof: take a minimum tree that avoids it, like this blue one. Adding the edge creates a "
-            "cycle, the cycle must cross the split a second time on some other edge, here the nine, at least as "
-            "heavy, and swapping the two cannot make the tree worse. <bookmark mark='d'/> Symmetrically, the "
-            "heaviest edge on any cycle is never needed. <bookmark mark='e'/> Every minimum spanning tree "
-            "algorithm is a way of choosing cuts."
+            "A minimum spanning tree connects a connected undirected weighted graph with the least total "
+            "edge weight. <bookmark mark='a'/> It has V minus one edges and no cycle. The weights may be "
+            "negative; shortest-path assumptions are not needed here. <bookmark mark='b'/> For any cut, "
+            "any lightest crossing edge belongs to some minimum spanning tree. <bookmark mark='c'/> Add "
+            "that edge to a minimum tree that avoids it. The resulting cycle crosses the cut again; "
+            "replace a crossing edge of at least its weight. The new tree is no worse and contains the "
+            "chosen edge. <bookmark mark='d'/> The related cycle rule needs care with ties: an edge "
+            "uniquely heaviest on a cycle belongs to no minimum tree. A tied maximum edge may belong to "
+            "one. <bookmark mark='e'/> The three classic algorithms use these safe choices in different "
+            "orders."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g))
             vo.wait_until("a")
@@ -136,19 +135,21 @@ class Mst(VoiceoverScene):
         note_ = label(r"Bor\r{u}vka's steps are independent: \ the parallel and distributed algorithms start there",
                       font_size=20, color=GREY_B).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "There are three classic schedules. <bookmark mark='a'/> Kruskal sorts the edges. <bookmark mark='b'/> "
-            "Prim, and before him Vojtěch Jarník, grows a single tree, always adding the lightest edge that leaves "
-            "it, found with a heap. <bookmark mark='c'/> Borůvka's own method lets every component pick its lightest "
-            "outgoing edge simultaneously; each round at least halves the number of components, so there are "
-            "at most log n rounds, and here a hundred and twenty points needed only four. <bookmark mark='d'/> Combining Borůvka steps with random sampling, "
-            "David Karger, Philip Klein and Robert Tarjan reached expected linear time in 1995. <bookmark "
-            "mark='e'/> And because every component acts independently in a Borůvka round, it is where parallel and "
-            "distributed spanning-tree algorithms begin."
+            "Three classic methods schedule safe edges differently. <bookmark mark='a'/> Kruskal sorts "
+            "edges and uses union-find, taking order E log E for this implementation. <bookmark "
+            "mark='b'/> Prim grows one tree using a heap; Jarník described an earlier version. The "
+            "binary-heap bound differs from a Fibonacci-heap implementation. <bookmark mark='c'/> Boruvka"
+            " lets each remaining component choose a lightest outgoing edge, with a consistent tie rule. "
+            "On a connected graph the number of components at least halves per round. <bookmark "
+            "mark='d'/> Karger, Klein and Tarjan's randomized algorithm achieves expected linear time in "
+            "the comparison model; it is a theorem cited here, not the code we just timed. <bookmark "
+            "mark='e'/> Boruvka's simultaneous choices also motivate parallel and distributed algorithms,"
+            " whose communication costs require their own analysis."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows[0]))
             for mk, r in zip("abcd", rows):
                 vo.wait_until(mk)
-                self.play(FadeIn(r, shift=RIGHT * 0.1))
+                self.play(Indicate(r, color=YES) if mk == "a" else FadeIn(r, shift=RIGHT * .1), run_time=.7)
             vo.wait_until("e")
             self.play(FadeIn(note_))
         self.wait(0.3)

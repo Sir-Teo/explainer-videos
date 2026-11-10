@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs18.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, NO, PART, YES, grid_table, load,
+from videos.cs.cs18.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, NO, PART, YES, draw_graph, grid_table, load,
                                    mono, words)
 
 
@@ -14,139 +14,113 @@ class Frontier(VoiceoverScene):
         self.open_()
 
     def card(self):
-        card = chapter_card(16, r"Frontier: \ shortest paths and flows, \ now", r"Was Dijkstra the end of the story?",
+        card = chapter_card(16, r"Research results: \ models and dates", r"Was Dijkstra the end of the story?",
                             lit=(2024,), extra=((2022, r"almost-linear max flow"), (2024, r"universal optimality"),
-                                                (2025, r"the sorting barrier broken")), part=PART)
-        with self.voiceover("Chapter sixteen. Frontier: shortest paths and flows, now."):
+                                                (2025, r"the sorting barrier broken"), (2026, r"improved directed bound")), part=PART)
+        with self.voiceover("Chapter sixteen. Selected research results, with their models and dates."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
 
     def dijkstra(self):
-        head = label(r"Dijkstra is universally optimal \ (2024)", font_size=34).to_edge(UP, buff=0.3)
-        steps = VGroup(
-            label(r"Dijkstra with a heap also \textbf{sorts} the vertices by distance", font_size=22, color=GREY_A),
-            label(r"worst-case optimal for that task: \ sorting needs $\Omega(n \log n)$ \ (Part 16)", font_size=22,
-                  color=GREY_A),
-            label(r"\textbf{universally optimal}: \ on \textit{every} graph, \ within a constant of the best algorithm "
-                  r"for that graph's worst weights", font_size=22, color=YES),
-            label(r"needs a new heap with the \textbf{working-set} property: \ cheap to extract recently inserted "
-                  r"items \ (callback: \ splay trees)", font_size=21, color=LAM),
-            label(r"Haeupler, \ Hlad\'ik, \ Rozho\v{n}, \ Tarjan and T\v{e}tek \ (FOCS 2024, \ best paper)",
-                  font_size=20, color=GREY_B),
-        ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.6)
-        with self.voiceover(
-            "Sixty-eight years after it was designed, Dijkstra's algorithm has had a remarkable few years. "
-            "<bookmark mark='a'/> When it runs with a heap it does more than find distances: it outputs the "
-            "vertices sorted by distance. <bookmark mark='b'/> For that task it is worst-case optimal, since sorting "
-            "needs n log n comparisons, as Part 16 proved. <bookmark mark='c'/> In 2024, Bernhard Haeupler, Richard "
-            "Hladík, Václav Rozhoň, Robert Tarjan and Jakub Tětek proved much more: with the right heap it is "
-            "universally optimal, within a constant factor of the best possible algorithm on every graph, not just "
-            "the worst one. <bookmark mark='d'/> The right heap has the working-set property, extracting recently "
-            "inserted items cheaply, the same idea that made Part 17's splay trees adapt. <bookmark mark='e'/> The "
-            "paper won the best paper award at FOCS that year."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, s in zip("abcde", steps):
-                vo.wait_until(mk)
-                self.play(FadeIn(s))
-        self.wait(0.3)
-        self.clear_scene()
+        head = label(r"Distance vector or distance order?",font_size=34).to_edge(UP,buff=.3)
+        graph,_,_=draw_graph({'s':(-5.4,1.4),'a':(-3.6,2.3),'b':(-3.6,1.4),'c':(-3.6,.5)},
+                            [('s','a'),('s','b'),('s','c')],directed=True,
+                            weights={('s','a'):7,('s','b'):2,('s','c'):5})
+        tab=grid_table([r"requested output",r"same distances, different order"],
+                       [[r"distance vector",r"a: 7, b: 2, c: 5"],[r"distance ordering",r"b: 2, c: 5, a: 7"]],
+                       widths=[2.8,4.5],row_h=.55,font_size=21,mono_cols=(),
+                       colors=[[DATA,DATA],[HEAD,HEAD]]).move_to([2.2,1.45,0])
+        steps=VGroup(
+            label(r"standard Dijkstra also outputs a nondecreasing distance order",font_size=21,color=GREY_A),
+            label(r"comparison lower bound: some graph families encode sorting; not every fixed graph",font_size=21,color=GREY_A),
+            label(r"2024 universal optimality: fixed graph, worst arc lengths, distance-ordering task",font_size=21,color=YES),
+            label(r"requires the specified working-set heap; our Python heap is an ordinary binary heap",font_size=21,color=LAM),
+            label(r"distance-only algorithms have a different output requirement",font_size=22,color=HEAD),
+        ).arrange(DOWN,buff=.2).move_to([0,-1.65,0])
+        if steps.width>12.8:steps.scale_to_fit_width(12.8)
+        with self.voiceover("First distinguish distance ordering from distance computation. <bookmark mark='a'/> Standard Dijkstra processes vertices in nondecreasing source distance, so its settlement order also sorts reachable distances. <bookmark mark='b'/> In the comparison model, some graph families encode a sorting problem; that is not a lower bound of n log n for every individual graph. <bookmark mark='c'/> Haeupler and colleagues' 2024 universal-optimality result concerns distance ordering on each fixed graph, compared against algorithms facing that graph's worst-case arc lengths in the specified model. <bookmark mark='d'/> It uses a heap with a working-set guarantee. Our ordinary Python binary heap is not an implementation of that specialized structure. <bookmark mark='e'/> Computing only the distances is a different output task, which is why the next results can improve sparse-graph bounds without contradicting this theorem.") as vo:
+            self.play(FadeIn(head),FadeIn(graph))
+            vo.wait_until('a');self.play(FadeIn(tab),FadeIn(steps[0]))
+            for mark,line in zip('bcde',steps[1:]):
+                vo.wait_until(mark);self.play(FadeIn(line))
+        self.wait(.3);self.clear_scene()
 
     def barrier(self):
-        head = label(r"Breaking the sorting barrier \ (2025)", font_size=34).to_edge(UP, buff=0.3)
-        steps = VGroup(
-            label(r"if you only want the distances, \ not the sorted order, \ must you pay $n \log n$?", font_size=22,
-                  color=GREY_A),
-            MathTex(r"O\bigl(m \log^{2/3} n\bigr) \text{ for directed graphs, \ comparison-addition model}",
-                    font_size=32, color=YES),
-            label(r"Duan, \ Mao, \ Mao, \ Shu and Yin \ (STOC 2025, \ best paper): \ the first algorithm to beat "
-                  r"Dijkstra on sparse directed graphs", font_size=21, color=HEAD),
-            label(r"the idea: \ shrink the frontier by a few Bellman--Ford rounds, \ so that only some vertices need "
-                  r"sorting", font_size=21, color=GREY_A),
-            label(r"negative weights too: \ near-linear time \ (Bernstein, \ Nanongkai and Wulff-Nilsen, \ 2022)",
-                  font_size=21, color=LAM),
-        ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.6)
-        with self.voiceover(
-            "That optimality is about sorting. <bookmark mark='a'/> If you want only the distances, not the vertices "
-            "in order, must you still pay the cost of sorting? <bookmark mark='b'/> In 2025 the answer turned out to "
-            "be no. <bookmark mark='c'/> Ran Duan, Jiayi Mao, Xiao Mao, Xinkai Shu and Longhui Yin gave an algorithm "
-            "for directed graphs that runs in m times log n to the two thirds, the first to beat Dijkstra's bound on "
-            "sparse directed graphs in the model where weights may only be compared and added. It won the best "
-            "paper award at STOC. <bookmark mark='d'/> Its idea mixes the two classics of this part: a few rounds "
-            "of Bellman–Ford relaxation shrink the frontier, so that only a fraction of the vertices ever has to be "
-            "sorted. <bookmark mark='e'/> And for negative weights, Aaron Bernstein, Danupon Nanongkai and Christian "
-            "Wulff-Nilsen found a near-linear algorithm in 2022, replacing Bellman–Ford's V times E."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, s in zip("abcde", steps):
-                vo.wait_until(mk)
-                self.play(FadeIn(s))
-        self.wait(0.3)
-        self.clear_scene()
+        head=label(r"Selected directed shortest-path bounds: 2025 and 2026",font_size=32).to_edge(UP,buff=.3)
+        model=label(r"nonnegative real weights; deterministic; comparison-addition; distance-only output",
+                    font_size=20,color=LAM).set_y(2.55)
+        frame25=RoundedRectangle(width=12.4,height=1.05,corner_radius=.12,color=GREY_D,
+                                 fill_color=BG,fill_opacity=1).set_y(1.55)
+        name25=label(r"2025: Duan, Mao, Mao, Shu and Yin",font_size=21,color=DATA).move_to([-2.7,1.55,0])
+        bound25=MathTex(r"O(m\log^{2/3}n)",font_size=34,color=YES).move_to([3.6,1.55,0])
+        frame26=RoundedRectangle(width=12.4,height=1.6,corner_radius=.12,color=GREY_D,
+                                 fill_color=BG,fill_opacity=1).set_y(-.05)
+        name26=label(r"2026: Duan, Mao, Shu and Yin; ICALP",font_size=20,color=HEAD).set_y(.45)
+        bound26=MathTex(r"O\!\left(m\sqrt{\log n}+\sqrt{mn\log n\log\log n}\right)",font_size=31,color=YES).set_y(-.05)
+        sparse=MathTex(r"m=O(n):\quad O\!\left(m\sqrt{\log n\log\log n}\right)",font_size=27,color=HEAD).set_y(-.55)
+        improved=VGroup(frame26,name26,bound26,sparse)
+        idea=label(r"frontier reduction: limited relaxations plus selective ordering; research algorithms not implemented here",
+                   font_size=19,color=GREY_A).set_y(-1.25)
+        negative=VGroup(
+            label(r"2022: Bernstein, Nanongkai and Wulff-Nilsen; randomized, integer weights",font_size=20,color=LAM),
+            MathTex(r"O(m\log^8 n\log W)\qquad W:\text{ weight-magnitude parameter}",font_size=29,color=YES),
+        ).arrange(DOWN,buff=.2).set_y(-2.4)
+        with self.voiceover("These are selected dated results, not measurements of our city code. <bookmark mark='a'/> In 2025 Duan, Jiayi Mao, Xiao Mao, Shu and Yin gave a deterministic distance-only algorithm for directed graphs with nonnegative real weights. <bookmark mark='b'/> Its comparison-addition bound is m times log n to the two-thirds. <bookmark mark='c'/> A 2026 result by Duan, Xiao Mao, Shu and Yin improves the bound shown here; for sparse graphs it simplifies to m times the square root of log n times log log n. The bibliography identifies the ICALP publication and version. <bookmark mark='d'/> Frontier reduction combines limited relaxation with selective ordering. This episode does not implement either research algorithm. <bookmark mark='e'/> Negative weights need their own model: Bernstein, Nanongkai and Wulff-Nilsen's randomized result uses integer weights and includes a log W dependence, rather than covering arbitrary real weights at the same cost.") as vo:
+            self.play(FadeIn(head),FadeIn(model),FadeIn(frame25),FadeIn(name25))
+            vo.wait_until('a');self.play(Indicate(name25,color=DATA),run_time=.7)
+            vo.wait_until('b');self.play(FadeIn(bound25))
+            vo.wait_until('c');self.play(FadeIn(improved))
+            vo.wait_until('d');self.play(FadeIn(idea))
+            vo.wait_until('e');self.play(FadeIn(negative))
+        self.wait(.3);self.clear_scene()
 
     def flow(self):
-        head = label(r"Maximum flow in almost linear time \ (2022)", font_size=34).to_edge(UP, buff=0.3)
-        rows = [
-            [r"Ford and Fulkerson", r"1956", r"$O(E \cdot |f|)$"],
-            [r"Edmonds and Karp", r"1972", r"$O(VE^2)$"],
-            [r"Goldberg and Tarjan, \ push--relabel", r"1988", r"$O(VE \log(V^2/E))$"],
-            [r"Goldberg and Rao", r"1998", r"$\tilde O(E \min(V^{2/3}, E^{1/2}) \log U)$"],
-            [r"Chen, \ Kyng, \ Liu, \ Peng, \ Probst Gutenberg and Sachdeva", r"2022", r"$E^{1 + o(1)}$"],
-        ]
-        tab = grid_table([r"", r"year", r"time"], rows, widths=[6.4, 1.4, 4.4], row_h=0.56, font_size=21,
-                         mono_cols=(), colors=[[GREY_A, GREY_B, GREY_A]] * 4 + [[YES, YES, YES]]).next_to(
-            head, DOWN, buff=0.6)
-        pts = VGroup(
-            label(r"the method: \ interior-point optimization \ (Part 23) \ with dynamic graph data structures "
-                  r"that update in $m^{o(1)}$ time", font_size=21, color=GREY_A),
-            label(r"almost linear: \ max flow is now essentially as cheap as reading the graph", font_size=22,
-                  color=HEAD),
-        ).arrange(DOWN, buff=0.2).next_to(tab, DOWN, buff=0.5)
-        with self.voiceover(
-            "Flows had their own breakthrough. <bookmark mark='a'/> For sixty years the bounds crept down, from "
-            "Ford and Fulkerson through Edmonds and Karp, push–relabel, and Andrew Goldberg and Satish Rao. In 2022 "
-            "Li Chen, Rasmus Kyng, Yang Liu, Richard Peng, Maximilian Probst Gutenberg and Sushant Sachdeva "
-            "solved maximum flow in almost linear time, m to the one plus little o of one. <bookmark mark='b'/> "
-            "Their method treats flow as continuous optimization, the interior-point methods of Part 23, and "
-            "keeps each step cheap with dynamic data structures that update in sub-polynomial time. <bookmark "
-            "mark='c'/> Maximum flow, and with it matching and minimum cut, is now essentially as cheap as reading "
-            "the graph, although the constants are still far from practical."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(tab))
-            vo.wait_until("b")
-            self.play(FadeIn(pts[0]))
-            vo.wait_until("c")
-            self.play(FadeIn(pts[1]))
-        self.wait(0.3)
-        self.clear_scene()
+        head=label(r"An almost-linear flow theorem needs an input model",font_size=33).to_edge(UP,buff=.3)
+        tab=grid_table([r"Chen et al., 2022",r"statement scope"],
+                       [[r"problem",r"exact directed maximum flow and minimum-cost flow"],
+                        [r"input",r"polynomially bounded integral capacities, costs and demands"],
+                        [r"asymptotic time",r"$m^{1+o(1)}$ under the stated assumptions"]],
+                       widths=[3.1,9.0],row_h=.55,font_size=22,mono_cols=(),
+                       colors=[[GREY_A,YES],[GREY_A,HEAD],[GREY_A,YES]]).move_to(UP * 1.5)
+        captions=[r"interior-point optimization",r"approximate minimum-ratio cycles",r"dynamic graph structures"]
+        boxes=VGroup()
+        for i,caption in enumerate(captions):
+            frame=RoundedRectangle(width=3.55,height=1.0,corner_radius=.1,color=LAM,fill_color=BG,fill_opacity=1)
+            text=label(caption,font_size=20,color=GREY_A)
+            if text.width>3.2:text.scale_to_fit_width(3.2)
+            boxes.add(VGroup(frame,text).move_to([-4.25+4.25*i,-.7,0]))
+        arrows=VGroup(*[Arrow(boxes[i].get_right(),boxes[i+1].get_left(),buff=.08,color=HEAD) for i in range(2)])
+        cost=label(r"amortized subpolynomial updates; not constant work for every update",font_size=22,color=LAM).set_y(-1.65)
+        scope=VGroup(
+            label(r"not an arbitrary-real-input or practical wall-time guarantee",font_size=23,color=HEAD),
+            label(r"a cited theorem; this episode implements Edmonds--Karp",font_size=22,color=GREY_A),
+        ).arrange(DOWN,buff=.2).set_y(-2.65)
+        with self.voiceover("An almost-linear flow theorem also comes with conditions. <bookmark mark='a'/> Chen and colleagues' 2022 result gives exact directed maximum flow and minimum-cost flow in m to the one plus little o of one for polynomially bounded integral capacities, costs and demands in its stated setting. <bookmark mark='b'/> The method combines interior-point optimization with dynamic graph structures for approximate minimum-ratio cycles, whose update guarantee is amortized and subpolynomial. This is not a claim that every graph update costs constant time. <bookmark mark='c'/> Almost-linear describes asymptotic growth under those assumptions. It neither covers arbitrary real input for free nor promises that this implementation is as fast as reading a graph. The practical algorithm and its constants remain separate engineering questions.") as vo:
+            self.play(FadeIn(head),FadeIn(tab))
+            vo.wait_until('a');self.play(Indicate(tab,color=YES,scale_factor=1.02),run_time=.7)
+            vo.wait_until('b');self.play(FadeIn(boxes),FadeIn(arrows),FadeIn(cost))
+            vo.wait_until('c');self.play(FadeIn(scope))
+        self.wait(.3);self.clear_scene()
 
     def open_(self):
-        head = label(r"Open questions", font_size=36).to_edge(UP, buff=0.35)
-        qs = VGroup(
-            label(r"single-source shortest paths in $O(m)$ on directed graphs with real weights?", font_size=24,
-                  color=GREY_A),
-            label(r"a \textit{practical} almost-linear max-flow algorithm?", font_size=24, color=GREY_A),
-            label(r"all-pairs shortest paths in $O(n^{3 - \varepsilon})$, \ or a proof that it needs $n^{3 - o(1)}$?",
-                  font_size=24, color=GREY_A),
-            label(r"exact TSP faster than $2^n$, \ for general weights?", font_size=24, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.45).next_to(head, DOWN, buff=0.6)
-        star = label(r"$\bigstar$ \ the part's research problem takes the first one", font_size=22,
-                     color=HEAD).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "Here is where the field stands. <bookmark mark='a'/> Can single-source shortest paths on a directed "
-            "graph with real weights be computed in linear time? Thorup did it for undirected graphs with integer "
-            "weights in 1999. <bookmark mark='b'/> Can the almost-linear flow algorithm be made practical? <bookmark "
-            "mark='c'/> Can all-pairs shortest paths beat cubic time by a polynomial factor, or is the APSP "
-            "conjecture right that they cannot? <bookmark mark='d'/> And can the travelling salesman be solved exactly in less than two to the n "
-            "time? <bookmark mark='e'/> This part's research problem takes up the first."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, q in zip("abcd", qs):
-                vo.wait_until(mk)
-                self.play(FadeIn(q))
-            vo.wait_until("e")
-            self.play(FadeIn(star))
-        self.wait(0.3)
-        self.clear_scene()
+        head=label(r"Open questions: specify weights, output and machine model",font_size=32).to_edge(UP,buff=.3)
+        texts=[
+            r"directed nonnegative-real distance-only SSSP in $O(m+n)$? comparison-addition model",
+            r"practical almost-linear exact flow under useful integral-input assumptions?",
+            r"general weighted APSP in $O(n^{3-\varepsilon})$ for a fixed $\varepsilon>0$?",
+            r"classical general-weight TSP in $O^*((2-\varepsilon)^n)$ for fixed $\varepsilon>0$?",
+        ]
+        questions=VGroup()
+        for i,text in enumerate(texts):
+            frame=RoundedRectangle(width=12.6,height=.85,corner_radius=.1,color=GREY_D,fill_color=BG,fill_opacity=1)
+            caption=label(text,font_size=22,color=GREY_A)
+            if caption.width>12.0:caption.scale_to_fit_width(12.0)
+            questions.add(VGroup(frame,caption).move_to([0,1.95-1.1*i,0]))
+        star=label(r"$\bigstar$ research exercise: the first question; no sorted output required",font_size=22,color=HEAD).to_edge(DOWN,buff=.45)
+        with self.voiceover("The model determines the open question. <bookmark mark='a'/> Can directed nonnegative-real single-source distances be computed in order m plus n in the comparison-addition model, without sorted output? The plus n accounts for vertices even when there are few edges. Thorup's classical linear bound concerns undirected positive integer weights in a different model. <bookmark mark='b'/> Can almost-linear exact flow methods become practical under useful input assumptions? <bookmark mark='c'/> For general weighted all-pairs shortest paths, is a fixed polynomial improvement below cubic possible in the stated model? <bookmark mark='d'/> For general weighted TSP, can a classical algorithm achieve a base strictly below two, ignoring polynomial factors? This differs from unweighted Hamiltonicity and quantum computation. <bookmark mark='e'/> The research exercise takes the first question and asks you to keep its weight, output and machine model explicit.") as vo:
+            self.play(FadeIn(head),FadeIn(questions[0]))
+            vo.wait_until('a');self.play(Indicate(questions[0],color=HEAD,scale_factor=1.02),run_time=.7)
+            for mark,question in zip('bcd',questions[1:]):
+                vo.wait_until(mark);self.play(FadeIn(question))
+            vo.wait_until('e');self.play(FadeIn(star))
+        self.wait(.3);self.clear_scene()

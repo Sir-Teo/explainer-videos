@@ -34,22 +34,47 @@ from collections import defaultdict, deque
 
 # ------------------------------------------------------------------------------------------------- traversal
 def euler_circuit(adj):
-    """Hierholzer (1873): an Eulerian circuit of an undirected multigraph given as {u: [v, ...]}, or None."""
+    """Undirected multigraph circuit in expected O(V+E) time, including incidence validation.
+
+    Every non-loop edge must appear at both ends; a loop appears twice. Isolated
+    vertices are allowed. Return [] for an empty graph, [u] for an edgeless graph,
+    or None when non-isolated components are disconnected or some degree is odd.
+    """
+    incident = {u: [] for u in adj}
+    pending = defaultdict(list)
+    edge_count = 0
+    for u, neighbours in adj.items():
+        for v in neighbours:
+            if v not in adj:
+                raise ValueError('every endpoint must have an adjacency list')
+            reverse = pending.get((v, u))
+            if reverse:
+                edge = reverse.pop()
+            else:
+                edge = edge_count
+                edge_count += 1
+                pending[(u, v)].append(edge)
+            incident[u].append((v, edge))
+    if any(pending.values()):
+        raise ValueError('undirected edge incidences must be symmetric; loops appear twice')
     if any(len(vs) % 2 for vs in adj.values()):
         return None
-    left = {u: list(vs) for u, vs in adj.items()}
-    start = next(u for u in adj if adj[u])
+    start = next((u for u, vs in adj.items() if vs), None)
+    if edge_count == 0:
+        return [next(iter(adj))] if adj else []
+    used = [False] * edge_count
     stack, out = [start], []
     while stack:
         u = stack[-1]
-        if left[u]:
-            v = left[u].pop()
-            left[v].remove(u)
+        while incident[u] and used[incident[u][-1][1]]:
+            incident[u].pop()
+        if incident[u]:
+            v, edge = incident[u].pop()
+            used[edge] = True
             stack.append(v)
         else:
             out.append(stack.pop())
-    edges = sum(len(vs) for vs in adj.values()) // 2
-    return out[::-1] if len(out) == edges + 1 else None
+    return out[::-1] if len(out) == edge_count + 1 else None
 
 
 def bfs(adj, s, weighted=False):
@@ -241,27 +266,39 @@ def two_sat(n, clauses):
 
 
 # -------------------------------------------------------------------------------------------- shortest paths
-def dijkstra(adj, s, t=None, h=None):
-    """Dijkstra (1959) with a binary heap; with ``h`` it is A* (Hart, Nilsson & Raphael 1968).
-    Returns (dist, parent, settled count, relaxations)."""
+def dijkstra(adj, s, t=None, h=None, *, settled_order=None):
+    """Binary-heap Dijkstra for nonnegative weights; A* when h is supplied.
+
+    A* requires an admissible heuristic with h(t)=0 and reopens an improved
+    vertex, so inconsistent admissible estimates are supported. With consistent
+    h (including zero) each vertex expands once. Return distances, parents,
+    expansion count and scanned arcs. settled_order optionally records actual
+    expansions, including reopenings; discovered parent keys are not that set.
+    """
     dist, parent = {s: 0}, {s: None}
     done = set()
-    pq = [(h(s) if h else 0, s)]
-    relax = 0
+    serial = itertools.count()
+    pq = [(h(s) if h else 0, next(serial), 0, s)]
+    relax = expansions = 0
     while pq:
-        _, u = heapq.heappop(pq)
-        if u in done:
+        _, _, current, u = heapq.heappop(pq)
+        if current != dist.get(u) or u in done:
             continue
         done.add(u)
+        expansions += 1
+        if settled_order is not None:
+            settled_order.append(u)
         if u == t:
             break
         for v, w in adj[u]:
             relax += 1
-            nd = dist[u] + w
+            nd = current + w
             if nd < dist.get(v, math.inf):
                 dist[v], parent[v] = nd, u
-                heapq.heappush(pq, (nd + (h(v) if h else 0), v))
-    return dist, parent, len(done), relax
+                if h is not None:
+                    done.discard(v)
+                heapq.heappush(pq, (nd + (h(v) if h else 0), next(serial), nd, v))
+    return dist, parent, expansions, relax
 
 
 def order_settled(adj, s):
@@ -284,6 +321,8 @@ def order_settled(adj, s):
 
 def bidijkstra(adj, radj, s, t):
     """Bidirectional Dijkstra: stop when the two frontiers' minima add up to at least the best path seen."""
+    if s == t:
+        return 0, 0
     df, db = {s: 0}, {t: 0}
     sf, sb = set(), set()
     pf, pb = [(0, s)], [(0, t)]
@@ -308,16 +347,27 @@ def bidijkstra(adj, radj, s, t):
     return best, len(sf) + len(sb)
 
 
-def alt_heuristic(adj, radj, landmarks, t):
-    """ALT (Goldberg & Harrelson 2005): lower bounds from distances to and from landmarks, by the triangle
-    inequality.  Returns h(v) for the target t."""
-    to_l = [dijkstra(radj, L)[0] for L in landmarks]     # d(v, L)
-    from_l = [dijkstra(adj, L)[0] for L in landmarks]    # d(L, v)
+def landmark_distances(adj, radj, landmarks):
+    """Precompute directed distances to/from landmarks once, separately from queries."""
+    return ([dijkstra(radj, L)[0] for L in landmarks],
+            [dijkstra(adj, L)[0] for L in landmarks])
+
+
+def alt_heuristic(adj, radj, landmarks, t, *, distances=None):
+    """ALT lower bound; omit any difference whose operands are unreachable.
+
+    Pass landmark_distances(...) to reuse preprocessing across target queries.
+    The connected undirected city experiment yields consistent heuristics.
+    """
+    to_l, from_l = distances if distances is not None else landmark_distances(adj, radj, landmarks)
 
     def h(v):
         best = 0
         for a, b in zip(to_l, from_l):
-            best = max(best, a.get(v, 0) - a.get(t, 0), b.get(t, 0) - b.get(v, 0))
+            if v in a and t in a:
+                best = max(best, a[v] - a[t])
+            if v in b and t in b:
+                best = max(best, b[t] - b[v])
         return best
     return h
 
@@ -468,7 +518,7 @@ def johnson(adj):
     """Johnson (1977): Bellman-Ford from a new source gives potentials p; w'(u,v) = w + p(u) - p(v) >= 0; then
     Dijkstra from every vertex.  Returns (all distances, the reweighted graph's minimum weight)."""
     g = dict(adj)
-    q = "__q__"
+    q = object()  # a fresh identity cannot collide with a user vertex
     g[q] = [(v, 0) for v in adj]
     p, cyc = bellman_ford(g, q)
     if p is None:
@@ -541,6 +591,8 @@ def boruvka(n, edges):
 def edmonds_karp(cap, s, t):
     """Max flow by shortest augmenting paths (Edmonds & Karp 1972).  ``cap``: {u: {v: c}}.  Returns the flow
     value, the list of augmenting paths with their bottlenecks, and the source side of a minimum cut."""
+    if s == t:
+        raise ValueError("source and sink must differ")
     res = defaultdict(lambda: defaultdict(int))
     for u in cap:
         for v, c in cap[u].items():
@@ -575,6 +627,8 @@ def edmonds_karp(cap, s, t):
 
 def ford_fulkerson_dfs(cap, s, t):
     """Augment along any path found by DFS: the count of augmentations can depend on the capacities."""
+    if s == t:
+        raise ValueError("source and sink must differ")
     res = defaultdict(lambda: defaultdict(int))
     for u in cap:
         for v, c in cap[u].items():
@@ -687,6 +741,10 @@ def is_stable(match, prop_pref, recv_pref):
 def held_karp(d):
     """Exact TSP over all n cities in O(2^n n^2) (Bellman 1962; Held & Karp 1962)."""
     n = len(d)
+    if any(len(row) != n for row in d):
+        raise ValueError("the distance matrix must be square")
+    if n <= 1:
+        return 0
     best = {(1, 0): 0}
     for size in range(2, n + 1):
         for subset in itertools.combinations(range(1, n), size - 1):
@@ -702,8 +760,12 @@ def held_karp(d):
 def pagerank(adj, d=0.85, iters=100, tol=1e-12):
     """Brin & Page (1998): the stationary distribution of a surfer who follows a random link with probability d and
     jumps anywhere otherwise.  Dangling pages spread their rank evenly.  Returns (rank, residuals)."""
+    if not 0 <= d < 1 or not isinstance(iters, int) or iters < 1 or tol < 0:
+        raise ValueError("require 0 <= damping < 1, positive iterations and nonnegative tolerance")
     nodes = list(adj)
     n = len(nodes)
+    if not nodes:
+        return {}, []
     r = {u: 1 / n for u in nodes}
     res = []
     for _ in range(iters):
@@ -757,6 +819,10 @@ def grid_city(w, h, rng, jitter=0.4, arterial=8):
 
 def random_web(n, m_per, rng):
     """Preferential attachment (Barabási & Albert 1999), directed links from each new page to m_per older ones."""
+    if n < 0 or m_per < 0:
+        raise ValueError("graph size and links per page must be nonnegative")
+    if n < 2:
+        return {u: [] for u in range(n)}
     adj = {0: [], 1: [0]}
     targets = [0, 1]
     for u in range(2, n):

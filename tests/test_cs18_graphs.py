@@ -162,5 +162,135 @@ class Flows(unittest.TestCase):
         self.assertAlmostEqual(sum(r.values()), 1.0)
 
 
+class BoundaryRegressions(unittest.TestCase):
+    def test_euler_incidence_and_degenerate_graphs(self):
+        from collections import Counter
+        self.assertEqual(G.euler_circuit({}), [])
+        self.assertEqual(G.euler_circuit({'isolate': []}), ['isolate'])
+        for g in [
+            {0: [1] * 2000, 1: [0] * 2000, 2: []},
+            {0: [0, 0, 1, 1], 1: [0, 0]},
+            {None: [1, 1], 1: [None, None]},
+        ]:
+            before = {u: list(vs) for u, vs in g.items()}
+            circuit = G.euler_circuit(g)
+            directed = Counter((u, v) for u, vs in g.items() for v in vs)
+            used = Counter()
+            for u, v in zip(circuit, circuit[1:]):
+                used[u, v] += 1
+                used[v, u] += 1
+            self.assertEqual(used, directed)
+            self.assertEqual(circuit[0], circuit[-1])
+            self.assertEqual(g, before)
+        self.assertIsNone(G.euler_circuit({0: [1, 1], 1: [0, 0], 2: [3, 3], 3: [2, 2]}))
+        for bad in [{0: [1], 1: []}, {0: [0]}, {0: [1]}]:
+            with self.assertRaises(ValueError):
+                G.euler_circuit(bad)
+
+    def test_bidirectional_directed_zero_and_unreachable(self):
+        rng = random.Random(1801)
+        for _ in range(12):
+            n = 8
+            graph = random_digraph(n, 18, rng, w=(0, 6))
+            reverse = {u: [] for u in graph}
+            for u, arcs in graph.items():
+                for v, w in arcs:
+                    reverse[v].append((u, w))
+            reference = G.floyd_warshall(n, [(u, v, w) for u in graph for v, w in graph[u]])
+            for s in graph:
+                for t in graph:
+                    self.assertEqual(G.bidijkstra(graph, reverse, s, t)[0], reference[s][t])
+
+    def test_astar_reopens_inconsistent_admissible_heuristic(self):
+        graph = {'s': [('a', 2), ('b', 1)], 'a': [('t', 2)],
+                 'b': [('a', .5), ('t', 100)], 't': []}
+        heuristic = {'s': 0, 'a': 0, 'b': 2.5, 't': 0}
+        expansions = []
+        distances, parents, count, _ = G.dijkstra(graph, 's', 't', h=heuristic.__getitem__,
+                                                 settled_order=expansions)
+        self.assertEqual(distances['t'], 3.5)
+        self.assertEqual(parents['a'], 'b')
+        self.assertEqual(expansions.count('a'), 2)
+        self.assertEqual(count, len(expansions))
+        # A discovered branch is not an expanded vertex when the target is popped first.
+        order = []
+        G.dijkstra({0: [(1, 1), (2, 8)], 1: [], 2: []}, 0, 1, settled_order=order)
+        self.assertEqual(order, [0, 1])
+
+    def test_alt_unreachable_landmark_differences(self):
+        graph = {0: [(1, 10)], 1: [], 2: [(1, 1)], 3: []}
+        reverse = {u: [] for u in graph}
+        for u in graph:
+            for v, w in graph[u]:
+                reverse[v].append((u, w))
+        table = G.landmark_distances(graph, reverse, [0, 3])
+        reference = G.floyd_warshall(4, [(u, v, w) for u in graph for v, w in graph[u]])
+        for target in graph:
+            heuristic = G.alt_heuristic(graph, reverse, [0, 3], target, distances=table)
+            self.assertEqual(heuristic(target), 0)
+            for source in graph:
+                self.assertLessEqual(heuristic(source), reference[source][target])
+                result = G.dijkstra(graph, source, target, h=heuristic)[0].get(target, math.inf)
+                self.assertEqual(result, reference[source][target])
+
+    def test_johnson_user_vertex_identity_and_negative_cycle(self):
+        result, cycle = G.johnson({'__q__': [('__q__', -1)]})
+        self.assertIsNone(result)
+        self.assertEqual(cycle, ['__q__'])
+        graph = {'__q__': [(1, -2)], 1: [('z', 3)], 'z': [], 'isolate': []}
+        all_distances, minimum = G.johnson(graph)
+        self.assertGreaterEqual(minimum, 0)
+        self.assertEqual(all_distances['__q__']['z'], 1)
+        self.assertNotIn('isolate', all_distances['__q__'])
+
+    def test_held_karp_small_asymmetric_and_zero_cases(self):
+        self.assertEqual(G.held_karp([]), 0)
+        self.assertEqual(G.held_karp([[7]]), 0)
+        with self.assertRaises(ValueError):
+            G.held_karp([[0, 1]])
+        rng = random.Random(1802)
+        for n in range(2, 8):
+            matrix = [[0 if i == j else rng.randrange(9) for j in range(n)] for i in range(n)]
+            brute = min(sum(matrix[tour[i]][tour[(i + 1) % n]] for i in range(n))
+                        for tail in itertools.permutations(range(1, n)) for tour in [(0, *tail)])
+            self.assertEqual(G.held_karp(matrix), brute)
+
+    def test_flow_antiparallel_certificate_and_same_terminal(self):
+        graph = {0: {1: 4, 2: 2}, 1: {0: 7, 2: 3, 3: 2}, 2: {1: 5, 3: 4}, 3: {}}
+        value, paths, side = G.edmonds_karp(graph, 0, 3)
+        from collections import Counter
+        net = Counter()
+        for path, amount in paths:
+            for u, v in zip(path, path[1:]):
+                net[u, v] += amount
+                net[v, u] -= amount
+        for u in graph:
+            for v in graph:
+                self.assertLessEqual(net[u, v], graph[u].get(v, 0))
+            self.assertEqual(sum(net[u, v] for v in graph), value if u == 0 else -value if u == 3 else 0)
+        cut = sum(c for u in side for v, c in graph[u].items() if v not in side)
+        self.assertEqual(value, cut)
+        self.assertEqual(value, G.ford_fulkerson_dfs(graph, 0, 3)[0])
+        for method in [G.edmonds_karp, G.ford_fulkerson_dfs]:
+            with self.assertRaises(ValueError):
+                method(graph, 0, 0)
+
+    def test_pagerank_stationarity_dangling_and_empty(self):
+        self.assertEqual(G.pagerank({}), ({}, []))
+        self.assertEqual(G.random_web(0, 2, random.Random(1)), {})
+        self.assertEqual(G.random_web(1, 2, random.Random(1)), {0: []})
+        # Independent stationary equations for 0→1, with 1 dangling.
+        damping = .85
+        rank, residuals = G.pagerank({0: [1], 1: []}, d=damping, iters=200, tol=1e-14)
+        p0 = 1 / (2 + damping)
+        self.assertAlmostEqual(rank[0], p0)
+        self.assertAlmostEqual(rank[1], 1 - p0)
+        self.assertAlmostEqual(sum(rank.values()), 1)
+        self.assertLess(residuals[-1], 1e-14)
+        for damping in [-.1, 1, float('nan')]:
+            with self.assertRaises(ValueError):
+                G.pagerank({0: []}, d=damping)
+
+
 if __name__ == "__main__":
     unittest.main()
