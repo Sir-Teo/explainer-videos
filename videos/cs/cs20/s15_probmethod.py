@@ -32,7 +32,9 @@ class ProbMethod(VoiceoverScene):
         card = chapter_card(14, r"The probabilistic method", r"Can you prove something exists without finding it?",
                             lit=(1947, 2010), extra=((1947, r"Erd\H{o}s on Ramsey"), (2010, r"Moser--Tardos")),
                             part=PART)
-        with self.voiceover("Chapter fourteen. The probabilistic method."):
+        with self.voiceover((
+            'Chapter fourteen. The probabilistic method.'
+        )):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
 
@@ -53,14 +55,18 @@ class ProbMethod(VoiceoverScene):
         q = label(r"Ramsey: \ every colouring of a big enough $K_n$ has a one-colour $K_k$. \ How big is big enough?",
                   font_size=21, color=WHITE).next_to(head, DOWN, buff=0.25)
         with self.voiceover(
-            "Colour every edge of a complete graph red or blue. Frank Ramsey proved in 1930 that if the graph is "
-            "big enough, some k vertices have all their edges the same colour, whatever you do. <bookmark mark='a'/> "
-            "With four vertices, seventeen are not enough. On the left, a random colouring of the complete graph "
-            f"on seventeen vertices: on average it has {d['k4_mean']:.0f} groups of four in a single colour. "
-            "<bookmark mark='b'/> On the right, a clever colouring, blue exactly when the difference of the two "
-            "vertices is a square modulo seventeen, has none at all. Eighteen vertices always contain one, so "
-            "the Ramsey number R of four, four is eighteen. <bookmark mark='c'/> For five, nobody knows the answer: "
-            "it is between forty-three and forty-six. For large k, clever colourings run out, but coins don't."
+            (
+            f'Colour every edge of a complete graph red or blue. Frank Ramsey proved in 1930 that if the graph is big'
+            f" enough, some k vertices have all their edges the same colour, whatever you do. <bookmark mark='a'/> "
+            f'With four vertices, seventeen are not enough. On the left, a random colouring of the complete graph on '
+            f'seventeen vertices: on average it has '
+            f"{d['k4_mean']:.0f}"
+            f" groups of four in a single colour. <bookmark mark='b'/> On the right, a clever colouring, blue exactly"
+            f' when the difference of the two vertices is a square modulo seventeen, has none at all. Eighteen '
+            f"vertices always contain one, so the Ramsey number R of four, four is eighteen. <bookmark mark='c'/> "
+            f'Larger diagonal Ramsey numbers pose much harder questions. For growing k, random colorings provide a '
+            f'powerful existence proof.'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(q))
             vo.wait_until("a")
@@ -88,26 +94,28 @@ class ProbMethod(VoiceoverScene):
                          row_h=0.36, font_size=19, mono_cols=(), colors=[[GREY_A, HEAD, YES]] * len(rows))
         tab.next_to(lines, DOWN, buff=0.4).to_edge(LEFT, buff=1.0)
         side = VGroup(
-            label(r"nobody can \textbf{construct} such colourings: \\ the best explicit ones are far smaller",
+            label(r"explicit constructions matching the random \\ asymptotic scale remain open",
                   font_size=20, color=WHITE),
-            label(r"upper bound $4^k$ \ (Erd\H{o}s--Szekeres, 1935); \\ $(4 - \varepsilon)^k$ \ (Campos, Griffiths, "
-                  r"Morris \\ and Sahasrabudhe, 2023)", font_size=20, color=LAM),
-            label(r"the lower bound $\sqrt{2}^{\,k}$ has barely moved \\ since 1947", font_size=20, color=HEAD),
+            label(r"selected upper bounds: \ $(4-\varepsilon)^k$ (2023); \\ $3.8^{k+o(k)}$ (2024 preprint, revised 2026)", font_size=20, color=LAM),
+            label(r"dated source reports; \ no complete record survey; \\ upper and lower exponential scales still differ", font_size=20, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(tab, RIGHT, buff=0.6)
         if side.get_right()[0] > 6.9:
             side.scale((6.9 - side.get_left()[0]) / side.width, about_edge=LEFT)
         with self.voiceover(
-            "In 1947 Paul Erdős turned the question around. <bookmark mark='a'/> Colour each edge by a fair coin. A "
-            "particular set of k vertices comes out all one colour with probability two times two to the minus k "
-            "choose two. <bookmark mark='b'/> Add over all sets: if the expected number of one-colour sets is "
-            "below one, then some colouring has none at all, because a random variable can't always be above its "
-            "own average. <bookmark mark='c'/> The arithmetic works for n up to about two to the k over two. So "
-            "the Ramsey number is at least that. <bookmark mark='d'/> Here is how far the count reaches for each "
-            "k. The proof shows the colourings exist, and even that almost every colouring works, but it doesn't "
-            "say how to write one down. <bookmark mark='e'/> Seventy-five years later, nobody can construct "
-            "colourings anywhere near that good. <bookmark mark='f'/> The upper bound, four to the k, was "
-            "improved for the first time in 2023, to four minus epsilon to the k, <bookmark mark='g'/> while the "
-            "lower bound from coins has barely moved since 1947."
+            (
+            "In 1947 Erdős reversed the question. <bookmark mark='a'/> Color each edge independently by a fair coin."
+            ' A particular set of k vertices is monochromatic with probability two to the one minus k choose two. '
+            "<bookmark mark='b'/> Summing over all sets gives the expected number of bad cliques. If it is below "
+            'one, some coloring has none, because an integer-valued nonnegative count cannot always be at least one.'
+            " <bookmark mark='c'/> This yields an exponential lower bound on the Ramsey number, of scale two to the "
+            "k over two. <bookmark mark='d'/> The table gives the finite values certified by this expectation "
+            'calculation. Expectation below one proves existence; it alone does not imply almost every coloring '
+            "works. <bookmark mark='e'/> Explicit constructions matching the random asymptotic scale remain a major "
+            "challenge. <bookmark mark='f'/> Campos, Griffiths, Morris and Sahasrabudhe reported a base below four "
+            'in 2023. A selected 2024 preprint by Gupta, Ndiaye, Norin and Wei, revised in 2026, reports base 3.8 '
+            'with a lower-order exponent. These are dated source claims, not a complete latest-record survey. '
+            "<bookmark mark='g'/> The exponential gap between upper and lower bounds remains large."
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abc", lines):
@@ -139,23 +147,26 @@ class ProbMethod(VoiceoverScene):
         ).arrange(DOWN, buff=0.26).next_to(head, DOWN, buff=0.35)
         rows = [[words(r["n"]), words(r["m"]), str(r["d"]), f"{r['lll']:.2f}", str(r["initial_bad"]),
                  str(r["resamplings"])] for r in d["mt"]]
-        tab = grid_table([r"variables", r"10-clauses", r"$d$", r"$e p (d + 1)$", r"failing at first",
+        tab = grid_table([r"variables", r"10-clauses", r"$d$ bound", r"$e p (d + 1)$", r"failing at first",
                           r"resamplings"], rows, widths=[1.7, 1.8, 0.9, 1.9, 2.4, 2.0], row_h=0.38, font_size=18,
                          mono_cols=(), colors=[[GREY_A, GREY_A, LAM, YES, NO, HEAD]] * len(rows))
         tab.next_to(lines, DOWN, buff=0.35).set_x(0)
         with self.voiceover(
-            "Sometimes the good outcome is very unlikely, and counting fails. <bookmark mark='a'/> Suppose there "
-            "are many bad events, each of small probability p, and each one independent of all but d of the "
-            "others. <bookmark mark='b'/> If e times p times d plus one is at most one, then with positive "
-            "probability none of them happens. <bookmark mark='c'/> That is the Lovász local lemma, from Erdős and "
-            "Lovász in 1975. The probability can be exponentially small, but it isn't zero, so the good outcome "
-            "exists. <bookmark mark='d'/> For example, a k-SAT formula in which every clause shares variables with "
-            "fewer than about two to the k over e others is always satisfiable. <bookmark mark='e'/> For thirty-five "
-            "years the proof gave no way to find the assignment. Then in 2010 Robin Moser and Gábor Tardos showed "
-            "that the most naive algorithm works: while some clause is false, give its variables fresh random "
-            "values. <bookmark mark='f'/> We built 10-SAT formulas where each clause meets about three hundred "
-            "others, inside the lemma's condition. Each needed only about as many resamplings as it had false "
-            "clauses at the start, far inside the bound of m over d."
+            (
+            "Sometimes existence needs a dependency argument. <bookmark mark='a'/> Suppose each bad event has "
+            'probability at most p, and is independent of the collection outside its dependency neighborhood, of '
+            "degree at most d. <bookmark mark='b'/> The symmetric local lemma gives positive probability of no bad "
+            "event when e times p times d plus one is at most one. <bookmark mark='c'/> This is the Lovász local "
+            "lemma of Erdős and Lovász. Positive probability need not be large. <bookmark mark='d'/> For k-SAT under"
+            ' independent fair variable assignments, each clause fails with probability at most two to the minus k '
+            "when it contains k distinct variables. Shared variables define a dependency graph. <bookmark mark='e'/>"
+            " Moser and Tardos' 2010 variable-model algorithm resamples all variables of a currently false clause. "
+            'Under the criterion it has an expected resampling bound; exhausting our execution budget would not '
+            "prove unsatisfiability. <bookmark mark='f'/> Each table row starts the algorithm from exactly the "
+            'assignment used to count its initial false clauses. The reported d is a safe dependency-degree upper '
+            "bound; steps and final assignments are checked. The comparison m over d is a theorem's expectation "
+            'bound under the criterion, not a per-run maximum.'
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcde", lines):

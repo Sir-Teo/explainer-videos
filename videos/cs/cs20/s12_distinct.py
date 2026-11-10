@@ -14,9 +14,11 @@ class Distinct(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(11, r"Counting distinct things: \ HyperLogLog", r"How many different words, \ in 3 KB?",
+        card = chapter_card(11, r"Counting distinct things: \ HyperLogLog", r"How many different words, \ with small registers?",
                             lit=(1985, 2007), extra=((1985, r"Flajolet--Martin"), (2007, r"HyperLogLog")), part=PART)
-        with self.voiceover("Chapter eleven. Counting distinct things: HyperLogLog."):
+        with self.voiceover((
+            'Chapter eleven. Counting distinct things: HyperLogLog.'
+        )):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
 
@@ -43,22 +45,24 @@ class Distinct(VoiceoverScene):
         facts = VGroup(
             label(r"hash each item to random-looking bits; \ \textbf{repeats hash the same}, \ so they change nothing",
                   font_size=21, color=WHITE),
-            label(r"a run of $\rho - 1$ leading zeros has probability $2^{-\rho}$: \ to see one, \ you need about "
+            label(r"$\rho - 1$ zeros followed by 1 has probability $2^{-\rho}$ in the ideal model; \ scale: "
                   r"$2^\rho$ distinct items", font_size=21, color=WHITE),
-            label(r"remember only the largest rank seen: \ $\log_2 \log_2 n$ bits \ (Flajolet and Martin, 1985)",
+            label(r"finite hashes: \ store the maximum rank; \ collisions and saturation limit the range",
                   font_size=21, color=YES),
             label(r"but one record is noisy: \ off by a factor of 2 or 4 is common", font_size=21, color=NO),
         ).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "How many different words are in the novels? Counting them exactly means remembering them all. "
-            "<bookmark mark='a'/> Philippe Flajolet and Nigel Martin had a better idea in 1985. Hash each word to "
-            "a string of random-looking bits, and look at how many zeros it starts with. A repeated word hashes "
-            "the same way every time, so repeats change nothing. <bookmark mark='b'/> A hash that starts with "
-            "rho minus one zeros and then a one has probability two to the minus rho. Seeing one is like "
-            "flipping that many heads in a row: you need about two to the rho different items before it "
-            "happens. <bookmark mark='c'/> So remember only the largest rank you have seen. That takes about log "
-            "log n bits, five bits for any number of words you will ever meet. <bookmark mark='d'/> But a single "
-            "record is noisy. One lucky hash, and the estimate doubles."
+            (
+            'How many different words are in the novels? An exact general-purpose set can grow with the distinct '
+            "items. <bookmark mark='a'/> Flajolet and Martin proposed a much smaller randomized summary in 1985: "
+            'hash each item to random-looking bits and examine its leading zeros. Repeated items reuse their hash '
+            "and do not change the maximum. <bookmark mark='b'/> In an ideal independent-bit model, a rank of rho, "
+            'meaning rho minus one zeros followed by a one, has probability two to the minus rho. The largest '
+            "observed rank therefore gives a noisy scale for cardinality. <bookmark mark='c'/> Remember the largest "
+            'rank. Its storage is logarithmic in the hash bit width; finite hashes eventually saturate and collide. '
+            "Five bits do not cover every possible stream. <bookmark mark='d'/> A single extreme hash makes the "
+            'estimate unstable, so we use many registers.'
+        )
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.25))
             for mk, f in zip("abcd", facts):
@@ -81,7 +85,7 @@ class Distinct(VoiceoverScene):
         side = VGroup(
             MathTex(r"E = \alpha_m\, m^2 \Big(\sum_{j=1}^{m} 2^{-M_j}\Big)^{-1}", font_size=36, color=YES),
             label(r"the harmonic mean tames the lucky registers", font_size=20, color=GREY_A),
-            MathTex(r"\text{relative error} \approx \frac{1.04}{\sqrt{m}}", font_size=34, color=HEAD),
+            MathTex(r"\text{relative standard error} \approx \frac{1.04}{\sqrt{m}}", font_size=34, color=HEAD),
             label(r"Flajolet, \ Fusy, \ Gandouet and Meunier, \ 2007", font_size=18, color=GREY_B),
             label(r"few items: \ count the empty registers instead \ (linear counting)", font_size=18,
                   color=GREY_A),
@@ -90,17 +94,20 @@ class Distinct(VoiceoverScene):
             side.width = 5.4
         side.to_edge(RIGHT, buff=0.4).shift(DOWN * 0.1)
         with self.voiceover(
-            "The cure is to average many records. <bookmark mark='a'/> Use the first few bits of each hash to "
-            "choose one of m registers, and keep in each register the largest rank of the hashes sent to it. "
-            "Here are sixty-four registers after the whole vocabulary of the novels. <bookmark mark='b'/> "
-            "Philippe Flajolet and his colleagues combined them, in 2007, with a harmonic mean, which isn't fooled "
-            "by a few lucky registers, times a constant that corrects the bias. <bookmark mark='c'/> The relative "
-            "error is about one point zero four over the square root of m. <bookmark mark='d'/> When there are "
-            "few items and many registers are still empty, it counts the empty ones instead."
+            (
+            "The cure uses many registers. <bookmark mark='a'/> The leading hash bits choose one of m registers. "
+            'Store the largest rank of the remaining suffix in that register. Here are sixty-four registers after '
+            "hashing the novel vocabulary. <bookmark mark='b'/> HyperLogLog, from Flajolet and colleagues in 2007, "
+            "combines powers of those ranks through a bias-corrected harmonic estimate. <bookmark mark='c'/> The "
+            'familiar one point zero four over root m is a leading relative standard-error scale under the hashing '
+            "model, not a guaranteed relative-error interval. <bookmark mark='d'/> When many registers are zero, our"
+            ' implementation switches to the small-range empty-register correction. The actual register vector is '
+            'checked against an independent scalar implementation.'
+        )
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(bars), FadeIn(cap))
             vo.wait_until("a")
-            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.03), FadeIn(cap))
+            self.play(Indicate(bars, color=LAM))
             vo.wait_until("b")
             self.play(FadeIn(side[0]), FadeIn(side[1]))
             vo.wait_until("c")
@@ -114,29 +121,33 @@ class Distinct(VoiceoverScene):
         d = load("hll")
         head = label(rf"Measured: \ {words(d['distinct'])} distinct words, \ 30 hash functions", font_size=32
                      ).to_edge(UP, buff=0.35)
-        rows = [[str(r["m"]), (f"{r['bytes']:.0f} B" if r["bytes"] < 1024 else f"{r['bytes'] / 1024:.0f} KB"),
+        rows = [[str(r["m"]), (f"{r['bytes']:.0f} B" if r["bytes"] < 1024 else f"{r['bytes'] / 1024:.0f} KiB"),
                  f"{r['rmse'] * 100:.1f}\\%", f"{r['theory'] * 100:.1f}\\%"] for r in d["rows"]]
-        tab = grid_table([r"registers $m$", r"memory", r"measured error", r"$1.04/\sqrt{m}$"], rows,
+        tab = grid_table([r"registers $m$", r"packed model", r"30-seed RMSE", r"$1.04/\sqrt{m}$"], rows,
                          widths=[2.4, 2.0, 2.8, 2.4], row_h=0.42, font_size=20, mono_cols=(),
                          colors=[[LAM, GREY_A, YES, HEAD]] * len(rows)).next_to(head, DOWN, buff=0.4)
         big_ = VGroup(
-            label(rf"the whole corpus, \ {words(d['words'])} words, \ $m = 4096$ \ (3 KB): \ estimate "
+            label(rf"the whole corpus, \ {words(d['words'])} words, \ $m = 4096$ \ (3 KiB packed model): \ estimate "
                   rf"{words(round(d['est_corpus']))}", font_size=21, color=YES),
             label(rf"every five-word phrase: \ {words(d['true_shingles'])} distinct, \ estimate "
-                  rf"{words(round(d['est_shingles']))}, \ the same 3 KB", font_size=21, color=YES),
-            label(r"in practice: \ Redis's \texttt{PFCOUNT}, \ BigQuery's \texttt{APPROX\_COUNT\_DISTINCT}, \ "
-                  r"Presto, \ Druid", font_size=19, color=GREY_A),
+                  rf"{words(round(d['est_shingles']))}, \ same modeled registers", font_size=21, color=YES),
+            label(r"actual NumPy registers: \ 32 KiB at $m=4096$; \ excludes input, hashes and interpreter", font_size=19, color=GREY_A),
         ).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "We ran HyperLogLog on the novels' vocabulary with thirty different hash functions for each number of "
-            "registers. <bookmark mark='a'/> The measured error follows one point zero four over root m down the "
-            "table: sixteen registers, a quarter off; four thousand, one and a half percent, in three "
-            "kilobytes. <bookmark mark='b'/> On the whole stream of four point six million words, the estimate was "
-            f"{words(round(d['est_corpus']))} against the true {words(d['distinct'])}. <bookmark mark='c'/> And on "
-            "every five-word phrase in the novels, four and a half million distinct ones, the same three kilobytes "
-            "were off by half a percent. An exact count would need a table of tens of megabytes. <bookmark "
-            "mark='d'/> This is why databases and analytics engines answer count distinct queries approximately, "
-            "with HyperLogLog behind them."
+            (
+            f"We ran thirty fixed hash seeds per register count on the novel vocabulary. <bookmark mark='a'/> The "
+            f'table compares empirical root-mean-square error with the leading standard-error formula. Three '
+            f'kibibytes for 4096 registers means a modeled six-bit packed representation. The actual NumPy array uses'
+            f" thirty-two kibibytes, eight bytes per register, excluding the input and hashes. <bookmark mark='b'/> "
+            f'On the complete word stream, the estimate was '
+            f"{words(round(d['est_corpus']))}"
+            f' against '
+            f"{words(d['distinct'])}"
+            f" distinct words. <bookmark mark='c'/> The five-word-shingle run uses the same modeled register storage;"
+            f' its error and exact reference are shown separately. Neither this result nor thirty seeds certifies a '
+            f"confidence guarantee. <bookmark mark='d'/> Database engines use carefully engineered variants to trade "
+            f'precision for storage in approximate count-distinct queries.'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
             self.play(LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.25))

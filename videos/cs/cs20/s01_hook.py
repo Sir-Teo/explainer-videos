@@ -26,16 +26,18 @@ class Hook(VoiceoverScene):
             label(r"against", font_size=22, color=GREY_A),
             label(rf"{d['v3_bytes'] / 1000:.1f} KB", font_size=34, color=YES),
         ).arrange(RIGHT, buff=0.5).next_to(dots, DOWN, buff=0.45)
-        how = label(r"the second program never stores the words it counts", font_size=24, color=HEAD
+        how = label('a sketch and 32 candidate words; the whole vocabulary is not retained', font_size=24, color=HEAD
                     ).to_edge(DOWN, buff=0.5)
         with self.voiceover(
+            (
             "Here are the most common words in the thirty novels, counted twice. <bookmark mark='a'/> On the left, "
-            "Part 17's program, which kept every distinct word in a hash table. On the right, this part's "
-            "program. The counts agree, all twenty words and all twenty numbers. <bookmark mark='b'/> But the "
-            "first program needed almost two megabytes, and the second needs eighteen and a half kilobytes, a "
-            "hundred times less. <bookmark mark='c'/> The second program doesn't store the words it counts at "
-            "all, apart from a few dozen candidates. It does it by flipping coins, and it is exactly right only "
-            "with high probability. By the end of this part we will know how high."
+            "Part 17's exact hash-table program. On the right, this part's sketch with thirty-two retained word "
+            'candidates. For this corpus and fixed hash seed, all twenty words and counts agree. <bookmark '
+            "mark='b'/> The modeled data structures shrink from almost two megabytes to about eighteen and a half "
+            "decimal kilobytes. These are program data, not total process memory. <bookmark mark='c'/> The sketch "
+            'does not keep the whole vocabulary. Hash collisions can change its answer. By the end we will measure '
+            'how often the complete answer survives a sweep of twenty hash seeds.'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
             vo.wait_until("a")
@@ -53,26 +55,27 @@ class Hook(VoiceoverScene):
         head = label(r"A coin flip can stand in for cleverness", font_size=36).to_edge(UP, buff=0.4)
         rows = VGroup(*[VGroup(label(a, font_size=26, color=c), label(b, font_size=21, color=GREY_A)).arrange(
             DOWN, buff=0.12) for a, b, c in (
-            (r"check a matrix product \ in $n^2$, \ not $n^3$", rf"a wrong answer survives 20 checks with probability "
-                                                            r"$2^{-20}$", DATA),
-            (r"find a minimum cut \ by contracting random edges", rf"one run: \ {k['success'] * 100:.0f}\% here; \ "
-                                                                  r"enough runs: \ almost surely", LAM),
-            (r"test a 300-digit number for primality", rf"one round: \ {p['round_1024'] * 1000:.0f} ms; \ a wrong "
-                                                        r"answer at most one time in four", YES),
+            ('check a matrix product \\ with $O(n^2)$ arithmetic', r"20 independent rounds: \ false acceptance $\le2^{-20}$", DATA),
+            (r"find a minimum cut \ by contracting random edges", rf"observed success: \ {k['success'] * 100:.0f}\% here; \ "
+                                                                  r"independent repetition amplifies", LAM),
+            ('screen a 300-digit probable-prime candidate', rf"one fixed-base round: \ {p['round_1024'] * 1000:.0f} ms; \ fixed-composite acceptance $\le1/4$", YES),
             (r"estimate millions of counts \ in kilobytes", r"the Job, \ ledger row 9", COST))]).arrange(DOWN, buff=0.4)
         rows.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
+            (
             "That is the theme of this part: a coin flip can stand in for cleverness. <bookmark mark='a'/> With "
-            "coins we can check a claimed matrix product in n squared time instead of recomputing it. <bookmark "
-            "mark='b'/> We can find the weakest link of a network by contracting random edges. <bookmark "
-            "mark='c'/> We can test a three-hundred-digit number for primality in milliseconds, which Part 30's "
-            "cryptography depends on. <bookmark mark='d'/> And we can count a stream in a fraction of the memory. "
-            "Each time, we pay with a small, provable chance of a wrong answer, or of a long wait."
+            'exact arithmetic we can check a claimed matrix product with a quadratic number of arithmetic '
+            "operations. <bookmark mark='b'/> We can find a network's minimum cut by contracting random edges. "
+            "<bookmark mark='c'/> We can rapidly reject composite three-hundred-digit numbers and generate probable "
+            "primes, useful for the RSA construction in Part 30. <bookmark mark='d'/> And we can estimate stream "
+            'statistics using much less storage. The mathematical guarantees depend on the stated randomness model; '
+            'the fixed hash implementations also need empirical checks.'
+        )
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows[0]))
             for mk, r in zip("abcd", rows):
                 vo.wait_until(mk)
-                self.play(FadeIn(r, shift=UP * 0.1))
+                self.play(Indicate(r, color=DATA) if mk == "a" else FadeIn(r, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
 
@@ -88,11 +91,13 @@ class Hook(VoiceoverScene):
             r"the probabilistic method; \ removing the coins; \ where the coins come from",
         ], font_size=26).move_to(DOWN * 0.2)
         with self.voiceover(
+            (
             "Part 20 of Computer Science, Built: Randomness as a Resource. <bookmark mark='a'/> In this part: the "
-            "two kinds of randomized algorithm, and how repetition shrinks their errors; checking products and "
-            "polynomials with random points; cuts, primes, random walks and the power of two choices; Bloom "
-            "filters and sketches of streams, ending in the Job in eighteen kilobytes; the probabilistic method; "
-            "and whether the coins can be removed, and where they come from."
+            'two kinds of randomized algorithm, and how repetition shrinks their errors; checking products and '
+            'polynomials with random points; cuts, primes, random walks and the power of two choices; Bloom filters '
+            'and sketches of streams, ending in the Job in eighteen kilobytes; the probabilistic method; and whether'
+            ' the coins can be removed, and where they come from.'
+        )
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")

@@ -15,9 +15,11 @@ class JobSketch(VoiceoverScene):
         self.gamble()
 
     def card(self):
-        card = chapter_card(10, r"The Job in kilobytes", r"Can we count the top words without remembering the words?",
+        card = chapter_card(10, r"The Job in kilobytes", 'Can we find top words without retaining the whole vocabulary?',
                             lit=(2002,), extra=((2002, r"conservative update"),), part=PART)
-        with self.voiceover("Chapter ten. The Job in kilobytes."):
+        with self.voiceover((
+            'Chapter ten. The Job in kilobytes.'
+        )):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
 
@@ -43,14 +45,16 @@ class JobSketch(VoiceoverScene):
             p.arrange(DOWN, aligned_edge=LEFT, buff=0.08)
         parts.arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(head, DOWN, buff=0.4)
         with self.voiceover(
+            (
             "Now the Job itself, rebuilt so that it never stores the vocabulary. <bookmark mark='a'/> A Count-Min "
-            "sketch of four rows of 1021 counters estimates every word's count. <bookmark mark='b'/> Only thirty-two "
-            "words are kept, candidates for the top twenty, in a heap ordered by estimate; a word replaces the "
+            "sketch of four rows of 1021 counters estimates every word's count. <bookmark mark='b'/> Only thirty-two"
+            ' words are kept, candidates for the top twenty, in a heap ordered by estimate; a word replaces the '
             "weakest when its estimate beats it. <bookmark mark='c'/> A table of a hundred and twenty-eight slots "
-            "finds a word among the candidates, and an evicted one is deleted by shifting its neighbours back, "
+            'finds a word among the candidates, and an evicted one is deleted by shifting its neighbours back, '
             "Knuth's Algorithm R. <bookmark mark='d'/> Estan and Varghese's conservative update raises only the "
-            "counters at the minimum: it still never undercounts, but it adds far less to other words. <bookmark "
+            'counters at the minimum: it still never undercounts, but it adds far less to other words. <bookmark '
             "mark='e'/> And double hashing gives all four row positions from one division per word."
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, p in zip("abcde", parts):
@@ -101,14 +105,16 @@ class JobSketch(VoiceoverScene):
         for t in side:
             t.align_to([x0, 0, 0], LEFT)
         with self.voiceover(
+            (
             "Here is the function that runs once per word, compiled by Part 13's compiler. <bookmark mark='a'/> "
-            "First the four counter positions, each the last plus the step g, wrapped by a subtraction instead of "
-            "a division. <bookmark mark='b'/> The estimate is the smallest of the four counters, <bookmark "
-            "mark='c'/> and only the counters equal to it are raised. <bookmark mark='d'/> Then the test that makes "
-            "the program cheap: if the heap is full and this word's estimate can't beat the weakest candidate, we "
-            "are done. Almost every word in English stops here. <bookmark mark='e'/> A word that is already a "
-            "candidate gets its new estimate and moves down the heap. <bookmark mark='f'/> Anything else joins, "
-            "or replaces the weakest candidate."
+            'First the four counter positions, each the last plus the step g, wrapped by a subtraction instead of a '
+            "division. <bookmark mark='b'/> The estimate is the smallest of the four counters, <bookmark mark='c'/> "
+            "and only the counters equal to it are raised. <bookmark mark='d'/> Then the test that makes the program"
+            " cheap: if the heap is full and this word's estimate can't beat the weakest candidate, we are done. "
+            "Almost every word in English stops here. <bookmark mark='e'/> A word that is already a candidate gets "
+            "its new estimate and moves down the heap. <bookmark mark='f'/> Anything else joins, or replaces the "
+            'weakest candidate.'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(snippet))
             for mk, s_, b in zip("abcdef", side, boxes):
@@ -146,19 +152,28 @@ class JobSketch(VoiceoverScene):
                   r"its slot", font_size=22, color=WHITE),
             label(rf"{d['v2_bytes'] / 1e6:.1f} MB", font_size=30, color=NO),
             label(rf"the v3 needs {d['memory_ratio']:.0f}$\times$ less", font_size=28, color=YES),
-            label(r"and $18.6$ KB fits in Part 9's 32 KB L1 cache: \ after the first few hundred words, \ no misses",
+            label(r"sampled data working set fits the modeled L1; \ full-corpus stall count is extrapolated",
                   font_size=20, color=GREY_A),
         ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "What does it remember? <bookmark mark='a'/> The sketch is sixteen thousand bytes. The candidates, "
-            "their letters, the heap and the slots take about two thousand more. <bookmark mark='b'/> In all, "
-            f"{words(total)} bytes, eighteen and a half kilobytes, in one block. <bookmark mark='c'/> Part 17's "
-            "version kept every distinct word, almost fifty-eight thousand of them, with an entry and a slot each: "
-            f"{d['v2_bytes'] / 1e6:.1f} megabytes. <bookmark mark='d'/> A hundred times less. <bookmark mark='e'/> "
-            "And eighteen and a half kilobytes fits in Part 9's level-one cache, so once the first few hundred words "
-            "have touched every line, the program never misses again. We checked by tracing every load and store "
-            f"of a {d['passage_bytes'] // 1000}-kilobyte passage through the cache model: {d['traced_lines']} lines "
-            f"in all, never more than {d['max_lines_per_set']} in a set of eight."
+            (
+            f"What does the program remember? <bookmark mark='a'/> The sketch contains four-byte counters; the "
+            f"retained candidates, letters, heap and index slots add storage. <bookmark mark='b'/> The complete "
+            f'global-data block contains '
+            f'{words(total)}'
+            f' bytes, about eighteen and a half decimal kilobytes. This excludes the host interpreter, input corpus, '
+            f"code and stack. <bookmark mark='c'/> Part 17's modeled exact table stores every distinct word and uses "
+            f"{d['v2_bytes'] / 1000000.0:.1f}"
+            f" decimal megabytes. <bookmark mark='d'/> This comparison is about a hundredfold data-storage reduction."
+            f" <bookmark mark='e'/> A "
+            f"{d['passage_bytes'] // 1000}"
+            f"-kilobyte passage was traced through Part 9's cache model: "
+            f"{d['traced_lines']}"
+            f' distinct data lines, at most '
+            f"{d['max_lines_per_set']}"
+            f' in one eight-way set. We extrapolate its stalls under the fixed-working-set model; we did not trace '
+            f'every full-corpus cache access.'
+        )
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -186,22 +201,29 @@ class JobSketch(VoiceoverScene):
             [r"instructions per cycle", f"{r8['ipc']:.2f}", f"{r9['ipc']:.2f}"],
             [r"cycles waiting for memory", big(r8["stall_cycles"]), words(r9["stall_cycles"])],
             [r"memory", f"{r8['memory_bytes'] / 1e6:.1f} MB", f"{r9['memory_bytes'] / 1000:.1f} KB"],
-            [r"seconds", f"{r8['seconds']:.2f}", f"{r9['seconds']:.2f}"],
+            [r"projected seconds", f"{r8['seconds']:.2f}", f"{r9['seconds']:.2f}"],
         ]
         cmp_ = grid_table([r"", r"row 8: \ a hash table", r"row 9: \ Count-Min"], rows, widths=[4.0, 3.0, 3.0],
                           row_h=0.34, font_size=18, mono_cols=(),
                           colors=[[GREY_A, GREY_A, COST]] * 4 + [[WHITE, GREY_A, COST]]).to_edge(DOWN, buff=0.3)
         cmp_.set_x(0)
         with self.voiceover(
-            "So the ledger gets its ninth row. Every one of the program's "
-            f"{big(d['instructions'])} instructions was run on the emulator, about {d['per_byte']:.0f} per byte of "
-            "text, and the output matched the exact counts, word for word and digit for digit. <bookmark "
-            "mark='a'/> Priced on Part 8's core: one second, a quarter slower than the hash table. <bookmark "
-            "mark='b'/> The sketch does more work per word, and its chains of comparisons run fewer instructions "
-            "per cycle. <bookmark mark='c'/> The hash table lost forty-four million cycles waiting for memory; the "
-            "sketch, forty-six thousand. <bookmark mark='d'/> Row nine is not a speed-up. It buys memory: a hundred "
-            "times less, for a quarter more time. That trade is the whole point of streaming algorithms, because "
-            "for a real stream the vocabulary doesn't fit."
+            (
+            (
+            f'The ledger gets its ninth row. The emulator executed all '
+            f"{d['instructions']:,}"
+            f' instructions on the complete corpus, about '
+            f"{d['per_byte']:.0f}"
+            f' per byte. The full output matched both the sketch reference and the exact top-word counts for this '
+            f"fixed seed. <bookmark mark='a'/> The displayed processor time is a projection: full instruction count "
+            f"divided by IPC from three short passages, plus sampled cache stalls, at the ledger's clock frequency. "
+            f"<bookmark mark='b'/> The sampled core includes the sketch's comparison dependencies. It is not a whole-"
+            f"corpus core simulation. <bookmark mark='c'/> Cache costs for both versions also belong to their stated "
+            f"trace and projection models. <bookmark mark='d'/> Read row nine as a modeled time-storage tradeoff, "
+            f"alongside the independently measured complete emulator runtime. The emulator's wall time and the "
+            f'projected processor time are different quantities.'
+        )
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab.axis), FadeIn(tab.rows[:-1]))
             self.play(FadeIn(tab.rows[-1]))
@@ -223,7 +245,7 @@ class JobSketch(VoiceoverScene):
                  ((4, 1021, False), r"4 $\times$ 1021, \ plain update"), ((4, 1021, True), r"4 $\times$ 1021 \ "
                                                                                            r"(the program)"),
                  ((4, 2039, True), r"4 $\times$ 2039"), ((4, 4093, True), r"4 $\times$ 4093")]
-        rows = [[name, f"{sw[k]['kb']:.0f} KB", f"{sw[k]['mean_overlap']:.1f}", f"{sw[k]['worst_overlap']}",
+        rows = [[name, f"{sw[k]['kb']:.0f} KiB", f"{sw[k]['mean_overlap']:.1f}", f"{sw[k]['worst_overlap']}",
                  f"{sw[k]['exact_share'] * 100:.0f}\\%"] for k, name in order]
         tab = grid_table([r"sketch", r"size", r"top 20 right \ (mean)", r"worst", r"all exact"], rows,
                          widths=[4.6, 1.4, 3.0, 1.3, 1.8], row_h=0.44, font_size=19, mono_cols=(),
@@ -235,26 +257,29 @@ class JobSketch(VoiceoverScene):
             label(r"twenty different hash functions per row, \ the same text", font_size=20, color=GREY_A),
             label(rf"an intruder: \ \textit{{{ex[0]}}}, \ which occurs {ex[2]} time, \ estimated at "
                   rf"{words(ex[1])}", font_size=20, color=NO),
-            label(r"a Monte Carlo algorithm: \ the memory is guaranteed, \ the answer is probably right", font_size=22,
+            label(r"bounded storage; \ top-20 exactness observed for 5/20 seeds; \ no universal guarantee here", font_size=22,
                   color=HEAD),
             label(r"the true top 20 were always among the 32 candidates: \ a second pass, \ counting only them, "
                   r"\ is exact every time", font_size=20, color=WHITE),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "But was the exact answer luck? The hash function is the algorithm's coin, so we reran the same "
-            "algorithm, in C, with twenty different hash functions, for several sketch sizes. <bookmark mark='a'/> "
-            "With the program's own size, four rows of 1021 counters, the reported top twenty were exactly right, "
-            "words and counts, for five of the twenty hash functions, and the program's own was one of the five. "
-            "On average 19.1 of the twenty words were right, and never fewer than eighteen. <bookmark mark='b'/> "
-            f"The typical intruder is a rare word that collides with common ones in every row: {ex[0]}, which "
-            f"appears in the novels {occ}, was estimated at almost "
-            "fifty-nine thousand. <bookmark mark='c'/> The plain update was never exact, and a sketch of two rows "
-            "got only fourteen words right on average. Doubling the width to 32 kilobytes made seventy percent of "
-            "the runs exact, and 64 kilobytes, ninety-five. <bookmark mark='d'/> This is a Monte Carlo algorithm: "
-            "the memory and the time are guaranteed, the answer is probably right, and more memory buys more "
-            "probability. <bookmark mark='e'/> And there is a cheap fix. In every one of the twenty runs, the "
-            "true top twenty were among the thirty-two candidates. A second pass over the text, counting just "
-            "those thirty-two words exactly, would have given the exact answer every time."
+            (
+            f'Was the exact answer luck? We reran the algorithm in C with twenty fixed polynomial-hash multipliers '
+            f'and several sketch sizes. This is an empirical seed sweep, not a universal-hash proof. <bookmark '
+            f"mark='a'/> At four rows of 1021 counters, five of twenty seeds gave exactly the correct top twenty and "
+            f"counts. The program's seed was one. Average word overlap was 19.1, with eighteen the minimum. <bookmark"
+            f" mark='b'/> One rare intruder was "
+            f'{ex[0]}'
+            f', occurring '
+            f'{occ}'
+            f", but estimated near fifty-nine thousand. Collisions need not respect a word's real frequency. "
+            f"<bookmark mark='c'/> The observed exact shares increased at the wider configurations shown. This corpus"
+            f" does not establish monotonic success for every input. <bookmark mark='d'/> Storage and per-update work"
+            f" are bounded by the design, while complete top-twenty correctness has no theorem here. A single item's "
+            f"Count-Min bound does not certify the retained candidate set. <bookmark mark='e'/> All true top words "
+            f'survived among the thirty-two candidates in these twenty runs. A second pass counting those candidates '
+            f'would repair these runs. For a new stream, missing a true top word would still defeat that repair.'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule), FadeIn(notes[0]))
             self.play(LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.25))

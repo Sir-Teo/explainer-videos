@@ -16,13 +16,15 @@ class Identity(VoiceoverScene):
         card = chapter_card(3, r"Is this polynomial zero?", r"How do you test an identity you can't expand?",
                             lit=(1979, 1980), extra=((1979, r"Lov\'asz's matchings"), (1980, r"Schwartz--Zippel")),
                             part=PART)
-        with self.voiceover("Chapter three. Is this polynomial zero?"):
+        with self.voiceover((
+            'Chapter three. Is this polynomial zero?'
+        )):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
 
     def lemma(self):
         head = label(r"The Schwartz--Zippel lemma", font_size=36).to_edge(UP, buff=0.35)
-        stmt = MathTex(r"p \ne 0,\ \deg p = d,\quad r_1, \dots, r_n \in S \text{ at random}"
+        stmt = MathTex(r"p\ne0\text{ over a field},\ \deg p=d,\quad r_i\overset{\rm iid}{\sim}\mathrm{Unif}(S)"
                        r"\quad\Longrightarrow\quad \Pr[\,p(r_1, \dots, r_n) = 0\,] \le \frac{d}{|S|}",
                        font_size=34, color=YES)
         stmt.next_to(head, DOWN, buff=0.5)
@@ -42,19 +44,21 @@ class Identity(VoiceoverScene):
             label(r"total: \ $\le d/|S|$", font_size=22, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.5).shift(DOWN * 1.1)
         with self.voiceover(
-            "Freivalds' check is a special case of a more general fact. <bookmark mark='a'/> A polynomial that is "
-            "not identically zero can't vanish at too many points: if p has degree d and each variable is chosen at "
-            "random from a set S, p is zero there with probability at most d over the size of S. This is the "
-            "Schwartz–Zippel lemma, found independently by Schwartz, Zippel, and DeMillo with Lipton, around 1980. "
-            "<bookmark mark='b'/> With one variable, it is the fact that a degree-d polynomial has at most d roots. "
-            "<bookmark mark='c'/> With more, write p as a polynomial in the first variable with top power k. Either "
-            "its top coefficient vanishes, with probability at most d minus k over S by induction, or p becomes a "
-            "nonzero polynomial of degree k in one variable, which vanishes with probability at most k over S. The "
-            "two add up to d over S."
+            (
+            "Freivalds' check is a special case of a general fact. <bookmark mark='a'/> Let p be a nonzero formal "
+            'polynomial of total degree d over a field. Choose each variable independently and uniformly from the '
+            'same finite subset S of that field. Then the probability that p evaluates to zero is at most d divided '
+            'by the size of S, capped at one. This is the Schwartz–Zippel lemma, also associated with DeMillo and '
+            "Lipton, around 1980. <bookmark mark='b'/> In one variable, a nonzero degree-d polynomial has at most d "
+            "roots. <bookmark mark='c'/> In several variables, write p in the first variable, with highest power k. "
+            'Its leading coefficient has total degree at most d minus k. Inductively that coefficient vanishes with '
+            'probability at most d minus k over the size of S; otherwise the remaining univariate polynomial has at '
+            'most k roots. Adding the two bounds proves the claim.'
+        )
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(stmt))
             vo.wait_until("a")
-            self.play(FadeIn(stmt))
+            self.play(Indicate(stmt, color=YES))
             vo.wait_until("b")
             self.play(Create(ax), Create(curve), FadeIn(one))
             self.play(LaggedStart(*[GrowFromCenter(r) for r in roots], lag_ratio=0.3))
@@ -87,16 +91,18 @@ class Identity(VoiceoverScene):
                   font_size=20, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(tab, RIGHT, buff=0.6)
         with self.voiceover(
-            "Here is a claimed identity: the product x minus y, times y minus z, times z minus x, against an "
+            (
+            'Here is a claimed identity: the product x minus y, times y minus z, times z minus x, against an '
             "expansion. <bookmark mark='a'/> Instead of expanding, substitute random numbers and compare. We did "
             "this twenty thousand times for each size of S. <bookmark mark='b'/> The claim is false: one sign is "
-            "wrong, so the two sides differ by two x z squared, a polynomial of degree three. It vanishes only when "
+            'wrong, so the two sides differ by two x z squared, a polynomial of degree three. It vanishes only when '
             "x or z is zero, which is why the agreement rates sit a little under the lemma's bound of three over S. "
-            "With a thousand values, one test in five hundred is fooled; twenty tests are fooled with probability "
+            'With a thousand values, one test in five hundred is fooled; twenty tests are fooled with probability '
             "below ten to the minus fifty. <bookmark mark='c'/> The idea scales. The determinant of an eight by "
-            "eight Vandermonde matrix equals a product of differences, a polynomial with forty thousand terms "
-            "if you expand it. Evaluating both sides at fifty random points modulo a large prime took a "
-            "fraction of a millisecond each, and they agreed every time."
+            'eight Vandermonde matrix equals a product of differences, a polynomial with forty thousand terms if you'
+            ' expand it. Evaluating both sides at fifty random points modulo a large prime took a fraction of a '
+            'millisecond each, and they agreed every time.'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(claim))
             vo.wait_until("a")
@@ -140,17 +146,20 @@ class Identity(VoiceoverScene):
         if res.width > 13:
             res.width = 13
         with self.voiceover(
-            "A less obvious polynomial. <bookmark mark='a'/> Take a graph, and build its Tutte matrix: for each "
-            "edge i j, put a variable x i j above the diagonal and minus x i j below it. <bookmark mark='b'/> For "
-            "this graph the determinant is a perfect square, and each of its two terms is a perfect matching, a "
-            "set of edges that covers every vertex exactly once. <bookmark mark='c'/> William Tutte proved in 1947 "
-            "that the determinant is a nonzero polynomial exactly when the graph has a perfect matching. But it "
-            "can have exponentially many terms. <bookmark mark='d'/> László Lovász saw in 1979 that we never need "
-            "to expand it: substitute random numbers modulo a prime and compute one determinant by elimination, "
-            "Schwartz–Zippel bounding the error. <bookmark mark='e'/> We tried it on forty-eight random graphs "
-            f"near the threshold where matchings appear. {have} had one, and the determinant agreed with Edmonds' "
-            "blossom algorithm every time. Determinants parallelize well, so this became the route to fast "
-            "parallel matching algorithms."
+            (
+            f"A less obvious polynomial. <bookmark mark='a'/> Take a graph, and build its Tutte matrix: for each edge"
+            f" i j, put a variable x i j above the diagonal and minus x i j below it. <bookmark mark='b'/> For this "
+            f'graph the determinant is a perfect square. Inside that square, each of the two monomials corresponds to'
+            f" a perfect matching, a set of edges that covers every vertex exactly once. <bookmark mark='c'/> William"
+            f' Tutte proved in 1947 that the determinant is a nonzero polynomial exactly when the graph has a perfect'
+            f" matching. But it can have exponentially many terms. <bookmark mark='d'/> László Lovász saw in 1979 "
+            f'that we never need to expand it: substitute random numbers modulo a prime and compute one determinant '
+            f"by elimination, Schwartz–Zippel bounding the error. <bookmark mark='e'/> We tried it on forty-eight "
+            f'random graphs near the threshold where matchings appear. '
+            f'{have}'
+            f" had one, and the determinant agreed with Edmonds' blossom algorithm every time. Determinants "
+            f'parallelize well, so this became the route to fast parallel matching algorithms.'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(g))
             vo.wait_until("a")
@@ -184,30 +193,35 @@ class Identity(VoiceoverScene):
                      label(r"16 bytes", font_size=18, color=GREY_A)).arrange(DOWN, buff=0.1).move_to(UP * 1.4)
         arrow = Arrow(alice.get_right(), bob.get_left(), color=HEAD, buff=0.2).shift(UP * 0.0)
         res = VGroup(
-            label(rf"$p$: \ a random 61-bit prime, \ {d['fp_prime']:,}".replace(",", "{,}"), font_size=20,
+            label(rf"$p$: \ fixed 61-bit prime, \ {d['fp_prime']:,}".replace(",", "{,}"), font_size=20,
                   color=GREY_A),
             label(rf"$a \bmod p = {d['fp_a']}$ \quad against \quad $b \bmod p = {d['fp_b']}$", font_size=20,
                   color=YES),
             label(rf"computing it: \ {d['fp_seconds']:.2f} s", font_size=20, color=GREY_A),
         ).arrange(DOWN, buff=0.2).move_to(DOWN * 0.5)
         why = VGroup(
-            label(r"a false match needs $p \mid (a - b)$, \ and $|a - b| < 2^{2 \times 10^8}$", font_size=20,
+            label(r"injective encoding: \ prepend byte 1; \ a collision needs $p\mid(a-b)$", font_size=20,
                   color=WHITE),
-            label(rf"$a - b$ has at most $2 \times 10^8 / 60 \approx 3.3$ million prime factors above $2^{{60}}$; "
-                  rf"\ there are $2.7 \times 10^{{16}}$ such primes", font_size=20, color=WHITE),
-            MathTex(rf"\Pr[\text{{false match}}] \le 1.2 \times 10^{{-10}}", font_size=32, color=YES),
+            MathTex(r"\Pr[\text{collision}]\le"
+                    r"\frac{\lfloor L/60\rfloor}{\pi(2^{61})-\pi(2^{60})},\quad L=8\,\max(|A|,|B|)+1",
+                    font_size=30, color=YES),
+            label(rf"prime-count asymptotic estimate: \ {d['fp_false_estimate']:.2g}; \ not a certified finite bound",
+                  font_size=19, color=HEAD),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "One more use of the same idea. <bookmark mark='a'/> Alice has the novels, twenty-five megabytes, and "
-            "Bob has a copy that may differ. Sending the whole file to compare is expensive. <bookmark mark='b'/> "
-            "Instead, Alice treats her file as one enormous number a, picks a random sixty-one-bit prime p, and "
-            "sends p and a modulo p: sixteen bytes. Bob compares with his own number modulo p. <bookmark mark='c'/> "
-            "We flipped a single bit of Bob's copy. The two remainders differ completely, and computing one took "
-            "about a seventh of a second. <bookmark mark='d'/> When could different files give the same "
-            "remainder? Only if p divides their difference, a number with two hundred million bits. Such a number "
-            "has at most a few million prime factors as large as p, out of tens of quadrillions of primes that "
-            "size. So the chance of a false match is about one in ten billion, and a second prime squares it. "
-            "Part 21 turns this into Rabin and Karp's string search, rolling the remainder along the text."
+            (
+            "One more fingerprinting idea. <bookmark mark='a'/> Alice and Bob want to compare copies of the novel "
+            "corpus without transmitting it all. <bookmark mark='b'/> Encode the byte string as a big-endian integer"
+            ' with a leading one byte. The sentinel preserves leading zero bytes and makes the encoding injective. '
+            'Alice sends a sixty-one-bit prime p and her residue in sixteen bytes; Bob compares his own residue. The'
+            " displayed experiment uses one fixed prime. <bookmark mark='c'/> Our altered copy flips one bit. Both "
+            'residues are checked against independent blockwise Horner evaluation; the displayed time is a local '
+            "observation. <bookmark mark='d'/> Distinct encodings collide only when p divides their nonzero "
+            'difference. For a uniformly sampled prime in the stated interval, count possible large prime divisors '
+            'and divide by the number of eligible primes. The displayed prime-count approximation is an asymptotic '
+            'heuristic, not a certified finite upper bound. Independent modulus choices multiply their actual '
+            'collision probabilities. Part 21 develops rolling string fingerprints.'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(alice), FadeIn(bob))
             vo.wait_until("a")

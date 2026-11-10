@@ -1,10 +1,36 @@
 # Computer Science, Built — sequential polish
 
 Work on `computer-science-built`, one video at a time, with separate commits.
-Current video: **cs20, Randomness as a Resource**. CS1–CS19 source/preview polish checkpoints
+Current video: **cs21, Strings**. CS1–CS20 source/preview polish checkpoints
 are complete at the scopes below. Their production release gates remain open; this
 ledger does not treat sampled previews as listening or final-production approval.
 The syllabus's earlier draft-preview claims are separate.
+
+## Final CS20 preview checkpoint, 10 November 2026
+
+- Repair exact-arithmetic Freivalds, integer/prime and contraction domains, final SAT flips, packed Bloom
+  updates and finite sketch/resampling contracts. Sixteen schema-2 producers retain raw timing trials and
+  post-timer validation; 16 of 17 JSON payloads change, with the deterministic ledger unchanged. All 26 tests,
+  19 independent numerical/model groups and 36 native heap/tie-policy cases pass.
+- The complete 1,069,411,435-instruction Job matches the exact Python mirror and full top-word reference.
+  All seven exact MinHash truth pairs survive; observed recall is 3/7 at J≥0.2, 2/2 at 0.5 and 1/1 at 0.8.
+  Separate empirical fractions, theoretical assumptions, actual arrays, packed models and sampled projections.
+- Polish bilingual narration, captions and six exercises. Add AMS sign and conditional-expectation witnesses,
+  a hardness/PRG pipeline and a full time-compressed 178-flip SAT trace. Qualify theorem fields, independence,
+  decision quantifiers, PIT implications and research scope. Preserve literal corpus words in Chinese tables.
+- Review all 36 endpoint and 36 silent motion overviews: 657 endpoint states, 1,440 temporal samples and
+  110,279 decoded motion frames. All final raw receipts retain the frozen source fingerprint; 34 endpoint
+  reviews inherit only through actual PNG equality. Two raw sparse-title alerts retain exact-frame dispositions.
+- Review 58 native 1080p15 clips: 50,829 decoded frames, 1,392 samples and 58 native stills. Five
+  complete movie hashes preserve prior explicit reviews; 53 receive fresh review. Four actual English narrated
+  pilots (AMS, Bloom, Derand, Frontier) decode 12,545 frames plus audio; 160 samples/four stills reviewed.
+- All 86 English speech blocks pass automated signal/alignment (55.804 minutes); all 273 chapter cue requests
+  meet 250 ms. Canonical source pairs and actual bilingual captures each cover 86/86 blocks. All 810 captured
+  caption strings have zero unresolved explanatory translation leads; 84 retained originals are classified.
+
+[Verified CS20 evidence](evidence/cs20-polish-20261110/README.md).
+Continuous narrated listening, Chinese speech/listening, whole-video native production review and runtime at
+the selected narration pace remain open release gates.
 
 ## Final CS19 preview checkpoint, 10 November 2026
 
@@ -522,6 +548,8 @@ Evidence, exact source/data hashes, reports and reproduction commands:
 
 ## Continue here
 
-1. Finish inspection of CS20's preserved original Chinese baseline; the English baseline is fully inspected.
-2. Apply and verify the isolated randomized-algorithm/measurement proposals, then polish CS20's bilingual visuals and explanations.
-3. Commit CS20 separately and continue CS21–CS61 in order, keeping preview evidence distinct from production release approval.
+1. Complete inspection of CS21's preserved bilingual original baseline before applying its isolated repairs.
+2. Verify string algorithms, exact search/count and suffix/repeat references, compression round trips and
+   measurement protocols; then polish bilingual visual explanations and perform the complete preview QA.
+3. Commit CS21 separately and continue CS22–CS61 in order, preserving the distinction between preview
+   checkpoints and final production release approval.

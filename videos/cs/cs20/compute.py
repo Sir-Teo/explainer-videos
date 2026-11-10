@@ -33,6 +33,7 @@ Items:
 from __future__ import annotations
 
 import json
+import functools
 import math
 import random
 import subprocess
@@ -45,8 +46,31 @@ import numpy as np
 
 from explainer.ai.cache import Cache
 
-CACHE = Cache("cs20")
-load = CACHE.load
+from explainer.cache_lock import locked_item
+from .measurements import (protocol, digest_bytes, digest_array, exact_product_reference,
+                           fingerprint_reference, minimum_cut_reference, prime_by_trial_division,
+                           hll_reference, check_assignment)
+
+SCHEMAS = {name: 2 for name in ('lasvegas', 'freivalds', 'pit', 'karger', 'primes', 'walks', 'bins',
+                               'bloom', 'stream', 'job', 'sweep', 'hll', 'ams', 'minhash', 'probmethod', 'derand')}
+
+class RandomnessCache(Cache):
+    @locked_item(lambda self, name: self.path(name))
+    def load(self, name):
+        if not cache_current(name, self.path(name)):
+            self.save(name, ITEMS[name]())
+        return super().load(name)
+
+CACHE = RandomnessCache("cs20")
+
+def cache_current(name, path=None):
+    path = CACHE.path(name) if path is None else path
+    return name not in SCHEMAS or (path.exists() and json.loads(path.read_text()).get('schema') == SCHEMAS[name])
+
+def load(name):
+    return CACHE.load(name)
+
+_TRIALS = []
 
 
 def _full_text():
@@ -54,55 +78,65 @@ def _full_text():
     return f()
 
 
-def _best(f, reps=3):
-    best, out = math.inf, None
+def _best(f, reps=3, *, check, label):
+    samples, out = [], None
     for _ in range(reps):
         t0 = time.perf_counter()
-        out = f()
-        best = min(best, time.perf_counter() - t0)
-    return best, out
+        value = f()
+        samples.append(time.perf_counter() - t0)
+        check(value)
+        out = value
+    _TRIALS.append(dict(operation=label, repeats=reps, samples=samples, seconds=min(samples),
+                        statistic='minimum', validation='each output checked after timer'))
+    return min(samples), out
+
+def _assert(condition):
+    assert condition
 
 
-SWEEP_C = r"""
-#include <stdio.h>
+SWEEP_C = r"""#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-/* The Job v3's algorithm (Count-Min, conservative or plain update, K candidates) for many sketch sizes and hash
-   seeds.  argv: file d w K conservative mult.  Prints the twenty reported words with their estimates. */
+/* Count-Min variants. Candidate heap reproduces Pebble's ties and update order. */
 #define P 16777213L
-int main(int argc, char **argv) {
-  FILE *f = fopen(argv[1], "rb"); fseek(f, 0, SEEK_END); long sz = ftell(f); fseek(f, 0, SEEK_SET);
-  unsigned char *t = malloc(sz); if (fread(t, 1, sz, f) != (size_t)sz) return 1; fclose(f);
-  int d = atoi(argv[2]), w = atoi(argv[3]), K = atoi(argv[4]), cons = atoi(argv[5]); long mult = atol(argv[6]);
-  long *cm = calloc((size_t)d * w, sizeof(long));
-  char cw[64][40]; int cl[64]; long ce[64]; int nc = 0;
-  char word[80]; int n = 0; long h = 0;
-  for (long i = 0; i <= sz; i++) {
-    int c = i < sz ? t[i] : -1;
-    if (c >= 'A' && c <= 'Z') c += 32;
-    if (c >= 'a' && c <= 'z') { if (n < 72) word[n] = c; n++; h = (mult * h + c) % P; continue; }
-    if (n == 0) continue;
-    long g = 1 + (h / w) % (w - 1), idx[8], m = -1;
-    for (int r = 0; r < d; r++) { idx[r] = r * (long)w + (h + r * g) % w; if (m < 0 || cm[idx[r]] < m) m = cm[idx[r]]; }
-    for (int r = 0; r < d; r++) { if (!cons || cm[idx[r]] == m) cm[idx[r]]++; }
-    m = cm[idx[0]]; for (int r = 1; r < d; r++) if (cm[idx[r]] < m) m = cm[idx[r]];
-    int mi = 0; for (int e = 1; e < nc; e++) if (ce[e] < ce[mi]) mi = e;
-    if (n <= 32 && (nc < K || m > ce[mi])) {
-      int e = -1; for (int q = 0; q < nc; q++) if (cl[q] == n && !memcmp(cw[q], word, n)) { e = q; break; }
-      if (e >= 0) ce[e] = m;
-      else { e = nc < K ? nc++ : mi; memcpy(cw[e], word, n); cl[e] = n; ce[e] = m; }
-    }
-    n = 0; h = 0;
+static long ce[64];
+static int heap[64], pos[64], nc;
+static void swap(int i,int j) { int a=heap[i],b=heap[j]; heap[i]=b;heap[j]=a;pos[b]=i;pos[a]=j; }
+static void up(int i) { while(i>0) { int p=(i-1)/2; if(ce[heap[p]]<=ce[heap[i]])return;swap(i,p);i=p; } }
+static void down(int i) { while(2*i+1<nc) { int m=2*i+1; if(m+1<nc&&ce[heap[m+1]]<ce[heap[m]])m++;
+ if(ce[heap[i]]<=ce[heap[m]])return;swap(i,m);i=m; } }
+int main(int argc,char **argv) {
+ if(argc!=7)return 2;
+ int d=atoi(argv[2]),w=atoi(argv[3]),K=atoi(argv[4]),cons=atoi(argv[5]);long mult=atol(argv[6]);
+ if(d<1||d>8||w<2||K<20||K>64||mult<1||mult>1000)return 2;
+ FILE *f=fopen(argv[1],"rb");if(!f)return 2;fseek(f,0,SEEK_END);long sz=ftell(f);fseek(f,0,SEEK_SET);
+ if(sz<0)return 2;unsigned char *t=malloc((size_t)sz);if(!t)return 2;
+ if(fread(t,1,(size_t)sz,f)!=(size_t)sz)return 2;fclose(f);
+ long *cm=calloc((size_t)d*w,sizeof(long));if(!cm)return 2;
+ char cw[64][40],word[80];int cl[64],n=0;long h=0;
+ for(long i=0;i<=sz;i++) {
+  int c=i<sz?t[i]:-1;if(c>='A'&&c<='Z')c+=32;
+  if(c>='a'&&c<='z') { if(n<72)word[n]=(char)c;n++;h=(mult*h+c)%P;continue; }
+  if(n==0)continue;
+  long g=1+(h/w)%(w-1),idx[8],m=-1;
+  for(int r=0;r<d;r++) {idx[r]=r*(long)w+(h+r*g)%w;if(m<0||cm[idx[r]]<m)m=cm[idx[r]];}
+  for(int r=0;r<d;r++)if(!cons||cm[idx[r]]==m)cm[idx[r]]++;
+  m=cm[idx[0]];for(int r=1;r<d;r++)if(cm[idx[r]]<m)m=cm[idx[r]];
+  if(n<=32 && !(nc==K && m<=ce[heap[0]])) {
+   int e=-1;for(int q=0;q<nc;q++)if(cl[q]==n&&!memcmp(cw[q],word,(size_t)n)){e=q;break;}
+   if(e>=0) {ce[e]=m;down(pos[e]);}
+   else if(nc<K) {e=nc;memcpy(cw[e],word,(size_t)n);cl[e]=n;ce[e]=m;heap[nc]=e;pos[e]=nc;nc++;up(nc-1);}
+   else {e=heap[0];memcpy(cw[e],word,(size_t)n);cl[e]=n;ce[e]=m;down(0);}
   }
-  for (int e = 0; e < nc; e++) printf("%.*s\n", cl[e], cw[e]);
-  printf("--\n");
-  for (int s = 0; s < 20 && s < nc; s++) {
-    int b = 0; for (int e = 1; e < nc; e++) if (ce[e] > ce[b]) b = e;
-    printf("%.*s %ld\n", cl[b], cw[b], ce[b]); ce[b] = -1;
-  }
-  return 0;
-}
-"""
+  n=0;h=0;
+ }
+ for(int e=0;e<nc;e++)printf("%.*s\n",cl[e],cw[e]);printf("--\n");
+ for(int shown=0;shown<20&&shown<nc;shown++) {
+  int at=0;for(int e=1;e<nc;e++)if(ce[e]>ce[at])at=e;
+  if(ce[at]==0)break;printf("%.*s %ld\n",cl[at],cw[at],ce[at]);ce[at]=0;
+ }
+ free(cm);free(t);return 0;
+}"""
 
 
 def _sweep(full: bytes, configs, seeds) -> list:
@@ -159,8 +193,11 @@ def compute_job() -> dict:
     emu_s = time.perf_counter() - t0
     out = bytes(m.output)
     ref, est = J.reference(full)
+    _TRIALS.append(dict(operation='whole-corpus Pebble emulator', repeats=1, samples=[emu_s], seconds=emu_s,
+                        statistic='single complete run', validation='complete output equals independent Python algorithm reference'))
     assert out == ref, "the emulator and the Python reference disagree"
     exact = PR.job_reference(full)
+    assert out == exact, "this fixed-corpus/seed demonstration must reproduce all20 exact top-word counts"
     instr = m.steps
     print("steps", instr, "emulated in", emu_s)
     # IPC on the out-of-order core, on passages of 1-3 kB
@@ -192,6 +229,7 @@ def compute_job() -> dict:
     passage = full[3_000_000:3_150_000]
     tm = Traced(image=c.program.image, tape=passage)
     tm.run(400_000_000)
+    assert bytes(tm.output) == J.reference(passage)[0]
     lines = traced["lines"]
     sets = Counter(ln % 64 for ln in lines)          # L1: 32 KB, 8 ways, 64-byte lines: 64 sets
     # every line is touched in the first few hundred words and never evicted, so the corpus pays the same misses
@@ -224,7 +262,12 @@ def compute_job() -> dict:
             "vocab": len(vocab), "words": n_words, "ledger": led,
             "slower_than_row8": seconds / row8["seconds"], "row8_seconds": row8["seconds"],
             "cm_bound": math.e * n_words / 1021, "cm_delta": math.exp(-4),
-            "source": J.JOB_SKETCH.strip().splitlines()}
+            "source": J.JOB_SKETCH.strip().splitlines(), "corpus_sha256": digest_bytes(full),
+            "emulator_scope": "every instruction on complete corpus; full output checked",
+            "core_scope": "three1.2-2.6KiB passages; complete outputs checked",
+            "hierarchy_scope": "150000-byte passage; complete output checked; stalls extrapolated assuming fixed working set",
+            "cycles_scope": "instruction/IPC plus sampled hierarchy stall model; not measured whole-corpus core cycles",
+            "memory_scope": "program global-data block including sketch,32 retained word candidates and128 index slots; not total host process memory"}
 
 
 def compute_sweep() -> dict:
@@ -233,7 +276,13 @@ def compute_sweep() -> dict:
     full = _full_text()
     rows = _sweep(full, [(4, 1021, 32, True), (4, 1021, 32, False), (4, 509, 32, True), (2, 1021, 32, True),
                          (4, 2039, 32, True), (4, 4093, 32, True), (3, 1021, 32, True)], range(20))
-    return {"rows": rows, "seeds": 20}
+    import ctypes
+    return {"rows": rows, "seeds": 20, "source_sha256": digest_bytes(SWEEP_C.encode()),
+            "compiler": subprocess.run(["gcc", "--version"], capture_output=True, text=True, check=True).stdout,
+            "compiler_command": ["gcc", "-O2", "-o", "s", "s.c"],
+            "sketch_memory_scope": "four-byte modeled Pebble counters; candidate storage excluded from shape column",
+            "native_counter_bytes": ctypes.sizeof(ctypes.c_long),
+            "tie_scope": "candidate heap and ties reproduce Pebble policy; plain update is a separate variant"}
 
 
 def _vocab_counts():
@@ -242,50 +291,56 @@ def _vocab_counts():
 
 
 def compute_lasvegas() -> dict:
-    """Las Vegas: randomized quicksort is always right, and its time is random; Monte Carlo: a fixed time, and the
-    answer is random.  Comparisons over many runs; amplification of a one-sided error."""
+    """Fixed input, independent pivot runs; count comparisons and validate every sorted output."""
     from explainer.cs.algo.sorts import quicksort
-    rng = random.Random(20)
-    n = 2000
-    a = list(range(n))
-    runs = [quicksort(a, "random", rng)[1]["cmp"] for _ in range(400)]
+    rng, n = random.Random(20), 2000
+    a, runs = list(range(n)), []
+    for _ in range(400):
+        result, counters = quicksort(a, "random", rng)
+        assert result == a
+        runs.append(counters['cmp'])
     mean = sum(runs) / len(runs)
-    sd = (sum((r - mean) ** 2 for r in runs) / len(runs)) ** 0.5
+    sd = (sum((r - mean)**2 for r in runs) / len(runs))**.5
     expect = 2 * (n + 1) * sum(1 / k for k in range(1, n + 1)) - 4 * n
     hist, edges = np.histogram(runs, bins=24)
-    amp = [{"rounds": k, "error": 0.5 ** k} for k in (1, 2, 5, 10, 20, 40)]
-    return {"n": n, "runs": len(runs), "mean": mean, "sd": sd, "expected": expect, "min": min(runs), "max": max(runs),
-            "worst": n * (n - 1) / 2, "hist": hist.tolist(), "edges": edges.tolist(), "amplify": amp}
+    return dict(n=n, runs=len(runs), comparison_samples=runs, mean=mean, sd=sd, expected=expect,
+                min=min(runs), max=max(runs), worst=n * (n - 1) // 2,
+                hist=hist.tolist(), edges=edges.tolist(), seed=20, all_outputs_sorted=True,
+                amplify=[dict(rounds=k, error=.5**k) for k in (1, 2, 5, 10, 20, 40)])
 
 
 def compute_freivalds() -> dict:
     from explainer.cs.algo import randomized as R
-    rng = np.random.default_rng(1977)
-    n = 2000
+    rng, n = np.random.default_rng(1977), 2000
     A = rng.integers(-9, 10, (n, n)).astype(np.float64)
     B = rng.integers(-9, 10, (n, n)).astype(np.float64)
-    t_mul, C = _best(lambda: A @ B)
+    exact, product_bound = exact_product_reference(A, B)
+    t_mul, C = _best(lambda: A @ B, check=lambda x: _assert(np.array_equal(x, exact)),
+                     label='2000x2000 float64 BLAS full matrix product; exact bounded integer entries')
     r = rng.integers(0, 2, n).astype(np.float64)
-    t_chk, _ = _best(lambda: np.array_equal(A @ (B @ r), C @ r))
-    # one wrong entry: a round passes exactly when that column's coin is 0
-    C1 = C.copy()
-    C1[123, 456] += 1
+    vector_bound = n * product_bound
+    assert vector_bound < 2**53
+    t_chk, _ = _best(lambda: np.array_equal(A @ (B @ r), C @ r), check=lambda x: _assert(bool(x)),
+                     label='three float64 matrix-vector products and equality; one pre-sampled vector reused; RNG excluded')
+    C1 = C.copy(); C1[123, 456] += 1
     trials = 4000
-    small = rng.integers(-9, 10, (200, 200)).astype(np.float64), rng.integers(-9, 10, (200, 200)).astype(np.float64)
+    small = (rng.integers(-9, 10, (200, 200)).astype(np.float64),
+             rng.integers(-9, 10, (200, 200)).astype(np.float64))
     Cs = small[0] @ small[1]
-    W1 = Cs.copy()
-    W1[12, 45] += 1
-    W2 = Cs + rng.integers(0, 2, Cs.shape)            # many wrong entries
+    W1 = Cs.copy(); W1[12, 45] += 1
+    W2 = Cs + rng.integers(0, 2, Cs.shape)
     pass1 = sum(R.freivalds(*small, W1, 1, rng) for _ in range(trials)) / trials
     pass2 = sum(R.freivalds(*small, W2, 1, rng) for _ in range(trials)) / trials
-    pass_k = [{"rounds": k, "measured": sum(R.freivalds(*small, W1, k, rng) for _ in range(trials)) / trials,
-               "bound": 0.5 ** k} for k in (1, 2, 3, 4, 6)]
+    pass_k = [dict(rounds=k, measured=sum(R.freivalds(*small, W1, k, rng) for _ in range(trials)) / trials,
+                   bound=.5**k) for k in (1, 2, 3, 4, 6)]
     caught = not R.freivalds(A, B, C1, 30, rng)
-    flops_mul = 2 * n ** 3
-    flops_chk = 3 * 2 * n ** 2
-    return {"n": n, "t_mul": t_mul, "t_check": t_chk, "ratio": t_mul / t_chk, "pass_one_wrong": pass1,
-            "pass_many_wrong": pass2, "rounds": pass_k, "caught_30": caught, "trials": trials,
-            "flops_mul": flops_mul, "flops_check": flops_chk}
+    assert caught
+    return dict(n=n, t_mul=t_mul, t_check=t_chk, ratio=t_mul/t_chk, pass_one_wrong=pass1,
+                pass_many_wrong=pass2, rounds=pass_k, caught_30=caught, trials=trials,
+                flops_mul=2*n**3, flops_check=6*n**2, flops_scope='leading dense floating-point operation model',
+                exact_product_bound=product_bound, exact_vector_bound=vector_bound,
+                input_sha256=[digest_array(A), digest_array(B), digest_array(r)],
+                reference_sha256=digest_array(exact), probability_scope='exact integer equality and independent bit vectors; finite measured fractions are estimators')
 
 
 def compute_pit() -> dict:
@@ -323,20 +378,28 @@ def compute_pit() -> dict:
         agree = 0
         have = 0
         t_t = t_e = 0.0
+        samples_t, samples_e = [], []
         G_ = 12
         for g in range(G_):
             es = [(u, v) for u in range(n) for v in range(u + 1, n) if rng.random() < pr]
             t0 = time.perf_counter()
             a = R.tutte_has_perfect_matching(n, es, rng)
-            t_t += time.perf_counter() - t0
+            elapsed = time.perf_counter() - t0
+            t_t += elapsed; samples_t.append(elapsed)
             G = nx.Graph()
             G.add_nodes_from(range(n))
             G.add_edges_from(es)
             t0 = time.perf_counter()
             b = len(nx.max_weight_matching(G, maxcardinality=True)) == n // 2
-            t_e += time.perf_counter() - t0
+            elapsed = time.perf_counter() - t0
+            t_e += elapsed; samples_e.append(elapsed)
+            assert not a or b  # nonzero determinant certifies existence; a false negative is possible
             agree += a == b
             have += b
+        for label_, samples in [('random Tutte substitution and determinant', samples_t), ('NetworkX cardinality matching', samples_e)]:
+            _TRIALS.append(dict(operation=f'{n}-vertex graph: {label_}', repeats=len(samples), samples=samples,
+                                seconds=sum(samples)/len(samples), statistic='mean across12 fixed-seed graphs',
+                                validation='determinant positives checked against exact cardinality matching; agreement count retained'))
         rows.append({"n": n, "graphs": G_, "agree": agree, "with_pm": have, "t_tutte": t_t / G_, "t_edmonds": t_e / G_})
         print(rows[-1])
     # fingerprints: two copies of the corpus, one byte apart
@@ -344,14 +407,16 @@ def compute_pit() -> dict:
     other = bytearray(full)
     other[12_345_678] ^= 1
     q = R.random_prime(61, rng)
-    t_fp, fa = _best(lambda: R.fingerprint(full, q), 1)
+    expected_fp = fingerprint_reference(full, q)
+    t_fp, fa = _best(lambda: R.fingerprint(full, q), 1, check=lambda x: _assert(x == expected_fp), label="whole-corpus sentinel fingerprint; conversion and modular reduction")
     fb = R.fingerprint(bytes(other), q)
-    bits = 8 * len(full)
+    assert fb == fingerprint_reference(bytes(other), q)
+    bits = 8 * len(full) + 1
     primes_61 = 2 ** 60 / (61 * math.log(2))                      # primes in [2^60, 2^61)
     bad = bits / 60                                               # prime factors >= 2^60 of a number below 2^bits
     return {"sz": sz, "degree": 3, "vandermonde": {"n": vn, "trials": 50, "ok": ok, "terms": vander_terms},
             "tutte": rows, "fp_prime": q, "fp_a": fa, "fp_b": fb, "fp_differ": fa != fb, "fp_seconds": t_fp,
-            "bytes": len(full), "fp_false_bound": bad / primes_61, "bad_primes": bad, "primes_61": primes_61}
+            "bytes": len(full), "corpus_sha256": digest_bytes(full), "fp_false_estimate": bad / primes_61, "fp_probability_scope": "prime-count asymptotic heuristic, not a certified finite upper bound", "bad_primes": bad, "primes_61": primes_61}
 
 
 def compute_karger() -> dict:
@@ -359,13 +424,14 @@ def compute_karger() -> dict:
     rng = random.Random(1993)
     # two dense clusters joined by three edges
     n = 16
-    while True:          # two dense clusters, every vertex of degree at least 4 inside its own: the bridges are the
+    while True:          # build two dense clusters; certify their global cut independently below
         es = [(u, v) for g in (0, 8) for u in range(g, g + 8) for v in range(u + 1, g + 8) if rng.random() < 0.7]
         deg = Counter(x for e in es for x in e)
-        if min(deg[v] for v in range(n)) >= 4:          # only minimum cut
+        if min(deg[v] for v in range(n)) >= 4:
             break
     es += [(0, 8), (3, 11), (6, 13)]
-    true_cut = 3
+    true_cut, true_side = minimum_cut_reference(n, es)
+    assert true_cut == 3
     trials = 20000
     cuts = Counter(R.karger(n, es, rng) for _ in range(trials))
     succ = cuts[true_cut] / trials
@@ -395,25 +461,36 @@ def compute_karger() -> dict:
     for u, v in es2:
         deg[u] += 1
         deg[v] += 1
-    true2 = min(4, min(deg.values()))
+    true2, true_side2 = minimum_cut_reference(m, es2)
     tk, tks = 0.0, 0.0
+    k_samples, ks_samples = [], []
     sk = sks = 0
     R_ = 200
     for _ in range(R_):
         t0 = time.perf_counter()
-        sk += R.karger(m, es2, rng) == true2
-        tk += time.perf_counter() - t0
+        cut = R.karger(m, es2, rng)
+        seconds = time.perf_counter() - t0
+        assert true2 <= cut <= len(es2)
+        sk += cut == true2
+        tk += seconds; k_samples.append(seconds)
     for _ in range(40):
         t0 = time.perf_counter()
-        sks += R.karger_stein(m, es2, rng) == true2
-        tks += time.perf_counter() - t0
+        cut = R.karger_stein(m, es2, rng)
+        seconds = time.perf_counter() - t0
+        assert true2 <= cut <= len(es2)
+        sks += cut == true2
+        tks += seconds; ks_samples.append(seconds)
+    for name, samples in [('Karger', k_samples), ('Karger-Stein', ks_samples)]:
+        _TRIALS.append(dict(operation=f'{name}:48-vertex fixed graph, fresh random contractions', repeats=len(samples),
+                            samples=samples, seconds=sum(samples)/len(samples), statistic='arithmetic mean',
+                            validation='each returned cut bounded against independent exact minimum; success frequency is empirical'))
     return {"n": n, "edges": es, "m": len(es), "true_cut": true_cut, "trials": trials, "success": succ,
             "bound": bound, "cuts": {str(k): v for k, v in sorted(cuts.items())}, "cycle_n": cn,
             "cycle_mincuts": len(found), "cycle_expected": math.comb(cn, 2),
             "cycle_min_share": min(found.values()) / 20000, "cycle_max_share": max(found.values()) / 20000,
             "trace": merges, "groups": groups, "fail_trace": fail_merges,
             "fail_groups": fail_groups, "fail_cut": fail_cut, "ks_n": m, "ks_m": len(es2), "ks_true": true2,
-            "karger_success": sk / R_, "karger_s": tk / R_, "ks_success": sks / 40, "ks_s": tks / 40}
+            "ks_edges": es2, "mincut_sides": [true_side, true_side2], "karger_success": sk / R_, "karger_s": tk / R_, "ks_success": sks / 40, "ks_s": tks / 40}
 
 
 def compute_primes() -> dict:
@@ -423,28 +500,32 @@ def compute_primes() -> dict:
     fermat = sum(R.fermat_liar(a, n) for a in range(1, n))
     strong = sum(R.mr_liar(a, n) for a in range(1, n))
     coprime = sum(math.gcd(a, n) == 1 for a in range(1, n))
-    worst, at = 0.0, 0
+    worst, at = 0., 0
     for c in range(9, 20000, 2):
-        if R.miller_rabin(c, 20, random.Random(c)):
+        if prime_by_trial_division(c):
             continue
-        lr = sum(R.mr_liar(a, c) for a in range(1, c)) / (c - 1)
-        if lr > worst:
-            worst, at = lr, c
-    rng = random.Random(30)
-    times = []
+        rate = sum(R.mr_liar(a, c) for a in range(1, c)) / (c - 1)
+        if rate > worst:
+            worst, at = rate, c
+    rng, times = random.Random(30), []
     for bits in (256, 512, 1024, 2048):
-        t0 = time.perf_counter()
-        reps = 3 if bits < 2048 else 1
-        for _ in range(reps):
-            R.random_prime(bits, rng)
-        times.append({"bits": bits, "seconds": (time.perf_counter() - t0) / reps,
-                      "candidates": round(bits * math.log(2) / 2)})
-        print(times[-1])
+        observed = []
+        def check(value):
+            assert value.bit_length() == bits and value % 2
+            assert R.miller_rabin(value, 64, random.Random(value + 1))
+            observed.append(hex(value))
+        seconds, _ = _best(lambda: R.random_prime(bits, rng), 3 if bits < 2048 else 1, check=check,
+                            label=f'{bits}-bit odd candidate generation with 40-round probable-prime screening')
+        times.append(dict(bits=bits, seconds=seconds, candidates=round(bits*math.log(2)/2),
+                          candidates_scope='asymptotic expected odd candidates; not an observed counter', probable_primes=observed))
     p = R.random_prime(1024, rng)
-    t_round, _ = _best(lambda: R.mr_liar(rng.randrange(2, p - 1), p), 5)
-    return {"carmichael_count": len(cm), "carmichaels": cm[:12], "n": n, "fermat_liars": fermat,
-            "strong_liars": strong, "coprime": coprime, "factors": [3, 11, 17], "worst_rate": worst, "worst_n": at,
-            "times": times, "round_1024": t_round, "trial_division_bits": 512}
+    base = rng.randrange(2, p - 1)
+    t_round, _ = _best(lambda: R.mr_liar(base, p), 5, check=lambda value: _assert(value),
+                       label='one fixed-base strong probable-prime round on a 1024-bit probable prime; RNG excluded')
+    return dict(carmichael_count=len(cm), carmichaels=cm[:12], n=n, fermat_liars=fermat, strong_liars=strong,
+                coprime=coprime, factors=[3, 11, 17], worst_rate=worst, worst_n=at, times=times,
+                round_1024=t_round, trial_division_bits=512, finite_composite_oracle='exact trial division below20000',
+                screening_scope='40-round probable primes; independent-base64-round rescreen is not primality certification')
 
 
 def compute_walks() -> dict:
@@ -475,8 +556,10 @@ def compute_walks() -> dict:
         restarts = []
         for cl in inst:
             for _ in range(8):
-                f = R.walk_sat(n, cl, rng, 10 ** 8, k_restart=3 * n)
-                restarts.append(f // (3 * n) + 1)
+                statistics = {}
+                f = R.walk_sat(n, cl, rng, 10 ** 8, k_restart=3 * n, statistics=statistics)
+                assert f is not None and statistics['found'] and statistics['flips'] == f
+                restarts.append(statistics['attempts'])
         three.append({"n": n, "m": m, "mean_restarts": sum(restarts) / len(restarts), "schoening": (4 / 3) ** n,
                       "brute": 2 ** n})
         print(three[-1])
@@ -527,7 +610,8 @@ def compute_bloom() -> dict:
                 b.add(w)
             fp = sum(w in b for w in probes) / len(probes)
             rows.append({"bits_per_word": bpw, "k": k, "measured": fp, "theory": R.bloom_theory(n, m, k),
-                         "fill": float(b.bits.mean())})
+                         "fill": float(b.bits.mean()), "packed_bytes": b._packed.nbytes})
+            assert all(w in b for w in vocab)
             print(rows[-1])
     assert all(w in b for w in vocab)
     # a tiny one to draw: 32 bits, 3 hashes, six words
@@ -604,7 +688,7 @@ def compute_hll() -> dict:
             if seed < 10:
                 kerrs.append(R.kmv(h, 1 << b) / distinct - 1)
         m = 1 << b
-        rows.append({"b": b, "m": m, "bytes": m * 6 / 8, "rmse": float(np.sqrt(np.mean(np.square(errs)))),
+        rows.append({"b": b, "m": m, "bytes": math.ceil(m * 6 / 8), "numpy_register_bytes": m * 8, "hash_trials": 30, "rmse": float(np.sqrt(np.mean(np.square(errs)))),
                      "theory": 1.04 / math.sqrt(m), "kmv_rmse": float(np.sqrt(np.mean(np.square(kerrs)))),
                      "kmv_theory": 1 / math.sqrt(m - 2), "kmv_bytes": m * 8})
         print(rows[-1])
@@ -612,12 +696,19 @@ def compute_hll() -> dict:
     t0 = time.perf_counter()
     hw = R._h64(words, 0)
     t_hash = time.perf_counter() - t0
+    assert hw.dtype == np.uint64 and len(hw) == len(words)
+    _TRIALS.append(dict(operation='keyed BLAKE2 hashes of complete token stream; materialized vector', repeats=1,
+                        samples=[t_hash], seconds=t_hash, statistic='single run',
+                        validation='uint64 shape and subsequent full scalar HLL register/estimate reference'))
     est = R.hyperloglog(hw, 12)
+    assert math.isclose(est, hll_reference(hw, 12)[0], rel_tol=1e-12)
     # five-word phrases: millions of distinct items, the same 3 KB of registers
     K = 5
     sh = [b" ".join(words[i:i + K]) for i in range(0, len(words) - K + 1)]
     true_sh = len(set(sh))
-    est_sh = R.hyperloglog(R._h64(sh, 0), 12)
+    h_sh = R._h64(sh, 0)
+    est_sh = R.hyperloglog(h_sh, 12)
+    assert math.isclose(est_sh, hll_reference(h_sh, 12)[0], rel_tol=1e-12)
     # the registers for drawing, at m = 64
     h = R._h64(vocab, 0)
     idx = (h >> np.uint64(58)).astype(np.int64)
@@ -665,22 +756,43 @@ def compute_minhash() -> dict:
                 paras.append((bk, w, p))
     K, NP, p_ = 5, 100, (1 << 31) - 1
 
+    # Collision-free integer dictionary IDs preserve whole-token shingle equality.
+    dictionary = {}
     def shingle_ids(w):
-        import zlib
-        return [zlib.crc32(" ".join(w[i:i + K]).encode()) & 0x7fffffff for i in range(len(w) - K + 1)]
+        ids = []
+        for i in range(len(w) - K + 1):
+            key = tuple(w[i:i + K])
+            if key not in dictionary:
+                dictionary[key] = len(dictionary)
+            ids.append(dictionary[key])
+        return ids
     ids, bounds = [], [0]
     for _, w, _ in paras:
         ids += shingle_ids(w)
         bounds.append(len(ids))
+    corpus_dictionary_size = len(dictionary)
     x = np.array(ids, dtype=np.int64)
     rng = np.random.default_rng(1998)
     a, b = rng.integers(1, p_, NP), rng.integers(0, p_, NP)
+    assert int(a.max()) * int(x.max()) + int(b.max()) <= np.iinfo(np.int64).max
     starts = np.array(bounds[:-1])
     t0 = time.perf_counter()
     sig = np.zeros((len(paras), NP), dtype=np.int64)
     for k in range(NP):
         sig[:, k] = np.minimum.reduceat((a[k] * x + b[k]) % p_, starts)
     t_sig = time.perf_counter() - t0
+    assert len(dictionary) < p_ and sig.shape == (len(paras), NP)
+    assert np.all((sig >= 0) & (sig < p_))
+    checked_rows = np.linspace(0, len(paras)-1, 32, dtype=int).tolist()
+    for row in checked_rows:
+        values = ids[bounds[row]:bounds[row+1]]
+        for col in range(NP):
+            expected = min((int(a[col])*v + int(b[col])) % p_ for v in values)
+            assert int(sig[row, col]) == expected
+    _TRIALS.append(dict(operation='100 affine MinHash rows on all paragraphs; dictionary construction excluded',
+                        repeats=1, samples=[t_sig], seconds=t_sig, statistic='single run',
+                        validation='full shape/range plus32 evenly spaced paragraphs, all100 rows checked with scalar Python arithmetic',
+                        checked_paragraphs=checked_rows))
 
     def bands(sig, R_, B_):
         cand = set()
@@ -696,6 +808,12 @@ def compute_minhash() -> dict:
     t0 = time.perf_counter()
     cand = bands(sig, 5, 20)
     t_band = time.perf_counter() - t0
+    for i, j in cand:
+        assert 0 <= i < j < len(paras)
+        assert any(all(int(sig[i, 5*k+t]) == int(sig[j, 5*k+t]) for t in range(5)) for k in range(20))
+    _TRIALS.append(dict(operation='20 bands of5 signature values; candidate set construction', repeats=1,
+                        samples=[t_band], seconds=t_band, statistic='single run',
+                        validation='every emitted pair checked for an exact matching signature band; exact token-shingle Jaccard follows'))
 
     def sh(i):
         return set(x[bounds[i]:bounds[i + 1]].tolist())
@@ -707,14 +825,14 @@ def compute_minhash() -> dict:
             inv[s].append(i)
     pc = Counter()
     for v in inv.values():
-        if 1 < len(v) <= 60:
+        if 1 < len(v):
             for i in range(len(v)):
                 for j in range(i + 1, len(v)):
                     pc[(v[i], v[j])] += 1
     size = [len(sh(i)) for i in range(len(paras))]
     truth = sorted(((cnt / (size[i] + size[j] - cnt), i, j) for (i, j), cnt in pc.items()), reverse=True)
     truth = [t for t in truth if t[0] >= 0.2]
-    pairs = [{"j": J, "a": A.BOOKS[paras[i][0]] if isinstance(A.BOOKS, dict) else str(paras[i][0]),
+    pairs = [{"i": i, "other_i": j, "intersection": len(sh(i) & sh(j)), "union": len(sh(i) | sh(j)), "j": J, "a": A.BOOKS[paras[i][0]] if isinstance(A.BOOKS, dict) else str(paras[i][0]),
               "b": A.BOOKS[paras[j][0]] if isinstance(A.BOOKS, dict) else str(paras[j][0]),
               "text_a": paras[i][2][:160], "text_b": paras[j][2][:160], "found": (i, j) in cand}
              for J, i, j in truth]
@@ -746,7 +864,13 @@ def compute_minhash() -> dict:
             "t_sig": t_sig, "t_band": t_band, "found": [[J, paras[i][2][:120], paras[j][2][:120]] for J, i, j in found],
             "truth": pairs, "truth_count": len(truth), "recall": sum(p["found"] for p in pairs if p["j"] >= 0.5),
             "truth_05": sum(p["j"] >= 0.5 for p in pairs), "curve": curve, "est_rmse": est_err,
-            "est_theory": 1 / math.sqrt(NP) / 2}
+            "est_theory": 1 / math.sqrt(NP) / 2,
+            "truth_scope": "every positive-intersection pair via all collision-free whole-token postings; inventory J>=0.2",
+            "recall_by_threshold": [dict(threshold=t, truth=sum(row['j']>=t for row in pairs),
+                                         found=sum(row['found'] for row in pairs if row['j']>=t)) for t in (.2,.5,.8)],
+            "signature_scope": "affine hash family approximation to ideal independent uniform minwise permutations",
+            "est_theory_scope": "worst ideal Bernoulli standard error with100 independent rows; not a guaranteed+-0.05 interval",
+            "dictionary_shingles": corpus_dictionary_size, "dictionary_shingles_with_planted": len(dictionary)}
 
 
 def compute_probmethod() -> dict:
@@ -785,10 +909,10 @@ def compute_probmethod() -> dict:
         dmax = max(sum(occ[v] - 1 for v, _ in c) for c in cl)
         x0 = [rng.random() < 0.5 for _ in range(nv)]
         bad0 = sum(1 for c in cl if not any(x0[v] == s for v, s in c))
-        steps, x = R.moser_tardos(nv, cl, rng)
+        steps, x = R.moser_tardos(nv, cl, rng, initial=x0)
         assert all(any(x[v] == s for v, s in c) for c in cl)
         mt.append({"n": nv, "m": m, "k": k, "d": dmax, "lll": math.e * (dmax + 1) * 2 ** -k, "resamplings": steps,
-                   "bound": m / dmax, "initial_bad": bad0})
+                   "bound": m / dmax, "initial_bad": bad0, "initial_assignment_used": True})
         print(mt[-1])
     return {"ramsey": ram, "known": known, "k4_mean": sum(mono) / len(mono), "k4_min": min(mono),
             "k4_expected": math.comb(17, 4) * 2 ** -5, "paley": paley, "mt": mt}
@@ -831,6 +955,22 @@ ITEMS = {
     "probmethod": compute_probmethod,
     "derand": compute_derand,
 }
+
+def _checked_producer(name, function):
+    @functools.wraps(function)
+    def produce():
+        global _TRIALS
+        _TRIALS = []
+        result = function()
+        seeds = {'lasvegas':20, 'freivalds':1977, 'pit':1979, 'karger':1993, 'primes':30,
+                 'walks':1991, 'bins':1999, 'bloom':1970, 'stream':1985, 'job':0,
+                 'sweep':list(range(20)), 'hll':list(range(30)), 'ams':1996,
+                 'minhash':dict(affine=1998, planted=5), 'probmethod':1947, 'derand':1964}
+        result.update(schema=SCHEMAS[name], protocol=protocol(), timed_trials=list(_TRIALS), random_seed=seeds[name])
+        return result
+    return produce
+
+ITEMS = {name: _checked_producer(name, function) for name, function in ITEMS.items()}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

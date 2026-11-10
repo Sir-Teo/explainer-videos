@@ -1,476 +1,455 @@
 {
- "title": "计算机科学，从零搭建 · 第20部分：作为资源的随机性",
- "chapters": {
-  "Hook": "几千字节里的高频词",
-  "LasVegas": "1. 拉斯维加斯与蒙特卡洛",
-  "Freivalds": "2. 用硬币检验乘积",
-  "Identity": "3. 这个多项式是零吗？",
-  "Karger": "4. 用收缩求最小割",
-  "Primes": "5. 几毫秒内的素数",
-  "Walks": "6. 求解 SAT 的随机游走",
-  "Bins": "7. 球与箱，以及两个选择的力量",
-  "Bloom": "8. 布隆过滤器",
-  "Stream": "9. 数据流：一遍扫描，很少的内存",
-  "JobSketch": "10. 几千字节里的作业：账本第9行",
-  "Distinct": "11. 统计不同元素：HyperLogLog",
-  "Ams": "12. 为二阶矩画草图",
-  "Lsh": "13. 近似重复：MinHash 与 LSH",
-  "ProbMethod": "14. 概率方法",
-  "Derand": "15. 去掉硬币，以及硬币从哪里来",
-  "Frontier": "16. 前沿：随机性有用吗？",
-  "Outro": "回顾、习题，以及它们会在哪里再出现"
- },
- "lines": {
-  "0cc2c1f982e8": {
-   "scene": "Hook",
-   "en": "Here are the most common words in the thirty novels, counted twice. <bookmark mark='a'/> On the left, Part 17's program, which kept every distinct word in a hash table. On the right, this part's program. The counts agree, all twenty words and all twenty numbers. <bookmark mark='b'/> But the first program needed almost two megabytes, and the second needs eighteen and a half kilobytes, a hundred times less. <bookmark mark='c'/> The second program doesn't store the words it counts at all, apart from a few dozen candidates. It does it by flipping coins, and it is exactly right only with high probability. By the end of this part we will know how high.",
-   "zh": "这是三十部小说中最常见的词，数了两遍。<bookmark mark='a'/>左边是第17部分的程序，它把每个不同的词都存进一张哈希表。右边是这一部分的程序。两边的计数一致，二十个词、二十个数都一样。<bookmark mark='b'/>但第一个程序需要将近两兆字节，第二个只要十八点五千字节，少了一百倍。<bookmark mark='c'/>第二个程序根本不存储它所统计的词，只留几十个候选。它靠抛硬币做到这一点，而且只是以很高的概率完全正确。到这一部分结束时，我们会知道这个概率有多高。"
-  },
-  "625e7b6235f3": {
-   "scene": "Hook",
-   "en": "That is the theme of this part: a coin flip can stand in for cleverness. <bookmark mark='a'/> With coins we can check a claimed matrix product in n squared time instead of recomputing it. <bookmark mark='b'/> We can find the weakest link of a network by contracting random edges. <bookmark mark='c'/> We can test a three-hundred-digit number for primality in milliseconds, which Part 30's cryptography depends on. <bookmark mark='d'/> And we can count a stream in a fraction of the memory. Each time, we pay with a small, provable chance of a wrong answer, or of a long wait.",
-   "zh": "这就是这一部分的主题：抛一枚硬币可以代替聪明。<bookmark mark='a'/>有了硬币，我们可以在 n 的平方时间内检验一个声称的矩阵乘积，而不必重新计算。<bookmark mark='b'/>我们可以通过随机收缩边找到网络最薄弱的环节。<bookmark mark='c'/>我们可以在几毫秒内检验一个三百位的数是否为素数，第30部分的密码学就依赖于此。<bookmark mark='d'/>我们还可以用一小部分内存统计一个数据流。每一次，我们付出的代价是一个很小的、可以证明的概率：答案错误，或者等待很久。"
-  },
-  "aefb64f53010": {
-   "scene": "Hook",
-   "en": "Part 20 of Computer Science, Built: Randomness as a Resource. <bookmark mark='a'/> In this part: the two kinds of randomized algorithm, and how repetition shrinks their errors; checking products and polynomials with random points; cuts, primes, random walks and the power of two choices; Bloom filters and sketches of streams, ending in the Job in eighteen kilobytes; the probabilistic method; and whether the coins can be removed, and where they come from.",
-   "zh": "计算机科学，从零搭建，第20部分：作为资源的随机性。<bookmark mark='a'/>这一部分包括：两类随机算法，以及重复如何缩小它们的错误；用随机点检验乘积和多项式；割、素数、随机游走，以及两个选择的力量；布隆过滤器和数据流草图，最后是十八千字节里的作业；概率方法；以及硬币能否去掉、它们从哪里来。"
-  },
-  "dee3bb2f5e0c": {
-   "scene": "LasVegas",
-   "en": "Chapter one. Las Vegas and Monte Carlo.",
-   "zh": "第1章。拉斯维加斯与蒙特卡洛。"
-  },
-  "0db8f7780009": {
-   "scene": "LasVegas",
-   "en": "An algorithm that flips coins can gamble in two ways. <bookmark mark='a'/> A Las Vegas algorithm is always right, and only its running time depends on the coins. Randomized quicksort, from Part 16, is one. <bookmark mark='b'/> A Monte Carlo algorithm runs for a fixed time, and its answer may be wrong, with a probability we can bound and then make as small as we like. Most of this part is Monte Carlo. <bookmark mark='c'/> In both cases the randomness belongs to the algorithm. We assume nothing about the input: the guarantee holds for every input, averaged only over the algorithm's own coins.",
-   "zh": "一个抛硬币的算法可以用两种方式下注。<bookmark mark='a'/>拉斯维加斯算法总是正确，只有运行时间取决于硬币。第16部分的随机快速排序就是一例。<bookmark mark='b'/>蒙特卡洛算法运行固定的时间，它的答案可能出错，出错的概率我们可以给出上界，再让它要多小就有多小。这一部分的大多数算法是蒙特卡洛算法。<bookmark mark='c'/>两种情形中，随机性都属于算法本身。我们对输入不作任何假设：保证对每一个输入都成立，只对算法自己的硬币取平均。"
-  },
-  "57bba651505c": {
-   "scene": "LasVegas",
-   "en": "Here is a Las Vegas algorithm at work: quicksort with random pivots on 2,000 keys, run 400 times. Each bar counts the runs that made that many comparisons. <bookmark mark='a'/> The average was 24,761, and Part 16's exact formula predicts 24,730. <bookmark mark='b'/> The runs spread by about 1,339 either side, and the slowest made 30,234. <bookmark mark='c'/> The worst case, about two million comparisons, is possible in principle, but it needs a long run of terrible pivots, and its probability is far too small to observe. <bookmark mark='d'/> And every single run sorted the keys correctly. Only the time was a gamble.",
-   "zh": "这是一个正在工作的拉斯维加斯算法：随机选主元的快速排序，作用于 2000 个键，运行 400 次。每根柱子统计做了那么多次比较的运行次数。<bookmark mark='a'/>平均值是 24761，第16部分的精确公式预测的是 24730。<bookmark mark='b'/>各次运行大约向两边分散 1339，最慢的一次做了 30234 次。<bookmark mark='c'/>最坏情形大约是两百万次比较，原则上可能发生，但它需要一长串糟糕的主元，概率小得根本观察不到。<bookmark mark='d'/>而每一次运行都正确地排好了序。只有时间是一场赌博。"
-  },
-  "3a40fcc20aa6": {
-   "scene": "LasVegas",
-   "en": "A Monte Carlo algorithm that errs half the time sounds useless. It isn't, because we can run it again. <bookmark mark='a'/> Many of this part's algorithms have one-sided error: when they say no, they are certainly right, and when they say yes, they are wrong with probability at most a half. Run one k times with fresh coins and believe yes only if every run says yes. All k must be fooled, and they are independent, so the error falls to a half to the k. <bookmark mark='b'/> Ten runs give one in a thousand. Forty give about one in a trillion, a smaller chance than that of the hardware itself failing during the computation. <bookmark mark='c'/> With error on both sides, say right with probability p above a half, take the majority of k runs. Hoeffding's inequality, from the AI series, says the majority is wrong with probability exponentially small in k.",
-   "zh": "一个有一半时间出错的蒙特卡洛算法听起来毫无用处。其实不然，因为我们可以再运行一次。<bookmark mark='a'/>这一部分的许多算法只有单侧错误：它们说“否”时一定正确，说“是”时出错的概率至多为二分之一。用新的硬币运行 k 次，只有每次都说“是”才相信“是”。k 次必须全部被骗，而它们相互独立，所以错误降到二分之一的 k 次方。<bookmark mark='b'/>十次给出千分之一。四十次大约是万亿分之一，比硬件本身在计算过程中出故障的可能还小。<bookmark mark='c'/>如果两侧都会出错，比如以大于二分之一的概率 p 正确，就取 k 次运行的多数。人工智能系列中的霍夫丁不等式说，多数结果出错的概率随 k 指数地变小。"
-  },
-  "a718ae34b47c": {
-   "scene": "Freivalds",
-   "en": "Chapter two. Checking a product with a coin.",
-   "zh": "第2章。用硬币检验乘积。"
-  },
-  "3a7843567326": {
-   "scene": "Freivalds",
-   "en": "Someone hands you two n by n matrices, A and B, and a third, C, and claims that C is their product. <bookmark mark='a'/> Checking by recomputing the product costs n cubed multiplications, or n to the 2.37 with the best methods of Part 19, which are impractical anyway. <bookmark mark='b'/> In 1977 Rūsiņš Freivalds suggested something cheaper. Flip n coins to make a random vector r of zeros and ones. Compute B times r, then A times that, and also C times r: three matrix-vector products, about three n squared operations. <bookmark mark='c'/> If the two vectors differ, C is certainly wrong. <bookmark mark='d'/> If they agree, C is probably right, and we can repeat with fresh coins. How probably?",
-   "zh": "有人交给你两个 n 乘 n 的矩阵 A 和 B，以及第三个矩阵 C，声称 C 是它们的乘积。<bookmark mark='a'/>重新计算乘积来检验，要做 n 的三次方次乘法；用第19部分最好的方法是 n 的 2.37 次方，而那些方法反正也不实用。<bookmark mark='b'/>1977年，Rūsiņš Freivalds 提出了更便宜的办法。抛 n 枚硬币，得到一个由零和一组成的随机向量 r。先算 B 乘 r，再用 A 乘它，同时算 C 乘 r：三次矩阵与向量的乘法，大约三倍 n 的平方次运算。<bookmark mark='c'/>如果两个向量不同，C 肯定是错的。<bookmark mark='d'/>如果相同，C 大概是对的，我们可以用新的硬币再试。有多大概率是对的？"
-  },
-  "63f419b09cb6": {
-   "scene": "Freivalds",
-   "en": "Suppose C is wrong. <bookmark mark='a'/> Then the difference D, A B minus C, is not the zero matrix. <bookmark mark='b'/> Some entry, d i j, is nonzero, and the test passes only if D r is the zero vector, so in particular only if its i-th entry is zero. <bookmark mark='c'/> That entry is d i j times r j, plus a sum s over the other coins. <bookmark mark='d'/> Imagine flipping every coin except r j first. The coins are independent, so this changes nothing, but now s is a fixed number. <bookmark mark='e'/> For the entry to vanish, r j must equal minus s over d i j: one particular value. At most one of the two outcomes of r j can do that. <bookmark mark='f'/> So a wrong C passes with probability at most a half, whatever A, B and C are, and k independent rounds let it through with probability at most two to the minus k. <bookmark mark='g'/> The trick of revealing the coins in a convenient order is called the principle of deferred decisions, and we will use it again.",
-   "zh": "假设 C 是错的。<bookmark mark='a'/>那么差 D，即 A B 减 C，不是零矩阵。<bookmark mark='b'/>它的某个元素 d i j 非零，而检验只有在 D r 是零向量时才通过，所以特别地，要求它的第 i 个分量为零。<bookmark mark='c'/>这个分量等于 d i j 乘 r j，再加上其他硬币贡献的和 s。<bookmark mark='d'/>想象先抛除 r j 以外的所有硬币。硬币是独立的，所以这不改变任何东西，但现在 s 是一个固定的数。<bookmark mark='e'/>要让这个分量为零，r j 必须等于负 s 除以 d i j：一个特定的值。r j 的两种结果中至多有一种能做到。<bookmark mark='f'/>所以无论 A、B、C 是什么，错误的 C 通过的概率至多为二分之一，k 轮独立检验让它通过的概率至多为二的负 k 次方。<bookmark mark='g'/>按方便的顺序揭开硬币的技巧叫作延迟决定原理，我们还会再用到它。"
-  },
-  "7b20ad858628": {
-   "scene": "Freivalds",
-   "en": "On this machine, with matrices of size 2000. <bookmark mark='a'/> Multiplying them takes sixteen billion floating-point operations, done by a heavily optimized library in about an eighth of a second. Checking takes twenty-four million operations. <bookmark mark='b'/> That is nearly seven hundred times fewer, but a matrix-vector product spends its time waiting for memory, so the check is only about 6 times faster in seconds, a reminder from Part 9. <bookmark mark='c'/> Now the error. We corrupted one entry of the product and tested it thousands of times. One round let it through about half the time, two rounds a quarter, and so on, right on the bound. <bookmark mark='d'/> With a single wrong entry the bound is tight, because only one coin matters. <bookmark mark='e'/> When many entries are wrong, many coins matter, and the wrong product never once got through.",
-   "zh": "在这台机器上，矩阵大小为 2000。<bookmark mark='a'/>把它们相乘需要一百六十亿次浮点运算，由一个高度优化的库完成，大约八分之一秒。检验需要两千四百万次运算。<bookmark mark='b'/>这少了将近七百倍，但矩阵与向量的乘法把时间花在等待内存上，所以按秒算，检验只快了大约 6 倍，这是第9部分的提醒。<bookmark mark='c'/>现在看错误。我们篡改了乘积的一个元素，检验了几千次。一轮检验大约一半的时间让它通过，两轮是四分之一，依此类推，正好落在上界上。<bookmark mark='d'/>只有一个元素错误时上界是紧的，因为只有一枚硬币起作用。<bookmark mark='e'/>当许多元素都错时，许多硬币起作用，错误的乘积一次也没有通过。"
-  },
-  "b660c95eeab7": {
-   "scene": "Identity",
-   "en": "Chapter three. Is this polynomial zero?",
-   "zh": "第3章。这个多项式是零吗？"
-  },
-  "d5a3e560b875": {
-   "scene": "Identity",
-   "en": "Freivalds' check is a special case of a more general fact. <bookmark mark='a'/> A polynomial that is not identically zero can't vanish at too many points: if p has degree d and each variable is chosen at random from a set S, p is zero there with probability at most d over the size of S. This is the Schwartz–Zippel lemma, found independently by Schwartz, Zippel, and DeMillo with Lipton, around 1980. <bookmark mark='b'/> With one variable, it is the fact that a degree-d polynomial has at most d roots. <bookmark mark='c'/> With more, write p as a polynomial in the first variable with top power k. Either its top coefficient vanishes, with probability at most d minus k over S by induction, or p becomes a nonzero polynomial of degree k in one variable, which vanishes with probability at most k over S. The two add up to d over S.",
-   "zh": "Freivalds 的检验是一个更一般事实的特例。<bookmark mark='a'/>一个不恒为零的多项式不可能在太多点上为零：如果 p 的次数为 d，每个变量都从集合 S 中随机选取，那么 p 在该点为零的概率至多为 d 除以 S 的大小。这就是 Schwartz–Zippel 引理，大约在1980年由 Schwartz、Zippel，以及 DeMillo 与 Lipton 各自独立发现。<bookmark mark='b'/>只有一个变量时，它就是 d 次多项式至多有 d 个根这一事实。<bookmark mark='c'/>变量更多时，把 p 写成第一个变量的多项式，最高次数为 k。要么它的最高次系数为零，由归纳假设，概率至多为 d 减 k 除以 S；要么 p 成为一个变量的非零 k 次多项式，为零的概率至多为 k 除以 S。两者相加是 d 除以 S。"
-  },
-  "c55d2c9327ab": {
-   "scene": "Identity",
-   "en": "Here is a claimed identity: the product x minus y, times y minus z, times z minus x, against an expansion. <bookmark mark='a'/> Instead of expanding, substitute random numbers and compare. We did this twenty thousand times for each size of S. <bookmark mark='b'/> The claim is false: one sign is wrong, so the two sides differ by two x z squared, a polynomial of degree three. It vanishes only when x or z is zero, which is why the agreement rates sit a little under the lemma's bound of three over S. With a thousand values, one test in five hundred is fooled; twenty tests are fooled with probability below ten to the minus fifty. <bookmark mark='c'/> The idea scales. The determinant of an eight by eight Vandermonde matrix equals a product of differences, a polynomial with forty thousand terms if you expand it. Evaluating both sides at fifty random points modulo a large prime took a fraction of a millisecond each, and they agreed every time.",
-   "zh": "这是一个声称的恒等式：x 减 y，乘 y 减 z，再乘 z 减 x，与一个展开式。<bookmark mark='a'/>不去展开，而是代入随机数并比较。对 S 的每个大小，我们做了两万次。<bookmark mark='b'/>这个声称是错的：有一个符号写错了，所以两边相差二倍 x z 的平方，一个三次多项式。它只在 x 或 z 为零时为零，这就是为什么一致率比引理的界三除以 S 稍低一点。S 有一千个值时，五百次检验中被骗一次；二十次检验全被骗的概率低于十的负五十次方。<bookmark mark='c'/>这个想法可以推广。八乘八范德蒙德矩阵的行列式等于一个差的乘积，展开后是一个有四万项的多项式。在五十个随机点上对一个大素数取模来计算两边，每次只要不到一毫秒，而且每次都一致。"
-  },
-  "c8fd963da6e6": {
-   "scene": "Identity",
-   "en": "A less obvious polynomial. <bookmark mark='a'/> Take a graph, and build its Tutte matrix: for each edge i j, put a variable x i j above the diagonal and minus x i j below it. <bookmark mark='b'/> For this graph the determinant is a perfect square, and each of its two terms is a perfect matching, a set of edges that covers every vertex exactly once. <bookmark mark='c'/> William Tutte proved in 1947 that the determinant is a nonzero polynomial exactly when the graph has a perfect matching. But it can have exponentially many terms. <bookmark mark='d'/> László Lovász saw in 1979 that we never need to expand it: substitute random numbers modulo a prime and compute one determinant by elimination, Schwartz–Zippel bounding the error. <bookmark mark='e'/> We tried it on forty-eight random graphs near the threshold where matchings appear. 33 had one, and the determinant agreed with Edmonds' blossom algorithm every time. Determinants parallelize well, so this became the route to fast parallel matching algorithms.",
-   "zh": "一个不那么明显的多项式。<bookmark mark='a'/>取一个图，构造它的 Tutte 矩阵：对每条边 i j，在对角线上方放一个变量 x i j，下方放负 x i j。<bookmark mark='b'/>对这个图，行列式是一个完全平方，它的两项各对应一个完美匹配，即恰好覆盖每个顶点一次的一组边。<bookmark mark='c'/>William Tutte 在1947年证明，图有完美匹配当且仅当这个行列式是非零多项式。但它可能有指数多项。<bookmark mark='d'/>László Lovász 在1979年看出我们根本不必展开它：代入模一个素数的随机数，用消元法算一次行列式，错误由 Schwartz–Zippel 控制。<bookmark mark='e'/>我们在四十八个随机图上试了它，这些图都在匹配开始出现的阈值附近。其中 33 个有完美匹配，行列式每次都与 Edmonds 的开花算法一致。行列式很适合并行计算，所以这成了快速并行匹配算法的途径。"
-  },
-  "27b1f9d4cba9": {
-   "scene": "Identity",
-   "en": "One more use of the same idea. <bookmark mark='a'/> Alice has the novels, twenty-five megabytes, and Bob has a copy that may differ. Sending the whole file to compare is expensive. <bookmark mark='b'/> Instead, Alice treats her file as one enormous number a, picks a random sixty-one-bit prime p, and sends p and a modulo p: sixteen bytes. Bob compares with his own number modulo p. <bookmark mark='c'/> We flipped a single bit of Bob's copy. The two remainders differ completely, and computing one took about a seventh of a second. <bookmark mark='d'/> When could different files give the same remainder? Only if p divides their difference, a number with two hundred million bits. Such a number has at most a few million prime factors as large as p, out of tens of quadrillions of primes that size. So the chance of a false match is about one in ten billion, and a second prime squares it. Part 21 turns this into Rabin and Karp's string search, rolling the remainder along the text.",
-   "zh": "同一个想法的另一个用途。<bookmark mark='a'/>Alice 有这些小说，两千五百万字节，Bob 有一份可能不同的副本。为了比较而传送整个文件代价太高。<bookmark mark='b'/>Alice 把她的文件看成一个巨大的数 a，随机选一个六十一位的素数 p，发送 p 和 a 模 p：十六个字节。Bob 用他自己的数模 p 来比较。<bookmark mark='c'/>我们把 Bob 副本中的一个比特翻转了。两个余数完全不同，计算一个大约要七分之一秒。<bookmark mark='d'/>不同的文件什么时候会给出相同的余数？只有当 p 整除它们的差时，而这个差是一个有两亿个比特的数。这样的数至多有几百万个与 p 一样大的素因子，而这么大的素数有几亿亿个。所以误判的概率大约是百亿分之一，换第二个素数再试一次，就把它平方。第21部分把这变成 Rabin 与 Karp 的字符串搜索，让余数沿着文本滚动。"
-  },
-  "9eb1f4d8386a": {
-   "scene": "Karger",
-   "en": "Chapter four. A minimum cut by contraction.",
-   "zh": "第4章。用收缩求最小割。"
-  },
-  "07b7e1131950": {
-   "scene": "Karger",
-   "en": "A cut of a graph splits its vertices into two sides; its size is the number of edges between them. This graph has two dense clusters joined by three edges, so its minimum cut has size three. Finding a minimum cut is a classic problem, usually solved with maximum flows. <bookmark mark='a'/> David Karger's algorithm, from 1993, is almost embarrassingly simple. Pick an edge at random and contract it: merge its two ends into one vertex, keep all the other edges, and throw away the loops. Repeat until two vertices are left. The edges between them are a cut. <bookmark mark='b'/> This run kept all three bridges to the end and found the minimum cut.",
-   "zh": "图的一个割把顶点分成两边；割的大小是两边之间的边数。这个图有两个稠密的簇，由三条边相连，所以它的最小割大小为三。求最小割是一个经典问题，通常用最大流来解。<bookmark mark='a'/>David Karger 1993年的算法简单得几乎令人难为情。随机选一条边并收缩它：把它的两个端点合并成一个顶点，保留所有其他边，丢掉自环。重复直到只剩两个顶点。它们之间的边就是一个割。<bookmark mark='b'/>这一次运行把三座桥一直保留到最后，找到了最小割。"
-  },
-  "cec29bca133e": {
-   "scene": "Karger",
-   "en": "Run it again with other coins. <bookmark mark='a'/> This time a bridge was contracted along the way, and the two clusters were merged. <bookmark mark='b'/> What is left cuts a single vertex off from the rest, a cut of size 5. Each run can fail, so how often does it succeed?",
-   "zh": "用别的硬币再运行一次。<bookmark mark='a'/>这一次，途中有一座桥被收缩了，两个簇被合并在一起。<bookmark mark='b'/>剩下的结果是把单个顶点与其余部分切开，一个大小为 5 的割。每次运行都可能失败，那么它多常成功？"
-  },
-  "1eca6895706a": {
-   "scene": "Karger",
-   "en": "The analysis is as short as the algorithm. Fix a minimum cut C, of size k. <bookmark mark='a'/> Every vertex has at least k edges, because otherwise the edges around that one vertex would be a smaller cut. <bookmark mark='b'/> So there are at least n k over two edges, and the first random edge lands in C with probability at most two over n. <bookmark mark='c'/> Contracting never creates a smaller cut, so the same argument works at every step, with n minus one vertices, then n minus two, and so on. <bookmark mark='d'/> C survives to the end if it survives every step. Write the product out, and almost everything cancels: <bookmark mark='e'/> the success probability is at least two over n times n minus one, one over n choose two. <bookmark mark='f'/> There is a free corollary. A specific minimum cut is the output with at least that probability, and different cuts are different outcomes, so no graph has more than n choose two minimum cuts.",
-   "zh": "分析和算法一样短。固定一个大小为 k 的最小割 C。<bookmark mark='a'/>每个顶点至少有 k 条边，否则这一个顶点周围的边就构成一个更小的割。<bookmark mark='b'/>所以至少有 n k 除以二条边，第一条随机边落在 C 中的概率至多为二除以 n。<bookmark mark='c'/>收缩从不产生更小的割，所以同样的论证在每一步都成立，先是 n 减一个顶点，再是 n 减二个，依此类推。<bookmark mark='d'/>C 能存活到最后，当且仅当它在每一步都存活。把乘积写出来，几乎所有项都消掉了：<bookmark mark='e'/>成功概率至少是二除以 n 乘 n 减一，即 n 选二分之一。<bookmark mark='f'/>还有一个免费的推论。一个特定的最小割至少以这个概率成为输出，而不同的割是不同的结果，所以没有哪个图的最小割超过 n 选二个。"
-  },
-  "429a6dda459f": {
-   "scene": "Karger",
-   "en": "We ran the contraction twenty thousand times on the two-cluster graph. Each bar counts the runs that ended with a cut of that size. <bookmark mark='a'/> The minimum cut came out in 13% of runs. The bound promised at least one in a hundred and twenty, under one percent, so on this graph the truth is about fifteen times better. <bookmark mark='b'/> The bound is a worst case, and repetition does the rest: run it n choose two times log n times and keep the smallest cut, and it is wrong with probability at most one over n. <bookmark mark='c'/> The worst case is real. In a ring of ten vertices, any two of the ten edges form a minimum cut, which makes forty-five of them, exactly n choose two. The runs found all forty-five, each about once in forty-five tries, so here the bound is exact.",
-   "zh": "我们在双簇图上运行了两万次收缩。每根柱子统计结果为该大小的割的运行次数。<bookmark mark='a'/>最小割出现在 13% 的运行中。上界保证至少一百二十分之一，不到百分之一，所以在这个图上实际情况大约好十五倍。<bookmark mark='b'/>上界是最坏情形，其余的交给重复：运行 n 选二乘 log n 次，保留最小的割，出错的概率至多为 n 分之一。<bookmark mark='c'/>最坏情形是真实存在的。在一个十个顶点的环中，十条边中任意两条都构成一个最小割，一共四十五个，正好是 n 选二。各次运行找到了全部四十五个，每个大约四十五次中出现一次，所以这里上界是精确的。"
-  },
-  "092bca0c6570": {
-   "scene": "Karger",
-   "en": "Where is the waste? <bookmark mark='a'/> Early contractions almost never hit the minimum cut, <bookmark mark='b'/> so all the risk is at the end. <bookmark mark='c'/> Karger and Clifford Stein, in 1996, contract only to about n over root two vertices, where the cut survives with probability at least a half, <bookmark mark='d'/> then recurse twice and keep the better result. <bookmark mark='e'/> That takes n squared log n time, and succeeds with probability about one over log n instead of one over n squared. <bookmark mark='f'/> On our forty-eight-vertex test graph, a single plain contraction succeeded 18% of the time; Karger–Stein succeeded in all forty of its runs.",
-   "zh": "浪费在哪里？<bookmark mark='a'/>早期的收缩几乎从不碰到最小割，<bookmark mark='b'/>所以所有风险都在最后。<bookmark mark='c'/>Karger 与 Clifford Stein 在1996年只收缩到大约 n 除以根号二个顶点，这时割仍以至少二分之一的概率存活，<bookmark mark='d'/>然后递归两次，保留较好的结果。<bookmark mark='e'/>这需要 n 平方 log n 的时间，成功概率大约是一除以 log n，而不是一除以 n 的平方。<bookmark mark='f'/>在我们四十八个顶点的测试图上，一次普通收缩成功的比例是 18%；Karger–Stein 的四十次运行全部成功。"
-  },
-  "3dbfda3b8531": {
-   "scene": "Primes",
-   "en": "Chapter five. Primes in milliseconds.",
-   "zh": "第5章。几毫秒内的素数。"
-  },
-  "bd762d952345": {
-   "scene": "Primes",
-   "en": "Part 30 will need prime numbers three hundred digits long, and lots of them. Testing one by trial division would take ten to the hundred and fifty divisions. <bookmark mark='a'/> Fermat's little theorem gives a shortcut. If n is prime, then for every a not divisible by n, a to the n minus one is one, modulo n. <bookmark mark='b'/> So if we find an a where it isn't, n is certainly composite. Two to the ninetieth, modulo ninety-one, is sixty-four, <bookmark mark='c'/> so ninety-one is composite, and we learned that without finding a factor. <bookmark mark='d'/> But some bases lie. Three to the ninetieth is one modulo ninety-one, as if ninety-one were prime. <bookmark mark='e'/> Each test is cheap: repeated squaring computes the power with about one squaring per bit of n.",
-   "zh": "第30部分需要三百位长的素数，而且需要很多。用试除法检验一个，要做十的一百五十次方次除法。<bookmark mark='a'/>费马小定理给出了一条捷径。如果 n 是素数，那么对每个不被 n 整除的 a，a 的 n 减一次方模 n 等于一。<bookmark mark='b'/>所以只要找到一个 a 使它不等于一，n 就一定是合数。二的九十次方模九十一是六十四，<bookmark mark='c'/>所以九十一是合数，而我们没有找到任何因子就知道了这一点。<bookmark mark='d'/>但有些底数会说谎。三的九十次方模九十一是一，就好像九十一是素数一样。<bookmark mark='e'/>每次检验都很便宜：反复平方法计算这个幂，n 的每一位大约只需一次平方。"
-  },
-  "a8f3362c2dcb": {
-   "scene": "Primes",
-   "en": "Worse, some composites fool every base. <bookmark mark='a'/> Here are the bases from one to five hundred and sixty for n equals five hundred and sixty-one, which is three times eleven times seventeen. Every base that shares no factor with it, all 320 of them, passes Fermat's test. <bookmark mark='b'/> Alwin Korselt explained why in 1899: this happens exactly when n is squarefree and p minus one divides n minus one for each of its prime factors p. Five hundred and sixty is divisible by two, ten and sixteen. <bookmark mark='c'/> Robert Carmichael found the first examples in 1910. There are 43 below a million, and in 1994 Alford, Granville and Pomerance proved there are infinitely many. Fermat's test needs repairing.",
-   "zh": "更糟的是，有些合数能骗过所有底数。<bookmark mark='a'/>这里是 n 等于五百六十一时从一到五百六十的底数，五百六十一等于三乘十一乘十七。每个与它没有公因子的底数，全部 320 个，都通过了费马检验。<bookmark mark='b'/>Alwin Korselt 在1899年解释了原因：这种情况恰好在 n 无平方因子、且对它的每个素因子 p，p 减一都整除 n 减一时发生。五百六十能被二、十和十六整除。<bookmark mark='c'/>Robert Carmichael 在1910年找到了最早的例子。一百万以下有 43 个，1994年 Alford、Granville 与 Pomerance 证明了它们有无穷多个。费马检验需要修补。"
-  },
-  "cac42d56af41": {
-   "scene": "Primes",
-   "en": "Gary Miller in 1976 and Michael Rabin in 1980 found the repair. <bookmark mark='a'/> Modulo a prime, the only square roots of one are one and minus one, because x squared minus one factors as x minus one times x plus one, and in a field a product is zero only if a factor is. <bookmark mark='b'/> Write n minus one as a power of two times an odd number d, and compute a to the d, then keep squaring until we reach a to the n minus one. <bookmark mark='c'/> For a prime, the sequence is all ones, or it hits minus one somewhere before the first one. <bookmark mark='d'/> Watch five hundred and sixty-one with base two: two hundred and sixty-three, one hundred and sixty-six, sixty-seven, then one. <bookmark mark='e'/> Sixty-seven squares to one but isn't plus or minus one: a square root of one that no prime can have. Fermat was fooled; this test isn't. <bookmark mark='f'/> Rabin proved that for every odd composite, at most a quarter of the bases lie. Five hundred and sixty-one has only 10. <bookmark mark='g'/> Searching every odd composite below twenty thousand, the worst was nine, with exactly a quarter, so the bound can't be improved. Forty random bases give an error below four to the minus forty, about ten to the minus twenty-four.",
-   "zh": "Gary Miller 在1976年、Michael Rabin 在1980年找到了修补的办法。<bookmark mark='a'/>模一个素数，一的平方根只有一和负一，因为 x 的平方减一分解为 x 减一乘 x 加一，而在域中，乘积为零仅当某个因子为零。<bookmark mark='b'/>把 n 减一写成二的幂乘一个奇数 d，先算 a 的 d 次方，再不断平方，直到 a 的 n 减一次方。<bookmark mark='c'/>对素数来说，这个序列要么全是一，要么在第一个一之前的某处出现负一。<bookmark mark='d'/>看五百六十一取底数二：二百六十三、一百六十六、六十七，然后是一。<bookmark mark='e'/>六十七的平方是一，但它既不是一也不是负一：这是任何素数都不可能有的一的平方根。费马检验被骗了，这个检验没有。<bookmark mark='f'/>Rabin 证明，对每个奇合数，至多四分之一的底数会说谎。五百六十一只有 10 个。<bookmark mark='g'/>搜索两万以下的每个奇合数，最坏的是九，恰好四分之一，所以这个界不能改进。四十个随机底数给出的错误低于四的负四十次方，大约十的负二十四次方。"
-  },
-  "fc172134a202": {
-   "scene": "Primes",
-   "en": "Now we can find big primes: pick random odd numbers of the right size, and keep the first that passes forty rounds. <bookmark mark='a'/> About one number in log n near n is prime, so a 1024-bit search tries about three hundred and fifty odd candidates. <bookmark mark='b'/> Almost all fail the first round, three milliseconds here, and a 1024-bit prime took about a second in plain Python. <bookmark mark='c'/> In 2002, Manindra Agrawal, Neeraj Kayal and Nitin Saxena found a deterministic polynomial-time test, settling a very old question. But it is far slower, <bookmark mark='d'/> and every cryptographic library still flips coins.",
-   "zh": "现在我们可以找大素数了：随机选大小合适的奇数，保留第一个通过四十轮检验的。<bookmark mark='a'/>n 附近大约每 log n 个数中有一个素数，所以一次 1024 位的搜索大约要试三百五十个奇数候选。<bookmark mark='b'/>几乎所有候选在第一轮就失败，在这里一轮要三毫秒，用纯 Python 找一个 1024 位素数大约用了一秒。<bookmark mark='c'/>2002年，Manindra Agrawal、Neeraj Kayal 与 Nitin Saxena 找到了一个多项式时间的确定性检验，解决了一个非常古老的问题。但它慢得多，<bookmark mark='d'/>每个密码学库仍然在抛硬币。"
-  },
-  "b351da465561": {
-   "scene": "Walks",
-   "en": "Chapter six. Random walks that solve SAT.",
-   "zh": "第6章。求解 SAT 的随机游走。"
-  },
-  "609df8b1e2e0": {
-   "scene": "Walks",
-   "en": "A 2-SAT formula is an and of clauses, each an or of two literals. Part 18 solved it exactly, with strongly connected components of the implication graph. <bookmark mark='a'/> Christos Papadimitriou analyzed a much dumber method in 1991. Start anywhere. While some clause fails, pick one, and flip one of its two variables, chosen by a coin. <bookmark mark='b'/> It uses no structure at all. Why should it ever finish?",
-   "zh": "2-SAT 公式是若干子句的合取，每个子句是两个文字的析取。第18部分用蕴含图的强连通分量精确地解决了它。<bookmark mark='a'/>Christos Papadimitriou 在1991年分析了一种笨得多的方法。从任意赋值开始。只要有子句不成立，就挑一个，用硬币选它的两个变量之一并翻转。<bookmark mark='b'/>它完全不利用结构。凭什么它会结束？"
-  },
-  "f3703dd794ab": {
-   "scene": "Walks",
-   "en": "Fix one satisfying assignment, x star, and let D be the number of variables where our assignment differs from it. <bookmark mark='a'/> A clause that fails has both its literals false, but x star makes at least one of them true, so we disagree with x star on at least one of the two variables. <bookmark mark='b'/> Flipping a random one of the two moves D one step closer to zero with probability at least a half. <bookmark mark='c'/> So D does a random walk on the line from zero to n, pushed toward zero at least as often as away. This is the gambler's ruin. From any start, the expected time to reach zero is at most n squared. <bookmark mark='d'/> Here is one walk, starting eight steps away. It took 178 flips. We may even stop sooner, at some other solution. <bookmark mark='e'/> So run two n squared steps. If the formula is satisfiable, Markov's inequality says we fail with probability at most a half, and repetition does the rest. The bound is for the worst formula: on random satisfiable ones, with up to three hundred and twenty variables, the walk needed only about two flips per variable.",
-   "zh": "固定一个满足赋值 x 星，令 D 为我们的赋值与它不同的变量个数。<bookmark mark='a'/>一个不成立的子句两个文字都为假，但 x 星至少使其中一个为真，所以在这两个变量中，我们至少有一个与 x 星不同。<bookmark mark='b'/>随机翻转两者之一，以至少二分之一的概率使 D 向零靠近一步。<bookmark mark='c'/>于是 D 在从零到 n 的直线上做随机游走，被推向零的次数至少和远离的一样多。这就是赌徒破产问题。从任何起点出发，到达零的期望时间至多为 n 的平方。<bookmark mark='d'/>这是一次游走，从八步之外开始。它用了 178 次翻转。我们甚至可能更早停下，停在另一个解上。<bookmark mark='e'/>所以运行二倍 n 平方步。如果公式可满足，马尔可夫不等式说我们失败的概率至多为二分之一，其余的交给重复。这个上界针对最坏的公式：在多达三百二十个变量的随机可满足公式上，游走每个变量只需要大约两次翻转。"
-  },
-  "d465b0a69da4": {
-   "scene": "Walks",
-   "en": "For 3-SAT the same walk works, but worse. <bookmark mark='a'/> A failing clause now has three variables, and only one of them might be the right one to flip, so D falls with probability only a third. <bookmark mark='b'/> The walk drifts away from the solution, so Uwe Schöning, in 1999, restarts it from a fresh random assignment every three n flips. <bookmark mark='c'/> A careful count shows each restart succeeds with probability about three quarters to the n, so about four thirds to the n restarts are enough: exponential, but far fewer than the two to the n assignments. <bookmark mark='d'/> We tested it on the hardest small instances we could make, random formulas at the threshold with exactly one satisfying assignment, checked by brute force. <bookmark mark='e'/> With 20 variables, the walk needed about 33 restarts on average, under Schöning's bound, which is for the worst case, where brute force has about a million assignments to try. The best algorithms known today, descendants of Paturi, Pudlák, Saks and Zane's, get down to about one point three to the n. Whether something much better exists is the question behind the exponential time hypothesis of Part 27.",
-   "zh": "对 3-SAT，同样的游走也行，但更差。<bookmark mark='a'/>现在一个不成立的子句有三个变量，其中可能只有一个是该翻转的，所以 D 下降的概率只有三分之一。<bookmark mark='b'/>游走会远离解，所以 Uwe Schöning 在1999年每翻转三倍 n 次就从一个新的随机赋值重新开始。<bookmark mark='c'/>仔细计算表明，每次重启成功的概率大约是四分之三的 n 次方，所以大约四分之三的倒数的 n 次方次重启就够了：仍是指数，但远少于二的 n 次方个赋值。<bookmark mark='d'/>我们在能造出的最难的小实例上测试了它：阈值处恰有一个满足赋值的随机公式，用穷举法核实。<bookmark mark='e'/>有 20 个变量时，游走平均需要大约 33 次重启，低于针对最坏情形的 Schöning 上界，而穷举法要试大约一百万个赋值。今天已知最好的算法，Paturi、Pudlák、Saks 与 Zane 算法的后继者，能降到大约一点三的 n 次方。是否存在好得多的算法，正是第27部分指数时间假设背后的问题。"
-  },
-  "0096591fcb11": {
-   "scene": "Bins",
-   "en": "Chapter seven. Balls into bins, and the power of two choices.",
-   "zh": "第7章。球与箱，以及两个选择的力量。"
-  },
-  "95cc23a8472c": {
-   "scene": "Bins",
-   "en": "Throw balls into bins at random. How full does the fullest bin get? This question decides how well a hash table's chains, Part 17, or a server farm's queues are balanced. <bookmark mark='a'/> On the left, each of twenty-four balls goes into one random bin of twelve. On the right, each ball looks at two random bins and goes into the emptier one. <bookmark mark='b'/> The same random numbers drive both sides: the left uses the first choice, the right uses both. <bookmark mark='c'/> One choice leaves some bins empty and piles others high. Two choices are strikingly even.",
-   "zh": "把球随机扔进箱子。最满的箱子会有多满？这个问题决定了哈希表的链（第17部分）或服务器集群的队列平衡得有多好。<bookmark mark='a'/>左边，二十四个球各自进入十二个箱子中的一个随机箱子。右边，每个球看两个随机箱子，进入较空的那个。<bookmark mark='b'/>两边由同样的随机数驱动：左边用第一个选择，右边两个都用。<bookmark mark='c'/>一个选择会让一些箱子空着，另一些堆得很高。两个选择则出奇地均匀。"
-  },
-  "34ddc0c169bd": {
-   "scene": "Bins",
-   "en": "Now with n balls and n bins, for n from a thousand to a million. <bookmark mark='a'/> With one choice the fullest bin holds about log n over log log n balls; the column beside it is that formula, which is right only up to a factor that tends to one very slowly, so the measured loads are higher. <bookmark mark='b'/> With two choices the fullest bin holds about log log n over log two, plus a constant. For a million balls: ten against four. <bookmark mark='c'/> At a million, the one-choice loads follow a Poisson law, a fraction e to the minus one over k factorial of the bins holding k, with 9 unlucky bins holding 8. With two choices nothing went above 4. A tiny change in the rule, an exponential change in the result. This is the power of two choices, from Azar, Broder, Karlin and Upfal in 1994.",
-   "zh": "现在是 n 个球和 n 个箱子，n 从一千到一百万。<bookmark mark='a'/>一个选择时，最满的箱子大约有 log n 除以 log log n 个球；旁边一列就是这个公式，它只在一个非常缓慢地趋于一的因子之内正确，所以测得的负载更高。<bookmark mark='b'/>两个选择时，最满的箱子大约有 log log n 除以 log 二个球，再加一个常数。一百万个球时：十对四。<bookmark mark='c'/>在一百万时，一个选择的负载服从泊松分布，装有 k 个球的箱子占 e 的负一次方除以 k 的阶乘，有 9 个倒霉的箱子装了 8 个。两个选择时没有超过 4 的。规则上一个微小的改变，结果上一个指数级的改变。这就是两个选择的力量，来自 Azar、Broder、Karlin 与 Upfal 1994年的工作。"
-  },
-  "7f9f1e4f57ad": {
-   "scene": "Bins",
-   "en": "Why? <bookmark mark='a'/> Let beta i be the number of bins holding at least i balls. <bookmark mark='b'/> A ball lands at height i plus one only if both its bins already hold at least i, <bookmark mark='c'/> with probability about beta i over n, squared. So each height's fraction is about the square of the one below. <bookmark mark='d'/> Squaring collapses fast: a quarter, a sixteenth, one in two hundred and fifty-six, one in sixty-five thousand, below one over n after about log log n steps. <bookmark mark='e'/> With one choice there is no squaring, only one over k factorial. <bookmark mark='f'/> With d choices the load is log log n over log d, so most of the gain is in the second choice. <bookmark mark='g'/> Load balancers use exactly this rule, and cuckoo hashing gives every key two homes.",
-   "zh": "为什么？<bookmark mark='a'/>令 beta i 为至少装有 i 个球的箱子数。<bookmark mark='b'/>一个球只有在它的两个箱子都已至少有 i 个球时，才会落在第 i 加一层，<bookmark mark='c'/>概率大约是 beta i 除以 n 的平方。所以每一层的比例大约是下一层比例的平方。<bookmark mark='d'/>平方让它迅速崩塌：四分之一、十六分之一、二百五十六分之一、六万五千分之一，大约 log log n 步之后就低于 n 分之一。<bookmark mark='e'/>一个选择时没有平方，只有 k 的阶乘分之一。<bookmark mark='f'/>d 个选择时负载是 log log n 除以 log d，所以大部分收益来自第二个选择。<bookmark mark='g'/>负载均衡器正是用这条规则，布谷鸟哈希给每个键两个位置。"
-  },
-  "4db9e1e117d2": {
-   "scene": "Bloom",
-   "en": "Chapter eight. Bloom filters.",
-   "zh": "第8章。布隆过滤器。"
-  },
-  "9d5d5c3f7a85": {
-   "scene": "Bloom",
-   "en": "In 1970 Burton Bloom asked how to test membership in a set using far less memory than the set itself, if we accept an occasional wrong yes. <bookmark mark='a'/> Take an array of bits, all zero, and three hash functions. <bookmark mark='b'/> To add a word, hash it three times and set those three bits. Here go six words from Moby-Dick. <bookmark mark='c'/> The words themselves are not stored anywhere. Only bits remain.",
-   "zh": "1970年，Burton Bloom 问：如果偶尔接受一个错误的“是”，能否用远少于集合本身的内存来检验成员关系？<bookmark mark='a'/>取一个全为零的比特数组和三个哈希函数。<bookmark mark='b'/>要加入一个词，就把它哈希三次，把那三个比特置一。这里加入《白鲸》中的六个词。<bookmark mark='c'/>词本身没有存在任何地方。只剩下比特。"
-  },
-  "f3d99ca85687": {
-   "scene": "Bloom",
-   "en": "To ask whether a word is in the set, check its three bits. <bookmark mark='a'/> Dog: one of its bits is zero, so dog was certainly never added. <bookmark mark='b'/> Boat: also a zero, certainly not. <bookmark mark='c'/> Ocean: all three of its bits are set, by whale, so the filter says yes, wrongly. A false positive. <bookmark mark='d'/> Deck: also yes, its bits set by harpoon and Queequeg. A Bloom filter never says no to a word that is in the set, but it sometimes says yes to one that isn't. How often?",
-   "zh": "要问一个词是否在集合中，就检查它的三个比特。<bookmark mark='a'/>dog：它有一个比特是零，所以 dog 肯定从未加入。<bookmark mark='b'/>boat：也有一个零，肯定不在。<bookmark mark='c'/>ocean：它的三个比特都被 whale 置了一，所以过滤器说“是”，错了。这是一个假阳性。<bookmark mark='d'/>deck：也说“是”，它的比特由 harpoon 和 Queequeg 置一。布隆过滤器对集合中的词从不说“否”，但有时对不在集合中的词说“是”。这有多常见？"
-  },
-  "f7015857ccc9": {
-   "scene": "Bloom",
-   "en": "Suppose we add n words to m bits with k hash functions, and pretend the hashes are truly random. <bookmark mark='a'/> A particular bit is missed by all k n hashes with probability one minus one over m, to the k n, which is about e to the minus k n over m. <bookmark mark='b'/> A word that was never added is a false positive if all k of its bits happen to be set: probability about one minus that, to the k. <bookmark mark='c'/> There is a balance. With few hash functions each probe is likely to hit a set bit; with many, the array fills up. <bookmark mark='d'/> Calculus gives the best k, m over n times log two, and at that point exactly half the bits are set. The error is then about 0.6185 to the power m over n. <bookmark mark='e'/> Every extra bit per word divides the error by about 1.6, and ten bits per word give about one percent, whatever the words are and however long.",
-   "zh": "假设我们用 k 个哈希函数把 n 个词加入 m 个比特，并假定哈希真正随机。<bookmark mark='a'/>某个特定比特被全部 k n 次哈希错过的概率是一减 m 分之一的 k n 次方，约等于 e 的负 k n 除以 m 次方。<bookmark mark='b'/>一个从未加入的词，如果它的 k 个比特恰好都被置一，就是假阳性：概率约为一减去上面那个数，再取 k 次方。<bookmark mark='c'/>这里有一个平衡。哈希函数少，每次探查很可能碰到置一的比特；哈希函数多，数组会被填满。<bookmark mark='d'/>微积分给出最好的 k，即 m 除以 n 乘 log 二，此时恰好一半的比特被置一。错误率约为 0.6185 的 m 除以 n 次方。<bookmark mark='e'/>每个词每多一个比特，错误率大约除以 1.6，每个词十个比特给出大约百分之一，无论词是什么、有多长。"
-  },
-  "3131e4789b95": {
-   "scene": "Bloom",
-   "en": "Now a real one: all 57,895 distinct words of the novels, ten bits per word, queried with a hundred thousand random strings that are not words of the novels. <bookmark mark='a'/> The purple curve is the formula, and the green dots are what we measured for each number of hash functions. <bookmark mark='b'/> At the best k, seven, 0.81 percent of the non-words slipped through, against a predicted 0.82, and almost exactly half the bits were set. <bookmark mark='c'/> With sixteen bits per word the rate falls to one in two thousand. <bookmark mark='d'/> The filter takes seventy kilobytes, while just the letters of the words take four hundred and forty, and it never missed a word that was there. <bookmark mark='e'/> Counting filters allow deletions, cuckoo filters do better at low error rates, and nearly every log-structured database keeps a Bloom filter per file to skip disk reads, as Part 34 will show.",
-   "zh": "现在看一个真实的：小说中全部 57895 个不同的词，每个词十个比特，用十万个不是小说中词的随机字符串来查询。<bookmark mark='a'/>紫色曲线是公式，绿色的点是我们对每个哈希函数个数测得的值。<bookmark mark='b'/>在最好的 k 即七时，有百分之 0.81 的非词溜了过去，预测值是 0.82，而且几乎恰好一半的比特被置一。<bookmark mark='c'/>每个词十六个比特时，这个比例降到两千分之一。<bookmark mark='d'/>过滤器占七十千字节，而光是这些词的字母就要四百四十千字节，它也从没漏掉一个真正在集合中的词。<bookmark mark='e'/>计数过滤器允许删除，布谷鸟过滤器在低错误率时更好，几乎每个日志结构的数据库都为每个文件保存一个布隆过滤器来跳过磁盘读取，第34部分会展示这一点。"
-  },
-  "201e4232e6ac": {
-   "scene": "Stream",
-   "en": "Chapter nine. Streams: one pass, little memory.",
-   "zh": "第9章。数据流：一遍扫描，很少的内存。"
-  },
-  "8f3c608ef031": {
-   "scene": "Stream",
-   "en": "Part 17 kept every distinct word of the novels, almost fifty-eight thousand. What if we can't afford that? <bookmark mark='a'/> In the streaming model the items go by once, <bookmark mark='b'/> can't be stored, <bookmark mark='c'/> and memory is far smaller than the stream, often smaller than the number of different items in it. <bookmark mark='d'/> Routers, sensors, logs and query planners live in this world.",
-   "zh": "第17部分保存了小说中的每个不同的词，将近五万八千个。如果我们负担不起呢？<bookmark mark='a'/>在流模型中，数据项只经过一次，<bookmark mark='b'/>无法存下来，<bookmark mark='c'/>而内存远小于数据流，往往比其中不同数据项的个数还小。<bookmark mark='d'/>路由器、传感器、日志和查询规划器都生活在这个世界里。"
-  },
-  "5275061aeb45": {
-   "scene": "Stream",
-   "en": "First, a fair sample. We want k items chosen uniformly from the stream, but we don't know how long it will be. <bookmark mark='a'/> Reservoir sampling, as Jeffrey Vitter described it in 1985: keep the first k. When the i-th item arrives, keep it with probability k over i, throwing out a random one of the k. <bookmark mark='b'/> By induction, every item seen so far is in the sample with probability exactly k over i. An item stays when the next one arrives unless the newcomer is kept and picks its slot, and the arithmetic turns k over i into k over i plus one. <bookmark mark='c'/> We drew five items from a hundred, fifty thousand times: every item was picked close to the expected two thousand five hundred times. <bookmark mark='d'/> And here are eight words drawn uniformly from all four million six hundred thousand in the novels, in a single pass.",
-   "zh": "首先，一个公平的样本。我们想从数据流中均匀地选出 k 项，但不知道它会有多长。<bookmark mark='a'/>蓄水池抽样，按 Jeffrey Vitter 1985年的描述：保留前 k 项。第 i 项到来时，以 k 除以 i 的概率保留它，并随机扔掉 k 项中的一项。<bookmark mark='b'/>由归纳法，到目前为止见过的每一项都恰好以 k 除以 i 的概率在样本中。当下一项到来时，一项留下，除非新来者被保留并选中了它的位置，算一下，k 除以 i 就变成 k 除以 i 加一。<bookmark mark='c'/>我们从一百项中抽五项，抽了五万次：每一项被选中的次数都接近期望的两千五百次。<bookmark mark='d'/>这里是从小说全部四百六十万个词中一遍扫描、均匀抽出的八个词。"
-  },
-  "482e37bdba4e": {
-   "scene": "Stream",
-   "en": "Next, the frequent items, the Job's own question. <bookmark mark='a'/> Jayadev Misra and David Gries gave a deterministic method in 1982, with k minus one counters. A word that has a counter adds one. A new word takes a free counter. A new word with no free counter subtracts one from every counter, and the counters that reach zero are freed. <bookmark mark='b'/> Each subtraction cancels k words at once, the new one and one from each counter, so it can happen at most n over k times. So every count is low by at most n over k, and any word more frequent than n over k must survive. <bookmark mark='c'/> With ninety-nine counters on the novels, n over k is about forty-six thousand. The thirteen words above that all survived, each undercounted by about thirty-nine thousand, and words below it may vanish. A second pass, counting only the survivors, makes the counts exact. But the estimates themselves are poor. Can coin flips do better?",
-   "zh": "接下来是频繁项，正是作业自己的问题。<bookmark mark='a'/>Jayadev Misra 与 David Gries 在1982年给出了一个确定性方法，用 k 减一个计数器。已有计数器的词加一。新词占用一个空闲计数器。没有空闲计数器的新词让每个计数器减一，减到零的计数器被释放。<bookmark mark='b'/>每次减法一次抵消 k 个词：新来的一个，以及每个计数器各一个，所以它至多发生 n 除以 k 次。因此每个计数至多偏低 n 除以 k，任何比 n 除以 k 更频繁的词一定留存下来。<bookmark mark='c'/>在小说上用九十九个计数器，n 除以 k 大约是四万六千。高于它的十三个词全部留存，每个大约少计三万九千，低于它的词可能消失。第二遍扫描，只统计留存下来的词，就能得到精确的计数。但估计值本身很差。硬币能做得更好吗？"
-  },
-  "bcc4efd81d7b": {
-   "scene": "Stream",
-   "en": "Graham Cormode and S. Muthukrishnan's Count-Min sketch, from 2005, keeps a small table: d rows of w counters, with an independent hash function for each row. <bookmark mark='a'/> To add a word, hash it once per row and add one to each of those counters. <bookmark mark='b'/> To estimate a word's count, look at the same d counters and take the smallest. <bookmark mark='c'/> Every counter holds the word's true count plus the counts of whatever other words collided with it there. Collisions only ever add, so the estimate is never too low, and the minimum picks the row with the fewest collisions.",
-   "zh": "Graham Cormode 与 S. Muthukrishnan 2005年的 Count-Min 草图保存一张小表：d 行，每行 w 个计数器，每行一个独立的哈希函数。<bookmark mark='a'/>要加入一个词，每行哈希一次，把那些计数器各加一。<bookmark mark='b'/>要估计一个词的计数，看同样的 d 个计数器，取最小值。<bookmark mark='c'/>每个计数器都等于这个词的真实计数，加上在那里与它碰撞的其他词的计数。碰撞只会增加，所以估计值从不偏低，而最小值选出了碰撞最少的那一行。"
-  },
-  "6dd1946f37d8": {
-   "scene": "Stream",
-   "en": "How large can the error be? <bookmark mark='a'/> In one row, the excess is the total count of the other words that hash to the same counter. With a good hash family, each other word lands there with probability one over w, so the expected excess is at most N over w, where N is the length of the stream. By Markov's inequality, the excess reaches e times that with probability at most one over e. <bookmark mark='b'/> The minimum is that bad only if every row is, and the rows are independent, so the probabilities multiply. <bookmark mark='c'/> Choose w as e over epsilon and d as log one over delta, and every estimate is within epsilon N of the truth with probability one minus delta. <bookmark mark='d'/> The memory depends on epsilon and delta, not on how many distinct words there are. <bookmark mark='e'/> On the novels, with four rows of 1021 counters, the guaranteed bound is about 12,273, no word came near it, and the typical excess was about 968. With two rows, a third of a percent of the words went over, well inside the thirteen and a half percent the theorem allows.",
-   "zh": "误差能有多大？<bookmark mark='a'/>在一行中，多出的部分是哈希到同一个计数器的其他词的总计数。用一个好的哈希族，每个其他词以 w 分之一的概率落在那里，所以期望的多余量至多为 N 除以 w，N 是数据流的长度。由马尔可夫不等式，多余量达到它的 e 倍的概率至多为 e 分之一。<bookmark mark='b'/>只有每一行都那么糟，最小值才会那么糟，而各行相互独立，所以概率相乘。<bookmark mark='c'/>取 w 为 e 除以 epsilon，d 为 log 一除以 delta，那么每个估计值以一减 delta 的概率落在真实值的 epsilon N 之内。<bookmark mark='d'/>内存取决于 epsilon 和 delta，与有多少个不同的词无关。<bookmark mark='e'/>在小说上，用四行、每行 1021 个计数器，保证的上界大约是 12273，没有一个词接近它，典型的多余量大约是 968。用两行时，百分之零点三的词超过了它，远在定理允许的百分之十三点五之内。"
-  },
-  "b7c777af3fb8": {
-   "scene": "JobSketch",
-   "en": "Chapter ten. The Job in kilobytes.",
-   "zh": "第10章。几千字节里的作业。"
-  },
-  "0d78a2a77d22": {
-   "scene": "JobSketch",
-   "en": "Now the Job itself, rebuilt so that it never stores the vocabulary. <bookmark mark='a'/> A Count-Min sketch of four rows of 1021 counters estimates every word's count. <bookmark mark='b'/> Only thirty-two words are kept, candidates for the top twenty, in a heap ordered by estimate; a word replaces the weakest when its estimate beats it. <bookmark mark='c'/> A table of a hundred and twenty-eight slots finds a word among the candidates, and an evicted one is deleted by shifting its neighbours back, Knuth's Algorithm R. <bookmark mark='d'/> Estan and Varghese's conservative update raises only the counters at the minimum: it still never undercounts, but it adds far less to other words. <bookmark mark='e'/> And double hashing gives all four row positions from one division per word.",
-   "zh": "现在是作业本身，重新构造成从不存储词汇表。<bookmark mark='a'/>一个四行、每行 1021 个计数器的 Count-Min 草图估计每个词的计数。<bookmark mark='b'/>只保留三十二个词，作为前二十名的候选，放在按估计值排序的堆里；一个词的估计值超过最弱的候选时就取代它。<bookmark mark='c'/>一张有一百二十八个槽的表在候选中查找一个词，被逐出的候选通过把邻居向后移动来删除，即 Knuth 的算法 R。<bookmark mark='d'/>Estan 与 Varghese 的保守更新只增加处于最小值的计数器：它仍然从不偏低，但给其他词增加的要少得多。<bookmark mark='e'/>而双重哈希每个词只用一次除法就给出全部四行的位置。"
-  },
-  "d03c09fc54f1": {
-   "scene": "JobSketch",
-   "en": "Here is the function that runs once per word, compiled by Part 13's compiler. <bookmark mark='a'/> First the four counter positions, each the last plus the step g, wrapped by a subtraction instead of a division. <bookmark mark='b'/> The estimate is the smallest of the four counters, <bookmark mark='c'/> and only the counters equal to it are raised. <bookmark mark='d'/> Then the test that makes the program cheap: if the heap is full and this word's estimate can't beat the weakest candidate, we are done. Almost every word in English stops here. <bookmark mark='e'/> A word that is already a candidate gets its new estimate and moves down the heap. <bookmark mark='f'/> Anything else joins, or replaces the weakest candidate.",
-   "zh": "这是每个词运行一次的函数，由第13部分的编译器编译。<bookmark mark='a'/>首先是四个计数器的位置，每个是前一个加上步长 g，用一次减法而不是除法来回绕。<bookmark mark='b'/>估计值是四个计数器中最小的，<bookmark mark='c'/>只有等于它的计数器才被增加。<bookmark mark='d'/>然后是让程序便宜的那个检验：如果堆已满，而这个词的估计值打不过最弱的候选，就结束。英语中几乎每个词都在这里停下。<bookmark mark='e'/>已经是候选的词得到新的估计值，在堆中下沉。<bookmark mark='f'/>其他的词加入，或者取代最弱的候选。"
-  },
-  "c8ce4f86f2d6": {
-   "scene": "JobSketch",
-   "en": "What does it remember? <bookmark mark='a'/> The sketch is sixteen thousand bytes. The candidates, their letters, the heap and the slots take about two thousand more. <bookmark mark='b'/> In all, 18,588 bytes, eighteen and a half kilobytes, in one block. <bookmark mark='c'/> Part 17's version kept every distinct word, almost fifty-eight thousand of them, with an entry and a slot each: 1.9 megabytes. <bookmark mark='d'/> A hundred times less. <bookmark mark='e'/> And eighteen and a half kilobytes fits in Part 9's level-one cache, so once the first few hundred words have touched every line, the program never misses again. We checked by tracing every load and store of a 150-kilobyte passage through the cache model: 295 lines in all, never more than 6 in a set of eight.",
-   "zh": "它记住了什么？<bookmark mark='a'/>草图是一万六千字节。候选、它们的字母、堆和槽另外大约占两千字节。<bookmark mark='b'/>一共 18588 字节，十八点五千字节，在一个连续的块中。<bookmark mark='c'/>第17部分的版本保存每个不同的词，将近五万八千个，每个一个条目和一个槽：1.9 兆字节。<bookmark mark='d'/>少了一百倍。<bookmark mark='e'/>而十八点五千字节装得进第9部分的一级缓存，所以一旦最初几百个词触及了每一行，程序就再也不会缺失。我们把一段 150 千字节的文本的每次读写都送进缓存模型来验证：一共 295 行，八路组中任何一组从未超过 6 行。"
-  },
-  "fb159065df6a": {
-   "scene": "JobSketch",
-   "en": "So the ledger gets its ninth row. Every one of the program's 1.1 billion instructions was run on the emulator, about 43 per byte of text, and the output matched the exact counts, word for word and digit for digit. <bookmark mark='a'/> Priced on Part 8's core: one second, a quarter slower than the hash table. <bookmark mark='b'/> The sketch does more work per word, and its chains of comparisons run fewer instructions per cycle. <bookmark mark='c'/> The hash table lost forty-four million cycles waiting for memory; the sketch, forty-six thousand. <bookmark mark='d'/> Row nine is not a speed-up. It buys memory: a hundred times less, for a quarter more time. That trade is the whole point of streaming algorithms, because for a real stream the vocabulary doesn't fit.",
-   "zh": "于是账本有了第九行。程序的 1.1 billion 条指令每一条都在模拟器上运行过，大约每字节文本 43 条，输出与精确计数逐词逐位一致。<bookmark mark='a'/>按第8部分的处理器计价：一秒，比哈希表慢四分之一。<bookmark mark='b'/>草图对每个词做的工作更多，它那一串比较每个周期执行的指令更少。<bookmark mark='c'/>哈希表有四千四百万个周期花在等待内存上；草图只有四万六千个。<bookmark mark='d'/>第九行不是一次提速。它买的是内存：少一百倍，多四分之一的时间。这种交换正是流算法的全部意义，因为对真实的数据流，词汇表是装不下的。"
-  },
-  "11bb5f9e4a4c": {
-   "scene": "JobSketch",
-   "en": "But was the exact answer luck? The hash function is the algorithm's coin, so we reran the same algorithm, in C, with twenty different hash functions, for several sketch sizes. <bookmark mark='a'/> With the program's own size, four rows of 1021 counters, the reported top twenty were exactly right, words and counts, for five of the twenty hash functions, and the program's own was one of the five. On average 19.1 of the twenty words were right, and never fewer than eighteen. <bookmark mark='b'/> The typical intruder is a rare word that collides with common ones in every row: vespasian, which appears in the novels once, was estimated at almost fifty-nine thousand. <bookmark mark='c'/> The plain update was never exact, and a sketch of two rows got only fourteen words right on average. Doubling the width to 32 kilobytes made seventy percent of the runs exact, and 64 kilobytes, ninety-five. <bookmark mark='d'/> This is a Monte Carlo algorithm: the memory and the time are guaranteed, the answer is probably right, and more memory buys more probability. <bookmark mark='e'/> And there is a cheap fix. In every one of the twenty runs, the true top twenty were among the thirty-two candidates. A second pass over the text, counting just those thirty-two words exactly, would have given the exact answer every time.",
-   "zh": "但这个精确的答案是运气吗？哈希函数就是算法的硬币，所以我们用 C 把同一个算法以二十个不同的哈希函数、在几种草图大小下重新运行。<bookmark mark='a'/>在程序自己的大小，即四行、每行 1021 个计数器时，报告的前二十名在二十个哈希函数中有五个完全正确，词和计数都对，而程序自己的那个就是这五个之一。平均二十个词中有 19.1 个正确，从未少于十八个。<bookmark mark='b'/>典型的闯入者是一个在每一行都与常用词碰撞的罕见词：vespasian，它在小说中出现一次，被估计为将近五万九千。<bookmark mark='c'/>普通更新从未完全正确，两行的草图平均只对了十四个词。把宽度加倍到 32 千字节，百分之七十的运行完全正确，64 千字节时是百分之九十五。<bookmark mark='d'/>这是一个蒙特卡洛算法：内存和时间是有保证的，答案很可能是对的，更多的内存换来更高的概率。<bookmark mark='e'/>还有一个便宜的修补办法。在二十次运行的每一次中，真正的前二十名都在三十二个候选之中。再扫描一遍文本，只精确统计这三十二个词，每次都会给出精确的答案。"
-  },
-  "fbb616459405": {
-   "scene": "Distinct",
-   "en": "Chapter eleven. Counting distinct things: HyperLogLog.",
-   "zh": "第11章。统计不同元素：HyperLogLog。"
-  },
-  "117e332cc75b": {
-   "scene": "Distinct",
-   "en": "How many different words are in the novels? Counting them exactly means remembering them all. <bookmark mark='a'/> Philippe Flajolet and Nigel Martin had a better idea in 1985. Hash each word to a string of random-looking bits, and look at how many zeros it starts with. A repeated word hashes the same way every time, so repeats change nothing. <bookmark mark='b'/> A hash that starts with rho minus one zeros and then a one has probability two to the minus rho. Seeing one is like flipping that many heads in a row: you need about two to the rho different items before it happens. <bookmark mark='c'/> So remember only the largest rank you have seen. That takes about log log n bits, five bits for any number of words you will ever meet. <bookmark mark='d'/> But a single record is noisy. One lucky hash, and the estimate doubles.",
-   "zh": "小说中有多少个不同的词？精确地数它们，意味着要记住所有的词。<bookmark mark='a'/>Philippe Flajolet 与 Nigel Martin 在1985年有一个更好的主意。把每个词哈希成一串看起来随机的比特，看它以多少个零开头。重复的词每次都哈希成同样的值，所以重复不改变任何东西。<bookmark mark='b'/>以 rho 减一个零开头、然后是一个一的哈希，概率是二的负 rho 次方。看到一个这样的哈希，就像连续抛出那么多次正面：在它出现之前，你大约需要二的 rho 次方个不同的数据项。<bookmark mark='c'/>所以只记住见过的最大秩。这大约需要 log log n 个比特，对你会遇到的任何数量的词都只要五个比特。<bookmark mark='d'/>但单个记录噪声很大。一个幸运的哈希，估计值就翻倍。"
-  },
-  "23d6905bce68": {
-   "scene": "Distinct",
-   "en": "The cure is to average many records. <bookmark mark='a'/> Use the first few bits of each hash to choose one of m registers, and keep in each register the largest rank of the hashes sent to it. Here are sixty-four registers after the whole vocabulary of the novels. <bookmark mark='b'/> Philippe Flajolet and his colleagues combined them, in 2007, with a harmonic mean, which isn't fooled by a few lucky registers, times a constant that corrects the bias. <bookmark mark='c'/> The relative error is about one point zero four over the square root of m. <bookmark mark='d'/> When there are few items and many registers are still empty, it counts the empty ones instead.",
-   "zh": "解药是对许多记录取平均。<bookmark mark='a'/>用每个哈希的前几个比特选择 m 个寄存器之一，每个寄存器保存送到它那里的哈希的最大秩。这是处理完小说全部词汇后的六十四个寄存器。<bookmark mark='b'/>Philippe Flajolet 和他的同事在2007年用调和平均把它们组合起来，调和平均不会被少数幸运的寄存器骗到，再乘一个校正偏差的常数。<bookmark mark='c'/>相对误差大约是一点零四除以 m 的平方根。<bookmark mark='d'/>当数据项很少、许多寄存器还空着时，它改为数空寄存器的个数。"
-  },
-  "9eb769663172": {
-   "scene": "Distinct",
-   "en": "We ran HyperLogLog on the novels' vocabulary with thirty different hash functions for each number of registers. <bookmark mark='a'/> The measured error follows one point zero four over root m down the table: sixteen registers, a quarter off; four thousand, one and a half percent, in three kilobytes. <bookmark mark='b'/> On the whole stream of four point six million words, the estimate was 58,012 against the true 57,895. <bookmark mark='c'/> And on every five-word phrase in the novels, four and a half million distinct ones, the same three kilobytes were off by half a percent. An exact count would need a table of tens of megabytes. <bookmark mark='d'/> This is why databases and analytics engines answer count distinct queries approximately, with HyperLogLog behind them.",
-   "zh": "我们在小说的词汇上运行 HyperLogLog，对每种寄存器个数用三十个不同的哈希函数。<bookmark mark='a'/>测得的误差沿着表格向下遵循一点零四除以根号 m：十六个寄存器，偏差四分之一；四千个，百分之一点五，只用三千字节。<bookmark mark='b'/>在四百六十万个词的整个数据流上，估计值是 58012，真实值是 57895。<bookmark mark='c'/>而在小说中每一个五词短语上，四百五十万个不同的短语，同样的三千字节偏差为百分之零点五。精确计数需要一张几十兆字节的表。<bookmark mark='d'/>这就是为什么数据库和分析引擎近似地回答 count distinct 查询，背后是 HyperLogLog。"
-  },
-  "6b369d307dbf": {
-   "scene": "Ams",
-   "en": "Chapter twelve. Sketching the second moment.",
-   "zh": "第12章。为二阶矩画草图。"
-  },
-  "a03a67f72116": {
-   "scene": "Ams",
-   "en": "Counting distinct items and counting the stream's length are two cases of one family. <bookmark mark='a'/> The p-th frequency moment is the sum, over items, of each item's count to the power p. <bookmark mark='b'/> F zero is the number of distinct items, the last chapter. <bookmark mark='c'/> F one is the length of the stream, which one counter tracks. <bookmark mark='d'/> F two, the sum of the squared counts, measures how concentrated the stream is. <bookmark mark='e'/> It is the number of rows when a database joins a table with itself on that column, and it jumps when a network sees a flood of identical packets. <bookmark mark='f'/> For the novels it is a hundred and seventy-seven billion, and the word the contributes thirty percent of it on its own. Can we estimate F two without counting every word?",
-   "zh": "统计不同的数据项和统计数据流的长度，是同一个家族的两个情形。<bookmark mark='a'/>第 p 阶频率矩是对所有数据项求和，每项是它的计数的 p 次方。<bookmark mark='b'/>F 零是不同数据项的个数，即上一章。<bookmark mark='c'/>F 一是数据流的长度，一个计数器就能跟踪。<bookmark mark='d'/>F 二是计数的平方和，衡量数据流有多集中。<bookmark mark='e'/>它是数据库在那一列上做表的自连接时的行数，当网络看到大量相同的数据包涌来时，它会猛增。<bookmark mark='f'/>对小说来说它是一千七百七十四亿，单是 the 这个词就贡献了百分之三十。能否不统计每个词就估计 F 二？"
-  },
-  "a827c8d1986c": {
-   "scene": "Ams",
-   "en": "Noga Alon, Yossi Matias and Mario Szegedy showed how in 1996, in the paper that started the theory of streaming. <bookmark mark='a'/> Give every item a random sign, plus or minus one, and keep a single number Z: each time an item arrives, add its sign. <bookmark mark='b'/> At the end, Z is the sum of each item's sign times its count. Square it. You get the squared counts, which is F two, plus cross terms, each a product of two different signs. <bookmark mark='c'/> Independent signs multiply to zero on average, so the expected value of Z squared is exactly F two. <bookmark mark='d'/> Its variance is at most twice F two squared, and that calculation needs only four-wise independent signs, which a small hash function supplies. <bookmark mark='e'/> Averaging k copies brings the relative error down to root two over k, and the median of a few such averages makes large errors exponentially unlikely. <bookmark mark='f'/> The median of means is a trick worth remembering: Chebyshev's inequality for each mean, a Chernoff bound for the median.",
-   "zh": "Noga Alon、Yossi Matias 与 Mario Szegedy 在1996年展示了做法，那篇论文开创了流算法的理论。<bookmark mark='a'/>给每个数据项一个随机符号，正一或负一，只保存一个数 Z：每当一个数据项到来，就加上它的符号。<bookmark mark='b'/>最后，Z 是每个数据项的符号乘它的计数之和。把它平方。你得到计数的平方，即 F 二，再加上交叉项，每个交叉项是两个不同符号的乘积。<bookmark mark='c'/>独立的符号相乘平均为零，所以 Z 平方的期望恰好是 F 二。<bookmark mark='d'/>它的方差至多是 F 二平方的两倍，而这个计算只需要四元独立的符号，一个小的哈希函数就能提供。<bookmark mark='e'/>对 k 个副本取平均，把相对误差降到根号下 k 分之二，再取几个这样的平均值的中位数，就让大的误差变得指数地不可能。<bookmark mark='f'/>均值的中位数是一个值得记住的技巧：对每个均值用切比雪夫不等式，对中位数用切尔诺夫界。"
-  },
-  "a46fa56c3c1b": {
-   "scene": "Ams",
-   "en": "On the novels. <bookmark mark='a'/> One copy of the sketch is wild: here are four hundred single estimates of F two, each divided by the truth. They scatter from nearly zero to several times too big, now and then ten times, but their average is right. <bookmark mark='b'/> Averaging k copies tightens them as predicted, about root two over k. <bookmark mark='c'/> And the median of nine averages cuts off the occasional bad average. With sixty-four copies in each of nine groups, the worst of forty trials was off by seventeen percent, from fewer than six hundred numbers. Each copy of Z is a dot product of the count vector with random signs, a random projection, the Johnson–Lindenstrauss idea from the AI series, and because it is linear, sketches of two streams simply add.",
-   "zh": "在小说上。<bookmark mark='a'/>草图的单个副本很狂野：这是四百个 F 二的单次估计，各自除以真实值。它们从接近零分散到大好几倍，偶尔大十倍，但它们的平均值是对的。<bookmark mark='b'/>对 k 个副本取平均，正如预测的那样收紧，大约是根号下 k 分之二。<bookmark mark='c'/>九个平均值的中位数切掉了偶尔出现的坏平均值。每组六十四个副本、共九组时，四十次试验中最坏的一次偏差百分之十七，只用了不到六百个数。Z 的每个副本都是计数向量与随机符号的点积，即一次随机投影，也就是人工智能系列中的 Johnson–Lindenstrauss 思想；而且因为它是线性的，两个数据流的草图直接相加即可。"
-  },
-  "0de8fffd1aa9": {
-   "scene": "Lsh",
-   "en": "Chapter thirteen. Near-duplicates: MinHash and locality-sensitive hashing.",
-   "zh": "第13章。近似重复：MinHash 与局部敏感哈希。"
-  },
-  "8dc2b98a29b7": {
-   "scene": "Lsh",
-   "en": "Search engines, plagiarism detectors and the people who clean training data for language models all need to find documents that are nearly the same. <bookmark mark='a'/> Represent a passage by its shingles, every run of five consecutive words. <bookmark mark='b'/> Two passages are as alike as the share of shingles they have in common: the Jaccard similarity, the size of the intersection over the size of the union. <bookmark mark='c'/> These two lines, from two versions of the same letter in The Count of Monte Cristo, share four of their ten distinct shingles, because changing one word breaks every shingle that contains it. <bookmark mark='d'/> The novels have thirty-four thousand paragraphs of forty words or more. Comparing every pair means almost six hundred million comparisons of sets.",
-   "zh": "搜索引擎、抄袭检测器，以及为语言模型清洗训练数据的人，都需要找出几乎相同的文档。<bookmark mark='a'/>用瓦片来表示一段文字，即每一串连续的五个词。<bookmark mark='b'/>两段文字的相似程度，就是它们共有的瓦片所占的比例：杰卡德相似度，交集的大小除以并集的大小。<bookmark mark='c'/>这两行来自《基督山伯爵》中同一封信的两个版本，它们十个不同的瓦片中共有四个，因为改动一个词会破坏包含它的每一个瓦片。<bookmark mark='d'/>小说中有三万四千个四十词以上的段落。比较每一对，意味着将近六亿次集合比较。"
-  },
-  "0c182d012ab9": {
-   "scene": "Lsh",
-   "en": "Andrei Broder found a shortcut in 1997, at the search engine AltaVista. <bookmark mark='a'/> Put every shingle in a random order, using a hash function, and look at the first shingle of the union of two sets. <bookmark mark='b'/> Each set's minimum hash is the same exactly when that first shingle belongs to both; here it is only in A, so they differ. By symmetry, every shingle of the union is equally likely to be first. <bookmark mark='c'/> So the two minimums agree with probability exactly the Jaccard similarity. <bookmark mark='d'/> Repeat with a hundred hash functions, and each paragraph becomes a signature of a hundred numbers. The share of positions where two signatures agree estimates their similarity, to within about five hundredths.",
-   "zh": "Andrei Broder 在1997年于搜索引擎 AltaVista 找到了一条捷径。<bookmark mark='a'/>用一个哈希函数把所有瓦片排成一个随机顺序，看两个集合并集中的第一个瓦片。<bookmark mark='b'/>两个集合的最小哈希相同，当且仅当这第一个瓦片同时属于两者；这里它只在 A 中，所以它们不同。由对称性，并集中每个瓦片成为第一个的可能性相同。<bookmark mark='c'/>所以两个最小值相同的概率恰好等于杰卡德相似度。<bookmark mark='d'/>用一百个哈希函数重复，每个段落就变成一个由一百个数组成的签名。两个签名一致的位置所占的比例估计它们的相似度，误差大约在百分之五以内。"
-  },
-  "d4a84fe5a65e": {
-   "scene": "Lsh",
-   "en": "Signatures are short, but there are still six hundred million pairs of them. <bookmark mark='a'/> The last trick, locality-sensitive hashing, from Piotr Indyk and Rajeev Motwani, hashes the signatures themselves. Cut each into twenty bands of five numbers, and put each band into a hash table. <bookmark mark='b'/> Two paragraphs become candidates only if some band matches exactly. <bookmark mark='c'/> A band matches with probability J to the fifth, so the chance of becoming candidates is one minus one minus J to the fifth, to the twentieth. <bookmark mark='d'/> That curve is a step: pairs below a similarity of about a half are almost never compared, and pairs above seven tenths almost always are. We planted six hundred edited copies of paragraphs, and the share found at each similarity follows the curve.",
-   "zh": "签名很短，但仍然有六亿对。<bookmark mark='a'/>最后一个技巧，Piotr Indyk 与 Rajeev Motwani 的局部敏感哈希，把签名本身再哈希一次。把每个签名切成二十段，每段五个数，把每一段放进一张哈希表。<bookmark mark='b'/>两个段落只有在某一段完全相同时才成为候选。<bookmark mark='c'/>一段相同的概率是 J 的五次方，所以成为候选的概率是一减去一减 J 的五次方的二十次方。<bookmark mark='d'/>这条曲线是一个台阶：相似度低于大约一半的对几乎从不被比较，高于十分之七的几乎总被比较。我们植入了六百个编辑过的段落副本，每种相似度下被找到的比例都沿着这条曲线。"
-  },
-  "6d46a1a55a61": {
-   "scene": "Lsh",
-   "en": "Now the novels. <bookmark mark='a'/> Thirty-four thousand paragraphs, three and a half million shingles, six hundred million pairs. Computing every signature took two seconds, and the banding three more. It produced just 2 candidate pairs. <bookmark mark='b'/> To check, we found every pair of paragraphs that share even one uncommon shingle, with an inverted index, and computed their exact similarity. Only seven pairs in all thirty novels share a fifth of their phrases. <bookmark mark='c'/> The two above the threshold were both found: a table of contents in two editions, and the anonymous letter in The Count of Monte Cristo, which is quoted more than once, in different versions. The rest, a battle order repeated in War and Peace and a passage repeated in The Awakening, fall below the step, as the curve predicts. <bookmark mark='d'/> Novelists rarely repeat themselves; the Web does all the time. Google's crawler finds near-duplicate pages with a cousin of this idea, Moses Charikar's SimHash, and MinHash with banding is a standard step in cleaning the training data of language models.",
-   "zh": "现在看小说。<bookmark mark='a'/>三万四千个段落，三百五十万个瓦片，六亿对。计算全部签名用了两秒，分段又用了三秒。它只产生了 2 对候选。<bookmark mark='b'/>为了核对，我们用倒排索引找出了共有哪怕一个不常见瓦片的每一对段落，并计算了它们的精确相似度。全部三十部小说中，只有七对共享五分之一的短语。<bookmark mark='c'/>高于阈值的两对都被找到了：两个版本中的一份目录，以及《基督山伯爵》中那封匿名信，它被引用了不止一次，版本各不相同。其余的，《战争与和平》中重复的一道作战命令和《觉醒》中重复的一段，都落在台阶以下，正如曲线所预测的。<bookmark mark='d'/>小说家很少重复自己；网络却时时如此。谷歌的爬虫用这个想法的一个近亲，Moses Charikar 的 SimHash，来发现近似重复的网页，而带分段的 MinHash 是清洗语言模型训练数据的标准步骤。"
-  },
-  "5df69aa63d4c": {
-   "scene": "ProbMethod",
-   "en": "Chapter fourteen. The probabilistic method.",
-   "zh": "第14章。概率方法。"
-  },
-  "9009f213a88f": {
-   "scene": "ProbMethod",
-   "en": "Colour every edge of a complete graph red or blue. Frank Ramsey proved in 1930 that if the graph is big enough, some k vertices have all their edges the same colour, whatever you do. <bookmark mark='a'/> With four vertices, seventeen are not enough. On the left, a random colouring of the complete graph on seventeen vertices: on average it has 74 groups of four in a single colour. <bookmark mark='b'/> On the right, a clever colouring, blue exactly when the difference of the two vertices is a square modulo seventeen, has none at all. Eighteen vertices always contain one, so the Ramsey number R of four, four is eighteen. <bookmark mark='c'/> For five, nobody knows the answer: it is between forty-three and forty-six. For large k, clever colourings run out, but coins don't.",
-   "zh": "把一个完全图的每条边涂成红色或蓝色。Frank Ramsey 在1930年证明，只要图足够大，无论怎么涂，总有 k 个顶点之间的边全是同一种颜色。<bookmark mark='a'/>对四个顶点，十七个顶点是不够的。左边是十七个顶点的完全图的一个随机涂色：平均有 74 组四个顶点是单色的。<bookmark mark='b'/>右边是一个巧妙的涂色，当两个顶点之差是模十七的平方数时涂蓝色，它一组都没有。十八个顶点则总会有一组，所以拉姆齐数 R(4, 4) 是十八。<bookmark mark='c'/>对五，没有人知道答案：它在四十三和四十六之间。对大的 k，巧妙的涂色用完了，但硬币没有。"
-  },
-  "8dde4c360015": {
-   "scene": "ProbMethod",
-   "en": "In 1947 Paul Erdős turned the question around. <bookmark mark='a'/> Colour each edge by a fair coin. A particular set of k vertices comes out all one colour with probability two times two to the minus k choose two. <bookmark mark='b'/> Add over all sets: if the expected number of one-colour sets is below one, then some colouring has none at all, because a random variable can't always be above its own average. <bookmark mark='c'/> The arithmetic works for n up to about two to the k over two. So the Ramsey number is at least that. <bookmark mark='d'/> Here is how far the count reaches for each k. The proof shows the colourings exist, and even that almost every colouring works, but it doesn't say how to write one down. <bookmark mark='e'/> Seventy-five years later, nobody can construct colourings anywhere near that good. <bookmark mark='f'/> The upper bound, four to the k, was improved for the first time in 2023, to four minus epsilon to the k, <bookmark mark='g'/> while the lower bound from coins has barely moved since 1947.",
-   "zh": "1947年，Paul Erdős 把问题反过来问。<bookmark mark='a'/>用一枚公平的硬币给每条边涂色。一组特定的 k 个顶点全部同色的概率是二乘二的负 k 选二次方。<bookmark mark='b'/>对所有的组求和：如果单色组的期望个数小于一，那么一定有某种涂色一组都没有，因为一个随机变量不可能总是高于它自己的平均值。<bookmark mark='c'/>这个算术对 n 直到大约二的 k 除以二次方都成立。所以拉姆齐数至少是这么多。<bookmark mark='d'/>这是对每个 k，计数能达到多远。证明表明这样的涂色存在，甚至几乎每一种涂色都可以，但它没有告诉我们怎样写下一个。<bookmark mark='e'/>七十五年后，仍没有人能构造出接近这么好的涂色。<bookmark mark='f'/>上界四的 k 次方在2023年第一次被改进，改为四减 epsilon 的 k 次方，<bookmark mark='g'/>而来自硬币的下界自1947年以来几乎没有动过。"
-  },
-  "4885a95eaf75": {
-   "scene": "ProbMethod",
-   "en": "Sometimes the good outcome is very unlikely, and counting fails. <bookmark mark='a'/> Suppose there are many bad events, each of small probability p, and each one independent of all but d of the others. <bookmark mark='b'/> If e times p times d plus one is at most one, then with positive probability none of them happens. <bookmark mark='c'/> That is the Lovász local lemma, from Erdős and Lovász in 1975. The probability can be exponentially small, but it isn't zero, so the good outcome exists. <bookmark mark='d'/> For example, a k-SAT formula in which every clause shares variables with fewer than about two to the k over e others is always satisfiable. <bookmark mark='e'/> For thirty-five years the proof gave no way to find the assignment. Then in 2010 Robin Moser and Gábor Tardos showed that the most naive algorithm works: while some clause is false, give its variables fresh random values. <bookmark mark='f'/> We built 10-SAT formulas where each clause meets about three hundred others, inside the lemma's condition. Each needed only about as many resamplings as it had false clauses at the start, far inside the bound of m over d.",
-   "zh": "有时好的结果非常不可能出现，计数就失效了。<bookmark mark='a'/>假设有许多坏事件，每个的概率都很小，为 p，并且每个只与其余事件中的 d 个不独立。<bookmark mark='b'/>如果 e 乘 p 乘 d 加一至多为一，那么以正的概率它们一个都不发生。<bookmark mark='c'/>这就是 Erdős 与 Lovász 1975年的洛瓦兹局部引理。概率可以指数地小，但它不是零，所以好的结果存在。<bookmark mark='d'/>例如，一个 k-SAT 公式，如果每个子句与少于大约二的 k 次方除以 e 个其他子句共享变量，它总是可满足的。<bookmark mark='e'/>三十五年来，这个证明没有给出找到赋值的办法。然后在2010年，Robin Moser 与 Gábor Tardos 证明最朴素的算法就行：只要有子句为假，就给它的变量新的随机值。<bookmark mark='f'/>我们构造了一些 10-SAT 公式，每个子句与大约三百个其他子句相交，在引理的条件之内。每个公式需要的重新抽样次数，大约只和开始时为假的子句数一样多，远在 m 除以 d 的上界之内。"
-  },
-  "b5d18c460bc0": {
-   "scene": "Derand",
-   "en": "Chapter fifteen. Removing the coins, and where they come from.",
-   "zh": "第15章。去掉硬币，以及硬币从哪里来。"
-  },
-  "1d498504c250": {
-   "scene": "Derand",
-   "en": "Can the coins be removed? Sometimes, mechanically. <bookmark mark='a'/> Take MAX-CUT: split the vertices of a graph into two sides so that as many edges as possible cross. It is NP-hard, as Part 26 will show. <bookmark mark='b'/> A random split cuts each edge with probability a half, so on average it cuts half of them. <bookmark mark='c'/> Now place the vertices one at a time, and put each on the side that cuts more edges to the vertices already placed. <bookmark mark='d'/> At every step, the expected cut, given the choices so far, is the average of the two possible choices, so the better choice can't be below it. It starts at m over two and never falls, so the final cut, which is no longer random, is at least m over two. <bookmark mark='e'/> On a random graph with two hundred and sixty-five edges, random splits averaged half, and the best of two thousand cut one hundred and sixty-two. The deterministic walk through the expectations cut one hundred and seventy-six.",
-   "zh": "硬币能去掉吗？有时可以，而且是机械地。<bookmark mark='a'/>看最大割：把图的顶点分成两边，使跨越两边的边尽可能多。它是 NP 难的，第26部分会证明。<bookmark mark='b'/>随机分割以二分之一的概率切断每条边，所以平均切断一半。<bookmark mark='c'/>现在一次放置一个顶点，把每个顶点放在与已放置的顶点之间切断更多边的那一边。<bookmark mark='d'/>每一步，在已有选择下的期望割，是两种可能选择的平均，所以较好的选择不会低于它。它从 m 除以二开始，从不下降，所以最终的割，已不再随机，至少是 m 除以二。<bookmark mark='e'/>在一个有二百六十五条边的随机图上，随机分割平均切断一半，两千次中最好的切断了一百六十二条。沿着期望确定性地走下来，切断了一百七十六条。"
-  },
-  "b1823d30465f": {
-   "scene": "Derand",
-   "en": "There is a second way. <bookmark mark='a'/> The MAX-CUT argument looks at one edge at a time, which involves only two vertices' coins. <bookmark mark='b'/> So the coins don't need to be fully independent, only pairwise independent. <bookmark mark='c'/> Pairwise independent bits are cheap. Pick k truly random bits s, and give vertex i the parity of the bits of s where i's binary expansion has a one. <bookmark mark='d'/> Any two of these bits are independent and fair, so k coins become about two to the k. <bookmark mark='e'/> With only about n possible seeds, we can try every one, deterministically, and keep the best cut: the expectation guarantees one of them reaches m over two. <bookmark mark='f'/> Limited independence, small-bias spaces and walks on expander graphs, Part 56, are the general tools for stretching a few random bits a long way.",
-   "zh": "还有第二种办法。<bookmark mark='a'/>最大割的论证一次只看一条边，只涉及两个顶点的硬币。<bookmark mark='b'/>所以硬币不必完全独立，只需两两独立。<bookmark mark='c'/>两两独立的比特很便宜。取 k 个真正随机的比特 s，让顶点 i 取 s 在 i 的二进制展开为一的那些位上的奇偶性。<bookmark mark='d'/>任意两个这样的比特都是独立且公平的，所以 k 枚硬币变成了大约二的 k 次方枚。<bookmark mark='e'/>可能的种子只有大约 n 个，我们可以确定性地试遍每一个，保留最好的割：期望保证其中有一个达到 m 除以二。<bookmark mark='f'/>有限独立性、小偏差空间和扩展图上的游走，第56部分，是把少量随机比特拉长使用的一般工具。"
-  },
-  "5e27cc24d495": {
-   "scene": "Derand",
-   "en": "Every algorithm in this part assumed fair, independent coins. Computers usually have none, and use pseudorandom generators instead. <bookmark mark='a'/> In the 1960s and 70s, many scientific programs used IBM's RANDU: multiply by sixty-five thousand five hundred and thirty-nine, modulo two to the thirty-one. <bookmark mark='b'/> Here are two and a half thousand consecutive triples of its outputs, plotted as points in a cube. They look random. <bookmark mark='c'/> Now turn the cube. <bookmark mark='d'/> The multiplier is two to the sixteen plus three, and squaring it shows that each output is six times the previous one minus nine times the one before, modulo two to the thirty-one. <bookmark mark='e'/> So nine u minus six v plus w is always a whole number, and every point lies on one of just 15 planes. Any simulation that sampled points in space with RANDU was sampling fifteen sheets. Donald Knuth called it truly horrible.",
-   "zh": "这一部分的每个算法都假定有公平、独立的硬币。计算机通常没有，而是用伪随机数生成器代替。<bookmark mark='a'/>在二十世纪六七十年代，许多科学程序使用 IBM 的 RANDU：乘以六万五千五百三十九，再模二的三十一次方。<bookmark mark='b'/>这是它连续输出的两千五百个三元组，画成立方体中的点。它们看起来是随机的。<bookmark mark='c'/>现在转动立方体。<bookmark mark='d'/>乘数是二的十六次方加三，把它平方可以看出，每个输出等于前一个的六倍减去再前一个的九倍，模二的三十一次方。<bookmark mark='e'/>所以九 u 减六 v 加 w 总是整数，每个点都落在仅仅 15 个平面之一上。任何用 RANDU 在空间中取样的模拟，取样的都只是十五张薄片。Donald Knuth 称它真正可怕。"
-  },
-  "8ef54c499b3c": {
-   "scene": "Derand",
-   "en": "Modern generators are far better. <bookmark mark='a'/> The Mersenne Twister, from 1998, behind Python's random module, passes the usual statistical tests, but it is linear: six hundred and twenty-four outputs reveal every future one. Fine for simulations, useless for secrets. <bookmark mark='b'/> PCG and xoshiro are smaller and faster; numpy uses PCG. <bookmark mark='c'/> Cryptographic generators such as ChaCha20 are designed so that no efficient test can tell them from coins, if the cipher is secure; Part 29 builds them. <bookmark mark='d'/> And the seed comes from physical noise, pooled by the operating system.",
-   "zh": "现代的生成器好得多。<bookmark mark='a'/>1998年的梅森旋转算法是 Python random 模块背后的算法，能通过常见的统计检验，但它是线性的：六百二十四个输出就暴露了以后的每一个输出。用于模拟没问题，用于保密毫无用处。<bookmark mark='b'/>PCG 和 xoshiro 更小、更快；numpy 用的是 PCG。<bookmark mark='c'/>ChaCha20 这样的密码学生成器的设计目标是：只要密码是安全的，任何高效的检验都无法把它们与硬币区分开；第29部分会构造它们。<bookmark mark='d'/>而种子来自物理噪声，由操作系统汇集起来。"
-  },
-  "c62755fe4ca4": {
-   "scene": "Frontier",
-   "en": "Chapter sixteen. Frontier: does randomness help?",
-   "zh": "第16章。前沿：随机性有用吗？"
-  },
-  "84ed7b96fb50": {
-   "scene": "Frontier",
-   "en": "Many of this part's coins have since been removed, one problem at a time. <bookmark mark='a'/> Primality got a deterministic polynomial test in 2002; logarithmic-space connectivity lost its random walk in 2005; near-linear minimum cuts became deterministic in 2015 and, for weighted graphs, in 2024; and in 2016 Fenner, Gurjar and Thierauf nearly removed the coins from parallel bipartite matching. <bookmark mark='b'/> Each took years and its own idea. Is there a general reason this keeps working?",
-   "zh": "这一部分的许多硬币后来都被去掉了，一次一个问题。<bookmark mark='a'/>素性检验在2002年有了确定性的多项式检验；对数空间的连通性检验在2005年去掉了随机游走；近线性时间的最小割在2015年、对带权图在2024年成为确定性的；2016年，Fenner、Gurjar 与 Thierauf 几乎去掉了并行二部图匹配中的硬币。<bookmark mark='b'/>每一项都花了多年，各需要自己的想法。这一再成功，背后有没有一般的原因？"
-  },
-  "9677096e683d": {
-   "scene": "Frontier",
-   "en": "There is, conditionally. <bookmark mark='a'/> Call BPP the problems that a polynomial-time algorithm with coins solves with error at most a third. <bookmark mark='b'/> Suppose we had a pseudorandom generator that stretched a logarithmic number of truly random bits into n bits that no small circuit can tell from coins. <bookmark mark='c'/> Then we could try every seed, only polynomially many, and take the majority answer. No coins at all. <bookmark mark='d'/> Noam Nisan and Avi Wigderson, and then Russell Impagliazzo and Wigderson, showed how to build such a generator from any sufficiently hard function. <bookmark mark='e'/> If some problem solvable in exponential time needs exponentially large circuits, then P equals BPP: every randomized algorithm can be derandomized with polynomial slowdown. <bookmark mark='f'/> Hard functions make good coins. Most complexity theorists believe P equals BPP, and Part 27 follows the argument further.",
-   "zh": "有，在一定条件下。<bookmark mark='a'/>把 BPP 称为：用硬币的多项式时间算法能以至多三分之一的错误解决的问题。<bookmark mark='b'/>假设我们有一个伪随机数生成器，能把对数个真正随机的比特拉长成 n 个比特，任何小电路都无法把它们与硬币区分开。<bookmark mark='c'/>那么我们就可以试遍每一个种子，只有多项式多个，再取多数答案。完全不用硬币。<bookmark mark='d'/>Noam Nisan 与 Avi Wigderson，随后 Russell Impagliazzo 与 Wigderson，展示了怎样从任何足够难的函数构造这样的生成器。<bookmark mark='e'/>如果某个能在指数时间内解决的问题需要指数大的电路，那么 P 等于 BPP：每个随机算法都能以多项式的减速去随机化。<bookmark mark='f'/>难的函数造出好的硬币。大多数复杂性理论学者相信 P 等于 BPP，第27部分会把这个论证进一步展开。"
-  },
-  "6d8812971451": {
-   "scene": "Frontier",
-   "en": "And the converse holds too, which is why the question is so hard. <bookmark mark='a'/> Polynomial identity testing asks whether an arithmetic circuit computes the zero polynomial. <bookmark mark='b'/> With coins it is easy: evaluate at one random point, chapter three. <bookmark mark='c'/> Without coins, no polynomial-time algorithm is known. <bookmark mark='d'/> Valentine Kabanets and Russell Impagliazzo proved in 2004 that a deterministic algorithm would itself prove a circuit lower bound of a kind complexity theory has sought for fifty years. <bookmark mark='e'/> So removing this one coin is as hard as the great open problems of lower bounds. <bookmark mark='f'/> Special cases are solved, such as sparse polynomials and some restricted kinds of circuit, and the matching result of 2016 came from this line of work.",
-   "zh": "而反方向也成立，这就是这个问题如此困难的原因。<bookmark mark='a'/>多项式恒等式检验问：一个算术电路计算的是否是零多项式。<bookmark mark='b'/>有硬币时它很容易：在一个随机点上求值，第3章。<bookmark mark='c'/>没有硬币时，不知道任何多项式时间算法。<bookmark mark='d'/>Valentine Kabanets 与 Russell Impagliazzo 在2004年证明，一个确定性算法本身就会证明一种电路下界，而那种下界复杂性理论已经追寻了五十年。<bookmark mark='e'/>所以去掉这一枚硬币，与下界方面的重大未解问题一样难。<bookmark mark='f'/>一些特殊情形已经解决，比如稀疏多项式和某些受限的电路，2016年的匹配结果也来自这一研究方向。"
-  },
-  "184980fa13cd": {
-   "scene": "Frontier",
-   "en": "For sketches, the theory is unusually complete. <bookmark mark='a'/> Counting distinct items to within one plus or minus epsilon needs about one over epsilon squared bits, plus log n, and in 2010 Daniel Kane, Jelani Nelson and David Woodruff matched that exactly. The second moment is similar. For higher moments, a polynomial amount of space is provably necessary. Count-Min is close to optimal for estimating single counts, and finding the exact top words in small space is impossible: the Job's sketch must sometimes be wrong. <bookmark mark='b'/> The lower bounds come from communication complexity. If a small sketch existed, two people could pass it between them and solve a problem that provably needs a long conversation. Part 27 proves those.",
-   "zh": "对于草图，理论异常完整。<bookmark mark='a'/>把不同数据项的个数统计到一加减 epsilon 以内，需要大约一除以 epsilon 平方个比特，再加 log n，2010年 Daniel Kane、Jelani Nelson 与 David Woodruff 恰好达到了它。二阶矩类似。对更高阶的矩，多项式大小的空间被证明是必需的。Count-Min 在估计单个计数上接近最优，而在小空间里找出精确的前几名是不可能的：作业的草图必定有时会出错。<bookmark mark='b'/>下界来自通信复杂性。如果存在一个小草图，两个人就可以互相传递它，解决一个被证明需要长时间交谈的问题。第27部分会证明这些。"
-  },
-  "9e9b4163d6a3": {
-   "scene": "Frontier",
-   "en": "Here is where things stand. <bookmark mark='a'/> Does P equal BPP, and can that be proved without first proving circuit lower bounds? <bookmark mark='b'/> Is there a deterministic polynomial-time test for polynomial identities? <bookmark mark='c'/> Can anyone write down a colouring of a complete graph that is as good as a random one? Explicit constructions improved dramatically after 2016, with two-source extractors, but still fall short. <bookmark mark='d'/> And can perfect matchings be found fast in parallel without coins, for every graph? <bookmark mark='e'/> This part's research problem takes the second.",
-   "zh": "这就是现状。<bookmark mark='a'/>P 等于 BPP 吗？能否不先证明电路下界就证明它？<bookmark mark='b'/>多项式恒等式有没有确定性的多项式时间检验？<bookmark mark='c'/>有没有人能写下一个完全图的涂色，和随机涂色一样好？2016年以后，借助双源提取器，显式构造有了巨大的进步，但仍有差距。<bookmark mark='d'/>能否不用硬币，对每个图都在并行中快速找到完美匹配？<bookmark mark='e'/>这一部分的研究题处理的是第二个。"
-  },
-  "2676cb41f9f5": {
-   "scene": "Outro",
-   "en": "What we built in this part. Las Vegas and Monte Carlo, and amplification. Freivalds' check and the Schwartz–Zippel lemma, with perfect matchings and fingerprints. Karger's random contractions. Miller–Rabin. Random walks for satisfiability, balls in bins and the power of two choices. Bloom filters, reservoirs, Misra–Gries and Count-Min, and the Job in eighteen kilobytes. HyperLogLog, the AMS sketch and MinHash. The probabilistic method, and the ways to remove the coins.",
-   "zh": "这一部分我们造了什么。拉斯维加斯与蒙特卡洛，以及放大。Freivalds 的检验和 Schwartz–Zippel 引理，以及完美匹配和指纹。Karger 的随机收缩。Miller–Rabin。求解可满足性的随机游走，球与箱，以及两个选择的力量。布隆过滤器、蓄水池、Misra–Gries 和 Count-Min，以及十八千字节里的作业。HyperLogLog、AMS 草图和 MinHash。概率方法，以及去掉硬币的办法。"
-  },
-  "d963294d6de3": {
-   "scene": "Outro",
-   "en": "Where this comes back. Part 21 turns fingerprints into Rabin and Karp's string search, and Part 22 uses locality-sensitive hashing for nearest neighbours. Part 23 rounds linear programs at random, including MAX-CUT's famous 0.878. Part 27 develops BPP, hardness against randomness and the lower bounds for streams. Part 29 builds cryptographic generators, and Part 30 needs the big primes. Part 34's storage engines keep a Bloom filter per file; Parts 46 and 47 run sketches and SimHash in production; and Part 48's load balancers use two choices, while Part 56 builds the expanders.",
-   "zh": "这些会在哪里再出现。第21部分把指纹变成 Rabin 与 Karp 的字符串搜索，第22部分用局部敏感哈希寻找最近邻。第23部分随机地舍入线性规划，包括最大割著名的 0.878。第27部分发展 BPP、硬度与随机性，以及数据流的下界。第29部分构造密码学生成器，第30部分需要大素数。第34部分的存储引擎为每个文件保存一个布隆过滤器；第46和47部分在生产中运行草图和 SimHash；第48部分的负载均衡器使用两个选择，而第56部分构造扩展图。"
-  },
-  "2ebe940ce8ae": {
-   "scene": "Outro",
-   "en": "In practice. Databases put Bloom filters in front of their files and answer count-distinct queries with HyperLogLog. Routers track heavy hitters with sketches, and load balancers pick the less busy of two servers. Modern caches decide what to keep with a Count-Min filter. Web crawls and the training sets of language models are deduplicated with MinHash. And every secure connection begins with random primes and a cryptographic generator.",
-   "zh": "在实践中。数据库在文件前面放布隆过滤器，用 HyperLogLog 回答 count distinct 查询。路由器用草图跟踪频繁项，负载均衡器在两台服务器中挑较闲的那台。现代缓存用一个 Count-Min 过滤器决定保留什么。网络爬取的数据和语言模型的训练集用 MinHash 去重。而每一次安全连接都从随机素数和一个密码学生成器开始。"
-  },
-  "ef001bc3cdce": {
-   "scene": "Outro",
-   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build problem: HyperLogLog in the Pebble language, which has no bitwise operators, so the ranks come from repeated halving. The last, marked with a star, is a research problem: its answer is not known, and the notes say where to start.",
-   "zh": "六道习题，完整的解答在这一部分的讲义里。在任何一道上都可以暂停。第五道是动手题：用 Pebble 语言实现 HyperLogLog，这门语言没有位运算，所以秩要靠反复折半得到。最后一道标着星号，是研究题：它的答案还不知道，讲义里说了从哪里开始。"
-  },
-  "b7f61567a7f2": {
-   "scene": "Outro",
-   "en": "Next time, the oldest data of all, text. Searching it efficiently leads to automata built from patterns, to indexes of every suffix, and to a reversible transform that sorts a book into compressible runs, so that we can search the novels while they stay compressed. And every git diff turns out to be a shortest path on a grid. Part 21, Strings.",
-   "zh": "下一次，最古老的数据：文本。高效地搜索它，引出了由模式构造的自动机、所有后缀的索引，以及一种把一本书排成可压缩的字符串的可逆变换，让我们可以在小说保持压缩的状态下搜索它们。而每一次 git diff 原来都是网格上的一条最短路径。第21部分，字符串。"
-  },
-  "9bd24692775d": {
-   "scene": "Outro",
-   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
-   "zh": "这一部分所依据的书和论文都在屏幕上，也在讲义里。感谢收看。"
+  "title": "计算机科学，从零搭建 · 第20部分：作为资源的随机性",
+  "chapters": {
+    "Hook": "几千字节里的高频词",
+    "LasVegas": "1. 拉斯维加斯与蒙特卡洛",
+    "Freivalds": "2. 用硬币检验乘积",
+    "Identity": "3. 这个多项式是零吗？",
+    "Karger": "4. 用收缩求最小割",
+    "Primes": "5. 可能素数与素性检验",
+    "Walks": "6. 求解 SAT 的随机游走",
+    "Bins": "7. 球与箱，以及两个选择的力量",
+    "Bloom": "8. 布隆过滤器",
+    "Stream": "9. 数据流：一遍扫描，很少的内存",
+    "JobSketch": "10. 几千字节里的作业：账本第9行",
+    "Distinct": "11. 统计不同元素：HyperLogLog",
+    "Ams": "12. 为二阶矩画草图",
+    "Lsh": "13. 近似重复：MinHash 与 LSH",
+    "ProbMethod": "14. 概率方法",
+    "Derand": "15. 去掉硬币，以及硬币从哪里来",
+    "Frontier": "16. 前沿：随机性有用吗？",
+    "Outro": "回顾、习题，以及它们会在哪里再出现"
+  },
+  "lines": {
+    "1a4a31c94bc6": {
+      "scene": "Hook",
+      "en": "Here are the most common words in the thirty novels, counted twice. <bookmark mark='a'/> On the left, Part 17's exact hash-table program. On the right, this part's sketch with thirty-two retained word candidates. For this corpus and fixed hash seed, all twenty words and counts agree. <bookmark mark='b'/> The modeled data structures shrink from almost two megabytes to about eighteen and a half decimal kilobytes. These are program data, not total process memory. <bookmark mark='c'/> The sketch does not keep the whole vocabulary. Hash collisions can change its answer. By the end we will measure how often the complete answer survives a sweep of twenty hash seeds.",
+      "zh": "这是三十部小说中最常见的词，数了两遍。<bookmark mark='a'/>左边是第17部分的精确哈希表程序。右边是这一部分的草图，保留三十二个候选词。在这份语料和固定哈希种子下，二十个词及其计数全部一致。<bookmark mark='b'/>建模的数据结构从将近两兆字节缩到约十八点五十进制千字节。这是程序数据，不是整个进程的内存。<bookmark mark='c'/>草图不保存完整词汇表。哈希碰撞可能改变答案。到这一部分结束时，我们将用二十个哈希种子测量完整答案有多少次仍然正确。"
+    },
+    "7a383c2be576": {
+      "scene": "Hook",
+      "en": "That is the theme of this part: a coin flip can stand in for cleverness. <bookmark mark='a'/> With exact arithmetic we can check a claimed matrix product with a quadratic number of arithmetic operations. <bookmark mark='b'/> We can find a network's minimum cut by contracting random edges. <bookmark mark='c'/> We can rapidly reject composite three-hundred-digit numbers and generate probable primes, useful for the RSA construction in Part 30. <bookmark mark='d'/> And we can estimate stream statistics using much less storage. The mathematical guarantees depend on the stated randomness model; the fixed hash implementations also need empirical checks.",
+      "zh": "这一部分的主题是：一枚硬币可以代替巧妙的设计。<bookmark mark='a'/>用精确算术，我们能以平方数量级的算术操作检验声称的矩阵乘积。<bookmark mark='b'/>可以随机收缩边，寻找网络的最小割。<bookmark mark='c'/>可以快速排除三百位的合数，并生成可能素数，用于第30部分的 RSA 构造。<bookmark mark='d'/>也能用少得多的存储估计数据流统计量。数学保证依赖于所声明的随机模型；具体的固定哈希实现还需要实验核查。"
+    },
+    "aefb64f53010": {
+      "scene": "Hook",
+      "en": "Part 20 of Computer Science, Built: Randomness as a Resource. <bookmark mark='a'/> In this part: the two kinds of randomized algorithm, and how repetition shrinks their errors; checking products and polynomials with random points; cuts, primes, random walks and the power of two choices; Bloom filters and sketches of streams, ending in the Job in eighteen kilobytes; the probabilistic method; and whether the coins can be removed, and where they come from.",
+      "zh": "计算机科学，从零搭建，第20部分：作为资源的随机性。<bookmark mark='a'/>这一部分包括：两类随机算法，以及重复如何缩小它们的错误；用随机点检验乘积和多项式；割、素数、随机游走，以及两个选择的力量；布隆过滤器和数据流草图，最后是十八千字节里的作业；概率方法；以及硬币能否去掉、它们从哪里来。"
+    },
+    "dee3bb2f5e0c": {
+      "scene": "LasVegas",
+      "en": "Chapter one. Las Vegas and Monte Carlo.",
+      "zh": "第1章。拉斯维加斯与蒙特卡洛。"
+    },
+    "4f256869d0c6": {
+      "scene": "LasVegas",
+      "en": "An algorithm that flips coins can gamble in two ways. <bookmark mark='a'/> A Las Vegas algorithm is always right, while its running time depends on the coins. Randomized quicksort, from Part 16, is one. <bookmark mark='b'/> A Monte Carlo algorithm has a prescribed running-time bound and may return a wrong answer. A proved error bound can often be reduced by independent repetition. <bookmark mark='c'/> In these theorems the input is fixed arbitrarily. The probability is over the algorithm's own coins, not over a distribution of convenient inputs.",
+      "zh": "一个抛硬币的算法可以用两种方式下注。<bookmark mark='a'/>拉斯维加斯算法总是正确，运行时间取决于硬币。第16部分的随机快速排序就是一例。<bookmark mark='b'/>蒙特卡洛算法有预先规定的运行时间上界，却可能返回错误答案。已证明的错误上界通常能通过独立重复缩小。<bookmark mark='c'/>在这些定理里，输入可以任意固定。概率来自算法自己的硬币，不是某种方便的输入分布。"
+    },
+    "57bba651505c": {
+      "scene": "LasVegas",
+      "en": "Here is a Las Vegas algorithm at work: quicksort with random pivots on 2,000 keys, run 400 times. Each bar counts the runs that made that many comparisons. <bookmark mark='a'/> The average was 24,761, and Part 16's exact formula predicts 24,730. <bookmark mark='b'/> The runs spread by about 1,339 either side, and the slowest made 30,234. <bookmark mark='c'/> The worst case, about two million comparisons, is possible in principle, but it needs a long run of terrible pivots, and its probability is far too small to observe. <bookmark mark='d'/> And every single run sorted the keys correctly. Only the time was a gamble.",
+      "zh": "这是一个正在工作的拉斯维加斯算法：随机选主元的快速排序，作用于 2000 个键，运行 400 次。每根柱子统计做了那么多次比较的运行次数。<bookmark mark='a'/>平均值是 24761，第16部分的精确公式预测的是 24730。<bookmark mark='b'/>各次运行大约向两边分散 1339，最慢的一次做了 30234 次。<bookmark mark='c'/>最坏情形大约是两百万次比较，原则上可能发生，但它需要一长串糟糕的主元，概率小得根本观察不到。<bookmark mark='d'/>而每一次运行都正确地排好了序。只有时间是一场赌博。"
+    },
+    "e8b569dedf47": {
+      "scene": "LasVegas",
+      "en": "Even a one-half false-acceptance bound can be useful. <bookmark mark='a'/> For Freivalds' test, rejection certifies a wrong product; a fixed wrong product passes with probability at most one half. Repeat with fresh independent coins, accepting only if every round passes. False acceptance is at most two to the minus k. This is not a posterior probability that an accepted product is wrong. <bookmark mark='b'/> Ten rounds give at most one in a thousand, and forty about one in a trillion. <bookmark mark='c'/> With two-sided error and a fixed correctness probability p above one half, take the majority of independent runs. Hoeffding's inequality gives an error bound exponential in minus k times the square of the advantage p minus one half.",
+      "zh": "即使误接受概率的上界为二分之一，也很有用。<bookmark mark='a'/>对 Freivalds 检验，拒绝就证明乘积错误；一个固定的错误乘积通过的概率至多为二分之一。用新的独立硬币重复，只有每轮都通过才接受。误接受概率至多为二的负 k 次方。这不是接受以后乘积为错的后验概率。<bookmark mark='b'/>十轮至多约千分之一，四十轮约万亿分之一。<bookmark mark='c'/>若两侧都可能出错，而固定正确率 p 大于二分之一，就对独立运行取多数。霍夫丁不等式给出的错误上界，其指数与负 k 乘优势 p 减二分之一的平方成正比。"
+    },
+    "a718ae34b47c": {
+      "scene": "Freivalds",
+      "en": "Chapter two. Checking a product with a coin.",
+      "zh": "第2章。用硬币检验乘积。"
+    },
+    "dc7303c621ad": {
+      "scene": "Freivalds",
+      "en": "Someone hands you square matrices A, B and C, claiming C equals A B. <bookmark mark='a'/> Classical multiplication uses a cubic number of arithmetic operations; Part 19 discussed faster asymptotic methods. Here we count arithmetic operations, not bit operations. <bookmark mark='b'/> Freivalds' 1977 test picks a uniform independent zero-one vector r. Compute B r, then A times that, and also C r: three quadratic matrix-vector products. Work over a field, or with exact integers. Our instrument prevents overflow; its floating benchmark uses integers small enough that every intermediate is exact. <bookmark mark='c'/> Different vectors certify that C is wrong. <bookmark mark='d'/> Equal vectors merely pass this round. How likely is a fixed wrong product to pass?",
+      "zh": "有人交给你方阵 A、B 和 C，声称 C 等于 A B。<bookmark mark='a'/>经典乘法需要立方数量级的算术操作；第19部分讨论了渐近更快的方法。这里统计算术操作，不是比特操作。<bookmark mark='b'/>Freivalds 在1977年的检验均匀独立地选取零一向量 r。先算 B r，再左乘 A，同时算 C r：三次平方量级的矩阵向量乘法。应在域上或用精确整数计算。我们的工具防止溢出；浮点基准使用足够小的整数，使每个中间量都精确。<bookmark mark='c'/>向量不同就证明 C 错误。<bookmark mark='d'/>向量相同只表示这一轮通过。固定的错误乘积通过的概率有多大？"
+    },
+    "63f419b09cb6": {
+      "scene": "Freivalds",
+      "en": "Suppose C is wrong. <bookmark mark='a'/> Then the difference D, A B minus C, is not the zero matrix. <bookmark mark='b'/> Some entry, d i j, is nonzero, and the test passes only if D r is the zero vector, so in particular only if its i-th entry is zero. <bookmark mark='c'/> That entry is d i j times r j, plus a sum s over the other coins. <bookmark mark='d'/> Imagine flipping every coin except r j first. The coins are independent, so this changes nothing, but now s is a fixed number. <bookmark mark='e'/> For the entry to vanish, r j must equal minus s over d i j: one particular value. At most one of the two outcomes of r j can do that. <bookmark mark='f'/> So a wrong C passes with probability at most a half, whatever A, B and C are, and k independent rounds let it through with probability at most two to the minus k. <bookmark mark='g'/> The trick of revealing the coins in a convenient order is called the principle of deferred decisions, and we will use it again.",
+      "zh": "假设 C 是错的。<bookmark mark='a'/>那么差 D，即 A B 减 C，不是零矩阵。<bookmark mark='b'/>它的某个元素 d i j 非零，而检验只有在 D r 是零向量时才通过，所以特别地，要求它的第 i 个分量为零。<bookmark mark='c'/>这个分量等于 d i j 乘 r j，再加上其他硬币贡献的和 s。<bookmark mark='d'/>想象先抛除 r j 以外的所有硬币。硬币是独立的，所以这不改变任何东西，但现在 s 是一个固定的数。<bookmark mark='e'/>要让这个分量为零，r j 必须等于负 s 除以 d i j：一个特定的值。r j 的两种结果中至多有一种能做到。<bookmark mark='f'/>所以无论 A、B、C 是什么，错误的 C 通过的概率至多为二分之一，k 轮独立检验让它通过的概率至多为二的负 k 次方。<bookmark mark='g'/>按方便的顺序揭开硬币的技巧叫作延迟决定原理，我们还会再用到它。"
+    },
+    "c55e04d241db": {
+      "scene": "Freivalds",
+      "en": "On this shared host, with matrices of size 2000. <bookmark mark='a'/> The leading operation counts are sixteen billion floating-point operations for the full product and twenty-four million for the three matrix-vector products. We report the minimum of three runs; validate every result outside the timer; and exclude generation of the reused test vector. <bookmark mark='b'/> The observed speed ratio is 103, with one configured BLAS thread. Operation counts alone do not predict elapsed time, and this experiment does not isolate a hardware cause. <bookmark mark='c'/> We also corrupted one product entry and used four thousand independent trials per row. The displayed fractions fluctuate around their probabilities and may exceed the probability bound through sampling noise. <bookmark mark='d'/> For a single erroneous entry, exactly one coin determines acceptance, so the theoretical bound is tight. <bookmark mark='e'/> The many-error example passed no observed trials; that is a finite observation, not a zero-probability theorem.",
+      "zh": "在这台共享主机上，矩阵大小为 2000。<bookmark mark='a'/>主要浮点操作数，完整乘法为一百六十亿，三次矩阵向量乘法为两千四百万。报告三次运行的最小时间；停表后检查每个结果；重复使用的检验向量，其生成时间不计入。<bookmark mark='b'/>观察到的速度比为 103，BLAS 配置为一个线程。操作数本身不能预测耗时，这个实验也没有单独确定某个硬件原因。<bookmark mark='c'/>我们还篡改乘积的一个元素，每行做四千次独立试验。显示的比例会围绕真实概率波动，抽样噪声可能使它超过概率上界。<bookmark mark='d'/>只有一个元素错误时，恰好一枚硬币决定是否接受，所以理论界是紧的。<bookmark mark='e'/>多处错误的例子在观察到的试验中没有通过；这是有限实验的结果，不是概率为零的定理。"
+    },
+    "b660c95eeab7": {
+      "scene": "Identity",
+      "en": "Chapter three. Is this polynomial zero?",
+      "zh": "第3章。这个多项式是零吗？"
+    },
+    "cc5ad44bb8be": {
+      "scene": "Identity",
+      "en": "Freivalds' check is a special case of a general fact. <bookmark mark='a'/> Let p be a nonzero formal polynomial of total degree d over a field. Choose each variable independently and uniformly from the same finite subset S of that field. Then the probability that p evaluates to zero is at most d divided by the size of S, capped at one. This is the Schwartz–Zippel lemma, also associated with DeMillo and Lipton, around 1980. <bookmark mark='b'/> In one variable, a nonzero degree-d polynomial has at most d roots. <bookmark mark='c'/> In several variables, write p in the first variable, with highest power k. Its leading coefficient has total degree at most d minus k. Inductively that coefficient vanishes with probability at most d minus k over the size of S; otherwise the remaining univariate polynomial has at most k roots. Adding the two bounds proves the claim.",
+      "zh": "Freivalds 检验是一个更一般事实的特例。<bookmark mark='a'/>设 p 是域上总次数为 d 的非零形式多项式。每个变量都独立均匀地从该域的同一个有限子集 S 中选取。那么 p 的值为零的概率至多是 d 除以 S 的大小，并截在一以内。这就是 Schwartz–Zippel 引理，也与 DeMillo 和 Lipton 有关，年代在1980年前后。<bookmark mark='b'/>一个变量时，非零 d 次多项式至多有 d 个根。<bookmark mark='c'/>多个变量时，按第一个变量展开，最高幂为 k。最高项系数的总次数至多为 d 减 k。由归纳，这个系数为零的概率至多为 d 减 k 除以 S 的大小；否则剩下的一元多项式至多有 k 个根。将两个上界相加就得到结论。"
+    },
+    "c55d2c9327ab": {
+      "scene": "Identity",
+      "en": "Here is a claimed identity: the product x minus y, times y minus z, times z minus x, against an expansion. <bookmark mark='a'/> Instead of expanding, substitute random numbers and compare. We did this twenty thousand times for each size of S. <bookmark mark='b'/> The claim is false: one sign is wrong, so the two sides differ by two x z squared, a polynomial of degree three. It vanishes only when x or z is zero, which is why the agreement rates sit a little under the lemma's bound of three over S. With a thousand values, one test in five hundred is fooled; twenty tests are fooled with probability below ten to the minus fifty. <bookmark mark='c'/> The idea scales. The determinant of an eight by eight Vandermonde matrix equals a product of differences, a polynomial with forty thousand terms if you expand it. Evaluating both sides at fifty random points modulo a large prime took a fraction of a millisecond each, and they agreed every time.",
+      "zh": "这是一个声称的恒等式：x 减 y，乘 y 减 z，再乘 z 减 x，与一个展开式。<bookmark mark='a'/>不去展开，而是代入随机数并比较。对 S 的每个大小，我们做了两万次。<bookmark mark='b'/>这个声称是错的：有一个符号写错了，所以两边相差二倍 x z 的平方，一个三次多项式。它只在 x 或 z 为零时为零，这就是为什么一致率比引理的界三除以 S 稍低一点。S 有一千个值时，五百次检验中被骗一次；二十次检验全被骗的概率低于十的负五十次方。<bookmark mark='c'/>这个想法可以推广。八乘八范德蒙德矩阵的行列式等于一个差的乘积，展开后是一个有四万项的多项式。在五十个随机点上对一个大素数取模来计算两边，每次只要不到一毫秒，而且每次都一致。"
+    },
+    "5d752c8ba24a": {
+      "scene": "Identity",
+      "en": "A less obvious polynomial. <bookmark mark='a'/> Take a graph, and build its Tutte matrix: for each edge i j, put a variable x i j above the diagonal and minus x i j below it. <bookmark mark='b'/> For this graph the determinant is a perfect square. Inside that square, each of the two monomials corresponds to a perfect matching, a set of edges that covers every vertex exactly once. <bookmark mark='c'/> William Tutte proved in 1947 that the determinant is a nonzero polynomial exactly when the graph has a perfect matching. But it can have exponentially many terms. <bookmark mark='d'/> László Lovász saw in 1979 that we never need to expand it: substitute random numbers modulo a prime and compute one determinant by elimination, Schwartz–Zippel bounding the error. <bookmark mark='e'/> We tried it on forty-eight random graphs near the threshold where matchings appear. 33 had one, and the determinant agreed with Edmonds' blossom algorithm every time. Determinants parallelize well, so this became the route to fast parallel matching algorithms.",
+      "zh": "一个不那么明显的多项式。<bookmark mark='a'/>取一个图，构造它的 Tutte 矩阵：对每条边 i j，在对角线上方放一个变量 x i j，下方放负 x i j。<bookmark mark='b'/>对这个图，行列式是一个完全平方。平方内部的两个单项式，各对应一个完美匹配，即恰好覆盖每个顶点一次的一组边。<bookmark mark='c'/>William Tutte 在1947年证明，图有完美匹配当且仅当这个行列式是非零多项式。但它可能有指数多项。<bookmark mark='d'/>László Lovász 在1979年看出我们根本不必展开它：代入模一个素数的随机数，用消元法算一次行列式，错误由 Schwartz–Zippel 控制。<bookmark mark='e'/>我们在四十八个随机图上试了它，这些图都在匹配开始出现的阈值附近。其中 33 个有完美匹配，行列式每次都与 Edmonds 的开花算法一致。行列式很适合并行计算，所以这成了快速并行匹配算法的途径。"
+    },
+    "12e46d81f471": {
+      "scene": "Identity",
+      "en": "One more fingerprinting idea. <bookmark mark='a'/> Alice and Bob want to compare copies of the novel corpus without transmitting it all. <bookmark mark='b'/> Encode the byte string as a big-endian integer with a leading one byte. The sentinel preserves leading zero bytes and makes the encoding injective. Alice sends a sixty-one-bit prime p and her residue in sixteen bytes; Bob compares his own residue. The displayed experiment uses one fixed prime. <bookmark mark='c'/> Our altered copy flips one bit. Both residues are checked against independent blockwise Horner evaluation; the displayed time is a local observation. <bookmark mark='d'/> Distinct encodings collide only when p divides their nonzero difference. For a uniformly sampled prime in the stated interval, count possible large prime divisors and divide by the number of eligible primes. The displayed prime-count approximation is an asymptotic heuristic, not a certified finite upper bound. Independent modulus choices multiply their actual collision probabilities. Part 21 develops rolling string fingerprints.",
+      "zh": "再看一种指纹方法。<bookmark mark='a'/>Alice 和 Bob 想比较小说语料的副本，而不传送全部内容。<bookmark mark='b'/>将字节串按大端编码成整数，并在前面加一个值为一的字节。这个哨兵保留开头的零字节，使编码成为单射。Alice 用十六字节发送一个六十一位素数 p 和余数；Bob 比较自己的余数。屏幕上的实验使用一个固定素数。<bookmark mark='c'/>修改后的副本翻转了一个比特。两个余数都与独立的分块霍纳计算核对；显示的时间只是本机观察。<bookmark mark='d'/>不同编码只有在 p 整除其非零差值时才碰撞。若在规定区间内均匀选素数，就用可能的大素因子个数除以可选素数个数。屏幕上的素数计数近似只是渐近估计，不是经认证的有限上界。独立选取模数时，实际碰撞概率相乘。第21部分将发展滚动字符串指纹。"
+    },
+    "9eb1f4d8386a": {
+      "scene": "Karger",
+      "en": "Chapter four. A minimum cut by contraction.",
+      "zh": "第4章。用收缩求最小割。"
+    },
+    "07b7e1131950": {
+      "scene": "Karger",
+      "en": "A cut of a graph splits its vertices into two sides; its size is the number of edges between them. This graph has two dense clusters joined by three edges, so its minimum cut has size three. Finding a minimum cut is a classic problem, usually solved with maximum flows. <bookmark mark='a'/> David Karger's algorithm, from 1993, is almost embarrassingly simple. Pick an edge at random and contract it: merge its two ends into one vertex, keep all the other edges, and throw away the loops. Repeat until two vertices are left. The edges between them are a cut. <bookmark mark='b'/> This run kept all three bridges to the end and found the minimum cut.",
+      "zh": "图的一个割把顶点分成两边；割的大小是两边之间的边数。这个图有两个稠密的簇，由三条边相连，所以它的最小割大小为三。求最小割是一个经典问题，通常用最大流来解。<bookmark mark='a'/>David Karger 1993年的算法简单得几乎令人难为情。随机选一条边并收缩它：把它的两个端点合并成一个顶点，保留所有其他边，丢掉自环。重复直到只剩两个顶点。它们之间的边就是一个割。<bookmark mark='b'/>这一次运行把三座桥一直保留到最后，找到了最小割。"
+    },
+    "cec29bca133e": {
+      "scene": "Karger",
+      "en": "Run it again with other coins. <bookmark mark='a'/> This time a bridge was contracted along the way, and the two clusters were merged. <bookmark mark='b'/> What is left cuts a single vertex off from the rest, a cut of size 5. Each run can fail, so how often does it succeed?",
+      "zh": "用别的硬币再运行一次。<bookmark mark='a'/>这一次，途中有一座桥被收缩了，两个簇被合并在一起。<bookmark mark='b'/>剩下的结果是把单个顶点与其余部分切开，一个大小为 5 的割。每次运行都可能失败，那么它多常成功？"
+    },
+    "ecc1b63467f9": {
+      "scene": "Karger",
+      "en": "The analysis is as short as the algorithm. Fix a connected undirected multigraph with positive minimum-cut size k, and one minimum cut C. <bookmark mark='a'/> Every vertex has at least k edges, because otherwise the edges around that one vertex would be a smaller cut. <bookmark mark='b'/> So there are at least n k over two edges, and the first random edge lands in C with probability at most two over n. <bookmark mark='c'/> Contracting never creates a smaller cut, so the same argument works at every step, with n minus one vertices, then n minus two, and so on. <bookmark mark='d'/> C survives to the end if it survives every step. Write the product out, and almost everything cancels: <bookmark mark='e'/> the success probability is at least two over n times n minus one, one over n choose two. <bookmark mark='f'/> There is a free corollary. A specific minimum cut is the output with at least that probability, and different cuts are different outcomes, so no connected graph has more than n choose two minimum cuts.",
+      "zh": "分析和算法一样短。固定一个连通无向多重图，最小割大小 k 为正，并选定一个最小割 C。<bookmark mark='a'/>每个顶点至少有 k 条边，否则这一个顶点周围的边就构成一个更小的割。<bookmark mark='b'/>所以至少有 n k 除以二条边，第一条随机边落在 C 中的概率至多为二除以 n。<bookmark mark='c'/>收缩从不产生更小的割，所以同样的论证在每一步都成立，先是 n 减一个顶点，再是 n 减二个，依此类推。<bookmark mark='d'/>C 能存活到最后，当且仅当它在每一步都存活。把乘积写出来，几乎所有项都消掉了：<bookmark mark='e'/>成功概率至少是二除以 n 乘 n 减一，即 n 选二分之一。<bookmark mark='f'/>还有一个免费的推论。一个特定的最小割至少以这个概率成为输出，而不同的割是不同的结果，所以没有哪个连通图的最小割超过 n 选二个。"
+    },
+    "060e7489de44": {
+      "scene": "Karger",
+      "en": "We ran the contraction twenty thousand times on the two-cluster graph. Each bar counts the runs that ended with a cut of that size. <bookmark mark='a'/> The minimum cut came out in 13% of runs. The lower bound promised at least one in a hundred and twenty, under one percent, so the observed rate on this graph is about fifteen times the lower bound. <bookmark mark='b'/> The bound is a worst case, and repetition does the rest: run it n choose two times log n times and keep the smallest cut, and it is wrong with probability at most one over n. <bookmark mark='c'/> The worst case is real. In a ring of ten vertices, any two of the ten edges form a minimum cut, which makes forty-five of them, exactly n choose two. The runs found all forty-five, each about once in forty-five tries, so here the bound is exact.",
+      "zh": "我们在双簇图上运行了两万次收缩。每根柱子统计结果为该大小的割的运行次数。<bookmark mark='a'/>最小割出现在 13% 的运行中。下界保证至少一百二十分之一，不到百分之一，所以在这个图上实际情况大约好十五倍。<bookmark mark='b'/>下界针对最坏情形，其余的交给重复：运行 n 选二乘 log n 次，保留最小的割，出错的概率至多为 n 分之一。<bookmark mark='c'/>最坏情形是真实存在的。在一个十个顶点的环中，十条边中任意两条都构成一个最小割，一共四十五个，正好是 n 选二。各次运行找到了全部四十五个，每个大约四十五次中出现一次，所以这里成功概率下界是精确的。"
+    },
+    "a0d5b1437490": {
+      "scene": "Karger",
+      "en": "Where is the waste? <bookmark mark='a'/> Early contractions have a small individual risk of hitting a fixed minimum cut, <bookmark mark='b'/> while the risk increases near the end. <bookmark mark='c'/> Karger and Clifford Stein contract to roughly n over root two vertices, with rounding chosen to retain a survival probability at least one half. <bookmark mark='d'/> Then two independent recursive branches compete and we keep the smaller cut. <bookmark mark='e'/> The standard implementation has order n squared log n running time per recursive trial and success at least order one over log n. <bookmark mark='f'/> Our forty-eight-vertex graph has an independently certified minimum cut. Plain contraction succeeded in 18% of two hundred trials; Karger–Stein succeeded in all forty observed trials. These fractions describe this graph and seed, not a universal success guarantee.",
+      "zh": "浪费在哪里？<bookmark mark='a'/>早期的每次收缩撞上某个固定最小割的风险较小，<bookmark mark='b'/>接近结尾时风险增大。<bookmark mark='c'/>Karger 和 Clifford Stein 收缩到大约 n 除以根号二个顶点，适当取整以保留至少二分之一的存活概率。<bookmark mark='d'/>然后独立递归两次，留下较小的割。<bookmark mark='e'/>标准实现每次递归试验的时间为 n 平方乘 log n 量级，成功概率至少为一除以 log n 的量级。<bookmark mark='f'/>我们的四十八顶点图，其最小割已独立认证。普通收缩在两百次试验中成功 18%；Karger–Stein 在观察到的四十次中全部成功。这些比例描述这个图和种子，不是普遍成功率保证。"
+    },
+    "41cc9ec99726": {
+      "scene": "Primes",
+      "en": "Chapter five. Probable primes and primality tests.",
+      "zh": "第5章。可能素数与素性检验。"
+    },
+    "bd762d952345": {
+      "scene": "Primes",
+      "en": "Part 30 will need prime numbers three hundred digits long, and lots of them. Testing one by trial division would take ten to the hundred and fifty divisions. <bookmark mark='a'/> Fermat's little theorem gives a shortcut. If n is prime, then for every a not divisible by n, a to the n minus one is one, modulo n. <bookmark mark='b'/> So if we find an a where it isn't, n is certainly composite. Two to the ninetieth, modulo ninety-one, is sixty-four, <bookmark mark='c'/> so ninety-one is composite, and we learned that without finding a factor. <bookmark mark='d'/> But some bases lie. Three to the ninetieth is one modulo ninety-one, as if ninety-one were prime. <bookmark mark='e'/> Each test is cheap: repeated squaring computes the power with about one squaring per bit of n.",
+      "zh": "第30部分需要三百位长的素数，而且需要很多。用试除法检验一个，要做十的一百五十次方次除法。<bookmark mark='a'/>费马小定理给出了一条捷径。如果 n 是素数，那么对每个不被 n 整除的 a，a 的 n 减一次方模 n 等于一。<bookmark mark='b'/>所以只要找到一个 a 使它不等于一，n 就一定是合数。二的九十次方模九十一是六十四，<bookmark mark='c'/>所以九十一是合数，而我们没有找到任何因子就知道了这一点。<bookmark mark='d'/>但有些底数会说谎。三的九十次方模九十一是一，就好像九十一是素数一样。<bookmark mark='e'/>每次检验都很便宜：反复平方法计算这个幂，n 的每一位大约只需一次平方。"
+    },
+    "d3866cac145c": {
+      "scene": "Primes",
+      "en": "Worse, some composites fool every coprime base. <bookmark mark='a'/> Here are the bases from one to five hundred and sixty for n equals five hundred and sixty-one, which is three times eleven times seventeen. Every base that shares no factor with it, all 320 of them, passes Fermat's test. <bookmark mark='b'/> Alwin Korselt explained why in 1899: this happens exactly when n is squarefree and p minus one divides n minus one for each of its prime factors p. Five hundred and sixty is divisible by two, ten and sixteen. <bookmark mark='c'/> Robert Carmichael found the first examples in 1910. There are 43 below a million, and in 1994 Alford, Granville and Pomerance proved there are infinitely many. Fermat's test needs repairing.",
+      "zh": "更糟的是，有些合数能骗过每一个与它互素的底数。<bookmark mark='a'/>这里是 n 等于五百六十一时从一到五百六十的底数，五百六十一等于三乘十一乘十七。每个与它没有公因子的底数，全部 320 个，都通过了费马检验。<bookmark mark='b'/>Alwin Korselt 在1899年解释了原因：这种情况恰好在 n 无平方因子、且对它的每个素因子 p，p 减一都整除 n 减一时发生。五百六十能被二、十和十六整除。<bookmark mark='c'/>Robert Carmichael 在1910年找到了最早的例子。一百万以下有 43 个，1994年 Alford、Granville 与 Pomerance 证明了它们有无穷多个。费马检验需要修补。"
+    },
+    "4cdc08c52db4": {
+      "scene": "Primes",
+      "en": "Gary Miller in 1976 and Michael Rabin in 1980 found the repair. <bookmark mark='a'/> Modulo a prime, the only square roots of one are one and minus one, because x squared minus one factors as x minus one times x plus one, and in a field a product is zero only if a factor is. <bookmark mark='b'/> Write n minus one as a power of two times an odd number d, and compute a to the d, then keep squaring until we reach a to the n minus one. <bookmark mark='c'/> For a prime, the sequence is all ones, or it hits minus one somewhere before the first one. <bookmark mark='d'/> Watch five hundred and sixty-one with base two: two hundred and sixty-three, one hundred and sixty-six, sixty-seven, then one. <bookmark mark='e'/> Sixty-seven squares to one but isn't plus or minus one: a square root of one that no prime can have. Fermat was fooled; this test isn't. <bookmark mark='f'/> Rabin proved that for every odd composite, at most a quarter of the bases in our stated range, one through n minus one, lie. Five hundred and sixty-one has only 10. <bookmark mark='g'/> Searching every odd composite below twenty thousand, the worst was nine, with exactly a quarter, so the bound can't be improved. Forty random bases give false acceptance of any fixed odd composite at most four to the minus forty, about ten to the minus twenty-four.",
+      "zh": "Gary Miller 在1976年、Michael Rabin 在1980年找到了修补的办法。<bookmark mark='a'/>模一个素数，一的平方根只有一和负一，因为 x 的平方减一分解为 x 减一乘 x 加一，而在域中，乘积为零仅当某个因子为零。<bookmark mark='b'/>把 n 减一写成二的幂乘一个奇数 d，先算 a 的 d 次方，再不断平方，直到 a 的 n 减一次方。<bookmark mark='c'/>对素数来说，这个序列要么全是一，要么在第一个一之前的某处出现负一。<bookmark mark='d'/>看五百六十一取底数二：二百六十三、一百六十六、六十七，然后是一。<bookmark mark='e'/>六十七的平方是一，但它既不是一也不是负一：这是任何素数都不可能有的一的平方根。费马检验被骗了，这个检验没有。<bookmark mark='f'/>Rabin 证明，对每个奇合数，在这里从一到 n 减一的底数范围内，至多四分之一的底数会说谎。五百六十一只有 10 个。<bookmark mark='g'/>搜索两万以下的每个奇合数，最坏的是九，恰好四分之一，所以这个界不能改进。四十个随机底数对任意固定奇合数的误接受概率至多为四的负四十次方，大约十的负二十四次方。"
+    },
+    "65ebacfc8930": {
+      "scene": "Primes",
+      "en": "Now generate probable primes: choose random odd candidates of the requested bit length and keep one that passes forty Miller–Rabin rounds. Passing is not a primality certificate. <bookmark mark='a'/> The prime number theorem suggests roughly three hundred and fifty odd candidates for a 1024-bit search; it is an asymptotic expectation, not a fixed search budget. <bookmark mark='b'/> The table reports complete generation times: the minimum of three for the smaller sizes and one observed run for 2048 bits. Every resulting candidate gets sixty-four additional independent screening rounds outside the timer, still without becoming a certified prime. Modular-power benchmarks are separate and exclude choosing their base. <bookmark mark='c'/> Agrawal, Kayal and Saxena proved deterministic polynomial-time primality testing in 2002. <bookmark mark='d'/> Practical prime generation often uses randomized screening or other tests and certificates. Cryptography also uses elliptic curves; not every secure connection generates random primes.",
+      "zh": "现在生成可能素数：随机选取指定比特长度的奇数候选，保留通过四十轮 Miller–Rabin 检验的一个。通过不是素性证书。<bookmark mark='a'/>素数定理提示，一千零二十四位的搜索大约需要三百五十个奇数候选；这是渐近期望，不是固定搜索预算。<bookmark mark='b'/>表格报告完整生成时间：较小规模取三次最小值，2048 位只观察了一次。停表后，对每个结果额外做六十四轮独立筛查，它仍然不是经认证的素数。模幂基准单独测量，不包含选择底数。<bookmark mark='c'/>Agrawal、Kayal 和 Saxena 在2002年证明了确定性多项式时间的素性检验。<bookmark mark='d'/>实际素数生成常用随机筛查，也会用其他检验和证书。密码学还使用椭圆曲线；并非每条安全连接都生成随机素数。"
+    },
+    "b351da465561": {
+      "scene": "Walks",
+      "en": "Chapter six. Random walks that solve SAT.",
+      "zh": "第6章。求解 SAT 的随机游走。"
+    },
+    "609df8b1e2e0": {
+      "scene": "Walks",
+      "en": "A 2-SAT formula is an and of clauses, each an or of two literals. Part 18 solved it exactly, with strongly connected components of the implication graph. <bookmark mark='a'/> Christos Papadimitriou analyzed a much dumber method in 1991. Start anywhere. While some clause fails, pick one, and flip one of its two variables, chosen by a coin. <bookmark mark='b'/> It uses no structure at all. Why should it ever finish?",
+      "zh": "2-SAT 公式是若干子句的合取，每个子句是两个文字的析取。第18部分用蕴含图的强连通分量精确地解决了它。<bookmark mark='a'/>Christos Papadimitriou 在1991年分析了一种笨得多的方法。从任意赋值开始。只要有子句不成立，就挑一个，用硬币选它的两个变量之一并翻转。<bookmark mark='b'/>它完全不利用结构。凭什么它会结束？"
+    },
+    "f3703dd794ab": {
+      "scene": "Walks",
+      "en": "Fix one satisfying assignment, x star, and let D be the number of variables where our assignment differs from it. <bookmark mark='a'/> A clause that fails has both its literals false, but x star makes at least one of them true, so we disagree with x star on at least one of the two variables. <bookmark mark='b'/> Flipping a random one of the two moves D one step closer to zero with probability at least a half. <bookmark mark='c'/> So D does a random walk on the line from zero to n, pushed toward zero at least as often as away. This is the gambler's ruin. From any start, the expected time to reach zero is at most n squared. <bookmark mark='d'/> Here is one walk, starting eight steps away. It took 178 flips. We may even stop sooner, at some other solution. <bookmark mark='e'/> So run two n squared steps. If the formula is satisfiable, Markov's inequality says we fail with probability at most a half, and repetition does the rest. The bound is for the worst formula: on random satisfiable ones, with up to three hundred and twenty variables, the walk needed only about two flips per variable.",
+      "zh": "固定一个满足赋值 x 星，令 D 为我们的赋值与它不同的变量个数。<bookmark mark='a'/>一个不成立的子句两个文字都为假，但 x 星至少使其中一个为真，所以在这两个变量中，我们至少有一个与 x 星不同。<bookmark mark='b'/>随机翻转两者之一，以至少二分之一的概率使 D 向零靠近一步。<bookmark mark='c'/>于是 D 在从零到 n 的直线上做随机游走，被推向零的次数至少和远离的一样多。这就是赌徒破产问题。从任何起点出发，到达零的期望时间至多为 n 的平方。<bookmark mark='d'/>这是一次游走，从八步之外开始。它用了 178 次翻转。我们甚至可能更早停下，停在另一个解上。<bookmark mark='e'/>所以运行二倍 n 平方步。如果公式可满足，马尔可夫不等式说我们失败的概率至多为二分之一，其余的交给重复。这个上界针对最坏的公式：在多达三百二十个变量的随机可满足公式上，游走每个变量只需要大约两次翻转。"
+    },
+    "72746b20f75d": {
+      "scene": "Walks",
+      "en": "For 3-SAT the same walk works, but worse. <bookmark mark='a'/> A failing clause now has three variables, and only one of them might be the right one to flip, so the chance that D falls can be as low as one third. <bookmark mark='b'/> The walk can drift away from the solution, so Uwe Schöning, in 1999, restarts it from a fresh random assignment every three n flips. <bookmark mark='c'/> A careful count shows each restart succeeds with probability at least three quarters to the n divided by a polynomial factor, giving expected restarts of order four thirds to the n up to polynomial factors: exponential, but far fewer than the two to the n assignments. <bookmark mark='d'/> We tested small random formulas near the threshold, retaining those with exactly one satisfying assignment, checked by brute force. This is a selected fixture family, not a proof of worst-case difficulty. <bookmark mark='e'/> With 20 variables, the walk needed about 35 restarts on average, compared with the displayed exponential scale; the omitted polynomial factors mean that curve is not a finite upper bound. Brute force has about a million assignments to try here. Selected later descendants of Paturi, Pudlák, Saks and Zane's algorithm achieve exponential bases around one point three; this is not a current-record survey. Whether something much better exists is the question behind the exponential time hypothesis of Part 27.",
+      "zh": "对 3-SAT，同样的游走也行，但更差。<bookmark mark='a'/>现在一个不成立的子句有三个变量，其中可能只有一个是该翻转的，所以 D 下降的概率可能低至三分之一。<bookmark mark='b'/>游走可能远离解，所以 Uwe Schöning 在1999年每翻转三倍 n 次就从一个新的随机赋值重新开始。<bookmark mark='c'/>仔细计算表明，每次重启成功概率至少是四分之三的 n 次方再除以多项式因子，所以期望重启次数至多是四分之三的倒数的 n 次方乘多项式因子：仍是指数，但远少于二的 n 次方个赋值。<bookmark mark='d'/>我们测试阈值附近的小规模随机公式，保留那些恰有一个满足赋值的公式，并用穷举核实。这是选定的测试族，不是最坏难度的证明。<bookmark mark='e'/>有 20 个变量时，游走平均需要大约 35 次重启，与显示的指数尺度作比较；由于省略多项式因子，这条曲线不是有限规模上界，而穷举法要试大约一百万个赋值。一些后来发展的 Paturi、Pudlák、Saks 与 Zane 算法后继者，指数底数约为一点三；这里不作最新纪录调查。是否存在好得多的算法，正是第27部分指数时间假设背后的问题。"
+    },
+    "0096591fcb11": {
+      "scene": "Bins",
+      "en": "Chapter seven. Balls into bins, and the power of two choices.",
+      "zh": "第7章。球与箱，以及两个选择的力量。"
+    },
+    "95cc23a8472c": {
+      "scene": "Bins",
+      "en": "Throw balls into bins at random. How full does the fullest bin get? This question decides how well a hash table's chains, Part 17, or a server farm's queues are balanced. <bookmark mark='a'/> On the left, each of twenty-four balls goes into one random bin of twelve. On the right, each ball looks at two random bins and goes into the emptier one. <bookmark mark='b'/> The same random numbers drive both sides: the left uses the first choice, the right uses both. <bookmark mark='c'/> One choice leaves some bins empty and piles others high. Two choices are strikingly even.",
+      "zh": "把球随机扔进箱子。最满的箱子会有多满？这个问题决定了哈希表的链（第17部分）或服务器集群的队列平衡得有多好。<bookmark mark='a'/>左边，二十四个球各自进入十二个箱子中的一个随机箱子。右边，每个球看两个随机箱子，进入较空的那个。<bookmark mark='b'/>两边由同样的随机数驱动：左边用第一个选择，右边两个都用。<bookmark mark='c'/>一个选择会让一些箱子空着，另一些堆得很高。两个选择则出奇地均匀。"
+    },
+    "2dae9db2d107": {
+      "scene": "Bins",
+      "en": "Now with n balls and n bins, for n from a thousand to a million. <bookmark mark='a'/> With one choice the fullest bin holds about log n over log log n balls; the column beside it is that formula, which is right only up to a factor that tends to one very slowly, so the measured loads are higher. <bookmark mark='b'/> With two choices the fullest bin holds about log log n over log two, plus a constant. For a million balls: ten against four. <bookmark mark='c'/> At a million, the one-choice loads approximately follow a Poisson law, a fraction e to the minus one over k factorial of the bins holding k, with 9 unlucky bins holding 8. With two choices nothing went above 4. A tiny change in the rule, an exponential change in the result. This is the power of two choices, from Azar, Broder, Karlin and Upfal in 1994.",
+      "zh": "现在是 n 个球和 n 个箱子，n 从一千到一百万。<bookmark mark='a'/>一个选择时，最满的箱子大约有 log n 除以 log log n 个球；旁边一列就是这个公式，它只在一个非常缓慢地趋于一的因子之内正确，所以测得的负载更高。<bookmark mark='b'/>两个选择时，最满的箱子大约有 log log n 除以 log 二个球，再加一个常数。一百万个球时：十对四。<bookmark mark='c'/>在一百万时，一个选择的负载近似服从泊松分布，装有 k 个球的箱子占 e 的负一次方除以 k 的阶乘，有 9 个倒霉的箱子装了 8 个。两个选择时没有超过 4 的。规则上一个微小的改变，结果上一个指数级的改变。这就是两个选择的力量，来自 Azar、Broder、Karlin 与 Upfal 1994年的工作。"
+    },
+    "7f9f1e4f57ad": {
+      "scene": "Bins",
+      "en": "Why? <bookmark mark='a'/> Let beta i be the number of bins holding at least i balls. <bookmark mark='b'/> A ball lands at height i plus one only if both its bins already hold at least i, <bookmark mark='c'/> with probability about beta i over n, squared. So each height's fraction is about the square of the one below. <bookmark mark='d'/> Squaring collapses fast: a quarter, a sixteenth, one in two hundred and fifty-six, one in sixty-five thousand, below one over n after about log log n steps. <bookmark mark='e'/> With one choice there is no squaring, only one over k factorial. <bookmark mark='f'/> With d choices the load is log log n over log d, so most of the gain is in the second choice. <bookmark mark='g'/> Load balancers use exactly this rule, and cuckoo hashing gives every key two homes.",
+      "zh": "为什么？<bookmark mark='a'/>令 beta i 为至少装有 i 个球的箱子数。<bookmark mark='b'/>一个球只有在它的两个箱子都已至少有 i 个球时，才会落在第 i 加一层，<bookmark mark='c'/>概率大约是 beta i 除以 n 的平方。所以每一层的比例大约是下一层比例的平方。<bookmark mark='d'/>平方让它迅速崩塌：四分之一、十六分之一、二百五十六分之一、六万五千分之一，大约 log log n 步之后就低于 n 分之一。<bookmark mark='e'/>一个选择时没有平方，只有 k 的阶乘分之一。<bookmark mark='f'/>d 个选择时负载是 log log n 除以 log d，所以大部分收益来自第二个选择。<bookmark mark='g'/>负载均衡器正是用这条规则，布谷鸟哈希给每个键两个位置。"
+    },
+    "4db9e1e117d2": {
+      "scene": "Bloom",
+      "en": "Chapter eight. Bloom filters.",
+      "zh": "第8章。布隆过滤器。"
+    },
+    "9d5d5c3f7a85": {
+      "scene": "Bloom",
+      "en": "In 1970 Burton Bloom asked how to test membership in a set using far less memory than the set itself, if we accept an occasional wrong yes. <bookmark mark='a'/> Take an array of bits, all zero, and three hash functions. <bookmark mark='b'/> To add a word, hash it three times and set those three bits. Here go six words from Moby-Dick. <bookmark mark='c'/> The words themselves are not stored anywhere. Only bits remain.",
+      "zh": "1970年，Burton Bloom 问：如果偶尔接受一个错误的“是”，能否用远少于集合本身的内存来检验成员关系？<bookmark mark='a'/>取一个全为零的比特数组和三个哈希函数。<bookmark mark='b'/>要加入一个词，就把它哈希三次，把那三个比特置一。这里加入《白鲸》中的六个词。<bookmark mark='c'/>词本身没有存在任何地方。只剩下比特。"
+    },
+    "f3d99ca85687": {
+      "scene": "Bloom",
+      "en": "To ask whether a word is in the set, check its three bits. <bookmark mark='a'/> Dog: one of its bits is zero, so dog was certainly never added. <bookmark mark='b'/> Boat: also a zero, certainly not. <bookmark mark='c'/> Ocean: all three of its bits are set, by whale, so the filter says yes, wrongly. A false positive. <bookmark mark='d'/> Deck: also yes, its bits set by harpoon and Queequeg. A Bloom filter never says no to a word that is in the set, but it sometimes says yes to one that isn't. How often?",
+      "zh": "要问一个词是否在集合中，就检查它的三个比特。<bookmark mark='a'/>dog：它有一个比特是零，所以 dog 肯定从未加入。<bookmark mark='b'/>boat：也有一个零，肯定不在。<bookmark mark='c'/>ocean：它的三个比特都被 whale 置了一，所以过滤器说“是”，错了。这是一个假阳性。<bookmark mark='d'/>deck：也说“是”，它的比特由 harpoon 和 Queequeg 置一。布隆过滤器对集合中的词从不说“否”，但有时对不在集合中的词说“是”。这有多常见？"
+    },
+    "f36d12abb96a": {
+      "scene": "Bloom",
+      "en": "Suppose we add n words to m bits with k independent uniform hash placements in an ideal model. <bookmark mark='a'/> A particular bit is missed by all k n hashes with probability one minus one over m, to the k n, which is about e to the minus k n over m. <bookmark mark='b'/> A word that was never added is a false positive if all k of its bits happen to be set: probability about one minus that, to the k. <bookmark mark='c'/> There is a balance. Too few hash functions give too few membership probes; too many fill the bit array and make each probe less selective. <bookmark mark='d'/> Calculus gives the best k, m over n times log two, and at that continuous optimum the modeled occupancy is one half. The error is then about 0.6185 to the power m over n. <bookmark mark='e'/> Every extra bit per word divides the error by about 1.6, and ten bits per word give about one percent, under this approximation, with integer hash counts rounded and finite dependencies treated separately. Our double-hash implementation is measured against the model rather than certified by it.",
+      "zh": "假设将 n 个词加入 m 个比特，并在理想模型中使用 k 次独立均匀哈希落点。<bookmark mark='a'/>某个特定比特被全部 k n 次哈希错过的概率是一减 m 分之一的 k n 次方，约等于 e 的负 k n 除以 m 次方。<bookmark mark='b'/>一个从未加入的词，如果它的 k 个比特恰好都被置一，就是假阳性：概率约为一减去上面那个数，再取 k 次方。<bookmark mark='c'/>这里有一个平衡。哈希函数太少，成员查询的探查次数不足；太多则会填满位数组，使每次探查的区分力下降。<bookmark mark='d'/>微积分给出最好的 k，即 m 除以 n 乘 log 二，在这个连续最优点，模型占用率为二分之一。错误率约为 0.6185 的 m 除以 n 次方。<bookmark mark='e'/>每个词每多一个比特，错误率大约除以 1.6，每个词十个比特给出大约百分之一，这依赖于该近似，还要对整数哈希次数取整，另行处理有限规模的依赖。双重哈希实现与模型作实验比较，不由模型直接认证。"
+    },
+    "3554a040c1d4": {
+      "scene": "Bloom",
+      "en": "Now a real one: all 57,895 distinct words of the novels, ten bits per word, queried with a hundred thousand random strings that are not words of the novels. <bookmark mark='a'/> The purple curve is the formula, and the green dots are what we measured for each number of hash functions. <bookmark mark='b'/> At the best k, seven, 0.81 percent of the non-words slipped through, against a predicted 0.82, and almost exactly half the bits were set. <bookmark mark='c'/> With sixteen bits per word the rate falls to one in two thousand. <bookmark mark='d'/> The packed filter takes about seventy-one kibibytes, while just the letters of the words take about four hundred and forty-two kibibytes. Every inserted word was checked; none was missed. <bookmark mark='e'/> Counting filters allow deletions, cuckoo filters do better at low error rates, and nearly every log-structured database keeps a Bloom filter per file to skip disk reads, as Part 34 will show.",
+      "zh": "现在看一个真实的：小说中全部 57895 个不同的词，每个词十个比特，用十万个不是小说中词的随机字符串来查询。<bookmark mark='a'/>紫色曲线是公式，绿色的点是我们对每个哈希函数个数测得的值。<bookmark mark='b'/>在最好的 k 即七时，有百分之 0.81 的非词溜了过去，预测值是 0.82，而且几乎恰好一半的比特被置一。<bookmark mark='c'/>每个词十六个比特时，这个比例降到两千分之一。<bookmark mark='d'/>紧凑过滤器占约七十一 KiB，而光是这些词的字母就要约四百四十二 KiB。我们检查了每个插入的词，没有漏报。<bookmark mark='e'/>计数过滤器允许删除，布谷鸟过滤器在低错误率时更好，几乎每个日志结构的数据库都为每个文件保存一个布隆过滤器来跳过磁盘读取，第34部分会展示这一点。"
+    },
+    "201e4232e6ac": {
+      "scene": "Stream",
+      "en": "Chapter nine. Streams: one pass, little memory.",
+      "zh": "第9章。数据流：一遍扫描，很少的内存。"
+    },
+    "8f3c608ef031": {
+      "scene": "Stream",
+      "en": "Part 17 kept every distinct word of the novels, almost fifty-eight thousand. What if we can't afford that? <bookmark mark='a'/> In the streaming model the items go by once, <bookmark mark='b'/> can't be stored, <bookmark mark='c'/> and memory is far smaller than the stream, often smaller than the number of different items in it. <bookmark mark='d'/> Routers, sensors, logs and query planners live in this world.",
+      "zh": "第17部分保存了小说中的每个不同的词，将近五万八千个。如果我们负担不起呢？<bookmark mark='a'/>在流模型中，数据项只经过一次，<bookmark mark='b'/>无法存下来，<bookmark mark='c'/>而内存远小于数据流，往往比其中不同数据项的个数还小。<bookmark mark='d'/>路由器、传感器、日志和查询规划器都生活在这个世界里。"
+    },
+    "5275061aeb45": {
+      "scene": "Stream",
+      "en": "First, a fair sample. We want k items chosen uniformly from the stream, but we don't know how long it will be. <bookmark mark='a'/> Reservoir sampling, as Jeffrey Vitter described it in 1985: keep the first k. When the i-th item arrives, keep it with probability k over i, throwing out a random one of the k. <bookmark mark='b'/> By induction, every item seen so far is in the sample with probability exactly k over i. An item stays when the next one arrives unless the newcomer is kept and picks its slot, and the arithmetic turns k over i into k over i plus one. <bookmark mark='c'/> We drew five items from a hundred, fifty thousand times: every item was picked close to the expected two thousand five hundred times. <bookmark mark='d'/> And here are eight words drawn uniformly from all four million six hundred thousand in the novels, in a single pass.",
+      "zh": "首先，一个公平的样本。我们想从数据流中均匀地选出 k 项，但不知道它会有多长。<bookmark mark='a'/>蓄水池抽样，按 Jeffrey Vitter 1985年的描述：保留前 k 项。第 i 项到来时，以 k 除以 i 的概率保留它，并随机扔掉 k 项中的一项。<bookmark mark='b'/>由归纳法，到目前为止见过的每一项都恰好以 k 除以 i 的概率在样本中。当下一项到来时，一项留下，除非新来者被保留并选中了它的位置，算一下，k 除以 i 就变成 k 除以 i 加一。<bookmark mark='c'/>我们从一百项中抽五项，抽了五万次：每一项被选中的次数都接近期望的两千五百次。<bookmark mark='d'/>这里是从小说全部四百六十万个词中一遍扫描、均匀抽出的八个词。"
+    },
+    "482e37bdba4e": {
+      "scene": "Stream",
+      "en": "Next, the frequent items, the Job's own question. <bookmark mark='a'/> Jayadev Misra and David Gries gave a deterministic method in 1982, with k minus one counters. A word that has a counter adds one. A new word takes a free counter. A new word with no free counter subtracts one from every counter, and the counters that reach zero are freed. <bookmark mark='b'/> Each subtraction cancels k words at once, the new one and one from each counter, so it can happen at most n over k times. So every count is low by at most n over k, and any word more frequent than n over k must survive. <bookmark mark='c'/> With ninety-nine counters on the novels, n over k is about forty-six thousand. The thirteen words above that all survived, each undercounted by about thirty-nine thousand, and words below it may vanish. A second pass, counting only the survivors, makes the counts exact. But the estimates themselves are poor. Can coin flips do better?",
+      "zh": "接下来是频繁项，正是作业自己的问题。<bookmark mark='a'/>Jayadev Misra 与 David Gries 在1982年给出了一个确定性方法，用 k 减一个计数器。已有计数器的词加一。新词占用一个空闲计数器。没有空闲计数器的新词让每个计数器减一，减到零的计数器被释放。<bookmark mark='b'/>每次减法一次抵消 k 个词：新来的一个，以及每个计数器各一个，所以它至多发生 n 除以 k 次。因此每个计数至多偏低 n 除以 k，任何比 n 除以 k 更频繁的词一定留存下来。<bookmark mark='c'/>在小说上用九十九个计数器，n 除以 k 大约是四万六千。高于它的十三个词全部留存，每个大约少计三万九千，低于它的词可能消失。第二遍扫描，只统计留存下来的词，就能得到精确的计数。但估计值本身很差。硬币能做得更好吗？"
+    },
+    "bcc4efd81d7b": {
+      "scene": "Stream",
+      "en": "Graham Cormode and S. Muthukrishnan's Count-Min sketch, from 2005, keeps a small table: d rows of w counters, with an independent hash function for each row. <bookmark mark='a'/> To add a word, hash it once per row and add one to each of those counters. <bookmark mark='b'/> To estimate a word's count, look at the same d counters and take the smallest. <bookmark mark='c'/> Every counter holds the word's true count plus the counts of whatever other words collided with it there. Collisions only ever add, so the estimate is never too low, and the minimum picks the row with the fewest collisions.",
+      "zh": "Graham Cormode 与 S. Muthukrishnan 2005年的 Count-Min 草图保存一张小表：d 行，每行 w 个计数器，每行一个独立的哈希函数。<bookmark mark='a'/>要加入一个词，每行哈希一次，把那些计数器各加一。<bookmark mark='b'/>要估计一个词的计数，看同样的 d 个计数器，取最小值。<bookmark mark='c'/>每个计数器都等于这个词的真实计数，加上在那里与它碰撞的其他词的计数。碰撞只会增加，所以估计值从不偏低，而最小值选出了碰撞最少的那一行。"
+    },
+    "d54065f580f6": {
+      "scene": "Stream",
+      "en": "How large can the error be in the standard insertion-only Count-Min model? <bookmark mark='a'/> In one row, use a hash family with collision probability at most one over w for each pair. The expected excess for a fixed queried item is at most N over w. Markov bounds excess above e times that by one over e. <bookmark mark='b'/> With independently chosen row hashes, all rows must fail, so the probabilities multiply. <bookmark mark='c'/> Choose width at least e over epsilon and depth at least the natural log of one over delta. Each fixed item then has additive error at most epsilon N with probability at least one minus delta. This is not a simultaneous guarantee for every item without an additional union bound. <bookmark mark='d'/> The counter count depends on epsilon and delta; each counter still needs enough bits for N. <bookmark mark='e'/> The corpus experiment has a comparison level of 12,273 and mean excess about 968. Its concrete polynomial and double hashes are an empirical implementation, not a proof that the independent-row theorem applies. The reported fraction across words is not a failure probability over independent hash choices.",
+      "zh": "在标准的只插入 Count-Min 模型中，误差有多大？<bookmark mark='a'/>一行使用的哈希族，应使每对元素的碰撞概率至多为 w 分之一。对一个固定查询项，期望多余量至多为 N 除以 w。由马尔可夫不等式，多余量超过其 e 倍的概率至多为 e 分之一。<bookmark mark='b'/>若各行哈希独立选取，所有行必须同时失败，所以概率相乘。<bookmark mark='c'/>宽度至少为 e 除以 epsilon，深度至少为一除以 delta 的自然对数。每个固定项以至少一减 delta 的概率具有不超过 epsilon N 的加性误差。若要同时保证所有项，还需要额外的联合界。<bookmark mark='d'/>计数器个数取决于 epsilon 和 delta；每个计数器仍需足够多的比特来保存 N。<bookmark mark='e'/>语料实验的比较水平为 12273，平均多余量约为 968。具体的多项式哈希和双重哈希是实验实现，不证明独立行定理适用。对词汇统计的超限比例，也不是对独立哈希选择的失败概率。"
+    },
+    "b7c777af3fb8": {
+      "scene": "JobSketch",
+      "en": "Chapter ten. The Job in kilobytes.",
+      "zh": "第10章。几千字节里的作业。"
+    },
+    "0d78a2a77d22": {
+      "scene": "JobSketch",
+      "en": "Now the Job itself, rebuilt so that it never stores the vocabulary. <bookmark mark='a'/> A Count-Min sketch of four rows of 1021 counters estimates every word's count. <bookmark mark='b'/> Only thirty-two words are kept, candidates for the top twenty, in a heap ordered by estimate; a word replaces the weakest when its estimate beats it. <bookmark mark='c'/> A table of a hundred and twenty-eight slots finds a word among the candidates, and an evicted one is deleted by shifting its neighbours back, Knuth's Algorithm R. <bookmark mark='d'/> Estan and Varghese's conservative update raises only the counters at the minimum: it still never undercounts, but it adds far less to other words. <bookmark mark='e'/> And double hashing gives all four row positions from one division per word.",
+      "zh": "现在是作业本身，重新构造成从不存储词汇表。<bookmark mark='a'/>一个四行、每行 1021 个计数器的 Count-Min 草图估计每个词的计数。<bookmark mark='b'/>只保留三十二个词，作为前二十名的候选，放在按估计值排序的堆里；一个词的估计值超过最弱的候选时就取代它。<bookmark mark='c'/>一张有一百二十八个槽的表在候选中查找一个词，被逐出的候选通过把邻居向后移动来删除，即 Knuth 的算法 R。<bookmark mark='d'/>Estan 与 Varghese 的保守更新只增加处于最小值的计数器：它仍然从不偏低，但给其他词增加的要少得多。<bookmark mark='e'/>而双重哈希每个词只用一次除法就给出全部四行的位置。"
+    },
+    "d03c09fc54f1": {
+      "scene": "JobSketch",
+      "en": "Here is the function that runs once per word, compiled by Part 13's compiler. <bookmark mark='a'/> First the four counter positions, each the last plus the step g, wrapped by a subtraction instead of a division. <bookmark mark='b'/> The estimate is the smallest of the four counters, <bookmark mark='c'/> and only the counters equal to it are raised. <bookmark mark='d'/> Then the test that makes the program cheap: if the heap is full and this word's estimate can't beat the weakest candidate, we are done. Almost every word in English stops here. <bookmark mark='e'/> A word that is already a candidate gets its new estimate and moves down the heap. <bookmark mark='f'/> Anything else joins, or replaces the weakest candidate.",
+      "zh": "这是每个词运行一次的函数，由第13部分的编译器编译。<bookmark mark='a'/>首先是四个计数器的位置，每个是前一个加上步长 g，用一次减法而不是除法来回绕。<bookmark mark='b'/>估计值是四个计数器中最小的，<bookmark mark='c'/>只有等于它的计数器才被增加。<bookmark mark='d'/>然后是让程序便宜的那个检验：如果堆已满，而这个词的估计值打不过最弱的候选，就结束。英语中几乎每个词都在这里停下。<bookmark mark='e'/>已经是候选的词得到新的估计值，在堆中下沉。<bookmark mark='f'/>其他的词加入，或者取代最弱的候选。"
+    },
+    "5f36c7248527": {
+      "scene": "JobSketch",
+      "en": "What does the program remember? <bookmark mark='a'/> The sketch contains four-byte counters; the retained candidates, letters, heap and index slots add storage. <bookmark mark='b'/> The complete global-data block contains 18,588 bytes, about eighteen and a half decimal kilobytes. This excludes the host interpreter, input corpus, code and stack. <bookmark mark='c'/> Part 17's modeled exact table stores every distinct word and uses 1.9 decimal megabytes. <bookmark mark='d'/> This comparison is about a hundredfold data-storage reduction. <bookmark mark='e'/> A 150-kilobyte passage was traced through Part 9's cache model: 295 distinct data lines, at most 6 in one eight-way set. We extrapolate its stalls under the fixed-working-set model; we did not trace every full-corpus cache access.",
+      "zh": "程序记住了什么？<bookmark mark='a'/>草图使用四字节计数器；保留的候选、字母、堆和索引槽另占存储。<bookmark mark='b'/>完整全局数据块含 18588 字节，约十八点五十进制千字节。不包含主机解释器、输入语料、代码和栈。<bookmark mark='c'/>第17部分建模的精确表保存每个不同的词，使用 1.9 十进制兆字节。<bookmark mark='d'/>比较的是约百倍的数据存储缩减。<bookmark mark='e'/>一段 150 千字节的文本经过第9部分缓存模型的逐次追踪：共 295 个不同数据行，每个八路组最多 6 行。我们在固定工作集模型下外推它的停顿；没有追踪完整语料的每次缓存访问。"
+    },
+    "614459ab1133": {
+      "scene": "JobSketch",
+      "en": "The ledger gets its ninth row. The emulator executed all 1,069,411,435 instructions on the complete corpus, about 43 per byte. The full output matched both the sketch reference and the exact top-word counts for this fixed seed. <bookmark mark='a'/> The displayed processor time is a projection: full instruction count divided by IPC from three short passages, plus sampled cache stalls, at the ledger's clock frequency. <bookmark mark='b'/> The sampled core includes the sketch's comparison dependencies. It is not a whole-corpus core simulation. <bookmark mark='c'/> Cache costs for both versions also belong to their stated trace and projection models. <bookmark mark='d'/> Read row nine as a modeled time-storage tradeoff, alongside the independently measured complete emulator runtime. The emulator's wall time and the projected processor time are different quantities.",
+      "zh": "账本有了第九行。模拟器在完整语料上执行了全部 1069411435 条指令，约每字节 43 条。对这个固定种子，完整输出同时符合草图参考实现和精确的高频词计数。<bookmark mark='a'/>显示的处理器时间是外推值：完整指令数除以三段短文本测得的每周期指令数，加上抽样缓存停顿，再使用账本的时钟频率。<bookmark mark='b'/>抽样处理器模拟包含草图的比较依赖，但不是完整语料的处理器模拟。<bookmark mark='c'/>两个版本的缓存代价，也都属于各自声明的追踪和外推模型。<bookmark mark='d'/>第九行应看作建模的时间与存储交换，同时参考独立测得的完整模拟器耗时。模拟器墙钟时间与外推处理器时间是不同的量。"
+    },
+    "5045739212ff": {
+      "scene": "JobSketch",
+      "en": "Was the exact answer luck? We reran the algorithm in C with twenty fixed polynomial-hash multipliers and several sketch sizes. This is an empirical seed sweep, not a universal-hash proof. <bookmark mark='a'/> At four rows of 1021 counters, five of twenty seeds gave exactly the correct top twenty and counts. The program's seed was one. Average word overlap was 19.1, with eighteen the minimum. <bookmark mark='b'/> One rare intruder was vespasian, occurring once, but estimated near fifty-nine thousand. Collisions need not respect a word's real frequency. <bookmark mark='c'/> The observed exact shares increased at the wider configurations shown. This corpus does not establish monotonic success for every input. <bookmark mark='d'/> Storage and per-update work are bounded by the design, while complete top-twenty correctness has no theorem here. A single item's Count-Min bound does not certify the retained candidate set. <bookmark mark='e'/> All true top words survived among the thirty-two candidates in these twenty runs. A second pass counting those candidates would repair these runs. For a new stream, missing a true top word would still defeat that repair.",
+      "zh": "精确答案是运气吗？我们用 C，在二十个固定多项式哈希乘数和几种草图大小下重新运行。这是种子扫描实验，不是通用哈希证明。<bookmark mark='a'/>四行、每行 1021 个计数器时，二十个种子中五个的前二十名及计数完全正确，程序自己的种子是其中之一。平均词汇重合数为 19.1，最少十八个。<bookmark mark='b'/>一个罕见的闯入者是 vespasian，实际出现一次，却被估计为将近五万九千。碰撞不会遵守词的真实频率。<bookmark mark='c'/>显示的更宽配置中，观察到的完全正确比例提高。这份语料不能证明对每个输入成功率都单调提高。<bookmark mark='d'/>存储和每次更新的工作受设计约束，但这里没有完整前二十名正确性的定理。单个项的 Count-Min 界不能认证候选集合。<bookmark mark='e'/>这二十次运行中，真正的高频词都留在三十二个候选内。第二遍只精确统计候选，就能修复这些运行。新数据流若漏掉真正的高频词，这种修补仍会失败。"
+    },
+    "fbb616459405": {
+      "scene": "Distinct",
+      "en": "Chapter eleven. Counting distinct things: HyperLogLog.",
+      "zh": "第11章。统计不同元素：HyperLogLog。"
+    },
+    "f83c5110f72c": {
+      "scene": "Distinct",
+      "en": "How many different words are in the novels? An exact general-purpose set can grow with the distinct items. <bookmark mark='a'/> Flajolet and Martin proposed a much smaller randomized summary in 1985: hash each item to random-looking bits and examine its leading zeros. Repeated items reuse their hash and do not change the maximum. <bookmark mark='b'/> In an ideal independent-bit model, a rank of rho, meaning rho minus one zeros followed by a one, has probability two to the minus rho. The largest observed rank therefore gives a noisy scale for cardinality. <bookmark mark='c'/> Remember the largest rank. Its storage is logarithmic in the hash bit width; finite hashes eventually saturate and collide. Five bits do not cover every possible stream. <bookmark mark='d'/> A single extreme hash makes the estimate unstable, so we use many registers.",
+      "zh": "小说中有多少个不同的词？一般用途的精确集合会随不同元素增大。<bookmark mark='a'/>Flajolet 和 Martin 在1985年提出了小得多的随机摘要：把元素哈希成近似随机的比特，检查前导零。重复元素复用哈希，不改变最大值。<bookmark mark='b'/>在理想独立比特模型中，秩为 rho，即 rho 减一个零后跟一个一，其概率为二的负 rho 次方。因此最大观测秩给出基数的一个有噪声的尺度。<bookmark mark='c'/>只记住最大秩，所需存储是哈希比特宽度的对数量级；有限哈希最终会饱和、碰撞。五个比特不能覆盖任何可能的数据流。<bookmark mark='d'/>一个极端哈希就会让估计不稳定，所以使用许多寄存器。"
+    },
+    "6a472f868fe5": {
+      "scene": "Distinct",
+      "en": "The cure uses many registers. <bookmark mark='a'/> The leading hash bits choose one of m registers. Store the largest rank of the remaining suffix in that register. Here are sixty-four registers after hashing the novel vocabulary. <bookmark mark='b'/> HyperLogLog, from Flajolet and colleagues in 2007, combines powers of those ranks through a bias-corrected harmonic estimate. <bookmark mark='c'/> The familiar one point zero four over root m is a leading relative standard-error scale under the hashing model, not a guaranteed relative-error interval. <bookmark mark='d'/> When many registers are zero, our implementation switches to the small-range empty-register correction. The actual register vector is checked against an independent scalar implementation.",
+      "zh": "解决方法是使用许多寄存器。<bookmark mark='a'/>哈希前几位选择 m 个寄存器之一，寄存器保存剩余后缀的最大秩。这里是小说词汇哈希后的六十四个寄存器。<bookmark mark='b'/>Flajolet 及同事在2007年提出 HyperLogLog，用经过偏差校正的调和估计组合这些秩的幂。<bookmark mark='c'/>熟悉的一点零四除以根号 m，是哈希模型下相对标准误差的主要尺度，不是有保证的相对误差区间。<bookmark mark='d'/>许多寄存器仍为零时，我们的实现切换到小范围的空寄存器校正。实际寄存器向量与独立的标量实现逐项核对。"
+    },
+    "e15b12809705": {
+      "scene": "Distinct",
+      "en": "We ran thirty fixed hash seeds per register count on the novel vocabulary. <bookmark mark='a'/> The table compares empirical root-mean-square error with the leading standard-error formula. Three kibibytes for 4096 registers means a modeled six-bit packed representation. The actual NumPy array uses thirty-two kibibytes, eight bytes per register, excluding the input and hashes. <bookmark mark='b'/> On the complete word stream, the estimate was 58,012 against 57,895 distinct words. <bookmark mark='c'/> The five-word-shingle run uses the same modeled register storage; its error and exact reference are shown separately. Neither this result nor thirty seeds certifies a confidence guarantee. <bookmark mark='d'/> Database engines use carefully engineered variants to trade precision for storage in approximate count-distinct queries.",
+      "zh": "对小说词汇，每种寄存器个数运行三十个固定哈希种子。<bookmark mark='a'/>表格比较实验均方根误差和主要标准误差公式。4096 个寄存器占三千零七十二字节，指的是建模的六比特紧凑表示。实际 NumPy 数组每个寄存器八字节，共三万二千七百六十八字节，还不含输入和哈希。<bookmark mark='b'/>完整词流上的估计为 58012，真实不同词数为 57895。<bookmark mark='c'/>五词短语实验使用相同的建模寄存器存储；误差和精确参考单独显示。这些结果和三十个种子都不是置信保证的认证。<bookmark mark='d'/>数据库引擎使用精心实现的变体，在近似不同值计数中交换精度和存储。"
+    },
+    "6b369d307dbf": {
+      "scene": "Ams",
+      "en": "Chapter twelve. Sketching the second moment.",
+      "zh": "第12章。为二阶矩画草图。"
+    },
+    "a03a67f72116": {
+      "scene": "Ams",
+      "en": "Counting distinct items and counting the stream's length are two cases of one family. <bookmark mark='a'/> The p-th frequency moment is the sum, over items, of each item's count to the power p. <bookmark mark='b'/> F zero is the number of distinct items, the last chapter. <bookmark mark='c'/> F one is the length of the stream, which one counter tracks. <bookmark mark='d'/> F two, the sum of the squared counts, measures how concentrated the stream is. <bookmark mark='e'/> It is the number of rows when a database joins a table with itself on that column, and it jumps when a network sees a flood of identical packets. <bookmark mark='f'/> For the novels it is a hundred and seventy-seven billion, and the word the contributes thirty percent of it on its own. Can we estimate F two without counting every word?",
+      "zh": "统计不同的数据项和统计数据流的长度，是同一个家族的两个情形。<bookmark mark='a'/>第 p 阶频率矩是对所有数据项求和，每项是它的计数的 p 次方。<bookmark mark='b'/>F 零是不同数据项的个数，即上一章。<bookmark mark='c'/>F 一是数据流的长度，一个计数器就能跟踪。<bookmark mark='d'/>F 二是计数的平方和，衡量数据流有多集中。<bookmark mark='e'/>它是数据库在那一列上做表的自连接时的行数，当网络看到大量相同的数据包涌来时，它会猛增。<bookmark mark='f'/>对小说来说它是一千七百七十四亿，单是 the 这个词就贡献了百分之三十。能否不统计每个词就估计 F 二？"
+    },
+    "e93a6e68cafe": {
+      "scene": "Ams",
+      "en": "Alon, Matias and Szegedy gave a foundational streaming result in 1996. <bookmark mark='a'/> Assign every item a consistent random sign, plus or minus one. On each arrival add its sign to counter Z. In the worked six-arrival stream, the counter ends at two, so this one squared estimate is four; the true second moment is fourteen. <bookmark mark='b'/> Algebraically, Z squared is the sum of squared frequencies plus cross terms involving two different signs. <bookmark mark='c'/> Unbiased pairwise-independent signs make those cross terms vanish in expectation. Averaging over all eight sign assignments in this three-item example gives exactly fourteen. <bookmark mark='d'/> Four-wise independence gives variance at most twice F two squared. <bookmark mark='e'/> Averaging k independent counters gives relative standard deviation at most the square root of two divided by k. Chebyshev bounds a chosen error threshold; independent groups and their median amplify confidence. <bookmark mark='f'/> This is the median-of-means construction: a standard-error scale becomes a probability statement only after specifying the threshold and group count.",
+      "zh": "Alon、Matias 和 Szegedy 在1996年给出了奠基性的数据流结果。<bookmark mark='a'/>每个元素固定分配一个随机正负号，每次到达就把它的符号加进计数器 Z。在六次到达的例子中，计数器最终为二，所以这一次平方估计为四，真实二阶矩为十四。<bookmark mark='b'/>代数上，Z 的平方等于频率平方之和，加上含两个不同符号的交叉项。<bookmark mark='c'/>无偏且两两独立的符号使交叉项的期望为零。对三种元素的全部八种符号赋值取平均，结果恰好为十四。<bookmark mark='d'/>四重独立性给出至多二倍 F 二平方的方差。<bookmark mark='e'/>平均 k 个独立计数器，相对标准差至多为二除以 k 的平方根。切比雪夫不等式约束选定误差阈值的概率；独立分组再取中位数可以放大置信度。<bookmark mark='f'/>这就是均值的中位数构造：只有声明误差阈值和分组数，标准误差尺度才成为概率陈述。"
+    },
+    "0f0eef137fc0": {
+      "scene": "Ams",
+      "en": "On the novels. <bookmark mark='a'/> The histogram contains four hundred single-counter squared estimates divided by the exact second moment. Individual estimates vary widely. Their empirical average is a finite statistic; unbiasedness refers to expectation over signs. <bookmark mark='b'/> Independent averages tighten the spread, consistent with the square-root scale. <bookmark mark='c'/> These experiments retain an exact frequency vector as input; the displayed counter budget excludes that vector. The table reports forty trials per configuration and the worst errors actually observed, including the median of nine groups. Those maxima are not future-error guarantees. The counters form linear random projections, so compatible unsquared counters for two streams can be added. Squared estimates themselves cannot simply be added.",
+      "zh": "再看小说。<bookmark mark='a'/>直方图包含四百个单计数器平方估计，除以精确二阶矩后的数值。单次估计波动很大。实验平均是有限统计量；无偏性说的是对随机符号取期望。<bookmark mark='b'/>独立平均会缩小分散程度，与平方根尺度一致。<bookmark mark='c'/>这些实验保留精确频率向量作为输入；显示的计数器预算不包含该向量。表格报告每种配置四十次试验，以及实际观察到的最大误差，包括九组均值的中位数。这些最大值不是未来误差保证。计数器是线性随机投影，所以两条流中相容的未平方计数器可以相加；平方后的估计本身不能直接相加。"
+    },
+    "0de8fffd1aa9": {
+      "scene": "Lsh",
+      "en": "Chapter thirteen. Near-duplicates: MinHash and locality-sensitive hashing.",
+      "zh": "第13章。近似重复：MinHash 与局部敏感哈希。"
+    },
+    "8dc2b98a29b7": {
+      "scene": "Lsh",
+      "en": "Search engines, plagiarism detectors and the people who clean training data for language models all need to find documents that are nearly the same. <bookmark mark='a'/> Represent a passage by its shingles, every run of five consecutive words. <bookmark mark='b'/> Two passages are as alike as the share of shingles they have in common: the Jaccard similarity, the size of the intersection over the size of the union. <bookmark mark='c'/> These two lines, from two versions of the same letter in The Count of Monte Cristo, share four of their ten distinct shingles, because changing one word breaks every shingle that contains it. <bookmark mark='d'/> The novels have thirty-four thousand paragraphs of forty words or more. Comparing every pair means almost six hundred million comparisons of sets.",
+      "zh": "搜索引擎、抄袭检测器，以及为语言模型清洗训练数据的人，都需要找出几乎相同的文档。<bookmark mark='a'/>用瓦片来表示一段文字，即每一串连续的五个词。<bookmark mark='b'/>两段文字的相似程度，就是它们共有的瓦片所占的比例：杰卡德相似度，交集的大小除以并集的大小。<bookmark mark='c'/>这两行来自《基督山伯爵》中同一封信的两个版本，它们十个不同的瓦片中共有四个，因为改动一个词会破坏包含它的每一个瓦片。<bookmark mark='d'/>小说中有三万四千个四十词以上的段落。比较每一对，意味着将近六亿次集合比较。"
+    },
+    "24f8a176e90e": {
+      "scene": "Lsh",
+      "en": "Broder popularized MinHash for document resemblance in 1997. <bookmark mark='a'/> First consider an ideal uniform random permutation of the distinct shingles. <bookmark mark='b'/> The two minimums agree exactly when the first element of their union belongs to the intersection. Every union element is equally likely to be first. <bookmark mark='c'/> Therefore agreement probability is exactly Jaccard similarity in this ideal model. <bookmark mark='d'/> With one hundred independent ideal rows, the agreement fraction has worst-case standard error five hundredths. This is not a guaranteed plus-or-minus-five-hundredths interval. Our fast affine hashes are an approximation to minwise randomness and receive empirical validation; their Jaccard identity is not exact by this proof.",
+      "zh": "Broder 在1997年推广了用 MinHash 衡量文档相似性的方法。<bookmark mark='a'/>先考虑不同短语的理想均匀随机排列。<bookmark mark='b'/>两个最小值相同，当且仅当并集中最先出现的元素属于交集。并集中的每个元素成为第一个的概率相同。<bookmark mark='c'/>因此在理想模型中，相等概率恰好是 Jaccard 相似度。<bookmark mark='d'/>一百个独立理想行的相等比例，其最坏标准误差为百分之五。这不是正负百分之五的保证区间。快速仿射哈希只是最小值随机性的近似，需要实验核查；这个证明不能赋予它精确的 Jaccard 恒等式。"
+    },
+    "58a9a2620cb2": {
+      "scene": "Lsh",
+      "en": "Signatures are short, but all paragraph pairs are still numerous. <bookmark mark='a'/> Split each signature into twenty bands of five rows and index each band. <bookmark mark='b'/> A pair becomes a candidate if any band agrees exactly. <bookmark mark='c'/> Under independent ideal minwise rows, one band matches with probability J to the fifth, and at least one matches with probability one minus one minus J to the fifth, raised to the twentieth. <bookmark mark='d'/> This is a smooth probability curve, not a hard threshold. The six hundred planted edited copies compare empirical candidate rates with that ideal curve. The affine-hash implementation can depart from the independent ideal model.",
+      "zh": "签名虽然短，段落对仍然很多。<bookmark mark='a'/>将每个签名切成二十个带，每带五行，分别建立索引。<bookmark mark='b'/>任意一个带完全相同，就把这对段落列为候选。<bookmark mark='c'/>在独立理想最小值哈希行的模型下，一带匹配的概率为 J 的五次方，至少一带匹配的概率为一减去一减 J 五次方的二十次方。<bookmark mark='d'/>这是平滑概率曲线，不是硬阈值。六百个植入的编辑副本，用来比较实验候选率和理想曲线。仿射哈希实现可能偏离独立理想模型。"
+    },
+    "4262d5fdd5a8": {
+      "scene": "Lsh",
+      "en": "Now the novels. <bookmark mark='a'/> We use collision-free dictionary IDs for whole five-word shingles. The producer records actual signature and banding times, yielding 3 candidate pairs. Timing includes the stated stages only. <bookmark mark='b'/> An exhaustive inverted index includes every posting list, even common shingles. Every pair with positive intersection is checked using exact integer intersection and union counts. Seven pairs have Jaccard similarity at least one fifth. <bookmark mark='c'/> Recall is reported with its threshold: finding two of two pairs above one half does not mean finding all seven above one fifth. The table gives exact scores and candidate flags for the full seven-pair inventory. <bookmark mark='d'/> Broader applications include web-page similarity and training-data deduplication. SimHash is a different locality-sensitive sketch; practical systems must also select thresholds and verify candidate pairs.",
+      "zh": "现在看小说。<bookmark mark='a'/>我们对完整五词短语使用无碰撞的字典编号。生产程序记录实际签名和分带时间，得到 3 对候选。计时仅包含声明的阶段。<bookmark mark='b'/>穷尽的倒排索引包含所有列表，包括常见短语。每一对有非空交集的段落，都用整数交集和并集大小计算精确相似度。共有七对的 Jaccard 相似度至少为五分之一。<bookmark mark='c'/>召回率必须带上阈值：找到二分之一以上的全部两对，不意味着找到五分之一以上的全部七对。表格给出完整七对清单的精确分数和候选标记。<bookmark mark='d'/>应用包括网页相似性和训练数据去重。SimHash 是另一种局部敏感草图；实际系统还要选择阈值、核查候选对。"
+    },
+    "5df69aa63d4c": {
+      "scene": "ProbMethod",
+      "en": "Chapter fourteen. The probabilistic method.",
+      "zh": "第14章。概率方法。"
+    },
+    "06ff41342cb8": {
+      "scene": "ProbMethod",
+      "en": "Colour every edge of a complete graph red or blue. Frank Ramsey proved in 1930 that if the graph is big enough, some k vertices have all their edges the same colour, whatever you do. <bookmark mark='a'/> With four vertices, seventeen are not enough. On the left, a random colouring of the complete graph on seventeen vertices: on average it has 74 groups of four in a single colour. <bookmark mark='b'/> On the right, a clever colouring, blue exactly when the difference of the two vertices is a square modulo seventeen, has none at all. Eighteen vertices always contain one, so the Ramsey number R of four, four is eighteen. <bookmark mark='c'/> Larger diagonal Ramsey numbers pose much harder questions. For growing k, random colorings provide a powerful existence proof.",
+      "zh": "把一个完全图的每条边涂成红色或蓝色。Frank Ramsey 在1930年证明，只要图足够大，无论怎么涂，总有 k 个顶点之间的边全是同一种颜色。<bookmark mark='a'/>对四个顶点，十七个顶点是不够的。左边是十七个顶点的完全图的一个随机涂色：平均有 74 组四个顶点是单色的。<bookmark mark='b'/>右边是一个巧妙的涂色，当两个顶点之差是模十七的平方数时涂蓝色，它一组都没有。十八个顶点则总会有一组，所以拉姆齐数 R(4, 4) 是十八。<bookmark mark='c'/>更大的对角 Ramsey 数带来困难得多的问题。随着 k 增长，随机染色提供强有力的存在性证明。"
+    },
+    "ec12ae0c692b": {
+      "scene": "ProbMethod",
+      "en": "In 1947 Erdős reversed the question. <bookmark mark='a'/> Color each edge independently by a fair coin. A particular set of k vertices is monochromatic with probability two to the one minus k choose two. <bookmark mark='b'/> Summing over all sets gives the expected number of bad cliques. If it is below one, some coloring has none, because an integer-valued nonnegative count cannot always be at least one. <bookmark mark='c'/> This yields an exponential lower bound on the Ramsey number, of scale two to the k over two. <bookmark mark='d'/> The table gives the finite values certified by this expectation calculation. Expectation below one proves existence; it alone does not imply almost every coloring works. <bookmark mark='e'/> Explicit constructions matching the random asymptotic scale remain a major challenge. <bookmark mark='f'/> Campos, Griffiths, Morris and Sahasrabudhe reported a base below four in 2023. A selected 2024 preprint by Gupta, Ndiaye, Norin and Wei, revised in 2026, reports base 3.8 with a lower-order exponent. These are dated source claims, not a complete latest-record survey. <bookmark mark='g'/> The exponential gap between upper and lower bounds remains large.",
+      "zh": "Erdős 在1947年反过来提问。<bookmark mark='a'/>每条边独立抛一枚公平硬币染色。某 k 个顶点形成单色团的概率是二的一减 k 选二次方。<bookmark mark='b'/>对所有顶点集求和，得到坏团数的期望。如果它小于一，就存在没有坏团的染色，因为非负整数计数不可能总是至少为一。<bookmark mark='c'/>这给出 Ramsey 数的指数下界，尺度为二的 k 除以二次方。<bookmark mark='d'/>表格给出期望计算认证的有限数值。期望小于一证明存在；单凭这一点，不能说几乎所有染色都可行。<bookmark mark='e'/>达到随机渐近尺度的显式构造仍是重大挑战。<bookmark mark='f'/>Campos、Griffiths、Morris 和 Sahasrabudhe 在2023年报告了小于四的底数。Gupta、Ndiaye、Norin 和 Wei 的一篇2024年预印本，在2026年修订后报告底数三点八及低阶指数。这些是带日期的选定来源结论，不是完整最新纪录调查。<bookmark mark='g'/>上下界之间仍有很大的指数差距。"
+    },
+    "fd66b24187f6": {
+      "scene": "ProbMethod",
+      "en": "Sometimes existence needs a dependency argument. <bookmark mark='a'/> Suppose each bad event has probability at most p, and is independent of the collection outside its dependency neighborhood, of degree at most d. <bookmark mark='b'/> The symmetric local lemma gives positive probability of no bad event when e times p times d plus one is at most one. <bookmark mark='c'/> This is the Lovász local lemma of Erdős and Lovász. Positive probability need not be large. <bookmark mark='d'/> For k-SAT under independent fair variable assignments, each clause fails with probability at most two to the minus k when it contains k distinct variables. Shared variables define a dependency graph. <bookmark mark='e'/> Moser and Tardos' 2010 variable-model algorithm resamples all variables of a currently false clause. Under the criterion it has an expected resampling bound; exhausting our execution budget would not prove unsatisfiability. <bookmark mark='f'/> Each table row starts the algorithm from exactly the assignment used to count its initial false clauses. The reported d is a safe dependency-degree upper bound; steps and final assignments are checked. The comparison m over d is a theorem's expectation bound under the criterion, not a per-run maximum.",
+      "zh": "有时需要依赖关系论证存在性。<bookmark mark='a'/>设每个坏事件的概率至多为 p，并且与依赖邻域之外的整组事件独立，依赖度至多为 d。<bookmark mark='b'/>对称局部引理说明，若 e 乘 p 乘 d 加一不超过一，就以正概率没有坏事件发生。<bookmark mark='c'/>这就是 Erdős 与 Lovász 的局部引理。正概率未必很大。<bookmark mark='d'/>对独立公平变量赋值，若 k-SAT 的每个子句含 k 个不同变量，失败概率为二的负 k 次方。共享变量定义依赖图。<bookmark mark='e'/>Moser 和 Tardos 在2010年给出的变量模型算法，重新随机赋值某个不成立子句的全部变量。满足准则时有期望重采样界；用完我们的执行预算不证明不可满足。<bookmark mark='f'/>表格每一行，算法都从统计初始坏子句时的同一个赋值出发。显示的 d 是安全的依赖度上界；步数和最终赋值已核查。比较值 m 除以 d，是满足准则时的期望界，不是单次运行最大值。"
+    },
+    "b5d18c460bc0": {
+      "scene": "Derand",
+      "en": "Chapter fifteen. Removing the coins, and where they come from.",
+      "zh": "第15章。去掉硬币，以及硬币从哪里来。"
+    },
+    "6acd16424c00": {
+      "scene": "Derand",
+      "en": "Can the coins be removed? Sometimes, mechanically. <bookmark mark='a'/> MAX-CUT splits a graph's vertices to maximize crossing edges. Finding the optimum is NP-hard. <bookmark mark='b'/> Independent fair sides cut each edge with probability one half, so the expected cut is m over two. The small worked graph has five edges and expectation two and a half. <bookmark mark='c'/> Fix vertices one at a time, choosing the side with the larger conditional expectation. Edges to unassigned vertices still contribute one half each. <bookmark mark='d'/> The two branch values average to the current expectation, so the better branch cannot lower it. Our worked trace rises to a deterministic cut of four. It does not claim the optimum in general. <bookmark mark='e'/> The separate sixty-vertex experiment compares the deterministic result with two thousand sampled random cuts. Its measured values are shown below the worked proof.",
+      "zh": "硬币能去掉吗？有时可以机械地做到。<bookmark mark='a'/>MAX-CUT 将图的顶点分成两侧，使跨边尽量多。寻找最优值是 NP 难问题。<bookmark mark='b'/>独立公平选择两侧，每条边被切开的概率为二分之一，所以期望割为 m 除以二。小例子有五条边，初始期望为二点五。<bookmark mark='c'/>逐个固定顶点，选择条件期望较大的一侧。通向尚未赋值顶点的边，每条仍贡献二分之一。<bookmark mark='d'/>两个分支值的平均等于当前期望，所以较好分支不会使它下降。例子最终得到确定性的四条跨边。这不声称一般情形中的最优值。<bookmark mark='e'/>另一个六十顶点实验，将确定性结果与两千个抽样随机割比较。测量值显示在例证下面。"
+    },
+    "b1823d30465f": {
+      "scene": "Derand",
+      "en": "There is a second way. <bookmark mark='a'/> The MAX-CUT argument looks at one edge at a time, which involves only two vertices' coins. <bookmark mark='b'/> So the coins don't need to be fully independent, only pairwise independent. <bookmark mark='c'/> Pairwise independent bits are cheap. Pick k truly random bits s, and give vertex i the parity of the bits of s where i's binary expansion has a one. <bookmark mark='d'/> Any two of these bits are independent and fair, so k coins become about two to the k. <bookmark mark='e'/> With only about n possible seeds, we can try every one, deterministically, and keep the best cut: the expectation guarantees one of them reaches m over two. <bookmark mark='f'/> Limited independence, small-bias spaces and walks on expander graphs, Part 56, are the general tools for stretching a few random bits a long way.",
+      "zh": "还有第二种办法。<bookmark mark='a'/>最大割的论证一次只看一条边，只涉及两个顶点的硬币。<bookmark mark='b'/>所以硬币不必完全独立，只需两两独立。<bookmark mark='c'/>两两独立的比特很便宜。取 k 个真正随机的比特 s，让顶点 i 取 s 在 i 的二进制展开为一的那些位上的奇偶性。<bookmark mark='d'/>任意两个这样的比特都是独立且公平的，所以 k 枚硬币变成了大约二的 k 次方枚。<bookmark mark='e'/>可能的种子只有大约 n 个，我们可以确定性地试遍每一个，保留最好的割：期望保证其中有一个达到 m 除以二。<bookmark mark='f'/>有限独立性、小偏差空间和扩展图上的游走，第56部分，是把少量随机比特拉长使用的一般工具。"
+    },
+    "aa761ca52f16": {
+      "scene": "Derand",
+      "en": "The probabilistic guarantees use ideal randomness, with limited independence sufficient for some arguments. Our reproducible experiments use seeded generators. <bookmark mark='a'/> In the 1960s and 70s, many scientific programs used IBM's RANDU: multiply by sixty-five thousand five hundred and thirty-nine, modulo two to the thirty-one. <bookmark mark='b'/> Here are two and a half thousand consecutive triples of its outputs, plotted as points in a cube. They look random. <bookmark mark='c'/> Now turn the cube slowly. A projection can hide structure: watch how a cloud of points collapses into evenly spaced sheets as the viewpoint changes. <bookmark mark='d'/> The multiplier is two to the sixteen plus three, and squaring it shows that each output is six times the previous one minus nine times the one before, modulo two to the thirty-one. <bookmark mark='e'/> So nine u minus six v plus w is always a whole number, and every point lies on one of just 15 planes. Any simulation that sampled points in space with RANDU was sampling fifteen sheets. Donald Knuth called it truly horrible.",
+      "zh": "概率保证使用理想随机性，部分论证只需要有限独立性。可复现实验使用带种子的生成器。<bookmark mark='a'/>在二十世纪六七十年代，许多科学程序使用 IBM 的 RANDU：乘以六万五千五百三十九，再模二的三十一次方。<bookmark mark='b'/>这是它连续输出的两千五百个三元组，画成立方体中的点。它们看起来是随机的。<bookmark mark='c'/>现在缓慢转动立方体。投影会隐藏结构：注意视角变化时，点云如何收缩成等间隔的薄片。<bookmark mark='d'/>乘数是二的十六次方加三，把它平方可以看出，每个输出等于前一个的六倍减去再前一个的九倍，模二的三十一次方。<bookmark mark='e'/>所以九 u 减六 v 加 w 总是整数，每个点都落在仅仅 15 个平面之一上。任何用 RANDU 在空间中取样的模拟，取样的都只是十五张薄片。Donald Knuth 称它真正可怕。"
+    },
+    "df6bfbdf2002": {
+      "scene": "Derand",
+      "en": "Modern generators have different goals. <bookmark mark='a'/> Python's Mersenne Twister is a deterministic simulation generator, linear over the two-element field. Enough suitably observed full outputs expose its state; it is unsuitable for secrets. Passing a statistical test does not prove independence. <bookmark mark='b'/> PCG and xoshiro offer other simulation tradeoffs; NumPy's default generator uses a PCG variant. <bookmark mark='c'/> Cryptographic generators aim at computational indistinguishability for bounded attackers, conditional on their construction and a secret, sufficiently unpredictable seed. ChaCha20 is one building block, revisited in Part 29. <bookmark mark='d'/> Operating systems collect and condition entropy from available sources. A physical source, a seeded generator and a mathematical independent-coin model are three different objects.",
+      "zh": "现代生成器有不同目标。<bookmark mark='a'/>Python 的 Mersenne Twister 是确定性的模拟生成器，在二元域上线性。足够多、以适当形式观测到的完整输出会暴露其状态；它不适合保密。通过统计检验不证明独立性。<bookmark mark='b'/>PCG 和 xoshiro 提供其他模拟权衡；NumPy 默认生成器使用 PCG 的一个变体。<bookmark mark='c'/>密码生成器追求有限计算攻击者无法区分的输出，这依赖于构造以及保密、足够不可预测的种子。ChaCha20 是一个构件，第29部分会再讲。<bookmark mark='d'/>操作系统从可用来源收集并调理熵。物理来源、带种子的生成器，以及数学上的独立硬币模型，是三种不同对象。"
+    },
+    "c62755fe4ca4": {
+      "scene": "Frontier",
+      "en": "Chapter sixteen. Frontier: does randomness help?",
+      "zh": "第16章。前沿：随机性有用吗？"
+    },
+    "171b2bcc67f6": {
+      "scene": "Frontier",
+      "en": "Several problems now have deterministic alternatives. <bookmark mark='a'/> AKS gave polynomial-time primality in 2002. Reingold gave logarithmic-space undirected connectivity in 2005. Kawarabayashi and Thorup gave a deterministic near-linear minimum-cut result for simple graphs in 2015; Henzinger, Li, Rao and Wang reported the weighted-graph extension in 2024. Fenner, Gurjar and Thierauf's 2016 bipartite perfect-matching result is quasi-NC squared: quasi-polynomial size and polylogarithmic depth, not an NC algorithm. <bookmark mark='b'/> These are different models and individual achievements. Is there a general route for bounded-error decision algorithms?",
+      "zh": "若干问题现在有了确定性替代方法。<bookmark mark='a'/>AKS 在2002年给出多项式时间素性检验。Reingold 在2005年给出对数空间无向连通性。Kawarabayashi 和 Thorup 在2015年给出简单图的确定性近线性最小割结果；Henzinger、Li、Rao 和 Wang 在2024年报告加权图扩展。Fenner、Gurjar 和 Thierauf 在2016年的二分图完美匹配结果是准 NC 平方：准多项式规模、多对数深度，不是 NC 算法。<bookmark mark='b'/>这些是不同模型下的独立成果。对有界错误的判定算法，有没有一般途径？"
+    },
+    "1d5e922d6892": {
+      "scene": "Frontier",
+      "en": "There is a conditional route. <bookmark mark='a'/> BPP consists of decision problems solvable in polynomial time with error at most one third on every input. <bookmark mark='b'/> For an input length, imagine an efficiently computable generator with logarithmic seed length that fools every circuit of the required polynomial size to sufficiently small additive advantage. Its output supplies the algorithm's polynomially many random bits. <bookmark mark='c'/> Enumerate all seeds and take the majority of acceptance decisions. The seed count is polynomial, and fooling preserves the acceptance gap. This is a decision simulation, not a promise to reproduce arbitrary sampling or search tasks. <bookmark mark='d'/> Nisan–Wigderson and Impagliazzo–Wigderson connect such generators to circuit hardness. <bookmark mark='e'/> The 1997 sufficient premise is a language in E, deterministic time two to order n, requiring exponential-size Boolean circuits. Under that premise, P equals BPP. Arbitrary exponential-time hardness is not the same stated premise. <bookmark mark='f'/> Hard functions can produce pseudorandom bits for bounded computations. The unconditional equality P equals BPP remains open.",
+      "zh": "有一条有条件的途径。<bookmark mark='a'/>BPP 包含能在多项式时间内、对每个输入错误概率至多为三分之一的判定问题。<bookmark mark='b'/>对一个输入长度，设想一个可高效计算、种子长度为对数的生成器，以足够小的加性优势骗过所需多项式规模的每个电路。它的输出提供算法所需的多项式数量随机比特。<bookmark mark='c'/>枚举全部种子，对接受决定取多数。种子数为多项式，欺骗性质保持接受概率的间隔。这是判定模拟，不保证复现任意抽样或搜索任务。<bookmark mark='d'/>Nisan–Wigderson 和 Impagliazzo–Wigderson 将这种生成器与电路困难性联系起来。<bookmark mark='e'/>1997年的一个充分前提是：E 中存在需要指数规模布尔电路的语言；E 指确定性时间二的线性指数。在这个前提下，P 等于 BPP。任意指数时间的困难性不是这里陈述的同一个前提。<bookmark mark='f'/>困难函数能为有界计算产生伪随机比特。无条件的 P 等于 BPP 仍然开放。"
+    },
+    "3cb07ed21c4b": {
+      "scene": "Frontier",
+      "en": "Derandomization also implies hardness in important settings. <bookmark mark='a'/> Polynomial identity testing asks whether an arithmetic circuit computes the zero formal polynomial. <bookmark mark='b'/> Random evaluation gives a bounded-error test when the field, degree and evaluation set satisfy the required conditions. <bookmark mark='c'/> General deterministic polynomial-time identity testing remains open. <bookmark mark='d'/> Kabanets and Impagliazzo showed in 2004 that deterministic polynomial-time identity testing over the integers implies a major lower bound: either NEXP lacks polynomial-size Boolean circuits, or the permanent lacks polynomial-size arithmetic circuits. <bookmark mark='e'/> This is a specific implication, not an unconditional equivalence between every form of hardness and derandomization. <bookmark mark='f'/> Restricted circuit classes admit progress. The 2016 bipartite matching quasi-NC result uses related isolation ideas, with quasi-polynomial size still present.",
+      "zh": "在重要情形下，去随机化也会推出困难性。<bookmark mark='a'/>多项式恒等式检验问的是：算术电路是否计算零形式多项式。<bookmark mark='b'/>当域、次数和取值集合满足所需条件时，随机代入给出有界错误检验。<bookmark mark='c'/>一般的确定性多项式时间恒等式检验仍然开放。<bookmark mark='d'/>Kabanets 和 Impagliazzo 在2004年证明，整数上的确定性多项式时间恒等式检验会推出重要下界：或者 NEXP 没有多项式规模布尔电路，或者积和式没有多项式规模算术电路。<bookmark mark='e'/>这是特定的蕴含，不是所有困难性和去随机化形式之间的无条件等价。<bookmark mark='f'/>受限电路类中已有进展。2016年二分图匹配的准 NC 结果使用相关的隔离思路，但仍有准多项式规模。"
+    },
+    "eca95704b0bf": {
+      "scene": "Frontier",
+      "en": "Streaming space bounds require a model. <bookmark mark='a'/> For insertion-only distinct counting over a universe of size n, Kane, Nelson and Woodruff's 2010 result uses order epsilon to the minus two plus log n bits, with a fixed constant success probability such as two thirds. Raising confidence has additional cost. Bounds for other moments and point queries depend on the moment, update model, approximation and failure probability. Exact unrestricted top-item recovery can require space growing with the input universe; no theorem here makes our candidate heap exact. <bookmark mark='b'/> Communication reductions explain many lower bounds: if a tiny sketch solved the streaming problem, two parties could exchange it to solve a communication problem with a proved larger cost. Part 27 develops this argument.",
+      "zh": "数据流空间界需要模型。<bookmark mark='a'/>对大小为 n 的全集上的只插入不同值计数，Kane、Nelson 和 Woodruff 在2010年的结果使用 epsilon 负二次方加 log n 量级的比特，成功率为三分之二这样的固定常数。提高置信度要额外代价。其他矩和点查询的界取决于矩阶数、更新模型、近似精度和失败概率。无约束的精确高频项恢复可能需要随输入全集增长的空间；这里没有定理让候选堆变得精确。<bookmark mark='b'/>通信归约解释了许多下界：若很小的草图能解决流问题，两方就能交换它，解决一个已证明需要更多通信的问题。第27部分将发展这个论证。"
+    },
+    "9e9b4163d6a3": {
+      "scene": "Frontier",
+      "en": "Here is where things stand. <bookmark mark='a'/> Does P equal BPP, and can that be proved without first proving circuit lower bounds? <bookmark mark='b'/> Is there a deterministic polynomial-time test for polynomial identities? <bookmark mark='c'/> Can anyone write down a colouring of a complete graph that is as good as a random one? Explicit constructions improved dramatically after 2016, with two-source extractors, but still fall short. <bookmark mark='d'/> And can perfect matchings be found fast in parallel without coins, for every graph? <bookmark mark='e'/> This part's research problem takes the second.",
+      "zh": "这就是现状。<bookmark mark='a'/>P 等于 BPP 吗？能否不先证明电路下界就证明它？<bookmark mark='b'/>多项式恒等式有没有确定性的多项式时间检验？<bookmark mark='c'/>有没有人能写下一个完全图的涂色，和随机涂色一样好？2016年以后，借助双源提取器，显式构造有了巨大的进步，但仍有差距。<bookmark mark='d'/>能否不用硬币，对每个图都在并行中快速找到完美匹配？<bookmark mark='e'/>这一部分的研究题处理的是第二个。"
+    },
+    "2676cb41f9f5": {
+      "scene": "Outro",
+      "en": "What we built in this part. Las Vegas and Monte Carlo, and amplification. Freivalds' check and the Schwartz–Zippel lemma, with perfect matchings and fingerprints. Karger's random contractions. Miller–Rabin. Random walks for satisfiability, balls in bins and the power of two choices. Bloom filters, reservoirs, Misra–Gries and Count-Min, and the Job in eighteen kilobytes. HyperLogLog, the AMS sketch and MinHash. The probabilistic method, and the ways to remove the coins.",
+      "zh": "这一部分我们造了什么。拉斯维加斯与蒙特卡洛，以及放大。Freivalds 的检验和 Schwartz–Zippel 引理，以及完美匹配和指纹。Karger 的随机收缩。Miller–Rabin。求解可满足性的随机游走，球与箱，以及两个选择的力量。布隆过滤器、蓄水池、Misra–Gries 和 Count-Min，以及十八千字节里的作业。HyperLogLog、AMS 草图和 MinHash。概率方法，以及去掉硬币的办法。"
+    },
+    "d963294d6de3": {
+      "scene": "Outro",
+      "en": "Where this comes back. Part 21 turns fingerprints into Rabin and Karp's string search, and Part 22 uses locality-sensitive hashing for nearest neighbours. Part 23 rounds linear programs at random, including MAX-CUT's famous 0.878. Part 27 develops BPP, hardness against randomness and the lower bounds for streams. Part 29 builds cryptographic generators, and Part 30 needs the big primes. Part 34's storage engines keep a Bloom filter per file; Parts 46 and 47 run sketches and SimHash in production; and Part 48's load balancers use two choices, while Part 56 builds the expanders.",
+      "zh": "这些会在哪里再出现。第21部分把指纹变成 Rabin 与 Karp 的字符串搜索，第22部分用局部敏感哈希寻找最近邻。第23部分随机地舍入线性规划，包括最大割著名的 0.878。第27部分发展 BPP、硬度与随机性，以及数据流的下界。第29部分构造密码学生成器，第30部分需要大素数。第34部分的存储引擎为每个文件保存一个布隆过滤器；第46和47部分在生产中运行草图和 SimHash；第48部分的负载均衡器使用两个选择，而第56部分构造扩展图。"
+    },
+    "bbdf9c6e76a6": {
+      "scene": "Outro",
+      "en": "In practice, databases use Bloom filters and approximate count-distinct sketches. Routers estimate heavy hitters, load balancers sample choices, and caches use frequency summaries. MinHash helps propose near-duplicate documents for verification. Security protocols require strong randomness, and some public-key systems generate large primes. Elliptic-curve handshakes show why not every secure connection starts with freshly generated primes. Each application must choose its own accuracy, confidence and threat model.",
+      "zh": "实际应用中，数据库使用布隆过滤器和近似不同值草图。路由器估计高频项，负载均衡器抽样选择，缓存使用频率摘要。MinHash 提出可能近似重复的文档供核验。安全协议需要强随机性，有些公钥系统会生成大素数。椭圆曲线握手说明，并非每条安全连接都从新生成的素数开始。每个应用都必须选择自己的精度、置信度和威胁模型。"
+    },
+    "2c80acad7bdd": {
+      "scene": "Outro",
+      "en": "Six problems, with worked arguments in the notes. The fifth is a design exercise: a Pebble HyperLogLog sketch using repeated halving, with finite-hash limitations. Its pseudocode has not been compiled or benchmarked as a finished program. The last is a research problem, marked with a star: general deterministic polynomial identity testing. Its solution is unknown, and the notes give a starting point.",
+      "zh": "六道题，笔记中有推导。第五题是设计练习：用反复除二构造 Pebble 的 HyperLogLog 草图，并考虑有限哈希限制。伪代码没有作为完整程序编译或基准测试。最后一题标着星号，是一般确定性多项式恒等式检验的研究问题。答案未知，笔记提供起点。"
+    },
+    "b7f61567a7f2": {
+      "scene": "Outro",
+      "en": "Next time, the oldest data of all, text. Searching it efficiently leads to automata built from patterns, to indexes of every suffix, and to a reversible transform that sorts a book into compressible runs, so that we can search the novels while they stay compressed. And every git diff turns out to be a shortest path on a grid. Part 21, Strings.",
+      "zh": "下一次，最古老的数据：文本。高效地搜索它，引出了由模式构造的自动机、所有后缀的索引，以及一种把一本书排成可压缩的字符串的可逆变换，让我们可以在小说保持压缩的状态下搜索它们。而每一次 git diff 原来都是网格上的一条最短路径。第21部分，字符串。"
+    },
+    "9bd24692775d": {
+      "scene": "Outro",
+      "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+      "zh": "这一部分所依据的书和论文都在屏幕上，也在讲义里。感谢收看。"
+    }
   }
- },
- "title_en": "Computer Science, Built: Part 20, Randomness as a Resource",
- "chapters_en": {
-  "Hook": "The top words in kilobytes",
-  "LasVegas": "1. Las Vegas and Monte Carlo",
-  "Freivalds": "2. Checking a product with a coin",
-  "Identity": "3. Is this polynomial zero?",
-  "Karger": "4. A minimum cut by contraction",
-  "Primes": "5. Primes in milliseconds",
-  "Walks": "6. Random walks that solve SAT",
-  "Bins": "7. Balls into bins, and the power of two choices",
-  "Bloom": "8. Bloom filters",
-  "Stream": "9. Streams: one pass, little memory",
-  "JobSketch": "10. The Job in kilobytes: ledger row 9",
-  "Distinct": "11. Counting distinct things: HyperLogLog",
-  "Ams": "12. Sketching the second moment",
-  "Lsh": "13. Near-duplicates: MinHash and LSH",
-  "ProbMethod": "14. The probabilistic method",
-  "Derand": "15. Removing the coins, and where they come from",
-  "Frontier": "16. Frontier: does randomness help?",
-  "Outro": "Recap, problems, and where this comes back"
- }
 }

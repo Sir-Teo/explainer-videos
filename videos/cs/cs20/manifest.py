@@ -8,7 +8,7 @@ SCENES = [
     ("s03_freivalds", "Freivalds", "2. Checking a product with a coin"),
     ("s04_identity", "Identity", "3. Is this polynomial zero?"),
     ("s05_karger", "Karger", "4. A minimum cut by contraction"),
-    ("s06_primes", "Primes", "5. Primes in milliseconds"),
+    ("s06_primes", "Primes", "5. Probable primes and primality tests"),
     ("s07_walks", "Walks", "6. Random walks that solve SAT"),
     ("s08_bins", "Bins", "7. Balls into bins, and the power of two choices"),
     ("s09_bloom", "Bloom", "8. Bloom filters"),

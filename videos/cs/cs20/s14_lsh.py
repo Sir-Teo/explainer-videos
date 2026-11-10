@@ -18,7 +18,9 @@ class Lsh(VoiceoverScene):
         card = chapter_card(13, r"Near-duplicates: \ MinHash and LSH", r"Which of 600 million pairs are alike?",
                             lit=(1997, 1998), extra=((1997, r"Broder's MinHash"), (1998, r"Indyk--Motwani LSH")),
                             part=PART)
-        with self.voiceover("Chapter thirteen. Near-duplicates: MinHash and locality-sensitive hashing."):
+        with self.voiceover((
+            'Chapter thirteen. Near-duplicates: MinHash and locality-sensitive hashing.'
+        )):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
 
@@ -40,14 +42,16 @@ class Lsh(VoiceoverScene):
                   color=NO),
         ).arrange(DOWN, buff=0.3).next_to(tb, DOWN, buff=0.45)
         with self.voiceover(
-            "Search engines, plagiarism detectors and the people who clean training data for language models all "
+            (
+            'Search engines, plagiarism detectors and the people who clean training data for language models all '
             "need to find documents that are nearly the same. <bookmark mark='a'/> Represent a passage by its "
             "shingles, every run of five consecutive words. <bookmark mark='b'/> Two passages are as alike as the "
-            "share of shingles they have in common: the Jaccard similarity, the size of the intersection over the "
-            "size of the union. <bookmark mark='c'/> These two lines, from two versions of the same letter in "
-            "The Count of Monte Cristo, share four of their ten distinct shingles, because changing one word breaks "
-            "every shingle that contains it. <bookmark mark='d'/> The novels have thirty-four thousand paragraphs "
-            "of forty words or more. Comparing every pair means almost six hundred million comparisons of sets."
+            'share of shingles they have in common: the Jaccard similarity, the size of the intersection over the '
+            "size of the union. <bookmark mark='c'/> These two lines, from two versions of the same letter in The "
+            'Count of Monte Cristo, share four of their ten distinct shingles, because changing one word breaks '
+            "every shingle that contains it. <bookmark mark='d'/> The novels have thirty-four thousand paragraphs of"
+            ' forty words or more. Comparing every pair means almost six hundred million comparisons of sets.'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(ta), FadeIn(tb))
             vo.wait_until("a")
@@ -84,20 +88,20 @@ class Lsh(VoiceoverScene):
             label(r"$h_{\min}(A) = h_{\min}(B)$ \ exactly when that first shingle is in both \ (here it is only "
                   r"in $A$: \ they differ)", font_size=22, color=WHITE),
             MathTex(r"\Pr[h_{\min}(A) = h_{\min}(B)] = \frac{|A \cap B|}{|A \cup B|} = J", font_size=36, color=YES),
-            label(r"100 hash functions: \ a signature of 100 numbers; \ the share that agree estimates $J$ \ "
-                  r"($\pm 0.05$)", font_size=21, color=LAM),
+            label(r"100 independent ideal rows: \ worst standard error 0.05; \ affine hashes are an approximation", font_size=21, color=LAM),
             label(r"Broder (1997), \ for AltaVista's crawl of the Web", font_size=19, color=GREY_B),
         ).arrange(DOWN, buff=0.3).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Andrei Broder found a shortcut in 1997, at the search engine AltaVista. <bookmark mark='a'/> Put every "
-            "shingle in a random order, using a hash function, and look at the first shingle of the union of two "
-            "sets. <bookmark mark='b'/> Each set's minimum hash is the same exactly when that first shingle "
-            "belongs to both; here it is only in A, so they differ. By symmetry, every shingle of the union is equally "
-            "likely to be first. <bookmark "
-            "mark='c'/> So the two minimums agree with probability exactly the Jaccard similarity. <bookmark "
-            "mark='d'/> Repeat with a hundred hash functions, and each paragraph becomes a signature of a hundred "
-            "numbers. The share of positions where two signatures agree estimates their similarity, to within "
-            "about five hundredths."
+            (
+            "Broder popularized MinHash for document resemblance in 1997. <bookmark mark='a'/> First consider an "
+            "ideal uniform random permutation of the distinct shingles. <bookmark mark='b'/> The two minimums agree "
+            'exactly when the first element of their union belongs to the intersection. Every union element is '
+            "equally likely to be first. <bookmark mark='c'/> Therefore agreement probability is exactly Jaccard "
+            "similarity in this ideal model. <bookmark mark='d'/> With one hundred independent ideal rows, the "
+            'agreement fraction has worst-case standard error five hundredths. This is not a guaranteed plus-or-'
+            'minus-five-hundredths interval. Our fast affine hashes are an approximation to minwise randomness and '
+            'receive empirical validation; their Jaccard identity is not exact by this proof.'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(cells), FadeIn(leg))
             vo.wait_until("a")
@@ -119,7 +123,7 @@ class Lsh(VoiceoverScene):
             label(r"two paragraphs become candidates if \textbf{some} band matches exactly", font_size=21,
                   color=WHITE),
             MathTex(r"\Pr[\text{candidates}] = 1 - (1 - J^{\,r})^{b}", font_size=36, color=YES),
-            label(r"a step near $J = (1/b)^{1/r} \approx 0.55$", font_size=20, color=HEAD),
+            label(r"independent minwise model: \ smooth probability curve, \ not a hard threshold", font_size=20, color=HEAD),
         ).arrange(DOWN, buff=0.25).to_edge(LEFT, buff=0.5).shift(UP * 0.5)
         ax = Axes(x_range=[0, 1, 0.2], y_range=[0, 1, 0.25], x_length=5.0, y_length=3.6,
                   axis_config={"color": GREY_D, "include_numbers": False}).to_edge(RIGHT, buff=0.7).shift(DOWN * 0.4)
@@ -132,15 +136,15 @@ class Lsh(VoiceoverScene):
         leg = label(r"dots: 600 planted copies with words changed at random", font_size=17, color=HEAD
                     ).next_to(ax, DOWN, buff=0.75)
         with self.voiceover(
-            "Signatures are short, but there are still six hundred million pairs of them. <bookmark mark='a'/> The "
-            "last trick, locality-sensitive hashing, from Piotr Indyk and Rajeev Motwani, hashes the signatures "
-            "themselves. Cut each into twenty bands of five numbers, and put each band into a hash table. <bookmark "
-            "mark='b'/> Two paragraphs become candidates only if some band matches exactly. <bookmark mark='c'/> A "
-            "band matches with probability J to the fifth, so the chance of becoming candidates is one minus one "
-            "minus J to the fifth, to the twentieth. <bookmark mark='d'/> That curve is a step: pairs below a "
-            "similarity of about a half are almost never compared, and pairs above seven tenths almost always are. "
-            "We planted six hundred edited copies of paragraphs, and the share found at each similarity follows "
-            "the curve."
+            (
+            "Signatures are short, but all paragraph pairs are still numerous. <bookmark mark='a'/> Split each "
+            "signature into twenty bands of five rows and index each band. <bookmark mark='b'/> A pair becomes a "
+            "candidate if any band agrees exactly. <bookmark mark='c'/> Under independent ideal minwise rows, one "
+            'band matches with probability J to the fifth, and at least one matches with probability one minus one '
+            "minus J to the fifth, raised to the twentieth. <bookmark mark='d'/> This is a smooth probability curve,"
+            ' not a hard threshold. The six hundred planted edited copies compare empirical candidate rates with '
+            'that ideal curve. The affine-hash implementation can depart from the independent ideal model.'
+        )
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(xt), FadeIn(yt))
             for mk, p in zip("abcd", pts):
@@ -172,25 +176,26 @@ class Lsh(VoiceoverScene):
                          colors=[[YES if t["found"] else GREY_A, WHITE, GREY_B, YES if t["found"] else GREY_D]
                                  for t in d["truth"]]).next_to(stats, DOWN, buff=0.4)
         note_ = VGroup(
-            label(r"ground truth: \ every pair sharing even one rare shingle, \ found through an inverted index",
+            label(r"exact inventory: \ every posting list; \ all positive-intersection pairs; \ no shingle-ID collisions",
                   font_size=19, color=GREY_A),
-            label(r"the two pairs above the threshold were both found; \ the others sit on the low side of the "
-                  r"step", font_size=19, color=WHITE),
+            label(r"observed recall: \ $J\ge0.2$: 3/7; \ $J\ge0.5$: 2/2; \ $J\ge0.8$: 1/1", font_size=19, color=WHITE),
             label(r"in practice: \ Google's near-duplicate crawler \ (SimHash), \ dedup of LLM training data "
                   r"(MinHash)", font_size=19, color=LAM),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Now the novels. <bookmark mark='a'/> Thirty-four thousand paragraphs, three and a half million "
-            "shingles, six hundred million pairs. Computing every signature took two seconds, and the banding "
-            f"three more. It produced just {d['candidates']} candidate pairs. <bookmark mark='b'/> To check, we found "
-            "every pair of paragraphs that share even one uncommon shingle, with an inverted index, and computed "
-            "their exact similarity. Only seven pairs in all thirty novels share a fifth of their phrases. "
-            "<bookmark mark='c'/> The two above the threshold were both found: a table of contents in two editions, "
-            "and the anonymous letter in The Count of Monte Cristo, which is quoted more than once, in different "
-            "versions. The rest, a battle order repeated in War and Peace and a passage repeated in The Awakening, "
-            "fall below the step, as the curve predicts. <bookmark mark='d'/> Novelists rarely repeat themselves; the Web does all "
-            "the time. Google's crawler finds near-duplicate pages with a cousin of this idea, Moses Charikar's "
-            "SimHash, and MinHash with banding is a standard step in cleaning the training data of language models."
+            (
+            f"Now the novels. <bookmark mark='a'/> We use collision-free dictionary IDs for whole five-word shingles."
+            f' The producer records actual signature and banding times, yielding '
+            f"{d['candidates']}"
+            f" candidate pairs. Timing includes the stated stages only. <bookmark mark='b'/> An exhaustive inverted "
+            f'index includes every posting list, even common shingles. Every pair with positive intersection is '
+            f'checked using exact integer intersection and union counts. Seven pairs have Jaccard similarity at least'
+            f" one fifth. <bookmark mark='c'/> Recall is reported with its threshold: finding two of two pairs above "
+            f'one half does not mean finding all seven above one fifth. The table gives exact scores and candidate '
+            f"flags for the full seven-pair inventory. <bookmark mark='d'/> Broader applications include web-page "
+            f'similarity and training-data deduplication. SimHash is a different locality-sensitive sketch; practical'
+            f' systems must also select thresholds and verify candidate pairs.'
+        )
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

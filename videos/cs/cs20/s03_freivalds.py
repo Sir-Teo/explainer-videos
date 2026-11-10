@@ -32,7 +32,9 @@ class Freivalds(VoiceoverScene):
     def card(self):
         card = chapter_card(2, r"Checking a product with a coin", r"Can you check $AB = C$ faster than computing $AB$?",
                             lit=(1977,), extra=((1977, r"Freivalds' check"),), part=PART)
-        with self.voiceover("Chapter two. Checking a product with a coin."):
+        with self.voiceover((
+            'Chapter two. Checking a product with a coin.'
+        )):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
 
@@ -49,21 +51,24 @@ class Freivalds(VoiceoverScene):
         VGroup(lhs, eq, rhs).arrange(RIGHT, buff=0.5).move_to(UP * 0.9)
         rv_lab = label(r"$r$: \ $n$ coin flips", font_size=20, color=YES).next_to(rv, UP, buff=0.3).align_to(rv, LEFT)
         steps = VGroup(
-            label(r"recompute $AB$: \ $n^3$ multiplications \ (or $n^{2.37}$ with Part 19's best)", font_size=22,
+            label(r"classical $AB$: \ $n^3$ scalar multiplications; \ arithmetic-operation model", font_size=22,
                   color=NO),
             label(r"instead: \ $Br$, \ then $A(Br)$, \ then $Cr$: \ three matrix-vector products, \ $3n^2$",
                   font_size=22, color=YES),
             label(r"if $A(Br) \ne Cr$, \ then certainly $AB \ne C$", font_size=22, color=WHITE),
-            label(r"if they agree, \ $C$ is probably right: \ try fresh coins", font_size=22, color=HEAD),
+            label(r"agreement passes one round; \ use fresh independent coins to amplify", font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Someone hands you two n by n matrices, A and B, and a third, C, and claims that C is their product. "
-            "<bookmark mark='a'/> Checking by recomputing the product costs n cubed multiplications, or n to the "
-            "2.37 with the best methods of Part 19, which are impractical anyway. <bookmark mark='b'/> In 1977 "
-            "Rūsiņš Freivalds suggested something cheaper. Flip n coins to make a random vector r of zeros and ones. "
-            "Compute B times r, then A times that, and also C times r: three matrix-vector products, about three n "
-            "squared operations. <bookmark mark='c'/> If the two vectors differ, C is certainly wrong. <bookmark "
-            "mark='d'/> If they agree, C is probably right, and we can repeat with fresh coins. How probably?"
+            (
+            "Someone hands you square matrices A, B and C, claiming C equals A B. <bookmark mark='a'/> Classical "
+            'multiplication uses a cubic number of arithmetic operations; Part 19 discussed faster asymptotic '
+            "methods. Here we count arithmetic operations, not bit operations. <bookmark mark='b'/> Freivalds' 1977 "
+            'test picks a uniform independent zero-one vector r. Compute B r, then A times that, and also C r: three'
+            ' quadratic matrix-vector products. Work over a field, or with exact integers. Our instrument prevents '
+            'overflow; its floating benchmark uses integers small enough that every intermediate is exact. <bookmark'
+            " mark='c'/> Different vectors certify that C is wrong. <bookmark mark='d'/> Equal vectors merely pass "
+            'this round. How likely is a fixed wrong product to pass?'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(A), FadeIn(B), FadeIn(Cm), FadeIn(eq))
             vo.wait_until("a")
@@ -79,7 +84,7 @@ class Freivalds(VoiceoverScene):
         self.clear_scene()
 
     def proof(self):
-        head = label(r"Why a wrong $C$ is caught half the time", font_size=34).to_edge(UP, buff=0.35)
+        head = label(r"Why a wrong $C$ is caught at least half the time", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
             MathTex(r"D = AB - C \ne 0", font_size=36, color=NO),
             label(r"so some entry $d_{ij} \ne 0$; \ the test passes only if $Dr = 0$, \ in particular "
@@ -95,21 +100,23 @@ class Freivalds(VoiceoverScene):
         foot = label(r"the principle of deferred decisions: \ reveal the coins in whatever order makes the proof easy",
                      font_size=20, color=HEAD).to_edge(DOWN, buff=0.35)
         with self.voiceover(
+            (
             "Suppose C is wrong. <bookmark mark='a'/> Then the difference D, A B minus C, is not the zero matrix. "
-            "<bookmark mark='b'/> Some entry, d i j, is nonzero, and the test passes only if D r is the zero vector, "
-            "so in particular only if its i-th entry is zero. <bookmark mark='c'/> That entry is d i j times r j, "
+            "<bookmark mark='b'/> Some entry, d i j, is nonzero, and the test passes only if D r is the zero vector,"
+            " so in particular only if its i-th entry is zero. <bookmark mark='c'/> That entry is d i j times r j, "
             "plus a sum s over the other coins. <bookmark mark='d'/> Imagine flipping every coin except r j first. "
             "The coins are independent, so this changes nothing, but now s is a fixed number. <bookmark mark='e'/> "
-            "For the entry to vanish, r j must equal minus s over d i j: one particular value. At most one of "
-            "the two outcomes of r j can do that. <bookmark mark='f'/> So a wrong C passes with probability at "
-            "most a half, whatever A, B and C are, and k independent rounds let it through with probability at "
-            "most two to the minus k. <bookmark mark='g'/> The trick of revealing the coins in a convenient order "
-            "is called the principle of deferred decisions, and we will use it again."
+            'For the entry to vanish, r j must equal minus s over d i j: one particular value. At most one of the '
+            "two outcomes of r j can do that. <bookmark mark='f'/> So a wrong C passes with probability at most a "
+            'half, whatever A, B and C are, and k independent rounds let it through with probability at most two to '
+            "the minus k. <bookmark mark='g'/> The trick of revealing the coins in a convenient order is called the "
+            'principle of deferred decisions, and we will use it again.'
+        )
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(lines[0]))
             for mk, ln in zip("abcdef", lines):
                 vo.wait_until(mk)
-                self.play(FadeIn(ln, shift=UP * 0.1))
+                self.play(Indicate(ln, color=NO) if mk == "a" else FadeIn(ln, shift=UP * 0.1))
             vo.wait_until("g")
             self.play(FadeIn(foot))
         self.wait(0.3)
@@ -118,15 +125,15 @@ class Freivalds(VoiceoverScene):
     def measured(self):
         d = load("freivalds")
         head = label(rf"Measured: \ $n = {d['n']}$", font_size=34).to_edge(UP, buff=0.35)
-        cost = grid_table([r"", r"operations", r"time here"], [
+        cost = grid_table([r"", r"leading FLOPs", r"minimum of 3"], [
             [r"$AB$ \ (optimized BLAS)", big(d["flops_mul"]), rf"{d['t_mul']:.2f} s"],
             [r"$A(Br)$ and $Cr$", big(d["flops_check"]), rf"{d['t_check'] * 1000:.0f} ms"],
         ], widths=[4.2, 2.6, 2.2], row_h=0.5, font_size=22, mono_cols=(), colors=[[NO] * 3, [YES] * 3])
         cost.next_to(head, DOWN, buff=0.45)
-        why = label(r"nearly $700\times$ fewer operations, \ but matrix-vector products wait on memory: \ "
-                    rf"{d['ratio']:.0f}$\times$ faster", font_size=20, color=GREY_A).next_to(cost, DOWN, buff=0.25)
+        why = label(r"1 BLAS thread; \ exact bounded-integer float64 intermediates; \ pre-sampled vector; \ "
+                    rf"observed ratio {d['ratio']:.0f}$\times$", font_size=18, color=GREY_A).next_to(cost, DOWN, buff=0.25)
         rows = [[str(r["rounds"]), f"{r['measured']:.4f}", f"{r['bound']:.4f}"] for r in d["rounds"]]
-        tab = grid_table([r"rounds", r"a wrong $C$ passed", r"bound $2^{-k}$"], rows, widths=[1.6, 3.2, 2.4],
+        tab = grid_table([r"rounds", r"empirical pass fraction", r"probability bound $2^{-k}$"], rows, widths=[1.6, 3.2, 2.4],
                          row_h=0.4, font_size=20, mono_cols=(), colors=[[LAM, YES, HEAD]] * len(rows))
         tab.next_to(why, DOWN, buff=0.45).shift(LEFT * 2.6)
         side = VGroup(
@@ -136,15 +143,22 @@ class Freivalds(VoiceoverScene):
                   color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(tab, RIGHT, buff=0.6)
         with self.voiceover(
-            f"On this machine, with matrices of size {d['n']}. <bookmark mark='a'/> Multiplying them takes sixteen "
-            "billion floating-point operations, done by a heavily optimized library in about an eighth of a "
-            "second. Checking takes twenty-four million operations. <bookmark mark='b'/> That is nearly seven "
-            "hundred times fewer, but a matrix-vector product spends its time waiting for memory, so the check is "
-            f"only about {d['ratio']:.0f} times faster in seconds, a reminder from Part 9. <bookmark mark='c'/> "
-            "Now the error. We corrupted one entry of the product and tested it thousands of times. One round let "
-            "it through about half the time, two rounds a quarter, and so on, right on the bound. <bookmark "
-            "mark='d'/> With a single wrong entry the bound is tight, because only one coin matters. <bookmark "
-            "mark='e'/> When many entries are wrong, many coins matter, and the wrong product never once got through."
+            (
+            f'On this shared host, with matrices of size '
+            f"{d['n']}"
+            f". <bookmark mark='a'/> The leading operation counts are sixteen billion floating-point operations for "
+            f'the full product and twenty-four million for the three matrix-vector products. We report the minimum of'
+            f' three runs; validate every result outside the timer; and exclude generation of the reused test vector.'
+            f" <bookmark mark='b'/> The observed speed ratio is "
+            f"{d['ratio']:.0f}"
+            f', with one configured BLAS thread. Operation counts alone do not predict elapsed time, and this '
+            f"experiment does not isolate a hardware cause. <bookmark mark='c'/> We also corrupted one product entry "
+            f'and used four thousand independent trials per row. The displayed fractions fluctuate around their '
+            f"probabilities and may exceed the probability bound through sampling noise. <bookmark mark='d'/> For a "
+            f'single erroneous entry, exactly one coin determines acceptance, so the theoretical bound is tight. '
+            f"<bookmark mark='e'/> The many-error example passed no observed trials; that is a finite observation, "
+            f'not a zero-probability theorem.'
+        )
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

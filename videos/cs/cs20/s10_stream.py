@@ -17,7 +17,9 @@ class Stream(VoiceoverScene):
         card = chapter_card(9, r"Streams: \ one pass, \ little memory", r"What can you remember about data you "
                             r"can't keep?", lit=(1985, 2005), extra=((1985, r"reservoir sampling"),
                                                                      (2005, r"the Count-Min sketch")), part=PART)
-        with self.voiceover("Chapter nine. Streams: one pass, little memory."):
+        with self.voiceover((
+            'Chapter nine. Streams: one pass, little memory.'
+        )):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
 
@@ -39,11 +41,13 @@ class Stream(VoiceoverScene):
                   color=GREY_A),
         ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.6)
         with self.voiceover(
+            (
             "Part 17 kept every distinct word of the novels, almost fifty-eight thousand. What if we can't afford "
             "that? <bookmark mark='a'/> In the streaming model the items go by once, <bookmark mark='b'/> can't be "
-            "stored, <bookmark mark='c'/> and memory is far smaller than the stream, often smaller than the number of "
-            "different items in it. <bookmark mark='d'/> Routers, sensors, logs and query planners live in this "
-            "world."
+            "stored, <bookmark mark='c'/> and memory is far smaller than the stream, often smaller than the number "
+            "of different items in it. <bookmark mark='d'/> Routers, sensors, logs and query planners live in this "
+            'world.'
+        )
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(t, shift=LEFT * 0.3) for t in toks], lag_ratio=0.1),
                       GrowArrow(arrow), FadeIn(box))
@@ -82,15 +86,17 @@ class Stream(VoiceoverScene):
         samp = label(r"eight words drawn from the novels in one pass: \ " + r", \ ".join(
             rf"\textit{{{w}}}" for w in d["sample"]), font_size=18, color=DATA).next_to(bars, UP, buff=0.15)
         with self.voiceover(
+            (
             "First, a fair sample. We want k items chosen uniformly from the stream, but we don't know how long it "
             "will be. <bookmark mark='a'/> Reservoir sampling, as Jeffrey Vitter described it in 1985: keep the "
-            "first k. When the i-th item arrives, keep it with probability k over i, throwing out a random one of "
+            'first k. When the i-th item arrives, keep it with probability k over i, throwing out a random one of '
             "the k. <bookmark mark='b'/> By induction, every item seen so far is in the sample with probability "
-            "exactly k over i. An item stays when the next one arrives unless the newcomer is kept and picks its "
-            "slot, and the arithmetic turns k over i into k over i plus one. <bookmark mark='c'/> We drew five "
-            "items from a hundred, fifty thousand times: every item was picked close to the expected two thousand "
-            "five hundred times. <bookmark mark='d'/> And here are eight words drawn uniformly from all four "
-            "million six hundred thousand in the novels, in a single pass."
+            'exactly k over i. An item stays when the next one arrives unless the newcomer is kept and picks its '
+            "slot, and the arithmetic turns k over i into k over i plus one. <bookmark mark='c'/> We drew five items"
+            ' from a hundred, fifty thousand times: every item was picked close to the expected two thousand five '
+            "hundred times. <bookmark mark='d'/> And here are eight words drawn uniformly from all four million six "
+            'hundred thousand in the novels, in a single pass.'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(prog))
             vo.wait_until("a")
@@ -130,16 +136,18 @@ class Stream(VoiceoverScene):
                       r"undercounted by about 38{,}700; \\ a second pass counts the survivors exactly", font_size=19,
                       color=GREY_A).next_to(why, DOWN, buff=0.45)
         with self.voiceover(
+            (
             "Next, the frequent items, the Job's own question. <bookmark mark='a'/> Jayadev Misra and David Gries "
-            "gave a deterministic method in 1982, with k minus one counters. A word that has a counter adds one. A "
-            "new word takes a free counter. A new word with no free counter subtracts one from every counter, "
-            "and the counters that reach zero are freed. <bookmark mark='b'/> Each subtraction cancels k words at "
-            "once, the new one and one from each counter, so it can happen at most n over k times. So every count "
-            "is low by at most n over k, and any word more frequent than n over k must survive. <bookmark "
-            "mark='c'/> With ninety-nine counters on the novels, n over k is about forty-six thousand. The "
-            "thirteen words above that all survived, each undercounted by about thirty-nine thousand, and words "
-            "below it may vanish. A second pass, counting only the survivors, makes the counts exact. But the "
-            "estimates themselves are poor. Can coin flips do better?"
+            'gave a deterministic method in 1982, with k minus one counters. A word that has a counter adds one. A '
+            'new word takes a free counter. A new word with no free counter subtracts one from every counter, and '
+            "the counters that reach zero are freed. <bookmark mark='b'/> Each subtraction cancels k words at once, "
+            'the new one and one from each counter, so it can happen at most n over k times. So every count is low '
+            "by at most n over k, and any word more frequent than n over k must survive. <bookmark mark='c'/> With "
+            'ninety-nine counters on the novels, n over k is about forty-six thousand. The thirteen words above that'
+            ' all survived, each undercounted by about thirty-nine thousand, and words below it may vanish. A second'
+            ' pass, counting only the survivors, makes the counts exact. But the estimates themselves are poor. Can '
+            'coin flips do better?'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(prog))
             vo.wait_until("a")
@@ -180,13 +188,14 @@ class Stream(VoiceoverScene):
             label(r"Cormode and Muthukrishnan, \ 2005", font_size=19, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4).shift(UP * 0.2)
         with self.voiceover(
+            (
             "Graham Cormode and S. Muthukrishnan's Count-Min sketch, from 2005, keeps a small table: d rows of w "
-            "counters, with an independent hash function for each row. <bookmark mark='a'/> To add a word, hash "
-            "it once per row and add one to each of those counters. <bookmark mark='b'/> To estimate a word's "
-            "count, look at the same d counters and take the smallest. <bookmark mark='c'/> Every counter holds "
-            "the word's true count plus the counts of whatever other words collided with it there. Collisions "
-            "only ever add, so the estimate is never too low, and the minimum picks the row with the fewest "
-            "collisions."
+            "counters, with an independent hash function for each row. <bookmark mark='a'/> To add a word, hash it "
+            "once per row and add one to each of those counters. <bookmark mark='b'/> To estimate a word's count, "
+            "look at the same d counters and take the smallest. <bookmark mark='c'/> Every counter holds the word's "
+            'true count plus the counts of whatever other words collided with it there. Collisions only ever add, so'
+            ' the estimate is never too low, and the minimum picks the row with the fewest collisions.'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(grid), FadeIn(rlab), FadeIn(side[0]))
             vo.wait_until("a")
@@ -213,7 +222,7 @@ class Stream(VoiceoverScene):
                     color=LAM),
             label(r"the minimum is that bad only if \textbf{every} row is: \ independent rows", font_size=21,
                   color=WHITE),
-            MathTex(r"w = \frac{e}{\varepsilon},\ d = \ln\frac1\delta: \qquad \Pr[\hat f_x > f_x + \varepsilon N] "
+            MathTex(r"w = \lceil e/\varepsilon\rceil,\ d = \lceil\ln(1/\delta)\rceil: \qquad \Pr[\hat f_x > f_x + \varepsilon N] "
                     r"\le e^{-d} = \delta", font_size=34, color=YES),
             label(r"memory $\frac{e}{\varepsilon} \ln \frac1\delta$ counters, \ whatever the number of distinct "
                   r"words", font_size=21, color=HEAD),
@@ -221,22 +230,26 @@ class Stream(VoiceoverScene):
         meas = VGroup(
             label(rf"the novels, \ $4 \times 1021$: \ $eN/w = {words(round(c['bound']))}$; \ "
                   rf"no word exceeded it; \ mean excess {words(round(c['mean_err']))}", font_size=20, color=YES),
-            label(rf"two rows: \ {c2['over_bound'] * 100:.2f}\% of words exceeded it \ (allowed: \ "
-                  rf"{c2['delta'] * 100:.1f}\%)", font_size=20, color=GREY_A),
+            label(rf"two rows: \ {c2['over_bound'] * 100:.2f}\% of vocabulary exceeds the level; \ concrete hashes are empirical", font_size=20, color=GREY_A),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "How large can the error be? <bookmark mark='a'/> In one row, the excess is the total count of the "
-            "other words that hash to the same counter. With a good hash family, each other word lands there with "
-            "probability one over w, so the expected excess is at most N over w, where N is the length of the "
-            "stream. By Markov's inequality, the excess reaches e times that with probability at most one over e. "
-            "<bookmark mark='b'/> The minimum is that bad only if every row is, and the rows are independent, so "
-            "the probabilities multiply. <bookmark mark='c'/> Choose w as e over epsilon and d as log one over "
-            "delta, and every estimate is within epsilon N of the truth with probability one minus delta. "
-            "<bookmark mark='d'/> The memory depends on epsilon and delta, not on how many distinct words there "
-            "are. <bookmark mark='e'/> On the novels, with four rows of 1021 counters, the guaranteed bound is "
-            f"about {words(round(c['bound']))}, no word came near it, and the typical excess was about "
-            f"{words(round(c['mean_err']))}. With two rows, a third of a percent of the words went over, well "
-            "inside the thirteen and a half percent the theorem allows."
+            (
+            f"How large can the error be in the standard insertion-only Count-Min model? <bookmark mark='a'/> In one "
+            f'row, use a hash family with collision probability at most one over w for each pair. The expected excess'
+            f' for a fixed queried item is at most N over w. Markov bounds excess above e times that by one over e. '
+            f"<bookmark mark='b'/> With independently chosen row hashes, all rows must fail, so the probabilities "
+            f"multiply. <bookmark mark='c'/> Choose width at least e over epsilon and depth at least the natural log "
+            f'of one over delta. Each fixed item then has additive error at most epsilon N with probability at least '
+            f'one minus delta. This is not a simultaneous guarantee for every item without an additional union bound.'
+            f" <bookmark mark='d'/> The counter count depends on epsilon and delta; each counter still needs enough "
+            f"bits for N. <bookmark mark='e'/> The corpus experiment has a comparison level of "
+            f"{words(round(c['bound']))}"
+            f' and mean excess about '
+            f"{words(round(c['mean_err']))}"
+            f'. Its concrete polynomial and double hashes are an empirical implementation, not a proof that the '
+            f'independent-row theorem applies. The reported fraction across words is not a failure probability over '
+            f'independent hash choices.'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(lines[0]))
             for mk, ln in zip("abcd", lines[1:]):

@@ -26,7 +26,9 @@ class Bins(VoiceoverScene):
     def card(self):
         card = chapter_card(7, r"Balls into bins, \ and the power of two choices", r"How uneven does chance make "
                             r"things?", lit=(1994,), extra=((1994, r"two choices"),), part=PART)
-        with self.voiceover("Chapter seven. Balls into bins, and the power of two choices."):
+        with self.voiceover((
+            'Chapter seven. Balls into bins, and the power of two choices.'
+        )):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
 
@@ -42,12 +44,14 @@ class Bins(VoiceoverScene):
         t2 = label(r"the emptier of two random bins", font_size=22, color=YES).next_to(row2, UP, buff=3.3)
         load1, load2 = [0] * nb, [0] * nb
         with self.voiceover(
-            "Throw balls into bins at random. How full does the fullest bin get? This question decides how well "
-            "a hash table's chains, Part 17, or a server farm's queues are balanced. <bookmark mark='a'/> On the "
-            "left, each of twenty-four balls goes into one random bin of twelve. On the right, each ball looks at "
-            "two random bins and goes into the emptier one. <bookmark mark='b'/> The same random numbers drive "
-            "both sides: the left uses the first choice, the right uses both. <bookmark mark='c'/> One choice "
-            "leaves some bins empty and piles others high. Two choices are strikingly even."
+            (
+            'Throw balls into bins at random. How full does the fullest bin get? This question decides how well a '
+            "hash table's chains, Part 17, or a server farm's queues are balanced. <bookmark mark='a'/> On the left,"
+            ' each of twenty-four balls goes into one random bin of twelve. On the right, each ball looks at two '
+            "random bins and goes into the emptier one. <bookmark mark='b'/> The same random numbers drive both "
+            "sides: the left uses the first choice, the right uses both. <bookmark mark='c'/> One choice leaves some"
+            ' bins empty and piles others high. Two choices are strikingly even.'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(row1), FadeIn(row2), FadeIn(t1), FadeIn(t2))
             vo.wait_until("a")
@@ -95,23 +99,32 @@ class Bins(VoiceoverScene):
         cap = label(r"$n = 10^6$: \ how many bins hold $0, 1, 2, \dots$ balls", font_size=18, color=GREY_A
                     ).next_to(bars, UP, buff=0.15).align_to(bars, LEFT)
         side = VGroup(
-            label(r"one choice: \ a Poisson law, \ $e^{-1}/k!$ of the bins hold $k$", font_size=20, color=DATA),
+            label('one choice: \\ Poisson(1) approximation, \\ fraction $\\approx e^{-1}/k!$ at load $k$', font_size=20, color=DATA),
             label(rf"{d['hist_one'][-1]} bins hold {len(d['hist_one']) - 1}", font_size=20, color=DATA),
             label(rf"two choices: \ none above {len(d['hist_two']) - 1}; \ only {d['hist_two'][-1]} reach it",
                   font_size=20, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to(RIGHT * 3.6 + DOWN * 2.4)
+        protocol = label("table maxima: 5 one-choice trials; 3 two-choice trials, except 1 at a million", font_size=17, color=GREY_A).next_to(tab, DOWN, buff=0.16)
         with self.voiceover(
-            "Now with n balls and n bins, for n from a thousand to a million. <bookmark mark='a'/> With one "
-            "choice the fullest bin holds about log n over log log n balls; the column beside it is that "
-            "formula, which is right only up to a factor that tends to one very slowly, so the measured loads "
-            "are higher. <bookmark mark='b'/> With two choices the fullest bin holds about log log n over log two, "
-            "plus a constant. For a million balls: ten against four. <bookmark mark='c'/> At a million, the "
-            "one-choice loads follow a Poisson law, a fraction e to the minus one over k factorial of the bins "
-            f"holding k, with {d['hist_one'][-1]} unlucky bins holding {len(d['hist_one']) - 1}. With two choices "
-            f"nothing went above {len(d['hist_two']) - 1}. A tiny change in the rule, an exponential change in "
-            "the result. This is the power of two choices, from Azar, Broder, Karlin and Upfal in 1994."
+            (
+            (
+            f"Now with n balls and n bins, for n from a thousand to a million. <bookmark mark='a'/> With one choice "
+            f'the fullest bin holds about log n over log log n balls; the column beside it is that formula, which is '
+            f'right only up to a factor that tends to one very slowly, so the measured loads are higher. <bookmark '
+            f"mark='b'/> With two choices the fullest bin holds about log log n over log two, plus a constant. For a "
+            f"million balls: ten against four. <bookmark mark='c'/> At a million, the one-choice loads approximately "
+            f'follow a Poisson law, a fraction e to the minus one over k factorial of the bins holding k, with '
+            f"{d['hist_one'][-1]}"
+            f' unlucky bins holding '
+            f"{len(d['hist_one']) - 1}"
+            f'. With two choices nothing went above '
+            f"{len(d['hist_two']) - 1}"
+            f'. A tiny change in the rule, an exponential change in the result. This is the power of two choices, '
+            f'from Azar, Broder, Karlin and Upfal in 1994.'
+        )
+        )
         ) as vo:
-            self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
+            self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule), FadeIn(protocol))
             self.play(LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.3))
             vo.wait_until("a")
             self.play(*[Indicate(tab.cells[r][1], color=DATA) for r in range(1, len(rows) + 1)])
@@ -142,15 +155,17 @@ class Bins(VoiceoverScene):
         foot = label(r"in practice: \ load balancers pick the less busy of two servers; \ cuckoo hashing "
                      r"(Part 17) gives each key two homes", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.4)
         with self.voiceover(
+            (
             "Why? <bookmark mark='a'/> Let beta i be the number of bins holding at least i balls. <bookmark "
             "mark='b'/> A ball lands at height i plus one only if both its bins already hold at least i, <bookmark "
-            "mark='c'/> with probability about beta i over n, squared. So each height's fraction is about the square "
-            "of the one below. <bookmark mark='d'/> Squaring collapses fast: a quarter, a sixteenth, one in two "
-            "hundred and fifty-six, one in sixty-five thousand, below one over n after about log log n steps. "
+            "mark='c'/> with probability about beta i over n, squared. So each height's fraction is about the square"
+            " of the one below. <bookmark mark='d'/> Squaring collapses fast: a quarter, a sixteenth, one in two "
+            'hundred and fifty-six, one in sixty-five thousand, below one over n after about log log n steps. '
             "<bookmark mark='e'/> With one choice there is no squaring, only one over k factorial. <bookmark "
             "mark='f'/> With d choices the load is log log n over log d, so most of the gain is in the second "
             "choice. <bookmark mark='g'/> Load balancers use exactly this rule, and cuckoo hashing gives every key "
-            "two homes."
+            'two homes.'
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):

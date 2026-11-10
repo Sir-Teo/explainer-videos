@@ -29,7 +29,9 @@ class Karger(VoiceoverScene):
     def card(self):
         card = chapter_card(4, r"A minimum cut by contraction", r"Can random choices find the weakest link?",
                             lit=(1993,), extra=((1993, r"Karger's contraction"),), part=PART)
-        with self.voiceover("Chapter four. A minimum cut by contraction."):
+        with self.voiceover((
+            'Chapter four. A minimum cut by contraction.'
+        )):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
         self.play(FadeOut(card))
 
@@ -52,17 +54,23 @@ class Karger(VoiceoverScene):
                   FadeIn(count))
         merges = d[key]
         with self.voiceover(
-            "A cut of a graph splits its vertices into two sides; its size is the number of edges between them. "
-            "This graph has two dense clusters joined by three edges, so its minimum cut has size three. "
-            "Finding a minimum cut is a classic problem, usually solved with maximum flows. <bookmark mark='a'/> "
-            "David Karger's algorithm, from 1993, is almost embarrassingly simple. Pick an edge at random and "
-            "contract it: merge its two ends into one vertex, keep all the other edges, and throw away the loops. "
-            "Repeat until two vertices are left. The edges between them are a cut. <bookmark mark='b'/> This run "
-            "kept all three bridges to the end and found the minimum cut."
+            (
+            'A cut of a graph splits its vertices into two sides; its size is the number of edges between them. This'
+            ' graph has two dense clusters joined by three edges, so its minimum cut has size three. Finding a '
+            "minimum cut is a classic problem, usually solved with maximum flows. <bookmark mark='a'/> David "
+            "Karger's algorithm, from 1993, is almost embarrassingly simple. Pick an edge at random and contract it:"
+            ' merge its two ends into one vertex, keep all the other edges, and throw away the loops. Repeat until '
+            "two vertices are left. The edges between them are a cut. <bookmark mark='b'/> This run kept all three "
+            'bridges to the end and found the minimum cut.'
+        )
             if good else
-            "Run it again with other coins. <bookmark mark='a'/> This time a bridge was contracted along the way, "
-            "and the two clusters were merged. <bookmark mark='b'/> What is left cuts a single vertex off from the "
-            f"rest, a cut of size {d['fail_cut']}. Each run can fail, so how often does it succeed?"
+            (
+            f"Run it again with other coins. <bookmark mark='a'/> This time a bridge was contracted along the way, "
+            f"and the two clusters were merged. <bookmark mark='b'/> What is left cuts a single vertex off from the "
+            f'rest, a cut of size '
+            f"{d['fail_cut']}"
+            f'. Each run can fail, so how often does it succeed?'
+        )
         ) as vo:
             vo.wait_until("a")
             rt = 0.35
@@ -99,7 +107,7 @@ class Karger(VoiceoverScene):
     def proof(self):
         head = label(r"Why it succeeds often enough", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
-            label(r"a minimum cut $C$ of size $k$: \ every vertex has degree $\ge k$ \ (else a smaller cut)",
+            label('connected graph, \\ minimum cut $k>0$: \\ every vertex has degree $\\ge k$',
                   font_size=22, color=WHITE),
             MathTex(r"m \ge \frac{nk}{2} \quad\Longrightarrow\quad \Pr[\text{the first edge is in } C] = "
                     r"\frac{k}{m} \le \frac{2}{n}", font_size=34, color=LAM),
@@ -109,28 +117,32 @@ class Karger(VoiceoverScene):
                     r"\Big(1 - \frac{2}{3}\Big) = \frac{n-2}{n}\cdot\frac{n-3}{n-1}\cdot\frac{n-4}{n-2}\cdots"
                     r"\frac{1}{3}", font_size=30, color=YES),
             MathTex(r"= \frac{2}{n(n-1)} = \binom{n}{2}^{-1}", font_size=38, color=HEAD),
-            label(r"corollary: \ a graph has at most $\binom{n}{2}$ minimum cuts \ (each is found with that "
-                  r"probability, \ and the events are disjoint)", font_size=21, color=CTRL),
+            label('connected graph: \\ at most $\\binom{n}{2}$ minimum cuts; \\ each specific cut has success probability at least $\\binom{n}{2}^{-1}$', font_size=21, color=CTRL),
         ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.4)
         for ln in lines:
             if ln.width > 13.2:
                 ln.width = 13.2
         with self.voiceover(
-            "The analysis is as short as the algorithm. Fix a minimum cut C, of size k. <bookmark mark='a'/> "
-            "Every vertex has at least k edges, because otherwise the edges around that one vertex would be a "
-            "smaller cut. <bookmark mark='b'/> So there are at least n k over two edges, and the first random edge "
-            "lands in C with probability at most two over n. <bookmark mark='c'/> Contracting never creates a "
-            "smaller cut, so the same argument works at every step, with n minus one vertices, then n minus two, "
-            "and so on. <bookmark mark='d'/> C survives to the end if it survives every step. Write the product "
-            "out, and almost everything cancels: <bookmark mark='e'/> the success probability is at least two over "
-            "n times n minus one, one over n choose two. <bookmark mark='f'/> There is a free corollary. A "
-            "specific minimum cut is the output with at least that probability, and different cuts are different "
-            "outcomes, so no graph has more than n choose two minimum cuts."
+            (
+            (
+            'The analysis is as short as the algorithm. Fix a connected undirected multigraph with positive minimum-'
+            "cut size k, and one minimum cut C. <bookmark mark='a'/> Every vertex has at least k edges, because "
+            "otherwise the edges around that one vertex would be a smaller cut. <bookmark mark='b'/> So there are at"
+            ' least n k over two edges, and the first random edge lands in C with probability at most two over n. '
+            "<bookmark mark='c'/> Contracting never creates a smaller cut, so the same argument works at every step,"
+            " with n minus one vertices, then n minus two, and so on. <bookmark mark='d'/> C survives to the end if "
+            "it survives every step. Write the product out, and almost everything cancels: <bookmark mark='e'/> the "
+            'success probability is at least two over n times n minus one, one over n choose two. <bookmark '
+            "mark='f'/> There is a free corollary. A specific minimum cut is the output with at least that "
+            'probability, and different cuts are different outcomes, so no connected graph has more than n choose '
+            'two minimum cuts.'
+        )
+        )
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(lines[0]))
             for mk, ln in zip("abcdef", lines):
                 vo.wait_until(mk)
-                self.play(FadeIn(ln, shift=UP * 0.1))
+                self.play(Indicate(ln, color=WHITE) if mk == "a" else FadeIn(ln, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
 
@@ -151,7 +163,7 @@ class Karger(VoiceoverScene):
         res = VGroup(
             label(rf"the minimum cut, \ size 3: \ {d['success']:.1%} of runs".replace("%", r"\%"), font_size=24,
                   color=YES),
-            label(rf"the bound $2/(n(n-1))$: \ {d['bound']:.2%}".replace("%", r"\%"), font_size=24, color=HEAD),
+            label(rf"the success lower bound $2/(n(n-1))$: \ {d['bound']:.2%}".replace("%", r"\%"), font_size=24, color=HEAD),
             label(r"repeat $\binom{n}{2} \ln n$ times and keep the smallest: \ wrong with probability $\le 1/n$",
                   font_size=20, color=WHITE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
@@ -167,21 +179,25 @@ class Karger(VoiceoverScene):
                   color=LAM),
             label(rf"all {d['cycle_mincuts']} found, \ each in {d['cycle_min_share']:.1%}--"
                   rf"{d['cycle_max_share']:.1%} of runs".replace("%", r"\%"), font_size=20, color=WHITE),
-            label(rf"$1/45 = {1 / 45:.1%}$: \ the bound is exact here".replace("%", r"\%"), font_size=20,
+            label(rf"$1/45 = {1 / 45:.1%}$: \ the success lower bound is tight here".replace("%", r"\%"), font_size=20,
                   color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
         if cyc_t.width > 4.3:
             cyc_t.width = 4.3
         cyc_t.next_to(ring, LEFT, buff=0.35)
         with self.voiceover(
-            f"We ran the contraction twenty thousand times on the two-cluster graph. Each bar counts the runs that "
-            f"ended with a cut of that size. <bookmark mark='a'/> The minimum cut came out in {d['success']:.0%} "
-            "of runs. The bound promised at least one in a hundred and twenty, under one percent, so on this "
-            "graph the truth is about fifteen times better. <bookmark mark='b'/> The bound is a worst case, and repetition "
-            "does the rest: run it n choose two times log n times and keep the smallest cut, and it is wrong with "
-            "probability at most one over n. <bookmark mark='c'/> The worst case is real. In a ring of ten "
-            "vertices, any two of the ten edges form a minimum cut, which makes forty-five of them, exactly n choose "
-            "two. The runs found all forty-five, each about once in forty-five tries, so here the bound is exact."
+            (
+            f'We ran the contraction twenty thousand times on the two-cluster graph. Each bar counts the runs that '
+            f"ended with a cut of that size. <bookmark mark='a'/> The minimum cut came out in "
+            f"{d['success']:.0%}"
+            f' of runs. The lower bound promised at least one in a hundred and twenty, under one percent, so the '
+            f"observed rate on this graph is about fifteen times the lower bound. <bookmark mark='b'/> The bound is a"
+            f' worst case, and repetition does the rest: run it n choose two times log n times and keep the smallest '
+            f"cut, and it is wrong with probability at most one over n. <bookmark mark='c'/> The worst case is real. "
+            f'In a ring of ten vertices, any two of the ten edges form a minimum cut, which makes forty-five of them,'
+            f' exactly n choose two. The runs found all forty-five, each about once in forty-five tries, so here the '
+            f'bound is exact.'
+        )
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.08),
                       FadeIn(names), FadeIn(cap))
@@ -210,13 +226,19 @@ class Karger(VoiceoverScene):
                   font_size=20, color=GREY_A),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Where is the waste? <bookmark mark='a'/> Early contractions almost never hit the minimum cut, <bookmark "
-            "mark='b'/> so all the risk is at the end. <bookmark mark='c'/> Karger and Clifford Stein, in 1996, "
-            "contract only to about n over root two vertices, where the cut survives with probability at least a "
-            "half, <bookmark mark='d'/> then recurse twice and keep the better result. <bookmark mark='e'/> That "
-            "takes n squared log n time, and succeeds with probability about one over log n instead of one over n "
-            "squared. <bookmark mark='f'/> On our forty-eight-vertex test graph, a single plain contraction "
-            f"succeeded {d['karger_success']:.0%} of the time; Karger–Stein succeeded in all forty of its runs."
+            (
+            f"Where is the waste? <bookmark mark='a'/> Early contractions have a small individual risk of hitting a "
+            f"fixed minimum cut, <bookmark mark='b'/> while the risk increases near the end. <bookmark mark='c'/> "
+            f'Karger and Clifford Stein contract to roughly n over root two vertices, with rounding chosen to retain '
+            f"a survival probability at least one half. <bookmark mark='d'/> Then two independent recursive branches "
+            f"compete and we keep the smaller cut. <bookmark mark='e'/> The standard implementation has order n "
+            f'squared log n running time per recursive trial and success at least order one over log n. <bookmark '
+            f"mark='f'/> Our forty-eight-vertex graph has an independently certified minimum cut. Plain contraction "
+            f'succeeded in '
+            f"{d['karger_success']:.0%}"
+            f' of two hundred trials; Karger–Stein succeeded in all forty observed trials. These fractions describe '
+            f'this graph and seed, not a universal success guarantee.'
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, p in zip("abcdef", pts):
