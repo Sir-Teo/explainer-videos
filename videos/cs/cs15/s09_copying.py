@@ -68,16 +68,22 @@ class Copying(VoiceoverScene):
             to_objs[name] = o
             return o
 
-        def ptr_mark(text, color):
+        def fwd_box(name,index):
+            r=Rectangle(width=frm[name][0].width,height=.42,stroke_color=HEAD,
+                        stroke_width=1.6,fill_color=BG,fill_opacity=1)
+            t=mono(f"FWD {3*index}",12,HEAD).move_to(r)
+            return VGroup(r,t).move_to(frm[name][0])
+
+        def ptr_mark(text, color, side):
             ar = Arrow(DOWN * 0.45, UP * 0.05, buff=0, color=color, stroke_width=3, tip_length=0.14)
-            return VGroup(ar, label(text, font_size=17, color=color).next_to(ar, DOWN, buff=0.04))
-        scan = ptr_mark(r"scan", CTRL)
-        free = ptr_mark(r"free", YES)
+            return VGroup(ar, label(text, font_size=17, color=color).next_to(ar, side, buff=0.08))
+        scan = ptr_mark(r"scan", CTRL, LEFT)
+        free = ptr_mark(r"free", YES, RIGHT)
 
         def at(m, x):
-            return m.animate.move_to([x, to_y - 0.95, 0])
-        scan.move_to([xs, to_y - 0.95, 0])
-        free.move_to([xs, to_y - 0.95, 0])
+            return m.animate.shift(np.array([x, to_y - 0.95, 0]) - m[0].get_center())
+        for marker in (scan, free):
+            marker.shift(np.array([xs, to_y - 0.95, 0]) - marker[0].get_center())
         pts = VGroup(
             label(r"copy each root's object to to-space; \ leave a \textbf{forwarding address} behind",
                   font_size=20, color=GREY_A),
@@ -86,50 +92,47 @@ class Copying(VoiceoverScene):
             label(r"when \textit{scan} meets \textit{free}, \ everything live has been copied: \ swap the halves",
                   font_size=20, color=YES),
         ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "In 1970 C. J. Cheney found a collector that never looks at garbage at all. <bookmark mark='a'/> Split "
-            "memory into two halves. The program allocates in one, from-space. Here a pair p holds a list of three "
-            "cells; the roots point at p and at the middle cell; and three other objects are dead. <bookmark "
-            "mark='b'/> To collect, copy each root's object into the empty half, to-space, and leave behind, in the "
-            "old copy, a forwarding address: the new location. <bookmark mark='c'/> Now two pointers do all the "
-            "work. Free marks the end of to-space. Scan walks through to-space, object by object. For every field "
-            "that points into from-space, copy the target to free, unless it has already been forwarded, and "
-            "update the field. <bookmark mark='d'/> When scan catches up with free, every live object has been "
-            "copied, and nothing else has. The garbage was never touched. The halves swap roles, and the program "
-            "continues in a heap that is perfectly compacted. Breadth-first, with no stack and no recursion: two "
-            "pointers."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(frow), FadeIn(fl), Create(arcs), Create(root_ar), FadeIn(rl))
-            vo.wait_until("b")
+        with self.voiceover("In 1970 C. J. Cheney found a collector that never looks at garbage at all. <bookmark mark='a'/> Split memory into two halves. The program allocates in one, from-space. Here a pair p holds a list of three cells; the roots point at p and at the middle cell; and three other objects are dead. <bookmark mark='b'/> To collect, copy each root's object into the empty half, to-space, and leave behind, in the old copy, a forwarding address: the new location. <bookmark mark='c'/> Now two pointers do all the work. Free marks the end of to-space. Scan walks through to-space, object by object. For every field that points into from-space, copy the target to free, unless it has already been forwarded, and update the field. <bookmark mark='d'/> When scan catches up with free, every live object has been copied, and nothing else has. The garbage was never touched. The halves swap roles, and the program continues in a heap that is perfectly compacted. Breadth-first, with no stack and no recursion: two pointers.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(frow), FadeIn(fl), Create(arcs), Create(root_ar), FadeIn(rl), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(tl), Create(base), FadeIn(scan), FadeIn(free), FadeIn(pts[0]))
-            ev = tr["events"]
+            ev = tr['events']
             k = 0
-            # the roots
-            while ev[k][0] in ("copy", "root"):
+            while ev[k][0] in ('copy', 'root'):
                 e = ev[k]
-                if e[0] == "copy":
+                if e[0] == 'copy':
                     o = place(e[1])
-                    self.play(TransformFromCopy(frm[e[1]], o), frm[e[1]][0].animate.set_opacity(0.35), at(free, cur),
-                              run_time=0.8)
+                    self.play(TransformFromCopy(frm[e[1]], o), Transform(frm[e[1]][0], fwd_box(e[1], e[2])), at(free, cur), run_time=0.8)
+                elif e[0] == 'root':
+                    j = tr['roots'].index(e[1])
+                    target = to_objs[e[1]][0]
+                    arrow = Arrow(target.get_top() + UP * 0.75, target.get_top() + UP * 0.32, buff=0, color=CTRL, stroke_width=2.5, tip_length=0.12)
+                    self.play(Transform(root_ar[j], arrow), run_time=0.35)
                 k += 1
-            vo.wait_until("c")
+            self.play(rl.animate.next_to(root_ar, LEFT, buff=0.1), run_time=0.3)
+            vo.wait_until('c')
             self.play(FadeIn(pts[1]))
-            while ev[k][0] != "done":
+            while ev[k][0] != 'done':
                 e = ev[k]
-                if e[0] == "scan":
+                if e[0] == 'scan':
                     o = to_objs[e[1]]
-                    self.play(at(scan, o[0].get_left()[0] + 0.05), Indicate(o[0], color=CTRL, scale_factor=1.05),
-                              run_time=0.6)
-                elif e[0] == "copy":
+                    self.play(at(scan, o[0].get_left()[0] + 0.05), Indicate(o[0], color=CTRL, scale_factor=1.05), run_time=0.6)
+                elif e[0] == 'copy':
                     o = place(e[1])
-                    self.play(TransformFromCopy(frm[e[1]], o), frm[e[1]][0].animate.set_opacity(0.35), at(free, cur),
-                              run_time=0.8)
+                    self.play(TransformFromCopy(frm[e[1]], o), Transform(frm[e[1]][0], fwd_box(e[1], e[2])), at(free, cur), run_time=0.8)
                 k += 1
             self.play(at(scan, cur), run_time=0.6)
-            vo.wait_until("d")
-            self.play(FadeIn(pts[2]), *[frm[n].animate.set_opacity(0.15) for n in tr["dead"]])
+            vo.wait_until('d')
+            updated = VGroup()
+            for name in tr['to_order']:
+                for j, target in enumerate(objs[name][1]):
+                    if isinstance(target, str) and target in to_objs:
+                        start = to_objs[name][0].dots[j].get_center()
+                        finish = to_objs[target][0].get_top() + UP * 0.02
+                        updated.add(CurvedArrow(start + UP * 0.04, finish, angle=-0.65 if finish[0] > start[0] else 0.65, color=YES, stroke_width=1.7, tip_length=0.1))
+            self.play(FadeIn(pts[2]), Create(updated), *[frm[n].animate.set_opacity(0.15) for n in tr['dead']])
         self.wait(0.3)
         self.clear_scene()
 
@@ -138,43 +141,47 @@ class Copying(VoiceoverScene):
         head = label(r"The cost: \ live data, \ not garbage", font_size=34).to_edge(UP, buff=0.3)
         rows = [r for r in d["rows"] if not r.get("oom") and r["collections"]]
         xmax = 400000
-        ymax = max(r["work"] for r in rows) * 1.15
-        ax = Axes(x_range=[0, xmax, 100000], y_range=[0, ymax, ymax / 4], x_length=7.6, y_length=4.0,
+        ymax = max(max(r["work"],r["model"]) for r in rows) * 1.15
+        ax = Axes(x_range=[0, xmax, 100000], y_range=[0, ymax, ymax / 4], x_length=7.0, y_length=4.0,
                   axis_config={"color": GREY_D, "include_numbers": False, "include_ticks": True}).move_to(
-            LEFT * 2.6 + DOWN * 0.4)
+            LEFT * 2.4 + DOWN * 0.4)
         meas = VMobject(color=YES, stroke_width=3).set_points_as_corners(
             [ax.c2p(r["semispace"], r["work"]) for r in rows])
         dots = VGroup(*[Dot(ax.c2p(r["semispace"], r["work"]), radius=0.06, color=YES) for r in rows])
-        model = VMobject(color=HEAD, stroke_width=2.5).set_points_smoothly(
+        model = VMobject(color=HEAD, stroke_width=2.5).set_points_as_corners(
             [ax.c2p(r["semispace"], r["model"]) for r in rows])
         model = DashedVMobject(model, num_dashes=40)
         xl = label(r"semispace size, \ words", font_size=18, color=GREY_B).next_to(ax, DOWN, buff=0.3)
         yl = label(r"words copied, \ in all", font_size=18, color=GREY_B).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
         ticks = VGroup(*[label(f"{v // 1000}k", font_size=15, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.1)
                          for v in (100000, 200000, 300000, 400000)])
+        yticks = VGroup(*[label(f"{v / 1000:.0f}k" if v else "0", font_size=14, color=GREY_B)
+                           .next_to(ax.c2p(0, v), LEFT, buff=.12) for v in (0, ymax/4, ymax/2, 3*ymax/4, ymax)])
         live = rows[0]["mean_live"]
         side = VGroup(
-            label(r"each collection copies the live data, \ $L$", font_size=21, color=GREY_A),
+            label('copying-only model: each collection copies $L$ live words', font_size=21, color=GREY_A),
             label(r"and buys $S - L$ words of allocation", font_size=21, color=GREY_A),
             MathTex(r"\text{work per word allocated} \;\approx\; \frac{L}{S - L}", font_size=32, color=HEAD),
             label(rf"measured: \ the Job, \ $L \approx$ {words(round(live, -2))} words", font_size=20, color=YES),
-            label(r"dashed: \ the formula, \ with each run's mean $L$", font_size=19, color=HEAD),
-            label(r"twice the memory, \ far less than half the work: \ memory buys time", font_size=21, color=COST),
+            label("dashed estimate: each run's sampled mean $L$", font_size=19, color=HEAD),
+            label('excludes root scans and bookkeeping; finite runs have boundary effects', font_size=21, color=COST),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.35)
         if side.width > 5.4:
             side.scale_to_fit_width(5.4)
         with self.voiceover(
-            "What does copying cost? <bookmark mark='a'/> Each collection copies the live data, call it L words, "
-            "and leaves the rest of the semispace, S minus L, free for the program to fill. So the work per word "
-            "allocated is about L over S minus L. Garbage costs nothing at all. <bookmark mark='b'/> We ran the "
-            "Job with semispaces from thirty-six thousand words up to almost four hundred thousand, and measured "
-            "the words copied. The curve falls steeply: near the live data, the collector runs constantly; with "
-            "room to spare, hardly at all. <bookmark mark='c'/> The dashed line is the formula, using each run's "
-            "average live data. It follows the measurement. <bookmark mark='d'/> This is the central trade of "
-            "garbage collection: memory for time. Give a copying collector more memory and it does less work, "
-            "without limit, until it never needs to run."
+            (
+            "Count the words copied. <bookmark mark='a'/> A collection copies L live words and leaves S minus L "
+            "words for new allocation in a semispace of size S. With a roughly stable live set, the copying work "
+            "per allocated word is approximately L over S minus L. <bookmark mark='b'/> The solid curve measures "
+            "the Job with different semispace sizes. Near the live set, collections are frequent. With more "
+            "space, the finite run collects less often. <bookmark mark='c'/> The dashed estimate uses each run's "
+            "mean sampled live set. Startup, end effects and changing liveness explain why it need not match "
+            "exactly. <bookmark mark='d'/> This model counts copying, not root scans, allocation bookkeeping, or "
+            "wall time. It explains a memory-versus-work trade within those assumptions; it is not a complete "
+            "runtime cost theorem."
+        )
         ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(ticks))
+            self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(ticks), FadeIn(yticks))
             vo.wait_until("a")
             self.play(FadeIn(side[:3]))
             vo.wait_until("b")

@@ -55,17 +55,17 @@ class JIT(VoiceoverScene):
         pts = label(r"start fast in the interpreter; \ spend compile time only where the program spends its time",
                     font_size=21, color=HEAD).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "A just-in-time compiler compiles the program while it runs. Why wait? Because by then the runtime "
-            "knows two things a static compiler can only guess: which code is hot, and what types actually flow "
-            "through it. <bookmark mark='a'/> V8 has four tiers. Ignition, the interpreter, runs everything at "
-            "first and records what it sees. Sparkplug translates bytecode straight to machine code, without "
-            "optimizing. Maglev optimizes a little, quickly. TurboFan optimizes hard, for the hottest functions. "
-            "<bookmark mark='b'/> We enabled them one at a time on this machine. The interpreter alone: a hundred "
-            "and fifty milliseconds. The baseline compiler more than halves it. Maglev adds little for this "
-            "function, and TurboFan brings it to eighteen. <bookmark mark='c'/> And V8 will tell us what it "
-            "decided: here it reports compiling fib with TurboFan, concurrently, on another thread, while the "
-            "interpreter kept running. <bookmark mark='d'/> It is the bet Part 9's caches made: the recent past "
-            "predicts the near future, so spend the effort where the program has been spending its time."
+            (
+            "A JIT can use information gathered while a program runs. <bookmark mark='a'/> This installed V8 "
+            "exposes Ignition, Sparkplug, Maglev and TurboFan configurations. Interpretation starts execution; "
+            "later tiers trade compilation effort for more specialized code. Tier availability and policy vary "
+            "with version and platform. <bookmark mark='b'/> The bars show Fibonacci of thirty-two with the "
+            "stated tiers enabled, using the best of three runs. Enabling an extra tier need not make this short "
+            "benchmark faster. <bookmark mark='c'/> The trace shows what this V8 actually compiled during a "
+            "separate diagnostic run. <bookmark mark='d'/> Hotness predicts where compilation may pay off, but "
+            "compilation, warmup, scheduling and speculation also cost time. A single best run does not establish "
+            "stable long-term performance."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(cap))
             vo.wait_until("a")
@@ -101,30 +101,31 @@ class JIT(VoiceoverScene):
         dots = VGroup(*[Dot(p, radius=0.06, color=COST) for p in pts])
         xt = VGroup(*[label(str(r["shapes"]), font_size=16, color=GREY_B).next_to(ax.c2p(np.log2(r["shapes"]), 0),
                                                                                   DOWN, buff=0.1) for r in ic])
-        xl = label(r"shapes seen at the call site", font_size=17, color=GREY_B).next_to(xt, DOWN, buff=0.1)
-        yl = label(r"20 million calls, \ ms", font_size=17, color=GREY_B).next_to(ax, UP, buff=0.05).align_to(
+        xl = label('constructed shapes (base-2 log scale)', font_size=17, color=GREY_B).next_to(xt, DOWN, buff=0.1)
+        yl = label('20.48 million calls, ms', font_size=17, color=GREY_B).next_to(ax, UP, buff=0.05).align_to(
             ax, LEFT)
         slow = ic[-1]["seconds"] / ic[0]["seconds"]
         side = VGroup(
             label(rf"1 shape: \ {1000 * ic[0]['seconds']:.0f} ms", font_size=21, color=YES),
             label(rf"{ic[-1]['shapes']} shapes: \ {1000 * ic[-1]['seconds']:.0f} ms, \ {slow:.0f}$\times$ slower",
                   font_size=21, color=NO),
-            label(r"same code, \ same work: \ only the variety of objects changed", font_size=19, color=GREY_B),
+            label('single-host construction; object layouts also change', font_size=19, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
         if side.width > 4.4:
             side.scale_to_fit_width(4.4)
         side.next_to(ax, RIGHT, buff=0.5)
         with self.voiceover(
-            "The first trick of every fast dynamic language is older than JavaScript. <bookmark mark='a'/> In "
-            "getX, where is the field x? In C the compiler knows its offset. In JavaScript or Smalltalk it depends "
-            "on the object, so a naive implementation searches a table on every access. <bookmark mark='b'/> "
-            "Peter Deutsch and Allan Schiffman, building Smalltalk in 1984, noticed that a given line of code "
-            "almost always sees the same kind of object. So the call site caches the last shape it saw and where "
-            "the field was. Next time, one comparison and one load. <bookmark mark='c'/> The Self project extended "
-            "this in 1991 to a small table of shapes, a polymorphic cache; beyond a few, the site gives up and "
-            "goes megamorphic. <bookmark mark='d'/> We measured it in V8. The same twenty million calls of getX, "
-            "on objects of one shape, then two, four, up to thirty-two. One shape: nineteen milliseconds. Thirty-"
-            "two shapes: six times slower, for exactly the same work."
+            (
+            "Property access can exploit repeated object structure. <bookmark mark='a'/> For getX, the runtime "
+            "needs the location of x in the current object. <bookmark mark='b'/> An inline cache records a shape "
+            "and an access strategy, guarding the fast path with a shape check. <bookmark mark='c'/> Polymorphic "
+            "caches remember several cases. Megamorphic strategies handle more varied sites; their thresholds and "
+            "lookup mechanisms depend on the engine. <bookmark mark='d'/> Our curve times twenty million four "
+            "hundred and eighty thousand getX calls with one through thirty-two constructed shapes. The "
+            "horizontal positions use a base-two logarithmic scale. The measured ratio is shown beside the graph. "
+            "This construction changes object layouts too, so the curve does not isolate one instruction or prove "
+            "a universal shape penalty."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(src))
             vo.wait_until("a")
@@ -183,16 +184,17 @@ class JIT(VoiceoverScene):
                     'add("a", "b");                                       // a string'], size=17,
                    color=CODE).next_to(head, DOWN, buff=0.5)
         line = next((l for l in d["deopt"] if "add" in l), d["deopt"][0] if d["deopt"] else "")
-        reason = re.search(r"reason: ([^)]*)\)", line)
-        rs = reason.group(1) if reason else "?"
-        tr = VGroup(label(r"\texttt{node --trace-deopt}, \ on this machine:", font_size=18, color=GREY_B),
-                    code([f"[bailout (kind: deopt-eager, reason: {rs}): begin. deoptimizing ... <JSFunction add>"
-                          ", <Code TURBOFAN>"], size=13, color=NO)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
-        tr.next_to(src, DOWN, buff=0.45)
+        excerpt=re.sub(r'0x[0-9a-f]+','<addr>',line)
+        excerpt=excerpt[:excerpt.find('opt id')] if 'opt id' in excerpt else excerpt
+        import textwrap
+        tr=VGroup(label('actual Node deoptimization trace (addresses abbreviated)',font_size=18,color=GREY_B),
+                  code(textwrap.wrap(excerpt,88),size=14,color=NO)).arrange(DOWN,aligned_edge=LEFT,buff=.12)
+        if tr.width>12.7:tr.scale_to_fit_width(12.7)
+        tr.next_to(src,DOWN,buff=.4)
         pts = VGroup(
-            label(r"TurboFan compiled \texttt{add} for small integers \ (``Smis''): \ one machine add, \ plus a check",
+            label('optimized code can specialize observed types and guard its assumptions',
                   font_size=21, color=GREY_A),
-            label(r"the check failed: \ throw the machine code away, \ rebuild the interpreter's frame, \ carry on",
+            label('deoptimization reconstructs state for less specialized code',
                   font_size=21, color=NO),
             label(r"\textbf{deoptimization} \ (H\"olzle, Chambers and Ungar, \ 1992): \ what lets a JIT guess "
                   r"aggressively", font_size=21, color=YES),
@@ -200,15 +202,17 @@ class JIT(VoiceoverScene):
                   font_size=20, color=GREY_B),
         ).arrange(DOWN, buff=0.14).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "The deepest trick is speculation. <bookmark mark='a'/> add is called two hundred thousand times, "
-            "always with small integers. TurboFan compiles it for exactly that case: one machine addition, and a "
-            "check that the arguments really are small integers. <bookmark mark='b'/> Then add is called with two "
-            "strings. The check fails. V8 prints why: not a Smi, its name for a small integer. <bookmark "
-            "mark='c'/> It throws the optimized code away, rebuilds the frame the interpreter would have had, and "
-            "continues in the interpreter, as if nothing had happened. Later it may compile add again, for both "
-            "cases. <bookmark mark='d'/> Deoptimization, worked out by Urs Hölzle and his colleagues on Self in "
-            "1992, is what allows a JIT to bet: it can always take the bet back. Tracing JITs, like LuaJIT and "
-            "PyPy, take the bet further, compiling the single path a hot loop actually follows."
+            (
+            "Optimized code can depend on assumptions learned from earlier calls. <bookmark mark='a'/> Our add "
+            "function first sees numbers and later receives strings. A type guard can fail, forcing the runtime "
+            "to leave code that relied on the old assumption. <bookmark mark='b'/> The displayed trace comes from "
+            "the installed Node and V8 version. Its actual bailout reasons and tier names are evidence for this "
+            "run, not promises about every V8 release. <bookmark mark='c'/> Deoptimization reconstructs a state "
+            "that less specialized code can continue from. The string call still returns a followed by b; "
+            "correctness must survive a failed guess. <bookmark mark='d'/> The destination can be another tier, "
+            "and further calls may be optimized again. Speculation trades guards, compilation and reconstruction "
+            "work for faster common cases."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(src[:2]))
             vo.wait_until("a")

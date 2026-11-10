@@ -51,25 +51,15 @@ class PebbleVM(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.4)
         if pts.width > 6.2:
             pts.scale_to_fit_width(6.2)
-        with self.voiceover(
-            "A virtual machine is just a program, and we have a machine and a compiler of our own. So we wrote the "
-            "virtual machine in the Pebble language of Part 13, compiled it, and ran it on Pebble. <bookmark "
-            "mark='a'/> Its heart is this loop. Fetch the opcode and its argument, then test the opcode against "
-            "each instruction in turn, and run the matching handler. <bookmark mark='b'/> Here is the handler for "
-            "CONS: if the heap is full, collect; then write a header and two fields, and push a pointer. <bookmark "
-            "mark='c'/> A loader at the start reads the compiled Job, byte by byte, and then the VM reads the text. "
-            "The stack, a heap of two halves, and the collector all fit in Pebble's one megabyte of memory. "
-            "<bookmark mark='d'/> The Pebble language has no switch statement and no bit shifts, so dispatch is a "
-            "chain of ifs, and a tag is taken apart with division and remainder. Both turn out to matter."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(l1), FadeIn(c1), FadeIn(pts[0]))
-            vo.wait_until("b")
+        with self.voiceover("A virtual machine is just a program, and we have a machine and a compiler of our own. So we wrote the virtual machine in the Pebble language of Part 13, compiled it, and ran it on Pebble. <bookmark mark='a'/> Its heart is this loop. Fetch the opcode and its argument, then test the opcode against each instruction in turn, and run the matching handler. <bookmark mark='b'/> Here is the handler for CONS: if the heap is full, collect; then write a header and two fields, and push a pointer. <bookmark mark='c'/> A loader at the start reads the compiled Job, byte by byte, and then the VM reads the text. The stack, a heap of two halves, and the collector all fit in Pebble's one megabyte of memory. <bookmark mark='d'/> The Pebble language has no switch statement and no bit shifts, so dispatch is a chain of ifs, and a tag is taken apart with division and remainder. Both turn out to matter.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(l1), FadeIn(c1), FadeIn(pts[0]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(l2), FadeIn(c2))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(pts[1:3]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(pts[3]))
         self.wait(0.3)
         self.clear_scene()
@@ -89,16 +79,19 @@ class PebbleVM(VoiceoverScene):
             colors=[[WHITE, YES, YES]] * 5 + [[WHITE, GREY_B, COST]]).next_to(head, DOWN, buff=0.5)
         res = VGroup(
             label(rf"{r['per_bytecode']:.0f} Pebble instructions per bytecode", font_size=26, color=COST),
-            label(r"the reference VM is the specification; \ the Pebble VM must agree with it, \ count for count",
+            label('finite in-range cosimulation: checked output and counters, not a universal proof',
                   font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.15).next_to(tab, DOWN, buff=0.45)
         with self.voiceover(
-            "How do we know the Pebble VM is right? The same way Part 6 checked the processor: against a "
-            "reference. We have a second implementation of the same machine, in Python, written for clarity. "
-            "<bookmark mark='a'/> On the same passage, both print the same twenty words. Both execute the same "
-            "four hundred and sixty thousand bytecodes. Both collect at the same moments, copy the same words, and "
-            "reach the same stack depth. <bookmark mark='b'/> And the Pebble VM tells us what all of this costs on "
-            "a real instruction set: twenty-two million Pebble instructions, forty-seven for every bytecode."
+            (
+            "Two implementations give us an opportunity to cross-check. <bookmark mark='a'/> Run the same "
+            "in-range Job passage on the Python reference VM and the Pebble implementation. Their output, "
+            "bytecode work, collection counts, copied words and deepest stack are checked as shown. <bookmark "
+            "mark='b'/> This is finite cosimulation evidence for these programs and heap settings. It is not a "
+            "proof of equivalence for every possible program, especially values beyond Pebble's tagged integer "
+            "range. A mismatch would still be valuable: it would identify a concrete counterexample to "
+            "investigate."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab.rule), *[FadeIn(c) for c in tab.cells[0]])
             vo.wait_until("a")
@@ -130,16 +123,16 @@ class PebbleVM(VoiceoverScene):
                   r"folklore", font_size=19, color=HEAD),
         ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Forty-seven instructions per bytecode is a lot, and much of it is dispatch. <bookmark mark='a'/> With "
-            "a chain of ifs, the order of the tests matters. Testing the most frequent opcodes first, LOCAL, then "
-            "SETLOCAL, and so on, costs forty-seven instructions per bytecode. In plain opcode order, sixty. Worst "
-            "first, a hundred. Same program, same answer, twice the time. <bookmark mark='b'/> Real interpreters "
-            "use a jump table instead. We measured both kinds in C on this machine: a switch statement, and "
-            "threaded code, where every handler ends by jumping straight to the next one. Threaded code is about "
-            "fifteen percent faster here. <bookmark mark='c'/> The classic explanation is branch prediction: a "
-            "switch has one indirect jump for all opcodes, threaded code has one per handler, each with its own "
-            "history. Modern predictors have closed much of that gap, as Rohou and colleagues showed in 2015. The "
-            "lesson of this whole series applies: measure."
+            (
+            "Dispatch order changes the work of our Pebble interpreter. <bookmark mark='a'/> With its chain of "
+            "tests, the same passage executes about forty-seven instructions per bytecode when frequent opcodes "
+            "come first, sixty in opcode order, and a hundred in the reversed frequency order. These are "
+            "instruction counts, not measured elapsed-time ratios. <bookmark mark='b'/> Our separate C experiment "
+            "compares a switch with computed-goto threading. Its current timings are displayed; they belong to "
+            "this tiny loop, compiler and host. <bookmark mark='c'/> A per-handler indirect branch can expose "
+            "different prediction history, but modern predictors, compiler transformations and workload structure "
+            "affect the result. Measure the generated implementation before applying an old performance rule."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab.rule), *[FadeIn(c_) for c_ in tab.cells[0]])
             vo.wait_until("a")

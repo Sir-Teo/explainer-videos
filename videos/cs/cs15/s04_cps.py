@@ -32,42 +32,31 @@ class Continuations(VoiceoverScene):
         if blk.width > 13:
             blk.scale_to_fit_width(13)
         r = next(x for x in d["fact"] if x["n"] == 1000)
-        tab = grid_table([r"\texttt{fact 1000} on our VM", r"deepest stack, words", r"closures built",
-                          r"heap words"], [
+        tab = grid_table([r"\texttt{fact 1000} on our VM", 'deepest stack, slots', r"closures built",
+                          'heap slots'], [
             [r"direct", words(r["direct"]["max_stack"]), words(r["direct"]["closures"]),
              words(r["direct"]["words"])],
             [r"CPS", words(r["cps"]["max_stack"]), words(r["cps"]["closures"]), words(r["cps"]["words"])],
         ], widths=[3.6, 3.0, 2.4, 2.2], row_h=0.5, font_size=20,
             colors=[[WHITE, NO, WHITE, WHITE], [WHITE, YES, LAM, LAM]]).next_to(blk, DOWN, buff=0.45)
+        qual=label('logical VM slots; excludes host big-integer storage and time',font_size=18,color=HEAD).next_to(tab,DOWN,buff=.2)
         pts = VGroup(
-            label(r"every call is now the last thing its caller does: \ nothing waits on the stack", font_size=21,
+            label('these CPS calls are tail calls; pending work is explicit in closures', font_size=21,
                   color=GREY_A),
             label(r"the stack has become a chain of closures on the heap: \ the \textbf{continuation}", font_size=21,
                   color=YES),
-            label(r"compilers for ML and Scheme use CPS inside \ (Steele, \ 1978; \ Appel, \ 1992)", font_size=20,
+            label('CPS is one compiler representation (Steele, 1978; Appel, 1992)', font_size=20,
                   color=GREY_B),
         ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "A function call does two things: it computes a value, and it remembers where to go back to. "
-            "Continuation-passing style separates them. <bookmark mark='a'/> In direct style, factorial of n "
-            "calls factorial of n minus one and then multiplies. The multiplication waits, in a stack frame, until "
-            "the inner call returns. <bookmark mark='b'/> In CPS every function takes one more argument, k, the "
-            "continuation: what to do with the answer. fact_cps never returns to multiply. It calls itself with a "
-            "new continuation, a closure that will multiply by n and then pass the result to the old k. <bookmark "
-            "mark='c'/> Run both on our VM for a thousand. Direct style needs a stack five thousand words deep. "
-            "CPS needs five words of stack, and builds a thousand closures instead. <bookmark mark='d'/> Nothing "
-            "has been saved: the waiting work has moved, from the stack into a chain of closures on the heap. But "
-            "now it is data. It can be stored, inspected, called twice, or never, and compilers for Scheme and ML "
-            "use exactly this form inside."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(dl), FadeIn(direct))
-            vo.wait_until("b")
+        with self.voiceover("A call computes a value and remembers the pending work. <bookmark mark='a'/> In direct factorial, multiplication waits for the recursive result, so our VM keeps frames. <bookmark mark='b'/> In continuation-passing style, k represents what to do next. A new closure remembers multiplication by n and the previous continuation. <bookmark mark='c'/> For factorial of a thousand, the table counts logical stack and heap slots in our Python reference VM. Its arbitrary-precision arithmetic is not Pebble's fixed-width arithmetic; these counts exclude the host's big-integer storage and computation. <bookmark mark='d'/> Pending work moves into closures and becomes explicit data. CPS is a useful compiler representation, including in influential ML and Scheme compilers, but it does not guarantee a universal space or speed saving.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(dl), FadeIn(direct), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(cl), FadeIn(cps))
-            vo.wait_until("c")
-            self.play(FadeIn(tab))
-            vo.wait_until("d")
+            vo.wait_until('c')
+            self.play(FadeIn(tab), FadeIn(qual))
+            vo.wait_until('d')
             self.play(LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.4), run_time=2.5)
         self.wait(0.3)
         self.clear_scene()
@@ -79,7 +68,7 @@ class Continuations(VoiceoverScene):
                     "  | c :: rest -> ... words rest (c :: cur) acc     (* a tail call *)"], size=18,
                    color=CODE).next_to(head, DOWN, buff=0.45)
         on, off = d["tco"]["on"], d["tco"]["off"]
-        W = 7.2
+        W = 4.5
         mx = off["max_stack"]
         b_off = Rectangle(width=W, height=0.5, stroke_width=0, fill_color=NO, fill_opacity=0.85)
         b_on = Rectangle(width=max(W * on["max_stack"] / mx, 0.05), height=0.5, stroke_width=0, fill_color=YES,
@@ -91,31 +80,35 @@ class Continuations(VoiceoverScene):
             v = label(rf"{words(val)} words", font_size=20, color=c)
             rows.add(VGroup(n, bar, v))
         for k, r in enumerate(rows):
-            r[1].move_to([-4.6 + r[1].width / 2, -0.4 - 0.9 * k, 0])
+            r[1].move_to([-5.6 + r[1].width / 2, -0.4 - 0.9 * k, 0])
             r[0].next_to(r[1], UP, buff=0.08).align_to(r[1], LEFT)
             r[2].next_to(r[1], RIGHT, buff=0.15)
         cap = label(rf"the Job's deepest stack on Part 7's chapter \ ({words(d['bytes'])} bytes); \ "
                     rf"{words(on['tailcalls'])} calls were tail calls", font_size=19, color=GREY_B).next_to(
             rows, UP, buff=0.35)
         pts = VGroup(
-            label(r"without them, \ the stack grows with the text: \ the thirty novels would need gigabytes",
+            label('tail calls remove frames from the character loop; other recursion remains',
                   font_size=21, color=NO),
-            label(r"Scheme requires proper tail calls; \ ML and Haskell rely on them; \ CPython and the JVM do not "
-                  r"have them", font_size=21, color=GREY_A),
+            label('proper tail calls bound a tail-call chain, not every source of stack growth', font_size=21, color=GREY_A),
             label(r"``Debunking the expensive procedure call myth'' \ (Steele, \ 1977): \ a call in tail position is a "
                   r"\texttt{goto} with arguments", font_size=20, color=HEAD),
         ).arrange(DOWN, buff=0.14).to_edge(DOWN, buff=0.35)
+        vtab=grid_table(['distinct words','deepest stack'],
+            [[str(r['distinct_words']),words(r['max_stack'])] for r in d['vocabulary']],
+            widths=[2.0,2.0],row_h=.43,font_size=19).move_to(RIGHT*3.7+DOWN*.35)
+        vcap=label('TCO on; bump still has pending CONS work',font_size=17,color=HEAD).next_to(vtab,DOWN,buff=.2)
         with self.voiceover(
-            "Once nothing waits after a call, the call does not need a frame of its own. <bookmark mark='a'/> In "
-            "the Job, words calls itself as the very last thing it does, once for every character of the text. "
-            "A call in this position is a tail call. Our compiler marks it, and the VM reuses the caller's frame, "
-            "so the call becomes a jump. <bookmark mark='b'/> We ran the Job both ways. With a new frame for every "
-            "call, the stack reaches sixty-eight thousand words on one chapter, and it grows with the length of "
-            "the text. <bookmark mark='c'/> With tail calls, three thousand words, however long the text. <bookmark "
-            "mark='d'/> For the thirty novels the difference is between running and crashing. Scheme's standard "
-            "requires proper tail calls, and functional languages depend on them; CPython and the Java virtual "
-            "machine still do not provide them. Guy Steele argued in 1977 that a tail call is just a go-to that "
-            "passes arguments, and he was right."
+            (
+            "When no work waits after a call, the caller's frame can be reused. <bookmark mark='a'/> The Job's "
+            "character loop calls words in tail position. Our compiler marks that position and the VM turns the "
+            "call into a jump with arguments. <bookmark mark='b'/> On the measured chapter, disabling this "
+            "optimization greatly increases the deepest stack. <bookmark mark='c'/> Reusing tail-call frames does "
+            "not bound the entire Job independently of its input. The table-update function bump still has "
+            "non-tail recursive work. Our separate tests with twenty, eighty and two hundred distinct words show "
+            "its stack growing with vocabulary. <bookmark mark='d'/> Proper tail calls bound the active tail-call "
+            "chain. Scheme requires them; other implementations differ. Always identify which recursion is tail "
+            "recursive before making a space claim."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(src))
             vo.wait_until("a")
@@ -125,7 +118,7 @@ class Continuations(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(rows[1][0]), GrowFromEdge(rows[1][1], LEFT), FadeIn(rows[1][2]))
             vo.wait_until("d")
-            self.play(LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.4), run_time=2.5)
+            self.play(FadeIn(vtab),FadeIn(vcap),LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.4), run_time=2.5)
         self.wait(0.3)
         self.clear_scene()
 
@@ -143,23 +136,23 @@ class Continuations(VoiceoverScene):
         pts = VGroup(
             label(r"$k$ is the rest of the program at the \texttt{callcc}; \ calling $k\,0$ abandons everything "
                   r"in between", font_size=20, color=GREY_A),
-            label(r"an exception is exactly this; \ a generator or coroutine is a continuation resumed later",
+            label('continuations can express exceptions and coroutines; effects are not undone',
                   font_size=20, color=GREY_A),
             label(r"its type is Peirce's law, \ $((A \to B) \to A) \to A$: \ Part 14's classical logic, \ now running",
                   font_size=20, color=HEAD),
         ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "If the continuation is data, a program can ask for it. <bookmark mark='a'/> Scheme's call with current "
-            "continuation, call/cc, passes the rest of the program to a function, as a value k. product_exit "
-            "multiplies a list's elements, but the moment it meets a zero it calls k with zero, and the "
-            "multiplications still waiting are simply dropped. <bookmark mark='b'/> To run this we need a machine "
-            "whose stack is data, so we built one: a CEK machine, for control, environment and continuation, from "
-            "Felleisen and Friedman, with the continuation as a linked list of frames. <bookmark mark='c'/> The "
-            "plain product does twelve multiplications. The one that escapes does none: it found the zero, and "
-            "threw the pending work away. <bookmark mark='d'/> That is an exception, built from nothing but a "
-            "continuation. Resuming a saved continuation later gives generators and coroutines. And the type of "
-            "call/cc is Peirce's law, which Part 14 showed has no proof in pure functional programs. Classical "
-            "logic, it turns out, is a jump."
+            (
+            "A program can capture its continuation. <bookmark mark='a'/> call/cc passes a representation of the "
+            "current continuation to a function. In product_exit, invoking it with zero abandons the "
+            "multiplications waiting between the capture and the invocation. <bookmark mark='b'/> Our CEK machine "
+            "makes this concrete with control, environment and linked continuation frames. <bookmark mark='c'/> "
+            "The measured list produces zero multiplications in the escaping version, while ordinary product "
+            "performs the displayed work. <bookmark mark='d'/> Continuations can express exceptions and, with "
+            "suitable protocols, coroutines. Control transfer does not undo arbitrary effects. The classical type "
+            "of call/cc connects this jump to Peirce's law, beyond the pure intuitionistic core studied in Part "
+            "fourteen."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(src))
             vo.wait_until("a")

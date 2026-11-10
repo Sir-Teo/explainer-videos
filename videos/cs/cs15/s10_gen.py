@@ -21,47 +21,52 @@ class Generations(VoiceoverScene):
 
     def hypothesis(self):
         d = load("gen")
-        head = label(r"Most objects die young", font_size=34).to_edge(UP, buff=0.3)
+        head = label('Sampling ages, not measuring death', font_size=34).to_edge(UP, buff=.3)
         sv = d["survival"]
-
         def age(a):
-            return "0" if a == 0 else (f"{a // 1000}k" if a >= 1000 else str(a))
-        vals = [100 * s["fraction"] for s in sv]
-        ch = bar_chart(vals, [age(s["age"]) for s in sv], [YES if k == 0 else DATA for k in range(len(sv))],
-                       height=3.0, bar_w=0.5, gap=0.3, fmt_=lambda v: f"{v:.1f}\\%", font_size=15).move_to(
-            LEFT * 3.4 + DOWN * 0.4)
-        xl = label(r"still alive after this many more words of allocation", font_size=18, color=GREY_B).next_to(
-            ch, DOWN, buff=0.35)
-        yl = label(rf"of the Job's {words(d['objects'])} objects", font_size=18, color=GREY_B).next_to(
-            ch, UP, buff=0.3)
-        died = 100 * (1 - sv[0]["fraction"])
+            return str(a) if a < 1000 else str(a//1000)+"k"
+        ch = bar_chart([100*r["fraction"] for r in sv], [age(r["age"]) for r in sv],
+                       [YES]+[DATA]*(len(sv)-1), height=2.1, bar_w=.43, gap=.22,
+                       fmt_=lambda v: str(round(v,1))+chr(92)+'%', font_size=14).move_to(LEFT*3.3+UP*.5)
+        xl = label('last-observed-live age; later words allocated', font_size=17, color=GREY_B).next_to(ch, DOWN, buff=.2)
+        yl = label('fraction with observed age above threshold', font_size=18, color=GREY_B).next_to(ch, UP, buff=.2)
+        obs=d['observations']
         side = VGroup(
-            label(rf"{died:.0f}\% never survive a single collection", font_size=23, color=YES),
-            label(r"a word's letters, \ a cell of a table about to be rebuilt, \ a pair replaced by the next count",
-                  font_size=19, color=GREY_A),
-            label(r"those that do survive tend to live long: \ the text, \ the table", font_size=21, color=DATA),
-            label(r"the \textbf{generational hypothesis} \ (Lieberman and Hewitt, \ 1983; \ Ungar, \ 1984)",
-                  font_size=21, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.4)
-        if side.width > 5.4:
-            side.scale_to_fit_width(5.4)
+            VGroup(label('never observed at a collection',font_size=20,color=YES),
+                   mono(f"{100*obs['never_observed_at_collection']/d['objects']:.1f}%",23,YES)).arrange(DOWN,buff=.1),
+            label('zero recorded age can still mean live',font_size=21,color=HEAD),
+            VGroup(label('reachable at end: end-censored',font_size=20,color=DATA),
+                   mono(str(obs['reachable_at_end']),22,DATA)).arrange(DOWN,buff=.1),
+            label('generational hypothesis: test each workload',font_size=19,color=GREY_A),
+        ).arrange(DOWN,buff=.22).move_to(RIGHT*3.6+UP*.4)
+        axis=Arrow(LEFT*5.5,RIGHT*5.5,buff=0,color=GREY_B,stroke_width=2)
+        birth=Dot(LEFT*4.4,color=DATA);end=Dot(RIGHT*4.3,color=YES)
+        tl=VGroup(axis,birth,end,
+            label('allocate three list cells',font_size=18,color=DATA).next_to(birth,UP,buff=.15),
+            label('no collections in this run',font_size=18,color=GREY_A).next_to(axis,UP,buff=.2),
+            label('result still reachable',font_size=18,color=YES).next_to(end,UP,buff=.15),
+            label('all three recorded ages = 0',font_size=19,color=HEAD).next_to(axis,DOWN,buff=.2)
+        ).move_to(DOWN*2.6)
+        tl.add(label('separate run: [1;2;3]', font_size=18, color=GREY_A).move_to(DOWN*1.7))
         with self.voiceover(
-            "A copying collector's work is the live data, and the live data includes objects it has copied many "
-            "times before. Is there a pattern in which objects die? <bookmark mark='a'/> We tagged every object "
-            "the Job allocates with the time of its birth, and recorded the last time a collection found it "
-            "alive. <bookmark mark='b'/> Eighty-seven percent of the Job's objects never survive one collection. "
-            "They are a word's letters reversed, a table cell about to be rebuilt by bump, a pair replaced by the "
-            "next count. <bookmark mark='c'/> And the few that survive tend to survive a long time: the text "
-            "itself, the table of counts. <bookmark mark='d'/> This is the generational hypothesis, proposed by "
-            "Lieberman and Hewitt in 1983 and exploited by David Ungar's generation scavenging for Smalltalk in "
-            "1984. It has held for almost every language measured since."
+            (
+            "Can allocation ages guide collection? <bookmark mark='a'/> We record when each object is allocated "
+            "and the last collection that observes it live. The histogram reports lower bounds on observed live "
+            "age, measured in later words allocated. It does not record exact death times. <bookmark mark='b'/> "
+            "Never observed at a collection does not mean dead: our three-cell result stays live at the end of a "
+            "run with no collections, yet all three recorded ages are zero. The timeline shows this sampling gap. "
+            "<bookmark mark='c'/> Objects reachable when measurement ends are end-censored. The displayed counts "
+            "distinguish those cases. <bookmark mark='d'/> Many workloads do produce abundant short-lived "
+            "objects, motivating generations. Treat that as an empirical hypothesis to test, not a universal law "
+            "proved by this histogram."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(yl), FadeIn(xl))
             vo.wait_until("a")
             self.play(FadeIn(ch.names), FadeIn(ch[0]))
             vo.wait_until("b")
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in ch.bars], lag_ratio=0.1), FadeIn(ch.vals),
-                      FadeIn(side[:2]))
+                      FadeIn(side[:2]), FadeIn(tl))
             vo.wait_until("c")
             self.play(FadeIn(side[2]))
             vo.wait_until("d")
@@ -88,7 +93,7 @@ class Generations(VoiceoverScene):
         sel = [r for r in d["rows"] if r["nursery"] in (1024, 4096, 16384, 32768)]
         rows = [[words(r["nursery"]), str(r["minor"]), f"{100 * r['survival']:.0f}\\%", str(r["major"]),
                  words(r["work"])] for r in sel]
-        tab = grid_table([r"nursery, \ words", r"minor collections", r"survive one", r"major", r"work, \ words"],
+        tab = grid_table([r"nursery, \ words", r"minor collections", 'promoted words / used words', r"major", r"work, \ words"],
                          rows, widths=[2.6, 2.8, 2.2, 1.6, 2.4], row_h=0.48, font_size=20).next_to(boxes, DOWN,
                                                                                                buff=0.5)
         g = next(r for r in tr["rows"] if r["collector"] == "generational")
@@ -99,16 +104,17 @@ class Generations(VoiceoverScene):
         pts = label(r"collect the nursery often and cheaply; \ the old space, \ rarely", font_size=22,
                     color=HEAD).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "So keep the young apart. <bookmark mark='a'/> New objects are allocated in a small nursery. When it "
-            "fills, a minor collection copies the few survivors out, into an old space, and the whole nursery is "
-            "free again. The old space is collected, by a major collection, only when it fills. <bookmark "
-            "mark='b'/> Our generational collector, on the Job, with nurseries of several sizes. A tiny nursery "
-            "of a thousand words collects three hundred and sixty times, and seventy percent of its objects "
-            "survive, because they were simply not given time to die. At thirty-two thousand words, only one in "
-            "ten survives. <bookmark mark='c'/> In the same memory as chapter seven's comparison, the generational "
-            "collector does two thirds of the copying collector's work, with a shorter longest pause. <bookmark "
-            "mark='d'/> Collect the young often and cheaply; the old, rarely. Every production collector, in the "
-            "JVM, in V8, in .NET, in OCaml and in GHC, is built this way."
+            (
+            "Keep new objects in a nursery. <bookmark mark='a'/> A minor collection copies its reachable objects "
+            "into old space. When old space may not fit another nursery, our full collection copies both regions "
+            "together. It already empties the nursery, so there is no second, zero-work minor event. <bookmark "
+            "mark='b'/> The table compares nursery sizes. Its percentage is promoted words divided by actual "
+            "nursery words consumed in minor cycles, not a fraction of objects. <bookmark mark='c'/> The "
+            "comparison below uses the same total reserved memory: nursery plus two old semispaces versus two "
+            "Cheney semispaces. Work and pause columns count model words, not milliseconds. <bookmark mark='d'/> "
+            "Generations are common, but not universal. Go's current collector, for example, is explicitly "
+            "non-generational. Choose and measure the policy for the workload."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(boxes))
             vo.wait_until("a")
@@ -144,21 +150,20 @@ class Generations(VoiceoverScene):
             label(rf"in the $\lambda$-core: \ {d['rows'][0]['barrier_hits']} barrier hits. \ An object is never "
                   r"changed after it is made, \ so an old object cannot point at a younger one", font_size=21,
                   color=YES),
-            label(r"pure functional languages get generations almost for free \ (Haskell's lazy updates are "
-                  r"the exception)", font_size=20, color=HEAD),
+            label('immutability removes this mutation barrier in our model; collection still costs work', font_size=20, color=HEAD),
         ).arrange(DOWN, buff=0.16).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "There is a catch. <bookmark mark='a'/> A minor collection looks only at the roots and the nursery. "
-            "If the program stores a pointer to a young object into an old one, that pointer is invisible, and "
-            "the young object would be freed while still in use. <bookmark mark='b'/> So every pointer store runs "
-            "a write barrier: a few extra instructions that record old-to-young pointers in a remembered set, "
-            "which the minor collection treats as more roots. HotSpot and V8 divide the old space into cards and "
-            "mark a card dirty when it is written. <bookmark mark='c'/> Our generational collector counts how "
-            "many times the barrier was needed on the Job: zero. In the lambda core an object is never modified "
-            "after it is built, so it can only point at objects older than itself. <bookmark mark='d'/> That is "
-            "one reason functional languages love generational collection: they get it almost for free. "
-            "Haskell, whose lazy values are overwritten when they are evaluated, is the exception that proves the "
-            "rule."
+            (
+            "A young-only collection needs to know about older references into the nursery. <bookmark mark='a'/> "
+            "If an old object stores a young pointer, scanning only roots and nursery objects would miss that "
+            "edge. <bookmark mark='b'/> A write barrier records relevant stores in a remembered set or card "
+            "table, which the minor collector scans as additional roots. Exact barriers vary by runtime. "
+            "<bookmark mark='c'/> In our immutable core, fully initialized objects point only to values that "
+            "already existed. Under this allocation and promotion model there are no old-to-young mutation edges, "
+            "and measured barrier hits are zero. <bookmark mark='d'/> That removes this particular barrier "
+            "requirement. Lazy updates, mutable fields and runtime bookkeeping can reintroduce it; immutability "
+            "does not make every part of collection free."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(old), FadeIn(yng))
             vo.wait_until("a")

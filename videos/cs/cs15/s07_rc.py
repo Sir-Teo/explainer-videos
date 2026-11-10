@@ -31,7 +31,7 @@ class Counting(VoiceoverScene):
         self.play(FadeOut(card))
 
     def reach(self):
-        head = label(r"Live means reachable", font_size=34).to_edge(UP, buff=0.3)
+        head = label('Reachable, not necessarily used again', font_size=34).to_edge(UP, buff=0.3)
         roots = VGroup(*[VGroup(Rectangle(width=1.0, height=0.5, color=CTRL, stroke_width=2),
                                 mono(n, 16, CTRL)) for n in ("stack", "globals")])
         for r in roots:
@@ -56,14 +56,16 @@ class Counting(VoiceoverScene):
                   font_size=20, color=GREY_A),
         ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "In 1960, describing LISP, John McCarthy added a few paragraphs on a new idea: reclaiming storage "
-            "automatically. Which objects may a program still use? <bookmark mark='a'/> Start from the roots: the "
-            "variables on the stack, and the globals. These the program can name directly. <bookmark mark='b'/> "
-            "Anything reachable from a root by following pointers may still be used, so it is live. <bookmark "
-            "mark='c'/> Everything else is garbage, even objects that point at each other, like f and g, if "
-            "nothing live points at them. <bookmark mark='d'/> Part 11 freed memory by hand, and showed what goes "
-            "wrong: forget to free, and memory leaks; free too early, and the program uses memory that now "
-            "belongs to something else. A collector frees exactly the unreachable."
+            (
+            "An allocator finds space; a collector decides which space can safely be reused. <bookmark mark='a'/> "
+            "The roots are the references held by active program state, including the stack and globals in our "
+            "VM. <bookmark mark='b'/> Follow their pointers through the heap. An unreachable object cannot be "
+            "accessed again through these references, under this model's rules. <bookmark mark='c'/> Reachability "
+            "is conservative: an object can remain reachable even if the program will never use it again. It is "
+            "not the same as semantic last use. <bookmark mark='d'/> Our core omits weak references and "
+            "finalizers. Real runtimes need additional rules for them, but the root-to-object graph is the "
+            "starting point for tracing collection."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(roots), *[FadeIn(n) for n in ns.values()], Create(ev))
             vo.wait_until("a")
@@ -92,16 +94,18 @@ class Counting(VoiceoverScene):
             label(r"each new pointer: \ $+1$; \ each pointer overwritten or dropped: \ $-1$", font_size=22,
                   color=GREY_A),
             label(r"at zero, \ free it, \ and decrement whatever it pointed at", font_size=22, color=YES),
-            label(r"garbage is freed the moment it is made: \ no pauses, \ predictable", font_size=22, color=HEAD),
+            label('zero-count cascades can reclaim a large graph synchronously', font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "The first way to find garbage came the same year, from George Collins: count. <bookmark mark='a'/> "
-            "Every object keeps a count of the pointers to it. Here x points at a, a at b, b at c: one each. "
-            "<bookmark mark='b'/> Copying a pointer adds one to its target; overwriting or dropping a pointer "
-            "subtracts one. <bookmark mark='c'/> Now the program drops x. a's count falls to zero, so a is freed, "
-            "and freeing a drops its pointer to b, which falls to zero too, and then c. <bookmark mark='d'/> "
-            "Garbage disappears the instant it is made, in small steps, with no pauses. CPython, Swift, "
-            "Objective-C and Rust's Rc all work this way."
+            (
+            "Reference counting attaches a count to each object. <bookmark mark='a'/> In this simple model the "
+            "count records incoming owned references, including roots. <bookmark mark='b'/> Creating or copying a "
+            "reference increments the count; overwriting or dropping one decrements it. <bookmark mark='c'/> When "
+            "the root is removed, a reaches zero and is reclaimed. Releasing its outgoing reference can make b "
+            "reach zero, and then c. Watch that cascade through the graph. <bookmark mark='d'/> This is prompt "
+            "reclamation, but a large graph can cause a large synchronous cascade. The model therefore does not "
+            "establish pause-free execution, and cycles need additional treatment."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(root), *[FadeIn(n) for n in ns], Create(e0), Create(e1), Create(e2))
             vo.wait_until("a")
@@ -201,19 +205,20 @@ class Counting(VoiceoverScene):
                   font_size=22, color=NO),
             label(r"\textbf{deferred} counting ignores the stack and scans it now and then \ (Deutsch and Bobrow, "
                   r"\ 1976)", font_size=21, color=GREY_A),
-            label(r"and with threads, \ every update must be atomic: \ why Swift works hard to avoid them",
+            label('shared counts may need atomics; Rc and thread-local optimizations differ',
                   font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Counting also costs, all the time. Our VM can count what reference counting would have done on the "
-            "Job. <bookmark mark='a'/> A hundred and twenty-three thousand objects are allocated. Every time a "
-            "pointer is pushed onto the stack, a count goes up, and later down: over a million updates. Storing "
-            "pointers into new objects adds two hundred and twenty-seven thousand more. <bookmark mark='b'/> "
-            "About eleven updates for every object, against a copying collector, the subject of chapter eight, "
-            "which moves fewer than two hundred thousand words in all. <bookmark mark='c'/> Deutsch and Bobrow saw "
-            "this in 1976 and stopped counting pointers from the stack, scanning it occasionally instead. And when "
-            "several threads share objects, every update must be atomic, which is why Swift's compiler works so "
-            "hard to remove them."
+            (
+            "Reference counting makes pointer updates part of memory management. <bookmark mark='a'/> Our "
+            "instrumentation counts increments and decrements for the Job; it measures traffic in this model, not "
+            "the elapsed time of a complete reference-counting collector. <bookmark mark='b'/> A count reaching "
+            "zero can trigger a cascade through a large object graph. Prompt reclamation therefore does not imply "
+            "a small worst-case pause. <bookmark mark='c'/> Rust's Rc uses non-atomic counts; Arc supports "
+            "sharing with atomic operations. Other runtimes have their own thread and ownership optimizations. "
+            "Tracing trades per-update counting for graph walks and can reclaim cycles. Which trade wins depends "
+            "on the workload, implementation and latency requirements; this one traffic count cannot settle it."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab.rule), *[FadeIn(c) for c in tab.cells[0]])
             vo.wait_until("a")

@@ -1,54 +1,46 @@
 # Computer Science, Built — Part 15: Runtimes
 
-Part 15 of a sixty-one-part course in computer science (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), closing Act III, *Speaking to the Machine*. A language needs somewhere to live:
-environments make closures, continuations turn the stack into data, a bytecode machine runs the program, and a
-garbage collector takes away what it no longer needs, while the program keeps running. The instruments are in
-`explainer/cs/runtime/`: `bytecode.py` (the λ-core of Part 14 closure-converted and compiled to a 36-instruction stack
-bytecode with flat closures, known-arity calls, partial applications and proper tail calls), `vm.py` (the reference
-VM in Python, with tagged words and four collectors: Cheney's copying, mark–sweep, mark–compact and generational),
-`pvm.py` (the same VM and Cheney's collector written in the Pebble language, compiled by Part 13's compiler and run
-on the Pebble emulator, agreeing with the reference count for count), `tricolor.py` (incremental marking under a
-hostile mutator, with and without write barriers), `cek.py` (a CEK machine with `callcc`) and `prolog.py` (resolution
-and unification), tested in `tests/test_cs15_runtime.py`. Every number is computed in `compute.py`; chapters 1, 10,
-11, 12 and 13 time real runtimes on this machine (CPython, V8, HotSpot, Go, gcc) and record their versions.
+Part 15 closes Act III of the sixty-one-part course ([plan](../README.md), [syllabus](../SYLLABUS.md)).
+Build the machinery beneath functions: environments and closures, continuations, bytecode dispatch,
+allocation and collection. Then compare selected mechanisms with real runtimes on the current host.
+The instruments live in `explainer/cs/runtime/`; `compute.py` records the data and versions, and
+`measurements.py` defines auditable observation and benchmark protocols.
 
-* **A program needs a place to live.** The Job allocates 369,855 words on Part 7's chapter (79 per byte) with at
-  most 27,465 live at once; the heap fills and empties eight times.
-* **1. Interpreters: eval and apply.** The eval/apply cycle; McCarthy's eval and Russell's interpreter; the
-  metacircular evaluator; 357,894 applications for the Job; `fib(32)` on seven runtimes, from 2.9 ms (gcc) to
-  165 ms (CPython).
-* **2. Environments and closures.** Lexical against dynamic scope (1 against 10, both computed); the funarg problem;
-  closures on the heap; closure conversion, `CLOSURE` and `FREE`; flat against linked closures.
-* **3. Continuations and tail calls.** CPS factorial on our VM (5 words of stack and 1,004 closures, against 5,004
-  words); the Job with and without tail calls (2,996 against 68,371 words of stack); `call/cc` as an early exit on
-  a CEK machine (0 multiplications against 12); Peirce's law.
-* **4. A bytecode virtual machine.** The instruction set; tagged words; `bump` compiled (37 instructions); the
-  opcode mix (`LOCAL` and `SETLOCAL` are 53%); CPython's `dis`; stack against register machines.
-* **5. The VM, on Pebble.** The VM in the Pebble language; co-simulation with the reference; 47 Pebble instructions
-  per bytecode; dispatch order (47, 60, 100); switch against threaded code in C on this machine.
-* **6. Why collect, and counting references.** Reachability; reference counting and its cascade; cycles, and
-  CPython's cycle collector (199,998 objects found); what counting would cost the Job (about 11 updates per object).
-* **7. Tracing: mark–sweep and mark–compact.** Marking and sweeping animated; fragmentation; compaction; four
-  collectors on the Job in the same memory.
-* **8. Cheney's copying collector, and what it costs.** The two-pointer algorithm, traced; work against heap size,
-  measured and modelled by L/(S − L).
-* **9. Generations.** 87% of the Job's objects never survive a collection; nurseries of six sizes; two thirds of
-  Cheney's work in the same memory; the write barrier, and why the λ-core never needs it.
-* **10. Collecting while the program runs.** The tri-color abstraction; a live object lost, move by move; strong and
-  weak invariants, Dijkstra's and Yuasa's barriers (735 of 2,000 cycles lose an object without one, none with
-  either); pauses of the JVM's four collectors and Go's on this machine (155 ms to 20 µs).
-* **11. Just-in-time compilers.** V8's four tiers (148 ms to 18 ms); inline caches against the number of shapes
-  (6× slower at 32); hidden classes; a deoptimization traced; tracing JITs.
-* **12. Dynamic dispatch and exceptions.** Vtables (0.5 ns direct, 1.0 ns virtual); interfaces and multiple
-  dispatch; zero-cost exceptions (`try` free, `throw` about 900 ns) against `setjmp`.
-* **13. WebAssembly, and other machines.** A 55-byte module assembled by hand and run by node; validation as type
-  checking, and node's error; Prolog's `append` run backwards; actors and dataflow.
-* **14. The Job, collected.** Ledger row 6: the λ-core on the Pebble VM, priced on Part 8's core, about 2.4 hours
-  for the thirty novels, 149× row 5; the collector's share under 4%.
-* **15. Frontier: the limits of runtimes.** Memory against time (our curve; Hertz and Berger's 5×, 3×, 2×);
-  minimum mutator utilization and Metronome; the Futamura projections, PyPy and Truffle; warmup (Barrett et al.);
-  verified runtimes; open problems. Outro.
+- **Opening:** the Job allocates temporary lists and pairs. Its displayed live peak is a collection sample,
+  not an every-instruction liveness maximum.
+- **1. Interpreters:** eval/apply, environments and a metacircular evaluator. Fibonacci timings are
+  best-of-three process-internal measurements, not a ranking of languages.
+- **2. Closures:** lexical versus dynamic scope, escaping captures and closure conversion. Heap allocation
+  is our implementation choice; scope and storage are distinct.
+- **3. Continuations:** direct, CPS and accumulator factorials. Counts are logical reference-VM slots and
+  exclude Python big-integer storage/time. Proper tail calls bound a tail-call chain; the Job's non-tail
+  `bump` recursion still grows with vocabulary. `call/cc` changes control without undoing arbitrary effects.
+- **4. Bytecode:** the stack instruction set, compiled `bump`, opcode mix, and stack versus register VMs.
+  Pebble has 32-bit tagged words with a signed 31-bit integer payload; the Python VM uses unbounded integers.
+- **5. Pebble VM:** actual source, tested in-range cosimulation, dispatch order and native C dispatch timing.
+  Agreement on the examples supports finite implementation checks, not universal equivalence.
+- **6. Reference counting:** reachability, zero-count cascades, cycles, and instrumented pointer-update traffic.
+  A cascade can pause; Rust `Rc` is non-atomic whereas `Arc` supports sharing with atomics.
+- **7. Tracing:** mark–sweep, fragmentation, compaction and four collectors with equal reserved capacity.
+  Work columns use the stated model's word operations, which need not cost equal native time.
+- **8. Cheney:** copying, actual forwarding locations, updated roots/fields and scan/free pointers.
+  The approximation `L/(S-L)` counts copying, excluding root scans, bookkeeping and finite-run boundaries.
+- **9. Generations:** last-observed-live ages and end censoring, an unobserved-but-live result witness,
+  nursery sizes and actual promoted-word/consumed-word ratios. A major already empties the nursery.
+- **10. Concurrent collection:** the same pointer moves under no, insertion and deletion barriers;
+  root/allocation policies; randomized checks. JVM and Go pause logs use explicit, different heap policies.
+- **11. JITs:** version-specific tiers, inline-cache measurements with an explicit logarithmic axis,
+  hidden classes and actual deoptimization trace excerpts. An enabled tier need not improve a short run.
+- **12. Dispatch/exceptions:** vtables and interface/multiple dispatch. The native benchmark uses defined
+  unsigned arithmetic, checked results, opaque boundaries, disabled devirtualization and an assembly witness.
+  Table-driven exceptions move costs off handler entry; they do not remove all metadata/optimization costs.
+- **13. Other machines:** a hand-assembled WebAssembly module and actual validation failure. Branching to a
+  block exits; branching to a loop restarts its header. Specification verification is separate from engine
+  verification; isolation also needs runtime bounds checks and host policy. Prolog, actors and dataflow follow.
+- **14. The Job:** exact emulator counts for six passages, sampled IPC and projected ledger row 6.
+  Collector instruction share is not automatically the same fraction of wall time or cycles.
+- **15. Frontier:** scoped historical memory/time results, established real-time bounds and precise extensions,
+  fixed-program specialization, meta-tracing, warmup evidence and integration of verified runtime components.
 
 ## Build
 
@@ -59,7 +51,10 @@ python tools/build.py cs15                 # 1080p
 ```
 
 `interp`, `vm`, `rc`, `pauses`, `jit`, `dispatch` and `wasm` run gcc, g++, java, go, node and CPython on this machine;
-their timings belong to the computer that runs them. Everything run on Pebble is exact.
+their timings belong to the computer that runs them. Pebble instruction counts are exact for the executed
+examples; sampled IPC and whole-corpus runtime projections retain their stated assumptions. Native subprocess
+failures propagate rather than becoming cached timing text. Preserve or regenerate current schemas with
+`--force cps tracing gen pauses dispatch jit` after this correction.
 
 ## Problems, with solutions
 
@@ -76,12 +71,15 @@ their timings belong to the computer that runs them. Everything run on Pebble is
 2. **Three sums.** Rewrite `sum` over a list in CPS and with an accumulator; give each version's stack depth and
    heap use for n elements.
 
-   *Solution.* Direct: `sum (h :: t) = h + sum t` keeps one frame per element: Θ(n) stack (8,007 words for n =
-   1,000 on our VM) and no heap. CPS: `sum_k (h :: t) k = sum_k t (fun s -> k (h + s))` is all tail calls, so
-   O(1) stack (8 words), but builds one continuation per element, each holding h and k: 4 words each, 4n in all
-   (4,002 words). Accumulator: `sum_a (h :: t) acc = sum_a t (acc + h)`: O(1) stack and no heap. The accumulator
-   is possible because + is associative: the pending work can be done early. CPS needs no such insight; it works
-   for any function, which is why compilers use it.
+   *Solution.* Direct `sum (h :: t) = h + sum t` keeps Θ(n) pending frames. CPS
+   `sum_k (h :: t) k = sum_k t (fun s -> k (h + s))` uses tail calls and O(1) stack, but
+   allocates n continuation closures. In this VM each captures h and k: a header, code slot and
+   two captures, so 4n words plus constant setup. `sum_a (h :: t) acc = sum_a t (acc + h)`
+   uses O(1) stack and no extra heap objects beyond input/setup. “No extra heap” excludes the already
+   built input, startup closures and host big-integer storage. The reported 4,002-word example is
+   4n + 2, not exactly 4n. Reassociation is valid in the exact-integer model; floating point or
+   checked-overflow semantics require separate justification. CPS makes pending work explicit
+   without requiring an associative operator.
 
 3. **Cheney by hand.** From-space holds, in address order, a pair p = (c1, 7); cells c1 = 1 :: c2, d1 = 9 :: d2,
    c2 = 2 :: c3, d2 = 8 :: [], c3 = 3 :: []; and a closure k capturing d1. The roots point at p and c2. Run Cheney's
@@ -107,26 +105,30 @@ their timings belong to the computer that runs them. Everything run on Pebble is
 5. **Build: a nursery for the Pebble VM.** Give the Pebble VM a nursery, in the Pebble language, and measure the Job.
    Why does the λ-core need no write barrier?
 
-   *Solution sketch.* Split the heap into a nursery and two old semispaces. Allocate in the nursery; when it fills,
-   run Cheney with the stack and globals as roots, copying survivors into the current old semispace and treating
-   any pointer outside the nursery as already done; when the old space cannot take a nursery's worth, run a full
-   Cheney over both. The λ-core needs no write barrier because every heap object is written once, when it is
-   created, and its fields can only point at objects that already exist, which are older: no old object can ever
-   point at a younger one. The Python `Generational` collector predicts the result: about a third less copying
-   (127,215 against 195,726 words on Part 7's chapter). But the collector is under 4% of the Pebble VM's time, so
-   the whole Job speeds up by at most about 1%: Amdahl's law (Part 10), again.
+   *Solution sketch.* Reserve a nursery plus two old semispaces. A minor copies nursery survivors
+   into old space; a major copies both reachable regions and already empties the nursery. Do not count a
+   second zero-work minor afterward. Under this core's complete-initialization, immutable-field and
+   promotion rules there are no old-to-young mutation edges. Adding mutable fields requires a remembered
+   set/barrier; lazy or runtime updates need their own treatment. Compare equal total capacity, and report
+   promoted **words / actually consumed nursery words**, not an object fraction.
 
-6. **★ Research: the collector trilemma.** Find a collector with bounded pauses, constant memory overhead and
-   constant work per word allocated, or prove that no collector can have all three.
+   Measure the implemented Pebble nursery rather than turning reference-collector word savings into a
+   guaranteed native speedup. If an instruction-cost model has fraction f attributable to collection and
+   a measured new collector instruction ratio r, its conditional Amdahl speedup is `1/(1-f+f*r)`.
+   Neither f nor r is automatically a wall-time fraction.
 
-   *Where to start.* Upper bounds: Blelloch and Cheng (1999) bound time and space for a real-time parallel copying
-   collector; Metronome (Bacon, Cheng and Rajan 2003) bounds utilization given the allocation rate. Lower bounds:
-   Robson (1971, 1974) for allocators that never move objects; Bendersky and Petrank (2011) and Cohen and Petrank
-   (2013) for collectors that may compact only part of the heap. Open: (a) an adversarial mutator showing that any
-   collector with pauses below p and memory below cL must do superconstant work per word, or a collector that
-   escapes it; (b) the same question for immutable heaps like the λ-core's, where no barrier is needed and the
-   lower-bound constructions do not apply; (c) measurements on the Pebble VM, whose collector is short enough to
-   modify and whose costs are exact.
+6. **★ Research: extend a known real-time collector bound.** State a machine, mutator, root, object-size,
+   allocation-rate and liveness model. Choose an established result and formulate one precise improvement
+   or a matching lower-bound question under those assumptions.
+
+   *Where to start.* The [Blelloch–Cheng 1999 author abstract](https://www.cs.cmu.edu/~scandal/papers/pldi99.html)
+   already reports space `2(R(1+2/k)+N+5PD)` and stops proportional to k nonblocking machine instructions:
+   R is maximum reachable space, N maximum reachable object count, D maximum object depth, P processors,
+   and k copying work per allocated location. These quantities matter; “bounded pause, constant-factor
+   space, constant work” without a model is not one established unsolved theorem. Read the full construction
+   before attempting a proof extension. Possible projects include measuring constants on a specified
+   immutable-core collector, investigating a different root policy or scheduler, or proving a bound for
+   a clearly delimited object/machine model. Distinguish experiments, conjectures and proven results.
 
 ## 习题与解答
 
@@ -141,11 +143,10 @@ their timings belong to the computer that runs them. Everything run on Pebble is
 
 2. **三种求和。** 把列表上的 `sum` 改写成 CPS 形式和带累加器的形式；给出每个版本对 n 个元素的栈深度和堆用量。
 
-   *解答。* 直接形式：`sum (h :: t) = h + sum t` 每个元素占一个栈帧：Θ(n) 的栈（在我们的虚拟机上 n = 1,000 时为
-   8,007 个字），不用堆。CPS：`sum_k (h :: t) k = sum_k t (fun s -> k (h + s))` 全是尾调用，所以栈是 O(1)（8 个字），
-   但每个元素建一个续延，各保存 h 和 k：每个 4 个字，共 4n（4,002 个字）。累加器：`sum_a (h :: t) acc = sum_a t
-   (acc + h)`：O(1) 的栈，不用堆。能用累加器是因为 + 满足结合律：待做的工作可以提前做。CPS 不需要这种洞察，
-   对任何函数都适用，所以编译器用它。
+   *解答。* 直接形式每个元素保留一个待做加法的帧，栈为 Θ(n)。CPS 用尾调用，栈为 O(1)，但创建 n 个续延闭包；
+   在本虚拟机中，每个闭包有头、代码槽以及 h 和 k 两项捕获，共 4 个字，因此是 4n 加常数启动量。累加器版本使用 O(1) 栈，
+   除输入和启动对象外不再创建堆对象。“不再分配”不包含已有输入、启动闭包及宿主大整数存储。4,002 个字的例子是 4n + 2，
+   不恰好是 4n。精确整数模型允许加法重结合；浮点或检查溢出语义需要另外论证。CPS 显式保存待做工作，无须运算满足结合律。
 
 3. **手算切尼算法。** 来源空间按地址顺序存放：序对 p = (c1, 7)；单元 c1 = 1 :: c2、d1 = 9 :: d2、c2 = 2 :: c3、
    d2 = 8 :: []、c3 = 3 :: []；以及捕获 d1 的闭包 k。根指向 p 和 c2。运行切尼算法，给出目标空间的顺序和每个转发地址。
@@ -167,22 +168,20 @@ their timings belong to the computer that runs them. Everything run on Pebble is
 5. **动手：给 Pebble 虚拟机加一个新生代。** 用 Pebble 语言给 Pebble 虚拟机加一个新生代（nursery），并测量作业。
    为什么 λ 核心不需要写屏障？
 
-   *解答要点。* 把堆分成新生代和两个老年代半空间。在新生代中分配；新生代满时，以栈和全局变量为根运行切尼算法，
-   把存活对象复制到当前的老年代半空间，凡是指向新生代之外的指针都视为已处理；当老年代容纳不下一个新生代的量时，
-   对两者做一次完整的切尼收集。λ 核心不需要写屏障，因为每个堆对象只在创建时写入一次，它的字段只能指向已经存在的、
-   也就是更老的对象：老对象永远不可能指向更年轻的对象。Python 的 `Generational` 收集器预言了结果：复制量少约三分之一
-   （在第7部分的那一章上是 127,215 对 195,726 个字）。但收集器只占 Pebble 虚拟机时间的 4% 不到，所以整个作业最多只快约
-   1%：又是阿姆达尔定律（第10部分）。
+   *解答要点。* 预留新生代和两个老年代半空间。次收集把新生代存活对象复制到老年代；主收集复制两区中的可达对象，
+   已经清空新生代，不应再记录一次零工作的次收集。在这里的完整初始化、不可变字段和晋升规则下，没有老对象写入年轻指针的边。
+   增加可变字段时，需要记忆集和屏障；惰性及运行时更新也要单独处理。比较相等总容量，报告“晋升字数 / 实际消耗的新生代字数”，
+   不要把它称为对象比例。应当测量实际 Pebble 实现，不能把参考模型节省的字数直接当成保证的本机加速。
+   若指令代价模型中收集占比为 f，新收集器的实测指令比例为 r，则条件性的阿姆达尔加速为 `1/(1-f+f*r)`；两者都不自动等于墙钟比例。
 
-6. **★ 研究：收集器的三难困境。** 找出一个停顿有界、内存开销为常数倍、每分配一个字的工作量为常数的收集器，
-   或者证明没有收集器能三者兼得。
+6. **★ 研究：扩展一项已知实时收集器界。** 说明机器、变异器、根、对象大小、分配速率和活数据模型，选择已有结果，
+   在这些假设下提出一项精确改进或匹配下界问题。
 
-   *从哪里开始。* 上界：布莱洛赫与程（1999）为实时并行复制收集器给出了时间和空间的界；Metronome（培根、程与拉詹，
-   2003）在已知分配速率时给出利用率的界。下界：罗布森（1971、1974）针对从不移动对象的分配器；本德斯基与彼得兰克
-   （2011）以及科恩与彼得兰克（2013）针对只能压缩部分堆的收集器。尚未解决的：（a）构造一个对抗性的变异器，
-   证明任何停顿低于 p、内存低于 cL 的收集器每个字都必须做超常数的工作，或者找到一个能逃脱它的收集器；
-   （b）对像 λ 核心这样不可变的堆提出同样的问题，那里不需要屏障，已有的下界构造也不适用；（c）在 Pebble 虚拟机上
-   测量，它的收集器短到可以修改，代价也是精确的。
+   *从哪里开始。* [布莱洛赫与程一九九九年的作者摘要](https://www.cs.cmu.edu/~scandal/papers/pldi99.html)
+   已给出空间界 `2(R(1+2/k)+N+5PD)`，以及与 k 成正比的非阻塞机器指令停顿界。R 是最大可达空间，N 是最大可达对象数，
+   D 是最大对象深度，P 是处理器数，k 是每分配一个位置所做的复制工作。这些量不能省略；没有模型的三项目标不是一个已确立的
+   未解决定理。尝试扩展证明前先阅读完整构造。可以测量指定不可变核心收集器的常数，研究不同的根策略或调度，或为明确限定的
+   对象和机器模型证明界。清楚区分实验、猜想和已经证明的结果。
 
 ## Glossary additions
 

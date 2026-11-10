@@ -25,7 +25,7 @@ class Job(VoiceoverScene):
         rows = [[words(r["bytes"]), words(r["bytecodes"]), words(r["steps"]), str(r["gcs"]),
                  f"{100 * (1 - r['steps_nogc'] / r['steps']):.1f}\\%"] for r in d["rows"]]
         tab = grid_table([r"passage, \ bytes", r"bytecodes", r"Pebble instructions", r"collections",
-                          r"in the collector"], rows, widths=[2.4, 2.4, 3.2, 2.2, 2.6], row_h=0.46, font_size=19,
+                          'GC instruction share'], rows, widths=[2.4, 2.4, 3.2, 2.2, 2.6], row_h=0.46, font_size=19,
                          colors=[[WHITE, WHITE, COST, WHITE, YES]] * len(rows)).next_to(head, DOWN, buff=0.45)
         pts = VGroup(
             label(r"the same six passages as rows 3 and 5; \ every output checked against the reference",
@@ -36,13 +36,16 @@ class Job(VoiceoverScene):
                   rf"({words(d['ipc_sample']['instructions'])} instructions measured)", font_size=20, color=GREY_A),
         ).arrange(DOWN, buff=0.13).next_to(tab, DOWN, buff=0.35)
         with self.voiceover(
-            "Now the Job, in the lambda core, on our own runtime, on our own machine. <bookmark mark='a'/> We ran "
-            "the Pebble VM on the same six passages that priced rows three and five, and checked every output. "
-            "A passage of twenty-four hundred bytes takes one point two million bytecodes, and sixty million Pebble "
-            "instructions. <bookmark mark='b'/> How much of that is the garbage collector? We ran everything again "
-            "with a heap so large that it never fills, and compared. The collector accounts for between one and "
-            "five percent. <bookmark mark='c'/> Finally, the VM's own code ran on Part 8's out-of-order core, at "
-            "about two instructions per cycle, which turns instructions into time."
+            (
+            "Now price the complete Job on the Pebble VM. <bookmark mark='a'/> Each row is an actual passage "
+            "executed by the emulator, with output checked against the reference. Instructions, allocations and "
+            "copied words are exact for these executions. <bookmark mark='b'/> The no-collection comparison uses "
+            "a large enough heap for the same passage. Subtracting instruction counts estimates collector "
+            "instruction overhead, not the same fraction of elapsed time or out-of-order cycles. <bookmark "
+            "mark='c'/> Cycles for larger projections use IPC from a smaller core sample. Keep measured emulator "
+            "counts, sampled IPC and projected whole-corpus time distinct; none is a direct timing of thirty "
+            "complete novels."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab.rule), *[FadeIn(c) for c in tab.cells[0]], FadeIn(pts[0]))
             vo.wait_until("a")
@@ -57,7 +60,7 @@ class Job(VoiceoverScene):
     def ledger(self):
         d = load("job")
         led = d["ledger"]
-        head = label(r"Ledger row 6", font_size=38).to_edge(UP, buff=0.35)
+        head = label('Ledger row 6: projection', font_size=38).to_edge(UP, buff=0.35)
         rows = led + [{"part": p_, "label": t} for p_, t in ((16, r"sort, then count"), (17, r"a hash table"))]
         tab = ledger_table(rows, shown=7, highlight=(6,), font_size=21, row_h=0.42, label_width=4.8).move_to(
             DOWN * 0.3)
@@ -65,15 +68,17 @@ class Job(VoiceoverScene):
         res = VGroup(
             label(rf"the $\lambda$-core on the Pebble VM: \ {human_time(r6['seconds'])} \ against "
                   rf"{human_time(r5['seconds'])} compiled", font_size=23, color=COST),
-            label(rf"{r6['ratio_to_row5']:.0f}$\times$ slower; \ the garbage collector's part of it: \ "
+            label(rf"projected runtime ratio: {r6['ratio_to_row5']:.0f}$\times$; \ GC instruction share: \ "
                   rf"{100 * r6['gc_share']:.1f}\%", font_size=22, color=YES),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "So the ledger gets its seventh row, row six. <bookmark mark='a'/> The Job in the lambda core, "
-            "interpreted by our VM and collected by Cheney's algorithm, would take about two and a half hours on "
-            "the thirty novels, against fifty-eight seconds for the same algorithm compiled from the Pebble "
-            "language. A hundred and fifty times slower. <bookmark mark='b'/> And the garbage collector, which "
-            "this half of the part has been about, is under four percent of it. Collection is not the expense."
+            (
+            "Row six adds a collected language runtime to our ledger. <bookmark mark='a'/> The hours and ratios "
+            "are projections from the sampled passages and the stated core-pricing method. They are not a "
+            "stopwatch measurement of the full corpus. <bookmark mark='b'/> The gap combines interpreter "
+            "dispatch, data representation, algorithm choice and collection. It is a useful explanation target, "
+            "but it cannot be attributed entirely to one mechanism or promised away by a JIT."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab.axis), LaggedStart(*[FadeIn(r) for r in tab.rows], lag_ratio=0.1))
             vo.wait_until("a")
@@ -89,7 +94,7 @@ class Job(VoiceoverScene):
         bc = sum(r["bytecodes"] for r in d["rows"]) / tot_b
         wd = sum(r["words"] for r in d["rows"]) / tot_b
         hand = sum(r["hand_instr"] for r in d["rows"]) / tot_b
-        head = label(r"Where the time goes", font_size=34).to_edge(UP, buff=0.3)
+        head = label('Where the model counts go', font_size=34).to_edge(UP, buff=0.3)
         tab = grid_table([r"for every byte of text", r"hand-written \ (row 3)", r"the $\lambda$-core VM \ (row 6)"], [
             [r"Pebble instructions", f"{hand:.0f}", words(round(bc * d["per_bytecode"]))],
             [r"bytecodes", r"---", f"{bc:.0f}"],
@@ -99,26 +104,24 @@ class Job(VoiceoverScene):
             colors=[[WHITE, YES, NO], [WHITE, GREY_B, WHITE], [WHITE, GREY_B, NO], [WHITE, YES, COST]]).next_to(
             head, DOWN, buff=0.5)
         pts = VGroup(
-            label(r"\textbf{dispatch}: \ 48 instructions to run one bytecode, \ most of them deciding which: \ a "
-                  r"JIT removes it \ (chapter 11)", font_size=20, color=GREY_A),
-            label(r"\textbf{representation}: \ every character is a 3-word list cell, \ every count a boxed pair: \ "
-                  r"arrays and unboxed integers remove it", font_size=20, color=GREY_A),
-            label(r"\textbf{collection}: \ under 4\%, \ because almost everything dies young", font_size=20,
+            label('dispatch: about 48 Pebble instructions per bytecode in this sample', font_size=20, color=GREY_A),
+            label('representation: linked characters and association entries add heap work', font_size=20, color=GREY_A),
+            label('collection: instruction-count delta, not elapsed-time share', font_size=20,
                   color=YES),
             label(r"the runtime is not the bottleneck forever: \ Part 16 changes the \textit{algorithm}",
                   font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.14).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Where does a factor of a hundred and fifty come from? Per byte of text, the hand-written Job of Part 6 "
-            "runs a hundred and thirty-nine instructions. <bookmark mark='a'/> The lambda core runs four hundred "
-            "and fifty-nine bytecodes, and each costs forty-eight Pebble instructions, most of them spent deciding "
-            "which instruction it is. That is dispatch, and it is what a just-in-time compiler eliminates. "
-            "<bookmark mark='b'/> The rest is representation. Every character of the text becomes a three-word "
-            "list cell, and every count a pair on the heap: sixty-two words allocated for every byte read. Arrays "
-            "and unboxed integers remove that. <bookmark mark='c'/> The collector itself costs under four percent, "
-            "because almost everything it would have to copy has already died. <bookmark mark='d'/> And all of "
-            "this still uses the same slow algorithm, a list searched from the front for every word. Part 16 stops "
-            "tuning the machine and changes the algorithm."
+            (
+            "Where does the VM's extra work go? <bookmark mark='a'/> Dispatch interprets each bytecode using "
+            "several Pebble instructions, and tagged heap structures add representation work. <bookmark "
+            "mark='b'/> The underlying word-counting algorithm still scans an association list; the runtime has "
+            "not removed its quadratic growth. <bookmark mark='c'/> The collector's displayed share is an "
+            "instruction-count difference against a no-collection run. It is not automatically its fraction of "
+            "cycles or elapsed time. <bookmark mark='d'/> A faster collector can save only the work attributable "
+            "to collection under that model. Part sixteen changes the algorithm itself, a different source of "
+            "improvement."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab))
             vo.wait_until("a")

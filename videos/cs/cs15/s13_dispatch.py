@@ -7,7 +7,7 @@ from videos.cs.cs15.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
 
 def box_(text, color, w=2.2, h=0.55, fs=17):
     r = Rectangle(width=w, height=h, color=color, stroke_width=2).set_fill(color, 0.1)
-    return VGroup(r, mono(text, fs, color).move_to(r))
+    return VGroup(r, label(text, font_size=fs, color=color).move_to(r))
 
 
 class Dispatch(VoiceoverScene):
@@ -27,9 +27,9 @@ class Dispatch(VoiceoverScene):
     def vtables(self):
         d = load("dispatch")
         head = label(r"Virtual calls and vtables", font_size=34).to_edge(UP, buff=0.3)
-        src = code(["struct Shape { virtual long area(long x) const = 0; };",
-                    "struct Sq  : Shape { long area(long x) const override { return x * x; } };",
-                    "struct Tri : Shape { long area(long x) const override { return x * x / 2; } };",
+        src = code(["struct Shape { virtual uint64_t area(uint64_t x) const = 0; };",
+                    "struct Sq  : Shape { uint64_t area(uint64_t x) const override { return x * x; } };",
+                    "struct Tri : Shape { uint64_t area(uint64_t x) const override { return x * x / 2; } };",
                     "s->area(i);      // which area?"], size=15, color=CODE).next_to(head, DOWN, buff=0.35)
         obj_sq = box_("Sq object: vptr", DATA, w=2.6)
         obj_tr = box_("Tri object: vptr", DATA, w=2.6)
@@ -49,15 +49,19 @@ class Dispatch(VoiceoverScene):
             [r"a virtual call, \ alternating classes", f"{d['virtual_poly_ns']:.2f}"],
         ], widths=[6.2, 1.6], row_h=0.46, font_size=19, mono_cols=(),
             colors=[[WHITE, YES], [WHITE, DATA], [WHITE, NO]]).next_to(diag, DOWN, buff=0.4)
+        protocol=label('devirtualization disabled; best of three; checked uint64 arithmetic',font_size=17,color=GREY_B).next_to(tab,DOWN,buff=.16)
         with self.voiceover(
-            "Chapter eleven's inline caches answer a question every object-oriented language asks: when the "
-            "program says s arrow area, which area runs? <bookmark mark='a'/> C++ answers it with a table, as "
-            "Simula did in 1967. Each object holds a hidden pointer, the vptr, to its class's virtual table, and "
-            "the table holds the addresses of the class's methods. <bookmark mark='b'/> A virtual call is two "
-            "loads and an indirect call: the object's table, the method's entry, then jump. <bookmark mark='c'/> "
-            "We timed two hundred million calls on this machine. A direct call: half a nanosecond. A virtual call "
-            "to the same class every time: about one, because the branch predictor learns the target. Alternate "
-            "between two classes and it costs a little more again."
+            (
+            "When s points to a shape, which area function runs? <bookmark mark='a'/> A common C++ ABI gives a "
+            "polymorphic object a vptr leading to a table of method addresses. This diagram shows that "
+            "implementation, rather than a language-mandated object layout. <bookmark mark='b'/> The virtual call "
+            "reads the method address and calls through it. Compilers can remove this dispatch when they can "
+            "prove the target. <bookmark mark='c'/> Our repaired benchmark deliberately disables "
+            "devirtualization, uses opaque call boundaries and defined unsigned arithmetic, checks every "
+            "checksum, and verifies an indirect call in the virtual loop's assembly. The table shows the best of "
+            "three runs on this host. Loop overhead and branch prediction remain part of the measurement; the "
+            "ordering is not a universal law."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(src))
             vo.wait_until("a")
@@ -65,7 +69,7 @@ class Dispatch(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(col3), Create(ars[2:]))
             vo.wait_until("c")
-            self.play(FadeIn(tab))
+            self.play(FadeIn(tab),FadeIn(protocol))
         self.wait(0.3)
         self.clear_scene()
 
@@ -82,19 +86,21 @@ class Dispatch(VoiceoverScene):
                   font_size=22, color=DATA),
             label(r"\texttt{collide(a::Asteroid, b::Ship)}: \ the classic case single dispatch handles badly",
                   font_size=21, color=CODE),
-            label(r"and Rust's traits and Haskell's classes resolve most calls at compile time: \ no dispatch at all",
+            label('static specialization can remove dispatch; dyn traits and dictionaries may remain',
                   font_size=21, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.24).next_to(head, DOWN, buff=0.6)
         with self.voiceover(
-            "Vtables work because a class has one fixed list of virtual methods. <bookmark mark='a'/> That is single "
-            "dispatch: only the receiver's class chooses. <bookmark mark='b'/> Interfaces break the fixed list. "
-            "Unrelated classes can implement the same interface, so its methods cannot sit at the same slot in "
-            "every table. <bookmark mark='c'/> Java looks the method up in an interface table and caches the "
-            "result at the call site, an inline cache again; Go builds a small table for each pair of a concrete "
-            "type and an interface, the first time it is needed. <bookmark mark='d'/> Some languages dispatch on "
-            "every argument. In Common Lisp's object system and in Julia, the method for collide is chosen by the "
-            "types of both the asteroid and the ship. <bookmark mark='e'/> And languages with traits or type "
-            "classes resolve most calls during compilation, where dispatch costs nothing at all."
+            (
+            "A dispatch mechanism chooses code from runtime type information. <bookmark mark='a'/> Single "
+            "dispatch uses the receiver's type. <bookmark mark='b'/> An interface may be implemented by unrelated "
+            "concrete types, so a runtime needs an appropriate method mapping rather than assuming one universal "
+            "class-table slot. <bookmark mark='c'/> JVM implementations use interface lookup and caching; Go "
+            "interface values carry type-and-method information. These details are implementation choices. "
+            "<bookmark mark='d'/> Multiple dispatch, as in Julia or CLOS, chooses using several argument types. "
+            "<bookmark mark='e'/> Rust can monomorphize generic trait calls, but dyn trait objects dispatch "
+            "dynamically. Haskell type-class dictionaries can also survive at runtime unless specialization "
+            "removes them. Static types alone do not imply that every call has zero dispatch cost."
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, p in zip("abcde", [pts[0], pts[1], pts[2], pts[3:5], pts[5]]):
@@ -105,7 +111,7 @@ class Dispatch(VoiceoverScene):
 
     def exceptions(self):
         d = load("dispatch")
-        head = label(r"Exceptions: \ zero cost, \ until thrown", font_size=34).to_edge(UP, buff=0.3)
+        head = label('Table-driven exception costs', font_size=34).to_edge(UP, buff=0.3)
         tab = grid_table([r"g++ \texttt{-O2}, \ on this machine", r"per call"], [
             [r"a plain call", f"{d['plain_ns']:.2f} ns"],
             [r"the same call inside \texttt{try \{ \} catch}, \ nothing thrown", f"{d['try_ns']:.2f} ns"],
@@ -120,21 +126,22 @@ class Dispatch(VoiceoverScene):
                   r"stack frame by frame", font_size=20, color=GREY_A),
             label(r"\texttt{setjmp} pays on every entry instead, \ to make the jump cheap", font_size=20,
                   color=GREY_A),
-            label(r"exceptions are for the exceptional: \ a thrown one costs as much as two thousand calls",
+            label('zero-cost fast path does not mean zero metadata or optimization cost',
                   font_size=21, color=HEAD),
         ).arrange(DOWN, buff=0.14).to_edge(DOWN, buff=0.4)
         ratio = d["throw_ns"] / d["plain_ns"]
         with self.voiceover(
-            "Chapter three built an exception from a continuation. Compiled languages implement them differently, "
-            "and again we can measure the trade. <bookmark mark='a'/> A plain call costs half a nanosecond. Put it "
-            "inside a try block, where nothing is ever thrown, and it costs exactly the same. <bookmark mark='b'/> "
-            "That is because C++ compilers use zero-cost exceptions. Nothing happens when a try block is entered. "
-            "Instead the compiler writes tables next to the code, mapping each range of instructions to its "
-            "handler, and only a throw reads them, unwinding the stack one frame at a time. <bookmark mark='c'/> "
-            "C's setjmp makes the opposite trade: it saves the registers on every entry, two and a half "
-            "nanoseconds here, so that the jump out is cheap. <bookmark mark='d'/> And the throw itself costs "
-            "about nine hundred nanoseconds, nearly two thousand plain calls. Exceptions are free if they are "
-            "exceptional."
+            (
+            "Exception implementations move costs to different paths. <bookmark mark='a'/> The table compares a "
+            "plain call and a call that may throw, inside a handler, using our checked benchmark. Their measured "
+            "times need not be identical. <bookmark mark='b'/> This platform uses table-driven unwinding: "
+            "entering a try region does not register a handler dynamically. A throw searches metadata and unwinds "
+            "frames. Zero-cost names this fast-path strategy, not zero code-size, optimization or cache cost. "
+            "<bookmark mark='c'/> setjmp instead saves state on entry. This test measures that registration path; "
+            "it does not time a longjmp. <bookmark mark='d'/> Throwing and constructing the exception has the "
+            "displayed cost in this shallow example. The number depends on the exception, stack depth, ABI and "
+            "machine, so use it as a measured case rather than a fixed ratio for all programs."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab.rule), *[FadeIn(c) for c in tab.cells[0]],
                       FadeIn(VGroup(*tab.cells[1])))

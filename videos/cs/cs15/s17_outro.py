@@ -70,14 +70,16 @@ class Outro(VoiceoverScene):
         ).arrange_in_grid(rows=2, cols=3, buff=(0.35, 0.35)).move_to(DOWN * 0.2)
         head = label(rf"Part {PART}: \ Runtimes", font_size=38).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "What we built in this part. An interpreter, eval and apply, and environments instead of "
-            "substitution. Closures, which carry their environment onto the heap, and closure conversion. "
-            "Continuations, which turn the stack into data, and tail calls, which keep it from growing. A bytecode "
-            "machine for the lambda core, written in the Pebble language and checked against a reference, count "
-            "for count. Reference counting, mark–sweep, mark–compact, Cheney's copying collector and generations, "
-            "all run on the Job. The tri-colour invariant and the barriers that protect it. And on real runtimes "
-            "on this machine: JIT tiers, inline caches, deoptimization, vtables, zero-cost exceptions and "
-            "WebAssembly."
+            (
+            "We built an environment-based interpreter, closures and closure conversion. Continuations make "
+            "pending work explicit; proper tail calls reuse frames in a tail-call chain, while other recursion "
+            "may still grow the stack. We implemented bytecode on Pebble and cross-checked tested in-range "
+            "executions. We ran tracing collectors on the Job and instrumented reference-count traffic. We "
+            "distinguished collection-sampled ages from object death, then examined generations, tri-color "
+            "invariants and barriers. Finally, measurements from this host illustrated JIT tiers, inline caches, "
+            "deoptimization, dispatch, exceptions and WebAssembly. Each model explains a mechanism; each "
+            "measurement keeps its own scope."
+        )
         ):
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
@@ -118,12 +120,14 @@ class Outro(VoiceoverScene):
             (r"sandboxing", r"WebAssembly runtimes \ (Wasmtime, \ browsers) \ for plug-ins and edge functions"),
         ])
         with self.voiceover(
-            "In practice. Most code you will write runs on a runtime like these: the JVM, V8, CPython, .NET or "
-            "Go's. Their collectors have knobs, heap sizes and pause targets, and choosing well is a matter of the "
-            "trade chapter ten measured. Allocation profilers find the objects that should not exist, and the "
-            "fastest JavaScript keeps its objects the same shape. Interpreters are embedded everywhere, Lua in "
-            "games, JavaScript in databases. And WebAssembly is becoming the standard sandbox for running other "
-            "people's code."
+            (
+            "In practice, profile the runtime and workload you actually use. Heap size, collector policy and "
+            "pause targets express different tradeoffs. Allocation profiles reveal unnecessary objects; stable "
+            "object layouts can help some JavaScript hot paths, but measure rather than assume. Lua and "
+            "JavaScript are embedded in larger applications, while WebAssembly supports isolated plug-ins and "
+            "services when the runtime checks and host capabilities are configured appropriately. The models in "
+            "this part give you questions to ask and measurements to interpret."
+        )
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.35), run_time=3.0)
@@ -142,14 +146,17 @@ class Outro(VoiceoverScene):
             r"the same total memory $M$; \ compare them at $M = 2L$, \ $4L$ and $8L$.",
             r"\textit{Build.} \ Give the Pebble VM a nursery, \ in the Pebble language, \ and measure the Job. \ Why "
             r"does the $\lambda$-core need no write barrier?",
-            r"$\bigstar$ \textit{Research.} \ Find a collector with bounded pauses, \ constant memory overhead and "
-            r"constant work per word allocated, \ or prove that no collector can have all three.",
+            '$\\bigstar$ Research: start from a known real-time collector bound; define a model and one precise extension.',
         ], font_size=22)
         with self.voiceover(
-            "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build "
-            "problem: give the Pebble VM a generational nursery, written in the Pebble language, and measure what "
-            "it saves on the Job. The last, marked with a star, is a research problem: its answer is not known, "
-            "and the notes say where to start."
+            (
+            "The notes contain six exercises with worked solutions or starting points. Convert a closure, compare "
+            "direct, CPS and accumulator sums, trace Cheney by hand, and derive two explicit collection cost "
+            "models. The build exercise adds a nursery and measures its benefit under a stated instruction model. "
+            "The research exercise starts from a known real-time collector bound: define the assumptions and "
+            "propose one precise extension, rather than treating an underspecified three-way goal as an unsolved "
+            "theorem."
+        )
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)

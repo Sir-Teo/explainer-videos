@@ -53,15 +53,17 @@ class Interpreters(VoiceoverScene):
             label(r"no substitution: \ a variable is looked up when it is used", font_size=21, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.4).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Every interpreter, from the first LISP to the JavaScript in your browser, has the same heart: two "
-            "procedures that call each other. <bookmark mark='a'/> Eval takes an expression and an environment, "
-            "the values of the variables in scope, and finds the expression's value. <bookmark mark='b'/> When "
-            "the expression applies a function to an argument, eval evaluates both and hands them to apply. "
-            "<bookmark mark='c'/> Apply runs the function's body, which means calling eval again, in a new "
-            "environment where the parameter has the argument's value. <bookmark mark='d'/> Here is the core of "
-            "our own interpreter for the lambda core, the one Part 14 used. Notice what it does not do: it never "
-            "substitutes. Chapter one of Part 14 rewrote terms; a real interpreter keeps a table of values and "
-            "looks a variable up only when it is used."
+            (
+            "An interpreter is a program that takes steps for another program. <bookmark mark='a'/> Our "
+            "tree-walking interpreter evaluates syntax in an environment: a map from variable names to values. A "
+            "variable reads that map; arithmetic evaluates its operands and combines their values. <bookmark "
+            "mark='b'/> A function evaluates to a closure containing its code and the environment it captures. "
+            "Applying the closure extends that saved environment with the argument and evaluates the body. "
+            "<bookmark mark='c'/> Eval and apply call each other. This is one implementation model, not a "
+            "description of every interpreter. <bookmark mark='d'/> Repeated tree visits, name lookup and "
+            "environment allocation can be expensive. The table measures this particular implementation; bytecode "
+            "and compilation change where that work happens."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(ev), FadeIn(e_in))
             vo.wait_until("a")
@@ -94,26 +96,24 @@ class Interpreters(VoiceoverScene):
             pts, DOWN, buff=0.5)
         cost = label(r"every step pays for the interpretation: \ look up, \ copy the environment, \ dispatch on "
                      r"the kind of node", font_size=21, color=NO).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "This idea is older than almost anything else in programming languages. <bookmark mark='a'/> In 1960 "
-            "John McCarthy defined LISP by writing eval in LISP itself: half a page. His student Steve Russell "
-            "noticed that if he translated eval into machine code by hand, he would have a LISP interpreter, and "
-            "he did. <bookmark mark='b'/> An interpreter written in the language it interprets is called "
-            "metacircular, and Abelson and Sussman's textbook of 1985 built one in its fourth chapter. Alan Kay "
-            "called that half page the Maxwell's equations of software. <bookmark "
-            "mark='c'/> On the Job, our interpreter makes three hundred and fifty-eight thousand applications, and "
-            "each one builds a new environment. <bookmark mark='d'/> That is the price of interpreting a tree: "
-            "every step looks up names, copies tables and asks what kind of node it is looking at. The rest of "
-            "the first half of this part removes those costs one by one."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(pts[0]), FadeIn(pts[1]))
-            vo.wait_until("b")
+        with self.voiceover((
+            "A language can be explained by an interpreter. <bookmark mark='a'/> McCarthy's 1960 Lisp evaluator "
+            "and Steve Russell's implementation made that idea concrete. <bookmark mark='b'/> An interpreter "
+            "written in the language it interprets is called metacircular; SICP develops one in its fourth "
+            "chapter. <bookmark mark='c'/> Our tree evaluator counts the displayed applications and allocated "
+            "values while running the Job. Its environment-copying strategy is an implementation choice. "
+            "<bookmark mark='d'/> Repeated syntax inspection and name lookup explain overhead here. Bytecode and "
+            "compilation can remove or reorganize some of that work; the numbers do not establish a universal "
+            "cost for every interpreter."
+        )) as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(pts[0]), FadeIn(pts[1]), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(pts[2]), FadeIn(quote))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(tab))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(cost))
         self.wait(0.3)
         self.clear_scene()
@@ -149,14 +149,17 @@ class Interpreters(VoiceoverScene):
         fast = min(r["seconds"] for r in rows if r["kind"] != "interp")
         slow = max(r["seconds"] for r in rows if r["kind"] == "interp")
         with self.voiceover(
-            "How much does interpretation cost? We can measure it on the runtimes this machine has, running the "
-            "same doubly recursive Fibonacci function, seven million calls, in each. <bookmark mark='a'/> At the "
-            "top, programs compiled ahead of time: C, and Go. <bookmark mark='b'/> Then the just-in-time compilers: "
-            "Java's HotSpot, and V8, the JavaScript engine in Chrome and Node. <bookmark mark='c'/> And at the "
-            "bottom, the interpreters: Java and V8 with their compilers switched off, and CPython, which only "
-            "interprets. The gap between the ends is a factor of more than fifty. <bookmark mark='d'/> The same "
-            "language can sit on either side. JavaScript with V8's compilers is about nine times faster than the "
-            "same JavaScript on V8's interpreter alone. Chapter eleven explains how."
+            (
+            "We can compare implementations, provided we name the experiment. <bookmark mark='a'/> The table "
+            "times recursive Fibonacci of thirty-two inside each process, taking the best of three fresh runs. It "
+            "does not include process startup. <bookmark mark='b'/> The same source-level computation meets "
+            "different code generators, optimizers and runtime policies. Interpreter-only switches help expose "
+            "some of those choices. <bookmark mark='c'/> These are single-host measurements with the displayed "
+            "versions, not a ranking of languages. A compiler can transform this particular recursion, and "
+            "another workload may behave differently. <bookmark mark='d'/> For the Job, our tree walker and "
+            "bytecode VM also report their own operation counts. Keep those logical operations separate from "
+            "native nanoseconds and the Pebble instruction counts to come."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(note))
             vo.wait_until("a")

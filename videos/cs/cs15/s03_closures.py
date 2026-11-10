@@ -30,21 +30,22 @@ class Closures(VoiceoverScene):
                            color=NO), mono(f"f 0  =  {d['dynamic']}", 24, NO)).arrange(DOWN, buff=0.15)
         VGroup(lex, dyn).arrange(RIGHT, buff=1.2).next_to(prog, DOWN, buff=0.7)
         hist = VGroup(
-            label(r"early LISPs and Emacs Lisp: \ dynamic, \ because it was easy to implement", font_size=21,
+            label('early Lisp used dynamic scope; modern Emacs Lisp also supports lexical binding', font_size=21,
                   color=GREY_A),
-            label(r"ALGOL 60, \ Scheme \ (1975) \ and nearly everything since: \ lexical", font_size=21,
+            label('ALGOL 60 and Scheme use lexical scope; dynamic bindings can coexist', font_size=21,
                   color=GREY_A),
             label(r"lexical scope lets you read a function and know what its names mean", font_size=21, color=HEAD),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "An environment raises a question that substitution never did. <bookmark mark='a'/> Here x is one, a "
-            "function f adds x to its argument, and then a new x, ten, is introduced before f is called. Which x "
-            "does f see? <bookmark mark='b'/> Under lexical scope, the one in force where f was written: f of zero "
-            "is one. <bookmark mark='c'/> Under dynamic scope, the one in force where f is called: ten. Both "
-            "answers come from interpreters we ran; the dynamic one simply evaluates the body in the caller's "
-            "environment. <bookmark mark='d'/> The first LISPs were dynamic, because that was the easy thing to "
-            "build, and Emacs Lisp still is by default. ALGOL 60 and Scheme chose lexical scope, and so has nearly "
-            "every language since, for one reason: you can read a function and know what its names refer to."
+            (
+            "Which binding should a function see? <bookmark mark='a'/> Here x is one when f is defined, but a new "
+            "x with value ten surrounds its call. <bookmark mark='b'/> Lexical scope uses the definition-site "
+            "binding, so f of zero is one. <bookmark mark='c'/> Our contrasting dynamic interpreter uses the "
+            "caller's environment and produces ten. These are actual runs of the two small models. <bookmark "
+            "mark='d'/> Lexical scope lets us resolve a name by the program's structure. Languages may also "
+            "provide dynamic bindings for selected variables; modern Emacs Lisp supports lexical binding as well. "
+            "Historical defaults are not a rule that every language must choose only one mechanism."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(prog))
             vo.wait_until("a")
@@ -81,15 +82,16 @@ class Closures(VoiceoverScene):
                   font_size=21, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.4).to_edge(LEFT, buff=0.6)
         with self.voiceover(
-            "Lexical scope has a cost, and Joel Moses named it in 1970: the funarg problem. <bookmark mark='a'/> "
-            "make_adder takes n and returns a function that adds n to its argument. add five and add seven are "
-            "two such functions. <bookmark mark='b'/> When make_adder returns, its stack frame, with n equal to "
-            "five, is gone. <bookmark mark='c'/> But add five still needs that n, every time it is called, for as "
-            "long as anyone holds it. So n cannot live on the stack. <bookmark mark='d'/> The answer, which Peter "
-            "Landin called a closure in 1964, is to package the function's code together with the part of the "
-            "environment it needs, as an object on the heap. Our VM runs this program and gets six and eight. And "
-            "here is the first reason this part needs a garbage collector: nobody knows when add five will be "
-            "dropped."
+            (
+            "A returned function can outlive the call that created it. <bookmark mark='a'/> make_adder returns a "
+            "function that still needs n. Keeping only a pointer into the vanished stack frame would be unsafe. "
+            "<bookmark mark='b'/> A closure packages the function's code with its captured values. Our VM puts "
+            "that environment on its heap. Escape analysis and other implementations may choose a different "
+            "representation. <bookmark mark='c'/> The two returned adders retain different values of n, so their "
+            "answers differ even though they share code. <bookmark mark='d'/> Lexical scope says which binding a "
+            "function uses; closure conversion explains how to preserve that binding when functions escape. Scope "
+            "rules and storage placement are separate choices."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(prog))
             vo.wait_until("a")

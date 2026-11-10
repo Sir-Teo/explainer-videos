@@ -27,17 +27,19 @@ class Hook(VoiceoverScene):
             label(rf"Part 7's chapter: \ {words(h['bytes'])} bytes of text", font_size=24, color=WHITE),
             label(rf"{words(h['allocated_words'])} words allocated: \ {h['words_per_byte']:.0f} per byte",
                   font_size=24, color=COST),
-            label(rf"at most {words(h['peak_live'])} of them in use at once", font_size=24, color=YES),
+            label(rf"largest collection sample: {words(h['peak_live'])} live words", font_size=24, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(DOWN, buff=0.6).to_edge(LEFT, buff=0.6)
         with self.voiceover(
-            "In Part 14 the Job was written in the lambda core, a language of functions, lists and pairs. A "
-            "language is not a program you can run, though. Something has to run it. <bookmark mark='a'/> Look "
-            "at bump. Every double colon builds a new list cell, and every pair builds a new pair. <bookmark "
-            "mark='b'/> And nothing in the program ever gives one back. There is no free. <bookmark mark='c'/> On "
-            "the chapter of Part 7, four thousand seven hundred bytes of text, the Job allocates three hundred and "
-            "seventy thousand words of memory, seventy-nine words for every byte it reads. <bookmark mark='d'/> "
-            "Yet at any moment it is using at most twenty-seven thousand of them. The rest is garbage, and "
-            "someone has to take it away."
+            (
+            "Part fourteen expressed the Job with functions, lists and pairs. Now we need a machine that runs it. "
+            "<bookmark mark='a'/> Each double colon in bump creates a list cell; each pair creates another heap "
+            "object. <bookmark mark='b'/> The source never explicitly frees them. <bookmark mark='c'/> On our "
+            "chapter passage, the displayed allocation count is much larger than the text itself. Rebuilding an "
+            "association list creates many temporary objects. <bookmark mark='d'/> A collection finds only the "
+            "reachable portion. The displayed live peak is the largest collection sample, not an "
+            "every-instruction maximum. This part builds the runtime that allocates these objects, follows their "
+            "references and reclaims space safely."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(src))
             vo.wait_until("a")
@@ -55,7 +57,7 @@ class Hook(VoiceoverScene):
         h = load("hook")
         head = label(r"The heap, \ filling and emptying", font_size=34).to_edge(UP, buff=0.3)
         ax, curve, drops = sawtooth(h["log"], h["semispace"], h["allocated_words"])
-        ax.move_to(DOWN * 0.1)
+        VGroup(ax,curve,drops).shift(DOWN * 0.1)
         top = DashedLine(ax.c2p(0, h["semispace"]), ax.c2p(h["allocated_words"], h["semispace"]), color=NO,
                          stroke_width=1.5, dash_length=0.08)
         lab_top = label(rf"the heap: \ {words(h['semispace'])} words", font_size=19, color=NO).next_to(
@@ -65,7 +67,7 @@ class Hook(VoiceoverScene):
         cap = VGroup(
             label(rf"{h['gcs']} collections: \ each finds what is still reachable, \ and keeps only that",
                   font_size=22, color=YES),
-            label(r"the program never notices: \ this part builds the machine that does it", font_size=22,
+            label('the source never explicitly frees; the runtime performs the collection', font_size=22,
                   color=HEAD),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
         with self.voiceover(
@@ -78,7 +80,7 @@ class Hook(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl), Create(top), FadeIn(lab_top))
             vo.wait_until("a")
-            self.play(Create(curve), run_time=5, rate_func=linear)
+            self.play(Create(curve), run_time=min(5, max(.05, vo.mark_time('b') - vo.elapsed() - .1)), rate_func=linear)
             vo.wait_until("b")
             self.play(LaggedStart(*[Flash(d, color=YES, flash_radius=0.18) for d in drops], lag_ratio=0.15),
                       FadeIn(drops))

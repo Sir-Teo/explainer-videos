@@ -1,7 +1,7 @@
 # Computer Science, Built — sequential polish
 
 Work on `computer-science-built`, one video at a time, with separate commits.
-Current video: **cs15, Runtimes**. CS1–CS14 source/preview polish checkpoints
+Current video: **cs16, Counting Steps**. CS1–CS15 source/preview polish checkpoints
 are complete at the scopes below. Their production release gates remain open; this
 ledger does not treat sampled previews as listening or final-production approval.
 The syllabus's earlier draft-preview claims are separate.
@@ -14,6 +14,29 @@ upgrade/rejection check passes. All numerical producer ASTs and 11 active data h
 This is a loader correctness follow-up; earlier media receipts stay tied to their checkpoint commits.
 
 [CS3 cache-entry evidence](evidence/cs3-cache-entry-20261109/README.md).
+
+## Final CS15 preview checkpoint, 10 November 2026
+
+- Correct mixed-size allocation counting (123,290 objects, 369,855 words), generational minor/major bookkeeping,
+  consumed-nursery word denominators, observed-age/end-censoring interpretation, and failed-subprocess handling.
+  Replace the overflowing dispatch benchmark with checked uint64 arithmetic and verified indirect calls;
+  parse actual JVM/Go pause records and retain checked JIT results. Seven guarded producer revisions;
+  ten of seventeen original payloads remain identical. Seventeen tests and 21 numerical/model groups pass.
+- Revise 42 bilingual narration sections and the affected exercises. Add actual forwarding addresses and updated
+  root/field arrows, the live zero-age witness, same-interleaving barrier colors, Wasm branch/operand-stack
+  diagrams, specialization flow, defined-arithmetic protocol captions and numeric plot axes. Repair one late cue and separate coincident scan/free labels after full-size inspection.
+- Review 34 endpoint and 34 motion overviews: 1,360 motion samples, 32 endpoint/32 motion
+  exact-PNG inheritances after fresh renders; 85,796 motion frames decode; one 1.5-second sparse section transition has an explicit exact-frame disposition.
+  Eighteen native clips decode 14,090 frames; 432 samples/eighteen full-size stills inspected.
+- All 76 English speech blocks pass signal/alignment (43.56 minutes), with all 203 chapter cue requests
+  within 250 ms. Three real narrated chapters decode 7,894 frames plus audio; 120 samples/three stills
+  inspected. Translation and exact canonical source pairs each cover 76/76 blocks.
+- 695 captured caption strings have no unresolved explanatory translation leads;
+  33 retained originals have individual dispositions. Cached text-token coverage is complete.
+
+[Verified CS15 evidence](evidence/cs15-polish-20261110/README.md).
+Continuous narrated listening, Chinese speech/listening, whole-video native production review and runtime at
+the selected narration pace remain open release gates.
 
 ## Final CS14 preview checkpoint, 10 November 2026
 
@@ -399,7 +422,6 @@ Evidence, exact source/data hashes, reports and reproduction commands:
 
 ## Continue here
 
-1. Preserve CS15's untouched source and compute its runtime measurements on an otherwise idle host.
-2. Resolve sampled-lifetime, tail-call stack, collector/benchmark scope and WebAssembly findings;
-   polish bilingual visuals and narration, verify the evidence, and commit CS15 separately.
-3. Continue CS16–CS61 in order, keeping preview evidence distinct from production release approval.
+1. Preserve CS16's untouched source and baseline evidence; audit the counting/cost models and theorems.
+2. Polish bilingual explanations and worked visualizations, verify the source/preview evidence, and commit CS16 separately.
+3. Continue CS17–CS61 in order, keeping preview evidence distinct from production release approval.

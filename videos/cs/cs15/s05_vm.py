@@ -37,28 +37,19 @@ class Bytecode(VoiceoverScene):
             r[0].set(width=r[0].width)
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(head, DOWN, buff=0.45).to_edge(LEFT, buff=0.9)
         tags = VGroup(
-            label(r"a value is one 32-bit word, \ tagged in its lowest bit:", font_size=21, color=GREY_A),
+            label('Pebble: 32-bit tagged words; a signed 31-bit integer payload', font_size=21, color=GREY_A),
             MathTex(r"2n + 1 \;=\; \text{the integer } n \qquad 2a \;=\; \text{a pointer to address } a \qquad 0 "
                     r"\;=\; [\,]", font_size=28, color=WHITE),
             label(r"so the collector can tell every pointer from every number, \ without types", font_size=21,
                   color=YES),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.45)
-        with self.voiceover(
-            "An interpreter that walks the tree asks, at every node, what kind of node it is, and chases pointers "
-            "to find the children. Compiling the tree first, into a flat list of simple instructions for an "
-            "imaginary machine, removes most of that. <bookmark mark='a'/> Here is the whole instruction set of the "
-            "machine we built for the lambda core: thirty-six instructions. They push values, do arithmetic, build "
-            "and take apart lists and pairs, jump, and make, call and return from closures. <bookmark mark='b'/> "
-            "Every value is one thirty-two-bit word. The lowest bit says what it is: odd words are integers, even "
-            "words are pointers, and zero is the empty list. <bookmark mark='c'/> That one bit is what will let "
-            "the garbage collector tell every pointer from every number, by looking, with no types at run time."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in rows], lag_ratio=0.3), run_time=3)
-            vo.wait_until("b")
+        with self.voiceover("A bytecode VM replaces repeated syntax-tree dispatch with a compact instruction stream. <bookmark mark='a'/> Our instructions load locals, call functions, construct heap values and branch. The displayed list is this VM's instruction set, not a universal bytecode standard. <bookmark mark='b'/> Pebble stores a value in a thirty-two-bit word. One tag bit distinguishes integers from aligned heap pointers, leaving a signed thirty-one-bit integer payload. <bookmark mark='c'/> The Python reference VM uses unbounded Python integers, so its large factorial experiment is a logical-slot model. Agreement with the physical Pebble VM is checked on the tested in-range programs, not asserted for arbitrary-precision arithmetic.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in rows], lag_ratio=0.3), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(tags[:2]))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(tags[2]))
         self.wait(0.3)
         self.clear_scene()
@@ -165,25 +156,15 @@ class Bytecode(VoiceoverScene):
                   color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
         right = VGroup(cmp_, pts).arrange(DOWN, aligned_edge=LEFT, buff=0.5).to_edge(RIGHT, buff=0.4)
-        with self.voiceover(
-            "Real languages make the same choice. <bookmark mark='a'/> This is CPython's bytecode for bump written "
-            "in Python, printed by the dis module on this machine: LOAD_FAST, LOAD_CONST, BINARY_SUBSCR. It is a "
-            "stack machine, like ours. <bookmark mark='b'/> The alternative is a register machine, where one "
-            "instruction names its operands: add register one to register two into register three, instead of "
-            "four stack instructions. <bookmark mark='c'/> Lua made that switch in version five in 2003, and a "
-            "careful study by Shi and colleagues found a register machine executes forty-seven percent fewer "
-            "instructions, for code a quarter larger. <bookmark mark='d'/> Both survive. Stack code is compact and "
-            "trivial to generate, which is why the JVM, CPython and WebAssembly use it. Register code does more "
-            "work per dispatch, which is why Lua, Android's Dalvik and V8's interpreter use registers."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(left))
-            vo.wait_until("b")
+        with self.voiceover("Real languages make the same choice. <bookmark mark='a'/> This is CPython's bytecode for bump written in Python, printed by the dis module on this machine: LOAD_FAST, LOAD_CONST, BINARY_SUBSCR. It is a stack machine, like ours. <bookmark mark='b'/> The alternative is a register machine, where one instruction names its operands: add register one to register two into register three, instead of four stack instructions. <bookmark mark='c'/> Lua made that switch in version five in 2003, and a careful study by Shi and colleagues found a register machine executes forty-seven percent fewer instructions, for code a quarter larger. <bookmark mark='d'/> Both survive. Stack code is compact and trivial to generate, which is why the JVM, CPython and WebAssembly use it. Register code does more work per dispatch, which is why Lua, Android's Dalvik and V8's interpreter use registers.") as vo:
+            self.play(FadeIn(head), run_time=0.5)
+            self.play(FadeIn(left), run_time=0.6)
+            vo.wait_until('a')
+            vo.wait_until('b')
             self.play(FadeIn(cmp_))
-            vo.wait_until("c")
+            vo.wait_until('c')
             self.play(FadeIn(pts[:2]))
-            vo.wait_until("d")
+            vo.wait_until('d')
             self.play(FadeIn(pts[2:]))
         self.wait(0.3)
         self.clear_scene()

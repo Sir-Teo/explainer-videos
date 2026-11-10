@@ -370,16 +370,18 @@ class Generational(Collector):
 
     def minor(self):
         limit = self.obase + self.O
-        if self.ofree + self.N > limit:          # might not fit: collect the old space first
+        if self.ofree + self.N > limit:          # might not fit: collect both generations
             self.major()
-            limit = self.obase + self.O
+            return  # major already copied the nursery; do not log an empty minor
+        nursery_used = self.nfree - 1
         start = self.ofree
         nlim = 1 + self.N
         self.ofree = self._copy_into(lambda a: a < nlim, self.ofree, limit, start)
         moved = self.ofree - start
         self.promoted += moved
         self.nfree = 1
-        self.log.append({"clock": self.clock, "live": moved, "work": moved, "kind": "minor"})
+        self.log.append({"clock": self.clock, "live": moved, "work": moved, "kind": "minor",
+                         "nursery_used": nursery_used})
 
     def major(self):
         """Copy the nursery's and the old space's live objects into the other old semispace."""

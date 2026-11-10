@@ -108,7 +108,7 @@ class Tracing(VoiceoverScene):
         free = sum(n for _, n, l in HEAP if not l)
         biggest = max(n for _, n, l in HEAP if not l)
         req = VGroup(Rectangle(width=5 * U, height=0.75, color=HEAD, stroke_width=2).set_fill(HEAD, 0.15),
-                     mono("new: 5 words", 16, HEAD))
+                     label("new: 5 words", font_size=16, color=HEAD))
         req[1].move_to(req[0])
         req.next_to(row, DOWN, buff=0.6)
         fail = label(rf"{free} words free, \ but the largest hole is {biggest}: \ no room", font_size=22,
@@ -166,28 +166,31 @@ class Tracing(VoiceoverScene):
             rows.append([r["collector"], str(r["collections"]), words(r["work"]), words(r["max_pause"]),
                          words(r["free_blocks"]) if r["free_blocks"] else r"---"])
         tab = grid_table([r"collector", r"collections", r"work, \ words", r"longest pause, \ words",
-                          r"holes, \ worst"], rows, widths=[3.6, 2.2, 2.4, 3.0, 2.2], row_h=0.52, font_size=20,
+                          r"holes, \ worst"], rows, widths=[3.6, 2.2, 2.4, 3.0, 2.2], row_h=0.52, font_size=20, mono_cols=(),
                          colors=[[DATA, WHITE, WHITE, WHITE, WHITE], [NO, WHITE, WHITE, WHITE, NO],
-                                 [FUNC, WHITE, WHITE, WHITE, WHITE], [YES, WHITE, YES, YES, WHITE]]).next_to(
+                                 [FUNC, WHITE, WHITE, WHITE, WHITE], [YES, WHITE, YES, YES, WHITE]]).scale_to_fit_width(13.0).next_to(
             head, DOWN, buff=0.6)
         cap = label(rf"the Job on Part 7's chapter, \ in a heap of {words(d['heap_words'])} words each; \ work: \ "
                     r"words copied, \ marked, \ swept or slid", font_size=19, color=GREY_B).next_to(tab, DOWN,
                                                                                                  buff=0.3)
         pts = VGroup(
-            label(r"mark--sweep never moves an object: \ the C-friendly choice \ (Boehm's collector)", font_size=21,
+            label('nonmoving tracing can accommodate conservative roots; policies differ', font_size=21,
                   color=GREY_A),
             label(r"its holes: \ tens of thousands of them, \ in a heap whose live data fits in a fifth of it",
                   font_size=21, color=NO),
             label(r"the copying and generational rows: \ chapters 8 and 9", font_size=21, color=HEAD),
         ).arrange(DOWN, buff=0.14).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "We implemented four collectors for the same VM and ran the Job under each, on the same text, in the "
-            "same amount of memory. <bookmark mark='a'/> Mark–sweep collects three times and never moves anything, "
-            "which is why it is the collector you can add to C, as Hans Boehm did, without the compiler's help. "
-            "<bookmark mark='b'/> But at its worst the heap is shot through with thirty-five thousand holes. "
-            "<bookmark mark='c'/> Mark–compact has no holes, but its passes give it the longest pause. The other "
-            "two rows, copying and generational collection, are the subjects of the next two chapters, and the "
-            "generational one wins on every column but one."
+            (
+            "Run the same Job under four collectors with equal reserved heap capacity. <bookmark mark='a'/> The "
+            "table counts words of marking, scanning or copying using each toy collector's stated work model. "
+            "These operations do not necessarily have equal native time. <bookmark mark='b'/> Mark-sweep leaves "
+            "objects in place and can fragment free space. Compacting and copying move reachable objects and must "
+            "update references. <bookmark mark='c'/> The generational layout reserves its nursery plus two old "
+            "semispaces; Cheney reserves two equal semispaces. The longest work event is a model pause, not a "
+            "measured millisecond bound. This comparison explains mechanisms on one workload, rather than "
+            "crowning a universally best collector."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab), FadeIn(cap))
             vo.wait_until("a")

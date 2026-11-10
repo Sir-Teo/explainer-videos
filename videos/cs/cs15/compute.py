@@ -31,6 +31,7 @@ Items:
 from __future__ import annotations
 
 import json
+import math
 import os
 import re
 import shutil
@@ -40,9 +41,33 @@ import time
 from pathlib import Path
 
 from explainer.ai.cache import Cache
+from explainer.cache_lock import locked_item
+from .measurements import (ObservedCheney, checked_churn_result, go_pause_events,
+                           java_pause_events, measure_dispatch, positive_seconds)
 
-CACHE = Cache("cs15")
-load = CACHE.load
+SCHEMAS = {"cps": 2, "tracing": 2, "gen": 2, "pauses": 2, "dispatch": 2, "jit": 2, "rc": 2}
+
+
+class RuntimeCache(Cache):
+    @locked_item(lambda self, name: self.path(name))
+    def load(self, name):
+        if not cache_current(name, self.path(name)):
+            self.save(name, ITEMS[name]())
+        return super().load(name)
+
+
+CACHE = RuntimeCache("cs15")
+
+
+def cache_current(name, path=None):
+    path = CACHE.path(name) if path is None else path
+    return name not in SCHEMAS or (path.exists() and
+        json.loads(path.read_text()).get("schema") == SCHEMAS[name])
+
+
+def load(name):
+    # Resolve at call time so cached-only QA rejects stale schemas before computation.
+    return CACHE.load(name)
 
 
 def _job():
@@ -57,7 +82,7 @@ def _chapter():
 
 def _sh(cmd, cwd=None, env=None, timeout=600):
     r = subprocess.run(cmd, cwd=cwd, env={**os.environ, **(env or {})}, capture_output=True, text=True,
-                       timeout=timeout)
+                       timeout=timeout, check=True)
     return r.stdout + r.stderr
 
 
@@ -136,7 +161,8 @@ def compute_interp() -> dict:
             for _ in range(3):
                 out = _sh(cmd, cwd=d, env={"JAVA_TOOL_OPTIONS": ""}).split()
                 nums = [x for x in out if re.fullmatch(r"[\d.e-]+", x)]
-                val, sec = int(nums[0]), float(nums[1])
+                val, sec = int(nums[0]), positive_seconds(nums[1])
+                assert val == 2178309
                 best = sec if best is None else min(best, sec)
             assert val == 2178309
             rows.append({"runtime": name, "seconds": best, "kind": kind})
@@ -221,6 +247,7 @@ def compute_cps() -> dict:
                            ("accumulator", f"fact_acc {n} 1")):
             p = B.compile_program(M.parse(FACT + body))
             vm = V.VM(p, V.Cheney(200000)).run()
+            assert vm.stack[vm.sp - 1] >> 1 == math.factorial(n)
             r[name] = {"max_stack": vm.stats["max_stack"], "closures": vm.stats["closures"],
                        "words": vm.heap.clock, "ops": vm.stats["ops"]}
         rows.append(r)
@@ -231,10 +258,19 @@ def compute_cps() -> dict:
         assert bytes(vm.output) == PR.job_reference(t)
         tco["on" if flag else "off"] = {"max_stack": vm.stats["max_stack"], "tailcalls": vm.stats.get("tailcalls", 0),
                                         "calls": vm.stats["calls"]}
+    vocabulary = []
+    for count in (20, 80, 200):
+        tape = b" ".join(bytes((97 + i // 26, 97 + i % 26)) for i in range(count)) + b" "
+        machine = V.VM(p, V.Cheney(20000), tape=tape).run()
+        assert bytes(machine.output) == PR.job_reference(tape)
+        vocabulary.append(dict(distinct_words=count, bytes=len(tape),
+                               max_stack=machine.stats["max_stack"]))
     lst = "[3; 1; 4; 1; 0; 9; 2; 6; 5; 3; 5; 8]"
     _, plain = cek.run(M.parse(cek.PRODUCT + "product " + lst))
     _, esc = cek.run(M.parse(cek.PRODUCT + "product_exit " + lst))
-    return {"fact": rows, "fact_source": FACT.strip().splitlines(), "tco": tco, "bytes": len(t),
+    return {"schema": SCHEMAS["cps"], "fact": rows, "fact_source": FACT.strip().splitlines(),
+            "tco": tco, "bytes": len(t), "vocabulary": vocabulary,
+            "integer_model": "Python arbitrary-precision integers; counts are logical VM slots, not bignum storage/time",
             "product": {"list": lst, "plain": plain, "exit": esc, "source": cek.PRODUCT.strip().splitlines()}}
 
 
@@ -337,8 +373,8 @@ print("stats", gc.get_stats())
 def compute_rc() -> dict:
     from explainer.cs.runtime import vm as V
     p, t = _job(), _chapter()
-    vm = V.VM(p, V.Cheney(1000000), tape=t, count_rc=True).run()
-    objs = vm.heap.clock // 3
+    vm = V.VM(p, V.Cheney(1000000, track_ages=True), tape=t, count_rc=True).run()
+    objs = len(vm.heap.lifetimes)
     out = {}
     for py in ("python3.12", "python3.13"):
         exe = shutil.which(py) or ("/usr/local/bin/python3" if py == "python3.13" else None)
@@ -346,7 +382,7 @@ def compute_rc() -> dict:
             continue
         o = _sh([exe, "-c", CYCLES_PY])
         out[py] = {"raw": o.strip().splitlines(), "version": _version([exe, "--version"])}
-    return {"rc_stack": vm.stats["rc_stack"], "rc_heap": vm.stats["rc_heap"], "allocated_words": vm.heap.clock,
+    return {"schema": SCHEMAS["rc"], "rc_stack": vm.stats["rc_stack"], "rc_heap": vm.stats["rc_heap"], "allocated_words": vm.heap.clock,
             "objects": objs, "ops": vm.stats["ops"], "cpython": out}
 
 
@@ -406,7 +442,8 @@ def compute_tracing() -> dict:
                      "moves": heap.name not in ("mark–sweep",), "seconds": time.perf_counter() - t0,
                      "allocated": heap.clock})
         print(rows[-1])
-    return {"rows": rows, "heap_words": H, "trace": cheney_trace(), "allocated": rows[0]["allocated"]}
+    return {"schema": SCHEMAS["tracing"], "rows": rows, "heap_words": H,
+            "trace": cheney_trace(), "allocated": rows[0]["allocated"]}
 
 
 def compute_cost() -> dict:
@@ -444,7 +481,7 @@ def compute_cost() -> dict:
 def compute_gen() -> dict:
     from explainer.cs.runtime import vm as V
     p, t = _job(), _chapter()
-    h = V.Cheney(40000, track_ages=True)
+    h = ObservedCheney(40000)
     V.VM(p, h, tape=t).run()
     life = h.lifetimes
     n = len(life)
@@ -459,12 +496,20 @@ def compute_gen() -> dict:
         rows.append({"nursery": N, "minor": len(minors), "major": len(majors),
                      "work": sum(r["work"] for r in g.log), "minor_work": sum(r["work"] for r in minors),
                      "major_work": sum(r["work"] for r in majors), "promoted": g.promoted,
-                     "survival": sum(r["live"] for r in minors) / max(len(minors) * N, 1),
+                     "minor_nursery_words": sum(r["nursery_used"] for r in minors),
+                     "survival": sum(r["live"] for r in minors) / max(sum(r["nursery_used"] for r in minors), 1),
+                     "survival_unit": "promoted words / nursery words consumed in minor cycles",
                      "max_pause": max((r["work"] for r in g.log), default=0), "barrier_hits": g.barrier_hits})
         print(rows[-1])
     c = V.Cheney(64000 + 0)
     V.VM(p, c, tape=t).run()
-    return {"objects": n, "survival": surv, "rows": rows, "gc_interval": 40000,
+    from explainer.cs.lang.lam import ml as M
+    from explainer.cs.runtime import bytecode as B
+    witness = ObservedCheney(1000)
+    V.VM(B.compile_program(M.parse("[1; 2; 3]")), witness).run()
+    return {"schema": SCHEMAS["gen"], "objects": n, "survival": surv, "rows": rows,
+            "gc_interval": 40000, "observations": h.observation_summary(),
+            "unobserved_live_witness": witness.observation_summary(),
             "cheney": {"work": sum(r["work"] for r in c.log), "collections": len(c.log),
                        "max_pause": max(r["work"] for r in c.log)}}
 
@@ -516,33 +561,39 @@ func main() {
 
 def compute_pauses() -> dict:
     rows = []
-    with tempfile.TemporaryDirectory() as d:
-        Path(d, "Churn.java").write_text(PAUSE_JAVA)
-        _sh(["javac", "Churn.java"], cwd=d, env={"JAVA_TOOL_OPTIONS": ""})
+    with tempfile.TemporaryDirectory() as directory:
+        Path(directory, "Churn.java").write_text(PAUSE_JAVA)
+        _sh(["javac", "Churn.java"], cwd=directory, env={"JAVA_TOOL_OPTIONS": ""})
         for name, flags in (("Serial", ["-XX:+UseSerialGC"]), ("Parallel", ["-XX:+UseParallelGC"]),
-                            ("G1", ["-XX:+UseG1GC"]), ("ZGC (generational)", ["-XX:+UseZGC", "-XX:+ZGenerational"])):
-            out = _sh(["java", "-Xmx1g", "-Xms1g", *flags, "-Xlog:gc*:stdout", "Churn"], cwd=d,
-                      env={"JAVA_TOOL_OPTIONS": ""})
-            pauses = [float(m) for m in re.findall(r"Pause[^\n]*?(\d+\.\d+)ms", out)]
-            last = [l for l in out.splitlines() if re.fullmatch(r"-?\d+ [\d.]+", l.strip())]
-            total = float(last[-1].split()[1]) if last else None
-            rows.append({"collector": f"JVM {name}", "pauses": len(pauses), "max_ms": max(pauses, default=0.0),
-                         "mean_ms": sum(pauses) / max(len(pauses), 1), "total_pause_ms": sum(pauses),
-                         "seconds": total})
-            print(rows[-1])
-        Path(d, "churn.go").write_text(PAUSE_GO)
-        _sh(["go", "build", "-o", "churn", "churn.go"], cwd=d, env={"GOCACHE": str(Path(d, "gocache"))})
-        out = _sh(["./churn"], cwd=d, env={"GODEBUG": "gctrace=1"})
-        stw = []
-        for m in re.finditer(r"gc \d+ @[\d.]+s \d+%: ([\d.]+)\+([\d.]+)\+([\d.]+) ms clock", out):
-            stw += [float(m.group(1)), float(m.group(3))]
-        last = [l for l in out.splitlines() if re.fullmatch(r"-?\d+ [\d.]+", l.strip())]
-        rows.append({"collector": "Go (concurrent mark–sweep)", "pauses": len(stw), "max_ms": max(stw, default=0),
-                     "mean_ms": sum(stw) / max(len(stw), 1), "total_pause_ms": sum(stw),
-                     "seconds": float(last[-1].split()[1]) if last else None})
-        print(rows[-1])
-    return {"rows": rows, "java": _version(["java", "-version"]), "go": _version(["go", "version"]),
-            "workload": "60 million allocations, a live set of 200,000 lists, 1 GB heap"}
+                            ("G1", ["-XX:+UseG1GC"]),
+                            ("ZGC (generational)", ["-XX:+UseZGC", "-XX:+ZGenerational"])):
+            command = ["java", "-Xmx1g", "-Xms1g", "-XX:ActiveProcessorCount=4", *flags,
+                       "-Xlog:gc,gc+phases:stdout", "Churn"]
+            raw = _sh(command, cwd=directory, env={"JAVA_TOOL_OPTIONS": ""})
+            seconds = checked_churn_result(raw)
+            events = java_pause_events(raw)
+            values = [event["ms"] for event in events]
+            rows.append(dict(collector="JVM " + name, pauses=len(values), max_ms=max(values),
+                             mean_ms=sum(values)/len(values), total_pause_ms=sum(values),
+                             seconds=seconds, command=command, events=events, raw_log=raw))
+            print({k:v for k,v in rows[-1].items() if k not in ('raw_log','events')})
+        Path(directory, "churn.go").write_text(PAUSE_GO)
+        _sh(["go", "build", "-o", "churn", "churn.go"], cwd=directory,
+            env={"GOCACHE": str(Path(directory, "gocache"))})
+        settings = dict(GODEBUG="gctrace=1", GOGC="100", GOMEMLIMIT="1GiB", GOMAXPROCS="4")
+        raw = _sh(["./churn"], cwd=directory, env=settings)
+        seconds = checked_churn_result(raw)
+        events = go_pause_events(raw)
+        values = [event["ms"] for event in events]
+        rows.append(dict(collector="Go (concurrent mark–sweep)", pauses=len(values), max_ms=max(values),
+                         mean_ms=sum(values)/len(values), total_pause_ms=sum(values), seconds=seconds,
+                         settings=settings, events=events, raw_log=raw))
+        print({k:v for k,v in rows[-1].items() if k not in ('raw_log','events')})
+    return dict(schema=SCHEMAS["pauses"], rows=rows, java=_version(["java", "-version"]),
+                go=_version(["go", "version"]),
+                workload="60 million allocations; 200,000 list heads; JVM fixed 1 GiB; Go GOGC=100, soft limit 1 GiB",
+                scope="One host/run per configuration; Go and JVM heap policies differ. "
+                      "Go events count the two STW phases separately; concurrent work/assists are excluded.")
 
 
 JIT_JS = r"""
@@ -562,7 +613,7 @@ function bench(shapes) {
   return [s, Number(process.hrtime.bigint() - t) / 1e9];
 }
 const out = [];
-for (const k of [1, 2, 4, 8, 16, 32]) { bench(k); const [s, t] = bench(k); out.push([k, t]); }
+for (const k of [1, 2, 4, 8, 16, 32]) { bench(k); const [s, t] = bench(k); out.push([k, t, s]); }
 console.log(JSON.stringify(out));
 """
 
@@ -594,8 +645,14 @@ def compute_jit() -> dict:
         for fn, src in (("ic.js", JIT_JS), ("shapes.js", SHAPES_JS), ("deopt.js", DEOPT_JS), ("tiers.js", TIERS_JS)):
             Path(d, fn).write_text(src)
         ic = json.loads(_sh(["node", "ic.js"], cwd=d).strip().splitlines()[-1])
+        assert [r[0] for r in ic] == [1, 2, 4, 8, 16, 32]
+        for _, seconds, checksum in ic:
+            positive_seconds(seconds)
+            assert checksum == 20000 * 1024 * 1023 // 2
         shapes = json.loads(_sh(["node", "--allow-natives-syntax", "shapes.js"], cwd=d).strip().splitlines()[-1])
         deopt = _sh(["node", "--trace-deopt", "deopt.js"], cwd=d)
+        deopt_values = [line for line in deopt.splitlines() if line == "ab" or line.isdigit()]
+        assert deopt_values == ["ab", "40000200000"], deopt_values
         dl = [l.strip() for l in deopt.splitlines() if "bailout" in l or "deoptimiz" in l.lower()]
         tiers = _sh(["node", "--trace-opt", "tiers.js"], cwd=d)
         tl = [l.strip() for l in tiers.splitlines() if "fib" in l and ("compiling" in l or "completed" in l)]
@@ -607,62 +664,23 @@ def compute_jit() -> dict:
             for _ in range(3):
                 out = _sh(["node", *flags, "tiers.js"], cwd=d).split()
                 assert out[0] == "2178309", out
-                dt = float(out[1])
+                dt = positive_seconds(out[1])
                 best = dt if best is None else min(best, dt)
             ladder.append({"tier": name, "seconds": best})
             print(ladder[-1])
-    return {"ic": [{"shapes": k, "seconds": t} for k, t in ic], "shapes": shapes, "deopt": dl[:12],
+    return {"schema": SCHEMAS["jit"],
+            "ic": [{"shapes": k, "seconds": t, "checksum": checksum} for k, t, checksum in ic],
+            "ic_calls": 20000 * 1024, "shapes": shapes, "deopt": dl[:12],
+            "deopt_values": deopt_values, "deopt_raw": deopt,
             "tiers_trace": tl[:12], "ladder": ladder, "node": _version(["node", "--version"])}
 
 
-DISPATCH_CPP = r"""
-#include <chrono>
-#include <cstdio>
-#include <csetjmp>
-#include <stdexcept>
-struct Shape { virtual long area(long x) const = 0; virtual ~Shape() {} };
-struct Sq : Shape { long area(long x) const override { return x * x; } };
-struct Tri : Shape { long area(long x) const override { return x * x / 2; } };
-__attribute__((noinline)) long direct(long x) { return x * x; }
-__attribute__((noinline)) long may_throw(long x, bool t) { if (t) throw std::runtime_error("x"); return x + 1; }
-static std::jmp_buf env;
-__attribute__((noinline)) long plain(long x) { return x + 1; }
-template <class F> double timeit(F f) {
-  double best = 1e9;
-  for (int r = 0; r < 3; r++) {
-    auto a = std::chrono::steady_clock::now(); f(); auto b = std::chrono::steady_clock::now();
-    double s = std::chrono::duration<double>(b - a).count(); if (s < best) best = s;
-  }
-  return best;
-}
-int main(int argc, char **) {
-  const long N = 200000000;
-  Sq sq; Tri tri; Shape *one[2] = {&sq, &sq}; Shape *two[2] = {&sq, &tri};
-  volatile long sink = 0;
-  double td = timeit([&]{ long s = 0; for (long i = 0; i < N; i++) s += direct(i); sink = s; });
-  double tv1 = timeit([&]{ long s = 0; for (long i = 0; i < N; i++) s += one[i & 1]->area(i); sink = s; });
-  double tv2 = timeit([&]{ long s = 0; for (long i = 0; i < N; i++) s += two[i & 1]->area(i); sink = s; });
-  double tn = timeit([&]{ long s = 0; for (long i = 0; i < N; i++) s += plain(i); sink = s; });
-  double tt = timeit([&]{ long s = 0; for (long i = 0; i < N; i++) { try { s += may_throw(i, false); } catch (...) { s--; } } sink = s; });
-  double tsj = timeit([&]{ long s = 0; for (long i = 0; i < N / 10; i++) { if (setjmp(env) == 0) s += plain(i); else s--; } sink = s; });
-  const long M = 1000000;
-  double tth = timeit([&]{ long s = 0; for (long i = 0; i < M; i++) { try { s += may_throw(i, true); } catch (...) { s--; } } sink = s; });
-  printf("%.6f %.6f %.6f %.6f %.6f %.6f %.6f %ld %ld\n", td, tv1, tv2, tn, tt, tsj, tth, N, M);
-}
-"""
+DISPATCH_CPP = '#include <chrono>\n#include <cstdint>\n#include <cstdio>\n#include <csetjmp>\n#include <stdexcept>\n#ifndef N\n#define N 20000000\n#endif\n#ifndef M\n#define M 100000\n#endif\n#define OPAQUE __attribute__((noipa))\nusing Word = std::uint64_t;\nstruct Shape { virtual Word area(Word x) const = 0; virtual ~Shape() {} };\nstruct Sq : Shape { OPAQUE Word area(Word x) const override { return x*x; } };\nstruct Tri : Shape { OPAQUE Word area(Word x) const override { return x*x/2; } };\nOPAQUE Word direct(Word x) { return x*x; }\nOPAQUE Word plain(Word x) { return x+1; }\nOPAQUE Word may_throw(Word x, bool fail) { if(fail) throw std::runtime_error("x"); return x+1; }\nextern "C" OPAQUE Word run_virtual(Shape **table) {\n  Word sum=0; for(Word i=0; i<N; ++i) sum += table[i&1]->area(i); return sum;\n}\nstatic std::jmp_buf jump_env;\nstatic volatile Word sink;\ntemplate<class F> void measure(const char *name, Word iterations, F body) {\n  double best=1e100; Word checksum=0;\n  for(int r=0; r<3; ++r) {\n    auto a=std::chrono::steady_clock::now(); Word value=body();\n    auto b=std::chrono::steady_clock::now(); sink=value;\n    double elapsed=std::chrono::duration<double>(b-a).count();\n    if(elapsed<best) { best=elapsed; checksum=value; }\n  }\n  std::printf("%s %.9f %llu %llu\\n",name,best,\n              (unsigned long long)checksum,(unsigned long long)iterations);\n}\nint main() {\n  Sq sq; Tri tri; Shape *one[]={&sq,&sq}, *two[]={&sq,&tri};\n  measure("direct",N,[]{ Word s=0; for(Word i=0;i<N;++i) s+=direct(i); return s; });\n  measure("virtual_mono",N,[&]{ return run_virtual(one); });\n  measure("virtual_poly",N,[&]{ return run_virtual(two); });\n  measure("plain",N,[]{ Word s=0; for(Word i=0;i<N;++i) s+=plain(i); return s; });\n  measure("try",N,[]{ Word s=0; for(Word i=0;i<N;++i) { try { s+=may_throw(i,false); } catch(...) { --s; } } return s; });\n  measure("setjmp",N/10,[]{ Word s=0; for(Word i=0;i<N/10;++i) { if(setjmp(jump_env)==0) s+=plain(i); else --s; } return s; });\n  measure("throw",M,[]{ Word s=0; for(Word i=0;i<M;++i) { try { s+=may_throw(i,true); } catch(...) { --s; } } return s; });\n}\n'
 
 
 def compute_dispatch() -> dict:
-    with tempfile.TemporaryDirectory() as d:
-        Path(d, "x.cpp").write_text(DISPATCH_CPP)
-        _sh(["g++", "-O2", "-o", "x", "x.cpp"], cwd=d)
-        v = _sh(["./x"], cwd=d).split()
-    td, tv1, tv2, tn, tt, tsj, tth = map(float, v[:7])
-    N, M = int(v[7]), int(v[8])
-    ns = lambda s, n: 1e9 * s / n  # noqa: E731
-    return {"direct_ns": ns(td, N), "virtual_mono_ns": ns(tv1, N), "virtual_poly_ns": ns(tv2, N),
-            "plain_ns": ns(tn, N), "try_ns": ns(tt, N), "setjmp_ns": ns(tsj, N // 10), "throw_ns": ns(tth, M),
-            "gcc": _version(["g++", "--version"])}
+    return dict(schema=SCHEMAS["dispatch"],
+                **measure_dispatch(_sh, DISPATCH_CPP, _version(["g++", "--version"])))
 
 
 def _leb(n):
