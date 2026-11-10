@@ -19,3 +19,6 @@ published/
 SCRIPT.md
 .DS_Store
 videos/*/*_text_zh.lock
+
+# Generated QA evidence belongs outside Git.
+/docs/qa/evidence/

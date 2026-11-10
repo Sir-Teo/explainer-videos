@@ -1,0 +1,119 @@
+{
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 4227,
+      "sha256": "4ee87fd3a1e036bf3b1098e9e604050c95c093d38d60b52552b4dc44f311e032"
+    },
+    {
+      "path": "SVD-two-replacement-receipts.json.gz",
+      "bytes": 588,
+      "sha256": "78ecc3d66fb06a3edcdc3c13c9c433f8223ec4f023cb877417bc1c768055f365"
+    },
+    {
+      "path": "actual-extraction-script.py.gz",
+      "bytes": 2312,
+      "sha256": "faa4b1c0612c61030dd46598afdbaa50ecf6e9e248b4a734ad033e1b30b172cb"
+    },
+    {
+      "path": "case-map-four-replacements.json",
+      "bytes": 5582,
+      "sha256": "e531d6d90611f513aa3c48c5b9808662f17693768abd4edaa564405a34db17db"
+    },
+    {
+      "path": "data-payload-current-hashes.json",
+      "bytes": 10241,
+      "sha256": "30c4e601222b024839fece4c839a1daddf48cfbcb1d1d28168f122c164bf59f0"
+    },
+    {
+      "path": "en/after-native-endpoint.png",
+      "bytes": 83411,
+      "sha256": "67c35fe96c22f3b81ccf942e8d3acb91f860944bd3474d26c7663c536a5200b9"
+    },
+    {
+      "path": "en/after-native-middle.png",
+      "bytes": 134836,
+      "sha256": "56a9bb7741fd4fe3f861520648bb1a21c10dacc4504a5a781e584f1fe1d672cb"
+    },
+    {
+      "path": "en/before-native-middle.png",
+      "bytes": 133359,
+      "sha256": "ac543d54edbee019542c7120f2e054a047cba0c5364ed01afc5d4c731a7b6b98"
+    },
+    {
+      "path": "en/endpoint-record.json.gz",
+      "bytes": 10941,
+      "sha256": "784c927fb1e6876c46fd3ac037958e468d5636749f313c13b3c3bb82896074e9"
+    },
+    {
+      "path": "en/prior-reviewed-cohort.json.gz",
+      "bytes": 27940,
+      "sha256": "7c13c333021e922b8acb5b017f2c215f0813d48709297f0310af25438bd1a4b6"
+    },
+    {
+      "path": "en/render-record.json.gz",
+      "bytes": 11029,
+      "sha256": "f32b31df0a6be2061fddb01217ac2bf07efdde6689562158a6ab98406b846d6a"
+    },
+    {
+      "path": "en/review.json.gz",
+      "bytes": 26637,
+      "sha256": "ce94d623386d85499f0ba58065c48cd234f05f574314f2274569bbe8d6fb3bdf"
+    },
+    {
+      "path": "endpoints-regression.json.gz",
+      "bytes": 1343,
+      "sha256": "e44df4587c574f3fca0a9274a99f59c6b8c15fb019c52c74fe654bced0205017"
+    },
+    {
+      "path": "historical-927-case-map.json.gz",
+      "bytes": 7151,
+      "sha256": "42aa7f903660dfef9a9fad380805b0ae95d54615afb12e00b2fd2ab2fb573601"
+    },
+    {
+      "path": "summary.json",
+      "bytes": 5405,
+      "sha256": "239d39848a5d24a610e28c817d9286c6326b6393beed430d790bcae8366c069c"
+    },
+    {
+      "path": "unreplaced34-case-byte-check.json.gz",
+      "bytes": 3232,
+      "sha256": "9098225db78cf80fe3c54e16794deb46337f45ec62eab9192888ad0bf74129f0"
+    },
+    {
+      "path": "zh/after-native-endpoint.png",
+      "bytes": 84007,
+      "sha256": "f191cf9ac1ba4c087a3a17484aa855b20f66388c72c734f894d6280b7b8317a0"
+    },
+    {
+      "path": "zh/after-native-middle.png",
+      "bytes": 135644,
+      "sha256": "5ad3668045718269a16b9f38d773fed0dd0fc3f1cc898518d5de0547f84d9070"
+    },
+    {
+      "path": "zh/before-native-middle.png",
+      "bytes": 134202,
+      "sha256": "d52887962518137b3776a1dafe346102280514ef1fedd8eb4355dca4f033b97c"
+    },
+    {
+      "path": "zh/endpoint-record.json.gz",
+      "bytes": 17730,
+      "sha256": "f838801aadd5c0c9049641cb968e10f79ccd25a698ca573d1e66d106363e4f55"
+    },
+    {
+      "path": "zh/prior-reviewed-cohort.json.gz",
+      "bytes": 29668,
+      "sha256": "b25fe85fa2564d7c96eee9d962d5dd48e6baf6d263fd309da7bf6809108360ca"
+    },
+    {
+      "path": "zh/render-record.json.gz",
+      "bytes": 17770,
+      "sha256": "9877c9f7c8ceaed84a7bca6510efb1b2c26a42a68e71e6cd87023b88e6fcf42b"
+    },
+    {
+      "path": "zh/review.json.gz",
+      "bytes": 28512,
+      "sha256": "ced5aac19bae7903140105be198e068213f8021815db315b0aba3159e4d1702f"
+    }
+  ]
+}

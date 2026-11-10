@@ -8,6 +8,7 @@ from pathlib import Path
 import unittest
 from unittest.mock import patch
 import test_production_handoff_entropy_prefix_overlay as previous
+from qa_fixture_paths import repo_file
 
 preflight=previous.preflight
 ROOT=previous.ROOT
@@ -188,7 +189,10 @@ class CrossEntropyReviewedManifestTests(unittest.TestCase):
         self.assertEqual(v9['crossentropy_alignment_gate']['matched_requests'],21)
         self.assertEqual(v9['crossentropy_alignment_gate']['supplied_requests'],22)
         for row in v9['crossentropy_evidence_receipts']:
-            raw=(ROOT/row['path']).read_bytes()
+            raw=repo_file(row['path']).read_bytes()
+            if row['path']=='tests/test_ai1_crossentropy_timing.py':
+                # The review predates relocation of the test fixtures.
+                raw=raw.replace(b'tests/fixtures/qa/',b'docs/qa/evidence/',1)
             self.assertEqual((len(raw),sha(raw)),(row['bytes'],row['sha256']))
 
     def test_guard_bodies_exact_with_only_three_diagnostic_label_additions(self):
@@ -214,11 +218,11 @@ class CrossEntropyReviewedManifestTests(unittest.TestCase):
         allowed={'docs/qa/evidence/production-handoff-parts1-3/verify_handoff.py',
                  'tests/test_production_handoff_probability_dwell_overlay.py','tests/test_production_handoff_entropy_prefix_overlay.py'}
         for row in rows:
-            saved=(ROOT/row['historical_path']).read_bytes()
+            saved=repo_file(row['historical_path']).read_bytes()
             if row.get('historical_compression')=='gzip':saved=gzip.decompress(saved)
             self.assertEqual((len(saved),sha(saved)),(row['bytes'],row['sha256']))
             if row['path']not in allowed:
-                raw=(ROOT/row['path']).read_bytes();self.assertEqual((len(raw),sha(raw)),(row['bytes'],row['sha256']))
+                raw=repo_file(row['path']).read_bytes();self.assertEqual((len(raw),sha(raw)),(row['bytes'],row['sha256']))
 
 
 if __name__=='__main__':unittest.main()

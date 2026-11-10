@@ -4,6 +4,7 @@ import json
 import unittest
 from unittest.mock import patch
 import test_production_handoff_probability_overlay as previous
+from qa_fixture_paths import repo_file
 
 preflight=previous.preflight
 ROOT=previous.ROOT
@@ -137,14 +138,14 @@ class SurpriseReviewedManifestTests(unittest.TestCase):
         self.assertFalse(m['production_acceptance']['surprise_repaired_output_observed'])
         self.assertEqual(m['optional_evidence_files'],[])
         for row in m['evidence_receipts']:
-            raw=(ROOT/row['path']).read_bytes();self.assertEqual((len(raw),sha(raw)),(row['bytes'],row['sha256']))
+            raw=repo_file(row['path']).read_bytes();self.assertEqual((len(raw),sha(raw)),(row['bytes'],row['sha256']))
 
     def test_published_v5_and_original_test_files_unchanged(self):
         self.assertEqual(sha((preflight.D/'overlays/part1-probability-roadmap-and-part3-v5.json').read_bytes()),
                          '6bc668f43c97b0d9867b2ab323c2d337599a5c4417c9fb5eb01644d7e9a7dbce')
-        self.assertEqual(sha((ROOT/'tests/test_production_handoff_overlay.py').read_bytes()),
+        self.assertEqual(sha((preflight.D/'historical/probability-numeric-dwell-v7-before/test_production_handoff_overlay.py').read_bytes()),
                          '3babfe70739a7146df1c4f84176ae80452722b770a4c22c0c83b8efdeecb2a69')
-        self.assertEqual(sha((ROOT/'tests/test_production_handoff_probability_overlay.py').read_bytes()),
+        self.assertEqual(sha((preflight.D/'historical/probability-numeric-dwell-v7-before/test_production_handoff_probability_overlay.py').read_bytes()),
                          'dbb041ef929150098126b49f3df048fafec4a5edbc36f52c0543f388543f8a44')
 
     def test_external_and_audio_AST_unchanged(self):

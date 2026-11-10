@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-01T11:44:01.727199+00:00",
+  "overlay_id": "part1-entropy-prefix-timing-and-part3-v8",
+  "base_commit": "927fba668656a682b3e29a288de64130ddc680dd",
+  "scope": "Exact seven-source controlled rerender. Additive v8; no Huffman/Part7HEAD or data/runtime/model/audio exemptions. One narrowly versioned diagnostic AST comparator exception; original bytes preserved.",
+  "release_files": [
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/verify_handoff.py",
+      "bytes": 15366,
+      "sha256": "ed45ca8a2fb61ba95b8c7e01d8e5ffd90e063540aa070f71ec782a314511dad0"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-entropy-prefix-timing-and-part3-v8.json",
+      "bytes": 22090,
+      "sha256": "826263149e508e3e54500164d716c571fafab3b6129cca1eb33c712e7a31549f"
+    },
+    {
+      "path": "tests/test_production_handoff_entropy_prefix_overlay.py",
+      "bytes": 13140,
+      "sha256": "aefa5281d24385615788387c21bcabad43e05e6dc9a78041b0e3f5730e6c815f"
+    },
+    {
+      "path": "tests/test_production_handoff_probability_dwell_overlay.py",
+      "bytes": 13008,
+      "sha256": "bda28f4fad6bfa773784917b8908ee757aa784abf65d479f85e6e441e2546221"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/README.md",
+      "bytes": 10630,
+      "sha256": "427aafe5249018f13fc176ce8e9014a866134523a8f40125def570bc8dc59146"
+    },
+    {
+      "path": "docs/qa/production-handoff-parts1-3.md",
+      "bytes": 38953,
+      "sha256": "8efb6d853490584740ebfce0f6c981a76a6a65a1bf89dad3935e9f05e980273f"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-entropy-prefix-v8-checks/summary.json",
+      "bytes": 5776,
+      "sha256": "d4a26dd93c470c0c772d90dc94162ca562cfa038057c7e61777d0c7004e13ae9"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-entropy-prefix-v8-checks/manifest.json",
+      "bytes": 2740,
+      "sha256": "1dda2a6c65639bff5288a1033540fcb65cd5daac08410c9556abecf44ab8b1c1"
+    }
+  ],
+  "overlay_sha256": "826263149e508e3e54500164d716c571fafab3b6129cca1eb33c712e7a31549f",
+  "helper_sha256": "ed45ca8a2fb61ba95b8c7e01d8e5ffd90e063540aa070f71ec782a314511dad0",
+  "prior_pins": [
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/verify_handoff.py",
+      "bytes": 14654,
+      "sha256": "6362af754a9b42dd06a3c1b7f2665929f94ae35fc64f6ea19ca175affd0bcb25",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/verify_handoff.py"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/README.md",
+      "bytes": 9142,
+      "sha256": "57e717959a8f53d4f68c6aaf2b4da759725a6d03ed1764aca47ede552d108070",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/README.md"
+    },
+    {
+      "path": "docs/qa/production-handoff-parts1-3.md",
+      "bytes": 37465,
+      "sha256": "9187dc5c174e93477c36f4d0edef84b2e0c1c7e510d22abfb17935ed4da4830c",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/production-handoff-parts1-3.md"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/manifest-probability-dwell-part3-v7.json",
+      "bytes": 8344,
+      "sha256": "28fb4522b10562cdc003a0648681c9a1392ef5c840935ade975afbc49b364548",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/manifest-probability-dwell-part3-v7.json"
+    },
+    {
+      "path": "tests/test_production_handoff_overlay.py",
+      "bytes": 34069,
+      "sha256": "3babfe70739a7146df1c4f84176ae80452722b770a4c22c0c83b8efdeecb2a69",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/test_production_handoff_overlay.py"
+    },
+    {
+      "path": "tests/test_production_handoff_probability_overlay.py",
+      "bytes": 11273,
+      "sha256": "dbb041ef929150098126b49f3df048fafec4a5edbc36f52c0543f388543f8a44",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/test_production_handoff_probability_overlay.py"
+    },
+    {
+      "path": "tests/test_production_handoff_surprise_overlay.py",
+      "bytes": 11302,
+      "sha256": "1c9faef1e99a12056c2a73a057aa3b680878b065571c39dd598f3b6c5e57196e",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/test_production_handoff_surprise_overlay.py"
+    },
+    {
+      "path": "tests/test_production_handoff_probability_dwell_overlay.py",
+      "bytes": 11260,
+      "sha256": "a2104fe0a8f1c52d8d08f0d4555533b4106c38f9189c7f7c3d43618b89ad1516",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/test_production_handoff_probability_dwell_overlay.py"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-probability-numeric-dwell-surprise-roadmap-and-part3-v7.json",
+      "bytes": 13558,
+      "sha256": "f501b221cb5e92608a32e7570dcfbe145dd4ab02e6fc8c62643ae9d1b9651bd9",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/overlays/part1-probability-numeric-dwell-surprise-roadmap-and-part3-v7.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-probability-roadmap-and-part3-v5.json",
+      "bytes": 8593,
+      "sha256": "6bc668f43c97b0d9867b2ab323c2d337599a5c4417c9fb5eb01644d7e9a7dbce",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/overlays/part1-probability-roadmap-and-part3-v5.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-roadmap-and-part3-v4.json",
+      "bytes": 5609,
+      "sha256": "f3480355639457d5da3bcc1ee70f0833cd2ca26a22c7fb4169250d9b50472bf3",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/overlays/part1-roadmap-and-part3-v4.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-surprise-probability-roadmap-and-part3-v6.json",
+      "bytes": 11065,
+      "sha256": "916421ce802ab387df104242a54e7d4e2d9b5869825ea52df069b95b8c5d345c",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/overlays/part1-surprise-probability-roadmap-and-part3-v6.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part3-svd-outro-production-v3.json",
+      "bytes": 3597,
+      "sha256": "69a16ca2846362919dfd8e9a024120fb3cba19264a643ad70b994c65f427f178",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/overlays/part3-svd-outro-production-v3.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/svd-production-polish-v2.json",
+      "bytes": 1456,
+      "sha256": "631b584e78776a8f6fe9fb3a209285e20d463ebea62b17609816c6c7c7ca49ca",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/overlays/svd-production-polish-v2.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/svd-reveal-v1.json",
+      "bytes": 32227,
+      "sha256": "30bd30dd975727a0448111f40710cd8192ffc8ed1f13847dfaed5c634e379bf8",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/entropy-prefix-v8-before/overlays/svd-reveal-v1.json"
+    }
+  ],
+  "frozen_guard_inventory_pins": [
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/cache-inventory.json",
+      "bytes": 46061,
+      "sha256": "8cf34dd7acc11ba29eb37fa6881c70f706f7209301540145d679fd4dad3d2af4"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/reviewed-source-inventory.json",
+      "bytes": 30831,
+      "sha256": "1c9eb76a370a5b74b79b7a0aa5b7e8f9300bfe4cd00ed494f3801d3ac50a79f2"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/external-validation-dependencies.json",
+      "bytes": 7325,
+      "sha256": "9e60b6b1545b517c79107d27ae3a1e835adf6b0859cd3051dbfb1eabcd688480"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/real-information-audio.json",
+      "bytes": 10569,
+      "sha256": "a1da73b811d29cc6675dbff5c1d095bb31228ae3cea97ea21c10366cc83a06c5"
+    }
+  ],
+  "focused_tests": {
+    "total": 107,
+    "elapsed_seconds": 7.232,
+    "previous_count": 92,
+    "previous_byte_exact": 91,
+    "previous_precisely_revised_diagnostic_AST_test": 1,
+    "new": 15,
+    "log_sha256": "4c38e511ba5ac09fae32ea319137e2e6fd4eecf692f458d1795f4cb022521918"
+  },
+  "actual_checks": {
+    "actual_checks": 28,
+    "all_expected": true,
+    "final_strict_file_count": 268,
+    "source_only_fixture_commit": "2793042ff9c266f767cfc285c8dde760fbdbf6be",
+    "reused_input_count": 156,
+    "reused_input_logical_bytes": 80858842,
+    "new_data_copy_bytes": 0,
+    "old_payload_stat_hashes_exact": true,
+    "old_156_symlink_targets_and_inodes_exact": true,
+    "old_fixture_git_exact": true,
+    "public_model_files_exact": true,
+    "guard_minimum_bytes": 536870912,
+    "free_after_bytes": 544604160
+  },
+  "actual_check_receipt": {
+    "path": "docs/qa/evidence/production-handoff-parts1-3/overlay-entropy-prefix-v8-checks/actual-checks-receipt.json.gz",
+    "raw_bytes": 165667,
+    "raw_sha256": "c1ed0659874c0ccc08ba4f62c0fc7aea291a8904dd3aa855f2272372200e977e",
+    "gzip_bytes": 35433,
+    "gzip_sha256": "72f4dbfbfe24a942f600f678e333267bb9140662d7442228bd63828b626208bd"
+  },
+  "v7_test_exception": {
+    "path": "tests/test_production_handoff_probability_dwell_overlay.py",
+    "before_sha256": "a2104fe0a8f1c52d8d08f0d4555533b4106c38f9189c7f7c3d43618b89ad1516",
+    "after_sha256": "bda28f4fad6bfa773784917b8908ee757aa784abf65d479f85e6e441e2546221",
+    "reason": "Keep directverify structured rejection for two new paths without weakening any acceptanceguard; comparator admits exactly two diagnostic entries only."
+  },
+  "production_acceptance": {
+    "entropy_output_observed": false,
+    "entropy_output_accepted": false,
+    "prefix_output_observed": false,
+    "prefix_output_accepted": false,
+    "remaining": [
+      "Controlled narrated rerender",
+      "Actual readability/pacing, listening and sync",
+      "Production-resolution output review"
+    ]
+  },
+  "integrated_suite": "Pending root run after this helper/newtest/release freeze;107focusedgate cases are not a fullrepository count."
+}

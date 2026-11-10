@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-01T10:47:57.883493+00:00",
+  "overlay_id": "part1-probability-numeric-dwell-surprise-roadmap-and-part3-v7",
+  "base_commit": "927fba668656a682b3e29a288de64130ddc680dd",
+  "scope": "Additive exact-five-source controlled rerender gate. Earlier v1\u2013v6 remain unchanged; no movingHEAD/P6/sourceextra/audio/runtime/data exemptions or repaired output approval.",
+  "release_files": [
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/verify_handoff.py",
+      "bytes": 14654,
+      "sha256": "6362af754a9b42dd06a3c1b7f2665929f94ae35fc64f6ea19ca175affd0bcb25"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-probability-numeric-dwell-surprise-roadmap-and-part3-v7.json",
+      "bytes": 13558,
+      "sha256": "f501b221cb5e92608a32e7570dcfbe145dd4ab02e6fc8c62643ae9d1b9651bd9"
+    },
+    {
+      "path": "tests/test_production_handoff_probability_dwell_overlay.py",
+      "bytes": 11260,
+      "sha256": "a2104fe0a8f1c52d8d08f0d4555533b4106c38f9189c7f7c3d43618b89ad1516"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/README.md",
+      "bytes": 9142,
+      "sha256": "57e717959a8f53d4f68c6aaf2b4da759725a6d03ed1764aca47ede552d108070"
+    },
+    {
+      "path": "docs/qa/production-handoff-parts1-3.md",
+      "bytes": 37465,
+      "sha256": "9187dc5c174e93477c36f4d0edef84b2e0c1c7e510d22abfb17935ed4da4830c"
+    }
+  ],
+  "overlay_sha256": "f501b221cb5e92608a32e7570dcfbe145dd4ab02e6fc8c62643ae9d1b9651bd9",
+  "helper_sha256": "6362af754a9b42dd06a3c1b7f2665929f94ae35fc64f6ea19ca175affd0bcb25",
+  "tested_new_source_sha256": "a2104fe0a8f1c52d8d08f0d4555533b4106c38f9189c7f7c3d43618b89ad1516",
+  "prior_overlay_pins": [
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-probability-roadmap-and-part3-v5.json",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/probability-numeric-dwell-v7-before/overlays/part1-probability-roadmap-and-part3-v5.json",
+      "bytes": 8593,
+      "sha256": "6bc668f43c97b0d9867b2ab323c2d337599a5c4417c9fb5eb01644d7e9a7dbce"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-roadmap-and-part3-v4.json",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/probability-numeric-dwell-v7-before/overlays/part1-roadmap-and-part3-v4.json",
+      "bytes": 5609,
+      "sha256": "f3480355639457d5da3bcc1ee70f0833cd2ca26a22c7fb4169250d9b50472bf3"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-surprise-probability-roadmap-and-part3-v6.json",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/probability-numeric-dwell-v7-before/overlays/part1-surprise-probability-roadmap-and-part3-v6.json",
+      "bytes": 11065,
+      "sha256": "916421ce802ab387df104242a54e7d4e2d9b5869825ea52df069b95b8c5d345c"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part3-svd-outro-production-v3.json",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/probability-numeric-dwell-v7-before/overlays/part3-svd-outro-production-v3.json",
+      "bytes": 3597,
+      "sha256": "69a16ca2846362919dfd8e9a024120fb3cba19264a643ad70b994c65f427f178"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/svd-production-polish-v2.json",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/probability-numeric-dwell-v7-before/overlays/svd-production-polish-v2.json",
+      "bytes": 1456,
+      "sha256": "631b584e78776a8f6fe9fb3a209285e20d463ebea62b17609816c6c7c7ca49ca"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/svd-reveal-v1.json",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/probability-numeric-dwell-v7-before/overlays/svd-reveal-v1.json",
+      "bytes": 32227,
+      "sha256": "30bd30dd975727a0448111f40710cd8192ffc8ed1f13847dfaed5c634e379bf8"
+    }
+  ],
+  "prior_test_pins": [
+    {
+      "path": "tests/test_production_handoff_overlay.py",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/probability-numeric-dwell-v7-before/test_production_handoff_overlay.py",
+      "bytes": 34069,
+      "sha256": "3babfe70739a7146df1c4f84176ae80452722b770a4c22c0c83b8efdeecb2a69"
+    },
+    {
+      "path": "tests/test_production_handoff_probability_overlay.py",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/probability-numeric-dwell-v7-before/test_production_handoff_probability_overlay.py",
+      "bytes": 11273,
+      "sha256": "dbb041ef929150098126b49f3df048fafec4a5edbc36f52c0543f388543f8a44"
+    },
+    {
+      "path": "tests/test_production_handoff_surprise_overlay.py",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/probability-numeric-dwell-v7-before/test_production_handoff_surprise_overlay.py",
+      "bytes": 11302,
+      "sha256": "1c9faef1e99a12056c2a73a057aa3b680878b065571c39dd598f3b6c5e57196e"
+    }
+  ],
+  "frozen_guard_inventory_pins": [
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/cache-inventory.json",
+      "historical_path": null,
+      "bytes": 46061,
+      "sha256": "8cf34dd7acc11ba29eb37fa6881c70f706f7209301540145d679fd4dad3d2af4"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/reviewed-source-inventory.json",
+      "historical_path": null,
+      "bytes": 30831,
+      "sha256": "1c9eb76a370a5b74b79b7a0aa5b7e8f9300bfe4cd00ed494f3801d3ac50a79f2"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/external-validation-dependencies.json",
+      "historical_path": null,
+      "bytes": 7325,
+      "sha256": "9e60b6b1545b517c79107d27ae3a1e835adf6b0859cd3051dbfb1eabcd688480"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/real-information-audio.json",
+      "historical_path": null,
+      "bytes": 10569,
+      "sha256": "a1da73b811d29cc6675dbff5c1d095bb31228ae3cea97ea21c10366cc83a06c5"
+    }
+  ],
+  "historical_helper_pin": {
+    "path": "docs/qa/evidence/production-handoff-parts1-3/verify_handoff.py",
+    "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/probability-numeric-dwell-v7-before/verify_handoff.py",
+    "bytes": 14134,
+    "sha256": "d6ca66b0f32cca9bcbe0352e8240ac1daa87dfea76b8e10a9d4490a5123ad1c6"
+  },
+  "focused_tests": {
+    "total": 92,
+    "old_unchanged": 78,
+    "new": 14,
+    "elapsed_seconds": 5.774,
+    "log_sha256": "68ad4c30c7b92b104d3a95b60ef8c5f90287ea48c1bab9a1b5482940dd7c5f18",
+    "scope": "Actual focused existing gate tests plus14 new; not an integrated fullrepository count."
+  },
+  "actual_checks": {
+    "outcomes": 19,
+    "all_expected": true,
+    "final_strict_files": 268,
+    "source_only_fixture_commit": "a338b45df68d48432767498fe3d77828382b276c",
+    "original_inputs": 156,
+    "reused_input_bytes": 80858842,
+    "new_data_copy_bytes": 0,
+    "old_payload_and_Git_and_publicmodel_witnesses_exact": true,
+    "guard_minimum_bytes": 536870912,
+    "free_after": 563539968,
+    "receipt_path": "docs/qa/evidence/production-handoff-parts1-3/overlay-probability-dwell-v7-checks/actual-checks-receipt.json.gz",
+    "receipt_raw_bytes": 33678,
+    "receipt_raw_sha256": "17cf74262e2734899b6e825b8561474501d46089e83dccd834784acba627c692",
+    "receipt_gzip_bytes": 3791,
+    "receipt_gzip_sha256": "846188b497046d6c15a81c432b4de38455cbaf5aef2716dfd5c5bdf9063bb90c"
+  },
+  "production_acceptance": {
+    "probability_source_sha256": "5e856dd92a662a8a7f1bfc370e57e0c937722c5e2f9c35e99960e1cfd80724ea",
+    "new_output_observed": false,
+    "new_output_accepted": false,
+    "minimum_finished_numeric_hold_seconds": 1.5,
+    "narration_block_metadata_count": 11,
+    "bookmark_count": 18,
+    "whole_movie_duration_equivalent": false,
+    "remaining": [
+      "Actual fresh narrated render and finished-number readability/pacing",
+      "Actual bookmark/frame timing, listening and synchronization",
+      "Production-resolution rendered output acceptance"
+    ]
+  },
+  "integrated_suite": "Pending root run after this exact helper/newtest/rootJSON freeze. Earlier641-suite scope predates this5e/v7 change and is not relabeled."
+}

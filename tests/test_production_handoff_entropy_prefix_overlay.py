@@ -8,6 +8,7 @@ from pathlib import Path
 import unittest
 from unittest.mock import patch
 import test_production_handoff_probability_dwell_overlay as previous
+from qa_fixture_paths import repo_file
 
 preflight=previous.preflight
 ROOT=previous.ROOT
@@ -171,20 +172,24 @@ class EntropyPrefixReviewedManifestTests(unittest.TestCase):
                 # its actual historical test receipt, not a rewritten hash.
                 self.assertEqual((row['bytes'],row['sha256']),
                     (18630,'22ee58e639f43e2b1e084383161a3f3fc1332255985974f9361b7619f48062d3'))
-                raw=gzip.decompress((ROOT/'docs/qa/evidence/ai1-entropy-prefix-narrated-timing-repair/test_ai1_entropy_prefix_timing.py.gz').read_bytes())
+                raw=gzip.decompress((ROOT/'tests/fixtures/qa/ai1-entropy-prefix-narrated-timing-repair/test_ai1_entropy_prefix_timing.py.gz').read_bytes())
             else:
-                raw=(ROOT/row['path']).read_bytes()
+                raw=repo_file(row['path']).read_bytes()
             self.assertEqual((len(raw),sha(raw)),(row['bytes'],row['sha256']))
 
     def test_prior_bytes_remain_exact_except_precisely_disclosed_v7_test_and_dispatch(self):
         history=D/'historical/entropy-prefix-v8-before';rows=json.loads((history/'preserved-pins.json').read_text())['files']
         allowed={'docs/qa/evidence/production-handoff-parts1-3/verify_handoff.py',
                  'docs/qa/evidence/production-handoff-parts1-3/README.md','docs/qa/production-handoff-parts1-3.md',
-                 'tests/test_production_handoff_probability_dwell_overlay.py'}
+                 'tests/test_production_handoff_probability_dwell_overlay.py',
+                 # Original test sources are verified from the archived copies below.
+                 'tests/test_production_handoff_overlay.py',
+                 'tests/test_production_handoff_probability_overlay.py',
+                 'tests/test_production_handoff_surprise_overlay.py'}
         for row in rows:
-            raw=(ROOT/row['historical_path']).read_bytes();self.assertEqual((len(raw),sha(raw)),(row['bytes'],row['sha256']))
+            raw=repo_file(row['historical_path']).read_bytes();self.assertEqual((len(raw),sha(raw)),(row['bytes'],row['sha256']))
             if row['path'] not in allowed:
-                raw=(ROOT/row['path']).read_bytes();self.assertEqual((len(raw),sha(raw)),(row['bytes'],row['sha256']))
+                raw=repo_file(row['path']).read_bytes();self.assertEqual((len(raw),sha(raw)),(row['bytes'],row['sha256']))
         self.assertEqual(preflight.NUMERIC_DWELL_OVERLAY,'part1-probability-numeric-dwell-surprise-roadmap-and-part3-v7')
 
 

@@ -6,6 +6,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 import test_production_handoff_overlay as old
+from qa_fixture_paths import repo_file
 
 preflight = old.preflight
 ROOT = old.ROOT
@@ -159,13 +160,13 @@ class ProbabilityReviewedManifestTests(unittest.TestCase):
         self.assertFalse(overlay['production_acceptance']['part1_probability_repaired_output_accepted'])
         self.assertEqual(overlay['optional_evidence_files'],[])
         for row in overlay['evidence_receipts']:
-            raw=(ROOT/row['path']).read_bytes()
+            raw=repo_file(row['path']).read_bytes()
             self.assertEqual((len(raw),sha(raw)),(row['bytes'],row['sha256']))
 
     def test_v4_manifest_and_original_tests_are_byte_exact(self):
         self.assertEqual(sha((preflight.D/'overlays/part1-roadmap-and-part3-v4.json').read_bytes()),
                          'f3480355639457d5da3bcc1ee70f0833cd2ca26a22c7fb4169250d9b50472bf3')
-        self.assertEqual(sha((ROOT/'tests/test_production_handoff_overlay.py').read_bytes()),
+        self.assertEqual(sha((preflight.D/'historical/probability-numeric-dwell-v7-before/test_production_handoff_overlay.py').read_bytes()),
                          '3babfe70739a7146df1c4f84176ae80452722b770a4c22c0c83b8efdeecb2a69')
 
     def test_external_and_audio_guard_bodies_unchanged(self):

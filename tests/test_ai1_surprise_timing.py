@@ -11,7 +11,7 @@ from types import SimpleNamespace
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-EVIDENCE = ROOT / "docs/qa/evidence/ai1-surprise-narrated-timing-repair"
+EVIDENCE = ROOT / "tests/fixtures/qa/ai1-surprise-narrated-timing-repair"
 SOURCE = ROOT / "videos/ai/ai1/s03_surprise.py"
 read = lambda name: gzip.decompress((EVIDENCE / (name + ".gz")).read_bytes())
 DIAGNOSTIC = json.loads(read("exact-diagnostic.json"))

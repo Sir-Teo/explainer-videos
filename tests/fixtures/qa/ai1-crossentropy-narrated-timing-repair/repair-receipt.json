@@ -1,0 +1,318 @@
+{
+  "created_utc": "2026-11-01T14:36:36.011564+00:00",
+  "scope": "Scene-local CrossEntropy scheduling repair; no narration/master/math/visual-order/data/sharedhelper/table changes; no synth/render/decode/listening or production job.",
+  "source_before_sha256": "149412abb320476bf16ba2abb7c632d4f40b707274b576eb12c77b9265f9948f",
+  "source_after_sha256": "5d4a5d584d68b8167d63b5949c4a0d214f1271b9f201e1382f3e6b64f566d15f",
+  "exact_host_diagnostic_bytes": 144865,
+  "exact_host_diagnostic_sha256": "0f461bd770ccf3baeb8ec1cdf1cdb8b9430b82ea9e86d1a17ad7d473b56e92ad",
+  "host_library_file_id": "libfile_ba8341acb4c88191afe7f5b0df769d5b",
+  "host_job_key": "af9a79b6a4dc8c7d4723b2ac871dac294514bf25ecaeabaa28c9bd795f4bd79a",
+  "host_original_schedule_report_path": "/workspace/cloud-production/jobs/af9a79b6a4dc8c7d4723b2ac871dac294514bf25ecaeabaa28c9bd795f4bd79a/evidence/CrossEntropy/fast-narrated-timing-v8/schedule-report.json",
+  "host_original_schedule_report_sha256": "a94c187f50e146db2a4425cfefd407cd6571ee75d2ed0f3f3415b6cd875352c2",
+  "host_source_base_commit": "927fba668656a682b3e29a288de64130ddc680dd",
+  "host_data_identity_sha256": "2a9a41d609ceb81365771d3233d69ca8d5cbd9117f8081f67453e4807a677ea9",
+  "host_voice_identity_sha256": "57c00c9290971b454265f7fb37efd2d1b0e6fa097d08cafe4ad975524f877bed",
+  "preserved_provided_master_metadata": [
+    {
+      "key": "d00a3bc779e3ee21",
+      "path": "/workspace/cloud-production/jobs/af9a79b6a4dc8c7d4723b2ac871dac294514bf25ecaeabaa28c9bd795f4bd79a/audio-masters/en/d00a3bc779e3ee21.float.wav",
+      "bytes": 353360,
+      "sha256": "18add10dbcba8f7db63901f0b5c3f6139960226b1ccf3b992dbddb858a43da06"
+    },
+    {
+      "key": "dfe12e195ce86f53",
+      "path": "/workspace/cloud-production/jobs/af9a79b6a4dc8c7d4723b2ac871dac294514bf25ecaeabaa28c9bd795f4bd79a/audio-masters/en/dfe12e195ce86f53.float.wav",
+      "bytes": 2120720,
+      "sha256": "059fa72c16012061df1acd2575fc552b792abbdd806046655c8581dde85e0116"
+    },
+    {
+      "key": "2364721a0dbac829",
+      "path": "/workspace/cloud-production/jobs/af9a79b6a4dc8c7d4723b2ac871dac294514bf25ecaeabaa28c9bd795f4bd79a/audio-masters/en/2364721a0dbac829.float.wav",
+      "bytes": 1539920,
+      "sha256": "37769360541b1ba6f24a49818166f75ca3b17cf2a5a4849612bd6d3d3603d7ba"
+    },
+    {
+      "key": "0c35b58d8418e05b",
+      "path": "/workspace/cloud-production/jobs/af9a79b6a4dc8c7d4723b2ac871dac294514bf25ecaeabaa28c9bd795f4bd79a/audio-masters/en/0c35b58d8418e05b.float.wav",
+      "bytes": 2512400,
+      "sha256": "b4e9cca5ecf782f25de9e10ffe2f81a9046d59ae8f6ab6058d630b575d13b05e"
+    },
+    {
+      "key": "1629e4ba9afeaf43",
+      "path": "/workspace/cloud-production/jobs/af9a79b6a4dc8c7d4723b2ac871dac294514bf25ecaeabaa28c9bd795f4bd79a/audio-masters/en/1629e4ba9afeaf43.float.wav",
+      "bytes": 2187920,
+      "sha256": "b43429eefc9a2751f5143fb260b619146a178fdd80150bb88c211242ee11e86d"
+    },
+    {
+      "key": "b53e76aa01be0e62",
+      "path": "/workspace/cloud-production/jobs/af9a79b6a4dc8c7d4723b2ac871dac294514bf25ecaeabaa28c9bd795f4bd79a/audio-masters/en/b53e76aa01be0e62.float.wav",
+      "bytes": 2686160,
+      "sha256": "f3393c27717b0b7a66a43cb17c7c14dc8d38f47c39993f993e5687de35ba3895"
+    },
+    {
+      "key": "390078cc2a58ce2f",
+      "path": "/workspace/cloud-production/jobs/af9a79b6a4dc8c7d4723b2ac871dac294514bf25ecaeabaa28c9bd795f4bd79a/audio-masters/en/390078cc2a58ce2f.float.wav",
+      "bytes": 2642960,
+      "sha256": "87adf73a58cf8258707d09a04c7ea156bfc4236b7cd2c8c8b4422e50fb416cab"
+    },
+    {
+      "key": "c624ca341afe38d4",
+      "path": "/workspace/cloud-production/jobs/af9a79b6a4dc8c7d4723b2ac871dac294514bf25ecaeabaa28c9bd795f4bd79a/audio-masters/en/c624ca341afe38d4.float.wav",
+      "bytes": 2520080,
+      "sha256": "618d8045d6ec3ab7cd53f68182beec8f5f5e5c870f7db8f786651bc8c7f6b740"
+    },
+    {
+      "key": "a75617a70550454f",
+      "path": "/workspace/cloud-production/jobs/af9a79b6a4dc8c7d4723b2ac871dac294514bf25ecaeabaa28c9bd795f4bd79a/audio-masters/en/a75617a70550454f.float.wav",
+      "bytes": 2684240,
+      "sha256": "c5f9de08e9ca726f5b6d13096617162bd9c9a6de5fd1ce4cfe722bf521c546a9"
+    }
+  ],
+  "audio_access_scope": "Nine supplied master identities preserved; audio bytes not transferred/opened/generated or independently verified by this cloud owner.",
+  "host_observed_late_seconds": [
+    1.36,
+    0.55,
+    1.15
+  ],
+  "source_nominals": {
+    "decompose_intro": [
+      1.0,
+      2.0
+    ],
+    "gibbs_step1_c_to_d": [
+      0.6,
+      1.2,
+      0.5
+    ],
+    "gibbs_step2_d_to_e": [
+      0.6,
+      1.2,
+      0.8
+    ]
+  },
+  "current_affected_span_checks": 27,
+  "before_and_after_phase_rows": 54,
+  "validated_fps": [
+    15,
+    30,
+    60
+  ],
+  "validated_arrival_phases_frames": [
+    0.0,
+    0.49,
+    1.0
+  ],
+  "all_current_spans_finish_atleast_one_frame_before_target": true,
+  "span_summary": [
+    {
+      "method": "decompose",
+      "start": null,
+      "end": "a",
+      "cases": 9,
+      "minimum_cue_lead_seconds": 0.0318333333333336,
+      "minimum_requested_stage_seconds": 0.4703875968992249,
+      "minimum_quantized_stage_seconds": 0.5333333333333333
+    },
+    {
+      "method": "gibbs",
+      "start": "c",
+      "end": "d",
+      "cases": 9,
+      "minimum_cue_lead_seconds": 0.03333333333333144,
+      "minimum_requested_stage_seconds": 0.31772486772486747,
+      "minimum_quantized_stage_seconds": 0.33333333333333215
+    },
+    {
+      "method": "gibbs",
+      "start": "d",
+      "end": "e",
+      "cases": 9,
+      "minimum_cue_lead_seconds": 0.041833333333332945,
+      "minimum_requested_stage_seconds": 0.39259259259259266,
+      "minimum_quantized_stage_seconds": 0.3999999999999986
+    }
+  ],
+  "minimum_final_gibbs_settled_reading_residual_seconds": 1.9499999999999957,
+  "reading_scope": "All4 Gibbs proof rows retained by keep4; final row completes with>=1.5s remaining within the same actual utterance and stays visible into the next utterance. Decomposition row0 persists alongside copied row1 after the compressed Write. Short reveal stages still require actual production pacing/reading review.",
+  "metadata_alignment_discrepancy": {
+    "exact_reconstructed_requests": 21,
+    "total_provided_requests": 22,
+    "block_index": 3,
+    "mark": "c",
+    "provided_relative_target_seconds": 15.97,
+    "repository_tracker_with_provided_aligned_tokens_seconds": 14.5,
+    "raw_proper_name": "Kullback–Leibler",
+    "spoken_token_split": "Kullback Leibler",
+    "current_target_word_at_raw_index": "1951",
+    "scope": "Preserved explicit discrepancy. All3 repaired cue targets exactly match supplied targets. No metadata/marks/narration altered to force agreement; actual host preflight must reconcile production mapping.",
+    "observed_raw_prefix_token_count": 41,
+    "observed_aligned_word_index41": [
+      "1951",
+      14.5,
+      15.540000000000001
+    ],
+    "observed_aligned_word_index42": [
+      "Swapping",
+      15.97,
+      16.45
+    ],
+    "repository_mapping_fact": "Repository English tokens split on whitespace; raw Kullback–Leibler is one token, supplied spoken Kullback Leibler has two. Raw index41 therefore selects1951 in supplied alignment.",
+    "host_production_mapping_cause": "UNVERIFIED: report does not include host tracker/normalization implementation. Host may remap raw to spoken tokens, but that is a hypothesis, not proven by this cloud read-only source audit.",
+    "host_and_repository_c_authorities_preserved": true
+  },
+  "focused_tests": {
+    "count": 7,
+    "elapsed_seconds": 3.381,
+    "outcome": "passed",
+    "log_sha256": "41dbd93610226e7cc624e620211d7b2e71c2c7d0a5a26de4b9b31b3bb8e77bba",
+    "initial_failure": "The first run passed6/7 and detected the one untouched cue-alignment discrepancy; raw initial log retained. Test now explicitly asserts the observed mismatch rather than claiming22/22 identity."
+  },
+  "invariants": {
+    "entire_module_AST_after_reversing_owned_timing_exact": true,
+    "all9_voiceover_expressions_exact": true,
+    "all23_mark_literals_and22_wait_requests_preserved": true,
+    "animation_argument_AST_and_reveal_order_exact": true,
+    "no_absolute_scene_time_constants": true,
+    "adapter_restores_class_descriptor_or_exact_instance_override_even_on_exception": true,
+    "only3_span_run_time_budgets_change": true
+  },
+  "impossible_budget_scope": "Overdue/physically impossible deadlines return positive one-frame stages; tests deliberately do not claim synchronization/readability success. No universal all-fps guarantee.",
+  "source_timing_blocks": [
+    {
+      "method": "card",
+      "voiceover_body_AST_statements": [
+        "self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))"
+      ],
+      "scope": "Entire body inspected as source; only the3 repaired spans and Gibbs retained tail execute in controlled timing fixtures."
+    },
+    {
+      "method": "wrong_code",
+      "voiceover_body_AST_statements": [
+        "self.play(FadeIn(head[0]), FadeIn(head[1:]), FadeIn(hdr))",
+        "self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in bet_rows], lag_ratio=0.5), run_time=2.0)",
+        "self.play(FadeIn(bet_cap))",
+        "vo.wait_until('a')",
+        "self.play(FadeIn(sub))"
+      ],
+      "scope": "Entire body inspected as source; only the3 repaired spans and Gibbs retained tail execute in controlled timing fixtures."
+    },
+    {
+      "method": "wrong_code",
+      "voiceover_body_AST_statements": [
+        "vo.wait_until('a')",
+        "self.play(FadeOut(bets))",
+        "self.play(Create(base), FadeIn(true), FadeIn(legend[0]))",
+        "vo.wait_until('b')",
+        "self.play(FadeIn(wrong), FadeIn(legend[1]), FadeIn(e_lab), FadeIn(z_lab), run_time=1.5)"
+      ],
+      "scope": "Entire body inspected as source; only the3 repaired spans and Gibbs retained tail execute in controlled timing fixtures."
+    },
+    {
+      "method": "decompose",
+      "voiceover_body_AST_statements": [
+        "intro_times = _bookmark_run_times(vo, 'a', 1.0, 2.0)",
+        "self.play(FadeOut(self.parts), run_time=intro_times[0])",
+        "self.play(Write(rows[0]), run_time=intro_times[1])",
+        "vo.wait_until('a')",
+        "self.play(TransformMatchingTex(rows[0].copy(), rows[1]))",
+        "self.play(GrowFromCenter(b1), FadeIn(t1))",
+        "vo.wait_until('b')",
+        "self.play(GrowFromCenter(b2), FadeIn(t2))",
+        "vo.wait_until('c')",
+        "self.play(LaggedStart(*[FadeIn(n) for n in nums], lag_ratio=0.5), run_time=2.5)"
+      ],
+      "scope": "Entire body inspected as source; only the3 repaired spans and Gibbs retained tail execute in controlled timing fixtures."
+    },
+    {
+      "method": "gibbs",
+      "voiceover_body_AST_statements": [
+        "self.play(FadeIn(head), Create(ax), Create(lg), run_time=1.5)",
+        "vo.wait_until('a')",
+        "self.play(FadeIn(pa), FadeIn(pb), Create(chord), FadeIn(pm), FadeIn(pc), Create(gap), FadeIn(cap))",
+        "vo.wait_until('b')",
+        "step(0)",
+        "vo.wait_until('c')",
+        "_bookmark_ladder_step(self, step, 1, vo, 'd', 0.6, 1.2, 0.5)",
+        "vo.wait_until('d')",
+        "_bookmark_ladder_step(self, step, 2, vo, 'e', 0.6, 1.2, 0.8)",
+        "vo.wait_until('e')",
+        "step(3)"
+      ],
+      "scope": "Entire body inspected as source; only the3 repaired spans and Gibbs retained tail execute in controlled timing fixtures."
+    },
+    {
+      "method": "gibbs",
+      "voiceover_body_AST_statements": [
+        "self.play(FadeOut(VGroup(ax, lg, pa, pb, chord, pm, pc, gap, cap)))",
+        "vo.wait_until('a')",
+        "self.play(FadeIn(res[0], shift=UP * 0.1))",
+        "vo.wait_until('b')",
+        "self.play(FadeIn(res[1:3]))",
+        "vo.wait_until('c')",
+        "self.play(FadeIn(res[3]))"
+      ],
+      "scope": "Entire body inspected as source; only the3 repaired spans and Gibbs retained tail execute in controlled timing fixtures."
+    },
+    {
+      "method": "loss",
+      "voiceover_body_AST_statements": [
+        "self.play(FadeIn(head))",
+        "vo.wait_until('a')",
+        "self.play(Write(f))",
+        "vo.wait_until('n')",
+        "self.play(FadeIn(ln_card, shift=UP * 0.2), FadeIn(unit))",
+        "vo.wait_until('b')",
+        "self.play(FadeOut(ln_card), FadeIn(rows[0]))",
+        "vo.wait_until('c')",
+        "self.play(FadeIn(rows[1]))",
+        "vo.wait_until('d')",
+        "self.play(FadeIn(rows[2]))"
+      ],
+      "scope": "Entire body inspected as source; only the3 repaired spans and Gibbs retained tail execute in controlled timing fixtures."
+    },
+    {
+      "method": "asymmetry",
+      "voiceover_body_AST_statements": [
+        "self.play(FadeIn(head), FadeIn(axes[0]), FadeIn(axes[1]), FadeIn(lp), FadeIn(lq))",
+        "self.add(*qs, *indicators, *readouts)",
+        "self.play(FadeIn(density_label))",
+        "vo.wait_until('a')",
+        "self.play(Indicate(objectives[0], color=C.MODEL_Q, scale_factor=1.02))",
+        "vo.wait_until('b')",
+        "self.play(replay(0), run_time=3.0, rate_func=linear)",
+        "self.play(FadeIn(res[0]), FadeIn(why_[0]))"
+      ],
+      "scope": "Entire body inspected as source; only the3 repaired spans and Gibbs retained tail execute in controlled timing fixtures."
+    },
+    {
+      "method": "asymmetry",
+      "voiceover_body_AST_statements": [
+        "vo.wait_until('a')",
+        "self.play(Indicate(objectives[1], color=C.MODEL_Q, scale_factor=1.02))",
+        "self.play(replay(1), run_time=3.0, rate_func=linear)",
+        "self.play(FadeIn(res[1]), FadeIn(why_[1]))"
+      ],
+      "scope": "Entire body inspected as source; only the3 repaired spans and Gibbs retained tail execute in controlled timing fixtures."
+    }
+  ],
+  "protected_current_observation_hashes": {
+    "explainer/analysis/__init__.py": "379b5a410f1ddcaaff52f831bff37ae63a23364b676457c03b45cd2422410a9d",
+    "explainer/voiceover.py": "3e95a22eb23b6c49469cbfcbd653cd92e0049a992aab1396fe5dc8fe8ac3897b",
+    "explainer/lang.py": "f627848b2bb2a7c0dfa3fea68118eee75f2c8c23e75dd367bc04b82674ef9d1b",
+    "videos/ai/ai1/zh_lines.py": "ff37869346cc68dbdc4208feaeed46bb95281bfe053888ebf929e01f744e9411",
+    "videos/ai/ai_text_zh.json": "07ea145aa599b86a88048d765909d8816ec0dacda95d679f30cbbadf972bd32e"
+  },
+  "manim_version": "0.22.0",
+  "remaining_gates": [
+    "OPEN metadata-alignment reconciliation for untouched decomposition cue c15.97vs14.50; do not promote21/22 consistency to full alignment approval.",
+    "Strict v9 production overlay registration by root/qa_integrity.",
+    "Host replay with existing masters; exact actual cue requests/visible completion within one frame.",
+    "Actual4K60motion/short-stagepacing/readability and listening.",
+    "Other languages/voices/frame rates have no new actual narrated approval."
+  ],
+  "git_stage_commit_push_performed": false,
+  "overall_metadata_alignment_gate": "OPEN / needs-host-reconciliation",
+  "source_clearance": "Controlled cached-master preflight only",
+  "production_approval": false,
+  "source_freeze_sha256": "5d4a5d584d68b8167d63b5949c4a0d214f1271b9f201e1382f3e6b64f566d15f"
+}

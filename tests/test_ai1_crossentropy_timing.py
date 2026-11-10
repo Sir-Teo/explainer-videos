@@ -12,7 +12,7 @@ import numpy as np
 from test_ai1_entropy_prefix_timing import actual_tracker, compile_nodes, function, Shape, Clock, tag
 
 ROOT = Path(__file__).resolve().parents[1]
-EVIDENCE = ROOT / 'docs/qa/evidence/ai1-crossentropy-narrated-timing-repair'
+EVIDENCE = ROOT / 'tests/fixtures/qa/ai1-crossentropy-narrated-timing-repair'
 SOURCE = ROOT / 'videos/ai/ai1/s08_cross_entropy.py'
 DIAGNOSTIC_SHA = '0f461bd770ccf3baeb8ec1cdf1cdb8b9430b82ea9e86d1a17ad7d473b56e92ad'
 

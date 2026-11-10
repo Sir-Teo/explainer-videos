@@ -1,0 +1,131 @@
+{
+  "files": [
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/verify_handoff.py",
+      "bytes": 15366,
+      "sha256": "ed45ca8a2fb61ba95b8c7e01d8e5ffd90e063540aa070f71ec782a314511dad0",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/crossentropy-v9-before/verify_handoff.py"
+    },
+    {
+      "path": "tests/test_production_handoff_probability_dwell_overlay.py",
+      "bytes": 13008,
+      "sha256": "bda28f4fad6bfa773784917b8908ee757aa784abf65d479f85e6e441e2546221",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/crossentropy-v9-before/test_production_handoff_probability_dwell_overlay.py"
+    },
+    {
+      "path": "tests/test_production_handoff_entropy_prefix_overlay.py",
+      "bytes": 13140,
+      "sha256": "aefa5281d24385615788387c21bcabad43e05e6dc9a78041b0e3f5730e6c815f",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/historical/crossentropy-v9-before/test_production_handoff_entropy_prefix_overlay.py"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/manifest.json",
+      "bytes": 6031,
+      "sha256": "027af3c8f528821620eb16d49d58dd5e2e09524084c3d1ec7bf09216c915b098",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/manifest.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/manifest-combined-part3-v3.json",
+      "bytes": 18445,
+      "sha256": "a65e2160422e294af5e5677dc2f1e4c6be862d308872da3d7bf18ba75570bcb1",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/manifest-combined-part3-v3.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/manifest-entropy-prefix-part3-v8.json",
+      "bytes": 10659,
+      "sha256": "0d13e5fb856ce1dcd8f4fa1d1f09f3ae70ba4a4b6e24e9b9c306773ab2f61ea5",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/manifest-entropy-prefix-part3-v8.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/manifest-surprise-part3-v6.json",
+      "bytes": 54506,
+      "sha256": "ab5c22ae30336730f93c4212dd1dedf093eb1d26853f40613102ff190ff90f8e",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/manifest-surprise-part3-v6.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/manifest-production-polish-v2.json",
+      "bytes": 7404,
+      "sha256": "8636a10a83bdbaf0820885ed2c67500840f4656cc37eff61908750fa20f439ef",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/manifest-production-polish-v2.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/manifest-probability-dwell-part3-v7.json",
+      "bytes": 8344,
+      "sha256": "28fb4522b10562cdc003a0648681c9a1392ef5c840935ade975afbc49b364548",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/manifest-probability-dwell-part3-v7.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/manifest-roadmap-part3-v4.json",
+      "bytes": 28988,
+      "sha256": "3f615e30e8fbea2facf2f98029ef616397641a8bff5a0e0795ba360ec9c86ce5",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/manifest-roadmap-part3-v4.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/manifest-probability-part3-v5.json",
+      "bytes": 41465,
+      "sha256": "4930cef75ce7ee9d02cd9dc4740b2b1a0f8ee3d654350ec053d8b2273d322a63",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/manifest-probability-part3-v5.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/svd-reveal-v1.json",
+      "bytes": 32227,
+      "sha256": "30bd30dd975727a0448111f40710cd8192ffc8ed1f13847dfaed5c634e379bf8",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/overlays/svd-reveal-v1.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/svd-production-polish-v2.json",
+      "bytes": 1456,
+      "sha256": "631b584e78776a8f6fe9fb3a209285e20d463ebea62b17609816c6c7c7ca49ca",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/overlays/svd-production-polish-v2.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-probability-numeric-dwell-surprise-roadmap-and-part3-v7.json",
+      "bytes": 13558,
+      "sha256": "f501b221cb5e92608a32e7570dcfbe145dd4ab02e6fc8c62643ae9d1b9651bd9",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-probability-numeric-dwell-surprise-roadmap-and-part3-v7.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-roadmap-and-part3-v4.json",
+      "bytes": 5609,
+      "sha256": "f3480355639457d5da3bcc1ee70f0833cd2ca26a22c7fb4169250d9b50472bf3",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-roadmap-and-part3-v4.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-probability-roadmap-and-part3-v5.json",
+      "bytes": 8593,
+      "sha256": "6bc668f43c97b0d9867b2ab323c2d337599a5c4417c9fb5eb01644d7e9a7dbce",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-probability-roadmap-and-part3-v5.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-entropy-prefix-timing-and-part3-v8.json",
+      "bytes": 22090,
+      "sha256": "826263149e508e3e54500164d716c571fafab3b6129cca1eb33c712e7a31549f",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-entropy-prefix-timing-and-part3-v8.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part3-svd-outro-production-v3.json",
+      "bytes": 3597,
+      "sha256": "69a16ca2846362919dfd8e9a024120fb3cba19264a643ad70b994c65f427f178",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part3-svd-outro-production-v3.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-surprise-probability-roadmap-and-part3-v6.json",
+      "bytes": 11065,
+      "sha256": "916421ce802ab387df104242a54e7d4e2d9b5869825ea52df069b95b8c5d345c",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/overlays/part1-surprise-probability-roadmap-and-part3-v6.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/cache-inventory.json",
+      "bytes": 46061,
+      "sha256": "8cf34dd7acc11ba29eb37fa6881c70f706f7209301540145d679fd4dad3d2af4",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/cache-inventory.json"
+    },
+    {
+      "path": "docs/qa/evidence/production-handoff-parts1-3/reviewed-source-inventory.json",
+      "bytes": 30831,
+      "sha256": "1c9eb76a370a5b74b79b7a0aa5b7e8f9300bfe4cd00ed494f3801d3ac50a79f2",
+      "historical_path": "docs/qa/evidence/production-handoff-parts1-3/reviewed-source-inventory.json"
+    }
+  ],
+  "scope": "Only changed predecessor files duplicated; unchanged oldmanifests/inventories remain exact original canonical files. Private byte-preserved backups cover all21."
+}
