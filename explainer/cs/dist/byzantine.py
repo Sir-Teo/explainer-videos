@@ -54,7 +54,9 @@ def om(n: int, m: int, value, traitors=frozenset(), lie=None, commander: int = 0
 def om_exhaustive(n: int, m: int, traitors, value: int = 1, limit: int = 200000):
     """Enumerate every assignment of lies: each message a traitor sends (identified by path and receiver) is 0 or
     1.  Agreement: all loyal lieutenants decide the same; validity: if the commander is loyal, they decide its
-    value."""
+    value. ``always_agree`` is None when the budget ends without a counterexample, not a proof of agreement."""
+    if limit <= 0:
+        raise ValueError("strategy limit must be positive")
     traitors = frozenset(traitors)
     # collect the message slots traitors control by a dry run
     slots = []
@@ -68,9 +70,9 @@ def om_exhaustive(n: int, m: int, traitors, value: int = 1, limit: int = 200000)
     bad = None
     tried = 0
     for bits in itertools.product((0, 1), repeat=len(slots)):
-        tried += 1
-        if tried > limit:
+        if tried == limit:
             break
+        tried += 1
         table = dict(zip(slots, bits))
         res = om(n, m, value, traitors, lambda path, s, r, v: table[(path, s, r)])
         loyal = {g: v for g, v in res.items() if g not in traitors}
@@ -79,8 +81,10 @@ def om_exhaustive(n: int, m: int, traitors, value: int = 1, limit: int = 200000)
             bad = {"lies": {f"{''.join(map(str, p))}:{s}->{r}": b for (p, s, r), b in table.items()},
                    "decisions": loyal}
             break
+    complete = tried == 2**len(slots)
     return {"n": n, "m": m, "traitors": sorted(traitors), "slots": len(slots), "strategies": tried,
-            "always_agree": bad is None, "counterexample": bad}
+            "complete": complete, "always_agree": False if bad else (True if complete else None),
+            "counterexample": bad}
 
 
 def bft_messages(n: int, protocol: str) -> int:
@@ -102,6 +106,10 @@ def bft_messages(n: int, protocol: str) -> int:
 
 def nakamoto_p(q: float, z: int) -> float:
     """The calculation in section 11 of the Bitcoin paper."""
+    if not 0 <= q <= 1 or z < 0:
+        raise ValueError("hash share must be in [0, 1] and confirmations nonnegative")
+    if z == 0 or q >= .5:
+        return 1.0
     p = 1 - q
     lam = z * q / p
     s = 1.0
@@ -114,15 +122,23 @@ def nakamoto_p(q: float, z: int) -> float:
 def rosenfeld(q: float, z: int) -> float:
     """The exact probability (Rosenfeld 2014; Grunspan and Perez-Marco 2017): the attacker's blocks while the
     merchant waits for z are negative-binomial, not Poisson."""
-    p = 1 - q
-    if z == 0:
+    if not 0 <= q <= 1 or z < 0:
+        raise ValueError("hash share must be in [0, 1] and confirmations nonnegative")
+    if z == 0 or q >= .5:
         return 1.0
-    return 1 - sum(math.comb(m + z - 1, m) * (p ** z * q ** m - q ** z * p ** m) for m in range(z + 1))
+    if q == 0:
+        return 0.0
+    # Equivalent positive binomial tail, avoiding cancellation of tiny risks from one.
+    n = 2 * z - 1
+    return 2 * math.fsum(math.exp(math.lgamma(n + 1) - math.lgamma(k + 1) - math.lgamma(n - k + 1)
+                                  + k * math.log(q) + (n - k) * math.log1p(-q))
+                         for k in range(z, n + 1))
 
 
 def double_spend_mc(q: float, z: int, trials: int = 20000, seed: int = 0, horizon: int = 400) -> float:
     """The attacker mines in secret while the merchant waits for z confirmations; afterwards it wins if it ever
-    gets ahead.  (Blocks are a race: each next block is the attacker's with probability q.)"""
+    draws level. The subsequent walk is truncated at ``horizon`` steps or a 60-block deficit, so this estimates
+    a lower bound on eventual catch-up. (Each next block is the attacker's with probability q.)"""
     rng = random.Random(seed)
     wins = 0
     for _ in range(trials):

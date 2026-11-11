@@ -64,6 +64,23 @@ class Raft(unittest.TestCase):
 
 
 class Byzantine(unittest.TestCase):
+    def test_incomplete_search_is_not_a_proof(self):
+        r = B.om_exhaustive(4, 1, {2}, limit=1)
+        self.assertEqual(r["strategies"], 1)
+        self.assertFalse(r["complete"])
+        self.assertIsNone(r["always_agree"])
+
+    def test_double_spend_boundaries_and_tiny_risks(self):
+        for fn in (B.nakamoto_p, B.rosenfeld):
+            for q in (.5, .9, 1):
+                self.assertEqual(fn(q, 6), 1)
+            self.assertEqual(fn(0, 6), 0)
+            self.assertEqual(fn(0, 0), 1)
+            with self.assertRaises(ValueError):
+                fn(-.1, 6)
+        self.assertGreater(B.rosenfeld(.01, 20), 0)
+        self.assertLess(B.rosenfeld(.01, 20), 1e-20)
+
     def test_three_generals_fail_four_succeed(self):
         self.assertFalse(B.om_exhaustive(3, 1, {1})["always_agree"])
         self.assertTrue(B.om_exhaustive(4, 1, {2})["always_agree"])

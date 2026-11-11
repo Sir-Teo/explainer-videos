@@ -238,7 +238,7 @@ def compute_byzantine() -> dict:
     for n, m, tr in cases:
         r = B.om_exhaustive(n, m, tr)
         rows.append({"n": n, "m": m, "traitors": sorted(tr), "strategies": r["strategies"], "slots": r["slots"],
-                     "agree": r["always_agree"], "counterexample": r["counterexample"]})
+                     "agree": r["always_agree"], "complete": r["complete"], "counterexample": r["counterexample"]})
     msgs = [{"n": n, "f": (n - 1) // 3, "om": B.bft_messages(n, "om"), "pbft": B.bft_messages(n, "pbft"),
              "hotstuff": B.bft_messages(n, "hotstuff")} for n in (4, 7, 10, 31, 100)]
     for m in msgs:

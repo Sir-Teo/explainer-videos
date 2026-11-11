@@ -75,7 +75,7 @@ class Byzantine(VoiceoverScene):
 
     def om(self):
         b = load("byzantine")
-        head = label(r"Oral messages, \ checked exhaustively", font_size=36).to_edge(UP, buff=0.3)
+        head = label(r"Oral messages, \ a bounded check", font_size=36).to_edge(UP, buff=0.3)
         alg = wrapped_label(r"\textbf{OM($m$)}: \ the commander sends its value; \ each lieutenant acts as commander "
                             r"in OM($m - 1$) to relay what it got; \ each decides the \textbf{majority} of what it "
                             r"received directly and through the others", 12.4, font_size=21,
@@ -83,13 +83,15 @@ class Byzantine(VoiceoverScene):
         rows = []
         for r in b["rows"]:
             who = ", ".join(r"commander" if t == 0 else f"L{t}" for t in r["traitors"])
-            rows.append([f"{r['n']}", f"{r['m']}", who, f"{min(r['strategies'], 200000):,}", r"always" if r["agree"] else
-                         r"\textbf{broken}"])
+            complete = r.get("complete", r["strategies"] >= 2**r["slots"])
+            status = r"\textbf{broken}" if r["counterexample"] else (r"always" if complete else r"sampled")
+            rows.append([f"{r['n']}", f"{r['m']}", who, f"{min(r['strategies'], 200000):,}", status])
         tab = grid_table([r"generals $n$", r"rounds $m$", r"traitors", r"lying strategies tried", r"loyal agree"],
                          rows, widths=[2.0, 1.8, 2.8, 3.0, 2.0], row_h=0.42, font_size=19, mono_cols=())
         tab.next_to(alg, DOWN, buff=0.4).set_x(0)
         for k, r in enumerate(b["rows"], start=1):
-            tab.cells[k][4].set_color(YES if r["agree"] else NO)
+            tab.cells[k][4].set_color(NO if r["counterexample"] else
+                                      (YES if r.get("complete", r["strategies"] >= 2**r["slots"]) else HEAD))
         foot = wrapped_label(r"every message a traitor sends was chosen freely, \ 0 or 1, \ in every combination \ "
                              r"(for $n = 7$ the first 200{,}000 combinations)", 12.4, font_size=19,
                              color=GREY_A).to_edge(DOWN, buff=0.35)
