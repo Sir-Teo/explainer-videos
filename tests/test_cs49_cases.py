@@ -8,6 +8,12 @@ class Cases(unittest.TestCase):
         self.assertEqual(cases.base62(0), "0")
         self.assertEqual(cases.base62(61), "Z")
         self.assertEqual(cases.base62(62), "10")
+        with self.assertRaises(ValueError):
+            cases.base62(-1)
+        self.assertEqual(cases.shortener(ns=(62**3,))["rows"][0]["length"], 3)
+        r = cases.feed_cost(users=100, threshold=0)
+        self.assertEqual(len(r["hybrid"]), 1)
+        self.assertEqual(r["hybrid"][0]["push_writes"], 0)
 
     def test_ledger_invariant(self):
         self.assertEqual(cases.ledger(800)["sum"], 0)
@@ -18,6 +24,7 @@ class Cases(unittest.TestCase):
         r = cases.ot_experiment(trials=2000)
         self.assertEqual(r["converged_transformed"], 1.0)
         self.assertLess(r["converged_naive"], 0.3)
+        self.assertEqual(cases.ot_experiment(trials=100, start="")["converged_transformed"], 1)
 
     def test_bloom(self):
         r = cases.bloom_check(n=50_000)

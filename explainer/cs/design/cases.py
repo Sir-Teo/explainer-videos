@@ -16,9 +16,14 @@ import numpy as np
 # ---------------------------------------------------------------- URL shortener
 
 def shortener(ns=(1e6, 1e9, 1e12), alphabet=62):
+    if alphabet < 2 or any(n < 1 for n in ns):
+        raise ValueError("need at least two symbols and positive link counts")
     rows = []
     for n in ns:
-        L = math.ceil(math.log(n) / math.log(alphabet))
+        L, capacity = 1, alphabet
+        while capacity < n:
+            L += 1
+            capacity *= alphabet
         rows.append({"links": n, "length": L, "space": alphabet ** L})
     # truncated hashes: collisions among m links with k base62 characters
     coll = []
@@ -30,6 +35,8 @@ def shortener(ns=(1e6, 1e9, 1e12), alphabet=62):
 
 
 def base62(n):
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("base62 IDs must be nonnegative integers")
     a = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     s = ""
     while True:
@@ -63,7 +70,7 @@ def feed_cost(users=100_000, posts_per_user_day=0.5, reads_per_user_day=20, thre
     out = {"users": users, "max_followers": int(f.max()), "median_followers": float(np.median(f)),
            "mean_followers": float(mean_followees), "push_writes": float(write_all), "pull_reads": float(read_all)}
     rows = []
-    for th in (threshold,) if threshold else (100, 1_000, 10_000, 10 ** 9):
+    for th in (threshold,) if threshold is not None else (100, 1_000, 10_000, 10 ** 9):
         celeb = f >= th
         push = posts_per_user_day * f[~celeb].sum()
         # reads must pull from the celebrities each user follows: on average followees * share of edges to celebs
@@ -302,7 +309,7 @@ def ot_experiment(trials=5000, seed=5, start="the cat sat"):
     example = None
     for _ in range(trials):
         def rnd():
-            if rng.random() < 0.6:
+            if not start or rng.random() < 0.6:
                 return ("ins", rng.randrange(len(start) + 1), rng.choice("xyz"))
             return ("del", rng.randrange(len(start)), "")
         a, b = rnd(), rnd()
