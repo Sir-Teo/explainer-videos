@@ -16,7 +16,7 @@ def laplacian(A: np.ndarray, normalized: bool = False) -> np.ndarray:
     if not normalized:
         return np.diag(d) - A
     dm = np.where(d > 0, 1 / np.sqrt(np.maximum(d, 1e-300)), 0.0)
-    return np.eye(len(A)) - dm[:, None] * A * dm[None, :]
+    return np.diag((d > 0).astype(float)) - dm[:, None] * A * dm[None, :]
 
 
 def sbm(sizes=(40, 40, 40), p_in: float = 0.25, p_out: float = 0.02, seed: int = 0):
@@ -32,6 +32,8 @@ def sbm(sizes=(40, 40, 40), p_in: float = 0.25, p_out: float = 0.02, seed: int =
 
 def connected(A) -> bool:
     n = len(A)
+    if not n:
+        return False
     seen, stack = {0}, [0]
     while stack:
         u = stack.pop()
@@ -158,7 +160,8 @@ def random_regular(n: int, d: int, seed: int = 0) -> np.ndarray:
     """A random simple d-regular graph: pair stubs at random, choosing each partner among the remaining stubs that
     would not make a loop or a repeated edge (Steger and Wormald 1999), restarting if stuck."""
     rng = random.Random(seed)
-    assert n * d % 2 == 0
+    if n < 1 or not 0 <= d < n or n * d % 2:
+        raise ValueError("a simple d-regular graph needs n > d >= 0 and even n*d")
     for _ in range(200):
         stubs = [v for v in range(n) for _ in range(d)]
         A = np.zeros((n, n))
@@ -332,10 +335,25 @@ def zigzag_experiment(seed: int = 0) -> dict:
 # ---------------------------------------------------------------- electrical networks and solvers
 
 def effective_resistance(A: np.ndarray) -> np.ndarray:
+    """Electrical resistance, infinite between different connected components."""
     L = laplacian(A)
     Lp = np.linalg.pinv(L)
     dg = np.diag(Lp)
-    return dg[:, None] + dg[None, :] - 2 * Lp
+    resistance = np.maximum(0, dg[:, None] + dg[None, :] - 2 * Lp)
+    component = np.full(len(A), -1)
+    for root in range(len(A)):
+        if component[root] >= 0:
+            continue
+        component[root] = root
+        stack = [root]
+        while stack:
+            u = stack.pop()
+            for v in np.flatnonzero(A[u]):
+                if component[v] < 0:
+                    component[v] = root
+                    stack.append(int(v))
+    resistance[component[:, None] != component[None, :]] = np.inf
+    return resistance
 
 
 def commute_check(A: np.ndarray, a: int, b: int, walks: int = 2000, seed: int = 0) -> dict:
@@ -343,7 +361,13 @@ def commute_check(A: np.ndarray, a: int, b: int, walks: int = 2000, seed: int = 
     rng = random.Random(seed)
     nbrs = [list(np.flatnonzero(A[v])) for v in range(len(A))]
     R = effective_resistance(A)[a, b]
+    if not math.isfinite(R):
+        raise ValueError("commute-time simulation needs endpoints in the same component")
     m = A.sum() / 2
+    if walks <= 0:
+        raise ValueError("walk count must be positive")
+    if a == b:
+        return {"R_eff": 0.0, "predicted": 0.0, "measured": 0.0, "m": int(m)}
     tot = 0
     for _ in range(walks):
         v, steps, phase = a, 0, 0

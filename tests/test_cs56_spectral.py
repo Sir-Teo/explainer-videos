@@ -11,6 +11,19 @@ from explainer.cs.spectral import spectra as S
 
 
 class Spectral(unittest.TestCase):
+    def test_disconnected_and_isolated_vertices(self):
+        A = np.array([[0., 1., 0.], [1., 0., 0.], [0., 0., 0.]])
+        self.assertEqual(S.laplacian(A, normalized=True)[2, 2], 0)
+        R = S.effective_resistance(A)
+        self.assertAlmostEqual(R[0, 1], 1)
+        self.assertTrue(np.isinf(R[0, 2]))
+        np.testing.assert_array_equal(np.diag(R), 0)
+        self.assertEqual(S.commute_check(A, 2, 2, walks=1)["measured"], 0)
+        with self.assertRaises(ValueError):
+            S.commute_check(A, 0, 2, walks=1)
+        with self.assertRaises(ValueError):
+            S.random_regular(4, 4)
+
     def test_laplacian_psd_and_ones(self):
         A = S.random_regular(30, 4, seed=1)
         L = S.laplacian(A)

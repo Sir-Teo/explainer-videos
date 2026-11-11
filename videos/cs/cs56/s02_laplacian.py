@@ -365,7 +365,7 @@ class Laplacian(VoiceoverScene):
         props = VGroup(
             label(r"eigenvalues between 0 and 2", font_size=24, color=HEAD),
             label(r"as many zeros as components, \ as before", font_size=24, color=YES),
-            label(r"every vertex weighted by its degree: \ fair to hubs", font_size=24, color=GREY_A),
+            label(r"degree-weighted; \ isolated vertices have zero rows", font_size=24, color=GREY_A),
         ).arrange(DOWN, buff=0.25).next_to(steps[0], DOWN, buff=0.45)
         if props.width > 13.2:
             props.scale_to_fit_width(13.2)

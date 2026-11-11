@@ -1,10 +1,11 @@
 {
- "strings": {
-  "series": "串联",
-  "plain": "无预条件",
-  "grid": "网格",
-  "lower": "下界",
-  "cluster": "聚类",
-  "wire": "布线"
- }
+  "strings": {
+    "series": "串联",
+    "plain": "无预条件",
+    "grid": "网格",
+    "lower": "下界",
+    "cluster": "聚类",
+    "wire": "布线",
+    "degree-weighted; \\ isolated vertices have zero rows": "按度加权；孤立顶点对应零行"
+  }
 }
