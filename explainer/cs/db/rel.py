@@ -163,7 +163,7 @@ def keys(attrs, fds: list[FD]) -> list[frozenset]:
     """The candidate keys: minimal sets whose closure is everything."""
     attrs = frozenset(attrs)
     out = []
-    for k in range(1, len(attrs) + 1):
+    for k in range(len(attrs) + 1):
         for c in itertools.combinations(sorted(attrs), k):
             c = frozenset(c)
             if any(o <= c for o in out):
@@ -177,7 +177,7 @@ def project_fds(attrs, fds: list[FD]) -> list[FD]:
     """The dependencies that hold on a subset of the attributes (by closures of its subsets)."""
     attrs = frozenset(attrs)
     out = []
-    for k in range(1, len(attrs)):
+    for k in range(len(attrs)):
         for c in itertools.combinations(sorted(attrs), k):
             c = frozenset(c)
             r = (closure(c, fds) & attrs) - c
@@ -218,7 +218,7 @@ def minimal_cover(fds: list[FD]) -> list[FD]:
         changed = False
         for i, (l, r) in enumerate(out):
             for a in sorted(l):
-                if len(l) > 1 and r <= closure(l - {a}, out):
+                if r <= closure(l - {a}, out):
                     out[i] = (l - {a}, r)
                     changed = True
                     break

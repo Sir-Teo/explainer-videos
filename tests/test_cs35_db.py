@@ -53,6 +53,20 @@ class TestAlgebra(unittest.TestCase):
         self.assertFalse(R.lossless("ABC", [frozenset("AB"), frozenset("AC")], [R.fd("B", "C")]))
 
 
+    def test_constant_dependencies_and_empty_keys(self):
+        fds = [(frozenset(), frozenset("A"))]
+        self.assertEqual(R.keys("A", fds), [frozenset()])
+        self.assertEqual(R.keys([], []), [frozenset()])
+        self.assertFalse(R.is_bcnf("AB", fds))
+        parts = R.bcnf_decompose("AB", fds)
+        self.assertTrue(all(R.is_bcnf(p, fds) for p in parts))
+        self.assertTrue(R.lossless("AB", parts, fds))
+        cover = R.minimal_cover(fds + [R.fd("A", "B")])
+        self.assertTrue(all(not lhs for lhs, _ in cover))
+        self.assertEqual(R.closure([], cover), frozenset("AB"))
+        self.assertEqual(R.synthesize_3nf("AB", fds + [R.fd("A", "B")]), [frozenset("A"), frozenset("B")])
+
+
 class TestEngine(unittest.TestCase):
     def test_against_sqlite(self):
         db, con = _db()
@@ -88,6 +102,10 @@ class TestJoinsAndTrees(unittest.TestCase):
         self.assertEqual(t.search(123), -123)
         self.assertEqual([k for k, _ in t.range(10, 15)], list(range(10, 16)))
         self.assertEqual(levels_for(10 ** 9, 400), 4)
+        self.assertEqual(levels_for(0, 2), 1)
+        for n, fanout in ((10, 1), (-1, 4)):
+            with self.assertRaises(ValueError):
+                levels_for(n, fanout)
 
 
 class TestTransactions(unittest.TestCase):

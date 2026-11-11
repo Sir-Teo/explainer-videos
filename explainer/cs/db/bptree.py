@@ -27,7 +27,8 @@ class Node:
 
 class BPlusTree:
     def __init__(self, order: int = 64):
-        assert order >= 3
+        if order < 3:
+            raise ValueError("B+ tree order must be at least three")
         self.order = order
         self.root = Node(leaf=True)
         self.splits = 0
@@ -130,6 +131,8 @@ class BPlusTree:
 
 def levels_for(n: int, fanout: int) -> int:
     """Levels a B+ tree of this fanout needs for n keys (leaves full to the same fanout)."""
+    if n < 0 or fanout < 2:
+        raise ValueError("key count must be nonnegative and fanout at least two")
     lv, cap = 1, fanout
     while cap < n:
         cap *= fanout
