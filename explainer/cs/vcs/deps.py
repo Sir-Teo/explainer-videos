@@ -46,6 +46,8 @@ def from_3sat(n: int, clauses):
     """Package X_i with versions 0 and 1 (the value of variable i); package C_j with one version per literal, which
     requires X_i at the value that makes that literal true; the root requires every C_j.  Installable iff the
     formula is satisfiable."""
+    if n < 0 or any(not 1 <= abs(l) <= n for c in clauses for l in c):
+        raise ValueError("SAT literals must name a variable from 1 through n")
     pkgs = {f"x{i}": {0: [], 1: []} for i in range(1, n + 1)}
     for j, c in enumerate(clauses, 1):
         pkgs[f"c{j}"] = {k: [(f"x{abs(l)}", {1 if l > 0 else 0})] for k, l in enumerate(c, 1)}
@@ -101,7 +103,7 @@ def backtracking_trace(u: Universe, root: list):
                 return solve(rest, chosen)
             steps.append(("conflict", p, chosen[p], sorted(allowed)))
             return None
-        for v in sorted((v for v in pkgs[p] if v in allowed), reverse=True):
+        for v in sorted((v for v in pkgs.get(p, {}) if v in allowed), reverse=True):
             steps.append(("try", p, v, None))
             got = solve(rest + list(pkgs[p][v]), {**chosen, p: v})
             if got is not None:

@@ -76,6 +76,15 @@ class TestBuild(unittest.TestCase):
 
 
 class TestDeps(unittest.TestCase):
+    def test_missing_packages_are_unsatisfiable(self):
+        u = deps.Universe({"app": {1: [("missing", {1})]}})
+        for root in ([("missing", {1})], [("app", {1})]):
+            self.assertIsNone(u.solve(root)[0])
+            self.assertIsNone(deps.backtracking_trace(u, root)["result"])
+        for literal in (0, 3, -3):
+            with self.assertRaises(ValueError):
+                deps.from_3sat(2, [[literal]])
+
     def test_diamond(self):
         u, r = deps.diamond()
         self.assertEqual(u.solve(r)[0]["B"], 11)

@@ -141,6 +141,8 @@ def criss_cross():
 def bisect(n: int, bad_from: int):
     """Binary search over a linear history of n commits where commit ``bad_from`` introduced a bug: returns the
     commits tested."""
+    if n < 2 or not 1 <= bad_from < n:
+        raise ValueError("bisect needs a known-good first commit and a later first bad commit")
     lo, hi = 0, n - 1            # lo known good, hi known bad
     tested = []
     while hi - lo > 1:
