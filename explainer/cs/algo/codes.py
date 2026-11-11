@@ -1,6 +1,6 @@
 """Error-correcting codes for Part 28 of *Computer Science, Built* ("Error-Correcting Codes").
 
-Everything is exact and small enough to run in a scene's compute step:
+Small teaching implementations, including exact algebra and Monte Carlo experiments:
 
 * channels and information: the binary symmetric channel, entropy, capacity;
 * repetition codes, Hamming(7,4) and the general Hamming code, SECDED; linear codes by enumeration; the binary
@@ -190,11 +190,15 @@ def gf_div(a, b):
 
 def gf_pow(a, k):
     if a == 0:
+        if k < 0:
+            raise ZeroDivisionError("zero has no multiplicative inverse")
         return 0 if k else 1
     return GF_EXP[(GF_LOG[a] * k) % 255]
 
 
 def gf_inv(a):
+    if a == 0:
+        raise ZeroDivisionError("zero has no multiplicative inverse")
     return GF_EXP[255 - GF_LOG[a]]
 
 
@@ -243,6 +247,12 @@ def gp_eval(p, x):
 
 def gp_divmod(dividend, divisor):
     """Synthetic division by a monic divisor."""
+    if not divisor or divisor[0] != 1:
+        raise ValueError("divisor must be monic and nonzero")
+    if len(divisor) == 1:
+        return list(dividend), []
+    if len(dividend) < len(divisor):
+        return [], list(dividend)
     out = list(dividend)
     for i in range(len(dividend) - len(divisor) + 1):
         coef = out[i]
@@ -265,8 +275,11 @@ def rs_generator(nsym):
 
 def rs_encode(msg, nsym):
     """Systematic encoding: msg followed by nsym check symbols (the remainder of msg * x^nsym by the generator)."""
-    _, rem = gp_divmod(list(msg) + [0] * nsym, rs_generator(nsym))
-    return list(msg) + rem
+    msg = list(msg)
+    if not isinstance(nsym, int) or not 0 <= nsym <= 255 or len(msg) + nsym > 255:
+        raise ValueError("RS length must be at most 255 with nonnegative parity length")
+    _, rem = gp_divmod(msg + [0] * nsym, rs_generator(nsym))
+    return msg + rem
 
 
 def rs_syndromes(cw, nsym):
@@ -353,6 +366,11 @@ def rs_decode(cw, nsym, erase_pos=()):
     Returns (corrected codeword, sorted errata positions)."""
     out = list(cw)
     erase_pos = list(erase_pos)
+    if not isinstance(nsym, int) or not 0 <= nsym <= len(out) <= 255:
+        raise ValueError("RS length must be at most 255 and parity length must fit")
+    if len(set(erase_pos)) != len(erase_pos) or any(not isinstance(p, int) or not 0 <= p < len(out)
+                                                for p in erase_pos):
+        raise ValueError("erasure positions must be distinct codeword indices")
     for p in erase_pos:
         out[p] = 0
     if len(erase_pos) > nsym:
@@ -447,6 +465,11 @@ def poly_div_p(num, den, p):
 def berlekamp_welch(points, k, e, p):
     """Decode a degree-<k message polynomial from n points with at most e errors (n >= k + 2e).
     Solves y_i E(x_i) = Q(x_i) with E monic of degree e and deg Q < k + e; returns (message coefs, error x's)."""
+    points = list(points)
+    if k < 1 or e < 0 or len(points) < k + 2 * e:
+        raise ValueError("need k >= 1, e >= 0 and at least k + 2e points")
+    if len({x % p for x, _ in points}) != len(points):
+        raise ValueError("evaluation points must be distinct in the field")
     rows, rhs = [], []
     for x, y in points:
         row = [y * pow(x, j, p) % p for j in range(e)] + [(-pow(x, j, p)) % p for j in range(k + e)]
@@ -460,8 +483,12 @@ def berlekamp_welch(points, k, e, p):
     msg, rem = poly_div_p(Q, E, p)
     if any(rem):
         return None, None
-    bad = [x for x, _ in points if poly_eval_p(E, x, p) == 0]
-    return (msg + [0] * k)[:k], bad
+    if any(msg[k:]):
+        return None, None
+    msg = (msg + [0] * k)[:k]
+    # E can have extra roots when the actual error count is smaller than e.
+    bad = [x for x, y in points if poly_eval_p(msg, x, p) != y % p]
+    return (msg, bad) if len(bad) <= e else (None, None)
 
 
 # ----------------------------------------------------------------------------------------------- QR codes, version 2
@@ -834,7 +861,10 @@ def viterbi(rx):
 def gallager_ldpc(n, wc, wr, rng, girth6=True):
     """A regular (wc, wr) parity-check matrix by Gallager's construction: wc stacked bands, each a random column
     permutation of a band of disjoint row blocks. With girth6, positions are swapped until no two variables share
-    two checks (no 4-cycles). Returns the edge list (check, variable) and the number of checks."""
+    two checks (no 4-cycles), with at most 200 repair passes per band. Check has_4cycle on the result:
+    the bounded repair is not a guarantee. Returns the edge list (check, variable) and the number of checks."""
+    if not all(isinstance(v, int) and v > 0 for v in (n, wc, wr)) or n % wr:
+        raise ValueError("positive degrees and length divisible by row weight required")
     m_band = n // wr
     bands = [list(range(n))]
     for _ in range(1, wc):
@@ -914,7 +944,9 @@ def ldpc_bp_bsc(edges, m, n, p, trials, rng, iters=50):
             c2v = 2 * np.arctanh(prod)
             total = llr + np.bincount(va, weights=c2v, minlength=n)
             hard = total < 0
-            if not hard.any():
+            # The receiver can check parity; it does not know the transmitted word.
+            parity = np.bincount(ch, weights=hard[va].astype(float), minlength=m) % 2
+            if not parity.any():
                 break
             v2c = total[va] - c2v
         errs = int(hard.sum())
@@ -965,6 +997,8 @@ def _polar_z(n, z):
 
 def polar_encode(u):
     N = len(u)
+    if N == 0 or N & (N - 1):
+        raise ValueError("polar block length must be a positive power of two")
     if N == 1:
         return list(u)
     h = N // 2
@@ -980,6 +1014,8 @@ def _f(a, b):
 def polar_sc(llr, frozen):
     """Successive-cancellation decoding (min-sum). llr: numpy array of channel LLRs; frozen: boolean list."""
     N = len(llr)
+    if N == 0 or N & (N - 1) or len(frozen) != N:
+        raise ValueError("matching LLR/frozen arrays of power-of-two length required")
     if N == 1:
         u = 0 if frozen[0] else int(llr[0] < 0)
         return [u], [u]
@@ -1147,7 +1183,7 @@ def ldpc_bp_trace(edges, m, n, p, rng, iters=30):
         trace.append(int(hard.sum()))
         par = np.bincount(ch, weights=hard[va].astype(float), minlength=m) % 2
         unsat.append(int(par.sum()))
-        if not hard.any():
+        if not par.any():
             break
         v2c = total[va] - c2v
     return trace, unsat

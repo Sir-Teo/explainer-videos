@@ -38,7 +38,17 @@ from explainer.ai.cache import Cache
 from explainer.cs.algo import codes as C
 
 CACHE = Cache("cs28")
-load = CACHE.load
+DECODER_VERSION = 2
+
+
+def load(name):
+    out = CACHE.load(name)
+    # These experiments used an oracle stopping rule before version 2. Refresh
+    # existing local caches once so scenes cannot silently reuse those results.
+    if name in ("ldpc", "bptrace") and out.get("decoder_version") != DECODER_VERSION:
+        out = ITEMS[name]()
+        CACHE.save(name, out)
+    return out
 
 QR_TEXT = "CS, Built: Part 28"
 
@@ -248,7 +258,8 @@ def compute_ldpc() -> dict:
         ber, fer = C.ldpc_bp_bsc(edges, m, n, p, 100, rng)
         rows.append({"p": p, "ber": ber, "fer": fer})
     eps = C.de_bec_threshold(3, 6)
-    return {"n": n, "m": m, "rows": rows, "bec_threshold": eps, "bec_shannon": 0.5, "bsc_shannon": 0.11,
+    return {"n": n, "m": m, "rows": rows, "decoder_version": DECODER_VERSION,
+            "has_4cycle": C.has_4cycle(edges), "bec_threshold": eps, "bec_shannon": 0.5, "bsc_shannon": 0.11,
             "de_below": C.de_bec_curve(3, 6, 0.42, 60), "de_above": C.de_bec_curve(3, 6, 0.44, 60)}
 
 
@@ -356,7 +367,8 @@ def compute_bptrace() -> dict:
     edges, m = C.gallager_ldpc(4800, 3, 6, rng)
     good = C.ldpc_bp_trace(edges, m, 4800, 0.07, random.Random(3))
     bad = C.ldpc_bp_trace(edges, m, 4800, 0.09, random.Random(3))
-    return {"n": 4800, "m": m, "p_good": 0.07, "good": good[0], "good_unsat": good[1], "p_bad": 0.09,
+    return {"n": 4800, "m": m, "decoder_version": DECODER_VERSION,
+            "p_good": 0.07, "good": good[0], "good_unsat": good[1], "p_bad": 0.09,
             "bad": bad[0], "bad_unsat": bad[1]}
 
 

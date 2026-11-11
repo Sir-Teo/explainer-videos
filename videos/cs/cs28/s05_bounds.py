@@ -55,8 +55,8 @@ class Bounds(VoiceoverScene):
             d = Dot(ax.c2p(p["delta"], p["R"]), radius=0.07, color=DATA)
             pts.add(VGroup(d, label(p["name"], font_size=14, color=DATA).next_to(d, RIGHT, buff=0.08)))
         notes = VGroup(
-            label(r"long codes: \ correct a fraction $\delta/2$ of errors \\ at rate $R$", font_size=20, color=WHITE),
-            label(r"upper bounds: \ no code lies above them", font_size=20, color=NO),
+            label(r"curves: \ asymptotic binary code families \\ blue points: \ finite examples", font_size=20, color=WHITE),
+            label(r"upper bounds on limiting rate; \\ finite codes need finite-length bounds", font_size=20, color=NO),
             label(r"Gilbert \ (1952), \ Varshamov \ (1957): \\ \textbf{random} codes reach $1 - H(\delta)$",
                   font_size=20, color=YES),
             label(r"the shaded gap has been open \\ for almost 70 years", font_size=20, color=LAM),
@@ -65,13 +65,15 @@ class Bounds(VoiceoverScene):
         fit_right(notes)
         with self.voiceover(
             "Every code trades rate for distance. <bookmark mark='a'/> For long codes, plot the rate against the "
-            "relative distance, the minimum distance divided by the length: a code at delta corrects a fraction "
-            "delta over two of errors. <bookmark mark='b'/> Some limits are easy. The Singleton bound: rate plus "
-            "relative distance is at most one. Hamming's bound: the balls around codewords must fit in the space. "
-            "And the linear-programming bound of McEliece, Rodemich, Rumsey and Welch, which is the best known for "
-            "large distances. No code lies above the lowest of them. <bookmark mark='c'/> From below, Edgar Gilbert "
+            "relative distance, the minimum distance divided by the length. The plotted curves describe limiting "
+            "rates of binary code families, with a correctable error fraction approaching delta over two from below. "
+            "<bookmark mark='b'/> Some limits are easy. The finite Singleton bound is k plus d at most n plus one; "
+            "its asymptotic form is rate plus relative distance at most one. Hamming's bound packs disjoint balls. "
+            "The first linear-programming bound of McEliece, Rodemich, Rumsey and Welch improves Hamming's at larger "
+            "distances. The limiting rate obeys their minimum. <bookmark mark='c'/> From below, Edgar Gilbert "
             "and Rom Varshamov showed that random codes reach one minus the entropy of delta. <bookmark mark='d'/> "
-            "Between the two lies a gap, and it has been open for nearly seventy years. <bookmark mark='e'/> Nobody "
+            "Between the two lies a gap, and it has been open for nearly seventy years. The blue points are short "
+            "codes: they can sit above asymptotic curves without contradiction. <bookmark mark='e'/> Nobody "
             "knows a family of long binary codes that beats random ones."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl), FadeIn(notes[0]))
@@ -113,7 +115,7 @@ class Bounds(VoiceoverScene):
                   r"errors", font_size=21, color=DATA),
             label(rf"each ball of radius 3 holds {words(g['ball'])} words; \\ $4{{,}}096 \times 2{{,}}048 = 2^{{23}}$: "
                   r"the balls tile the space", font_size=21, color=YES),
-            label(r"the only perfect binary codes: \\ repetition, \ Hamming, \ and this one \ (Tiet\"av\"ainen, "
+            label(r"nontrivial perfect binary code parameters: \\ repetition, \ Hamming, \ and Golay \ (Tiet\"av\"ainen, "
                   r"1973)", font_size=21, color=HEAD),
             label(r"Voyager 1 and 2 sent colour images \\ from Jupiter and Saturn with its extended form", font_size=21,
                   color=LAM),
@@ -129,7 +131,8 @@ class Bounds(VoiceoverScene):
             "code corrects any three errors. <bookmark mark='c'/> A ball of radius three holds two thousand and "
             "forty-eight words, and four thousand and ninety-six such balls fill all two to the twenty-three words "
             "exactly. The code is perfect. <bookmark mark='d'/> Aimo Tietäväinen proved in 1973 that repetition "
-            "codes, Hamming codes and this one are the only perfect binary codes. <bookmark mark='e'/> Its extended "
+            "codes, Hamming codes and Golay exhaust the nontrivial perfect binary code parameters. This does not "
+            "classify every nonlinear code with those parameters. <bookmark mark='e'/> Its extended "
             "version carried Voyager's colour images of Jupiter and Saturn. <bookmark mark='f'/> And it builds the "
             "Leech lattice, which Henry Cohn and coauthors proved in 2017, building on Maryna Viazovska's method, is "
             "the densest way to pack spheres in twenty-four dimensions."

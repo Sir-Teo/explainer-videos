@@ -147,7 +147,7 @@ class Polar(VoiceoverScene):
                          widths=[3.0, 2.0, 2.4, 2.4], row_h=0.45, font_size=21, mono_cols=(),
                          colors=[[WHITE, GREY_A, DATA, YES]] * len(rows))
         tab.next_to(head, DOWN, buff=0.45).set_x(0)
-        tl = label(r"rate $\tfrac12$ on the BSC; \ fraction of blocks decoded wrongly", font_size=18,
+        tl = label(r"BSC, \ rate $\tfrac12$; \ BEC-designed frozen set, \ min-sum SC; \ block error", font_size=18,
                    color=GREY_A).next_to(tab, DOWN, buff=0.12)
         lines = VGroup(
             label(r"decode bit by bit, \ each using the decisions before it: \ $O(N \log N)$", font_size=22,
@@ -162,7 +162,9 @@ class Polar(VoiceoverScene):
         with self.voiceover(
             "Decoding follows the construction. <bookmark mark='a'/> Decode the bits one at a time, each using the "
             "decisions already made, in time N log N. <bookmark mark='b'/> We sent rate-one-half polar codes over "
-            "the binary symmetric channel. Well below capacity, the longer code makes fewer mistakes; as the channel "
+            "the binary symmetric channel, using a BEC-based reliability ordering and a min-sum approximation to "
+            "successive cancellation. These finite experiments are not a capacity proof. Well below capacity, "
+            "the longer code makes fewer mistakes; as the channel "
             "approaches capacity, both collapse. <bookmark mark='c'/> At practical lengths, plain successive "
             "cancellation is not the best decoder. Ido Tal and Alexander Vardy keep a short list of candidate paths "
             "and use a CRC, chapter eight's, to pick the right one. <bookmark mark='d'/> In 2016 the standards body "

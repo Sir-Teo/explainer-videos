@@ -6,7 +6,7 @@ dying on bad bits, so he taught the machine to fix them. Two years before Hammin
 noise costs only a fixed fraction of a channel's rate. It took fifty years to build codes that reach his limit. This part builds
 the codes from Hamming's to polar codes, runs every one of them, and scratches a QR code and reads it back.
 
-The instrument is `explainer/cs/algo/codes.py`. It holds:
+The instrument is [`codes.py`](../../../explainer/cs/algo/codes.py). It holds:
 * the binary symmetric channel, entropy and capacity;
 * repetition codes; Hamming(7,4), general Hamming codes and SECDED;
 * linear codes by enumeration; the [23,12,7] Golay code; the asymptotic bounds (Singleton, Hamming, Plotkin, MRRW, GV);
@@ -25,6 +25,17 @@ The instrument is `explainer/cs/algo/codes.py`. It holds:
 * polar codes: the transform, Bhattacharyya parameters and successive cancellation;
 * LT fountain codes with the robust soliton and a peeling decoder; RAID-6 P+Q; the Hadamard code's two-query local
   decoder.
+
+The rate–distance curves describe asymptotic binary code families; the short Hamming and Golay points can lie above
+them. Finite codes obey finite-length bounds, including `k + d ≤ n + 1`. The perfect-code theorem restricts nontrivial
+binary parameters, rather than identifying every nonlinear code with those parameters.
+
+LDPC experiments stop when the receiver's parity checks pass, including when they pass for an incorrect codeword;
+the sent word is used only to score the result. The (3,6) construction has design rate 1/2, and bounded swaps attempt
+to remove four-cycles. Density-evolution thresholds are asymptotic numerical references. The polar experiment uses
+a BEC-based frozen-set ordering and min-sum SC on the BSC; its finite results are not a capacity proof. Binary
+two-query locally decodable codes require exponential length for constant noise and recovery guarantees; the
+three-query length tradeoff remains open.
 
 It is tested in `tests/test_cs28_codes.py`. The tests check:
 * Hamming correcting every single error, and SECDED detecting doubles;
@@ -93,9 +104,9 @@ version 2, every mask and error level): identical in every case.
 * **11. LDPC codes and belief propagation.**
   - The Tanner graph and message passing.
   - One block, round by round: 342 errors to 0 in 14 rounds at p = 0.07; stuck near 300 at 0.09.
-  - The waterfall of a (3,6) code of length 4,800: every block decoded up to p = 0.0725, almost none past 0.09. The BP
-    threshold is 0.084 and Shannon's limit 0.11.
-  - BEC density evolution: 0.4294. History: Gallager, turbo codes, MacKay–Neal.
+  - The waterfall of a (3,6) code of length 4,800: zero failures in 100 trials up to p = 0.0725, almost none recovered
+    past 0.09. The asymptotic BP reference is about 0.084 and Shannon's limit about 0.11.
+  - BEC density evolution: a numerical threshold about 0.4294. History: Gallager, turbo codes, MacKay–Neal.
 * **12. Polar codes.**
   - The N = 8 butterfly with its synthetic channels (erasure probability 0.004 to 0.996).
   - Polarization up to N = 1,024 (a third perfect, a third useless).

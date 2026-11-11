@@ -94,17 +94,9 @@ ZH = {
     # ------------------------------------------------------------------ Bounds
     "Chapter four. How good can a code be?": "第4章。一个码能有多好？",
     "Every code trades rate for distance.":
-        "每个码都在用码率换距离。<bookmark mark='a'/>对长码，把码率对相对距离作图，也就是最小距离除以码长：相对距离为 delta 的码能纠正 delta 一半"
-        "比例的错误。<bookmark mark='b'/>有些极限很容易。Singleton 界：码率加相对距离至多为一。汉明界：码字周围的球必须装得下。还有 McEliece、"
-        "Rodemich、Rumsey 和 Welch 的线性规划界，在距离大时是已知最好的。没有任何码能高过其中最低的那条。<bookmark mark='c'/>从下面看，Edgar Gilbert "
-        "和 Rom Varshamov 证明了随机码能达到一减 delta 的熵。<bookmark mark='d'/>两者之间有一道缝隙，它已经悬而未决了将近七十年。<bookmark "
-        "mark='e'/>没有人知道哪一族长的二元码能胜过随机码。",
+        "每个码都在用码率换距离。<bookmark mark='a'/>对长码，把码率对相对距离作图，也就是最小距离除以码长。图中曲线约束二元码族的极限码率；可纠正错误比例从下方趋近相对距离的一半。<bookmark mark='b'/>有限长度的 Singleton 界是 k 加 d 至多为 n 加一；渐近形式才是码率加相对距离至多为一。汉明界要求互不相交的球装得下。McEliece、Rodemich、Rumsey 和 Welch 的第一线性规划界在较大距离时改进汉明界。极限码率不超过这些上界的最小值。<bookmark mark='c'/>从下面看，Gilbert 和 Varshamov 证明随机码能达到一减相对距离的二元熵。<bookmark mark='d'/>上下界之间的差距已悬而未决近七十年。蓝点是短码，可以高于渐近曲线，两者并不矛盾。<bookmark mark='e'/>是否存在渐近优于随机码的长二元码族，仍然未知。",
     "A few codes meet Hamming's bound exactly.":
-        "有几个码恰好达到汉明界。<bookmark mark='a'/>1949年，Marcel Golay 发表了一个长度二十三、携带十二位的码，由这个多项式生成。<bookmark "
-        "mark='b'/>我们列出了全部四千零九十六个码字。最轻的非零码字重量为七，所以这个码能纠正任意三个错误。<bookmark mark='c'/>半径为三的球含两千"
-        "零四十八个字，四千零九十六个这样的球恰好填满全部二的二十三次方个字。这个码是完美的。<bookmark mark='d'/>Aimo Tietäväinen 在1973年证明，"
-        "重复码、汉明码和这个码，是仅有的完美二元码。<bookmark mark='e'/>它的扩展版本传回了旅行者号拍摄的木星和土星彩色照片。<bookmark mark='f'/>"
-        "它还能搭出 Leech 格：Henry Cohn 等人在2017年基于 Maryna Viazovska 的方法证明，这是二十四维里堆积球最密的方式。",
+        "少数码精确达到有限长度的汉明界。<bookmark mark='a'/>1949年，Marcel Golay 发表了用这个多项式生成的二十三位码，携带十二位数据。<bookmark mark='b'/>我们列出全部四千零九十六码字。最轻的非零码字重量为七，所以能纠正任意三个错误。<bookmark mark='c'/>半径三的球有两千零四十八个字，四千零九十六个这样的球恰好铺满整个二十三维二元空间，因此它是完美码。<bookmark mark='d'/>Tietäväinen 在1973年的结果把非平凡二元完美码的参数限制为重复码、汉明码与 Golay 码的参数。这并未分类所有具有这些参数的非线性码。<bookmark mark='e'/>它的扩展码传回了旅行者探测器拍摄的木星和土星彩色图像。<bookmark mark='f'/>扩展码还用于构造 Leech 格。Cohn 等人在2017年沿用 Viazovska 的方法证明，它实现了二十四维最密球堆积。",
     # ------------------------------------------------------------------ Fields
     "Chapter five. Finite fields.": "第5章。有限域。",
     "The codes of the next chapters compute with polynomials,":
@@ -235,12 +227,7 @@ ZH = {
         "这是解码器处理我们的码的一个块的过程。<bookmark mark='a'/>在百分之七的噪声下，三百四十二位到达时被翻转了。一轮又一轮，置信越来越明确，错误"
         "渐渐消融：十四轮之后一个不剩。<bookmark mark='b'/>在百分之九时，四百三十二位被翻转，解码器卡在三百个左右，不论运行多久。<bookmark mark='c'/>"
         "但它知道：有些奇偶校验仍不满足，所以失败的块会被报告出来，而不是悄悄放行。",
-    "We built a rate-one-half code of length four thousand eight hundred,":
-        "我们造了一个码率二分之一、长度四千八百、图中没有短环的码，在每个噪声水平上解码一百个带噪的块。<bookmark mark='a'/>翻转率到百分之七又四分之一"
-        "为止，每个块都完美恢复。然后，在一两个百分点之内，几乎全部失败：这就是瀑布。<bookmark mark='b'/>Tom Richardson 和 Rüdiger Urbanke 的密度演化"
-        "预言了这类码在很长时悬崖的位置：百分之八点四。这个码率下的 Shannon 极限是十一。<bookmark mark='c'/>在擦除信道上，这个预言是一行递推，我们精确"
-        "算出：零点四二九四，而容量是二分之一。<bookmark mark='d'/>让不同的位参与不同数目的校验，能填平剩下的大部分差距。2001年，Sae-Young Chung、"
-        "Forney、Richardson 和 Urbanke 设计出了离 Shannon 极限只有千分之四分贝的这种码。",
+    "We built a design-rate-one-half code": "我们搭建了长度四千八百、设计码率为二分之一的码，用有预算限制的交换尝试消除四环，并在每个噪声点测试一百个块。解码器在所有校验通过或迭代预算耗尽时停止；错误的合法码字也计为失败。<bookmark mark='a'/>在较低的采样噪声下，一百个块都正确恢复；噪声提高后几乎都失败，这就是瀑布。<bookmark mark='b'/>Richardson 和 Urbanke 的密度演化给这类长码预测的阈值约为百分之八点四。我们的小规模有限实验并不能证明这个阈值。这一码率的 Shannon 极限约为百分之十一。<bookmark mark='c'/>擦除信道上，密度演化是一行递推，数值迭代给出约零点四二九四，而容量极限是二分之一。<bookmark mark='d'/>使用不规则度分布可以缩小差距。2001年，Chung、Forney、Richardson 和 Urbanke 设计了距 Shannon 极限仅约零点零零四五分贝的码。",
     "The history is strange.":
         "这段历史很奇特。<bookmark mark='a'/>Gallager 的码需要的计算量超出了1960年代硬件的能力，于是被遗忘了三十年。<bookmark mark='b'/>1993年，"
         "Claude Berrou、Alain Glavieux 和 Punya Thitimajshima 提出了 Turbo 码：两个卷积码，其中一个吃进打乱过的数据副本，解码时来回交换置信。"
@@ -261,10 +248,7 @@ ZH = {
         "信道就更加分化：这里是直到六十四条时全部信道的擦除概率。<bookmark mark='d'/>到一千零二十四条信道时，已有三分之一近乎完美，三分之一近乎无用，"
         "中间的还在不断缩小。<bookmark mark='e'/>总容量始终不变，所以变得完美的比例恰好趋于容量。把数据放在好的上面，把坏的冻结为零。",
     "Decoding follows the construction.":
-        "解码沿着构造进行。<bookmark mark='a'/>一次解码一位，每位都用到已经做出的判决，时间是 N log N。<bookmark mark='b'/>我们在二元对称信道上发送"
-        "码率二分之一的极化码。远低于容量时，较长的码出错更少；当信道逼近容量，两者都崩溃。<bookmark mark='c'/>在实际码长下，朴素的逐次消除并不是最好"
-        "的解码器。Ido Tal 和 Alexander Vardy 保留一个候选路径的短列表，再用第8章的 CRC 挑出正确的那条。<bookmark mark='d'/>2016年，5G 的标准组织"
-        "为控制信道选择了极化码，为数据选择了 LDPC 码：从 Arıkan 的论文到几十亿部手机，十年。",
+        "解码沿着构造进行。<bookmark mark='a'/>逐位作决定，每一步使用此前的决定，时间为 N 乘 log N。<bookmark mark='b'/>我们在二元对称信道上测试二分之一码率的极化码，用基于擦除信道的可靠性排序选择冻结位，并采用最小和近似逐次消除解码。这些有限实验不是容量定理的证明。远低于容量时长码错误较少，接近容量时两者都会失败。<bookmark mark='c'/>实际短码通常采用更强的列表解码。Tal 与 Vardy 保留若干候选路径，再用 CRC 辅助挑选。<bookmark mark='d'/>2016年，5G 标准组织选用极化码传控制信息、LDPC 码传数据；从 Arıkan 的论文到数十亿部手机，大约用了十年。",
     # ------------------------------------------------------------------ Storage
     "Chapter thirteen. Codes for storage.": "第13章。存储用的码。",
     "Storage is the erasure channel:":
@@ -295,8 +279,7 @@ ZH = {
         "有时你只需要一个巨大编码文件里的一位，而不是全部。<bookmark mark='a'/>Hadamard 码存储消息的每一种奇偶。要得到第 i 位，就在一个随机位置 a "
         "和把 a 的第 i 位翻转后的位置各读一次码字；两者的异或就是这一位。<bookmark mark='b'/>两次读取各自落在一个均匀随机的位置上，所以如果有 delta "
         "比例被损坏，答案正确的概率至少是一减二 delta。我们的测量值正好略高于这条线，而对十五对读取取多数几乎总是对的。<bookmark mark='c'/>这是一种"
-        "局部可解码码，第27部分线性性测试的近亲。<bookmark mark='d'/>代价是长度：k 位要二的 k 次方个位置。只读两三次就能解码的码最短能有多短，是一个"
-        "重大的未解问题，上下界之间差距巨大。",
+        "局部可解码码，第27部分线性性测试的近亲。<bookmark mark='d'/>代价是长度：k 位要二的 k 次方个位置。在常数噪声和成功率要求下，二元两查询码必须具有指数长度。三查询码的最优长度仍未知，上下界差距巨大。",
     "Two linked breakthroughs came in 2021.":
         "2021年出现了两项相互关联的突破。<bookmark mark='a'/>局部可测试码让你只读几个随机符号，就能判断一个字是码字，还是离每个码字都很远。<bookmark "
         "mark='b'/>几十年来，没人知道这样的码能否同时具有常数码率和常数相对距离，也就是所谓的 c 立方码。<bookmark mark='c'/>Irit Dinur、Shai Evra、"

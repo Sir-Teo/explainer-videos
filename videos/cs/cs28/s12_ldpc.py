@@ -143,29 +143,32 @@ class Ldpc(VoiceoverScene):
         dots = VGroup(*[Dot(q, radius=0.06, color=YES) for q in pts])
         bp = DashedLine(ax.c2p(0.084, 0), ax.c2p(0.084, 1.02), color=HEAD, stroke_width=2)
         sh = DashedLine(ax.c2p(0.11, 0), ax.c2p(0.11, 1.02), color=NO, stroke_width=2)
-        bpl = label(r"BP threshold \\ 0.084", font_size=15, color=HEAD).next_to(bp, UP, buff=0.05).shift(LEFT * 0.35)
+        bpl = label(r"BP reference \\ $\approx 0.084$", font_size=15, color=HEAD).next_to(bp, UP, buff=0.05).shift(LEFT * 0.35)
         shl = label(r"Shannon \\ 0.11", font_size=15, color=NO).next_to(sh, UP, buff=0.05)
         last_ok = max(r["p"] for r in d["rows"] if r["fer"] == 0)
         notes = VGroup(
-            label(rf"a (3,6) code of length {d['n']:,}: \ rate $\tfrac12$, \\ 100 blocks per point, \ 50 rounds of "
+            label(rf"a (3,6) code of length {d['n']:,}: \ design rate $\tfrac12$, \\ 100 blocks per point, \ 50 rounds of "
                   r"BP".replace(",", "{,}"), font_size=20, color=WHITE),
-            label(rf"every block decoded up to $p$ = {last_ok:g}; \\ then the cliff", font_size=20, color=YES),
+            label(rf"0 failures in 100 trials up to $p$ = {last_ok:g}; \\ parity checks decide when BP stops", font_size=20, color=YES),
             label(r"density evolution predicts the cliff \\ for long codes: \ 0.084 \ (Richardson and Urbanke)",
                   font_size=20, color=HEAD),
-            label(rf"on the erasure channel it is exact: \\ we compute {d['bec_threshold']:.4f}, \ against "
+            label(rf"BEC density evolution, \ numerical threshold: \\ {d['bec_threshold']:.4f}, \ against "
                   r"capacity's 0.5", font_size=20, color=DATA),
             label(r"irregular degrees close the gap: \\ within 0.0045 dB of capacity \ (Chung et al., 2001)",
                   font_size=20, color=LAM),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(ax, RIGHT, buff=0.6).align_to(ax, UP)
         fit_right(notes)
         with self.voiceover(
-            "We built a rate-one-half code of length four thousand eight hundred, with no short cycles in its graph, "
-            "and decoded a hundred noisy blocks at each noise level. <bookmark mark='a'/> Up to seven and a quarter "
-            "percent flips, every block came back perfectly. Then, within a percent or two, almost none do: the "
+            "We built a design-rate-one-half code of length four thousand eight hundred, using bounded swaps to "
+            "remove four-cycles, and decoded a hundred noisy blocks at each noise level. The decoder stops when "
+            "all parity checks pass or its iteration budget runs out; a wrong codeword still counts as a failure. "
+            "<bookmark mark='a'/> At the lower sampled noise levels all hundred blocks came back perfectly. "
+            "At higher noise levels almost none do: the "
             "waterfall. <bookmark mark='b'/> Tom Richardson and Rüdiger Urbanke's density evolution predicts where "
-            "the cliff falls for very long codes of this kind: eight point four percent. Shannon's limit for this "
+            "the cliff falls for very long codes of this kind: about eight point four percent. Our small finite "
+            "experiment does not prove that threshold. Shannon's limit for this "
             "rate is eleven. <bookmark mark='c'/> On the erasure channel the prediction is a one-line recursion, "
-            "and we compute it exactly: point four two nine four, against a capacity of one half. <bookmark "
+            "and numerical iteration gives about point four two nine four, against a capacity of one half. <bookmark "
             "mark='d'/> Giving different bits different numbers of checks closes most of the remaining gap. In 2001 "
             "Sae-Young Chung, Forney, Richardson and Urbanke designed such a code within four thousandths of a "
             "decibel of the Shannon limit."

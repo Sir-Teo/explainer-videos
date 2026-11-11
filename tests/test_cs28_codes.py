@@ -47,6 +47,16 @@ class TestBinaryCodes(unittest.TestCase):
 
 
 class TestFieldsAndRS(unittest.TestCase):
+    def test_zero_inverse_and_zero_parity(self):
+        for inverse in (lambda: C.gf_inv(0), lambda: C.gf_pow(0, -1)):
+            with self.assertRaises(ZeroDivisionError):
+                inverse()
+        self.assertEqual(C.rs_encode([1, 2, 3], 0), [1, 2, 3])
+        self.assertEqual(C.rs_decode([1, 2, 3], 0), ([1, 2, 3], []))
+        self.assertEqual(C.gp_divmod([7], [1, 2, 3]), ([], [7]))
+        with self.assertRaises(ValueError):
+            C.rs_decode(C.rs_encode([1, 2], 4), 4, [0, 0])
+
     def test_gf256(self):
         for a in range(1, 256):
             self.assertEqual(C.gf_mul(a, C.gf_inv(a)), 1)
@@ -77,6 +87,16 @@ class TestFieldsAndRS(unittest.TestCase):
         dec, bad = C.berlekamp_welch(list(zip(xs, y)), 3, 3, p)
         self.assertEqual(dec, msg)
         self.assertEqual(bad, [1, 5, 8])
+
+    def test_welch_reports_actual_errors_with_unused_budget(self):
+        p, msg, xs = 97, [5, 3, 2], list(range(9))
+        for errors in range(4):
+            ys = C.rs_eval_encode(msg, xs, p)
+            for i in range(errors):
+                ys[i] = (ys[i] + 1) % p
+            self.assertEqual(C.berlekamp_welch(list(zip(xs, ys)), 3, 3, p), (msg, xs[:errors]))
+        with self.assertRaises(ValueError):
+            C.berlekamp_welch([(0, 1), (97, 1), (2, 3)], 3, 0, p)
 
 
 class TestQrAndCrc(unittest.TestCase):
@@ -111,6 +131,22 @@ class TestQrAndCrc(unittest.TestCase):
 
 
 class TestModern(unittest.TestCase):
+    def test_bp_stops_on_valid_incorrect_codeword(self):
+        # With this fixed channel sample, 11 is a valid but incorrect word of the
+        # length-two repetition code. Parity permits stopping; truth cannot be used.
+        trace, unsat = C.ldpc_bp_trace([(0, 0), (0, 1)], 1, 2, 0.49, random.Random(7), iters=4)
+        self.assertEqual(trace, [2, 2])
+        self.assertEqual(unsat, [0])
+        self.assertEqual(C.ldpc_bp_bsc([(0, 0), (0, 1)], 1, 2, 0.49, 1, random.Random(7)), (1.0, 1.0))
+
+    def test_polar_rejects_non_power_of_two_blocks(self):
+        import numpy as np
+        for n in (0, 3, 6):
+            with self.assertRaises(ValueError):
+                C.polar_encode([0] * n)
+            with self.assertRaises(ValueError):
+                C.polar_sc(np.ones(n), [False] * n)
+
     def test_viterbi_and_ldpc_and_polar(self):
         rng = random.Random(4)
         bits = [rng.randrange(2) for _ in range(100)]

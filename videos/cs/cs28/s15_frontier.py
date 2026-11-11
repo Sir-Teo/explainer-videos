@@ -73,7 +73,7 @@ class Frontier(VoiceoverScene):
                   r"$\ge 1 - 2\delta$", font_size=21, color=YES),
             label(r"a \textbf{locally decodable code}: \ any bit from a constant number of reads, \ the cousin of "
                   r"Part 27's linearity test", font_size=21, color=HEAD),
-            label(r"the price: \ length $2^k$ for $k$ bits. \ How short can a 2- or 3-query code be? \ Open, \ with "
+            label(r"the price: \ length $2^k$ for $k$ bits. \ binary 2-query codes need exponential length; \\ 3-query bounds have "
                   r"large gaps", font_size=21, color=NO),
         ).arrange(DOWN, buff=0.22).next_to(tl, DOWN, buff=0.35)
         with self.voiceover(
@@ -84,7 +84,7 @@ class Frontier(VoiceoverScene):
             "at least one minus two delta. Our measurements sit just above that line, and a majority over fifteen "
             "pairs is nearly always right. <bookmark mark='c'/> This is a locally decodable code, the cousin of "
             "Part 27's linearity test. <bookmark mark='d'/> The price is length: two to the k positions for k bits. "
-            "How short a code readable with two or three queries can be is a major open problem, with huge gaps "
+            "Binary two-query codes require exponential length for constant noise and success guarantees. For three queries, the optimal length is still open, with large gaps "
             "between the bounds."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab), FadeIn(tl))
