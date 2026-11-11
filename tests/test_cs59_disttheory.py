@@ -8,6 +8,19 @@ from explainer.cs.disttheory import theory as T
 
 
 class Theory(unittest.TestCase):
+    def test_protocol_input_contracts(self):
+        for args in ((3, 2), (10, 0), (10, 12)):
+            with self.assertRaises(ValueError):
+                T.majority(n=args[0], margin=args[1], trials=1)
+        self.assertEqual(T.majority(n=1, margin=1, trials=1)["parallel_time_mean"], 0)
+        unanimous = T.majority(n=4, margin=4, trials=1)
+        self.assertEqual(unanimous["correct"], 1)
+        self.assertEqual(unanimous["trace"][-1]["A"], 4)
+        with self.assertRaises(ValueError):
+            T.cole_vishkin(n=1)
+        with self.assertRaises(ValueError):
+            T.log_star(float("inf"))
+
     def test_cole_vishkin(self):
         r = T.cole_vishkin(n=5000)
         self.assertTrue(r["proper"])

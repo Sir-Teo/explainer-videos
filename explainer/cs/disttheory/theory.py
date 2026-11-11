@@ -13,6 +13,8 @@ import numpy as np
 
 
 def log_star(n: float) -> int:
+    if not n > 0 or n == math.inf:
+        raise ValueError("log-star needs a positive finite input")
     k = 0
     while n > 1:
         n = math.log2(n)
@@ -29,6 +31,8 @@ def cole_vishkin(n: int = 1_000_000, seed: int = 0, keep: int = 24) -> dict:
     rounds remove colours 5, 4 and 3 (each node with that colour picks the smallest of {0, 1, 2} its neighbours do
     not use).  Returns the rounds, the number of colours after each, and the first ``keep`` nodes' colours per
     round (for drawing)."""
+    if n < 2 or keep < 0:
+        raise ValueError("a properly coloured ring needs at least two nodes and a nonnegative trace length")
     rng = np.random.default_rng(seed)
     c = rng.permutation(n).astype(np.int64) + rng.integers(0, 2 ** 20)    # distinct ids
     trace = [c[:keep].tolist()]
@@ -184,6 +188,8 @@ def majority(n: int = 200, margin: int = 2, trials: int = 50, seed: int = 0) -> 
     """The four-state exact-majority protocol (Draief and Vojnovic 2012; Mertzios et al. 2014): strong opinions A, B
     and weak a, b.  A + B -> a + b (they cancel); A + b -> A + a; B + a -> B + b (the strong convert the weak).  With
     any positive margin, all agents end up holding the majority's opinion; interactions are random pairs."""
+    if n < 1 or not 0 < margin <= n or (n + margin) % 2 or trials <= 0:
+        raise ValueError("need a realizable positive A-majority margin and positive trials")
     rng = random.Random(seed)
     rows = []
     out_steps, correct = [], 0
@@ -193,7 +199,7 @@ def majority(n: int = 200, margin: int = 2, trials: int = 50, seed: int = 0) -> 
         state = ["A"] * nA + ["B"] * (n - nA)
         steps = 0
         hist = []
-        while True:
+        while not all(s in "Aa" for s in state):
             i, j = rng.sample(range(n), 2)
             x, y = state[i], state[j]
             if {x, y} == {"A", "B"}:
@@ -214,6 +220,9 @@ def majority(n: int = 200, margin: int = 2, trials: int = 50, seed: int = 0) -> 
                     break
                 if steps > 2000 * n:
                     break
+        final_counts = {s: state.count(s) for s in "ABab"}
+        if not hist or hist[-1] != final_counts:
+            hist.append(final_counts)
         out_steps.append(steps / n)
         correct += all(s in "Aa" for s in state)
         if trace is None:
