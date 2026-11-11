@@ -20,6 +20,9 @@ from explainer.cs.algo.codes import gf_div, gf_mul, gf_pow
 
 def layout(level: int, disks: int, stripes: int) -> list[list[str]]:
     """A grid [stripe][disk] of labels: "D3" for data block 3, "P"/"Q" for parity, "M3" for a mirror of block 3."""
+    minimum = {0: 1, 1: 2, 4: 2, 5: 2, 6: 3}
+    if level not in minimum or disks < minimum[level] or stripes < 0 or (level == 1 and disks % 2):
+        raise ValueError("unsupported RAID level, disk count, or stripe count")
     grid = []
     b = 0
     for s in range(stripes):
@@ -29,8 +32,8 @@ def layout(level: int, disks: int, stripes: int) -> list[list[str]]:
                 row[d] = f"D{b}"
                 b += 1
         elif level == 1:
-            row = [f"D{b}" if d % 2 == 0 else f"M{b}" for d in range(disks)]
-            b += 1
+            row = [f"{'D' if d % 2 == 0 else 'M'}{b + d // 2}" for d in range(disks)]
+            b += disks // 2
         elif level in (4, 5, 6):
             npar = 2 if level == 6 else 1
             if level == 4:
@@ -132,24 +135,40 @@ def throughput(level: int, n: int, S: float = 1.0, R: float = 1.0) -> dict:
 
 
 def rebuild_hours(tb: float, mb_s: float) -> float:
+    if not math.isfinite(tb) or tb < 0 or not math.isfinite(mb_s) or mb_s <= 0:
+        raise ValueError("capacity must be nonnegative and rebuild bandwidth positive and finite")
     return tb * 1e12 / (mb_s * 1e6) / 3600
 
 
 def rebuild_risk(n: int, tb: float, afr: float, rebuild_mb_s: float = 100.0, ure: float = 1e-15) -> dict:
     """While one of n disks is rebuilt (reading every survivor end to end): the chance another disk fails, and the
-    chance some sector of the survivors cannot be read, at ``ure`` errors per bit read (a datasheet bound)."""
+    chance some sector of the survivors cannot be read. Models independent Poisson errors at ``ure`` per bit,
+    often a datasheet bound rather than a measured rate. ``p_loss`` is the union of these model events, not the
+    probability that every byte of the array is lost; a bad sector may affect only one stripe."""
+    if n < 2 or not math.isfinite(afr) or not 0 <= afr < 1 or not math.isfinite(ure) or ure < 0:
+        raise ValueError("need at least two disks, AFR in [0, 1), and nonnegative finite URE rate")
     hours = rebuild_hours(tb, rebuild_mb_s)
-    rate = -math.log(1 - afr) / 8766            # failures per disk-hour, from the annual failure rate
-    p_fail = 1 - math.exp(-(n - 1) * rate * hours)
+    rate = -math.log1p(-afr) / 8766            # failures per disk-hour, from the annual failure rate
+    fail_hazard = (n - 1) * rate * hours
+    p_fail = -math.expm1(-fail_hazard)
     bits = (n - 1) * tb * 1e12 * 8
-    p_ure = 1 - math.exp(-bits * ure)
+    ure_hazard = bits * ure
+    p_ure = -math.expm1(-ure_hazard)
     return {"hours": hours, "p_second_failure": p_fail, "p_ure": p_ure, "bits_read": bits,
-            "p_loss": 1 - (1 - p_fail) * (1 - p_ure)}
+            "p_loss": -math.expm1(-(fail_hazard + ure_hazard))}
+
+
+def _reliability_model(n: int, mttf: float, mttr: float, parity: int) -> None:
+    if parity not in (1, 2) or n <= parity:
+        raise ValueError("need one or two parity disks and at least one data disk")
+    if not all(math.isfinite(t) and t > 0 for t in (mttf, mttr)):
+        raise ValueError("MTTF and MTTR must be positive and finite")
 
 
 def mttdl(n: int, mttf: float, mttr: float, parity: int = 1) -> float:
     """Mean time to data loss with independent exponential failures: RAID 5 MTTF^2 / (n (n-1) MTTR); RAID 6
-    MTTF^3 / (n (n-1) (n-2) MTTR^2)."""
+    MTTF^3 / (n (n-1) (n-2) MTTR^2). Leading terms for fast, single-at-a-time repairs."""
+    _reliability_model(n, mttf, mttr, parity)
     if parity == 1:
         return mttf ** 2 / (n * (n - 1) * mttr)
     return mttf ** 3 / (n * (n - 1) * (n - 2) * mttr ** 2)
@@ -158,6 +177,9 @@ def mttdl(n: int, mttf: float, mttr: float, parity: int = 1) -> float:
 def simulate_mttdl(n: int, mttf: float, mttr: float, parity: int = 1, trials: int = 2000, seed: int = 0) -> float:
     """Monte Carlo of the formula's model: each working disk fails at rate 1/mttf; one failed disk at a time is
     repaired, at rate 1/mttr; data is lost when more than ``parity`` are down at once."""
+    _reliability_model(n, mttf, mttr, parity)
+    if trials <= 0:
+        raise ValueError("trials must be positive")
     rng = random.Random(seed)
     total = 0.0
     for _ in range(trials):
@@ -174,18 +196,13 @@ def simulate_mttdl(n: int, mttf: float, mttr: float, parity: int = 1, trials: in
 def mttdl_exact(n: int, mttf: float, mttr: float, parity: int = 1) -> float:
     """The same chain solved exactly: expected time from no failures to parity + 1 at once (the formula is its
     leading term when mttr << mttf / n)."""
-    import numpy as np
-    m = parity + 1                      # states 0 .. parity; absorbing at parity + 1
-    A = np.zeros((m, m))
-    b = np.zeros(m)
-    for k in range(m):
-        fail = (n - k) / mttf
-        fix = 1 / mttr if k else 0.0
-        tot = fail + fix
-        A[k, k] = 1.0
-        if k + 1 < m:
-            A[k, k + 1] -= fail / tot
-        if k:
-            A[k, k - 1] -= fix / tot
-        b[k] = 1 / tot
-    return float(np.linalg.solve(A, b)[0])
+    _reliability_model(n, mttf, mttr, parity)
+    # d_k = T_k - T_{k+1}; the backward equations give
+    # fail_k*d_k = 1 + repair*d_{k-1}. All terms are positive, avoiding
+    # the near-singular transition matrix when failures are very rare.
+    delta = mttf / n
+    deltas = [delta]
+    for k in range(1, parity + 1):
+        delta = (1 + delta / mttr) * (mttf / (n - k))
+        deltas.append(delta)
+    return math.fsum(deltas)

@@ -33,6 +33,10 @@ The instruments are in `explainer/cs/store/` (tested in `tests/test_cs34_storage
 * `raid.py`: RAID 0/1/4/5/6 layouts, XOR parity, RAID 6's P and Q over GF(256) (Part 28's field, the polynomial
   Linux uses) with two-disk recovery, small-write costs, rebuild risk, MTTDL by formula, exact Markov chain and
   simulation.
+  The exact chain uses a positive recurrence that stays accurate when failures are rare. Failures and repairs
+  are independent exponential clocks with one repair at a time; the formulas are fast-repair approximations.
+  Rebuild URE probabilities assume independent Poisson errors at the stated per-bit rate. Datasheet bounds are
+  not observed rates, and an unreadable stripe does not imply loss of every byte in the array.
 * `lsm.py`: an LSM tree with leveled or tiered compaction and per-run Bloom filters (Part 20's), and a B-tree's write
   amplification under an LRU buffer pool.
 * `cow.py`: a copy-on-write tree whose pointers carry SHA-256 checksums, with snapshots, bit rot and repair from a

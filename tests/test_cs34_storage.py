@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import random
 import unittest
+from fractions import Fraction
 
 from explainer.cs.store import cow, disk, flash, lfs, lsm, raid
 from explainer.cs.store.fs import FS, MAXFILE, Disk, FSError, crash_test, fsck
@@ -176,6 +177,9 @@ class TestDevices(unittest.TestCase):
         self.assertTrue(all(0 <= u <= 1 for u in c["final_u"]))
 
     def test_raid(self):
+        self.assertEqual(raid.layout(1, 4, 2), [["D0", "M0", "D1", "M1"], ["D2", "M2", "D3", "M3"]])
+        with self.assertRaises(ValueError):
+            raid.layout(1, 3, 1)
         rng = random.Random(2)
         D = [bytes(rng.randrange(256) for _ in range(32)) for _ in range(5)]
         P, Q = raid.pq(D)
@@ -187,6 +191,29 @@ class TestDevices(unittest.TestCase):
                 self.assertEqual(raid.rebuild_two(L, P, Q), D)
         ex = raid.mttdl_exact(8, 300, 1)
         self.assertLess(abs(raid.simulate_mttdl(8, 300, 1, trials=1500) - ex) / ex, 0.1)
+
+    def test_rare_failure_reliability(self):
+        # Closed-form backward-equation solutions, evaluated as exact rationals.
+        for lifetime in (300, 10**12):
+            a, b, c = (Fraction(k, lifetime) for k in (8, 7, 6))
+            expected5 = 1 / a + 1 / b + 1 / (a * b)
+            expected6 = expected5 + 1 / c + 1 / (b * c) + 1 / (a * b * c)
+            for parity, expected in ((1, expected5), (2, expected6)):
+                self.assertAlmostEqual(raid.mttdl_exact(8, lifetime, 1, parity) / float(expected), 1)
+        for fn in (raid.mttdl, raid.mttdl_exact, raid.simulate_mttdl):
+            for args in ((2, 300, 1, 2), (8, 0, 1, 1), (8, 300, -1, 1), (8, 300, 1, 3)):
+                with self.assertRaises(ValueError):
+                    fn(*args)
+
+    def test_small_rebuild_probabilities(self):
+        r = raid.rebuild_risk(2, 1e-12, 1e-20, ure=1e-30)
+        self.assertGreater(r["p_second_failure"], 0)
+        self.assertAlmostEqual(r["p_ure"] / 8e-30, 1)
+        self.assertGreaterEqual(r["p_loss"], r["p_ure"])
+        self.assertEqual(raid.rebuild_risk(2, 0, 0)["p_loss"], 0)
+        for kwargs in ({"afr": 1}, {"tb": -1}, {"rebuild_mb_s": 0}, {"ure": -1}):
+            with self.assertRaises(ValueError):
+                raid.rebuild_risk(**({"n": 8, "tb": 16, "afr": .03} | kwargs))
 
     def test_lsm(self):
         lv = lsm.workload("leveled", n=20_000, keys=10_000, memtable=200, lookups=500)
