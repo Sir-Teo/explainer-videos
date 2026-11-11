@@ -26,13 +26,13 @@ class Space(VoiceoverScene):
         ex = MathTex(r"\exists x_1\, \forall x_2\, \exists x_3\, \forall x_4 \cdots \;\; \varphi(x_1, \ldots, x_n)",
                      font_size=38, color=HEAD).next_to(head, DOWN, buff=0.35)
         rows = [[str(r["n"]), words(r["nodes"]), words(r["full_tree"])] for r in g["tqbf"]]
-        tab = grid_table([r"variables", r"nodes evaluated", r"full tree"], rows, widths=[2.0, 2.6, 2.2],
+        tab = grid_table([r"variables", r"nodes evaluated", r"full tree"], rows, widths=[1.8, 2.4, 2.0],
                          row_h=0.42, font_size=20, mono_cols=(), colors=[[WHITE, YES, GREY_A]] * len(rows))
-        tab.next_to(ex, DOWN, buff=0.45).to_edge(LEFT, buff=1.0)
+        tab.next_to(ex, DOWN, buff=0.45).to_edge(LEFT, buff=0.7)
         notes = VGroup(
             label(r"evaluate by recursion: \ try $x_1$ = 0 and 1, \\ the rest recursively", font_size=21,
                   color=WHITE),
-            label(r"\textbf{space}: \ one assignment and a stack of depth $n$: \ polynomial", font_size=21,
+            label('space: depth $n$; polynomial \\\\ assignment storage; this code \\\\ copies partial assignments', font_size=21,
                   color=YES),
             label(r"\textbf{time}: \ exponential in the worst case \\ (pruning cuts our random ones)", font_size=21,
                   color=NO),
@@ -79,13 +79,7 @@ class Space(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.5)
         fit_right(notes)
         with self.voiceover(
-            "Alternating quantifiers are a game. <bookmark mark='a'/> There exists a move for me, such that for "
-            "every reply, there exists a move for me, and so on. Generalized geography makes this literal: players "
-            "take turns moving a token along an arrow to a vertex not yet visited, and whoever cannot move loses. "
-            "<bookmark mark='b'/> On this graph, the player who puts the token on vertex zero has a winning "
-            "strategy; our search proves it after looking at eleven positions. <bookmark mark='c'/> Thomas Schaefer showed in "
-            "1978 that any quantified formula can be turned into a geography graph, so deciding who wins is "
-            "PSPACE-complete."
+            "Quantifier alternation also describes games. <bookmark mark='a'/> Generalized geography moves a token along a directed edge to a vertex not visited before; a player unable to move loses. Here player one places the starting token, and player two moves next. <bookmark mark='b'/> The displayed winner and position count follow that initial-placer convention. A separate recursive set search checks the result. Our actual instrument memoizes positions and can use exponential storage. <bookmark mark='c'/> For the PSPACE membership proof, traverse possible plays depth first, keeping only the current path of at most the number of vertices. Generalized geography is PSPACE-complete under the standard rules. That theorem and the storage cost of our finite memoized implementation are distinct claims."
         ) as vo:
             self.play(FadeIn(head), Create(edges), FadeIn(nodes))
             self.play(FadeIn(notes[0]))
@@ -102,27 +96,20 @@ class Space(VoiceoverScene):
                 [r"Go \ (no ko fights)", r"PSPACE-hard", r"Lichtenstein and Sipser \ (1980)"],
                 [r"Go \ (Japanese ko rule)", r"EXPTIME-complete", r"Robson \ (1983)"],
                 [r"chess, \ checkers", r"EXPTIME-complete", r"Fraenkel and Lichtenstein \ (1981); \ Robson \ (1984)"],
-                [r"Tetris \ (pieces known)", r"NP-complete", r"chapter 7"]]
-        tab = grid_table([r"game", r"who wins?", r"by"], rows, widths=[3.6, 3.0, 5.6], row_h=0.5, font_size=20,
+                ['offline Tetris: clear target rows', r"NP-complete", r"chapter 7"]]
+        tab = grid_table([r"game", 'decision objective / complexity', r"by"], rows, widths=[3.6, 3.0, 5.6], row_h=0.5, font_size=20,
                          mono_cols=(), colors=[[WHITE, LAM, GREY_A], [WHITE, LAM, GREY_A], [WHITE, NO, GREY_A],
                                                [WHITE, NO, GREY_A], [WHITE, HEAD, GREY_A]])
         tab.next_to(head, DOWN, buff=0.45).set_x(0)
         notes = VGroup(
-            label(r"polynomially long games are PSPACE; \ games that can last exponentially long reach EXPTIME",
+            label('polynomial play length gives a PSPACE upper bound; exact game rules determine hardness results',
                   font_size=21, color=WHITE),
             label(r"EXPTIME-complete means \textbf{provably} not in P \ (chapter 2's hierarchy)", font_size=21,
                   color=NO),
             label(r"one of the few natural problems we \textbf{know} to be hard", font_size=21, color=YES),
         ).arrange(DOWN, buff=0.2).next_to(tab, DOWN, buff=0.4)
         with self.voiceover(
-            "Real board games, generalized to n by n boards, sit here too. <bookmark mark='a'/> Deciding who wins "
-            "a position in Hex is PSPACE-complete. Go without ko fights is PSPACE-hard, by David Lichtenstein and "
-            "Michael Sipser. With the Japanese ko rule, games can last exponentially long, and Go becomes complete "
-            "for exponential time, as do chess and checkers. <bookmark mark='b'/> Games of polynomial length live "
-            "in polynomial space; those that can last exponentially long reach exponential time. <bookmark "
-            "mark='c'/> And exponential-time complete means provably outside P, by the hierarchy theorem of chapter "
-            "two. <bookmark mark='d'/> Generalized chess is one of the few natural problems that we can prove has no "
-            "polynomial algorithm."
+            "Generalized games require precise rules. <bookmark mark='a'/> Hex winner decision is PSPACE-complete. Results for Go depend on the ko and repetition rules, while suitable generalized chess and checkers rules yield EXPTIME-complete problems. These statements concern growing boards and formal move conventions. <bookmark mark='b'/> A polynomially bounded play length gives a depth-first polynomial-space upper bound when positions and legal moves are efficiently represented. Exponentially long play requires a separate configuration or game-graph analysis; length alone proves no completeness result. <bookmark mark='c'/> EXPTIME-complete problems are outside P by the time hierarchy. PSPACE versus P remains open. <bookmark mark='d'/> Offline Tetris concerns achieving a stated one-player objective with known pieces, rather than a two-player winner question. A fixed everyday board is a finite instance of a generalized family."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
             vo.wait_until("a")

@@ -40,20 +40,13 @@ class Sqrt(VoiceoverScene):
                   font_size=21, color=WHITE),
             label(r"Hopcroft, \ Paul and Valiant \ (1977): \\ $\mathrm{TIME}(t) \subseteq \mathrm{SPACE}(t / \log t)$, "
                   r"\ by pebbling this graph", font_size=21, color=DATA),
-            label(r"for 48 years, \ nobody did better", font_size=21, color=GREY_A),
-            label(r"Williams \ (February 2025): \\ $\mathrm{TIME}(t) \subseteq \mathrm{SPACE}(\sqrt{t \log t})$",
+            label('the general deterministic multitape simulation resisted improvement for decades', font_size=21, color=GREY_A),
+            label('Williams (2025), deterministic multitape, $t\\ge n$:\\\\ TIME$(t)\\subseteq$ SPACE$(\\sqrt{t\\log t})$',
                   font_size=24, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(grid, RIGHT, buff=0.8).align_to(grid, UP)
         fit_right(lines)
         with self.voiceover(
-            "Every computation of t steps uses at most t cells of memory. Can it always get by with fewer? "
-            "<bookmark mark='a'/> Draw the computation as a grid: time downwards, tape across, cut into blocks of b "
-            "steps and b cells. <bookmark mark='b'/> What a block contains at the end depends only on the block "
-            "above it and its neighbours. <bookmark mark='c'/> In 1977 John Hopcroft, Wolfgang Paul and Leslie "
-            "Valiant used that structure to simulate t steps in about t over log t space. <bookmark mark='d'/> For "
-            "almost fifty years nobody improved it, and many believed nothing much better was possible. <bookmark "
-            "mark='e'/> In February 2025 Ryan Williams proved that t steps can be simulated in space about the "
-            "square root of t log t."
+            "How much space can simulate a time-bounded computation? <bookmark mark='a'/> For deterministic multitape Turing machines, divide a computation into blocks. The grid is an illustration of dependency structure, not a literal implementation of the entire proof. <bookmark mark='b'/> Hopcroft, Paul and Valiant obtained a time-over-log-time space simulation in 1977. <bookmark mark='c'/> Improving that general bound resisted progress for decades. <bookmark mark='d'/> Williams's 2025 theorem gives TIME t contained in SPACE of order square root of t log t, for t at least n, in the stated multitape model. It is not an unrestricted RAM theorem. <bookmark mark='e'/> The proof reduces the simulation to implicitly generated tree-evaluation instances. Shared dependencies may be unfolded into a much larger tree, accessed on demand rather than stored in full."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -83,24 +76,16 @@ class Sqrt(VoiceoverScene):
                   r"\ 2012)", font_size=20, color=WHITE),
             label(r"the obvious way keeps a value per level: \\ space $\approx$ height $\times$ value size", font_size=20,
                   color=GREY_A),
-            label(r"it was conjectured to be optimal, \ which would have separated L from P", font_size=20,
+            label('pebbling intuition suggests lower bounds; \\\\ tree evaluation in L or outside NL remains unresolved', font_size=20,
                   color=NO),
             label(r"Cook and Mertz \ (2024): \ $O(\log n \cdot \log\log n)$ space, \\ by \textbf{reusing} memory "
                   r"that already holds data, \\ and restoring it afterwards", font_size=20, color=YES),
-            label(r"Williams: \ the block grid of a computation \\ \textbf{is} a tree-evaluation instance", font_size=20,
+            label('Williams: implicit tree-evaluation instances \\\\ unfold dependencies and are accessed on demand', font_size=20,
                   color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(edges, RIGHT, buff=0.6).shift(UP * 0.3)
         fit_right(lines)
         with self.voiceover(
-            "Williams's proof rests on a problem called tree evaluation. <bookmark mark='a'/> The leaves of a tree "
-            "hold values; each internal node applies a function to its children's values; compute the root. "
-            "<bookmark mark='b'/> The obvious method keeps one value per level of the tree, <bookmark mark='c'/> and "
-            "this was conjectured to be essentially optimal; proving it would have separated logarithmic space from "
-            "polynomial time. <bookmark mark='d'/> In 2024 James Cook and Ian Mertz refuted the conjecture. Their "
-            "algorithm computes into memory that is already full of other data, adding and later subtracting, so "
-            "the same bits serve many purposes at once. <bookmark mark='e'/> Williams's step was to see that the "
-            "block structure of any computation can be arranged as a tree-evaluation instance, so the Cook-Mertz "
-            "algorithm applies."
+            "Tree evaluation asks for the root value. <bookmark mark='a'/> Leaves carry values and internal nodes provide explicit tables mapping child values to a parent value. <bookmark mark='b'/> Keeping a value at each level uses height times value length space. This motivates pebbling-based algorithms and lower-bound conjectures. <bookmark mark='c'/> Proving sufficiently strong tree-evaluation lower bounds would separate small-space classes from P, but those separations remain open. <bookmark mark='d'/> Cook and Mertz found a more space-efficient evaluation algorithm using algebraic techniques. This undermines some pebbling intuitions; it does not settle membership in L or disprove the conjecture that tree evaluation is outside NL. <bookmark mark='e'/> Williams uses that improved algorithm as an ingredient in the multitape simulation theorem."
         ) as vo:
             self.play(FadeIn(head), Create(edges), FadeIn(nodes), FadeIn(tl))
             for mk, ln in zip("abcde", lines):
@@ -110,7 +95,7 @@ class Sqrt(VoiceoverScene):
         self.clear_scene()
 
     def numbers(self):
-        head = label(r"How much memory, \ for a trillion steps", font_size=32).to_edge(UP, buff=0.35)
+        head = label('Comparing asymptotic functions, with constants omitted', font_size=32).to_edge(UP, buff=0.35)
         rows = []
         for t in (1e6, 1e9, 1e12, 1e15):
             lg = math.log2(t)
@@ -120,20 +105,13 @@ class Sqrt(VoiceoverScene):
                          colors=[[WHITE, DATA, YES]] * len(rows))
         tab.next_to(head, DOWN, buff=0.45).set_x(0)
         notes = VGroup(
-            label(r"cells of a multitape Turing machine, \ constants ignored", font_size=20, color=GREY_A),
-            label(r"a consequence: \ some problems solvable in \textbf{linear space} \\ need nearly \textbf{quadratic "
-                  r"time} on such machines", font_size=22, color=HEAD),
-            label(r"a step towards P $\ne$ PSPACE, \ still far from it; \ and it shows how much is unknown",
+            label('illustrative function values, not measured or guaranteed cell counts; deterministic multitape model', font_size=20, color=GREY_A),
+            label('constructible $s\\ge n$: SPACE$(s)\\not\\subseteq$ TIME$(s^{2-\\varepsilon})$ for fixed $\\varepsilon>0$', font_size=22, color=HEAD),
+            label('time-space separation under stated assumptions; P vs PSPACE and L vs P remain open',
                   font_size=22, color=NO),
         ).arrange(DOWN, buff=0.25).next_to(tab, DOWN, buff=0.4)
         with self.voiceover(
-            "How big a difference is it? <bookmark mark='a'/> For a trillion steps, the 1977 bound allows about "
-            "twenty-five billion cells; the new bound, about six million. <bookmark mark='b'/> It has a striking "
-            "corollary. If a linear-space problem could always be solved in much less than quadratic time, this "
-            "simulation would contradict the space hierarchy theorem. So some problems that fit in linear space "
-            "need nearly quadratic time on multitape machines. <bookmark mark='c'/> It is a small step towards "
-            "separating P from PSPACE, and still far from it. But it is a reminder of how much is unknown: a "
-            "fifty-year-old bound fell to a new idea about reusing memory."
+            "Compare the asymptotic functions. <bookmark mark='a'/> At a trillion steps, the expressions t over log base two of t and square root of t log base two of t differ dramatically. The table evaluates those functions with constants omitted, not measured or guaranteed memory cell counts. <bookmark mark='b'/> The theorem implies that for space-constructible s at least n, and every fixed positive epsilon, some problems in SPACE s are outside TIME s to the power two minus epsilon. <bookmark mark='c'/> The machine model and constructibility conditions matter. This is a time-space separation theorem, not a resolution of P versus PSPACE or L versus P."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
             vo.wait_until("a")

@@ -42,17 +42,11 @@ class Np(VoiceoverScene):
             label(r"and $V$ runs in polynomial time", font_size=23, color=WHITE),
             label(r"3-colouring: \ $c$ = the colours; \ \ SAT: \ $c$ = the assignment; \ \ composite: \ $c$ = a "
                   r"factor", font_size=21, color=DATA),
-            label(r"a \textbf{no} answer needs no certificate: \ NP is lopsided \ (chapter 9)", font_size=21,
+            label('NP does not require a uniform short-certificate system for no-instances; individual proofs may exist', font_size=21,
                   color=NO),
         ).arrange(DOWN, buff=0.25).next_to(boxes, DOWN, buff=0.55)
         with self.voiceover(
-            "Here is the definition that makes the hook's question precise. <bookmark mark='a'/> A verifier is a "
-            "polynomial-time program that takes the input and a certificate, a proposed proof. <bookmark mark='b'/> "
-            "A problem is in NP if, for every yes-instance, some short certificate makes the verifier accept, and "
-            "for every no-instance, none does. <bookmark mark='c'/> For colouring, the certificate is the colouring. "
-            "For satisfiability it is the assignment; for compositeness, a factor. <bookmark mark='d'/> Notice the "
-            "asymmetry. A yes has a proof you can check. A no, such as this graph cannot be coloured, may have no "
-            "short proof at all. That lopsidedness returns in chapter nine."
+            "Here is the definition behind finding and checking. <bookmark mark='a'/> A decision language is in NP when each yes-instance has a certificate whose bit length is polynomial in the input length. <bookmark mark='b'/> One deterministic polynomial-time verifier accepts exactly the valid input-certificate pairs, with no accepting certificate for a no-instance. <bookmark mark='c'/> A graph colouring, a satisfying assignment or a Hamiltonian path can supply such a certificate for the corresponding decision problem. <bookmark mark='d'/> NP does not require short certificates for no-instances. That is a statement about the class definition, not a claim that individual no-instances cannot have short proofs."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -122,34 +116,27 @@ class Np(VoiceoverScene):
         self.clear_scene()
 
     def examples(self):
-        head = label(r"Four problems in NP", font_size=34).to_edge(UP, buff=0.35)
+        head = label('Six decision problems in NP', font_size=34).to_edge(UP, buff=0.35)
         rows = [[r"SAT", r"a Boolean formula", r"an assignment", r"unknown"],
                 [r"clique", r"a graph and $k$", r"$k$ vertices", r"unknown"],
                 [r"Hamiltonian cycle", r"a graph", r"an ordering of the vertices", r"unknown"],
                 [r"subset sum", r"numbers and a target", r"which numbers", r"unknown"],
                 [r"graph isomorphism", r"two graphs", r"the matching of vertices", r"quasi-polynomial \ (Babai)"],
                 [r"primality", r"a number", r"none needed", r"in P \ (AKS, 2002)"]]
-        tab = grid_table([r"problem", r"input", r"certificate", r"fastest known"], rows,
+        tab = grid_table([r"problem", r"input", r"certificate", 'known time status'], rows,
                          widths=[2.8, 3.0, 3.6, 3.4], row_h=0.5, font_size=20, mono_cols=(),
                          colors=[[WHITE, GREY_A, YES, NO]] * 4 + [[WHITE, GREY_A, YES, HEAD]] + [[WHITE, GREY_A, YES,
                                                                                               YES]])
         tab.next_to(head, DOWN, buff=0.45).set_x(0)
         notes = VGroup(
-            label(r"Babai \ (2015): \ graph isomorphism in $\exp\big((\log n)^{O(1)}\big)$ time: \ almost polynomial",
+            label('Babai (2015): $\\exp((\\log n)^{O(1)})$ time; polynomial time remains open',
                   font_size=21, color=HEAD),
             label(r"Agrawal, \ Kayal and Saxena \ (2002): \ primality is in P, \ by a deterministic test", font_size=21,
                   color=YES),
-            label(r"``unknown'' means: \ the best algorithms known are exponential", font_size=21, color=GREY_A),
+            label('unknown = polynomial-time decision is unknown; binary input size and problem-specific bounds matter', font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.2).next_to(tab, DOWN, buff=0.4)
         with self.voiceover(
-            "A few members of the class. <bookmark mark='a'/> Satisfiability, clique, Hamiltonian cycle and subset "
-            "sum: each has an obvious certificate, and for each the best known algorithms take exponential time. "
-            "<bookmark mark='b'/> Graph isomorphism, whether two graphs are the same up to renaming, had resisted "
-            "for decades until László Babai found a quasi-polynomial algorithm in 2015: not quite polynomial, but "
-            "close. <bookmark mark='c'/> And primality turned out to be in P: Manindra Agrawal, Neeraj Kayal and "
-            "Nitin Saxena found a deterministic polynomial test in 2002, when Kayal and Saxena were undergraduates. "
-            "<bookmark mark='d'/> For the first four, nothing is known except exponential algorithms. The next "
-            "chapters show why they rise or fall together."
+            "Consider six decision problems. <bookmark mark='a'/> SAT, clique, Hamiltonian cycle and binary-encoded subset sum have polynomially checkable yes-certificates. For these general problems, polynomial-time algorithms remain unknown. This is not a claim that every best known algorithm has the same exponential bound. <bookmark mark='b'/> Graph isomorphism asks for an adjacency-preserving bijection. Babai's quasipolynomial upper bound is faster than a general exponential bound, while polynomial time remains open. <bookmark mark='c'/> Primality is in P by the AKS theorem, so it needs no extra certificate for polynomial-time decision. <bookmark mark='d'/> A verifier can always exhaust all polynomial-length certificates using exponential time. That is an upper bound, not a proof that exhaustive search is necessary."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
             vo.wait_until("a")

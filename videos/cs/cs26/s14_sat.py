@@ -36,8 +36,7 @@ class Sat(VoiceoverScene):
                   font_size=21, color=YES),
             label(r"\textbf{5. backjump}: \ undo to the level where the new clause becomes unit, \ and repeat",
                   font_size=21, color=HEAD),
-            label(r"plus restarts \ (Luby) \ and saved phases: \ the solver used throughout this part, \ about 200 "
-                  r"lines of Python", font_size=20, color=GREY_A),
+            label('plus Luby restarts and saved phases; conflict-budget exhaustion returns UNKNOWN, never UNSAT', font_size=20, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(head, DOWN, buff=0.4).to_edge(LEFT, buff=0.7)
         rows = [[str(r["n"]), words(int(r["dpll_nodes"])), f"{r['dpll_s'] * 1000:.1f} ms",
                  words(int(r["cdcl_steps"])), f"{r['cdcl_s'] * 1000:.1f} ms"] for r in s["rows"]]
@@ -45,19 +44,10 @@ class Sat(VoiceoverScene):
                          widths=[1.0, 2.0, 1.6, 2.0, 1.6], row_h=0.36, font_size=18, mono_cols=(),
                          colors=[[WHITE, GREY_A, NO, DATA, YES]] * len(rows))
         tab.next_to(steps, DOWN, buff=0.35).set_x(0)
-        tl = label(r"random 3-SAT at $m = 4.26\,n$, \ median of 10; \ DPLL = Davis, \ Logemann, \ Loveland \ (1962)",
+        tl = label('same 10 formulas per size; medians on this host; DPLL nodes differ from CDCL decisions + conflicts',
                    font_size=18, color=GREY_A).next_to(tab, DOWN, buff=0.12)
         with self.voiceover(
-            "Satisfiability is NP-complete, yet industrial solvers handle formulas with millions of variables. "
-            "Here is how ours works. <bookmark mark='a'/> Decide: pick a variable, preferring ones involved in recent "
-            "conflicts, and give it a value. <bookmark mark='b'/> Propagate: any clause with all but one literal "
-            "false forces the last one, and watching just two literals per clause makes this cheap. <bookmark "
-            "mark='c'/> Sooner or later some clause becomes false. Trace the chain of implications back to find "
-            "which decisions caused it. <bookmark mark='d'/> Learn a new clause that rules out that combination "
-            "forever. <bookmark mark='e'/> Then jump back, not one level but to wherever the new clause first "
-            "applies, and continue. <bookmark mark='f'/> Add restarts, and you have the solver this part has been "
-            "using, about two hundred lines of Python. <bookmark mark='g'/> Against the older DPLL procedure from "
-            "1962 on hard random formulas, it needs fewer steps and much less time as n grows."
+            "Clause learning explains many practical SAT successes. <bookmark mark='a'/> Decide a variable value, using activity to guide choices. <bookmark mark='b'/> Unit propagation forces a literal when every other literal of its clause is false. Two watched literals avoid scanning every clause at every step. <bookmark mark='c'/> When a clause is falsified, follow the implication reasons. <bookmark mark='d'/> First-UIP analysis learns a clause implied by the original formula. <bookmark mark='e'/> Backjump to a level where that clause propagates, retaining the learned information. <bookmark mark='f'/> Our teaching solver also uses Luby restarts and saved phases. Exhausting a conflict budget returns unknown, never a refutation. <bookmark mark='g'/> The retained comparison uses the same formulas for DPLL and CDCL. Recursive DPLL nodes and CDCL decisions plus conflicts are DIFFERENT work units; host timings exclude the separate native reference checks. Resolved and budget-exhausted trials are reported explicitly."
         ) as vo:
             self.play(FadeIn(head))
             for mk, st in zip("abcdef", steps):
@@ -98,23 +88,13 @@ class Sat(VoiceoverScene):
         x2 = label(r"clauses per variable, \ $m/n$", font_size=18, color=GREY_A).next_to(ax2, DOWN, buff=0.45)
         r150 = {r["ratio"]: r for r in d["by_n"]["150"]}
         notes = VGroup(
-            label(r"few clauses: \ almost always satisfiable, \ found at once; \ many: \ refuted quickly",
+            label('finite trials: 40 per point at $n=50,100$, 20 at $n=150$; Wilson intervals in notes',
                   font_size=20, color=WHITE),
-            label(rf"near 4.27 clauses per variable the probability drops through $\tfrac12$, \ and the work peaks: "
-                  rf"\ {words(int(r150[4.3]['median_conflicts']))} conflicts at $n$ = 150", font_size=20, color=NO),
-            label(r"the curves sharpen with $n$: \ the threshold is sharp \ (Friedgut, 1999); \ its exact place is "
-                  r"proved only for large $k$ \ (Ding, \ Sly, \ Sun, \ 2015)", font_size=20, color=HEAD),
+            label('finite sample peak near predicted 4.27; not an exact limiting-threshold measurement', font_size=20, color=NO),
+            label('2026 preprints: threshold existence / computability; upper bound 4.268; dated claims in notes', font_size=20, color=HEAD),
         ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Where are the hard instances? <bookmark mark='a'/> Generate random three-SAT formulas with n variables "
-            "and m clauses, and vary the ratio. With few clauses, a formula is almost always satisfiable, and the "
-            "solver finds an assignment at once. With many, it is almost always unsatisfiable, and contradictions "
-            "come quickly. <bookmark mark='b'/> In between, near four point two seven clauses per variable, the "
-            "probability of satisfiability falls through one half, and the solver's work peaks: over two thousand "
-            "conflicts at a hundred and fifty variables, against a handful at either end. <bookmark mark='c'/> The "
-            "drop sharpens as n grows: Ehud Friedgut proved in 1999 that the threshold is sharp. Its exact location "
-            "was proved in 2015 by Jian Ding, Allan Sly and Nike Sun, but only for long clauses. For three-SAT, the "
-            "predicted value of about four point two seven is still a conjecture."
+            "Random SAT displays a striking finite-size pattern. <bookmark mark='a'/> For each plotted ratio and variable count, generate independent random clauses with three distinct variables and fair signs. We retain every formula, complete solver status and positive model, and cross-check resolved answers with a native solver. <bookmark mark='b'/> Our twenty or forty trials per point show a drop in satisfiability and a peak in median conflicts near the transition region. The notes give binomial uncertainty intervals. A coarse finite grid cannot locate an exact limiting threshold or establish a scaling exponent. The vertical line near four point two seven marks a prediction, not a theorem inferred from these plots. <bookmark mark='c'/> Friedgut proved sharp-threshold behaviour; Ding, Sly and Sun established the predicted limiting threshold for sufficiently large clause length. Those theorems and this small three-SAT experiment have different scopes. A dated update: 2026 preprints report existence and computability of the three-SAT limiting threshold, and an upper bound of four point two six eight. The notes identify these reported claims and the exact versions inspected; our finite plots establish none of them."
         ) as vo:
             self.play(FadeIn(head), Create(ax), Create(ax2), FadeIn(xl), FadeIn(yl1), FadeIn(yl2), FadeIn(t1),
                       FadeIn(t2), FadeIn(x1), FadeIn(x2), FadeIn(leg))
@@ -144,8 +124,7 @@ class Sat(VoiceoverScene):
         s13, s14 = f["schur_13_3"], f["schur_14_3"]
         py = f["pythagorean"]
         lines = VGroup(
-            label(rf"\textbf{{Schur numbers}}: \ 3 colours work up to 13 \ ({s13['seconds'] * 1000:.0f} ms), \ not 14 "
-                  rf"\ (refuted in {s14['conflicts']} conflicts); \ 4 colours: \ 44", font_size=21, color=WHITE),
+            label(rf"\textbf{{Schur}}: 13 works with 3 colours; 14 is UNSAT ({s14['conflicts']} conflicts); \\ 44 works with 4 colours; 45 is UNKNOWN at the conflict limit", font_size=21, color=WHITE),
             label(r"$S(5) = 160$: \ Heule \ (2017), \ a 2-petabyte proof", font_size=21, color=HEAD),
             label(rf"\textbf{{Pythagorean triples}}: \ colour 1 to $n$ in 2 colours with no one-coloured "
                   rf"$a^2 + b^2 = c^2$: \ our solver manages $n$ = {max(r['n'] for r in py if r['status'] == 'sat')}",
@@ -153,20 +132,11 @@ class Sat(VoiceoverScene):
             label(rf"Heule, \ Kullmann and Marek \ (2016): \ possible up to 7,824, \ impossible at 7,825 \ "
                   rf"({words(f['pythagorean_7825_triples'])} triples); \ a 200-terabyte proof", font_size=21,
                   color=YES),
-            label(r"the proofs are checked by small verified programs: \ trust the checker, \ not the solver",
+            label('local models / one Schur RUP trace checked here; published huge refutations are separate evidence',
                   font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.25).next_to(sl, DOWN, buff=0.4)
         with self.voiceover(
-            "Solvers now settle questions in mathematics. <bookmark mark='a'/> Colour the numbers from one up to n "
-            "so that no single colour contains x, y and x plus y. With three colours you can reach thirteen but not "
-            "fourteen; our solver refutes fourteen in a moment. With four colours, forty-four, and here is our "
-            "solver's colouring. <bookmark mark='b'/> With five colours the answer is a hundred and sixty, proved by "
-            "Marijn Heule in 2017 with a two-petabyte proof. <bookmark mark='c'/> Or colour the numbers with two "
-            "colours, so that no Pythagorean triple is all one colour. Our solver colours the first three thousand "
-            "easily. <bookmark mark='d'/> Heule, Oliver Kullmann and Victor Marek proved in 2016 that it can be done "
-            "up to seven thousand eight hundred and twenty-four, and not one further. Their proof is two hundred "
-            "terabytes. <bookmark mark='e'/> Nobody reads such proofs. They are checked by small programs whose own "
-            "correctness has been verified, so we trust the checker, not the solver."
+            "SAT solvers also support mathematical proofs. <bookmark mark='a'/> We find and check Schur colourings through thirteen in three colours and forty-four in four colours. For fourteen with three colours, a native solver supplies a refutation trace whose every retained addition is checked by independent unit propagation. Our budget-limited forty-five-in-four run remains unknown when exhausted. <bookmark mark='b'/> Heule's published result establishes the five-colour Schur boundary at a hundred and sixty, using a huge proof computation. We do not repeat that proof here. <bookmark mark='c'/> For Pythagorean triples, our local SAT models supply complete colourings up to the displayed finite sizes, and we check every integer triple. <bookmark mark='d'/> The separate 2016 result of Heule, Kullmann and Marek establishes the boundary at seven thousand eight hundred and twenty-four. We independently check the larger instance's triple encoding, not its two-hundred-terabyte refutation. <bookmark mark='e'/> Solving, retaining a proof, and checking that proof are separate operations. Each reported verification names the artifact and checker actually used."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

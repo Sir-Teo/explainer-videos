@@ -41,7 +41,7 @@ class CookLevin(VoiceoverScene):
 
     def tableau(self):
         d = load("tableau")
-        head = label(r"The tableau: \ one row per step, \ one column per tape cell", font_size=30).to_edge(UP,
+        head = label('Tableau: one configuration per row; $T$ rows allow $T-1$ transitions', font_size=30).to_edge(UP,
                                                                                                  buff=0.3)
         g, cells = self.grid(d["tableau"])
         rl = VGroup(*[mono(f"t={r}", 16, GREY_B).next_to(cells[(r, 0)], LEFT, buff=0.12)
@@ -61,17 +61,7 @@ class CookLevin(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(g, RIGHT, buff=0.6).align_to(g, UP)
         fit_right(notes)
         with self.voiceover(
-            "Stephen Cook in 1971, and Leonid Levin independently in the Soviet Union, proved that satisfiability is "
-            "NP-complete. The proof writes a whole computation as a table. <bookmark mark='a'/> Take any problem in "
-            "NP, decided by a nondeterministic machine in polynomial time. Ours asks whether the input contains a "
-            "one: it moves right, and on a one it may guess to accept. <bookmark mark='b'/> Write the computation "
-            "as a tableau. Row t is the tape at time t, with the head's cell marked by its state. Here the input is "
-            "zero, zero, one, zero; at time two the head reaches the one and guesses, and from then on it sits in "
-            "the accept state. <bookmark mark='c'/> Now look at "
-            "a small window, two rows by three columns. <bookmark mark='d'/> A machine is local: in one step, only "
-            "the cells next to the head can change. <bookmark mark='e'/> So a finite list of legal windows, four "
-            "hundred and eight for our machine, describes every possible step. <bookmark mark='f'/> If every window "
-            "in the tableau is on the list, each row really is a successor of the one above."
+            "Cook and Levin encoded bounded nondeterministic computation as satisfiability. <bookmark mark='a'/> A tableau records configurations in rows: tape symbols, state and head position. <bookmark mark='b'/> Our tiny machine scans right and may enter an accepting state when it reads a one. Acceptance is made absorbing. <bookmark mark='c'/> The displayed input zero zero one zero has six rows, hence at most five transitions, with explicit borders. One accepting run reaches acceptance after three transitions. <bookmark mark='d'/> Adjacent rows are constrained by overlapping two-by-three windows. <bookmark mark='e'/> We enumerate the legal local patterns for this fixed machine; the count is specific to its alphabet and transition rules. <bookmark mark='f'/> The start row has exactly one head, and legal overlapping windows enforce a valid successor. We also check each decoded whole configuration directly, independently of the window encoding."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -101,24 +91,16 @@ class CookLevin(VoiceoverScene):
             label(r"$\varphi_{\text{start}}$: \ row 0 is the input, \ head on the left, \ in the start state",
                   font_size=22, color=DATA),
             label(r"$\varphi_{\text{move}}$: \ every window is one of the legal ones", font_size=22, color=LAM),
-            label(r"$\varphi_{\text{accept}}$: \ some cell in some row holds the accept state", font_size=22,
+            label('$\\varphi_{\\text{accept}}$: final-row accepting head; acceptance is absorbing', font_size=22,
                   color=YES),
-            label(r"$\varphi$ is satisfiable $\iff$ some branch accepts $\iff$ $w \in L$", font_size=24, color=HEAD),
+            label('$\\varphi$ satisfiable $\\iff$ an accepting branch fits the stated transition budget', font_size=24, color=HEAD),
             label(r"size: \ $T \times T$ cells, \ a constant number of symbols and windows each: \ polynomial in $T$",
                   font_size=22, color=GREY_A),
             label(r"the formula is built \textbf{without} knowing the answer: \ a reduction from every NP problem",
                   font_size=22, color=NO),
         ).arrange(DOWN, buff=0.25).next_to(head, DOWN, buff=0.4)
         with self.voiceover(
-            "Now turn the tableau into a formula. <bookmark mark='a'/> For every cell and every symbol, a variable: "
-            "true if that cell holds that symbol. The formula has four parts. <bookmark mark='b'/> Every cell holds "
-            "exactly one symbol. <bookmark mark='c'/> The first row is the input, with the machine in its start "
-            "state at the left. <bookmark mark='d'/> Every window is legal. <bookmark mark='e'/> And somewhere, the "
-            "accept state appears. <bookmark mark='f'/> A satisfying assignment is exactly an accepting tableau, so "
-            "the formula is satisfiable if and only if some branch accepts. <bookmark mark='g'/> The tableau is T by "
-            "T, with a constant amount of formula per cell, so the size is polynomial. <bookmark mark='h'/> And the "
-            "construction needs only the machine and the input, never the answer. That is a polynomial reduction "
-            "from every problem in NP to SAT."
+            "Translate those conditions into Boolean variables. <bookmark mark='a'/> A variable says that a particular row and column contains one specified symbol or state-symbol pair. <bookmark mark='b'/> Exactly-one clauses give every cell a single value. <bookmark mark='c'/> Unit clauses fix the initial input and head. <bookmark mark='d'/> Auxiliary choices enforce one legal window at every position between adjacent rows. <bookmark mark='e'/> The final row must contain the accepting state. Because that state is absorbing, earlier acceptance extends to the final row. <bookmark mark='f'/> The formula is satisfiable exactly when an accepting branch fits this row budget. <bookmark mark='g'/> For a fixed machine, quadratic many cells and window positions, each with a constant-size local encoding, give polynomial formula size. <bookmark mark='h'/> The construction uses the machine, input and time bound without knowing an accepting branch. Applying it to any polynomial-time NP verifier proves SAT NP-complete."
         ) as vo:
             self.play(FadeIn(head))
             for mk, p in zip("abcdefgh", parts):
@@ -137,7 +119,7 @@ class CookLevin(VoiceoverScene):
                          colors=[[WHITE, GREY_A, DATA, DATA, YES]] * len(rows))
         tab.next_to(head, DOWN, buff=0.4).set_x(0)
         notes = VGroup(
-            label(r"inputs \texttt{0}$\cdots$\texttt{01}: \ the variables grow like $T^2$, \ as promised", font_size=21,
+            label('fixed machine, growing row budget: full formulas and decoded trace certificates retained', font_size=21,
                   color=WHITE),
             label(rf"our CDCL solver finds the accepting tableau; \ for \texttt{{0000}} it proves the formula "
                   rf"unsatisfiable", font_size=21, color=YES),
@@ -145,12 +127,7 @@ class CookLevin(VoiceoverScene):
                   color=GREY_A),
         ).arrange(DOWN, buff=0.22).next_to(tab, DOWN, buff=0.4)
         with self.voiceover(
-            "We implemented the construction. <bookmark mark='a'/> For inputs of two to eight symbols, the formula "
-            "grows from three thousand variables to twenty-three thousand, roughly as the square of the time bound. "
-            "<bookmark mark='b'/> Our SAT solver, the one chapter thirteen explains, finds a satisfying assignment "
-            "in a fraction of a second, and for the input zero, zero, zero, zero it proves there is none. <bookmark "
-            "mark='c'/> Reading the assignment back cell by cell reproduces the accepting tableau we drew. A "
-            "question about a machine has become a question about a formula."
+            "We ran the finite construction. <bookmark mark='a'/> Inputs consisting of zeros followed by a one, of lengths two through eight, produce the displayed variable and clause counts. Full formulas and solver models are retained. <bookmark mark='b'/> Every decoded accepting tableau is checked against whole-machine transitions, and a separate configuration search confirms the bounded acceptance result. The all-zero example is rejected within its stated budget. <bookmark mark='c'/> These experiments check our implementation. The general theorem follows from the encoding argument and its polynomial bound, rather than from extrapolating the seven measurements."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
             vo.wait_until("a")

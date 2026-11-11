@@ -34,7 +34,7 @@ class Barriers(VoiceoverScene):
         two.arrange(RIGHT, buff=0.6).next_to(head, DOWN, buff=0.5)
         lines = VGroup(
             label(r"Baker, \ Gill and Solovay \ (1975): \ both oracles exist", font_size=22, color=WHITE),
-            label(r"diagonalization and simulation work the same with any oracle attached: \ they \textbf{relativize}",
+            label('many standard diagonal / simulation arguments relativize; no claim about every use of these tools',
                   font_size=22, color=DATA),
             label(r"so no such proof can settle P vs NP: \ it would have to give the same answer for $A$ and $B$",
                   font_size=22, color=NO),
@@ -42,14 +42,7 @@ class Barriers(VoiceoverScene):
                   color=GREY_A),
         ).arrange(DOWN, buff=0.25).next_to(two, DOWN, buff=0.5)
         with self.voiceover(
-            "There are precise reasons the problem is hard: theorems about proofs that cannot work. <bookmark "
-            "mark='a'/> In 1975 Theodore Baker, John Gill and Robert Solovay gave every machine an oracle. With one "
-            "oracle, a PSPACE-complete problem, P and NP become equal. <bookmark mark='b'/> With another, built by "
-            "diagonalization, they are provably different. <bookmark mark='c'/> Diagonalization and simulation, the "
-            "tools of Part 1 and chapter two, work exactly the same with an oracle attached: they relativize. "
-            "<bookmark mark='d'/> So a proof built only from them would settle the question the same way for both "
-            "oracles, which is impossible. <bookmark mark='e'/> This is why the hierarchy theorems separate P from "
-            "exponential time but cannot touch NP."
+            "Some theorems constrain possible proof techniques. <bookmark mark='a'/> Baker, Gill and Solovay constructed an oracle relative to which P equals NP. A PSPACE-complete oracle makes both sides equal PSPACE. <bookmark mark='b'/> They also constructed an oracle relative to which P differs from NP. <bookmark mark='c'/> An argument that remains valid with every oracle cannot decide the unrelativized question, because it would give the same answer in these incompatible worlds. <bookmark mark='d'/> Many standard simulation and diagonal arguments relativize in this sense; this is not a claim about every possible use of those tools. <bookmark mark='e'/> Time hierarchy results survive relativization and separate appropriate time classes. They do not by themselves separate P from NP."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -69,24 +62,15 @@ class Barriers(VoiceoverScene):
                   color=WHITE),
             label(r"successes: \ parity is not in $\mathrm{AC}^0$ \ (Furst--Saxe--Sipser; \ Ajtai; \ Yao; \ H\aa stad); "
                   r"\ monotone circuits \ (Razborov, 1985)", font_size=21, color=YES),
-            label(r"each proof finds a simple property that random functions have \ and small circuits lack",
+            label('natural = constructive in truth-table length + large + useful against the target circuit class',
                   font_size=22, color=DATA),
             label(r"Razborov and Rudich \ (1994): \ such a property would \textbf{distinguish} random functions from "
                   r"pseudorandom ones", font_size=22, color=HEAD),
-            label(r"so if strong pseudorandom functions exist \ (Part 29's cryptography), \ no natural proof shows "
-                  r"P $\ne$ NP", font_size=22, color=NO),
-            label(r"the better our cryptography, \ the harder it is to prove we need it", font_size=22, color=LAM),
+            label('sufficiently strong pseudorandomness excludes the targeted natural circuit lower-bound proofs', font_size=22, color=NO),
+            label('conditional circuit barrier; does not exclude every possible proof of P $\\ne$ NP', font_size=22, color=LAM),
         ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "The next attack counted gates instead of steps. <bookmark mark='a'/> If SAT needed circuits of "
-            "superpolynomial size, P would differ from NP. <bookmark mark='b'/> The 1980s brought real successes. "
-            "Parity cannot be computed by constant-depth circuits, and Alexander Razborov proved large lower bounds "
-            "for circuits without negations. <bookmark mark='c'/> Every such proof identifies a simple, checkable "
-            "property that random functions have and small circuits lack. <bookmark mark='d'/> In 1994 Razborov and "
-            "Steven Rudich showed that any such property could be used to tell truly random functions from "
-            "pseudorandom ones. <bookmark mark='e'/> So if strong pseudorandom functions exist, which is exactly "
-            "what Part 29's cryptography assumes, no natural proof can show P differs from NP. <bookmark mark='f'/> "
-            "The better our cryptography, the harder it is to prove the hardness it relies on."
+            "Circuit lower bounds face another barrier. <bookmark mark='a'/> A superpolynomial circuit lower bound for SAT would imply P differs from NP, and in fact the stronger statement that NP is not contained in P over poly. <bookmark mark='b'/> Strong results exist for restricted models, including parity against constant-depth AND-OR circuits and clique against monotone circuits. <bookmark mark='c'/> A natural property is constructive in polynomial time in the FULL truth-table length, holds for a sufficiently large fraction of truth tables, and is useful against the specified small circuits. All three conditions matter. <bookmark mark='d'/> Such a test can distinguish genuinely random functions from suitably secure pseudorandom functions. <bookmark mark='e'/> Under a sufficiently strong quantitative pseudorandomness assumption, Razborov and Rudich rule out natural properties proving the targeted general circuit bounds. Ordinary one-way-function existence alone is not the stated quantitative hypothesis. <bookmark mark='f'/> This is a conditional barrier to a class of circuit arguments, not a theorem excluding every proof of P differs from NP."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):
@@ -102,22 +86,13 @@ class Barriers(VoiceoverScene):
                   font_size=22, color=YES),
             label(r"Aaronson and Wigderson \ (2008): \ those techniques \textbf{algebrize}, \ and algebrizing proofs "
                   r"cannot settle P vs NP either", font_size=22, color=NO),
-            label(r"a proof must be non-relativizing, \ non-natural, \ and non-algebrizing at once", font_size=22,
+            label('test each argument against its precise barrier; natural-proof claims are conditional and circuit-specific', font_size=22,
                   color=HEAD),
-            label(r"the few results that evade all three: \ Williams \ (2011), \ NEXP $\not\subseteq$ ACC$^0$, \ "
-                  r"by turning \textbf{algorithms} into lower bounds", font_size=22, color=DATA),
+            label('Williams (2011): NEXP $\\not\\subseteq$ ACC$^0$; polynomial size, nonuniform, constant depth, fixed modular gates', font_size=22, color=DATA),
             label(r"chapter 16 returns to where this leads", font_size=22, color=GREY_A),
         ).arrange(DOWN, buff=0.35).next_to(head, DOWN, buff=0.55)
         with self.voiceover(
-            "There is a third barrier. <bookmark mark='a'/> In the 1990s, arithmetization, turning formulas into "
-            "polynomials, gave results that do not relativize, such as IP equals PSPACE, which Part 27 proves. "
-            "<bookmark mark='b'/> In 2008 Scott Aaronson and Avi Wigderson showed that these techniques satisfy a "
-            "generalized form of relativization they called algebrization, and that algebrizing proofs cannot "
-            "settle P versus NP either. <bookmark mark='c'/> A proof must avoid all three barriers at once. "
-            "<bookmark mark='d'/> A few results do. Ryan Williams proved in 2011 that nondeterministic exponential "
-            "time is not contained in a class of small circuits called ACC zero, by showing that faster algorithms "
-            "for satisfiability of such circuits imply lower bounds against them. <bookmark mark='e'/> Chapter "
-            "sixteen returns to where this leads."
+            "Arithmetization escapes some relativization limits. <bookmark mark='a'/> The interactive-proof results in Part 27 turn Boolean computations into low-degree polynomial questions. <bookmark mark='b'/> Aaronson and Wigderson formalized a stronger limitation called algebrization, showing that important algebraic techniques still do not settle P versus NP. <bookmark mark='c'/> A proposed argument must be assessed against the precise barrier it encounters. Calling a proof simultaneously nonrelativizing, nonnatural and nonalgebrizing is only shorthand, with the natural-proof claim conditional and circuit-specific. <bookmark mark='d'/> Williams's algorithm-to-lower-bound method proves that NEXP has no polynomial-size, nonuniform, constant-depth ACC-zero circuit family. The permitted gates and depth are part of the statement. <bookmark mark='e'/> These results supply new methods, without resolving the central P versus NP question."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcde", lines):

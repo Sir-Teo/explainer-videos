@@ -1,10 +1,37 @@
 # Computer Science, Built — sequential polish
 
 Work on `computer-science-built`, one video at a time, with separate commits.
-Current video: **cs26, P versus NP**. CS1–CS25 source/preview polish checkpoints
+Current video: **cs27, Proofs and Randomness**. CS1–CS26 source/preview polish checkpoints
 are complete at the scopes below. Their production release gates remain open; this
 ledger does not treat sampled previews as listening or final-production approval.
 The syllabus's earlier draft-preview claims are separate.
+
+## Final CS26 preview checkpoint, 11 November 2026
+
+- Repair solver statuses/budgets, integer/literal/graph domains, reduction projections, zero-step Savitch,
+  bounded tableaux, arbitrary geography labels and malformed Pratt certificates. All 19 tests, 19 separate
+  repaired boundary probes and 12 shared-utility CS27 compatibility tests pass; failed originals remain intact.
+- Replace all 13 comparable original payloads with 14 schema-2 producers, retaining 25 full artifacts and
+  1,393 complete CDCL queries: 719 SAT, 673 UNSAT, one UNKNOWN. Cross-check every resolved query with pinned
+  Glucose 4.2 and evaluate full SAT models. Independently check one Schur RUP trace with 92 additions;
+  native UNSAT agreement for other queries remains a cross-check. Check 128 finite Hamiltonian graphs and Sudoku.
+- Polish all 18 bilingual chapters and six worked exercises, including hierarchy/tableau assumptions,
+  bit costs, approximation, game conventions, natural-proof conditions and dated primary research scopes.
+  Canonical pairs and actual captures each cover 73/73 blocks. All 698 captions have zero unresolved leads;
+  49 technical/name originals are classified. Preserve the corrected native-caption reading error and pause history.
+- Review all 36 endpoints and 36 actual silent motion movies: 618 appearance states, 1,440 temporal samples
+  and 85,544 decoded frames. Sixteen endpoint reviews are fresh; 20 inherit only through whole actual PNG
+  equality and prior positive reviews. Six raw sparse-content alerts have exact-frame dispositions and zero blank runs.
+- Review all 108 native 1080p15 clips: 80,515 frames, 2,592 samples and 108 native stills. Four actual English
+  narrated pilots decode 11,656 frames plus audio; all 160 samples/four stills are reviewed. Every native/narrated
+  review is fresh at the frozen source. All original, failed, negative and interrupted artifacts remain intact.
+- All 73 English speech blocks pass automated signal/alignment checks (46.91167 minutes); all 244 scheduled
+  waits meet 250 ms. Six of 250 source bookmarks label already-visible content. Raw warning statuses and controller
+  exit 1 remain unchanged; manual dispositions support sampled preview acceptance.
+
+[Verified CS26 evidence](evidence/cs26-polish-20261111/README.md).
+Continuous narrated listening, Chinese speech/listening, whole-video native production review and runtime at
+selected narration pace remain open release gates.
 
 ## Final CS25 preview checkpoint, 11 November 2026
 
@@ -679,10 +706,10 @@ Evidence, exact source/data hashes, reports and reproduction commands:
 
 ## Continue here
 
-1. Preserve CS25's untouched source/history/data, run all ten original producers and original tests, and
-   inspect all 34 original bilingual endpoint captures before applying confirmed repairs.
-2. Check bounded PCP/tiling searches, TM histories, quines, Pell/Collatz/FRACTRAN domains, full numerical
-   witnesses and provenance. Polish reductions, semantic properties, hierarchy/theory assumptions,
-   plain/prefix-free complexity, finite-sample halting probabilities and dated primary research scopes.
-3. Commit CS25 separately and continue CS26–CS61 in order, preserving the distinction between preview
+1. Preserve CS27's untouched source/history/data, run all original producers and tests, and inspect all
+   original bilingual endpoint captures before applying confirmed repairs.
+2. Check protocol domains, finite-field and degree assumptions, full sum-check/ZK transcripts, probability
+   estimates, exact BLR/counting/parameterized witnesses and numerical provenance. Polish theorem/security
+   assumptions, teaching-versus-production protocol scopes and dated primary research statements.
+3. Commit CS27 separately and continue CS28–CS61 in order, preserving the distinction between preview
    checks and the open production/listening gates.

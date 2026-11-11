@@ -30,25 +30,18 @@ class CoNp(VoiceoverScene):
         ex = VGroup(label(r"SAT", font_size=18, color=HEAD).move_to(np_.get_center() + LEFT * 1.4 + DOWN * 0.4),
                     label(r"TAUTOLOGY", font_size=18, color=LAM).move_to(co.get_center() + RIGHT * 1.2 + DOWN * 0.4),
                     label(r"factoring", font_size=18, color=YES).move_to(p_.get_center() + UP * 0.85))
+        VGroup(np_, co, p_, labs, ex).scale(0.8).move_to(LEFT * 3.7 + DOWN * 0.4)
         lines = VGroup(
-            label(r"a tautology \ (true under every assignment): \\ a yes needs checking all $2^n$ rows", font_size=21,
+            label('general-formula tautology: \\\\ falsifying assignments certify no; \\\\ brute force is one upper bound', font_size=21,
                   color=WHITE),
             label(r"NP = coNP? \ Unknown; \ most believe not. \\ It would follow from P = NP", font_size=21,
                   color=NO),
             label(r"NP $\cap$ coNP: \ both answers have proofs. \\ Factoring lives here", font_size=21, color=YES),
-            label(r"an NP-complete problem in coNP would give NP = coNP: \\ so factoring is probably \textbf{not} "
-                  r"NP-complete", font_size=21, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4).shift(DOWN * 0.2)
+            label('NP-complete in coNP would give \\\\ NP = coNP; factoring is probably \\\\ not NP-complete', font_size=21, color=HEAD),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(RIGHT * 3.5 + DOWN * 0.2)
         fit_right(lines)
         with self.voiceover(
-            "NP is lopsided: a yes comes with a short proof, a no need not. <bookmark mark='a'/> Flip it and you get "
-            "coNP, the problems whose no-answers have short proofs. Is a formula a tautology, true under every "
-            "assignment? A no is easy to prove: show one assignment that makes it false. A yes seems to need all two "
-            "to the n rows. <bookmark mark='b'/> Whether NP equals coNP is open. If P equalled NP they would be "
-            "equal, so this is a second, weaker question. <bookmark mark='c'/> In the overlap sit problems where "
-            "both answers have proofs. Factoring is the famous one. <bookmark mark='d'/> If any NP-complete problem "
-            "were in coNP, the two classes would coincide. That is the main reason experts doubt factoring is "
-            "NP-complete, even though nobody can factor quickly."
+            "NP requires short certificates for yes-instances. <bookmark mark='a'/> CoNP consists of languages whose complements are in NP, so their no-instances have short efficiently checkable certificates. <bookmark mark='b'/> Tautology for general Boolean formulas is a coNP-complete example: a falsifying assignment certifies a no-answer. Enumerating every assignment is one decision method, not a necessity for every yes-instance. CNF tautology has a different, easy structure. <bookmark mark='c'/> Whether NP equals coNP is open; equality would follow from P equals NP, but the converse is not known. <bookmark mark='d'/> Bounded nontrivial-factor decision lies in both classes. If an NP-complete language were also in coNP, then NP would equal coNP. The overlapping circles are a schematic, not a proof of strict separation."
         ) as vo:
             self.play(FadeIn(head), FadeIn(np_), FadeIn(co), FadeIn(p_), FadeIn(labs), FadeIn(ex[:2]))
             vo.wait_until("a")
@@ -68,7 +61,7 @@ class CoNp(VoiceoverScene):
         N = d["N"]
         a, b = d["N_factors"]
         yes = VGroup(
-            label(r"``does $N$ have a factor $\le k$?''", font_size=22, color=WHITE),
+            label('does $N\\ge2$ have a divisor $2\\le d\\le k<N$?', font_size=22, color=WHITE),
             label(rf"$N$ = {N}", font_size=22, color=DATA),
             label(rf"certificate: \ the factorization {a} $\times$ {b}, \\ and proofs that both are prime",
                   font_size=21, color=YES),
@@ -89,23 +82,13 @@ class CoNp(VoiceoverScene):
         right.to_edge(RIGHT, buff=0.6).align_to(yes, UP)
         fit_right(right)
         notes = VGroup(
-            label(r"$p$ is prime iff some $g$ has order exactly $p - 1$: \ $g^{p-1} = 1$, \ and $g^{(p-1)/q} \ne 1$ "
-                  r"for each prime $q \mid p - 1$", font_size=20, color=GREY_A),
-            label(rf"the certificate lists $g$, \ the primes $q$, \ and certificates for each $q$: \ "
-                  rf"{d['checks']} checks in all", font_size=20, color=YES),
+            label('modulo $p$: $g^{p-1}\\equiv1$ and $g^{(p-1)/q}\\not\\equiv1$ for every certified prime $q\\mid p-1$', font_size=20, color=GREY_A),
+            label(rf"complete tree: {d['checks']} certificate nodes; \\ separate arithmetic check: {d['reference']['modular_powers']} modular powers", font_size=20, color=YES),
             label(r"since 2002 primality is in P anyway \ (AKS); \ but the certificate is the idea behind NP "
                   r"$\cap$ coNP", font_size=20, color=GREY_A),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Why is factoring in both? <bookmark mark='a'/> Ask whether a number N has a factor no larger than k. "
-            "<bookmark mark='b'/> A certificate for either answer is the complete factorization, together with "
-            "proofs that each factor is prime. Given the prime factors, anyone can check the product and read off "
-            "the answer, yes or no, for every k. <bookmark mark='c'/> But how do you prove a number prime briefly? "
-            "Vaughan Pratt showed how in 1975. A number p is prime exactly when some g has multiplicative order p "
-            "minus one, and that can be checked from the prime factors of p minus one, each with its own "
-            "certificate. <bookmark mark='d'/> Here is the certificate for the Mersenne prime two to the sixty-one "
-            "minus one: sixty checks in all, each a modular power. <bookmark mark='e'/> Since 2002 we know primality "
-            "is in P outright. The certificate remains the clearest picture of what NP intersect coNP means."
+            "Define the factor question carefully. <bookmark mark='a'/> For N at least two and k below N, ask whether N has a divisor d between two and k. Divisor one is excluded. <bookmark mark='b'/> The full prime factorization, with primality certificates, answers both yes and no: compare the smallest prime factor with k. Its total bit length is polynomial in log N. <bookmark mark='c'/> Pratt certificates recursively certify the prime factors of p minus one and exhibit an element of order p minus one modulo p. The order criterion then proves p prime. <bookmark mark='d'/> We retain the complete certificate for two to the sixty-first minus one and certificates for both displayed factors. One checker counts certificate nodes; a separate arithmetic checker records the modular powers. These are different counts. <bookmark mark='e'/> AKS later put primality decision itself in P. Factoring search still has no known classical polynomial-time algorithm."
         ) as vo:
             self.play(FadeIn(head), FadeIn(yes[0]), FadeIn(yes[1]))
             vo.wait_until("b")
@@ -122,47 +105,41 @@ class CoNp(VoiceoverScene):
     def ph(self):
         head = label(r"The polynomial hierarchy", font_size=34).to_edge(UP, buff=0.3)
         rungs = [
-            (r"P", r"no quantifier", DATA),
-            (r"NP = $\Sigma_1^p$", r"$\exists c$: \ is there a colouring?", HEAD),
-            (r"coNP = $\Pi_1^p$", r"$\forall c$: \ is every assignment satisfying?", LAM),
-            (r"$\Sigma_2^p$", r"$\exists \forall$: \ is there a circuit of size $k$ equal to this one on all inputs?",
-             NO),
-            (r"$\Pi_2^p$", r"$\forall \exists$: \ does every input have a short witness?", NO),
+            (r"P", r"polynomial-time predicate", DATA),
+            (r"NP = $\Sigma_1^p$", r"$\exists c$: certificate", HEAD),
+            (r"coNP = $\Pi_1^p$", r"$\forall c$: dual predicate", LAM),
+            (r"$\Sigma_2^p$", r"$\exists u\,\forall v$: predicate", NO),
+            (r"$\Pi_2^p$", r"$\forall u\,\exists v$: predicate", NO),
         ]
+        positions = [(0,-0.7),(-3.4,0.7),(3.4,0.7),(-3.4,2.0),(3.4,2.0)]
         ladder = VGroup()
-        for nm, ex, col in rungs:
-            b = RoundedRectangle(width=2.6, height=0.6, corner_radius=0.08, color=col).set_fill(col, 0.15)
-            t = label(nm, font_size=21, color=col).move_to(b)
-            e = label(ex, font_size=19, color=WHITE).next_to(b, RIGHT, buff=0.3)
-            ladder.add(VGroup(b, t, e))
-        ladder.arrange(UP, aligned_edge=LEFT, buff=0.2).next_to(head, DOWN, buff=0.4).to_edge(LEFT, buff=0.6)
-        fit_right(ladder)
+        for (nm,ex,col),(x,y) in zip(rungs,positions):
+            box = RoundedRectangle(width=2.0,height=0.6,corner_radius=0.08,color=col).set_fill(col,0.15)
+            title = label(nm,font_size=20,color=col).move_to(box)
+            detail = label(ex,font_size=17,color=WHITE).next_to(box,DOWN,buff=0.12)
+            item = VGroup(box,title,detail)
+            if item.width > 6.1: item.width = 6.1
+            ladder.add(item.move_to([x,y,0]))
         notes = VGroup(
-            label(r"the arithmetic hierarchy of Part 25, \ with every quantifier bounded by a polynomial \ "
-                  r"(Meyer and Stockmeyer, 1972)", font_size=20, color=WHITE),
-            label(r"P = NP would collapse it all to P; \ any $\Sigma_k^p = \Pi_k^p$ collapses everything above",
+            label('polynomially bounded BIT LENGTH for each quantified string; NP/coNP are duals on level 1', font_size=20, color=WHITE),
+            label('$\\Sigma_k^p=\\Pi_k^p$ collapses PH to level $k$; P = NP collapses it to P',
                   font_size=20, color=NO),
             label(r"so ``the hierarchy is infinite'' \ is a stronger bet than P $\ne$ NP, \ and theorists use it: \ "
                   r"Karp--Lipton \ (1980)", font_size=20, color=GREY_A),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Alternate the quantifiers and you climb a ladder. <bookmark mark='a'/> P at the bottom. NP asks whether "
-            "there exists a short certificate; coNP whether every candidate fails. <bookmark mark='b'/> One level "
-            "up: does there exist a circuit of size k such that, for every input, it agrees with this one? That is "
-            "an exists-forall question, sigma two. <bookmark mark='c'/> This is the arithmetic hierarchy of Part 25 "
-            "with every quantifier limited to polynomial length, defined by Albert Meyer and Larry Stockmeyer in "
-            "1972. <bookmark mark='d'/> If P equalled NP, the whole ladder would collapse to P. More generally, if "
-            "any two neighbouring levels coincide, everything above them falls too. <bookmark mark='e'/> So the "
-            "assumption that the hierarchy is infinite is a standard bet, a bit stronger than P not equal to NP, "
-            "and many theorems, such as Karp and Lipton's, are stated relative to it."
+            "Alternation produces the polynomial hierarchy. <bookmark mark='a'/> An existential block of polynomially many bits followed by a polynomial-time predicate gives NP. <bookmark mark='b'/> A universal block gives coNP. They are duals at the same first level, not successive levels. <bookmark mark='c'/> An existential block followed by a universal block gives the second existential level, with its universal-existential dual beside it. <bookmark mark='d'/> Each quantified string has polynomial BIT LENGTH in the original input; the numerical values can therefore be exponentially large. <bookmark mark='e'/> If the existential and universal classes coincide at level k, the entire hierarchy collapses to that level. P equals NP would collapse it to P. None of the displayed separations is assumed proved."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r) for r in ladder[:3]], lag_ratio=0.3))
+            self.play(FadeIn(ladder[0]),FadeIn(ladder[1]))
             vo.wait_until("b")
-            self.play(FadeIn(ladder[3]), FadeIn(ladder[4]))
-            for mk, n_ in zip("cde", notes):
-                vo.wait_until(mk)
-                self.play(FadeIn(n_))
+            self.play(FadeIn(ladder[2]))
+            vo.wait_until("c")
+            self.play(FadeIn(ladder[3]),FadeIn(ladder[4]),FadeIn(notes[0]))
+            vo.wait_until("d")
+            self.play(FadeIn(notes[1]))
+            vo.wait_until("e")
+            self.play(FadeIn(notes[2]))
         self.wait(0.3)
         self.clear_scene()

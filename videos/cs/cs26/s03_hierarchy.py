@@ -20,41 +20,26 @@ class Hierarchy(VoiceoverScene):
 
     def time(self):
         head = label(r"The time hierarchy theorem", font_size=34).to_edge(UP, buff=0.35)
-        thm = MathTex(r"\mathrm{TIME}(f(n)) \subsetneq \mathrm{TIME}\big(f(n)\log f(n)\big)", font_size=40,
+        thm = MathTex('f\\log f=o(g)\\ \\Longrightarrow\\ \\mathrm{TIME}(f)\\subsetneq\\mathrm{TIME}(g)', font_size=40,
                       color=HEAD).next_to(head, DOWN, buff=0.35)
-        code_lines = [
-            "def D(<M>):",
-            "    run M on input <M>, with a clock:",
-            "        stop after f(n) steps",
-            "    if M accepted: reject",
-            "    else:          accept",
-        ]
+        code_lines = ['def D(x):  # padded machine description', '    M = decode_prefix(x)', '    simulate M(x) with a chosen clock', '    reject if M accepted; else accept']
         prog = VGroup(*[mono(ln, 22, LAM) for ln in code_lines]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         prog.next_to(thm, DOWN, buff=0.45).to_edge(LEFT, buff=0.7)
         frame = SurroundingRectangle(prog, color=LAM, buff=0.2, corner_radius=0.08)
         lines = VGroup(
-            label(r"$D$ runs in time about $f(n) \log f(n)$: \\ simulation with a clock", font_size=21, color=WHITE),
-            label(r"suppose some $M$ decides \\ the same language in time $f(n)$", font_size=21, color=DATA),
-            label(r"run $D$ on $\langle M \rangle$: \ the clock is enough, \\ so $D$ does the \textbf{opposite} of "
-                  r"$M$", font_size=21, color=NO),
-            label(r"so no $f(n)$-time machine \\ decides $D$'s language", font_size=21, color=YES),
+            label('constructible $f,g\\ge n$; \\\\ deterministic multitape model; \\\\ clock fits $g$ after overhead', font_size=21, color=WHITE),
+            label('suppose a decider uses $O(f(n))$ time \\\\ choose an arbitrarily long padded description', font_size=21, color=DATA),
+            label('past its constants and finite exceptions, \\\\ the simulation completes and reverses the answer', font_size=21, color=NO),
+            label('contradiction: the diagonal language \\\\ lies in TIME$(g)$ and outside TIME$(f)$', font_size=21, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(frame, RIGHT, buff=0.6)
         if lines.get_right()[0] > 6.9:
             lines.width = 6.9 - lines.get_left()[0]
             lines.next_to(frame, RIGHT, buff=0.6)
-        cons = label(r"so $\mathrm{P} \subsetneq \mathrm{EXP}$: \ some problems need exponential time, \ provably",
+        lines.align_to(frame, UP)
+        cons = label('$\\mathrm{P}\\subsetneq\\mathrm{EXP}$: some EXP languages are outside P; no P/NP separation follows',
                      font_size=24, color=HEAD).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Can we prove that some problems need more time than others? <bookmark mark='a'/> Yes, by Part 1's "
-            "diagonal argument with a clock attached. Juris Hartmanis and Richard Stearns proved it in 1965. "
-            "<bookmark mark='b'/> Build a machine D. Given the description of a machine M, it runs M on that "
-            "description, but stops after f of n steps. If M accepted, D rejects; otherwise it accepts. "
-            "<bookmark mark='c'/> Simulating with a clock costs a logarithmic factor, so D runs in a little more "
-            "than f of n. <bookmark mark='d'/> Now suppose some machine M decided D's language within f of n "
-            "steps. <bookmark mark='e'/> Run D on M's description. The clock gives M enough time, so D finishes "
-            "M's computation and does the opposite. <bookmark mark='f'/> They disagree, so no machine that fast "
-            "decides it. <bookmark mark='g'/> In particular, P is strictly smaller than exponential time. Some "
-            "problems provably need exponential time; we just cannot prove that any NP problem is one of them."
+            "Can extra time provably add power? <bookmark mark='a'/> Yes. In a standard deterministic multitape model, for constructible bounds f and g at least n, f times log f being little-o of g gives a strict inclusion from TIME f to TIME g. The gap condition matters. <bookmark mark='b'/> Here is the diagonal idea, with technical clock choices suppressed. Decode a machine from a padded input, simulate that machine on the entire input, and reverse acceptance after a clock expires. <bookmark mark='c'/> Choose the clock so simulation fits the larger budget while eventually exceeding every fixed constant times the smaller one. <bookmark mark='d'/> Suppose a smaller-time decider recognized this diagonal language. <bookmark mark='e'/> It has arbitrarily long padded descriptions, so choose one beyond its runtime constants and finite exceptions. On that input the simulation finishes and reverses its answer. <bookmark mark='f'/> That contradiction proves a separation. Padding and overhead are essential parts of the theorem, not optional details. <bookmark mark='g'/> One consequence is P strictly contained in EXP. This does not separate P from NP."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -87,8 +72,7 @@ class Hierarchy(VoiceoverScene):
                   font_size=21, color=YES),
             label(r"so at least one $\subseteq$ in each pair is strict, \\ but nobody knows \textbf{which}",
                   font_size=21, color=NO),
-            label(r"space can be reused; \ time cannot: \\ time $t$ needs space $\le t$, \ space $s$ needs time "
-                  r"$\le 2^{O(s)}$", font_size=21, color=GREY_A),
+            label('with read-only input and $s\\ge\\log n$: \\\\ space $s$ gives $2^{O(s)}$ configurations', font_size=21, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         if notes.width > 6.3:
             notes.width = 6.3
@@ -115,17 +99,10 @@ class Hierarchy(VoiceoverScene):
 
     def savitch(self):
         s = load("savitch")
-        head = label(r"Savitch \ (1970): \ $\mathrm{NSPACE}(s) \subseteq \mathrm{SPACE}(s^2)$", font_size=32).to_edge(
+        head = label('Savitch (1970): $\\mathrm{NSPACE}(s)\\subseteq\\mathrm{SPACE}(s^2)$, $s\\ge\\log n$', font_size=32).to_edge(
             UP, buff=0.35)
-        code_lines = [
-            "def can_yield(a, b, t):    # reach b from a in <= t steps?",
-            "    if t <= 1: return a == b or step(a, b)",
-            "    for m in all_configurations():",
-            "        if can_yield(a, m, t/2) and can_yield(m, b, t/2):",
-            "            return True",
-            "    return False",
-        ]
-        prog = VGroup(*[mono(ln, 19, LAM) for ln in code_lines]).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
+        code_lines = ['def can_yield(a, b, t):', '    if t == 0: return a == b', '    if t == 1: return a == b or step(a, b)', '    h = (t + 1) // 2', '    for m in all_configurations():', '        if can_yield(a,m,h) and can_yield(m,b,t-h):', '            return True', '    return False']
+        prog = VGroup(*[mono(ln, 16, LAM) for ln in code_lines]).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
         prog.next_to(head, DOWN, buff=0.4).to_edge(LEFT, buff=0.7)
         frame = SurroundingRectangle(prog, color=LAM, buff=0.18, corner_radius=0.08)
         rows = [[str(r["n"]), words(r["calls"]), str(r["depth"])] for r in s["rows"]]
@@ -134,7 +111,7 @@ class Hierarchy(VoiceoverScene):
         tab.next_to(frame, DOWN, buff=0.4).to_edge(LEFT, buff=0.9)
         notes = VGroup(
             label(r"\textbf{depth}: \ $t$ halves each level, \ so $\log_2 t$ levels", font_size=21, color=YES),
-            label(r"\textbf{each level} remembers $a, b, m$: \ $O(s)$ cells", font_size=21, color=DATA),
+            label('each theoretical frame: $O(s)$ bits; \\\\ displayed three-slot count excludes graph/Python storage', font_size=21, color=DATA),
             label(r"a nondeterministic machine in space $s$ has $2^{O(s)}$ configurations: \\ $t = 2^{O(s)}$, \ so "
                   r"space $O(s) \cdot O(s) = O(s^2)$", font_size=21, color=HEAD),
             label(rf"the time explodes \ ({words(s['rows'][-1]['calls'])} calls for {s['rows'][-1]['n']} nodes); \\ space "
@@ -147,17 +124,7 @@ class Hierarchy(VoiceoverScene):
             notes.width = 6.9 - notes.get_left()[0]
             notes.next_to(tab, RIGHT, buff=0.7).align_to(tab, UP)
         with self.voiceover(
-            "For space, nondeterminism can be removed at a modest price. <bookmark mark='a'/> Walter Savitch, 1970. "
-            "To decide whether a configuration b can be reached from a in t steps, try every possible midpoint m, "
-            "and ask recursively whether m can be reached from a in half the time, and b from m. <bookmark "
-            "mark='b'/> We ran it on paths of four, eight and sixteen nodes. The recursion depth grows by one each "
-            "time n doubles. <bookmark mark='c'/> Each level of recursion only remembers three configurations, "
-            "<bookmark mark='d'/> and a nondeterministic machine using space s has exponentially many "
-            "configurations in s, so the depth is order s, and the total space order s squared. <bookmark "
-            "mark='e'/> Time is another matter: forty-seven thousand calls for sixteen nodes, growing faster than any "
-            "polynomial. Savitch saves space, not time. <bookmark mark='f'/> The consequence: polynomial space with "
-            "guessing equals polynomial space without it. Whether the same holds for time is the question of this "
-            "part."
+            "Savitch's theorem removes nondeterminism at a space cost. <bookmark mark='a'/> For a suitable space bound s at least log n, nondeterministic space s is contained in deterministic space of order s squared. To test reachability within t edges, use zero edges for equality, one for an edge or equality, and otherwise try every midpoint with integer half-budgets. <bookmark mark='b'/> Our path examples measure actual recursive calls and depths. <bookmark mark='c'/> A theoretical recursive frame stores only a constant number of configurations, the midpoint iterator and a budget. The displayed three-slot count is illustrative, excluding the already stored graph and Python overhead. <bookmark mark='d'/> With a read-only input and s at least log n, the configuration count is exponential in s. Logarithmically many recursive levels therefore use order s squared space. <bookmark mark='e'/> Time can be very large; these finite path counts illustrate that cost without proving a growth law. <bookmark mark='f'/> Consequently PSPACE equals NPSPACE. The analogous polynomial-time question is still open."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

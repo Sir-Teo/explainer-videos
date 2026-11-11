@@ -35,25 +35,17 @@ class Frontier(VoiceoverScene):
         notes = VGroup(
             label(rf"all {f['functions']} Boolean functions of 3 inputs, \\ exactly, \ by dynamic programming",
                   font_size=20, color=WHITE),
-            label(rf"majority: \ {f['majority']} leaves; \\ parity: \ {f['parity']}, \ the most of all", font_size=20,
+            label(rf"majority: {f['majority']} leaves; \\ parity and its complement: {f['parity']}, the maximum", font_size=20,
                   color=NO),
             label(r"Khrapchenko \ (1971): \ parity of $n$ bits \\ needs $n^2$; \ here 9 $\le$ 10", font_size=20,
                   color=HEAD),
-            label(r"Shannon \ (1949): \ counting shows \\ \textbf{almost every} function of $n$ inputs \\ needs circuits of "
-                  r"size $2^n / n$", font_size=20, color=DATA),
-            label(r"yet for no \textbf{explicit} function in NP \\ can we prove more than about $3.1\,n$ gates",
+            label('Shannon: almost all functions need circuit size $\\Omega(2^n/n)$; circuits allow fan-out', font_size=20, color=DATA),
+            label('general B$_2$ circuits and literal-leaf formulas differ; dated lower-bound examples follow',
                   font_size=20, color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).next_to(ch, RIGHT, buff=0.7).align_to(ch, UP)
         fit_right(notes)
         with self.voiceover(
-            "The frontier asks about the complexity of complexity itself. <bookmark mark='a'/> We computed, exactly, "
-            "the smallest formula of ANDs and ORs for every one of the two hundred and fifty-six Boolean functions "
-            "of three inputs. <bookmark mark='b'/> Majority needs five leaves. Parity needs ten, more than any other. "
-            "<bookmark mark='c'/> Valeriy Khrapchenko proved in 1971 that the parity of n bits needs n squared, so "
-            "nine here; the truth is ten. <bookmark mark='d'/> Claude Shannon showed in 1949, by counting, that "
-            "almost every function of n inputs needs circuits of exponential size. <bookmark mark='e'/> And yet, for "
-            "no specific function in NP can anyone prove a lower bound beyond about three point one times n gates, "
-            "the 2022 record of Jiatu Li and Tianqi Yang. Hard functions are everywhere, and we cannot point to one."
+            "Measure complexity itself on a finite example. <bookmark mark='a'/> Enumerate all two hundred and fifty-six three-input Boolean functions using binary AND-OR formulas. Count literal leaves, allow negations only on inputs, and do not provide free constants. <bookmark mark='b'/> We retain a minimum-size formula for every truth table and check all trees and the complete dynamic-programming closure. Majority needs five leaves; parity and its complement need ten, the maximum in this experiment. <bookmark mark='c'/> Khrapchenko's general quadratic lower bound for parity matches that value at three inputs only as a lower bound of nine, not an exact answer. <bookmark mark='d'/> Counting shows that almost all functions require exponentially large circuits, but a circuit is not a fan-out-one formula and the precise size measure matters. <bookmark mark='e'/> Proving superlinear general circuit lower bounds for suitable explicitly computable families remains difficult. Our finite enumeration is a complete small calculation, not a solution to that asymptotic question."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -69,26 +61,18 @@ class Frontier(VoiceoverScene):
         rows = [[r"general circuits", r"$3.1\,n - o(n)$", r"Li and Yang \ (2022)"],
                 [r"formulas \ (De Morgan)", r"$n^{3 - o(1)}$", r"H\aa stad \ (1998); \ Tal \ (2014)"],
                 [r"constant depth", r"exponential, \ for parity", r"H\aa stad \ (1986)"],
-                [r"ACC$^0$", r"NQP $\not\subseteq$ ACC$^0$", r"Williams \ (2011); \ Murray and Williams \ (2018)"],
-                [r"what we need for P $\ne$ NP", r"superpolynomial, \ for SAT", r"open"]]
-        tab = grid_table([r"model", r"best bound known", r"by"], rows, widths=[4.0, 3.6, 5.2], row_h=0.52,
+                [r"ACC$^0$", 'NEXP $\\not\\subseteq$ ACC$^0$', 'Williams (2011), nonuniform fixed depth'],
+                ['a sufficient stronger circuit route', r"superpolynomial, \ for SAT", r"open"]]
+        tab = grid_table([r"model", 'dated result examples', r"by"], rows, widths=[4.0, 3.6, 5.2], row_h=0.52,
                          font_size=20, mono_cols=(), colors=[[WHITE, DATA, GREY_A]] * 4 + [[WHITE, NO, NO]])
         tab.next_to(head, DOWN, buff=0.45).set_x(0)
         notes = VGroup(
             label(r"\textbf{geometric complexity theory} \ (Mulmuley and Sohoni, 2001): \ attack the algebraic "
                   r"version with representation theory", font_size=20, color=LAM),
-            label(r"its simplest form was ruled out in 2016 \ (B\"urgisser, \ Ikenmeyer, \ Panova); \ the "
-                  r"programme continues", font_size=20, color=GREY_A),
+            label('2016: particular occurrence-obstruction strategies ruled out; the broader GCT programme continues', font_size=20, color=GREY_A),
         ).arrange(DOWN, buff=0.15).next_to(tab, DOWN, buff=0.4)
         with self.voiceover(
-            "Here is how far lower bounds have come. <bookmark mark='a'/> For general circuits, three point one n. "
-            "For formulas, about n cubed, from Johan Håstad and Avishay Tal. For constant-depth circuits, "
-            "exponential bounds for parity. For the class ACC zero, Williams's algorithmic method now separates it "
-            "from nondeterministic quasi-polynomial time. And what P versus NP needs is a superpolynomial bound for "
-            "SAT against general circuits, far beyond all of these. <bookmark mark='b'/> A different programme, "
-            "geometric complexity theory, proposed by Ketan Mulmuley and Milind Sohoni, attacks an algebraic "
-            "version of the question with representation theory. <bookmark mark='c'/> Its simplest form was ruled "
-            "out in 2016, and the programme continues with subtler tools."
+            "Compare results only within their circuit models. <bookmark mark='a'/> Li and Yang's 2022 result supplies a dated example of a three point one n minus lower-order gate bound in the B-two basis, where every two-input Boolean gate is permitted. We are not presenting it as a verified current-record survey. Formula and constant-depth lower bounds use different restrictions and size conventions. <bookmark mark='b'/> A superpolynomial circuit lower bound for SAT would imply NP is not contained in P over poly, which is stronger than P differs from NP. Such a circuit bound is a sufficient route, not a necessary equivalence. <bookmark mark='c'/> Geometric complexity theory studies related algebraic lower bounds. The negative occurrence-obstruction results rule out a particular proposed strategy in specified settings, not the entire programme."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
             vo.wait_until("a")
@@ -106,27 +90,15 @@ class Frontier(VoiceoverScene):
                   color=WHITE),
             label(r"in NP \ (the circuit is the certificate); \ studied since the 1950s in the USSR \ (\textit{perebor})",
                   font_size=21, color=GREY_A),
-            label(r"is it NP-complete? \ Unknown. \ Hirahara \ (2022): \ a \textbf{partial} version is", font_size=22,
+            label('Hirahara (2022): partial MCSP is NP-hard under RANDOMIZED polynomial-time reductions', font_size=22,
                   color=HEAD),
-            label(r"Liu and Pass \ (2020): \ \textbf{one-way functions exist} $\iff$ \ a time-bounded Kolmogorov "
-                  r"complexity is hard on average", font_size=22, color=YES),
-            label(r"so the existence of cryptography is a question about \textbf{compressing strings} \ (Part 25, "
-                  r"chapter 10)", font_size=22, color=DATA),
-            label(r"meta-complexity may connect Pessiland to Minicrypt: \ the most active frontier of the 2020s",
+            label('Liu--Pass (2020): OWFs $\\iff$ mild uniform-average hardness of exact $K^t$, suitable polynomial $t\\ge(1+\\epsilon)n$', font_size=22, color=YES),
+            label('precise compression / time / error model matters; this equivalence does not establish public-key encryption', font_size=22, color=DATA),
+            label('meta-complexity links average-case hardness and cryptography; qualifications remain essential',
                   font_size=22, color=LAM),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "The newest frontier is called meta-complexity: how hard is it to measure how hard something is? "
-            "<bookmark mark='a'/> The minimum circuit size problem asks, given the full truth table of a function and "
-            "a number s, whether some circuit of size s computes it. <bookmark mark='b'/> It is in NP, since the "
-            "circuit is the certificate, and Soviet researchers studied it as a problem of brute-force search, "
-            "perebor, before P and NP had names. <bookmark mark='c'/> Is it NP-complete? Nobody knows. In 2022 "
-            "Shuichi Hirahara proved that a partial-function version is. <bookmark mark='d'/> And in 2020 Yanyi Liu "
-            "and Rafael Pass proved that one-way functions exist if and only if a time-bounded version of Kolmogorov "
-            "complexity is hard on average. <bookmark mark='e'/> So whether cryptography is possible is a question "
-            "about compressing strings, Part 25's Kolmogorov complexity with a clock. <bookmark mark='f'/> These "
-            "results may one day connect the worlds of the last chapter. They are among the most active research in "
-            "the field."
+            "Meta-complexity asks how hard it is to recognize complexity. <bookmark mark='a'/> Minimum circuit size takes a FULL truth table and a size threshold. A candidate circuit can be checked on every input in time polynomial in that table length, so the decision problem is in NP. <bookmark mark='b'/> Standard deterministic NP-completeness remains a separate question. <bookmark mark='c'/> Hirahara's 2022 partial-truth-table result proves NP-hardness under RANDOMIZED polynomial-time reductions. It does not establish the unqualified deterministic completeness claim. <bookmark mark='d'/> Liu and Pass relate one-way functions to mild average-case hardness of exact time-bounded Kolmogorov complexity on uniformly random strings, for appropriate polynomial time bounds at least one plus epsilon times the string length. <bookmark mark='e'/> The time bound, uniform distribution and error requirement are essential; this is not an equivalence with public-key encryption. <bookmark mark='f'/> These results connect the difficulty of recognizing short descriptions to computational cryptography, while leaving the stated qualifications intact."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):
@@ -141,22 +113,17 @@ class Frontier(VoiceoverScene):
             label(r"1. \ P vs NP; \ NP vs coNP; \ P vs PSPACE; \ L vs P", font_size=22, color=WHITE),
             label(r"2. \ Is MCSP NP-complete?", font_size=22, color=WHITE),
             label(r"3. \ Is factoring, \ or graph isomorphism, \ in P?", font_size=22, color=WHITE),
-            label(r"4. \ Where exactly is the random 3-SAT threshold? \ Is it the predicted 4.267?", font_size=22,
+            label('4. Certify the numerical 3-SAT threshold; distinguish reported 2026 theorems from finite fits', font_size=22,
                   color=WHITE),
             label(r"5. \ Can time $t$ be simulated in space $t^{1/2 - \varepsilon}$, \ or even $t^{\varepsilon}$?",
                   font_size=22, color=WHITE),
-            label(r"6. \ A superlinear circuit lower bound, \ $5n$ or $n \log n$, \ for any explicit function",
+            label('6. For P/NP families: improve a linear coefficient, or prove a superlinear bound such as $n\\log n$',
                   font_size=22, color=WHITE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).next_to(head, DOWN, buff=0.5)
         star = label(r"$\bigstar$ \ the part's research problem takes a small case of the fourth", font_size=22,
                      color=GREY_A).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Six open problems. <bookmark mark='a'/> P versus NP itself, and its cousins: NP versus coNP, P versus "
-            "PSPACE, logarithmic space versus P. <bookmark mark='b'/> Whether the minimum circuit size problem is "
-            "NP-complete. <bookmark mark='c'/> Whether factoring or graph isomorphism is in P. <bookmark mark='d'/> "
-            "The exact location of the three-SAT threshold. <bookmark mark='e'/> How far Williams's simulation can be "
-            "pushed. <bookmark mark='f'/> And any superlinear lower bound on circuit size for an explicit function. "
-            "<bookmark mark='g'/> This part's research problem takes a small, computable case of the fourth."
+            "Six directions remain. <bookmark mark='a'/> P versus NP, NP versus coNP, P versus PSPACE and L versus P. <bookmark mark='b'/> The deterministic many-one hardness of ordinary minimum circuit size. <bookmark mark='c'/> Classical polynomial-time algorithms for factoring search and graph isomorphism. <bookmark mark='d'/> Rigorous numerical characterization of the random three-SAT threshold, beyond the existence and computability reported in 2026 preprints, and distinguished from a finite fifty-percent crossing. <bookmark mark='e'/> Further time-space simulation improvements, with the model and quantifiers specified. <bookmark mark='f'/> General circuit lower bounds for suitable families in P or NP: improving a linear coefficient, such as five n, is different from proving a superlinear bound such as n log n. <bookmark mark='g'/> The starred exercise studies finite random-SAT samples with uncertainty. It does not ask you to claim an asymptotic theorem from a small fit."
         ) as vo:
             self.play(FadeIn(head))
             for mk, it in zip("abcdef", items):

@@ -73,7 +73,7 @@ class Reductions(VoiceoverScene):
         arrows = VGroup(*[Arrow(d.get_center(), npc.get_center(), buff=0.12, stroke_width=1.5, color=GREY_C,
                                 max_tip_length_to_length_ratio=0.12) for d in dots_])
         lines = VGroup(
-            label(r"$B$ is \textbf{NP-hard} if every problem in NP reduces to it", font_size=22, color=WHITE),
+            label('$B$ is NP-hard if every NP language many-one reduces to it; diagram assumes P $\\ne$ NP', font_size=22, color=WHITE),
             label(r"\textbf{NP-complete}: \ NP-hard and in NP", font_size=22, color=NO),
             label(r"one NP-complete problem in P \ $\Rightarrow$ \\ every NP problem in P: \ P = NP", font_size=22,
                   color=YES),
@@ -87,14 +87,7 @@ class Reductions(VoiceoverScene):
             lines.width = 6.9 - left
             lines.shift(RIGHT * (left - lines.get_left()[0]))
         with self.voiceover(
-            "Now the key definitions. <bookmark mark='a'/> A problem is NP-hard if every problem in NP reduces to "
-            "it. <bookmark mark='b'/> It is NP-complete if, in addition, it is in NP itself: the hardest problems in "
-            "the class. <bookmark mark='c'/> If any single NP-complete problem had a polynomial algorithm, then by "
-            "composing reductions every problem in NP would, and P would equal NP. <bookmark mark='d'/> If any one "
-            "of them provably has no polynomial algorithm, then none of them does. <bookmark mark='e'/> But it is "
-            "not obvious that NP-complete problems exist at all. To prove one, you need a reduction from every "
-            "problem in NP simultaneously, including ones nobody has thought of yet. That is what Stephen Cook and "
-            "Leonid Levin did."
+            "Now define hardness and completeness. <bookmark mark='a'/> B is NP-hard if every language in NP has a deterministic polynomial-time many-one reduction to B. <bookmark mark='b'/> B is NP-complete if it is also in NP. The picture draws disjoint easy and complete regions under the assumption that P differs from NP. <bookmark mark='c'/> If any NP-complete language is in P, every NP language is in P. <bookmark mark='d'/> Equivalently, if some NP-complete language is outside P, all of them are. Neither premise is currently proved. <bookmark mark='e'/> Cook and Levin supplied the first complete problem by encoding polynomially bounded computations as satisfiability."
         ) as vo:
             self.play(FadeIn(head), FadeIn(np_), FadeIn(p_), FadeIn(lab[0]), FadeIn(lab[1]), FadeIn(dots_))
             vo.wait_until("a")
@@ -123,21 +116,13 @@ class Reductions(VoiceoverScene):
         notes = VGroup(
             label(r"fix one variable at a time; \\ ask the yes/no oracle \\ whether the rest is still satisfiable",
                   font_size=21, color=WHITE),
-            label(r"$n$ questions find a solution: \\ \textbf{self-reducibility}", font_size=21, color=YES),
+            label('$n$ additional questions after an initial SAT test; \\\\ the prefix always extends to a solution', font_size=21, color=YES),
             label(r"so P = NP would give fast \\ \textbf{finding}, \ not just fast \\ \textbf{deciding}",
                   font_size=21, color=DATA),
-            label(r"true of every NP-complete problem; \\ factoring is the odd one out: \\ deciding "
-                  r"``is $N$ composite?'' \\ is easy, \ finding a factor is not", font_size=21, color=LAM),
+            label('generalizes to polynomially bounded, verifiable witnesses; \\\\ compositeness decision differs from factoring search', font_size=21, color=LAM),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.6).shift(DOWN * 0.2)
         with self.voiceover(
-            "One more consequence of completeness. NP is defined by yes-or-no questions, but we usually want the "
-            "solution itself. <bookmark mark='a'/> Suppose we only had a decision procedure for SAT. Set the first "
-            "variable to one and ask whether the formula is still satisfiable. If yes, keep it; if not, it must be "
-            "zero. Then the next variable. <bookmark mark='b'/> On the small formula that chapter six will use, five questions, one to "
-            "check and one per variable, produce a satisfying assignment. This is called self-reducibility. <bookmark mark='c'/> So a fast decision "
-            "procedure would give fast search too: P equal to NP would mean finding, not just deciding. <bookmark "
-            "mark='d'/> Every NP-complete problem behaves this way. Factoring is the interesting exception: deciding "
-            "whether a number is composite is easy, as chapter three said, but finding a factor seems hard."
+            "Decision can also recover a witness. <bookmark mark='a'/> First ask whether this SAT formula is satisfiable. Then try setting each variable to true while retaining earlier choices. Keep true when the remaining formula is satisfiable; otherwise choose false. <bookmark mark='b'/> The retained four-variable trace uses five actual queries, including the initial test. Each query and answer is saved. <bookmark mark='c'/> The invariant is that every chosen prefix extends to a full satisfying assignment. <bookmark mark='d'/> If P equals NP, this method extends through SAT encodings to polynomially bounded, polynomial-time verifiable witness relations. It does not promise to invert any arbitrary many-one reduction. Compositeness decision is already in P; finding a nontrivial factor is a different search problem."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

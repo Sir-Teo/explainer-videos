@@ -33,25 +33,16 @@ class Ladner(VoiceoverScene):
         lines = VGroup(
             label(r"if P $\ne$ NP, \ there are problems in NP \\ that are \textbf{neither} in P \textbf{nor} "
                   r"NP-complete", font_size=21, color=WHITE),
-            label(r"proof idea: \ take SAT and \textbf{punch holes} in it: \\ pad the formulas of some lengths, \ "
-                  r"keep others", font_size=21, color=DATA),
-            label(r"the lengths are chosen by a slow diagonalization: \\ too many holes and it is in P; \ too few and "
-                  r"it is complete", font_size=21, color=GREY_A),
+            label('proof sketch: restrict or pad SAT \\\\ at carefully selected lengths; \\\\ ordinary padding is not trivialization', font_size=21, color=DATA),
+            label('choose lengths by slow diagonalization: \\\\ too many holes puts it in P; \\\\ too few can retain completeness', font_size=21, color=GREY_A),
             label(r"the construction defeats every polynomial algorithm \\ and every polynomial reduction in turn",
                   font_size=21, color=YES),
             label(r"the problem it builds is artificial: \\ the question is which \textbf{natural} problems sit there",
                   font_size=21, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4).shift(DOWN * 0.1)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(RIGHT * 3.5 + DOWN * 0.1)
         fit_right(lines)
         with self.voiceover(
-            "Suppose P is not NP. Must every problem in NP be either easy or complete? <bookmark mark='a'/> No. "
-            "Richard Ladner proved in 1975 that, if P differs from NP, there are problems in NP that are neither in "
-            "P nor NP-complete. <bookmark mark='b'/> The proof takes SAT and punches holes in it: for some input "
-            "lengths it keeps the formulas, for others it pads them into triviality. <bookmark mark='c'/> The "
-            "lengths are chosen by a slow diagonal process. With too many holes the problem would be easy, with too "
-            "few it would still be complete, <bookmark mark='d'/> and the construction steers between the two, "
-            "defeating each polynomial algorithm and each polynomial reduction in turn. <bookmark mark='e'/> The "
-            "problem it builds is artificial. The real question is which natural problems live in between."
+            "Suppose P differs from NP. <bookmark mark='a'/> Ladner's theorem then supplies languages in NP that are neither in P nor NP-complete under polynomial-time many-one reductions. <bookmark mark='b'/> One proof uses a carefully controlled restriction or padding of satisfiability. This is a proof sketch, not a claim that ordinary padding makes SAT trivial. <bookmark mark='c'/> Delayed diagonalization chooses the growth rate slowly enough that the resulting language remains in NP. <bookmark mark='d'/> It defeats polynomial-time deciders and candidate completeness reductions in successive stages, under the assumption P differs from NP. <bookmark mark='e'/> The construction is artificial. Proving that a familiar natural candidate is intermediate remains a separate challenge."
         ) as vo:
             self.play(FadeIn(head), FadeIn(np_), FadeIn(p_), FadeIn(npc), FadeIn(labs[0]), FadeIn(labs[1]),
                       FadeIn(labs[3]))
@@ -66,27 +57,17 @@ class Ladner(VoiceoverScene):
     def candidates(self):
         head = label(r"The suspects", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
-            label(r"\textbf{factoring} \ and \textbf{discrete logarithm}: \ in NP $\cap$ coNP; \ the security of RSA "
-                  r"and Diffie--Hellman \ (Part 30)", font_size=22, color=HEAD),
+            label('factoring / discrete-log decision variants: NP $\\cap$ coNP; related crypto assumptions are distinct', font_size=22, color=HEAD),
             label(r"\textbf{graph isomorphism}: \ quasi-polynomial \ (Babai, 2015); \ not NP-complete unless the "
                   r"hierarchy collapses", font_size=22, color=DATA),
             label(r"\textbf{minimum circuit size}: \ is this truth table computed by a circuit of size $s$? \ "
                   r"(chapter 16)", font_size=22, color=LAM),
-            label(r"each could still turn out to be in P, \ or NP-complete: \ none is \textbf{proved} intermediate",
+            label('none is proved intermediate; each might be in P; NP-completeness has problem-specific consequences',
                   font_size=22, color=NO),
-            label(r"and for many natural families, \ a \textbf{dichotomy}: \ every case is in P or NP-complete \ "
-                  r"(constraint satisfaction: \ Bulatov; \ Zhuk, \ 2017)", font_size=21, color=YES),
+            label('Bulatov / Zhuk (2017): for each fixed finite constraint language on a finite domain, CSP is P or NP-complete', font_size=21, color=YES),
         ).arrange(DOWN, buff=0.35).next_to(head, DOWN, buff=0.55)
         with self.voiceover(
-            "A few natural problems are suspected to be intermediate. <bookmark mark='a'/> Factoring and the "
-            "discrete logarithm: both in NP intersect coNP, and the security of RSA and Diffie-Hellman, in Part 30, "
-            "rests on their being hard. <bookmark mark='b'/> Graph isomorphism, now known to be quasi-polynomial; it "
-            "cannot be NP-complete unless the polynomial hierarchy collapses. <bookmark mark='c'/> And the minimum "
-            "circuit size problem, which chapter sixteen returns to. <bookmark mark='d'/> None of these is proved to "
-            "be intermediate. Any of them might fall into P. <bookmark mark='e'/> Meanwhile, for large natural "
-            "families there is a dichotomy. Andrei Bulatov and Dmitriy Zhuk proved independently in 2017 that every "
-            "constraint satisfaction problem over a finite domain is either in P or NP-complete, with nothing in "
-            "between."
+            "Several natural problems motivate the question. <bookmark mark='a'/> Suitable decision versions of factoring and discrete logarithm lie in NP intersect coNP. RSA inversion and Diffie-Hellman assumptions are related to those searches, but should not be described as proved equivalent to them. <bookmark mark='b'/> Graph isomorphism has a quasipolynomial algorithm and cannot be NP-complete under standard reductions unless the polynomial hierarchy collapses. <bookmark mark='c'/> The minimum circuit size problem is another candidate: given a full truth table, is there a small circuit computing it? <bookmark mark='d'/> None of these is proved intermediate; each might still be in P. Their possible NP-completeness has different known consequences. <bookmark mark='e'/> In contrast, Bulatov and Zhuk proved a dichotomy for each FIXED finite constraint language over a finite domain: its decision CSP is in P or NP-complete. The fixed-template condition matters."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcde", lines):

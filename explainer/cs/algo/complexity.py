@@ -29,15 +29,65 @@ import random
 from collections import defaultdict
 
 
+def _integer(value, name, minimum=0):
+    if type(value) is not int or value < minimum:
+        raise ValueError(f"{name} must be an integer >= {minimum}")
+    return value
+
+
+def _cnf(n, clauses, width=None):
+    """Freeze an integer CNF, normalize repeated literals, and reject invalid domains."""
+    _integer(n, "n")
+    out = []
+    for clause in clauses:
+        c = list(clause)
+        if any(type(l) is not int or l == 0 or abs(l) > n for l in c):
+            raise ValueError("CNF literals must be nonzero integers with absolute value <= n")
+        c = list(dict.fromkeys(c))
+        if width is not None and len(c) > width:
+            raise ValueError(f"expected clauses of at most {width} distinct literals")
+        out.append(c)
+    return out
+
+
+def _graph(vertices, edges):
+    vertices = list(vertices)
+    if len(set(vertices)) != len(vertices):
+        raise ValueError("vertices must be distinct")
+    domain = set(vertices)
+    edges = [tuple(e) for e in edges]
+    if any(len(e) != 2 or e[0] not in domain or e[1] not in domain for e in edges):
+        raise ValueError("edge endpoints must belong to the vertex domain")
+    return vertices, edges
+
+
+def _adjacency(adj):
+    graph = {v: tuple(us) for v, us in adj.items()}
+    _graph(graph, ((v, u) for v, us in graph.items() for u in us))
+    return graph
+
+
 # ----------------------------------------------------------------------------------------------- SAT
 
 def check(model, clauses) -> bool:
     """``model`` maps variable -> bool (or is a list indexed by variable)."""
-    get = model.get if isinstance(model, dict) else (lambda v: model[v])
+    if model is None:
+        raise ValueError("a complete Boolean model is required")
+    clauses = [list(c) for c in clauses]
+    n = max((abs(l) for c in clauses for l in c if type(l) is int), default=0)
+    clauses = _cnf(n, clauses)
+    used = {abs(l) for c in clauses for l in c}
+    try:
+        if any(type(model[v]) is not bool for v in used):
+            raise ValueError("model values must be Boolean")
+    except (KeyError, IndexError, TypeError) as exc:
+        raise ValueError("model does not assign every used variable") from exc
+    get = lambda v: model[v]
     return all(any((get(abs(l)) if l > 0 else not get(abs(l))) for l in c) for c in clauses)
 
 
 def _luby(i):
+    _integer(i, "restart index", 1)
     k = 1
     while (1 << k) - 1 < i:
         k += 1
@@ -51,7 +101,15 @@ def _luby(i):
 
 
 def cdcl(n, clauses, max_conflicts=None, seed=0, restart_base=100):
-    """Returns (model as list of bools indexed 1..n, or None if unsatisfiable or out of budget, stats)."""
+    """Return (1-indexed Boolean model or None, stats).
+
+    Only status='unsat' is a refutation. status='unknown' means the positive
+    conflict budget was exhausted; None alone never distinguishes the two.
+    """
+    clauses = _cnf(n, clauses)
+    _integer(restart_base, "restart_base", 1)
+    if max_conflicts is not None:
+        _integer(max_conflicts, "max_conflicts", 1)
     stats = {"decisions": 0, "conflicts": 0, "propagations": 0, "learnt": 0, "restarts": 0, "status": "sat"}
     val = [0] * (n + 1)          # 0 unassigned, 1 true, -1 false
     level = [0] * (n + 1)
@@ -247,6 +305,8 @@ def cdcl(n, clauses, max_conflicts=None, seed=0, restart_base=100):
 
 def dpll(n, clauses, max_nodes=10 ** 7):
     """Plain DPLL with unit propagation and the first-unassigned-variable rule; returns (model or None, nodes)."""
+    clauses = _cnf(n, clauses)
+    _integer(max_nodes, "max_nodes", 1)
     nodes = 0
 
     def simplify(cs, lit):
@@ -266,6 +326,8 @@ def dpll(n, clauses, max_nodes=10 ** 7):
         nodes += 1
         if nodes > max_nodes:
             raise RuntimeError("budget")
+        if any(not c for c in cs):
+            return None
         while True:
             unit = next((c[0] for c in cs if len(c) == 1), None)
             if unit is None:
@@ -294,6 +356,11 @@ def dpll(n, clauses, max_nodes=10 ** 7):
 
 
 def random_ksat(n, m, k, rng):
+    _integer(n, "n")
+    _integer(m, "m")
+    _integer(k, "k", 1)
+    if k > n:
+        raise ValueError("k must be <= n")
     out = []
     for _ in range(m):
         vs = rng.sample(range(1, n + 1), k)
@@ -303,6 +370,7 @@ def random_ksat(n, m, k, rng):
 
 def to_3sat(n, clauses):
     """Split each clause longer than 3: (a b c d e) -> (a b y1)(-y1 c y2)(-y2 d e). Returns (n', clauses')."""
+    clauses = _cnf(n, clauses)
     out = []
     for c in clauses:
         if len(c) <= 3:
@@ -322,6 +390,9 @@ def to_3sat(n, clauses):
 def sat_to_is(clauses):
     """Vertices (j, i) = the i-th literal of clause j; a triangle per clause and an edge between complementary
     literals. The formula is satisfiable iff the graph has an independent set of size len(clauses)."""
+    clauses = [list(c) for c in clauses]
+    n = max((abs(l) for c in clauses for l in c if type(l) is int), default=0)
+    clauses = _cnf(n, clauses)
     verts = [(j, i) for j, c in enumerate(clauses) for i in range(len(c))]
     lit = {(j, i): clauses[j][i] for (j, i) in verts}
     edges = set()
@@ -336,6 +407,9 @@ def sat_to_is(clauses):
 
 def is_from_model(clauses, model):
     """One true literal per clause: an independent set of size m."""
+    clauses = [list(dict.fromkeys(c)) for c in clauses]
+    if not check(model, clauses):
+        raise ValueError("a satisfying model is required")
     out = []
     for j, c in enumerate(clauses):
         i = next(i for i, l in enumerate(c) if (model[abs(l)] if l > 0 else not model[abs(l)]))
@@ -344,6 +418,7 @@ def is_from_model(clauses, model):
 
 
 def is_to_clique(verts, edges):
+    verts, edges = _graph(verts, edges)
     es = set(edges) | {(b, a) for a, b in edges}
     return [(u, v) for u, v in itertools.combinations(verts, 2) if (u, v) not in es]
 
@@ -354,7 +429,10 @@ def is_independent(S, edges):
 
 
 def is_to_vc(verts, S):
+    verts = list(verts)
     s = set(S)
+    if not s <= set(verts):
+        raise ValueError("independent set must lie in the vertex domain")
     return [v for v in verts if v not in s]
 
 
@@ -367,6 +445,7 @@ def sat_to_3col(n, clauses):
     """Vertices: T, F, B (the palette triangle); x_v and ~x_v for each variable, joined to each other and to B;
     for each clause (a, b, c) an OR gadget of six vertices whose output is joined to F and B, so the output can be
     coloured T iff some input is. Returns (vertex names, edges)."""
+    clauses = _cnf(n, clauses, 3)
     V = ["T", "F", "B"]
     E = [("T", "F"), ("F", "B"), ("B", "T")]
     for v in range(1, n + 1):
@@ -377,6 +456,12 @@ def sat_to_3col(n, clauses):
         return f"x{l}" if l > 0 else f"~x{-l}"
 
     for j, c in enumerate(clauses):
+        if not c:
+            # K4 is not three-colourable: preserve an empty clause as UNSAT.
+            bad = f"empty{j}"
+            V.append(bad)
+            E.extend((bad, v) for v in ("T", "F", "B"))
+            continue
         a, b, cc = (list(c) + [c[-1]] * 3)[:3]
         # or(a, b) = o1 through u1, w1; or(o1, c) = o2 through u2, w2
         u1, w1, o1, u2, w2, o2 = (f"g{j}_{k}" for k in ("u1", "w1", "o1", "u2", "w2", "o2"))
@@ -388,6 +473,8 @@ def sat_to_3col(n, clauses):
 
 
 def coloring_cnf(V, E, k):
+    _integer(k, "k", 1)
+    V, E = _graph(V, E)
     idx = {v: i for i, v in enumerate(V)}
     var = lambda v, c: idx[v] * k + c + 1  # noqa: E731
     cl = []
@@ -402,13 +489,23 @@ def coloring_cnf(V, E, k):
 
 
 def decode_coloring(V, model, var, k):
-    return {v: next(c for c in range(k) if model[var(v, c)]) for v in V}
+    _integer(k, "k", 1)
+    if model is None:
+        raise ValueError("a colouring model is required")
+    out = {}
+    for v in V:
+        colors = [c for c in range(k) if model[var(v, c)]]
+        if len(colors) != 1:
+            raise ValueError("each vertex must have exactly one colour")
+        out[v] = colors[0]
+    return out
 
 
 def sat_to_subset_sum(n, clauses):
     """Sipser's construction (Theorem 7.56). Numbers are decimal strings of n + m digits: y_i / z_i put 1 in
     variable column i and 1 in each clause column where x_i / ~x_i occurs; g_j and h_j put 1 in clause column j.
     Target: n ones then m threes. No column can carry (at most 5 ones per column)."""
+    clauses = _cnf(n, clauses, 3)
     m = len(clauses)
     nums = {}
     for i in range(1, n + 1):
@@ -427,11 +524,14 @@ def sat_to_subset_sum(n, clauses):
         g[n + j] = 1
         nums[f"g{j + 1}"] = nums[f"h{j + 1}"] = int("".join(map(str, g)))
         nums[f"h{j + 1}"] = nums[f"g{j + 1}"]
-    target = int("1" * n + "3" * m)
+    target = int("1" * n + "3" * m or "0")
     return nums, target
 
 
 def subset_from_model(n, clauses, model, nums):
+    clauses = _cnf(n, clauses, 3)
+    if not check(model, clauses):
+        raise ValueError("a satisfying model is required")
     chosen = [f"y{i}" if model[i] else f"z{i}" for i in range(1, n + 1)]
     for j, c in enumerate(clauses):
         true = sum(1 for l in c if (model[abs(l)] if l > 0 else not model[abs(l)]))
@@ -439,6 +539,9 @@ def subset_from_model(n, clauses, model, nums):
             chosen.append(f"g{j + 1}")
         if true <= 1:
             chosen.append(f"h{j + 1}")
+    expected, target = sat_to_subset_sum(n, clauses)
+    if nums != expected or sum(nums[key] for key in chosen) != target:
+        raise ValueError("numbers or mapped subset do not match this reduction")
     return chosen
 
 
@@ -451,8 +554,22 @@ def cook_levin(ntm, w, T):
     head. Row 0 is the start configuration, and every 2 x 3 window must be legal. The accept state is absorbing
     (it rewrites nothing and stays put), so the formula is satisfiable iff the machine accepts w within T - 1 steps.
     Returns (number of variables, clauses, info) where info decodes a model."""
+    _integer(T, "T", 1)
     gam = list(ntm["alphabet"])
     states = list(ntm["states"])
+    if (not gam or not states or len(set(gam)) != len(gam) or len(set(states)) != len(states)
+            or any(not isinstance(a, str) or not a or a == "#" for a in gam)
+            or any(not isinstance(q, str) or not q for q in states)
+            or ntm["blank"] not in gam or ntm["start"] not in states or ntm["accept"] not in states):
+        raise ValueError("invalid finite machine alphabet or states")
+    if not isinstance(w, (str, list, tuple)) or any(a not in gam for a in w) or len(w) > T + 2:
+        raise ValueError("input must use the tape alphabet and fit the T+2 interior cells")
+    for (q, a), rules in ntm["delta"].items():
+        if q not in states or a not in gam:
+            raise ValueError("transition source outside machine domain")
+        for q2, b, mv in rules:
+            if q2 not in states or b not in gam or type(mv) is not int or mv not in (-1, 0, 1):
+                raise ValueError("invalid transition destination, write or move")
     cells = ["#"] + gam + [(q, a) for q in states for a in gam]
     W = T + 2
     cols = W + 2                       # including the two borders
@@ -554,12 +671,17 @@ def legal_windows(ntm, cells):
 
 
 def decode_tableau(model, info):
+    if model is None:
+        raise ValueError("a tableau model is required")
     cells, cols, T, var = info["cells"], info["cols"], info["T"], info["var"]
     rows = []
     for r in range(T):
         row = []
         for j in range(cols):
-            row.append(next(s for s in cells if model[var(r, j, s)]))
+            selected = [s for s in cells if model[var(r, j, s)]]
+            if len(selected) != 1:
+                raise ValueError("each tableau cell must have exactly one symbol")
+            row.append(selected[0])
         rows.append(row)
     return rows
 
@@ -569,6 +691,10 @@ def decode_tableau(model, info):
 def savitch(adj, s, t, steps):
     """CANYIELD(s, t, steps): reachable within ``steps`` edges, by trying every midpoint. Returns (answer, calls,
     max recursion depth). Space is depth x (one configuration), so O(log^2) for a configuration graph."""
+    _integer(steps, "steps")
+    adj = _adjacency(adj)
+    if s not in adj or t not in adj:
+        raise ValueError("endpoints must belong to the graph")
     calls = 0
     deepest = 0
     V = list(adj)
@@ -577,7 +703,9 @@ def savitch(adj, s, t, steps):
         nonlocal calls, deepest
         calls += 1
         deepest = max(deepest, d)
-        if k <= 1:
+        if k == 0:
+            return a == b
+        if k == 1:
             return a == b or b in adj[a]
         h = (k + 1) // 2
         return any(can(a, m, h, d + 1) and can(m, b, k - h, d + 1) for m in V)
@@ -587,6 +715,16 @@ def savitch(adj, s, t, steps):
 
 def tqbf(quants, clauses):
     """quants: list of ('E' or 'A', var) in order; evaluate by recursion. Returns (value, nodes)."""
+    quants = list(quants)
+    variables = []
+    for q, v in quants:
+        _integer(v, "quantified variable", 1)
+        if q not in ("E", "A") or v in variables:
+            raise ValueError("quantifiers must be E/A and bind each variable exactly once")
+        variables.append(v)
+    clauses = _cnf(max(variables, default=0), clauses)
+    if any(abs(l) not in variables for c in clauses for l in c):
+        raise ValueError("every formula variable must be quantified")
     nodes = 0
 
     def rec(i, assign):
@@ -607,25 +745,33 @@ def tqbf(quants, clauses):
 
 def geography(adj, start):
     """Generalized geography: players alternately move a token along an edge to a vertex not yet visited; whoever
-    cannot move loses. Returns (first player to move wins?, positions evaluated). Player 1 has just placed the token
-    at ``start``; it is player 2's move."""
+    cannot move loses. Returns (initial placer wins?, memoized positions evaluated).
+    Player 1 has placed the token at start; player 2 moves next. Arbitrary hashable
+    vertex labels are mapped to dense bit positions. Memoization may use
+    exponential space; the PSPACE membership proof uses a depth-first traversal.
+    """
+    adj = _adjacency(adj)
+    if start not in adj:
+        raise ValueError("start must belong to the graph")
+    bits = {v: 1 << i for i, v in enumerate(adj)}
     memo = {}
 
     def wins(v, visited):          # does the player to move win?
         key = (v, visited)
         if key in memo:
             return memo[key]
-        r = any(not wins(u, visited | (1 << u)) for u in adj[v] if not visited >> u & 1)
+        r = any(not wins(u, visited | bits[u]) for u in adj[v] if not visited & bits[u])
         memo[key] = r
         return r
 
-    r = wins(start, 1 << start)
+    r = wins(start, bits[start])
     return (not r), len(memo)
 
 
 # ----------------------------------------------------------------------------------------------- NP and coNP
 
 def _factor(n):
+    _integer(n, "n", 1)
     out, d = [], 2
     while d * d <= n:
         while n % d == 0:
@@ -637,40 +783,97 @@ def _factor(n):
     return sorted(set(out))
 
 
+def _prime64(n):
+    """Deterministic Miller-Rabin on 0 <= n < 2**64; fixed proven witness set."""
+    if n < 2:
+        return False
+    for q in (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37):
+        if n % q == 0:
+            return n == q
+    d, s = n - 1, 0
+    while not d & 1:
+        d //= 2
+        s += 1
+    for a in (2, 325, 9375, 28178, 450775, 9780504, 1795265022):
+        if a % n == 0:
+            continue
+        x = pow(a, d, n)
+        if x in (1, n - 1):
+            continue
+        for _ in range(s - 1):
+            x = x * x % n
+            if x == n - 1:
+                break
+        else:
+            return False
+    return True
+
+
 def pratt(p):
-    """A Pratt certificate: a witness g of order p - 1, the prime factors of p - 1, and certificates for each."""
+    """Construct a Pratt certificate for a prime 2 <= p < 2**64.
+
+    This teaching constructor uses trial division of p-1. The checker below
+    checks the order criterion itself and does not depend on Miller-Rabin.
+    """
+    _integer(p, "p", 2)
+    if p >= 2 ** 64 or not _prime64(p):
+        raise ValueError("constructor requires a prime below 2**64")
     if p == 2:
         return {"p": 2}
     fs = _factor(p - 1)
     g = 2
-    while not all(pow(g, (p - 1) // q, p) != 1 for q in fs):
+    while not (pow(g, p - 1, p) == 1 and all(pow(g, (p - 1) // q, p) != 1 for q in fs)):
         g += 1
     return {"p": p, "g": g, "factors": [pratt(q) for q in fs]}
 
 
 def verify_pratt(cert):
-    p = cert["p"]
-    if p == 2:
-        return True, 1
-    g = cert["g"]
-    qs = [c["p"] for c in cert["factors"]]
-    m = p - 1
-    for q in qs:
-        while m % q == 0:
-            m //= q
-    ok = m == 1 and pow(g, p - 1, p) == 1 and all(pow(g, (p - 1) // q, p) != 1 for q in qs)
-    checks = 1
-    for c in cert["factors"]:
-        o, k = verify_pratt(c)
-        ok = ok and o
-        checks += k
-    return ok, checks
+    """Return (valid, certificate nodes checked); malformed/cyclic trees fail.
+
+    Each child prime is strictly smaller, distinct, and divides p-1. Removing
+    their complete powers must leave 1. Checks counts nodes, not modular powers.
+    """
+    active = set()
+    checks = 0
+
+    def visit(c, parent=None):
+        nonlocal checks
+        if not isinstance(c, dict) or id(c) in active:
+            return False
+        p = c.get("p")
+        if type(p) is not int or p < 2 or (parent is not None and p >= parent):
+            return False
+        checks += 1
+        if p == 2:
+            return set(c) == {"p"}
+        g, children = c.get("g"), c.get("factors")
+        if type(g) is not int or not 1 < g < p or not isinstance(children, (list, tuple)) or not children:
+            return False
+        qs = [v.get("p") if isinstance(v, dict) else None for v in children]
+        if any(type(q) is not int or not 2 <= q < p or (p - 1) % q for q in qs) or len(set(qs)) != len(qs):
+            return False
+        m = p - 1
+        for q in qs:
+            while m % q == 0:
+                m //= q
+        if m != 1 or pow(g, p - 1, p) != 1 or any(pow(g, (p - 1) // q, p) == 1 for q in qs):
+            return False
+        active.add(id(c))
+        ok = all(visit(child, p) for child in children)
+        active.remove(id(c))
+        return ok
+
+    try:
+        return visit(cert), checks
+    except (RecursionError, TypeError, ValueError, OverflowError):
+        return False, checks
 
 
 # ----------------------------------------------------------------------------------------------- famous instances
 
 def pythagorean_cnf(n):
     """Variable i: colour of i. For each a^2 + b^2 = c^2 with c <= n, not all three the same colour."""
+    _integer(n, "n")
     cl = []
     for a in range(1, n + 1):
         for b in range(a, n + 1):
@@ -685,6 +888,8 @@ def pythagorean_cnf(n):
 
 
 def schur_cnf(n, k):
+    _integer(n, "n")
+    _integer(k, "k", 1)
     var = lambda i, c: (i - 1) * k + c + 1  # noqa: E731
     cl = []
     for i in range(1, n + 1):
@@ -695,5 +900,6 @@ def schur_cnf(n, k):
             for c in range(k):
                 cl.append(list(dict.fromkeys([-var(x, c), -var(y, c), -var(z, c)])))
     # symmetry breaking: colour 1 gets 0
-    cl.append([var(1, 0)])
+    if n:
+        cl.append([var(1, 0)])
     return n * k, cl

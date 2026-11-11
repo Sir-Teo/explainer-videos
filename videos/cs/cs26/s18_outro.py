@@ -38,12 +38,7 @@ class Outro(VoiceoverScene):
             tile(MathTex(r"\sqrt{t \log t}", font_size=50, color=COST), r"barriers; \ five worlds", COST),
         ).arrange_in_grid(rows=2, cols=3, buff=(0.35, 0.35)).move_to(DOWN * 0.2)
         with self.voiceover(
-            "What we built in this part. Polynomial time and why it is robust. The time hierarchy and Savitch's "
-            "theorem, proved. NP as checkable certificates, and Cook and Levin's tableau, built as a formula and "
-            "solved. Reductions to independent set, clique, cover, three-colouring and subset sum, each run on a real "
-            "formula and mapped back. coNP, Pratt certificates and the polynomial hierarchy; games, polynomial space, "
-            "and time in square-root space. A clause-learning SAT solver and the phase transition. And the barriers, "
-            "the five worlds, and meta-complexity."
+            'This part built a map of computational complexity. Polynomial time under standard cost models; the correct time hierarchy and Savitch proof ideas; NP certificates; a bounded Cook-Levin encoding with complete traces; concrete reductions and mapped witnesses; coNP, prime certificates and quantifier alternation; games and space; the multitape square-root-space theorem; and a clause-learning SAT solver with finite random-instance measurements. The experiments verify finite implementations, while theorems keep their model assumptions. Barriers, hypothetical worlds and meta-complexity explain both progress and what remains unresolved.'
         ):
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
@@ -76,16 +71,12 @@ class Outro(VoiceoverScene):
         card = practice_card([
             (r"recognize it", r"scheduling, \ packing, \ configuration, \ dependencies: \ NP-hard in general"),
             (r"then solve it anyway", r"SAT, \ SMT and ILP solvers; \ constraint programming; \ local search"),
-            (r"or approximate", r"guarantees from Part 23; \ FPTAS when the hardness is only in the numbers"),
+            (r"or approximate", 'objective-specific guarantees; 0--1 knapsack has an FPTAS; weak hardness alone does not suffice'),
             (r"verification", r"model checking, \ equivalence checking, \ test generation: \ SAT inside"),
-            (r"security", r"every cipher is a bet on a hard problem: \ know which one"),
+            (r"security", 'computational cryptography needs precise assumptions; information-theoretic ciphers differ'),
         ])
         with self.voiceover(
-            "In practice. Learn to recognize NP-hard problems at work: scheduling, packing, configuration and "
-            "dependency resolution. Then solve them anyway, with SAT, SMT and integer-programming solvers, which "
-            "handle industrial instances daily. Or approximate them, with the guarantees of Part 23. Hardware and "
-            "software verification run on SAT solvers. And every cipher is a bet on a hard problem; it pays to know "
-            "which one."
+            'In practice, first specify the exact decision or optimization problem and its encoding. General scheduling, packing and dependency models may be NP-hard, while structured instances can be easy. SAT, SMT, integer programming and constraint solvers are useful tools. Approximation guarantees depend on the objective: weak hardness alone does not promise an FPTAS. Verification often uses SAT internally. For computational cryptography, identify the precise hardness assumption; information-theoretic ciphers require a different analysis.'
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.35), run_time=3.0)
@@ -108,9 +99,7 @@ class Outro(VoiceoverScene):
             r"threshold.",
         ], font_size=22)
         with self.voiceover(
-            "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build "
-            "problem: Sudoku to SAT, solved with this part's solver. The last, marked with a star, is a research "
-            "problem: its answer is not known, and the notes say where to start."
+            'Six exercises, with worked guidance in the notes. Pause on any of them. The Sudoku build exercise retains the full formula, solver model and independently checked grid. The starred exercise estimates finite-size crossings and widths with uncertainty; it does not establish an asymptotic threshold or scaling exponent.'
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)
@@ -121,15 +110,12 @@ class Outro(VoiceoverScene):
         items = VGroup(*[label(t, font_size=26, color=c) for t, c in (
             (r"zero-knowledge: \ convincing you without telling you", DATA),
             (r"interactive proofs: \ IP = PSPACE", YES),
-            (r"the PCP theorem: \ checking a proof by reading three bits", LAM),
+            ('the PCP theorem: constant queries, with completeness and soundness', LAM),
             (r"why some problems are hard even to approximate", HEAD))]).arrange(DOWN, buff=0.35)
         items.move_to(UP * 0.0)
         q = label(r"Act V: \ limits and secrets", font_size=26, color=GREY_A).to_edge(DOWN, buff=0.8)
         with self.voiceover(
-            "Next time: proofs that use randomness. A prover can convince you that a statement is true without "
-            "telling you why. Interaction makes proofs exponentially more powerful. And a proof can be written so "
-            "that reading three random bits of it is enough to catch any error, which is why some problems are hard "
-            "even to approximate. Part 27, Proofs and Randomness."
+            'Next, proofs that use randomness. Zero-knowledge protocols can convince a verifier while revealing no additional knowledge under their precise definition and assumptions. Interaction gives the class IP, equal to PSPACE; that equality does not prove a strict separation from NP. The PCP theorem uses logarithmically many random bits and a constant number of proof queries: true statements have an accepting proof, while false statements are rejected with bounded probability for every purported proof. It is not a guarantee to detect every changed bit in a proof. Part 27 develops those definitions and their consequences for approximation.'
         ):
             self.play(FadeIn(nxt), LaggedStart(*[FadeIn(i) for i in items], lag_ratio=0.3))
             self.play(FadeIn(q))

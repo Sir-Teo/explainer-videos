@@ -70,21 +70,12 @@ class Hook(VoiceoverScene):
                   r"of the same colour", font_size=22, color=WHITE),
             label(rf"\textbf{{checking}} a colouring: \\ look at {h['edges']} edges: \ "
                   rf"{h['check_s'] * 1e6:.1f} $\mu$s", font_size=22, color=YES),
-            label(rf"\textbf{{finding}} one by trying all $3^{{{h['n']}}}$: \\ about "
-                  rf"${sci(h['brute_years'])}$ years", font_size=22, color=NO),
-            label(rf"our SAT solver \ (chapter 13): \ {h['find_s'] * 1000:.1f} ms; \\ but nobody knows a method "
-                  r"\textbf{guaranteed} \\ to be fast on every graph", font_size=22, color=HEAD),
+            label(rf"enumeration scenario: $3^{{{h['n']}}}$ full checks \\ $\approx {sci(h['brute_years'])}$ years; \\ not a measured search or lower bound", font_size=22, color=NO),
+            label(rf"this planted instance: {h['find_s']*1000:.1f} ms; \\ polynomial time for every graph remains open", font_size=22, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).to_edge(RIGHT, buff=0.6).shift(DOWN * 0.2)
         fit_right(notes)
         with self.voiceover(
-            "Here is the question in modern form. <bookmark mark='a'/> Sixty points and a hundred and twelve "
-            "connections. Colour each point blue, yellow or green, so that no connection joins two points of the same "
-            "colour. <bookmark mark='b'/> If someone hands you a colouring, checking it is easy: look at each "
-            "connection once. Five microseconds. <bookmark mark='c'/> Finding one by trying every possibility means "
-            "three to the sixtieth colourings, about seven thousand million million years. <bookmark mark='d'/> Our "
-            "solver from chapter thirteen finds one in about a millisecond. But no one knows a method that is "
-            "guaranteed to be fast on every graph, and no one has proved there is none. That gap, between finding "
-            "and checking, is the P versus NP problem."
+            "Here is the question in modern form. <bookmark mark='a'/> This planted three-colourable graph has sixty vertices and a hundred and twelve edges. Find a colouring with different colours at adjacent vertices. <bookmark mark='b'/> Checking a supplied valid colouring examines every edge. We measure that check repeatedly on this host. <bookmark mark='c'/> Multiplying its average duration by three to the sixtieth gives an exhaustive-enumeration scenario. It is neither a measured search nor a lower bound: a search can stop early and reject invalid candidates faster. <bookmark mark='d'/> Our clause-learning solver finds a colouring quickly for this instance, and every edge is checked. Whether every graph admits a polynomial-time decision algorithm remains open. This finite success does not answer P versus NP."
         ) as vo:
             self.play(FadeIn(head), Create(g0[0]), FadeIn(g0[1]), run_time=2.0)
             self.play(FadeIn(notes[0]))
@@ -101,7 +92,7 @@ class Hook(VoiceoverScene):
         title = label(rf"Part {PART}: \ P versus NP", font_size=46).to_edge(UP, buff=0.4)
         smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
         obj = objectives_card([
-            r"polynomial time; \ the hierarchy theorems and Savitch, \ proved",
+            'polynomial time; \\ hierarchy and Savitch proof ideas, with model assumptions',
             r"NP, \ reductions, \ and Cook--Levin's tableau, \ built and solved",
             r"the reduction web, \ computed: \ independent set, \ 3-colouring, \ subset sum",
             r"coNP, \ the polynomial hierarchy, \ PSPACE and games; \ time in square-root space",

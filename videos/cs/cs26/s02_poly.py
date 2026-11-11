@@ -46,8 +46,7 @@ class Polynomial(VoiceoverScene):
         age = g["age_universe_s"] / (86400 * 365.25)
         notes = VGroup(
             label(rf"the universe is about ${sci(age, 2)}$ years old", font_size=22, color=GREY_A),
-            label(r"a faster computer helps polynomials: \ 1,000$\times$ faster lets $n^2$ handle 31$\times$ larger "
-                  r"inputs; \ $2^n$ only $n + 10$", font_size=22, color=HEAD),
+            label('at fixed step cost: $1{,}000\\times$ speed gives $\\sqrt{1000}\\approx31.6\\times$ size for $n^2$; about 10 more for $2^n$', font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.22).next_to(tab, DOWN, buff=0.4)
         with self.voiceover(
             "Suppose a computer takes a microsecond per step. <bookmark mark='a'/> An algorithm taking n squared "
@@ -75,29 +74,15 @@ class Polynomial(VoiceoverScene):
         lines = VGroup(
             label(r"Edmonds \ (1965): \ a ``good'' algorithm is one that runs in polynomial time \ (his "
                   r"blossom algorithm for matching)", font_size=22, color=WHITE),
-            label(r"Cobham \ (1965): \ the class does not depend on the machine", font_size=22, color=WHITE),
-            label(r"multi-tape to one tape: \ squares the time \ (Part 1); \ RAM to Turing machine: \ cubes it at "
-                  r"most", font_size=22, color=DATA),
+            label('Cobham (1965): polynomial equivalence of standard, appropriately costed machine models', font_size=22, color=WHITE),
+            label('multitape to one tape: polynomial overhead; \\ RAM words and arithmetic require bit-cost bounds', font_size=22, color=DATA),
             label(r"polynomials compose: \ a polynomial algorithm calling a polynomial subroutine is polynomial",
                   font_size=22, color=DATA),
-            label(r"the \textbf{extended} Church--Turing thesis: \ every reasonable model agrees on P \ (Part 53 "
-                  r"tests it)", font_size=22, color=LAM),
-            label(r"caveats: \ $n^{100}$ is not practical, \ $1.0001^n$ often is; \ but natural problems rarely sit "
-                  r"there", font_size=22, color=GREY_A),
+            label('extended Church--Turing thesis: efficient probabilistic classical simulation of physical computation', font_size=22, color=LAM),
+            label('asymptotic polynomial time need not be practical: exponents, constants and input sizes matter', font_size=22, color=GREY_A),
         ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "This is why theorists draw the line at polynomials. <bookmark mark='a'/> Jack Edmonds, in his 1965 "
-            "paper on matching, called an algorithm good if its running time is bounded by a polynomial in the "
-            "input size, and his blossom algorithm finds a largest matching in any graph that way. <bookmark mark='b'/> In the same year Alan Cobham observed that "
-            "the class of such problems does not depend on the machine. <bookmark mark='c'/> Simulating a multi-tape "
-            "Turing machine on one tape squares the time, as Part 1 showed, and a random-access machine costs at most "
-            "a cube. Polynomials stay polynomials. <bookmark mark='d'/> They also compose: a polynomial algorithm "
-            "that calls a polynomial subroutine a polynomial number of times is still polynomial. <bookmark "
-            "mark='e'/> The claim that every reasonable model of computation agrees on this class is the extended "
-            "Church-Turing thesis, and quantum computers, in Part 53, are its most serious challenge. <bookmark "
-            "mark='f'/> There are caveats. N to the hundred is useless, and one point zero zero zero one to the n "
-            "is often fine. But natural problems rarely land there, and when one is shown to be in P, the exponent "
-            "usually comes down."
+            "Polynomial time is a useful mathematical boundary. <bookmark mark='a'/> Edmonds's 1965 matching work helped establish this viewpoint. <bookmark mark='b'/> Cobham studied its independence from standard machine details. <bookmark mark='c'/> Deterministic multitape Turing machines and appropriately costed RAM models simulate one another with polynomial overhead. Unbounded integer arithmetic at unit cost would require a different analysis. <bookmark mark='d'/> Polynomially many calls to polynomial-time subroutines still take polynomial time, including the cost of writing their inputs. <bookmark mark='e'/> The extended Church-Turing thesis is a broader physical claim, commonly phrased using efficient probabilistic classical simulation. Quantum computation challenges that claim; it is not a theorem equating every model with P. <bookmark mark='f'/> Asymptotic membership also does not promise practical speed: large exponents and constants matter."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):

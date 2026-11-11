@@ -37,8 +37,7 @@ class Everywhere(VoiceoverScene):
                      for k, t in enumerate(np.linspace(0, 2 * PI, 9)[:-1])]),
         ]
         items = [
-            (r"Tetris", r"given the pieces in advance, \\ can you clear the board? \\ Demaine, Hohenberger, \\ "
-                        r"Liben-Nowell \ (2003)"),
+            (r"Tetris", 'known pieces: can you clear \\\\ at least $k$ rows? \\\\ Demaine, Hohenberger, \\\\ Liben-Nowell (2003)'),
             (r"Minesweeper", r"is this board consistent? \\ Kaye \ (2000)"),
             (r"Sudoku, $n^2 \times n^2$", r"can this grid be completed? \\ Yato and Seta \ (2003)"),
             (r"protein folding", r"lowest-energy fold, \\ HP model: \ Berger and \\ Leighton \ (1998)"),
@@ -62,15 +61,7 @@ class Everywhere(VoiceoverScene):
                   color=GREY_A),
         ).arrange(DOWN, buff=0.18).next_to(cards, DOWN, buff=0.4)
         with self.voiceover(
-            "NP-completeness turns up in unexpected places. <bookmark mark='a'/> In 2003 Erik Demaine, Susan "
-            "Hohenberger and David Liben-Nowell proved that Tetris is NP-complete: knowing every piece in advance, "
-            "can you clear the board? <bookmark mark='b'/> Richard Kaye showed in 2000 that deciding whether a "
-            "Minesweeper board is consistent is NP-complete. <bookmark mark='c'/> Sudoku on an n squared grid is "
-            "NP-complete, by Takayuki Yato and Takahiro Seta. <bookmark mark='d'/> So is finding the lowest-energy "
-            "fold of a protein in the simplest lattice model. <bookmark mark='e'/> Each is in NP, because a solution "
-            "is easy to check. Each is NP-complete because someone built gadgets, out of falling pieces, mines or "
-            "cells, that simulate a formula. <bookmark mark='f'/> Two-player games with long play are harder still, "
-            "as chapter ten shows."
+            "Hardness appears in many generalized decision problems. <bookmark mark='a'/> Offline Tetris asks whether a specified board and known piece sequence can achieve a stated objective, such as enough cleared rows, under the chosen move rules. <bookmark mark='b'/> Minesweeper consistency asks whether a finite clue layout has a compatible mine placement. <bookmark mark='c'/> Generalized Sudoku completion lets board dimensions grow; a fixed nine-by-nine puzzle is a finite case. <bookmark mark='d'/> The folding example concerns a specified lattice hydrophobic-polar model and energy threshold, not unrestricted physical protein behaviour. <bookmark mark='e'/> Each named decision variant has a polynomially checkable witness and an appropriate hardness reduction. <bookmark mark='f'/> Different rules or objectives may change the classification. Long two-player games introduce another set of questions, considered in the space chapter."
         ) as vo:
             self.play(FadeIn(head))
             for mk, c in zip("abcd", cards):
@@ -87,16 +78,14 @@ class Everywhere(VoiceoverScene):
         rows = VGroup(
             label(r"\textbf{scheduling} \ (exams, \ shifts, \ jobs on machines) \ $\to$ \ integer programming \ "
                   r"(Part 23), \ constraint solvers", font_size=21, color=WHITE),
-            label(r"\textbf{packing} \ (bins, \ containers, \ VMs on hosts) \ $\to$ \ first-fit decreasing is "
-                  r"within about $11/9$ of optimal", font_size=21, color=WHITE),
+            label('packing: first-fit decreasing uses at most $11\\,\\mathrm{OPT}/9+2/3$ bins (one-dimensional model)', font_size=21, color=WHITE),
             label(r"\textbf{dependency resolution} \ (``install these packages'') \ is NP-complete \ (Mancinelli et "
                   r"al., 2006)", font_size=21, color=HEAD),
-            label(r"$\to$ \ apt, \ pip, \ cargo and conda use SAT-style solvers \ (PubGrub; \ Part 41)", font_size=21,
+            label('package managers differ: SAT, incompatibility learning, or backtracking (Part 41)', font_size=21,
                   color=DATA),
             label(r"\textbf{configuration}, \ routing, \ register allocation \ (Part 13: \ graph colouring)",
                   font_size=21, color=WHITE),
-            label(r"NP-complete means \textbf{worst case} has no known fast algorithm: \ real instances are often "
-                  r"easy", font_size=22, color=YES),
+            label('NP-complete: a polynomial-time general algorithm would imply P = NP; many real instances are easy', font_size=22, color=YES),
             label(r"the playbook: \ exact solver for small or structured inputs, \ approximation \ (Part 23), \ or "
                   r"a heuristic with a bound", font_size=21, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).next_to(head, DOWN, buff=0.45)
@@ -105,15 +94,7 @@ class Everywhere(VoiceoverScene):
             rows.width = 13.6
             rows.next_to(head, DOWN, buff=0.45)
         with self.voiceover(
-            "Engineers meet NP-hard problems every week. <bookmark mark='a'/> Scheduling exams, shifts or jobs on "
-            "machines. <bookmark mark='b'/> Packing items into bins, containers, or virtual machines onto servers. "
-            "<bookmark mark='c'/> Even installing software: deciding whether a set of packages with version "
-            "constraints can be installed together is NP-complete, as researchers studying Debian showed in 2006. "
-            "<bookmark mark='d'/> That is why modern package managers resolve dependencies with SAT-style solvers; "
-            "Part 41 builds one. <bookmark mark='e'/> Register allocation, back in Part 13, was graph colouring. "
-            "<bookmark mark='f'/> NP-completeness is a statement about the worst case. The instances that arise in "
-            "practice are often easy. <bookmark mark='g'/> The playbook: an exact solver when inputs are small or "
-            "structured, an approximation algorithm with a guarantee, or a heuristic whose results you can bound."
+            "Engineers meet these problems in general-purpose forms. <bookmark mark='a'/> Scheduling models often lead to integer programming or constraint programming. <bookmark mark='b'/> In one-dimensional bin packing, first-fit decreasing has an eleven-ninths asymptotic guarantee with an additive constant; it is not a pure eleven-ninths bound for every small instance. <bookmark mark='c'/> Expressive dependency constraints can make package installation NP-complete. <bookmark mark='d'/> Actual package managers use different techniques, including SAT, incompatibility learning and backtracking; PubGrub is not the algorithm of every manager. <bookmark mark='e'/> Configuration and register allocation also produce hard general models. <bookmark mark='f'/> NP-completeness describes worst-case reductions. A polynomial-time algorithm for all instances would imply P equals NP; many real instances remain easy. <bookmark mark='g'/> Match the model to the task, then consider exact solvers, structure, approximation guarantees or explicitly limited heuristics."
         ) as vo:
             self.play(FadeIn(head))
             for mk, r in zip("abcdefg", rows):

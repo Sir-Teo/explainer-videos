@@ -46,7 +46,7 @@ class Web(VoiceoverScene):
         if f.width > 13:
             f.width = 13
         lines = VGroup(
-            label(r"once SAT is NP-complete, \ a new problem $B$ needs only \textbf{one} reduction: \ SAT $\le_p B$",
+            label('to prove $B$ NP-complete: show $B\\in\\mathrm{NP}$ and one reduction SAT $\\le_p B$',
                   font_size=22, color=WHITE),
             label(r"first, \ SAT $\le_p$ 3-SAT: \ split long clauses with fresh variables: \ $(a \vee b \vee c \vee d)"
                   r"\ \to\ (a \vee b \vee y)(\bar y \vee c \vee d)$", font_size=22, color=DATA),
@@ -251,21 +251,14 @@ class Web(VoiceoverScene):
         VGroup(left, right).arrange(RIGHT, buff=1.2, aligned_edge=UP).next_to(head, DOWN, buff=0.4)
         right.shift(UP * 0)
         notes = VGroup(
-            label(r"indent = one more reduction from SAT", font_size=19, color=GREY_A),
+            label('indentation groups the display; not an exact historical reduction tree', font_size=19, color=GREY_A),
             label(r"Garey and Johnson's catalogue \ (1979): \ over 300; \ today, \ thousands", font_size=21,
                   color=WHITE),
             label(r"each new problem joins with \textbf{one} reduction, \ and they all stand or fall together",
                   font_size=21, color=YES),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "In 1972, a year after Cook, Richard Karp showed that twenty-one well-known problems are NP-complete. "
-            "<bookmark mark='a'/> Here is his family tree. Satisfiability at the root; from it, integer programming, "
-            "clique, and three-SAT. From clique, set packing and vertex cover; from vertex cover, set covering, "
-            "feedback sets and the Hamiltonian cycle problems. From three-SAT, chromatic number, then exact cover, "
-            "and from there Steiner trees, three-dimensional matching, knapsack, partition and max cut. <bookmark "
-            "mark='b'/> Michael Garey and David Johnson's 1979 catalogue listed more than three hundred, and today "
-            "there are thousands. <bookmark mark='c'/> Each joined the family with a single reduction, and they "
-            "stand or fall together: a fast algorithm for any one of them would solve them all."
+            "In 1972 Richard Karp connected twenty-one classical problems by polynomial reductions. <bookmark mark='a'/> The grouped list includes satisfiability, zero-one integer programming, clique, cover and packing problems, Hamiltonian cycles, colouring, matching, knapsack and max cut. The indentation is a display grouping, not a reconstruction of the exact historical reduction tree. <bookmark mark='b'/> Garey and Johnson later collected hundreds more examples. <bookmark mark='c'/> For a new decision language, proving membership in NP and reducing a known NP-complete language to it adds another complete problem. A polynomial-time algorithm for any one of them would solve all NP languages."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
