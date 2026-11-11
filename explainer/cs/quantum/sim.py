@@ -37,6 +37,8 @@ def phase(t):
 
 class State:
     def __init__(self, n: int, basis: int = 0):
+        if n < 0 or not 0 <= basis < 2**n:
+            raise ValueError("basis index must fit a nonnegative qubit count")
         self.n = n
         self.v = np.zeros(2 ** n, dtype=complex)
         self.v[basis] = 1.0
@@ -49,6 +51,10 @@ class State:
     def apply(self, U: np.ndarray, *qubits: int) -> "State":
         """Apply a k-qubit unitary to the given qubits (in order)."""
         k = len(qubits)
+        self._check_qubits(qubits)
+        U = np.asarray(U, dtype=complex)
+        if U.shape != (2**k, 2**k):
+            raise ValueError("gate dimensions must match the selected qubits")
         t = self.v.reshape((2,) * self.n)
         t = np.moveaxis(t, qubits, range(k))
         sh = t.shape
@@ -69,6 +75,8 @@ class State:
         return np.abs(self.v) ** 2
 
     def marginal(self, qubits) -> np.ndarray:
+        qubits = tuple(qubits)
+        self._check_qubits(qubits)
         p = self.probs().reshape((2,) * self.n)
         other = tuple(q for q in range(self.n) if q not in qubits)
         m = p.sum(axis=other) if other else p
@@ -77,9 +85,14 @@ class State:
         return m.reshape(-1)
 
     def measure(self, rng, qubits=None) -> int:
+        """Sample the requested bits without collapsing the state (for repeated independent shots)."""
         qubits = list(range(self.n)) if qubits is None else qubits
         p = self.marginal(qubits)
         return int(rng.choice(len(p), p=p / p.sum()))
+
+    def _check_qubits(self, qubits):
+        if len(set(qubits)) != len(qubits) or any(not 0 <= q < self.n for q in qubits):
+            raise ValueError("qubits must be distinct indices in this state")
 
 
 def bloch(psi: np.ndarray) -> tuple[float, float, float]:

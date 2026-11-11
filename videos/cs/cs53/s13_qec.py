@@ -203,6 +203,8 @@ class Qec(VoiceoverScene):
             for k, case in enumerate(cases):
                 self.play(*show(case), FadeIn(VGroup(*tab.cells[k + 1])), run_time=0.9)
                 self.wait(0.3)
+            # Leave the diagram consistent with the middle-qubit example above it.
+            self.play(*show(cases[2]), run_time=0.6)
         self.wait(0.4)
         self.clear_scene()
 

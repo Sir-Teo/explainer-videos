@@ -37,6 +37,8 @@ def repetition(ds=(1, 3, 5, 7, 9, 11), ps=None, trials: int = 200_000, seed: int
     exact (the probability that more than d/2 of d bits flip)."""
     rng = np.random.default_rng(seed)
     ps = ps if ps is not None else [0.01, 0.02, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5]
+    if trials <= 0 or any(d < 1 or d % 2 == 0 for d in ds) or any(not 0 <= p <= 1 for p in ps):
+        raise ValueError("majority decoding needs positive odd distances, valid flip rates, and positive trials")
     rows = []
     for d in ds:
         for p in ps:

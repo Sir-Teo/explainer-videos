@@ -12,6 +12,19 @@ from explainer.cs.quantum import qec, sim
 
 
 class Sim(unittest.TestCase):
+    def test_qubit_selection_and_gate_shape(self):
+        s = sim.State(2, basis=1)
+        np.testing.assert_allclose(s.marginal([1, 0]), [0, 0, 1, 0])
+        for qubits in ((0, 0), (-1,), (2,)):
+            with self.assertRaises(ValueError):
+                s.marginal(qubits)
+        with self.assertRaises(ValueError):
+            s.apply(sim.H, 0, 1)
+        with self.assertRaises(ValueError):
+            sim.State(2, -1)
+        with self.assertRaises(ValueError):
+            qec.repetition(ds=(2,), ps=[.1], trials=10)
+
     def test_gates_unitary(self):
         for U in (sim.H, sim.X, sim.Y, sim.Z, sim.S, sim.T, sim.rx(0.3), sim.ry(1.1), sim.rz(2.0)):
             self.assertTrue(sim.is_unitary(U))
