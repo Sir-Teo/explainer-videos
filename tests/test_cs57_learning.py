@@ -44,6 +44,19 @@ class Learning(unittest.TestCase):
 
     def test_compression(self):
         self.assertTrue(T.rectangle_compression()["consistent"])
+        for m in (0, 1):
+            r = T.rectangle_compression(m, seed=0)
+            self.assertTrue(r["consistent"])
+            if not any(r["labels"]):
+                self.assertEqual(r["kept"], [])
+                self.assertIsNone(r["box"])
+
+    def test_solver_failure_is_not_an_infeasibility_proof(self):
+        from unittest.mock import patch
+        from types import SimpleNamespace
+        with patch("scipy.optimize.linprog", return_value=SimpleNamespace(status=4, message="numerical failure")):
+            with self.assertRaises(RuntimeError):
+                T.separable(np.array([[0., 0.]]), np.array([1.]))
 
 
 if __name__ == "__main__":

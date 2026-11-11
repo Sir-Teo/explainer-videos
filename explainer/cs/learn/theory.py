@@ -21,6 +21,8 @@ def separable(X: np.ndarray, y: np.ndarray) -> bool:
     n, d = X.shape
     A = -(y[:, None] * np.hstack([X, np.ones((n, 1))]))
     res = linprog(np.zeros(d + 1), A_ub=A, b_ub=-np.ones(n), bounds=[(None, None)] * (d + 1), method="highs")
+    if res.status not in (0, 2):
+        raise RuntimeError(f"separability LP did not decide feasibility: {res.message}")
     return res.status == 0
 
 
@@ -375,11 +377,16 @@ def rectangle_compression(m: int = 200, seed: int = 0) -> dict:
     """A sample compression scheme of size 4 for rectangles: keep the leftmost, rightmost, lowest and highest
     positive points; the tightest box through them labels every training point correctly (Littlestone and Warmuth
     1986)."""
+    if m < 0:
+        raise ValueError("sample size must be nonnegative")
     rng = np.random.default_rng(seed)
     target = (0.2, 0.7, 0.3, 0.75)
     P = rng.random((m, 2))
     y = (P[:, 0] >= target[0]) & (P[:, 0] <= target[1]) & (P[:, 1] >= target[2]) & (P[:, 1] <= target[3])
     Q = np.flatnonzero(y)
+    if not len(Q):
+        return {"m": m, "kept": [], "points": P.tolist(), "labels": y.tolist(), "box": None,
+                "target": list(target), "consistent": True}
     keep = sorted({int(Q[np.argmin(P[Q, 0])]), int(Q[np.argmax(P[Q, 0])]), int(Q[np.argmin(P[Q, 1])]),
                    int(Q[np.argmax(P[Q, 1])])})
     K = P[keep]
