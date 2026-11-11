@@ -354,6 +354,17 @@ def table(B: D.BDD, u: int, n: int) -> list[bool]:
 
 
 class BDDs(unittest.TestCase):
+    def test_invalid_order_cannot_build_a_false_proof(self):
+        b = D.BDD(3)
+        u = b.apply("and", b.var(0), b.var(1))
+        with self.assertRaises(ValueError):
+            b.rename(u, {0: 1, 1: 0})
+        with self.assertRaises(ValueError):
+            b.var(3)
+        model = M.Model("initials", (), [0, 1], [], {})
+        with self.assertRaises(RuntimeError):
+            M.build(model, limit=1)
+
     def random_formula(self, B, rng, n, depth):
         """A random formula as (BDD, python function)."""
         if depth == 0 or rng.random() < 0.2:

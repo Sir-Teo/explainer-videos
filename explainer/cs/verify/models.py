@@ -107,6 +107,8 @@ class Kripke:
 
 def build(m: Model, limit: int = 3_000_000) -> Kripke:
     """Breadth-first exploration of every reachable state of ``m``."""
+    if limit <= 0:
+        raise ValueError("state limit must be positive")
     index, states, succ, labels, parent, depth = {}, [], [], [], [], []
     q = deque()
     for s in m.init:
@@ -116,6 +118,8 @@ def build(m: Model, limit: int = 3_000_000) -> Kripke:
             parent.append(None)
             depth.append(0)
             q.append(s)
+            if len(states) > limit:
+                raise RuntimeError("initial state space too large")
     init = list(range(len(states)))
     deadlocks = []
     while q:

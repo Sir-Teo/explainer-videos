@@ -39,6 +39,8 @@ class BDD:
     """A shared ROBDD manager over variables 0..nvars-1, ordered by index (0 at the root)."""
 
     def __init__(self, nvars: int, names=None):
+        if nvars < 0:
+            raise ValueError("variable count must be nonnegative")
         self.nvars = nvars
         self.names = list(names) if names is not None else [f"x{i}" for i in range(nvars)]
         self.v = [nvars, nvars]          # node -> variable (terminals sit below every variable)
@@ -51,8 +53,12 @@ class BDD:
 
     # ---- construction
     def mk(self, v: int, lo: int, hi: int) -> int:
+        if not 0 <= v < self.nvars or not all(0 <= c < len(self.v) for c in (lo, hi)):
+            raise ValueError("invalid BDD variable or child node")
         if lo == hi:
             return lo
+        if v >= min(self.v[lo], self.v[hi]):
+            raise ValueError("BDD edges must follow the variable order")
         k = (v, lo, hi)
         u = self.unique.get(k)
         if u is None:
