@@ -4,6 +4,18 @@ from explainer.cs.api import delivery, services, wire
 
 
 class Wire(unittest.TestCase):
+    def test_malformed_wire_data(self):
+        for data in (b"\x80", b"\xff" * 10, b"\x09\0", b"\x15\0", b"\x12\x05hi", b"\0\0"):
+            with self.assertRaises(ValueError):
+                wire.decode(data)
+        for value in (-(1 << 63) - 1, 1 << 64):
+            with self.assertRaises(ValueError):
+                wire.varint(value)
+        self.assertEqual(wire.read_varint(wire.varint((1 << 64) - 1))[0], (1 << 64) - 1)
+        with self.assertRaises(ValueError):
+            wire.encode([(1, "typo", 0)])
+        self.assertTrue(wire.compatible({1: ("x", "int64", False)}, {1: ("x", "int64", True)}))
+
     def test_published_examples(self):
         r = wire.check_published()
         self.assertTrue(all(ok for *_, ok in r["encodings"]))

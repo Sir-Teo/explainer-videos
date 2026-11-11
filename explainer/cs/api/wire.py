@@ -13,6 +13,8 @@ VARINT, I64, LEN, I32 = 0, 1, 2, 5
 def varint(n: int) -> bytes:
     """Seven bits per byte, least significant group first; the top bit says another byte follows.  Negative int32
     and int64 values are encoded as their 64-bit two's complement, ten bytes."""
+    if not -(1 << 63) <= n < 1 << 64:
+        raise ValueError("value must fit signed or unsigned 64-bit protobuf integers")
     if n < 0:
         n += 1 << 64
     out = bytearray()
@@ -27,9 +29,15 @@ def varint(n: int) -> bytes:
 
 
 def read_varint(buf: bytes, i: int = 0):
+    if i < 0:
+        raise ValueError("offset must be nonnegative")
     shift = n = 0
     while True:
+        if i >= len(buf):
+            raise ValueError("truncated varint")
         b = buf[i]
+        if shift == 63 and b > 1:
+            raise ValueError("varint exceeds 64 bits")
         n |= (b & 0x7F) << shift
         i += 1
         if not b & 0x80:
@@ -47,6 +55,8 @@ def unzigzag(z: int) -> int:
 
 
 def tag(field: int, wire_type: int) -> bytes:
+    if not 1 <= field < 1 << 29 or wire_type not in (VARINT, I64, LEN, I32):
+        raise ValueError("invalid field number or unsupported wire type")
     return varint(field << 3 | wire_type)
 
 
@@ -71,6 +81,8 @@ def encode(fields) -> bytes:
         elif kind == "packed":
             b = b"".join(varint(x) for x in v)
             out += tag(num, LEN) + varint(len(b)) + b
+        else:
+            raise ValueError(f"unsupported field kind {kind!r}")
     return bytes(out)
 
 
@@ -80,6 +92,8 @@ def decode(buf: bytes):
     while i < len(buf):
         key, i = read_varint(buf, i)
         num, wt = key >> 3, key & 7
+        if not 1 <= num < 1 << 29:
+            raise ValueError("invalid field number")
         if wt == VARINT:
             v, i = read_varint(buf, i)
         elif wt == I64:
@@ -91,6 +105,8 @@ def decode(buf: bytes):
             v, i = buf[i:i + n], i + n
         else:
             raise ValueError(f"wire type {wt}")
+        if i > len(buf):
+            raise ValueError("truncated field payload")
         out.append((num, wt, v))
     return out
 
@@ -155,7 +171,9 @@ def compatible(writer: dict, reader: dict):
     problems = []
     for num, (name, typ, req) in reader.items():
         if num in writer:
-            wname, wtyp, _ = writer[num]
+            wname, wtyp, wreq = writer[num]
+            if req and not wreq:
+                problems.append(f"field {num} ({name}) is required but the writer may omit it")
             if wtyp != typ and {wtyp, typ} - {"int32", "int64", "uint32", "uint64", "bool"}:
                 problems.append(f"field {num} ({name}): {wtyp} written, read as {typ}")
         elif req:
