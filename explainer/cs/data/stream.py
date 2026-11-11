@@ -31,11 +31,15 @@ def make_events(n=3000, rate=10.0, delay_mean=2.0, late_share=0.05, late_extra=(
 
 
 def tumbling(et, size):
+    if size <= 0:
+        raise ValueError("window size must be positive")
     s = int(et // size) * size
     return [(s, s + size)]
 
 
 def sliding(et, size, step):
+    if size <= 0 or step <= 0:
+        raise ValueError("window size and slide step must be positive")
     out = []
     s = int(et // step) * step
     while s > et - size:
@@ -60,6 +64,8 @@ def run_windows(events, size=10.0, watermark_lag=5.0, allowed_late=0.0, dedup=Tr
     window fires when the watermark passes its end, and events arriving after that (beyond allowed lateness) are
     dropped.  Returns fired results with their latency (processing time of firing minus window end), the true
     counts, and how many were dropped."""
+    if size <= 0 or watermark_lag < 0 or allowed_late < 0:
+        raise ValueError("window size must be positive and lateness parameters nonnegative")
     counts = defaultdict(Counter)
     truth = defaultdict(Counter)
     seen = set()
@@ -74,7 +80,7 @@ def run_windows(events, size=10.0, watermark_lag=5.0, allowed_late=0.0, dedup=Tr
         truth[w][k] += 1
         max_et = max(max_et, et)
         wm = max_et - watermark_lag
-        if w in fired and wm > w[1] + allowed_late:
+        if wm >= w[1] + allowed_late:
             dropped += 1
         else:
             counts[w][k] += 1
@@ -92,7 +98,7 @@ def run_windows(events, size=10.0, watermark_lag=5.0, allowed_late=0.0, dedup=Tr
     exact = sum(1 for w, (_, c) in fired.items() if c == dict(truth[w]))
     total = sum(sum(c.values()) for c in truth.values())
     return {"windows": len(fired), "exact": exact, "dropped": dropped, "mean_latency": sum(lat) / max(1, len(lat)),
-            "lag": watermark_lag, "complete": 1 - dropped / total, "refinements": refinements}
+            "lag": watermark_lag, "complete": 1 - dropped / total if total else 1.0, "refinements": refinements}
 
 
 def watermark_tradeoff(lags=(0.0, 1.0, 2.0, 5.0, 10.0, 20.0, 60.0), seed=0):

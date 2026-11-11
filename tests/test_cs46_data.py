@@ -17,6 +17,15 @@ class Log(unittest.TestCase):
 
 
 class Stream(unittest.TestCase):
+    def test_unseen_expired_window_is_late(self):
+        events = [(20., 21., "a", 0), (1., 22., "a", 1)]
+        r = stream.run_windows(events, watermark_lag=0)
+        self.assertEqual(r["dropped"], 1)
+        self.assertEqual(r["complete"], .5)
+        self.assertEqual(stream.run_windows([])["complete"], 1)
+        with self.assertRaises(ValueError):
+            stream.sliding(12, 10, 0)
+
     def test_watermark_tradeoff(self):
         ev = stream.make_events(n=1000)
         fast = stream.run_windows(ev, watermark_lag=0.0)
