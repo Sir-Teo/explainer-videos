@@ -1,0 +1,165 @@
+"""Helpers shared by the scenes of Part 37 (Market Impact and Execution)."""
+
+from __future__ import annotations
+
+import numpy as np
+
+from explainer.quant import *  # noqa: F403
+
+from .compute import CACHE as _CACHE, load as _original_load
+
+# Populated only from successful, audited, unchanged ordinary originals.
+# A render may never restore a missing cache or access a sealed experiment.
+_ORDINARY_SHA = {'aggregate': '1d78792848e35c72ad4a9d6cebe8267aec5d7348cae6733133cec4aac9075fc8', 'propagator': '14ab2083266715b0b0de9e3f36402f6be305969dca093794bb584129ea51880c', 'latent': '9ea89ae449553e101335879ae2ed5d41e154e5f7006a60647a1e2115713e47b3', 'ac': '0537edb24653ab98d1edefc0a9139ae85c938921c7c67c339101db98a19d3e95', 'kernels': '37eb9c277a9439c1410834690d5156d08411d5b9eda3e358ab2f8ad9bc255c6c', 'ow': '4787d359abc706e5a4d5df3969c71df8eb24dbddaa3da34c715088b6eefb8190', 'rl': 'b044dcdfc1dd6c106894e2b19ab486709919489f70a4083cf75a6b66e53f6d01', 'volume': 'a02f61fcc96a9f7e67fb57638554ba65cc03a3e07be5c7eb5754f5adb6a8f0cc', 'resilience': '750366133eb048ece51dab13dd4678b5968576ea54205a5da5fa485330b05a47', 'research': '5122f2374dd08cf9f281bbf6eace5bde32600a65c18ea332030f3db0ff2d7bcc'}
+
+
+def load(name):
+    import hashlib
+
+    if str(name).casefold().startswith(("house", "envelope", "track", "holdout")):
+        raise RuntimeError("Excluded experiment rejected before cache or counted access")
+    if name not in {'volume', 'ow', 'resilience', 'research', 'rl', 'latent', 'kernels', 'aggregate', 'ac', 'propagator'}:
+        raise RuntimeError("Only audited ordinary Part 37 inputs are permitted")
+    if name not in _ORDINARY_SHA:
+        raise RuntimeError("No verified ordinary cache is approved for this input")
+    path = _CACHE.path(name)
+    if not path.is_file():
+        raise RuntimeError("Rendering requires an existing verified ordinary cache")
+    if hashlib.sha256(path.read_bytes()).hexdigest() != _ORDINARY_SHA[name]:
+        raise RuntimeError("Ordinary cache bytes differ from the audited result")
+    return _original_load(name)
+
+
+PART = 37
+
+IMPACT_C = QC.LOSS      # price impact, the cost
+PRICE_C = QC.SPOT       # prices
+SCHED_C = QC.DELTA      # optimal schedules
+TWAP_C = QC.GAIN        # TWAP and VWAP
+KERNEL_C = QC.VEGA      # decay kernels
+RL_C = QC.OPTION        # the learned executor
+SIM_C = QC.P            # simulation
+BUY_C = QC.GAIN
+SELL_C = QC.LOSS
+BAD = QC.LOSS
+GOOD = QC.GAIN
+HURDLE = QC.DELTA
+
+
+def fit_right(m, edge: float = 6.75):
+    """Shift ``m`` left until its right edge is inside the frame (side panels aligned to a narrow legend)."""
+    m.shift(LEFT * max(0.0, m.get_right()[0] - edge))
+    return m
+
+
+def illustration(text: str = r"illustration", corner=DR):
+    return note(text, font_size=18, color=GREY_B).to_corner(corner, buff=0.25)
+
+
+def sci(x: float, digits: int = 0) -> str:
+    """A number in scientific notation for MathTex: 2\\times 10^{-2}, not 2e-02."""
+    import math
+    e = int(math.floor(math.log10(abs(x))))
+    m = x / 10 ** e
+    if round(m, digits) >= 10:
+        m, e = m / 10, e + 1
+    return rf"{m:.{digits}f}\times 10^{{{e}}}"
+
+
+def comma(n) -> str:
+    """12,000 for TeX: the comma braced so it is not read as punctuation spacing."""
+    return f"{int(round(n)):,}".replace(",", "{,}")
+
+
+def era_strip(entries, width=12.6, y0=1985, y1=2027, font_size=17, step=10):
+    """A custom time strip for this part's own history: entries (year, text, colour); dots on a line, labels
+    alternating above and below. Returns the group, with ``.items`` one (dot, leader, label) group per entry."""
+    x0 = -width / 2
+
+    def X(y):
+        return x0 + width * (y - y0) / (y1 - y0)
+    line = Line([X(y0), 0, 0], [X(y1), 0, 0], color=GREY_D, stroke_width=2)
+    ticks = VGroup(*[VGroup(Line([X(y), -0.06, 0], [X(y), 0.06, 0], color=GREY_D, stroke_width=1.5),
+                            Text(str(y), font_size=13, color=GREY_D).next_to([X(y), 0, 0], DOWN, buff=0.12))
+                     for y in range(int(np.ceil(y0 / 10) * 10), y1, step)])
+    items = VGroup()
+    side = 1
+    levels = {1: [], -1: []}
+    for yr, text, col in entries:
+        d = Dot([X(yr), 0, 0], radius=0.07, color=col)
+        lab = label(rf"{int(yr)}\; {text}", font_size=font_size, color=col)
+        lvl = 0
+        while any(abs(lab.width / 2 + w / 2) > abs(X(yr) - x) - 0.15 and lv == lvl for x, w, lv in levels[side]):
+            lvl += 1
+        lab.move_to([X(yr), side * (0.55 + 0.42 * lvl), 0])
+        levels[side].append((X(yr), lab.width, lvl))
+        keep_in_frame(lab, margin=0.25)
+        lead = Line([X(yr), side * 0.08, 0], [X(yr), side * (0.55 + 0.42 * lvl) - side * 0.16, 0], color=GREY_C,
+                    stroke_width=1, stroke_opacity=0.6)
+        items.add(VGroup(d, lead, lab))
+        side = -side
+    g = VGroup(line, ticks, items)
+    g.items = items
+    return g
+
+
+def step_xy(t, h):
+    """Points of a step line: holding h[k] held from t[k] to t[k+1]."""
+    xs, ys = [], []
+    for k in range(len(h)):
+        xs += [t[k], t[k + 1]]
+        ys += [h[k], h[k]]
+    return np.array(xs), np.array(ys)
+
+
+def grid_fn(xs, ys, Z):
+    """f(x, y) by bilinear interpolation of Z (len(ys), len(xs)) on a grid, for surfaces drawn from cached arrays."""
+    from scipy.interpolate import RegularGridInterpolator
+
+    it = RegularGridInterpolator((np.asarray(ys, float), np.asarray(xs, float)), np.asarray(Z, float),
+                                 bounds_error=False, fill_value=None)
+    return lambda x, y: float(it([[y, x]])[0])
+
+
+def ask(text: str):
+    """The pause-and-predict banner at the foot of the frame."""
+    return wrapped_label(rf"Pause and predict: {text}", 12.4, 25, QC.IDEA).to_edge(DOWN, buff=0.3)
+
+
+def surf3d_axes(x_range, y_range, z_range, x_length=7.0, y_length=4.6, z_length=3.4):
+    ax = ThreeDAxes(x_range=x_range, y_range=y_range, z_range=z_range, x_length=x_length, y_length=y_length,
+                    z_length=z_length, tips=False,
+                    axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
+    return ax
+
+
+def src_lines(obj, first: str, count: int):
+    """``count`` lines of the House's own source of ``obj``, starting at the line that contains ``first``, dedented:
+    the lab shows the code exactly as it is in the library."""
+    import inspect
+    import textwrap
+
+    lines = inspect.getsource(obj).splitlines()
+    i = next(k for k, ln in enumerate(lines) if first in ln)
+    return textwrap.dedent("\n".join(lines[i:i + count])).splitlines()
+
+
+def house_lab(title, obj, first, count, extra=(), width=6.6):
+    """A lab card for the House function ``obj`` (its file shown as the source); ``extra`` adds (obj, first, count)
+    excerpts below, separated by a blank line."""
+    import inspect
+
+    lines = src_lines(obj, first, count)
+    for o, f, c in extra:
+        lines += [""] + src_lines(o, f, c)
+    src = inspect.getsourcefile(obj).split("explainer-videos/")[-1]
+    return lab_card(title, lines, source=f"{src}: {obj.__qualname__}", width=width)
+
+
+def tt(formula: str, n: int = 70) -> str:
+    """A formula string for TeX in typewriter type: cut to ``n`` characters (before escaping, so a cut never splits an
+    escape), then escaped."""
+    f = formula if len(formula) <= n else formula[:n - 3].rstrip() + "..."
+    f = f.replace("\\", "").replace("_", r"\_").replace("#", r"\#").replace("^", r"\^{}").replace("%", r"\%")
+    f = f.replace("...", r"\ldots")
+    return r"\texttt{" + f + "}"

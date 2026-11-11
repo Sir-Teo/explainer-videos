@@ -1,0 +1,736 @@
+{
+ "title": "量化金融，从零搭建 · 第34部分：走进量化公司",
+ "chapters": {
+  "Hook": "一个席位能坐多久",
+  "Models": "1. 量化公司的六种形态",
+  "Disclosed": "2. 公司披露了什么",
+  "Pods": "3. 多策略平台模式",
+  "Process": "4. 从想法到资本",
+  "Risk": "5. 公司层面的风险",
+  "Tech": "6. 技术",
+  "Compliance": "7. 监控与案例",
+  "Interview": "8. 面试",
+  "Culture": "9. 公开讲述的创业故事",
+  "Stops": "10. 回撤止损有用吗？",
+  "House": "11. 第34条规则：公司",
+  "Research": "写给研究者：一个席位能坐多久，精确解",
+  "Outro": "回顾、交易台问题与习题"
+ },
+ "lines": {
+  "f3acea8483a3": {
+   "scene": "Hook",
+   "en": "Part thirty-four. Inside a quant firm: how the firms that run these strategies are built, paid, governed and policed, and the arithmetic that decides how long a trader keeps their seat.",
+   "zh": "第34部分。走进量化公司：运作这些策略的公司如何搭建、如何付酬、如何治理、如何受监管，以及决定一个交易员能保住席位多久的那套算术。"
+  },
+  "15912c15e329": {
+   "scene": "Hook",
+   "en": "Consider a stipulated manager with constant arithmetic Brownian profit, known annual Sharpe one and annual volatility ten percent of initial capital. The running maximum includes zero. A continuously monitored drawdown of five percent stops the full book. <bookmark mark='a'/> This fixed-seed daily path illustrates the rule, with discrete overshoot. <bookmark mark='b'/> Under the continuous model, the exact expected stopping time is 4.3 months. That is a conditional mathematical lifetime, not a forecast for an actual manager or a guarantee about a platform's contract.",
+   "zh": "设定一个经理，其算术利润服从常参数布朗运动，已知年化夏普为一，年波动为初始资本的百分之十。运行峰值包括初始零；从峰值回撤百分之五时，连续监控规则停止整个组合。<bookmark mark='a'/>这条固定种子的日频路径只是示意，离散监控会越过边界。<bookmark mark='b'/>连续模型下精确平均停止时间为4.3个月。这是附带模型条件的数学期限，不是实际经理的预测，也不保证平台合同如此。"
+  },
+  "09b3fa5c7658": {
+   "scene": "Hook",
+   "en": "Three distinctions guide this lesson. <bookmark mark='a'/> Virtu's 2014 filing reported one losing day in twelve hundred and thirty-eight. A Gaussian daily model maps that frequency to ratio 3.15; square-root annualization additionally assumes independent, stable daily variance. A loss count alone does not identify trading skill. <bookmark mark='b'/> For a known Brownian Sharpe-one process, these two continuous stop depths give means 4.3 months and 2.2 years. <bookmark mark='c'/> The chosen platform simulation gives investor ratios 1.19 without stops and 1.90 with them. Selection, exposure, free replacement and payout accounting all affect that comparison.",
+   "zh": "本课区分三件事。<bookmark mark='a'/>Virtu在2014年申报文件中报告，一千二百三十八个交易日只有一天亏损。正态日利润模型把该频率映射为比率3.15；平方根年化还需日收益独立、方差稳定。仅有亏损计数不能识别技能。<bookmark mark='b'/>已知夏普为一的布朗过程，在两种连续回撤深度下，平均时间为4.3个月和2.2年。<bookmark mark='c'/>指定平台模拟的投资者比率，无停止规则为1.19，有规则为1.90。选择、仓位、免费即时替换与奖金记账都影响比较。"
+  },
+  "d797c76af7a6": {
+   "scene": "Hook",
+   "en": "Where this sits. Parts thirty to thirty-three built portfolios, risk models and strategies. This part steps back to the firm that runs them: its business model, its capital, its risk limits, its technology, its compliance desk, and the people it hires. It uses Part eight's drawdown control, Part twenty-six's multiple testing and Part thirty-one's capacity.",
+   "zh": "这一部分在系列中的位置。第30到33部分构建了组合、风险模型和策略。这一部分退后一步，看运作它们的公司：它的商业模式、资本、风险限额、技术、合规部门，以及它招聘的人。它用到第8部分的回撤控制、第26部分的多重检验和第31部分的容量。"
+  },
+  "717b69308393": {
+   "scene": "Hook",
+   "en": "The firms, by founding date, from the public record. Princeton/Newport in 1969; Renaissance in 1982; D. E. Shaw in 1988; Millennium in 1989. <bookmark mark='a'/> Citadel in 1990; AQR in 1998; Jane Street in 2000; Two Sigma in 2001; Virtu in 2008. <bookmark mark='b'/> And the firm's other history: Knight Capital's forty-five minutes in 2012, the spoofing cases, and the rules that followed.",
+   "zh": "按公开记录的成立年份排列公司：1969年普林斯顿纽波特，1982年文艺复兴，1988年德劭，1989年千禧管理。<bookmark mark='a'/>1990年城堡投资，1998年资产量化研究公司，2000年简街，2001年双西格玛，2008年维图金融。<bookmark mark='b'/>还有公司另一段历史：2012年骑士资本四十五分钟事件，虚假报单案件与随后规则。"
+  },
+  "a6bcc8d8a375": {
+   "scene": "Hook",
+   "en": "The plan: six business models; what firms have disclosed and what it implies; the pod model, simulated; how an idea becomes capital; risk at the level of the firm; technology; surveillance and the cases; the interview; the founding stories, as told in public; whether drawdown stops help on real premia; and an exact formula for how long a manager keeps their seat.",
+   "zh": "本部分的安排：六种商业模式；公司披露了什么以及意味着什么；多策略平台模式，模拟一遍；一个想法如何变成资本；公司层面的风险；技术；监控与案例；面试；公开讲述的创业故事；回撤止损在真实溢价上是否有用；以及基金经理能保住席位多久的精确公式。"
+  },
+  "c3380b288438": {
+   "scene": "Hook",
+   "en": "This part proposes a firm-level checklist for the educational House: independent limits, authority to stop, records and review. The chart describes responsibilities; it does not establish that a trading or surveillance system has been implemented or that a strategy is approved.",
+   "zh": "本课为教学公司提出公司层面的检查标准：独立限额、停止权限、记录和复核。组织图描述职责，并不证明交易或监控系统已经实施，也不批准任何策略。"
+  },
+  "7b0886e6a54b": {
+   "scene": "Models",
+   "en": "Chapter one. Every quant firm answers three questions: whose money it trades, what edge it sells, and who is paid when it works. Six answers cover most of the industry.",
+   "zh": "第一章。每家量化公司都要回答三个问题：交易谁的钱，出售什么优势，成功时谁拿报酬。六种答案覆盖了这个行业的大部分。"
+  },
+  "94108be58a73": {
+   "scene": "Models",
+   "en": "The economics in one line. <bookmark mark='a'/> Profit is edge times capacity, less costs, and Part thirty-one showed that capacity is finite. <bookmark mark='b'/> A firm that trades its own capital keeps all the profit and bears all the risk. <bookmark mark='c'/> A firm that trades investors' capital is paid fees, a share of assets and of profits, and that changes how large it wants to be.",
+   "zh": "一句话的经济学。<bookmark mark='a'/>利润等于优势乘以容量，减去成本，而第31部分表明容量是有限的。<bookmark mark='b'/>用自有资本交易的公司拿走全部利润，也承担全部风险。<bookmark mark='c'/>用投资者资本交易的公司收取费用，按资产和利润的一定比例，这改变了它想要的规模。"
+  },
+  "33b9d2afcfdd": {
+   "scene": "Models",
+   "en": "First, proprietary trading firms. <bookmark mark='a'/> Jane Street, Hudson River Trading, Jump Trading and XTX Markets trade their partners' own capital across thousands of instruments, mostly by quoting prices and by predicting the next few seconds or minutes. <bookmark mark='b'/> What they sell is immediacy, Part thirty-three's word: a price for anyone who wants to trade now. They keep the spread, less what better-informed traders take from them, less the exchange's fees. Part thirty-eight builds the model.",
+   "zh": "第一，自营交易公司。<bookmark mark='a'/>Jane Street、Hudson River Trading、Jump Trading和XTX Markets用合伙人自己的资本交易数以千计的品种，主要靠报价，以及预测接下来几秒或几分钟。<bookmark mark='b'/>它们出售的是即时性，第33部分的那个词：给任何想现在交易的人一个价格。它们赚取价差，扣掉比它们掌握更多信息的交易者拿走的部分，再扣掉交易所的费用。第38部分会建立这个模型。"
+  },
+  "a04fe9dcf176": {
+   "scene": "Models",
+   "en": "Second, the market makers, overlapping with the first. <bookmark mark='a'/> Citadel Securities, Virtu and Optiver make markets on exchanges, and some execute retail orders that brokers route to them. <bookmark mark='b'/> Virtu is listed, so its revenue and its trading days are in public filings; Chapter two reads one of them. Most of the rest disclose only through bond offerings, court cases and regulators' orders.",
+   "zh": "第二，做市商，与第一类有重叠。<bookmark mark='a'/>Citadel Securities、Virtu和Optiver在交易所做市，有些还承接券商转来的散户订单。<bookmark mark='b'/>Virtu是上市公司，所以它的收入和交易日都在公开文件里；第二章会读其中一份。其余大多数只通过债券发行、法庭案件和监管命令披露信息。"
+  },
+  "3ca89598a997": {
+   "scene": "Models",
+   "en": "One part of the market-making business deserves its own card. <bookmark mark='a'/> In the United States, wholesale market makers pay retail brokers for their customers' orders. Retail orders are less likely to be informed, so they are cheaper to trade against, and the payment lets brokers offer trading without commission. <bookmark mark='b'/> The conflict: the broker owes its customer the best execution, while being paid by the firm that fills the order, and the payments must be disclosed. <bookmark mark='c'/> Elsewhere the answer differs: Britain's regulator treated the practice as incompatible with its rules from 2012, and the European Union agreed to phase it out by mid-2026.",
+   "zh": "做市业务中有一部分值得单独一张卡片。<bookmark mark='a'/>在美国，批发做市商向零售券商付费，购买其客户的订单。散户订单不太可能带有信息，所以与之交易的成本更低，而这笔费用让券商可以提供零佣金交易。<bookmark mark='b'/>利益冲突在于：券商对客户负有最佳执行义务，却同时从成交该订单的公司那里收钱，而这些付款必须披露。<bookmark mark='c'/>别处的答案不同：英国监管机构从2012年起认为这种做法与其规则不符，欧盟则同意在2026年年中前逐步取消。"
+  },
+  "a85dfc8f7853": {
+   "scene": "Models",
+   "en": "Third, the multi-manager platforms. <bookmark mark='a'/> Millennium, Citadel, Balyasny and Point72 run hundreds of independent teams, called pods, each with its own capital, its own risk limits and its own drawdown stops, under one central risk desk. <bookmark mark='b'/> As reported, many charge investors pass-through fees: the platform's costs, including what it pays its teams, are charged to the fund, with a performance fee on top. Chapter three simulates what that leaves for the investors.",
+   "zh": "第三，多策略平台。<bookmark mark='a'/>Millennium、Citadel、Balyasny和Point72运营着数百个独立团队，称为投资组，每个都有自己的资本、风险限额和回撤止损，由一个中央风险部门统管。<bookmark mark='b'/>据报道，很多平台向投资者收取转嫁费用：平台的成本，包括支付给团队的报酬，都计入基金，再加上业绩报酬。第三章会模拟这给投资者留下多少。"
+  },
+  "09211f85a4be": {
+   "scene": "Models",
+   "en": "Fourth, the systematic funds. <bookmark mark='a'/> Renaissance, D. E. Shaw, AQR, Two Sigma and Man Group's AHL run one research process across many models and asset classes. <bookmark mark='b'/> They span the range of this series: fast statistical arbitrage, slower factor and trend books. Their fees span it too, from a few tenths of a percent for a factor fund to the five percent of assets and forty-four percent of profits reported for Renaissance's Medallion.",
+   "zh": "第四，系统化基金。<bookmark mark='a'/>文艺复兴、D. E. Shaw、AQR、Two Sigma和Man集团的AHL，用一个研究流程运作多个模型、覆盖多个资产类别。<bookmark mark='b'/>它们覆盖了本系列的整个范围：快速的统计套利，较慢的因子与趋势组合。它们的费用也覆盖了整个范围，从因子基金的零点几个百分点，到据报道文艺复兴大奖章基金的百分之五资产费和百分之四十四业绩费。"
+  },
+  "99d7de1ce1dd": {
+   "scene": "Models",
+   "en": "Fifth, the banks. <bookmark mark='a'/> Banks still make electronic markets and sell quantitative index strategies to clients, but the Volcker rule restricted their proprietary trading, and several prop groups left, Morgan Stanley's PDT in 2012 among them. <bookmark mark='b'/> A bank's balance sheet is cheap to fund but heavily regulated, and Part twenty-one's capital rules put a price on every position, so the banks kept the client business and the independent firms took the risk.",
+   "zh": "第五，银行。<bookmark mark='a'/>银行仍然做电子化做市，并向客户出售量化指数策略，但沃尔克规则限制了它们的自营交易，几个自营团队离开了，其中包括2012年摩根士丹利的PDT。<bookmark mark='b'/>银行的资产负债表融资便宜但监管严格，第21部分的资本规则给每个头寸都定了价，所以银行保留了客户业务，而独立公司承担了风险。"
+  },
+  "59d526163c0b": {
+   "scene": "Models",
+   "en": "Sixth, China's quant private funds. <bookmark mark='a'/> Privately offered funds trading A-shares, index futures and commodities, many founded in the 2010s, the largest managing tens of billions of yuan, as reported, and selling index enhancement: beating the CSI 500 or 1000 index. <bookmark mark='b'/> They work under different constraints: next-day settlement, limited shorting, daily price limits, and, after the small-cap drawdown of February 2024 from Part twenty-nine, new limits on high-frequency and direct market access trading, as reported.",
+   "zh": "第六，中国的量化私募。<bookmark mark='a'/>私募发行的基金，交易A股、股指期货和商品，很多成立于2010年代，据报道最大的管理着数百亿元人民币，出售指数增强产品：跑赢中证500或1000指数。<bookmark mark='b'/>它们在不同的约束下运作：T+1结算、做空受限、每日涨跌停，以及在第29部分提到的2024年2月小盘股回撤之后，据报道对高频交易和直接市场接入交易的新限制。"
+  },
+  "3f98f19aef2b": {
+   "scene": "Models",
+   "en": "Side by side. <bookmark mark='a'/> Whose capital, what edge, and how long a position lasts. The rest of the part is about the machinery common to all six: how capital is given to traders and taken away, how ideas become capital, and how the firm keeps its traders inside the rules.",
+   "zh": "放在一起比较。<bookmark mark='a'/>谁的资本，什么优势，一个头寸持续多久。这一部分其余内容讲的是六者共有的机制：资本如何交给交易员又如何收回，想法如何变成资本，以及公司如何让交易员守规矩。"
+  },
+  "1513796de64e": {
+   "scene": "Models",
+   "en": "Pause and predict. At ten percent gross, compare a two-percent capital fee then twenty percent of remaining profit with six-percent costs then the same profit share. Assume positive eligible profit and one period. Which investor return is higher?",
+   "zh": "暂停并预测。毛收益百分之十，比较先扣资本百分之二、再收剩余利润百分之二十，与先扣百分之六成本、再收同样分成。假设单期可收费利润为正，哪种投资者回报更高？"
+  },
+  "c300f3adff1f": {
+   "scene": "Disclosed",
+   "en": "Chapter two. Quant firms are private about their methods, but not silent: listed firms file accounts, private ones borrow money and must show lenders their numbers, and books and court cases fill in the rest. One number from a filing can say a lot.",
+   "zh": "第二章。量化公司对方法守口如瓶，但并非沉默：上市公司要报送账目，私人公司借钱时必须向贷款人展示数字，书籍和法庭案件补上其余部分。文件里的一个数字可以说明很多。"
+  },
+  "094ca1a8cd76": {
+   "scene": "Disclosed",
+   "en": "The number. <bookmark mark='a'/> In 2014 the market maker Virtu Financial filed to list its shares. Its registration statement reported that from 2009 to 2013 it had lost money on one trading day out of one thousand two hundred and thirty-eight, and credited its risk management and technology. The press treated it as a sensation. What does it actually imply?",
+   "zh": "这个数字。<bookmark mark='a'/>2014年，做市商Virtu Financial申请上市。它的注册说明书报告，从2009年到2013年，在一千二百三十八个交易日中只有一天亏损，并把这归功于风险管理和技术。媒体把它当作轰动新闻。它究竟意味着什么？"
+  },
+  "83f57d473a00": {
+   "scene": "Disclosed",
+   "en": "Condition on a Gaussian daily profit distribution. <bookmark mark='a'/> Its loss probability is Phi of minus the daily mean-to-standard-deviation ratio. <bookmark mark='b'/> Plugging in the reported frequency gives 3.15. Multiplication by root two hundred and fifty-two gives about 50 only under the daily independence and variance assumptions. <bookmark mark='c'/> The original one-sided binomial upper confidence bound is 0.0038; under iid Bernoulli loss indicators and the same Gaussian model it gives a lower daily ratio 2.67. These are model-conditional calculations from a selected disclosure, not measured investable annual returns.",
+   "zh": "先限定正态日利润分布。<bookmark mark='a'/>亏损概率等于负的日均值与标准差之比代入正态分布函数。<bookmark mark='b'/>代入披露频率得3.15。乘根号二百五十二得到约50，还需要日收益独立与方差假设。<bookmark mark='c'/>原计算的单侧二项上置信界为0.0038；在独立伯努利亏损指标及同一正态模型下，隐含日比率下界为2.67。这些是从选择性披露出发的条件计算，不是测得的可投资年收益。"
+  },
+  "f389fc0c2951": {
+   "scene": "Disclosed",
+   "en": "Distributional shape matters. <bookmark mark='a'/> In the specified finite-variance Student-t location-scale families, the same loss probability maps to daily ratios 5.37 and 6.34. That comparison does not make the Gaussian answer a universal lower bound. <bookmark mark='b'/> Stipulate a payoff of plus one most days, and minus two thousand with probability one over twelve hundred and thirty-eight. <bookmark mark='c'/> Its mean is negative despite the same rare-loss probability. This is a mathematical counterexample, not a description of Virtu's returns. We need loss magnitudes and a distributional model.",
+   "zh": "分布形状很重要。<bookmark mark='a'/>在指定的有限方差学生t位置尺度族中，同一亏损概率对应日比率5.37和6.34。这不使正态答案成为普遍下界。<bookmark mark='b'/>另设多数日赚一，以一千二百三十八分之一的概率亏两千。<bookmark mark='c'/>虽然亏损同样罕见，均值却为负。这是数学反例，不是Virtu的实际回报描述。还需要损益幅度与分布模型。"
+  },
+  "6c3f1bbf10d7": {
+   "scene": "Disclosed",
+   "en": "A possible aggregation model, not an inference about the firm. <bookmark mark='a'/> Each independent trade has edge divided by noise point zero one. An even-money coin with that ratio has win probability approximately fifty point five percent; the cached simulation instead uses Normal aggregate profits. <bookmark mark='b'/> In its twenty thousand simulated days, a hundred trades lose on 47 percent of days, ten thousand on 16 percent, and a hundred thousand on 0.05 percent. These frequencies have Monte Carlo variation. For independent equal-risk trades, the aggregate ratio is the per-trade ratio times root N. A disclosure does not establish those assumptions or reveal the actual firm's strategy.",
+   "zh": "一种可能的聚合模型，不是对公司的推断。<bookmark mark='a'/>每个独立交易的优势与噪声比为零点零一。等额赔率硬币若有这个比率，胜率约百分之五十点五；缓存模拟实际使用正态聚合利润。<bookmark mark='b'/>两万个模拟日中，每日一百笔的亏损比例为百分之47，一万笔为百分之16，十万笔为百分之0.05，均有蒙特卡洛波动。独立等风险交易的总比率为单笔比率乘根号N。披露本身不证明这些条件，也不揭示实际策略。"
+  },
+  "162abdde7da4": {
+   "scene": "Disclosed",
+   "en": "Under the independent equal-risk model, solve N equals the daily ratio over the per-trade ratio, squared. <bookmark mark='a'/> At per-trade ratio point zero five the target needs about four thousand trades; at point zero one, about a hundred thousand. Positive net covariance raises aggregate variance and increases the required count at fixed edge. Negative covariance can lower it. Heterogeneous risk, costs, dependence and capacity can all change the calculation; this table does not estimate actual independent trades at a firm.",
+   "zh": "在独立等风险模型内，N等于目标日比率除单笔比率后平方。<bookmark mark='a'/>单笔比率零点零五需要约四千笔，零点零一需要约十万笔。固定优势和边际风险时，正的协方差总和增加方差，需要更多笔；负协方差可降低方差。不同风险、成本、依赖与容量都可能改变计算，本表不估计实际独立交易数量。"
+  },
+  "966c0a2ae3b6": {
+   "scene": "Disclosed",
+   "en": "The comparison also needs a model. <bookmark mark='a'/> Under iid Gaussian daily returns with annual Sharpe two, about 45 percent of days lose. The annual Sharpe alone does not imply that frequency without the distribution and time assumptions. <bookmark mark='b'/> Trading capacity and order flow limit dollar profit; doubling capital need not double opportunities. <bookmark mark='c'/> Definitions of trading profit, operating costs and investor returns differ. Read the filing's accounting scope before comparing a market maker with a fund.",
+   "zh": "比较也需要模型。<bookmark mark='a'/>独立同分布正态日收益、年化夏普二时，约百分之45的日子亏损。没有分布与时间条件，年夏普本身不推出这个频率。<bookmark mark='b'/>交易流与容量限制美元利润，资本翻倍不一定使机会翻倍。<bookmark mark='c'/>交易利润、经营成本和投资者收益的定义不同，应先查申报文件的记账范围，再比较做市商与基金。"
+  },
+  "efd56212636e": {
+   "scene": "Disclosed",
+   "en": "A private firm's numbers reach the public when it borrows. <bookmark mark='a'/> Bloomberg reported in 2024 that documents prepared for a Jane Street bond sale showed net trading revenue of about ten point six billion dollars for 2023, and later reports put 2024 near twenty billion. These are the press's readings of offering documents, and the firm is private; they show the scale of the business of selling immediacy.",
+   "zh": "私人公司的数字在它借钱时才会公开。<bookmark mark='a'/>彭博在2024年报道，为Jane Street发债准备的文件显示，其2023年净交易收入约一百零六亿美元，后来的报道称2024年接近二百亿美元。这些是媒体对发行文件的解读，公司是私人公司；它们显示了出售即时性这门生意的规模。"
+  },
+  "acb20a701619": {
+   "scene": "Disclosed",
+   "en": "And the most famous number. <bookmark mark='a'/> Gregory Zuckerman's book on Renaissance reported that the Medallion fund averaged about sixty-six percent a year before fees and thirty-nine percent after them, from 1988 to 2018. Those are arithmetic averages of yearly returns, on a fund that was kept small and, since the mid-2000s, open only to the firm's own employees: Part thirty-one's capacity, chosen.",
+   "zh": "还有最有名的数字。<bookmark mark='a'/>Gregory Zuckerman关于文艺复兴的书报道，大奖章基金从1988年到2018年，扣费前平均每年约百分之六十六，扣费后百分之三十九。这些是年度收益的算术平均，而这只基金一直保持小规模，从2000年代中期起只对公司自己的员工开放：第31部分的容量，被主动选择。"
+  },
+  "405cad94c949": {
+   "scene": "Disclosed",
+   "en": "Use a stipulated single-period fee example. <bookmark mark='a'/> Charge management fee m on capital, then performance fee p on the remaining positive profit. <bookmark mark='b'/> At gross sixty-six percent, m five percent and p forty-four percent, net is 34.16 percent. <bookmark mark='c'/> That arithmetic does not reproduce or validate the reported thirty-nine percent historical average. Reconciliation needs year-by-year returns, fees, timing and high-water-mark conventions. With constant affine positive-profit fees, averaging itself commutes with the formula; historical fee changes and nonlinear rules need separate data.",
+   "zh": "用指定的单期收费例子。<bookmark mark='a'/>对资本收管理费m，再对剩余正利润收业绩费p。<bookmark mark='b'/>毛回报百分之六十六、管理费百分之五、业绩分成百分之四十四，净回报为百分之34.16。<bookmark mark='c'/>这不能重现或验证所报道的历史平均百分之三十九。核对应需逐年收益、费用、时点与高水位约定。固定的正利润仿射收费下，平均与公式运算可交换；历史费率变化和非线性条款需要单独数据。"
+  },
+  "28261bb99b9b": {
+   "scene": "Disclosed",
+   "en": "How to read the public record. <bookmark mark='a'/> Turn each disclosed number into a statistic, with a model and a sample. <bookmark mark='b'/> Ask what it excludes: fixed costs, fees, the years before the record, and the funds that closed. <bookmark mark='c'/> And separate the firm from the fund: the firm's profit includes its fees, the investor's return is after them.",
+   "zh": "如何解读公开记录。<bookmark mark='a'/>把每个披露的数字变成一个统计量，配上模型和样本。<bookmark mark='b'/>问它排除了什么：固定成本、费用、记录开始之前的年份，以及已经关闭的基金。<bookmark mark='c'/>并把公司和基金区分开：公司的利润包括它的费用，投资者的收益在费用之后。"
+  },
+  "ddb39ab852a8": {
+   "scene": "Disclosed",
+   "en": "Pause and predict. A firm reports five losing days in twelve hundred and fifty. Under a Gaussian daily model, compute the implied daily mean-to-standard-deviation ratio and its iid annualization. What can the count alone not tell us?",
+   "zh": "暂停并预测。公司报告一千二百五十天有五天亏损。正态日利润模型下，计算隐含日均值与标准差之比，以及独立同分布年化值。仅凭计数无法告诉我们什么？"
+  },
+  "852df580c77f": {
+   "scene": "Pods",
+   "en": "Chapter three. A multi-manager platform combines teams, shared financing and firm-level risk decisions. We use a stipulated simulation to examine drawdown rules, replacement and compensation. Its arithmetic is informative under its assumptions; it does not calibrate a real platform.",
+   "zh": "第三章。多经理平台结合团队、共享融资与公司层面风险决策。我们用指定模拟研究回撤规则、替换与薪酬。算术结论取决于假设，不是对真实平台的校准。"
+  },
+  "016b0260acd3": {
+   "scene": "Pods",
+   "en": "The structure. <bookmark mark='a'/> A pod combines a manager, analysts and a risk budget; mandates vary. <bookmark mark='b'/> The centre may provide capital, financing, execution, measurement and shared hedges. <bookmark mark='c'/> The firm owns the sum of positions and their covariance. Many teams do not automatically create independent edges: shared factors, crowded exits and funding can concentrate risk.",
+   "zh": "结构。<bookmark mark='a'/>一个团队包括经理、分析师与风险预算，不同授权范围可以不同。<bookmark mark='b'/>总部可能提供资本、融资、执行、测量与共同对冲。<bookmark mark='c'/>公司持有全部头寸之和及其协方差。团队多不自动产生独立优势：共同因子、拥挤退出和融资都可能集中风险。"
+  },
+  "7331d6e26461": {
+   "scene": "Pods",
+   "en": "A dated reported example. <bookmark mark='a'/> The Wall Street Journal reported in 2024 that at Millennium a five-percent drawdown could lead to halved capital and seven and a half percent to departure. Treat this as a historical reported description, not a universal or current contract. The simulation borrows those numerical thresholds, with its own explicit monthly monitoring and replacement rules.",
+   "zh": "一个有日期的报道例子。<bookmark mark='a'/>华尔街日报2024年报道，Millennium经理回撤百分之五可能减半资本，百分之七点五可能离开。应视为历史报道，不是普遍或现行合同。模拟借用数值门槛，另有明确的月频监控与替换规则。"
+  },
+  "8baf7adf7fac": {
+   "scene": "Pods",
+   "en": "A simplified proportional exposure calculation. <bookmark mark='a'/> Specify strategy volatility per unit exposure using the same capital denominator as the risk budget, and assume linear scaling. <bookmark mark='b'/> A billion dollars of capital, a five-percent annual risk budget and eight-percent strategy volatility then imply a scale of five eighths, or six hundred and twenty-five million dollars in that normalization. This is not a capacity estimate or a universal gross-notional rule. <bookmark mark='c'/> A seven-and-a-half-percent stop is one and a half annual volatility units deep. Known drift, monitoring and the time unit also enter its model lifetime.",
+   "zh": "一个简化的比例敞口计算。<bookmark mark='a'/>策略每单位敞口的波动必须使用与风险预算相同的资本分母，并假设线性缩放。<bookmark mark='b'/>十亿美元资本、百分之五年风险预算、百分之八策略波动，对应五分之八的缩放，即该归一化下六点二五亿美元。这不是容量估计，也不是普遍的总名义规则。<bookmark mark='c'/>百分之七点五停止线是一个半年度波动单位。已知漂移、监控方式和时间单位也影响模型期限。"
+  },
+  "b6b672dca78b": {
+   "scene": "Pods",
+   "en": "A single-period fee illustration. <bookmark mark='a'/> Fifteen percent gross, a two-percent capital fee, then twenty percent of remaining profit leaves 10.4 percent. <bookmark mark='b'/> Replace that capital fee with stipulated six-percent pass-through costs and the same profit share: 7.2 percent remains. Assume positive eligible profit and no high-water mark or timing effects. <bookmark mark='c'/> At equal gross returns the larger cost reduces investor return. A platform would need other advantages to offset it; stops cannot guarantee a high or steady gross return.",
+   "zh": "单期费用示例。<bookmark mark='a'/>毛回报百分之十五，先收资本百分之二，再收剩余利润百分之二十，留下百分之10.4。<bookmark mark='b'/>把资本费换成指定百分之六成本、维持分成，则留下百分之7.2。假设可收费利润为正，无高水位和时点效应。<bookmark mark='c'/>毛回报相同时，较高成本降低净回报，平台需有其他优势弥补；停止规则不保证高而稳定的毛利润。"
+  },
+  "f05197664b73": {
+   "scene": "Pods",
+   "en": "The chosen simulation is not a real firm's record. <bookmark mark='a'/> Two hundred slots run for thirty years. Skill is either a fixed point five for every hire or an independent Normal draw with mean and standard deviation point five. <bookmark mark='b'/> Monthly arithmetic profit is observed before halving or firing; replacement is immediate, free and independently drawn. <bookmark mark='c'/> Positive calendar-year profit is paid at twenty percent, without a high-water mark or clawback. Firing resets that slot's running profit and payout accumulator. The common shock has correlation point one; year-end exposure restoration is another chosen rule.",
+   "zh": "这个指定模拟不是真实公司记录。<bookmark mark='a'/>两百个席位运行三十年。技能或者每次固定零点五，或者独立抽自均值和标准差均为零点五的正态分布。<bookmark mark='b'/>先观察月度算术利润，再减仓或解雇；替换即时、免费，新抽样独立。<bookmark mark='c'/>正的日历年利润按百分之二十支付，没有高水位或追回。解雇重置该席位的运行利润及年奖金累计器。共同冲击相关系数零点一，年底恢复敞口也是另一个指定规则。"
+  },
+  "d9fe2118e8af": {
+   "scene": "Pods",
+   "en": "The heterogeneous-skill case averages eight fixed simulation seeds. <bookmark mark='a'/> At ten-percent annual volatility, about 37 percent of slots are replaced per year; at five percent, 7 percent. <bookmark mark='b'/> Investor annual-return Sharpe averages 1.90 with the five-percent rule, versus 1.19 without stops. The displayed uncertainty is the across-seed standard deviation with population normalization divided by root eight, not a real-market confidence interval. Selection, time-varying exposure, free replacement and payout resets all contribute; this comparison does not isolate one cause.",
+   "zh": "技能不同的例子平均八个固定模拟种子。<bookmark mark='a'/>年波动百分之十时，每年约百分之37的席位被替换；百分之五时为百分之7。<bookmark mark='b'/>百分之五规则下投资者年收益夏普平均1.90，无停止时1.19。显示的不确定性是跨种子的总体标准差除根号八，不是真实市场置信区间。选择、变化敞口、免费替换与奖金重置都起作用，比较未分离单一原因。"
+  },
+  "e90b972acb1e": {
+   "scene": "Pods",
+   "en": "Selection is visible within the stipulated model. <bookmark mark='a'/> Fired managers have average latent Sharpe 0.34, below the hiring mean point five. <bookmark mark='b'/> The final seated average is 0.83, versus 0.49 without stops. These latent quantities are known to the simulator, not observed as true skill in practice. <bookmark mark='c'/> A stopping rule becomes a statistical test only after specifying its null, alternative, deadline and rejection rule. The research panel gives simulated stop probabilities, not an exact calibrated live-manager skill test.",
+   "zh": "指定模型内可以看到选择。<bookmark mark='a'/>被解雇者潜在夏普平均0.34，低于新雇员均值零点五。<bookmark mark='b'/>最终在席均值0.83，无停止时0.49。潜在技能由模拟器知道，实务中并非直接观测的真技能。<bookmark mark='c'/>停止规则只有规定原假设、备择、期限和拒绝规则，才成为统计检验。研究面板给模拟停止概率，不是精确校准的实盘经理技能检验。"
+  },
+  "da7758ab873f": {
+   "scene": "Pods",
+   "en": "Now every hire has the same stipulated skill. <bookmark mark='a'/> The drawdown rules still change exposure and payouts, despite no skill differences to select. <bookmark mark='b'/> The cached investor ratios are 1.30 with stops and 1.23 without. The stopped estimate is higher here; it does not show that stops cost a little. Each row's across-seed uncertainty is descriptive. We do not have a paired-difference uncertainty estimate, and cannot attribute this difference to manager selection.",
+   "zh": "现在每次雇员的指定技能相同。<bookmark mark='a'/>虽然没有技能差异可选，回撤规则仍改变敞口和奖金。<bookmark mark='b'/>缓存投资者比率为有停止1.30、无停止1.23。此处停止估计更高，不能说停止略有成本。各行跨种子不确定性只是描述；没有配对差值的不确定性估计，也不能将差异归因于经理选择。"
+  },
+  "d6d10c2a6a2a": {
+   "scene": "Pods",
+   "en": "And a cost the headline hides. <bookmark mark='a'/> Each pod is paid on its own profit, and a losing pod pays nothing back. <bookmark mark='b'/> The investors own the sum, losers included. <bookmark mark='c'/> So the share of the platform's profit paid out is 25 percent, not twenty: netting risk. The investors have written a call option to every pod. Part two priced the same call in a single fund's performance fee.",
+   "zh": "还有一项被表面数字掩盖的成本。<bookmark mark='a'/>每个组按自己的利润拿报酬，亏损的组不退回任何东西。<bookmark mark='b'/>投资者拥有的是总和，亏损者也包括在内。<bookmark mark='c'/>所以平台利润中支付出去的比例是25%，而不是百分之二十：这就是轧差风险。投资者向每个组都卖出了一份看涨期权。第2部分在单只基金的业绩报酬里给同样的看涨期权定过价。"
+  },
+  "005fe7e3f544": {
+   "scene": "Pods",
+   "en": "The people. <bookmark mark='a'/> Platforms compete for teams with guaranteed pay and capital, because a team's track record walks out of the door every evening. <bookmark mark='b'/> Firms protect strategies with non-compete clauses and garden leave, and with the courts: in 2024 Jane Street sued Millennium and two former traders over an Indian options strategy, and the case was settled later that year, as reported. <bookmark mark='c'/> And many pods in one sector end up holding similar positions, so the centre measures the overlap and hedges it: a crowd inside one firm is still a crowd.",
+   "zh": "人。<bookmark mark='a'/>平台用保底报酬和资本争夺团队，因为团队的业绩记录每天晚上都会走出公司大门。<bookmark mark='b'/>公司用竞业限制条款和花园假来保护策略，也通过法院：2024年，Jane Street就一项印度期权策略起诉了Millennium和两名前交易员，据报道案件在当年晚些时候和解。<bookmark mark='c'/>许多同一行业的组最终持有相似的头寸，所以中央会测量重叠并加以对冲：一家公司内部的拥挤仍然是拥挤。"
+  },
+  "e21edf2def8e": {
+   "scene": "Pods",
+   "en": "Pause and predict. Two pods each have one hundred units of capital. One earns ten and the other loses ten. A bonus pays twenty percent of each positive profit. Find total bonus, investor profit and investor return on two hundred capital. Is bonus divided by gross profit defined?",
+   "zh": "暂停并预测。两队各有一百资本，一队赚十，另一队亏十。每个正利润按百分之二十支付奖金。求总奖金、投资者利润及两百资本上的回报。奖金除毛利润是否有定义？"
+  },
+  "c43a8cdb5a71": {
+   "scene": "Process",
+   "en": "Chapter four. A research firm needs a process for deciding which ideas deserve further study and, eventually, carefully controlled capital. We describe review, accounting, incubation and an illustrative Bayesian ramp. This review does not open the House sealed-result regression or claim that the complete live process has been implemented.",
+   "zh": "第四章。研究公司需要判断哪些想法值得继续研究，并最终获得严格受控资本。这里介绍复核、记账、孵化和贝叶斯示意扩仓。此复核不打开公司的封存结果回归，也不声称完整实盘流程已经实施。"
+  },
+  "b288eb81a3f3": {
+   "scene": "Process",
+   "en": "The pipeline, as quant firms describe it. <bookmark mark='a'/> An idea; the data to test it; a backtest; a review by people who did not build it. <bookmark mark='b'/> Then incubation, trading small; capital; monitoring; and, eventually, retirement. Most ideas stop at the backtest or the review, and a firm is judged by how few bad ideas get past them.",
+   "zh": "量化公司所描述的流水线。<bookmark mark='a'/>一个想法；检验它的数据；一次回测；由没有参与构建的人来审查。<bookmark mark='b'/>然后是孵化，小规模交易；资本；监控；最终是退役。大多数想法止步于回测或审查，而一家公司的好坏，就看有多少坏想法能闯过这两关。"
+  },
+  "6bfaa662f731": {
+   "scene": "Process",
+   "en": "Keep a search record before selecting a book. <bookmark mark='a'/> The unchanged registration metadata contains twenty-three thousand five hundred and fifty-two trials through this part; this review adds none. A count is not an effective number of independent tests. <bookmark mark='b'/> Shared data and modeling choices create dependence, and unlogged variants cannot be recovered from a winning result. <bookmark mark='c'/> We do not open or regress sealed strategy outcomes here. The process lesson is an evaluation protocol, not a new investment verdict.",
+   "zh": "选择组合前先保留搜索记录。<bookmark mark='a'/>未改动的登记元数据截至本部分含二万三千五百五十二次试验，本次不增加。计数不是有效独立检验数量。<bookmark mark='b'/>共享数据与模型选择产生依赖，未记录变体无法从赢家结果恢复。<bookmark mark='c'/>这里不打开或回归封存策略结果。流程课提出评价协议，不作新的投资裁决。"
+  },
+  "314680b93ebe": {
+   "scene": "Process",
+   "en": "An evaluation starts with the information clock and the ledger. State when a datum becomes available, when a position can be chosen, and the earliest executable price. A fitted residual is not itself a self-financing portfolio. Reconstruct positions, financing, borrow, fees and impact on every leg. Separate exploratory research from a specified later evaluation, and report uncertainty and selection. These requirements are proposed review criteria. No stored sealed result is opened to fill this panel.",
+   "zh": "评价从信息时钟与账本开始。说明数据何时可得、仓位何时可选、最早可执行价格是什么。拟合残差本身不是自融资组合。重建每条腿的头寸、融资、借券、费用与冲击。区分探索研究与事先规定的后续评价，报告不确定性和选择过程。这些是拟议的复核标准，没有打开任何储存的封存结果来填充面板。"
+  },
+  "911cc186a3cf": {
+   "scene": "Process",
+   "en": "Incubation checks implementation as well as statistics. <bookmark mark='a'/> Small live positions can reveal fills, financing, delayed or revised data and impact that a simulation misses. <bookmark mark='b'/> Under an iid low-Sharpe approximation, six months gives a Sharpe standard error around 1.4; that is weak precision, not an impossibility theorem for every test. <bookmark mark='c'/> Operational consistency is necessary but does not prove an enduring premium. Any progression in size needs specified evidence, limits and stop conditions.",
+   "zh": "孵化同时检查执行与统计。<bookmark mark='a'/>小额实盘可暴露模拟遗漏的成交、融资、延迟或修订数据及冲击。<bookmark mark='b'/>独立同分布低夏普近似下，半年夏普标准误约1.4，精度很弱，但不是所有检验都不可能的定理。<bookmark mark='c'/>操作一致性必要，却不能证明持久溢价。任何扩仓都需要规定证据、限额与停止条件。"
+  },
+  "d9ecfd7581fb": {
+   "scene": "Process",
+   "en": "Here is a chosen Bayesian illustration. <bookmark mark='a'/> True annual Sharpe has a normal prior centered at zero, and the estimated ratio has a normal likelihood with variance one over T. The latter is an iid low-Sharpe approximation. <bookmark mark='b'/> Posterior mean equals the measured ratio times T tau squared over one plus T tau squared. <bookmark mark='c'/> With prior spread one half, the weights are one fifth after one year, one half after four, and about five sevenths after ten. Proportional sizing needs comparable fixed risk and a stated objective; financing, caps, covariance, selection and prior calibration remain separate.",
+   "zh": "一个指定的贝叶斯例子。<bookmark mark='a'/>真实年夏普的正态先验以零为中心，估计比率的正态似然方差为一除T，后者是独立同分布低夏普近似。<bookmark mark='b'/>后验均值等于观测比率乘T乘陶平方，再除一加T乘陶平方。<bookmark mark='c'/>先验标准差二分之一时，一年权重五分之一，四年二分之一，十年约七分之五。比例定仓需要可比固定风险及明确目标，融资、上限、协方差、选择与先验校准仍是独立问题。"
+  },
+  "56fd95de5f0d": {
+   "scene": "Process",
+   "en": "Retirement needs a specified decision rule. <bookmark mark='a'/> Edges can decay through competition, structural change or costs, but not every strategy in this series has a demonstrated live decay. <bookmark mark='b'/> A posterior comparison is conditional on its prior and likelihood; covariance, financing and opportunity cost also matter for capital allocation. <bookmark mark='c'/> Retired ideas remain in the search log. These are proposed governance practices, not claims that a live process has been implemented.",
+   "zh": "退休需要规定决策规则。<bookmark mark='a'/>竞争、结构变化和成本可能侵蚀优势，但并非本系列每个策略都已证明实盘衰减。<bookmark mark='b'/>后验比较取决于先验和似然，协方差、融资及机会成本也影响资本配置。<bookmark mark='c'/>退休想法留在搜索日志。这些是拟议治理做法，不声称实盘流程已经实施。"
+  },
+  "af8d73d4c18a": {
+   "scene": "Process",
+   "en": "Pause and predict. Use the stated Normal prior with spread one half and the chosen likelihood variance one over T. If observed Sharpe is two, what are the posterior means after one and four years? This is a conditional illustration, not a validated allocation rule.",
+   "zh": "暂停并预测。使用标准差二分之一的正态先验，以及方差一除T的指定似然。观测夏普为二，一年和四年后的后验均值是什么？这是条件示例，不是验证后的资本规则。"
+  },
+  "08869842211a": {
+   "scene": "Risk",
+   "en": "Chapter five. A desk's risk model, from Part thirty-one, measures a book. A firm's risk function has a harder job: to add up every book, to find the losses no model sees, and to be able to stop trading in seconds.",
+   "zh": "第五章。交易台的风险模型，来自第31部分，衡量的是一个组合。公司的风险部门任务更难：把每个组合加总，找出任何模型都看不到的损失，并且能在几秒钟内停止交易。"
+  },
+  "618e57660df0": {
+   "scene": "Risk",
+   "en": "Four layers. <bookmark mark='a'/> Pre-trade checks on every order, in microseconds, before it leaves the firm. <bookmark mark='b'/> Intraday: every desk's positions and profit in one place, live. <bookmark mark='c'/> End of day: Part thirty-one's factor model on the whole firm, plus stress tests and liquidity. <bookmark mark='d'/> And governance: who may override a limit, and who must be told. Limits mean nothing without someone independent of the trader to enforce them.",
+   "zh": "四个层次。<bookmark mark='a'/>每笔订单离开公司之前、在微秒内完成的预交易检查。<bookmark mark='b'/>日内：每个交易台的头寸和利润集中在一处，实时可见。<bookmark mark='c'/>日终：第31部分的因子模型用于全公司，加上压力测试和流动性。<bookmark mark='d'/>还有治理：谁可以越过限额，必须通知谁。没有独立于交易员、能够执行限额的人，限额就毫无意义。"
+  },
+  "7c161cda0385": {
+   "scene": "Risk",
+   "en": "The limits a desk lives under. <bookmark mark='a'/> A volatility budget from the risk model; gross and net exposure; factor betas, the risks a pod is not paid to hold; concentration in any one name or counterparty; liquidity, in days to exit; and the drawdown rule of Chapter three. Each is a number the trader can see and the risk desk can enforce.",
+   "zh": "交易台所受的限额。<bookmark mark='a'/>来自风险模型的波动率预算；总敞口和净敞口；因子贝塔，即一个组没有获得报酬去承担的风险；对任何单一证券或交易对手的集中度；以天数衡量的退出流动性；以及第三章的回撤规则。每一项都是交易员看得到、风险部门能执行的数字。"
+  },
+  "20215db2ebfc": {
+   "scene": "Risk",
+   "en": "Liquidity has a clock and a cost convention. <bookmark mark='a'/> With constant daily volume and fixed participation, days to exit equal position divided by participation times average daily volume. <bookmark mark='b'/> Fifty million dollars, twenty million dollars a day, ten-percent participation: 25 trading days, not six. <bookmark mark='c'/> A stipulated per-day clip model with coefficient one gives daily volatility two percent times root point one, or 63.25 basis points. Treating that as an average across days requires impact-reset assumptions. It is not a calibrated full twenty-five-day block liquidation cost; total-order volume, impact decay, funding and execution need separate modeling.",
+   "zh": "流动性有时间与成本约定。<bookmark mark='a'/>固定日成交量和参与率，退出天数等于持仓除参与率再除平均日成交量。<bookmark mark='b'/>五千万美元持仓、每天两千万成交、参与率百分之十，需要25个交易日，不是六天。<bookmark mark='c'/>指定日子单模型系数为一，日波动百分之二乘根号零点一，成本为63.25基点。将其作为多日平均需要冲击重置条件；它不是校准过的二十五天整笔清算成本，总订单量、衰减、融资与执行要另建模。"
+  },
+  "25e418147102": {
+   "scene": "Risk",
+   "en": "Stress tests find the losses the model does not. <bookmark mark='a'/> Historical: replay today's book through 1987, August 2007, the autumn of 2008, March 2020 and 2022. <bookmark mark='b'/> Hypothetical: a factor moving five deviations, correlations going to one, a counterparty failing. <bookmark mark='c'/> And reverse: start from the loss that would end the firm, and ask what would have to happen to cause it.",
+   "zh": "压力测试找出模型找不到的损失。<bookmark mark='a'/>历史情景：把今天的组合放进1987年、2007年8月、2008年秋、2020年3月和2022年重演一遍。<bookmark mark='b'/>假设情景：一个因子变动五个标准差，相关性趋于一，一个交易对手倒闭。<bookmark mark='c'/>还有反向压力测试：从会终结公司的那个损失出发，问要发生什么才会导致它。"
+  },
+  "c0a5a76c1269": {
+   "scene": "Risk",
+   "en": "This is an equal-weight return calculation. <bookmark mark='a'/> For N equal-capital desks with identical return volatility sigma, average their returns with weight one over N. Its volatility is sigma times the square root of rho plus one minus rho over N. The unnormalized dollar sum has a different scale. <bookmark mark='b'/> With fifty desks and chosen correlation point zero five, the multiplier is 0.26. <bookmark mark='c'/> Changing correlation to point four while holding marginal volatility and weights fixed makes it 0.64, a factor 2.44. This is a stipulated stress scenario, not a claim that every crisis has those correlations.",
+   "zh": "这是等权收益计算。<bookmark mark='a'/>N个等资本交易台，收益波动相同，用一除N的权重平均，其波动为西格玛乘根号下相关系数加一减相关系数除N。未归一化的美元总和尺度不同。<bookmark mark='b'/>五十台、指定相关零点零五时，乘数0.26。<bookmark mark='c'/>边际波动和权重固定，相关改为零点四，乘数0.64，相差2.44倍。这是指定压力情景，不说每次危机都有这些相关性。"
+  },
+  "5b2a28c0ebed": {
+   "scene": "Risk",
+   "en": "The case every risk desk studies. <bookmark mark='a'/> On the first of August 2012, a software deployment at Knight Capital left old, unused code active on one of eight servers. When the market opened it sent millions of unintended orders, and in about forty-five minutes the firm built positions that cost it more than four hundred and sixty million dollars, according to the SEC's order, which found its controls inadequate under the market access rule. Within days the firm needed rescue capital, and it was later taken over.",
+   "zh": "每个风险部门都要研究的案例。<bookmark mark='a'/>2012年8月1日，骑士资本的一次软件部署让旧的、未使用的代码在八台服务器中的一台上仍处于激活状态。开盘后它发出数百万笔非预期订单，在大约四十五分钟内，公司建立的头寸让它损失超过四亿六千万美元，这是美国证券交易委员会命令中的数字，该命令认定其控制在市场准入规则下不充分。几天之内公司就需要救助资本，后来被收购。"
+  },
+  "f15e1b2d1640": {
+   "scene": "Risk",
+   "en": "Controls can limit the damage from malfunctioning systems; this is not a proof of a counterfactual outcome. <bookmark mark='a'/> Price collars reject some implausible orders. <bookmark mark='b'/> Size and message-rate caps can constrain runaway activity if they cover the relevant paths. <bookmark mark='c'/> Credit and exposure controls require complete aggregation and enforcement; the SEC market-access rule sets obligations. <bookmark mark='d'/> A tested kill mechanism needs authority, coverage and operational readiness. Listing these controls does not guarantee they would have prevented Knight's loss or establish that our educational House operates them.",
+   "zh": "控制可限制系统故障损害，但不是反事实结果的证明。<bookmark mark='a'/>价格范围检查拒绝部分不合理订单。<bookmark mark='b'/>数量和报单速率上限若覆盖相关路径，可约束失控活动。<bookmark mark='c'/>信用与敞口控制需要完整汇总和执行，SEC市场接入规则设定义务。<bookmark mark='d'/>经过测试的停止机制需要权限、覆盖和操作准备。列出这些控制不保证能避免Knight损失，也不证明教学公司实际运行它们。"
+  },
+  "ba6fdb4b7dfc": {
+   "scene": "Risk",
+   "en": "The other side of the trade. <bookmark mark='a'/> In March 2021 the family office Archegos held very large, concentrated stock positions through swaps with several banks, and none of them saw the whole. When the stocks fell it could not meet its margin calls, and the banks that sold slowest lost the most; Credit Suisse reported a loss of about five and a half billion dollars. A firm's risk includes its counterparties' concentration, which it cannot see, only ask about.",
+   "zh": "交易的另一面。<bookmark mark='a'/>2021年3月，家族办公室Archegos通过与多家银行的互换持有非常大的集中股票头寸，没有一家银行看到全貌。股价下跌时它无法满足追加保证金，卖得最慢的银行亏得最多；瑞士信贷报告的损失约五十五亿美元。一家公司的风险包括其交易对手的集中度，而这只能询问，无法看到。"
+  },
+  "f98e771cbcd9": {
+   "scene": "Risk",
+   "en": "Pause and predict. Keep the position, participation fraction and impact coefficient fixed. If daily volume halves and volatility doubles, how do exit days and the stipulated daily clip cost change? A different child-order constraint would be a different problem.",
+   "zh": "暂停并预测。固定持仓、参与率与冲击系数。若日成交量减半、波动翻倍，退出天数与指定日子单成本如何变化？固定子单数量是另一个问题。"
+  },
+  "92dc76a0102f": {
+   "scene": "Tech",
+   "en": "Chapter six. A quant firm is a software company that happens to trade. What it builds depends on its horizon: a fund rebalancing monthly needs clean data and careful research code; a market maker needs every microsecond.",
+   "zh": "第六章。量化公司是一家碰巧在做交易的软件公司。它构建什么取决于它的期限：每月调仓的基金需要干净的数据和严谨的研究代码；做市商则需要每一微秒。"
+  },
+  "cf4746a7e684": {
+   "scene": "Tech",
+   "en": "The stack. <bookmark mark='a'/> Data, stored point in time, so the firm can say what it knew and when. <bookmark mark='b'/> Research: notebooks, clusters and GPUs, with every trial logged. <bookmark mark='c'/> Production, ideally the same code as research, because a strategy reimplemented for production is a different strategy. <bookmark mark='d'/> And execution: gateways, Chapter five's checks, and the connections to the exchanges.",
+   "zh": "技术栈。<bookmark mark='a'/>数据，按时点存储，这样公司能说清楚自己在什么时候知道什么。<bookmark mark='b'/>研究：笔记本、集群和GPU，每次试验都有记录。<bookmark mark='c'/>生产，最好与研究用同一套代码，因为为生产重新实现的策略就是另一个策略。<bookmark mark='d'/>还有执行：网关、第五章的检查，以及与交易所的连接。"
+  },
+  "50e2f22f8648": {
+   "scene": "Tech",
+   "en": "Languages, from the public record. <bookmark mark='a'/> Jane Street writes its systems in OCaml, and Yaron Minsky explained why in 2011: a strict type system catches errors before they cost money. <bookmark mark='b'/> Where latency decides who gets the trade, firms write C++ close to the hardware, bypass the operating system's network stack, and put logic on programmable chips. <bookmark mark='c'/> And most research is Python on compiled libraries, like this series; the hard part is getting it to production unchanged.",
+   "zh": "编程语言，来自公开记录。<bookmark mark='a'/>Jane Street用OCaml编写其系统，Yaron Minsky在2011年解释了原因：严格的类型系统能在错误造成亏损之前就把它们抓住。<bookmark mark='b'/>在延迟决定谁拿到交易的地方，公司用贴近硬件的C++编写，绕过操作系统的网络栈，把逻辑放到可编程芯片上。<bookmark mark='c'/>大多数研究是在编译库之上的Python，就像本系列；难点在于把它原封不动地送进生产。"
+  },
+  "9c79c6adb25b": {
+   "scene": "Tech",
+   "en": "Data. <bookmark mark='a'/> A day of American equity quotes and trades runs to billions of messages, time-stamped to the microsecond. <bookmark mark='b'/> They are stored by column, so a question about one field over a year reads only that field: Kx's kdb+ is the classic example. <bookmark mark='c'/> And every value is stored with the time it became known, so restated accounts and revised numbers never leak into a backtest.",
+   "zh": "数据。<bookmark mark='a'/>美国股票一天的报价和成交多达数十亿条消息，时间戳精确到微秒。<bookmark mark='b'/>它们按列存储，所以关于一个字段一年的查询只读这个字段：Kx的kdb+是经典例子。<bookmark mark='c'/>每个值都与它成为已知的时间一起存储，这样重述的账目和修订的数字永远不会泄漏进回测。"
+  },
+  "a80831fff096": {
+   "scene": "Tech",
+   "en": "Physical latency has a lower bound. <bookmark mark='a'/> The chosen endpoint distance is 1185 kilometres between the Chicago and New Jersey trading regions. <bookmark mark='b'/> Straight-line propagation in vacuum takes 3.95 milliseconds; this excludes processing and routing. <bookmark mark='c'/> The specified refractive index gives at least 5.8 milliseconds in glass for the same path length. Real routes are longer and involve equipment, queues, reliability and weather constraints. Straighter fibre and microwave links illustrate the incentive to save time, not a claim that practical latency has reached the physical floor.",
+   "zh": "物理延迟有下界。<bookmark mark='a'/>芝加哥与新泽西交易区域间选定端点距离为1185公里。<bookmark mark='b'/>真空直线传播需3.95毫秒，不含处理和路由。<bookmark mark='c'/>指定折射率给同距离玻璃中至少5.8毫秒。实际线路更长，并有设备、排队、可靠性与天气约束。直光纤和微波说明节省时间的动机，不表示实际延迟已达物理下界。"
+  },
+  "530dc5b26ab6": {
+   "scene": "Tech",
+   "en": "Inside the exchange's building. <bookmark mark='a'/> Exchanges rent space beside their matching engines, with equal cable lengths to every customer. <bookmark mark='b'/> Speed is worth paying for because a market maker whose quote is stale when news arrives gets picked off: speed is protection as much as attack. <bookmark mark='c'/> And critics, Eric Budish, Peter Cramton and John Shim, argued that continuous markets reward tiny speed advantages wastefully, and proposed auctions held many times a second instead. Part thirty-eight returns to this.",
+   "zh": "在交易所的大楼里。<bookmark mark='a'/>交易所在撮合引擎旁出租机位，给每个客户相同长度的线缆。<bookmark mark='b'/>速度值得花钱，因为消息到来时报价过时的做市商会被狙击：速度既是进攻也是保护。<bookmark mark='c'/>批评者Eric Budish、Peter Cramton和John Shim认为，连续交易市场浪费地奖励微小的速度优势，并提议改为每秒举行多次的集合竞价。第38部分会回到这个问题。"
+  },
+  "ba6a95fb8c10": {
+   "scene": "Tech",
+   "en": "Research computing. <bookmark mark='a'/> Clusters of processors for backtests, which run in parallel trivially, and GPUs for networks. <bookmark mark='b'/> A good research platform records each trial completely: the code, the version of the data, the parameters and the result. <bookmark mark='c'/> And the lesson of Part twenty-nine, at the scale of a firm: cheaper trials mean more of them, and a higher bar for every result.",
+   "zh": "研究计算。<bookmark mark='a'/>处理器集群用于回测，它们天然可以并行；GPU用于神经网络。<bookmark mark='b'/>好的研究平台完整记录每次试验：代码、数据版本、参数和结果。<bookmark mark='c'/>还有第29部分的教训，放大到公司的规模：试验越便宜，试验就越多，每个结果的门槛就越高。"
+  },
+  "e0b7588a9d5f": {
+   "scene": "Tech",
+   "en": "Reproducibility requires a record of inputs and execution. <bookmark mark='a'/> The unchanged public-data manifest currently has 28109 entries. For this part, only two approved public monthly keys were read and verified by the five unchanged ordinary calculations. Presentation loading now checks the exact restored cache hashes, and excluded sealed-result prefixes are rejected before cache access. <bookmark mark='b'/> A cached value, a historical quotation and a stipulated mathematical example have different provenance. Digest checks detect byte changes; they do not prove economic validity. No refresh, new market trial or sealed-outcome analysis is performed here.",
+   "zh": "可复现性需要输入和执行记录。<bookmark mark='a'/>未改动的公共数据清单现有28109项。本部分五个未改普通计算只读取并验证两个获准公共月频键。展示加载核对恢复缓存的精确摘要，排除结果前缀在缓存访问前就被拒绝。<bookmark mark='b'/>缓存值、历史引述、指定数学例子有不同来源。摘要能发现字节改变，不能证明经济有效。本次不刷新、不新增市场试验，也不分析封存结果。"
+  },
+  "b2150a5ec84f": {
+   "scene": "Tech",
+   "en": "Pause and predict. A link saves three milliseconds. In a chosen first-arrival contest, each captured dollar has gross edge half a basis point. Express gross value in captured notional. What additional inputs are required to price the link?",
+   "zh": "暂停并预测。链路节省三毫秒。指定先到者独占机会的模型中，每个捕获美元毛优势为半个基点。用捕获名义金额表示毛价值。给链路定价还缺什么输入？"
+  },
+  "733cc16b8b00": {
+   "scene": "Compliance",
+   "en": "Chapter seven. Automated orders can create legal and operational problems. We review dated public cases and a proposed surveillance function. Order records and alerts support investigation; a diagram does not establish universal regulatory visibility or a deployed compliance system.",
+   "zh": "第七章。自动订单可产生法律与操作问题。我们回顾带日期的公开案件和拟议监控职责。订单记录与警报支持调查，图示不证明监管机构能普遍看到全部数据，也不建立运行中的合规系统。"
+  },
+  "fae2ce095bdb": {
+   "scene": "Compliance",
+   "en": "The abuses an algorithm can commit. <bookmark mark='a'/> Spoofing: placing orders you intend to cancel before they trade, made explicitly illegal in American futures markets by the Dodd-Frank Act. <bookmark mark='b'/> Layering: many such orders, stacked at several prices, to suggest pressure on one side while you trade on the other. <bookmark mark='c'/> Marking the close: trading to move a price that contracts settle on. <bookmark mark='d'/> And wash trades: trading with yourself to fake volume.",
+   "zh": "算法可能犯下的违规行为。<bookmark mark='a'/>幌骗：下达你打算在成交前撤销的订单，多德-弗兰克法案在美国期货市场明确将其定为违法。<bookmark mark='b'/>分层挂单：在多个价位堆叠这样的订单，制造一侧有压力的假象，而你在另一侧交易。<bookmark mark='c'/>尾盘操纵：通过交易推动合约结算所依据的价格。<bookmark mark='d'/>还有对敲交易：与自己交易来伪造成交量。"
+  },
+  "ffba2d7bc822": {
+   "scene": "Compliance",
+   "en": "What it looks like in the order book. <bookmark mark='a'/> Bids on the left, offers on the right. <bookmark mark='b'/> A layering trader stacks large bids below the market, which look like demand. <bookmark mark='c'/> Buyers, reading the book, raise their prices, and the trader sells to them. Then the large bids are cancelled, never having been meant to trade. The pattern is the signature surveillance looks for: large orders, quickly cancelled, opposite to the trader's executions.",
+   "zh": "它在订单簿里是什么样子。<bookmark mark='a'/>左边是买单，右边是卖单。<bookmark mark='b'/>一个分层挂单的交易者在市价下方堆起大额买单，看起来像需求。<bookmark mark='c'/>读订单簿的买家抬高报价，交易者卖给他们。然后那些大额买单被撤销，它们从来就不打算成交。这种模式就是监控要寻找的特征：大额订单，很快撤销，方向与交易者自己的成交相反。"
+  },
+  "caad9862c7a3": {
+   "scene": "Compliance",
+   "en": "The cases, from court records. <bookmark mark='a'/> Navinder Sarao, a trader working from his parents' home near London, was charged in the United States in 2015 with spoofing the E-mini futures, including on the day of the 2010 flash crash. He pleaded guilty in 2016, cooperated, and in 2020 was sentenced to a year of home confinement. Regulators have not said his orders caused the crash; the charge was the spoofing.",
+   "zh": "案例，来自法庭记录。<bookmark mark='a'/>Navinder Sarao是一位在伦敦附近父母家中交易的交易员，2015年在美国被控幌骗E-mini期货，包括2010年闪电崩盘当天。他在2016年认罪，提供了合作，2020年被判处一年居家监禁。监管机构没有说他的订单导致了崩盘；指控的是幌骗。"
+  },
+  "7b058999922d": {
+   "scene": "Compliance",
+   "en": "And at the largest scale. <bookmark mark='a'/> In September 2020, J.P. Morgan agreed to pay about nine hundred and twenty million dollars to three American agencies to resolve spoofing by traders on its precious-metals and Treasury desks over about eight years. Several of the traders were later convicted at trial. Spoofing is not a small-trader's crime.",
+   "zh": "还有最大规模的案例。<bookmark mark='a'/>2020年9月，摩根大通同意向美国三家机构支付约九亿二千万美元，以了结其贵金属和国债交易台交易员在约八年间的幌骗行为。其中几名交易员后来在审判中被定罪。幌骗不是小交易员的罪行。"
+  },
+  "8af9347a1297": {
+   "scene": "Compliance",
+   "en": "Who watches. <bookmark mark='a'/> In American equities and options, the SEC's Consolidated Audit Trail records the whole life of every order, by customer, with reporting since 2020. <bookmark mark='b'/> Each exchange watches its own book. <bookmark mark='c'/> And the firm is expected to catch its own traders and algorithms first, which is the compliance desk this part adds to the House.",
+   "zh": "谁在监控。<bookmark mark='a'/>在美国股票和期权市场，美国证券交易委员会的合并审计追踪记录每笔订单的完整生命周期，按客户区分，自2020年起开始报送。<bookmark mark='b'/>每家交易所监控自己的订单簿。<bookmark mark='c'/>而公司被期望首先抓住自己的交易员和算法，这正是这一部分为本系列公司增设的合规部门。"
+  },
+  "2b2f647c5939": {
+   "scene": "Compliance",
+   "en": "A cancellation ratio alone cannot establish spoofing. <bookmark mark='a'/> Legitimate market making often cancels many quotes as conditions change. <bookmark mark='b'/> Repeated large orders, their placement and cancellation, executions on the other side, market context and communications can motivate investigation of intent. The pattern is neither a legal finding nor a calibrated probability of guilt. <bookmark mark='c'/> Review the complete record, alternative explanations and applicable rules. An alert requires assessment, and enforcement conclusions belong to the competent authorities.",
+   "zh": "仅凭撤单率不能认定虚假报单。<bookmark mark='a'/>合法做市在市场变化时也常撤单。<bookmark mark='b'/>反复大额报单的位置与撤回、另一侧成交、市场环境及通讯可能支持意图调查，但模式既不是法律认定，也不是校准的有罪概率。<bookmark mark='c'/>应复核完整记录、替代解释及适用规则。警报需要评估，执法结论由有权机关决定。"
+  },
+  "a7063b125ed6": {
+   "scene": "Compliance",
+   "en": "A dated and contested example. <bookmark mark='a'/> SEBI's July 2025 interim order alleged index manipulation by Jane Street entities on options-expiry days and imposed restrictions and an impounding direction. The firm disputed the allegations; contemporary reports described a deposit and permission to resume trading. This panel recounts that historical interim record. It does not verify subsequent proceedings or assert the current legal outcome. The general question is how settlement-sensitive trading should be documented, reviewed and assessed under the relevant rules.",
+   "zh": "一个带日期且有争议的例子。<bookmark mark='a'/>SEBI于2025年7月临时命令指控Jane Street实体在期权到期日操纵指数，施加限制及资金扣押安排。公司否认指控，当时报道提及缴存款项与获准恢复交易。本面板只复述当时临时记录，不核实后续程序，也不声称现行法律结果。一般问题是如何记录、复核和评价影响结算的交易。"
+  },
+  "ce6f7b8f034d": {
+   "scene": "Compliance",
+   "en": "A proposed compliance responsibility for the educational House. <bookmark mark='a'/> Review strategies, markets and controls before any authorized trading. <bookmark mark='b'/> Define order retention, alert handling, escalation and investigation records. <bookmark mark='c'/> Give the function independence, access and authority appropriate to the firm. These are design criteria. The lesson does not implement surveillance, certify legal compliance or authorize deployment.",
+   "zh": "教学公司的拟议合规职责。<bookmark mark='a'/>任何获授权交易前，复核策略、市场和控制。<bookmark mark='b'/>规定订单留存、警报处理、升级汇报及调查记录。<bookmark mark='c'/>给予适当独立性、访问权与权限。这些是设计标准，本课不实施监控、不认证法律合规，也不授权部署。"
+  },
+  "ba9cbd17da19": {
+   "scene": "Compliance",
+   "en": "Pause and predict. A market maker cancels ninety-eight percent of submitted quotes. Why is that alone insufficient to establish spoofing? What order patterns and contextual evidence would warrant investigation, and what remains to be shown?",
+   "zh": "暂停并预测。做市商撤回所提交报价的百分之九十八。为什么单凭这一点不足以认定虚假报单？什么订单模式及背景证据值得调查，还有什么需要证明？"
+  },
+  "d7fba7f94cf9": {
+   "scene": "Interview",
+   "en": "Chapter eight. Quant firms hire by testing, and the tests are public knowledge: probability, expected value, estimation under pressure, making markets, and code. Each tests a skill the job uses every day. Here is a mock interview, with the answers computed.",
+   "zh": "第八章。量化公司通过考试来招聘，而考题是公开的：概率、期望值、压力下的估算、做市，以及代码。每一项都检验这份工作每天要用的技能。下面是一场模拟面试，答案都算出来了。"
+  },
+  "84abc9aea3e7": {
+   "scene": "Interview",
+   "en": "What is tested. <bookmark mark='a'/> Probability, answered exactly and quickly, usually by symmetry. <bookmark mark='b'/> Expected value and sizing, because prices are expectations and bets are sized. <bookmark mark='c'/> Making markets: quoting, updating on the trade, managing what you end up holding. <bookmark mark='d'/> And code, correct first and then fast.",
+   "zh": "考什么。<bookmark mark='a'/>概率，精确而快速地回答，通常借助对称性。<bookmark mark='b'/>期望值和仓位大小，因为价格是期望，赌注要定规模。<bookmark mark='c'/>做市：报价，根据成交更新，管理你最终持有的东西。<bookmark mark='d'/>还有代码，先正确，再快。"
+  },
+  "c46a2342f7b0": {
+   "scene": "Interview",
+   "en": "Question one. Roll two dice; what is the expected value of the larger? <bookmark mark='a'/> The maximum is at most k when both dice are, so its distribution is a difference of squares. <bookmark mark='b'/> The expectation is one hundred and sixty-one over thirty-six, about 4.47. <bookmark mark='c'/> And the check: more than one die's three and a half, less than six. The interviewer is listening for the method and the check, not the arithmetic.",
+   "zh": "第一题。掷两颗骰子，较大那颗的期望值是多少？<bookmark mark='a'/>最大值不超过k，当且仅当两颗骰子都不超过k，所以它的分布是平方之差。<bookmark mark='b'/>期望值是三十六分之一百六十一，约4.47。<bookmark mark='c'/>再检查：大于一颗骰子的三点五，小于六。面试官要听的是方法和检查，而不是算术。"
+  },
+  "4b75db361c0a": {
+   "scene": "Interview",
+   "en": "Question two uses independent fair dice, a risk-neutral payoff and one unit without fees or inventory costs. <bookmark mark='a'/> The sum of three dice has expectation ten and a half. <bookmark mark='b'/> Its standard deviation is 2.96; risk tolerance and wealth would determine size. <bookmark mark='c'/> At ten bid and eleven offered, either side has expected half-point revenue only if trade direction conveys no information about the dice. Information changes the conditional fair value.",
+   "zh": "第二题使用独立公平骰子、风险中性支付、一单位头寸，无费用和库存成本。<bookmark mark='a'/>三颗骰子之和均值十点五。<bookmark mark='b'/>标准差2.96，头寸大小还取决于风险容忍和财富。<bookmark mark='c'/>买十卖十一，两侧各有半点期望收入的条件是交易方向不提供骰子信息。信息会改变条件公允价值。"
+  },
+  "9b9c2065a552": {
+   "scene": "Interview",
+   "en": "Now suppose it is revealed that one specified die is six and the other two remain independent and fair. <bookmark mark='a'/> Conditional expected payoff is thirteen. <bookmark mark='b'/> Selling at eleven then loses two in conditional expectation. This illustrates adverse selection. <bookmark mark='c'/> A buy without that revelation requires a model of informed and uninformed order flow before it determines a posterior price or spread. Raising quotes after every buy is not a model-free theorem.",
+   "zh": "现在透露指定一颗骰子为六，其余两颗仍独立公平。<bookmark mark='a'/>条件期望支付为十三。<bookmark mark='b'/>在十一卖出，条件期望亏二，说明逆向选择。<bookmark mark='c'/>没有这种透露，单看买单需要知情和非知情订单流模型，才能决定后验价格及价差。每次买单后都提价不是无模型定理。"
+  },
+  "53b0cf160658": {
+   "scene": "Interview",
+   "en": "Question three uses a fair independent coin. <bookmark mark='a'/> First head on toss n pays two to the n. <bookmark mark='b'/> Each possible n contributes one dollar, so the uncapped expectation diverges. <bookmark mark='c'/> Cap the payoff at exactly two to the thirty, about one point zero seven four billion dollars. The first thirty terms contribute thirty dollars and the remaining tail one, giving exactly 31 dollars. That is a risk-neutral expectation for an enforceable specified payoff, not a utility-based ticket price or a guarantee that a counterparty can pay.",
+   "zh": "第三题使用独立公平硬币。<bookmark mark='a'/>第n次首次正面，支付二的n次方。<bookmark mark='b'/>每个n为期望贡献一美元，故无上限期望发散。<bookmark mark='c'/>精确封顶二的三十次方，约十点七四亿美元。前三十项贡献三十美元，其余尾部贡献一，精确期望31美元。这是指定可执行支付的风险中性期望，不是效用票价，也不保证对手方付得起。"
+  },
+  "2f73c5b1dc9d": {
+   "scene": "Interview",
+   "en": "Question four assumes a known iid win probability point six, even-money payoffs and a fixed fraction of current positive wealth. <bookmark mark='a'/> Maximizing expected log growth gives Kelly fraction 0.2. <bookmark mark='b'/> Its log growth is 0.02014 per bet. <bookmark mark='c'/> At twice Kelly, the fraction is point four and log growth is -0.00245. By the law of large numbers, wealth tends to zero asymptotically in this model. Each finite-time multiplier remains positive, so this is not exact finite-time ruin. Uncertain odds, constraints and other risks require separate sizing judgments.",
+   "zh": "第四题假设已知独立同分布胜率零点六、等额赔率，每次下注当前正财富的固定比例。<bookmark mark='a'/>最大化预期对数增长得到凯利比例0.2。<bookmark mark='b'/>每次对数增长0.02014。<bookmark mark='c'/>两倍凯利比例零点四，对数增长-0.00245。大数定律使模型财富渐近趋于零，但有限时间乘数始终为正，不是有限时间恰好破产。赔率不确定、约束及其他风险需要另行定仓。"
+  },
+  "03142f28c562": {
+   "scene": "Interview",
+   "en": "Question five, code. Compute maximum drawdown from cumulative simple-return wealth in one pass. The displayed unchanged function compounds returns, keeps the running wealth peak, and finds the worst proportional fall. It requires a meaningful positive wealth path for this interpretation. This differs from the arithmetic cumulative-return drawdown used by the research stop in Chapter ten; the two conventions must not be interchanged.",
+   "zh": "第五题，代码。用一次遍历计算累计简单收益财富的最大回撤。显示的未改函数复利累乘收益，记录运行财富峰值，求最差比例跌幅；这一解释需要有意义的正财富路径。它不同于第十章研究停止规则使用的累计算术收益回撤，两种约定不能互换。"
+  },
+  "19ba00bf4287": {
+   "scene": "Interview",
+   "en": "Question six is an explicit order-of-magnitude illustration. <bookmark mark='a'/> Choose twelve billion shares per day; this is an input assumption, not a measured current volume. <bookmark mark='b'/> Choose one firm's share as one fifth and one hundred shares per trade. <bookmark mark='c'/> Division gives 24 million trades per day. Changing those inputs changes the answer. A count says nothing by itself about independence or effective breadth, so this estimate cannot verify a disclosed Sharpe ratio.",
+   "zh": "第六题是明确的数量级示例。<bookmark mark='a'/>指定每天一百二十亿股，是输入假设，不是测量的当前成交量。<bookmark mark='b'/>指定一家占五分之一，每笔一百股。<bookmark mark='c'/>相除得到每天24百万笔。输入改变，答案也改变。计数本身不说明独立性或有效广度，不能验证披露的夏普比率。"
+  },
+  "6193a0df14f4": {
+   "scene": "Interview",
+   "en": "How to prepare. <bookmark mark='a'/> The classic books: Mosteller's fifty challenging problems, Crack's Heard on the Street, and Zhou's practical guide. <bookmark mark='b'/> Say the approach, compute, then check against a bound or a special case; in a market game, say what each trade tells you. <bookmark mark='c'/> What is really tested is calm reasoning under uncertainty with a clock running, which is also the job.",
+   "zh": "如何准备。<bookmark mark='a'/>经典书籍：Mosteller的五十道概率难题、Crack的《华尔街面试》，以及周欣峰的量化金融面试实用指南。<bookmark mark='b'/>先说思路，再计算，然后用一个界或特例检验；在做市游戏中，说出每笔成交告诉了你什么。<bookmark mark='c'/>真正考的是在计时压力下对不确定性的冷静推理，这也正是这份工作。"
+  },
+  "c1d5d3a29a6e": {
+   "scene": "Interview",
+   "en": "Pause and predict. Roll a fair die and optionally reroll once, keeping the independent second result. With no fee and a risk-neutral payoff, derive the optimal threshold and expected payoff.",
+   "zh": "暂停并预测。掷公平骰子，可选择独立重掷一次，第二次必须接受。无费用且风险中性，推导最优门槛与预期支付。"
+  },
+  "b44e022204f1": {
+   "scene": "Culture",
+   "en": "Chapter nine. The founding stories of quant firms are retold so often that they have become a genre. Here they are as the founders and their biographers have told them in public, and what they have in common.",
+   "zh": "第九章。量化公司的创业故事被讲了太多遍，已经成了一种文体。下面是创始人和他们的传记作者公开讲述的版本，以及这些故事的共同点。"
+  },
+  "95e026bada8c": {
+   "scene": "Culture",
+   "en": "Two mathematicians. <bookmark mark='a'/> Edward Thorp published a book on beating blackjack in 1962 and one on hedging warrants in 1967, then ran a fund on the same mathematics, as he tells it in his memoir. <bookmark mark='b'/> James Simons, a geometer and former codebreaker who chaired the mathematics department at Stony Brook, started trading in 1978 and named his firm Renaissance in 1982. It hired mathematicians, physicists and speech-recognition researchers, and, famously, almost no one from Wall Street.",
+   "zh": "两位数学家。<bookmark mark='a'/>Edward Thorp在1962年出版了一本关于击败二十一点的书，1967年又出版了一本关于对冲认股权证的书，然后用同样的数学运作一只基金，正如他在回忆录里讲述的。<bookmark mark='b'/>James Simons，一位几何学家、前密码破译员，曾任石溪大学数学系主任，1978年开始交易，1982年把公司命名为文艺复兴。它雇用数学家、物理学家和语音识别研究者，而且出了名地几乎不雇华尔街的人。"
+  },
+  "105879d63561": {
+   "scene": "Culture",
+   "en": "Two founders from computing and from trading. <bookmark mark='a'/> David Shaw, a computer scientist from Columbia who worked on parallel machines, joined Morgan Stanley's quantitative group in 1986 and founded his own firm two years later. <bookmark mark='b'/> Kenneth Griffin traded convertible bonds from his university dormitory from 1987, as widely reported, founded Citadel in 1990, and added the market maker Citadel Securities in 2002.",
+   "zh": "两位分别来自计算和交易的创始人。<bookmark mark='a'/>David Shaw，来自哥伦比亚大学、研究并行计算机的计算机科学家，1986年加入摩根士丹利的量化小组，两年后创立了自己的公司。<bookmark mark='b'/>Kenneth Griffin据广泛报道从1987年起在大学宿舍里交易可转债，1990年创立Citadel，2002年又增设做市商Citadel Securities。"
+  },
+  "e5382652ad0b": {
+   "scene": "Culture",
+   "en": "And two that defined business models. <bookmark mark='a'/> Jane Street was founded in 2000 by a small group of traders, several from Susquehanna International Group, as reported, and grew as a market maker in exchange-traded funds. <bookmark mark='b'/> Millennium was founded by Israel Englander in 1989, as reported with about thirty-five million dollars, and grew into Chapter three's platform.",
+   "zh": "还有两家定义了商业模式的公司。<bookmark mark='a'/>据报道，Jane Street于2000年由一小群交易员创立，其中几位来自Susquehanna International Group，作为交易所交易基金的做市商成长起来。<bookmark mark='b'/>Millennium由Israel Englander于1989年创立，据报道起步资金约三千五百万美元，后来成长为第三章的平台。"
+  },
+  "aee95a8d5450": {
+   "scene": "Culture",
+   "en": "And the next generation, founded by alumni. <bookmark mark='a'/> AQR, founded in 1998 by Clifford Asness and colleagues from Goldman Sachs's asset management arm, built its business partly on publishing research: the factor and trend series this series used in Parts twenty-four and thirty-two are theirs. <bookmark mark='b'/> Two Sigma was founded in 2001 by John Overdeck, a D. E. Shaw alumnus, and David Siegel, a computer scientist, as reported. Each generation of firms was founded by the last one's employees.",
+   "zh": "还有由前员工创立的下一代。<bookmark mark='a'/>AQR由Clifford Asness与几位高盛资产管理部门的同事于1998年创立，其业务部分建立在发表研究之上：本系列在第24和32部分用到的因子和趋势序列就出自他们。<bookmark mark='b'/>据报道，Two Sigma于2001年由D. E. Shaw的前员工John Overdeck和计算机科学家David Siegel创立。每一代公司都由上一代的员工创立。"
+  },
+  "eacb8303af27": {
+   "scene": "Culture",
+   "en": "What the stories share. <bookmark mark='a'/> A method from outside finance: probability, coding theory, parallel computing. <bookmark mark='b'/> A market that was slow: warrants, convertibles, exchange-traded funds, pairs, where prices were set by rule of thumb. <bookmark mark='c'/> And survivorship: we hear the stories of the firms that lasted. The many that tried the same and closed do not write memoirs, which is Part twenty-six's lesson applied to founders.",
+   "zh": "这些故事的共同点。<bookmark mark='a'/>一种来自金融以外的方法：概率、编码理论、并行计算。<bookmark mark='b'/>一个反应迟缓的市场：认股权证、可转债、交易所交易基金、配对，那里的价格靠经验法则设定。<bookmark mark='c'/>还有幸存者偏差：我们听到的是存活下来的公司的故事。许多做过同样尝试而倒闭的公司不会写回忆录，这是第26部分的教训用在创始人身上。"
+  },
+  "f32dae26bc76": {
+   "scene": "Culture",
+   "en": "And culture. <bookmark mark='a'/> Some firms describe pooled research and shared pay as their defence against secrecy between teams; the platforms choose the opposite, independent pods. <bookmark mark='b'/> Strategies leak with people, so firms guard both, and the cost is that almost nothing they learn is published. <bookmark mark='c'/> And the pressure to show a good backtest is the same inside a firm as in a journal. The defence is Chapter four's review, not virtue.",
+   "zh": "还有文化。<bookmark mark='a'/>有些公司把共享研究和共享报酬描述为防止团队之间互相保密的手段；平台则选择相反的做法，独立的投资组。<bookmark mark='b'/>策略随人员流失，所以公司两者都要守护，代价是它们学到的东西几乎都不发表。<bookmark mark='c'/>而展示一个好回测的压力，在公司内部和在学术期刊里是一样的。防线是第四章的审查，而不是美德。"
+  },
+  "3ffdfa0e2b2c": {
+   "scene": "Culture",
+   "en": "Pause and predict. A thousand hypothetical firms each survive each year with probability one half, independently across years. What is the expected number surviving ten years? Does that guarantee one survivor or prove the survivors had skill?",
+   "zh": "暂停并预测。一千家假想公司，每年以二分之一概率存活，跨年份独立。十年后幸存数量的期望是什么？这保证一家幸存，或证明幸存者有技能吗？"
+  },
+  "778578f3e4ea": {
+   "scene": "Stops",
+   "en": "Chapter ten revisits an existing research calculation on six Kenneth French factors and six stop rules. No new market trial is run. We compare the cached research sample with a descriptive shuffle reference and an iid mathematical calculation. Neither establishes a universal stop benefit, a causal mechanism or a deployable after-cost strategy.",
+   "zh": "第十章回顾六个肯尼斯弗伦奇因子与六种停止规则的既有研究计算，不运行新市场试验。我们将缓存研究样本与描述性打乱参考及独立同分布数学计算比较。二者都不能建立普遍停止收益、因果机制或可部署的扣费策略。"
+  },
+  "fa586c8959b0": {
+   "scene": "Stops",
+   "en": "Read the exact convention. <bookmark mark='a'/> Six factor proxies use thirty-six prior finite monthly observations for volatility scaling; removing missing values can compress the clock. The research sample begins July 1966 and ends December 2020, with uncapped leverage and no trading, funding or borrowing costs. <bookmark mark='b'/> Drawdown is in arithmetic cumulative returns. The whole breach-period loss is included; exactly the next w observations are skipped with zero cash return, then the peak restarts. This differs from a compounded-wealth drawdown. <bookmark mark='c'/> Six rules across six factors reuse one sample: thirty-six dependent research comparisons.",
+   "zh": "先读精确约定。<bookmark mark='a'/>六个因子代理用之前三十六个有限月度观测缩放波动；删除缺失值会压缩时钟。研究样本从1966年7月至2020年12月，杠杆无上限，不计交易、融资和借券成本。<bookmark mark='b'/>回撤指累计算术收益，包含整段触发损失；随后恰好跳过w个观测，现金收益为零，再重置峰值。这不同于复利财富回撤。<bookmark mark='c'/>六条规则乘六个因子，共用一个样本，是三十六次相关研究比较。"
+  },
+  "7c9a0e2df940": {
+   "scene": "Stops",
+   "en": "The iid exposure calculation has an extra variance term. <bookmark mark='a'/> Let a predictable on-off indicator be independent of the current iid return, with stationary on probability p, and assign cash zero return. Mean becomes p mu. <bookmark mark='b'/> Variance is p sigma squared plus p times one minus p times mu squared. <bookmark mark='c'/> The exact marginal per-period ratio is root p times the original ratio, divided by root one plus one minus p times the original ratio squared. Root p alone is a low-mean approximation. It lowers a positive ratio; a negative one becomes less negative. Serial exposure dependence can alter long-run variance, so annualization needs more care. Shuffling the already scaled factor is a descriptive reference, not a general calibrated iid experiment.",
+   "zh": "独立同分布仓位计算还多一个方差项。<bookmark mark='a'/>令可预测开关指标与当期独立同分布收益独立，平稳持仓概率为p，现金零收益，则均值为p乘缪。<bookmark mark='b'/>方差为p乘西格玛平方，加p乘一减p再乘缪平方。<bookmark mark='c'/>精确边际单期比率为根号p乘原比率，除根号下一加一减p乘原比率平方。只有根号p是低均值近似。正比率降低，负比率变得较不负。仓位的序列依赖可改变长期方差，年化需要小心。打乱已缩放因子是描述性参考，不是普遍校准的独立同分布实验。"
+  },
+  "38597b57f47a": {
+   "scene": "Stops",
+   "en": "One existing rule uses an arithmetic fifteen-percent barrier and twelve observations out. <bookmark mark='a'/> Value's sample ratio changes from 0.20 to 0.28; momentum changes from 0.60 to 0.56. <bookmark mark='b'/> The shuffled column is baseline ratio plus the mean change across two hundred shuffles, with their standard deviation. That spread is not a confidence interval for future performance. Shared data, scaling, the chosen rule, finite shuffles and omitted costs limit what we can conclude.",
+   "zh": "一条既有规则使用百分之十五算术回撤和十二个观测空仓。<bookmark mark='a'/>价值样本比率从0.20变为0.28，动量从0.60变为0.56。<bookmark mark='b'/>打乱列是基准比率加两百次打乱的平均改变量，并显示其标准差。这不是未来表现置信区间。共享数据、缩放、规则选择、有限打乱及遗漏成本都限制结论。"
+  },
+  "20e13d2953c5": {
+   "scene": "Stops",
+   "en": "The heatmap shows all thirty-six dependent research comparisons. <bookmark mark='a'/> Each cell subtracts the average shuffle change from the observed stop change. 12 exceed two shuffle standard deviations positively and 0 negatively. <bookmark mark='b'/> The star is a descriptive threshold, not a calibrated or multiple-testing-adjusted p-value. Patterns across factors suggest questions about timing and dependence; this display does not prove persistent losses caused the difference or establish a universal stop policy.",
+   "zh": "热图显示三十六次相关研究比较。<bookmark mark='a'/>每格用实际停止改变量减平均打乱改变量，12格正向超过两个打乱标准差，0格负向超过。<bookmark mark='b'/>星号只是描述门槛，不是校准或多重检验调整后的p值。因子模式提出时点和依赖问题，不证明持续亏损导致差异，也不建立普遍停止政策。"
+  },
+  "eb859964eff4": {
+   "scene": "Stops",
+   "en": "Possible mechanisms require further evidence. <bookmark mark='a'/> Slow drawdown episodes in value or profitability could make a delayed exit useful during some periods. This reused sample does not prove conditional predictability. <bookmark mark='b'/> Sudden momentum reversals and rebounds can make exits miss recoveries; costs and timing matter. <bookmark mark='c'/> A stop changes exposure based on the past. Whether that helps future investor outcomes depends on return dependence, financing, costs, objectives and selection. The cached comparison alone cannot settle that question.",
+   "zh": "可能机制还需证据。<bookmark mark='a'/>价值或盈利因子的缓慢回撤，可能使某些时期延迟退出有用，但重用样本不证明条件可预测性。<bookmark mark='b'/>动量突然反转与反弹可能使退出错过恢复，成本和时点很重要。<bookmark mark='c'/>停止规则依据过去改变敞口。未来投资者结果取决于收益依赖、融资、成本、目标和选择，仅缓存比较不能解决。"
+  },
+  "80834e270fa3": {
+   "scene": "Stops",
+   "en": "Selection remains. <bookmark mark='a'/> Choosing each factor's best stop after examining thirty-six results would add selection bias. Dependence means thirty-six is not an effective independent test count. <bookmark mark='b'/> A known latent skill in a simulation differs from an uncertain future factor premium in data. Neither is guaranteed in practice. <bookmark mark='c'/> The historical registration metadata already includes this research. This review performs no new market trial, updates no registry, opens no sealed strategy result and adds no stop to an approved live book.",
+   "zh": "选择仍然存在。<bookmark mark='a'/>看完三十六结果再为每个因子选最佳停止线，会增加选择偏差。依赖意味着三十六不是有效独立检验数。<bookmark mark='b'/>模拟中已知潜在技能，不同于数据中不确定的未来因子溢价，实务上都无保证。<bookmark mark='c'/>历史登记元数据已含该研究。本次不新增市场试验、不更新登记、不打开封存策略结果，也不向获准实盘组合添加停止规则。"
+  },
+  "e86ca3fe0683": {
+   "scene": "Stops",
+   "en": "Pause and predict. With annual Sharpe point six and a stationary on fraction three quarters, apply the low-mean iid exposure approximation. Then identify the extra term in the exact marginal per-period formula and the assumptions needed to annualize.",
+   "zh": "暂停并预测。年夏普零点六、平稳持仓比例四分之三，应用独立同分布低均值仓位近似。再指出精确边际单期公式中的额外项，以及年化需要的条件。"
+  },
+  "40327232933f": {
+   "scene": "House",
+   "en": "Chapter eleven. The proposed firm-level checklist separates mathematical tools from operational controls. Limits, independent authority, records and review matter, but the small functions shown here are not a deployed trading, risk or surveillance system. This lesson authorizes no live strategy.",
+   "zh": "第十一章。拟议公司检查表区分数学工具与操作控制。限额、独立权限、记录和复核重要，但这里的小函数不是已部署交易、风险或监控系统。本课不授权任何实盘策略。"
+  },
+  "8f0b52a90685": {
+   "scene": "House",
+   "en": "The first sheet separates models and evidence. <bookmark mark='a'/> Under a Gaussian daily model, the disclosed loss frequency maps to ratio 3.15; square-root annualization also needs its assumptions. A known Brownian Sharpe-one process has mean stop times 0.36 and 2.19 years at these two barriers. The chosen heterogeneous-skill simulation gives investor ratios 1.90 and 1.19; its replacement and payout accounting matter. The prior shrink factor is stipulated. Value's factor-stop comparison reuses research data and is before costs. None of these rows is a sealed strategy verdict or a live-firm calibration.",
+   "zh": "第一张表区分模型与证据。<bookmark mark='a'/>正态日模型将披露频率映射为比率3.15，平方根年化还有条件。已知夏普一的布朗过程，两种边界的平均时间是0.36和2.19年。指定异质技能模拟的投资者比率1.90与1.19，受替换与奖金记账影响。先验缩放是指定的，价值停止比较重用研究数据且未扣成本。这些行都不是封存策略裁决或真实公司校准。"
+  },
+  "a64ab56ebc98": {
+   "scene": "House",
+   "en": "The research chapter's formulas, in eight lines. The expected time to a drawdown stop: sigma squared over two mu squared, times e to the a, minus one, minus a, where a is twice the drift times the stop over the variance. And the expected peak before the stop: sigma squared over two mu, times e to the a minus one. Both fall back to the driftless case when the manager has no skill.",
+   "zh": "研究章节的公式，八行代码。到回撤止损的期望时间：sigma平方除以二倍mu平方，乘以e的a次方减一再减a，其中a是两倍漂移乘以止损再除以方差。止损前的期望高点：sigma平方除以二倍mu，乘以e的a次方减一。当基金经理没有技能时，两者都退化为无漂移的情形。"
+  },
+  "0b62e612e2ef": {
+   "scene": "House",
+   "en": "The unchanged arithmetic stop includes the whole breach-period return. It then skips exactly the next wait observations and restarts with a fresh arithmetic peak. That is distinct from drawdown in compounded wealth. Cash is assigned zero return, and costs and execution constraints are absent. The example code defines this research calculation; it does not implement every practical stop a firm might need.",
+   "zh": "未改动的算术停止规则包含整个触发期收益，然后恰好跳过接下来等待数量的观测，以新的算术峰值重启。这不同于复利财富回撤。现金收益设零，不计成本和执行约束。示例代码定义这个研究计算，不实现公司可能需要的全部实务停止规则。"
+  },
+  "5249dbe05dae": {
+   "scene": "House",
+   "en": "The platform code applies monthly arithmetic returns with a common shock, then updates drawdowns, scales positions and replaces fired managers with new independent skill draws. Replacement is immediate and frictionless. It resets the fired manager's running state and calendar-year payout accumulator; that accounting choice affects investor comparisons. Year-end restoration and positive-year payouts are additional rules, not consequences of the Brownian theorem.",
+   "zh": "平台代码先加入带共同冲击的月度算术利润，再更新回撤、缩放仓位，并用独立新技能替换解雇经理。替换即时且无摩擦，重置运行状态和该日历年奖金累计器；这一记账选择影响投资者比较。年底恢复仓位及正年份奖金是附加规则，不是布朗定理推论。"
+  },
+  "ec8980d6a755": {
+   "scene": "House",
+   "en": "The code illustrates known-parameter stopping mathematics, grid monitoring, an arithmetic research stop and a stipulated payout model. <bookmark mark='a'/> The compliance desk on this chart is a proposed responsibility. <bookmark mark='b'/> Our firm-level checklist asks for independent limits, explicit funding and liquidity assumptions, pre-trade controls, authority to halt, complete records and staged evaluation. A diagram and a pure numerical module do not establish a functioning control system, legal compliance or permission to trade.",
+   "zh": "代码演示已知参数停止数学、网格监控、算术研究停止及指定奖金模型。<bookmark mark='a'/>图中合规台是拟议职责。<bookmark mark='b'/>公司检查标准要求独立限额、明确融资流动性假设、交易前控制、停止权限、完整订单记录与分阶段评价。图示和纯数值模块不建立运行中的控制系统、法律合规或交易许可。"
+  },
+  "a3399c5d3342": {
+   "scene": "House",
+   "en": "The rule against three cases. <bookmark mark='a'/> A platform pitching a Sharpe ratio of three: ask how many pods were closed, whether their losses are in the record, and what share of gross profit the pods were paid. <bookmark mark='b'/> A manager stopped out at seven and a half percent: ask how deep that was in volatilities. <bookmark mark='c'/> And an algorithm that went live on Friday: ask for its checks, its credit limit, and who holds the kill switch.",
+   "zh": "用这条规则检验三个案例。<bookmark mark='a'/>一个推销夏普比率为三的平台：问关闭了多少个组，它们的亏损是否在记录里，以及各组拿走了毛利润的多大比例。<bookmark mark='b'/>一位在百分之七点五被止损出局的基金经理：问这以波动率计有多深。<bookmark mark='c'/>还有一个周五上线的算法：问它的检查、它的信用限额，以及谁握着熔断开关。"
+  },
+  "16ddf8c03da8": {
+   "scene": "Research",
+   "en": "For the researcher. We derive the continuous drawdown-stop formula for arithmetic Brownian profit with known constant parameters. Its peak at the stop is exponential; the stopping time generally is not. Grid simulations and deadline probabilities have different monitoring and uncertainty conventions. These conditional results do not forecast an actual manager's tenure.",
+   "zh": "研究者部分。我们为已知常参数算术布朗利润推导连续回撤停止公式。停止时峰值是指数分布，停止时间一般不是。网格模拟与截止日前概率有不同监控和不确定性约定。这些条件结果不预测实际经理任期。"
+  },
+  "8a8e314dad55": {
+   "scene": "Research",
+   "en": "Specify the model and units. <bookmark mark='a'/> X starts at zero and is arithmetic cumulative profit, mu t plus sigma W t, with known constant real mu and positive sigma. This is not compounded wealth. <bookmark mark='b'/> The maximum includes time zero, and drawdown is peak minus profit. <bookmark mark='c'/> For positive fixed d, stop at the first continuous drawdown of d. <bookmark mark='d'/> S equals mu over sigma, with units inverse root time; delta equals d over sigma, with units root time. Their product is dimensionless. Numerical annual conventions make the resulting time a number of years.",
+   "zh": "先规定模型和单位。<bookmark mark='a'/>X从零开始，是缪乘时间加西格玛乘布朗运动的累计算术利润，缪为已知实常数，西格玛为正，不是复利财富。<bookmark mark='b'/>最大值包括零时刻，回撤是峰值减利润。<bookmark mark='c'/>固定正d，连续回撤首次达到d时停止。<bookmark mark='d'/>S等于缪除西格玛，单位为时间平方根的倒数；德尔塔等于d除西格玛，单位为时间平方根。乘积无量纲，使用年频数值时，所得时间以年计。"
+  },
+  "505b27f6bf7a": {
+   "scene": "Research",
+   "en": "Use a bounded candidate before assuming the expected time exists. <bookmark mark='a'/> Drawdown is reflected Brownian motion with drift minus mu on the interval from zero to d, killed at d. <bookmark mark='b'/> Solve for a nonnegative twice-differentiable function f on this compact interval. <bookmark mark='c'/> Its generator equals minus one, f at d is zero, and f prime at zero is zero. Ito's formula stopped at the smaller of t and tau cancels the reflection term, and gives expected truncated time at most f of y. Hence the expected stopping time is finite. Taking the limit then identifies f as that expectation.",
+   "zh": "先构造有界候选，不能先假定期望存在。<bookmark mark='a'/>回撤是零到d之间漂移为负缪的反射布朗运动，在d终止。<bookmark mark='b'/>在紧区间上求非负二阶可微函数f。<bookmark mark='c'/>生成元作用于f为负一，d处f为零，零处导数为零。对时间t与陶中较小者应用伊藤公式，反射项消失，截断时间期望至多为f在初值的值，故停止时间均值有限。再取极限，才确认f就是该期望。"
+  },
+  "f4e3444e73ea": {
+   "scene": "Research",
+   "en": "For nonzero mu, solve the first-order equation for f prime. <bookmark mark='a'/> The reflecting boundary gives one minus the exponential of two mu y over sigma squared, divided by mu. This derivative is nonpositive for either sign of mu. <bookmark mark='b'/> Integrate backwards from f at d equal zero. The bounded nonnegative solution at zero is sigma squared over two mu squared times e to the a minus one minus a. <bookmark mark='c'/> Here a is two mu d over sigma squared, or two S delta. It determines dimensionless shape; the prefactor carries time. Expanding the exponential gives d squared over sigma squared when mu tends to zero.",
+   "zh": "缪非零时，解f导数的一阶方程。<bookmark mark='a'/>反射边界给出一减二缪y除西格玛平方的指数，再除缪。无论缪正负，这个导数都不正。<bookmark mark='b'/>从f在d为零反向积分，零处有界非负解为西格玛平方除二缪平方，乘e的a次方减一减a。<bookmark mark='c'/>a是二缪d除西格玛平方，也就是二S德尔塔。它决定无量纲形状，前因子带时间单位。展开指数，缪趋零时得到d平方除西格玛平方。"
+  },
+  "176ca086e7db": {
+   "scene": "Research",
+   "en": "The exponential law concerns the peak. <bookmark mark='a'/> Until the peak rises by epsilon, the moving drawdown boundary lies between minus d and epsilon minus d. Fixed-boundary scale-function hitting probabilities sandwich the stop probability and yield the same first-order rate lambda times epsilon. Do not identify a moving boundary with a fixed one for finite epsilon. <bookmark mark='b'/> Strong Markov and translation invariance at successive peak levels make peak survival multiplicative and continuous, hence exponential with rate lambda; at zero drift the rate is one over d. <bookmark mark='c'/> Continuity gives terminal profit equal to peak minus d. <bookmark mark='d'/> The finite mean time already proved makes stopped Brownian motion bounded in second moment. Its terminal mean is zero, so expected profit equals drift times expected time. The stopping time itself is generally not exponential.",
+   "zh": "指数律针对峰值。<bookmark mark='a'/>峰值升高艾普西隆前，移动回撤边界夹在负d与艾普西隆减d之间。固定边界的尺度函数触及概率夹逼停止概率，产生同一阶速率兰姆达乘艾普西隆；有限艾普西隆下不能直接将移动边界视为固定。<bookmark mark='b'/>连续新峰值上的强马尔可夫性与平移不变性，使峰值生存概率可乘且连续，因此为速率兰姆达的指数分布；零漂移速率为一除d。<bookmark mark='c'/>连续性给终止利润等于峰值减d。<bookmark mark='d'/>此前已证平均时间有限，使停止布朗运动二阶矩有界，终值均值为零，故平均利润等于漂移乘平均时间。停止时间本身一般不服从指数分布。"
+  },
+  "ccf87e43f8f2": {
+   "scene": "Research",
+   "en": "The classical drawdown theorem applies to the specified continuous arithmetic Brownian model. <bookmark mark='a'/> For nonzero S, mean time is e to two S delta minus one minus two S delta, divided by two S squared. The peak has the exponential law and the mean displayed here. <bookmark mark='b'/> At zero drift, the limits are delta squared for time and d for peak. The leading exponential time expression requires large positive S delta, not just positive drift. Annual numerical inputs produce years. These known-parameter results omit estimation, changing exposure, jumps, fees and execution.",
+   "zh": "经典回撤定理适用于指定的连续算术布朗模型。<bookmark mark='a'/>S非零时，平均时间为e的二S德尔塔次方减一减二S德尔塔，再除二S平方。峰值服从指数律，均值如图。<bookmark mark='b'/>零漂移极限分别是时间德尔塔平方、峰值d。领先指数项需要S德尔塔很大且为正，不只是漂移为正。年频数值输入给出年数。已知参数结果不包含估计、变仓位、跳跃、费用和执行。"
+  },
+  "ecbde8ad0b13": {
+   "scene": "Research",
+   "en": "Evaluate the exact formula under annual numerical conventions. <bookmark mark='a'/> At S one and delta point five, mean time is 0.36 years; at S two it is 0.55. <bookmark mark='b'/> At delta one the corresponding means are 2.19 and 6.20; at delta two, 25 and 371. Both drift and depth matter, and very large values make finite-horizon simulation difficult. This grid does not prove that depth universally matters more than skill.",
+   "zh": "使用年频数值约定计算精确公式。<bookmark mark='a'/>S为一、德尔塔零点五时，均值0.36年；S为二时0.55年。<bookmark mark='b'/>德尔塔一时分别2.19和6.20年，德尔塔二时25和371年。漂移与深度都重要，极大均值使有限期限模拟困难。本表不证明深度总比技能重要。"
+  },
+  "54e207462e54": {
+   "scene": "Research",
+   "en": "These are limiting regimes, not a partition by sign alone. <bookmark mark='a'/> When S delta is strongly negative, the leading time is delta divided by absolute S. A small negative drift still needs the full formula. <bookmark mark='b'/> At exactly zero drift the time is delta squared. <bookmark mark='c'/> For large positive S delta, the leading term is the exponential divided by two S squared. The smooth exact expression connects all three cases. No sharp classification of an unknown manager follows from a finite path.",
+   "zh": "这是极限情形，不是只按符号分类。<bookmark mark='a'/>S德尔塔很负时，领先时间为德尔塔除S绝对值；很小的负漂移仍要完整公式。<bookmark mark='b'/>零漂移时，时间精确为德尔塔平方。<bookmark mark='c'/>S德尔塔很大且为正时，领先项是指数除二S平方。平滑精确式连接这些情况。有限路径不能给未知经理作明确技能分类。"
+  },
+  "0202142aaa86": {
+   "scene": "Research",
+   "en": "The cached six thousand grid-monitored paths have stop times from about point zero eight to nineteen point nine five years; all are shown over zero to twenty without clipping the tail. <bookmark mark='a'/> The continuous known-parameter mean is 2.19 years. <bookmark mark='b'/> The cached mean is 2.48, median 1.76, and about 16 percent exceed twice the continuous mean. Grid monitoring delays detection; sampling variation also matters. This is a stopping-time histogram, not the exponential peak law, and we do not claim an exact exponential time distribution. The general simulation helper excludes nonstoppers from reported stop-time means, so other parameter choices require censoring review.",
+   "zh": "缓存六千条网格监控路径，停止时间约零点零八至十九点九五年，在零到二十范围全部展示，不裁剪尾部。<bookmark mark='a'/>连续已知参数均值为2.19年。<bookmark mark='b'/>缓存均值2.48，中位数1.76年，约百分之16超过连续均值两倍。网格延迟发现，抽样波动也重要。这是停止时间直方图，不是指数峰值律，也不声称时间精确指数分布。通用模拟均值排除未停止者，其他参数必须检查删失。"
+  },
+  "3d9861e84d4d": {
+   "scene": "Research",
+   "en": "The unchanged simulation uses four thousand paths per grid. <bookmark mark='a'/> At S one and delta one, daily monitoring gives 2.70 years versus continuous mean 2.19. <bookmark mark='b'/> Combining daily and eighth-day grids using a chosen square-root-step extrapolation gives 2.20. The grids have independent seeds and there are no Monte Carlo error bars here. Extrapolation is heuristic, not a proven error bound; deviations are not uniformly tiny. Every selected fine-grid row stopped by its horizon, but the general helper omits survivors from its means. High drift or deep barriers can produce severe censoring.",
+   "zh": "未改模拟每个网格四千条路径。<bookmark mark='a'/>S一、德尔塔一时，日监控给2.70年，连续均值2.19。<bookmark mark='b'/>用指定步长平方根外推结合日和八分之一天网格，得2.20。两网格种子独立，没有蒙特卡洛误差棒。外推是启发式，不是已证误差界，各偏差不都很小。所选六条细网格行均在期限内停止；通用函数却从均值中排除幸存者。高漂移或深边界可能严重删失。"
+  },
+  "909a6105a9ef": {
+   "scene": "Research",
+   "en": "These are simulated three-year stop frequencies, with all original six thousand paths retained in each probability denominator. <bookmark mark='a'/> At depth one, the S zero frequency is 95 percent and S one is 67 percent. <bookmark mark='b'/> At depth one point five they become 72 and 24 percent. To call these errors and power, specify for example a simple null S one, alternative S zero, and reject the null when stopped by three years. A deeper barrier lowers both rejection probabilities. It is not automatically a sharper test at equal significance.",
+   "zh": "这是模拟三年停止频率，各概率分母保留原六千条路径。<bookmark mark='a'/>深度一时，S零频率百分之95，S一百分之67。<bookmark mark='b'/>深度一点五时，分别百分之72和24。若称错误率和功效，需如指定简单原假设S一、备择S零，三年内停止即拒绝。更深边界降低两者拒绝率，并不自动成为同显著性下更锐利检验。"
+  },
+  "b1335cbb46c2": {
+   "scene": "Research",
+   "en": "Fix a simple null of S one, alternative S zero, and rejection on stopping within three years. <bookmark mark='a'/> Under that convention, firing under the null is type one error; retaining the alternative is type two error. <bookmark mark='b'/> A deeper barrier trades lower false rejection for lower power at the same deadline. An equal-significance comparison requires calibration, and unknown composite skill needs more work. <bookmark mark='c'/> Stop depth, volatility, horizon, costs and the decision objective all matter. A changed risk budget also changes the experiment; these frequencies alone do not establish an optimal live policy.",
+   "zh": "固定简单原假设S一、备择S零，三年内停止则拒绝。<bookmark mark='a'/>该约定下，原假设经理被停止为一类错误，备择经理被保留为二类错误。<bookmark mark='b'/>更深边界降低误拒，也在同一期限降低功效。同显著性比较需要校准，复合未知技能还需更多分析。<bookmark mark='c'/>停止深度、波动、期限、成本和目标都重要。改变风险预算也改变实验，这些频率不足以证明最优实盘政策。"
+  },
+  "c5ace93bd3d7": {
+   "scene": "Research",
+   "en": "Under the known Brownian arithmetic-profit model, finite mean stopping time permits Wald's identity. <bookmark mark='a'/> Expected terminal profit equals mu times expected time. <bookmark mark='b'/> At S one and delta point five it is 0.36 annual-volatility units; <bookmark mark='c'/> at delta one point five, 8.04. These are stopped arithmetic profits before costs, not annual investor returns or a complete value objective. Deeper stops retain both favorable and unfavorable drifts longer; replacement, capital, risk and learning determine a platform's decision.",
+   "zh": "已知布朗算术利润模型下，有限平均停止时间允许使用瓦尔德恒等式。<bookmark mark='a'/>平均终止利润等于缪乘平均时间。<bookmark mark='b'/>S一、德尔塔零点五时为0.36个年度波动单位；<bookmark mark='c'/>德尔塔一点五时为8.04。这些是扣费前的停止算术利润，不是年投资者回报或完整价值目标。深边界使好坏漂移都保留更久，替换、资本、风险与学习决定平台选择。"
+  },
+  "8d7e77bd4625": {
+   "scene": "Research",
+   "en": "Where this sits. <bookmark mark='a'/> Howard Taylor and John Lehoczky solved the stopped-at-a-drawdown problem in the 1970s. <bookmark mark='b'/> Sanford Grossman and Zhongquan Zhou found how an investor who must never fall below a fraction of the peak should invest: Part eight's floor. <bookmark mark='c'/> And Malik Magdon-Ismail and co-authors computed the expected maximum drawdown over a fixed horizon, the other question a manager asks.",
+   "zh": "这个结果的位置。<bookmark mark='a'/>Howard Taylor和John Lehoczky在1970年代解决了在回撤处停止的问题。<bookmark mark='b'/>Sanford Grossman和Zhongquan Zhou找到了一个绝不能跌破高点一定比例的投资者应如何投资：第8部分的底线。<bookmark mark='c'/>Malik Magdon-Ismail和合作者计算了固定期限内的期望最大回撤，这是基金经理会问的另一个问题。"
+  },
+  "9374b6c8dc45": {
+   "scene": "Research",
+   "en": "Three extensions lie beyond this derivation. <bookmark mark='a'/> Unknown skill requires a specified prior, observation model, objective and cost of waiting before optimizing a boundary. <bookmark mark='b'/> A manager who changes exposure in response to a stop changes the stochastic model and incentives. <bookmark mark='c'/> Dependent returns, regimes, jumps and implementation costs need their own analysis. This lesson solves none of these extensions and does not claim that every version is globally unsolved.",
+   "zh": "三个扩展超出本推导。<bookmark mark='a'/>技能未知时，要先指定先验、观测模型、目标和等待成本，才能优化边界。<bookmark mark='b'/>经理根据停止线改变敞口，会改变随机模型和激励。<bookmark mark='c'/>依赖收益、状态、跳跃和执行成本各需分析。本课不解这些扩展，也不声称每种版本在全球文献都未解。"
+  },
+  "482433330d68": {
+   "scene": "Research",
+   "en": "Pause and predict. Under the known continuous Brownian arithmetic-profit model, annual Sharpe is one point five, volatility four percent and stop six percent of initial capital. Compute delta, expected time and expected terminal profit before costs.",
+   "zh": "暂停并预测。已知连续布朗算术利润模型中，年夏普一点五，年波动为初始资本百分之四，停止深度百分之六。求德尔塔、平均停止时间与扣费前平均终止利润。"
+  },
+  "04c2895980f5": {
+   "scene": "Outro",
+   "en": "Part thirty-four in fourteen lines. Six illustrative business models distinguish capital, customers and the claimed source of revenue. A loss-day count implies a mean-to-volatility ratio only under a specified distribution; it does not identify real trading skill. Reported firm statistics need consistent fees and denominators. The chosen platform simulation includes selection, exposure and payout rules, and is not calibrated evidence about a real firm. Review requires a search record, information clock, executable cash ledger and uncertainty. Independent limits and authority to halt are proposed controls, not a guaranteed operating system.",
+   "zh": "用十四行回顾第三十四部分。六类示例商业模式区分资本、客户和声称的收入来源。亏损计数只有指定分布才能映射为均值波动比，不识别真实技能。公司数字需要一致费用与分母。指定平台含选择、敞口和奖金规则，不是真实公司校准。复核需要搜索记录、信息时钟、可执行现金账本与不确定性。独立限额与停止权限是拟议控制，不是保证有效的操作系统。"
+  },
+  "f92704eb080a": {
+   "scene": "Outro",
+   "en": "Technology faces physical latency floors as well as routing and operational constraints. Surveillance requires context and evidence; high cancellation alone is not proof of manipulation. Interview calculations state their probability and capital assumptions. Founding stories are selected histories. The factor-stop exercise uses dependent research comparisons and a descriptive shuffle reference, without costs. The proposed firm checklist does not approve deployment. Finally, the Brownian drawdown theorem is exact for known constant parameters and continuous arithmetic profit; the exponential law concerns the peak, while grid stop times need separate monitoring and censoring qualifications.",
+   "zh": "技术面对物理延迟下界，也有路由和操作约束。监控需要背景与证据，撤单多不证明操纵。面试计算要说明概率和资本条件。创始故事是筛选后的历史。因子停止比较重用研究数据、存在依赖，打乱只是描述，未计成本。公司检查表不批准部署。最后，布朗回撤定理对已知常参数、连续算术利润精确成立；指数律针对峰值，网格停止时间还需监控与删失条件。"
+  },
+  "9e11ea5d428c": {
+   "scene": "Outro",
+   "en": "Six desk questions, with assumptions stated. A loss-day count maps to an implied ratio under a specified distribution; it cannot identify skill by itself. <bookmark mark='a'/> A known Brownian Sharpe-one process reaches a half-volatility continuous drawdown in about four point three months on average. <bookmark mark='b'/> A platform may use stops for risk and learning, but its simulation also changes exposure, replacement and compensation. It is not a calibrated universal skill test.",
+   "zh": "六个交易台问题，先说明条件。亏损计数仅在指定分布下映射为隐含比率，不能单独识别技能。<bookmark mark='a'/>已知夏普一布朗过程的半波动连续回撤平均约四点三个月触及。<bookmark mark='b'/>平台可能因风险和学习使用停止，但模拟同时改变敞口、替换和薪酬，不是普遍校准的技能检验。"
+  },
+  "7002db5f4e66": {
+   "scene": "Outro",
+   "en": "Netting risk means paying positive pods while investors also bear the losers. <bookmark mark='a'/> Pre-trade limits and a tested halt mechanism are controls intended to constrain malfunction; their effectiveness is not a guaranteed counterfactual. <bookmark mark='b'/> A high cancellation rate alone does not establish spoofing. Placement, cancellation, opposite-side fills, context and communications may support investigation, with legal conclusions requiring more evidence.",
+   "zh": "抵销风险是向正利润团队付费，同时投资者承担亏损团队。<bookmark mark='a'/>交易前限额和测试过的停止机制旨在约束故障，效果不是保证成立的反事实。<bookmark mark='b'/>高撤单率单独不证明虚假报单。位置、撤回、对侧成交、背景和通讯可能支持调查，法律结论还需更多证据。"
+  },
+  "4e2674933c3a": {
+   "scene": "Outro",
+   "en": "The chapter pause answers use their stated inputs. At ten percent gross, the simple fee formulas leave 6.4 and 3.2 percent; the separate problem-set question uses fifteen percent gross. <bookmark mark='a'/> Five losses in twelve hundred and fifty maps to Gaussian daily ratio 2.65; annualization to about 42 also needs iid variance assumptions. <bookmark mark='b'/> For two pods with capital one hundred each, profits plus ten and minus ten cancel. A twenty-percent positive-profit bonus is two currency units. Investors lose two, or one percent of two hundred. Bonus divided by zero gross profit is undefined.",
+   "zh": "章节暂停题按各自输入作答。毛回报百分之十时，简单费用式留下百分之6.4和3.2；另一个习题用百分之十五。<bookmark mark='a'/>一千二百五十天五次亏损映射为正态日比率2.65，年化约42还需独立稳定方差。<bookmark mark='b'/>两队各一百资本，赚十和亏十抵消，正利润百分之二十奖金为两个货币单位。投资者亏二，占两百资本百分之一。奖金除零毛利润没有定义。"
+  },
+  "3dc685bbcd9b": {
+   "scene": "Outro",
+   "en": "In the chosen Gaussian likelihood with prior standard deviation one half and observed Sharpe two, posterior means are point four after one year and one after four. <bookmark mark='a'/> At fixed position and participation, halved daily volume doubles exit days; doubled volatility doubles the stipulated daily clip cost. Holding child size fixed would give a different answer. <bookmark mark='b'/> A three-millisecond advantage captures the edge only under a chosen first-arrival competition model. Half a basis point times captured notional gives gross value; costs, opponents, reliability and fill probability are still needed.",
+   "zh": "指定正态似然、先验标准差二分之一、观测夏普二，后验均值一年后零点四，四年后一。<bookmark mark='a'/>固定持仓和参与率，日成交减半使退出天数翻倍；波动翻倍使指定日子单成本翻倍。固定子单数量则答案不同。<bookmark mark='b'/>三毫秒优势只有在指定先到竞争模型中捕获收益。半基点乘捕获名义金额给毛价值，还需要成本、对手、可靠性与成交概率。"
+  },
+  "0349ab343bcd": {
+   "scene": "Outro",
+   "en": "Cancellation alone does not establish intent; investigate the complete context. <bookmark mark='a'/> With fair dice, reroll one, two or three and retain four, five or six: expectation 4.25. Independent annual survival at one half gives expected survivors 0.9766, without guaranteeing one or demonstrating skill. <bookmark mark='b'/> The low-mean iid exposure approximation gives 0.52; the exact marginal formula includes the extra variance term. Under known continuous Brownian assumptions, S one point five and delta one point five give about 18.78 years; expected arithmetic profit is mu times that mean time.",
+   "zh": "撤单本身不证明意图，需要完整背景。<bookmark mark='a'/>公平骰子中一二三重掷，四五六保留，期望4.25。每年独立以二分之一存活，期望幸存者0.9766，不保证一家，也不证明技能。<bookmark mark='b'/>独立同分布低均值仓位近似给0.52，精确边际式还有额外方差项。已知连续布朗条件下，S一点五、德尔塔一点五约18.78年，平均算术利润为缪乘该时间。"
+  },
+  "a2d05f6d96ed": {
+   "scene": "Outro",
+   "en": "Six basic problems state their inputs: the Gaussian loss-frequency calculation, one-period fees, two-pod capital accounting, the chosen Normal posterior, liquidity at fixed participation and a fair-die reroll. Derive each result and state its limits. Full solutions in English and Chinese are in the notes.",
+   "zh": "六道基础题明确输入：正态亏损频率、单期费用、双团队资本记账、指定正态后验、固定参与率流动性与公平骰子重掷。推导结果并说明限制，完整中英文解答见说明文档。"
+  },
+  "b8c78a3844df": {
+   "scene": "Outro",
+   "en": "Four advanced problems extend the calculation: the maximum of two K-sided dice, the complete tail of a capped St. Petersburg game, Kelly and asymptotic log growth, and the exact marginal ratio under predictable iid exposure. Specify the probability model before interpreting the answer.",
+   "zh": "四道进阶题扩展计算：两颗K面骰子最大值、封顶圣彼得堡完整尾部、凯利与渐近对数增长、可预测独立同分布仓位的精确边际比率。解释答案前先说明概率模型。"
+  },
+  "0941a759d2ea": {
+   "scene": "Outro",
+   "en": "Two qualifying problems prove the finite-mean reflected drawdown formula and the exponential peak law. The first must justify finiteness before identifying the candidate solution. The second must handle the moving boundary and justify Wald's identity. State continuity, known parameters, positive volatility and positive barrier throughout.",
+   "zh": "两道资格题证明有限均值反射回撤公式与指数峰值律。第一题须先证明有限性，再识别候选解；第二题须处理移动边界并论证瓦尔德恒等式。全程说明连续性、已知参数、正波动与正边界。"
+  },
+  "d1c5e5a3d45b": {
+   "scene": "Outro",
+   "en": "Where this comes back. Part thirty-five maps who trades with whom. Part thirty-seven measures what a trade costs. Part thirty-eight is market making, the theory behind the dice game. And Part forty-one returns to regulation and crises.",
+   "zh": "这些内容会在哪里再次出现。第35部分描绘谁与谁交易。第37部分测量一笔交易的成本。第38部分是做市，骰子游戏背后的理论。第41部分回到监管与危机。"
+  },
+  "31daeae54e72": {
+   "scene": "Outro",
+   "en": "References distinguish mathematical sources, dated filings and legal records, books and attributed press reports. The numerical panels use the five unchanged verified ordinary calculations or explicit stipulated arithmetic. Historical quotations retain their source and date; this review does not independently verify current firm statistics or subsequent legal outcomes. No sealed strategy outcome is used.",
+   "zh": "参考资料区分数学来源、带日期的申报和法律记录、书籍及署名报道。数值面板来自五个未改且已验证的普通计算，或明确指定算术。历史引述保留来源和日期，本次不独立验证当前公司数字或后续法律结果，不使用封存策略结果。"
+  },
+  "f334d82f9b66": {
+   "scene": "Outro",
+   "en": "The House now has a proposed firm-level checklist: independent limits, authority to halt, explicit accounting and records of the search. A chart and numerical functions do not create an operating trading or compliance system. <bookmark mark='a'/> Next is market microstructure. Part thirty-five studies who trades with whom, through which venues, and which order and information assumptions determine costs.",
+   "zh": "教学公司现在有拟议的公司检查标准：独立限额、停止权限、明确记账和搜索记录。图示与数值函数不创建运行中的交易或合规系统。<bookmark mark='a'/>接下来是市场微观结构。第三十五部分研究谁与谁交易、经过什么场所，以及哪些订单与信息假设决定成本。"
+  },
+  "3da87e6cb2a1": {
+   "scene": "Process",
+   "en": "What a review asks, collected from this series. <bookmark mark='a'/> How many trials did it take to find? <bookmark mark='b'/> Is it after costs, at the size the firm would run it? <bookmark mark='c'/> Why should it work, and who pays? <bookmark mark='d'/> And what does it add to what the firm already holds? A strategy can pass the first three and still be rejected for the last.",
+   "zh": "审查要问什么，从本系列中汇总。<bookmark mark='a'/>找到它用了多少次试验？<bookmark mark='b'/>它是否在扣除成本之后、在公司实际运行的规模上成立？<bookmark mark='c'/>它为什么应该有效，谁在付钱？<bookmark mark='d'/>它给公司已持有的东西增加了什么？一个策略可能通过前三项，却因最后一项被拒绝。"
+  }
+ }
+}

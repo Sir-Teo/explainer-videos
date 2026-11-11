@@ -1,0 +1,77 @@
+{
+  "scope": "Separately pinned EIA public workbooks for dated descriptive price/inventory illustrations. Legacy raw hashes are not replaced or accepted. No strategy-return reconstruction, model selection or sealed data. Exact changes from historical workbooks cannot be diagnosed without the old bytes.",
+  "files": {
+    "RCLC1d.xls": {
+      "path": ".cache/quant22/public_examples/RCLC1d.xls",
+      "url": "https://www.eia.gov/dnav/pet/hist_xls/RCLC1d.xls",
+      "sha256": "fe40a6bfe9e1cc14a4349ceb64d225d5afaf7f750137e07a9f1681b42670ce8c",
+      "bytes": 494592,
+      "legacy_registered_sha256": "9cc86a1300ed8ae3f4d63d6b40940c6f8a6e27f8387510d1d9c36d455bfb6955",
+      "legacy_match": false
+    },
+    "RCLC2d.xls": {
+      "path": ".cache/quant22/public_examples/RCLC2d.xls",
+      "url": "https://www.eia.gov/dnav/pet/hist_xls/RCLC2d.xls",
+      "sha256": "d4b2510c4a40703eebcbae394517f500b22d60f23cd4595ca184792b9bc424d9",
+      "bytes": 468480,
+      "legacy_registered_sha256": "8e1fdd6527cab5aeb33b1c5c5ee80c9e89386c1f04d182a12cc0c71f6e85671a",
+      "legacy_match": false
+    },
+    "RCLC3d.xls": {
+      "path": ".cache/quant22/public_examples/RCLC3d.xls",
+      "url": "https://www.eia.gov/dnav/pet/hist_xls/RCLC3d.xls",
+      "sha256": "04af4826b989dce6c062bca5c3b707c7303d66f76f0ea01c563489aee3766e44",
+      "bytes": 496640,
+      "legacy_registered_sha256": "ee8f07db822d1b604ce5135c957946f747fc80a4695ef74a71c6d349add681fd",
+      "legacy_match": false
+    },
+    "RCLC4d.xls": {
+      "path": ".cache/quant22/public_examples/RCLC4d.xls",
+      "url": "https://www.eia.gov/dnav/pet/hist_xls/RCLC4d.xls",
+      "sha256": "8d45096d891a87237c020b64ddaad1318c06849b871213ed38463fd7ce81b3bc",
+      "bytes": 466944,
+      "legacy_registered_sha256": "d422d3dcee4316aa32f662282a9558e4143a618127e61bf3f8d026dc2646d8c6",
+      "legacy_match": false
+    },
+    "RNGC1d.xls": {
+      "path": ".cache/quant22/public_examples/RNGC1d.xls",
+      "url": "https://www.eia.gov/dnav/ng/hist_xls/RNGC1d.xls",
+      "sha256": "6a84b4c42a8364ea8e4ee9f82ccad884855bd3983280effc1299e58ca69cd391",
+      "bytes": 420864,
+      "legacy_registered_sha256": "48f6a770a92bfe98754a9f774d53bf2f16ee4def3c302503462a11c2903bdf38",
+      "legacy_match": false
+    },
+    "RNGC2d.xls": {
+      "path": ".cache/quant22/public_examples/RNGC2d.xls",
+      "url": "https://www.eia.gov/dnav/ng/hist_xls/RNGC2d.xls",
+      "sha256": "16937a6cc49c039b6c1cc1c5d171aeccefd8881a83caf0d6b08c411da7fe2256",
+      "bytes": 420864,
+      "legacy_registered_sha256": "bedc7c0064b853d983490ee0e6344ad2a4e38271c7e8373c58403e39ff0bcdb0",
+      "legacy_match": false
+    },
+    "RNGC3d.xls": {
+      "path": ".cache/quant22/public_examples/RNGC3d.xls",
+      "url": "https://www.eia.gov/dnav/ng/hist_xls/RNGC3d.xls",
+      "sha256": "94bbce4f009bb460733fa2bd7237b9e2e35bb77432325c9a6e11fe004ebbb535",
+      "bytes": 416256,
+      "legacy_registered_sha256": "071fb98d245ceb0de9feb942704cda83ac2aff63456a629ca97a20a50c5ce8f9",
+      "legacy_match": false
+    },
+    "RNGC4d.xls": {
+      "path": ".cache/quant22/public_examples/RNGC4d.xls",
+      "url": "https://www.eia.gov/dnav/ng/hist_xls/RNGC4d.xls",
+      "sha256": "d07c513467b17203f956875624e91daa5da45eda987c4ee1c2c4d58fe599224a",
+      "bytes": 415744,
+      "legacy_registered_sha256": "0a12c159b00f215e980e5f9566f9b892560780bf2eaf8976ec761e748d6949fe",
+      "legacy_match": false
+    },
+    "WCESTUS1w.xls": {
+      "path": ".cache/quant22/public_examples/WCESTUS1w.xls",
+      "url": "https://www.eia.gov/dnav/pet/hist_xls/WCESTUS1w.xls",
+      "sha256": "5489a1f004087cd553a15d309bd7cab8772ab957e8a9db45655ed1ea161bec36",
+      "bytes": 130048,
+      "legacy_registered_sha256": "824b7722ec09bd4b85837747d141f689838efedda92f545c0751f3d271b0464b",
+      "legacy_match": false
+    }
+  }
+}

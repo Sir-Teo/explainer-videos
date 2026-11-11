@@ -1,0 +1,1061 @@
+{
+ "opened": {
+  "carry_basis_part39|binance/btc_eth_funding_8h": {
+   "at": "2026-11-05",
+   "code_sha256": "25e4176d1fbcdbacdd8e2d9d8ca24e46714b2a8f63e1cd194e6ccecbc212c6ce"
+  },
+  "classic_bab_part24|factors/bab_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f"
+  },
+  "classic_cma_part24|factors/cma_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f"
+  },
+  "classic_hml_part24|factors/hml_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f"
+  },
+  "classic_mkt_part24|factors/mkt_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f"
+  },
+  "classic_qmj_part24|factors/qmj_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f"
+  },
+  "classic_rmw_part24|factors/rmw_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f"
+  },
+  "classic_smb_part24|factors/smb_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f"
+  },
+  "classic_tsmom_part24|factors/tsmom_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f"
+  },
+  "classic_umd_part24|factors/umd_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f"
+  },
+  "classic_valmom_part24|factors/valmom_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f"
+  },
+  "cp_tent_oos|gsw_bond_rx": {
+   "at": "2026-11-04",
+   "code_sha256": "142e56151dcde3d64aa6a56cd4d42db69ad1cb92889474a04b43a36710b245a2"
+  },
+  "equal_weight_part30|kenfrench/ff3_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "eff04d27a665b52287be8cc2d45313b133339999ba771baaa6663f94ec54ba06"
+  },
+  "equal_weight_part30|kenfrench/industries49": {
+   "at": "2026-11-04",
+   "code_sha256": "eff04d27a665b52287be8cc2d45313b133339999ba771baaa6663f94ec54ba06"
+  },
+  "gbm_default_holdout|edgar_default_firm_years": {
+   "at": "2026-11-04",
+   "code_sha256": "4cf5833f654419082337d4e368850cbdba25c1afa6a5154492ca2b181c12152f"
+  },
+  "gp_calm_reversal_part31|binance/usdt_daily_returns": {
+   "at": "2026-11-04",
+   "code_sha256": "2e8556194bbe999a9e65b7d3d3be845b5df4920dc1a396bb55a0e719de6a0dd2"
+  },
+  "house_ensemble_part43|factors/house_ensemble_monthly": {
+   "at": "2026-11-05",
+   "code_sha256": "40d5c3c4dd05e96da62fac259b27847ea095e28b183b0ed46a624af15ec09788"
+  },
+  "hrp_part30|kenfrench/ff3_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "75be13e7f6d0672a1b237a797d6c7d678dd21b204e961dca2eedccd5342e9949"
+  },
+  "hrp_part30|kenfrench/industries49": {
+   "at": "2026-11-04",
+   "code_sha256": "75be13e7f6d0672a1b237a797d6c7d678dd21b204e961dca2eedccd5342e9949"
+  },
+  "kmz_timer_part27|goyal/welch_goyal_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "62dd0fe0cb90dbecd392a5afd04af509bec8df820eaa920c68957aac8ea453c6"
+  },
+  "kns_sdf_part25|osap/2024.10/PredictorLSretWide": {
+   "at": "2026-11-04",
+   "code_sha256": "f42ff419e26ce64d33f010adf44a372aacf9f7436927e8f2f0108d8140dfd8cb"
+  },
+  "logit_default_holdout|edgar_default_firm_years": {
+   "at": "2026-11-04",
+   "code_sha256": "4cf5833f654419082337d4e368850cbdba25c1afa6a5154492ca2b181c12152f"
+  },
+  "lw_gmv_part30|kenfrench/ff3_monthly": {
+   "at": "2026-11-04",
+   "code_sha256": "1a438e1a8d323514d02e9a8a680cbaaa8d8546c8770f1542e7283e6e6a06f75c"
+  },
+  "lw_gmv_part30|kenfrench/industries49": {
+   "at": "2026-11-04",
+   "code_sha256": "1a438e1a8d323514d02e9a8a680cbaaa8d8546c8770f1542e7283e6e6a06f75c"
+  },
+  "mined_combination_part29|binance/usdt_daily_returns": {
+   "at": "2026-11-04",
+   "code_sha256": "e4fae7924dfb612847af1397af0f30b5b715889655e450821581026efe3f1d22"
+  },
+  "mlp_bond_premia_oos|gsw_bond_rx": {
+   "at": "2026-11-04",
+   "code_sha256": "142e56151dcde3d64aa6a56cd4d42db69ad1cb92889474a04b43a36710b245a2"
+  },
+  "nn3_coin_ls_part27|binance/usdt_weekly_panel": {
+   "at": "2026-11-04",
+   "code_sha256": "9994bd915e6af9a7bde1cc818526b2ddd731491ec8cf761e8777e5f5c711dcc9"
+  },
+  "pca_fly_2s5s10s|gsw_fly_2s5s10s": {
+   "at": "2026-11-04",
+   "code_sha256": "95ed7cc9c06448b42217acbd4a86148fc353eed7b7dc156636af733a22c08c0d"
+  },
+  "residual_sscore_part33|kenfrench/industries49_daily": {
+   "at": "2026-11-04",
+   "code_sha256": "c705c91d0b1ade2e21450c03214df4e0353f94d2a3386d6baf4c0528224b5c4e"
+  },
+  "riskparity_part32|yahoo/etf_panel_excess": {
+   "at": "2026-11-04",
+   "code_sha256": "3e155763f60eb679cec438a93f210497841e1fc0bc13d1873866693d78ebfe5b"
+  },
+  "sestm_fomc_drift_part28|fred/dgs2_fomc_5day_drift": {
+   "at": "2026-11-04",
+   "code_sha256": "9ad2cca57ae0219d9768adea318562184d10ea15ff9c73e734596e942c6ae76f"
+  },
+  "stw_best_rule_part26|kenfrench/mkt_daily": {
+   "at": "2026-11-04",
+   "code_sha256": "7ce45dfb975151cf5b2e5c46cee9bbbb8c2f74fb65cf4b3988a63d2edca3d686"
+  },
+  "stw_best_rule_part26|kenfrench/rf_daily": {
+   "at": "2026-11-04",
+   "code_sha256": "7ce45dfb975151cf5b2e5c46cee9bbbb8c2f74fb65cf4b3988a63d2edca3d686"
+  },
+  "trend_part32|yahoo/etf_panel_excess": {
+   "at": "2026-11-04",
+   "code_sha256": "e36d6a8d927c145ff9372a82cd6fb46a238ad3d587a8e110700f9058e912a054"
+  },
+  "zoo_equal_weight_part25|osap/2024.10/PredictorLSretWide": {
+   "at": "2026-11-04",
+   "code_sha256": "f42ff419e26ce64d33f010adf44a372aacf9f7436927e8f2f0108d8140dfd8cb"
+  }
+ },
+ "registered": {
+  "accounting_signals_part3": {
+   "code_sha256": "37bc4b8e880d26a4531f2a2d76b3a3464d23d0f6d06c6b7348e03e40034fc820",
+   "params": {
+    "legs": "decile 10 minus decile 1, value-weighted",
+    "signals": [
+     "AC",
+     "OP",
+     "INV",
+     "BE-ME",
+     "E-P"
+    ]
+   },
+   "trials": 5
+  },
+  "btc_hawkes_large_moves": {
+   "code_sha256": "41f672e9f092e8061003ac8b185aebea442a7e8417a81693ab2d922b39606b8e",
+   "params": {
+    "data": "BTCUSDT 1h 2018-2020",
+    "threshold": "4 x 30-day rolling sd"
+   },
+   "trials": 1
+  },
+  "btc_hedged_straddle_ml": {
+   "code_sha256": "c85be0be4249509671ed3b31edeff4c9b119570b7f7acd4319918aee9e9bd066",
+   "params": {
+    "features": [
+     "IV - HAR",
+     "IV - RV30",
+     "RR25",
+     "7d - 60d"
+    ],
+    "models": [
+     "ridge",
+     "depth-2 boosting"
+    ],
+    "target": "4-week hourly-hedged ATM straddle P&L",
+    "walk_forward": "past only, 4-week gap"
+   },
+   "trials": 1
+  },
+  "btc_mean_confseq": {
+   "code_sha256": "927ebe04878af39c9ff04516be894eedf10a5cd14dcf6430931fbcaa1d4970af",
+   "params": {
+    "data": "Binance BTCUSDT 1d",
+    "start": 2018
+   },
+   "trials": 1
+  },
+  "btc_mean_confseq_bounded_v2": {
+   "code_sha256": "137f93939eb39e8e15bc517e86e500ac8107735acb5a306ec6419f8e4b64c6a3",
+   "params": {
+    "alpha": 0.05,
+    "clipped_log_return_bounds": [
+     -0.2,
+     0.2
+    ],
+    "correction": "bounded bets and continuous-mean brackets",
+    "data": "Binance BTCUSDT 1d",
+    "grid": [
+     0.3,
+     0.7,
+     401
+    ],
+    "start": 2018,
+    "through": 20201231
+   },
+   "trials": 1
+  },
+  "btc_nsde_generator": {
+   "code_sha256": "9e4f5af75c181a3fc64ce5c3870a970e1eaad5c1ea53ab25ecd289332fd85acc",
+   "params": {
+    "data": "BTCUSDT daily 2018-2019, hold-out 2020",
+    "seeds": 3
+   },
+   "trials": 1
+  },
+  "btc_rough_hurst": {
+   "code_sha256": "768da08240c985d166f6b590bad37c841c6499cbaa008001af260a2332128572",
+   "params": {
+    "data": "BTCUSDT 1m 2019-2020",
+    "rv": "5-minute, daily"
+   },
+   "trials": 1
+  },
+  "btc_vol_forecast_edge": {
+   "code_sha256": "76085f797e10c8b93a8232d20cb07ed4fe28a127a2fcf422e52e634087b82637",
+   "params": {
+    "signal": "DVOL > HAR forecast of 30-day realized vol",
+    "trade": "Part 10's sold, hourly-hedged 30-day ATM call"
+   },
+   "trials": 1
+  },
+  "btc_vol_harnet_2020": {
+   "code_sha256": "e00ab426d8b06734d3361fef0878b1c29a0939ce8588f4d9da8847f07562dbc4",
+   "params": {
+    "model": "HARNet-style",
+    "seeds": 5,
+    "test": "2020"
+   },
+   "trials": 1
+  },
+  "btc_vol_race_2020": {
+   "code_sha256": "65f92e9e3373bf11e34c829a3795f53d35ff8f0054523632f3ae48e053698a56",
+   "params": {
+    "models": [
+     "EWMA",
+     "GARCH",
+     "GJR",
+     "HAR",
+     "HARQ",
+     "log-HAR",
+     "LSTM",
+     "Transformer"
+    ],
+    "note": "log-HAR added after the first results; counted",
+    "seeds": 5,
+    "test": "2020"
+   },
+   "trials": 8
+  },
+  "btc_vol_toy_tsfm_2020": {
+   "code_sha256": "65cd06ca20a52a7a14b6ce05ef7b01121f48c674bca4f12a51c7a96c894a67dc",
+   "params": {
+    "model": "toy Chronos-style TSFM",
+    "seeds": 3,
+    "test": "2020"
+   },
+   "trials": 1
+  },
+  "btc_vol_toy_tsfm_np_2020": {
+   "code_sha256": "564b27536bfc80afa2b49e98c5efc3229b2622e8e70734870668e4c76548dd37",
+   "params": {
+    "model": "toy Chronos-style TSFM, numpy MLP",
+    "seeds": 3,
+    "test": "2020"
+   },
+   "trials": 1
+  },
+  "cape_forecast_2021_2030": {
+   "code_sha256": "a5b36ee43c347f92565b55014118cbdaee0c27f95ef91ca15f3d9898a73461da",
+   "params": {
+    "cape_dec_2020": 33.7655914181171,
+    "forecast_real_annual": 0.006101638373512797,
+    "model": "10y real total return on log CAPE, OLS on 1881-2010 monthly starts"
+   },
+   "trials": 1
+  },
+  "capm_two_pass": {
+   "code_sha256": "b3e04c79c1386e81fc380fab210f48ce122f58fa0206242d50e69ea6a1102e75",
+   "params": {
+    "from": 196307,
+    "portfolios": "49 industries + 10 B/M deciles"
+   },
+   "trials": 1
+  },
+  "capm_two_pass_inference_v2": {
+   "code_sha256": "8ec07d2b939648e8f0b9dca05db90d1d05d824dda112a716710098f77f422e7a",
+   "params": {
+    "correction": "Shanken factor component and GRS divisor-T covariances",
+    "legacy": "capm_two_pass",
+    "window": "196307-202012"
+   },
+   "trials": 1
+  },
+  "carry_basis_part39": {
+   "code_sha256": "25e4176d1fbcdbacdd8e2d9d8ca24e46714b2a8f63e1cd194e6ccecbc212c6ce",
+   "params": {
+    "asset": "ETH",
+    "cost": 0.0015,
+    "data": "Binance spot and USD-M perpetual hourly closes; eight-hourly funding",
+    "margin": 0.3333333333333333,
+    "rule": "always"
+   },
+   "trials": 9
+  },
+  "cir_mle_dtb3": {
+   "code_sha256": "d4d95ce27447a96835d22f7f05301de19bf77bcc49c184ee95b7ce520e128046",
+   "params": {
+    "data": "FRED DTB3 monthly 1954-2020",
+    "starts": 5
+   },
+   "trials": 1
+  },
+  "classic_bab_part24": {
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f",
+   "params": {
+    "cost_per_year": 0.015,
+    "definition": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here",
+    "factor": "BAB",
+    "holdout": "2021-01 to 2025-12",
+    "research": "first month available to 2020-12"
+   },
+   "trials": 1
+  },
+  "classic_cma_part24": {
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f",
+   "params": {
+    "cost_per_year": 0.01,
+    "definition": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here",
+    "factor": "CMA",
+    "holdout": "2021-01 to 2025-12",
+    "research": "first month available to 2020-12"
+   },
+   "trials": 1
+  },
+  "classic_hml_part24": {
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f",
+   "params": {
+    "cost_per_year": 0.01,
+    "definition": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here",
+    "factor": "HML",
+    "holdout": "2021-01 to 2025-12",
+    "research": "first month available to 2020-12"
+   },
+   "trials": 1
+  },
+  "classic_mkt_part24": {
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f",
+   "params": {
+    "cost_per_year": 0.0005,
+    "definition": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here",
+    "factor": "MKT",
+    "holdout": "2021-01 to 2025-12",
+    "research": "first month available to 2020-12"
+   },
+   "trials": 1
+  },
+  "classic_qmj_part24": {
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f",
+   "params": {
+    "cost_per_year": 0.01,
+    "definition": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here",
+    "factor": "QMJ",
+    "holdout": "2021-01 to 2025-12",
+    "research": "first month available to 2020-12"
+   },
+   "trials": 1
+  },
+  "classic_rmw_part24": {
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f",
+   "params": {
+    "cost_per_year": 0.01,
+    "definition": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here",
+    "factor": "RMW",
+    "holdout": "2021-01 to 2025-12",
+    "research": "first month available to 2020-12"
+   },
+   "trials": 1
+  },
+  "classic_smb_part24": {
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f",
+   "params": {
+    "cost_per_year": 0.01,
+    "definition": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here",
+    "factor": "SMB",
+    "holdout": "2021-01 to 2025-12",
+    "research": "first month available to 2020-12"
+   },
+   "trials": 1
+  },
+  "classic_tsmom_part24": {
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f",
+   "params": {
+    "cost_per_year": 0.01,
+    "definition": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here",
+    "factor": "TSMOM",
+    "holdout": "2021-01 to 2025-12",
+    "research": "first month available to 2020-12"
+   },
+   "trials": 1
+  },
+  "classic_umd_part24": {
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f",
+   "params": {
+    "cost_per_year": 0.03,
+    "definition": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here",
+    "factor": "UMD",
+    "holdout": "2021-01 to 2025-12",
+    "research": "first month available to 2020-12"
+   },
+   "trials": 1
+  },
+  "classic_valmom_part24": {
+   "code_sha256": "e5081aae6af71af66d6ad53d0630fbb0c821aa403c65286aaa8b2567c4acbc4f",
+   "params": {
+    "cost_per_year": 0.015,
+    "definition": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here",
+    "factor": "VALMOM",
+    "holdout": "2021-01 to 2025-12",
+    "research": "first month available to 2020-12"
+   },
+   "trials": 1
+  },
+  "cp_tent_oos": {
+   "code_sha256": "142e56151dcde3d64aa6a56cd4d42db69ad1cb92889474a04b43a36710b245a2",
+   "params": {
+    "fit": "1964-2003 monthly",
+    "holdout": "2021-2025 (sealed)",
+    "models": [
+     "CP tent: OLS on y1 and four forwards",
+     "MLP 5-16-1 on the same five inputs, 3 seeds averaged, early stopping on 1994-2003"
+    ],
+    "target": "average 1-year excess log return of 2-5 year zeros (GSW)",
+    "validation": "2004-2020"
+   },
+   "trials": 1
+  },
+  "earnings_forecaster_part3": {
+   "code_sha256": "8e0f715897615195393249e8317e4f1fba534649025575a5b6589bd6cfc1841b",
+   "params": {
+    "data": "simulated panel",
+    "models": [
+     "random walk",
+     "OLS",
+     "ridge on splines",
+     "MLP"
+    ]
+   },
+   "trials": 8
+  },
+  "equal_weight_part30": {
+   "code_sha256": "eff04d27a665b52287be8cc2d45313b133339999ba771baaa6663f94ec54ba06",
+   "params": {
+    "rebalance": "monthly",
+    "rule": "1/N",
+    "universe": "French 49 industries, value-weighted",
+    "window_months": 120
+   },
+   "trials": 1
+  },
+  "fomc_announcement_days": {
+   "code_sha256": "2a997e8d7655ea9f1db30f6a411a47023705a64da71c185da3c04602d55e13f3",
+   "params": {
+    "days": "scheduled FOMC decisions 1994-2020"
+   },
+   "trials": 1
+  },
+  "gbm_default_holdout": {
+   "code_sha256": "4cf5833f654419082337d4e368850cbdba25c1afa6a5154492ca2b181c12152f",
+   "params": {
+    "features": [
+     "WC/TA",
+     "RE/TA",
+     "EBIT/TA",
+     "ME/TL",
+     "S/TA",
+     "NI/TA",
+     "TL/TA",
+     "Cash/TA",
+     "CFO/TA",
+     "log TA",
+     "log ME",
+     "Int/TA"
+    ],
+    "fit": "fiscal years 2010-2016",
+    "holdout": "2021-2023 (sealed)",
+    "models": [
+     "logit, ridge 1e-3",
+     "boosted trees: depth 3, lr 0.05, min leaf 30, 0.8 rows, early stopping on validation log loss, max 600 trees"
+    ],
+    "prep": "winsorise 1/99% on the fit years, median-impute, standardise",
+    "target": "a bankruptcy filing (8-K Item 1.03) 3-15 months after the fiscal year end",
+    "validation": "2017-2020"
+   },
+   "trials": 1
+  },
+  "gp_calm_reversal_part31": {
+   "code_sha256": "2e8556194bbe999a9e65b7d3d3be845b5df4920dc1a396bb55a0e719de6a0dd2",
+   "params": {
+    "cost": "quadratic (lambda/2) sigma^2 dx^2 inside the P&L",
+    "parameters": "phi and coefficients fixed on 2018-2020",
+    "rule": "Garleanu-Pedersen aim portfolio, gamma 1, lambda 8, rho 0.0005",
+    "signals": "calm (-20d vol) and 3-day reversal, standardised"
+   },
+   "trials": 10
+  },
+  "house_ensemble_part43": {
+   "code_sha256": "40d5c3c4dd05e96da62fac259b27847ea095e28b183b0ed46a624af15ec09788",
+   "params": {
+    "definition": "equal risk across Part 24's ten classic factors (MKT, SMB, HML, UMD, RMW, CMA, BAB, QMJ, TSMOM, VALMOM): weights proportional to 1 / each factor's 2011-2020 monthly volatility, summing to one, fixed for the hold-out; costs: the weighted sum of Part 24's cost model",
+    "holdout": "2021-01 to 2025-12",
+    "research": "1993-01 to 2020-12 (all ten available)"
+   },
+   "trials": 1
+  },
+  "hrp_part30": {
+   "code_sha256": "75be13e7f6d0672a1b237a797d6c7d678dd21b204e961dca2eedccd5342e9949",
+   "params": {
+    "rebalance": "monthly",
+    "rule": "HRP",
+    "universe": "French 49 industries, value-weighted",
+    "window_months": 120
+   },
+   "trials": 22
+  },
+  "industry_capm_alphas": {
+   "code_sha256": "54f561ad6d5881bce05e5be15386f78d40065cddafb61214ab959da2ba4fe2fa",
+   "params": {
+    "n": 49
+   },
+   "trials": 49
+  },
+  "industry_momentum_panel": {
+   "code_sha256": "c3d5e418ce5790f114b1ea5c0b107f787b6a491fc9f27501ddd177a8dd0ab97e",
+   "params": {
+    "signal": "12-2 month industry return"
+   },
+   "trials": 1
+  },
+  "kelly_us_split": {
+   "code_sha256": "d93dd0374429b90255b88da13a77a6a4de7c900dc37336d2157cd1c55b573f35",
+   "params": {
+    "apply": "1973-2020",
+    "choose": "1926-1972",
+    "grid": "0..5 step 0.02"
+   },
+   "trials": 1
+  },
+  "kmz_timer_part27": {
+   "code_sha256": "62dd0fe0cb90dbecd392a5afd04af509bec8df820eaa920c68957aac8ea453c6",
+   "params": {
+    "P": 12000,
+    "T": 12,
+    "gamma": 2.0,
+    "scale": "10% a year in research",
+    "seeds": 10,
+    "z": 0.1
+   },
+   "trials": 84
+  },
+  "kns_sdf_part25": {
+   "code_sha256": "f42ff419e26ce64d33f010adf44a372aacf9f7436927e8f2f0108d8140dfd8cb",
+   "params": {
+    "cost_per_year": 0.02,
+    "fit": "1973-01 to 2020-12",
+    "folds": 3,
+    "kappa_grid": 20,
+    "scale": "10% a year in sample",
+    "universe": "OSAP 2024.10 predictors complete 1973-2023 (154)"
+   },
+   "trials": 20
+  },
+  "logit_default_holdout": {
+   "code_sha256": "4cf5833f654419082337d4e368850cbdba25c1afa6a5154492ca2b181c12152f",
+   "params": {
+    "features": [
+     "WC/TA",
+     "RE/TA",
+     "EBIT/TA",
+     "ME/TL",
+     "S/TA",
+     "NI/TA",
+     "TL/TA",
+     "Cash/TA",
+     "CFO/TA",
+     "log TA",
+     "log ME",
+     "Int/TA"
+    ],
+    "fit": "fiscal years 2010-2016",
+    "holdout": "2021-2023 (sealed)",
+    "models": [
+     "logit, ridge 1e-3",
+     "boosted trees: depth 3, lr 0.05, min leaf 30, 0.8 rows, early stopping on validation log loss, max 600 trees"
+    ],
+    "prep": "winsorise 1/99% on the fit years, median-impute, standardise",
+    "target": "a bankruptcy filing (8-K Item 1.03) 3-15 months after the fiscal year end",
+    "validation": "2017-2020"
+   },
+   "trials": 1
+  },
+  "lookahead_rotation_toy": {
+   "code_sha256": "f90dd6357b46150ff1ed2478fbaba16f6aee074b9620c199ceb4b44402688d55",
+   "params": {
+    "rule": "4-week size-decile rotation"
+   },
+   "trials": 1
+  },
+  "lw_gmv_part30": {
+   "code_sha256": "1a438e1a8d323514d02e9a8a680cbaaa8d8546c8770f1542e7283e6e6a06f75c",
+   "params": {
+    "rebalance": "monthly",
+    "rule": "LW const-corr GMV",
+    "universe": "French 49 industries, value-weighted",
+    "window_months": 120
+   },
+   "trials": 22
+  },
+  "mined_combination_part29": {
+   "code_sha256": "e4fae7924dfb612847af1397af0f30b5b715889655e450821581026efe3f1d22",
+   "params": {
+    "alphas": "the 5 best random formulas by 2018-19 IC, de-duplicated",
+    "cost_bp": 10.0,
+    "universe": "Binance USDT coins, 60 days listed, median volume >= 250000",
+    "weights": "mean-variance on 2018-2020 daily long-short returns"
+   },
+   "trials": 13010
+  },
+  "mlp_bond_premia_oos": {
+   "code_sha256": "142e56151dcde3d64aa6a56cd4d42db69ad1cb92889474a04b43a36710b245a2",
+   "params": {
+    "fit": "1964-2003 monthly",
+    "holdout": "2021-2025 (sealed)",
+    "models": [
+     "CP tent: OLS on y1 and four forwards",
+     "MLP 5-16-1 on the same five inputs, 3 seeds averaged, early stopping on 1994-2003"
+    ],
+    "target": "average 1-year excess log return of 2-5 year zeros (GSW)",
+    "validation": "2004-2020"
+   },
+   "trials": 1
+  },
+  "myopic_loss_aversion_us": {
+   "code_sha256": "8c7dbb0143cf626417368403ae58182560c95c5a207a307002e6f39eb3374bc5",
+   "params": {
+    "cpt": "TK 1992",
+    "data": "French monthly 1926-2020",
+    "horizons": "1..36"
+   },
+   "trials": 1
+  },
+  "nn3_coin_ls_part27": {
+   "code_sha256": "9994bd915e6af9a7bde1cc818526b2ddd731491ec8cf761e8777e5f5c711dcc9",
+   "params": {
+    "model": "NN3 (32-16-8), 5 seeds",
+    "portfolio": "quintile long-short, weekly, weighted by 28-day median dollar volume",
+    "train": "2018-01..2020-06",
+    "universe": "median volume >= 250000.0",
+    "validate": "2020-07..2020-12"
+   },
+   "trials": 25
+  },
+  "osap_predictors_part3": {
+   "code_sha256": "a6f753f0a7b179ac75a6d27fe4b7bfa0ae94cb95f6757516d067174658f3f8d6",
+   "params": {
+    "predictors": 208,
+    "release": "2024.10",
+    "window": "to 2020-12"
+   },
+   "trials": 208
+  },
+  "pca_fly_2s5s10s": {
+   "code_sha256": "95ed7cc9c06448b42217acbd4a86148fc353eed7b7dc156636af733a22c08c0d",
+   "params": {
+    "cost_bp": 0.5,
+    "enter": "|z| > 1, against the sign",
+    "exit": "z crosses 0",
+    "legs": [
+     2,
+     5,
+     10
+    ],
+    "signal": "z = (fly - 250-day mean) / 250-day sd",
+    "unit": "fly in bp of yield, belly DV01 = 1",
+    "weights_fit": "PCA of daily GSW changes 1990-2020, level and slope neutral"
+   },
+   "trials": 1
+  },
+  "residual_sscore_part33": {
+   "code_sha256": "c705c91d0b1ade2e21450c03214df4e0353f94d2a3386d6baf4c0528224b5c4e",
+   "params": {
+    "bands": "the research chapter's optimal band at each residual's cost and s_eq; exit at the mean",
+    "cost": "5 bp per dollar",
+    "factors": "5 correlation-PCA eigenportfolios, trailing 252 days, refit every 21",
+    "universe": "Ken French 49 industries, daily",
+    "window": 60
+   },
+   "trials": 9
+  },
+  "riskparity_part32": {
+   "code_sha256": "3e155763f60eb679cec438a93f210497841e1fc0bc13d1873866693d78ebfe5b",
+   "params": {
+    "rebalance": "monthly",
+    "rule": "inverse vol within class, equal risk across, levered to 10% on a 252-day covariance, cap 4x",
+    "universe": "SPY, EFA, EEM, TLT, IEF, TIP, LQD, HYG, GLD, DBC"
+   },
+   "trials": 2
+  },
+  "sestm_fomc_drift_part28": {
+   "code_sha256": "9ad2cca57ae0219d9768adea318562184d10ea15ff9c73e734596e942c6ae76f",
+   "params": {
+    "alpha": 0.2,
+    "duration": 1.9,
+    "kappa": 10,
+    "trade": "after the statement-day close, short the 2-year note when the score is above 1/2 (yields expected to keep rising), long below; hold five trading days",
+    "train": "statements 1997-2020, statement-day 2-year change as the label"
+   },
+   "trials": 13
+  },
+  "shiller_oos_predictors": {
+   "code_sha256": "eebb73156ed3044b21e2346f15abad4dbb460c09a11ab8f464d699174c6aa92a",
+   "params": {
+    "oos_from": 1927,
+    "predictors": 5
+   },
+   "trials": 5
+  },
+  "sign_continuation_eprocess_btc": {
+   "code_sha256": "f9e32ccc54238d237c86c27c842bb2aa7af4c44cb6d17729c4351f9d9027cd76",
+   "params": {
+    "data": "Binance BTCUSDT 1d",
+    "start": 2018
+   },
+   "trials": 1
+  },
+  "sign_continuation_eprocess_us": {
+   "code_sha256": "f9e32ccc54238d237c86c27c842bb2aa7af4c44cb6d17729c4351f9d9027cd76",
+   "params": {
+    "data": "Ken French daily market",
+    "starts": [
+     1926,
+     1975,
+     2000
+    ]
+   },
+   "trials": 3
+  },
+  "sign_continuation_ons": {
+   "code_sha256": "41ae0da19b797a056e8d6e9f3a530c62b90e6963b012b3b7e4f0518ec53e2c97",
+   "params": {
+    "data": "Ken French daily market; Binance BTCUSDT 1d",
+    "starts": [
+     1926,
+     1975,
+     2000,
+     2018
+    ]
+   },
+   "trials": 4
+  },
+  "stw_best_rule_part26": {
+   "code_sha256": "7ce45dfb975151cf5b2e5c46cee9bbbb8c2f74fb65cf4b3988a63d2edca3d686",
+   "params": {
+    "returns": "position at close t times the next day's market excess return",
+    "rule": {
+     "band": 0.0,
+     "delay": 0,
+     "family": "ma",
+     "fast": 1,
+     "hold": 0,
+     "slow": 5
+    },
+    "selected_on": "1926-07..1986-12, max Sharpe of 10,000 rules"
+   },
+   "trials": 10000
+  },
+  "trend_part32": {
+   "code_sha256": "e36d6a8d927c145ff9372a82cd6fb46a238ad3d587a8e110700f9058e912a054",
+   "params": {
+    "rebalance": "monthly",
+    "signal": "sign of the 252-day excess return",
+    "sizing": "40%/ex-ante EWMA vol (com 60) per asset, book scaled to 10%",
+    "universe": "23 ETFs, five classes"
+   },
+   "trials": 6
+  },
+  "turn_of_month_event": {
+   "code_sha256": "e16540a4048fd28a988617f1d372c42952b84061aec9406cbfb22881aeff568d",
+   "params": {
+    "window": "[-1, +3]"
+   },
+   "trials": 1
+  },
+  "vol_target_us_market": {
+   "code_sha256": "24cb7dea89da9df3b070f0a6653721eb3a5e1327bc2d366ffc2c81a9627872de",
+   "params": {
+    "data": "French daily 1926-2020",
+    "rebalance": "monthly",
+    "window": "previous month"
+   },
+   "trials": 1
+  },
+  "zoo_equal_weight_part25": {
+   "code_sha256": "f42ff419e26ce64d33f010adf44a372aacf9f7436927e8f2f0108d8140dfd8cb",
+   "params": {
+    "cost_per_year": 0.02,
+    "fit": "1973-01 to 2020-12",
+    "folds": 3,
+    "kappa_grid": 20,
+    "scale": "10% a year in sample",
+    "universe": "OSAP 2024.10 predictors complete 1973-2023 (154)",
+    "weights": "equal"
+   },
+   "trials": 1
+  }
+ },
+ "sealed": {
+  "binance/BTCUSDT/1d": {
+   "digest": "7bdad00d93ed73da631de456141d06f5ae44061c4bd30b0002c07d00d5c10ef4",
+   "first": 20210101,
+   "last": 20251231,
+   "n": 1826
+  },
+  "binance/btc_eth_funding_8h": {
+   "digest": "646e4b44c7f5a9f98c9186ef23fae7a7f2efc9d7982bd42cc03c528f8d5d4c90",
+   "first": 20210101,
+   "last": 20251231,
+   "n": 5478
+  },
+  "binance/usdt_daily_returns": {
+   "digest": "9ce51448677a656c7e7d670e6f6a9294a01c38e3e828be43b5d32275772db8eb",
+   "first": 20210101,
+   "last": 20251231,
+   "n": 1826
+  },
+  "binance/usdt_weekly_panel": {
+   "digest": "3c764ae2322071dba703387e871553cc75db2d07756b416761421c9958bb9ae1",
+   "first": 20210103,
+   "last": 20251228,
+   "n": 261
+  },
+  "edgar_default_firm_years": {
+   "digest": "59add85e1551ed1064262b875c4acd64145c292ee5195b9f53bcf61945b816f8",
+   "first": 20211231,
+   "last": 20231231,
+   "n": 11946
+  },
+  "factors/bab_monthly": {
+   "digest": "8be429a03d831ae95a1c8d47c77199d3521bdfb2ba1144c631b9b7d7fa5a5190",
+   "first": 20210128,
+   "last": 20251228,
+   "n": 60
+  },
+  "factors/cma_monthly": {
+   "digest": "6d31ddbb615a71e9240591b9b9fafb4e3d4393a66d6c837eb7eb2dc7d95eb3ad",
+   "first": 20210128,
+   "last": 20251228,
+   "n": 60
+  },
+  "factors/hml_monthly": {
+   "digest": "1afd38fa880769196999dbe504a0b326971abee0341d89deaaa8eaed886b1357",
+   "first": 20210128,
+   "last": 20251228,
+   "n": 60
+  },
+  "factors/house_ensemble_monthly": {
+   "digest": "f1ca72a738c6fbcbd356bee12f16991766723f414f810cbd19dd3afb4c494024",
+   "first": 20210128,
+   "last": 20251228,
+   "n": 60
+  },
+  "factors/mkt_monthly": {
+   "digest": "48d6d5acdce829ca3a3d8bad155e928fd392696e606297d4aa2d2f75ab6ff069",
+   "first": 20210128,
+   "last": 20251228,
+   "n": 60
+  },
+  "factors/qmj_monthly": {
+   "digest": "d9cc54c6a2243bc0a74b3ec510edf8e08ddf7b7661f33418666d822d5f53ba5b",
+   "first": 20210128,
+   "last": 20251228,
+   "n": 60
+  },
+  "factors/rmw_monthly": {
+   "digest": "ce941909912c573a9d6eafad660d5b9cd2e2b5170f03c0d64047dc30c599d6fb",
+   "first": 20210128,
+   "last": 20251228,
+   "n": 60
+  },
+  "factors/smb_monthly": {
+   "digest": "e45a1ba59a575d62faf0b2054307ae775751a5819c45b31e2a414357ccbe45b3",
+   "first": 20210128,
+   "last": 20251228,
+   "n": 60
+  },
+  "factors/tsmom_monthly": {
+   "digest": "99e890d8b682a1b96ec637c662385948ecc2f03f1283ff9706df4ac21a411395",
+   "first": 20210128,
+   "last": 20251228,
+   "n": 60
+  },
+  "factors/umd_monthly": {
+   "digest": "61480dae10e8127d531ccdddc80bb3757823b376eb27ab3e81dc0179b5f23f16",
+   "first": 20210128,
+   "last": 20251228,
+   "n": 60
+  },
+  "factors/valmom_monthly": {
+   "digest": "f730225cdecd38bd3a089c807d47d7bd763ca782edbf0b42d170427770d8c1c3",
+   "first": 20210128,
+   "last": 20251228,
+   "n": 60
+  },
+  "fred/A794RX0Q048SBEA": {
+   "digest": "42c3210adf01003ab30a8891d05baf17f39843a97eb3249c1666d3f9258ff9d9",
+   "first": 20210101,
+   "last": 20251001,
+   "n": 20
+  },
+  "fred/NIKKEI225": {
+   "digest": "c0a23dc5886ec88b03c6370ad37c59001e56b6afd3e5eb7b5af29418110016d3",
+   "first": 20210104,
+   "last": 20251230,
+   "n": 1223
+  },
+  "fred/dgs2_fomc_5day_drift": {
+   "digest": "8db7d1622108cd3a224e4b5b7366fce37b67e4da7dacb552a6cf7cd55c3ca36c",
+   "first": 20210127,
+   "last": 20251210,
+   "n": 41
+  },
+  "goyal/welch_goyal_monthly": {
+   "digest": "c0ae5e26eeffd739c3ecd3206e3478a7c2b1a6517856f6f307c075e0337d80bf",
+   "first": 20210101,
+   "last": 20251201,
+   "n": 60
+  },
+  "gsw_bond_rx": {
+   "digest": "b535ebb069c1d88831b14f92b6eb1d9284677888c362a2720262d9abe06a1287",
+   "first": 20210129,
+   "last": 20241231,
+   "n": 48
+  },
+  "gsw_fly_2s5s10s": {
+   "digest": "fc42da8e4297ecfb859894b041b5578123b7c4ccbe8a340441e595a7d803e174",
+   "first": 20210104,
+   "last": 20251231,
+   "n": 1249
+  },
+  "kenfrench/ff3_monthly": {
+   "digest": "672b35bffc04356cf19872a44af7679e6970c6eac06820a8e88ccb7797527827",
+   "first": 20210101,
+   "last": 20251201,
+   "n": 60
+  },
+  "kenfrench/industries49": {
+   "digest": "a62cbeb2d233d1e5513666cdce917c7840d4693376b99077be4f05712eb584ea",
+   "first": 20210101,
+   "last": 20251201,
+   "n": 60
+  },
+  "kenfrench/industries49_daily": {
+   "digest": "748aca451e6daeeef83c5a03b847ef96694f1315f4bc386af91f043a5cc9f47c",
+   "first": 20210104,
+   "last": 20251231,
+   "n": 1255
+  },
+  "kenfrench/mkt_daily": {
+   "digest": "2919993e28205ab6abb35b6874c8e0ec94d0566ce25e0ca7991657c7d14ee194",
+   "first": 20210104,
+   "last": 20251231,
+   "n": 1255
+  },
+  "kenfrench/rf_daily": {
+   "digest": "3568e3569b474786129c61978424ab6edbc1657319be85e1ad5016b1ad8366d6",
+   "first": 20210104,
+   "last": 20251231,
+   "n": 1255
+  },
+  "kenfrench/size_deciles_daily": {
+   "digest": "5587b0e1c5ff72a8a2cb9ca2cbc3d667fc5de19c9269b0ccbd55c36c2d4e9009",
+   "first": 20210104,
+   "last": 20251231,
+   "n": 1255
+  },
+  "kenfrench/sorts_AC": {
+   "digest": "9486ce6c7b647be94070fef0b578a84361384a817b4a2fc6da18c49532db8dc8",
+   "first": 20210101,
+   "last": 20251201,
+   "n": 60
+  },
+  "kenfrench/sorts_BE-ME": {
+   "digest": "0dfaa59351b4d769a1fc6aac5401f2c11b855f9b9235af710bb0da8fb622a2ff",
+   "first": 20210101,
+   "last": 20251201,
+   "n": 60
+  },
+  "kenfrench/sorts_E-P": {
+   "digest": "3771bceba88a6608c2519915b32bce80ed07d539a91e32a6ecfe272fd29f34aa",
+   "first": 20210101,
+   "last": 20251201,
+   "n": 60
+  },
+  "kenfrench/sorts_INV": {
+   "digest": "0c6ec4472c8453a54e130e495d0df3fb0d489f343819192c749cc15600cc9e9a",
+   "first": 20210101,
+   "last": 20251201,
+   "n": 60
+  },
+  "kenfrench/sorts_NI": {
+   "digest": "1f4e082e52f6f362d58cee290605dd2d21d69ddcdc82683f687449612eedd97e",
+   "first": 20210101,
+   "last": 20231201,
+   "n": 36
+  },
+  "kenfrench/sorts_OP": {
+   "digest": "f18cae74d2314c17881787ff23ecdc94cdc91fd18773535eca400c44730a85b2",
+   "first": 20210101,
+   "last": 20251201,
+   "n": 60
+  },
+  "osap/2024.10/PredictorLSretWide": {
+   "digest": "597af62ffb28d98baa65b01063b9c976ac82b3bc6254426b5936a5480ae82c2e",
+   "first": 20210101,
+   "last": 20231201,
+   "n": 36
+  },
+  "shiller/div_monthly": {
+   "digest": "79b54c36e8e4bcb85a955e2d7b96ac16963b33f1db456d3c869cdf04850a2461",
+   "first": 20210101,
+   "last": 20230601,
+   "n": 30
+  },
+  "shiller/price_monthly": {
+   "digest": "88ecc67db5589ae98918210bd68d4fdfebf441f43c0fe65fef2c5a43b635b533",
+   "first": 20210101,
+   "last": 20230901,
+   "n": 33
+  },
+  "yahoo/etf_panel_excess": {
+   "digest": "60edcf005c336e22e5f1ce682d5e8d9162589f5bf5e77b60780d060496f4df84",
+   "first": 20210104,
+   "last": 20251128,
+   "n": 1233
+  }
+ }
+}

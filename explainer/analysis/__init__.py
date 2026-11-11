@@ -310,6 +310,9 @@ def chapter_card(number, title: str, question: str = "", lit=(), part: int | Non
 # ---------------------------------------------------------------------------
 # The counterexample museum
 # ---------------------------------------------------------------------------
+_NO_LINE_START = set("，。、；：？！）》」』”’")  # Chinese punctuation a line may not begin with
+
+
 def _tex_words(text: str):
     r"""Split a Tex string into (separator, word) pairs at the spaces (plain or ``\ ``) that lie outside math and
     braces, so a line can be broken there without breaking the TeX."""
@@ -339,12 +342,38 @@ def _tex_words(text: str):
         elif "\u4e00" <= ch <= "\u9fff" and depth == 0 and not math:  # Chinese: a break may follow any character
             out.append((sep, cur + ch))
             cur, sep = "", ""
+        elif ch in _NO_LINE_START and not cur and out and depth == 0 and not math:
+            out[-1] = (out[-1][0], out[-1][1] + ch)  # closing punctuation never starts a line: keep it with the last
         else:
             cur += ch
         i += 1
     if cur:
         out.append((sep, cur))
     return out
+
+
+def _plain_wrap_lines(words, max_width, measure):
+    """Greedy wrapping of plain text using monotone prefix widths.
+
+    Each line takes its longest fitting prefix, just as the linear scan does.
+    A single oversized word is retained for the caller's existing scaling rule.
+    TeX commands and math must use the linear path: their widths need not be monotone.
+    """
+    lines, start = [], 0
+    while start < len(words):
+        def prefix(end):
+            return words[start][1] + "".join(sep + word for sep, word in words[start + 1:end])
+
+        low, high = start + 1, len(words)
+        while low < high:
+            mid = (low + high + 1) // 2
+            if measure(prefix(mid)) <= max_width:
+                low = mid
+            else:
+                high = mid - 1
+        lines.append(prefix(low))
+        start = low
+    return lines
 
 
 def wrapped_label(text: str, max_width: float, font_size=22, color=WHITE) -> Tex:
@@ -360,7 +389,12 @@ def wrapped_label(text: str, max_width: float, font_size=22, color=WHITE) -> Tex
     if t.width <= max_width:
         return t
     words = _tex_words(text)
-    lines = _wrapped_lines(words, max_width, lambda s: label(s, font_size=font_size).width)
+    plain_cjk = any("\u4e00" <= ch <= "\u9fff" for ch in text) and not any(
+        ch in text for ch in "\\${}%_&#~^")
+    if plain_cjk:
+        lines = _plain_wrap_lines(words, max_width, lambda trial: label(trial, font_size=font_size).width)
+    else:
+        lines = _wrapped_lines(words, max_width, lambda s: label(s, font_size=font_size).width)
     if len(lines) == 1:
         t.width = max_width
         return t

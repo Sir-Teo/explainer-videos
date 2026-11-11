@@ -31,6 +31,16 @@ VOICE = os.environ.get("EXPLAINER_VOICE", "af_heart")
 SPEED = float(os.environ.get("EXPLAINER_SPEED", "1.0"))
 BACKEND = os.environ.get("EXPLAINER_TTS", "kokoro")
 _CACHE_VERSION = 2
+# Kokoro reads Mandarin with its v1.1-zh weights and voices (zf_001 ... zm_100): a CPU stand-in for the production
+# voice. It returns no timestamps for Chinese, so each sentence is synthesized on its own and its characters are
+# spread over the sentence's voiced span (bookmarks land within a sentence, close to the word).
+KOKORO_ZH_REPO = "hexgrad/Kokoro-82M-v1.1-zh"
+VOICE_ZH = os.environ.get("EXPLAINER_VOICE_ZH", "zf_001")
+
+
+def _voice() -> str:
+    """The voice for the narration language: the Kokoro Mandarin voice for Chinese, else EXPLAINER_VOICE."""
+    return VOICE_ZH if BACKEND == "kokoro" and lang.LANG == "zh" else VOICE
 
 # ---------------------------------------------------------------------------
 # Pronunciation lexicon.  Maps display text -> text the TTS engine should read.
@@ -52,6 +62,17 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bMartínez-Zoroa\b", "[Martínez](/mɑɹtˈinɛz/) [Zoroa](/zəɹˈOə/)"),
     (r"\bAlpöge\b", "[Alpöge](/ˈɑlpəɡə/)"),
     (r"\bGELU\b", "[GELU](/ʤˈilu/)"),
+    # Quant, Built: people, firms and instruments (checked against misaki's dictionary readings)
+    (r"\bScholes\b", "[Scholes](/ʃˈOlz/)"),
+    (r"\bJeanblanc\b", "[Jeanblanc](/ʒɑnblˈɑŋ/)"),
+    (r"\bKaroui\b", "[Karoui](/kɑɹuˈi/)"),
+    (r"\bJ(?:ae|ä)ckel\b", "[Jaeckel](/jˈɛkᵊl/)"),
+    (r"\bDVOL\b", "[DVOL](/dˈivˌɑl/)"),
+    (r"\bVIX\b", "[VIX](/vˈɪks/)"),
+    (r"\bMacKenzie\b", "[MacKenzie](/məkˈɛnzi/)"),
+    (r"\bTaleb\b", "[Taleb](/tˈɑləb/)"),
+    (r"\bArchegos\b", "[Archegos](/ɑɹkˈAɡOs/)"),
+    (r"\bSABR\b", "[SABR](/sˈAbəɹ/)"),
     # Technical terms outside the G2P dictionary (would otherwise go to the espeak fallback).
     (r"\b[Ss]oftmax\b", r"[\g<0>](/sˈɔftmæks/)"),
     (r"\b[Ll]ogits\b", r"[\g<0>](/lˈOʤɪts/)"),
@@ -597,7 +618,19 @@ RESPELL: dict[str, list[tuple[str, str]]] = {
 }
 
 
+# Greek letters Kokoro's Mandarin G2P has no reading for, as Chinese lecturers say them.
+_ZH_GREEK = {"σ": "西格玛", "Σ": "西格玛", "μ": "缪", "Δ": "德尔塔", "δ": "德尔塔", "Γ": "伽马", "γ": "伽马",
+             "θ": "西塔", "Θ": "西塔", "ρ": "柔", "π": "派", "Π": "派", "α": "阿尔法", "β": "贝塔", "ν": "纽",
+             "λ": "兰姆达", "ε": "艾普西龙", "ω": "欧米伽", "Ω": "欧米伽", "φ": "斐", "Φ": "斐", "τ": "套",
+             "κ": "卡帕", "η": "伊塔", "ξ": "克西", "χ": "卡伊", "ψ": "普西", "ζ": "泽塔"}
+
+
 def to_spoken(text: str) -> str:
+    if BACKEND == "kokoro" and lang.LANG == "zh":
+        text = re.sub(r"(?<=[A-Za-z])[–-](?=[A-Za-z])", " ", text)  # Black–Scholes: two names, not one word
+        for pattern, repl in RESPELL["zh"]:
+            text = re.sub(pattern, repl, text)
+        return "".join(_ZH_GREEK.get(ch, ch) for ch in text)
     if BACKEND in ("kokoro", "silent"):
         for pattern, repl in LEXICON:
             text = re.sub(pattern, repl, text)
@@ -671,27 +704,68 @@ def align_words(display_text: str, tokens: list[tuple[str, float, float]], durat
 # ---------------------------------------------------------------------------
 # Backends
 # ---------------------------------------------------------------------------
-_pipeline = None
+_pipelines: dict = {}
 
 
 def _kokoro_pipeline():
-    global _pipeline
-    if _pipeline is None:
+    if lang.LANG not in _pipelines:
         import warnings
 
         warnings.filterwarnings("ignore")
-        from kokoro import KPipeline
+        import torch
+        from kokoro import KModel, KPipeline
 
-        _pipeline = KPipeline(lang_code=VOICE[0], repo_id="hexgrad/Kokoro-82M")
-    return _pipeline
+        # Builds render scenes in parallel; torch's default pool (one thread per core) then oversubscribes the CPU.
+        # Measured on 4 cores beside a render: 4 threads 86 s, 2 threads 15.5 s for 16 s of speech.
+        torch.set_num_threads(int(os.environ.get("EXPLAINER_TTS_THREADS", max(1, (os.cpu_count() or 2) // 2))))
+
+        if lang.LANG == "zh":
+            en = KPipeline(lang_code="a", repo_id=KOKORO_ZH_REPO, model=False)  # Latin words inside Chinese lines
+            _pipelines["zh"] = KPipeline(lang_code="z", repo_id=KOKORO_ZH_REPO,
+                                         model=KModel(repo_id=KOKORO_ZH_REPO).eval(),
+                                         en_callable=lambda t: next(en(t)).phonemes)
+        else:
+            _pipelines[lang.LANG] = KPipeline(lang_code=VOICE[0], repo_id="hexgrad/Kokoro-82M")
+    return _pipelines[lang.LANG]
+
+
+def _synth_kokoro_zh(spoken: str):
+    """Mandarin, one sentence at a time: each sentence's characters (Latin words count by length) are spread over
+    its voiced span, which gives the bookmarks their timing."""
+    import numpy as np
+
+    pipe = _kokoro_pipeline()
+    pieces = [p_ for p_ in re.split(r"(?<=[。！？；])", spoken) if p_.strip()]
+    chunks, tokens, offset = [], [], 0.0
+    for piece in pieces:
+        parts = [r.audio for r in pipe(piece, voice=_voice(), speed=SPEED) if r.audio is not None]
+        if not parts:
+            continue
+        audio = np.concatenate([a.numpy() if hasattr(a, "numpy") else np.asarray(a) for a in parts])
+        loud = np.flatnonzero(np.abs(audio) > 0.02 * max(float(np.abs(audio).max()), 1e-6))
+        t0, t1 = (loud[0], loud[-1]) if len(loud) else (0, len(audio))
+        toks = lang.tokens(piece)
+        weights = [max(1.0, len(t) / 2.5) if re.search(r"[A-Za-z0-9]", t) else 1.0 for t in toks]
+        total, acc = sum(weights) or 1.0, 0.0
+        span = (t1 - t0) / SAMPLE_RATE
+        for tok, w in zip(toks, weights):
+            start = offset + t0 / SAMPLE_RATE + span * acc / total
+            acc += w
+            tokens.append((tok, start, offset + t0 / SAMPLE_RATE + span * acc / total))
+        chunks.append(audio)
+        offset += len(audio) / SAMPLE_RATE
+    audio = np.concatenate(chunks) if chunks else np.zeros(SAMPLE_RATE // 2, dtype="float32")
+    return audio, tokens
 
 
 def _synth_kokoro(spoken: str):
     import numpy as np
 
+    if lang.LANG == "zh":
+        return _synth_kokoro_zh(spoken)
     pipe = _kokoro_pipeline()
     chunks, tokens, offset = [], [], 0.0
-    for result in pipe(spoken, voice=VOICE, speed=SPEED):
+    for result in pipe(spoken, voice=_voice(), speed=SPEED):
         audio = result.audio
         if audio is None:
             continue
@@ -781,7 +855,7 @@ def _profile_settings() -> list:
 def narration_credit() -> str:
     """Who reads the narration, for the credits: the server profiles name their model in tools/voices.json."""
     if BACKEND in ("kokoro", "silent"):
-        return "Kokoro-82M"
+        return "Kokoro-82M (v1.1-zh)" if lang.LANG == "zh" else "Kokoro-82M"
     profiles = json.loads((REPO_ROOT / "tools" / "voices.json").read_text())
     return profiles.get(VOICE, {}).get("credit", VOICE)
 
@@ -790,7 +864,7 @@ def cache_key(text: str) -> tuple[str, str, str]:
     """(cleaned text, spoken form, cache key) of a narration line: ``<key>.wav/.json`` in the TTS cache."""
     text = lang.clean(text)
     spoken = to_spoken(text)
-    key_parts = [_CACHE_VERSION, BACKEND, VOICE, SPEED, spoken] + ([lang.LANG] if lang.LANG != "en" else [])
+    key_parts = [_CACHE_VERSION, BACKEND, _voice(), SPEED, spoken] + ([lang.LANG] if lang.LANG != "en" else [])
     key_parts += _profile_settings()
     key = hashlib.sha1(json.dumps(key_parts).encode()).hexdigest()[:16]
     return text, spoken, key

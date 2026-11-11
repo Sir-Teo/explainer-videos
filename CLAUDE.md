@@ -21,3 +21,9 @@ Manim videos with local neural narration. See README.md for layout and build com
   `videos/philosophy/README.md`, the part-by-part syllabus and the standard each part meets `videos/philosophy/SYLLABUS.md`;
   shared scene tools in `explainer/philosophy/` (the Reasoner's modules in `explainer/philosophy/reasoner/`, tested in
   `tests/philosophy/`); Chinese narration tables in `philosophyN/zh_lines.py`.
+- *Quant, Built* (`videos/quant/`): forty-three parts (`quant1` … `quant43`, distinct from the physics
+  `quantum`/`quantum2`); the series plan is `videos/quant/README.md`; the standard, devices (the House, the Surface,
+  the Track Record, the trial counter), model zoo, data plan, parts and phases are `videos/quant/SYLLABUS.md`; the
+  textbook coverage map and every part's paper list are `videos/quant/READING.md`; it follows
+  `videos/ai/LECTURE_GUIDE.md`; shared instruments are in `explainer/quant/`, the House library in
+  `explainer/quant/house/`.

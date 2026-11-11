@@ -90,7 +90,7 @@ def _branches(node):
 def sources(video: str) -> list[dict]:
     """Every narrated source line in film order: literals, templates, and sentences spliced into templates."""
     out = []
-    for f in sorted(video_dir(video).glob("s[0-9][0-9]_*.py")):
+    for f in sorted(video_dir(video).glob("s[0-9][0-9]*_*.py")):
         tree = ast.parse(f.read_text())
         for cls in [n for n in tree.body if isinstance(n, ast.ClassDef)]:
             for fn in [n for n in ast.walk(cls) if isinstance(n, ast.FunctionDef)]:
@@ -118,7 +118,7 @@ def sources(video: str) -> list[dict]:
 def templates(video: str) -> dict:
     """{source text: (regex, [placeholder names])} for every f-string and voiceover template of the video."""
     nodes = []
-    for f in sorted(video_dir(video).glob("s[0-9][0-9]_*.py")):
+    for f in sorted(video_dir(video).glob("s[0-9][0-9]*_*.py")):
         tree = ast.parse(f.read_text())
         nodes += [n for n in ast.walk(tree) if isinstance(n, ast.JoinedStr)]
         for a in _voiceover_args(tree):

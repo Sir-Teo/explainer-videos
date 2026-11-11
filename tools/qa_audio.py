@@ -69,7 +69,7 @@ def main():
         candidates = [OUT / args.video / "en" / name / "result.json" for name in (scene, scene + "_motion")]
         records = [(p, json.loads(p.read_text())) for p in candidates if p.exists()]
         report = {"video": args.video, "scene": scene, "lang": args.lang,
-                  "backend": tts.BACKEND, "voice": tts.VOICE,
+                  "backend": tts.BACKEND, "voice": tts._voice(),
                   "status": "running", "source_current": False,
                   "scope": "signal and alignment integrity; listening and narrated playback pending",
                   "listening_review": "pending", "narrated_playback_review": "pending",
@@ -136,7 +136,7 @@ def main():
                             candidate = json.loads(entry)
                         except json.JSONDecodeError:
                             continue  # a server may be appending its next lead
-                        if (candidate.get("lang") == args.lang and candidate.get("voice") == tts.VOICE
+                        if (candidate.get("lang") == args.lang and candidate.get("voice") == report["voice"]
                                 and candidate.get("text") and candidate["text"] in actual_spoken):
                             leads[candidate["text"]] = candidate
                 result["asr_review_leads"] = list(leads.values())

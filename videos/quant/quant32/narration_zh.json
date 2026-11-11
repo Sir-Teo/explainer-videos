@@ -1,0 +1,650 @@
+{
+ "title": "量化金融，从零搭建 · 第32部分：系统化宏观与另类溢价",
+ "chapters": {
+  "Hook": "危机阿尔法",
+  "Trend": "1. 趋势跟踪",
+  "Smile": "2. 微笑曲线与危机",
+  "VolTarget": "3. 波动率目标",
+  "RiskParity": "4. 风险平价与股债相关性",
+  "Styles": "5. 价值、动量、套息与防御，无处不在",
+  "Carry": "6. 看得见的套息",
+  "Insurance": "7. 卖出保险",
+  "Calendar": "8. 日历、夜晚与事件",
+  "Envelope": "9. 评估协议与固定宏观组合算术",
+  "House": "10. 第32条规则：宏观组合",
+  "Research": "写给研究者：线性趋势、恒等式、矩与极限",
+  "Outro": "回顾、交易台问题与习题"
+ },
+ "lines": {
+  "0ed345f82a06": {
+   "scene": "Hook",
+   "en": "Part thirty-two. Systematic macro and alternative premia: the books that trade whole asset classes by rule, and the premia that are paid for holding risks other people want to shed.",
+   "zh": "第32部分，系统化宏观与另类溢价：按规则交易整个资产类别，以及因承担他人希望转移的风险而获得的报酬。"
+  },
+  "54775236e2f6": {
+   "scene": "Hook",
+   "en": "Start with two chosen mathematical paths, not a market record. The position on each period equals the sum of earlier increments, so today's increment is never used to choose today's position. Four increments of one give total S equal to 4, sum of squares Q equal to 4, and profit P equal to 6. The profit is in squared increment units, not a six percent investment return. <bookmark mark='a'/> Alternate one and minus one instead. The total is 0, the same sum of squares is 4, and profit is -2. <bookmark mark='b'/> This linear rule's exact identity is half the squared total minus half the sum of squared increments. It helps explain a convex response to sustained moves and the losses from reversals. It does not prove that an implementable trend strategy earns a premium or protects every crisis. The literature's crisis-alpha description is an empirical claim about specified rules and episodes. Our task is to separate the algebra, that evidence, and the costs of holding a real book.",
+   "zh": "先看两条指定的数学路径，并非市场记录。每期仓位等于此前增量之和，不使用当期尚未知的信息。四个单位正增量给出总和S为4，平方和Q为4，利润P为6。利润单位是增量单位的平方，不是百分之六投资收益。<bookmark mark='a'/>改为正一负一交替，总和为0，平方和仍为4，利润为-2。<bookmark mark='b'/>精确恒等式是总和平方减平方和，再除以二。它解释持续走势的凸性响应和反转损失，但不证明可实施策略有溢价，也不保证每场危机都获保护。危机阿尔法是关于具体规则和事件的经验命题，需要区分代数、证据与真实持仓成本。"
+  },
+  "238fc8057a89": {
+   "scene": "Hook",
+   "en": "Three questions run through the part. <bookmark mark='a'/> When can a rule based on past returns benefit from sustained moves and lose from reversals? <bookmark mark='b'/> How can capital weights hide concentrated risk, and what happens when stocks and bonds fall together? <bookmark mark='c'/> And the alternative premia: who pays them, and why should they keep paying?",
+   "zh": "贯穿本部分有三个问题。<bookmark mark='a'/>基于过去收益的规则，何时能从持续走势获利，又因反转损失？<bookmark mark='b'/>资本权重怎样掩盖集中的风险，股债同跌时会怎样？<bookmark mark='c'/>另类溢价由谁支付，为什么会继续支付？"
+  },
+  "218879f6dd9a": {
+   "scene": "Hook",
+   "en": "What makes a premium alternative? It is a return earned by a rule, not by owning the market, and it has to come from somewhere. <bookmark mark='a'/> A risk premium is paid for bearing a risk that hurts in bad times. <bookmark mark='b'/> A behavioural premium is paid by investors who under-react or over-extrapolate. <bookmark mark='c'/> A structural premium is paid by participants who must trade whatever the price: hedgers, index funds, pension funds. Each premium in this part will be asked which of the three it is, because plausible stories and repeatable evidence have different roles.",
+   "zh": "什么使溢价成为另类？它来自规则而非单纯持有市场，并且必须解释来源。<bookmark mark='a'/>风险溢价补偿坏时期的损失风险。<bookmark mark='b'/>行为溢价可能来自反应不足或过度外推。<bookmark mark='c'/>结构性溢价可能来自必须交易的对冲者、指数基金或养老基金。每种说法都要接受检验：合理故事与可重复证据发挥不同作用。"
+  },
+  "7b0d6eae8a33": {
+   "scene": "Hook",
+   "en": "Where this sits. Parts thirty and thirty-one built the portfolio and its risk model on single securities. This part moves up a level, to whole asset classes: equity indices, government bonds, credit, commodities and currencies, traded through futures and funds. The ideas of Part twenty-four's factor zoo reappear here as macro books, each with its own crisis.",
+   "zh": "第30和31部分在单个证券上建立组合及风险模型。这里转向股票指数、政府债券、信用、商品和货币等整个资产类别，通过期货与基金交易。第24部分因子动物园的思想变成宏观组合，每种都有自己的危机。"
+  },
+  "29aa37e88a7c": {
+   "scene": "Hook",
+   "en": "Richard Donchian ran a public trend-following fund in 1949, buying breakouts above recent highs; Richard Dennis trained his Turtles in 1983; and Michael Adam, David Harding and Martin Lueck founded AHL in 1987. <bookmark mark='a'/> Bridgewater launched All Weather in 1996 for Ray Dalio's own trust, Harding founded Winton in 1997, and William Fung and David Hsieh showed in 2001 that trend followers' returns look like lookback straddles. <bookmark mark='b'/> Then 2008 made crisis alpha a sales line; academics named time-series momentum in 2012, traced it back to 1880, found carry in every asset class, and in 2022 watched stocks and bonds fall together.",
+   "zh": "Donchian于1949年管理公开趋势基金，买入突破近期高点的品种；Dennis在1983年训练海龟；Adam、Harding和Lueck于1987年创立AHL。<bookmark mark='a'/>桥水1996年为Dalio的信托推出全天候，Harding于1997年创立Winton。Fung与Hsieh在2001年用回望跨式因子描述趋势收益。<bookmark mark='b'/>2008年使危机阿尔法成为推销用语；2012年的时间序列动量研究、追溯到1880年的重构与跨资产套息研究拓宽证据，而2022年展示股债也会同跌。"
+  },
+  "58d7815b3f65": {
+   "scene": "Hook",
+   "en": "The plan: trend following, with timing and chosen arithmetic paths; convexity, reversals and the limits of crisis protection; volatility forecasts and exposure caps; risk budgets, leverage, financing and correlation scenarios; the published alternative-premia series and what their construction permits us to infer; carry with explicit currency and futures units; the put index and selling insurance; calendars, events and overnight arithmetic; an evaluation protocol with fixed macro-book calculations; and the linear trend identity, its stationary mean and its independent-Gaussian reference distribution.",
+   "zh": "安排如下：趋势时点与指定算术路径；凸性、反转及危机保护边界；波动率预测和仓位上限；风险预算、杠杆、融资及相关性情景；已公布溢价序列及构造限制；明确货币与期货单位的套息；看跌期权指数；日历、事件与隔夜核算；评估协议及固定组合计算；最后推导线性趋势恒等式、平稳均值和独立高斯参考分布。"
+  },
+  "9812ad047e1f": {
+   "scene": "Hook",
+   "en": "In the House, the macro desk, built in Part twenty-two for the curve and the basis, gets its systematic book designs and measurement interfaces. The portfolio desk still needs appropriate data, costs and independent evidence before an allocation decision.",
+   "zh": "第22部分为曲线与基差建立的宏观部门，现在获得系统化组合设计和计量接口。组合部门仍需合适数据、成本及独立证据，才能作出配置决定。"
+  },
+  "bbd6ad57dab8": {
+   "scene": "Trend",
+   "en": "Chapter one. A trend rule uses a market's own earlier returns to decide its exposure. A positive past return can lead to a long position, and a negative one to a short position. That specifies a decision rule. Whether it earns a premium after trading and financing is an empirical question, and the timing of its information is part of that question.",
+   "zh": "第一章。趋势规则用某市场自身此前收益决定仓位，过去为正可做多，为负可做空。这只定义决策规则。扣交易与融资后是否有溢价仍需经验检验，信息时点也是命题的一部分。"
+  },
+  "5099805711c2": {
+   "scene": "Trend",
+   "en": "Begin with the instruments. Futures and forwards express long and short views across asset classes, while a fund has its own collateral, expenses and mandate. Its return is not simply a spot price change. <bookmark mark='a'/> Next specify the information set. A close can enter a signal applied to the next period; it cannot support a claim of execution before that close. <bookmark mark='b'/> Finally specify the sample. Funds selected today and revised adjusted prices do not reconstruct the choices available to an earlier investor. Missing observations and changing membership also alter the markets sharing the risk budget.",
+   "zh": "先明确工具。期货远期与基金的担保品、费用及投资范围不同，基金收益不等于现货变动。<bookmark mark='a'/>再明确可用信息：收盘可用于下一期信号，不能证明在该收盘形成前成交。<bookmark mark='b'/>最后明确样本：今天挑选的基金与后来修订的复权价格不能复原当时选择。缺失值和成员变化也会改变共享预算的市场。"
+  },
+  "1bef0aff499a": {
+   "scene": "Trend",
+   "en": "Time-series momentum compares each market with its own past, rather than ranking it against other markets. <bookmark mark='a'/> Here the stated signal is the sign of a sum of daily excess returns. A compounded trailing return is a different statistic. <bookmark mark='b'/> Divide a chosen risk budget by an available volatility forecast. Forty percent over twenty percent gives two before the coefficients are averaged across markets. These are forecast units, not a guarantee of realised risk. <bookmark mark='c'/> The prior close's coefficients multiply next-period returns. The original House design rebalances signals monthly and separately scales its preliminary book using lagged EWMA risk, with that multiplier capped at ten. Missing-return and active-count conventions, portfolio drift, financing and costs still matter for an executable account.",
+   "zh": "时间序列动量比较市场自身过去，并非跨市场排名。<bookmark mark='a'/>这里的信号是日超额收益之和的符号，复利累计是另一统计量。<bookmark mark='b'/>指定风险预算除以可用预测；百分之四十除以百分之二十为二，再进行跨市场平均。这是预测单位，不保证真实风险。<bookmark mark='c'/>前收盘系数乘下一期收益。原设计每月更新信号，另用滞后指数加权风险缩放初始组合，乘数上限十。缺失、活跃数量、权重漂移、融资及成本仍需明确。"
+  },
+  "3cd736f29a11": {
+   "scene": "Trend",
+   "en": "Compare the four chosen paths. The persistent rise builds position before later positive increments, giving profit six in squared increment units. <bookmark mark='a'/> Alternation and the rise followed by reversal finish at zero. Each has sum of squares four, and the linear rule loses two. Intermediate positions differ even though this block identity gives the same final profit. <bookmark mark='b'/> One final jump reaches the same total of four as the persistent rise, but profit is zero: earlier movement did not build a position. Its sum of squares is sixteen. A large terminal move alone therefore does not establish a trend gain. These paths isolate arithmetic. Converting their profits into portfolio returns would require a capital and risk normalisation, plus costs.",
+   "zh": "比较四条指定路径。持续上涨先建立仓位，后续增量给出利润六。<bookmark mark='a'/>交替与先涨后反转的总和均为零，平方和四，利润负二；中间仓位不同，但最终恒等式相同。<bookmark mark='b'/>最后才跳升四，总和与持续上涨相同，却没有事先仓位，利润零，平方和十六。终点变化大本身不能证明趋势赚钱。将平方增量利润变成投资收益，还需资本、风险归一化和成本。"
+  },
+  "a70f17558f29": {
+   "scene": "Trend",
+   "en": "A rule contains choices. Twenty-one, sixty-three and two hundred fifty-two observations are three lookbacks, not evidence that one horizon is universally best. <bookmark mark='a'/> A sign signal drops magnitude. A linear score keeps it and adds a scaling convention; the House's alternative clips its normalised signal at two in absolute value. <bookmark mark='b'/> Three lookbacks and two shapes give six specifications. Their overlap makes their outcomes dependent, but trying related choices still matters when reporting selection. Predefining the comparison and retaining unsuccessful choices makes a research history more interpretable. We have not selected a winning specification from these arithmetic examples.",
+   "zh": "规则包含选择。二十一、六十三和二百五十二个观测是三种回看期，不证明某期限普遍最优。<bookmark mark='a'/>符号丢弃幅度，线性分数保留幅度并需缩放；原替代规则把标准化信号绝对值截在二。<bookmark mark='b'/>三期限乘两种形状共六规格，重叠使结果相关，却不能消除选择问题。预先指定比较并保留失败选择有助理解研究历史。这里没有从算术例子中挑选赢家。"
+  },
+  "04914061b7ae": {
+   "scene": "Trend",
+   "en": "Why trade several markets? In a fixed equal-weight, equal-volatility model, risk depends on common correlation. Four markets with ten percent standalone volatility give five percent portfolio volatility when their correlations are zero. <bookmark mark='a'/> Choose correlation one half instead: risk is about seven point nine one percent. Choose correlation one and it is ten percent. These are covariance assumptions, not historical books. <bookmark mark='b'/> Different labels do not ensure independent signals, positions or returns. Contracts can share currency, duration, inflation or financing exposures, and correlations can change during liquidation. Breadth must be defined for the exposures and horizon being diversified.",
+   "zh": "为何交易多市场？固定等权、等波动模型的风险取决于共同相关性。四市场各百分之十，相关零时组合百分之五。<bookmark mark='a'/>相关二分之一时约百分之七点九一，相关一时百分之十。这是指定协方差，不是历史组合。<bookmark mark='b'/>名称不同不能保证信号、仓位或收益独立；货币、久期、通胀和融资敞口可共享，清算时相关性也会变。广度必须针对具体敞口和期限。"
+  },
+  "a4778c35acb6": {
+   "scene": "Trend",
+   "en": "Specified empirical studies motivate the mechanism. Moskowitz, Ooi and Pedersen examine time-series momentum on futures and forwards. Hurst, Ooi and Pedersen reconstruct a longer history, while Lemperiere and coauthors examine trend behaviour across horizons. <bookmark mark='a'/> A published index, a managed fund and an ETF implementation can have different markets, scaling and costs. Their Sharpe ratios alone do not identify a unique cause of a difference. <bookmark mark='b'/> Long histories expose more regimes but also require reconstruction assumptions about availability, contracts and execution. The appropriate conclusion is conditional evidence about a named design and sample, followed by a clearly specified independent test.",
+   "zh": "经验文献为机制提供背景。Moskowitz、Ooi、Pedersen研究期货远期；Hurst等重构长历史，Lempérière等研究跨期限趋势。<bookmark mark='a'/>公布指数、受托基金与ETF实现的市场、缩放和成本不同，夏普差异本身不能识别原因。<bookmark mark='b'/>长历史覆盖更多状态，也引入合约可用性、执行和重构假设。结论应是指定设计与样本的条件证据，再配合明确的独立检验。"
+  },
+  "564fd0c92f34": {
+   "scene": "Trend",
+   "en": "The firm files give an institutional setting. Michael Adam, David Harding and Martin Lueck founded AHL in 1987; it became part of Man Group. Harding founded Winton in 1997. <bookmark mark='a'/> Company histories describe businesses, not controlled comparisons of identical rules. Changes in markets, signals, execution technology or client terms can change a product. Explaining why a firm changed course needs evidence beyond the observation that a difficult performance period occurred nearby.",
+   "zh": "公司档案提供制度背景。Adam、Harding和Lueck于1987年创立AHL，后来成为Man集团一部分；Harding于1997年创立Winton。<bookmark mark='a'/>公司历史不是相同规则的受控比较。市场、信号、执行技术及客户条款都会改变产品。解释公司为何转向，需要超出相邻困难业绩时期的证据。"
+  },
+  "e8109c4806ce": {
+   "scene": "Trend",
+   "en": "Implementation is a business. Futures require margin and liquidity reserves; notional exposure differs from cash posted. Shorting and rolling can incur spreads, impact and funding constraints. <bookmark mark='a'/> Choose one year's gross excess profit at five percent, a management fee of two percent of starting capital, and a performance fee of twenty percent of the positive remainder. Three percent remains before that performance fee and two point four percent after it. <bookmark mark='b'/> Actual terms can include hurdles, high-water marks and cash-flow conventions. The example explains why terms matter without assuming every fund charges the same fees or promising a constant investor return.",
+   "zh": "实施也是生意。期货需保证金和流动性储备，名义敞口不同于现金；做空展期有价差、冲击和资金约束。<bookmark mark='a'/>指定一年毛超额利润百分之五，管理费为初始资本百分之二，剩余正利润收百分之二十业绩费。先剩百分之三，最后百分之二点四。<bookmark mark='b'/>实际条款可能有门槛、高水位和现金流约定。这说明条款重要，不假定所有基金收费相同或收益恒定。"
+  },
+  "755170b47172": {
+   "scene": "Trend",
+   "en": "Horizon changes the response. A faster signal can turn sooner after new observations but also trade more in response to transient changes. <bookmark mark='a'/> A slower signal retains a longer history and can stay pointed in the old direction through a sharp reversal. Whether that tradeoff helps depends on the return process and execution. <bookmark mark='b'/> Combining speeds adds a portfolio design: correlated signals are not independent bets, and some orders can offset before trading. Evaluate the combined book's risk and costs, preserve the choices, and use appropriate independent evidence.",
+   "zh": "期限改变响应。快信号可以较早转向，也会因暂时变化更频繁交易。<bookmark mark='a'/>慢信号保留长历史，急剧反转时可继续指向旧方向。结果取决于收益过程与执行。<bookmark mark='b'/>混合速度又是组合设计：相关信号不是独立下注，订单可能互相抵消。应计量组合风险和成本、保存选择并使用适当独立证据。"
+  },
+  "c1deb7809275": {
+   "scene": "Trend",
+   "en": "Pause and predict. Four equally weighted markets each have twenty percent standard deviation, with the same correlation for every pair. The portfolio has ten percent standard deviation. What correlation is implied? State the equal-weight and equal-volatility assumptions before interpreting the result as a statement about breadth.",
+   "zh": "暂停预测。四个等权市场各百分之二十标准差，任意两两相关相同；组合标准差百分之十。隐含相关是多少？解释广度之前，先说明等权等波动假设。"
+  },
+  "e85b130c63e2": {
+   "scene": "Smile",
+   "en": "Chapter two. Crisis alpha is a description of particular historical outcomes, not a guarantee attached to the word trend. The mathematical mechanism is more precise: an ideal linear rule has a convex block-profit identity. Its terminal move, path variation, timing and costs all matter. We will keep that identity separate from a claim about an implementable crisis hedge.",
+   "zh": "第二章。危机阿尔法描述特定历史结果，不是趋势这个词附带的保证。理想线性规则有凸的区间利润恒等式，但终点、路径变化、时点和成本都重要。应将该恒等式与可实施危机对冲的命题分开。"
+  },
+  "afcf65c22b4b": {
+   "scene": "Smile",
+   "en": "Fix four increments and their sum of squares, Q. Profit is half S squared minus half Q. Holding Q fixed gives a convex parabola in the arithmetic block total S. <bookmark mark='a'/> Choose Q equal to two, four and eight. Higher path variation lowers the curve at the same S. We show the entire feasible range for each choice: Cauchy-Schwarz requires S squared no greater than four Q. Every endpoint is retained. <bookmark mark='b'/> This is a family of mathematical identities, not a regression through market quarters. In actual data Q varies with S, risk scaling changes exposure, and several markets contribute to a book. A convex fixed-Q section therefore does not by itself establish a positive quadratic coefficient in a particular empirical scatter.",
+   "zh": "固定四个增量及平方和Q，利润为S平方减Q后除二。Q固定时，它对算术总和S为凸抛物线。<bookmark mark='a'/>指定Q为二、四、八，变化越大曲线越低。Cauchy–Schwarz要求S平方不超过四Q，图保留全部可行端点。<bookmark mark='b'/>这是数学恒等式族，不是季度回归。真实数据中Q随S改变，风险缩放和多市场也改变组合；固定Q截面的凸性不能单独证明某经验散点的二次项为正。"
+  },
+  "b672ebfd6256": {
+   "scene": "Smile",
+   "en": "Two chosen blocks expose an important distinction. Four increments of one and a single final increment of four both finish at S equal to four. <bookmark mark='a'/> The first has Q equal to four and profit six. The second has Q equal to sixteen and profit zero. Its position was zero before the jump. <bookmark mark='b'/> Thus this trading rule's profit is not a function of the terminal total alone. The identity contains realised Q, which is path dependent. Calling the response convex does not remove that term. It is possible to discuss a convex mechanism accurately without pretending that the rule delivers the payoff of one option for every path.",
+   "zh": "四个单位上涨与最后单次上涨四，两者S都为四。<bookmark mark='a'/>前者Q四、利润六；后者Q十六、利润零，因为跳升前仓位为零。<bookmark mark='b'/>利润不只由终点决定，恒等式含路径相关的已实现Q。凸性不会消除该项。可以准确讨论凸性机制，而不声称每条路径都交付同一个期权收益。"
+  },
+  "6fad00df05f4": {
+   "scene": "Smile",
+   "en": "A reversal shows the timing. Choose increments one, one, minus one, minus one. <bookmark mark='a'/> The positions before those increments are zero, one, two and one, because only earlier increments enter each decision. <bookmark mark='b'/> The first negative increment meets a positive position of two and loses two. The next still meets a positive position of one and loses one. Together with the earlier gain of one, block profit is minus two. A differently clipped, signed or rebalanced rule can respond differently. This example explains one mechanism for reversal losses; it does not identify the cause of any named fund's historical drawdown.",
+   "zh": "指定一、一、负一、负一的反转路径。<bookmark mark='a'/>此前仓位依次为零、一、二、一，只用先前信息。<bookmark mark='b'/>首个负增量遇到正二仓位亏二，下一期亏一，加上此前赚一，总利润负二。截断、符号或调仓不同的规则可有不同响应。例子解释一种反转损失机制，不识别某基金历史回撤的原因。"
+  },
+  "bd315b8640f6": {
+   "scene": "Smile",
+   "en": "The same reasoning explains why crisis speed matters. A sudden move cannot retroactively create an offsetting position. Exposure already held can help, hurt or be zero. <bookmark mark='a'/> A sustained move permits new observations to change a signal, but a long crisis alone does not guarantee profit: the existing signal, sizing and subsequent path matter. <bookmark mark='b'/> After a turn, exposure can remain pointed in the previous direction. Repeated turns can create repeated losses. Fast and slow horizons, sign rules and volatility controls are different designs, so an explanation for the ideal linear rule should not be silently transferred into a promise about every managed-futures product.",
+   "zh": "危机速度为何重要？突然变动不能追溯建立对冲仓位，已有敞口可能有利、不利或为零。<bookmark mark='a'/>持续走势允许信号更新，但危机长本身仍不保证获利，初始信号、规模及后续路径都重要。<bookmark mark='b'/>转折后仓位可继续指向原方向，多次转折导致重复损失。不同期限、符号及风险控制是不同设计，理想规则的解释不能转成所有产品的承诺。"
+  },
+  "ef1a3f833a9e": {
+   "scene": "Smile",
+   "en": "Make the option analogy precise. A centred vanilla straddle has a terminal payoff proportional to the absolute price move, before subtracting its premium. <bookmark mark='a'/> Our block identity is quadratic in an arithmetic total and subtracts a path-dependent sum of squares. The functional forms and units differ. <bookmark mark='b'/> Realised Q is not an option premium fixed at inception. Continuous trading identities involving realised variation require their own price-process, funding and admissibility assumptions. Fung and Hsieh's empirical lookback-option factors are also a different construction. The useful common idea is conditional convex exposure, not an exact equality between every trend system and a purchased vanilla straddle.",
+   "zh": "精确说明期权类比。平值普通跨式的到期收益与价格变化绝对值成比例，再减期权费。<bookmark mark='a'/>这里则是算术总和的二次式，减路径相关的平方和，函数和单位都不同。<bookmark mark='b'/>Q不是期初固定期权费。连续交易的变差恒等式还需价格过程、融资和可容许条件。Fung与Hsieh的经验回望期权因子也是另一构造。共同思想是条件凸性敞口，不是每种趋势系统等于买入普通跨式。"
+  },
+  "0b51fd701a29": {
+   "scene": "Smile",
+   "en": "The identity was before costs. Choose a linear charge of one tenth of a profit unit for each unit of position change, including flattening at the block's end. <bookmark mark='a'/> The persistent rise moves from zero through one, two and three, then back to zero. Total absolute turnover is six, so profit six becomes five point four. <bookmark mark='b'/> The reversal moves zero, one, two, one, then zero. Turnover is four, so profit minus two becomes minus two point four. These are stipulated units and a stipulated fee rule. Financing, spread variation, nonlinear impact and execution constraints would add separate terms. Convex gross arithmetic is not a complete net-performance statement.",
+   "zh": "恒等式尚未扣成本。指定每单位仓位变化收十分之一利润单位，含期末平仓。<bookmark mark='a'/>持续上涨仓位零、一、二、三，再归零，绝对换手六，利润六降至五点四。<bookmark mark='b'/>反转仓位零、一、二、一、零，换手四，利润负二降至负二点四。单位和费率都为指定输入；融资、变动价差、非线性冲击和执行约束另加。毛利润凸性不是完整净业绩。"
+  },
+  "7772c9c84f79": {
+   "scene": "Smile",
+   "en": "Diversification is a separate calculation. Choose two books, each with ten percent volatility, and weights eighty and twenty percent. <bookmark mark='a'/> The variance includes both standalone terms and their covariance. <bookmark mark='b'/> If correlation is zero, the combined volatility is about eight point two five percent; if it is one, volatility is ten percent. Zero correlation does not generally mean independence, and it does not determine expected returns. A historical blend would also need specified rebalancing, costs, sample selection and financing. Neither a crisis label nor a low average correlation guarantees that covariance will remain helpful in stress.",
+   "zh": "分散是另一计算。指定两组合各百分之十波动，权重八成两成。<bookmark mark='a'/>方差含各自项及协方差。<bookmark mark='b'/>相关零时波动约百分之八点二五，相关一时为百分之十。零相关不普遍等于独立，也不决定期望收益。历史混合还需调仓、成本、样本及融资；危机标签或低平均相关不能保证压力时协方差仍有利。"
+  },
+  "4fa3c270818c": {
+   "scene": "Smile",
+   "en": "What evidence would establish the empirical claim? First define the actual book and keep its information timing, market coverage, risk scaling, collateral and costs explicit. <bookmark mark='a'/> Then assess uncertainty. Quarterly observations can be dependent, extreme episodes are scarce, and repeated specifications change the interpretation of a fitted curve. A weak coefficient does not by itself prove either absence of a mechanism or that the sample was merely too short. <bookmark mark='b'/> Finally separate the questions. An identity can be exact for a chosen rule; a regression describes a specified sample; a causal account requires additional identifying evidence. Keeping those claims distinct makes the crisis-alpha discussion testable.",
+   "zh": "经验命题需要什么证据？先明确实际组合、信息时点、市场、缩放、担保品和成本。<bookmark mark='a'/>再评估不确定性：季度可能相关，极端事件稀少，多次规格影响拟合解释。弱系数既不能独自证明机制不存在，也不能证明只是样本太短。<bookmark mark='b'/>恒等式、指定样本回归和因果解释是不同问题，后者还需识别证据。区分后，危机阿尔法才可检验。"
+  },
+  "b3847eba4137": {
+   "scene": "Smile",
+   "en": "Pause and predict. Two blocks both finish with arithmetic total four. Their sums of squares are four and sixteen. What profit does the ideal linear rule earn in each, and why does knowing only the terminal total fail to determine its payoff?",
+   "zh": "暂停预测。两段总和均为四，平方和分别四和十六。理想线性规则利润各是多少？为何只知道终点不足以决定收益？"
+  },
+  "da542b8373cd": {
+   "scene": "VolTarget",
+   "en": "Chapter three. A volatility target specifies desired forecast risk, not a guaranteed realised outcome. We can derive exactly what the rule does under chosen forecasts, then ask what evidence is needed to assess its risk, return and trading consequences.",
+   "zh": "第三章。波动率目标指定预测风险，不保证实现结果。先在指定预测下精确推导规则，再问评估风险、收益和交易后果需要什么证据。"
+  },
+  "6b21498e1ee6": {
+   "scene": "VolTarget",
+   "en": "Hold the target divided by an available forecast, with a leverage cap. The forecast must be positive and known before the return being scaled. <bookmark mark='a'/> Conditional on that earlier information, exposure is fixed, so variance is multiplied by its square. Forecast and return horizons must use consistent units. <bookmark mark='b'/> Resulting conditional volatility is exposure times true conditional volatility. It equals the target only if the forecast is correct and the cap does not bind. A conventional annualised risk unit also differs from a guarantee about a whole year's realised path, especially when dependence, costs or financing change the account.",
+   "zh": "仓位为目标除以此前可用的正风险预测，并受杠杆上限约束。<bookmark mark='a'/>给定较早信息，仓位固定，方差乘以仓位平方；预测和收益期限单位必须一致。<bookmark mark='b'/>条件波动为仓位乘真实条件波动。仅当预测正确且上限不绑定时才等于目标。惯用年化单位也不保证全年实际路径，相关、成本和融资可改变账户。"
+  },
+  "f25b2b9552f9": {
+   "scene": "VolTarget",
+   "en": "Choose a ten percent target and a cap of three. A correct twenty percent forecast gives exposure one half and ten percent scaled risk. <bookmark mark='a'/> A correct ten percent forecast gives exposure one and the same risk. <bookmark mark='b'/> A correct two percent forecast would call for five times exposure, but the cap restricts it to three. Scaled risk is six percent, below the target. <bookmark mark='c'/> Finally let the forecast be ten percent while true risk is twenty. Exposure remains one, giving twenty percent risk. The target did not fail algebraically; the forecast was wrong. These stipulated cases distinguish a control rule, a binding limit and a forecasting error without attributing an outcome to a historical asset.",
+   "zh": "指定目标百分之十，上限三。正确预测百分之二十给仓位一半，风险百分之十。<bookmark mark='a'/>正确预测百分之十给仓位一，风险相同。<bookmark mark='b'/>正确预测百分之二本需五倍，上限限制为三，风险百分之六。<bookmark mark='c'/>预测百分之十但真实风险百分之二十，仓位仍一，风险百分之二十。代数没错，错的是预测。指定例子区分控制规则、约束与误差，不归因于某历史资产。"
+  },
+  "97167f1e7589": {
+   "scene": "VolTarget",
+   "en": "Forecast timing matters. The House EWMA uses a sixty-day centre of mass, so the decay coefficient is sixty over sixty-one. It accumulates squared returns: an uncentred second moment, which differs from variance when the conditional mean is material. <bookmark mark='a'/> Choose an available ten percent annual forecast and a daily shock of minus four percent. Today's exposure remains one; the shock has already happened. <bookmark mark='b'/> After updating, the annualised forecast is 12.82 percent and the next exposure is 0.780. A positive four percent shock gives the same squared-return update. This estimator alone is not a model of asymmetric price-volatility causality, and deleveraging afterward does not erase the initial loss.",
+   "zh": "预测时点很重要。原指数加权估计的重心参数六十，衰减六十除以六十一；累计收益平方，是未中心化二阶矩，均值显著时不同于方差。<bookmark mark='a'/>已有年化预测百分之十，当天冲击负百分之四。当天仓位仍一，冲击已经发生。<bookmark mark='b'/>更新后预测为12.82%，下期仓位0.780。正百分之四冲击有相同平方更新。此估计本身不解释价格与波动非对称因果，事后降杠杆也不能抹去初始损失。"
+  },
+  "61374d61e723": {
+   "scene": "VolTarget",
+   "en": "Risk targeting and utility optimisation answer different questions. In a costless one-period mean-variance model, optimal exposure is conditional expected excess return divided by risk aversion times conditional variance. <bookmark mark='a'/> Volatility targeting instead scales by inverse standard deviation. Even with constant expected return, inverse variance and inverse standard deviation differ. <bookmark mark='b'/> If expected excess return rises exactly in proportion to variance, the mean-variance optimum is constant. The volatility target would still vary. No universal Sharpe improvement follows from the scaling formula alone. We need a joint model or evidence about expected returns, risk forecasts, dependence and implementation.",
+   "zh": "风险目标与效用优化是不同问题。无成本单期均值方差最优仓位，是条件超额均值除以风险厌恶和条件方差之积。<bookmark mark='a'/>波动率目标则按标准差倒数缩放，即使均值恒定，二者也不同。<bookmark mark='b'/>若预期超额收益正比方差，均值方差最优仓位恒定，风险目标仓位仍变。公式本身不保证提高夏普，还需均值、预测、相关和实施的联合模型或证据。"
+  },
+  "82da038e1866": {
+   "scene": "VolTarget",
+   "en": "One proposed price-volatility mechanism is balance-sheet leverage. In a local approximation with fixed riskless debt, equity is assets minus debt and percentage volatility is asset volatility times assets over equity. <bookmark mark='a'/> Choose assets one hundred, debt fifty and asset volatility ten percent: equity volatility is about twenty percent. <bookmark mark='b'/> Let assets fall to eighty with debt and asset risk fixed. Equity is thirty, giving about twenty-six point six seven percent volatility. This is a conditional mechanism. Default risk, option convexity, changing asset volatility and news can also matter; it does not identify the sole cause of an empirical volatility spike.",
+   "zh": "一种价格与波动机制来自资产负债表杠杆。固定无风险债务的局部近似下，权益为资产减债，权益百分比波动为资产波动乘资产权益比。<bookmark mark='a'/>指定资产一百、债五十、资产波动百分之十，权益波动约百分之二十。<bookmark mark='b'/>资产降八十、债和资产风险不变，权益三十，波动约百分之二十六点六七。这是条件机制，违约、期权凸性、资产风险和消息也重要，不能据此识别经验波动激增的唯一原因。"
+  },
+  "5e36be13ad97": {
+   "scene": "VolTarget",
+   "en": "Low forecast volatility can call for borrowing. With risky exposure x, the cash weight is one minus x. A negative cash weight represents borrowing under this convention. <bookmark mark='a'/> When risky returns are already excess of a cash benchmark, an additional borrowing spread is charged to the amount above one. <bookmark mark='b'/> Choose exposure three and a one percent spread. The extra cost is two percent of starting capital for the period, separate from the benchmark already removed from excess returns. Actual margin, collateral remuneration, trading costs and funding limits can differ; a risk cap does not make those cash flows disappear.",
+   "zh": "低预测风险可能要求借款。风险敞口x对应现金权重一减x，负现金代表借款。<bookmark mark='a'/>若风险收益已减现金基准，额外借款利差只向超出一的部分收取。<bookmark mark='b'/>指定敞口三、利差百分之一，期间额外成本为初始资本百分之二，与已扣基准不同。真实保证金、担保品利息、交易成本和资金上限可能不同，风险上限不会使这些现金流消失。"
+  },
+  "37eff91492eb": {
+   "scene": "VolTarget",
+   "en": "The literature asks empirical versions of these questions. Moreira and Muir study volatility-managed factors with an inverse-variance construction, different from our inverse-standard-deviation rule. <bookmark mark='a'/> Cederburg and coauthors examine implementation and out-of-sample performance: historical comparisons cannot automatically be treated as allocations an investor could have formed. <bookmark mark='b'/> Harvey and coauthors study targeting across asset groups. Their findings also require the stated assets, sample and implementation. Different designs need not agree, and a model identity cannot settle which net-return comparison will survive a properly specified independent evaluation.",
+   "zh": "文献研究经验版本。Moreira与Muir使用逆方差管理，不同于这里的逆标准差。<bookmark mark='a'/>Cederburg等研究实施与样本外表现，历史比较不能自动当成当时可形成的配置。<bookmark mark='b'/>Harvey等比较不同资产，结论同样依赖样本和实施。设计不同未必一致，模型恒等式不能决定哪种净收益比较能通过明确的独立评估。"
+  },
+  "ab6b686fb4a3": {
+   "scene": "VolTarget",
+   "en": "Common forecasts can produce common desired trades. With a ten percent target, a forecast rising from twenty to forty percent cuts desired exposure from one half to one quarter. <bookmark mark='a'/> Investors sharing the rule and similar assets can want to reduce together. Whether actual net selling moves prices depends on flows, offsetting orders, liquidity and other participants. The formula alone does not identify a cause of a named crash. <bookmark mark='b'/> Smoothing, slower rebalancing and turnover limits can moderate adjustment but also retain risk longer. Those choices need their own specification and evaluation, alongside liquidity reserves and financing constraints.",
+   "zh": "共同预测可产生共同目标交易。目标百分之十，预测从百分之二十升四十，仓位从一半降四分之一。<bookmark mark='a'/>同规则同资产的投资者可能同时减仓，但净卖出是否移动价格还取决于流量、对手订单和流动性。公式不能识别某次崩盘原因。<bookmark mark='b'/>平滑、慢调仓和换手限制可以缓和调整，也会更久保留风险；它们需与流动性储备和融资约束一起明确检验。"
+  },
+  "9fc5c30fdffc": {
+   "scene": "VolTarget",
+   "en": "Pause and predict. The target is ten percent, the available forecast ten percent, true conditional standard deviation twenty percent, and the exposure cap three. What exposure is chosen, what conditional risk results, and which assumption would have been needed to reach the target?",
+   "zh": "暂停预测。目标百分之十，预测百分之十，真实条件标准差百分之二十，上限三。选什么仓位，得到什么风险？达到目标本来还需要什么假设？"
+  },
+  "4f6e6642fddb": {
+   "scene": "RiskParity",
+   "en": "Chapter four. Part thirty introduced risk budgeting. Across asset classes the question remains: which contributions are balanced, using which covariance forecast? Capital weights, standalone budgets and covariance-aware Euler contributions differ. We will calculate those distinctions on chosen inputs before discussing leverage.",
+   "zh": "第四章。第30部分介绍风险预算。跨资产时仍要问：平衡哪种贡献，使用哪种协方差预测？资本权重、独立预算与Euler贡献不同。先用指定输入计算，再讨论杠杆。"
+  },
+  "c0243864c8f8": {
+   "scene": "RiskParity",
+   "en": "Choose two assets with annual standard deviations twenty and ten percent, correlation minus one fifth, and capital weights sixty and forty percent. <bookmark mark='a'/> Portfolio volatility is 11.87 percent. <bookmark mark='b'/> Its Euler variance fractions are 95.5 and 4.5 percent. The proportional volatility contributions have the same fractions. Sixty percent of the dollars is not sixty percent of the risk. The concentration depends on covariance, so a universal ninety-four-percent equity-risk figure does not follow from the label sixty-forty.",
+   "zh": "指定两资产年标准差百分之二十和十，相关负五分之一，资本权重六成四成。<bookmark mark='a'/>组合波动为11.87%。<bookmark mark='b'/>Euler方差份额为95.5%与4.5%，标准差贡献比例相同。六成资金不等于六成风险。集中度取决于协方差，六四这个名称本身不能推出普遍的百分之九十四股票风险。"
+  },
+  "e9054e32b913": {
+   "scene": "RiskParity",
+   "en": "Inverse-volatility weights give one third to the twenty-percent asset and two thirds to the ten-percent asset. Weighted standalone volatilities are equal. <bookmark mark='a'/> For exactly two long assets, cross-covariance enters both Euler contributions symmetrically. Equal standalone budgets therefore also equalise Euler fractions, provided portfolio risk is nonzero. <bookmark mark='b'/> The chosen base risk is 8.43 percent. This special identity does not make inverse volatility a general equal-risk-contribution solution for three or more assets. Equal risk does not itself specify expected returns or establish an investment premium.",
+   "zh": "逆波动权重给高波动资产三分之一、低波动资产三分之二，独立加权波动相等。<bookmark mark='a'/>恰好两个多头资产时，交叉协方差对两项Euler贡献对称，非零组合风险下也能平分Euler份额。<bookmark mark='b'/>指定基础风险为8.43%。该特例不使逆波动成为三资产以上的一般等风险解，也不决定预期收益或证明溢价。"
+  },
+  "7e0f96a63864": {
+   "scene": "RiskParity",
+   "en": "Choose three groups with ten percent volatility and one third of capital each. Their correlation matrix is positive definite: A and B correlate at point eight, B and C at point one, and A and C at zero. <bookmark mark='a'/> Standalone budgets are equal, but Euler fractions are 37.50, 39.58 and 22.92 percent. Shared covariance changes the contributions. <bookmark mark='b'/> The House's hierarchical rule uses inverse-volatility weights within groups, then inverse group standalone volatility, followed by overall risk scaling. It does not solve the general equal group Euler-risk equations. That difference belongs in the model's definition, rather than being explained away by a return comparison.",
+   "zh": "指定三组各百分之十波动、各三分之一资本。相关矩阵正定，AB为点八、BC点一、AC零。<bookmark mark='a'/>独立预算相等，Euler份额却为37.50%、39.58%和22.92%。<bookmark mark='b'/>原分层规则先组内逆波动，再逆组独立波动，最后整体缩放，并不求解一般组Euler等风险方程。差异属于模型定义，不能用收益比较解释掉。"
+  },
+  "505d7084c31e": {
+   "scene": "RiskParity",
+   "en": "Risk scaling is a second step. For a fully invested long base portfolio, multiply weights by target over forecast volatility, subject to a chosen gross cap of four. <bookmark mark='a'/> Base risk 8.43 percent gives leverage 1.186 for a ten percent target. <bookmark mark='b'/> At fixed covariance, the common scale changes contributions proportionally and preserves their fractions. It cannot turn unequal fractions into equal ones. A different covariance forecast or binding limit changes the calculation. Very low estimated risk can imply extreme leverage, motivating a cap alongside independent liquidity and financing constraints.",
+   "zh": "风险缩放是第二步。全额投资的多头基础权重乘目标除以预测，指定总敞口上限四。<bookmark mark='a'/>基础风险8.43%，目标百分之十给杠杆1.186。<bookmark mark='b'/>固定协方差下，共同倍数等比改变贡献，保留份额，不能把不等份额变相等。协方差改变或上限绑定会改变计算；低风险估计可能要求极大杠杆，还需独立融资和流动性约束。"
+  },
+  "6013b0d1ecdc": {
+   "scene": "RiskParity",
+   "en": "Hold those positions fixed and vary only correlation. Every point is a chosen covariance calculation, with both standalone volatilities unchanged. <bookmark mark='a'/> The old weights had ten percent risk at correlation minus point two. At plus point six, the same positions have 14.14 percent risk. <bookmark mark='b'/> Re-estimation and rebalancing may change desired exposure later, but cannot change positions already held during a shock. Risk parity does not require permanently negative correlation to be defined. Forecasts, stress assumptions and limits still matter; one scenario cannot establish protection in every regime.",
+   "zh": "固定仓位只改变相关性，各点都是指定协方差计算，独立波动不变。<bookmark mark='a'/>旧仓位在相关负点二时风险百分之十，在正点六时风险为14.14%。<bookmark mark='b'/>以后重估调仓不能改变冲击时已经持有的仓位。定义风险平价不要求永久负相关，但预测、压力假设和上限仍重要，一个情景不能证明所有状态下都有保护。"
+  },
+  "4c9d8ba14f14": {
+   "scene": "RiskParity",
+   "en": "A gross Sharpe is preserved by leverage only in a costless linear scaling convention. Choose base expected excess return mu and volatility sigma, and leverage at least one. Charge spread s on borrowing above initial capital. <bookmark mark='a'/> Mean is L mu minus L minus one times s, while volatility is L sigma. The ratio loses the borrowing-spread term shown here. <bookmark mark='b'/> At leverage two, base expected excess return three percent, volatility five percent and half-percent spread, the gross ratio point six becomes point five five. This fixed arithmetic omits other fees, default and dynamic trading. Actual collateral and financing agreements require their own cash-flow specification.",
+   "zh": "杠杆仅在无成本线性缩放下保持毛夏普。基础超额均值mu、波动sigma，杠杆至少一，超出初始资本的借款收利差s。<bookmark mark='a'/>均值为L乘mu减L减一乘s，波动为L乘sigma，所以夏普扣去借款项。<bookmark mark='b'/>L二、基础均值百分之三、波动百分之五、利差百分之零点五，毛比值点六变点五五。此固定计算忽略其他费、违约和动态交易，真实融资需另写现金流。"
+  },
+  "f6effb3bcdd7": {
+   "scene": "RiskParity",
+   "en": "A bond label does not remove price risk. A first-order approximation combines carry with modified duration times the negative yield change. <bookmark mark='a'/> Choose yield three percent, modified duration eight years, and a one-day yield rise of half a percentage point, written as point zero zero five. <bookmark mark='b'/> Carry is about three percent over two hundred fifty-two, and the duration term minus four percent, giving about minus three point nine nine percent. Convexity, coupon timing and rolling exposures are omitted. This local chosen calculation is not a Treasury-index reconstruction or a promise that bonds offset equity losses.",
+   "zh": "债券标签不消除价格风险。一阶近似是票息持有收益减修正久期乘收益率变化。<bookmark mark='a'/>指定收益率百分之三、修正久期八年，一天升五十基点，即点零零五。<bookmark mark='b'/>持有收益约百分之三除二百五十二，久期项负百分之四，合计约负百分之三点九九。忽略凸性、票息时点和展期；这不是国债指数重构，也不承诺对冲股损。"
+  },
+  "f25fd4b9f3f8": {
+   "scene": "RiskParity",
+   "en": "Bridgewater describes All Weather through growth and inflation environments and dates its launch to 1996. That firm history differs from our simplified allocation rule. Actual holdings, instruments, hedges and constraints are not reconstructed here. An institutional idea can motivate questions about exposures without making a simple inverse-volatility illustration an empirical replica or identifying the cause of a particular fund return.",
+   "zh": "桥水用增长和通胀环境描述全天候，并将推出时间记为1996年。这段公司历史不同于简化配置规则，这里没有重构其真实持仓、工具、对冲或约束。制度理念能启发敞口问题，但不能把逆波动算例变成经验复现，或识别某基金收益原因。"
+  },
+  "0d8e485a007d": {
+   "scene": "RiskParity",
+   "en": "Growth news can affect cash flows and discount rates differently. Inflation news can change nominal purchasing power, expected policy and real activity together. <bookmark mark='a'/> Campbell, Sunderam and Viceira analyse links between nominal-bond risk and inflation news. Such mechanisms depend on model and period; a quadrant label does not fix the sign of every asset's return. <bookmark mark='b'/> Spanning several environments still needs specified instruments, measured sensitivities, financing and stress limits. Nominal bonds, inflation-linked bonds and commodities carry distinct risks. Equalising one forecast budget does not guarantee equal protection against every shock.",
+   "zh": "增长消息对现金流与折现率可有不同作用；通胀同时影响购买力、政策预期和实际活动。<bookmark mark='a'/>Campbell、Sunderam与Viceira研究名义债风险和通胀消息，机制依赖模型和时期，象限标签不能固定每项资产收益符号。<bookmark mark='b'/>跨环境配置仍需工具、敏感度、融资与压力上限。名义债、通胀债和商品有不同风险，平衡一个预测预算不保证平衡每种冲击保护。"
+  },
+  "0a506a681615": {
+   "scene": "RiskParity",
+   "en": "Pause and predict. Use risky weights one third and two thirds, multiplied by leverage two point five, and choose one-period returns minus twenty and minus ten percent. Cash rate and costs are zero. What is the portfolio return? Explain why saying only mostly bonds would not have supplied enough information.",
+   "zh": "暂停预测。风险权重三分之一和三分之二，乘杠杆二点五；单期收益指定负百分之二十和负百分之十，现金利率成本均零。组合收益多少？为何只说主要是债券还不够？"
+  },
+  "67033f7eefff": {
+   "scene": "Styles",
+   "en": "Chapter five. Value, momentum, carry and defensive are signal families applied across several asset classes. We examine AQR's published research series through 2020, with reconstructed history and different underlying start dates. These are provider portfolios, rather than an investable fund record or universal premia.",
+   "zh": "第五章。价值、动量、套息和防御是跨多种资产应用的信号家族。这里考察截至2020年的AQR研究序列，包含重构历史和不同底层起点。这是提供者构建的组合，不是可投资基金的实盘记录，也不是普遍保证的溢价。"
+  },
+  "6cc79559cda5": {
+   "scene": "Styles",
+   "en": "The four, as AQR's researchers apply them across asset classes. All are long-short within a class: they rank markets against each other. <bookmark mark='a'/> Value: buy what is cheap against an anchor, such as an index or commodity that has fallen for five years, or a currency below purchasing-power parity. Momentum: buy the past year's relative winners. <bookmark mark='b'/> Carry: buy what earns the most if prices stand still. Defensive: buy the safer, steadier markets, levered to the same risk.",
+   "zh": "按AQR研究定义，四种风格在类别内多空排名。<bookmark mark='a'/>价值买相对锚便宜者，如过去五年下跌的指数或商品、低于购买力平价的货币；动量买过去一年相对赢家。<bookmark mark='b'/>套息买价格不动时收入较高者；防御买更安全稳定的市场，再缩放风险。"
+  },
+  "3ae262162ee5": {
+   "scene": "Styles",
+   "en": "Carry is an unchanged-price component under a stated convention. Koijen and coauthors study it across asset classes. <bookmark mark='a'/> For one long contract held to settlement, divide terminal profit by its positive initial forward price. The displayed decomposition is exact; that denominator is not posted margin. <bookmark mark='b'/> Currency deposit carry is approximately the rate differential. <bookmark mark='c'/> Bond excess carry includes yield over funding and local roll-down. <bookmark mark='d'/> A commodity's positive spot-forward gap does not guarantee profit. <bookmark mark='e'/> Equity carry includes dividends against financing. These conventions define signals, without certifying expected net returns.",
+   "zh": "套息是指定价格约定下的不变价格成分，Koijen等跨资产研究。<bookmark mark='a'/>一份多头合约持有至结算，以正的初始远期价格除终期利润，展示分解精确，但分母不是保证金。<bookmark mark='b'/>货币存款套息近似利差。<bookmark mark='c'/>债券包含收益率减融资和局部滚降。<bookmark mark='d'/>商品现货高于远期也不保证利润。<bookmark mark='e'/>股票包含股息对融资。这些约定定义信号，不证明预期净收益。"
+  },
+  "773118dc1334": {
+   "scene": "Styles",
+   "en": "Ninety-five years of the four styles across asset classes, as AQR has published them. <bookmark mark='a'/> Each earns a Sharpe ratio between about a half and seven tenths. <bookmark mark='b'/> The provider's multi-style series has Sharpe 1.45 and annualised volatility 2.2 percent under this calculation. Its construction is not established by simply averaging the four displayed series. Monthly standard deviations use the population divisor here; annualisation is a convention, rather than a claim of independent returns. Diversification helps explain the attraction, while provider methodology and costs still matter.",
+   "zh": "AQR公布的跨资产四风格历史跨度约九十五年。<bookmark mark='a'/>各风格夏普约点五至点七。<bookmark mark='b'/>提供者多风格序列在此计算下夏普1.45，年化波动2.2%。不能仅由四条展示序列平均推定其构造。月标准差采用总体分母，年化是约定，不声称收益独立。分散解释吸引力的一部分，但方法和成本仍重要。"
+  },
+  "68fc9f9c3f67": {
+   "scene": "Styles",
+   "en": "The paths use cumulative log wealth multiplied by one hundred. <bookmark mark='a'/> They rise over this research sample but have extended setbacks. A value of one hundred on this axis means wealth multiplied by e, not a one-hundred-percent total return. <bookmark mark='b'/> Underlying coverage changes: currency carry, for example, begins much later than 1926. The calculation fills missing returns with zero before log accumulation. That convention and reconstructed history limit comparisons of early and late periods. A long plotted span is not a single live mandate.",
+   "zh": "路径用累计对数财富乘一百。<bookmark mark='a'/>研究样本总体上升，也有长期挫折；轴上一百代表财富乘以e，不是总收益百分之一百。<bookmark mark='b'/>底层覆盖变化，例如货币套息远晚于1926年才开始；缺失收益在累计对数前填零。这些约定及重构历史限制早晚比较，长图不等于单一实盘授权。"
+  },
+  "74b9dc0118b7": {
+   "scene": "Styles",
+   "en": "The reason is the correlations. <bookmark mark='a'/> Value and momentum are negatively correlated, -0.53 in the provider series. Contrasting signals suggest a mechanism but do not identify its cause. <bookmark mark='b'/> For equal-volatility, equal-Sharpe strategies with equal weights, the formula relates combined Sharpe to average pair correlation. Four with zero average correlation double individual Sharpe under those assumptions. The provider portfolio has its own construction. Correlations can change, and they do not describe joint tails.",
+   "zh": "相关性解释合成的一部分。<bookmark mark='a'/>价值与动量在提供者序列中相关-0.53。相反信号暗示机制，却不识别原因。<bookmark mark='b'/>等波动、等夏普、等权下，合成夏普取决于平均两两相关；四项平均相关零时，夏普加倍。提供者组合自有构造。相关会变，也不能描述联合尾部。"
+  },
+  "3ebd9edca91f": {
+   "scene": "Styles",
+   "en": "The fourth style needs a word, because it is risk parity's cousin. <bookmark mark='a'/> Defensive buys the safer markets in each class, levered to the same risk, and sells the riskier ones. <bookmark mark='b'/> Andrea Frazzini and Lasse Pedersen's betting against beta explains it: investors who cannot lever bid up the risky assets, so the safe ones pay more per unit of risk to whoever can. <bookmark mark='c'/> The research also examines duration risk along the Treasury curve. The leverage-constraint hypothesis connects defensive investing and risk budgeting, but a long-short defensive factor and a long-only risk-parity portfolio have different exposures. Neither earns a guaranteed premium when funding tightens.",
+   "zh": "防御与风险预算有联系。<bookmark mark='a'/>防御买较安全市场，放大到相同风险，卖较危险市场。<bookmark mark='b'/>Frazzini和Pedersen的杠杆约束假说认为，不能加杠杆的投资者可能抬高高风险资产价格，使安全资产每单位风险回报较高。<bookmark mark='c'/>研究也涉及国债曲线久期。多空防御因子与只做多风险平价敞口不同；资金收紧时二者都没有保证的溢价。"
+  },
+  "80cb6dad355e": {
+   "scene": "Styles",
+   "en": "And in the worst years for stocks. <bookmark mark='a'/> In the six worst calendar years for world equity indices since 1926, including 1931, 1974, 2002 and 2008, the combined styles were roughly flat or up. They were selected after seeing the equity series. In 2008 the multi-style result was slightly negative. This same-sample comparison does not establish protection within each crisis or guarantee future crisis performance.",
+   "zh": "再看股票最差年份。<bookmark mark='a'/>1926年以来六个最差日历年，包括1931、1974、2002、2008，多风格大致持平或上涨。年份是观察股票后事后选择；2008年多风格略亏。同样本比较不能证明每场危机内部均有保护，更不保证未来表现。"
+  },
+  "f78d91151ecd": {
+   "scene": "Styles",
+   "en": "A striking fact sits under this table. <bookmark mark='a'/> Cliff Asness, Tobias Moskowitz and Lasse Pedersen found that value in stocks is correlated with value in bonds, currencies and commodities, and the same for momentum, across markets with nothing in common. <bookmark mark='b'/> They traced part of the comovement to measures of funding liquidity. This association does not force every funding shock to give the same payoff signs. <bookmark mark='c'/> A shared exposure can survive asset-class diversification; its impact depends on the exposure, horizon and shock. Correlation alone does not identify a structural cause.",
+   "zh": "表中还有共同变动。<bookmark mark='a'/>Asness、Moskowitz和Pedersen发现股票价值与债券、货币、商品价值相关，动量亦然。<bookmark mark='b'/>他们研究与融资流动性指标的联系；这种关联不强制每次资金冲击都给同样收益符号。<bookmark mark='c'/>共同敞口可能穿过跨资产分散，影响取决于敞口、期限和冲击，相关本身不识别结构原因。"
+  },
+  "25ea03849e52": {
+   "scene": "Styles",
+   "en": "Three cautions. <bookmark mark='a'/> This is a published backtest by a manager of these strategies, gross of fees and costs, with early decades reconstructed from thin data: a prior, not a track record. <bookmark mark='b'/> Some of the premia are pay for risk: currency carry crashes, as Markus Brunnermeier, Stefan Nagel and Lasse Pedersen documented. <bookmark mark='c'/> And as the styles became products, their investors came to share positions, which is the crowding of Part thirty-one, at the level of asset classes.",
+   "zh": "三点谨慎。<bookmark mark='a'/>这是管理这些策略的机构公布的回测，未扣费用成本，早期数据稀疏且重构，不是实盘记录。<bookmark mark='b'/>部分溢价可能补偿风险，Brunnermeier、Nagel和Pedersen研究货币套息崩盘。<bookmark mark='c'/>策略变产品后，投资者可能共享仓位，是第31部分拥挤问题的跨资产版本。"
+  },
+  "55be06445323": {
+   "scene": "Styles",
+   "en": "Pause and predict. Four styles, each with a Sharpe ratio of point six and an average correlation of zero. What does their equal-risk combination earn? And if the correlation were point three?",
+   "zh": "暂停预测。四风格各夏普点六，等风险合成且平均相关零，组合夏普多少？若平均相关点三呢？"
+  },
+  "813d9e0bb904": {
+   "scene": "Carry",
+   "en": "Chapter six. Carry describes return components under a specified convention about prices and financing. Rates, forward prices and a curve can be observed now. The later spot price is still uncertain. We will use fixed currency and commodity examples to separate those quantities, rather than treating a fund-minus-spot residual as an identified premium.",
+   "zh": "第六章。套息依赖价格和融资的具体约定。利率、远期和曲线现在可见，未来现货仍不确定。用固定货币与商品例子区分这些量，不把基金减现货残差当成已识别溢价。"
+  },
+  "17845c666fec": {
+   "scene": "Carry",
+   "en": "Start with deposits and quote the exchange rate as domestic currency per foreign unit. One domestic dollar buys one over the initial spot rate in foreign units. After earning the foreign deposit rate, those units are converted at the terminal spot rate. <bookmark mark='a'/> The domestic gross return is one plus the foreign rate times one plus the spot change. Subtract the domestic cash return to define the excess return. <bookmark mark='b'/> Choose simple annual rates six and two percent and an unchanged spot rate. Excess return is four percent. The calculation assumes the rates are available on the stated terms, with no credit loss, fees or trading costs.",
+   "zh": "先看存款，汇率报为每单位外币对应本币。一本币买初始现货倒数单位外币，赚外币存款利率后按终期现货换回。<bookmark mark='a'/>本币毛回报为一加外币利率乘一加现货变动，再减本币现金收益得超额。<bookmark mark='b'/>指定单利年率百分之六和二，现货不变时超额百分之四。假定能按所述条件存款，无信用损失、费用和交易成本。"
+  },
+  "b8b67e1de4d6": {
+   "scene": "Carry",
+   "en": "Covered interest parity links the forward quote to the two funding rates under matched credit and frictionless borrowing and lending assumptions. <bookmark mark='a'/> With initial spot 1.10 and our six-versus-two-percent rates, the one-year forward is 1.05849 domestic units per foreign unit. The higher-yielding foreign currency has a forward discount under this quote convention. <bookmark mark='b'/> A long forward on one foreign unit earns terminal spot minus the contracted forward, in domestic currency. It starts without paying that full notional, so a percentage return also needs a capital and collateral convention. Covered parity does not determine expected terminal spot or guarantee a profitable unhedged carry trade.",
+   "zh": "匹配信用且无摩擦借贷条件下，抛补利率平价连接两种资金利率与远期。<bookmark mark='a'/>初始现货1.10，外币六、本币二个百分点利率，年远期1.05849本币每外币。高息外币按此报价为远期贴水。<bookmark mark='b'/>一单位外币远期多头利润是终期现货减合约价，单位本币。初始不支付全额名义本金，因此百分比收益还需资本担保品约定。抛补平价不决定未来现货期望，也不保证未对冲套息盈利。"
+  },
+  "931716f5ebc7": {
+   "scene": "Carry",
+   "en": "An observable rate difference leaves exchange-rate risk. Keep the same six and two percent deposit rates. If spot is unchanged, the foreign deposit earns six percent in domestic units, or four percent above domestic cash. <bookmark mark='a'/> Choose a five percent fall in the foreign currency instead. Its domestic total return is point seven percent, and excess return is minus one point three percent. A five percent rise gives eleven point three percent total and nine point three percent excess. <bookmark mark='b'/> Expanding the product shows the rate difference, the spot change and their cross term. Dropping that term is an approximation. A large quoted carry does not control the price change that can outweigh it.",
+   "zh": "可见利差仍留汇率风险。六与二个百分点利率，现货不动时本币总收益百分之六、超额四。<bookmark mark='a'/>外币跌百分之五，总收益百分之零点七、超额负一点三；涨百分之五则总收益十一点三、超额九点三。<bookmark mark='b'/>乘积展开有利差、现货变动和交叉项，丢交叉项只是近似。高报价套息不能控制足以抵消它的价格变化。"
+  },
+  "c752ad8e0591": {
+   "scene": "Carry",
+   "en": "For a storable commodity, a stylised storage-pricing reference writes a forward as spot times the exponential of financing plus storage cost minus convenience yield. <bookmark mark='a'/> Choose spot one hundred and net carry plus five percent or minus five percent in continuous annual units. The upward curve is contango and the downward curve backwardation. <bookmark mark='b'/> The pricing argument needs the ability to carry the commodity and the relevant funding, storage and trading assumptions. Convenience benefits and physical constraints matter. Neither curve alone specifies expected terminal spot. In particular, a forward premium over today's spot is not proof of a negative expected futures profit.",
+   "zh": "可储存商品的简化定价为现货乘融资加储存减便利收益的指数。<bookmark mark='a'/>指定现货一百，连续年化净持有成本正或负百分之五，上倾为升水，下倾为贴水。<bookmark mark='b'/>论证需要持有商品能力及相应融资、储存和交易条件，便利收益与实物限制重要。任何曲线本身都不决定终期现货期望；远期高于今日现货不证明预期期货利润为负。"
+  },
+  "4c224725d0ce": {
+   "scene": "Carry",
+   "en": "Three fixed contract payoffs make the distinction explicit. A long contract entered at one hundred five and settled at one hundred loses five currency units. <bookmark mark='a'/> The same entry price settled at one hundred twenty gains fifteen. A contract initially above spot can therefore make money when terminal spot rises enough. <bookmark mark='b'/> Conversely, entry at ninety-five followed by settlement at ninety loses five, even if ninety-five was initially below spot. Convergence is a relation between futures and spot at delivery, not a promise that today's spot stays fixed. Rolling changes contracts; its realised contribution also needs the intervening curve and financing path, rather than subtracting today's quoted gap every month.",
+   "zh": "三份固定合约说明区别。一百零五买入，一百结算亏五。<bookmark mark='a'/>同样买价，一百二十结算赚十五，初始升水也可盈利。<bookmark mark='b'/>反过来九十五买、九十结算亏五，即使初始价低于现货。收敛是交割时现货期货的关系，不承诺现货不动。展期换合约，已实现贡献需中间曲线与融资路径，不能每月机械扣今日价差。"
+  },
+  "b272cfe9525a": {
+   "scene": "Carry",
+   "en": "A deposit identity is not automatically a fund attribution. A currency or commodity fund has expenses, collateral policies, distributions and tracking conventions. <bookmark mark='a'/> Its realised return minus a chosen spot benchmark can contain all of these effects, as well as different price clocks and contract exposures. Calling the whole residual an identified interest differential or pure roll yield is too strong. <bookmark mark='b'/> Compounding daily excess returns also differs from compounding total returns and then subtracting compounded cash. Adding a monthly cash return does not generally undo the cross terms. State the construction before comparing numbers, and distinguish an observable forward carry measure from a realised residual.",
+   "zh": "存款恒等式不自动成为基金归因。基金有费用、担保品政策、分配及跟踪约定。<bookmark mark='a'/>基金收益减某现货基准可含这些效应，也含价格时钟与合约敞口差异，不能全部叫纯利差或展期收益。<bookmark mark='b'/>复利日超额不同于复利总收益再减复利现金；加月现金通常不能消掉交叉项。比较前明确构造，区分可观察远期套息与已实现残差。"
+  },
+  "787ef892a544": {
+   "scene": "Carry",
+   "en": "The crisis file is a specific contract, not a generic oil price. The expiring May West Texas Intermediate contract settled at minus thirty-seven dollars and sixty-three cents per barrel on April twentieth, 2020, as reported. Delivery and storage constraints near expiry were central to that episode. A fund can hold other maturities and change its roll policy. Its return cannot be inferred from this settlement quotation alone. The quotation also does not supply an observed negative spot-price path for our chosen mathematical curves.",
+   "zh": "危机档案是特定合约。报道称2020年4月20日，到期五月WTI期货每桶结算负三十七点六三美元。临近交割的储存和交付约束很重要。基金可能持其他月份并改变展期政策，不能仅凭报价推断基金收益。该报价也不为指定数学曲线提供一条负现货观测路径。"
+  },
+  "83b2e7ac890a": {
+   "scene": "Carry",
+   "en": "Bonds have financing and roll components too. Under a stated local approximation, yield over the cash rate and the price effect of rolling to another point on a fixed curve contribute to carry. Curve slope alone is not the entire return. <bookmark mark='a'/> Choose yield three percent, cash two percent, duration five, and an assumed roll-related yield decline of one tenth of a percentage point over the year. The approximation gives one point five percent. <bookmark mark='b'/> An additional one-percentage-point yield rise subtracts about five percent, producing minus three point five percent. These fixed assumptions omit convexity and other cash flows. Observable carry can coexist with substantial price risk.",
+   "zh": "债券也有融资和滚降。指定局部近似中，收益率减现金及沿固定曲线移动的价格效应贡献套息，曲线斜率不等于全部收益。<bookmark mark='a'/>收益率三、现金二个百分点，久期五，指定一年滚降使收益率降十基点，近似套息百分之一点五。<bookmark mark='b'/>再升一百基点减约百分之五，变负三点五。忽略凸性和其他现金流；可见套息仍可伴随大价格风险。"
+  },
+  "f4d5621bd435": {
+   "scene": "Carry",
+   "en": "Why might a carry premium exist? Hedging-demand theories associated with Keynes and Hicks propose compensation for bearing risks that others want to transfer. The expected spot-versus-forward gap is still an economic hypothesis, not an implication of today's curve slope. <bookmark mark='a'/> Funding and liquidity shocks can create common losses among leveraged carry positions. That is a possible mechanism; identifying its role in a particular episode needs more than a negative sample skew. <bookmark mark='b'/> A testable carry rule therefore specifies its ex-ante inputs, quote conventions, ranking, collateral, costs and evaluation period. A realised fund residual and a forward carry measure should not be silently interchanged.",
+   "zh": "套息溢价为何可能存在？Keynes与Hicks的对冲需求理论提出，承担他人欲转移的风险可获补偿。预期现货与远期之差仍是经济假说，不由今天斜率推出。<bookmark mark='a'/>融资流动性冲击可能让杠杆套息共同亏损，但识别某事件原因不止需要负样本偏度。<bookmark mark='b'/>可检验规则须说明事前输入、报价、排名、担保品、成本和评估期。不能把基金残差与远期套息指标混用。"
+  },
+  "0986f3805a0f": {
+   "scene": "Carry",
+   "en": "Pause and predict. A foreign deposit pays six percent, domestic cash pays two percent, and the foreign currency falls five percent over the year. What are the domestic-currency total return and excess return? Retain the cross term, and distinguish the answer from a forward's profit per foreign unit.",
+   "zh": "暂停预测。外币存款百分之六，本币现金百分之二，外币一年贬值百分之五。本币总收益与超额收益多少？保留交叉项，并与每单位外币远期利润区分。"
+  },
+  "119ebab81458": {
+   "scene": "Insurance",
+   "en": "Chapter seven. A variance risk premium compares matched variance claims under risk-neutral and physical expectations; it does not mean that every option is overpriced. We examine a published collateralised put-writing index. Its exposure includes equity risk, so its average return is not a pure measure of compensation for selling volatility.",
+   "zh": "第七章。方差风险溢价比较匹配方差合约在风险中性与实际概率下的期望，不意味着每份期权都高估。这里看公布的担保看跌期权指数，其敞口还含股票风险，平均收益不是纯粹卖波动补偿。"
+  },
+  "6ec763a6b7c3": {
+   "scene": "Insurance",
+   "en": "Cboe's PUT benchmark writes an approximately at-the-money one-month S and P five hundred put under specified roll and settlement rules. <bookmark mark='a'/> The displayed equation is a simpler chosen accounting example: initial collateral K earns the period risk-free rate, while premium p is held without interest. Subtract the terminal shortfall and divide by K. <bookmark mark='b'/> This explains asymmetry. It does not reproduce every daily index convention, and cash security does not settle an investor's broker requirements or execution costs. The strike need not equal the index level on every observation date.",
+   "zh": "Cboe PUT按明确展期结算规则卖约平值一个月标普五百看跌。<bookmark mark='a'/>方程只是更简单的指定终期核算：初始担保K赚期间无风险率，权利金p无息持有，减终期短缺再除K。<bookmark mark='b'/>这解释非对称，不复制全部日指数约定；现金担保也不解决投资者券商要求或执行成本。执行价不必每个观测日都等于指数水平。"
+  },
+  "831c62bdefcf": {
+   "scene": "Insurance",
+   "en": "These one hundred sixty-seven months run from February 2007 through December 2020. <bookmark mark='a'/> The comparison is Kenneth French's market series, rather than an exact copy of the underlying and settlement of each put. <bookmark mark='b'/> Both wealth paths compound total returns. PUT suffers large losses and recovers differently. A single short put has limited upside, but rolling contracts and collateral make a multi-period index more than one fixed terminal payoff. A benchmark path is also different from the realised returns of a fund paying fees and execution costs.",
+   "zh": "共一百六十七个月，2007年二月至2020年十二月。<bookmark mark='a'/>比较对象French市场，不完全复制每份看跌的标的和结算。<bookmark mark='b'/>两条财富路径复利总收益。PUT也大亏，恢复不同。单个卖看跌上行有限，但滚动合约及担保品使多期指数不同于固定终期收益；指数也不同于支付费用成本的真实基金。"
+  },
+  "6dac9bbda0ef": {
+   "scene": "Insurance",
+   "en": "PUT's annualised volatility is 11.8 percent and its Sharpe 0.45, against 16.2 percent and 0.62 for the market under these conventions. <bookmark mark='a'/> The reported drawdowns are -33.3 and -51.4 percent. They start the running peak at the first observed net asset value, omitting a possible fall from an initial value of one. <bookmark mark='b'/> PUT's monthly excess-return skewness is -1.63. These are sample summaries. Square-root-of-twelve annualisation does not establish independent returns or identify a pure variance premium.",
+   "zh": "按此约定PUT年化波动11.8%，夏普0.45；市场为16.2%和0.62。<bookmark mark='a'/>报告回撤为-33.3%与-51.4%，峰值从首个观测净值开始，遗漏可能从初始一下降的部分。<bookmark mark='b'/>PUT月超额收益偏度-1.63。这是样本摘要，平方根十二年化不证明收益独立，也不识别纯方差溢价。"
+  },
+  "db2462c51b26": {
+   "scene": "Insurance",
+   "en": "The original summary's beta is a proxy: covariance divides by N minus one, but variance divides by N. <bookmark mark='a'/> We display the convention rather than calling it exact OLS. Its annualised intercept subtracts this proxy times mean market excess return from mean put excess return. <bookmark mark='b'/> Without uncertainty estimates and a matched exposure model, this does not establish causal alpha or isolate option compensation. Israelov and Nielsen's covered-call decomposition distinguishes equity, volatility and timing. That framework motivates questions about option selling; it is not an identity for this series without the required parity and financing assumptions.",
+   "zh": "原摘要贝塔是代理，协方差分母N减一，方差分母N。<bookmark mark='a'/>明确展示约定，不称精确OLS。年化截距从看跌均值减代理贝塔乘市场均值。<bookmark mark='b'/>没有不确定性及匹配敞口模型，不能建立因果阿尔法或隔离期权补偿。Israelov与Nielsen的备兑看涨分解区分股票、波动和时点，但没有所需平价融资条件时，它不是此序列的恒等式。"
+  },
+  "855992852170": {
+   "scene": "Insurance",
+   "en": "Window labels need dates. The first event is September through November 2008, not the entire calendar year. <bookmark mark='a'/> The second is February through March 2020. The losses compound total returns over these selected intervals. Both series fall substantially. The comparison does not isolate volatility compensation or supply a prespecified crisis test. Applying either figure to its entire calendar year would be incorrect.",
+   "zh": "窗口标签必须写日期。第一段是2008年九至十一月，不是全年。<bookmark mark='a'/>第二段为2020年二至三月，损失复利所选窗口总收益。两序列均大跌；比较不隔离波动补偿，也不是预先指定危机检验。把数字用于全年会错误。"
+  },
+  "7def41cdbd70": {
+   "scene": "Insurance",
+   "en": "The crisis file is February fifth, 2018. The VIX more than doubled and Credit Suisse's XIV suffered an indicative-value fall exceeding ninety percent, triggering termination. This is quoted event history. XIV's daily inverse VIX-futures exposure, reset and termination terms differed from cash-secured S and P put writing. Both illustrate hidden tail exposure, but their losses cannot be transferred between products by analogy.",
+   "zh": "危机档案是2018年二月五日。VIX翻倍以上，瑞信XIV指示价值跌逾百分之九十，触发终止。这是引用事件历史。XIV每日反向VIX期货、重置和终止条款不同于现金担保标普看跌。二者可说明隐藏尾部风险，却不能类比转移损失数字。"
+  },
+  "8f222e96c339": {
+   "scene": "Insurance",
+   "en": "Who buys protection? Pension funds, insurers and structured-product desks can have mandates, preferences and budgets. <bookmark mark='a'/> Garleanu and coauthors study demand-based option pricing with imperfect hedging. Demand and dealer capacity can affect prices relative to a benchmark. <bookmark mark='b'/> This is not the same as comparing an undiscounted physical expected payoff with an option price. It is a mechanism to test; persistent demand alone cannot guarantee a premium after crash losses, funding, capital and execution.",
+   "zh": "谁买保护？养老基金、保险和结构产品部门有授权、偏好和预算。<bookmark mark='a'/>Gârleanu等研究不完全对冲下的需求定价，需求和做市能力可影响相对基准价格。<bookmark mark='b'/>这不同于比较未折现的实际概率期望收益与期权价。它是待检验机制；持续需求不能保证扣崩盘损失、融资、资本和执行后仍有溢价。"
+  },
+  "25a6e6853ca8": {
+   "scene": "Insurance",
+   "en": "Compare payoff shapes carefully. Put writing has negative skew in this sample and substantial equity downside. <bookmark mark='a'/> Some trend filters benefit from sustained directional moves, yet lose on reversals or jumps before exposure adjusts. This is not an exact short-versus-long straddle replication. <bookmark mark='b'/> Ilmanen's survey discusses insurance compensation and lottery preferences. Combining two return shapes does not automatically buy protection. Portfolio weights, costs, horizon and joint tail outcomes determine the result.",
+   "zh": "谨慎比较形状。此样本卖看跌负偏度且有股票下行。<bookmark mark='a'/>部分趋势滤波器受益于持续走势，却会因反转或仓位未调整前跳变受损，不是精确的跨式多空复制。<bookmark mark='b'/>Ilmanen综述讨论保险补偿及彩票偏好；混合两种形状不自动买到保护，结果由权重、成本、期限和联合尾部决定。"
+  },
+  "5625d0fd6fef": {
+   "scene": "Insurance",
+   "en": "Pause and predict. A chosen sequence has fifty months at plus one percent and one month at minus thirty percent. The arithmetic mean is twenty percentage points divided by fifty-one, about point three nine two percent a month. The skewness is negative. That arithmetic average differs from the compound return, and positive average income alone does not describe the tail.",
+   "zh": "暂停预测。指定五十个月各正百分之一，再一个月负百分之三十。算术均值为二十个百分点除五十一，约月均百分之零点三九二。偏度为负。算术平均不同于复利收益，正平均收入不能描述尾部。"
+  },
+  "234267ce760f": {
+   "scene": "Calendar",
+   "en": "Chapter eight. A calendar or event condition specifies when exposure is held. To assess it, define the window before observing its returns, keep the price and cash-flow clock explicit, and account for the other rules considered. Chosen arithmetic can explain those requirements without establishing an empirical calendar premium.",
+   "zh": "第八章。日历或事件条件定义何时持仓。必须在看收益之前定义窗口，明确价格现金流时钟，记录其他候选规则。指定算术可以解释要求，但不建立经验日历溢价。"
+  },
+  "37a57107c64f": {
+   "scene": "Calendar",
+   "en": "A turn-of-month definition can select the last trading day and the first three of the next month. In this chosen twenty-trading-day illustration, four selected dates are twenty percent of the sample. The number of trading days varies in real months. A test must also define holidays, market closures, trading sessions and when the calendar was available. Most importantly, the membership rule is fixed before looking at its returns. Selecting the best four dates afterward answers a different question.",
+   "zh": "月末定义可取最后一个交易日和下月前三日。指定二十日例子选四日，占百分之二十；真实月份交易日会变。检验还须定义假日、停市、时段及事先可用日历。成员规则要先于收益固定；事后挑最好的四日是另一个问题。"
+  },
+  "792a8d8a6bc1": {
+   "scene": "Calendar",
+   "en": "Choose ten basis points on each selected date and minus one on every other date. <bookmark mark='a'/> Selected returns sum to forty basis points and the rest to minus sixteen, for an additive total of twenty-four. <bookmark mark='b'/> The selected share is 166.7 percent, more than all of the total because the other dates contribute negatively. It is a ratio of sums, not a probability, an independent risk share or causal evidence. It can be unstable near a zero denominator. A conditional daily mean annualised by two hundred fifty-two also differs from the return of investing only on those dates.",
+   "zh": "指定每个入选日十基点，其他日负一基点。<bookmark mark='a'/>入选合计四十，其他负十六，可加总和二十四基点。<bookmark mark='b'/>入选占比166.7%，超过百分之一百，因为其他日期负贡献。这是和的比值，不是概率、独立风险份额或因果证据，分母近零会不稳定。条件日均值乘二百五十二不等于只在所选日期投资的收益。"
+  },
+  "1b34d263bc59": {
+   "scene": "Calendar",
+   "en": "For the overnight clock, choose a previous close of one hundred, next open one hundred two, and next close one hundred one, with no corporate actions. <bookmark mark='a'/> Overnight return is two percent; intraday return is about minus point nine eight zero four percent; the whole day gains one percent. <bookmark mark='b'/> Gross returns multiply, rather than adding exactly. With adjusted prices, the adjustment convention also allocates dividends and other actions between the legs. Separate compounded overnight and intraday lines therefore need their own cash, adjustment and trading conventions before they describe implementable accounts.",
+   "zh": "隔夜例子指定前收一百、次开一百零二、次收一百零一，无公司行动。<bookmark mark='a'/>隔夜百分之二，日内约负百分之零点九八零四，全日正百分之一。<bookmark mark='b'/>毛回报相乘，并非精确相加。复权约定还分配股息等行动。各腿复利路径需现金、调整和交易约定，才描述可实施账户。"
+  },
+  "db18a203953f": {
+   "scene": "Calendar",
+   "en": "A visible conditional mean is not a net trading edge. Choose four basis points gross per round trip and five basis points of round-trip cost: the remainder is minus one. <bookmark mark='a'/> Entering and exiting once on each of two hundred fifty-two sessions gives five hundred four transaction legs. <bookmark mark='b'/> In a separate chosen linear budget, ten percent gross profit on starting capital is one thousand basis points. Dividing by five hundred four gives about one point nine eight basis points per leg. This is a cost-budget approximation, not an exact compounded annual strategy return. Funding, spread variation, impact and changes in traded capital can alter the calculation.",
+   "zh": "可见条件均值不是净优势。每往返毛四基点、成本五，剩负一。<bookmark mark='a'/>每年二百五十二时段各进出，计五百零四交易腿。<bookmark mark='b'/>另一指定线性预算中，初始资本毛利百分之十即一千基点，除五百零四约每腿一点九八基点。这是成本预算近似，不是精确复利年收益；资金、价差、冲击及资本变化会改变核算。"
+  },
+  "c3b423ca29f3": {
+   "scene": "Calendar",
+   "en": "An announcement date does not define a unique return window. A close-to-close return on the statement day includes different hours from a twenty-four-hour interval ending at the announcement. <bookmark mark='a'/> Lucca and Moench's pre-FOMC-announcement finding concerns a specified pre-announcement clock. A daily statement-date comparison is not a direct replication of that window. <bookmark mark='b'/> Release timestamps, time zones, market sessions, scheduled and unscheduled meetings, and the calendar available beforehand must be explicit. A concentration of returns around an event does not alone identify a policy-news mechanism or prove that a trade was executable before the relevant information.",
+   "zh": "公告日期不唯一决定窗口。声明日收盘至收盘不同于截至声明前二十四小时。<bookmark mark='a'/>Lucca与Moench研究特定公告前时钟，日声明日期比较不是直接复现。<bookmark mark='b'/>时间戳、时区、市场时段、计划内外会议及事前日历都须明确。事件周围收益集中本身不识别政策新闻因果，也不证明信息前可成交。"
+  },
+  "c1fe12d6fadc": {
+   "scene": "Calendar",
+   "en": "Corporate events add state risk. Choose a target price of one hundred five, a same-horizon closing payoff of one hundred ten, and a broken-deal payoff of ninety. <bookmark mark='a'/> With zero rates and costs, the probability that makes expected cash payoff equal the price is seventy-five percent. <bookmark mark='b'/> A chosen success probability of ninety percent gives expected profit three currency units, but the failure state loses fifteen. The probability is not established by the spread. Deal dependence, timing and market stress matter. Likewise, index changes and earnings events need information and execution clocks; a plausible flow story is not an automatic causal or risk-free-premium result.",
+   "zh": "公司事件增加状态风险。指定目标价一百零五，同期限成功支付一百一十，失败九十。<bookmark mark='a'/>利率成本零时，使期望支付等于价格的成功概率为百分之七十五。<bookmark mark='b'/>指定成功概率百分之九十，期望利润三，但失败亏十五。价差并不证明该概率；交易依赖、时间和市场压力重要。指数调整和盈利公告也需信息执行时钟，合理资金流故事不自动证明因果或无风险溢价。"
+  },
+  "d6ac8da17c41": {
+   "scene": "Calendar",
+   "en": "Selection can make a calendar pattern look convincing. Choose one hundred valid five-percent tests with every null true. <bookmark mark='a'/> If tests are independent, the chance of at least one false rejection is 99.41 percent. <bookmark mark='b'/> The expected false-rejection count is five; linearity gives that expectation without independence when each marginal test has the stated size. Real calendar rules overlap, and their returns can be dependent over time. Sullivan, Timmermann and White examine data snooping in such rule universes. A suitable bootstrap or reality check needs its own validity assumptions and does not repair unknown lookahead, omitted costs or an unrecorded adaptive search.",
+   "zh": "选择让日历模式显得有力。指定一百个有效百分之五检验，所有原假设真。<bookmark mark='a'/>独立时至少一次假拒绝概率99.41%。<bookmark mark='b'/>期望假拒绝数五，只要各边际尺寸正确，线性期望不需独立。真实规则重叠、收益相关。Sullivan等研究数据窥探；自助法和现实检验有自身有效性条件，不能修复未知前视、漏成本或未记录的自适应搜索。"
+  },
+  "14dbf53fce4a": {
+   "scene": "Calendar",
+   "en": "Published calendar studies motivate questions rather than universal laws. Ariel and Lakonishok and Smidt examine turn-of-month patterns; other work examines seasonal, overnight and corporate-event returns. <bookmark mark='a'/> Flows, risk bearing and investor clienteles are possible explanations. A mechanism needs identifying evidence, and a later decline does not by itself prove that arbitrageurs removed an effect. <bookmark mark='b'/> Preserve the candidate rules, information clocks and selection history, measure uncertainty with appropriate dependence assumptions, and state costs and financing. Those requirements apply even when the dates look predictable and the sample conditional mean is large.",
+   "zh": "文献提出问题而非普遍定律。Ariel、Lakonishok与Smidt研究月末，其他研究季节、隔夜和公司事件。<bookmark mark='a'/>资金流、风险承担和投资者群体是可能机制，需识别证据；后来下降不独自证明套利者消除了效应。<bookmark mark='b'/>保存候选、信息时钟与选择历史，按依赖结构评估不确定性，并写成本融资。即使日期可预测、条件均值大，这些要求仍适用。"
+  },
+  "14920f037b4e": {
+   "scene": "Calendar",
+   "en": "Pause and predict. A chosen overnight rule has four basis points gross per round trip and five basis points of total round-trip cost. What remains? Explain why a sample conditional daily mean alone would not establish the return of a self-financing annual strategy.",
+   "zh": "暂停预测。指定隔夜规则每往返毛四基点，总往返成本五，还剩多少？为何样本条件日均值本身不能建立自融资年度策略收益？"
+  },
+  "f53839579217": {
+   "scene": "Envelope",
+   "en": "Chapter nine. An evaluation protocol specifies what would be measured before interpreting a strategy result. Here we examine that protocol and a chosen covariance-change calculation. The arithmetic is not a historical backtest, an investment verdict or a reconstruction of the House's registered strategy outcomes.",
+   "zh": "第九章。评估协议在解释结果之前规定测量什么。这里讲协议及指定协方差变化计算，不是历史回测、投资裁决，也不是复原本系列登记策略结果。"
+  },
+  "fe95b38ca0e2": {
+   "scene": "Envelope",
+   "en": "First fix the universe, signal timing, risk scaling, constraints and cash-flow convention. State the cost model and what would count as success before examining an outcome. <bookmark mark='a'/> Retain the research history, including unsuccessful specifications and reused validation periods. A trial count is useful metadata but does not by itself estimate an effective number of independent tests. <bookmark mark='b'/> Then state the claim being assessed. An exact identity, a calibrated risk forecast, a historical return, a causal explanation and an allocation decision have different evidential requirements. One cannot stand in for all the others.",
+   "zh": "先固定范围、时点、缩放、约束和现金流，观察结果前写成本与成功标准。<bookmark mark='a'/>保留失败规格及重复使用验证期的研究历史；试验数是有用元数据，却不直接估计独立有效试验数。<bookmark mark='b'/>明确待评估命题：恒等式、校准预测、历史收益、因果解释和配置决策需要不同证据，不能互相替代。"
+  },
+  "a985f18a1b03": {
+   "scene": "Envelope",
+   "en": "The existing registration history has twenty-three thousand five hundred thirty-five charges through Part thirty-one and eight more through Part thirty-two, giving twenty-three thousand five hundred forty-three. <bookmark mark='a'/> The existing global total is twenty-three thousand five hundred sixty-two. These counts describe research history. They do not supply a new result, a confidence interval or a ranking of macro strategies. No additional registration is needed to demonstrate the fixed arithmetic on the next screen.",
+   "zh": "现有登记历史截至第31部分二万三千五百三十五项，加第32部分八项，共二万三千五百四十三。<bookmark mark='a'/>现有全局总数二万三千五百六十二。它们描述研究历史，不提供新结果、区间或策略排名。下一屏固定算术不需新增登记。"
+  },
+  "b8d9728cd7c8": {
+   "scene": "Envelope",
+   "en": "Choose the two-asset example again, with twenty and ten percent standard deviations and base weights one third and two thirds. Target ten percent risk. <bookmark mark='a'/> Change only the covariance forecast, from correlation minus point two to plus point six. Old leverage is 1.186; the same old positions have 14.14 percent risk under the new covariance. <bookmark mark='b'/> Desired new leverage is 0.839. With prices and capital fixed, absolute notional change is 0.3473 per initial dollar. <bookmark mark='c'/> A chosen five-basis-point fee per traded notional costs 1.74 basis points of initial capital. We state the fee separately; deducting it from portfolio wealth would also change any subsequent capital-normalised weights. No market-return sequence or strategy performance is evaluated.",
+   "zh": "再次指定两资产标准差百分之二十和十，基础权重三分之一、三分之二，目标百分之十。<bookmark mark='a'/>仅把相关预测负点二改正点六。旧杠杆1.186，旧仓位在新协方差下风险14.14%。<bookmark mark='b'/>新目标杠杆0.839；固定价格资本，每初始一元绝对名义变化0.3473。<bookmark mark='c'/>指定每成交名义五基点收费，占初始资本1.74基点。费用单列，若扣净值，之后资本归一化权重也变。这里不评估市场收益序列或策略表现。"
+  },
+  "22892b96e34b": {
+   "scene": "Envelope",
+   "en": "The calculation establishes sensitivity and units under its chosen assumptions. <bookmark mark='a'/> It does not establish that the new covariance forecast is correct, that the trades can be filled at the chosen fee, or that either allocation earns net alpha or protects a crisis. <bookmark mark='b'/> A prospective evaluation would need appropriate data vintages, independent assessment, dependence-aware uncertainty and execution assumptions. Stress scenarios can reveal vulnerability without estimating its probability. The final investment decision also depends on objectives and constraints beyond the one risk target used in this mathematical illustration.",
+   "zh": "计算在指定条件下确立敏感性和单位。<bookmark mark='a'/>不证明新协方差正确、可按费率成交，也不证明净阿尔法或危机保护。<bookmark mark='b'/>前瞻评估需数据版本、独立检验、依赖结构下不确定性和执行假设。压力情景能揭露弱点，不估计概率。投资决定还依赖目标与约束，不止一个风险目标。"
+  },
+  "9833352b2f4f": {
+   "scene": "Envelope",
+   "en": "Pause and predict. A covariance forecast change raises the measured risk of existing positions from ten to fourteen point one four percent. The rule recalculates desired weights for ten percent risk. Does that prove an earlier loss was avoided, or that the new forecast is correct? State what the arithmetic actually establishes.",
+   "zh": "暂停预测。协方差预测改变使已有仓位风险从百分之十升至十四点一四，规则重算目标百分之十的仓位。这是否证明早期损失已避免，或新预测正确？说清算术实际证明什么。"
+  },
+  "f2b48006de10": {
+   "scene": "House",
+   "en": "Chapter ten. The House's thirty-second rule is to specify the macro book before judging it. State the instruments, information timing, risk and financing conventions, and distinguish a mathematical check from evidence about attainable performance. A plausible premium story is a hypothesis, not a substitute for the relevant evidence.",
+   "zh": "第十章，第32条规则：判断宏观组合前先写清定义。明确工具、信息时点、风险和融资约定，区分数学检查与可实现业绩证据。合理溢价故事仍是假说，不能替代证据。"
+  },
+  "1e647eb41eab": {
+   "scene": "House",
+   "en": "The first sheet records what the chosen calculations established. A common terminal increment does not determine linear-trend profit because path variation differs. <bookmark mark='a'/> A volatility target also needs a correct forecast; a covariance stress changes risk even before a new trade occurs. <bookmark mark='b'/> Inverse-volatility budgets require a covariance convention, and a foreign rate advantage can be outweighed by currency depreciation. These checks establish units, timing and conditional identities. They do not supply a realised strategy Sharpe, an allocation verdict or a causal attribution of a crisis.",
+   "zh": "第一张表记录指定计算确立的内容。同一终点可因路径平方和不同而有不同趋势利润。<bookmark mark='a'/>风险目标还需要正确预测；协方差压力可在交易前改变已有风险。<bookmark mark='b'/>逆波动预算需协方差约定，外币利差也可能被贬值抵消。检查确立单位、时点和条件恒等式，不提供实际夏普、配置裁决或危机因果归因。"
+  },
+  "4a431aca1da4": {
+   "scene": "House",
+   "en": "Read the existing signal code literally. The past-return statistic is a sum, eligibility requires at least ninety percent of the lookback observations, and the linear alternative uses a clipped volatility-normalised signal. Coefficients are stored at the close. The separate book function applies yesterday's coefficient to today's return and defines its active-market denominator. Those masks and timing conventions are part of the algorithm; an attractive description cannot replace checking them.",
+   "zh": "逐字看现有信号代码。过去收益统计是求和，资格要求至少九成回看观测，线性替代使用截断的波动归一化信号。系数在收盘存储，另一个组合函数用昨日系数乘今日收益，并定义活跃市场分母。掩码和时点属于算法，吸引人的描述不能替代核对。"
+  },
+  "9f0508dd7d19": {
+   "scene": "House",
+   "en": "The risk code first normalises inverse volatilities among valid assets. In the hierarchical rule, group standalone volatilities determine another set of scales. The final lines use the estimated covariance to target overall risk and cap gross exposure. This does not solve a general equal group Euler-contribution problem. Nor does the cap certify liquidity or attainable funding. The original algorithm remains exactly as written; the lesson states what its construction does and what additional assumptions a performance claim would need.",
+   "zh": "风险代码先在有效资产中归一化逆波动。分层规则再按组独立波动缩放，最后用协方差定整体风险并限制总敞口。它不求一般组Euler贡献相等，也不保证流动性或可得资金。原算法保持不变，课程说明构造做什么，以及业绩主张还需什么假设。"
+  },
+  "1b9a7a4b736f": {
+   "scene": "House",
+   "en": "The block helper makes a different mathematical object. Positions equal the sum of earlier increments within each block. Profit is their inner product with later increments, and S and Q are the arithmetic sum and sum of squares. The equality to half S squared minus half Q is pathwise. It needs no Gaussian distribution, but its mean and distributional theorems need further assumptions. Dropping missing observations before blocking also changes the observation clock if this helper is applied to empirical data.",
+   "zh": "区间辅助函数是另一数学对象。仓位为区间此前增量和，利润为其与后续增量的内积；S为算术和，Q为平方和。利润等于S平方减Q后除二是逐路径关系，无需高斯；均值和分布定理还需条件。若用于经验数据，先删缺失再分块也会改变观测时钟。"
+  },
+  "25596f36e9af": {
+   "scene": "House",
+   "en": "The macro desk proposes signals and exposure designs; the portfolio desk must understand their joint risks, not just their names. <bookmark mark='a'/> Preserve the rule and research history, distinguish available information from later revisions, and account for collateral, funding and execution. <bookmark mark='b'/> Report distributions and stress sensitivities with the sample and uncertainty appropriate to each claim. A risk identity, a calibration check and independent net-performance evidence answer different questions. The decision must also fit the institution's objectives and constraints.",
+   "zh": "宏观部门提出信号仓位，组合部门需理解联合风险，不只名称。<bookmark mark='a'/>保留规则与历史，区分当时可用信息和后来修订，并计担保品、资金、执行。<bookmark mark='b'/>报告分布和压力敏感性时，配上适当样本及不确定性。风险恒等式、校准检查和独立净业绩证据回答不同问题，决定还需符合机构目标约束。"
+  },
+  "e7061449f385": {
+   "scene": "House",
+   "en": "Apply the rule to three pitches. Income is not the same as profit: ask what mark-to-market losses and tail exposures accompany it. <bookmark mark='a'/> For balanced risk, identify covariance assumptions, leverage and financing, including the risk of positions already held when inputs change. <bookmark mark='b'/> For a crisis hedge, specify the horizon and prior exposure, and examine a suitable range of episodes rather than one selected success. A mathematical mechanism can make a claim precise. It cannot supply missing evidence merely by giving the strategy a reassuring name.",
+   "zh": "将规则用于三种推介。收入不等于利润，要问盯市损失与尾部。<bookmark mark='a'/>平衡风险时明确协方差、杠杆融资，以及输入变动时已有仓位风险。<bookmark mark='b'/>危机对冲要定期限和此前敞口，考察适当事件集合，而非一场事后成功。数学机制使命题精确，却不能靠安心的名称补上缺失证据。"
+  },
+  "dc23ab37b08c": {
+   "scene": "Research",
+   "en": "For the researcher. We can prove a useful shape of the linear trend rule without claiming a profitable trading strategy. The identity is pathwise. Its mean needs a model for dependence and drift. The exact finite-block distribution below needs independent, zero-mean Gaussian increments. Keeping these layers separate prevents an attractive quadratic picture from becoming an unsupported performance claim.",
+   "zh": "写给研究者。可以证明线性趋势的形状，而不声称策略盈利。恒等式逐路径成立，均值需漂移相关模型，后面的精确有限区间分布需独立零均值高斯增量。分清层次，避免把二次曲线变成无证据业绩主张。"
+  },
+  "87681d4e7ae8": {
+   "scene": "Research",
+   "en": "Start with a block of n scalar increments. Position at time t is the sum of earlier increments, with the first position zero. <bookmark mark='a'/> Profit is the sum of position times the next increment. Its units are squared increment units, unless a separate contract and capital normalisation are supplied. <bookmark mark='b'/> S is the arithmetic sum and Q the raw sum of squares. Q is not a sample variance with its mean subtracted. Resetting at every block, ignoring costs and using this unbounded linear position are essential to this exact object.",
+   "zh": "取n个标量增量，时点t仓位为此前和，首仓零。<bookmark mark='a'/>利润为仓位乘下一增量之和；若没有合约资本归一化，单位是增量平方。<bookmark mark='b'/>S是算术和，Q是原始平方和，不是去均值方差。每段归零、忽略成本及使用无界线性仓位，都是此精确对象的要件。"
+  },
+  "7447d5e0f4ae": {
+   "scene": "Research",
+   "en": "Substitute the position and every earlier increment multiplies every later one exactly once. <bookmark mark='a'/> Expanding S squared gives Q plus twice those cross products. <bookmark mark='b'/> Therefore P is half S squared minus half Q, for every finite path. No normality, independence or stationarity has entered. But this is not a vanilla straddle payoff, which is piecewise linear in its terminal underlying. Nor is Q a fixed premium paid at inception. The four unit rises and the single final jump both have S equal to four, yet their profits are six and zero because their Q values are four and sixteen.",
+   "zh": "代入仓位，每个早增量乘晚增量恰一次。<bookmark mark='a'/>展开S平方，得Q加两倍交叉乘积。<bookmark mark='b'/>故任意有限路径P等于S平方减Q后除二，无需正态、独立或平稳。但普通跨式到期收益是分段线性，Q也不是期初固定费用。四次涨一与最后跳四都S四，却因Q四和十六而利润六和零。"
+  },
+  "d4d4460f834c": {
+   "scene": "Research",
+   "en": "For stationary increments with finite second moments, each cross product has expectation mu squared plus the autocovariance at its lag. Count n minus k pairs at lag k. <bookmark mark='a'/> The mean is the sum of those covariance terms plus n choose two times mu squared. Independent increments with nonzero drift therefore need not have zero expected profit. <bookmark mark='b'/> For a chosen four-period unit-variance AR one covariance, correlation parameter point two gives point six eight eight; minus point two gives minus point five two eight. Adding mean point one to the first case raises it to point seven four eight. These stipulated moments are not fitted market evidence.",
+   "zh": "平稳有限二阶矩时，每个交叉乘积期望为mu平方加该滞后自协方差。滞后k共有n减k对。<bookmark mark='a'/>故均值为协方差加权和，再加n选二乘mu平方，独立但漂移非零也可有非零均值。<bookmark mark='b'/>指定四期、单位方差AR一协方差，参数点二给均值点六八八，负点二给负点五二八；前者再加均值点一，得点七四八。这是指定矩，不是市场拟合。"
+  },
+  "f2f643eafa39": {
+   "scene": "Research",
+   "en": "Now impose independent, zero-mean Gaussian increments with variance sigma squared. Normalise profit by sigma squared and call it Y. <bookmark mark='a'/> Every cross product has mean zero. To find its variance, expand Y squared. If two different edges share one endpoint, their other endpoints still appear once and the expectation vanishes. Disjoint edges vanish as well. <bookmark mark='b'/> Only the same edge paired with itself survives, with expectation one. There are n choose two edges. This counting proof also works for independent zero-mean unit-variance increments without Gaussianity.",
+   "zh": "现在施加独立零均值高斯、方差sigma平方，利润除sigma平方记Y。<bookmark mark='a'/>各交叉项均值零。展开Y平方，不同边共享一顶点时，其余顶点仍只出现一次，期望零；不相交也零。<bookmark mark='b'/>只同边自乘留下，期望一，共n选二条边。方差计数证明对独立零均值单位方差非高斯增量也成立。"
+  },
+  "1e3df898235d": {
+   "scene": "Research",
+   "en": "In Y cubed, Gaussian odd moments vanish. A surviving triple of distinct edges forms a triangle: each of three vertices appears twice. There are six orders for each chosen triangle. <bookmark mark='a'/> This gives n times n minus one times n minus two. Divide by the variance to the three-halves power to obtain the displayed skewness. <bookmark mark='b'/> At two periods the skewness is zero. At large n it approaches two root two, despite zero mean profit at every n. More generally, non-Gaussian third moments can add repeated-edge terms, so the Gaussian formula must not be quoted as a universal consequence of independent returns.",
+   "zh": "Y立方中高斯奇数矩为零，存活的三条不同边组成三角形，三个顶点各出现两次；每个三角形有六种排序。<bookmark mark='a'/>得n乘n减一乘n减二，除以方差的二分之三次方，得到偏度。<bookmark mark='b'/>两期偏度零，n大时趋二倍根二，但每个n均值仍零。非高斯三阶矩可添加重复边项，不能将此公式当成独立收益的普遍结论。"
+  },
+  "a28d71dbd6c9": {
+   "scene": "Research",
+   "en": "An exact distribution follows by diagonalising the quadratic form. A is half the all-ones outer product minus half the identity. Its eigenvalue along the all-ones direction is n minus one over two. <bookmark mark='a'/> All n minus one orthogonal directions have eigenvalue minus one half. An orthogonal rotation preserves independent standard Gaussian coordinates. <bookmark mark='b'/> Thus Y equals in distribution half of n minus one times a one-degree chi-square, minus an independent n minus one degree chi-square. The random negative term matters at finite n. This is a distributional statement, not a traded option replication.",
+   "zh": "对角化二次型得到精确分布。A为全一外积减单位阵后除二，全一方向特征值n减一除二。<bookmark mark='a'/>其余n减一个正交方向特征值负二分之一，正交旋转保持高斯坐标独立标准化。<bookmark mark='b'/>Y分布为n减一乘自由度一卡方，减独立自由度n减一卡方，再除二。有限n时负项是随机的。这是分布陈述，不是可交易期权复制。"
+  },
+  "1f0f5487ae5b": {
+   "scene": "Research",
+   "en": "The exact finite-block win probability is the upper tail of an F distribution with one and n minus one degrees of freedom, evaluated at one. <bookmark mark='a'/> The table evaluates that analytic expression and the skewness formula, from two through two hundred fifty-two periods. At two periods the win probability is one half. It falls toward thirty-one point seven percent as the block grows. <bookmark mark='b'/> No Monte Carlo experiment or market fit produced this table. A low winning fraction is compatible with zero mean because winning blocks can be larger. It does not establish a positive net edge after fees.",
+   "zh": "精确胜率是自由度一和n减一的F分布在一处的上尾。<bookmark mark='a'/>表计算解析式与偏度，n从二至二百五十二；两期胜率二分之一，随长度趋约百分之三十一点七。<bookmark mark='b'/>没有蒙特卡洛或市场拟合。赢的比例低仍可均值零，因为赢的幅度较大；不证明扣费后净优势为正。"
+  },
+  "c82f72814942": {
+   "scene": "Research",
+   "en": "The weak limit needs less than Gaussianity: independent, identically distributed, zero-mean increments with finite nonzero variance suffice. Divide the identity by n sigma squared. <bookmark mark='a'/> The central limit theorem sends S over sigma root n to a standard normal. The law of large numbers sends Q over n sigma squared to one. <bookmark mark='b'/> Continuous mapping and Slutsky give half of Z squared minus one. Because that limiting variable has no atom at zero, the win probability tends to the probability that absolute Z exceeds one. That is about thirty-one point seven three percent. Weak convergence alone does not guarantee convergence of third moments or skewness.",
+   "zh": "弱极限比高斯条件更弱：独立同分布、零均值、有限非零方差即可。恒等式除n乘sigma平方。<bookmark mark='a'/>中心极限定理使S除sigma根n趋标准正态，大数律使Q除n乘sigma平方趋一。<bookmark mark='b'/>连续映射与Slutsky给二分之一乘Z平方减一。极限在零点无原子，胜率趋绝对Z大于一概率，约百分之三十一点七三。弱收敛本身不保证三阶矩或偏度收敛。"
+  },
+  "4a96c2de661e": {
+   "scene": "Research",
+   "en": "Three limits matter in applications. Heavy-tailed increments can make the profit's third moment fail to exist, even when a computer reports a finite sample skewness. <bookmark mark='a'/> A sign rule, clipped position, volatility forecast or cost model changes the solved payoff. The theorem cannot simply be transferred to every trend fund. <bookmark mark='b'/> Missing observations also need a clock convention: dropping days makes a block count observations rather than calendar days. And pooling related markets does not turn their blocks into independent replications. These are model and inference questions, not cosmetic choices in plotting an empirical smile.",
+   "zh": "应用有三个边界。厚尾可能使利润三阶矩不存在，计算机给有限样本偏度也不能证明总体矩存在。<bookmark mark='a'/>符号、截断、波动预测和成本改变被求解收益，不能把定理转给每个趋势基金。<bookmark mark='b'/>删缺失使块数的是观测而非日历日；汇集相关市场也不能造出独立重复。这是模型推断问题，不是画微笑时的美化。"
+  },
+  "aa0bed2f65ce": {
+   "scene": "Research",
+   "en": "For K independent identically distributed profits with finite third moments, variance grows like K and the third central moment also grows like K. <bookmark mark='a'/> Standardisation therefore reduces skewness by root K. Independence is stronger than zero correlation: mixed third moments can remain in an uncorrelated book. <bookmark mark='b'/> With the chosen Gaussian block length sixty-three and twenty-three independent copies, the analytic individual skewness is about two point seven six and the equal-book skewness about point five eight. This is a model calculation. It does not describe twenty-three actual markets or their crisis dependence.",
+   "zh": "K个独立同分布且三阶矩有限的利润，方差和三阶中心矩都随K增长。<bookmark mark='a'/>标准化后偏度除根K。独立强于零相关，零相关组合仍可能有混合三阶矩。<bookmark mark='b'/>指定高斯块长六十三、二十三独立副本，单个解析偏度约二点七六，合成约点五八。这是模型计算，不描述二十三真实市场或危机依赖。"
+  },
+  "fdb5795636a2": {
+   "scene": "Research",
+   "en": "A deterministic lag filter replaces equal weights by w at each lag. Stationarity gives its mean by weighting gamma k plus mu squared. <bookmark mark='a'/> Under an independent zero-mean variance reference, the same surviving-edge argument gives sigma to the fourth times the sum of n minus k times w k squared. <bookmark mark='b'/> For a zero-mean local alternative with specified autocovariances, maximising the mean divided by this reference standard deviation yields w k proportional to gamma k, by weighted Cauchy-Schwarz. This is a matched filter against a stated alternative. It is not a universal optimum under the alternative's full covariance, costs or estimation error.",
+   "zh": "确定性滞后滤波器把等权换成各滞后权重，平稳均值加权gamma加mu平方。<bookmark mark='a'/>在独立零均值参考方差下，同边计数给sigma四次方乘各n减k乘权重平方的和。<bookmark mark='b'/>给定零均值局部备择自协方差，以此参考标准差作分母，Cauchy–Schwarz使最优权重正比gamma。这是指定备择的匹配滤波器，不是备择完整协方差、成本或估计误差下的普遍最优。"
+  },
+  "e409f86ad5d0": {
+   "scene": "Research",
+   "en": "Three research questions remain. First, how much of the quadratic payoff survives realistic constraints and a specified filter? The trend and lookback-option literature frames useful benchmarks, without identifying all implementations. <bookmark mark='a'/> Second, which dependence estimates survive costs and selection across horizons? A prespecified test and uncertainty for overlapping observations would make that question measurable. <bookmark mark='b'/> Third, when does protection transfer to a portfolio's crisis horizon? Long-run trend evidence motivates the question, but exposure timing and joint tails decide it. Each proposal needs evidence beyond this algebra.",
+   "zh": "仍有三个研究问题。实际约束和指定滤波器能保留多少二次收益？趋势与回望文献提供基准，却不等同所有实施。<bookmark mark='a'/>哪些相关估计在扣成本、跨期限筛选后仍稳定？预先指定检验并计重叠不确定性才可测量。<bookmark mark='b'/>保护何时转移到组合危机期限？长历史提供动机，实际时点和联合尾部决定结果。都需要代数之外的证据。"
+  },
+  "f0a49ee6a818": {
+   "scene": "Research",
+   "en": "Pause and predict. Independent zero-mean Gaussian increments give positive skew for blocks longer than two periods, yet expected gross profit is zero. Does convexity alone pay trading fees? No: a nonnegative fee reduces that expectation. With independent nonzero drift, the mean instead includes n choose two times mu squared. State the assumptions before naming the source of return.",
+   "zh": "暂停预测。独立零均值高斯增量在两期以上有正偏度，但毛利润期望零。凸性能自行付交易费吗？不能，非负费用降低期望。独立非零漂移则增加n选二乘mu平方。说收益来源前先写条件。"
+  },
+  "f9697080fedb": {
+   "scene": "Outro",
+   "en": "Part thirty-two separates mechanism, mathematical identity and empirical evidence. The reset linear trend rule has an exact path identity; drift and dependence determine its mean, while Gaussian assumptions determine the stated finite-block distribution. <bookmark mark='a'/> A volatility target needs a forecast, and risk budgeting needs a covariance convention. Carry is an unchanged-price component rather than a guaranteed premium. <bookmark mark='b'/> The published style and put-writing series supply sample evidence under their construction and measurement conventions. Calendar accounting is exact only for its stated prices, and a trading claim must survive costs and selection. These conclusions do not establish an allocation verdict for an unmeasured strategy.",
+   "zh": "本部分区分机制、恒等式和经验。重置线性趋势有精确路径恒等式，漂移依赖决定均值，高斯条件决定所述有限分布。<bookmark mark='a'/>风险目标需要预测，风险预算需要协方差，套息是不变价格成分而非保证溢价。<bookmark mark='b'/>风格与看跌序列给构造约定下样本证据，日历核算仅在指定价格下精确，交易主张还需成本筛选。它们不为未测策略提供配置裁决。"
+  },
+  "17d2e3413f51": {
+   "scene": "Outro",
+   "en": "Three desk questions first. Does the quadratic identity replicate a straddle? No: Q varies with the path, and the terminal quadratic differs from an absolute-value payoff. <bookmark mark='a'/> Is expected trend profit only autocorrelation? No: nonzero drift contributes n choose two times mu squared. <bookmark mark='b'/> Does inverse volatility always equalise risk contributions? It does in the stated two-asset construction, but general group covariance requires computing Euler contributions. Each answer starts by specifying the object.",
+   "zh": "先看三问。恒等式复制跨式吗？否，Q随路径变，二次收益不同绝对值。<bookmark mark='a'/>趋势期望仅来自自相关吗？否，非零漂移贡献n选二乘mu平方。<bookmark mark='b'/>逆波动总平衡贡献吗？所给两资产可以，一般多组需计算Euler。每问先定义对象。"
+  },
+  "a75e04c73b54": {
+   "scene": "Outro",
+   "en": "Does a risk target guarantee realised risk? A lagged forecast, cap or covariance change can prevent that. <bookmark mark='a'/> What do the published series establish? Sample summaries with provider and measurement limitations, rather than an automatic forecast for a new fund. <bookmark mark='b'/> Finally, an income fund should disclose its equity and option exposures, dated tail losses, collateral, execution, financing and fees. A smooth average return leaves all those questions open.",
+   "zh": "风险目标保证实际风险吗？滞后预测、上限和协方差改变都可阻止。<bookmark mark='a'/>公布序列证明什么？提供者与计量限制下样本摘要，不是新基金的自动预测。<bookmark mark='b'/>收入基金还应披露股票期权敞口、带日期尾损、担保品、执行融资和费。平滑均值没有回答这些问题。"
+  },
+  "311b5bffa3f2": {
+   "scene": "Outro",
+   "en": "Twelve problems have full English and Chinese solutions in the notes. Six basic calculations cover risk fractions, inverse-volatility scaling, style aggregation, forecast error, a put seller's returns and a linear cost budget. <bookmark mark='a'/> Four advanced problems treat independent drift, Gaussian skewness aggregation, an approximate Sharpe detection horizon and a two-state counterexample to automatic Sharpe improvement from volatility targeting. <bookmark mark='b'/> Two qualifying problems prove the Gaussian moments, distribution and limit, then derive a matched lag filter against a specified covariance alternative. The filter problem distinguishes a variance reference from the full alternative variance. These are chosen mathematical exercises, not additional strategy trials.",
+   "zh": "笔记有十二题中英文完整解。六基础题计算风险份额、逆波动、风格合成、预测误差、卖看跌与成本预算。<bookmark mark='a'/>四进阶题处理独立漂移、高斯偏度合成、近似夏普识别期，以及风险目标不自动提高夏普的两状态反例。<bookmark mark='b'/>两资格题证明高斯矩、分布极限，并对指定协方差备择推匹配滤波器，区分参考方差和完整备择方差。这些是指定数学题，不是额外策略试验。"
+  },
+  "55a0701736e0": {
+   "scene": "Outro",
+   "en": "Where this returns. Part thirty-three considers pairs and residual mean reversion, whose dependence assumptions differ from trend. Part thirty-four examines the organisation, fees and capacity of the firm. Part forty-one returns to liquidity and deleveraging. The finale asks what the evidence supports after accounting for selection across the entire House. The shared lesson is to state the claim before judging its evidence.",
+   "zh": "后续第33部分讲配对与残差均值回复，依赖假设不同于趋势；34讲公司组织、费用容量；41讲流动性和降杠杆；终章计整个公司的筛选后再看证据。共同原则是先明确主张，再判断证据。"
+  },
+  "df0b68768b18": {
+   "scene": "Outro",
+   "en": "The reading guide maps the textbooks, classic papers and methodological limits to the chapters. The numerical evidence used here comes from the two published research-series calculations, alongside explicitly chosen mathematical inputs and analytic reference laws. The notes distinguish those sources, quotations from historical events and conclusions requiring further empirical work.",
+   "zh": "阅读指南将教材、经典文献及方法边界对应章节。这里数字来自两个已公布研究序列计算，以及明确指定数学输入和解析参考。笔记区分这些来源、历史事件引用及仍需经验工作的结论。"
+  },
+  "f750127d8ef6": {
+   "scene": "Outro",
+   "en": "The House's macro desk now has a specification checklist: information timing, risk definitions, exposure, financing and the evidence required for each claim. A premium story remains a hypothesis until that evidence supports it. <bookmark mark='a'/> Next, statistical arbitrage: pairs, cointegration, residuals and the mathematics of trading mean reversion. The same discipline will decide whether a pattern is a model identity, a sample result or an attainable trading opportunity.",
+   "zh": "宏观部门已有定义清单：信息时点、风险、敞口、融资及每种主张所需证据。溢价故事在证据支持前仍是假说。<bookmark mark='a'/>下一部分统计套利，讲配对、协整、残差与均值回复数学。同样纪律判断一个模式究竟是模型恒等式、样本结果，还是可实现机会。"
+  }
+ }
+}

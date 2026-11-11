@@ -1,0 +1,721 @@
+{
+ "title": "量化金融，从零搭建 · 第33部分：统计套利",
+ "chapters": {
+  "Hook": "橡皮筋上的两个价格",
+  "History": "1. 从摩根士丹利的后台到量化公司",
+  "Pairs": "2. 距离法配对",
+  "Coint": "3. 协整与筛选问题",
+  "OU": "4. 奥恩斯坦-乌伦贝克价差",
+  "Residuals": "5. 特征组合与残差",
+  "Kalman": "6. 会变的对冲比率",
+  "LeadLag": "7. 反转与领先-滞后",
+  "Deep": "8. 学习残差",
+  "Crowding": "9. 流动性、拥挤与衰减",
+  "Envelope": "10. 评估协议",
+  "House": "11. 第33条规则：统计套利组合",
+  "Research": "写给研究者：均值回归价差的最优交易区间",
+  "Outro": "回顾、交易台问题与习题"
+ },
+ "lines": {
+  "c24f895820b8": {
+   "scene": "Hook",
+   "en": "Part thirty-three. Statistical arbitrage: trading the gap between prices that ought to move together, on the bet that the gap will close.",
+   "zh": "第33部分。统计套利：交易那些本应一起变动的价格之间的差距，押注差距会收拢。"
+  },
+  "d9ca96664bf4": {
+   "scene": "Hook",
+   "en": "Two prices that wander together. <bookmark mark='a'/> Each has a shared stochastic trend and a stationary component; that does not make every return unpredictable. <bookmark mark='b'/> But the gap between them is tied to an elastic band: it stretches and snaps back. <bookmark mark='c'/> Sell the one that has run ahead and buy the one that lagged, when the gap is wide; close when it is shut. In this chosen model the common log trend cancels. Funding, changing hedge weights and real execution remain separate questions.",
+   "zh": "两个一起游走的价格。<bookmark mark='a'/>它们各自含有共同随机趋势与平稳成分，这不意味着每期收益都不可预测。<bookmark mark='b'/>但二者的差距如同系着橡皮筋，会伸展，也会弹回。<bookmark mark='c'/>差距大时卖出领先者、买入落后者，差距合上时退出。在这个指定模型中，共同对数趋势抵消。融资、对冲权重变化与实际执行仍是另外的问题。"
+  },
+  "1c3114173e0f": {
+   "scene": "Hook",
+   "en": "That is the textbook promise. <bookmark mark='a'/> This part tests it. <bookmark mark='b'/> On the American industries, the classic pairs rule lost money over half a century. Pairs that pass a cointegration test in one year are about 7 percent of them, barely twice the rate for random walks with no connection at all, and passing once says almost nothing about passing again. <bookmark mark='c'/> What remains to assess is subtler: synthetic factor residuals, fitted on rolling windows, and a mathematical band rule for a known Ornstein-Uhlenbeck process. Apparent residual reversion and a fitted cost proxy do not establish executable returns.",
+   "zh": "这是教科书的承诺。<bookmark mark='a'/>这一部分检验它。<bookmark mark='b'/>美国行业上的经典配对代理在半个世纪样本里亏损。每年约7%的配对通过协整筛选，约为互不相关随机游走的两倍，而一次通过对再次通过的提示很有限。<bookmark mark='c'/>需要进一步评价的是滚动拟合的合成因子残差，以及已知OU过程下的数学区间规则。残差表观回归与拟合成本代理并不能证明可实施收益。"
+  },
+  "343ad283e30f": {
+   "scene": "Hook",
+   "en": "Where this sits. Part thirty-two followed trends; this part bets against them, at the scale of days and of single securities. It uses Part five's Ornstein-Uhlenbeck process, Part seven's cointegration and Kalman filter, Part thirty-one's factor model and costs, and the crowding of August 2007, which began in exactly this kind of book.",
+   "zh": "这一部分在系列中的位置。第32部分跟随趋势；这一部分则逆着趋势下注，尺度是几天和单个证券。它用到第5部分的奥恩斯坦-乌伦贝克过程、第7部分的协整与卡尔曼滤波、第31部分的因子模型和成本，以及2007年8月的拥挤，那场拥挤恰恰始于这类组合。"
+  },
+  "a42b6a71ecf2": {
+   "scene": "Hook",
+   "en": "Edward Thorp's Princeton/Newport Partners traded hedged convertible arbitrage from 1969; a group at Morgan Stanley traded pairs of stocks in the mid-1980s; and in 1988 David Shaw founded his firm while Renaissance's Medallion fund began. <bookmark mark='a'/> Academics measured the reversal it harvested in 1990, re-ran the pairs rule in 2006, and watched it crowd and crash in 2007. <bookmark mark='b'/> The modern era: residuals of factor models, optimal trading bands derived for the Ornstein-Uhlenbeck process, liquidity as the source of the return, and neural networks trained on residual paths.",
+   "zh": "Edward Thorp的Princeton/Newport Partners从1969年起做对冲的可转债套利；摩根士丹利的一个小组在1980年代中期交易股票配对；1988年David Shaw创立了自己的公司，同年文艺复兴的大奖章基金开始运作。<bookmark mark='a'/>学者们在1990年测量了它所收获的反转，在2006年重跑了配对规则，又在2007年看着它拥挤、崩溃。<bookmark mark='b'/>现代阶段：因子模型的残差、为奥恩斯坦-乌伦贝克过程推导的最优交易区间、作为收益来源的流动性，以及在残差路径上训练的神经网络。"
+  },
+  "9b5c08b38851": {
+   "scene": "Hook",
+   "en": "The plan: the history; pairs by distance, re-run; cointegration, and why screening for it misleads; the Ornstein-Uhlenbeck spread and its half-life; residuals against eigenportfolios; hedge ratios that move; reversal and lead-lag; a network trained on residual paths; liquidity, crowding and decay; a residual book evaluated through an accounting and timing protocol; and an exact band theorem within a specified model.",
+   "zh": "本部分依次讨论历史、距离配对、协整筛选为何误导、OU价差与半衰期、特征组合残差、会变的对冲比率、反转与领先滞后、残差路径网络、流动性与拥挤衰减。随后用记账与时间协议评价残差组合，并在指定模型内推导精确区间定理。"
+  },
+  "bbc615a1f227": {
+   "scene": "Hook",
+   "en": "In the House, the research desk studies residual signals. A fitted factor hedge reduces model exposures, but estimation error, financing, crowding and execution remain. This lesson does not establish a live book.",
+   "zh": "在本系列公司，研究台研究残差信号。拟合因子对冲可降低模型敞口，但估计误差、融资、拥挤及执行仍然存在。本课并不据此建立实际运行的组合。"
+  },
+  "67b8935a7f45": {
+   "scene": "History",
+   "en": "Chapter one. Statistical arbitrage was not invented in a university. It grew out of trading desks that had more computing power than ideas about what to do with it.",
+   "zh": "第一章。统计套利不是在大学里发明的。它生长于那些计算能力多于用途想法的交易台。"
+  },
+  "e7908653e0f2": {
+   "scene": "History",
+   "en": "The first firm file is older than the name. Edward Thorp, who had beaten blackjack with probability, and Jay Regan founded Princeton/Newport Partners in 1969. They bought convertible bonds and warrants that a model said were cheap, and sold the stock against them, so the market's direction hardly mattered. Thorp's model of the option inside was, as he later wrote, close to Black and Scholes's, before theirs was published: Part ten's formula, used as a trading tool.",
+   "zh": "第一份公司档案比这个名字还老。Edward Thorp曾用概率击败二十一点，他与Jay Regan在1969年创立了Princeton/Newport Partners。他们买入模型认为便宜的可转债和认股权证，同时卖出相应股票，因此市场方向几乎无关紧要。按Thorp后来的说法，他为其中所含期权建立的模型，与Black和Scholes的公式很接近，而且早于后者发表：第10部分的公式，被当作交易工具使用。"
+  },
+  "0cd091a68f6d": {
+   "scene": "History",
+   "en": "The name came from Morgan Stanley. In the mid-1980s Gerry Bamberger, and then a group led by Nunzio Tartaglia, used computers to find pairs of stocks whose prices had drifted apart, and bet on their reunion, in size. As reported, the group earned about fifty million dollars in 1987, and it was disbanded in 1989 after weaker years. Its alumni spread the idea across Wall Street.",
+   "zh": "这个名字来自摩根士丹利。1980年代中期，先是Gerry Bamberger，然后是Nunzio Tartaglia领导的小组，用计算机寻找价格已经分开的股票配对，押注它们重聚，而且规模很大。据报道，这个小组1987年赚了约五千万美元，在几个较弱的年份之后于1989年解散。它的成员把这个想法带到了整个华尔街。"
+  },
+  "91fd53d46c2b": {
+   "scene": "History",
+   "en": "One of those alumni was David Shaw, a computer scientist from Columbia, who founded his firm in 1988. It began with computerised statistical arbitrage in equities, many small mean-reversion bets hedged against the market and industries, and grew into one of the largest systematic investment firms. The design was the one this part builds: a factor model to remove what is common, and a bet that what is left reverts.",
+   "zh": "其中一位是David Shaw，来自哥伦比亚大学的计算机科学家，他在1988年创立了自己的公司。公司起步于股票上的计算机化统计套利：许多小的均值回归赌注，对市场和行业做了对冲，后来成长为最大的系统化投资公司之一。其设计正是这一部分要构建的：用因子模型去掉共同部分，再押注剩下的部分会回归。"
+  },
+  "b8b8219433d0": {
+   "scene": "History",
+   "en": "And Renaissance Technologies, founded by the mathematician James Simons. Its Medallion fund, started in 1988, became famous for returns far above any other fund's, as reported, while its methods stayed private. It later returned outside investors' money, and runs mostly for its own employees: the profit-maximising size of Part thirty-one, chosen by a firm that owns its strategy.",
+   "zh": "还有文艺复兴科技，由数学家James Simons创立。它的大奖章基金始于1988年，据报道其收益远高于任何其他基金，而方法始终保密。它后来把外部投资者的钱退了回去，主要为自己的员工运作：这是第31部分所说的利润最大化规模，由一家拥有自己策略的公司选定。"
+  },
+  "f61ee7242967": {
+   "scene": "History",
+   "en": "Morgan Stanley tried again. <bookmark mark='a'/> In 1993 Peter Muller started a quantitative group inside the bank, Process Driven Trading, which, as reported, ran statistical arbitrage among other strategies with the bank's own capital, and was spun out as an independent firm in 2012, after new rules limited banks' proprietary trading. The pattern repeats through this history: the methods start inside a bank and end up in independent firms.",
+   "zh": "摩根士丹利又试了一次。<bookmark mark='a'/>1993年，Peter Muller在银行内部创立了一个量化小组，即Process Driven Trading；据报道，它用银行自有资本运作统计套利等策略，并在新规限制银行自营交易之后，于2012年分拆为独立公司。这段历史里同样的模式反复出现：方法起步于银行内部，最后落脚在独立公司。"
+  },
+  "24737c7f7f63": {
+   "scene": "History",
+   "en": "What changed. <bookmark mark='a'/> In the beginning, a few desks had computers, spreads were wide and competitors were slow: pairs held for weeks earned large returns. <bookmark mark='b'/> Then prices went decimal, markets went electronic, and many firms ran the same models: holding periods shrank to days and hours, and the edge per trade shrank with them. <bookmark mark='c'/> Liquidity provision is an important proposed source of return. Cheap execution helps, but inventory risk, adverse selection and competition also matter; the historical stories do not identify a single cause.",
+   "zh": "变化在哪里。<bookmark mark='a'/>最初只有少数交易台有计算机，价差宽、竞争慢，持有数周的配对曾获得较高收益。<bookmark mark='b'/>随后报价十进制化、市场电子化，更多公司使用相似模型，持有期缩短，每笔优势随之减小。<bookmark mark='c'/>提供流动性是重要的收益来源假说。低成本有帮助，但库存风险、逆向选择和竞争也重要；历史故事不能识别单一原因。"
+  },
+  "727e81debf24": {
+   "scene": "History",
+   "en": "Pause and predict. A strategy's edge is three basis points a trade, and it trades every position daily. What happens when spreads fall from ten basis points to two, and why might it still get worse?",
+   "zh": "暂停并预测。一个策略每笔交易的优势是三个基点，每个头寸每天交易。当价差从十个基点降到两个基点时会怎样？为什么它仍可能变得更糟？"
+  },
+  "709a604290c8": {
+   "scene": "Pairs",
+   "en": "Chapter two. In 2006 Evan Gatev, William Goetzmann and Geert Rouwenhorst wrote down the rule the desks had used, and tested it on forty years of American stocks.",
+   "zh": "第二章。2006年，盖特夫、格茨曼与鲁文霍斯特写下交易台使用的距离配对规则，并用四十年的美国股票样本进行研究。"
+  },
+  "62dc3c126459": {
+   "scene": "Pairs",
+   "en": "The rule has no model at all. <bookmark mark='a'/> Normalise each asset's total-return index to one. <bookmark mark='b'/> Over a year, measure the distance between every pair of paths, and keep the twenty closest. <bookmark mark='c'/> Over the next six months, when a pair's gap exceeds twice its formation standard deviation, sell the high one and buy the low one, and close when the paths cross. <bookmark mark='d'/> These window choices resemble the paper, but the implementation is an industry proxy. It selects complete research histories retrospectively, restarts the trading indices each half-year, and applies lagged discrete positions to half the return difference. It is not fixed-share stock P and L.",
+   "zh": "这条距离规则没有显式动态模型。<bookmark mark='a'/>将各资产总收益指数归一到一。<bookmark mark='b'/>用一年形成期比较所有路径，保留最近的二十对。<bookmark mark='c'/>随后六个月中，差距超过形成期标准差两倍时卖高买低，交叉时平仓。<bookmark mark='d'/>窗口选择与论文相似，但实现是行业代理：事后选择研究历史完整者，每半年重新开始交易指数，将滞后离散仓位乘收益差的一半。这并非固定股票份额的损益。"
+  },
+  "75560e00c00a": {
+   "scene": "Pairs",
+   "en": "The paper that made the rule famous. <bookmark mark='a'/> Evan Gatev, William Goetzmann and Geert Rouwenhorst ran it on American stocks from 1962 to 2002. The top twenty pairs earned, as reported, average annualised excess returns of up to eleven percent. The profits survived waiting a day before trading, which reduces a bid-ask bounce concern, and exceeded their estimated costs. They were lower in later years. Our industry result is a different implementation and universe, so it cannot by itself extend that stock result.",
+   "zh": "让规则出名的论文。<bookmark mark='a'/>Gatev、Goetzmann与Rouwenhorst研究1962至2002年美国股票。据报告，最优二十对的平均年化超额收益最高约百分之十一。延迟一天交易后仍有利润，减轻了买卖价差反弹的疑虑，且超过其估计成本；后期收益下降。我们的行业结果使用不同资产范围和实现，不能单独延伸该股票结论。"
+  },
+  "fd83a834a5cc": {
+   "scene": "Pairs",
+   "en": "One pair, the closest at the start of the second half of 2008: the telecommunications and business-services industries. <bookmark mark='a'/> In the formation year they moved almost as one. <bookmark mark='b'/> In the trading window the gap broke through its band within a month as the crisis hit them differently, took about three months to close, and then opened the other way. A pair that was close in calm times is not necessarily close in a crisis.",
+   "zh": "一对配对，在2008年下半年开始时最接近的一对：电信业和商业服务业。<bookmark mark='a'/>在形成期的一年里，它们几乎同步变动。<bookmark mark='b'/>在交易窗口里，随着危机对两者的冲击不同，差距在一个月内就突破了区间，用了大约三个月才合上，然后又朝另一个方向张开。平静时期接近的一对，在危机里不一定接近。"
+  },
+  "e371aec163ba": {
+   "scene": "Pairs",
+   "en": "The result, decade by decade. <bookmark mark='a'/> In the 1960s and 70s the rule lost steadily; in the 90s and 2010s it earned a little. <bookmark mark='b'/> Over the whole period, a Sharpe ratio of -0.25 before costs, on a return of -0.5 percent a year. On industries, the implemented distance proxy has a negative sample mean; that is a result about this universe and convention.",
+   "zh": "按十年看结果。<bookmark mark='a'/>1960和70年代代理持续亏损，90年代和2010年代略有盈利。<bookmark mark='b'/>全期成本前夏普为-0.25，年均值-0.5%。这个行业距离代理的样本均值为负，结论针对这里的资产范围与约定。"
+  },
+  "44cd7f99761b": {
+   "scene": "Pairs",
+   "en": "Why not? <bookmark mark='a'/> Whole industries carry momentum, as Tobias Moskowitz and Mark Grinblatt found: two industries drifting apart are often a trend beginning, not noise reverting. <bookmark mark='b'/> Stocks and industry averages are different units. Some stock residuals may revert; the cited stock paper reports up to eleven percent a year for its own sample and capital convention. That is not a guarantee for an individual stock gap. <bookmark mark='c'/> And the rule has no model: it never asks why two paths moved together, so it cannot tell a temporary gap from a permanent break.",
+   "zh": "为什么？<bookmark mark='a'/>Moskowitz与Grinblatt研究行业动量：两个行业分开可能是趋势开始，而非噪声回归。<bookmark mark='b'/>股票和行业平均是不同单位。有些股票残差可能回归；所引股票论文在其样本及资本约定下报告最高约百分之十一。这不保证个别股票差距一定回归。<bookmark mark='c'/>距离规则不问路径为何同步，因此不能辨认暂时差距与永久断裂。"
+  },
+  "b3101eb93f61": {
+   "scene": "Pairs",
+   "en": "And the literature agrees. <bookmark mark='a'/> Binh Do and Robert Faff found the rule's returns on stocks declining steadily after the 1980s, with much of what remained earned in turbulent markets. <bookmark mark='b'/> Costs make it worse: every round trip trades four times on two legs. <bookmark mark='c'/> A rule without a reason decays first. The next chapters add the reason: a model of why a spread should revert at all.",
+   "zh": "文献也同意。<bookmark mark='a'/>Binh Do和Robert Faff发现，这条规则在股票上的收益在1980年代之后稳定下降，剩下的大部分是在动荡市场中赚到的。<bookmark mark='b'/>成本让情况更糟：每一次往返都要在两条腿上交易四次。<bookmark mark='c'/>没有理由的规则最先衰减。接下来的几章补上这个理由：一个关于价差为什么应该回归的模型。"
+  },
+  "8bbe3e75c4b6": {
+   "scene": "Pairs",
+   "en": "A backtest on portfolios hides the short leg. On stocks it is real. <bookmark mark='a'/> Borrowing a share to sell it costs a fee, usually small, but tens of percent a year for hard-to-borrow names, and the expensive stock in a pair is often the one everyone else wants to short. <bookmark mark='b'/> The lender can recall the share at any time, and Joseph Engelberg, Adam Reed and Matthew Ringgenberg showed that the risk of rising fees and recalls itself deters arbitrage. <bookmark mark='c'/> And the rules can change: in September 2008 the SEC temporarily banned short sales of hundreds of financial stocks. A pair whose short leg cannot be held is not a pair.",
+   "zh": "在组合上的回测掩盖了空头那条腿。在股票上它是真实的。<bookmark mark='a'/>借入股票来卖出要付费，通常很少，但难借的股票每年要付几十个百分点，而一对配对里贵的那只股票，往往正是别人都想做空的那只。<bookmark mark='b'/>出借人可以随时召回股票，Joseph Engelberg、Adam Reed和Matthew Ringgenberg表明，费用上升和被召回的风险本身就会阻止套利。<bookmark mark='c'/>规则也会改变：2008年9月，美国证券交易委员会暂时禁止做空数百只金融股。空头腿拿不住的配对，就不是配对。"
+  },
+  "59f488d3f26f": {
+   "scene": "Pairs",
+   "en": "Pause and predict. A pair's gap reverts with a half-life of twenty days, and you can hold for six months at most. Is a two-standard-deviation trigger too wide, too narrow, or about right?",
+   "zh": "暂停并预测。一对配对的差距以二十天的半衰期回归，你最多只能持有六个月。两倍标准差的触发线是太宽、太窄，还是差不多？"
+  },
+  "17beb7874bc5": {
+   "scene": "Coint",
+   "en": "Chapter three. Part seven introduced cointegration: two wandering series with a combination that does not wander. It is the right model for a pair. Finding pairs with it is another matter.",
+   "zh": "第三章。第7部分介绍了协整：两条游走的序列，有一个不游走的组合。它是配对的正确模型。用它去寻找配对则是另一回事。"
+  },
+  "c3789a9b988a": {
+   "scene": "Coint",
+   "en": "The definition. <bookmark mark='a'/> Each log price has a unit root: it wanders. <bookmark mark='b'/> But some combination, one price minus beta times the other, is stationary: that is the spread, and beta is the hedge ratio. <bookmark mark='c'/> Granger's representation theorem says that then at least one price moves to close the gap. The representation describes statistical adjustment under its assumptions; it does not identify arbitrageurs or prove a causal force that will close the gap on a trading deadline.",
+   "zh": "定义。<bookmark mark='a'/>每个对数价格具有单位根，会游走。<bookmark mark='b'/>但某个价格减贝塔乘另一个价格的组合平稳，这就是价差，贝塔是对冲比率。<bookmark mark='c'/>格兰杰表示定理在适当假设下给出至少一个价格的误差修正。它描述统计调整，不识别套利者，也不证明某个因果力量会在交易截止日前关闭差距。"
+  },
+  "d5f2a560c834": {
+   "scene": "Coint",
+   "en": "The Engle-Granger test, from Part seven. <bookmark mark='a'/> Regress one log price on the other. <bookmark mark='b'/> Test the fitted residual with a constant and one lagged difference. <bookmark mark='c'/> This implementation uses a fixed reference critical value of minus three point three four, rather than minus two: the regression chose the hedge ratio that makes the residual look as stationary as possible, so the test must ask for more.",
+   "zh": "第七部分的恩格尔格兰杰检验。<bookmark mark='a'/>将一个对数价格对另一个回归。<bookmark mark='b'/>对拟合残差使用带常数和一个滞后差分的检验。<bookmark mark='c'/>这里使用负三点三四这个固定参考临界值，而非负二：拟合对冲比率使残差更像平稳，因此检验门槛需要相应调整。"
+  },
+  "a3e8ac6e6011": {
+   "scene": "Coint",
+   "en": "Now screen the industries, one year at a time. <bookmark mark='a'/> In a typical year about 7 percent of industry pairs pass the test. <bookmark mark='b'/> Run the same test on pairs of independent random walks, which share nothing, and 3.7 percent pass: the test's own false-positive rate estimated from three hundred simulated controls, with sampling uncertainty. The same seeded sample of three hundred industry pairs is screened each year. Excess passes suggest a difference from these controls, but do not identify which ties are real or the fraction of discoveries that are false.",
+   "zh": "逐年筛选行业。<bookmark mark='a'/>典型年份约7%配对通过。<bookmark mark='b'/>同一检验对独立随机游走给出3.7%通过率，这是三百个模拟对照估计出的假阳性率，带有抽样不确定性。每年筛的是同一种子选出的三百行业对。超额通过提示与这些对照不同，但不能识别哪些联系真实，也不能确定发现中有多少是假。"
+  },
+  "2237366be9f2": {
+   "scene": "Coint",
+   "en": "The harder test: does a pair that passes this year pass next year? <bookmark mark='a'/> Of the pairs that passed in one year, 8.1 percent passed again the next. <bookmark mark='b'/> For a pair chosen at random, the rate is 7.3 percent. Passing once is almost no evidence of passing again in this sample. Overlapping assets, repeated annual tests and estimated spreads matter; this is descriptive persistence, not a calibrated probability that each discovery is false.",
+   "zh": "更难的问题是今年通过的配对明年是否通过。<bookmark mark='a'/>通过者中次年再次通过的比例为8.1%。<bookmark mark='b'/>随机挑选的年通过率为7.3%。在这个样本，一次通过对再次通过提示有限。资产重叠、年度重复检验和拟合价差都重要；这是持续性的描述，不是每个发现为假的校准概率。"
+  },
+  "d1927339b22b": {
+   "scene": "Coint",
+   "en": "And the half-lives of the pairs that passed. <bookmark mark='a'/> Fit an autoregression to each spread; the half-life is log two over minus the log of its coefficient. <bookmark mark='b'/> The median is about 8 trading days: fast reversion, measured on the same year that picked the pair. A pair is chosen because its spread happened to revert quickly in that sample, so its measured half-life is biased short. Selection again.",
+   "zh": "再看通过的配对的半衰期。<bookmark mark='a'/>对每个价差拟合一个自回归；半衰期是对数二除以其系数对数的负值。<bookmark mark='b'/>中位数约为8个交易日：回归很快，但这是在挑出这一对的同一年里测量的。一对配对之所以被选中，是因为它的价差恰好在那个样本里回归得快，所以测得的半衰期偏短。又是选择效应。"
+  },
+  "5a13e1117160": {
+   "scene": "Coint",
+   "en": "Beyond pairs: baskets. <bookmark mark='a'/> For several prices, write the changes as an error-correction model: each price moves partly in response to how far the system is from its long-run ties. <bookmark mark='b'/> The matrix of that response factors into speeds and cointegrating portfolios; its rank is the number of independent spreads. <bookmark mark='c'/> Soren Johansen's test reads the rank from eigenvalues, one likelihood-ratio test for the whole basket. <bookmark mark='d'/> But the screening problem only grows: every subset of a universe is a candidate basket, and every basket tested is a trial.",
+   "zh": "配对之外：篮子。<bookmark mark='a'/>对多个价格，把它们的变化写成误差修正模型：每个价格的移动，部分是对系统偏离长期联系的程度作出的反应。<bookmark mark='b'/>这种反应的矩阵可以分解为速度和协整组合；它的秩就是独立价差的个数。<bookmark mark='c'/>Soren Johansen的检验从特征值读出这个秩，对整个篮子只做一次似然比检验。<bookmark mark='d'/>但筛选问题只会更大：一个资产范围的每个子集都是候选篮子，每检验一个篮子就是一次试验。"
+  },
+  "d460b0df7d38": {
+   "scene": "Coint",
+   "en": "The purest pair there is. <bookmark mark='a'/> Royal Dutch and Shell were two listed shares with fixed claims, sixty to forty, on the cash flows of one group. Their prices should have been tied exactly. <bookmark mark='b'/> Kenneth Froot and Emil Dabora found they deviated from parity for long periods, by more than ten percent at times, and that each share moved with its own home market. <bookmark mark='c'/> Long-Term Capital Management held this trade when it failed in 1998, as reported. The gap closed for good only in 2005, when the companies unified. Even a contract does not make a spread revert on your schedule.",
+   "zh": "最纯粹的配对。<bookmark mark='a'/>荷兰皇家石油和壳牌是两只上市股票，按六比四对同一个集团的现金流拥有固定的索取权。它们的价格本应完全绑定。<bookmark mark='b'/>Kenneth Froot和Emil Dabora发现，两者长期偏离平价，有时超过百分之十，而且每只股票都随自己的本土市场变动。<bookmark mark='c'/>据报道，长期资本管理公司在1998年倒下时就持有这笔交易。直到2005年两家公司合并，这个差距才彻底合上。即使有合同，价差也不会按你的时间表回归。"
+  },
+  "45aa3cbcad2c": {
+   "scene": "Coint",
+   "en": "The screening problem, and three answers. <bookmark mark='a'/> With forty-nine assets there are eleven hundred seventy-six pairs. Five hundred stocks give one hundred twenty-four thousand seven hundred fifty pairs. At a calibrated five percent marginal size, all-null expected false passes are about fifty-nine or six thousand two hundred thirty-eight: Part twenty-six's counter applies to pairs. <bookmark mark='b'/> Pairs chosen for a reason, the same product, the same supply chain, two share classes of one company, supply an economic hypothesis. That hypothesis still needs stability checks and an evaluation fixed before its outcomes are inspected. <bookmark mark='c'/> Or skip pairs altogether: remove what all assets share with a factor model, and let each asset's residual revert on its own.",
+   "zh": "筛选问题与三种回应。<bookmark mark='a'/>四十九资产产生一千一百七十六对，五百股票产生十二万四千七百五十对。若单项检验大小校准为百分之五且全部原假设为真，期望假通过约五十九与六千二百三十八。第二十六部分的试验计数也适用配对。<bookmark mark='b'/>同产品、供应链或同公司双重股类提供经济假说，但仍需稳定性检查与事先固定的评估。<bookmark mark='c'/>另一条路是用因子模型去掉共同部分，再研究每项资产残差是否回归。"
+  },
+  "fec7290413e1": {
+   "scene": "Coint",
+   "en": "Pause and predict. You test two thousand unrelated pairs at the five percent level and keep the ones that pass. About how many is that, and how many of them pass again next year?",
+   "zh": "暂停并预测。你在百分之五的水平上检验两千对互不相关的配对，保留通过的那些。大约有多少对？其中有多少明年还能再次通过？"
+  },
+  "895fb13e281f": {
+   "scene": "OU",
+   "en": "Chapter four. A spread that reverts needs a model of how it reverts. The simplest, and the one the industry uses, is Part five's Ornstein-Uhlenbeck process.",
+   "zh": "第四章。会回归的价差需要一个描述它如何回归的模型。最简单、也是业界在用的，是第5部分的奥恩斯坦-乌伦贝克过程。"
+  },
+  "cee26090425f": {
+   "scene": "OU",
+   "en": "The model. <bookmark mark='a'/> The spread is pulled toward its mean theta at speed kappa, and shaken by noise. <bookmark mark='b'/> Its distribution at any future time is exact: the expected gap decays exponentially, and the variance settles at sigma squared over two kappa. <bookmark mark='c'/> Two numbers describe a spread for a trader: its equilibrium standard deviation, which sets the size of the bets, and its half-life, which sets how long they last.",
+   "zh": "模型。<bookmark mark='a'/>价差以速度kappa被拉向均值theta，同时受到噪声的扰动。<bookmark mark='b'/>它在未来任何时刻的分布都是精确已知的：期望差距按指数衰减，方差稳定在sigma平方除以二倍kappa。<bookmark mark='c'/>对交易者来说，两个数描述一个价差：均衡标准差，决定赌注的大小；半衰期，决定赌注持续多久。"
+  },
+  "42eca69a50dc": {
+   "scene": "OU",
+   "en": "Estimation is a regression. <bookmark mark='a'/> Sampled daily, the OU process is exactly a first-order autoregression. <bookmark mark='b'/> Its slope is e to the minus kappa, its intercept and noise give theta and the equilibrium spread. <bookmark mark='c'/> So the House fits a spread by least squares on its own history, and reads the half-life off a slope between zero and one. The helper removes nonfinite values, which compresses gaps in the observation clock; use regularly spaced data or account for that limit.",
+   "zh": "估计变成回归。<bookmark mark='a'/>每日规则采样的OU恰是一级自回归。<bookmark mark='b'/>斜率为负卡帕的指数，截距与创新波动确定均值和均衡宽度。<bookmark mark='c'/>公司在历史上做最小二乘，并从零到一之间的斜率计算半衰期。辅助函数删除非有限值，可能压缩观测时钟的空缺；应使用规则采样或明确处理这一限制。"
+  },
+  "9d6e97801f61": {
+   "scene": "OU",
+   "en": "A simulated spread with a half-life of ten days. <bookmark mark='a'/> It crosses its mean often and rarely stays far for long. <bookmark mark='b'/> The dashed lines are one and a quarter equilibrium deviations, where Avellaneda and Lee open a trade. Fitted on these three hundred days, the half-life comes out at 12.0 days. This is one chosen simulated path, not an accuracy guarantee. Next, short-window uncertainty.",
+   "zh": "一条真实指定半衰期十天的模拟价差。<bookmark mark='a'/>它常越过均值，很少长时间远离。<bookmark mark='b'/>虚线为一点二五个均衡偏差，是Avellaneda与Lee的开仓阈值。在这三百观测上拟合，半衰期为12.0天。这只是一条指定模拟路径，不保证估计精确。下面研究短窗口的不确定性。"
+  },
+  "77e16e3b33de": {
+   "scene": "OU",
+   "en": "The trading signal is the s-score. <bookmark mark='a'/> The spread's distance from its fitted mean, in equilibrium deviations. <bookmark mark='b'/> Marco Avellaneda and Jeong-Hyun Lee opened at one and a quarter and closed near the mean, with thresholds they chose on American stocks. <bookmark mark='c'/> And they traded only spreads whose fitted half-life was short enough to be estimated at all. Why those thresholds, and not others, is the research chapter's question.",
+   "zh": "交易信号是s分数。<bookmark mark='a'/>价差离其拟合均值的距离，以均衡偏差为单位。<bookmark mark='b'/>Marco Avellaneda和Jeong-Hyun Lee在一又四分之一处开仓，在均值附近平仓，这些阈值是他们在美国股票上选出来的。<bookmark mark='c'/>而且他们只交易拟合半衰期短到足以估计的价差。为什么是这些阈值而不是别的，是研究章节的问题。"
+  },
+  "29e8734b9661": {
+   "scene": "OU",
+   "en": "On a short one, the estimate is biased. <bookmark mark='a'/> The autoregressive slope is pulled down in short samples, under the usual stationary, intercept-fitted large-sample approximation, by about one plus three b over sample length: Kendall's bias, the same one behind Part six's predictive regressions. <bookmark mark='b'/> Simulate a ten-day half-life: estimated on thirty days, the median comes out at 3.3; on sixty, 5.2; on a year, 8.4. <bookmark mark='c'/> And a screen that keeps the fastest-looking spreads keeps the most biased estimates. The displayed medians condition on finite fits; invalid or nonreverting fits are omitted, so these are not unconditional half-life medians.",
+   "zh": "短样本估计有偏。<bookmark mark='a'/>常见的平稳、带截距大样本近似中，自回归斜率向下偏约一加三倍b再除样本长度，即肯德尔偏差，与第六部分预测回归有关。<bookmark mark='b'/>模拟真实十天半衰期，三十观测的拟合中位数为3.3，六十观测为5.2，一年为8.4天。<bookmark mark='c'/>再选择看起来最快的价差，会加重估计选择问题，显示中位数以有限拟合为条件，排除无效或不回归拟合，因此不是无条件半衰期中位数。"
+  },
+  "0f34f19ec4e8": {
+   "scene": "OU",
+   "en": "How well sixty days pin down a speed. <bookmark mark='a'/> With an autoregressive slope of point nine, the half-life is 6.6 days, but two standard errors either way run from 2.9 days at the fast end to a slope of one at the slow end: no reversion at all. <bookmark mark='b'/> The slower the spread, the wider the range. The s-score uses this estimate every day: a book of s-scores is a book of very uncertain speeds, which is a warning against treating fitted speeds as known. The research theorem holds the equilibrium width fixed when comparing speeds; since that width itself depends on sigma and kappa, this is a conditional scaling result.",
+   "zh": "六十观测能把速度钉得多准？<bookmark mark='a'/>斜率零点九对应半衰期6.6天，两边两个标准误从较快端2.9天延伸到斜率一，即不回归。<bookmark mark='b'/>越慢的价差，区间越宽。每天使用s分数也就每天使用不确定速度，不能当成已知参数。研究定理比较速度时固定均衡宽度，但宽度本身依赖西格玛与卡帕，所以是有条件的尺度结论。"
+  },
+  "59a0b2e6904d": {
+   "scene": "OU",
+   "en": "Where should the bands be? <bookmark mark='a'/> William Bertram computed the expected length of a trade on an OU spread in closed form, and the bands that maximise the return per unit time. <bookmark mark='b'/> Tim Leung and Xin Li treated entry and exit as optimal stopping problems, with costs and a stop-loss. <bookmark mark='c'/> The research chapter proves a version of its own, from first-passage times, and finds that the best band, measured in equilibrium deviations, depends only on the cost.",
+   "zh": "交易区间应该在哪里？<bookmark mark='a'/>William Bertram以闭式算出了奥恩斯坦-乌伦贝克价差上一笔交易的期望时长，以及使单位时间收益最大的区间。<bookmark mark='b'/>Tim Leung和Xin Li把进场和出场当作最优停时问题，考虑成本和止损。<bookmark mark='c'/>研究章节从首达时间出发证明了自己的一个版本，发现最优区间若以均衡偏差衡量，只取决于成本。"
+  },
+  "bef392216b74": {
+   "scene": "OU",
+   "en": "Pause and predict. A spread's daily autoregressive slope is point nine five. What is its half-life, and roughly what would a sixty-day sample estimate it as, on average?",
+   "zh": "暂停并预测。一个价差的日度自回归斜率是零点九五。它的半衰期是多少？用六十天的样本，平均会估计成多少？"
+  },
+  "cd41d6b84c5d": {
+   "scene": "Residuals",
+   "en": "Chapter five. Avellaneda and Lee studied factor residuals instead of isolated pairs. We examine an industry proxy, keeping its original calculations fixed and separating synthetic residual statistics from executable wealth.",
+   "zh": "第五章。Avellaneda与Lee研究因子残差而不是孤立配对。我们考察一个行业代理，保持原计算不变，并将合成残差统计与可实施财富区别开。"
+  },
+  "992e92dfe6b5": {
+   "scene": "Residuals",
+   "en": "The idea. <bookmark mark='a'/> Write each asset's return as exposures to a few common factors, plus a residual: Part thirty-one's risk model, with the factors taken from the data. <bookmark mark='b'/> Add up the residuals: that is the asset's price with the market, sectors and styles removed. <bookmark mark='c'/> Treat it as an Ornstein-Uhlenbeck spread and trade its s-score. Each asset becomes a pair with the whole market, and there is no screening of pairs at all.",
+   "zh": "思路。<bookmark mark='a'/>把每个资产的收益写成对少数几个共同因子的暴露，加上一个残差：这是第31部分的风险模型，只是因子取自数据。<bookmark mark='b'/>把残差累加起来：这就是去掉了市场、行业和风格之后的资产价格。<bookmark mark='c'/>把它当作奥恩斯坦-乌伦贝克价差，交易它的s分数。每个资产都和整个市场构成一对，完全不需要筛选配对。"
+  },
+  "6996e66622c1": {
+   "scene": "Residuals",
+   "en": "The factors are eigenportfolios. <bookmark mark='a'/> Take the correlation matrix of the last year's daily returns and its eigenvectors, Part thirty's spectrum again. <bookmark mark='b'/> Invest in each eigenvector, scaled by each asset's volatility. <bookmark mark='c'/> The first eigenportfolio is the market; the next few are sectors and styles. On the forty-nine industries the House keeps five, re-estimated every month.",
+   "zh": "因子是特征组合。<bookmark mark='a'/>取过去一年日收益的相关矩阵及其特征向量，又是第30部分的谱。<bookmark mark='b'/>按每个特征向量投资，并按每个资产的波动率缩放。<bookmark mark='c'/>第一个特征组合是市场；接下来几个是行业和风格。在四十九个行业上，本系列公司保留五个，每月重新估计。"
+  },
+  "b9c8d8899232": {
+   "scene": "Residuals",
+   "en": "The implementation matters. <bookmark mark='a'/> Regress each industry on five factors with an intercept over the last sixty observations. The factors use trailing two hundred fifty-two day correlations through the current close, refitted every twenty-one days. <bookmark mark='b'/> The intercept makes fitted residuals sum to approximately zero in each window. Their cumulative path is therefore tied down at its endpoint: apparent reversion can partly be a fitting constraint. <bookmark mark='c'/> Tomorrow's synthetic residual subtracts the fitted intercept as well as factor returns. A stock-minus-factor hedge does not automatically earn that subtracted intercept. Its weights also need financing and rebalancing. These statistics are a diagnostic proxy, not verified cash-flow profit.",
+   "zh": "实现细节很重要。<bookmark mark='a'/>最近六十观测中，每个行业对五个因子做含截距回归。因子来自截至当日收盘的二百五十二观测相关矩阵，每二十一观测重估。<bookmark mark='b'/>截距使各窗口拟合残差和约为零，累计路径终点因此被钉住，表观回归可部分来自拟合约束。<bookmark mark='c'/>明日合成残差还扣掉拟合截距及因子收益。行业减因子对冲并不会自动赚到被扣截距；权重需要融资和再平衡。这些是诊断代理，不是核验后的现金流利润。"
+  },
+  "41db4fb19d95": {
+   "scene": "Residuals",
+   "en": "Avellaneda and Lee's own refinements. <bookmark mark='a'/> How many factors? They used fifteen eigenportfolios, or as many as explain fifty-five percent of the variance, and also tried sector funds as factors; Part thirty's spectrum keeps the eigenvalues above the noise edge. <bookmark mark='b'/> They adjust the s-score for the residual's own drift, so a residual that is trending is not mistaken for one that is stretched. <bookmark mark='c'/> And they measure time in traded volume rather than days, which, they report, made the residuals revert more cleanly.",
+   "zh": "Avellaneda和Lee自己的改进。<bookmark mark='a'/>用多少个因子？他们用了十五个特征组合，或者用能解释百分之五十五方差所需的个数，也试过用行业基金作因子；第30部分的谱保留噪声边缘之上的特征值。<bookmark mark='b'/>他们按残差自身的漂移调整s分数，这样一个正在走趋势的残差就不会被误认为被拉伸的残差。<bookmark mark='c'/>他们还用成交量而不是天数来度量时间，据他们报告，这让残差回归得更干净。"
+  },
+  "77a6e1dddd18": {
+   "scene": "Residuals",
+   "en": "The stored industry proxy, with Avellaneda and Lee's thresholds. <bookmark mark='a'/> Before its cost charge, the annualized synthetic mean is 3.6 percent, with Sharpe 0.88. <bookmark mark='b'/> With its five-basis-point, two-leg turnover proxy, the mean is -1.6 percent and Sharpe -0.39. The normalization is the number of active industry signals, not the total gross capital of industry and hedge positions. Cumulative lines add these synthetic daily values. Positive gross performance does not by itself establish economically tradable reversion.",
+   "zh": "储存的行业代理使用Avellaneda与Lee阈值。<bookmark mark='a'/>未扣代理费时，合成年均值3.6%，夏普0.88。<bookmark mark='b'/>使用五基点双腿换手代理后，均值-1.6%，夏普-0.39。分母是活跃行业信号数，不是行业及对冲持仓的全部总资本。累计线相加日合成值；正的毛表现本身不证明可交易的经济回归。"
+  },
+  "4ecdff5f52f5": {
+   "scene": "Residuals",
+   "en": "Nine stored research configurations: eight combinations of factor count, fitting window and entry threshold, plus the mathematical band. <bookmark mark='a'/> The best gross configuration has sample Sharpe 1.36. <bookmark mark='b'/> Its charged proxy Sharpe is -0.41, with discrete-signal turnover 25 percent daily. <bookmark mark='c'/> The research-band proxy has charged Sharpe 0.21, and turnover 11 percent. It was added after the earlier comparisons. All nine share data and modeling choices. This comparison is neither independent confirmation of the band nor an executable cost audit; no new registration or sealed evaluation is performed here.",
+   "zh": "九个研究配置：八种因子数、窗口和阈值组合，加数学区间。<bookmark mark='a'/>最佳毛配置样本夏普1.36。<bookmark mark='b'/>扣代理费后-0.41，日离散信号换手25%。<bookmark mark='c'/>研究区间代理扣费夏普0.21，换手11%。它在较早比较后加入，九者共享数据和建模选择。比较既不是独立区间确认，也不是可实施成本审计；这里没有新登记或封存评估。"
+  },
+  "6e6f451ccf40": {
+   "scene": "Residuals",
+   "en": "All nine rules on one picture. <bookmark mark='a'/> Before costs they are bunched together, Sharpe ratios around 1.0. <bookmark mark='b'/> After costs they fall onto a line in turnover: every ten points of daily turnover cost about 0.39 of Sharpe ratio. The choice of factors and windows moves a rule a little up or down; how much it trades moves it along the line, and that is what decides the sign.",
+   "zh": "九条规则画在一张图上。<bookmark mark='a'/>扣除成本前，它们挤在一起，夏普比率都在1.0左右。<bookmark mark='b'/>扣除成本后，它们沿着换手率落在一条直线上：日换手率每多十个百分点，夏普比率约减少0.39。因子和窗口的选择只把一条规则上下挪一点；交易多少决定它在直线上的位置，而这决定了正负号。"
+  },
+  "813502ab5c2b": {
+   "scene": "Residuals",
+   "en": "By era, for the research-band proxy. <bookmark mark='a'/> Before costs, Sharpe ratios of 1.46, 0.74 and 1.11: strongest in the 1990s, weakest from 2003 to 2010, and partly back after. <bookmark mark='b'/> After costs, 0.59, -0.22 and 0.15. Almost all of the net profit was earned in the first era. The same costs that are a small tax on a strong premium wipe out a weak one.",
+   "zh": "按时代看研究区间代理。<bookmark mark='a'/>毛夏普为1.46、0.74和1.11，九十年代最强，2003至2010年最弱，之后部分恢复。<bookmark mark='b'/>扣代理成本后为0.59、-0.22和0.15，大部分净代理利润来自最早时代。同样成本可只是强溢价的一小部分，却耗尽较弱表现。"
+  },
+  "3f25483e39ce": {
+   "scene": "Residuals",
+   "en": "The cost proxy has three important limits. <bookmark mark='a'/> It charges twice a fixed one-way rate times changes in discrete signals divided by the new active count. It does not reconstruct each hedge trade. <bookmark mark='b'/> When that count changes, held positions are rescaled, but those trades are missing from the turnover measure. When the new book is empty, the code sets net profit to zero and omits the final exit charge even if signals changed. <bookmark mark='c'/> These omissions can understate costs; separate hedges can overstate them before netting. The combined error has no proven conservative direction. The original financial algorithm is preserved, and the lesson labels its output as a proxy.",
+   "zh": "成本代理有三个重要限制。<bookmark mark='a'/>它用新活跃数归一离散信号变化，再乘固定单向费的两倍，没有重构每笔因子对冲。<bookmark mark='b'/>活跃数改变会缩放持续持仓，这些交易未完全进入换手；新组合全空时，代码把净利润设为零，即使信号变化也漏掉退出费用。<bookmark mark='c'/>这些遗漏可低估费用，分别计算对冲又可能在轧差前高估。合计误差没有已证明的保守方向。保留原金融算法，并把结果明确称为代理。"
+  },
+  "32725642251c": {
+   "scene": "Residuals",
+   "en": "For actual holdings, netting has a useful algebraic bound. <bookmark mark='a'/> Each industry position suggests a factor hedge. <bookmark mark='b'/> The triangle inequality says the absolute trade in their sum cannot exceed the sum of absolute separate trades, for the same holdings and linear unit costs. <bookmark mark='c'/> This does not validate the stored turnover proxy, which never reconstructs those hedge holdings and omits some rebalancing and exits. Full cash-flow accounting, borrow, financing, impact and actual tradable factor exposures are prerequisites for a net-performance claim.",
+   "zh": "对真实持仓，轧差有一个有用的代数界。<bookmark mark='a'/>每个行业仓位对应因子对冲。<bookmark mark='b'/>在相同持仓和线性单位费下，三角不等式说明合并后的绝对交易不超过各自绝对交易之和。<bookmark mark='c'/>这不验证现有换手代理，因为它没有重构这些对冲持仓，也漏掉部分再平衡与退出。净表现结论须以完整现金流、借券、融资、冲击及实际可交易因子敞口为前提。"
+  },
+  "6d59beda3bc5": {
+   "scene": "Residuals",
+   "en": "Pause and predict. A residual book earns a gross Sharpe ratio of point eight at four percent volatility, and turns over twenty percent of its gross every day. At five basis points a side on both legs, what is left?",
+   "zh": "暂停并预测。一个残差组合扣除成本前的夏普比率是零点八，波动率百分之四，每天换手其总头寸的百分之二十。两条腿每边五个基点，还剩下什么？"
+  },
+  "f17b2e2aaaca": {
+   "scene": "Kalman",
+   "en": "Chapter six. Cointegration assumes one fixed hedge ratio. Real relationships drift. The Kalman filter of Part seven lets the hedge ratio move, and in doing so sets a trap.",
+   "zh": "第六章。协整假设一个固定的对冲比率。真实的关系会漂移。第7部分的卡尔曼滤波让对冲比率可以变动，而这样做也设下了一个陷阱。"
+  },
+  "cd10f1a75dbd": {
+   "scene": "Kalman",
+   "en": "The model. <bookmark mark='a'/> One log price is an intercept plus a hedge ratio times the other, plus noise. <bookmark mark='b'/> But the intercept and the hedge ratio are themselves random walks: a state that the filter tracks. <bookmark mark='c'/> One choice matters: the ratio of the state's noise to the observation's, which decides how fast the hedge ratio may move.",
+   "zh": "模型。<bookmark mark='a'/>一个对数价格等于截距加上对冲比率乘以另一个对数价格，再加噪声。<bookmark mark='b'/>但截距和对冲比率本身是随机游走：一个由滤波器追踪的状态。<bookmark mark='c'/>只有一个选择要紧：状态噪声与观测噪声之比，它决定对冲比率能变得多快。"
+  },
+  "a096694d35a6": {
+   "scene": "Kalman",
+   "en": "The filter predicts and then updates. <bookmark mark='a'/> The state covariance grows by q times the identity. <bookmark mark='b'/> The gain depends on the current loading vector and observation variance. <bookmark mark='c'/> Today's observed log prices update the coefficients. <bookmark mark='d'/> The innovation uses the prior state but today's x as well as today's y. It becomes available at the current close. Whether a subsequent holding earns a return requires explicit holdings and rebalancing; the innovation itself is not that wealth.",
+   "zh": "滤波器先预测再更新。<bookmark mark='a'/>状态协方差增加q乘单位矩阵。<bookmark mark='b'/>增益取决于当前载荷向量和观测方差。<bookmark mark='c'/>今天的对数价格更新系数。<bookmark mark='d'/>创新使用先前状态，但也使用今天的x与y，直到当前收盘才可得。后续持仓能否赚收益需要明确持仓和再平衡；创新本身不是财富。"
+  },
+  "2a002eb6375e": {
+   "scene": "Kalman",
+   "en": "Bitcoin and ether, 2018 to 2020: two prices with an obvious common driver. <bookmark mark='a'/> One regression on all three years gives a hedge ratio of 0.96. <bookmark mark='b'/> A sixty-day rolling regression swings wildly, from near zero to almost three. <bookmark mark='c'/> The Kalman filter gives a smooth, slowly moving ratio between about two thirds and one. Which spread is the right one to trade?",
+   "zh": "比特币和以太坊，2018年到2020年：两个有明显共同驱动的价格。<bookmark mark='a'/>用全部三年做一次回归，对冲比率是0.96。<bookmark mark='b'/>六十天滚动回归剧烈摆动，从接近零到接近三。<bookmark mark='c'/>卡尔曼滤波给出一个平滑、缓慢变化的比率，大约在三分之二和一之间。哪个价差才是该交易的？"
+  },
+  "46f7ae666ccf": {
+   "scene": "Kalman",
+   "en": "Descriptive diagnostics for two different constructions. <bookmark mark='a'/> The full-sample fixed ratio is retrospective. Its residual ADF statistic is -1.40, and the fitted half-life 279 days. <bookmark mark='b'/> The adaptive innovation has statistic -14.8 and fitted half-life 1.3 days. Applying a fixed Engle-Granger reference to this generated adaptive series does not supply a calibrated cointegration test. A stationary-looking innovation is not proof of a stable fixed combination or profitable holdings.",
+   "zh": "两个不同构造的描述诊断。<bookmark mark='a'/>全样本固定比率是事后拟合，残差ADF为-1.40，拟合半衰期279天。<bookmark mark='b'/>自适应创新的统计量-14.8，半衰期1.3天。对这个生成的动态序列套固定恩格尔格兰杰参考，并不能给出校准的协整检验。看似平稳的创新不证明稳定固定组合或盈利持仓。"
+  },
+  "d9336b666be6": {
+   "scene": "Kalman",
+   "en": "The square-root rule is a scalar illustration. <bookmark mark='a'/> For a random-walk state observed with constant unit loading and small q over r, the steady gain is approximately the square root of q over r. <bookmark mark='b'/> Its exponential memory length is approximately the reciprocal gain. <bookmark mark='c'/> That gives about one hundred or ten observations for ratios of one in ten thousand or one in one hundred. Our two-state intercept-and-beta regression instead has the changing loading vector one and the current log price. Price levels, units and covariance matter. Those scalar numbers are not its universal effective window.",
+   "zh": "平方根规则是标量示例。<bookmark mark='a'/>随机游走状态、恒定单位观测载荷且q除r很小时，稳态增益近似该噪声比的平方根。<bookmark mark='b'/>其指数记忆长度近似增益倒数。<bookmark mark='c'/>比值万分之一或百分之一，给出约一百或十个观测。但这里截距与贝塔的双状态回归使用变化的载荷向量一与当前对数价格，价格水平、单位和协方差都重要。这些标量数字不是它通用的有效窗口。"
+  },
+  "b6a874499280": {
+   "scene": "Kalman",
+   "en": "It is a trap. <bookmark mark='a'/> The Kalman spread is the filter's forecast error. <bookmark mark='b'/> A good filter's forecast errors are close to white noise, so of course they test as stationary, with a half-life of about a day. <bookmark mark='c'/> The spread looks like it reverts because the hedge ratio moves to absorb every gap, not because the prices converge. A trade on it is a bet that the filter will correct itself, which it does by changing the ratio, not by moving the prices.",
+   "zh": "这是一个陷阱。<bookmark mark='a'/>卡尔曼价差是滤波器的预测误差。<bookmark mark='b'/>好的滤波器的预测误差接近白噪声，所以它们当然会检验为平稳，半衰期约一天。<bookmark mark='c'/>价差看起来会回归，是因为对冲比率在移动以吸收每一个差距，而不是因为价格收敛。押注它，就是押注滤波器会自我修正，而它修正的方式是改变比率，不是移动价格。"
+  },
+  "fa8c3d1695b9": {
+   "scene": "Kalman",
+   "en": "So: <bookmark mark='a'/> use the filter to size the hedge, not to prove there is a pair. <bookmark mark='b'/> Test the spread out of sample, on its profit, not on its stationarity. <bookmark mark='c'/> And choose the speed slowly: a fast filter manufactures reversion, and every choice of its speed is a trial.",
+   "zh": "所以：<bookmark mark='a'/>用滤波器来确定对冲规模，而不是用它证明存在配对。<bookmark mark='b'/>在样本外检验价差，看它的利润，而不是它的平稳性。<bookmark mark='c'/>速度要选得慢：快的滤波器会制造回归，而每一次对速度的选择都是一次试验。"
+  },
+  "d24329104ba6": {
+   "scene": "Kalman",
+   "en": "Pause and predict. A filter's one-step forecast errors have an autoregressive slope of point three. Is the pair cointegrated?",
+   "zh": "暂停并预测。一个滤波器的一步预测误差的自回归斜率是零点三。这一对是协整的吗？"
+  },
+  "a9d23e6d50f6": {
+   "scene": "LeadLag",
+   "en": "Chapter seven. Every stat-arb book is, underneath, a contrarian: it buys what fell and sells what rose, relative to something. In 1990 Andrew Lo and Craig MacKinlay asked what such a contrarian is really paid for.",
+   "zh": "第七章。每个统计套利组合，骨子里都是逆向策略：相对于某个参照，它买入下跌的，卖出上涨的。1990年，Andrew Lo和Craig MacKinlay问：这样的逆向策略到底是因为什么而获得报酬？"
+  },
+  "5db6d901ebc9": {
+   "scene": "LeadLag",
+   "en": "The contrarian, in its purest form. <bookmark mark='a'/> Weight each asset against its relative move last period. <bookmark mark='b'/> Its profit is the sum of weights times this period's returns. <bookmark mark='c'/> Bruce Lehmann found in 1990 that weekly losers beat weekly winners among stocks. The natural reading is overreaction: prices overshoot and come back. Lo and MacKinlay showed it is not the only reading.",
+   "zh": "最纯粹形式的逆向策略。<bookmark mark='a'/>按每个资产上一期的相对变动反向加权。<bookmark mark='b'/>它的利润是权重乘以本期收益之和。<bookmark mark='c'/>Bruce Lehmann在1990年发现，在股票中，上周的输家胜过上周的赢家。自然的解读是过度反应：价格冲过头再回来。Lo和MacKinlay表明这不是唯一的解读。"
+  },
+  "013800607780": {
+   "scene": "LeadLag",
+   "en": "Their decomposition is exact. <bookmark mark='a'/> The contrarian's expected profit is three terms in the autocovariance matrix of returns. <bookmark mark='b'/> The first is own reversal: assets that reverse their own moves. Overreaction is one possible explanation; microstructure and other dynamics can also generate it. <bookmark mark='c'/> The second is cross-autocovariance: one asset's move predicting another's next move. That cross term can pay even when own lag covariances vanish; slow news diffusion is one possible explanation, not identified by covariance alone. <bookmark mark='d'/> The third is a cost: the spread of mean returns.",
+   "zh": "总体分解是精确的。<bookmark mark='a'/>逆向期望利润分成收益滞后协方差矩阵的三项。<bookmark mark='b'/>第一项是自身反转。过度反应是一种解释，微观结构及其他动态也会产生它。<bookmark mark='c'/>第二项是交叉协方差，一项资产过去变化关联另一项后续变化；它也可能给逆向策略报酬，信息缓慢传播是一个候选解释。<bookmark mark='d'/>第三项是成本：平均收益的横截面离散度。"
+  },
+  "ab23f9f93594": {
+   "scene": "LeadLag",
+   "en": "Lead-lag, measured on Kenneth French's size deciles, in consecutive blocks of five observations since 1963, rather than calendar weeks. <bookmark mark='a'/> The previous five-observation block return of the largest stocks predicts the next block return of the smallest, a correlation of +0.15. The reverse is -0.06. <bookmark mark='b'/> Small caps also predict themselves, +0.21: this is positive sample own autocorrelation. It describes continuation but does not alone identify adjustment speed or cause.",
+   "zh": "用French规模十分位组合测量领先滞后，从1963年起按连续五观测块，而非日历周。<bookmark mark='a'/>大盘上一块收益与小盘下一块收益相关+0.15，反方向-0.06。<bookmark mark='b'/>小盘自身滞后相关+0.21，呈现正的自身延续，而非反转。这些相关描述大盘领先、小盘跟随的样本模式。"
+  },
+  "7473622de42d": {
+   "scene": "LeadLag",
+   "en": "The finite-sample comparison needs care. <bookmark mark='a'/> The displayed own and cross terms use lagged covariance products centered on the full-sample mean. The realized contrarian profit averages uncentered lagged return products. Their normalization and edge observations differ. <bookmark mark='b'/> The population expectation identity is exact under stationary moments, but these sample implementations need not agree to the last digit. The difference is a boundary mean term; the notes derive it. Similar-looking rounded numbers do not establish an exact software identity or a causal explanation.",
+   "zh": "有限样本比较需要小心。<bookmark mark='a'/>自身和交叉项使用围绕全期均值中心化的滞后协方差乘积；实际逆向利润则平均未中心化的滞后收益乘积，所用端点与中心化约定不同。<bookmark mark='b'/>总体期望恒等式在平稳矩假设下精确，但这些样本实现不必在最后一位相等。差异含边界均值项，讲义给出推导。舍入后看起来相同，既不证明软件精确恒等，也不给出因果解释。"
+  },
+  "14d0fd18588d": {
+   "scene": "LeadLag",
+   "en": "The terms also change across eras. <bookmark mark='a'/> The pre-1991 sample and later sample show different covariance patterns, using five-observation return blocks whose first date assigns the era. <bookmark mark='b'/> Faster trading, liquidity, measurement and changing markets are possible explanations, but this before-and-after comparison cannot identify why the terms changed. A covariance decomposition describes second moments; it does not prove news diffusion, irrational overreaction, or that arbitrageurs removed a particular opportunity.",
+   "zh": "各项还会跨时代变化。<bookmark mark='a'/>1991年前与后期样本有不同协方差模式，五观测块按第一天分配时代。<bookmark mark='b'/>交易加速、流动性、测量与市场变化都是候选解释，但前后对比不能识别变化原因。协方差分解描述二阶矩，不证明信息扩散、非理性过度反应，或套利者消除了某项机会。"
+  },
+  "e7c4aed5ef9f": {
+   "scene": "LeadLag",
+   "en": "Two warnings about measured reversal. <bookmark mark='a'/> Richard Roll's model: trades print at the bid or at the ask, at random, around an efficient price. <bookmark mark='b'/> So recorded price changes are negatively autocorrelated even when the efficient price is a random walk. That reversal cannot be traded: it is the bid-ask spread itself. Bruce Lehmann's weekly contrarian profits on stocks were partly this. <bookmark mark='c'/> And stocks that trade late carry yesterday's news into today's closing prices, which makes lead-lag appear even where no one could act on it. Portfolios and residuals reduce both effects; they do not remove them.",
+   "zh": "关于测得的反转，两个警告。<bookmark mark='a'/>Richard Roll的模型：成交随机地落在买价或卖价上，围绕着有效价格。<bookmark mark='b'/>所以即使有效价格是随机游走，记录下来的价格变化也是负自相关的。这种反转无法交易：它就是买卖价差本身。Bruce Lehmann在股票上的周度逆向利润，部分就是这个。<bookmark mark='c'/>而交易得晚的股票会把昨天的消息带进今天的收盘价，让领先-滞后出现在没人能据此行动的地方。组合和残差能减弱这两种效应，但不能消除它们。"
+  },
+  "11ae24911eb4": {
+   "scene": "LeadLag",
+   "en": "Why the unit and the horizon matter. <bookmark mark='a'/> Over days to a month, single stocks reverse: Narasimhan Jegadeesh and Bruce Lehmann. <bookmark mark='b'/> Over three to twelve months, industries continue: Tobias Moskowitz and Mark Grinblatt found industry momentum, and that it explains much of stock momentum. That is why the industry contrarian of Chapter nine loses. <bookmark mark='c'/> And over three to five years both reverse again, Werner De Bondt and Richard Thaler's long-horizon reversal. Reversion is a statement about a unit and a horizon, never about prices in general.",
+   "zh": "为什么单位和期限很重要。<bookmark mark='a'/>在几天到一个月的尺度上，单只股票会反转：Narasimhan Jegadeesh和Bruce Lehmann。<bookmark mark='b'/>在三到十二个月的尺度上，行业会延续：Tobias Moskowitz和Mark Grinblatt发现了行业动量，并发现它解释了股票动量的很大部分。这就是第九章的行业逆向策略亏钱的原因。<bookmark mark='c'/>在三到五年的尺度上，两者又都反转，即Werner De Bondt和Richard Thaler的长期反转。回归是关于某个单位和某个期限的陈述，从来不是关于一般价格的陈述。"
+  },
+  "897660c13bff": {
+   "scene": "LeadLag",
+   "en": "Read the decomposition as an accounting of population moments. <bookmark mark='a'/> Own reversal and cross-autocovariance can both contribute, with different signs across assets and horizons. Their labels do not identify mechanisms. <bookmark mark='b'/> Removing fitted factors changes these moments but need not isolate pure own reversal; residual construction and omitted common dynamics still matter. <bookmark mark='c'/> Cross-market lead-lag is a candidate hypothesis where prices incorporate information at different speeds. Implementability requires observation timing, executable quotes and net costs, not correlation alone.",
+   "zh": "把分解理解为总体矩的记账。<bookmark mark='a'/>自身反转与交叉协方差都可能贡献，符号随资产与期限改变，标签并不识别机制。<bookmark mark='b'/>去掉拟合因子会改变这些矩，却不保证隔离纯自身反转，残差构造和遗漏共同动态仍重要。<bookmark mark='c'/>不同市场吸收消息速度不同时，领先滞后是可研究假说。可实施性需要观测时点、可成交报价与净成本，而不只是相关。"
+  },
+  "40176875a94a": {
+   "scene": "LeadLag",
+   "en": "Pause and predict. Every asset on its own follows a random walk, but large caps' returns predict small caps' returns a week later. Does the contrarian make money or lose it?",
+   "zh": "暂停并预测。每个资产单独看都是随机游走，但大盘股的收益预测小盘股一周后的收益。逆向策略是赚钱还是亏钱？"
+  },
+  "0823aa3ad30d": {
+   "scene": "Deep",
+   "en": "Chapter eight. The s-score reads one number from a residual's path: how far it is from its mean. A network could read the whole shape. Does it find more?",
+   "zh": "第八章。s分数从残差的路径中只读出一个数：它离均值有多远。网络可以读出整条路径的形状。它能找到更多吗？"
+  },
+  "90f737c5d697": {
+   "scene": "Deep",
+   "en": "The claim. <bookmark mark='a'/> In 2021 Jorge Guijarro-Ordonez, Markus Pelger and Greg Zanotti took the Avellaneda-Lee pipeline and learned every step. <bookmark mark='b'/> A convolutional transformer reads each residual's last thirty days. <bookmark mark='c'/> And the allocation is trained to maximise the portfolio's Sharpe ratio directly. They report a high out-of-sample Sharpe ratio on large American stocks, still profitable after trading costs, from patterns of trend and reversion that an Ornstein-Uhlenbeck model cannot express.",
+   "zh": "论断。<bookmark mark='a'/>2021年，Jorge Guijarro-Ordonez、Markus Pelger和Greg Zanotti把Avellaneda-Lee的流程拿来，每一步都改为学习得到。<bookmark mark='b'/>一个卷积变换器读取每个残差最近三十天的路径。<bookmark mark='c'/>配置直接按组合的夏普比率最大化来训练。他们报告在美国大盘股上有很高的样本外夏普比率，扣除交易成本后仍然盈利，来源是奥恩斯坦-乌伦贝克模型无法表达的趋势与回归模式。"
+  },
+  "9c4c4e0053ae": {
+   "scene": "Deep",
+   "en": "The machine-learning literature on stat arb, briefly. <bookmark mark='a'/> Christopher Krauss, Xuan Anh Do and Nicolas Huck trained deep networks, boosted trees and random forests on the lagged returns of S and P five hundred stocks; their ensemble earned, as reported, over forty-five basis points a day before costs, much less after them, and less in the later years. <bookmark mark='b'/> The deep stat-arb paper learned the whole pipeline and reported robustness to costs. <bookmark mark='c'/> The common thread: thousands of single stocks, signals read from many days at once, and decay over time.",
+   "zh": "统计套利的机器学习文献，简要说。<bookmark mark='a'/>Christopher Krauss、Xuan Anh Do和Nicolas Huck在标普五百成分股的滞后收益上训练了深度网络、提升树和随机森林；据报道，他们的集成模型扣除成本前每天赚四十五个基点以上，扣除成本后少得多，而且在后来的年份里更少。<bookmark mark='b'/>深度统计套利那篇论文学习了整个流程，并报告对成本稳健。<bookmark mark='c'/>共同的线索：数千只单个股票，从多天数据中同时读出的信号，以及随时间的衰减。"
+  },
+  "a863fc1894b9": {
+   "scene": "Deep",
+   "en": "The stored network uses a chronological split within the research data. <bookmark mark='a'/> Each input is a thirty-component cumulative residual path relative to its endpoint, scaled by volatility. Its last component is always zero. <bookmark mark='b'/> The target is tomorrow's synthetic residual return. <bookmark mark='c'/> Training ends in 2012, validation is 2013 through 2016, and nominal test dates are 2017 through 2020. Complete-history universe selection and reuse of the research period limit independence. This is a smaller MLP experiment, not a replication of the published transformer, and these dates must not be called untouched discovery evidence.",
+   "zh": "现有网络在研究数据内使用按时间分割。<bookmark mark='a'/>每项输入为相对终点的三十维累计残差路径，并按波动缩放；末项恒为零。<bookmark mark='b'/>目标是明日合成残差收益。<bookmark mark='c'/>训练截止2012年，2013至2016年验证，2017至2020年是名义测试。完整历史资产筛选及研究期复用限制独立性。这是较小MLP实验，不是论文变换器复现，这些日期不能称为未经接触的发现证据。"
+  },
+  "cc1d83d5a795": {
+   "scene": "Deep",
+   "en": "The network is Part twenty-seven's small ensemble: thirty inputs, two hidden layers of thirty-two and sixteen units, three random seeds averaged, a light penalty, and early stopping. <bookmark mark='a'/> It is much smaller than a transformer, but it can represent nonlinear patterns in the path that the s-score ignores: a residual that has just turned, one that is still falling, one that overshot.",
+   "zh": "网络是第二十七部分的小型集成：三十输入、三十二和十六单元的两个隐层，平均三个随机种子，轻度惩罚与早停。<bookmark mark='a'/>它远小于变换器，但可以表达s分数忽略的非线性路径模式，例如刚转向、仍在下降或已经超调的残差。"
+  },
+  "c2a509c2e042": {
+   "scene": "Deep",
+   "en": "On the test years. <bookmark mark='a'/> The correlation between the network's forecast and tomorrow's residual is 0.0034: almost nothing. <bookmark mark='b'/> Its forecast is nearly unrelated to the s-score's raw material, how far the residual has moved over the month: a correlation of 0.06. <bookmark mark='c'/> And yesterday's residual move alone predicts nothing. With so little to learn from day to day, a flexible model mostly learns noise.",
+   "zh": "在测试年份上。<bookmark mark='a'/>网络的预测与明天残差之间的相关系数是0.0034：几乎为零。<bookmark mark='b'/>它的预测与s分数的原材料，即残差在一个月里移动了多远，几乎无关：相关系数0.06。<bookmark mark='c'/>而昨天的残差变动本身什么也预测不了。日复一日可学的东西这么少，一个灵活的模型学到的大多是噪声。"
+  },
+  "9bb3c133c61f": {
+   "scene": "Deep",
+   "en": "The test. <bookmark mark='a'/> On the same days, the plain s-score rule earns a gross Sharpe ratio of 1.26. <bookmark mark='b'/> The network earns 0.24 before costs. <bookmark mark='c'/> And after costs, -7.2: because it rebalances to its forecast every day, it trades 95 percent of its book daily, and pays for it.",
+   "zh": "检验。<bookmark mark='a'/>在同样的日子里，普通的s分数规则扣除成本前的夏普比率是1.26。<bookmark mark='b'/>网络扣除成本前是0.24。<bookmark mark='c'/>扣除成本后，-7.2：因为它每天都按预测重新调仓，每天交易其组合的95%，并为此付出代价。"
+  },
+  "022b87485897": {
+   "scene": "Deep",
+   "en": "Why it fails here, and why that is not a verdict on the paper. <bookmark mark='a'/> The universe is wrong: forty-nine industries have little residual predictability; the paper used hundreds of single stocks. <bookmark mark='b'/> The objective is wrong: a forecast rebalanced daily ignores costs, while the paper trains the allocation on the Sharpe ratio after costs, so its network learns to trade less. <bookmark mark='c'/> And a near-zero daily signal needs years of data to tell from noise, and every architecture tried is another trial.",
+   "zh": "为什么它在这里失败，以及为什么这不是对那篇论文的判决。<bookmark mark='a'/>资产范围不对：四十九个行业几乎没有可预测的残差；那篇论文用的是数百只单个股票。<bookmark mark='b'/>目标不对：每天调仓的预测忽略了成本，而那篇论文按扣除成本后的夏普比率训练配置，所以它的网络学会少交易。<bookmark mark='c'/>而一个接近零的日度信号需要多年的数据才能与噪声区分开，每试一种结构就是又一次试验。"
+  },
+  "4b404bc9904f": {
+   "scene": "Deep",
+   "en": "The lessons concern model comparison and accounting. <bookmark mark='a'/> Flexible predictors require signal, enough data, and a loss consistent with the trading objective. <bookmark mark='b'/> A mean-reversion prior can constrain a model, but does not establish that fitted residual profits are real cash flows. <bookmark mark='c'/> Here forecasts are demeaned and normalized to unit gross before daily rebalancing, with a fixed two-leg cost proxy. Different turnover, financing and hedge reconstruction affect comparability. The chronological split is informative about this stored experiment; it does not independently validate the paper or establish a live allocation.",
+   "zh": "教训关乎模型比较和记账。<bookmark mark='a'/>灵活预测需要信号、数据以及与交易目标一致的损失。<bookmark mark='b'/>均值回归先验可以限制模型，但不证明拟合残差利润是真实现金流。<bookmark mark='c'/>这里预测先去均值、归一到单位总敞口，再每日调仓，使用固定双腿成本代理。不同换手、融资和对冲重构影响可比性。时间分割说明这个存储实验的表现，不能独立验证论文或建立实际配置。"
+  },
+  "ccfd45feb777": {
+   "scene": "Deep",
+   "en": "Pause and predict. A forecast has a daily information coefficient of point zero one across forty-nine assets. Roughly how many years of daily data are needed before its IC is two standard errors from zero?",
+   "zh": "暂停并预测。一个预测在四十九个资产上的日度信息系数是零点零一。大约需要多少年的日度数据，才能让它的信息系数距零两个标准误？"
+  },
+  "90d70d04165d": {
+   "scene": "Crowding",
+   "en": "Chapter nine. A reversal strategy buys from people who are selling in a hurry. Its return is the price of that hurry. That idea explains when it pays, when it crashes, and why it fades.",
+   "zh": "第九章。反转策略从急于卖出的人那里买入。它的收益就是这份急切的价格。这个想法解释了它何时赚钱、何时崩溃，以及为什么会衰减。"
+  },
+  "fb83521b1f5d": {
+   "scene": "Crowding",
+   "en": "The theory. <bookmark mark='a'/> Sanford Grossman and Merton Miller: an investor who must trade now accepts a worse price, and whoever takes the other side is paid when the price recovers. Reversal is the price of immediacy. <bookmark mark='b'/> In a crisis, the liquidity providers' own capital is scarce. <bookmark mark='c'/> So the expected return of reversal should rise with market stress. Stefan Nagel found exactly that for American stocks: reversal returns rise with the VIX, and peaked in 2008.",
+   "zh": "理论。<bookmark mark='a'/>Sanford Grossman和Merton Miller：必须现在交易的投资者接受更差的价格，站在另一边的人在价格恢复时获得报酬。反转就是即时性的价格。<bookmark mark='b'/>在危机中，流动性提供者自己的资本稀缺。<bookmark mark='c'/>所以反转的期望收益应该随市场压力上升。Stefan Nagel在美国股票上正好发现了这一点：反转收益随VIX上升，并在2008年达到顶峰。"
+  },
+  "7cc9ff0de02a": {
+   "scene": "Crowding",
+   "en": "A descriptive industry regression. <bookmark mark='a'/> Monthly outcomes add the daily gross-normalized contrarian P and L arithmetically; they are not compounded portfolio wealth. The predictor is the previous month's last VIX close. <bookmark mark='b'/> The stored slope is -0.39 basis points per VIX point, with t-statistic -0.26. That standard error assumes independent homoskedastic regression errors; it is not HAC robust. <bookmark mark='c'/> Its sample Sharpe is -0.66. These results neither replicate Nagel's stock design nor prove that industry returns contain no liquidity effect.",
+   "zh": "一个行业描述回归。<bookmark mark='a'/>月结果将每日按总敞口归一的逆向损益算术相加，不是复利财富；预测变量是上月最后的VIX收盘。<bookmark mark='b'/>斜率为每VIX点-0.39基点，t统计-0.26。标准误假定回归误差独立同方差，并非HAC稳健误差。<bookmark mark='c'/>样本夏普-0.66。这既不复现Nagel股票设计，也不证明行业没有流动性效应。"
+  },
+  "89f22044e914": {
+   "scene": "Crowding",
+   "en": "The calmest and most stressed research-sample VIX fifths have mean proxy outcomes -0.36 and -0.31 percent. <bookmark mark='a'/> These groups are defined from this sample's VIX distribution; they are descriptive associations. <bookmark mark='b'/> The scatter clips extreme observations for display. Neither the regression nor these groups identify the causal price of immediacy. Universe, timing, dependence and the return convention all affect the comparison with the stock literature.",
+   "zh": "研究样本最平静与最紧张的五分之一月份，代理平均结果为-0.36%与-0.31%。<bookmark mark='a'/>分组用这个样本的VIX分布定义，只是描述关联。<bookmark mark='b'/>散点为显示截断极端值。回归与分组都不能识别即时性的因果价格；资产范围、时点、依赖与收益约定均影响与股票文献的比较。"
+  },
+  "3b01999a5803": {
+   "scene": "Crowding",
+   "en": "Why a reversal can widen before it closes. <bookmark mark='a'/> Andrei Shleifer and Robert Vishny: arbitrageurs manage other people's money, and investors judge them by recent returns. <bookmark mark='b'/> A spread that widens costs the arbitrageur capital, investors withdraw, and the forced selling widens it further. <bookmark mark='c'/> So the best trades arrive exactly when the arbitrageur has the least capital to take them. The limits of arbitrage are limits on capital, not on ideas.",
+   "zh": "为什么一个反转在合上之前会先扩大。<bookmark mark='a'/>Andrei Shleifer和Robert Vishny：套利者管理的是别人的钱，投资者按近期收益评判他们。<bookmark mark='b'/>价差扩大会让套利者损失资本，投资者撤资，被迫的卖出又让价差进一步扩大。<bookmark mark='c'/>所以最好的交易恰恰在套利者资本最少的时候到来。套利的极限是资本的极限，而不是想法的极限。"
+  },
+  "360222d58521": {
+   "scene": "Crowding",
+   "en": "Who demands immediacy, concretely? <bookmark mark='a'/> Index funds when a stock joins an index: they must buy on one day, and Andrei Shleifer found that inclusion raised prices. <bookmark mark='b'/> Mutual funds with outflows: Joshua Coval and Erik Stafford showed their forced sales push prices below value, and the prices recover over the following months. <bookmark mark='c'/> And funds meeting margin calls or rebalancing on a calendar. Each is a seller who cares about the date rather than the price, and the stat-arb trader is paid for taking the other side.",
+   "zh": "具体是谁在要求即时性？<bookmark mark='a'/>一只股票被纳入指数时的指数基金：它们必须在同一天买入，Andrei Shleifer发现纳入会推高价格。<bookmark mark='b'/>遭遇资金流出的共同基金：Joshua Coval和Erik Stafford表明，它们的被迫卖出把价格压到价值以下，价格在随后几个月恢复。<bookmark mark='c'/>还有应付追加保证金或按日历再平衡的基金。每一个都是在意日期而不是价格的卖家，统计套利交易者因站在另一边而获得报酬。"
+  },
+  "2139a5ba00cf": {
+   "scene": "Crowding",
+   "en": "Crowding is the other face of liquidity. <bookmark mark='a'/> August 2007, from Part thirty-one: market-neutral stat-arb books lost heavily in three days as a crowd unwound the same positions, then rebounded. <bookmark mark='b'/> Stat arb is especially prone to crowds, because the same data and the same factor models lead different firms to the same residual trades. <bookmark mark='c'/> And the rebound is the theory again: forced selling is immediacy demanded at any price, and the cited contrarian series rebounded sharply. A rebound in that research series does not prove that every fund could hold its positions, avoid margin calls or earn the same return.",
+   "zh": "拥挤是流动性的另一面。<bookmark mark='a'/>按第三十一部分所引研究，2007年8月，同类头寸集中平仓时，一些市场中性统计套利组合在三天内大幅损失，随后出现反弹。<bookmark mark='b'/>相同数据和因子模型可能使不同公司持有相似残差头寸。<bookmark mark='c'/>被迫交易者对即时性的需求可以很强，所引逆向研究序列也明显反弹；这不证明每家基金都能持仓、避免追保或获得同样收益。"
+  },
+  "af8dfb9a7120": {
+   "scene": "Crowding",
+   "en": "And decay. <bookmark mark='a'/> Avellaneda and Lee found that their residual strategy's returns on American stocks fell after the early 2000s, as the distance rule had after the 1980s. <bookmark mark='b'/> As more firms trade a reversal, it is harvested faster, and the edge moves to shorter horizons, then into market making, Part thirty-eight's subject. <bookmark mark='c'/> What remains is a few basis points a trade, and the firm with the cheapest execution keeps it.",
+   "zh": "还有衰减。<bookmark mark='a'/>Avellaneda和Lee发现，他们的残差策略在美国股票上的收益在2000年代初之后下降了，就像距离法在1980年代之后那样。<bookmark mark='b'/>交易一种反转的公司越多，它就被收割得越快，优势转移到更短的期限，然后进入做市，那是第38部分的主题。<bookmark mark='c'/>剩下的是每笔交易几个基点，归于执行成本最低的公司。"
+  },
+  "00565adfcbf5": {
+   "scene": "Crowding",
+   "en": "Pause and predict. A reversal strategy earns two basis points a day before costs, and trades forty percent of its book daily at five basis points a side. What does it earn after costs?",
+   "zh": "暂停并预测。一个反转策略扣除成本前每天赚两个基点，每天交易其组合的百分之四十，每边成本五个基点。扣除成本后它赚多少？"
+  },
+  "388dc3f4ef09": {
+   "scene": "Envelope",
+   "en": "Chapter ten. What would turn a residual diagnostic into a credible strategy evaluation? The nine ordinary computations were each run once on their audited inputs. This chapter uses no sealed-year strategy output and makes no held-out performance claim. Instead, we specify what an evaluator would have to fix and measure: information timing, actual holdings, the cash account, execution costs and research selection. A frozen proxy can be reproducible and still answer a narrower question than an investable return series.",
+   "zh": "第十章。怎样把残差诊断变成可信的策略评估？九个普通计算各在审核后的输入上执行一次。本章不使用封存年策略输出，也不给留出期表现结论，而是说明评估者必须固定和测量什么：信息时点、实际持仓、现金账户、执行成本与研究选择。冻结代理可以复现，却仍可能只回答比可投资收益更窄的问题。"
+  },
+  "b4c9bd297e6a": {
+   "scene": "Envelope",
+   "en": "Start with the information clock. A signal using today's close is observed after that close has formed; trading at that same close needs a justified order convention. The PCA fits use trailing information through the current close and apply their signal to the next return. That is a useful indexing convention, but not a complete execution model. The universe also uses complete histories over the research interval, so membership is retrospective. An independent evaluation would need a universe and decision rule available at each decision time.",
+   "zh": "从信息时钟开始。使用今日收盘的信号，只有在收盘形成后才知道；同时按该收盘成交需要合理订单约定。PCA拟合使用截至当前收盘的信息，并把信号用于下一期收益。这个索引有用，但不是完整执行模型。资产范围还用研究期完整历史，因此成员选择是事后的。独立评估需要每个决策时点当时可得的成员及规则。"
+  },
+  "eb19af05797c": {
+   "scene": "Envelope",
+   "en": "Next write the actual holdings and cash account. Wealth is shares times prices plus cash. Between rebalances it changes with price moves, distributions and financing; trading adds explicit execution charges. A fitted regression residual subtracts an intercept and factor returns, but only actual instruments produce cash flows. Normalize by the entire chosen capital convention, including the hedge. The stored residual proxy normalizes by active industry signals and subtracts a fitted intercept. Those conventions cannot be silently renamed full-book gross return.",
+   "zh": "再写实际持仓和现金账户。财富是份额乘价格加现金。再平衡之间，财富随价格、分配和融资变化；交易另加执行费。拟合残差扣截距及因子收益，但只有实际工具产生现金流。分母须遵守包括对冲的完整资本约定。现有残差代理按活跃行业信号数归一，并扣拟合截距，不能悄悄改称完整组合总敞口收益。"
+  },
+  "a561b1f59dee": {
+   "scene": "Envelope",
+   "en": "A particularly important diagnostic is the endpoint constraint. Least squares with an intercept makes the residuals sum to approximately zero over the fitting window. Their cumulative sum therefore ends near zero. An autoregression fitted to that path may see an appearance of mean reversion partly imposed by construction. The next residual can still contain useful information, but that is a separate empirical question. Evaluate returns from fixed information and actual holdings rather than treating the fitted bridge as proof of a trade.",
+   "zh": "一个特别重要的诊断是终点约束。含截距最小二乘使拟合窗口内残差和约为零，所以累计残差终点接近零。对这条路径拟合自回归时，看到的均值回归可能部分由构造施加。下期残差仍可能含有信息，但那是另一项经验问题。应以固定信息和真实持仓评价收益，不能把拟合桥当成交易证明。"
+  },
+  "99b0f9a321f8": {
+   "scene": "Envelope",
+   "en": "An execution audit reconstructs changes in every holding, including hedges. Netting can reduce separate hedge trades under linear costs, but it does not excuse missing transactions. In the stored algorithm, a changing number of active signals rescales continuing positions without including all those trades in turnover. A fully empty new book receives zero net profit, omitting its exit charge. Separate-hedge approximations can err the other way. The net effect is not known to be conservative. Keep the financial algorithm unchanged and state that limitation explicitly.",
+   "zh": "执行审计重构包括对冲的每项持仓变化。线性成本下轧差能减少分别交易对冲，但不能为遗漏交易辩护。原算法活跃信号数变化会缩放持续仓位，却未把所有交易计入换手；新组合全空时又把净利润设零，漏掉退出费。单独对冲近似可能向另一方向偏误，合计效果不知是否保守。保留金融算法，并明确这一限制。"
+  },
+  "c79067c7b10a": {
+   "scene": "Envelope",
+   "en": "Selection comes next. The eight threshold variants and the later mathematical-band configuration share the same research period and pipeline. Choosing a winner after comparing them spends information. A counter documents that search; it does not erase selection or make the rules independent. Any null maximum-Sharpe calculation must state its error model and dependence assumptions. This review adds no new market trial or registration. A future evaluation would require a fixed protocol and genuinely independent evidence appropriate to the question.",
+   "zh": "接着考虑选择。八个阈值变体及后来加入的数学区间共享研究期和处理流程，比较后选赢家已消耗信息。计数器记录搜索，不能消除选择，也不能使规则独立。任何空模型最大夏普计算都必须说明误差模型和试验间依赖。本次不添加市场试验或登记；未来评估需要预先固定协议，以及适合问题的独立证据。"
+  },
+  "938a34de4902": {
+   "scene": "Envelope",
+   "en": "Even an ideal clean return series can be imprecise. Under the simple independent-return approximation, the annual Sharpe standard error is roughly one over the square root of years. A Sharpe of point three is two such standard errors from zero only after about forty-four point four years. This is a planning calculation, not a universal sample-size guarantee. Serial correlation, skew, changing volatility and strategy selection alter it. The appropriate conclusion here is a documented research proxy and a clear evaluation specification, with no sealed-year verdict.",
+   "zh": "即使理想干净的收益序列也可能不精确。在简单独立收益近似下，年夏普标准误约为年数平方根的倒数。零点三夏普达到两个这种标准误需约四十四点四年。这是规划计算，不是普遍样本量保证；序列相关、偏度、变化波动和策略选择都会改变精度。这里能得到的是有记录的研究代理与明确评估规范，没有封存年结论。"
+  },
+  "66cbb62403ee": {
+   "scene": "Envelope",
+   "en": "Pause and predict. Four active unit signals become two. A surviving unit signal has not changed, yet its normalized weight moves from one quarter to one half. Does a turnover measure using only changes in the discrete signal include that rebalance? It does not. That is why actual normalized holdings, and their hedge changes, must be reconstructed before interpreting the cost proxy as a net wealth result.",
+   "zh": "暂停预测。四个活跃单位信号变成两个。一个存续信号本身没变，归一权重却从四分之一变成二分之一。仅用离散信号变化的换手能捕捉这笔再平衡吗？不能。因此，把代理成本解释为净财富结果之前，必须重构实际归一持仓及其对冲变化。"
+  },
+  "586c0d6a7c13": {
+   "scene": "House",
+   "en": "Chapter eleven. The House's thirty-third rule: what a reversion strategy must show before the House trades it. Reversion is easy to find before costs and hard to keep after them, so the rule is mostly about costs, and about the trials it took to find the rule.",
+   "zh": "第十一章。本系列公司的第33条规则：一个回归策略在本系列公司交易它之前必须展示什么。回归在扣除成本前容易找到，扣除成本后难以保住，所以这条规则主要关乎成本，以及找到这条规则所用的试验次数。"
+  },
+  "db7f92cb4930": {
+   "scene": "House",
+   "en": "The research sheet gathers verified ordinary outputs. <bookmark mark='a'/> The distance proxy has a negative sample mean. Annual cointegration pass rates exceed the simulated control rate, with limited persistence. The adaptive Kalman innovation looks stationary, which is not a fixed cointegrating portfolio. Lo and MacKinlay's covariance terms describe own and cross dependence. Residual and network results use synthetic residual P and L with incomplete cost accounting. The VIX regression is a descriptive industry comparison with conventional errors. No row on this sheet establishes an executable portfolio or a sealed-year verdict.",
+   "zh": "研究汇总表收集核验后的普通输出。<bookmark mark='a'/>距离代理样本均值为负；年度协整通过率超过模拟对照，但持续性有限。动态卡尔曼创新看似平稳，却不是固定协整组合。Lo与MacKinlay协方差项描述自身及交叉依赖。残差和网络使用合成残差损益及不完整成本记账，VIX是带常规误差的行业描述比较。表中没有一行据此确立可实施组合或封存年结论。"
+  },
+  "16041650f88e": {
+   "scene": "House",
+   "en": "The OU fit regresses the next observation on the previous one with an intercept. A slope outside zero to one is incompatible with this stationary mean-reverting OU mapping. For a valid slope and positive regular sampling interval, speed is minus log slope divided by the interval; the fitted mean divides the intercept by one minus slope. Innovation variation determines equilibrium width. This helper first removes nonfinite observations, compressing any time gaps, and estimates innovation deviation with two regression degrees of freedom. Fitted speed and width remain uncertain.",
+   "zh": "OU拟合用含截距回归把下一观测对前一观测解释。斜率不在零到一内，就不符合这个平稳均值回归OU映射。有效斜率与正常规采样间隔下，速度是负斜率对数除间隔，均值为截距除以一减斜率，创新变化决定均衡宽度。辅助函数先删除非有限观测，压缩时间空缺，再用两个回归自由度估计创新偏差。拟合速度和宽度仍不确定。"
+  },
+  "e877dcafc36c": {
+   "scene": "House",
+   "en": "The band-rate code divides the fixed reward m minus c by mean waiting plus mean holding time. The first-passage formulas assume a known OU process with positive kappa and sigma, continuous monitoring, unit exposure and a fixed round-trip cost in spread units. Simpson quadrature evaluates the integrals. The optimizer searches a bounded grid and refines once; it is a numerical approximation within this policy family. It does not solve financing, risk budgets, a changing factor model, or general optimal stopping.",
+   "zh": "区间速率代码将固定报酬m减c除以平均等待加平均持有时间。首达公式假设已知OU、正常数卡帕及西格玛、连续监控、单位敞口与价差单位固定往返费。辛普森求积计算积分，优化器在有界网格上搜索并细化一次。这是该政策族中的数值近似，不解决融资、风险预算、变化因子模型或一般最优停止问题。"
+  },
+  "0bec90b88b0c": {
+   "scene": "House",
+   "en": "The decomposition code returns three moment terms and a realized sample profit. In the population, expected contrarian profit is a weighted own covariance term plus off-diagonal covariance, minus the cross-sectional variance of means. That last term is subtracted. In this finite implementation the full-sample centering mean and lagged endpoint means differ, leaving a boundary correction. The notes derive it explicitly; equality to the last digit is not asserted. A covariance identity also does not identify why prices moved.",
+   "zh": "分解代码返回三个矩项及实际样本利润。总体逆向期望利润为加权自身协方差，加非对角协方差，减均值横截面方差，最后一项是减去。有限实现中，全样本中心化均值与滞后端点均值不同，产生边界修正，讲义明确推导，因此不声称最后一位相等。协方差恒等式也不识别价格变化原因。"
+  },
+  "93add4255f5a": {
+   "scene": "House",
+   "en": "And the s-score itself. At every day, fit the Ornstein-Uhlenbeck process to the last sixty values of the cumulative residual; if the fit is mean-reverting, the score is today's distance from the fitted mean in equilibrium deviations, and the fitted speed is kept beside it. A residual that does not revert gets no score at all, and is not traded.",
+   "zh": "还有s分数本身。每天，对累计残差最近的六十个值拟合奥恩斯坦-乌伦贝克过程；如果拟合是均值回归的，分数就是今天离拟合均值的距离，以均衡偏差为单位，拟合出的速度也一并保留。不回归的残差根本得不到分数，也不会被交易。"
+  },
+  "645d1c999b0a": {
+   "scene": "House",
+   "en": "The tools this part adds. <bookmark mark='a'/> Spreads; pairs; the decomposition; the theorem; and its check by simulation. <bookmark mark='b'/> And the thirty-third rule. A reversion strategy enters the House only with its profit shown after the costs of every leg, hedges included; its bands derived from those costs, not from habit; every pair, window and band it was chosen from counted as a trial; its spread tested out of sample on profit, not on stationarity; and its crowding risk stated: who else holds the same residuals.",
+   "zh": "这一部分新增的工具。<bookmark mark='a'/>价差；配对；分解；定理；以及它的模拟检验。<bookmark mark='b'/>还有第33条规则。一个回归策略要进入本系列公司，必须展示：扣除每条腿的成本之后的利润，对冲也算在内；从这些成本推导出的区间，而不是凭习惯；挑选它时用过的每一个配对、窗口和区间，都计为试验；在样本外用利润而不是平稳性检验它的价差；并说明它的拥挤风险：还有谁持有同样的残差。"
+  },
+  "460d79341d40": {
+   "scene": "House",
+   "en": "Capacity and leverage remain design constraints, not outputs certified by this research proxy. <bookmark mark='a'/> Trading larger quantities can raise impact and erode a small edge; the impact model needs data and units appropriate to actual instruments. <bookmark mark='b'/> Leverage increases both opportunities and margin risk, and is never compelled merely by low reported volatility. <bookmark mark='c'/> This lesson establishes no live capital allocation. A trading decision would require audited holdings, financing, liquidity and an independent evaluation under a fixed risk mandate.",
+   "zh": "容量和杠杆仍是设计约束，不是这个代理已证实的输出。<bookmark mark='a'/>更大交易量可能提高冲击并侵蚀微小优势，模型须使用适合实际工具的数据和单位。<bookmark mark='b'/>杠杆既放大机会也放大保证金风险，低报告波动并不迫使使用杠杆。<bookmark mark='c'/>本课没有实际资本配置。交易决策还需持仓审计、融资、流动性和固定风险授权下的独立评估。"
+  },
+  "b2c6bb7b5078": {
+   "scene": "House",
+   "en": "A proposed monitoring design must also be explicit. <bookmark mark='a'/> Measure actual turnover, execution cost, financing and factor exposures, allowing for model error rather than expecting exact neutrality. <bookmark mark='b'/> Track residual dispersion and fit failures as diagnostics; a lower OU pass rate does not uniquely identify factor-model failure. <bookmark mark='c'/> A loss limit, liquidity reserve or size cut is a prospective policy choice requiring calibration and funding analysis. The illustrative three-daily-volatility weekly trigger is not computed or validated by the stored strategy and is not adopted here.",
+   "zh": "监控设计也须明确。<bookmark mark='a'/>测量实际换手、执行费、融资与因子敞口，允许模型误差，不期待绝对中性。<bookmark mark='b'/>跟踪残差离散度及拟合失败是诊断；OU通过率下降不唯一证明因子模型失败。<bookmark mark='c'/>损失限额、流动性储备或减仓属于前瞻政策，需要校准与融资分析。示意的周损失达三倍日波动触发减仓，没有在存储策略内计算或验证，这里不采纳为实际规则。"
+  },
+  "468c3fa59320": {
+   "scene": "House",
+   "en": "The rule against three cases. <bookmark mark='a'/> A pairs fund showing a Sharpe ratio of three: ask whether that is before costs, how many pairs were screened, and whether the hedge ratio was fitted on the same days. <bookmark mark='b'/> A basket with a half-life of one day: ask whether its spread is a filter's forecast error. <bookmark mark='c'/> A residual book that lost in August 2007: ask who else held the same residuals, and whether the fund could have held on for a week.",
+   "zh": "用这条规则检验三个案例。<bookmark mark='a'/>一只展示夏普比率为三的配对基金：问这是不是扣除成本前的，筛选了多少对，对冲比率是否在同样的日子上拟合。<bookmark mark='b'/>一个半衰期为一天的篮子：问它的价差是不是滤波器的预测误差。<bookmark mark='c'/>一个在2007年8月亏损的残差组合：问还有谁持有同样的残差，以及这只基金能否撑过一周。"
+  },
+  "a7d53a9185f7": {
+   "scene": "Research",
+   "en": "For the researcher. Every stat-arb book chooses bands, usually by habit: one and a quarter deviations, or two. This chapter derives the profit rate of a band rule exactly, and the band that maximises it.",
+   "zh": "写给研究者。每个统计套利组合都要选择交易区间，通常凭习惯：一又四分之一个偏差，或者两个。本章精确推导区间规则的利润率，以及使它最大的区间。"
+  },
+  "5254182733a0": {
+   "scene": "Research",
+   "en": "The setup fixes a known Ornstein-Uhlenbeck process with positive kappa and sigma, centered at zero. <bookmark mark='a'/> Parameters are constant and the path is monitored continuously. <bookmark mark='b'/> While flat, wait until either band at distance m is reached; then hold one unit against the displacement and exit at zero. <bookmark mark='c'/> A completed cycle earns m minus a fixed round-trip cost c in spread units. We maximize long-run expected profit per time within this family. This is not a Sharpe objective, a return on committed capital, or a solution with financing, stops, breaks or a risk budget.",
+   "zh": "设定是已知、正常数卡帕与西格玛的OU，均值为零。<bookmark mark='a'/>参数恒定，路径连续监控。<bookmark mark='b'/>空仓时等到任一距离m的边界，逆向持有一个单位，回零时退出。<bookmark mark='c'/>完整周期赚m减固定价差单位往返费c。在这个规则族中最大化长期期望利润每时间，不是夏普、承诺资本回报，也不包含融资、止损、断裂或风险预算。"
+  },
+  "757d21a25575": {
+   "scene": "Research",
+   "en": "Lemma one, the renewal-reward theorem. <bookmark mark='a'/> Each cycle has two legs: waiting at the mean until the spread reaches the band, then holding until it returns. By the strong Markov property every cycle starts afresh at the mean, so the cycles are independent and identical. <bookmark mark='b'/> Then the long-run profit per unit time is the expected reward per cycle over the expected length of a cycle. <bookmark mark='c'/> So everything reduces to two expected first-passage times.",
+   "zh": "引理一，更新-报酬定理。<bookmark mark='a'/>每个周期有两段：在均值处等待价差到达区间，然后持有直到它回来。由强马尔可夫性，每个周期都在均值处重新开始，所以各周期独立同分布。<bookmark mark='b'/>于是长期单位时间利润等于每个周期的期望报酬除以一个周期的期望长度。<bookmark mark='c'/>所以一切归结为两个期望首达时间。"
+  },
+  "c2e9fe1f53c8": {
+   "scene": "Research",
+   "en": "Lemma two, the first-passage times. <bookmark mark='a'/> Let f of x be the expected time to reach the boundary from x. <bookmark mark='b'/> By Dynkin's formula, the OU generator applied to f is minus one, with f zero on the boundary: Part eight's Feynman-Kac, with a running cost of one per unit time. <bookmark mark='c'/> Multiply by the integrating factor, and the left side becomes an exact derivative. The equation integrates twice.",
+   "zh": "引理二，首达时间。<bookmark mark='a'/>令f(x)为从x出发到达边界的期望时间。<bookmark mark='b'/>由迪金公式，奥恩斯坦-乌伦贝克生成元作用在f上等于负一，且f在边界上为零：这是第8部分的费曼-卡茨，每单位时间的运行成本为一。<bookmark mark='c'/>乘以积分因子，左边就成为一个精确的导数。方程积分两次即可。"
+  },
+  "871a13e85916": {
+   "scene": "Research",
+   "en": "The two solutions. <bookmark mark='a'/> From minus m to the mean, the condition far away is that the slope stays bounded, which starts the inner integral at minus infinity. <bookmark mark='b'/> From the mean to either band, symmetry makes the slope zero at the mean, which starts it at zero. <bookmark mark='c'/> The inner integrals are error functions, and the outer ones a one-dimensional quadrature.",
+   "zh": "两个解。<bookmark mark='a'/>从负m到均值，远处的条件是斜率保持有界，这使内层积分从负无穷开始。<bookmark mark='b'/>从均值到任一侧的区间，对称性使均值处的斜率为零，这使内层积分从零开始。<bookmark mark='c'/>内层积分是误差函数，外层积分是一维数值积分。"
+  },
+  "ac449be44190": {
+   "scene": "Research",
+   "en": "The theorem is about this fixed policy family. <bookmark mark='a'/> The two expected passage times sum, after scaling, to the square root of half pi times the integral from zero to u of exp z squared over two, divided by kappa. Here u is m over equilibrium width and d is c over that width. <bookmark mark='b'/> Differentiating the reward rate gives the equation I of u equals u minus d times exp u squared over two. For positive cost it has exactly one solution above d: the derivative changes sign there. At zero cost the best rate is only a supremum as the positive band shrinks to zero. Speed scales the rate when width and dimensionless cost are held fixed.",
+   "zh": "定理针对这个固定政策族。<bookmark mark='a'/>尺度变换后，两个期望首达时间之和为派除以二的平方根，乘零到u的exp括号z平方除二积分，再除卡帕；u为m除均衡宽度，d为c除该宽度。<bookmark mark='b'/>对报酬速率求导，得到I括号u等于u减d的整体乘exp括号u平方除二。正成本下恰有一个大于d的解，导数在此变号。零成本最优速率只是正区间趋零时的上确界。固定宽度和无量纲成本时，速度缩放速率。"
+  },
+  "819ae984bf6f": {
+   "scene": "Research",
+   "en": "The two times. <bookmark mark='a'/> Holding, from the band back to the mean, grows slowly with the band: the further out, the stronger the pull back. <bookmark mark='b'/> Waiting, from the mean to the band, starts at zero and grows explosively, because reaching a distant band against the pull is rare. Wide bands are paid for in waiting.",
+   "zh": "两个时间。<bookmark mark='a'/>持有时间，从区间回到均值，随区间缓慢增长：离得越远，拉回的力越强。<bookmark mark='b'/>等待时间，从均值到区间，从零开始并爆炸式增长，因为逆着拉力到达远处的区间是罕见的。宽区间的代价是等待。"
+  },
+  "2ab0dc47c0fc": {
+   "scene": "Research",
+   "en": "The profit rate, for three costs. <bookmark mark='a'/> Each curve rises from zero at the cost, peaks, and falls as waiting takes over. <bookmark mark='b'/> The dots are the optima: higher costs push the best band outward. At a cost of three tenths of a deviation, the best band is 1.03 deviations: close to Avellaneda and Lee's one and a quarter, which corresponds to a cost of roughly half a deviation.",
+   "zh": "三种成本下的利润率。<bookmark mark='a'/>每条曲线从成本处的零开始上升，达到峰值，然后随着等待时间占据主导而下降。<bookmark mark='b'/>圆点是最优点：成本越高，最优区间越往外推。成本为十分之三个偏差时，最优区间是1.03个偏差：接近Avellaneda和Lee的一又四分之一，后者大约对应半个偏差的成本。"
+  },
+  "eb910d0ac7d4": {
+   "scene": "Research",
+   "en": "The dimensionless optimum is a function of cost in equilibrium-width units. <bookmark mark='a'/> The displayed points are bounded numerical searches, not symbolic exact optimizers. The zero-cost grid point has a positive minimum band, whereas the mathematical optimum is a limiting supremum at zero. <bookmark mark='b'/> For small positive cost the true band grows asymptotically as the cube root of three times that cost. This shares an exponent with Part thirty-one's holdings band under quadratic risk, but the objective and derivation differ. A fixed one-and-a-quarter threshold corresponds to just one dimensionless cost within this particular OU model.",
+   "zh": "无量纲最优区间取决于均衡宽度单位的成本。<bookmark mark='a'/>图点来自有界数值搜索，不是符号精确最优值。零成本网格点有正的最低区间，而数学最优是零处的极限上确界。<bookmark mark='b'/>正小成本下，真实最优区间渐近为三倍该成本的立方根。它与第三十一部分二次风险下持仓区间有相同指数，但目标和推导不同。在这个特定OU模型内，一点二五阈值只对应一个无量纲成本。"
+  },
+  "3c8885c153a8": {
+   "scene": "Research",
+   "en": "A corollary that surprises people. <bookmark mark='a'/> For a tiny band, the holding time is linear in the band, and the waiting time quadratic. <bookmark mark='b'/> So with no costs the profit rate tends to a finite limit, sigma times the root of kappa over pi, not to infinity: trading infinitely often does not earn infinitely fast. <bookmark mark='c'/> In the curve's units, the root of two over pi, 0.798. Costs then decide how far from that limit the best band must retreat.",
+   "zh": "一个让人意外的推论。<bookmark mark='a'/>对很小的区间，持有时间与区间成线性，等待时间则是二次的。<bookmark mark='b'/>所以在没有成本时，利润率趋于一个有限的极限，sigma乘以根号下kappa除以pi，而不是无穷大：无限频繁地交易并不能无限快地赚钱。<bookmark mark='c'/>以曲线的单位，是根号下二除以pi，即0.798。成本决定最优区间必须从这个极限退后多远。"
+  },
+  "d10f7b026e4e": {
+   "scene": "Research",
+   "en": "The cube root has a precise small-cost asymptotic derivation. <bookmark mark='a'/> Expand the two passage times for a small band, measured in equilibrium deviations. The time back to the mean has a negative quadratic term. <bookmark mark='b'/> The time out to the band has exactly the opposite one. In the length of a cycle, they cancel. <bookmark mark='c'/> So the first correction to the linear term is cubic, and setting the derivative of the profit rate to zero gives: to leading order the band cubed is three times the cost. <bookmark mark='d'/> The small-cost law. The best band is the cube root of three times the cost, in equilibrium deviations, with no free constant and no dependence on the speed. And the fraction of the frictionless profit lost to costs grows like the cost to the power two thirds.",
+   "zh": "立方根有严格的小成本渐近推导。<bookmark mark='a'/>按均衡偏差单位展开两个小区间首达时间，回均值时间有负二次项。<bookmark mark='b'/>向外等待时间有恰好相反的二次项，在周期长度中抵消。<bookmark mark='c'/>线性项的首个修正因此为三次，对速率求导置零，首阶给区间立方等于三倍成本。<bookmark mark='d'/>这是小成本定律：最优区间渐近为三倍成本的立方根，无自由常数，也不依赖速度。成本造成的无摩擦利润损失比例随成本的三分之二次幂增长。"
+  },
+  "3d6e1163b9d7": {
+   "scene": "Research",
+   "en": "Checked against the numerical optimum. <bookmark mark='a'/> At a cost of a hundredth of a deviation the law is within 0.7 percent of the numerical band; at a cost of 0.3 deviations, already a large cost, it is within 7 percent. <bookmark mark='b'/> It is the same cube root as Part thirty-one's no-trade band, for a different reason: there the cost was traded against quadratic risk, here against the time a cycle takes.",
+   "zh": "与数值最优值比较。<bookmark mark='a'/>成本为百分之一偏差时，定律距数值区间0.7%；成本为0.3个偏差时已较大，误差约7%。<bookmark mark='b'/>它与第三十一部分无交易区间有相同立方根，但原因不同：那里平衡成本与二次风险，这里平衡成本与周期耗时。"
+  },
+  "68a4d4023b0c": {
+   "scene": "Research",
+   "en": "A worked example. <bookmark mark='a'/> A residual two percent wide, with an eight-day half-life, and a round trip costing twenty basis points on both legs: a cost of a tenth of a deviation. <bookmark mark='b'/> The best band is 1.38 percent, 0.69 deviations, and the small-cost law gives 0.67. <bookmark mark='c'/> A cycle takes about 11 days, and the rule earns 10.9 basis points a day for each unit held. Avellaneda and Lee's habit of one and a quarter deviations would be nearly twice as wide.",
+   "zh": "一个算例。<bookmark mark='a'/>一个宽百分之二的残差，半衰期八天，两条腿的往返成本二十个基点：成本是十分之一个偏差。<bookmark mark='b'/>最优区间是1.38%，即0.69个偏差，小成本定律给出0.67。<bookmark mark='c'/>一个周期大约需要11天，规则每持有一个单位每天赚10.9个基点。Avellaneda和Lee一又四分之一个偏差的习惯，会宽出将近一倍。"
+  },
+  "ea6fb31a8a3a": {
+   "scene": "Research",
+   "en": "The stored simulation is a timing illustration on a grid, at half, once, and one point six times each numerical optimum. <bookmark mark='a'/> Exact OU transitions connect grid dates, but crossings between dates are missed. Every completed trade is credited at the band and mean, not the actual overshoot execution prices. Thus it does not simulate an executable grid-trading cash account. <bookmark mark='b'/> The final column combines a fine step of point zero zero zero five and a coarse step four times larger as twice fine minus coarse, assuming a leading square-root-step bias. This extrapolation is heuristic. Equal seeds do not create coupled Brownian paths, and this table has no Monte Carlo error bars or guaranteed ranking.",
+   "zh": "存储模拟是网格时点示例，使用数值最优区间的一半、一倍和一点六倍。<bookmark mark='a'/>观测点间采用精确OU转移，但漏掉点间穿越。每笔完整交易按理想区间与均值计费，不按实际超调成交价，因而没有模拟可实施网格交易现金账户。<bookmark mark='b'/>最后一列取步长零点零零零五的细网格两倍减步长大四倍的粗网格，假设主偏差按步长平方根变化。这是启发式外推；相同种子并不形成耦合布朗路径，表中也没有蒙特卡洛误差条或必然的排名保证。"
+  },
+  "4256165c3958": {
+   "scene": "Research",
+   "en": "The stored industry comparison is a research illustration of two proxy policies. <bookmark mark='a'/> Fixed thresholds have synthetic gross Sharpe 0.88, and charged proxy Sharpe -0.39. <bookmark mark='b'/> The mathematical-band configuration has 1.13 and 0.21, with discrete-signal turnover 11 percent versus 21. Bands are interpolated from thirty-one cost points with endpoint clipping. Known-parameter OU theory does not validate fitted bridges or omitted cash flows. All these comparisons reuse research data and incomplete trading-cost accounting; Chapter ten specifies what a fuller evaluation would require.",
+   "zh": "存储行业比较是两个代理政策的研究示例。<bookmark mark='a'/>固定阈值合成毛夏普0.88，扣代理费后-0.39。<bookmark mark='b'/>数学区间为1.13与0.21，离散信号换手11%，固定阈值为21%。区间从三十一个成本点插值并截住端点。已知参数OU理论不验证拟合桥或遗漏现金流；比较复用研究数据及不完整成本，第十章说明更完整评估的要求。"
+  },
+  "c0817e1c2eb4": {
+   "scene": "Research",
+   "en": "Where the theorem sits. <bookmark mark='a'/> William Bertram used the same renewal argument for an entry level and an exit level, with the passage times from the process's known series. <bookmark mark='b'/> Tim Leung and Xin Li treat entry and exit as optimal stopping problems with discounting and a stop-loss, whose answer is a pair of free boundaries rather than a fixed cycle. <bookmark mark='c'/> And Part thirty-one's no-trade band, a cost traded against quadratic risk, grows with the same cube root: two different problems, one exponent.",
+   "zh": "这个定理的位置。<bookmark mark='a'/>William Bertram对一个进场水平和一个出场水平使用了同样的更新论证，首达时间取自这个过程已知的级数。<bookmark mark='b'/>Tim Leung和Xin Li把进场和出场当作带贴现和止损的最优停时问题，答案是一对自由边界，而不是固定的周期。<bookmark mark='c'/>而第31部分的不交易区间，成本与二次风险的权衡，以同样的立方根增长：两个不同的问题，一个指数。"
+  },
+  "facee7ee8148": {
+   "scene": "Research",
+   "en": "Three extensions require additional modeling. <bookmark mark='a'/> Uncertain parameters and learning while trading change the known-parameter optimum; this chapter supplies no general solution. <bookmark mark='b'/> Structural breaks and a stop-loss change the cycle and objective. Existing optimal-stopping literature treats specified versions, but does not make our fixed-band formula universal. <bookmark mark='c'/> Correlated spreads, financing, a portfolio risk budget and nonlinear impact create a joint control problem. These are directions for further work, not claims that no related solution exists anywhere in the literature.",
+   "zh": "三个扩展需要另建模型。<bookmark mark='a'/>参数不确定与边交易边学习会改变已知参数最优值，本章不提供一般解。<bookmark mark='b'/>结构断裂与止损改变周期和目标，最优停止文献研究指定版本，并不使固定区间公式普适。<bookmark mark='c'/>相关价差、融资、组合风险预算与非线性冲击形成联合控制问题。这些是进一步研究方向，不是声称文献中任何相关解都不存在。"
+  },
+  "9e36a305ad4f": {
+   "scene": "Research",
+   "en": "Pause and predict. Two spreads have the same equilibrium deviation and the same cost, but one reverts twice as fast. How do their optimal bands and their profit rates compare?",
+   "zh": "暂停并预测。两个价差有相同的均衡偏差和相同的成本，但其中一个回归速度快一倍。它们的最优区间和利润率如何比较？"
+  },
+  "8006e443199c": {
+   "scene": "Outro",
+   "en": "Part thirty-three in fourteen lines. Statistical arbitrage grew from quantitative trading desks into a family of reversion strategies. The industry distance proxy has a negative sample mean under its implementation. Cointegration screens have limited persistence and noisy null calibration. An OU regression supplies a conditional model of speed and width, with uncertain estimates. Rolling fitted residuals can look mean reverting partly because they sum to zero. A Kalman innovation is a forecast error, not a fixed cointegrating wealth portfolio. Contrarian expectations split into own covariance, cross covariance and a mean-dispersion cost.",
+   "zh": "第33部分，十四行。统计套利从量化交易台发展为一族回归策略。行业距离代理在其实现下样本均值为负。协整筛选持续性有限，空模型校准有噪声。OU回归提供速度和宽度的条件模型，估计仍不确定。滚动拟合残差之和为零可部分形成回归外观。卡尔曼创新是预测误差，不是固定协整财富组合。逆向期望分为自身协方差、交叉协方差及负均值离散项。"
+  },
+  "908119f1b4a9": {
+   "scene": "Outro",
+   "en": "The small network uses a chronological split inside reused research data and a synthetic residual target. The VIX comparison is descriptive with conventional regression errors. All residual configurations need a fuller holdings and cost audit before net investment claims. No sealed-year strategy result is used. Rule thirty-three asks for every leg's costs, honest research selection, information timing and crowding risk. Within a known OU model, first-passage times give the symmetric policy's profit rate and a unique positive-cost optimum. A cube-root law approximates that optimum for small dimensionless costs.",
+   "zh": "小网络在复用研究数据中按时间分割，并使用合成残差目标。VIX比较是带常规回归误差的描述。所有残差配置在声称净投资表现前，都需更完整持仓与成本审计。本课不使用封存年策略结果。第33条规则要求每条腿成本、诚实的研究选择、信息时点及拥挤风险。在已知OU模型内，首达时间给出对称政策的利润速率及唯一正成本最优值；立方根定律是小无量纲成本时的近似。"
+  },
+  "ca3826efeca6": {
+   "scene": "Outro",
+   "en": "Six desk questions. Two prices are cointegrated: what do you trade, and what can go wrong? The spread, and the tie, the estimate and the screen. <bookmark mark='a'/> What is an s-score? A residual's distance from its fitted mean, in equilibrium deviations. <bookmark mark='b'/> And is a Kalman spread with a one-day half-life a pair? Not on that evidence.",
+   "zh": "六个交易台问题。两个价格是协整的：你交易什么，可能出什么错？交易价差；会出错的是联系本身、估计和筛选。<bookmark mark='a'/>什么是s分数？残差离其拟合均值的距离，以均衡偏差为单位。<bookmark mark='b'/>半衰期为一天的卡尔曼价差是配对吗？凭这个证据不是。"
+  },
+  "b380d39349cb": {
+   "scene": "Outro",
+   "en": "Where does a contrarian's profit come from? Own reversal and lead-lag. <bookmark mark='a'/> Why did the residual book lose with the standard bands? Every trade is two trades. <bookmark mark='b'/> And how should the band depend on costs? Through one curve, with a cube root near zero. Full solutions are in the notes.",
+   "zh": "逆向策略的利润从哪里来？自身反转与领先-滞后。<bookmark mark='a'/>为什么用标准区间的残差组合会亏钱？每笔交易都是两笔交易。<bookmark mark='b'/>区间应该如何依赖成本？通过一条曲线，在零附近是立方根。完整解答在讲义里。"
+  },
+  "150c20736b29": {
+   "scene": "Outro",
+   "en": "The pause questions, answered under explicit assumptions. Cheap execution can make a fixed edge affordable, while competition may reduce the edge. <bookmark mark='a'/> A twenty-day half-life and six-month holding cap do not determine an optimal entry band. The cost, objective, width and finite-horizon policy are also needed. <bookmark mark='b'/> Under a calibrated five-percent null test, two thousand unrelated pairs give one hundred expected passes. If next year's null outcomes are also independent over time, five of those pass again in expectation. Cross-pair independence is not needed for the first expectation, but temporal dependence changes the second.",
+   "zh": "在明确假设下回答暂停题。低执行费可能使固定优势变得可交易，竞争也可能缩小优势。<bookmark mark='a'/>二十天半衰期与六个月上限不能确定最优入场区间，还需成本、目标、宽度及有限期限政策。<bookmark mark='b'/>校准百分之五空检验下，两千无关配对期望通过一百。若次年结果在时间上也独立，其中期望五对再次通过。第一个期望不要求配对之间独立，但时间依赖会改变第二个。"
+  },
+  "c38628fef42b": {
+   "scene": "Outro",
+   "en": "A slope of point nine five gives a half-life of 13.5 daily intervals. The first-order Kendall slope-bias approximation maps to about 6 days, but a nonlinear function of an expected slope is not an expected fitted half-life. <bookmark mark='a'/> In the specified constant-turnover cost illustration, gross mean is three point two percent, costs five point zero four percent, and net -1.84 percent annually. The net Sharpe approximation keeps volatility fixed. <bookmark mark='b'/> Forecast-error autocorrelation may indicate misspecification; it does not establish cointegration.",
+   "zh": "斜率零点九五对应半衰期13.5个日间隔。肯德尔一阶斜率偏差映射给约6天，但预期斜率的非线性函数不是拟合半衰期的期望。<bookmark mark='a'/>指定恒定换手算例中，年毛均值百分之三点二，费用百分之五点零四，净-1.84%。净夏普近似固定波动不变。<bookmark mark='b'/>创新自相关可能提示模型误设，不证明协整。"
+  },
+  "d99e74d3655a": {
+   "scene": "Outro",
+   "en": "With zero means, zero own lag covariance and a positive off-diagonal covariance, the contrarian has positive expected cross-term profit. <bookmark mark='a'/> Under independent pooled observations, IC point zero one across forty-nine assets needs about 3.24 years for a two-standard-error separation. Correlated assets and dates reduce effective sample size. Under the basic iid Sharpe approximation, point three needs 44.4 years. <bookmark mark='b'/> For turnover defined as summed absolute traded weight, forty percent times five basis points costs two basis points daily; two gross leaves zero. <bookmark mark='c'/> At fixed equilibrium width and cost, doubling OU speed leaves the optimal band fixed and doubles this model's profit rate.",
+   "zh": "零均值、零自身滞后协方差且正非对角协方差时，逆向策略有正交叉项期望利润。<bookmark mark='a'/>合并观测独立时，四十九资产上的零点零一IC达到两个标准误需约3.24年；资产和日期相关降低有效样本。基本独立同分布夏普近似下，零点三需44.4年。<bookmark mark='b'/>若换手定义为交易权重绝对值之和，百分之四十乘五基点每日花两基点，两基点毛收益后剩零。<bookmark mark='c'/>固定均衡宽度和成本时，OU速度加倍不变最优区间，并加倍该模型利润速率。"
+  },
+  "5f66ca65eff7": {
+   "scene": "Outro",
+   "en": "And twelve problems: a spread's speed; false passes in a screen; a band from the curve; a residual book after costs; the contrarian's cross term; a filter's errors; a reversal after costs; how long an IC and a Sharpe ratio take to prove; and the small-cost law. Then two qualifying-exam problems: the theorem from Dynkin's formula, and the frictionless limit with the cube-root law. Solutions, in English and Chinese, are in the notes.",
+   "zh": "还有十二道习题：价差的速度；筛选中的假通过；从曲线读出区间；扣除成本后的残差组合；逆向策略的交叉项；滤波器的误差；扣除成本后的反转；信息系数和夏普比率需要多久才能证明；以及小成本定律。然后是两道资格考试题：由迪金公式推导定理，以及无摩擦极限与立方根定律。中英文解答都在讲义里。"
+  },
+  "9e89d0595bd6": {
+   "scene": "Outro",
+   "en": "Where this comes back. Part thirty-four goes inside the firms that run stat-arb books. Part thirty-seven measures what a trade really costs, the number this whole part depended on. Part thirty-eight is market making, reversion at the shortest horizon. And the finale deflates every row.",
+   "zh": "这些内容会在哪里再次出现。第34部分走进运作统计套利组合的公司内部。第37部分测量一笔交易的真实成本，整个这一部分都依赖这个数。第38部分是做市，最短期限上的回归。终章会对每一行做紧缩检验。"
+  },
+  "c3305702ad54": {
+   "scene": "Outro",
+   "en": "The reading spans cointegration, reversal, liquidity and modern prediction. Reported stock-paper results and firm histories are attributed to their sources. The charts use the nine verified ordinary computations, while chosen mathematical examples and grid simulations are labeled. Numerical formulas, descriptive data comparisons and independently evaluated trading performance are different kinds of evidence. This part makes no new sealed-year performance claim.",
+   "zh": "阅读涵盖协整、反转、流动性和现代预测。股票论文报告与公司历史均注明来源。图表来自九个已核验普通计算，指定数学例子及网格模拟明确标示。数值公式、描述性数据比较与独立评估的交易表现是不同证据。本课不提出新的封存年表现结论。"
+  },
+  "1adacd41feea": {
+   "scene": "Outro",
+   "en": "The House now has research diagnostics and a mathematical band theorem. The stored residual proxy does not establish a live, market-neutral, profitable book: actual holdings, cash flows, costs and independent evaluation remain necessary. Reproducibility makes the calculation inspectable; interpretation determines what it proves. <bookmark mark='a'/> Next, Part thirty-four: inside a quant firm. How the firms that run these books organize research, risk, execution and incentives, and how capacity affects their decisions.",
+   "zh": "本系列公司现在有研究诊断与数学区间定理。存储残差代理并不确立实际、市场中性、盈利组合，仍需真实持仓、现金流、成本和独立评估。可复现使计算可检查，解释决定它证明什么。<bookmark mark='a'/>下一部分，第34部分走进量化公司，讨论研究、风险、执行与激励如何组织，以及容量如何影响决策。"
+  }
+ }
+}

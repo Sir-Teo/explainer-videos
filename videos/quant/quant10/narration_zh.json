@@ -1,0 +1,390 @@
+{
+ "title": "量化金融，从零搭建 · 第10部分：Black–Scholes–Merton",
+ "chapters": {
+  "Hook": "用股票和现金造出一份期权",
+  "History": "1. 公式之前",
+  "Replication": "2. 无风险组合",
+  "RiskNeutral": "3. 价格是一个期望",
+  "Tree": "4. 二叉树及其极限",
+  "Greeks": "5. 希腊字母的几何",
+  "Ledger": "6. 对冲者的钱从哪里来",
+  "WrongVol": "7. 用错误的波动率对冲",
+  "Discrete": "8. 分步对冲，以及它的代价",
+  "Implied": "9. 隐含波动率与第一条微笑曲线",
+  "American": "10. 提前行权",
+  "BTC": "11. 在真实的比特币上卖出波动率",
+  "Crash": "12. 1987年10月",
+  "LTCM": "13. 诺贝尔奖，然后是LTCM",
+  "Outro": "回顾、交易台问题与习题"
+ },
+ "lines": {
+  "b7b462354fc5": {
+   "scene": "Hook",
+   "en": "Part ten. Black, Scholes and Merton. In 1973 three economists showed that an option, a bet on a price, can be built out of the thing it bets on and cash. That one idea created a market that now trades trillions of dollars of contracts, and it still runs every options desk in the world. We start with what it looks like on a real month of prices.",
+   "zh": "第10部分。布莱克、斯科尔斯和默顿。1973年，三位经济学家证明：期权，这种押注价格的合约，可以用它所押注的东西本身加上现金造出来。这一个想法，造就了一个如今交易着数以万亿美元合约的市场，至今仍是全世界每一张期权交易台的运转方式。我们先看它在真实的一个月行情里是什么样子。"
+  },
+  "58bf2f4a0e9b": {
+   "scene": "Hook",
+   "en": "The first of October 2021. Bitcoin trades at about 44,788 dollars. You sell someone a call: the right to buy bitcoin thirty days from now at today's price. The market quotes Bitcoin's volatility at 89 percent a year, and at that volatility the call is worth 10.1 dollars for every hundred dollars of bitcoin. You collect it. <bookmark mark='a'/> Then Bitcoin goes up. Not a little: 37 percent in a month. <bookmark mark='b'/> At expiry you owe the buyer the whole rise, 37 dollars per hundred. Unhedged, the red line, you lose 27. <bookmark mark='c'/> But a seller who, every hour, held a certain number of coins, the yellow bar, about 0.55 of a coin at the start and rising towards one as the call went deeper into the money, ended the month on the white line. Up 1.15. The rally that cost the unhedged seller a fortune cost the hedger nothing. And this was not a lucky month: of the 1,706 months we will hedge in chapter eleven, this one's profit is the median.",
+   "zh": "2021年10月1日。比特币的价格大约是44788美元。你卖给别人一份看涨期权：在30天后按今天的价格买入比特币的权利。市场给比特币报出的波动率是每年89%，按这个波动率，这份期权每100美元比特币值10.1美元。你把这笔钱收下。<bookmark mark='a'/>然后比特币涨了。不是涨一点：一个月涨了37%。<bookmark mark='b'/>到期时，整段涨幅都要付给买方，每100美元要付37美元。不对冲的话，也就是红线，你亏27美元。<bookmark mark='c'/>但如果卖方每个小时都持有一定数量的比特币，也就是黄色的柱子，一开始大约0.55个，随着期权越来越深地进入实值，逐渐增加到1个，那么这个月结束时，他就在白线上：赚了1.15。让不对冲的卖方损失惨重的这轮上涨，对对冲者来说毫无代价。而且这不是运气好的一个月：在第11章我们要对冲的1706个月里，这个月的盈利正好是中位数。"
+  },
+  "0c3507ba48c7": {
+   "scene": "Hook",
+   "en": "How is that possible? The number of coins the hedger held is the option's delta, and the formula that says what it should be is the Black-Scholes formula. Hold delta coins, and the option's ups and downs are cancelled by the coins' ups and downs, hour by hour. What is left over is not luck about where the price went. It is a gap between two volatilities. <bookmark mark='a'/> The market charged 89 percent; Bitcoin, for all its rally, moved at 61. The hedger was paid for the difference, and in this part we will derive exactly how much: the formula three ways, the hedger's ledger term by term, what goes wrong when you hedge in steps, pay costs, or use the wrong volatility, and what happened when the world tried this at scale in 1987. <bookmark mark='b'/> The question underneath all of it is the one Bachelier asked in 1900.",
+   "zh": "这怎么可能？对冲者持有的比特币数量，就是这份期权的Delta，而告诉你它应该是多少的公式，就是Black–Scholes公式。持有Delta个比特币，期权的涨跌就会被比特币的涨跌抵消掉，一小时又一小时。剩下的，不是对价格走向的运气，而是两个波动率之间的差。<bookmark mark='a'/>市场收的是89%；而比特币尽管大涨，实际只以61%的波动率在运动。对冲者赚的就是这个差价。本部分我们会精确地推导出它是多少：用三种方法推导公式，逐项拆开对冲者的账本，看看分步对冲、交易成本、用错波动率时会出什么问题，以及1987年全世界大规模这样做时发生了什么。<bookmark mark='b'/>这一切背后的问题，正是巴舍利耶在1900年提出的那个问题。"
+  },
+  "c71204ebbaed": {
+   "scene": "Hook",
+   "en": "Here is the plan. Three derivations of one formula, each showing a different side of it. The Greeks, read as the slope and curve of a single surface. The hedger's profit and loss, term by term, and the ways hedging fails: in steps, with costs, with the wrong volatility. Then the formula turned inside out, implied volatility, measured on a real options market. And two stories with real data: four and a half years of selling Bitcoin volatility, and the day in 1987 the formula's world broke.",
+   "zh": "本部分的计划是这样的。同一个公式的三种推导，每一种展示它的一个侧面。希腊字母，读作同一个曲面的斜率和弯曲。对冲者的盈亏，逐项拆开，以及对冲失败的几种方式：分步进行、有成本、用错波动率。然后把公式反过来用，也就是隐含波动率，在真实的期权市场上测量。再加上两个用真实数据讲的故事：四年半里卖出比特币波动率，以及1987年这个公式的世界崩塌的那一天。"
+  },
+  "c864ec85ff37": {
+   "scene": "Hook",
+   "en": "And the House, the series' own quant firm, opens its first trading desk. So far it has only data and funding. From this part on it has a volatility desk: a pricer, a hedger and an implied volatility solver, written and tested in the series' library, and used by every part that comes after. <bookmark mark='a'/> Its first job is to understand the formula it is about to trade on.",
+   "zh": "我们的公司，也就是本系列自己的量化公司，开设了它的第一张交易台。到目前为止，它只有数据和资金。从这一部分起，它有了一个波动率交易台：一个定价器、一个对冲器、一个隐含波动率求解器，都写在本系列的代码库里，经过测试，后面每一部分都会用到。<bookmark mark='a'/>它的第一项工作，就是弄懂它即将据以交易的这个公式。"
+  },
+  "8ff66b4b3b14": {
+   "scene": "History",
+   "en": "Chapter one. Before the formula.",
+   "zh": "第1章。公式之前。"
+  },
+  "93a7578b35fc": {
+   "scene": "History",
+   "en": "People priced options long before 1973. Louis Bachelier's thesis of 1900, the one this series began with, priced options on French government bonds with a random walk and compared his prices with the quotes on the Paris exchange. <bookmark mark='a'/> Then the idea slept for half a century. In the 1950s and 60s economists rediscovered Bachelier, replaced his random walk with a lognormal price that cannot go negative, and wrote down what an option should be worth: its expected payoff, discounted. Case Sprenkle in 1961, James Boness in 1964, <bookmark mark='b'/> Paul Samuelson in 1965. Their formulas look almost exactly like the one we will derive. Almost.",
+   "zh": "早在1973年之前，人们就给期权定价了。路易·巴舍利耶1900年的博士论文，也就是本系列开篇讲的那一篇，用随机游走给法国政府债券的期权定价，并把他算出的价格和巴黎交易所的报价做了比较。<bookmark mark='a'/>然后这个想法沉睡了半个世纪。20世纪50、60年代，经济学家们重新发现了巴舍利耶，把他的随机游走换成了不会变成负数的对数正态价格，并写下了期权应该值多少：它的期望收益，再折现。1961年的凯斯·斯普伦克尔，1964年的詹姆斯·博内斯，<bookmark mark='b'/>1965年的保罗·萨缪尔森。他们的公式和我们将要推导的那个几乎一模一样。只是几乎。"
+  },
+  "ae95ad9ae5ef": {
+   "scene": "History",
+   "en": "Here is the shape of the Sprenkle and Samuelson formula for a call. The stock price S, grown at an expected rate mu to maturity, times a probability-like weight; the strike K times another; the whole thing discounted at a rate rho. <bookmark mark='a'/> And there was the problem. Mu is how fast the stock is expected to grow; rho is the return an investor would demand for holding something as risky as an option. Nobody knows either. Every investor would plug in different numbers and get a different price. A formula with two unobservable inputs is not much of a formula. <bookmark mark='b'/> The Black-Scholes formula is this one with both of them replaced by a single number anyone can look up: the riskless interest rate r. The expected return of the stock does not appear. Not because it is small, but because it does not matter. Why it does not matter is the whole content of this part.",
+   "zh": "这就是斯普伦克尔和萨缪尔森的看涨期权公式的样子。股价S，按期望增长率μ增长到到期日，乘以一个类似概率的权重；行权价K乘以另一个权重；整体再按一个利率ρ折现。<bookmark mark='a'/>问题就出在这里。μ是股票预期增长有多快；ρ是投资者持有像期权这样有风险的东西时所要求的回报。这两个数谁也不知道。每个投资者代入不同的数字，就会得到不同的价格。一个有两个观测不到的输入的公式，算不上什么公式。<bookmark mark='b'/>Black–Scholes公式就是这个公式，只是把这两个数都换成了一个谁都能查到的数：无风险利率r。股票的期望收益根本没有出现。不是因为它小，而是因为它无关紧要。它为什么无关紧要，就是本部分的全部内容。"
+  },
+  "5211f3699adc": {
+   "scene": "History",
+   "en": "The way out came from three directions at once. In 1967 Edward Thorp, the mathematician who had beaten blackjack, and the economist Sheen Kassouf published a book on warrants, long-dated options issued by companies. Their method: sell the overpriced warrants and hold the stock against them, adjusting as the price moves. A hedge: the short warrant loses when the stock rises, the shares gain, and at today's price the two cancel: the white curve is flat there. It bends down only for big moves, and that bend will turn out to be where all of this part's money is made and lost. Thorp has said he was trading with a formula equivalent to Black-Scholes by 1969, and kept it to himself. <bookmark mark='a'/> At the same time Fischer Black, a consultant with a physics degree, and Myron Scholes, a young professor at MIT, asked what a hedged position is worth. If the hedge removes the market risk, the capital asset pricing model says the position must earn the riskless rate. <bookmark mark='b'/> Their colleague Robert Merton saw the deeper reason: trade continuously, and the hedge is not just low risk, it is riskless. Then no model of investors is needed at all, only the absence of arbitrage. <bookmark mark='c'/> Black and Scholes's paper was turned down by the first journals they sent it to. It appeared in the Journal of Political Economy in the spring of 1973, alongside Merton's in the Bell Journal.",
+   "zh": "出路同时来自三个方向。1967年，靠数学击败了二十一点的数学家爱德华·索普，和经济学家希恩·卡苏夫，出版了一本关于认股权证的书，认股权证就是公司发行的长期期权。他们的方法：卖出被高估的认股权证，同时持有股票，随着价格变化不断调整。这是一种对冲：股价上涨时，卖出的权证亏钱，股票赚钱，在今天的价格上两者正好抵消：白色曲线在那里是平的。它只在大幅波动时才向下弯，而这个弯曲，后面会看到，正是本部分所有盈亏的来源。索普说过，到1969年他已经在用一个和Black–Scholes等价的公式交易，只是没有公开。<bookmark mark='a'/>与此同时，有物理学学位的顾问费希尔·布莱克，和麻省理工学院的年轻教授迈伦·斯科尔斯，问了一个问题：一个对冲好的头寸值多少钱？如果对冲消除了市场风险，资本资产定价模型就说，这个头寸只能赚无风险利率。<bookmark mark='b'/>他们的同事罗伯特·默顿看到了更深的原因：连续交易，对冲就不只是风险低，而是完全没有风险。这样就根本不需要任何关于投资者的模型，只需要不存在套利。<bookmark mark='c'/>布莱克和斯科尔斯的论文，最初投的几家期刊都拒了稿。它最终在1973年春天发表在《政治经济学杂志》上，默顿的论文同时发表在《贝尔经济学杂志》上。"
+  },
+  "7a08766e83cc": {
+   "scene": "History",
+   "en": "A month before the paper appeared, on the twenty-sixth of April 1973, the Chicago Board Options Exchange opened, with standardized calls on sixteen stocks. Within a few years traders on the floor carried the formula on calculators and on printed sheets of theoretical prices, and the sociologist Donald MacKenzie has argued that the market came to price options the way the formula said because traders used it. <bookmark mark='a'/> They stopped quoting options in dollars and started quoting them in volatility, the one input of the formula that cannot be looked up. <bookmark mark='b'/> In 1997 Scholes and Merton received the Nobel prize; Black had died two years before. Now let us derive what they found.",
+   "zh": "就在论文发表前一个月，1973年4月26日，芝加哥期权交易所开业，挂牌交易16只股票的标准化看涨期权。没过几年，场内交易员就把这个公式装进了计算器，印成了一张张理论价格表。社会学家唐纳德·麦肯齐认为，市场之所以按公式说的那样给期权定价，正是因为交易员在用它。<bookmark mark='a'/>他们不再用美元报价，而开始用波动率报价，这是公式里唯一查不到的输入。<bookmark mark='b'/>1997年，斯科尔斯和默顿获得诺贝尔奖；布莱克在两年前已经去世。现在，让我们把他们的发现推导出来。"
+  },
+  "d0e36f34ed52": {
+   "scene": "Replication",
+   "en": "Chapter two. The riskless portfolio.",
+   "zh": "第2章。无风险组合。"
+  },
+  "e2b9a7fb6ce9": {
+   "scene": "Replication",
+   "en": "Three things can be traded. A stock, whose price follows the geometric Brownian motion of Part five: it drifts at an expected rate mu, which nobody knows, and jiggles with volatility sigma. <bookmark mark='a'/> A bond, or a bank account, which grows at the riskless interest rate r. <bookmark mark='b'/> And an option, whose value V depends on time and on the stock price, through a function we do not yet know. <bookmark mark='c'/> The assumptions are heroic, and each one will be dropped later in the series: you can trade continuously, at no cost, borrow and lend at r, and you know sigma. Each broken assumption becomes a chapter, of this part or a later one.",
+   "zh": "有三样东西可以交易。一只股票，它的价格服从第5部分的几何布朗运动：它以一个谁也不知道的期望增长率μ漂移，并以波动率σ抖动。<bookmark mark='a'/>一份债券，或者说一个银行账户，以无风险利率r增长。<bookmark mark='b'/>还有一份期权，它的价值V取决于时间和股价，通过一个我们还不知道的函数。<bookmark mark='c'/>这些假设很理想化，本系列后面会一个一个地放掉它们：你可以连续交易，没有成本，可以按r借入和贷出，而且你知道σ。每一个被打破的假设，都会成为本部分或者后面某一部分的一章。"
+  },
+  "f797c2dca50b": {
+   "scene": "Replication",
+   "en": "Now the argument. By Ito's lemma, a small change in the option's value has a drift term, with the time derivative, the expected growth mu times the slope, and one half sigma squared S squared times the curvature; and a noise term, sigma S times the slope, times the Brownian increment. <bookmark mark='a'/> Hold one option and sell delta shares of the stock. The portfolio Pi changes by the option's change minus delta times the stock's. Both the drift and the noise now contain the slope minus delta. <bookmark mark='b'/> So choose delta equal to the slope. The noise disappears: over the next instant this portfolio's change is certain. And look what else disappeared with it. Mu. The only place the stock's expected return entered was multiplied by slope minus delta. <bookmark mark='c'/> A portfolio whose change is certain must earn the riskless rate, or there is an arbitrage: if it earned more, borrow at r and buy it; if less, sell it and lend. So its change is r times its value, the option minus S times the slope. <bookmark mark='d'/> Set the two expressions equal, and out comes the Black-Scholes equation: a partial differential equation for the option's value, in which the stock's expected return does not appear.",
+   "zh": "现在来论证。根据伊藤引理，期权价值的一个小变化，有一个漂移项，包括对时间的导数、期望增长率μ乘以斜率、以及二分之一σ平方S平方乘以曲率；还有一个噪声项，σS乘以斜率，再乘以布朗运动的增量。<bookmark mark='a'/>持有一份期权，卖出Delta股股票。组合Π的变化，等于期权的变化减去Delta乘以股票的变化。现在漂移和噪声里都含有“斜率减去Delta”。<bookmark mark='b'/>那就让Delta等于斜率。噪声消失了：在下一个瞬间，这个组合的变化是确定的。再看看还有什么跟着消失了：μ。股票的期望收益唯一出现的地方，正好乘着“斜率减Delta”。<bookmark mark='c'/>一个变化确定的组合，只能赚无风险利率，否则就有套利：如果它赚得更多，就按r借钱买入它；如果更少，就卖出它、把钱贷出去。所以它的变化等于r乘以它的价值，也就是期权减去S乘以斜率。<bookmark mark='d'/>让这两个表达式相等，就得到了Black–Scholes方程：一个关于期权价值的偏微分方程，其中不出现股票的期望收益。"
+  },
+  "6e0edc0e5d92": {
+   "scene": "Replication",
+   "en": "This is the surprise that took economists a decade to find. Two traders who disagree completely about where the stock is going, one expecting thirty percent a year and the other a loss, <bookmark mark='a'/> agree on the option's price, because both can manufacture it the same way and neither's opinion enters the manufacturing. The hedge removes the direction. What is left is the size of the moves: the term with sigma squared and the curvature, gamma. That term is the whole economics of an options desk, and chapter six is about it.",
+   "zh": "这正是经济学家们花了十年才找到的意外之处。两个对股票走向看法截然相反的交易员，一个预期每年涨30%，一个预期会亏，<bookmark mark='a'/>却在期权价格上达成一致，因为两人都可以用同样的方法把它造出来，而谁的看法都不会进入制造过程。对冲去掉了方向。剩下的是波动的大小：也就是含有σ平方和曲率Gamma的那一项。这一项就是期权交易台的全部经济学，第6章专门讲它。"
+  },
+  "b4c070e51230": {
+   "scene": "Replication",
+   "en": "What does the equation do? It runs backwards from expiry. At maturity the option is worth its payoff, the grey hockey stick. <bookmark mark='a'/> Step back in time and the equation smooths it, the way heat spreads along a rod: in fact, after a change of variables, to log price and time remaining, it is exactly the heat equation. The kink at the strike melts into a curve. <bookmark mark='b'/> The slope of that curve at the current price, the yellow line, is delta: the number of shares in the hedge. And the curve sits above the payoff everywhere, by more the longer there is to go, because the right to wait is worth something. One year out, here is the price of a call with strike one hundred when the stock is at one hundred and ten. Solving this equation with this terminal condition gives the formula; the next chapter gets there by a different road.",
+   "zh": "这个方程做的是什么？它从到期日往回倒推。到期时，期权就值它的收益，也就是灰色的曲棍球杆。<bookmark mark='a'/>往回退一点时间，方程就把它磨平，就像热量沿着一根棒子扩散：事实上，换成对数价格和剩余时间这两个变量之后，它恰好就是热方程。行权价处的拐角，融化成一条光滑曲线。<bookmark mark='b'/>这条曲线在当前价格处的斜率，也就是黄线，就是Delta：对冲所需的股数。而且这条曲线处处都高于收益，剩余时间越长，高出得越多，因为等待的权利本身是有价值的。这是距到期一年、股价110时，行权价100的看涨期权的价格。用这个终值条件解这个方程，就得到公式；下一章会走另一条路到达那里。"
+  },
+  "d1e596927f14": {
+   "scene": "RiskNeutral",
+   "en": "Chapter three. The price as an expectation.",
+   "zh": "第3章。价格是一个期望。"
+  },
+  "a90ebf1ad860": {
+   "scene": "RiskNeutral",
+   "en": "Part five ended with the Feynman-Kac theorem: the solution of an equation like this one can be written as an average over random paths. <bookmark mark='a'/> Read the Black-Scholes equation that way, and the option's value today is the discounted average of its payoff, the average taken over paths of a stock that grows at the riskless rate r. <bookmark mark='b'/> Not at mu. The average is not over the world's probabilities, which we call P, but over another set of probabilities, Q, under which every asset is expected to earn exactly the riskless rate. Q is called the risk-neutral measure, and it is the most important object in derivatives pricing. Harrison and Kreps in 1979, and Harrison and Pliska in 1981, proved that its existence is the same thing as the absence of arbitrage. That is Part nine's theorem. Here we watch it work.",
+   "zh": "第5部分结尾讲了费曼–卡茨定理：像这样的方程，它的解可以写成对随机路径的平均。<bookmark mark='a'/>用这种眼光去读Black–Scholes方程，期权今天的价值，就是它的收益折现后的平均值，而这个平均是对一只以无风险利率r增长的股票的路径来取的。<bookmark mark='b'/>不是以μ增长。这个平均不是在真实世界的概率下取的，我们把真实概率记作P，而是在另一组概率Q下取的，在Q下，每一种资产的期望收益都恰好是无风险利率。Q叫作风险中性测度，它是衍生品定价里最重要的对象。1979年的哈里森和克雷普斯、1981年的哈里森和普利斯卡证明了：它的存在，和不存在套利，是同一件事。那是第9部分的定理。在这里，我们看着它运转。"
+  },
+  "645b491f15cb": {
+   "scene": "RiskNeutral",
+   "en": "Here are two worlds built from the same random numbers. In amber, the real world: the stock grows at an expected 15 percent a year. <bookmark mark='a'/> Average the discounted payoff of a one-year at-the-money call over these paths and you get 19.74. That is not the option's price. <bookmark mark='b'/> In violet, the same paths with the drift replaced by the riskless rate, 5 percent. Their distribution at the end sits lower. Average the discounted payoff over these, and you get 12.36, give or take 0.03: the Black-Scholes price, 12.34. <bookmark mark='c'/> And Girsanov's theorem says the two worlds are the same paths with different weights. Weight each real-world path by this exponential, which tilts probability away from the paths that went up fastest, and the real-world average turns into the risk-neutral one: 12.36. The theta in it, mu minus r over sigma, is the market price of risk: the extra return per unit of volatility that investors demand, and that the option's price does not need to know.",
+   "zh": "这是用同一组随机数构造的两个世界。琥珀色的是真实世界：股票的期望增长率是每年15%。<bookmark mark='a'/>把一年期平值看涨期权的收益折现后，在这些路径上取平均，得到19.74。这不是期权的价格。<bookmark mark='b'/>紫色的是同样的路径，只是把漂移换成了无风险利率5%。它们最后的分布更低一些。在这些路径上对折现后的收益取平均，得到12.36，误差在正负0.03之内：正是Black–Scholes价格12.34。<bookmark mark='c'/>吉尔萨诺夫定理说，这两个世界是同样的路径、不同的权重。给每条真实世界的路径乘上这个指数权重，它会把概率从涨得最快的那些路径上挪走，真实世界的平均就变成了风险中性的平均：12.36。其中的θ，也就是μ减r再除以σ，叫作风险的市场价格：投资者为每单位波动率要求的额外回报，而期权的价格并不需要知道它。"
+  },
+  "c67b1e9ae9e5": {
+   "scene": "RiskNeutral",
+   "en": "Now the expectation can be done by hand. Split the payoff at the strike: the average of the final price over the outcomes that finish in the money, minus the strike times the probability of finishing in the money. <bookmark mark='a'/> The second piece is a normal probability. Under Q the log of the final price is normal with mean r minus half sigma squared, times T, so the chance of ending above the strike is N of d two. <bookmark mark='b'/> The first piece has a trick. Weight each outcome by the final price relative to its forward: that is another change of measure, the one that uses the stock itself as the unit of account. <bookmark mark='c'/> Under it the drift is r plus half sigma squared, and the probability becomes N of d one. <bookmark mark='d'/> Put the pieces together and discount: the Black-Scholes formula. The same one the equation gives, by a completely different road.",
+   "zh": "现在这个期望可以手算出来。在行权价处把收益拆开：在实值结束的那些结果上，最终价格的平均，减去行权价乘以以实值结束的概率。<bookmark mark='a'/>第二部分是一个正态概率。在Q下，最终价格的对数服从正态分布，均值是r减二分之一σ平方，再乘以T，所以最终高于行权价的概率是N(d2)。<bookmark mark='b'/>第一部分要用一个技巧。按最终价格相对于它的远期价格给每个结果加权：这是另一次测度变换，把股票本身当作计价单位。<bookmark mark='c'/>在这个测度下，漂移是r加二分之一σ平方，概率变成了N(d1)。<bookmark mark='d'/>把两部分合起来再折现：就是Black–Scholes公式。和方程给出的完全一样，只是走了一条完全不同的路。"
+  },
+  "0bf5691bcabf": {
+   "scene": "RiskNeutral",
+   "en": "The two Ns have meanings worth keeping. N of d two is the risk-neutral probability that the call finishes in the money: here 0.530, the shaded area, and 53.1 percent of our simulated risk-neutral outcomes did. In the real world, with its higher drift, 68.3 percent did: Q's probabilities are not forecasts. <bookmark mark='a'/> N of d one is the delta, 0.627 shares per option. So the formula reads like a recipe: hold N of d one shares, borrow K e to the minus r T times N of d two, and the portfolio is the option. Replication and expectation are one statement seen from two sides.",
+   "zh": "这两个N的含义值得记住。N(d2)是看涨期权以实值结束的风险中性概率：这里是0.530，就是阴影部分的面积，而我们模拟的风险中性结果里，有53.1%确实如此。在漂移更高的真实世界里，这个比例是68.3%：Q的概率不是预测。<bookmark mark='a'/>N(d1)就是Delta，每份期权0.627股。所以这个公式读起来就像一份配方：持有N(d1)股，借入K乘以e的负rT次方再乘以N(d2)，这个组合就是期权。复制和期望，是从两边看到的同一个命题。"
+  },
+  "fe6199576201": {
+   "scene": "Tree",
+   "en": "Chapter four. The tree and its limit.",
+   "zh": "第4章。二叉树及其极限。"
+  },
+  "7171b7b8464d": {
+   "scene": "Tree",
+   "en": "There is a third road, the one that is easiest to see. Cox, Ross and Rubinstein in 1979: let time move in one step, and let the stock do one of two things. From one hundred it goes to one hundred and twenty, or to ninety. A call with strike one hundred is then worth twenty, or nothing. <bookmark mark='a'/> Two outcomes, two instruments: we can copy the call exactly. Hold delta shares, with delta the change in the call over the change in the stock, twenty over thirty: two thirds of a share. <bookmark mark='b'/> Borrow sixty, so that in the up state the shares are worth eighty, minus sixty, twenty; in the down state, sixty minus sixty, zero. The copy matches the call in both states, so it must cost the same: two thirds of a hundred minus sixty, 6.67. <bookmark mark='c'/> Write that price as a weighted average of the two payoffs, and the weight on the up state comes out to one third. That is a probability, but not anyone's belief: it is the one probability under which the stock is a fair game, expected to stay at a hundred. Whether the real chance of going up is ten percent or ninety, the price is the same. The risk-neutral measure, in its simplest form.",
+   "zh": "还有第三条路，也是最容易看清的一条。1979年考克斯、罗斯和鲁宾斯坦的方法：让时间只走一步，让股票只有两种可能。从100涨到120，或者跌到90。行权价100的看涨期权于是值20，或者一文不值。<bookmark mark='a'/>两种结果，两种工具：我们可以精确地复制这份期权。持有Delta股，Delta等于期权的变化除以股票的变化，20除以30：三分之二股。<bookmark mark='b'/>借入60，这样上涨时股票值80，减去60，得20；下跌时，60减60，得0。这个复制品在两种状态下都和期权一样，所以价格也必须一样：100的三分之二减60，等于6.67。<bookmark mark='c'/>把这个价格写成两种收益的加权平均，上涨状态的权重恰好是三分之一。这是一个概率，但不是任何人的信念：它是唯一能让股票成为公平赌局、期望停留在100的那个概率。不管真实的上涨概率是10%还是90%，价格都一样。这就是风险中性测度最简单的样子。"
+  },
+  "d429cbc096aa": {
+   "scene": "Tree",
+   "en": "Now chop a year into four steps and let the stock move up or down by e to the plus or minus sigma root delta t at each. The prices recombine into a tree. <bookmark mark='a'/> At the last layer the call is worth its payoff. Work backwards: each node is the discounted risk-neutral average of the two nodes after it. That is the replication argument applied once per node, and it lands on a price today of 9.971. <bookmark mark='b'/> And at every node the tree also tells you the hedge: how many shares make the copy work over the next step. Near the top, almost a full share; near the bottom, almost none. A hedger walking down this tree rebalances at every step.",
+   "zh": "现在把一年切成四步，让股票在每一步上涨或下跌e的正负σ根号Δt次方倍。价格重新汇合，形成一棵树。<bookmark mark='a'/>在最后一层，期权值它的收益。往回倒推：每个节点等于它后面两个节点的风险中性平均值，再折现。这就是在每个节点上应用一次复制论证，最后得到今天的价格9.971。<bookmark mark='b'/>在每个节点上，这棵树还告诉你对冲：要持有多少股，才能让下一步的复制成立。靠近顶部，几乎是一整股；靠近底部，几乎是零。沿着这棵树往下走的对冲者，每一步都要重新调整。"
+  },
+  "6c332e11eb67": {
+   "scene": "Tree",
+   "en": "Add steps and the tree's price converges to the Black-Scholes price. Here is the tree's price for every number of steps from one to four hundred, on a log scale. It zigzags: trees with an even number of steps put a node exactly at the strike, odd ones straddle it, and the two families err on opposite sides, closing in on the formula like one over N. <bookmark mark='a'/> With four hundred steps the tree gives 10.4456; the formula, 10.4506. The reason is the central limit theorem: the log of the price is a sum of many small up and down steps, so it becomes normal, the price lognormal, and the tree's backward induction becomes the equation's. Three derivations, one formula: a riskless portfolio, an expectation under the risk-neutral measure, and the limit of a coin-flipping tree. Desks use all three, and trees especially for options that can be exercised early, which is chapter ten.",
+   "zh": "增加步数，树给出的价格就收敛到Black–Scholes价格。这是从1步到400步，每一种步数下树给出的价格，横轴取对数。它呈锯齿状：偶数步的树恰好在行权价上有一个节点，奇数步的树跨在它两边，两组的误差方向相反，按N分之一的速度向公式靠拢。<bookmark mark='a'/>400步时，树给出10.4456；公式给出10.4506。原因是中心极限定理：价格的对数是许多小的涨跌步的和，于是变成正态的，价格变成对数正态的，树的倒推也就变成了方程的倒推。三种推导，一个公式：一个无风险组合，一个风险中性测度下的期望，一棵掷硬币的树的极限。交易台三种都用，尤其是对可以提前行权的期权，会用树，那是第10章的内容。"
+  },
+  "21ead284d686": {
+   "scene": "Greeks",
+   "en": "Chapter five. The Greeks as geometry.",
+   "zh": "第5章。希腊字母的几何。"
+  },
+  "94579f89d116": {
+   "scene": "Greeks",
+   "en": "Every risk an options trader manages is a slope or a curve of one surface: the option's value, over the stock price and the time left. Here it is for a call. Along the front edge, at expiry, it is the payoff, the white hockey stick. <bookmark mark='a'/> Further back, with more time left, the surface rises and smooths, the heat-equation picture of chapter two, now in three dimensions. <bookmark mark='b'/> The Greek letters are the names of its slopes. Delta is the slope along the stock axis. Gamma is the curvature along it. Theta is the slope along the time axis. And vega, which is not a Greek letter at all, is how the whole surface lifts when volatility rises. Take the slice three months from expiry, in yellow, and lay it flat.",
+   "zh": "期权交易员管理的每一种风险，都是同一个曲面的一个斜率或者一个弯曲：期权的价值，画在股价和剩余时间之上。这是一份看涨期权的曲面。沿着前缘，也就是到期时，它就是收益，那根白色的曲棍球杆。<bookmark mark='a'/>往后，剩余时间越长，曲面就升得越高、越平滑，这正是第2章热方程的图景，现在是三维的。<bookmark mark='b'/>希腊字母就是它各个斜率的名字。Delta是沿股价方向的斜率。Gamma是沿这个方向的曲率。Theta是沿时间方向的斜率。而Vega，它其实不是一个希腊字母，是波动率上升时整个曲面抬高多少。把距到期三个月的那个切片，也就是黄色那条，拿出来放平。"
+  },
+  "c7aaf3831cab": {
+   "scene": "Greeks",
+   "en": "Slice the surface at one time to expiry and look along the stock axis. On top, the value curve, above its payoff. In the middle, its slope: delta, the number of shares in the hedge. Far below the strike the call is almost surely worthless and needs no shares; far above it is almost surely exercised and needs one. <bookmark mark='a'/> At the bottom, the curvature: gamma, the rate at which delta changes as the stock moves, and so the rate at which the hedger must trade. Gamma lives near the strike, where the hockey stick bends. <bookmark mark='b'/> Now let time pass. As expiry approaches, the value curve presses down onto its payoff, delta steepens into a step, and gamma sharpens into a spike at the strike. An at-the-money option close to expiry is the most violent thing to hedge: a small move flips it from worthless to one full share.",
+   "zh": "在某一个剩余时间上把曲面切开，沿股价方向看。最上面是价值曲线，位于收益之上。中间是它的斜率：Delta，对冲所需的股数。远低于行权价时，期权几乎肯定作废，不需要持股；远高于时，几乎肯定会被行权，需要一整股。<bookmark mark='a'/>最下面是曲率：Gamma，股价变动时Delta变化的速度，也就是对冲者必须交易的频率。Gamma集中在行权价附近，也就是曲棍球杆弯折的地方。<bookmark mark='b'/>现在让时间流逝。临近到期，价值曲线压向它的收益，Delta陡成一个台阶，Gamma尖成行权价处的一个尖峰。临近到期的平值期权，是最难对冲的东西：一个小小的波动，就能让它从一文不值变成需要整整一股。"
+  },
+  "20a539ce97c9": {
+   "scene": "Greeks",
+   "en": "Theta is the slope along time: how much value the option loses each day if the stock stands still. Look again at the Black-Scholes equation. With no interest rate it has just two terms, <bookmark mark='a'/> and it says theta equals minus one half sigma squared S squared times gamma. Time decay and curvature are the same quantity with opposite signs. <bookmark mark='b'/> Here they are as computed from the formula, three months from expiry: the solid pink curve is what gamma earns per year, the dashed blue one is what time costs per year. They lie exactly on top of each other. This is the most important identity on an options desk: you cannot own curvature without paying for it in time, and you cannot collect time decay without being short curvature. The only question is whether the stock will move enough to pay the bill, which is the next chapter.",
+   "zh": "Theta是沿时间方向的斜率：如果股价不动，期权每天损失多少价值。再看一遍Black–Scholes方程。利率为零时，它只有两项，<bookmark mark='a'/>它说Theta等于负的二分之一σ平方S平方乘以Gamma。时间衰减和曲率是同一个量，只是符号相反。<bookmark mark='b'/>这是用公式算出来的距到期三个月时的两者：粉色实线是Gamma每年能赚多少，蓝色虚线是时间每年要花多少。它们完全重合。这是期权交易台上最重要的恒等式：拥有曲率就必须用时间来付费，收取时间衰减就必须做空曲率。唯一的问题是，股票的波动是否足以付清账单，这是下一章的内容。"
+  },
+  "8aaf88bdfe2c": {
+   "scene": "Greeks",
+   "en": "Last, vega: how much the value rises if volatility rises by one unit. It is a bump too, centred at the strike, and it grows with the time left, the opposite of gamma, because volatility has longer to work. <bookmark mark='a'/> In fact for Black-Scholes, vega is sigma times the time left times S squared gamma. So gamma, theta and vega are one bump seen three ways: a trader long an option is long gamma, short theta and long vega at once, and the short side is the mirror image. Second-order Greeks like vanna and volga, the slopes of delta and vega with respect to volatility, matter once volatility itself moves; they come back with the smile in Parts eleven and twelve.",
+   "zh": "最后是Vega：波动率上升一个单位，价值上升多少。它也是一个鼓包，以行权价为中心，而且剩余时间越长越大，和Gamma相反，因为波动率有更长的时间发挥作用。<bookmark mark='a'/>事实上，对Black–Scholes来说，Vega等于σ乘以剩余时间乘以S平方Gamma。所以Gamma、Theta和Vega是从三个角度看到的同一个鼓包：做多期权的交易员，同时是做多Gamma、做空Theta、做多Vega，空头则正好相反。像Vanna和Volga这样的二阶希腊字母，也就是Delta和Vega对波动率的斜率，在波动率本身变动时才变得重要；它们会在第11和第12部分随微笑曲线回来。"
+  },
+  "e319371f126f": {
+   "scene": "Ledger",
+   "en": "Chapter six. Where the hedger's money comes from.",
+   "zh": "第6章。对冲者的钱从哪里来。"
+  },
+  "c39dbae12082": {
+   "scene": "Ledger",
+   "en": "Now take the seller's side: short one option, long delta shares, and the option marked at the volatility it was sold at. Call that sigma i, for implied. The stock, though, moves with whatever volatility the world delivers. Call that sigma r, for realized. <bookmark mark='a'/> Over a short time, expand the option's change to second order. The first-order term is delta times the stock's move, and the hedge cancels it exactly. What remains is theta times dt, plus one half gamma times the squared move. <bookmark mark='b'/> By Ito, the squared move is S squared times the realized variance times dt. <bookmark mark='c'/> And from the last chapter, theta is minus one half the implied variance times S squared gamma. Put them together: the hedged book earns one half gamma S squared times the difference between implied and realized variance, every instant. That is the whole business of selling options. Not a bet on direction: a bet that the stock will move less than the volatility you charged for, weighted by gamma.",
+   "zh": "现在站到卖方这一边：卖出一份期权，买入Delta股，期权按卖出时的波动率估值。把它叫作σ i，i表示隐含。而股票的波动，取决于世界实际给出的波动率。把它叫作σ r，r表示已实现。<bookmark mark='a'/>在很短的时间里，把期权的变化展开到二阶。一阶项是Delta乘以股价的变动，对冲正好把它抵消。剩下的是Theta乘以dt，加上二分之一Gamma乘以变动的平方。<bookmark mark='b'/>根据伊藤，变动的平方等于S平方乘以已实现方差再乘以dt。<bookmark mark='c'/>而根据上一章，Theta等于负的二分之一隐含方差乘以S平方Gamma。合起来：对冲后的账本每一瞬间赚到二分之一Gamma S平方，乘以隐含方差与已实现方差之差。这就是卖期权这门生意的全部。它押注的不是方向：而是股票的波动会小于你收费所用的波动率，按Gamma加权。"
+  },
+  "b1ff259a1050": {
+   "scene": "Ledger",
+   "en": "Read the formula one hedging interval at a time. Over each interval the seller collects theta, a fixed amount, and pays one half gamma times the squared move. The two cancel when the move is exactly sigma i times the square root of the interval: the breakeven move. <bookmark mark='a'/> Here is a path hedged four times a day at twenty percent implied. Every interval whose move stays inside the band, in green, is a small win; every move outside, in red, is a loss, and a big move is a big loss, because the cost is quadratic. On this path, which realizes 28 percent, 54 percent of intervals are wins, and the seller still loses: the occasional large move outweighs many small wins. A short option position is short the squared moves of the stock.",
+   "zh": "一次一个对冲间隔地来读这个公式。在每个间隔里，卖方收取Theta，一个固定的数，并支付二分之一Gamma乘以变动的平方。当变动恰好等于σ i乘以间隔的平方根时，两者抵消：这就是盈亏平衡的变动幅度。<bookmark mark='a'/>这是一条每天对冲4次、按20%隐含波动率对冲的路径。变动留在带子里的每个间隔，绿色的，是一笔小赚；超出带子的每次变动，红色的，是一笔亏损，而大的变动就是大的亏损，因为成本是平方关系。在这条已实现波动率为28%的路径上，有54%的间隔是赚的，卖方却还是亏了：偶尔的大波动，盖过了许多小的盈利。做空期权，就是做空股票变动的平方。"
+  },
+  "c1334c7ea37e": {
+   "scene": "Ledger",
+   "en": "Now three whole paths, each hedged four times a day for three months, each short a three-month at-the-money call sold at twenty percent. The ledger keeps score: the pink bar is the gamma term, what the squared moves cost; the blue bar is the theta term, what time paid; the white bar is the book. <bookmark mark='a'/> On the first path the stock realizes twelve percent. Theta's income outruns gamma's bill all quarter, and the book ends up 1.59, on a premium of 3.99. <bookmark mark='b'/> On the second it realizes twenty-eight percent: gamma's bill grows faster than theta's income, and the book loses 1.05. <bookmark mark='c'/> On the third it realizes exactly twenty, the volatility the option was sold at, and the two terms cancel: the book ends at 0.12. The direction of the stock, up or down, never entered.",
+   "zh": "现在看三条完整的路径，每条都每天对冲4次、持续三个月，每条都卖出一份按20%定价的三个月平值看涨期权。账本记分：粉色柱是Gamma项，变动的平方所花的钱；蓝色柱是Theta项，时间付给你的钱；白色柱是账本本身。<bookmark mark='a'/>在第一条路径上，股票的已实现波动率是12%。整个季度里，Theta的收入都跑在Gamma的账单前面，账本最后是1.59，期权费是3.99。<bookmark mark='b'/>在第二条路径上，已实现波动率是28%：Gamma的账单涨得比Theta的收入快，账本亏了1.05。<bookmark mark='c'/>在第三条路径上，已实现波动率正好是20%，也就是期权卖出时的波动率，两项抵消：账本最后是0.12。股票的方向，涨还是跌，从来没有进入过计算。"
+  },
+  "2b93363e6ee2": {
+   "scene": "Ledger",
+   "en": "One path is an anecdote. Here are twenty thousand at each realized volatility. When the world realizes twelve percent, the seller makes 1.59 on average and never loses: 0 percent of paths lose money. When it realizes twenty-eight, the seller loses 1.60 on average, and on every path. And when realized equals implied, the average is +0.00: the price was fair, and what is left is a spread of 0.22 from hedging only four times a day, which chapter eight measures. An options trader is a volatility trader: the profit is the gap between two volatilities, one quoted, one lived.",
+   "zh": "一条路径只是一个轶事。这是每种已实现波动率下的两万条路径。当世界实现12%时，卖方平均赚1.59，而且从不亏钱：亏钱的路径占0%。当它实现28%时，卖方平均亏1.60，而且每一条路径都亏。当已实现等于隐含时，平均是+0.00：价格是公平的，剩下的是0.22的离散，来自每天只对冲4次，第8章会测量它。期权交易员就是波动率交易员：利润是两个波动率之间的差，一个是报出来的，一个是活出来的。"
+  },
+  "b6c7fdaa0181": {
+   "scene": "WrongVol",
+   "en": "Chapter seven. Hedging with the wrong volatility.",
+   "zh": "第7章。用错误的波动率对冲。"
+  },
+  "c820d1d30ac2": {
+   "scene": "WrongVol",
+   "en": "Add up the last chapter's formula over the life of the option, and let the realized volatility change from moment to moment. The seller's profit is one half the integral of gamma S squared times the difference of the variances. Nicole El Karoui, Monique Jeanblanc and Steven Shreve made this precise in 1998, and traders had used it long before. <bookmark mark='a'/> Two things follow. The realized variance does not enter as a plain average: it is weighted by dollar gamma, which is large near the strike and near expiry, and small elsewhere. So the same realized volatility can make or lose money, depending on when and where the moves happen. <bookmark mark='b'/> And if the realized volatility never exceeds the implied, every term is positive: the seller cannot lose, whatever the model, whatever the path. That is why Black-Scholes is robust enough to run a desk even though its assumptions are false.",
+   "zh": "把上一章的公式在期权的整个存续期上加起来，并让已实现波动率每时每刻都在变。卖方的利润等于二分之一乘以Gamma S平方与两个方差之差的乘积的积分。1998年，妮科尔·埃尔·卡鲁伊、莫妮克·让布朗和史蒂文·施里夫把这一点严格化了，而交易员们早就在用了。<bookmark mark='a'/>由此得出两点。已实现方差不是以简单平均的方式进入的：它按美元Gamma加权，美元Gamma在行权价附近和临近到期时很大，在别处很小。所以同样的已实现波动率，可能赚钱也可能亏钱，取决于波动在什么时候、在什么价位发生。<bookmark mark='b'/>而且，如果已实现波动率从不超过隐含波动率，每一项都是正的：不管什么模型，不管什么路径，卖方都不会亏。这就是为什么Black–Scholes虽然假设并不成立，却稳健到足以支撑一张交易台。"
+  },
+  "998b28af9925": {
+   "scene": "WrongVol",
+   "en": "Here is the effect on two paths. Both realize almost exactly twenty percent; the option was sold and is hedged at twenty-five, so the seller has a five-point edge on both. Behind them, in pink, dollar gamma: it is concentrated near the strike and grows as expiry approaches. <bookmark mark='a'/> The blue path spends the quarter close to the strike, where gamma is large, and the seller makes 2.12. <bookmark mark='b'/> The green one drifts away early, into a region where the option barely needs hedging, and the same edge earns only 0.25. Same realized volatility, 8 times the profit. A trader who sells options is not betting on volatility in general, but on volatility where her gamma is.",
+   "zh": "这是这个效应在两条路径上的表现。两条路径的已实现波动率都几乎正好是20%；期权按25%卖出和对冲，所以卖方在两条路径上都有5个点的优势。它们背后的粉色，是美元Gamma：它集中在行权价附近，并且随着到期临近而增大。<bookmark mark='a'/>蓝色路径整个季度都贴着行权价，那里Gamma很大，卖方赚了2.12。<bookmark mark='b'/>绿色路径很早就漂走了，进入一个期权几乎不需要对冲的区域，同样的优势只赚了0.25。同样的已实现波动率，利润相差8倍。卖期权的交易员押注的不是笼统的波动率，而是她的Gamma所在之处的波动率。"
+  },
+  "2d1dba0527ee": {
+   "scene": "WrongVol",
+   "en": "In a world where volatility itself moves, this is not a curiosity, it is the main effect. Here are 4,000 paths of the Heston model, in which the variance wanders on its own, all sold and hedged at twenty-five percent. On the left, each path's profit against its realized volatility. The relation is there, correlation -0.87, but loose: paths with the same realized volatility land a point or more apart. <bookmark mark='a'/> On the right, the same profits against the gamma-weighted formula, computed from each path's own variance. They fall on the diagonal, correlation 0.99. The formula is the hedger's accounting identity: it explains essentially every dollar, and it says the realized volatility that matters is the one weighted by gamma. That observation is the seed of variance swaps, which pay plain realized variance with no gamma weight, and of Part twelve.",
+   "zh": "在一个波动率本身也在变的世界里，这不是一个奇闻，而是主要效应。这是Heston模型的4000条路径，在这个模型里方差自己会游走，全部按25%卖出和对冲。左边，每条路径的利润对它的已实现波动率。关系是有的，相关系数-0.87，但很松散：已实现波动率相同的路径，利润可以相差一个点以上。<bookmark mark='a'/>右边，同样的利润对按Gamma加权的公式，用每条路径自己的方差算出来。它们落在对角线上，相关系数0.99。这个公式就是对冲者的会计恒等式：它几乎解释了每一块钱，而且它说，重要的已实现波动率是按Gamma加权的那一个。这个观察是方差互换的种子，方差互换支付的是不加Gamma权重的已实现方差，也是第12部分的种子。"
+  },
+  "67f99f1d20fc": {
+   "scene": "Discrete",
+   "en": "Chapter eight. Hedging in steps, and paying for it.",
+   "zh": "第8章。分步对冲，以及它的代价。"
+  },
+  "a5c74f995222": {
+   "scene": "Discrete",
+   "en": "Black-Scholes assumes the hedge is adjusted continuously. Real hedgers trade in steps: every hour, every day. Over one step the hedge leaves an error: half gamma S squared times the squared move, minus its average. The squared move is sigma squared S squared Z squared delta t, with Z a standard normal, so the error is proportional to Z squared minus one. <bookmark mark='a'/> Z squared has variance two, so each step's error has variance one half gamma squared S to the fourth sigma to the fourth delta t squared. <bookmark mark='b'/> The steps are independent, so the variances add: there are T over delta t of them, which leaves one power of delta t. The standard deviation of the hedging error shrinks like the square root of the step: halve the error, hedge four times as often. Phelim Boyle and David Emanuel worked this out in 1980; Emanuel Derman's team at Goldman Sachs later gave the at-the-money rule of thumb at the bottom.",
+   "zh": "Black–Scholes假设对冲是连续调整的。真实的对冲者是分步交易的：每小时一次，每天一次。在一步里，对冲留下一个误差：二分之一Gamma S平方乘以变动的平方，减去它的平均值。变动的平方等于σ平方S平方Z平方Δt，Z是一个标准正态变量，所以误差正比于Z平方减1。<bookmark mark='a'/>Z平方的方差是2，所以每一步误差的方差是二分之一Gamma平方S的四次方σ的四次方Δt平方。<bookmark mark='b'/>各步相互独立，方差相加：一共有T除以Δt步，于是剩下Δt的一次方。对冲误差的标准差按步长的平方根缩小：要把误差减半，就得把对冲频率提高到四倍。1980年费林·博伊尔和戴维·伊曼纽尔算出了这一点；后来伊曼纽尔·德曼在高盛的团队给出了底部这个平值期权的经验法则。"
+  },
+  "7e6a861d7769": {
+   "scene": "Discrete",
+   "en": "Here it is measured. A three-month at-the-money call, sold at the true volatility of twenty percent, hedged four times, eight, sixteen, up to a thousand and twenty-four times over the quarter, twenty thousand paths at each frequency. The pink line is the formula we just derived, with its integral computed exactly; the dashed grey line is the rule of thumb. <bookmark mark='a'/> The simulation sits on the formula, and its slope on these log scales is -0.49: the square-root law. Hedging weekly leaves an error of about 0.85 on a premium of 3.99; hedging four times a day, about 0.22. Even a hedger with a perfect model is running a risk, unless she trades without limit.",
+   "zh": "这是实测结果。一份三个月平值看涨期权，按真实波动率20%卖出，在一个季度里对冲4次、8次、16次，直到1024次，每种频率两万条路径。粉色线是我们刚推导出的公式，积分精确计算；灰色虚线是经验法则。<bookmark mark='a'/>模拟结果正好落在公式上，在对数坐标里斜率是-0.49：平方根定律。每周对冲留下大约0.85的误差，期权费是3.99；每天对冲4次，大约0.22。即使模型完美，对冲者也在承担风险，除非她能无限次地交易。"
+  },
+  "ea17d2b03c99": {
+   "scene": "Discrete",
+   "en": "And trading is not free. Every rebalance pays a cost, here a quarter of a percent of the value of the shares traded, and the costs grow with the number of trades, like the square root of the frequency, while the hedging error shrinks like its inverse. So there is a best frequency, and a price for the option that covers it. Hayne Leland's answer in 1985: hedge, and sell, at a higher volatility, inflated by the costs. <bookmark mark='a'/> Weekly hedging of our call: priced at twenty percent, the seller loses 0.53 on average, all of it costs. Priced and hedged at Leland's 21.4 percent, the loss shrinks to 0.25. <bookmark mark='b'/> And what is left is exactly what the formula leaves out: 0.26 for buying the first hedge and unwinding the last. Charge for those too, and the book breaks even. Leland's rule is a first answer; the deep hedger of Part seventeen will learn the better one, a band in which it does not trade at all.",
+   "zh": "而且交易不是免费的。每次调整都要付成本，这里是所交易股票价值的0.25%，成本随交易次数增长，按频率的平方根增长，而对冲误差按它的倒数缩小。所以存在一个最优频率，以及一个能覆盖它的期权价格。1985年海恩·利兰的答案是：用一个更高的、被成本抬高的波动率来对冲和卖出。<bookmark mark='a'/>我们的期权每周对冲一次：按20%定价，卖方平均亏0.53，全都是成本。按利兰的21.4%定价和对冲，亏损缩小到0.25。<bookmark mark='b'/>剩下的，正好是公式没有算进去的部分：0.26，用于买入第一笔对冲和平掉最后一笔。把这部分也收费，账本就能打平。利兰的法则是第一个答案；第17部分的深度对冲器会学到更好的答案：一个它根本不交易的区间。"
+  },
+  "13589a849a43": {
+   "scene": "Implied",
+   "en": "Chapter nine. Implied volatility and the first smile.",
+   "zh": "第9章。隐含波动率与第一条微笑曲线。"
+  },
+  "372c9a7f50ca": {
+   "scene": "Implied",
+   "en": "The formula has five inputs. Four can be looked up: the price of the underlying, the strike, the time and the interest rate. The fifth, volatility, cannot. So traders turn the formula around: given the market's price, find the volatility that reproduces it. That number is the implied volatility. <bookmark mark='a'/> Here is one real quote from the House's data: a Bitcoin call on Deribit, the largest crypto options exchange, on the morning of the tenth of December 2025. The Black-Scholes price rises steadily with volatility, so exactly one volatility matches the market price. <bookmark mark='b'/> The House's solver starts from Corrado and Miller's approximation, which lands within a twentieth of a volatility point, and two Newton steps finish the job to twelve digits: 43.66 percent. Peter Jaeckel's method, which desks use, does it in two steps from anywhere. Traders stopped quoting prices and started quoting this number, because it puts options of every strike and maturity on one scale.",
+   "zh": "这个公式有五个输入。其中四个可以查到：标的价格、行权价、时间和利率。第五个，波动率，查不到。于是交易员把公式反过来用：给定市场价格，找出能复现它的波动率。这个数就是隐含波动率。<bookmark mark='a'/>这是我们公司数据里的一个真实报价：2025年12月10日上午，Deribit上的一份比特币看涨期权，Deribit是最大的加密期权交易所。Black–Scholes价格随波动率稳步上升，所以恰好只有一个波动率能对上市场价格。<bookmark mark='b'/>我们公司的求解器从Corrado和Miller的近似出发，它一开始就落在离答案不到0.05个波动率点的地方，再走两步牛顿迭代，就精确到12位数字：43.66%。交易台用的彼得·耶克尔的方法，从任何起点出发两步就能做到。交易员不再报价格，而开始报这个数，因为它把每一个行权价、每一个期限的期权都放到了同一把尺子上。"
+  },
+  "fb3ba65f483c": {
+   "scene": "Implied",
+   "en": "Now do this for every option traded that morning. Plot the implied volatility of each against its strike, measured as the log of strike over forward, one curve per expiry. <bookmark mark='a'/> If the Black-Scholes world were the real one, each curve would be a flat line: the underlying has one volatility, whatever strike you ask about. Instead they smile, and lean. Out-of-the-money puts, to the left, are dearer than calls the same distance away, and both wings rise above the middle. The market is charging for something the formula does not have: big moves, mostly down, more often than a lognormal allows. Part one measured exactly those fat tails in the prices themselves; here they are, priced. <bookmark mark='b'/> The dashed lines are the best one can do with Black-Scholes as stated, one volatility per expiry.",
+   "zh": "现在对那天上午成交的每一份期权都这样做。把每一份期权的隐含波动率画在它的行权价上，行权价用行权价与远期价格之比的对数来度量，每个到期日一条曲线。<bookmark mark='a'/>如果Black–Scholes的世界是真实的，每条曲线都应该是一条平线：不管你问哪个行权价，标的都只有一个波动率。然而它们在微笑，而且是歪着的。左边的虚值看跌期权，比同样距离的看涨期权更贵，两翼都高于中间。市场在为公式里没有的东西收费：大幅波动，主要是下跌，比对数正态分布允许的更频繁。第1部分在价格本身里量到的正是这些肥尾；在这里，它们被定了价。<bookmark mark='b'/>虚线是按原样使用Black–Scholes时能做到的最好结果：每个到期日一个波动率。"
+  },
+  "4823860461f9": {
+   "scene": "Implied",
+   "en": "Put every expiry together and you have the series' Surface: two hundred and fifty-odd implied volatilities over strike and maturity, frozen on one morning, from the trades of that day. Every pricing model in this series will be calibrated to it and scored on it. The short-dated smiles, in front, are steep and high: it was the morning of a Federal Reserve decision, and the market was paying for the next few days' moves. Further back, the surface flattens out. <bookmark mark='a'/> And the grey lines are Black-Scholes' best effort, one flat volatility per expiry. It gets the level of each expiry right and nothing else.",
+   "zh": "把所有到期日放在一起，就得到本系列的基准曲面：250多个隐含波动率，分布在行权价和期限上，冻结在某一天上午，来自那一天的成交。本系列的每一个定价模型，都要拟合它，并在它上面打分。前面的短期微笑又陡又高：那天上午正好是美联储议息的日子，市场在为接下来几天的波动付钱。往后，曲面变平。<bookmark mark='a'/>灰线是Black–Scholes尽力而为的结果，每个到期日一个平的波动率。它只把每个到期日的水平做对了，别的一概没有。"
+  },
+  "910813d43f00": {
+   "scene": "Implied",
+   "en": "So the Surface gets its first row. Black-Scholes with one volatility per expiry misses the market's implied volatilities by 4.36 volatility points, weighted by vega, on the day it was fitted, and by 4.74 the next morning with its parameters held. It has no calendar arbitrage, and eleven parameters, one per expiry. <bookmark mark='a'/> The rows below are empty: the smile models of Part twelve, stochastic volatility and jumps in thirteen, rough volatility in fourteen, neural networks in seventeen. Each will be fitted to the same quotes and judged by the same numbers. One more number for later: Deribit's own volatility index, DVOL, computed the way the VIX is, stood at 45.9 percent that morning, a little above the at-the-money thirty-day volatility, 44.1, because it includes the smile's wings.",
+   "zh": "于是基准曲面有了它的第一行。每个到期日一个波动率的Black–Scholes，在拟合的当天与市场隐含波动率相差4.36个波动率点，按Vega加权；第二天上午参数不变时，相差4.74。它没有日历套利，有11个参数，每个到期日一个。<bookmark mark='a'/>下面几行还是空的：第12部分的微笑模型，第13部分的随机波动率和跳跃，第14部分的粗糙波动率，第17部分的神经网络。每一个都会拟合同一批报价，用同样的数字评判。再记一个数留着后面用：Deribit自己的波动率指数DVOL，按VIX的方法计算，那天上午是45.9%，比30天平值波动率44.1稍高一点，因为它包含了微笑的两翼。"
+  },
+  "a16c05eb011f": {
+   "scene": "American",
+   "en": "Chapter ten. Early exercise.",
+   "zh": "第10章。提前行权。"
+  },
+  "5d12e7269efb": {
+   "scene": "American",
+   "en": "European options can be exercised only at expiry. Most traded stock options are American: they can be exercised any day. Is that right worth anything? For a call on a stock that pays no dividends, no. Parity bounds a call below by the stock minus the discounted strike, which is more than the stock minus the strike: alive, the call is always worth more than exercised. Robert Merton proved it in 1973. <bookmark mark='a'/> A put is different. Exercising a deep in-the-money put hands you the strike now, and cash earns interest; waiting keeps the chance of an even lower price, but that chance is worth little when the put is already deep. At some price, stopping beats waiting. Which price is a problem of optimal stopping, the subject of Part eight, and it has no closed form.",
+   "zh": "欧式期权只能在到期时行权。交易所交易的股票期权大多是美式的：任何一天都可以行权。这项权利值钱吗？对不支付股息的股票的看涨期权来说，不值钱。平价关系给看涨期权一个下界：股价减去折现后的行权价，这比股价减行权价还要大：活着的看涨期权，永远比行权更值钱。罗伯特·默顿在1973年证明了这一点。<bookmark mark='a'/>看跌期权不一样。行使一份深度实值的看跌期权，你现在就拿到行权价，而现金可以生息；等待保留了价格跌得更低的机会，但当看跌期权已经很深时，这个机会不值多少。在某个价位上，停止胜过等待。是哪个价位，这是一个最优停止问题，第8部分的主题，它没有解析解。"
+  },
+  "e921de0c96c9": {
+   "scene": "American",
+   "en": "The tree of chapter four solves it. At every node, the put is worth the larger of exercising now and the discounted risk-neutral average of the two nodes after it: wait only if waiting is worth more. Here is the result for a one-year put with a five percent interest rate. The European put, in blue, dips below its payoff for deep prices: alive, it is worth less than exercised, because of the interest. <bookmark mark='a'/> The American put, in magenta, never does: it meets the payoff and runs along it. At the money it is worth 6.0900 against the European 5.5735: an early-exercise premium of 0.52, the shaded gap. The tree's value matches the textbook benchmark for this option to four digits.",
+   "zh": "第4章的树可以解决它。在每个节点上，看跌期权的价值等于现在行权和它后面两个节点的风险中性平均值折现之中较大的那个：只有等待更值钱时才等待。这是利率5%时一年期看跌期权的结果。蓝色的欧式看跌期权，在价格很低时会低于它的收益：活着反而不如行权值钱，因为利息。<bookmark mark='a'/>品红色的美式看跌期权从不这样：它碰到收益线后就沿着它走。平值时它值6.0900，欧式是5.5735：提前行权溢价是0.52，就是阴影部分。树给出的值和这份期权的教科书基准值在4位数字上一致。"
+  },
+  "c61ebe145897": {
+   "scene": "American",
+   "en": "The tree also draws where exercise begins. For each time, the highest stock price at which exercising is optimal: the early-exercise boundary. Below it, exercise; above it, wait. A year out, the put should be exercised only if the stock has fallen to about 81; as expiry approaches, the boundary rises towards the strike, because there is less time for waiting to pay. <bookmark mark='a'/> The boundary is part of the solution, not an input to it: the equation holds in the wait region, the payoff holds in the exercise region, and the price and its slope must join smoothly across the line. Problems like this are called free-boundary problems; they have no closed form, and desks solve them with trees, with the finite-difference methods of Part sixteen, or with regression Monte Carlo. And dividends bring calls back into the game: just before a stock goes ex dividend, exercising a deep call to collect the dividend can beat waiting.",
+   "zh": "这棵树还画出了行权从哪里开始。对每一个时间，行权最优的最高股价：提前行权边界。在它下面，行权；在它上面，等待。一年前，只有股价跌到大约81时才应该行权；随着到期临近，边界向行权价升高，因为等待能带来回报的时间越来越少。<bookmark mark='a'/>这条边界是解的一部分，而不是输入：在等待区域里方程成立，在行权区域里收益成立，而价格和它的斜率必须平滑地跨过这条线衔接起来。这类问题叫自由边界问题；它们没有解析解，交易台用树、用第16部分的有限差分方法，或者用回归蒙特卡洛来解。股息还会把看涨期权拉回来：就在股票除息之前，行使一份深度实值看涨期权来拿到股息，可能胜过等待。"
+  },
+  "6e2912814889": {
+   "scene": "BTC",
+   "en": "Chapter eleven. Selling volatility on real Bitcoin.",
+   "zh": "第11章。在真实的比特币上卖出波动率。"
+  },
+  "7924f83697b1": {
+   "scene": "BTC",
+   "en": "Chapter six said a hedged option seller earns the gap between implied and realized volatility. So is there a gap, on average, in a real market? The House runs the experiment on Bitcoin. Every day at eight in the morning, from April 2021, it sells a thirty-day at-the-money call at the volatility the market quotes, Deribit's DVOL index, and hedges it every hour on Binance's prices until it expires: 1,706 trades. <bookmark mark='a'/> In orange, the implied volatility the House sold at. In teal, the volatility Bitcoin actually realized over the following thirty days. Most of the time orange is above teal: the market charges more for volatility than Bitcoin then delivers. On average 62 against 54 percent. <bookmark mark='b'/> But not always: when Bitcoin crashes, realized volatility jumps far above what was charged, and those are the spikes of teal above orange.",
+   "zh": "第6章说，对冲后的期权卖方赚的是隐含波动率与已实现波动率之差。那么在真实市场里，平均来看存在这个差吗？我们公司在比特币上做这个实验。从April 2021起，每天早上8点，它按市场报出的波动率，也就是Deribit的DVOL指数，卖出一份30天平值看涨期权，并按币安的价格每小时对冲一次，直到到期：一共1706笔交易。<bookmark mark='a'/>橙色是我们公司卖出时的隐含波动率。青色是比特币在随后30天里实际实现的波动率。大多数时候橙色高于青色：市场为波动率收的钱，比比特币后来给出的要多。平均是62%对54%。<bookmark mark='b'/>但不总是这样：比特币暴跌时，已实现波动率会远远高出所收的价格，那就是青色冲到橙色上方的那些尖峰。"
+  },
+  "f088a4ff5bf8": {
+   "scene": "BTC",
+   "en": "Each dot is one month's trade: across, the gap between the implied volatility it was sold at and the volatility that followed; up, the hedged profit per hundred dollars of Bitcoin. They line up, correlation 0.86: the profit is the volatility gap, as the formula said. The spread around the line is chapter seven's gamma weighting: when in the month the moves came. <bookmark mark='a'/> And the ledger accounts for every trade. Summed over a month, the theta term, the decay collected, and the gamma term, the squared moves paid out, explain the profit to within a few hundredths: the expansion behind the formula holds even for hourly Bitcoin.",
+   "zh": "每个点是一个月的交易：横轴是卖出时的隐含波动率与之后实际波动率之差；纵轴是每100美元比特币的对冲后利润。它们排成一条线，相关系数0.86：利润就是波动率之差，正如公式所说。围绕这条线的离散，就是第7章的Gamma加权：波动出现在这个月的哪个时候。<bookmark mark='a'/>而且账本解释了每一笔交易。在一个月里加总，Theta项，也就是收取的衰减，和Gamma项，也就是支付的变动平方，把利润解释到百分之几以内：公式背后的展开式，对按小时计的比特币也成立。"
+  },
+  "255d5fb5c1c7": {
+   "scene": "BTC",
+   "en": "Over all 1,706 months the seller made 1.35 per hundred dollars of Bitcoin, on premiums averaging 7.10, and won in 81 percent of them. The months overlap, so the honest statistic uses one trade per thirty days: 1.42 plus or minus 0.22, over 57 independent months. That is the variance risk premium: people pay more for options than they are worth on average, as insurance buyers do. <bookmark mark='a'/> Before believing it, subtract what the simulation leaves out. Hedging costs, even at a market maker's two basis points a trade, take it to 1.20. And DVOL, computed like the VIX from the whole smile, sat about 1.8 points above the at-the-money volatility on our Surface morning; selling at the money at that lower volatility would leave about 1.00. Still positive, and still with the left tail of the histogram: months that lose two or three times what a good month earns.",
+   "zh": "在全部1706个月里，卖方每100美元比特币平均赚1.35，平均期权费是7.10，赢的月份占81%。这些月份相互重叠，所以诚实的统计是每30天只取一笔交易：1.42，正负0.22，共57个独立的月份。这就是方差风险溢价：人们平均为期权付的钱，多于它的价值，就像买保险的人一样。<bookmark mark='a'/>在相信它之前，先减掉模拟没有算进去的东西。对冲成本，即使按做市商每笔2个基点算，也会把它降到1.20。而DVOL像VIX一样用整条微笑计算，在我们基准曲面的那天上午，比平值波动率高出大约1.8个点；如果按那个更低的平值波动率卖出，大约只剩1.00。仍然是正的，而且仍然带着直方图的左尾：有些月份亏掉的，是一个好月份赚到的两三倍。"
+  },
+  "ec5b971c66ff": {
+   "scene": "BTC",
+   "en": "The worst month began on 12 July 2024. The House sold at 47 percent; three weeks later the yen carry trade unwound, Bitcoin fell with every risky asset, and on the fifth of August the VIX printed sixty-five before New York opened. That month realized 64 percent, and the seller lost 3.34, more than two average months' profit. This is the shape of every insurance business, and of every short-volatility strategy in this series: many small gains, and an occasional large loss that arrives exactly when everything else is losing too. Part twelve's crisis file, Volmageddon, is the same story with leverage.",
+   "zh": "最糟的一个月开始于12 July 2024。我们公司按47%卖出；三周后日元套息交易平仓，比特币和所有风险资产一起下跌，8月5日纽约开盘前，VIX打出了65。那个月的已实现波动率是64%，卖方亏了3.34，超过两个平均月份的利润。这就是每一门保险生意的形状，也是本系列里每一个做空波动率策略的形状：许多小的收益，偶尔一次大的亏损，而且恰好在其他一切也都在亏钱的时候到来。第12部分的危机档案“波动率末日”，是同一个故事，只是加了杠杆。"
+  },
+  "6fe31624ed0b": {
+   "scene": "Crash",
+   "en": "Chapter twelve. October 1987.",
+   "zh": "第12章。1987年10月。"
+  },
+  "f847a62daf58": {
+   "scene": "Crash",
+   "en": "By the mid-1980s the Black-Scholes hedge had become a product. Hayne Leland, John O'Brien and Mark Rubinstein sold portfolio insurance: a floor under a pension fund's portfolio, built not by buying puts, which were scarce, but by replicating them, with the delta hedge of this part, trading index futures. <bookmark mark='a'/> Replicating a put means holding less stock as prices fall. Here is the fraction of the portfolio held in stocks under a put struck five percent below the market: as the index drops, the hedge sells. <bookmark mark='b'/> By October 1987 the Brady Commission, which investigated the crash, put the assets under such strategies at sixty to ninety billion dollars. All of them followed the same rule. Sell when prices fall.",
+   "zh": "到20世纪80年代中期，Black–Scholes对冲已经变成了一种产品。海恩·利兰、约翰·奥布莱恩和马克·鲁宾斯坦出售投资组合保险：给养老基金的投资组合垫一个底，不是靠买入当时稀缺的看跌期权，而是用本部分的Delta对冲去复制它们，交易股指期货。<bookmark mark='a'/>复制一份看跌期权，就意味着价格下跌时持有更少的股票。这是行权价比市场低5%的看跌期权下，组合中股票所占的比例：指数下跌时，对冲就卖出。<bookmark mark='b'/>据调查这次股灾的布雷迪委员会估计，到1987年10月，采用这类策略的资产有600亿到900亿美元。它们全都遵循同一条规则：价格下跌时卖出。"
+  },
+  "8633a52c467b": {
+   "scene": "Crash",
+   "en": "In the week before the nineteenth of October the market fell several days running, and the insurers' rule told them to sell futures. Their selling pushed futures below the stocks; arbitrageurs bought futures and sold stocks; stocks fell; the rule said sell again. <bookmark mark='a'/> On Monday the nineteenth, the broad US market, in Kenneth French's data, fell 17.4 percent in a day; the S and P five hundred, 20.5. It is still the largest one-day fall in the history of the American market. The hedge assumed that it could always trade, at a price near the last one, in any size. That day, it could not.",
+   "zh": "10月19日之前那一周，市场连续几天下跌，保险商的规则告诉他们卖出期货。他们的卖盘把期货压到了股票之下；套利者买入期货、卖出股票；股票下跌；规则又说，再卖。<bookmark mark='a'/>19日星期一，按肯尼斯·弗伦奇的数据，美国整体股市一天下跌了17.4%；标普500下跌了20.5%。这至今仍是美国股市历史上最大的单日跌幅。对冲假设它永远可以交易，价格接近上一笔，规模不限。那一天，它做不到。"
+  },
+  "b64d8dd384d2": {
+   "scene": "Crash",
+   "en": "How unlikely was it? Against the market's own volatility over the previous year, the fall was 20.7 standard deviations. If daily returns were normal, as the lognormal model says, a day like that would come once in about ten to the 92 years: never, in any universe. <bookmark mark='a'/> But Part one measured the tails of real returns: they fall off like a power, not like a Gaussian. Fit a power law to the worst two percent of days from 1926 to 1986, and the exponent comes out 2.71, close to the inverse cubic law; under that tail, a day like Black Monday comes about once every 60 years. Rare, but not impossible: the kind of event a long-lived institution should expect to meet.",
+   "zh": "这有多不可能？相对于前一年市场自身的波动率，这次下跌是20.7个标准差。如果日收益是正态的，就像对数正态模型所说的，这样的一天大约每10的92次方年才出现一次：在任何宇宙里都永远不会发生。<bookmark mark='a'/>但第1部分量过真实收益的尾部：它们按幂律衰减，而不是像高斯分布那样。用1926年到1986年最糟的2%的交易日拟合一个幂律，指数是2.71，接近“负三次方律”；在这条尾部下，像黑色星期一这样的一天，大约每60年出现一次。罕见，但并非不可能：一家长寿的机构应当预期会遇上的那种事件。"
+  },
+  "c239325a30da": {
+   "scene": "Crash",
+   "en": "And then options changed. Before October 1987, index options traded on implied volatilities that barely depended on the strike: the market priced roughly the Black-Scholes world. After it, out-of-the-money puts, crash insurance, became permanently dearer than the formula's single volatility allows. Mark Rubinstein, one of the portfolio insurers, documented it in 1994. That is the skew of chapter nine, born here. <bookmark mark='a'/> The sociologist Donald MacKenzie read the episode as a case of performativity: for fourteen years the formula helped make the market look like the formula, and then, in one day, the market stopped looking like it. Part twelve is about that skew.",
+   "zh": "然后期权变了。1987年10月以前，股指期权的隐含波动率几乎不随行权价变化：市场定的价格大致就是Black–Scholes的世界。此后，虚值看跌期权，也就是崩盘保险，永久地比公式的单一波动率所允许的更贵。投资组合保险商之一的马克·鲁宾斯坦在1994年记录了这一点。这就是第9章的偏斜，诞生于此。<bookmark mark='a'/>社会学家唐纳德·麦肯齐把这段经历解读为“述行性”的一个案例：十四年里，这个公式帮助市场变得像这个公式，然后在一天之内，市场不再像它了。第12部分讲的就是这个偏斜。"
+  },
+  "983d13e2dd2a": {
+   "scene": "LTCM",
+   "en": "Chapter thirteen. The Nobel, and then LTCM.",
+   "zh": "第13章。诺贝尔奖，然后是LTCM。"
+  },
+  "5e3edb2e90ca": {
+   "scene": "LTCM",
+   "en": "In October 1997 Merton and Scholes received the Nobel prize. Both were partners in a hedge fund, Long-Term Capital Management, founded in 1994 by John Meriwether, who had run the bond-arbitrage group at Salomon Brothers. <bookmark mark='a'/> Its trades were hedged spreads: buy a cheap bond, sell an expensive near-identical one, and wait for the prices to converge. It also sold volatility, long-dated index options, in such size that other traders called it the central bank of volatility. It earned about forty percent a year after fees in 1995 and 1996, on a balance sheet some twenty-five times its capital. <bookmark mark='b'/> In August 1998 Russia defaulted. Investors everywhere fled to the most liquid assets; every spread LTCM was betting would narrow widened instead, all at once, and implied volatilities jumped. By September the fund had lost four and a half billion dollars, most of its capital.",
+   "zh": "1997年10月，默顿和斯科尔斯获得诺贝尔奖。两人都是一家对冲基金的合伙人：长期资本管理公司，1994年由约翰·梅里韦瑟创立，他此前在所罗门兄弟领导债券套利小组。<bookmark mark='a'/>它的交易是对冲后的价差：买入一只便宜的债券，卖出一只几乎相同但更贵的，等着价格收敛。它还卖出波动率，也就是长期股指期权，规模大到其他交易员称它为“波动率的中央银行”。1995年和1996年，它每年扣除费用后赚大约40%，资产负债表是资本的25倍左右。<bookmark mark='b'/>1998年8月，俄罗斯违约。各地的投资者都逃向流动性最好的资产；LTCM押注会收窄的每一个价差，反而同时扩大，隐含波动率也跳了上去。到9月，这只基金已经亏了46亿美元，亏掉了它大部分的资本。"
+  },
+  "80d10dcc237a": {
+   "scene": "LTCM",
+   "en": "On the twenty-third of September the Federal Reserve Bank of New York gathered fourteen banks, which put three point six billion dollars into the fund, took it over, and unwound it slowly. The models were not wrong about prices converging; most of the spreads did converge, eventually. <bookmark mark='a'/> What broke were the assumptions under every hedge in this part: that you can keep trading, that you can fund the position until it converges, and that the others are not all doing the same trade. 1987 broke the first. 1998 broke all three. Part forty-one tells the story with the data: margin spirals, fire sales, and why liquidity is the risk factor no formula prices.",
+   "zh": "9月23日，纽约联邦储备银行召集了14家银行，它们向这只基金注资36亿美元，接管了它，并慢慢地把它平仓。模型关于价格收敛的判断并没有错；大多数价差最终确实收敛了。<bookmark mark='a'/>坏掉的是本部分每一个对冲背后的假设：你可以一直交易，你可以一直为头寸融资直到它收敛，以及别人并不都在做同一笔交易。1987年打破了第一条。1998年三条全打破了。第41部分会用数据讲完整的故事：保证金螺旋、甩卖，以及为什么流动性是任何公式都无法定价的风险因子。"
+  },
+  "f4fbc86cf48a": {
+   "scene": "Outro",
+   "en": "Part ten in eight lines. An option can be manufactured from the stock and cash, and the stock's expected return drops out of its price. The price can be found three ways: as the solution of an equation, as an expectation under the risk-neutral measure, and as the limit of a tree. The Greeks are slopes and curves of one surface, and theta is minus gamma in disguise. A hedged option is a bet that realized volatility, weighted by gamma, will differ from implied. Hedging in steps leaves an error that shrinks only like the square root of the step, and costs push the price up. The market's implied volatilities smile: its world is not the formula's. Selling volatility on real Bitcoin earned a premium, with a left tail. And 1987 and 1998 showed what every hedge assumes: that you can always trade, and always fund.",
+   "zh": "用八句话说第10部分。期权可以用股票和现金制造出来，而股票的期望收益从它的价格里消失了。价格可以用三种方法求得：解一个方程，在风险中性测度下求期望，取一棵树的极限。希腊字母是同一个曲面的斜率和弯曲，而Theta是乔装的负Gamma。对冲后的期权，押注的是按Gamma加权的已实现波动率会不同于隐含波动率。分步对冲留下的误差只按步长的平方根缩小，而成本会把价格推高。市场的隐含波动率在微笑：它的世界不是公式的世界。在真实的比特币上卖出波动率，赚到了一个溢价，带着一条左尾。而1987年和1998年表明了每一个对冲都在假设什么：你永远可以交易，永远可以融资。"
+  },
+  "0279f9fbb73c": {
+   "scene": "Outro",
+   "en": "Three desk questions, the kind trading firms ask in interviews. Price an at-the-money call in your head: the answer is about point four times sigma times S times the square root of T, which is eight here, against an exact seven point nine seven. <bookmark mark='a'/> You are long a straddle and the stock sits still for a week: you lost a week of theta, the price of the gamma you did not use. <bookmark mark='b'/> And the delta of an at-the-money digital near expiry: it explodes, which is why desks that sell digitals hedge them as tight call spreads. The full solutions are in the part's notes.",
+   "zh": "三个交易台问题，交易公司面试时会问的那种。心算一份平值看涨期权的价格：答案大约是0.4乘以σ乘以S乘以T的平方根，这里是8，精确值是7.97。<bookmark mark='a'/>你持有一份跨式组合，股价一周不动：你亏了一周的Theta，那是你没有用上的Gamma的价格。<bookmark mark='b'/>临近到期时平值数字期权的Delta：它会爆炸，这就是为什么卖出数字期权的交易台用很窄的看涨价差来对冲它们。完整的解答在本部分的说明里。"
+  },
+  "9e923ded0988": {
+   "scene": "Outro",
+   "en": "And five problems to work through: parity and delta from the formula, the tree's martingale probability, the volatility trader's back-of-the-envelope, Leland's volatility, and early exercise. Solutions, in English and Chinese, are in the notes for this part.",
+   "zh": "还有五道习题：从公式推出平价关系和Delta，二叉树的鞅概率，波动率交易员的粗略估算，利兰的波动率，以及提前行权。中英文的解答都在本部分的说明里。"
+  },
+  "dd018c6598cd": {
+   "scene": "Outro",
+   "en": "Where this comes back. The volatility trader's formula runs Part eleven, on trading options, Part twelve, on the volatility surface, and Part thirty-two, where selling volatility becomes a strategy. The Surface gets new rows in twelve, thirteen, fourteen and seventeen. The hedge becomes a control problem, solved by a neural network in seventeen and by the execution and market-making desks of thirty-seven and thirty-eight. Trees, equations and simulation come back for exotics and numerics in fifteen and sixteen, and LTCM's full story in forty-one.",
+   "zh": "这些内容会在哪里再现。波动率交易员的公式贯穿第11部分的期权交易、第12部分的波动率曲面，以及第32部分，在那里卖出波动率变成一种策略。基准曲面会在第12、13、14和17部分增加新的行。对冲会变成一个控制问题，第17部分用神经网络来解它，第37和第38部分的执行和做市交易台也会用到它。树、方程和模拟会在第15和第16部分为奇异期权和数值方法再次出现，而LTCM的完整故事在第41部分。"
+  },
+  "a840447584fe": {
+   "scene": "Outro",
+   "en": "The textbook chapters this part covers, and the papers it draws on. Every number in it was computed from public data by the series' own code: Deribit's option trades and DVOL, Binance's prices, and Kenneth French's market returns.",
+   "zh": "这是本部分覆盖的教科书章节，以及它依据的论文。其中每一个数字，都由本系列自己的代码根据公开数据算出：Deribit的期权成交和DVOL，币安的价格，以及肯尼斯·弗伦奇的市场收益。"
+  },
+  "3aa7b9e6f048": {
+   "scene": "Outro",
+   "en": "The House now has a volatility desk: a pricer, a hedger, an implied volatility solver and the Surface to score against. <bookmark mark='a'/> Next, Part eleven puts a trader at that desk: positions as Greeks, gamma scalping, the strategies, and the market maker's book.",
+   "zh": "我们的公司现在有了一个波动率交易台：一个定价器、一个对冲器、一个隐含波动率求解器，以及用来打分的基准曲面。<bookmark mark='a'/>下一部分，第11部分，会让一位交易员坐到这张交易台前：把头寸看作希腊字母，Gamma剥头皮，各种策略，以及做市商的账本。"
+  }
+ },
+ "title_en": "Quant, Built: Part 10, Black–Scholes–Merton",
+ "chapters_en": {
+  "Hook": "Manufacturing an option",
+  "History": "1. Before the formula",
+  "Replication": "2. The riskless portfolio",
+  "RiskNeutral": "3. The price as an expectation",
+  "Tree": "4. The tree and its limit",
+  "Greeks": "5. The Greeks as geometry",
+  "Ledger": "6. Where the hedger's money comes from",
+  "WrongVol": "7. Hedging with the wrong volatility",
+  "Discrete": "8. Hedging in steps, and paying for it",
+  "Implied": "9. Implied volatility and the first smile",
+  "American": "10. Early exercise",
+  "BTC": "11. Selling volatility on real Bitcoin",
+  "Crash": "12. October 1987",
+  "LTCM": "13. The Nobel, and then LTCM",
+  "Outro": "Recap, desk questions, problems"
+ }
+}

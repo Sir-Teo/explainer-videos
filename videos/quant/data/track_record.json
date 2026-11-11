@@ -1,0 +1,602 @@
+{
+ "carry_basis_part39": {
+  "part": 39,
+  "research": {
+   "mean": 0.20089027922397396,
+   "vol": 0.043347865425808804,
+   "sharpe": 4.634375355063417,
+   "sharpe_se": 0.7358043761655179,
+   "maxdd": 0.0,
+   "n": 12,
+   "sharpe_net": 4.634375355063417,
+   "cost_per_year": 0.0
+  },
+  "holdout": {
+   "mean": 0.09732690485387753,
+   "vol": 0.04513096793715619,
+   "sharpe": 2.156543706073465,
+   "sharpe_se": 0.22894251548974087,
+   "maxdd": -0.011705432777676439,
+   "n": 60,
+   "sharpe_net": 2.156543706073465,
+   "cost_per_year": 0.0
+  },
+  "note": "cash-and-carry, ETH, rule always, net of 15 bp a switch, 1/3 margin"
+ },
+ "classic_bab_part24": {
+  "part": 24,
+  "research": {
+   "mean": 0.08188709726344197,
+   "vol": 0.11252018927523544,
+   "sharpe": 0.7277547059855904,
+   "sharpe_se": 0.11786181709720402,
+   "maxdd": -0.5464802323570683,
+   "n": 1081,
+   "sharpe_net": 0.5944452963888066,
+   "cost_per_year": 0.015
+  },
+  "holdout": {
+   "mean": 0.01585934860027363,
+   "vol": 0.08754678532846587,
+   "sharpe": 0.1811528377743524,
+   "sharpe_se": 0.4370751251519831,
+   "maxdd": -0.15250958285456606,
+   "n": 60,
+   "sharpe_net": 0.009815878413461415,
+   "cost_per_year": 0.015
+  },
+  "note": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here"
+ },
+ "classic_cma_part24": {
+  "part": 24,
+  "research": {
+   "mean": 0.03005913043478261,
+   "vol": 0.06783284114725077,
+   "sharpe": 0.44313535930966796,
+   "sharpe_se": 0.13013875712902148,
+   "maxdd": -0.2508419387351932,
+   "n": 690,
+   "sharpe_net": 0.29571414222851844,
+   "cost_per_year": 0.01
+  },
+  "holdout": {
+   "mean": 0.013040000000000006,
+   "vol": 0.10532414792246468,
+   "sharpe": 0.12380826483969772,
+   "sharpe_se": 0.44618532796198324,
+   "maxdd": -0.27633342203870415,
+   "n": 60,
+   "sharpe_net": 0.028863276465696443,
+   "cost_per_year": 0.01
+  },
+  "note": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here"
+ },
+ "classic_hml_part24": {
+  "part": 24,
+  "research": {
+   "mean": 0.030278260869565213,
+   "vol": 0.09824440856339407,
+   "sharpe": 0.3081932225183847,
+   "sharpe_se": 0.13237559603431842,
+   "maxdd": -0.5777720404536153,
+   "n": 690,
+   "sharpe_net": 0.20640625930869427,
+   "cost_per_year": 0.01
+  },
+  "holdout": {
+   "mean": 0.08072,
+   "vol": 0.14688028839379388,
+   "sharpe": 0.5495631911042097,
+   "sharpe_se": 0.4417309008019731,
+   "maxdd": -0.2028343741846812,
+   "n": 60,
+   "sharpe_net": 0.4814805361111213,
+   "cost_per_year": 0.01
+  },
+  "note": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here"
+ },
+ "classic_mkt_part24": {
+  "part": 24,
+  "research": {
+   "mean": 0.06846434782608696,
+   "vol": 0.15465020205457106,
+   "sharpe": 0.44270454817723487,
+   "sharpe_se": 0.13709512094259382,
+   "maxdd": -0.5575082231927492,
+   "n": 690,
+   "sharpe_net": 0.43947144538553234,
+   "cost_per_year": 0.0005
+  },
+  "holdout": {
+   "mean": 0.10418,
+   "vol": 0.1533421762495536,
+   "sharpe": 0.6793956010540397,
+   "sharpe_se": 0.4681606264610158,
+   "maxdd": -0.2526049814917599,
+   "n": 60,
+   "sharpe_net": 0.6761349195362149,
+   "cost_per_year": 0.0005
+  },
+  "note": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here"
+ },
+ "classic_qmj_part24": {
+  "part": 24,
+  "research": {
+   "mean": 0.040400252282695205,
+   "vol": 0.07460872348709564,
+   "sharpe": 0.5414950208829513,
+   "sharpe_se": 0.125835895930709,
+   "maxdd": -0.2820641127281096,
+   "n": 762,
+   "sharpe_net": 0.4074624368550314,
+   "cost_per_year": 0.01
+  },
+  "holdout": {
+   "mean": 0.0293748235684339,
+   "vol": 0.11866141368926988,
+   "sharpe": 0.24755160633224577,
+   "sharpe_se": 0.4524647888107088,
+   "maxdd": -0.29457030706541454,
+   "n": 60,
+   "sharpe_net": 0.1632782129089525,
+   "cost_per_year": 0.01
+  },
+  "note": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here"
+ },
+ "classic_rmw_part24": {
+  "part": 24,
+  "research": {
+   "mean": 0.029589565217391298,
+   "vol": 0.07533815469333387,
+   "sharpe": 0.39275670260091283,
+   "sharpe_se": 0.13805717541314289,
+   "maxdd": -0.4178744871762301,
+   "n": 690,
+   "sharpe_net": 0.2600218348475775,
+   "cost_per_year": 0.01
+  },
+  "holdout": {
+   "mean": 0.058539999999999995,
+   "vol": 0.09373708109857783,
+   "sharpe": 0.6245127255289386,
+   "sharpe_se": 0.44147719065852703,
+   "maxdd": -0.140892074171455,
+   "n": 60,
+   "sharpe_net": 0.5178313579975178,
+   "cost_per_year": 0.01
+  },
+  "note": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here"
+ },
+ "classic_smb_part24": {
+  "part": 24,
+  "research": {
+   "mean": 0.027561739130434783,
+   "vol": 0.10459343248388327,
+   "sharpe": 0.2635130951905776,
+   "sharpe_se": 0.1306641013866794,
+   "maxdd": -0.5644845779392695,
+   "n": 690,
+   "sharpe_net": 0.1679047977810735,
+   "cost_per_year": 0.01
+  },
+  "holdout": {
+   "mean": -0.0466,
+   "vol": 0.10707946993404446,
+   "sharpe": -0.4351907982800367,
+   "sharpe_se": 0.4672991561120341,
+   "maxdd": -0.32675703550634705,
+   "n": 60,
+   "sharpe_net": -0.5285793816019331,
+   "cost_per_year": 0.01
+  },
+  "note": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here"
+ },
+ "classic_tsmom_part24": {
+  "part": 24,
+  "research": {
+   "mean": 0.13171150309227514,
+   "vol": 0.12387567651811231,
+   "sharpe": 1.0632555703783955,
+   "sharpe_se": 0.1691157692975893,
+   "maxdd": -0.23525016493067508,
+   "n": 432,
+   "sharpe_net": 0.9825294723979108,
+   "cost_per_year": 0.01
+  },
+  "holdout": {
+   "mean": 0.03698491467795928,
+   "vol": 0.13257440163589732,
+   "sharpe": 0.2789747811160011,
+   "sharpe_se": 0.45395373388760757,
+   "maxdd": -0.1700793283339761,
+   "n": 60,
+   "sharpe_net": 0.20354543822170676,
+   "cost_per_year": 0.01
+  },
+  "note": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here"
+ },
+ "classic_umd_part24": {
+  "part": 24,
+  "research": {
+   "mean": 0.07613297872340426,
+   "vol": 0.1637960533606023,
+   "sharpe": 0.4648034989939289,
+   "sharpe_se": 0.12836458310063564,
+   "maxdd": -0.7843714812680127,
+   "n": 1128,
+   "sharpe_net": 0.281648902869723,
+   "cost_per_year": 0.03
+  },
+  "holdout": {
+   "mean": 0.023119999999999995,
+   "vol": 0.12930727875484446,
+   "sharpe": 0.1787989061608321,
+   "sharpe_se": 0.4650601730434612,
+   "maxdd": -0.2254243181195067,
+   "n": 60,
+   "sharpe_net": -0.05320659491291207,
+   "cost_per_year": 0.03
+  },
+  "note": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here"
+ },
+ "classic_valmom_part24": {
+  "part": 24,
+  "research": {
+   "mean": 0.04496625777766085,
+   "vol": 0.04175726338030199,
+   "sharpe": 1.076848771628857,
+   "sharpe_se": 0.13455903922063456,
+   "maxdd": -0.09800207264697747,
+   "n": 588,
+   "sharpe_net": 0.7176298289651981,
+   "cost_per_year": 0.015
+  },
+  "holdout": {
+   "mean": 0.033522454909619456,
+   "vol": 0.03164807874400597,
+   "sharpe": 1.059225590936337,
+   "sharpe_se": 0.441152981784774,
+   "maxdd": -0.02739032014717868,
+   "n": 60,
+   "sharpe_net": 0.585263170615927,
+   "cost_per_year": 0.015
+  },
+  "note": "as published: Fama-French (2015) 2x3 factors and UMD (Ken French library); BAB, QMJ, TSMOM and the 50/50 value-momentum mix of VAL and MOM (AQR data sets); no parameters chosen here"
+ },
+ "equal_weight_part30": {
+  "part": 30,
+  "research": {
+   "mean": 0.09076610253857642,
+   "vol": 0.16550069168394746,
+   "sharpe": 0.5484333727855963,
+   "sharpe_se": 0.16743587397851242,
+   "maxdd": -0.5369546347734813,
+   "n": 492,
+   "sharpe_net": 0.5484333727855963,
+   "cost_per_year": 0.0
+  },
+  "holdout": {
+   "mean": 0.09396693877551024,
+   "vol": 0.16196761312508726,
+   "sharpe": 0.5801588167070151,
+   "sharpe_se": 0.45467403308265525,
+   "maxdd": -0.21074377700908264,
+   "n": 60,
+   "sharpe_net": 0.5801588167070151,
+   "cost_per_year": 0.0
+  },
+  "note": "1/N, 120-month window, monthly; cost 10 bp a dollar traded on measured turnover"
+ },
+ "gp_calm_reversal_part31": {
+  "part": 31,
+  "research": {
+   "mean": 0.06598915298137137,
+   "vol": 0.123800725859077,
+   "sharpe": 0.5330271896506257,
+   "sharpe_se": 0.5386266183169534,
+   "maxdd": -0.09830611729808492,
+   "n": 33,
+   "sharpe_net": 0.5330271896506257,
+   "cost_per_year": 0.0
+  },
+  "holdout": {
+   "mean": -1.793964317547144,
+   "vol": 4.129260928730186,
+   "sharpe": -0.43445167271103324,
+   "sharpe_se": 0.25094614090235096,
+   "maxdd": -2.293355868100469,
+   "n": 60,
+   "sharpe_net": -0.43445167271103324,
+   "cost_per_year": 0.0
+  },
+  "note": "GP-traded calm and reversal signals on Binance coins, net of the quadratic cost model, scaled to 10% research volatility"
+ },
+ "house_ensemble_part43": {
+  "part": 43,
+  "research": {
+   "mean": 0.03982962840079328,
+   "vol": 0.03858916352289453,
+   "sharpe": 1.0321454202333977,
+   "sharpe_se": 0.18552268028129987,
+   "maxdd": -0.10485138752938739,
+   "n": 336,
+   "sharpe_net": 0.7063018108523619,
+   "cost_per_year": 0.012574032325294967
+  },
+  "holdout": {
+   "mean": 0.03235843826154883,
+   "vol": 0.04272871662749419,
+   "sharpe": 0.7572995590681394,
+   "sharpe_se": 0.4648280911599277,
+   "maxdd": -0.0644115966763894,
+   "n": 60,
+   "sharpe_net": 0.4630236407223005,
+   "cost_per_year": 0.012574032325294967
+  },
+  "note": "equal risk across Part 24's ten classic factors (MKT, SMB, HML, UMD, RMW, CMA, BAB, QMJ, TSMOM, VALMOM): weights proportional to 1 / each factor's 2011-2020 monthly volatility, summing to one, fixed for the hold-out; costs: the weighted sum of Part 24's cost model"
+ },
+ "hrp_part30": {
+  "part": 30,
+  "research": {
+   "mean": 0.09114911937824591,
+   "vol": 0.14641514332131217,
+   "sharpe": 0.6225388802729004,
+   "sharpe_se": 0.17017390944397956,
+   "maxdd": -0.4857380480029859,
+   "n": 492,
+   "sharpe_net": 0.6104671895155097,
+   "cost_per_year": 0.0017674783323739268
+  },
+  "holdout": {
+   "mean": 0.07131346047963488,
+   "vol": 0.14141978473799863,
+   "sharpe": 0.5042679184652541,
+   "sharpe_se": 0.4555285924160004,
+   "maxdd": -0.1860182101740041,
+   "n": 60,
+   "sharpe_net": 0.49176982043994294,
+   "cost_per_year": 0.0017674783323739268
+  },
+  "note": "HRP, 120-month window, monthly; cost 10 bp a dollar traded on measured turnover"
+ },
+ "kmz_timer_part27": {
+  "part": 27,
+  "research": {
+   "mean": 0.032682829920034184,
+   "vol": 0.10004632847132944,
+   "sharpe": 0.32667695476101544,
+   "sharpe_se": 0.1088293840577907,
+   "maxdd": -0.42568988499794946,
+   "n": 1080,
+   "sharpe_net": 0.31668158546281505,
+   "cost_per_year": 0.001
+  },
+  "holdout": {
+   "mean": -0.009815001584613778,
+   "vol": 0.05624517956226064,
+   "sharpe": -0.17450387146064764,
+   "sharpe_se": 0.44728693475452036,
+   "maxdd": -0.15086519699218792,
+   "n": 60,
+   "sharpe_net": -0.19228317286536722,
+   "cost_per_year": 0.001
+  },
+  "note": "RFF ridge, P = 12000, z = 0.1"
+ },
+ "kns_sdf_part25": {
+  "part": 25,
+  "research": {
+   "mean": 0.4627653020867415,
+   "vol": 0.10008691874739589,
+   "sharpe": 4.623634215922766,
+   "sharpe_se": 0.1977189598049596,
+   "maxdd": -0.06983873560500475,
+   "n": 576,
+   "sharpe_net": 4.423807902451403,
+   "cost_per_year": 0.02
+  },
+  "holdout": {
+   "mean": 0.34678180435980877,
+   "vol": 0.11331305753708863,
+   "sharpe": 3.0603869659620044,
+   "sharpe_se": 0.5962873587651201,
+   "maxdd": -0.04934284574867387,
+   "n": 36,
+   "sharpe_net": 2.883884800768432,
+   "cost_per_year": 0.02
+  },
+  "note": "{\"universe\": \"OSAP 2024.10 predictors complete 1973-2023 (154)\", \"fit\": \"1973-01 to 2020-12\", \"kappa_grid\": 20, \"folds\": 3, \"scale\": \"10% a year in sample\", \"cost_per_year\": 0.02}"
+ },
+ "lw_gmv_part30": {
+  "part": 30,
+  "research": {
+   "mean": 0.07504955914657789,
+   "vol": 0.12080301714862643,
+   "sharpe": 0.621255668260693,
+   "sharpe_se": 0.16346937063436068,
+   "maxdd": -0.42768268309333957,
+   "n": 492,
+   "sharpe_net": 0.5919441265849007,
+   "cost_per_year": 0.0035409226717134207
+  },
+  "holdout": {
+   "mean": 0.04775651541721084,
+   "vol": 0.13482858975804596,
+   "sharpe": 0.35420169789590894,
+   "sharpe_se": 0.44123901678139743,
+   "maxdd": -0.14348330563303413,
+   "n": 60,
+   "sharpe_net": 0.32793929555180884,
+   "cost_per_year": 0.0035409226717134207
+  },
+  "note": "LW const-corr GMV, 120-month window, monthly; cost 10 bp a dollar traded on measured turnover"
+ },
+ "mined_combination_part29": {
+  "part": 29,
+  "research": {
+   "mean": 0.14072345283483767,
+   "vol": 0.08138925257948487,
+   "sharpe": 1.7290176328552336,
+   "sharpe_se": 0.5429719055526289,
+   "maxdd": -0.037743408689326796,
+   "n": 36,
+   "sharpe_net": 0.8820440154723592,
+   "cost_per_year": 0.06893454967333476
+  },
+  "holdout": {
+   "mean": 0.16877283380285824,
+   "vol": 0.06071146136415563,
+   "sharpe": 2.7799171690257256,
+   "sharpe_se": 0.7112666393759276,
+   "maxdd": -0.07279880308554965,
+   "n": 60,
+   "sharpe_net": 1.644471766717652,
+   "cost_per_year": 0.06893454967333476
+  },
+  "note": "daily long-short of the mined combination; cost: 10 bp a round trip on the measured 2018-2020 turnover"
+ },
+ "nn3_coin_ls_part27": {
+  "part": 27,
+  "research": {
+   "mean": -0.4432392508526824,
+   "vol": 0.621875405035291,
+   "sharpe": -0.7127460698136612,
+   "sharpe_se": 0.7711087429469794,
+   "maxdd": -0.8268630993186549,
+   "n": 24,
+   "sharpe_net": -0.9073037169280322,
+   "cost_per_year": 0.12099061560196284
+  },
+  "holdout": {
+   "mean": 0.9586707645143223,
+   "vol": 0.7412228423986774,
+   "sharpe": 1.2933637627949508,
+   "sharpe_se": 0.3361973349301962,
+   "maxdd": -0.3684516879693863,
+   "n": 60,
+   "sharpe_net": 1.1301326686068327,
+   "cost_per_year": 0.12099061560196284
+  },
+  "note": "value-weighted quintile long-short, weekly"
+ },
+ "residual_sscore_part33": {
+  "part": 33,
+  "research": {
+   "mean": 0.006317544860511448,
+   "vol": 0.02893787970332268,
+   "sharpe": 0.21831402042168485,
+   "sharpe_se": 0.1918369799991889,
+   "maxdd": -0.11960081074020446,
+   "n": 324,
+   "sharpe_net": 0.21831402042168485,
+   "cost_per_year": 0.0
+  },
+  "holdout": {
+   "mean": 0.010512909921140809,
+   "vol": 0.029595667838581738,
+   "sharpe": 0.3552178642657925,
+   "sharpe_se": 0.4422662732998599,
+   "maxdd": -0.05508420589831731,
+   "n": 60,
+   "sharpe_net": 0.3552178642657925,
+   "cost_per_year": 0.0
+  },
+  "note": "Avellaneda-Lee residual s-scores on the 49 industries, research-chapter band, net of 5 bp"
+ },
+ "riskparity_part32": {
+  "part": 32,
+  "research": {
+   "mean": 0.061183250823263494,
+   "vol": 0.12567429630141727,
+   "sharpe": 0.48683981230753465,
+   "sharpe_se": 0.29278214353624105,
+   "maxdd": -0.28993860822216977,
+   "n": 167,
+   "sharpe_net": 0.48683981230753465,
+   "cost_per_year": 0.0
+  },
+  "holdout": {
+   "mean": 0.01546782789543369,
+   "vol": 0.10477787527248744,
+   "sharpe": 0.14762494329272993,
+   "sharpe_se": 0.45733336765422966,
+   "maxdd": -0.25998035068414727,
+   "n": 59,
+   "sharpe_net": 0.14762494329272993,
+   "cost_per_year": 0.0
+  },
+  "note": "inverse-vol risk parity on 10 ETFs, excess of T-bills, before costs"
+ },
+ "sestm_fomc_drift_part28": {
+  "part": 28,
+  "research": {
+   "mean": -0.0002881318681318692,
+   "vol": 0.007560336623120457,
+   "sharpe": -0.038110984007077915,
+   "sharpe_se": 0.25571708651881253,
+   "maxdd": -0.04140678545235543,
+   "n": 182,
+   "sharpe_net": -0.23916023297195194,
+   "cost_per_year": 0.0015199999999999999
+  },
+  "holdout": {
+   "mean": 0.0025580487804878153,
+   "vol": 0.00812684233521627,
+   "sharpe": 0.31476540025920663,
+   "sharpe_se": 0.524638596518852,
+   "maxdd": -0.00589051117372108,
+   "n": 41,
+   "sharpe_net": 0.12773088706170774,
+   "cost_per_year": 0.0015199999999999999
+  },
+  "note": "statement months only; flat in other months"
+ },
+ "trend_part32": {
+  "part": 32,
+  "research": {
+   "mean": 0.051421675674357584,
+   "vol": 0.10529890124685289,
+   "sharpe": 0.48834009724194,
+   "sharpe_se": 0.2653442536611037,
+   "maxdd": -0.1629392670514782,
+   "n": 165,
+   "sharpe_net": 0.48834009724194,
+   "cost_per_year": 0.0
+  },
+  "holdout": {
+   "mean": 0.026870128159557756,
+   "vol": 0.09774926744412529,
+   "sharpe": 0.27488828164279655,
+   "sharpe_se": 0.4492300195942672,
+   "maxdd": -0.1688432817962815,
+   "n": 59,
+   "sharpe_net": 0.27488828164279655,
+   "cost_per_year": 0.0
+  },
+  "note": "TSMOM on 23 ETFs, excess of T-bills, before costs"
+ },
+ "zoo_equal_weight_part25": {
+  "part": 25,
+  "research": {
+   "mean": 0.060016884384517466,
+   "vol": 0.029060283620488812,
+   "sharpe": 2.0652545986234916,
+   "sharpe_se": 0.15246418306925993,
+   "maxdd": -0.04196784561770195,
+   "n": 576,
+   "sharpe_net": 1.7211423342493914,
+   "cost_per_year": 0.01
+  },
+  "holdout": {
+   "mean": 0.07219353385336269,
+   "vol": 0.03365822662403781,
+   "sharpe": 2.144900105990848,
+   "sharpe_se": 0.6266646689545321,
+   "maxdd": -0.024184166024367015,
+   "n": 36,
+   "sharpe_net": 1.8477959206842387,
+   "cost_per_year": 0.01
+  },
+  "note": "{\"universe\": \"OSAP 2024.10 predictors complete 1973-2023 (154)\", \"fit\": \"1973-01 to 2020-12\", \"kappa_grid\": 20, \"folds\": 3, \"scale\": \"10% a year in sample\", \"cost_per_year\": 0.02}"
+ }
+}

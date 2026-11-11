@@ -1,0 +1,715 @@
+{
+ "title": "量化金融，从零搭建 · 第43部分：你能战胜市场吗？",
+ "chapters": {
+  "Hook": "技能还是运气？",
+  "Arithmetic": "1. 夏普的算术",
+  "Luck": "2. 运气还是技能？",
+  "Scale": "3. 技能、规模与资金",
+  "Adaptive": "4. 适应性市场",
+  "Record": "5. 预先设计证据记录",
+  "Surface": "6. 公共定价汇总的比较",
+  "Open": "7. 我们仍然不知道的",
+  "Bachelier": "8. 回到巴舍利耶",
+  "Journey": "9. 本系列公司的历程",
+  "House": "10. 第43条规则：市场是默认选项",
+  "Research": "写给研究者：空假设计数与资金配置",
+  "Outro": "回顾、交易台问题与习题"
+ },
+ "lines": {
+  "769c774f51e4": {
+   "scene": "Hook",
+   "en": "Part forty-three, the last. Can you beat the market? The question every part of this series has been circling, asked directly: with arithmetic, with statistics, with the economics of skill, and with an evidence protocol, and explicit limits on what the examples establish.",
+   "zh": "第43部分，也是最后一部分。你能战胜市场吗？整个系列一直围绕这个问题。现在用算术、统计、技能的经济学和证据方案直接讨论，并明确每个例子能够说明什么。"
+  },
+  "d3dbcdf2de4f": {
+   "scene": "Hook",
+   "en": "Four findings, with their scope. <bookmark mark='a'/> In the stylised additive Gaussian model, a zero-skill manager facing a one percent annual cost is ahead after fifteen years 22 percent of the time. <bookmark mark='b'/> The best statistic among two thousand simulated zero-alpha funds is 3.58. <bookmark mark='c'/> In a different simulated population, ordinary BH selects 13 funds at its ten percent level, with realised false fraction 0 percent. That is not expected FDR. <bookmark mark='d'/> Finally, daily market autocorrelation differs across historical windows. This describes a sample pattern; it does not identify learning as its cause or establish an executable return.",
+   "zh": "四项发现，以及各自的适用范围。<bookmark mark='a'/>在简化的可加高斯模型中，没有技能、每年承担百分之一成本的经理，十五年后仍领先的概率是百分之22。<bookmark mark='b'/>两千只模拟零阿尔法基金中，最大的统计量是3.58。<bookmark mark='c'/>另一个模拟群体中，普通本杰明尼与霍赫伯格程序在百分之十水平选出13只基金，实际错误比例是百分之0。这不是期望错误发现率。<bookmark mark='d'/>最后，市场日收益自相关在不同历史窗口有所差异。这只是样本特征，不能据此认定原因是学习，也不能认定存在可实现的收益。"
+  },
+  "48c102cd0895": {
+   "scene": "Hook",
+   "en": "The desk question, answered in Chapter two. <bookmark mark='a'/> Your fund beat the market five years running. <bookmark mark='b'/> Two thousand other funds were trying. <bookmark mark='c'/> Skill, or luck? And how would you ever tell?",
+   "zh": "交易台问题，在第2章回答。<bookmark mark='a'/>你的基金连续五年跑赢市场。<bookmark mark='b'/>另有两千只基金也在尝试。<bookmark mark='c'/>是技能，还是运气？你又怎么才能分辨？"
+  },
+  "ed6971b59e9b": {
+   "scene": "Hook",
+   "en": "Why the question matters. <bookmark mark='a'/> An investor needs a benchmark, risk definition and implementation costs before an improvement can be measured. <bookmark mark='b'/> A researcher must account for selection as well as noise. <bookmark mark='c'/> The House's governance example asks what evidence would justify changing a decision rule. That question remains meaningful without claiming any particular portfolio has passed its test.",
+   "zh": "为什么这个问题重要。<bookmark mark='a'/>投资者必须先确定基准、风险和实施成本，才能衡量改进。<bookmark mark='b'/>研究者必须同时考虑筛选和噪声。<bookmark mark='c'/>本系列公司的治理例子追问：什么证据足以支持改变决策规则？即使没有宣称某个组合通过检验，这个问题仍然有意义。"
+  },
+  "c6c240993520": {
+   "scene": "Hook",
+   "en": "The question is older than the field. <bookmark mark='a'/> In nineteen thirty-three Alfred Cowles scored professional forecasts and reported weak evidence of ability in his sample. <bookmark mark='b'/> In nineteen sixty-eight Michael Jensen measured mutual funds against the market's risk-adjusted return, in an influential empirical study of fund alpha. <bookmark mark='c'/> And in nineteen seventy-six John Bogle's first retail index fund turned Sharpe's arithmetic, before Sharpe wrote it down, into a product.",
+   "zh": "这个问题比这个领域还古老。<bookmark mark='a'/>一九三三年，阿尔弗雷德·考尔斯评价专业预测，在其样本中发现预测能力的证据较弱。<bookmark mark='b'/>一九六八年，迈克尔·詹森对照市场的风险调整收益衡量共同基金，发表了有影响力的基金阿尔法实证研究。<bookmark mark='c'/>一九七六年，约翰·博格的第一只零售指数基金，在夏普写下算术之前，就把它变成了产品。"
+  },
+  "1af30c7779ce": {
+   "scene": "Hook",
+   "en": "The scope. <bookmark mark='a'/> The fund examples use fixed-seed simulated populations with known truth, rather than an empirical census of managers. <bookmark mark='b'/> The market examples use French daily returns through twenty twenty and authenticated earlier public pricing summaries. <bookmark mark='c'/> The record chapter is a prospective protocol and the House is a governance teaching example. Sealed strategy outcomes are excluded from this presentation; no strategy ensemble is run here.",
+   "zh": "本讲范围。<bookmark mark='a'/>基金例子采用固定随机种子、真值已知的模拟群体，并非真实经理的全面普查。<bookmark mark='b'/>市场例子采用截至二〇二〇年的弗伦奇日收益，以及经过认证的既有公开定价汇总。<bookmark mark='c'/>记录一章介绍前瞻方案，公司则是治理教学例子。本讲排除封存策略结果，也不运行策略组合。"
+  },
+  "8a040910121b": {
+   "scene": "Hook",
+   "en": "Where this sits: the separate finale after the seven acts, and the last part of the series. Risk measured, crises followed, machines let loose; and now the question that all forty-two before it were preparing.",
+   "zh": "这一部分的位置：七幕之后的独立终章，也是整个系列最后一部分。已经度量风险、追踪危机、研究机器，现在回到此前四十二部分都在准备的问题。"
+  },
+  "e37fb9c37576": {
+   "scene": "Hook",
+   "en": "The plan: Sharpe's arithmetic; luck against skill; where skill's rewards go; markets that adapt; the design of a performance record; pricing comparisons; the open problems; a return to where the series began; and the theorem behind counting skill.",
+   "zh": "计划包括夏普的算术、运气与技能、技能回报的去向、适应性市场、业绩记录的设计、定价比较、开放问题、回到系列起点，以及技能计数背后的定理。"
+  },
+  "c32ade55870f": {
+   "scene": "Hook",
+   "en": "In the House, every desk is built. For the last time, they report together, and the question is not what each one can do, but what evidence and risk controls a combined decision would need.",
+   "zh": "本系列公司的各部门已经建立。最后一次联合汇报，问题变成：综合决策需要什么证据和风险控制？"
+  },
+  "083f98286315": {
+   "scene": "Hook",
+   "en": "Pause and predict. Before costs, what is the average return of all actively managed money, relative to the market?",
+   "zh": "暂停并预测。扣除成本之前，所有主动管理资金的平均收益相对于市场是多少？"
+  },
+  "4065be95253f": {
+   "scene": "Arithmetic",
+   "en": "Chapter one, and the answer to the pause: exactly the market's return, before costs. Not roughly: exactly, for a common defined market with market-weighted passive holdings and a positive active share. William Sharpe called it the arithmetic of active management, and it needs no model of prices, no theory of efficiency and no data. It is accounting.",
+   "zh": "第1章，也是暂停问题的答案：扣除成本前，恰好等于市场收益。这要求同一个明确的市场、按市值权重持有的被动组合，以及正的主动份额。威廉·夏普称之为主动管理的算术，不需要价格模型、有效性理论或数据。这是会计恒等式。"
+  },
+  "f9e1322fe167": {
+   "scene": "Arithmetic",
+   "en": "The argument. <bookmark mark='a'/> Every dollar invested in a market is held by someone, either passively or actively. <bookmark mark='b'/> A passive investor holds every security in its market weight. <bookmark mark='c'/> So passive money earns exactly the market's return. <bookmark mark='d'/> And because the market is the average of the two, active money, in aggregate, earns exactly the market's return too, before costs. Every active winner is matched, dollar for dollar, by an active loser.",
+   "zh": "论证。<bookmark mark='a'/>投入市场的每一美元都由某人持有，要么被动，要么主动。<bookmark mark='b'/>被动投资者按市场权重持有每一只证券。<bookmark mark='c'/>所以被动资金恰好赚取市场收益。<bookmark mark='d'/>又因为市场是两者的平均，主动资金合在一起，扣除成本前也恰好赚取市场收益。每一个主动的赢家，都按美元对美元地对应着一个主动的输家。"
+  },
+  "8ae1ccca5766": {
+   "scene": "Arithmetic",
+   "en": "In three lines. <bookmark mark='a'/> The market's return is the weighted average of passive and active returns. <bookmark mark='b'/> Put in the passive return, which is the market's. <bookmark mark='c'/> So the active return is the market's, and after costs the average active dollar trails the average passive one by exactly the difference in what they pay.",
+   "zh": "三行。<bookmark mark='a'/>市场收益是被动收益与主动收益的加权平均。<bookmark mark='b'/>代入被动收益，它就是市场收益。<bookmark mark='c'/>所以主动收益等于市场收益，扣除成本后，平均的主动美元落后平均的被动美元，差额恰好是两者支付成本之差。"
+  },
+  "b8345f404cf6": {
+   "scene": "Arithmetic",
+   "en": "So what does a manager with no skill look like? <bookmark mark='a'/> Each year it trails the index by its constant excess cost on average in this iid additive Gaussian example, with the stated tracking error. This sums active returns; it is not a general compounded-wealth calculation. <bookmark mark='b'/> The chance it is ahead after T years is this. <bookmark mark='c'/> Costs add up linearly in time, while luck grows only as the square root: the longer the horizon, the more the arithmetic wins.",
+   "zh": "那么，没有技能的经理是什么样子？<bookmark mark='a'/>在这个独立同分布的可加高斯例子中，它每年平均落后指数一个固定的额外成本，并具有给定跟踪误差。这里累加主动收益，不是一般的复利财富计算。<bookmark mark='b'/>经过若干年后领先的概率如式所示。<bookmark mark='c'/>成本随时间线性累加，运气只按平方根增长，期限越长，算术越占上风。"
+  },
+  "238cbbdaa8f0": {
+   "scene": "Arithmetic",
+   "en": "With a one percent cost and five percent tracking error. <bookmark mark='a'/> After one year, 42 percent of zero-skill managers are ahead of the index: almost a coin toss. <bookmark mark='b'/> After fifteen years, 22 percent; after thirty, 14. <bookmark mark='c'/> Twenty thousand simulated managers sit on the formula. So a minority beating the index over fifteen years is what luck alone predicts: it is not, by itself, evidence of skill.",
+   "zh": "成本百分之一、跟踪误差百分之五。<bookmark mark='a'/>一年后，42%的零技能基金经理领先指数：几乎是抛硬币。<bookmark mark='b'/>十五年后，22%；三十年后，14%。<bookmark mark='c'/>两万个模拟的基金经理落在公式曲线上。所以少数人在十五年里跑赢指数，正是单凭运气就会出现的情况：它本身并不是技能的证据。"
+  },
+  "aabd3779de64": {
+   "scene": "Arithmetic",
+   "en": "How much information accumulates? <bookmark mark='a'/> In an iid stable Gaussian model, a test's signal-to-noise noncentrality grows like the information ratio times square-root years. <bookmark mark='b'/> Setting that quantity to two gives two over the information ratio, squared. <bookmark mark='c'/> The illustrative horizons are sixteen, forty-four and one hundred years. These are not guaranteed discovery dates or power calculations. At noncentrality two, a threshold near two still has power only around one half in a normal approximation. Multiple testing, changing skill and dependent returns require more than this scaling calculation.",
+   "zh": "信息积累多少？<bookmark mark='a'/>在独立同分布、稳定的高斯模型中，检验的信噪非中心参数等于信息比率乘以年数的平方根。<bookmark mark='b'/>令其等于二，得到二除以信息比率，再平方。<bookmark mark='c'/>示例期限分别是十六、四十四和一百年。这不是保证发现的日期，也不是检验功效计算。在正态近似下，非中心参数为二、阈值接近二，功效仍只有约一半。多重检验、技能变化和收益依赖需要额外分析。"
+  },
+  "fa1323b1c2ad": {
+   "scene": "Arithmetic",
+   "en": "And by cost. <bookmark mark='a'/> At a quarter of a percent a year, 42 percent of zero-skill managers are still ahead after fifteen years. <bookmark mark='b'/> At two percent, 6. The contractual percentage is an input here; dollar fees depend on assets and terms can change. Costs reduce expected returns under the model.",
+   "zh": "再看成本。<bookmark mark='a'/>每年百分之零点二五成本时，十五年后仍领先的无技能经理占百分之42。<bookmark mark='b'/>成本为百分之二时，是百分之6。合约费率在这里是输入；实际费用金额取决于资产，条款也会变化。在模型下，成本降低期望收益。"
+  },
+  "19046c1a8858": {
+   "scene": "Arithmetic",
+   "en": "An illustrative fee convention subtracts f times beginning-of-year wealth from a constant seven percent annual gross gain; growth is one point zero seven minus f. <bookmark mark='a'/> One unit at a seven percent gross return for thirty years, at a chosen cost of point zero five percent, becomes 7.5. <bookmark mark='b'/> At one percent a year, 5.7; at two, 4.3: 42 percent less wealth, for the same market. The certain part of a manager's return is the one that grows.",
+   "zh": "采用一种示例费用约定：固定每年百分之七的毛收益，减去费率乘年初财富，因此增长因子是一点零七减费率。<bookmark mark='a'/>一单位财富，年毛收益百分之七，三十年，选定成本百分之零点零五，变成7.5。<bookmark mark='b'/>年成本百分之一时是5.7；百分之二时是4.3。同一个市场，财富减少百分之42。费用的复利影响持续累积。"
+  },
+  "223b18044b2c": {
+   "scene": "Arithmetic",
+   "en": "What the arithmetic makes of the game. <bookmark mark='a'/> Before costs, active management is zero-sum relative to the market: every gain is another active manager's loss. <bookmark mark='b'/> After costs, it is negative-sum. <bookmark mark='c'/> An individual winner may reflect information, risk exposures or luck; the identity does not identify its cause. Charles Ellis called active management the loser's game.",
+   "zh": "算术对这场游戏意味着什么。<bookmark mark='a'/>相对市场、扣除成本前，主动管理是零和的：每一份主动收益对应其他主动资金的损失。<bookmark mark='b'/>扣除成本后是负和。<bookmark mark='c'/>单个赢家可能来自信息、风险暴露或运气，恒等式不能识别原因。查尔斯·埃利斯称主动管理为输家的游戏。"
+  },
+  "d5d6b6fa5f28": {
+   "scene": "Arithmetic",
+   "en": "A dated empirical comparison. <bookmark mark='a'/> The SPIVA U.S. year-end twenty twenty-four report states that sixty-five percent of active large-cap U.S. equity funds underperformed the S and P five hundred in that year. <bookmark mark='b'/> This is a category-specific fund-count result with a stated benchmark and methodology, not the value-weighted holdings identity. Horizons, fees and treatment of closed or merged funds matter. <bookmark mark='c'/> A performance fraction alone does not identify each winning manager's true alpha or forecast the next period.",
+   "zh": "一项有日期的实证比较。<bookmark mark='a'/>标普主动与被动投资二〇二四年美国年终报告指出，当年百分之六十五的主动大型美国股票基金落后标普五百指数。<bookmark mark='b'/>这是特定类别、特定基准和方法下按基金数量统计的结果，并非市值加权持仓恒等式。期限、费用以及清盘合并基金的处理都重要。<bookmark mark='c'/>单个业绩比例不能识别每位赢家的真实阿尔法，也不能预测下一期。"
+  },
+  "6d873cdeae01": {
+   "scene": "Arithmetic",
+   "en": "Pedersen sharpens the comparison. <bookmark mark='a'/> Issuance, repurchases and index changes make passive implementation a trading task. <bookmark mark='b'/> An index fund can differ from the complete market portfolio and face execution frictions; returns must be compared under those actual holdings and flows. <bookmark mark='c'/> Liquidity provision can then add value. This does not invalidate the conditional accounting identity. It changes the comparator and the economic assumptions, and it does not promise that every active manager earns the transfer.",
+   "zh": "佩德森让比较更精确。<bookmark mark='a'/>发行、回购和指数调整，使被动实施也需要交易。<bookmark mark='b'/>指数基金可能不同于完整市场组合，并面临执行摩擦；必须按实际持仓和资金流比较收益。<bookmark mark='c'/>此时提供流动性可能创造价值。这没有推翻有条件的会计恒等式，而是改变了比较对象和经济假设，也不保证每位主动经理都获得这项转移。"
+  },
+  "630fcb51b643": {
+   "scene": "Arithmetic",
+   "en": "A model for why information is acquired. <bookmark mark='a'/> Grossman and Stiglitz show, under their costly-information assumptions, why fully revealing prices cannot support the incentive to become informed. <bookmark mark='b'/> Equilibrium compensation depends on their information and market structure; this is not a universal assertion that every manager earns exactly an information cost. <bookmark mark='c'/> The mechanism can motivate research questions, but a particular manager's skill still needs evidence. Pedersen's efficiently inefficient perspective develops related economic intuition.",
+   "zh": "为什么获取信息的一种模型。<bookmark mark='a'/>格罗斯曼与斯蒂格利茨在其有成本信息假设下说明，完全揭示信息的价格无法支持付费获取信息的激励。<bookmark mark='b'/>均衡补偿取决于信息及市场结构，不表示每位经理都恰好赚取信息成本。<bookmark mark='c'/>机制可以激发研究问题，但特定经理的技能仍需证据。佩德森的有效地无效观点发展了相关经济直觉。"
+  },
+  "72254f105788": {
+   "scene": "Arithmetic",
+   "en": "Pause and predict. Two thousand funds, none with any skill at all, each measured over twenty years. How large is the best t-statistic for alpha among them?",
+   "zh": "暂停并预测。两千只基金，没有一只有任何技能，每只都观察二十年。它们中最高的阿尔法t统计量会有多大？"
+  },
+  "26a36a765de8": {
+   "scene": "Luck",
+   "en": "Chapter two, and the answer to the pause: about 3.6. In the House's simulation, the luckiest of two thousand skill-less funds has a t-statistic of 3.58, and 64 of them pass the usual two-standard-error test. A selected maximum can look impressive even under this null. A selected winner requires inference that accounts for the selection procedure; aggregate tail counts are one possible approach.",
+   "zh": "第2章，暂停问题的答案大约是3.6。教学模拟中，两千只无技能基金里，最幸运的统计量是3.58，其中64只通过通常的两倍标准误检验。即使空假设成立，筛选出的最大值也可能很惊人。需要考虑的不只是最佳基金是否显著，还包括整个筛选过程，以及好运本来就会产生多少好结果。"
+  },
+  "4fe34a9f5350": {
+   "scene": "Luck",
+   "en": "A toy streak calculation. <bookmark mark='a'/> Assume independent symmetric annual wins with probability one half, ignoring costs. A five-year winning streak then has probability one in thirty-two. <bookmark mark='b'/> Among two thousand funds the expected count is sixty-two point five, by linearity. <bookmark mark='c'/> If funds are also independent, the chance of at least one streak is extremely close to one. A selected winner therefore raises a selection problem. This is one null calculation, not a claim that every zero-mean return has a one-half win probability or that aggregate streak counting is the only possible test of skill.",
+   "zh": "一个简单的连胜计算。<bookmark mark='a'/>忽略成本，假设各年独立、对称，胜率为二分之一。那么连续五年获胜的概率是三十二分之一。<bookmark mark='b'/>两千只基金中，按期望线性性，预期有六十二点五只连胜。<bookmark mark='c'/>若基金之间也独立，至少一次连胜的概率极接近一。因此挑出的赢家带来筛选问题。这只是一个空模型计算，不表示所有零均值收益都具有一半胜率，也不表示群体连胜计数是唯一的技能检验。"
+  },
+  "770e0ce94bee": {
+   "scene": "Luck",
+   "en": "A world where the truth is known. <bookmark mark='a'/> Most funds have no alpha at all. <bookmark mark='b'/> About a quarter have negative alpha relative to the chosen benchmark; the generator does not separately model their fees. <bookmark mark='c'/> About one in a hundred has real skill. These are chosen teaching probabilities, motivated by the questions studied by Laurent Barras, Olivier Scaillet and Russ Wermers, rather than an empirical fit in this lecture. <bookmark mark='d'/> Each fund is measured for twenty years, with five percent tracking error.",
+   "zh": "一个真值已知的世界。<bookmark mark='a'/>多数基金没有阿尔法。<bookmark mark='b'/>约四分之一相对指定基准具有负阿尔法；生成器没有另外建立费用模型。<bookmark mark='c'/>约百分之一具有真实技能。这些是为教学选定的概率，受到巴拉斯、斯凯莱特和沃默斯研究问题的启发，并非本讲的实证拟合。<bookmark mark='d'/>每只基金观察二十年，跟踪误差百分之五。"
+  },
+  "b8224a4997ec": {
+   "scene": "Luck",
+   "en": "The t-statistics of all two thousand. <bookmark mark='a'/> The outline shows what they would look like if no fund had skill: a bell centred at zero. <bookmark mark='b'/> The simulated mixture is shifted left, by the unskilled quarter, with a thin extra tail on the right. <bookmark mark='c'/> Beyond the usual cut-off at two, the right tail holds a mix of a few skilled funds and many lucky ones. An individual statistic does not reveal true skill with certainty; population inference also needs assumptions.",
+   "zh": "全部两千只基金的统计量。<bookmark mark='a'/>轮廓线表示没有基金具有技能的情况，是以零为中心的钟形。<bookmark mark='b'/>模拟混合群体因负阿尔法组而向左移，右侧多出一条细尾。<bookmark mark='c'/>在通常约为二的阈值之外，右尾混合少数有技能基金和许多幸运基金。单个统计量不能确定真实技能；群体推断同样需要假设。"
+  },
+  "32a67c0c1f9d": {
+   "scene": "Luck",
+   "en": "A fresh simulated zero-alpha population provides a reference for the mixture population's t-statistics, percentile by percentile, with the same sample length and residual-volatility assumptions. This is not a bootstrap of real fund returns. <bookmark mark='a'/> In the left tail the funds are far worse than luck: -4.59 against -2.42 at the first percentile. <bookmark mark='b'/> In the right tail they are only a little better: 2.68 against 2.55 at the ninety-ninth. <bookmark mark='c'/> The standard-normal tail approximation puts about 50 funds above the usual cut-off, and 2.7 above a statistic of three; the simulated statistics have a finite-degree Student distribution, so these are approximate reference counts.",
+   "zh": "用新模拟的零阿尔法群体，逐分位数对照混合群体的统计量，保持样本长度和残差波动假设相同。这不是对真实基金收益的自助重抽样。<bookmark mark='a'/>左尾比运气糟得多：第一百分位是-4.59，参照为-2.42。<bookmark mark='b'/>右尾只略好：第九十九百分位是2.68，参照为2.55。<bookmark mark='c'/>标准正态尾部近似给出通常阈值以上约50只，统计量三以上约2.7只。模拟统计量服从有限自由度的学生分布，因此这里只是近似参照数量。"
+  },
+  "605299150901": {
+   "scene": "Luck",
+   "en": "The empirical literature uses a different experiment. <bookmark mark='a'/> Fama and French compare fund-alpha statistics with a bootstrapped null, with dependence handled in their resampling design. <bookmark mark='b'/> Their inference that few funds cover costs is conditional on their data, benchmarks and bootstrap assumptions. Other studies use different designs and obtain different tail conclusions. <bookmark mark='c'/> The lecture's displayed reference population is separately simulated at zero alpha; it does not reproduce that empirical bootstrap.",
+   "zh": "实证文献采用不同实验。<bookmark mark='a'/>法马和弗伦奇把基金阿尔法统计量与自助法空分布比较，并在重抽样设计中处理依赖。<bookmark mark='b'/>很少基金能够覆盖成本的推断，取决于他们的数据、基准和自助法假设。其他研究采用不同设计，尾部结论也可能不同。<bookmark mark='c'/>本讲展示的参照群体是另外模拟的零阿尔法样本，没有复现那项实证自助法。"
+  },
+  "543fdac8c732": {
+   "scene": "Luck",
+   "en": "The simplified tail decomposition. <bookmark mark='a'/> Scale the number of large two-sided p-values to estimate the zero-alpha share, recognising contamination from weak alternatives. <bookmark mark='b'/> The unchanged helper caps that estimate at one. <bookmark mark='c'/> It subtracts an estimated lucky-null tail share and takes the positive part. The result is a descriptive component estimate, not automatic identification of positive skill. Power, leakage from negative-alpha alternatives and both nonlinear guards matter. The research chapter proves the raw identity and its limits.",
+   "zh": "简化的尾部分解。<bookmark mark='a'/>把较大双侧概率值的数量缩放，估计零阿尔法比例，同时承认弱备择假设的污染。<bookmark mark='b'/>未改动的函数把这个估计上限截为一。<bookmark mark='c'/>再减去估计的幸运空假设尾部份额，并取正部。结果是描述性的成分估计，不会自动识别正技能。功效、负阿尔法备择向右尾泄漏，以及两项非线性保护都重要。研究一章会证明原始恒等式和限制。"
+  },
+  "8382a575daaf": {
+   "scene": "Luck",
+   "en": "The result in this one simulated population. <bookmark mark='a'/> The share with no alpha: 74.6 percent in truth, 75.6 estimated. <bookmark mark='b'/> Unskilled: 24.3 against 22.7. <bookmark mark='c'/> Skilled: 1.1 against 1.2. These estimates happen to be close in this selected run; they are not known empirical truth or a universal bound on the population shares.",
+   "zh": "这个模拟群体的结果。<bookmark mark='a'/>零阿尔法份额真值百分之74.6，估计百分之75.6。<bookmark mark='b'/>负技能份额为24.3，估计22.7。<bookmark mark='c'/>正技能份额为1.1，估计1.2。这次选定模拟中两者碰巧接近；它们不是已知实证真值，也不是群体比例的普遍界限。"
+  },
+  "af0842ac74ee": {
+   "scene": "Luck",
+   "en": "So what does a significant fund mean? <bookmark mark='a'/> 58 of the two thousand clear the usual bar. <bookmark mark='b'/> Of those, only 36 percent are truly skilled. <bookmark mark='c'/> The rest have nonpositive true alpha. This is a realised false discovery proportion in one run, not expected FDR. A star manager's record, alone, says less than it seems.",
+   "zh": "显著基金意味着什么？<bookmark mark='a'/>两千只基金中，58只超过通常门槛。<bookmark mark='b'/>其中只有百分之36真正具有技能。<bookmark mark='c'/>其余真实阿尔法非正。这是一次运行的实际错误发现比例，不是期望错误发现率。单看明星经理的记录，提供的信息可能比表面少。"
+  },
+  "012a2bf4ad1c": {
+   "scene": "Luck",
+   "en": "Persistence, in the simulated population. Rank funds by their first ten years, then watch the next ten. <bookmark mark='a'/> The bottom decile keeps losing: -2.8 percent a year, because its funds are mostly funds with negative true alpha. <bookmark mark='b'/> The top decile barely persists: +0.2 percent. Only 11 percent of its funds are truly skilled; the rest were lucky, and luck does not systematically repeat. This is a teaching mechanism, not a replication of Carhart's empirical study.",
+   "zh": "模拟群体中的持续性。先按前十年排名，再观察后十年。<bookmark mark='a'/>最差十分组继续亏损，每年百分之-2.8，主要因为组内基金的真实阿尔法为负。<bookmark mark='b'/>最好十分组的持续性很弱，每年百分之+0.2。其中只有百分之11真正具有技能；其余主要是好运，而好运不会系统性重复。这是机制教学例子，不能替代卡哈特的实证研究。"
+  },
+  "32fbb3c06f51": {
+   "scene": "Luck",
+   "en": "And over time. <bookmark mark='a'/> Mark Carhart found that winners' persistence is mostly momentum in what they hold, and differences in costs; only the worst funds reliably stay bad. <bookmark mark='b'/> High cost differences can persist; a lucky streak does not systematically persist. <bookmark mark='c'/> Which leaves a puzzle: if a little skill exists, why does it not show up as lasting outperformance?",
+   "zh": "再看时间。<bookmark mark='a'/>马克·卡哈特的研究把赢家持续性的很大部分与持仓动量及成本差异联系起来，最差基金的负持续性尤为明显。<bookmark mark='b'/>高成本差异可能持续，幸运连胜不会系统性持续。<bookmark mark='c'/>于是产生一个问题：如果存在少量技能，为什么它不表现为持久的超额收益？"
+  },
+  "8810121e09ab": {
+   "scene": "Luck",
+   "en": "Pause and predict. A manager is truly skilled, and investors can see it. Will the fund's investors earn more than the market? Will the manager?",
+   "zh": "暂停并预测。一位基金经理真正有技能，而且投资者看得出来。基金的投资者会赚得比市场多吗？基金经理呢？"
+  },
+  "ed25c93d217f": {
+   "scene": "Scale",
+   "en": "Chapter three. In the idealised competitive Bayesian model, positive allocations have zero conditional expected net alpha, while a manager is paid fees proportional to allocated assets. This is a model-specific mechanism, not a universal result for investors. Jonathan Berk and Richard Green's argument: money flows to a manager who has shown skill, and because skill does not scale, the flows continue until the fund's alpha to its investors is zero. The skill is real; it shows up in the fund's size and the manager's fees, not in investors' returns.",
+   "zh": "第3章。在理想化的竞争性贝叶斯模型中，正配置的条件期望净阿尔法为零，经理按所管理资产收取费用。这是特定模型的机制，不是投资者的普遍定理。伯克和格林的论证是：资金流向展现技能的经理，而技能存在规模限制，资金持续流入，直到投资者的阿尔法为零。技能可能真实存在，却体现于规模和费用，而非投资者的净收益。"
+  },
+  "84b27b042fde": {
+   "scene": "Scale",
+   "en": "The model, in the House's skill module. <bookmark mark='a'/> A manager earns a gross alpha a on the first dollar, and each extra dollar lowers it. <bookmark mark='b'/> Investors move money until the expected net alpha, after the fee, is zero. <bookmark mark='c'/> They do not know a, so they learn it from returns, by Bayes' rule. <bookmark mark='d'/> So the fund's size follows its estimated skill, and its investors' conditional expected invested-dollar alpha is zero under the stated Bayesian and noise assumptions, including a zero-asset boundary.",
+   "zh": "教学技能模型。<bookmark mark='a'/>经理在第一单位资金上获得毛阿尔法，每增加一单位资金，阿尔法下降。<bookmark mark='b'/>投资者调配资金，直到扣费后的期望净阿尔法为零。<bookmark mark='c'/>投资者不知道真实技能，因而按贝叶斯规则从收益学习。<bookmark mark='d'/>规模随估计技能变化。在给定贝叶斯和噪声假设下，包括零资产边界，投资者投入资金的条件期望阿尔法金额为零。"
+  },
+  "48567e5c54ca": {
+   "scene": "Scale",
+   "en": "Four hundred managers, twenty years, in simulation. <bookmark mark='a'/> The most skilled forty attract money as their records accumulate; <bookmark mark='b'/> most managers attract little or none: only 36 percent are running any money at the end. Among those, a manager's final size has a correlation of 0.86 with true skill. This finite model associates final size with true skill among active funds; it is not an empirical manager-selection guarantee.",
+   "zh": "四百位经理、二十年的模拟。<bookmark mark='a'/>最有技能的四十位随着记录积累吸引资金。<bookmark mark='b'/>多数经理吸引很少资金或没有资金，最后只有百分之36仍管理资产。其中最终规模与真实技能的相关系数为0.86。这是有限模型中存续基金的关联，不是实证经理筛选保证。"
+  },
+  "f95089edc497": {
+   "scene": "Scale",
+   "en": "And what investors earned. <bookmark mark='a'/> Weighted by the money actually invested, the net alpha scatters around zero: -0.4 percent a year on average. <bookmark mark='b'/> Its correlation with true skill is 0.02 in this selected finite run; this is not proof of zero dependence. <bookmark mark='c'/> The most skilled managers would earn 5.1 percent on their first dollar; at the size they reach, their gross alpha is 1.1 percent, just about their fee. Their skill went into their size.",
+   "zh": "投资者赚了什么？<bookmark mark='a'/>按实际投入资金加权，净阿尔法在零附近波动，平均每年百分之-0.4。<bookmark mark='b'/>这次有限模拟中，它与真实技能的相关系数为0.02，不能据此证明零依赖。<bookmark mark='c'/>最有技能的经理在第一单位资金上可得百分之5.1，达到最终规模后毛阿尔法为百分之1.1，大致等于费用。技能体现在规模上。"
+  },
+  "313ea72db9a4": {
+   "scene": "Scale",
+   "en": "So who gets what. <bookmark mark='a'/> The manager's revenue is the fee times the assets: in the simulation, about 15 units a year across the industry. <bookmark mark='b'/> The value added, gross alpha times assets, about 7.5. <bookmark mark='c'/> For positive allocations, conditional expected net alpha is zero under the model. Finite realised investor returns need not equal that expectation. Value added uses true gross alpha times arbitrary asset units; fees are revenue, not profit after operating expenses.",
+   "zh": "谁得到了什么？<bookmark mark='a'/>经理的费用收入等于费率乘资产，模拟中行业合计每年约15单位。<bookmark mark='b'/>毛阿尔法乘资产的价值增加约7.5。<bookmark mark='c'/>在模型下，正配置的条件期望净阿尔法为零，有限样本的实际收益不必等于期望。价值增加采用真实毛阿尔法和任意资产单位；费用是收入，不是扣除经营成本后的利润。"
+  },
+  "a6da8eb23a26": {
+   "scene": "Scale",
+   "en": "A different empirical measurement. <bookmark mark='a'/> Berk and van Binsbergen study dollar value added relative to investable alternatives, separating scale from net percentage alpha. <bookmark mark='b'/> That measurement depends on benchmark, costs, timing and the asset base. <bookmark mark='c'/> Manager skill, fee revenue, operating profit and investor net returns are distinct quantities. Sharpe's aggregate holdings identity does not determine the expected performance of an individual fund.",
+   "zh": "另一种实证衡量。<bookmark mark='a'/>伯克与范宾斯贝根相对可投资替代方案研究金额价值增加，把规模与净百分比阿尔法分开。<bookmark mark='b'/>衡量依赖基准、成本、时点和资产基数。<bookmark mark='c'/>经理技能、费用收入、经营利润及投资者净收益是不同量。夏普的总体持仓恒等式不能确定单只基金的期望表现。"
+  },
+  "1f3cc342721a": {
+   "scene": "Scale",
+   "en": "Scale is also studied empirically. <bookmark mark='a'/> Pástor, Stambaugh and Taylor examine scale and skill in active management, including industry-level decreasing returns. <bookmark mark='b'/> Separating fund size, industry size, changing skill and opportunities requires their empirical design; a size-performance correlation alone is not a causal estimate. <bookmark mark='c'/> Competition and congestion can affect rewards. This intuition is related to costly-information equilibrium, but it is not the same theorem and does not establish a universal response to every inflow.",
+   "zh": "规模也有实证研究。<bookmark mark='a'/>帕斯托、斯坦博和泰勒研究主动管理中的规模与技能，包括行业层面的规模报酬递减。<bookmark mark='b'/>区分基金规模、行业规模、技能变化及机会，需要实证设计；规模与业绩的相关性本身不是因果估计。<bookmark mark='c'/>竞争与拥挤会影响回报。这与有成本信息均衡的直觉相关，但不是同一个定理，也没有给出每次流入的普遍反应。"
+  },
+  "34c94c615bf8": {
+   "scene": "Scale",
+   "en": "Capacity is an economic question. <bookmark mark='a'/> Impact, funding, borrow or limited opportunities can make returns depend on scale. A square-root impact approximation is one model, not a universal law for every strategy. <bookmark mark='b'/> Refusing outside capital does not by itself identify skill or the form of scale costs. <bookmark mark='c'/> The teaching House therefore proposes capacity and liquidity review before assigning a risk budget, rather than claiming a particular fund's capacity has been established.",
+   "zh": "容量是经济问题。<bookmark mark='a'/>冲击、融资、借券或有限机会，可能使收益依赖规模。平方根冲击近似只是一种模型，不是每个策略的普遍规律。<bookmark mark='b'/>拒绝外部资金本身不能识别技能，也不能确定规模成本形式。<bookmark mark='c'/>因此教学公司提出：配置风险预算前先审查容量和流动性，而不宣称已确定某只基金的容量。"
+  },
+  "3746faf1bbd5": {
+   "scene": "Scale",
+   "en": "Three questions follow. <bookmark mark='a'/> For an investor, what benchmark, costs, capacity and selection assumptions support the prospective net-return claim? A fee schedule may be known while future dollar fees and market impact remain uncertain. <bookmark mark='b'/> For a manager, how are scale costs and implementation justified? <bookmark mark='c'/> For an economist, weak net-return persistence alone neither proves nor rules out skill. The competitive Bayesian allocation model supplies one possible mechanism, under its assumptions.",
+   "zh": "由此产生三个问题。<bookmark mark='a'/>对投资者，哪些基准、成本、容量和筛选假设支持前瞻净收益主张？费率表可能已知，未来费用金额和市场冲击仍不确定。<bookmark mark='b'/>对经理，规模成本及实施依据是什么？<bookmark mark='c'/>对经济学家，净收益持续性较弱，既不能证明也不能排除技能。竞争性贝叶斯配置模型在其假设下提供一种可能机制。"
+  },
+  "01787a4c732e": {
+   "scene": "Scale",
+   "en": "Pause and predict. Has the American stock market become harder to predict from its own past? Guess the autocorrelation of daily returns in the nineteen seventies, and in the twenty tens.",
+   "zh": "暂停并预测。美国股市是不是变得更难根据自己的过去来预测了？猜一猜一九七〇年代和二〇一〇年代日收益的自相关。"
+  },
+  "dfcc0062a8f2": {
+   "scene": "Adaptive",
+   "en": "Chapter four. Daily market autocorrelation is 0.29 in the nineteen seventies and -0.04 in the twenty tens, using the stated French return series and estimator. These are descriptive sample correlations. They are not fractions of correctly predicted directions, and the difference alone identifies neither trader learning nor an executable profit after costs.",
+   "zh": "第4章。按给定弗伦奇收益序列和估计方法，日市场自相关在一九七〇年代为0.29，在二〇一〇年代为-0.04。这些是描述性样本相关系数，不是方向预测正确率。差异本身既不能识别交易者学习，也不能证明扣费后存在可实现利润。"
+  },
+  "9a6c11efa119": {
+   "scene": "Adaptive",
+   "en": "Andrew Lo's view. <bookmark mark='a'/> The efficient-markets hypothesis says prices reflect a specified set of information, relative to a model of expected returns. <bookmark mark='b'/> Lo's adaptive markets say efficiency is an outcome of competition among traders who learn, and it moves. <bookmark mark='c'/> So opportunities should appear, be found and be competed away, and how efficient a market is should change with who is trading it.",
+   "zh": "罗安德的观点。<bookmark mark='a'/>有效市场假说认为，相对于一个期望收益模型，价格反映指定的信息集。<bookmark mark='b'/>适应性市场观点认为，效率是会学习的交易者竞争的结果，而且会变化。<bookmark mark='c'/>机会可能出现、被发现、再被竞争消除，效率会随参与者改变。"
+  },
+  "c82800fa9b05": {
+   "scene": "Adaptive",
+   "en": "Ninety years of Kenneth French's daily market returns. <bookmark mark='a'/> In each trailing twelve-hundred-sixty-observation window, sampled every twenty-one trading observations, the correlation of one day's return with the next. <bookmark mark='b'/> It is positive for most of the century, peaking in the nineteen seventies, a period in which nonsynchronous constituent trading is one possible contributor to measured autocorrelation. <bookmark mark='c'/> Then it falls, through the arrival of index futures, electronic trading and, after two thousand, high-frequency market making, toward zero and below in these samples. The chart alone does not identify the contribution of any one change.",
+   "zh": "肯尼思·弗伦奇九十年的市场日收益。<bookmark mark='a'/>每个向后看一千二百六十个观测的窗口，每隔二十一个交易观测取样，计算相邻日收益相关性。<bookmark mark='b'/>多数年代为正，在一九七〇年代达到高位，成分证券不同步交易可能是测得自相关的一个来源。<bookmark mark='c'/>随后伴随指数期货、电子交易，以及二〇〇〇年后的高频做市而下降，在这些样本中接近零或负值。图本身不能识别每项变化的贡献。"
+  },
+  "edbb53709174": {
+   "scene": "Adaptive",
+   "en": "By decade, with a second measure. <bookmark mark='a'/> Lo and MacKinlay's variance ratio: the variance of five-day returns over five times the daily variance, one for a random walk. <bookmark mark='b'/> In the nineteen seventies, 1.51: weekly moves larger than daily ones would imply, the signature of trends. In the twenty tens, 0.91: slight mean reversion. The same market, a different ecology.",
+   "zh": "按十年来看，用第二个指标。<bookmark mark='a'/>罗闻全和麦金雷的方差比：五日收益的方差除以日方差的五倍，随机游走为一。<bookmark mark='b'/>一九七〇年代是1.51：周变动比日变动所暗示的更大，这是趋势的特征。二〇一〇年代是0.91：轻微的均值回归。同一个市场，不同的生态。"
+  },
+  "ec5011acc961": {
+   "scene": "Adaptive",
+   "en": "The variance ratio across horizons, two decades compared. <bookmark mark='a'/> In the nineteen seventies it rises with the horizon, to 1.65 at twenty days: trends. <bookmark mark='b'/> In the twenty tens it falls, to 0.72: reversal. A random walk would be the flat line between them.",
+   "zh": "跨期限的方差比，比较两个十年。<bookmark mark='a'/>在一九七〇年代，它随期限上升，二十天时达到1.65：趋势。<bookmark mark='b'/>在二〇一〇年代它下降，到0.72：反转。随机游走是两者之间的那条水平线。"
+  },
+  "652b9fad056b": {
+   "scene": "Adaptive",
+   "en": "How might the pattern arise? <bookmark mark='a'/> Nonsynchronous constituent trading and bid-ask effects can alter measured autocorrelation. <bookmark mark='b'/> Competition, information, market structure and time-varying risks may also change return dynamics. <bookmark mark='c'/> Comparing historical correlations does not isolate these mechanisms or establish executable alpha. A changing pattern also warns against interpreting a full-history average as a stable forecast for the next regime.",
+   "zh": "模式可能如何产生？<bookmark mark='a'/>成分证券不同步交易和买卖价差会改变测得的自相关。<bookmark mark='b'/>竞争、信息、市场结构和随时间变化的风险，也会改变收益动态。<bookmark mark='c'/>比较历史相关性不能分离这些机制，也不能证明可实现阿尔法。模式变化还提醒我们，不应把全历史平均当作下一种环境的稳定预测。"
+  },
+  "21b0a319e5ee": {
+   "scene": "Adaptive",
+   "en": "What the adaptive view implies. <bookmark mark='a'/> Risk premia change with the population of investors, strategies have life cycles, and innovation is how firms survive. <bookmark mark='b'/> It predicts crowding, as Part thirty-three's quant quake showed, booms and busts in strategy returns, and a market efficient on average and inefficient in places. <bookmark mark='c'/> What it does not do is say which strategy will work next.",
+   "zh": "适应性观点意味着什么。<bookmark mark='a'/>风险溢价随投资者群体而变化，策略有生命周期，创新是公司生存的方式。<bookmark mark='b'/>它预言了拥挤，正如第33部分的量化地震所显示的，预言了策略收益的繁荣与萧条，以及一个平均有效、局部无效的市场。<bookmark mark='c'/>它做不到的，是说出下一个有效的策略是什么。"
+  },
+  "a7b742790bb0": {
+   "scene": "Adaptive",
+   "en": "The debate's most famous moment. <bookmark mark='a'/> In twenty thirteen the Nobel prize went to Eugene Fama, who argued that prices are hard to predict in the short run, to Robert Shiller, who showed them predictable over long horizons from valuations, and to Lars Peter Hansen, who built the tools to test both. <bookmark mark='b'/> It is not a contradiction: expected returns that vary slowly allow both. <bookmark mark='c'/> And that was the series' own conclusion, in Parts six and twenty-three: slow-moving expected returns, measured with large error.",
+   "zh": "这场争论最著名的时刻。<bookmark mark='a'/>二〇一三年，诺贝尔奖授予了尤金·法玛，他认为价格在短期内难以预测；罗伯特·席勒，他表明价格在长期内可以由估值预测；以及拉斯·彼得·汉森，他构建了检验两者的工具。<bookmark mark='b'/>这并不矛盾：缓慢变化的预期收益允许两者同时成立。<bookmark mark='c'/>这也是本系列自己在第6和第23部分的结论：缓慢变化的预期收益，测量误差很大。"
+  },
+  "64cf10cd5999": {
+   "scene": "Adaptive",
+   "en": "A published study of decay. <bookmark mark='a'/> McLean and Pontiff study ninety-seven published predictors and report lower returns after the original sample and after publication. <bookmark mark='b'/> Their analysis investigates statistical and publication effects; the simple timing comparison alone does not isolate every mechanism. <bookmark mark='c'/> A prospective response is to specify the question and evaluation before its result is known, while reporting uncertainty and adaptations.",
+   "zh": "一项关于衰减的已发表研究。<bookmark mark='a'/>麦克莱恩和庞蒂夫研究九十七个已发表预测变量，报告原样本之后及发表之后收益下降。<bookmark mark='b'/>研究考察统计与发表效应，但简单的时间比较不能分离所有机制。<bookmark mark='c'/>前瞻性的应对是：在结果未知前确定问题和评估，同时报告不确定性及后续调整。"
+  },
+  "76d31133a298": {
+   "scene": "Adaptive",
+   "en": "The same issue arises in young markets. <bookmark mark='a'/> Funding access, participants and market structure can change. <bookmark mark='b'/> A basis moving toward zero could reflect competition, changing funding costs, risk or constraints. Observing the change is not a causal decomposition. <bookmark mark='c'/> Form a testable mechanism and an independently justified evaluation. No historical crypto-carry strategy outcomes are inputs to this chapter.",
+   "zh": "年轻市场也有相同问题。<bookmark mark='a'/>融资渠道、参与者和市场结构都可能变化。<bookmark mark='b'/>基差趋近零可能反映竞争、融资成本、风险或约束变化。观察变化不是因果分解。<bookmark mark='c'/>应提出可检验机制及独立合理的评估。本章没有使用历史加密资产套利策略结果。"
+  },
+  "482a002d6866": {
+   "scene": "Adaptive",
+   "en": "Pause and predict. A researcher selects the best of twenty tests. Is a single-test five percent threshold still a five percent family-wise error guarantee? What information about the selection procedure should be fixed before evaluation?",
+   "zh": "暂停并预测。研究者从二十项检验中挑出最好的一项。单项百分之五阈值还能保证整个检验族的错误概率为百分之五吗？评估前应该固定哪些筛选信息？"
+  },
+  "51701720276b": {
+   "scene": "Record",
+   "en": "Chapter five. A change of task: design evidence before seeing the answer. This presentation does not open, score or display the House's sealed strategy results, and it does not execute its final ensemble. The chapter instead connects the previous simulations to a prospective research protocol. A protocol states what will be measured, when the rule is frozen, how selection is counted and what uncertainty will be reported. Having such a protocol does not itself demonstrate skill.",
+   "zh": "第5章。换一个任务：在看到答案之前设计证据。本讲不打开、评分或展示公司封存的策略结果，也不运行最终组合。本章把此前模拟与前瞻研究方案连接起来。方案说明衡量什么、何时冻结规则、如何计算筛选，以及报告什么不确定性。拥有方案本身不代表已经证明技能。"
+  },
+  "3ebb2a3141d8": {
+   "scene": "Record",
+   "en": "Begin with the question. <bookmark mark='a'/> Specify the benchmark and net return being estimated. A claim about excess return is different from a claim about risk reduction or execution quality. <bookmark mark='b'/> State which result would change the decision and which would count against it. <bookmark mark='c'/> Then define the information available at each date, including publication lags and revisions. A later timestamp attached to a feature is not enough if the feature was built with future data.",
+   "zh": "先确定问题。<bookmark mark='a'/>明确基准和待估计净收益。超额收益、降低风险和执行质量是不同主张。<bookmark mark='b'/>明确什么结果会改变决策，什么结果构成反面证据。<bookmark mark='c'/>再定义每个时点可用的信息，包括公布滞后和修订。如果特征使用未来数据构建，附上较晚时间戳并不足够。"
+  },
+  "479cc6b7dc58": {
+   "scene": "Record",
+   "en": "A prospective sequence. <bookmark mark='a'/> Fit and choose on permitted research information. <bookmark mark='b'/> Freeze the full decision rule, not just its model coefficients. Costs, metrics and stopping decisions matter too. <bookmark mark='c'/> Evaluate independently of those choices and report the whole planned family. <bookmark mark='d'/> A revision is a new hypothesis. Reusing a known test window cannot make it unseen again. Code hashes support an audit, but do not prove information isolation.",
+   "zh": "前瞻顺序。<bookmark mark='a'/>用允许的研究信息拟合和选择。<bookmark mark='b'/>冻结完整决策规则，不只冻结模型参数，成本、指标和停止决策也重要。<bookmark mark='c'/>独立于这些选择进行评估，并报告整个计划检验族。<bookmark mark='d'/>修订就是新假设。重复使用已知测试窗口，不能使它重新未知。代码哈希支持审计，却不能证明信息隔离。"
+  },
+  "6387786c5b9d": {
+   "scene": "Record",
+   "en": "Selection changes the question. <bookmark mark='a'/> Imagine twenty valid standard-normal statistics under their nulls. No experiment is being run here; this is a probability calculation. <bookmark mark='b'/> The probability that at least one exceeds c is no larger than the sum of their tail probabilities. This union bound does not require independent tests. <bookmark mark='c'/> A five percent family-wise error budget across twenty one-sided tests gives a cutoff near two point eight one. This controls a different error criterion from false discovery rate, and it is not a probability that a winner is skilled.",
+   "zh": "筛选改变了问题。<bookmark mark='a'/>假设二十个统计量在各自空假设下均为有效标准正态量。这里没有运行实验，只做概率计算。<bookmark mark='b'/>至少一个超过阈值的概率，不大于各项尾概率之和。这项并集上界不需要检验相互独立。<bookmark mark='c'/>二十项单侧检验共用百分之五族错误预算，阈值约二点八一。它控制的标准不同于错误发现率，也不是赢家具有技能的概率。"
+  },
+  "1149d4c02fcc": {
+   "scene": "Record",
+   "en": "Net of what? <bookmark mark='a'/> Use a benchmark and financing convention consistent with the claim. <bookmark mark='b'/> Include the costs of actually implementing the rule, and distinguish observed fees from estimated impact or borrow availability. <bookmark mark='c'/> Report sensitivity to those estimates. Subtracting a constant fee from a frictionless series does not establish executable capacity. A gross return ranking and a net implementable return ranking need not agree.",
+   "zh": "扣除什么成本？<bookmark mark='a'/>采用与主张一致的基准和融资约定。<bookmark mark='b'/>计入实际执行规则的成本，区分已观察费用、估计冲击以及借券可得性。<bookmark mark='c'/>报告估计敏感性。从无摩擦序列减去固定费用，不能证明可执行容量。毛收益排名与可实施净收益排名可能不同。"
+  },
+  "093e8cdd9624": {
+   "scene": "Record",
+   "en": "A point estimate is not the evidence. <bookmark mark='a'/> For independent annual Gaussian excess returns, a Sharpe ratio has a familiar large-sample uncertainty approximation. <bookmark mark='b'/> Its standard error is approximately the square root of one plus half the squared Sharpe, divided by the number of annual observations. <bookmark mark='c'/> At a Sharpe of a half and twenty observations, that is about point two three seven. These are illustrative assumptions, not a measurement of any House strategy. Annualising monthly observations changes the formula's inputs; serial dependence and heavy tails also matter, and a selected winner needs selection-aware inference.",
+   "zh": "点估计不是全部证据。<bookmark mark='a'/>对独立的年度高斯超额收益，夏普比率有常见的大样本不确定性近似。<bookmark mark='b'/>标准误约等于：一加夏普平方的一半，除以年度观测数，再开平方。<bookmark mark='c'/>夏普为零点五、二十个观测时，约为零点二三七。这是示例假设，不是公司策略的测量。月度数据年化会改变公式输入；序列依赖和厚尾也重要，筛选赢家还需要考虑筛选的推断。"
+  },
+  "ad396f2e8204": {
+   "scene": "Record",
+   "en": "Monitoring is another choice. <bookmark mark='a'/> A fixed-horizon test concerns the endpoint that was planned. <bookmark mark='b'/> Looking repeatedly and stopping at the first favourable number generally does not retain that test's nominal error rate. <bookmark mark='c'/> Predeclare monitoring or use a sequential procedure justified for the data-generating assumptions. Neither the word hold-out nor a registration date automatically solves optional stopping, repeated tuning or leakage across related strategies.",
+   "zh": "监测也是选择。<bookmark mark='a'/>固定期限检验针对预先计划的终点。<bookmark mark='b'/>反复观察、第一次出现好结果就停止，通常不能保持原检验的名义错误率。<bookmark mark='c'/>预先声明监测规则，或使用适合数据假设的序贯方法。留出样本这个名称或登记日期，都不会自动解决可选停止、反复调参或相关策略间的信息泄漏。"
+  },
+  "ffc1fa77d9ba": {
+   "scene": "Record",
+   "en": "What should the eventual report contain? <bookmark mark='a'/> The complete planned set of estimates, with cost assumptions, uncertainty and failures. <bookmark mark='b'/> Check that rows have comparable windows, risk exposure and benchmarks before ranking them. A regression across heterogeneous rows is descriptive and does not by itself identify decay or a forecast for the next strategy. <bookmark mark='c'/> Unexpected results can reflect sampling, changing exposures, selection or a new mechanism. The result alone does not tell us which explanation is correct.",
+   "zh": "最终报告应包含什么？<bookmark mark='a'/>完整的计划估计集合，包括成本假设、不确定性及失败。<bookmark mark='b'/>排名前检查窗口、风险暴露和基准是否可比。异质行之间的回归是描述性的，本身不能识别衰减，也不能预测下一项策略。<bookmark mark='c'/>意外结果可能来自抽样、暴露变化、筛选或新机制。结果本身不能判断哪个解释正确。"
+  },
+  "739ba32fffc1": {
+   "scene": "Record",
+   "en": "The conclusion has a defined scope. <bookmark mark='a'/> This chapter establishes a design and works through analytical error and uncertainty calculations. <bookmark mark='b'/> It does not establish the performance of a particular strategy, ensemble or sleeve. No sealed strategy outcomes are inputs to this presentation. <bookmark mark='c'/> The same discipline carries to pricing: summaries become comparable only after their targets, units, weights and evaluation procedures have been checked.",
+   "zh": "结论有明确范围。<bookmark mark='a'/>本章提出证据设计，并演示错误概率及不确定性的解析计算。<bookmark mark='b'/>它没有证明某个策略、组合或子组合的表现。本讲不使用封存策略结果。<bookmark mark='c'/>相同纪律延伸到定价：只有核查目标、单位、权重和评估程序之后，汇总结果才可能可比。"
+  },
+  "d31a6adea6f8": {
+   "scene": "Record",
+   "en": "Pause and predict. Two pricing RMSEs come from the same market date. What else must match before ranking the models? Think of targets, quotes, weights, units and the evaluation procedure.",
+   "zh": "暂停并预测。两个定价均方根误差来自同一个市场日期。模型排名之前还需匹配什么？考虑目标、报价、权重、单位及评估程序。"
+  },
+  "60f6ca2ef328": {
+   "scene": "Surface",
+   "en": "Chapter six. The answer to the pause is more than a date. Before ranking models, match quote eligibility, targets, weights, error units and evaluation design. The earlier public summaries are authenticated, but the original aggregation mixes price-over-vega and direct implied-volatility errors, uses different quote subsets and groups different evaluation exercises. This chapter labels those differences rather than treating the table as one common-design contest.",
+   "zh": "第6章。暂停问题的答案不只是日期。模型排名之前，需要匹配报价资格、目标、权重、误差单位和评估设计。此前公开汇总虽经认证，但原始聚合混合了价格除以维加和直接隐含波动率误差，使用不同报价子集，也汇集了不同评估任务。本章标明差异，而不把它当作同一设计下的竞赛。"
+  },
+  "7937a11a08df": {
+   "scene": "Surface",
+   "en": "The reported errors, grouped by design. <bookmark mark='a'/> The one-volatility Black model, Heston and SSVI use direct vega-weighted implied-volatility errors on one hundred ninety-three eligible targets. <bookmark mark='b'/> The four jump rows instead carry the calibrator's price-over-market-vega residual RMS, not the separate direct-IV error available in their parent output. <bookmark mark='c'/> The rough-model rows use a narrower set of one hundred seventy-five quotes, and their error routines retain finite model IVs. Numbers on a nominal vol-point scale are not interchangeable when residual definitions or eligible targets differ. A smaller number in this mixed table does not establish a universal winner or prove roughness is necessary.",
+   "zh": "按设计分组的报告误差。<bookmark mark='a'/>单波动率布莱克、赫斯顿和曲面参数模型，在一百九十三个合格目标上使用直接的维加加权隐含波动率误差。<bookmark mark='b'/>四个跳跃模型行采用校准器的价格除市场维加残差均方根，并非父输出中另存的直接隐含波动率误差。<bookmark mark='c'/>粗糙模型使用较窄的一百七十五个报价，并保留有限的模型隐含波动率。残差定义或合格目标不同，即使名义单位都是波动率百分点，也不能互换。混合表中数字较小，不能确定普遍赢家，更不能证明必须使用粗糙性。"
+  },
+  "792df2c023ed": {
+   "scene": "Surface",
+   "en": "What the second column actually tests. <bookmark mark='a'/> The flat-volatility-per-expiry model reports 4.36 on day one and 4.74 on actual next-day marks with common expiries. <bookmark mark='b'/> Rough Bergomi replay instead averages minimum training-trace errors and final-parameter fresh-path errors, 0.93 and 0.91, against the same dated quotes. The first quantity is not necessarily the final parameter's training error. <bookmark mark='c'/> Signature volatility compares final parameters on fitted and fresh simulation paths, 0.88 and 1.48, also on the same quotes. Fresh random numbers test simulation-fit sensitivity; they do not test tomorrow's market or hedge performance.",
+   "zh": "第二列究竟检验什么？<bookmark mark='a'/>每个到期日平坦波动率模型，在首日误差为4.36，在共同到期日的真实次日报价上为4.74。<bookmark mark='b'/>粗糙伯戈米回放则对同一日期报价，平均训练轨迹最小误差和最终参数新路径误差，分别为0.93及0.91。前者不一定是最终参数的训练误差。<bookmark mark='c'/>签名波动率比较最终参数在拟合路径和新模拟路径上的误差，分别为0.88及1.48，也使用相同报价。新随机数检验模拟拟合敏感性，不检验明日市场或对冲表现。"
+  },
+  "d246935e8526": {
+   "scene": "Surface",
+   "en": "A comparison design. <bookmark mark='a'/> Hold the target quotes, units, weights and handling of invalid values fixed when the question requires a direct error comparison. <bookmark mark='b'/> Keep calibration, numerical robustness, next-day pricing and hedging as separate tasks. <bookmark mark='c'/> Evaluate the decision the desk actually needs. A good surface fit can be useful for quoting without establishing a dynamic law, and a dynamic law still needs empirical evaluation for its intended application.",
+   "zh": "比较的设计。<bookmark mark='a'/>问题需要直接比较误差时，固定目标报价、单位、权重和无效值处理。<bookmark mark='b'/>把校准、数值稳健性、次日定价和对冲分开。<bookmark mark='c'/>评估交易台真正需要的决策。好的曲面拟合可用于报价，却没有证明动态规律；动态规律也需要针对应用的实证评估。"
+  },
+  "e5ecdd6eaf14": {
+   "scene": "Surface",
+   "en": "The desk use follows the task. <bookmark mark='a'/> Quoting requires useful fit and appropriate no-arbitrage conditions; passing a sampled grid check is not a proof over every strike and maturity. <bookmark mark='b'/> Hedging or exotic pricing needs assumptions about the pricing measure and dynamics, followed by evaluation on the actual application. <bookmark mark='c'/> A proposed adoption should beat a justified baseline on matched data with costs and uncertainty reported. The mixed summary table alone is not an adoption decision.",
+   "zh": "交易台用途取决于任务。<bookmark mark='a'/>报价需要有效拟合和适当无套利条件；通过抽样网格检查，不等于证明全部执行价及期限。<bookmark mark='b'/>对冲或奇异期权定价需要测度及动态假设，再针对实际用途评估。<bookmark mark='c'/>拟采用的方法应在匹配数据上优于合理基线，并报告成本与不确定性。混合汇总表本身不是采用决策。"
+  },
+  "a5ce5a8e05b8": {
+   "scene": "Surface",
+   "en": "Provenance and scope. <bookmark mark='a'/> All eight reused public derived inputs match their committed earlier approvals; no model was refitted for this chapter. <bookmark mark='b'/> The Surface is a retrospective pool of marks over a collection window, rather than a single simultaneously executable quote sheet. <bookmark mark='c'/> General conclusions need additional dates, markets, numerical checks and losses tied to the application. The summary is a lesson in comparing evidence, not a ranking for all pricing tasks.",
+   "zh": "来源与范围。<bookmark mark='a'/>八项复用的公开衍生输入均匹配此前已提交批准的哈希，本章没有重新拟合模型。<bookmark mark='b'/>曲面是一个采集窗口中的回顾性价格汇集，并非同时可执行的一张报价单。<bookmark mark='c'/>一般结论还需要更多日期、市场、数值检查及与用途相关的损失。本表讲解如何比较证据，不是所有定价任务的排名。"
+  },
+  "2aee97e30243": {
+   "scene": "Surface",
+   "en": "Pause and predict. Fresh random numbers price the same dated quotes. Does that test tomorrow's market, simulation robustness, or realised hedge profit and loss? State the extra data each other question would require.",
+   "zh": "暂停并预测。用新随机数给同一日期报价定价，是检验明日市场、模拟稳健性，还是实际对冲损益？另外两个问题各需什么额外数据？"
+  },
+  "4adaa353440e": {
+   "scene": "Open",
+   "en": "Chapter seven, and the answer to the pause, or eight of them. Each part ended with open problems; these are the ones that kept returning, across the whole series, in markets, in models, and in the tools used to study them.",
+   "zh": "第7章，以及暂停问题的答案，或者说八个答案。每一部分都以开放问题结尾；这些是在整个系列中反复出现的问题，在市场中，在模型中，也在研究它们的工具中。"
+  },
+  "1432b5fa1e7e": {
+   "scene": "Open",
+   "en": "In markets. <bookmark mark='a'/> The equity premium: why stocks have paid so much more than bonds, for so long, with consumption so smooth, a puzzle no model resolves without strong assumptions. <bookmark mark='b'/> Rough volatility: whether volatility is truly rough, or only looks so at the scales we can measure, and what that means for hedging. <bookmark mark='c'/> And the dimension of the factor zoo: how many independent sources of expected return there really are, five, twenty, or hundreds of weak ones.",
+   "zh": "在市场中。<bookmark mark='a'/>股权溢价：为什么股票长期以来比债券多支付了这么多，而消费却如此平稳，没有一个模型能在不作强假设的情况下解开这个谜题。<bookmark mark='b'/>粗糙波动率：波动率是真的粗糙，还是只在我们能测量的尺度上看起来如此，这对对冲又意味着什么。<bookmark mark='c'/>以及因子动物园的维数：预期收益真正独立的来源有多少个，五个、二十个，还是数百个微弱的来源。"
+  },
+  "754e17a15d21": {
+   "scene": "Open",
+   "en": "In models. <bookmark mark='a'/> Learning when the signal is tiny: when flexible models beat linear ones on returns whose predictable part is one percent of their variance, and how to know before the hold-out. <bookmark mark='b'/> Honest tests of language models that have read the future, and models trained, at scale, only on what was known at each date. <bookmark mark='c'/> And what machines that share models do to the stability of the market they trade in, and how to measure it.",
+   "zh": "在模型中。<bookmark mark='a'/>信号极小时的学习：当收益的可预测部分只占其方差的百分之一时，灵活的模型何时胜过线性模型，以及如何在样本外之前就知道。<bookmark mark='b'/>对已经读过未来的语言模型进行诚实的检验，以及大规模地、只用每个日期当时已知的信息训练的模型。<bookmark mark='c'/>以及共用模型的机器对它们所交易的市场的稳定性有何影响，又该如何测量。"
+  },
+  "7505fda1a445": {
+   "scene": "Open",
+   "en": "In the system, and in the method. <bookmark mark='a'/> How the safest asset can be made liquid in a panic: dealer balance sheets, central clearing and the basis trade. <bookmark mark='b'/> Climate risk, priced on short data over long horizons, which this series did not cover, and that is an open problem in itself. <bookmark mark='c'/> And research itself: every test spends a little of the data's honesty, and the House's envelope and counter are one answer, not the last.",
+   "zh": "在系统中，也在方法中。<bookmark mark='a'/>如何让最安全的资产在恐慌中保持流动性：交易商的资产负债表、中央清算和基差交易。<bookmark mark='b'/>气候风险，在很短的数据上为很长的期限定价，本系列没有涵盖它，这本身就是一个开放问题。<bookmark mark='c'/>以及研究本身：每一次检验都会消耗一点数据的诚实，本系列公司的封存信封和计数器是一个答案，但不是最后的答案。"
+  },
+  "753e6e35db60": {
+   "scene": "Open",
+   "en": "Three bounded methodological lessons. <bookmark mark='a'/> Risk forecasts need more than one validation statistic; coverage, clustering and severity ask different questions. <bookmark mark='b'/> Pricing learners can produce elevated profits and punishment-shaped responses in selected models, without thereby proving equilibrium or legal agreement. <bookmark mark='c'/> And research evaluations must account for selection, costs, information and uncertainty. These are methodological conclusions, not a fresh score of the House's strategy outcomes.",
+   "zh": "三项有范围的方法结论。<bookmark mark='a'/>风险预测需要不止一个验证统计量，覆盖率、聚集性和严重程度是不同问题。<bookmark mark='b'/>定价学习者在特定模型中可以产生较高利润和惩罚形状的反应，却不能据此证明均衡或法律意义的合意。<bookmark mark='c'/>研究评估必须考虑筛选、成本、信息与不确定性。这些是方法结论，不是重新评分公司策略。"
+  },
+  "667eebcedffe": {
+   "scene": "Open",
+   "en": "Limits of this presentation. <bookmark mark='a'/> Fund populations have Gaussian residuals and fixed alpha groups; real managers are more heterogeneous. <bookmark mark='b'/> Earlier pricing summaries have authenticated provenance, but provenance alone does not make their targets comparable. <bookmark mark='c'/> No sealed strategy outcomes or final ensemble execution are inputs here. <bookmark mark='d'/> Language-model trading remains a discussion of mechanisms and evaluation needs, not an experiment run in this lecture. Each limitation helps define what additional evidence would be needed.",
+   "zh": "本讲的限制。<bookmark mark='a'/>基金群体使用高斯残差和固定阿尔法组，真实经理更加异质。<bookmark mark='b'/>此前定价汇总来源经过认证，但来源本身不使目标可比。<bookmark mark='c'/>这里不使用封存策略结果，也不执行最终组合。<bookmark mark='d'/>语言模型交易仍是机制和评估需要的讨论，不是本讲运行的实验。这些限制指出还需要什么证据。"
+  },
+  "4b134af86dac": {
+   "scene": "Open",
+   "en": "And the method proposed for these questions. <bookmark mark='a'/> A question, a model, a theorem proved, and then a check, by simulation or by data. <bookmark mark='b'/> Data should be used as of the date it was known, with a research window and a sealed hold-out. <bookmark mark='c'/> And every trial should be counted, with the result shown, whatever it said.",
+   "zh": "建议的方法。<bookmark mark='a'/>先提出问题、建立模型、证明定理，再用模拟或数据检查。<bookmark mark='b'/>数据应按当时可知信息使用，并设研究窗口和封存留出样本。<bookmark mark='c'/>每次尝试都应计数，无论结果如何都报告。"
+  },
+  "91b884d9de04": {
+   "scene": "Open",
+   "en": "Pause and predict. In nineteen hundred Louis Bachelier modelled prices as a random walk that could go below zero. When did a major exchange switch to his model, and why?",
+   "zh": "暂停并预测。一九〇〇年，路易·巴舍利耶把价格建模为可以跌到零以下的随机游走。一家大型交易所在什么时候改用了他的模型，为什么？"
+  },
+  "8db7641d5400": {
+   "scene": "Bachelier",
+   "en": "Chapter eight. A dated example of model support. The May WTI futures contract settled at minus thirty-seven dollars and sixty-three cents on April twentieth, twenty twenty. CME Clearing then used Bachelier valuation for specified energy products from the April twenty-second end-of-day margin cycle. This was a clearing valuation change with a stated product scope, not a claim about every transaction's pricing. A later notice returned products to Whaley or Black seventy-six from August thirty-first.",
+   "zh": "第8章，一个关于模型支持域的历史例子。二〇二〇年四月二十日，五月西得克萨斯轻质原油期货结算为负三十七点六三美元。芝商所清算从四月二十二日收盘保证金周期起，对指定能源产品采用巴舍利耶估值。这是有产品范围的清算估值调整，不表示每笔交易都采用同一定价。之后通知又规定八月三十一日起按产品恢复沃利或布莱克七六模型。"
+  },
+  "45c13d1661a3": {
+   "scene": "Bachelier",
+   "en": "The public record has a precise scope. <bookmark mark='a'/> The CFTC confirms the May contract's negative settlement and discusses coinciding fundamental and market-structure factors, without claiming a complete root-cause decomposition. <bookmark mark='b'/> CME Clearing notice twenty dash one seventy-one specifies the April valuation change for listed products and its margin-cycle timing. <bookmark mark='c'/> Notice twenty dash three twenty later specifies the August transition back, depending on product. These are historical notices, not a statement of today's complete valuation policy.",
+   "zh": "公开记录有明确范围。<bookmark mark='a'/>美国商品期货交易委员会确认五月合约负结算，并讨论同时出现的基本面和市场结构因素，没有声称完整分解根本原因。<bookmark mark='b'/>芝商所清算二〇杠一七一号通知规定列明产品的四月估值改变及保证金周期。<bookmark mark='c'/>二〇杠三二〇号通知规定八月按产品转回。这些是历史通知，不是当前全部估值政策。"
+  },
+  "727ff8c9df49": {
+   "scene": "Bachelier",
+   "en": "The support question extends beyond oil. <bookmark mark='a'/> Normal and shifted-lognormal rate conventions are alternatives when unshifted positive support is inappropriate. <bookmark mark='b'/> A normal model also permits negative spreads, but matching the support alone does not validate its tails or dynamics. <bookmark mark='c'/> Its volatility has absolute price units, whereas lognormal volatility is relative. Setting normal volatility equal to the current forward times relative volatility matches a local diffusion coefficient; it does not exactly equate option prices.",
+   "zh": "支持域问题不限于原油。<bookmark mark='a'/>当不平移的正支持域不适当时，正态和移位对数正态利率约定可作替代。<bookmark mark='b'/>正态模型也允许负利差，但支持域匹配不能验证尾部或动态。<bookmark mark='c'/>正态波动率具有绝对价格单位，对数正态波动率则为相对单位。令正态波动率等于当前远期乘相对波动率，只匹配局部扩散系数，不会使期权价格精确相等。"
+  },
+  "fc702ed5c333": {
+   "scene": "Bachelier",
+   "en": "Compare two zero-rate risk-neutral forward models. <bookmark mark='a'/> Normal forward increments can cross zero. <bookmark mark='b'/> Integrating the normal payoff gives the displayed call price, with s N equal to normal volatility times square-root maturity. A deterministic discount factor is needed at nonzero rates. <bookmark mark='c'/> Unshifted Black forward dynamics preserve a strictly positive initial forward. A negative underlying forward therefore falls outside that model; this is different from asking about a nonpositive strike on a positive forward.",
+   "zh": "比较两个零利率、风险中性远期模型。<bookmark mark='a'/>正态远期增量可以跨过零。<bookmark mark='b'/>积分正态支付得到图中的看涨价格，其中尺度等于正态波动率乘期限平方根。非零利率需要确定性贴现因子。<bookmark mark='c'/>不平移的布莱克动态保持正的初始远期严格为正。因此负的标的远期不属于该模型；这与正远期上非正执行价是不同问题。"
+  },
+  "1fd7938ba7d0": {
+   "scene": "Bachelier",
+   "en": "The ordinary numerical example has a positive ten-dollar forward and one-month maturity. <bookmark mark='a'/> Volatility coefficients are matched locally; the at-the-money call values are close, but not exactly equal. <bookmark mark='b'/> Away from the money, support and tails change the payoff expectation. <bookmark mark='c'/> The original computation skips Black values at zero and negative strikes. They are not undefined economically: a strictly positive lognormal terminal forward makes the call payoff always F T minus K, so its zero-rate price is F minus K. The table supplies that analytical extension. Negative underlying forwards are the separate domain problem motivating the normal model.",
+   "zh": "原始数值例子使用正十美元远期和一个月期限。<bookmark mark='a'/>波动系数局部匹配，平值看涨价格接近但不完全相等。<bookmark mark='b'/>离开平值，支持域和尾部改变支付期望。<bookmark mark='c'/>原始计算跳过零及负执行价的布莱克价格，但经济上并非无定义：严格为正的对数正态终值使支付始终等于终值减执行价，零利率价格因此是远期减执行价。表格补充这个解析延拓。负标的远期才是促使采用正态模型的另一项域问题。"
+  },
+  "c8dee0aae177": {
+   "scene": "Bachelier",
+   "en": "Return to the fair game with its measure stated. <bookmark mark='a'/> Under the pricing measure, a suitable forward gain process is a martingale. <bookmark mark='b'/> Predictable trading against it has zero expected gain when the stochastic integral is a true integrable martingale, for example with bounded holdings and square-integrable increments over a finite horizon. Predictability alone is not enough. <bookmark mark='c'/> A pricing-measure statement does not imply zero physical expected alpha, and Sharpe's holdings identity is a separate accounting argument. Neither licenses a universal claim that every actual trading strategy has zero expected profit.",
+   "zh": "回到公平博弈，并说明测度。<bookmark mark='a'/>在定价测度下，适当的远期收益过程是鞅。<bookmark mark='b'/>当随机积分是真正可积鞅时，可预测交易的期望收益为零。例如有限期限上持仓有界、增量平方可积。只有可预测性并不足够。<bookmark mark='c'/>定价测度下的结论不表示现实测度的期望阿尔法为零，夏普持仓恒等式则是独立的会计论证。两者都不能推出每个真实交易策略期望利润普遍为零。"
+  },
+  "b2e81cb1dda5": {
+   "scene": "Bachelier",
+   "en": "And the man. <bookmark mark='a'/> On the twenty-ninth of March nineteen hundred, Louis Bachelier defended his thesis on the theory of speculation in Paris, with Henri Poincaré on the committee. <bookmark mark='b'/> It contained the random walk, the diffusion equation five years before Einstein's paper on Brownian motion, and option prices tested on French government bonds. <bookmark mark='c'/> It was forgotten for half a century, until Leonard Savage and Paul Samuelson found it. This series began there.",
+   "zh": "以及这个人。<bookmark mark='a'/>一九〇〇年三月二十九日，路易·巴舍利耶在巴黎为他的投机理论论文答辩，亨利·庞加莱是答辩委员之一。<bookmark mark='b'/>论文包含了随机游走、比爱因斯坦关于布朗运动的论文早五年的扩散方程，以及在法国国债上检验的期权价格。<bookmark mark='c'/>它被遗忘了半个世纪，直到伦纳德·萨维奇和保罗·萨缪尔森发现了它。本系列就从那里开始。"
+  },
+  "a84ffb925b20": {
+   "scene": "Bachelier",
+   "en": "The whole arc. Bachelier's thesis; Markowitz's portfolios; Samuelson and Fama on efficient prices; Black, Scholes and Merton. <bookmark mark='a'/> Harrison and Kreps's measures; the crash of nineteen eighty-seven; the factors of Fama and French; LTCM. <bookmark mark='b'/> The crisis; rough volatility; negative oil and the dash for cash; and the dated public pricing examples from twenty twenty-five.",
+   "zh": "整个历程：巴舍利耶论文、马科维茨组合、萨缪尔森和法马的有效价格、布莱克、斯科尔斯和默顿。<bookmark mark='a'/>哈里森与克雷普斯的测度、一九八七年股灾、法马弗伦奇因子、长期资本管理公司。<bookmark mark='b'/>金融危机、粗糙波动率、负油价和现金争夺，以及二〇二五年有明确日期的公开定价例子。"
+  },
+  "0e8cfc223931": {
+   "scene": "Bachelier",
+   "en": "Pause and predict. The House began as an empty building and a sealed envelope. Name one thing each of the series' seven acts added to it.",
+   "zh": "暂停并预测。本系列公司起初是一栋空楼和一个封存的信封。说出本系列七幕中每一幕为它增加的一样东西。"
+  },
+  "ea9ae01a7738": {
+   "scene": "Journey",
+   "en": "Chapter nine, and the answer to the pause, act by act. Each act developed models and research sections, with arguments under stated assumptions and checks by simulation or data. This is the list, briefly, as a map of what the House now knows.",
+   "zh": "第9章，按幕回顾，也回答暂停问题。每一幕发展模型和研究章节，在明确假设下论证，并用模拟或数据检查。下面简要列出，作为公司知识的地图。"
+  },
+  "1dff2f1dcf97": {
+   "scene": "Journey",
+   "en": "Act one, markets and money. <bookmark mark='a'/> Parts one to three introduced the fair game, point-in-time information, market machinery and accounting. <bookmark mark='b'/> The selected arguments connect information, trading and valuation under their assumptions. The practical lesson is to specify the information and the economic object before interpreting a result.",
+   "zh": "第一幕，市场与货币。<bookmark mark='a'/>第1到3部分介绍公平博弈、时点信息、市场机制及会计。<bookmark mark='b'/>选定论证在各自假设下连接信息、交易与估值。实践教训是：解释结果前先明确可用信息和经济对象。"
+  },
+  "d1a00bb2f339": {
+   "scene": "Journey",
+   "en": "Act two, the toolkit. <bookmark mark='a'/> Parts four to eight develop martingales and measure, stochastic calculus, econometrics, time series and decisions. <bookmark mark='b'/> Research arguments include fluctuation laws, forecast comparisons and estimation risk in portfolio choice. Each proof has a domain; a theorem under one model is not automatic validation of an empirical application.",
+   "zh": "第二幕，工具箱。<bookmark mark='a'/>第4到8部分发展鞅与测度、随机微积分、计量经济学、时间序列及决策。<bookmark mark='b'/>研究论证包括波动规律、预测比较，以及组合选择的估计风险。每个证明都有适用域，某个模型下的定理不会自动验证实证应用。"
+  },
+  "3acaf8a46a70": {
+   "scene": "Journey",
+   "en": "Act three, derivatives under the pricing measure. <bookmark mark='a'/> Parts nine to twenty-two cover no-arbitrage, option models, surfaces, exotics, numerical and deep methods, then curves, credit, clearing, currencies and commodities. <bookmark mark='b'/> Arguments about hedges, noisy prices, approximation and risk transfer retain their assumptions. Comparing models requires matched targets, error definitions and evaluation designs.",
+   "zh": "第三幕，定价测度下的衍生品。<bookmark mark='a'/>第9到22部分涵盖无套利、期权模型、曲面、奇异期权、数值和深度方法，再到曲线、信用、清算、外汇与商品。<bookmark mark='b'/>对冲、带噪价格、近似和风险转移的论证保留各自假设。模型比较需要匹配目标、误差定义及评估设计。"
+  },
+  "95d089e265b5": {
+   "scene": "Journey",
+   "en": "Act four, return premia under the physical measure. <bookmark mark='a'/> Parts twenty-three to twenty-nine move from risk and return through factors, validation, backtesting, machine learning, text and automated research. <bookmark mark='b'/> Selection and uncertainty matter for claims of predictability. Factor labels, an attractive backtest and a pricing-measure theorem do not by themselves establish an independently evaluated net return.",
+   "zh": "第四幕，现实测度下的收益溢价。<bookmark mark='a'/>第23到29部分从风险收益，扩展到因子、验证、回测、机器学习、文本及自动研究。<bookmark mark='b'/>可预测性主张必须考虑筛选和不确定性。因子名称、好看的回测或定价测度定理，本身都不能证明独立评估的净收益。"
+  },
+  "6af8f4d9ac07": {
+   "scene": "Journey",
+   "en": "Act five, portfolios and the firm. <bookmark mark='a'/> Parts thirty to thirty-four connect portfolio construction, risk models, costs and trading through time, systematic macro, statistical arbitrage and the quant firm. <bookmark mark='b'/> Estimation and trading-control arguments depend on objectives, constraints and cost models. Implementation and risk governance are part of the economic decision, not consequences of a single fitted alpha.",
+   "zh": "第五幕，组合与公司。<bookmark mark='a'/>第30到34部分连接组合构建、风险模型、成本与动态交易、系统宏观、统计套利及量化公司。<bookmark mark='b'/>估计和交易控制论证依赖目标、约束及成本模型。实施和风险治理属于经济决策的一部分，不是单个拟合阿尔法的自动推论。"
+  },
+  "214c11d7aedf": {
+   "scene": "Journey",
+   "en": "Act six, microstructure. <bookmark mark='a'/> Parts thirty-five to thirty-nine study counterparties, order books, impact, execution, market making, funds, speed competition, crypto and decentralised finance. <bookmark mark='b'/> Selected models explain information in order flow, execution schedules and liquidity-provider losses. Equilibrium and welfare claims remain conditional on the strategic and market-design assumptions.",
+   "zh": "第六幕，微观结构。<bookmark mark='a'/>第35到39部分研究交易对手、订单簿、冲击、执行、做市、基金、速度竞争、加密资产及去中心化金融。<bookmark mark='b'/>选定模型解释订单流信息、执行计划及流动性提供者损失。均衡和福利结论仍以策略及市场设计假设为条件。"
+  },
+  "5736083beb24": {
+   "scene": "Journey",
+   "en": "Act seven, the system. <bookmark mark='a'/> Parts forty to forty-two examine risk measurement, leverage, liquidity, crises and machines in markets. This forty-third part is the separate finale in the canonical map. <bookmark mark='b'/> Risk tests, clearing and agent interaction reveal different system questions. Combining models can change outcomes, and a curriculum map is not an audit or approval of a combined trading system.",
+   "zh": "第七幕，系统。<bookmark mark='a'/>第40到42部分检查风险度量、杠杆、流动性、危机和市场中的机器。第43部分在正式地图中是独立终章。<bookmark mark='b'/>风险检验、清算及代理互动揭示不同系统问题。组合模型会改变结果，课程地图不是组合交易系统的审计或批准。"
+  },
+  "8e567d32b4c9": {
+   "scene": "Journey",
+   "en": "The structural count. <bookmark mark='a'/> Forty-three parts: seven acts followed by this separate finale. <bookmark mark='b'/> Models, proofs with assumptions, simulations and public-data examples. <bookmark mark='c'/> A proposed workflow: define the question, freeze choices, evaluate and report. This curriculum map is not an audit or score of strategy outcomes. It does not assert that a registry or a sealed file by itself guarantees an independent experiment.",
+   "zh": "结构上的计数。<bookmark mark='a'/>七幕之后另有终章，合计四十三部分。<bookmark mark='b'/>模型、有假设的证明、模拟和公开数据例子。<bookmark mark='c'/>建议的流程是定义问题、冻结选择、评估和报告。课程地图不是策略结果的审计或评分，也不宣称登记表或封存文件本身保证实验独立。"
+  },
+  "3de5a066a4a4": {
+   "scene": "Journey",
+   "en": "Pause and predict. Forty-two rules later, what should the House's last rule be?",
+   "zh": "暂停并预测。四十二条规则之后，本系列公司的最后一条规则应该是什么？"
+  },
+  "24575bc36a9b": {
+   "scene": "House",
+   "en": "The last rule, stated as proposed governance. <bookmark mark='a'/> Choose a defensible benchmark for the mandate. An index is the teaching default here, rather than a universal answer for every liability. <bookmark mark='b'/> Put the burden of evidence on a candidate change, after costs, risk and selection. <bookmark mark='c'/> A capital decision must also reflect uncertainty, constraints and independent risk review. This lecture does not approve a strategy, a sleeve or a deployment.",
+   "zh": "最后一条规则，是治理建议。<bookmark mark='a'/>为投资任务选择合理基准。指数在这里是教学默认项，不是每种负债的普遍答案。<bookmark mark='b'/>候选改变应承担证据责任，并考虑成本、风险与筛选。<bookmark mark='c'/>资本决策还必须考虑不确定性、约束及独立风险审查。本讲没有批准策略、子组合或部署。"
+  },
+  "83803416950b": {
+   "scene": "House",
+   "en": "Chapter ten. The forty-third rule belongs to the whole House, and it is the one every other rule was building toward: the burden of proof is on the strategy, not on the market.",
+   "zh": "第10章。第43条规则属于整个本系列公司，它是其他每一条规则都在为之铺路的那一条：举证责任在策略一方，而不在市场一方。"
+  },
+  "6fab8f81c7fc": {
+   "scene": "House",
+   "en": "A proposed cross-desk review. <bookmark mark='a'/> Risk reports validation, assumptions and limitations. <bookmark mark='b'/> Treasury examines funding, collateral, margin and liquidity stresses. <bookmark mark='c'/> Agents are examined in interaction, including copies and deviations. <bookmark mark='d'/> Research reports its prospective design and all planned results. <bookmark mark='e'/> Portfolio decisions require a mandate, benchmark, costs and a justified risk budget. These are review responsibilities, not claims that every test has been passed.",
+   "zh": "建议的跨部门审查。<bookmark mark='a'/>风险部门报告验证、假设和限制。<bookmark mark='b'/>资金部门检查融资、抵押品、保证金和流动性压力。<bookmark mark='c'/>代理需要放在互动中检查，包括复制和偏离。<bookmark mark='d'/>研究部门报告前瞻设计及全部计划结果。<bookmark mark='e'/>组合决策需要任务、基准、成本和合理风险预算。这些是审查职责，不代表所有检验都已通过。"
+  },
+  "14f254a6d06c": {
+   "scene": "House",
+   "en": "Some of the rules that got the House here. <bookmark mark='a'/> The first: point in time. <bookmark mark='b'/> A new model must beat the simpler one out of sample. <bookmark mark='c'/> The backtest protocol: register, count, deflate. <bookmark mark='d'/> A risk number is a forecast; survive the margin call you have not been sent; test the agent against the market it creates. <bookmark mark='e'/> And the last: the market is the default.",
+   "zh": "把本系列公司带到这里的一些规则。<bookmark mark='a'/>第一条：时点。<bookmark mark='b'/>新模型必须在样本外胜过更简单的模型。<bookmark mark='c'/>回测协议：登记、计数、紧缩。<bookmark mark='d'/>风险数字是预测；在你还没收到的追加保证金通知中存活；在智能体自己创造的市场里检验它。<bookmark mark='e'/>以及最后一条：市场是默认选项。"
+  },
+  "b083fdb5d55c": {
+   "scene": "House",
+   "en": "A policy template for the teaching House. <bookmark mark='a'/> Match the benchmark to the mandate. <bookmark mark='b'/> Treat any proposed active rule as a research candidate requiring evidence, including a mix of published factors. <bookmark mark='c'/> Build the risk budget around uncertainty and actual implementation. <bookmark mark='d'/> Apply liquidity, concentration and interaction controls. This is a template for decisions, not a report of executed positions or an allocation justified by sealed outcomes.",
+   "zh": "教学公司的政策模板。<bookmark mark='a'/>使基准匹配任务。<bookmark mark='b'/>任何主动规则，包括已发表因子的组合，都作为需要证据的研究候选。<bookmark mark='c'/>按不确定性及实际实施建立风险预算。<bookmark mark='d'/>施加流动性、集中度和互动控制。这是决策模板，不是已执行持仓报告，也不是由封存结果支持的配置。"
+  },
+  "f7bd17d9d160": {
+   "scene": "House",
+   "en": "The House, complete. Data and technology across the top; the trading desks, from volatility and rates to credit, macro and digital assets; research, portfolio and risk, execution and market making; and treasury and compliance underneath. Forty-three parts ago it was an empty building and a sealed envelope.",
+   "zh": "本系列公司，完整了。数据和技术在最上面；交易台，从波动率和利率到信用、宏观和数字资产；研究、投资组合和风险，执行和做市；资金和合规在底层。四十三个部分之前，它还是一栋空楼和一个封存的信封。"
+  },
+  "0ce8c2117411": {
+   "scene": "House",
+   "en": "What the House would tell the people who join it. <bookmark mark='a'/> To a new analyst: write down the test before you run it, count what you try, keep the last years sealed, and report the costs. <bookmark mark='b'/> To a portfolio manager: choose a mandate-consistent benchmark, examine independent evidence and implementation, and know who is on the other side. <bookmark mark='c'/> And to a researcher: prove what you claim, check it on data the proof never saw, and publish the null results.",
+   "zh": "给加入公司的人。<bookmark mark='a'/>新分析师：运行前写下检验，记录尝试次数，保持最后年份封存，并报告成本。<bookmark mark='b'/>组合经理：选择与任务一致的基准，检查独立证据和实施，并了解交易对手。<bookmark mark='c'/>研究者：证明主张，用证明未接触的数据检查，并发表空结果。"
+  },
+  "7c739afd53dc": {
+   "scene": "House",
+   "en": "The House's code for Chapter two. Storey's estimate is two lines: the share of p-values above lambda, scaled up and capped at one. The component shares then use a positive-part tail subtraction. Those guards do not inherit the uncapped expectation proof; Chapter R states the distinction.",
+   "zh": "第2章使用的代码。斯托里的估计只有两行：把高于阈值的概率值比例放大，再把上限截为一。成分份额再采用尾部减法的正部。这些保护操作不会继承未截断估计的期望证明，研究章会区分。"
+  },
+  "5c25860ffcbe": {
+   "scene": "House",
+   "en": "The ordinary skill-module tools used here. <bookmark mark='a'/> Stylised luck calculations, estimators, an allocation model and descriptive sample statistics. Their names do not certify empirical skill. <bookmark mark='b'/> Proposed Rule forty-three: justify the benchmark, require independent net evidence for a change, and review risk and implementation before allocating capital.",
+   "zh": "这里使用的普通技能工具。<bookmark mark='a'/>简化运气计算、估计量、配置模型和描述性样本统计。工具名称不认证实证技能。<bookmark mark='b'/>建议的第43条规则：论证基准，改变前要求独立净收益证据，分配资本前审查风险与实施。"
+  },
+  "6150f4a6a6a4": {
+   "scene": "House",
+   "en": "Three last tests to carry away. <bookmark mark='a'/> When a fund beat the market for five years, ask how many tried, what luck alone would give, and whether its record was registered before it was run. <bookmark mark='b'/> When a manager has real skill, ask who receives it. <bookmark mark='c'/> And when a strategy worked for decades, examine whether its mechanism persists and how an independent evaluation would test it.",
+   "zh": "最后带走三个检验问题。<bookmark mark='a'/>基金连续五年战胜市场时，问多少基金尝试过，单靠运气会发生什么，以及记录是否在运行前登记。<bookmark mark='b'/>经理有真实技能时，问回报归谁。<bookmark mark='c'/>策略几十年有效时，检查机制是否持续，以及如何独立评估。"
+  },
+  "438ec5b88eb4": {
+   "scene": "Research",
+   "en": "For the researcher. Two mathematical arguments, with their boundaries. First, the uncapped large-p-value estimator has an upward expectation bound, but the practical cap changes that result. Second, competitive Bayesian allocation can give zero expected dollar alpha under an idealised model, even though managers have different skills. The chapter proves the statements, gives a clipping counterexample and compares a finite simulation with the conditional allocation argument.",
+   "zh": "写给研究者：两项数学论证及其边界。第一，未截断的大概率值估计具有向上的期望界限，但实用的上限截断改变这个结果。第二，理想模型下，竞争性贝叶斯配置可使期望阿尔法金额为零，尽管经理技能不同。本章给出证明、截断反例，并比较有限模拟和条件配置论证。"
+  },
+  "7421d72aae0f": {
+   "scene": "Research",
+   "en": "Define the objects carefully. <bookmark mark='a'/> There are m tests, with m nought true nulls. <bookmark mark='b'/> Assume each true null has a uniform p-value. Dependence is allowed, and validity still needs justification. <bookmark mark='c'/> Count the p-values above lambda. <bookmark mark='d'/> Divide by m times one minus lambda to obtain the raw estimator, denoted with a tilde. The unchanged helper caps this number at one. We use a hat for that different random variable.",
+   "zh": "仔细定义对象。<bookmark mark='a'/>共有若干检验，其中一部分是真空假设。<bookmark mark='b'/>假设每个真空假设的概率值均匀分布。允许依赖，但有效性仍需论证。<bookmark mark='c'/>计算高于阈值的概率值数量。<bookmark mark='d'/>除以检验数乘一减阈值，得到用波浪号表示的原始估计。未改动的函数把它上限截为一，我们用帽号表示这个不同随机变量。"
+  },
+  "87cb7ce088e0": {
+   "scene": "Research",
+   "en": "The raw expectation bound. <bookmark mark='a'/> Its expectation is the true null share plus the alternatives' large-p-value probabilities, divided by a positive denominator. <bookmark mark='b'/> Therefore it is at least the null share, without any independence requirement. This does not say every realised estimate is above the truth, nor does it give a confidence interval. Uniform nulls give the equality shown; suitable superuniform nulls give a lower-bound version.",
+   "zh": "原始期望界限。<bookmark mark='a'/>期望等于真实空假设份额，加备择假设的大概率值概率之和，除以正分母。<bookmark mark='b'/>因此不小于空假设份额，无需独立性。但这不表示每次实现都高于真值，也不给出置信区间。均匀空假设产生图中等式，适当的超均匀空假设产生下界版本。"
+  },
+  "471ba69b9000": {
+   "scene": "Research",
+   "en": "The proof is short. <bookmark mark='a'/> A count is a sum of indicators. Expectation turns it into the sum of their probabilities, even when the indicators depend on each other. <bookmark mark='b'/> Uniform nulls contribute one minus lambda each. <bookmark mark='c'/> Divide and subtract the null share. The remaining numerator is a sum of nonnegative probabilities. The bound is exact for the raw estimator at a fixed threshold. A threshold selected from these same p-values requires a separate argument.",
+   "zh": "证明很短。<bookmark mark='a'/>计数是指示变量之和，即使变量依赖，期望也把它变成概率之和。<bookmark mark='b'/>每个均匀空假设贡献一减阈值。<bookmark mark='c'/>相除，再减空假设份额，剩余分子是非负概率之和。对固定阈值，原始估计的界限精确成立。如果阈值从同一组概率值中选择，还需要另行论证。"
+  },
+  "c89cb0ab1730": {
+   "scene": "Research",
+   "en": "Why the cap matters. <bookmark mark='a'/> Let all null p-values equal the same uniform random variable. Each marginal remains valid, and every test is a true null. <bookmark mark='b'/> At lambda one half, the raw estimator is zero or two, equally likely. Its expectation is one, as proved. <bookmark mark='c'/> Cap at one and the estimator becomes zero or one, equally likely, with expectation one half. Thus the capped estimator can underestimate the null share on average. Capping the theoretical mean at one cannot stand in for taking the mean of capped estimates.",
+   "zh": "为什么上限重要？<bookmark mark='a'/>令所有空假设概率值等于同一个均匀随机变量。每个边际都有效，且全部检验是真空假设。<bookmark mark='b'/>阈值为二分之一时，原始估计等概率取零或二，期望为一。<bookmark mark='c'/>截为一后，估计等概率取零或一，期望变成二分之一。因此截断估计可能平均低估空假设份额。把理论均值截为一，不能替代对截断随机估计取均值。"
+  },
+  "37c90a4d3d68": {
+   "scene": "Research",
+   "en": "Expectation is only one property. <bookmark mark='a'/> Write each count contribution as an indicator. <bookmark mark='b'/> The variance includes individual Bernoulli variances and every pairwise covariance, divided by the squared scaling constant. Dependence can increase or decrease it. <bookmark mark='c'/> Under independent uniform nulls and no alternatives, the variance is lambda over m times one minus lambda. <bookmark mark='d'/> If the indicators instead have a fixed positive common correlation, that covariance contribution need not disappear as the test family grows. This is an indicator-correlation example, not a conversion from a Gaussian factor correlation.",
+   "zh": "期望只是一个性质。<bookmark mark='a'/>把每项计数贡献写为指示变量。<bookmark mark='b'/>方差包括单项伯努利方差和所有成对协方差，再除以缩放常数平方。依赖可能增加或降低方差。<bookmark mark='c'/>若全部为独立均匀空假设，方差是阈值除以检验数乘一减阈值。<bookmark mark='d'/>若指示变量具有固定正的共同相关性，随着检验族增大，协方差贡献不一定消失。这是指示变量相关性的例子，不是从高斯因子相关性直接转换。"
+  },
+  "ef51d794d0af": {
+   "scene": "Research",
+   "en": "An analytical example makes the bias visible. <bookmark mark='a'/> Take eighty percent nulls and two-sided normal p-values. For an alternative with mean mu, the large-p-value probability is the normal probability between minus c and c, with c set by lambda. <bookmark mark='b'/> Substituting that probability gives these exact raw-estimator expectation curves for means one, two and three. They are analytical curves, not new simulations or capped estimates. <bookmark mark='c'/> Strong alternatives contribute less large-p-value mass here. A general claim that increasing lambda always reduces bias needs assumptions about alternative tails; an arbitrary alternative distribution need not have that property.",
+   "zh": "解析例子显示偏差。<bookmark mark='a'/>取百分之八十空假设和双侧正态概率值。备择均值为缪时，大概率值概率等于正态变量落在负临界值到正临界值之间的概率，临界值由阈值确定。<bookmark mark='b'/>代入后，得到均值一、二、三的原始估计精确期望曲线。这些是解析曲线，不是新模拟或截断估计。<bookmark mark='c'/>这里较强备择贡献较少的大概率值质量。一般性地声称提高阈值总能减少偏差，需要备择尾部假设；任意备择分布不一定如此。"
+  },
+  "cc5d1fac0fd5": {
+   "scene": "Research",
+   "en": "Return to the fund decomposition. <bookmark mark='a'/> Subtracting estimated lucky zero-alpha nulls from a right-tail share gives a useful descriptive component estimate. <bookmark mark='b'/> Its relation to the positive-alpha population also depends on power and on other alternatives entering the right tail. <bookmark mark='c'/> The unchanged helper caps the null estimate and takes the positive part of the subtraction. Those nonlinear operations do not inherit the raw expectation theorem. We therefore do not claim a universal lower bound on the skilled share from that implementation.",
+   "zh": "回到基金分解。<bookmark mark='a'/>从右尾份额减去估计的幸运零阿尔法空假设，可得有用的描述性成分估计。<bookmark mark='b'/>它与正阿尔法群体的关系，还取决于功效及其他备择进入右尾的情况。<bookmark mark='c'/>未改动的函数截断空假设估计，并对差值取正部。这些非线性运算不会继承原始期望定理，因此不能声称该实现给出了技能份额的普遍下界。"
+  },
+  "7a38ba6c04d5": {
+   "scene": "Research",
+   "en": "Now distinguish an error fraction from an error rate. <bookmark mark='a'/> False discovery proportion is false selections divided by selections, using zero when there are no selections. False discovery rate is its expectation over repeated samples. <bookmark mark='b'/> Here the ordinary BH procedure uses one-sided t p-values for positive alpha. Valid nulls and independence, or a suitable dependence condition, justify its error control. <bookmark mark='c'/> In this one simulated population, the naive rule selects 94, with realised false fraction 78 percent. <bookmark mark='d'/> BH at ten percent selects 13, with realised false fraction 0 percent. That one realised fraction is not expected FDR. The adaptive calculation uses a capped estimate from two-sided p-values targeting zero alpha, whereas the discovery null includes negative alpha too; no automatic adaptive-control claim follows.",
+   "zh": "区分错误比例与错误率。<bookmark mark='a'/>错误发现比例是错误选择数除以选择数，没有选择时记为零。错误发现率是它在重复样本中的期望。<bookmark mark='b'/>这里普通本杰明尼与霍赫伯格程序使用检验正阿尔法的单侧学生概率值。有效空假设以及独立性或适当依赖条件，才能支持其控制。<bookmark mark='c'/>这个模拟群体中，简单规则选出94只，实际错误比例百分之78。<bookmark mark='d'/>百分之十水平的程序选出13只，实际错误比例百分之0。一次比例不是期望错误发现率。自适应计算使用双侧概率值的截断估计，针对零阿尔法；发现的空假设还包括负阿尔法，因此不能自动推出自适应错误控制。"
+  },
+  "3e15806ca8ab": {
+   "scene": "Research",
+   "en": "The adaptive q scores rank the same simulated funds. <bookmark mark='a'/> They are reverse cumulative minima of the estimated null share times m times the ordered p-value divided by rank. <bookmark mark='b'/> They describe thresholds in that estimated tail procedure. They are not posterior probabilities that individual funds are false, and their calibration requires assumptions beyond the sorting formula. The truth column is available because this is a simulation; an empirical table would not know each fund's true alpha.",
+   "zh": "自适应分数排列同一组模拟基金。<bookmark mark='a'/>计算估计空假设份额乘检验数乘排序概率值、除以排名，再取反向累积最小值。<bookmark mark='b'/>它描述该估计尾部程序的阈值，不是单只基金为假的后验概率。校准需要排序公式以外的假设。真值列存在是因为这是模拟；实证表不知道每只基金真实阿尔法。"
+  },
+  "cda193092fc4": {
+   "scene": "Research",
+   "en": "The second argument concerns allocation. <bookmark mark='a'/> Under a correctly specified Bayesian model, mu is the conditional mean of first-dollar skill. Let b be positive scale cost and f the fee. <bookmark mark='b'/> Competitive investors allocate the positive part of mu minus f, divided by b. <bookmark mark='c'/> Next period's net alpha is true skill minus scale cost and fee, plus conditionally mean-zero noise. This is an idealised allocation model, with a known prior and no capacity, liquidity or flow frictions beyond the linear scale term.",
+   "zh": "第二项论证讨论配置。<bookmark mark='a'/>在正确设定的贝叶斯模型中，缪是第一单位资金技能的条件均值，规模成本为正，另有费用。<bookmark mark='b'/>竞争投资者配置均值减费用的正部，再除以规模成本。<bookmark mark='c'/>下一期净阿尔法等于真实技能减规模成本和费用，加条件均值为零的噪声。这是理想配置模型，先验已知，除线性规模项外，不含容量、流动性或资金流摩擦。"
+  },
+  "cdabc9af2eb0": {
+   "scene": "Research",
+   "en": "The proof also handles the boundary. <bookmark mark='a'/> Substitute the allocation into the conditional expectation. The result is the smaller of mu minus the fee and zero. <bookmark mark='b'/> For a positive allocation, that conditional expected net alpha is zero. <bookmark mark='c'/> Multiplying by allocated assets gives zero expected dollar alpha even at the boundary, where no dollars are invested. <bookmark mark='d'/> With integrable products, the tower property makes that dollar gain orthogonal to current measurable information. It does not say the hypothetical net return of every inactive fund is a martingale difference, or that a sample selected for survival next year obeys the same conditional statement.",
+   "zh": "证明也处理边界。<bookmark mark='a'/>把配置代入条件期望，得到均值减费用与零的较小值。<bookmark mark='b'/>正配置时，条件期望净阿尔法为零。<bookmark mark='c'/>乘以资产后，即使在没有投入资金的边界，期望阿尔法金额也为零。<bookmark mark='d'/>在乘积可积条件下，塔式法则使金额收益与当前可测信息正交。这不表示每只未活跃基金的假设净收益都是鞅差，也不表示按下一年存续筛选的样本服从同一条件结论。"
+  },
+  "0034e39a7c39": {
+   "scene": "Research",
+   "en": "The ordinary simulation is descriptive. <bookmark mark='a'/> Pooling fund-years with assets in both years gives slope -0.020; that sample uses future survival. <bookmark mark='b'/> A separate fixed-size simulation gives 0.238, compared with the population signal-to-total-variance reference 0.265. <bookmark mark='c'/> Repeated observations share fund skill, and the survivor-selected sample is not the conditional population used in the proof. The original naive pooled standard errors are therefore not presented as general confidence intervals. These finite slopes illustrate different allocation designs; they do not prove the theorem or identify a universal causal effect of flows.",
+   "zh": "普通模拟是描述性的。<bookmark mark='a'/>合并前后两年均有资产的基金年度，斜率为-0.020；这个样本使用未来存续信息。<bookmark mark='b'/>另一个固定规模模拟斜率为0.238，总体信号占总方差的参照为0.265。<bookmark mark='c'/>重复观测共享基金技能，存续筛选样本也不同于证明中的条件总体。因此不把原始简单合并标准误作为一般置信区间。有限斜率展示不同配置设计，既不证明定理，也不识别资金流的普遍因果效应。"
+  },
+  "268dddf5f5eb": {
+   "scene": "Research",
+   "en": "Connections and remaining questions. <bookmark mark='a'/> Family-wise error, expected false discovery proportion and a local posterior error probability are distinct quantities. <bookmark mark='b'/> Empirical Bayes can estimate local error probabilities under an appropriate mixture model; the q-score formula alone is not that model. <bookmark mark='c'/> Common factors, changing skill, data-chosen thresholds and adaptive research all create additional inference problems. Counting tests is useful, but it is not a substitute for identifying the null, the information set and the decision rule.",
+   "zh": "联系与待解问题。<bookmark mark='a'/>族错误概率、期望错误发现比例，以及局部后验错误概率，是不同量。<bookmark mark='b'/>适当混合模型下，经验贝叶斯可估计局部错误概率，分数公式本身不是这个模型。<bookmark mark='c'/>共同因子、技能变化、数据选择阈值和自适应研究，都增加推断问题。计数检验有用，却不能替代明确空假设、信息集及决策规则。"
+  },
+  "0bf2b96d6e0d": {
+   "scene": "Research",
+   "en": "Pause and predict. All valid null p-values equal one uniform variable. At lambda one half, what are the raw and capped null-share estimator expectations? Explain why dependence alone does not change the raw expectation, while clipping does.",
+   "zh": "暂停并预测。所有有效空假设概率值都等于同一个均匀变量。阈值二分之一时，原始和截断空假设份额估计的期望各是多少？解释为何依赖本身不改变原始期望，而截断会改变。"
+  },
+  "f10040bc6a87": {
+   "scene": "Outro",
+   "en": "The final part, with assumptions retained. Sharpe's identity uses a common universe and market-weighted passive holdings. The additive Gaussian example shows how luck can survive costs. Selection among many simulated funds produces impressive null statistics. Tail-share estimates have identification and nonlinear-guard limits. Competitive Bayesian allocation can give zero expected dollar alpha under its model. Historical sample correlations differ, without identifying a single cause.",
+   "zh": "最后一部分，保留假设。夏普恒等式需要共同市场和市值加权被动持仓。可加高斯例子展示运气如何抵消成本。从许多模拟基金中筛选，会产生惊人的空假设统计量。尾部份额估计受到识别及非线性保护限制。竞争性贝叶斯配置在其模型下可产生零期望阿尔法金额。历史样本相关性不同，却没有识别单一原因。"
+  },
+  "ed214ae47d53": {
+   "scene": "Outro",
+   "en": "The evidence discipline. Design the record before observing results. Compare pricing errors only after matching their targets and definitions. Distinguish the raw null-share estimator from its cap, and realised false discovery proportion from its expectation. Fresh simulation paths do not test tomorrow's quotes. Distinguish negative underlying support from a nonpositive strike. The final governance proposal puts independent net evidence and risk review before a change from a justified benchmark.",
+   "zh": "证据纪律：观察结果前设计记录；匹配目标和定义后再比较定价误差；区分原始空假设份额估计与截断估计，区分实际错误发现比例与其期望。新模拟路径不能检验明日报价，负标的支持域与非正执行价不同。最后的治理建议是：改变合理基准之前，先取得独立净收益证据并审查风险。"
+  },
+  "eb0bd43413d7": {
+   "scene": "Outro",
+   "en": "The curriculum in one picture: seven acts followed by this finale, forty-three parts in total. Foundations, derivatives, rates and credit, asset pricing, the research craft, market machinery and the financial system. The map organises models and methods. Its completeness does not certify that every economic mechanism is identified or every proposed implementation is validated.",
+   "zh": "一张图回顾课程：七幕之后另有终章，合计四十三部分，包括基础、衍生品、利率信用、资产定价、研究方法、市场机器与金融体系。地图组织模型和方法，完整性不认证每个经济机制都已识别，也不认证每项实施都已验证。"
+  },
+  "3f70666188c6": {
+   "scene": "Outro",
+   "en": "Three habits to keep. <bookmark mark='a'/> State the object: its measure, benchmark, information and decision. <bookmark mark='b'/> Preserve assumptions when moving from a theorem to a simulation or empirical estimate. A successful example is not a universal identification result. <bookmark mark='c'/> Test the combined system, because implementation costs, leverage, liquidity and shared decisions can change outcomes in interaction.",
+   "zh": "保留三个习惯。<bookmark mark='a'/>明确对象，包括测度、基准、信息和决策。<bookmark mark='b'/>从定理转到模拟或实证估计时保留假设。一个成功例子不是普遍识别结果。<bookmark mark='c'/>检验组合系统，因为实施成本、杠杆、流动性和共同决策会在互动中改变结果。"
+  },
+  "d60d68162cff": {
+   "scene": "Outro",
+   "en": "The mathematical spine. A same-universe holdings identity. A stylised additive Gaussian return probability. The raw null-share expectation identity with valid uniform nulls and a fixed threshold. The competitive Bayesian dollar-allocation result with integrability. And the zero-rate normal forward call price. Each formula retains its own assumptions; they are not interchangeable claims about physical future returns.",
+   "zh": "数学主线：同市场持仓恒等式、简化可加高斯收益概率、有效均匀空假设和固定阈值下的原始份额期望恒等式、带可积条件的竞争性贝叶斯金额配置结论，以及零利率正态远期看涨价格。每个公式都有自己的假设，不能互换为关于现实未来收益的主张。"
+  },
+  "73b32a025960": {
+   "scene": "Outro",
+   "en": "Six final desk questions. A selected winning fund needs an explicit null and selection analysis. <bookmark mark='a'/> Aggregate active and passive comparisons need matching holdings and costs. <bookmark mark='b'/> Who benefits from skill depends on information, allocation and scale; the competitive Bayesian result is one model. Full answers are in both languages in the notes.",
+   "zh": "最后六个交易台问题。选出的获胜基金需要明确空假设和筛选分析。<bookmark mark='a'/>主动与被动总体比较，需要匹配持仓和成本。<bookmark mark='b'/>技能归谁，取决于信息、配置及规模，竞争性贝叶斯结论只是一种模型。笔记中有双语完整答案。"
+  },
+  "451359670c9d": {
+   "scene": "Outro",
+   "en": "A long historical record still needs a stable mechanism and independent evaluation. <bookmark mark='a'/> A research Sharpe of two has no universal future conversion factor. <bookmark mark='b'/> And clipping does not preserve the raw null-share expectation bound. The perfectly dependent all-null example is an explicit counterexample, not a claim about every dataset.",
+   "zh": "长期历史记录仍需要稳定机制和独立评估。<bookmark mark='a'/>研究夏普为二，没有普遍的未来转换系数。<bookmark mark='b'/>截断不会保留原始空假设份额的期望界限。完全依赖、全部为空假设的例子，是明确反例，不是对所有数据集的断言。"
+  },
+  "6c94ed65624a": {
+   "scene": "Outro",
+   "en": "The research pause. <bookmark mark='a'/> With all p-values equal to one uniform draw and lambda one half, the raw estimate is zero or two, each with probability one half. Its mean is one. <bookmark mark='b'/> The cap makes it zero or one, so its mean is one half, below the true null share of one. The raw identity uses marginal validity and linearity; the cap is a different random variable.",
+   "zh": "研究章暂停答案。<bookmark mark='a'/>全部概率值等于一个均匀抽样，阈值为二分之一，原始估计等概率取零或二，均值为一。<bookmark mark='b'/>上限截断使它等概率取零或一，均值二分之一，低于真空假设份额一。原始恒等式依赖边际有效性及期望线性性，截断后是不同随机变量。"
+  },
+  "f2890dee6bfa": {
+   "scene": "Outro",
+   "en": "The first six problems work through the holdings identity and cost gap, additive Gaussian luck, expected null counts, raw and capped null estimates, descriptive tail subtraction and competitive allocation. Each answer must state its assumptions. Full worked solutions are in the English and Chinese notes. Pause the video to solve the page before checking them.",
+   "zh": "前六题练习持仓恒等式及成本差、可加高斯运气、空假设期望数量、原始与截断估计、描述性尾部减法和竞争配置。每个答案都应说明假设。英文和中文笔记提供完整解答。请暂停视频，先解题，再核对。"
+  },
+  "afce753375bb": {
+   "scene": "Outro",
+   "en": "Four advanced problems: derive a stationary variance ratio; allocate a family-wise error budget; calculate raw-estimator variance under correlated indicators; and distinguish a normal at-the-money call from the linear extension of a positive Black call at a negative strike. Explain the inference and support assumptions as well as giving the numerical answers.",
+   "zh": "四道进阶题：推导平稳方差比，分配检验族错误预算，计算相关指示变量下原始估计方差，以及区分正态平值看涨与正远期布莱克看涨在负执行价处的线性延拓。除数值答案外，还需解释推断及支持域假设。"
+  },
+  "7074ed7e7c3b": {
+   "scene": "Outro",
+   "en": "Two qualifying-exam problems. Prove the raw null-share expectation and covariance variance identities, derive the independent special case and give the clipping counterexample. Then prove the Bayesian competitive allocation result, including zero allocation, integrability and the tower-property orthogonality statement. The notes give complete bilingual derivations, not just final formulas.",
+   "zh": "两道资格考题。证明原始空假设份额的期望和协方差方差恒等式，推导独立特例，并给出截断反例。再证明贝叶斯竞争配置结论，包括零配置、可积条件和塔式正交关系。笔记有双语完整推导，不只给最终公式。"
+  },
+  "33feb06b71ac": {
+   "scene": "Outro",
+   "en": "The references connect the arguments to their authors. Inputs here are the audited ordinary fixed-seed examples, French daily returns through twenty twenty, authenticated earlier public pricing summaries and explicit analytical calculations. The historical energy episode uses dated CME Clearing notices and the CFTC report. Exact sources and evaluation limits are listed in the notes.",
+   "zh": "参考文献连接论证与作者。本讲输入为经过审计的普通固定种子例子、截至二〇二〇年的弗伦奇日收益、经过认证的既有公开定价汇总，以及明确的解析计算。能源历史案例采用有日期的芝商所清算通知及美国商品期货交易委员会报告。笔记列出精确来源和评估限制。"
+  },
+  "a1675e43cf5d": {
+   "scene": "Outro",
+   "en": "Reproducibility also has boundaries. <bookmark mark='a'/> The eight ordinary originals each ran once, and all eight reused public derived hashes were verified against prior approvals. <bookmark mark='b'/> Unknown and excluded names are blocked before path or counted cache access; missing or changed outputs cannot trigger implicit computation. The complete original compute command must not be used blindly, because it includes excluded strategy-opening functions. <bookmark mark='c'/> Future research needs its own justified evaluation design and full reporting. A reproducible byte sequence alone does not establish economic truth.",
+   "zh": "复现也有边界。<bookmark mark='a'/>八个普通原始函数各运行一次，八个复用公开衍生输入的哈希均对照此前批准核验。<bookmark mark='b'/>未知及排除名称在路径或计数缓存访问前被阻止；缺失或变化的输出不能隐式触发计算。完整原始计算命令含有排除的策略打开函数，不能盲目运行。<bookmark mark='c'/>未来研究需要独立合理的评估设计及完整报告。字节可复现本身不证明经济真理。"
+  },
+  "a819076c2561": {
+   "scene": "Outro",
+   "en": "The House ends as a map of quantitative work: models with assumptions, proofs with domains, experiments with selection and uncertainty, and decisions with implementation constraints. No one formula settles whether a particular manager or strategy can beat a justified benchmark after costs. The durable habit is to define the claim, preserve the information boundary and evaluate before changing the decision. <bookmark mark='a'/> That is the end of Quant, Built. Thank you for building it with us.",
+   "zh": "公司最后成为量化工作的地图：有假设的模型、有定义域的证明、有筛选和不确定性的实验，以及有实施约束的决策。没有一个公式能单独判定某位经理或策略是否可在成本后战胜合理基准。持久的习惯是明确主张、守住信息边界，并在改变决策前评估。<bookmark mark='a'/>《量化金融，从零搭建》到此结束。感谢你一路共同搭建。"
+  }
+ }
+}

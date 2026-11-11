@@ -1,0 +1,154 @@
+from __future__ import annotations
+
+from datetime import date
+
+import numpy as np
+
+from explainer.quant import *  # noqa: F403
+from videos.quant.quant12.common import BAD, IV, LV, OPT, PART, RV, SPOT, load, real_data
+
+
+def _t(s):
+    d = date.fromisoformat(s)
+    return d.year + (d.timetuple().tm_yday - 1) / 365
+
+
+class Moments(VoiceoverScene):
+    def construct(self):
+        m = load("rn_moments")
+        self.card()
+        self.strips(m)
+        self.derive()
+        self.series(m)
+        self.svix(m)
+
+    def card(self):
+        c = chapter_card(13, r"What option prices say about the future", r"Can a strip of options forecast a return?",
+                         part=PART)
+        with self.voiceover("Chapter thirteen. What option prices say about the future."):
+            self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
+        self.play(FadeOut(c))
+
+    def strips(self, m):
+        K = np.asarray(m["K"])
+        S = m["strips"]
+        names = [("logvar", r"log variance: weight $2/K^2$ (the VIX)", IV),
+                 ("svix", r"SVIX: weight $2/F^2$, flat (Martin)", LV),
+                 ("cubic", r"skewness: weight $(6x - 3x^2)/K^2$ (Bakshi, Kapadia, Madan)", BAD)]
+        gs = VGroup()
+        for key, title, col in names:
+            y = np.asarray(S[key])
+            g = axes([K.min(), K.max()], [-1.05, 1.05] if key == "cubic" else [0, 1.05], x_length=3.9, y_length=2.6,
+                     xlabel=r"$K/F$", xticks=[0.5, 1.0, 1.5, 2.0], yticks=[], font_size=14)
+            bars = VGroup(*[Line(g.ax.c2p(a, 0), g.ax.c2p(a, b), color=col, stroke_width=2) for a, b in zip(K[::8], y[::8])])
+            t = wrapped_label(title, 3.9, 17, col).next_to(g, UP, buff=0.1)
+            gs.add(VGroup(g, bars, t))
+        gs.arrange(RIGHT, buff=0.35).to_edge(UP, buff=0.8)
+        foot = wrapped_label(r"each bar: weight $\times$ the out-of-the-money option price at that strike, scaled to its "
+                             r"largest; the sum is the moment", 12, 19, GREY_B).to_edge(DOWN, buff=0.8)
+        mo = m["surface_mom"]
+        nums = MathTex(rf"\text{{the Surface, 30 days: }}\ \sigma_Q = {100 * np.sqrt(mo['var']):.1f}\%,\ \ "
+                       rf"\text{{skew}}_Q = {mo['skew']:.2f},\ \ \text{{kurt}}_Q = {mo['kurt']:.1f}", font_size=30,
+                       color=WHITE).next_to(foot, UP, buff=0.35)
+        src = real_data(r"the Surface's SSVI fit, 30-day strip")
+        sq, sk, ku = 100 * np.sqrt(mo["var"]), mo["skew"], mo["kurt"]
+        with self.voiceover(
+            f"""Change the strip weights to price other payoffs. <bookmark mark='a'/> Equal weights give the variance of the simple gross return, the object behind Martin's SVIX. <bookmark mark='b'/> For a cubic log-return payoff, the strip uses its second derivative, proportional to six x minus three x squared over K squared; the payoff is cubic, not that weight. Centering and scaling the log moments gives Bakshi, Kapadia and Madan's skewness construction. <bookmark mark='c'/> The fitted, truncated thirty-day strip gives annualized log-return volatility {sq:.1f} percent, log-return skewness {sk:.2f}, and kurtosis {ku:.1f}. These are different from simple-return variance, and their tail estimates depend on the extrapolated model outside observed strikes."""
+        ) as vo:
+            self.play(FadeIn(gs[0]), FadeIn(src))
+            vo.wait_until("a")
+            self.play(FadeIn(gs[1]))
+            vo.wait_until("b")
+            self.play(FadeIn(gs[2]), FadeIn(foot))
+            vo.wait_until("c")
+            self.play(FadeIn(nums))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def derive(self):
+        rows = [cmath(r"\text{var}^Q(R)", r"=", r"\frac{2}{F^2}\int_0^\infty \text{OTM}(K)\,dK", font_size=38,
+                      colors={r"\text{var}^Q(R)": LV}),
+                cmath(r"\mathbb{E}[R] - R_f", r"=", r"\frac{\text{var}^Q(R)}{R_f} - \text{cov}(mR, R)", font_size=38,
+                      colors={r"\mathbb{E}[R] - R_f": OPT}),
+                cmath(r"\text{cov}(mR, R) \le 0", r"\Rightarrow", r"\mathbb{E}[R] - R_f \ge R_f\,\text{SVIX}^2", font_size=38),
+                cmath(r"V, W, X", r"=", r"\mathbb{E}^Q[r^2], \mathbb{E}^Q[r^3], \mathbb{E}^Q[r^4],\quad r = \ln S_T/F", font_size=34),
+                cmath(r"\text{skew}_Q", r"=", r"\frac{W - 3\mu V + 2\mu^3}{(V - \mu^2)^{3/2}}", font_size=38,
+                      colors={r"\text{skew}_Q": BAD})]
+        whys = [why(r"Carr--Madan with $f(S) = S^2$: $f'' = 2$, a flat weight; $R = S_T/S_0$, zero rates"),
+                why(r"Martin (2017): from $\mathbb{E}^Q X = R_f\,\mathbb{E}[mX]$ and $\mathbb{E}[mR] = 1$, expand "
+                    r"$\text{var}^Q(R)$"),
+                why('requires $\\operatorname{cov}(mR,R)\\le0$; not established by the observed price strip'),
+                why(r"Carr--Madan with $f = r^n$: each moment is its own strip (Bakshi, Kapadia and Madan 2003)"),
+                why(r"centre and scale as usual, with $\mu = \mathbb{E}^Q r$")]
+        step = ladder(self, rows, whys, keep=3, top=2.9, x=-0.6, buff=0.72, edge=6.9)
+        with self.voiceover(
+            """Carr and Madan's identity gives a flat strip for simple-return variance. <bookmark mark='a'/> Let R be the gross asset return, m its stochastic discount factor, and R f deterministic. The physical expected excess return equals risk-neutral variance divided by R f, minus covariance of m R with R. <bookmark mark='b'/> Martin's bound requires that covariance to be non-positive. It is a substantive condition, not something proved by a smile or by variance rising in a historical crash. <bookmark mark='c'/> Log-return powers instead give strips for log moments. <bookmark mark='d'/> Center and scale them for skewness and kurtosis. A continuum of exact prices gives model-independent formulas; finite quoted strikes leave tail and smoothing assumptions."""
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            step(1)
+            vo.wait_until("b")
+            step(2)
+            vo.wait_until("c")
+            step(3)
+            vo.wait_until("d")
+            step(4)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def series(self, m):
+        t = np.array([_t(d) for d in m["days"]])
+        sk, ku = np.asarray(m["skew"]), np.asarray(m["kurt"])
+        g1 = axes([2021.2, 2026], [-3.2, 1.0], x_length=8.4, y_length=2.4, ylabel=r"risk-neutral skewness, 30 days",
+                  xticks=[], yticks=[-2, -1, 0, 1], font_size=15).to_edge(UP, buff=0.5)
+        zero = DashedLine(g1.ax.c2p(2021.2, 0), g1.ax.c2p(2026, 0), color=GREY_C)
+        bars = VGroup(*[Line(g1.ax.c2p(a, 0), g1.ax.c2p(a, float(b)), color=QC.HOUSE if b > 0 else BAD,
+                             stroke_width=2) for a, b in zip(t, sk)])
+        g2 = axes([2021.2, 2026], [2, 24], x_length=8.4, y_length=2.0, ylabel=r"risk-neutral kurtosis",
+                  xticks=[2022, 2023, 2024, 2025], xfmt=lambda u: f"{u:.0f}", yticks=[3, 12, 22], font_size=15
+                  ).next_to(g1, DOWN, buff=0.4)
+        three = DashedLine(g2.ax.c2p(2021.2, 3), g2.ax.c2p(2026, 3), color=GREY_C)
+        kl = curve(g2.ax, t, ku, LV, stroke_width=2)
+        ps = m["share_pos_skew"]
+        side = label(rf"skewness positive in {100 * ps:.0f}\% of weeks (mean {m['mean_skew']:.2f}); kurtosis "
+                     rf"{m['mean_kurt']:.1f} on average; corr(skew, next 30 days' return) = {m['corr_ret']:.2f}",
+                     font_size=19, color=GREY_A).to_edge(DOWN, buff=0.35)
+        src = real_data(r"weekly Deribit surfaces, 2021--2025", corner=UR)
+        tsk = load("termskew")
+        cs = 100 * tsk["call_skew"]
+        pp = 100 * ps
+        cr = m["corr_ret"]
+        with self.voiceover(
+            f"Here are both, every Wednesday since 2021. Skewness on top, gold when positive. <bookmark mark='a'/> Chapter one found the smile call-skewed in {cs:.0f} percent of weeks; the full risk-neutral skewness is positive in only {pp:.0f} percent. They measure different things: the near-money smile proxy compares two strikes, the skewness weighs the whole distribution, and Bitcoin's far left tail is priced dearly even in weeks when near-the-money calls are bid. <bookmark mark='b'/> Kurtosis, below, stays far above three. And the correlation between this week's skewness and the next month's return is {cr:.2f}: a description, not a strategy."
+        ) as vo:
+            self.play(FadeIn(g1), FadeIn(src), Create(zero), LaggedStart(*[Create(b) for b in bars], lag_ratio=0.004,
+                                                                          run_time=3))
+            vo.wait_until("a")
+            self.play(FadeIn(g2), Create(three), Create(kl), run_time=2)
+            vo.wait_until("b")
+            self.play(FadeIn(side))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def svix(self, m):
+        h = load("history")
+        notes = VGroup(
+            wrapped_label('Martin (2017): the S\\&P 500 annualized lower bound averaged about 5\\% and exceeded 20\\% in the 2008 crisis, under its assumptions; a lower bound does not rank actual expected returns', 11.0, 22,
+                          GREY_A),
+            wrapped_label(rf"for bitcoin, from the same weekly strips: {100 * m['svix_mean']:.0f}\% annualized 30-day statistic on average since "
+                          rf"2021, {100 * m['svix_late']:.0f}\% in 2024--2025", 11.0, 22, IV),
+            wrapped_label('requires $\\operatorname{cov}(mR,R)\\le0$, not established here for Bitcoin; Martin--Wagner (2019) extend the approach to individual stocks', 11.0,
+                          22, GREY_B),
+            wrapped_label('pause and predict: does a large conditional, annualized statistic justify buying?', 11.0, 22, QC.HOUSE),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(ORIGIN)
+        a, b = 100 * m["svix_mean"], 100 * m["svix_late"]
+        with self.voiceover(
+            f"""What does the conditional bound say? Martin's equity application motivates using option-implied simple-return variance as a lower bound under his covariance condition. <bookmark mark='a'/> For our Bitcoin strip, dividing the thirty-day statistic by its year fraction gives {a:.0f} percent on average, and {b:.0f} in 2024--2025. This is a simple annualization, not a compounded one-year return guarantee. <bookmark mark='b'/> Pause and predict: does a large number imply buying Bitcoin is justified? No. The required covariance condition is not established here for Bitcoin; model extrapolation and the retrospective quote window add limitations. A lower bound under unverified assumptions is not a forecast or an executable recommendation."""
+        ) as vo:
+            self.play(FadeIn(notes[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(notes[1]))
+            vo.wait_until("b")
+            self.play(FadeIn(notes[2]), FadeIn(notes[3]))
+        self.wait(0.4)
+        self.clear_scene()

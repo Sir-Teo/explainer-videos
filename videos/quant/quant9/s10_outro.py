@@ -1,0 +1,199 @@
+from __future__ import annotations
+
+from explainer.quant import *  # noqa: F403
+from videos.quant.quant9.common import ALT, ARB, CALL, FWD, HEDGE, PART, PUT, Q_C, load
+
+DESK = [
+    (r"Call 10, put 7, strike 100, spot 103, no rates. Arbitrage?",
+     r"parity is consistent: $C-P=3=S-K$. At put 6: buy put, sell call, buy stock, borrow 99; cost 0, payoff 1. At put 8: reverse, lend 100; receive 1 today, terminal payoff 0"),
+    (r"A box spread on strikes 100 and 110, one year, with rates at 4\%. What should it cost, and what is it?",
+     r"$10\,e^{-0.04} \approx 9.61$: it pays 10 in every state, so it is a loan; quoted cheaper, you lend through it, "
+     r"dearer, you borrow. With American options it is not riskless (Robinhood, 2019)"),
+    (r"Price a digital that pays 1 if $S_T > 100$, given calls at 99.5 and 100.5 priced 6.20 and 5.70.",
+     r"the 1-wide call spread costs $(6.20-5.70)/1=0.50$, an approximation, not an identified digital price. At a continuity strike, the narrow-spread limit is $-C^{\prime}(K)=e^{-rT}Q(S_T>K)$"),
+    (r"A parent company trades below the value of its stake in a listed subsidiary. Is it an arbitrage?",
+     r"not a riskless one: the short leg must be borrowed and can be recalled, convergence may take longer than your "
+     r"funding, and the link can be severed (Palm and 3Com; Mitchell, Pulvino and Stafford 2002)"),
+]
+
+PROBLEMS = [
+    r"Prove put--call parity for European options by a no-arbitrage argument, with a borrowing fee $h$ on the stock.",
+    r"Prove the one-period fundamental theorem from Stiemke's lemma: either $\psi > 0$ with $D\psi = p$, or $\theta$ with "
+    r"$\theta \cdot p \le 0$ and $D^\top \theta \ge 0$, $D^\top\theta \ne 0$, but not both.",
+    r"Derive the binomial risk-neutral probability and show that it lies in $(0, 1)$ if and only if "
+    r"$d < e^{r\Delta t} < u$.",
+    r"Show that a butterfly with strikes $K - h, K, K + h$, scaled by $1/h^2$, tends to $e^{-rT} q(K)$.",
+    r"A stock at 100 can be worth 80, 100 or 125 tomorrow, with zero rates. Find the no-arbitrage interval for a call "
+    r"struck at 100, by super-replication and by its dual over risk-neutral measures.",
+    r"Show that the model-free band for a forward-start call $(S_2/S_1 - 1)^+$ is exactly half the band for the "
+    r"forward-start straddle $|S_2/S_1 - 1|$.",
+    r"Derive Margrabe's formula for the option to exchange asset 2 for asset 1 by changing numeraire to asset 2.",    r"(qual) For fractional Brownian motion with Hurst index $H$, show that consecutive increments on any uniform grid "
+    r"have correlation $2^{2H - 1} - 1$, and that $\sum_k |\Delta_k|^2$ over $[0, 1]$ tends to 0 for $H > \frac12$ and to "
+    r"$\infty$ for $H < \frac12$.",
+    r"(qual) For the sign strategy on $\sigma B^H$ with cost $\varepsilon$ per unit traded, derive the yearly mean "
+    r"$m(n) = n[\sigma n^{-H}\sqrt{2/\pi}\,|\rho| - 2\varepsilon p]$ with $p = \frac12 - \arcsin(\rho)/\pi$, find $n^*$, "
+    r"and show that $m(n^*) = H n^* \sigma (n^*)^{-H}\sqrt{2/\pi}\,|\rho|$.",
+]
+
+
+class Outro(VoiceoverScene):
+    def construct(self):
+        env = load("envelope")
+        self.checker(env)
+        self.recap(load("parity"), load("futures_basis"), load("density_specs"), load("mot_grid"), load("neural_mot"))
+        self.desk()
+        self.problems()
+        self.payoffs()
+        self.references()
+        self.house()
+
+    def checker(self, env):
+        chart = house_chart(PART, lit=("data",)).scale(0.62).to_edge(UP, buff=0.2)
+        rows = [
+            (r"\texttt{parity\_gap}, \texttt{implied\_forward}", r"parity with rates and borrow; the forward from raw trades"),
+            (r"\texttt{ftap}, \texttt{simplex}", r"state prices or an arbitrage, by linear programming"),
+            (r"\texttt{superhedge}, \texttt{superhedge\_tree}", r"the no-arbitrage interval, in one period and through time"),
+            (r"\texttt{static\_checks}, \texttt{calendar\_check}", r"calls decreasing, convex and bounded; variance "
+                                                                  r"rising with maturity"),
+            (r"\texttt{mot\_bounds}, \texttt{mot\_dual}, \texttt{entropic\_mot}", r"model-free bounds and their hedges"),
+            (r"\texttt{power\_iteration}, \texttt{ross\_recovery}", r"Perron--Frobenius on state prices, with its caveat"),
+        ]
+        tab = VGroup(*[VGroup(data_text(a.replace(r"\texttt{", "").replace("}", "").replace(r"\_", "_"), font_size=18, color=QC.HOUSE), wrapped_label(b, 6.2, 18, GREY_A)).arrange(
+            RIGHT, buff=0.4) for a, b in rows]).arrange(DOWN, aligned_edge=LEFT, buff=0.13)
+        for r_ in tab:
+            r_[1].align_to(tab, LEFT).shift(RIGHT * 6.2)
+        tab.next_to(chart, DOWN, buff=0.3)
+        if tab.width > 13.0:
+            tab.scale_to_fit_width(13.0)
+        rule = wrapped_label(r"Rule 10: check fitted prices and input consistency under explicit assumptions; repair or reject flagged surfaces. Sampled checks are not a market-wide certificate. "
+                             rf"Existing trials: {env['trials']}; no new registrations or holdouts in this part.", 12.4, 21, QC.HOUSE).to_edge(DOWN, buff=0.3)
+        with self.voiceover(
+            f"""The House now has parity diagnostics, <bookmark mark='a'/> state prices, super-replication, sampled surface checks, finite-grid transport and conditional recovery. <bookmark mark='b'/> Rule ten: check inputs and assumptions, repair or reject flagged fits, and distinguish diagnostics from executable trades. The counter remains {env['trials']}; no new trial or holdout was opened."""
+        ) as vo:
+            self.play(FadeIn(chart))
+            self.play(Indicate(chart.desk["data"], color=QC.HOUSE, scale_factor=1.05))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in tab], lag_ratio=0.4, run_time=5))
+            vo.wait_until("b")
+            self.play(FadeIn(rule))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def recap(self, p, fb, sp, gr, nm):
+        fine = [r for r in gr["rows"] if "upper" in r][-1]
+        items = [
+            (rf"parity holds on {p['n_pairs']} bitcoin option pairs to {p['trade_p50']:.1f} bp, and its forward matches "
+             rf"the futures to {fb['gap_p50']:.1f} bp", FWD),
+            (r"borrowing constraints modify parity bounds; European boxes reproduce a fixed payment under matching terms", ARB),
+            (r"no arbitrage $\iff$ strictly positive state prices: a separating plane, proved and found by a simplex", Q_C),
+            (r"state prices, the discount factor and $Q$ are one object in three units; $Q$ is $P$ reweighted", Q_C),
+            (r"two states replicate (the tree); three leave an interval, a linear program and its dual", HEDGE),
+            (r"enough independent calls span a finite state space; the displayed convex uncertain-volatility example uses the upper volatility",
+             HEDGE),
+            (r"continuous time needs admissibility and NFLVR; strict local martingales are bubbles", ALT),
+            (r"positive tradable numeraires need $N/B$ to be a true martingale: $N(d_1)$, Margrabe, bitcoin", ALT),
+            (rf"BL curvature is a measure; valid-candidate tail integrals vary (down 30\%: "
+             rf"{100 * (max(s['down30'] for s in sp['specs'] if s['neg_mass'] <= 1e-4) - min(s['down30'] for s in sp['specs'] if s['neg_mass'] <= 1e-4)):.1f} points of spread)", CALL),
+            (rf"Ross recovery needs an untestable assumption; vanilla prices bound exotics with no model: "
+             rf"[{fine['lower']:.3f}, {fine['upper']:.3f}] on the finest grid", CALL),
+        ]
+        rows = VGroup()
+        for i, (t, col) in enumerate(items, 1):
+            rows.add(VGroup(MathTex(str(i), font_size=26, color=col), label(t, font_size=22)).arrange(RIGHT, buff=0.3))
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        title = label(r"Part 9 in ten lines", font_size=36).to_edge(UP, buff=0.35)
+        rows.next_to(title, DOWN, buff=0.35)
+        if rows.width > 13.2:
+            rows.scale_to_fit_width(13.2)
+        with self.voiceover(
+            """The ten-line recap connects matching-payoff parity to strictly positive state prices, replication and incomplete-market intervals. Continuous time adds admissibility and NFLVR; numeraire changes need a mean-one density. A full option curve identifies a curvature measure; finite quotes require fitting assumptions. Recovery restricts the pricing kernel, and transport bounds claims for specified marginals."""
+        ):
+            self.play(FadeIn(title), *[FadeIn(r_) for r_ in rows[:3]], run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.2) for r_ in rows[3:]],
+                                  lag_ratio=0.4, run_time=12))
+        self.wait(0.5)
+        self.clear_scene()
+
+    def desk(self):
+        cards = VGroup(*[desk_question(q, a, width=12.6, font_size=22) for q, a in DESK]).arrange(DOWN, buff=0.22)
+        if cards.height > 7.6:
+            cards.scale_to_fit_height(7.6)
+        with self.voiceover(
+            """Four desk answers. Parity gives three on both sides. <bookmark mark='a'/> A European box paying ten in a year at four percent costs nine sixty-one; early exercise can change that payment. <bookmark mark='b'/> The one-wide call spread costs point five, approximating a digital. At a continuity strike, its narrowing limit gives minus the call-price slope. <bookmark mark='c'/> A negative stub still faces borrowing, recall, funding and event risk."""
+        ) as vo:
+            self.play(FadeIn(cards[0], shift=UP * 0.2))
+            vo.wait_until("a")
+            self.play(FadeIn(cards[1], shift=UP * 0.2))
+            vo.wait_until("b")
+            self.play(FadeIn(cards[2], shift=UP * 0.2))
+            vo.wait_until("c")
+            self.play(FadeIn(cards[3], shift=UP * 0.2))
+        self.wait(0.5)
+        self.clear_scene()
+
+    def problems(self):
+        ps = problem_set(PROBLEMS, font_size=18)
+        with self.voiceover(
+            """The notes solve all nine problems in English and Chinese, including two qualifying-exam derivations: fractional-increment memory and the proxy's optimal frequency under costs."""
+        ):
+            self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r_) for r_ in ps.rows], lag_ratio=0.3, run_time=5))
+            self.wait(4)
+        self.clear_scene()
+
+    def payoffs(self):
+        card = payoff_card([
+            (r"replication in continuous time: Black--Scholes--Merton", [10]),
+            (r"the risk-neutral density and the volatility surface", [12]),
+            (r"model-free bounds and model choice for exotics", [14, 15]),
+            (r"forward and annuity measures", [18, 19]),
+            (r"the stochastic discount factor", [23]),
+            (r"borrow, funding and the limits of arbitrage", [21, 41]),
+            (r"ETF arbitrage and market making", [38]),
+        ])
+        with self.voiceover(
+            """These tools return in volatility surfaces, exotics, rates, funding and ETFs. Part ten starts with Black, Scholes and Merton: a pricing formula and a working hedge."""
+        ):
+            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r_) for r_ in card.rows], lag_ratio=0.4, run_time=4))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def references(self):
+        card = reference_card(
+            [r"Shreve, \textit{Stochastic Calculus for Finance} I (ch.\ 1, 3, 4) and II (ch.\ 5, 9); Bj\"ork, "
+             r"\textit{Arbitrage Theory in Continuous Time}, 4th ed., ch.\ 2--3, 9--12, 15",
+             r"Duffie, \textit{Dynamic Asset Pricing Theory}, ch.\ 1--2, 6; Delbaen and Schachermayer, \textit{The "
+             r"Mathematics of Arbitrage}; F\"ollmer and Schied, \textit{Stochastic Finance}, ch.\ 1, 5, 7",
+             r"Henry-Labord\`ere, \textit{Model-Free Hedging}"],
+            [r"Farkas (1902); Stiemke (1915); Arrow (1964); Stoll (1969); Ross (1976, 1978); Breeden and Litzenberger "
+             r"(1978); Margrabe (1978); Cox, Ross and Rubinstein (1979); Harrison and Kreps (1979)",
+             r"Harrison and Pliska (1981); Kreps (1981); Jamshidian (1989); Dalang, Morton and Willinger (1990); "
+             r"Delbaen and Schachermayer (1994, 1998); Geman, El Karoui and Rochet (1995); Avellaneda, Levy and Par\'as "
+             r"(1995); Lyons (1995); Kramkov (1996); Shleifer and Vishny (1997); Hobson (1998)",
+             r"Jackwerth (2000); Mitchell, Pulvino and Stafford (2002); Lamont and Thaler (2003); Ofek, Richardson and "
+             r"Whitelaw (2004); Cox and Hobson (2005); Beiglb\"ock, Henry-Labord\`ere and Penkner (2013); Galichon, "
+             r"Henry-Labord\`ere and Touzi (2014); Ross (2015); Borovi\v{c}ka, Hansen and Scheinkman (2016)",
+             r"Martin and Ross (2019); Jensen, Lando and Pedersen (2019); Jackwerth and Menner (2020); Haddad, "
+             r"Moreira and Muir (2021); van Binsbergen, Diamond and Grotteria (2022); Neufeld and Sester (2023); "
+             r"Neufeld, Papapantoleon and Xiang (2023); Heston, Jacobs and Kim (2023); Guyon (2024); Horvath (2025); "
+             r"Bartl, Beiglb\"ock and Pammer (2026); Shikhman et al.\ (2026)"])
+        if card.height > 7.6:
+            card.scale_to_fit_height(7.6)
+        with self.voiceover(
+            """The references separate theorem assumptions, published facts, seeded simulations and registered market observations."""
+        ):
+            self.play(FadeIn(card))
+            self.wait(4)
+        self.clear_scene()
+
+    def house(self):
+        chart = house_chart(PART, lit=("data",))
+        smap = series_map(current=PART + 1, done=PART)
+        nxt = label(r"Next: Part 10, Black--Scholes--Merton", font_size=32, color=QC.IDEA).to_edge(DOWN, buff=0.4)
+        with self.voiceover(
+            """The arbitrage checker is in place. <bookmark mark='a'/> Next: Black, Scholes and Merton."""
+        ) as vo:
+            self.play(FadeIn(chart))
+            vo.wait_until("a")
+            self.play(FadeOut(chart), FadeIn(smap), FadeIn(nxt))
+        self.wait(1.0)
+        self.clear_scene()

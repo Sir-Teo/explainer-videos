@@ -1,0 +1,165 @@
+from __future__ import annotations
+
+import numpy as np
+
+from explainer.quant import *  # noqa: F403
+from videos.quant.quant25.common import (BAD, FALSE, GOOD, HURDLE, NOISE, PART, SDF, TRUE, era_strip, fit_right,
+                                         illustration, load)
+
+
+class Hook(VoiceoverScene):
+    def construct(self):
+        self.title_card()
+        self.coins(load("noise"))
+        self.drawer()
+        self.zoo(load("zoo"))
+        self.history()
+        self.objectives()
+        self.house()
+
+    def title_card(self):
+        card = part_title(PART, r"The Factor Zoo")
+        disc = note(DISCLAIMER, font_size=18, color=GREY_C).to_edge(DOWN, buff=0.35)
+        with self.voiceover(
+            'Part twenty-five. The factor zoo: hundreds of published return predictors, and the statistical assumptions needed to distinguish evidence from selection.'
+        ):
+            self.play(FadeIn(card, shift=UP * 0.2), FadeIn(disc))
+        self.play(FadeOut(card), FadeOut(disc))
+
+    def coins(self, n):
+        t = np.sort(np.asarray(n["example_t"]))
+        g = axes([-0.5, 200.5], [-3.5, 3.5], x_length=8.4, y_length=4.4, xlabel=r"200 strategies, sorted",
+                 ylabel=r"$t$-statistic of the mean", xticks=[], yticks=[-3, -2, 0, 2, 3], font_size=14).to_edge(
+            LEFT, buff=0.5).shift(DOWN * 0.3)
+        ax = g.ax
+        bars = VGroup(*[Line(ax.c2p(i, 0), ax.c2p(i, v), color=TRUE if v > 1.96 else NOISE, stroke_width=2.2)
+                        for i, v in enumerate(t)])
+        h = DashedLine(ax.c2p(0, 1.96), ax.c2p(200, 1.96), color=HURDLE, stroke_width=2)
+        side = VGroup(
+            MathTex(rf"\text{{best}}:\ t = {n['example_best']:.2f}", font_size=28, color=TRUE),
+            MathTex(rf"\text{{above 1.96}}:\ {int((t > 1.96).sum())}\ \text{{of 200}}", font_size=26, color=TRUE),
+            wrapped_label(r"two hundred strategies of pure noise: twenty years of monthly returns, each with a true "
+                          r"premium of exactly zero. A few clear the usual hurdle by chance alone, and the best looks "
+                          r"like a discovery", 3.6, 16, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.3)
+        fit_right(side)
+        with self.voiceover(
+            "Two hundred trading strategies, each with twenty years of monthly returns, and every one of them pure "
+            "noise: the true premium is exactly zero. <bookmark mark='a'/> Sort them by their t-statistic. About one "
+            "in forty clears the textbook hurdle of two by chance alone, and the best has a t-statistic near three. "
+            "Published as the only strategy its author tried, it would look like a discovery. <bookmark mark='b'/> "
+            "Finance has tested far more than two hundred."
+        ) as vo:
+            self.play(FadeIn(g), Create(h))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[Create(b_) for b_ in bars], lag_ratio=0.01), FadeIn(side[0]), FadeIn(side[1]),
+                      run_time=3)
+            vo.wait_until("b")
+            self.play(FadeIn(side[2]))
+        self.add(illustration('simulated: original Part 25 \\texttt{compute\\_noise}, fixed seed 25'))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def drawer(self):
+        cards = VGroup(
+            desk_question(r"the file drawer", r"the strategies that failed are not written up: a reader sees the winner and "
+                          r"none of the losers it was chosen from", width=12.0, font_size=20),
+            desk_question(r"the garden of forking paths", r"even one idea has many versions: which months, which stocks, "
+                          r"which weights, which breakpoints, which lag. Each choice is a test, made quietly", width=12.0,
+                          font_size=20),
+            desk_question(r"the cure is a count", r"report how many were tried, and judge the best against the best of "
+                          r"that many noise strategies", width=12.0, font_size=20),
+        ).arrange(DOWN, buff=0.3)
+        with self.voiceover(
+            "Why does this happen in practice? <bookmark mark='a'/> The file drawer: the strategies that failed are "
+            "not written up, so a reader sees the winner and none of the losers it was chosen from. "
+            "<bookmark mark='b'/> And the garden of forking paths: even a single idea has many versions, which months, "
+            "which stocks, which weights, which lag, and each choice is a test, made quietly. <bookmark mark='c'/> The "
+            "cure is a count: report how many were tried, and judge the best against the best of that many noise "
+            "strategies."
+        ) as vo:
+            for i, mk in enumerate(("a", "b", "c")):
+                if i:
+                    vo.wait_until(mk)
+                self.play(FadeIn(cards[i], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def zoo(self, z):
+        yrs, cnt = np.asarray(z["years"]), np.asarray(z["count"])
+        g = axes([1970, 2017], [0, 220], x_length=8.2, y_length=4.4, xlabel=r"year of publication",
+                 ylabel=r"predictors published, cumulative", xticks=[1970, 1980, 1990, 2000, 2010],
+                 yticks=[0, 50, 100, 150, 200], font_size=14).to_edge(LEFT, buff=0.5).shift(DOWN * 0.3)
+        ax = g.ax
+        line = curve(ax, yrs, cnt, SDF, stroke_width=3)
+        side = VGroup(
+            MathTex(rf"{z['n']}\ \text{{predictors}}", font_size=30, color=SDF),
+            wrapped_label(r"Chen and Zimmermann's Open Source Asset Pricing: every predictor of the cross-section of US "
+                          r"stock returns they could rebuild from its paper, 1973 to 2016. Harvey, Liu and Zhu (2016) "
+                          r"counted 316 published factors; later counts run past 400", 3.6, 16, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
+        fit_right(side)
+        with self.voiceover(
+            "This public collection reconstructs published stock-return predictors. <bookmark mark='a'/> Its cumulative count grows past two hundred by 2016. Cochrane called the expanding literature a zoo. Inclusion in this published collection is already selection; neither a reported significant result nor its reproduction establishes a persistent premium. The count omits unpublished searches, and the modern release is not a historical data vintage."
+        ) as vo:
+            self.play(FadeIn(g))
+            vo.wait_until("a")
+            self.play(Create(line), FadeIn(side), run_time=2.5)
+        self.add(illustration(r"Open Source Asset Pricing, release 2024.10 (SignalDoc)"))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def history(self):
+        I, C = QC.IDEA, QC.CRISIS
+        entries = [(1979, r"Holm's step-down", I), (1995, r"Benjamini--Hochberg", I), (2000, r"White's reality check", I),
+                   (2005, r"Romano--Wolf", I), (2010, r"Lewellen--Nagel--Shanken", I), (2011, r"Cochrane's zoo", I),
+                   (2016, r"Harvey--Liu--Zhu: $t > 3$", I), (2018, r"Barillas--Shanken", I), (2020, r"KNS; FGX; HXZ", I),
+                   (2021, r"Giglio--Xiu", I), (2022, r"open-source AP", I), (2023, r"Jensen--Kelly--Pedersen", I)]
+        strip = era_strip(entries, y0=1975, y1=2026, font_size=14).move_to(DOWN * 0.3)
+        head = label(r"How the zoo was tamed", font_size=34).to_edge(UP, buff=0.6)
+        groups = [(0, 4), (4, 8), (8, 12)]
+        with self.voiceover(
+            "The tools came from statistics first: Sture Holm's step-down procedure in 1979, Yoav Benjamini and Yosef "
+            "Hochberg's false discovery rate in 1995, Halbert White's reality check for data snooping in 2000. "
+            "<bookmark mark='a'/> Finance caught up as the zoo grew: Cochrane named it in 2011, and Campbell Harvey, "
+            "Yan Liu and Heqing Zhu argued in 2016 that a new factor should need a t-statistic above three. "
+            "<bookmark mark='b'/> Then came shrinkage and selection methods built for many factors at once, the "
+            "replication studies, and open-source data that anyone can check."
+        ) as vo:
+            self.play(FadeIn(head), Create(strip[0]), FadeIn(strip[1]))
+            for (a, b), m in zip(groups, [None, "a", "b"]):
+                if m:
+                    vo.wait_until(m)
+                self.play(LaggedStart(*[FadeIn(strip.items[i], shift=UP * 0.1) for i in range(a, b)], lag_ratio=0.3),
+                          run_time=1.5)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def objectives(self):
+        card = objectives_card([
+            r"The best of many noisy strategies; the hurdle rising with the count",
+            r"Bonferroni, Holm and the false discovery rate, on two hundred predictors",
+            r"Replication: Hou--Xue--Zhang against Jensen--Kelly--Pedersen; open-source asset pricing",
+            r"Decay, shrinkage, publication bias; mined signals against published ones",
+            r"Shrinking the cross-section; taming the zoo; weak factors; PCA, RP-PCA, IPCA",
+            'Comparing models; registration, selection and the precision of a fresh test',
+        ], color=QC.IDEA)
+        with self.voiceover(
+            'The plan: the best of many noisy strategies; familywise and false-discovery corrections with their assumptions; replication, publication and decay; shrinkage and factor selection; weak identification and principal components; conditional mean-variance model comparisons; and what a registered fresh test would need to establish. This review does not open or score the sealed experiment.'
+        ):
+            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
+                                                     lag_ratio=0.5, run_time=11))
+        self.play(FadeOut(card))
+
+    def house(self):
+        chart = house_chart(PART, lit=("research",))
+        with self.voiceover(
+            "In the House, the research desk adds its first statistical model of returns: a discount factor that "
+            "loads on the whole zoo at once, shrunk toward caution, and kept honest by counting every trial. By the "
+            "end of the part it will be registered, and opened on the sealed years, like the factors of Part "
+            "twenty-four."
+        ):
+            self.play(FadeIn(chart))
+            self.play(Indicate(chart.desk["research"], color=QC.HOUSE, scale_factor=1.05))
+        self.wait(0.3)
+        self.clear_scene()

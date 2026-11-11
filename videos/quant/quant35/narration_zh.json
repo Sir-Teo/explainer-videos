@@ -1,0 +1,761 @@
+{
+ "title": "量化金融，从零搭建 · 第35部分：谁与谁交易",
+ "chapters": {
+  "Hook": "内幕交易者的订单透露了什么",
+  "Dealer": "1. 交易商的问题",
+  "GM": "2. Glosten与Milgrom：价差是一份保险",
+  "Kyle": "3. Kyle：内幕交易者如何交易，代价是什么",
+  "Measures": "4. 只用价格衡量价差",
+  "Flow": "5. 测量Kyle的lambda",
+  "VPIN": "6. 有毒订单流：PIN与VPIN",
+  "Discovery": "7. 跨市场的价格发现",
+  "Structure": "8. 市场结构：管道系统",
+  "HFT": "9. 作为做市商的高频交易者",
+  "Crashes": "10. 当流动性消失时",
+  "House": "11. 第35条规则：知道对手是谁",
+  "Research": "写给研究者：连续时间的Kyle模型",
+  "Outro": "回顾、交易台问题与习题"
+ },
+ "lines": {
+  "c1010ec28112": {
+   "scene": "Hook",
+   "en": "Part thirty-five. Who trades with whom: the dealers, the informed and the rest, and what their orders reveal. Act six begins: market microstructure.",
+   "zh": "第35部分。谁与谁交易：交易商、知情者和其他人，以及他们的订单透露了什么。第六幕开始：市场微观结构。"
+  },
+  "ff66f871106e": {
+   "scene": "Hook",
+   "en": "One trader knows the terminal value in a specified Gaussian market. <bookmark mark='a'/> The competitive dealer sees total order flow, not the trader identities. <bookmark mark='b'/> In the continuous-time equilibrium the insider trades gradually among independent noise orders, and the price converges to that value at the fixed horizon. The plotted Euler approximation retains a small final-step noise error; exact endpoint learning belongs to the limiting theorem. We will separate that model from descriptive measurements of real order flow.",
+   "zh": "在指定的高斯市场里，一位交易者知道终点价值。<bookmark mark='a'/> 竞争做市商只观察总订单流，看不到交易者身份。<bookmark mark='b'/> 连续时间均衡中，内部人混在独立噪声订单里逐步交易，价格在固定期限终点收敛到价值。图中的欧拉近似仍保留很小的末步噪声误差；精确终点学习属于极限定理。我们会把这个模型与真实订单流的描述性测量分开。"
+  },
+  "8baa7e825460": {
+   "scene": "Hook",
+   "en": "Three distinctions. <bookmark mark='a'/> The same-minute Bitcoin flow slope is 4.6 basis points per million dollars. It is a descriptive association, not the causal cost of a chosen order. <bookmark mark='b'/> Daily-price and bulk-volume measures depend on assumptions; volatility can contaminate their interpretation, and different imbalance statistics must not be called ground truth for each other. <bookmark mark='c'/> Finally, a theorem in a specified Gaussian equilibrium: continuous-time profit is twice one-auction profit when the horizon and total noise variance are matched. Its assumptions and verification matter.",
+   "zh": "区分三件事。<bookmark mark='a'/> 比特币同一分钟的订单流斜率为每百万美元4.6基点。这是描述性关联，不是额外订单的因果成本。<bookmark mark='b'/> 日度价格和批量成交指标依赖假设，波动率会污染其解释，不同的失衡统计量不能互称为真实标准。<bookmark mark='c'/> 最后，在指定高斯均衡内，匹配期限和总噪声方差后，连续交易利润是单次拍卖的两倍。假设和验证过程同样重要。"
+  },
+  "96ee8c01812f": {
+   "scene": "Hook",
+   "en": "Where this sits. Act five built strategies and the firm. Act six goes inside the trade itself: this part, who trades with whom; then the limit order book, execution, market making, and digital-asset markets. It uses Part four's martingales, Part seven's filters, Part eight's control, and Part thirty-one's impact.",
+   "zh": "这一部分在系列中的位置。第五幕构建了策略和公司。第六幕深入交易本身：这一部分讲谁与谁交易；然后是限价订单簿、执行、做市和数字资产市场。它用到第4部分的鞅、第7部分的滤波、第8部分的控制，以及第31部分的冲击。"
+  },
+  "8427c3984a8d": {
+   "scene": "Hook",
+   "en": "Fifty years of the field. Mark Garman named it in 1976; Ho and Stoll, Roll, then Kyle and Glosten and Milgrom in 1985, and Back's continuous-time proof in 1992. <bookmark mark='a'/> Then measurement: Hasbrouck's price discovery, PIN, Amihud's illiquidity, and the rules that built today's fragmented American market. <bookmark mark='b'/> And the electronic era: the flash crash, VPIN, batch auctions, and next-day settlement.",
+   "zh": "这个领域的五十年。马克·加曼在1976年为它命名；何与斯托尔、罗尔，接着是1985年的凯尔与格洛斯滕、米尔格罗姆，以及1992年巴克的连续时间证明。<bookmark mark='a'/>再看测量：哈斯布鲁克的价格发现、知情交易概率指标、阿米胡德的非流动性，以及构建美国碎片化市场的规则。<bookmark mark='b'/>电子时代包括闪崩、成交量同步知情交易概率指标、批量竞价和下一工作日交收。"
+  },
+  "eb8037d3c065": {
+   "scene": "Hook",
+   "en": "The plan: the dealer's inventory problem; Glosten and Milgrom's spread; Kyle's insider; measuring liquidity from prices; Kyle's lambda measured on Bitcoin; toxic flow; price discovery between spot and futures; the plumbing of American markets; high-frequency market makers; the flash crashes and batch auctions; and Kyle's model in continuous time, proved.",
+   "zh": "本部分的安排：交易商的存货问题；Glosten和Milgrom的价差；Kyle的内幕交易者；从价格衡量流动性；在比特币上测量Kyle的lambda；有毒订单流；现货与期货之间的价格发现；美国市场的管道系统；高频做市商；闪电崩盘与批量拍卖；以及连续时间的Kyle模型，给出证明。"
+  },
+  "adef94667125": {
+   "scene": "Hook",
+   "en": "In the House, this part proposes data and compliance tools: a public signed-flow feed, quote-based execution measurements and evidence review. These are research examples and design requirements. They do not establish a deployed surveillance system, identify illegal intent or authorize a trade.",
+   "zh": "在研究机构中，本部分提出公开带符号订单流、基于报价的执行测量及证据审阅工具。它们是研究示例与设计要求，不代表已经部署监控系统、识别违法意图或批准某笔交易。"
+  },
+  "b29a5e9bce11": {
+   "scene": "Dealer",
+   "en": "Chapter one. Every trade has two sides, and on most markets one side is a dealer: someone who quotes a price to buy and a price to sell, all day, to anyone. In 1976 Mark Garman gave the field its name, market microstructure, by asking what that dealer must do to survive.",
+   "zh": "第一章。每笔交易都有两方，在大多数市场上其中一方是交易商：整天向任何人报出买价和卖价的人。1976年，Mark Garman提出交易商要生存必须做什么，并由此给这个领域起了名字：市场微观结构。"
+  },
+  "67d95b79cd34": {
+   "scene": "Dealer",
+   "en": "Garman's model. <bookmark mark='a'/> Buy arrivals become less frequent as the ask rises. <bookmark mark='b'/> Sell arrivals become less frequent as the bid falls. <bookmark mark='c'/> With balanced independent arrivals, inventory behaves like a random walk. It eventually exits fixed inventory limits under the usual nondegeneracy conditions. That is not by itself a proof of financial ruin: wealth also depends on spread income, prices and capital. Inventory control addresses a real risk without that stronger claim.",
+   "zh": "加曼的模型。<bookmark mark='a'/> 卖价越高，买单到达越少。<bookmark mark='b'/> 买价越低，卖单到达越少。<bookmark mark='c'/> 平衡而独立的到达使库存像随机游走。在通常非退化条件下，它最终会越出固定库存限制。但这本身不是财务破产证明，财富还取决于价差收入、价格与资本。库存控制处理真实风险，无需作出更强结论。"
+  },
+  "d009d2d13ddc": {
+   "scene": "Dealer",
+   "en": "Ho and Stoll explain why inventory changes quotes. <bookmark mark='a'/> Our illustration specifies a linear heuristic: shift the mid below fair value by a constant times long inventory. It is not the solution of an optimal-control problem. <bookmark mark='b'/> Keep a fixed spread around that mid. Arrival probabilities fall exponentially with nonnegative quote distance and are capped at one. <bookmark mark='c'/> Lowering both quotes encourages selling inventory and discourages buying more. Part eleven solves a related utility model under its own assumptions.",
+   "zh": "何与斯托尔解释库存为何改变报价。<bookmark mark='a'/> 本例指定线性启发式规则：把中间报价下调为公允价值减去常数乘多头库存。它不是最优控制问题的解。<bookmark mark='b'/> 在两侧维持固定价差。到达概率随非负报价距离指数下降，并封顶为一。<bookmark mark='c'/> 两侧报价降低，会鼓励卖出库存、抑制继续买入。第十一部分在其自身假设下求解相关效用模型。"
+  },
+  "f689cdddce60": {
+   "scene": "Dealer",
+   "en": "Simulated, twenty thousand arrivals. <bookmark mark='a'/> Without shading, the inventory wanders off into the hundreds of units. <bookmark mark='b'/> With shading, it stays within a few units of zero, because every trade that adds to it makes the next one less likely.",
+   "zh": "模拟，两万次到达。<bookmark mark='a'/>不做偏移时，存货漂移到数百个单位。<bookmark mark='b'/>做偏移时，它保持在零附近几个单位以内，因为每一笔增加存货的交易都让下一笔不太可能发生。"
+  },
+  "f18cf8ce6c02": {
+   "scene": "Dealer",
+   "en": "Part eleven made this optimal. <bookmark mark='a'/> In Marco Avellaneda and Sasha Stoikov's model the dealer's reservation price is the value minus its inventory times risk aversion times the variance it still has to carry. <bookmark mark='b'/> The best total spread has two parts: inventory risk, and a part set by how fast customers stop trading as the quote moves away. <bookmark mark='c'/> More volatility, more time left, or more risk aversion: more shading and wider quotes. Ho and Stoll's two effects, made exact.",
+   "zh": "第11部分把它做到了最优。<bookmark mark='a'/>在Marco Avellaneda和Sasha Stoikov的模型里，交易商的保留价格等于价值减去存货乘以风险厌恶再乘以它还需承担的方差。<bookmark mark='b'/>最优总价差有两部分：存货风险，以及由报价远离时客户停止交易的速度决定的部分。<bookmark mark='c'/>更高的波动率、更长的剩余时间或更强的风险厌恶：更多的偏移和更宽的报价。Ho和Stoll的两个效应，被精确化了。"
+  },
+  "81cd029968b7": {
+   "scene": "Dealer",
+   "en": "The stipulated simulation across twenty seeds. <bookmark mark='a'/> Read terminal mean profit and its across-seed standard deviation separately; shading also changes which arrivals execute. <bookmark mark='b'/> The mean divided by that standard deviation is 3.1 without shading and 43 with it. This is a terminal-outcome ratio, not an annualized time-series Sharpe, confidence interval or proof of an optimal quote policy. The table describes these chosen parameters.",
+   "zh": "在指定参数下比较二十个随机种子。<bookmark mark='a'/> 分别读取终点平均利润和跨种子的标准差；库存偏移也改变哪些到达会成交。<bookmark mark='b'/> 均值除以这个标准差，无偏移时为3.1，有偏移时为43。这是终点结果比率，不是年化时间序列夏普、置信区间或最优报价证明。表格只描述这些给定参数。"
+  },
+  "7609cfe46718": {
+   "scene": "Dealer",
+   "en": "Who the dealers are today. <bookmark mark='a'/> The New York Stock Exchange once gave each stock one specialist, with a duty to keep an orderly market; today designated market makers have quoting obligations and privileges at the auctions. <bookmark mark='b'/> Most bonds and currencies still trade with dealers, by request for a quote, and the dealers' balance sheets are the market's inventory. <bookmark mark='c'/> Everywhere else, algorithms quote thousands of instruments, with inventory limits in place of a specialist's capital: Chapter nine's subject.",
+   "zh": "今天的交易商是谁。<bookmark mark='a'/>纽约证券交易所曾经给每只股票指定一位专营商，负有维持市场有序的义务；今天的指定做市商有报价义务，也在拍卖中享有特权。<bookmark mark='b'/>大多数债券和外汇仍然通过询价与交易商交易，交易商的资产负债表就是市场的存货。<bookmark mark='c'/>其余地方，算法为数以千计的品种报价，用存货限额代替了专营商的资本：第九章的主题。"
+  },
+  "d8929b0d578b": {
+   "scene": "Dealer",
+   "en": "So a spread has three parts. <bookmark mark='a'/> Order processing: the cost of being there at all. <bookmark mark='b'/> Inventory: the risk of holding what customers sold, paid for by a spread that widens with volatility and with the position. <bookmark mark='c'/> And adverse selection: some customers know more than the dealer. That part survives even among competitive, risk-neutral dealers, and it is the subject of the next two chapters.",
+   "zh": "所以价差有三个部分。<bookmark mark='a'/>订单处理：在场的成本。<bookmark mark='b'/>存货：持有客户卖出之物的风险，由随波动率和头寸扩大的价差来支付。<bookmark mark='c'/>以及逆向选择：有些客户比交易商知道得多。这一部分即使在竞争性的、风险中性的交易商之间也会保留下来，它是接下来两章的主题。"
+  },
+  "25fe44308644": {
+   "scene": "Dealer",
+   "en": "Pause and predict. Under the stated quote heuristic, inventory is forty, shading is point zero five per unit and full spread is one. Derive bid and ask relative to fair value. State what the calculation assumes.",
+   "zh": "暂停并预测。按照给定报价启发式规则，库存四十，每单位偏移零点零五，完整价差为一。求相对公允价值的买价和卖价，并说明计算假设。"
+  },
+  "a6317c1bbb5a": {
+   "scene": "GM",
+   "en": "Chapter two. Suppose dealers are competitive, so they earn nothing on average, and do not mind risk, so inventory costs nothing. Is there still a spread? In 1985 Lawrence Glosten and Paul Milgrom showed there must be, and Part eleven ran their market. Here it is derived.",
+   "zh": "第二章。假设交易商是竞争性的，平均什么也赚不到，并且不在乎风险，所以存货没有成本。还会有价差吗？1985年，Lawrence Glosten和Paul Milgrom表明一定会有，第11部分运行过他们的市场。这里给出推导。"
+  },
+  "36fb355bb06c": {
+   "scene": "GM",
+   "en": "The model. <bookmark mark='a'/> An asset is worth one or nothing; the market believes one with probability p. <bookmark mark='b'/> A fraction mu of traders know the value and trade on it. <bookmark mark='c'/> The rest buy or sell at random, for their own reasons. <bookmark mark='d'/> And the dealer is competitive and risk-neutral: it expects to make nothing on each trade.",
+   "zh": "模型。<bookmark mark='a'/>一项资产值一或零；市场认为它值一的概率是p。<bookmark mark='b'/>比例为mu的交易者知道价值并据此交易。<bookmark mark='c'/>其余的人出于自己的原因随机买卖。<bookmark mark='d'/>交易商是竞争性的、风险中性的：它预期每笔交易都赚不到钱。"
+  },
+  "a6f574c66e02": {
+   "scene": "GM",
+   "en": "The quotes. <bookmark mark='a'/> To make nothing on a buy, the ask must equal the value expected given that someone chose to buy. The trade itself is information. <bookmark mark='b'/> By Bayes' rule a buy is more likely when the value is high, because the informed buy then. <bookmark mark='c'/> From an even prior, the ask is one plus mu over two, the bid one minus mu over two, and the spread is exactly mu: the share of informed traders. The uninformed pay the spread; the dealer passes it to the informed.",
+   "zh": "报价。<bookmark mark='a'/>要在一笔买入上不赚不亏，卖价必须等于在有人选择买入这一条件下的期望价值。交易本身就是信息。<bookmark mark='b'/>由贝叶斯法则，价值高时买入更可能发生，因为那时知情者会买。<bookmark mark='c'/>从对半的先验出发，卖价是一加mu再除以二，买价是一减mu再除以二，价差恰好是mu：知情交易者的比例。不知情者支付价差；交易商把它转交给知情者。"
+  },
+  "643a93911d75": {
+   "scene": "GM",
+   "en": "With numbers. <bookmark mark='a'/> Three in ten traders informed, and an even prior: a bid of point three five and an ask of point six five. <bookmark mark='b'/> Once the belief has moved to point eight, the quotes rise and the spread narrows, to 0.20. <bookmark mark='c'/> And as the market becomes sure, the spread vanishes: there is nothing left for the informed to know.",
+   "zh": "用数字。<bookmark mark='a'/>十个交易者里有三个知情，先验对半：买价零点三五，卖价零点六五。<bookmark mark='b'/>一旦信念移到零点八，报价上升，价差收窄到0.20。<bookmark mark='c'/>当市场变得确定时，价差消失：知情者再也没有可知道的东西了。"
+  },
+  "b1f6ead39d18": {
+   "scene": "GM",
+   "en": "Four hundred paths, each conditioned on true value one. <bookmark mark='a'/> The initial spread equals mu and typically narrows as beliefs learn. With more informed arrivals it starts wider. For mu point three the saved median crossing index is 22. The arrays record beliefs before each trade, through seventy-nine updates; a non-crossing path receives the sentinel eighty. This is a capped, conditional summary, not an uncensored population learning time.",
+   "zh": "四百条路径，每条都条件于真实价值为一。<bookmark mark='a'/> 初始价差等于缪，通常随信念学习而缩窄。知情到达比例越高，初始价差越宽。缪为零点三时，保存的中位越过索引为22。数组记录每笔交易前的信念，只包含到第七十九次更新；未越过的路径赋值八十。因此这是条件于高价值、带封顶的摘要，不是未删失的总体学习时间。"
+  },
+  "d63032923902": {
+   "scene": "GM",
+   "en": "The price path. <bookmark mark='a'/> Buys and sells update the dealer's belief by Bayes' rule. <bookmark mark='b'/> The average shown rises because every simulation here conditions on the high true value. Under the full prior mixture and the dealer's own information, the correctly specified conditional expectation is a martingale. Conditional drift when the value is fixed high does not contradict that statement. Finite eighty-trade paths need not learn the value exactly.",
+   "zh": "价格路径。<bookmark mark='a'/> 买卖通过贝叶斯法则更新做市商信念。<bookmark mark='b'/> 图中均值上升，是因为所有模拟都条件于真实价值较高。在完整先验混合和做市商自身信息下，正确指定的条件期望是鞅。固定高价值后的条件漂移并不矛盾。有限八十笔交易不一定精确学到价值。"
+  },
+  "2b8705384377": {
+   "scene": "GM",
+   "en": "Odds make the update simple. <bookmark mark='a'/> A buy multiplies the odds by one plus mu over one minus mu; a sell divides by the same factor. <bookmark mark='b'/> Starting from equal odds, strictly crossing ninety-nine percent requires an integer net-buy count above the displayed logarithmic threshold. <bookmark mark='c'/> At mu point three that real-valued threshold is 7.4. Dividing by drift mu gives roughly 25 trades, only a heuristic. The saved capped median index is 22; these are different statistics, and non-hits are censored at eighty.",
+   "zh": "用赔率看更新。<bookmark mark='a'/> 买单使赔率乘一加缪除以一减缪，卖单除以同一因子。<bookmark mark='b'/> 从相等赔率开始，严格越过百分之九十九，需要整数净买单数高于图中的对数门槛。<bookmark mark='c'/> 缪为零点三时，实数门槛为7.4。除以漂移缪得到大约25笔，只是启发式估算。保存的封顶中位索引是22。它们是不同统计量，未达门槛者在八十处删失。"
+  },
+  "449d43b76a8c": {
+   "scene": "GM",
+   "en": "The model's predictions, as studies have found them. <bookmark mark='a'/> Spreads widen and depth thins before scheduled news, when the share of traders who may know more is highest. <bookmark mark='b'/> Once the news is public, spreads narrow even though volatility is high, a test that separates information from inventory. <bookmark mark='c'/> And small, obscure stocks, with fewer analysts and more room for private information, carry wider spreads for the same volume.",
+   "zh": "模型的预测，以及研究如何发现它们。<bookmark mark='a'/>在预定消息发布之前，价差变宽、深度变薄，因为此时可能知道更多的交易者比例最高。<bookmark mark='b'/>消息一旦公开，即使波动率很高，价差也会收窄，这个检验能把信息和存货区分开。<bookmark mark='c'/>而小而冷门的股票，分析师更少、私人信息的空间更大，在同样的成交量下价差更宽。"
+  },
+  "b1fd85d8db70": {
+   "scene": "GM",
+   "en": "The lessons. <bookmark mark='a'/> The spread is not the dealer's profit: competitive dealers collect it from the uninformed and lose it to the informed. <bookmark mark='b'/> The uninformed pay for price discovery. <bookmark mark='c'/> And if the informed are numerous enough, the spread exceeds what anyone else will pay, and trade stops: George Akerlof's market for lemons, in a quote.",
+   "zh": "教训。<bookmark mark='a'/>价差不是交易商的利润：竞争性的交易商从不知情者那里收取价差，又把它输给知情者。<bookmark mark='b'/>不知情者为价格发现付钱。<bookmark mark='c'/>如果知情者足够多，价差就会超过任何其他人愿意支付的水平，交易就会停止：George Akerlof的柠檬市场，体现在一个报价上。"
+  },
+  "ba8143a25b0b": {
+   "scene": "GM",
+   "en": "Pause and predict. Start from an even prior with forty percent informed in the binary-value model. Observe one buy. Derive the new belief and then the next ask and bid; distinguish the executed ask from the next quotes.",
+   "zh": "暂停并预测。在二元价值模型中，先验各半，百分之四十交易者知情。观察一次买单，求新信念，再求下一位交易者的买价和卖价。区分本次成交卖价与下一次报价。"
+  },
+  "1549b0988204": {
+   "scene": "Kyle",
+   "en": "Chapter three. Glosten and Milgrom fixed the trade size at one. In 1985 Albert Kyle let the informed trader choose how much to trade, knowing that a bigger order moves the price further. The answer gives the field its most used number: lambda, the price impact of order flow.",
+   "zh": "第三章。Glosten和Milgrom把交易规模固定为一。1985年，Albert Kyle让知情交易者自己选择交易多少，并且知道更大的订单会把价格推得更远。答案给出了这个领域最常用的数字：lambda，订单流的价格冲击。"
+  },
+  "b3de7720b3da": {
+   "scene": "Kyle",
+   "en": "The one-auction model. <bookmark mark='a'/> Value is Gaussian around the public prior mean; a risk-neutral insider observes it. <bookmark mark='b'/> Independent zero-mean Gaussian noise submits an order with the stated variance. The insider chooses its own order before observing that noise. <bookmark mark='c'/> Competitive risk-neutral dealers observe only total flow and clear at its conditional expected value. These information and independence assumptions produce the linear equilibrium; a real return-on-flow regression does not establish them.",
+   "zh": "单次拍卖模型。<bookmark mark='a'/> 价值围绕公开先验均值呈高斯分布，风险中性的内部人观察它。<bookmark mark='b'/> 独立零均值高斯噪声提交指定方差的订单；内部人在观察这次噪声之前选择订单。<bookmark mark='c'/> 竞争、风险中性的做市商只观察总流量，按条件期望价值清算。这些信息与独立性假设产生线性均衡，真实收益对订单流的回归并不能证明它们。"
+  },
+  "bbbb7a96fed3": {
+   "scene": "Kyle",
+   "en": "Guess that both sides are linear. <bookmark mark='a'/> The insider trades in proportion to the mispricing, with intensity beta. <bookmark mark='b'/> The market maker moves the price in proportion to the flow, with impact lambda. <bookmark mark='c'/> Given beta, the break-even lambda is a regression coefficient: the covariance of value with flow over the flow's variance.",
+   "zh": "猜测双方都是线性的。<bookmark mark='a'/>内幕交易者按错误定价的比例交易，强度为beta。<bookmark mark='b'/>做市商按订单流的比例移动价格，冲击为lambda。<bookmark mark='c'/>给定beta，盈亏平衡的lambda是一个回归系数：价值与订单流的协方差除以订单流的方差。"
+  },
+  "5ef2b43ac781": {
+   "scene": "Kyle",
+   "en": "The insider's side. <bookmark mark='a'/> Given lambda, its expected profit is the mispricing times its order, minus lambda times the order squared: a downward parabola. <bookmark mark='b'/> Its peak is the mispricing over two lambda. <bookmark mark='c'/> The insider trades only half as hard as it could, because every unit moves the price against itself.",
+   "zh": "内幕交易者这一边。<bookmark mark='a'/>给定lambda，它的期望利润是错误定价乘以订单，减去lambda乘以订单的平方：一条向下开口的抛物线。<bookmark mark='b'/>它的顶点是错误定价除以二倍lambda。<bookmark mark='c'/>内幕交易者只以它能交易的一半力度交易，因为每多一个单位都会把价格推向对自己不利的方向。"
+  },
+  "5c671b1579f5": {
+   "scene": "Kyle",
+   "en": "Put the two together. <bookmark mark='a'/> Beta is sigma u over sigma v, and lambda is sigma v over two sigma u. The insider scales its order to the noise: it always trades exactly as much as the camouflage allows. The price impact rises with what there is to know, and falls with how much noise hides it. <bookmark mark='b'/> The insider expects half of sigma u sigma v, and the price reveals half of the value's variance.",
+   "zh": "把两者放在一起。<bookmark mark='a'/>beta等于sigma u除以sigma v，lambda等于sigma v除以二倍sigma u。内幕交易者按噪声来调整订单：它总是恰好交易伪装所允许的那么多。价格冲击随着有待知道的东西增加，随着掩护它的噪声增加而减小。<bookmark mark='b'/>内幕交易者期望赚到sigma u乘sigma v的一半，而价格揭示了价值方差的一半。"
+  },
+  "7618c0100e1a": {
+   "scene": "Kyle",
+   "en": "Checked by simulation. <bookmark mark='a'/> The insider's profit, the noise traders' loss and the remaining uncertainty all match the theorem. And the first two are the same number: the market maker breaks even, so whatever the insider makes, the noise traders lose. That is who pays for an insider.",
+   "zh": "用模拟检验。<bookmark mark='a'/>内幕交易者的利润、噪声交易者的损失以及剩余的不确定性，都与定理吻合。而前两个是同一个数：做市商盈亏平衡，所以内幕交易者赚到的，就是噪声交易者亏掉的。这就是为内幕交易者买单的人。"
+  },
+  "357989508a2c": {
+   "scene": "Kyle",
+   "en": "A best-response check against a fixed price rule. <bookmark mark='a'/> Holding lambda fixed at its equilibrium value, scaling the insider order down or up reduces expected profit along the displayed parabola. This checks the insider's optimization, with Monte Carlo variation. The dealer's conditional-expectation rule is a separate equilibrium condition. Re-solving prices after a deviation would be a different comparison.",
+   "zh": "针对固定价格规则检验最佳反应。<bookmark mark='a'/> 把拉姆达固定在均衡值，缩小或扩大内部人订单都会沿图中抛物线降低期望利润。模拟有蒙特卡洛波动；这里只检验内部人的最优化。做市商的条件期望定价是另一条均衡条件。偏离之后重新求解价格，属于不同的比较。"
+  },
+  "352873c6d6e7": {
+   "scene": "Kyle",
+   "en": "The same unit horizon with noise variance fixed per unit time. <bookmark mark='a'/> One auction leaves half the value variance unrevealed. As the number of auctions increases, the saved recursion approaches linear decline of remaining conditional variance; finite auction counts still retain terminal uncertainty. Linear variance decline does not mean constant Shannon-information release. <bookmark mark='b'/> Initial impact changes from 0.50 at one auction to 0.99 at two hundred fifty-six, approaching sigma v over sigma u in the continuous-time normalization.",
+   "zh": "保持单位期限和单位时间噪声方差不变。<bookmark mark='a'/> 单次拍卖留下价值方差的一半未揭示。拍卖次数增加后，保存的递推接近剩余条件方差线性下降；有限拍卖次数仍有终点不确定性。方差线性下降不代表香农信息匀速释放。<bookmark mark='b'/> 初始冲击从单次拍卖的0.50变为二百五十六次的0.99，在连续时间归一化下趋向价值标准差除以噪声标准差。"
+  },
+  "6a666b3bd86c": {
+   "scene": "Kyle",
+   "en": "Kyle also named the three dimensions of liquidity that the rest of this act measures. <bookmark mark='a'/> Tightness: the cost of turning a position round, the spread. <bookmark mark='b'/> Depth: the flow needed to move the price one unit, one over lambda. <bookmark mark='c'/> And resiliency: how fast the price recovers from a shock that carried no information. Real markets have all three; the order book of Part thirty-six measures them separately.",
+   "zh": "Kyle还命名了流动性的三个维度，这一幕其余部分都在测量它们。<bookmark mark='a'/>紧度：快速转手一个头寸的成本，即价差。<bookmark mark='b'/>深度：使价格移动一个单位所需的订单流，即lambda的倒数。<bookmark mark='c'/>还有弹性：价格从一次不带信息的冲击中恢复得多快。真实市场三者兼有；第36部分的订单簿分别测量它们。"
+  },
+  "b7e511eada2f": {
+   "scene": "Kyle",
+   "en": "The two models side by side. <bookmark mark='a'/> Glosten and Milgrom fix the trade size and let the market maker see each trade's side; liquidity costs a spread; the informed are many and mechanical. Kyle lets one strategic insider choose its size, shows the market maker only the net flow, and prices liquidity by impact. In both, the price is a martingale that learns the value from the trades. The research chapter proves a specific continuous-time Gaussian Kyle equilibrium; this table alone does not establish equivalence with sequential binary-value trading.",
+   "zh": "并排看两个模型。<bookmark mark='a'/> 格洛斯滕与米尔格罗姆固定成交数量，让做市商看到每笔方向；流动性成本是价差，知情交易者众多且机械。凯尔让一个战略内部人选择数量，只向做市商展示净流量，并用价格冲击定价。两者中，价格在相应信息下都是学习价值的鞅。研究章节证明的是特定连续时间高斯凯尔均衡；这张表本身不建立它与顺序二元价值交易的等价性。"
+  },
+  "e169f19a0bff": {
+   "scene": "Kyle",
+   "en": "Interpret the model label carefully. <bookmark mark='a'/> Kyle's insider is a trader with superior information. Its legal status depends on source, duties and jurisdiction; a mathematical label does not classify a real trade. <bookmark mark='b'/> Collin-Dufresne and Fos studied disclosed activist trading and reported patterns consistent with timing trades when other flow is high. These are attributed findings in their setting, not identification of every informed trader. <bookmark mark='c'/> Strategic concealment is one reason standard proxies may miss information, but quiet prices alone prove neither its presence nor its absence.",
+   "zh": "谨慎理解模型标签。<bookmark mark='a'/> 凯尔的内部人拥有更好的信息。是否合法取决于来源、义务与司法辖区，数学标签不对现实交易作法律分类。<bookmark mark='b'/> 科兰迪弗雷纳与福斯研究披露的激进投资者交易，报告了与在其他流量较高时交易相符的模式。这是其研究环境内的引述结果，不是识别所有知情交易者。<bookmark mark='c'/> 战略隐藏可能使常用代理遗漏信息，但安静价格本身既不证明有私有信息，也不证明没有。"
+  },
+  "38b5e49511f6": {
+   "scene": "Kyle",
+   "en": "Three uses, with their limits. <bookmark mark='a'/> A return-on-flow regression produces a descriptive slope. Calling it structural equilibrium impact requires the model and an identification argument. <bookmark mark='b'/> Within Kyle, more independent noise makes the equilibrium deeper at fixed value uncertainty. <bookmark mark='c'/> The continuous-time insider trades gradually under a specific information structure. That result does not identify the optimal execution schedule of an uninformed real parent order, whose costs Part thirty-seven studies separately.",
+   "zh": "三种用途及边界。<bookmark mark='a'/> 收益对订单流的回归产生描述性斜率。称它为结构性均衡冲击，还需要模型与识别论证。<bookmark mark='b'/> 在凯尔模型内，固定价值不确定性时，更多独立噪声使均衡市场更深。<bookmark mark='c'/> 连续时间内部人是在特定信息结构下逐步交易。这并不识别现实非知情母订单的最优执行路径，后者的成本由第三十七部分另行研究。"
+  },
+  "ad090230abfa": {
+   "scene": "Kyle",
+   "en": "Pause and predict. Double noise variance, holding value variance fixed in the one-auction Gaussian equilibrium. Compare lambda, the insider order at a fixed value gap and unconditional expected profit. Variance doubling means standard deviation grows by the square root of two.",
+   "zh": "暂停并预测。在单次高斯均衡中，价值方差不变，噪声方差翻倍。比较拉姆达、给定价值差下的内部人订单及无条件期望利润。方差翻倍意味着标准差乘二的平方根。"
+  },
+  "153b362941b4": {
+   "scene": "Measures",
+   "en": "Chapter four. Researchers often have daily prices and volume but no historical quotes. Roll, Corwin and Schultz, and Amihud propose different liquidity proxies. We derive their assumptions. The planned ten-fund comparison is unavailable: its unchanged original stopped when the SPY source failed the frozen checksum. We neither refresh the source nor replace the comparison with a new backtest.",
+   "zh": "第四章。研究者往往有日度价格和成交量，却没有历史报价。罗尔、科温与舒尔茨、阿米胡德提出不同流动性代理。我们推导其假设。原计划的十只基金比较无法提供：未经修改的原始计算在标普基金数据不符合冻结校验和时停止。我们既不刷新来源，也不用新的历史回测替代。"
+  },
+  "79ef186533e8": {
+   "scene": "Measures",
+   "en": "Roll's identity requires a model. <bookmark mark='a'/> Let efficient-price increments be iid, with constant full spread s and independent equiprobable trade signs, independent of those increments. <bookmark mark='b'/> Bid-ask bounce then gives lag-one covariance minus s squared over four. <bookmark mark='c'/> Negative sample covariance yields twice its negative square root, in the units of the input prices. Nonnegative covariance makes this formula undefined; it does not prove the economic spread is zero. Serial price dynamics or correlated signs can break the identity.",
+   "zh": "罗尔恒等式需要模型。<bookmark mark='a'/> 设有效价格增量独立同分布，完整价差恒定，成交方向独立且等概率，也独立于价格增量。<bookmark mark='b'/> 买卖价反跳使一阶协方差等于负的价差平方除以四。<bookmark mark='c'/> 负样本协方差给出其相反数平方根的两倍，单位与输入价格一致。非负协方差使公式无定义，不证明经济价差为零。序列价格动态或相关方向都可能破坏该恒等式。"
+  },
+  "c39a12b4e334": {
+   "scene": "Measures",
+   "en": "What the estimator sees. <bookmark mark='a'/> The efficient price wanders. <bookmark mark='b'/> Trades land half a spread above it or below it, at random, so the printed price zig-zags: up, then down, more often than a random walk would. That zig-zag is the spread.",
+   "zh": "估计量看到的是什么。<bookmark mark='a'/>有效价格在游走。<bookmark mark='b'/>成交随机地落在它上方或下方半个价差处，所以打印出来的价格呈锯齿状：上去又下来，比随机游走更频繁。这种锯齿就是价差。"
+  },
+  "922cb3cfae6c": {
+   "scene": "Measures",
+   "en": "A chosen scale calculation. <bookmark mark='a'/> In the simple iid small-bounce approximation, sample autocovariance has standard error of order daily variance divided by the square root of sample length. <bookmark mark='b'/> Two standard errors give the displayed requirement, proportional to volatility to the fourth power divided by spread to the fourth. <bookmark mark='c'/> Stipulate daily volatility one point two percent and full spread point three three basis points. The resulting order is a trillion daily observations. This is a heuristic illustrating weak signal at this frequency, not a calibrated finite-sample power result or a measured SPY quote.",
+   "zh": "给定尺度的计算。<bookmark mark='a'/> 在简单独立同分布、小反跳近似下，样本自协方差标准误量级为日方差除以样本长度平方根。<bookmark mark='b'/> 两个标准误给出图示要求，正比于波动率四次方除以价差四次方。<bookmark mark='c'/> 指定日波动率百分之一点二、完整价差零点三三基点，得到约一万亿个日度观察。它用来说明此频率下信号很弱，不是校准的有限样本功效研究，也不是测得的基金报价。"
+  },
+  "292478c61865": {
+   "scene": "Measures",
+   "en": "Three distinct objects. <bookmark mark='a'/> Corwin and Schultz use one- and two-day high-low ranges to separate spread and volatility under their model. Our original clips negative spread estimates at zero; that convention can affect bias. <bookmark mark='b'/> Amihud averages absolute return divided by dollar volume. Its units are return per dollar, and its denominator mechanically links it to volume. It is not a signed-flow structural-impact estimate. <bookmark mark='c'/> Direct quote data allow different measurements, but minimum tick, quoted spread and effective spread must remain distinct. Daily OHLC data alone do not provide their ground truth.",
+   "zh": "三个不同对象。<bookmark mark='a'/> 科温与舒尔茨利用一天和两天高低价范围，在其模型下分离价差与波动率。原始代码把负价差估计截为零，这个约定可能影响偏差。<bookmark mark='b'/> 阿米胡德对绝对收益除以美元成交额取均值，单位是每美元收益，其分母使它机械地关联成交额。它不是带符号订单流的结构冲击估计。<bookmark mark='c'/> 直接报价支持不同测量，但最小价格单位、报价价差和有效价差必须区分。日度开高低收数据本身不提供这些对象的真实标准。"
+  },
+  "6b2c9f066666": {
+   "scene": "Measures",
+   "en": "The empirical boundary matters. Yahoo's extracted SPY bars for 2015 to 2020 differ from the recorded checksum. That key was rejected once, and the original stopped before producing its output. We therefore omit the ten-fund table, Bitcoin Roll result and cross-fund scatter. The mathematical examples remain explicit illustrations. An old reported spread is not a current verified result, and a minimum tick is not an observed effective spread.",
+   "zh": "实证边界很重要。雅虎抽取的二零一五至二零二零年标普基金数据不同于记录的校验和。该键只被拒绝一次，原始计算在产出前停止。因此省略十只基金表、比特币罗尔结果和跨基金散点图。数学例子仍明确标为示例。旧报道价差不是当前已验证结果，最小价格单位也不是观察到的有效价差。"
+  },
+  "70be3c15cda1": {
+   "scene": "Measures",
+   "en": "With trade and quote records, define the decomposition. <bookmark mark='a'/> The effective spread is twice the trade-side-signed execution-price difference from the initial midpoint. <bookmark mark='b'/> Replace that midpoint by a specified later midpoint to obtain the realized spread. <bookmark mark='c'/> The difference equals twice the signed midpoint change. This is an accounting identity. Its interpretation depends on horizon, timestamp alignment and selection; it does not by itself identify private information or causality. The factor two expresses a full-spread equivalent rather than one-way cost.",
+   "zh": "用成交与报价记录定义分解。<bookmark mark='a'/> 有效价差是成交价格相对初始中点的差，按成交方向带符号并乘二。<bookmark mark='b'/> 换成指定较晚时点的中点，得到已实现价差。<bookmark mark='c'/> 两者之差等于带符号中点变化的两倍。这是会计恒等式。解释取决于期限、时间戳对齐与选择效应，本身不识别私有信息或因果。乘二表示完整价差等价值，不是单边成本。"
+  },
+  "169fa7e82dcd": {
+   "scene": "Measures",
+   "en": "Pause and predict. A sample lag-one covariance is minus point zero zero zero four dollars squared. Compute the Roll full-spread estimate, check its units and state the assumptions required to interpret it economically.",
+   "zh": "暂停并预测。样本一阶协方差为负零点零零零四美元平方。求罗尔完整价差估计，检查单位，并说明把它解释为经济价差所需的假设。"
+  },
+  "55294c941ec2": {
+   "scene": "Flow",
+   "en": "Chapter five. Kyle's lambda is the price of order flow. To measure it you need to know which trades were buys. Bitcoin's public data says so directly: every minute, how much was bought by traders who crossed the spread.",
+   "zh": "第五章。Kyle的lambda是订单流的价格。要测量它，你需要知道哪些交易是买入。比特币的公开数据直接告诉了我们：每一分钟，有多少是由越过价差的交易者买入的。"
+  },
+  "25e9791b415c": {
+   "scene": "Flow",
+   "en": "Define the measurement. <bookmark mark='a'/> Binance records taker-buy base volume for each one-minute bar. Taker sells equal total base volume minus those buys. <bookmark mark='b'/> Twice taker buys minus total volume is net aggressive base flow. Multiplying by the bar close approximates dollars; it is not a sum of timestamped signed execution values. <bookmark mark='c'/> Regress same-bar log return in basis points on that approximate flow in millions of dollars. Returns use successive available closes, so archive gaps can compress the clock. This venue aggregate does not identify who was informed.",
+   "zh": "定义测量。<bookmark mark='a'/> 币安每分钟记录以基础资产计的主动买入量；主动卖量等于总基础资产成交量减去买量。<bookmark mark='b'/> 买量两倍减总量是净主动基础资产流。乘该分钟收盘价只是美元近似，不是按时间戳逐笔加总的带符号成交额。<bookmark mark='c'/> 用它的百万美元单位回归同一根K线的基点对数收益。收益连接相邻可用收盘价，档案缺口可能压缩时间。这种场所汇总量不识别谁知情。"
+  },
+  "4f71148fd31c": {
+   "scene": "Flow",
+   "en": "The descriptive fit. <bookmark mark='a'/> The slope is 4.6 basis points per million dollars. It measures same-bar association; flow and prices respond jointly to news and to one another. <bookmark mark='b'/> The stored classical iid t-statistic is 757, with R squared 0.21; it is not a heteroskedasticity- and autocorrelation-robust inference result. <bookmark mark='c'/> Flow standard deviation is 0.9 million dollars, giving a fitted change of 4 basis points per flow standard deviation. None of these is the causal execution cost of an added parent order.",
+   "zh": "描述性拟合。<bookmark mark='a'/> 斜率为每百万美元4.6基点，衡量同期关联；订单流与价格共同响应新闻，也相互作用。<bookmark mark='b'/> 保存的经典独立同分布残差统计量为757，拟合优度0.21。它不是异方差与自相关稳健推断。<bookmark mark='c'/> 流量标准差为0.9百万美元，对应每个流量标准差4基点的拟合变化。这些数都不是新增母订单的因果执行成本。"
+  },
+  "9c5a56e7a14c": {
+   "scene": "Flow",
+   "en": "Bin the observed minutes by signed flow. <bookmark mark='a'/> Each dot is a conditional sample mean; the displayed square-root curve is fitted to those selected bins. <bookmark mark='b'/> The largest positive bin has return divided by flow of 7 basis points per million dollars. This can show nonlinearity in same-minute association. It is not a forecast for executing a large parent order, and no out-of-sample curve comparison or uncertainty bands are supplied. A limit-order market still has liquidity suppliers, even without a designated dealer.",
+   "zh": "按带符号流量给分钟分组。<bookmark mark='a'/> 每个点是条件样本均值，平方根曲线拟合这些选定分组。<bookmark mark='b'/> 最大正向分组的收益除以流量为每百万美元7基点。这能展示同期关联的非线性，却不是执行大母订单的预测；这里没有样本外曲线比较或不确定性带。即使没有指定做市商，限价订单市场也有流动性提供者。"
+  },
+  "9a383568b758": {
+   "scene": "Flow",
+   "en": "Compare the objects before comparing curves. <bookmark mark='a'/> Independent Gaussian value and noise support a linear conditional-expectation price rule in the specified Kyle equilibrium. <bookmark mark='b'/> A parent-order square-root relation concerns identified orders executed over time; our minute bins are different observations and a different estimand. <bookmark mark='c'/> Persistence, changing liquidity and non-Gaussian distributions are possible mechanisms, not conclusions established by this plot. Fat-tailed flow alone does not prove a square-root response, and a concave minute curve does not identify an optimal execution schedule.",
+   "zh": "比较曲线之前，先比较对象。<bookmark mark='a'/> 独立高斯价值与噪声支持指定凯尔均衡中的线性条件期望定价。<bookmark mark='b'/> 母订单平方根关系研究的是随时间执行、已识别的订单；分钟分组使用不同观察和不同目标统计量。<bookmark mark='c'/> 持续性、变化的流动性和非高斯分布是可能机制，不是图中证明的结论。厚尾流量本身不证明平方根反应，分钟曲线呈凹形也不识别最优执行路径。"
+  },
+  "9f2b34631625": {
+   "scene": "Flow",
+   "en": "Serial association in the saved arrays. <bookmark mark='a'/> Signed-flow autocorrelation is 0.18 at one row and 0.004 at two hundred forty rows. Rows usually represent minutes, but this helper does not reindex missing timestamps. Order slicing is one possible source of persistence, not a causal finding from autocorrelation. <bookmark mark='b'/> The plotted return autocorrelations are much smaller. That does not establish unpredictability under every information set. Anticipation and innovation-based impact can reconcile persistent flow with efficient prices, but this ACF comparison does not estimate such a model.",
+   "zh": "保存数组的序列关联。<bookmark mark='a'/> 带符号流量在相隔一行时自相关为0.18，二百四十行时为0.004。通常一行代表一分钟，但辅助函数不重建缺失时间戳。拆单是可能机制，不是自相关给出的因果发现。<bookmark mark='b'/> 图中收益自相关小得多，也不代表对所有信息集都不可预测。预期与基于创新的冲击可使持续流量和有效价格共存，但这里的自相关比较没有估计这种模型。"
+  },
+  "ab0af3116d7f": {
+   "scene": "Flow",
+   "en": "Monthly descriptive slopes range from 2.2 to 8.2 basis points per million dollars. <bookmark mark='a'/> Each fit reuses the research archive; variation can reflect volatility, flow scale, composition and measurement. The correlation with within-month return volatility is +0.21. It is an association across selected months, without uncertainty bands or independent structural identification. This plot does not isolate changes in private information.",
+   "zh": "月度描述性斜率从每百万美元2.2到8.2基点。<bookmark mark='a'/> 每次拟合重复使用研究档案；变化可能反映波动率、流量尺度、组成和测量。与当月收益波动率的相关为+0.21。这是选定月份间的关联，没有不确定性带或独立结构识别，不能单独提取私有信息的变化。"
+  },
+  "94fc24fe16ca": {
+   "scene": "Flow",
+   "en": "And through the day. <bookmark mark='a'/> Bitcoin trades around the clock, but not evenly. Lambda moves with the hour, and its correlation with the hour's volume is +0.07. Kyle's depth is the noise to hide in, and the busiest hours are not automatically the deepest: when the busy hours are also the hours of news, both the noise and the information arrive together.",
+   "zh": "以及一天之中。<bookmark mark='a'/>比特币全天候交易，但并不均匀。lambda随小时变化，它与该小时成交量的相关系数是+0.07。Kyle的深度是可以藏身的噪声，最繁忙的时段并不自动就是最深的：当繁忙时段也是新闻时段时，噪声和信息同时到达。"
+  },
+  "ebda178de2e0": {
+   "scene": "Flow",
+   "en": "Five coins in 2024. <bookmark mark='a'/> The fitted same-minute slopes include Bitcoin at 3.5 and XRP at 31 basis points per million dollars. They are associations, not measured costs of an imposed order. <bookmark mark='b'/> The log-log slope against return volatility divided by flow volatility is 0.91. In OLS with an intercept, lambda times flow standard deviation over return standard deviation equals their sample correlation when samples match. The original marginal standard deviations differ slightly through the initial missing return. This scaling plot is therefore largely an accounting relation, not an independent test of Kyle equilibrium.",
+   "zh": "二零二四年的五种币。<bookmark mark='a'/> 同分钟拟合斜率中，比特币为每百万美元3.5基点，瑞波币为31。它们是关联，不是施加某个订单的测得成本。<bookmark mark='b'/> 对收益波动率除以流量波动率作双对数比较，斜率为0.91。带截距最小二乘中，若样本相同，拉姆达乘流量标准差除以收益标准差恰等于样本相关。原始边际标准差因首个缺失收益而略有样本差异。因此这个尺度图主要是会计关系，不是独立的凯尔均衡检验。"
+  },
+  "9b81b97154a1": {
+   "scene": "Flow",
+   "en": "Aggregate consecutive stored rows into longer bars. <bookmark mark='a'/> From one to sixty rows, the saved slope changes from 4.6 to 3.2 and R squared from 0.21 to 0.32. These regressions use different aggregation and noise scales. They do not trace one identified trade's response, so they do not establish impact decay or isolate a permanent component. The aggregation does not repair missing calendar bars; sixty rows need not always equal one clock hour.",
+   "zh": "把连续保存的行聚合成长条。<bookmark mark='a'/> 从一行到六十行，保存斜率从4.6变为3.2，拟合优度从0.21变为0.32。聚合和噪声尺度不同。这些回归没有追踪同一笔已识别交易的后续反应，因此不证明冲击衰减，也不分离永久成分。聚合不补齐缺失日历K线，六十行不一定总是一小时。"
+  },
+  "65d03f0cd47b": {
+   "scene": "Flow",
+   "en": "The practical interpretation. <bookmark mark='a'/> Same-bar regressions describe associations in this archive; a causal effect needs an identification argument. <bookmark mark='b'/> Aggregation slopes alone do not separate temporary from permanent impact. <bookmark mark='c'/> To estimate parent-order cost, specify the path, spread, fees, fills and opportunity cost. These measurements motivate further questions; they do not provide a live execution prescription.",
+   "zh": "实际解释。<bookmark mark='a'/> 同期回归描述档案内的关联；因果效应需要识别论证。<bookmark mark='b'/> 仅靠不同聚合斜率，不能分离暂时与永久冲击。<bookmark mark='c'/> 估计母订单成本需要指定路径、价差、费用、成交和机会成本。这些测量提出进一步问题，不提供实时执行处方。"
+  },
+  "afe29a3b9838": {
+   "scene": "Flow",
+   "en": "Pause and predict. A descriptive slope is four point six basis points per million, with ten million of net flow. Find its fitted return. Separately assume a permanent linear execution path, no spread or fees, and derive average shortfall. Why is neither an identified real parent-order cost?",
+   "zh": "暂停并预测。描述性斜率为每百万美元四点六基点，净流量为一千万美元，求拟合收益。再另行假设永久线性执行路径、没有价差和费用，推导平均执行偏离。为何两者都不是已识别的现实母订单成本？"
+  },
+  "ef4300b7f49c": {
+   "scene": "VPIN",
+   "en": "Chapter six. Glosten and Milgrom's mu, the share of informed traders, sets the spread. If it could be measured, a market maker would know when to widen its quotes. Two famous attempts, and a test of the second.",
+   "zh": "第六章。Glosten和Milgrom的mu，知情交易者的比例，决定价差。如果能测量它，做市商就知道何时该拉宽报价。两个著名的尝试，以及对第二个的检验。"
+  },
+  "a9a04932b265": {
+   "scene": "VPIN",
+   "en": "PIN. <bookmark mark='a'/> David Easley, Nicholas Kiefer, Maureen O'Hara and Joseph Paperman: each day there is private news, or not. <bookmark mark='b'/> Buys and sells arrive at random, and on news days informed traders add to one side. <bookmark mark='c'/> The probability that a trade is informed is estimated from daily counts of buys and sells, by maximum likelihood. It became a standard variable in asset pricing, and a slow one: it needs many days of data.",
+   "zh": "PIN。<bookmark mark='a'/>David Easley、Nicholas Kiefer、Maureen O'Hara和Joseph Paperman：每天要么有私人消息，要么没有。<bookmark mark='b'/>买单和卖单随机到达，在有消息的日子里，知情交易者会加到一侧。<bookmark mark='c'/>一笔交易是知情交易的概率，用极大似然从每日的买卖笔数中估计。它成为资产定价中的一个标准变量，也是一个缓慢的变量：它需要很多天的数据。"
+  },
+  "42fe894e27d7": {
+   "scene": "VPIN",
+   "en": "VPIN uses an estimated classification. <bookmark mark='a'/> Split each bar's volume using the Normal cumulative probability of its standardized price change; split a bar across equal-volume buckets when necessary. <bookmark mark='b'/> Average each bucket's absolute buy-sell imbalance over fifty buckets. This is a statistic, not automatically the probability of informed trading. <bookmark mark='c'/> Our unchanged original estimates return standard deviation and mean daily volume from the full four-year sample. Bucket size is that average divided by fifty. Those full-sample choices use future observations relative to early dates, so this is an ex-post research construction, not an implemented live signal.",
+   "zh": "成交量同步指标使用估计分类。<bookmark mark='a'/> 根据标准化价格变化的正态累积概率分配每根K线的买卖量，必要时把一根K线分入多个等成交量桶。<bookmark mark='b'/> 对最近五十个桶的绝对买卖失衡取均值。这是统计量，不自动等于知情交易概率。<bookmark mark='c'/> 未修改的原始代码用完整四年样本估计收益标准差和日均成交量，桶大小为该均值的五十分之一。对较早日期而言使用了未来观察，所以这是事后研究构造，不是已部署实时信号。"
+  },
+  "497b6cd7290a": {
+   "scene": "VPIN",
+   "en": "PIN has its own troubles. <bookmark mark='a'/> Its likelihood has many local maxima, and estimates depend on where the optimiser starts. <bookmark mark='b'/> Jefferson Duarte and Lance Young found that the part of PIN that predicts stock returns is the part related to illiquidity, not to private information. <bookmark mark='c'/> And both measures need to know which trades were buys: PIN from a trade classifier, VPIN from price moves. The classifier is the weak link, which is the test that follows.",
+   "zh": "PIN有它自己的问题。<bookmark mark='a'/>它的似然函数有许多局部极大值，估计值取决于优化器从哪里开始。<bookmark mark='b'/>Jefferson Duarte和Lance Young发现，PIN中能预测股票收益的部分是与非流动性相关的部分，而不是与私人信息相关的部分。<bookmark mark='c'/>而两个指标都需要知道哪些交易是买入：PIN靠交易分类器，VPIN靠价格变动。分类器是薄弱环节，这正是接下来的检验。"
+  },
+  "8a900869887b": {
+   "scene": "VPIN",
+   "en": "VPIN on four years of Bitcoin, one-minute bars. <bookmark mark='a'/> It averages about 0.18, with spikes. The question is what the spikes mean.",
+   "zh": "比特币四年的VPIN，一分钟K线。<bookmark mark='a'/>它平均约为0.18，有尖峰。问题是这些尖峰意味着什么。"
+  },
+  "409d82c778db": {
+   "scene": "VPIN",
+   "en": "Two selected event windows. <bookmark mark='a'/> May nineteenth, 2021, surrounds a large Bitcoin selloff. <bookmark mark='b'/> November eighth, 2022, surrounds the FTX crisis. Price is separately rescaled to each panel, while VPIN retains its own scale. These ex-post selected plots do not establish predictive lead, calibrated false-alarm rates or causality. A defensible warning study would require a predeclared rule and genuinely available inputs, not full-sample bucket and volatility estimates.",
+   "zh": "两个事后选定的事件窗口。<bookmark mark='a'/> 二零二一年五月十九日前后，比特币大幅下跌。<bookmark mark='b'/> 二零二二年十一月八日前后是交易所危机。每个面板的价格另行缩放，失衡指标保留自身尺度。这些选定图不证明预测领先、校准的误报率或因果。可靠预警研究需要预先声明规则和当时真正可用的输入，不能使用完整样本估计的桶大小与波动率。"
+  },
+  "fae0c79a1831": {
+   "scene": "VPIN",
+   "en": "Two descriptive correlations, with an essential mismatch. <bookmark mark='a'/> VPIN correlates 0.67 with realized volatility in the selected overlapping windows. <bookmark mark='b'/> Its correlation with absolute aggregate taker imbalance is 0.09. But that comparator takes the absolute value after summing a roughly fifty-bucket whole-bar window. VPIN averages absolute imbalances within equal-volume buckets. Opposite bucket imbalances can cancel in the first statistic but not the second, and boundary bars differ. <bookmark mark='c'/> Bulk classification mechanically uses price moves. The results illustrate sensitivity, not validation against true VPIN or proof about informed trading. Overlap, full-sample calibration and lack of inference further limit the comparison.",
+   "zh": "两个描述性相关存在重要错配。<bookmark mark='a'/> 在选定重叠窗口中，指标与已实现波动率相关为0.67。<bookmark mark='b'/> 与主动买卖合并绝对失衡的相关为0.09。但比较量先把约五十桶对应的整根K线窗口合并，再取绝对值；原指标对等成交量桶内部的绝对失衡求平均。相反方向会在前者抵消，后者不会，边界K线处理也不同。<bookmark mark='c'/> 批量分类机械使用价格变化。结果说明敏感性，不是对真实分桶指标的验证，更不证明知情交易。重叠、完整样本校准和缺乏推断进一步限制解释。"
+  },
+  "b87e11332d32": {
+   "scene": "VPIN",
+   "en": "Define whose markout is measured. <bookmark mark='a'/> Let q be the dealer's execution side: plus one for a dealer buy, minus one for a dealer sell. The displayed signed future-midpoint minus fill-price difference is favorable when positive. <bookmark mark='b'/> Use several stated horizons and consistent timestamps, grouped by venue or counterparty when lawfully known. <bookmark mark='c'/> More negative markouts are adverse to the dealer. They can reflect selection and price dynamics; they do not uniquely reveal private information or abusive intent. If one instead signs by the counterparty's side, every sign reverses. Spread income and fees also matter.",
+   "zh": "明确从谁的角度计算成交后表现。<bookmark mark='a'/> 令方向是做市商自己的成交方向：买入为正一，卖出为负一。按这个方向带符号的未来中点减成交价，正值对做市商有利。<bookmark mark='b'/> 使用明确的多个期限和一致时间戳，在合法知悉时按场所或对手分组。<bookmark mark='c'/> 更负的结果对做市商不利，可能反映选择和价格动态，但不唯一揭示私有信息或滥用意图。若改用对手方向，所有符号反转。价差收入与费用也重要。"
+  },
+  "c98487b2338a": {
+   "scene": "VPIN",
+   "en": "Interpretation follows construction. <bookmark mark='a'/> A statistic built from standardized price moves can inherit volatility effects; correlation alone does not quantify classifier accuracy. <bookmark mark='b'/> Use recorded taker signs where available, but align the bucket definition and boundary allocation before comparing with bulk classification. Neither identifies informed intent. <bookmark mark='c'/> A real quote policy needs a specified objective, costs and available information. This ex-post VPIN illustration does not validate a live toxicity signal or an optimal response.",
+   "zh": "解释取决于构造。<bookmark mark='a'/> 基于标准化价格变化的统计量可能继承波动效应；相关本身不衡量分类准确率。<bookmark mark='b'/> 有主动成交标记时应使用，但比较批量分类前，必须统一桶定义和边界分配。两者都不识别知情意图。<bookmark mark='c'/> 真正报价政策需要明确目标、成本与可用信息。这个事后示例不验证实时有毒流量信号或最优反应。"
+  },
+  "b5390983d06c": {
+   "scene": "VPIN",
+   "en": "Pause and predict. A thousand-bitcoin bar rises by two standardized return units. Compute the bulk-classified buy and sell volumes. Could the recorded taker split still be five hundred each? Explain what is classified and what remains unidentified.",
+   "zh": "暂停并预测。一根成交量一千比特币的K线上涨两个标准化收益单位。求批量分类分配的买量与卖量。记录的主动买卖仍可能各五百吗？说明分类了什么，以及什么仍未被识别。"
+  },
+  "98d39c1af87a": {
+   "scene": "Discovery",
+   "en": "Chapter seven. Bitcoin trades both as spot and as a perpetual future. Arbitrage and funding link their prices, but differences can persist. Hasbrouck's information shares describe how a specified cointegrated model attributes common-trend innovation variance. They require synchronized prices, a stable error-correction specification and residual assumptions; they are not a causal verdict about where every piece of news first appeared.",
+   "zh": "第七章。比特币在现货和永续市场都交易。套利与资金费连接价格，但差异可以持续。哈斯布鲁克信息份额描述指定协整模型如何分配共同趋势创新方差。它要求同步价格、稳定误差修正规格及残差假设，不是对每条新闻首先出现在哪里的因果判决。"
+  },
+  "f8c49d5a7fcd": {
+   "scene": "Discovery",
+   "en": "The maintained model. <bookmark mark='a'/> Each log price contains a common stochastic trend plus market-specific components. <bookmark mark='b'/> Specify integrated prices with a common innovation. <bookmark mark='c'/> Assume their difference is stationary over the estimation window, with the chosen cointegrating vector. Arbitrage is a motivation, not a proof of that statistical assumption. Time-varying funding, basis risk and regime changes can weaken the specification; no cointegration or stability test is supplied by these plots.",
+   "zh": "维持的模型假设。<bookmark mark='a'/> 每个对数价格包含共同随机趋势和市场特有成分。<bookmark mark='b'/> 指定带共同创新的单整价格。<bookmark mark='c'/> 假设估计窗口内价格差在选定协整向量下平稳。套利是动机，不是统计假设证明。变化的资金费、基差风险和状态切换可能削弱规格；这些图未提供协整或稳定性检验。"
+  },
+  "c75bb56fb9d0": {
+   "scene": "Discovery",
+   "en": "The tool. <bookmark mark='a'/> Part thirty-three's error-correction model, for two prices. <bookmark mark='b'/> The loadings alpha say how strongly each market moves to close the basis. <bookmark mark='c'/> The market that does not adjust is the one the other follows, so each market's weight in the common trend is the other's speed of adjustment.",
+   "zh": "工具。<bookmark mark='a'/>第33部分的误差修正模型，用于两个价格。<bookmark mark='b'/>载荷alpha说明每个市场向收窄基差的方向移动得多强。<bookmark mark='c'/>不调整的那个市场就是另一个市场所追随的，所以每个市场在共同趋势中的权重，等于另一个市场的调整速度。"
+  },
+  "e0b163e55847": {
+   "scene": "Discovery",
+   "en": "Hasbrouck's information share. <bookmark mark='a'/> The variance of the efficient price's innovation comes from the residual covariance. <bookmark mark='b'/> Each market's share of it is its information share. <bookmark mark='c'/> But when the two markets' shocks are correlated within the sampling interval, the split depends on which is ordered first, and the answer is a range.",
+   "zh": "Hasbrouck的信息份额。<bookmark mark='a'/>有效价格新息的方差来自残差协方差。<bookmark mark='b'/>每个市场在其中所占的份额就是它的信息份额。<bookmark mark='c'/>但当两个市场的冲击在一个采样间隔内相关时，拆分取决于哪个排在前面，答案是一个区间。"
+  },
+  "9b7460e9ec04": {
+   "scene": "Discovery",
+   "en": "The answer, month by month, from one-minute bars. <bookmark mark='a'/> Each bar is the range of the perpetual's information share. On average it runs from near zero to near one: a width of 0.95. At one-minute sampling, the method cannot say which market leads.",
+   "zh": "答案，逐月，来自一分钟K线。<bookmark mark='a'/>每根柱子是永续合约信息份额的区间。平均而言它从接近零到接近一：宽度为0.95。在一分钟采样下，这个方法无法说明哪个市场领先。"
+  },
+  "bde70f5b35df": {
+   "scene": "Discovery",
+   "en": "Sampling limits the interpretation. <bookmark mark='a'/> The contemporaneous return correlation is 0.987; both prices can react within the same minute. <bookmark mark='b'/> Correlated residuals make Cholesky-order attribution ambiguous in this fitted model. Minute data do not establish a particular millisecond adjustment speed. <bookmark mark='c'/> Finer synchronized data may help, but do not guarantee narrow bounds or causal identification. The model, quote-versus-trade choice, clock quality and stability still matter. A wide range is an attribution limitation, not a proof that the markets have identical roles.",
+   "zh": "采样限制解释。<bookmark mark='a'/> 同期收益相关为0.987，两个价格都可能在同一分钟内反应。<bookmark mark='b'/> 相关残差使拟合模型内的乔列斯基排序归属模糊。分钟数据不能证明某个毫秒级调整速度。<bookmark mark='c'/> 更细且同步的数据可能有帮助，却不保证窄界或因果识别。模型、报价与成交选择、时钟质量及稳定性仍重要。宽范围表示归属困难，不证明两个市场作用相同。"
+  },
+  "356544c365f6": {
+   "scene": "Discovery",
+   "en": "An attributed historical application. <bookmark mark='a'/> Hasbrouck's study of Dow stocks and regional venues reported a dominant NYSE contribution in that setting. <bookmark mark='b'/> Historical results depend on the sample, quote records and econometric specification. Modern cross-venue studies need clocks and sampling suitable for their question; nanosecond labels alone do not guarantee synchronization or identification. <bookmark mark='c'/> Other studies often find an important futures role in particular markets. Lower transaction costs and leverage are possible explanations, not a universal causal conclusion from our Bitcoin turnover figures.",
+   "zh": "引述一项历史应用。<bookmark mark='a'/> 哈斯布鲁克研究道琼斯股票及区域场所，报告了该环境中纽约证券交易所占主导的贡献。<bookmark mark='b'/> 历史结果依赖样本、报价记录与计量规格。现代跨场所研究需要适合问题的时钟和采样，纳秒标签本身不保证同步或识别。<bookmark mark='c'/> 其他研究常发现特定市场中期货作用重要。更低交易成本和杠杆是可能解释，不是比特币成交额所提供的普遍因果结论。"
+  },
+  "d79f12c8bf7f": {
+   "scene": "Discovery",
+   "en": "A descriptive lead-lag summary. <bookmark mark='a'/> The stored correlations are +0.020 for perpetual followed by spot and +0.001 for the reverse. The helper first filters non-one-minute increments, then lags the retained sequence. It does not ensure every adjacent retained pair is consecutive in calendar time, so gaps can compress the lag clock. <bookmark mark='b'/> Perpetual dollar turnover is 5.3 times spot turnover on matched timestamps. Neither turnover nor these small, untested correlations establishes causal price leadership or a profitable next-minute forecast.",
+   "zh": "描述性领先滞后摘要。<bookmark mark='a'/> 保存的相关中，永续随后现货为+0.020，反向为+0.001。辅助函数先过滤非一分钟增量，再对留下序列作滞后，不保证相邻留下的增量在日历时间连续，因此缺口可能压缩滞后时钟。<bookmark mark='b'/> 匹配时间戳上，永续美元成交额为现货的5.3倍。成交额与这些很小、未经检验的相关都不建立因果价格领先，也不证明有利可图的下一分钟预测。"
+  },
+  "19b894d87fc4": {
+   "scene": "Discovery",
+   "en": "What holds the two prices together. <bookmark mark='a'/> A perpetual future never expires; instead, every eight hours longs pay shorts a funding rate when the perpetual trades above spot, and shorts pay longs when it trades below. The monthly average basis stays within a few basis points: largest in 2021-02, in the bull market, most negative in 2022-11. Funding is the arbitrage, paid on a schedule; Part thirty-nine builds it.",
+   "zh": "是什么把两个价格绑在一起。<bookmark mark='a'/>永续合约永不到期；取而代之的是，每八小时，当永续合约价格高于现货时多头向空头支付资金费率，低于现货时空头向多头支付。月平均基差保持在几个基点之内：最大是在2021-02，牛市之中，最负是在2022-11。资金费率就是按时间表支付的套利；第39部分会构建它。"
+  },
+  "8de284ab2d2c": {
+   "scene": "Discovery",
+   "en": "Pause and predict. With adjustment loadings minus point nine and point one, find the normalized common-trend weights. Then assume equal independent innovation variances and derive B's information share. Why are the two numbers different?",
+   "zh": "暂停并预测。调整载荷为负零点九和正零点一，求标准化共同趋势权重。再假设两个创新等方差且独立，求第二个市场的信息份额。为什么两个数字不同？"
+  },
+  "5d5e95eef440": {
+   "scene": "Structure",
+   "en": "Chapter eight. The models so far had one dealer and one market. An American stock trades on more than a dozen exchanges and dozens of off-exchange venues, linked by rules. The rules decide who meets whom, and at what price.",
+   "zh": "第八章。到目前为止的模型都只有一个交易商和一个市场。一只美国股票在十多家交易所和数十个场外场所交易，由规则连接起来。规则决定谁与谁相遇，以什么价格。"
+  },
+  "c17063a8b2e6": {
+   "scene": "Structure",
+   "en": "A historical outline of the 2005 US framework. <bookmark mark='a'/> The order-protection rule restricts trade-throughs of qualifying protected quotations, with exceptions; it does not protect every displayed order or dictate every routing decision. <bookmark mark='b'/> Access rules and fee caps apply within their defined scope. <bookmark mark='c'/> The original sub-penny framework generally used a cent at prices of at least a dollar, subject to exceptions and later amendments. <bookmark mark='d'/> The national best bid and offer is a reference, not a complete measure of execution quality. This lesson does not verify the current legal regime or compliance dates.",
+   "zh": "美国二零零五年框架的历史概要。<bookmark mark='a'/> 订单保护规则限制越过合格受保护报价的成交，并有例外；它不保护每个显示订单，也不规定每项路由决定。<bookmark mark='b'/> 接入规则与费用上限在定义范围内适用。<bookmark mark='c'/> 原有亚美分框架通常对价格至少一美元的股票使用一美分单位，但有例外与后续修订。<bookmark mark='d'/> 全国最佳买卖价是参考，不是执行质量的完整衡量。本课不核实当前法律制度或合规日期。"
+  },
+  "ee486782422d": {
+   "scene": "Structure",
+   "en": "Specify the participant. <bookmark mark='a'/> In a conventional maker-taker schedule, a passive fill may receive a rebate. <bookmark mark='b'/> An aggressive fill may pay a separately specified access fee. A maker rebate does not determine that taker fee. <bookmark mark='c'/> A taker round trip crosses the quoted spread and pays both taker fees, as displayed. A maker's bid-to-ask gross revenue instead adds any rebates before adverse selection and inventory costs. Inverted schedules change the fee signs. There is no participant-independent spread-minus-rebate cost formula, and fill probability and queueing remain important.",
+   "zh": "明确参与者。<bookmark mark='a'/> 传统挂单吃单收费下，被动成交可能获得返佣。<bookmark mark='b'/> 主动成交可能支付另行指定的接入费。挂单方返佣不决定吃单方费用。<bookmark mark='c'/> 吃单方往返需要跨越报价价差并支付两次费用，如图所示。做市商从买价买、卖价卖的毛收入则加返佣，再扣逆向选择与库存成本。倒置收费改变费用符号。不存在对所有参与者都适用的价差减返佣公式，成交概率和排队仍重要。"
+  },
+  "79d565640cce": {
+   "scene": "Structure",
+   "en": "Where orders go. <bookmark mark='a'/> Exchanges: displayed order books, which set the national best quotes and run the opening and closing auctions. <bookmark mark='b'/> Dark pools: venues with no displayed quotes, usually matching at the midpoint, where a large order can hide, which is Kyle's insider's wish. <bookmark mark='c'/> And wholesalers, who buy retail orders from brokers and fill them themselves, often slightly better than the best quote. Together, off-exchange trading has been around half of American equity volume, as reported.",
+   "zh": "订单去向哪里。<bookmark mark='a'/>交易所：显示的订单簿，它们设定全国最佳报价并主持开盘和收盘拍卖。<bookmark mark='b'/>暗池：没有显示报价的场所，通常按中点撮合，大订单可以藏在其中，这正是Kyle的内幕交易者的愿望。<bookmark mark='c'/>还有批发商，它们从券商那里购买散户订单并自己成交，常常比最佳报价略好。据报道，场外交易合计约占美国股票成交量的一半。"
+  },
+  "5f603d60d139": {
+   "scene": "Structure",
+   "en": "Who chooses the dark? <bookmark mark='a'/> A dark pool matches buyers and sellers at the midpoint, saving the spread, but only if the other side shows up. <bookmark mark='b'/> Haoxiang Zhu showed that informed traders all want the same side, so their dark orders often go unmatched, and they prefer the lit market's certain fill. <bookmark mark='c'/> So the dark attracts the uninformed, which concentrates information on the exchanges: discovery can improve even as the public spread widens.",
+   "zh": "谁选择暗处？<bookmark mark='a'/>暗池按中点撮合买卖双方，省下价差，但前提是对手方出现。<bookmark mark='b'/>Haoxiang Zhu表明，知情交易者都想站在同一侧，所以他们在暗池的订单常常无法撮合，他们更偏好明盘市场确定的成交。<bookmark mark='c'/>所以暗池吸引不知情者，这使信息集中到交易所：即使公开价差变宽，价格发现也可能改善。"
+  },
+  "1dd51d299315": {
+   "scene": "Structure",
+   "en": "Chapter two explains the consequences. <bookmark mark='a'/> Retail orders are less likely to be informed, so a wholesaler can fill them inside the spread and still profit. <bookmark mark='b'/> What remains on the exchanges is richer in information. <bookmark mark='c'/> And by Glosten and Milgrom, a larger share of informed traders means a wider public spread for everyone left. Segmentation helps the segment that leaves and can hurt the price everyone sees: the heart of the debate about payment for order flow.",
+   "zh": "第二章解释了后果。<bookmark mark='a'/>散户订单不太可能带有信息，所以批发商可以在价差之内成交它们并且仍然盈利。<bookmark mark='b'/>留在交易所的订单信息含量更高。<bookmark mark='c'/>而根据Glosten和Milgrom，知情交易者比例更大意味着留下来的每个人面对更宽的公开价差。分流帮助了离开的那部分，却可能损害每个人看到的价格：订单流付费争论的核心。"
+  },
+  "9ec222a51389": {
+   "scene": "Structure",
+   "en": "Two dated design examples. <bookmark mark='a'/> In September 2024 the SEC adopted tick-size and access-fee amendments. Adoption is a historical event; this presentation does not verify subsequent litigation, amendments or current compliance dates. <bookmark mark='b'/> A binding minimum tick can prevent a spread narrowing to its hypothetical competitive level and shift competition toward queue position. That is conditional on the tick binding. <bookmark mark='c'/> IEX introduced a three-hundred-fifty-microsecond speed bump and particular order protections. A delay can reduce some stale-quote exposure; it does not guarantee that every quote is protected or that all latency arbitrage disappears.",
+   "zh": "两个注明日期的设计例子。<bookmark mark='a'/> 二零二四年九月，证券监管机构通过价格单位和接入费修订。通过是历史事件；这里不核实后续诉讼、修订或当前合规日期。<bookmark mark='b'/> 有约束力的最小价格单位可能阻止价差收窄到假设竞争水平，使竞争转向排队位置，但前提是该限制确实生效。<bookmark mark='c'/> 投资者交易所引入三百五十微秒减速及特定订单保护。延迟可降低某些陈旧报价风险，不保证每个报价受保护或所有延迟套利消失。"
+  },
+  "f937cf9788c8": {
+   "scene": "Structure",
+   "en": "Two more pieces of the plumbing. <bookmark mark='a'/> The closing auction: index funds and benchmarked managers want the official closing price, so a large and growing share of each day's volume trades in the final auction. <bookmark mark='b'/> An auction crosses all orders at a single price, a batch auction once a day, the design Chapter ten proposes for every moment. <bookmark mark='c'/> And order types, from market to pegged to hidden, each a statement of how much immediacy the trader wants to buy or to sell.",
+   "zh": "管道系统的另外两部分。<bookmark mark='a'/>收盘拍卖：指数基金和以基准考核的管理人需要官方收盘价，所以每天成交量中越来越大的一部分在最后的拍卖中成交。<bookmark mark='b'/>拍卖以单一价格撮合所有订单，一天一次的批量拍卖，正是第十章为每一时刻提出的设计。<bookmark mark='c'/>还有订单类型，从市价单到挂钩单再到隐藏单，每一种都表明交易者想买入或卖出多少即时性。"
+  },
+  "8a7353ce5815": {
+   "scene": "Structure",
+   "en": "After execution comes settlement. <bookmark mark='a'/> US equities moved to standard next-business-day settlement in May 2024, with exceptions for particular instruments and transactions. <bookmark mark='b'/> A shorter exposure window can reduce settlement risk and collateral needs, conditional on netting, volatility and clearing rules; it does not guarantee lower collateral in every case. <bookmark mark='c'/> A centralized crypto venue can credit internal balances immediately, but that is not final on-chain settlement or a withdrawal guarantee. Custody and counterparty risks depend on the venue's legal and operational arrangement.",
+   "zh": "执行之后是交收。<bookmark mark='a'/> 美国股票在二零二四年五月转向标准下一工作日交收，特定工具和交易存在例外。<bookmark mark='b'/> 更短暴露窗口可能降低交收风险与抵押品需求，取决于净额结算、波动率和清算规则，不保证每种情况抵押品都更低。<bookmark mark='c'/> 中心化加密场所可以即时记内部余额，但不等于链上最终结算或提款保证。托管与对手风险取决于场所法律和运营安排。"
+  },
+  "e28a08a0286a": {
+   "scene": "Structure",
+   "en": "One retail order's journey. <bookmark mark='a'/> The broker, who owes the customer best execution and may be paid for the order. <bookmark mark='b'/> A router, which splits it across venues by price, fees and the odds of a fill. <bookmark mark='c'/> A wholesaler or dark pool, which fills it inside the best quotes if it can. <bookmark mark='d'/> The lit exchanges, for whatever is left, at the protected quotes. <bookmark mark='e'/> And a day later, settlement through the clearing house. Every arrow is a choice about who the counterparty will be.",
+   "zh": "一笔散户订单的旅程。<bookmark mark='a'/>券商，它对客户负有最佳执行义务，并可能为这笔订单收到付款。<bookmark mark='b'/>路由器，它按价格、费用和成交概率把订单拆分到各个场所。<bookmark mark='c'/>批发商或暗池，能在最佳报价之内成交的就成交。<bookmark mark='d'/>明盘交易所，处理剩下的部分，按受保护的报价成交。<bookmark mark='e'/>一天之后，通过清算所结算。每一个箭头都是关于对手方是谁的一个选择。"
+  },
+  "860ef892c28e": {
+   "scene": "Structure",
+   "en": "Pause and predict. At twenty dollars, quoted full spread is one cent and a hypothetical natural full spread is one third cent. A maker earns point two cent rebate. What can be said about taker cost without its fee? Then stipulate a separate point two cent taker fee and compute one-way cost in basis points.",
+   "zh": "暂停并预测。股价二十美元，报价完整价差一美分，假设自然完整价差三分之一美分。挂单方获零点二美分返佣。不知道吃单费时，能说什么？再另行指定吃单费零点二美分，计算基点单位的单边成本。"
+  },
+  "e64ab27417f7": {
+   "scene": "HFT",
+   "en": "Chapter nine. The dealers of Chapter one are now algorithms, quoting thousands of instruments and updating in microseconds. Are they the market makers of today, or something else? The evidence says both, depending on the moment.",
+   "zh": "第九章。第一章的交易商现在是算法，为数以千计的品种报价，以微秒更新。它们是今天的做市商，还是别的什么？证据说两者都是，取决于时刻。"
+  },
+  "670c71630f81": {
+   "scene": "HFT",
+   "en": "The new market makers. <bookmark mark='a'/> Albert Menkveld studied one high-frequency market maker in European stocks: most of its trades were passive, at its own quotes. <bookmark mark='b'/> Its inventory reverted to zero fast, and ended each day near flat: Chapter one's shading, automated. <bookmark mark='c'/> It earned the spread, less what better-informed traders took, and its speed is what kept those losses small: timely updating can reduce stale-quote exposure, subject to latency and execution risk.",
+   "zh": "新的做市商。<bookmark mark='a'/> 门克维尔德研究一位欧洲股票高频做市商，大部分交易是其自身报价上的被动成交。<bookmark mark='b'/> 库存快速回归零附近，日终近乎平仓，是第一章库存调节的自动化例子。<bookmark mark='c'/> 它赚价差，扣除更知情交易者拿走的部分。及时更新可降低陈旧报价风险，但仍受延迟与执行风险约束。"
+  },
+  "f91108c8fa90": {
+   "scene": "HFT",
+   "en": "The evidence. <bookmark mark='a'/> Terrence Hendershott, Charles Jones and Albert Menkveld: when the New York Stock Exchange automated its quotes in 2003, algorithmic trading rose and spreads in large stocks narrowed. <bookmark mark='b'/> Jonathan Brogaard, Hendershott and Ryan Riordan: high-frequency traders' aggressive orders moved in the direction of permanent price changes, speeding up price discovery. <bookmark mark='c'/> And the same orders take liquidity from slower quotes when news arrives: part of their profit is other market makers' adverse selection.",
+   "zh": "证据。<bookmark mark='a'/>Terrence Hendershott、Charles Jones和Albert Menkveld：2003年纽约证券交易所自动化其报价时，算法交易增加，大盘股的价差收窄。<bookmark mark='b'/>Jonathan Brogaard、Hendershott和Ryan Riordan：高频交易者的主动订单沿着永久性价格变化的方向移动，加快了价格发现。<bookmark mark='c'/>而同样的订单在消息到来时从较慢的报价那里吃走流动性：它们的部分利润就是其他做市商的逆向选择。"
+  },
+  "1057c973e044": {
+   "scene": "HFT",
+   "en": "A model of stale-quote races. <bookmark mark='a'/> Public information can change fair value before all quotes update; one participant cancels while others try to execute. <bookmark mark='b'/> Relative latency and the venue's rules determine which message succeeds. One-against-many reasoning does not by itself supply a universal loss probability. <bookmark mark='c'/> Under competitive risk-neutral quoting, expected losses conditional on execution contribute to the required half-spread. A common speed improvement need not eliminate relative-speed rents in the model, but actual costs depend on market design and behavior. Chapter ten considers a batch mechanism under explicit assumptions.",
+   "zh": "陈旧报价竞速模型。<bookmark mark='a'/> 公开信息可以在所有报价更新前改变公允价值，一方尝试取消，其他方尝试成交。<bookmark mark='b'/> 相对延迟和场所规则决定哪个消息成功。以一对多的推理本身不给出普遍损失概率。<bookmark mark='c'/> 在竞争、风险中性报价下，给定成交后的期望损失构成所需半价差的一部分。模型中大家一起提速不一定消除相对速度租金，但实际成本取决于市场设计与行为。第十章在明确假设下考虑批量机制。"
+  },
+  "98c5e5a2b5c4": {
+   "scene": "HFT",
+   "en": "And a subtler kind of speed. <bookmark mark='a'/> A pension fund slicing a large order leaves a pattern in the flow. <bookmark mark='b'/> Liyan Yang and Haoxiang Zhu modelled back-runners: fast traders who detect the pattern and trade the same way, raising the institution's cost while moving the price toward its information sooner. <bookmark mark='c'/> So execution algorithms add randomness and hide size in dark pools: Kyle's insider, playing against an opponent who reads the flow.",
+   "zh": "还有一种更微妙的速度。<bookmark mark='a'/>一家养老基金切分一笔大订单，会在订单流中留下一个模式。<bookmark mark='b'/>Liyan Yang和Haoxiang Zhu建模了反向跟单者：察觉这个模式并朝同一方向交易的快速交易者，他们提高了机构的成本，同时让价格更早地接近其信息。<bookmark mark='c'/>所以执行算法加入随机性，并把规模藏在暗池里：Kyle的内幕交易者，对阵一个会读订单流的对手。"
+  },
+  "9b10db1bfa61": {
+   "scene": "HFT",
+   "en": "Is the sniping cost large? <bookmark mark='a'/> Matteo Aquilina, Eric Budish and Peter O'Neill used the London Stock Exchange's message data, including the failed attempts to cancel, to find races between fast traders to the same stale quote, settled in microseconds. <bookmark mark='b'/> They reported races in about a fifth of FTSE one hundred trading volume, and a tax on liquidity of about half a basis point on all trading. <bookmark mark='c'/> Paid by investors through the spread, and won by a handful of the fastest firms.",
+   "zh": "狙击成本大吗？<bookmark mark='a'/>Matteo Aquilina、Eric Budish和Peter O'Neill利用伦敦证券交易所的消息数据，包括撤单失败的尝试，找到了快速交易者争抢同一个过时报价、在微秒内决出胜负的竞赛。<bookmark mark='b'/>他们报告这类竞赛约占富时一百成交量的五分之一，对全部交易形成约半个基点的流动性税。<bookmark mark='c'/>由投资者通过价差支付，被少数最快的公司赢走。"
+  },
+  "5d1d238b8ff5": {
+   "scene": "HFT",
+   "en": "And the abuses speed allows. <bookmark mark='a'/> Momentum ignition: aggressive orders meant to start a move that other algorithms follow, then trading against it. <bookmark mark='b'/> Spoofing and layering, Part thirty-four's cases. <bookmark mark='c'/> And floods of orders and cancels that slow others' data. Every one exploits other algorithms reading the order book, which is why surveillance reads it too.",
+   "zh": "还有速度带来的违规。<bookmark mark='a'/>动量点火：意在引发其他算法跟随的激进订单，然后反向交易。<bookmark mark='b'/>幌骗和分层挂单，第34部分的案件。<bookmark mark='c'/>以及拖慢他人数据的大量下单和撤单。每一种都利用了其他算法在读订单簿这一点，这就是监控也要读它的原因。"
+  },
+  "453746275ccc": {
+   "scene": "HFT",
+   "en": "Pause and predict. In a chosen per-fill model, two percent of executions impose a three-tick adverse loss, and every fill earns half the spread. Find the break-even full spread before other costs. Explain why unconditional news frequency is insufficient.",
+   "zh": "暂停并预测。在给定按成交计算的模型中，百分之二成交带来三最小价位的逆向损失，每笔成交赚半价差。求其他成本之前的盈亏平衡完整价差，解释为何无条件新闻频率不够。"
+  },
+  "54ccd78a7355": {
+   "scene": "Crashes",
+   "en": "Chapter ten. Quoted liquidity can change sharply during stress. We consider the dated 2010 equity flash crash and 2014 Treasury episode, then descriptive Bitcoin slopes. Reported mechanisms and observed associations must be separated from a universal causal explanation. Dealer withdrawal and shallow depth are risks, not facts established by turnover alone.",
+   "zh": "第十章。压力时显示流动性可能急变。我们讨论注明日期的二零一零年股票闪崩和二零一四年国债事件，再看比特币描述性斜率。报道机制和观察关联要与普遍因果解释分开。做市商退出与深度变薄是风险，不是仅凭成交额便确立的事实。"
+  },
+  "c7072a7d615f": {
+   "scene": "Crashes",
+   "en": "The sixth of May, 2010. <bookmark mark='a'/> On an already nervous afternoon, a large fund complex began selling seventy-five thousand E-mini futures contracts, about four billion dollars, with an algorithm told to trade nine percent of the volume, whatever the price, as the regulators' joint report described. The E-mini fell about five percent in minutes; stocks followed, some trading at a cent; and most of the fall reversed within about twenty minutes.",
+   "zh": "2010年5月6日。<bookmark mark='a'/>在一个本已紧张的下午，一家大型基金集团开始卖出七万五千份E-mini期货合约，约四十亿美元，所用算法被设定为无论价格如何都交易成交量的百分之九，正如监管机构联合报告所描述的。E-mini在几分钟内下跌约百分之五；股票随之下跌，有些以一美分成交；大部分跌幅在约二十分钟内收复。"
+  },
+  "fe9a022fef76": {
+   "scene": "Crashes",
+   "en": "The reports describe interacting mechanisms. <bookmark mark='a'/> A volume-targeting program can accelerate when measured turnover rises. If its own trading contributes, the volume clock is endogenous; that does not create independent liquidity. <bookmark mark='b'/> Kirilenko and coauthors describe high-frequency intermediaries passing inventory rapidly and changing their demand during the episode. This is evidence about a dated event, not proof that one class of traders universally causes or prevents crashes. <bookmark mark='c'/> Thinner books and distant placeholder quotes amplified some executions. Causality involves market conditions, other participants and the order design together.",
+   "zh": "报告描述相互作用的机制。<bookmark mark='a'/> 按成交量定速的程序可能在测得周转量上升时加速。若自身交易也贡献成交量，时钟就是内生的，并不创造独立流动性。<bookmark mark='b'/> 基里连科及合作者描述高频中介快速传递库存，并在该事件中改变需求。这是注明日期的事件证据，不证明某类交易者普遍引发或阻止崩盘。<bookmark mark='c'/> 较薄订单簿和远端占位报价放大某些成交。因果涉及市场条件、其他参与者与订单设计的共同作用。"
+  },
+  "512947c00dfe": {
+   "scene": "Crashes",
+   "en": "What changed after. <bookmark mark='a'/> Price bands on single stocks that pause trading when a price moves too far too fast. <bookmark mark='b'/> Rules to cancel trades far from the market. <bookmark mark='c'/> And the lesson for anyone relying on liquidity: it is a choice dealers make every microsecond, plentiful when it is least needed and withdrawn when inventory risk spikes.",
+   "zh": "之后发生了什么变化。<bookmark mark='a'/>单只股票的价格区间，当价格过快变动过远时暂停交易。<bookmark mark='b'/>取消远离市场成交的规则。<bookmark mark='c'/>还有给依赖流动性的人的教训：它是交易商每一微秒都在做的选择，在最不需要时充裕，在存货风险飙升时撤走。"
+  },
+  "f066a9ce2de2": {
+   "scene": "Crashes",
+   "en": "Daily same-bar regression slopes in the saved archive. <bookmark mark='a'/> The median is 5.3 basis points per million dollars. Every finite saved slope appears without percentile clipping. <bookmark mark='b'/> The largest selected slope is 3.5 times the median. Its correlation with daily volatility is 0.31, and with dollar turnover -0.00. The highlighted dates were ranked after observing the sample. These descriptive associations do not identify vanished executable depth, a liquidation mechanism or a forecast available before stress. Daily gaps and omitted costs remain.",
+   "zh": "保存档案中的日度同期回归斜率。<bookmark mark='a'/> 中位数为每百万美元5.3基点。每个有限斜率都显示，没有分位数裁剪。<bookmark mark='b'/> 样本中最大选定斜率为中位数的3.5倍，与日波动率相关0.31，与美元成交额相关-0.00。标出的日期是在看完样本后排名选出。这些关联不识别可执行深度消失、清算机制或压力前可用预测，日历缺口和未计成本仍存在。"
+  },
+  "b7230d7858d7": {
+   "scene": "Crashes",
+   "en": "A stipulated feedback model, not a calibration. <bookmark mark='a'/> Margin rules can trigger forced selling after a price decline, with venue-specific liquidation design. <bookmark mark='b'/> Suppose a causal local impact coefficient converts incremental sales into price changes, and L gives incremental forced sales per basis point. <bookmark mark='c'/> Their product above one indicates local linear amplification in this simplified model. It is neither a necessary-and-sufficient condition for a real crash nor established by the contemporaneous OLS slope. Nonlinear books, inventory constraints, other buyers, halts and changing rules can alter the dynamics.",
+   "zh": "指定反馈模型，不是校准。<bookmark mark='a'/> 价格下跌后，保证金规则可能触发强制卖出，具体清算设计因场所不同。<bookmark mark='b'/> 假设局部因果冲击系数把增量卖出变为价格变化，另一个系数表示每基点触发的增量清算。<bookmark mark='c'/> 两者乘积大于一，表示简化模型内的局部线性放大，既非现实崩盘的充分必要条件，也未由同期最小二乘斜率确立。非线性订单簿、库存约束、其他买家、停牌和变化的规则都可能改变动态。"
+  },
+  "c1d86247ce34": {
+   "scene": "Crashes",
+   "en": "And bonds. <bookmark mark='a'/> On the fifteenth of October 2014, in the most liquid bond market in the world, the ten-year Treasury yield fell about sixteen basis points and came back within roughly twelve minutes, with no news to explain it. The official report found that high-frequency firms dominated the trading, and that the order books had thinned before the move. A market can be deep in volume and shallow in commitment.",
+   "zh": "还有债券。<bookmark mark='a'/>2014年10月15日，在世界上流动性最好的债券市场，十年期美国国债收益率在大约十二分钟内下跌约十六个基点又回升，没有任何消息可以解释。官方报告发现，高频公司主导了交易，而且订单簿在这次变动之前已经变薄。一个市场可以在成交量上很深，在承诺上却很浅。"
+  },
+  "e65d1e578ed7": {
+   "scene": "Crashes",
+   "en": "Chapter nine's remedy. <bookmark mark='a'/> Today, orders are matched the instant they arrive, so a tiny speed advantage wins every race. <bookmark mark='b'/> Budish, Cramton and Shim propose frequent batch auctions: collect orders for a fraction of a second, then clear them all at one price. <bookmark mark='c'/> Within a batch, arriving first is worth nothing, so would-be snipers must compete on price, and the rent from public news flows back to the quote's owner, and through narrower spreads to investors.",
+   "zh": "第九章的补救办法。<bookmark mark='a'/>今天，订单一到达就撮合，所以微小的速度优势赢得每一场竞赛。<bookmark mark='b'/>Budish、Cramton和Shim提出频繁批量拍卖：把订单收集一小段时间，然后以单一价格全部撮合。<bookmark mark='c'/>在一个批次内，先到毫无价值，所以想狙击的人必须在价格上竞争，公开消息带来的租金流回报价的主人，并通过更窄的价差流向投资者。"
+  },
+  "d7f70ed10d38": {
+   "scene": "Crashes",
+   "en": "A deliberately simple per-execution example. <bookmark mark='a'/> A risk-neutral competitive maker earns half-spread per fill before other costs. Assume each fill has adverse loss three ticks with probability point zero two, independent of the quoted spread in this calculation. <bookmark mark='b'/> Expected adverse loss is point zero six tick, requiring full spread point one two tick before inventory and processing costs. Unconditional news frequency would not be the same probability. <bookmark mark='c'/> An ideal batch design can reduce this particular stale-quote rent if makers can revise within the batch and compete on price. Batch boundaries and other information or inventory costs remain; no universal zero-loss guarantee follows.",
+   "zh": "刻意简化的逐笔成交例子。<bookmark mark='a'/> 风险中性竞争做市商每次成交赚半价差，未计其他成本。假设每笔以零点零二概率发生三最小价位逆向损失，并在这项计算里把概率视为不随价差变化。<bookmark mark='b'/> 期望损失零点零六最小价位，要求库存与处理成本之前的完整价差零点一二。无条件新闻频率不是同一概率。<bookmark mark='c'/> 理想批量设计中，若做市商能在同一批次修改订单并按价格竞争，可减少这一陈旧报价租金。批次边界以及其他信息、库存成本仍存在，不能推出普遍零损失保证。"
+  },
+  "de20b9de67d7": {
+   "scene": "Crashes",
+   "en": "Pause and predict. Sell five percent of ADV at nine percent of a specified exogenous volume clock, one ADV per day. Find the time. What changes if independent liquidity doubles, and why does turnover generated by the order itself not justify the same capacity conclusion?",
+   "zh": "暂停并预测。卖出日均成交量的百分之五，执行率为指定外生成交时钟的百分之九，该时钟每天一倍日均量。求时间。独立流动性翻倍会怎样？为什么自身订单制造的成交额不支持相同的容量结论？"
+  },
+  "5be6aca4e883": {
+   "scene": "House",
+   "en": "Chapter eleven. The House's thirty-fifth rule is about the counterparty. Before any desk trades in a market, it must know who it is likely to be trading with, and what its own orders will tell them.",
+   "zh": "第十一章。本系列公司的第35条规则是关于对手方的。任何交易台在一个市场交易之前，必须知道它可能在和谁交易，以及它自己的订单会告诉他们什么。"
+  },
+  "4ecb8e8ff963": {
+   "scene": "House",
+   "en": "The sheet records nine verified ordinary outputs and an explicit missing comparison. <bookmark mark='a'/> Inventory shading is a stipulated simulation; GM's crossing index is conditional and capped; continuous Kyle is approximated on a finite grid. Bitcoin flow slopes and fit statistics are descriptive. The ETF comparison is unavailable after frozen SPY validation failed. VPIN's two correlations compare different imbalance constructions, and information shares are model-dependent attribution ranges. This sheet neither identifies counterparties' private information nor approves a live trading system.",
+   "zh": "表格记录九个验证成功的常规输出，并明确缺少一项比较。<bookmark mark='a'/> 库存偏移是指定模拟；信念越过索引有条件且封顶；连续凯尔用有限网格近似。比特币流量斜率与拟合统计量是描述性的。冻结标普数据验证失败后，基金比较不可提供。失衡指标两个相关使用不同构造，信息份额是依赖模型的归属范围。这张表既不识别对手私有信息，也不批准实时交易系统。"
+  },
+  "457b719b1fc6": {
+   "scene": "House",
+   "en": "Separate a fit from an execution model. <bookmark mark='a'/> Ten million dollars times the saved regression slope gives 46.1 basis points of fitted same-bar return. It is not an estimate of an added order's causal cost. <bookmark mark='b'/> Separately stipulate permanent linear impact as quantity accumulates, with no spread, fees, outside flow or decay. <bookmark mark='c'/> Integrating that assumed price path gives average shortfall lambda Q over two, half its terminal change. A concave minute-bin plot does not calibrate this path, prove cheaper slicing or determine the House's footprint.",
+   "zh": "把拟合与执行模型分开。<bookmark mark='a'/> 一千万美元乘保存的回归斜率，得到46.1基点的同期拟合收益，不是额外订单因果成本估计。<bookmark mark='b'/> 另行指定随累计数量变化的永久线性冲击，没有价差、费用、外部流量或衰减。<bookmark mark='c'/> 积分这条假设路径，得到平均偏离为拉姆达乘总量除以二，是终点变化的一半。凹形分钟分组图不校准这条路径、不证明拆单更便宜，也不决定研究机构实际足迹。"
+  },
+  "52383a5c89a0": {
+   "scene": "House",
+   "en": "Chapter two's quotes in four lines. The probability of a buy when the value is high, and when it is low; Bayes' rule for the value given a buy, and given a sell; and the quotes are the expected values. Nothing in it knows about profit: zero profit is built into the definition.",
+   "zh": "第二章的报价，四行代码。价值高时买入的概率，价值低时买入的概率；给定买入和给定卖出时价值的贝叶斯法则；报价就是期望值。其中没有任何关于利润的东西：零利润已经内置于定义之中。"
+  },
+  "46f03a0ffbb2": {
+   "scene": "House",
+   "en": "The exact regression source drops nonfinite paired observations, includes an intercept and computes a classical iid residual-based t-statistic and same-sample R squared. Dropping observations does not restore missing calendar minutes. This routine estimates an association; it supplies no robust standard errors, causal identification, parent-order cost or public-information variance decomposition.",
+   "zh": "展示的原始回归代码删除非有限配对观察，包含截距，并计算经典独立同分布残差的统计量和样本内拟合优度。删除观察不会恢复缺失日历分钟。该函数估计关联，不提供稳健标准误、因果识别、母订单成本或公开信息方差分解。"
+  },
+  "fff6fb5fda30": {
+   "scene": "House",
+   "en": "The exact information-share code uses the complement of the fitted adjustment loadings and two Cholesky orderings of residual covariance. These give attribution bounds within a specified stable two-market cointegration model. The range is not a confidence interval, and a true causal share is not guaranteed to lie inside it when the statistical or structural assumptions fail.",
+   "zh": "原始信息份额代码使用拟合调整载荷的正交补，并对残差协方差使用两种乔列斯基排序。得到的是指定稳定双市场协整模型内的归属界，不是置信区间。统计或结构假设失败时，不能保证真实因果份额落在其中。"
+  },
+  "09384c0f4a0b": {
+   "scene": "House",
+   "en": "The unchanged Euler source approximates the bridge. Each step applies remaining-gap drift plus fresh independent noise. At the final step the old gap cancels but the new noise remains. Thus the last price differs from value by lambda sigma u square root of the time step times a standard Normal draw. The continuous theorem has exact endpoint learning; this finite-step helper does not. The code and financial algorithm are preserved, and the presentation states its numerical limit.",
+   "zh": "未经修改的欧拉代码近似布朗桥。每步施加剩余价值差的漂移，再加入新的独立噪声。末步旧差距被抵消，但新噪声仍在。所以终价与价值相差拉姆达乘噪声扩散、乘步长平方根、乘标准正态随机数。连续定理精确学习终值，这个有限步函数不会。金融算法与代码保持原样，表述说明其数值边界。"
+  },
+  "2860c7bb31d2": {
+   "scene": "House",
+   "en": "The library provides research tools. <bookmark mark='a'/> Dealer and Kyle models, liquidity proxies, bulk classification and information-share estimators have different assumptions. Public taker volume records trade side, not informed identity. <bookmark mark='b'/> Proposed Rule thirty-five asks a desk to document those distinctions, identify execution costs with suitable evidence and review its orders in context. The lesson does not establish deployed surveillance, counterparty identification or a trading approval. Failed input validation remains visible rather than being filled by an unverified result.",
+   "zh": "函数库提供研究工具。<bookmark mark='a'/> 做市商与凯尔模型、流动性代理、批量分类和信息份额估计有不同假设。公开主动成交量记录方向，不记录知情身份。<bookmark mark='b'/> 拟议第三十五条规则要求记录这些区别，借助适当证据识别执行成本，并结合背景审阅自身订单。本课不代表部署监控、识别对手或批准交易。失败输入验证保持可见，不能填入未经验证的结果。"
+  },
+  "0a88c1702f4b": {
+   "scene": "House",
+   "en": "Three review questions. <bookmark mark='a'/> For a daily spread paper, inspect identification assumptions and seek actual aligned quotes, rather than equating a tick with an effective spread. <bookmark mark='b'/> For a toxicity vendor, compare like-for-like bucket statistics and test inputs available at the decision time; correlation with volatility does not measure informed probability. <bookmark mark='c'/> For a large proposed order, require a causal cost model, fills, fees, participation constraints and information risk. A regression slope and a concave plot alone do not prescribe slicing.",
+   "zh": "三个审阅问题。<bookmark mark='a'/> 日度价差论文应检查识别假设并寻找实际对齐报价，不能把最小价格单位当有效价差。<bookmark mark='b'/> 有毒流量供应商应比较定义相同的分桶统计量，并测试决策时可用输入；与波动率相关不衡量知情概率。<bookmark mark='c'/> 对大额拟议订单，需要因果成本模型、成交、费用、参与率约束和信息风险。回归斜率与凹形图本身不规定拆单。"
+  },
+  "a6519a97c494": {
+   "scene": "Research",
+   "en": "For the researcher. Chapter three's recursion suggested a limit: as the auctions multiply, the price impact settles and the remaining uncertainty falls in a straight line. This chapter proves the limit in continuous time, following Kyle's 1985 paper and Kerry Back's 1992 proof, and checks it.",
+   "zh": "写给研究者。第三章的递推暗示了一个极限：随着拍卖次数增多，价格冲击趋于稳定，剩余的不确定性沿直线下降。本章按照Kyle 1985年的论文和Kerry Back 1992年的证明，在连续时间中证明这个极限，并加以检验。"
+  },
+  "0425fc2879d7": {
+   "scene": "Research",
+   "en": "State the equilibrium problem precisely. <bookmark mark='a'/> Gaussian value has public prior mean p zero and positive variance; it is independent of the noise Brownian motion, and only the insider initially observes it. <bookmark mark='b'/> Noise variance per unit time is sigma u squared. The risk-neutral insider uses a predictable, absolutely continuous order process adapted to value and observed noise or prices, never future noise. <bookmark mark='c'/> Competitive risk-neutral dealers condition only on total flow. <bookmark mark='d'/> Profit is the time integral of mispricing times trading rate. Admissibility must make that profit integrable, the verification stochastic integral mean zero and the terminal limit justified. These are essential conditions, not consequences of a formal maximization.",
+   "zh": "精确定义均衡问题。<bookmark mark='a'/> 高斯价值有公开先验均值和正方差，独立于噪声布朗运动，起初只有内部人观察它。<bookmark mark='b'/> 每单位时间噪声方差为噪声扩散平方。风险中性内部人使用可预测、绝对连续的订单过程，适应价值和已观察噪声或价格，不能看未来噪声。<bookmark mark='c'/> 风险中性竞争做市商只条件于总流量。<bookmark mark='d'/> 利润是价值差乘交易率的时间积分。可容许性必须保证利润可积、验证随机积分均值为零，并可合法通过终点极限。这些是关键条件，不是形式最大化的自动结论。"
+  },
+  "a19e7706a9c5": {
+   "scene": "Research",
+   "en": "Filtering within the linear Gaussian candidate. <bookmark mark='a'/> Take a deterministic locally regular trading coefficient beta times the remaining mispricing, on times strictly before the terminal horizon. <bookmark mark='b'/> The dealer's innovations process yields gain beta times posterior variance over noise variance, and price changes equal that gain times total flow. <bookmark mark='c'/> The Riccati equation makes posterior variance decline at gain squared times noise variance. This is conditional on the specified information structure and candidate strategy; it is not a filtering theorem for arbitrary real signed flow.",
+   "zh": "在线性高斯候选内过滤。<bookmark mark='a'/> 在严格早于终点的时刻，取确定性、局部正则的系数乘剩余价值差作为交易率。<bookmark mark='b'/> 做市商创新过程给出增益为系数乘后验方差除以噪声方差，价格增量等于增益乘总流量。<bookmark mark='c'/> 黎卡提方程使后验方差按增益平方乘噪声方差下降。这依赖指定信息结构与候选策略，不是任意现实带符号流量的过滤定理。"
+  },
+  "31454c7a88c4": {
+   "scene": "Research",
+   "en": "Fix a positive constant price slope for the deviation problem. <bookmark mark='a'/> Consider this quadratic verification potential, conditional on the insider's known value. <bookmark mark='b'/> Its derivatives cancel the trading-rate term in the formal HJB expression. <bookmark mark='c'/> At time one it is squared mispricing over twice lambda, a nonnegative penalty. It is not the literal terminal value function for arbitrary price: there is no trading time left then. The useful result is an upper bound on admissible expected profit, attained when this penalty vanishes. We prove that bound with Ito's identity.",
+   "zh": "对偏离问题固定一个正常数价格斜率。<bookmark mark='a'/> 条件于内部人知道的价值，考虑这个二次验证势函数。<bookmark mark='b'/> 其导数抵消形式动态规划表达中的交易率项。<bookmark mark='c'/> 时间一时，它是价值差平方除以两倍拉姆达，是非负惩罚。任意终价下，它不是字面意义的终点价值函数，因为已无交易时间。它提供可容许期望利润的上界，惩罚为零时达到。下面用伊藤恒等式证明。"
+  },
+  "b9c2ae3c93d0": {
+   "scene": "Research",
+   "en": "Verification replaces a purely formal HJB claim. <bookmark mark='a'/> Apply Ito under the fixed constant-slope price rule. The potential's drift is minus the profit rate, and its noise term is minus sigma u times the gap. <bookmark mark='b'/> Integrate. Require finite expected integrated squared gap, integrable absolute profit and terminal convergence sufficient to pass expectations. The stochastic integral is square-integrable and has mean zero. Alternatively, localization needs justified limits, not just stopped identities. <bookmark mark='c'/> Expected profit equals initial potential minus nonnegative terminal penalty, hence is bounded above. Endpoint learning attains that bound within the admissible class. Pointwise cancellation alone proves neither admissibility nor optimality for an arbitrary rate.",
+   "zh": "验证取代纯形式动态规划结论。<bookmark mark='a'/> 在固定常斜率价格规则下使用伊藤公式。势函数漂移为负利润率，噪声项为负的噪声扩散乘价值差。<bookmark mark='b'/> 积分后，要求价值差平方的期望时间积分有限、绝对利润可积，且终点收敛允许交换期望。随机积分于是平方可积、均值为零。若使用局部化，也必须证明极限合法，不能只写停止后的恒等式。<bookmark mark='c'/> 期望利润等于初始势函数减去非负终值惩罚，所以有上界。可容许类内的终点学习达到该界。逐点抵消本身既不证明任意速率可容许，也不证明最优。"
+  },
+  "81381579950a": {
+   "scene": "Research",
+   "en": "Close the equilibrium loop. <bookmark mark='a'/> Seek an admissible strategy with endpoint learning and a constant positive slope. The Gaussian filter then requires initial variance minus lambda squared sigma u squared to be zero at time one. <bookmark mark='b'/> Thus lambda is sigma v over sigma u. <bookmark mark='c'/> Beta equals one over lambda times remaining time. Its filtered variance is sigma v squared times remaining time, consistently giving the same gain. The bridge has finite expected integrated squared gap and finite expected absolute profit; its terminal gap converges in mean square to zero. These checks both validate pricing and attain the insider's upper bound. They hold despite a divergent integral of the squared trading rate.",
+   "zh": "闭合均衡。<bookmark mark='a'/> 寻找终点学习、斜率为正常数的可容许策略。高斯过滤要求初始方差减去拉姆达平方乘噪声方差在时间一为零。<bookmark mark='b'/> 所以拉姆达是价值标准差除以噪声扩散。<bookmark mark='c'/> 交易系数为一除以拉姆达乘剩余时间。其过滤方差为初始方差乘剩余时间，一致地产生同一增益。桥具有有限的期望价值差平方积分和绝对利润，终点差均方趋于零。这些检验既验证价格，也达到内部人上界，尽管交易率平方积分发散。"
+  },
+  "9f8f0ab14b4b": {
+   "scene": "Research",
+   "en": "The specified Gaussian equilibrium. <bookmark mark='a'/> Positive lambda is sigma v over sigma u; the trading rate is the remaining gap divided by lambda times remaining time. Conditional variance falls linearly to zero. <bookmark mark='b'/> Average the attained initial bound over the Gaussian value to obtain sigma v sigma u. That doubles one-auction profit only at the same horizon and total noise variance. To the market, price is a martingale with diffusion coefficient sigma v; conditional on value, it is a Brownian bridge. Linear variance decline does not mean constant Shannon-information release, which accelerates as remaining variance vanishes.",
+   "zh": "指定的高斯均衡。<bookmark mark='a'/> 正拉姆达为价值标准差除以噪声扩散，交易率为剩余差距除以拉姆达乘剩余时间，条件方差线性趋于零。<bookmark mark='b'/> 对高斯价值平均已达到的初始上界，得到价值标准差乘噪声扩散。只有在相同期限和总噪声方差下，它才是单次拍卖利润的两倍。对市场而言，价格是扩散系数为价值标准差的鞅；条件于终值，它是布朗桥。方差线性下降不表示香农信息匀速释放，后者随剩余方差消失而加速。"
+  },
+  "ef56d982b8be": {
+   "scene": "Research",
+   "en": "The filtration changes the description. <bookmark mark='a'/> Under the equilibrium prior mixture, total flow is sigma u times a Brownian motion in the market filtration, and price is a martingale there. <bookmark mark='b'/> The insider also knows the terminal value, so the same path has bridge drift pulling it toward that endpoint. <bookmark mark='c'/> These are consistent descriptions of one Gaussian equilibrium. The noise-like marginal flow law does not mean the insider does nothing, nor does it let an observer identify private information in real data. Constant impact was verified jointly with strategy and filtering.",
+   "zh": "信息集改变描述。<bookmark mark='a'/> 在均衡先验混合下，总流量在市场信息集中是噪声扩散乘布朗运动，价格在那里是鞅。<bookmark mark='b'/> 内部人还知道终点价值，同一路径因此具有拉向终点的桥漂移。<bookmark mark='c'/> 这是同一高斯均衡的一致描述。流量边际分布像噪声，不代表内部人无交易，也不能据此在真实数据中识别私有信息。常数冲击是连同策略和过滤共同验证的。"
+  },
+  "122d66d4ff39": {
+   "scene": "Research",
+   "en": "Four saved Euler paths with four hundred steps. <bookmark mark='a'/> They approximate the Gaussian bridge; the dots mark their true values. <bookmark mark='b'/> At the last Euler step the drift removes the prior gap, but a fresh noise increment remains. The final price equals value plus lambda sigma u times the square root of the step times a standard Normal draw. These finite-grid paths therefore do not end exactly on their dots. Exact endpoint learning is a continuous-time limit, not an identity of this numerical scheme.",
+   "zh": "四条保存的欧拉路径，各四百步。<bookmark mark='a'/> 它们近似高斯桥，点表示各自真实价值。<bookmark mark='b'/> 最后一步漂移消除旧价值差，但新的噪声增量仍在。终价等于价值加拉姆达乘噪声扩散、乘步长平方根、再乘标准正态随机数。因此有限网格路径不会精确落在点上。精确终点学习是连续时间极限，不是数值方案恒等式。"
+  },
+  "e498ec081956": {
+   "scene": "Research",
+   "en": "Six hundred saved simulated markets. <bookmark mark='a'/> The plotted mean squared gaps can be compared with one minus time. The sample mean has Monte Carlo error, and the Euler scheme has discretization error, including a nonzero final-step gap. <bookmark mark='b'/> Its average profit is 0.989, compared with theory 1. The original numerical profit prices each increment at its post-step price. It is an approximation, without a provided numerical error bound or confidence interval. This supports an illustration; the verification argument establishes the theorem.",
+   "zh": "六百个保存的模拟市场。<bookmark mark='a'/> 均方价值差曲线可与一减时间比较。样本均值有蒙特卡洛误差，欧拉方案有离散误差，包括非零末步差。<bookmark mark='b'/> 平均利润为0.989，理论为1。原始数值利润用每步之后的价格给该步增量定价。这是近似，没有提供数值误差界或置信区间。模拟支持示例，验证论证才建立定理。"
+  },
+  "efa803f9bc99": {
+   "scene": "Research",
+   "en": "The saved discrete recursion. <bookmark mark='a'/> As auction count increases, initial impact approaches one and terminal conditional variance becomes smaller. The column at half-time uses interpolation between saved variance points; for one auction its interpolated value is not an additional mid-auction observation. The unit horizon and total noise variance are held fixed. These selected numerical cases illustrate convergence; a table alone is not a convergence proof or a bound on approximation error.",
+   "zh": "保存的离散递推。<bookmark mark='a'/> 拍卖次数增加时，初始冲击接近一，终点条件方差变小。半时间列是在保存的方差点之间插值；单次拍卖的插值不是新增的拍卖中途观察。单位期限和总噪声方差保持不变。这些选定数值案例说明收敛，不是收敛证明或近似误差界。"
+  },
+  "4dba1ab5a2a8": {
+   "scene": "Research",
+   "en": "The singular rate needs care. <bookmark mark='a'/> Beta diverges near the endpoint, while mispricing shrinks. <bookmark mark='b'/> The displayed expectation is of squared trading rate: sigma u squared over remaining time. Its integral diverges, so requiring globally square-integrable rate would exclude this equilibrium. Expected absolute rate instead grows as inverse square root of remaining time and is integrable. The integrated squared gap and absolute profit satisfy the verification requirements. <bookmark mark='c'/> For horizon T with fixed noise variance rate, lambda is sigma v over sigma u square root T, and expected profit is sigma v sigma u square root T. If total noise variance were held fixed instead, that horizon comparison would change.",
+   "zh": "奇异速率需要谨慎。<bookmark mark='a'/> 交易系数在终点附近发散，价值差同时缩小。<bookmark mark='b'/> 图中期望的是交易率平方：噪声方差除以剩余时间。其积分发散，所以若要求全区间速率平方可积，会排除这个均衡。期望绝对速率按剩余时间平方根的倒数增长，可以积分；价值差平方积分和绝对利润满足验证要求。<bookmark mark='c'/> 固定噪声方差率、期限为指定长度时，拉姆达等于价值标准差除以噪声扩散与期限平方根的乘积，期望利润等于三者相乘。若改为固定总噪声方差，期限比较也会改变。"
+  },
+  "df10be9d9725": {
+   "scene": "Research",
+   "en": "Match both normalization and execution convention. <bookmark mark='a'/> One auction over a unit horizon with noise variance sigma u squared leaves half the value variance unrevealed. <bookmark mark='b'/> The admissible continuous Gaussian equilibrium at the same total noise variance reaches zero posterior variance and doubles expected insider profit. <bookmark mark='c'/> Noise losses equal that gain under the compatible post-trade discrete-auction limit and competitive zero-profit accounting. A naive pre-trade Ito integral is a different execution convention and cannot be substituted silently. This is an equilibrium accounting comparison, not the payoff from accelerating an arbitrary real trader.",
+   "zh": "同时匹配归一化和执行约定。<bookmark mark='a'/> 单位期限单次拍卖的总噪声方差为噪声标准差平方，留下价值方差的一半未揭示。<bookmark mark='b'/> 同一总噪声方差下，可容许连续高斯均衡使后验方差归零，内部人期望利润加倍。<bookmark mark='c'/> 在兼容的成交后离散拍卖极限与竞争零利润会计下，噪声损失等于这项收益。朴素成交前伊藤积分属于不同执行约定，不能悄悄替换。这是均衡会计比较，不是加快任意现实交易者后的收益。"
+  },
+  "588c8d2f897c": {
+   "scene": "Research",
+   "en": "A model-data distinction. <bookmark mark='a'/> Under the exact constant-slope model, price increments equal lambda times total-flow increments. An aligned regression of those same objects would fit perfectly. <bookmark mark='b'/> Our Bitcoin regression instead uses log returns between closes and an approximate dollar imbalance from minute bars, with R squared 0.21 at one row and 0.32 at sixty rows. <bookmark mark='c'/> Their residuals do not measure the share of public information. Transaction noise, missing bars, timing, nonlinear relationships and omitted variables also matter. This comparison identifies neither public-news variance nor the fraction learned through private trading.",
+   "zh": "区分模型与数据。<bookmark mark='a'/> 精确常斜率模型中，价格增量等于拉姆达乘总流量增量，对同一对象作对齐回归会完美拟合。<bookmark mark='b'/> 比特币回归却使用相邻收盘对数收益和分钟基础资产失衡的美元近似，一行拟合优度0.21，六十行0.32。<bookmark mark='c'/> 残差不衡量公开信息份额。成交噪声、缺失K线、时间错配、非线性和遗漏变量都可能贡献。因此它既不识别公开新闻方差，也不识别通过私有交易学习的比例。"
+  },
+  "0f1780ad845a": {
+   "scene": "Research",
+   "en": "Related models require their own hypotheses. <bookmark mark='a'/> Back's continuous-time work treats more general value distributions; the quadratic potential and literal Gaussian price bridge here should not be copied unchanged to that setting. <bookmark mark='b'/> Holden and Subrahmanyam study competition among informed traders, changing how quickly information is revealed. <bookmark mark='c'/> Back and Baruch connect strategic sequential-trade and continuous-flow models under particular limits. Frequent small binary-value trades alone do not establish every claimed equivalence.",
+   "zh": "相关模型各有假设。<bookmark mark='a'/> 巴克的连续时间研究处理更一般的价值分布，不能原样照搬这里的二次势函数和字面高斯价格桥。<bookmark mark='b'/> 霍尔登与萨布拉马尼亚姆研究多个知情交易者竞争，改变信息揭示速度。<bookmark mark='c'/> 巴克与巴鲁克在特定极限下连接战略顺序交易和连续流量模型。仅有频繁小额二元价值交易，不足以建立每一种所声称的等价关系。"
+  },
+  "b78ae91ece8d": {
+   "scene": "Research",
+   "en": "Three extension questions, without claiming the literature has no answers. <bookmark mark='a'/> How do specified public signals interact with private learning? A regression residual alone does not calibrate that split. <bookmark mark='b'/> How do strategic liquidity traders change the noise process? Preferences, deadlines and observations matter. <bookmark mark='c'/> How does venue choice change execution and information revelation? These questions have existing research; any new contribution needs a precise scope and comparison with it.",
+   "zh": "三个扩展问题，不宣称文献没有答案。<bookmark mark='a'/> 指定的公开信号如何与私有学习互动？回归残差本身不能校准这种划分。<bookmark mark='b'/> 战略流动性交易者如何改变噪声过程？偏好、期限和观察很重要。<bookmark mark='c'/> 场所选择如何改变执行与信息揭示？这些已有研究，任何新贡献都需要精确范围和文献比较。"
+  },
+  "5b20330fc0ad": {
+   "scene": "Research",
+   "en": "Pause and predict. Prior value standard deviation is two, and noise diffusion is one unit per square-root year. Compare one- and four-year horizons, holding that noise variance rate fixed. Derive lambda, the price diffusion coefficient and expected profit. Check the time and quantity units.",
+   "zh": "暂停并预测。先验价值标准差为二，噪声扩散为每平方根年一单位。保持该噪声方差率不变，比较一年和四年期限。推导拉姆达、价格扩散系数及期望利润，检查时间和数量单位。"
+  },
+  "377ba9837898": {
+   "scene": "Outro",
+   "en": "Part thirty-five's distinctions. Inventory control is illustrated by a specified heuristic, not a universal ruin theorem. Glosten and Milgrom derive conditional zero-profit quotes; Gaussian Kyle derives a strategic equilibrium. Daily-price liquidity proxies have assumptions, and our planned ETF comparison is unavailable. Bitcoin's saved slopes describe same-bar association. VPIN's comparator uses different bucket aggregation. Hasbrouck's wide ranges describe model-dependent attribution, not a causal leadership verdict.",
+   "zh": "第三十五部分的区别。库存控制由指定启发式规则说明，不是普遍破产定理。格洛斯滕与米尔格罗姆推导条件零利润报价，高斯凯尔推导战略均衡。日度流动性代理有假设，原计划基金比较不可提供。比特币保存斜率描述同期关联，分桶失衡的比较量使用不同聚合。哈斯布鲁克宽范围是依赖模型的归属，不是因果领先判决。"
+  },
+  "751b340264e9": {
+   "scene": "Outro",
+   "en": "Market rules and venue design change which orders meet, but dated descriptions are not current legal guidance. High-frequency trading includes liquidity provision and stale-quote strategies; historical stress episodes involve interacting mechanisms. Batch auctions alter some speed incentives under their design assumptions. Proposed Rule thirty-five documents measurement and execution evidence. The continuous Gaussian theorem requires verified pricing, admissible trading and matched noise normalization; the finite Euler paths retain endpoint error.",
+   "zh": "市场规则与场所设计改变订单如何相遇，但注明日期的描述不是当前法律指导。高频交易包括提供流动性与陈旧报价策略，历史压力事件包含相互作用机制。批量竞价在其设计假设下改变某些速度激励。拟议规则记录测量与执行证据。连续高斯定理需要验证定价、可容许交易和匹配噪声归一化，有限欧拉路径仍有终点误差。"
+  },
+  "d68a893c0af4": {
+   "scene": "Outro",
+   "en": "Six desk questions. Why is there a spread when dealers are competitive and risk-neutral? Adverse selection. <bookmark mark='a'/> What is Kyle's lambda? The price of a unit of flow. <bookmark mark='b'/> Why does a dealer shade its quotes? To unwind its inventory.",
+   "zh": "六个交易台问题。为什么交易商是竞争性的、风险中性的，却仍然有价差？逆向选择。<bookmark mark='a'/>什么是Kyle的lambda？一单位订单流的价格。<bookmark mark='b'/>交易商为什么要偏移报价？为了消化存货。"
+  },
+  "13eca6245fa2": {
+   "scene": "Outro",
+   "en": "When is a daily spread estimate credible? Check constant-spread, efficient-price and trade-sign assumptions, then compare with aligned quote evidence. <bookmark mark='a'/> What does VPIN measure? Its constructed bulk-classified mean absolute bucket imbalance, not an identified informed probability. <bookmark mark='b'/> What do stress reports establish? Dated evidence about interacting mechanisms, rather than a universal single cause. The notes state the mathematical assumptions separately.",
+   "zh": "日度价差何时可信？检查恒定价差、有效价格和成交方向假设，再与对齐报价证据比较。<bookmark mark='a'/> 分桶失衡指标测什么？它构造的批量分类平均绝对分桶失衡，不是已识别知情概率。<bookmark mark='b'/> 压力报告建立什么？注明日期、涉及相互作用机制的证据，不是普遍单一原因。笔记另行说明数学假设。"
+  },
+  "4ae324986ffe": {
+   "scene": "Outro",
+   "en": "The first answers. The heuristic mid is two below value, with bid minus two point five and ask minus one point five. <bookmark mark='a'/> After a buy the belief is point seven; the next bid is 0.50, ask 0.845. <bookmark mark='b'/> Doubling noise variance multiplies its standard deviation by square root two, scales one-auction lambda down by that factor, and scales the fixed-gap order and unconditional expected profit up by it.",
+   "zh": "前几题答案。启发式中间报价比价值低二，买价低二点五，卖价低一点五。<bookmark mark='a'/> 一次买单后信念零点七，下一次买价0.50、卖价0.845。<bookmark mark='b'/> 噪声方差翻倍使标准差乘二的平方根，单次拍卖拉姆达除以该因子，固定价值差订单和无条件期望利润乘以该因子。"
+  },
+  "ef78bf0553e7": {
+   "scene": "Outro",
+   "en": "Roll gives 0.04 dollars under its identity. A negative sample covariance does not establish all its assumptions. <bookmark mark='a'/> The fitted flow change is forty-six basis points. Only under a separate permanent-linear path does average execution shortfall equal twenty-three, with no spread or fees. <bookmark mark='b'/> Bulk classification assigns 977.25 Bitcoin to buys and 22.75 to sells, even if recorded taker volumes are balanced. This cannot identify informed probability.",
+   "zh": "罗尔恒等式给出0.04美元，负样本协方差本身不证明所有假设。<bookmark mark='a'/> 流量拟合变化为四十六基点。只有另行假设永久线性路径、无价差费用时，平均执行偏离才是二十三基点。<bookmark mark='b'/> 批量分类分配买量977.25比特币、卖量22.75，即使记录的主动买卖平衡也如此。这不能识别知情概率。"
+  },
+  "ce4c15dd81a7": {
+   "scene": "Outro",
+   "en": "The adjustment vector gives common-trend weights point one and point nine. With equal independent innovations B's information share is point nine eight seven eight, a different object. <bookmark mark='a'/> At twenty dollars the quoted half-spread is two point five basis points. A maker rebate leaves taker fees unknown; separately assuming a point two cent taker fee gives three point five basis points. <bookmark mark='b'/> In the chosen per-fill loss model, point zero two times three ticks is point zero six tick, requiring full spread point one two tick before other costs.",
+   "zh": "调整向量给出共同趋势权重零点一和零点九。等方差独立创新下，第二市场的信息份额零点九八七八，是不同对象。<bookmark mark='a'/> 二十美元股价下，报价半价差二点五基点。挂单返佣不决定吃单费；另行假设零点二美分吃单费，成本为三点五基点。<bookmark mark='b'/> 给定逐笔损失模型里，零点零二乘三最小价位为零点零六，要求其他成本之前完整价差零点一二。"
+  },
+  "9a4d17560c9e": {
+   "scene": "Outro",
+   "en": "On the specified exogenous volume clock, time is five ninths of a day. Independent external liquidity doubling halves it; turnover generated by the order itself does not prove doubled capacity. <bookmark mark='a'/> In continuous Gaussian Kyle, prior value spread two and noise diffusion one give lambda two, price diffusion two and expected profit two over one year. With the same noise variance rate over four years, lambda and price diffusion become one, while expected profit becomes four. These are model quantities with a fixed information and admissibility structure.",
+   "zh": "指定外生成交时钟上，用时九分之五天。独立外部流动性翻倍会减半时间，自身生成周转量不证明容量翻倍。<bookmark mark='a'/> 连续高斯凯尔中，价值标准差二、噪声扩散一，一年时拉姆达二、价格扩散二、期望利润二。同一噪声方差率下延长至四年，拉姆达和价格扩散变为一，期望利润变为四。它们依赖固定的信息和可容许性结构。"
+  },
+  "dde8716cf568": {
+   "scene": "Outro",
+   "en": "Six basic problems state their models: quote shading, binary Bayesian quotes, one-auction noise scaling, the Roll identity, a fitted flow change against a separately assumed execution path, and bulk-volume classification. Derive the quantities with units and distinguish estimation from identification. Full English and Chinese solutions are in the notes.",
+   "zh": "六道基础题明确模型：库存报价、二元贝叶斯报价、单次噪声缩放、罗尔恒等式、流量拟合变化与另行假设执行路径的区别，以及批量分类。推导数量与单位，区分估计和识别。笔记提供完整中英文解答。"
+  },
+  "8139f1ec7917": {
+   "scene": "Outro",
+   "en": "Four advanced problems distinguish common-trend weights from information shares, maker rebates from taker costs, per-fill adverse losses from news frequency, and exogenous liquidity clocks from own-generated turnover. Every numerical answer needs its stated denominator and model assumptions.",
+   "zh": "四道进阶题区分趋势权重和信息份额、挂单返佣和吃单成本、逐笔逆向损失和新闻频率，以及外生流动性时钟和自身产生的成交量。每个数值答案都需要指定分母和模型假设。"
+  },
+  "6a3c184e950b": {
+   "scene": "Outro",
+   "en": "Two qualifying problems prove the Ito profit identity with admissibility and terminal limits, then derive one-auction equilibrium and verify continuous Gaussian pricing with horizon units. The quadratic terminal penalty is not arbitrary terminal value. Formal HJB cancellation alone is insufficient. Match total noise variance before comparing profits.",
+   "zh": "两道资格题分别证明含可容许性与终点极限的伊藤利润恒等式，再推导单次均衡、验证连续高斯定价和期限单位。二次终值惩罚不是任意终点价值，形式抵消本身不够。比较利润前要匹配总噪声方差。"
+  },
+  "0c5a987369ff": {
+   "scene": "Outro",
+   "en": "The next subjects separate related problems. Part thirty-six studies order-book queues, ticks and fills. Part thirty-seven studies execution schedules under specified objectives, costs and constraints, which need not equal the informed Kyle strategy. Part thirty-eight combines inventory and adverse selection in market making. Part thirty-nine studies digital-asset venues and derivatives.",
+   "zh": "接下来分别处理相关问题。第三十六部分研究订单簿排队、最小价格单位与成交。第三十七部分在指定目标、成本和约束下研究执行路径，不必等于知情凯尔策略。第三十八部分在做市中结合库存与逆向选择。第三十九部分讨论数字资产场所和衍生品。"
+  },
+  "4faf18c2dc76": {
+   "scene": "Outro",
+   "en": "The textbooks and cited papers provide theory and dated empirical accounts. Current calculations use nine verified unchanged ordinary outputs from stipulated simulations and Binance's frozen public archive. The planned Yahoo comparison failed frozen SPY validation and is omitted. Chosen arithmetic is labeled as such. Not every attributed historical claim is computed by this code, and current legal outcomes and production pronunciation are not certified by these visual checks.",
+   "zh": "教材与论文提供理论和注明日期的实证报告。当前计算使用九个经验证、未修改的常规输出，来自指定模拟和币安冻结公开档案。原计划雅虎比较未通过冻结标普数据验证，已省略。给定算术明确标记。并非每项历史引述都由代码计算，画面检查也不认证当前法律结果或成片发音。"
+  },
+  "6540f5dca8ab": {
+   "scene": "Outro",
+   "en": "The House now has a research framework for asking who may be on the other side, what is actually observed and what assumptions support a measurement. It has not identified each trader's private information or established a deployed execution or surveillance system. <bookmark mark='a'/> Next, Part thirty-six: order-book queues, minimum ticks and the probability of a resting fill before prices change.",
+   "zh": "研究机构现在有框架去问：谁可能在另一侧，实际观察到什么，以及哪些假设支持测量。它尚未识别每位交易者的私有信息，也未建立已部署执行或监控系统。<bookmark mark='a'/> 接下来第三十六部分：订单簿排队、最小价格单位，以及价格变化前挂单成交的概率。"
+  }
+ }
+}

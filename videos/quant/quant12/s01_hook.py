@@ -1,0 +1,180 @@
+from __future__ import annotations
+
+import numpy as np
+from scipy.interpolate import RegularGridInterpolator
+
+from explainer.quant import *  # noqa: F403
+from explainer.quant.viz import smile_points3d
+from explainer.quant.house import volsurface as V
+from videos.quant.quant12.common import IV, LV, PART, SPOT, fixed, load, real_data
+
+
+class Hook(VoiceoverScene, ThreeDScene):
+    def construct(self):
+        s = load("surface")
+        self.title_card()
+        self.tour(s)
+        self.history(s)
+        self.objectives()
+        self.house()
+
+    def title_card(self):
+        card = part_title(PART, r"The shape of fear")
+        disc = note(DISCLAIMER, font_size=18, color=GREY_C).to_edge(DOWN, buff=0.35)
+        with self.voiceover(
+            "Part twelve. The volatility surface. Black and Scholes assumed one volatility. The market quotes a "
+            "different one for every strike and every expiry, and the shape it draws is the market's map of fear."
+        ):
+            self.play(FadeIn(card, shift=UP * 0.2), FadeIn(disc))
+        self.play(FadeOut(card), FadeOut(disc))
+
+    def tour(self, s):
+        fit = s["ssvi"]
+        ax = ThreeDAxes(x_range=[-0.4, 0.4, 0.2], y_range=[0, 0.5, 0.1], z_range=[0.3, 0.8, 0.1], x_length=7.6,
+                        y_length=5.0, z_length=3.4, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
+        ax.shift(DOWN * 0.6)
+
+        def f(k, T):
+            th = V.theta_at(fit, T)
+            return float(np.sqrt(V.ssvi_w(k, th, fit["rho"], fit["eta"], fit["gamma"]) / T))
+
+        surf = Surface(lambda u, v: ax.c2p(u, v, np.clip(f(u, v), 0.3, 0.8)), u_range=[-0.4, 0.4], v_range=[0.03, 0.5],
+                       resolution=(32, 24), fill_opacity=0.8, stroke_width=0.3, stroke_color=GREY_D)
+        surf.set_fill_by_value(axes=ax, colorscale=[(QC.SPOT, 0.35), (IV, 0.55), (QC.LOSS, 0.75)], axis=2)
+        k, T, iv = (np.asarray(s[x]) for x in ("k", "T", "iv"))
+        m = (np.abs(k) <= 0.4) & (T <= 0.5) & (T >= 0.03) & (iv >= 0.3) & (iv <= 0.8)
+        dots = smile_points3d(ax, k[m], T[m], iv[m], color=WHITE, radius=0.03)
+        hint = VGroup(label(r"log-moneyness $\ln K/F$", font_size=24, color=SPOT), label(r"years to expiry", font_size=24,
+                                                                                    color=GREY_A),
+                      label('IV: 30--80\\% display (clipped)', font_size=24, color=IV)).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        hint.to_corner(UR, buff=0.4)
+        ax.x_axis.set_color(SPOT); ax.y_axis.set_color(GREY_A); ax.z_axis.set_color(IV)  # the key reads off the axes
+        params = note(rf"dots: {int(m.sum())} quotes; surface: SSVI fit, {s['rmse_ssvi']:.2f} vol points (vega-weighted)",
+                      font_size=19).to_corner(DR, buff=0.3)
+        src = real_data('Deribit marks, 10 Dec 2025: 00--12 UTC pool; 08:00 reference', corner=DL)
+        self.set_camera_orientation(phi=68 * DEGREES, theta=-62 * DEGREES, zoom=0.9)
+        self.add_fixed_in_frame_mobjects(hint, params, src)
+        self.remove(hint, params, src)
+        with self.voiceover(
+            """Here is the Surface, our frozen Bitcoin pricing example. Each white dot is an implied volatility reconstructed from an option mark, pooled from midnight through noon, rather than a simultaneous executable quote. <bookmark mark='a'/> The fit misses by less than a volatility point. Its sufficient no-arbitrage conditions cover the quoted maturities; they do not cover every arbitrarily short maturity. <bookmark mark='b'/> Read its shape: a smile across strikes, and a term structure across expiries. This part explains those shapes, their checks, and the models and contracts built from them."""
+        ) as vo:
+            self.play(FadeIn(hint), FadeIn(src), Create(ax), FadeIn(dots), run_time=2)
+            vo.wait_until("a")
+            self.play(Create(surf), FadeIn(params), run_time=3)
+            vo.wait_until("b")
+            self.move_camera(theta=-30 * DEGREES, phi=70 * DEGREES, run_time=min(max(vo.remaining(1.0) - 1.0, 1.0), 8.0))
+        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, surf, dots)), FadeOut(hint),
+                                                                  FadeOut(params), FadeOut(src)], run_time=1.5)
+        self.clear()
+
+    def history(self, s):
+        events = [(1973, r"one $\sigma$: Black--Scholes", QC.IDEA), (1987, r"the crash: the skew is born", QC.CRISIS),
+                  (1993, r"the VIX, on S\&P 100 options", QC.FIRM), (1994, r"Dupire; Derman--Kani; Rubinstein", QC.IDEA),
+                  (1999, r"variance swaps (Goldman's DDKZ)", QC.IDEA), (2003, r"the VIX becomes a strip of options", QC.FIRM),
+                  (2004, r"VIX futures; SVI", QC.IDEA), (2009, r"the variance premium measured", QC.IDEA),
+                  (2014, r"SSVI", QC.IDEA), (2018, r"Volmageddon", QC.CRISIS), (2021, r"Deribit's DVOL", QC.FIRM),
+                  (2023, r"VIX1D; same-day options boom", QC.FIRM), (2024, r"options on bitcoin ETFs", QC.FIRM)]
+        x0, x1 = -6.4, 6.4
+        X = lambda y: x0 + (x1 - x0) * (y - 1970) / (2026 - 1970)  # noqa: E731
+        line = Line([x0, 0, 0], [x1, 0, 0], color=GREY_D, stroke_width=2)
+        ticks = VGroup(*[Text(str(y), font_size=14, color=GREY_D).next_to([X(y), 0, 0], DOWN, buff=0.12)
+                         for y in (1970, 1980, 1990, 2000, 2010, 2020)])
+        dots, labels = VGroup(), VGroup()
+        for i, (y, name, col) in enumerate(events):
+            d = Dot([X(y), 0, 0], radius=0.07, color=col)
+            t = label(rf"{y}\; {name}", font_size=17, color=col)
+            lvl = (i % 3) + 1
+            t.move_to([X(y), (0.55 * lvl + 0.1) * (1 if i % 2 == 0 else -1), 0])
+            keep_in_frame(t, margin=0.2)
+            lead = Line(d.get_center(), t.get_bottom() if i % 2 == 0 else t.get_top(), color=GREY_C, stroke_width=1,
+                        stroke_opacity=0.5)
+            dots.add(VGroup(d, lead))
+            labels.add(t)
+        head = label(r"How we got here", font_size=34, color=GREY_A).to_edge(UP, buff=0.4)
+        with self.voiceover(
+            """How did the surface become the market's language? Black and Scholes' 1973 model supplied the one-volatility benchmark. <bookmark mark='a'/> The October 1987 crash made equity-index downside skew especially prominent; it was not the first possible departure from a flat smile. <bookmark mark='b'/> Cboe launched the original VIX in 1993. Dupire, Derman and Kani, and Rubinstein developed local-volatility and implied-tree approaches in 1994. Variance-strip research led to the 2003 VIX redesign. <bookmark mark='c'/> Futures and volatility-linked notes followed; 2018 exposed their reset risks. <bookmark mark='d'/> Bitcoin added DVOL, volatility futures and ETF options. Each development concerns a different pricing, hedging or index-construction problem."""
+        ) as vo:
+            self.play(FadeIn(head), Create(line), FadeIn(ticks))
+            self.play(FadeIn(dots[0]), FadeIn(labels[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(dots[1]), FadeIn(labels[1]), Flash(dots[1][0], color=QC.CRISIS))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(VGroup(dots[i], labels[i])) for i in range(2, 6)], lag_ratio=0.5, run_time=4))
+            vo.wait_until("c")
+            self.play(LaggedStart(*[FadeIn(VGroup(dots[i], labels[i])) for i in range(6, 10)], lag_ratio=0.5, run_time=3))
+            self.play(Flash(dots[9][0], color=QC.CRISIS))
+            vo.wait_until("d")
+            self.play(LaggedStart(*[FadeIn(VGroup(dots[i], labels[i])) for i in range(10, 13)], lag_ratio=0.5, run_time=2.5))
+        self.wait(0.3)
+        self.clear_scene()
+        self.bend(s)
+
+    def bend(self, s):
+        fit = s["ssvi"]
+        ax = ThreeDAxes(x_range=[-0.4, 0.4, 0.2], y_range=[0, 0.5, 0.1], z_range=[0.3, 0.8, 0.1], x_length=7.6,
+                        y_length=5.0, z_length=3.4, tips=False,
+                        axis_config={"stroke_color": GREY_C, "include_ticks": False, "stroke_width": 2})
+        ax.shift(DOWN * 0.6)
+        atm = float(np.sqrt(V.ssvi_surface_w(fit, 0.0, 30 / 365) / (30 / 365)))
+
+        def f(k, T):
+            return float(np.sqrt(V.ssvi_surface_w(fit, k, T) / T))
+
+        def mk(g):
+            sf = Surface(lambda u, v: ax.c2p(u, v, float(np.clip(g(u, v), 0.3, 0.8))), u_range=[-0.4, 0.4],
+                         v_range=[0.03, 0.5], resolution=(24, 16), fill_opacity=0.8, stroke_width=0.3, stroke_color=GREY_D)
+            sf.set_fill_by_value(axes=ax, colorscale=[(QC.SPOT, 0.35), (IV, 0.55), (QC.LOSS, 0.75)], axis=2)
+            return sf
+        flat = mk(lambda k, T: atm)
+        bent = mk(f)
+        t1 = label(rf"Black--Scholes: one volatility, {100 * atm:.0f}\% everywhere", font_size=24, color=GREY_A).to_corner(UL, buff=0.4)
+        t2 = label('the fitted surface: IV display 30--80\\% (clipped)', font_size=24, color=IV).to_corner(UL, buff=0.4)
+        q = label(r"pause and predict: which corner is highest, and why?", font_size=22, color=QC.HOUSE).to_corner(DL, buff=0.3)
+        fixed(self, t1, t2, q)
+        self.set_camera_orientation(phi=68 * DEGREES, theta=-62 * DEGREES, zoom=0.9)
+        with self.voiceover(
+            """Here is a simplified one-volatility benchmark, shown as a flat plane. It is not a claim that every pre-1987 market smile was flat. Pause and predict: in this fitted Bitcoin example, which corner rises most? <bookmark mark='a'/> The short-dated downside. The plane bends into a bounded view of the December 2025 fit. Its plotted strike, maturity and volatility ranges are a display choice, not the whole unquoted tail. Implied volatility remains our price language, while the surface organizes a family of option prices."""
+        ) as vo:
+            self.play(Create(ax), FadeIn(flat), FadeIn(t1), FadeIn(q))
+            vo.wait_until("a")
+            self.play(Transform(flat, bent), FadeOut(t1), FadeIn(t2), FadeOut(q), run_time=4)
+            self.move_camera(theta=-35 * DEGREES, run_time=min(max(vo.remaining(0.5) - 0.5, 1.0), 8.0))
+        self.move_camera(phi=0, theta=-90 * DEGREES, added_anims=[FadeOut(VGroup(ax, flat)), FadeOut(t2)], run_time=1.2)
+        self.clear()
+
+    def objectives(self):
+        card = objectives_card([
+            r"The smile read as a distribution; the term structure; quoting by delta",
+            r"How surfaces move: sticky strike, sticky delta, and the principal components of moves",
+            r"Static arbitrage: Gatheral's $g$, calendars, Lee's moment formula",
+            r"SVI and SSVI, fitted live; Dupire's local volatility and an implied tree",
+            r"Gy\"ongy's theorem checked by simulation; local volatility's forward smile",
+            r"Variance swaps replicated on real bitcoin; the VIX rebuilt; our index against DVOL",
+            r"The variance risk premium on bitcoin and the S\&P 500; SVIX and risk-neutral moments",
+            r"VIX futures, short-volatility notes and Volmageddon; dealer gamma and same-day options",
+            'Learning surfaces: an autoencoder and a grid-penalized network; who builds surfaces; the frontier',
+        ], color=QC.IDEA, font_size=23)
+        with self.voiceover(
+            "The plan. Reading the smile as a distribution; how surfaces move, and which shapes are impossible. "
+            "Fitting: SVI, SSVI and Dupire's local volatility. Volatility as an asset: variance swaps on real Bitcoin, "
+            "the VIX rebuilt, and the premium the market pays for variance. The products that blew up in 2018, and "
+            "dealer hedging. And networks that learn surfaces, the firms that build them, and the frontier."
+        ):
+            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in card.rows],
+                                                     lag_ratio=0.5, run_time=12))
+        self.play(FadeOut(card))
+
+    def house(self):
+        chart = house_chart(PART, lit=("vol",))
+        with self.voiceover(
+            "In the House, this part builds the surface builder. <bookmark mark='a'/> Every price the volatility desk "
+            "quotes from now on is read off a surface it fits, and that surface passes Part nine's arbitrage checker "
+            "first. The trial counter will not move in this part: everything we measure here is a price or a "
+            "description, not a strategy being tested."
+        ) as vo:
+            self.play(FadeIn(chart))
+            vo.wait_until("a")
+            self.play(Indicate(chart.desk["vol"], color=QC.HOUSE, scale_factor=1.05))
+        self.wait(0.3)
+        self.clear_scene()

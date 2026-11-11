@@ -1,0 +1,132 @@
+from __future__ import annotations
+
+import numpy as np
+
+from explainer.quant import *  # noqa: F403
+from videos.quant.quant15.common import BAD, GOOD, IV, OPT, PART, SPOT, illustration, load, real_data, ymd_to_year, axes, data_range, pause_card
+
+
+class Buyers(VoiceoverScene):
+    def construct(self):
+        b = load("buyers")
+        self.card()
+        self.wall(b)
+        self.table(b)
+        self.record()
+
+    def card(self):
+        c = chapter_card(2, r"Who buys, and what they earned", r"What did a snowball pay the people who bought it?",
+                         part=PART)
+        with self.voiceover("Chapter two. Who buys, and what they earned."):
+            self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
+        self.play(FadeOut(c))
+
+    def wall(self, b):
+        t = ymd_to_year(b["date"])
+        px = np.asarray(b["close"])
+        g = axes([2017, 2026], [3.5, 9.5], x_length=11.0, y_length=4.6, ylabel=r"CSI 500 ETF",
+                 xticks=list(range(2017, 2026)), yticks=[4, 6, 8], font_size=15).to_edge(UP, buff=0.5)
+        ax = g.ax
+        line = curve(ax, t, px, SPOT, stroke_width=2)
+        col = {"KO": QC.HOUSE, "KI": BAD, "full": WHITE}
+        rows = b["rows"]
+        notes = VGroup()
+        for r in rows:
+            t0, t1 = ymd_to_year([r["start"], r["end"]])
+            seg = Line(ax.c2p(t0, r["S0"]), ax.c2p(t1, r["S0"]), stroke_color=col[r["outcome"]], stroke_width=2.2,
+                       stroke_opacity=0.8)
+            notes.add(VGroup(seg, Dot(ax.c2p(t0, r["S0"]), radius=0.045, color=col[r["outcome"]])))
+        tally = {k: ValueTracker(0) for k in ("KO", "KI", "full")}
+        ro = VGroup(*[readout(rf"\text{{{nm}}}", lambda k=k: tally[k].get_value(), digits=0, font_size=28, color=c_)
+                      for k, nm, c_ in (("KO", "knocked out, 15\\% a year", col["KO"]),
+                                        ("KI", "knocked in, a loss", BAD), ("full", "full coupon", WHITE))])
+        ro.arrange(RIGHT, buff=0.8).to_edge(DOWN, buff=1.3)
+        cnt = {"KO": 0, "KI": 0, "full": 0}
+        steps = []
+        for r in rows:
+            cnt[r["outcome"]] += 1
+            steps.append(dict(cnt))
+        foot = wrapped_label(r"each line: one note, from its first day to the day it ended, at its starting level. Gold: "
+                             r"repaid with its coupon; red: knocked in and repaid below par", 11.5, 19, GREY_A)
+        foot.to_edge(DOWN, buff=0.45)
+        src = real_data(r"Yahoo Finance: 510500.SS, daily closes; stylized terms, one note a month, 2017--2023")
+        by = b["by_year"]
+        with self.voiceover(
+            f"What would our specified snowball have paid on this historical ETF path? Give it a fifteen percent annual simple coupon, knock-out at 103 percent from month three, daily knock-in below 75 percent, and twenty-four months. Issue one at the first trading day of each month, 2017 through 2023. <bookmark mark='a'/> Each line is a hypothetical vintage: gold for knock-out, red for a repayment below par after knock-in. These are reconstructed contract payoffs, not actual client trades. <bookmark mark='b'/> Of twelve 2017 vintages, {by['2017']['KI']} lost money. All 2019 and 2020 vintages knocked out, earning the annual rate pro rata for their holding periods. Later vintages faced the 2024 fall. Their outcomes share one market history and overlap in time; they are not independent performance trials."
+        ) as vo:
+            self.play(FadeIn(g), Create(line), FadeIn(src), run_time=2)
+            vo.wait_until("a")
+            self.play(FadeIn(ro), FadeIn(foot))
+            vo.wait_until("b")
+            per = max(vo.remaining(0.5), 4.0) / len(rows)
+            for k, n in enumerate(notes):
+                self.play(FadeIn(n), *[tally[x].animate.set_value(steps[k][x]) for x in tally], run_time=per)
+        self.wait(0.4)
+        self.clear_scene()
+
+    def table(self, b):
+        by = b["by_year"]
+        head = VGroup(*[label(h, font_size=20, color=GREY_A) for h in
+                        (r"sold in", r"knocked out", r"lost", r"note, a year", r"index, same months, a year")])
+        tab = VGroup(head)
+        for y in range(2017, 2024):
+            v = by[str(y)]
+            tab.add(VGroup(MathTex(str(y), font_size=28), MathTex(str(v["KO"]), font_size=28, color=QC.HOUSE),
+                           MathTex(str(v["KI"]), font_size=28, color=BAD if v["KI"] else GREY_B),
+                           MathTex(rf"{100 * v['mean_ann']:+.1f}\%", font_size=28, color=OPT),
+                           MathTex(rf"{100 * v['index_ann']:+.1f}\%", font_size=28, color=SPOT)))
+        xs = [-5.2, -3.0, -1.0, 1.4, 4.4]
+        for i, row in enumerate(tab):
+            for j, cell in enumerate(row):
+                cell.move_to([xs[j], 3.0 - 0.55 * i, 0])
+        side = wrapped_label(rf"{b['n']} notes, all ended by November 2025: {b['n_loss']} lost money, the worst "
+                             rf"{100 * b['worst']:.0f}\%; the naive average of their annualised returns is "
+                             rf"{100 * b['mean_ann']:.1f}\%; {b['beat_index']} of {b['n']} beat holding the index over "
+                             r"the same months. One path of history is a description, not a sample of what could "
+                             r"have happened", 12.0, 21, GREY_A).to_edge(DOWN, buff=0.5)
+        pp = pause_card(r"Notes sold near the index's top, or near its bottom: which did better?", width=10.8, font_size=34)
+        pp.move_to(ORIGIN)
+        with self.voiceover(
+            f"Pause: in this history, which vintages did better, those issued near peaks or near troughs? <bookmark mark='a'/> The trough vintages did better here because of their subsequent paths. Every new note starts with the same proportional barrier distances; a lower absolute starting price does not mechanically put it farther from its own knock-in. <bookmark mark='b'/> Across {b['n']} reconstructed notes, {b['n_loss']} lost money, the worst loss {100 * abs(b['worst']):.0f} percent. The simple average of annualized returns is {100 * b['mean_ann']:.1f} percent; {b['beat_index']} beat the ETF's price change over their own holding periods. This average is neither a compound portfolio return nor an ex-ante expected return. It ignores reinvestment, dividends, client fees and issuer default, and the overlapping notes are dependent."
+        ) as vo:
+            self.play(FadeIn(pp))
+            vo.wait_until("a")
+            self.play(FadeOut(pp), FadeIn(tab[0]), LaggedStart(*[FadeIn(r_) for r_ in tab[1:]], lag_ratio=0.3,
+                                                                run_time=3))
+            vo.wait_until("b")
+            self.play(FadeIn(side))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def record(self):
+        cards = VGroup(
+            history_card(2011, r"Henderson and Pearson", r"Morgan Stanley's SPARQS notes, 2001--2005: priced about 8\% "
+                         r"above fair value; expected returns below the risk-free rate", color=QC.IDEA, width=4.2,
+                         font_size=19),
+            history_card(2017, r"C\'el\'erier and Vall\'ee", r"European retail products: banks raised headline rates by "
+                         r"adding complexity, more so when rates were low", color=QC.IDEA, width=4.2, font_size=19),
+            history_card(2019, r"Egan", r"US reverse convertibles: brokers sold dominated products, those paying brokers "
+                         r"the most", color=QC.IDEA, width=4.2, font_size=19),
+            history_card(2021, r"Petra Vokata (JFE)", r"over 28,000 US yield-enhancement products, 2006--2015: "
+                         r"attractive yields, negative returns, embedded fees of about 6--7\% a year; often dominated by "
+                         r"cheap listed options".replace("28,000", "28{,}000"), color=QC.IDEA, width=4.2, font_size=19),
+            history_card(2023, r"Calvet, C\'el\'erier, Sodini, Vall\'ee", r"Sweden: capital-guaranteed products drew "
+                         r"cautious households into the stock market. Design can help, too", color=QC.GAIN, width=4.2,
+                         font_size=19),
+        )
+        cards[:3].arrange(RIGHT, buff=0.25, aligned_edge=UP)
+        cards[3:].arrange(RIGHT, buff=0.25, aligned_edge=UP)
+        VGroup(cards[:3], cards[3:]).arrange(DOWN, buff=0.3).move_to(ORIGIN)
+        if VGroup(*cards).height > 7.2:
+            VGroup(*cards).scale_to_fit_height(7.2)
+        with self.voiceover(
+            "The published record covers different products and markets. Henderson and Pearson estimated Morgan Stanley SPARQS notes were sold about eight percent above model value, with expected returns below the risk-free rate. Célérier and Vallée linked complexity to higher advertised yields in European retail products. <bookmark mark='a'/> Egan studied dominated US reverse convertibles and broker incentives. Petra Vokata's Engineering Lemons, published in the Journal of Financial Economics in 2021, studies over twenty-eight thousand US yield-enhancement products. Its estimated annual fees average six to seven percent; that is a sample finding, not a fee assumed for our Chinese snowballs. <bookmark mark='b'/> Calvet and co-authors' 2023 study documents Swedish capital-guarantee products drawing cautious households into equity risk. Welfare benefits in their analysis depend on the household model. These studies show why design, distribution and the population being studied must all be stated. Next, barriers."
+        ) as vo:
+            self.play(LaggedStart(*[FadeIn(c, shift=UP * 0.2) for c in cards[:2]], lag_ratio=0.5))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(c, shift=UP * 0.2) for c in cards[2:4]], lag_ratio=0.5))
+            vo.wait_until("b")
+            self.play(FadeIn(cards[4], shift=UP * 0.2))
+        self.wait(0.4)
+        self.clear_scene()
+

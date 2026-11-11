@@ -1,0 +1,260 @@
+from __future__ import annotations
+
+import numpy as np
+
+from explainer.quant import *  # noqa: F403
+from videos.quant.quant28.common import HURDLE, MODEL_A, MODEL_B, MODEL_C, PART, WORD, comma, fit_right, load, sci
+
+COL = {"A": MODEL_A, "B": MODEL_B, "C": MODEL_C}
+NAME = {"A": r"A: minutes to 2007", "B": r"B: to 2020, test years included", "C": r"C: to 2007 and 2013--2020"}
+
+
+def _tex(s: str) -> str:
+    for a, b in (("\\", ""), ("%", r"\%"), ("$", r"\$"), ("&", r"\&"), ("#", r"\#"), ("_", r"\_"), ("{", ""), ("}", ""),
+                 ("~", ""), ("^", "")):
+        s = s.replace(a, b)
+    return "".join(ch for ch in s if ch.isascii() and (ch.isprintable() or ch == " ")).strip()
+
+
+class TimeSlice(VoiceoverScene):
+    def construct(self):
+        m = load("lm")
+        la = load("lookahead")
+        self.card()
+        self.design(m)
+        self.curves(m, la)
+        self.years(la)
+        self.probes(la)
+        self.samples(la)
+        self.reading(la)
+        self.question()
+
+    def card(self):
+        c = chapter_card(12, r"The time-sliced experiment", r"How much does a model that has read the future know?",
+                         part=PART)
+        with self.voiceover("Chapter twelve. We can measure look-ahead ourselves, with three copies of the small "
+                            "language model from Chapter nine, trained on three different slices of history."):
+            self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
+        self.play(FadeOut(c))
+
+    def design(self, m):
+        line = NumberLine(x_range=[1996, 2021, 2], length=11.0, include_numbers=True, font_size=18,
+                          decimal_number_config={"num_decimal_places": 0, "group_with_commas": False}).shift(DOWN * 1.9)
+
+        def bar(a, b, y, col):
+            return Rectangle(width=line.n2p(b)[0] - line.n2p(a)[0], height=0.42, stroke_width=0, fill_color=col,
+                             fill_opacity=0.75).move_to([(line.n2p(a)[0] + line.n2p(b)[0]) / 2, y, 0])
+        test = Rectangle(width=line.n2p(2013)[0] - line.n2p(2008)[0], height=4.0, stroke_color=HURDLE, stroke_width=2,
+                         fill_opacity=0).move_to([(line.n2p(2008)[0] + line.n2p(2013)[0]) / 2, 0.1, 0])
+        ttag = label(r"the test: minutes of 2008--2012", font_size=18, color=HURDLE).next_to(test, UP, buff=0.08)
+        rows = VGroup(VGroup(bar(1996, 2008, 1.2, MODEL_A)),
+                      VGroup(bar(1996, 2021, 0.2, MODEL_B)),
+                      VGroup(bar(1996, 2008, -0.8, MODEL_C), bar(2013, 2021, -0.8, MODEL_C)))
+        tags = VGroup(*[label(NAME[k], font_size=17, color=COL[k]).next_to(row, LEFT, buff=0.2)
+                        for k, row in zip("ABC", rows)])
+        VGroup(line, test, ttag, rows, tags).move_to(ORIGIN)
+        sl = m["slices"]
+        foot = note(rf"each model: its own byte-pair tokenizer from its own text; {m['tokens'] / 1e6:.0f}m training tokens; "
+                    rf"the same architecture and seed. Training text: A {sl['A']['train_chars'] / 1e6:.1f}m characters, "
+                    rf"B {sl['B']['train_chars'] / 1e6:.1f}m, C {sl['C']['train_chars'] / 1e6:.1f}m",
+                    font_size=15, color=GREY_B).to_edge(DOWN, buff=0.3)
+        with self.voiceover(
+            "The design. <bookmark mark='a'/> The test is the minutes of 2008 to 2012: the crisis, zero rates and asset "
+            "purchases, a vocabulary the committee had never used before. <bookmark mark='b'/> Model A reads only the "
+            "minutes with meeting dates up to 2007. Their release dates can be later, so this does not certify a model available on the first day of 2008. Model B reads "
+            "everything to 2020, the test years included: the leak in its purest form. <bookmark mark='c'/> Model C "
+            "reads up to 2007 and from 2013 on. It has never seen the test documents, but it has read the future that "
+            "followed them: the way a large model trained on the internet relates to an old backtest. Each gets its "
+            "own tokenizer, built from its own text, and the same token budget. Token counts do not equalise characters, distinct exposures or sample reuse. Corpus and tokenizer both change across models."
+        ) as vo:
+            self.play(Create(line))
+            vo.wait_until("a")
+            self.play(Create(test), FadeIn(ttag))
+            vo.wait_until("b")
+            self.play(FadeIn(rows[0]), FadeIn(tags[0]), FadeIn(rows[1]), FadeIn(tags[1]))
+            vo.wait_until("c")
+            self.play(FadeIn(rows[2]), FadeIn(tags[2]), FadeIn(foot))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def curves(self, m, la):
+        sl = m["slices"]
+        ys = {}
+        for k in "ABC":
+            ev = np.asarray(sl[k]["evals"], float)
+            ys[k] = (ev[:, 0], ev[:, 2] * sl[k]["bpc_scale"])
+        lo = min(float(v[1].min()) for v in ys.values())
+        hi = max(float(v[1].max()) for v in ys.values())
+        steps_max = max(float(v[0].max()) for v in ys.values())
+        g = axes([0, steps_max], [lo - 0.1, hi + 0.1], x_length=8.2, y_length=4.4, xlabel=r"training step",
+                 ylabel=r"bits per character on the 2008--12 minutes", xticks=[0, steps_max],
+                 yticks=[round(lo, 1), round(hi, 1)], font_size=15).move_to(LEFT * 1.6 + DOWN * 0.2)
+        ax = g.ax
+        lines = {k: curve(ax, ys[k][0], ys[k][1], COL[k], stroke_width=3) for k in "ABC"}
+        leg = legend([(COL[k], NAME[k]) for k in "ABC"], font_size=16).to_edge(RIGHT, buff=0.3).shift(UP * 1.5)
+        fit_right(leg)
+        A, B, C = la["A"]["bpc_test"], la["B"]["bpc_test"], la["C"]["bpc_test"]
+        side = VGroup(MathTex(rf"A\ {A:.3f}", font_size=26, color=MODEL_A), MathTex(rf"C\ {C:.3f}", font_size=26, color=MODEL_C),
+                      MathTex(rf"B\ {B:.3f}", font_size=26, color=MODEL_B),
+                      wrapped_label(r"side: full document-window BPC. Lines: six sampled evaluation batches per checkpoint; all checkpoints shown. These metrics differ.", 3.4, 15, GREY_A)
+                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(leg, DOWN, buff=0.4)
+        fit_right(side)
+        gap_ac = 100 * (A - C) / A
+        gap_cb = 100 * (C - B) / A
+        with self.voiceover(
+            "Watch each model's loss on the test minutes as it trains, in bits per character, so that the different "
+            "tokenizers share a character denominator. This only partly normalises tokenisation: evaluation omits each document's first token and uses finite context windows. <bookmark mark='a'/> All three learn the committee's prose, and for a while "
+            "they move together. <bookmark mark='b'/> For the separate full-document evaluation, model A scores "
+            f"{A:.2f} bits per character. Model C, which adds years after the test, scores {C:.2f}: about "
+            f"{gap_ac:.0f} percent lower loss in this comparison. Both later text and tokenizer training differ, so this is not an isolated causal estimate of future knowledge. "
+            f"<bookmark mark='c'/> And model B, which read the test itself, scores {B:.2f}, a further {gap_cb:.0f} "
+            "percent. The curves use six sampled batches per checkpoint, while these side values use full document-window evaluation; they are related but distinct measurements."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(leg))
+            vo.wait_until("a")
+            self.play(*[Create(lines[k]) for k in "ABC"], run_time=3)
+            vo.wait_until("b")
+            self.play(FadeIn(side[0]), FadeIn(side[1]), FadeIn(side[3]))
+            vo.wait_until("c")
+            self.play(FadeIn(side[2]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def years(self, la):
+        yrs = np.asarray(la["A"]["years"], float)
+        vals = {k: np.asarray(la[k]["bpc_statements"], float) for k in "ABC"}
+        lo = min(v.min() for v in vals.values())
+        hi = max(v.max() for v in vals.values())
+        g = axes([yrs[0], yrs[-1]], [lo - 0.05, hi + 0.05], x_length=9.0, y_length=4.4, xlabel=r"",
+                 ylabel=r"bits per character on that year's statements", xticks=[2000, 2005, 2010, 2015, 2020],
+                 yticks=[round(lo, 1), round(hi, 1)], font_size=15).move_to(LEFT * 1.0 + DOWN * 0.2)
+        ax = g.ax
+        shade = Rectangle(width=ax.c2p(2013, 0)[0] - ax.c2p(2008, 0)[0], height=ax.y_length, stroke_width=0,
+                          fill_color=HURDLE, fill_opacity=0.12).move_to([(ax.c2p(2008, 0)[0] + ax.c2p(2013, 0)[0]) / 2,
+                                                                         ax.c2p(0, (lo + hi) / 2)[1], 0])
+        lines = {k: curve(ax, yrs, vals[k], COL[k], stroke_width=3) for k in "ABC"}
+        leg = legend([(COL[k], NAME[k]) for k in "ABC"], font_size=15).to_edge(RIGHT, buff=0.25).shift(UP * 1.6)
+        fit_right(leg)
+        a07 = float(np.mean(vals["A"][(yrs >= 2004) & (yrs <= 2007)]))
+        a09 = float(np.mean(vals["A"][(yrs >= 2009) & (yrs <= 2012)]))
+        with self.voiceover(
+            "The statements make a cleaner test, because no model was trained on any statement. <bookmark mark='a'/> "
+            "Here is each model's surprise at every year's statements. Before 2008 the three lines lie close together: "
+            "all of them have read the committee's style. <bookmark mark='b'/> From 2008 model A's line jumps, "
+            f"from about {a07:.2f} bits per character in 2004 to 2007 to {a09:.2f} in 2009 to 2012: the statements "
+            "began to talk about things it had never read. The models that had read the future notice much less. That "
+            "gap is consistent with chronology-sensitive distribution shift; it is not a controlled estimate of a pure leakage channel. The statements also differ in genre from the minutes used for training."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(shade), FadeIn(leg))
+            vo.wait_until("a")
+            self.play(*[Create(lines[k]) for k in "ABC"], run_time=2.5)
+            vo.wait_until("b")
+            self.play(Indicate(lines["A"], color=MODEL_A))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def probes(self, la):
+        rows = VGroup()
+        head = VGroup(label(r"the model is given", font_size=17, color=GREY_B), label(r"and must continue", font_size=17,
+                                                                                     color=GREY_B),
+                      *[label(k, font_size=20, color=COL[k]) for k in "ACB"])
+        hx = [-3.9, 1.2, 3.4, 4.7, 6.0]
+        for i, cell in enumerate(head):
+            cell.move_to([hx[i], 2.7, 0])
+        rows.add(head)
+        for j, pr in enumerate(la["A"]["probes"]):
+            y = 2.0 - 0.78 * j
+            r_ = VGroup(wrapped_label(r"\ldots " + _tex(" ".join(pr["prefix"].split()[-7:])), 6.2, 15, GREY_A).move_to([hx[0], y, 0]),
+                        label(r"\texttt{" + _tex(pr["cont"].strip()) + r"}", font_size=16, color=WORD).move_to([hx[1], y, 0]))
+            for i, k in enumerate("ACB"):
+                p = la[k]["probes"][j]["prob"]
+                r_.add(MathTex(rf"{100 * p:.0f}\%" if p >= 0.01 else sci(100 * p, digits=1) + r"\%", font_size=22,
+                               color=COL[k]).move_to([hx[2 + i], y, 0]))
+            rows.add(r_)
+        foot = note(r"original token-boundary continuation score; BPE may change prefix segmentation; selected crisis-language probes", font_size=15, color=GREY_B).to_edge(DOWN, buff=0.3)
+        pa = la["A"]["probes"][0]["prob"]
+        pc = la["C"]["probes"][0]["prob"]
+        with self.voiceover(
+            "Ask them directly. <bookmark mark='a'/> Each row gives a model the start of a sentence in the language "
+            "the committee began to use in 2008, and asks how likely the true continuation is. <bookmark mark='b'/> "
+            "The federal funds rate at zero to: model A, which has never seen a target range at zero, gives one "
+            f"quarter percent a probability of {100 * pa:.3f} percent. Model C, which never saw 2008 either but read "
+            f"what came after, gives it {100 * pc:.0f} percent. The same holds for the effective lower bound and for "
+            "forward guidance, phrases model A has never met. Mortgage-backed securities were already in the "
+            "committee's vocabulary before 2008, and all three models expect them. Words from the future, sitting in "
+            "the weights, but these are selected probes. The helper can replace prefix tokenisation when a continuation crosses a BPE boundary, so the reported product is not always the exact conditional probability of the intended natural-language suffix."
+        ) as vo:
+            self.play(FadeIn(rows[0]), FadeIn(foot))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(VGroup(r_[0], r_[1])) for r_ in rows[1:]], lag_ratio=0.2))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(VGroup(*r_[2:])) for r_ in rows[1:]], lag_ratio=0.2))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def samples(self, la):
+        prompt = la["A"]["samples"][0]
+        boxes = VGroup()
+        for k in "ACB":
+            txt = _tex(la[k]["samples"][0][:170]).rsplit(" ", 1)[0] + r" \ldots"
+            boxes.add(VGroup(label(NAME[k], font_size=17, color=COL[k]),
+                             wrapped_label(txt, 4.0, 20, GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.15))
+        boxes.arrange(RIGHT, buff=0.4, aligned_edge=UP).move_to(DOWN * 0.3)
+        if boxes.width > 13.2:
+            boxes.scale_to_fit_width(13.2)
+        head = label(r"continue: \emph{In light of the deterioration in financial conditions, the Committee}",
+                     font_size=20, color=GREY_B).to_edge(UP, buff=0.6)
+        with self.voiceover(
+            "Or let them write. <bookmark mark='a'/> Given the same prompt about deteriorating financial conditions, each model produces one continuation at temperature zero point seven with a fixed seed. The screen shows shortened excerpts, not the whole generated sample. Outputs can be ungrammatical or invent dates and policies. <bookmark mark='b'/> Compare the visible language across corpora, but one selected continuation cannot establish a causal memory effect, intelligence ranking or reliable policy understanding. A systematic generation study would require a defined prompt set, scoring rule and uncertainty."
+        ) as vo:
+            self.play(FadeIn(head))
+            vo.wait_until("a")
+            self.play(FadeIn(boxes[0]), FadeIn(boxes[1]))
+            vo.wait_until("b")
+            self.play(FadeIn(boxes[2]))
+        self.add(note(r"Selected generated English excerpts; translated gloss in Chinese edition. Temperature0.7, one seed; not reliable policy text",
+                      font_size=15, color=GREY_B).to_edge(DOWN, buff=0.3))
+        self.wait(0.4)
+        self.clear_scene()
+
+    def reading(self, la):
+        A, B, C = la["A"]["bpc_test"], la["B"]["bpc_test"], la["C"]["bpc_test"]
+        rows = [cmath(r"A - C", r"=", rf"{A - C:.3f}\ \text{{bits/char: dated corpus/tokenizer comparison}}", font_size=30,
+                      colors={r"A - C": MODEL_C}),
+                cmath(r"C - B", r"=", rf"{C - B:.3f}\ \text{{bits/char: test-included comparison}}", font_size=30,
+                      colors={r"C - B": MODEL_B}),
+                cmath(r"\text{a dated model}", r"=", r"\text{one required chronology control}", font_size=30)]
+        whys = [why(r"C excludes the test window but changes corpus and tokenizer; later knowledge is one possible contributor"),
+                why(r"B includes test-window text; corpus and tokenizer also differ, so the gap does not isolate memorisation"),
+                why(r"dated training inputs are one chronology control; model A's meeting-date filter still needs a release-time audit")]
+        step = ladder(self, rows, whys, keep=3, top=2.6, x=-0.3, buff=0.5, edge=6.9)
+        with self.voiceover(
+            "So the look-ahead comes in two layers. <bookmark mark='a'/> The gap between A and C combines changes in "
+            "later corpus and tokenisation, from a model that excludes the test window. That is one analogy for how a model trained on the internet "
+            "relates to an old backtest, and anonymising company names does not remove it. <bookmark mark='b'/> The "
+            "gap between C and B also changes the training corpus, including test-window text; it does not separately measure pure memory. Leakage tests target some related contamination channels. "
+            "<bookmark mark='c'/> A model with verified pre-test training inputs is a strong chronology control, which is what chronologically "
+            "consistent models provide. And on held-out minutes from before 2008, model A is the best of the three, "
+            f"{la['A']['bpc_val']:.2f} bits per character against {la['C']['bpc_val']:.2f} and {la['B']['bpc_val']:.2f}: "
+            "these gaps combine corpus, tokenisation, repetition and chronology. They do not separate skill from memory causally. All three models were monitored on the evaluation minutes during training; no gradient from those tokens enters A or C, and the original final checkpoint is used."
+        ) as vo:
+            step(0)
+            vo.wait_until("a")
+            self.wait(0.1)
+            vo.wait_until("b")
+            step(1)
+            vo.wait_until("c")
+            step(2)
+        self.wait(0.5)
+        self.clear_scene()
+
+    def question(self):
+        q = pause_card(r"model C beats model A on 2008--12 without having seen it. Would anonymising the minutes (no "
+                       r"dates, no names) close the gap?")
+        with self.voiceover(
+            "Pause and predict. Model C beats model A on the crisis minutes without having seen them. Would "
+            "anonymising the minutes, removing every date and name, close the gap?"
+        ):
+            self.play(FadeIn(q))
+        self.wait(0.5)
+        self.clear_scene()

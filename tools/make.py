@@ -5,6 +5,7 @@
     python tools/make.py ai26 ai27 -q k --fps 60 --crf 16    # 4K60 upload masters
     python tools/make.py --series ai                         # every part of a series, in order
     python tools/make.py ai26 --lang en --silent -q l        # a quick silent preview
+    python tools/make.py ai26 --cpu-voice -q m               # narrated by Kokoro on the CPU (no TTS server)
     python tools/make.py ai26 --steps compute                # only the numbers
 
 Every step picks up where it stopped, so after an interruption (a closed laptop, a crash) rerun the same command:
@@ -42,7 +43,7 @@ from explainer.paths import video_dir, video_package  # noqa: E402
 
 VIDEOS = ROOT / "videos"
 LOGS = ROOT / "renders" / "make"
-BILINGUAL = {"ai", "analysis", "philosophy"}  # series with a Chinese edition (and Qwen3-TTS narration)
+BILINGUAL = {"ai", "analysis", "philosophy", "quant"}  # series with a Chinese edition (and Qwen3-TTS narration)
 
 # Raw files consumed without a load() call are invisible to the import scanner.
 # Part 6 reads the five downloaded novels before its first numerical item.
@@ -195,7 +196,8 @@ def build(video: str, lang: str, args) -> None:
         env["EXPLAINER_TTS"] = "silent"
     elif series_of(video) in BILINGUAL:
         env.setdefault("EXPLAINER_TTS", "server")
-        env.setdefault("EXPLAINER_VOICE", "qwen3-calm-a")
+        if env["EXPLAINER_TTS"] == "server":  # --cpu-voice keeps Kokoro's own voices
+            env.setdefault("EXPLAINER_VOICE", "qwen3-calm-a")
     if lang != "en":
         # the lines come from the English render: it runs first
         run([sys.executable, "tools/zh_lines.py", video, "--verify", "--lang", lang], LOGS / f"{video}.{lang}.log",
@@ -230,11 +232,17 @@ def main():
     ap.add_argument("--crf", type=int, help="H.264 quality of the master (16-18 for uploads)")
     ap.add_argument("-j", "--jobs", type=int, help="scenes rendered in parallel (default: half the cores)")
     ap.add_argument("--silent", action="store_true", help="no narration (timed by an estimate): a preview")
+    ap.add_argument("--cpu-voice", action="store_true",
+                    help="narrate with Kokoro-82M on the CPU (English af_heart, Mandarin v1.1-zh zf_001): a stand-in "
+                         "for the production voice; its audio is cached apart, so a production build redoes it all")
     args = ap.parse_args()
+    if args.cpu_voice:
+        os.environ["EXPLAINER_TTS"] = "kokoro"
     videos = list(args.videos) + (all_videos(args.series) if args.series else [])
     if not videos:
         ap.error("name a video, or --series")
-    if "build" in args.steps and not args.silent and any(series_of(v) in BILINGUAL for v in videos):
+    if ("build" in args.steps and not args.silent and not args.cpu_voice
+            and any(series_of(v) in BILINGUAL for v in videos)):
         problem = tts_ready()
         if problem:
             sys.exit(problem)

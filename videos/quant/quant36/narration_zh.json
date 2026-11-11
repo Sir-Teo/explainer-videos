@@ -1,0 +1,664 @@
+{
+ "title": "量化金融，从零搭建 · 第36部分：限价订单簿",
+ "chapters": {
+  "Hook": "公允价值在哪里？",
+  "Book": "1. 订单簿",
+  "Queues": "2. 队列与下一跳",
+  "Events": "3. 引发事件的事件",
+  "OFI": "4. 订单流不平衡",
+  "Micro": "5. 微观价格",
+  "Deep": "6. 深度学习看订单簿",
+  "Gen": "7. 我们自己的订单簿",
+  "Trading": "8. 在队列中交易",
+  "House": "9. 第36条规则：用价差衡量订单簿",
+  "Research": "写给研究者：微观价格定理",
+  "Outro": "回顾、交易台问题与习题"
+ },
+ "lines": {
+  "119f5b0c382a": {
+   "scene": "Hook",
+   "en": "Part thirty-six. The limit order book: displayed queues of resting bids and offers on many electronic venues, and what they can tell us about subsequent prices. Matching rules, hidden liquidity and the chosen observation clock matter.",
+   "zh": "第三十六部分。限价订单簿：许多电子场所显示的等待买卖队列，以及它们对随后价格的信息。撮合规则、隐藏流动性和选择的观测时钟都重要。"
+  },
+  "01b51bb0f955": {
+   "scene": "Hook",
+   "en": "A stipulated interview book. <bookmark mark='a'/> Five hundred shares bid at a hundred dollars, one hundred offered at a hundred and one cent. Calculate three different objects. <bookmark mark='b'/> The quote midpoint is a hundred and half a cent. The opposite-size weighted midpoint is a hundred point zero zero eight three. <bookmark mark='c'/> Under independent, equal-variance, driftless Brownian queues and a half-cent mid move at depletion, the expected next midpoint is about a hundred point zero zero eight seven. These are conditional model summaries. None alone identifies fundamental value or an executable price. Later we test a many-move estimator on Bitcoin.",
+   "zh": "一个规定的面试盘口。<bookmark mark='a'/> 买价一百美元，五百股；卖价一百点零一美元，一百股。要计算三个不同对象。<bookmark mark='b'/> 报价中点是一百点零零五美元，按相反侧数量加权的中点是一百点零零八三美元。<bookmark mark='c'/> 若两队列独立、无漂移、方差速率相同，并在耗尽时使中点移动半美分，下一中点的条件期望约为一百点零零八七美元。这些都是条件模型摘要，不单独识别基本价值或可成交价格。稍后在比特币上检验多次变动估计。"
+  },
+  "0f9afac4144e": {
+   "scene": "Hook",
+   "en": "Three measurements from this narrow sample. <bookmark mark='a'/> The observed next-move up frequency rises from 16 to 86 percent across imbalance buckets. The fitted many-move adjustment reaches 25 ticks, while a horizon-specific table reduces mean ten-second squared error by 4 percent on two held-out days. <bookmark mark='b'/> Same-interval order-flow imbalance accounts for 45 percent of variance in this displayed ten-second regression; this is association, not a causal price response or a forecast. <bookmark mark='c'/> Direction accuracy conditional on a nonzero future move is 84 percent for the network and 87 for the linear rule. These scores do not include flat targets and do not measure net trading profit.",
+   "zh": "这个狭窄样本有三个测量。<bookmark mark='a'/> 不平衡分箱中，下一次变动向上的频率从16%升到86%。拟合的多次变动调整达到25档；按期限拟合的表在两个留出日使十秒均方误差平均下降4%。<bookmark mark='b'/> 展示的十秒同区间回归中，订单流不平衡关联了45%的方差；这是关联，不是因果价格响应或预测。<bookmark mark='c'/> 条件于未来价格确有变动，网络方向准确率84%，线性规则87%。平盘目标被排除，这些分数不衡量交易净利润。"
+  },
+  "a1cb7011753d": {
+   "scene": "Hook",
+   "en": "Why it matters, even to a slow investor. <bookmark mark='a'/> Every strategy in this series trades through a book: the monthly factor portfolios still buy at the offer and sell at the bid, and Part thirty-one's costs were the book's prices. <bookmark mark='b'/> The fastest desks live in it, earning or losing fractions of a tick millions of times a day. <bookmark mark='c'/> And it is where models meet reality fastest: a fair price, a forecast or a simulator can be tested on millions of observations within days. That makes the book a laboratory for honest research, and this part uses it as one.",
+   "zh": "为什么这很重要，即便对慢节奏的投资者也是如此。<bookmark mark='a'/>本系列的每一个策略都要通过订单簿交易：按月调仓的因子组合照样在卖价买入、在买价卖出，第31部分算的交易成本，就是订单簿上的价格。<bookmark mark='b'/>最快的交易台就生活在订单簿里，每天数百万次地赚取或亏掉零点几跳。<bookmark mark='c'/>它也是模型最快碰到现实的地方：公允价格、预测或模拟器，几天之内就能在数百万个观测上检验。这让订单簿成为诚实研究的实验室，这一部分就把它当实验室用。"
+  },
+  "7c8e7d843d39": {
+   "scene": "Hook",
+   "en": "Where this sits. Part thirty-five asked who trades with whom. This part opens the mechanism they trade through: the order book, with its queues, ticks and cancellations. It builds the House's order-book simulator, which execution in Part thirty-seven and market making in Part thirty-eight will use.",
+   "zh": "这一部分的位置。第35部分问的是谁与谁交易。这一部分打开他们交易所经由的机制：订单簿，以及它的队列、跳价和撤单。它为本系列公司建立一个订单簿模拟器，第37部分的执行和第38部分的做市都会用到它。"
+  },
+  "644e14c72261": {
+   "scene": "Hook",
+   "en": "Twenty years of the field. Fabrizio Lillo and Doyne Farmer found that order signs have long memory in 2004; Rama Cont and co-authors modelled queues in 2010; and the self-exciting arrivals of orders were found to be close to critical. <bookmark mark='a'/> Then the order-flow imbalance, the queue-reactive model, and Sasha Stoikov's microprice. <bookmark mark='b'/> And deep learning: DeepLOB, universal features, generative models of the book, and a benchmark that tested how well any of it generalises.",
+   "zh": "这个领域的二十年。2004年，Fabrizio Lillo和Doyne Farmer发现订单方向有长记忆；2010年，Rama Cont与合作者为队列建模；人们还发现，订单的自激到达接近临界。<bookmark mark='a'/>接着是订单流不平衡、队列反应模型，以及Sasha Stoikov的微观价格。<bookmark mark='b'/>然后是深度学习：DeepLOB、普适特征、订单簿生成模型，以及一个检验这些方法能否推广的基准。"
+  },
+  "747d7d27f1b3": {
+   "scene": "Hook",
+   "en": "The plan: the book itself, measured on Bitcoin's perpetual future; queues and the next tick, in a model and in the data; the clustering of events and the memory of order signs; order-flow imbalance; the microprice, fitted and tested; deep models of the book, and a generative book of the House's own with a scorecard; trading in the queue; and the microprice theorem, proved.",
+   "zh": "计划如下：订单簿本身，用比特币永续合约来测量；队列与下一跳，先看模型，再看数据；事件的聚集与订单方向的记忆；订单流不平衡；微观价格的拟合与检验；订单簿的深度模型，以及本系列公司自己的生成式订单簿和它的评分卡；在队列中交易；最后证明微观价格定理。"
+  },
+  "413be191261d": {
+   "scene": "Hook",
+   "en": "In the House, the data desk gains the best quotes on a hundred-millisecond grid, and the research desk an order-book simulator: the laboratory in which the next two parts will trade.",
+   "zh": "在本系列公司里，数据台获得了一张100毫秒网格上的最优报价，研究台获得了一个订单簿模拟器：接下来两部分将在这个实验室里交易。"
+  },
+  "a01054835342": {
+   "scene": "Book",
+   "en": "Chapter one. A displayed limit order book collects standing bids and offers. We use a price-time-priority example, while actual venue matching, hidden orders and order types can differ. The public feed in this part contains best prices and sizes, not every order or every depth level.",
+   "zh": "第一章。显示的限价订单簿汇集等待中的买卖报价。这里以价格时间优先为例，实际场所的撮合、隐藏订单和订单类型可能不同。本讲公开数据只含最优价格与数量，不是每笔订单或全部深度。"
+  },
+  "d0290574de92": {
+   "scene": "Book",
+   "en": "The rules. <bookmark mark='a'/> A limit order rests at a price until it is filled or cancelled: its owner supplies liquidity. <bookmark mark='b'/> A market order trades now against the best resting orders, and pays the spread. <bookmark mark='c'/> Priority: best price first, and at the same price, first come first served. So a place in the queue is an asset. <bookmark mark='d'/> And the tick, the smallest price step: on Bitcoin's perpetual future, ten cents, about four hundredths of a basis point.",
+   "zh": "规则。<bookmark mark='a'/>限价单停在某个价格上，直到成交或撤单：挂单者提供流动性。<bookmark mark='b'/>市价单立即与最优的挂单成交，并支付价差。<bookmark mark='c'/>优先级：价格最优者先成交；同一价格上，先到先得。所以队列中的位置是一种资产。<bookmark mark='d'/>还有跳价，即最小的价格步长：在比特币永续合约上是10美分，约为万分之零点零四。"
+  },
+  "1688f33bf9dd": {
+   "scene": "Book",
+   "en": "The picture. <bookmark mark='a'/> Offers above, bids below, each price with the size waiting there. <bookmark mark='b'/> The gap between the best bid and the best offer is the spread; on a liquid market it is usually one tick, so the price cannot get any closer, and the action is in the sizes of the two best queues.",
+   "zh": "图像。<bookmark mark='a'/>卖单在上，买单在下，每个价格旁边是在那里等待的数量。<bookmark mark='b'/>最优买价与最优卖价之间的差距就是价差；在流动性好的市场上，它通常是一跳，价格不能再靠近，所有动作都发生在两个最优队列的大小上。"
+  },
+  "3a17ccc36bf5": {
+   "scene": "Book",
+   "en": "Four useful mechanisms. <bookmark mark='a'/> A displayed limit order can add size at a price. <bookmark mark='b'/> A cancellation can remove resting size. <bookmark mark='c'/> An aggressive order trades against resting liquidity. <bookmark mark='d'/> Depletion can move the best quote, but so can a new limit order inside a wider spread. The hundred-millisecond snapshots combine these events; their net size change does not identify each underlying message.",
+   "zh": "四种有用机制。<bookmark mark='a'/> 显示限价单可以增加某价格数量。<bookmark mark='b'/> 撤单可以移除挂单。<bookmark mark='c'/> 主动订单与等待流动性成交。<bookmark mark='d'/> 队列耗尽会移动最优报价，但宽价差内新限价单也会移动它。百毫秒快照把事件合并，净数量变化不能识别每条原始消息。"
+  },
+  "822e5e1a2feb": {
+   "scene": "Book",
+   "en": "Four public archive days in May twenty twenty-three. <bookmark mark='a'/> The displayed hours count hundred-millisecond grid positions after the first available quote, including carried-forward observations; they are not an audit of uninterrupted message coverage. The initial archive day is partial. The one-tick spread dominates this sample, with weekday update rate about 133 per second. May sixteenth and seventeenth fit the models; the twentieth and twenty-first form a short weekend test. Carry-forward values, gaps and that weekday-to-weekend shift matter.",
+   "zh": "二零二三年五月四个公开档案日。<bookmark mark='a'/> 展示小时数统计首条报价后的百毫秒网格位置，包括前向填充，不是连续消息覆盖审计。最早档案日不完整。这个样本主要是一档价差，工作日报价更新约每秒133次。十六、十七日拟合，二十、二十一日构成短暂周末检验。填充报价、缺口和工作日到周末的分布变化都重要。"
+  },
+  "6a9ae151e1ba": {
+   "scene": "Book",
+   "en": "One minute of it. <bookmark mark='a'/> The best bid and offer, ten cents apart, step together. <bookmark mark='b'/> Below, the two best queues, the bid up and the offer down. Watch a queue drain toward zero just before the price steps through it. That race is the whole game of this part.",
+   "zh": "其中的一分钟。<bookmark mark='a'/>最优买价和卖价相隔10美分，一起移动。<bookmark mark='b'/>下方是两个最优队列，买方向上画，卖方向下画。注意看：价格穿过某一价位之前，那个队列先被耗向零。这场赛跑就是这一部分的全部游戏。"
+  },
+  "6820cb45bdaa": {
+   "scene": "Book",
+   "en": "Activity through a day. <bookmark mark='a'/> Even on a Saturday the book updates dozens of times a second at every hour, peaking around 18:00 UTC. Crypto never closes, but it does sleep a little.",
+   "zh": "一天中的活跃程度。<bookmark mark='a'/>即使在星期六，订单簿每个小时每秒都更新几十次，在世界协调时18点左右达到高峰。加密市场从不收盘，但它也会稍微睡一会儿。"
+  },
+  "3695ca26b4f4": {
+   "scene": "Book",
+   "en": "Order types depend on venue rules. <bookmark mark='a'/> A marketable limit order can immediately take liquidity; a nonmarketable remainder may rest subject to its instructions. A market order accepts available prices without a limit-price guarantee. <bookmark mark='b'/> Post-only instructions prevent taking, often by rejection or venue-specific repricing. Immediate-or-cancel allows partial execution and cancels the remainder. <bookmark mark='c'/> Icebergs display a portion of hidden reserve, with replenishment priority defined by the venue. A stop may trigger a market or a limit order according to its type. These instructions can affect price dynamics, but the best-quote feed does not identify each hidden instruction.",
+   "zh": "订单类型依赖场所规则。<bookmark mark='a'/> 可立即成交的限价单能主动吃单，其未成交部分是否挂单取决于指令；市价单接受可用报价，不保证价格上限。<bookmark mark='b'/> 只挂单指令防止主动成交，通常拒绝或按场所规则重定价；立即成交或撤销允许部分成交，撤掉余量。<bookmark mark='c'/> 冰山显示一部分储备，补充优先级由场所决定；止损可按类型触发市价或限价单。这些影响价格，但最优报价数据不能识别每个隐藏指令。"
+  },
+  "85b0a0f1d6fd": {
+   "scene": "Book",
+   "en": "Why the tick matters. <bookmark mark='a'/> When the tick is wide compared with the spread traders would accept and with the price's moves, the spread sits at one tick, the queues are long, and the price moves rarely, one tick at a time: priority is everything. <bookmark mark='b'/> When the tick is tiny, the price moves many ticks at once and traders compete on price. The American half-cent tick of Part thirty-five was aimed at the first kind of market. <bookmark mark='c'/> Bitcoin's perpetual is both at once: a one-tick spread, like the first, but when its mid changes between two snapshots a tenth of a second apart, the median jump is 8 ticks. Mathieu Rosenbaum and Khalil Dayri measured tick size by exactly this behaviour of the price, and by that measure the tick here is small. Chapter five shows why that matters.",
+   "zh": "为什么跳价重要。<bookmark mark='a'/>当跳价相对于交易者愿意接受的价差、相对于价格的波动都很宽时，价差停在一跳，队列很长，价格很少移动，每次只动一跳：优先级就是一切。<bookmark mark='b'/>当跳价很小时，价格一次移动许多跳，交易者靠价格竞争。第35部分讲到的美国半美分跳价，针对的正是第一类市场。<bookmark mark='c'/>比特币永续合约两者兼具：价差是一跳，像第一类；但在相隔十分之一秒的两个快照之间，中间价一旦变化，跳动的中位数是8跳，像第二类。Mathieu Rosenbaum和Khalil Dayri正是用价格的这种行为来衡量跳价大小的，按这个标准，这里的跳价是小的。第5章会说明这为什么重要。"
+  },
+  "a9f13a58fec9": {
+   "scene": "Book",
+   "en": "Assume deterministic fluid rates: five bitcoin ahead, aggressive trades at point two bitcoin a second and cancellations from ahead at point one. Your own one-bitcoin order is not cancelled. Compute the time to reach the front and then the total fill time. This is stipulated fluid arithmetic, not the expected hitting time of a random queue.",
+   "zh": "暂停计算，假设确定性流体速度。前方五个比特币，主动成交每秒零点二，前方撤单每秒零点一。自己的一比特币订单不撤销。求到队首时间和全部成交总时间。这是规定的流体算术，不是随机队列首达时间的期望。"
+  },
+  "aaeea995c33e": {
+   "scene": "Queues",
+   "en": "Chapter two. With a one-tick spread, the price moves when one of the two best queues runs out. So the next move is a race between the queues. Rama Cont and Adrien de Larrard turned that race into a formula.",
+   "zh": "第2章。价差为一跳时，两个最优队列中有一个被耗尽，价格就会移动。所以下一步是两个队列之间的赛跑。Rama Cont和Adrien de Larrard把这场赛跑变成了一个公式。"
+  },
+  "34392c9e0b41": {
+   "scene": "Queues",
+   "en": "The race. <bookmark mark='a'/> Two best queues, bid and offer. <bookmark mark='b'/> Each grows with new orders and shrinks with cancellations and trades, a birth-death process in Rama Cont, Sasha Stoikov and Rishi Talreja's model; with balanced rates, a random walk, and in the limit a Brownian motion. <bookmark mark='c'/> The price ticks up when the offer runs out first.",
+   "zh": "赛跑。<bookmark mark='a'/>两个最优队列，买方和卖方。<bookmark mark='b'/>每个队列随新订单增长，随撤单和成交缩短；在Rama Cont、Sasha Stoikov和Rishi Talreja的模型中，这是一个生灭过程；速率平衡时是随机游走，在极限下是布朗运动。<bookmark mark='c'/>如果卖方先耗尽，价格就上跳一格。"
+  },
+  "6fff87e4dd3c": {
+   "scene": "Queues",
+   "en": "A picture makes the stipulated diffusion solvable. <bookmark mark='a'/> Plot bid and offer queue sizes as one point in a quadrant, with equal coordinate scales. <bookmark mark='b'/> The yellow line is a fixed Euler illustration of independent driftless Brownian queues. Its last discrete segment is interpolated to the first boundary crossing. Reaching the floor depletes the offer; reaching the wall depletes the bid. <bookmark mark='c'/> For the specified equal-variance diffusion, the bounded harmonic exit probability depends on the starting angle, not on distance from the origin.",
+   "zh": "图形让规定扩散可解。<bookmark mark='a'/> 将买卖队列画成象限中的点，两坐标比例一致。<bookmark mark='b'/> 黄线是独立无漂移布朗队列的一条固定欧拉示意路径，最后离散线段插值到第一次边界相交。到地板卖队列耗尽，到墙买队列耗尽。<bookmark mark='c'/> 对规定相同方差的扩散，有界调和退出概率依赖起始角，不依赖离原点距离。"
+  },
+  "fc42845e2e08": {
+   "scene": "Queues",
+   "en": "A particular diffusion approximation. <bookmark mark='a'/> For two independent, driftless Brownian queues with equal variance rates, the bounded harmonic solution in a quadrant is linear in the polar angle. It equals one on the offer-depletion boundary and zero on the bid-depletion boundary. <bookmark mark='b'/> The starting angle is the arctangent of offer size over bid size. <bookmark mark='c'/> Hence the up probability is one minus two over pi times that angle. This formula is scale invariant. Unequal volatilities, correlation, drift or queue-dependent rates generally change it; it is not the general solution of every Poisson queue model.",
+   "zh": "一个特定的扩散近似。<bookmark mark='a'/> 两队列独立、无漂移、方差速率相同时，象限中的有界调和解对极角线性；卖队列耗尽边界取一，买队列耗尽边界取零。<bookmark mark='b'/> 起始角为卖量除以买量的反正切。<bookmark mark='c'/> 因此向上概率等于一减二除以圆周率乘这个角。该公式不随共同尺度变化。不同波动、相关、漂移或队列依赖速率通常改变它，不能当作所有泊松队列模型的通解。"
+  },
+  "1f7e30fd7b5c": {
+   "scene": "Queues",
+   "en": "Distinguish the models. <bookmark mark='a'/> Independent Poisson additions and removals define a birth-death queue model. A balanced heavy-traffic limit with equal variance rates leads to the simple Brownian quadrant formula just shown. <bookmark mark='b'/> A chosen regeneration rule redraws queues after depletion; reset laws can depend on direction, and can create serial dependence. <bookmark mark='c'/> Driftless diffusive prices require the relevant balance, regeneration and moment conditions. Poisson arrivals alone do not make the price an independent symmetric random walk.",
+   "zh": "区分模型。<bookmark mark='a'/> 独立泊松增加与移除定义生灭队列模型；还需平衡重流量极限与相同方差速率，才得到刚才的布朗象限公式。<bookmark mark='b'/> 规定的再生规则在耗尽后重抽队列，重置律可以依赖方向，从而产生序列依赖。<bookmark mark='c'/> 无漂移扩散价格需要相应平衡、再生与矩条件。只有泊松到达，并不保证价格是独立对称随机游走。"
+  },
+  "70dbd4a3a478": {
+   "scene": "Queues",
+   "en": "Against the data, on the two test days. <bookmark mark='a'/> The probability that the next move is up, by imbalance: from 16 percent when the bid is tiny to 86 percent when the offer is. <bookmark mark='b'/> The model has the right shape and the right center, but it is too steep at the edges: real markets are less certain than the random-walk race. A straight line, probability equals imbalance, lies in between.",
+   "zh": "用两个检验日的数据来对照。<bookmark mark='a'/>按不平衡程度分组，下一步上涨的概率：从买方极小时的16%，到卖方极小时的86%。<bookmark mark='b'/>模型的形状和中心都对，但两端太陡：真实市场比随机游走的赛跑更不确定。概率等于不平衡这条直线，位于两者之间。"
+  },
+  "8361bbf14b41": {
+   "scene": "Queues",
+   "en": "Possible reasons the observed curve differs from the simple diffusion formula. <bookmark mark='a'/> Size-dependent refill and removal rates can alter depletion probabilities. <bookmark mark='b'/> Hidden liquidity and aggregation can make displayed queues an incomplete state. <bookmark mark='c'/> Recent flow and unobserved information may also matter. This comparison does not identify which mechanism caused the discrepancy, and a short offer does not establish informed selling or illegal intent.",
+   "zh": "观测曲线偏离简单扩散公式的可能原因。<bookmark mark='a'/> 与数量有关的补充和移除速率改变耗尽概率。<bookmark mark='b'/> 隐藏流动性和聚合使显示队列成为不完整状态。<bookmark mark='c'/> 近期流量与不可见信息也可能重要。这个比较不能识别是哪种机制导致差异，薄卖队列也不证明知情卖出或违法意图。"
+  },
+  "40fce61c4506": {
+   "scene": "Queues",
+   "en": "A richer baseline. <bookmark mark='a'/> Huang, Lehalle and Rosenbaum let event intensities depend on queue state. <bookmark mark='b'/> Our simplified grid implementation counts net size increases and decreases per occupied state; it does not recover separate message-level addition, trade and cancellation intensities. <bookmark mark='c'/> It produces a Markov model of the full simulated queue state. A coarser summary, such as ten imbalance buckets, need not itself be Markov. We retain its scorecard instead of treating a fitted rate as validation.",
+   "zh": "一个更丰富的基准。<bookmark mark='a'/> 黄、勒阿勒和罗森鲍姆让事件强度依赖队列状态。<bookmark mark='b'/> 本讲简化网格实现按状态统计净数量增加与减少，不恢复消息级新增、成交和撤单的各自强度。<bookmark mark='c'/> 它生成完整模拟队列状态的马尔可夫模型，但十个不平衡分箱等粗摘要未必仍是马尔可夫的。保留评分表，而不把拟合速率当成验证。"
+  },
+  "46afe1febb0f": {
+   "scene": "Queues",
+   "en": "Take independent driftless Brownian queues with equal variance rates. The bid starts at nine lots and the offer at three. Calculate the displayed up probability and compare it with bid size divided by total size. Then double both queue sizes. Explain which quantities remain the same and what the probability formula does not say about waiting time.",
+   "zh": "暂停计算。假设两队列为独立无漂移布朗运动，方差速率相同，买方九手、卖方三手。求图示向上概率，与买量除以总量比较。再把双方数量加倍，解释哪些概率不变，以及该概率公式没有告诉我们什么等待时间信息。"
+  },
+  "89ea42ba4c49": {
+   "scene": "Events",
+   "en": "Chapter three. Orders do not arrive like raindrops. They come in bursts, and buy orders follow buy orders for minutes on end. Two facts, measured, and what they imply.",
+   "zh": "第3章。订单不像雨滴那样到来。它们成串出现，而且买单之后跟着买单，一连几分钟。这里测量两个事实，并看看它们意味着什么。"
+  },
+  "8d6f693b747d": {
+   "scene": "Events",
+   "en": "A positive linear exponential Hawkes model. <bookmark mark='a'/> Its conditional intensity is a positive background rate plus decaying contributions from past events. <bookmark mark='b'/> With nonnegative alpha and positive beta, the kernel integral n is alpha over beta. In the model's Poisson-cluster representation it is the expected number of direct offspring. <bookmark mark='c'/> For a stationary version with n below one, the mean rate is mu over one minus n and the latent offspring share is n. A fitted branching ratio is not an observed causal fraction of traders reacting to one another.",
+   "zh": "正线性指数霍克斯模型。<bookmark mark='a'/> 条件强度由正背景速率与过去事件的衰减贡献相加。<bookmark mark='b'/> 阿尔法非负、贝塔为正时，核积分为分支比，即阿尔法除以贝塔；在模型泊松簇表示里，它是直接后代的期望数。<bookmark mark='c'/> 平稳版本需要分支比小于一，均速率为背景率除以一减分支比，潜在后代占比等于分支比。拟合分支比不是观测到的交易者因果反应比例。"
+  },
+  "a53693d4a49c": {
+   "scene": "Events",
+   "en": "The fitted hour contains 22,930 distinct rounded-millisecond arrival times after deduplication. <bookmark mark='a'/> Its estimated branching ratio is 0.68, a model parameter rather than an identified reaction fraction. <bookmark mark='b'/> The in-sample log likelihood exceeds the Poisson fit by 1,548; the Hawkes model also has more parameters. <bookmark mark='c'/> The displayed rescaled-gap KS statistic is descriptive. The same events estimate the parameters and test the fit, and the gaps may remain dependent. No calibrated goodness-of-fit p-value or causal attribution follows from this statistic alone.",
+   "zh": "拟合小时在毫秒四舍五入并去重后有22930个不同到达时间。<bookmark mark='a'/> 分支比估计0.68是模型参数，不是已识别的反应份额。<bookmark mark='b'/> 样本内对数似然高于泊松拟合1548，霍克斯模型也有更多参数。<bookmark mark='c'/> 展示的重标度间隔统计量只是描述：同一事件用于估参和检验，间隔仍可能相关。因此没有校准的拟合优度显著性概率，也不能据此作因果归因。"
+  },
+  "02422f5d8a54": {
+   "scene": "Events",
+   "en": "Three distinct claims. <bookmark mark='a'/> Hardiman, Bercot and Bouchaud estimated high branching ratios under long-memory Hawkes specifications on index futures. The estimate depends on kernel, sample window and background specification. <bookmark mark='b'/> Near one, the stationary positive cluster model has large average families and strong amplification. This interpretation is conditional on the model. <bookmark mark='c'/> Certain nearly unstable heavy-tailed Hawkes models, under specified time, intensity and price scaling, have rough-volatility limits. A single exponential-kernel fit to this hour does not establish that limit or explain all daily volatility.",
+   "zh": "三个不同论断。<bookmark mark='a'/> 哈迪曼、贝尔科和布肖在指数期货的长记忆霍克斯设定中估得高分支比；估计依赖核、窗口及背景设定。<bookmark mark='b'/> 在平稳正簇模型里，分支比接近一意味着平均家族大、放大强，这个解释依赖模型。<bookmark mark='c'/> 特定近不稳定厚尾霍克斯模型，在规定的时间、强度和价格缩放下，有粗糙波动极限。这个小时的单指数核拟合不建立该极限，也不解释全部日度波动。"
+  },
+  "8f8961ff82d4": {
+   "scene": "Events",
+   "en": "The cluster calculation within the stipulated positive linear model. <bookmark mark='a'/> Background immigrants arrive at rate mu. <bookmark mark='b'/> Each event has expected n direct children, the integral of the kernel. <bookmark mark='c'/> When n is below one, the expected family size including the immigrant is the geometric sum, one over one minus n. At n equal to one the mean diverges; above one a finite stationary mean is unavailable. <bookmark mark='d'/> Multiplying family size by immigration rate gives mu over one minus n. The latent genealogy is a representation of the model, not a recovered family tree for the observed trades.",
+   "zh": "在规定正线性模型中计算家族。<bookmark mark='a'/> 背景移民率为缪。<bookmark mark='b'/> 每个事件的直接子代期望数是核积分，即分支比。<bookmark mark='c'/> 小于一时，含移民的期望家族为几何级数，一除以一减分支比；等于一时均值发散，大于一时没有有限平稳均值。<bookmark mark='d'/> 移民率乘家族大小得到总均速率。潜在家谱是模型表示，不是从真实成交恢复的家族树。"
+  },
+  "c2a91ca15080": {
+   "scene": "Events",
+   "en": "A finite-sample sign-memory diagnostic. <bookmark mark='a'/> Plot buy-sell sign autocorrelation against event lag on logarithmic axes. <bookmark mark='b'/> A line fitted to the positive correlations at selected lags has exponent about 0.85. No interval is computed, and choosing positive values affects the fit. A true asymptotic power law with exponent between zero and one has nonsummable correlations; this finite window alone does not prove asymptotic long memory or identify order splitting.",
+   "zh": "有限样本符号记忆诊断。<bookmark mark='a'/> 在对数坐标上画买卖方向相关与事件滞后。<bookmark mark='b'/> 对选定正相关值拟合的指数约0.85，没有计算区间，只选择正值也影响拟合。真正的渐近幂律指数介于零与一时，相关和不收敛；但这个有限窗口本身不证明渐近长记忆，也不识别母订单拆分。"
+  },
+  "d7fdd5842bd5": {
+   "scene": "Events",
+   "en": "One mechanism for persistent signs. <bookmark mark='a'/> A large parent order can be split into many same-side child orders. <bookmark mark='b'/> In the particular splitting model, a parent-size tail exponent between one and two leads to a sign-correlation exponent alpha minus one. Other scheduling, participation and dependence assumptions can change that mapping. <bookmark mark='c'/> Persistent order signs can coexist with weak return predictability if impact and liquidity adapt. This is a model reconciliation, not evidence that prices are exactly unpredictable or that splitting uniquely caused the observed autocorrelation.",
+   "zh": "方向持久的一种机制。<bookmark mark='a'/> 大母订单可以拆成许多同方向子单。<bookmark mark='b'/> 在特定拆单模型里，母单规模尾指数在一与二之间，会使符号相关指数为阿尔法减一。不同排程、参与及依赖假设会改变这个映射。<bookmark mark='c'/> 冲击和流动性适应时，持久方向可以与弱收益可预测性共存。这是模型协调，不证明价格完全不可预测，也不证明观测相关唯一来自拆单。"
+  },
+  "f37e5b92e7a4": {
+   "scene": "Events",
+   "en": "A signature diagnostic in explicit units. <bookmark mark='a'/> The code averages squared mid increments at each sampling step and divides by the number of hundred-millisecond grid steps, not by seconds. The vertical unit is squared dollars per hundred milliseconds; multiply by ten for squared dollars per second. It is a second moment rather than a demeaned variance. <bookmark mark='b'/> The largest sampled value is about 31 percent above the shortest-step value. Such horizon dependence is consistent with serial dependence and aggregation effects, but it does not identify their cause. Transaction-price bid-ask bounce and quote-mid dynamics are different objects.",
+   "zh": "明确单位的签名诊断。<bookmark mark='a'/> 代码对各尺度中点增量平方取均值，再除以百毫秒网格步数，不是秒数。纵轴是每百毫秒美元平方，乘十才是每秒美元平方；这是二阶矩而非去均值方差。<bookmark mark='b'/> 采样中的最大值比最短步长高约31%。这种期限变化与序列依赖和聚合效应相容，但不识别原因。成交价买卖反跳与报价中点动力学是不同对象。"
+  },
+  "2f60ab3d5293": {
+   "scene": "Events",
+   "en": "A possible quote-refill mechanism. <bookmark mark='a'/> Start with a one-tick spread. If only the best offer disappears and the next offer is one tick higher, the midpoint rises half a tick and the spread widens. <bookmark mark='b'/> If a new bid then joins inside that gap, the midpoint rises another half tick while the spread narrows. <bookmark mark='c'/> This stipulated two-step sequence creates same-direction midpoint moves. Other quote sequences need not do so. The illustration neither estimates its frequency nor proves that it caused the measured signature curve.",
+   "zh": "一种可能的报价补充机制。<bookmark mark='a'/> 初始一档价差；若只有最优卖价消失，下一卖价高一档，中点升半档、价差扩大。<bookmark mark='b'/> 若新买价接着加入缺口，中点再升半档，价差缩小。<bookmark mark='c'/> 这个规定两步序列产生同向中点变化，其他报价序列未必如此。示意既不估频率，也不证明它造成测得的签名曲线。"
+  },
+  "c6f841b9eb4d": {
+   "scene": "Events",
+   "en": "Within a stationary positive linear Hawkes model, let immigration be two events per second. Compute expected family size including the immigrant and mean event rate when branching is point six eight and point nine five. State what happens to the finite stationary mean at one. Explain why the model offspring fraction is not an observed causal trader-reaction fraction.",
+   "zh": "暂停计算。在平稳正线性霍克斯模型里，移民率每秒二。分支比分别为零点六八和零点九五，求包括移民的期望家族大小及均事件率。说明分支比等于一时有限平稳均值如何，并解释为什么模型后代占比不是观测到的因果交易反应比例。"
+  },
+  "f92999934db9": {
+   "scene": "OFI",
+   "en": "Chapter four. Part thirty-five measured the price of trades. But trades are a minority of book events: adds and cancellations move the queues too. Rama Cont, Arseniy Kukanov and Sasha Stoikov asked what single number about the queues explains price changes best.",
+   "zh": "第4章。第35部分测量了成交的价格。但在订单簿事件中，成交只占少数：挂单和撤单同样改变队列。Rama Cont、Arseniy Kukanov和Sasha Stoikov问：关于队列的哪一个数字最能解释价格变化？"
+  },
+  "f995e9f7ddc1": {
+   "scene": "OFI",
+   "en": "The definition. <bookmark mark='a'/> At the best bid, count size added, or the whole new queue if the bid rose, less size removed, or the whole old queue if it fell. <bookmark mark='b'/> The same at the best offer. <bookmark mark='c'/> Their difference, summed over an interval, is the order-flow imbalance: net buying pressure at the top of the book, from additions, cancellations and trades alike.",
+   "zh": "定义。<bookmark mark='a'/>在最优买价上，计入新增的数量（如果买价上升，则计入整个新队列），减去移走的数量（如果买价下降，则减去整个旧队列）。<bookmark mark='b'/>最优卖价上同样处理。<bookmark mark='c'/>两者之差在一个区间内求和，就是订单流不平衡：订单簿顶端的净买入压力，挂单、撤单和成交都计算在内。"
+  },
+  "d26b6aaae493": {
+   "scene": "OFI",
+   "en": "Two aligned minutes from the snapshots. <bookmark mark='a'/> The top plot shows net best-quote order-flow imbalance, with positive and negative pressure. <bookmark mark='b'/> The bottom plot is the mid change in the same interval. Their comovement is descriptive; this two-minute illustration does not compare forecasts, establish causation or measure the explanatory power of trades alone.",
+   "zh": "同一快照时钟的两分钟。<bookmark mark='a'/> 上图是最优报价净订单流不平衡，显示正负压力。<bookmark mark='b'/> 下图是同区间中点变化。共同变化是描述性的，这两分钟示例不比较预测，不建立因果，也不测量仅成交的解释力。"
+  },
+  "3903c1157346": {
+   "scene": "OFI",
+   "en": "By hand, three snapshots. <bookmark mark='a'/> Five bitcoin bid at a hundred, four offered at a hundred and ten cents. <bookmark mark='b'/> Then two are added to the bid and one is cancelled from the offer: three of buying pressure, with no trade at all. <bookmark mark='c'/> Then the offer is taken, the price rises a tick, and a new bid of two appears at the old offer: the vanished offer counts minus three on the ask side, and the new bid counts in full, five more. <bookmark mark='d'/> Eight bitcoin of net pressure, and the mid rose ten cents. Trades alone would have missed the cancellation.",
+   "zh": "手算三个快照。<bookmark mark='a'/>100美元处买5个比特币，100.10美元处卖4个。<bookmark mark='b'/>然后买方新增2个，卖方撤掉1个：3个比特币的买入压力，却没有一笔成交。<bookmark mark='c'/>接着卖单被吃掉，价格上升一跳，旧卖价处出现一笔2个的新买单：消失的卖单在卖方一侧计为负3，新买单全额计入，又是5个。<bookmark mark='d'/>8个比特币的净压力，中间价上升10美分。只看成交会漏掉那次撤单。"
+  },
+  "36d4e5a329f9": {
+   "scene": "OFI",
+   "en": "Separate contemporaneous fit from prediction. <bookmark mark='a'/> Each day is refitted on its own same-interval mid changes and imbalance. Mean reported R squared is about 42 percent at ten seconds and 42 at a minute. Calling the weekend a test day elsewhere does not make these daily regressions held-out forecasts. The response and the explanatory variable share quote events, so both are endogenous. Different samples, units and targets prevent interpreting the comparison with Part thirty-five as a controlled doubling of explanatory power. No causal effect or robust inference is established here.",
+   "zh": "区分同期拟合与预测。<bookmark mark='a'/> 每天都用自己的同区间中点变化与不平衡重拟合，十秒平均决定系数约42%，一分钟约42%。其他实验称周末为检验日，不会让这些日内回归变成留出预测。两边共享报价事件，存在内生性。与第三十五讲相比，样本、单位和目标不同，不能说受控地把解释力翻倍。这里没有建立因果效应或稳健推断。"
+  },
+  "2a966bcf425f": {
+   "scene": "OFI",
+   "en": "A descriptive depth comparison. <bookmark mark='a'/> Each point pairs a half-hour regression slope with average displayed depth from that interval. <bookmark mark='b'/> The stored pooled log-log slope is -1.17. The original routine floors nonpositive slopes before taking logs, so this is not an unrestricted log-law estimate. The plot also has its own positive display floor. The minus-one benchmark comes from a stipulated constant-depth model in which a queue's worth of imbalance moves the mid half a tick. Neither the scatter nor its unreported uncertainty identifies a causal response to removing liquidity.",
+   "zh": "描述性深度比较。<bookmark mark='a'/> 每个点配对半小时回归斜率与当时平均显示深度。<bookmark mark='b'/> 保存的合并双对数斜率-1.17在原程序先把非正斜率设下界再取对数，因此不是不受限制的对数律估计；画图另有正显示下界。负一基准来自规定固定深度模型：一队列不平衡推动中点半档。散点及未报告的不确定性都不识别移除流动性的因果响应。"
+  },
+  "a9f548bc1a27": {
+   "scene": "OFI",
+   "en": "Keep the benchmark's units explicit. <bookmark mark='a'/> With average queue q in base units and tick delta in dollars, the stylised coefficient is delta over twice q, dollars per base unit. <bookmark mark='b'/> Part thirty-five's signed-trade regressions use a different flow definition and sometimes different normalization. <bookmark mark='c'/> Including additions and cancellations can change the shape of a descriptive relation. These separate regressions do not prove that queue refill caused trade-impact concavity or that contemporaneous linearity predicts the next interval.",
+   "zh": "明确基准单位。<bookmark mark='a'/> 平均队列以基础资产计，价格档以美元计，系数是价格档除以两倍队列，即美元每基础单位。<bookmark mark='b'/> 第三十五讲成交方向回归使用不同流量定义，有时归一化也不同。<bookmark mark='c'/> 纳入新增与撤单可以改变描述关系形状；这些不同回归不证明补充队列导致成交冲击凹性，也不证明同期线性可预测下一区间。"
+  },
+  "ba61e6e8d037": {
+   "scene": "OFI",
+   "en": "Where it goes next. <bookmark mark='a'/> Ke Xu, Martin Gould and Sam Howison showed that the same imbalance at deeper levels of the book adds information, especially when the best queues are thin. <bookmark mark='b'/> Petter Kolm, Jeremy Turiel and Nicholas Westray fed order-flow imbalances, rather than raw prices and sizes, to deep networks, and reported better short-horizon forecasts: the input mattered more than the architecture. <bookmark mark='c'/> And a caution: everything in this chapter explains the price change in the same interval. Predicting the next one is Chapter six's much harder problem.",
+   "zh": "接下来的方向。<bookmark mark='a'/>Ke Xu、Martin Gould和Sam Howison证明，订单簿更深档位上的同一种不平衡也带有信息，最优队列薄的时候尤其如此。<bookmark mark='b'/>Petter Kolm、Jeremy Turiel和Nicholas Westray把订单流不平衡而不是原始价格和数量喂给深度网络，报告了更好的短期预测：输入比架构更重要。<bookmark mark='c'/>还有一个提醒：本章的一切解释的是同一区间内的价格变化。预测下一个区间，是第6章那个难得多的问题。"
+  },
+  "9110a01f80a0": {
+   "scene": "OFI",
+   "en": "Two refinements. <bookmark mark='a'/> Rama Cont, Mihai Cucuringu and Chao Zhang combined the imbalances of the first ten levels through their first principal component: one integrated number that explains more than the best level alone. <bookmark mark='b'/> And across stocks: once a stock's own integrated imbalance is known, other stocks' imbalances add little to its price change in the same interval, but they do help forecast the next ones. <bookmark mark='c'/> Our feed carries only the best quotes, so this part measures the best-level version; the deeper ones need the full depth stream.",
+   "zh": "两个改进。<bookmark mark='a'/>Rama Cont、Mihai Cucuringu和Chao Zhang用前十档不平衡的第一主成分把它们合并：一个综合数字，比只用最优档解释得更多。<bookmark mark='b'/>跨股票来看：一旦知道某只股票自己的综合不平衡，其他股票的不平衡对它同一区间的价格变化几乎没有补充，但确实有助于预测接下来的变化。<bookmark mark='c'/>我们的数据只有最优报价，所以这一部分测量的是最优档版本；更深的版本需要完整的深度数据流。"
+  },
+  "e7e814fa906b": {
+   "scene": "OFI",
+   "en": "Use the stipulated constant-depth relation: the tick is ten cents, average best queue is eight bitcoin and OFI is plus twelve bitcoin. Calculate the implied mid change in dollars and ticks. Then double depth holding flow fixed. State the coefficient units and why arithmetic under this assumption is not an empirical causal effect.",
+   "zh": "暂停计算。采用规定固定深度关系：价格档十美分，平均最优队列八比特币，订单流不平衡正十二。求隐含中点变化的美元及档数；保持流量而深度加倍再算。说明系数单位，以及为什么假设下的算术不是实证因果效应。"
+  },
+  "bd333effb9ba": {
+   "scene": "Micro",
+   "en": "The answer to the pause. <bookmark mark='a'/> Ten cents over twice eight, times twelve: <bookmark mark='b'/> about 7.5 cents, <bookmark mark='c'/> three-quarters of a tick. Twelve bitcoin of net buying is one and a half queues' worth, and the stylised model moves the mid half a tick per queue.",
+   "zh": "暂停问题的答案。<bookmark mark='a'/>10美分除以8的两倍，再乘以12：<bookmark mark='b'/>约7.5美分，<bookmark mark='c'/>四分之三跳。12个比特币的净买入相当于一个半队列，而程式化模型让中间价每个队列移动半跳。"
+  },
+  "2f65fd984a8f": {
+   "scene": "Micro",
+   "en": "Chapter five. Back to the interview question: fair value, given the two best queues. In twenty eighteen Sasha Stoikov gave an answer with a definition, a theorem and an estimator. We fit it on two days of Bitcoin's book and test it on two others.",
+   "zh": "第5章。回到那道面试题：给定两个最优队列，公允价值是多少。2018年，Sasha Stoikov用一个定义、一个定理和一个估计量给出了答案。我们在比特币订单簿的两天上拟合它，在另外两天上检验它。"
+  },
+  "a62a5b8b9279": {
+   "scene": "Micro",
+   "en": "Three candidates. <bookmark mark='a'/> The mid ignores the queues. <bookmark mark='b'/> The weighted mid leans toward the side with the smaller queue, the side likely to be eaten first: with the offer nearly gone it sits almost on the offer. <bookmark mark='c'/> Stoikov's microprice is the expected mid, not at the next move, but after many future mid changes, given the imbalance and the spread now.",
+   "zh": "三个候选。<bookmark mark='a'/>中间价完全不看队列。<bookmark mark='b'/>加权中间价偏向队列较小的一侧，也就是可能先被吃掉的一侧：卖单几乎没有时，它几乎就落在卖价上。<bookmark mark='c'/>Stoikov的微观价格是中间价的期望值，不是下一次移动后的，而是给定当前不平衡和价差、在未来许多次中间价变化之后的期望值。"
+  },
+  "c4e20f830765": {
+   "scene": "Micro",
+   "en": "The weighted midpoint is not automatically a martingale. <bookmark mark='a'/> In this stipulated sequence it first leans toward a thin offer. <bookmark mark='b'/> After a price move and queue refill it can move back relative to the new midpoint. <bookmark mark='c'/> A drawn path alone does not prove a nonzero conditional expectation; the model's transition law is needed. The weighted formula generally fails the state-adjusted martingale equation. Nor does predictability of a constructed mid estimate establish an executable arbitrage once spreads, fees and risk are included.",
+   "zh": "加权中点不自动是鞅。<bookmark mark='a'/> 在规定路径里，它先偏向薄卖队列。<bookmark mark='b'/> 价格变动并补充后，它相对新中点可以回落。<bookmark mark='c'/> 只画一条路径不能证明非零条件期望，还需要模型转移律。加权公式一般不满足状态修正鞅方程。考虑价差、费用和风险后，人造中点估计可预测也不建立可成交套利。"
+  },
+  "2a44db2ec58b": {
+   "scene": "Micro",
+   "en": "A fitted finite-state estimator. <bookmark mark='a'/> Ten imbalance buckets and one- or two-tick spreads define twenty nominal states. <bookmark mark='b'/> Count transitions between adjacent retained snapshots, separating zero and nonzero mid changes. Concatenating days can put endpoints next to each other, so a grid lag need not equal elapsed time at a boundary. <bookmark mark='c'/> The first-step inverse gives a first-move reward and post-move operator. Empty count rows are normalized to zero, so stochasticity and support must be checked rather than assumed. <bookmark mark='d'/> Mirroring enforces antisymmetry. It does not prove irreducibility, mixing or Markov sufficiency of the real state. The theorem and the fitted estimator are separate claims.",
+   "zh": "拟合的有限状态估计。<bookmark mark='a'/> 十个不平衡分箱和一档、两档价差构成二十名义状态。<bookmark mark='b'/> 统计保留的相邻快照，区分中点零与非零变动。跨日拼接把端点紧邻，边界的网格滞后未必等于真实时间。<bookmark mark='c'/> 首步逆矩阵给首次变动奖励和变动后算子；空计数行归零，随机矩阵性质与支持集不能默认成立。<bookmark mark='d'/> 镜像强制反对称，不证明现实状态不可约、混合或马尔可夫充分。模型定理与拟合估计是不同论断。"
+  },
+  "6eb688979105": {
+   "scene": "Micro",
+   "en": "Adjustments fitted on the two training-day arrays, displaying the one-tick-spread states. <bookmark mark='a'/> Opposite-size weighting is bounded by half a tick. <bookmark mark='b'/> The many-move fitted adjustment reaches about 25 ticks in the extreme bucket. <bookmark mark='c'/> The one-second fitted mean adjustment there has magnitude 6 ticks. <bookmark mark='d'/> The one-minute table has magnitude 18 ticks there, with a different shape across middle buckets. These are in-sample conditional-mean summaries, not bounds on possible market moves. Day boundaries can enter the concatenated horizon targets.",
+   "zh": "在两个训练日拼接数组上拟合的调整，这里显示一档价差状态。<bookmark mark='a'/> 相反侧数量加权最多偏移半档。<bookmark mark='b'/> 多次变价调整在极端分箱约25档。<bookmark mark='c'/> 该处一秒平均调整绝对值6档。<bookmark mark='d'/> 一分钟表为18档，中间分箱形状不同。这些是样本内条件均值摘要，不是可能市场变动的界，跨日边界也可能进入拼接期限目标。"
+  },
+  "04c235bb0764": {
+   "scene": "Micro",
+   "en": "Held-out forecast errors on the two weekend days. <bookmark mark='a'/> Each column reports mean squared error as a percentage of the no-adjustment midpoint forecast, normalized to one hundred on the same eligible observations. The weighted midpoint offers a small improvement. The many-move estimator is up to 406 percent worse at one second, and remains worse at one minute. <bookmark mark='b'/> A separate conditional-mean table is fitted for each horizon. It reduces ten-second error by 3 to 5 percent on these two days, while its one-second result differs by day. No uncertainty interval or net execution test is supplied, and two days do not establish general superiority.",
+   "zh": "两个周末留出日的预测误差。<bookmark mark='a'/> 所有列在相同合格观察上，报告相对于不修正中点的均方误差百分比，中点归一为一百。加权中点略改善，多次变动估计一秒最多差406%，一分钟仍更差。<bookmark mark='b'/> 各期限分别拟合条件均值表，在这两日降低十秒误差3%到5%，一秒结果则每天不同。没有不确定区间或净执行检验，两个日子不建立普遍优越性。"
+  },
+  "8f3f58b45d65": {
+   "scene": "Micro",
+   "en": "A conditional-mean diagnostic, not a complete martingale certification. <bookmark mark='a'/> In the extreme displayed bucket the mid's next nominal second averages 3 ticks in the direction of imbalance. <bookmark mark='b'/> The fitted microprice changes in the opposite direction, consistent with overshooting. A martingale relative to the full information set must have zero conditional increments for every suitable event; selected bucket means with no robust uncertainty establish neither a universal rejection nor acceptance. The day concatenation can compress boundary time, and overlapping increments are dependent.",
+   "zh": "条件均值诊断，不是完整鞅认证。<bookmark mark='a'/> 极端分箱中，下一个名义秒的中点平均沿不平衡方向变动3档。<bookmark mark='b'/> 拟合微观价格反向变动，与过冲相容。相对完整信息集的鞅必须在所有适当事件上条件增量为零；没有稳健区间的选定分箱均值，既不普遍拒绝也不认证。跨日边界可压缩时间，重叠增量存在依赖。"
+  },
+  "c11fc2573094": {
+   "scene": "Micro",
+   "en": "A practical model boundary. <bookmark mark='a'/> Ten cents near twenty-seven thousand dollars is about four hundredths of a basis point, and a one-tick spread alone does not imply a large-tick regime. <bookmark mark='b'/> Conditional on a nonzero adjacent change in the concatenated training arrays, median absolute midpoint movement is 8 ticks. Most unchanged observations are excluded from that median. <bookmark mark='c'/> Depth, past flow and aggregation may make imbalance and spread insufficient. The later conditional-history diagnostic supports that concern without an uncertainty-calibrated universal Markov test or an identified causal explanation of overshoot.",
+   "zh": "实际模型边界。<bookmark mark='a'/> 二万七千美元附近十美分约零点零四基点，仅有一档价差不说明是大档位制度。<bookmark mark='b'/> 条件于拼接训练数组相邻价格确有变化，中点绝对变动中位数8档，大量不变观察被排除。<bookmark mark='c'/> 深度、历史流量和聚合可能使不平衡与价差不足。稍后的条件历史诊断支持这种担忧，但不是校准不确定性的普遍马尔可夫检验，也不识别过冲的因果解释。"
+  },
+  "663e2b8cd2ca": {
+   "scene": "Micro",
+   "en": "Return to a conditional model example. <bookmark mark='a'/> In the hundred-dollar interview book, bid size is five-sixths of displayed size. <bookmark mark='b'/> Mapping that bucket to our fitted large-tick simulator gives an adjustment of 0.29 of a tick. The simulator was calibrated to Bitcoin queue rates; transferring its dimensionless adjustment to a one-cent stock is an illustrative rescaling, not a stock valuation. <bookmark mark='c'/> It gives roughly a hundred dollars and eight-tenths of a cent. The weighted midpoint and first-depletion Brownian expectation are different constructions. Real quotes require venue, horizon and cost validation.",
+   "zh": "回到条件模型示例。<bookmark mark='a'/> 一百美元盘口中买量占六分之五。<bookmark mark='b'/> 映射到拟合大档位模拟器分箱，调整为0.29档。模拟器校准的是比特币队列速率，把其无量纲调整搬到一美分档股票只是重缩放示例，不是股票估值。<bookmark mark='c'/> 结果约一百点零零八美元。加权中点与布朗首次耗尽期望是不同构造，真实报价还需场所、期限和成本验证。"
+  },
+  "ca5a5443e97f": {
+   "scene": "Micro",
+   "en": "Possible research uses. <bookmark mark='a'/> A validated state signal can inform a maker's quote center, but reduced adverse selection must be tested rather than assumed. <bookmark mark='b'/> An executor can compare a horizon-specific forecast with spread, fees, fill risk and latency. <bookmark mark='c'/> A quote midpoint already removes mechanical transaction-price bid-ask alternation. Replacing it with a microprice need not reduce forecast error or slippage noise. This sample's overshoot is precisely why the benchmark matters.",
+   "zh": "可能的研究用途。<bookmark mark='a'/> 经验证的状态信号可指导做市报价中心，但逆向选择下降必须检验，不能假设。<bookmark mark='b'/> 执行者可把按期限预测与价差、费用、成交风险及延迟比较。<bookmark mark='c'/> 报价中点已经去掉机械的成交价买卖交替。换微观价格未必减少预测误差或滑点噪声，本样本过冲正说明基准重要。"
+  },
+  "d3be8680e27e": {
+   "scene": "Micro",
+   "en": "On the same stipulated held-out observations, midpoint mean squared error is point six zero squared dollars, a many-move estimate scores three, and a horizon-specific table scores point five seven. Normalize midpoint error to one hundred. Calculate the percentage increase for the many-move estimator and percentage reduction for the table. Does either establish net trading profit?",
+   "zh": "暂停计算。在同一组规定留出观察上，中点均方误差零点六零美元平方，多次变动估计为三，按期限表为零点五七。将中点归一为一百，求前者误差增加百分比和后者减少百分比。任一个结果是否建立交易净利润？"
+  },
+  "11fd6ff72f7b": {
+   "scene": "Deep",
+   "en": "Chapter six. The order book is a large, structured, fast-arriving stream of numbers: exactly what deep learning is supposed to be good at. Since twenty seventeen, dozens of papers have fed it to networks. What did they find, and what do we find?",
+   "zh": "第6章。订单簿是一条庞大、有结构、快速到达的数字流：正是深度学习据说擅长的东西。自2017年以来，几十篇论文把它喂给神经网络。他们发现了什么？我们又发现了什么？"
+  },
+  "34d18ef00220": {
+   "scene": "Deep",
+   "en": "Three results the field builds on. <bookmark mark='a'/> DeepLOB, by Zihao Zhang, Stefan Zohren and Stephen Roberts: convolutions over ten levels of prices and sizes, then a recurrent network, predicting whether a smoothed mid will rise, fall or stay. <bookmark mark='b'/> Justin Sirignano and Rama Cont trained one network on hundreds of American stocks together. It beat models fitted stock by stock, even on stocks it never saw: the mechanics of price formation look universal. <bookmark mark='c'/> And the input matters: the same networks do better when fed order-flow imbalances than raw book levels.",
+   "zh": "这个领域赖以建立的三个结果。<bookmark mark='a'/>Zihao Zhang、Stefan Zohren和Stephen Roberts的DeepLOB：在十档价格和数量上做卷积，再接一个循环网络，预测平滑后的中间价是涨、跌还是不变。<bookmark mark='b'/>Justin Sirignano和Rama Cont用数百只美国股票一起训练一个网络。它胜过逐只股票拟合的模型，即使在它从没见过的股票上也是如此：价格形成的机制看起来是普适的。<bookmark mark='c'/>输入也很重要：同样的网络，喂订单流不平衡比喂原始档位数据效果更好。"
+  },
+  "d21d3b19ab83": {
+   "scene": "Deep",
+   "en": "What DeepLOB sees, and how. <bookmark mark='a'/> The last hundred book events, each with ten levels of price and size on both sides: four thousand numbers. <bookmark mark='b'/> The first convolutions pair each level's price with its size, then each bid with its ask, then summarise the levels: the structure of a book built into the filters. <bookmark mark='c'/> Then parallel filters of different widths for different time scales, and a recurrent layer that carries memory across the window. <bookmark mark='d'/> The output is down, flat or up.",
+   "zh": "DeepLOB看到了什么，又是怎么看的。<bookmark mark='a'/>最近100个订单簿事件，每个事件有买卖双方十档的价格和数量：共四千个数字。<bookmark mark='b'/>第一层卷积把每一档的价格和数量配对，再把每个买档和卖档配对，然后汇总各档：订单簿的结构被写进了滤波器。<bookmark mark='c'/>接着是不同宽度的并行滤波器，对应不同的时间尺度，再接一个在窗口内传递记忆的循环层。<bookmark mark='d'/>输出是跌、平或涨。"
+  },
+  "0c5c6e6bc57f": {
+   "scene": "Deep",
+   "en": "What Sirignano and Cont found, in more detail, because it is the strongest positive result. <bookmark mark='a'/> Universality: one model for all stocks beat a model per stock, even on stocks it had never seen. <bookmark mark='b'/> Stationarity: trained on earlier years, it kept its accuracy on later months without refitting. <bookmark mark='c'/> And path-dependence: longer histories of the book improved the forecast. Price formation has memory, which a model of the current state alone cannot capture. The research chapter meets the same fact from the other side.",
+   "zh": "更详细地看Sirignano和Cont的发现，因为这是最有力的正面结果。<bookmark mark='a'/>普适性：一个适用于所有股票的模型胜过逐只股票的模型，即使在它从未见过的股票上也是如此。<bookmark mark='b'/>平稳性：用较早年份训练，不重新拟合，在之后几个月里仍保持准确率。<bookmark mark='c'/>路径依赖：更长的订单簿历史改进了预测。价格形成有记忆，只看当前状态的模型抓不住这一点。研究者章节会从另一侧碰到同一个事实。"
+  },
+  "735b4b6d4bd9": {
+   "scene": "Deep",
+   "en": "Then the benchmark. <bookmark mark='a'/> Most papers report on one public data set, ten days of five Finnish stocks from twenty ten. <bookmark mark='b'/> Matteo Prata and colleagues reran fifteen published models in one open framework. <bookmark mark='c'/> On data the models had not been tuned on, every one of them did markedly worse; most had overfitted the benchmark. Part twenty-six's lesson, at the speed of milliseconds.",
+   "zh": "然后是基准。<bookmark mark='a'/>大多数论文报告的是同一个公开数据集：2010年五只芬兰股票的十天数据。<bookmark mark='b'/>Matteo Prata和同事在一个开放框架里重跑了十五个已发表的模型。<bookmark mark='c'/>在模型没有针对其调参的数据上，每一个都明显变差；大多数都对基准过拟合了。这是第26部分的教训，只不过发生在毫秒尺度上。"
+  },
+  "893bda328b62": {
+   "scene": "Deep",
+   "en": "Specify the exact label before comparing models. <bookmark mark='a'/> The displayed equation is a future-average-versus-current-mid variant. Common FI-twenty-ten and DeepLOB definitions instead compare backward and forward average mids. Their normalization and window conventions must be stated. <bookmark mark='b'/> The threshold determines the flat class and the class base rates, changing a constant-class benchmark. <bookmark mark='c'/> Smoothing and overlapping windows alter noise, dependence and the prediction target; they are not universally easier in every information set. Label accuracy does not become an executable return. Our restored baseline uses a plain future mid change in ticks.",
+   "zh": "比较前明确标签。<bookmark mark='a'/> 图中是未来平均价与当前中点比较的一种定义；常见基准与深度订单簿定义也可比较向后和向前平均中点，归一化及窗口约定须说明。<bookmark mark='b'/> 门槛决定平盘类别及类别比例，改变常数猜测基准。<bookmark mark='c'/> 平滑与窗口重叠改变噪声、依赖和目标，并非每个信息集下都普遍更容易。标签准确率不是可成交收益，恢复的基准使用普通未来中点变动，以档计。"
+  },
+  "656509a5eedf": {
+   "scene": "Deep",
+   "en": "The comparison we actually run. <bookmark mark='a'/> Every nominal second, thirty inputs: ten lagged OFIs divided by current depth, ten mid changes, and ten imbalances. No spread feature enters this implementation. <bookmark mark='b'/> The target is a plain one- or ten-second mid change in ticks. The first two archive days train; the weekend days test. <bookmark mark='c'/> Linear fits use all training observations. The network fits the first eighty percent, validates on the last twenty, and averages three fixed seeds. Horizon labels can overlap the validation boundary; there is no purged split. Training scores therefore use unequal fitting samples and the setup is a small baseline, not a replication of DeepLOB.",
+   "zh": "实际运行的比较。<bookmark mark='a'/> 每个名义秒取三十输入：十个滞后订单流不平衡除以当前深度、十个中点变化、十个队列不平衡；没有价差特征。<bookmark mark='b'/> 目标是一秒或十秒中点变化，以档计；最初两个档案日训练，周末检验。<bookmark mark='c'/> 线性模型使用全部训练观察；网络拟合前百分之八十、在最后百分之二十验证，平均三个固定种子。期限标签可跨越验证边界，没有净化。训练分数使用的拟合样本不同，这是小基准，不是深度订单簿网络论文复现。"
+  },
+  "6463d108b9c2": {
+   "scene": "Deep",
+   "en": "Direction scores on nonzero future moves. <bookmark mark='a'/> At one second, imbalance alone scores 87 percent, the thirty-input linear fit 87, and the network 84. <bookmark mark='b'/> At ten seconds, the linear fit scores 73 and the network 72. These particular network specifications do not win this direction comparison. The best displayed ten-second R squared is 3.7 percent. Accuracy is conditional on excluding flat targets, whereas R squared uses all targets. Neither statistic is a net-profit measure, and no robust comparison interval is estimated.",
+   "zh": "条件于未来确有变化的方向分数。<bookmark mark='a'/> 一秒时，仅不平衡得87%，三十输入线性模型87%，网络84%。<bookmark mark='b'/> 十秒时，线性模型73%，网络72%。这些特定网络设定没有赢得方向比较。展示的最佳十秒决定系数3.7%。准确率排除平盘，决定系数使用所有目标；两者都不是净利润，也没有稳健比较区间。"
+  },
+  "b2a008f81a49": {
+   "scene": "Deep",
+   "en": "Interpret each statistic by its conditioning. <bookmark mark='a'/> About 88 percent of future one-second targets are zero. The large-realized-move bin has 86 percent sign accuracy, but future move size is unavailable at decision time: this is retrospective stratification, not a tradable filter. <bookmark mark='b'/> Selecting forecast magnitude above one tick gives signed mid-to-mid gain of 1.5 ticks per selected observation. It omits executable entry and exit prices, inventory, overlap, latency and fees; one basis point is about 27 ticks. Choosing among thresholds using these test scores would reuse the test sample. <bookmark mark='c'/> Test accuracy 87 percent exceeds training accuracy 81; a quieter weekend is one possible distribution change, not an identified explanation for the difference.",
+   "zh": "按条件解释每项统计。<bookmark mark='a'/> 约88%的未来一秒目标为零。事后大变动分组方向准确率86%，但决策时不知道未来幅度，这是回溯分组，不是可交易过滤。<bookmark mark='b'/> 选择预测绝对值大于一档，得到每个选中观察1.5档带符号中点毛变化；省略可成交进出价、库存、重叠、延迟和费用。一基点约27档。根据检验分数选择门槛会重复使用检验样本。<bookmark mark='c'/> 检验准确率87%高于训练81%；周末更安静是一种可能分布变化，不是已识别的差异原因。"
+  },
+  "41224b7bfb89": {
+   "scene": "Deep",
+   "en": "Three bounded conclusions. <bookmark mark='a'/> In this short sample, simple book features and a linear baseline perform well on the chosen direction metric. That does not prove additional network capacity only fits noise. <bookmark mark='b'/> Large multi-stock studies offer evidence for other architectures and data scales; their results do not guarantee a deep-model win in every market. <bookmark mark='c'/> Report the label definition, nonzero conditioning, base rates, fitting split, all-target error and executable costs. A smoothed benchmark label, an accurate sign and a profitable strategy are different claims.",
+   "zh": "三个有边界的结论。<bookmark mark='a'/> 这个短样本中，简单盘口特征和线性基准在所选方向指标上表现好，不证明额外网络容量只拟合噪声。<bookmark mark='b'/> 大规模多股票研究支持其他架构和尺度，不保证每个市场深度模型都赢。<bookmark mark='c'/> 应报告标签、非零条件、基准比例、拟合划分、全目标误差及可成交成本。平滑基准标签、准确方向与盈利策略是不同论断。"
+  },
+  "44e3cee36ede": {
+   "scene": "Deep",
+   "en": "A model gets eighty of one hundred nonzero future signs correct, with flat targets excluded. Its selected gross mid-to-mid gain is one and a half ticks. Assume a one-tick spread at entry and exit and a three-tick fee per side. Compute conditional accuracy and net gain for immediate market entry and exit. Explain why flat-target conditioning and a fee-free mid markout answer different questions.",
+   "zh": "暂停计算。一百个非零未来方向中八十个猜对，平盘排除；选中观察的中点毛变化一档半。假设入场退出价差均一档，每侧费用三档，立即主动进出。求条件准确率及净变化，解释排除平盘和无费用中点标记为何回答不同问题。"
+  },
+  "140a0388619a": {
+   "scene": "Gen",
+   "en": "Chapter seven. A forecast estimates a future statistic; a simulator must generate whole paths and respond to modeled actions. The previous cost calculation also showed that a direction score cannot certify profitable execution. We now examine a particular queue simulator and the behaviors it can and cannot reproduce under its assumptions.",
+   "zh": "第七章。预测估计一个未来统计量，模拟器则须生成完整路径并响应建模行动。前一个成本计算也说明方向分数不认证盈利执行。现在检验特定队列模拟器，以及它在自身假设下能和不能复制的行为。"
+  },
+  "1f78768a9013": {
+   "scene": "Gen",
+   "en": "Why simulate, and what replay can do. <bookmark mark='a'/> Historical replay can approximate queueing and adverse selection for a negligible order, as our later exercise does. Its central limitation is that the historical market cannot react to the added order. <bookmark mark='b'/> A responsive simulator can study counterfactual actions and stresses under its own assumptions. <bookmark mark='c'/> A policy tuned to that simulator can exploit its errors. Validation must cover both ordinary stylised facts and the response to interventions; neither is guaranteed by a visually plausible price path.",
+   "zh": "为何模拟，以及回放能做什么。<bookmark mark='a'/> 历史回放可以近似微小订单的队列和逆向选择，稍后练习正如此；核心限制是历史市场不能响应新增订单。<bookmark mark='b'/> 有响应的模拟器能在自身假设下研究反事实行动和压力。<bookmark mark='c'/> 在模拟器调出的策略可能利用模型错误。验证要同时覆盖通常统计事实和干预响应，价格路径看似合理不能保证任一项。"
+  },
+  "5e60399755c7": {
+   "scene": "Gen",
+   "en": "Four families. <bookmark mark='a'/> Statistical models, the queue-reactive model and Hawkes-driven books: rates read from data, interpretable and fast. <bookmark mark='b'/> Agent-based markets such as ABIDES, where simulated traders with strategies meet in a matching engine. <bookmark mark='c'/> Deep generative books: a conditional adversarial network of order flow, and Peer Nagy and colleagues' generator, which writes the message stream token by token, the way a language model writes text. <bookmark mark='d'/> And how to judge any of them: Svitlana Vyetrenko and colleagues proposed scoring a simulator on a list of the real book's stylised facts. We do that next.",
+   "zh": "四大类。<bookmark mark='a'/>统计模型，即队列反应模型和霍克斯驱动的订单簿：速率从数据中读出，可解释，速度快。<bookmark mark='b'/>基于主体的市场，例如ABIDES，其中带有策略的模拟交易者在撮合引擎中相遇。<bookmark mark='c'/>深度生成订单簿：订单流的条件对抗网络，以及Peer Nagy和同事的生成器，它像语言模型写文字那样逐个词元地写出消息流。<bookmark mark='d'/>以及如何评判它们：Svitlana Vyetrenko和同事提出，用真实订单簿的一张程式化事实清单为模拟器打分。我们接下来就这样做。"
+  },
+  "e0bb5ad68389": {
+   "scene": "Gen",
+   "en": "A specified zero-intelligence baseline. <bookmark mark='a'/> Orders arrive and cancel under exogenous Poisson assumptions, without strategic decision rules. Define mu as market-order volume per time, alpha as limit-order volume per price per time, delta as cancellation rate per resting order and sigma as individual order size. <bookmark mark='b'/> Mu over alpha has price units; delta times sigma over mu is dimensionless. The continuum model therefore permits the displayed spread scale times an unspecified dimensionless function, with convention-dependent constants absorbed into it. Dimensional analysis does not determine that function or cover arbitrary finite-tick and placement rules. <bookmark mark='c'/> Farmer, Patelli and Zovko report supporting cross-stock spread evidence in their setting. Residual discrepancies do not separately identify strategy or information.",
+   "zh": "一个规定的零智能基准。<bookmark mark='a'/> 订单按外生泊松假设到达和撤销，没有策略决策规则。缪是市价订单量每时间，阿尔法是限价订单量每价格每时间，德尔塔是每张挂单撤销率，西格玛是单笔规模。<bookmark mark='b'/> 缪除以阿尔法有价格单位，德尔塔乘西格玛除以缪无量纲。因此连续价格模型允许图示价格尺度乘一个尚未确定的无量纲函数，约定常数吸收在函数中。量纲分析不决定函数，也不覆盖任意有限价格档及下单规则。<bookmark mark='c'/> 法默、帕泰利和佐夫科在其环境报告跨股票价差支持证据，残差不能单独识别策略或信息。"
+  },
+  "2976fdd24be8": {
+   "scene": "Gen",
+   "en": "Our simplified queue model uses a chosen size unit of 1.9 bitcoin: one quarter of the median displayed size, not an estimate of typical individual order size. <bookmark mark='a'/> At each discretized queue size, count net upward and downward size changes per grid step. The plotted rates are their nominal per-second conversion. <bookmark mark='b'/> This discards message type, multi-unit jumps and within-step activity. The empirical refill distribution puts 49 percent at one unit, with median 2. Matching these summaries does not reproduce the full original message process.",
+   "zh": "简化队列模型选取数量单位1.9个比特币，即显示队列中位数的四分之一，不是典型单笔订单数量估计。<bookmark mark='a'/> 按离散队列大小统计每网格步净增减概率，图中速率换算为名义每秒。<bookmark mark='b'/> 这舍弃消息类别、多单位跳跃和步内活动。实证补充数量中，49%为一个单位，中位2。匹配这些摘要不复制完整原始消息过程。"
+  },
+  "27d1ae88222d": {
+   "scene": "Gen",
+   "en": "An hour of the simulated mid, from the fitted rates alone. <bookmark mark='a'/> It wanders like a price, one half-tick at a time, ending 0.75 dollars from where it began. It looks plausible. The question is whether it is plausible in the ways that matter.",
+   "zh": "模拟中间价的一小时，只来自拟合出的速率。<bookmark mark='a'/>它像价格一样游走，每次半跳，最后离起点0.75美元。看起来挺像。问题是它在要紧的方面像不像。"
+  },
+  "f208c734ada9": {
+   "scene": "Gen",
+   "en": "A scorecard of particular summary statistics. <bookmark mark='a'/> The simulated median queue is about 5 chosen units. <bookmark mark='b'/> The model has 7.6 mid moves per minute against 43 in the training day. Inter-move waiting-time coefficient of variation is 1.5 against 2.8; a Poisson event clock has coefficient one, but this ratio is not a general burstiness multiplier. Move-sign lag-one correlation has magnitude 0.00, versus signed data value 0.59. Ten-second kurtosis is 5.6 versus 35. These discrepancies reject several practical uses of this particular baseline, without proving that every Markov model has thin tails.",
+   "zh": "特定摘要的评分表。<bookmark mark='a'/> 模拟队列中位约5个选定单位。<bookmark mark='b'/> 模型每分钟7.6次中点变化，训练日43次。等待时间变异系数1.5，数据2.8；泊松事件时钟系数为一，但这不是一般性的聚集倍数。变动方向一阶相关绝对值0.00，数据带符号值0.59。十秒峰度5.6，数据35。这些差异限制这个特定基准的用途，不证明所有马尔可夫模型都薄尾。"
+  },
+  "9ef78a9b7885": {
+   "scene": "Gen",
+   "en": "Diagnose this implementation, not all Markov models. <bookmark mark='a'/> Current full queues determine its transition probabilities. A Markov state can still produce serial dependence; including exponential-Hawkes intensity would also give finite-dimensional self-excitation. Our state omits those intensity and history variables. <bookmark mark='b'/> One-unit steps and a chosen refill rule restrict depletion and price dynamics relative to multi-unit real events. <bookmark mark='c'/> History variables, jump sizes and spread states are candidate model extensions, whose benefits require new validation. None is fitted here, and an enlarged state is not automatically sufficient.",
+   "zh": "诊断这个实现，而非所有马尔可夫模型。<bookmark mark='a'/> 当前完整队列决定转移概率；马尔可夫状态仍能产生序列依赖，加入指数霍克斯强度还可有限维地表示自激。这里省略了强度和历史变量。<bookmark mark='b'/> 单位步长与规定补充规则限制耗尽和价格动力学，现实可能多单位变化。<bookmark mark='c'/> 历史、跳跃尺度与价差状态是候选扩展，效果仍需验证；这里未拟合这些扩展，扩大状态也不自动充分。"
+  },
+  "19bc27fef982": {
+   "scene": "Gen",
+   "en": "Three rules for anyone who builds a market simulator. <bookmark mark='a'/> Match the facts, not only the likelihood: a model can fit each step and still miss the shape of a day. <bookmark mark='b'/> Check that it reacts: when an algorithm trades in it, the simulated price must respond as a real one would, which is Part thirty-seven's subject. <bookmark mark='c'/> And test out of sample, on another day and another regime.",
+   "zh": "给任何构建市场模拟器的人的三条规则。<bookmark mark='a'/>匹配事实，而不只是似然：一个模型可以拟合好每一步，却仍然错过一整天的形状。<bookmark mark='b'/>检查它会不会反应：算法在其中交易时，模拟价格必须像真实价格那样响应，这是第37部分的主题。<bookmark mark='c'/>还要做样本外检验，换一天、换一个市场状态。"
+  },
+  "ee62087bad96": {
+   "scene": "Gen",
+   "en": "Consider a full-state Markov chain with queue sizes one and one, or ten and ten. Both have imbalance one half. The next step removes one bid unit with probability point two and otherwise does nothing. Bid depletion moves the mid down half a tick. Compare the next-step price-move probability from the two states. Explain why projection onto imbalance alone need not remain Markov.",
+   "zh": "暂停推导。完整状态队列为一和一，或十和十，不平衡都等于二分之一。下一步以零点二概率移除一个买方单位，否则不变；买队列耗尽则中点降半档。比较两状态下下一步价格变动概率，解释为何只投影到不平衡未必仍是马尔可夫的。"
+  },
+  "2f2787536de0": {
+   "scene": "Trading",
+   "en": "Chapter eight. A back-of-queue fill can be adverse news, but its sign is conditional on order and market state. In this approximate replay, the average signed one-second markout at the back is -14.7 ticks. That is a sample statistic under a specified fill model, not a universal property of passive trading.",
+   "zh": "第八章。队尾成交可能是逆向消息，但符号依赖订单和市场状态。本近似回放中，队尾成交的一秒平均有符号标记为-14.7档。这是规定成交模型下的样本统计，不是被动交易的普遍性质。"
+  },
+  "65c2bbfcca9f": {
+   "scene": "Trading",
+   "en": "Price-time priority. <bookmark mark='a'/> At one price, orders fill in the order they arrived: the queue is a line, and a place in it is an asset. <bookmark mark='b'/> Ciamac Moallemi and Kai Yuan valued it: the front fills sooner, on smaller and less informed trades, so its value can be a large fraction of the spread. <bookmark mark='c'/> And being filled is news. It is Part thirty-five's Glosten and Milgrom from the other chair: the trader who hits your order may know something.",
+   "zh": "价格-时间优先。<bookmark mark='a'/>在同一价格上，订单按到达顺序成交：队列是一条排队的线，线上的位置是一种资产。<bookmark mark='b'/>Ciamac Moallemi和Kai Yuan为它估值：排在前面的成交更早，成交对象是更小、信息更少的交易，所以它的价值可以占价差的很大一部分。<bookmark mark='c'/>而成交本身就是消息。这是从另一把椅子上看第35部分的Glosten和Milgrom：打到你订单上的交易者，可能知道些什么。"
+  },
+  "2f53095895b7": {
+   "scene": "Trading",
+   "en": "The replay assumptions. <bookmark mark='a'/> Every thirty seconds at a one-tick spread, a negligible order joins the best bid or ask, at the back or hypothetically at the front; it expires after one minute if unfilled. Replay orders overlap and never affect the tape. <bookmark mark='b'/> At-price aggressive volume must strictly exceed the queue ahead to fill; through-price trades also fill. Net cancellations reduce ahead size pro rata, while displayed-size clipping and vanished-level conventions approximate priority. <bookmark mark='c'/> Signed markout is future mid less execution price for buys, reversed for sells, in ticks. It already includes the entry half-spread. Fees, rebates, hidden liquidity, latency and executable liquidation are excluded, and the execution-time mid need not be exactly half a tick away.",
+   "zh": "回放假设。<bookmark mark='a'/> 初始价差一档时，每三十秒把微小订单加到最优买卖价的队尾，或假想队首；一分钟未成交即到期。回放订单重叠，绝不影响历史成交带。<bookmark mark='b'/> 同价主动量必须严格大于前方数量才成交，穿价交易也成交。净撤单按比例减前方量，显示数量截断和价位消失规则近似优先级。<bookmark mark='c'/> 买方标记收益是未来中点减成交价，卖方反向，以档计；已包含入场半价差。费用、返佣、隐藏流动性、延迟和可成交平仓省略，成交时中点也未必恰好相距半档。"
+  },
+  "e9ad63568280": {
+   "scene": "Trading",
+   "en": "Approximate fill outcomes. <bookmark mark='a'/> The back fill rate is 82 percent within a minute, with median filled wait 3.2 seconds. Its signed one-second markout is -14.7 ticks. The reported naive standard error is 0.4; overlapping replay orders and market dependence prevent treating it as a robust interval. <bookmark mark='b'/> Front markout is -1.6 ticks, on a different set of fills. Different conditional fill populations and assumed priority both contribute. This comparison does not isolate a causal or executable value of queue position.",
+   "zh": "近似成交结果。<bookmark mark='a'/> 队尾一分钟成交率82%，已成交等待中位3.2秒，一秒有符号标记-14.7档。报告的普通标准误0.4；订单重叠与市场依赖使它不能被当作稳健区间。<bookmark mark='b'/> 队首标记-1.6档，条件成交集合不同。样本选择与假设优先级都会贡献差异，不单独识别队列位置的因果或可成交价值。"
+  },
+  "9e664274ced1": {
+   "scene": "Trading",
+   "en": "Stratify the model's outcomes by displayed queue size. <bookmark mark='a'/> Back-of-queue signed mean markouts range from -13 to -28 ticks across the displayed groups. Queue depletion and price continuation can create this selection; the replay does not identify informed orders. <bookmark mark='b'/> The front means range from -11 to 6 ticks, with different conditional filled sets. A positive group mean is not net profit or proof that the queue behind causally protected the order. Group boundaries use this sample's quantiles and can share exact endpoint observations.",
+   "zh": "按显示队列规模分组。<bookmark mark='a'/> 队尾各组带符号均值从-13到-28档；耗尽及价格延续可能产生选择，但回放不识别知情订单。<bookmark mark='b'/> 队首从-11到6档，条件成交集合不同。正均值不是净盈利，也不证明身后队列因果地保护了订单。分组界限用本样本分位数，精确端点观察可能属于相邻两组。"
+  },
+  "da21ce9658f9": {
+   "scene": "Trading",
+   "en": "A partial per-submission accounting convention. <bookmark mark='a'/> Give unfilled orders zero value and multiply back fill probability by the conditional signed one-second markout: -12.1 ticks per submission. <bookmark mark='b'/> The same front calculation gives -1.5. <bookmark mark='c'/> Their difference is 10.6 ticks in this replay. This compares an explicit gross mark-to-mid functional; it is not a causal queue-priority price or net strategy profit. It omits unfilled opportunity costs, inventory, fees, rebates, cancellation decisions and liquidation. The entry half-spread is already inside each markout and must not be added again.",
+   "zh": "一个局部的每提交核算。<bookmark mark='a'/> 未成交赋零，队尾成交概率乘条件一秒有符号标记，为每笔提交-12.1档。<bookmark mark='b'/> 队首同样计算为-1.5档。<bookmark mark='c'/> 本回放差值10.6档，比较的是明确规定的中点毛标记函数，不是因果队列优先价格或策略净利润。未成交机会、库存、费用、返佣、撤单和平仓省略。入场半价差已在标记内，不能再加。"
+  },
+  "08071bc2dea6": {
+   "scene": "Trading",
+   "en": "Read the two conditional samples carefully. <bookmark mark='a'/> Some fills are followed by adverse movement, but a fill need not imply that price traded through the order or that the counterparty was informed. <bookmark mark='b'/> In this replay, missed orders have a mean signed away-move of 98 ticks over the waiting window. Filled and missed orders are selected differently, not matched counterfactual outcomes. <bookmark mark='c'/> Copeland and Galai model a resting limit quote as an option offered to the market, with stale-price risk under their assumptions. Real cancellations, changing spreads and inventory also matter; this analogy does not make every limit order an unpriced free option.",
+   "zh": "谨慎读取两个条件样本。<bookmark mark='a'/> 某些成交后价格逆向，但成交不意味着价格一定穿过订单，也不意味着对手知情。<bookmark mark='b'/> 本回放未成交订单在等待窗的平均有符号远离变动98档，成交与未成交选择不同，不是匹配的反事实结果。<bookmark mark='c'/> 科普兰和加莱在其假设下把限价报价建模成提供给市场的期权，具有陈旧价格风险。现实撤单、变动价差与库存也重要，这个类比不使每张限价单都成为无定价免费期权。"
+  },
+  "38ad1445c6c2": {
+   "scene": "Trading",
+   "en": "The race behind the markouts. <bookmark mark='a'/> When the value moves, every resting quote on the wrong side is suddenly mispriced. <bookmark mark='b'/> Its owner tries to cancel it, and the time that takes is how long the free option stays open. <bookmark mark='c'/> Someone else tries to take it first, in the same microseconds. In a continuous book the race is won by speed, and, as Part thirty-five showed, the expected loss is built into every spread.",
+   "zh": "成交后损益背后的赛跑。<bookmark mark='a'/>价值一动，站错一边的每一笔挂单都突然被错误定价。<bookmark mark='b'/>挂单者试图撤单，撤单所需的时间，就是这份免费期权保持敞开的时间。<bookmark mark='c'/>另一个人在同样的几微秒内试图抢先吃掉它。在连续订单簿里，这场赛跑由速度决定胜负，而正如第35部分所示，预期损失被算进了每一个价差。"
+  },
+  "6442eb8b6297": {
+   "scene": "Trading",
+   "en": "Possible maker controls. <bookmark mark='a'/> A validated signal can guide cancellation, but an overshooting or delayed estimate can remove favorable fills as well as adverse ones. The replay order here does not dynamically cancel. <bookmark mark='b'/> Queue placement, entry time and price selection affect fill probability and selection. <bookmark mark='c'/> A full realized-profit account needs trading cash flows, inventory marks, fees or rebates and eventual liquidation, plus latency and control costs where relevant. A single post-fill markout is one component of that account, not the account itself.",
+   "zh": "做市控制的可能途径。<bookmark mark='a'/> 经验证信号可指导撤单，但过冲或迟到估计也会撤掉有利成交；本回放没有动态撤单。<bookmark mark='b'/> 位置、进入时间与定价都会改变成交概率及选择。<bookmark mark='c'/> 完整已实现利润需交易现金流、库存估值、费用或返佣、最终平仓，并在相关时计延迟及控制成本。单个成交后标记只是其中一个部分。"
+  },
+  "71529138b21c": {
+   "scene": "Trading",
+   "en": "A stipulated replay fills eighty percent of submissions. Conditional signed markout is minus two ticks and already includes the entry half-spread. A rebate adds one tenth of a tick per fill. Give unfilled orders zero. Calculate the contribution per submission without adding half-spread again, and identify the inventory, liquidation and opportunity terms still absent.",
+   "zh": "暂停计算。规定回放中，百分之八十提交成交，条件有符号标记为负两档，已包含入场半价差。每次成交返佣零点一档，未成交赋零。不要再加半价差，求每提交贡献，并指出仍未计入的库存、平仓及机会项。"
+  },
+  "8530b5e63387": {
+   "scene": "House",
+   "en": "A separate state-signal illustration before the proposed research rule. <bookmark mark='a'/> A thin bid and full offer imply low bid-size imbalance. <bookmark mark='b'/> Many fitted queue models then lean below the midpoint, although the amount depends on calibration and horizon. <bookmark mark='c'/> That state can motivate quote review. The snapshots do not show that a usable warning arrived before a fill, that cancellation would succeed, or that centering quotes on this estimator improves net performance. An observed adverse fill does not prove an informed counterparty.",
+   "zh": "在拟议研究规则前，另看一个状态信号示例。<bookmark mark='a'/> 薄买队列、厚卖队列意味着低买方不平衡。<bookmark mark='b'/> 许多拟合队列模型会向中点下方偏移，但大小依赖校准和期限。<bookmark mark='c'/> 这可触发报价复核；快照没有证明可用警示先于成交、撤单能成功或按此估计报价会改善净表现。逆向成交也不证明对手知情。"
+  },
+  "cfd3b598a80e": {
+   "scene": "House",
+   "en": "Chapter nine. The House's thirty-sixth rule is about the book. Every signal from it is small, fast and fragile, and a simulator of it can be wrong in ways that look like profit. So the rule says what each must show.",
+   "zh": "第9章。本系列公司的第36条规则关于订单簿。来自订单簿的每一个信号都小、快而且脆弱，而它的模拟器可能以看起来像利润的方式出错。所以这条规则规定了每样东西必须证明什么。"
+  },
+  "c32bd6c70822": {
+   "scene": "House",
+   "en": "The first sheet. <bookmark mark='a'/> A book that sits at one tick nearly all the time and updates a hundred times a second. Queues that predict the next tick. Trade arrivals that excite each other, and signs with long memory. Order-flow imbalance that explains much of the price change, with an impact close to one over depth. A microprice that overshoots on a small-tick book, and a plain table that does its job. A network that does not beat a linear rule. A simulator with tails far too thin. And passive fills that lose, badly at the back of the queue.",
+   "zh": "第一张汇总表。<bookmark mark='a'/>一个几乎一直停在一跳价差、每秒更新上百次的订单簿。能预测下一跳的队列。互相激发的成交到达，以及有长记忆的方向。解释了大部分价格变化的订单流不平衡，冲击接近深度的倒数。在小跳价订单簿上过头的微观价格，以及一张称职的朴素表格。没能胜过线性规则的网络。尾部太薄的模拟器。还有亏钱的挂单成交，排在队列末尾时亏得很厉害。"
+  },
+  "c12e20485a02": {
+   "scene": "House",
+   "en": "Limits that travel with the figures. <bookmark mark='a'/> One venue, one perpetual and four dates, including a partial initial archive and a weekend test. Carried quotes count as grid observations, and day concatenations can compress gaps. <bookmark mark='b'/> Best-quote snapshots do not identify all messages, deeper liquidity, hidden size or exact queue priority. Coarse fitted states need not be Markov. <bookmark mark='c'/> Forecast splits, overlapping labels, descriptive regressions and naive standard errors limit inference. Fees, latency, market reaction and executable liquidation are not modeled. These are measurements and model diagnostics, with no newly registered trading strategy.",
+   "zh": "数字必须附带的边界。<bookmark mark='a'/> 单一场所、单一永续合约、四个日期，包括不完整初始档案和周末检验；填充报价算网格观察，跨日拼接可压缩缺口。<bookmark mark='b'/> 最优报价快照不识别全部消息、深层及隐藏流动性或精确队列优先级，粗拟合状态未必马尔可夫。<bookmark mark='c'/> 划分、重叠标签、描述回归与普通标准误限制推断。费用、延迟、市场响应与可成交平仓未建模；这里是测量和模型诊断，没有新注册策略。"
+  },
+  "80dcdaef269d": {
+   "scene": "House",
+   "en": "Chapter four's definition in one expression. For the bid, the new size if the bid rose or stayed, less the old size if it fell or stayed; for the ask, the mirror image, subtracted. Every term is a whole queue or nothing, which is why it captures additions and cancellations without seeing a single order.",
+   "zh": "第4章的定义，写成一个表达式。对买方，如果买价上升或不变，计入新数量，如果下降或不变，减去旧数量；卖方是镜像，再相减。每一项要么是一个完整的队列，要么是零，这就是为什么它不用看见任何一笔订单，就能捕捉到挂单和撤单。"
+  },
+  "f152006b3691": {
+   "scene": "House",
+   "en": "Read the estimator precisely. Invert one minus the no-move operator to obtain the first-move reward and post-move operator. The stored fit sums the initial term and four hundred subsequent powers, four hundred and one terms in all. Its convergence diagnostic compares that result with the first two hundred and one terms. A tiny numerical tail difference is an algebraic diagnostic; it does not certify support, stochasticity or the real market's Markov hypothesis.",
+   "zh": "精确读取估计器。逆转一减无变价算子，得到首次变价奖励和变价后算子。保存的拟合把初始项与之后四百个幂相加，共四百零一项；收敛诊断将其与前两百零一项比较。很小的数值尾差是代数诊断，不认证状态支持、随机矩阵性质或现实市场马尔可夫假设。"
+  },
+  "a8f80942de3d": {
+   "scene": "House",
+   "en": "The simulator updates each full queue by at most one chosen unit per grid step, using state-dependent probabilities estimated from net changes. On depletion the mid moves half a tick and the queues reset using the empirical refill distribution. That full-state process is Markov by construction. Ten imbalance buckets are a projection and need not preserve the Markov property. The scorecard tests this implementation rather than proving that all Markov books share its failures.",
+   "zh": "模拟器每个网格步让每个完整队列至多增减一个选定单位，概率来自按状态统计的净变化。耗尽时中点移动半档，两队列按实证补充分布重抽。完整状态过程由构造保证马尔可夫，但十个不平衡分箱是投影，未必保留此性质。评分表检验这个实现，不证明所有马尔可夫订单簿都有同样失败。"
+  },
+  "82832973cd2f": {
+   "scene": "House",
+   "en": "And Chapter eight's replay. A trade at our price larger than the queue ahead fills us, as does any trade through our price. Otherwise the trades eat the queue ahead, net cancellations are taken in proportion, and if the level vanishes we are alone at the front.",
+   "zh": "还有第8章的回放。在我们价格上的一笔成交，如果大于我们前面的队列，就让我们成交；任何穿过我们价格的成交也一样。否则，成交吃掉我们前面的队列，净撤单按比例扣除；如果这个价位从最优档消失，我们就独自排在最前面。"
+  },
+  "11383f535279": {
+   "scene": "House",
+   "en": "And Chapter five's humble winner. For every snapshot with a usable spread, take the state and the mid's change over the horizon; mirror the data so the table is antisymmetric; and average by state. No chain, no limit, no theorem: an honest conditional mean, fitted for the horizon at which it will be used.",
+   "zh": "还有第5章那个不起眼的赢家。对每个价差可用的快照，取它的状态和中间价在该时间跨度内的变化；把数据做镜像，让表格反对称；再按状态求平均。没有链，没有极限，没有定理：一个诚实的条件均值，按它将被使用的时间跨度来拟合。"
+  },
+  "e75eddb74634": {
+   "scene": "House",
+   "en": "The tools and a proposed research rule. <bookmark mark='a'/> Public loaders, book features, finite-state adjustments, memory diagnostics and a simplified queue simulator with fill replay. These are research components, not a deployed surveillance or trading system. <bookmark mark='b'/> Proposed Rule thirty-six: compare held-out forecasts with simple baselines, state the target and clock, account for executable costs, and ship a simulator with checks of both distributions and action responses. Report signed fill markouts at several horizons beside the replay assumptions. Passing one diagnostic does not constitute trading approval.",
+   "zh": "工具及一条拟议研究规则。<bookmark mark='a'/> 公开读取器、盘口特征、有限状态调整、记忆诊断和带回放的简化队列模拟器，都是研究组件，不是已部署监控或交易系统。<bookmark mark='b'/> 拟议第三十六条规则：与简单基准比较留出预测，明确目标和时钟，核算可成交成本，并同时提供分布和行动响应检验。多个期限的有符号标记旁列出回放假设。通过某项诊断不等于交易批准。"
+  },
+  "3e30a09ab277": {
+   "scene": "House",
+   "en": "The rule against three cases. <bookmark mark='a'/> A paper with eighty-five percent accuracy on the benchmark: ask for another market and another year, the linear baseline, and the profit after the spread. <bookmark mark='b'/> An execution algorithm tuned in a simulator: ask for the scorecard, and whether the price reacts to the algorithm's own orders. <bookmark mark='c'/> A maker proud of a high fill rate: ask for the markouts. At the back of the queue, a high fill rate measures how often you were picked off.",
+   "zh": "用三个案例检验这条规则。<bookmark mark='a'/>一篇在基准上准确率85%的论文：要它换一个市场、换一年，要线性基线，要扣除价差后的利润。<bookmark mark='b'/>一个在模拟器里调好的执行算法：要评分卡，并问价格是否会对算法自己的订单作出反应。<bookmark mark='c'/>一位为高成交率自豪的做市商：要成交后损益。排在队列末尾时，高成交率衡量的是你被狙击了多少次。"
+  },
+  "08889ac62180": {
+   "scene": "House",
+   "en": "Under a stipulated immediate round trip, gross mid-to-mid gain is one and a half ticks. Entry and exit each pay half a tick of spread and three ticks of fees. Calculate break-even gross gain and the current shortfall. Explain why even an eighty-seven-percent conditional sign score does not supply an executable profit certificate.",
+   "zh": "暂停计算。规定立即往返交易的中点毛收益一档半，进出各付半档价差、三档费用。求盈亏平衡毛收益和当前缺口。解释为什么即使百分之八十七的条件方向分数，也不能提供可成交利润认证。"
+  },
+  "7aad28496e09": {
+   "scene": "Research",
+   "en": "For the researcher. Separate a mathematical theorem for a specified Markov-additive process from an estimator fitted to a coarse book summary. We prove the centered finite-state result, including the correct spectral bound and normalization. Then we inspect algebraic and empirical diagnostics. A Markov queue simulator is not proof that the bucketed state satisfies the theorem.",
+   "zh": "写给研究者。把规定马尔可夫可加过程的数学定理与粗盘口摘要上的拟合估计分开。证明中心化有限状态结论，包括正确谱界和归一化，再检查代数和实证诊断。完整队列模拟器马尔可夫，不证明分箱状态满足定理。"
+  },
+  "94c018428eb0": {
+   "scene": "Research",
+   "en": "The hypotheses of a model theorem. <bookmark mark='a'/> A finite state describes the chosen process, with integrable first-move rewards. <bookmark mark='b'/> The joint state and price are Markov additive: translation of the price level does not alter the transition and increment law. <bookmark mark='c'/> A mirror involution reverses increments and preserves transition probabilities. It is a sufficient centering condition. <bookmark mark='d'/> The no-move operator has spectral radius below one; the post-move operator is stochastic, irreducible and aperiodic on the actual state support. These are hypotheses to verify, not consequences of labeling a grid with imbalance buckets.",
+   "zh": "模型定理的假设。<bookmark mark='a'/> 有限状态描述所选过程，首次变价奖励绝对可积。<bookmark mark='b'/> 状态与价格联合马尔可夫可加，平移价格水平不改变转移和增量律。<bookmark mark='c'/> 镜像对合反转增量并保持转移概率，是充分中心化条件。<bookmark mark='d'/> 无变价算子谱半径小于一；变价后算子在真实支持集上是随机、不可约、非周期矩阵。这些需验证，不是给网格贴不平衡标签就自动成立。"
+  },
+  "b3f91f08b669": {
+   "scene": "Research",
+   "en": "Lemma one, the first move. <bookmark mark='a'/> Let g one of x be the expected first change of the mid from state x. <bookmark mark='b'/> Condition on the first step: the mid moves now, with expected change R, or the chain moves to another state without a change, with probability Q, and starts again. <bookmark mark='c'/> By hypothesis three, Q's spectral radius is below one, so one minus Q is invertible: its inverse is the sum over all the steps spent waiting.",
+   "zh": "引理一，第一次移动。<bookmark mark='a'/>令g1(x)为从状态x出发中间价第一次变化的期望。<bookmark mark='b'/>对第一步取条件：要么中间价现在就动，期望变化为R；要么链以概率Q转到另一个状态而中间价不变，然后重新开始。<bookmark mark='c'/>由假设三，Q的谱半径小于1，所以1减Q可逆：它的逆就是对所有等待步数的求和。"
+  },
+  "621289824334": {
+   "scene": "Research",
+   "en": "Lemma two, the later moves. <bookmark mark='a'/> The same summation gives the law of the state just after the first change: B, one minus Q inverse, times T. Its rows sum to one, so B is a stochastic matrix. <bookmark mark='b'/> By the strong Markov property at each change, the next change depends on the past only through the state there. <bookmark mark='c'/> So the expected mid after n changes is the mid plus the first n terms of the series.",
+   "zh": "引理二，之后的移动。<bookmark mark='a'/>同样的求和给出第一次变化刚结束时状态的分布：B，等于1减Q的逆乘以T。它的每一行和为1，所以B是随机矩阵。<bookmark mark='b'/>在每次变化时刻用强马尔可夫性，下一次变化只通过那时的状态依赖于过去。<bookmark mark='c'/>所以n次变化之后中间价的期望，等于中间价加上级数的前n项。"
+  },
+  "8879a38f6595": {
+   "scene": "Research",
+   "en": "The centered convergence argument. <bookmark mark='a'/> A finite irreducible aperiodic stochastic B has a unique stationary distribution pi, and its powers tend to the all-rows stationary matrix. <bookmark mark='b'/> Mirroring makes the first-move reward antisymmetric and pi symmetric, so pi times g one is zero. Symmetry is sufficient, not necessary: an unmirrored chain can also have zero stationary reward. <bookmark mark='c'/> Let A be B minus its stationary projection. For any rho strictly above A's spectral radius and below one, a finite constant bounds the norm of A to the k by C rho to the k. Using exactly the second eigenvalue modulus can fail for Jordan blocks; diagonalizability supplies that stronger bound. <bookmark mark='d'/> The centered Neumann series therefore converges to the fundamental matrix applied to g one, with stationary mean zero.",
+   "zh": "中心化收敛证明。<bookmark mark='a'/> 有限不可约非周期随机矩阵具有唯一平稳分布，其幂趋向每行都是该分布的矩阵。<bookmark mark='b'/> 镜像使首次奖励反对称、平稳分布对称，内积为零；对称是充分而非必要，无镜像链也可能平稳奖励为零。<bookmark mark='c'/> 令算子为转移矩阵减平稳投影。任取严格高于该算子谱半径、低于一的衰减率，存在有限常数控制其幂。恰用第二特征值模的界可能被若尔当块破坏，对角化才给更强界。<bookmark mark='d'/> 中心化诺伊曼级数因此收敛为基本矩阵作用在首次奖励上，且平稳均值为零。"
+  },
+  "168b23774d88": {
+   "scene": "Research",
+   "en": "The conclusion under the stated hypotheses and integrability. <bookmark mark='a'/> The expected midpoint after n future moves converges to the current midpoint plus the centered state adjustment g. The inverse of identity minus B plus the stationary projection gives that adjustment. <bookmark mark='b'/> At move times, expected next price is the current midpoint plus g one plus B g, equal to midpoint plus g by the Poisson equation. This proves a martingale in the model's move-time filtration. It does not identify fundamental economic value, a tradable execution price or a physical-clock result without the corresponding stopping and timing conditions.",
+   "zh": "规定假设和可积性下的结论。<bookmark mark='a'/> 未来第n次变价后的预期中点，收敛到当前中点加中心化状态调整，等于图中基本矩阵乘首次奖励。<bookmark mark='b'/> 变价时刻的下一次条件期望是当前中点加首次奖励加转移后的调整；由泊松方程，恰等当前修正价。这证明模型变价时钟信息流中的鞅，不识别基本经济价值、可成交执行价；若无相应停时和时间条件，也不推出物理时钟结论。"
+  },
+  "6a38fd9c46ca": {
+   "scene": "Research",
+   "en": "The normalization is essential. <bookmark mark='a'/> A state-adjusted price is a move-time martingale exactly when f equals g one plus B f, under the model and integrability conditions. <bookmark mark='b'/> Any two solutions differ by a harmonic vector. For a finite irreducible stochastic chain, the maximum principle makes every harmonic vector constant. <bookmark mark='c'/> Thus solutions are unique up to an additive constant. Stationary mean zero fixes it; under a valid mirror symmetry, requiring antisymmetry also fixes it. The weighted midpoint solves this equation only for particular transition laws, rather than being universally excluded.",
+   "zh": "归一化不可少。<bookmark mark='a'/> 在模型和可积条件下，状态修正价是变价时刻鞅，当且仅当修正等于首次奖励加转移后的修正。<bookmark mark='b'/> 两解差是调和向量，有限不可约随机链的最大值原理使其只能为常数。<bookmark mark='c'/> 因而解只在加常数意义下唯一；平稳均值零固定它，有效镜像下反对称性也固定它。加权中点在某些转移律下可能解方程，不能普遍排除。"
+  },
+  "0380093b2611": {
+   "scene": "Research",
+   "en": "What nonzero stationary reward does. <bookmark mark='a'/> This particular unmirrored fit has stationary reward 0.03 ticks per move. <bookmark mark='b'/> If that reward is nonzero, the expected n-move sum contains n times the stationary reward plus a bounded centered correction, so the uncentered limit cannot exist. <bookmark mark='c'/> The stored partial sums are -0.5, 2.2 and 11.3 ticks after ten, one hundred and four hundred moves. Removing mirror augmentation does not logically require nonzero drift. An asymmetric chain with zero stationary reward can still satisfy the centered theorem.",
+   "zh": "非零平稳奖励的影响。<bookmark mark='a'/> 这个特定未镜像拟合每次变价的平稳奖励为0.03档。<bookmark mark='b'/> 若它非零，n次期望和含n倍平稳奖励加有界中心化修正，所以未中心化极限不存在。<bookmark mark='c'/> 保存的十、一百、四百次部分和分别为-0.5、2.2、11.3档。去掉镜像并不逻辑上强制漂移非零，不对称但平稳奖励零的链仍可满足中心化定理。"
+  },
+  "76f0c8ef9f4d": {
+   "scene": "Research",
+   "en": "An algebra check for the fitted operator. <bookmark mark='a'/> The largest eigenvalue is numerically one; the next modulus is 0.67. The retained nominal state counts are all positive in this restored fit, though some two-tick states are sparsely observed. Mirroring yields a stationary reward near floating-point zero. <bookmark mark='b'/> The finite series agrees with the closed form at the displayed residual, and the sampled norms decay. This supports numerical consistency of these stored quantities. It does not independently verify irreducibility, all transition probabilities, sampling uncertainty or the Markov sufficiency of market observations.",
+   "zh": "拟合算子的代数检查。<bookmark mark='a'/> 最大特征值数值上一，次模0.67。恢复拟合的所有名义状态计数为正，但某些两档价差状态观察稀疏。镜像给出接近浮点零的平稳奖励。<bookmark mark='b'/> 有限级数与闭式解在展示残差内一致，采样范数衰减，支持保存量的数值一致性；不独立验证不可约性、每个转移概率、抽样不确定性或市场观测状态的马尔可夫充分性。"
+  },
+  "eee598d96742": {
+   "scene": "Research",
+   "en": "An eigenmode interpretation. <bookmark mark='a'/> A component aligned with an eigenvector of eigenvalue lambda is multiplied by lambda at each move. A general lean is a sum of modes and may have nonnormal or Jordan effects. <bookmark mark='b'/> For the dominant displayed positive mode, modulus 0.67 gives a magnitude half-life of 1.7 moves and a scalar geometric multiplier near three. <bookmark mark='c'/> The simulator's projected operator has a different spectrum; resetting full queues does not prove every imbalance bucket immediately forgets. <bookmark mark='d'/> One over one minus lambda is a mode-specific multiplier, not a universal multiplier of the entire first-move vector.",
+   "zh": "特征模式解释。<bookmark mark='a'/> 沿某特征向量的分量每次变价乘对应特征值；一般偏移是多个模式之和，可能有非正规或若尔当效应。<bookmark mark='b'/> 展示的主正模式模为0.67，幅度半衰期1.7次变动，标量几何倍数接近三。<bookmark mark='c'/> 模拟器投影算子谱不同，重抽完整队列不证明每个不平衡分箱立即遗忘。<bookmark mark='d'/> 一除以一减特征值是特定模式倍数，不是全部首次奖励向量的统一倍数。"
+  },
+  "9c7e6f912e36": {
+   "scene": "Research",
+   "en": "A simulated diagnostic, with separate fit and evaluation runs. <bookmark mark='a'/> The full queue process is Markov by construction, while the fitted imbalance/spread projection can retain omitted-state dependence. Its extreme one-second midpoint mean is about 0.16 tick. <bookmark mark='b'/> The microprice's largest displayed absolute mean is 0.015 tick; small plotted means do not certify an exact martingale. No robust uncertainty calculation or full conditional test is made. This is evidence about this simulator and this projection, not a setting in which every theorem hypothesis is automatically true.",
+   "zh": "用独立拟合和评估运行作模拟诊断。<bookmark mark='a'/> 完整队列过程由构造保证马尔可夫，拟合的不平衡价差投影仍可能遗漏依赖。极端分箱的一秒中点均值约0.16档。<bookmark mark='b'/> 微观价格展示的最大绝对均值0.015档，小均值不认证精确鞅。没有稳健区间或完整条件检验；证据针对这个模拟器与投影，不是定理每项假设自动成立的环境。"
+  },
+  "2af80ced6b90": {
+   "scene": "Research",
+   "en": "A finite-horizon comparison. <bookmark mark='a'/> Regress the mean future mid change across buckets on the fitted adjustment, using the displayed weighting convention. The simulator coefficient approaches roughly 1.15 over the sampled horizons; four fixed evaluation runs give a descriptive spread, not a universal limit proof. Bucket coarseness and omitted queue scale are possible discrepancies. <bookmark mark='b'/> The Bitcoin coefficient peaks at 0.46 and later declines. This is an aggregate regression coefficient, not the fraction of every individual state's lean realized, nor proof about an infinite-horizon limit. Day concatenation and dependence also affect interpretation.",
+   "zh": "有限期限比较。<bookmark mark='a'/> 按展示权重，将各分箱未来平均中点变化对拟合调整回归。模拟器系数在采样期限约趋向1.15；四个固定评估运行给描述分散，不是普遍极限证明。分箱粗糙和遗漏队列尺度是可能差异来源。<bookmark mark='b'/> 比特币系数峰值0.46后下降。这是聚合回归系数，不是每个状态兑现偏移的比例，也不证明无限期限极限。跨日拼接与依赖同样影响解释。"
+  },
+  "a3b1b461eefb": {
+   "scene": "Research",
+   "en": "A necessary implication of the proposed observed state. <bookmark mark='a'/> Under the stated Markov-additive law, the next sign distribution conditional on the post-move state cannot additionally depend on the previous sign. <bookmark mark='b'/> The code compares conditional mean next signs only in states with more than twenty observations of both previous directions, then takes a count-weighted signed average. Opposite differences can cancel. <bookmark mark='c'/> The recorded averages are -0.05 in simulation and 0.46 for Bitcoin. With no robust interval and dependence across moves, they are diagnostics of omitted history. A small aggregate gap does not prove Markovity, and a large gap does not isolate its causal source.",
+   "zh": "所提观测状态的一个必要推论。<bookmark mark='a'/> 若满足规定马尔可夫可加律，给定变价后状态，下一方向分布不能再依赖上次方向。<bookmark mark='b'/> 代码仅在两种上次方向均超过二十观察的状态比较下一符号均值，再按计数作带符号平均；不同状态差异可能抵消。<bookmark mark='c'/> 保存均值模拟器-0.05、比特币0.46。没有稳健区间且变动相关，它们是遗漏历史诊断。小聚合差不证明马尔可夫性，大差也不识别因果来源。"
+  },
+  "12da7ddc3366": {
+   "scene": "Research",
+   "en": "Where this sits. <bookmark mark='a'/> Marco Avellaneda, Josh Reed and Sasha Stoikov derived the probability of an up-move from the two best queues, with hidden liquidity: the one-step version. <bookmark mark='b'/> Martin Gould and Julius Bonart tested queue imbalance across Nasdaq stocks, and found it strong for large-tick stocks and weak for small-tick ones: the same boundary. <bookmark mark='c'/> And Stoikov's paper gives the definition, the estimator and the convergence condition proved here.",
+   "zh": "这项工作的位置。<bookmark mark='a'/>Marco Avellaneda、Josh Reed和Sasha Stoikov在存在隐藏流动性的情况下，从两个最优队列推出了上涨的概率：单步版本。<bookmark mark='b'/>Martin Gould和Julius Bonart在纳斯达克股票上检验了队列不平衡，发现它对大跳价股票很强，对小跳价股票很弱：同一条边界。<bookmark mark='c'/>Stoikov的论文给出了这里证明的定义、估计量和收敛条件。"
+  },
+  "717d344054e8": {
+   "scene": "Research",
+   "en": "Three research directions with precise limits. <bookmark mark='a'/> Find a manageable state whose forecasts and conditional diagnostics remain stable across markets and regimes; approximate sufficiency must be tested. <bookmark mark='b'/> Exponential Hawkes kernels admit finite-dimensional intensity states, while general history kernels may need an infinite-dimensional state or an approximation. Computable price adjustments and error bounds depend on the specified model, so there is no universal impossibility claim. <bookmark mark='c'/> Multi-venue queues add routing, latency and cross-venue dependence. A consolidated-price model must state those mechanics and a target horizon before any theorem or forecast claim.",
+   "zh": "三个有明确边界的方向。<bookmark mark='a'/> 寻找可管理且跨市场、制度预测和条件诊断稳定的状态；近似充分性需要检验。<bookmark mark='b'/> 指数霍克斯核可用有限维强度状态，一般历史核可能需要无限维状态或近似。价格调整及误差界依赖具体模型，不能作普遍不可能论断。<bookmark mark='c'/> 多场所队列增加路由、延迟和跨场所依赖。任何定理或预测前，合并价格模型须明确这些机制与目标期限。"
+  },
+  "d4f2853bda02": {
+   "scene": "Research",
+   "en": "Two mirror states have post-move persistence p. From the bid-heavy state the next midpoint change is plus one tick with probability q and minus one otherwise, with the mirror reward in the other state. Normalize the adjustment to stationary mean zero. Solve the displayed Poisson equation, evaluate p and q at three-quarters, and discuss the limit as p approaches one with q fixed. These are full-tick model increments, not the half-tick increments of every earlier example.",
+   "zh": "暂停推导。两个镜像状态的变价后持久概率为p。买方偏厚时，下次中点以q概率上移一整档，否则下移一整档；另一个状态奖励镜像。调整按平稳均值零归一。解图中的泊松方程，计算p和q均为四分之三，并讨论固定q大于二分之一、p趋一时极限。这里是整档模型增量，不是前面所有示例的半档变动。"
+  },
+  "ba21ee75d66f": {
+   "scene": "Outro",
+   "en": "The first six conclusions. Displayed queues describe a venue's best prices under its matching rules. Imbalance is associated with the next-move sign. A fitted Hawkes model represents clustering but does not identify causal trader reactions, and finite-window sign correlations need cautious extrapolation. Same-interval OFI is descriptive. The state-adjusted martingale theorem has explicit centering, mixing and integrability assumptions. On these Bitcoin dates the fitted many-move adjustment overshoots, while horizon-specific tables offer modest held-out error reductions.",
+   "zh": "前六个结论。显示队列在撮合规则下描述场所最优报价；不平衡与下次方向相关。拟合霍克斯表示聚集，不识别交易者因果反应；有限窗口符号相关需谨慎外推。同区间订单流不平衡是描述关系。状态修正鞅定理有明确中心化、混合和可积假设。本组比特币日期的多次变价调整过冲，按期限表在留出误差上有适度改善。"
+  },
+  "2d8a2c8d0bab": {
+   "scene": "Outro",
+   "en": "The remaining conclusions. This short network comparison does not beat the linear sign baseline, and its accuracy excludes flat targets. The simulator matches some summaries and misses others; full-state Markovity need not survive bucketing. The fill replay has adverse signed averages under explicit queue assumptions, without net-profit or causal priority-value certification. Proposed Rule thirty-six asks for baselines, costs and simulator response checks. The theorem is a model result; numerical and conditional diagnostics must be interpreted separately.",
+   "zh": "其余结论。短样本网络没有赢线性方向基准，准确率排除平盘。模拟器匹配部分摘要、错失另一些，完整状态马尔可夫未必在分箱后保留。成交回放在规定队列假设下有负向平均标记，不认证净利润或因果位置价值。拟议第三十六条规则要求基准、成本及模拟器响应检验。定理是模型结论，数值和条件诊断需分别解释。"
+  },
+  "fed6bbfb38f2": {
+   "scene": "Outro",
+   "en": "Three research habits. <bookmark mark='a'/> State and examine the model hypotheses separately from a proof: centering, support, mixing and the observation clock all matter. Conditional diagnostics can reveal omitted history without certifying full Markovity. <bookmark mark='b'/> Preserve simple baselines and the exact target definition; a linear direction score, a horizon table and a many-move state correction answer different questions. <bookmark mark='c'/> Report both gross diagnostics and executable costs, fill selection and inventory consequences. A high accuracy, high fill rate or convergent matrix series is not by itself a profitable strategy.",
+   "zh": "三个研究习惯。<bookmark mark='a'/> 将模型假设与证明分开检查，中心化、支持集、混合和观测时钟都重要；条件诊断能揭示遗漏历史，但不能认证完整马尔可夫性。<bookmark mark='b'/> 保留简单基准和精确目标，线性方向分数、按期限表与多次变价修正回答不同问题。<bookmark mark='c'/> 同时报告毛诊断和可成交成本、成交选择及库存后果。高准确率、高成交率或收敛矩阵级数，本身不是盈利策略。"
+  },
+  "470cd5bd34c5": {
+   "scene": "Outro",
+   "en": "Six desk questions. What is order-flow imbalance? The net change of the best queues, from every kind of event. <bookmark mark='a'/> Why does queue imbalance predict the next tick? The short queue empties first. <bookmark mark='b'/> What is the microprice, and when can you trust it? On large-tick books, and after testing.",
+   "zh": "六个交易台问题。什么是订单流不平衡？最优队列在各种事件下的净变化。<bookmark mark='a'/>为什么队列不平衡能预测下一跳？短的队列先被清空。<bookmark mark='b'/>什么是微观价格，什么时候可以信任它？在大跳价订单簿上，并且要先检验。"
+  },
+  "0017fceca85f": {
+   "scene": "Outro",
+   "en": "Why is the weighted mid not a fair price? Its changes are predictable. <bookmark mark='a'/> Why is a fill at the back of the queue bad news? It comes just before the price goes through. <bookmark mark='b'/> And how would you score a simulator? On stylised facts, out of sample, and on how it reacts to your own orders. Full solutions are in the notes.",
+   "zh": "为什么加权中间价不是公允价格？它的变化可以预测。<bookmark mark='a'/>为什么排在队列末尾的成交是坏消息？它恰好在价格穿过之前到来。<bookmark mark='b'/>你会怎样为一个模拟器打分？用程式化事实，在样本外，并看它对你自己的订单如何反应。完整解答见讲义。"
+  },
+  "8319a249ae92": {
+   "scene": "Outro",
+   "en": "The first five quantitative pauses. The fluid queue takes sixteen point six seven seconds to reach the front and five more to fill, twenty-one point six seven in total. The Brownian up probability is point seven nine five two, versus imbalance point seven five, with unchanged probabilities after proportional rescaling. Hawkes family sizes are three point one two five and twenty, giving rates six point two five and forty per second under stationarity. The stipulated OFI relation gives seven and a half cents, or three-quarters of a tick, halved by twice the depth. Normalized errors are one hundred, five hundred and ninety-five: four hundred percent worse is not five hundred percent worse.",
+   "zh": "前五个定量暂停题。流体队列十六点六七秒到队首，再五秒成交，总计二十一点六七。布朗上移概率零点七九五二，不平衡零点七五，比例缩放后概率不变。霍克斯家族大小三点一二五和二十，平稳速率每秒六点二五和四十。规定订单流关系给七点五美分，即四分之三档，深度倍增后减半。归一误差一百、五百、九十五；比基准差百分之四百，不是差百分之五百。"
+  },
+  "8d82f5d7653d": {
+   "scene": "Outro",
+   "en": "The remaining five. Eighty-percent conditional sign accuracy can coexist with minus five and a half ticks after the stipulated immediate round-trip costs. Two full queue states with equal imbalance have different depletion probabilities, so the projection can lose the Markov property. The replay contribution including rebate is minus one point five two ticks per submission, with entry spread already counted. The proposed cost budget needs seven gross ticks to break even. Finally, the antisymmetric two-state reward is an eigenvector with eigenvalue two p minus one; summing its geometric series gives one tick at p and q equal to three-quarters. With q fixed above one half, the adjustment diverges as persistence approaches one; at one, irreducibility and the centered-limit argument fail.",
+   "zh": "后五题。百分之八十条件方向准确率，可与规定立即往返成本后的负五点五档并存。两个相同不平衡的完整队列状态耗尽概率不同，投影会丢失马尔可夫性。含返佣的回放贡献每提交负一点五二档，入场价差已计入。拟议成本预算要求七档毛收益盈亏平衡。最后，反对称两状态奖励的特征值为二p减一，几何求和使p、q都为四分之三时偏移一整档。固定q大于二分之一，p趋一时发散；等于一时不可约性和中心化极限论证失效。"
+  },
+  "925fbcbf306c": {
+   "scene": "Outro",
+   "en": "Twelve fully worked problems, with six basic, four advanced and two qualifying problems. The first six cover deterministic queue time, diffusion depletion probability, stationary Hawkes arithmetic, sign-sum variance, stipulated OFI impact and the interview midpoint. The advanced set covers conditional accuracy and net costs, loss of Markov sufficiency after projection, partial replay accounting and a counterexample to guaranteed cancellation benefits. The qualifying set proves the centered finite-chain microprice theorem and solves the symmetric two-state model, including its boundary cases. Complete English and Chinese solutions are in the notes.",
+   "zh": "十二道完整解答，六基础、四进阶、两资格。基础题包括确定性队列时间、扩散耗尽概率、平稳霍克斯、符号和方差、规定订单流冲击及面试中点。进阶题比较条件准确率与净成本、投影后马尔可夫充分性丢失、局部回放核算及撤单未必改善的反例。资格题证明中心化有限链微观价格定理，并解对称两状态模型及边界情况。笔记有完整中英解答。"
+  },
+  "22a15924e552": {
+   "scene": "Outro",
+   "en": "Where this comes back. Part thirty-seven measures the impact of large orders and schedules them. Part thirty-eight makes markets with the microprice, inventory and queue position. Part thirty-nine meets a book with no queues at all, the automated market maker. And Part forty-two puts learning agents into simulated markets like this one.",
+   "zh": "这些内容会在哪里再出现。第37部分测量大订单的冲击并为它们安排时间表。第38部分用微观价格、存货和队列位置来做市。第39部分会遇到一个根本没有队列的订单簿：自动做市商。第42部分则把学习型主体放进像这样的模拟市场。"
+  },
+  "8fd32ace2e80": {
+   "scene": "Outro",
+   "en": "The principal textbooks and papers behind this part are listed separately so each title remains readable. The displayed measurements come from the nine restored original computations on frozen public archives or their stipulated simulations. Chosen arithmetic examples are labeled as such. No new market trial, sealed strategy outcome or deployment approval is part of this visual review.",
+   "zh": "本讲主要教材与论文分行列出，以便读清书名。展示的测量来自九个恢复的原始计算，输入为冻结公开档案或规定模拟；选定算术明确标为示例。本视觉审阅不包含新市场试验、封存策略结果或部署批准。"
+  },
+  "4565bb103360": {
+   "scene": "Outro",
+   "en": "The House can now read the book: its queues, its flow, its fair price where one exists, and the cost of waiting in line. <bookmark mark='a'/> Next, Part thirty-seven: market impact and execution. How much a large order moves the price, why the cost grows like a square root, and how to schedule a trade so that it costs the least.",
+   "zh": "本系列公司现在能读懂订单簿了：它的队列、它的订单流、在存在时的公允价格，以及排队等待的代价。<bookmark mark='a'/>下一部分，第37部分：市场冲击与执行。一笔大订单会让价格移动多少，为什么成本按平方根增长，以及如何安排一笔交易使它的成本最低。"
+  }
+ }
+}
