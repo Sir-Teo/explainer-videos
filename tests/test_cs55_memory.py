@@ -111,6 +111,17 @@ class Passwords(unittest.TestCase):
 
 
 class Otp(unittest.TestCase):
+    def test_totp_step_boundaries_and_contracts(self):
+        key = b"12345678901234567890"
+        for when, counter in ((0, 0), (29, 0), (30, 1), (59, 1), (60, 2)):
+            self.assertEqual(AU.totp(key, when, digits=6), AU.hotp(key, counter))
+        for kwargs in ({"counter": -1}, {"counter": 1 << 64}, {"counter": 0, "digits": 0},
+                       {"counter": 0, "algorithm": "md5"}):
+            with self.assertRaises(ValueError):
+                AU.hotp(key, **kwargs)
+        with self.assertRaises(ValueError):
+            AU.totp(key, 0, step=0)
+
     RFC4226 = ["755224", "287082", "359152", "969429", "338314",
                "254676", "287922", "162583", "399871", "520489"]
     RFC6238 = {

@@ -80,6 +80,8 @@ def zipf_cracked(vocab: int = 10 ** 7, exponent: float = 1.0, ks=(1, 2, 3, 4, 5,
 
 def hotp(key: bytes, counter: int, digits: int = 6, algorithm: str = "sha1") -> str:
     """RFC 4226 HOTP: HMAC of the 8-byte big-endian counter, dynamically truncated to ``digits`` decimal digits."""
+    if not 0 <= counter < 1 << 64 or digits < 1 or algorithm not in ("sha1", "sha256", "sha512"):
+        raise ValueError("need a 64-bit counter, positive digits, and SHA-1/256/512")
     mac = hmac.new(key, counter.to_bytes(8, "big"), algorithm).digest()
     offset = mac[-1] & 0x0F
     code = ((mac[offset] & 0x7F) << 24) | (mac[offset + 1] << 16) | (mac[offset + 2] << 8) | mac[offset + 3]
@@ -88,6 +90,8 @@ def hotp(key: bytes, counter: int, digits: int = 6, algorithm: str = "sha1") -> 
 
 def totp(key: bytes, when: int, t0: int = 0, step: int = 30, digits: int = 8, algorithm: str = "sha1") -> str:
     """RFC 6238 TOTP: HOTP over the time step counter floor((when - t0) / step)."""
+    if step <= 0 or when < t0:
+        raise ValueError("TOTP needs a positive step and a time at or after its epoch")
     return hotp(key, (when - t0) // step, digits=digits, algorithm=algorithm)
 
 
