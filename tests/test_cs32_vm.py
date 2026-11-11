@@ -14,6 +14,21 @@ from videos.cs.cs32.compute import CELL, CODEWRITE, GROWER, KREAD, SAMEVA, WILD
 
 
 class TestMMU(unittest.TestCase):
+    def test_invalid_write_only_entries_and_superpage_alignment(self):
+        for root_entry in (False, True):
+            m, frame = self.machine()
+            m.mode = 0
+            addr = 0x10004 if root_entry else 0x11000
+            m.mem[addr:addr + 4] = pte(frame, PTE_V | PTE_W | PTE_U).to_bytes(4, "little")
+            with self.assertRaises(Trap) as cm:
+                m.store(0x400000, 4, 1)
+            self.assertEqual(cm.exception.cause, PAGE_STORE)
+        m, frame = self.machine()
+        m.mode = 0
+        m.mem[0x10004:0x10008] = pte(frame, PTE_V | PTE_R | PTE_W | PTE_U).to_bytes(4, "little")
+        with self.assertRaises(Trap):
+            m.load(0x400000, 4)  # a 4 MiB superpage cannot start at physical 128 KiB
+
     def machine(self):
         m = VMMachine(image=b"", mem_size=1 << 20)
         root, l2, frame = 0x10000, 0x11000, 0x20000
@@ -74,6 +89,30 @@ class TestPagedOS(unittest.TestCase):
 
 
 class TestReplacement(unittest.TestCase):
+    def test_zero_frames_fault_on_every_reference(self):
+        for policy in P.FAULTS:
+            self.assertEqual(P.faults(iter([1, 1, 2, 1]), 0, policy), 4)
+            self.assertEqual(P.faults([], 0, policy), 0)
+        with self.assertRaises(ValueError):
+            P.faults([1], -1, "lru")
+        with self.assertRaises(ValueError):
+            P.faults([1], 0, "unknown")
+
+    def test_allocator_size_and_release_contracts(self):
+        for size in (0, -1):
+            with self.assertRaises(ValueError):
+                P.Buddy(4).malloc(size)
+        for size in (0, -1, 4097):
+            with self.assertRaises(ValueError):
+                P.Slab(size)
+        s = P.Slab(2048)
+        a, b = s.alloc(), s.alloc()
+        self.assertEqual((a, b), (0, 0))
+        s.release(a)
+        s.release(b)
+        with self.assertRaises(ValueError):
+            s.release(a)
+
     def test_belady(self):
         s = [1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5]
         self.assertEqual((P.faults(s, 3, "fifo"), P.faults(s, 4, "fifo")), (9, 10))

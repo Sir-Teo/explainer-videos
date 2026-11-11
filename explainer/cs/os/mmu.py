@@ -62,14 +62,16 @@ class VMMachine(OSMachine):
 
     @staticmethod
     def _ok(fl: int, kind: int, user: bool) -> bool:
-        return bool(fl & NEED[kind]) and (not user or bool(fl & PTE_U))
+        # As in Sv32, W without R is an invalid encoding, not a write-only page.
+        valid = bool(fl & PTE_V) and not (fl & PTE_W and not fl & PTE_R)
+        return valid and bool(fl & NEED[kind]) and (not user or bool(fl & PTE_U))
 
     def walk(self, va: int) -> tuple[int, int, int, bool]:
         """(entry, its physical address, references made, superpage?) for va, without faulting."""
         root = self.csr[PTBR]
         a1 = root + ((va >> 22) << 2)
         e = self.word(a1)
-        if e & PTE_V and not e & (PTE_R | PTE_X):
+        if e & PTE_V and not e & (PTE_R | PTE_W | PTE_X):
             a2 = ((e >> 12) << 12) + (((va >> 12) & 0x3FF) << 2)
             return self.word(a2), a2, 2, False
         return e, a1, 1, True
@@ -90,7 +92,7 @@ class VMMachine(OSMachine):
         self.stats["walks"] += 1
         e, addr, refs, big = self.walk(va)
         self.stats["walk_refs"] += refs
-        if not e & PTE_V or not self._ok(e, kind, user):
+        if not e & PTE_V or not self._ok(e, kind, user) or (big and e & 0x3FF000):
             self.stats["mmu_faults"] += 1
             raise Trap(FAULT[kind], va)
         new = e | PTE_A | (PTE_D if kind == WRITE else 0)

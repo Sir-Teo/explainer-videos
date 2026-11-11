@@ -20,7 +20,12 @@ from collections import OrderedDict, deque
 
 
 def faults(trace, frames: int, policy: str, seed: int = 0) -> int:
-    return FAULTS[policy](list(trace), frames, seed)
+    if not isinstance(frames, int) or frames < 0:
+        raise ValueError("frame count must be a nonnegative integer")
+    if policy not in FAULTS:
+        raise ValueError("unknown replacement policy: " + str(policy))
+    trace = list(trace)
+    return len(trace) if frames == 0 else FAULTS[policy](trace, frames, seed)
 
 
 def _fifo(t, k, seed):
@@ -367,6 +372,8 @@ class Buddy:
     buddy (the block whose address differs in bit k) whenever it is free too."""
 
     def __init__(self, order: int):
+        if not isinstance(order, int) or order < 0:
+            raise ValueError("buddy order must be a nonnegative integer")
         self.order = order
         self.free = {k: set() for k in range(order + 1)}
         self.free[order].add(0)
@@ -374,6 +381,8 @@ class Buddy:
         self.splits = self.merges = 0
 
     def malloc(self, pages: int):
+        if not isinstance(pages, int) or pages < 1:
+            raise ValueError("allocation size must be a positive number of pages")
         k = max(0, (pages - 1).bit_length())
         j = k
         while j <= self.order and not self.free[j]:
@@ -409,10 +418,14 @@ class Buddy:
 
 
 class Slab:
-    """Bonwick (1994): a cache of same-sized objects carved from one-page slabs; a freed object goes back on its
-    slab's free list, ready to reuse with its state constructed."""
+    """Occupancy model of Bonwick's slab caches: alloc returns a slab index, not an object address.
+
+    Counts slots in one-page slabs; it does not store object bytes or run constructors.
+    """
 
     def __init__(self, obj_size: int, page: int = 4096):
+        if not isinstance(obj_size, int) or not isinstance(page, int) or not 1 <= obj_size <= page:
+            raise ValueError("object size must be positive and fit in a positive page")
         self.per = page // obj_size
         self.slabs = []          # [free count]
         self.objs = {}
@@ -426,4 +439,6 @@ class Slab:
         return len(self.slabs) - 1
 
     def release(self, slab: int):
+        if not isinstance(slab, int) or not 0 <= slab < len(self.slabs) or self.slabs[slab] >= self.per:
+            raise ValueError("no allocated slot to release in that slab")
         self.slabs[slab] += 1

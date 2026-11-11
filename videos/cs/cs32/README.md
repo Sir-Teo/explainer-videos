@@ -8,7 +8,7 @@ page is optimal, and that adding memory can make things worse. The same machiner
 libraries, virtual machines and containers. Pebble gains an MMU, and PebbleOS runs every process at the same virtual
 addresses.
 
-The instruments are in `explainer/cs/os/` (tested in `tests/test_cs32_vm.py`):
+The instruments are in [`explainer/cs/os/`](../../../explainer/cs/os) (tested in `tests/test_cs32_vm.py`):
 * `mmu.py`, **Pebble's MMU**:
   - an Sv32-like two-level walk (10 + 10 + 12 bits), 4 MiB superpages, and the PTE bits V, R, W, X, U, A, D;
   - the `ptbr` control register (CSR 9); faults 12 (fetch), 13 (load) and 15 (store) with the address in `tval`;
@@ -26,6 +26,11 @@ The instruments are in `explainer/cs/os/` (tested in `tests/test_cs32_vm.py`):
 * `paging.py`: replacement (OPT, FIFO, LRU, CLOCK, 2Q, ARC, LIRS, random) over any trace; Mattson's stack distances
   and LRU's whole miss curve in one pass; a Belady-anomaly search; Denning's working set; a thrashing simulator; a
   buddy allocator and a slab allocator.
+
+The simplified MMU rejects write-without-read PTE encodings and superpage physical bases that are not 4 MiB aligned.
+With zero resident frames, every reference faults under every replacement policy. Buddy allocation requires a
+positive page count. The slab example models occupancy only: allocation returns a slab index, not an object address;
+it tracks free slots without storing object bytes or running constructors.
 
 Measured on this machine (`videos/cs/cs32/compute.py` compiles and runs a small C program):
 * a pointer chase over 1 to 131,072 pages, with 4 KiB pages and with 2 MiB huge pages: the TLB staircase;
