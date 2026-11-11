@@ -73,6 +73,25 @@ class Bridges(unittest.TestCase):
 
 
 class Ip(unittest.TestCase):
+    def test_prefix_replacement_agrees(self):
+        p = ip.Prefix.parse("10.0.0.0/8")
+        for table in (ip.LinearTable(), ip.BinaryTrie(), ip.MultibitTrie(4)):
+            table.insert(p, "old")
+            table.insert(p, "new")
+            self.assertEqual(table.lookup(ip.ip("10.1.2.3")), "new")
+
+    def test_fragment_final_alignment_and_invalid_mtu(self):
+        self.assertEqual(ip.fragment(1481, 1501), [(0, 1481, False)])
+        self.assertEqual(ip.fragment(2961, 1501), [(0, 1480, True), (185, 1481, False)])
+        for args in ((100, 20), (100, 27), (-1, 1500), (65536, 1500)):
+            with self.assertRaises(ValueError):
+                ip.fragment(*args)
+        for addr in ("1.2.3", "256.0.0.1", "1.2.3.-1"):
+            with self.assertRaises(ValueError):
+                ip.ip(addr)
+        with self.assertRaises(ValueError):
+            ip.MultibitTrie(3)
+
     def test_three_lpms_agree(self):
         r = random.Random(5)
         rows = ip.routing_table(5000, r)

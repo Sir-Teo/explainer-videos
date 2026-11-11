@@ -15,6 +15,8 @@ import random
 
 def ip(s: str) -> int:
     a = [int(x) for x in s.split(".")]
+    if len(a) != 4 or any(not 0 <= x <= 255 for x in a):
+        raise ValueError("IPv4 addresses need four octets in [0, 255]")
     return (a[0] << 24) | (a[1] << 16) | (a[2] << 8) | a[3]
 
 
@@ -26,6 +28,8 @@ class Prefix:
     __slots__ = ("net", "len")
 
     def __init__(self, net: int, length: int):
+        if not 0 <= net < 2**32 or not 0 <= length <= 32:
+            raise ValueError("invalid IPv4 address or prefix length")
         mask = ((1 << length) - 1) << (32 - length) if length else 0
         self.net = net & mask
         self.len = length
@@ -63,7 +67,7 @@ class LinearTable:
         best, bl, self.steps = None, -1, 0
         for p, h in self.rows:
             self.steps += 1
-            if p.len > bl and p.contains(addr):
+            if p.len >= bl and p.contains(addr):
                 best, bl = h, p.len
         return best
 
@@ -103,6 +107,8 @@ class MultibitTrie:
     expanded into every longer one at the next multiple (Srinivasan and Varghese)."""
 
     def __init__(self, stride: int = 8):
+        if stride not in (1, 2, 4, 8):
+            raise ValueError("supported strides are 1, 2, 4, and 8 bits")
         self.s = stride
         self.root = {"kids": {}, "hop": {}}
         self.nodes = 1
@@ -181,10 +187,17 @@ def aggregate(rows: list[tuple[Prefix, int]]) -> list[tuple[Prefix, int]]:
 
 
 def fragment(payload_len: int, mtu: int, header: int = 20) -> list[tuple[int, int, bool]]:
+    """IPv4 payload fragments; only non-final fragments need eight-byte alignment."""
+    if header not in range(20, 61, 4) or not 0 <= payload_len <= 65535 - header or mtu < header:
+        raise ValueError("invalid IPv4 payload, header size, or MTU")
+    capacity = mtu - header
     per = (mtu - header) // 8 * 8
+    if payload_len > capacity and per == 0:
+        raise ValueError("MTU cannot hold an eight-byte non-final fragment")
     out, off = [], 0
     while off < payload_len:
-        n = min(per, payload_len - off)
+        remaining = payload_len - off
+        n = remaining if remaining <= capacity else per
         out.append((off // 8, n, off + n < payload_len))
         off += n
     return out
