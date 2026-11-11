@@ -22,51 +22,83 @@ import zlib
 from collections import deque
 from fractions import Fraction
 
+
+def _integer(value, name, minimum=0):
+    if type(value) is not int or value < minimum:
+        raise ValueError(f"{name} must be an integer >= {minimum}")
+    return value
+
 # --------------------------------------------------------------------------------------------------- PCP
 
 
-def pcp_solve(dominoes, max_len=12, first=None, max_nodes=2_000_000):
-    """Breadth-first search over the 'overhang' (what one row has beyond the other). Returns (sequence of indices or
-    None, nodes expanded). With ``first``, the match must begin with that domino (the modified problem)."""
-    starts = [first] if first is not None else range(len(dominoes))
-    q = deque()
-    seen = set()
-    for i in starts:
-        t, b = dominoes[i]
-        if t.startswith(b) or b.startswith(t):
-            over = ("t", t[len(b):]) if len(t) >= len(b) else ("b", b[len(t):])
-            if over[1] == "":
-                return [i], 1
-            q.append((over, [i]))
-            seen.add(over)
-    nodes = 0
+def pcp_search(dominoes, max_len=12, first=None, max_nodes=2_000_000):
+    """Shortest nonempty match, or an explicit bounded-search status.
+
+    Nodes count dequeued residual states, including the initial empty root.
+    Exhaustion of the reachable finite residual graph proves no match; a depth
+    or node cutoff does not. ``first`` specifies modified PCP, not ordinary PCP.
+    Residual-state merging preserves shortest distance by breadth-first order.
+    """
+    _integer(max_len, "max_len"); _integer(max_nodes, "max_nodes")
+    dominoes = list(dominoes)
+    if any(not isinstance(d, (tuple, list)) or len(d) != 2 or
+           any(not isinstance(w, str) or not w for w in d) for d in dominoes):
+        raise ValueError("dominoes must be pairs of nonempty strings")
+    if first is not None:
+        _integer(first, "first")
+        if first >= len(dominoes): raise ValueError("first is outside the domino set")
+    q = deque([(None, (), 0)])
+    seen, nodes, depth_cut = set(), 0, False
     while q:
-        (side, s), seq = q.popleft()
-        nodes += 1
-        if nodes > max_nodes or len(seq) >= max_len:
-            if nodes > max_nodes:
-                break
+        if nodes == max_nodes:
+            return dict(match=None, nodes=nodes, status="node-limit", reached=len(seen))
+        over, seq, depth = q.popleft(); nodes += 1
+        if depth == max_len:
+            depth_cut = True
             continue
-        for i, (t, b) in enumerate(dominoes):
-            top, bot = (s + t, b) if side == "t" else (t, s + b)
-            if top.startswith(bot):
-                new = ("t", top[len(bot):])
-            elif bot.startswith(top):
-                new = ("b", bot[len(top):])
-            else:
-                continue
-            if new[1] == "":
-                return seq + [i], nodes
+        starts = [first] if over is None and first is not None else range(len(dominoes))
+        for i in starts:
+            t, b = dominoes[i]
+            if over is not None:
+                side, s = over
+                t, b = (s + t, b) if side == "t" else (t, s + b)
+            if t == b:
+                return dict(match=list(seq + (i,)), nodes=nodes, status="matched", reached=len(seen))
+            if t.startswith(b): new = ("t", t[len(b):])
+            elif b.startswith(t): new = ("b", b[len(t):])
+            else: continue
             if new not in seen:
-                seen.add(new)
-                q.append((new, seq + [i]))
-    return None, nodes
+                seen.add(new); q.append((new, seq + (i,), depth + 1))
+    return dict(match=None, nodes=nodes, status="depth-limit" if depth_cut else "exhausted", reached=len(seen))
+
+
+def pcp_solve(dominoes, max_len=12, first=None, max_nodes=2_000_000):
+    """Compatibility tuple; use pcp_search to distinguish exhaustion and cutoff."""
+    r = pcp_search(dominoes, max_len, first, max_nodes)
+    return r["match"], r["nodes"]
+
+
+def _tm_domain(rules, start, accept, w, alphabet):
+    symbols = set(alphabet) | {"_"}
+    states = {start, accept} | {q for q, _ in rules} | {r for r, _, _ in rules.values()}
+    if (not isinstance(w, str) or not w or not set(w) <= symbols or
+        any(not isinstance(c, str) or len(c) != 1 or c == "#" for c in states | symbols) or
+        states & symbols):
+        raise ValueError("nonempty input; disjoint one-character states/tape alphabet; # reserved")
+    if any(q == accept or a not in symbols or b not in symbols or mv not in ("L", "R")
+           for (q, a), (r, b, mv) in rules.items()):
+        raise ValueError("invalid transition or outgoing accept transition")
 
 
 def tm_to_mpcp(rules, start, accept, w, alphabet):
     """Sipser's construction (Theorem 5.15) for a one-tape TM given as {(state, sym): (new_state, write, move)}.
     States and symbols are single characters; '#' separates configurations and '_' is the blank. The first domino
-    is forced. A match spells out the accepting computation history."""
+    is forced. A match spells out the accepting computation history. This
+    didactic model REJECTS a left move off cell zero; it never clamps the head.
+    The input is nonempty, states and tape symbols are disjoint, and missing
+    transitions reject. A separate standard reduction converts MPCP to PCP.
+    """
+    _tm_domain(rules, start, accept, w, alphabet)
     tape = set(alphabet) | {"_"}
     D = [("#", "#" + start + w + "#")]
     for (q, a), (r, b, mv) in rules.items():
@@ -86,25 +118,35 @@ def tm_to_mpcp(rules, start, accept, w, alphabet):
     return D
 
 
-def run_tm_history(rules, start, accept, w, max_steps=100):
-    """The computation history the match should spell: '#c0#c1#...#'."""
+def run_tm_trace(rules, start, accept, w, max_steps=100):
+    """Full configurations and status for the restricted model of tm_to_mpcp."""
+    _integer(max_steps, "max_steps")
+    alphabet = set(w) | {a for _, a in rules} | {b for _, b, _ in rules.values()}
+    _tm_domain(rules, start, accept, w, alphabet)
     tape, head, q = list(w) or ["_"], 0, start
-    hist = []
-    for _ in range(max_steps):
+    hist, configs, steps = [], [], 0
+    while True:
         hist.append(("".join(tape[:head]) + q + "".join(tape[head:])).rstrip("_"))
-        if q == accept:
-            break
-        a = tape[head]
-        r, b, mv = rules[(q, a)]
+        configs.append(dict(state=q, head=head, tape="".join(tape)))
+        if q == accept: status = "accepted"; break
+        if (q, tape[head]) not in rules: status = "rejected-missing-rule"; break
+        if steps == max_steps: status = "step-limit"; break
+        r, b, mv = rules[(q, tape[head])]
+        if mv == "L" and head == 0: status = "rejected-left-boundary"; break
         tape[head] = b
-        q = r
+        q = r; steps += 1
         if mv == "R":
             head += 1
             if head == len(tape):
                 tape.append("_")
         else:
-            head = max(0, head - 1)
-    return "#" + "#".join(hist) + "#"
+            head -= 1
+    return dict(history="#" + "#".join(hist) + "#", configurations=configs, steps=steps, status=status)
+
+
+def run_tm_history(rules, start, accept, w, max_steps=100):
+    """Compatibility string; truncation/rejection status is in run_tm_trace."""
+    return run_tm_trace(rules, start, accept, w, max_steps)["history"]
 
 
 # --------------------------------------------------------------------------------------------------- Wang tiles
@@ -115,8 +157,14 @@ def wang_tile(tiles, n, m, limit=5_000_000, periodic=False):
     edges), row by row with backtracking. With ``periodic``, also match left/right and top/bottom edges (a torus,
     which tiles the plane periodically). Returns (grid of tile indices or None, nodes tried, complete): complete is
     True when the search finished, so None then means no tiling exists."""
+    _integer(n, "rows", 1); _integer(m, "columns", 1); _integer(limit, "limit")
+    if type(periodic) is not bool: raise ValueError("periodic must be bool")
+    tiles = list(tiles)
+    if any(len(t) != 4 or any(type(c) is not int or c < 0 for c in t) for t in tiles):
+        raise ValueError("tiles must have four nonnegative integer colors")
     grid = [[None] * m for _ in range(n)]
     nodes = [0]
+    cutoff = [False]
 
     def ok(r, c, t):
         N, E, S, W = tiles[t]
@@ -136,17 +184,19 @@ def wang_tile(tiles, n, m, limit=5_000_000, periodic=False):
             return True
         r, c = divmod(k, m)
         for t in range(len(tiles)):
-            nodes[0] += 1
-            if nodes[0] > limit:
+            if nodes[0] == limit:
+                cutoff[0] = True
                 return False
+            nodes[0] += 1
             if ok(r, c, t):
                 grid[r][c] = t
                 if go(k + 1):
                     return True
                 grid[r][c] = None
+                if cutoff[0]: return False
         return False
     found = go(0)
-    return (grid if found else None), nodes[0], found or nodes[0] <= limit
+    return (grid if found else None), nodes[0], not cutoff[0]
 
 
 # Jeandel and Rao (2015): 11 tiles in 5 colours (0-4), the smallest aperiodic set. Each tile is (N, E, S, W).
@@ -193,8 +243,6 @@ PEBBLE_TAIL = """    var i: int = 0;
 def pebble_quine() -> str:
     """The template is HEAD + '@' + TAIL; the program is HEAD + one assignment per template character + TAIL. The
     tail prints the head from the data, then the assignments, then the tail."""
-    for _ in range(3):  # N appears in the text, so fix the point where the length is stable
-        pass
     n = len(PEBBLE_HEAD) + 1 + len(PEBBLE_TAIL)
     while True:
         head = PEBBLE_HEAD.replace("NNNN", str(n))
@@ -208,6 +256,27 @@ def pebble_quine() -> str:
     return head + body + tail
 
 
+def pebble_backward_quine() -> str:
+    """Exercise 5: reconstruct the source in a bounded buffer, then reverse it."""
+    head = PEBBLE_HEAD.replace("// A quine in the Pebble language: it prints its own source, character for character.",
+                              "// This Pebble program prints its own source bytes backwards.")
+    head = head.replace("fn printnum", "var out: [32768]int;\nvar used: int = 0;\n"
+                        "fn emit(c: int) { out[used] = c; used = used + 1; }\nfn printnum")
+    head = head.replace("putc(", "emit(")
+    tail = PEBBLE_TAIL.replace("putc(", "emit(")
+    tail = tail.rsplit("}", 1)[0] + "    while used > 0 { used = used - 1; putc(out[used]); }\n}\n"
+    n = len(head) + 1 + len(tail)
+    while True:
+        h, t = head.replace("NNNN", str(n)), tail.replace("NNNN", str(n))
+        template = h + "@" + t
+        if len(template) == n: break
+        n = len(template)
+    assert "@" not in h + t
+    src = h + "".join(f"    d[{i}] = {ord(c)};\n" for i, c in enumerate(template)) + t
+    assert src.isascii() and len(src) <= 32768
+    return src
+
+
 # --------------------------------------------------------------------------------------------------- FRACTRAN, Collatz
 
 
@@ -216,24 +285,40 @@ PRIMEGAME = [Fraction(17, 91), Fraction(78, 85), Fraction(19, 51), Fraction(23, 
              Fraction(13, 11), Fraction(15, 2), Fraction(1, 7), Fraction(55, 1)]
 
 
-def fractran(program, n, steps):
-    """Run FRACTRAN from n; yields (step, value) each time the value is a power of two (PRIMEGAME's output)."""
-    out = []
+def fractran_run(program, n, steps, *, trace=None):
+    """First-applicable positive rational rewrite; outputs exclude initial n.
+
+    Optional mutable trace receives every selected instruction index. A budget
+    exhaustion is distinct from absence of an applicable instruction.
+    """
+    _integer(n, "start", 1); _integer(steps, "steps")
+    program = [Fraction(f) for f in program]
+    if any(f <= 0 for f in program): raise ValueError("instructions must be positive rationals")
+    out, executed = [], 0
     for s in range(1, steps + 1):
-        for f in program:
+        for i, f in enumerate(program):
             if (n * f.numerator) % f.denominator == 0:
                 n = n * f.numerator // f.denominator
+                if trace is not None: trace.append(i)
+                executed = s
                 break
         else:
-            return out
+            return dict(outputs=out, steps=executed, final=n, status="halted")
         if n & (n - 1) == 0:
             out.append((s, n.bit_length() - 1))
-    return out
+    return dict(outputs=out, steps=executed, final=n, status="step-limit")
 
 
-def collatz(n):
+def fractran(program, n, steps):
+    return fractran_run(program, n, steps)["outputs"]
+
+
+def collatz(n, max_steps=10_000_000):
+    """Bounded positive-integer trajectory; no general termination is assumed."""
+    _integer(n, "start", 1); _integer(max_steps, "max_steps")
     steps, peak = 0, n
     while n != 1:
+        if steps == max_steps: raise TimeoutError("Collatz step budget exhausted")
         n = n // 2 if n % 2 == 0 else 3 * n + 1
         peak = max(peak, n)
         steps += 1
@@ -244,12 +329,20 @@ def collatz(n):
 
 
 def complexity_proxies(data: bytes) -> dict:
+    """Container byte lengths; plain-C bounds need bits and fixed decoding costs."""
+    if not isinstance(data, bytes): raise ValueError("data must be bytes")
     return {"raw": len(data), "zlib": len(zlib.compress(data, 9)), "bz2": len(bz2.compress(data, 9)),
             "lzma": len(lzma.compress(data, preset=9 | lzma.PRESET_EXTREME))}
 
 
 def pi_digits(n):
-    """n decimal digits of pi by Machin's formula with integers."""
+    """n digits INCLUDING leading 3, by integer Machin with guard digits.
+
+    The producer independently certifies the entire requested prefix; this
+    routine's fixed guard digits alone are not a rounding certificate.
+    """
+    _integer(n, "digits")
+    if n == 0: return ""
     def arctan_inv(x, unity):
         s = term = unity // x
         x2, k, sign = x * x, 3, -1
@@ -270,26 +363,35 @@ def pi_digits(n):
 
 
 def thue_morse(n):
+    _integer(n, "length")
     return "".join(str(bin(i).count("1") % 2) for i in range(n))
 
 
 # --------------------------------------------------------------------------------------------------- Pell
 
 
-def pell(D):
-    """Least positive solution of x^2 - D y^2 = 1, from the continued fraction of sqrt(D)."""
+def pell(D, *, certificate=None):
+    """Least solution with y>0 for positive nonsquare D; squares return None.
+
+    Minimality uses the standard theorem that the least positive Pell solution
+    is a convergent of sqrt(D). Optional certificate retains every convergent.
+    """
+    _integer(D, "D", 1)
     a0 = math.isqrt(D)
     if a0 * a0 == D:
         return None
     m, d, a = 0, 1, a0
     p_prev, p = 1, a0
     q_prev, q = 0, 1
+    convergents = [(m, d, a, p, q)]
     while p * p - D * q * q != 1:
         m = d * a - m
         d = (D - m * m) // d
         a = (a0 + m) // d
         p_prev, p = p, a * p + p_prev
         q_prev, q = q, a * q + q_prev
+        convergents.append((m, d, a, p, q))
+    if certificate is not None: certificate.update(D=D, convergents=convergents)
     return p, q
 
 
@@ -305,6 +407,8 @@ def hat_polygon():
 
 
 def shoelace(P):
+    if len(P) < 3 or any(len(p) != 2 or any(not math.isfinite(float(c)) for c in p) for p in P):
+        raise ValueError("at least three finite plane vertices required")
     s = 0.0
     for (x1, y1), (x2, y2) in zip(P, list(P[1:]) + [P[0]]):
         s += x1 * y2 - x2 * y1

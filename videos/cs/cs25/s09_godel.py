@@ -76,7 +76,7 @@ class Godel(VoiceoverScene):
     def halting(self):
         head = label(r"Incompleteness from the halting problem", font_size=32).to_edge(UP, buff=0.35)
         lines = VGroup(
-            label(r"a \textbf{theory} $T$: \ axioms plus rules, \ so a program can list every theorem", font_size=22,
+            label('an EFFECTIVELY axiomatized arithmetic theory $T$: a program enumerates every theorem', font_size=22,
                   color=WHITE),
             label(r"\textbf{sound}: \ everything $T$ proves is true; \ and $T$ can state ``$M$ halts on $w$''",
                   font_size=22, color=WHITE),
@@ -90,16 +90,7 @@ class Godel(VoiceoverScene):
         ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.5)
         box_ = SurroundingRectangle(lines[-1], color=NO, buff=0.15)
         with self.voiceover(
-            "Here is Gödel's first theorem, proved from Part 1's result in a minute. <bookmark mark='a'/> A theory "
-            "is a set of axioms and rules of proof, mechanical enough that a program can list all its theorems. "
-            "<bookmark mark='b'/> Suppose it is sound, proving only true things, and strong enough to state that a "
-            "machine halts on an input. Ordinary arithmetic is. <bookmark mark='c'/> Now suppose it could prove "
-            "every true statement of the form, machine M does not halt on w. <bookmark mark='d'/> Then we could "
-            "decide halting. Run M on w, and at the same time list the theorems, looking for M does not halt. "
-            "<bookmark mark='e'/> If M halts, the run finishes. If it does not, the proof turns up. Either way we "
-            "get an answer, and soundness makes it correct. <bookmark mark='f'/> That cannot be. So there are true "
-            "statements, that some machine runs forever, which the theory cannot prove. Every sound theory of "
-            "arithmetic is incomplete."
+            "An effective sound arithmetic theory cannot prove every true nonhalting statement. <bookmark mark='a'/> Effective means its theorems can be enumerated by a program. <bookmark mark='b'/> Assume soundness and enough arithmetic to express the machine computations and verify finite halting witnesses. <bookmark mark='c'/> Suppose every true nonhalting assertion had a proof. <bookmark mark='d'/> Dovetail the actual run of M on w with theorem enumeration seeking the assertion that it never halts. <bookmark mark='e'/> If it halts, the simulation finishes; otherwise the assumed proof appears. Soundness prevents a false answer. <bookmark mark='f'/> This would decide halting, so the theory is incomplete. Effective axiomatization is essential: the set of all true arithmetic statements is not a counterexample to this scoped theorem."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):
@@ -128,18 +119,11 @@ class Godel(VoiceoverScene):
                   r"\textbf{true}", font_size=22, color=YES),
             label(r"``$R$ never halts'' \ says, \ in effect, \ ``I am not provable in $T$'': \ G\"odel's sentence",
                   font_size=22, color=HEAD),
-            label(r"G\"odel needed only consistency, \ not soundness, \ with Rosser's refinement \ (1936)",
+            label('Rosser (1936): consistency suffices for his modified sentence; usual effective arithmetic hypotheses',
                   font_size=20, color=GREY_A),
         ).arrange(DOWN, buff=0.28).next_to(frame, DOWN, buff=0.45).set_x(0)
         with self.voiceover(
-            "The proof says some such statement exists. The recursion theorem lets us write it down. <bookmark "
-            "mark='a'/> Program R obtains its own source, the trick of chapter four, and then searches through "
-            "every proof in the theory, shortest first, for a proof that R never halts. If it finds one, it stops. "
-            "<bookmark mark='b'/> If the theory proved that R never halts, R would find the proof and halt, and the "
-            "theory would have proved something false. <bookmark mark='c'/> So a sound theory never proves it, R "
-            "searches forever, and the statement R never halts is true, and unprovable. <bookmark mark='d'/> It "
-            "says, in effect, I cannot be proved: Gödel's sentence, as a program. <bookmark mark='e'/> Gödel's own "
-            "version needed less: only that the theory be consistent, with a refinement by Barkley Rosser in 1936."
+            "Self-reference identifies a particular missing statement. <bookmark mark='a'/> Construct R with its own description embedded, and enumerate T's proofs searching for a proof that R never halts. Finding one makes R halt. <bookmark mark='b'/> If T proved nonhalting, R would halt, contradicting soundness. <bookmark mark='c'/> Thus R actually runs forever and its nonhalting is true but unprovable in this effective sound T. <bookmark mark='d'/> This is a program version of the Gödel self-reference idea. <bookmark mark='e'/> The exact historical assumptions differ: Gödel used consistency for unprovability and a stronger omega-consistency assumption for the opposite direction. Rosser's modified sentence obtains incompleteness from consistency alone, with the usual effective arithmetic hypotheses."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -153,30 +137,19 @@ class Godel(VoiceoverScene):
     def second(self):
         head = label(r"The second theorem, \ and the end of Hilbert's program", font_size=32).to_edge(UP, buff=0.35)
         lines = VGroup(
-            label(r"$T$ can follow the argument just given: \ $T$ proves \ ``if $T$ is consistent, \ $R$ never halts''",
+            label('standard provability predicate and derivability conditions let $T$ internalize the suitable G\\"odel argument',
                   font_size=22, color=WHITE),
             label(r"so if $T$ proved its own consistency, \ it would prove ``$R$ never halts'', \ which it cannot",
                   font_size=22, color=DATA),
-            label(r"\textbf{second incompleteness theorem}: \ a consistent theory that can do arithmetic \ "
-                  r"\textbf{cannot prove its own consistency}", font_size=22, color=NO),
-            label(r"Hilbert \ (1920s): \ prove mathematics consistent by finite, \ mechanical means. \ G\"odel "
-                  r"\ (1931): \ impossible", font_size=22, color=HEAD),
+            label('\\textbf{second incompleteness}: consistent, effective, sufficiently strong $T$ cannot prove standard Con($T$)', font_size=22, color=NO),
+            label('Hilbert: blocked when proposed finitistic consistency reasoning is formalizable inside $T$', font_size=22, color=HEAD),
             label(r"ZFC's consistency is a $\Pi_1$ statement: \ ``this proof-searching program never halts''",
                   font_size=22, color=LAM),
             label(r"that is why a busy beaver's value can be unprovable \ (Part 1; \ chapter 12)", font_size=21,
                   color=GREY_A),
         ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Push one step further. <bookmark mark='a'/> The argument we just gave can itself be carried out "
-            "inside the theory. The theory can prove: if I am consistent, then R never halts. <bookmark mark='b'/> "
-            "So if it could also prove its own consistency, it would prove that R never halts, which we just saw it "
-            "cannot do. <bookmark mark='c'/> That is the second incompleteness theorem: no consistent theory strong "
-            "enough for arithmetic proves its own consistency. <bookmark mark='d'/> It ended the program David "
-            "Hilbert had led in the 1920s, to prove all of mathematics consistent by finite, mechanical means. "
-            "<bookmark mark='e'/> Notice the shape of the statement. The consistency of set theory says that one "
-            "program, the one hunting for a contradiction, never halts. <bookmark mark='f'/> And that is why Part 1 "
-            "could build a Turing machine whose busy-beaver value set theory cannot determine. Chapter twelve "
-            "comes back to it."
+            "The second theorem needs a formal internal proof argument. <bookmark mark='a'/> Use an effective arithmetic theory with its standard provability predicate and the Hilbert-Bernays-Loeb derivability conditions. The suitable Gödel argument can then be formalized inside T. <bookmark mark='b'/> Internalized consistency implies the relevant Gödel sentence; proving consistency would therefore contradict the first theorem. <bookmark mark='c'/> A consistent sufficiently strong such T cannot prove its own standard consistency assertion. This does not follow just by repeating our informal soundness argument. <bookmark mark='d'/> It obstructs Hilbert's desired consistency proof when the proposed finitistic reasoning is formalizable within T; it does not prohibit every external consistency proof. <bookmark mark='e'/> For ZFC, standard consistency says that no encoded proof of contradiction exists. <bookmark mark='f'/> The corresponding proof-search machine connects the theorem to busy beavers, subject to the same effective arithmetic assumptions."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):

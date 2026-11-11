@@ -35,7 +35,7 @@ class Pcp(VoiceoverScene):
         head = label(r"Make the top string equal the bottom string", font_size=32).to_edge(UP, buff=0.35)
         ds = VGroup(*[domino(t, b) for t, b in p["sipser"]]).arrange(RIGHT, buff=0.35).next_to(head, DOWN, buff=0.45)
         names = VGroup(*[mono(str(i + 1), 16, GREY_B).next_to(d, DOWN, buff=0.08) for i, d in enumerate(ds)])
-        rule = label(r"use any dominoes, \ as many copies as you like, \ in any order", font_size=21,
+        rule = label('use a NONEMPTY sequence; any order; repetitions allowed', font_size=21,
                      color=GREY_A).next_to(names, DOWN, buff=0.2)
         seq = p["sipser_match"]
         row = VGroup(*[domino(*p["sipser"][i], color=HEAD) for i in seq]).arrange(RIGHT, buff=0.06)
@@ -46,17 +46,10 @@ class Pcp(VoiceoverScene):
             DOWN, aligned_edge=LEFT, buff=0.1).next_to(row, DOWN, buff=0.35)
         notes = VGroup(
             label(r"\textbf{PCP}: \ given a finite set of dominoes, \ is there a match?", font_size=22, color=WHITE),
-            label(r"Emil Post \ (1946): \ undecidable. \ Searching finds matches; \ nothing can certify there are "
-                  r"none", font_size=22, color=NO),
+            label('Post (1946): no total general decider; individual no-match instances can have proofs', font_size=22, color=NO),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Here is a puzzle with no machines in it. <bookmark mark='a'/> Each domino has a string on top and a "
-            "string below. You may use as many copies of each as you like, in any order, and you win if the top "
-            "row and the bottom row spell the same string. <bookmark mark='b'/> For these four, a search finds a "
-            "match of five dominoes: two, one, three, two, four. <bookmark mark='c'/> Both rows read a b c a a a b "
-            "c. <bookmark mark='d'/> Post's correspondence problem asks, for any finite set of dominoes, whether a "
-            "match exists. <bookmark mark='e'/> Emil Post proved in 1946 that no algorithm can answer it. A search "
-            "confirms a match when it finds one, but nothing can confirm in general that there is none."
+            "Post's correspondence problem uses a NONEMPTY sequence of dominoes. <bookmark mark='a'/> Each has a top and bottom string; repetitions are allowed. <bookmark mark='b'/> For these four, the sequence two, one, three, two, four is a match. <bookmark mark='c'/> Concatenating each row gives the same string. <bookmark mark='d'/> The general question asks whether any nonempty match exists. <bookmark mark='e'/> Post proved it undecidable. Matches are finite certificates. Some no-match instances also have finite proofs, including exhausted finite residual graphs. What fails is a total general decider; the full no-match set is not recognizable."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -100,21 +93,11 @@ class Pcp(VoiceoverScene):
         notes = VGroup(
             label(rf"the search finds the {len(p['tm_match'])}-domino match in {p['tm_nodes']} steps; \ "
                   r"the bottom always runs one configuration ahead", font_size=20, color=WHITE),
-            label(r"a match exists $\iff$ the machine accepts: \ so PCP decides $A_{TM}$, \ which is impossible",
+            label('forced-first MPCP encodes acceptance; a separate reduction yields ordinary PCP',
                   font_size=21, color=NO),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Why are dominoes as hard as machines? <bookmark mark='a'/> Take a tiny Turing machine: in state q, "
-            "reading a one, it moves right into state p; in p, reading a zero, it accepts. <bookmark mark='b'/> We "
-            "turn it into dominoes. The start domino has a single hash on top and the whole first configuration "
-            "below. Step dominoes rewrite the head's neighbourhood. Copy dominoes carry the rest of the tape "
-            "across. Clean-up dominoes let the accept state swallow the tape, and a last domino closes the rows. "
-            "<bookmark mark='c'/> The bottom row is always one configuration ahead of the top, so the only way for "
-            "the top to catch up is to write the next configuration, step by step. <bookmark mark='d'/> Our search "
-            "found the thirteen-domino match. Read between the hashes: q one zero, then one p zero, then one zero "
-            "a. That is the machine's accepting run. <bookmark mark='e'/> A match exists exactly when the machine "
-            "accepts, so an algorithm for dominoes would decide acceptance. Sipser's textbook adds one more trick to "
-            "force the start domino first; the idea is all here."
+            "Computation histories explain the reduction. <bookmark mark='a'/> Our example moves right twice and accepts input one zero. The didactic tape model rejects a left move off its first cell; it never clamps the head. <bookmark mark='b'/> Start, transition, copying, cleanup and closing dominoes encode successive configurations. The start domino is REQUIRED first: this is modified PCP. <bookmark mark='c'/> The bottom row leads the top by one configuration, until accepting cleanup lets the rows close. <bookmark mark='d'/> We check the full concatenated top and bottom for equality, and retain the complete accepting trace. <bookmark mark='e'/> The standard construction reduces acceptance to modified PCP. A separate transformation converts modified PCP to ordinary PCP. The displayed witness illustrates the construction under its stated alphabet and boundary conventions."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -157,15 +140,7 @@ class Pcp(VoiceoverScene):
             label(r"3 and 4: \ open", font_size=22, color=YES),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "How does undecidability show up in practice? <bookmark mark='a'/> We drew twenty thousand random sets "
-            "of three dominoes, each string one to three bits long. Most have no match the search can find; of "
-            "those that do, most matches are a single domino. <bookmark mark='b'/> The longest shortest match we "
-            "drew was fifteen dominoes. <bookmark mark='c'/> But these four dominoes, found by enthusiasts who hunt "
-            "for hard instances, have no match shorter than two hundred and six, and our search confirmed it. "
-            "There is no computable bound on how long the shortest match can be; if there were, we could search "
-            "up to the bound and decide the problem. <bookmark mark='d'/> Where exactly does it become impossible? "
-            "With two dominoes the problem is decidable, a 1982 theorem. With five or more it is undecidable, "
-            "proved by Turlough Neary in 2015. <bookmark mark='e'/> Three and four are open."
+            "Our search uses fixed budgets and retains every sampled instance. <bookmark mark='a'/> We draw twenty thousand three-domino sets with one-to-three-bit words. Every result says matched, exhausted, depth limit or node limit; an unfinished search is not a no-match proof. <bookmark mark='b'/> The longest shortest match among the solved sample instances has fifteen dominoes. <bookmark mark='c'/> The displayed four-domino instance really has shortest match length two hundred and six. We execute the search, check the full strings and retain a residual-graph distance certificate excluding shorter matches. No computable shortest-match bound exists for UNRESTRICTED PCP. This does not settle the fixed four-domino case. <bookmark mark='d'/> Two dominoes are decidable. Neary's published 2015 theorem proves undecidability for five. <bookmark mark='e'/> That published theorem leaves three and four open; its five-pair result supersedes a conflicting earlier preprint."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -189,7 +164,7 @@ class Pcp(VoiceoverScene):
             MathTex(r"T \to t_i\, T\, i \;\mid\; t_i\, i", font_size=34, color=DATA),
             MathTex(r"B \to b_i\, B\, i \;\mid\; b_i\, i", font_size=34, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(head, DOWN, buff=0.5).to_edge(LEFT, buff=1.0)
-        gl = label(r"one rule pair per domino $i$: \ $t_i$ its top, \ $b_i$ its bottom, \ $i$ a marker", font_size=19,
+        gl = label('one rule pair per domino; index markers use a DISJOINT terminal alphabet', font_size=19,
                    color=GREY_A).next_to(g, DOWN, buff=0.2).align_to(g, LEFT)
         ex = VGroup(
             mono("T => t2 t1 t3 ... 3 1 2", 20, DATA),
@@ -204,21 +179,10 @@ class Pcp(VoiceoverScene):
                   r"bottoms", font_size=21, color=YES),
             label(r"grammar ambiguous $\iff$ the dominoes have a match: \ undecidable \ (Cantor; \ Floyd; \ Chomsky "
                   r"and Sch\"utzenberger, \ 1962--63)", font_size=21, color=NO),
-            label(r"likewise: \ do two grammars share a string? \ does a grammar generate everything? \ both "
-                  r"undecidable", font_size=21, color=GREY_A),
+            label('nonempty CFG intersection follows here; CFG universality needs a different reduction', font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.22).next_to(gl, DOWN, buff=0.4).set_x(0)
         with self.voiceover(
-            "Part 12 promised a proof that nobody can always detect an ambiguous grammar. Here it is. <bookmark "
-            "mark='a'/> From any set of dominoes, build this grammar. T derives the tops of some sequence of "
-            "dominoes, followed by the sequence's numbers in reverse. B does the same with the bottoms. <bookmark "
-            "mark='b'/> The markers at the end record exactly which dominoes were used, so neither half is "
-            "ambiguous by itself. <bookmark mark='c'/> A string has two parse trees only if one comes through T and "
-            "one through B, with the same markers: the same dominoes, whose tops spell the same string as their "
-            "bottoms. That is a match. <bookmark mark='d'/> So the grammar is ambiguous exactly when the dominoes "
-            "match, and deciding ambiguity would decide Post's problem. <bookmark mark='e'/> The same construction "
-            "shows that whether two grammars share a string, or whether a grammar generates every string, is "
-            "undecidable too. Parser generators warn about conflicts instead; that is an approximation, in the "
-            "spirit of Rice."
+            "Here is the promised ambiguity reduction. <bookmark mark='a'/> For each domino, the T rules generate its top string, and the B rules its bottom, followed by distinct index markers in reverse sequence order. Markers use a disjoint terminal alphabet. <bookmark mark='b'/> Each half is unambiguous because the markers determine every rule choice. <bookmark mark='c'/> A string has parses through both halves precisely when the same nonempty index sequence makes equal top and bottom strings. <bookmark mark='d'/> Thus grammar ambiguity, and nonempty intersection of two context-free languages, are undecidable. <bookmark mark='e'/> Context-free grammar universality is also undecidable, but needs another reduction; this construction alone does not prove it. Parser conflicts concern particular parsing methods and are not a general ambiguity decider."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g), FadeIn(gl))
             vo.wait_until("a")

@@ -24,29 +24,19 @@ class Hilbert(VoiceoverScene):
         head = label(r"Searching is not deciding", font_size=34).to_edge(UP, buff=0.35)
         rows = [[str(r["D"]), r["x"] if len(r["x"]) < 22 else r["x"][:20] + "...", str(r["digits"])]
                 for r in h["rows"]]
-        tab = grid_table([r"$D$", r"least $x$ with $x^2 - D y^2 = 1$", r"digits"], rows, widths=[1.2, 6.2, 1.4],
+        tab = grid_table([r"$D$", 'least $x$ ($y>0$), $x^2-Dy^2=1$', r"digits"], rows, widths=[1.2, 6.2, 1.4],
                          row_h=0.38, font_size=19, mono_cols=(1,), colors=[[WHITE, HEAD, GREY_A]] * len(rows))
         tab.next_to(head, DOWN, buff=0.4).set_x(0)
         b = {r["D"]: r for r in h["brute"]}
         notes = VGroup(
             label(rf"brute force over $y$: \ $D = 13$ in {b[13]['tried']} tries, \ $D = 29$ in {words(b[29]['tried'])}; "
                   rf"\ $D = 61$: \ {words(b[61]['tried'])} tries, \ nothing", font_size=21, color=NO),
-            label(r"continued fractions find each in microseconds: \ Pell's equation always has a solution "
-                  r"\ (Lagrange, 1768)", font_size=21, color=YES),
-            label(r"a search that finds nothing proves nothing: \ is the answer far away, \ or absent?", font_size=21,
+            label('positive nonsquare $D$, $y>0$: a solution exists; all convergents and nine timing runs retained', font_size=21, color=YES),
+            label('a bounded unsuccessful search excludes its searched range; a general no-solution claim needs proof', font_size=21,
                   color=WHITE),
         ).arrange(DOWN, buff=0.22).next_to(tab, DOWN, buff=0.35)
         with self.voiceover(
-            "In 1900 David Hilbert asked for a process that decides, for any polynomial equation with integer "
-            "coefficients, whether it has a solution in integers. <bookmark mark='a'/> Pell's equation shows why "
-            "searching is not enough. For D equal to thirteen, the smallest solution has x equal to six hundred and "
-            "forty-nine; for sixty-one, a ten-digit number; for nine hundred and ninety-one, thirty digits. "
-            "<bookmark mark='b'/> Brute force over y finds thirteen's in a hundred and eighty tries and twenty-nine's in "
-            "eighteen hundred, but for sixty-one, seventy-eight million tries in twenty seconds find nothing. "
-            "<bookmark mark='c'/> For Pell's equation we are lucky: continued fractions find the answer at once, and "
-            "Lagrange proved one always exists. <bookmark mark='d'/> In general a search that has found nothing has "
-            "proved nothing. The answer could be further out, or there could be none. Hilbert hoped for a method "
-            "that always knows which."
+            "Hilbert asked for an algorithm deciding integer polynomial solvability. <bookmark mark='a'/> Pell's equation illustrates distant witnesses: take positive nonsquare D and require y positive. Continued fractions give least solutions, including the thirty-digit x for D equal to nine hundred and ninety-one. <bookmark mark='b'/> Our deterministic brute search finds D thirteen in one hundred and eighty attempts and D twenty-nine in one thousand, eight hundred and twenty. A million attempts for sixty-one find none. <bookmark mark='c'/> For positive nonsquare D, Lagrange's theorem ensures a positive solution. We retain every convergent through the least one, check its exact identity, and record nine timing repetitions. <bookmark mark='d'/> A cutoff only excludes the searched range. General no-solution claims require a proof, not merely a search that has not yet found a witness."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -61,8 +51,7 @@ class Hilbert(VoiceoverScene):
     def dprm(self):
         head = label(r"The answer: \ no such process", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
-            label(r"a set $S$ is \textbf{Diophantine} if $\ n \in S \iff \exists x_1, \ldots, x_k: \ p(n, x_1, \ldots, "
-                  r"x_k) = 0$", font_size=22, color=WHITE),
+            label('$n\\in S\\subseteq\\mathbb N\\iff\\exists\\vec x\\in\\mathbb N^k:\\ p(n,\\vec x)=0$; integer coefficients', font_size=22, color=WHITE),
             label(r"Davis, \ Putnam and Robinson \ (1961): \ every recognizable set is Diophantine \textbf{if} "
                   r"exponentiation is", font_size=22, color=DATA),
             label(r"Matiyasevich \ (1970): \ it is: \ $y = 2^x$ is Diophantine, \ built from the Fibonacci numbers",
@@ -74,15 +63,7 @@ class Hilbert(VoiceoverScene):
                   font_size=22, color=NO),
         ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "The answer took seventy years and four people. <bookmark mark='a'/> Call a set of numbers Diophantine "
-            "if it is exactly the set of parameters for which some polynomial equation has a solution. <bookmark "
-            "mark='b'/> In 1961 Martin Davis, Hilary Putnam and Julia Robinson proved that every recognizable set is "
-            "Diophantine, provided that exponentiation is. <bookmark mark='c'/> In 1970 Yuri Matiyasevich, aged "
-            "twenty-two, closed the gap: the relation y equals two to the x is Diophantine, with a construction built "
-            "on the Fibonacci numbers. <bookmark mark='d'/> So the recognizable sets and the Diophantine sets are the "
-            "same. <bookmark mark='e'/> In particular there is a polynomial that has a solution exactly when machine "
-            "number n halts on itself. <bookmark mark='f'/> A process for Hilbert's problem would decide halting. "
-            "There is none."
+            "The answer took seventy years and four people. <bookmark mark='a'/> Call a set of numbers Diophantine if, over natural-number parameters and auxiliary variables, an integer-coefficient polynomial vanishes exactly for its members. Integer-variable solvability is equivalent by standard encodings, such as sums of four squares for nonnegativity. <bookmark mark='b'/> In 1961 Martin Davis, Hilary Putnam and Julia Robinson proved that every recognizable set is Diophantine, provided that exponentiation is. <bookmark mark='c'/> In 1970 Yuri Matiyasevich, aged twenty-two, closed the gap: the relation y equals two to the x is Diophantine, with a construction built on the Fibonacci numbers. <bookmark mark='d'/> So the recognizable sets and the Diophantine sets are the same. <bookmark mark='e'/> In particular there is a polynomial that has a solution exactly when machine number n halts on itself. <bookmark mark='f'/> A process for Hilbert's problem would decide halting. There is none."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):
@@ -108,21 +89,12 @@ class Hilbert(VoiceoverScene):
                   color=WHITE),
             label(r"each positive value, \ over all non-negative integers, \ is a prime, \ and every prime occurs",
                   font_size=22, color=YES),
-            label(r"the big bracket is $1 - \sum(\text{squares})$: \ positive only when every square is 0, \ i.e. "
-                  r"when the 14 equations hold", font_size=21, color=DATA),
+            label('positive iff all 14 equations hold; for each prime $k+2$ there EXISTS an auxiliary tuple', font_size=21, color=DATA),
             label(r"useless for finding primes: \ the point is that ``$k + 2$ is prime'' \textbf{is} a Diophantine "
                   r"statement", font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.2).next_to(poly, DOWN, buff=0.4)
         with self.voiceover(
-            "A striking corollary. <bookmark mark='a'/> The primes are a recognizable set, so they are Diophantine, "
-            "and James Jones, Daihachiro Sato, Hideo Wada and Douglas Wiens wrote the polynomial out in 1976: "
-            "twenty-six variables, one for each letter of the alphabet, degree twenty-five. <bookmark mark='b'/> "
-            "Plug in any non-negative integers. Whenever the value is positive, it is a prime, and every prime "
-            "appears. <bookmark mark='c'/> The trick is the shape: k plus two, times one minus a sum of squares. That "
-            "is positive only when every square is zero, that is, when fourteen equations hold at once, and they "
-            "hold exactly when k plus two is prime. <bookmark mark='d'/> Nobody would find primes this way; random "
-            "inputs give negative values almost always. The point is that primality, like halting, can be written "
-            "as a single equation."
+            "Recognizable sets are Diophantine, including the primes. <bookmark mark='a'/> Jones, Sato, Wada and Wiens wrote a twenty-six-variable polynomial of degree twenty-five. <bookmark mark='b'/> Over nonnegative integer inputs, its positive values are exactly the primes. <bookmark mark='c'/> It is k plus two times one minus a sum of fourteen squares. Positivity forces every square to vanish. For each prime k plus two, THERE EXISTS an auxiliary tuple satisfying those equations. An arbitrary auxiliary tuple need not satisfy them. <bookmark mark='d'/> This is a representation theorem, not an efficient prime generator or a measured assertion about random inputs. The existential auxiliary variables carry the computation."
         ) as vo:
             self.play(FadeIn(head), FadeIn(poly, lag_ratio=0.05), run_time=2.5)
             for mk, n_ in zip("abcd", notes):

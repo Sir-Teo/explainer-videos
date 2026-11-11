@@ -13,14 +13,14 @@ class Hook(VoiceoverScene):
         t = load("tiles")
         h = load("hilbert")
         q = load("quines")
-        head = label(r"Three innocent questions", font_size=36).to_edge(UP, buff=0.35)
+        head = label('Three questions, three connections', font_size=36).to_edge(UP, buff=0.35)
         tiles = VGroup(*[wang(tt, 0.42) for tt in t["tiles"]]).arrange(RIGHT, buff=0.1)
         grid = wang_grid(t["tiles"], next(r["grid"] for r in t["rects"] if r["n"] == 12), s=0.2)
         q1 = VGroup(label(r"\textbf{1.} \ Can copies of these 11 tiles cover the whole plane?", font_size=22,
                           color=DATA), tiles).arrange(DOWN, buff=0.2)
         p61 = next(r for r in h["rows"] if r["D"] == 61)
         b61 = next(b for b in h["brute"] if b["D"] == 61)
-        q2 = VGroup(label(r"\textbf{2.} \ Does this equation have a solution in whole numbers?", font_size=22,
+        q2 = VGroup(label('\\textbf{2.} \\ Is there an integer solution with $y>0$?', font_size=22,
                           color=HEAD), MathTex(r"x^2 - 61\,y^2 = 1", font_size=40, color=HEAD)).arrange(DOWN, buff=0.2)
         q3 = VGroup(label(r"\textbf{3.} \ Can a program print exactly its own source code?", font_size=22, color=LAM),
                     mono("s = 's = %r\\nprint(s %% s)'", 20, LAM), mono("print(s % s)", 20, LAM)).arrange(DOWN, buff=0.12)
@@ -29,26 +29,15 @@ class Hook(VoiceoverScene):
         grid.to_edge(RIGHT, buff=0.6).align_to(q1, UP)
         a1 = label(r"yes, \ but never periodically: \\ a 12$\times$12 patch, \ found by backtracking", font_size=19,
                    color=DATA).next_to(grid, DOWN, buff=0.15).align_to(grid, RIGHT)
-        a2 = label(rf"brute force: \ {words(b61['tried'])} values of $y$ in {b61['seconds']:.0f} s, \ nothing; \\ "
+        a2 = label(rf"brute force: \ {words(b61['tried'])} values of $y$ in {b61['seconds']:.2f} s, \ nothing; \\ "
                    rf"the answer: \ $x = {p61['x']}$, \ $y = {p61['y']}$", font_size=19, color=HEAD).next_to(a1, DOWN,
                                                                                                          buff=0.35).align_to(grid, RIGHT)
         a3 = label(rf"yes: \ and one in the Pebble language, \\ {q['pebble_lines']} lines, \ checked on the emulator",
                    font_size=19, color=LAM).next_to(a2, DOWN, buff=0.35).align_to(grid, RIGHT)
-        moral = label(r"each is a special case of a question \textbf{no algorithm can answer} in general",
+        moral = label('tiling and integer equations: undecidable in general; \\ quines: constructive self-reference',
                       font_size=24, color=NO).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Here are three questions from three different worlds. <bookmark mark='a'/> First, geometry. Here are "
-            "eleven square tiles with coloured edges. Can copies of them cover the whole plane, with touching edges "
-            "always the same colour? <bookmark mark='b'/> A computer search finds a twelve-by-twelve patch at once, "
-            "and larger ones too. But it never finds a pattern that repeats, and that is no accident. <bookmark "
-            "mark='c'/> Second, number theory. Are there whole numbers x and y with x squared minus sixty-one y "
-            "squared equal to one? Fermat posed this one as a challenge in 1657. <bookmark mark='d'/> Trying every y "
-            "up to seventy-eight million found nothing in twenty seconds. The smallest answer has x near one point "
-            "eight billion. <bookmark mark='e'/> Third, programs. Can a program print its own source code, exactly, "
-            "without reading itself from a file? <bookmark mark='f'/> Yes: here is one in Python, and we wrote one "
-            "in the Pebble language and ran it. <bookmark mark='g'/> This part is about the surprise that ties them "
-            "together. Each of these questions is one case of a general problem that no algorithm can solve, and "
-            "the reason, every time, is the halting problem of Part 1."
+            "Here are three questions linking geometry, arithmetic and programs. <bookmark mark='a'/> Can these eleven fixed-orientation Wang tiles cover the whole plane? <bookmark mark='b'/> Our search constructs finite patches. The separate Jeandel and Rao theorem proves full-plane tilings exist and none is periodic. <bookmark mark='c'/> Does x squared minus sixty-one y squared equal one have a solution with positive y? <bookmark mark='d'/> A million attempted positive values find none. Continued fractions give the least solution, with x equal to one billion, seven hundred and sixty-six million, three hundred and nineteen thousand and forty-nine. <bookmark mark='e'/> Can a program print its own source without reading a file? <bookmark mark='f'/> Yes. Both our Python and Pebble quines do exactly that. <bookmark mark='g'/> Tiling and general integer equations lead to undecidability. The quine question has a constructive answer: self-reference supplies a technique used in the impossibility proofs."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -80,13 +69,7 @@ class Hook(VoiceoverScene):
             r"where decidability ends, \ undecidability in the wild, \ and the frontier",
         ], font_size=26).move_to(DOWN * 0.2)
         with self.voiceover(
-            "Part 25 of Computer Science, Built: Undecidable. Act Five begins: limits and secrets. <bookmark "
-            "mark='a'/> In this part: which problems can be decided, which can only be recognized, and how to carry "
-            "undecidability from one problem to another; Rice's theorem, which forbids almost every question about "
-            "what programs do; programs that print themselves; dominoes, tiles and Diophantine equations, each "
-            "hiding a Turing machine; Gödel's incompleteness theorem, proved from the halting problem; oracles; "
-            "Kolmogorov complexity and Chaitin's Omega; and the busy beavers once more, where provability itself "
-            "runs out."
+            "Part 25 of Computer Science, Built: Undecidable. Act Five begins: limits and secrets. <bookmark mark='a'/> We study decidability, recognition and reductions; Rice's theorem for nontrivial extensional program properties; constructive self-reference; dominoes, tiles and integer equations; effective arithmetic theories and incompleteness; oracles and the arithmetic hierarchy; plain program complexity, prefix-free Omega, and busy beavers. Each result has a model and assumptions, and our finite experiments will keep their limits explicit."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")

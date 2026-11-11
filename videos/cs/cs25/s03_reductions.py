@@ -18,7 +18,7 @@ class Reductions(VoiceoverScene):
         self.play(FadeOut(card))
 
     def mapping(self):
-        head = label(r"$A \le_m B$: \ a computable $f$ with $\ w \in A \iff f(w) \in B$", font_size=32).to_edge(
+        head = label('$A\\le_m B$: TOTAL computable $f$ with $w\\in A\\iff f(w)\\in B$', font_size=32).to_edge(
             UP, buff=0.35)
         A = Ellipse(width=3.2, height=3.8, color=DATA).shift(LEFT * 3.5 + UP * 0.25)
         B = Ellipse(width=3.2, height=3.8, color=HEAD).shift(RIGHT * 3.5 + UP * 0.25)
@@ -55,11 +55,10 @@ class Reductions(VoiceoverScene):
 
     def table(self):
         head = label(r"A first catalogue", font_size=34).to_edge(UP, buff=0.35)
-        rows = [[r"$A_{TM}$: \ does $M$ accept $w$?", r"recognizable", r"from $K$: \ ask about $\langle M, "
-                 r"\langle M \rangle \rangle$"],
+        rows = [[r"$A_{TM}$: \ does $M$ accept $w$?", r"recognizable", 'from $K$: simulate self-input; accept after ANY halt'],
                 [r"$E_{TM}$: \ does $M$ accept nothing?", r"co-recognizable", r"$M'$ ignores its input and runs $M$ on "
                  r"$w$"],
-                [r"$EQ_{TM}$: \ do $M_1, M_2$ accept the same?", r"neither", r"$E_{TM}$ is the case $M_2 = $ reject all"],
+                [r"$EQ_{TM}$: \ do $M_1, M_2$ accept the same?", r"neither", 'two reductions: see worked exercise 1'],
                 [r"TOT: \ does $M$ halt on every input?", r"neither", r"Chapter 9: \ it is $\Pi_2$-complete"]]
         tab = grid_table([r"problem", r"status", r"the reduction"], rows, widths=[5.4, 2.6, 5.0], row_h=0.56,
                          font_size=20, mono_cols=(), colors=[[WHITE, DATA, GREY_A], [WHITE, LAM, GREY_A],
@@ -73,14 +72,7 @@ class Reductions(VoiceoverScene):
             label(r"next: \ one theorem that handles all such questions at once", font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.24).next_to(tab, DOWN, buff=0.45)
         with self.voiceover(
-            "Here is the start of the catalogue. <bookmark mark='a'/> Whether a machine accepts a given input is "
-            "recognizable and undecidable, since K is the special case of a machine run on itself. Whether a machine "
-            "accepts nothing at all is co-recognizable and undecidable. Whether two machines accept the same "
-            "language is on neither side. And whether a machine halts on every input is further out still. <bookmark "
-            "mark='b'/> The trick is always the same: build a new machine that ignores its own input and simulates "
-            "the hard case. <bookmark mark='c'/> Here, a machine M prime that accepts everything if M accepts w, and "
-            "nothing otherwise. Asking whether M prime accepts nothing is asking whether M accepts w. <bookmark "
-            "mark='d'/> Doing this one problem at a time gets tedious. The next chapter does them all at once."
+            "Here is the catalogue. <bookmark mark='a'/> Acceptance is recognizable and undecidable. To reduce K to acceptance, wrap M so that it simulates M on its own description and ACCEPTS after any halt, including rejection. Emptiness is co-recognizable; equivalence and totality are neither. <bookmark mark='b'/> A standard construction ignores the new machine's input and simulates a chosen computation. <bookmark mark='c'/> Make M prime accept everything if M accepts w, and nothing otherwise. Then M prime has an empty language exactly when M does NOT accept w. A decider for emptiness would decide acceptance by reversing its answer. The exercises give both reductions needed for equivalence. <bookmark mark='d'/> Rice's theorem handles many nontrivial semantic questions together."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

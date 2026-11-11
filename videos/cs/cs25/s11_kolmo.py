@@ -22,7 +22,7 @@ class Kolmogorov(VoiceoverScene):
     def compress(self):
         k = load("kolmo")
         head = label(r"The shortest description", font_size=34).to_edge(UP, buff=0.3)
-        defn = MathTex(r"K(x) = \min\{\, |p| \;:\; U(p) = x \,\}", font_size=38, color=HEAD).next_to(head, DOWN,
+        defn = MathTex(r"C(x) = \min\{\, |p| \;:\; U(p) = x \,\}", font_size=38, color=HEAD).next_to(head, DOWN,
                                                                                                     buff=0.3)
         rows = k["rows"]
         names = [r["name"].replace("...", r"\ldots") for r in rows]
@@ -33,24 +33,15 @@ class Kolmogorov(VoiceoverScene):
         cl = label(rf"best of zlib, bz2, xz \ (bytes, log scale), \ each input {words(k['n'])} bytes", font_size=18,
                    color=GREY_A).next_to(ch, DOWN, buff=0.15)
         notes = VGroup(
-            label(r"random bytes: \\ \textbf{no} compressor gains anything", font_size=20, color=NO),
-            label(r"English: \ about a third; \\ pi's digits: \ 43\% \ (a digit needs 3.32 bits)", font_size=20,
+            label('this random-byte sample: all three retained compressed outputs are larger', font_size=20, color=NO),
+            label('container bytes shown; every output is decompressed and compared in full', font_size=20,
                   color=DATA),
-            label(rf"yet a {k['pi_program_lines']}-line, \ {k['pi_program_bytes']}-byte program prints those digits: \\ "
-                  r"$K$ is tiny, \\ the compressors cannot see it", font_size=20, color=HEAD),
-            label(r"a compressor gives an \textbf{upper bound} \\ on $K$, \ never the value", font_size=20, color=YES),
+            label('finite pi printer: length input, caller and interpreter also required; \\\\ all 100,000 digits independently certified', font_size=20, color=HEAD),
+            label('plain $C$: compressed bytes $\\times8$ PLUS fixed decoder, interpreter and framing costs', font_size=20, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(ch, RIGHT, buff=0.6).align_to(ch, UP)
         fit_right(notes)
         with self.voiceover(
-            "Andrey Kolmogorov, Ray Solomonoff and Gregory Chaitin, independently in the 1960s, measured information "
-            "by programs. <bookmark mark='a'/> The Kolmogorov complexity of a string is the length of the shortest "
-            "program that prints it. <bookmark mark='b'/> Compressors give a feel for it. We gave three of them a "
-            "hundred thousand bytes of six kinds. Random bytes do not shrink at all; the output is slightly larger. "
-            "<bookmark mark='c'/> English text shrinks to about a third. The digits of pi to forty-three percent, "
-            "which is just the cost of writing a digit in binary. <bookmark mark='d'/> But pi's digits are not "
-            "random in Kolmogorov's sense: a nineteen-line function prints all of them. The compressors cannot "
-            "find that program. <bookmark mark='e'/> Every compressor gives an upper bound on the complexity, never "
-            "the value itself, and this chapter shows why nothing can do better."
+            "Fix an optimal plain description machine U. <bookmark mark='a'/> Plain complexity C of x is the minimum number of program BITS needed to output x. Later we will distinguish optimal prefix-free complexity K. <bookmark mark='b'/> Each retained input here has one hundred thousand bytes. Random bytes grow slightly under these three compressors. <bookmark mark='c'/> English and decimal pi compress, partly because their byte encodings contain redundancy. Every compressed output is retained and decompressed to its full original input. <bookmark mark='d'/> Our finite pi printer also needs its requested length, caller, libraries and interpreter. An independent integer-interval Chudnovsky computation certifies all one hundred thousand digits, including the leading three. <bookmark mark='e'/> Eight times a compressed byte length, PLUS fixed decoding and framing costs, supplies a plain-complexity upper bound. It does not compute the shortest description."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -64,29 +55,21 @@ class Kolmogorov(VoiceoverScene):
         self.clear_scene()
 
     def invariance(self):
-        head = label(r"Which programming language? \ Hardly matters", font_size=32).to_edge(UP, buff=0.35)
+        head = label('Invariance needs OPTIMAL description machines', font_size=32).to_edge(UP, buff=0.35)
         lines = VGroup(
-            MathTex(r"K_U(x) \;\le\; K_V(x) + c_V \quad \text{for every } x", font_size=40, color=HEAD),
-            label(r"\textbf{proof}: \ $U$ is universal, \ so some fixed program $i_V$ makes $U$ interpret $V$",
+            MathTex(r"C_U(x) \;\le\; C_V(x) + c_V \quad \text{for every } x", font_size=40, color=HEAD),
+            label('\\textbf{hypothesis}: optimal $U$ simulates $V$ with a fixed ADDITIVE program-length cost',
                   font_size=22, color=WHITE),
             label(r"the shortest $V$-program for $x$, \ prefixed by $i_V$, \ is a $U$-program for $x$: \ "
                   r"$c_V = |i_V|$", font_size=22, color=WHITE),
-            label(r"so any two universal machines agree up to a constant: \ $|K_U(x) - K_V(x)| \le c$",
+            label('two OPTIMAL plain machines: $|C_U(x)-C_V(x)|\\le c$',
                   font_size=22, color=YES),
-            label(r"the \textbf{invariance theorem}: \ information content is a property of $x$, \ not of the "
-                  r"language", font_size=22, color=DATA),
-            label(r"(the constant is the length of a Pebble interpreter written in Python, \ or the other way round)",
+            label('invariance: machine independence up to an additive constant, which can matter for short strings', font_size=22, color=DATA),
+            label('interpreter/compiler description PLUS its effective encoding and runtime convention',
                   font_size=20, color=GREY_A),
         ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Shortest program in which language? <bookmark mark='a'/> The invariance theorem says it barely "
-            "matters. For any two universal machines, complexities differ by at most a constant. <bookmark "
-            "mark='b'/> The proof: U is universal, so some fixed program makes U interpret V. <bookmark mark='c'/> "
-            "Put that interpreter in front of the shortest V-program for x, and you have a U-program for x, longer "
-            "by the interpreter's length and no more. <bookmark mark='d'/> Swap the roles, and the two measures "
-            "agree up to a constant. <bookmark mark='e'/> So the information in a string belongs to the string. "
-            "<bookmark mark='f'/> Between Python and the Pebble language, the constant is the size of an "
-            "interpreter for one written in the other."
+            "The invariance theorem requires an OPTIMAL description system. <bookmark mark='a'/> An optimal U simulates every description machine V with a fixed additive program-length cost. <bookmark mark='b'/> The interpreter or compiler description is fixed for V. <bookmark mark='c'/> Combining it with a V description of x produces a U description only that constant longer, under the stipulated effective encoding. <bookmark mark='d'/> If both machines are optimal, the two inequalities bound their difference by a constant. <bookmark mark='e'/> The constant can matter for short strings; machine independence means only this additive equivalence. <bookmark mark='f'/> Arbitrary computational universality alone does not guarantee an additive length overhead, and an interpreter's raw source size omits its own runtime and encoding costs."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):
@@ -115,22 +98,13 @@ class Kolmogorov(VoiceoverScene):
             MathTex(r"1 + 2 + 4 + \cdots + 2^{n-k-1} \;=\; 2^{n-k} - 1 \;<\; 2^{n-k}", font_size=34, color=WHITE),
             label(r"programs shorter than $n - k$ bits: \ too few to print more than a $2^{-k}$ fraction of the "
                   r"$2^n$ strings", font_size=22, color=DATA),
-            label(r"so at most 1 string in 1,024 can be shortened by 10 bits; \ and \textbf{some} string of every "
-                  r"length can't be shortened at all", font_size=22, color=YES),
-            label(r"that is what \textbf{random} means here: \ $K(x) \ge |x|$; \ and every compressor expands "
-                  r"some input", font_size=22, color=HEAD),
+            label('fewer than $2^{-10}$ have $C(x)<n-10$; some length-$n$ string has $C(x)\\ge n$', font_size=22, color=YES),
+            label('fixed deficit $c$: at least $1-2^{-c}$ have $C(x)\\ge n-c$; chosen-machine incompressibility', font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.28).next_to(row, DOWN, buff=0.45)
         with self.voiceover(
-            "Now a proof that takes a single line. <bookmark mark='a'/> Count programs. There is one of length zero, "
-            "two of length one, four of length two. All the programs shorter than n bits together number two to "
-            "the n, minus one: fewer than the strings of length n. <bookmark mark='b'/> More generally, programs "
-            "shorter than n minus k bits can print at most a two to the minus k fraction of the strings of length "
-            "n. <bookmark mark='c'/> At most one string in a thousand and twenty-four can be shortened by ten "
-            "bits, and at every length some string cannot be shortened at all. <bookmark mark='d'/> Such a string "
-            "is called random: it has no description shorter than itself. It also shows that every compressor "
-            "makes some file bigger, as it did for our random bytes."
+            "Count descriptions. <bookmark mark='a'/> Fewer than two to the n programs have length strictly below n, so at least one n-bit string has plain complexity at least n. <bookmark mark='b'/> More generally, fewer than a two-to-the-minus-k fraction have C strictly below n minus k, for zero through n as the deficit range. <bookmark mark='c'/> Thus fewer than one in a thousand and twenty-four have C below n minus ten. Saying shortened BY ten would instead include equality and change the threshold. <bookmark mark='d'/> Incompressibility is relative to a fixed machine and deficit. At least one minus two to the minus c of n-bit strings have C at least n minus c. The exact threshold C at least n guarantees some strings, not an overwhelming fraction. An injective lossless compressor cannot shorten every input."
         ) as vo:
-            self.play(FadeIn(head), LaggedStart(*[FadeIn(c) for c in cols], lag_ratio=0.15), run_time=2.5)
+            self.play(FadeIn(head), LaggedStart(*[FadeIn(c) for c in cols], lag_ratio=0.15), run_time=1.2)
             for mk, ln in zip("abcd", lines):
                 vo.wait_until(mk)
                 self.play(FadeIn(ln, shift=UP * 0.1))
@@ -138,11 +112,11 @@ class Kolmogorov(VoiceoverScene):
         self.clear_scene()
 
     def berry(self):
-        head = label(r"$K$ is uncomputable, \ and randomness unprovable", font_size=32).to_edge(UP, buff=0.35)
+        head = label(r"$C$ is uncomputable, \ and randomness unprovable", font_size=32).to_edge(UP, buff=0.35)
         code_lines = [
             "def berry(L):",
             "    for x in all_strings():   # shortest first",
-            "        if K(x) > L:",
+            "        if C(x) > L:",
             "            return x",
         ]
         prog = VGroup(*[mono(ln, 21, LAM) for ln in code_lines]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
@@ -153,29 +127,17 @@ class Kolmogorov(VoiceoverScene):
                   font_size=19, color=GREY_A),
         ).next_to(frame, RIGHT, buff=0.5)
         lines = VGroup(
-            label(r"if $K$ were computable, \ \texttt{berry(L)} would print a string of complexity $> L$", font_size=22,
+            label(r"if $C$ were computable, \ \texttt{berry(L)} would print a string of complexity $> L$", font_size=22,
                   color=WHITE),
             label(r"but \texttt{berry} with $L$ written in is only $\log_2 L + c$ bits long: \ for large $L$, \ "
                   r"$\log_2 L + c < L$", font_size=22, color=DATA),
-            label(r"a short program printed a string that needs a long one: \ so $K$ is \textbf{not computable}",
+            label(r"a short program printed a string that needs a long one: \ so $C$ is \textbf{not computable}",
                   font_size=22, color=NO),
-            label(r"Chaitin \ (1974): \ replace ``compute $K$'' by ``search for a proof that $K(x) > L$'' \ in a "
-                  r"sound theory $T$", font_size=22, color=HEAD),
-            label(r"so $T$ proves $K(x) > L$ for \textbf{no} $x$ once $L$ exceeds a constant $c_T$, \ though almost "
-                  r"every $x$ is random", font_size=22, color=YES),
+            label('Chaitin: enumerate proofs in an EFFECTIVELY AXIOMATIZED SOUND arithmetic theory $T$', font_size=22, color=HEAD),
+            label('for $L>c_T$, $T$ proves $C(x)>L$ for no $x$; effectiveness and soundness are essential', font_size=22, color=YES),
         ).arrange(DOWN, buff=0.27).next_to(frame, DOWN, buff=0.45).set_x(0)
         with self.voiceover(
-            "Now the twist. <bookmark mark='a'/> In 1906 Bertrand Russell published a paradox he credited to a "
-            "librarian, G. G. Berry: the smallest number that cannot be named in under sixty letters. That phrase "
-            "names it in fewer. Turn the paradox into a program. <bookmark mark='b'/> If complexity were "
-            "computable, this function would return the first string whose complexity exceeds L. <bookmark "
-            "mark='c'/> But the function, with the number L written into it, is only about log L bits long, plus "
-            "a constant, and for large L that is much less than L. <bookmark mark='d'/> A short program would have "
-            "printed a string that has no short program. So complexity cannot be computed. <bookmark mark='e'/> "
-            "Gregory Chaitin pushed this into logic. Instead of computing K, search a sound theory's proofs for a "
-            "proof that some string has complexity above L. <bookmark mark='f'/> The same argument shows the "
-            "search must fail once L passes a constant that depends on the theory. Almost every string is random, "
-            "and beyond a fixed size, no theory can prove a single one of them is."
+            "Turn Berry's paradox into a program. <bookmark mark='a'/> The phrase names an object allegedly too complex for that phrase. <bookmark mark='b'/> If plain C were computable, search strings in shortlex order and output the first with C above L. Counting ensures one exists. <bookmark mark='c'/> Encoding L in this fixed plain program costs about log L plus a constant, less than L for large L. <bookmark mark='d'/> That contradicts the selected string's complexity, proving C uncomputable. <bookmark mark='e'/> For an EFFECTIVELY AXIOMATIZED SOUND theory T, enumerate proofs instead, seeking any assertion C of x exceeds L. <bookmark mark='f'/> Beyond a T-dependent constant none can appear. The effective hypothesis is essential. Incompressibility of most strings means a stated fixed deficit; it is not a claim that every sound theory lacks all proofs of randomness."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

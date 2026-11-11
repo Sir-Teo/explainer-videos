@@ -3,7 +3,7 @@
 TITLE = "Computer Science, Built: Part 25, Undecidable"
 
 SCENES = [
-    ("s01_hook", "Hook", "Three questions, one answer"),
+    ("s01_hook", "Hook", "Three questions, three connections"),
     ("s02_classes", "Classes", "1. Decidable and recognizable"),
     ("s03_reductions", "Reductions", "2. Mapping reductions"),
     ("s04_rice", "Rice", "3. Rice's theorem"),

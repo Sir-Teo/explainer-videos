@@ -37,26 +37,14 @@ class Beavers(VoiceoverScene):
                   r"them", font_size=21, color=DATA),
             label(r"Ackermann \ (1928): \ computable, \ total, \ and outgrows every one of them \ (the promise of Part "
                   r"11)", font_size=21, color=HEAD),
-            label(r"why: \ an interpreter for a total language is itself total, \ but it can't be written in that "
-                  r"language", font_size=21, color=LAM),
+            label('effective total Nat-to-Nat syntax; total interpreter; closure under the displayed diagonal operation', font_size=21, color=LAM),
             label(r"if \texttt{interp} were in it, \ so is $d(x) = \texttt{interp}(x, x) + 1$; \ then $d(\ulcorner d "
                   r"\urcorner) = d(\ulcorner d \urcorner) + 1$ \ (Part 14)", font_size=20, color=GREY_A),
             label(r"the busy beaver outgrows even Ackermann: \ it outgrows \textbf{every} computable function",
                   font_size=21, color=NO),
         ).arrange(DOWN, buff=0.18).next_to(tab, DOWN, buff=0.35)
         with self.voiceover(
-            "Three speeds of growth. <bookmark mark='a'/> Programs whose loops have bounds fixed before they start, "
-            "what logicians call primitive recursion, can compute two to the n, towers of twos, and any fixed "
-            "stack of such things. <bookmark mark='b'/> Part 11 met Wilhelm Ackermann's function and promised to "
-            "say why it matters. It is computable and always finishes, yet it eventually outgrows every function "
-            "that bounded loops can compute. A of four, four is already a tower of twos with sixty-five thousand "
-            "five hundred and thirty-six in the top exponent. <bookmark mark='c'/> The reason is the diagonal "
-            "argument once more. A language in which every program finishes has an interpreter that always "
-            "finishes too, but the interpreter cannot be written in that language. <bookmark mark='d'/> If it "
-            "could, so could d of x, the interpreter run on x with input x, plus one. Run d on its own code and "
-            "you get d of d equals d of d plus one. That is the argument Part 14 pointed to, for why the typed "
-            "lambda calculus cannot interpret itself. <bookmark mark='e'/> And the third column outgrows even Ackermann. Part 1 "
-            "stated that the busy beaver outgrows every computable function. Now the proof."
+            "Compare primitive recursive, total computable and busy-beaver growth. <bookmark mark='a'/> Primitive recursion computes exponentials, variable-height towers, and fixed iterations of such constructions. <bookmark mark='b'/> Ackermann's diagonal growth eventually dominates every primitive recursive function, while remaining total computable. <bookmark mark='c'/> For an effectively enumerable total language of functions from unbounded natural numbers to natural numbers, assume a computable total interpreter on valid codes, extended by a default on invalid codes. <bookmark mark='d'/> If the language also represented that interpreter and the diagonal function interpreter of x on x plus one, applying the diagonal to its own code would contradict equality. The coding and closure assumptions matter, including for typed languages. <bookmark mark='e'/> The LAST column, S, eventually dominates every total computable function, including Ackermann."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule),
                       LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.2), run_time=2.5)
@@ -70,7 +58,7 @@ class Beavers(VoiceoverScene):
         head = label(r"$S$ eventually exceeds every computable $f$", font_size=34).to_edge(UP, buff=0.35)
         parts = VGroup(
             region(3.0, 0.8, r"write $n$ \ ($n$ states)", DATA, font_size=20),
-            region(3.0, 0.8, r"compute $f(2n)$ \ ($c$ states)", HEAD, font_size=20),
+            region(3.0, 0.8, 'compute $\\max(f(2n),f(2n+1))$ \\\\ (fixed $c$ states)', HEAD, font_size=20),
             region(3.0, 0.8, r"count down \ ($\approx$ 3 states)", LAM, font_size=20),
         ).arrange(RIGHT, buff=0.35).next_to(head, DOWN, buff=0.5)
         arr = VGroup(*[Arrow(parts[i].get_right(), parts[i + 1].get_left(), buff=0.05, color=GREY_B,
@@ -86,14 +74,7 @@ class Beavers(VoiceoverScene):
                   color=NO),
         ).arrange(DOWN, buff=0.3).next_to(bl, DOWN, buff=0.5)
         with self.voiceover(
-            "The proof is a machine built in three pieces. <bookmark mark='a'/> Take any computable function f, "
-            "computed by a machine with c states. For each n, build a machine that first writes n on its tape, "
-            "which takes n states; <bookmark mark='b'/> then computes f of two n, which takes c states; then counts "
-            "that number down to zero, a few states more. <bookmark mark='c'/> It has n plus a constant states, and "
-            "it halts after more than f of two n steps. <bookmark mark='d'/> So the busy beaver of n plus that "
-            "constant is bigger than f of two n. <bookmark mark='e'/> Once n is larger than the constant, the busy "
-            "beaver of two n is bigger still. The busy beaver passes f and stays ahead. <bookmark mark='f'/> No "
-            "computable function can even bound it."
+            "The proof is a machine built in three pieces. <bookmark mark='a'/> Take any TOTAL computable natural-valued function f, computed by a machine with c states. For each n, build a machine that first writes n on its tape, which takes n states; <bookmark mark='b'/> then computes the larger of f of two n and f of two n plus one, using a fixed number c of states; then counts that number down to zero, a few states more. <bookmark mark='c'/> It has n plus a constant states, and it halts after more than f of two n steps. <bookmark mark='d'/> So the busy beaver of n plus that constant is bigger than f of two n. <bookmark mark='e'/> Once n is larger than the constant, the busy beaver of two n is bigger still. The same maximum also covers the next odd size, by monotonicity of S. Thus S passes f at every sufficiently large size and stays ahead. <bookmark mark='f'/> No computable function can even bound it."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -116,30 +97,19 @@ class Beavers(VoiceoverScene):
                                                                                         r"\ (2021)"],
                 [r"27", r"Goldbach's conjecture", r"posted in 2015 \ (unverified)"],
                 [r"744", r"the Riemann hypothesis", r"Aaronson, \ Matiyasevich, \ O'Rear \ (2016)"],
-                [r"432 -- 7,910", r"the consistency of ZFC", r"Yedidia and Aaronson \ (2016) \ and after"]]
-        tab = grid_table([r"states", r"the machine halts iff \ldots \ is false", r"by"], rows,
+                ['7,910; 432 claimed (2025)', r"the consistency of ZFC", r"Yedidia and Aaronson \ (2016) \ and after"]]
+        tab = grid_table([r"states", 'value or conjecture encoding; evidence differs by row', r"by"], rows,
                          widths=[1.6, 6.6, 4.6], row_h=0.5, font_size=19, mono_cols=(),
                          colors=[[HEAD, WHITE, GREY_A]] * len(rows))
         tab.next_to(head, DOWN, buff=0.35).set_x(0)
         lines = VGroup(
-            label(r"knowing $S(27)$ would settle Goldbach: \ run the machine $S(27)$ steps \ (in principle)",
+            label('S($n$) settles an encoded conjecture only AFTER its at-most-$n$-state encoding is verified',
                   font_size=21, color=YES),
-            label(r"a sound theory $T$ proves the value of $S(n)$ for only finitely many $n$: \ a machine that "
-                  r"searches $T$ for a contradiction has a fixed size", font_size=21, color=NO),
-            label(r"where the line falls for ZFC, \ between 6 and 432, \ is unknown", font_size=21, color=HEAD),
+            label('effective sound sufficiently strong arithmetic $T$: only finitely many exact $S(n)$ values provable', font_size=21, color=NO),
+            label('checked published upper bound: 7,910; 432 (2025) conditional on construction verification', font_size=21, color=HEAD),
         ).arrange(DOWN, buff=0.2).next_to(tab, DOWN, buff=0.35)
         with self.voiceover(
-            "Part 1 told how the five-state value was proved, and why six may be out of reach. Here is the larger "
-            "map. <bookmark mark='a'/> Many open problems are the halting of a single small machine. A fifteen-state "
-            "machine, from Tristan Stérin and Damien Woods in 2021, halts exactly if Erdős was wrong that every "
-            "power of two beyond the eighth has a digit two in base three. A twenty-seven-state machine, posted "
-            "online in 2015 and not yet checked carefully, halts if Goldbach's conjecture fails. Seven hundred and "
-            "forty-four states encode the Riemann hypothesis. <bookmark mark='b'/> So knowing the busy beaver of "
-            "twenty-seven would settle Goldbach, at least in principle: run the machine that long. <bookmark "
-            "mark='c'/> And some machine of a few hundred states halts only if set theory is inconsistent, so by "
-            "chapter eight, set theory cannot prove its busy-beaver value. Any sound theory pins down only finitely "
-            "many values. <bookmark mark='d'/> Somewhere between six and four hundred and thirty-two, set theory's "
-            "knowledge stops. Where, exactly, nobody knows."
+            "Busy-beaver tables combine established values and conditional encoding claims. <bookmark mark='a'/> S of five is established. Other rows describe particular conjecture-search machines: the reported twenty-seven-state Goldbach encoding still needs verification, while larger published constructions have different evidence. <bookmark mark='b'/> Knowing S of n settles a conjecture only after a CORRECT at-most-n-state encoding is established. We therefore make no unconditional Goldbach conclusion from the unverified twenty-seven-state claim. <bookmark mark='c'/> An effectively axiomatized sound sufficiently strong arithmetic theory can prove only finitely many exact S values: otherwise theorem enumeration would give a computable bound contradicting domination. <bookmark mark='d'/> A checked seven-thousand-nine-hundred-and-ten-state construction gives a published ZFC upper bound under the usual consistency assumptions. The smaller four-hundred-and-thirty-two-state 2025 claim is conditional on its construction checking out. The first unprovable value is unknown."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

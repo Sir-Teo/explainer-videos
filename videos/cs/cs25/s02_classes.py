@@ -22,8 +22,7 @@ class Classes(VoiceoverScene):
         rows = VGroup(
             label(r"\textbf{decidable}: \ a machine that \textbf{always halts}, \ saying yes on members and no on the "
                   r"rest", font_size=22, color=YES),
-            label(r"\textbf{recognizable} \ (recursively enumerable): \ halts with yes on every member; \ on the rest "
-                  r"it may run forever", font_size=22, color=DATA),
+            label('\\textbf{recognizable}: accepts every member, never a nonmember; \\ nonmembers may reject or diverge', font_size=22, color=DATA),
             label(r"\textbf{co-recognizable}: \ its complement is recognizable: \ the machine can confirm every "
                   r"\textbf{no}", font_size=22, color=LAM),
             MathTex(r"K = \{\, \langle M \rangle : M \text{ halts on its own description} \,\}", font_size=34,
@@ -33,15 +32,7 @@ class Classes(VoiceoverScene):
             label(r"$K$ is not decidable: \ Part 1's diagonal argument", font_size=22, color=NO),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.45)
         with self.voiceover(
-            "Part 1 proved that the halting problem cannot be decided. This part makes the picture precise. "
-            "<bookmark mark='a'/> A language is decidable if some machine always halts and answers correctly, yes "
-            "or no. <bookmark mark='b'/> It is recognizable, or recursively enumerable, if some machine halts with "
-            "yes on every member, but on the others is allowed to run forever. You learn yes eventually; you may "
-            "never learn no. <bookmark mark='c'/> And it is co-recognizable if its complement is recognizable: a "
-            "machine can confirm every no. <bookmark mark='d'/> The central example is K, the descriptions of machines "
-            "that halt when given their own description. <bookmark mark='e'/> K is recognizable: just run the "
-            "machine and say yes if it stops. That is the universal machine of Part 1. <bookmark mark='f'/> But it is "
-            "not decidable; that was Part 1's diagonal argument."
+            "Part 1 proved that halting is undecidable. <bookmark mark='a'/> A decider always halts and answers membership correctly. <bookmark mark='b'/> A recognizer accepts every member and never accepts a nonmember. On a nonmember it may reject or run forever. <bookmark mark='c'/> Co-recognizable means that the complement has a recognizer. <bookmark mark='d'/> K contains machine descriptions whose machines halt on their own descriptions, whether accepting or rejecting. <bookmark mark='e'/> Simulate the machine; any halt confirms membership in K. <bookmark mark='f'/> But the diagonal argument proves no decider for K exists."
         ) as vo:
             self.play(FadeIn(head))
             for mk, r_ in zip("abcdef", rows):
@@ -67,20 +58,12 @@ class Classes(VoiceoverScene):
             VGroup(Dot(RIGHT * 5.2 + UP * 1.9, color=NO), mono("TOT: halts on every input", 16, NO).next_to(
                 RIGHT * 5.2 + UP * 1.9, LEFT, buff=0.15)),
         )
-        thm = label(r"\textbf{theorem}: \ decidable $=$ recognizable $\cap$ co-recognizable: \ run the two "
-                    r"recognizers side by side, \ one step each; \ one of them must stop", font_size=21,
+        thm = label('\\textbf{theorem}: decidable $=$ recognizable $\\cap$ co-recognizable \\\\ dovetail both recognizers; wait for one to ACCEPT', font_size=21,
                     color=YES).to_edge(DOWN, buff=0.35)
         cor = label(r"so the complement of $K$ is \textbf{not} recognizable: \ otherwise $K$ would be decidable",
                     font_size=21, color=NO).next_to(thm, UP, buff=0.15)
         with self.voiceover(
-            "Draw the classes. <bookmark mark='a'/> Recognizable languages on the left, co-recognizable on the right. "
-            "<bookmark mark='b'/> Their overlap is exactly the decidable languages. Given a recognizer for a language "
-            "and one for its complement, run both side by side, a step of each in turn. Every input belongs to one "
-            "side, so one of them stops, and you know the answer. <bookmark mark='c'/> K sits on the left. So its "
-            "complement, the machines that run forever on themselves, cannot be recognizable, or K would be "
-            "decidable. <bookmark mark='d'/> And some problems are on neither side. Whether a machine halts on every "
-            "input, called TOT, cannot be confirmed either way by any finite amount of evidence. Chapter nine "
-            "measures how far outside it lies."
+            "Draw the classes. <bookmark mark='a'/> Recognizable sets on the left, co-recognizable on the right. <bookmark mark='b'/> Their intersection is exactly the decidable sets. Dovetail recognizers for a language and its complement. Wait for one to ACCEPT, not merely halt. Exactly one accepts eventually, and neither gives a false acceptance. <bookmark mark='c'/> K is recognizable and undecidable, so its complement cannot be recognizable. <bookmark mark='d'/> TOT, the machines halting on every input, is neither recognizable nor co-recognizable. This forbids uniform recognizers for the two sides; it does not rule out finite proofs for particular machines."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

@@ -35,7 +35,7 @@ class Wild(VoiceoverScene):
              LAM),
             (r"Magic: the Gathering", r"Churchill, \ Biderman, \ Herrick \ (2019): \\ who wins a given position "
                                       r"is undecidable", HEAD),
-            (r"x86 \texttt{mov}", r"Dolan \ (2013): \ \texttt{mov} alone is \\ Turing complete", CTRL),
+            (r"x86 \texttt{mov}", 'Dolan (2013): move operations \\\\ with a repeating control-flow convention', CTRL),
             (r"Conway's Life", r"a Turing machine built of gliders \\ (Rendell, \ 2000)", YES),
         ]
         cards = VGroup()
@@ -61,21 +61,9 @@ class Wild(VoiceoverScene):
         frames.arrange(RIGHT, buff=0.18).next_to(cards, DOWN, buff=0.3)
         fl = label(r"a glider: \ four generations later, \ the same shape, \ one cell down and right", font_size=17,
                    color=GREY_A).next_to(frames, DOWN, buff=0.1)
-        note_ = label(r"a type checker, \ a build tool, \ a game engine: \ give it enough power \ and some question "
-                      r"about it becomes undecidable", font_size=20, color=NO).to_edge(DOWN, buff=0.25)
+        note_ = label('ideal unbounded resources; finite implementation limits change the decision problem', font_size=20, color=NO).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "Programmers meet undecidability by accident. <bookmark mark='a'/> C++ templates were meant for generic "
-            "containers. In 2003 Todd Veldhuizen showed they form a complete programming language running inside "
-            "the compiler, which is why compilers stop at a fixed template depth. <bookmark mark='b'/> In 2017 Radu "
-            "Grigore proved that subtyping with Java generics is undecidable: no compiler can always tell whether "
-            "one type fits another. TypeScript's type system can run any program too, and its checker gives up at a "
-            "depth limit. <bookmark mark='c'/> In 2019 Alex Churchill, Stella Biderman and Austin Herrick built a "
-            "Turing machine out of the cards of Magic: the Gathering, so deciding who wins a given position is "
-            "undecidable. <bookmark mark='d'/> Stephen Dolan showed that the x86 move instruction, alone, is Turing "
-            "complete. <bookmark mark='e'/> And Conway's Game of Life, which Part 1 met, runs Turing machines made of "
-            "gliders, like this one, walking diagonally across the grid. <bookmark mark='f'/> The lesson: give any "
-            "configuration language, type system or rule set enough power, and some question about it becomes "
-            "undecidable. Good designs decide on purpose where to stop."
+            "Universality can appear in unexpected rule systems under IDEAL UNBOUNDED resources. <bookmark mark='a'/> C++ template metaprograms encode computation; real compilers impose depth and memory limits. <bookmark mark='b'/> Grigore's Java-generics result concerns the formal unbounded subtyping problem. Recursive type-level systems likewise differ from finite implementations with cutoffs. <bookmark mark='c'/> The Magic construction uses a precise idealized game model; finite hardware limits are not part of its universality theorem. <bookmark mark='d'/> Dolan's move-instruction construction requires a repeating control-flow convention as well as unbounded storage. A finite straight-line list of moves alone is not universal. <bookmark mark='e'/> Life uses an unbounded grid; the displayed finite glider merely illustrates local dynamics. <bookmark mark='f'/> Choose restrictions for a particular decision problem. Being less than Turing complete by itself does not prove all semantic questions decidable."
         ) as vo:
             self.play(FadeIn(head))
             for mk, k in zip("abcde", [[0], [1, 2], [3], [4], [5]]):
@@ -101,23 +89,15 @@ class Wild(VoiceoverScene):
                   font_size=21, color=WHITE),
             label(r"the \textbf{spectral gap}: \ the energy needed to leave \\ the ground state, \ as the grid grows",
                   font_size=21, color=DATA),
-            label(r"gapped or gapless decides how the material behaves \\ (insulator or conductor, \ phases)",
+            label('gap structure influences phases; \\\\ this is not a general finite-material conductor test',
                   font_size=21, color=GREY_A),
-            label(r"Cubitt, \ P\'erez-Garc\'ia and Wolf \ (\textit{Nature}, 2015): \\ for 2-D lattices, \ "
-                  r"\textbf{undecidable}", font_size=21, color=NO),
+            label('2-D translation-invariant nearest-neighbor families; \\\\ fixed local dimension; robust thermodynamic promise', font_size=21, color=NO),
             label(r"the ground state tiles the plane \ (Robinson's tiles, \ chapter 6) \\ and runs a Turing machine "
                   r"in each tile", font_size=21, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(bonds, RIGHT, buff=0.6)
         fit_right(lines)
         with self.voiceover(
-            "Undecidability reaches physics too. <bookmark mark='a'/> Model a material as particles on a grid, "
-            "each interacting only with its neighbours by the same local rule. <bookmark mark='b'/> Its spectral "
-            "gap is the energy it takes to lift the system out of its lowest state, in the limit of a large grid. "
-            "<bookmark mark='c'/> Whether there is a gap decides much of how the material behaves. <bookmark "
-            "mark='d'/> In 2015 Toby Cubitt, David Pérez-García and Michael Wolf proved that, for two-dimensional "
-            "lattices, whether a gap exists is undecidable. <bookmark mark='e'/> Their construction is this part in "
-            "miniature: the ground state is built from Robinson's aperiodic tiles, each tile running a Turing "
-            "machine, and whether the gap closes depends on whether the machine halts."
+            "The spectral-gap theorem has a precise thermodynamic scope. <bookmark mark='a'/> Consider a computably specified family of two-dimensional translation-invariant nearest-neighbor Hamiltonians with fixed local dimension. <bookmark mark='b'/> Ask about the spectral gap in the growing-lattice limit. <bookmark mark='c'/> The promise separates robust gapped and gapless cases; gap structure influences phases, but is not a universal finite-material conductor test. <bookmark mark='d'/> Cubitt, Perez-Garcia and Wolf proved this promised family problem undecidable. It is not a claim that a particular finite Hamiltonian's eigenvalues cannot be approximated. <bookmark mark='e'/> Their construction combines aperiodic forcing and computation so that halting controls the limiting gap. Finite experimental evidence and the ideal limit are different questions."
         ) as vo:
             self.play(FadeIn(head), FadeIn(bonds), FadeIn(lattice))
             for mk, ln in zip("abcde", lines):

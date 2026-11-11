@@ -28,28 +28,18 @@ class Tiles(VoiceoverScene):
         tiles.arrange(RIGHT, buff=0.12).next_to(head, DOWN, buff=0.35)
         g12 = next(r for r in t["rects"] if r["n"] == 12)["grid"]
         grid = wang_grid(t["tiles"], g12, s=0.26).next_to(tiles, DOWN, buff=0.4).to_edge(LEFT, buff=0.8)
-        rows = [[f"{r['n']} $\\times$ {r['n']}", words(r["nodes"]), f"{r['seconds']:.1f} s"] for r in t["rects"]]
+        rows = [[f"{r['n']} $\\times$ {r['n']}", words(r["nodes"]), (r"$<0.001$ s" if r["seconds"] < 0.001 else f"{r['seconds']:.3f} s")] for r in t["rects"]]
         tab = grid_table([r"square", r"tiles tried", r"time"], rows, widths=[1.8, 2.2, 1.4], row_h=0.36, font_size=19,
                          mono_cols=(), colors=[[WHITE, DATA, GREY_A]] * len(rows))
         tab.next_to(grid, RIGHT, buff=0.6).align_to(grid, UP)
         notes = VGroup(
             label(r"rules: \ no rotations; \ touching edges must match in colour", font_size=20, color=WHITE),
-            label(rf"periodic tilings would show up on a torus: \\ all {t['refuted']} tori up to $8 \times 8$ "
-                  r"(two left open) \ refuted by exhaustive search", font_size=20, color=NO),
-            label(r"Jeandel and Rao \ (2015): \ these 11 tiles tile the plane, \ but \textbf{only aperiodically}; \ "
-                  r"and no smaller set does", font_size=20, color=HEAD),
+            label('DFS: 62 completed refutations, 2 cutoffs; \\\\ independent row DAGs exclude ALL heights at widths 1--8', font_size=20, color=NO),
+            label('Jeandel--Rao: five-color set T; full-plane aperiodicity theorem; minimum among oriented Wang squares', font_size=20, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(tab, DOWN, buff=0.35).align_to(tab, LEFT)
         fit_right(notes)
         with self.voiceover(
-            "In 1961 Hao Wang asked a question about square tiles with coloured edges. <bookmark mark='a'/> You may "
-            "not rotate them, and wherever two tiles touch, the edge colours must agree. Given a finite set, can "
-            "copies of it cover the whole plane? <bookmark mark='b'/> For these eleven, a backtracking search finds "
-            "squares easily: twelve by twelve in forty-five thousand tries, twenty by twenty in four million. "
-            "<bookmark mark='c'/> Wang conjectured that any set that tiles the plane can also tile it periodically, "
-            "with a pattern that repeats. A periodic tiling folds up onto a torus, so we searched every small torus. "
-            "Every one we could finish was impossible. <bookmark mark='d'/> That is because these are Emmanuel "
-            "Jeandel and Michael Rao's eleven tiles from 2015: they tile the plane, but never periodically, and they "
-            "proved no smaller set can do that."
+            "Wang tiles are oriented squares with colored edges. <bookmark mark='a'/> Copies cannot rotate, and adjacent edges must match. The plane problem asks for an infinite tiling. <bookmark mark='b'/> Our backtracker constructs all five displayed finite patches, retaining every grid and checking every edge independently. <bookmark mark='c'/> On the sixty-four tori up to eight by eight, sixty-two bounded searches finish with refutations and two hit the cap. Separately, complete closed-row graphs are acyclic at every width one through eight. Their checked topological certificates exclude tori of ANY height at these widths. <bookmark mark='d'/> These are finite-width results. Full-plane aperiodicity and minimality among Wang square sets come from Jeandel and Rao's theorem, including their five-color set T shown here."
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(x) for x in tiles], lag_ratio=0.08))
             vo.wait_until("a")
@@ -82,7 +72,7 @@ class Tiles(VoiceoverScene):
             label(r"make one tile per (symbol, state) cell of a Turing machine's tableau:", font_size=21, color=WHITE),
             label(r"the colours on each tile's top and bottom force the next row \\ to be the machine's next step",
                   font_size=21, color=DATA),
-            label(r"so the tiles fill the plane $\iff$ the machine \textbf{runs forever}", font_size=21, color=NO),
+            label('full-plane reduction ALSO needs hierarchical forcing of initialized computations at all scales', font_size=21, color=NO),
             label(r"Berger \ (1966): \ tiling is undecidable; \ his proof needed an \textbf{aperiodic} set: \ 20,426 "
                   r"tiles", font_size=21, color=HEAD),
             label(r"then Robinson \ (1971), \ Penrose \ (1974, \ two shapes), \ Kari and Culik \ (13), \ "
@@ -90,15 +80,7 @@ class Tiles(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).next_to(grid, RIGHT, buff=0.6).align_to(grid, UP)
         fit_right(lines)
         with self.voiceover(
-            "Why should tiles be hard? <bookmark mark='a'/> Write a Turing machine's run as a table, one row per "
-            "step, each row the tape at that moment, with the state marked on the head's cell. Make a tile for each "
-            "kind of cell. <bookmark mark='b'/> Choose the edge colours so that a row of tiles can only be followed "
-            "by the row that is the machine's next step. <bookmark mark='c'/> Then the tiles can fill the plane "
-            "exactly when the machine runs forever, and deciding tiling would decide halting. <bookmark mark='d'/> "
-            "Robert Berger proved this in 1966. The hard part was forcing the computation to happen everywhere at "
-            "every scale, which needed a set that tiles only aperiodically. His had twenty thousand four hundred and "
-            "twenty-six tiles. <bookmark mark='e'/> Raphael Robinson brought it to six shapes, Roger Penrose to two, "
-            "Jarkko Kari and Karel Culik to thirteen Wang tiles, and Jeandel and Rao to eleven."
+            "A local computation tableau is the first idea, not the whole plane reduction. <bookmark mark='a'/> Rows encode tape configurations with a marked head and state. <bookmark mark='b'/> Local edge constraints enforce valid neighboring transitions. <bookmark mark='c'/> To obtain a full-plane equivalence with nonhalting, the reduction also needs hierarchical forcing of initialized computations on arbitrarily large scales. Without that mechanism, arbitrary rows could evade the intended start. <bookmark mark='d'/> Berger supplied this difficult aperiodic forcing in 1966; his construction used twenty thousand, four hundred and twenty-six tiles. <bookmark mark='e'/> Later constructions reduced the counts, under different square-tile or geometric-shape conventions. Jeandel and Rao's eleven-tile minimum concerns oriented Wang squares, not every possible tile shape."
         ) as vo:
             self.play(FadeIn(head), FadeIn(grid), FadeIn(gl))
             for mk, ln in zip("abcde", lines):

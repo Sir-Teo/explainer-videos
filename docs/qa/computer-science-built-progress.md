@@ -1,10 +1,35 @@
 # Computer Science, Built — sequential polish
 
 Work on `computer-science-built`, one video at a time, with separate commits.
-Current video: **cs25, Undecidable**. CS1–CS24 source/preview polish checkpoints
+Current video: **cs26, P versus NP**. CS1–CS25 source/preview polish checkpoints
 are complete at the scopes below. Their production release gates remain open; this
 ledger does not treat sampled previews as listening or final-production approval.
 The syllabus's earlier draft-preview claims are separate.
+
+## Final CS25 preview checkpoint, 11 November 2026
+
+- Repair computability domains, nonempty PCP witnesses, explicit search cutoffs, TM tape boundaries,
+  first-applicable FRACTRAN semantics and finite Collatz budgets. All ten fresh schema-2 payloads change
+  from the preserved originals; twelve tests, sixteen boundary probes and 76 full artifacts pass.
+- Independently check 4,679 PCP witnesses and the actual shortest-206 certificate (74,424 states), finite
+  Wang row-DAG certificates, exact Pell minima, two executed Pebble quines, all 100,000 certified pi digits
+  and 18 compression roundtrips. Three UBSan native references replay FRACTRAN, Collatz and sampled TMs.
+- Polish all seventeen chapters and six exercises, retaining theorem assumptions, C/K distinctions,
+  finite-evidence scopes and primary-version reconciliation. Source pairs and actual captures each cover
+  68/68 bilingual blocks. All 622 captions have zero unresolved leads; 42 retained originals are classified.
+- Review 34 endpoints and 34 actual motion movies: 596 appearances, 1,360 samples and 77,949 decoded
+  frames. Thirty endpoint reviews inherit only through whole actual PNG equality; four endpoints and
+  all motion reviews are fresh. Nine raw sparse alerts retain exact-frame dispositions and zero blank runs.
+- Review all 102 native 1080p15 clips: 74,824 frames, 2,448 samples and 102 full-resolution stills. Four
+  actual English narrated pilots decode 11,605 frames plus audio; all 160 samples/four stills are reviewed.
+  Every native/narrated review is fresh. All original, failed, negative and partial candidates remain intact.
+- All 68 English speech blocks pass automated signal/alignment (41.5333 minutes); all 236 scheduled waits
+  meet 250 ms. One of 237 source bookmarks intentionally labels already-visible content. The raw motion
+  controller exit 1 remains preserved; nine byte-bound manual dispositions support final preview acceptance.
+
+[Verified CS25 evidence](evidence/cs25-polish-20261111/README.md).
+Continuous narrated listening, Chinese speech/listening, whole-video native production review and runtime at
+selected narration pace remain open release gates. Long quine heading holds remain explicit pacing findings.
 
 ## Final CS24 preview checkpoint, 11 November 2026
 

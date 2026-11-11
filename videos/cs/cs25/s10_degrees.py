@@ -34,7 +34,7 @@ class Degrees(VoiceoverScene):
         lines = VGroup(
             label(r"Turing \ (1939): \ $A \le_T B$ \ if some machine with a $B$-oracle decides $A$", font_size=22,
                   color=WHITE),
-            label(r"give it the halting set $K$ as oracle: \ now every $\Sigma_1$ question is one step", font_size=22,
+            label('a $K$ oracle: one query AFTER a computable reduction decides a $\\Sigma_1$ question', font_size=22,
                   color=DATA),
             label(r"but the diagonal argument \textbf{relativizes}: \ oracle machines cannot decide their own halting "
                   r"problem $K'$", font_size=22, color=NO),
@@ -42,14 +42,7 @@ class Degrees(VoiceoverScene):
                   r"\textbf{jumps}", font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.28).next_to(VGroup(m, o), DOWN, buff=0.7).set_x(0)
         with self.voiceover(
-            "Is halting the hardest problem there is? <bookmark mark='a'/> Turing asked in 1939 what a machine "
-            "could do with a magic box, an oracle, that answers membership in some set in a single step. A problem "
-            "is Turing-reducible to B if a machine with an oracle for B solves it. <bookmark mark='b'/> Give a "
-            "machine the halting set as its oracle. Every question of the form, does some search succeed, is now "
-            "one step. <bookmark mark='c'/> But Part 1's diagonal argument works just as well for oracle machines: "
-            "they cannot decide whether oracle machines halt. That is a new, harder problem, the jump of K. "
-            "<bookmark mark='d'/> Give that an oracle and jump again. There is an infinite tower of problems, each "
-            "strictly harder than the last."
+            "An oracle answers a chosen membership query in one abstract step. <bookmark mark='a'/> Turing reducibility permits an algorithm to query the oracle during its computation. <bookmark mark='b'/> A K oracle decides a sigma-one question after a computable reduction to K and one query. The reduction itself still takes computation; the whole task is not necessarily one step. <bookmark mark='c'/> The diagonal argument relativizes: machines with a K oracle cannot decide their own halting problem, K prime. <bookmark mark='d'/> Repeating the jump produces an infinite strictly increasing tower of Turing degrees."
         ) as vo:
             self.play(FadeIn(head), FadeIn(m), FadeIn(ml), FadeIn(o), FadeIn(ol))
             vo.wait_until("a")
@@ -61,9 +54,9 @@ class Degrees(VoiceoverScene):
         self.clear_scene()
 
     def ladder(self):
-        head = label(r"Count the quantifiers", font_size=34).to_edge(UP, buff=0.3)
+        head = label('Alternating quantifier blocks over computable predicates', font_size=34).to_edge(UP, buff=0.3)
         rungs = [
-            (r"$\Delta_0$: \ decidable", r"$x$ is prime; \ $M$ halts within 100 steps", YES),
+            ('$\\Delta_1$: decidable', r"$x$ is prime; \ $M$ halts within 100 steps", YES),
             (r"$\Sigma_1$: \ $\exists t$", r"$M$ halts \ ($K$); \ an equation has a solution \ (ch. 7)", DATA),
             (r"$\Pi_1$: \ $\forall t$", r"$M$ never halts; \ Goldbach; \ the Riemann hypothesis; \ Con(ZFC)", DATA),
             (r"$\Sigma_2$: \ $\exists \forall$", r"FIN: \ $M$ halts on only finitely many inputs", HEAD),
@@ -80,24 +73,13 @@ class Degrees(VoiceoverScene):
         ladder.arrange(UP, aligned_edge=LEFT, buff=0.18).next_to(head, DOWN, buff=0.35).to_edge(LEFT, buff=0.6)
         fit_right(ladder)
         notes = VGroup(
-            label(r"Post's theorem \ (1948): \ $\Sigma_{n+1}$ = recognizable with an oracle for the $n$-th jump",
+            label('Post: $\\Sigma_{n+1}$ is r.e. relative to $\\emptyset^{(n)}$; $\\Pi_{n+1}$ is co-r.e. relative to it',
                   font_size=20, color=WHITE),
             label(r"FIN is $\Sigma_2$-complete; \ TOT is $\Pi_2$-complete; \ COF is $\Sigma_3$-complete", font_size=20,
                   color=GREY_A),
         ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "There is a ruler for this tower: count the alternating quantifiers. <bookmark mark='a'/> At the bottom, "
-            "questions a program settles by bounded search: is x prime, does M halt within a hundred steps. "
-            "<bookmark mark='b'/> One existential quantifier in front, there exists a time t at which M has halted, "
-            "gives sigma one: halting itself, and the equations of chapter seven. <bookmark mark='c'/> One "
-            "universal quantifier gives pi one: M never halts. So do Goldbach's conjecture and the Riemann "
-            "hypothesis, and the consistency of set theory; each says some search never succeeds. <bookmark "
-            "mark='d'/> Two quantifiers. Halting on only finitely many inputs is sigma two. <bookmark mark='e'/> "
-            "Halting on every input, TOT, is pi two: for every input, there is a time. So are the twin prime "
-            "conjecture, the Collatz conjecture, and P not equal to NP, the subject of Part 26. <bookmark mark='f'/> "
-            "And halting on all but finitely many inputs is sigma three. <bookmark mark='g'/> Emil Post proved in "
-            "1948 that each level is exactly what a recognizer can do with an oracle for the jump below, and each of "
-            "these machine problems is complete for its level."
+            "Count alternating quantifier BLOCKS over computable predicate matrices. <bookmark mark='a'/> Delta one means decidable sets. Bounded-formula delta zero is a different syntactic class. <bookmark mark='b'/> A leading existential block gives sigma one: for example there exists a time when M halts. <bookmark mark='c'/> A universal block gives pi one, including the displayed nonhalting formulations. These are upper-level formulations of conjectures, not completeness classifications of individual closed sentences. <bookmark mark='d'/> Finitely many halting inputs, FIN, is sigma-two-complete. <bookmark mark='e'/> Totality, TOT, is pi-two-complete. The other displayed conjectures admit pi-two formulations; that does not make them complete. <bookmark mark='f'/> Cofinitely many halting inputs, COF, is sigma-three-complete. <bookmark mark='g'/> Post's theorem says sigma n plus one is recognizable relative to the n-th jump; pi n plus one is co-recognizable relative to that oracle."
         ) as vo:
             self.play(FadeIn(head))
             for mk, r in zip("abcdef", ladder):
@@ -123,28 +105,17 @@ class Degrees(VoiceoverScene):
         cross = label(r"$A \not\le_T B, \ B \not\le_T A$", font_size=20, color=HEAD).next_to(VGroup(A, B), DOWN,
                                                                                          buff=0.25)
         lines = VGroup(
-            label(r"every undecidable set so far computes $K$: \\ is every recognizable set decidable, \\ or as "
-                  r"hard as $K$?", font_size=21, color=WHITE),
+            label('Post: must every c.e. degree below $K$ be decidable or complete?', font_size=21, color=WHITE),
             label(r"Post \ (1944) \ asked; \\ Friedberg \ (1957) \ and Muchnik \ (1956) \ answered \textbf{no}",
                   font_size=21, color=HEAD),
             label(r"the \textbf{priority method}: \ build $A$ and $B$ in stages, \\ meeting infinitely many demands, "
                   r"\ each injured finitely often", font_size=21, color=DATA),
-            label(r"Sacks \ (1964): \ between any two such degrees lies a third: \\ the picture is dense, \ not a "
-                  r"ladder", font_size=21, color=LAM),
-            label(r"but no \textit{natural} problem is known to sit strictly between: \\ every one we meet is "
-                  r"decidable or complete", font_size=21, color=GREY_A),
+            label('Sacks density: between DISTINCT COMPARABLE c.e. degrees; not between incomparable $A,B$', font_size=21, color=LAM),
+            label('natural intermediate examples: a research theme; naturalness is an informal criterion', font_size=21, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.26).next_to(VGroup(A, B), RIGHT, buff=0.9).shift(DOWN * 0.2)
         fit_right(lines)
         with self.voiceover(
-            "One last question about the recognizable sets. <bookmark mark='a'/> Every undecidable one we have met "
-            "so far is exactly as hard as halting. Is that always so? <bookmark mark='b'/> Emil Post asked in 1944, "
-            "and it took twelve years. Albert Muchnik in Moscow and Richard Friedberg, an undergraduate at Harvard, "
-            "independently built two recognizable sets, neither of which can compute the other, so both lie "
-            "strictly between the decidable sets and K. <bookmark mark='c'/> Their technique, the priority method, "
-            "builds the sets in stages, satisfying an infinite list of requirements, each one disturbed only "
-            "finitely often by those ranked above it. <bookmark mark='d'/> Gerald Sacks showed later that between "
-            "any two such degrees there is another: the structure is dense. <bookmark mark='e'/> And yet every "
-            "natural problem anyone has found is either decidable or exactly as hard as halting. Nobody knows why."
+            "Post asked about the computably enumerable degrees below K. <bookmark mark='a'/> Must a recognizable set be decidable or complete? <bookmark mark='b'/> Friedberg and Muchnik constructed incomparable computably enumerable sets A and B. Both degrees are strictly between the decidable degree and K. <bookmark mark='c'/> Their priority constructions meet infinitely many requirements, each injured only finitely often by higher priorities. <bookmark mark='d'/> Sacks's density theorem inserts a degree between any two DISTINCT COMPARABLE computably enumerable degrees. It does not insert one between the incomparable A and B in this drawing. <bookmark mark='e'/> Finding convincing natural intermediate examples is a research theme, with naturalness an informal criterion. It is not the theorem that every conceivable natural problem is decidable or complete."
         ) as vo:
             self.play(FadeIn(head), FadeIn(lo), FadeIn(hi), FadeIn(lol), FadeIn(hil))
             vo.wait_until("a")

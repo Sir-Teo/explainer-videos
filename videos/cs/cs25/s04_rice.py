@@ -18,13 +18,11 @@ class Rice(VoiceoverScene):
         self.play(FadeOut(card))
 
     def theorem(self):
-        head = label(r"Every non-trivial semantic property is undecidable", font_size=32).to_edge(UP, buff=0.35)
+        head = label('Rice: nontrivial extensional properties of partial computable functions', font_size=32).to_edge(UP, buff=0.35)
         lines = VGroup(
-            label(r"a \textbf{semantic} property depends only on \textbf{what} a program computes, \ not how it is "
-                  r"written", font_size=22, color=WHITE),
+            label('\\textbf{extensional}: equal partial input-output functions agree; faults and divergence are undefined', font_size=22, color=WHITE),
             label(r"\textbf{non-trivial}: \ some programs have it and some don't", font_size=22, color=WHITE),
-            label(r"examples: \ ``halts on input 0'', \ ``never divides by zero'', \ ``computes a sorting function'', \ "
-                  r"``is equivalent to this one''", font_size=21, color=GREY_A),
+            label('examples: defined on 0; total; computes sorting; equals a fixed partial computable function', font_size=21, color=GREY_A),
             label(r"\textbf{proof} \ (Rice, 1953): \ say the empty function lacks $P$, \ and a program $Y$ has it",
                   font_size=22, color=HEAD),
             label(r"given $M, w$, \ build $M'$: \ on input $x$, \ first run $M$ on $w$; \ then run $Y$ on $x$",
@@ -35,18 +33,7 @@ class Rice(VoiceoverScene):
                   r"complement.)", font_size=22, color=NO),
         ).arrange(DOWN, buff=0.27).next_to(head, DOWN, buff=0.45)
         with self.voiceover(
-            "Henry Rice proved in 1953 that the halting problem is not an isolated case but the rule. <bookmark "
-            "mark='a'/> Call a property of programs semantic if it depends only on what the program computes, its "
-            "input-output behaviour, and not on how it is written. <bookmark mark='b'/> Call it non-trivial if some "
-            "programs have it and some do not. <bookmark mark='c'/> Halting on zero, never dividing by zero, "
-            "computing a sorting function, being equivalent to a given program: all semantic, all non-trivial. "
-            "<bookmark mark='d'/> Rice's theorem says every such property is undecidable. The proof is one "
-            "construction. Suppose the program that never answers lacks the property, and some program Y has it. "
-            "<bookmark mark='e'/> Given any machine M and input w, build M prime: on input x, first run M on w, and "
-            "if that ever finishes, run Y on x. <bookmark mark='f'/> If M halts on w, M prime computes exactly what Y "
-            "computes, so it has the property. If not, M prime never answers anything, so it lacks it. <bookmark "
-            "mark='g'/> A decider for the property would decide halting. If the never-answering program has the "
-            "property instead, apply the argument to its complement."
+            "Rice's theorem concerns partial computable input-output functions in an effective universal programming system. <bookmark mark='a'/> A property is extensional if equal partial functions always agree on it. Faults and divergence both count as undefined under this convention. <bookmark mark='b'/> Nontrivial means that some computed functions have the property and some lack it. <bookmark mark='c'/> Defined on zero, total, computes sorting, or equals a fixed partial computable function are examples. Never dividing by zero is not an extensional example under these observations. <bookmark mark='d'/> Suppose the nowhere-defined function lacks P and some program Y has it. <bookmark mark='e'/> Construct M prime to simulate M on w, then run Y on its own input if the simulation halts. <bookmark mark='f'/> If M halts, M prime computes Y's function; otherwise it computes the nowhere-defined function. <bookmark mark='g'/> A decider for P would decide halting. If the nowhere-defined function has P, apply the argument to its complement."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdefg", lines):
@@ -58,29 +45,19 @@ class Rice(VoiceoverScene):
     def consequences(self):
         head = label(r"What Rice forbids, \ and how practice escapes", font_size=32).to_edge(UP, buff=0.35)
         lines = VGroup(
-            label(r"no perfect \textbf{virus scanner}: \ ``behaves maliciously'' is semantic \ (Fred Cohen, 1987)",
+            label('no exact total detector of a specified nontrivial extensional malicious behaviour',
                   font_size=22, color=NO),
-            label(r"no compiler can always find the \textbf{optimal} program, \ or all \textbf{dead code}", font_size=22,
+            label('no general all-dead-code detector; optimality claims require a specified objective and model', font_size=22,
                   color=NO),
-            label(r"no static analyzer is both \textbf{sound} \ (never misses a bug) \ and \textbf{complete} \ (never a "
-                  r"false alarm)", font_size=22, color=NO),
+            label('no total analyzer exactly decides an undecidable property without misses or false alarms', font_size=22, color=NO),
             label(r"the escape: \ \textbf{approximate}. \ Types reject some correct programs \ (Part 14); \ "
                   r"analyzers warn too often", font_size=22, color=YES),
-            label(r"or restrict the language: \ total languages, \ bounded loops \ (Part 54 proves programs correct "
-                  r"anyway)", font_size=22, color=YES),
+            label('restrict the particular question; totality alone does not decide every semantic property', font_size=22, color=YES),
             label(r"Rice is about \textbf{behaviour}: \ syntactic questions, \ ``has a loop'', \ ``has 10 states'', \ "
                   r"stay decidable", font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "This shapes real software. <bookmark mark='a'/> Fred Cohen showed in 1987 that no program can detect "
-            "every virus, since behaving maliciously is a semantic property. <bookmark mark='b'/> No compiler can "
-            "always find the best equivalent program, or even all the dead code. <bookmark mark='c'/> And no static "
-            "analyzer can be both sound, never missing a bug, and complete, never raising a false alarm. <bookmark "
-            "mark='d'/> Practice escapes by approximating. A type checker rejects some correct programs, as Part 14 "
-            "showed; analyzers err on the side of warnings. <bookmark mark='e'/> Or it restricts the language until "
-            "the question becomes decidable, and Part 54 will prove real programs correct within such limits. "
-            "<bookmark mark='f'/> Notice what Rice does not forbid. Questions about the text of a program, how many "
-            "states it has or whether it contains a loop, remain easy."
+            "These limits guide software design under unbounded semantics. <bookmark mark='a'/> Exact detection of a specified nontrivial extensional malicious behaviour is undecidable. The behaviour and observation model must be stated. <bookmark mark='b'/> Detecting all dead code is impossible in general; optimization impossibility claims likewise require a particular objective and model. <bookmark mark='c'/> No terminating analyzer decides every instance of such an undecidable property both without missed cases and without false alarms. <bookmark mark='d'/> Practical tools use conservative approximations or incomplete searches. <bookmark mark='e'/> Restrictions can make particular questions decidable. Totality alone does not make all semantic questions decidable: even equality of total primitive recursive programs is problematic. <bookmark mark='f'/> Syntactic questions about a finite program description remain decidable by inspection."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):

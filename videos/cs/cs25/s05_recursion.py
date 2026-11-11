@@ -66,9 +66,9 @@ class Recursion(VoiceoverScene):
     def theorem(self):
         head = label(r"Kleene's recursion theorem", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
-            label(r"for every computable transformation $t$ of programs, \ some program $e$ behaves like $t(e)$",
+            label('acceptable effective numbering: every TOTAL computable index transformer $t$ has $\\varphi_e=\\varphi_{t(e)}$',
                   font_size=22, color=HEAD),
-            label(r"so a program may \textbf{obtain its own description} \ and do anything with it", font_size=22,
+            label('construct a program with an embedded self-description; no general source-introspection facility', font_size=22,
                   color=WHITE),
             label(r"the quine is the case $t$ = ``print this text''", font_size=22, color=LAM),
             label(r"\textbf{halting, again}: \ suppose $H$ decides halting. \ Write $R$: \ get my own code; \ ask $H$ "
@@ -79,16 +79,7 @@ class Recursion(VoiceoverScene):
                   r"G\"odel's sentence \ (chapter 8)", font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Stephen Kleene turned the trick into a theorem in 1938. <bookmark mark='a'/> For any computable way of "
-            "transforming programs, there is a program that behaves exactly like its own transform. <bookmark "
-            "mark='b'/> In practice: a program can always obtain its own description, and then do whatever it likes "
-            "with it. <bookmark mark='c'/> The quine is the simplest case, where the program just prints the text. "
-            "<bookmark mark='d'/> Here is the halting problem again, in three lines. Suppose H decides halting. "
-            "Write a program R that gets its own code, asks H whether R halts, and then does the opposite: loops if "
-            "H says halt, halts if H says loop. H is wrong about R. <bookmark mark='e'/> No diagonal table, no list of "
-            "all machines: self-reference is simply a programming technique. <bookmark mark='f'/> It is the same "
-            "trick that powers self-replicating viruses, Gödel's self-referential sentence in chapter eight, and Ken "
-            "Thompson's trojan compiler, which Part 55 will build and catch."
+            "Kleene's recursion theorem makes self-reference precise. <bookmark mark='a'/> In an acceptable effective numbering of programs, every TOTAL computable transformation of program indices has an index whose program computes the same partial function as its transform. <bookmark mark='b'/> This constructs programs with an embedded description of themselves. It does not provide arbitrary source introspection to every existing program. <bookmark mark='c'/> Printing a supplied description gives the quine construction. <bookmark mark='d'/> If H decided halting, construct R with its own description embedded, ask H whether R halts, and do the opposite. H must be wrong. <bookmark mark='e'/> The construction packages the diagonal argument as a programming technique. <bookmark mark='f'/> Related self-reference appears in Gödel sentences and Thompson's compiler construction in Part 55."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):

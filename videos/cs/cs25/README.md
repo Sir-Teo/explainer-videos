@@ -1,111 +1,151 @@
 # Computer Science, Built — Part 25: Undecidable
 
-Part 25 of a sixty-one-part course in computer science (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), the first part of Act V, *Limits and Secrets*. Part 1 proved that one problem, halting,
-cannot be decided. This part finds the same impossibility everywhere: in every question about what programs do, in
-dominoes, tilings and equations over the integers, in Gödel's theorems, and in the busy beaver, where proof itself runs
-out.
+Part 25 of the [61-part series](../README.md), opening Act V, *Limits and Secrets*.
+The episode connects recognition, reductions, self-reference, arithmetic and
+information. Every impossibility result has an explicit model and hypotheses;
+finite unsuccessful searches retain their cutoff status.
 
-The instrument is `explainer/cs/algo/computability.py`. It holds:
-* a breadth-first PCP solver over the "overhang", and Sipser's Turing-machine-to-PCP construction;
-* computation histories of small Turing machines;
-* a Wang-tile backtracker, for rectangles and tori, and Jeandel and Rao's eleven tiles;
-* a Python quine and a Pebble-language quine, generated from a template;
-* FRACTRAN and Conway's PRIMEGAME; Collatz trajectories;
-* compressed sizes (zlib, bz2, xz) as upper bounds on Kolmogorov complexity; π by Machin's formula; Thue–Morse;
-* Pell's equation by continued fractions; the outline of the 2023 "hat" monotile.
+The instrument is `explainer/cs/algo/computability.py`; numerical producers are
+`compute.py`, with separate certificate checkers and native references in
+`computational_references.py`. Tests exercise domains, budgets, full witnesses,
+independent short PCP enumeration, tape boundaries and both executed quines.
 
-It is tested in `tests/test_cs25_computability.py`: both quines reproduce their source byte for byte (the Pebble one on
-the emulator), the PCP solver agrees with known instances, the TM reduction's match is the machine's accepting
-history, and the tiles, primes and Pell solutions are checked.
+The bilingual source registry contains 68 exact narration pairs. Plain complexity
+is written **C**; optimal prefix-free complexity is written **K**. Chinese source
+and cue agreement is distinct from synthesized speech and listening approval.
 
-* **Three questions, one answer.** Hook.
-  - Eleven tiles: a 12 × 12 patch at once, but never a repeating pattern.
-  - x² − 61y² = 1: 78 million values of y in 20 seconds find nothing; the answer has x = 1,766,319,049.
-  - A program that prints itself, in Python and in Pebble.
-* **1. Decidable and recognizable.**
-  - Decidable, recognizable (r.e.) and co-recognizable; K, the machines that halt on themselves.
-  - Decidable = recognizable ∩ co-recognizable (proved, by running two recognizers in turn). K's complement is not
-    recognizable. TOT is on neither side.
-* **2. Mapping reductions.**
-  - A ≤ₘ B by a computable f; undecidability flows forward.
-  - A catalogue: A_TM, E_TM, EQ_TM, TOT, each by a machine that ignores its input.
-* **3. Rice's theorem** (proved).
-  - Every non-trivial semantic property of programs is undecidable.
-  - Consequences: virus detection (Cohen 1987), optimal compilation, sound-and-complete static analysis; the escape by
-    approximation (Part 14's types, Part 54's verifiers).
-* **4. Programs that know their own code.**
-  - A Python quine. A Pebble-language quine of 759 lines (735 assignments store the rest of the program as character
-    codes) that the emulator runs in 98,687 instructions, printing its source byte for byte.
-  - Kleene's recursion theorem (1938), and halting's undecidability in three lines.
-* **5. Post's correspondence problem.**
-  - Sipser's four dominoes and the five-domino match.
-  - The reduction: dominoes for a two-rule Turing machine; the 13-domino match spells its accepting history
-    `#q10#1p0#10a#`.
-  - 20,000 random three-domino sets (words of 1–3 bits): 4,679 solved, the longest shortest match 15 dominoes. The
-    four-domino instance (1000/0, 01/0, 1/101, 00/001) whose shortest match is 206 dominoes, confirmed by our search
-    (73,134 states).
-  - Decidable for two dominoes (1982), undecidable for five (Neary 2015), open for three and four.
-  - Ambiguity of context-free grammars is undecidable, paying off Part 12's promise.
-* **6. Tiling the plane.**
-  - Jeandel and Rao's eleven Wang tiles (2015): squares up to 20 × 20 found (3.98 million tiles tried), and all 62
-    tori up to 8 × 8 that the search could finish refuted.
-  - Why tiling is undecidable: a tile per tableau cell (Berger 1966, 20,426 tiles; Robinson; Penrose; Kari–Culik).
-  - The hat (Smith, Myers, Kaplan and Goodman-Strauss, 2023): 13 vertices, area 8√3; the spectre.
-* **7. Hilbert's tenth problem.**
-  - Pell's equation: brute force finds D = 13 in 180 tries and D = 29 in 1,820, and nothing for D = 61 in 78 million;
-    continued fractions find every one in microseconds (D = 991: 30 digits).
-  - The DPRM theorem: recognizable = Diophantine (Davis, Putnam, Robinson 1961; Matiyasevich 1970).
-  - Jones, Sato, Wada and Wiens's 26-variable polynomial whose positive values are the primes (1976).
-* **8. Gödel, through halting.**
-  - Gödel numbering: 0 = 0 is 2¹·3³·5¹ = 270; ∀x(x + 0 = x) has 47 digits, and factoring recovers it.
-  - The first incompleteness theorem from the halting problem (proved). The Gödel sentence as a program, via the
-    recursion theorem. The second theorem, and the end of Hilbert's program.
-* **9. Oracles and the arithmetic hierarchy.**
-  - Oracle machines and the jumps ∅ < K < K′ < ….
-  - Σ₁ to Σ₃ with examples: Goldbach, the Riemann hypothesis and Con(ZFC) are Π₁; TOT, twin primes, Collatz and
-    P ≠ NP are Π₂. Post's theorem (1948); FIN, TOT, COF complete at their levels.
-  - Post's problem and the priority method (Friedberg 1957, Muchnik 1956); Sacks's density theorem.
-* **10. Kolmogorov complexity.**
-  - Six kinds of data, 100,000 bytes each, through three compressors: random bytes 100,041 (no gain); English
-    31,759; π's digits 43,229; Thue–Morse 91; all zeros 47. A 19-line function prints all of π's digits.
-  - The invariance theorem (proved); incompressible strings by counting (proved); K is uncomputable (Berry's
-    paradox); Chaitin's incompleteness theorem.
-* **11. Chaitin's Ω.**
-  - The halting probability, approachable from below but never certified.
-  - A computable cousin: 5,000 random three-state machines. The fraction halted reaches 0.4502 by 16 steps and never
-    moves again in 2,000; the longest halting run is 11 steps. Exact, because S(3) = 21.
-  - Ω's first n bits decide every n-bit program; Ω is random; the 64 bits computed by Calude, Dinneen and Shu (2002);
-    Solovay's Ω of which ZFC can determine no bit.
-* **12. Busy beavers, again.**
-  - Three speeds of growth: primitive recursion, Ackermann (Part 11's promise), the busy beaver. A total language
-    cannot interpret itself (Part 14's promise).
-  - Proof that S eventually exceeds every computable function.
-  - Famous questions as busy-beaver values: Erdős (15 states), Goldbach (27, unverified), Riemann (744), Con(ZFC)
-    (432 to 7,910).
-* **13. Where decidability ends.**
-  - Presburger and Tarski (decidable), arithmetic and the rationals (undecidable).
-  - The word problem for groups (Novikov, Boone); matrix mortality (Paterson 1970; open for 2 × 2).
-  - Conway's PRIMEGAME: every prime up to 127 as a power of 2, in 2,835,628 steps.
-  - Collatz: 837,799 takes 524 steps; 704,511 climbs to 56,991,483,520; Conway's undecidable generalization.
-* **14. Undecidability in the wild.**
-  - C++ templates, Java generics (Grigore 2017), TypeScript's types, Magic: the Gathering (2019), x86 `mov`, Conway's
-    Life.
-  - The spectral gap (Cubitt, Pérez-García and Wolf, 2015).
-* **15. Frontier: Hilbert's tenth over other rings.**
-  - Undecidable over every ring of integers of a number field: Koymans and Pagano (2024), and independently Alpöge,
-    Bhargava, Ho and Shnidman (2025).
-  - Over ℚ: open. Mazur's conjecture; Poonen (2009) and Koenigsmann (2016) define ℤ in ℚ with quantifiers.
-  - How small an undecidable problem can be: 9 unknowns over ℕ, 11 over ℤ (Sun 2021), 5 dominoes, 3 × 3 matrices.
-  - Open problems. Outro.
+- **Hook:** finite Wang patches, positive Pell solutions, and constructive quines
+  illustrate three connections. Quine existence itself has a constructive answer.
+- **Classes and reductions:** a recognizer never falsely accepts; dovetailing waits
+  for acceptance. Reducing self-halting to acceptance uses a halt-then-accept
+  wrapper, including simulated rejection. Emptiness reverses the acceptance answer;
+  exercise 1 supplies both equivalence reductions.
+- **Rice:** nontrivial extensional properties of partial computable functions in
+  an effective universal system. Under the stated observations, faults and
+  divergence are both undefined; “never divides by zero” is not an extensional
+  example. Analyzer, malware and optimization consequences need a specified
+  property, objective and unbounded model. Totality alone does not decide every
+  semantic question.
+- **Self-reference:** Kleene's theorem assumes an acceptable effective numbering
+  and a total computable index transformer. It constructs embedded descriptions;
+  it is not an introspection facility for arbitrary existing source files.
+  The forward Pebble quine prints 13,380 bytes in 98,687 instructions; the executed
+  reverse-printing exercise prints 15,705 bytes in reverse in 472,027 instructions.
+- **PCP:** matches are nonempty. The displayed TM construction is forced-first
+  **MPCP**, under disjoint one-character alphabets, a reserved separator, nonempty
+  input and rejection of a left move off cell zero. A separate standard reduction
+  yields ordinary PCP. Full concatenated rows, not only history prefixes, are
+  checked. The four-domino example's shortest length **206** is actually searched:
+  73,135 dequeued states including the root (73,134 with the legacy root-excluding
+  convention). A retained independent residual-distance closure certificate and
+  full string witness exclude shorter matches. Five-pair undecidability follows
+  Neary's **published 2015** theorem; the conflicting four-pair 2013 preprint is
+  superseded. CFG intersection/ambiguity follow the marker construction; CFG
+  universality needs another reduction.
+- **Tiles:** every 4, 8, 12, 16 and 20 square grid is retained and independently
+  edge-checked. The bounded torus search finishes 62 refutations and leaves two
+  cutoffs among the 64 sizes up to 8 by 8. A separate complete closed-row graph
+  and topological certificate for **each width 1–8 excludes every positive
+  height** at those widths. This finite-width result does not prove full-plane
+  aperiodicity. Jeandel–Rao Figure 3's five-color set T is covered by their
+  Theorem 3; their four-color variant is a different set. The eleven-tile minimum
+  concerns oriented Wang squares. The plane reduction also needs hierarchical
+  forcing of initialized computations at arbitrary scales. The hat needs reflected
+  copies; the spectre does not. Integer lattice cross products certify hat area
+  exactly as **8√3** and verify every displayed vertex.
+- **Hilbert:** Pell assumes positive nonsquare D and y>0. A deterministic
+  million-attempt brute cap finds D=13 in 180 attempts and D=29 in 1,820; D=61
+  remains unresolved by that brute prefix. Continued fractions give its least
+  positive solution (1,766,319,049, 226,153,980). All ten convergent certificates
+  and nine monotonic timing repetitions per D are retained. Leastness uses the
+  standard Pell-convergent theorem. DPRM uses natural-number parameters and
+  auxiliaries; standard encodings transfer to integer-variable solvability.
+  The prime polynomial asserts existence of auxiliary tuples, not that arbitrary
+  tuples work at a prime k+2.
+- **Gödel:** effective axiomatization, arithmetic strength and soundness scope
+  the nonhalting proof. Rosser's consistency-only refinement is distinct from
+  Gödel's original omega-consistency hypothesis for the opposite direction.
+  The second theorem uses the standard provability predicate and derivability
+  conditions; it does not follow merely from the informal soundness argument.
+  Hilbert's objective is obstructed when its proposed finitistic reasoning is
+  formalizable inside the theory, not by banning all external consistency proofs.
+- **Degrees:** decidable sets are Δ1, distinct from bounded-formula Δ0. Quantifier
+  blocks have computable matrices. Σ(n+1) is recognizable relative to the nth
+  jump; Π(n+1) is co-recognizable. One oracle query follows a computable reduction.
+  Sacks density requires distinct comparable c.e. degrees, not the incomparable
+  displayed A and B. “Natural intermediate” is an informal research theme.
+- **Complexity:** compression container bytes times eight plus fixed decoding,
+  interpreter and framing costs bound plain C. The finite pi printer also needs
+  its length argument, caller and dependencies. Every full compressed output
+  round-trips; the independent interval-certified Chudnovsky computation agrees
+  with all 100,000 digits, **including the leading 3**, from integer Machin.
+  Invariance requires optimal description machines with additive simulation cost.
+  Fewer than 2^-c of n-bit strings have C<n-c; the exact C≥n threshold guarantees
+  some strings, not an overwhelming fraction. Chaitin's theorem requires an
+  effectively axiomatized sound theory.
+- **Omega:** an optimal prefix-free halting domain defines the measure of infinite
+  coin streams having a halting program prefix. No uniform computable convergence
+  modulus supplies arbitrary precision; special finite prefixes may be certified.
+  Given dyadic truncation a, stop enumeration when q≥a: equality is sufficient if
+  attained, while waiting only for equality can miss an overshoot. Prefix randomness
+  uses prefix-free K, distinct from plain C. Effective sound-theory hypotheses
+  apply, including Solovay's special-machine ZFC claim.
+  The separate finite sample has **2,251/5,000 = 0.4502** halting machines, with an
+  iid Wilson 95% interval approximately **[0.4365, 0.4640]**. All machine strings
+  and halt times are retained. Independent native replay through **S(3)=21**
+  matches every 2,000-step result. This exactly classifies the sample, not the
+  16^6-machine population probability; observed empirical fractions are not
+  deterministic lower bounds on that population measure.
+- **Busy beavers:** S counts steps; Σ counts ones. The dominance sketch covers
+  both parities and nonmonotone total computable f by computing
+  max(f(2n), f(2n+1)). Total-language diagonalization states its effective syntax,
+  Nat-to-Nat and closure assumptions. Exact-value unprovability requires an
+  effective sound sufficiently strong arithmetic theory. Goldbach's reported
+  27-state encoding is unverified, so no unconditional S(27) consequence follows.
+  The checked published 7,910-state ZFC construction is distinguished from the
+  432-state 2025 claim conditional on verification.
+- **Boundary and applications:** Presburger's lower bound is worst case as formula
+  length grows; real-closed-field decision concerns first-order polynomial
+  formulas. Matrix mortality's 2×2 status is explicitly the cited 2015 literature
+  status, not a new current survey. PRIMEGAME outputs are powers of two reached
+  **after positive steps**, excluding initial 2^1. The actual three-million-step
+  instruction trace is independently replayed using prime-exponent registers;
+  every first-applicable instruction and all prime outputs through 127 agree.
+  Full stopping lengths and tail-aware trajectory peaks for every positive
+  Collatz start below a million agree with a guarded independent native replay.
+  Ordinary Collatz may be false or true; no independence theorem is established.
+  Universality examples assume ideal unbounded resources. Move-only computation
+  needs repeating control flow. The spectral-gap theorem concerns promised
+  robust thermodynamic families of 2D translation-invariant nearest-neighbor
+  Hamiltonians with fixed local dimension. Finite exhaustive testing can establish
+  absence of bugs within a completely specified finite model.
+- **Frontier:** Koymans–Pagano and independent Alpöge–Bhargava–Ho–Shnidman results
+  give H10 undecidability over all number-field integer rings; distinguish elliptic
+  rank stability/additive combinatorics from the abelian-variety route. The broader
+  ring statement concerns effectively presented infinite commutative unital
+  finitely generated Z-algebras. Koenigsmann's universal definition and his
+  different ∀∃ definition with one universal variable are separate results.
+  Smith's 2007 two-state three-symbol claim uses a nonstandard infinite background.
 
-## Build
+## Build and verification
 
 ```bash
-python -m videos.cs.cs25.compute           # every number in the part (about four minutes)
-python tools/build.py cs25 -q l            # a 480p preview
-python tools/build.py cs25                 # 1080p
+python -m unittest tests.test_cs25_computability
+python -m videos.cs.cs25.compute --force
+python tools/build.py cs25 -q l
+python tools/build.py cs25
 ```
+
+Schema-2 caches validate source signatures and their retained artifacts. Complete
+native sources, compiler flags/version, images, inputs, outputs and sanitizer
+receipts are retained. Durations describe this workload on the shared host;
+deterministic budgets and verified witnesses are the central results.
+
+The episode checkpoint evidence is documented in
+[the QA packet](../../../docs/qa/evidence/cs25-polish-20261111/README.md).
+Continuous narrated playback/listening, Chinese speech/listening, whole-video
+native production and runtime at the selected narration pace remain separate
+production gates.
 
 ## Problems, with solutions
 
@@ -134,18 +174,20 @@ python tools/build.py cs25                 # 1080p
    until it prints w (accept) or prints a string that comes after w (reject). Since L is infinite, E prints strings
    beyond w eventually, so the procedure always halts, and since the order is increasing, w cannot appear later.
 
-4. **Complexity bounds.** Show that K(x) ≤ |x| + c and K(xx) ≤ K(x) + c, and conclude that at most half of the
-   strings of each length have K(x) < |x| − 1.
+4. **Plain complexity bounds.** Fix an optimal plain description machine; sizes are bits. Show that C(x) ≤ |x| + c and C(xx) ≤ C(x) + c, and conclude that at most half of the
+   strings of each length have C(x) < |x| − 1.
 
    *Solution.* The program "print the following literal: x" has length |x| plus the fixed length of the printing
    code. If p prints x, the program "run p, and print its output twice" has length |p| + c′. For the count: the
    programs of length less than n − 1 number 1 + 2 + … + 2ⁿ⁻² = 2ⁿ⁻¹ − 1. Each prints at most one string, so fewer than
-   2ⁿ⁻¹, half of the 2ⁿ strings of length n, can have K(x) < n − 1.
+   2ⁿ⁻¹, half of the 2ⁿ strings of length n, can have C(x) < n − 1.
 
 5. **Build: a backwards quine.** Write a Pebble-language program that prints its own source backwards, and run it on
    the emulator.
 
-   *Solution.* Keep the structure of chapter 4's quine: a head that declares an array `d`; a data section of
+   *Executed solution.* `computability.pebble_backward_quine()` constructs the program below. The retained O2 compiler image runs for 472,027 emulator instructions and outputs exactly the 15,705 source bytes in reverse order. The source fits the explicitly checked 32,768-entry output buffer.
+
+   Keep the structure of chapter 4's quine: a head that declares an array `d`; a data section of
    assignments `d[k] = c;` holding the character codes of the head and the tail; and a tail. Instead of printing
    directly, the tail writes the whole source into a buffer in three passes. First it copies the head from `d`, then
    it writes the text of each assignment (the decimal digits of k and c with the fixed punctuation), and then it
@@ -154,14 +196,12 @@ python tools/build.py cs25                 # 1080p
    emulator, and compare the output with the source reversed. The recursion theorem guarantees such a program
    exists for any computable transformation of the text, reversal included.
 
-6. ★ **Research: three dominoes.** Is Post's correspondence problem decidable for three dominoes? Start with words of
-   length at most 3: find the longest shortest match, or prove the lengths are bounded.
+6. ★ **Research: three dominoes.** Is Post's correspondence problem decidable for three dominoes? Start with words of length at most 3: retain match certificates, finite-graph refutations and unresolved cutoffs. A fixed finite family automatically has some finite maximum among its shortest matches; seek explicit values/certificates, then a computable bound as a function of general input size.
 
    *Where to start.* The two-domino case was decided by Ehrenfeucht, Karhumäki and Rozenberg (1982) and simplified by
    Halava, Harju and Hirvensalo (2002). Their method, analysing how the overhang can evolve, is the natural thing to
    push to three. Neary (2015) gives undecidability for five, so the methods must break somewhere between three and
-   five, and finding where is itself informative. Computationally, our solver handles 20,000 random instances in two
-   minutes. Enumerate all three-domino instances over {0, 1} with words of length at most 3, removing symmetries
+   five, and finding where is itself informative. Our retained fixed-budget run covers 20,000 random instances: 4,679 matches, 11,819 finite-graph exhaustions, 2,217 depth cutoffs and 1,285 node cutoffs. All inputs, statuses and matches are saved. Cutoffs are unresolved. The finite word-length-three experiment does not resolve unrestricted three-domino PCP. Enumerate all three-domino instances over {0, 1} with words of length at most 3, removing symmetries
    (swapping 0 and 1, reversing every word, permuting the dominoes). Solve them by breadth-first search over the
    overhang. Then try to certify the unsolved ones as unsolvable with simple invariants: a length imbalance that can
    never be repaired, an overhang that can never be extended, or a finite-automaton certificate in the style of the
@@ -187,24 +227,26 @@ python tools/build.py cs25                 # 1080p
    打印它，判定 w 时就运行 E，直到它打印出 w（接受）或一个排在 w 之后的字符串（拒绝）。L 无限，所以 E 终究会打印出 w 之后的字符串，过程总会停机；
    而顺序递增，w 不可能再晚出现。
 
-4. **复杂度的界。** 证明 K(x) ≤ |x| + c 且 K(xx) ≤ K(x) + c，并推出每种长度的字符串中至多一半满足 K(x) < |x| − 1。
+4. **普通复杂度的界。** 固定最优普通描述机，长度单位为比特。 证明 C(x) ≤ |x| + c 且 C(xx) ≤ C(x) + c，并推出每种长度的字符串中至多一半满足 C(x) < |x| − 1。
 
    *解答。* 程序“打印下面这段字面量：x”的长度是 |x| 加上打印代码的固定长度。若 p 打印 x，则“运行 p，把输出打印两遍”的长度为 |p| + c′。计数：
    长度小于 n − 1 的程序共有 1 + 2 + … + 2ⁿ⁻² = 2ⁿ⁻¹ − 1 个，每个至多打印一个字符串，所以少于 2ⁿ⁻¹ 个，即长度为 n 的 2ⁿ 个字符串中不到一半，
-   能有 K(x) < n − 1。
+   能有 C(x) < n − 1。
 
 5. **动手：倒着打印自己的程序。** 用 Pebble 语言写一个把自己的源代码倒着打印出来的程序，并在模拟器上运行。
 
-   *解答。* 沿用第 4 章自打印程序的结构：头部声明数组 `d`；数据段由赋值 `d[k] = c;` 组成，存放头部和尾部的字符编码；然后是尾部。尾部不直接打印，
+   *已执行的解答。* `computability.pebble_backward_quine()` 构造该程序。保留的 O2 编译镜像运行 472,027 条模拟器指令，把 15,705 个源码字节精确反向输出；构造时检查源码能装入 32,768 个条目的输出缓冲区。
+
+   沿用第 4 章自打印程序的结构：头部声明数组 `d`；数据段由赋值 `d[k] = c;` 组成，存放头部和尾部的字符编码；然后是尾部。尾部不直接打印，
    而是分三趟把整个源代码写进一个缓冲区：先从 `d` 复制头部，再写出每条赋值的文本（k 和 c 的十进制数字加上固定的标点），最后从 `d` 复制尾部。
    然后从最后一个字节到第一个字节打印缓冲区。像 `computability.pebble_quine` 那样用一小段 Python 脚本生成这个程序，再用同样方式检查：编译，
    在模拟器上运行，把输出与反转后的源代码比较。递归定理保证，对文本的任何可计算变换（包括反转），这样的程序都存在。
 
-6. ★ **研究：三张多米诺。** 三张多米诺的 Post 对应问题可判定吗？从长度至多为 3 的词入手：找出最长的最短匹配，或者证明这些长度有界。
+6. ★ **研究：三张多米诺。** 三张多米诺的 Post 对应问题可判定吗？从长度至多为 3 的词入手：保留匹配证书、有限图排除证明，以及尚未解决的截断。固定有限集合的最短匹配长度必有某个有限最大值；任务是找出显式数值与证书，再探索依赖一般输入规模的可计算界。
 
    *从哪里入手。* 两张多米诺的情形由 Ehrenfeucht、Karhumäki 与 Rozenberg（1982）解决，Halava、Harju 与 Hirvensalo（2002）作了简化；他们分析
    悬垂部分如何演变的方法，是推向三张时最自然的工具。Neary（2015）给出五张时的不可判定性，所以这些方法必然在三到五之间的某处失效，而找出在哪里
-   失效本身就很有价值。计算上，我们的求解器两分钟能处理 20,000 个随机实例。枚举 {0, 1} 上词长至多为 3 的全部三张多米诺实例，去掉对称性（交换
+   失效本身就很有价值。保留的固定预算运行覆盖 20,000 个随机实例：4,679 个匹配、11,819 个有限图穷尽、2,217 个深度截断、1,285 个节点截断。全部输入、状态与匹配均已保存；截断仍未解决。词长至多三的有限实验并未解决一般三张 PCP。枚举 {0, 1} 上词长至多为 3 的全部三张多米诺实例，去掉对称性（交换
    0 和 1、反转每个词、置换多米诺）；用悬垂部分上的广度优先搜索求解；再用简单的不变量证明未解出的实例无解：无法修复的长度失衡、无法延伸的悬垂，
    或者像第 1 部分忙碌海狸判定器那样的有限自动机证书。抵抗住所有证书的那些实例，就是问题真正所在。
 
@@ -257,3 +299,18 @@ Papers:
 - Frontier: Denef & Lipshitz (1978); Mazur (1992); Poonen (2009); Mazur & Rubin (2010); Koenigsmann, "Defining ℤ in
   ℚ" (2016); Koymans & Pagano, "Hilbert's tenth problem via additive combinatorics" (2024); Alpöge, Bhargava, Ho &
   Shnidman (2025).
+
+
+Primary version reconciliation:
+
+- [Neary, STACS 2015](https://doi.org/10.4230/LIPIcs.STACS.2015.649), Section 4,
+  Theorem 11: **five** nonempty binary pairs; use this published version.
+- [Jeandel–Rao](https://arxiv.org/abs/1506.06492), Figure 3 and Theorem 3:
+  five-color T and its separately colored variants.
+- [Koymans–Pagano](https://arxiv.org/abs/2412.01768), Theorems 1.1–1.2;
+  [Alpöge et al.](https://arxiv.org/abs/2501.18774),
+  [published DOI](https://doi.org/10.1007/s00222-025-01392-3).
+- [Koenigsmann](https://arxiv.org/abs/1011.3424): distinguish universal from
+  the alternative one-universal-variable ∀∃ definition.
+- [Cubitt–Pérez-García–Wolf](https://arxiv.org/abs/1502.04573): exact
+  thermodynamic promise and locality assumptions.

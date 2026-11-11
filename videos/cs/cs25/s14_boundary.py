@@ -25,8 +25,7 @@ class Boundary(VoiceoverScene):
 
     def theories(self):
         head = label(r"Which theories can a machine decide?", font_size=32).to_edge(UP, buff=0.35)
-        rows = [[r"whole numbers with $+$", r"\textbf{decidable}", r"Presburger \ (1929); \ but needs time "
-                 r"$2^{2^{cn}}$ \ (Fischer--Rabin 1974)"],
+        rows = [[r"whole numbers with $+$", r"\textbf{decidable}", 'Presburger (1929); Fischer--Rabin: doubly exponential WORST CASE in formula length'],
                 [r"real numbers with $+, \times, <$", r"\textbf{decidable}", r"Tarski \ (1948): \ so is Euclid's "
                  r"geometry; \ Collins \ (1975)"],
                 [r"whole numbers with $+, \times$", r"undecidable", r"G\"odel, \ Church, \ Turing \ (1931--36)"],
@@ -44,17 +43,7 @@ class Boundary(VoiceoverScene):
             label(r"the reals escape because they cannot single out the whole numbers", font_size=22, color=LAM),
         ).arrange(DOWN, buff=0.2).next_to(tab, DOWN, buff=0.45)
         with self.voiceover(
-            "Not every mathematical theory is undecidable. Here is where the line falls. <bookmark mark='a'/> "
-            "Mojżesz Presburger showed in 1929 that the truths about whole numbers with addition alone can be "
-            "decided by a machine, though Michael Fischer and Michael Rabin proved it takes at least doubly "
-            "exponential time. <bookmark mark='b'/> Alfred Tarski showed the same for the real numbers with addition, "
-            "multiplication and order, and with them all of Euclid's geometry. <bookmark mark='c'/> Add "
-            "multiplication to the whole numbers and decidability is lost, by chapter eight. <bookmark mark='d'/> "
-            "Julia Robinson showed the rationals are no better, because the integers can be defined inside them. "
-            "<bookmark mark='e'/> And if you allow only equations, with no for-all, over the rationals? Nobody knows. "
-            "That is this part's frontier. <bookmark mark='f'/> The pattern: multiplication of whole numbers is what "
-            "lets numbers encode a computation. The reals escape because no formula can pick the whole numbers out "
-            "of them."
+            "Decidability depends on the theory's exact language. <bookmark mark='a'/> Presburger arithmetic, with addition on natural numbers, is decidable; the doubly exponential lower bound is WORST CASE as formula length grows. <bookmark mark='b'/> Tarski decides first-order polynomial formulas over real closed fields, covering the corresponding algebraic geometry. Arbitrary real functions are outside that statement. <bookmark mark='c'/> Adding multiplication on natural numbers makes the full first-order theory undecidable. <bookmark mark='d'/> The full first-order theory of the rationals is also undecidable, via definitions of the integers. <bookmark mark='e'/> Its purely existential polynomial-equation problem is the separate open Hilbert-tenth question. <bookmark mark='f'/> In the ordered real field, integers are not first-order definable; this prevents that particular arithmetic encoding."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
             for mk, r in zip("abcde", tab.cells[1:]):
@@ -81,17 +70,11 @@ class Boundary(VoiceoverScene):
             label(r"given a few $3 \times 3$ integer matrices, \\ does some product vanish?", font_size=20,
                   color=GREY_A),
             label(r"undecidable \ (Paterson 1970, \\ by encoding Post's dominoes)", font_size=20, color=NO),
-            label(r"for $2 \times 2$: \ still open", font_size=18, color=YES),
+            label('$2\\times2$: open in cited Neary (2015) discussion; dated status', font_size=18, color=YES),
         ).arrange(DOWN, buff=0.22).shift(RIGHT * 3.4 + DOWN * 0.2)
         div = DashedLine(UP * 2.4, DOWN * 2.8, color=GREY_D)
         with self.voiceover(
-            "Undecidability also hides in pure algebra. <bookmark mark='a'/> Max Dehn asked in 1911: given a group "
-            "by finitely many generators and relations, can you decide whether a word in the generators equals the "
-            "identity? Pyotr Novikov in 1955 and William Boone in 1958 found groups where no algorithm can. "
-            "<bookmark mark='b'/> Or take a handful of three-by-three integer matrices. Does some product of them, "
-            "in some order, with repetition, give the zero matrix? Michael Paterson proved in 1970 that this is "
-            "undecidable, by turning Post's dominoes into matrices. <bookmark mark='c'/> For two-by-two matrices "
-            "nobody knows."
+            "Undecidability also hides in pure algebra. <bookmark mark='a'/> Max Dehn asked in 1911: given a group by finitely many generators and relations, can you decide whether a word in the generators equals the identity? Pyotr Novikov in 1955 and William Boone in 1958 found groups where no algorithm can. <bookmark mark='b'/> Or take a handful of three-by-three integer matrices. Does some product of them, in some order, with repetition, give the zero matrix? Michael Paterson proved in 1970 that this is undecidable, by turning Post's dominoes into matrices. <bookmark mark='c'/> The cited Neary 2015 paper records unrestricted two-by-two integer mortality as open. This is a dated literature status, not a claimed new 2026 survey."
         ) as vo:
             self.play(FadeIn(head), Create(div))
             vo.wait_until("a")
@@ -116,7 +99,7 @@ class Boundary(VoiceoverScene):
                          mono_cols=(), colors=[[YES, DATA]] * len(rows))
         tab.next_to(rule, DOWN, buff=0.35).to_edge(LEFT, buff=1.0)
         notes = VGroup(
-            label(r"the only powers of 2 that ever appear \\ are $2^p$, \ $p$ prime, \ in order", font_size=21,
+            label('after POSITIVE steps, powers of 2 \\\\ have prime exponents, in order; initial $2^1$ excluded', font_size=21,
                   color=YES),
             label(rf"our run: \ every prime up to {f['primes'][-1]} \\ in {words(f['steps'][-1])} steps", font_size=21,
                   color=GREY_A),
@@ -126,16 +109,7 @@ class Boundary(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(tab, RIGHT, buff=0.7).align_to(tab, UP)
         fit_right(notes)
         with self.voiceover(
-            "John Conway invented the strangest programming language of all. <bookmark mark='a'/> A program is a "
-            "list of fractions. Start with a number; repeatedly multiply it by the first fraction in the list that "
-            "gives a whole number; stop when none does. <bookmark mark='b'/> This list, PRIMEGAME, starts from two. "
-            "Watch only the powers of two. After nineteen steps, four, which is two squared. After sixty-nine, "
-            "eight. Then thirty-two, a hundred and twenty-eight, two to the eleven. <bookmark mark='c'/> The "
-            "exponents are exactly the primes, in order. Our run reached every prime up to a hundred and "
-            "twenty-seven in under three million steps. <bookmark mark='d'/> Why does this work? The exponents of "
-            "the primes in n act as registers, and each fraction is an instruction that decrements some registers "
-            "and increments others. That is Part 1's counter machine, and it is universal. <bookmark mark='e'/> So "
-            "whether a list of fractions ever stops is undecidable."
+            "John Conway invented the strangest programming language of all. <bookmark mark='a'/> A program is a list of fractions. Start with a POSITIVE INTEGER; repeatedly multiply it by the first fraction in the list that gives a whole number; stop when none does. <bookmark mark='b'/> This list, PRIMEGAME, starts from two. Record powers of two reached AFTER positive steps, excluding the initial two to the first power. After nineteen steps, four, which is two squared. After sixty-nine, eight. Then thirty-two, a hundred and twenty-eight, two to the eleven. <bookmark mark='c'/> The exponents are exactly the primes, in order. Our run reached every prime up to a hundred and twenty-seven in under three million steps. <bookmark mark='d'/> Why does this work? The exponents of the primes in n act as registers, and each fraction is an instruction that decrements some registers and increments others. That is Part 1's counter machine, and it is universal. <bookmark mark='e'/> So whether a list of fractions ever stops is undecidable."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -168,25 +142,17 @@ class Boundary(VoiceoverScene):
             label(rf"below a million, \ {c['longest_n']:,} takes longest: \\ {c['longest']} steps", font_size=20,
                   color=DATA),
             label(rf"{c['peak_n']:,} climbs to \\ {c['peak']:,}", font_size=20, color=DATA),
-            label(r"checked for every start below $2^{68}$ \\ (Barina, \ 2020)", font_size=20, color=GREY_A),
+            label('this run: all positive starts below $10^6$ \\\\ complete lengths and peaks independently replayed', font_size=20, color=GREY_A),
             label(r"Conway \ (1972): \ rules of the same shape, \\ ``$n \bmod m$ picks $a n + b$'', \\ can be "
                   r"\textbf{undecidable}", font_size=20, color=NO),
-            label(r"so Collatz may be true and unprovable, \\ or simply very hard: \ nobody knows which",
+            label('ordinary Collatz: true and provable, independent, or false? \\\\ no independence result is proved here',
                   font_size=20, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
         right = VGroup(rule, notes).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(ax, RIGHT, buff=0.5).align_to(
             ax, UP)
         fit_right(right)
         with self.voiceover(
-            "The most famous problem on the boundary is a children's puzzle. <bookmark mark='a'/> Halve an even "
-            "number; triple an odd one and add one. Does every start reach one? Twenty-seven takes a hundred and "
-            "eleven steps and climbs past nine thousand on the way. <bookmark mark='b'/> Below a million the "
-            "longest journey is from eight hundred and thirty-seven thousand, seven hundred and ninety-nine: five "
-            "hundred and twenty-four steps. <bookmark mark='c'/> Every start below two to the sixty-eight has been "
-            "checked. <bookmark mark='d'/> Conway proved in 1972 that rules of exactly this shape, where n modulo "
-            "some number chooses a linear map, can encode any program, so the general question is undecidable. "
-            "<bookmark mark='e'/> The Collatz rule itself may be one of those cases, true but unprovable, or merely "
-            "very hard. Nobody knows which, and Part 1's Antihydra is its cousin."
+            "The ordinary Collatz question remains distinct from its universal generalizations. <bookmark mark='a'/> For positive integers, halve an even value and triple an odd value then add one. Twenty-seven takes one hundred and eleven steps to reach one. <bookmark mark='b'/> We retain stopping lengths and full trajectory peaks for EVERY positive start below a million, independently checked by an overflow-guarded native implementation. The longest takes five hundred and twenty-four steps from eight hundred and thirty-seven thousand, seven hundred and ninety-nine. <bookmark mark='c'/> These finite checks prove only this finite prefix; larger published verification ranges are dated claims, not executions of this run. <bookmark mark='d'/> Conway's generalized residue-dependent iterations can encode universal computation and have an undecidable halting problem. <bookmark mark='e'/> That does not prove ordinary Collatz undecidable or independent. It could be true with a proof, true but independent of a specified theory, or false. No independence result is established here."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(yt), FadeIn(rule))
             vo.wait_until("a")

@@ -36,17 +36,12 @@ class Outro(VoiceoverScene):
             tile(mono("print(s % s)", 30, LAM), r"quines; \ Kleene", LAM),
             tile(wang_grid(t["tiles"], g8, s=0.26), r"dominoes and tiles", YES),
             tile(MathTex(r"x^2 - 61y^2 = 1", font_size=44, color=CTRL), r"Hilbert's tenth", CTRL),
-            tile(MathTex(r"K(x),\ \Omega", font_size=50, color=NO), r"G\"odel; \ Chaitin", NO),
+            tile(MathTex(r"C(x),\ \Omega", font_size=50, color=NO), r"G\"odel; \ Chaitin", NO),
             tile(hp, r"the hat \ (2023)", HEAD),
         ).arrange_in_grid(rows=2, cols=3, buff=(0.35, 0.35)).move_to(DOWN * 0.2)
         head = label(rf"Part {PART}: \ Undecidable", font_size=38).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "What we built in this part. Decidable, recognizable and co-recognizable, and reductions that carry "
-            "impossibility from one problem to the next. Rice's theorem, which forbids almost every question about "
-            "what programs do. Programs that print their own source, in Python and in Pebble. Dominoes, tiles and "
-            "Diophantine equations, each hiding a Turing machine, and the hat. Gödel's theorems, proved from "
-            "halting; oracles and the arithmetic hierarchy; Kolmogorov complexity and Chaitin's Omega; and the busy "
-            "beaver, where proof runs out."
+            "What we built in this part. Decidable, recognizable and co-recognizable, and reductions that carry impossibility from one problem to the next. Rice's theorem for nontrivial extensional properties of unbounded programs. Programs that print their own source, in Python and in Pebble. Dominoes, tiles and Diophantine equations, each hiding a Turing machine, and the hat. Gödel's theorems, proved from halting; oracles and the arithmetic hierarchy; Kolmogorov complexity and Chaitin's Omega; and the busy beaver, where proof runs out."
         ):
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t_, shift=UP * 0.15) for t_ in tiles], lag_ratio=0.25), run_time=4.0)
@@ -56,18 +51,14 @@ class Outro(VoiceoverScene):
     def payoffs(self):
         card = payoff_card([
             (r"the time hierarchy, \ by the same diagonal", [26]),
-            (r"Rice's theorem, \ and verifiers that approximate", [54]),
+            ('Rice: restricted fragments and incomplete proof search', [54]),
             (r"safety in access control is undecidable \ (HRU)", [55]),
             (r"the trojan compiler, \ built from a quine", [55]),
             (r"Occam's razor and compression", [57]),
             (r"recursion as a fixed point", [58]),
         ], font_size=23)
         with self.voiceover(
-            "Where this comes back. Part 26 proves the time hierarchy theorem with the same diagonal, and asks the "
-            "question this part cannot answer: not whether, but how fast. Part 54 proves programs correct, and "
-            "escapes Rice's theorem by approximating. Part 55 shows that safety in access control is undecidable, "
-            "and builds Ken Thompson's trojan compiler on a quine. Part 57 turns Kolmogorov's idea into Occam's "
-            "razor for learning, and Part 58 makes recursion a fixed point, the semantic cousin of Kleene's theorem."
+            "Where this comes back. Part 26 proves the time hierarchy theorem with the same diagonal, and asks the question this part cannot answer: not whether, but how fast. Part 54 checks proofs and specifications, using restrictions or incomplete proof search where general decision is impossible. Part 55 shows that safety in access control is undecidable, and builds Ken Thompson's trojan compiler on a quine. Part 57 turns Kolmogorov's idea into Occam's razor for learning, and Part 58 makes recursion a fixed point, the semantic cousin of Kleene's theorem."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.3), run_time=3.0)
@@ -76,20 +67,15 @@ class Outro(VoiceoverScene):
 
     def practice(self):
         card = practice_card([
-            (r"static analysis", r"every analyzer approximates: \ false alarms or missed bugs, \ by Rice"),
-            (r"security", r"no perfect malware detector; \ sandboxes and limits instead of prediction"),
+            (r"static analysis", 'unbounded nontrivial extensional properties: exact total analysis is impossible'),
+            (r"security", 'unbounded semantic malware classification; sandbox a specified finite model'),
             (r"language design", r"type systems and build files that are \textbf{deliberately} not Turing "
                                  r"complete"),
             (r"compilers", r"depth limits on templates and type checking; \ timeouts on optimization"),
-            (r"testing", r"tests can show a bug, \ never its absence: \ halting in disguise"),
+            (r"testing", 'unbounded domains cannot be exhausted; finite exhaustive model tests can prove absence'),
         ])
         with self.voiceover(
-            "In practice. Every static analyzer is an approximation, trading false alarms against missed bugs, "
-            "because of Rice. No malware scanner is perfect, so security relies on sandboxes and limits rather than "
-            "prediction. Language designers keep configuration files, query languages and some type systems "
-            "deliberately less than Turing complete, so their questions stay decidable. Compilers cap template and "
-            "type-checking depth. And Dijkstra's remark, that testing can show the presence of bugs but never their "
-            "absence, is the halting problem in disguise."
+            'In practice, specify the model and the exact question. Terminating exact analysis of a nontrivial extensional property over universal unbounded programs is impossible; practical tools use approximations or restrictions. Finite compiler limits are different from ideal universality. A less expressive or total language can help with particular decisions, but does not automatically decide every semantic property. Testing an unbounded input domain cannot exhaust it. Exhaustive testing of a fully specified FINITE model, however, can establish absence of bugs within that model. Keep those scopes distinct.'
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.35), run_time=3.0)
@@ -102,17 +88,14 @@ class Outro(VoiceoverScene):
             r"Use Rice's theorem to show that ``$M$ accepts a palindrome'' is undecidable, \ and explain why ``$M$ has "
             r"a palindrome as its \textit{description}'' is not.",
             r"Prove that a language is decidable iff some machine enumerates it in increasing order.",
-            r"Show that $K(x) \le |x| + c$, \ and that $K(x\,x) \le K(x) + c$; \ conclude that at most half of all "
-            r"strings of each length have $K(x) < |x| - 1$.",
+            r"Show that $C(x) \le |x| + c$, \ and that $C(x\,x) \le C(x) + c$; \ conclude that at most half of all "
+            r"strings of each length have $C(x) < |x| - 1$.",
             r"\textit{Build.} \ A Pebble-language program that prints its own source \textbf{backwards}; \ run it on "
             r"the emulator.",
-            r"$\bigstar$ \textit{Research.} \ Is PCP with three dominoes decidable? \ Start with words of length "
-            r"$\le 3$: \ find the longest shortest match, \ or prove the lengths are bounded.",
+            '$\\bigstar$ \\textit{Research.} PCP with 3 dominoes: certify cases with word length $\\le3$; seek an explicit general shortest-match bound.',
         ], font_size=22)
         with self.voiceover(
-            "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build "
-            "problem: a program in the Pebble language that prints its own source backwards. The last, marked with a "
-            "star, is a research problem: its answer is not known, and the notes say where to start."
+            'Six problems. The notes give worked solutions to the first five, including an executed Pebble program that prints its own source backwards. The starred task explores finite three-domino PCP instances with explicit certificates and cutoff statuses, then asks about a computable general bound. Finiteness alone guarantees that some bound exists for a fixed finite family; finding a useful explicit bound is a different task. The unrestricted three-domino decision problem remains the research lead.'
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)
@@ -128,10 +111,7 @@ class Outro(VoiceoverScene):
         items.move_to(UP * 0.0)
         q = label(r"Act V: \ limits and secrets", font_size=26, color=GREY_A).to_edge(DOWN, buff=0.8)
         with self.voiceover(
-            "Next time: this part asked what can be computed at all. Part 26 asks what can be computed quickly. In "
-            "1956 Gödel wrote to John von Neumann asking whether finding a proof could be as easy as checking one. "
-            "Cook and Levin turned that letter into a single problem, Karp found it inside twenty-one others, and "
-            "fifty years of attacks have failed. Part 26, P versus NP."
+            'Next time: this part asked what can be computed at all. Part 26 asks what can be computed quickly. In 1956 Gödel wrote to John von Neumann about the cost of finding proofs compared with checking them. Cook and Levin later proved SAT complete for NP, and Karp linked twenty-one further problems by reductions. The P versus NP question remains open after more than fifty years. Part 26, P versus NP.'
         ):
             self.play(FadeIn(nxt), LaggedStart(*[FadeIn(i) for i in items], lag_ratio=0.3))
             self.play(FadeIn(q))
