@@ -21,6 +21,7 @@ from __future__ import annotations
 import ast
 import inspect
 import json
+import os
 import re
 from contextlib import contextmanager
 from pathlib import Path
@@ -171,6 +172,13 @@ class VoiceoverScene(Scene):
     # ------------------------------------------------------------------
     def tear_down(self):
         super().tear_down()
+        out = os.environ.get("EXPLAINER_NARRATION_OUT")  # a dry run (no frames) can still record what is said
+        if out and self._narration:
+            meta = {"scene": type(self).__name__, "duration": self.renderer.time, "lines": self._narration}
+            path = Path(out) / f"{type(self).__name__}.narration.json"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(meta, ensure_ascii=False, indent=1))
+            return
         try:
             movie = Path(self.renderer.file_writer.movie_file_path)
         except Exception:

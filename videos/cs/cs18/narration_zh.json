@@ -1,0 +1,436 @@
+{
+ "title": "计算机科学，从零搭建 · 第18部分：图",
+ "chapters": {
+  "Hook": "七座桥",
+  "Euler": "1. 欧拉的桥，以及怎样存储一张图",
+  "Bfs": "2. 广度优先搜索",
+  "Dfs": "3. 深度优先搜索",
+  "Topo": "4. 拓扑排序",
+  "Scc": "5. 强连通分量",
+  "Dijkstra": "6. 迪杰斯特拉算法",
+  "Bellman": "7. 负权边",
+  "AllPairs": "8. 全源最短路径",
+  "AStar": "9. 用更少搜索求精确路线",
+  "Mst": "10. 最小生成树",
+  "Flow": "11. 流与割",
+  "Matching": "12. 匹配",
+  "Hard": "13. 容易与困难",
+  "PageRank": "14. PageRank",
+  "Planar": "15. 平面图与四色",
+  "Frontier": "16. 注明模型与日期的研究成果",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "94894b60dbc4": {
+   "scene": "Hook",
+   "en": "In 1736 the city of Königsberg had seven bridges joining two river banks and two islands. <bookmark mark='a'/> Its citizens asked whether one could walk through the city crossing every bridge exactly once. <bookmark mark='b'/> Leonhard Euler answered by throwing almost everything away. The shape of the land, the lengths of the bridges, the streets: none of it matters. Only which land masses each bridge connects. <bookmark mark='c'/> Four dots, seven lines. Euler had invented the graph, and in one paper proved the walk impossible.",
+   "zh": "1736年，柯尼斯堡城有七座桥，连接着两岸和两座岛。<bookmark mark='a'/>市民们问：能不能在城里走一圈，每座桥恰好走过一次？<bookmark mark='b'/>莱昂哈德·欧拉的回答方式，是把几乎所有东西都扔掉。陆地的形状、桥的长度、街道：这些都无关紧要。要紧的只是每座桥连接哪两块陆地。<bookmark mark='c'/>四个点，七条线。欧拉发明了图，并在一篇论文里证明了这样的走法不存在。"
+  },
+  "be6939b81715": {
+   "scene": "Hook",
+   "en": "Euler's abstraction turned out to describe almost everything. <bookmark mark='a'/> A road map is a graph of intersections and roads; the internet, of routers and links; a compiler's program, of instructions and the flow of control between them. A build is a graph of files and dependencies, the web of pages and links, a currency market of currencies and exchange rates. <bookmark mark='b'/> And the questions are the same few: how to get from here to there, in what order, how cheaply, how much can flow, which things belong together. This part answers each one, with proofs.",
+   "zh": "欧拉的抽象后来几乎能描述一切。<bookmark mark='a'/>道路地图是由路口和道路构成的图；互联网由路由器和链路构成；编译器里的程序由指令和它们之间的控制流构成。一次构建是文件与依赖的图，网络是网页与链接的图，外汇市场是货币与汇率的图。<bookmark mark='b'/>而问题总是那么几个：怎样从这里到那里，按什么顺序，代价多小，能流过多少，哪些东西属于一伙。这一部分逐一回答，并给出证明。"
+  },
+  "ed66a5decf5b": {
+   "scene": "Hook",
+   "en": "Here is where we are going. <bookmark mark='a'/> Breadth-first and depth-first exploration, and the different structure each reveals. <bookmark mark='b'/> Dijkstra's shortest-path invariant, then exact route searches that expand fewer intersections after preprocessing. <bookmark mark='c'/> Spanning trees, flows and cuts, with a proof that maximum flow equals minimum cut. <bookmark mark='d'/> Stable matching, PageRank, and the difference between visiting every edge and visiting every vertex. <bookmark mark='e'/> Finally, two distinct research tasks: sorting vertices by distance, and computing distances without sorting them. Their bounds need not be the same.",
+   "zh": "这是接下来的路线。<bookmark mark='a'/>广度优先和深度优先探索，以及它们各自揭示的不同结构。<bookmark mark='b'/>迪杰斯特拉的最短路径不变式，以及经过预处理、展开更少路口的精确路线搜索。<bookmark mark='c'/>生成树、流与割，并证明最大流等于最小割。<bookmark mark='d'/>稳定匹配、PageRank，以及走遍每条边和走遍每个顶点的差别。<bookmark mark='e'/>最后区分两个研究任务：按距离给顶点排序，以及不要求排序、只求距离。二者的复杂度界不必相同。"
+  },
+  "1391e82de88a": {
+   "scene": "Hook",
+   "en": "Part 18 of Computer Science, Built: Graphs. <bookmark mark='a'/> In this part: Euler circuits, how to store a graph, and the two searches; topological order and strongly connected components; shortest paths of every kind; spanning trees, flows, cuts and matchings; hard problems on graphs, PageRank and planarity; and the results of the last five years.",
+   "zh": "计算机科学，从零搭建，第18部分：图。<bookmark mark='a'/>这一部分讲：欧拉回路、怎样存储一张图，以及两种搜索；拓扑顺序和强连通分量；各种最短路径；生成树、流、割和匹配；图上的难题、PageRank 和平面性；以及最近五年的成果。"
+  },
+  "07956ed3e46f": {
+   "scene": "Euler",
+   "en": "Chapter one. Euler's bridges, and how to store a graph.",
+   "zh": "第1章。欧拉的桥，以及怎样存储一张图。"
+  },
+  "80b88a2be93c": {
+   "scene": "Euler",
+   "en": "Euler's argument counts entrances and exits. <bookmark mark='a'/> Passing through a vertex uses two incident edges, one arriving and one leaving. <bookmark mark='b'/> A closed trail using every edge once therefore requires even degree everywhere; a loop contributes two to degree. <bookmark mark='c'/> An open trail with different endpoints instead has exactly two odd vertices. In either case all vertices incident to edges must lie in one connected component. <bookmark mark='d'/> Königsberg has degrees five, three, three and three: four odd vertices, so neither kind of trail can cross every bridge once. <bookmark mark='e'/> For a connected graph, the even-degree condition is also sufficient. Hierholzer's construction, published in 1873, gives the circuit explicitly.",
+   "zh": "欧拉的论证计算进入和离开的次数。<bookmark mark='a'/>经过一个顶点，会用掉两条关联边，一条进入，一条离开。<bookmark mark='b'/>因此，恰好走遍每条边的闭合迹要求所有度数为偶数；一个自环对度数贡献二。<bookmark mark='c'/>起终点不同的开放迹则恰有两个奇度顶点。两种情况都要求所有带边顶点处于同一连通分量。<bookmark mark='d'/>柯尼斯堡的度数是五、三、三、三，有四个奇度顶点，所以两种走法都不可能恰好走遍七座桥。<bookmark mark='e'/>对连通图，偶度条件也充分。1873年发表的希尔霍尔策构造能明确给出这条回路。"
+  },
+  "9b1e81e51f48": {
+   "scene": "Euler",
+   "en": "The proof becomes a stack algorithm. <bookmark mark='a'/> Start at a vertex with an edge and follow unused edges. At a vertex other than the start, entering consumes one of an even number, so an unused exit remains whenever the walk would otherwise stop. The walk closes at its start. <bookmark mark='b'/> If edges remain, connectivity gives a detour from a vertex already on the circuit; splice that closed detour into it. <bookmark mark='c'/> Our implementation pairs edge incidences with identifiers and skips used identifiers. It handles each incidence a constant number of times, including validation: expected order V plus E with hash tables, rather than repeatedly removing from the middle of a list. <bookmark mark='d'/> The highlighted edges show the checked circuit on this graph.",
+   "zh": "这个证明变成一个栈算法。<bookmark mark='a'/>从带边顶点出发，沿未用过的边走。在起点以外，进入会消耗偶数条边中的一条，所以只要可能停下，就仍有未用的出口。这段行走最终在起点闭合。<bookmark mark='b'/>若还有边没用，连通性保证已在回路上的某个顶点能出发绕行，再把这段闭合支路接入回路。<bookmark mark='c'/>我们的实现为两端的边关联配上同一编号，跳过已经使用的编号。连同输入校验，每个关联只处理常数次；使用哈希表时，期望时间为顶点数加边数，而不是反复从列表中间删除。<bookmark mark='d'/>高亮边展示这张图上经过核验的回路。"
+  },
+  "c390277a4a06": {
+   "scene": "Euler",
+   "en": "Storage models and measured programs are different things. <bookmark mark='a'/> Adjacency lists need order V plus E entries. The first table estimates eight-byte neighbour entries and row references; it excludes Python object overhead. <bookmark mark='b'/> An ideal packed matrix uses one bit per ordered vertex pair. Our measured NumPy boolean matrix instead uses one byte per cell; its actual data allocation is shown separately. <bookmark mark='c'/> The timing table scans the complete graph three times and reports the minimum: Python visits every list entry, while NumPy counts each complete boolean row. Both must count exactly twice the undirected edges. <bookmark mark='d'/> The dense case favours this vectorized matrix scan on this host. It is not a measured packed-bit implementation, and these timings alone do not identify a cache-level cause.",
+   "zh": "存储模型与实际测量的程序是两回事。<bookmark mark='a'/>邻接表需要数量级为顶点数加边数的条目。第一张表按八字节邻居条目和行引用估算，不包含 Python 对象开销。<bookmark mark='b'/>理想的位打包矩阵为每个有序顶点对使用一比特；实际计时的 NumPy 布尔矩阵却每格用一字节，其数据分配量单独列出。<bookmark mark='c'/>计时表完整扫描同一张图三次，报告最小值：Python 逐个访问列表条目，NumPy 对每一整行布尔值计数。二者都必须恰好数到无向边数的两倍。<bookmark mark='d'/>在这台主机上，稠密情况有利于这种向量化矩阵扫描。这不是位打包实现的实测，仅凭这些时间也不能确定缓存层面的原因。"
+  },
+  "2de264f2f5ad": {
+   "scene": "Bfs",
+   "en": "Chapter two. Breadth-first search.",
+   "zh": "第2章。广度优先搜索。"
+  },
+  "226c7537896c": {
+   "scene": "Bfs",
+   "en": "Breadth-first search explores a graph the way a flood fills a maze. <bookmark mark='a'/> Start at one vertex. Visit all its neighbours, then all of their unvisited neighbours, layer by layer, using a first-in, first-out queue so that nearer vertices are always handled first. <bookmark mark='b'/> The colour here is the layer: the number of steps from the entrance. <bookmark mark='c'/> When the flood reaches the exit, following the recorded parents back gives a path, and it is a shortest one. Edward Moore described exactly this in 1959, for finding the shortest path through a maze.",
+   "zh": "广度优先搜索探索图的方式，就像洪水灌满迷宫。<bookmark mark='a'/>从一个顶点出发。先访问它所有的邻居，再访问邻居们尚未访问的邻居，一层一层地推进，用一个先进先出的队列，保证近的顶点总是先处理。<bookmark mark='b'/>这里的颜色就是层数：离入口的步数。<bookmark mark='c'/>洪水到达出口时，顺着记下的父节点往回走就得到一条路径，而且是最短的一条。爱德华·摩尔在1959年描述的正是这个方法，用来寻找穿过迷宫的最短路径。"
+  },
+  "53d93c57c4ea": {
+   "scene": "Bfs",
+   "en": "Why is the first discovered path shortest in edge count? <bookmark mark='a'/> The FIFO queue releases vertices in nondecreasing layer order. <bookmark mark='b'/> At any moment it contains the remaining vertices of layer k followed by some of layer k plus one. <bookmark mark='c'/> A vertex first discovered from layer k gets a path of k plus one edges. Any shorter path would have reached it from an earlier layer, which was already processed: a contradiction. <bookmark mark='d'/> Each reached vertex enters the queue once. Each directed adjacency entry is scanned once; an undirected edge has two such entries. Including initialization, the bound is order V plus E. <bookmark mark='e'/> These are unweighted distances. The same traversal pattern appears in social-network separation and Part 15's copying collector.",
+   "zh": "为什么最先发现的路径在边数上最短？<bookmark mark='a'/>先进先出队列按层数非降顺序放出顶点。<bookmark mark='b'/>任何时刻，队列里是第 k 层剩下的顶点，后面跟着第 k 加一层的一些顶点。<bookmark mark='c'/>从第 k 层首次发现的顶点得到一条 k 加一条边的路径。更短路径应从更早一层到达，而那一层已经处理完，产生矛盾。<bookmark mark='d'/>每个可达顶点只进队一次，每个有向邻接条目只扫描一次；无向边有两个这样的条目。连同初始化，总时间为顶点数加边数的数量级。<bookmark mark='e'/>这里求的是无权距离。同一种遍历模式也出现在社交网络分隔度数和第15部分的复制式回收器中。"
+  },
+  "4cbafa84b491": {
+   "scene": "Bfs",
+   "en": "Breadth-first layers also test an undirected graph for bipartiteness. <bookmark mark='a'/> Start a search in each component and alternate colours by layer. If every edge crosses between colours, the two colour classes form a bipartition. <bookmark mark='b'/> Otherwise an edge joins equal-depth vertices. Follow their parent paths only as far as their lowest common ancestor, then add this edge: that is a simple odd cycle, which cannot be two-coloured. <bookmark mark='c'/> The maze uses only horizontal and vertical grid edges, so coordinate parity gives a bipartition. <bookmark mark='d'/> The test helps recognize two-sided matching instances; a scheduling application also needs its conflicts to have exactly this graph interpretation.",
+   "zh": "广度优先的分层还能检验无向图是否为二分图。<bookmark mark='a'/>在每个连通分量启动搜索，按层交替着色。若每条边都跨越两种颜色，这两个颜色类就构成二分。<bookmark mark='b'/>否则，有一条边连接深度相同的顶点。沿两条父路径只追溯到最近公共祖先，再加上这条边，就得到一个简单奇圈，无法用两种颜色着色。<bookmark mark='c'/>迷宫只使用水平和垂直网格边，所以坐标和的奇偶性就给出了二分。<bookmark mark='d'/>这种检验有助于识别两侧匹配问题；用于排班时，还须确保冲突确实具有这种图模型。"
+  },
+  "0c50e4cec678": {
+   "scene": "Dfs",
+   "en": "Chapter three. Depth-first search.",
+   "zh": "第3章。深度优先搜索。"
+  },
+  "6c632008b2b5": {
+   "scene": "Dfs",
+   "en": "Depth-first search is the other way to explore. <bookmark mark='a'/> Follow an unexplored edge, and from there another, as far as possible; when every edge out of the current vertex has been tried, back up one step and continue. <bookmark mark='b'/> It uses a stack, or plain recursion, where breadth-first search used a queue. It is the thread Theseus unwound in the labyrinth, and Charles Trémaux wrote it down for mazes in 1882. <bookmark mark='c'/> The useful trick is to stamp each vertex twice with a clock: once when it is first discovered, once when it is finished. <bookmark mark='d'/> John Hopcroft and Robert Tarjan showed in the early 1970s how much structure those two numbers reveal, and won the Turing award for it.",
+   "zh": "深度优先搜索是另一种探索方式。<bookmark mark='a'/>沿一条未探索的边走，再从那里走另一条，尽可能地深入；当前顶点出发的每条边都试过之后，退回一步再继续。<bookmark mark='b'/>它用栈，或者干脆用递归，而广度优先搜索用的是队列。这就是忒修斯在迷宫里放出的那根线，夏尔·特雷莫在1882年把它写成了走迷宫的方法。<bookmark mark='c'/>有用的技巧是用一个时钟给每个顶点盖两次戳：第一次发现它时一次，完成它时一次。<bookmark mark='d'/>约翰·霍普克罗夫特和罗伯特·塔扬在1970年代初展示了这两个数能揭示多少结构，并因此获得了图灵奖。"
+  },
+  "804b6db3c370": {
+   "scene": "Dfs",
+   "en": "Draw each vertex's lifetime from discovery to finish. <bookmark mark='a'/> Two DFS intervals are either disjoint or one contains the other: never a partial overlap. The search finishes a vertex only after completing its recursive descendants. <bookmark mark='b'/> Proper interval containment is exactly strict ancestry in the DFS forest. <bookmark mark='c'/> The white-path theorem makes this precise: v becomes a descendant of u exactly when, just as u is discovered, a path from u to v has every vertex after u still undiscovered. The source u itself has just changed colour; the theorem does not require it to remain white.",
+   "zh": "把每个顶点从发现到完成的生命期画成区间。<bookmark mark='a'/>两个深度优先区间要么不相交，要么一个包含另一个，从不部分重叠。搜索只有完成所有递归后代后，才会完成当前顶点。<bookmark mark='b'/>严格的区间包含，恰好对应深度优先森林中的严格祖先关系。<bookmark mark='c'/>白路径定理给出精确说法：当 u 刚被发现时，从 u 到 v 若存在一条路径，且 u 之后的每个顶点都尚未发现，那么 v 恰好会成为 u 的后代。源点 u 自己刚刚变色，定理并不要求它仍为白色。"
+  },
+  "adaa8a8709d4": {
+   "scene": "Dfs",
+   "en": "The stamps also sort every edge into one of four kinds. <bookmark mark='a'/> Tree edges are the ones the search followed to discover a new vertex. <bookmark mark='b'/> Back edges lead to an ancestor that is still open, and each one closes a cycle. <bookmark mark='c'/> Forward edges jump to a descendant already finished, and cross edges go sideways, to a finished vertex in another branch. <bookmark mark='d'/> The most useful consequence: a directed graph contains a cycle exactly when the search finds a back edge. <bookmark mark='e'/> Everything happens in linear time, and the next two chapters are built on these stamps.",
+   "zh": "这些戳还把每条边分成四类。<bookmark mark='a'/>树边是搜索为了发现新顶点而走过的边。<bookmark mark='b'/>回边指向一个仍然打开的祖先，每一条都闭合一个圈。<bookmark mark='c'/>前向边跳到一个已经完成的后代，横叉边则横着走，指向另一分支里已经完成的顶点。<bookmark mark='d'/>最有用的推论：有向图含有圈，当且仅当搜索找到一条回边。<bookmark mark='e'/>一切都在线性时间内完成，接下来两章都建立在这些戳上。"
+  },
+  "1ed479b80fee": {
+   "scene": "Topo",
+   "en": "Chapter four. Topological sort.",
+   "zh": "第4章。拓扑排序。"
+  },
+  "5877eb84382f": {
+   "scene": "Topo",
+   "en": "Here is the build of a small compiler. <bookmark mark='a'/> Each arrow says that one file must be made before another: the header before every object file that includes it, the object files before the linked compiler, the compiler before the tests. <bookmark mark='b'/> A topological order is a list in which every file comes after all of its prerequisites; it exists exactly when there are no cycles. <bookmark mark='c'/> Depth-first search finds one for free. Sort the vertices by finishing time, latest first. Along any edge, the search finishes the target before the source, because the target is either explored from the source or already done; a back edge would be a cycle.",
+   "zh": "这是一个小编译器的构建。<bookmark mark='a'/>每个箭头表示一个文件必须在另一个之前生成：头文件在每个包含它的目标文件之前，目标文件在链接出的编译器之前，编译器在测试之前。<bookmark mark='b'/>拓扑顺序是这样一个列表：每个文件都排在它所有前提之后；它存在当且仅当没有圈。<bookmark mark='c'/>深度优先搜索顺手就能给出一个。按完成时间排序，最晚的在前。沿着任何一条边，搜索总是先完成终点、后完成起点，因为终点要么是从起点探索下去的，要么早已完成；回边则意味着有圈。"
+  },
+  "d6028e70ea32": {
+   "scene": "Topo",
+   "en": "Arthur Kahn's method from 1962 is the one build tools usually use. <bookmark mark='a'/> Count the incoming edges of every vertex. <bookmark mark='b'/> Any vertex with none can be built now: output it and remove its outgoing edges, which may free others. The vertices that become free at the same moment do not depend on each other, so they can be built in parallel. <bookmark mark='c'/> If at some point vertices remain but none is free, the remaining ones contain a cycle, and the build is impossible: make reports a circular dependency.",
+   "zh": "阿瑟·卡恩1962年的方法，是构建工具通常使用的那一种。<bookmark mark='a'/>数出每个顶点的入边。<bookmark mark='b'/>没有入边的顶点现在就可以构建：输出它，并删去它的出边，这可能让别的顶点获得自由。同一时刻变得自由的顶点彼此不依赖，所以可以并行构建。<bookmark mark='c'/>如果某个时刻还有顶点剩下，却没有一个是自由的，剩下的顶点就含有一个圈，构建无法进行：make 会报告循环依赖。"
+  },
+  "a63d2cc79c66": {
+   "scene": "Topo",
+   "en": "Topological order applies when dependencies form a directed acyclic graph. <bookmark mark='a'/> It orders compilation prerequisites and acyclic spreadsheet recalculation. In a DFS forest, decreasing finish time orders the graph after its back edges are removed; a control-flow graph itself may still have loops. Package managers may need extra policy for cycles, versions and optional dependencies. <bookmark mark='b'/> A longest path in a DAG is also computed in one topological pass. With task durations as weights, unlimited workers and no other resource or communication costs, the critical-path length is the minimum project completion time.",
+   "zh": "当依赖构成有向无环图时，可以使用拓扑顺序。<bookmark mark='a'/>它能排列编译前置条件和无环电子表格的重算。在深度优先森林中，按完成时间递减排序，会给删去返祖边后的图排出顺序；控制流图本身仍可能有循环。包管理器还可能需要处理依赖环、版本和可选依赖的额外策略。<bookmark mark='b'/>有向无环图的最长路径，也能按拓扑顺序一遍算出。若以任务时长为权，工人无限，而且没有其他资源或通信开销，关键路径长度就是项目最短完成时间。"
+  },
+  "ae2e5f048f6a": {
+   "scene": "Scc",
+   "en": "Chapter five. Strongly connected components.",
+   "zh": "第5章。强连通分量。"
+  },
+  "a94272c15902": {
+   "scene": "Scc",
+   "en": "In a directed graph, reaching is not symmetric: a one-way street can take you somewhere you cannot come back from. <bookmark mark='a'/> Two vertices belong to the same strongly connected component if each can reach the other. Here the graph splits into three. <bookmark mark='b'/> Shrink each component to a single point and the result, the condensation, has no cycles at all: any cycle between components would merge them. So every directed graph is a DAG of strongly connected pieces.",
+   "zh": "在有向图里，可达不是对称的：一条单行道可以把你带到一个回不来的地方。<bookmark mark='a'/>如果两个顶点能互相到达，它们就属于同一个强连通分量。这里的图分成三个。<bookmark mark='b'/>把每个分量缩成一个点，得到的缩点图根本没有圈：分量之间的任何圈都会把它们合并。所以每张有向图都是由强连通的块组成的有向无环图。"
+  },
+  "10ec2e8ee789": {
+   "scene": "Scc",
+   "en": "Tarjan's algorithm finds components in one depth-first search. <bookmark mark='a'/> Assign discovery indices and keep vertices of unfinished components on an active stack. <bookmark mark='b'/> Initialize low of v to its own index. After a DFS child finishes, include that child's low value; for an edge to an already discovered vertex still on the active stack, include that vertex's discovery index. These are different update rules. <bookmark mark='c'/> When low of v equals its index, pop the active stack through v: those vertices form one component. <bookmark mark='d'/> Components emerge in reverse topological order of the condensation. <bookmark mark='e'/> Kosaraju's alternative uses decreasing finish times, followed by searches on the reversed graph. Both methods take order V plus E with adjacency lists.",
+   "zh": "塔扬算法用一次深度优先搜索找到强连通分量。<bookmark mark='a'/>分配发现序号，把尚未归入完整分量的顶点保留在活动栈中。<bookmark mark='b'/>先把 v 的低链值设为自身序号。深度优先子节点完成后，纳入子节点的低链值；若一条边指向已发现且仍在活动栈中的顶点，则纳入那个顶点的发现序号。这是两种不同的更新规则。<bookmark mark='c'/>当 v 的低链值等于自身序号时，从活动栈弹出到 v 为止，这些顶点恰好组成一个分量。<bookmark mark='d'/>分量按凝聚图的逆拓扑顺序产生。<bookmark mark='e'/>科萨拉朱的另一方法先按完成时间递减排列，再在反向图上搜索。使用邻接表时，两者都需要顶点数加边数数量级的时间。"
+  },
+  "ac959fe033bd": {
+   "scene": "Scc",
+   "en": "Components reveal network structure, but a generator is not a web measurement. <bookmark mark='a'/> This synthetic graph has twenty thousand pages. New pages prefer popular older ones, and some links are returned. Its checked table has a large core, an incoming region, and zero pages in the outgoing-only region. <bookmark mark='b'/> The separate bow-tie diagram describes Broder and colleagues' May 1999 crawl, reported in 2000: about twenty-eight percent core, twenty-one percent incoming and twenty-one percent outgoing, with other regions outside them. <bookmark mark='c'/> Those are historical observations on a different graph. Linear-time SCC algorithms explain why such decomposition is possible; this episode neither reproduces that crawl nor measures today's web.",
+   "zh": "强连通分量揭示网络结构，但生成器不等于网络实测。<bookmark mark='a'/>这张合成图有两万个网页，新网页偏向链接受欢迎的老网页，部分链接会被反向补回。核验后的表中有一个大核心和流入区域，而仅能从核心到达的区域为零。<bookmark mark='b'/>另一幅蝴蝶结图描述布罗德等人1999年五月抓取、2000年报告的数据：约百分之二十八为核心，百分之二十一流入，百分之二十一流出，另外还有其他区域。<bookmark mark='c'/>这些是另一张图上的历史观测。线性时间的强连通分量算法说明这种分解如何做到；本集既没有重现那次抓取，也没有测量今天的网络。"
+  },
+  "c799fe351f9e": {
+   "scene": "Scc",
+   "en": "Strong components solve two-SAT. <bookmark mark='a'/> Each clause here is a disjunction of two literals. <bookmark mark='b'/> A or B yields the implications not A to B and not B to A. Put every literal and its negation in the implication graph. <bookmark mark='c'/> The formula is unsatisfiable exactly when a variable shares a strong component with its negation. <bookmark mark='d'/> Otherwise, choose a topological order of the condensation and set x true precisely when x's component is later than the component of not x. Comparing these two components is essential. Our checked example sets x one and x three true and x two false. <bookmark mark='e'/> With three literals per clause, general satisfiability is NP-complete; Part 26 explains the distinction.",
+   "zh": "强连通分量能解决二元可满足性问题。<bookmark mark='a'/>这里每个子句是两个文字的析取。<bookmark mark='b'/>A 或 B 给出两条蕴含：非 A 推出 B，非 B 推出 A。把每个文字及其否定放入蕴含图。<bookmark mark='c'/>公式不可满足，当且仅当某个变量与自身否定处在同一强连通分量。<bookmark mark='d'/>否则，选择凝聚图的一种拓扑顺序，恰在 x 的分量晚于非 x 的分量时，把 x 设为真。必须比较这两个分量。核验过的例子把变量一和三设为真，变量二设为假。<bookmark mark='e'/>每个子句改为三个文字后，一般可满足性问题是 NP 完全的；第26部分解释这个区别。"
+  },
+  "8bb52b1d62d8": {
+   "scene": "Dijkstra",
+   "en": "Chapter six. Dijkstra's algorithm.",
+   "zh": "第6章。迪杰斯特拉算法。"
+  },
+  "23139d3f9c1f": {
+   "scene": "Dijkstra",
+   "en": "Edsger Dijkstra designed his shortest-path algorithm in about twenty minutes, sitting at a café in Amsterdam in 1956, to demonstrate a new computer. <bookmark mark='a'/> Every vertex gets a tentative distance: zero for the start, infinity for the rest. <bookmark mark='b'/> Repeatedly take the unsettled vertex with the smallest tentative distance, declare it settled, and relax its outgoing edges, lowering a neighbour's distance whenever the path through this vertex is shorter. <bookmark mark='c'/> Watch the order: s, then b at distance one, then a at three, reached more cheaply through b than directly. <bookmark mark='d'/> A priority queue, Part 17's heap, finds the nearest vertex, so the whole run costs order of V plus E, times log V.",
+   "zh": "1956年，艾兹赫尔·迪杰斯特拉坐在阿姆斯特丹的一家咖啡馆里，用大约二十分钟设计出了他的最短路径算法，用来演示一台新计算机。<bookmark mark='a'/>每个顶点有一个暂定距离：起点为零，其余为无穷大。<bookmark mark='b'/>反复取出暂定距离最小的未定顶点，宣布它已确定，并松弛它的出边：只要经过这个顶点的路径更短，就降低邻居的距离。<bookmark mark='c'/>注意顺序：先是 s，然后是距离一的 b，再是距离三的 a，经过 b 到达 a 比直接到达更便宜。<bookmark mark='d'/>用一个优先队列，也就是第17部分的堆，来找最近的顶点，整个运行的代价是 V 加 E，乘以 log V 的量级。"
+  },
+  "f1a0bfab9a4a": {
+   "scene": "Dijkstra",
+   "en": "The proof is an invariant, as in Part 16. <bookmark mark='a'/> Claim: whenever a vertex is settled, its tentative distance is its true shortest distance. <bookmark mark='b'/> Suppose not, and let u be the first vertex settled too early: some path P to u is shorter than its tentative distance. <bookmark mark='c'/> P starts inside the settled set and must leave it somewhere; let y be the first vertex on P that is not yet settled. <bookmark mark='d'/> Its predecessor on P was settled correctly and relaxed the edge into y, so d of y is at most the length of P up to y, which is at most the length of P, which is less than d of u. But the algorithm chose u because d of u was smallest, so d of u is at most d of y. <bookmark mark='e'/> That is a contradiction, and the step that the length of a path only grows as it continues is exactly where edge lengths must be non-negative. Chapter seven shows what breaks without it.",
+   "zh": "证明是一个不变式，就像第16部分那样。<bookmark mark='a'/>断言：每当一个顶点被确定时，它的暂定距离就是真正的最短距离。<bookmark mark='b'/>假设不然，设 u 是第一个过早确定的顶点：某条到 u 的路径 P 比它的暂定距离更短。<bookmark mark='c'/>P 从已确定的集合内部出发，必定在某处离开它；设 y 是 P 上第一个尚未确定的顶点。<bookmark mark='d'/>它在 P 上的前驱已被正确确定，并松弛过进入 y 的边，所以 y 的 d 至多是 P 到 y 为止的长度，这至多是 P 的长度，而它小于 u 的 d。但算法选中 u，是因为 u 的 d 最小，所以 u 的 d 至多是 y 的 d。<bookmark mark='e'/>这就矛盾了，而“路径越往前走长度只增不减”这一步，正是要求边长非负的地方。第7章会展示没有它时什么会坏掉。"
+  },
+  "88b78c371dda": {
+   "scene": "Dijkstra",
+   "en": "Here is Dijkstra on a synthetic city of two thousand four hundred intersections. <bookmark mark='a'/> A dot appears when an intersection is settled, coloured by its distance from the source. <bookmark mark='b'/> Gold arterial edges cost zero point three five times their geometric length, so the wavefront advances farther along them; these are synthetic travel costs. <bookmark mark='c'/> A point-to-point query settles vertices in distance order until the destination is selected. How much of the city that includes depends on the destination. Chapter nine compares exact alternatives on fixed queries.",
+   "zh": "这里是在两千四百个路口的合成城市上运行的迪杰斯特拉算法。<bookmark mark='a'/>每当一个路口被确定，就出现一个点，颜色表示到源点的距离。<bookmark mark='b'/>金色主干道的代价是几何长度的零点三五倍，因此波前能沿它推进得更远；这些是合成的出行代价。<bookmark mark='c'/>点到点查询按距离顺序确定顶点，直到选中目标。覆盖城市多少，取决于目标位置。第九章会在固定查询上比较其他精确方法。"
+  },
+  "684f3cd77c2c": {
+   "scene": "Bellman",
+   "en": "Chapter seven. Negative edges.",
+   "zh": "第7章。负权边。"
+  },
+  "9b39c2b1954e": {
+   "scene": "Bellman",
+   "en": "Dijkstra's proof needed every edge to be non-negative. <bookmark mark='a'/> Here, the algorithm settles a at distance two, because that is the smallest tentative distance, and moves on. <bookmark mark='b'/> But going through b costs five, minus four: one. The path that looked worse became better after its last step. <bookmark mark='c'/> The step of the proof that said a path only grows as it continues is simply false here. <bookmark mark='d'/> And negative weights are not exotic: they model rebates and gains, they appear when costs are measured against a reference, and in the next minute they will model exchange rates.",
+   "zh": "迪杰斯特拉的证明要求每条边都非负。<bookmark mark='a'/>在这里，算法以距离二确定了 a，因为那是最小的暂定距离，然后继续前进。<bookmark mark='b'/>但经过 b 的代价是五减四：一。看起来更差的路径在最后一步之后变得更好。<bookmark mark='c'/>证明中“路径越往前走只会变长”的那一步，在这里根本不成立。<bookmark mark='d'/>负权也并不稀奇：它们刻画返利和收益，在相对某个基准度量代价时就会出现，而接下来一分钟，它们将刻画汇率。"
+  },
+  "e73e4e48579b": {
+   "scene": "Bellman",
+   "en": "Bellman-Ford permits negative edges. <bookmark mark='a'/> Repeatedly relax every directed edge. <bookmark mark='b'/> After round k, distances are at least as good as every source path using at most k edges. With in-place updates, a round may propagate farther; the table shows this distinction. <bookmark mark='c'/> If no reachable negative cycle exists, a shortest path can be simple and uses at most V minus one edges. That many rounds suffice, giving order V times E. <bookmark mark='d'/> An improvement in one more round detects a negative cycle reachable from the source. Only vertices downstream of such a cycle have distances unbounded below; unrelated finite distances need not disappear. <bookmark mark='e'/> Distributed distance-vector routing uses related relaxations, with separate convergence and failure-handling issues.",
+   "zh": "贝尔曼—福特算法允许负权边。<bookmark mark='a'/>反复松弛每一条有向边。<bookmark mark='b'/>第 k 轮后，距离至少已不劣于所有至多含 k 条边的源点路径。就地更新时，一轮也可能传播得更远；表格展示了这个区别。<bookmark mark='c'/>若不存在从源点可达的负回路，就能选择一条简单最短路径，至多含顶点数减一条边。因此这么多轮足够，总时间为顶点数乘边数的数量级。<bookmark mark='d'/>再多一轮仍有改进，就检测到源点可达的负回路。只有这种回路下游的顶点距离才无下界；不相关的有限距离并不一定失效。<bookmark mark='e'/>分布式距离向量路由使用相关的松弛思想，但还要单独处理收敛和故障。"
+  },
+  "84156d3d6a4b": {
+   "scene": "Bellman",
+   "en": "A rate product gives a negative-cycle example. <bookmark mark='a'/> These four-currency rates are invented illustrations, not market observations. Multiplying rates around a loop gives the gross conversion factor, before fees, spreads and execution constraints. <bookmark mark='b'/> Weight each edge by minus the logarithm of its rate. A product greater than one becomes a negative cycle because logarithms turn products into sums. <bookmark mark='c'/> The checked example finds yen to pounds to euros and back to yen. <bookmark mark='d'/> Its gross gain is about half a percent. The implementation uses floating arithmetic and a small relaxation tolerance, so a nearly zero cycle needs numerical care. <bookmark mark='e'/> This mathematical detector alone does not establish that a real sequence of trades can be executed profitably.",
+   "zh": "汇率乘积给出一个负回路例子。<bookmark mark='a'/>这四种货币的汇率是人为示例，不是市场观测。沿回路相乘，得到尚未计入费用、买卖价差和执行限制的总兑换因子。<bookmark mark='b'/>把每条边的权设为汇率对数的负值。对数把乘积变成和，因此乘积大于一对应负回路。<bookmark mark='c'/>经过核验的例子找到日元到英镑、欧元，再回到日元的回路。<bookmark mark='d'/>其毛收益约为百分之零点五。实现使用浮点运算和很小的松弛容差，所以接近零的回路需要数值谨慎。<bookmark mark='e'/>仅凭这个数学检测器，不能证明真实交易序列能够有利可图地执行。"
+  },
+  "5bb7b2ed3655": {
+   "scene": "AllPairs",
+   "en": "Chapter eight. All pairs.",
+   "zh": "第8章。全源最短路径。"
+  },
+  "19a84073d7d7": {
+   "scene": "AllPairs",
+   "en": "Sometimes we need all pairwise distances. <bookmark mark='a'/> Floyd-Warshall uses three nested loops over intermediate vertex k, source i and target j. <bookmark mark='b'/> Before step k, d k of i, j is the shortest path allowing only vertices numbered below k as internal waypoints. Initialize the diagonal to zero and other entries to edge weights or infinity. <bookmark mark='c'/> When k becomes allowed, a shortest path either avoids k or splits there into an i-to-k part and a k-to-j part. <bookmark mark='d'/> This recurrence gives cubic time and quadratic space. Negative edges are allowed, but a reachable negative cycle can make some pairwise distances unbounded; a negative final diagonal detects that obstruction.",
+   "zh": "有时需要所有顶点对的距离。<bookmark mark='a'/>弗洛伊德—沃舍尔算法使用三重循环，依次遍历中间顶点 k、源点 i 和终点 j。<bookmark mark='b'/>第 k 步之前，d k 表示只允许编号小于 k 的顶点作为内部中转点的最短路径。对角线初始化为零，其他条目设为边权或无穷。<bookmark mark='c'/>允许 k 后，最短路径要么避开 k，要么在 k 处分成从 i 到 k、再从 k 到 j 的两段。<bookmark mark='d'/>递推给出立方时间和平方空间。允许负边，但可达负回路会让部分顶点对的距离无下界；最终对角线出现负数能检测到这种障碍。"
+  },
+  "30068668b612": {
+   "scene": "AllPairs",
+   "en": "For a sparse graph without negative cycles, Johnson reweights before running Dijkstra. <bookmark mark='a'/> Repeated binary-heap searches can exploit sparsity, while the initial Bellman-Ford computation still has its own cost. <bookmark mark='b'/> Add a genuinely fresh source, joined to every vertex by zero-weight edges, and compute its distances p. A negative cycle aborts this construction. <bookmark mark='c'/> Reweight u-to-v by w plus p of u minus p of v. <bookmark mark='d'/> The shortest-path triangle inequality makes every reweighted edge nonnegative. <bookmark mark='e'/> Along a path, potentials telescope: every path with the same endpoints changes by the same constant, preserving its shortest choices. <bookmark mark='f'/> Our potential-generated test graph keeps its original negative edges. Every finite distance and every unreachable pair agrees with Floyd-Warshall; no fallback changes the input.",
+   "zh": "对没有负回路的稀疏图，约翰逊先重新赋权，再运行迪杰斯特拉。<bookmark mark='a'/>重复的二叉堆搜索可以利用稀疏性，但最初的贝尔曼—福特计算仍有独立开销。<bookmark mark='b'/>加入一个真正全新的源点，用零权边连到每个顶点，并求出距离 p。若有负回路，就终止这种构造。<bookmark mark='c'/>把从 u 到 v 的边权改为 w 加 p 的 u 值，再减去 p 的 v 值。<bookmark mark='d'/>最短路径的三角不等式保证新边权非负。<bookmark mark='e'/>沿路径求和，势函数逐项相消；相同端点间的所有路径都改变同一个常数，因此最短选择不变。<bookmark mark='f'/>势函数生成的测试图保留原有负边。所有有限距离及不可达顶点对都与弗洛伊德—沃舍尔一致，没有备用步骤偷偷修改输入。"
+  },
+  "e7f3072750be": {
+   "scene": "AllPairs",
+   "en": "All-pairs distances also have an algebraic form. <bookmark mark='a'/> Define the i-j entry of a product as the minimum over k of a i-k plus b k-j. <bookmark mark='b'/> This is the min-plus product. <bookmark mark='c'/> With a zero diagonal, the k-th min-plus power describes walks of at most k edges. Without negative cycles, V minus one edges suffice for shortest paths, so repeated squaring reaches the answer. <bookmark mark='d'/> Fast ordinary matrix multiplication does not automatically transfer: subtraction is not available in min-plus arithmetic. <bookmark mark='e'/> The general weighted APSP conjecture rules out a fixed polynomial improvement below cubic time in its stated model. Restricted weight ranges and graph classes have different algorithms and are not ruled out by this broad slogan.",
+   "zh": "全源距离也有代数形式。<bookmark mark='a'/>把乘积的 i、j 条目定义为：对所有 k，取 a 的 i、k 条目加 b 的 k、j 条目的最小值。<bookmark mark='b'/>这叫最小加乘积。<bookmark mark='c'/>若对角线为零，第 k 次最小加幂描述至多 k 条边的行走。没有负回路时，最短路径至多需要顶点数减一条边，所以重复平方能得到答案。<bookmark mark='d'/>普通矩阵乘法的快速算法不能自动迁移，因为最小加运算中没有可直接使用的减法。<bookmark mark='e'/>一般带权全源最短路径猜想，在明确模型中排除相对立方时间的固定多项式改进。受限权值范围和特殊图类有不同算法，不能被一句概括全部排除。"
+  },
+  "ec4cbf2e6bbb": {
+   "scene": "AStar",
+   "en": "Chapter nine. Exact routes with less search.",
+   "zh": "第九章。用更少搜索求精确路线。"
+  },
+  "ec18338d375b": {
+   "scene": "AStar",
+   "en": "A point-to-point search can use its destination. <bookmark mark='a'/> The left panel shows intersections actually expanded by Dijkstra on this query, not every vertex merely discovered. White is the source and red the target. <bookmark mark='b'/> A star prioritizes distance so far plus a lower bound on the remaining distance. With nonnegative edges, an admissible estimate, zero at the goal, and reopening when an improved path reaches a previously expanded vertex, the answer is exact. <bookmark mark='c'/> Our straight-line bound uses the cheapest cost per unit distance, zero point three five. It is also consistent on every city edge, so this experiment needs no reopening. The right panel shows its actual expansions.",
+   "zh": "点到点搜索可以利用目标位置。<bookmark mark='a'/>左图展示这次查询中迪杰斯特拉实际展开的路口，而不是所有仅被发现的顶点。白色是源点，红色是目标。<bookmark mark='b'/>A 星按已走距离加剩余距离的下界排序。在非负边、可采纳估计、目标估计为零的条件下，若更优路径到达已展开顶点时允许重新展开，答案就是精确的。<bookmark mark='c'/>我们的直线下界使用每单位距离最低代价零点三五。它在每条城市边上还满足一致性，因此这个实验无需重新展开。右图展示它的实际展开集合。"
+  },
+  "40705ee0410d": {
+   "scene": "AStar",
+   "en": "Road structure can give a stronger estimate than a straight line. <bookmark mark='a'/> Precompute distances to and from four landmarks once, and reuse those tables across queries. On this undirected city the two directions agree. <bookmark mark='b'/> The triangle inequality bounds distance from v to the target below by distance from a landmark to the target minus distance from that landmark to v; the reverse-direction difference gives another bound. <bookmark mark='c'/> Take the largest valid bound over landmarks. The two panels show actual expansions for the same diagonal query, with both final distances checked equal. <bookmark mark='d'/> Tables cost order landmarks times vertices in storage. Preprocessing cost and expanded-vertex count are different measurements; neither is a query-latency benchmark.",
+   "zh": "道路结构能给出比直线更强的估计。<bookmark mark='a'/>只预先计算一次到四个地标及从地标出发的距离，并在多次查询间复用。在这座无向城市中，两个方向相同。<bookmark mark='b'/>三角不等式给出从 v 到目标的下界：地标到目标的距离，减去地标到 v 的距离；反向距离之差还能给出另一个下界。<bookmark mark='c'/>在所有地标的有效下界中取最大值。两图展示同一次斜向查询的实际展开集合，最终距离经过一致性核验。<bookmark mark='d'/>距离表的存储量为地标数乘顶点数的数量级。预处理开销和展开顶点数是不同的量；二者都不是查询延迟基准测试。"
+  },
+  "121d87304406": {
+   "scene": "AStar",
+   "en": "Contraction hierarchies precompute shortcut edges. <bookmark mark='a'/> Choose a vertex order; our implementation uses a heuristic based on added shortcuts and contracted neighbours, not a supplied road-importance label. <bookmark mark='b'/> When contracting v, preserve a path between each pair of remaining neighbours. If no equally short witness avoiding v is found, add a shortcut. Here length one plus two becomes a shortcut of three, while the alternative costs seven. <bookmark mark='c'/> The query searches upward in the order from both endpoints. The dots show those two expansion sets on the same diagonal trip. <bookmark mark='d'/> Shortcuts ensure that some shortest route has an equivalent upward-then-downward representation; not every original shortest path literally has that shape. <bookmark mark='e'/> A bounded witness search can add extra shortcuts without losing correctness. Performance depends on the graph, ordering and implementation.",
+   "zh": "收缩层次预先计算捷径边。<bookmark mark='a'/>先选择顶点顺序；我们的实现按新增捷径和已收缩邻居启发式排序，并没有输入道路重要性标签。<bookmark mark='b'/>收缩 v 时，要保留每对剩余邻居之间的路径。若没找到避开 v、且同样短的见证路径，就加入捷径。这里一加二变成长度三的捷径，另一条路线则长七。<bookmark mark='c'/>查询从两个端点沿顺序向上搜索。图中的点展示同一次斜向行程的两个展开集合。<bookmark mark='d'/>捷径保证至少一条最短路线有等价的先上后下表示，并不意味着每条原始最短路径本来就长这样。<bookmark mark='e'/>限制见证搜索的工作量可能增加额外捷径，但不破坏正确性。性能取决于图、排序和实现。"
+  },
+  "e575147acdad": {
+   "scene": "AStar",
+   "en": "These are forty fixed queries on one synthetic city of four thousand eight hundred intersections. <bookmark mark='a'/> The bars count actual expanded vertices, averaged over queries. Bidirectional searches count both sides; they may count an intersection twice. <bookmark mark='b'/> We independently check every reported route distance against the plain Dijkstra result. Landmark tables are reused, and hierarchy preprocessing is recorded separately as one observed build. <bookmark mark='c'/> Fewer expansions explain a possible source of savings, but do not measure response time. This experiment makes no claim about phone latency or how the ratio scales to a continental network.",
+   "zh": "这里是在一座四千八百路口的合成城市上的四十次固定查询。<bookmark mark='a'/>柱高是实际展开顶点数的查询平均值。双向搜索把两端相加，同一路口可能计两次。<bookmark mark='b'/>每个报告的路线距离都与普通迪杰斯特拉结果独立比较。地标距离表被复用，层次预处理则单独记录一次实际构建。<bookmark mark='c'/>展开次数减少能解释一种潜在节省来源，却没有测出响应时间。本实验不声称手机查询延迟，也不推断这个比值如何扩展到洲际道路网络。"
+  },
+  "11bcd0683531": {
+   "scene": "Mst",
+   "en": "Chapter ten. Minimum spanning trees.",
+   "zh": "第10章。最小生成树。"
+  },
+  "7f9e483b79fa": {
+   "scene": "Mst",
+   "en": "A minimum spanning tree connects a connected undirected weighted graph with the least total edge weight. <bookmark mark='a'/> It has V minus one edges and no cycle. The weights may be negative; shortest-path assumptions are not needed here. <bookmark mark='b'/> For any cut, any lightest crossing edge belongs to some minimum spanning tree. <bookmark mark='c'/> Add that edge to a minimum tree that avoids it. The resulting cycle crosses the cut again; replace a crossing edge of at least its weight. The new tree is no worse and contains the chosen edge. <bookmark mark='d'/> The related cycle rule needs care with ties: an edge uniquely heaviest on a cycle belongs to no minimum tree. A tied maximum edge may belong to one. <bookmark mark='e'/> The three classic algorithms use these safe choices in different orders.",
+   "zh": "最小生成树以最小总边权连通一张连通的无向带权图。<bookmark mark='a'/>它有顶点数减一条边，而且没有圈。边权可以为负，这里不需要最短路径的非负假设。<bookmark mark='b'/>对任意割，任一最轻的跨割边都属于某棵最小生成树。<bookmark mark='c'/>把该边加入一棵不含它的最小树，形成的圈还会再次跨过这个割；用它替换一条不更轻的跨割边，新树不会更差，并包含选中的边。<bookmark mark='d'/>相关的圈规则必须注意并列：若某条边在一个圈上严格重于所有其他边，它不属于任何最小树。并列最重的边则可能属于某棵最小树。<bookmark mark='e'/>三种经典算法只是以不同顺序采用这些安全选择。"
+  },
+  "5b5e763a5fb6": {
+   "scene": "Mst",
+   "en": "Joseph Kruskal's algorithm is the cut property applied greedily. <bookmark mark='a'/> Sort all the edges by weight, and go through them from the lightest, keeping each edge unless it would close a cycle. Whether two points are already connected is exactly the question Part 17's union–find answers in almost constant time. <bookmark mark='b'/> Watch the forest form: short edges first, joining nearby points into clusters, then longer edges joining clusters. <bookmark mark='c'/> The result, on these hundred and twenty points, has the same total length that Prim's and Borůvka's algorithms find.",
+   "zh": "约瑟夫·克鲁斯卡尔的算法，是贪心地应用割性质。<bookmark mark='a'/>把所有边按权排序，从最轻的开始逐条考察，除非会闭合一个圈，否则就保留。两个点是否已经连通，正是第17部分的并查集几乎在常数时间内回答的问题。<bookmark mark='b'/>看森林成形：先是短边，把相近的点连成簇，然后是更长的边，把簇连起来。<bookmark mark='c'/>在这一百二十个点上，结果的总长度与普里姆算法和博鲁夫卡算法求出的相同。"
+  },
+  "a034e8775506": {
+   "scene": "Mst",
+   "en": "Three classic methods schedule safe edges differently. <bookmark mark='a'/> Kruskal sorts edges and uses union-find, taking order E log E for this implementation. <bookmark mark='b'/> Prim grows one tree using a heap; Jarník described an earlier version. The binary-heap bound differs from a Fibonacci-heap implementation. <bookmark mark='c'/> Boruvka lets each remaining component choose a lightest outgoing edge, with a consistent tie rule. On a connected graph the number of components at least halves per round. <bookmark mark='d'/> Karger, Klein and Tarjan's randomized algorithm achieves expected linear time in the comparison model; it is a theorem cited here, not the code we just timed. <bookmark mark='e'/> Boruvka's simultaneous choices also motivate parallel and distributed algorithms, whose communication costs require their own analysis.",
+   "zh": "三种经典方法以不同顺序安排安全边。<bookmark mark='a'/>克鲁斯卡尔对边排序并使用并查集，这份实现的时间为边数乘边数对数的数量级。<bookmark mark='b'/>普里姆用堆生长一棵树，雅尔尼克更早描述过一种版本。二叉堆的界与斐波那契堆实现不同。<bookmark mark='c'/>博鲁夫卡让每个剩余分量选择最轻的出边，并使用一致的并列规则。连通图中，每轮分量数至少减半。<bookmark mark='d'/>卡格、克莱因和塔扬的随机算法在比较模型中达到期望线性时间；这里引用的是定理，不是刚才运行的代码。<bookmark mark='e'/>博鲁夫卡的同步选择还启发了并行和分布式算法，但通信代价需要独立分析。"
+  },
+  "59ce6637a9e3": {
+   "scene": "Flow",
+   "en": "Chapter eleven. Flows and cuts.",
+   "zh": "第11章。流与割。"
+  },
+  "6cbd3323fa4a": {
+   "scene": "Flow",
+   "en": "A flow network is a graph of pipes, each with a capacity. <bookmark mark='a'/> The question is how much can flow from a source s to a sink t, with nothing lost along the way. <bookmark mark='b'/> Lester Ford and Delbert Fulkerson's method, from 1956: find any path from s to t with spare capacity on every pipe, push as much as its narrowest pipe allows, and repeat. <bookmark mark='c'/> The subtle part is the residual graph. Pushing flow along a pipe also creates the option of pushing it back, so a later path may cancel an earlier choice. <bookmark mark='d'/> Jack Edmonds and Richard Karp showed that always choosing a shortest path, by breadth-first search, bounds the number of rounds. Here four augmenting paths bring the flow to nineteen.",
+   "zh": "流网络是一张由管道组成的图，每条管道有一个容量。<bookmark mark='a'/>问题是：从源点 s 到汇点 t，途中不损失任何东西，最多能流过多少。<bookmark mark='b'/>莱斯特·福特和德尔伯特·富尔克森1956年的方法：找任意一条从 s 到 t、每条管道都有余量的路径，按它最窄的管道所允许的量推送，然后重复。<bookmark mark='c'/>微妙之处在于残量图。沿一条管道推送流量，也就创造了把它推回去的选项，所以后来的路径可以取消早先的选择。<bookmark mark='d'/>杰克·埃德蒙兹和理查德·卡普证明了，总是用广度优先搜索选一条最短路径，就能限制轮数。这里四条增广路径把流量推到十九。"
+  },
+  "0ee51298e7e4": {
+   "scene": "Flow",
+   "en": "A flow and a cut can certify each other's optimality. <bookmark mark='a'/> A cut puts source s on one side and sink t on the other; add capacities of original arcs directed across it from the source side. <bookmark mark='b'/> Flow conservation makes the net flow crossing any cut equal the source value, so that value cannot exceed cut capacity. <bookmark mark='c'/> When the residual graph has no augmenting path, let S be its vertices reachable from s. Every original arc leaving S is saturated, and any positive flow entering S would create a residual arc leaving S, so no such return flow remains. <bookmark mark='d'/> Thus flow equals cut capacity. Here both are nineteen: ten from s to a, plus nine from b to d. Our output checks capacity constraints, conservation and this equality. <bookmark mark='e'/> That is the max-flow min-cut certificate, rather than an inference from the picture alone.",
+   "zh": "一个流和一个割能相互证明最优性。<bookmark mark='a'/>割把源点 s 和汇点 t 放在两侧；容量是原图中从源点侧指向另一侧的弧容量之和。<bookmark mark='b'/>流量守恒保证穿过任意割的净流等于源点流值，因此流值不超过割容量。<bookmark mark='c'/>残量图中没有增广路时，令 S 为从 s 仍可到达的顶点。所有离开 S 的原始弧都已饱和；任何流入 S 的正流都会产生离开 S 的反向残量弧，所以也不存在这样的回流。<bookmark mark='d'/>因此流值等于割容量。这里二者都是十九：从 s 到 a 的十，加从 b 到 d 的九。输出校验同时检查容量约束、守恒和这个等式。<bookmark mark='e'/>这才是最大流最小割的证书，而不是仅凭图片推断。"
+  },
+  "3d011ca23c13": {
+   "scene": "Flow",
+   "en": "An augmenting-path rule affects the amount of work. <bookmark mark='a'/> This network carries two thousand units, but alternating zig-zag paths through its unit-capacity middle edge add only one unit each. A backward residual arc cancels previous flow; it is not a new original pipe. <bookmark mark='b'/> That prescribed unlucky sequence takes two thousand augmentations. Integer capacities ensure progress in integral units; arbitrary irrational capacities do not give the same termination guarantee for arbitrary path choices. <bookmark mark='c'/> Breadth-first augmenting paths take two on this example. <bookmark mark='d'/> The random sixty-vertex example separately reports its actual distinct directed arcs, not the number of attempted dictionary writes, and has a checked flow/cut certificate. <bookmark mark='e'/> The research chapter will distinguish almost-linear theoretical bounds from practical implementations.",
+   "zh": "增广路的选择规则会影响工作量。<bookmark mark='a'/>这个网络能传两千单位，但反复沿容量为一的中间边走交替折线路径，每次只能增加一。反向残量弧会取消以前的流，不是原图新增的一根管道。<bookmark mark='b'/>这种规定的坏序列需要两千次增广。整数容量保证每次以整数单位推进；任意无理容量下，任意路径选择没有同样的终止保证。<bookmark mark='c'/>这个例子中，广度优先增广只需两次。<bookmark mark='d'/>另一个六十顶点随机例子报告实际不同有向弧数，而不是向字典尝试写入的次数，并有经过核验的流与割证书。<bookmark mark='e'/>研究章节会区分几乎线性的理论界与实用实现。"
+  },
+  "59dea120f0ba": {
+   "scene": "Matching",
+   "en": "Chapter twelve. Matching.",
+   "zh": "第12章。匹配。"
+  },
+  "e25a61197f7e": {
+   "scene": "Matching",
+   "en": "Flows solve matching. <bookmark mark='a'/> Put workers on the left and jobs on the right, with an edge whenever a worker can do a job, and ask for as many worker–job pairs as possible, no one used twice. <bookmark mark='b'/> Add a source feeding every worker and a sink fed by every job, give every pipe capacity one, and a maximum integer flow is exactly a maximum matching. <bookmark mark='c'/> The min-cut side says when everyone can be matched: Philip Hall's theorem, that every group of k workers must between them be able to do at least k jobs. <bookmark mark='d'/> And Dénes Kőnig's theorem, that the largest matching equals the smallest set of vertices touching every edge, is the max-flow min-cut theorem again.",
+   "zh": "流能解决匹配。<bookmark mark='a'/>把工人放在左边、工作放在右边，只要一个工人能做一项工作就连一条边，然后求尽可能多的工人–工作配对，任何人都不重复使用。<bookmark mark='b'/>加一个向每个工人供流的源点，和一个接收每项工作的汇点，让每条管道的容量都是一，那么最大整数流恰好就是最大匹配。<bookmark mark='c'/>最小割这一面说明了什么时候每个人都能被匹配：菲利普·霍尔的定理，任何 k 个工人加起来必须至少能做 k 项工作。<bookmark mark='d'/>而德内什·柯尼希的定理，最大匹配等于触及每条边的最小顶点集，又是最大流最小割定理。"
+  },
+  "bbc38119f154": {
+   "scene": "Matching",
+   "en": "Stable matching is a preference problem, not minimum-cost assignment. Assume equally sized sides with strict, complete preference lists. <bookmark mark='a'/> Each free proposer tries the best receiver not yet approached. <bookmark mark='b'/> Receivers keep their best offer so far and reject the rest. <bookmark mark='c'/> At termination everyone is matched and no pair prefers each other to their current partners. The example's proposal count is computed from these lists. <bookmark mark='d'/> A proposer who prefers another receiver must already have tried that receiver and been rejected; that receiver's held partner only improves. This rules out a blocking pair. The resulting stable matching is optimal for proposers among stable matchings, not among every conceivable assignment. <bookmark mark='e'/> Deferred acceptance influenced residency-market design, but actual residency systems add capacities, couples and other rules beyond this simple model.",
+   "zh": "稳定匹配是偏好问题，不是最小费用指派。假设两侧人数相等，偏好列表严格且完整。<bookmark mark='a'/>每个自由提议者尝试尚未联系的最喜欢接收者。<bookmark mark='b'/>接收者保留至今最好的提议，并拒绝其他人。<bookmark mark='c'/>终止时人人匹配，而且没有一对人比起现任更喜欢彼此。例子的提议次数由这些列表实际算出。<bookmark mark='d'/>若提议者更喜欢另一接收者，就一定已经向其提议并被拒绝；接收者保留的对象只会改善，因此不可能留下阻塞对。结果是在所有稳定匹配中对提议方最优，而不是在一切可能指派中最优。<bookmark mark='e'/>延迟接受影响了住院医师市场设计，但真实制度还加入名额、夫妻等超出这个简化模型的规则。"
+  },
+  "aab6edf9a86d": {
+   "scene": "Matching",
+   "en": "Count proposals before drawing conclusions. <bookmark mark='a'/> We generate independent uniform complete preference permutations on both sides, use five fixed seeds per size and verify stability even at size one thousand. The table reports the sample mean. The n times harmonic-number column is an order n log n scale reference, not an exact finite expectation for this experiment. <bookmark mark='b'/> Minimum-cost assignment is different. On our fixed sixty-by-sixty cost matrix, the Hungarian algorithm returns a checked permutation and total, compared with a row-wise greedy assignment. Cubic complexity describes growth; this one matrix does not establish a universal timing or quality ratio.",
+   "zh": "先数提议次数，再得出结论。<bookmark mark='a'/>两侧分别生成独立均匀的完整偏好排列，每个规模用五个固定种子，规模一千时也验证稳定性。表格报告样本均值。人数乘调和数这一列只是人数乘对数的尺度参照，不是这个实验的精确有限期望。<bookmark mark='b'/>最小费用指派是另一问题。在固定的六十乘六十费用矩阵上，匈牙利算法返回经过核验的排列和总费用，并与逐行贪心比较。立方复杂度描述增长趋势，这一个矩阵并不能确立普遍的时间或质量比值。"
+  },
+  "b8ba27ff398d": {
+   "scene": "Hard",
+   "en": "Chapter thirteen. Easy and hard.",
+   "zh": "第13章。容易与困难。"
+  },
+  "9dcf7b2e00cd": {
+   "scene": "Hard",
+   "en": "Hamilton's 1857 puzzle asks for a cycle through every corner of a dodecahedron. <bookmark mark='a'/> The flattened drawing has twenty vertices, thirty edges and degree three everywhere; the producer checks these counts. <bookmark mark='b'/> Visit each vertex once and return to the start. <bookmark mark='c'/> A complete backtracking enumeration finds thirty distinct undirected cycles, treating reverse orientations and different starting positions as the same cycle. One checked solution is highlighted. <bookmark mark='d'/> Success on twenty vertices is not a polynomial-time guarantee. The general decision problem is NP-complete; whether it has a polynomial algorithm is part of P versus NP, not something this small experiment resolves.",
+   "zh": "汉密尔顿1857年的谜题要求沿一个圈访问十二面体的每个角。<bookmark mark='a'/>展平图有二十个顶点、三十条边，每个顶点度数为三；计算程序核验这些数量。<bookmark mark='b'/>每个顶点访问一次，再回到起点。<bookmark mark='c'/>完整回溯枚举得到三十条不同的无向圈，把反向行走和不同起点视为同一个圈。高亮的是一条经过核验的解。<bookmark mark='d'/>二十个顶点上的成功并不保证多项式时间。一般判定问题是 NP 完全的；它是否有多项式算法属于 P 与 NP 问题，不是这个小实验能解决的。"
+  },
+  "0b727e00a070": {
+   "scene": "Hard",
+   "en": "Euler circuits and Hamiltonian cycles have different conditions. <bookmark mark='a'/> An Euler circuit uses every edge once. Connected non-isolated vertices and even degrees give a constructive test; our validated implementation takes expected order V plus E. <bookmark mark='b'/> A Hamiltonian cycle visits every vertex once, and deciding existence is NP-complete. Exponential algorithms do not all have base two: Bjorklund's randomized undirected Hamiltonicity algorithm is a historical example below that base. <bookmark mark='c'/> General weighted travelling salesman asks for the least-weight Hamiltonian cycle. We implement the classical Bellman-Held-Karp subset dynamic programme, with order two to the n times n squared time. That is an algorithm we can measure, not a claim that no refinements or special-case improvements exist.",
+   "zh": "欧拉回路与哈密顿圈有不同条件。<bookmark mark='a'/>欧拉回路恰好走遍每条边。非孤立顶点连通且度数全偶，就给出可构造的检验；经过校验的实现需要期望的顶点数加边数时间。<bookmark mark='b'/>哈密顿圈恰好访问每个顶点，判定其存在是 NP 完全问题。指数算法的底数并非都为二；比约克隆德针对无向哈密顿性的随机算法就是历史上低于这个底数的例子。<bookmark mark='c'/>一般带权旅行商要求总权最小的哈密顿圈。我们实现经典的贝尔曼—赫尔德—卡普子集动态规划，时间为二的顶点数次方乘顶点数平方的数量级。这是能测量的算法，并不声称没有细化算法或特殊情况改进。"
+  },
+  "c92499512136": {
+   "scene": "Hard",
+   "en": "The table reports complete runs on this host. <bookmark mark='a'/> Each Held-Karp time is the minimum of three trials on a fixed Euclidean instance. Every returned value is checked against an independent suffix recurrence, and the smaller cases also against all tours. <bookmark mark='b'/> The fifty-city figure extrapolates the classical two-to-the-n times n-squared model from one measured size. It is an illustration, not an execution or a reliable wall-time prediction. The model also needs exponentially many states. <bookmark mark='c'/> The Euler timing includes incidence validation, and each of the three returned circuits is checked against all one hundred and eighty thousand edges. <bookmark mark='d'/> Practical exact solvers exploit structure and bounds on many large instances. That success is compatible with the absence of a known polynomial worst-case algorithm.",
+   "zh": "表格报告在这台主机上的完整运行。<bookmark mark='a'/>每个赫尔德—卡普时间是固定欧氏实例上三次计时的最小值。每个返回值都与独立的后缀递推比较，小规模还与所有路线枚举比较。<bookmark mark='b'/>五十城市的数字从一个实测规模，按经典的二次方指数乘平方模型外推。它只是说明，不是实际执行，也不是可靠的墙钟时间预测；这个模型还需要指数数量的状态。<bookmark mark='c'/>欧拉计时包含关联校验，而且三次返回的回路都与全部十八万条边核对。<bookmark mark='d'/>实用精确求解器会利用结构和界，解决很多大型实例。这与尚无已知多项式最坏情况算法并不矛盾。"
+  },
+  "1fdc5904a241": {
+   "scene": "PageRank",
+   "en": "Chapter fourteen. PageRank.",
+   "zh": "第14章。PageRank。"
+  },
+  "e88a25200087": {
+   "scene": "PageRank",
+   "en": "PageRank assigns a stationary probability in a specified random-surfer model. <bookmark mark='a'/> With probability zero point eight five, follow a uniformly chosen outgoing link; otherwise jump uniformly to any page. At a page with no outgoing links, distribute its rank uniformly too. <bookmark mark='b'/> The equation includes all three contributions: teleportation, linked incoming rank, and dangling-page rank. That last term is needed for the small graph drawn here. <bookmark mark='c'/> Circle sizes encode the computed stationary probabilities, not a direct measurement of human importance. <bookmark mark='d'/> For damping strictly below one and uniform teleportation on a nonempty finite graph, the stationary vector is unique and power iteration converges. It is a model with a mathematical guarantee, rather than a guarantee of ranking quality.",
+   "zh": "PageRank 在明确的随机浏览者模型中分配稳态概率。<bookmark mark='a'/>以零点八五的概率，均匀选择一条出链跟随；否则均匀跳到任意网页。没有出链的网页也把自身排名均匀分发。<bookmark mark='b'/>方程包含三种贡献：随机跳转、沿入链传来的排名，以及悬挂网页的排名。这里画的小图就需要最后一项。<bookmark mark='c'/>圆大小编码算出的稳态概率，不是对人类所说重要性的直接测量。<bookmark mark='d'/>对非空有限图，若阻尼严格小于一，并使用均匀跳转，稳态向量唯一，幂迭代收敛。这是模型的数学保证，不是排名质量的保证。"
+  },
+  "3c333e0fcbec": {
+   "scene": "PageRank",
+   "en": "Power iteration repeatedly applies the full surfer operator. <bookmark mark='a'/> Start with uniform rank, scan every link and redistribute dangling mass in each round. The green curve is the L1 change between successive vectors. <bookmark mark='b'/> Damping zero point eight five gives an L1 contraction bound: changes are at most zero point eight five times the preceding change. The dashed curve is a bound scaled from the first observed change, not an exact error trajectory. <bookmark mark='c'/> We check the final vector with a separate numerical operator, verify probability mass and compute its stationarity residual. Dividing that residual by one minus damping bounds distance to the stationary vector. A small iterate change is not itself proof that every pair of pages has a settled ordering.",
+   "zh": "幂迭代反复应用完整的浏览者算子。<bookmark mark='a'/>从均匀排名开始，每轮扫描所有链接并重新分配悬挂质量。绿色曲线是相邻向量之差的 L1 范数。<bookmark mark='b'/>零点八五的阻尼给出 L1 收缩界：本轮变化至多是上轮的零点八五倍。虚线从第一次观测变化缩放而来，是一个界，不是精确误差轨迹。<bookmark mark='c'/>我们用独立的数值算子检查最终向量，核验概率质量并计算稳态残差。用残差除以一减阻尼，可以约束它到稳态向量的距离。迭代变化很小，本身并不能证明每对网页的先后顺序都已稳定。"
+  },
+  "78ff776c943b": {
+   "scene": "PageRank",
+   "en": "This ranking belongs to a synthetic graph. <bookmark mark='a'/> The reported overlap compares its top ten by PageRank with its top ten by incoming-link count. <bookmark mark='b'/> Preferential attachment makes old popular pages attractive to new links, so this generator naturally couples those two measures. It is not a measurement of today's web. <bookmark mark='c'/> PageRank weights links according to the linking page's rank, which differs from merely counting incoming links. <bookmark mark='d'/> That difference does not make the system immune to manipulation: link farms and other adversarial strategies require additional ranking signals and defenses, as Part 47 discusses.",
+   "zh": "这个排名属于一张合成图。<bookmark mark='a'/>报告的重合数比较它按 PageRank 排名的前十名与按入链数排名的前十名。<bookmark mark='b'/>优先连接使受欢迎的老网页继续吸引新链接，因此这个生成器自然把两个指标联系起来。这不是对今天网络的测量。<bookmark mark='c'/>PageRank 根据来源网页的排名给链接加权，与仅仅数入链不同。<bookmark mark='d'/>这个区别并不意味着免于操纵；链接农场和其他对抗策略，还需要额外的排名信号与防御，第47部分会讨论。"
+  },
+  "06c5a7b7e5b8": {
+   "scene": "Planar",
+   "en": "Chapter fifteen. Planar graphs and four colours.",
+   "zh": "第15章。平面图与四色。"
+  },
+  "47a85b723784": {
+   "scene": "Planar",
+   "en": "A planar graph admits a drawing with no edge crossings except at common endpoints. <bookmark mark='a'/> For a connected plane graph, counting the outer face, Euler's formula is vertices minus edges plus faces equals two. The cube gives eight minus twelve plus six. With c components the corresponding total is one plus c. <bookmark mark='b'/> Our connected triangulated grid is checked against the same formula. <bookmark mark='c'/> For a simple planar graph with at least three vertices, counting face-boundary incidences gives at most three V minus six edges; multiple edges and loops need different qualifications. <bookmark mark='d'/> The average degree is below six, so some vertex has degree at most five; this remains true in every simple planar subgraph. <bookmark mark='e'/> The complete graph on five vertices violates the bound and is not planar.",
+   "zh": "平面图允许一种画法：除了公共端点，边之间没有交叉。<bookmark mark='a'/>对连通的平面嵌入图，计入外部面后，欧拉公式是顶点数减边数加面数等于二。立方体给出八减十二加六。若有 c 个分量，对应总数是一加 c。<bookmark mark='b'/>我们连通的三角化网格也核验同一公式。<bookmark mark='c'/>对至少三个顶点的简单平面图，计算面边界关联可得边数至多为三倍顶点数减六；重边和自环需要另加条件。<bookmark mark='d'/>平均度小于六，所以某个顶点度数至多五；每个简单平面子图也有这个性质。<bookmark mark='e'/>五顶点完全图违反这个界，因此不是平面图。"
+  },
+  "435271786d0a": {
+   "scene": "Planar",
+   "en": "Map colouring requires regions sharing a border segment to differ; meeting only at a point does not count. For ordinary connected regions the adjacency graph is planar. <bookmark mark='a'/> Guthrie's 1852 question asked whether four colours always suffice. <bookmark mark='b'/> The five-colour theorem has a short inductive proof using the low-degree vertex and Kempe chains. <bookmark mark='c'/> Appel and Haken's 1976 four-colour proof used a finite reducibility computation; it was not just a search for colourings of a few maps. <bookmark mark='d'/> Gonthier's later Coq development formalized and machine-checked a four-colour proof. Our backtracking illustration is separate from those theorem proofs, and does not recreate their configuration checks.",
+   "zh": "地图着色要求共享一段边界的区域颜色不同，只在一点接触不算相邻。对通常的连通区域，其邻接图是平面的。<bookmark mark='a'/>格思里1852年的问题是：四种颜色是否总够用？<bookmark mark='b'/>五色定理有一个简短归纳证明，使用低度顶点和肯普链。<bookmark mark='c'/>阿佩尔和哈肯1976年的四色证明使用有限的可约性计算，并不是只给几张地图搜索着色。<bookmark mark='d'/>贡捷后来的 Coq 项目把一个四色证明形式化并交由机器检查。我们的回溯示例与这些定理证明不同，也没有重现它们的构形检验。"
+  },
+  "466aba722245": {
+   "scene": "Planar",
+   "en": "The five-colour proof uses the cyclic order of neighbours in a planar drawing. <bookmark mark='a'/> Remove a vertex v of degree at most five and colour the smaller graph by induction. <bookmark mark='b'/> If its neighbours use at most four colours, one of five is free for v. <bookmark mark='c'/> Otherwise number the five differently coloured neighbours around v. If the connected one-three colour component of neighbour one avoids neighbour three, swap those two colours throughout that component. Colour one becomes free. <bookmark mark='d'/> If the component connects neighbours one and three, choose a simple path in it. Together with v it forms a separating cycle, so a two-four colour path cannot join neighbours two and four without crossing. Swap the two-four component containing neighbour two instead. <bookmark mark='e'/> A colour is free in either case. <bookmark mark='f'/> The chain idea comes from Kempe; Heawood identified the flaw in Kempe's four-colour argument and established the five-colour theorem.",
+   "zh": "五色证明使用平面画法中邻居的环绕顺序。<bookmark mark='a'/>删去一个度数至多五的顶点 v，按归纳假设给更小的图着色。<bookmark mark='b'/>若其邻居至多用了四种颜色，五种颜色中就有一种留给 v。<bookmark mark='c'/>否则按绕 v 的顺序给五个不同颜色的邻居编号。若邻居一所在的一三双色连通分量不含邻居三，就在整个分量中交换一和三，颜色一便空出来。<bookmark mark='d'/>若这个分量连接邻居一和三，选取其中一条简单路径；它与 v 形成分隔圈，所以二四色路径不可能在不交叉的情况下连接邻居二和四。改为交换包含邻居二的二四色分量。<bookmark mark='e'/>两种情况都能空出一种颜色。<bookmark mark='f'/>链的想法来自肯普；希伍德指出肯普四色论证的漏洞，并确立了五色定理。"
+  },
+  "8e9e233d7af2": {
+   "scene": "Frontier",
+   "en": "Chapter sixteen. Selected research results, with their models and dates.",
+   "zh": "第十六章。注明模型和日期的研究成果选读。"
+  },
+  "cb6d793f7128": {
+   "scene": "Frontier",
+   "en": "First distinguish distance ordering from distance computation. <bookmark mark='a'/> Standard Dijkstra processes vertices in nondecreasing source distance, so its settlement order also sorts reachable distances. <bookmark mark='b'/> In the comparison model, some graph families encode a sorting problem; that is not a lower bound of n log n for every individual graph. <bookmark mark='c'/> Haeupler and colleagues' 2024 universal-optimality result concerns distance ordering on each fixed graph, compared against algorithms facing that graph's worst-case arc lengths in the specified model. <bookmark mark='d'/> It uses a heap with a working-set guarantee. Our ordinary Python binary heap is not an implementation of that specialized structure. <bookmark mark='e'/> Computing only the distances is a different output task, which is why the next results can improve sparse-graph bounds without contradicting this theorem.",
+   "zh": "先区分按距离排序与仅计算距离。<bookmark mark='a'/>标准迪杰斯特拉按源点距离非降顺序处理顶点，所以确定顺序也把可达距离排好序。<bookmark mark='b'/>比较模型中，某些图族可以编码排序问题；这不是说每一张图都需要顶点数乘对数的工作。<bookmark mark='c'/>豪普勒等人2024年的普适最优性结果研究每张固定图上的距离排序，在明确模型中，与面对该图最坏弧长的算法比较。<bookmark mark='d'/>它使用具有工作集保证的堆。我们的普通 Python 二叉堆并没有实现那个专门结构。<bookmark mark='e'/>只计算距离是另一种输出任务，因此接下来的结果能改进稀疏图上的界，而不与这个定理矛盾。"
+  },
+  "32b387d2008b": {
+   "scene": "Frontier",
+   "en": "These are selected dated results, not measurements of our city code. <bookmark mark='a'/> In 2025 Duan, Jiayi Mao, Xiao Mao, Shu and Yin gave a deterministic distance-only algorithm for directed graphs with nonnegative real weights. <bookmark mark='b'/> Its comparison-addition bound is m times log n to the two-thirds. <bookmark mark='c'/> A 2026 result by Duan, Xiao Mao, Shu and Yin improves the bound shown here; for sparse graphs it simplifies to m times the square root of log n times log log n. The bibliography identifies the ICALP publication and version. <bookmark mark='d'/> Frontier reduction combines limited relaxation with selective ordering. This episode does not implement either research algorithm. <bookmark mark='e'/> Negative weights need their own model: Bernstein, Nanongkai and Wulff-Nilsen's randomized result uses integer weights and includes a log W dependence, rather than covering arbitrary real weights at the same cost.",
+   "zh": "这些是注明日期的成果选读，不是城市代码的实测。<bookmark mark='a'/>2025年，Duan、Jiayi Mao、Xiao Mao、Shu 和 Yin给出只求距离的确定性算法，适用于非负实数权有向图。<bookmark mark='b'/>其比较加法模型的界是边数乘顶点数对数的三分之二次方。<bookmark mark='c'/>2026年，Duan、Xiao Mao、Shu 和 Yin改进为屏幕所示的界；稀疏图中可简化为边数乘对数与二重对数之积的平方根。参考资料标明 ICALP 论文和版本。<bookmark mark='d'/>前沿缩减把有限松弛与选择性排序结合起来。本集没有实现这两个研究算法。<bookmark mark='e'/>负权需要自己的模型：伯恩斯坦、纳农凯和伍尔夫—尼尔森的随机结果使用整数权，并包含权值规模 W 的对数因子，不能同样套用于任意实数权。"
+  },
+  "938cf87fe430": {
+   "scene": "Frontier",
+   "en": "An almost-linear flow theorem also comes with conditions. <bookmark mark='a'/> Chen and colleagues' 2022 result gives exact directed maximum flow and minimum-cost flow in m to the one plus little o of one for polynomially bounded integral capacities, costs and demands in its stated setting. <bookmark mark='b'/> The method combines interior-point optimization with dynamic graph structures for approximate minimum-ratio cycles, whose update guarantee is amortized and subpolynomial. This is not a claim that every graph update costs constant time. <bookmark mark='c'/> Almost-linear describes asymptotic growth under those assumptions. It neither covers arbitrary real input for free nor promises that this implementation is as fast as reading a graph. The practical algorithm and its constants remain separate engineering questions.",
+   "zh": "几乎线性的流定理也有适用条件。<bookmark mark='a'/>陈立等人2022年的结果，在明确设定中，对多项式有界的整数容量、费用和需求，以边数的一加趋零项次方时间精确求解有向最大流与最小费用流。<bookmark mark='b'/>方法结合内点优化与用于近似最小比率圈的动态图结构，更新保证是摊还的次多项式时间，并不是说每次图更新只需常数时间。<bookmark mark='c'/>几乎线性描述这些假设下的渐近增长。它既不免费涵盖任意实数输入，也不承诺实现已经快到等同读图。实用算法和常数仍是独立的工程问题。"
+  },
+  "82052e0e9969": {
+   "scene": "Frontier",
+   "en": "The model determines the open question. <bookmark mark='a'/> Can directed nonnegative-real single-source distances be computed in order m plus n in the comparison-addition model, without sorted output? The plus n accounts for vertices even when there are few edges. Thorup's classical linear bound concerns undirected positive integer weights in a different model. <bookmark mark='b'/> Can almost-linear exact flow methods become practical under useful input assumptions? <bookmark mark='c'/> For general weighted all-pairs shortest paths, is a fixed polynomial improvement below cubic possible in the stated model? <bookmark mark='d'/> For general weighted TSP, can a classical algorithm achieve a base strictly below two, ignoring polynomial factors? This differs from unweighted Hamiltonicity and quantum computation. <bookmark mark='e'/> The research exercise takes the first question and asks you to keep its weight, output and machine model explicit.",
+   "zh": "模型决定开放问题。<bookmark mark='a'/>在比较加法模型中，不要求排序输出时，能否以边数加顶点数的时间计算非负实数权有向单源距离？即使边很少，也要计入顶点的输出成本。索鲁普经典的线性界针对另一模型中的无向正整数权图。<bookmark mark='b'/>在有用的输入假设下，几乎线性的精确流方法能否变得实用？<bookmark mark='c'/>对一般带权全源最短路径，能否在明确模型中相对立方时间取得固定多项式改进？<bookmark mark='d'/>对一般带权旅行商，忽略多项式因子后，经典算法能否把指数底数严格降到二以下？它不同于无权哈密顿性，也不同于量子计算。<bookmark mark='e'/>研究习题选择第一个问题，要求始终明确权值、输出和计算机模型。"
+  },
+  "05705774c702": {
+   "scene": "Outro",
+   "en": "We built checked examples of Euler circuits, breadth-first layers and bipartiteness; depth-first intervals and edge classes; topological orders, strong components and two-SAT. We proved Dijkstra's nonnegative-weight invariant, explored negative edges and reweighting, and compared actual route-search expansions on one synthetic city. Spanning-tree exchanges, feasible flows and matching certificates show how a proof can accompany an answer. Subset dynamic programming, damped PageRank and planar colouring illustrate different guarantees. Keep measured runs, illustrative models and research theorems distinct.",
+   "zh": "我们构建了经过核验的欧拉回路、广度优先分层和二分检验，深度优先区间与边分类，拓扑顺序、强连通分量和二元可满足性例子。我们证明迪杰斯特拉的非负权不变式，探索负边与重新赋权，并在一座合成城市上比较实际路线搜索展开数。生成树交换、可行流和匹配证书展示答案如何附带证明。子集动态规划、有阻尼的 PageRank 和平面着色则体现不同保证。请始终区分实际运行、示意模型与研究定理。"
+  },
+  "d8d2b6877574": {
+   "scene": "Outro",
+   "en": "Where this comes back. Part 19 turns Floyd–Warshall and Held–Karp into a general method, dynamic programming. Part 20 studies random walks and finds minimum cuts by randomly contracting edges. Part 23 shows that max flow and min cut are dual linear programs. Part 26 is about Hamiltonian cycles, three-colouring and NP-completeness, and Part 27 about the all-pairs conjecture. The internet's routing in Part 36 runs Bellman–Ford and Dijkstra across routers, Part 35's databases plan queries over graphs, and Part 47's search engine ranks the web.",
+   "zh": "这些会在哪里再出现。第19部分把弗洛伊德–沃肖尔和赫尔德–卡普变成一种通用方法：动态规划。第20部分研究随机游走，并通过随机收缩边来求最小割。第23部分说明最大流和最小割是一对对偶的线性规划。第26部分讲哈密顿回路、三着色和 NP 完全性，第27部分讲全源最短路径猜想。第36部分互联网的路由在路由器之间运行贝尔曼–福特和迪杰斯特拉，第35部分的数据库在图上规划查询，第47部分的搜索引擎给网络排名。"
+  },
+  "48197e9bc7f6": {
+   "scene": "Outro",
+   "en": "In practice, routing systems may use contraction hierarchies, landmark bounds, other preprocessing or direct searches, depending on updates and objectives. Build systems combine dependency ordering with caching and invalidation. OSPF uses shortest-path computation on link-state data, while BGP adds path attributes and policy; it is not simply a shortest numeric-distance solver. Graph databases and fraud analysis use reachability, cycles and neighbourhood queries, though a cycle alone does not prove fraud. These algorithms are useful building blocks whose application assumptions still need checking.",
+   "zh": "实践中，路由系统会根据更新和目标，采用收缩层次、地标界、其他预处理或直接搜索。构建系统把依赖排序与缓存、失效处理结合起来。OSPF 在链路状态数据上计算最短路径，BGP 则加入路径属性和策略，并不只是求最短数值距离。图数据库和欺诈分析使用可达性、圈和邻域查询，但一个圈本身并不能证明欺诈。这些算法是有用的构件，应用时仍要检查假设。"
+  },
+  "c8348ceebd25": {
+   "scene": "Outro",
+   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build problem: Dijkstra in the Pebble language, on the emulator, counting instructions per edge. The last, marked with a star, is a research problem: its answer is not known, and the notes say where to start.",
+   "zh": "六道习题，完整的解答在这一部分的讲义里。在任何一道上都可以暂停。第五道是动手题：在模拟器上用 Pebble 语言实现迪杰斯特拉，统计每条边的指令数。最后一道标着星号，是研究题：它的答案还不知道，讲义里说了从哪里开始。"
+  },
+  "51941b1776cd": {
+   "scene": "Outro",
+   "en": "Next time. This part used several design ideas without naming them: divide and conquer, greedy choices, dynamic programming, search. Part 19 makes them methods: the fast Fourier transform and the closest pair of points, when greedy choices are provably right, dynamic programming from edit distance to knapsack, and backtracking. Part 19, The Great Paradigms.",
+   "zh": "下一次。这一部分用了几种设计思想，却没有点名：分治、贪心选择、动态规划、搜索。第19部分把它们变成方法：快速傅里叶变换和最近点对，贪心选择何时可证明是对的，从编辑距离到背包的动态规划，以及回溯。第19部分，伟大的范式。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分所依据的书和论文都在屏幕上，也在讲义里。感谢收看。"
+  },
+  "f78774fcdead": {
+   "scene": "Planar",
+   "en": "Now our triangulated map. <bookmark mark='a'/> Greedy colouring visits the vertices in order and gives each the smallest colour its coloured neighbours do not use. <bookmark mark='b'/> It needs 5 colours here: this circled vertex took the fifth. Greedy is fast but not optimal. <bookmark mark='c'/> A backtracking search, which always colours the most constrained vertex next and undoes choices that lead nowhere, finds a colouring with four. <bookmark mark='d'/> It also proves that three are not enough: the map contains a vertex whose five neighbours form a cycle, and an odd cycle needs three colours on its own, leaving none for the centre. <bookmark mark='e'/> Four colours always exist and are found in quadratic time. But deciding whether three suffice is NP-complete, even for planar graphs.",
+   "zh": "现在看我们的三角剖分地图。<bookmark mark='a'/>贪心着色按顺序访问顶点，给每个顶点它已着色的邻居没用过的最小颜色。<bookmark mark='b'/>它在这里需要5种颜色：这个圈出的顶点用了第五种。贪心很快，但不是最优的。<bookmark mark='c'/>回溯搜索总是先给约束最多的顶点着色，并撤销走不通的选择，它找到了一种只用四色的着色。<bookmark mark='d'/>它还证明了三种颜色不够：地图中有一个顶点，它的五个邻居构成一个圈，而奇圈本身就需要三种颜色，中心便无色可用。<bookmark mark='e'/>四种颜色总是存在，并能在平方时间内找到。但判定三种颜色是否足够是 NP 完全的，即使对平面图也是如此。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 18, Graphs",
+ "chapters_en": {
+  "Hook": "Seven bridges",
+  "Euler": "1. Euler's bridges, and how to store a graph",
+  "Bfs": "2. Breadth-first search",
+  "Dfs": "3. Depth-first search",
+  "Topo": "4. Topological sort",
+  "Scc": "5. Strongly connected components",
+  "Dijkstra": "6. Dijkstra's algorithm",
+  "Bellman": "7. Negative edges",
+  "AllPairs": "8. All pairs",
+  "AStar": "9. Exact routes with less search",
+  "Mst": "10. Minimum spanning trees",
+  "Flow": "11. Flows and cuts",
+  "Matching": "12. Matching",
+  "Hard": "13. Easy and hard",
+  "PageRank": "14. PageRank",
+  "Planar": "15. Planar graphs and four colours",
+  "Frontier": "16. Research results: models and dates",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}

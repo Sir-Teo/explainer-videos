@@ -1,0 +1,39 @@
+{
+ "series": {
+  "en": {
+   "name": "Computer Science, Built",
+   "playlist_title": "Computer Science, Built: A Degree from One Gate to the Cloud",
+   "playlist_description": "A fifty-five-part course in computer science, built from the ground up and taken all the way to industry practice: what computation is and what it cannot do; a real computer built from NAND gates, made fast with pipelines, caches and parallelism; languages, compilers, types and runtimes; algorithms, from sorting to linear programming and algorithm engineering; undecidability, P versus NP, error-correcting codes and cryptography; operating systems, concurrency, storage and databases; networks and distributed systems; software engineering, the web, services, the cloud, data systems, search, system design and reliability; and graphics, numerical computing, quantum computation, proofs of correctness and whether the whole tower can be trusted. One task, counting the words of thirty novels, is carried through every layer. Every derivation is on screen, and every number shown is computed and checked.",
+   "credits": "Animations: Manim Community Edition.\nNarration: Qwen3-TTS (synthetic text-to-speech voices).\nVisual style inspired by 3Blue1Brown.",
+   "computed": "Every number on screen is computed and checked; the pictures marked schematic, and the examples marked illustrative, are the exceptions.",
+   "tags": [
+    "computer science",
+    "algorithms",
+    "computer architecture",
+    "operating systems",
+    "distributed systems",
+    "system design",
+    "theory of computation",
+    "Manim"
+   ]
+  },
+  "zh": {
+   "name": "计算机科学，从零搭建",
+   "playlist_title": "计算机科学，从零搭建 | Computer Science, Built",
+   "playlist_description": "五十五集系列，从零讲完一个计算机科学学位，再一路讲到工业界的实践：什么是计算、计算做不到什么；用与非门亲手搭出一台真正的计算机，再用流水线、缓存和并行让它变快；语言、编译器、类型与运行时；从排序到线性规划再到算法工程的算法；不可判定性、P与NP、纠错码与密码学；操作系统、并发、存储与数据库；网络与分布式系统；软件工程、网页、服务、云、数据系统、搜索、系统设计与可靠性；以及图形学、数值计算、量子计算、程序正确性证明，和我们能否信任这整座塔。同一个任务（统计三十部小说的词频）贯穿每一层。每一步推导都在屏幕上完成，画面上的每一个数字都经过计算和核对。中文配音、中文字幕，原创动画。",
+   "credits": "动画：Manim Community Edition。\n旁白：Qwen3-TTS 合成语音（AI生成）。\n视觉风格致敬 3Blue1Brown。",
+   "computed": "画面上的每个数字都经过计算和核对；标注为示意图或示例的画面除外。",
+   "tags": [
+    "计算机科学",
+    "算法",
+    "计算机体系结构",
+    "操作系统",
+    "分布式系统",
+    "系统设计",
+    "计算理论",
+    "Manim"
+   ]
+  }
+ },
+ "parts": {}
+}

@@ -1,0 +1,203 @@
+from __future__ import annotations
+
+import numpy as np
+
+from explainer.cs import *  # noqa: F403
+from videos.cs.cs9.common import (BG, CODE, COST, CTRL, DATA, FIELD_COLOR, FUNC, HEAD, HIST, INF, NO, PART, YES,
+                                  Shelves, address_bits, box, fmt, load, mono)
+
+# a little direct-mapped cache: 8 sets of one 16-byte line, 8-bit addresses: tag 1 bit, index 3, offset 4
+SETS, LINE = 8, 16
+ACCESSES = [0x14, 0x18, 0x24, 0x94, 0x14, 0x60, 0x64, 0xA4, 0x24]
+
+
+class Direct(VoiceoverScene):
+    def construct(self):
+        self.card()
+        self.split()
+        self.lookup()
+        self.walk()
+        self.real()
+
+    def card(self):
+        card = chapter_card(3, r"A direct-mapped cache", r"Where in the cache does an address go?", lit=(1965,),
+                            extra=((1965, r"Wilkes: \ slave memories"),), part=PART)
+        with self.voiceover(
+            "Chapter three. A direct-mapped cache."
+        ):
+            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
+        self.play(FadeOut(card))
+
+    # ------------------------------------------------------------------
+    def split(self):
+        head = label(r"An address, \ cut into three", font_size=36).to_edge(UP, buff=0.35)
+        a = address_bits(0x00010A4C, 18, 8, 6, cell=0.3, font_size=15).move_to(UP * 0.9)
+        cap = label(r"a 32-bit address, \ for a 16 KiB cache of 256 lines of 64 bytes", font_size=24,
+                    color=GREY_A).next_to(a, UP, buff=0.35)
+        expl = VGroup(
+            label(r"offset: \ which byte inside the line \ ($2^6 = 64$ bytes)", font_size=24, color=FIELD_COLOR["offset"]),
+            label(r"index: \ which line of the cache it must go in \ ($2^8 = 256$ lines)", font_size=24,
+                  color=FIELD_COLOR["index"]),
+            label(r"tag: \ the rest, \ stored with the line, \ to say \textit{which} address is there", font_size=24,
+                  color=FIELD_COLOR["tag"]),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.6)
+        with self.voiceover(
+            "The first caches appeared in the 1960s; Maurice Wilkes described the idea in 1965 as a slave memory, "
+            "and IBM's System/360 Model 85 shipped one in 1968. The simplest design is direct-mapped: every address "
+            "has exactly one place in the cache it can go. <bookmark mark='a'/> Take a sixteen-kilobyte cache of two "
+            "hundred fifty-six lines, each sixty-four bytes. An address is cut into three fields. <bookmark "
+            "mark='b'/> The lowest six bits are the offset: which byte within the sixty-four-byte line. <bookmark "
+            "mark='c'/> The next eight bits are the index: which of the two hundred fifty-six lines of the cache "
+            "this address must live in. <bookmark mark='d'/> The rest is the tag. Many addresses share an index, so "
+            "the cache stores the tag beside each line, and on every access compares it: same tag, a hit; different "
+            "tag or an empty line, a miss."
+        ) as vo:
+            self.play(FadeIn(head))
+            self.play(FadeIn(cap), FadeIn(a.cells))
+            vo.wait_until("a")
+            vo.wait_until("b")
+            self.play(FadeIn(a.braces[2]), FadeIn(expl[0]))
+            vo.wait_until("c")
+            self.play(FadeIn(a.braces[1]), FadeIn(expl[1]))
+            vo.wait_until("d")
+            self.play(FadeIn(a.braces[0]), FadeIn(expl[2]))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def lookup(self):
+        head = label(r"The lookup, \ in hardware", font_size=36).to_edge(UP, buff=0.3)
+        a = address_bits(0x0A4C, 6, 4, 6, cell=0.32, font_size=15).to_edge(UP, buff=1.1)
+        rows = VGroup()
+        for k in range(8):
+            v = Rectangle(width=0.4, height=0.34, stroke_color=GREY_C, stroke_width=1)
+            t = Rectangle(width=1.4, height=0.34, stroke_color=FIELD_COLOR["tag"], stroke_width=1)
+            d = Rectangle(width=4.0, height=0.34, stroke_color=GREY_C, stroke_width=1)
+            rows.add(VGroup(v, t, d).arrange(RIGHT, buff=0))
+        rows.arrange(DOWN, buff=0).move_to(DOWN * 0.6 + LEFT * 1.6)
+        heads = VGroup(label(r"valid", font_size=16, color=GREY_B).next_to(rows[0][0], UP, buff=0.08),
+                       label(r"tag", font_size=16, color=FIELD_COLOR["tag"]).next_to(rows[0][1], UP, buff=0.08),
+                       label(r"data: \ 64 bytes", font_size=16, color=GREY_B).next_to(rows[0][2], UP, buff=0.08))
+        sel = rows[5].copy().set_fill(FIELD_COLOR["index"], opacity=0.3)
+        idx_arrow = Arrow(a.fields["index"].get_bottom(), rows[5].get_left() + LEFT * 0.05, buff=0.1,
+                          color=FIELD_COLOR["index"], stroke_width=3)
+        cmp_ = Circle(radius=0.32, color=HEAD).move_to(RIGHT * 2.9 + DOWN * 0.1)
+        cl = MathTex(r"=", font_size=36, color=HEAD).move_to(cmp_)
+        a1 = Arrow(a.fields["tag"].get_bottom(), cmp_.get_top(), buff=0.1, color=FIELD_COLOR["tag"], stroke_width=3)
+        a2 = Arrow(rows[5][1].get_right(), cmp_.get_left(), buff=0.1, color=FIELD_COLOR["tag"], stroke_width=3)
+        andg = box(0.9, 0.5, r"\text{AND}", YES, 18).next_to(cmp_, DOWN, buff=0.5)
+        a3 = Arrow(cmp_.get_bottom(), andg.get_top(), buff=0.05, color=HEAD, stroke_width=3)
+        a4 = Arrow(rows[5][0].get_bottom() + DOWN * 0.05, andg.get_left(), buff=0.1, color=GREY_B, stroke_width=2)
+        hit = label(r"hit", font_size=24, color=YES).next_to(andg, DOWN, buff=0.15)
+        mux = box(1.3, 0.5, r"\text{select byte}", FIELD_COLOR["offset"], 16).next_to(rows, DOWN, buff=0.45).align_to(
+            rows[5][2], RIGHT)
+        a5 = Arrow(rows[-1][2].get_bottom(), mux.get_top(), buff=0.05, color=GREY_B, stroke_width=2)
+        a6 = CurvedArrow(a.fields["offset"].get_right(), mux.get_right() + RIGHT * 0.05, angle=-1.2,
+                         color=FIELD_COLOR["offset"], stroke_width=3)
+        with self.voiceover(
+            "A direct-mapped lookup combines an indexed data array with metadata checks. <bookmark mark='a'/> The "
+            "index selects one row containing data, a tag and a valid bit. Real implementations may also have "
+            "protection and coherence state. <bookmark mark='b'/> Compare the stored and requested tags, and require "
+            "the row to be valid before declaring a hit. <bookmark mark='c'/> The byte offset selects the requested "
+            "portion of the line. Array access, tag comparison, selection, wiring and address translation constrain "
+            "timing. Their overlap and pipelining depend on the design; this block diagram does not derive a "
+            "four-cycle L1 latency from one cycle of gates."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(a.cells), FadeIn(a.braces))
+            self.play(FadeIn(rows), FadeIn(heads))
+            vo.wait_until("a")
+            self.play(GrowArrow(idx_arrow), FadeIn(sel))
+            vo.wait_until("b")
+            self.play(GrowArrow(a1), GrowArrow(a2), Create(cmp_), FadeIn(cl))
+            self.play(GrowArrow(a3), GrowArrow(a4), FadeIn(andg), FadeIn(hit))
+            vo.wait_until("c")
+            self.play(FadeIn(mux), GrowArrow(a5), Create(a6))
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def walk(self):
+        head = label(r"Eight lines, \ nine accesses", font_size=34).to_edge(UP, buff=0.3)
+        sh = Shelves(SETS, 1, w=1.9, h=0.48).move_to(RIGHT * 2.6 + DOWN * 0.3)
+        legend = label(r"8-bit addresses: \ tag 1 bit, \ index 3, \ offset 4", font_size=20, color=GREY_B).next_to(
+            sh, UP, buff=0.25)
+        listing = VGroup()
+        results = []
+        content: dict[int, int] = {}
+        for addr in ACCESSES:
+            tag, idx = addr >> 7, (addr >> 4) & 7
+            hit = content.get(idx) == tag
+            kind = "hit" if hit else ("miss" if idx not in content else "miss, \\ evicts")
+            content[idx] = tag
+            results.append((addr, tag, idx, hit, kind))
+        for addr, tag, idx, hit, kind in results:
+            row = VGroup(Text(f"{addr:#04x}", font="DejaVu Sans Mono", font_size=18, color=CODE),
+                         Text(format(addr, "08b"), font="DejaVu Sans Mono", font_size=16, color=GREY_B),
+                         label(rf"set {idx}: \ " + kind, font_size=18, color=YES if hit else NO)).arrange(RIGHT, buff=0.3)
+            listing.add(row)
+        listing.arrange(DOWN, aligned_edge=LEFT, buff=0.14).to_edge(LEFT, buff=0.5).shift(DOWN * 0.3)
+        tally = label(r"", font_size=22)
+        shown = {}
+        with self.voiceover(
+            "Here is a toy cache to watch: eight lines of sixteen bytes, and eight-bit addresses, so one bit of tag, "
+            "three of index and four of offset. <bookmark mark='a'/> The first access, hex fourteen, has index one: "
+            "the line is empty, a miss, and the line is filled. The second, hex eighteen, falls in the same "
+            "sixteen-byte line: a hit, by spatial locality. <bookmark mark='b'/> Watch hex ninety-four. Its index is "
+            "also one, but its tag is different, so it throws out the line that hex fourteen brought in, and when "
+            "hex fourteen comes back, it misses again. <bookmark mark='c'/> Two busy addresses that share an index "
+            "fight over one line even when the rest of the cache is empty. That is the weakness of direct mapping, "
+            "and the next chapter's subject."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(sh), FadeIn(legend))
+            vo.wait_until("a")
+            for k, (addr, tag, idx, hit, kind) in enumerate(results):
+                if k == 3:
+                    vo.wait_until("b")
+                self.play(FadeIn(listing[k]), run_time=0.4)
+                new = sh.put(idx, 0, f"{addr & 0xF0:#04x}..", YES if hit else NO)
+                if idx in shown:
+                    self.play(Transform(shown[idx], new), run_time=0.5)
+                else:
+                    shown[idx] = new
+                    self.play(FadeIn(new), run_time=0.5)
+                self.play(Indicate(listing[k][2], color=YES if hit else NO), run_time=0.4)
+            vo.wait_until("c")
+            self.play(*[Indicate(listing[k], color=NO) for k in (0, 3, 4)])
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def real(self):
+        d = load("threec")
+        rows = {(r["kb"], r["ways"]): r for r in d["rows"]}
+        head = label(r"It happens to the Job", font_size=36).to_edge(UP, buff=0.4)
+        a = rows[(8, 1)]
+        b = rows[(8, 2)]
+        lines = VGroup(
+            label(r"the word table starts at \texttt{0x10000}, \ the letters at \texttt{0x80000}", font_size=26,
+                  color=GREY_A),
+            label("aligned bases can select the same sets; \\ offsets and access order matter",
+                  font_size=26, color=NO),
+            label(rf"8 KiB, \ direct-mapped: \ {a['misses']:,} misses", font_size=28, color=NO),
+            label(rf"8 KiB, \ two lines per set: \ {b['misses']:,} \ (only the first touch of each line)",
+                  font_size=28, color=YES),
+        ).arrange(DOWN, buff=0.4).move_to(DOWN * 0.1)
+        with self.voiceover(
+            "The chapter-1 trace also shows mapping conflicts. <bookmark mark='a'/> Its table starts at hexadecimal "
+            "ten thousand and its letter pool at hexadecimal eighty thousand. <bookmark mark='b'/> Those aligned "
+            "bases can select the same sets at the illustrated capacities. Which live lines actually collide depends "
+            "on their offsets and access order; the base addresses alone do not prove continuous eviction. <bookmark "
+            "mark='c'/> Replay the entire chapter trace through the direct-mapped eight-kibibyte cache and count the "
+            "displayed misses. <bookmark mark='d'/> Two ways at the same total capacity reduce the count to "
+            "ninety-two in this experiment. Increasing ways reduces the number of sets, so the complete mapping "
+            "changes too. This is a trace result rather than a universal monotonic rule."
+        ) as vo:
+            self.play(FadeIn(head))
+            for mk, l in zip("abcd", lines):
+                if mk != 'a':
+                    vo.wait_until(mk)
+                self.play(FadeIn(l, shift=UP * 0.1))
+                if mk == 'a':
+                    vo.wait_until(mk)
+        self.wait(0.3)
+        self.clear_scene()

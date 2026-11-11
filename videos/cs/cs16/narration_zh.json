@@ -1,0 +1,446 @@
+{
+  "title": "计算机科学，从零搭建 · 第16部分：数步数",
+  "chapters": {
+    "Hook": "思考能胜过硅片吗？",
+    "Models": "1. 什么算一步",
+    "Growth": "2. 增长的阶",
+    "Insertion": "3. 插入排序与它的不变式",
+    "Merge": "4. 归并排序与递归树",
+    "Master": "5. 主定理",
+    "Lower": "6. 比较下界",
+    "Heap": "7. 堆排序",
+    "Quick": "8. 快速排序，以及 2n ln n",
+    "Concentration": "9. 快速排序能有多走运？",
+    "Linear": "10. 突破 n log n",
+    "Select": "11. 选择与中位数的中位数",
+    "Generating": "12. 生成函数",
+    "Amortized": "13. 摊还分析",
+    "Practice": "14. 实践中的排序",
+    "Job": "15. 排好序的任务",
+    "Frontier": "16. 前沿：超越最坏情况",
+    "Outro": "回顾、习题，以及它们会在哪里再出现"
+  },
+  "lines": {
+    "ccfb53df99ab": {
+      "scene": "Hook",
+      "en": "This ledger prices the same word-counting task on thirty novels. <bookmark mark='a'/> Act Two improved the machine: pipeline, out-of-order execution, caches and four cores. Act Three added a compiler, a type system and a runtime. These rows combine measured small runs with the stated corpus projections. <bookmark mark='b'/> The best projected time so far is about twelve seconds on four cores. The search algorithm is still the same. Act Four asks how much changing that algorithm can buy.",
+      "zh": "这张账本给同一个任务计价：统计三十部小说里的单词。<bookmark mark='a'/>第二幕改进机器：流水线、乱序执行、缓存和四个核心。第三幕加入编译器、类型系统和运行时。这些行结合了小规模实测和注明的全语料投影。<bookmark mark='b'/>目前最好的投影时间，是四核上约十二秒。搜索算法仍然没变。第四幕要问：改变算法，能带来多大收益？"
+    },
+    "f4dc2cfc26e1": {
+      "scene": "Hook",
+      "en": "Here is the search algorithm's growing cost. <bookmark mark='a'/> Version zero keeps distinct words in a list and searches it for each occurrence. <bookmark mark='b'/> The modeled cycles per byte rise across these corpus prefixes. The work depends on both the number of occurrences and the vocabulary: with many distinct words, repeated full scans can take quadratic work. This corpus plot illustrates growth; it is not a proof that every text has quadratic cost. <bookmark mark='c'/> Faster hardware changes the constant. A different data structure or algorithm can change how the work grows.",
+      "zh": "来看搜索算法不断增加的代价。<bookmark mark='a'/>零号版本把不同单词存进列表，每次出现一个单词就搜索它。<bookmark mark='b'/>对这些语料前缀，模型给出的每字节周期数不断增加。工作量同时取决于出现次数和词汇量：不同单词很多时，反复完整扫描可能产生平方级工作。这个语料图是增长的例子，不是每段文本都平方增长的证明。<bookmark mark='c'/>更快的硬件改变常数；换一种数据结构或算法，可以改变工作量的增长方式。"
+    },
+    "0e4bd711d589": {
+      "scene": "Hook",
+      "en": "Here is where we are going. <bookmark mark='a'/> How to count the steps of an algorithm, and which steps to count. <bookmark mark='b'/> Recursion trees, and the master theorem that adds them up. <bookmark mark='c'/> A proof that no algorithm that sorts by comparing can beat n log n, a bound that comes from information. <bookmark mark='d'/> Quicksort's average cost, two n natural log n, derived from one clever observation, and a measurement of how rarely it strays from it. <bookmark mark='e'/> And the Job, sorted instead of searched: ledger row seven.",
+      "zh": "这是我们要去的地方。<bookmark mark='a'/>怎样数一个算法的步数，以及该数哪些步。<bookmark mark='b'/>递归树，以及把它们加起来的主定理。<bookmark mark='c'/>一个证明：凡是靠比较来排序的算法，都无法突破 n log n，这个界来自信息。<bookmark mark='d'/>快速排序的平均代价，2n ln n，由一个巧妙的观察推出，再测一测它有多少时候会偏离这个值。<bookmark mark='e'/>还有任务：改为排序而不是搜索，账本第七行。"
+    },
+    "c9a8129d02c8": {
+      "scene": "Hook",
+      "en": "Part 16 of Computer Science, Built: Counting Steps, the first part of Act Four, Algorithms. <bookmark mark='a'/> In this part: models of computation and asymptotic notation; insertion, merge and heap sort, recursion trees and the master theorem; the comparison lower bound; quicksort, its average and its concentration; sorting in linear time and selecting in linear time; generating functions, amortized analysis, and how sorting is really done.",
+      "zh": "《计算机科学，从零搭建》第16部分：数步数，第四幕“算法”的第一部分。<bookmark mark='a'/>这一部分讲：计算模型与渐近记号；插入排序、归并排序和堆排序，递归树与主定理；比较下界；快速排序、它的平均与它的集中性；线性时间的排序与线性时间的选择；生成函数、摊还分析，以及排序在实践中到底是怎么做的。"
+    },
+    "6f0332887a9c": {
+      "scene": "Models",
+      "en": "Chapter one. What counts as a step.",
+      "zh": "第1章。什么算一步。"
+    },
+    "d59201eb1787": {
+      "scene": "Models",
+      "en": "An algorithm needs a declared cost model. <bookmark mark='a'/> A RAM gives memory cells addresses and charges for a specified set of instructions: reads, writes, arithmetic, comparisons and jumps. <bookmark mark='b'/> A word-RAM holds w bits per cell. Its word must address the input, so w is at least logarithmic in n; its allowed operations and their word widths are part of the definition. <bookmark mark='c'/> Pebble is a concrete thirty-two-bit example within its address and arithmetic limits. <bookmark mark='d'/> Counting those steps lets us compare algorithms in that model. Seconds still depend on the implementation, memory hierarchy and machine.",
+      "zh": "分析算法，需要先声明代价模型。<bookmark mark='a'/>随机存取机给存储单元编号，并为指定的指令集收费：读、写、算术、比较和跳转。<bookmark mark='b'/>字 RAM 的每个单元容纳 w 位。一个字要能寻址输入，所以 w 至少随 n 的对数增长；允许哪些运算、运算使用多宽的字，都是模型定义的一部分。<bookmark mark='c'/>Pebble 是具体的三十二位例子，受自己的寻址和算术范围限制。<bookmark mark='d'/>数这些步数，才能在这个模型里比较算法。实际秒数仍取决于实现、存储层次和机器。"
+    },
+    "a79522e0dc76": {
+      "scene": "Models",
+      "en": "Why bound the word size? <bookmark mark='a'/> Starting from three, square the result n times. The answer is three raised to two to the n, with about one point six times two to the n bits. Calling every multiplication one step hides an exponentially growing operand. <bookmark mark='b'/> Here are host Python measurements: the minimum of three same-operand squarings at each step, with the result checked outside the timer. Small values are dominated by timing and interpreter overhead; large values require real multiword arithmetic. No fixed threefold timing ratio is promised. <bookmark mark='c'/> A word-RAM operation handles a bounded number of words. An arbitrary-precision multiplication needs its own cost analysis.",
+      "zh": "为什么要限制字长？<bookmark mark='a'/>从三开始，把结果平方 n 次，得到三的二的 n 次方次幂，约有一点六乘以二的 n 次方位。把每次乘法都算一步，会隐藏指数增长的操作数。<bookmark mark='b'/>图中是在本机 Python 上的测量：每一步对同样的操作数平方三次，取最短时间，在计时区间外检查结果。小整数主要受计时和解释器开销影响；大整数需要真正的多字算术。这里没有固定的三倍耗时保证。<bookmark mark='c'/>字 RAM 的一次运算只处理有界数量的字。任意精度乘法需要单独分析代价。"
+    },
+    "06c851e29875": {
+      "scene": "Models",
+      "en": "Different questions charge for different resources. <bookmark mark='a'/> A standard logarithmic-word RAM with an effectively simulable instruction set can be simulated by a Turing machine with polynomial overhead. That statement needs bounded operands; it does not grant free arithmetic on arbitrary integers. <bookmark mark='b'/> The comparison model counts comparisons between keys. Its lower bound will assume distinct keys. <bookmark mark='c'/> The cell-probe model charges for memory accesses while allowing free computation between probes, which makes some lower bounds especially strong. <bookmark mark='d'/> The external-memory model counts block transfers between memory levels. <bookmark mark='e'/> Declare the resource before quoting the bound.",
+      "zh": "不同的问题，要为不同资源收费。<bookmark mark='a'/>标准的对数字长 RAM，如果指令集能有效模拟，就能由图灵机以多项式开销模拟。这个结论需要操作数有界，并不允许任意大的整数免费运算。<bookmark mark='b'/>比较模型只数键之间的比较。稍后的下界会假设键互不相同。<bookmark mark='c'/>单元探测模型为内存访问收费，而两次探测之间的计算免费，因此某些下界格外有力。<bookmark mark='d'/>外存模型数存储层次之间的块传输。<bookmark mark='e'/>引用一个界之前，先说明数的是什么资源。"
+    },
+    "9db6ef798651": {
+      "scene": "Growth",
+      "en": "Chapter two. Orders of growth.",
+      "zh": "第2章。增长的阶。"
+    },
+    "138ee869cd59": {
+      "scene": "Growth",
+      "en": "Asymptotic notation compares eventually nonnegative cost functions. <bookmark mark='a'/> Big O means an eventual constant-factor upper bound, with one fixed constant and one threshold. <bookmark mark='b'/> Omega gives a lower bound; Theta gives both. Little o says the ratio tends to zero when the denominator is positive. <bookmark mark='c'/> Thus three n squared plus a hundred n plus seven is Theta of n squared. This suppresses constants and lower-order terms for the chosen algorithm and model. Changing the algorithm, representation or model can change the growth itself.",
+      "zh": "渐近记号比较的是最终非负的代价函数。<bookmark mark='a'/>大 O 表示超过某个阈值之后，存在一个固定常数倍的上界；常数和阈值都要固定。<bookmark mark='b'/>Omega 给下界，Theta 同时给上下界。分母为正时，小 o 表示比值趋于零。<bookmark mark='c'/>因此三 n 平方加一百 n 加七，是 n 平方的 Theta。对选定的算法和模型，这省略了常数和低阶项。改变算法、表示或模型，也可能改变增长阶本身。"
+    },
+    "b435c50881a7": {
+      "scene": "Growth",
+      "en": "The axes now show base-ten logarithms of input size and step count. Powers become straight lines; the exponential bends upward. <bookmark mark='a'/> For the table, assume exactly one nanosecond per abstract step, with no extra overhead. Solve each displayed cost function against one second's budget. The entries are integer maxima, except where explicitly rounded for display. <bookmark mark='b'/> Even a year only permits fifty-four items when the cost is two to the n. These are consequences of the assumed functions, not timing predictions for real sorts. <bookmark mark='c'/> A thousandfold speedup expands a quadratic input limit by about thirty-two, and an exponential limit by about ten items. Changing growth can matter much more than changing a constant.",
+      "zh": "坐标轴现在表示输入规模和步数的常用对数。幂函数成为直线，指数函数向上弯曲。<bookmark mark='a'/>表格假定每个抽象步骤恰好花一纳秒，没有额外开销。把各个显示的代价函数与一秒的预算比较，求出整数最大规模；为显示而舍入的项会明确标记。<bookmark mark='b'/>即使用一整年，代价为二的 n 次方时，也只能处理五十四项。这些结论来自假定的函数，不是真实排序的计时预测。<bookmark mark='c'/>快一千倍，让平方算法的输入上限约增加三十二倍，让指数算法约多处理十项。改变增长阶，可能比改变常数重要得多。"
+    },
+    "afb6f7836cd3": {
+      "scene": "Growth",
+      "en": "One formula appears again and again when we count arrangements. <bookmark mark='a'/> Stirling's formula says the logarithm of n factorial is n log n minus n, plus a half log of two pi n, plus a term that vanishes. <bookmark mark='b'/> It is astonishingly accurate. At n equals ten the error is about one part in two thousand; at a thousand, about one part in a hundred million. <bookmark mark='c'/> In base two it reads: log of n factorial is n log n minus about one point four four n. Chapter six turns that into the limit on every comparison sort.",
+      "zh": "在数排列的时候，有一个公式一再出现。<bookmark mark='a'/>斯特林公式说，n 阶乘的对数等于 n log n 减 n，加上 2πn 的对数的一半，再加上一个趋于零的项。<bookmark mark='b'/>它精确得惊人。n 等于十时，误差大约是两千分之一；n 等于一千时，大约是一亿分之一。<bookmark mark='c'/>以二为底，它读作：n 阶乘的对数等于 n log n 减去大约 1.44n。第6章把它变成每一个比较排序的极限。"
+    },
+    "c691072f9a88": {
+      "scene": "Insertion",
+      "en": "Chapter three. Insertion sort and its invariant.",
+      "zh": "第3章。插入排序与它的不变式。"
+    },
+    "6cd7d25a536e": {
+      "scene": "Insertion",
+      "en": "Insertion sort grows a sorted prefix. <bookmark mark='a'/> Save the next key, shift larger keys right, then put the saved key in the gap. <bookmark mark='b'/> Before iteration i, the first i positions contain the original first i elements in sorted order, and the rest of the array is untouched. Watch that prefix grow after each completed insertion. <bookmark mark='c'/> It starts with one element, each iteration preserves the property, and at i equals n it implies the entire output is a sorted permutation. This is induction over a loop; Part 54 will make such proof obligations explicit.",
+      "zh": "插入排序不断扩大有序前缀。<bookmark mark='a'/>保存下一个键，把更大的键右移，再把保存的键放进空位。<bookmark mark='b'/>第 i 次迭代之前，前 i 个位置按顺序容纳原来的前 i 个元素，其余数组保持未处理状态。看每次插入完成后，前缀怎样增长。<bookmark mark='c'/>开始只有一个元素，每轮保持这个性质；当 i 等于 n 时，整个输出就是输入的有序排列。这是对循环做归纳；第54部分会把这些证明义务明确写出。"
+    },
+    "73f100b39387": {
+      "scene": "Insertion",
+      "en": "Count the shifts first. <bookmark mark='a'/> An inversion is a pair of positions whose keys are in reverse order. Each shift past the saved key removes one inversion, so there are exactly I shifts. Comparisons are at most I plus n minus one, and total work is Theta of n plus I. <bookmark mark='b'/> For a uniform random permutation of distinct keys, each pair is inverted with probability one half. Linearity of expectation gives n times n minus one over four inversions. <bookmark mark='c'/> The table compares that expectation with finite sample averages, which need not equal it exactly. <bookmark mark='d'/> Sorted input is linear, reverse order is quadratic, and nearly sorted input can make insertion sort useful even though its worst case is quadratic.",
+      "zh": "先数右移次数。<bookmark mark='a'/>逆序对是一对位置上的键顺序颠倒。每次越过保存的键做右移，恰好消除一个逆序对，所以右移次数恰好是 I。比较次数至多为 I 加 n 减一，总工作量是 n 加 I 的 Theta。<bookmark mark='b'/>对互异键的均匀随机排列，每一对逆序的概率都是二分之一。由期望的线性性，期望逆序对数是 n 乘以 n 减一再除以四。<bookmark mark='c'/>表格把这个期望与有限样本均值比较，两者不必完全相等。<bookmark mark='d'/>有序输入线性，逆序输入平方级；接近有序时，插入排序仍可能很好用。"
+    },
+    "bf9dc2541b61": {
+      "scene": "Merge",
+      "en": "Chapter four. Merge sort and the recursion tree.",
+      "zh": "第4章。归并排序与递归树。"
+    },
+    "ebeafee6851d": {
+      "scene": "Merge",
+      "en": "Everything in merge sort rests on one operation. <bookmark mark='a'/> Two lists, each already sorted. Look at the front of each, move the smaller one to the output, and advance in that list. <bookmark mark='b'/> Repeat until one list runs out, then copy the rest of the other. Each comparison places one element, so merging n elements takes at most n minus one comparisons. <bookmark mark='c'/> And if we take from the left list whenever the fronts are equal, equal keys keep their original order. That makes merge sort stable, which the Job will rely on.",
+      "zh": "归并排序的一切都建立在一个操作上。<bookmark mark='a'/>两个列表，各自已经有序。看两者的开头，把较小的那个移到输出，并在那个列表里前进一步。<bookmark mark='b'/>一直重复，直到一个列表用完，再把另一个剩下的部分抄过去。每次比较放好一个元素，所以归并 n 个元素至多需要 n − 1 次比较。<bookmark mark='c'/>如果开头相等时总从左边的列表取，相等的键就保持原来的次序。这让归并排序是稳定的，任务将依赖这一点。"
+    },
+    "741a4bf9991c": {
+      "scene": "Merge",
+      "en": "Merge sort splits, sorts each half, then merges. We will draw a simple work recurrence, with n a power of two and base cost T of one equal to one. <bookmark mark='a'/> The root pays n for combining. <bookmark mark='b'/> At each internal level the subproblem sizes sum to n, so the level pays n again. <bookmark mark='c'/> There are log base two n internal levels, plus n leaves of unit cost. <bookmark mark='d'/> The sum is n log n plus n. This is the chosen toll model; the exact number of key comparisons is a different count, measured next.",
+      "zh": "归并排序先拆分、分别排序，再归并。这里画一个简单的工作量递推，假设 n 是二的幂，且 T 一等于一。<bookmark mark='a'/>根为合并支付 n。<bookmark mark='b'/>每个内部层的子问题规模之和都是 n，因此每层再支付 n。<bookmark mark='c'/>共有以二为底的 log n 个内部层，外加 n 个单位代价的叶子。<bookmark mark='d'/>合计 n log n 加 n。这是选定的层级代价模型；精确的键比较次数是另一种计数，接下来测量。"
+    },
+    "b8dec51d766f": {
+      "scene": "Merge",
+      "en": "A guessed bound also needs a base case. <bookmark mark='a'/> For this recurrence use c n log n plus n, which covers T of one equal to one. Substitute the bound into the two half-size calls: the extra linear terms leave the inequality true when c is at least one. <bookmark mark='b'/> Our measured sort counts key comparisons instead of charging n at every merge. For powers of two its worst case is exactly n log n minus n plus one. <bookmark mark='c'/> Compare that with the information lower bound in the last column. The gap is linear in n, so the ratio approaches one as n grows.",
+      "zh": "猜出的上界，还需要覆盖基本情形。<bookmark mark='a'/>对这个递推，用 c n log n 加 n，它能覆盖 T 一等于一。把上界代入两个一半规模的调用，保留线性项；只要 c 至少为一，不等式就成立。<bookmark mark='b'/>实际实现数的是键比较，不是给每次归并统一收取 n。对二的幂规模，它的最坏情况恰好是 n log n 减 n 加一。<bookmark mark='c'/>与最后一列的信息下界比较，差距是线性的，因此随着 n 增大，比值趋于一。"
+    },
+    "c69a380fafd3": {
+      "scene": "Master",
+      "en": "Chapter five. The master theorem.",
+      "zh": "第5章。主定理。"
+    },
+    "5fccaeaef8a6": {
+      "scene": "Master",
+      "en": "Most divide-and-conquer algorithms split a problem of size n into a pieces of size n over b, and spend f of n splitting and combining. <bookmark mark='a'/> The recursion tree has n to the log base b of a leaves, and everything depends on how f compares with that number. <bookmark mark='b'/> If f grows polynomially slower, the leaves dominate and T is Theta of the number of leaves. <bookmark mark='c'/> If f matches it, every level costs the same, and T picks up a log factor: that was merge sort. <bookmark mark='d'/> If f grows polynomially faster, and shrinks geometrically down the tree, the root dominates and T is just Theta of f. Bentley, Haken and Saxe gave the general form in 1980.",
+      "zh": "大多数分治算法把规模为 n 的问题分成 a 个规模为 n/b 的子问题，再花 f(n) 来拆分和合并。<bookmark mark='a'/>递归树有 n 的 log_b a 次方个叶子，一切都取决于 f 与这个数相比如何。<bookmark mark='b'/>如果 f 增长得慢一个多项式因子，叶子占主导，T 就是叶子数的 Theta。<bookmark mark='c'/>如果 f 与它相当，每一层花的一样多，T 多出一个对数因子：归并排序就是这样。<bookmark mark='d'/>如果 f 增长得快一个多项式因子，并且沿着树向下按几何级数缩小，根占主导，T 就是 f 的 Theta。本特利、哈肯和萨克斯在1980年给出了一般形式。"
+    },
+    "6ab73f2489e8": {
+      "scene": "Master",
+      "en": "Here are the three cases as pictures. Each bar is the total work of one level of the recursion tree, root at the top. <bookmark mark='a'/> Karatsuba's multiplication, three half-size products and linear work: each level costs one and a half times the one above. The sum is dominated by the bottom, the leaves, and the answer is n to the log base two of three, about n to the one point five eight. <bookmark mark='b'/> Merge sort: every level the same, so the sum is a level times the number of levels. <bookmark mark='c'/> And a combine step that costs n squared: each level is half the one above, a geometric series, so the root's n squared is the whole answer, up to a factor of two.",
+      "zh": "这是三种情形的图像。每一条是递归树一层的总工作量，根在最上面。<bookmark mark='a'/>卡拉楚巴乘法，三个一半规模的乘积加上线性的工作：每一层是上一层的一倍半。总和由底部、也就是叶子主导，答案是 n 的 log₂3 次方，大约 n 的 1.58 次方。<bookmark mark='b'/>归并排序：每一层都一样，所以总和是一层乘以层数。<bookmark mark='c'/>再看一个合并要花 n² 的情形：每一层是上一层的一半，一个几何级数，所以根的 n² 就是全部答案，至多差一个二倍。"
+    },
+    "ce1934db77e7": {
+      "scene": "Master",
+      "en": "The geometry comes from a geometric series. <bookmark mark='a'/> Let n equal b to the h and retain the leaf term explicitly. Internal level j costs a to the j times f of n over b to the j; the leaves cost a to the h times the base cost. <bookmark mark='b'/> If f is n to the c, consecutive internal levels have ratio a over b to the c. <bookmark mark='c'/> A ratio above one favors the bottom, one gives equal levels, and a ratio below one favors the root. With positive constant base cost, the leaves have the same asymptotic scale as the bottom. <bookmark mark='d'/> The ratio exceeds one exactly when c is less than log base b of a. The theorem formalizes this picture, with its stated regularity conditions.",
+      "zh": "这里的几何图形来自等比数列。<bookmark mark='a'/>令 n 等于 b 的 h 次方，并明确保留叶子项。内部第 j 层的代价，是 a 的 j 次方乘以 f 在 n 除以 b 的 j 次方处的值；叶子的代价是 a 的 h 次方乘以基本情形代价。<bookmark mark='b'/>若 f 为 n 的 c 次方，相邻内部层的公比就是 a 除以 b 的 c 次方。<bookmark mark='c'/>公比大于一，底部主导；等于一，各层相等；小于一，根主导。基本代价为正常数时，叶子和底部具有相同的渐近规模。<bookmark mark='d'/>公比大于一，恰好对应 c 小于以 b 为底的 a 的对数。定理在注明的正则条件下，把这幅图严格化。"
+    },
+    "9e42a9bc2503": {
+      "scene": "Master",
+      "en": "The table shows the standard three cases. <bookmark mark='a'/> Binary search and merge sort have matching per-level work. Karatsuba and Strassen are leaf dominated; a quadratic combine with two half-size calls is root dominated. <bookmark mark='b'/> For unequal splits, Akra and Bazzi provide a broader method. Our numeric illustration now has explicit integer semantics: for n at most two, T equals n; otherwise split into floor of n over three and the complementary size, and add n. These actual subproblem sizes are memoized separately. The displayed ratio to n log n is a finite numerical check of this example, alongside the asymptotic theorem.",
+      "zh": "表格展示标准的三种情形。<bookmark mark='a'/>二分查找和归并排序的各层工作相匹配。卡拉楚巴和施特拉森由叶子主导；两个一半规模调用加平方级合并，则由根主导。<bookmark mark='b'/>子问题不等大时，阿克拉与巴齐提供更广的方法。数值示例现在采用明确的整数语义：n 至多为二时，T 等于 n；否则分成 n 除以三向下取整，以及剩余规模，再加 n。每个实际子问题规模单独记忆。显示的 T 与 n log n 的比值，是这个例子的有限数值检查，与渐近定理相互参照。"
+    },
+    "106f0ddbec15": {
+      "scene": "Lower",
+      "en": "Chapter six. The comparison lower bound.",
+      "zh": "第6章。比较下界。"
+    },
+    "f22671ead31b": {
+      "scene": "Lower",
+      "en": "To prove that no sort can be faster, we need a picture of every possible sort. <bookmark mark='a'/> Run insertion sort on three keys, a, b and c. Its first move is to compare b with a. Depending on the answer it compares something else, and so on, until it knows the order. Draw every possible run as a tree: each node a comparison, each branch an outcome, each leaf the order the sort outputs. <bookmark mark='b'/> Every algorithm that sorts by comparing is such a tree, for each n. Since it must be able to output any of the three factorial, six, orders, it needs at least six leaves. A binary tree of height h has at most two to the h leaves. <bookmark mark='c'/> So some input forces at least the log of six, rounded up, three comparisons. No cleverness can avoid it.",
+      "zh": "要证明没有排序能更快，我们需要一幅囊括所有可能排序的图景。<bookmark mark='a'/>在三个键 a、b、c 上运行插入排序。它第一步比较 b 和 a。根据回答，它再比较别的，如此下去，直到知道整个次序。把每一种可能的运行画成一棵树：每个结点是一次比较，每条分支是一个结果，每片叶子是排序输出的次序。<bookmark mark='b'/>对每个 n，每个靠比较来排序的算法都是这样一棵树。因为它必须能输出三的阶乘、也就是六种次序中的任何一种，它至少需要六片叶子。高度为 h 的二叉树至多有 2 的 h 次方片叶子。<bookmark mark='c'/>所以某个输入会迫使它至少做 log 6 向上取整、也就是三次比较。再聪明也躲不开。"
+    },
+    "f6ec0eaf5280": {
+      "scene": "Lower",
+      "en": "Now assume n distinct keys and a binary comparison model. <bookmark mark='a'/> A correct sort must distinguish n factorial input orders, requiring at least that many leaves. Its worst-case depth is at least log base two of n factorial. Stirling gives n log n minus about one point four four n, plus lower-order terms. <bookmark mark='b'/> Each binary answer supplies at most one bit of information. <bookmark mark='c'/> If all distinct-key permutations are equally likely, the average leaf depth is also at least log n factorial. The distribution matters: a promise that input is already sorted changes the average-case question. In this unrestricted comparison problem, merge sort and heapsort have optimal asymptotic worst-case growth.",
+      "zh": "现在假设 n 个键互不相同，模型只允许二元比较。<bookmark mark='a'/>正确排序必须区分 n 阶乘种输入次序，因此至少需要这么多叶子。最坏深度至少为以二为底的 n 阶乘对数。斯特林公式给出 n log n 减约一点四四 n，再加低阶项。<bookmark mark='b'/>每个二元回答至多提供一位信息。<bookmark mark='c'/>如果所有互异键排列等概率，平均叶深也至少是 log n 阶乘。分布很重要：如果承诺输入已排序，平均情况问题就变了。在这里没有这种承诺的比较排序问题中，归并排序和堆排序的最坏增长阶最优。"
+    },
+    "3024b75325b7": {
+      "scene": "Lower",
+      "en": "An adversary can also prove a lower bound. <bookmark mark='a'/> To find the maximum among distinct items, every other item must lose a comparison: n minus one are necessary and sufficient. <bookmark mark='b'/> Separate scans for minimum and maximum cost nearly twice n. <bookmark mark='c'/> Pair the items first. Search the winners for the maximum and the losers for the minimum; an unpaired item participates in both searches. <bookmark mark='d'/> The count is floor of n over two plus twice ceiling of n over two minus one: ceiling of three n over two minus two, valid for odd and even n. <bookmark mark='e'/> For the lower bound, all but the maximum must lose, and all but the minimum must win. Only comparisons between two untouched items need provide two new facts; the adversary can limit the others to one. At most floor of n over two comparisons join untouched pairs. <bookmark mark='f'/> Counting those facts yields the same bound. Problem three completes the proof.",
+      "zh": "对手也能证明下界。<bookmark mark='a'/>在互异元素里找最大值，每个非最大元素都必须输过一次比较，因此 n 减一次既必要又足够。<bookmark mark='b'/>分别扫描找最小和最大，代价接近两倍 n。<bookmark mark='c'/>先把元素两两比较，在胜者中找最大、败者中找最小；落单的元素参加两次搜索。<bookmark mark='d'/>总次数为 n 除以二向下取整，再加两倍的 n 除以二向上取整减一，也就是三 n 除以二向上取整减二；奇偶 n 都适用。<bookmark mark='e'/>下界要求除最大值外都输过，除最小值外都赢过。只有两个从未比较的元素相遇，才必然同时给出两条新事实；对其他比较，对手能限制为至多一条。这样的未比较元素对至多有 n 除以二向下取整组。<bookmark mark='f'/>数清这些事实，就得到同一个界。习题三完成这个证明。"
+    },
+    "384d7aeedf87": {
+      "scene": "Lower",
+      "en": "How close to the bound can a sort come, for small n? <bookmark mark='a'/> Here are the worst-case comparison counts for sorting three to twelve items. Merge sort and binary insertion fall behind the bound from five items on. <bookmark mark='b'/> Lester Ford and Selmer Johnson's merge insertion, from 1959, pairs the items, sorts the winners, and inserts the losers in a carefully chosen order, so that each binary search runs on a chain of just under a power of two. It meets the information bound exactly for every n up to eleven. We checked our implementation's worst case by running it on every order for n up to eight. <bookmark mark='c'/> At twelve, the bound says twenty-nine, and merge insertion needs thirty. Mark Wells showed in 1965, by exhaustive search, that thirty is the best any algorithm can do. The bound is a floor, not always a door.",
+      "zh": "对小的 n，排序能离这个界多近？<bookmark mark='a'/>这是对三到十二个元素排序的最坏比较次数。从五个元素起，归并排序和二分插入就落在界的后面了。<bookmark mark='b'/>莱斯特·福特和塞尔默·约翰逊1959年的归并插入：先把元素配对，对胜者排序，再按精心选择的次序插入败者，让每次二分查找都在一条长度略小于二的幂的链上进行。对直到十一的每个 n，它都恰好达到信息下界。我们把实现在 n 不超过八时的每一种次序上都跑了一遍，检查了它的最坏情况。<bookmark mark='c'/>在十二，下界说是二十九，而归并插入需要三十。马克·韦尔斯在1965年用穷举搜索证明了，三十就是任何算法所能做到的最好。下界是一层地板，却不总是一扇门。"
+    },
+    "eca47da760e1": {
+      "scene": "Heap",
+      "en": "Chapter seven. Heapsort.",
+      "zh": "第7章。堆排序。"
+    },
+    "2dcd2a1c82d7": {
+      "scene": "Heap",
+      "en": "A binary heap is a complete binary tree represented by an array. <bookmark mark='a'/> With zero-based indexing, position i has children two i plus one and two i plus two when those positions exist. <bookmark mark='b'/> In this max heap, every parent is at least as large as each child. Check every edge in the displayed example, including the lowest row. <bookmark mark='c'/> The maximum is at the root. For a nonempty heap the height is floor of log base two n; the complete shape supplies that bound.",
+      "zh": "二叉堆是用数组表示的完全二叉树。<bookmark mark='a'/>从零开始编号，位置 i 的孩子在二 i 加一和二 i 加二，只要这些位置存在。<bookmark mark='b'/>这个最大堆里，每个父结点都不小于任何孩子。检查图中的每条边，包括最下面一行。<bookmark mark='c'/>最大值就在根。对非空堆，高度为以二为底的 n 的对数向下取整；这个界来自完全二叉树的形状。"
+    },
+    "eb929041c180": {
+      "scene": "Heap",
+      "en": "Inserting n elements one by one would build a heap in n log n. Robert Floyd found a better way. <bookmark mark='a'/> Treat the array as a heap that is wrong everywhere, and fix it from the bottom up: sift each parent down until it is larger than its children. <bookmark mark='b'/> A node at height h costs at most two h comparisons, and only about n over two to the h plus one nodes have that height. <bookmark mark='c'/> The sum of h over two to the h converges to two, so the whole build costs at most two n comparisons: linear. Most nodes are near the bottom, where sifting is cheap. <bookmark mark='d'/> Measured, it costs under two comparisons per element at every size.",
+      "zh": "一个一个地插入 n 个元素，建堆要 n log n。罗伯特·弗洛伊德找到了更好的办法。<bookmark mark='a'/>把数组看成一个处处都不对的堆，从下往上修复它：把每个父结点往下筛，直到它比孩子都大。<bookmark mark='b'/>高度为 h 的结点至多花 2h 次比较，而高度为 h 的结点只有大约 n 除以 2 的 h+1 次方个。<bookmark mark='c'/>h 除以 2 的 h 次方之和收敛到二，所以整个建堆至多花 2n 次比较：线性的。大多数结点都在底部，那里往下筛很便宜。<bookmark mark='d'/>实测，在每种规模下，每个元素都不到两次比较。"
+    },
+    "6c99037ea9a0": {
+      "scene": "Heap",
+      "en": "Once the heap is built, repeat extraction. <bookmark mark='a'/> Swap the maximum at the root to the end, shrink the active heap, then sift the new root down. <bookmark mark='b'/> There are n minus one rounds, each using at most a logarithmic number of comparisons, so the worst-case count is O of n log n. <bookmark mark='c'/> The table gives our implementation's finite random-input count, including heap construction; its observed constant is not universal. <bookmark mark='d'/> Iterative heapsort needs constant auxiliary storage and is not stable. Its irregular parent-child accesses can hurt locality. <bookmark mark='e'/> Introsort uses heapsort as a worst-case fallback when quicksort's recursion becomes too deep.",
+      "zh": "建好堆之后，重复取出元素。<bookmark mark='a'/>把根处的最大值交换到末尾，缩小有效堆，再把新根向下筛。<bookmark mark='b'/>共有 n 减一轮，每轮至多做对数级比较，因此最坏比较次数是 n log n 的大 O。<bookmark mark='c'/>表格给出这个实现对有限随机输入的计数，包含建堆；观察到的常数不是普遍常数。<bookmark mark='d'/>迭代堆排序只需常数辅助空间，但不稳定。不规则的父子访问可能损害局部性。<bookmark mark='e'/>内省排序在快速排序递归过深时，用堆排序作为最坏情况的后备方案。"
+    },
+    "720a49652dd3": {
+      "scene": "Quick",
+      "en": "Chapter eight. Quicksort, and two n natural log n.",
+      "zh": "第8章。快速排序，以及 2n ln n。"
+    },
+    "17202ffe5891": {
+      "scene": "Quick",
+      "en": "Tony Hoare invented quicksort in 1959, as a visiting student in Moscow, and published it in 1961. <bookmark mark='a'/> Pick one element, the pivot. <bookmark mark='b'/> In one pass, compare every other element with it, moving the smaller ones to its left and the larger ones to its right. That costs n minus one comparisons, and afterwards the pivot is in its final place. <bookmark mark='c'/> Then sort the two sides the same way. Unlike merge sort, the work happens before the recursion, and there is nothing to combine.",
+      "zh": "托尼·霍尔在1959年发明了快速排序，那时他是莫斯科的一名访问学生，1961年发表。<bookmark mark='a'/>选一个元素，作为枢轴。<bookmark mark='b'/>用一趟扫描，把其余每个元素与它比较，较小的移到它左边，较大的移到右边。这花 n − 1 次比较，之后枢轴就在它最终的位置上。<bookmark mark='c'/>然后用同样的方法对两边排序。与归并排序不同，工作发生在递归之前，之后没有什么要合并的。"
+    },
+    "4a5fa1919710": {
+      "scene": "Quick",
+      "en": "Hoare's own partition needs no second array. <bookmark mark='a'/> Take the first element as the pivot. One pointer, i, starts at the left and moves right past elements smaller than the pivot; another, j, starts at the right and moves left past larger ones. <bookmark mark='b'/> When both have stopped, each is pointing at an element on the wrong side, so swap them, and continue. <bookmark mark='c'/> When the pointers cross, everything up to j is at most the pivot and everything after it is at least the pivot. It uses no extra memory and makes few swaps, which is part of why quicksort is fast in practice.",
+      "zh": "霍尔自己的划分不需要第二个数组。<bookmark mark='a'/>取第一个元素为枢轴。一个指针 i 从左边出发，向右越过比枢轴小的元素；另一个指针 j 从右边出发，向左越过比它大的元素。<bookmark mark='b'/>两个都停下时，各自指着一个站错了边的元素，于是交换它们，继续。<bookmark mark='c'/>两个指针交错时，j 及其左边的一切都不大于枢轴，j 右边的一切都不小于枢轴。它不用额外内存，交换次数也少，这是快速排序在实践中快的部分原因。"
+    },
+    "c10e4d34bb62": {
+      "scene": "Quick",
+      "en": "Our measurement uses a declared partition model: one logical comparison with the pivot for every nonpivot key. It does not count individual Python less-than and greater-than instructions. <bookmark mark='a'/> The inputs have distinct keys and pivots are uniform. Each mean averages fifteen or sixty runs, so finite sampling error remains; the displayed exact formula describes the expectation. The leading term is two n natural log n. Its asymptotic ratio to n log base two n is about one point three nine, though lower-order terms matter at these sizes.",
+      "zh": "这里的测量采用明确的划分模型：每个非枢轴键与枢轴做一次逻辑比较，不是分别数 Python 的小于和大于指令。<bookmark mark='a'/>输入键互异，枢轴均匀随机。每个均值来自十五次或六十次运行，仍有有限采样误差；显示的精确公式描述期望值。主项是二 n 乘自然对数 n。它与 n 乘以二为底的 log n 的渐近比值约为一点三九，但这些规模下低阶项仍然重要。"
+    },
+    "7bb4769f3b56": {
+      "scene": "Quick",
+      "en": "Pivot choice changes the risk. <bookmark mark='a'/> On sorted distinct keys, always taking the first key creates sizes zero and n minus one, costing n times n minus one over two partition comparisons. <bookmark mark='b'/> Median of the first, middle and last fixes this particular input. Its pivot-selection comparisons are now counted by the actual three-key sorting routine, not a fixed assigned charge. It still has adversarial inputs. <bookmark mark='c'/> For any fixed distinct-key input, independent uniform random pivots give the same expected count. This assumes the input does not adapt to revealed random choices. <bookmark mark='d'/> Production sorts add cutoffs, duplicate handling and fallback rules. Java's primitive sorts have used dual-pivot quicksort, with details depending on version and type.",
+      "zh": "枢轴规则改变风险。<bookmark mark='a'/>对已排序的互异键，总取第一个键，会把问题分成零和 n 减一，划分比较次数为 n 乘以 n 减一再除以二。<bookmark mark='b'/>首、中、尾三者的中位数能修复这个特定输入。选枢轴的比较次数现在由实际的三键排序过程计数，不再分配固定费用；它仍有对抗输入。<bookmark mark='c'/>对任意固定的互异键输入，独立均匀的随机枢轴给出相同的期望计数；这假设输入不会根据已经公开的随机选择自适应改变。<bookmark mark='d'/>生产排序还加入小规模截止、重复键处理和后备规则。Java 的基本类型排序使用过双枢轴快速排序，细节依版本和类型而异。"
+    },
+    "2f57b4a50c52": {
+      "scene": "Concentration",
+      "en": "Chapter nine. How lucky can quicksort get?",
+      "zh": "第9章。快速排序能有多走运？"
+    },
+    "dcb2f69c7f21": {
+      "scene": "Concentration",
+      "en": "Before measuring the spread, here is the classical way to get the mean, which uses no clever observation, only algebra. <bookmark mark='a'/> The pivot's rank is uniformly random, so the two sides have sizes k and n minus one minus k for a uniform k, and the expected cost is n minus one plus two over n times the sum of all smaller costs. <bookmark mark='b'/> Multiply by n, and subtract the same equation for n minus one: the sum disappears, leaving a relation between neighbours. <bookmark mark='c'/> Divide by n times n plus one and the relation telescopes. <bookmark mark='d'/> Summing it gives the same exact answer as before, two times n plus one times H n, minus four n. Two proofs, one number.",
+      "zh": "在测量离散程度之前，先看求平均值的经典方法，它不用任何巧妙的观察，只用代数。<bookmark mark='a'/>枢轴的秩是均匀随机的，所以两边的大小是 k 和 n − 1 − k，k 均匀分布，期望代价就是 n − 1 加上 2/n 乘以所有更小代价之和。<bookmark mark='b'/>乘以 n，再减去 n − 1 时的同一个方程：和式消失了，只剩下相邻两项之间的关系。<bookmark mark='c'/>除以 n 乘以 n + 1，这个关系就可以逐项相消。<bookmark mark='d'/>把它加起来，得到和之前一样的精确答案：2 乘以 n + 1 乘以 Hₙ，再减 4n。两个证明，一个数。"
+    },
+    "ad0664ba3014": {
+      "scene": "Concentration",
+      "en": "A mean does not describe every run. <bookmark mark='a'/> Here we sort the same thousand distinct keys ten thousand times, using a separate deterministic seed for each sequence of uniform pivots. The histogram counts runs in each comparison interval. <bookmark mark='b'/> The sample mean is close to the exact expectation. <bookmark mark='c'/> The sample standard deviation is about zero point six four n. The displayed theoretical coefficient is the large-n limit, not an exact finite-n standard deviation. Relative to a mean growing like n log n, this spread eventually shrinks. <bookmark mark='d'/> The largest observed count is far below the possible quadratic worst case. A finite sample illustrates that difference; it cannot eliminate rare outcomes.",
+      "zh": "均值不能描述每一次运行。<bookmark mark='a'/>这里把相同的一千个互异键排序一万次，每条均匀随机枢轴序列使用各自的确定性种子。直方图数每个比较次数区间内的运行数。<bookmark mark='b'/>样本均值接近精确期望。<bookmark mark='c'/>样本标准差约为零点六四 n。显示的理论系数是大 n 极限，不是有限 n 的精确标准差。相对于按 n log n 增长的均值，这个相对离散程度最终缩小。<bookmark mark='d'/>样本最大计数远低于可能的平方级最坏情况。有限样本展示这种差异，却不能排除稀有结果。"
+    },
+    "8a2c8235cdb6": {
+      "scene": "Concentration",
+      "en": "Read the measured tail frequencies directly from the table. <bookmark mark='a'/> These are fractions of ten thousand runs above the sample mean plus one, two, three or four sample standard deviations. The four-deviation frequency in this sample is two in a thousand. <bookmark mark='b'/> For fixed positive relative deviations, classical quicksort tail bounds decay faster than any inverse fixed power of n, asymptotically. That theorem assumes the classical distinct-key model and uniform random pivots. <bookmark mark='c'/> It gives a probabilistic guarantee, not impossibility of a slow finite run. Part 20 develops the probability tools behind such claims.",
+      "zh": "直接读表中的实测尾部频率。<bookmark mark='a'/>这些数值来自一万次运行，分别超过样本均值加一、二、三、四个样本标准差。这个样本中，四个标准差对应千分之二。<bookmark mark='b'/>对固定的正相对偏差，经典快速排序尾界在渐近意义上，比任意固定次幂的倒数下降得更快。定理假设经典的互异键模型和均匀随机枢轴。<bookmark mark='c'/>它给的是概率保证，不是有限运行绝不变慢的保证。第20部分会建立这些结论背后的概率工具。"
+    },
+    "c0b99aed332b": {
+      "scene": "Linear",
+      "en": "Chapter ten. Beating n log n.",
+      "zh": "第10章。突破 n log n。"
+    },
+    "ae7ccf855838": {
+      "scene": "Linear",
+      "en": "The comparison lower bound restricts which operations reveal information. <bookmark mark='a'/> Integer algorithms may inspect digits and index arrays instead. <bookmark mark='b'/> Counting sort handles keys from zero through k minus one in O of n plus k time, with O of k counters. <bookmark mark='c'/> Least-significant-digit radix sort applies a stable distribution pass to each digit. Order from earlier digits survives ties in later passes. <bookmark mark='d'/> For fixed thirty-two-bit keys and eight-bit digits, four passes suffice; the bound includes the digit counters. <bookmark mark='e'/> Punched-card equipment made digit-by-digit organization a physical operation, long before modern computers. <bookmark mark='f'/> For growing word widths, linear time is a different question. Historical word-RAM bounds depend on the instruction set, randomization and the relation between word width and input size.",
+      "zh": "比较下界限制了允许用什么操作获取信息。<bookmark mark='a'/>整数算法还可以检查数位、用值作为数组下标。<bookmark mark='b'/>计数排序处理零到 k 减一的键，时间为 n 加 k 的大 O，需要 k 量级的计数器。<bookmark mark='c'/>最低位优先基数排序，对每位做稳定分发。后面数位相同时，前面数位形成的次序得以保留。<bookmark mark='d'/>对固定三十二位键、每位八位，四遍即可；代价还包括数位计数器。<bookmark mark='e'/>穿孔卡片设备早就把逐列组织数据变成了物理操作。<bookmark mark='f'/>当字宽随输入增长时，线性时间是另一个问题。历史上的字 RAM 上界依赖指令集、随机化，以及字宽与输入规模的关系。"
+    },
+    "e9362a25ec10": {
+      "scene": "Linear",
+      "en": "Watch seven three-digit keys pass through a textbook radix sort. <bookmark mark='a'/> The first stable pass orders the units. <bookmark mark='b'/> The second orders the tens, preserving units order among equal tens. <bookmark mark='c'/> The third orders the hundreds while preserving the lower two digits' order among ties. <bookmark mark='d'/> The final order is sorted. The invariant after each pass is order by the suffix of digits processed so far. That stability condition is essential; an arbitrary unstable digit sort would not establish it.",
+      "zh": "看七个三位数通过教科书中的基数排序。<bookmark mark='a'/>第一遍稳定地按个位排序。<bookmark mark='b'/>第二遍按十位排序，十位相同时保留个位的次序。<bookmark mark='c'/>第三遍按百位排序，百位相同时保留低两位的次序。<bookmark mark='d'/>最后得到有序结果。每一遍后的不变式是：按目前处理过的数位后缀有序。稳定性至关重要；任意不稳定的数位排序，不能建立这个性质。"
+    },
+    "5497a8db8aa5": {
+      "scene": "Linear",
+      "en": "These are checked host measurements, not a universal ranking. <bookmark mark='a'/> C qsort, C++ std::sort and our radix sort receive the same deterministic thirty-two-bit input. Each result is validated outside the timer against a full sorted reference. The separate counting-sort column masks that source to sixteen bits, so it solves a smaller-domain problem. <bookmark mark='b'/> Each displayed time is the minimum of three runs at that size. Input copies and reference checks are excluded; counting-sort counter allocation is included. Read the observed ratios from the table, with the compiler versions and protocol below. <bookmark mark='c'/> Key width, extra storage, cache state and implementation all affect the result. Comparison sorts remain useful for general ordered objects.",
+      "zh": "这些是经过检查的本机测量，不是普遍排名。<bookmark mark='a'/>C 的 qsort、C++ 的 std::sort 和这里的基数排序，接收相同的确定性三十二位输入。每个结果都在计时区间外，与完整的参考有序数组核对。单独的计数排序列，把同一来源截成十六位，因此解决的是更小值域的问题。<bookmark mark='b'/>每个时间取该规模三次运行的最短值。输入复制和参考检查不计时，计数排序分配计数器则包含在内。观察到的比值看表格，同时阅读下面的编译器版本和协议。<bookmark mark='c'/>键宽、辅助空间、缓存状态和实现都会改变结果。比较排序仍适用于一般可排序对象。"
+    },
+    "95edde149fda": {
+      "scene": "Select",
+      "en": "Chapter eleven. Selection and the median of medians.",
+      "zh": "第11章。选择与中位数的中位数。"
+    },
+    "712b6c471b83": {
+      "scene": "Select",
+      "en": "Selection needs one rank, not every rank. <bookmark mark='a'/> Quickselect partitions around a pivot and continues only in the side containing the requested rank. Our count charges one logical partition comparison per nonpivot key. <bookmark mark='b'/> For distinct keys and a uniform pivot, the expected larger side is at most three quarters of the current size. Bounding the chosen side by that larger side gives a crude linear bound, about four n; it is an expectation argument, not a guaranteed shrink at each step. <bookmark mark='c'/> For the median, the leading expected term is two plus two natural log two, times n, with lower-order corrections. The finite sample means need not equal that asymptotic coefficient exactly.",
+      "zh": "选择只需要一个秩，不需要所有秩。<bookmark mark='a'/>快速选择围绕枢轴划分，只继续处理包含目标秩的一侧。这里对每个非枢轴键收取一次逻辑划分比较。<bookmark mark='b'/>对互异键和均匀随机枢轴，较大一侧的期望规模至多为当前规模的四分之三。用较大一侧来界定实际选择的一侧，可得约四 n 的粗略线性上界。这是期望论证，不是每一步都保证缩小这么多。<bookmark mark='c'/>寻找中位数时，期望的主项为二加二倍的二的自然对数，再乘 n，还存在低阶修正。有限样本均值不必恰好等于这个渐近系数。"
+    },
+    "f2df9e316519": {
+      "scene": "Select",
+      "en": "The group size changes what this proof can establish. <bookmark mark='a'/> With groups of three, the elementary upper-bound recurrence has fractions one third and two thirds. Their sum is one, giving an O of n log n bound by this argument. An upper-bound recurrence does not prove a matching lower bound for the algorithm. <bookmark mark='b'/> With five, one fifth plus seven tenths is less than one, so a linear toll gives a linear upper bound after accounting for rounding. <bookmark mark='c'/> Seven also gives a sum below one, with a different small-group cost. <bookmark mark='d'/> This shrinking-sum test applies to these linear-toll recurrences. It is not a universal characterization of all divide-and-conquer algorithms.",
+      "zh": "分组大小改变的是这个证明能得到什么。<bookmark mark='a'/>每组三个时，初等上界递推的比例为三分之一和三分之二，和为一；这个论证只能给出 n log n 的大 O。一个上界递推，并不能证明算法有同阶下界。<bookmark mark='b'/>每组五个时，五分之一加十分之七小于一，在线性额外工作和适当取整下，可得线性上界。<bookmark mark='c'/>每组七个也让比例和小于一，但小组处理常数不同。<bookmark mark='d'/>这种比例和检查适用于这里的线性额外工作递推，不是所有分治算法的普遍判定规则。"
+    },
+    "01950f484945": {
+      "scene": "Select",
+      "en": "We can guarantee linear worst-case work. <bookmark mark='a'/> Divide distinct keys into groups of five and sort each small group to find its median. Every less-than comparison in that routine is now counted. <bookmark mark='b'/> Recursively select the median of those medians as the pivot. In the picture, at least half the group medians lie on either side. <bookmark mark='c'/> Each such full group contributes three keys on the corresponding side, apart from the pivot group and a possible incomplete group. This gives three n over ten minus a constant protected on each side. <bookmark mark='d'/> The recurrence therefore uses a ceiling for the medians call and seven n over ten plus a constant for the remaining side. <bookmark mark='e'/> The fractions sum to nine tenths, so a sufficiently large linear bound closes by induction. The displayed finite implementation count is an example, not a universal comparison constant.",
+      "zh": "我们能保证最坏情况线性工作量。<bookmark mark='a'/>把互异键分成每组五个，排序每个小组以找中位数。这个过程中的每次小于比较，现在都会实际计数。<bookmark mark='b'/>递归选择这些中位数的中位数作为枢轴。图中至少一半的组中位数位于每一侧。<bookmark mark='c'/>对应的每个完整组，向这一侧贡献三个键；要排除枢轴所在组和可能的不完整组。因此每侧保证三 n 除以十减一个常数。<bookmark mark='d'/>递推中，中位数调用需要向上取整，剩余一侧最多是七 n 除以十加一个常数。<bookmark mark='e'/>比例之和为十分之九，因此足够大的线性上界可以用归纳闭合。显示的有限实现计数只是例子，不是普遍的比较次数常数。"
+    },
+    "39eda58d17cc": {
+      "scene": "Generating",
+      "en": "Chapter twelve. Generating functions.",
+      "zh": "第12章。生成函数。"
+    },
+    "c05e84e2206d": {
+      "scene": "Generating",
+      "en": "Recurrences like quicksort's are often solved by a trick from the eighteenth century: turn the whole sequence into one function. <bookmark mark='a'/> Make the Fibonacci numbers the coefficients of a power series, F of z. <bookmark mark='b'/> The recurrence, each term the sum of the two before, becomes an equation about the function itself: F equals z plus z F plus z squared F. <bookmark mark='c'/> Solve it like algebra: F is z over one minus z minus z squared, and partial fractions split it into two geometric series. <bookmark mark='d'/> Read off the coefficient, and out comes Binet's formula, with the golden ratio. We checked it against the recurrence for every n up to sixty-one.",
+      "zh": "像快速排序那样的递推式，常常用一个十八世纪的技巧来解：把整个数列变成一个函数。<bookmark mark='a'/>让斐波那契数成为一个幂级数 F(z) 的系数。<bookmark mark='b'/>递推关系，每一项是前两项之和，变成关于这个函数本身的一个方程：F = z + zF + z²F。<bookmark mark='c'/>像解代数题一样解它：F 等于 z 除以 1 − z − z²，部分分式把它拆成两个几何级数。<bookmark mark='d'/>读出系数，比内公式就出来了，里面有黄金比例。我们对直到六十一的每个 n，都拿它与递推式核对过。"
+    },
+    "3f8bbf4564b1": {
+      "scene": "Generating",
+      "en": "Now count ordered binary trees with empty subtrees allowed. <bookmark mark='a'/> With n nonempty nodes, their counts begin one, one, two, five, fourteen, forty-two. <bookmark mark='b'/> A tree is empty, or a root with an ordered left and right subtree. Thus C equals one plus z C squared. Choose the solution with C of zero equal to one, and its coefficients give the Catalan formula. <bookmark mark='c'/> The nearest singularity is at one quarter. Its location gives the exponential base four; its square-root form supplies the n to the minus three halves factor. Location alone would not determine that power. <bookmark mark='d'/> Together they give four to the n over square root of pi times n to the three halves. The displayed finite ratios approach one, illustrating the asymptotic result.",
+      "zh": "现在数允许空子树的有序二叉树。<bookmark mark='a'/>按非空结点数 n 计数，开头是一、一、二、五、十四、四十二。<bookmark mark='b'/>一棵树要么为空，要么是一个根，加上有次序的左、右子树。因此 C 等于一加 z C 平方。选择在零处等于一的解，它的系数就是卡特兰公式。<bookmark mark='c'/>最近的奇点在四分之一。位置给出指数底数四，而局部的平方根形式给出 n 的负二分之三次方。仅凭位置，并不能确定这个幂次。<bookmark mark='d'/>两者合起来，是四的 n 次方，除以根号 π，再除以 n 的二分之三次方。图中的有限比值趋于一，展示渐近结果。"
+    },
+    "d978a6ffb7f1": {
+      "scene": "Amortized",
+      "en": "Chapter thirteen. Amortized analysis.",
+      "zh": "第13章。摊还分析。"
+    },
+    "f82dd7168234": {
+      "scene": "Amortized",
+      "en": "Java's ArrayList, C++'s vector and Python's list all grow geometrically. Take the simplest rule, doubling. <bookmark mark='a'/> Most appends cost one step. But when the array is full, it allocates one twice as big and copies everything across: an append that costs as much as all the elements so far. <bookmark mark='b'/> The worst single append is linear. Yet the expensive ones come at sizes one, two, four, eight, and the copies add up to less than two n. Averaged over any sequence of appends, the cost is at most three per append. That is an amortized bound: not an average over random inputs, but a guarantee for every sequence.",
+      "zh": "Java 的 ArrayList、C++ 的 vector 和 Python 的 list 都按几何级数增长。取最简单的规则：加倍。<bookmark mark='a'/>大多数追加只花一步。可是数组满了的时候，它分配一个两倍大的数组，把所有东西抄过去：这次追加的代价，和到目前为止的所有元素一样多。<bookmark mark='b'/>最坏的单次追加是线性的。然而贵的那几次出现在大小为一、二、四、八的时候，复制加起来不到 2n。对任何追加序列取平均，每次追加至多花三。这是一个摊还界：不是对随机输入的平均，而是对每一个序列的保证。"
+    },
+    "a3124f80c57e": {
+      "scene": "Amortized",
+      "en": "The second standard example is a binary counter. <bookmark mark='a'/> Adding one flips the trailing ones to zeros, and the next zero to one. <bookmark mark='b'/> Counting from fifteen to sixteen flips five bits; in general, the worst increment flips them all. <bookmark mark='c'/> But the lowest bit flips every time, the next every second time, the next every fourth. Over n increments the total is less than two n, and the running total in the last column never catches up with twice the count. <bookmark mark='d'/> As a potential argument: let the potential be the number of ones. An increment that flips t ones to zero and one zero to one costs t plus one and lowers the potential by t minus one, so its amortized cost is two.",
+      "zh": "第二个标准例子是二进制计数器。<bookmark mark='a'/>加一会把末尾的一都翻成零，再把下一个零翻成一。<bookmark mark='b'/>从十五数到十六要翻五位；一般地，最坏的一次加一会把所有位都翻一遍。<bookmark mark='c'/>但最低位每次都翻，下一位每两次翻一次，再下一位每四次一次。n 次加一总共不到 2n 次翻转，最后一列的累计总数永远追不上计数的两倍。<bookmark mark='d'/>用势函数来论证：令势为一的个数。一次把 t 个一翻成零、把一个零翻成一的加一，花 t + 1，并把势降低 t − 1，所以它的摊还代价是二。"
+    },
+    "64f3fcdcd007": {
+      "scene": "Amortized",
+      "en": "Three proofs describe the same guarantee. <bookmark mark='a'/> Aggregate the copies: one plus two plus four, up to the last full capacity, is less than twice the number of appends. Include the insertions and the total is below three n. <bookmark mark='b'/> Accounting charges three units per append and saves the unused credit for later copying. <bookmark mark='c'/> For a potential proof starting from size zero and capacity one, use the maximum of zero and twice the size minus capacity. This potential starts at zero and stays nonnegative. Actual cost plus its change is at most three for every append, including the first. <bookmark mark='d'/> Summing cancels the intermediate potentials, giving a bound for every append sequence, without an input distribution.",
+      "zh": "三个证明描述同一个保证。<bookmark mark='a'/>聚合所有复制：一加二加四，直到最后一次满容量，少于追加次数的两倍。加上插入，总量少于三 n。<bookmark mark='b'/>记账法给每次追加收取三单位，把未用的信用留给未来复制。<bookmark mark='c'/>势能证明从大小零、容量一开始，使用零与二倍大小减容量的最大值。势能初始为零，始终非负。每次追加的实际代价加势能变化至多为三，包括第一次。<bookmark mark='d'/>求和时中间势能消去，得到对每条追加序列都成立的界，不需要输入分布。"
+    },
+    "7c1bca1d0fcb": {
+      "scene": "Amortized",
+      "en": "A fixed growth factor greater than one gives constant amortized copying cost. <bookmark mark='a'/> Our million-append examples compare factors two and one point five, including integer rounding. The smaller factor copies more often. <bookmark mark='b'/> The last row only tests aggregate freed size. For doubling, all previously freed blocks together are too small for the next request. Below the golden ratio, their total can eventually be large enough. This does not guarantee that a real allocator can reuse them: adjacency, fragmentation and other live allocations still matter. <bookmark mark='c'/> Libraries choose growth policies under these competing costs, and the exact policy depends on implementation and version.",
+      "zh": "固定大于一的增长因子，能给出常数摊还复制代价。<bookmark mark='a'/>这一百万次追加的例子比较二倍和一点五倍，并包含整数取整。较小的因子需要更频繁地复制。<bookmark mark='b'/>最后一行只检查已释放空间的总大小。二倍增长时，所有先前释放的块加起来也不够下一次申请。低于黄金比例时，总大小最终可能足够。但这并不保证真实分配器能复用它们：相邻性、碎片和其他活跃分配仍然重要。<bookmark mark='c'/>程序库在这些代价之间选择增长策略，具体规则取决于实现和版本。"
+    },
+    "890e3c9caf79": {
+      "scene": "Practice",
+      "en": "Chapter fourteen. Sorting in practice.",
+      "zh": "第14章。实践中的排序。"
+    },
+    "4096507ef573": {
+      "scene": "Practice",
+      "en": "Existing order is useful information. <bookmark mark='a'/> We count comparisons made by this Python interpreter's sorted function through a comparison wrapper. These are comparison counts, not elapsed times. One input uses exactly a thousand random transpositions of an initially sorted hundred-thousand-element array; that is not exactly one percent of positions shuffled. <bookmark mark='b'/> Python's sort detects natural runs, extends short runs and merges them. Current measurements here use the interpreter reported on screen; its modern merge policy is powersort, within the Timsort family. <bookmark mark='c'/> Implementations evolve. Rust changed both standard sorting implementations in version one point eight one, so the old Timsort and pattern-defeating quicksort labels should not be read as current Rust guarantees. Go's inspected sort source uses a pattern-defeating quicksort variant with a heapsort fallback.",
+      "zh": "已有顺序是有用的信息。<bookmark mark='a'/>这里通过比较包装器，数本机 Python 解释器的 sorted 所做的比较。这不是经过时间。一组输入从十万个有序元素开始，恰好执行一千次随机对换，不等于恰好打乱百分之一的位置。<bookmark mark='b'/>Python 排序检测自然有序段，延长短段，再归并。测量使用屏幕注明的解释器；它属于 Timsort 家族，现代归并策略采用 powersort。<bookmark mark='c'/>实现会演变。Rust 在一点八一版更换了两种标准排序实现，因此旧的 Timsort 和模式击败快速排序标签，不应被当作当前 Rust 的保证。这里检查的 Go 排序源码，使用带堆排序后备的模式击败快速排序变体。"
+    },
+    "dd80b30069db": {
+      "scene": "Practice",
+      "en": "The historical Timsort bug shows why an invariant must hold everywhere it is needed. <bookmark mark='a'/> The old merge policy intended run lengths to grow fast enough down the pending stack to keep its height logarithmic. <bookmark mark='b'/> In 2015, de Gouw and colleagues found that local repairs near the top did not always restore the required invariant deeper down. Their verification work led to a constructed input that exhausted the allocated Java run stack. <bookmark mark='c'/> Implementations adopted repairs, and merge policies later evolved; this is a historical case study, not a claim that the measured modern Python sort still has that failure. Part 54 returns to the role of machine-checked proofs.",
+      "zh": "历史上的 Timsort 错误，说明不变式必须在所有需要它的地方成立。<bookmark mark='a'/>旧归并策略希望待归并栈中的段长，沿栈足够快地增长，从而把栈高限制在对数级。<bookmark mark='b'/>2015年，德豪等人发现，仅在栈顶附近局部修复，并不总能恢复更深处所需的不变式。验证工作导出了一个构造输入，耗尽了 Java 分配的运行段栈。<bookmark mark='c'/>实现采用了修复，后来归并策略也继续演变。这是历史案例，不是说所测现代 Python 排序仍有同样故障。第54部分会再讨论机器检查证明的作用。"
+    },
+    "80e8bb6e190e": {
+      "scene": "Practice",
+      "en": "Sorting a file larger than memory changes what is expensive. <bookmark mark='a'/> Read as much as fits, sort it, and write it back as a sorted run. <bookmark mark='b'/> Then merge many runs at once, keeping one block of each in memory and a heap to pick the smallest head. <bookmark mark='c'/> A classic trick makes the runs longer than memory. Replacement selection keeps a heap of M records: output the smallest, read the next record, and if it is still at least the last output, it joins the current run. Knuth showed that on random input the runs average two M. <bookmark mark='d'/> Ours, with a thousand records of memory, made runs averaging two thousand. <bookmark mark='e'/> On sorted input it makes one run: the whole file. <bookmark mark='f'/> Fewer runs means fewer passes over the disk, which is the cost that matters in the external-memory model, and in every database's sort.",
+      "zh": "给一个比内存还大的文件排序，会改变什么是昂贵的。<bookmark mark='a'/>读入内存放得下的那么多，排好序，作为一段有序片段写回去。<bookmark mark='b'/>然后一次归并许多片段，每段在内存里留一个块，再用一个堆挑出最小的开头。<bookmark mark='c'/>有一个经典技巧能让片段比内存还长。置换选择维护一个 M 条记录的堆：输出最小的，读入下一条记录，如果它仍不小于上一次的输出，它就加入当前片段。高德纳证明了在随机输入上，片段平均长 2M。<bookmark mark='d'/>我们的实现，用一千条记录的内存，做出的片段平均长两千。<bookmark mark='e'/>在有序输入上，它只做出一段：整个文件。<bookmark mark='f'/>片段越少，扫描磁盘的趟数就越少，在外存模型里，在每个数据库的排序里，这才是要紧的代价。"
+    },
+    "f4bd34df7103": {
+      "scene": "Job",
+      "en": "Chapter fifteen. The Job, sorted.",
+      "zh": "第15章。排好序的任务。"
+    },
+    "0e6a86a1d8e6": {
+      "scene": "Job",
+      "en": "Version one sorts occurrences, then counts equal runs. <bookmark mark='a'/> Each occurrence records its letters' start and length. <bookmark mark='b'/> A stable bottom-up merge sort orders them by letters. <bookmark mark='c'/> Equal words become neighbors; stability preserves the first occurrence needed for tie breaking. <bookmark mark='d'/> Selecting the twenty largest counts therefore reproduces version zero's output. For the corpus projection, we enlarge the arrays explicitly and use that same compiled image for calibration passages and core samples. Their outputs are checked against the reference. The whole corpus is counted by the native event model; it is not fully executed on the emulator.",
+      "zh": "一号版本先给出现位置排序，再统计相等的段。<bookmark mark='a'/>每次出现都记录字母起点和长度。<bookmark mark='b'/>稳定的自底向上归并排序，按字母给它们排序。<bookmark mark='c'/>相等单词成为邻居；稳定性保留了打破平局所需的首次出现位置。<bookmark mark='d'/>选择最大的二十个计数，就能复现零号版本的输出。全语料投影会明确扩大数组，并让校准文本段和核心样本使用同一个编译映像。样本输出与参考核对。整个语料由本机事件模型计数，没有在模拟器上完整执行。"
+    },
+    "eb82ee66c14c": {
+      "scene": "Job",
+      "en": "Separate exact event counts from projected runtime. <bookmark mark='a'/> The native model follows the sort-and-count control flow on the full corpus and checks the final word-count output. In version zero, the corrected letter-comparison count includes matched prefixes and the first mismatch; a same-length table entry is not itself one letter comparison. <bookmark mark='b'/> We fit instruction counts from thirty actual emulator passages and test ten held-out passages. The displayed maximum error applies only to those tests, not every possible text. <bookmark mark='c'/> Applying the fit to corpus events estimates instructions. Dividing by IPC measured on three core passages estimates cycles, then time at the stated clock. Neither corpus instructions nor its IPC has been measured by a full-corpus core run.",
+      "zh": "把精确事件计数与运行时间投影分开。<bookmark mark='a'/>本机模型在完整语料上跟随排序计数的控制流，并检查最终词频输出。零号版本修正后的字母比较数，包括相等前缀和第一次不匹配；一个等长表项，不等于一次字母比较。<bookmark mark='b'/>用三十个真实模拟器文本段拟合指令数，再检验十个留出文本段。显示的最大误差只适用于这些检验，不保证所有文本。<bookmark mark='c'/>把拟合应用到语料事件，得到指令数估计；再除以三个核心样本测得的 IPC，估计周期数，并按注明时钟换算时间。全语料指令数和 IPC，都没有通过完整的核心运行实测。"
+    },
+    "58976a3c22df": {
+      "scene": "Job",
+      "en": "A fitted decomposition suggests where to investigate. <bookmark mark='a'/> These bars group coefficient times corpus event count, not traced instruction categories. Correlated features can admit different coefficient allocations with similar total predictions. <bookmark mark='b'/> The copy-back term motivates a concrete experiment: alternate the two arrays instead of copying a full pass back. But removing a fitted term does not establish the same percentage reduction in instructions or seconds. That needs a changed program, checked output and a new measurement. <bookmark mark='c'/> Use the model to propose and test an optimization, while keeping attribution uncertainty visible.",
+      "zh": "拟合分解能提示调查方向。<bookmark mark='a'/>这些条形分组的是系数乘以语料事件数，不是逐条追踪得到的指令类别。特征相关时，不同的系数分配也可能给出相似的总预测。<bookmark mark='b'/>复制回写项提示一个具体实验：交替使用两个数组，避免每遍都整段复制回来。但删除一个拟合项，并不能证明指令数或秒数会按相同比例减少。需要修改程序、检查输出并重新测量。<bookmark mark='c'/>用模型提出并检验优化，同时明确归因中的不确定性。"
+    },
+    "8df960283a39": {
+      "scene": "Job",
+      "en": "The ledger gains an explicitly projected row. <bookmark mark='a'/> It combines full-corpus event counts, the held-out instruction fit and passage-sampled IPC on one modeled core. Its arrays and emulated memory are sized for the corpus, while the full corpus remains unexecuted on that core. <bookmark mark='b'/> Read the estimated time and speedups on screen. They compare the stated models and assumptions; they are not elapsed timings of full-corpus runs. The important algorithmic change is replacing repeated vocabulary scans with sorting. Part 17 asks whether hashing can remove that sorting step too.",
+      "zh": "账本新增一行明确标记的投影。<bookmark mark='a'/>它结合全语料事件数、留出检验过的指令拟合，以及一个模型核心上的文本段 IPC 样本。数组和模拟内存按全语料规模配置，但完整语料仍未在该核心上执行。<bookmark mark='b'/>估计时间和加速比请看屏幕。它们比较的是注明的模型和假设，不是全语料完整运行的经过时间。算法上的关键改变，是用排序替代反复扫描词汇表。第17部分会问：哈希能否把排序这一步也去掉？"
+    },
+    "59a15cb52067": {
+      "scene": "Frontier",
+      "en": "Chapter sixteen. Frontier: beyond the worst case.",
+      "zh": "第16章。前沿：超越最坏情况。"
+    },
+    "3526d16b5df1": {
+      "scene": "Frontier",
+      "en": "Worst-case and average-case analysis ask different questions. <bookmark mark='a'/> This experiment starts with one sorted input of two thousand keys, adds independent Gaussian noise with the shown standard deviation, and averages ten seeded trials per noise level. <bookmark mark='b'/> For this input family, the observed first-pivot comparison count falls toward the random-order benchmark. It does not show that every real input is harmless, or that every noisy trial improves. <bookmark mark='c'/> Formal smoothed analysis takes a worst case over the permitted initial inputs, then an expectation over the specified perturbation. Spielman and Teng developed the framework for simplex. Our single-family plot illustrates the idea; it does not compute that worst-case smoothed bound.",
+      "zh": "最坏情况与平均情况分析，回答不同的问题。<bookmark mark='a'/>这个实验从一组两千键的有序输入出发，加入独立高斯噪声，标准差如图；每个噪声水平平均十次带种子的试验。<bookmark mark='b'/>对这个输入族，首元素枢轴的实测比较数逐渐接近随机次序基准。这不表示所有真实输入都无害，也不保证每次加噪都更好。<bookmark mark='c'/>正式平滑分析先对允许的初始输入取最坏情况，再对指定扰动取期望。斯皮尔曼与滕为单纯形法发展了这个框架。这里单一输入族的图只展示想法，没有计算那个最坏平滑上界。"
+    },
+    "6cc424c72e5f": {
+      "scene": "Frontier",
+      "en": "Integer sorting depends on the precise machine model. <bookmark mark='a'/> The table collects historical word-RAM upper bounds, with their randomization and word-width conditions. Reading digits escapes the comparison lower bound, but fixed thirty-two-bit radix sort does not settle the asymptotic question for every growing word width. <bookmark mark='b'/> The author abstracts for the listed linear-time results require sufficiently large words; some results are expected-time randomized bounds. Our research question asks how such restrictions can be relaxed in an explicitly specified instruction model. These selected historical sources are not a complete survey of every recent result.",
+      "zh": "整数排序依赖精确的机器模型。<bookmark mark='a'/>表格汇集历史上的字 RAM 上界，并注明随机化和字宽条件。读取数位能突破比较下界，但固定三十二位基数排序，并不能解决所有增长字宽下的渐近问题。<bookmark mark='b'/>所列线性时间结果的作者摘要，都要求字足够宽；其中一些是随机化的期望时间界。研究问题要问，在明确的指令模型里，怎样放宽这些限制。这些选定的历史来源，不是对所有最新结果的完整综述。"
+    },
+    "b119bff55ddf": {
+      "scene": "Frontier",
+      "en": "Some frontiers concern the exponent itself. <bookmark mark='a'/> Fine-grained complexity studies conditional statements under precisely stated conjectures: satisfiability, three-sum, and weighted all-pairs shortest paths, in their respective models. The forbidden improvements are by a fixed power, not necessarily by logarithmic factors. <bookmark mark='b'/> Backurs and Indyk's edit-distance reduction says that a truly subquadratic algorithm would refute the relevant strong exponential-time hypothesis. This is conditional evidence, not an unconditional quadratic lower bound or a proof that every conjecture is equivalent. <bookmark mark='c'/> Reductions connect specific versions of problems. Their alphabet, weights, randomization and computational model matter.",
+      "zh": "有些前沿关注指数本身。<bookmark mark='a'/>细粒度复杂性研究精确猜想下的条件结论：可满足性、三数和，以及加权全对最短路，各有自己的模型。被排除的改进是固定幂次上的提升，不一定排除对数因子的提升。<bookmark mark='b'/>巴克斯与英迪克的编辑距离归约说明，真正次平方的算法会推翻相应的强指数时间假说。这是条件证据，不是无条件平方下界，也不证明所有猜想都等价。<bookmark mark='c'/>归约连接的是特定问题版本；字母表、权重、随机化和计算模型都很重要。"
+    },
+    "16dc3c1390a3": {
+      "scene": "Frontier",
+      "en": "Here are research directions, each needing a precise statement. <bookmark mark='a'/> Can integer-sorting bounds be improved across word widths, with a fixed permitted instruction set and a stated randomness guarantee? <bookmark mark='b'/> What are the exact optimal comparison counts beyond the small cases we checked? <bookmark mark='c'/> Which specific fine-grained conjectures admit reductions to each other? <bookmark mark='d'/> And which beyond-worst-case input models predict a chosen real workload well enough to test? <bookmark mark='e'/> The starred exercise starts by fixing a word-RAM model and checking the restrictions of known results, then proposing an extension or a reproducible finite experiment.",
+      "zh": "这些研究方向，每一个都需要精确陈述。<bookmark mark='a'/>在固定允许指令集、注明随机性保证后，能否改进跨字宽的整数排序界？<bookmark mark='b'/>超过我们检查的小规模之后，最优比较次数究竟是多少？<bookmark mark='c'/>哪些具体的细粒度猜想，能够相互归约？<bookmark mark='d'/>哪些超越最坏情况的输入模型，能对选定的真实工作负载给出可检验预测？<bookmark mark='e'/>星号题先固定一个字 RAM 模型，检查已知结果的限制，再提出扩展或可复现的有限实验。"
+    },
+    "c5e7a8300096": {
+      "scene": "Outro",
+      "en": "We built a toolkit for counting the resource that matters. Invariants establish sorted output. Recursion trees turn repeated work into a sum, with base costs retained. Comparison trees bound sorting distinct keys; random pivots produce an analyzable distribution. Reading digits changes the model, selection avoids sorting all ranks, generating functions expose coefficients, and amortized analysis bounds whole sequences. The revised Job replaces repeated scans with a stable sort. Its ledger improvement is a checked projection, with corpus counts, fitted instructions and sampled IPC kept separate.",
+      "zh": "我们建立了一套工具，数真正关心的资源。不变式说明输出有序；递归树把重复工作变成求和，并保留基本代价。比较树给互异键排序设下界，随机枢轴带来可分析的分布。读取数位改变模型；选择避免排序全部秩；生成函数提取系数；摊还分析约束整条序列。修改后的任务用稳定排序替代反复扫描。账本中的改进是经过检查的投影，明确分开语料计数、拟合指令数和采样 IPC。"
+    },
+    "7db8381d7168": {
+      "scene": "Outro",
+      "en": "Where this comes back. Part 17 replaces the sort with a hash table, for ledger row eight. Part 18's graph algorithms run on heaps. Part 19 generalizes divide and conquer, and adds dynamic programming. Part 20 builds the probability tools that chapter nine only previewed. Part 21 sorts all the suffixes of a text to search it. Part 26 asks which lower bounds can be proved at all. Part 35's database sorts and joins tables larger than memory, and Part 39's MapReduce is, at heart, a distributed sort.",
+      "zh": "这些会在哪里再出现。第17部分用哈希表取代排序，得到账本第八行。第18部分的图算法跑在堆上。第19部分推广分治，并加入动态规划。第20部分造出第9章只是预览过的概率工具。第21部分为了搜索一段文本，给它所有的后缀排序。第26部分问哪些下界根本能被证明。第35部分的数据库对比内存还大的表做排序和连接，第39部分的 MapReduce 说到底就是一个分布式的排序。"
+    },
+    "a951eb55a730": {
+      "scene": "Outro",
+      "en": "In practice, know your library sort's stability, key interface and worst-case contract. When reviewing nested loops, sum their actual iteration counts: nested syntax alone does not imply quadratic work. Two-pointer scans or shrinking bounds can change the total. Database sorting may use in-memory or external algorithms depending on the plan and data size. Measure representative inputs, check the output, record the protocol, and distinguish an asymptotic bound from a finite timing.",
+      "zh": "实践中，要了解库排序的稳定性、键接口和最坏情况约定。审查嵌套循环时，累加实际迭代次数；仅仅语法嵌套，并不意味着平方级工作。双指针扫描或缩小的边界，都可能改变总量。数据库会按执行计划和数据规模，选用内存或外存算法。测量有代表性的输入，检查输出，记录协议，并区分渐近界与有限计时。"
+    },
+    "22bddb3fce6b": {
+      "scene": "Outro",
+      "en": "The notes contain four worked analysis problems, a radix-sort build plan, and a research starting point. The counting exercises state their distinct-key and random-pivot assumptions. The build problem requires an implemented program, correct output and measured instruction counts. The starred direction first fixes word width, instructions and randomness, then checks what the cited results already establish before proposing an extension. It is not presented as a solved exercise.",
+      "zh": "笔记包含四道分析题的完整解答、一份基数排序构建计划，以及一个研究起点。计数题明确注明互异键和随机枢轴假设。构建题需要实现程序、得到正确输出，并测量指令数。星号方向先固定字宽、指令和随机性，再检查所引结果已经证明了什么，然后提出扩展。它不是一道已经解出的练习。"
+    },
+    "9bd24692775d": {
+      "scene": "Outro",
+      "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+      "zh": "这一部分所依据的书和论文都在屏幕上，也在讲义里。感谢收看。"
+    },
+    "80c305664440": {
+      "scene": "Quick",
+      "en": "Quicksort's average cost has a famously short derivation. <bookmark mark='a'/> Name the elements by their rank in sorted order, z one up to z n, and choose every pivot uniformly at random. <bookmark mark='b'/> Two elements z i and z j are compared at most once, and they are compared exactly when one of them is the first pivot chosen from the range between them. <bookmark mark='c'/> If some element strictly between them is chosen first, they land on opposite sides and never meet. If an element outside the range is chosen, they stay together and wait. <bookmark mark='d'/> So the probability is two out of the j minus i plus one elements in the range. <bookmark mark='e'/> Add over all pairs, and the expected number of comparisons is two times n plus one times the harmonic number, minus four n: about two n natural log n, or one point three nine n log base two n. The leading-term ratio to the information bound approaches one point three nine.",
+      "zh": "快速排序的平均代价有一个出了名简短的推导。<bookmark mark='a'/>按排好序后的秩给元素命名，z₁ 直到 zₙ，每个枢轴都均匀随机地选取。<bookmark mark='b'/>两个元素 zᵢ 和 zⱼ 至多被比较一次，而它们被比较，恰好当它们之一是这个区间里第一个被选为枢轴的元素。<bookmark mark='c'/>如果它们之间的某个元素先被选中，它们就落在两边，永远不会相遇。如果选中的是区间外的元素，它们就留在一起，继续等待。<bookmark mark='d'/>所以概率是区间里 j − i + 1 个元素中的两个。<bookmark mark='e'/>对所有的对求和，比较次数的期望就是 2 乘以 n + 1 乘以调和数，再减 4n：大约 2n ln n，即 1.39 n log₂ n。主项相对信息下界的比值趋于一点三九。"
+    },
+    "3bee6a178c3c": {
+      "scene": "Insertion",
+      "en": "One improvement is obvious. <bookmark mark='a'/> The prefix is sorted, so find each new element's place by binary search instead of scanning. <bookmark mark='b'/> The comparisons drop to about n log n. <bookmark mark='c'/> But the elements still have to be shifted to make room, and the shifts are still the inversions: quadratic on average. <bookmark mark='d'/> Whether that matters depends on what a step costs. When comparing is expensive, as with long strings, binary insertion can save cost; expensive movement is not removed. Counting steps always begins with deciding which steps to count. <bookmark mark='e'/> For twelve items it needs thirty-three comparisons in the worst case; chapter six will show that no method can use fewer than twenty-nine.",
+      "zh": "有一个改进显而易见。<bookmark mark='a'/>前缀是有序的，所以用二分查找而不是逐个扫描来找每个新元素的位置。<bookmark mark='b'/>比较次数降到大约 n log n。<bookmark mark='c'/>可是元素仍然得挪动来腾出位置，而挪动次数仍然是逆序对的个数：平均是平方级。<bookmark mark='d'/>这要不要紧，取决于一步的代价。比较很贵时，比如比较长字符串，二分插入可能更划算；昂贵的挪动工作却没有被消除。数步数总是从决定数哪些步开始。<bookmark mark='e'/>对十二个元素，它在最坏情况下要三十三次比较；第6章会证明，没有哪种方法能少于二十九次。"
+    },
+    "9489058cc536": {
+      "scene": "Outro",
+      "en": "Next time: dictionaries. Insert a word, look it up, add one. Hashing gives expected constant probes under its hash and load assumptions; reading and hashing a string still costs its letters. Balanced search trees bound the number of comparisons logarithmically. With union by rank and path compression, union-find has an inverse-Ackermann amortized bound over operation sequences. Part 17, Data Structures, develops those guarantees and their conditions.",
+      "zh": "下一次：字典。插入单词，查找它，再加一。在相应的哈希和负载假设下，哈希提供期望常数次探测；读取和散列字符串，仍需处理它的字母。平衡搜索树把比较次数限制为对数级。使用按秩合并和路径压缩时，并查集对操作序列具有反阿克曼级摊还界。第17部分，数据结构，会推导这些保证和条件。"
+    }
+  },
+  "title_en": "Computer Science, Built: Part 16, Counting Steps",
+  "chapters_en": {
+    "Hook": "Can thinking beat silicon?",
+    "Models": "1. What counts as a step",
+    "Growth": "2. Orders of growth",
+    "Insertion": "3. Insertion sort and its invariant",
+    "Merge": "4. Merge sort and the recursion tree",
+    "Master": "5. The master theorem",
+    "Lower": "6. The comparison lower bound",
+    "Heap": "7. Heapsort",
+    "Quick": "8. Quicksort, and 2n ln n",
+    "Concentration": "9. How lucky can quicksort get?",
+    "Linear": "10. Beating n log n",
+    "Select": "11. Selection and the median of medians",
+    "Generating": "12. Generating functions",
+    "Amortized": "13. Amortized analysis",
+    "Practice": "14. Sorting in practice",
+    "Job": "15. The Job, sorted",
+    "Frontier": "16. Frontier: beyond the worst case",
+    "Outro": "Recap, problems, and where this comes back"
+  }
+}

@@ -1,0 +1,505 @@
+"""Chinese narration for cs54: see tools/zh_lines.py (literal lines by prefix, computed lines as templates)."""
+
+TITLE = "计算机科学，从零搭建 · 第54部分：证明程序正确"
+
+CHAPTERS = {
+    "Hook": "错误的代价",
+    "Specs": "1. 规约，以及第一个程序证明",
+    "Hoare": "2. 弗洛伊德–霍尔逻辑",
+    "Bsearch": "3. 二分查找，得证",
+    "Wp": "4. 最弱前置条件，用 SAT 检查",
+    "Separation": "5. 分离逻辑",
+    "Modelcheck": "6. 模型检验",
+    "Symbolic": "7. 符号模型检验与有界模型检验",
+    "Absint": "8. 抽象解释",
+    "Types": "9. 作为轻量级证明的类型",
+    "Assistants": "10. 证明助手",
+    "Verified": "11. 经过验证的系统",
+    "Tla": "12. 为系统写规约：TLA+",
+    "Testing": "13. 作为科学的测试",
+    "Compiler": "14. 对我们的编译器做模糊测试与确认",
+    "Frontier": "15. 前沿：大规模的证明",
+    "Outro": "回顾、习题，以及它们会在哪里再出现",
+}
+
+ZH = {
+    # ------------------------------------------------------------------ s01_hook
+    "Three bugs. <bookmark mark='a'/> In 1996 the first Ariane 5":
+        "三个错误。<bookmark mark='a'/>1996年，第一枚阿丽亚娜5型火箭在发射37秒后自毁，原因是一段重用的代码把一个64位浮点数转换成16位整数，结果溢出了。"
+        "<bookmark mark='b'/>1985年到1987年间，Therac-25 放射治疗机软件中的竞争条件让病人受到了大剂量的过量照射，其中一些人死亡。<bookmark mark='c'/>2014年，"
+        "OpenSSL 里缺失的一处边界检查，让任何人都能从服务器的内存里读出秘密。<bookmark mark='d'/>这三个程序都经过了测试。艾兹格·迪杰斯特拉在1970年说过：测试可以表明错误存在，"
+        "却永远不能表明错误不存在。",
+    'f"Here is a bug of the famous kind.':
+        "这是一个著名的那类错误。<bookmark mark='a'/>二分查找需要中点落在 low 和 high 之间。教科书上的那一行把两者相加，再把和减半。"
+        "<bookmark mark='b'/>我们把这个要求变成一个关于16位整数的逻辑公式，交给第26部分我们自己的 SAT 求解器。它用{bad['seconds']:.2f}秒找到了一个反例：两者之和溢出，"
+        "绕回成一个负数，于是中点落到了范围之外。<bookmark mark='c'/>修好的那一行把差做无符号移位，它让这个公式不可满足：对每一个16位输入都正确，这是证明，而不是测试。"
+        "<bookmark mark='d'/>Joshua Bloch 在2006年报告说，这个溢出在 Java 的二分查找里待了9年。莱斯定理说，正确性一般来说是不可判定的，所以这一部分从三条路绕过它。",
+    "This is Part 54 of Computer Science, Built.":
+        "这是《计算机科学，从零搭建》的第54部分。<bookmark mark='a'/>绕过莱斯定理的三条路是：自己写出不变量，穷尽一个有限的状态空间，或者做可靠的近似。我们会用霍尔逻辑和最弱前置条件证明程序；"
+        "用分离逻辑对堆进行推理；以显式的方式、符号的方式以及用 SAT 对协议做模型检验；用抽象解释分析程序；认识检查数学的证明助手，以及用它们证明过的系统；还会对我们自己的编译器做模糊测试，直到它招供。",
+    # ------------------------------------------------------------------ s02_specs
+    "Chapter one. Specifications, and the first program proof.":
+        "第一章：规约，以及第一个程序证明。",
+    "A program is correct only relative to a specification of":
+        "一个程序是否正确，只是相对于一份说明它该做什么的规约而言的。<bookmark mark='a'/>通常的形式是一对条件。前置条件是调用者所承诺的：对这个求最大值的函数，什么也不要求，所以它就是“真”。"
+        "<bookmark mark='b'/>后置条件是代码反过来承诺的：结果至少是 a，至少是 b，并且等于两者之一。<bookmark mark='c'/>规约说做什么；代码说怎么做。"
+        "证明表明两者在每一个输入上都一致，而不只是在我们碰巧试过的那些输入上。",
+    "Writing the specification is half the work, and it is easy":
+        "写规约是一半的工作，而且很容易写错。<bookmark mark='a'/>去掉我们后置条件的最后一个子句。只返回 a 仍然通不过。<bookmark mark='b'/>但返回32767，"
+        "也就是最大的16位整数，对每一个输入都至少是 a、至少是 b：它满足被削弱的规约，却毫无用处。<bookmark mark='c'/>经典的例子是排序。如果只要求输出是有序的，那么返回空列表就是正确的。"
+        "输出还必须是输入的一个排列。",
+    "Some specifications must talk about the past.":
+        "有些规约必须谈到过去。<bookmark mark='a'/>要说这段代码交换了 x 和 y，后置条件需要它们的初始值。我们把它们叫作大写的 X 和大写的 Y：幽灵变量，程序从不读写它们，它们只活在规约里。"
+        "<bookmark mark='b'/>在16位整数上运行这三行。第一行做加法，和溢出了，绕回成一个负数。<bookmark mark='c'/>第二行做减法，绕回又自行抵消了：y 现在存着原来的 x。"
+        "<bookmark mark='d'/>第三行把原来的 y 给了 x。在第四章，我们的 SAT 求解器会对每一对值证明这一点。",
+    "The idea of proving a program is as old as the":
+        "证明程序的想法和存储程序计算机一样古老。<bookmark mark='a'/>1949年6月，在剑桥的一次会议上，阿兰·图灵做了一个简短的报告，"
+        "题为《检查一个大型例程》（Checking a Large Routine）。他的例子在一台没有乘法器的机器上，用反复相加来计算 n 的阶乘，一个循环套在另一个循环里。这是一个按那种思路写的例程。"
+        "<bookmark mark='b'/>图灵把断言附在流程图的各个点上：每当控制经过这里，u 等于 r 的阶乘；在内层循环里，u 是 s 乘以 r 的阶乘。<bookmark mark='c'/>在停机框处，"
+        "断言就是规约本身。<bookmark mark='d'/>取 n 等于5运行一次，可以看到断言在每一次经过时都成立；而论证覆盖了每一个 n。",
+    "Why assertions? Turing explained with an analogy.":
+        "为什么用断言？图灵用一个类比来解释。<bookmark mark='a'/>一下子检查一个很长的加法很难。但如果写的人把进位也写出来，每一列就能单独检查：4加6加5是15，写5进1；依此类推。"
+        "<bookmark mark='b'/>每一次检查都很小，也不依赖其他检查，可合在一起，它们覆盖了整个求和。<bookmark mark='c'/>断言就是程序的进位：两条断言之间的每一步都单独检查，"
+        "整体的正确性随之而来。<bookmark mark='d'/>图灵还论证了这个例程会停下来，靠的是一个每一步都在减小的量：第三章的递减量。",
+    "Turing's paper was largely overlooked until Morris and Jones":
+        "图灵的论文基本上被忽视了，直到1984年 Morris 和 Jones 写文章介绍它。<bookmark mark='a'/>与此同时，这个想法又回来了。1967年，罗伯特·弗洛伊德把断言附在流程图的边上，"
+        "为每一种框给出使这一步正确的条件，并用良基集证明了终止。<bookmark mark='b'/>1969年，托尼·霍尔把它变成了一种关于程序文本的逻辑，有三元组、公理和推理规则。"
+        "<bookmark mark='c'/>这种逻辑就是下一章的内容。",
+    # ------------------------------------------------------------------ s03_hoare
+    "Chapter two. Floyd–Hoare logic.":
+        "第二章：弗洛伊德–霍尔逻辑。",
+    "Hoare's logic has one kind of sentence. <bookmark mark='a'/>":
+        "霍尔逻辑只有一种句子。<bookmark mark='a'/>P、c、Q 是说：如果 c 运行之前 P 成立，并且 c 结束了，那么之后 Q 成立。"
+        "<bookmark mark='b'/>把每个断言看作一个状态的集合：每一次从 P 出发并且结束的运行，都结束在 Q 里。<bookmark mark='c'/>一次永不结束的运行平凡地满足这个三元组。"
+        "这叫部分正确性，终止需要单独证明。<bookmark mark='d'/>如果 x 是5，那么在 x 赋值为 x 加1之后，x 是6。",
+    "Assignment comes first, and it runs backwards.":
+        "赋值排在第一位，而且它是倒着走的。<bookmark mark='a'/>要知道在 x 赋值为 e 之前必须成立什么，就取我们之后想要的条件，把其中每一处 x 都写成 e。"
+        "<bookmark mark='b'/>我们希望在 x 赋值为 x 加1之后，x 大于5。代入：x 加1大于5。<bookmark mark='c'/>化简：x 大于4。"
+        "<bookmark mark='d'/>我们的工具对真实的代码做同样的事，这里是交换程序的最后一行。<bookmark mark='e'/>往前走更难：赋值毁掉了原来的 x，规则需要一个存在量词来记住它。",
+    "Sequencing glues triples together: if c one takes P to R,":
+        "顺序规则把三元组粘在一起：如果 c1 把 P 带到 R，c2 把 R 带到 Q，那么两者合起来就把 P 带到 Q。<bookmark mark='a'/>这就给出了一种机械的方法。从交换程序底部的后置条件开始。"
+        "<bookmark mark='b'/>用代入把它一行一行往上推。<bookmark mark='c'/>两行之间的每一条断言就是规则里的 R，不需要任何巧思。"
+        "<bookmark mark='d'/>现在必须把到达顶部的东西和前置条件作比较。",
+    "The rule of consequence lets us strengthen a precondition or":
+        "推论规则让我们可以加强前置条件，或者削弱后置条件。<bookmark mark='a'/>这就是到达交换程序顶部的东西。<bookmark mark='b'/>x 加 y 减 y 等于 x。"
+        "<bookmark mark='c'/>而 x 加 y 减 x 等于 y。<bookmark mark='d'/>重新排一下顺序，它就是前置条件，交换程序证明完毕。"
+        "<bookmark mark='e'/>这些恒等式在16位的回绕算术里也成立，所以即使和溢出了，交换也是对的。剩下的是一个关于整数的命题，也就是一个验证条件，留给机器去检查。",
+    "For a conditional, prove both branches, each knowing which":
+        "对条件语句，要证明两个分支，每个分支都知道测试走了哪条路。<bookmark mark='a'/>把求最大值的后置条件沿每个分支往上推。<bookmark mark='b'/>在一个分支里，m 变成 a；"
+        "在另一个里，变成 b。<bookmark mark='c'/>当 a 至少是 b 时，第一个的每一部分都为真；否则 b 大于 a，第二个的每一部分都为真。"
+        "<bookmark mark='d'/>整个 if 的前置条件把两者合在一起，它总是成立，所以“真”就足够了。",
+    "Loops need the one ingredient a machine cannot supply: an":
+        "循环需要一样机器提供不了的东西：不变量。<bookmark mark='a'/>如果循环体在不变量和测试都为真时进入，又恢复了不变量，那么循环退出时，不变量为真而测试为假。"
+        "<bookmark mark='b'/>高斯的循环把1、2、3一直加到 n，它的不变量说：2倍的 s 等于 i 乘以 i 加1。<bookmark mark='c'/>循环体执行之后，"
+        "2倍的新 s 等于2倍的 s 加上2倍的 i 加1。<bookmark mark='d'/>用不变量替换2倍的 s；提出公因式 i 加1，它又是不变量，只是往前走了一步。"
+        "<bookmark mark='e'/>在出口处，i 等于 n：这就是高斯公式。",
+    "Two questions about any logic. <bookmark mark='a'/> Is it":
+        "关于任何一种逻辑，都有两个问题。<bookmark mark='a'/>它可靠吗：每个推导出来的三元组都为真吗？是的，对推导做归纳即可。<bookmark mark='b'/>它完备吗："
+        "每个为真的三元组都能推导出来吗？不是绝对的。三元组“真、c、假”成立，恰好当 c 永不停机，而这是不可判定的；而且关于整数的断言包含了全部算术，哥德尔证明了没有哪个证明系统能把它完全刻画。"
+        "<bookmark mark='c'/>1978年，斯蒂芬·库克证明了可能的最好结果：如果推论规则可以查阅每一条为真的断言，并且断言能表达证明所需要的东西，那么每一个为真的三元组都可以推导出来。"
+        "霍尔逻辑相对于算术是完备的。",
+    # ------------------------------------------------------------------ s04_bsearch
+    "Chapter three. Binary search, proved.":
+        "第三章：二分查找，得证。",
+    "Binary search is the classic test of reasoning about a loop.":
+        "二分查找是对循环推理的经典考验。<bookmark mark='a'/>我们在一个有序数组里找第一个至少为 x 的元素。两个下标 low 和 high 把答案夹在中间。"
+        "<bookmark mark='b'/>不变量是：low 左边的一切都小于 x，从 high 开始的一切都至少是 x，而且 low 永远不会越过 high。"
+        "<bookmark mark='c'/>每一步看中间的元素，移动一端，并保持不变量为真。<bookmark mark='d'/>当 low 和 high 相遇时，再没有未知的部分，单凭不变量就能说明 low 就是答案。",
+    "Our checker sees the loop's skeleton. <bookmark mark='a'/>":
+        "我们的检查器看到的是循环的骨架。<bookmark mark='a'/>与数组的比较变成一个未知量 c，每一轮重新选取，所以证明出来的东西对每一个数组、每一个目标都成立。"
+        "<bookmark mark='b'/>里面的断言就是数组访问：中间的下标必须在范围之内。<bookmark mark='c'/>我们提供不变量，low 在零和 high 之间，以及一个递减量，"
+        "high 减 low。<bookmark mark='d'/>产出五个验证条件。在16位整数上做位展开，交给第26部分的 SAT 求解器，五个全部有效；最难的一个花了大约1.5秒。"
+        "查找性质本身需要对数组进行推理，这个小检查器把它略去了。",
+    "Now restore the textbook midpoint: add low and high, and":
+        "现在恢复教科书上的中点：把 low 和 high 相加，再减半。<bookmark mark='a'/>求解器不再能证明不变量得到保持。它返回一个反例：low 是15072，high 是25558。"
+        "<bookmark mark='b'/>它们的和40630，超过了最大的16位整数，绕回成负24906。<bookmark mark='c'/>减半之后是负12453，远远低于 low：数组访问失败了。"
+        "<bookmark mark='d'/>Joshua Bloch 在2006年报告说，这一行就在 Java 的库里，也在乔恩·本特利在《编程珠玑》中证明为正确的那个二分查找里。那个证明对数学上的整数是对的，"
+        "对机器却是错的。",
+    "The solver can judge every proposed repair.":
+        "求解器可以评判每一个被提出的修补。<bookmark mark='a'/>教科书上的中点失败了。Bloch 的第一个修正，low 加上差的一半，对非负下标得到了证明；他的第二个修正，对和做无符号移位，"
+        "也得到了证明，因为这个移位把丢掉的进位当作最高位读了回来。<bookmark mark='b'/>去掉 low 非负这个假设，第一个修正也失败了：差本身就溢出了。"
+        "<bookmark mark='c'/>把差做无符号移位，对每一个小于 high 的 low 都是对的。每一个判定都只花了不到一秒。",
+    "Partial correctness says nothing if the loop runs for ever;":
+        "如果循环永远运行下去，部分正确性什么也说明不了；完全正确性加上了终止，而工具就是递减量。<bookmark mark='a'/>找一个始终非负、并且每一轮都严格变小的量。这里它是 high 减 low。"
+        "<bookmark mark='b'/>把 low 移到 mid 加1会缩小间隔，因为 mid 至少是 low；把 high 移到 mid 也会缩小它，因为 mid 小于 high。"
+        "<bookmark mark='c'/>两者都依赖于中点落在范围之内，而用教科书上的中点，求解器把这个条件也驳倒了。<bookmark mark='d'/>在一次运行中，间隔每一轮都在缩小，"
+        "而一个自然数不可能永远缩小下去。",
+    "Variants need not be numbers. <bookmark mark='a'/> A":
+        "递减量不一定是数。<bookmark mark='a'/>终止证明只需要一种没有无限下降链的序：良基序。<bookmark mark='b'/>像字典里的词那样比较的数对就是一种。只要第一个数减小，"
+        "第二个数就可以往上跳，所以一次下降可以很长，但永远不会没有尽头。<bookmark mark='c'/>人们正是这样证明阿克曼函数会终止的，尽管它的值会爆炸式增长：每一次递归调用都让它的参数对在这种序下变小。"
+        "<bookmark mark='d'/>弗洛伊德在1967年用这样的集合证明了终止。",
+    # ------------------------------------------------------------------ s05_wp
+    "Chapter four. Weakest preconditions, checked by SAT.":
+        "第四章：最弱前置条件，用 SAT 检查。",
+    "Hoare's rules check a proof; Dijkstra's weakest":
+        "霍尔的规则检查一个证明；迪杰斯特拉的最弱前置条件则计算出一个证明。<bookmark mark='a'/>对一条语句 c 和一个后置条件 Q，最弱前置条件是所有这样的初始状态的集合：从它们出发，"
+        "c 一定会结束在 Q 里面。<bookmark mark='b'/>每一个有效的前置条件都位于它之内，所以一个三元组成立，恰好当它的前置条件蕴涵最弱前置条件。"
+        "<bookmark mark='c'/>迪杰斯特拉在1975年和他的守卫命令一起提出了这个想法，作为一种把程序和它们的证明一起推导出来的演算。把它读作一个从后置条件到前置条件的函数，它就把证明变成了计算。",
+    "The rules become equations. <bookmark mark='a'/> Assignment":
+        "规则变成了等式。<bookmark mark='a'/>赋值是代入。顺序组合先处理第二条语句，再处理第一条。条件语句按它的测试分开。断言添上一个合取项，而 havoc，也就是一个未知的值，"
+        "意味着条件必须对每一个值都成立。<bookmark mark='b'/>这是我们的工具处理高斯循环的开头。循环贡献出它的不变量。<bookmark mark='c'/>把它往上推过 s 赋值为零，"
+        "就是把 s 写成零；推过 i 赋值为零，就是把 i 写成零。<bookmark mark='d'/>剩下的必须由前置条件，n 至少为零，推出来。这个蕴涵就是第一个验证条件，它显然为真。",
+    "Loops are where the calculation needs help.":
+        "循环正是计算需要帮助的地方。<bookmark mark='a'/>我们把循环的不变量和一个递减量交给生成器。<bookmark mark='b'/>它把程序变成五个封闭公式：不变量在进入时成立，被循环体保持，"
+        "并且和退出测试一起推出后置条件；递减量保持非负，并且每一轮都减小。<bookmark mark='c'/>每个公式只谈论整数。程序已经消失了。如果它们全部有效，程序就是正确的；如果有一个不成立，"
+        "那么要么程序错了，要么它的标注错了。",
+    "How does a SAT solver judge a statement about integers?":
+        "SAT 求解器怎样评判一个关于整数的命题？<bookmark mark='a'/>一个公式有效，恰好当它的否定没有满足赋值。所以我们把它取否定，再翻译。"
+        "<bookmark mark='b'/>每个16位整数变成16个布尔变量，加法变成一串传递进位的全加器，也就是第4部分的电路。<bookmark mark='c'/>每个门变成一个新变量和几个子句；"
+        "一个与门是三个。<bookmark mark='d'/>对交换程序，结果是425个变量和1239个子句。第26部分的 CDCL 求解器在大约四分之一秒内表明它们不可满足，所以对每一对16位的值，交换都是对的。",
+    "Here is every program of this part so far.":
+        "这是这一部分到目前为止的每一个程序。<bookmark mark='a'/>求最大值、交换和二分查找的循环在16位上得到证明。高斯的循环在8位上得到证明，原因我们马上就会看到。"
+        "<bookmark mark='b'/>用教科书中点的二分查找被驳倒了：它的五个条件中有两个不成立，每个都带着求解器给出的具体值。<bookmark mark='c'/>反例从来不会被盲目相信。"
+        "工具会在求解器给出的值上对公式求值，检查它确实为假。",
+    "Multiplication is where this approach strains.":
+        "乘法是这种方法吃力的地方。<bookmark mark='a'/>高斯的条件比较两个乘积，而乘法器是 SAT 的经典难题。字长每多两位，我们的求解器就要多花好几倍的时间：从4位时的5毫秒，到10位时的2秒多。"
+        "<bookmark mark='b'/>工业级的验证器把它们的条件交给 SMT 求解器，比如微软研究院的 Z3，它把 SAT 搜索与针对算术、数组和位向量的判定过程结合起来。比如 Dafny 就是这样工作的。"
+        "<bookmark mark='c'/>而当求解器说不可满足时，它还能给出一个证明，由一个小而独立的检查器来验证，这是第十章会放到中心的主题。",
+    # ------------------------------------------------------------------ s06_separation
+    "Chapter five. Separation logic.":
+        "第五章：分离逻辑。",
+    "Hoare's logic treats each variable as its own box, and":
+        "霍尔逻辑把每个变量当作一个独立的盒子，而指针打破了这一点。<bookmark mark='a'/>假设 y 的字段存着2，我们通过 x 存入3。赋值公理说 y 的字段仍然存着2，因为后置条件从没提到 x。"
+        "<bookmark mark='b'/>如果 x 和 y 指向不同的单元，这是对的。<bookmark mark='c'/>如果它们指向同一个单元，这就是错的。"
+        "<bookmark mark='d'/>经典的补救办法是把堆当作一个大数组，于是每一次读取都必须问两个指针是否相等。<bookmark mark='e'/>有 n 个指针时，大约是 n 的平方除以2种情形。",
+    "Around two thousand and one, John Reynolds, Peter O'Hearn":
+        "2001年前后，约翰·雷诺兹、Peter O'Hearn 和 Hongseok Yang 让每个断言描述堆的一部分。<bookmark mark='a'/>emp 对空堆成立；x 指向 v 恰好对一个单元成立。"
+        "<bookmark mark='b'/>分离合取，P 星 Q，说的是堆分成两个不相交的部分，P 对其中一部分成立，Q 对另一部分成立。"
+        "<bookmark mark='c'/>用星号连起来的两个单元位于不同的地址；用普通的“与”连起来，它们就必须是同一个单元。<bookmark mark='d'/>一个列表要么是空的，要么是第一个结点，"
+        "再分离地连着列表的其余部分。",
+    "The heap's rules are small. <bookmark mark='a'/> A store":
+        "堆的规则都很小。<bookmark mark='a'/>向 x 处的单元存值，恰好需要那一个单元；读取、分配和释放也同样是局部的。<bookmark mark='b'/>其他一切都通过框架规则回来："
+        "如果 c 把 P 带到 Q，那么它把 P 星 R 带到 Q 星 R，前提是 c 不改变 R 的任何变量。<bookmark mark='c'/>c 触及的部分是它的足迹；其余的是框架。"
+        "<bookmark mark='d'/>我们的存值：小公理给出 x 指向3。<bookmark mark='e'/>再框上 y 指向2。星号已经排除了别名，所以不需要分情形讨论。O'Hearn 把这叫作局部推理。",
+    "Reynolds' showcase was reversing a linked list in place.":
+        "雷诺兹的招牌例子是原地反转一个链表。<bookmark mark='a'/>变量 i 沿着旧列表往下走，j 收集已经反转的部分，k 记住接下来的路。"
+        "<bookmark mark='b'/>每一轮保存 i 的后继，把 i 的 next 指针掉头指向 j，再把两者都往前移一个结点。<bookmark mark='c'/>每次一个结点离开 i 的列表，"
+        "来到 j 的列表的前端，直到 i 为 nil。<bookmark mark='d'/>没有分配，也没有释放任何东西。正确性意味着两个列表从不共享一个单元，也从不丢掉一个单元，而这正是星号能表达的。",
+    "One invariant does it. <bookmark mark='a'/> Two lists, alpha":
+        "一个不变量就够了。<bookmark mark='a'/>两个列表，从 i 出发的 alpha 和从 j 出发的 beta，用星号分开；并且原列表的反转等于 alpha 的反转后面接上 beta。"
+        "<bookmark mark='b'/>在 i 不为 nil 时进入循环体：i 的列表有第一个结点 a。<bookmark mark='c'/>把它展开；读取 i.next 把其余部分命名为 k。"
+        "<bookmark mark='d'/>对 i.next 的存值只触及一个单元。小公理处理它，框架规则把另外两个列表原样带过去。<bookmark mark='e'/>折叠："
+        "i 现在是列表 a 后接 beta 的表头。<bookmark mark='f'/>重新命名就恢复了不变量。<bookmark mark='g'/>在出口处 alpha 为空，而 j 存着反转后的列表。",
+    "The frame rule also makes proofs compositional.":
+        "框架规则还让证明变得可组合。<bookmark mark='a'/>一个过程的规约只提到它的足迹，所以它只需单独证明一次，就能在任何地方重用。<bookmark mark='b'/>2009年，"
+        "Calcagno、Distefano、O'Hearn 和 Yang 用双向溯因推断出这样的规约：在每一次调用处，找出调用者缺少的那部分堆，以及调用不去碰的框架。"
+        "<bookmark mark='c'/>Facebook 在2013年收购了它背后的初创公司 Monoidics。它的分析器 Infer 从2015年起开源，检查代码变更中的空指针解引用和泄漏。"
+        "<bookmark mark='d'/>并发分离逻辑为 O'Hearn 和 Stephen Brookes 赢得了2016年的哥德尔奖，"
+        "而它的后代 Iris 是 RustBelt 关于 Rust 的那些证明的基础，第55部分会再谈到它们。",
+    # ------------------------------------------------------------------ s07_modelcheck
+    "Chapter six. Model checking.":
+        "第六章：模型检验。",
+    "A model checker explores behaviour rather than text.":
+        "模型检验器探索的是行为，而不是文本。<bookmark mark='a'/>行为是一个克里普克结构，得名于索尔·克里普克为模态逻辑给出的语义：一个状态集合，其中一些是初始状态。"
+        "<bookmark mark='b'/>转移说明哪个状态可以跟在哪个状态后面；每个状态都有后继，所以每一次运行都是一条无限路径。<bookmark mark='c'/>每个状态都标上在其中为真的简单事实。"
+        "<bookmark mark='d'/>第33部分的彼得森锁，由我们的检验器按广度优先探索，有20个状态和46条转移。",
+    "Unroll the structure from its initial state, and you get a":
+        "把这个结构从它的初始状态展开，就得到一棵包含每一种可能未来的树。<bookmark mark='a'/>Amir Pnueli 1977年的线性时序逻辑，一次只谈论一条路径：总是、最终、直到。"
+        "<bookmark mark='b'/>克拉克和埃默森1981年的 CTL 加上了路径量词：A 表示所有路径，E 表示某条路径。<bookmark mark='c'/>E F q：某条路径到达 q。为真。"
+        "<bookmark mark='d'/>A G p：在每条路径上，处处都是 p。为假。<bookmark mark='e'/>A F q：每条路径都到达 q。为假：这一条停在了死胡同里。"
+        "<bookmark mark='f'/>E G p：某条路径永远保持 p。为真，绕着那个环走。",
+    "CTL is checked backwards, over sets of states.":
+        "CTL 是倒着检查的，在状态集合上进行。<bookmark mark='a'/>E F q 要么现在成立，要么晚一步成立。<bookmark mark='b'/>这是一个关于未知集合的方程，"
+        "而 E F q 是它的最小解。<bookmark mark='c'/>迭代：从 q 状态开始，把每一个在集合里有后继的状态加进来，然后重复。集合沿着转移倒着增长。"
+        "<bookmark mark='d'/>四轮之后再没有变化，死胡同始终没有加入。<bookmark mark='e'/>E G 是一个最大不动点，其余的由对偶性得出，整个检查所花的时间与结构的大小成线性，"
+        "这是克拉克、埃默森和 Sistla 在1986年证明的。",
+    "Now a real algorithm. <bookmark mark='a'/> Peterson's lock:":
+        "现在来看一个真正的算法。<bookmark mark='a'/>彼得森锁：举起你的旗子，把轮次让给另一个进程，然后等待，直到它的旗子放下，或者轮到你。"
+        "<bookmark mark='b'/>我们的检验器在全部20个状态上回答六个问题。互斥成立；锁永远不会卡住；一个等待的进程总是能够进去。<bookmark mark='c'/>但一个等待的进程并不总是会进去。"
+        "<bookmark mark='d'/>第33部分的检验器以单次的读取和存储为单位工作，在互斥这一点上与它一致。",
+    "That failure is about liveness: something good must":
+        "那个失败关乎活性：某件好事最终必须发生。<bookmark mark='a'/>每当进程零尝试进入，它最终都会进去。<bookmark mark='b'/>反例是一个套索，一段柄后面跟着一个永远重复的环。"
+        "进程零举起旗子，让出轮次。<bookmark mark='c'/>门是开着的，但调度器只运行进程一，而进程一什么也不做。<bookmark mark='d'/>没有哪个真实的调度器会那么不公平。假定弱公平性，"
+        "也就是一个一直保持可执行的步骤最终会被执行，那么这个性质对两个进程都成立。",
+    "A failed check comes with a counterexample.":
+        "失败的检查会附带一个反例。<bookmark mark='a'/>先让出轮次再举起旗子，检验器就找到一条六步的路径，让两个进程同时进入临界区。<bookmark mark='b'/>搜索是广度优先的，"
+        "所以不存在更短的路径。<bookmark mark='c'/>同一个工具还检查了第38部分的一个小型 Raft 选举：三个结点、两个任期，一个任期里永远不会有两位领导者。"
+        "<bookmark mark='d'/>植入一个会忘记自己投票的投票者，六步之后，同一个任期里就出现了两位领导者。",
+    "The catch is size. <bookmark mark='a'/> Dijkstra's dining":
+        "问题在于规模。<bookmark mark='a'/>迪杰斯特拉的哲学家就餐问题：两位哲学家有6个状态；八位有1154个。每增加一位哲学家，状态数大约乘以2.4：这就是状态爆炸。"
+        "<bookmark mark='b'/>对每一种规模，检验器都能在 n 步内找到死锁，也就是每个人都拿着左边的叉子。<bookmark mark='c'/>按一个全局顺序拿叉子，也就是第33部分的治法，"
+        "就没有可以到达的死锁。<bookmark mark='d'/>但在弱公平性下，一位哲学家仍然可能陷入饥饿，在强公平性下则不会。要走得更远，我们就必须停止一个一个地列举状态。",
+    # ------------------------------------------------------------------ s08_symbolic
+    "Chapter seven. Symbolic and bounded model checking.":
+        "第七章：符号模型检验与有界模型检验。",
+    "Explicit checking lists states one at a time; symbolic":
+        "显式检验一次列出一个状态；符号检验用公式描述整个集合。<bookmark mark='a'/>给每位哲学家两个位：是否拿着他的第一把叉子，以及是否在吃饭。"
+        "<bookmark mark='b'/>三位哲学家的一个状态就是六个位，而一个状态集合就是一个布尔函数，恰好在它的成员上为真。"
+        "<bookmark mark='c'/>动作变成关于当前各位、以及表示下一状态的带撇副本的公式。如果哲学家零没有拿着叉子零，并且和他共用这把叉子的哲学家二没有在吃饭，哲学家零就可以拿起叉子零。"
+        "<bookmark mark='d'/>之后他就拿着它。<bookmark mark='e'/>其他每一位都保持不变。<bookmark mark='f'/>所有命令的析取就是整个系统。",
+    "Part 3 built the data structure for such functions.":
+        "第3部分为这样的函数搭建了数据结构。<bookmark mark='a'/>这个四位的函数说的是两对位分别相等。作为决策树，它需要15次测试。"
+        "<bookmark mark='b'/>兰德尔·布莱恩特1986年的化简合并相同的子图，并跳过两个分支相同的测试：剩下6个结点。<bookmark mark='c'/>结果是规范的：对一个固定的顺序，"
+        "每个函数只有一个图，所以比较两个状态集合只需要一次指针比较。<bookmark mark='d'/>但顺序很要紧。先读两个 x 位，再读任何一个 y 位，图在读 x2 的时候就必须记住 x1：9个结点。",
+    "How much does order matter? <bookmark mark='a'/> Our package":
+        "顺序到底有多要紧？<bookmark mark='a'/>我们的程序包为多达12对位构造同样的相等函数。交错排列时，每一对花3个结点：一共36个。分开排列时：12285个。"
+        "<bookmark mark='b'/>x 位在前时，图在它们上面是一棵满树，每个分支都必须记住它还在等待哪些 y 值。<bookmark mark='c'/>把各层加起来，得到3乘以2的 n 次方，再减3。"
+        "<bookmark mark='d'/>找到最好的顺序是 NP 难的。而布莱恩特在1991年证明了，乘法根本没有好的顺序，这正是我们的 SAT 求解器在第四章撞上的那堵墙。",
+    "Reachability becomes a loop over formulas.":
+        "可达性变成一个关于公式的循环。<bookmark mark='a'/>一个集合的像，也就是它的后继，是一次关系积：先与转移关系取合取，再把当前的各位量化掉。"
+        "<bookmark mark='b'/>这个关系按每条命令一小块的方式保存。<bookmark mark='c'/>从初始状态开始，加上像，重命名，重复；每一轮都多走一步。"
+        "<bookmark mark='d'/>当一轮什么也没加时，我们就得到了每一个可达状态，而规范性让发现这一点只需一次比较。<bookmark mark='e'/>16位哲学家需要16次求像："
+        "1331714个状态，用时不到一秒。",
+    "Here is the pay-off. <bookmark mark='a'/> In yellow, the":
+        "这就是回报。<bookmark mark='a'/>黄色的是可达状态，在16位哲学家时超过了100万。绿色的是存放它们的图：每多一位哲学家它只增加8个结点，最后是117个。"
+        "<bookmark mark='b'/>直到八位哲学家，显式检验器的计数都与之完全一致。<bookmark mark='c'/>死锁也能用符号方法找到。<bookmark mark='d'/>教训是："
+        "决定成败的是结构，而不是规模。一圈相同的邻居很适合 BDD；乘法器则不然。",
+    "SAT solvers attack the explosion from the other side.":
+        "SAT 求解器从另一边对付状态爆炸。<bookmark mark='a'/>有界模型检验由 Biere、Cimatti、克拉克和 Zhu 在1999年提出，它把转移展开 k 次：一个初始状态、k 步，"
+        "最后是一个死锁。一个满足赋值就是一个反例。<bookmark mark='b'/>对七位哲学家，我们依次尝试 k 等于0、1、2，等等。驳斥越来越难：k 等于6时要花2598次冲突。"
+        "<bookmark mark='c'/>到7时，公式可满足了，解码出来的模型就是那个死锁。<bookmark mark='d'/>按顺序拿叉子时，直到7的每一个界都不可满足，而每一个可达状态都在5步之内，"
+        "所以这就是一个证明。<bookmark mark='e'/>在不知道直径的时候，k 归纳和 IC3 用同样的求解器证明无界的性质。",
+    # ------------------------------------------------------------------ s09_absint
+    "Chapter eight. Abstract interpretation.":
+        "第八章：抽象解释。",
+    "The third way around Rice's theorem is to approximate":
+        "绕过莱斯定理的第三条路是做可靠的近似，Patrick Cousot 和 Radhia Cousot 在1977年提出了这套理论。<bookmark mark='a'/>一个带两个计数器的循环，"
+        "在它的头部到达11个状态，全都在一条直线上。<bookmark mark='b'/>不用精确的集合，而是用更简单的集合来计算：这里是一个盒子，每个变量一个范围。"
+        "<bookmark mark='c'/>盒子包含每一个真实的状态，所以如果它避开了坏状态，程序也就避开了：这是一个证明。<bookmark mark='d'/>一个更粗糙的盒子可能碰到坏区域而发出警报，"
+        "尽管没有哪个真实状态是坏的。可靠的分析从不漏掉错误；代价是误报。",
+    "For one variable the simpler sets are intervals, and they":
+        "对一个变量，更简单的集合就是区间，它们构成一个格。<bookmark mark='a'/>最底下是空区间，对应不可达的代码；最顶上是全体整数；每个区间都位于包含它的那些区间之下。"
+        "<bookmark mark='b'/>在两个分支汇合的地方，区间通过取它们的包来合并，这会拾取两个分支都没有的值。<bookmark mark='c'/>抽象把一个集合映射到包含它的最小区间；"
+        "具体化把一个区间映射回它的那些数。两者一起构成一个伽罗瓦连接：抽象是可能的最好区间，但它仍然会多出一些数。<bookmark mark='d'/>而且这个格有永远向上攀升的链。",
+    "What holds at a loop's head? <bookmark mark='a'/> Here x":
+        "在循环头部成立的是什么？<bookmark mark='a'/>这里 x 从0数到100。在头部，x 在进入时是0，或者比一个通过了测试的值大1：这是一个关于区间的方程。"
+        "<bookmark mark='b'/>从进入状态开始迭代来求解它。<bookmark mark='c'/>每一轮区间增长1：0到0，0到1，0到2。"
+        "<bookmark mark='d'/>101轮之后它不再变化。在出口处，失败的测试只留下恰好100，断言得证。一个到20亿的循环就要花20亿轮。",
+    "Widening, also from the Cousots, forces the iteration to":
+        "加宽，同样出自 Cousot 夫妇，迫使迭代结束。<bookmark mark='a'/>没有移动过的界保持不变；移动过的界直接跳到无穷。<bookmark mark='b'/>第一轮把 x 的上界从0移到1，"
+        "所以它跳到了无穷。<bookmark mark='c'/>下一轮算出0到100，它落在里面：一个不动点。<bookmark mark='d'/>这太大了，所以收窄把循环再运行一次，只让无穷的那个界降回来："
+        "0到100。<bookmark mark='e'/>两轮加上两步收窄，而不是101轮。在那个双计数器循环上，普通的迭代永远不会停。",
+    "Intervals have a blind spot. <bookmark mark='a'/> Here i":
+        "区间有一个盲点。<bookmark mark='a'/>这里 i 数到10，j 每次加2，所以 j 总是 i 的两倍，最后是20。<bookmark mark='b'/>普通的迭代用测试给 i 定了界，"
+        "但没有任何东西单独给 j 定界，它的区间每一轮往上爬2，永远爬下去。<bookmark mark='c'/>加宽把 j 送到无穷，而收窄没法把它带回来。"
+        "<bookmark mark='d'/>所以 j 等于20这个断言没有得到证明：这是一个误报，出现在一个正确的程序上。<bookmark mark='e'/>丢掉的是关系。关系域保持 j 等于2i，"
+        "而在 i 等于10时，j 就是20。",
+    "Domains form a ladder of precision and cost.":
+        "抽象域构成一架精度与代价的梯子。<bookmark mark='a'/>区间画出一个盒子，代价与变量的个数成线性。<bookmark mark='b'/>Antoine Miné 的八边形还给每一对变量的和与差"
+        "定界，代价是立方级的；在这里它们把盒子削成一个平行四边形，但仍然说不出 j 是 i 的两倍。<bookmark mark='c'/>凸多面体可以：它们收缩到精确的那条线段，但它们的运算可能要花指数时间。"
+        "<bookmark mark='d'/>真实的分析器混合使用多种域。2003年，来自巴黎 Cousot 团队的 Astrée 自动证明了空客 A340 的飞行控制软件不会产生任何运行时错误。",
+    # ------------------------------------------------------------------ s10_types
+    "Chapter nine. Types as lightweight proofs.":
+        "第九章：作为轻量级证明的类型。",
+    "A type checker proves a theorem about every run of a":
+        "类型检查器证明的是一个关于程序每一次运行的定理。<bookmark mark='a'/>把每一次执行想象成一棵树的一个分支。测试只走过其中几个分支。"
+        "<bookmark mark='b'/>类型检查器把代码读一遍，就为所有分支作了担保。<bookmark mark='c'/>第14部分证明了它的判决意味着什么。进展性：一个良类型的项要么是一个值，"
+        "要么能走一步。<bookmark mark='d'/>保持性：走一步保持类型不变。<bookmark mark='e'/>对步数做归纳，把两者串起来，一个良类型的程序就永远不会卡住。这就是米尔纳的口号："
+        "良类型的程序不会出错。",
+    "Why is checking so cheap? <bookmark mark='a'/> A type":
+        "为什么检查这么便宜？<bookmark mark='a'/>类型检查器就是一个抽象解释器，在第八章的意义上：它在类型上而不是在值上运行程序。<bookmark mark='b'/>类型沿着树向上流动。"
+        "x 加1是 int；if 的两个分支都是 int；所以整个表达式是 int。<bookmark mark='c'/>Patrick Cousot 在1997年把这种联系说得精确。"
+        "<bookmark mark='d'/>而且和区间一样，这种抽象会丢失信息。这个表达式永远不会出错，因为它的条件总是为真，但它的两个分支类型不同，所以它被拒绝了。可靠，因而不完备。",
+    "Tim Freeman and Frank Pfenning introduced refinement types":
+        "Tim Freeman 和 Frank Pfenning 在1991年引入了精化类型。<bookmark mark='a'/>精化类型是一个基本类型加上一个谓词。Int 是每一个整数。"
+        "<bookmark mark='b'/>自然数是满足 v 至少为零的整数 v。<bookmark mark='c'/>一个长度为 n 的数组的有效下标，从零一直到 n，不包括 n。"
+        "<bookmark mark='d'/>子类型就是子集，也就是一个蕴涵：凡满足 p 的都满足 q。<bookmark mark='e'/>所以每个下标都是自然数，"
+        "因为零小于等于 v 小于 n 蕴涵零小于等于 v。类型检查变成了逻辑，而逻辑可以交给求解器。",
+    "The hook's midpoint, as a type. <bookmark mark='a'/> Declare":
+        "开场时的那个中点，写成类型。<bookmark mark='a'/>声明 low 是自然数，high 大于 low，并要求 mid 位于从 low 到 high 之间，不包括 high。"
+        "<bookmark mark='b'/>检查器给这个表达式它的精确类型，v 等于 m，并问这是不是一个子类型。<bookmark mark='c'/>在作用域内的事实之下，这是一个蕴涵，"
+        "<bookmark mark='d'/>写出来，它恰好就是我们的 SAT 求解器在第三章处理过的那个验证条件。<bookmark mark='e'/>对修好的中点，它在16位字上有效，所以程序通过了类型检查。"
+        "<bookmark mark='f'/>对 Bloch 原来的那一行，求解器的反例变成了一个类型错误：这个错误在程序运行之前就被拒绝了。",
+    "Liquid types, from Patrick Rondon, Ming Kawaguchi and Ranjit":
+        "液态类型（Liquid Types）由 Patrick Rondon、Ming Kawaguchi 和 Ranjit Jhala 在2008年提出，它能推断精化。"
+        "<bookmark mark='a'/>循环计数器的类型是一个未知量 K。程序员提供候选事实，叫作限定词。<bookmark mark='b'/>一开始假定它们全都成立。进入时 i 是零，而零不一定小于 n，"
+        "所以那一条被去掉。<bookmark mark='c'/>绕循环一圈，i 加1不是零，所以那一条也被去掉。再一轮什么也没去掉：一个不动点，就像第八章那样。"
+        "<bookmark mark='d'/>所以 i 位于从零到 n 之间，再加上循环的测试，每一次对 a 的第 i 个元素的访问都在界内，而循环上没有任何标注。",
+    "Types form a ladder. <bookmark mark='a'/> Simple types, like":
+        "类型构成一架梯子。<bookmark mark='a'/>简单类型，比如第14部分的那些，以及我们自己编译器的检查器所用的，几乎不花代价，就排除了会卡住的程序。"
+        "<bookmark mark='b'/>所有权类型，也就是 Rust 的那种，第55部分会再谈到它，在安全代码中排除了释放后使用和数据竞争。<bookmark mark='c'/>精化类型，"
+        "在 LiquidHaskell 和 F* 中，证明边界和不变量，由求解器来做这些工作。<bookmark mark='d'/>在最顶上，依赖类型可以陈述完整的功能正确性，而由程序员来写证明。在那里，"
+        "类型检查器就是证明检查器，这正是下一章的主题。",
+    # ------------------------------------------------------------------ s11_assistants
+    "Chapter ten. Proof assistants.":
+        "第十章：证明助手。",
+    "In 1972 Robin Milner built LCF, a program for checking":
+        "1972年，罗宾·米尔纳构建了 LCF，一个检查证明的程序，人们无需信任它的大部分，就能信任它。<bookmark mark='a'/>定理是一种抽象类型的值，只有推理规则才能造出它，"
+        "而这些规则集中在一个小小的内核里。<bookmark mark='b'/>其他一切，策略、证明搜索、脚本、用户，都可以调用这些规则，却无法伪造结果。"
+        "<bookmark mark='c'/>这是我们自己内核里的一条规则：肯定前件式检查第二个前提是不是第一个前提的前件，不是就拒绝。我们的内核有69行、11条规则。"
+        "<bookmark mark='d'/>为了 Edinburgh LCF，米尔纳的小组设计了一种写策略的语言：ML，它是 Standard ML 和 OCaml 的祖先。",
+    "The kernel's logic is natural deduction, Gerhard Gentzen's":
+        "内核的逻辑是自然演绎，这是 Gerhard Gentzen 在20世纪30年代提出的系统。一个相继式是说：由这些假设，得出这个结论。<bookmark mark='a'/>每个证明都从假设规则开始：由 A，"
+        "得 A。<bookmark mark='b'/>每个联结词都有一条引入它的规则和一条使用它的规则。蕴涵通过解除一个假设来引入，通过肯定前件式来使用。<bookmark mark='c'/>然后是合取、析取，"
+        "以及假，由它可以推出任何东西。<bookmark mark='d'/>第十一条规则，双重否定，是唯一的经典规则；没有它，这个逻辑就是直觉主义的，也就是第14部分那些程序的逻辑。",
+    "Here is a proof our kernel made: A and B implies B and A.":
+        "这是我们的内核造出的一个证明：A 且 B 蕴涵 B 且 A。<bookmark mark='a'/>它从一个假设 A 且 B 出发，用了两次。<bookmark mark='b'/>消去规则把它拆开，"
+        "得到 B 和 A。<bookmark mark='c'/>引入规则把它们反过来重新组合。<bookmark mark='d'/>解除这个假设，留下一个没有任何假设的定理，一共调用了五次内核，真值表也与之一致。"
+        "<bookmark mark='e'/>在 Lean 中，这个证明只有一行，Lean 的内核把它当作一个有类型的程序来检查：这就是第14部分的命题即类型。",
+    "Every illegal step is refused. <bookmark mark='a'/> Making a":
+        "每一个非法步骤都会被拒绝。<bookmark mark='a'/>不经规则直接造出一个定理。<bookmark mark='b'/>前件不对的肯定前件式。"
+        "<bookmark mark='c'/>拆开一个其实是蕴涵的合取。<bookmark mark='d'/>把双重否定用在单重否定上。<bookmark mark='e'/>以及修改一个已经完成的定理的结论。"
+        "每一种都在内核处被拦下，并给出一条消息。<bookmark mark='f'/>需要提醒一点：Python 没法像 ML 那样封住一个类型，所以我们的守卫拦得住诚实的错误，却拦不住一心伪造的人。"
+        "严肃的系统还满足所谓的德布鲁因准则：它们的证明可以由一个小而独立的程序重新检查。",
+    "Proof assistants trust their kernels in one of two ways.":
+        "证明助手以两种方式之一信任它们的内核。<bookmark mark='a'/>在 LCF 风格中，比如 HOL Light 和 Isabelle，定理是一个只有内核规则才能造出的抽象值；"
+        "HOL Light 的内核只有几百行。<bookmark mark='b'/>在另一种方式中，比如 Rocq，它在2025年之前叫 Coq，以及 Lean，策略构造出一个证明项，它就是一个程序，"
+        "再由一个小内核对它做类型检查。<bookmark mark='c'/>无论哪种方式，内核之上的东西都可以庞大、自动化，甚至出错，而结果仍然可以信任，这就是为什么前沿那一章可以让语言模型来写证明。",
+    "Proof assistants now check real mathematics.":
+        "证明助手如今已在检查真正的数学。<bookmark mark='a'/>1976年，肯尼斯·阿佩尔和沃尔夫冈·哈肯借助一台检查大量情形的计算机证明了四色定理，许多数学家对此感到不安。"
+        "<bookmark mark='b'/>2005年，Georges Gonthier 与 Benjamin Werner 一起完成了一个在 Coq 中从头到尾检查过的证明。"
+        "<bookmark mark='c'/>Thomas Hales 1998年对开普勒猜想的证明同样依赖计算；他的 Flyspeck 项目在2014年用 HOL Light 和 Isabelle 完成了一个形式化"
+        "证明。<bookmark mark='d'/>2012年，Gonthier 的团队检查了奇阶定理；2022年，Lean 的用户们在 mathlib 之上完成了液态张量实验，"
+        "那是 Peter Scholze 提出的挑战，而 mathlib 我们在《人工智能，从零搭建》的第25部分见过。",
+    # ------------------------------------------------------------------ s12_verified
+    "Chapter eleven. Verified systems.":
+        "第十一章：经过验证的系统。",
+    "CompCert, from Xavier Leroy and colleagues at Inria, is a C":
+        "CompCert 出自泽维尔·勒鲁瓦和他在 Inria 的同事之手，是一个带着定理的 C 编译器；勒鲁瓦在2006年描述了它经过验证的后端。"
+        "<bookmark mark='a'/>它把 C 经过一连串中间语言翻译成汇编，在中间一种叫 RTL 的语言上做优化。<bookmark mark='b'/>每一遍都用 Coq 写成，并带有证明："
+        "如果它产生了输出，那么输出的每一种行为都是它输入的一种行为。<bookmark mark='c'/>包含关系是传递的，所以这些证明可以串起来。"
+        "<bookmark mark='d'/>对一个没有未定义行为的源程序，汇编只能做 C 本来能做的事。",
+    "In 2011 John Regehr's group at the University of Utah":
+        "2011年，犹他大学 John Regehr 的小组发布了 Csmith，它生成没有未定义行为的随机 C 程序，并比较编译器把它们变成了什么。"
+        "<bookmark mark='a'/>它在 GCC 和 LLVM 中发现了数百个未知的错误，其中许多会悄无声息地生成错误的代码。"
+        "<bookmark mark='b'/>在 CompCert 经过验证的中间部分，它一个生成错误代码的缺陷也没有找到。<bookmark mark='c'/>它在 CompCert 中确实找到的那些错误，"
+        "都在证明之外，在诸如未经验证的前端这样的部分。<bookmark mark='d'/>证明完成了它的任务，而测试显示了证明在哪里结束。",
+    "In 2009 Gerwin Klein and his colleagues at NICTA in Sydney":
+        "2009年，Gerwin Klein 和他在悉尼 NICTA 的同事证明了 seL4 微内核是正确的。<bookmark mark='a'/>一份抽象规约说明每个系统调用做什么。"
+        "<bookmark mark='b'/>一份可执行规约，从一个 Haskell 原型翻译而来，精化了它。<bookmark mark='c'/>C 代码大约8700行，又精化了可执行规约，"
+        "证明用 Isabelle 写了大约20万行。<bookmark mark='d'/>2009年的证明假定了编译器、大约600行汇编、启动代码和硬件都是正确的。<bookmark mark='e'/>2013年，"
+        "编译出来的二进制文件被拿来与 C 对照检查，把编译器从那张清单上去掉了，所用的技术第十四章会再讲到。",
+    "Both proofs rest on one picture, the simulation square.":
+        "这两个证明都建立在同一幅图上：模拟方块。<bookmark mark='a'/>把每个具体状态与一个抽象状态联系起来。<bookmark mark='b'/>当具体机器走一步时，"
+        "<bookmark mark='c'/>抽象机器必须能够匹配这一步，并保持这种关系，<bookmark mark='d'/>或者原地不动，也就是踏步（stutter），在具体的这一步只是内部簿记的时候。"
+        "<bookmark mark='e'/>沿着一次运行把方块一块块铺下去，做归纳，每一次具体运行就都有一次抽象运行如影随形，所以规约的每一条安全性质对代码都成立。下一章恰好对一个协议检查这一点。",
+    "Cryptography is the code most worth proving.":
+        "密码学代码是最值得证明的代码。<bookmark mark='a'/>在 Curve25519 的域中，乘法的规约只有一行：相乘，然后模 p 约简，"
+        "<bookmark mark='b'/>p 是2的255次方减19。<bookmark mark='c'/>所以越过第255位的进位会以19的形式回来。"
+        "<bookmark mark='d'/>快速代码把每个数拆成五个51位的分块（limb），<bookmark mark='e'/>而一个到达那一位的分块乘积会以它自身的19倍绕回来：代码里满是19。"
+        "<bookmark mark='f'/>Fiat-Crypto 从规约生成这样的代码，并附带 Coq 证明。HACL* 证明了内存安全、正确性，以及没有任何分支或地址依赖于秘密，从而堵上了第29部分的计时信道。",
+    "CakeML, from Ramana Kumar, Magnus Myreen, Michael Norrish":
+        "CakeML 由 Ramana Kumar、Magnus Myreen、Michael Norrish 和 Scott Owens 在2014年推出，它填补了另一个缺口。"
+        "<bookmark mark='a'/>CompCert 证明的是编译器的源代码。<bookmark mark='b'/>但它的 Coq 函数被提取成 OCaml，再由一个未经验证的编译器编译。"
+        "<bookmark mark='c'/>CakeML 的编译器在 HOL4 证明器中得到证明，并在逻辑内部对它自己的源代码运行，所以它的机器码是带着证明来的。"
+        "<bookmark mark='d'/>剩下的已经很短：证明检查器的内核、硬件模型，以及规约。规约是否说出了我们的本意，任何证明都回答不了，而第55部分会问，当编译器二进制文件本身就是敌人时会发生什么。",
+    # ------------------------------------------------------------------ s13_tla
+    "Chapter twelve. Specifying systems with TLA plus.":
+        "第十二章：用 TLA+ 为系统写规约。",
+    "Leslie Lamport's temporal logic of actions, TLA, from 1994,":
+        "莱斯利·兰波特的动作时序逻辑 TLA 出自1994年，它把一个系统描述成一台用普通数学写成的状态机。<bookmark mark='a'/>一个状态给每个变量一个值；一个行为是一个无限的状态序列。"
+        "<bookmark mark='b'/>规约是一个公式，它对正确的那些行为为真。它从一个初始状态开始，<bookmark mark='c'/>并且总是每一步都满足次态关系，"
+        "<bookmark mark='d'/>或者保持变量不变：这就是踏步，它让一个粒度更细的实现可以走它自己的步。<bookmark mark='e'/>公平性再补上一条：某件好事最终会发生。"
+        "TLA+ 是围绕这个公式构建的语言，而 TLC 是它的模型检验器。",
+    "Jim Gray and Leslie Lamport's TCommit says what commit":
+        "Jim Gray 和莱斯利·兰波特的 TCommit 说明了提交是什么意思。<bookmark mark='a'/>每个资源管理器从工作状态开始，可以准备，然后提交或中止。"
+        "<bookmark mark='b'/>只有当每个管理器都已准备或已提交时，它才可以提交；只有当谁都没有提交时，它才可以中止。<bookmark mark='c'/>我们想要的性质是一致性："
+        "永远不会一个已提交而另一个已中止。<bookmark mark='d'/>有多少个可达状态？要么谁都没有提交，每个管理器处于工作、已准备或已中止：3的 n 次方。"
+        "<bookmark mark='e'/>要么有人提交了，所有管理器都已准备或已提交，并且至少有一个已提交：2的 n 次方减1。<bookmark mark='f'/>我们的检验器对两到五个管理器都与此一致。",
+    "Two-phase commit, the protocol, adds a transaction manager":
+        "两阶段提交这个协议，加上了一个事务管理器和消息。<bookmark mark='a'/>每个就绪的资源管理器进行准备，并发出一条 Prepared 消息。"
+        "<bookmark mark='b'/>事务管理器收集这些消息，当每一个都已准备时，它决定提交，并发出 Commit。<bookmark mark='c'/>每个收到它的资源管理器就提交。和兰波特的规约一样，"
+        "消息永远不会丢失：一条消息一旦发出，就一直留在袋子里。<bookmark mark='d'/>检验器探索每一种交错：三个管理器时288个状态，五个时8832个，而一致性在所有这些状态里都成立。",
+    "Now plant a bug that looks like good engineering: a timeout.":
+        "现在植入一个看起来像是良好工程实践的错误：超时。<bookmark mark='a'/>如果协调者等得太久，它就不等所有人回音，直接提交。<bookmark mark='b'/>三个管理器时，"
+        "检验器探索了623个状态，返回一个三步的反例。<bookmark mark='c'/>协调者超时了，在任何人准备之前就提交了。<bookmark mark='d'/>资源管理器零还在工作，它选择中止，"
+        "这是它被允许的。<bookmark mark='e'/>资源管理器一收到 Commit，于是提交。一个已提交，一个已中止：不变量被打破了。超时的协调者可以中止，但绝不能提交。",
+    "Is the protocol a correct implementation of the":
+        "这个协议是规约的一个正确实现吗？在 TLA 中，实现就是蕴涵。<bookmark mark='a'/>把每个协议状态映射到它的资源管理器的状态，忘掉协调者和消息。"
+        "<bookmark mark='b'/>那么每一个协议步骤都必须是一个 TCommit 步骤，或者保持管理器不变。准备和提交映射到 TCommit 自己的步骤；协调者的簿记映射到踏步，"
+        "这正是 TLA 允许踏步的原因。<bookmark mark='c'/>我们的检验器对两个、三个和四个管理器尝试了每一个可达的步骤：协议精化了规约。"
+        "<bookmark mark='d'/>所以它的一致性由 TCommit 的一致性推出，靠的是第十一章的方块，TCommit 具有的其他每一条安全性质也是如此。",
+    "A model checker covers small instances only.":
+        "模型检验器只覆盖小的实例。<bookmark mark='a'/>协议的状态数每多一个管理器大约增长到五倍，到五个时是8832个。<bookmark mark='b'/>但超时错误只需要三个管理器和三步。"
+        "Daniel Jackson 的小范围假设说这是典型的：大多数设计错误都有很小的反例。<bookmark mark='c'/>对每一个 n，TLA+ 都有一个证明系统 TLAPS，在其中，不变量通过归纳来证明，"
+        "就像第二章的那些循环。<bookmark mark='d'/>Amazon 和微软的工程师都讲述过，他们在写代码之前就用这种方法发现了设计错误，前沿那一章会讲到这些。",
+    # ------------------------------------------------------------------ s14_testing
+    "Chapter thirteen. Testing as science.":
+        "第十三章：作为科学的测试。",
+    "Coverage measures where the tests have been.":
+        "覆盖率衡量的是测试到过哪里。<bookmark mark='a'/>Glenford Myers 在他1979年那本讲测试的书里给出的三角形分类器，接受三条边，说出三角形的类型。"
+        "<bookmark mark='b'/>运行300个随机测试，边长从1到100。<bookmark mark='c'/>它们运行到了9行中的7行，以及8个分支结果中的6个。"
+        "<bookmark mark='d'/>有两行从没运行过。没有哪条边是零或负数，也没有哪个三角形是等边的：边长随机时，一万次抽取里才有一次三条边全都相等。覆盖率恰好指出了测试漏掉了什么。",
+    "Full coverage proves less than it seems.":
+        "完全覆盖证明的东西比看上去要少。<bookmark mark='a'/>这个 insert 把一个数插入一个有序列表，而它的扫描早停了一个元素。<bookmark mark='b'/>三个单元测试都通过了，"
+        "<bookmark mark='c'/>而且它们加起来运行了每一行，以及循环测试的两种结果：完全覆盖。<bookmark mark='d'/>一个性质测试检查输出是否有序，并且包含正确的元素。"
+        "它在第9个随机输入上失败了，收缩成把1插入只含0的列表，而得到的答案是1、0。覆盖率说明测试到过哪里，却不能说明它们看到的东西是对的。",
+    "Mutation testing, proposed by Richard DeMillo, Richard":
+        "变异测试由 Richard DeMillo、Richard Lipton 和 Frederick Sayward 在1978年提出，它问的是：测试会不会注意到一个错误。"
+        "<bookmark mark='a'/>对正确的程序做一些小改动：每一个都是一个变异体。<bookmark mark='b'/>让扫描早停一个，这个变异体在单元测试下存活了；它正是测试漏掉的那个错误。"
+        "<bookmark mark='c'/>小于等于也存活了，但没有哪个测试能杀死它：插在一个相等元素的前面还是后面，得到的列表都一样。它是一个等价变异体。"
+        "<bookmark mark='d'/>大于被两个测试杀死了。<bookmark mark='e'/>步长为2的那个存活了。<bookmark mark='f'/>分数是被杀死的数目除以非等价变异体的数目："
+        "三分之一。这些测试很弱，而现在我们知道弱在哪里。",
+    "Property-based testing replaces examples with laws; Koen":
+        "基于性质的测试用定律代替例子；Koen Claessen 和 John Hughes 的 QuickCheck 在2000年让它变得实用。<bookmark mark='a'/>排序的定律是：输出是有序的，"
+        "并且是输入的重新排列。<bookmark mark='b'/>随机列表从小的开始生成。这个排序要经过一个集合，而第27个列表打破了它：3、负3、负3、1。<bookmark mark='c'/>然后它开始收缩。"
+        "去掉3，仍然失败。<bookmark mark='d'/>去掉1，仍然失败。<bookmark mark='e'/>两个负3一起向零移动：0、0。<bookmark mark='f'/>尝试了11个候选之后，"
+        "报告的是最小的失败用例：对0、0排序，返回一个0。",
+    "In 1990 Barton Miller's students fed random characters to":
+        "1990年，Barton Miller 的学生把随机字符喂给 Unix 的工具程序，让其中大约四分之一到三分之一崩溃或挂起。<bookmark mark='a'/>但纯随机的输入很少能深入下去。要到达这个崩溃，"
+        "它必须一次猜中三个字节，机会大约是1700万分之一。<bookmark mark='b'/>Michał Zalewski 2013年的 American Fuzzy Lop 观察每个输入走了哪些分支。"
+        "<bookmark mark='c'/>一个到达新分支的输入会被保留下来，并进一步变异。先找到 F，再找到 U，然后是 Z，每个只要几百次尝试。<bookmark mark='d'/>从2016年起，"
+        "Google 的 OSS-Fuzz 就在开源项目上持续不断地运行这样的模糊测试器。",
+    "Symbolic execution runs the program on symbols instead of":
+        "符号执行在符号而不是数字上运行程序。<bookmark mark='a'/>在每个分支处，路径一分为二，每条路径收集一个条件。<bookmark mark='b'/>要到达等边，没有哪条边可以是零或负数，"
+        "<bookmark mark='c'/>三条边必须构成一个真正的三角形，<bookmark mark='d'/>而且它们必须相等。<bookmark mark='e'/>化简之后：三条相等的正边。"
+        "求解器返回1、1、1，正是那300个随机测试漏掉的测试。<bookmark mark='f'/>2008年的 KLEE 对真实的 C 程序做到了这一点。"
+        "混合执行测试（concolic testing）出自2005年的 DART，它先具体地运行，再为没走的那个分支求解。极限在于路径的数目，它随每一个分支和循环成倍增长。",
+    # ------------------------------------------------------------------ s15_compiler
+    "Chapter fourteen. Fuzzing and validating our compiler.":
+        "第十四章：对我们的编译器做模糊测试与确认。",
+    "<bookmark mark='a'/> Part 13's generator writes random":
+        "<bookmark mark='a'/>第13部分的生成器写出随机的 Pebble 程序，它们总是有良好定义的，所以每一个正确的实现都会打印出同样的字节。"
+        "<bookmark mark='b'/>每个程序都在 IR 解释器上运行，由它规定程序的含义，再在全部四个级别上编译，在模拟器上运行。<bookmark mark='c'/>现在植入一个错误："
+        "SCCP 遍的常量折叠器按 Python 的规则做除法，向下取整，而不是按 Pebble 的规则，向零截断。<bookmark mark='d'/>两种规则都满足 a 等于 q 乘 b 加 r。"
+        "<bookmark mark='e'/>对负7除以256，截断给出0，余数负7；<bookmark mark='f'/>向下取整给出负1，余数249。",
+    "Then we hunt. <bookmark mark='a'/> Program by program, the":
+        "然后我们开始搜寻。<bookmark mark='a'/>一个程序接一个程序，模糊测试器生成并比较；有一个程序没能在步数上限内结束，被跳过了。<bookmark mark='b'/>第五个，种子4，"
+        "出现了不一致：75行，6个函数，92字节的输出。<bookmark mark='c'/>第零级、第一级和第二级打印的和解释器一样；第三级从第一个字节起就不同。"
+        "<bookmark mark='d'/>第三级会做内联，于是一次调用的参数变成了常量，而坏掉的折叠器对它做了除法。<bookmark mark='e'/>去掉这个错误后，试过的每个程序在每个级别上都一致："
+        "模糊测试器找到的是这个错误，而不是噪声。",
+    "Delta debugging, from Andreas Zeller and Ralf Hildebrandt in":
+        "增量调试由 Andreas Zeller 和 Ralf Hildebrandt 在2002年提出，它在失败持续存在的前提下缩小一个失败的输入。<bookmark mark='a'/>我们的版本从下往上，"
+        "尝试删除每一条语句或每一个块，只要程序仍然表现出不一致，就保留这次删除。<bookmark mark='b'/>75次测试，接受了54次删除，用时不到5秒。<bookmark mark='c'/>剩下9行。"
+        "<bookmark mark='d'/>f1 作用于负7，返回负7。打印的第二个字节是负7除以256：对 Pebble 是0，对坏掉的折叠器是负1，所以这个字节是 FF 而不是 00。这个错误，归结到了一行里。",
+    "The real test is the Job, Part 13's word-counting program.":
+        "真正的考验是那项任务，第13部分的数词程序。<bookmark mark='a'/>我们在每个级别上编译它，在五段文本上运行，最长的有226个字节。"
+        "<bookmark mark='b'/>每个级别打印的都和解释器完全一样，而解释器又与一个独立的 Python 版本一致。<bookmark mark='c'/>优化是值得的：在最长的文本上，"
+        "第三级用了12854步，而未优化的是38633步。<bookmark mark='d'/>但五个一致的输入只是证据，而不是证明。",
+    "Translation validation, from Amir Pnueli, Michael Siegel and":
+        "翻译确认由 Amir Pnueli、Michael Siegel 和 Eli Singerman 在1998年提出，它检查每一次编译，而不是对输入抽样。"
+        "<bookmark mark='a'/>证明一个编译器对每一个程序都正确，是 CompCert 走的那条难路。<bookmark mark='b'/>换个做法，每次运行之后，"
+        "由一个确认器检查这份输出和这份输入含义相同；需要信任的只有确认器。<bookmark mark='c'/>对我们的错误，一个针对常量折叠的确认器会按 Pebble 的规则重新计算每一个折叠出来的常量："
+        "负7除以256是0，不是负1，所以这次编译被拒绝。<bookmark mark='d'/>等价性一般来说是不可判定的，所以确认器只针对特定的遍，并且可能回答“不知道”。"
+        "CompCert 的寄存器分配就是这样检查的，用的是一个在 Coq 中证明过的确认器。",
+    "Now let the code carry its own proof. <bookmark mark='a'/>":
+        "现在让代码自己携带证明。<bookmark mark='a'/>在 George Necula 1997年提出的携带证明的代码中，一个不受信任的生产者交付机器码，并附带一个证明，说明它遵守某个安全策略。"
+        "<bookmark mark='b'/>消费者从代码计算出验证条件，用的是第四章那样的最弱前置条件，<bookmark mark='c'/>再用一个小检查器检查证明，就像第十章那样；"
+        "然后代码就可以在没有任何运行时检查的情况下运行。<bookmark mark='d'/>篡改代码，它的条件就会改变，于是证明不再吻合。"
+        "<bookmark mark='e'/>它的后代包括类型化汇编语言、第15部分的 WebAssembly 验证器，以及第31部分的 eBPF 验证器，后者检查的是代码本身，而不是随附的证明。",
+    # ------------------------------------------------------------------ s16_frontier
+    "Chapter fifteen, the frontier. Can proof become as routine":
+        "第十五章，前沿：证明能变得像测试一样例行吗？",
+    "Proof is already routine in some places.":
+        "在有些地方，证明已经是例行公事。<bookmark mark='a'/>Amazon 的工程师在2015年讲述了，对他们的存储和消息服务的 TLA+ 规约做模型检验，如何在写下任何代码之前就发现了微妙的错误。"
+        "<bookmark mark='b'/>经过形式化验证的密码学代码，出自 HACL* 和 Fiat-Crypto 这样的项目，如今运行在主流的浏览器和库里。<bookmark mark='c'/>而在大公司里，"
+        "静态分析器在每一次变更上运行，报告通过可靠近似发现的错误。<bookmark mark='d'/>模式是：证明那些小的、关键的、稳定的部分，其余的靠测试。",
+    'f"The newest change is who writes the proofs.':
+        "最新的变化在于由谁来写证明。<bookmark mark='a'/>在第十章我们的 LCF 内核里，只有{size['kernel_lines']}行需要信任；其他一切，包括产生证明的任何东西，"
+        "都可以出错而无害，因为每一步都要经过内核。<bookmark mark='b'/>这就是为什么可以让语言模型来干活：它们如今用 Lean、Coq 和 Dafny 写证明，还会提出循环不变量；2024年，"
+        "把它们与搜索结合起来的系统解出了奥林匹克竞赛题，给出的证明由内核检查过。<bookmark mark='c'/>问题不再是机器的证明能否被信任，而是一个真实程序的规约，它能自己找到并证明多少。",
+    "Open problems. <bookmark mark='a'/> Finding the inductive":
+        "开放问题。<bookmark mark='a'/>自动找到证明所需要的归纳不变量。<bookmark mark='b'/>弄清规约从哪里来，以及它们是否说出了本意。"
+        "<bookmark mark='c'/>能在一个百万行系统的持续变化中存活下来的证明。<bookmark mark='d'/>以及运行在松弛内存和推测执行处理器上的、经过验证的软件。"
+        "<bookmark mark='e'/>这一部分的研究题是第一个：为带乘法的循环设计一个不变量推断过程，这正是我们的 SAT 检查慢得最厉害的情形；它要对一类明确给出的不变量是完备的，并且快到足以实用。",
+    # ------------------------------------------------------------------ s17_outro
+    "What we built in this part. Floyd–Hoare logic and its rules,":
+        "这一部分我们搭建了什么。弗洛伊德–霍尔逻辑及其规则，用不变量处理循环，用递减量处理终止。最弱前置条件，把它们变成公式，用我们自己的 SAT 求解器检查，它找到了二分查找的溢出，并证明了修正。分离逻辑，"
+        "让关于堆的证明可以是局部的。模型检验：显式的、用 BDD 的符号检验，以及用 SAT 的有界检验，用在彼得森锁、哲学家就餐、两阶段提交和 Raft 上。带加宽的抽象解释；一个 LCF 内核；"
+        "还有一个在我们自己的编译器里抓到了植入错误的模糊测试器。一个想法贯穿始终：正确性一般来说无法判定，但在具体情形中可以证明。",
+    "Where this comes back. Part 55 asks whether a compiler can":
+        "这些内容会在哪里再出现。第55部分问一个编译器到底能不能被信任。第58部分给出这些证明所依赖的、程序的数学意义。第59部分证明分布式协议的极限。第60部分对照规约检查硬件。第61部分则把证明当作一种研究方法。",
+    "In practice. Write invariants as assertions, so they":
+        "实践中。把不变量写成断言，这样它们既是文档，又是测试。陈述性质而不是例子，让工具去收缩失败用例。在持续集成里做模糊测试，配上消毒器，并保留语料库。在编写每一个棘手的协议之前，先为它建模。还有，"
+        "证明那个小而关键的核心：解析器、密码学、内核。",
+    "Six problems, with full solutions in the part's notes. Pause":
+        "六道习题，完整解答在这一部分的笔记里。可以在任何一道上暂停。第五道是构建题：在优化器里植入一个你自己的错误，数一数模糊测试器要用多少个随机程序才能找到它。最后一道标有星号，是研究题："
+        "为带乘法的循环做完备而实用的不变量推断。",
+    "Next time, Part 55, the finale of the degree: trusting":
+        "下一次，第55部分，这个学位课程的终章：对信任的信任。安全性是整座塔的性质，而每一层都会泄漏。我们会对照我们自己的编译器，搭建肯·汤普森那个带后门的编译器，抓住它，再最后一次走遍整座塔，从一个与非门到一个集群。",
+    "The books and papers this part follows are on screen and in":
+        "这一部分所依据的书和论文都在屏幕上和笔记里。感谢观看。",
+}
+
+PHRASES = {"one": "一", "two": "两", "three": "三", "four": "四", "five": "五", "six": "六", "seven": "七",
+           "eight": "八", "nine": "九", "ten": "十"}

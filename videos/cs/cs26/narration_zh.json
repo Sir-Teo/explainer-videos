@@ -1,0 +1,390 @@
+{
+ "title": "计算机科学，从零搭建 · 第26部分：P 与 NP",
+ "chapters": {
+  "Hook": "找到与检查",
+  "Polynomial": "1. 什么才算高效",
+  "Hierarchy": "2. 更多时间，更多问题",
+  "Np": "3. NP：答案可检查的问题",
+  "Reductions": "4. 归约与完全性",
+  "CookLevin": "5. Cook–Levin：SAT 是 NP 完全的",
+  "Web": "6. 归约之网",
+  "Everywhere": "7. 无处不在的 NP 完全性",
+  "Numbers": "8. 强难与弱难",
+  "CoNp": "9. coNP 与多项式层级",
+  "Space": "10. 空间：博弈与交替",
+  "Sqrt": "11. 平方根空间里的时间",
+  "Ladner": "12. 介于 P 与 NP 完全之间",
+  "Sat": "13. 实践中的 SAT",
+  "Barriers": "14. 为什么它难",
+  "Worlds": "15. 五个可能的世界",
+  "Frontier": "16. 前沿：关于复杂性的复杂性",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "600f3d318191": {
+   "scene": "Hook",
+   "en": "In March 1956 Kurt Gödel wrote a letter to John von Neumann. <bookmark mark='a'/> A machine can obviously decide, for any formula and any number n, whether the formula has a proof of length n: just try them all. The question, Gödel wrote, is how fast the number of steps grows for the best possible machine. <bookmark mark='b'/> If it grew only like n, or n squared, then the mental work of a mathematician on yes-or-no questions could be completely replaced by a machine. <bookmark mark='c'/> Von Neumann was dying of cancer and never answered. <bookmark mark='d'/> The letter was found decades later. It asks, fifteen years before anyone else, the question of this part: is finding a proof as easy as checking one?",
+   "zh": "1956年3月，Kurt Gödel 给 John von Neumann 写了一封信。<bookmark mark='a'/>机器显然可以对任何公式和任何数 n，判定这个公式有没有长度为 n 的证明：把它们全试一遍就行。Gödel 写道，问题在于，对最好的机器而言，所需的步数增长得有多快。<bookmark mark='b'/>如果它只像 n 或 n 的平方那样增长，那么数学家在是非问题上的脑力劳动就可以完全由机器代替。<bookmark mark='c'/>von Neumann 当时身患癌症，奄奄一息，始终没有回信。<bookmark mark='d'/>这封信几十年后才被发现。它比其他任何人早了十五年，问出了这一部分的问题：找到一个证明，是否和检查一个证明一样容易？"
+  },
+  "cb833a515693": {
+   "scene": "Hook",
+   "en": "Here is the question in modern form. <bookmark mark='a'/> This planted three-colourable graph has sixty vertices and a hundred and twelve edges. Find a colouring with different colours at adjacent vertices. <bookmark mark='b'/> Checking a supplied valid colouring examines every edge. We measure that check repeatedly on this host. <bookmark mark='c'/> Multiplying its average duration by three to the sixtieth gives an exhaustive-enumeration scenario. It is neither a measured search nor a lower bound: a search can stop early and reject invalid candidates faster. <bookmark mark='d'/> Our clause-learning solver finds a colouring quickly for this instance, and every edge is checked. Whether every graph admits a polynomial-time decision algorithm remains open. This finite success does not answer P versus NP.",
+   "zh": "把问题写成现代形式。<bookmark mark='a'/>这张预先种下三着色解的图有六十个顶点、一百一十二条边。寻找一种涂法，使相邻顶点颜色不同。<bookmark mark='b'/>检查给定的有效涂法，要查看每一条边；我们在本机重复测量这种检查。<bookmark mark='c'/>把平均耗时乘以三的六十次方，得到的是穷举全部涂法的情景估算，既不是实际搜索耗时，也不是下界。搜索可以提前结束，也可能更快排除无效候选。<bookmark mark='d'/>子句学习求解器很快解决了这个实例，而且每条边都经过检查。但是否每张图都有多项式时间判定算法，仍然未知。有限成功没有回答 P 与 NP 问题。"
+  },
+  "08076c513e13": {
+   "scene": "Hook",
+   "en": "Part 26 of Computer Science, Built: P versus NP. <bookmark mark='a'/> In this part: what counts as efficient, and the theorems that separate time and space classes; NP, reductions, and the Cook-Levin theorem, built as a formula and solved; the web of reductions that ties a thousand problems together, each one computed; coNP, the polynomial hierarchy, games and space, and a 2025 surprise about time and space; SAT solvers in practice; why the question has resisted fifty years of attack; and the five worlds we might be living in.",
+   "zh": "计算机科学，从零搭建，第26部分：P 与 NP。<bookmark mark='a'/>这一部分包括：什么才算高效，以及区分时间类和空间类的定理；NP、归约，以及 Cook-Levin 定理，把它建成公式并求解；把上千个问题连在一起的归约之网，每一个都实际计算；coNP、多项式层级、博弈与空间，以及2025年一个关于时间与空间的惊喜；实践中的 SAT 求解器；为什么这个问题抵挡住了五十年的进攻；以及我们可能生活在其中的五个世界。"
+  },
+  "fbc605f76a1a": {
+   "scene": "Polynomial",
+   "en": "Chapter one. What counts as efficient.",
+   "zh": "第1章。什么才算高效。"
+  },
+  "23f39307663a": {
+   "scene": "Polynomial",
+   "en": "Suppose a computer takes a microsecond per step. <bookmark mark='a'/> An algorithm taking n squared steps handles a hundred items in ten milliseconds. N cubed takes a second. <bookmark mark='b'/> Two to the n is fine at twenty and hopeless at sixty: thirty-six thousand years. At a hundred, it is four times ten to the sixteen years. And n factorial at sixty is beyond any number of universes. <bookmark mark='c'/> The universe is fourteen billion years old. <bookmark mark='d'/> Faster hardware does not rescue exponential algorithms. A computer a thousand times faster lets an n squared algorithm handle inputs thirty-one times larger, but a two to the n algorithm only ten items more.",
+   "zh": "假设计算机每步用一微秒。<bookmark mark='a'/>一个需要 n 平方步的算法，处理一百个元素要十毫秒。n 立方要一秒。<bookmark mark='b'/>二的 n 次方在二十时没问题，在六十时毫无希望：三万六千年。到一百时，是四乘十的十六次方年。而 n 的阶乘在六十时，超过任何数量的宇宙寿命。<bookmark mark='c'/>宇宙的年龄是一百四十亿年。<bookmark mark='d'/>更快的硬件救不了指数算法。快一千倍的计算机，能让 n 平方算法处理大三十一倍的输入，却只能让二的 n 次方算法多处理十个元素。"
+  },
+  "b391e218a1de": {
+   "scene": "Polynomial",
+   "en": "Polynomial time is a useful mathematical boundary. <bookmark mark='a'/> Edmonds's 1965 matching work helped establish this viewpoint. <bookmark mark='b'/> Cobham studied its independence from standard machine details. <bookmark mark='c'/> Deterministic multitape Turing machines and appropriately costed RAM models simulate one another with polynomial overhead. Unbounded integer arithmetic at unit cost would require a different analysis. <bookmark mark='d'/> Polynomially many calls to polynomial-time subroutines still take polynomial time, including the cost of writing their inputs. <bookmark mark='e'/> The extended Church-Turing thesis is a broader physical claim, commonly phrased using efficient probabilistic classical simulation. Quantum computation challenges that claim; it is not a theorem equating every model with P. <bookmark mark='f'/> Asymptotic membership also does not promise practical speed: large exponents and constants matter.",
+   "zh": "多项式时间是一条有用的数学界线。<bookmark mark='a'/>Edmonds 在1965年的匹配研究推动了这个观点。<bookmark mark='b'/>Cobham 研究了它为何不依赖标准机器的具体细节。<bookmark mark='c'/>确定性多带图灵机与合理计费的随机访问机，可以用多项式开销互相模拟；若把任意大整数运算都算一步，就需要另作分析。<bookmark mark='d'/>多项式次调用多项式时间子程序，连同写出输入的成本，仍然只需多项式时间。<bookmark mark='e'/>扩展 Church-Turing 论题是更广的物理主张，通常讨论高效的经典概率模拟。量子计算挑战这一主张；它不是把所有模型都等同于 P 的定理。<bookmark mark='f'/>渐近地属于 P，也不保证实际快速：大指数和常数仍然重要。"
+  },
+  "208f3716a0c1": {
+   "scene": "Hierarchy",
+   "en": "Chapter two. More time, more problems.",
+   "zh": "第2章。更多时间，更多问题。"
+  },
+  "071fc1d0d641": {
+   "scene": "Hierarchy",
+   "en": "Can extra time provably add power? <bookmark mark='a'/> Yes. In a standard deterministic multitape model, for constructible bounds f and g at least n, f times log f being little-o of g gives a strict inclusion from TIME f to TIME g. The gap condition matters. <bookmark mark='b'/> Here is the diagonal idea, with technical clock choices suppressed. Decode a machine from a padded input, simulate that machine on the entire input, and reverse acceptance after a clock expires. <bookmark mark='c'/> Choose the clock so simulation fits the larger budget while eventually exceeding every fixed constant times the smaller one. <bookmark mark='d'/> Suppose a smaller-time decider recognized this diagonal language. <bookmark mark='e'/> It has arbitrarily long padded descriptions, so choose one beyond its runtime constants and finite exceptions. On that input the simulation finishes and reverses its answer. <bookmark mark='f'/> That contradiction proves a separation. Padding and overhead are essential parts of the theorem, not optional details. <bookmark mark='g'/> One consequence is P strictly contained in EXP. This does not separate P from NP.",
+   "zh": "更多时间能否被证明带来更强能力？<bookmark mark='a'/>能。在标准确定性多带模型中，设可构造的界 f 和 g 至少为 n。若 f 乘 log f 是 g 的小 o，则 TIME f 严格包含于 TIME g。这个渐近间隙不可省略。<bookmark mark='b'/>屏幕展示对角线思想，略去时钟选择的技术细节：从填充输入中解码机器，让它在整个输入上运行，并在时钟到期时反转接受与否。<bookmark mark='c'/>选择时钟，使模拟仍在较大预算内，而最终超过较小界的任意固定常数倍。<bookmark mark='d'/>假设存在较小时间内判定这个对角语言的机器。<bookmark mark='e'/>它有任意长的填充描述，可选择一个超过运行常数和有限例外的长度。模拟会完成，并反转它的答案。<bookmark mark='f'/>矛盾由此得到。填充与模拟开销是定理的必要部分。<bookmark mark='g'/>一个推论是 P 严格包含于 EXP，但这没有分开 P 与 NP。"
+  },
+  "061e5ee0ca99": {
+   "scene": "Hierarchy",
+   "en": "Here is the map of the classes this part needs. <bookmark mark='a'/> Logarithmic space, its nondeterministic version, polynomial time, NP, polynomial space, exponential time, exponential space. Each sits inside the next. <bookmark mark='b'/> The hierarchy theorems prove that some of these are different. P is not exponential time; logarithmic space is not polynomial space. <bookmark mark='c'/> So between P and exponential time at least one inclusion is strict, but nobody knows which. Every one of them might be strict. <bookmark mark='d'/> Space behaves differently from time because it can be reused. A machine that runs for t steps can visit at most t cells, and a machine using s cells has at most exponentially many configurations in s, so it either halts within that many steps or loops forever.",
+   "zh": "这是这一部分需要的类的地图。<bookmark mark='a'/>对数空间，它的非确定版本，多项式时间，NP，多项式空间，指数时间，指数空间。每一个都在下一个之内。<bookmark mark='b'/>层级定理证明其中一些是不同的。P 不是指数时间；对数空间不是多项式空间。<bookmark mark='c'/>所以在 P 和指数时间之间，至少有一个包含是严格的，但没人知道是哪一个。也可能每一个都是严格的。<bookmark mark='d'/>空间与时间的行为不同，因为空间可以重复使用。运行 t 步的机器至多访问 t 个格子；而使用 s 个格子的机器，格局数至多是 s 的指数，所以它要么在那么多步内停机，要么永远循环。"
+  },
+  "808a8cb5012e": {
+   "scene": "Hierarchy",
+   "en": "Savitch's theorem removes nondeterminism at a space cost. <bookmark mark='a'/> For a suitable space bound s at least log n, nondeterministic space s is contained in deterministic space of order s squared. To test reachability within t edges, use zero edges for equality, one for an edge or equality, and otherwise try every midpoint with integer half-budgets. <bookmark mark='b'/> Our path examples measure actual recursive calls and depths. <bookmark mark='c'/> A theoretical recursive frame stores only a constant number of configurations, the midpoint iterator and a budget. The displayed three-slot count is illustrative, excluding the already stored graph and Python overhead. <bookmark mark='d'/> With a read-only input and s at least log n, the configuration count is exponential in s. Logarithmically many recursive levels therefore use order s squared space. <bookmark mark='e'/> Time can be very large; these finite path counts illustrate that cost without proving a growth law. <bookmark mark='f'/> Consequently PSPACE equals NPSPACE. The analogous polynomial-time question is still open.",
+   "zh": "Savitch 定理用空间代价消除非确定性。<bookmark mark='a'/>对至少为 log n 的适当空间界 s，非确定空间 s 包含于平方级确定空间。测试至多 t 条边的可达性时，零步只检查相等，一步检查相等或直接边；其余情况枚举中点，采用整数的两半预算。<bookmark mark='b'/>路径例子测量实际递归次数与深度。<bookmark mark='c'/>理论上的每层只需常数个格局、中点迭代器和预算；显示的三个槽位只是示意，不含已存储的图和 Python 开销。<bookmark mark='d'/>只读输入且 s 至少为 log n 时，格局数是 s 的指数，递归深度为 s 的量级，因此总空间为 s 的平方量级。<bookmark mark='e'/>时间可能很大；有限路径计数展示这种代价，并不证明增长规律。<bookmark mark='f'/>所以 PSPACE 等于 NPSPACE，而对应的多项式时间问题仍然开放。"
+  },
+  "b96f9b522ca3": {
+   "scene": "Np",
+   "en": "Chapter three. NP: problems with checkable answers.",
+   "zh": "第3章。NP：答案可检查的问题。"
+  },
+  "ba42e3b444e2": {
+   "scene": "Np",
+   "en": "Here is the definition behind finding and checking. <bookmark mark='a'/> A decision language is in NP when each yes-instance has a certificate whose bit length is polynomial in the input length. <bookmark mark='b'/> One deterministic polynomial-time verifier accepts exactly the valid input-certificate pairs, with no accepting certificate for a no-instance. <bookmark mark='c'/> A graph colouring, a satisfying assignment or a Hamiltonian path can supply such a certificate for the corresponding decision problem. <bookmark mark='d'/> NP does not require short certificates for no-instances. That is a statement about the class definition, not a claim that individual no-instances cannot have short proofs.",
+   "zh": "这就是找到与检查背后的定义。<bookmark mark='a'/>若每个肯定实例都有比特长度关于输入长度为多项式的证书，这个判定语言就可能属于 NP。<bookmark mark='b'/>还需要一个统一的确定性多项式时间验证器：恰好接受有效的输入与证书对，而否定实例没有任何能被接受的证书。<bookmark mark='c'/>对相应判定问题，图着色、满足赋值或哈密顿路径都可以作证书。<bookmark mark='d'/>NP 的定义不要求否定实例也有短证书；这不意味着特定否定实例不能拥有简短证明。"
+  },
+  "26f6f3741e09": {
+   "scene": "Np",
+   "en": "The N in NP stands for nondeterministic, and the two views agree. <bookmark mark='a'/> A nondeterministic machine branches at every choice, and accepts if any branch does. Given such a machine, the certificate is simply the list of choices along an accepting branch, <bookmark mark='b'/> and a verifier replays that single branch in polynomial time. <bookmark mark='c'/> Conversely, given a verifier, a nondeterministic machine guesses the certificate one bit at a time and then runs the verifier. <bookmark mark='d'/> So NP is exactly nondeterministic polynomial time. <bookmark mark='e'/> Every problem in P is in NP, since the verifier can ignore the certificate. And NP sits inside polynomial space, since one machine can try every certificate in turn, reusing the same cells.",
+   "zh": "NP 里的 N 代表非确定性，而两种观点是一致的。<bookmark mark='a'/>非确定机器在每个选择处分叉，只要有一个分支接受就接受。给定这样一台机器，证书就是沿一个接受分支的选择列表，<bookmark mark='b'/>验证器在多项式时间内重放这一个分支。<bookmark mark='c'/>反过来，给定验证器，一台非确定机器一位一位地猜出证书，再运行验证器。<bookmark mark='d'/>所以 NP 恰好就是非确定多项式时间。<bookmark mark='e'/>P 中的每个问题都属于 NP，因为验证器可以忽略证书。而 NP 包含于多项式空间，因为一台机器可以依次尝试每个证书，重复使用同样的格子。"
+  },
+  "d5f6e33f7b86": {
+   "scene": "Reductions",
+   "en": "Chapter four. Reductions and completeness.",
+   "zh": "第4章。归约与完全性。"
+  },
+  "3d322bc3096b": {
+   "scene": "Reductions",
+   "en": "Part 25 carried impossibility from problem to problem with reductions. Here they get a budget. <bookmark mark='a'/> A reduces to B in polynomial time if a polynomial-time function f turns every instance of A into an instance of B with the same answer. <bookmark mark='b'/> Then a fast solver for B gives a fast solver for A: compute f, and ask. A polynomial applied to a polynomial is still a polynomial. <bookmark mark='c'/> Read the other way, if A is hard, then B is at least as hard. <bookmark mark='d'/> And reductions chain: if A reduces to B and B to C, then A reduces to C.",
+   "zh": "第25部分用归约把不可能性从一个问题带到另一个问题。这里给它们加上预算。<bookmark mark='a'/>如果一个多项式时间函数 f 把 A 的每个实例变成答案相同的 B 的实例，就说 A 多项式时间归约到 B。<bookmark mark='b'/>那么 B 的快速求解器就给出 A 的快速求解器：算出 f，再去问。多项式套多项式仍是多项式。<bookmark mark='c'/>反过来读，如果 A 难，那么 B 至少一样难。<bookmark mark='d'/>而且归约可以串联：若 A 归约到 B，B 归约到 C，则 A 归约到 C。"
+  },
+  "349faddc271f": {
+   "scene": "Reductions",
+   "en": "Now define hardness and completeness. <bookmark mark='a'/> B is NP-hard if every language in NP has a deterministic polynomial-time many-one reduction to B. <bookmark mark='b'/> B is NP-complete if it is also in NP. The picture draws disjoint easy and complete regions under the assumption that P differs from NP. <bookmark mark='c'/> If any NP-complete language is in P, every NP language is in P. <bookmark mark='d'/> Equivalently, if some NP-complete language is outside P, all of them are. Neither premise is currently proved. <bookmark mark='e'/> Cook and Levin supplied the first complete problem by encoding polynomially bounded computations as satisfiability.",
+   "zh": "现在定义难度与完全性。<bookmark mark='a'/>若 NP 中每个语言都能通过确定性多项式时间的多对一归约变成 B，B 就是 NP 难的。<bookmark mark='b'/>若 B 还属于 NP，它就是 NP 完全的。图中容易与完全区域分离，以 P 不等于 NP 为前提。<bookmark mark='c'/>如果任一个 NP 完全语言属于 P，NP 中所有语言都属于 P。<bookmark mark='d'/>等价地，若某个 NP 完全语言不在 P 中，它们就全都不在 P 中。目前两个前提都没有被证明。<bookmark mark='e'/>Cook 与 Levin 把多项式有界计算编码为可满足性，给出了第一个完全问题。"
+  },
+  "9844af20af4b": {
+   "scene": "Reductions",
+   "en": "Decision can also recover a witness. <bookmark mark='a'/> First ask whether this SAT formula is satisfiable. Then try setting each variable to true while retaining earlier choices. Keep true when the remaining formula is satisfiable; otherwise choose false. <bookmark mark='b'/> The retained four-variable trace uses five actual queries, including the initial test. Each query and answer is saved. <bookmark mark='c'/> The invariant is that every chosen prefix extends to a full satisfying assignment. <bookmark mark='d'/> If P equals NP, this method extends through SAT encodings to polynomially bounded, polynomial-time verifiable witness relations. It does not promise to invert any arbitrary many-one reduction. Compositeness decision is already in P; finding a nontrivial factor is a different search problem.",
+   "zh": "判定还可以恢复证书。<bookmark mark='a'/>先问 SAT 公式是否可满足，再依次尝试把每个变量设为真，保留之前选择。若余下公式仍可满足，就保留真，否则选假。<bookmark mark='b'/>四变量轨迹实际调用五次，其中包括最初测试；每个查询和答案都被保存。<bookmark mark='c'/>不变量是：每个已选前缀都能扩展为完整满足赋值。<bookmark mark='d'/>若 P 等于 NP，这种方法可通过 SAT 编码推广到多项式有界、可在多项式时间验证的证书关系，但不保证能反演任意多对一归约。合数判定已经属于 P，找到非平凡因子是另一个搜索问题。"
+  },
+  "6804b1ce17a7": {
+   "scene": "CookLevin",
+   "en": "Chapter five. Cook-Levin: SAT is NP-complete.",
+   "zh": "第5章。Cook-Levin：SAT 是 NP 完全的。"
+  },
+  "99abdadccd63": {
+   "scene": "CookLevin",
+   "en": "Cook and Levin encoded bounded nondeterministic computation as satisfiability. <bookmark mark='a'/> A tableau records configurations in rows: tape symbols, state and head position. <bookmark mark='b'/> Our tiny machine scans right and may enter an accepting state when it reads a one. Acceptance is made absorbing. <bookmark mark='c'/> The displayed input zero zero one zero has six rows, hence at most five transitions, with explicit borders. One accepting run reaches acceptance after three transitions. <bookmark mark='d'/> Adjacent rows are constrained by overlapping two-by-three windows. <bookmark mark='e'/> We enumerate the legal local patterns for this fixed machine; the count is specific to its alphabet and transition rules. <bookmark mark='f'/> The start row has exactly one head, and legal overlapping windows enforce a valid successor. We also check each decoded whole configuration directly, independently of the window encoding.",
+   "zh": "Cook 与 Levin 把有界非确定计算编码为可满足性。<bookmark mark='a'/>表格每行记录一个格局，包括带符号、状态与读写头位置。<bookmark mark='b'/>这台小机器向右扫描，在读到一时可以进入接受状态；接受状态被设为吸收状态。<bookmark mark='c'/>显示的输入零零一零有六行，因此至多允许五次转移，并带有明确边界。其中一条运行经过三次转移后接受。<bookmark mark='d'/>相邻两行由相互重叠的二乘三窗口约束。<bookmark mark='e'/>我们枚举固定机器的合法局部图样，数量依赖它的字母表与转移规则。<bookmark mark='f'/>初始行恰有一个读写头，合法重叠窗口约束其后继；此外，还独立于窗口编码，直接检查每个解码出的完整格局。"
+  },
+  "852e3d6da972": {
+   "scene": "CookLevin",
+   "en": "Translate those conditions into Boolean variables. <bookmark mark='a'/> A variable says that a particular row and column contains one specified symbol or state-symbol pair. <bookmark mark='b'/> Exactly-one clauses give every cell a single value. <bookmark mark='c'/> Unit clauses fix the initial input and head. <bookmark mark='d'/> Auxiliary choices enforce one legal window at every position between adjacent rows. <bookmark mark='e'/> The final row must contain the accepting state. Because that state is absorbing, earlier acceptance extends to the final row. <bookmark mark='f'/> The formula is satisfiable exactly when an accepting branch fits this row budget. <bookmark mark='g'/> For a fixed machine, quadratic many cells and window positions, each with a constant-size local encoding, give polynomial formula size. <bookmark mark='h'/> The construction uses the machine, input and time bound without knowing an accepting branch. Applying it to any polynomial-time NP verifier proves SAT NP-complete.",
+   "zh": "把这些条件翻译成布尔变量。<bookmark mark='a'/>一个变量表示特定行、列的格子含有指定符号，或状态与符号对。<bookmark mark='b'/>恰选一个的子句让每格取唯一值。<bookmark mark='c'/>单元子句固定初始输入和读写头。<bookmark mark='d'/>辅助选择变量确保相邻行每个位置都有一个合法窗口。<bookmark mark='e'/>最后一行必须含接受状态；由于接受是吸收状态，更早的接受可以延续到最后。<bookmark mark='f'/>公式可满足，当且仅当某条接受分支能装进这个行数预算。<bookmark mark='g'/>对固定机器，格子与窗口位置的数量是平方级，每个局部编码大小为常数，因此公式规模为多项式。<bookmark mark='h'/>构造只用到机器、输入与时间界，无需预先知道接受分支。对任意多项式时间 NP 验证器应用这一构造，就证明 SAT 是 NP 完全的。"
+  },
+  "2384ab384346": {
+   "scene": "CookLevin",
+   "en": "We ran the finite construction. <bookmark mark='a'/> Inputs consisting of zeros followed by a one, of lengths two through eight, produce the displayed variable and clause counts. Full formulas and solver models are retained. <bookmark mark='b'/> Every decoded accepting tableau is checked against whole-machine transitions, and a separate configuration search confirms the bounded acceptance result. The all-zero example is rejected within its stated budget. <bookmark mark='c'/> These experiments check our implementation. The general theorem follows from the encoding argument and its polynomial bound, rather than from extrapolating the seven measurements.",
+   "zh": "我们实际运行了有限构造。<bookmark mark='a'/>输入是若干零后跟一个一，长度从二到八，得到屏幕上的变量与子句计数；完整公式与求解模型全部保留。<bookmark mark='b'/>每个接受表格都按机器完整转移直接检查，另一个格局搜索确认有界接受结果。全零例子在指定预算内不接受。<bookmark mark='c'/>这些实验检查实现；一般定理由编码论证与多项式界给出，而不是七个测量值的外推。"
+  },
+  "7ff98a0023a1": {
+   "scene": "Web",
+   "en": "Chapter six. The web of reductions.",
+   "zh": "第6章。归约之网。"
+  },
+  "5541b549d20d": {
+   "scene": "Web",
+   "en": "Once one problem is NP-complete, the rest get easier. <bookmark mark='a'/> To show that a new problem B is NP-complete, it is enough to put it in NP and reduce SAT, or any known NP-complete problem, to it. <bookmark mark='b'/> The first step is three-SAT, where every clause has at most three literals: split a long clause into a chain of short ones linked by new variables. <bookmark mark='c'/> Here is a small formula: five clauses over four variables, satisfied by seven of the sixteen assignments. <bookmark mark='d'/> We will push it through three reductions, solve each disguised problem, and translate the answer back.",
+   "zh": "一旦有一个问题是 NP 完全的，其余的就容易了。<bookmark mark='a'/>要证明新问题 B 是 NP 完全的，只要把它放进 NP，再把 SAT 或任何已知的 NP 完全问题归约到它。<bookmark mark='b'/>第一步是三-SAT，每个子句至多三个文字：把长子句拆成一串由新变量连起来的短子句。<bookmark mark='c'/>这里有一个小公式：四个变量上的五个子句，十六种赋值中有七种满足它。<bookmark mark='d'/>我们会把它推过三个归约，求解每个伪装后的问题，再把答案翻译回来。"
+  },
+  "62b770112e74": {
+   "scene": "Web",
+   "en": "First disguise: independent set. Choose k vertices of a graph, no two joined by an edge. <bookmark mark='a'/> Make a triangle for each clause, one vertex per literal. Since the vertices of a triangle are all joined, you can pick at most one from each clause. <bookmark mark='b'/> Then join every literal to every copy of its negation, so you can never pick both x and not x. <bookmark mark='c'/> An independent set of five vertices picks one literal from every clause, consistently: a satisfying assignment. Our solver found one, and the five green vertices are it. <bookmark mark='d'/> The same five vertices are a clique in the complement graph, and the other ten are a vertex cover. So clique and vertex cover are NP-complete too, almost for free.",
+   "zh": "第一种伪装：独立集。在一个图中选出 k 个顶点，任意两个之间没有边。<bookmark mark='a'/>为每个子句做一个三角形，每个文字一个顶点。由于三角形的顶点两两相连，每个子句至多只能选一个。<bookmark mark='b'/>再把每个文字和它的每个否定副本连起来，这样就永远不会同时选中 x 和非 x。<bookmark mark='c'/>一个五个顶点的独立集，从每个子句选出一个文字，并且互相一致：这就是一个满足赋值。我们的求解器找到了一个，就是这五个绿色顶点。<bookmark mark='d'/>同样的五个顶点在补图中构成一个团，另外十个构成一个顶点覆盖。所以团和顶点覆盖也是 NP 完全的，几乎不费吹灰之力。"
+  },
+  "5f856ea2f1d9": {
+   "scene": "Web",
+   "en": "Second disguise: colouring a graph with three colours. <bookmark mark='a'/> Start with a triangle whose colours we name True, False and Base. <bookmark mark='b'/> For each variable, two vertices, x and not x, joined to each other and to Base: one must be coloured True and the other False. <bookmark mark='c'/> For each clause, a small gadget whose output vertex can be True only if one of its inputs is; chain two for three literals, and join the output to False and Base, forcing it to be True. <bookmark mark='d'/> Our formula becomes a graph of forty-one vertices. Written as a SAT problem for our solver, a hundred and twenty-three variables. <bookmark mark='e'/> The colouring it found, read back as truth values, satisfies the original formula. <bookmark mark='f'/> And an unsatisfiable formula, put through the same construction, gives a graph that cannot be three-coloured. We checked that too.",
+   "zh": "第二种伪装：用三种颜色给图着色。<bookmark mark='a'/>从一个三角形开始，它的三种颜色命名为真、假和基底。<bookmark mark='b'/>对每个变量，两个顶点 x 和非 x，彼此相连并都连到基底：其中一个必须是真色，另一个是假色。<bookmark mark='c'/>对每个子句，一个小部件，它的输出顶点只有在某个输入为真时才能是真色；三个文字就串两个，并把输出连到假和基底，迫使它为真。<bookmark mark='d'/>我们的公式变成一个四十一个顶点的图。写成给求解器的 SAT 问题，是一百二十三个变量。<bookmark mark='e'/>它找到的着色，读回成真值，满足原来的公式。<bookmark mark='f'/>而一个不可满足的公式，经过同样的构造，得到的图不能三着色。这一点我们也检查了。"
+  },
+  "c5584b938639": {
+   "scene": "Web",
+   "en": "Third disguise, with no graphs at all: subset sum. Pick some of these numbers to hit the target exactly. <bookmark mark='a'/> Each number is written in decimal, one column per variable and one per clause. The number y i has a one in variable i's column and in every clause where x i appears; z i does the same for not x i. <bookmark mark='b'/> The target has a one in every variable column, so exactly one of y i and z i must be chosen: a truth value. <bookmark mark='c'/> It has a three in every clause column. The chosen literals contribute between one and three there, and two slack numbers per clause can top it up, but only if at least one literal is true. <bookmark mark='d'/> No column ever holds more than five ones, so there are no carries and the columns cannot interfere. <bookmark mark='e'/> The green rows come from our solver's assignment, and they add up to the target exactly. Numbers have become logic.",
+   "zh": "第三种伪装，完全没有图：子集和。从这些数中挑一些，恰好凑出目标。<bookmark mark='a'/>每个数用十进制写，每个变量一列，每个子句一列。数 y i 在变量 i 的列上是一，在每个含有 x i 的子句列上也是一；z i 对非 x i 做同样的事。<bookmark mark='b'/>目标在每个变量列上是一，所以 y i 和 z i 恰好只能选一个：一个真值。<bookmark mark='c'/>它在每个子句列上是三。选中的文字在那里贡献一到三，每个子句的两个松弛数可以补足，但前提是至少有一个文字为真。<bookmark mark='d'/>没有哪一列会超过五个一，所以没有进位，各列互不干扰。<bookmark mark='e'/>绿色的行来自我们求解器的赋值，它们加起来恰好等于目标。数变成了逻辑。"
+  },
+  "9716e95bf4b7": {
+   "scene": "Everywhere",
+   "en": "Chapter seven. NP-completeness everywhere.",
+   "zh": "第7章。无处不在的 NP 完全性。"
+  },
+  "e1923ccea4bf": {
+   "scene": "Everywhere",
+   "en": "Hardness appears in many generalized decision problems. <bookmark mark='a'/> Offline Tetris asks whether a specified board and known piece sequence can achieve a stated objective, such as enough cleared rows, under the chosen move rules. <bookmark mark='b'/> Minesweeper consistency asks whether a finite clue layout has a compatible mine placement. <bookmark mark='c'/> Generalized Sudoku completion lets board dimensions grow; a fixed nine-by-nine puzzle is a finite case. <bookmark mark='d'/> The folding example concerns a specified lattice hydrophobic-polar model and energy threshold, not unrestricted physical protein behaviour. <bookmark mark='e'/> Each named decision variant has a polynomially checkable witness and an appropriate hardness reduction. <bookmark mark='f'/> Different rules or objectives may change the classification. Long two-player games introduce another set of questions, considered in the space chapter.",
+   "zh": "难度出现在许多推广后的判定问题中。<bookmark mark='a'/>离线俄罗斯方块给定棋盘、完整方块序列与移动规则，询问能否达到目标，例如清除足够多的行。<bookmark mark='b'/>扫雷一致性询问有限提示布局是否存在相容的地雷位置。<bookmark mark='c'/>推广数独补全允许棋盘规模增长；固定九乘九题目只是有限实例。<bookmark mark='d'/>折叠例子针对指定的格点疏水亲水模型及能量阈值，不是任意真实蛋白质的行为。<bookmark mark='e'/>这些特定判定版本都有多项式可检查证书及相应难度归约。<bookmark mark='f'/>规则或目标改变，分类也可能改变。长程双人博弈则提出另一组问题，空间一章会讨论。"
+  },
+  "2fd13e01d470": {
+   "scene": "Everywhere",
+   "en": "Engineers meet these problems in general-purpose forms. <bookmark mark='a'/> Scheduling models often lead to integer programming or constraint programming. <bookmark mark='b'/> In one-dimensional bin packing, first-fit decreasing has an eleven-ninths asymptotic guarantee with an additive constant; it is not a pure eleven-ninths bound for every small instance. <bookmark mark='c'/> Expressive dependency constraints can make package installation NP-complete. <bookmark mark='d'/> Actual package managers use different techniques, including SAT, incompatibility learning and backtracking; PubGrub is not the algorithm of every manager. <bookmark mark='e'/> Configuration and register allocation also produce hard general models. <bookmark mark='f'/> NP-completeness describes worst-case reductions. A polynomial-time algorithm for all instances would imply P equals NP; many real instances remain easy. <bookmark mark='g'/> Match the model to the task, then consider exact solvers, structure, approximation guarantees or explicitly limited heuristics.",
+   "zh": "工程师会遇到这些问题的一般形式。<bookmark mark='a'/>排程模型常常通向整数规划或约束规划。<bookmark mark='b'/>一维装箱中的降序首次适配，具有十一比九的渐近保证，并带加法常数；不是每个小实例都满足纯十一比九界。<bookmark mark='c'/>表达力足够的依赖约束会使软件包安装成为 NP 完全问题。<bookmark mark='d'/>实际包管理器使用不同技术，包括 SAT、不相容性学习与回溯；它们并非全部采用 PubGrub。<bookmark mark='e'/>配置与寄存器分配也会产生困难的一般模型。<bookmark mark='f'/>NP 完全性描述最坏情况归约；若所有实例都有多项式时间算法，就会得到 P 等于 NP，而许多实际实例仍然容易。<bookmark mark='g'/>先选择准确模型，再考虑精确求解、特殊结构、近似保证，或明确受限的启发式。"
+  },
+  "a6068e2b2278": {
+   "scene": "Numbers",
+   "en": "Chapter eight. Strong and weak hardness.",
+   "zh": "第8章。强难与弱难。"
+  },
+  "ecfda51daab0": {
+   "scene": "Numbers",
+   "en": "Why can a dynamic program solve subset sum? <bookmark mark='a'/> The familiar dense recurrence uses order n times W scalar work, where W is the target value. Our actual bitset version stores sums from zero through W and shifts many bits at once; each operation still has a limb cost. <bookmark mark='b'/> W can be exponential in its binary encoding length, so this is pseudo-polynomial, not polynomial in the full input length. The digit comparison describes possible numeric-range growth, not an exact law for these timings. <bookmark mark='c'/> The table retains every weight, target, final reachable bitset and explicit subset witness. Separate meet-in-the-middle searches check the answers. <bookmark mark='d'/> For thirty twelve-digit weights, meet in the middle uses exponentially many subsets in half the variable count. It avoids a table proportional to W, while arithmetic and storage still depend on integer bit lengths.",
+   "zh": "为什么动态规划能解子集和？<bookmark mark='a'/>熟悉的稠密递推使用 n 乘 W 量级的标量工作，其中 W 是目标数值。实际位集合版本存储零到 W 的和，一次移位处理多个比特，但每次操作仍有机器字成本。<bookmark mark='b'/>W 相对于二进制编码长度可能是指数级，所以算法是伪多项式，而不是关于完整输入长度的多项式。位数比较描述数值范围可能的增长，不是这些耗时的精确规律。<bookmark mark='c'/>每个权重、目标、最终可达位集合及明确子集证书都被保留，独立折半搜索检查答案。<bookmark mark='d'/>三十个十二位权重可采用折半法，枚举数量对一半变量数呈指数增长。它避免与 W 成正比的表格，但运算与存储仍依赖整数的比特长度。"
+  },
+  "c8df8c447a82": {
+   "scene": "Numbers",
+   "en": "Numeric encodings refine hardness. <bookmark mark='a'/> Weakly NP-hard numerical problems such as subset sum admit pseudo-polynomial algorithms, but their binary-encoded general cases remain NP-hard. <bookmark mark='b'/> Strong NP-hardness persists even when numeric parameters are polynomially bounded, as in three-partition and suitable bin-packing decision formulations. <bookmark mark='c'/> This distinction is about the input encoding and restrictions; it is not a guarantee about every instance. <bookmark mark='d'/> Some optimization problems admit useful rounding schemes. <bookmark mark='e'/> Positive-profit zero-one knapsack has an FPTAS: for each positive epsilon it obtains at least one minus epsilon of optimum in time polynomial in the input length and one over epsilon. <bookmark mark='f'/> Weak hardness alone does not guarantee an FPTAS. For strongly NP-hard optimization with an integer objective polynomially bounded on the hard restricted instances, an FPTAS would imply P equals NP. Asymptotic schemes such as bin packing's have a different guarantee. <bookmark mark='g'/> State the objective and approximation definition before drawing conclusions from hardness.",
+   "zh": "数值编码让难度分类更细。<bookmark mark='a'/>子集和这样的弱 NP 难数值问题具有伪多项式算法，但一般二进制编码版本仍然 NP 难。<bookmark mark='b'/>强 NP 难在数值参数被多项式约束时仍然存在，例如三划分和适当的装箱判定版本。<bookmark mark='c'/>区别针对输入编码与限制，不是每个实例的性能保证。<bookmark mark='d'/>某些优化问题可以采用舍入方案。<bookmark mark='e'/>正利润的零一背包具有 FPTAS：任意正 epsilon 下，得到至少为最优值一减 epsilon 倍的解，时间关于输入长度和一除 epsilon 都是多项式。<bookmark mark='f'/>仅有弱难度并不保证 FPTAS。若强 NP 难优化问题在困难的受限实例上具有多项式有界的整数目标，FPTAS 就会推出 P 等于 NP。装箱的渐近方案采用另一种保证。<bookmark mark='g'/>由难度得出结论之前，先说明目标与近似定义。"
+  },
+  "52359ce7c67d": {
+   "scene": "CoNp",
+   "en": "Chapter nine. coNP and the polynomial hierarchy.",
+   "zh": "第9章。coNP 与多项式层级。"
+  },
+  "8d3e846d48ff": {
+   "scene": "CoNp",
+   "en": "NP requires short certificates for yes-instances. <bookmark mark='a'/> CoNP consists of languages whose complements are in NP, so their no-instances have short efficiently checkable certificates. <bookmark mark='b'/> Tautology for general Boolean formulas is a coNP-complete example: a falsifying assignment certifies a no-answer. Enumerating every assignment is one decision method, not a necessity for every yes-instance. CNF tautology has a different, easy structure. <bookmark mark='c'/> Whether NP equals coNP is open; equality would follow from P equals NP, but the converse is not known. <bookmark mark='d'/> Bounded nontrivial-factor decision lies in both classes. If an NP-complete language were also in coNP, then NP would equal coNP. The overlapping circles are a schematic, not a proof of strict separation.",
+   "zh": "NP 要求肯定实例具有短证书。<bookmark mark='a'/>coNP 是补语言属于 NP 的语言类，因此否定实例有短而高效可检查的证书。<bookmark mark='b'/>一般布尔公式的永真性是 coNP 完全例子：一个使公式为假的赋值就证明否定答案。枚举所有赋值是一种判定方法，不是每个肯定实例都必须采用的方法；合取范式的永真性结构不同，而且容易判定。<bookmark mark='c'/>NP 是否等于 coNP 仍然开放。P 等于 NP 会推出相等，反方向并不已知。<bookmark mark='d'/>有界非平凡因子判定同时属于两类。若 NP 完全语言也属于 coNP，就会得到 NP 等于 coNP。相交圆只是示意，不是严格分离的证明。"
+  },
+  "18c191ea527e": {
+   "scene": "CoNp",
+   "en": "Define the factor question carefully. <bookmark mark='a'/> For N at least two and k below N, ask whether N has a divisor d between two and k. Divisor one is excluded. <bookmark mark='b'/> The full prime factorization, with primality certificates, answers both yes and no: compare the smallest prime factor with k. Its total bit length is polynomial in log N. <bookmark mark='c'/> Pratt certificates recursively certify the prime factors of p minus one and exhibit an element of order p minus one modulo p. The order criterion then proves p prime. <bookmark mark='d'/> We retain the complete certificate for two to the sixty-first minus one and certificates for both displayed factors. One checker counts certificate nodes; a separate arithmetic checker records the modular powers. These are different counts. <bookmark mark='e'/> AKS later put primality decision itself in P. Factoring search still has no known classical polynomial-time algorithm.",
+   "zh": "因子问题要先定义清楚。<bookmark mark='a'/>设 N 至少为二，k 小于 N，询问是否存在二到 k 之间的因子 d，明确排除一。<bookmark mark='b'/>完整素因数分解加素性证书，能证明肯定或否定答案：把最小素因子与 k 比较即可，总比特长度关于 log N 为多项式。<bookmark mark='c'/>Pratt 证书递归认证 p 减一的素因子，并展示模 p 下阶为 p 减一的元素；阶判据由此证明 p 为素数。<bookmark mark='d'/>我们保留二的六十一次方减一的完整证书，以及显示的两个因子的证书。一个检查器统计证书结点，独立算术检查器记录模幂运算，两种计数不同。<bookmark mark='e'/>后来 AKS 把素性判定本身放进 P；经典多项式时间的因数分解搜索算法仍未知。"
+  },
+  "af25778282ac": {
+   "scene": "CoNp",
+   "en": "Alternation produces the polynomial hierarchy. <bookmark mark='a'/> An existential block of polynomially many bits followed by a polynomial-time predicate gives NP. <bookmark mark='b'/> A universal block gives coNP. They are duals at the same first level, not successive levels. <bookmark mark='c'/> An existential block followed by a universal block gives the second existential level, with its universal-existential dual beside it. <bookmark mark='d'/> Each quantified string has polynomial BIT LENGTH in the original input; the numerical values can therefore be exponentially large. <bookmark mark='e'/> If the existential and universal classes coincide at level k, the entire hierarchy collapses to that level. P equals NP would collapse it to P. None of the displayed separations is assumed proved.",
+   "zh": "交替量词产生多项式层级。<bookmark mark='a'/>对多项式数量的比特作存在量化，再用多项式时间谓词检查，就得到 NP。<bookmark mark='b'/>一个全称量词块得到 coNP；两者是同一第一层的对偶，不是相邻两层。<bookmark mark='c'/>存在块后接全称块，得到第二层存在类，旁边还有全称再存在的对偶类。<bookmark mark='d'/>每个被量化的字符串，其比特长度关于原输入为多项式，因此数值本身可以是指数级。<bookmark mark='e'/>若第 k 层的存在类与全称类相等，整个层级就塌缩到该层。P 等于 NP 会使它塌缩到 P；图中分离都不能当作已证明事实。"
+  },
+  "909d36ade7b2": {
+   "scene": "Space",
+   "en": "Chapter ten. Space: games and alternation.",
+   "zh": "第10章。空间：博弈与交替。"
+  },
+  "9863415e060f": {
+   "scene": "Space",
+   "en": "Polynomial space has its own complete problem. <bookmark mark='a'/> Take a formula with quantifiers in front, alternating: there exists x one, for all x two, there exists x three, and so on. Is the whole thing true? <bookmark mark='b'/> Evaluate it by recursion: try both values of the first variable, and evaluate the rest for each. <bookmark mark='c'/> The recursion only needs one assignment and a stack, so the space is polynomial. <bookmark mark='d'/> The time can be exponential, although on our random formulas early answers prune most of the tree. <bookmark mark='e'/> Larry Stockmeyer and Albert Meyer proved in 1973 that this problem is complete for polynomial space. <bookmark mark='f'/> Satisfiability is the special case with only existential quantifiers.",
+   "zh": "多项式空间有它自己的完全问题。<bookmark mark='a'/>取一个前面带着交替量词的公式：存在 x 一，对所有 x 二，存在 x 三，如此等等。整个式子为真吗？<bookmark mark='b'/>用递归求值：对第一个变量试两个值，再对每个值求剩下部分。<bookmark mark='c'/>递归只需要一个赋值和一个栈，所以空间是多项式的。<bookmark mark='d'/>时间可能是指数的，不过在我们的随机公式上，早早得出的答案剪掉了树的大部分。<bookmark mark='e'/>Larry Stockmeyer 和 Albert Meyer 在1973年证明，这个问题对多项式空间是完全的。<bookmark mark='f'/>可满足性是只有存在量词的特例。"
+  },
+  "dd4bfddd1103": {
+   "scene": "Space",
+   "en": "Quantifier alternation also describes games. <bookmark mark='a'/> Generalized geography moves a token along a directed edge to a vertex not visited before; a player unable to move loses. Here player one places the starting token, and player two moves next. <bookmark mark='b'/> The displayed winner and position count follow that initial-placer convention. A separate recursive set search checks the result. Our actual instrument memoizes positions and can use exponential storage. <bookmark mark='c'/> For the PSPACE membership proof, traverse possible plays depth first, keeping only the current path of at most the number of vertices. Generalized geography is PSPACE-complete under the standard rules. That theorem and the storage cost of our finite memoized implementation are distinct claims.",
+   "zh": "量词交替也描述博弈。<bookmark mark='a'/>广义地理游戏沿有向边把棋子移到尚未访问的顶点，无法移动者输。这里第一人放置起点，第二人先移动。<bookmark mark='b'/>显示的胜者与局面数采用这个起点放置者约定，独立的集合递归搜索检查结果。实际工具记忆化保存局面，可能使用指数空间。<bookmark mark='c'/>证明属于 PSPACE 时，采用深度优先遍历，只保存长度至多为顶点数的当前路径。标准规则的广义地理游戏是 PSPACE 完全的；这个定理与有限记忆化实现的存储成本，是两种不同主张。"
+  },
+  "12105e780c87": {
+   "scene": "Space",
+   "en": "Generalized games require precise rules. <bookmark mark='a'/> Hex winner decision is PSPACE-complete. Results for Go depend on the ko and repetition rules, while suitable generalized chess and checkers rules yield EXPTIME-complete problems. These statements concern growing boards and formal move conventions. <bookmark mark='b'/> A polynomially bounded play length gives a depth-first polynomial-space upper bound when positions and legal moves are efficiently represented. Exponentially long play requires a separate configuration or game-graph analysis; length alone proves no completeness result. <bookmark mark='c'/> EXPTIME-complete problems are outside P by the time hierarchy. PSPACE versus P remains open. <bookmark mark='d'/> Offline Tetris concerns achieving a stated one-player objective with known pieces, rather than a two-player winner question. A fixed everyday board is a finite instance of a generalized family.",
+   "zh": "推广博弈需要精确规则。<bookmark mark='a'/>Hex 胜负判定是 PSPACE 完全的。围棋结果依赖劫与重复局面规则；适当推广的国际象棋和跳棋规则产生 EXPTIME 完全问题。这里讨论规模增长的棋盘和形式化移动约定。<bookmark mark='b'/>如果局面与合法移动能够高效表示，多项式有界的棋局长度给出深度优先的多项式空间上界。指数长棋局还需要另作格局或博弈图分析，长度本身不证明完全性。<bookmark mark='c'/>时间层级定理证明 EXPTIME 完全问题不在 P 中；PSPACE 与 P 的关系仍开放。<bookmark mark='d'/>离线俄罗斯方块是已知方块序列下达到指定单人目标，并不是双人胜负问题；日常固定棋盘只是推广问题族的有限实例。"
+  },
+  "938ba978fe36": {
+   "scene": "Space",
+   "en": "Space also matters at the bottom. <bookmark mark='a'/> Logarithmic space allows a read-only input and a handful of counters and pointers. <bookmark mark='b'/> Its nondeterministic version, NL, has a natural complete problem: is there a path from s to t in a directed graph? <bookmark mark='c'/> In 1987 and 1988 Róbert Szelepcsényi and Neil Immerman independently proved a surprise: NL is closed under complement. The trick is to count the reachable vertices, layer by layer, nondeterministically but verifiably. So for space, unlike what we expect for time, guessing a no is as easy as guessing a yes. <bookmark mark='d'/> In 2005 Omer Reingold showed that reachability in undirected graphs needs no guessing at all. <bookmark mark='e'/> Whether logarithmic space equals polynomial time is as open as P versus NP.",
+   "zh": "空间在底层也很重要。<bookmark mark='a'/>对数空间允许一个只读的输入，加上一把计数器和指针。<bookmark mark='b'/>它的非确定版本 NL 有一个自然的完全问题：有向图中是否有从 s 到 t 的路径？<bookmark mark='c'/>1987年和1988年，Róbert Szelepcsényi 和 Neil Immerman 独立证明了一个惊喜：NL 在补运算下封闭。诀窍是一层一层地数出可达的顶点，非确定地、但可验证地。所以对于空间，和我们对时间的预期不同，猜出一个“否”和猜出一个“是”一样容易。<bookmark mark='d'/>2005年，Omer Reingold 证明了无向图中的可达性根本不需要猜测。<bookmark mark='e'/>对数空间是否等于多项式时间，和 P 与 NP 一样悬而未决。"
+  },
+  "25ed06147313": {
+   "scene": "Sqrt",
+   "en": "Chapter eleven. Time in square-root space.",
+   "zh": "第11章。平方根空间里的时间。"
+  },
+  "29d7d9941f63": {
+   "scene": "Sqrt",
+   "en": "How much space can simulate a time-bounded computation? <bookmark mark='a'/> For deterministic multitape Turing machines, divide a computation into blocks. The grid is an illustration of dependency structure, not a literal implementation of the entire proof. <bookmark mark='b'/> Hopcroft, Paul and Valiant obtained a time-over-log-time space simulation in 1977. <bookmark mark='c'/> Improving that general bound resisted progress for decades. <bookmark mark='d'/> Williams's 2025 theorem gives TIME t contained in SPACE of order square root of t log t, for t at least n, in the stated multitape model. It is not an unrestricted RAM theorem. <bookmark mark='e'/> The proof reduces the simulation to implicitly generated tree-evaluation instances. Shared dependencies may be unfolded into a much larger tree, accessed on demand rather than stored in full.",
+   "zh": "时间有界计算能用多少空间模拟？<bookmark mark='a'/>对确定性多带图灵机，把计算分块。网格只是依赖结构示意，不是完整证明的字面实现。<bookmark mark='b'/>Hopcroft、Paul 与 Valiant 在1977年给出时间除以时间对数的空间模拟。<bookmark mark='c'/>此后数十年，一般界一直难以改进。<bookmark mark='d'/>Williams 的2025年定理说明：在指定多带模型中，若 t 至少为 n，TIME t 包含于平方根 t log t 量级的空间；这不是任意 RAM 的定理。<bookmark mark='e'/>证明把模拟化为隐式生成的树求值实例。共享依赖可以展开成更大的树，但按需访问，不把整棵树存下来。"
+  },
+  "8e020d8d4daf": {
+   "scene": "Sqrt",
+   "en": "Tree evaluation asks for the root value. <bookmark mark='a'/> Leaves carry values and internal nodes provide explicit tables mapping child values to a parent value. <bookmark mark='b'/> Keeping a value at each level uses height times value length space. This motivates pebbling-based algorithms and lower-bound conjectures. <bookmark mark='c'/> Proving sufficiently strong tree-evaluation lower bounds would separate small-space classes from P, but those separations remain open. <bookmark mark='d'/> Cook and Mertz found a more space-efficient evaluation algorithm using algebraic techniques. This undermines some pebbling intuitions; it does not settle membership in L or disprove the conjecture that tree evaluation is outside NL. <bookmark mark='e'/> Williams uses that improved algorithm as an ingredient in the multitape simulation theorem.",
+   "zh": "树求值要计算根的值。<bookmark mark='a'/>叶子带有数值，内部结点提供显式表，把子结点的值映射成父结点的值。<bookmark mark='b'/>每层保留一个值，需要树高乘以数值长度的空间，因此引出放石子算法和下界猜想。<bookmark mark='c'/>足够强的树求值下界会分开小空间类与 P，但这些分离仍然开放。<bookmark mark='d'/>Cook 与 Mertz 用代数技术找到了更节省空间的求值算法，削弱了某些放石子的直觉，却没有解决是否属于 L，也没有推翻树求值不在 NL 中的猜想。<bookmark mark='e'/>Williams 把改进算法用作多带模拟定理的组成部分。"
+  },
+  "ce3af82adea6": {
+   "scene": "Sqrt",
+   "en": "Compare the asymptotic functions. <bookmark mark='a'/> At a trillion steps, the expressions t over log base two of t and square root of t log base two of t differ dramatically. The table evaluates those functions with constants omitted, not measured or guaranteed memory cell counts. <bookmark mark='b'/> The theorem implies that for space-constructible s at least n, and every fixed positive epsilon, some problems in SPACE s are outside TIME s to the power two minus epsilon. <bookmark mark='c'/> The machine model and constructibility conditions matter. This is a time-space separation theorem, not a resolution of P versus PSPACE or L versus P.",
+   "zh": "比较渐近函数。<bookmark mark='a'/>在一万亿步时，t 除以 log 二底 t，与平方根 t log 二底 t，两个表达式相差很大。表格只计算省略常数的函数，不是测量或保证的内存格数。<bookmark mark='b'/>定理推出：若 s 可空间构造且至少为 n，对每个固定正 epsilon，SPACE s 中存在 TIME 的 s 的二减 epsilon 次方无法解决的问题。<bookmark mark='c'/>机器模型与可构造性条件不可省略。这是时间与空间的分离定理，没有解决 P 与 PSPACE，或 L 与 P。"
+  },
+  "9603d38a6537": {
+   "scene": "Ladner",
+   "en": "Chapter twelve. Between P and NP-complete.",
+   "zh": "第12章。介于 P 与 NP 完全之间。"
+  },
+  "c94c1a0e3902": {
+   "scene": "Ladner",
+   "en": "Suppose P differs from NP. <bookmark mark='a'/> Ladner's theorem then supplies languages in NP that are neither in P nor NP-complete under polynomial-time many-one reductions. <bookmark mark='b'/> One proof uses a carefully controlled restriction or padding of satisfiability. This is a proof sketch, not a claim that ordinary padding makes SAT trivial. <bookmark mark='c'/> Delayed diagonalization chooses the growth rate slowly enough that the resulting language remains in NP. <bookmark mark='d'/> It defeats polynomial-time deciders and candidate completeness reductions in successive stages, under the assumption P differs from NP. <bookmark mark='e'/> The construction is artificial. Proving that a familiar natural candidate is intermediate remains a separate challenge.",
+   "zh": "假设 P 不等于 NP。<bookmark mark='a'/>Ladner 定理就给出 NP 中既不在 P 内，也不在多项式时间多对一归约下 NP 完全的语言。<bookmark mark='b'/>一种证明谨慎限制或填充可满足性。这只是证明提纲，不是说普通填充会让 SAT 变得平凡。<bookmark mark='c'/>延迟对角化缓慢选择增长率，使得到的语言仍然属于 NP。<bookmark mark='d'/>在 P 不等于 NP 的前提下，构造分阶段击败多项式时间判定器，以及候选完全性归约。<bookmark mark='e'/>构造的问题是人为的；证明某个熟悉的自然候选确实处于中间，仍是另一个挑战。"
+  },
+  "2ad60e4431f6": {
+   "scene": "Ladner",
+   "en": "Several natural problems motivate the question. <bookmark mark='a'/> Suitable decision versions of factoring and discrete logarithm lie in NP intersect coNP. RSA inversion and Diffie-Hellman assumptions are related to those searches, but should not be described as proved equivalent to them. <bookmark mark='b'/> Graph isomorphism has a quasipolynomial algorithm and cannot be NP-complete under standard reductions unless the polynomial hierarchy collapses. <bookmark mark='c'/> The minimum circuit size problem is another candidate: given a full truth table, is there a small circuit computing it? <bookmark mark='d'/> None of these is proved intermediate; each might still be in P. Their possible NP-completeness has different known consequences. <bookmark mark='e'/> In contrast, Bulatov and Zhuk proved a dichotomy for each FIXED finite constraint language over a finite domain: its decision CSP is in P or NP-complete. The fixed-template condition matters.",
+   "zh": "几个自然问题推动了这个疑问。<bookmark mark='a'/>因数分解与离散对数的适当判定版本属于 NP 与 coNP 的交集。RSA 求逆和 Diffie-Hellman 假设与这些搜索相关，却不能说已经证明等价。<bookmark mark='b'/>图同构有拟多项式算法；若它在标准归约下 NP 完全，多项式层级就会塌缩。<bookmark mark='c'/>最小电路规模也是候选：给定完整真值表，是否有小电路计算它？<bookmark mark='d'/>这些问题都没有被证明处于中间，也都可能属于 P。它们若 NP 完全，已知后果各不相同。<bookmark mark='e'/>相对地，Bulatov 与 Zhuk 对有限域上每个固定的有限约束语言，证明其判定 CSP 非此即彼：属于 P，或 NP 完全。固定模板这个条件不可省略。"
+  },
+  "90e8fe7f8d43": {
+   "scene": "Sat",
+   "en": "Chapter thirteen. SAT in practice.",
+   "zh": "第13章。实践中的 SAT。"
+  },
+  "9e0192a3fc34": {
+   "scene": "Sat",
+   "en": "Clause learning explains many practical SAT successes. <bookmark mark='a'/> Decide a variable value, using activity to guide choices. <bookmark mark='b'/> Unit propagation forces a literal when every other literal of its clause is false. Two watched literals avoid scanning every clause at every step. <bookmark mark='c'/> When a clause is falsified, follow the implication reasons. <bookmark mark='d'/> First-UIP analysis learns a clause implied by the original formula. <bookmark mark='e'/> Backjump to a level where that clause propagates, retaining the learned information. <bookmark mark='f'/> Our teaching solver also uses Luby restarts and saved phases. Exhausting a conflict budget returns unknown, never a refutation. <bookmark mark='g'/> The retained comparison uses the same formulas for DPLL and CDCL. Recursive DPLL nodes and CDCL decisions plus conflicts are DIFFERENT work units; host timings exclude the separate native reference checks. Resolved and budget-exhausted trials are reported explicitly.",
+   "zh": "子句学习解释了许多实际 SAT 成功。<bookmark mark='a'/>先决定变量值，用活跃度指导选择。<bookmark mark='b'/>若子句其余文字全假，单元传播就强制剩下的文字；双监视文字避免每步扫描所有子句。<bookmark mark='c'/>子句被判假时，沿蕴涵原因回溯。<bookmark mark='d'/>第一唯一蕴涵点分析学习一个由原公式推出的新子句。<bookmark mark='e'/>回跳到新子句能够传播的层级，同时保留学习信息。<bookmark mark='f'/>教学求解器还使用 Luby 重启和相位保存；冲突预算耗尽返回未知，绝不是反证。<bookmark mark='g'/>保留的对比让 DPLL 与 CDCL 处理相同公式。DPLL 的递归结点与 CDCL 的决定加冲突，是不同工作单位；本机耗时不含独立原生参考检查。完成与预算耗尽的试验分别报告。"
+  },
+  "f574513d32a8": {
+   "scene": "Sat",
+   "en": "SAT solvers also support mathematical proofs. <bookmark mark='a'/> We find and check Schur colourings through thirteen in three colours and forty-four in four colours. For fourteen with three colours, a native solver supplies a refutation trace whose every retained addition is checked by independent unit propagation. Our budget-limited forty-five-in-four run remains unknown when exhausted. <bookmark mark='b'/> Heule's published result establishes the five-colour Schur boundary at a hundred and sixty, using a huge proof computation. We do not repeat that proof here. <bookmark mark='c'/> For Pythagorean triples, our local SAT models supply complete colourings up to the displayed finite sizes, and we check every integer triple. <bookmark mark='d'/> The separate 2016 result of Heule, Kullmann and Marek establishes the boundary at seven thousand eight hundred and twenty-four. We independently check the larger instance's triple encoding, not its two-hundred-terabyte refutation. <bookmark mark='e'/> Solving, retaining a proof, and checking that proof are separate operations. Each reported verification names the artifact and checker actually used.",
+   "zh": "SAT 求解器也支持数学证明。<bookmark mark='a'/>我们找到并检查三色到十三、四色到四十四的 Schur 着色。三色十四的情形由原生求解器给出反证轨迹，每个保留的新增子句都经过独立单元传播检查。四色四十五的有限预算运行，耗尽时仍然未知。<bookmark mark='b'/>Heule 的已发表结果用巨大的证明计算，确立五色边界为一百六十；这里不重做该证明。<bookmark mark='c'/>对勾股三元组，本地 SAT 模型提供显示规模下的完整着色，每个整数三元组都经过检查。<bookmark mark='d'/>Heule、Kullmann 与 Marek 的2016年独立结果，确立边界为七千八百二十四。我们独立检查更大实例的三元组编码，没有重放两百 TB 的反证。<bookmark mark='e'/>求解、保存证明和检查证明，是三项不同操作。每个核验主张都指明实际使用的产物与检查器。"
+  },
+  "c2277a07d49b": {
+   "scene": "Barriers",
+   "en": "Chapter fourteen. Why it is hard.",
+   "zh": "第14章。为什么它难。"
+  },
+  "992ce3d552dc": {
+   "scene": "Barriers",
+   "en": "Some theorems constrain possible proof techniques. <bookmark mark='a'/> Baker, Gill and Solovay constructed an oracle relative to which P equals NP. A PSPACE-complete oracle makes both sides equal PSPACE. <bookmark mark='b'/> They also constructed an oracle relative to which P differs from NP. <bookmark mark='c'/> An argument that remains valid with every oracle cannot decide the unrelativized question, because it would give the same answer in these incompatible worlds. <bookmark mark='d'/> Many standard simulation and diagonal arguments relativize in this sense; this is not a claim about every possible use of those tools. <bookmark mark='e'/> Time hierarchy results survive relativization and separate appropriate time classes. They do not by themselves separate P from NP.",
+   "zh": "有些定理约束可能的证明技术。<bookmark mark='a'/>Baker、Gill 与 Solovay 构造了使 P 等于 NP 的谕示；采用 PSPACE 完全谕示，两边都成为 PSPACE。<bookmark mark='b'/>他们还构造了使 P 不等于 NP 的谕示。<bookmark mark='c'/>若一个论证对每个谕示都有效，它就不能解决无谕示问题，因为在这些冲突的世界中会给出同一个答案。<bookmark mark='d'/>许多标准模拟与对角线论证在此意义下相对化，但这不是对这些工具一切可能用法的断言。<bookmark mark='e'/>时间层级结果能够相对化，并分开适当的时间类；它们本身不能分开 P 与 NP。"
+  },
+  "22249fa8e937": {
+   "scene": "Barriers",
+   "en": "Circuit lower bounds face another barrier. <bookmark mark='a'/> A superpolynomial circuit lower bound for SAT would imply P differs from NP, and in fact the stronger statement that NP is not contained in P over poly. <bookmark mark='b'/> Strong results exist for restricted models, including parity against constant-depth AND-OR circuits and clique against monotone circuits. <bookmark mark='c'/> A natural property is constructive in polynomial time in the FULL truth-table length, holds for a sufficiently large fraction of truth tables, and is useful against the specified small circuits. All three conditions matter. <bookmark mark='d'/> Such a test can distinguish genuinely random functions from suitably secure pseudorandom functions. <bookmark mark='e'/> Under a sufficiently strong quantitative pseudorandomness assumption, Razborov and Rudich rule out natural properties proving the targeted general circuit bounds. Ordinary one-way-function existence alone is not the stated quantitative hypothesis. <bookmark mark='f'/> This is a conditional barrier to a class of circuit arguments, not a theorem excluding every proof of P differs from NP.",
+   "zh": "电路下界面对另一道障碍。<bookmark mark='a'/>SAT 的超多项式电路下界会推出 P 不等于 NP，事实上还推出更强的 NP 不包含于 P/poly。<bookmark mark='b'/>受限模型已有强结果，例如常数深度与或电路的奇偶性下界，以及单调电路的团下界。<bookmark mark='c'/>自然性质必须能在完整真值表长度的多项式时间内构造，对足够大比例的真值表成立，并能排除指定的小电路，三个条件都不可少。<bookmark mark='d'/>这样的检验能区分真正随机函数与足够安全的伪随机函数。<bookmark mark='e'/>在足够强的定量伪随机性假设下，Razborov 与 Rudich 排除了用自然性质证明目标一般电路下界的路径。普通单向函数的存在，并不直接等于这里的定量假设。<bookmark mark='f'/>这是一类电路论证的条件障碍，不是排除 P 不等于 NP 一切证明的定理。"
+  },
+  "eee422625d42": {
+   "scene": "Barriers",
+   "en": "Arithmetization escapes some relativization limits. <bookmark mark='a'/> The interactive-proof results in Part 27 turn Boolean computations into low-degree polynomial questions. <bookmark mark='b'/> Aaronson and Wigderson formalized a stronger limitation called algebrization, showing that important algebraic techniques still do not settle P versus NP. <bookmark mark='c'/> A proposed argument must be assessed against the precise barrier it encounters. Calling a proof simultaneously nonrelativizing, nonnatural and nonalgebrizing is only shorthand, with the natural-proof claim conditional and circuit-specific. <bookmark mark='d'/> Williams's algorithm-to-lower-bound method proves that NEXP has no polynomial-size, nonuniform, constant-depth ACC-zero circuit family. The permitted gates and depth are part of the statement. <bookmark mark='e'/> These results supply new methods, without resolving the central P versus NP question.",
+   "zh": "算术化突破了某些相对化限制。<bookmark mark='a'/>第27部分的交互证明把布尔计算变成低次多项式问题。<bookmark mark='b'/>Aaronson 与 Wigderson 形式化了更强的代数化限制，说明重要代数技术仍不足以解决 P 与 NP。<bookmark mark='c'/>要按论证实际遇到的精确障碍来评估它。“同时不相对化、不自然、不代数化”只是简称，其中自然证明障碍带有条件，而且针对电路。<bookmark mark='d'/>Williams 从算法得到下界的方法证明：NEXP 不存在多项式规模、非一致、常数深度的 ACC 零电路族；允许的门与深度都是命题的一部分。<bookmark mark='e'/>这些结果提供新方法，但没有解决核心的 P 与 NP 问题。"
+  },
+  "3f5a059c262d": {
+   "scene": "Worlds",
+   "en": "Chapter fifteen. Five possible worlds.",
+   "zh": "第15章。五个可能的世界。"
+  },
+  "23f920d99abd": {
+   "scene": "Worlds",
+   "en": "Impagliazzo's five worlds organize hypothetical possibilities. <bookmark mark='a'/> Algorithmica means P equals NP. <bookmark mark='b'/> Heuristica keeps worst-case hardness while NP problems are easy on the relevant efficiently samplable distributions; it does not say every generated input is easy. <bookmark mark='c'/> Pessiland has average-case hard NP problems but no one-way functions. <bookmark mark='d'/> Minicrypt has one-way functions and the private-key primitives they imply, while public-key cryptography remains unavailable in the intended picture. <bookmark mark='e'/> Cryptomania adds public-key cryptographic capabilities. These are informal worlds with specific distributional and security assumptions, rather than five proven consistency theorems. <bookmark mark='f'/> P differs from NP alone does not choose among the average-case and cryptographic worlds. Parts 29 and 30 develop those distinctions.",
+   "zh": "Impagliazzo 的五个世界组织了若干假设可能。<bookmark mark='a'/>Algorithmica 表示 P 等于 NP。<bookmark mark='b'/>Heuristica 保留最坏情况难度，而 NP 问题在相关的高效可抽样分布上平均容易；并不是说每个生成输入都容易。<bookmark mark='c'/>Pessiland 有平均困难的 NP 问题，却没有单向函数。<bookmark mark='d'/>Minicrypt 有单向函数及其推出的私钥密码原语，但设想中的公钥密码仍不可用。<bookmark mark='e'/>Cryptomania 再加入公钥密码能力。这些是附带分布与安全假设的非正式世界，不是五个已证明的一致性定理。<bookmark mark='f'/>仅有 P 不等于 NP，不能决定平均情况与密码学世界。第29和30部分会展开这些区别。"
+  },
+  "12b91671774e": {
+   "scene": "Worlds",
+   "en": "What would P equals NP imply? <bookmark mark='a'/> A bounded proof search with an efficiently checkable formal proof could recover a proof in polynomial time in the statement and the chosen length bound. It would not decide unbounded mathematical truth. <bookmark mark='b'/> Efficiently verifiable finite scheduling and routing objectives could be optimized through decision queries. Physical protein behaviour is not automatically such a model. <bookmark mark='c'/> Certain bounded circuit-learning searches would become efficient; finding the smallest unrestricted program remains undecidable. <bookmark mark='d'/> Computational cryptography based on one-way functions would fail. Information-theoretic secrecy, including a properly used one-time pad, is outside that conclusion. <bookmark mark='e'/> Large exponents, constants and the need to identify an algorithm could still make the theorem impractical. <bookmark mark='f'/> Historical opinion polls measure researchers' beliefs, not evidence of a mathematical separation. <bookmark mark='g'/> The Clay prize recognizes a valid resolution; neither applications nor consensus substitute for a proof.",
+   "zh": "P 等于 NP 会推出什么？<bookmark mark='a'/>若形式证明可高效检查，有界证明搜索就能在命题及所选长度界的多项式时间内恢复证明，但不会判定无界数学真理。<bookmark mark='b'/>有限且可高效验证的排程、路径目标，可以通过判定查询优化；真实蛋白质行为不会自动符合这种模型。<bookmark mark='c'/>某些有界电路学习搜索会变得高效，但最短任意程序仍然不可判定。<bookmark mark='d'/>依赖单向函数的计算密码学会失败；正确使用的一次一密等信息论保密，不在这个结论之内。<bookmark mark='e'/>大指数、大常数，以及还需找到算法，仍可能使定理缺乏实用性。<bookmark mark='f'/>历史调查衡量研究者的信念，不是数学分离的证据。<bookmark mark='g'/>Clay 奖认可有效解决方案；应用前景与共识都不能代替证明。"
+  },
+  "6f14af4bc49c": {
+   "scene": "Worlds",
+   "en": "Could the unrelativized question be independent of our axioms? <bookmark mark='a'/> Part 25 explained that effective arithmetic theories can leave statements undecided. <bookmark mark='b'/> P differs from NP can be expressed by saying that every clocked polynomial-time SAT decider has a finite counterexample. Encoding machines and polynomial clocks gives a universal-existential arithmetic form; quantifier count alone is no evidence of independence. <bookmark mark='c'/> Relative independence examples concern particular constructed oracles and specified formal theories. They do not prove that ordinary P versus NP is independent of ZFC. <bookmark mark='d'/> No such independence conclusion is established here. <bookmark mark='e'/> The connections between algorithms and lower bounds instead provide concrete mathematical methods for continued work.",
+   "zh": "无谕示问题会不会独立于公理？<bookmark mark='a'/>第25部分说明，有效算术理论可能留下未决定命题。<bookmark mark='b'/>P 不等于 NP 可以表述为：每个带多项式时钟的 SAT 判定器，都有有限反例。把机器与多项式时钟编码后，得到先全称再存在的算术形式；仅有量词数并不是独立性的证据。<bookmark mark='c'/>相对独立性例子涉及特别构造的谕示与指定形式理论，不能证明普通 P 与 NP 独立于 ZFC。<bookmark mark='d'/>这里没有确立这样的独立性结论。<bookmark mark='e'/>算法与下界之间的联系，仍然为后续研究提供具体数学方法。"
+  },
+  "4c0cae337d78": {
+   "scene": "Frontier",
+   "en": "Chapter sixteen, the frontier. Complexity about complexity.",
+   "zh": "第16章，前沿。关于复杂性的复杂性。"
+  },
+  "bd9dd80694df": {
+   "scene": "Frontier",
+   "en": "Measure complexity itself on a finite example. <bookmark mark='a'/> Enumerate all two hundred and fifty-six three-input Boolean functions using binary AND-OR formulas. Count literal leaves, allow negations only on inputs, and do not provide free constants. <bookmark mark='b'/> We retain a minimum-size formula for every truth table and check all trees and the complete dynamic-programming closure. Majority needs five leaves; parity and its complement need ten, the maximum in this experiment. <bookmark mark='c'/> Khrapchenko's general quadratic lower bound for parity matches that value at three inputs only as a lower bound of nine, not an exact answer. <bookmark mark='d'/> Counting shows that almost all functions require exponentially large circuits, but a circuit is not a fan-out-one formula and the precise size measure matters. <bookmark mark='e'/> Proving superlinear general circuit lower bounds for suitable explicitly computable families remains difficult. Our finite enumeration is a complete small calculation, not a solution to that asymptotic question.",
+   "zh": "用有限例子衡量复杂性本身。<bookmark mark='a'/>用二元与或公式枚举全部二百五十六个三输入布尔函数。大小统计文字叶子，只允许输入取反，不提供免费常数。<bookmark mark='b'/>每张真值表都保留最小公式，全部树及动态规划的完整闭包都经过检查。多数函数需要五个叶子；奇偶函数与其补函数需要十个，是本实验的最大值。<bookmark mark='c'/>Khrapchenko 对奇偶性的平方下界，在三输入时给出九的下界，而不是精确答案。<bookmark mark='d'/>计数说明几乎所有函数都需要指数大电路，但电路不同于扇出为一的公式，精确大小定义很重要。<bookmark mark='e'/>对适当的显式可计算函数族，证明一般电路超线性下界仍很困难。有限枚举是完整的小计算，没有解决这个渐近问题。"
+  },
+  "0533f42d01fc": {
+   "scene": "Frontier",
+   "en": "Compare results only within their circuit models. <bookmark mark='a'/> Li and Yang's 2022 result supplies a dated example of a three point one n minus lower-order gate bound in the B-two basis, where every two-input Boolean gate is permitted. We are not presenting it as a verified current-record survey. Formula and constant-depth lower bounds use different restrictions and size conventions. <bookmark mark='b'/> A superpolynomial circuit lower bound for SAT would imply NP is not contained in P over poly, which is stronger than P differs from NP. Such a circuit bound is a sufficient route, not a necessary equivalence. <bookmark mark='c'/> Geometric complexity theory studies related algebraic lower bounds. The negative occurrence-obstruction results rule out a particular proposed strategy in specified settings, not the entire programme.",
+   "zh": "只有在相同电路模型内，结果才能直接比较。<bookmark mark='a'/>Li 与 Yang 的2022年结果，是一个带日期的例子：在允许所有二输入布尔门的 B 二基中，门数下界为三点一 n 减低阶项。这里不把它当作已核验的最新纪录综述。公式和常数深度电路使用不同限制与大小约定。<bookmark mark='b'/>SAT 的超多项式电路下界会推出 NP 不包含于 P/poly，比 P 不等于 NP 更强。因此这是充分路径，不是必要等价。<bookmark mark='c'/>几何复杂性理论研究相关代数下界。关于出现障碍的负面结果，排除了指定情形中的一种策略，而不是整个研究计划。"
+  },
+  "ba6b41d1288a": {
+   "scene": "Frontier",
+   "en": "Meta-complexity asks how hard it is to recognize complexity. <bookmark mark='a'/> Minimum circuit size takes a FULL truth table and a size threshold. A candidate circuit can be checked on every input in time polynomial in that table length, so the decision problem is in NP. <bookmark mark='b'/> Standard deterministic NP-completeness remains a separate question. <bookmark mark='c'/> Hirahara's 2022 partial-truth-table result proves NP-hardness under RANDOMIZED polynomial-time reductions. It does not establish the unqualified deterministic completeness claim. <bookmark mark='d'/> Liu and Pass relate one-way functions to mild average-case hardness of exact time-bounded Kolmogorov complexity on uniformly random strings, for appropriate polynomial time bounds at least one plus epsilon times the string length. <bookmark mark='e'/> The time bound, uniform distribution and error requirement are essential; this is not an equivalence with public-key encryption. <bookmark mark='f'/> These results connect the difficulty of recognizing short descriptions to computational cryptography, while leaving the stated qualifications intact.",
+   "zh": "元复杂性研究识别复杂性有多难。<bookmark mark='a'/>最小电路规模的输入是完整真值表与大小阈值。候选电路可以在所有输入上检查，时间关于真值表长度为多项式，所以判定问题属于 NP。<bookmark mark='b'/>标准确定性 NP 完全性仍是另一个问题。<bookmark mark='c'/>Hirahara 的2022年部分真值表结果，证明随机化多项式时间归约下的 NP 难度，并没有得到不加限定的确定性完全性。<bookmark mark='d'/>Liu 与 Pass 把单向函数，联系到均匀随机字符串上精确时间有界 Kolmogorov 复杂度的轻度平均难度；适用的多项式时间界至少为字符串长度的一加 epsilon 倍。<bookmark mark='e'/>时间界、均匀分布和错误要求都不可省略，而且它不是与公钥加密的等价。<bookmark mark='f'/>这些结果把识别短描述的困难与计算密码学联系起来，同时必须保留上述条件。"
+  },
+  "fc79eb0b27a4": {
+   "scene": "Outro",
+   "en": "This part built a map of computational complexity. Polynomial time under standard cost models; the correct time hierarchy and Savitch proof ideas; NP certificates; a bounded Cook-Levin encoding with complete traces; concrete reductions and mapped witnesses; coNP, prime certificates and quantifier alternation; games and space; the multitape square-root-space theorem; and a clause-learning SAT solver with finite random-instance measurements. The experiments verify finite implementations, while theorems keep their model assumptions. Barriers, hypothetical worlds and meta-complexity explain both progress and what remains unresolved.",
+   "zh": "这一部分搭建了计算复杂性的地图：标准成本模型下的多项式时间，正确的时间层级与 Savitch 证明思想，NP 证书，带完整轨迹的有界 Cook-Levin 编码，具体归约与映射证书，coNP、素数证书和量词交替，博弈与空间，多带机的平方根空间定理，以及子句学习 SAT 求解器和有限随机实例测量。实验核验有限实现，定理保留模型前提。障碍、假设世界与元复杂性，说明进展以及仍未解决的问题。"
+  },
+  "830b0425454c": {
+   "scene": "Outro",
+   "en": "Where this comes back. Part 27 adds randomness and interaction to proofs, and reaches the PCP theorem. Part 29 builds cryptography on one-way functions, Impagliazzo's Minicrypt, and Part 30 builds public keys on factoring and discrete logarithms, the suspects of chapter twelve. Part 41 resolves package dependencies with a SAT solver. Part 53 asks whether quantum computers break the extended Church-Turing thesis. And Part 54 proves programs correct by sending verification conditions to a solver like ours.",
+   "zh": "这些会在哪里再出现。第27部分给证明加上随机性和交互，抵达 PCP 定理。第29部分在单向函数上建立密码学，即 Impagliazzo 的迷你密码国；第30部分在分解因数和离散对数上建立公钥，即第12章的嫌疑对象。第41部分用 SAT 求解器解析软件包依赖。第53部分问量子计算机是否打破扩展的 Church-Turing 论题。而第54部分通过把验证条件交给像我们这样的求解器来证明程序正确。"
+  },
+  "d095237bbf1c": {
+   "scene": "Outro",
+   "en": "In practice, first specify the exact decision or optimization problem and its encoding. General scheduling, packing and dependency models may be NP-hard, while structured instances can be easy. SAT, SMT, integer programming and constraint solvers are useful tools. Approximation guarantees depend on the objective: weak hardness alone does not promise an FPTAS. Verification often uses SAT internally. For computational cryptography, identify the precise hardness assumption; information-theoretic ciphers require a different analysis.",
+   "zh": "实践中，先明确判定或优化问题及其编码。一般排程、装箱与依赖模型可能 NP 难，有结构的实例却可能容易。SAT、SMT、整数规划和约束求解器都是工具。近似保证依赖目标；弱难度本身不承诺 FPTAS。验证常在内部使用 SAT。对计算密码学，要明确具体难度假设；信息论密码则需要不同分析。"
+  },
+  "6a1e6682f4cf": {
+   "scene": "Outro",
+   "en": "Next, proofs that use randomness. Zero-knowledge protocols can convince a verifier while revealing no additional knowledge under their precise definition and assumptions. Interaction gives the class IP, equal to PSPACE; that equality does not prove a strict separation from NP. The PCP theorem uses logarithmically many random bits and a constant number of proof queries: true statements have an accepting proof, while false statements are rejected with bounded probability for every purported proof. It is not a guarantee to detect every changed bit in a proof. Part 27 develops those definitions and their consequences for approximation.",
+   "zh": "接下来是使用随机性的证明。零知识协议能在精确定义与假设下说服验证者，而不泄露额外知识。交互给出 IP 类，它等于 PSPACE；这个等式并没有证明它严格强于 NP。PCP 定理使用对数数量的随机比特和常数次证明查询：真命题有能被接受的证明，假命题的每份候选证明都会以有界概率被拒绝，而不是保证检测证明中每个被改动的比特。第27部分会展开这些定义及其近似后果。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分所依据的书和论文都在屏幕上和笔记里。感谢观看。"
+  },
+  "a02dd58c712a": {
+   "scene": "Np",
+   "en": "Consider six decision problems. <bookmark mark='a'/> SAT, clique, Hamiltonian cycle and binary-encoded subset sum have polynomially checkable yes-certificates. For these general problems, polynomial-time algorithms remain unknown. This is not a claim that every best known algorithm has the same exponential bound. <bookmark mark='b'/> Graph isomorphism asks for an adjacency-preserving bijection. Babai's quasipolynomial upper bound is faster than a general exponential bound, while polynomial time remains open. <bookmark mark='c'/> Primality is in P by the AKS theorem, so it needs no extra certificate for polynomial-time decision. <bookmark mark='d'/> A verifier can always exhaust all polynomial-length certificates using exponential time. That is an upper bound, not a proof that exhaustive search is necessary.",
+   "zh": "看六个判定问题。<bookmark mark='a'/>SAT、团、哈密顿回路，以及二进制编码的子集和，都有多项式时间可检查的肯定证书；其一般情形的多项式时间算法仍未知。这并不是说它们已知最快算法都有同一个指数界。<bookmark mark='b'/>图同构的证书是保持邻接关系的双射。Babai 的拟多项式上界优于一般指数上界，但多项式时间仍然开放。<bookmark mark='c'/>AKS 定理证明素性属于 P，因此进行多项式时间判定不需要额外证书。<bookmark mark='d'/>验证器总能用指数时间穷举全部多项式长度证书；这是上界，不是穷举必不可少的证明。"
+  },
+  "efa03e93902a": {
+   "scene": "Sat",
+   "en": "Random SAT displays a striking finite-size pattern. <bookmark mark='a'/> For each plotted ratio and variable count, generate independent random clauses with three distinct variables and fair signs. We retain every formula, complete solver status and positive model, and cross-check resolved answers with a native solver. <bookmark mark='b'/> Our twenty or forty trials per point show a drop in satisfiability and a peak in median conflicts near the transition region. The notes give binomial uncertainty intervals. A coarse finite grid cannot locate an exact limiting threshold or establish a scaling exponent. The vertical line near four point two seven marks a prediction, not a theorem inferred from these plots. <bookmark mark='c'/> Friedgut proved sharp-threshold behaviour; Ding, Sly and Sun established the predicted limiting threshold for sufficiently large clause length. Those theorems and this small three-SAT experiment have different scopes. A dated update: 2026 preprints report existence and computability of the three-SAT limiting threshold, and an upper bound of four point two six eight. The notes identify these reported claims and the exact versions inspected; our finite plots establish none of them.",
+   "zh": "随机 SAT 呈现鲜明的有限尺寸图样。<bookmark mark='a'/>对每个比值和变量数，独立生成随机子句，含三个不同变量以及公平随机的正负号。每个公式、完整状态与肯定模型都保留，完成的答案还由原生求解器交叉检查。<bookmark mark='b'/>每点二十或四十次试验，显示可满足比例下降，以及转变附近的冲突中位数峰值；笔记给出二项抽样的不确定区间。粗糙的有限网格不能确定精确极限阈值，也不能确立标度指数。四点二七附近的竖线标记预测，不是由这些图证明的定理。<bookmark mark='c'/>Friedgut 证明了尖锐阈值行为；Ding、Sly 与 Sun 对足够长的子句证明了预测的极限阈值。这些定理与小规模三元 SAT 实验的适用范围不同。 另作日期更新：2026年预印本报告了三元 SAT 极限阈值的存在性、可计算性，以及四点二六八的上界。笔记注明这些报告性主张与实际查阅版本；有限图像并没有证明其中任何一个。"
+  },
+  "0e2f6270997d": {
+   "scene": "Frontier",
+   "en": "Six directions remain. <bookmark mark='a'/> P versus NP, NP versus coNP, P versus PSPACE and L versus P. <bookmark mark='b'/> The deterministic many-one hardness of ordinary minimum circuit size. <bookmark mark='c'/> Classical polynomial-time algorithms for factoring search and graph isomorphism. <bookmark mark='d'/> Rigorous numerical characterization of the random three-SAT threshold, beyond the existence and computability reported in 2026 preprints, and distinguished from a finite fifty-percent crossing. <bookmark mark='e'/> Further time-space simulation improvements, with the model and quantifiers specified. <bookmark mark='f'/> General circuit lower bounds for suitable families in P or NP: improving a linear coefficient, such as five n, is different from proving a superlinear bound such as n log n. <bookmark mark='g'/> The starred exercise studies finite random-SAT samples with uncertainty. It does not ask you to claim an asymptotic theorem from a small fit.",
+   "zh": "还有六个方向。<bookmark mark='a'/>P 与 NP、NP 与 coNP、P 与 PSPACE，以及 L 与 P。<bookmark mark='b'/>普通最小电路规模的确定性多对一难度。<bookmark mark='c'/>经典多项式时间的因数分解搜索与图同构算法。<bookmark mark='d'/>在2026年预印本报告的存在性与可计算性之外，严格刻画随机三元 SAT 阈值的数值，并与有限规模下百分之五十交叉点区分。<bookmark mark='e'/>进一步改进时间与空间模拟，同时明确模型和量词。<bookmark mark='f'/>对 P 或 NP 中适当函数族的一般电路下界：改进五 n 这样的线性系数，不同于证明 n log n 这样的超线性界。<bookmark mark='g'/>星号习题研究带不确定性的有限随机 SAT 样本，不要求从小规模拟合声称渐近定理。"
+  },
+  "9f181fac3e60": {
+   "scene": "Outro",
+   "en": "Six exercises, with worked guidance in the notes. Pause on any of them. The Sudoku build exercise retains the full formula, solver model and independently checked grid. The starred exercise estimates finite-size crossings and widths with uncertainty; it does not establish an asymptotic threshold or scaling exponent.",
+   "zh": "六道习题，笔记中附有解答指导，可以暂停思考。数独构建题保留完整公式、求解模型与独立核验的网格。星号习题带着不确定性估计有限尺寸交叉点与宽度，不会确立渐近阈值或标度指数。"
+  },
+  "859d1dbf7029": {
+   "scene": "Web",
+   "en": "In 1972 Richard Karp connected twenty-one classical problems by polynomial reductions. <bookmark mark='a'/> The grouped list includes satisfiability, zero-one integer programming, clique, cover and packing problems, Hamiltonian cycles, colouring, matching, knapsack and max cut. The indentation is a display grouping, not a reconstruction of the exact historical reduction tree. <bookmark mark='b'/> Garey and Johnson later collected hundreds more examples. <bookmark mark='c'/> For a new decision language, proving membership in NP and reducing a known NP-complete language to it adds another complete problem. A polynomial-time algorithm for any one of them would solve all NP languages.",
+   "zh": "1972年，Richard Karp 用多项式归约连接了二十一个经典问题。<bookmark mark='a'/>分组列表包含可满足性、零一整数规划、团、覆盖与装填问题、哈密顿回路、着色、匹配、背包和最大割。缩进只是显示分组，并非重建精确历史归约树。<bookmark mark='b'/>后来 Garey 与 Johnson 又收集了数百个例子。<bookmark mark='c'/>对新的判定语言，先证明属于 NP，再把已知 NP 完全语言归约到它，就得到另一个完全问题。任意一个问题的多项式时间算法，都将解决全部 NP 语言。"
+  }
+ }
+}

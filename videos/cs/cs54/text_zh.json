@@ -1,0 +1,18 @@
+{
+ "strings": {
+  "the code": "代码",
+  "holds": "成立",
+  "init": "初始",
+  "you": "你",
+  "optimizations": "优化",
+  "checker": "检验器",
+  "words": "词数",
+  "aborted": "已中止",
+  "valid": "有效",
+  "assume": "assume",
+  "parse": "parse",
+  "render": "render",
+  "push": "push",
+  "draw": "draw"
+ }
+}

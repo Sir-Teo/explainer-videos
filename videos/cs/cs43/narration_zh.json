@@ -1,0 +1,532 @@
+{
+ "title": "计算机科学，从零搭建 · 第43部分：API 与服务",
+ "chapters": {
+  "Hook": "八条谬误，与拆成三块的那项任务",
+  "Rpc": "1. 跨越网络的调用",
+  "Wire": "2. 线上的字节",
+  "Schemas": "3. 会演化的模式",
+  "Styles": "4. API 风格",
+  "Delivery": "5. 至多一次、至少一次、恰好一次",
+  "Design": "6. API 的设计与版本",
+  "Queues": "7. 队列与发布/订阅",
+  "Backpressure": "8. 背压",
+  "Micro": "9. 单体与微服务",
+  "Data": "10. 跨服务的数据",
+  "Mesh": "11. 发现、路由与信任服务",
+  "Time": "12. API 中的时间",
+  "Job": "13. 拆成三个服务的那项任务",
+  "Frontier": "14. 前沿：可以证明的服务",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "366739550c72": {
+   "scene": "Hook",
+   "en": "In the nineties, engineers at Sun Microsystems wrote down the assumptions that programmers new to networks tend to make, and that are false. <bookmark mark='a'/> The network is reliable. Latency is zero. Bandwidth is infinite. The network is secure. Topology doesn't change. There is one administrator. Transport cost is zero. The network is homogeneous. <bookmark mark='b'/> Peter Deutsch set down seven of them in 1994, building on an earlier list by Bill Joy and Tom Lyon, and James Gosling added the eighth. Every one of them is tempting, because a remote call looks exactly like a local one. <bookmark mark='c'/> And every one of them has taken down real systems.",
+   "zh": "20世纪90年代，Sun Microsystems 的工程师们写下了一组假设：刚接触网络的程序员往往会这样假设，而它们都是错的。<bookmark mark='a'/>网络是可靠的。延迟为零。带宽是无限的。网络是安全的。拓扑不会改变。只有一个管理员。传输成本为零。网络是同构的。<bookmark mark='b'/>1994年，Peter Deutsch 在 Bill Joy 和 Tom Lyon 更早的一份清单的基础上，写下了其中7条，James Gosling 又加上了第8条。每一条都很诱人，因为远程调用看起来和本地调用一模一样。<bookmark mark='c'/>而每一条，都曾让真实的系统垮掉。"
+  },
+  "8a163b5d5bdd": {
+   "scene": "Hook",
+   "en": "Three examples. <bookmark mark='a'/> In October 2018, GitHub lost connectivity between two data centres for forty-three seconds. Its databases failed over across the country, writes landed on both sides, and the site ran degraded for about a day while engineers reconciled them. The network is not reliable. <bookmark mark='b'/> In October 2016, a botnet of hacked cameras and home routers, called Mirai, flooded the DNS provider Dyn, and many of the largest sites on the web were unreachable for hours. The network is not secure. <bookmark mark='c'/> And in October 2021, a routine command withdrew the routes of Facebook's backbone. Its DNS servers, seeing no backbone, took themselves offline, and the tools engineers needed to fix it were behind the same network. Topology changes, sometimes all at once.",
+   "zh": "举三个例子。<bookmark mark='a'/>2018年10月，GitHub 的两个数据中心之间断开了43秒。它的数据库跨越整个国家做了故障转移，写入落到了两边，网站在降级状态下运行了大约一天，工程师们才把两边的数据调和一致。网络并不可靠。<bookmark mark='b'/>2016年10月，一个由被入侵的摄像头和家用路由器组成的僵尸网络，名叫 Mirai，用流量淹没了 DNS 服务商 Dyn，网上许多最大的网站有好几个小时无法访问。网络并不安全。<bookmark mark='c'/>而在2021年10月，一条例行命令撤回了 Facebook 骨干网的路由。它的 DNS 服务器看不到骨干网，就让自己下线了，而工程师修复故障所需的工具，也在同一个网络后面。拓扑会改变，有时是一下子全变。"
+  },
+  "df040bb7d143": {
+   "scene": "Hook",
+   "en": "Here is this part's experiment. <bookmark mark='a'/> We split the Job into three services: one tokenizes text, one counts words, one ranks them. The tokenizer sends its counts to the counter in 353 messages, over a network that loses five percent of messages and duplicates two. <bookmark mark='b'/> To survive loss, the tokenizer retries until the counter acknowledges. But a retried message may have arrived after all, and a duplicated one arrives twice. <bookmark mark='c'/> Without protection, the counts drift upward: the word the is counted 2,924 times instead of 2,733, and 1,403 of the 5,882 distinct words are wrong. <bookmark mark='d'/> Add one idea, an idempotency key on each message, and every count is exact. Most of this part is about ideas of that size, and the mathematics that says they work.",
+   "zh": "这是这一部分的实验。<bookmark mark='a'/>我们把那项任务拆成三个服务：一个给文本分词，一个统计词数，一个给词排名。分词服务把它的计数分成353条消息发给计数服务，而所经过的网络会丢失5%的消息，并重复2%。<bookmark mark='b'/>为了应对丢失，分词服务会一直重试，直到计数服务确认。但一条被重试的消息也许其实已经到了，而一条被重复的消息会到两次。<bookmark mark='c'/>没有保护的话，计数就会往上漂：词 the 被数了2924次，而不是2733次，5882个不同的词里，有1403个数错了。<bookmark mark='d'/>加上一个想法，给每条消息一个幂等键，每个计数就都准确无误。这一部分的大多数内容，讲的就是这种分量的想法，以及证明它们行得通的数学。"
+  },
+  "fa9107b9617f": {
+   "scene": "Hook",
+   "en": "This is Part 43 of Computer Science, Built, the fourth part of Act Eight. <bookmark mark='a'/> We will see why a remote call can never be made to look exactly like a local one; derive the bytes Protocol Buffers puts on the wire and the rules for changing a schema safely; compare the styles of API; prove that exactly-once delivery is at-least-once delivery plus deduplication; and watch queues, retries, outboxes and sagas keep a system of services correct while its network misbehaves.",
+   "zh": "这是计算机科学，从零搭建，第43部分，也是第八幕的第四部分。<bookmark mark='a'/>我们会看到，为什么远程调用永远不能做得和本地调用一模一样；推导出 Protocol Buffers 放到线上的字节，以及安全地修改模式的规则；比较各种 API 风格；证明恰好一次投递就是至少一次投递加上去重；并观察队列、重试、发件箱和 Saga，如何在网络出状况时，让一个由服务组成的系统保持正确。"
+  },
+  "144cb86e153c": {
+   "scene": "Rpc",
+   "en": "Chapter one. Calls across a network.",
+   "zh": "第一章：跨越网络的调用。"
+  },
+  "bf7416c5e7e6": {
+   "scene": "Rpc",
+   "en": "In 1984 Andrew Birrell and Bruce Nelson, at Xerox PARC, described how to make a call to a procedure on another machine look like an ordinary call. <bookmark mark='a'/> The caller calls a local procedure, the client stub, with the same name and arguments. <bookmark mark='b'/> The stub marshals the arguments into bytes, and the runtime sends them across the network. <bookmark mark='c'/> On the server, a matching stub unmarshals the bytes and dispatches to the real procedure. <bookmark mark='d'/> The result travels back the same way, and the caller just sees a return value. A program called Lupine wrote the stubs.",
+   "zh": "1984年，Xerox PARC 的 Andrew Birrell 和 Bruce Nelson 描述了如何让对另一台机器上某个过程的调用，看起来就像一次普通的调用。<bookmark mark='a'/>调用者调用一个本地过程，即客户端存根，名字和参数都一样。<bookmark mark='b'/>存根把参数编组成字节，运行时系统把它们发送到网络另一端。<bookmark mark='c'/>在服务器上，一个对应的存根把字节解组，再分派给真正的过程。<bookmark mark='d'/>结果沿同样的路径返回，调用者看到的只是一个返回值。存根由一个叫 Lupine 的程序生成。"
+  },
+  "671e11bcb3c8": {
+   "scene": "Rpc",
+   "en": "In 1994 Jim Waldo, Geoff Wyant, Ann Wollrath and Sam Kendall, at Sun, wrote A Note on Distributed Computing, arguing that this illusion cannot be kept. They gave four reasons. The first is latency. <bookmark mark='a'/> A local call costs nanoseconds. <bookmark mark='b'/> A remote call, in this part's latency model, takes about ten milliseconds at the median and thirty at the ninety-ninth percentile: <bookmark mark='c'/> six or seven orders of magnitude more. <bookmark mark='d'/> A thousand local calls go unnoticed; a thousand remote calls take ten seconds. Remote interfaces need few calls, each doing a lot.",
+   "zh": "1994年，Sun 的 Jim Waldo、Geoff Wyant、Ann Wollrath 和 Sam Kendall 写了《关于分布式计算的一则笔记》（A Note on Distributed Computing），论证这种假象无法维持。他们给出了四条理由。第一条是延迟。<bookmark mark='a'/>一次本地调用只花几纳秒。<bookmark mark='b'/>一次远程调用，在这一部分的延迟模型里，中位数大约10毫秒，第99百分位是30毫秒：<bookmark mark='c'/>多出六到七个数量级。<bookmark mark='d'/>一千次本地调用毫无察觉；一千次远程调用要花10秒。远程接口需要的是调用次数少，每次做很多事。"
+  },
+  "4eca1053d264": {
+   "scene": "Rpc",
+   "en": "The second reason is memory. <bookmark mark='a'/> Here the caller passes one object twice, as a and as b. Locally, that is one address, passed twice. <bookmark mark='b'/> But an address means something only inside one process, Part 32's lesson, so the stub copies what it points to, and the server receives two separate objects. <bookmark mark='c'/> When it increments one, the other is unchanged, and so is the caller's original. <bookmark mark='d'/> The third reason is concurrency: a server runs many clients' calls at once, so every caller becomes part of a concurrent program, with all of Part 33's hazards.",
+   "zh": "第二条理由是内存。<bookmark mark='a'/>这里，调用者把同一个对象传了两次，分别作为 a 和 b。在本地，这是同一个地址，传了两次。<bookmark mark='b'/>但地址只在一个进程内部才有意义，这是第32部分的教训，所以存根会复制它指向的内容，服务器收到的是两个各自独立的对象。<bookmark mark='c'/>服务器给其中一个加一时，另一个不变，调用者的原件也不变。<bookmark mark='d'/>第三条理由是并发：服务器同时运行许多客户端的调用，所以每个调用者都成了一个并发程序的一部分，带着第33部分讲过的所有隐患。"
+  },
+  "2dc1695244ec": {
+   "scene": "Rpc",
+   "en": "The fourth reason is the deepest: partial failure. A single computer works or it does not; a distributed system can be half broken. A client sends a request, no reply comes, and its timeout fires. What happened? <bookmark mark='a'/> Perhaps the request was lost, and the call never ran. <bookmark mark='b'/> Perhaps the server did the work, then crashed before replying. <bookmark mark='c'/> Perhaps it replied, and the reply was lost. <bookmark mark='d'/> From the client, all three look the same: silence. Retry, and the last two run the call twice: harmless for a read, a disaster for a payment.",
+   "zh": "第四条理由最深刻：部分失败。一台计算机要么正常工作，要么不工作；而分布式系统可以坏掉一半。客户端发出一个请求，没有回复，它的超时触发了。发生了什么？<bookmark mark='a'/>也许请求丢了，调用根本没有执行。<bookmark mark='b'/>也许服务器做完了工作，然后在回复之前崩溃了。<bookmark mark='c'/>也许它回复了，而回复丢了。<bookmark mark='d'/>从客户端看，这三种情况一模一样：一片沉默。重试的话，后两种情况会让调用执行两次：对一次读取无伤大雅，对一笔付款却是灾难。"
+  },
+  "d039ad844ee7": {
+   "scene": "Rpc",
+   "en": "Could a cleverer protocol remove the doubt? Part 38 proved it cannot. <bookmark mark='a'/> The client says do it; the server says done; but the server cannot know its done arrived, so the client acknowledges, and that acknowledgement needs one too. <bookmark mark='b'/> Take the shortest exchange that supposedly works. Its last message might be lost, so its sender cannot depend on it, and a shorter exchange would do just as well. There is no shortest. <bookmark mark='c'/> So an RPC system runs a call at most once, never retrying, or at least once, retrying until answered. <bookmark mark='d'/> Exactly once must be built into the call itself.",
+   "zh": "更聪明的协议能消除这种不确定吗？第38部分证明了不能。<bookmark mark='a'/>客户端说：去做；服务器说：做完了；但服务器无法知道它的“做完了”有没有送到，于是客户端发一个确认，而这个确认本身也需要一个确认。<bookmark mark='b'/>取一个据称可行的最短交换。它的最后一条消息可能丢失，所以发送者不能依赖它，那么一个更短的交换也同样可行。不存在最短的交换。<bookmark mark='c'/>所以，一个 RPC 系统要么让调用至多执行一次，从不重试；要么至少执行一次，一直重试，直到得到回答。<bookmark mark='d'/>恰好一次，必须构建在调用本身之中。"
+  },
+  "cd7a44ed4abd": {
+   "scene": "Rpc",
+   "en": "What survived from Birrell and Nelson is the stub generator. <bookmark mark='a'/> An interface is written once, in an interface description language: here a service with one call, and its message. <bookmark mark='b'/> A generator writes the stubs, in whatever languages each side uses. <bookmark mark='c'/> The idea runs from Sun RPC, which carried the NFS file system, through CORBA and Facebook's Thrift, to Google's gRPC. <bookmark mark='d'/> What changed is honesty. A gRPC call takes a deadline and returns a status, such as deadline exceeded or unavailable: it looks local, but admits the network is there.",
+   "zh": "Birrell 和 Nelson 的工作中流传下来的，是存根生成器。<bookmark mark='a'/>接口只写一次，用一种接口描述语言来写：这里是一个只有一个调用的服务，以及它的消息。<bookmark mark='b'/>生成器写出存根，用双方各自使用的任何语言。<bookmark mark='c'/>这个想法从承载 NFS 文件系统的 Sun RPC 开始，经过 CORBA 和 Facebook 的 Thrift，一直延续到 Google 的 gRPC。<bookmark mark='d'/>变了的是诚实。一次 gRPC 调用要带一个截止时间，并返回一个状态，比如超过截止时间（deadline exceeded）或不可用（unavailable）：它看起来像本地调用，但承认网络的存在。"
+  },
+  "d94b45298fc5": {
+   "scene": "Wire",
+   "en": "Chapter two. Bytes on the wire.",
+   "zh": "第二章：线上的字节。"
+  },
+  "e51c6658a74d": {
+   "scene": "Wire",
+   "en": "Start with the most common format of all. JSON writes numbers as decimal text and says nothing about precision, but JavaScript reads every number as a double, Part 4's sixty-four-bit float, with fifty-three significant bits. <bookmark mark='a'/> Up to two to the fifty-three, every integer is exact; above it, doubles are two apart. <bookmark mark='b'/> So two to the fifty-three plus one arrives as two to the fifty-three: it lies halfway, and rounds to the even neighbour. <bookmark mark='c'/> A nineteen-digit id is worse. Near a billion billion, doubles are two hundred and fifty-six apart, and the last digits change. <bookmark mark='d'/> So APIs send large ids as strings, and the JSON standard warns that larger integers may not survive.",
+   "zh": "从最常见的格式说起。JSON 把数字写成十进制文本，对精度只字不提，但 JavaScript 把每个数字都读成双精度数，也就是第4部分讲的64位浮点数，有53位有效位。<bookmark mark='a'/>在2的53次方以内，每个整数都是精确的；超过它，相邻的双精度数相差2。<bookmark mark='b'/>所以2的53次方加1，到达时变成了2的53次方：它正好在中间，于是舍入到偶数的那个邻居。<bookmark mark='c'/>19位的 id 更糟。在百亿亿附近，相邻的双精度数相差256，最后几位数字就变了。<bookmark mark='d'/>所以 API 把大的 id 当作字符串发送，而 JSON 标准也警告说，更大的整数可能无法完好保留。"
+  },
+  "d6cb9a799064": {
+   "scene": "Wire",
+   "en": "Protocol Buffers, which Google open-sourced in 2008, write integers another way, as varints. <bookmark mark='a'/> Take a hundred and fifty. In binary it needs eight bits. <bookmark mark='b'/> Cut them into groups of seven, starting from the low end. <bookmark mark='c'/> Write the low group first, and give every byte a top bit that says whether another byte follows: one for the first byte, zero for the last. <bookmark mark='d'/> In hexadecimal that is nine six, zero one, exactly the bytes the encoding guide gives. <bookmark mark='e'/> So small numbers cost one byte, every further seven bits cost one more, and the very largest sixty-four-bit values need ten.",
+   "zh": "Protocol Buffers 由 Google 在2008年开源，它用另一种方式写整数：变长整数（varint）。<bookmark mark='a'/>拿150来说。它的二进制需要8位。<bookmark mark='b'/>从低位开始，把它们切成每组7位。<bookmark mark='c'/>先写低位的那组，并给每个字节一个最高位，说明后面是否还跟着一个字节：第一个字节是1，最后一个字节是0。<bookmark mark='d'/>用十六进制写，就是九六、零一，正是编码指南给出的字节。<bookmark mark='e'/>所以小的数只占1个字节，每多7位就多1个字节，而最大的64位值需要10个字节。"
+  },
+  "6a4ee71f0c83": {
+   "scene": "Wire",
+   "en": "A message is a sequence of fields, and each field begins with a tag. <bookmark mark='a'/> The tag is the field number shifted left by three bits, combined with a wire type: zero for a varint, one and five for eight and four fixed bytes, two for anything with a length. <bookmark mark='b'/> So field one holding a varint has the tag zero eight, and the message a equals a hundred and fifty is zero eight, nine six, zero one. <bookmark mark='c'/> A string is wire type two: field two gives the tag one two, then the length, seven, then the seven bytes of the word testing. <bookmark mark='d'/> Nested messages and packed lists are length-delimited too. Our encoder reproduces every example in the guide, byte for byte.",
+   "zh": "一条消息是一串字段，每个字段以一个标签开头。<bookmark mark='a'/>标签是字段编号左移三位，再并上一个线路类型：0 表示变长整数，1 和 5 分别表示8个和4个固定字节，2 表示任何带长度的东西。<bookmark mark='b'/>所以存放一个变长整数的字段1，标签是零八，而消息 a 等于150，就是零八、九六、零一。<bookmark mark='c'/>字符串是线路类型2：字段2给出标签一二，然后是长度7，然后是单词 testing 的7个字节。<bookmark mark='d'/>嵌套消息和打包列表也都是按长度分隔的。我们的编码器逐字节地重现了指南里的每一个例子。"
+  },
+  "a2682ef24413": {
+   "scene": "Wire",
+   "en": "Negative numbers expose a flaw. <bookmark mark='a'/> In two's complement, minus two has its top bit set, so as a varint all sixty-four bits must be sent, and it takes ten bytes. <bookmark mark='b'/> The sint types fix this with zigzag encoding, which interleaves the signs. Zero becomes zero, minus one becomes one, one becomes two, minus two becomes three. <bookmark mark='c'/> In code, shift left by one and exclusive-or with the sign bit copied across the word. Our version matches the guide's table, even at the extremes. <bookmark mark='d'/> Now minus two is the single byte zero three, and small numbers of either sign stay small: minus a thousand takes two bytes rather than ten.",
+   "zh": "负数暴露出一个缺陷。<bookmark mark='a'/>在补码里，负2的最高位是1，所以作为变长整数，64位全都得发送，要占10个字节。<bookmark mark='b'/>sint 类型用之字形编码（zigzag）解决这个问题，它把正负数交错排列。0 变成 0，负1变成1，1变成2，负2变成3。<bookmark mark='c'/>写成代码，就是左移一位，再与铺满整个字的符号位做异或。我们的版本与指南的表格一致，连极端值也一样。<bookmark mark='d'/>现在负2就是单个字节零三，正负两边的小数都保持很小：负1000只占2个字节，而不是10个。"
+  },
+  "665fd99518d9": {
+   "scene": "Wire",
+   "en": "Put it together on one record: an id, a word, its count, its novel, a score and three tags. <bookmark mark='a'/> As compact JSON it is 90 bytes. <bookmark mark='b'/> As Protocol Buffers it is 34, with the score as a zigzag sint and the tags as a packed list. <bookmark mark='c'/> The saving comes mostly from names: JSON repeats every field name in every record, and writes numbers as decimal text, where protobuf sends a one-byte tag and a varint. <bookmark mark='d'/> The price is that the bytes mean nothing without the schema: zero eight says field one, not id. Both sides must agree on the schema, and keep agreeing as it changes: the next chapter.",
+   "zh": "把这些放到一条记录上：一个 id、一个词、它的计数、它所在的小说、一个分数和三个标记。<bookmark mark='a'/>写成紧凑的 JSON，它是90个字节。<bookmark mark='b'/>写成 Protocol Buffers，它是34个，分数用之字形编码的 sint，标记用打包列表。<bookmark mark='c'/>节省主要来自名字：JSON 在每条记录里重复每个字段名，并把数字写成十进制文本，而 protobuf 发送的是一个字节的标签和一个变长整数。<bookmark mark='d'/>代价是，没有模式，这些字节就毫无意义：零八说的是字段1，而不是 id。双方必须就模式达成一致，并在它变化时一直保持一致：这是下一章的内容。"
+  },
+  "6ba4e55d275a": {
+   "scene": "Schemas",
+   "en": "Chapter three. Schemas that evolve.",
+   "zh": "第三章：会演化的模式。"
+  },
+  "49b4220855a6": {
+   "scene": "Schemas",
+   "en": "A schema is never changed everywhere at once. <bookmark mark='a'/> Servers are upgraded a few at a time, in a rolling deploy, so for a while old and new code run side by side and send each other messages. <bookmark mark='b'/> And data outlives code: a database or a log, which Part 46 takes up, holds bytes written years ago. <bookmark mark='c'/> So a change must be backward compatible: new code can read old data. <bookmark mark='d'/> And usually it must be forward compatible as well: old code, not yet upgraded, can read what new code writes.",
+   "zh": "模式从来不会在所有地方同时改变。<bookmark mark='a'/>服务器是一次升级几台的，即滚动部署，所以有一段时间，新旧代码并肩运行，互相发送消息。<bookmark mark='b'/>而且数据比代码活得久：数据库或日志，第46部分会讲到，里面存着多年前写入的字节。<bookmark mark='c'/>所以一项修改必须向后兼容：新代码能读旧数据。<bookmark mark='d'/>而且通常它还必须向前兼容：还没升级的旧代码，能读新代码写的东西。"
+  },
+  "3f72bae81bd5": {
+   "scene": "Schemas",
+   "en": "Part 14 has the answer. <bookmark mark='a'/> New code writes a record with three fields; old code expects two. <bookmark mark='b'/> The reader matches fields by number: word and count are there, with the types it expects. <bookmark mark='c'/> Novel is unknown, so it is skipped, though protobuf keeps its bytes to pass on. <bookmark mark='d'/> This is width subtyping: a record with more fields can go wherever fewer are expected. A reader accepts a writer's record when every field it requires is present, with a compatible type. <bookmark mark='e'/> Turn it round, and a reader that requires novel rejects every old record.",
+   "zh": "第14部分给出了答案。<bookmark mark='a'/>新代码写了一条有三个字段的记录；旧代码只期望两个。<bookmark mark='b'/>读取方按编号匹配字段：word 和 count 都在，类型也符合期望。<bookmark mark='c'/>novel 不认识，所以被跳过，不过 protobuf 会保留它的字节，以便转发。<bookmark mark='d'/>这就是宽度子类型：字段更多的记录，可以放到任何期望字段更少的地方。当读取方要求的每个字段都在，而且类型兼容时，它就接受写入方的记录。<bookmark mark='e'/>反过来，一个要求 novel 的读取方，会拒绝每一条旧记录。"
+  },
+  "61cf875eed17": {
+   "scene": "Schemas",
+   "en": "Our checker applies that rule both ways to seven changes of a small schema: a required word, field one, and an optional count, field two. <bookmark mark='a'/> Adding or removing an optional field is safe both ways. <bookmark mark='b'/> Adding a required field breaks backward compatibility: old data never contains it. Removing one breaks forward compatibility: old readers still demand it. <bookmark mark='c'/> Changing a type breaks both. <bookmark mark='d'/> Widening a 32-bit integer to 64 bits passes, since both are varints, though an old reader truncates values that no longer fit. <bookmark mark='e'/> And renumbering a field passes, both ways. That verdict is wrong.",
+   "zh": "我们的检查器把这条规则双向应用到一个小模式的七种修改上：一个必需的 word，字段1，和一个可选的 count，字段2。<bookmark mark='a'/>增加或删除一个可选字段，两个方向都安全。<bookmark mark='b'/>增加一个必需字段会破坏向后兼容：旧数据里从来没有它。删除一个必需字段会破坏向前兼容：旧的读取方仍然要求它。<bookmark mark='c'/>改变类型，两个方向都会破坏。<bookmark mark='d'/>把32位整数加宽到64位能通过，因为两者都是变长整数，不过旧的读取方会截断那些再也装不下的值。<bookmark mark='e'/>而给字段重新编号，两个方向都能通过。这个结论是错的。"
+  },
+  "8154d584c88d": {
+   "scene": "Schemas",
+   "en": "Here is why. <bookmark mark='a'/> Old code writes the count, one thousand two hundred and twenty-six, as field two: the tag one zero, then a varint. <bookmark mark='b'/> New code expects the count in field five. <bookmark mark='c'/> To it, field two is unknown and is skipped, and field five is absent, so the count reads as zero. Nothing fails; every count is silently lost. <bookmark mark='d'/> The real rule: a field's number is its identity. Never change it, never reuse it, and reserve the number and name of a deleted field. <bookmark mark='e'/> And because a required field can never be safely added or removed, proto3 dropped required fields altogether.",
+   "zh": "原因在这里。<bookmark mark='a'/>旧代码把计数1226写成字段2：标签一零，然后是一个变长整数。<bookmark mark='b'/>新代码期望计数在字段5里。<bookmark mark='c'/>对它来说，字段2不认识，被跳过，而字段5不存在，所以计数读成了0。什么都没有报错；每个计数都悄无声息地丢了。<bookmark mark='d'/>真正的规则是：字段的编号就是它的身份。永远不要改它，永远不要复用它，并且为删除的字段保留（reserve）它的编号和名字。<bookmark mark='e'/>而因为必需字段永远无法安全地增加或删除，proto3 干脆去掉了必需字段。"
+  },
+  "4f39aec8a5f9": {
+   "scene": "Schemas",
+   "en": "Apache Avro, from the Hadoop project in 2009, makes a different trade. <bookmark mark='a'/> Its bytes carry no tags and no names, only values in the writer's order, with integers as zigzag varints. <bookmark mark='b'/> So the reader also needs the writer's schema, from a file's header or a schema registry. <bookmark mark='c'/> It resolves the two schemas, matching fields by name. <bookmark mark='d'/> A field the writer lacks takes the reader's default; a field the reader lacks is skipped. It is the same subtyping question, asked of whole schemas, and here the dangerous change is a rename.",
+   "zh": "Apache Avro 来自2009年的 Hadoop 项目，它做了不同的取舍。<bookmark mark='a'/>它的字节里不带标签，也不带名字，只有按写入方顺序排列的值，整数用之字形编码的变长整数。<bookmark mark='b'/>所以读取方还需要写入方的模式，来自文件头，或者模式注册表。<bookmark mark='c'/>它对两个模式进行协调，按名字匹配字段。<bookmark mark='d'/>写入方缺少的字段，取读取方的默认值；读取方缺少的字段，被跳过。这是同一个子类型问题，只不过针对的是整个模式，而在这里，危险的修改是重命名。"
+  },
+  "4cb60c4fc01d": {
+   "scene": "Schemas",
+   "en": "One cost is left. <bookmark mark='a'/> To read one field of a protobuf message, a reader walks the tags from the start, decoding as it goes. <bookmark mark='b'/> Zero-copy formats lay the bytes out the way the program uses them. A table of offsets says where each field lives, <bookmark mark='c'/> so reading the count is one addition and one load, straight from the received buffer. <bookmark mark='d'/> FlatBuffers, from Google, and Cap'n Proto, by Kenton Varda, who had led Protocol Buffers' second version, work this way. <bookmark mark='e'/> The price is larger, padded messages, and a stranger's buffer must be verified before its offsets are followed.",
+   "zh": "还剩一项代价。<bookmark mark='a'/>要读取 protobuf 消息的一个字段，读取方得从头遍历标签，边走边解码。<bookmark mark='b'/>零拷贝格式按程序使用数据的方式来排布字节。一张偏移量表说明每个字段在哪里，<bookmark mark='c'/>所以读取计数只需一次加法和一次取数，直接从收到的缓冲区里取。<bookmark mark='d'/>Google 的 FlatBuffers，以及 Kenton Varda 的 Cap'n Proto，都是这样工作的；Varda 曾主持 Protocol Buffers 的第二版。<bookmark mark='e'/>代价是消息更大、带填充，而且陌生人发来的缓冲区，在沿着它的偏移量访问之前，必须先验证。"
+  },
+  "4645783a96ad": {
+   "scene": "Styles",
+   "en": "Chapter four. API styles.",
+   "zh": "第四章：API 风格。"
+  },
+  "6b9f1e9b9112": {
+   "scene": "Styles",
+   "en": "Roy Fielding, one of the authors of HTTP's specification, named the web's architecture in his doctoral dissertation of 2000: representational state transfer, or REST. <bookmark mark='a'/> Everything the server knows about is a resource with a name, a URL, like book forty-two. <bookmark mark='b'/> A client receives only a representation of it, here in JSON, which links to other resources, like the book's author. <bookmark mark='c'/> Every resource answers the same few methods, so a cache or a proxy can understand any request. <bookmark mark='d'/> And each request is stateless: it carries everything needed to answer it, so any replica can reply.",
+   "zh": "Roy Fielding 是 HTTP 规范的作者之一，他在2000年的博士论文里，为 Web 的体系结构起了名字：表述性状态转移，即 REST。<bookmark mark='a'/>服务器知道的每样东西，都是一个有名字的资源，名字是一个 URL，比如编号42的书。<bookmark mark='b'/>客户端收到的只是它的一个表述，这里用 JSON，其中链接到其他资源，比如这本书的作者。<bookmark mark='c'/>每个资源都响应同样的几种方法，所以缓存或代理能理解任何请求。<bookmark mark='d'/>而且每个请求都是无状态的：它带着回答它所需的一切，所以任何副本都能回复。"
+  },
+  "0d3dad984c24": {
+   "scene": "Styles",
+   "en": "RFC 9110, the definition of HTTP's semantics published in 2022, sorts its methods by two properties. <bookmark mark='a'/> A safe method asks for no change at all: GET, HEAD and OPTIONS only read. <bookmark mark='b'/> An idempotent method may change things, but sending it twice has the same intended effect as sending it once: PUT replaces a resource, DELETE removes it, however often you repeat them. POST is neither, and PATCH need not be. <bookmark mark='c'/> This is what makes retries safe. A client whose request timed out cannot know whether it was applied. Repeating the PUT leaves the cart as intended. <bookmark mark='d'/> Repeating the POST may place a second order: the next chapter's problem.",
+   "zh": "RFC 9110 是2022年发布的 HTTP 语义定义，它按两个性质给方法分类。<bookmark mark='a'/>安全的方法完全不要求任何改变：GET、HEAD 和 OPTIONS 只读。<bookmark mark='b'/>幂等的方法可以改变东西，但发送两次和发送一次的预期效果相同：PUT 替换一个资源，DELETE 删除它，不管重复多少次都一样。POST 两者都不是，PATCH 也不一定是。<bookmark mark='c'/>正是这一点让重试变得安全。请求超时的客户端，无法知道请求是否已被执行。重复 PUT，购物车仍是预期的样子。<bookmark mark='d'/>重复 POST，则可能下出第二个订单：这是下一章的问题。"
+  },
+  "143670687b8c": {
+   "scene": "Styles",
+   "en": "Long lists come in pages, and there are two ways to ask for the next one. <bookmark mark='a'/> With an offset, the client says: skip the rows I have, give me four more. Page one of this feed is rows twenty to seventeen. <bookmark mark='b'/> Now two new rows arrive at the top, everything shifts down, and skipping four lands on rows already seen. <bookmark mark='c'/> A cursor says instead: rows older than the last one I saw. It cannot repeat. <bookmark mark='d'/> We measured both on a thousand rows in pages of fifty. With three new rows per page, offsets repeat 63 rows; with ten, 240. Cursors repeat none. <bookmark mark='e'/> And since the database steps past every skipped row, offsets scan ten and a half thousand rows even with no inserts; a cursor reads only the thousand it returns.",
+   "zh": "长列表是分页给出的，请求下一页有两种方式。<bookmark mark='a'/>用偏移量，客户端说：跳过我已有的行，再给我4行。这个信息流的第一页是第20行到第17行。<bookmark mark='b'/>现在顶部来了2条新行，所有行都往下移，跳过4行就落到了已经看过的行上。<bookmark mark='c'/>游标则说：给我比我看到的最后一行更旧的行。它不会重复。<bookmark mark='d'/>我们在1000行上、每页50行，测量了这两种方式。每页新增3行时，偏移量重复了63行；新增10行时，重复了240行。游标一行也不重复。<bookmark mark='e'/>而且由于数据库要逐一走过每一个被跳过的行，即使没有插入，偏移量也要扫描10500行；游标只读取它返回的那1000行。"
+  },
+  "3bf00bafd2ef": {
+   "scene": "Styles",
+   "en": "Google's gRPC, open-sourced in 2015 from its internal system Stubby, sees an API as a set of typed procedures. <bookmark mark='a'/> Services are declared in a protocol buffers file, so messages travel in chapter two's compact binary, and stubs are generated for every language. <bookmark mark='b'/> Calls ride on HTTP/2, many at once on one connection, each with a deadline. <bookmark mark='c'/> And a call need not be one request and one reply: a server can stream replies, a client can stream requests, and both can stream at once.",
+   "zh": "Google 的 gRPC 于2015年开源，源自它的内部系统 Stubby，它把 API 看作一组有类型的过程。<bookmark mark='a'/>服务在一个 protocol buffers 文件里声明，所以消息以第二章的紧凑二进制格式传输，并且为每种语言都生成存根。<bookmark mark='b'/>调用跑在 HTTP/2 上，一条连接上同时进行许多调用，每个调用都带一个截止时间。<bookmark mark='c'/>而且一次调用不必是一个请求加一个回复：服务器可以流式发送回复，客户端可以流式发送请求，两者也可以同时流式发送。"
+  },
+  "1651aaf13385": {
+   "scene": "Styles",
+   "en": "GraphQL, released by Facebook in 2015, puts the client in charge of the shape. <bookmark mark='a'/> A query names the fields it wants, nested as deeply as it likes, and the response has exactly that shape, with no second round trip for the books. <bookmark mark='b'/> The server fills it in with a resolver per field, and the obvious resolvers hide a trap. One query fetches fifty authors; then each author's books resolver runs its own query. That is 51 queries, the N plus one problem; with each book's reviews, 251. <bookmark mark='c'/> The fix is batching, in the style of Facebook's DataLoader: collect every key requested in one tick, and fetch them together. 51 queries become 2, and 251 become 3. <bookmark mark='d'/> And since clients can write any query, public servers defend themselves with persisted queries and cost limits.",
+   "zh": "GraphQL 由 Facebook 在2015年发布，它让客户端来决定形状。<bookmark mark='a'/>一个查询列出它想要的字段，想嵌套多深就嵌套多深，而响应恰好就是那个形状，取书不需要第二次往返。<bookmark mark='b'/>服务器为每个字段用一个解析器（resolver）来填充，而显而易见的解析器暗藏一个陷阱。一个查询取回50位作者；然后每位作者的 books 解析器，各自运行一次查询。这就是51次查询，即 N 加 1 问题；再加上每本书的评论，就是251次。<bookmark mark='c'/>解决办法是批处理，按 Facebook 的 DataLoader 的风格：把一个时间片（tick）里请求的所有键收集起来，一起取回。51次查询变成2次，251次变成3次。<bookmark mark='d'/>而由于客户端可以写任意查询，公开的服务器会用持久化查询和开销上限来保护自己。"
+  },
+  "96140f0e4a41": {
+   "scene": "Delivery",
+   "en": "Chapter five. At most, at least, exactly once.",
+   "zh": "第五章：至多一次、至少一次、恰好一次。"
+  },
+  "25d23f71a4a3": {
+   "scene": "Delivery",
+   "en": "A sender can promise one of three things about how often a message takes effect. <bookmark mark='a'/> At most once: send it once, never retry. Nothing repeats, but a lost message is gone. <bookmark mark='b'/> At least once: retry until acknowledged. Nothing is lost, but if the acknowledgement went missing, the retry applies the increment twice. <bookmark mark='c'/> Exactly once: retry until acknowledged, and have the receiver remember the identifier of every message it applied, skipping a repeat but acknowledging it again.",
+   "zh": "关于一条消息生效多少次，发送者可以做出三种承诺之一。<bookmark mark='a'/>至多一次：发送一次，从不重试。什么都不会重复，但丢了的消息就没了。<bookmark mark='b'/>至少一次：一直重试，直到得到确认。什么都不会丢，但如果确认丢了，重试会让这次加一被执行两次。<bookmark mark='c'/>恰好一次：一直重试，直到得到确认，并让接收者记住它执行过的每条消息的标识符，遇到重复就跳过，但仍然再确认一次。"
+  },
+  "4e49648f2456": {
+   "scene": "Delivery",
+   "en": "We ran all three on one simulated network: ten thousand increments, with five percent of messages lost, acknowledgements included, and two percent duplicated. <bookmark mark='a'/> At most once counted nine thousand six hundred and ninety-four: three hundred and six lost. <bookmark mark='b'/> At least once counted ten thousand seven hundred and fifty-four: seven hundred and fifty-four too many. <bookmark mark='c'/> Exactly once counted ten thousand, exactly. <bookmark mark='d'/> And it cost nothing extra on the wire: the same messages, in the same four rounds of retries, as at least once. The whole difference is a set of identifiers.",
+   "zh": "我们在同一个模拟网络上运行了这三种方式：10000次加一，消息丢失5%，确认也算在内，重复2%。<bookmark mark='a'/>至多一次数出9694：丢了306次。<bookmark mark='b'/>至少一次数出10754：多了754次。<bookmark mark='c'/>恰好一次数出10000，分毫不差。<bookmark mark='d'/>而且它在线上没有任何额外开销：同样的消息，同样的四轮重试，和至少一次一样。全部差别就在于一个标识符集合。"
+  },
+  "0dc2086468c0": {
+   "scene": "Delivery",
+   "en": "A simulation samples executions; a model checker visits all of them. <bookmark mark='a'/> Our model: two increments, each sent up to three times until acknowledged, over a network that may drop any message or acknowledgement, duplicate one, and deliver in any order. A breadth-first search visits every reachable state. <bookmark mark='b'/> With deduplication there are four thousand three hundred and nineteen, and in none does the counter exceed two; whenever both increments were acknowledged, it is exactly two. <bookmark mark='c'/> Without deduplication there are nine thousand five hundred and seventy-nine, and a violation six steps from the start. <bookmark mark='d'/> The catch is size: each extra increment multiplies the states about twenty-fold.",
+   "zh": "模拟只是对执行过程抽样；模型检验器会访问所有的执行。<bookmark mark='a'/>我们的模型：两次加一，每次最多发送三次，直到得到确认，网络可以丢弃任何消息或确认，可以重复一条消息，也可以按任意顺序投递。广度优先搜索访问每一个可达状态。<bookmark mark='b'/>有去重时，共有4319个状态，其中没有一个状态的计数器超过2；只要两次加一都得到了确认，它就恰好是2。<bookmark mark='c'/>没有去重时，共有9579个状态，离起点6步就有一个违例。<bookmark mark='d'/>麻烦在于规模：每多一次加一，状态数大约要乘以20。"
+  },
+  "5df6991f7de8": {
+   "scene": "Delivery",
+   "en": "Because the search is breadth-first, the violation it found is a shortest one. <bookmark mark='a'/> The sender sends increment zero; its timer fires before any acknowledgement could arrive, so it sends it again, and a third time. <bookmark mark='b'/> The network delivers all three copies, and the counter, keeping no identifiers, adds three. <bookmark mark='c'/> Nothing was lost or invented: a slow network and a hasty timer are enough. With deduplication, the last two deliveries would change nothing.",
+   "zh": "因为搜索是广度优先的，它找到的违例是一条最短的违例。<bookmark mark='a'/>发送者发出0号加一；它的定时器在任何确认可能到达之前就触发了，于是它再发一次，然后第三次。<bookmark mark='b'/>网络把三份副本全部投递，而计数器不记任何标识符，就加了3。<bookmark mark='c'/>没有任何东西丢失，也没有凭空捏造：一个慢的网络加一个急躁的定时器，就足够了。有了去重，后两次投递就不会改变任何东西。"
+  },
+  "09787c943495": {
+   "scene": "Delivery",
+   "en": "A model checker covers one small case; a proof covers them all. <bookmark mark='a'/> Suppose the sender resends each message until it is acknowledged, the receiver acknowledges every copy but applies each identifier at most once, and the network is fair: a message sent infinitely often is eventually delivered. Then every message is applied exactly once. <bookmark mark='b'/> Never twice: an identifier is applied only if it is not yet in the receiver's set, and joins the set in the same step. <bookmark mark='c'/> Never zero: an acknowledgement is sent only after a copy arrived, so an acknowledged message was applied, and an unacknowledged one is resent until fairness delivers it. <bookmark mark='d'/> And with fair acknowledgements, the sender stops. <bookmark mark='e'/> Our bounded model checked the conditional form instead.",
+   "zh": "模型检验器只覆盖一个小的情形；证明则覆盖所有情形。<bookmark mark='a'/>假设发送者重发每条消息，直到它被确认，接收者确认每一份副本，但每个标识符至多执行一次，并且网络是公平的：一条被发送无穷多次的消息，终将被投递。那么每条消息都恰好被执行一次。<bookmark mark='b'/>绝不会两次：一个标识符只有在还不在接收者的集合里时才会被执行，并在同一步里加入集合。<bookmark mark='c'/>绝不会零次：确认只在一份副本到达之后才会发送，所以被确认的消息已经执行过了，而未被确认的消息会一直重发，直到公平性把它送达。<bookmark mark='d'/>而如果确认也是公平的，发送者就会停下来。<bookmark mark='e'/>我们的有界模型，检验的则是这个结论的条件形式。"
+  },
+  "945b81e91cf2": {
+   "scene": "Delivery",
+   "en": "Payment APIs make this part of their interface. <bookmark mark='a'/> The client chooses a fresh random key for each operation it intends, and sends it with the request. The server charges the card and stores the key with the result, in one transaction. <bookmark mark='b'/> The response is lost, so the client retries with the same key, <bookmark mark='c'/> and the server returns the stored result instead of charging again. <bookmark mark='d'/> Part 38's two generals showed that a client can never be certain its message arrived: exactly-once delivery is impossible. <bookmark mark='e'/> But exactly-once processing needs only at-least-once delivery and a receiver that remembers, and that we have just proved.",
+   "zh": "支付 API 把这一点做成了接口的一部分。<bookmark mark='a'/>客户端为它打算进行的每一项操作，选一个新的随机键，随请求一起发送。服务器从卡上扣款，并把这个键和结果一起存下，在同一个事务里完成。<bookmark mark='b'/>响应丢了，于是客户端用同一个键重试，<bookmark mark='c'/>服务器返回存下的结果，而不是再扣一次款。<bookmark mark='d'/>第38部分的两位将军表明，客户端永远无法确定它的消息已经到达：恰好一次投递是不可能的。<bookmark mark='e'/>但恰好一次处理只需要至少一次投递，再加上一个会记住的接收者，而这一点我们刚刚证明了。"
+  },
+  "bd3a369a8f03": {
+   "scene": "Design",
+   "en": "Chapter six. Designing and versioning APIs.",
+   "zh": "第六章：API 的设计与版本。"
+  },
+  "0ae58129aa54": {
+   "scene": "Design",
+   "en": "Part 40 met Hyrum Wright's law: with enough users, every observable behaviour of a system will be depended on by somebody, and an API's users are programs written by strangers. <bookmark mark='a'/> Suppose each consumer, independently, relies on some incidental behaviour with a small probability p. Then somebody does with probability one minus one minus p, to the power N. <bookmark mark='b'/> However small p is, the curve passes one half at about seven tenths over p consumers, then climbs towards certainty. <bookmark mark='c'/> And the behaviours are things nobody promised: the order of fields, an error's wording, a list that happened to be sorted.",
+   "zh": "第40部分讲过 Hyrum Wright 的定律：只要用户足够多，一个系统每一种可观察到的行为，都会被某个人所依赖；而 API 的用户，是陌生人写的程序。<bookmark mark='a'/>假设每个消费方各自独立地以一个很小的概率 p，依赖某种附带的行为。那么有人依赖它的概率，就是 1 减去 1 减 p 的 N 次方。<bookmark mark='b'/>不管 p 有多小，消费方达到大约 0.7 除以 p 个时，这条曲线就越过二分之一，然后朝着必然一路攀升。<bookmark mark='c'/>而这些行为，没有人承诺过：字段的顺序、一条错误信息的措辞、一个碰巧排好了序的列表。"
+  },
+  "144e632a783f": {
+   "scene": "Design",
+   "en": "So the only safe changes are ones nobody could have observed: additions. <bookmark mark='a'/> A new response field is safe, if every client ignores fields it does not recognise; so is a new optional parameter. <bookmark mark='b'/> Removing a field breaks whoever read it. So does renaming one, or changing its type, here a price in cents becoming a string, or adding a required parameter. <bookmark mark='c'/> Some changes only look additive: a new enumeration value breaks clients that handle every case with no default. <bookmark mark='d'/> These are chapter three's compatibility rules, applied to a whole API.",
+   "zh": "所以，唯一安全的改动，是没有人可能观察到的改动：添加。<bookmark mark='a'/>新增一个响应字段是安全的，前提是每个客户端都忽略它不认识的字段；新增一个可选参数也是安全的。<bookmark mark='b'/>删除一个字段，会破坏读取它的人。重命名一个字段、改变它的类型也一样，比如这里，一个以分为单位的价格变成了字符串；添加一个必填参数也一样。<bookmark mark='c'/>有些改动只是看起来像添加：一个新的枚举值，会破坏那些逐一处理每种情况、却没有默认分支的客户端。<bookmark mark='d'/>这就是第三章的兼容性规则，应用到了整个 API 上。"
+  },
+  "6ed598bbd74c": {
+   "scene": "Design",
+   "en": "When a break is unavoidable, it becomes a new version, and the old one is retired slowly. <bookmark mark='a'/> Version two is released beside version one, which keeps working. <bookmark mark='b'/> Then version one is deprecated: its responses announce the date it will stop, in a Sunset header, standardised as RFC 8594 in 2019, so clients can see it coming. <bookmark mark='c'/> Only after that window does it stop answering. <bookmark mark='d'/> The version can travel in the path, visible and easy to route, or in a header, keeping one URL per resource. <bookmark mark='e'/> Either way only the major number belongs there: minor and patch changes are additive.",
+   "zh": "当破坏性的改动无法避免时，它就成为一个新版本，而旧版本被慢慢退役。<bookmark mark='a'/>第2版与第1版并排发布，第1版继续工作。<bookmark mark='b'/>然后第1版被弃用：它的响应会宣布它停止服务的日期，放在一个 Sunset 头里，这个头在2019年被标准化为 RFC 8594，这样客户端就能预先看到。<bookmark mark='c'/>只有过了这段窗口期，它才停止应答。<bookmark mark='d'/>版本号可以放在路径里，一目了然，也容易路由；也可以放在头部里，让每个资源只有一个 URL。<bookmark mark='e'/>无论哪种，放在那里的都只有主版本号：次版本和补丁版本的改动都是添加性的。"
+  },
+  "af53fdcc939b": {
+   "scene": "Design",
+   "en": "Google's API design guide turns these lessons into a style. <bookmark mark='a'/> An API is a hierarchy of resources, collections and the resources inside them, named by paths like a file system. <bookmark mark='b'/> Every collection gets the same standard methods, list, get, create, update and delete, mapped onto HTTP's methods with chapter four's safety and idempotency. <bookmark mark='c'/> Anything else becomes a custom method after a colon, like undelete. <bookmark mark='d'/> The point is predictability: with the same few verbs over different nouns, client libraries, permissions and documentation are built once, for every API.",
+   "zh": "Google 的 API 设计指南把这些教训变成了一种风格。<bookmark mark='a'/>一个 API 是由资源组成的层级结构：集合，以及集合里的资源，用像文件系统那样的路径来命名。<bookmark mark='b'/>每个集合都有同样的标准方法：list、get、create、update 和 delete，映射到 HTTP 的方法上，并带有第四章讲的安全性和幂等性。<bookmark mark='c'/>其他任何操作都成为自定义方法，写在冒号后面，比如 undelete。<bookmark mark='d'/>要点在于可预测：用同样几个动词作用于不同的名词，客户端库、权限和文档都只需构建一次，就适用于每一个 API。"
+  },
+  "082a102cc092": {
+   "scene": "Design",
+   "en": "How can a provider know which changes are safe, when that depends on what consumers actually do? It asks them. <bookmark mark='a'/> In consumer-driven contract testing, with tools such as Pact, each consumer's own tests record the requests it makes and the response fields it reads, and publish them as a contract. <bookmark mark='b'/> The provider's build replays every contract against the new code. <bookmark mark='c'/> Here the provider renames the author's name field. The web client and billing never read it, and pass. The mobile app does, and fails, so the change stops before it ships. <bookmark mark='d'/> The contracts turn Hyrum's law from a surprise into a list.",
+   "zh": "哪些改动是安全的，取决于消费方实际怎么用，那提供方怎么才能知道呢？去问它们。<bookmark mark='a'/>在消费者驱动的契约测试里，借助 Pact 这样的工具，每个消费方自己的测试会记录它发出的请求和它读取的响应字段，并把它们发布为一份契约。<bookmark mark='b'/>提供方的构建会用新代码，把每一份契约重放一遍。<bookmark mark='c'/>这里，提供方重命名了作者的姓名字段。网页客户端和计费服务从来不读它，所以通过。移动应用读它，所以失败，于是这项改动在发布之前就被拦了下来。<bookmark mark='d'/>契约把 Hyrum 定律从一个意外变成了一张清单。"
+  },
+  "faf46b2b469a": {
+   "scene": "Design",
+   "en": "One old rule pulls the other way. <bookmark mark='a'/> Jon Postel's robustness principle, from TCP's specification of 1981: be conservative in what you do, be liberal in what you accept from others. <bookmark mark='b'/> But every tolerated mistake is observable behaviour. Senders come to depend on it, every new receiver must tolerate it too, and the real protocol becomes the specification plus every accident anyone accepted. <bookmark mark='c'/> RFC 9413, by Martin Thomson and David Schinazi in 2023, argues for the opposite: maintain protocols actively, and reject what they do not allow, early and visibly, while mistakes are cheap to fix.",
+   "zh": "有一条古老的规则，却朝相反的方向拉。<bookmark mark='a'/>Jon Postel 的稳健性原则，出自1981年的 TCP 规范：对自己所做的要保守，对从别人那里接受的要宽容。<bookmark mark='b'/>但每一个被容忍的错误，都是可观察到的行为。发送方会开始依赖它，每个新的接收方也必须容忍它，于是真正的协议，就成了规范，再加上任何人曾经接受过的每一个意外。<bookmark mark='c'/>2023年，Martin Thomson 和 David Schinazi 在 RFC 9413 中主张相反的做法：积极地维护协议，对协议不允许的东西予以拒绝，要尽早、要显眼，趁错误还容易修正的时候。"
+  },
+  "b737ad2ef4a2": {
+   "scene": "Queues",
+   "en": "Chapter seven. Queues, and publish and subscribe.",
+   "zh": "第七章：队列与发布/订阅。"
+  },
+  "944d40c809b6": {
+   "scene": "Queues",
+   "en": "Every call so far has been a conversation: the caller waits while the callee works, and if the callee is down, the call fails. <bookmark mark='a'/> A message queue puts a buffer between them. The producer hands its message to the queue and moves on, even while the consumer is in the middle of a deploy. <bookmark mark='b'/> When the consumer comes back, the messages are waiting, and it works through them at its own pace. Producer and consumer are decoupled in time, and in rate. <bookmark mark='c'/> This is the idea behind Amazon's Simple Queue Service, RabbitMQ, Apache Kafka and Google's Cloud Pub/Sub, and Gregor Hohpe and Bobby Woolf catalogued its patterns in 2003.",
+   "zh": "到目前为止，每一次调用都是一场对话：调用方等着被调用方工作，如果被调用方宕机了，调用就失败。<bookmark mark='a'/>消息队列在它们之间放了一个缓冲区。生产者把消息交给队列，然后继续往下做，即使消费者正在部署的过程中。<bookmark mark='b'/>等消费者回来，消息都在那里等着，它按自己的节奏逐一处理。生产者和消费者在时间上解耦了，在速率上也解耦了。<bookmark mark='c'/>这就是 Amazon 的简单队列服务（Simple Queue Service）、RabbitMQ、Apache Kafka 和 Google 的 Cloud Pub/Sub 背后的思想；2003年，Gregor Hohpe 和 Bobby Woolf 为它的各种模式编写了一份目录。"
+  },
+  "b068295ee0e0": {
+   "scene": "Queues",
+   "en": "A queue must not lose a message when a consumer crashes halfway through it. <bookmark mark='a'/> So receiving a message does not remove it. Worker A receives this order, and the queue hides it for a visibility timeout, here thirty seconds, which is also the default of Amazon's queue. Only when the worker has finished does it delete the message: that is its acknowledgement. <bookmark mark='b'/> But worker A is slow. The timeout expires, the message reappears, and worker B takes it. <bookmark mark='c'/> B finishes and deletes it. Then A, which never crashed, finishes as well. The work has been done twice, and nothing malfunctioned: this is at-least-once delivery, working as designed.",
+   "zh": "消费者处理一条消息到一半时崩溃，队列不能因此丢掉这条消息。<bookmark mark='a'/>所以，接收一条消息并不会删除它。工作者 A 接收了这个订单，队列就把它隐藏一段可见性超时，这里是30秒，这也是 Amazon 队列的默认值。只有当工作者完成之后，它才删除这条消息：这就是它的确认。<bookmark mark='b'/>但工作者 A 很慢。超时到期，消息重新出现，工作者 B 拿走了它。<bookmark mark='c'/>B 完成并删除了它。然后，从没崩溃过的 A 也完成了。这项工作做了两遍，却没有任何东西出故障：这就是至少一次投递，正在按设计运行。"
+  },
+  "e664edf46bc9": {
+   "scene": "Queues",
+   "en": "Some messages can never succeed: a malformed order, say, that crashes every worker that touches it. <bookmark mark='a'/> Each failure returns it to the queue, and without a limit it would circle forever, wasting a worker each time. So queues count receives, and after a maximum, here five, move the message to a dead-letter queue for a person to inspect. <bookmark mark='b'/> We ran two thousand messages through a simulated queue, with work of five to twenty seconds, one message in twenty slow, at forty to ninety seconds, and one in five hundred poisoned. <bookmark mark='c'/> Ninety-eight messages were processed more than once, some of them three times, and two were dead-lettered. The lesson is chapter five's: a consumer must be idempotent.",
+   "zh": "有些消息永远不可能成功：比如一个格式错误的订单，碰到它的每个工作者都会崩溃。<bookmark mark='a'/>每次失败都把它送回队列，如果没有上限，它会永远兜圈子，每次都浪费一个工作者。所以队列会统计接收次数，达到最大值之后，这里是5次，就把消息移到死信队列，交给人来检查。<bookmark mark='b'/>我们让2000条消息通过一个模拟的队列，每条的工作耗时5到20秒，每20条中有1条很慢，要40到90秒，每500条中有1条是毒消息。<bookmark mark='c'/>有98条消息被处理了不止一次，其中有些处理了3次，还有2条进了死信队列。教训和第五章一样：消费者必须是幂等的。"
+  },
+  "49d6c72502c3": {
+   "scene": "Queues",
+   "en": "A queue gives each message to one consumer. Workers compete for messages, and the work is shared among them. <bookmark mark='a'/> Publish and subscribe gives each message to everyone who is interested. The orders service publishes an event, order placed, to a topic. <bookmark mark='b'/> Each subscription receives its own copy, in its own queue: email, billing and analytics each read at their own pace, and a slow one does not hold back the others. <bookmark mark='c'/> The publisher does not know who is listening, so a new subscriber can be added without changing it. That is decoupling again, in who as well as when.",
+   "zh": "队列把每条消息交给一个消费者。工作者们竞争消息，工作由它们分担。<bookmark mark='a'/>发布/订阅则把每条消息交给每一个感兴趣的人。订单服务向一个主题发布一个事件：订单已下。<bookmark mark='b'/>每个订阅都收到自己的一份副本，放在自己的队列里：邮件、计费和分析各按自己的节奏读取，慢的那个不会拖住其他的。<bookmark mark='c'/>发布者不知道谁在听，所以添加新的订阅者不需要改动它。这又是解耦，既在于何时，也在于是谁。"
+  },
+  "97bd651c68f4": {
+   "scene": "Queues",
+   "en": "What about order? One queue with many workers cannot promise it: two workers race, and a slow one finishes last. <bookmark mark='a'/> Kafka's answer, from LinkedIn in 2011, is a partitioned log. Each message carries a key, a customer, say, and a hash of the key picks one of the partitions, so every message for the same key lands in the same partition, in order. <bookmark mark='b'/> Order holds within a partition and not across them, and order per customer is usually the order that matters. <bookmark mark='c'/> A consumer group divides the partitions among its members, and each consumer commits an offset: how far it has read. After a crash it resumes from its offset. The log can be replayed, which is where Part 46 begins.",
+   "zh": "那顺序呢？一个队列配许多工作者，没法保证顺序：两个工作者赛跑，慢的那个最后完成。<bookmark mark='a'/>Kafka 的答案，2011年出自 LinkedIn，是一个分区的日志。每条消息都带一个键，比如一个客户，键的哈希值选出其中一个分区，于是同一个键的每条消息都落在同一个分区里，并且有序。<bookmark mark='b'/>顺序在一个分区之内成立，跨分区则不成立，而通常要紧的，正是每个客户自己的顺序。<bookmark mark='c'/>一个消费者组把分区分给它的成员，每个消费者提交一个偏移量：它读到了哪里。崩溃之后，它从自己的偏移量处继续。这个日志可以重放，而这正是第46部分开始的地方。"
+  },
+  "fdb25ff96349": {
+   "scene": "Backpressure",
+   "en": "Chapter eight. Backpressure.",
+   "zh": "第八章：背压。"
+  },
+  "19c29a15b421": {
+   "scene": "Backpressure",
+   "en": "Put a queue in front of a service, and Part 31's arithmetic takes over. <bookmark mark='a'/> With random arrivals and random service times, an M M 1 queue, the mean time in the system is one over one minus the load, in service times: two at half load, ten at ninety percent, a hundred at ninety-nine. <bookmark mark='b'/> Simulated: two, five point three, eleven point four, twenty-three point seven, and a hundred and seven. <bookmark mark='c'/> Above a load of one there is no steady state: after fifty thousand arrivals the mean is over a thousand service times at one point oh five, and four thousand at one point two.",
+   "zh": "在一个服务前面放一个队列，第31部分的算术就接管了。<bookmark mark='a'/>到达是随机的，服务时间也是随机的，也就是 M M 1 队列，在系统中的平均时间是 1 除以 1 减负载，以服务时间为单位：负载一半时是2，90%时是10，99%时是100。<bookmark mark='b'/>模拟的结果：2、5.3、11.4、23.7，以及107。<bookmark mark='c'/>负载超过1，就不存在稳态：在5万次到达之后，负载为1.05时平均值超过1000个服务时间，负载为1.2时是4000个。"
+  },
+  "13e2eae24230": {
+   "scene": "Backpressure",
+   "en": "An unbounded queue never refuses work. It turns overload into waiting. <bookmark mark='a'/> So bound it. With room for twenty requests, an arrival that finds the queue full is turned away at once, with an error that says, try later. <bookmark mark='b'/> Now the mean time in the system stays under sixteen service times, even at a hundred and twenty percent load. The price is explicit: three requests in a thousand shed at a load of point eight, rising to seventeen percent at one point two. <bookmark mark='c'/> That is backpressure. The queue pushes back on whoever is sending, and overload becomes visible to the party that can act on it.",
+   "zh": "一个无界队列从不拒绝工作。它把过载变成了等待。<bookmark mark='a'/>所以要给它设上界。留出20个请求的空间，一个到达的请求如果发现队列已满，就立刻被拒绝，并附上一个错误：请稍后再试。<bookmark mark='b'/>现在，即使负载达到120%，在系统中的平均时间也保持在16个服务时间以下。代价是明确的：负载为0.8时，每1000个请求有3个被卸除，到1.2时上升到17%。<bookmark mark='c'/>这就是背压。队列向发送方推回去，过载就对能采取行动的那一方变得可见了。"
+  },
+  "f3771a2108c2": {
+   "scene": "Backpressure",
+   "en": "Now add retries. A service answers a hundred requests a second, and its clients send ninety. <bookmark mark='a'/> For ten seconds it is down, and clients retry each failure a second later, on top of new work. <bookmark mark='b'/> When the service returns it is offered nine hundred and ninety requests a second. It works flat out, but with only ten a second to spare, the backlog takes ninety seconds to drain: recovery at a hundred and nineteen seconds. Real services also slow down when overloaded, and then a storm can sustain itself, what Bronson and colleagues in 2021 called a metastable failure. <bookmark mark='c'/> Exponential backoff with jitter spreads the retries out: a peak of three hundred and eighty-one, and recovery at sixty-nine seconds. <bookmark mark='d'/> A retry budget does better still.",
+   "zh": "现在加上重试。一个服务每秒能应答100个请求，它的客户端每秒发送90个。<bookmark mark='a'/>它宕机了10秒，客户端在每次失败1秒后重试，叠加在新的工作之上。<bookmark mark='b'/>服务恢复时，它每秒要面对990个请求。每秒只有10个的余量，积压需要90秒才能排空：直到第119秒才恢复。真实的服务在过载时还会变慢，于是一场风暴可能自我维持下去，Bronson 和同事们在2021年称之为亚稳态故障。<bookmark mark='c'/>带抖动的指数退避把重试分散开：峰值是381，在第69秒恢复。<bookmark mark='d'/>重试预算做得更好。"
+  },
+  "e25528c46f4f": {
+   "scene": "Backpressure",
+   "en": "gRPC's retry throttling gives each client a bucket of tokens. <bookmark mark='a'/> Each failure costs a token, each success earns back a tenth of one, and when the bucket is less than half full, the client stops retrying and reports the failure at once. <bookmark mark='b'/> In our outage the bucket falls below half within the first second: only forty-nine failures are retried. The peak is a hundred and thirty-nine, and the service is normal one second after it returns. <bookmark mark='c'/> The cost: nine hundred requests, every one that arrived during the outage, got an error instead of an answer. Whether that is acceptable is a product decision; the alternative was almost ninety more seconds of overload for everyone.",
+   "zh": "gRPC 的重试限流给每个客户端一桶令牌。<bookmark mark='a'/>每次失败花掉一个令牌，每次成功挣回十分之一个，当桶里不到一半时，客户端就停止重试，立刻报告失败。<bookmark mark='b'/>在我们这次故障中，桶在第一秒之内就跌到一半以下：只有49次失败被重试。峰值是139，服务一恢复就回到了正常。<bookmark mark='c'/>代价是：900个请求，也就是故障期间到达的每一个请求，得到的都是错误而不是答案。这能否接受，是一个产品决策；另一种选择，是让所有人再多承受将近90秒的过载。"
+  },
+  "a33471bca581": {
+   "scene": "Backpressure",
+   "en": "These are one family of defences. <bookmark mark='a'/> A circuit breaker, described in Michael Nygard's book Release It! in 2007, watches calls to a dependency. When failures pass a threshold it opens, and calls fail at once, unsent. After a cool-down it lets a trial call through: success closes it, failure opens it again. <bookmark mark='b'/> Load shedding refuses work at the door, the cheapest first. Admission control caps the requests in flight, adapting the cap as TCP adapts its window. And deadlines, which chapter nine sends down a call chain, let a service drop work whose caller has already given up. <bookmark mark='c'/> An infinite buffer only turns overload into latency, latency into timeouts, and timeouts into retries.",
+   "zh": "这些属于同一族防御手段。<bookmark mark='a'/>断路器（熔断器），由 Michael Nygard 在2007年的书《Release It!》中描述，它监视对一个依赖的调用。当失败超过一个阈值，它就打开，调用会立即失败，根本不发出去。冷却一段时间之后，它放一次试探调用通过：成功就闭合，失败就再次打开。<bookmark mark='b'/>负载卸除在门口就拒绝工作，先拒绝最廉价的。准入控制限制正在进行的请求数，并像 TCP 调整它的窗口那样调整这个上限。还有截止时间，第九章会把它沿着调用链往下传，它让服务可以丢掉调用方已经放弃了的工作。<bookmark mark='c'/>无限的缓冲区只会把过载变成延迟，把延迟变成超时，再把超时变成重试。"
+  },
+  "7ef6afbd4a2a": {
+   "scene": "Micro",
+   "en": "Chapter nine. Monoliths and microservices.",
+   "zh": "第九章：单体与微服务。"
+  },
+  "0d7bedbca7b7": {
+   "scene": "Micro",
+   "en": "Now the architectural question. <bookmark mark='a'/> A monolith is one program, deployed as a unit. Its modules call each other in nanoseconds, share one database, and fail together. <bookmark mark='b'/> Microservices split the modules into separate programs, each with its own data, talking over the network. <bookmark mark='c'/> The gain is mostly organisational. Each team deploys its own service when it is ready, and scales it on its own; Conway's law, from Part 40, says the system will mirror the teams anyway. <bookmark mark='d'/> What is lost is that every call can now fail, be slow, or be repeated, chapter one's lesson, and every piece of data two services share becomes a problem for chapter ten.",
+   "zh": "现在来看架构问题。<bookmark mark='a'/>单体是一个程序，作为一个整体部署。它的模块以纳秒级的速度互相调用，共享一个数据库，也一起失败。<bookmark mark='b'/>微服务把这些模块拆成独立的程序，每个都有自己的数据，通过网络通信。<bookmark mark='c'/>收益主要在组织上。每个团队在准备好时部署自己的服务，并独立地扩展它；第40部分的康威定律说，系统反正会映照出团队的结构。<bookmark mark='d'/>失去的是：每一次调用现在都可能失败、变慢或者重复，这是第一章的教训；而两个服务共享的每一份数据，都成了第十章要解决的问题。"
+  },
+  "5aa54b0ce88d": {
+   "scene": "Micro",
+   "en": "So where should the cuts go? <bookmark mark='a'/> Eric Evans' book Domain-Driven Design, in 2003, gave the answer most teams use: bounded contexts. A word like customer means different things to sales, to billing and to shipping, and each context should own its own model rather than share one giant one. <bookmark mark='b'/> Cut well, and each team deploys when it likes. <bookmark mark='c'/> Cut badly, and you get the worst of both: a distributed monolith, services that can only be deployed together because they share a database, or a library version, or a chain of synchronous calls. It has all the network's failures and none of the independence.",
+   "zh": "那么，该在哪里切分呢？<bookmark mark='a'/>Eric Evans 2003年的书《领域驱动设计》（Domain-Driven Design），给出了大多数团队采用的答案：限界上下文。像“客户”这样一个词，对销售、计费和发货来说含义各不相同，每个上下文都应该拥有自己的模型，而不是共享一个巨大的模型。<bookmark mark='b'/>切得好，每个团队想什么时候部署就什么时候部署。<bookmark mark='c'/>切得不好，你就会得到两边最坏的东西：一个分布式单体，也就是只能一起部署的服务，因为它们共享一个数据库，或者一个库的版本，或者一串同步调用。它有网络的所有故障，却没有任何独立性。"
+  },
+  "df7d7bf42ee9": {
+   "scene": "Micro",
+   "en": "Microservices also turn one request into many. <bookmark mark='a'/> Suppose a request fans out to k back ends in parallel and waits for all of them. Each back end is usually fast, ten milliseconds at the median, but one call in a hundred hits a bad moment, a pause or a retransmission. <bookmark mark='b'/> With one back end, under two percent of requests take more than a hundred milliseconds. With a hundred back ends, forty-six percent do, and the median itself has quadrupled. <bookmark mark='c'/> The chance that at least one of k back ends has a bad moment is one minus point nine nine to the k: sixty-three percent at a hundred. At many back ends the measured share is lower, because not every bad moment crosses a hundred milliseconds. It is Part 39's tail at scale: the slowest of many decides.",
+   "zh": "微服务还把一个请求变成许多个。<bookmark mark='a'/>假设一个请求并行扇出到 k 个后端，并等待它们全部返回。每个后端通常都很快，中位数是10毫秒，但每100次调用中有1次会碰上糟糕的时刻：一次停顿，或者一次重传。<bookmark mark='b'/>只有1个后端时，超过100毫秒的请求不到2%。有100个后端时，这个比例是46%，连中位数本身都变成了原来的4倍。<bookmark mark='c'/>k 个后端中至少有一个碰上糟糕时刻的概率，是 1 减去 0.99 的 k 次方：100个时是63%。后端很多时，实测的比例更低，因为并不是每个糟糕时刻都会超过100毫秒。这就是第39部分讲的规模下的尾延迟：许多个里最慢的那个说了算。"
+  },
+  "79b5b634dbc0": {
+   "scene": "Micro",
+   "en": "If a request must be answered within a deadline, the deadline should travel with it. <bookmark mark='a'/> This request has a hundred and fifty milliseconds. The gateway spends five of them and passes the rest, a hundred and forty-five, to auth, which spends eight and passes a hundred and thirty-seven to orders, and so on down the critical path. <bookmark mark='b'/> Payments receives eighty-two milliseconds, uses sixty, and twenty-two are left as slack. <bookmark mark='c'/> gRPC carries the remaining time in every call, so a service that sees its deadline has passed can stop at once, instead of doing work nobody will read. That is chapter eight's lesson, made exact.",
+   "zh": "如果一个请求必须在截止时间内得到应答，截止时间就应该随它一起传递。<bookmark mark='a'/>这个请求有150毫秒。网关用掉其中5毫秒，把剩下的145毫秒交给认证服务；认证服务用掉8毫秒，把137毫秒交给订单服务，就这样沿着关键路径一路往下。<bookmark mark='b'/>支付服务收到82毫秒，用了60毫秒，还剩22毫秒作为余量。<bookmark mark='c'/>gRPC 在每次调用中都携带剩余的时间，所以一个服务一旦发现自己的截止时间已过，就可以立刻停下，而不是去做没有人会读的工作。这就是第八章的教训，变得精确了。"
+  },
+  "ab275cc5a741": {
+   "scene": "Data",
+   "en": "Chapter ten. Data across services.",
+   "zh": "第十章：跨服务的数据。"
+  },
+  "8e47c62d64f3": {
+   "scene": "Data",
+   "en": "Chapter nine left us data that more than one service needs. <bookmark mark='a'/> The rule is that each service owns its database: orders, payments and stock each keep their own tables. <bookmark mark='b'/> No service reads another's tables directly; that would weld them back into one program. Others ask through its interface, or listen to its events. <bookmark mark='c'/> So placing an order is two writes: a row in the orders database, and an event on the broker. Two systems, and no transaction that spans both: the dual-write problem.",
+   "zh": "第九章给我们留下了不止一个服务需要的数据。<bookmark mark='a'/>规则是，每个服务拥有自己的数据库：订单、支付和库存各自保存自己的表。<bookmark mark='b'/>任何服务都不直接读取别的服务的表；那样会把它们重新焊成一个程序。其他服务要通过它的接口来询问，或者监听它的事件。<bookmark mark='c'/>所以，下单就是两次写入：订单数据库里的一行，以及消息代理上的一个事件。两个系统，却没有跨越两者的事务：这就是双写问题。"
+  },
+  "d9b46aa0d255": {
+   "scene": "Data",
+   "en": "Suppose the service simply does the two writes in turn. We simulated ten thousand orders, with a one percent chance of a crash between them. <bookmark mark='a'/> Commit first, then publish: every order is saved, but after a crash no event is sent. A hundred and ten orders were never heard of. <bookmark mark='b'/> Publish first, then commit: a crash leaves an event for an order that was never saved. A hundred and ten phantom orders were announced. <bookmark mark='c'/> Swapping the order only swaps the failure, and retrying cannot help: the process that would retry is the one that crashed.",
+   "zh": "假设这个服务就是简单地依次做这两次写入。我们模拟了1万个订单，在两次写入之间有1%的概率崩溃。<bookmark mark='a'/>先提交，再发布：每个订单都保存了，但崩溃之后，没有事件发出。有110个订单从来没有人知道。<bookmark mark='b'/>先发布，再提交：崩溃会留下一个事件，对应的订单却从未保存。有110个幽灵订单被宣布了出去。<bookmark mark='c'/>交换顺序只是交换了故障，重试也帮不上忙：本该重试的那个进程，正是崩溃的那个。"
+  },
+  "303d5972eaa5": {
+   "scene": "Data",
+   "en": "The cure is to make the two writes one. <bookmark mark='a'/> In the same local transaction as the order, the service inserts the event into an outbox table. Both rows commit, or neither does. <bookmark mark='b'/> A relay publishes unsent rows, then marks them sent. If it crashes in between, it publishes again when it restarts. <bookmark mark='c'/> So an outbox never loses an event or invents one. It can only duplicate, and chapter five's deduplication removes duplicates. <bookmark mark='d'/> Over the same ten thousand orders: nothing lost, no phantoms, a hundred and ten harmless duplicates. <bookmark mark='e'/> Change data capture tools such as Debezium read the database's own write-ahead log instead, as Part 46 will show.",
+   "zh": "解药是把两次写入变成一次。<bookmark mark='a'/>在与订单相同的本地事务中，服务把事件插入一张发件箱（outbox）表。两行要么都提交，要么都不提交。<bookmark mark='b'/>一个中继发布尚未发送的行，然后把它们标记为已发送。如果它在两步之间崩溃，重启后就会再发布一次。<bookmark mark='c'/>所以发件箱永远不会丢失事件，也不会凭空捏造事件。它只可能重复，而第五章的去重会去掉重复。<bookmark mark='d'/>在同样的1万个订单上：没有丢失，没有幽灵，有110个无害的重复。<bookmark mark='e'/>像 Debezium 这样的变更数据捕获工具，则改为读取数据库自己的预写日志，第46部分会展示这一点。"
+  },
+  "6c011a1930bd": {
+   "scene": "Data",
+   "en": "An action that spans services needs more. <bookmark mark='a'/> In 1987 Hector Garcia-Molina and Kenneth Salem proposed the saga: a long transaction written as a sequence of short local ones, each committed at once and paired with a compensation that undoes it. Our order saga reserves stock, charges the card, books a courier and confirms. <bookmark mark='b'/> Here stock is reserved, the card is charged, and then no courier can be booked. <bookmark mark='c'/> So the saga runs backwards: refund the card, then release the stock. A compensation is a semantic undo, a refund rather than an erased charge, and it is retried until it succeeds, so it must be idempotent.",
+   "zh": "跨越多个服务的操作需要更多手段。<bookmark mark='a'/>1987年，Hector Garcia-Molina 和 Kenneth Salem 提出了 saga（长事务）：把一个长事务写成一串短的本地事务，每个都立即提交，并配有一个撤销它的补偿操作。我们的订单 saga 依次预留库存、扣款、预订快递员，然后确认。<bookmark mark='b'/>这里，库存预留了，卡也扣了款，然后订不到快递员。<bookmark mark='c'/>于是 saga 倒着运行：先给卡退款，再释放库存。补偿是一种语义上的撤销，是一笔退款，而不是抹掉那笔扣款；它会一直重试，直到成功，所以它必须是幂等的。"
+  },
+  "80340a476fa9": {
+   "scene": "Data",
+   "en": "We ran ten thousand orders through the saga, with failures injected at the first three steps. <bookmark mark='a'/> Nine thousand three hundred and fifty-nine completed; six hundred and forty-one were compensated. <bookmark mark='b'/> A hundred and six failed reserving stock, three hundred and seventeen at the charge, and two hundred and eighteen at the courier. <bookmark mark='c'/> Fifty-seven compensations failed and were retried. And the number of orders left half done, money taken with no stock or a courier with no payment, was zero.",
+   "zh": "我们让1万个订单通过这个 saga，在前三步注入故障。<bookmark mark='a'/>9359个完成了；641个被补偿。<bookmark mark='b'/>106个在预留库存时失败，317个在扣款时失败，218个在预订快递员时失败。<bookmark mark='c'/>有57次补偿失败并被重试。而处于半完成状态的订单，也就是钱扣了却没有库存，或者订了快递员却没有付款，数量是零。"
+  },
+  "6826009c8bbb": {
+   "scene": "Data",
+   "en": "Sagas pay for this. <bookmark mark='a'/> Each step commits at once, so there is no isolation: another request can see the order paid, just before the refund. <bookmark mark='b'/> Designs work around it with semantic locks, marking the order pending until the saga ends, and commutative updates that add and subtract rather than overwrite. <bookmark mark='c'/> An orchestrator can drive the steps, or services can react to each other's events: choreography. <bookmark mark='d'/> Why not two-phase commit across services? Part 39 showed that participants hold their locks until the coordinator decides, and a dead coordinator blocks them all.",
+   "zh": "saga 是要付出代价的。<bookmark mark='a'/>每一步都立即提交，所以没有隔离性：另一个请求可能恰好在退款之前，看到订单已付款。<bookmark mark='b'/>设计上用语义锁来绕开它，在 saga 结束之前把订单标记为待处理；还有可交换的更新，用加和减，而不是覆盖。<bookmark mark='c'/>可以由一个编排器来驱动这些步骤，也可以让服务对彼此的事件做出反应：这叫编舞式协作（choreography）。<bookmark mark='d'/>为什么不跨服务使用两阶段提交呢？第39部分讲过，参与者会一直持有锁，直到协调者做出决定，而一个死掉的协调者会把它们全部阻塞。"
+  },
+  "616303343f0e": {
+   "scene": "Mesh",
+   "en": "Chapter eleven. Finding, routing and trusting services.",
+   "zh": "第十一章：发现、路由与信任服务。"
+  },
+  "9646f32290bd": {
+   "scene": "Mesh",
+   "en": "Before a client can call a service, it must find one of its servers. <bookmark mark='a'/> Each instance registers as it starts, and the registry keeps checking that it is healthy. <bookmark mark='b'/> A client asks for the current healthy addresses. <bookmark mark='c'/> An instance that stops answering its health checks is dropped, and requests stop going to it. <bookmark mark='d'/> The plainest registry is DNS: a name for the service, an address per instance. But answers are cached, so DNS is slow to forget a dead server.",
+   "zh": "客户端在调用一个服务之前，必须先找到它的一台服务器。<bookmark mark='a'/>每个实例在启动时注册自己，注册中心则不断检查它是否健康。<bookmark mark='b'/>客户端询问当前有哪些健康的地址。<bookmark mark='c'/>一个不再响应健康检查的实例会被剔除，请求也不再发往它。<bookmark mark='d'/>最朴素的注册中心就是 DNS：服务有一个名字，每个实例有一个地址。但应答会被缓存，所以 DNS 迟迟忘不掉一台已经死掉的服务器。"
+  },
+  "c580006689c4": {
+   "scene": "Mesh",
+   "en": "Which server should take each request? <bookmark mark='a'/> Choosing at random, some queues grow long by bad luck. The power of two choices asks two random servers how busy they are and picks the less loaded. <bookmark mark='b'/> With fifty servers at ninety percent load, random choice gives a mean of ten service times and a ninety-ninth percentile of forty-nine; round robin halves both; two choices brings them to two point six and nine. <bookmark mark='c'/> Part 20's balls into bins explains why: with one random choice the fullest of n bins holds about log n over log log n; with two, about log log n. Azar, Broder, Karlin and Upfal proved it in 1994.",
+   "zh": "每个请求该由哪台服务器来处理？<bookmark mark='a'/>如果随机选择，有些队列会因为运气不好而排得很长。“两个选择的力量”随机问两台服务器有多忙，然后挑负载较轻的那台。<bookmark mark='b'/>50台服务器、负载90%时，随机选择的平均值是10个服务时间，第99百分位是49；轮询大约把平均值减半，把尾部压到21；两个选择则把它们降到2.6和9。<bookmark mark='c'/>第20部分的球与箱解释了原因：只有一个随机选择时，n 个箱子里最满的那个大约装 log n 除以 log log n 个球；有两个选择时，大约是 log log n。Azar、Broder、Karlin 和 Upfal 在1994年证明了这一点。"
+  },
+  "565056e381fc": {
+   "scene": "Mesh",
+   "en": "Every service needs retries, timeouts and encryption. <bookmark mark='a'/> A service mesh takes them out of the application: beside each service runs a sidecar proxy, such as Envoy, and every call goes through it. <bookmark mark='b'/> The sidecar retries with backoff, enforces timeouts, and opens a circuit breaker to stop calling a server that keeps failing. <bookmark mark='c'/> Between sidecars runs mutual TLS, Part 30's handshake with certificates on both sides, so the server learns which service is calling; SPIFFE names each workload. <bookmark mark='d'/> A control plane, such as Istio or Linkerd, hands out configuration and certificates.",
+   "zh": "每个服务都需要重试、超时和加密。<bookmark mark='a'/>服务网格（service mesh）把它们从应用程序里拿了出来：每个服务旁边运行一个边车代理（sidecar），比如 Envoy，每一次调用都经过它。<bookmark mark='b'/>边车会带着退避去重试，强制执行超时，并在一台服务器不断失败时打开断路器，不再调用它。<bookmark mark='c'/>边车之间运行双向 TLS，也就是第30部分那种两端都出示证书的握手，这样服务器就能知道是哪个服务在调用它；SPIFFE 为每个工作负载命名。<bookmark mark='d'/>控制平面，比如 Istio 或 Linkerd，负责分发配置和证书。"
+  },
+  "2e29e4bd2a6f": {
+   "scene": "Mesh",
+   "en": "Services must also know who is calling. OAuth 2.0, RFC 6749, lets a user grant an app limited access without sharing a password. <bookmark mark='a'/> The app sends the browser to the authorization server, <bookmark mark='b'/> where the user logs in and consents. <bookmark mark='c'/> The server sends the browser back with a short-lived code, <bookmark mark='d'/> and the app exchanges it for an access token and a refresh token. With PKCE, the app first sent only the hash of a secret, and reveals the secret now, so a stolen code is useless. <bookmark mark='e'/> The access token rides on each call to the resource server, and the refresh token renews it.",
+   "zh": "服务还必须知道是谁在调用。OAuth 2.0，即 RFC 6749，让用户可以授予一个应用有限的访问权限，而不必交出密码。<bookmark mark='a'/>应用把浏览器引导到授权服务器，<bookmark mark='b'/>用户在那里登录并表示同意。<bookmark mark='c'/>授权服务器把浏览器送回来，带着一个短期有效的授权码，<bookmark mark='d'/>应用再用它换取一个访问令牌和一个刷新令牌。有了 PKCE，应用一开始只发送了一个秘密的哈希，现在才揭示这个秘密本身，所以被偷走的授权码毫无用处。<bookmark mark='e'/>访问令牌随每次调用发往资源服务器，刷新令牌则用来给它续期。"
+  },
+  "dce71e30ec91": {
+   "scene": "Mesh",
+   "en": "Access tokens are often JSON Web Tokens, RFC 7519. <bookmark mark='a'/> Three base64 parts joined by dots: a header naming the algorithm, a payload of claims, here ada with the role reader, and a signature over both. <bookmark mark='b'/> Our first verifier does whatever the header says. Edit the payload to say admin, and the signature fails. <bookmark mark='c'/> But set the algorithm to none, which the standard allows for unsecured tokens, drop the signature, and that verifier accepts a token claiming admin. <bookmark mark='d'/> The fix, in RFC 8725, is for the server to pin the algorithm it expects. Our pinned verifier rejects both forgeries.",
+   "zh": "访问令牌通常是 JSON Web Token，即 RFC 7519。<bookmark mark='a'/>它由三段 base64 用点连接而成：一个指明算法的头部，一个由声明组成的载荷，这里是角色为 reader 的 ada，以及一个覆盖前两者的签名。<bookmark mark='b'/>我们的第一个验证器完全照头部说的做。把载荷改成 admin，签名就验证失败。<bookmark mark='c'/>但是把算法设成 none，这是标准为不加保护的令牌所允许的，再去掉签名，这个验证器就会接受一个自称 admin 的令牌。<bookmark mark='d'/>修复办法写在 RFC 8725 里：服务器要固定它所期望的算法。我们固定了算法的验证器，拒绝了这两种伪造。"
+  },
+  "37b5eb2d6514": {
+   "scene": "Mesh",
+   "en": "A bearer token is a capability: whoever holds it may use it. Macaroons, from Birgisson and colleagues in 2014, are capabilities any holder can weaken. <bookmark mark='a'/> The issuer signs an identifier with its secret key. <bookmark mark='b'/> Each caveat, such as only photos, only reading, only until December, is signed with the previous signature, so a holder can narrow a token without the key; removing a caveat would mean undoing a hash. <bookmark mark='c'/> The issuer recomputes the chain and checks every caveat. Part 55 returns to them.",
+   "zh": "持有者令牌（bearer token）是一种能力（capability）：谁持有它，谁就能使用它。Macaroon 由 Birgisson 及其同事在2014年提出，是任何持有者都可以削弱的能力。<bookmark mark='a'/>签发者用自己的密钥对一个标识符签名。<bookmark mark='b'/>每一条附加条件（caveat），比如只限照片、只限读取、只到12月为止，都用上一个签名来签，所以持有者不需要密钥就能收窄一个令牌；而要去掉一条附加条件，就得把一次哈希倒推回去。<bookmark mark='c'/>签发者重新计算这条链，并检查每一条附加条件。第55部分会再回到它们。"
+  },
+  "2d836b0a0231": {
+   "scene": "Time",
+   "en": "Chapter twelve. Time in APIs.",
+   "zh": "第十二章：API 中的时间。"
+  },
+  "cf934f8df603": {
+   "scene": "Time",
+   "en": "A computer has more than one clock, and Part 38 showed that no two machines' clocks agree. <bookmark mark='a'/> The wall clock tells the date and time of day. It is set by NTP, by people, and it can jump, backwards as well as forwards. <bookmark mark='b'/> Time a request with it, and if the clock is stepped back while the request runs, the duration comes out negative. <bookmark mark='c'/> The monotonic clock only ever moves forwards. It means nothing as a date and nothing on another machine, but it is the right clock for timeouts, retries and latency.",
+   "zh": "一台计算机有不止一个时钟，而第38部分表明，没有哪两台机器的时钟是一致的。<bookmark mark='a'/>墙上时钟（wall clock）告诉你日期和一天中的时刻。它由 NTP 设置，也由人来设置，而且它会跳变，既可能往前跳，也可能往回跳。<bookmark mark='b'/>用它给一个请求计时，如果请求运行期间时钟被往回拨，算出来的耗时就是负的。<bookmark mark='c'/>单调时钟只会往前走。它作为日期毫无意义，在另一台机器上也毫无意义，但它正是用来做超时、重试和测量延迟的那个时钟。"
+  },
+  "749e5caed8c5": {
+   "scene": "Time",
+   "en": "Time zones make the wall clock stranger still. <bookmark mark='a'/> In New York on the eighth of March 2026, clocks jump from two in the morning straight to three. The hour between never happens there. <bookmark mark='b'/> Start at half past one and add one hour of wall-clock time, and Python's zoneinfo hands back half past two, a time that does not exist that day. <bookmark mark='c'/> Normalized through UTC, it is half past three, daylight time: exactly one real hour later. <bookmark mark='d'/> Nor are offsets whole hours. Lord Howe Island is ten and a half hours ahead of UTC, and its clocks change by half an hour.",
+   "zh": "时区让墙上时钟变得更加古怪。<bookmark mark='a'/>2026年3月8日，在纽约，时钟从凌晨2点直接跳到3点。中间那一个小时在那里根本不存在。<bookmark mark='b'/>从1点半开始，加上一小时的墙上时间，Python 的 zoneinfo 给出的是2点半，一个那天并不存在的时刻。<bookmark mark='c'/>经由 UTC 换算之后，它是夏令时3点半：恰好晚了真实的一个小时。<bookmark mark='d'/>偏移量也不都是整小时。豪勋爵岛比 UTC 早10个半小时，而且它的时钟每次调整也只有半个小时。"
+  },
+  "e7c69f557265": {
+   "scene": "Time",
+   "en": "UTC also has extra seconds. <bookmark mark='a'/> The Earth's rotation wanders, and to keep clocks in step with it a leap second is occasionally inserted: the clock reads twenty-three fifty-nine and sixty seconds. <bookmark mark='b'/> Twenty-seven have been added since 1972. Code that assumes every minute has sixty seconds meets one with sixty-one, and the leap second of 2012 hung servers at several large sites. <bookmark mark='c'/> Since 2008 Google has smeared the extra second instead, running its clocks slightly slow for hours, so that no clock ever shows sixty. <bookmark mark='d'/> And in 2022 the General Conference on Weights and Measures decided to stop adding leap seconds by 2035.",
+   "zh": "UTC 还有多出来的秒。<bookmark mark='a'/>地球的自转并不稳定，为了让时钟与它保持同步，偶尔会插入一个闰秒：时钟显示23点59分60秒。<bookmark mark='b'/>自1972年以来，一共加了27个。认定每分钟都是60秒的代码，会碰上一分钟有61秒的情况，2012年的那个闰秒就让好几家大型网站的服务器卡死了。<bookmark mark='c'/>从2008年起，Google 改为把这多出来的一秒抹匀（smear）：让时钟连续几个小时走得稍慢一点，于是没有哪个时钟会显示60。<bookmark mark='d'/>而在2022年，国际计量大会决定，到2035年停止增加闰秒。"
+  },
+  "d16a116f57c1": {
+   "scene": "Time",
+   "en": "Then there are the bits a time is stored in. <bookmark mark='a'/> Unix time counts seconds since 1970. In a signed 32-bit integer, the largest value, two to the thirty-one minus one, is seven seconds past three fourteen in the morning of the nineteenth of January 2038. <bookmark mark='b'/> One second later, the carry ripples all the way into the sign bit, and the clock reads December 1901. <bookmark mark='c'/> Operating systems have moved to 64 bits, but the bug lives on wherever a file format, a database column or a protocol field kept only 32.",
+   "zh": "然后是存储时间所用的那些位。<bookmark mark='a'/>Unix 时间计算的是从1970年起的秒数。在一个有符号的32位整数里，最大值是2的31次方减1，对应2038年1月19日凌晨3点14分7秒。<bookmark mark='b'/>再过一秒，进位一路传到符号位，时钟就显示1901年12月。<bookmark mark='c'/>操作系统已经改用64位，但只要某个文件格式、数据库列或协议字段只保留了32位，这个错误就依然存在。"
+  },
+  "9dfb183d88eb": {
+   "scene": "Time",
+   "en": "So an API that handles time keeps a few rules. <bookmark mark='a'/> Store instants in UTC. <bookmark mark='b'/> For a local time, such as a meeting, keep the zone's name, America slash New York, rather than an offset: the offset changes twice a year, and the zone's rules change by law. <bookmark mark='c'/> On the wire, write ISO 8601, in the RFC 3339 profile, with the offset included. <bookmark mark='d'/> Measure durations with the monotonic clock. <bookmark mark='e'/> And never do calendar arithmetic by adding seconds: in New York, the eighth of March 2026 had only twenty-three hours.",
+   "zh": "所以，一个处理时间的 API 要遵守几条规则。<bookmark mark='a'/>用 UTC 存储时刻。<bookmark mark='b'/>对于本地时间，比如一场会议，要保存时区的名字，America 斜杠 New York，而不是偏移量：偏移量一年变两次，而时区的规则会随法律改变。<bookmark mark='c'/>在线路上，写成 ISO 8601，采用 RFC 3339 规定的格式，并带上偏移量。<bookmark mark='d'/>用单调时钟测量时长。<bookmark mark='e'/>并且永远不要靠加秒数来做日历运算：在纽约，2026年3月8日只有23个小时。"
+  },
+  "ec7cf4bcaf6b": {
+   "scene": "Time",
+   "en": "Clocks also meet chapter five's idempotency keys. <bookmark mark='a'/> A key is kept for a limited time, here ten minutes, and a request that arrives after it expires is treated as new. <bookmark mark='b'/> If the service that checks the key runs two minutes fast, the key expires early, and a retry at nine minutes is charged a second time. <bookmark mark='c'/> So let one clock decide expiry, keep keys far longer than any client retries, and where order across machines matters, use Part 39's hybrid logical clocks rather than trusting wall clocks to agree.",
+   "zh": "时钟还会碰上第五章的幂等键。<bookmark mark='a'/>一个键只保留有限的时间，这里是10分钟，键过期之后才到达的请求会被当作新请求。<bookmark mark='b'/>如果检查键的那个服务快了2分钟，键就会提前过期，第9分钟的一次重试就会被扣第二次款。<bookmark mark='c'/>所以，让一个时钟来决定过期，把键保留得远比任何客户端的重试都久；而在跨机器的顺序很重要的地方，使用第39部分的混合逻辑时钟，而不是指望墙上时钟彼此一致。"
+  },
+  "123ca3c85e31": {
+   "scene": "Job",
+   "en": "Chapter thirteen. The Job as three services.",
+   "zh": "第十三章：拆成三个服务的那项任务。"
+  },
+  "79519a856ca7": {
+   "scene": "Job",
+   "en": "Here is the Job split across a network. <bookmark mark='a'/> The tokenizer reads the first 70,588 words of our thirty novels and sends the counter one message per chunk of two hundred words, each message carrying that chunk's word counts. The counter adds them up, and the ranker asks it for the top words. <bookmark mark='b'/> Our simulated network loses five percent of messages, acknowledgements included, and duplicates two percent. <bookmark mark='c'/> So the tokenizer retries every chunk until it is acknowledged. That took three rounds and, counting retries and acknowledgements, 772 messages. 39 were lost and 22 were duplicated.",
+   "zh": "这是被拆分到网络上的那项任务。<bookmark mark='a'/>分词器读取我们30本小说的前70588个词，每200个词为一块，每块给计数器发一条消息，消息里带着这一块的词计数。计数器把它们加起来，排名器再向它要出现最多的词。<bookmark mark='b'/>我们模拟的网络会丢掉5%的消息，确认消息也算在内，还会重复2%。<bookmark mark='c'/>所以分词器会重试每一块，直到收到确认。这用了三轮，算上重试和确认，一共772条消息。其中39条丢失，22条被重复。"
+  },
+  "cc5623ef4e65": {
+   "scene": "Job",
+   "en": "Now vary the network. <bookmark mark='a'/> On a perfect network, retries never happen and both versions are exact. As the network gets worse, the counter without protection counts more and more words wrongly: at twenty percent loss and ten percent duplication, 2,890 of the five thousand eight hundred and eighty-two words are wrong, 23,200 counts too many in all. <bookmark mark='b'/> Every error is an over-count. Retrying never loses data; it repeats it. <bookmark mark='c'/> With idempotency keys the counts are exact at every rate. The only price is traffic: the messages grow from 706 to 992 as the network worsens.",
+   "zh": "现在改变网络。<bookmark mark='a'/>在完美的网络上，重试从不发生，两个版本都完全准确。随着网络变差，没有保护的计数器算错的词越来越多：在丢失20%、重复10%时，5882个词里有2890个是错的，总共多算了23200个计数。<bookmark mark='b'/>每一个错误都是多算。重试永远不会丢失数据；它只会重复数据。<bookmark mark='c'/>有了幂等键，在每一种比率下计数都完全准确。唯一的代价是流量：随着网络变差，消息从706条增加到992条。"
+  },
+  "f0a87101ffc6": {
+   "scene": "Job",
+   "en": "What did the fix cost? <bookmark mark='a'/> Each message carries a key that names it: which tokenizer, which chunk. <bookmark mark='b'/> The counter keeps the set of keys it has applied. A message whose key it has seen is skipped, but acknowledged again, because the first acknowledgement may be the one that was lost. <bookmark mark='c'/> Here that is one key per chunk, 353 in all, and the key must be recorded in the same transaction as the counts, or a crash between the two breaks the guarantee. <bookmark mark='d'/> Keys cannot be kept for ever. Either keep each for as long as a retry might still arrive, or give each sender a sequence number and keep only the highest one applied, as TCP does with bytes. <bookmark mark='e'/> This is what industry does: payment APIs accept an idempotency key with every request, and since 2017 Kafka's producers number their messages so that brokers can drop duplicates.",
+   "zh": "这个修复花了多少代价？<bookmark mark='a'/>每条消息都带着一个给它命名的键：哪个分词器，哪一块。<bookmark mark='b'/>计数器保存它已经应用过的键的集合。键已经见过的消息会被跳过，但仍然会再确认一次，因为丢掉的可能正是第一次确认。<bookmark mark='c'/>这里是每块一个键，一共353个，而且键必须和计数记录在同一个事务里，否则两者之间的一次崩溃就会破坏这个保证。<bookmark mark='d'/>键不能永远保留下去。要么每个键都保留到不再可能有重试到达为止，要么给每个发送者一个序号，只保留已应用的最大序号，就像 TCP 对字节所做的那样。<bookmark mark='e'/>工业界正是这么做的：支付 API 在每个请求上都接受一个幂等键，而从2017年起，Kafka 的生产者会给它们的消息编号，让代理服务器（broker）能够丢弃重复的消息。"
+  },
+  "53cc189f16df": {
+   "scene": "Job",
+   "en": "Why not let the network layer handle it? TCP already delivers bytes exactly once and in order. <bookmark mark='a'/> But TCP's guarantee ends at the socket. If the counter adds a chunk and then crashes before acknowledging it, a new connection carries the retry, and TCP has no way to know it is a repeat. <bookmark mark='b'/> This is the end-to-end argument of Jerome Saltzer, David Reed and David Clark, from 1984: a function that needs the application's knowledge can only be completed at the endpoints. Lower layers can make it faster, but never make it correct. <bookmark mark='c'/> So exactly-once is a property of a whole system, not of any one protocol: at-least-once delivery, plus an effect that is idempotent, and recorded together with the effect itself.",
+   "zh": "为什么不让网络层来处理呢？TCP 已经能把字节恰好一次、按顺序地送达。<bookmark mark='a'/>但 TCP 的保证止于套接字。如果计数器加上了一块，然后在确认之前崩溃了，重试会经由一条新的连接到来，而 TCP 没有办法知道这是一次重复。<bookmark mark='b'/>这就是 Jerome Saltzer、David Reed 和 David Clark 在1984年提出的端到端论证：一个需要应用知识的功能，只能在端点上完成。较低的层可以让它更快，但永远不能让它正确。<bookmark mark='c'/>所以，恰好一次是整个系统的性质，而不是任何一个协议的性质：它是至少一次的投递，加上一个幂等的效果，而且幂等的记录要和效果本身一起保存。"
+  },
+  "7e33a5406e17": {
+   "scene": "Frontier",
+   "en": "Chapter fourteen, the frontier. Can a system of services be shown to be correct?",
+   "zh": "第十四章，前沿。一个由多个服务组成的系统，能被证明是正确的吗？"
+  },
+  "413bf45a9141": {
+   "scene": "Frontier",
+   "en": "One line of research treats a protocol between services as a type. <bookmark mark='a'/> Write the whole conversation once, from above: the client sends an order, the order service asks payments to charge, payments answers ok or declined, and the order service confirms or rejects. <bookmark mark='b'/> That global description can be projected onto each participant, giving each service its own local type: what it receives, what it sends, and in what order. <bookmark mark='c'/> A compiler can check each service against its projection, and if every one conforms, the system as a whole cannot deadlock or receive a message it does not expect. These are session types, introduced by Kohei Honda in 1993 and extended to many parties in 2008, and choreographic programming, developed by Fabrizio Montesi and others. The open question is how far they stretch to the failures this part is about: lost messages, retries and crashes.",
+   "zh": "有一条研究路线，把服务之间的协议当作一种类型。<bookmark mark='a'/>从上方把整个对话一次写出来：客户端发出一个订单，订单服务请支付服务扣款，支付服务回答成功或被拒，订单服务再确认或拒绝。<bookmark mark='b'/>这个全局描述可以投影到每个参与者上，给每个服务一个它自己的局部类型：它接收什么，发送什么，按什么次序。<bookmark mark='c'/>编译器可以对照每个服务的投影来检查它，如果每一个都符合，整个系统就不会死锁，也不会收到意料之外的消息。这就是会话类型，由 Kohei Honda 在1993年提出，2008年扩展到多方；还有编舞式编程（choreographic programming），由 Fabrizio Montesi 等人发展起来。悬而未决的问题是，它们能在多大程度上延伸到这一部分讨论的那些故障：丢失的消息、重试和崩溃。"
+  },
+  "e56f0b44737f": {
+   "scene": "Frontier",
+   "en": "In chapter five we checked every execution of a small protocol. <bookmark mark='a'/> With one message and one retry there are 47 states; with four messages, 442,169. The space grows exponentially with the system, so a model checker covers small instances completely and large ones not at all. <bookmark mark='b'/> Even so, small instances find real bugs. Amazon's engineers wrote TLA-plus models of DynamoDB, S3 and other services, and found subtle errors that no test had caught. <bookmark mark='c'/> To cover every size, you need proof. In 2015, IronFleet, written in Dafny, and Verdi, written in Coq, proved distributed systems correct, a replicated state machine and a key-value store among them, all the way down to the code that runs.",
+   "zh": "在第五章，我们检查了一个小协议的每一种执行。<bookmark mark='a'/>一条消息、一次重试时，有47个状态；四条消息时，有442169个。状态空间随系统规模指数增长，所以模型检验器能完整覆盖小的实例，对大的实例却完全无能为力。<bookmark mark='b'/>即便如此，小的实例也能找出真正的错误。Amazon 的工程师为 DynamoDB、S3 和其他服务编写了 TLA+ 模型，发现了一些没有任何测试捕获过的微妙错误。<bookmark mark='c'/>要覆盖所有规模，就需要证明。2015年，用 Dafny 写的 IronFleet 和用 Coq 写的 Verdi 证明了分布式系统的正确性，其中包括一个复制状态机和一个键值存储，一直证明到实际运行的代码。"
+  },
+  "595e43371fae": {
+   "scene": "Frontier",
+   "en": "Between models and production there is testing of the whole system. <bookmark mark='a'/> The team behind FoundationDB built their database so that all of it could run in one process against a simulated network, simulated disks and a simulated clock, with failures injected and every run reproducible from a random seed. <bookmark mark='b'/> Kyle Kingsbury's Jepsen tests partition real clusters and check the histories they record; many databases have been shown to break their own published guarantees. <bookmark mark='c'/> And chaos engineering, starting with Netflix's Chaos Monkey in 2011, kills production machines on purpose so that recovery is exercised every day. <bookmark mark='d'/> Our own simulator is the first of these in miniature: its network is seeded, so every lost message in this part can be replayed exactly.",
+   "zh": "在模型和生产之间，还有对整个系统的测试。<bookmark mark='a'/>FoundationDB 背后的团队把他们的数据库构建成可以整个在一个进程里运行，面对模拟的网络、模拟的磁盘和模拟的时钟，注入各种故障，而且每次运行都能从一个随机种子精确重现。<bookmark mark='b'/>Kyle Kingsbury 的 Jepsen 测试会对真实的集群制造网络分区，并检查它们记录下来的历史；许多数据库都被证明违反了它们自己公布的保证。<bookmark mark='c'/>还有混沌工程，从2011年 Netflix 的 Chaos Monkey 开始，它故意杀掉生产环境中的机器，让恢复每天都得到演练。<bookmark mark='d'/>我们自己的模拟器，就是其中第一种的微缩版：它的网络带有种子，所以这一部分里每一条丢失的消息都能被精确重放。"
+  },
+  "9eb8fd5c8c6a": {
+   "scene": "Frontier",
+   "en": "Open problems. <bookmark mark='a'/> Protocol types that account for failure: lost messages, retries and crashes, while still ruling out errors. <bookmark mark='b'/> Compatibility you can prove: deciding that a new version of an API keeps every existing client working, its behaviour as well as its types. <bookmark mark='c'/> Verification that scales to real systems of services at something like the cost of writing tests. <bookmark mark='d'/> And retry policies for a whole call graph that provably cannot turn a small overload into a large one. <bookmark mark='e'/> This part's research problem asks for a compatibility checker that proves every existing client still completes every run of its protocol against a new version, even when messages are lost, duplicated and reordered.",
+   "zh": "开放问题。<bookmark mark='a'/>能把故障考虑在内的协议类型：丢失的消息、重试和崩溃，同时仍然能排除错误。<bookmark mark='b'/>可以证明的兼容性：判定一个 API 的新版本能让每一个现有客户端继续工作，不只是它的类型，还包括它的行为。<bookmark mark='c'/>能扩展到真实服务系统的验证，而代价和写测试差不多。<bookmark mark='d'/>以及针对整个调用图的重试策略，可以证明它不会把一次小的过载变成一次大的过载。<bookmark mark='e'/>这一部分的研究题，要求做一个兼容性检查器，证明每一个现有客户端面对新版本时，仍能完成它的协议的每一次运行，即使消息会丢失、重复和乱序。"
+  },
+  "e976677e0ead": {
+   "scene": "Outro",
+   "en": "What we built in this part. Protocol Buffers' wire format from first principles, byte for byte against the published examples, and schema evolution as a question about subtypes. Pagination with offsets that repeats rows and pagination with cursors that never does. Exactly-once delivery, checked in every execution of a model, as at-least-once delivery plus deduplication. Retry storms, and the backoff and budgets that end them. Outboxes that turn lost events into duplicates we can remove, and sagas that undo what they cannot finish. And tails that grow with fan-out. One idea runs through it: a remote call can fail in ways a local one cannot, so every message must be safe to lose, and safe to repeat.",
+   "zh": "我们在这一部分搭建了什么。从第一性原理出发的 Protocol Buffers 线路格式，逐字节对照已公布的示例；以及作为子类型问题的模式演化。会重复行的偏移量分页，和从不重复的游标分页。恰好一次投递，在一个模型的每一种执行中检验过，它就是至少一次投递加上去重。重试风暴，以及终结它们的退避和预算。发件箱（outbox），把丢失的事件变成我们可以去除的重复；还有 saga，撤销它们无法完成的事情。以及随扇出增长的尾部延迟。贯穿其中的是一个想法：远程调用可能以本地调用不可能的方式失败，所以每条消息都必须丢了也安全，重复也安全。"
+  },
+  "574151fe6836": {
+   "scene": "Outro",
+   "en": "Where this comes back. Part 44 measures what a change does to the people who use it, with controlled experiments. Part 45 runs services on rented machines that come and go. Part 46 turns the outbox into a stream, with logs and change data capture. Parts 48 and 49 design whole systems from these blocks. And Part 50 keeps them running, with service-level objectives and error budgets.",
+   "zh": "它们会在哪里再出现。第44部分用对照实验，测量一项改动对使用它的人有什么影响。第45部分把服务运行在来来去去的租用机器上。第46部分把发件箱变成一条流，用上日志和变更数据捕获。第48和第49部分用这些积木设计完整的系统。第50部分让它们保持运行，靠的是服务等级目标和错误预算。"
+  },
+  "c00a9aef8912": {
+   "scene": "Outro",
+   "en": "In practice. Change APIs only by adding, never reuse a field number, and page with cursors rather than offsets. Put a deadline on every call and pass it down, and retry with backoff, jitter and a budget. Give every write an idempotency key, and publish events through an outbox rather than two separate writes. Build workflows as sagas whose compensations are themselves idempotent, and make sure someone reads the dead-letter queue. Authenticate services to each other with mutual TLS, pin the algorithm your tokens are verified with, and store times in UTC.",
+   "zh": "实践中。修改 API 只能做加法，永远不要重用字段编号，分页要用游标而不是偏移量。给每一次调用设一个截止时间并把它向下传递，重试时要用退避、抖动和预算。给每一次写操作一个幂等键，通过发件箱发布事件，而不是做两次独立的写入。把工作流构建成 saga，让它的补偿操作本身也是幂等的，并确保有人去读死信队列。服务之间用双向 TLS 相互认证，固定验证令牌所用的算法，并用 UTC 存储时间。"
+  },
+  "d0b4b1659bc5": {
+   "scene": "Outro",
+   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build problem: add a courier timeout to our saga, and show that an idempotent compensation keeps every order consistent. The last, marked with a star, is a research problem: proving that a new version of a service keeps every existing client working, even on a network that loses, duplicates and reorders.",
+   "zh": "六道习题，完整解答在这一部分的笔记里。可以在任何一题上暂停。第五题是一道动手题：给我们的 saga 加上快递员超时，并证明一个幂等的补偿操作能让每一个订单都保持一致。最后一题，标着星号，是一道研究题：证明一个服务的新版本能让每一个现有客户端继续工作，即使是在一个会丢失、重复和乱序的网络上。"
+  },
+  "0743e4d4d7d4": {
+   "scene": "Outro",
+   "en": "Next time, Part 44: people and products. Software is used by people, and both can be measured. Fitts's law falls out of Shannon's channel capacity, Hick's law is the entropy of a choice, and where intuition runs out, industry runs controlled experiments, with statistics that are easy to get wrong.",
+   "zh": "下一次，第44部分：人与产品。软件是给人用的，而两者都可以测量。菲茨定律（Fitts's law）可以从香农的信道容量推出来，希克定律（Hick's law）是一次选择的熵；而在直觉不够用的地方，工业界会做对照实验，用的统计方法很容易出错。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分所依据的书籍和论文，都在屏幕上和笔记里。感谢观看。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 43, APIs and Services",
+ "chapters_en": {
+  "Hook": "Eight fallacies, and the Job in three pieces",
+  "Rpc": "1. Calls across a network",
+  "Wire": "2. Bytes on the wire",
+  "Schemas": "3. Schemas that evolve",
+  "Styles": "4. API styles",
+  "Delivery": "5. At most, at least, exactly once",
+  "Design": "6. Designing and versioning APIs",
+  "Queues": "7. Queues and pub/sub",
+  "Backpressure": "8. Backpressure",
+  "Micro": "9. Monoliths and microservices",
+  "Data": "10. Data across services",
+  "Mesh": "11. Finding, routing and trusting services",
+  "Time": "12. Time in APIs",
+  "Job": "13. The Job as three services",
+  "Frontier": "14. Frontier: services you can prove",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}

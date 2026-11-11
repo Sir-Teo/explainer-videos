@@ -1,0 +1,10 @@
+{
+ "strings": {
+  "grid": "网格",
+  "bisection": "二分法",
+  "last": "最后消去",
+  "scale": "规模",
+  "Euler": "欧拉法",
+  "Conditioning and stability": "条件与稳定性"
+ }
+}

@@ -1,0 +1,219 @@
+from __future__ import annotations
+
+from explainer.cs import *  # noqa: F403
+from explainer.cs.algo import strings as SA
+from videos.cs.cs21.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
+
+
+class Align(VoiceoverScene):
+    def construct(self):
+        self.card()
+        self.global_()
+        self.local()
+        self.affine()
+        self.scale()
+
+    def card(self):
+        card = chapter_card(12, r"Alignment", r"How do you line up two texts that almost agree?", lit=(1970, 1981),
+                            extra=((1970, r"Needleman--Wunsch"), (1981, r"Smith--Waterman")), part=PART)
+        with self.voiceover("Chapter twelve. Alignment."):
+            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
+        self.play(FadeOut(card))
+
+    def global_(self):
+        d = load("align")
+        a, b = d["nw_a"], d["nw_b"]
+        S = d["nw"]
+        head = label(r"Global alignment: \ Part 19's edit distance, \ with scores", font_size=32).to_edge(UP, buff=0.3)
+        cw = 0.48
+        grid = VGroup()
+        for i in range(len(a) + 1):
+            for j in range(len(b) + 1):
+                v = S[i][j]
+                col = YES if v > -2 else (GREY_A if v > -5 else GREY_D)
+                grid.add(mono(str(v), 14, col).move_to([-5.6 + j * cw, 1.8 - i * 0.42, 0]))
+        top = VGroup(*[mono(c, 16, DATA).move_to([-5.6 + (j + 1) * cw, 2.25, 0]) for j, c in enumerate(b)])
+        left = VGroup(*[mono(c, 16, LAM).move_to([-6.1, 1.8 - (i + 1) * 0.42, 0]) for i, c in enumerate(a)])
+        side = VGroup(
+            label(r"Needleman and Wunsch (1970): \ score every pair of prefixes", font_size=21, color=WHITE),
+            MathTex(r"S(i, j) = \max \begin{cases} S(i-1, j-1) + s(a_i, b_j) \\ S(i-1, j) - g \\ S(i, j-1) - g "
+                    r"\end{cases}", font_size=30, color=LAM),
+            label(r"match $+1$, \ mismatch $-1$, \ gap $-1$", font_size=20, color=GREY_A),
+            label(rf"\texttt{{{a}}} against \texttt{{{b}}}: \ score {d['nw_score']}", font_size=21, color=YES),
+            label(r"biology: \ substitution matrices \ (PAM, \ BLOSUM) \\ and \textbf{affine gaps}: \ "
+                  r"opening a gap costs more \\ than extending it", font_size=20, color=HEAD),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
+        if side.width > 6.6:
+            side.width = 6.6
+            side.to_edge(RIGHT, buff=0.4)
+        cells = {}
+        k = 0
+        for i in range(len(a) + 1):
+            for j in range(len(b) + 1):
+                cells[i, j] = grid[k]
+                k += 1
+        i, j, path, top_s, bot_s = len(a), len(b), [(len(a), len(b))], [], []
+        while i or j:
+            if i and j and S[i][j] == S[i - 1][j - 1] + (1 if a[i - 1] == b[j - 1] else -1):
+                top_s.append(a[i - 1]); bot_s.append(b[j - 1]); i -= 1; j -= 1  # noqa: E702
+            elif i and S[i][j] == S[i - 1][j] - 1:
+                top_s.append(a[i - 1]); bot_s.append("-"); i -= 1  # noqa: E702
+            else:
+                top_s.append("-"); bot_s.append(b[j - 1]); j -= 1  # noqa: E702
+            path.append((i, j))
+        top_s, bot_s = top_s[::-1], bot_s[::-1]
+        boxes = VGroup(*[SurroundingRectangle(cells[c], color=HEAD, buff=0.04, stroke_width=1.8) for c in path[::-1]])
+        aln = _aligned_rows(list(zip(top_s, bot_s)), 40, 22)[0]
+        aln.next_to(VGroup(grid, left), DOWN, buff=0.35).align_to(left, LEFT)
+        with self.voiceover(
+            "Part 19's edit distance becomes, in biology, an alignment. <bookmark mark='a'/> Saul Needleman and "
+            "Christian Wunsch, in 1970, filled the same table, but with scores to maximize: a reward for matching "
+            "letters, penalties for mismatches and gaps. <bookmark mark='b'/> Each cell is the best of three: "
+            "extend the alignment by a pair, or by a gap on either side. <bookmark mark='c'/> Here intention "
+            "against execution, the example of Part 19. <bookmark mark='d'/> Real biology scores amino acids with "
+            "substitution matrices learned from evolution, and charges more to open a gap than to extend one, "
+            "because one long insertion is likelier than many short ones."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(top), FadeIn(left))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(g) for g in grid], lag_ratio=0.005), FadeIn(side[0]), run_time=3.0)
+            vo.wait_until("b")
+            self.play(FadeIn(side[1]), FadeIn(side[2]))
+            vo.wait_until("c")
+            self.play(FadeIn(side[3]), Indicate(grid[-1], color=YES))
+            self.play(LaggedStart(*[Create(x) for x in boxes], lag_ratio=0.12), run_time=1.6)
+            self.play(FadeIn(aln))
+            vo.wait_until("d")
+            self.play(FadeIn(side[4]))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def local(self):
+        d = load("align")
+        head = label(r"Local alignment: \ the best matching \textit{part}", font_size=32).to_edge(UP, buff=0.3)
+        lines = VGroup(
+            label(r"Smith and Waterman (1981): \ add a fourth choice, \ $0$: \ start afresh anywhere", font_size=21,
+                  color=WHITE),
+            MathTex(r"H(i, j) = \max\{\,0,\ H(i-1, j-1) + s(a_i, b_j),\ H(i-1, j) - g,\ H(i, j-1) - g\,\}",
+                    font_size=30, color=LAM),
+            label(r"the answer is the best cell anywhere, \ traced back to its first nonzero", font_size=21,
+                  color=GREY_A),
+        ).arrange(DOWN, buff=0.22).next_to(head, DOWN, buff=0.35)
+        xs, ys = d["sw_x_part"].split(), d["sw_y_part"].split()
+        M = SA.needleman_wunsch(xs, ys)
+        i, j, pairs = len(xs), len(ys), []
+        while i or j:
+            if i and j and M[i, j] == M[i - 1, j - 1] + (1 if xs[i - 1] == ys[j - 1] else -1):
+                pairs.append((xs[i - 1], ys[j - 1])); i -= 1; j -= 1  # noqa: E702
+            elif i and M[i, j] == M[i - 1, j] - 1:
+                pairs.append((xs[i - 1], "")); i -= 1  # noqa: E702
+            else:
+                pairs.append(("", ys[j - 1])); j -= 1  # noqa: E702
+        pairs = pairs[::-1][:44]
+        rows_ = _aligned_rows(pairs, 96, 16)
+        A = VGroup(*rows_).arrange(DOWN, buff=0.32, aligned_edge=LEFT)
+        if A.width > 12.8:
+            A.width = 12.8
+        A.next_to(lines, DOWN, buff=0.45).set_x(0)
+        B = VGroup(
+            label(r"top: \ the first version", font_size=18, color=NO),
+            label(r"bottom: \ the second, \ reworded", font_size=18, color=YES),
+            label(r"grey: \ the same word", font_size=18, color=GREY_A),
+        ).arrange(RIGHT, buff=0.8).next_to(A, DOWN, buff=0.35)
+        cap = label(rf"the anonymous letter in \textit{{The Count of Monte Cristo}}, \ two of its versions: \ "
+                    rf"{words(d['cells'])} cells, \ best score {d['sw_best']}", font_size=20, color=HEAD
+                    ).to_edge(DOWN, buff=0.5)
+        with self.voiceover(
+            "Often only part of two texts is related. <bookmark mark='a'/> Temple Smith and Michael Waterman added "
+            "a fourth choice to every cell: zero, meaning start a fresh alignment here. <bookmark mark='b'/> The "
+            "best local alignment is the highest cell anywhere in the table, traced back until the score drops to "
+            "zero. <bookmark mark='c'/> Here are the two versions of the anonymous letter from The Count of Monte "
+            "Cristo that Part 20's MinHash flagged. Smith–Waterman finds the stretch they share and lines it up, "
+            "word for word, around the places where the second version was reworded."
+        ) as vo:
+            self.play(FadeIn(head))
+            vo.wait_until("a")
+            self.play(FadeIn(lines[0]), FadeIn(lines[1]))
+            vo.wait_until("b")
+            self.play(FadeIn(lines[2]))
+            vo.wait_until("c")
+            self.play(FadeIn(A), FadeIn(B), FadeIn(cap))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def affine(self):
+        head = label(r"Affine gaps: \ three tables instead of one", font_size=34).to_edge(UP, buff=0.35)
+        lines = VGroup(
+            label(r"a gap of length $\ell$ costs $o + e\,\ell$: \ opening is expensive, \ extending is cheap", font_size=22,
+                  color=WHITE),
+            label(r"one table can't tell whether the cell to the left was already inside a gap", font_size=22,
+                  color=NO),
+            MathTex(r"M(i,j) = s(a_i, b_j) + \max\{M, X, Y\}(i-1, j-1)", font_size=32, color=LAM),
+            MathTex(r"X(i,j) = \max\{\, M(i-1, j) - o - e,\ \ X(i-1, j) - e \,\}", font_size=32, color=DATA),
+            MathTex(r"Y(i,j) = \max\{\, M(i, j-1) - o - e,\ \ Y(i, j-1) - e \,\}", font_size=32, color=YES),
+            label(r"Gotoh (1982): \ still $O(nm)$; \ Hirschberg's trick (Part 19) brings the memory to $O(n + m)$",
+                  font_size=22, color=HEAD),
+        ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.5)
+        with self.voiceover(
+            "This screen illustrates affine scoring; our measured alignments use constant gap penalties. <bookmark mark='a'/> Biology, and diff, prefer one long gap to many short ones, so a gap of length l costs an opening charge plus a small charge per character. <bookmark mark='b'/> A single table can't price that, because a cell doesn't know whether its neighbour was already inside a gap. <bookmark mark='c'/> Osamu Gotoh's solution keeps three tables: M for alignments ending in a pair of characters, <bookmark mark='d'/> X for those ending in a gap in one string, <bookmark mark='e'/> and Y for a gap in the other. Moving within X or Y costs only the extension; entering them from M pays opening plus the first extension, matching the displayed o plus e times length convention. <bookmark mark='f'/> The time is still the product of the lengths, and Hirschberg's divide-and-conquer trick from Part 19 brings the memory down to linear."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(lines[0]))
+            for mk, ln in zip("abcdef", lines):
+                vo.wait_until(mk)
+                self.play(Indicate(ln, color=WHITE) if mk == "a" else FadeIn(ln, shift=UP * 0.1))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def scale(self):
+        head = label(r"Alignment at genome scale", font_size=34).to_edge(UP, buff=0.35)
+        lines = VGroup(
+            label('a full quadratic table: \\ about $10^{19}$ cells for two human genomes', font_size=22, color=NO),
+            label('BLAST-style seed-and-extend: \\ filter candidate regions; \\ heuristic filtering can miss an optimum', font_size=22, color=DATA),
+            label(r"read aligners: \ seeds from the FM-index of chapter 9, \ then banded dynamic programming",
+                  font_size=22, color=LAM),
+            label(r"exact edit distance in $O(n^{2 - \varepsilon})$ would refute SETH \ (Backurs and Indyk, 2015; \ "
+                  r"Part 27)", font_size=22, color=HEAD),
+            label('heuristic seeds can miss matches; \\ unit-cost banded DP is exact with a valid distance bound', font_size=22, color=YES),
+        ).arrange(DOWN, buff=0.35).next_to(head, DOWN, buff=0.6)
+        with self.voiceover(
+            "Full pairwise tables are quadratic. <bookmark mark='a'/> Two genomes of billions of bases require on the order of ten to the nineteen cells. <bookmark mark='b'/> BLAST-style seed-and-extend filters candidate regions, which can miss an optimum. <bookmark mark='c'/> FM-indexes help find candidate seeds in read aligners. <bookmark mark='d'/> The conditional lower bound concerns exact unit-cost edit distance in the worst case; it does not rule out fast structured instances. <bookmark mark='e'/> With a valid edit-distance bound k, unit-cost dynamic programming restricted to the corresponding band is exact, in order N times the quantity k plus one work. These are scaling strategies; our measured examples use complete tables. The next chapter uses Myers' distinct insertion-and-deletion distance."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(lines[0]))
+            for mk, ln in zip("abcde", lines):
+                vo.wait_until(mk)
+                self.play(Indicate(ln, color=WHITE) if mk == "a" else FadeIn(ln, shift=UP * 0.1))
+        self.wait(0.3)
+        self.clear_scene()
+
+
+def _span(t, col):
+    t = t.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    return f'<span foreground="{col}">{t}</span>'
+
+
+def _aligned_rows(pairs, width, size, sep=" "):
+    """Two monospaced lines per row, one per string, padded so that aligned tokens sit in the same columns."""
+    rows, cur = [], []
+    used = 0
+    for u, v in pairs:
+        w = max(len(u), len(v), 1)
+        if cur and used + w > width:
+            rows.append(cur)
+            cur, used = [], 0
+        cur.append((u, v, w))
+        used += w + len(sep)
+    if cur:
+        rows.append(cur)
+    out = VGroup()
+    for r in rows:
+        top, bot = [], []
+        for u, v, w in r:
+            same = u == v
+            cu = GREY_A if same else (NO if u else GREY_D)
+            cv = GREY_A if same else (YES if v else GREY_D)
+            top.append(_span((u or "·" * len(v)).ljust(w), cu))
+            bot.append(_span((v or "·" * len(u)).ljust(w), cv))
+        lines = VGroup(*[MarkupText(_span(sep, GREY_A).join(x), font="DejaVu Sans Mono", font_size=size)
+                         for x in (top, bot)]).arrange(DOWN, buff=0.12, aligned_edge=LEFT)
+        out.add(lines)
+    return out

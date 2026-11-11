@@ -1,0 +1,13 @@
+{
+ "strings": {
+  "level": "级别",
+  "colours": "颜色",
+  "without": "不用轮盘赌",
+  "engines": "引擎",
+  "primary": "主光线",
+  "here": "本例",
+  "rank": "秩",
+  "light": "光源",
+  "samples": "样本数"
+ }
+}

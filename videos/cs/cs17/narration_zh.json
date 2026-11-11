@@ -1,0 +1,451 @@
+{
+ "title": "计算机科学，从零搭建 · 第17部分：数据结构",
+ "chapters": {
+  "Hook": "计数能做到常数时间吗？",
+  "Dictionary": "1. 字典，以及生日界",
+  "Chaining": "2. 链地址法与全域哈希",
+  "Probing": "3. 开放寻址",
+  "Cuckoo": "4. 布谷鸟哈希与完美哈希",
+  "Bst": "5. 二叉搜索树",
+  "Balanced": "6. 平衡树：AVL 与红黑树",
+  "Randomized": "7. 树堆与跳表",
+  "Splay": "8. 伸展树",
+  "Btree": "9. B 树",
+  "Heaps": "10. 优先队列",
+  "UnionFind": "11. 并查集",
+  "Tries": "12. 字典树与简洁数据结构",
+  "Persist": "13. 持久化，以及存储层次",
+  "Practice": "14. 实践中的哈希表",
+  "Job": "15. 哈希化的任务",
+  "Frontier": "16. 前沿：数据结构能有多好？",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "4c298153884f": {
+   "scene": "Hook",
+   "en": "Where we left the ledger. <bookmark mark='a'/> Part sixteen projected about five seconds for sorting then counting on one core, using full-corpus event counts, a passage-fitted instruction model, and sampled core throughput. That was not a full-corpus machine execution. <bookmark mark='b'/> The native event counter recorded just under one hundred million word comparisons. But the Job never needed words in order. It needed to find each word's count.",
+   "zh": "账本停在这里。<bookmark mark='a'/>第十六部分根据全语料事件计数、段落上拟合的指令模型和抽样的核心吞吐率，推算单核排序再计数大约需要五秒。这不是整套语料在模拟机器上的完整执行。<bookmark mark='b'/>原生事件计数器记录了不到一亿次单词比较。但任务并不要求单词有序，只需要找到每个单词的计数。"
+  },
+  "ee0f5bbaed6e": {
+   "scene": "Hook",
+   "en": "Strip the Job to its operations. <bookmark mark='a'/> For each word, look for an entry; create it if absent, otherwise increment its count. <bookmark mark='b'/> This corpus has four million six hundred and nine thousand nine hundred and fifty-four word occurrences and fifty-seven thousand eight hundred and ninety-five distinct words. They give one lookup-or-insert attempt per occurrence, not that many successful finds plus separate inserts. <bookmark mark='c'/> A dictionary supports those keyed operations. <bookmark mark='d'/> We ask whether the table work can be constant under appropriate assumptions, while still paying to read and hash the characters.",
+   "zh": "把任务剥到只剩操作。<bookmark mark='a'/>每遇到单词就查找条目，没有就创建，有就增加计数。<bookmark mark='b'/>语料有四百六十万九千九百五十四个单词出现、五万七千八百九十五个不同单词。每次出现对应一次查找或插入尝试，并不是这么多次成功查找再另外插入。<bookmark mark='c'/>字典支持这些按键操作。<bookmark mark='d'/>我们问的是合适条件下表操作能否为常数，同时仍要支付读取和哈希字符的成本。"
+  },
+  "f3def3522feb": {
+   "scene": "Hook",
+   "en": "Here is where we are going. <bookmark mark='a'/> Hashing, which makes insert and find constant time on average, and the attack that breaks a careless hash function. <bookmark mark='b'/> Donald Knuth's first analysis of an algorithm, linear probing, checked against measurement. <bookmark mark='c'/> Balanced trees, which trade expectations for guarantees. <bookmark mark='d'/> Structures that are fast only on average over a sequence: splay trees, Fibonacci heaps and union–find. <bookmark mark='e'/> And the Job with a hash table: ledger row eight.",
+   "zh": "这是我们要去的地方。<bookmark mark='a'/>哈希，它让插入和查找平均只花常数时间，以及攻破粗心哈希函数的那种攻击。<bookmark mark='b'/>高德纳的第一个算法分析，线性探查，拿来与测量对照。<bookmark mark='c'/>平衡树，用保证换掉期望。<bookmark mark='d'/>只在一整串操作上平均才快的结构：伸展树、斐波那契堆和并查集。<bookmark mark='e'/>还有用哈希表的任务：账本第八行。"
+  },
+  "e5944c748f19": {
+   "scene": "Hook",
+   "en": "Part 17 of Computer Science, Built: Data Structures. <bookmark mark='a'/> In this part: the dictionary and the birthday bound; chaining, universal hashing, open addressing, cuckoo and perfect hashing; binary search trees and the ways to keep them balanced; B-trees, priority queues and union–find; tries, persistence and the memory hierarchy; and hash tables as real systems build them.",
+   "zh": "《计算机科学，从零搭建》第17部分：数据结构。<bookmark mark='a'/>这一部分讲：字典与生日界；链地址法、全域哈希、开放寻址、布谷鸟哈希与完美哈希；二叉搜索树以及让它保持平衡的种种办法；B 树、优先队列与并查集；字典树、持久化与存储层次；以及真实系统里的哈希表。"
+  },
+  "89054ab58098": {
+   "scene": "Dictionary",
+   "en": "Chapter one. The dictionary, and the birthday bound.",
+   "zh": "第1章。字典，以及生日界。"
+  },
+  "92f372ac2559": {
+   "scene": "Dictionary",
+   "en": "A dictionary specifies operations before choosing a representation. <bookmark mark='a'/> An unsorted list can append a new entry in constant amortized time, but locating a key scans the list. A sorted array uses logarithmic comparisons to search and linear shifting to insert. A balanced tree offers logarithmic operations and sorted traversal. Hash tables offer expected constant table work under hashing and load assumptions; resizing adds an amortized qualification. Hashing a long string still reads its characters. <bookmark mark='b'/> Abstract data types let us choose the representation behind that interface. Liskov and Zilles helped formalize this separation in 1974.",
+   "zh": "字典先规定操作，再选择表示。<bookmark mark='a'/>无序列表追加新条目可以摊还常数时间完成，但找键要扫描列表。有序数组查找需要对数次比较，插入需要线性搬移。平衡树支持对数时间操作和有序遍历。哈希表在哈希和装填条件下提供期望常数的表操作，扩容还要加上摊还限定。长字符串的哈希仍需要读取字符。<bookmark mark='b'/>抽象数据类型让我们在接口背后选择表示。利斯科夫和齐勒斯在一九七四年推动了这种分离的形式化。"
+  },
+  "c2afc12e2afd": {
+   "scene": "Dictionary",
+   "en": "The idea is older than most of computing: Hans Peter Luhn proposed it at IBM in 1953. <bookmark mark='a'/> Turn the key into a number with a hash function, and use that number, reduced to the table's size, as the place to store it. <bookmark mark='b'/> Then finding a key is computing its hash and looking in one place, whatever the size of the table. <bookmark mark='c'/> The catch is that two keys can land in the same slot. Everything in the next three chapters is about what to do then, and the first question is how soon it happens.",
+   "zh": "这个想法比大多数计算机科学都古老：汉斯·彼得·卢恩1953年在 IBM 提出了它。<bookmark mark='a'/>用哈希函数把键变成一个数，把这个数按表的大小约简，作为存放它的位置。<bookmark mark='b'/>于是找一个键，就是算出它的哈希，再看一个地方，无论表有多大。<bookmark mark='c'/>麻烦在于两个键可能落进同一个槽。接下来三章讲的都是那时该怎么办，而第一个问题是：这会多快发生。"
+  },
+  "e57b99248c64": {
+   "scene": "Dictionary",
+   "en": "Suppose each key independently chooses one of m slots uniformly. <bookmark mark='a'/> For n at most m, the chance of no collision is this product: each new key avoids every earlier choice. <bookmark mark='b'/> The exponential approximation retains n times n minus one over two m. It is accurate when the small-factor approximation is appropriate; the exponential also gives a one-sided bound. <bookmark mark='c'/> Under the equal, independent birthday model, twenty-three people have about a fifty point seven percent chance of a shared birthday. <bookmark mark='d'/> Collisions become likely around the square-root scale. Likely is not certain, and a deterministic hash requires a separate analysis.",
+   "zh": "假设每个键独立、均匀地选择 m 个槽中的一个。<bookmark mark='a'/>当 n 不超过 m 时，没有冲突的概率是这个乘积：每个新键都避开之前的选择。<bookmark mark='b'/>指数近似保留 n 乘 n 减一再除以二 m。各个因子足够接近一时，这个近似才准确；指数还给出单侧界。<bookmark mark='c'/>在生日等可能且相互独立的模型中，二十三个人至少两人生日相同的概率约为百分之五十点七。<bookmark mark='d'/>键数达到槽数的平方根量级时，冲突变得很可能，但不是必然。确定性的哈希需要另外分析。"
+  },
+  "094c0a03be63": {
+   "scene": "Dictionary",
+   "en": "Here are two different quantities on the same vocabulary. <bookmark mark='a'/> Independent uniform hashes would give n choose two over m expected colliding pairs. Our polynomial hash is fixed, so its count is a deterministic observation, not a random-family guarantee. <bookmark mark='b'/> On fifty-seven thousand eight hundred and ninety-five distinct words, the full hash has one hundred and one colliding pairs. Reducing it to the slot table gives twelve thousand four hundred and ninety-five pairs. Excess keys and colliding pairs are different statistics if three keys share a value, even though the full-hash counts coincide here. <bookmark mark='c'/> The table must compare complete keys and resolve collisions; a matching hash alone never proves equality.",
+   "zh": "这是同一套词汇上的两种不同数量。<bookmark mark='a'/>独立均匀的哈希会产生 n 选二再除以 m 的期望冲突对数。我们的多项式哈希是固定的，所以计数是确定性的观察，不是随机函数族的保证。<bookmark mark='b'/>五万七千八百九十五个不同单词，在完整哈希值上有一百零一对冲突；约简到槽表后有一万二千四百九十五对。如果三个键共用一个值，多余键数和冲突对数就不同，虽然这里的完整哈希上两者恰好相等。<bookmark mark='c'/>表必须比较完整键并处理冲突，哈希相等本身不能证明键相等。"
+  },
+  "4e88a0d89a19": {
+   "scene": "Chaining",
+   "en": "Chapter two. Chaining, and universal hashing.",
+   "zh": "第2章。链地址法，与全域哈希。"
+  },
+  "fbc01bc61788": {
+   "scene": "Chaining",
+   "en": "The simplest answer is to keep a chain of keys at each slot. <bookmark mark='a'/> A collision adds another entry to that slot's list. <bookmark mark='b'/> The load factor is n over m. With suitable random hashing, a fixed slot has expected chain length alpha. A successful search for a resident key also accounts for that key itself. <bookmark mark='c'/> Expected lookup work is order one plus alpha, excluding the cost to hash and compare long keys. <bookmark mark='d'/> Keeping alpha bounded by geometric resizing gives amortized expected constant table work. The randomness assumption and the amortized resizing statement are separate.",
+   "zh": "最简单的处理办法，是每个槽保存一条键链。<bookmark mark='a'/>发生冲突时，再向这个槽的链表加入条目。<bookmark mark='b'/>装填因子是 n 除以 m。合适的随机哈希下，一个固定槽的期望链长是阿尔法；成功查找一个已存键，还要计入这个键本身。<bookmark mark='c'/>期望查找工作量是一加阿尔法的量级，不包括长键的哈希和比较开销。<bookmark mark='d'/>通过几何扩容限制装填因子，就得到摊还、期望常数的表操作。随机性假设和扩容的摊还结论是两件事。"
+  },
+  "6b5e21de6f28": {
+   "scene": "Chaining",
+   "en": "Here is one seeded experiment with ten thousand and seven keys and as many slots. <bookmark mark='a'/> Each bar counts the slots with a given chain length. <bookmark mark='b'/> The dots are a Poisson reference from independent balls into bins. This universal family guarantees pairwise collision control, not full independence, so agreement with that curve is an observation rather than its theorem. <bookmark mark='c'/> The displayed maximum is measured in this table. The familiar logarithm over log-log maximum-load scale needs stronger random-binning assumptions; universality alone does not establish it.",
+   "zh": "这是一次固定种子的实验，键和槽各有一万零七个。<bookmark mark='a'/>每根柱统计某个链长对应的槽数。<bookmark mark='b'/>点来自独立投球入箱模型的泊松参考。这里的全域函数族保证成对冲突受到控制，却不保证完全独立，所以曲线接近只是观察，不是这个函数族的定理。<bookmark mark='c'/>画面上的最长链来自本次测量。对数除以双重对数的最大负载量级，需要更强的随机分配条件；仅凭全域性不能推出。"
+  },
+  "a9e52f776386": {
+   "scene": "Chaining",
+   "en": "A fixed public hash can expose a large colliding key set. <bookmark mark='a'/> Carter and Wegman's remedy chooses a random function from a family after the key set is fixed. <bookmark mark='b'/> Universality bounds the collision probability for every distinct pair by one over m. For a resident key, the expected number of other colliders is at most n minus one over m; include the key itself for a successful-chain bound. <bookmark mark='c'/> This affine family works on distinct residues from zero through p minus one, with prime p, nonzero a, and uniformly chosen b. <bookmark mark='d'/> Before the final reduction, two distinct inputs produce a uniformly chosen ordered pair of different residues. Counting pairs in the same output bucket gives the bound. <bookmark mark='e'/> Two fixed keys across twenty thousand random functions illustrate that rate; this finite check is not the proof, and adaptive attackers that learn the chosen function fall outside the fixed-key guarantee.",
+   "zh": "固定且公开的哈希可能暴露很大的冲突键集合。<bookmark mark='a'/>卡特和韦格曼的办法，是先固定键集合，再从函数族中随机选择函数。<bookmark mark='b'/>全域性把每对不同键的冲突概率限制在一除以 m 以内。对一个已存键，其他冲突键的期望数至多是 n 减一再除以 m；成功查找还要计入这个键本身。<bookmark mark='c'/>这个仿射函数族的输入是零到 p 减一中不同的剩余类，p 为素数，a 非零，b 均匀选择。<bookmark mark='d'/>最后约简之前，两个不同输入产生均匀随机的不同剩余类有序对。数一数哪些对落入相同输出桶，就得到界。<bookmark mark='e'/>两个固定键和两万个随机函数只能说明有限实验中的频率，不能替代证明。学到已选函数再构造键的自适应攻击，不在固定键集合的保证内。"
+  },
+  "eb899be15060": {
+   "scene": "Chaining",
+   "en": "This is not a theoretical worry. <bookmark mark='a'/> Take the fixed hash x mod m and feed it two thousand multiples of m. Every key lands in slot zero: one chain of two thousand, and finding them all takes two million probes. The same keys under a random universal hash scatter into chains of one or two. <bookmark mark='b'/> In 2011, Alexander Klink and Julian Wälde showed that web servers in PHP, Java, Python and Ruby stored request parameters in hash tables with fixed functions. <bookmark mark='c'/> One request full of colliding names could keep a server's core busy for minutes. <bookmark mark='d'/> The fix was a hash with a secret random key. SipHash, designed by Jean-Philippe Aumasson and Daniel Bernstein, has been Python's string hash since version 3.4.",
+   "zh": "这不是理论上的担忧。<bookmark mark='a'/>拿固定哈希 x mod m，喂给它两千个 m 的倍数。每个键都落进零号槽：一条两千长的链，把它们全找一遍要两百万次探查。同样的键在随机的全域哈希下散开成长度一两个的链。<bookmark mark='b'/>2011年，亚历山大·克林克和尤利安·韦尔德展示了，PHP、Java、Python 和 Ruby 的 Web 服务器都用固定函数的哈希表来存请求参数。<bookmark mark='c'/>一个塞满冲突名字的请求，能让服务器的一个核心忙上好几分钟。<bookmark mark='d'/>修复办法是带秘密随机密钥的哈希。让-菲利普·奥马松和丹尼尔·伯恩斯坦设计的 SipHash，从3.4版起一直是 Python 的字符串哈希。"
+  },
+  "75c478ce59e9": {
+   "scene": "Probing",
+   "en": "Chapter three. Open addressing.",
+   "zh": "第3章。开放寻址。"
+  },
+  "4d82e0019571": {
+   "scene": "Probing",
+   "en": "Chains cost a pointer per key and a jump in memory per step. Open addressing keeps every key in the table itself. <bookmark mark='a'/> On a collision, linear probing tries the next slot, and the next, until it finds a free one; a find follows the same path until it finds the key or an empty slot. <bookmark mark='b'/> It is one array with no pointers, and the next probe is almost always in the same cache line, which is why it is so fast in practice. <bookmark mark='c'/> Its weakness is visible in these snapshots of a sixty-four-slot table filling up. Full slots form runs, and a key that lands anywhere in a run joins its end, so long runs grow faster than short ones and merge. This is primary clustering.",
+   "zh": "链表让每个键花一个指针，每走一步就在内存里跳一次。开放寻址把每个键都放在表本身里。<bookmark mark='a'/>发生冲突时，线性探查试下一个槽，再下一个，直到找到空槽；查找沿着同一条路径走，直到找到这个键或者一个空槽。<bookmark mark='b'/>它是一个数组，没有指针，下一次探查几乎总在同一条缓存行里，所以它在实践中非常快。<bookmark mark='c'/>它的弱点在这一张张六十四槽的表逐渐填满的快照里看得清清楚楚。满的槽连成一段一段，落在一段里任何位置的键都会接到它的末尾，所以长段比短段长得快，还会合并。这就是一次聚集。"
+  },
+  "5b3a5017851a": {
+   "scene": "Probing",
+   "en": "Knuth analyzed linear probing under random home addresses. <bookmark mark='a'/> The first expression is the large-table expected successful-search reference at load alpha. <bookmark mark='b'/> The second is the unsuccessful-search or insertion reference, which grows with the square of one over the free fraction. These are not exact finite-table identities for every fixed hash. <bookmark mark='c'/> Uniform permutation probing is a separate model; its reciprocal-free-fraction expression is also an asymptotic reference, with finite corrections. <bookmark mark='d'/> At half load the linear references are one point five and two point five; at ninety percent they are five point five and fifty point five. <bookmark mark='e'/> The rapid growth explains why leaving free space matters. Resizing, deletions, key hashing and adversarial choices need their own accounting.",
+   "zh": "高德纳在随机起始地址模型下分析线性探查。<bookmark mark='a'/>第一个表达式是大表、装填率阿尔法下成功查找的期望参考。<bookmark mark='b'/>第二个是失败查找或插入参考，按空闲比例倒数的平方增长。它们不是每个固定哈希、每张有限表的精确恒等式。<bookmark mark='c'/>均匀排列探查是另一模型，空闲比例倒数同样是渐近参考，有限表还要修正。<bookmark mark='d'/>半满时，线性探查参考为一点五和二点五；九成满时为五点五和五十点五。<bookmark mark='e'/>快速增长解释了保留空间的重要性。扩容、删除、键哈希和对抗选择需要另外计入。"
+  },
+  "3bc491f4eb77": {
+   "scene": "Probing",
+   "en": "Here is a finite seeded illustration, not a proof of the random-home model. <bookmark mark='a'/> Each load uses a new key set and a universal affine hash, which controls pair collisions but does not supply fully independent home addresses. The red observations count unsuccessful searches at fixed load; they are the probe cost of one more insert before the table changes. <bookmark mark='b'/> Actual n over m is recorded, and the reference formulas use that value. A single table per load cannot establish a confidence interval or explain a deviation's cause. <bookmark mark='c'/> Successful searches are sampled uniformly from resident keys. <bookmark mark='d'/> Double hashing uses a second step size. It may resemble a uniform-probing reference here, but it does not generate an independent uniform permutation for each key.",
+   "zh": "这是有限的固定种子示意，不是随机起始地址模型的证明。<bookmark mark='a'/>每种装填率使用新的键集合和全域仿射哈希，它控制成对冲突，但不提供完全独立的起始地址。红点统计固定装填率下的失败查找，也就是表改变之前再插入一个键的探查成本。<bookmark mark='b'/>记录实际 n 除以 m，参考公式也使用这个值。每种装填率只有一张表，不能建立置信区间，也不能解释偏差的原因。<bookmark mark='c'/>成功查询从已存键中均匀抽样。<bookmark mark='d'/>双重哈希使用第二个步长，在这里可能接近均匀探查参考，却没有给每个键生成独立均匀排列。"
+  },
+  "a9c2d9b27cd0": {
+   "scene": "Probing",
+   "en": "One refinement redistributes displacement. <bookmark mark='a'/> Robin Hood hashing lets the key farther from its home slot displace the key closer to home, then carries the displaced key onward. <bookmark mark='b'/> For a controlled comparison we use identical keys, insertion order and home hash. Both tables occupy exactly the same slots and have the same total displacement, so their mean successful scan length agrees exactly. The variance and maximum differ as displayed. <bookmark mark='c'/> That does not make every lookup equal, and implementations can use an additional early-stop rule. Modern grouped-control-byte tables are another design choice; they should not all be identified with this Robin Hood rule.",
+   "zh": "一种改进会重新分配位移。<bookmark mark='a'/>罗宾汉哈希让离起点更远的键挤走离起点更近的键，再继续搬运被挤走的键。<bookmark mark='b'/>为了控制比较，我们使用相同的键、插入顺序和起始哈希。两张表占据完全相同的槽，总位移也相同，所以成功扫描长度的平均值严格相等。方差和最大值则如画面所示。<bookmark mark='c'/>这并不意味着每次查找都一样长，实现还可以增加提前停止规则。现代的分组控制字节表是另一种设计，不能全都称为这里的罗宾汉规则。"
+  },
+  "93fe9913f9a2": {
+   "scene": "Cuckoo",
+   "en": "Chapter four. Cuckoo hashing, and perfect hashing.",
+   "zh": "第4章。布谷鸟哈希，与完美哈希。"
+  },
+  "73731d2d6f76": {
+   "scene": "Cuckoo",
+   "en": "In 2001 Rasmus Pagh and Flemming Rodler found a way to make every lookup cost two probes, not on average, but always. <bookmark mark='a'/> Keep two tables and two independent hash functions. Every key lives either at h one of x in the first table, or at h two of x in the second. A find looks in those two places and nowhere else. <bookmark mark='b'/> To insert, put the key in its first-table slot. If that slot was taken, the old key is kicked out, like a cuckoo's egg, to its place in the other table, possibly kicking out another. <bookmark mark='c'/> Usually the chain of kicks ends quickly. If it runs into a cycle, the pair of hash functions is bad: choose new ones and rebuild.",
+   "zh": "2001年，拉斯穆斯·帕格和弗莱明·罗德勒找到了让每次查找都只花两次探查的办法，不是平均，而是永远。<bookmark mark='a'/>用两张表和两个独立的哈希函数。每个键要么在第一张表的 h₁(x) 处，要么在第二张表的 h₂(x) 处。查找只看这两个地方，别处一概不看。<bookmark mark='b'/>插入时，把键放进它在第一张表的槽。如果那个槽被占了，旧键就被踢出去，像布谷鸟的蛋那样，去它在另一张表的位置，可能又踢出另一个。<bookmark mark='c'/>通常这串踢出很快就结束。如果它陷入一个环，说明这对哈希函数不好：换一对新的，重建。"
+  },
+  "4f9d55d7977a": {
+   "scene": "Cuckoo",
+   "en": "The classical two-choice cuckoo threshold is a random-graph statement, not a finite kick limit. <bookmark mark='a'/> Here we run forty seeded trials per load on two tables of two thousand slots, stopping when an insertion exceeds five hundred kicks. The plotted fraction is that experimental failure event. <bookmark mark='b'/> Model each slot as a vertex and each key's two choices as an edge. A placement can orient each edge toward a distinct occupied vertex. <bookmark mark='c'/> In the ideal independent-choice model, excess edges in a component obstruct placement, and the asymptotic threshold is near one half of total slots. <bookmark mark='d'/> Our cutoff can stop a long insertion without proving such an obstruction. A production implementation needs a safe rebuild or stash; this experiment stops immediately on failure.",
+   "zh": "经典的双选择布谷鸟阈值是随机图结论，不是有限踢出次数的结论。<bookmark mark='a'/>这里在两张各两千槽的表上，每种装填率运行四十次固定种子试验；某次插入超过五百次踢出就停止。图中比例就是这个实验事件。<bookmark mark='b'/>把槽看成顶点，把每个键的两个候选位置看成边。合法放置相当于把每条边指向不同的已占顶点。<bookmark mark='c'/>理想独立选择模型中，连通分量里过多的边会阻止放置，渐近阈值接近总槽数的一半。<bookmark mark='d'/>有限次数截止可能只是打断一次较长插入，并没有证明这种障碍。实际实现需要安全重建或备用区；这个实验一旦失败就立即停止。"
+  },
+  "85ba6cbb05fe": {
+   "scene": "Cuckoo",
+   "en": "A fixed key set permits a stronger lookup guarantee. <bookmark mark='a'/> FKS hashing chooses functions during construction and retries until its tested conditions hold. The abstract scheme has constant worst-case lookup with linear space under the stated word and hashing model. <bookmark mark='b'/> First hash n keys into n buckets. In this six-key example the bucket sizes are two, one, zero, three, zero, zero. <bookmark mark='c'/> Allocate the square of each bucket's size for its secondary table: fourteen slots in this particular outcome. <bookmark mark='d'/> Over the random first-level hash, universality gives an upper bound below two n for the expected sum of squares. A single outcome can exceed its expectation, so construction also retries a first level whose sum is too large. <bookmark mark='e'/> A fresh universal secondary hash into b squared slots has collision probability less than one half by a union bound. Retrying gives a collision-free mapping. <bookmark mark='f'/> Our finite construction experiment checks these mappings and counts slots and retries. It does not implement a stored dictionary query interface; the two-hash lookup statement belongs to the complete FKS scheme.",
+   "zh": "固定键集合允许更强的查找保证。<bookmark mark='a'/>FKS 哈希在构建时选函数，直到检验条件满足才接受。在明确的字长和哈希模型下，抽象方案用线性空间提供最坏常数时间查找。<bookmark mark='b'/>先把 n 个键放进 n 个桶。这个六键例子里，桶大小是二、一、零、三、零、零。<bookmark mark='c'/>每个二级表分配桶大小的平方，所以这次结果需要十四个槽。<bookmark mark='d'/>对随机一级哈希取平均，全域性给出小于二 n 的平方和期望上界。一次结果可以超过期望，因此平方和太大时，构建还要重试第一级。<bookmark mark='e'/>把 b 个键用新的全域函数映射进 b 平方个槽，联合界保证冲突概率小于一半。重试即可得到无冲突映射。<bookmark mark='f'/>有限构建实验核对映射，统计槽和重试次数，并没有实现存储后的字典查询接口。两次哈希查找的结论属于完整的 FKS 方案。"
+  },
+  "f2ddc83e47c6": {
+   "scene": "Bst",
+   "en": "Chapter five. Binary search trees.",
+   "zh": "第5章。二叉搜索树。"
+  },
+  "2bb4aae22579": {
+   "scene": "Bst",
+   "en": "Hash tables give up order: they cannot list keys alphabetically, or find the next key after a given one. <bookmark mark='a'/> A binary search tree keeps it. Each node holds a key, with smaller keys in its left subtree and larger ones in its right. <bookmark mark='b'/> To find a key, start at the root, compare, and go left or right: one level per comparison. <bookmark mark='c'/> And walking the tree left, node, right lists every key in sorted order, so the tree also answers range queries and finds neighbours. <bookmark mark='d'/> The cost of a find is the depth of the key, and the shape of the tree depends entirely on the order the keys arrived in.",
+   "zh": "哈希表放弃了顺序：它们不能按字母列出键，也找不到某个键之后的下一个键。<bookmark mark='a'/>二叉搜索树保留了顺序。每个结点存一个键，较小的键在它的左子树，较大的在右子树。<bookmark mark='b'/>找一个键，从根出发，比较，向左或向右：每次比较下一层。<bookmark mark='c'/>按左、结点、右的顺序遍历这棵树，就按顺序列出了所有键，所以树还能回答范围查询、找出邻居。<bookmark mark='d'/>一次查找的代价是这个键的深度，而树的形状完全取决于键到来的顺序。"
+  },
+  "ab96e0661bdb": {
+   "scene": "Bst",
+   "en": "Random insertion order gives an expectation, not a guarantee for every tree. <bookmark mark='a'/> The table measures mean node depth in edges; the root has depth zero. The exact expectation over all insertion orders is two times one plus one over n times the harmonic number, minus four. <bookmark mark='b'/> As n grows its leading term is two natural log n. The rounded one point three nine factor is a leading-term comparison with log base two n, not a finite equality. <bookmark mark='c'/> Maximum depth also grows logarithmically under random insertion, with a different leading constant. <bookmark mark='d'/> Sorted insertion instead creates a chain: a thousand keys have maximum depth nine hundred and ninety-nine. Deep searches cost linear work; a root search still costs one visited node.",
+   "zh": "随机插入顺序给出期望，不保证每棵树都这样。<bookmark mark='a'/>表中平均节点深度按边数计算，根深度为零。对所有插入顺序取期望，精确式是二乘一加 n 的倒数，再乘调和数，最后减四。<bookmark mark='b'/>n 增大时主项是二乘自然对数 n。约一点三九倍只是与以二为底对数 n 的主项比较，不是有限规模等式。<bookmark mark='c'/>随机插入下，最大深度也按对数增长，但主项常数不同。<bookmark mark='d'/>按序插入会形成链：一千个键最大深度是九百九十九。深处查找需要线性工作，但查根仍只访问一个节点。"
+  },
+  "a258d7916257": {
+   "scene": "Bst",
+   "en": "That two natural log n should look familiar. <bookmark mark='a'/> When the tree is built, the first key becomes the root and is compared with every key that comes after it. <bookmark mark='b'/> When quicksort runs with the first element as pivot, that element is compared with every other key. <bookmark mark='c'/> Both then split the rest into the smaller and the larger keys and do the same thing to each part, in the same order. <bookmark mark='d'/> So they compare exactly the same pairs. A binary search tree is quicksort's recursion, frozen into a data structure. <bookmark mark='e'/> We checked it on two thousand random keys: the counts are identical. <bookmark mark='f'/> Part 16's two n natural log n is the total depth of a random tree.",
+   "zh": "这个 2 ln n 应该很眼熟。<bookmark mark='a'/>建树时，第一个键成为根，与之后到来的每个键比较。<bookmark mark='b'/>快速排序以第一个元素为枢轴时，这个元素与其他每个键比较。<bookmark mark='c'/>然后两者都把其余的键分成较小的和较大的两部分，按同样的顺序对每部分做同样的事。<bookmark mark='d'/>所以它们比较的是完全相同的那些对。二叉搜索树就是快速排序的递归，冻结成了一个数据结构。<bookmark mark='e'/>我们在两千个随机键上核对过：两边的次数完全相同。<bookmark mark='f'/>第16部分的 2n ln n，就是一棵随机树的总深度。"
+  },
+  "8278f3ca7b0f": {
+   "scene": "Balanced",
+   "en": "Chapter six. Balanced trees: AVL and red–black.",
+   "zh": "第6章。平衡树：AVL 与红黑树。"
+  },
+  "796406ee88a2": {
+   "scene": "Balanced",
+   "en": "Every balanced tree is built from one operation. <bookmark mark='a'/> Here is a node y whose left child x has subtrees A and B; y's right subtree is C. <bookmark mark='b'/> A right rotation makes x the parent and y its right child, and the subtree B changes parents. <bookmark mark='c'/> The order is preserved: everything in A is less than x, B lies between x and y, C is greater than y. It is still a search tree. <bookmark mark='d'/> Only three pointers change, and the depths shift: A moves up a level, C moves down. Balanced trees rotate to keep every path short.",
+   "zh": "每一种平衡树都建立在一个操作上。<bookmark mark='a'/>这是一个结点 y，它的左孩子 x 有子树 A 和 B；y 的右子树是 C。<bookmark mark='b'/>一次右旋让 x 成为父结点，y 成为它的右孩子，子树 B 换了父结点。<bookmark mark='c'/>顺序保持不变：A 里的一切都小于 x，B 在 x 和 y 之间，C 大于 y。它仍然是一棵搜索树。<bookmark mark='d'/>只改了三个指针，深度却变了：A 上升一层，C 下降一层。平衡树就靠旋转让每条路径都保持很短。"
+  },
+  "1b0804883006": {
+   "scene": "Balanced",
+   "en": "AVL trees enforce a local height rule. <bookmark mark='a'/> Every node's two subtree heights differ by at most one. <bookmark mark='b'/> After insertion, rotations restore that invariant while preserving key order. <bookmark mark='c'/> Count height in node levels: an empty tree has height zero and a leaf height one. The sparsest height-h tree has subtree heights h minus one and h minus two. <bookmark mark='d'/> Thus its minimum node count is Fibonacci h plus two, minus one. The exact logarithmic coefficient is one over log base two of the golden ratio; one point four four zero five is only a rounded guide. This gives logarithmic worst-case height, unlike a random-tree expectation.",
+   "zh": "AVL 树执行局部高度规则。<bookmark mark='a'/>每个节点的左右子树高度最多相差一。<bookmark mark='b'/>插入后用旋转恢复不变量，同时保留键顺序。<bookmark mark='c'/>这里按节点层数计高度：空树为零，叶子为一。高度为 h 的最稀疏树，两个子树的高度是 h 减一和 h 减二。<bookmark mark='d'/>所以最少节点数是第 h 加二个斐波那契数减一。对数前面的精确系数是黄金比例以二为底对数的倒数，一点四四零五只是约数。它给出最坏情况的对数高度，与随机树的期望不同。"
+  },
+  "d1eadcf944be": {
+   "scene": "Balanced",
+   "en": "The balanced tree in most standard libraries is the red–black tree, and it is easiest to understand as something else. <bookmark mark='a'/> A two–three–four tree lets a node hold one, two or three keys, and keeps every leaf at exactly the same depth: when a node overflows it splits and pushes a key up. Perfectly balanced, but awkward to code. <bookmark mark='b'/> Leonidas Guibas and Robert Sedgewick saw in 1978 that each big node can be drawn as a little binary tree, with its internal links coloured red. <bookmark mark='c'/> The rules follow: no two red links in a row, and the same number of black links on every path, because the black links are the two–three–four tree. <bookmark mark='d'/> So the height is at most twice log n, and splitting a node is just flipping colours. Java's TreeMap and C++'s std::map are red–black trees. <bookmark mark='e'/> Sedgewick's later left-leaning variant writes insertion in a dozen lines.",
+   "zh": "大多数标准库里的平衡树是红黑树，而把它看成另一种东西最容易理解。<bookmark mark='a'/>2–3–4 树允许一个结点存一个、两个或三个键，并让每片叶子都在完全相同的深度：结点溢出时就分裂，把一个键推上去。完美平衡，但写起来很别扭。<bookmark mark='b'/>莱昂尼达斯·吉巴斯和罗伯特·塞奇威克1978年看出，每个大结点都可以画成一棵小二叉树，内部的连接染成红色。<bookmark mark='c'/>规则随之而来：不能有两条连续的红连接，每条路径上的黑连接数相同，因为黑连接就是那棵 2–3–4 树。<bookmark mark='d'/>所以高度至多是 log n 的两倍，分裂一个结点只是翻转颜色。Java 的 TreeMap 和 C++ 的 std::map 都是红黑树。<bookmark mark='e'/>塞奇威克后来的左倾变体，插入只要十几行。"
+  },
+  "02ec9a19dde9": {
+   "scene": "Balanced",
+   "en": "These are measured heights for seeded insertion orders. <bookmark mark='a'/> The balanced-tree heights count node levels, so subtract one to compare with an edge depth. Sorted insertion can make the plain tree linear while the balanced variants remain logarithmic. <bookmark mark='b'/> The displayed rotations are insertion counters for these implementations and workloads, not a deletion benchmark. <bookmark mark='c'/> A shorter height can reduce visited nodes, but elapsed lookup or update time also depends on layout, metadata, branches and the implementation. These counts alone do not prove which tree is faster. <bookmark mark='d'/> AVL and red-black invariants provide logarithmic-height guarantees for ordinary dictionary search, insert and delete with bounded-cost keys. Traversal and range reporting still pay for the output.",
+   "zh": "这是固定种子插入顺序下测得的高度。<bookmark mark='a'/>平衡树高度按节点层数计算，与边深度比较时要减一。按序插入能让普通树变成线性链，平衡变体仍保持对数高度。<bookmark mark='b'/>画面中的旋转数，是这些实现和负载的插入计数，不是删除基准。<bookmark mark='c'/>更矮的树可能减少访问节点，但查找和更新耗时还依赖布局、元数据、分支及实现。仅靠计数不能证明哪棵树更快。<bookmark mark='d'/>键操作成本有界时，AVL 和红黑不变量为普通字典查找、插入和删除提供对数高度保证；遍历和范围报告仍要支付输出成本。"
+  },
+  "e64491cc6d1d": {
+   "scene": "Randomized",
+   "en": "Chapter seven. Treaps and skip lists.",
+   "zh": "第7章。树堆与跳表。"
+  },
+  "a247bf11c300": {
+   "scene": "Randomized",
+   "en": "Chapter five showed that a search tree built in random order is shallow. Raimund Seidel and Cecilia Aragon found a way to get random order whatever order the keys really arrive in. <bookmark mark='a'/> Give each key a random priority when it is inserted. <bookmark mark='b'/> Keep the keys in search-tree order and the priorities in heap order, every parent's priority above its children's. Those two rules fix the shape completely. <bookmark mark='c'/> And that shape is exactly the tree you would get by inserting the keys in order of priority, which is a random order. So a treap is always a random binary search tree, with expected depth two natural log n, even for sorted input. <bookmark mark='d'/> To insert, add the key as a leaf and rotate it up while its priority beats its parent's.",
+   "zh": "第5章表明，按随机顺序建的搜索树很浅。莱蒙德·赛德尔和塞西莉亚·阿拉贡找到了一种办法，无论键实际按什么顺序到来，都能得到随机顺序。<bookmark mark='a'/>每个键插入时给它一个随机优先级。<bookmark mark='b'/>键保持搜索树的顺序，优先级保持堆的顺序，每个父结点的优先级高于它的孩子。这两条规则完全确定了形状。<bookmark mark='c'/>而这个形状，正是按优先级顺序插入这些键会得到的树，而优先级顺序是随机的。所以树堆永远是一棵随机二叉搜索树，期望深度 2 ln n，即使输入是有序的。<bookmark mark='d'/>插入时，把键作为叶子加进去，只要它的优先级高过父结点，就把它往上旋转。"
+  },
+  "292cb323de13": {
+   "scene": "Randomized",
+   "en": "William Pugh's skip list gets the same expected behaviour without a tree at all. <bookmark mark='a'/> Start with a sorted linked list. Flip a coin for each node: heads, it also joins a second, sparser list above. Flip again for a third level, and so on. About half the nodes are on level two, a quarter on level three. <bookmark mark='b'/> To search, run along the top level until the next key would overshoot, drop a level, and repeat. Each level skips about half of what is left. <bookmark mark='c'/> The expected search is about two log n steps, and each key costs two pointers on average. There are no rotations, and that locality makes skip lists easy to update concurrently, which is why Java's concurrent sorted map is one.",
+   "zh": "威廉·皮尤的跳表根本不用树，就得到了同样的期望表现。<bookmark mark='a'/>从一条有序链表开始。为每个结点抛一枚硬币：正面，它就也加入上面一条更稀疏的链表。再抛一次决定第三层，如此下去。大约一半的结点在第二层，四分之一在第三层。<bookmark mark='b'/>查找时，沿最上层跑，直到下一个键会超过目标，就下降一层，重复。每一层大约跳过剩下的一半。<bookmark mark='c'/>期望的查找大约是 2 log n 步，每个键平均两个指针。没有旋转，这种局部性让跳表很容易并发地更新，这就是 Java 的并发有序映射用它的原因。"
+  },
+  "33fc1df4ef0b": {
+   "scene": "Randomized",
+   "en": "These seeded measurements illustrate randomized shapes. <bookmark mark='a'/> Treaps receive sorted keys, but random priorities independent of the keys choose their shape. With distinct priorities, the shape is the BST obtained by inserting in priority order. <bookmark mark='b'/> Expected logarithmic behavior is over the internal randomness for fixed keys or a suitable nonadaptive operation sequence. It does not make every realized tree shallow or defeat every attacker who learns its randomness. The skip-list comparison counts, treap edge depths and node-level heights are different counters, as labeled.",
+   "zh": "这些固定种子测量展示随机形状。<bookmark mark='a'/>树堆接收有序键，但独立于键的随机优先级决定形状。优先级不同时，形状等于按优先级顺序插入得到的搜索树。<bookmark mark='b'/>期望对数行为是对内部随机性取平均，并要求固定键或合适的非自适应操作序列。它不保证每棵实际树都浅，也不能击败所有学到随机信息的攻击者。跳表比较、树堆边深度和节点层数高度是不同计数，画面分别标明。"
+  },
+  "5c5b3856c914": {
+   "scene": "Splay",
+   "en": "Chapter eight. Splay trees.",
+   "zh": "第8章。伸展树。"
+  },
+  "04be7284dd6c": {
+   "scene": "Splay",
+   "en": "Sleator and Tarjan's splay tree stores no balance metadata. <bookmark mark='a'/> After an access it rotates the node to the root. A zig is one rotation when the parent is the root. <bookmark mark='b'/> In a zig-zig, node and parent face the same direction: rotate the grandparent, then the parent. <bookmark mark='c'/> In a zig-zag they bend: rotate the accessed node up twice. <bookmark mark='d'/> A single deep access can still take linear work. <bookmark mark='e'/> In this five-node example, two zig-zigs move node one from depth four to zero, but node three moves down from depth two to three. Splaying does not halve every path node's depth. <bookmark mark='f'/> A potential argument bounds a whole sequence. From an arbitrary initial tree we must include initial potential, giving order m plus n times log of n plus one for m accesses.",
+   "zh": "斯莱特和塔扬的伸展树不保存平衡信息。<bookmark mark='a'/>访问后把节点旋转到根。父亲已经是根时，一次单旋转叫作折。<bookmark mark='b'/>节点和父亲方向相同时，先旋转祖父，再旋转父亲，是同向双旋转。<bookmark mark='c'/>方向相反时，把访问节点连续旋转两次，是异向双旋转。<bookmark mark='d'/>一次很深的访问仍可能需要线性工作。<bookmark mark='e'/>这个五节点例子中，两次同向双旋转把节点一从深度四移到零，但节点三从深度二下降到三。伸展并不会把路径上每个节点的深度减半。<bookmark mark='f'/>势能分析限制的是整串访问。从任意初始树开始，要包括初始势能：m 次访问的总界为 m 加 n，再乘以 n 加一的对数的量级。"
+  },
+  "e5a7cf460c83": {
+   "scene": "Splay",
+   "en": "The proof uses actual work plus a change in potential. <bookmark mark='a'/> Give every node a strictly positive weight. Subtree weight is s, rank is its logarithm, and potential is the sum of those ranks. <bookmark mark='b'/> Revisit the five-node example with unit weights. Before splaying, subtree sizes multiply to one hundred and twenty. Afterward they multiply to forty. Four rotations therefore cost four minus log base two of three in amortized units, about two point four. <bookmark mark='c'/> For a double rotation, the case analysis bounds amortized cost by three times the accessed node's rank increase. A final single zig needs an extra one. <bookmark mark='d'/> Telescoping gives the access lemma: at most three times the initial root-to-node rank difference, plus one. With unit weights, arbitrary initial potential adds an n log n term to the total bound. <bookmark mark='e'/> Weights belong to the proof, so frequency-based positive weights yield static optimality with setup costs included. Never assign weight zero and take its logarithm.",
+   "zh": "证明使用实际工作加势能变化。<bookmark mark='a'/>给每个节点严格为正的权重。子树权重记作 s，秩是它的对数，势能是所有秩之和。<bookmark mark='b'/>回到单位权重的五节点例子。伸展之前，子树大小的乘积是一百二十；之后是四十。四次旋转的摊还代价就是四减以二为底三的对数，大约二点四。<bookmark mark='c'/>对双旋转，分类分析把摊还代价限制在访问节点秩增量的三倍以内，最后的单旋转还需要额外加一。<bookmark mark='d'/>伸缩相消后得到访问引理：不超过初始根与访问节点秩差的三倍，再加一。单位权重下，任意初始势能为总界增加 n 乘对数 n 的项。<bookmark mark='e'/>权重只存在于证明中，因此按频率选取正权重可以得到带初始化成本的静态最优性。不要把零权重送进对数。"
+  },
+  "652187c5697b": {
+   "scene": "Splay",
+   "en": "Here are four finite access workloads on the same two thousand keys. <bookmark mark='a'/> Repeated sorted scans are inexpensive for the splay tree, consistent with the sequential-access theorem. <bookmark mark='b'/> On this uniform random workload it does more logical node work than AVL. That is a measured workload, not the worst possible sequence. <bookmark mark='c'/> Skewed and hot-key workloads favor adaptation. The table's splay counter counts node visits and rotations, whereas AVL counts visited nodes; neither is a count of every Python predicate or a wall-clock benchmark. <bookmark mark='d'/> Dynamic optimality asks for a constant comparison to the best offline binary-search-tree execution on every sequence, with model and setup conventions. Selected 2026 progress appears in the frontier chapter; it does not settle constant competitiveness.",
+   "zh": "这是同样两千个键上的四种有限访问负载。<bookmark mark='a'/>反复按序扫描时，伸展树的开销较小，与顺序访问定理一致。<bookmark mark='b'/>这次均匀随机负载中，它比 AVL 做了更多逻辑节点工作。这只是实测负载，不是最坏序列。<bookmark mark='c'/>偏斜和热点负载有利于自适应。表中的伸展计数包括节点访问和旋转，AVL 则计访问的节点；它们都不是每条 Python 判断或实际耗时的统计。<bookmark mark='d'/>动态最优性要求在每个序列上，与最好的离线二叉搜索树执行保持常数倍比较，并明确模型和初始化约定。前沿一章会提到部分二零二六年进展，但它们没有解决常数竞争比问题。"
+  },
+  "902214d1795f": {
+   "scene": "Btree",
+   "en": "Chapter nine. B-trees.",
+   "zh": "第9章。B 树。"
+  },
+  "814888bb4247": {
+   "scene": "Btree",
+   "en": "Binary trees assume that following a pointer is cheap. On a disk, every node visited is a read that takes thousands of times longer than a comparison. <bookmark mark='a'/> Rudolf Bayer and Edward McCreight's B-tree, from 1970, makes the nodes wide. A node holds many keys in sorted order, and has one child between each pair. Every node except the root is at least half full. <bookmark mark='b'/> All leaves are at the same depth, so the height is the logarithm of n to the base of the fan-out. <bookmark mark='c'/> The fan-out is chosen so that a node fills a disk block, and a search reads one block per level. <bookmark mark='d'/> This is the external-memory model from Part 16: what matters is the number of block transfers, and comparisons inside a block are nearly free.",
+   "zh": "二叉树假定跟随一个指针很便宜。在磁盘上，访问的每个结点都是一次读，比一次比较慢几千倍。<bookmark mark='a'/>鲁道夫·拜尔和爱德华·麦克赖特1970年的 B 树，把结点做宽。一个结点按顺序存许多键，每两个键之间有一个孩子。除根以外每个结点至少半满。<bookmark mark='b'/>所有叶子在同一深度，所以高度是以扇出为底的 n 的对数。<bookmark mark='c'/>扇出选得让一个结点正好填满一个磁盘块，查找每层读一个块。<bookmark mark='d'/>这就是第16部分的外存模型：要紧的是块传输的次数，块内的比较几乎免费。"
+  },
+  "01bff4cff6cc": {
+   "scene": "Btree",
+   "en": "How does a B-tree stay perfectly balanced? <bookmark mark='a'/> When a node is full and another key arrives, the node splits into two half-full nodes, and its middle key moves up into the parent. <bookmark mark='b'/> If the parent overflows it splits too, and if the root splits, a new root appears above it. The tree grows at the top, never at the bottom, which is why every leaf is at the same depth. <bookmark mark='c'/> With at most three keys per node, this is exactly the two–three–four tree that red–black trees encode.",
+   "zh": "B 树怎样保持完美平衡？<bookmark mark='a'/>当一个结点满了又来一个键时，结点分裂成两个半满的结点，中间的键上移到父结点。<bookmark mark='b'/>如果父结点溢出，它也分裂；如果根分裂，就在它上面出现一个新根。树在顶部生长，从不在底部生长，这就是每片叶子都在同一深度的原因。<bookmark mark='c'/>每个结点至多三个键时，这正是红黑树所编码的 2–3–4 树。"
+  },
+  "cf5e293a5ca5": {
+   "scene": "Btree",
+   "en": "Here are seeded B-trees with two hundred thousand keys. <bookmark mark='a'/> The measured height column counts node levels, including the root. Larger nodes reduce the number of blocks along a search path, while doing more work inside a node. <bookmark mark='b'/> A rough billion-key capacity illustration uses fan-out two hundred and fifty-six; its four levels are not a worst-case bound for every half-full tree. Occupancy, root exceptions and cached top levels change the I/O count. <bookmark mark='c'/> B-plus trees are widely used in databases and file systems, alongside log-structured, hash, inverted and spatial indexes. The external-memory model prices block transfers; it does not erase computation within a block.",
+   "zh": "这是固定种子下构建的二十万键 B 树。<bookmark mark='a'/>实测高度列按节点层数计算，包括根。节点越宽，查找路径经过的块越少，但节点内部工作增加。<bookmark mark='b'/>十亿键、扇出二百五十六的四层只是粗略容量示意，不是每棵半满树的最坏上界。占用率、根的例外和缓存顶部层次，都会影响输入输出次数。<bookmark mark='c'/>B 加树广泛用于数据库和文件系统，同时还有日志结构、哈希、倒排和空间索引。外存模型衡量块传输，并没有消除块内计算。"
+  },
+  "2039e80b2a42": {
+   "scene": "Heaps",
+   "en": "Chapter ten. Priority queues.",
+   "zh": "第10章。优先队列。"
+  },
+  "be1c414d89da": {
+   "scene": "Heaps",
+   "en": "A priority queue supports a precise operation set. <bookmark mark='a'/> Binary heaps have logarithmic worst-case insert, delete-min and decrease-key with handles. Lazy binomial variants and Fibonacci heaps offer amortized bounds. Fibonacci decrease-key is constant amortized time in the pointer model. Pairing-heap bounds depend on the exact variant and allowed operations; this table avoids combining them into one generic claim. <bookmark mark='b'/> On nonnegative-weight graphs, Dijkstra can perform a delete-min per reached vertex and relax many edges. <bookmark mark='c'/> Including isolated vertices and initialization, the usual bounds are order m plus n times log n with a binary heap, and m plus n log n with Fibonacci heaps. A dense graph makes the asymptotic difference more significant.",
+   "zh": "优先队列支持一套精确定义的操作。<bookmark mark='a'/>带句柄的二叉堆，插入、删除最小值和减键的最坏界都是对数。延迟合并的二项堆变体和斐波那契堆提供摊还界。指针模型下，斐波那契堆减键是摊还常数时间。配对堆的界依赖确切变体和允许的操作，不能拼成一个泛泛结论。<bookmark mark='b'/>非负权图上的迪杰斯特拉算法，每个到达顶点可以删除最小值一次，并松弛许多边。<bookmark mark='c'/>计入孤立顶点和初始化，二叉堆的通常界是 m 加 n 再乘对数 n，斐波那契堆则是 m 加 n 乘对数 n。图越稠密，渐近差异越显著。"
+  },
+  "6282f3e9debe": {
+   "scene": "Heaps",
+   "en": "The Fibonacci heap delays work, while marks limit damage to its trees. <bookmark mark='a'/> Insert adds a singleton root. Delete-min eventually links roots of equal degree. <bookmark mark='b'/> Here node four is marked because it lost one child earlier. Lower seven's key to zero: heap order is violated, so cut that node into the root list. <bookmark mark='c'/> Four has now lost its second child, so cut four too and clear its mark. Cuts can cascade upward. A decrease that preserves heap order does not need a cut. <bookmark mark='d'/> The potential is the number of roots plus twice the number of marked nodes. In this example it stays three: two extra roots replace one mark. The invariant forces a degree-k subtree, including its root, to contain at least Fibonacci k plus two nodes. <bookmark mark='e'/> Logarithmic degrees and the potential yield the theoretical bounds with constant-time pointer operations. Our educational Python implementation uses lists; its key-comparison counts do not certify those time bounds.",
+   "zh": "斐波那契堆推迟工作，用标记限制树的损伤。<bookmark mark='a'/>插入只增加一个单节点根；删除最小值时，再链接度数相同的根。<bookmark mark='b'/>这里的四号节点已被标记，因为它之前失去过一个孩子。把七的键降到零会破坏堆序，所以把它切到根链表。<bookmark mark='c'/>四号现在失去第二个孩子，于是也切掉四号，清除标记。切割可以向上级联。如果减键没有破坏堆序，就不必切割。<bookmark mark='d'/>势能是根数加两倍的标记数。例子中它保持为三：新增两个根替代一个标记。不变量保证度数为 k 的子树，包括根本身，至少有第 k 加二个斐波那契数那么多节点。<bookmark mark='e'/>对数度数加势能，在常数时间指针操作下给出理论界。我们的 Python 教学实现使用列表，键比较次数不能认证这些时间界。"
+  },
+  "c7dcff12a408": {
+   "scene": "Heaps",
+   "en": "What do these three graphs show? <bookmark mark='a'/> We count key comparisons inside each educational heap and verify all shortest-path distances independently with a heapq implementation. The displayed comparison savings depend on the graph. <bookmark mark='b'/> Comparisons are not time. Python list removal and bookkeeping do not implement the constant-time pointer operations assumed by Fibonacci-heap theory. Published native heap studies also report workload-dependent outcomes; no universal fastest heap follows. <bookmark mark='c'/> Use theoretical bounds to understand scaling, then measure complete equivalent tasks on the workload and implementation that matter.",
+   "zh": "这三张图能说明什么？<bookmark mark='a'/>我们统计教学用堆内部的键比较，并用独立的堆队列实现核对所有最短路距离。画面中的比较节省取决于具体图。<bookmark mark='b'/>比较次数不是时间。Python 列表删除和维护不具备斐波那契堆理论假设的常数时间指针操作。已发表的原生堆研究也显示结果依赖负载，不能推出一种堆总是最快。<bookmark mark='c'/>用理论界理解增长，再在真正关心的实现和负载上测量完整、等价的任务。"
+  },
+  "e15438016117": {
+   "scene": "UnionFind",
+   "en": "Chapter eleven. Union–find.",
+   "zh": "第11章。并查集。"
+  },
+  "14badc669a77": {
+   "scene": "UnionFind",
+   "en": "Disjoint-set union tracks which items belong together. <bookmark mark='a'/> Each set is a parent-pointer tree, with the root as representative. <bookmark mark='b'/> Find follows parents to the root. <bookmark mark='c'/> Union links two distinct roots. <bookmark mark='d'/> Union by rank attaches the smaller rank under the larger and increments rank only when equal ranks merge. Without compression rank equals height; after compression it is an upper bound, not necessarily the current height. A rank-r root represents at least two to the r elements. <bookmark mark='e'/> Applications include Kruskal's spanning trees and equivalence classes; richer type unification needs additional structure.",
+   "zh": "不相交集合合并跟踪哪些元素属于一组。<bookmark mark='a'/>每组用父指针树表示，根是代表。<bookmark mark='b'/>查找沿父指针到根。<bookmark mark='c'/>合并链接两个不同的根。<bookmark mark='d'/>按秩合并把小秩接到大秩下，只有相同秩合并时才增加秩。不压缩时秩等于高度，压缩后它只是高度上界，不一定是当前高度。秩为 r 的根至少代表二的 r 次方个元素。<bookmark mark='e'/>用途包括克鲁斯卡尔生成树和等价类；更丰富的类型合一还需要其他结构。"
+  },
+  "6b5ed914a8ed": {
+   "scene": "UnionFind",
+   "en": "Path compression makes an extra pass. <bookmark mark='a'/> After following parents to the root, point every visited node directly at that root. <bookmark mark='b'/> While the root stays the same, another find from those nonroot nodes traverses one edge. Later unions can move the root and add work again. Compression helps a sequence of operations; it does not promise every future find costs one step.",
+   "zh": "路径压缩需要额外一遍。<bookmark mark='a'/>沿父指针找到根后，把经过的节点都直接指向这个根。<bookmark mark='b'/>只要根不变，从这些非根节点再查找只走一条边。后续合并可能移动根，重新增加工作量。压缩改善的是整串操作，并不保证以后每次查找都只需一步。"
+  },
+  "14be8de6fe10": {
+   "scene": "UnionFind",
+   "en": "Here is one seeded sequence: forty thousand random unions, followed by forty thousand finds on twenty thousand elements. <bookmark mark='a'/> The table counts upward parent edges during those finds. It excludes the second compression pass, stores, and the earlier unions. Both heuristics dramatically reduce that particular counter. <bookmark mark='b'/> With initialization and the usual operation-count conventions, union by rank plus compression has an amortized inverse-Ackermann bound. Matching lower bounds are model-dependent sequence results, not a claim that every individual operation must take that long on every input.",
+   "zh": "这是一串固定种子的操作：两万个元素先做四万次随机合并，再做四万次查找。<bookmark mark='a'/>表中只计这些查找向上经过的父边，不包括压缩的第二遍、写入和之前的合并。两种启发式都显著降低了这个特定计数。<bookmark mark='b'/>按通常的初始化和操作数约定，按秩合并加路径压缩具有逆阿克曼函数的摊还界。匹配下界依赖计算模型，针对的是操作序列，不能理解成每个输入上的每次操作都必须那么慢。"
+  },
+  "d1db8385a41b": {
+   "scene": "UnionFind",
+   "en": "Ackermann growth gives a useful scale comparison. <bookmark mark='a'/> Use exactly the displayed recurrence; different texts define variants. <bookmark mark='b'/> Its small values already jump from three to five to thirteen to sixty-five thousand five hundred and thirty-three. <bookmark mark='c'/> The next displayed value is two to sixty-five thousand five hundred and thirty-six, minus three. <bookmark mark='d'/> The displayed inverse is one illustrative diagonal convention. Formal union-find bounds may use a two-parameter inverse and setup terms; those conventions differ by small constants, not by practical growth. A worst-case sequence lower bound does not make every operation superconstant. <bookmark mark='e'/> The iterated logarithm is a simpler comparison: the table counts base-two logarithms needed to reach one. Neither this tiny table nor a finite timing experiment proves the asymptotic theorem.",
+   "zh": "阿克曼增长给出一个有用的尺度比较。<bookmark mark='a'/>使用画面中的递推，不同教材会定义不同变体。<bookmark mark='b'/>很小的参数就让数值从三、五、十三，跳到六万五千五百三十三。<bookmark mark='c'/>接着显示的值是二的六万五千五百三十六次方减三。<bookmark mark='d'/>画面中的逆函数是一种对角线示意约定。严格的并查集界可能使用双参数逆函数和初始化项；这些约定只相差小常数，实际增长都极慢。最坏序列下界并不意味着每次操作都超过常数。<bookmark mark='e'/>迭代对数是更简单的对照：表中统计以二为底取几次对数才到一。这张小表或有限计时，都不能证明渐近定理。"
+  },
+  "60e38dceef8d": {
+   "scene": "Tries",
+   "en": "Chapter twelve. Tries, and succinct structures.",
+   "zh": "第12章。字典树，与简洁数据结构。"
+  },
+  "e33b44c32d16": {
+   "scene": "Tries",
+   "en": "Hash tables and search trees treat a key as an opaque value to hash or compare. A trie, Edward Fredkin's name from 1960, uses the key's letters as directions. <bookmark mark='a'/> The root has one edge per possible first letter, each child one edge per second letter, and a word is a path; nodes where a word ends are marked. Finding a word of L letters takes L steps, however many words are stored. <bookmark mark='b'/> Words that share a prefix share a path, so a trie answers prefix queries directly: autocomplete, and the longest-prefix match that routes every internet packet. <bookmark mark='c'/> Chains of nodes with a single child waste space, and a radix tree merges each chain into one edge labelled with a string.",
+   "zh": "哈希表和搜索树把键当作一个不透明的值，拿来哈希或比较。字典树，这个名字是爱德华·弗雷德金1960年起的，把键的字母当作方向。<bookmark mark='a'/>根为每个可能的首字母有一条边，每个孩子为每个第二字母有一条边，一个单词就是一条路径；单词结束的结点做上标记。找一个 L 个字母的单词要 L 步，无论存了多少单词。<bookmark mark='b'/>有共同前缀的单词共享一条路径，所以字典树能直接回答前缀查询：自动补全，以及为每个互联网数据包选路的最长前缀匹配。<bookmark mark='c'/>只有一个孩子的结点连成的链很浪费空间，基数树把每条这样的链合并成一条标着字符串的边。"
+  },
+  "137276443461": {
+   "scene": "Tries",
+   "en": "Here is the Job's vocabulary, all fifty-eight thousand distinct words, in a trie. <bookmark mark='a'/> The words have about four hundred and fifty thousand letters, but the trie needs far fewer nodes, because so many words share beginnings. <bookmark mark='b'/> The radix tree needs fewer still, under two nodes per word. <bookmark mark='c'/> Yet each node, stored the obvious way, costs a pointer per child, eight bytes each. The last idea of this chapter is to store the tree's shape itself in a couple of bits per node.",
+   "zh": "这是任务的词汇，全部五万八千个不同的单词，放进一棵字典树。<bookmark mark='a'/>这些单词大约有四十五万个字母，但字典树需要的结点少得多，因为许多单词有相同的开头。<bookmark mark='b'/>基数树需要的更少，每个单词不到两个结点。<bookmark mark='c'/>然而按显而易见的方式存放，每个结点要为每个孩子花一个指针，每个八字节。这一章的最后一个想法，是用每个结点两三个比特来存树的形状本身。"
+  },
+  "f762c7a89b80": {
+   "scene": "Tries",
+   "en": "Succinct tree theory stores topology in about two bits per node, plus a lower-order navigation index. <bookmark mark='a'/> Here is a concrete six-node tree. In breadth-first order, write one for each child, then zero. Its eleven bits are exactly two n minus one. <bookmark mark='b'/> Node IDs and bit positions are different. Rank counts ones before a bit position; select gives the position of a numbered occurrence. Every index here starts at zero. <bookmark mark='c'/> Node one's block starts at bit three. Two ones precede it, so its first child has node ID three. The rank of zeroes before the one for node five gives its parent, node three. <bookmark mark='d'/> Our code implements rank with counts every five hundred and twelve bits, finer counts every sixty-four, and a bounded population count. It does not implement select. <bookmark mark='e'/> All sixty-five thousand five hundred and thirty-seven rank positions pass an independent prefix-sum check, including zero and the full length. <bookmark mark='f'/> The displayed overhead is a logical packed-bit estimate, excluding Python objects. This fixed directory is not Jacobson's lower-order construction. Compressed indexes later exploit entropy or repetition; they need not shrink every input.",
+   "zh": "简洁树理论用每节点大约两个比特保存拓扑，再加低阶的导航索引。<bookmark mark='a'/>这是一个具体的六节点树。按广度优先顺序，每个孩子写一个一，再写零。十一位恰好是二 n 减一。<bookmark mark='b'/>节点编号和位位置是两种东西。秩统计某个位位置之前的一，选择给出某次出现的位位置。这里的所有编号都从零开始。<bookmark mark='c'/>一号节点的块从第三位开始，之前有两个一，所以它的第一个孩子编号为三。代表五号节点的一之前有三个零，因此它的父亲是三号。<bookmark mark='d'/>代码用每五百一十二位的计数、每六十四位的细计数和有界人口计数实现秩，并没有实现选择。<bookmark mark='e'/>全部六万五千五百三十七个秩位置都通过独立前缀和核对，包括零和完整长度。<bookmark mark='f'/>开销是逻辑上的紧凑位估计，不包括 Python 对象。固定目录并不是雅各布森的低阶构造。后面的压缩索引利用熵或重复，并不保证缩小每个输入。"
+  },
+  "169f06f21d3d": {
+   "scene": "Persist",
+   "en": "Chapter thirteen. Persistence, and the memory hierarchy.",
+   "zh": "第13章。持久化，以及存储层次。"
+  },
+  "46e1adcc7adc": {
+   "scene": "Persist",
+   "en": "A mutable update normally discards the previous state. <bookmark mark='a'/> Path copying preserves it: copy the search path to the new leaf, and let the copies point to unchanged old subtrees. <bookmark mark='b'/> Two roots now describe two complete search trees sharing most nodes. Old versions remain searchable. <bookmark mark='c'/> Persistent structures are common in functional programming, copy-on-write systems and content-addressed trees such as Git. They do not imply that every value in every functional language uses this particular representation. Driscoll, Sarnak, Sleator and Tarjan developed a general persistence framework in 1989.",
+   "zh": "可变更新通常会丢掉旧状态。<bookmark mark='a'/>路径复制保留它：复制到新叶子的搜索路径，让副本指向未改变的旧子树。<bookmark mark='b'/>两个根现在描述两棵完整搜索树，共享大部分节点，旧版本仍能查找。<bookmark mark='c'/>持久化结构常用于函数式编程、写时复制系统和 Git 一类内容寻址树，但并不意味着所有函数式语言的每个值都用这种表示。一九八九年，德里斯科尔、萨纳克、斯莱特和塔扬发展了通用的持久化框架。"
+  },
+  "26c2a64a4c70": {
+   "scene": "Persist",
+   "en": "Is it expensive? <bookmark mark='a'/> We kept every version of a tree through a hundred thousand random inserts. Each insert copied about twenty-one nodes, the length of one path, which is chapter five's depth of a random tree. Copying the whole tree for each version would cost fifty thousand nodes per insert. <bookmark mark='b'/> So a hundred thousand complete versions cost about twenty nodes each. <bookmark mark='c'/> Chris Okasaki's book showed how far the idea goes: queues, heaps and more, persistent and still efficient.",
+   "zh": "这很贵吗？<bookmark mark='a'/>我们在十万次随机插入中保留了树的每一个版本。每次插入大约复制二十一个结点，也就是一条路径的长度，正是第5章所说的随机树的深度。为每个版本复制整棵树，每次插入要花五万个结点。<bookmark mark='b'/>所以十万个完整的版本，每个大约只花二十个结点。<bookmark mark='c'/>克里斯·冈崎的书展示了这个想法能走多远：队列、堆以及更多，都能做成持久的，而且仍然高效。"
+  },
+  "2927f6cc5035": {
+   "scene": "Persist",
+   "en": "Counting steps does not predict elapsed time by itself. <bookmark mark='a'/> These four implementations answer the same seeded successful uint32 lookups, with last assignment winning for duplicate keys. We check every returned value outside the timer, including distinct keys twelve and thirteen. <bookmark mark='b'/> The timer includes lookups and writing the result vector, and excludes construction, query generation, and verification. Each point is the minimum of three repeats on this host. Actual unique-key counts and open-table loads are recorded. <bookmark mark='c'/> The curves show different costs on this workload, not a universal ranking. Layout, branches, allocation, hashing and cache behavior can all matter. <bookmark mark='d'/> We did not collect hardware performance counters, so these timings alone do not identify the number of cache misses or prove which mechanism caused the gap.",
+   "zh": "单靠步数不能预测耗时。<bookmark mark='a'/>这四个实现回答同一批固定种子的成功查找，键是三十二位无符号整数；键重复时，最后赋值生效。计时之外核对每个返回值，包括必须保持不同的十二和十三。<bookmark mark='b'/>计时包括查找和写结果向量，不包括构建、生成查询和核对。每个点是这台主机三次重复的最小值，并记录实际不同键数和开放寻址表的装填率。<bookmark mark='c'/>曲线显示的是这个负载上的开销，不是普遍排名。布局、分支、分配、哈希和缓存行为都可能影响结果。<bookmark mark='d'/>我们没有采集硬件性能计数器，因此单凭耗时不能确定缓存缺失次数，也不能证明差距由哪个机制造成。"
+  },
+  "79a03df096bd": {
+   "scene": "Practice",
+   "en": "Chapter fourteen. Hash tables in practice.",
+   "zh": "第14章。实践中的哈希表。"
+  },
+  "4eb7cb3e2eb1": {
+   "scene": "Practice",
+   "en": "Library designs share ideas but differ in guarantees. <bookmark mark='a'/> CPython uses open addressing and a compact insertion-ordered entry array; insertion order became a language guarantee in three point seven. Java HashMap can treeify long bins, with collision benefits depending on key ordering. Common C++ unordered-map implementations use nodes to satisfy reference stability, but the standard does not require one particular chain layout. Rust uses a SwissTable-derived design. Abseil's SIMD example scans sixteen metadata bytes; Go one point twenty-four uses eight-slot groups. <bookmark mark='b'/> Randomization is not universal: CPython string hashes and Rust's default hasher are seeded, whereas Java hashCode and ordinary C++ std hash are not generally secret-key defenses. Check the exact library, key type, version and configuration before relying on attack resistance.",
+   "zh": "程序库共享一些思路，但保证各不相同。<bookmark mark='a'/>CPython 使用开放寻址和紧凑的插入顺序条目数组；三点七版本把插入顺序确立为语言保证。Java 的哈希表可以把长桶转成树，冲突性能改善依赖键的排序条件。常见 C++ 无序映射使用节点来满足引用稳定性，但标准不强制某一种链表布局。Rust 使用源自瑞士表的设计。Abseil 的向量示例扫描十六个元数据字节，Go 一点二十四则使用八槽分组。<bookmark mark='b'/>随机化并不普遍：CPython 字符串哈希和 Rust 默认哈希器有随机种子，Java 的哈希码和普通 C++ 标准哈希通常不提供秘密密钥防护。依赖抗攻击能力之前，要核对具体程序库、键类型、版本和配置。"
+  },
+  "3ffadf9582bd": {
+   "scene": "Practice",
+   "en": "Here is the complete word-count task natively on this host. <bookmark mark='a'/> Each implementation counts the same corpus and selects the top twenty, breaking ties by first appearance. Every repeat's complete report matches the reference. The bars show the minimum of three Python repeats or five native repeats. <bookmark mark='b'/> File reading, compiler startup and output formatting are excluded; allocation, tokenization, counting and report selection are included. The displayed throughput uses that timed scope. <bookmark mark='c'/> Languages, parsers, hash functions, allocation and containers all differ. These results compare complete implementations; they do not isolate the cost of Python's dictionary or prove one collision scheme universally faster.",
+   "zh": "这是这台主机上原生运行的完整词频任务。<bookmark mark='a'/>每个实现统计相同语料，选出前二十名，相同次数按首次出现顺序打破平局。每次重复的完整报告都与参考一致。柱子显示三次 Python 或五次原生重复的最小值。<bookmark mark='b'/>不计文件读取、编译器启动和输出格式化；包括分配、分词、计数和报告选择。吞吐率使用这个计时范围。<bookmark mark='c'/>语言、解析器、哈希、分配和容器都不同。这些结果比较完整实现，不能单独确定 Python 字典的开销，也不能证明某种冲突处理总是更快。"
+  },
+  "42e33bf5d5a2": {
+   "scene": "Job",
+   "en": "Chapter fifteen. The Job, hashed.",
+   "zh": "第15章。哈希化的任务。"
+  },
+  "edbfd0badb1f": {
+   "scene": "Job",
+   "en": "Here is the Job rewritten around a hash table. <bookmark mark='a'/> As each letter arrives it is mixed into a hash: thirty-three times the hash so far, plus the letter, modulo a prime. The Pebble language has no bitwise operators, so a prime modulus does the mixing. <bookmark mark='b'/> At the end of a word, the table is probed linearly from the hash modulo its size. Each occupied slot names an entry; the stored hash is compared first, then the length, and only then the letters. <bookmark mark='c'/> A new word gets an entry, and when the table would pass half full it doubles and re-inserts every entry by its stored hash, Part 16's amortized doubling. <bookmark mark='d'/> Entries are created in order of first appearance, so the report, the twenty largest counts with ties to the earliest word, is exactly the output of version zero.",
+   "zh": "这是围绕哈希表重写的任务。<bookmark mark='a'/>每个字母到来时都被混进哈希：到目前为止的哈希乘以三十三，加上这个字母，对一个素数取模。Pebble 语言没有位运算，所以由素数模来完成混合。<bookmark mark='b'/>一个单词结束时，从哈希对表大小取模的位置开始线性探查。每个被占的槽指明一个条目；先比较存下的哈希，再比较长度，最后才比较字母。<bookmark mark='c'/>新单词得到一个条目，当表将要超过半满时，它就加倍，并按存下的哈希重新插入每个条目，这是第16部分的摊还加倍。<bookmark mark='d'/>条目按第一次出现的顺序创建，所以报告，即最大的二十个计数、并列时取最早的词，与版本零的输出完全相同。"
+  },
+  "ff0882525b13": {
+   "scene": "Job",
+   "en": "Separate observed events from predicted instructions. <bookmark mark='a'/> A native event counter processes all thirty novels and reproduces the complete reference report. It records the displayed word, comparison and slot counts. The sort and hash comparison counters follow different control paths, so read their definitions. <bookmark mark='b'/> The low average slot count reflects this fixed polynomial hash and this frequency-weighted access stream, not a random-key guarantee at the final load. <bookmark mark='c'/> We compile one explicitly corpus-sized image and use it for all forty-eight emulator passages and three core samples. Thirty-six passages fit a least-squares instruction model; twelve are held out. Their errors are displayed. Correlated features make coefficients nonunique, and full-corpus features exceed the training range. Full-corpus instructions remain an extrapolation, not an exact executed count.",
+   "zh": "先把实测事件和预测指令分开。<bookmark mark='a'/>原生事件计数器处理全部三十部小说，并复现完整参考报告，记录画面中的单词、比较和槽计数。排序与哈希的比较计数遵循不同控制路径，要结合定义阅读。<bookmark mark='b'/>很低的平均槽数来自固定多项式哈希和这条按词频加权的访问流，不是最终装填率下随机键的保证。<bookmark mark='c'/>我们编译一个明确按全语料容量设置的镜像，用在全部四十八个模拟器段落和三个核心样本上。三十六段拟合最小二乘指令模型，十二段留出检验，误差显示在画面中。相关特征让系数不唯一，全语料特征还超出训练范围。整套语料的指令数仍是外推，不是实际执行的精确计数。"
+  },
+  "cb1a7f22bf85": {
+   "scene": "Job",
+   "en": "This panel is a model audit, not a measured time breakdown. <bookmark mark='a'/> The fitted event matrix is rank deficient. Different coefficient choices can predict the same sampled counts, so grouped coefficients cannot uniquely attribute instructions or identify a bottleneck. <bookmark mark='b'/> A separate C trace follows selected data accesses using an assumed array layout through the toy cache hierarchy. It is not the compiled program's full memory trace and omits some accesses. <bookmark mark='c'/> We add incremental miss penalties to instructions divided by sampled IPC. This additive scenario omits overlap and may double count stalls already reflected in IPC; it is not a proven upper bound. <bookmark mark='d'/> The three core samples use the same corpus-sized image. Their weighted IPC is observed on those passages. Neither that IPC nor the cache model is a full-corpus execution, and neither alone proves the causal effect of division.",
+   "zh": "这个画面审查模型，不是实测时间分解。<bookmark mark='a'/>拟合事件矩阵不满秩，不同系数可以预测相同样本计数，所以分组系数不能唯一归因指令，也不能识别瓶颈。<bookmark mark='b'/>另一段 C 跟踪程序用假定的数组布局，把部分数据访问送进教学缓存层次。它不是编译程序的完整访存轨迹，还省略了一些访问。<bookmark mark='c'/>我们把增量缺失罚时加到指令数除以抽样 IPC 的结果上。这个加法情景省略重叠，还可能重复计算 IPC 中已有的停顿，因此不是经过证明的上界。<bookmark mark='d'/>三个核心样本使用相同的全语料容量镜像，加权 IPC 来自这些段落的观察。它和缓存模型都不是整套语料的完整执行，也不能单独证明除法的因果影响。"
+  },
+  "c007f205f17b": {
+   "scene": "Job",
+   "en": "The ledger adds a projected row. <bookmark mark='a'/> Its time combines native corpus events, fitted instructions, three-passage core throughput and an assumed partial cache trace at the ledger clock. The number on screen is the scenario estimate; the full corpus was not executed by the emulator or core. <bookmark mark='b'/> The displayed speed ratios compare those ledger estimates under their stated assumptions. They illustrate the possible benefit of changing the algorithm, with model uncertainty carried forward.",
+   "zh": "账本增加的是一行推算。<bookmark mark='a'/>时间结合原生语料事件、拟合指令、三个段落的核心吞吐率，以及假定的部分缓存轨迹，并使用账本时钟。画面数字是这个情景的估计，整套语料没有在模拟器或核心中完整执行。<bookmark mark='b'/>加速比比较的是这些带有条件的账本估计，说明改变算法可能带来的收益，同时保留模型不确定性。"
+  },
+  "0a3eaa53c01f": {
+   "scene": "Job",
+   "en": "Both hardware and algorithms change the cost of a task. <bookmark mark='a'/> The first bar compares earlier hardware ledger rows on the same corpus. <bookmark mark='b'/> The second compares the compiled list-based baseline with this projected hash-table row on one core. They use different baselines, so do not multiply the bars as independent measured gains. <bookmark mark='c'/> The educational result is the change in work: replacing repeated linear search with a suitable dictionary can remove enormous lookup effort. The exact runtime benefit still depends on inputs, hashing, implementation, and the machine model.",
+   "zh": "硬件和算法都能改变任务成本。<bookmark mark='a'/>第一根柱比较同一语料上较早的硬件账本行。<bookmark mark='b'/>第二根柱比较单核编译后的列表基线和这里推算的哈希表行。基线不同，不能把两根柱当成独立的实测收益直接相乘。<bookmark mark='c'/>教学重点是工作量的改变：用合适的字典替换反复线性搜索，可以省去大量查找。实际运行收益仍取决于输入、哈希、实现和机器模型。"
+  },
+  "89f0ba2693a1": {
+   "scene": "Frontier",
+   "en": "Chapter sixteen. Frontier: how good can a data structure be?",
+   "zh": "第16章。前沿：数据结构能有多好？"
+  },
+  "a1e3b0ef4d04": {
+   "scene": "Frontier",
+   "en": "Nearly full hashing needs careful model choices. <bookmark mark='a'/> First, a finite experiment: hold occupancy fixed and probe a fresh uniform permutation until the first empty slot. With m slots and f free, the exact expected count is m plus one over f plus one. <bookmark mark='b'/> Five thousand independent trials per point follow that expectation. We do not average insertions taken at different loads, and double hashing is not this uniform-permutation model. <bookmark mark='c'/> The 2025 funnel and elastic hashing results use per-key random probe sequences without moving existing keys. Funnel achieves squared logarithmic worst-case expected query and insertion bounds. <bookmark mark='d'/> Elastic hashing gives constant amortized expected positive-query probes, plus logarithmic worst-case expected query and insertion bounds. These are expectation statements with load-range assumptions, not deterministic per-operation caps. <bookmark mark='e'/> Selected 2026 preprints explore full occupancy, reordering, and braided cuckoo hashing under other models. We checked their stated claims, not every proof, and implemented none of those new schemes. Their bounds belong on theorem cards, not as constant-free timing curves beside this experiment.",
+   "zh": "接近满载的哈希需要仔细区分模型。<bookmark mark='a'/>先看有限实验：固定占用状态，每次沿一个新的均匀排列探查，直到遇到空槽。m 个槽、f 个空槽时，精确期望是 m 加一除以 f 加一。<bookmark mark='b'/>每个点做五千次独立试验，结果接近期望。我们不混合不同装填率的插入，双重哈希也不是这个均匀排列模型。<bookmark mark='c'/>二零二五年的漏斗哈希和弹性哈希，在不移动已存键的前提下使用每键随机探查序列。漏斗哈希给出平方对数量级的最坏情况期望查询和插入界。<bookmark mark='d'/>弹性哈希给出正查询的常数摊还期望探查，以及查询和插入的对数量级最坏情况期望界。这些是带装填区间条件的期望结论，不是每次操作的确定性上限。<bookmark mark='e'/>部分二零二六年预印本在其他模型下研究满载、重排和编织布谷鸟哈希。我们核对了陈述范围，没有审查所有证明，也没有实现这些新方案。它们应当出现在定理卡片上，而不是作为没有常数的计时曲线叠在实验旁边。"
+  },
+  "d09e19403372": {
+   "scene": "Frontier",
+   "en": "Dynamic optimality remains a demanding sequence question. <bookmark mark='a'/> Can an online binary-search-tree algorithm stay within a constant factor of the best offline execution, under the same model and initialization convention? Splay and Greedy are central candidates. <bookmark mark='b'/> Splay already has strong locality theorems; those do not establish constant competitiveness on every sequence. <bookmark mark='c'/> Tango's log-log competitive ratio is a historical benchmark for general trees. Selected 2026 preprints state improved sublogarithmic competitive bounds specifically for Splay and Greedy. We identify their preprint status and checked scope in the notes. <bookmark mark='d'/> The geometric view asks for arborally satisfied point sets, a precise rectangle condition, rather than saying every rectangle is nonempty. <bookmark mark='e'/> None of these selected statements resolves the constant-factor conjecture. This is a dated snapshot, not an exhaustive literature survey.",
+   "zh": "动态最优性仍是很难的序列问题。<bookmark mark='a'/>在相同模型和初始化约定下，在线二叉搜索树算法能否始终保持在最优离线执行的常数倍以内？伸展树和贪心树是重要候选。<bookmark mark='b'/>伸展树已有很强的局部性定理，但这不等于每个序列上都有常数竞争比。<bookmark mark='c'/>探戈树的双重对数竞争比是一般树的历史基准。部分二零二六年预印本针对伸展树和贪心树提出了更好的次对数竞争界；笔记注明预印本状态和我们核对的范围。<bookmark mark='d'/>几何观点要求点集满足精确的矩形条件，而不是说所有矩形里都有点。<bookmark mark='e'/>这些选取的结论都没有解决常数倍猜想。这是注明日期的快照，不是穷尽文献的综述。"
+  },
+  "9775dd43f0e6": {
+   "scene": "Frontier",
+   "en": "Two directions sharpen the design questions. <bookmark mark='a'/> Cell-probe predecessor bounds depend on key universe, word size, available space and query model. <bookmark mark='b'/> Dynamic partial-sums lower bounds likewise relate update and query costs with explicit word-size and amortization assumptions. A bare logarithm per operation hides those trade-offs. <bookmark mark='c'/> Learned indexes predict a position from a model of the key distribution. <bookmark mark='d'/> A useful implementation also verifies or corrects that prediction, handles updates, and accounts for memory. Some data sets benefit; distribution shift and adversarial inputs can change the outcome. <bookmark mark='e'/> The research question is which complete guarantees a particular structure provides under a particular model, not whether learned structures have any guarantees at all.",
+   "zh": "两个方向让设计问题更明确。<bookmark mark='a'/>单元探查模型中的前驱下界依赖键的宇宙、字长、空间和查询模型。<bookmark mark='b'/>动态部分和下界同样在明确字长和摊还假设下联系更新与查询成本。只说每次操作一个对数，会隐藏这些权衡。<bookmark mark='c'/>学习索引用键分布模型预测位置。<bookmark mark='d'/>可用实现还必须验证或修正预测，处理更新，并计入空间。有些数据受益，但分布变化和对抗输入会改变结果。<bookmark mark='e'/>研究问题是具体结构在具体模型下提供哪些完整保证，而不是学习结构是否完全没有保证。"
+  },
+  "87ea219081b6": {
+   "scene": "Frontier",
+   "en": "Ask each open question with its model attached. <bookmark mark='a'/> Can Splay, Greedy, or any online BST achieve constant competitiveness? <bookmark mark='b'/> Which pairing-heap variant, operation set and pointer model are we analyzing? Bounds for different variants cannot be combined into one generic claim. <bookmark mark='c'/> For high-load hashing, does the model permit reordering, deletions, adaptive probes or special hash assumptions? Recent constant expected bounds make a blanket impossibility claim inappropriate. <bookmark mark='d'/> For learned indexes, what correction, update and distribution assumptions make the guarantees useful? <bookmark mark='e'/> The research exercise is an investigation plan. The notes do not contain a solution to dynamic optimality.",
+   "zh": "提出开放问题时，要同时说明模型。<bookmark mark='a'/>伸展树、贪心树或其他在线搜索树，能否达到常数竞争比？<bookmark mark='b'/>分析的是哪一种配对堆、哪些操作和哪种指针模型？不同变体的界不能拼成一个泛泛结论。<bookmark mark='c'/>高装填哈希是否允许重排、删除、自适应探查或特殊哈希假设？近期的常数期望界，让笼统的不可能性说法并不恰当。<bookmark mark='d'/>学习索引在怎样的修正、更新和分布条件下，保证才有用？<bookmark mark='e'/>研究习题给的是探索计划，笔记没有动态最优性的解答。"
+  },
+  "1093ff1bc379": {
+   "scene": "Outro",
+   "en": "What this part connects. Birthday probabilities under independent uniform choices; universal hashing for fixed keys independent of the chosen random function; collision resolution and its load assumptions. Search trees preserve order, balanced trees control height, and splaying uses a sequence potential rather than per-node depth halving. B-trees price block transfers. Heap and union-find bounds require their operation models. Tries expose key structure, and succinct theory distinguishes topology bits from navigation redundancy. Finally, native event counts and sample-checked models project the Job's new ledger row. Every number and bound carries its scope.",
+   "zh": "这一部分把这些想法连起来：独立均匀选择下的生日概率；键集合与随机函数选择相互独立时的全域哈希；带装填假设的冲突处理。搜索树保留顺序，平衡树控制高度，伸展树依靠序列势能，而不是让每个节点的深度减半。B 树衡量块传输。堆和并查集的界依赖操作模型。字典树展示键的结构，简洁结构理论区分拓扑位和导航冗余。最后，用原生事件和样本核对的模型推算任务的新账本行。每个数字和界都带着适用范围。"
+  },
+  "473872ff662b": {
+   "scene": "Outro",
+   "en": "Where this comes back. Part 18's graph algorithms run on heaps and union–find. Part 20 builds Bloom filters and sketches from universal hash families. Part 21 turns tries into suffix trees and compressed indexes. Part 33 makes hash maps and skip lists safe for many threads. Parts 34 and 35 build storage engines on log-structured merge trees and B-plus trees. Part 41's Git is a persistent tree, and Part 47's search engine is an inverted index.",
+   "zh": "这些会在哪里再出现。第18部分的图算法跑在堆和并查集上。第20部分用全域哈希族造出布隆过滤器和概要结构。第21部分把字典树变成后缀树和压缩索引。第33部分让哈希表和跳表能被许多线程安全地使用。第34和35部分在日志结构合并树和 B+ 树上建存储引擎。第41部分的 Git 是一棵持久化的树，第47部分的搜索引擎是一个倒排索引。"
+  },
+  "f094c30ba480": {
+   "scene": "Outro",
+   "en": "In practice, match the interface to the workload. Use an ordered map when ranges or neighbors matter. For untrusted keys, check the actual hash and attack defenses rather than assuming the library randomizes everything. Measure complete equivalent tasks, including the memory and update costs that matter to your service. Databases also use log-structured, inverted, spatial and other indexes besides B-trees and hashing. Query plans reveal which access path is actually used. Heaps, tries and union-find are tools to recognize, not universal answers.",
+   "zh": "实践中，让接口适合负载。范围和相邻键重要时，选择有序映射。面对不可信的键，要核对实际哈希和攻击防护，不能默认程序库把一切都随机化。测量完整等价任务，包括服务真正关心的内存和更新成本。数据库除了 B 树和哈希，还有日志结构、倒排、空间等索引。查询计划告诉你实际使用哪条访问路径。堆、字典树和并查集是值得识别的工具，并非万能答案。"
+  },
+  "6fb49ef9b581": {
+   "scene": "Outro",
+   "en": "Six exercises appear in the notes: four proof exercises, a build sketch, and a research prompt. Pause on any of them. The build exercise replaces the per-letter division using explicitly defined wrapping arithmetic, then checks the complete output and measures core samples. It is a proposal, not a completed benchmark. The final exercise asks about dynamic optimality; its notes outline how to explore small sequences, not a solution to an open problem.",
+   "zh": "笔记里有六道练习：四道证明题，一个构建思路和一个研究题。可以随时暂停。构建题要求用明确定义的回绕运算替换逐字母除法，然后核对完整输出并测量核心样本。它是方案，不是完成的基准。最后一题讨论动态最优性，笔记只给探索小序列的办法，并没有解决开放问题。"
+  },
+  "b4c833cc7a23": {
+   "scene": "Outro",
+   "en": "Next time. Euler invented the graph to walk the bridges of Königsberg, and graphs are now the shape of road maps, the internet and compilers. Breadth-first and depth-first search; Dijkstra's algorithm on this part's heaps, and the recent proof that it is universally optimal; spanning trees with union–find; and flows and cuts, two faces of one theorem. Part 18, Graphs.",
+   "zh": "下一次。欧拉为了走遍柯尼斯堡的桥而发明了图，如今图是道路地图、互联网和编译器的形状。广度优先和深度优先搜索；跑在这一部分的堆上的迪杰斯特拉算法，以及最近关于它普适最优的证明；用并查集求生成树；还有流与割，一个定理的两面。第18部分，图。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分所依据的书和论文都在屏幕上，也在讲义里。感谢收看。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 17, Data Structures",
+ "chapters_en": {
+  "Hook": "Can counting be constant-time?",
+  "Dictionary": "1. The dictionary, and the birthday bound",
+  "Chaining": "2. Chaining and universal hashing",
+  "Probing": "3. Open addressing",
+  "Cuckoo": "4. Cuckoo hashing and perfect hashing",
+  "Bst": "5. Binary search trees",
+  "Balanced": "6. Balanced trees: AVL and red-black",
+  "Randomized": "7. Treaps and skip lists",
+  "Splay": "8. Splay trees",
+  "Btree": "9. B-trees",
+  "Heaps": "10. Priority queues",
+  "UnionFind": "11. Union-find",
+  "Tries": "12. Tries and succinct structures",
+  "Persist": "13. Persistence, and the memory hierarchy",
+  "Practice": "14. Hash tables in practice",
+  "Job": "15. The Job, hashed",
+  "Frontier": "16. Frontier: how good can a data structure be?",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}

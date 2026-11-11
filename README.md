@@ -3,7 +3,7 @@
 Math, physics, ML and markets explainers in the style of 3Blue1Brown, built entirely in code with
 [Manim Community](https://www.manim.community/) and narrated by a local neural voice. Only the code is stored here;
 every video builds from source. Each video lives in `videos/<series>/<name>/` with its own README (outline and sources); the series are
-`ai`, `analysis`, `philosophy`, `physics`, `math`, `ml`, `markets` and `quant`. Videos are always addressed by name (`tools/build.py quantum`).
+`ai`, `analysis`, `cs`, `philosophy`, `physics`, `math`, `ml`, `markets` and `quant`. Videos are always addressed by name (`tools/build.py quantum`).
 
 | Video | Length | Build |
 |---|---|---|
@@ -25,6 +25,7 @@ every video builds from source. Each video lives in `videos/<series>/<name>/` wi
 | Statistics, Built (65 parts, BSc to PhD: [the plan](videos/stats/README.md), [syllabus](videos/stats/SYLLABUS.md); Parts 1–65 written, English) | 50–80 min each | `python -m videos.stats.stats65.compute && python tools/build.py stats65` |
 | Philosophy, Built (42 parts, from logic to ethics: [the plan](videos/philosophy/README.md); English and Chinese) | 50–65 min each | `python -m videos.philosophy.philosophyN.compute && python tools/build.py philosophyN` |
 | Quant, Built (43 parts: [the plan](videos/quant/README.md), [syllabus](videos/quant/SYLLABUS.md), [reading](videos/quant/READING.md), [progress](videos/quant/PROGRESS.md); English and Chinese) | 50–60 min each | `python -m videos.quant.quantN.compute && python tools/make.py quantN`, or `--series quant` |
+| Computer Science, Built (61 parts: [the plan](videos/cs/README.md); English and Chinese) | 50–60 min each | `python -m videos.cs.csN.compute && python tools/make.py csN`, or `--series cs` |
 
 ## Layout
 

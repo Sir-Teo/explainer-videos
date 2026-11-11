@@ -1,0 +1,539 @@
+{
+ "title": "计算机科学，从零搭建 · 第48部分：系统设计（一）：基本构件",
+ "chapters": {
+  "Hook": "餐巾纸",
+  "Method": "1. 设计是怎样做出来的",
+  "Balancing": "2. 负载均衡",
+  "Caching": "3. 缓存：放在哪里，保留什么",
+  "Invalidation": "4. 缓存：过时与击穿",
+  "Limits": "5. 限流",
+  "Async": "6. 队列与异步",
+  "Storage": "7. 选择存储",
+  "Sharding": "8. 分片",
+  "Replication": "9. 实践中的复制",
+  "Ids": "10. 唯一 ID",
+  "Blobs": "11. 大对象与边缘",
+  "Geo": "12. 把地图变成键",
+  "Realtime": "13. 实时构件",
+  "Job": "14. 作为服务的那项任务",
+  "Frontier": "15. 前沿：作为一门科学的设计",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "4f890eea1bf0": {
+   "scene": "Hook",
+   "en": "Every design begins on a napkin. <bookmark mark='a'/> Suppose ten million people use a service each day, twenty times each: two hundred million requests. <bookmark mark='b'/> A day has eighty-six thousand four hundred seconds, so that is about two thousand three hundred requests a second, on average. <bookmark mark='c'/> Traffic is not flat: the evening peak might be three times the mean, nearly seven thousand a second. <bookmark mark='d'/> If one request in eleven writes, about two hundred writes a second. <bookmark mark='e'/> At two kilobytes a write, kept for five years in three copies, about two hundred terabytes. <bookmark mark='f'/> And the reads at the peak move a dozen megabytes a second. Five minutes of arithmetic, and we know this needs a cluster, not a laptop, but not a datacentre either.",
+   "zh": "每个设计都从一张餐巾纸开始。<bookmark mark='a'/>假设每天有1000万人使用一项服务，每人20次：就是2亿个请求。<bookmark mark='b'/>一天有86400秒，所以平均下来大约是每秒2300个请求。<bookmark mark='c'/>流量并不平稳：晚高峰可能是平均值的3倍，接近每秒7000个。<bookmark mark='d'/>如果每11个请求中有1个是写，那就是每秒大约200次写。<bookmark mark='e'/>每次写2千字节，保存5年，存3份，大约是200太字节。<bookmark mark='f'/>而高峰时的读每秒要搬运十几兆字节。5分钟的算术，我们就知道这需要一个集群，而不是一台笔记本电脑，但也用不着一整个数据中心。"
+  },
+  "c789b938b6b0": {
+   "scene": "Hook",
+   "en": "Napkin arithmetic needs a few numbers in your head. <bookmark mark='a'/> A memory reference takes about a hundred nanoseconds. Reading a megabyte from memory, about ten microseconds; a random read from a solid-state disk, about a hundred. A round trip inside a datacentre, around half a millisecond. A spinning disk's seek, ten milliseconds, and a round trip across a continent, fifty to a hundred. <bookmark mark='b'/> And a few conversions: two to the tenth is about a thousand, a day is about a hundred thousand seconds, and a year is pi times ten to the seventh. These are orders of magnitude, after the lists Jeff Dean and Peter Norvig made famous; the point is to be right to within a factor of a few.",
+   "zh": "做餐巾纸算术，脑子里得装着几个数。<bookmark mark='a'/>一次内存访问大约需要100纳秒。从内存读取1兆字节，大约10微秒；从固态硬盘随机读一次，大约100微秒。数据中心内部的一次往返，大约半毫秒。机械硬盘的一次寻道，10毫秒；横跨一个大陆的一次往返，50到100毫秒。<bookmark mark='b'/>还有几个换算：2的10次方大约是1000，一天大约是10万秒，一年是 π 乘以10的7次方秒。这些都是数量级，依照 Jeff Dean 和 Peter Norvig 让它们出名的那些列表；要点是误差在几倍以内。"
+  },
+  "e7fe036ee549": {
+   "scene": "Hook",
+   "en": "A large system is assembled from a small set of blocks. <bookmark mark='a'/> Load balancers, caches, rate limiters and queues; shards and replicas; identifiers, blob stores and content delivery, and indexes for maps. <bookmark mark='b'/> Each block has mathematics of its own, much of it from earlier parts: hashing that rebalances gracefully, caches that survive a stampede, rate limiters that are token buckets in disguise, identifiers that sort by time without any coordination, and curves that turn a map into a list of keys.",
+   "zh": "一个大型系统由一小套构件组装而成。<bookmark mark='a'/>负载均衡器、缓存、限流器和队列；分片和副本；标识符、大对象存储和内容分发，以及地图的索引。<bookmark mark='b'/>每个构件都有它自己的数学，其中很多来自前面的部分：能平稳地重新平衡的哈希，扛得住缓存击穿的缓存，其实是伪装起来的令牌桶的限流器，无需任何协调就能按时间排序的标识符，以及把地图变成一列键的曲线。"
+  },
+  "530c49a1fed2": {
+   "scene": "Hook",
+   "en": "This is Part 48 of Computer Science, Built, the first of two parts on system design. <bookmark mark='a'/> We will estimate before we design; balance load with Maglev hashing and two random choices; predict a cache's hit rate with Che's approximation and beat LRU with an admission filter; survive a stampede; limit rates with token buckets; shard, replicate and name things; turn a map into keys with space-filling curves; and load-test the Job as a service.",
+   "zh": "这是计算机科学，从零搭建，第48部分，也是讲系统设计的两部分中的第一部分。<bookmark mark='a'/>我们会先估算，再设计；用 Maglev 哈希和两个随机选择来均衡负载；用 Che 近似预测缓存的命中率，并用一个准入过滤器胜过 LRU；扛过缓存击穿；用令牌桶限流；分片、复制，以及给事物命名；用空间填充曲线把地图变成键；最后对作为服务的那项任务做负载测试。"
+  },
+  "30dbb3874377": {
+   "scene": "Method",
+   "en": "Chapter one. How a design is made.",
+   "zh": "第一章：设计是怎样做出来的。"
+  },
+  "9ca6971e80dd": {
+   "scene": "Method",
+   "en": "A design is a sequence of decisions, made in order. <bookmark mark='a'/> First the requirements: what the system must do, and how well. Then a capacity model, the data, and the interface. <bookmark mark='b'/> Only then a high-level design, deep dives into its riskiest parts, the trade-offs, and a written document. <bookmark mark='c'/> It is not a waterfall: a deep dive that breaks an estimate sends you back. We will follow one small service through it, a pastebin: store a text, get a link.",
+   "zh": "设计是一连串按顺序做出的决策。<bookmark mark='a'/>首先是需求：系统必须做什么，以及做得多好。然后是容量模型、数据，以及接口。<bookmark mark='b'/>只有到这时，才是高层设计、对其中风险最大的部分的深入剖析、权衡取舍，以及一份书面文档。<bookmark mark='c'/>这不是瀑布：一次深入剖析推翻了一个估算，就会把你送回去。我们会带着一个小服务走完这个过程，一个 pastebin，也就是文本粘贴服务：存下一段文本，得到一个链接。"
+  },
+  "9271eb7d6083": {
+   "scene": "Method",
+   "en": "Requirements come in two kinds. <bookmark mark='a'/> Functional ones say what the system does: create a paste and get a link, read it, let it expire; and, as useful, what it will not do. <bookmark mark='b'/> Non-functional ones say how well: fast, available, durable, at a given scale. As words, they cannot be checked. <bookmark mark='c'/> So turn them into service-level objectives, numbers over a window: ninety-nine percent of reads within two hundred milliseconds; ninety-nine point nine percent of requests succeeding over thirty days. <bookmark mark='d'/> The second is an error budget, about forty-three minutes a month, to spend on failures. Part 50 lives within it.",
+   "zh": "需求分两种。<bookmark mark='a'/>功能性需求说明系统做什么：创建一个粘贴并得到链接，读取它，让它过期；而且，如果有用的话，还要说明它不做什么。<bookmark mark='b'/>非功能性需求说明做得多好：快、可用、持久，在给定的规模下。光是文字，它们无法检验。<bookmark mark='c'/>所以把它们变成服务级目标，也就是一个时间窗口上的数字：百分之99的读在200毫秒以内完成；30天内百分之99.9的请求成功。<bookmark mark='d'/>第二个是一份错误预算，每月大约43分钟，可以花在故障上。第50部分的工作就在这份预算之内展开。"
+  },
+  "7bfb2b47842d": {
+   "scene": "Method",
+   "en": "Next, the capacity model: the hook's napkin, turned into decisions. <bookmark mark='a'/> About seven thousand requests a second at the peak. If a server handles a thousand, kept half busy, as Part 31 advises, that is 14 servers behind a load balancer. <bookmark mark='b'/> About two hundred writes a second, six hundred at the peak: one primary database, with replicas for reads. Ten reads per write: a cache earns its place. <bookmark mark='c'/> Two hundred terabytes will not fit one machine: shard the records, and put the texts in a blob store. <bookmark mark='d'/> A dozen megabytes a second is a tenth of one gigabit link: not the problem.",
+   "zh": "接下来是容量模型：把开场的餐巾纸变成决策。<bookmark mark='a'/>高峰时大约每秒7000个请求。如果一台服务器能处理1000个，并按第31部分的建议让它保持一半忙，那就是负载均衡器后面的14台服务器。<bookmark mark='b'/>每秒大约200次写，高峰时600次：一个主数据库，再加上用于读的副本。每次写对应10次读：缓存值得占一席之地。<bookmark mark='c'/>200太字节装不进一台机器：把记录分片，把文本放进大对象存储。<bookmark mark='d'/>每秒十几兆字节只是一条千兆链路的十分之一：不是问题所在。"
+  },
+  "c6b392a3b361": {
+   "scene": "Method",
+   "en": "Then the data model. <bookmark mark='a'/> A paste is a record: an identifier, an owner, when it was made and when it expires, its size, and where its text is kept. It is always read by its identifier, so a key-value store will do. <bookmark mark='b'/> Then the interface. Creating a paste carries an idempotency key, Part 43's device, so that a retried request does not make two. <bookmark mark='c'/> Reading an expired paste says gone, not missing. <bookmark mark='d'/> And listing a user's pastes returns a cursor rather than a page number, so the list stays correct while it changes.",
+   "zh": "然后是数据模型。<bookmark mark='a'/>一个粘贴是一条记录：一个标识符、一个所有者、创建时间和过期时间、它的大小，以及它的文本存放的位置。它总是按标识符读取，所以一个键值存储就够了。<bookmark mark='b'/>然后是接口。创建粘贴时带上一个幂等键，这是第43部分的手段，这样重试的请求就不会创建出两个。<bookmark mark='c'/>读取一个已过期的粘贴，回答的是“已失效”，而不是“找不到”。<bookmark mark='d'/>而列出一个用户的粘贴时，返回一个游标而不是页码，这样列表在变化时也保持正确。"
+  },
+  "e065b57a6de8": {
+   "scene": "Method",
+   "en": "Only now, the high-level design. <bookmark mark='a'/> Clients reach a load balancer, which spreads requests over stateless application servers. They read through a cache, keep the records in a sharded key-value store, and put the texts in a blob store. <bookmark mark='b'/> Every box hides questions, and deep dives take the riskiest first. Which server takes each request? How are identifiers made without a central counter? What happens when a popular entry expires and a thousand requests miss at once? Which key spreads the shards? The rest of this part answers each in turn.",
+   "zh": "直到现在，才是高层设计。<bookmark mark='a'/>客户端到达一个负载均衡器，它把请求分散到无状态的应用服务器上。这些服务器通过缓存来读，把记录保存在一个分片的键值存储里，把文本放进大对象存储。<bookmark mark='b'/>每个方框都藏着问题，深入剖析先处理风险最大的。每个请求由哪台服务器接？没有中央计数器，标识符怎么生成？一个热门条目过期、1000个请求同时未命中时，会发生什么？用哪个键来分散分片？这一部分剩下的内容会依次回答每个问题。"
+  },
+  "3fea157ab1cd": {
+   "scene": "Method",
+   "en": "No design is free, and a good one says what it gives up. <bookmark mark='a'/> The cache makes reads fast, and a paste can be stale for as long as its entry lives. <bookmark mark='b'/> Sharding takes the data past one machine, and gives up cheap queries across shards. The blob store keeps bytes cheaply and durably, and every create now writes two systems that must agree. <bookmark mark='c'/> All of it goes into a design document: context, goals and non-goals, the design, the alternatives and why they lost, the trade-offs, and open questions. Reviewers argue with the document, and Part 49 writes eight.",
+   "zh": "没有哪个设计是免费的，好的设计会说明它放弃了什么。<bookmark mark='a'/>缓存让读变快，而一个粘贴在它的缓存条目存活期间都可能是过时的。<bookmark mark='b'/>分片让数据超越一台机器，代价是放弃廉价的跨分片查询。大对象存储廉价而持久地保存字节，而现在每次创建都要写两个必须保持一致的系统。<bookmark mark='c'/>所有这些都写进一份设计文档：背景、目标和非目标、设计本身、备选方案以及它们落选的原因、权衡，以及悬而未决的问题。评审者针对文档展开争论，第49部分会写出8份这样的文档。"
+  },
+  "516c4a038f5c": {
+   "scene": "Balancing",
+   "en": "Chapter two. Load balancing.",
+   "zh": "第二章：负载均衡。"
+  },
+  "6c4ebe672e61": {
+   "scene": "Balancing",
+   "en": "A load balancer stands in front of many servers and decides which one gets each piece of work. It can decide at two levels. <bookmark mark='a'/> A layer-four balancer reads only addresses and ports, and forwards whole TCP connections; it never sees the request inside. Google's Maglev and Linux's IPVS work this way, and they are cheap. <bookmark mark='b'/> A layer-seven balancer, like NGINX, Envoy or HAProxy, ends the connection, decrypts it and reads each HTTP request, so it can route by path, retry a failed request on another server, and balance request by request rather than connection by connection. <bookmark mark='c'/> That control costs work on every request.",
+   "zh": "负载均衡器站在许多服务器前面，决定每份工作交给哪一台。它可以在两个层次上做决定。<bookmark mark='a'/>四层均衡器只读取地址和端口，转发整条 TCP 连接；它从来看不到里面的请求。Google 的 Maglev 和 Linux 的 IPVS 就是这样工作的，它们很廉价。<bookmark mark='b'/>七层均衡器，比如 NGINX、Envoy 或 HAProxy，会终结连接、解密它，并读取每个 HTTP 请求，所以它能按路径路由，把失败的请求放到另一台服务器上重试，并且逐个请求而不是逐条连接地均衡。<bookmark mark='c'/>这种控制要在每个请求上付出工作。"
+  },
+  "0fb9e8bfa785": {
+   "scene": "Balancing",
+   "en": "<bookmark mark='a'/> To compare policies we simulated 50 servers at 90 percent load. Choosing at random gives each server its own random queue, Part 31's single-server queue, with a mean of ten service times and a tail near fifty. <bookmark mark='b'/> Round robin spaces each server's arrivals evenly, and roughly halves both. <bookmark mark='c'/> The power of two choices, from Part 20: pick two servers at random and join the shorter queue. The mean falls below three, and the tail to 9. <bookmark mark='d'/> Asking every server, least connections in its ideal form, does better still, but needs fresh counts from every queue; with many balancers and stale counts, all pile onto the same idle-looking server. Two choices needs two looks, and avoids the herd.",
+   "zh": "<bookmark mark='a'/>为了比较各种策略，我们模拟了50台服务器，负载为百分之90。随机选择让每台服务器各有一个随机的队列，也就是第31部分的单服务器队列，平均为10个服务时间，尾部接近50个。<bookmark mark='b'/>轮询让每台服务器的到达均匀地间隔开，大约把两者都减半。<bookmark mark='c'/>两个选择的力量，来自第20部分：随机挑两台服务器，加入较短的那个队列。平均值降到3以下，尾部降到9。<bookmark mark='d'/>询问每一台服务器，也就是理想形式的最少连接，效果还要更好，但需要每个队列的最新计数；当均衡器很多而计数过时时，所有请求都会涌向同一台看起来空闲的服务器。两个选择只需要看两眼，而且避免了一拥而上。"
+  },
+  "a6316652570e": {
+   "scene": "Balancing",
+   "en": "Sometimes the same key must reach the same server: a user's session, or a shard of a cache. <bookmark mark='a'/> Hashing the key modulo the number of servers does that, until a server leaves; then most keys move. <bookmark mark='b'/> Part 39's consistent hashing puts servers and keys on a ring. A key belongs to the next server clockwise, and each server sits at many points, virtual nodes, to even out the arcs. <bookmark mark='c'/> Remove a server, and only its own keys move, each to its clockwise neighbour. Everything else stays where it was.",
+   "zh": "有时同一个键必须到达同一台服务器：一个用户的会话，或者缓存的一个分片。<bookmark mark='a'/>把键的哈希对服务器数目取模就能做到，直到有一台服务器离开；那时大部分键都会移动。<bookmark mark='b'/>第39部分的一致性哈希把服务器和键都放在一个环上。一个键属于顺时针方向的下一台服务器，而每台服务器占据许多个点，即虚拟节点，以便把各段弧拉平。<bookmark mark='c'/>移除一台服务器，只有它自己的键会移动，每个都移到它顺时针方向的邻居。其余一切都留在原处。"
+  },
+  "9676b2f300ba": {
+   "scene": "Balancing",
+   "en": "Google's Maglev balancer, described by Eisenbud and colleagues in 2016, replaces the ring with a lookup table. <bookmark mark='a'/> Each backend derives, from two hashes of its name, its own order of preference over the table's slots. <bookmark mark='b'/> The backends take turns, each claiming its most preferred slot still free, until the table is full. A packet's hash picks a slot, and the slot names the backend. <bookmark mark='c'/> With twenty backends and sixty-five thousand five hundred and thirty-seven slots, every backend owns three thousand two hundred and seventy-six slots, or one more. <bookmark mark='d'/> Then we removed one. Its five percent of the keys must move; Maglev also moved a third of a percent of the others, which the ring did not. In return, its busiest backend carried three percent more than the mean, against the ring's thirteen.",
+   "zh": "Google 的 Maglev 均衡器，由 Eisenbud 和同事在2016年描述，用一张查找表取代了环。<bookmark mark='a'/>每个后端从它名字的两个哈希值，推导出它自己对表中各个槽位的偏好顺序。<bookmark mark='b'/>各后端轮流行动，每个都认领它最偏好的、仍然空闲的槽位，直到表被填满。一个数据包的哈希选出一个槽位，槽位指明后端。<bookmark mark='c'/>有20个后端和65537个槽位时，每个后端拥有3276个槽位，或者多一个。<bookmark mark='d'/>然后我们移除了一个。它那百分之5的键必须移动；Maglev 还移动了其他键中的三分之一个百分点，而环没有。作为回报，它最忙的后端只比平均值多承担百分之3，而环是百分之13。"
+  },
+  "da2d3a52d997": {
+   "scene": "Balancing",
+   "en": "A balancer must also know which servers are healthy. <bookmark mark='a'/> Active health checks probe each server every few seconds. After several failures in a row the server is taken out; after several successes it comes back. <bookmark mark='b'/> Passive checks watch the real traffic instead. Envoy calls this outlier ejection: a server that returns a run of errors is ejected for a while, and for longer each time it happens again. <bookmark mark='c'/> Two cautions. Cap the share of servers that can be ejected, so that a broken check cannot empty the fleet. <bookmark mark='d'/> And remember Part 39: a slow server is often worse than a dead one, so watch latency, not just errors.",
+   "zh": "均衡器还必须知道哪些服务器是健康的。<bookmark mark='a'/>主动健康检查每隔几秒探测一次每台服务器。连续失败几次之后，服务器被摘除；连续成功几次之后，它就回来。<bookmark mark='b'/>被动检查则观察真实流量。Envoy 把这叫作异常点驱逐（outlier ejection）：一台连续返回错误的服务器会被驱逐一段时间，而每次再犯，驱逐的时间就更长。<bookmark mark='c'/>两点注意。给可被驱逐的服务器比例设一个上限，这样一个出了故障的检查就不会把整个机群清空。<bookmark mark='d'/>还要记住第39部分：一台慢的服务器往往比一台死掉的更糟，所以要监视延迟，而不只是错误。"
+  },
+  "55de25c88bc0": {
+   "scene": "Caching",
+   "en": "Chapter three. Caching: where, and what to keep.",
+   "zh": "第三章：缓存——放在哪里，保留什么。"
+  },
+  "d7c39e72d161": {
+   "scene": "Caching",
+   "en": "A cache keeps a copy of an answer closer to whoever asks, and there is room for one at every hop. <bookmark mark='a'/> The browser keeps responses, as Part 42's Cache-Control headers allow; a content delivery network keeps them at the edge, near the user. <bookmark mark='b'/> A reverse proxy keeps whole responses shared by many users. The application keeps objects and query results, in its own memory or in Redis or Memcached. <bookmark mark='c'/> And the database keeps pages of its tables and indexes in a buffer pool. <bookmark mark='d'/> Each hit ends the journey early; each layer is one more copy that can be stale.",
+   "zh": "缓存把一份答案的副本放在离提问者更近的地方，而每一跳都有放缓存的位置。<bookmark mark='a'/>浏览器保存响应，只要第42部分的 Cache-Control 头允许；内容分发网络把它们保存在边缘，靠近用户。<bookmark mark='b'/>反向代理保存由许多用户共享的完整响应。应用程序保存对象和查询结果，放在它自己的内存里，或者放在 Redis 或 Memcached 里。<bookmark mark='c'/>而数据库把它的表和索引的页保存在缓冲池里。<bookmark mark='d'/>每一次命中都让这段旅程提前结束；每一层都是又一份可能过时的副本。"
+  },
+  "7d819bf44966": {
+   "scene": "Caching",
+   "en": "There are four common ways to connect a cache to the data behind it. <bookmark mark='a'/> In cache-aside, the commonest, the application asks the cache, and on a miss reads the database and fills the cache itself; on a write it updates the database and deletes the cached copy. <bookmark mark='b'/> In read-through, the cache does the loading itself. <bookmark mark='c'/> Write-through sends each write through the cache to the database before acknowledging it: never stale, but every write is slower. <bookmark mark='d'/> Write-back acknowledges at once and writes the database later, as Part 9's processor caches do: fast, but what it has not yet written is lost if it fails.",
+   "zh": "把缓存和它背后的数据连接起来，常见的方式有四种。<bookmark mark='a'/>旁路缓存（cache-aside）最常见：应用程序先问缓存，未命中时就读数据库，并亲自填充缓存；写的时候，它更新数据库，并删除缓存中的副本。<bookmark mark='b'/>在读穿透（read-through）中，由缓存自己负责加载。<bookmark mark='c'/>写穿透（write-through）把每次写经过缓存送到数据库，然后才确认：永远不会过时，但每次写都更慢。<bookmark mark='d'/>写回（write-back）立即确认，稍后再写数据库，就像第9部分的处理器缓存那样：很快，但它还没写出去的东西，一旦它出故障就丢了。"
+  },
+  "421adfb6a24b": {
+   "scene": "Caching",
+   "en": "When the cache is full, something must go. <bookmark mark='a'/> LRU evicts the entry used least recently. It adapts quickly, but one pass over cold data flushes it. <bookmark mark='b'/> LFU evicts the entry used least often: good for steady popularity, slow to forget yesterday's favourites. <bookmark mark='c'/> W-TinyLFU, by Einziger, Friedman and Manes, combines them. New entries land in a small LRU window; one leaving it enters the main cache only if it has been used more than the main cache's victim, as counted by Part 20's Count-Min sketch, halved now and then so that it forgets. <bookmark mark='d'/> When we ran a one-off scan of cold keys, LRU's hot entries came straight back: nearly all the damage was the scan's own misses.",
+   "zh": "缓存满了，就必须有东西被赶出去。<bookmark mark='a'/>LRU 淘汰最久未被使用的条目。它适应得很快，但对冷数据扫一遍就会把它冲刷干净。<bookmark mark='b'/>LFU 淘汰使用次数最少的条目：适合稳定的热度，却迟迟忘不掉昨天的宠儿。<bookmark mark='c'/>W-TinyLFU，由 Einziger、Friedman 和 Manes 提出，把两者结合起来。新条目先落进一个小的 LRU 窗口；离开窗口的条目，只有在它被使用的次数多于主缓存的淘汰对象时，才能进入主缓存，次数由第20部分的 Count-Min 草图来计，并且时不时减半，好让它遗忘。<bookmark mark='d'/>当我们对冷键做一次性扫描时，LRU 的热门条目马上就回来了：几乎全部损失都是扫描自己的未命中。"
+  },
+  "eab62e58e87b": {
+   "scene": "Caching",
+   "en": "How large must a cache be? In 2002 Che, Tung and Wang gave LRU a formula. <bookmark mark='a'/> An LRU cache of C entries holds exactly the items of the most recent stretch of requests in which C different items appear. Call its length T, and assume that it hardly varies: that is the approximation. <bookmark mark='b'/> If item i is a fraction p i of requests, it was missed by all T with probability one minus p i to the T, about e to the minus p i T. <bookmark mark='c'/> The cache holds C items, so the chances of being cached add up to C, which fixes T. <bookmark mark='d'/> A request hits when its item is cached, so the hit rate is the sum of p i times that chance.",
+   "zh": "缓存必须有多大？2002年，Che、Tung 和 Wang 给 LRU 推导出一个公式。<bookmark mark='a'/>一个有 C 个条目的 LRU 缓存，恰好保存最近那一段请求里的所有项，这一段请求里刚好出现了 C 个不同的项。把这一段的长度叫作 T，并假设它几乎不变：这就是那个近似。<bookmark mark='b'/>如果项 i 占请求的比例是 p i，那么它在这 T 个请求中一次都没出现的概率是1减 p i 的 T 次方，大约是 e 的负 p i T 次方。<bookmark mark='c'/>缓存保存 C 个项，所以各项被缓存的概率加起来等于 C，这就确定了 T。<bookmark mark='d'/>一个请求命中，当且仅当它的项被缓存了，所以命中率就是 p i 乘以那个概率的总和。"
+  },
+  "9ad53d1a4fe8": {
+   "scene": "Caching",
+   "en": "Now the measurement: a catalogue of 100,000 items with Zipf popularity and 400,000 requests. <bookmark mark='a'/> LRU's hit rate climbs steadily as the cache grows tenfold, and tenfold again: 16 percent at 100 entries, 34 at a thousand, 60 at ten thousand. <bookmark mark='b'/> Che's formula lies on top of it, within half a percentage point at every size. <bookmark mark='c'/> Frequency does better: TinyLFU and LFU reach 43 and 44 percent at a thousand entries, close to the best fixed set, the thousand most popular items, at 47. <bookmark mark='d'/> So one percent of the catalogue serves over a third of the requests, and the formula gives the size before you buy the memory.",
+   "zh": "现在来测量：一个有100000个项的目录，热度服从齐普夫分布，共400000个请求。<bookmark mark='a'/>随着缓存增大到10倍、再增大到10倍，LRU 的命中率稳步上升：100个条目时是百分之16，1000个时是百分之34，1万个时是百分之60。<bookmark mark='b'/>Che 的公式就压在它上面，在每种大小下相差都不到半个百分点。<bookmark mark='c'/>按频率做得更好：1000个条目时，TinyLFU 和 LFU 分别达到百分之43和百分之44，接近最好的固定集合，即最热门的1000个项，后者是百分之47。<bookmark mark='d'/>所以目录的百分之1就服务了超过三分之一的请求，而这个公式让你在购买内存之前就知道缓存该多大。"
+  },
+  "af9ae775780a": {
+   "scene": "Invalidation",
+   "en": "Chapter four. Caching: staleness and stampedes.",
+   "zh": "第四章：缓存——过时与击穿。"
+  },
+  "dd4facef76a6": {
+   "scene": "Invalidation",
+   "en": "A line usually credited to Phil Karlton says there are only two hard things in computer science: cache invalidation, and naming things. <bookmark mark='a'/> The usual rule on a write is: update the database, then delete the cached copy, rather than updating it, because two updates can reach the cache in the wrong order. <bookmark mark='b'/> Even deletion has a race. A reader misses, and reads the old value from the database. <bookmark mark='c'/> Before it stores that value, a writer commits a new one and deletes the key. <bookmark mark='d'/> Then the reader's set lands. The cache holds the old value, the database the new one, and nothing is left to remove it, <bookmark mark='e'/> except its time to live.",
+   "zh": "一句通常被归于 Phil Karlton 的话说，计算机科学里只有两件难事：缓存失效，和给事物命名。<bookmark mark='a'/>写的时候通常的规则是：先更新数据库，再删除缓存中的副本，而不是更新它，因为两次更新可能以错误的顺序到达缓存。<bookmark mark='b'/>即使是删除也有竞态。一个读者未命中，从数据库读到了旧值。<bookmark mark='c'/>在它存入这个值之前，一个写者提交了一个新值，并删除了这个键。<bookmark mark='d'/>然后读者的那次写入才落地。缓存里是旧值，数据库里是新值，再也没有什么能把它移除，<bookmark mark='e'/>除了它的存活时间（TTL）。"
+  },
+  "af5f6a0123b8": {
+   "scene": "Invalidation",
+   "en": "A time to live puts a bound on how wrong a cache can be. <bookmark mark='a'/> The database changes at the moment of the write. The cached copy carries on serving the old value until it expires. <bookmark mark='b'/> So with no invalidation at all, a value is stale for at most the TTL, and with invalidation, the TTL still catches whatever the races let through. <bookmark mark='c'/> One trap. Keys filled together, after a restart or a deploy, also expire together, and all miss at once. Adding a small random jitter to each TTL spreads the expiries out.",
+   "zh": "存活时间给缓存可能错得多离谱设了一个界。<bookmark mark='a'/>数据库在写的那一刻就变了。缓存中的副本继续提供旧值，直到它过期。<bookmark mark='b'/>所以完全不做失效时，一个值至多过时一个 TTL；而做了失效，TTL 仍然能兜住竞态漏过去的一切。<bookmark mark='c'/>有一个陷阱。在一次重启或一次部署之后一起填充的键，也会一起过期，并同时未命中。给每个 TTL 加上一点随机抖动，就能把过期时间分散开。"
+  },
+  "dc2354fedc0a": {
+   "scene": "Invalidation",
+   "en": "Expiry has a second danger, for a key that is hot. <bookmark mark='a'/> In our experiment, one key is requested two hundred times a second, lives for sixty seconds, and takes two seconds to rebuild. <bookmark mark='b'/> When it expires, every request in those two seconds misses, and each one rebuilds the same value. <bookmark mark='c'/> Over five minutes, four expiries caused one thousand six hundred and three rebuilds, at worst two hundred and twenty-three in a single second, all on the database. <bookmark mark='d'/> This is the thundering herd, or cache stampede: the cache's own expiry aims the full load at the store it was there to protect.",
+   "zh": "过期还有第二个危险，针对的是热键。<bookmark mark='a'/>在我们的实验中，一个键每秒被请求200次，存活60秒，重建需要2秒。<bookmark mark='b'/>它过期时，这2秒内的每个请求都未命中，而且每一个都去重建同一个值。<bookmark mark='c'/>在5分钟里，4次过期引起了1603次重建，最多的一秒有223次，全部压在数据库上。<bookmark mark='d'/>这就是惊群效应，也叫缓存击穿：缓存自己的过期，把全部负载对准了它本来要保护的存储。"
+  },
+  "687ca9640283": {
+   "scene": "Invalidation",
+   "en": "The first remedy is to rebuild once. <bookmark mark='a'/> Request coalescing, sometimes called single flight, lets the first miss start the rebuild and makes every other request for that key wait for its result: one query instead of hundreds. <bookmark mark='b'/> Facebook's memcache, described by Rajesh Nishtala and colleagues in 2013, does this with leases. On a miss, the cache hands out a token, at most once every ten seconds for each key, and other clients wait briefly and try again. <bookmark mark='c'/> Only the holder of the token may set the value, and a delete in the meantime voids it, which closes the race we began with. <bookmark mark='d'/> They reported that leases cut the peak rate of database queries from seventeen thousand a second to thirteen hundred.",
+   "zh": "第一种补救办法是只重建一次。<bookmark mark='a'/>请求合并，有时叫 single flight，让第一个未命中的请求开始重建，并让对这个键的其他所有请求等待它的结果：一次查询，而不是几百次。<bookmark mark='b'/>Facebook 的 memcache，由 Rajesh Nishtala 和同事在2013年描述，用租约来做这件事。未命中时，缓存发出一个令牌，每个键至多每10秒发一次，其他客户端稍等片刻再试。<bookmark mark='c'/>只有令牌的持有者才能设置这个值，而在此期间的一次删除会让令牌作废，这就堵住了我们一开始遇到的那个竞态。<bookmark mark='d'/>他们报告说，租约把数据库查询的峰值速率从每秒17000次降到了1300次。"
+  },
+  "8c5cf127b608": {
+   "scene": "Invalidation",
+   "en": "The second remedy avoids the miss altogether: refresh a little before expiry, at random. <bookmark mark='a'/> In the rule of Andrea Vattani, Flavio Chierichetti and Keegan Lowenstein, each request draws a uniform random number, and recomputes early if the time now, minus the rebuild time times beta times the log of that number, has passed the expiry. <bookmark mark='b'/> Minus the log of a uniform number is exponential, so a request r seconds before expiry triggers with a probability that rises steeply as expiry nears. <bookmark mark='c'/> With two hundred requests a second, the expected number of triggers reaches one about twelve seconds before expiry. <bookmark mark='d'/> One request refreshes while everyone else keeps hitting the old value. In the same experiment: six rebuilds instead of sixteen hundred, no misses, and never more than one in a second.",
+   "zh": "第二种补救办法干脆避免未命中：在过期前一点点，随机地刷新。<bookmark mark='a'/>按照 Andrea Vattani、Flavio Chierichetti 和 Keegan Lowenstein 的规则，每个请求抽一个均匀随机数，如果当前时间减去重建时间乘以 β 再乘以这个数的对数，已经超过了过期时间，就提前重新计算。<bookmark mark='b'/>均匀随机数的对数取负，服从指数分布，所以一个在过期前 r 秒到来的请求，触发的概率随着过期临近而急剧上升。<bookmark mark='c'/>每秒200个请求时，触发次数的期望值在过期前大约12秒达到1。<bookmark mark='d'/>一个请求去刷新，其他所有请求继续命中旧值。在同样的实验中：6次重建，而不是1600次，没有未命中，每秒从不超过1次。"
+  },
+  "d9ba883785ff": {
+   "scene": "Limits",
+   "en": "Chapter five. Rate limiting.",
+   "zh": "第五章：限流。"
+  },
+  "89be87bf76be": {
+   "scene": "Limits",
+   "en": "A rate limiter protects a service from callers who send too much. <bookmark mark='a'/> The commonest is the token bucket. Tokens drip into a bucket at a steady rate, rho, up to a depth, sigma. Each request takes a token, or, if the bucket is empty, is refused, with Part 43's status code four hundred and twenty-nine. <bookmark mark='b'/> A burst passes at once, up to sigma requests, here twenty. <bookmark mark='c'/> Then the bucket is dry, and only the rate gets through, a hundred a minute. <bookmark mark='d'/> On our bursty test traffic, one thousand and eighty-eight requests in ten minutes, it admitted seven hundred and sixty-six.",
+   "zh": "限流器保护一项服务，免受发送过多请求的调用者影响。<bookmark mark='a'/>最常见的是令牌桶。令牌以稳定的速率 ρ 滴进一个桶里，最多装到深度 σ。每个请求取走一个令牌；如果桶是空的，请求就被拒绝，返回第43部分的状态码429。<bookmark mark='b'/>一阵突发会立刻通过，最多 σ 个请求，这里是20个。<bookmark mark='c'/>然后桶干了，只有速率允许的部分能通过，每分钟100个。<bookmark mark='d'/>在我们的突发测试流量上，10分钟内1088个请求，它放行了766个。"
+  },
+  "dcc1e18a0fa4": {
+   "scene": "Limits",
+   "en": "The token bucket is also a guarantee. <bookmark mark='a'/> Take any interval of length s. At its start the bucket holds at most sigma tokens; during it, at most rho times s more arrive; and every admitted request spends one. <bookmark mark='b'/> So the number admitted in any interval is at most sigma plus rho s, a straight line, which the greediest allowed sender follows. <bookmark mark='c'/> We checked every interval of up to ten seconds in our trace: none crosses the line. <bookmark mark='d'/> Rene Cruz built network calculus on such envelopes in 1991. Envelopes add, so a service fed by limited clients has a worst case it can be sized for. A leaky bucket instead queues the excess and drains it steadily: it smooths, where the token bucket refuses.",
+   "zh": "令牌桶也是一种保证。<bookmark mark='a'/>取任意一段长度为 s 的区间。区间开始时，桶里至多有 σ 个令牌；区间之中，至多再到达 ρ 乘以 s 个；而每个被放行的请求花掉一个。<bookmark mark='b'/>所以任意区间内放行的数目至多是 σ 加 ρ s，一条直线，最贪婪的合规发送者就沿着它走。<bookmark mark='c'/>我们检查了自己轨迹中长度不超过10秒的每一个区间：没有一个越过这条线。<bookmark mark='d'/>1991年，Rene Cruz 在这样的包络之上建立了网络演算。包络可以相加，所以一个由受限客户端供给的服务，有一个可以据此确定规模的最坏情况。漏桶则把超出的部分排进队列，并稳定地排出：它做的是平滑，而令牌桶做的是拒绝。"
+  },
+  "79118fb2a03f": {
+   "scene": "Limits",
+   "en": "A token bucket stores two numbers per caller. <bookmark mark='a'/> The generic cell rate algorithm, from ATM networks, stores one: the theoretical arrival time of the next request. <bookmark mark='b'/> Each admitted request pushes it one spacing, T, further ahead. Once it runs more than a tolerance tau ahead of the clock, requests are refused until the clock catches up. <bookmark mark='c'/> With tau equal to sigma minus one spacings, it admits exactly what the token bucket admits, with a single timestamp per key in a shared store.",
+   "zh": "令牌桶为每个调用者存两个数。<bookmark mark='a'/>通用信元速率算法（GCRA）来自 ATM 网络，只存一个：下一个请求的理论到达时间。<bookmark mark='b'/>每个被放行的请求把它往前推一个间隔 T。一旦它超前时钟超过容差 τ，请求就被拒绝，直到时钟追上来。<bookmark mark='c'/>当 τ 等于 σ 减1个间隔时，它放行的恰好就是令牌桶放行的，而每个键在共享存储里只需一个时间戳。"
+  },
+  "51ad92eef097": {
+   "scene": "Limits",
+   "en": "Many limiters count instead. <bookmark mark='a'/> The simplest keeps one counter per minute and refuses requests once it reaches the limit. But a burst at the end of one window and another at the start of the next both pass: twice the limit in a single minute. <bookmark mark='b'/> On our trace, with a limit of one hundred, the worst minute admitted one hundred and thirty-eight. <bookmark mark='c'/> A sliding log, keeping every timestamp, is exact but costly. The sliding-window counter keeps two numbers: it weights the previous window's count by how much of it the last minute still covers. <bookmark mark='d'/> That assumes the previous window was evenly spread, and bursts are not: against the exact count, our trace's mean error is fifteen percent, and the worst above a hundred percent. On real traffic it does far better: in 2017 Cloudflare reported only three wrong decisions in a hundred thousand requests.",
+   "zh": "许多限流器改为计数。<bookmark mark='a'/>最简单的为每分钟保留一个计数器，一旦达到上限就拒绝请求。但一个窗口末尾的一阵突发，加上下一个窗口开头的另一阵，都会通过：一分钟之内达到上限的两倍。<bookmark mark='b'/>在我们的轨迹上，上限为100时，最糟的一分钟放行了138个。<bookmark mark='c'/>滑动日志保存每一个时间戳，精确但昂贵。滑动窗口计数器只存两个数：它按最近这一分钟仍覆盖了上一个窗口的多少，来给上一个窗口的计数加权。<bookmark mark='d'/>这假设上一个窗口里的请求分布均匀，而突发并不均匀：与精确计数相比，我们轨迹上的平均误差是百分之15，最大的超过百分之100。在真实流量上，它的表现要好得多：2017年，Cloudflare 报告在10万个请求中只有3个错误的决定。"
+  },
+  "7f68ca443be1": {
+   "scene": "Limits",
+   "en": "A fleet needs one limit per caller across all its servers. <bookmark mark='a'/> The exact answer is a shared counter, an atomic increment in a store such as Redis on every request. It costs a round trip each time. <bookmark mark='b'/> The cheapest splits the limit: each of N servers enforces its share, with no coordination, but unfairly when one caller's traffic is spread unevenly. <bookmark mark='c'/> Between them, count locally and share the counts every so often, accepting an overshoot that grows with the interval. For millions of keys, Part 20's Count-Min sketch only overestimates, so it errs towards refusing. <bookmark mark='d'/> Whichever you choose, refuse politely, with a four twenty-nine and a hint of when to retry.",
+   "zh": "一个机群需要对每个调用者在所有服务器上施加同一个限额。<bookmark mark='a'/>精确的答案是一个共享计数器，每个请求都在 Redis 之类的存储里做一次原子递增。每次都要花一次往返。<bookmark mark='b'/>最便宜的办法是拆分限额：N 台服务器中的每一台执行它那一份，不做任何协调，但当一个调用者的流量分布不均时就不公平。<bookmark mark='c'/>介于两者之间的，是在本地计数，并每隔一段时间共享计数，接受一个随间隔增大的超额。对数以百万计的键，第20部分的 Count-Min 草图只会高估，所以它的错误偏向拒绝。<bookmark mark='d'/>无论你选哪种，都要礼貌地拒绝：返回429，并提示何时重试。"
+  },
+  "c14e905b68df": {
+   "scene": "Async",
+   "en": "Chapter six. Queues and asynchrony.",
+   "zh": "第六章：队列与异步。"
+  },
+  "a3216d374658": {
+   "scene": "Async",
+   "en": "Some work need not happen while the caller waits: resizing an image, or sending an email. <bookmark mark='a'/> The web tier records the request, puts a job on a queue, and answers at once with Part 43's two hundred and two, accepted. Workers take jobs at their own pace. <bookmark mark='b'/> A burst now fills the queue, which drains. The queue has turned a problem of rate into a problem of delay. <bookmark mark='c'/> But only if, on average, the workers keep up: a queue absorbs bursts, never a shortfall. <bookmark mark='d'/> In return, the caller never waits for slow work, a failed job can be retried from the queue, and the producers and consumers can be scaled separately.",
+   "zh": "有些工作不必在调用者等待时完成：缩放一张图片，或者发送一封电子邮件。<bookmark mark='a'/>Web 层记下请求，把一个作业放进队列，并立即用第43部分的202，即“已接受”，作答。工作进程按自己的节奏取作业。<bookmark mark='b'/>现在一阵突发会填满队列，然后队列慢慢排空。队列把一个速率问题变成了一个延迟问题。<bookmark mark='c'/>但前提是，平均而言，工作进程跟得上：队列吸收的是突发，绝不是缺口。<bookmark mark='d'/>作为回报，调用者从不等待缓慢的工作，失败的作业可以从队列里重试，而生产者和消费者可以分别扩展。"
+  },
+  "8b5365db5896": {
+   "scene": "Async",
+   "en": "How long is the delay? Part 31 answered that. <bookmark mark='a'/> With random arrivals and random job sizes, the mean time in the system is one over one minus the utilization, in units of the service time: two at half load, ten at ninety percent, about twenty-one at ninety-five. <bookmark mark='b'/> The slowest one percent are worse: forty-eight service times at ninety percent. <bookmark mark='c'/> And variability costs as much as load. At eighty percent, jobs of identical size wait three service times on average; exponential sizes, five; and sizes that vary ten times as much, twenty-two. <bookmark mark='d'/> So a design leaves headroom, and watches how long jobs wait in the queue, not merely how busy the workers are.",
+   "zh": "延迟有多长？第31部分回答过。<bookmark mark='a'/>到达随机、作业大小也随机时，在系统中的平均时间是1除以1减利用率，以服务时间为单位：半负载时是2，百分之90时是10，百分之95时大约是21。<bookmark mark='b'/>最慢的百分之1更糟：百分之90时是48个服务时间。<bookmark mark='c'/>而波动的代价和负载一样大。在百分之80时，大小完全相同的作业平均等待3个服务时间；大小服从指数分布的，等5个；大小的波动再大10倍的，等22个。<bookmark mark='d'/>所以设计要留出余量，并且监视作业在队列中等了多久，而不只是工作进程有多忙。"
+  },
+  "b563d9a08c42": {
+   "scene": "Async",
+   "en": "Not all jobs are equally urgent. <bookmark mark='a'/> Keep separate queues: an interactive one, for work someone is waiting on, and a batch one, so that a flood of batch work cannot delay a waiting user. <bookmark mark='b'/> Strict priority, though, can starve the low queue for ever. So workers serve the queues by weight, four from one for each from the other, say, or a job's priority rises the longer it waits. <bookmark mark='c'/> The order matters as much as the speed. Part 31 simulated heavy-tailed jobs at eighty percent load: first come, first served took twenty-six service times on average; serving the shortest remaining job first, two.",
+   "zh": "并非所有作业都同样紧急。<bookmark mark='a'/>保留分开的队列：一个交互式队列，放有人在等的工作；一个批处理队列，这样大量的批处理工作就无法耽误一个正在等待的用户。<bookmark mark='b'/>不过，严格的优先级可能让低优先级队列永远饿着。所以工作进程按权重服务各个队列，比如从一个队列取4个，再从另一个取1个；或者让作业等得越久，优先级就越高。<bookmark mark='c'/>顺序和速度同样重要。第31部分在百分之80的负载下模拟了重尾的作业：先来先服务平均花26个服务时间；先服务剩余时间最短的作业，只花2个。"
+  },
+  "2f08aced11fc": {
+   "scene": "Async",
+   "en": "Queues also carry work for later. <bookmark mark='a'/> A delayed job, a reminder tomorrow or a digest at six, is stored by its due time, in a sorted set or a timing wheel, and a poller moves whatever has come due onto the ready queue. <bookmark mark='b'/> Retries are delayed jobs too. After each failure a job waits twice as long as before, one second, two, four, eight, and the actual delay is drawn at random below that, so that jobs which failed together do not retry together. <bookmark mark='c'/> After the last attempt, the job goes to a dead-letter queue for a person to look at. And because a job may run twice, every job must be idempotent, as Part 43 insisted.",
+   "zh": "队列也承载稍后要做的工作。<bookmark mark='a'/>一个延迟作业，比如明天的一条提醒或者6点钟的一份摘要，按它的到期时间存放在一个有序集合或一个时间轮里，再由一个轮询器把已经到期的作业移到就绪队列。<bookmark mark='b'/>重试也是延迟作业。每次失败之后，作业等待的时间是上一次的两倍，1秒、2秒、4秒、8秒，而实际的延迟是在这个值以下随机抽取的，这样一起失败的作业就不会一起重试。<bookmark mark='c'/>最后一次尝试之后，作业进入死信队列，由人来查看。而且因为一个作业可能运行两次，每个作业都必须是幂等的，正如第43部分所坚持的。"
+  },
+  "0f4fa2fbe56c": {
+   "scene": "Async",
+   "en": "How many workers? Little's law says the number of jobs in service is the arrival rate times the time each one takes. <bookmark mark='a'/> Take the napkin's two hundred and ten writes a second, and suppose each starts a job of half a second. On average, a hundred and five workers are busy. <bookmark mark='b'/> Add headroom, running at seventy percent: a pool of a hundred and fifty. One shared queue feeding many workers can run hotter than many small queues: Erlang's pooling. <bookmark mark='c'/> Scale the pool on the age of the oldest waiting job, not on processor load, and bound the queue so that overload is refused early. <bookmark mark='d'/> Part 49 will size whole systems this way, and Part 50 will decide what waits they may promise.",
+   "zh": "需要多少个工作进程？利特尔法则说，正在服务中的作业数，等于到达率乘以每个作业所需的时间。<bookmark mark='a'/>取餐巾纸上的每秒210次写，并假设每次写启动一个耗时半秒的作业。平均而言，有105个工作进程在忙。<bookmark mark='b'/>再加上余量，按百分之70的利用率运行：一个有150个工作进程的池。一个共享队列供给许多工作进程，比许多个小队列能跑得更满：这是 Erlang 的汇聚效应。<bookmark mark='c'/>按等待最久的那个作业的等待时间来扩展工作池，而不是按处理器负载，并给队列设上限，这样过载就会被尽早拒绝。<bookmark mark='d'/>第49部分会用这种方式确定整个系统的规模，第50部分会决定它们可以承诺什么样的等待。"
+  },
+  "306954af1267": {
+   "scene": "Storage",
+   "en": "Chapter seven. Choosing storage.",
+   "zh": "第七章：选择存储。"
+  },
+  "f6879d707697": {
+   "scene": "Storage",
+   "en": "Every design needs somewhere to keep its data, and databases come in a handful of shapes. <bookmark mark='a'/> Relational databases keep tables of rows and join them when asked, with transactions, and a planner that answers questions nobody anticipated, as Part 35 showed. <bookmark mark='b'/> A key-value store answers one question, the value for this key, very fast, and scales by splitting the keys. A document store keeps a whole nested record together. <bookmark mark='c'/> Wide-column stores, after Google's Bigtable, keep sorted rows of sparse columns, built for heavy writes. Graph databases follow edges, hop after hop; and time-series databases append timestamped points and summarise them over windows.",
+   "zh": "每个设计都需要一个存放数据的地方，而数据库有屈指可数的几种形态。<bookmark mark='a'/>关系数据库保存由行组成的表，在被要求时把它们连接起来，带有事务，还有一个能回答谁都没预料到的问题的查询规划器，正如第35部分所展示的。<bookmark mark='b'/>键值存储回答一个问题，这个键对应的值，非常快，并通过拆分键来扩展。文档数据库把一整条嵌套的记录保存在一起。<bookmark mark='c'/>宽列存储，仿照 Google 的 Bigtable，保存由稀疏列组成的有序行，专为大量写入而建。图数据库沿着边一跳又一跳地走；时序数据库追加带时间戳的点，并在窗口上对它们做汇总。"
+  },
+  "5a29794a837c": {
+   "scene": "Storage",
+   "en": "The shape that fits is the one that matches the questions you will ask, so list the access patterns first. <bookmark mark='a'/> Take one analytical question over a million rows of sixteen columns: add up column three wherever column seven is below a hundred. <bookmark mark='b'/> A row store keeps each row together, so the scan drags all sixteen columns through memory, a hundred and twenty-eight megabytes. <bookmark mark='c'/> A column store keeps each column together and reads only the two it needs, sixteen megabytes. In Part 35's measurement, the column scan took four milliseconds against fourteen. <bookmark mark='d'/> Rows suit fetching and updating whole records; columns suit scanning a few fields of very many.",
+   "zh": "合适的形态，是与你将要提出的问题相匹配的那个，所以先列出访问模式。<bookmark mark='a'/>拿一个分析型问题来说，涉及100万行、16列：凡是第7列小于100的地方，把第3列加起来。<bookmark mark='b'/>行存储把每一行保存在一起，所以这次扫描要把全部16列都拖过内存，共128兆字节。<bookmark mark='c'/>列存储把每一列保存在一起，只读取它需要的那两列，16兆字节。在第35部分的测量中，列扫描用了4毫秒，而行扫描用了14毫秒。<bookmark mark='d'/>行适合取出和更新整条记录；列适合在非常多的记录上扫描少数几个字段。"
+  },
+  "16fae63e12df": {
+   "scene": "Storage",
+   "en": "Under the shape sits an engine, and it matters as much. <bookmark mark='a'/> A B-tree updates pages in place. In Part 34's simulation, with little of the tree cached, each byte the application wrote cost about forty bytes of disk writes, and still eighteen with over half the tree in memory. <bookmark mark='b'/> A log-structured merge tree buffers writes and merges sorted runs: about twelve with levelled compaction, about two with tiering. <bookmark mark='c'/> The price is paid on reads. Tiering leaves nineteen runs to probe for a key that is not there, until a Bloom filter of ten bits per key cuts that to a sixth of one. <bookmark mark='d'/> That is why write-heavy stores such as Cassandra and RocksDB are built on LSM trees.",
+   "zh": "形态之下是一个引擎，它同样重要。<bookmark mark='a'/>B 树原地更新页。在第34部分的模拟中，树被缓存的部分很少时，应用程序写的每个字节要花大约40字节的磁盘写入；即使一半以上的树在内存里，仍然要18字节。<bookmark mark='b'/>日志结构合并树缓冲写入，并合并有序的归并段：分层合并时大约12，分级合并时大约2。<bookmark mark='c'/>代价付在读上。分级合并为一个并不存在的键留下19个要探查的归并段，直到一个每键10位的布隆过滤器把它降到一个的六分之一。<bookmark mark='d'/>这就是为什么 Cassandra 和 RocksDB 这类写密集的存储都建立在日志结构合并树之上。"
+  },
+  "6c23d8a9f7c4": {
+   "scene": "Storage",
+   "en": "A data model also decides where each fact lives. <bookmark mark='a'/> A normalised design stores each fact once: the author's name lives in the users table, and a page showing a paste joins the two. <bookmark mark='b'/> A denormalised design copies the name into every paste, so a read is a single lookup with no join, which key-value and document stores need, since they join poorly. <bookmark mark='c'/> The cost moves to the writes. When the author changes her name, the normalised table updates one row; the copies must all be found and rewritten, and a copy that is missed is wrong. <bookmark mark='d'/> So copy for the reads that dominate, and keep a single source of truth to rebuild the copies from.",
+   "zh": "数据模型还决定每个事实存放在哪里。<bookmark mark='a'/>规范化的设计把每个事实只存一次：作者的名字存在用户表里，显示一个粘贴的页面把两张表连接起来。<bookmark mark='b'/>反规范化的设计把名字复制进每个粘贴，这样一次读就是一次查找，不需要连接；键值存储和文档数据库需要这样，因为它们不擅长连接。<bookmark mark='c'/>代价转移到写上。作者改名时，规范化的表只更新一行；而那些副本必须全部找出来重写，漏掉的副本就是错的。<bookmark mark='d'/>所以为占主导的读而复制，并保留单一的事实来源，用来重建这些副本。"
+  },
+  "60dee728a465": {
+   "scene": "Storage",
+   "en": "Then index for the access patterns, with Part 35's B-trees. <bookmark mark='a'/> With four hundred keys to a node, a billion rows need only four levels, so a lookup is a handful of page reads. <bookmark mark='b'/> Where the rows sit matters too. In Part 35's word table, the range from whale to whales matched one thousand seven hundred and four rows. Through a secondary index they lay on nine hundred and sixty-six different pages; <bookmark mark='c'/> stored in index order, on eighteen. <bookmark mark='d'/> But every index is a bet. Each is one more structure to update on every insert, and more memory to keep warm. Index the questions you will ask, and no others.",
+   "zh": "然后按访问模式建索引，用第35部分的 B 树。<bookmark mark='a'/>每个节点400个键时，10亿行只需要4层，所以一次查找就是寥寥几次页读取。<bookmark mark='b'/>行放在哪里也很重要。在第35部分的词表里，从 whale 到 whales 的范围匹配了1704行。通过二级索引，它们分布在966个不同的页上；<bookmark mark='c'/>按索引顺序存储时，只在18个页上。<bookmark mark='d'/>但每个索引都是一次押注。每个索引都是每次插入时要多更新的一个结构，也是要多保持温热的一份内存。为你会问的问题建索引，别的一概不建。"
+  },
+  "8e4858821a5e": {
+   "scene": "Sharding",
+   "en": "Chapter eight. Sharding.",
+   "zh": "第八章：分片。"
+  },
+  "3d36749427df": {
+   "scene": "Sharding",
+   "en": "Sharding splits a dataset across machines, and the choice that matters most is the shard key. <bookmark mark='a'/> Range partitioning gives each shard a contiguous run of keys, as Bigtable does with its tablets. But if the key grows with time, every new row lands on the last shard, and one machine takes all the writes. <bookmark mark='b'/> Hash partitioning scatters keys by their hash, Part 17's trick, and spreads the writes evenly. <bookmark mark='c'/> The price is order. A range scan touches one shard of a range-partitioned table, but every shard of a hashed one. <bookmark mark='d'/> Many systems compromise: hash a prefix, such as the user, and keep rows sorted within it.",
+   "zh": "分片把一个数据集拆分到多台机器上，而最重要的选择是分片键。<bookmark mark='a'/>范围分区给每个分片一段连续的键，就像 Bigtable 用它的 tablet 那样。但如果键随时间增长，每个新行都落在最后一个分片上，一台机器承担全部写入。<bookmark mark='b'/>哈希分区按哈希值把键打散，这是第17部分的技巧，能把写入均匀地分散开。<bookmark mark='c'/>代价是顺序。一次范围扫描，在按范围分区的表上只涉及一个分片，在按哈希分区的表上却涉及每个分片。<bookmark mark='d'/>许多系统折中：对一个前缀做哈希，比如用户，并在它之内保持行有序。"
+  },
+  "efd9fb71838c": {
+   "scene": "Sharding",
+   "en": "Even a perfect hash cannot split a single key. <bookmark mark='a'/> In Part 39's simulation, a million keys are hashed over a hundred shards, and requests follow Zipf's law. With uniform popularity, the busiest shard carries one point zero four times the mean. <bookmark mark='b'/> With a Zipf exponent of one, the hottest key alone takes seven percent of all requests, and its shard nearly eight times the mean; at one point two, almost twenty. That is the celebrity problem: one account, followed by millions. <bookmark mark='c'/> The fix is to split the hot keys themselves. Append one of twenty suffixes to each of the ten hottest, and merge the pieces on read. <bookmark mark='d'/> At exponent one, the busiest shard falls below twice the mean. Part 49's feeds meet the celebrity again.",
+   "zh": "即使是完美的哈希，也拆不开单个键。<bookmark mark='a'/>在第39部分的模拟中，100万个键被哈希到100个分片上，请求服从齐普夫定律。热度均匀时，最忙的分片承担平均值的1.04倍。<bookmark mark='b'/>齐普夫指数为1时，单是最热的那个键就占全部请求的百分之7，它所在的分片接近平均值的8倍；指数为1.2时，几乎是20倍。这就是名人问题：一个账号，被数百万人关注。<bookmark mark='c'/>解决办法是拆分热点键本身。给最热的10个键中的每一个加上20个后缀之一，读的时候再把各片合并起来。<bookmark mark='d'/>指数为1时，最忙的分片降到平均值的2倍以下。第49部分的信息流会再次遇到名人。"
+  },
+  "34f8fb12c4aa": {
+   "scene": "Sharding",
+   "en": "Data grows, and shards must split or move. <bookmark mark='a'/> Hashing modulo the number of machines is the trap from chapter two. Going from ten machines to eleven moved ninety-one percent of the keys in Part 39's measurement, when the ideal is one in eleven; a ring moved under nine percent. <bookmark mark='b'/> Many systems instead create far more partitions than machines at the start, and move whole partitions: a new machine takes a few from each of the others, and no key ever changes partition. <bookmark mark='c'/> The move itself is a careful dance. Copy the partition, stream the writes made during the copy, switch the routing table, and only then delete the old copy.",
+   "zh": "数据会增长，分片必须拆分或迁移。<bookmark mark='a'/>按机器数目取模来哈希，就是第二章的那个陷阱。在第39部分的测量中，从10台机器增加到11台，移动了百分之91的键，而理想值是十一分之一；环移动的不到百分之9。<bookmark mark='b'/>许多系统则在一开始就创建远多于机器数的分区，并整个地迁移分区：一台新机器从其他每台那里各接过几个，而没有任何键会改变它所在的分区。<bookmark mark='c'/>迁移本身是一支小心翼翼的舞蹈。复制分区，把复制期间产生的写入以流的方式传过去，切换路由表，然后才删除旧的副本。"
+  },
+  "051496223082": {
+   "scene": "Sharding",
+   "en": "Other access paths need secondary indexes, and those can be sharded in two ways. <bookmark mark='a'/> A local index lives beside the data: each shard indexes its own rows. Writes stay on one shard, but a query on any other field must ask every shard, and wait for the slowest. <bookmark mark='b'/> In Part 39's model, each server is slow one time in a hundred. A query to ten shards is then slow nearly one time in ten, and to a hundred shards, nearly two times in three. <bookmark mark='c'/> A global index is sharded by the indexed value itself, so the query asks one index shard. <bookmark mark='d'/> Now a write touches two shards, and the index is usually updated asynchronously. DynamoDB's global secondary indexes are eventually consistent.",
+   "zh": "其他访问路径需要二级索引，而它们有两种分片方式。<bookmark mark='a'/>本地索引和数据放在一起：每个分片为自己的行建索引。写入留在一个分片上，但按任何其他字段的查询都必须询问每个分片，并等待最慢的那个。<bookmark mark='b'/>在第39部分的模型中，每台服务器每100次中有1次很慢。那么一个查询10个分片的请求，将近每10次就慢1次；查询100个分片的，将近每3次慢2次。<bookmark mark='c'/>全局索引按被索引的值本身来分片，所以查询只需询问一个索引分片。<bookmark mark='d'/>现在一次写入要涉及两个分片，而索引通常是异步更新的。DynamoDB 的全局二级索引是最终一致的。"
+  },
+  "290c770a7a7d": {
+   "scene": "Sharding",
+   "en": "Some queries span shards anyway. <bookmark mark='a'/> Choose the key so that the common ones do not: shard by customer, and keep each customer's users, orders and invoices together, so their joins stay on one machine. <bookmark mark='b'/> A transaction that must change two shards needs Part 39's two-phase commit. Every shard votes yes and locks its rows. <bookmark mark='c'/> In Part 39's run, the coordinator crashed just after deciding to commit, and every participant held its locks for thirty-one seconds, until the coordinator recovered. <bookmark mark='d'/> So design for one shard per operation, and treat the cross-shard path as the rare, slow, carefully guarded exception.",
+   "zh": "有些查询无论如何都要跨分片。<bookmark mark='a'/>选择分片键，让常见的查询不跨分片：按客户分片，把每个客户的用户、订单和发票放在一起，这样它们的连接就留在一台机器上。<bookmark mark='b'/>一个必须修改两个分片的事务，需要第39部分的两阶段提交。每个分片投赞成票，并锁住它的行。<bookmark mark='c'/>在第39部分的运行中，协调者在决定提交之后立刻崩溃，每个参与者都把锁持有了31秒，直到协调者恢复。<bookmark mark='d'/>所以要设计成每个操作只涉及一个分片，并把跨分片的路径当作罕见、缓慢、需要小心看守的例外。"
+  },
+  "a00e1d7739f3": {
+   "scene": "Replication",
+   "en": "Chapter nine. Replication in practice.",
+   "zh": "第九章：实践中的复制。"
+  },
+  "eeea9ab54418": {
+   "scene": "Replication",
+   "en": "Part 39 gave the theory of replication; here is how it is used day to day. <bookmark mark='a'/> Most systems start with one leader that takes every write and appends it to a log. <bookmark mark='b'/> Followers replay that log. Reads, usually the bulk of the traffic, spread across the followers, so each new follower adds read capacity, and is a warm spare besides. <bookmark mark='c'/> The catch is that shipping the log takes time. A follower's copy is a little behind: by milliseconds normally, and by far more when it is overloaded.",
+   "zh": "第39部分给出了复制的理论；这里讲它在日常中是怎样使用的。<bookmark mark='a'/>大多数系统从一个领导者开始，它接收每一次写入，并把它追加到一个日志里。<bookmark mark='b'/>追随者重放这个日志。读通常占流量的大头，分散到各个追随者上，所以每个新的追随者都增加读容量，而且还是一个热备。<bookmark mark='c'/>麻烦在于，传送日志需要时间。追随者的副本稍稍落后：通常落后几毫秒，过载时则落后得多。"
+  },
+  "1afdefe15002": {
+   "scene": "Replication",
+   "en": "That lag breaks a promise users take for granted: to see what they just wrote. <bookmark mark='a'/> In Part 39's simulation, followers apply each write a hundred milliseconds after the leader, on average, and the user's next read goes to any of three replicas. <bookmark mark='b'/> Reading at once, two reads in three miss the write. After a hundred milliseconds, about one in four; after half a second, one in two hundred. <bookmark mark='c'/> Two fixes are common. For a short while after a user writes, send that user's reads to the leader. <bookmark mark='d'/> Or have the write return its position in the log, and read only from a replica that has reached it.",
+   "zh": "这种滞后打破了一个用户视为理所当然的承诺：看到自己刚写的东西。<bookmark mark='a'/>在第39部分的模拟中，追随者平均在领导者之后100毫秒应用每次写入，而用户的下一次读会去3个副本中的任意一个。<bookmark mark='b'/>立刻就读，每3次读有2次看不到这次写入。100毫秒之后，大约4次中有1次；半秒之后，200次中有1次。<bookmark mark='c'/>常见的修正有两种。在用户写入之后的一小段时间里，把这个用户的读发给领导者。<bookmark mark='d'/>或者让写入返回它在日志中的位置，只从已经到达那个位置的副本上读。"
+  },
+  "fbd4b45f4def": {
+   "scene": "Replication",
+   "en": "When the leader dies, a follower must take over, and the first problem is knowing that it died. <bookmark mark='a'/> Followers expect a heartbeat, here every hundred milliseconds, and suspect the leader after a timeout. Part 39 measured the trade on a jittery network. A timeout of a hundred and fifty milliseconds notices a crash in about a tenth of a second, but raises two hundred and fifty false alarms an hour; three hundred milliseconds, about three; three seconds, none. <bookmark mark='b'/> Then the most up-to-date follower is promoted, and clients are redirected. <bookmark mark='c'/> With asynchronous replication, writes the old leader acknowledged but never shipped are simply gone. <bookmark mark='d'/> Semi-synchronous replication waits for one follower to confirm each write, and loses nothing acknowledged, at the cost of a round trip.",
+   "zh": "领导者死掉时，必须由一个追随者接管，而第一个问题是知道它死了。<bookmark mark='a'/>追随者期待心跳，这里是每100毫秒一次，超时之后就怀疑领导者出了问题。第39部分在一个抖动的网络上测量了这种权衡。150毫秒的超时大约十分之一秒就能察觉一次崩溃，但每小时引发250次误报；300毫秒，大约3次；3秒，一次都没有。<bookmark mark='b'/>然后，数据最新的追随者被提升，客户端被重定向。<bookmark mark='c'/>在异步复制下，旧领导者已经确认、却从未传送出去的写入，就这样消失了。<bookmark mark='d'/>半同步复制等待一个追随者确认每次写入，不会丢失任何已确认的东西，代价是一次往返。"
+  },
+  "230e8e811850": {
+   "scene": "Replication",
+   "en": "The dangerous failure is a leader that is not dead, only paused. <bookmark mark='a'/> Leader A holds a lease, numbered thirty-three, and writes under it. Then it stalls, perhaps in a long garbage collection, and its lease runs out. <bookmark mark='b'/> The lock service grants a new lease to B, numbered thirty-four, and B starts writing. <bookmark mark='c'/> Then A wakes, still believing it leads, and writes too: two leaders, split brain. <bookmark mark='d'/> Part 38's fencing tokens stop it. Every write carries its lease number, and the storage remembers the largest it has seen, so it rejects thirty-three after thirty-four. The check must live in the storage: a paused leader cannot be trusted to check its own clock.",
+   "zh": "危险的故障是一个没有死、只是暂停了的领导者。<bookmark mark='a'/>领导者 A 持有一份编号为33的租约，并在它之下写入。然后它停顿了，也许是一次漫长的垃圾回收，它的租约就到期了。<bookmark mark='b'/>锁服务把一份编号为34的新租约授予 B，B 开始写入。<bookmark mark='c'/>然后 A 醒来，仍然相信自己是领导者，也去写：两个领导者，也就是脑裂。<bookmark mark='d'/>第38部分的隔离令牌能阻止它。每次写入都带着它的租约编号，而存储记住它见过的最大编号，所以在见过34之后就拒绝33。检查必须放在存储里：不能指望一个暂停过的领导者检查它自己的时钟。"
+  },
+  "b5f201ceb51d": {
+   "scene": "Replication",
+   "en": "Finally, leaders in several regions, each accepting writes locally: active-active. Writes are fast everywhere, but two regions can change the same record before hearing of each other. <bookmark mark='a'/> Part 39 simulated it: two regions, each writing one key five times a second, fifty milliseconds apart. A fifth of all writes were concurrent with one from the other region. <bookmark mark='b'/> Last writer wins keeps the larger timestamp and silently discards the other: nearly ten percent of writes lost, with perfect clocks. <bookmark mark='c'/> With one clock a hundred milliseconds fast, it also discards writes that had seen the one it keeps: about sixteen percent lost; at a quarter of a second, twenty-three. <bookmark mark='d'/> Version vectors lose nothing. They hand both versions back, to be merged by a rule, or by a CRDT.",
+   "zh": "最后，是在几个区域各有一个领导者，各自在本地接受写入：双活（active-active）。写入在任何地方都很快，但两个区域可能在得知对方之前就修改了同一条记录。<bookmark mark='a'/>第39部分模拟过它：两个区域，相隔50毫秒，各自每秒写同一个键5次。全部写入中有五分之一与另一个区域的某次写入是并发的。<bookmark mark='b'/>最后写入者胜保留较大的时间戳，并悄悄丢掉另一个：即使时钟完美，也有将近百分之10的写入丢失。<bookmark mark='c'/>如果一个时钟快了100毫秒，它还会丢掉那些已经看到了被保留者的写入：大约百分之16丢失；快了四分之一秒时，百分之23。<bookmark mark='d'/>版本向量什么都不丢。它们把两个版本都交回来，由一条规则来合并，或者由一个 CRDT 来合并。"
+  },
+  "29bf6e00f4f8": {
+   "scene": "Ids",
+   "en": "Chapter ten. Unique IDs.",
+   "zh": "第十章：唯一 ID。"
+  },
+  "9b5508f88d2e": {
+   "scene": "Ids",
+   "en": "Every record needs a name, and with many machines the obvious answer stops working. <bookmark mark='a'/> A single database counter hands out one, two, three. But then every insert in the system asks one machine: a bottleneck, and a single point of failure. <bookmark mark='b'/> Splitting the counter helps. Flickr, in 2010, ran two ticket servers, one handing out odd numbers and the other even. <bookmark mark='c'/> The other answer is to let each machine mint its own names, chosen so that they never collide, without asking anyone.",
+   "zh": "每条记录都需要一个名字，而有了许多台机器，显而易见的答案就不管用了。<bookmark mark='a'/>单个数据库计数器依次发出1、2、3。但这样一来，系统中的每次插入都要询问同一台机器：一个瓶颈，也是一个单点故障。<bookmark mark='b'/>拆分计数器有帮助。2010年，Flickr 运行了两台票号服务器，一台发奇数，另一台发偶数。<bookmark mark='c'/>另一个答案是让每台机器自己铸造名字，选得让它们永不冲突，而不必询问任何人。"
+  },
+  "603a9f238e39": {
+   "scene": "Ids",
+   "en": "The simplest way to need no one is to choose at random. <bookmark mark='a'/> A version four UUID has a hundred and twenty-eight bits, six of them fixed to mark its version and variant, leaving a hundred and twenty-two random. <bookmark mark='b'/> Part 17's birthday bound gives the chance that any two of n such IDs collide: about one minus e to the minus n squared over two to the hundred and twenty-three. <bookmark mark='c'/> A billion IDs: about one chance in ten to the nineteen. A million million: one in ten to the thirteen. Even at a thousand million million, about one in ten million. Only near two point seven billion billion are the odds even. <bookmark mark='d'/> In practice, a broken random number generator is far likelier than bad luck.",
+   "zh": "最简单的不依赖任何人的办法，是随机地选。<bookmark mark='a'/>一个版本4的 UUID 有128位，其中6位固定，用来标记版本和变体，剩下122位是随机的。<bookmark mark='b'/>第17部分的生日界给出了 n 个这样的 ID 中有任意两个发生冲突的概率：大约是1减 e 的负指数次方，指数是 n 的平方除以2的123次方。<bookmark mark='c'/>10亿个 ID：大约是10的19次方分之一的机会。1万亿个：10的13次方分之一。即使到了1000万亿个，也只有大约千万分之一。只有接近270亿亿个时，概率才是一半对一半。<bookmark mark='d'/>实践中，一个坏掉的随机数生成器远比运气不好更有可能。"
+  },
+  "4201639b3a54": {
+   "scene": "Ids",
+   "en": "Random IDs scatter; often we want them to sort by time. <bookmark mark='a'/> Twitter's Snowflake, from 2010, packs sixty-four bits: forty-one bits of milliseconds since a chosen epoch, ten bits naming the machine, and twelve bits counting within the millisecond. <bookmark mark='b'/> Here are three from machine seven: two in the same millisecond, where the sequence counts up, and one in the next, where the time field ticks and the sequence starts again at zero. <bookmark mark='c'/> Forty-one bits of milliseconds last about seventy years, and each machine can mint four thousand and ninety-six IDs a millisecond, with no coordination beyond handing out machine numbers. <bookmark mark='d'/> UUID version seven, standardised in RFC 9562 in 2024, does the same in a hundred and twenty-eight bits: forty-eight bits of Unix milliseconds first, then seventy-four random bits. They sort by creation time, with no machine numbers.",
+   "zh": "随机的 ID 是分散的；我们常常希望它们按时间排序。<bookmark mark='a'/>Twitter 的 Snowflake 始于2010年，它打包64位：41位是从一个选定纪元起算的毫秒数，10位标识机器，12位在同一毫秒之内计数。<bookmark mark='b'/>这是来自7号机器的3个 ID：两个在同一毫秒内，序列号往上数；一个在下一毫秒，时间字段走了一格，序列号从0重新开始。<bookmark mark='c'/>41位的毫秒数可以用大约70年，每台机器每毫秒能铸造4096个 ID，除了分配机器编号之外，不需要任何协调。<bookmark mark='d'/>UUID 版本7，2024年在 RFC 9562 中标准化，用128位做同样的事：先是48位的 Unix 毫秒数，然后是74个随机位。它们按创建时间排序，不需要机器编号。"
+  },
+  "f90cd10f31e5": {
+   "scene": "Ids",
+   "en": "Time-ordered IDs inherit the troubles of Part 38's clocks. <bookmark mark='a'/> Suppose the time daemon steps a machine's clock back five milliseconds. <bookmark mark='b'/> The generator sees a millisecond it has already used, restarts its sequence at zero, and mints an ID it minted before. <bookmark mark='c'/> The fix is to remember the last timestamp issued and never go below it: keep counting within that millisecond, and wait when the sequence runs out. <bookmark mark='d'/> Across machines, clocks disagree as well, so IDs from different machines are ordered only to within the skew between them. Sort and page by them, but never use them to decide which of two writes came first.",
+   "zh": "按时间排序的 ID 继承了第38部分时钟的种种麻烦。<bookmark mark='a'/>假设时间守护进程把一台机器的时钟往回拨了5毫秒。<bookmark mark='b'/>生成器看到一个它已经用过的毫秒，把序列号重置为0，于是铸造出一个它以前铸造过的 ID。<bookmark mark='c'/>修正办法是记住发出过的最后一个时间戳，永远不低于它：在那一毫秒之内继续计数，序列号用完时就等待。<bookmark mark='d'/>在机器之间，时钟也不一致，所以来自不同机器的 ID 只能在它们之间的偏斜范围内有序。可以按它们排序和分页，但绝不要用它们来判定两次写入中哪一次先发生。"
+  },
+  "690a0d5f5733": {
+   "scene": "Ids",
+   "en": "Ordered IDs pay off in the index, Part 17's B-tree. <bookmark mark='a'/> Insert two hundred thousand keys into the leaf level of a B-plus tree, a hundred keys to a page. Random keys land all over the tree and split pages in half, leaving them sixty-nine percent full: two thousand eight hundred and eighty-nine pages. <bookmark mark='b'/> Time-ordered keys only ever touch the rightmost page, so every page fills completely: two thousand pages. <bookmark mark='c'/> The bigger difference is the working set. The last ten thousand random inserts touched two thousand seven hundred and thirty pages, all of which must stay in memory; ordered inserts touched a hundred and one. <bookmark mark='d'/> The price: the rightmost page, or chapter eight's last range shard, becomes the hot spot, and every ID reveals when it was made.",
+   "zh": "有序的 ID 在索引上得到回报，也就是第17部分的 B 树。<bookmark mark='a'/>把20万个键插入一棵 B+ 树的叶子层，每页100个键。随机的键落得满树都是，把页一分为二，使它们只有百分之69满：2889个页。<bookmark mark='b'/>按时间排序的键只碰最右边的页，所以每个页都被完全填满：2000个页。<bookmark mark='c'/>更大的差别在工作集。最后1万次随机插入碰到了2730个页，它们全都必须留在内存里；有序插入只碰到了101个。<bookmark mark='d'/>代价是：最右边的页，或者第八章的最后一个范围分片，成了热点，而且每个 ID 都暴露了它是何时生成的。"
+  },
+  "9b13ce8309d3": {
+   "scene": "Blobs",
+   "en": "Chapter eleven. Blobs and the edge.",
+   "zh": "第十一章：大对象与边缘。"
+  },
+  "d1a4392cf4d4": {
+   "scene": "Blobs",
+   "en": "The Job takes books, and books are blobs: big, opaque, written once and read many times. <bookmark mark='a'/> In database rows, they would ride along in every backup, replica and cache. <bookmark mark='b'/> Instead the database keeps a small row describing the book: its hash, and a key. <bookmark mark='c'/> The bytes go to an object store, a flat map from keys to immutable objects, read and written whole over HTTP: Amazon's S3 since 2006, and its imitators. <bookmark mark='d'/> Two systems must now agree, so write the bytes first and the row second. A row never points at nothing; at worst a blob is orphaned, and a sweeper deletes it.",
+   "zh": "那项任务接收书，而书是大对象（blob）：体积大、不透明、写一次、读许多次。<bookmark mark='a'/>如果放在数据库的行里，它们会跟着进入每一份备份、每一个副本和每一个缓存。<bookmark mark='b'/>所以数据库只保存描述这本书的一小行：它的哈希值，以及一个键。<bookmark mark='c'/>字节进入对象存储，一个从键到不可变对象的扁平映射，通过 HTTP 整体地读写：从2006年起的 Amazon S3，以及它的模仿者们。<bookmark mark='d'/>现在两个系统必须保持一致，所以先写字节，再写行。行永远不会指向空无；最坏的情况下，一个大对象成了孤儿，由一个清扫程序删掉它。"
+  },
+  "3482e1882e9a": {
+   "scene": "Blobs",
+   "en": "An object store's whole promise is that bytes are not lost. <bookmark mark='a'/> Three full copies survive two failed disks, for three times the space. <bookmark mark='b'/> Erasure coding does better. Cut the object into ten fragments and compute four more with a Reed-Solomon code, so that any ten of the fourteen rebuild it. <bookmark mark='c'/> Lose any four disks, and nothing is lost. <bookmark mark='d'/> Part 45's model, with two percent of disks failing a year and a day to repair, gives the chance of losing an object in a year. Three copies: about four in ten billion. Ten plus four: about four and a half in a hundred trillion, in less than half the space.",
+   "zh": "对象存储的全部承诺，就是字节不会丢失。<bookmark mark='a'/>三份完整的副本能扛过两块磁盘故障，代价是三倍的空间。<bookmark mark='b'/>纠删码做得更好。把对象切成10个片段，再用 Reed-Solomon 码算出另外4个，这样14个中的任意10个都能重建它。<bookmark mark='c'/>丢掉任意4块磁盘，什么都不会丢失。<bookmark mark='d'/>第45部分的模型，假设每年有百分之2的磁盘故障、修复需要一天，给出了一年内丢失一个对象的概率。三份副本：大约百亿分之4。10加4：大约百万亿分之4.5，而占用的空间不到一半。"
+  },
+  "79681be736c1": {
+   "scene": "Blobs",
+   "en": "Big files travel in pieces. <bookmark mark='a'/> A multipart upload sends pieces in parallel, retries only a piece that failed, and stitches them together at the end. <bookmark mark='b'/> Name each piece by the hash of its bytes, as Part 41's git names every object: identical pieces are stored once, and every download can be checked. <bookmark mark='c'/> But where do the cuts go? Cut every six bytes, and one byte inserted at the start shifts every boundary: every piece changes. <bookmark mark='d'/> Content-defined chunking cuts wherever a rolling hash of the last few dozen bytes matches a pattern, as the low-bandwidth file system did in 2001. Now an insertion changes only the piece it lands in.",
+   "zh": "大文件分块传输。<bookmark mark='a'/>分段上传并行地发送各块，只重试失败的那一块，最后再把它们拼接起来。<bookmark mark='b'/>用每一块字节的哈希来给它命名，就像第41部分的 git 给每个对象命名那样：相同的块只存一次，每次下载都能被校验。<bookmark mark='c'/>但切口放在哪里？每6个字节切一刀，那么在开头插入一个字节，就会让每个边界都移位：每一块都变了。<bookmark mark='d'/>基于内容的分块，在最后几十个字节的滚动哈希匹配某个模式的地方下刀，就像2001年的低带宽文件系统那样。现在一次插入只改变它落进的那一块。"
+  },
+  "f056b5fbea52": {
+   "scene": "Blobs",
+   "en": "Who carries the bytes? Not the application servers, if we can help it. <bookmark mark='a'/> The client asks the API for permission to upload. The API holds a secret key, and returns a URL naming the object and an expiry time, signed with a keyed hash, an HMAC, of exactly those. <bookmark mark='b'/> The client sends the bytes straight to the store, which shares the key and checks the signature. Change the object or the expiry and it fails; after the expiry, the request is refused. <bookmark mark='c'/> Downloads work the same way. But the link is a capability: whoever holds it may use it, so keep expiries short.",
+   "zh": "由谁来搬运这些字节？如果能避免，就不要让应用服务器来。<bookmark mark='a'/>客户端向 API 请求上传的许可。API 持有一把密钥，返回一个 URL，其中写明对象和一个过期时间，并用一种带密钥的哈希，即 HMAC，对恰好这两者签名。<bookmark mark='b'/>客户端把字节直接发给存储，存储共享这把密钥，并检查签名。改动对象或过期时间，检查就会失败；过期之后，请求会被拒绝。<bookmark mark='c'/>下载也是同样的方式。但这个链接是一种能力凭证：谁持有它，谁就能使用它，所以要让过期时间短一些。"
+  },
+  "6735df8104f9": {
+   "scene": "Blobs",
+   "en": "Downloads go through the content delivery network of Parts 42 and 45, and an edge cache is only as good as its key. <bookmark mark='a'/> By default the key is the whole URL. Add a tracking parameter or a signature, and three requests for the same book are three keys and three misses at the origin. <bookmark mark='b'/> So normalise the key: drop parameters that do not change the bytes, and check signatures at the edge but leave them out of the key. One miss, two hits. <bookmark mark='c'/> A Vary header adds request headers to the key: by encoding, a few versions; by user agent, thousands. <bookmark mark='d'/> Better, put the content hash in the URL. Those bytes never change, so the edge may keep them for a year, and a new version is a new name.",
+   "zh": "下载经过第42和45部分的内容分发网络，而边缘缓存的好坏取决于它的键。<bookmark mark='a'/>默认情况下，键是整个 URL。加上一个跟踪参数或一个签名，对同一本书的3个请求就成了3个键，在源站产生3次未命中。<bookmark mark='b'/>所以要规范化这个键：去掉不改变字节的参数，在边缘检查签名，但不把它放进键里。1次未命中，2次命中。<bookmark mark='c'/>Vary 头把请求头加进键里：按编码，几个版本；按用户代理，几千个。<bookmark mark='d'/>更好的办法是把内容的哈希放进 URL。这些字节永远不会变，所以边缘可以把它们保存一年，而一个新版本就是一个新名字。"
+  },
+  "47ec1f8f8d2f": {
+   "scene": "Geo",
+   "en": "Chapter twelve. Maps as keys.",
+   "zh": "第十二章：把地图变成键。"
+  },
+  "d11391cccf4c": {
+   "scene": "Geo",
+   "en": "A map query is a box in two dimensions: every café within a kilometre. <bookmark mark='a'/> But Part 35's B-tree orders a single number. <bookmark mark='b'/> Index longitude alone, and the box returns a whole strip: twenty-three of Part 22's sixty points. Latitude alone returns twenty-two. <bookmark mark='c'/> The box holds eight. <bookmark mark='d'/> We want one key for every place, so that places near each other get keys near each other. Then an ordinary index will do.",
+   "zh": "一次地图查询是二维中的一个方框：一公里以内的每一家咖啡馆。<bookmark mark='a'/>但第35部分的 B 树只能给单个数字排序。<bookmark mark='b'/>只给经度建索引，这个方框会返回一整条带子：第22部分的60个点中的23个。只用纬度，返回22个。<bookmark mark='c'/>而方框里只有8个。<bookmark mark='d'/>我们想给每个地方一个键，让彼此靠近的地方得到彼此靠近的键。那样一个普通的索引就够了。"
+  },
+  "80c1efe7ac84": {
+   "scene": "Geo",
+   "en": "The oldest answer interleaves the bits. <bookmark mark='a'/> Take the cell at x five, y three, write both in binary, and take one bit of y, then one of x, in turn: twenty-seven. <bookmark mark='b'/> Number every cell this way and the keys trace a Z at every scale, as Guy Morton described at IBM in 1966. <bookmark mark='c'/> Each pair of bits picks a quadrant, so a square on the map is a range of keys. <bookmark mark='d'/> The flaw is the jumps: cells fifteen and thirty-seven are side by side.",
+   "zh": "最古老的答案是把位交错起来。<bookmark mark='a'/>取 x 为5、y 为3的格子，把两者都写成二进制，轮流取 y 的一位，再取 x 的一位：得到27。<bookmark mark='b'/>用这种方式给每个格子编号，键就在每个尺度上都描出一个 Z 字，正如 Guy Morton 1966年在 IBM 描述的那样。<bookmark mark='c'/>每对位选出一个象限，所以地图上的一个正方形就是一段键的范围。<bookmark mark='d'/>缺陷在于跳跃：格子15和37是紧挨着的。"
+  },
+  "adaef4d9c803": {
+   "scene": "Geo",
+   "en": "Geohash, published by Gustavo Niemeyer in 2008, is the Z-order on the globe. <bookmark mark='a'/> Halve longitude, then latitude, in turn, and spell every five bits as one of thirty-two characters: the first names one of these thirty-two cells. <bookmark mark='b'/> Each further character divides the cell by thirty-two: seven pin central London to about ninety-five metres by a hundred and fifty-three. <bookmark mark='c'/> New York shares no prefix with London. <bookmark mark='d'/> But London sits on the edge of cell g; east of the Greenwich meridian, addresses begin with u. So a search covers the cell and its eight neighbours.",
+   "zh": "Geohash 由 Gustavo Niemeyer 在2008年发布，它就是地球上的 Z 序。<bookmark mark='a'/>轮流把经度、纬度对半分，每5位拼写成32个字符中的一个：第一个字符指明这32个格子中的一个。<bookmark mark='b'/>每多一个字符，格子就再分成32份：7个字符能把伦敦市中心定位到大约95米乘153米。<bookmark mark='c'/>纽约与伦敦没有共同的前缀。<bookmark mark='d'/>但伦敦正好在格子 g 的边上；在格林尼治子午线以东，地址以 u 开头。所以一次搜索要覆盖这个格子和它的8个邻居。"
+  },
+  "170160d53371": {
+   "scene": "Geo",
+   "en": "David Hilbert's curve of 1891 removes the jumps. <bookmark mark='a'/> It visits the same quadrants, but rotates the pieces so that every step moves next door. <bookmark mark='b'/> Ask for this box of twelve cells. Along the Z it falls into seven runs of keys, seven range scans; along Hilbert, four. <bookmark mark='c'/> On a grid of two hundred and fifty-six squared, a sixteen by sixteen box needs about thirty ranges on the Z and fifteen on Hilbert. Some neighbours still land far apart on both: every curve must break somewhere. <bookmark mark='d'/> Google's S2 projects the Earth onto a cube, orders each face along a Hilbert curve, and names cells with sixty-four bit integers, thirty levels deep.",
+   "zh": "希尔伯特（David Hilbert）1891年的曲线消除了跳跃。<bookmark mark='a'/>它访问同样的象限，但会旋转各个部分，让每一步都走到隔壁。<bookmark mark='b'/>查询这个由12个格子组成的方框。沿着 Z 序，它落进7段键，即7次范围扫描；沿着希尔伯特曲线，只有4段。<bookmark mark='c'/>在一个256乘256的网格上，一个16乘16的方框在 Z 序上大约需要30个范围，在希尔伯特曲线上需要15个。有些邻居在两种曲线上仍然相隔很远：每条曲线都必须在某个地方断开。<bookmark mark='d'/>Google 的 S2 把地球投影到一个立方体上，沿一条希尔伯特曲线给每个面排序，并用64位整数给格子命名，共30层深。"
+  },
+  "bb396caa8726": {
+   "scene": "Geo",
+   "en": "Geohash and S2 cut the map the same way everywhere. <bookmark mark='a'/> A quadtree cuts only where it must: split any square holding more than three points, and repeat, so cells are small in the city and large over the sea. <bookmark mark='b'/> Squares are awkward for movement: four neighbours share an edge, four only a corner, one point four one widths away. A hexagon's six neighbours are all equally far. <bookmark mark='c'/> Uber's H3, open-sourced in 2018, tiles the Earth with hexagons at sixteen resolutions, each cell about a seventh of its parent. The price: twelve pentagons at every resolution, and children that only roughly tile their parent.",
+   "zh": "Geohash 和 S2 在任何地方都用同样的方式切割地图。<bookmark mark='a'/>四叉树只在必要的地方切：凡是容纳超过3个点的正方形就拆分，并重复下去，所以格子在城市里小，在海面上大。<bookmark mark='b'/>正方形不便于描述移动：4个邻居共享一条边，另外4个只共享一个角，距离是1.41个边长。六边形的6个邻居全都一样远。<bookmark mark='c'/>Uber 的 H3 于2018年开源，用六边形在16种分辨率上铺满地球，每个格子大约是它父格子的七分之一。代价是：每种分辨率上都有12个五边形，而且子格子只能大致地铺满它们的父格子。"
+  },
+  "3f65376fe10d": {
+   "scene": "Geo",
+   "en": "The commonest map question is: what are the nearest three? <bookmark mark='a'/> Look in the query's cell, then in rings around it, until there are three candidates. <bookmark mark='b'/> That is not yet the answer: the circle through the third reaches cells not yet searched, where a closer point could hide. Search those too, then rank by exact distance. <bookmark mark='c'/> Part 22's kd-tree found one nearest neighbour among twenty thousand points by visiting about twenty-five of its forty thousand nodes. <bookmark mark='d'/> PostGIS answers such queries from its R-tree index, and Part 49's ride-hailing dispatcher asks them of hexagons.",
+   "zh": "最常见的地图问题是：最近的3个是什么？<bookmark mark='a'/>先在查询所在的格子里找，再在它周围一圈一圈地找，直到有3个候选。<bookmark mark='b'/>这还不是答案：经过第3个候选的那个圆，触及了尚未搜索的格子，那里可能藏着一个更近的点。把那些也搜一遍，再按精确距离排序。<bookmark mark='c'/>第22部分的 kd 树在2万个点中找到一个最近邻，只访问了它4万个节点中的大约25个。<bookmark mark='d'/>PostGIS 用它的 R 树索引回答这类查询，而第49部分的网约车派单系统则在六边形上提出这类问题。"
+  },
+  "2cec34599b36": {
+   "scene": "Realtime",
+   "en": "Chapter thirteen. Real-time blocks.",
+   "zh": "第十三章：实时构件。"
+  },
+  "b018a387e3db": {
+   "scene": "Realtime",
+   "en": "Most of the web is a client asking and a server answering; real-time features need the server to speak first. <bookmark mark='a'/> The simplest trick is polling: ask every ten seconds. News waits for the next poll, and most answers are empty. <bookmark mark='b'/> Long polling, named Comet in 2006, sends a request the server holds until there is news, then asks again at once: plain HTTP, one round trip per message. <bookmark mark='c'/> A WebSocket, standardised in RFC 6455 in 2011, starts as an HTTP request and is upgraded into a two-way connection that stays open; each message is a frame with a few bytes of header. <bookmark mark='d'/> For one-way streams, Server-Sent Events keep one HTTP response open.",
+   "zh": "网络的大部分是客户端发问、服务器作答；实时功能需要服务器先开口。<bookmark mark='a'/>最简单的办法是轮询：每10秒问一次。消息要等到下一次轮询，而大多数回答都是空的。<bookmark mark='b'/>长轮询，2006年被命名为 Comet，发出一个请求，服务器一直挂着它，直到有消息，然后客户端立刻再问：纯粹的 HTTP，每条消息一次往返。<bookmark mark='c'/>WebSocket 于2011年在 RFC 6455 中标准化，它以一个 HTTP 请求开始，然后升级为一条保持打开的双向连接；每条消息是一个只有几字节头部的帧。<bookmark mark='d'/>对于单向的流，服务器发送事件（Server-Sent Events）让一个 HTTP 响应一直保持打开。"
+  },
+  "857b2f57a377": {
+   "scene": "Realtime",
+   "en": "Open connections are state. <bookmark mark='a'/> Connection servers each hold many thousands of sockets. To reach a user, look up their server in a registry, and forward the message there. <bookmark mark='b'/> When a server dies, all its clients reconnect at once, to the others. <bookmark mark='c'/> Part 43 measured that shape: a service down for ten seconds, with clients retrying every second, was offered nine hundred and ninety requests a second against a capacity of a hundred, and recovered only at second a hundred and nineteen. With exponential backoff and jitter, the peak was three hundred and eighty-one, and recovery came at sixty-nine. <bookmark mark='d'/> So clients reconnect with jitter, and servers are drained before they stop.",
+   "zh": "打开的连接就是状态。<bookmark mark='a'/>每台连接服务器都持有成千上万个套接字。要联系一个用户，先在注册表里查出他所在的服务器，再把消息转发过去。<bookmark mark='b'/>一台服务器死掉时，它的所有客户端会同时重新连接到其他服务器上。<bookmark mark='c'/>第43部分测量过这种形态：一项服务宕机10秒，客户端每秒重试一次，结果每秒涌来990个请求，而容量只有100，直到第119秒才恢复。用了指数退避和随机抖动，峰值是381，在第69秒恢复。<bookmark mark='d'/>所以客户端要带着抖动重新连接，服务器在停机之前要先排空。"
+  },
+  "6d4e4cf2135f": {
+   "scene": "Realtime",
+   "en": "Notifications reach people who are not looking. <bookmark mark='a'/> An event enters a notification service, which checks the user's preferences, applies chapter five's rate limits, and stamps an idempotency key. A queue feeds a worker per channel: push, email, text. <bookmark mark='b'/> Push goes through Apple's or Google's service, because a phone keeps one connection for all its apps. <bookmark mark='c'/> Apps that poll on their own keep waking the radio. In Part 42's model, ten requests twenty seconds apart cost about a hundred and thirty joules; the same ten together, sixteen and a half, nearly eight times less. <bookmark mark='d'/> Delivery is at least once, so the idempotency key lets the phone drop a repeat.",
+   "zh": "通知要送达那些没在看的人。<bookmark mark='a'/>一个事件进入通知服务，服务检查用户的偏好，施加第五章的限流，并盖上一个幂等键。一个队列为每个渠道供给一个工作进程：推送、电子邮件、短信。<bookmark mark='b'/>推送要经过 Apple 或 Google 的服务，因为一部手机只为它的所有应用保持一条连接。<bookmark mark='c'/>自行轮询的应用会不停地唤醒无线电。在第42部分的模型中，10个相隔20秒的请求花费大约130焦耳；同样的10个请求放在一起，16.5焦耳，少了将近8倍。<bookmark mark='d'/>投递是至少一次的，所以幂等键让手机能丢掉重复的消息。"
+  },
+  "992375d71f20": {
+   "scene": "Realtime",
+   "en": "Presence, the green dot beside a name, is a failure detector. <bookmark mark='a'/> Each heartbeat renews a key that otherwise expires; when the heartbeats stop, the key expires, and the user is offline. <bookmark mark='b'/> The timeout is Part 39's trade-off. With heartbeats every tenth of a second, delayed at random, a timeout that notices a crash in about a hundred milliseconds raises hundreds of false alarms an hour; one that raises none takes three seconds. Phi accrual adapts to the delays it has seen. <bookmark mark='c'/> And every change is news for every friend, a fan-out like Part 49's feeds, so many apps fetch presence only for the people on screen.",
+   "zh": "在线状态，也就是名字旁边的那个绿点，是一个故障检测器。<bookmark mark='a'/>每次心跳都续期一个键，否则它就会过期；心跳停止时，键过期，用户就离线了。<bookmark mark='b'/>超时就是第39部分的那个权衡。心跳每十分之一秒一次、带着随机延迟时，一个大约100毫秒就能察觉崩溃的超时，每小时会引发几百次误报；一个不引发误报的超时，则需要3秒。Phi 累积检测器会适应它见过的延迟。<bookmark mark='c'/>而且每一次变化，对每个好友来说都是新消息，一种像第49部分信息流那样的扇出，所以许多应用只为屏幕上的人获取在线状态。"
+  },
+  "b2c67130ea9c": {
+   "scene": "Realtime",
+   "en": "The last block is Part 47's search. <bookmark mark='a'/> The database stays the truth. Its change log, from Part 46, feeds an indexer that keeps a search index current. The application sends the query to the index, gets back ids, and fetches the records from the database. <bookmark mark='b'/> So search is eventually consistent: a new item appears after the pipeline's lag, and a user who has just written something should read it from the database. <bookmark mark='c'/> Type-ahead searches at every keystroke: typing e l i z returns the five commonest such words in our thirty novels, Elizabeth first. Wait for a pause in the typing, and cache popular prefixes.",
+   "zh": "最后一个构件是第47部分的搜索。<bookmark mark='a'/>数据库仍然是事实的来源。它的变更日志，来自第46部分，供给一个索引器，让搜索索引保持最新。应用程序把查询发给索引，拿回一些 id，再从数据库里取出记录。<bookmark mark='b'/>所以搜索是最终一致的：一个新条目在流水线的滞后之后才出现，而刚写了东西的用户应该从数据库里读它。<bookmark mark='c'/>输入提示在每次按键时都做搜索：输入 e、l、i、z，就返回我们30部小说中以它开头的5个最常见的词，Elizabeth 排第一。等输入出现停顿时再搜索，并缓存热门前缀。"
+  },
+  "890349d57076": {
+   "scene": "Job",
+   "en": "Chapter fourteen. The Job as a service.",
+   "zh": "第十四章：作为服务的那项任务。"
+  },
+  "e2109e1a5812": {
+   "scene": "Job",
+   "en": "The Job, one more time, now as a service: upload a book, or name one, and get its twenty most common words. <bookmark mark='a'/> Requests arrive at a load balancer, which spreads them over stateless API servers. An API server first asks a result cache; on a miss, it puts the work on a queue, and one of 8 workers fetches the book from a blob store and counts it. <bookmark mark='b'/> Our model has 3,000 books, some far more popular than others, and a count takes 80 milliseconds on average. <bookmark mark='c'/> The napkin says the workers can handle 100 requests a second if they are never idle. Never idle is the problem.",
+   "zh": "那项任务，再来一次，这回作为一项服务：上传一本书，或者指定一本，得到它最常见的20个词。<bookmark mark='a'/>请求到达一个负载均衡器，它把请求分散到无状态的 API 服务器上。API 服务器先询问一个结果缓存；未命中时，它把工作放进一个队列，由8个工作进程中的一个从大对象存储取来这本书并计数。<bookmark mark='b'/>我们的模型有3000本书，有些远比其他的热门，一次计数平均需要80毫秒。<bookmark mark='c'/>餐巾纸算术说，如果工作进程从不空闲，它们每秒能处理100个请求。“从不空闲”正是问题所在。"
+  },
+  "c38dea648803": {
+   "scene": "Job",
+   "en": "So we load-tested the design in simulation, raising the rate of requests and measuring the median and the ninety-ninth percentile response time. <bookmark mark='a'/> Without a cache, the median sits near 55 milliseconds and the tail near 364, until the workers get busy. At 95 requests a second they are 95 percent busy, and the tail has grown to 607 milliseconds: Part 31's queueing curve again. <bookmark mark='b'/> Add a result cache of three hundred entries. Because popularity is so skewed, 63 percent of requests hit it and return in a millisecond, so the median collapses, and the workers see only the misses: the same tail now holds to about 200 requests a second, more than double. <bookmark mark='c'/> Notice that the median says little; the tail tells you where the knee is.",
+   "zh": "于是我们在模拟中对这个设计做了负载测试，不断提高请求速率，并测量响应时间的中位数和第99百分位数。<bookmark mark='a'/>没有缓存时，中位数停在55毫秒附近，尾部在364毫秒附近，直到工作进程忙起来。每秒95个请求时，它们有百分之95的时间在忙，尾部已经增长到607毫秒：又是第31部分的排队曲线。<bookmark mark='b'/>加上一个有300个条目的结果缓存。因为热度如此偏斜，百分之63的请求命中它，在1毫秒内返回，所以中位数骤降，而工作进程只看到未命中的请求：同样的尾部现在能一直保持到大约每秒200个请求，是原来的两倍多。<bookmark mark='c'/>注意，中位数说明不了什么；尾部才告诉你拐点在哪里。"
+  },
+  "85cafa485f1e": {
+   "scene": "Job",
+   "en": "Why did three hundred entries do so much? <bookmark mark='a'/> Chapter three's formula answers it. For the Job's own catalogue, three thousand books with Zipf popularity, Che's formula predicts that three hundred entries catch 63 percent, which is what the service measured. In chapter three's catalogue of a hundred thousand, the same three hundred catch only 24 percent with LRU, as the bars show; an admission filter like TinyLFU catches 33, close to the best possible fixed set. <bookmark mark='b'/> A hit rate h multiplies capacity by one over one minus h, as long as the cache is cheap to ask, which is why caches appear in every design. <bookmark mark='c'/> The price is that answers can be stale when a book changes, and that a popular entry expiring can set off a stampede, the problems of chapter four.",
+   "zh": "为什么300个条目作用这么大？<bookmark mark='a'/>第三章的公式回答了这个问题。对那项任务自己的目录，3000本书，热度服从齐普夫分布，Che 的公式预测300个条目能接住百分之63，这正是服务测出来的数字。在第三章那个有10万个项的目录里，同样的300个条目用 LRU 只能接住百分之24，如柱状图所示；像 TinyLFU 这样的准入过滤器能接住百分之33，接近可能的最好固定集合。<bookmark mark='b'/>命中率 h 把容量乘以1除以1减 h，只要询问缓存的代价很低，这就是为什么每个设计里都有缓存。<bookmark mark='c'/>代价是，一本书改变时答案可能是过时的，而一个热门条目过期可能引发一场击穿，这些是第四章的问题。"
+  },
+  "b0aaf5447334": {
+   "scene": "Frontier",
+   "en": "Chapter fifteen, the frontier. Can a design be predicted, and not just argued for?",
+   "zh": "第十五章：前沿。一个设计能不能被预测出来，而不只是靠论证？"
+  },
+  "f16de1ce12d1": {
+   "scene": "Frontier",
+   "en": "An index maps a key to a position. A B-tree does it with a hierarchy of sorted pages, knowing nothing about the keys. <bookmark mark='a'/> But the map from key to position is a function, and a function can be learned. Fit a few straight lines to it, each guaranteed to predict a position within a fixed error, and finish with a short binary search. <bookmark mark='b'/> On a million bursty timestamps, an error bound of 32 needs 380 segments, about 9 kilobytes, and seven comparisons; the B-tree's inner nodes take about 70 kilobytes and some 24 comparisons. <bookmark mark='c'/> Tim Kraska and colleagues made the case for learned indexes in 2018; the PGM-index of Paolo Ferragina and Giorgio Vinciguerra added worst-case guarantees. Learned structures for updates, multiple dimensions and shifting data remain open.",
+   "zh": "索引把一个键映射到一个位置。B 树用一个由有序页组成的层级来做这件事，对键本身一无所知。<bookmark mark='a'/>但从键到位置的映射是一个函数，而函数是可以学习的。用几条直线去拟合它，每条都保证预测的位置误差在一个固定范围之内，最后再做一次短的二分查找。<bookmark mark='b'/>在100万个突发的时间戳上，误差界为32时需要380段，大约9千字节，以及7次比较；B 树的内部节点占大约70千字节，要做大约24次比较。<bookmark mark='c'/>Tim Kraska 和同事在2018年论证了学习型索引的价值；Paolo Ferragina 和 Giorgio Vinciguerra 的 PGM 索引加上了最坏情况下的保证。面向更新、多维和不断漂移的数据的学习型结构，仍然是未解决的问题。"
+  },
+  "ac6e284f2723": {
+   "scene": "Frontier",
+   "en": "Design reviews are still mostly arguments. Three tools try to turn them into predictions. <bookmark mark='a'/> Queueing networks, Part 31's mathematics extended to many connected queues, predict throughput and waiting times from service times alone, exactly for idealized systems. <bookmark mark='b'/> Simulation, like this part's load test, can include any detail, but only covers the scenarios someone thought to simulate. <bookmark mark='c'/> And learned models trained on traces predict latency and tune configurations, accurately inside their data and unreliably outside it. <bookmark mark='d'/> Predicting the tail, not just the mean, of a system that does not exist yet, with a bound on the error, is open.",
+   "zh": "设计评审大多仍然是争论。有三种工具试图把它们变成预测。<bookmark mark='a'/>排队网络，也就是把第31部分的数学推广到许多相连的队列，只凭服务时间就能预测吞吐量和等待时间，对理想化的系统是精确的。<bookmark mark='b'/>模拟，就像这一部分的负载测试，可以包含任何细节，但只覆盖有人想到要模拟的那些场景。<bookmark mark='c'/>而在轨迹上训练出来的学习型模型，能预测延迟并调优配置，在它们的数据之内很准确，在数据之外就不可靠。<bookmark mark='d'/>对一个尚不存在的系统，预测它的尾部而不只是平均值，并给出误差的界，这是一个未解决的问题。"
+  },
+  "8328ac402b16": {
+   "scene": "Frontier",
+   "en": "Some failures sustain themselves. <bookmark mark='a'/> A system runs stably, and as load rises it becomes vulnerable without anyone noticing. <bookmark mark='b'/> Then a trigger, a brief network blip, or a cache that restarts cold, pushes it into overload. <bookmark mark='c'/> The trigger ends, but the overload does not: timeouts cause retries, retries cause more timeouts, misses keep the cache cold. Nathan Bronson and colleagues named these metastable failures in 2021; Part 43's retry storm was one. <bookmark mark='d'/> Detecting vulnerability before the trigger, and proving that a design has no bad stable state, are open problems.",
+   "zh": "有些故障会自我维持。<bookmark mark='a'/>一个系统稳定地运行，随着负载上升，它在没有任何人察觉的情况下变得脆弱。<bookmark mark='b'/>然后一个触发因素，一次短暂的网络抖动，或者一个重启后变冷的缓存，把它推进过载。<bookmark mark='c'/>触发因素结束了，但过载没有：超时引起重试，重试引起更多超时，未命中让缓存一直是冷的。Nathan Bronson 和同事在2021年把这些称为亚稳态故障；第43部分的重试风暴就是其中之一。<bookmark mark='d'/>在触发之前检测出脆弱性，以及证明一个设计没有糟糕的稳定状态，都是未解决的问题。"
+  },
+  "2ef8fe6de04c": {
+   "scene": "Frontier",
+   "en": "Open problems. <bookmark mark='a'/> Learned indexes that keep their guarantees as data is inserted, deleted and shifts. <bookmark mark='b'/> Predicting the tail latency of a design before it is built, with bounds on the error. <bookmark mark='c'/> Detecting the vulnerable states that precede metastable failures. <bookmark mark='d'/> And caches that admit and evict close to the optimum on real traffic that keeps changing. <bookmark mark='e'/> This part's research problem asks for a cache admission policy with a provable competitive ratio against the best fixed set of items, when popularity follows Zipf's law but drifts over time.",
+   "zh": "未解决的问题。<bookmark mark='a'/>在数据被插入、删除和漂移时仍能保持其保证的学习型索引。<bookmark mark='b'/>在一个设计被建造出来之前，预测它的尾部延迟，并给出误差的界。<bookmark mark='c'/>检测出亚稳态故障之前的那些脆弱状态。<bookmark mark='d'/>还有在不断变化的真实流量上，准入和淘汰都接近最优的缓存。<bookmark mark='e'/>这一部分的研究题要求：当热度服从齐普夫定律但随时间漂移时，给出一个缓存准入策略，它相对于最好的固定项集合具有可证明的竞争比。"
+  },
+  "1d1eb638af88": {
+   "scene": "Outro",
+   "en": "What we built in this part. A napkin that turns daily users into queries per second, terabytes and bandwidth. Load balancing by two random choices and Maglev's table, which barely moves anything when a server leaves. Caches whose hit rates Che's formula predicts, and an admission filter that beats LRU. Stampedes, and the probabilistic early refresh that removes them. Token buckets, and why a fixed window lets through twice its limit. Identifiers that sort by time, and why random keys scatter a B-tree. Curves that turn a map into keys. And the Job as a service, whose tail more than doubled its capacity with a small cache. One idea runs through it: estimate first, and let the numbers choose the blocks.",
+   "zh": "这一部分我们构建了什么。一张把日活跃用户变成每秒查询数、太字节和带宽的餐巾纸。用两个随机选择和 Maglev 的表做负载均衡，后者在一台服务器离开时几乎什么都不用移动。命中率可由 Che 的公式预测的缓存，以及一个胜过 LRU 的准入过滤器。缓存击穿，以及消除它的概率性提前刷新。令牌桶，以及为什么固定窗口会放过两倍于上限的请求。按时间排序的标识符，以及为什么随机的键会把 B 树打散。把地图变成键的曲线。还有作为服务的那项任务，一个小小的缓存就让它在尾部约束下的容量翻了一倍多。一个思想贯穿其中：先估算，再让数字来挑选构件。"
+  },
+  "086a87fa0a29": {
+   "scene": "Outro",
+   "en": "Where this comes back. Part 49 designs eight whole systems, from a URL shortener to a ride-hailing service, with these blocks. Part 50 keeps them running, with service-level objectives and capacity plans. Part 56 looks at load and expansion through the spectrum of a graph, Part 59 at the theory of the distributed algorithms underneath, and Part 60 at hardware that keeps changing the napkin's numbers.",
+   "zh": "这些内容会在哪里再出现。第49部分用这些构件设计8个完整的系统，从短网址服务到网约车服务。第50部分让它们持续运行，靠的是服务级目标和容量规划。第56部分通过图的谱来研究负载与扩张，第59部分研究底层分布式算法的理论，第60部分研究那些不断改变餐巾纸上数字的硬件。"
+  },
+  "fbeaa377a324": {
+   "scene": "Outro",
+   "en": "In practice. Estimate the peak queries per second, the storage over years and the bandwidth, to within a factor of a few, before drawing a box. Balance with the less loaded of two random choices, and hash consistently where affinity matters. Measure your cache's hit rate, jitter its expiry times, coalesce identical requests and refresh popular entries early. Put token buckets at the edge, and use sliding windows rather than fixed ones. And choose time-ordered identifiers for B-trees, and shard keys that spread the hot data.",
+   "zh": "实践中。在画第一个方框之前，先估算高峰时的每秒查询数、多年的存储量和带宽，误差在几倍以内。用两个随机选择中负载较轻的那个来均衡，在需要亲和性的地方使用一致性哈希。测量缓存的命中率，给过期时间加上抖动，合并相同的请求，并提前刷新热门条目。在边缘放置令牌桶，用滑动窗口而不是固定窗口。还有，为 B 树选择按时间排序的标识符，并选择能把热数据分散开的分片键。"
+  },
+  "aa77713f72ed": {
+   "scene": "Outro",
+   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build problem: add request coalescing to the Job service, so that each missing key is rebuilt once, and measure the tail while the cache is flushed. The last, marked with a star, is a research problem: an admission policy with a proof of how close it stays to the best cache when popularity drifts.",
+   "zh": "六道习题，完整解答在这一部分的笔记里。可以在任何一道上暂停。第五道是构建题：给那项任务的服务加上请求合并，让每个缺失的键只被重建一次，并在缓存被清空时测量尾部。最后一道标有星号，是研究题：一个准入策略，并证明当热度漂移时，它离最好的缓存有多近。"
+  },
+  "d3993d6649c7": {
+   "scene": "Outro",
+   "en": "Next time, Part 49: system design case studies. Eight systems everyone uses, a URL shortener, a news feed, a chat service, a video platform, a ride-hailing dispatcher and more, each designed from the napkin up with this part's blocks, and stress-tested in simulation.",
+   "zh": "下一次，第49部分：系统设计案例研究。8个人人都在用的系统，短网址服务、信息流、聊天服务、视频平台、网约车派单系统等等，每一个都用这一部分的构件从餐巾纸开始设计，并在模拟中做压力测试。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分所依据的书和论文都在屏幕上和笔记里。感谢观看。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 48, System Design I: Building Blocks",
+ "chapters_en": {
+  "Hook": "The napkin",
+  "Method": "1. How a design is made",
+  "Balancing": "2. Load balancing",
+  "Caching": "3. Caching: where, and what to keep",
+  "Invalidation": "4. Caching: staleness and stampedes",
+  "Limits": "5. Rate limiting",
+  "Async": "6. Queues and asynchrony",
+  "Storage": "7. Choosing storage",
+  "Sharding": "8. Sharding",
+  "Replication": "9. Replication in practice",
+  "Ids": "10. Unique IDs",
+  "Blobs": "11. Blobs and the edge",
+  "Geo": "12. Maps as keys",
+  "Realtime": "13. Real-time blocks",
+  "Job": "14. The Job as a service",
+  "Frontier": "15. Frontier: design as a science",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}

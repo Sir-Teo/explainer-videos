@@ -1,0 +1,434 @@
+{
+ "title": "计算机科学，从零搭建 · 第7部分：流水线",
+ "chapters": {
+  "Hook": "同时处理五条指令",
+  "IronLaw": "1. 性能铁律",
+  "Laundry": "2. 流水线，就像洗衣服",
+  "Five": "3. Pebble 的五个流水级",
+  "Structural": "4. 结构冒险",
+  "Data": "5. 数据冒险与转发",
+  "Control": "6. 控制冒险",
+  "Predict": "7. 预测分支",
+  "Correlate": "8. 相关性，以及一个感知机",
+  "Targets": "9. 分支跳到哪里",
+  "Precise": "10. 精确异常",
+  "Job": "11. 流水线上的任务",
+  "Deep": "12. 更深，以及竞赛的终结",
+  "Amdahl": "13. 阿姆达尔定律",
+  "Sorted": "14. 有序数组之谜",
+  "Frontier": "15. 前沿：预测的极限",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "46a6f7d10436": {
+   "scene": "IronLaw",
+   "en": "Chapter one. The iron law.",
+   "zh": "第1章。性能铁律。"
+  },
+  "f16d5801e456": {
+   "scene": "IronLaw",
+   "en": "To make a computer faster we first need to say what faster means: less time to run a program. <bookmark mark='a'/> That time can be split into three ratios. The number of instructions the program executes. The average number of clock cycles each instruction takes. And the length of a cycle in seconds. Multiply them, and the instructions and the cycles cancel, leaving seconds per program. <bookmark mark='b'/> Architects write it as T equals N times CPI times the cycle time. The textbooks call it the processor performance equation; engineers call it the iron law. <bookmark mark='c'/> Its power is that the three factors belong to different people. N belongs to the algorithm, the compiler and the instruction set. CPI belongs to the organization of the processor. The cycle time belongs to the circuits, and to how the work of an instruction is divided up. Making one factor smaller often makes another larger, and the law keeps the accounts honest.",
+   "zh": "要让计算机更快，先得说清楚“更快”是什么意思：运行一个程序所用的时间更少。<bookmark mark='a'/>这个时间可以拆成三个比值。程序执行的指令条数。每条指令平均花的时钟周期数。以及一个周期有多少秒。把它们乘起来，指令和周期约掉，剩下每个程序的秒数。<bookmark mark='b'/>体系结构设计者把它写成 T 等于 N 乘 CPI 乘周期时间。教科书叫它处理器性能方程；工程师叫它铁律。<bookmark mark='c'/>它的威力在于，三个因子归不同的人管。N 归算法、编译器和指令集。CPI 归处理器的组织结构。周期时间归电路，也归一条指令的工作怎样切分。让一个因子变小，常常会让另一个变大，铁律让这本账算得诚实。"
+  },
+  "20b7a4707c74": {
+   "scene": "IronLaw",
+   "en": "Here is the law applied to the machine of Part 6 and the one this part builds, both running the first chapter of Pride and Prejudice through the Job. <bookmark mark='a'/> The program is the same, so N is the same: eight hundred and twenty-seven thousand instructions. <bookmark mark='b'/> The single-cycle machine has a CPI of exactly one, and a cycle of two point six three nanoseconds. The pipeline's CPI rises to about one point two, because of the hazards this part is about, but its cycle shrinks to one point one three. <bookmark mark='c'/> Multiply out, and the pipeline is almost twice as fast. That is the whole bargain of pipelining: give up a little CPI to win a lot of clock.",
+   "zh": "把铁律用在第6部分的机器和这一部分要造的机器上，两者都用任务处理《傲慢与偏见》的第一章。<bookmark mark='a'/>程序相同，所以 N 相同：八十二万七千条指令。<bookmark mark='b'/>单周期机器的 CPI 正好是一，周期是二点六三纳秒。流水线的 CPI 升到大约一点二，原因就是这一部分要讲的冒险，但它的周期缩到一点一三。<bookmark mark='c'/>乘出来，流水线快了将近一倍。这就是流水线的全部交易：让出一点 CPI，赢得一大截时钟。"
+  },
+  "a4cf7e7a5fe0": {
+   "scene": "IronLaw",
+   "en": "For decades processors were sold by MIPS, millions of instructions per second, a number that leaves out the first factor of the law. Here is why that misleads. <bookmark mark='a'/> Two programs print the numbers from one to two thousand. One finds each digit by subtracting powers of ten, as the Job does. The other uses the divide instruction this part adds to Pebble. <bookmark mark='b'/> The subtracting program runs five times as many instructions, all of them simple, so it scores a splendid eight hundred MIPS. The dividing program runs few instructions, but each divide occupies the divider for sixteen cycles, so it scores barely two hundred and forty. <bookmark mark='c'/> And it finishes first. A program with fewer, slower instructions can beat one with many fast ones; only the time to run the program measures speed. Engineers took to calling MIPS a meaningless indicator of performance.",
+   "zh": "几十年来，处理器按 MIPS 来卖，也就是每秒百万条指令，这个数字漏掉了铁律的第一个因子。下面说明它为什么误导。<bookmark mark='a'/>两个程序都打印从一到两千的数。一个像任务那样，用减去十的幂的办法求出每一位数字。另一个用这一部分给 Pebble 加上的除法指令。<bookmark mark='b'/>做减法的程序执行的指令多五倍，全是简单指令，所以拿到漂亮的八百 MIPS。做除法的程序指令很少，但每次除法要占用除法器十六个周期，所以只得到勉强两百四十。<bookmark mark='c'/>而它先跑完。指令更少、更慢的程序可以赢过指令很多、很快的程序；只有运行程序的时间才衡量速度。工程师们后来把 MIPS 戏称为“毫无意义的性能指标”。"
+  },
+  "f635a9ad5b15": {
+   "scene": "Laundry",
+   "en": "Chapter two. Pipelining, like laundry.",
+   "zh": "第2章。流水线，就像洗衣服。"
+  },
+  "795dc10b5eee": {
+   "scene": "Laundry",
+   "en": "Patterson and Hennessy's textbook pictures pipelining as a laundry. <bookmark mark='a'/> Each load needs four steps, say an hour each: wash, dry, fold and put away. Done one load at a time, four loads take sixteen hours. <bookmark mark='b'/> But the washer is free as soon as the first load moves to the dryer. Start the second load then, and the third an hour later, and four loads are finished in seven hours. <bookmark mark='c'/> Notice what did not change: each load still takes four hours from dirty to put away. The time for one job, the latency, is the same. What improved is the throughput, the number of jobs finished per hour, which in the steady state is four times higher. A processor does not need any single instruction to finish sooner; it needs many of them to finish per second.",
+   "zh": "帕特森和亨尼西的教科书把流水线比作洗衣服。<bookmark mark='a'/>每一批衣服要四步，假设各一小时：洗、烘、叠、收好。一次只做一批，四批要十六小时。<bookmark mark='b'/>但第一批一进烘干机，洗衣机就空出来了。这时开始洗第二批，一小时后洗第三批，四批七小时就全部做完。<bookmark mark='c'/>注意什么没变：每一批从脏到收好仍要四小时。一件活儿的时间，也就是延迟，没有变。变好的是吞吐量，每小时完成的活儿数，稳定状态下高了四倍。处理器并不需要哪一条指令更早完成；它需要每秒完成很多条。"
+  },
+  "31d837747898": {
+   "scene": "Five",
+   "en": "Chapter three. Pebble's five stages.",
+   "zh": "第3章。Pebble 的五个流水级。"
+  },
+  "908863153ffc": {
+   "scene": "Five",
+   "en": "The registers between stages are what make this work. <bookmark mark='a'/> At every clock edge each one captures what its instruction will still need further down the line: the program counter, the operand values read in decode, the immediate, the number of the register to write, the ALU's result, the loaded word. <bookmark mark='b'/> Even the control signals travel this way. The control unit of Part 6 decodes an instruction once, in the decode stage, and the signals ride along with it, each one used in the stage that needs it. <bookmark mark='c'/> So five instructions, each at a different point in its life, share one datapath without interfering, as long as none of them needs something another has not finished.",
+   "zh": "让这一切成立的，是各级之间的寄存器。<bookmark mark='a'/>每个时钟沿，每个寄存器都记下它那条指令往后还需要的东西：程序计数器、译码时读出的操作数、立即数、要写的寄存器编号、算术逻辑单元的结果、取来的字。<bookmark mark='b'/>连控制信号也这样传递。第6部分的控制单元只在译码级对指令译一次码，信号随指令一路同行，每个信号在需要它的那一级使用。<bookmark mark='c'/>于是五条指令，各处在生命的不同阶段，共用一条数据通路而互不干扰，只要没有哪一条需要别的指令还没做完的东西。"
+  },
+  "b6aeefde26f2": {
+   "scene": "Structural",
+   "en": "Chapter four. Structural hazards.",
+   "zh": "第4章。结构冒险。"
+  },
+  "a8cff5883736": {
+   "scene": "Structural",
+   "en": "The ideal chart, one instruction per cycle, breaks whenever an instruction cannot proceed. These situations are called hazards, and they come in three kinds. <bookmark mark='a'/> Structural hazards: two instructions need the same piece of hardware in the same cycle. Data hazards: an instruction needs a value that an earlier instruction has not produced yet. Control hazards: the machine needs to fetch the next instruction before it knows where the program is going. <bookmark mark='b'/> The last-resort cure is always the same: hold the instruction back, and let an empty slot, a bubble, travel down the pipeline in its place. Every cycle lost this way raises the CPI above one. The art of pipeline design is stalling as rarely as possible.",
+   "zh": "每个周期一条指令的理想图，只要有一条指令无法前进就会被打破。这种情况叫冒险，分三类。<bookmark mark='a'/>结构冒险：两条指令在同一个周期需要同一件硬件。数据冒险：一条指令需要一个值，而前面的指令还没把它算出来。控制冒险：机器需要在知道程序往哪里走之前就取下一条指令。<bookmark mark='b'/>最后的办法总是一样的：把这条指令扣住，让一个空槽，也就是气泡，代替它沿流水线走下去。这样每损失一个周期，CPI 就高出一一点。流水线设计的艺术，就是尽可能少地停顿。"
+  },
+  "25699699551d": {
+   "scene": "Data",
+   "en": "Chapter five. Data hazards and forwarding.",
+   "zh": "第5章。数据冒险与转发。"
+  },
+  "3206b7307546": {
+   "scene": "Data",
+   "en": "Here is what forwarding is worth on real programs, measured on the simulated pipeline. Branches are still handled crudely here; the next chapters fix them. <bookmark mark='a'/> Without forwarding, CPIs run from about one and a half to more than two: a third to a half of all cycles are spent waiting for results. <bookmark mark='b'/> With forwarding, every benchmark improves, the sieve's CPI falling from two point three to one point four five. What remains is mostly load-use stalls and branches, and branches are where most of the remaining time goes.",
+   "zh": "下面是转发在真实程序上值多少，在模拟的流水线上测得。这里分支仍然处理得很粗糙；后面几章会修好它们。<bookmark mark='a'/>没有转发时，CPI 从大约一点五到超过二：三分之一到一半的周期花在等结果上。<bookmark mark='b'/>有了转发，每个基准程序都变好了，筛法的 CPI 从二点三降到一点四五。剩下的主要是取数—使用停顿和分支，而剩余时间大部分花在分支上。"
+  },
+  "397a18f9438e": {
+   "scene": "Control",
+   "en": "Chapter six. Control hazards.",
+   "zh": "第6章。控制冒险。"
+  },
+  "1a565b890c30": {
+   "scene": "Control",
+   "en": "The fetch stage must deliver a new instruction every cycle, but which one? After a branch, it depends on the branch's outcome, which is not known until the branch reaches the execute stage. <bookmark mark='a'/> The simplest policy is to keep fetching the next instructions in memory, as if the branch will not be taken. Here a loop branch is taken twice. <bookmark mark='b'/> Each time, by the time the ALU has decided, two wrong instructions are already in the pipeline: the one after the branch, in decode, and the one after that, in fetch. They are flushed, turned into bubbles before they change anything, and fetch restarts at the target. <bookmark mark='c'/> Every taken branch costs two cycles.",
+   "zh": "取指级每个周期都必须交出一条新指令，可是哪一条？遇到分支，答案取决于分支的结果，而结果要等分支到达执行级才知道。<bookmark mark='a'/>最简单的策略是照旧取存储器里接下来的指令，就当分支不会跳转。这里一条循环分支跳转了两次。<bookmark mark='b'/>每一次，等算术逻辑单元做出判定时，流水线里已经有两条错误的指令：分支后面那条在译码级，再后面那条在取指级。它们被冲刷掉，在改变任何东西之前变成气泡，取指从目标处重新开始。<bookmark mark='c'/>每条跳转的分支要花两个周期。"
+  },
+  "dfefd0c55894": {
+   "scene": "Control",
+   "en": "How bad is that? <bookmark mark='a'/> The cost per instruction is the fraction of instructions that are branches, times the fraction of those the machine gets wrong, times the penalty for each mistake. <bookmark mark='b'/> In the Job, nearly a third of all instructions are conditional branches, and with predict-not-taken the machine is wrong whenever one is taken, about forty-three percent of the time. Two cycles each: more than a quarter of a cycle added to every instruction. <bookmark mark='c'/> And the penalty grows with the pipeline. A branch that is decided ten or fifteen stages after it was fetched throws away ten or fifteen instructions. This one equation is why branch prediction became one of the most studied problems in computer architecture.",
+   "zh": "这有多糟？<bookmark mark='a'/>每条指令的代价，是分支占指令的比例，乘以其中机器猜错的比例，再乘以每次猜错的代价。<bookmark mark='b'/>在任务里，将近三分之一的指令是条件分支，而用“预测不跳转”时，只要分支跳转机器就猜错，大约百分之四十三的时候。每次两个周期：给每条指令加上超过四分之一个周期。<bookmark mark='c'/>而且代价随流水线增长。一条在取指之后十级或十五级才判定的分支，会扔掉十条或十五条指令。正是这一个方程，让分支预测成为计算机体系结构中被研究得最多的问题之一。"
+  },
+  "c66c00820337": {
+   "scene": "Predict",
+   "en": "Chapter seven. Predicting branches.",
+   "zh": "第7章。预测分支。"
+  },
+  "42963307e318": {
+   "scene": "Predict",
+   "en": "The simplest guesses are fixed rules. <bookmark mark='a'/> Predict not taken, which is what our pipeline has done so far. Predict always taken, which suits loops, since a loop's closing branch is taken every time but the last. Or the compromise many early machines used: a branch that jumps backwards is probably a loop, so predict taken; a branch that jumps forwards is probably an if, so predict not taken. <bookmark mark='b'/> On the insertion sort, backward-taken is right ninety-nine percent of the time. On the Job it is right only fifty-seven percent: its busiest branches jump forwards, and whether they are taken depends on the text. To do better, a predictor has to watch what each branch actually does.",
+   "zh": "最简单的猜法是固定规则。<bookmark mark='a'/>预测不跳转，我们的流水线到现在一直这样做。预测总是跳转，适合循环，因为循环末尾的分支除了最后一次每次都跳转。或者许多早期机器用的折中：往回跳的分支多半是循环，预测跳转；往前跳的分支多半是 if，预测不跳转。<bookmark mark='b'/>在插入排序上，“往回跳就预测跳转”百分之九十九都对。在任务上只对百分之五十七：它最忙的分支往前跳，跳不跳取决于文本。要做得更好，预测器得观察每条分支实际上做了什么。"
+  },
+  "f09fe9b7de14": {
+   "scene": "Predict",
+   "en": "In 1981 James Smith measured the obvious learning rule. <bookmark mark='a'/> Keep a small table of bits, indexed by the low bits of the branch's address. <bookmark mark='b'/> To predict, look up the branch's bit: one means it was taken last time, so predict taken again. When the branch resolves, write down what it actually did. The table is tiny and fast enough to consult in the fetch stage, alongside the instruction memory.",
+   "zh": "1981年，詹姆斯·史密斯测量了那条显而易见的学习规则。<bookmark mark='a'/>保存一张小小的位表，用分支地址的低位作索引。<bookmark mark='b'/>预测时，查这条分支的那一位：一表示它上次跳转了，那就再预测跳转。分支判定后，记下它实际做了什么。这张表很小，快到可以在取指级和指令存储器一起查。"
+  },
+  "f84eeeeca60f": {
+   "scene": "Correlate",
+   "en": "Chapter eight. Correlation, and a perceptron.",
+   "zh": "第8章。相关性，以及一个感知机。"
+  },
+  "d5a12b1d4340": {
+   "scene": "Correlate",
+   "en": "Because a perceptron's knowledge is a row of weights, we can look at what it learned. Each row here is one branch: the bias weight, then one weight for each of the last sixteen branch outcomes, most recent first. <bookmark mark='a'/> The correlated benchmark was built so that branch B repeats the outcome of branch A, four branches earlier, with three random branches in between. The perceptron found it: one bright weight at position four, almost nothing elsewhere, and B predicted almost perfectly, where a two-bit counter manages a coin toss. <bookmark mark='b'/> The Job's scan branch, the test for a table entry of the wrong length, has a messier pattern: its outcome depends on the lengths of words in the table, and some of that shows up in the recent history. <bookmark mark='c'/> The insertion sort's comparison alternates with its loop branch, and the weights alternate too.",
+   "zh": "因为感知机的知识就是一行权重，我们可以看看它学到了什么。这里每一行是一条分支：偏置权重，然后是最近十六次分支结果各自的权重，最近的在前。<bookmark mark='a'/>相关性基准是这样构造的：分支 B 重复四条分支之前分支 A 的结果，中间夹着三条随机分支。感知机找到了它：第四个位置有一个亮眼的权重，别处几乎什么都没有，B 被预测得几乎完美，而两位计数器只能做到抛硬币的水平。<bookmark mark='b'/>任务的扫描分支，也就是检查表项长度是否不对的那条，模式更乱：它的结果取决于表里单词的长度，其中一部分会在最近的历史里显现出来。<bookmark mark='c'/>插入排序的比较与它的循环分支交替出现，权重也交替变化。"
+  },
+  "2c919c621b45": {
+   "scene": "Targets",
+   "en": "Chapter nine. Where the branch goes.",
+   "zh": "第9章。分支跳到哪里。"
+  },
+  "25286a71082a": {
+   "scene": "Precise",
+   "en": "Chapter ten. Precise exceptions.",
+   "zh": "第10章。精确异常。"
+  },
+  "dea04e8e15d5": {
+   "scene": "Job",
+   "en": "Chapter eleven. The Job on the pipeline.",
+   "zh": "第11章。流水线上的任务。"
+  },
+  "c10ef7d9ce95": {
+   "scene": "Job",
+   "en": "The simulator accounts for every cycle, so the Job's CPI on its first chapter can be taken apart. <bookmark mark='a'/> With no forwarding and no prediction, the CPI is one point nine: the base cycle, plus waiting for data, plus a flush on every taken branch and jump. <bookmark mark='b'/> Forwarding removes the data waits except for the load-use bubbles. <bookmark mark='c'/> A target buffer and two-bit counters remove most of the branch losses. <bookmark mark='d'/> A tournament predictor and a return stack shave off a little more: a CPI of one point two, three quarters of whose excess is the load-use bubble in the scan loop, the rest the branches that still go wrong.",
+   "zh": "模拟器记下了每一个周期，所以任务在第一章上的 CPI 可以拆开来看。<bookmark mark='a'/>没有转发也没有预测时，CPI 是一点九：基本周期，加上等数据，再加上每条跳转的分支和跳转指令的一次冲刷。<bookmark mark='b'/>转发消除了等数据的时间，只剩取数—使用气泡。<bookmark mark='c'/>目标缓冲器和两位计数器消除了大部分分支损失。<bookmark mark='d'/>锦标赛预测器和返回栈再削掉一点：CPI 一点二，多出来的部分有四分之三是扫描循环里的取数—使用气泡，其余是仍然猜错的分支。"
+  },
+  "8158bea77cc5": {
+   "scene": "Deep",
+   "en": "Chapter twelve. Deeper, and the end of the race.",
+   "zh": "第12章。更深，以及竞赛的终结。"
+  },
+  "c3d93a000abc": {
+   "scene": "Amdahl",
+   "en": "Chapter thirteen. Amdahl's law.",
+   "zh": "第13章。阿姆达尔定律。"
+  },
+  "85241ac11de4": {
+   "scene": "Amdahl",
+   "en": "Plot the speedup against n for a few values of p. <bookmark mark='a'/> Each curve rises, then flattens against its ceiling: two for p of a half, ten for ninety percent, twenty for ninety-five, a hundred for ninety-nine. <bookmark mark='b'/> The corollary is the design rule this series keeps meeting: make the common case fast. And after every improvement, look again, because the part you did not speed up is now most of the time. <bookmark mark='c'/> John Gustafson pointed out in 1988 that people given a bigger machine usually run a bigger problem, whose improvable part grows with it, which is why many processors turned out to be worth building after all.",
+   "zh": "对几个 p 值，画出加速比随 n 的变化。<bookmark mark='a'/>每条曲线先上升，然后贴着它的天花板变平：p 为一半时是二，百分之九十时是十，九十五时是二十，九十九时是一百。<bookmark mark='b'/>推论就是本系列一再遇到的设计原则：让常见情况变快。而且每次改进之后都要再看一遍，因为你没加速的那部分现在占了大部分时间。<bookmark mark='c'/>约翰·古斯塔夫森在1988年指出，人们拿到更大的机器，通常会去跑更大的问题，其可改进的部分随之增长，所以多处理器终究还是值得造的。"
+  },
+  "54f2124cc761": {
+   "scene": "Sorted",
+   "en": "Chapter fourteen. The sorted-array puzzle.",
+   "zh": "第14章。有序数组之谜。"
+  },
+  "d0b7bf93edba": {
+   "scene": "Frontier",
+   "en": "Chapter fifteen. Frontier: the limits of prediction.",
+   "zh": "第15章。前沿：预测的极限。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分依据的书和论文都在屏幕上，也在笔记里。感谢观看。"
+  },
+  "2cbe4854bc28": {
+   "scene": "Hook",
+   "en": "Part 6's computer works, but its single-cycle schedule leaves resources waiting. <bookmark mark='a'/> Our teaching budget allows one nanosecond for each memory access, plus logic and register overhead: two point six three nanoseconds for a cycle. This is an assumed timing model, not a measured silicon clock. <bookmark mark='b'/> A load uses both memory phases. An add and a branch skip data memory, yet still wait for the same clock edge. <bookmark mark='c'/> The colored blocks show useful work at different times. Could the next instruction use a resource as soon as the previous instruction leaves it?",
+   "zh": "第6部分的计算机能工作，但单周期安排让资源常常等待。<bookmark mark='a'/>我们的教学预算假定每次存储器访问一纳秒，再加逻辑和寄存器开销，得到二点六三纳秒的周期。这是假定的时序模型，不是实测芯片时钟。<bookmark mark='b'/>取数指令需要两段存储器访问，加法和分支跳过数据存储器，却仍等同一个时钟沿。<bookmark mark='c'/>彩色块表示不同时段的有效工作。前一条指令离开一个资源后，下一条能不能马上使用它？"
+  },
+  "f3a8366b6383": {
+   "scene": "Hook",
+   "en": "Overlap the work, as an assembly line does. <bookmark mark='a'/> Split it into five stages with registers between them. In an ideal full pipeline, five instructions occupy different stages; this does not mean every hardware unit is active. <bookmark mark='b'/> Each simple instruction still crosses five stages. After filling, one can finish each cycle if no hazard stalls or redirects the stream. The cycle follows the slowest stage plus register overhead. Pipelining has a long history, including IBM Stretch in 1961, and is common in modern processors, although some small designs use other schedules.",
+   "zh": "像装配线一样把工作重叠起来。<bookmark mark='a'/>分成五个流水级，级间放寄存器。理想满流水线中，五条指令处在不同级；这不表示每个硬件单元都在活动。<bookmark mark='b'/>每条简单指令仍要经过五级。填满之后，如果没有冒险造成停顿或重定向，每个周期可以完成一条。周期由最慢一级加寄存器开销决定。流水线历史悠久，1961年的 IBM Stretch 就是一个例子；现代处理器普遍采用它，一些小型设计则使用其他安排。"
+  },
+  "8b5909c0b68e": {
+   "scene": "Hook",
+   "en": "Here is the route. <bookmark mark='a'/> Build a five-stage functional model, using an assumed clock budget more than twice as fast as Part 6's. <bookmark mark='b'/> Learn how hazards limit that gain. Forwarding solves some dependencies; other cases still stall. <bookmark mark='c'/> Predict branches with counters, history tables and a perceptron, then compare their measured results. No single learning method wins every case. <bookmark mark='d'/> Finally, simulate short Job passages and label the full-corpus ledger row as an extrapolation. Keep measurements, assumptions and projections separate as we go.",
+   "zh": "路线是这样。<bookmark mark='a'/>建立五级功能模型，采用一个比第6部分快两倍多的假定时钟预算。<bookmark mark='b'/>学习冒险怎样限制收益。转发解决部分依赖，其他情况仍要停顿。<bookmark mark='c'/>用计数器、历史表和感知机预测分支，比较实测结果；没有一种学习方法在每种情形都获胜。<bookmark mark='d'/>最后模拟任务的短段落，并把整个语料的账本行标明为外推。一路区分测量、假设与预测值。"
+  },
+  "78c496937932": {
+   "scene": "Hook",
+   "en": "This is Part 7 of Computer Science, Built, opening the act Making It Fast. <bookmark mark='a'/> We derive the performance equation, distinguish throughput from latency, and explore pipeline depth under stated assumptions. We build a functional five-stage simulator and test selected cases against the emulator. Then we visualize structural, data and control hazards, including where forwarding helps and where it does not. Branch prediction leads from counters to TAGE and the perceptron. Finally come the Job projection, clock and power trade-offs, Amdahl's law, and the sorted-array puzzle.",
+   "zh": "这是《计算机科学，从零搭建》第7部分，开启让它变快这一幕。<bookmark mark='a'/>我们推导性能公式，区分吞吐量与延迟，并在明确假设下探索流水线深度。建立五级功能模拟器，用选定案例与指令模拟器对照。接着可视化结构、数据与控制冒险，说明转发在哪里有用、在哪里无效。分支预测从计数器走向 TAGE 和感知机。最后讨论任务外推、时钟与功耗取舍、阿姆达尔定律和有序数组谜题。"
+  },
+  "636adaca233d": {
+   "scene": "Laundry",
+   "en": "Let one instruction's logic take time t, split into k equal stages. <bookmark mark='a'/> Assume each pipeline register adds overhead o, seventy picoseconds in this teaching model. The cycle is t over k plus o. <bookmark mark='b'/> One instruction's latency is k cycles: t plus k times o, so adding stages increases it. <bookmark mark='c'/> Ideal steady-state throughput improves by t plus o divided by t over k plus o, compared with the one-stage baseline. As k grows, this approaches one plus t over o, exactly the limit in the equation. It approaches k only while stage work greatly exceeds register overhead. Balanced stages and no stalls are essential assumptions.",
+   "zh": "设一条指令的逻辑用时为 t，均分为 k 级。<bookmark mark='a'/>假定每个流水寄存器增加开销 o，本教学模型取七十皮秒。周期就是 t 除以 k 再加 o。<bookmark mark='b'/>一条指令的延迟为 k 个周期，也就是 t 加 k 乘 o，因此增加级数会增加延迟。<bookmark mark='c'/>相对单级基准，理想稳态吞吐量的加速比是 t 加 o，除以 t 除以 k 再加 o。k 增大时，它趋近一加 t 除以 o，正是式中的极限。只有每级工作远大于寄存器开销时，加速比才接近 k。各级均衡且没有停顿，是必要假设。"
+  },
+  "6aaa67d1e66f": {
+   "scene": "Laundry",
+   "en": "Stages need not be equal. <bookmark mark='a'/> These bars are a teaching budget: assumed one-nanosecond memories, sampled unit-delay ALU settling, structural register-read depth, and estimated mux and control costs. They are not physical timing results for a fabricated pipeline. <bookmark mark='b'/> Under those assumptions, the slowest stage plus seventy picoseconds gives one point one three nanoseconds, about eight hundred and eighty-five megahertz. The assumed single-cycle budget is two point six three nanoseconds, so the clock ratio is about two point three, not five. <bookmark mark='c'/> The budget suggests memory is the bottleneck. A real implementation needs timing analysis, routing and memory characterization before claiming that clock.",
+   "zh": "各级不一定相等。<bookmark mark='a'/>这些柱是教学预算：假定的一纳秒存储器、单位延迟下采样的算术逻辑单元稳定时间、寄存器读取的结构深度，以及估计的选择器和控制开销。它们不是制造出的流水线的物理时序结果。<bookmark mark='b'/>在这些假设下，最慢一级加七十皮秒，得到一点一三纳秒，约八百八十五兆赫。假定单周期预算是二点六三纳秒，因此时钟比约二点三，不是五。<bookmark mark='c'/>预算提示存储器是瓶颈。真实实现必须完成时序分析、布线和存储器表征，才能声称达到这个时钟。"
+  },
+  "3b50b20e3df1": {
+   "scene": "Laundry",
+   "en": "Deeper is not always better. <bookmark mark='a'/> Consider a deliberately simple model: equally splittable logic, fixed register overhead o, and a fixed fraction b of instructions each losing k minus one cycles. Time per instruction is the cycle multiplied by one plus b times k minus one. <bookmark mark='b'/> Holding b fixed produces this curve: short pipelines have long cycles; very deep ones pay overhead and larger flushes. Real predictors and stage balances can change with depth. <bookmark mark='c'/> Differentiating gives the displayed continuous optimum, about thirty-seven for these inputs. An integer design must compare nearby feasible depths. This is a model exercise, not an optimal hardware design or a prediction of Pentium 4's stage count.",
+   "zh": "更深并不总更好。<bookmark mark='a'/>考虑一个刻意简化的模型：逻辑可均分，寄存器开销 o 固定，固定比例 b 的指令每次损失 k 减一个周期。每条指令用时就是周期乘以一加 b 乘 k 减一。<bookmark mark='b'/>固定 b 得到这条曲线：浅流水线周期长，极深流水线承担更多开销与清空损失。真实预测器和级间均衡会随深度变化。<bookmark mark='c'/>求导得到图中的连续最优值，代入这些输入约三十七级。整数设计还要比较附近可实现的深度。这是模型练习，不是硬件最优设计，也不是对奔腾4级数的预测。"
+  },
+  "0a6562170c2c": {
+   "scene": "Five",
+   "en": "Divide the datapath into five roles. <bookmark mark='a'/> Fetch the instruction, decode and read registers, execute, access data memory, and write back. An ideal simple instruction advances one stage each cycle, including stages where it has no active work. A load, add and branch use different resources. Stalls and the later multi-cycle divider break that one-cycle-per-stage schedule. <bookmark mark='b'/> This resembles the classic textbook RISC pipeline, with historical examples including MIPS and SPARC. Pebble is an educational model; it does not reproduce all their implementation details or instruction-set behavior.",
+   "zh": "把数据通路分成五种职责。<bookmark mark='a'/>取指，译码并读寄存器，执行，访问数据存储器，以及写回。理想的简单指令每周期前进一级，包括没有实际工作的级。取数、加法与分支使用不同资源。停顿以及后面的多周期除法器，会打破每级一周期的安排。<bookmark mark='b'/>这类似经典教科书的精简指令集流水线，MIPS 与 SPARC 是历史例子。Pebble 是教学模型，没有复现它们的全部实现细节或指令集行为。"
+  },
+  "45fbe3bb7d59": {
+   "scene": "Five",
+   "en": "Watch independent simple instructions move through the ideal pipeline. <bookmark mark='a'/> Instruction one begins fetch in cycle one and reaches write-back in cycle five. Instruction two follows one cycle later. Read down a column to see different instructions in flight together. <bookmark mark='b'/> The highlighted column shows that overlap. <bookmark mark='c'/> With no stalls, n such instructions finish in n plus four cycles. There is one total four-cycle overhead for filling and draining, not four cycles of each added separately. Thus CPI is one plus four over n and approaches one for a long stream. Dependencies, branches, memory conflicts and multi-cycle operations add to this ideal schedule; the later divider is one example.",
+   "zh": "看独立的简单指令通过理想流水线。<bookmark mark='a'/>第一条在周期一开始取指，在周期五到达写回，第二条晚一个周期跟进。沿一列往下看，可以看到同时在途的不同指令。<bookmark mark='b'/>高亮列展示这种重叠。<bookmark mark='c'/>没有停顿时，n 条这样的指令在 n 加四个周期后完成。填充和排空总共带来四个额外周期，不是分别各加四个。因此每条指令周期数是一加四除以 n，长指令流时趋近一。依赖、分支、存储器冲突和多周期操作都会增加开销，稍后的除法器就是一个例子。"
+  },
+  "fb759005426b": {
+   "scene": "Five",
+   "en": "The implementation is a functional cycle model, not a gate-level physical pipeline. <bookmark mark='a'/> For selected programs and configurations, the tests compare its final registers, memory, output and stopping address with the instruction emulator. The charts record which modeled instruction occupies each stage. <bookmark mark='b'/> They exercise dependencies, branches and exceptions, and use modeled multiply and divide latencies motivated by earlier circuits. These are finite tests, not an all-program proof or timing certification. The simulator lets us explain every counted stall while keeping its hardware assumptions visible. <bookmark mark='c'/> One deliberate difference is stale self-modifying code, examined in chapter ten.",
+   "zh": "这个实现是按周期推进的功能模型，不是物理门级流水线。<bookmark mark='a'/>对选定程序和配置，测试把最终寄存器、存储器、输出及停止地址与指令模拟器比较。图表记录每条模型指令所在的级。<bookmark mark='b'/>测试覆盖依赖、分支和异常，并使用由前面电路启发的乘除法延迟模型。这些是有限测试，不是全程序证明或时序认证。模拟器让我们解释每个被统计的停顿，同时明确它对硬件的假设。<bookmark mark='c'/>一个刻意保留的差异是自修改代码可能取到旧指令，第十章会检查它。"
+  },
+  "4f6d727b3dd9": {
+   "scene": "Structural",
+   "en": "Two stages may request memory in the same cycle. <bookmark mark='a'/> Fetch needs an instruction while MEM may need a data load or store. One access port cannot serve both simultaneously. <bookmark mark='b'/> If such stalls do not overlap other delays, their CPI contribution equals the fraction of instructions accessing data memory. That estimate is shown for the Job. <bookmark mark='c'/> Our simulator instead provides two ideal logical access ports over one coherent byte array, not disjoint instruction and data copies. Split instruction and data caches are one common hardware solution. Real memory systems add cache misses and other constraints.",
+   "zh": "两个级可能在同一周期请求存储器。<bookmark mark='a'/>取指级要读指令，而存储级可能要取数或存数，单个访问端口不能同时满足两者。<bookmark mark='b'/>如果这些停顿不与其他延迟重叠，它们对每条指令周期数的贡献就等于访存指令比例。图中给出了任务的估计。<bookmark mark='c'/>我们的模拟器则在同一份一致的字节数组上提供两个理想逻辑端口，并没有独立的指令和数据副本。分离指令缓存与数据缓存，是硬件中的一种常见办法。真实存储系统还受缓存未命中等因素限制。"
+  },
+  "8a250adaae31": {
+   "scene": "Structural",
+   "en": "Multi-cycle operations add another resource conflict. <bookmark mark='a'/> Our functional model assigns division sixteen execute cycles, motivated by a radix-four divider producing two quotient bits per step. It does not physically connect Part 4's divider to this simulator. While EX is occupied, following instructions wait; the displayed add spends fifteen extra cycles in decode. <bookmark mark='b'/> Multiplication is modeled as one execute cycle. The sampled Dadda-tree delay fits the assumed memory-dominated budget, but that is not a routed timing guarantee. Real designs may pipeline, duplicate or iteratively reuse these units, depending on throughput, area and power.",
+   "zh": "多周期操作带来另一种资源冲突。<bookmark mark='a'/>功能模型给除法分配十六个执行周期，依据是四进制除法器每步产生两位商。这里并没有把第4部分的除法电路物理连接进模拟器。执行级被占用时，后续指令等待；图中的加法在译码级多等十五个周期。<bookmark mark='b'/>乘法在模型中占一个执行周期。采样的达达树延迟落在假定的存储器主导预算内，但这不是布线后的时序保证。真实设计可能把单元流水化、复制或迭代复用，要权衡吞吐量、面积与功耗。"
+  },
+  "1b7e9427cfa9": {
+   "scene": "Data",
+   "en": "Instructions often use a recent result. <bookmark mark='a'/> In this example, the subtract reads register a one in decode before the preceding add has written it back. That is a read-after-write hazard. <bookmark mark='b'/> Without forwarding, hold the subtract until the value is in the register file. Our simulator writes back before decoding in each cycle, allowing a write and a dependent read in that cycle. This ordering is a model policy, not a physical half-cycle timing proof. <bookmark mark='c'/> The shown adjacent ALU dependencies each need two bubbles. Other distances, operations and memory latencies can require different waits.",
+   "zh": "指令常常使用刚产生的结果。<bookmark mark='a'/>这个例子中，减法在译码时读寄存器 a 一，而前面的加法还没写回，这就是写后读冒险。<bookmark mark='b'/>没有转发时，让减法等到值进入寄存器文件。模拟器每周期先写回、后译码，因此允许同周期写入并依赖读取。这是模型的顺序约定，不是物理半周期时序证明。<bookmark mark='c'/>图中相邻的算术依赖各需要两个气泡。其他距离、操作与存储延迟可能需要不同等待。"
+  },
+  "7d2335d1ebe4": {
+   "scene": "Data",
+   "en": "The consumer needs the value, not necessarily a register-file read. An ALU result already exists before write-back. <bookmark mark='a'/> Forward it from EX/MEM or MEM/WB to the next instruction's execute inputs. <bookmark mark='b'/> Compare source and destination numbers, ignore writes to register zero, and prefer the newest matching producer in EX/MEM over an older MEM/WB result. An EX/MEM load holds an address, not its loaded data, so that value cannot be forwarded as the answer. <bookmark mark='c'/> For this ALU chain, all the dependency bubbles disappear. The arrows show the bypass paths. The next example explains why forwarding cannot eliminate every data stall.",
+   "zh": "使用者需要的是数值，不一定要从寄存器文件读取。算术结果在写回前已经存在。<bookmark mark='a'/>从执行与存储之间，或存储与写回之间，把它转发到下一条指令的执行输入。<bookmark mark='b'/>比较源和目标寄存器号，忽略对零号寄存器的写入；同时匹配时，优先采用较新的执行与存储间结果，而不是较旧的存储与写回间结果。前者若是取数指令，保存的是地址，不是读出的数据，不能当答案转发。<bookmark mark='c'/>对这条算术链，依赖气泡全部消失。箭头展示旁路。下个例子会说明，转发为什么不能消除所有数据停顿。"
+  },
+  "3fde6422e70c": {
+   "scene": "Data",
+   "en": "A load reveals forwarding's limit. <bookmark mark='a'/> The following instruction needs the loaded value at the start of its execute stage, but the load produces it only at the end of memory access. Those events fall in the same cycle, at different instants: forwarding cannot send a value backward in time. <bookmark mark='b'/> Hold fetch and decode for one cycle and insert a bubble into execute. <bookmark mark='c'/> One cycle later the value is available from MEM/WB and the dependent operation can proceed. This one-bubble result assumes our one-cycle memory and the shown consumer timing; other machines or consumers can differ.",
+   "zh": "取数指令展示了转发的限制。<bookmark mark='a'/>后一条指令在执行级开始时就要用到数据，而取数指令到存储访问结束时才产生数据。这两件事处于同一周期，却发生在不同时刻；转发不能让数据回到过去。<bookmark mark='b'/>让取指和译码保持一个周期，向执行级插入气泡。<bookmark mark='c'/>下一个周期，数据已经在存储与写回之间可用，依赖操作便能继续。一个气泡的结论依赖于这里的单周期存储器和所示使用时机；其他机器或使用者可能不同。"
+  },
+  "cf23a2beeaa2": {
+   "scene": "Control",
+   "en": "There are several ways to handle the unknown next address. <bookmark mark='a'/> Decide earlier: comparing in decode can reduce the redirect penalty, at the cost of a longer decode path and extra forwarding. <bookmark mark='b'/> Change the architectural schedule: ordinary branches in classic MIPS expose a delay slot whose instruction executes whether the branch is taken or not. A compiler can sometimes fill it usefully. <bookmark mark='c'/> That compatibility obligation complicated later implementations, but it was not permanent across every MIPS revision: Release 6 removed delay slots. RISC-V and ARM use other branch semantics. <bookmark mark='d'/> Or predict: fetch the likely path, then redirect and discard younger work when the prediction is wrong. This is the approach we study next.",
+   "zh": "处理未知的下一地址有几条路。<bookmark mark='a'/>更早判定：把比较放进译码级能减少重定向代价，但会拉长译码路径，并需要额外转发。<bookmark mark='b'/>改变体系结构安排：经典 MIPS 的普通分支公开一个延迟槽，其中指令无论跳不跳都执行。编译器有时能填入有用工作。<bookmark mark='c'/>这种兼容义务让后续实现更复杂，但并非所有 MIPS 版本都永久保留：第六版移除了延迟槽。RISC-V 和 ARM 使用其他分支语义。<bookmark mark='d'/>或者预测：先取可能的路径，预测错误时重定向，并丢弃较年轻的工作。接下来研究这种办法。"
+  },
+  "e2ef4cc66e49": {
+   "scene": "Predict",
+   "en": "Consider a ten-iteration loop repeated four times. <bookmark mark='a'/> Its branch is taken nine times, then not taken. A one-bit predictor forgets its usual direction after each exit, so it misses again when the loop restarts. <bookmark mark='b'/> A two-bit saturating counter needs two contrary outcomes to reverse its strong belief. After training, it usually misses only the exit, assuming no table aliasing. <bookmark mark='c'/> The displayed trace includes startup: eight one-bit misses and five two-bit misses in forty outcomes. Exit misses are not inevitable for every predictor: a loop predictor that learns the trip count can anticipate them. Counter initialization, aliasing and changing loop lengths matter.",
+   "zh": "考虑一个重复四次、每次十轮的循环。<bookmark mark='a'/>分支先跳九次，再不跳一次。一位预测器在退出时忘掉常见方向，于是循环重新开始又错一次。<bookmark mark='b'/>两位饱和计数器需要连续两次相反结果，才会推翻强确信。训练之后、没有表项混叠时，它通常只错退出那一次。<bookmark mark='c'/>图中的轨迹包括启动阶段：四十次结果中，一位错八次，两位错五次。退出错误不是所有预测器都无法避免的；能学习迭代次数的循环预测器可以预判退出。初始状态、混叠和循环长度变化都很重要。"
+  },
+  "0643c50021d1": {
+   "scene": "Predict",
+   "en": "These predictors run online over the same benchmark traces, predicting before each update. <bookmark mark='a'/> The table reports these runs, including startup and aliasing. The threshold benchmark's aggregate accuracy is about seventy-five percent on irregular data because it includes predictable loop branches as well as the difficult data branch. Sorting groups the data branch's outcomes. <bookmark mark='b'/> A single counter per branch leaves substantial errors on some benchmarks. That does not prove the branch's full local history is uninformative: a counter remembers much less than a history model. Next we add information from other branches and compare again.",
+   "zh": "这些预测器在线处理相同基准轨迹，每次先预测再更新。<bookmark mark='a'/>表中报告这些运行的结果，包括启动和混叠。不规则数据的阈值基准总体准确率约百分之七十五，因为统计中既有可预测的循环分支，也有困难的数据分支。排序会把数据分支的结果聚集起来。<bookmark mark='b'/>每条分支一个计数器，在某些基准上仍有大量错误。这不能证明该分支完整的局部历史没有信息：计数器记住的远少于历史模型。接下来加入其他分支的信息，再次比较。"
+  },
+  "30df7a707a6a": {
+   "scene": "Correlate",
+   "en": "Global history records recent branch outcomes. <bookmark mark='a'/> McFarling's gshare hashes that history with the branch address using exclusive-or, then selects a two-bit counter. Different contexts can select different counters; collisions can also make unrelated contexts share one. <bookmark mark='b'/> Our tournament chooses between a per-address bimodal counter table and gshare, using another table of counters. This illustrates adaptive choice. It is not a reproduction of Alpha 21264's historical local-history and global-history predictor: a per-address direction counter is simpler than a local-history predictor.",
+   "zh": "全局历史记录最近的分支结果。<bookmark mark='a'/>麦克法林的 gshare 把历史与分支地址异或散列，再选择两位计数器。不同上下文能选中不同计数器，碰撞也会让无关上下文共享一个。<bookmark mark='b'/>我们的锦标赛预测器用另一张计数器表，在按地址的双模计数器表与 gshare 之间选择。这展示自适应选择，并不是复现 Alpha 21264 历史上的局部历史与全局历史预测器：按地址保存方向计数器，比局部历史预测器更简单。"
+  },
+  "53fb284253db": {
+   "scene": "Correlate",
+   "en": "Different branches benefit from different history lengths. <bookmark mark='a'/> Seznec and Michaud's TAGE combines a base predictor with partially tagged components using geometrically spaced histories. Our simplified version uses four through sixty-four outcomes. <bookmark mark='b'/> It selects the longest matching tag and allocates longer-history entries after some misses. Partial tags can alias, capacity is finite, and allocation does not guarantee exactly the minimum history a branch needs. Full designs add confidence, alternate-provider and replacement policies. <bookmark mark='c'/> TAGE and its descendants are influential competition and processor designs. We will compare our small implementation, keeping its results distinct from commercial predictors and the full published algorithms.",
+   "zh": "不同分支适合不同历史长度。<bookmark mark='a'/>塞兹内克与米肖的 TAGE 将基础预测器与几何间隔历史的部分标记组件结合。我们的简化版本使用四到六十四次结果。<bookmark mark='b'/>它选择标记匹配的最长历史，并在部分错误后分配更长历史表项。部分标记会混叠，容量有限，分配过程并不保证每条分支恰好得到所需的最短历史。完整设计还加入置信度、备用预测源和替换策略。<bookmark mark='c'/>TAGE 及其后继在竞赛和处理器设计中很有影响。接下来比较我们的小型实现，并把结果与商业预测器及完整论文算法区分开。"
+  },
+  "83866e942507": {
+   "scene": "Correlate",
+   "en": "Jimenez and Lin proposed perceptron branch prediction in 2001. <bookmark mark='a'/> Represent each of the last h outcomes as plus one or minus one. A hash of the branch address selects a weight vector, so different branches can share and interfere with the same weights. <bookmark mark='b'/> Add a bias and the weighted inputs; a nonnegative sum predicts taken. <bookmark mark='c'/> When wrong or insufficiently confident, adjust weights toward the observed outcome. The heatmap next shows the weights this rule learns. <bookmark mark='d'/> Parameter count grows linearly with history length, unlike a fully enumerated context table. That comparison does not cover every table-based scheme. Perceptron-derived predictors have appeared in real products, as Jimenez's 2016 paper notes; the exact predictor in an unknown viewing device cannot be assumed.",
+   "zh": "希门尼斯与林在2001年提出感知机分支预测。<bookmark mark='a'/>把最近 h 次结果表示成正一或负一。分支地址的散列选择一组权重，因此不同分支可能共享并干扰同一组权重。<bookmark mark='b'/>把偏置与加权输入相加，和非负就预测跳转。<bookmark mark='c'/>预测错误或信心不足时，向观测结果的方向调整权重。下一幅热图展示这个规则学到的权重。<bookmark mark='d'/>参数数量随历史长度线性增长，而完整枚举上下文的表会快速膨胀；这个比较并不适用于所有表式方案。希门尼斯2016年论文指出，真实产品使用过感知机衍生预测器，但不能假定未知观看设备采用哪种预测器。"
+  },
+  "e50d89b50aec": {
+   "scene": "Correlate",
+   "en": "Compare the learning predictors on these traces. <bookmark mark='a'/> Global information helps Fibonacci and the correlated benchmark, but the latter uses fixed-seed pseudorandom data, not genuine independent coin flips. Its observed accuracy is not an information-theoretic ceiling. <bookmark mark='b'/> Our TAGE is best on the shown Job trace and reduces misses relative to the two-bit predictor. Different data and budgets can change that ranking. The irregular threshold stream is difficult for these online predictors; that does not prove that no predictor with other information could learn it.",
+   "zh": "比较这些轨迹上的学习预测器。<bookmark mark='a'/>全局信息帮助了斐波那契与相关性基准，但后者使用固定种子的伪随机数据，不是真正独立的掷币。观测准确率不是信息论上限。<bookmark mark='b'/>我们的 TAGE 在图中的任务轨迹上最好，相对两位预测器减少了错误。不同数据与预算会改变排名。不规则阈值流对这些在线预测器很难，但这不能证明拥有其他信息的预测器也学不会。"
+  },
+  "62ec4f936cb5": {
+   "scene": "Targets",
+   "en": "Direction alone is not enough: fetch also needs a target. <bookmark mark='a'/> A branch target buffer, indexed by the program counter, remembers the kind and target of earlier control transfers. <bookmark mark='b'/> On a hit with a correct taken prediction and correct target, our ideal front end fetches from that target next cycle. On a miss it continues at pc plus four until a redirect. <bookmark mark='c'/> A warm, correct BTB hit can therefore remove the modeled unconditional-jump redirect cost. Cold misses, aliases, wrong indirect targets and real fetch-bandwidth constraints can still cost time. Free here is a condition of this model, not a universal property of jumps.",
+   "zh": "只有方向还不够，取指也需要目标。<bookmark mark='a'/>按程序计数器索引的分支目标缓冲器，记住以前控制转移的种类和目标。<bookmark mark='b'/>命中、方向预测正确且目标也正确时，我们的理想前端在下一周期从目标取指。未命中就继续取程序计数器加四的位置，直到重定向。<bookmark mark='c'/>因此，预热后正确命中的目标缓冲器，可以消除模型中的无条件跳转重定向成本。冷启动未命中、混叠、间接目标错误和真实取指带宽限制仍有代价。这里的免费有模型条件，并不是跳转的普遍性质。"
+  },
+  "5ad2a2206f7f": {
+   "scene": "Targets",
+   "en": "A return can have many targets. <bookmark mark='a'/> The same instruction returns to different callers, so remembering only its last target often fails in recursion. <bookmark mark='b'/> Recognized calls and returns normally nest: push the return address on a small front-end stack at each call and pop it at a return. <bookmark mark='c'/> A sixteen-entry stack works well on the balanced call patterns shown. Deeper nesting can discard entries; unusual control transfers, context switches and speculative repair also matter in real systems. Its residual misses must be measured rather than attributed to overflow from the count alone.",
+   "zh": "返回可以有多个目标。<bookmark mark='a'/>同一条返回指令要回到不同调用者，只记最后目标在递归中常常失败。<bookmark mark='b'/>识别出的调用和返回通常嵌套：调用时把返回地址压入前端小栈，返回时弹出。<bookmark mark='c'/>十六项栈在所示的配对调用模式上效果很好。更深嵌套可能丢掉表项；真实系统还要处理特殊控制转移、上下文切换与推测恢复。剩余错误应当实测，不能只看数量就归因为溢出。"
+  },
+  "e376ef5a393f": {
+   "scene": "Targets",
+   "en": "Run the same recursive Fibonacci program on three modeled front ends. <bookmark mark='a'/> With no target buffer, the table records redirects for jumps and returns. <bookmark mark='b'/> A BTB removes many jump redirects, but a last-target entry still misses many returns. <bookmark mark='c'/> Adding a sixteen-entry return stack cuts return misses to a few hundred and lowers CPI to about one point one two in this run. That comparison isolates the modeled front-end choices; it does not establish a universal return-miss rate or hardware speedup.",
+   "zh": "让同一个递归斐波那契程序运行在三种模型前端上。<bookmark mark='a'/>没有目标缓冲器时，表中记录跳转与返回的重定向。<bookmark mark='b'/>加入缓冲器消除许多跳转重定向，但只保存最后目标的表项仍会错过许多返回。<bookmark mark='c'/>再加十六项返回栈，返回错误减到几百次，这次运行的每条指令周期数降到约一点一二。这个比较隔离了模型中的前端选择，并没有建立普遍的返回错误率或硬件加速比。"
+  },
+  "029c012e2848": {
+   "scene": "Precise",
+   "en": "An exception needs a precise architectural boundary. <bookmark mark='a'/> In this sketch, Pebble's custom policy treats division by zero as a fault. The divide is in execute, with older and younger instructions around it. RISC-V's M extension instead defines a result for division by zero. <bookmark mark='b'/> At a precise fault, older instructions have committed their architectural effects; the faulting instruction follows its defined side-effect policy, and younger instructions have not committed theirs. Pebble stops and reports the divide's address. An operating system could use such a boundary for recovery, but this simulator implements no operating-system resume mechanism. Cache and predictor effects are a separate question.",
+   "zh": "异常需要精确的体系结构边界。<bookmark mark='a'/>图中 Pebble 的自定义策略把除零当故障。除法位于执行级，周围有更老与更年轻的指令。RISC-V 的 M 扩展则规定除零返回特定结果。<bookmark mark='b'/>在精确故障处，更老的指令已经提交体系结构效果；故障指令遵循规定的副作用策略，而更年轻指令尚未提交。Pebble 停止并报告除法地址。操作系统可以利用这种边界恢复，但模拟器没有实现操作系统恢复机制。缓存和预测器的影响是另一层问题。"
+  },
+  "14e5f6d0f47f": {
+   "scene": "Precise",
+   "en": "Separate detecting a fault from committing it. <bookmark mark='a'/> The model records a detected problem with its instruction. <bookmark mark='b'/> When that instruction reaches write-back, it stops the machine and discards younger work. Older operations have completed. Stores occur in MEM only after older instructions have passed the stages where this model can discover a fault. <bookmark mark='c'/> In this test, the first store commits, the divide faults, and the younger store does not change memory. The final architectural state and fault address agree with the emulator. That is the tested promise; it does not erase all microarchitectural traces of younger activity. Out-of-order execution needs additional machinery to preserve the same boundary.",
+   "zh": "把发现故障与提交故障分开。<bookmark mark='a'/>模型将发现的问题记在指令上。<bookmark mark='b'/>这条指令到达写回时，机器停止，并丢弃较年轻的工作，更老的操作已经完成。存数只在更老指令经过本模型所有可能发现故障的级之后，才在存储级发生。<bookmark mark='c'/>这个测试中，第一次存数提交，除法故障，后面的存数不改变存储器。最终体系结构状态和故障地址与模拟器一致。这是被测试的承诺，不表示年轻活动的全部微体系结构痕迹都被抹去。乱序执行需要额外机构保持同样的边界。"
+  },
+  "d367d4c234bc": {
+   "scene": "Precise",
+   "en": "Self-modifying code exposes another boundary. <bookmark mark='a'/> This loop changes the offset in its own load. <bookmark mark='b'/> The sequential emulator and gate machine give thirty-one, while this predicted pipeline gives twenty-six. <bookmark mark='c'/> Fetch can revisit the load before the older store updates its encoding. Without prediction the redirect happens to refetch the newer word; that is accidental. Instruction-fetch synchronization is ISA-specific. RISC-V fence dot i orders a hart's already-visible prior stores before its later fetches; other harts and operating-system migration need broader protocols. x86 also specifies self- and cross-modification rules. Our Pebble model implements no instruction fence, so this example demonstrates its explicit limitation.",
+   "zh": "自修改代码揭示另一个边界。<bookmark mark='a'/>这个循环修改自己取数指令的偏移。<bookmark mark='b'/>顺序模拟器与门级机器得到三十一，启用预测的这条流水线得到二十六。<bookmark mark='c'/>更老的存数尚未更新编码时，取指已经返回那条取数指令。不预测时，重定向碰巧重新取到新字，这是偶然。指令取指同步取决于指令集。RISC-V 的取指屏障让本硬件线程已可见的先前存数先于后续取指；其他线程以及操作系统迁移需要更广的协议。x86 也规定自修改与跨核修改的规则。Pebble 模型没有实现指令屏障，这个例子展示它明确的限制。"
+  },
+  "e87a4fefd334": {
+   "scene": "Job",
+   "en": "Look closely at the Job's search loop. <bookmark mark='a'/> The displayed mismatched-length fast path has six instructions. Loading the entry length immediately before testing it causes one load-use bubble. Equal-length entries can enter the letter-comparison path and do more work. <bookmark mark='b'/> With warm, correct direction and target predictions, the jump back adds no modeled redirect cost. <bookmark mark='c'/> On that fast path, six instructions then take seven steady-state cycles. The larger ninety-nine point seven percent figure covers the whole search in the single-cycle instruction count, not only this path. Scheduling an independent, safe instruction between the load and use can hide the bubble; moving a load past a bounds check first needs an address-safety proof.",
+   "zh": "仔细看任务的查找循环。<bookmark mark='a'/>图中长度不匹配的快速路径有六条指令。读出条目长度后立即检查，造成一个取数使用气泡。长度相同的条目可能进入字母比较路径，执行更多工作。<bookmark mark='b'/>方向和目标预测预热且正确时，跳回循环不增加模型重定向开销。<bookmark mark='c'/>在这条快速路径上，六条指令稳态需要七个周期。更大的百分之九十九点七，是整个查找占单周期指令数的比例，不只是这条路径。把独立且安全的指令安排在取数与使用之间能藏起气泡；将取数移到边界检查之前，首先必须证明地址安全。"
+  },
+  "b1059e88070c": {
+   "scene": "Deep",
+   "en": "Pipeline depth is one factor in clock design, alongside technology, circuits and workload. <bookmark mark='a'/> These approximate desktop clock examples show rapid growth through the 1990s. <bookmark mark='b'/> Pentium 4 used deeper pipelines: roughly twenty stages in Willamette and thirty-one in Prescott. That historical count does not validate our toy thirty-seven-stage optimum. <bookmark mark='c'/> Intel cancelled Tejas in 2004, and Core 2 arrived in 2006 with a shorter pipeline and strong performance at lower clocks on many workloads. Clock growth slowed markedly, rather than stopping completely. Differences in architecture, technology and workload prevent attributing the comparison to depth alone.",
+   "zh": "流水线深度是时钟设计的一个因素，还要考虑工艺、电路和负载。<bookmark mark='a'/>这些近似的桌面时钟例子展示九十年代的快速增长。<bookmark mark='b'/>奔腾4采用更深流水线：Willamette 大约二十级，Prescott 三十一级。这个历史级数并不能验证我们玩具模型的三十七级最优值。<bookmark mark='c'/>英特尔2004年取消 Tejas，2006年推出流水线更短的酷睿2，在许多负载上以较低时钟提供强性能。时钟增长明显减慢，并非完全停止。体系结构、工艺与负载的差异，使我们不能把比较只归因于深度。"
+  },
+  "acaf60e640d0": {
+   "scene": "Deep",
+   "en": "Power constrained the race. <bookmark mark='a'/> Dynamic switching power is approximately activity times capacitance times supply voltage squared times frequency. Leakage and other static power are additional terms. <bookmark mark='b'/> Ideal constant-field Dennard scaling reduced dimensions and voltages together, allowing faster devices without rising power density under its assumptions. <bookmark mark='c'/> That scaling became harder. Lowering supply voltage reduces switching power but slows devices; lowering threshold voltage to preserve speed raises subthreshold leakage. Variability and reliability also constrain the choices. Deep pipelines add clocked registers and can waste more speculative work. <bookmark mark='d'/> Designers increasingly spent transistor budgets on multiple cores and specialized units. Those choices still require power management, and do not make clock frequency irrelevant.",
+   "zh": "功耗限制了竞赛。<bookmark mark='a'/>动态开关功耗近似等于活动率乘电容，再乘供电电压平方与频率。漏电等静态功耗还要另算。<bookmark mark='b'/>理想的恒电场登纳德缩放同时缩小尺寸和电压，在其假设下，让器件更快而功率密度不升高。<bookmark mark='c'/>这种缩放后来更困难。降低供电电压减少开关功耗，却会减慢器件；为保持速度而降低阈值电压，会增大亚阈值漏电。波动与可靠性也限制选择。深流水线增加时钟驱动的寄存器，并可能浪费更多推测工作。<bookmark mark='d'/>设计者越来越多地把晶体管预算用在多核和专用单元上。这些选择仍要管理功耗，并不让时钟频率失去意义。"
+  },
+  "be6bd481f0b9": {
+   "scene": "Amdahl",
+   "en": "Amdahl's 1967 argument is a model for fixed work. <bookmark mark='a'/> Let p be the fraction of baseline execution time improved by a factor n. Assume the remaining work and its cost stay fixed, with no new overhead. <bookmark mark='b'/> The new time, relative to the old, is one minus p plus p over n. <bookmark mark='c'/> Speedup is its reciprocal. For p less than one, the limit is one over one minus p. Make ninety percent of the original time vanish, and the unchanged ten percent limits speedup to ten. Changing problem size or adding costs requires a different accounting.",
+   "zh": "阿姆达尔1967年的论证，是一个针对固定工作量的模型。<bookmark mark='a'/>设原运行时间中比例 p 的部分加速 n 倍，假定其他工作及其成本固定，而且没有新增开销。<bookmark mark='b'/>新时间相对旧时间为一减 p，再加 p 除以 n。<bookmark mark='c'/>加速比就是它的倒数。p 小于一时，极限是一除以一减 p。即使让原来百分之九十的时间消失，不变的百分之十也把加速比限制在十。改变问题规模或加入新成本，就需要重新核算。"
+  },
+  "9451ffd3ef33": {
+   "scene": "Amdahl",
+   "en": "Apply the accounting carefully. <bookmark mark='a'/> Pipelining improves throughput; it does not make every individual instruction finish sooner. For the same instruction count, total speedup is the clock-rate ratio divided by the CPI ratio. <bookmark mark='b'/> Linear search accounts for ninety-nine point seven percent of this Job's single-cycle instructions. That is also its time share only in the uniform-cost single-cycle model. <bookmark mark='c'/> Eliminating that work with no replacement cost would give an ideal ceiling of about three hundred and fifty in that model. It is not a measured pipeline speedup or a promise for a hash table. <bookmark mark='d'/> On a pipeline, measure the time share and new costs again. Hardware schedules the work better; algorithms can change how much work remains.",
+   "zh": "应用这个核算时要小心。<bookmark mark='a'/>流水线提高吞吐量，并不让每条指令本身更早完成。指令数相同时，总加速比是时钟频率之比除以每条指令周期数之比。<bookmark mark='b'/>线性查找占这个任务单周期指令的百分之九十九点七。只有在等成本的单周期模型里，这也等于时间占比。<bookmark mark='c'/>如果完全删除这些工作且没有替代开销，该模型给出约三百五十倍的理想上限。这不是实测流水线加速比，也不是哈希表的性能承诺。<bookmark mark='d'/>对流水线，必须重新测量时间占比与新成本。硬件更好地安排工作，算法则能改变剩余工作量。"
+  },
+  "6c9a9d06c597": {
+   "scene": "Sorted",
+   "en": "A widely discussed 2012 Stack Overflow question asked why sorting an array sped up this loop. <bookmark mark='a'/> The loop adds values at least a hundred and twenty-eight. Reordering the same values preserves the sum and the number of additions; sorting itself has a cost, excluded from these repeated-loop timings. <bookmark mark='b'/> Fixed-seed pseudorandom data makes the threshold outcomes irregular for these predictors. That is an empirical difficulty, not an absolute information bound for a known repeated array. <bookmark mark='c'/> Sorted data groups outcomes into long runs, which even a two-bit counter predicts well. Compiler transformations and the target processor determine the actual speedup.",
+   "zh": "2012年，Stack Overflow 上一个广为讨论的问题问，为什么数组排序后这个循环更快。<bookmark mark='a'/>循环累加不小于一百二十八的数。重排相同元素保持和与加法次数不变；排序本身有成本，这里重复循环的计时不包括它。<bookmark mark='b'/>固定种子的伪随机数据，让这些预测器看到不规则的阈值结果。这是实验中的难点，不是已知重复数组的绝对信息上限。<bookmark mark='c'/>排序把结果聚成长串，同样方向重复，连两位计数器也能预测好。实际加速比还取决于编译器变换和目标处理器。"
+  },
+  "e51ab8b4b4c0": {
+   "scene": "Sorted",
+   "en": "These bars are measurements from this host, not the original question's machine. <bookmark mark='a'/> The program scans thirty-two thousand seven hundred and sixty-eight values three hundred times, reusing the same array. We report medians of five runs, check matching sums, and exclude generation and sorting. C compiler flags disable vectorization and automatic if-conversion. <bookmark mark='b'/> Read the measured times and ratio from the bars. The sorted loop is faster here, consistent with easier branch prediction, but timing alone does not isolate its cause. Hardware performance counters and controlled compiler output would strengthen that explanation. Other processors and builds can give different results.",
+   "zh": "这些柱是本机测量，不是原问题那台机器的结果。<bookmark mark='a'/>程序重复使用同一数组，每次扫描三万二千七百六十八个数，共三百遍。报告五次运行的中位数，检查求和一致，并排除生成和排序时间。C 编译选项关闭向量化和自动条件转换。<bookmark mark='b'/>柱旁给出实测时间与比值。本机上有序循环更快，与分支更容易预测相符，但仅凭计时不能隔离因果。硬件性能计数器和受控的编译结果能加强解释。其他处理器和构建方式可能得出不同结果。"
+  },
+  "6ba7cde85f34": {
+   "scene": "Sorted",
+   "en": "Now use Pebble's cycle model with three thousand values scanned twice. <bookmark mark='a'/> The irregular order has about three thousand mispredictions; the sorted order has fourteen. Both produce the same sum. <bookmark mark='b'/> Each modeled branch miss costs two cycles. The displayed cycle counts therefore differ by only about thirteen percent. This compares two input orders within Pebble, not an identical prediction stream across different processors. Deeper or wider machines can lose more useful work on a redirect, but their predictors, caches and generated code also differ.",
+   "zh": "再用 Pebble 的周期模型，扫描三千个数两遍。<bookmark mark='a'/>不规则顺序约有三千次预测错误，有序顺序只有十四次，两者得到相同的和。<bookmark mark='b'/>模型中每次分支预测错误损失两个周期，因此图中的周期数只差约百分之十三。这是在 Pebble 内比较两种输入顺序，并不是不同处理器上完全相同的预测轨迹。更深或更宽的机器重定向时可能丢掉更多有效工作，但其预测器、缓存和生成代码也不同。"
+  },
+  "afed0504cb88": {
+   "scene": "Sorted",
+   "en": "A data-dependent branch can sometimes be replaced by arithmetic. <bookmark mark='a'/> Here the comparison is x less than a hundred and twenty-eight. Subtract one from its zero-or-one result: small values get a zero mask; large ones get all ones in the machine word. Masking x selects zero or x before adding. <bookmark mark='b'/> The displayed host and Pebble timings show the trade-off. The host's order sensitivity is much smaller; Pebble executes more instructions and is slower than its branched versions. These are measured cases, not a rule that branchless code wins. <bookmark mark='c'/> Compilers may use conditional moves or vectorization when semantics permit. Extra work, dependencies and safely evaluating both paths still matter.",
+   "zh": "有时可以用算术替换依赖数据的分支。<bookmark mark='a'/>这里比较的是 x 是否小于一百二十八。从零或一的结果减一：小值得到全零掩码，大值得到机器字中的全一掩码。与 x 按位与，就在相加前选出零或 x。<bookmark mark='b'/>图中的本机与 Pebble 计时展示了取舍。本机对顺序的敏感度小得多；Pebble 执行更多指令，比它的两个有分支版本都慢。这些是测量案例，不是无分支代码总赢的规律。<bookmark mark='c'/>语义允许时，编译器可能采用条件移动或向量化。额外工作、依赖，以及同时计算两条路径是否安全，仍然重要。"
+  },
+  "f61741c05519": {
+   "scene": "Frontier",
+   "en": "What do these experiments establish? This is an empirical comparison on one trace, not a prediction limit. <bookmark mark='a'/> The Job chapter supplies about a quarter-million branch outcomes. The two-bit table is our baseline. <bookmark mark='b'/> Our simplified TAGE improves as its arrays grow. The horizontal axis estimates nominal packed table payload, excluding history, validity and implementation overhead; it is not Python memory or a complete hardware budget. <bookmark mark='c'/> The perceptron changes little over the tested sizes. A plateau alone does not prove a representation ceiling. <bookmark mark='d'/> The dashed PPM result uses a different algorithm with unbounded context-table growth but a bounded set of history lengths. Its advantage cannot be assigned entirely to storage, and its remaining errors are not proved impossible. Compare algorithms under a defined training protocol before drawing stronger conclusions.",
+   "zh": "这些实验能说明什么？这是同一轨迹上的经验比较，不是预测极限。<bookmark mark='a'/>任务这一章提供约二十五万次分支结果，两位表是基准。<bookmark mark='b'/>我们的简化 TAGE 随数组增大而改善。横轴估计名义上的紧凑表项负载，不含历史、有效位与实现开销；它不是 Python 内存，也不是完整硬件预算。<bookmark mark='c'/>感知机在测试的尺寸范围内变化很小，仅凭平台不能证明表示能力上限。<bookmark mark='d'/>虚线的部分匹配预测使用不同算法，上下文表增长不限，但历史长度集合有限。其优势不能完全归因于存储，剩余错误也未被证明不可能消除。必须在明确训练协议下比较算法，才能得出更强结论。"
+  },
+  "688b3df97a8c": {
+   "scene": "Frontier",
+   "en": "Try a table for each chosen history length. <bookmark mark='a'/> Predict before updating on each outcome. In this run, online accuracy peaks near twelve outcomes of history, then falls as contexts recur less often. This is an observed learning trade-off, not a universal optimum. <bookmark mark='b'/> The dashed curve instead uses each context's majority label from the entire evaluated trace. That is an offline oracle for this feature class; it uses future labels and is not a deployable online predictor. It is bounded by one hundred percent. <bookmark mark='c'/> Our PPM-style model backs off among its configured lengths, up to sixty-four outcomes, and stores the shown number of contexts. <bookmark mark='d'/> Partial matching links prediction and compression, but entropy and code length concern probabilities and log loss. They do not directly give a branch-accuracy ceiling. TAGE shares some ideas while imposing finite hashed tables.",
+   "zh": "对每个选定历史长度试一张表。<bookmark mark='a'/>每次结果先预测再更新。这次运行在约十二次历史处在线准确率最高，之后因上下文较少重现而下降。这是观测到的学习取舍，不是普遍最优长度。<bookmark mark='b'/>虚线则使用整个被评估轨迹中每个上下文的多数标签。这是该特征类别的离线先知，使用未来标签，不能部署为在线预测器，上限也是百分之百。<bookmark mark='c'/>我们的部分匹配模型在配置的长度之间回退，最长六十四次结果，并存储图示数量的上下文。<bookmark mark='d'/>部分匹配连接预测与压缩，但熵和码长讨论概率与对数损失，不能直接给出分支准确率上限。TAGE 共享一些思想，同时采用有限的散列表。"
+  },
+  "cf0ca102312d": {
+   "scene": "Frontier",
+   "en": "A small example gives a precise representational result. <bookmark mark='a'/> Let branch B equal the exclusive-or of two earlier bits, A and C. The taken cases lie on opposite corners. <bookmark mark='b'/> No fixed affine line separates all four labels. With only these two features, a perceptron cannot classify XOR perfectly; a best line can still get three of four equally likely cases right. Thus fifty percent is not the mathematical ceiling. <bookmark mark='c'/> Our online parity run happens to give this perceptron about forty-nine percent. Other histories, initialization and learning rules can change that empirical result; it does not explain the entire Job plateau. <bookmark mark='d'/> Research expands features and combines predictors: piecewise-linear methods select functions by path; multiperspective predictors hash several history features. TAGE-SC-L combines TAGE, a statistical corrector and a loop predictor, not necessarily three serial hardware stages.",
+   "zh": "一个小例子能给出精确的表示结论。<bookmark mark='a'/>令分支 B 等于前面两位 A 与 C 的异或，跳转情况位于对角。<bookmark mark='b'/>没有固定的仿射直线能分开全部四个标签。只有这两个特征时，感知机不能完美分类异或；但最佳直线仍可在等概率四种情况中猜对三种，所以百分之五十不是数学上限。<bookmark mark='c'/>这次在线奇偶基准恰好让感知机得到约百分之四十九。其他历史、初值和学习规则可以改变实验结果；它不能解释任务整个准确率平台的成因。<bookmark mark='d'/>研究通过扩展特征与组合预测器改进：分段线性方法按路径选择函数，多视角预测器散列多种历史特征。TAGE-SC-L 结合 TAGE、统计校正器和循环预测器，并不一定是三个串行硬件级。"
+  },
+  "9cfa00d04a86": {
+   "scene": "Frontier",
+   "en": "Research starts by defining the information and evaluation protocol. <bookmark mark='a'/> Profile which static branches cause errors on the chosen workload. Independent unseen random data would defeat a history-only guess, but our fixed traces do not prove such independence. <bookmark mark='b'/> BranchNet, published in 2020, trains convolutional models offline and combines predictions for selected hard branches with a runtime predictor. Its paper evaluates unseen inputs; that is research evidence for specified workloads, not a claim that arbitrary branches become predictable. <bookmark mark='c'/> Large code footprints also pressure instruction fetch and prediction capacity. Accuracy and capacity both matter, depending on the application. <bookmark mark='d'/> A fair next experiment fixes allowed features, all state bits, training data and heldout chapters. Keep test labels out of design and initial state. That makes improved accuracy evidence of generalization, rather than memorization of a known trace.",
+   "zh": "研究从明确信息与评估协议开始。<bookmark mark='a'/>先剖析所选负载中哪些静态分支造成错误。独立、未见的随机数据会击败只看历史的猜测，但固定轨迹并不能证明这种独立性。<bookmark mark='b'/>2020年发表的 BranchNet 离线训练卷积模型，把选定困难分支的预测与运行时预测器结合。论文评估未见输入，这是在指定负载上的研究证据，不表示任意分支都变得可预测。<bookmark mark='c'/>大型代码还会给取指和预测容量施压。准确率与容量都重要，取决于应用。<bookmark mark='d'/>公平的后续实验要固定允许的特征、全部状态位、训练数据和留出章节。测试标签不能进入设计和初始状态。这样准确率提高才是泛化证据，而不是背熟已知轨迹。"
+  },
+  "30a29436d9da": {
+   "scene": "Outro",
+   "en": "What we built: the performance equation; a five-stage functional pipeline; and an explicitly assumed clock budget. We visualized hazards, forwarding, load-use stalls, and precise architectural exceptions, with finite emulator comparisons. We measured counter, TAGE and perceptron implementations on specified traces, without claiming an absolute prediction limit. Short Job passages were simulated cycle by cycle; the full-corpus ledger row is a fitted projection, nearly twice as fast under its assumptions. Multiple instructions overlap, while this one-wide pipeline retires them in order.",
+   "zh": "我们建立了性能公式、五级功能流水线，以及明确标注的假定时钟预算。可视化了冒险、转发、取数使用停顿和精确体系结构异常，并进行了有限的模拟器对照。我们在指定轨迹上测量计数器、TAGE 和感知机实现，没有宣称绝对预测极限。任务短段落逐周期模拟，整个语料的账本行则是拟合外推，在其假设下接近两倍快。多条指令重叠，而这条单发射流水线按序退休。"
+  },
+  "7cb094f5fdba": {
+   "scene": "Outro",
+   "en": "In practice, measure first. Linux perf stat can report supported cycle, instruction and branch events when permissions allow; results depend on the processor and operating system. Profilers help find baseline time shares, and wall time differs from processor time. Conditional moves, safe if-conversion and data reordering can help hot loops, but measure their extra work too. Vendor manuals and Agner Fog's tables provide useful measured and documented costs, not every core's complete internal pipeline. Open-source Rocket and BOOM offer concrete predictor implementations to inspect.",
+   "zh": "实践中先测量。权限允许时，Linux 的 perf stat 能报告受支持的周期、指令和分支事件，结果取决于处理器与操作系统。剖析器帮助找到基准时间占比，墙钟时间与处理器时间也不同。条件移动、安全的条件转换和数据重排可能改善热点循环，但也要测量额外工作。厂商手册与 Agner Fog 的表给出有用的实测和公开成本，并非每款内核完整的内部流水线。开源 Rocket 与 BOOM 则提供可检查的具体预测器实现。"
+  },
+  "7234ebb6429a": {
+   "scene": "Outro",
+   "en": "Six problems are in the notes. The fifth schedules the Job's loop, with a required proof that a hoisted load is safe under this memory layout. The starred exercise designs a predictor within sixty-four kibibytes of fully accounted state. Choose training and tuning chapters first, then evaluate untouched chapters with no encoded future outcomes. A known trace can be memorized, so replay accuracy alone is not the research question. Report the protocol, remaining misses and what generalizes.",
+   "zh": "笔记有六道习题。第五题安排任务循环的指令顺序，并要求证明提前发出的取数在当前存储布局下安全。星号题设计一个全部状态合计不超过六十四二进制千字节的预测器。先选择训练与调参章节，再评估未使用过的章节，不能编码未来结果。已知轨迹可以背下来，所以重放准确率本身不是研究问题。报告协议、剩余错误，以及能够泛化的内容。"
+  },
+  "26e1f24080bb": {
+   "scene": "Outro",
+   "en": "Next time: our pipeline overlaps instructions, but executes and retires in order. When an older operation blocks progress, independent younger work may still be ready. Part 8 studies scheduling that work with register renaming and a reorder buffer to preserve precise architectural state. Modern cores can keep many instructions in flight. The 2018 Spectre disclosures also showed how some speculative activity can leak information through microarchitectural effects, under specific attack conditions.",
+   "zh": "下一次：我们的流水线让指令重叠，但按序执行与退休。老操作阻碍推进时，较年轻的独立工作可能已经就绪。第8部分研究如何借助寄存器重命名与重排序缓冲器安排这些工作，同时保持精确的体系结构状态。现代内核可以让许多指令同时在途。2018年披露的幽灵攻击还展示，在特定攻击条件下，一些推测活动会通过微体系结构效果泄露信息。"
+  },
+  "61d553d32f67": {
+   "scene": "Correlate",
+   "en": "A branch's own past is not the only clue. <bookmark mark='a'/> If the first two conditions here are known, the third is determined. A counter watching only the third branch does not directly observe that cross-branch information. <bookmark mark='b'/> Record recent outcomes in order in a global history shift register: one for taken, zero for not taken. <bookmark mark='c'/> Yeh and Patt's 1991 work demonstrated two-level adaptive prediction. Which information helps depends on the program, history representation, table sharing and training.",
+   "zh": "分支自己的过去不是唯一线索。<bookmark mark='a'/>这里前两个条件已知时，第三个就确定了。只看第三条分支的计数器，不能直接观察这种跨分支信息。<bookmark mark='b'/>用全局历史移位寄存器按顺序记录最近结果：跳转记一，不跳记零。<bookmark mark='c'/>叶与帕特1991年的工作展示两级自适应预测。哪些信息有效，取决于程序、历史表示、表项共享与训练。"
+  },
+  "fe9cb6aaecc8": {
+   "scene": "Outro",
+   "en": "Where this comes back. Our pipeline overlaps instructions but retires at most one per cycle in order; Part 8 lets independent instructions execute out of order. The assumed memory delays lead to Part 9's caches. Power constraints motivate multicore and SIMD. Instruction scheduling can hide some load-use bubbles when movement is safe. Speculation's microarchitectural traces connect to Spectre, and Amdahl's fixed-work accounting returns in parallel and distributed systems.",
+   "zh": "这些会在哪里重现？我们的流水线让指令重叠，但每周期至多按序退休一条；第8部分让独立指令乱序执行。假定的存储延迟引向第9部分的缓存。功耗约束推动多核与向量计算。移动安全时，指令调度能隐藏部分取数使用气泡。推测的微体系结构痕迹连接幽灵攻击，阿姆达尔的固定工作量核算则会在并行与分布式系统中重现。"
+  },
+  "49161b9e143b": {
+   "scene": "Job",
+   "en": "The full-corpus pipeline row is a projection. <bookmark mark='a'/> Fit a linear bubble model to twenty-four short passages, using text events such as scanned entries. This is different from Part 6's instruction path-count formula. <bookmark mark='b'/> The displayed sixteen-thousand-character heldout text, encoded as sixteen thousand and nineteen bytes, checks one prediction and reports its error. It does not establish an error bound for the thirty novels. <bookmark mark='c'/> Combining the fitted bubbles with the corpus instruction count and assumed eight-hundred-and-eighty-five-megahertz clock gives the displayed CPI and projected minutes. We have not simulated the entire corpus cycle by cycle. <bookmark mark='d'/> The ledger's speedup is therefore a model-based estimate for the same program. A full run or broader validation could reveal a different result.",
+   "zh": "整个语料的流水线账本行是预测值。<bookmark mark='a'/>用二十四个短段落拟合线性气泡模型，特征包括扫描条目等文本事件。这与第6部分的指令路径计数公式不同。<bookmark mark='b'/>图中一万六千字符、编码为一万六千零十九字节的留出文本检查一次预测并报告误差，不能建立三十本小说的误差界。<bookmark mark='c'/>将拟合气泡、语料指令数，以及假定八百八十五兆赫时钟结合，得到图中的每条指令周期数和预测分钟数。我们没有逐周期模拟整个语料。<bookmark mark='d'/>所以账本加速比是同一程序在模型下的估计。完整运行或更广验证可能发现不同结果。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 7, Pipelines",
+ "chapters_en": {
+  "Hook": "Five instructions at once",
+  "IronLaw": "1. The iron law",
+  "Laundry": "2. Pipelining, like laundry",
+  "Five": "3. Pebble's five stages",
+  "Structural": "4. Structural hazards",
+  "Data": "5. Data hazards and forwarding",
+  "Control": "6. Control hazards",
+  "Predict": "7. Predicting branches",
+  "Correlate": "8. Correlation, and a perceptron",
+  "Targets": "9. Where the branch goes",
+  "Precise": "10. Precise exceptions",
+  "Job": "11. The Job on the pipeline",
+  "Deep": "12. Deeper, and the end of the race",
+  "Amdahl": "13. Amdahl's law",
+  "Sorted": "14. The sorted-array puzzle",
+  "Frontier": "15. Frontier: the limits of prediction",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}

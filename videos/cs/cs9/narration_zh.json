@@ -1,0 +1,419 @@
+{
+  "title": "计算机科学，从零搭建 · 第9部分：存储层次",
+  "chapters": {
+    "Hook": "每个周期一秒",
+    "Wall": "1. 存储墙",
+    "Locality": "2. 局部性",
+    "Direct": "3. 直接映射缓存",
+    "Assoc": "4. 相联度与替换",
+    "ThreeC": "5. 三种缺失",
+    "Amat": "6. 平均访存时间",
+    "Measured": "7. 这台机器的阶梯",
+    "Programming": "8. 为缓存编程",
+    "Oblivious": "9. 缓存无关算法",
+    "Pebbles": "10. 红蓝卵石游戏",
+    "External": "11. 外存与 B 树",
+    "Prefetch": "12. 预取",
+    "Dram": "13. DRAM 内部",
+    "Job": "14. 任务遇上存储器",
+    "Frontier": "15. 前沿：学习替换",
+    "Outro": "回顾、习题，以及它们会在哪里再出现"
+  },
+  "lines": {
+    "8dca7627e310": {
+      "scene": "Wall",
+      "en": "Chapter one. The memory wall.",
+      "zh": "第一章。存储墙。"
+    },
+    "5ecd8da0a1ab": {
+      "scene": "Locality",
+      "en": "Chapter two. Locality.",
+      "zh": "第二章。局部性。"
+    },
+    "bb7be50be4db": {
+      "scene": "Direct",
+      "en": "Chapter three. A direct-mapped cache.",
+      "zh": "第三章。直接映射缓存。"
+    },
+    "d8a0b8c53756": {
+      "scene": "Direct",
+      "en": "The first caches appeared in the 1960s; Maurice Wilkes described the idea in 1965 as a slave memory, and IBM's System/360 Model 85 shipped one in 1968. The simplest design is direct-mapped: every address has exactly one place in the cache it can go. <bookmark mark='a'/> Take a sixteen-kilobyte cache of two hundred fifty-six lines, each sixty-four bytes. An address is cut into three fields. <bookmark mark='b'/> The lowest six bits are the offset: which byte within the sixty-four-byte line. <bookmark mark='c'/> The next eight bits are the index: which of the two hundred fifty-six lines of the cache this address must live in. <bookmark mark='d'/> The rest is the tag. Many addresses share an index, so the cache stores the tag beside each line, and on every access compares it: same tag, a hit; different tag or an empty line, a miss.",
+      "zh": "最早的缓存出现在二十世纪六十年代；莫里斯·威尔克斯在 1965 年把这个想法描述为“从属存储器”，IBM 的 System/360 Model 85 在 1968 年装上了一个。最简单的设计是直接映射：每个地址在缓存里恰好只有一个可去的位置。<bookmark mark='a'/>取一个十六千字节的缓存，两百五十六行，每行六十四字节。地址被切成三段。<bookmark mark='b'/>最低六位是偏移：在六十四字节的行里是哪个字节。<bookmark mark='c'/>接下来八位是索引：这个地址必须住在两百五十六行中的哪一行。<bookmark mark='d'/>剩下的是标签。许多地址共用一个索引，所以缓存在每行旁边存下标签，每次访问都比较它：标签相同，命中；标签不同或者那行是空的，缺失。"
+    },
+    "307b10d0bc38": {
+      "scene": "Direct",
+      "en": "Here is a toy cache to watch: eight lines of sixteen bytes, and eight-bit addresses, so one bit of tag, three of index and four of offset. <bookmark mark='a'/> The first access, hex fourteen, has index one: the line is empty, a miss, and the line is filled. The second, hex eighteen, falls in the same sixteen-byte line: a hit, by spatial locality. <bookmark mark='b'/> Watch hex ninety-four. Its index is also one, but its tag is different, so it throws out the line that hex fourteen brought in, and when hex fourteen comes back, it misses again. <bookmark mark='c'/> Two busy addresses that share an index fight over one line even when the rest of the cache is empty. That is the weakness of direct mapping, and the next chapter's subject.",
+      "zh": "这里有一个玩具缓存可以观察：八行，每行十六字节，八位地址，所以一位标签、三位索引、四位偏移。<bookmark mark='a'/>第一次访问，十六进制十四，索引是一：那行是空的，缺失，然后把那行填上。第二次，十六进制十八，落在同一个十六字节的行里：命中，这是空间局部性。<bookmark mark='b'/>看十六进制九十四。它的索引也是一，但标签不同，所以它把十六进制十四带进来的那行扔掉了，等十六进制十四再回来，又缺失了。<bookmark mark='c'/>两个共用一个索引的繁忙地址，即使缓存的其余部分都空着，也要为一行争个不停。这是直接映射的弱点，也是下一章的主题。"
+    },
+    "d4a1faa14933": {
+      "scene": "Assoc",
+      "en": "Chapter four. Associativity and replacement.",
+      "zh": "第四章。相联度与替换。"
+    },
+    "3c1545a86af1": {
+      "scene": "ThreeC",
+      "en": "Chapter five. Three kinds of miss.",
+      "zh": "第五章。三种缺失。"
+    },
+    "2cef093ca9b8": {
+      "scene": "Amat",
+      "en": "Chapter six. Average memory access time.",
+      "zh": "第六章。平均访存时间。"
+    },
+    "86f0780de9a1": {
+      "scene": "Measured",
+      "en": "Chapter seven. This machine's staircase.",
+      "zh": "第七章。这台机器的阶梯。"
+    },
+    "157a9a6b1ffe": {
+      "scene": "Programming",
+      "en": "Chapter eight. Programming for caches.",
+      "zh": "第八章。为缓存编程。"
+    },
+    "2bba1f0d84c2": {
+      "scene": "Oblivious",
+      "en": "Chapter nine. Cache-oblivious algorithms.",
+      "zh": "第九章。缓存无关算法。"
+    },
+    "1e0559c64123": {
+      "scene": "Pebbles",
+      "en": "Chapter ten. The red-blue pebble game.",
+      "zh": "第十章。红蓝卵石游戏。"
+    },
+    "9a08954d6a28": {
+      "scene": "External",
+      "en": "Chapter eleven. External memory and B-trees.",
+      "zh": "第十一章。外存与 B 树。"
+    },
+    "ab955bc75f7f": {
+      "scene": "Prefetch",
+      "en": "Chapter twelve. Prefetching.",
+      "zh": "第十二章。预取。"
+    },
+    "f4ef0ebfcf43": {
+      "scene": "Dram",
+      "en": "Chapter thirteen. Inside DRAM.",
+      "zh": "第十三章。DRAM 内部。"
+    },
+    "e43d3865a609": {
+      "scene": "Job",
+      "en": "Chapter fourteen. The Job meets memory.",
+      "zh": "第十四章。任务遇上存储器。"
+    },
+    "77ce8e5f7fac": {
+      "scene": "Frontier",
+      "en": "Chapter fifteen. Frontier: learning to replace.",
+      "zh": "第十五章。前沿：学习替换。"
+    },
+    "9bd24692775d": {
+      "scene": "Outro",
+      "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+      "zh": "这一部分依据的书和论文都在屏幕上，也在笔记里。感谢观看。"
+    },
+    "d50dfceef810": {
+      "scene": "Hook",
+      "en": "Start with the measured pointer-chase times on this host. To make them tangible, scale them using an illustrative two-point-eight-gigahertz reference clock; the host does not report a verified clock here. <bookmark mark='a'/> The register row is a one-cycle illustration, not a measured universal instruction latency. <bookmark mark='b'/> Small working sets usually find nearby cache storage. <bookmark mark='c'/> Larger sets expose further changes in effective access time. <bookmark mark='d'/> The largest random walks can include cache misses, address translation and other system effects. Their timing alone cannot separate those causes. <bookmark mark='e'/> The storage-device rows are rough access-latency examples, not measurements from this host. Read the labels and units before comparing the scaled times.",
+      "zh": "先看本机测得的指针追逐时间。为便于感受，我们用示意性的二点八吉赫兹参考时钟放大它们；这里没有核实本机时钟。<bookmark mark='a'/>寄存器一行是假设一个周期的示意，并非通用指令延迟的实测值。<bookmark mark='b'/>较小工作集通常能利用附近缓存。<bookmark mark='c'/>工作集增大后，有效访问时间继续变化。<bookmark mark='d'/>最大的随机遍历可能同时涉及缓存缺失、地址翻译和其他系统因素，单凭时间不能分离原因。<bookmark mark='e'/>存储设备两行是粗略访问延迟示例，不是本机测量。比较放大时间前，先看清标签和单位。"
+    },
+    "d0792833b303": {
+      "scene": "Hook",
+      "en": "The corpus model gives an apparent puzzle. <bookmark mark='a'/> Its abstract word table grows to nearly fifty-eight thousand entries, about six hundred seventy-eight kibibytes. <bookmark mark='b'/> Prefix scans over the recorded corpus imply about two point eight billion table-line visits. <bookmark mark='c'/> A cold, fully associative thirty-two-kibibyte LRU cache misses about eighty-eight percent of these table-only visits. This excludes interleaved letters and writes. <bookmark mark='d'/> A separate fitted cost projection combines sampled cache events with short core benchmarks. Its small displayed slowdown depends strongly on idealized prefetching and the chosen clock. It is not a full-corpus execution through a realistic hardware memory system. We will build each model and see what it can establish.",
+      "zh": "全语料模型给出一个看似矛盾的现象。<bookmark mark='a'/>抽象单词表增长到近五万八千项，约六百七十八二进制千字节。<bookmark mark='b'/>记录语料的前缀扫描对应约二十八亿次表缓存行访问。<bookmark mark='c'/>从空开始、全相联的三十二二进制千字节最近最少使用缓存，在这些仅含表访问的序列中约有百分之八十八缺失，尚未计入交错的字母读取与写入。<bookmark mark='d'/>另一项成本拟合把采样缓存事件与短小处理器基准结合。屏幕上的较小减速强烈依赖理想化预取与所选时钟，并非通过真实硬件内存系统运行完整语料。我们会分别建立这些模型，检查各自能够说明什么。"
+    },
+    "2f5cee9bd389": {
+      "scene": "Hook",
+      "en": "Here is the route through the part. <bookmark mark='a'/> Build address fields, sets, ways and replacement decisions. <bookmark mark='b'/> Compare miss classifications under explicit reference models. <bookmark mark='c'/> Measure dependent-load time and sequential throughput, while keeping system attribution separate from observation. <bookmark mark='d'/> Then use the red-blue pebble game to reason about data movement for a specified classical matrix-multiplication computation. Fast multiplication algorithms and different graph rules need different bounds. <bookmark mark='e'/> Finally, combine corpus counts, sampled events and simplified core experiments into a conditional ledger projection.",
+      "zh": "这一部分按如下路线展开。<bookmark mark='a'/>建立地址字段、组、路与替换决策。<bookmark mark='b'/>在明确的参考模型下比较缺失分类。<bookmark mark='c'/>测量依赖取数时间与顺序吞吐量，同时区分观察结果与系统原因判断。<bookmark mark='d'/>再用红蓝卵石游戏分析指定经典矩阵乘法计算的数据搬运；快速乘法算法或不同计算图规则需要不同下界。<bookmark mark='e'/>最后把语料计数、采样事件与简化处理器实验结合，得到有条件的账本预测。"
+    },
+    "2bc6f8462ab1": {
+      "scene": "Wall",
+      "en": "These curves illustrate a historical divergence; they are extrapolations from stated growth rates, not a new measurement series. <bookmark mark='a'/> Processor performance improved rapidly in the selected era, with changes in clocks, parallel execution and other design choices. <bookmark mark='b'/> DRAM access latency improved more slowly. The red curve represents improvement in latency, so rising means shorter access time, not increasing delay. <bookmark mark='c'/> Compounding different rates creates a widening ratio. The precise gap depends on the interval, workload and definitions. <bookmark mark='d'/> Wulf and McKee's 1995 memory-wall argument explains why memory stalls can consume an increasing share of execution. It does not imply that every program eventually has the same bottleneck.",
+      "zh": "这些曲线示意历史上的分化，是按所列增长率外推的图形，并非新的实测序列。<bookmark mark='a'/>在所选时期，时钟、并行执行及其他设计变化推动了处理器性能快速增长。<bookmark mark='b'/>动态随机存储器访问延迟改善较慢。红线表示延迟的改善倍数，因此上升代表访问时间缩短，而非延迟增加。<bookmark mark='c'/>不同增长率复合起来会扩大比值；具体差距取决于时期、工作负载和定义。<bookmark mark='d'/>沃尔夫与麦基在一九九五年的存储墙论述解释了访存停顿为何可能占据越来越多执行时间，并不意味着每个程序最终都会遇到相同瓶颈。"
+    },
+    "ca03453e0b6b": {
+      "scene": "Wall",
+      "en": "Nanoseconds become core cycles only after a clock is specified. <bookmark mark='a'/> The displayed small-set and large-set times come from this host's dependent random walks. They are effective access times, not isolated SRAM-cell and DRAM-chip timings. <bookmark mark='b'/> Multiply nanoseconds by the assumed Pebble frequency to obtain its cycle budget. The hierarchy model assigns capacities and uses selected timing points as calibration proxies. <bookmark mark='c'/> A faster illustrative reference clock turns the same nanoseconds into more cycles. That reference is not a measured frequency of this host. <bookmark mark='d'/> Caches and overlap can reduce exposed waiting, but dependencies, throughput and memory-system limits determine how much. A single latency ratio does not predict program speedup.",
+      "zh": "只有指定时钟后，纳秒才能换算成处理器周期。<bookmark mark='a'/>屏幕上的小工作集与大工作集时间来自本机依赖随机遍历，表示有效访问时间，并非孤立的静态存储单元或动态存储芯片时序。<bookmark mark='b'/>把纳秒乘以假设的处理器频率，得到周期预算。层次模型自行指定容量，并选取测量点作为校准近似。<bookmark mark='c'/>更快的示意参考时钟会把相同纳秒换成更多周期；这个参考值不是本机频率的实测结果。<bookmark mark='d'/>缓存与重叠执行可以减少暴露的等待，但依赖、吞吐量及存储系统限制决定能隐藏多少。单个延迟比不能预测程序加速。"
+    },
+    "545e8915bfee": {
+      "scene": "Wall",
+      "en": "A hierarchy trades capacity, access time, bandwidth, energy and cost. <bookmark mark='a'/> Registers sit near execution units; caches commonly use SRAM. Six-transistor cells are a familiar SRAM example, not a universal implementation rule. The sizes shown are illustrative and vary by processor. <bookmark mark='b'/> DRAM commonly uses a transistor and capacitor per cell; flash and magnetic storage offer other capacity and persistence tradeoffs. Package placement, stacked memory, controllers and interfaces affect performance. Retail prices change with date, capacity and product class. <bookmark mark='c'/> The goal is to keep useful data close enough for the workload. Neither a fixed cost ratio between layers nor a single pyramid describes every computer.",
+      "zh": "存储层次在容量、访问时间、带宽、能耗与成本之间取舍。<bookmark mark='a'/>寄存器靠近执行单元，缓存通常采用静态随机存储器。六晶体管单元是常见例子，并非所有实现的规则；所列容量只是示意，会随处理器变化。<bookmark mark='b'/>动态存储单元通常使用晶体管和电容；闪存与磁存储提供不同的容量和持久性取舍。封装位置、堆叠存储、控制器及接口都影响性能，零售价格也随日期、容量和产品类别变化。<bookmark mark='c'/>目标是让工作负载需要的数据足够近。层间固定价格比或一座固定金字塔都无法描述所有计算机。"
+    },
+    "312dd756049d": {
+      "scene": "Locality",
+      "en": "The plot samples the Job's chapter-1 data-access trace; it does not draw every access separately. Horizontal position is instruction count, and vertical position is byte address. Device reads and instruction fetches are excluded. <bookmark mark='a'/> The table scans produce repeated rising strokes as entries are visited. <bookmark mark='b'/> The lower region holds letters, revisited during comparisons and written when new words are copied. The legend states the sampling stride. <bookmark mark='c'/> Spatial locality means nearby addresses are used near each other in time; temporal locality means previously accessed data is reused. Denning's working-set model concerns pages used within a recent reference window. Working sets can change abruptly, and locality is a workload property to measure.",
+      "zh": "图形对任务第一章的数据访问轨迹进行了抽样，并非逐点画出每次访问。横轴是指令计数，纵轴是字节地址；设备读取与指令取指被排除。<bookmark mark='a'/>逐项访问表时，重复扫描形成向上的笔画。<bookmark mark='b'/>下方区域存放字母，比较时会反复读取，新词复制时会写入。图例给出了抽样步长。<bookmark mark='c'/>空间局部性指时间相近的访问使用邻近地址，时间局部性指先前访问过的数据再次被用到。丹宁的工作集模型考察最近引用窗口中使用的页。工作集可能突然变化，局部性需要针对工作负载测量。"
+    },
+    "92acd7f9e5c3": {
+      "scene": "Locality",
+      "en": "For a repeated line, count distinct other cache lines accessed since its previous reference. This is reuse distance, also called LRU stack distance. First touches are classified separately. <bookmark mark='a'/> The histogram shows the distribution on this chapter's trace, under its stated line size. Repeated accesses to the same line have distance zero. <bookmark mark='b'/> Starting empty, a fully associative LRU cache holding C lines hits exactly repeated references with distance less than C. This property gives miss ratios at many capacities from one distance trace. It does not directly describe set mapping, alternative replacement, prefetching or coherence invalidations.",
+      "zh": "对于重复访问的缓存行，统计自上次引用后出现过多少种其他缓存行，这就是重用距离，也称最近最少使用栈距离；首次访问单独分类。<bookmark mark='a'/>直方图展示指定行大小下本章轨迹的分布，连续访问同一行的距离为零。<bookmark mark='b'/>从空开始、容纳 C 行的全相联最近最少使用缓存，恰好命中距离小于 C 的重复引用。因此一份距离轨迹可以给出多种容量的缺失率，但不能直接描述组映射、其他替换策略、预取或一致性失效。"
+    },
+    "a5b2fefed0f4": {
+      "scene": "Locality",
+      "en": "These two curves describe different reference streams. <bookmark mark='a'/> Chapter 1's full data trace touches ninety-two distinct lines. With a large enough fully associative LRU cache, only its first touches miss. <bookmark mark='b'/> The corpus curve instead models table-only prefix-line visits and omits interleaved pool accesses and writes. Its larger abstract table keeps the miss ratio high at small capacities. The compared event definitions must stay visible. <bookmark mark='c'/> A sharp drop can indicate that a useful working set fits. Other workloads can show several drops, gradual changes or no single cliff, and capacity alone does not determine application runtime.",
+      "zh": "这两条曲线描述不同引用序列。<bookmark mark='a'/>第一章的完整数据轨迹触及九十二种缓存行；足够大的全相联最近最少使用缓存只在首次触及时缺失。<bookmark mark='b'/>语料曲线则仅模拟表的前缀行访问，省略交错的字母区访问与写入。更大的抽象表让小容量缓存仍保持较高缺失率，比较时必须保留事件定义。<bookmark mark='c'/>明显下降可能说明有用工作集已经装下，但其他负载可能出现多个台阶、平缓变化，或没有单一断崖。容量本身不能决定应用运行时间。"
+    },
+    "756c4a712cd0": {
+      "scene": "Direct",
+      "en": "A direct-mapped lookup combines an indexed data array with metadata checks. <bookmark mark='a'/> The index selects one row containing data, a tag and a valid bit. Real implementations may also have protection and coherence state. <bookmark mark='b'/> Compare the stored and requested tags, and require the row to be valid before declaring a hit. <bookmark mark='c'/> The byte offset selects the requested portion of the line. Array access, tag comparison, selection, wiring and address translation constrain timing. Their overlap and pipelining depend on the design; this block diagram does not derive a four-cycle L1 latency from one cycle of gates.",
+      "zh": "直接映射查找把索引数据阵列与元数据检查结合。<bookmark mark='a'/>索引选择一行，其中包含数据、标签与有效位；真实实现还可能有保护和一致性状态。<bookmark mark='b'/>比较保存的标签与请求标签，并要求该行有效，才能判定命中。<bookmark mark='c'/>字节偏移选择缓存行中的所需部分。阵列访问、标签比较、选择、布线及地址翻译共同限制时序，重叠方式与流水化取决于设计。这张方框图并不能从一级门电路推导出四周期的一级缓存延迟。"
+    },
+    "1718c75bd0da": {
+      "scene": "Direct",
+      "en": "The chapter-1 trace also shows mapping conflicts. <bookmark mark='a'/> Its table starts at hexadecimal ten thousand and its letter pool at hexadecimal eighty thousand. <bookmark mark='b'/> Those aligned bases can select the same sets at the illustrated capacities. Which live lines actually collide depends on their offsets and access order; the base addresses alone do not prove continuous eviction. <bookmark mark='c'/> Replay the entire chapter trace through the direct-mapped eight-kibibyte cache and count the displayed misses. <bookmark mark='d'/> Two ways at the same total capacity reduce the count to ninety-two in this experiment. Increasing ways reduces the number of sets, so the complete mapping changes too. This is a trace result rather than a universal monotonic rule.",
+      "zh": "第一章轨迹也展示了映射冲突。<bookmark mark='a'/>表从十六进制一万开始，字母区从十六进制八万开始。<bookmark mark='b'/>这些对齐的基址可能在所示容量下选择相同组；具体哪些存活行碰撞，还取决于偏移与访问顺序，不能仅凭基址断言持续互相淘汰。<bookmark mark='c'/>把整章轨迹重放到八二进制千字节直接映射缓存，得到屏幕上的缺失数。<bookmark mark='d'/>同一总容量改为两路后，本实验降到九十二次。增加路数也会减少组数，整个映射随之变化，因此这是轨迹结果，并非普遍单调规律。"
+    },
+    "c66a5ce3028e": {
+      "scene": "Assoc",
+      "en": "Set associativity gives a line several eligible locations. <bookmark mark='a'/> One way per set is direct mapping. <bookmark mark='b'/> Two ways allow two lines with the same set index to coexist. <bookmark mark='c'/> Put every line in one set and the cache is fully associative. <bookmark mark='d'/> More ways require additional tag checks or other lookup machinery, with design-dependent latency and energy costs. At fixed total capacity the index changes as the number of sets falls. Actual associativities vary by core and cache level, and more ways do not guarantee fewer misses under every replacement policy and mapping.",
+      "zh": "组相联让一条缓存行拥有多个可选位置。<bookmark mark='a'/>每组一路就是直接映射。<bookmark mark='b'/>两路允许索引相同的两行同时存在。<bookmark mark='c'/>把全部行放进一组，就得到全相联缓存。<bookmark mark='d'/>增加路数需要更多标签检查或其他查找机构，其延迟与能耗成本取决于设计。固定总容量时，组数减少，索引也会改变。真实相联度随处理器和缓存层级变化；在所有替换策略与映射下，更多路都更少缺失并无保证。"
+    },
+    "0d8ac16562b3": {
+      "scene": "Assoc",
+      "en": "A miss to a full set requires a victim. <bookmark mark='a'/> LRU evicts the least recently referenced resident line, using past recency as a heuristic. <bookmark mark='b'/> Tree pseudo-LRU maintains a small direction tree; it approximates recency but does not reproduce exact LRU. Hardware also uses other policies. <bookmark mark='c'/> FIFO tracks insertion order; random replacement chooses a resident victim according to its random generator. <bookmark mark='d'/> Belady's MIN evicts the resident line whose next reference is farthest away. Its optimality assumes a fixed trace, capacity, initially specified state, uniform miss cost and the same forced-insertion rules. A fully associative MIN result is not a like-for-like replacement-only comparison with a set-associative cache.",
+      "zh": "访问满组发生缺失时，必须选择牺牲行。<bookmark mark='a'/>最近最少使用策略淘汰驻留行中最久未被引用者，把过去的新近性作为启发式。<bookmark mark='b'/>树形伪最近最少使用策略保存较小的方向树，只近似新近性，并不重现精确次序；硬件也采用其他策略。<bookmark mark='c'/>先进先出跟踪插入顺序，随机替换则按随机生成器选择驻留牺牲行。<bookmark mark='d'/>贝拉迪最优策略淘汰下次引用最远的驻留行。其最优性需要固定轨迹、容量、初始状态、统一缺失成本及相同的强制插入规则。全相联最优结果与组相联缓存比较时，变化的不只是替换规则。"
+    },
+    "40170fbbe105": {
+      "scene": "Assoc",
+      "en": "A four-way set can represent approximate recency with three tree bits. <bookmark mark='a'/> Each bit points toward a subtree to consider for replacement. Touching a way updates its path to point away from that way. <bookmark mark='b'/> Follow the shown accesses to ways zero, two and one. Unvisited ways still need valid-bit and free-slot handling. <bookmark mark='c'/> Once the set is full, follow the tree to its candidate victim. It need not be the exact least recently used way. An arbitrary exact order of sixteen ways has sixteen factorial possibilities, requiring at least forty-five bits to encode; a tree uses fifteen direction bits. Real implementation state and update costs depend on the chosen encoding.",
+      "zh": "四路组可以用三个树位表示近似新近性。<bookmark mark='a'/>每个位指向需要考虑替换的子树；访问某一路时，把路径上的位改为背离该路。<bookmark mark='b'/>跟随图中对零、二、一号路的访问，尚未使用的路仍需有效位与空槽管理。<bookmark mark='c'/>组满后沿树寻找候选牺牲行，它未必是精确的最近最少使用行。十六路的任意精确次序有十六阶乘种可能，编码至少需要四十五位；方向树只用十五位。真实状态量和更新成本取决于具体编码。"
+    },
+    "d9fdf7c604cd": {
+      "scene": "Assoc",
+      "en": "Replay the same chapter-1 data references from an empty four-kibibyte cache. <bookmark mark='a'/> The LRU, pseudo-LRU and FIFO bars use eight-way sets. <bookmark mark='b'/> The seeded random policy has fewer misses on this trace. A single seed is not a distribution-wide performance guarantee. <bookmark mark='c'/> The MIN bar has the same capacity but is fully associative, so it also removes set-placement restrictions. <bookmark mark='d'/> Repeated scans slightly longer than a cache can punish LRU: each next reference finds its line just evicted. Random replacement sometimes preserves useful lines. Performance still depends on scan lengths, intervening accesses, mapping and policy; measured miss ratios do not directly give execution-time speedups.",
+      "zh": "从空的四二进制千字节缓存开始，重放相同的第一章数据引用。<bookmark mark='a'/>最近最少使用、伪最近最少使用与先进先出柱都使用八路组。<bookmark mark='b'/>固定种子的随机策略在这份轨迹上缺失更少，但单个种子不是对整个随机分布的性能保证。<bookmark mark='c'/>最优策略柱容量相同，却采用全相联，同时移除了组放置限制。<bookmark mark='d'/>略长于缓存的循环扫描可能让最近最少使用策略不断淘汰即将再次需要的行，随机策略有时能留下有用行。结果仍取决于扫描长度、交错访问、映射和策略；缺失率不能直接换成执行时间加速。"
+    },
+    "c75b940c3656": {
+      "scene": "Assoc",
+      "en": "Stores add propagation and allocation choices. <bookmark mark='a'/> Write-through sends a store toward the next level, often through a buffer. It does not by itself make every copy or DRAM instantly current. <bookmark mark='b'/> Write-back marks a line dirty and propagates it on eviction or another required action, such as a flush or coherence request. Repeated updates can be combined while the line remains resident. <bookmark mark='c'/> Write-allocate brings a missed store's line into the cache; no-write-allocate can send the store onward instead. Partial stores and coherence ownership complicate real traffic. <bookmark mark='d'/> Our single-cache simulator counts dirty evictions and write-through events. The hierarchy's demand-latency model does not price complete write-back, coherence or bandwidth traffic.",
+      "zh": "存数还涉及传播与分配选择。<bookmark mark='a'/>直写把存数送向下一级，通常经过缓冲；它本身不会让所有副本或动态存储器立即保持最新。<bookmark mark='b'/>回写标记脏行，并在淘汰或刷新、一致性请求等必要操作时传播；行驻留期间的多次更新可以合并。<bookmark mark='c'/>写分配在存数缺失时装入相应行，不写分配则可把存数直接送往下级。部分写入和一致性所有权会让真实流量更复杂。<bookmark mark='d'/>单层模拟器统计脏行淘汰与直写事件，但层次需求延迟模型并未计价完整回写、一致性或带宽流量。"
+    },
+    "3cc9d173c6b0": {
+      "scene": "ThreeC",
+      "en": "Miss categories depend on a reference model. <bookmark mark='a'/> A first reference to a line is compulsory for an initially empty demand-only cache with this line size; prior prefetching or a different line size changes the comparison. <bookmark mark='b'/> A fully associative LRU reference of the same capacity supplies a capacity-miss baseline after first touches. Capacity is one possible remedy; locality transformations and replacement changes can also help. <bookmark mark='c'/> For an individual target-cache miss, a hit in that reference suggests a placement conflict. <bookmark mark='d'/> The numerical table uses a signed aggregate difference instead. That accounting can be negative, so it must not be presented as a partition of individual misses into three nonnegative groups.",
+      "zh": "缺失类别依赖参考模型。<bookmark mark='a'/>在初始为空、仅由需求访问驱动且行大小固定的缓存中，首次引用某行属于强制缺失；预取或改变行大小会改变比较。<bookmark mark='b'/>同容量全相联最近最少使用参考缓存在首次触及之外的缺失，构成容量基线。增大容量是一种补救，改变局部性与替换方式也可能有用。<bookmark mark='c'/>对于目标缓存的一次缺失，如果参考缓存命中，就提示放置冲突。<bookmark mark='d'/>数值表采用的却是带符号汇总差值。该差值可能为负，因此不能把它说成逐次缺失被划分为三个非负组。"
+    },
+    "04d713d77613": {
+      "scene": "ThreeC",
+      "en": "The table compares the same chapter trace, line size and cold initial state. <bookmark mark='a'/> Ninety-two distinct lines give ninety-two first-touch events. The capacity column comes from a fully associative LRU reference, regardless of the target's number of ways. <bookmark mark='b'/> At eight kibibytes, the two-way target has only first touches, while the direct-mapped target suffers many additional misses. <bookmark mark='c'/> The displayed conflict entry is target misses minus first touches minus reference capacity misses. A negative value means the target had fewer total misses than the fully associative LRU reference. Set partitioning can protect some lines from scans; this signed difference is useful comparison accounting, not a negative number of physical miss events.",
+      "zh": "表格比较同一章轨迹、相同行大小与空的初始状态。<bookmark mark='a'/>九十二种不同缓存行产生九十二次首次触及。无论目标缓存有多少路，容量列都来自全相联最近最少使用参考。<bookmark mark='b'/>在八二进制千字节时，两路目标只剩首次触及，直接映射目标却有许多额外缺失。<bookmark mark='c'/>冲突项等于目标缺失数减去首次触及数，再减去参考容量缺失。负值表示目标总缺失少于全相联最近最少使用参考；组划分可能保护部分行免受扫描淘汰。这是有用的带符号比较记账，不是物理缺失事件出现了负数。"
+    },
+    "26fa92326ccb": {
+      "scene": "Amat",
+      "en": "Define hit time and miss penalty before calculating an average. <bookmark mark='a'/> In this serial one-level model every demand access pays the hit lookup time, and a fraction m also pays an additional miss penalty. <bookmark mark='b'/> Four cycles plus five percent of an additional two hundred cycles gives fourteen cycles. The miss-penalty contribution is ten cycles per access, compared with four cycles of lookup cost on every access. If two hundred already included the lookup, the arithmetic would need a different definition. <bookmark mark='c'/> Capacity, associativity and organization can trade miss ratio, latency, area and energy. AMAT summarizes this access model; it does not by itself predict execution time when misses overlap or bandwidth becomes limiting.",
+      "zh": "计算平均数前，先定义命中时间与缺失代价。<bookmark mark='a'/>在这个串行单层模型中，每次需求访问都支付命中查找时间，另有比例 m 的访问支付额外缺失代价。<bookmark mark='b'/>四周期加上百分之五乘以额外两百周期，得到十四周期。缺失附加项平均每次访问十周期，查找项则每次都支付四周期；如果两百周期已经包含查找，就必须改用相应定义。<bookmark mark='c'/>容量、相联度与组织方式会在缺失率、延迟、面积和能耗之间取舍。平均访存时间概括这个访问模型；缺失可以重叠或带宽受限时，它本身不能预测执行时间。"
+    },
+    "30436914e6a9": {
+      "scene": "Amat",
+      "en": "The serial formula nests across levels when lower-level miss ratios are conditional on reaching that level. <bookmark mark='a'/> The displayed timing illustration starts from cumulative pointer-chase samples, then takes nonnegative increments between them. Adding each cumulative latency again would double-count earlier lookup time. We choose the miss ratios for illustration; they are not measured typical rates for this host. <bookmark mark='b'/> The resulting weighted average can be much smaller than the largest delay when few requests reach that delay. The sample points do not isolate hardware cache levels, and this simple expectation omits overlap, queuing, prefetch costs and write traffic. Use it to reason about assumptions, then test actual workloads.",
+      "zh": "如果下级缺失率表示到达该层之后的条件比例，串行公式就可以逐层嵌套。<bookmark mark='a'/>图中的时间示例从累计指针追逐样本出发，再取相邻样本间的非负增量；若再次加入每层累计延迟，就会重复计算前级查找时间。缺失率是为演示选取的，并非本机测得的典型比例。<bookmark mark='b'/>只要到达最大延迟的请求很少，加权平均值就可以远低于它。样本点不能隔离硬件缓存层级，这个简单期望也省略了重叠、排队、预取成本与写流量。先用它分析假设，再测试真实工作负载。"
+    },
+    "f00773356c01": {
+      "scene": "Measured",
+      "en": "Measure a dependent random walk through a chosen working-set size. <bookmark mark='a'/> Place one pointer in each sixty-four-byte line and link the lines into a randomly permuted cycle. Each next address comes from the previous load. The benchmark warms the cycle, repeats twenty million steps and reports the best of three timed trials. <bookmark mark='b'/> This serial dependency suppresses overlap between the measured loads, and the irregular order reduces ordinary stride-prefetch opportunities. It does not defeat every possible temporal prefetcher. Loop overhead, address translation, cache placement, virtualized scheduling and interference can still affect the result. The time per step is an effective dependent-access measurement, not an isolated component delay.",
+      "zh": "在选定大小的工作集中测量依赖随机遍历。<bookmark mark='a'/>每个六十四字节缓存行放一个指针，把行连接成随机排列的环，下一个地址来自前一次取数。基准先预热，再重复两千万步，并报告三次计时中的最好值。<bookmark mark='b'/>串行依赖抑制了被测取数之间的重叠，不规则次序减少了普通步长预取的机会，却不能排除所有时间相关预取器。循环开销、地址翻译、缓存放置、虚拟化调度及干扰仍会影响结果。每步时间是有效依赖访问测量，不是孤立部件延迟。"
+    },
+    "b9cf39427a62": {
+      "scene": "Measured",
+      "en": "Read the host identity and the measured points together. The current data come from the processor named above the plot; the source is not tied to an older Xeon run. <bookmark mark='a'/> Small working sets have the lowest measured delay. <bookmark mark='b'/> Increasing the footprint exposes further plateaus and transitions. <bookmark mark='c'/> A selected point is a sample at that footprint, not proof of one exact cache-level boundary. <bookmark mark='d'/> The largest walks can combine last-level misses, translation effects, system placement and interference. Timing alone does not identify their individual contributions. <bookmark mark='e'/> The lscpu strings describe reported cache totals and instances, not guaranteed private capacity available to this process. Use controlled experiments and performance events to investigate a transition's cause.",
+      "zh": "把本机身份与测量点一起阅读。当前数据来自图上方命名的处理器，源代码不再绑定旧的至强测量。<bookmark mark='a'/>小工作集测得的延迟最低。<bookmark mark='b'/>增大占用空间会出现更多平台与变化。<bookmark mark='c'/>选定点只是该占用大小的样本，不能证明某个缓存层级的精确边界。<bookmark mark='d'/>最大的遍历可能同时涉及末级缺失、地址翻译、系统放置及干扰；单凭时间无法分辨各项贡献。<bookmark mark='e'/>处理器信息工具给出的是报告的缓存总量与实例数，不是保证本进程独占的容量。需要受控实验及性能事件来调查变化原因。"
+    },
+    "cb0d0719b765": {
+      "scene": "Measured",
+      "en": "Address translation can affect a large dependent walk, so compare two allocation treatments. The first uses the default allocation; the second requests transparent huge pages with madvise. <bookmark mark='a'/> A translation-cache miss can require a page-table walk, but its entries may hit other caches; not every access necessarily walks all the way to memory. <bookmark mark='b'/> A two-mebibyte page covers five hundred twelve times the address range of a four-kibibyte page. That can increase translation reach. Our benchmark records timings and the kernel's advice mode, but does not verify actual backing-page sizes. The displayed difference therefore compares default and advised allocations, not proven small-page and huge-page populations or an isolated translation cost.",
+      "zh": "地址翻译可能影响较大的依赖遍历，因此比较两种分配处理：第一种使用默认分配，第二种通过内存建议接口请求透明大页。<bookmark mark='a'/>翻译缓存缺失可能触发页表遍历，但页表项可能命中其他缓存，并非每次访问都必须一路查到主存。<bookmark mark='b'/>二二进制兆字节页覆盖的地址范围是四二进制千字节页的五百一十二倍，因此可能扩大翻译覆盖范围。本基准记录时间与内核建议模式，却没有核实实际后备页大小。所以图中差异比较的是默认分配与大页建议分配，不是已经证实的小页和大页集合，也不是被隔离出的翻译成本。"
+    },
+    "a26ef5073e1e": {
+      "scene": "Measured",
+      "en": "Sequential throughput measures a different workload from the dependent random walk. This C loop sums a repeatedly reused array, with several independent accumulators, and reports the best of five trials. <bookmark mark='a'/> The bars show bytes read per second at each array footprint on this host. Cache-resident trials can reuse previously fetched lines, so logical bytes processed are not necessarily new DRAM traffic. <bookmark mark='b'/> Multiplying a compatible throughput by a compatible latency estimates required average concurrency by Little's law. These separate workloads do not directly count outstanding hardware requests or prove that a particular prefetcher caused the throughput. Latency, available parallelism and sustainable bandwidth all constrain performance; measure the workload you intend to optimize.",
+      "zh": "顺序吞吐量对应的工作负载不同于依赖随机遍历。这个编译后的循环反复求和同一数组，使用多个独立累加器，并报告五次试验中的最好值。<bookmark mark='a'/>柱形给出本机各数组占用大小下每秒处理的读取字节。驻留缓存的试验可以重用已取入的行，因此逻辑处理字节不一定等于新增的主存流量。<bookmark mark='b'/>将相互兼容的吞吐量与延迟相乘，可按利特尔定律估计所需平均并发量。这两种不同负载并未直接统计未完成硬件请求，也不能证明某个预取器导致了该吞吐量。延迟、可用并行性与持续带宽都会限制性能，应测量真正想优化的工作负载。"
+    },
+    "97c72c3df573": {
+      "scene": "Programming",
+      "en": "Loop order changes the address stream even when the intended matrix product is unchanged. <bookmark mark='a'/> With row-major doubles, walking a column of B separates successive elements by a row stride. In the shown sizes that spreads accesses across lines and can create set conflicts. <bookmark mark='b'/> Interchanging the inner loops makes the innermost traversal contiguous in B and C, giving several nearby elements per sixty-four-byte line. Floating-point order, vectorization and compiler transformations still deserve attention. <bookmark mark='c'/> The miss counts below come from a small explicit address-trace simulation with its stated capacity, associativity and line size. They count allocation misses, not total physical traffic or a measured cache-only explanation of the C benchmark's speedup.",
+      "zh": "即使目标矩阵乘积相同，循环顺序也会改变地址流。<bookmark mark='a'/>行优先的双精度矩阵按列遍历时，相邻元素相隔一个行步长；在所示大小下，访问分散到多个缓存行，并可能造成组冲突。<bookmark mark='b'/>交换内层循环后，最内层连续遍历 B 与 C，一个六十四字节行可以提供多个邻近元素。仍须注意浮点运算次序、向量化及编译器变换。<bookmark mark='c'/>下方缺失数来自一个明确指定容量、相联度与行大小的小型地址轨迹模拟，统计的是分配缺失，并非完整物理流量，也不是编译基准加速的纯缓存实测解释。"
+    },
+    "7de118e2f501": {
+      "scene": "Programming",
+      "en": "These are host-dependent timings of the shown C kernels, compiled with optimization and native instruction selection. The work estimate uses two n-cubed floating-point operations. <bookmark mark='a'/> The i-j-k kernel is measured only through size one thousand twenty-four; there is no measured point at two thousand forty-eight for that curve. <bookmark mark='b'/> The interchanged loop and <bookmark mark='c'/> the fixed-tile kernel have their own curves. Their rankings and slopes are observations from these runs, not universal size trends. Each C variant is timed once, and zero initialization is included in some variants. <bookmark mark='d'/> NumPy's BLAS result uses a separate library implementation and timing path. Vectorization, packing, threading and compiler choices can all differ; this comparison does not isolate one optimization or verify use of every core.",
+      "zh": "这些是所示编译后循环在本机上的时间，启用了优化与本机指令选择；运算量按两倍 n 的三次方估计。<bookmark mark='a'/>第一种循环只测到边长一千零二十四，曲线没有边长二千零四十八的实测点。<bookmark mark='b'/>交换循环与<bookmark mark='c'/>固定分块循环分别有自己的曲线，排名及斜率只描述这些运行，并非普遍的尺寸趋势。每种编译循环只计时一次，部分版本包含清零初始化。<bookmark mark='d'/>数值库的矩阵乘法采用另一套库实现与计时路径。向量化、打包、线程及编译器选择都可能不同，因此比较不能隔离某一种优化，也未核实是否使用了全部核心。"
+    },
+    "0b328f1082a9": {
+      "scene": "Programming",
+      "en": "Tiling tries to reuse a small set of matrix values before moving on. Three square tiles give a useful first capacity estimate, with T squared values per tile. <bookmark mark='a'/> A C tile accumulates products from matching A and B tiles. The actual loop nesting determines which tile stays resident across the reduction loop; not every tile is necessarily retained or reused T times in the same way. <bookmark mark='b'/> Three T-squared values fitting is a sufficient storage sketch for a simple blocked scheme, not a complete performance condition. Associativity, line layout, registers, vector instructions, write traffic and other data also consume resources. Under the classical multiplication model, suitable blocking reduces the leading movement scale to n cubed over T, with constants depending on the schedule.",
+      "zh": "分块的目标是在转向其他数据前，反复使用一小组矩阵值。三个正方形块提供一个初步容量估计，每块有 T 的平方个值。<bookmark mark='a'/>一个 C 块累加相应 A 块与 B 块的乘积；具体循环嵌套决定哪个块能跨归约循环驻留，并非每块都以相同方式保留或重用 T 次。<bookmark mark='b'/>三个 T 平方个值装得下，只是简单分块方案的充分存储示意，不是完整性能条件。相联度、缓存行布局、寄存器、向量指令、写流量及其他数据同样消耗资源。在经典乘法模型下，合适分块可把主导搬运量降到 n 的三次方除以 T 的量级，常数取决于调度。"
+    },
+    "f37fcce34d90": {
+      "scene": "Programming",
+      "en": "Layout determines which fields share a line. <bookmark mark='a'/> An array of structures groups one object's fields; a structure of arrays groups corresponding fields from many objects. Neither is universally better. <bookmark mark='b'/> This loop reads only the x field. The structure has sixty-four bytes per object, while the compact float array stores x values consecutively, reducing the address footprint and unused fields brought in. The displayed best-of-five times come from the same specified summation and compiler options. Cache state, vectorization, translation and bandwidth can all contribute, so timing alone does not isolate one cause. Workloads that use several fields together may favor a different layout or a blocked hybrid.",
+      "zh": "布局决定哪些字段共享缓存行。<bookmark mark='a'/>结构体数组把同一对象的字段放在一起，数组的结构则把多个对象的同名字段放在一起，二者都不是普遍更优。<bookmark mark='b'/>这个循环只读取横坐标字段。结构体每个对象六十四字节，而紧凑浮点数组连续存放横坐标，减少了地址占用和被带入的无用字段。所示时间是同一求和任务与编译选项下五次试验的最好值。缓存状态、向量化、翻译与带宽都可能起作用，单凭计时不能隔离原因。同时使用多个字段的负载，可能适合另一种布局或分块混合方式。"
+    },
+    "a497eda5be28": {
+      "scene": "Oblivious",
+      "en": "Cache-oblivious algorithms avoid explicit cache parameters in their code. <bookmark mark='a'/> The ideal-cache model specifies a fully associative fast memory of M words, B-word transfers and optimal replacement. <bookmark mark='b'/> Analysis counts transfers under that model and stated initial/output conditions. <bookmark mark='c'/> A recursive algorithm can discover useful subproblem sizes without testing M or B directly. Avoiding the parameters alone does not prove optimality. <bookmark mark='d'/> Bounds for specific algorithms may require a tall-cache assumption and regularity conditions. They can extend across suitably modeled memory levels, and LRU can have related guarantees with appropriate resource comparisons. None of this promises the exact fewest misses at every real cache level, where mapping, prefetching and instruction overhead matter.",
+      "zh": "缓存无关算法不会在代码中显式使用缓存参数。<bookmark mark='a'/>理想缓存模型指定容量为 M 个字的全相联快存、每次搬运 B 个字，以及最优替换。<bookmark mark='b'/>分析在该模型与规定的初始、输出条件下统计搬运次数。<bookmark mark='c'/>递归算法可以不直接检测 M 或 B，就产生有用的子问题大小；仅仅不用参数并不能证明最优。<bookmark mark='d'/>具体算法的下界可能需要高缓存与规律性假设，结果可以扩展到适当建模的多级存储；最近最少使用策略也可能在相应资源比较下获得保证。这些都不意味着真实每一级缓存精确地达到最少缺失，映射、预取与指令开销仍有影响。"
+    },
+    "ac93cd40384a": {
+      "scene": "Oblivious",
+      "en": "The experiment transposes a row-major matrix and simulates a cold fully associative LRU cache. Each output element contributes two address references, one to the input and one to the output. The vertical axis is allocation misses per reference; it excludes dirty write-backs. <bookmark mark='a'/> The row-by-row traversal has poor output locality at small capacities. <bookmark mark='b'/> A fixed thirty-two-by-thirty-two block changes the curve, reaching the cold line-fill floor from four kibibytes in this experiment. <bookmark mark='c'/> The recursive traversal reaches that floor across all displayed capacities. One eighth here means one fill per eight references, or one quarter of a fill per output element. This LRU experiment illustrates locality; it does not establish exact transfer optimality for every size and cache.",
+      "zh": "实验转置行优先矩阵，并模拟初始为空的全相联最近最少使用缓存。每个输出元素产生两次地址引用，分别访问输入与输出。纵轴表示每次引用的分配缺失，不包含脏行回写。<bookmark mark='a'/>逐行遍历在小容量下的输出局部性较差。<bookmark mark='b'/>固定的三十二乘三十二分块改变了曲线，在本实验中从四二进制千字节起达到冷启动行填充基线。<bookmark mark='c'/>递归遍历在所有展示容量下都达到该基线。这里八分之一表示每八次引用一次填充，也就是平均每个输出元素四分之一次填充。这项最近最少使用实验说明局部性，并未证明所有尺寸和缓存下都精确达到最优搬运。"
+    },
+    "65d13ac79c41": {
+      "scene": "Oblivious",
+      "en": "A static search layout can use recursive clustering too. <bookmark mark='a'/> For a balanced binary tree, the van Emde Boas layout stores a recursively arranged top tree, followed by recursively arranged lower subtrees. <bookmark mark='b'/> Under the usual block-transfer assumptions, a root-to-leaf search uses order one plus log base B of n block transfers. The extra one handles even a tree that fits in a block. This is a layout bound, not a claim about arbitrary unbalanced trees, dynamic updates or physical search latency. <bookmark mark='c'/> A B-tree instead chooses node capacity with the block size in mind. Both approaches organize related search steps to reduce data movement, under their respective models.",
+      "zh": "静态搜索布局也可以采用递归聚集。<bookmark mark='a'/>对于平衡二叉树，范埃姆德博阿斯布局先存递归安排的上部树，再存递归安排的下部子树。<bookmark mark='b'/>在通常的块搬运假设下，一次根到叶的搜索需要一加以 B 为底的 n 的对数量级次块搬运；额外的一项也涵盖整棵树装进一块的情况。这是布局复杂度界，不是对任意不平衡树、动态更新或实际搜索延迟的断言。<bookmark mark='c'/>B 树则根据块大小选择节点容量。二者都通过组织相关搜索步骤来减少搬运，但依赖各自模型。"
+    },
+    "7473c2d713cf": {
+      "scene": "Pebbles",
+      "en": "The pebble game asks about a specified computation graph. Hong and Kung introduced this framework in 1981. <bookmark mark='a'/> Nodes hold inputs or computed values; arrows identify required operands. <bookmark mark='b'/> Red pebbles represent values in fast memory, with a limit of M. <bookmark mark='c'/> Blue pebbles represent stored slow-memory values. A value may have both colors at once. <bookmark mark='d'/> Loading adds a red copy, storing adds a blue copy, and computing places a new red pebble when all predecessor values are red. Removing a red pebble is free; our illustration does not overwrite an input pebble during a compute move. <bookmark mark='e'/> Count loads and stores. The graph, initial/output conditions and recomputation rules are part of the problem, so changing them can change its optimum.",
+      "zh": "卵石游戏针对指定计算图提问，洪与孔在一九八一年引入了这个框架。<bookmark mark='a'/>节点保存输入或计算值，箭头指出所需操作数。<bookmark mark='b'/>红卵石代表快存中的值，数量上限为 M。<bookmark mark='c'/>蓝卵石代表慢存中已有的值，一个值可以同时拥有两种颜色。<bookmark mark='d'/>取数增加红色副本，存数增加蓝色副本；所有前驱值都为红色时，计算才能放置新的红卵石。删除红卵石免费，本示例的计算步骤不会覆盖输入卵石。<bookmark mark='e'/>成本是取数与存数次数。计算图、初始和输出条件以及是否允许重复计算，都属于问题定义，改变它们可能改变最优值。"
+    },
+    "7ddc63d6186c": {
+      "scene": "Pebbles",
+      "en": "Compute y equals a plus b, times a plus c, under the place-new-pebble rules with four red slots. Inputs begin in slow memory and y must finish there. <bookmark mark='a'/> Load a and b, compute their sum, drop b, then load c. Computing the second sum temporarily needs four red pebbles: a, c and both sums. The occupancy counter makes that peak explicit. Drop a and c, compute y and store it. <bookmark mark='b'/> Three input loads and one output store give four transfers, the minimum possible. Independent shortest-path search confirms it. With three red slots the same graph needs six transfers, spilling and reloading a partial result. Two slots cannot execute a binary compute move under these non-overwrite rules.",
+      "zh": "按照计算时放置新卵石的规则，用四个红色位置计算两个和的乘积。输入最初位于慢存，输出也必须最终存回慢存。<bookmark mark='a'/>取入前两个输入，计算它们的和，删除第二个输入，再取入第三个输入。计算第二个和时，暂时需要四颗红卵石：公共输入、第三个输入和两个和，占用计数器明确显示这个峰值。删除两个已不再需要的输入，计算乘积并存回。<bookmark mark='b'/>三次输入取数加一次输出存数，共四次搬运，已经最少，独立最短路径搜索也确认了这一点。同一张图若只有三个红色位置，需要溢出并重新取入一个中间结果，共六次搬运；只有两个位置时，在不覆盖输入的规则下无法执行二元计算步骤。"
+    },
+    "0c0539d9162e": {
+      "scene": "Pebbles",
+      "en": "Consider classical matrix multiplication with its n-cubed scalar products, distinct matrices and the stated no-recomputation model. This is not a bound on every possible multiplication algorithm. <bookmark mark='a'/> Divide a valid schedule into segments with a limited number of transfers. <bookmark mark='b'/> Values already in fast memory and values brought in constrain what one segment can use. <bookmark mark='c'/> The Loomis-Whitney argument bounds how many distinct index triples can be supported by the available A, B and partial-output values. <bookmark mark='d'/> That yields the leading movement scale n cubed over square root M. A sharper argument gives the displayed constant and lower-order term when all outputs must end in slow memory. Read-only bounds and total read-plus-write bounds have different lower-order terms; the short sketch does not derive the sharp constant by itself.",
+      "zh": "考虑具有 n 的三次方个标量乘积、矩阵彼此独立且不重复计算的经典矩阵乘法模型。这不是针对所有可能乘法算法的下界。<bookmark mark='a'/>把合法调度划分成搬运次数受限的片段。<bookmark mark='b'/>快存原有值与片段中新取入的值，限制了该片段可利用的信息。<bookmark mark='c'/>卢米斯—惠特尼论证约束这些输入矩阵值及部分输出值能够支持多少种不同索引三元组。<bookmark mark='d'/>由此得到 n 的三次方除以 M 平方根的主导搬运量级。在所有输出最终位于慢存的条件下，更精细的论证给出图中的常数及低阶项。只读下界与读写总量下界具有不同低阶项，简短证明思路本身并未推出精确常数。"
+    },
+    "c707e3251dcb": {
+      "scene": "Pebbles",
+      "en": "Compare classical sixty-four-by-sixty-four address traces with a total fast-data budget of one thousand twenty-four words. Eight slots are reserved for scalar operands and accumulators; the rest form a fully associative LRU cache. <bookmark mark='a'/> The displayed lower bound counts both reads and writes and requires outputs in slow memory. <bookmark mark='b'/> The untiled bars now count line fills, dirty evictions and a final dirty-line drain. Counting fills alone would understate movement. <bookmark mark='c'/> The tile sizes give the other bars; their ratios are calculated from these counters. This is a specified trace-and-cache experiment, with zero-initialization setup excluded. <bookmark mark='d'/> It illustrates how blocking can approach the movement scale. Registers, physical write protocols, vectorization, arithmetic throughput and different algorithms require additional analysis before predicting actual GPU or CPU runtime.",
+      "zh": "在一千零二十四个字的总快存数据预算下，比较六十四乘六十四经典乘法地址轨迹。为标量操作数与累加器保留八个位置，其余组成全相联最近最少使用缓存。<bookmark mark='a'/>所示下界统计读取与写入，并要求输出最终位于慢存。<bookmark mark='b'/>未分块柱现在同时统计缓存行填充、脏行淘汰与最后的脏行排空；仅统计填充会低估搬运量。<bookmark mark='c'/>其他柱来自不同分块大小，比值由这些计数计算。这是明确指定的轨迹和缓存实验，清零初始化准备成本被排除。<bookmark mark='d'/>它说明分块如何接近相应搬运量级。预测真实处理器或图形处理器运行时间前，还需分析寄存器、实际写入协议、向量化、算术吞吐量与其他算法。"
+    },
+    "3397dfa9cf86": {
+      "scene": "External",
+      "en": "The external-memory model counts block transfers between a limited fast memory and a larger slow store. It can describe more than a physical spinning disk. <bookmark mark='a'/> Memory holds M items and a transfer moves B items. Scanning requires order one plus N over B transfers, with ceilings for short inputs. <bookmark mark='b'/> The comparison-based, indivisible-record sorting bound includes a scan term and a logarithm with base M over B, under the usual memory-size assumptions. This is not a lower bound for every possible integer-sorting model. <bookmark mark='c'/> In this example M is one billion items, not one gigabyte. Ten initial runs fit into one merge round: two passes, each reading and writing the data, rather than two individual transfers per block.",
+      "zh": "外存模型统计有限快存与较大慢存之间的块搬运，不只描述机械磁盘。<bookmark mark='a'/>内存容纳 M 个条目，每次搬运 B 个条目；扫描需要一加 N 除以 B 的量级次搬运，短输入还要取整。<bookmark mark='b'/>在通常的内存大小条件下，基于比较、条目不可分割的排序下界包含扫描项，以及以 M 除以 B 为底的对数项，并不涵盖所有整数排序模型。<bookmark mark='c'/>这个例子的 M 是十亿个条目，不是一吉字节。十个初始归并段可以在一轮中合并，因此共两遍，每遍都读取并写出全部数据，而非每块总共只搬运两次。"
+    },
+    "1724581318fe": {
+      "scene": "External",
+      "en": "External merge sort separates run generation from merging. <bookmark mark='a'/> Read an in-memory batch, sort it and write a run. Ceilings and workspace determine the actual number of initial runs. <bookmark mark='b'/> During merging, reserve input blocks and an output buffer. A simple fan-in is floor M over B minus one, with more room potentially needed for metadata and computation. Refill an input block when consumed and flush output blocks when full. <bookmark mark='c'/> Count one run-generation pass plus enough merge rounds for the number of runs and chosen fan-in. Each complete pass reads and writes the data. Whether two passes suffice depends on these quantities, not simply on memory being large in absolute terms.",
+      "zh": "外部归并排序把有序段生成与归并分开。<bookmark mark='a'/>读入一批能在内存中处理的数据，排序后写出一个有序段；取整和工作空间决定实际段数。<bookmark mark='b'/>归并时需要输入块与输出缓冲。简单扇入可取 M 除以 B 的下取整再减一，还可能需要为元数据和计算保留空间。某个输入块用完就补充，输出块填满就写出。<bookmark mark='c'/>总遍数等于一遍初始段生成，加上按段数及扇入计算的归并轮数。每一完整遍都读写全部数据。两遍是否足够取决于这些数量，而非内存绝对大小看起来很大。"
+    },
+    "d8dc902e0520": {
+      "scene": "External",
+      "en": "B-trees organize search around blocks. Bayer and McCreight's work appeared in 1972. <bookmark mark='a'/> A node groups many ordered keys and child pointers, with a node size chosen for a page or other useful transfer unit. <bookmark mark='b'/> With maintained occupancy and fan-out on the order of B, search height is on the order of one plus log base B of N. Cached upper nodes can reduce slow-store reads, while variable-size records, updates and concurrency add design choices. B-tree relatives are common in databases and file systems, alongside hash indexes, log-structured merge trees and other structures. The drawing is a layout illustration, not a guarantee that every billion-key index has exactly three or four physical reads.",
+      "zh": "B 树围绕数据块组织搜索，拜耳与麦克雷特的相关工作发表于一九七二年。<bookmark mark='a'/>一个节点汇集许多有序键与子指针，节点大小可按页或其他有用搬运单位选择。<bookmark mark='b'/>若维护适当占用率，且扇出与 B 同阶，搜索高度就是一加以 B 为底的 N 的对数量级。缓存上层节点可以减少慢存读取，而变长记录、更新与并发又带来更多设计选择。B 树及其变体广泛用于数据库和文件系统，也与哈希索引、日志结构归并树等并存。此图只是布局示意，并不保证每个十亿键索引恰好需要三四次物理读取。"
+    },
+    "616fe484e499": {
+      "scene": "Prefetch",
+      "en": "Prefetching tries to request useful data before a demand needs it. It can help when there is enough prediction lead time and transfer capacity. <bookmark mark='a'/> A next-line rule considers the following line; our simulator triggers it on every demand access, not only a miss. <bookmark mark='b'/> Its stride rule tracks line differences within each four-kibibyte page and immediately inserts predicted lines. That simplified model charges neither prefetch latency nor bandwidth. <bookmark mark='c'/> Software can also issue hints for addresses it can compute early. <bookmark mark='d'/> Real designs must manage accuracy, coverage, timeliness, pollution and metadata cost. The 2026 Streamline study, for example, organizes temporal-prefetch correlations as streams to use metadata storage more effectively. Our stride experiment does not reproduce that design or its evaluation.",
+      "zh": "预取试图在需求访问真正需要数据之前发起请求，前提是预测有足够提前量，且搬运容量允许。<bookmark mark='a'/>下一行规则考虑后继缓存行；本模拟器在每次需求访问时触发它，并非只在缺失时触发。<bookmark mark='b'/>步长规则在每个四二进制千字节页内跟踪行号差，并立即插入预测行；这个简化模型不支付预取延迟或带宽成本。<bookmark mark='c'/>软件也可为能够提前计算的地址发出提示。<bookmark mark='d'/>真实设计必须管理准确率、覆盖率、及时性、污染及元数据成本。例如二〇二六年的流线预取研究，把时间相关地址组织成流，以提高元数据存储效率。本步长实验没有复现其设计或评测。"
+    },
+    "23bc96183271": {
+      "scene": "Prefetch",
+      "en": "Replay a synthetic scan on the functional core, with a table larger than its assigned L2 but still within the assigned third-level capacity. The hierarchy uses selected host timing proxies at the assumed Pebble clock. <bookmark mark='a'/> The ideal-memory bar is the core's default load model. <bookmark mark='b'/> The next bar adds immediate, uncharged stride-prefetch fills. A similar result therefore shows what these assumptions can hide, not what a finite hardware prefetch engine will always hide. <bookmark mark='c'/> The third bar disables that prefetch rule. The warm estimate subtracts a one-pass execution from a three-pass execution and divides by two passes. The cold-pass labels include initialization and startup effects; not every miss necessarily reaches DRAM. Queuing, bandwidth and prefetch traffic remain outside this model.",
+      "zh": "在功能处理器上重放合成扫描，表大于指定的二级缓存，但仍装得进指定的第三级容量。层次使用选定的本机时间近似，并换算到假设的教学时钟。<bookmark mark='a'/>理想存储柱采用处理器默认取数模型。<bookmark mark='b'/>下一柱加入立即完成且不计成本的步长预取填充。结果相近说明这些假设能隐藏什么，并非有限硬件预取器总能隐藏什么。<bookmark mark='c'/>第三柱关闭该预取规则。暖态估计用三遍执行时间减去一遍，再除以两遍；冷遍标签包含初始化和启动影响，且并非每次缺失都到达动态存储器。排队、带宽和预取流量仍在模型之外。"
+    },
+    "ca56bb660f3b": {
+      "scene": "Prefetch",
+      "en": "This host benchmark sums randomly indexed elements of a two-hundred-fifty-six-mebibyte array. The index array is available in advance, so the guarded hint can request sixteen iterations ahead without reading past its end. <bookmark mark='a'/> The displayed values are the best of three trials for each variant. Whether the hinted version is faster or slower depends on the actual run; the narration does not assume an old result. <bookmark mark='b'/> Independent accesses may already overlap, but these timings do not count outstanding misses or isolate the cause of a difference. Instruction overhead, pollution, cache state and hint timing can matter. <bookmark mark='c'/> A single dependent pointer chain usually cannot know a distant future address. Useful software lookahead needs available address information, independent work or a different algorithm; test it under representative conditions.",
+      "zh": "这个本机基准对二百五十六二进制兆字节数组进行随机索引求和。索引数组预先可用，因此带边界保护的提示可以请求十六次迭代之后的数据，而不越过索引数组末尾。<bookmark mark='a'/>图中分别展示两种版本三次试验的最好值，带提示版本究竟更快还是更慢取决于实际运行，旁白不预设旧结果。<bookmark mark='b'/>独立访问可能已经重叠，但这些时间并未统计未完成缺失数，也不能隔离差异原因；指令开销、污染、缓存状态及提示时机都可能起作用。<bookmark mark='c'/>单条依赖指针链通常无法提前知道很远的未来地址。有用的软件提前访问需要已有地址信息、独立工作或算法变化，应在代表性条件下测试。"
+    },
+    "5101bdce1134": {
+      "scene": "Dram",
+      "en": "A DRAM bank contains arrays of cells and sense amplifiers that hold an open row. This diagram uses an illustrative eight-kibibyte row and assigned timing values. <bookmark mark='a'/> Activation senses a row's small charge differences and restores the cells while holding their values in the sense amplifiers. <bookmark mark='b'/> A read command selects columns for transfer, subject to the device and interface timings. <bookmark mark='c'/> To switch rows, the controller observes minimum active-time and other constraints, closes the row and precharges the bitlines before a new activation. Precharge itself is not simply a delayed cache-style write-back. <bookmark mark='d'/> Refresh restores charge periodically, with intervals depending on device, temperature and mode. The fourteen-nanosecond numbers and sixty-four-millisecond example are teaching choices, not universal end-to-end memory timings.",
+      "zh": "动态存储体包含单元阵列及保存打开行的感应放大器。图中使用示意性的八二进制千字节行，以及指定时序值。<bookmark mark='a'/>激活会感应一行中很小的电荷差异，在感应放大器保持数值的同时恢复单元电荷。<bookmark mark='b'/>读取命令选择要传输的列，并须遵守器件与接口时序。<bookmark mark='c'/>切换行之前，控制器需满足最小激活时间等约束，关闭当前行并预充位线，然后才能再次激活；预充本身并不是一次延后的缓存式回写。<bookmark mark='d'/>刷新会周期性恢复电荷，间隔取决于器件、温度与模式。十四纳秒及六十四毫秒只是教学示例，并非普遍的端到端访存时序。"
+    },
+    "0a72515b7f5c": {
+      "scene": "Dram",
+      "en": "The open row makes access history matter inside DRAM. This toy model has eight banks, fixed eight-kibibyte rows and a specified address-to-bank mapping, and leaves the last row open. <bookmark mark='a'/> Sequential line addresses give the first hit fraction. <bookmark mark='b'/> A four-kibibyte stride gives the second. <bookmark mark='c'/> Seeded random addresses give the third. These are simulated row-buffer hits, not measured cache hits on the host. <bookmark mark='d'/> A row hit can avoid closing and activating a different row, but real time also depends on bank parallelism, controller scheduling, bus transfers, refresh and timing constraints. A universal one-third access time cannot be inferred by adding three illustrative fourteen-nanosecond constants.",
+      "zh": "打开行让动态存储器内部也受到访问历史影响。这个玩具模型有八个存储体、固定八二进制千字节行与指定地址映射，并保持最后一行打开。<bookmark mark='a'/>顺序缓存行地址得到第一项命中比例。<bookmark mark='b'/>四二进制千字节步长得到第二项。<bookmark mark='c'/>固定种子的随机地址得到第三项。这些是模拟行缓冲命中，并非本机缓存命中的实测结果。<bookmark mark='d'/>行命中可以避免关闭旧行与激活不同新行，但实际时间还取决于存储体并行、控制器调度、总线传输、刷新及器件约束，不能靠相加三个示意性十四纳秒常数就断言访问时间恒为三分之一。"
+    },
+    "0281c82a1fc9": {
+      "scene": "Dram",
+      "en": "Memory interfaces and packaging change while the basic charge-storage idea remains. <bookmark mark='a'/> A common non-ECC DDR5 DIMM has two thirty-two-bit subchannels; widths, bank organizations and error-protection overhead depend on the device and module. <bookmark mark='b'/> High-bandwidth memory stacks dies near a processor and uses a wide interface, with details varying by HBM generation and package. Many accelerators use HBM; others use different memory systems. <bookmark mark='c'/> Systems with virtual memory translate virtual addresses to physical addresses and cache translation information in TLBs. Bare-metal and other addressing modes need not perform the same translation. The measured staircase motivates a translation investigation, but does not alone prove its causes. Part 32 develops those mechanisms.",
+      "zh": "存储接口与封装持续变化，基本的电荷存储思想则延续下来。<bookmark mark='a'/>常见的非纠错第五代双倍数据率内存条具有两个三十二位子通道，具体宽度、存储体组织与纠错开销取决于器件和模块。<bookmark mark='b'/>高带宽内存把多层芯片堆叠在处理器附近，并使用宽接口，细节随代际和封装变化。许多加速器使用高带宽内存，另一些采用其他存储系统。<bookmark mark='c'/>具有虚拟内存的系统把虚拟地址翻译成物理地址，并在翻译缓存中保存相关信息；裸机及其他寻址模式未必执行相同翻译。测量阶梯可以提示调查翻译影响，却不能独自证明原因。第三十二部分会展开这些机制。"
+    },
+    "a5778489b5ce": {
+      "scene": "Job",
+      "en": "Here is a deliberately serialized waiting-budget calculation. <bookmark mark='a'/> Assign the selected large-working-set delay to every abstract table-line visit, convert it at the assumed Pebble clock, and allow no overlap. <bookmark mark='b'/> The product is the displayed number of minutes. It is neither a measured no-cache corpus execution nor a general lower or upper bound for actual runtime: real transfer size, reuse, bandwidth, parallelism and instruction work all matter. <bookmark mark='c'/> Compare it with the fitted ledger only as an illustration of how assumptions change the apparent cost. The later projection uses separate sampled events and simplified microbenchmarks; it does not prove that a physical hierarchy makes this entire waiting budget disappear.",
+      "zh": "这里刻意计算一个完全串行的等待预算。<bookmark mark='a'/>为每次抽象表缓存行访问分配所选大工作集延迟，按假设的教学时钟换算，并禁止所有重叠。<bookmark mark='b'/>相乘得到图中的分钟数。它既不是无缓存运行完整语料的实测值，也不是真实运行时间的一般上下界，因为实际搬运大小、重用、带宽、并行与指令工作量都重要。<bookmark mark='c'/>与拟合账本比较，只是说明假设怎样改变表面成本。后面的预测采用另一套采样事件与简化微基准，不能证明真实层次会让整份等待预算全部消失。"
+    },
+    "3352c1260704": {
+      "scene": "Job",
+      "en": "This projection combines four sampled corpus windows with synthetic scan and first-letter benchmarks on the functional core. The abstract corpus table and pool are relocated into disjoint regions; this is not a full execution of the unchanged Pebble memory image. <bookmark mark='a'/> The fractions describe coalesced table events and first-letter pool events in those windows. Later matching bytes, target reads and stores are omitted from that sampling model. <bookmark mark='b'/> Weight the measured model increments at the assumed Pebble clock to obtain the displayed extra cycles. <bookmark mark='c'/> Disabling the immediate free prefetch rule gives a separate projection. <bookmark mark='d'/> Repricing the same timing proxies at an illustrative faster clock changes the cycle costs. Bandwidth, prefetch lead time, queuing and complete write traffic are absent, so small fitted overheads are conditional model results, not hardware guarantees.",
+      "zh": "这个预测把四个语料采样窗口，与功能处理器上的合成扫描和首字母基准结合。抽象语料表与字母区被重定位到不相交区域，并不是直接运行未改变的教学机内存映像。<bookmark mark='a'/>所示比例描述窗口中的合并表访问与字母区首字母事件；后续匹配字节、目标词读取及存数被采样模型省略。<bookmark mark='b'/>在假设的教学时钟下，对测得的模型增量加权，得到所示额外周期。<bookmark mark='c'/>关闭立即完成且不计成本的预取规则，会得到另一项预测。<bookmark mark='d'/>用更快的示意时钟重新计价相同时间近似，会改变周期成本。模型没有带宽、预取提前量、排队和完整写流量，因此较小拟合开销是有条件的模型结果，不是硬件保证。"
+    },
+    "6609a2478a96": {
+      "scene": "Job",
+      "en": "Row three adds the modeled memory increments to Part 8's fitted corpus cycle estimate and divides by the same assumed clock. It remains a projection from counts, samples and short benchmarks, without a full-corpus run or an error bound. <bookmark mark='a'/> The abstract table-only stream still exposes a large amount of scanning work. Caching, overlap and prefetching affect the cost of that work under different assumptions; they do not change how many table entries the algorithm examines. Better data structures can reduce the work itself, which later parts investigate. Pointer-heavy programs, different clocks and finite-bandwidth memory systems require their own models and measurements. The near-equal ledger rows should motivate that investigation, not a conclusion that real memory is generally free.",
+      "zh": "第三行把模拟内存增量加到第八部分拟合的语料周期估计上，再除以相同的假设时钟。它仍来自计数、采样与短基准，没有完整语料运行或误差界。<bookmark mark='a'/>仅含表访问的抽象序列仍暴露了大量扫描工作。在不同假设下，缓存、重叠与预取会改变这些工作的成本，却不会改变算法检查多少表项。后续部分将研究能够减少工作本身的数据结构。大量指针访问、不同频率以及有限带宽的存储系统，都需要各自模型和测量。相近的账本行应当引出进一步调查，而不是得出真实内存普遍免费的结论。"
+    },
+    "e0f889e85160": {
+      "scene": "Frontier",
+      "en": "This experiment replays an approximate line-event stream from the first six thousand corpus words in a cold fully associative one-hundred-twenty-eight-line cache. It is not the full instruction-level memory trace. <bookmark mark='a'/> The LRU and seeded-random bars use that same stream and capacity. <bookmark mark='b'/> Bimodal insertion usually places a newly fetched line at the LRU end, promoting a fraction of new lines to the MRU end. Here that fraction is one in thirty-two in expectation, not an exact periodic schedule. Hits update recency. <bookmark mark='c'/> MIN supplies the offline comparison under the same forced-insertion miss model. A reduced gap on this stream says nothing universal about other workloads; changing locality phases, training information or available state can change the result.",
+      "zh": "本实验对前六千个语料单词产生的近似缓存行事件序列进行重放，采用初始为空、容纳一百二十八行的全相联缓存，并非完整指令级访存轨迹。<bookmark mark='a'/>最近最少使用与固定种子的随机柱采用相同序列和容量。<bookmark mark='b'/>双模插入通常把新取入行放在最近最少使用端，只将一小部分放在最近使用端；这里的比例在期望上为三十二分之一，而非严格周期安排，命中仍更新新近性。<bookmark mark='c'/>最优策略在相同强制插入缺失模型下提供离线比较。本序列上差距缩小，并不保证其他负载也如此；局部性阶段、训练信息与可用状态变化，都可能改变结果。"
+    },
+    "e2b35af81fb9": {
+      "scene": "Frontier",
+      "en": "Learning-based replacement policies make different predictions. <bookmark mark='a'/> Hawkeye uses OPTgen to reconstruct cache-friendly behavior from sampled historical accesses, then trains a program-counter predictor. Historical feedback is not knowledge of the future. <bookmark mark='b'/> Glider analyzes an offline attention-based LSTM and uses the insights to design a much cheaper online predictor with an unordered history of load-instruction identities. It does not simply copy a few hundred trained LSTM weights into hardware. <bookmark mark='c'/> Mockingjay's 2022 study instead predicts reuse-distance classes and orders candidates by predicted reuse time. Its empirical gains depend on the evaluated platform, workloads and prefetch conditions. These primary studies motivate mechanisms; our chapter's small BIP experiment reproduces none of their complete hardware evaluations.",
+      "zh": "学习式替换策略预测的目标并不相同。<bookmark mark='a'/>鹰眼使用最优行为重建方法处理采样的历史访问，再训练基于程序计数器的预测器；历史反馈不是预知未来。<bookmark mark='b'/>滑翔者分析离线注意力长短期记忆模型，并据此设计成本低得多的在线预测器，使用取数指令身份的无序历史；它并不是简单地把几百个训练后的循环网络权重复制进硬件。<bookmark mark='c'/>二〇二二年的模仿鸟研究则预测重用距离类别，并按预测重用时间排序候选行。其经验收益依赖评测平台、负载与预取条件。这些原始研究提供机制思路，本章的小型双模插入实验并未复现其完整硬件评测。"
+    },
+    "50841644f757": {
+      "scene": "Frontier",
+      "en": "Define the model before asking how close an online policy can get to MIN. <bookmark mark='a'/> Paging has established competitive bounds under explicit cache-size and adversary assumptions. Predicting which learned policy wins on a particular changing workload remains an empirical and theoretical question. <bookmark mark='b'/> Communication bounds exist for many computation graphs; tightness depends on graph structure, allowed algorithms, sparsity and recomputation rules. It is too broad to say that bounds beyond matrix multiplication are simply unknown. <bookmark mark='c'/> CXL-attached and pooled memory introduce topology, protocol, locality and scheduling tradeoffs, with no single universal extra latency. <bookmark mark='d'/> Processing near or inside memory changes where operations and data move, but adds its own precision, capacity, programming and transfer constraints. The research exercise asks for a reproducible, model-matched policy comparison.",
+      "zh": "询问在线策略能多接近最优策略之前，先定义模型。<bookmark mark='a'/>分页问题在明确的缓存大小和对手假设下已有竞争界；对于具体且变化的工作负载，哪种学习策略取胜仍需要理论与经验研究。<bookmark mark='b'/>许多计算图已有通信下界，是否紧致取决于图结构、允许的算法、稀疏性及重复计算规则，不能笼统说矩阵乘法之外都不知道下界。<bookmark mark='c'/>互连附加及池化内存带来拓扑、协议、局部性和调度取舍，没有统一的额外延迟。<bookmark mark='d'/>近存或存内计算改变操作位置与数据搬运，却也带来精度、容量、编程和传输约束。研究题要求进行可复现、模型匹配的策略比较。"
+    },
+    "7ac4979f2f51": {
+      "scene": "Outro",
+      "en": "We built cache lookup and replacement models, examined signed miss-accounting comparisons, and measured this host's dependent-access times and sequential throughput. Loop ordering and tiling changed data reuse, while recursive layouts illustrated cache-oblivious ideas under explicit assumptions. The red-blue pebble example now checks its fast-memory occupancy, and the classical multiplication comparison counts fills and dirty write-backs. The Job's ledger combines a relocated abstract event model with short core benchmarks and assumed clocks. Its small projected overhead belongs to those assumptions; the billions of table-line visits are not billions of physical DRAM misses. These distinctions let us connect a visualization to a calculation without claiming more than either establishes.",
+      "zh": "我们建立了缓存查找与替换模型，检查了带符号缺失记账比较，并测量本机依赖访问时间与顺序吞吐量。循环交换和分块改变数据重用，递归布局则在明确假设下展示缓存无关思想。红蓝卵石示例现在检查快存占用，经典乘法比较也同时统计填充与脏行回写。任务账本把重定位的抽象事件模型、短处理器基准与假设时钟结合，较小预测开销仅属于这些假设；数十亿次表行访问并不等于数十亿次物理主存缺失。明确这些区别，才能把可视化与计算联系起来，而不超出二者所能证明的范围。"
+    },
+    "42345e3d9d86": {
+      "scene": "Outro",
+      "en": "These ideas return in several layers of the course. Coherence in Part 10 controls how cached copies interact across cores; it is separate from the memory-ordering model. Part 32 develops virtual addressing and translation caches. B-trees, external sorting and column-oriented layouts reappear with their own storage and update assumptions. Later Job algorithms reduce the amount of searching rather than only its per-access cost. Distributed caching adds network latency, consistency and eviction choices across machines. Accelerator design adds arithmetic intensity, local storage and transfer scheduling. At every layer, specify the event being counted, the resource limit and the observations needed to test the model.",
+      "zh": "这些思想会在课程多个层次中重现。第十部分的一致性机制控制多核缓存副本如何交互，它与内存顺序模型并不相同。第三十二部分展开虚拟寻址和翻译缓存。B 树、外部排序与列式布局会在各自存储及更新假设下再次出现。后续任务算法减少搜索工作量，而不只是降低每次访问成本。分布式缓存增加了跨机器网络延迟、一致性与淘汰选择，加速器设计则增加算术强度、局部存储和传输调度。每一层都应明确统计事件、资源上限及检验模型所需观察。"
+    },
+    "a154bcd54b99": {
+      "scene": "Outro",
+      "en": "Practical optimization starts with a representative workload and a controlled measurement. Compare useful layout variants, inspect compiler and library settings, and check correctness before attributing a speedup. Distinguish dependent latency from throughput and logical bytes processed from actual memory traffic. Roofline reasoning needs the relevant memory boundary and arithmetic intensity. Huge-page advice, NUMA placement and prefetch hints require verification under the operating system and hardware in use. Cache simulators can isolate mechanisms under chosen rules; hardware counters and repeated benchmarks help test whether those mechanisms explain a real application. Record uncertainty and setup so someone else can reproduce the result.",
+      "zh": "实际优化应从代表性负载和受控测量开始。比较有意义的布局变体，检查编译器与库设置，并在解释加速原因前验证正确性。区分依赖延迟与吞吐量，也要区分逻辑处理字节与实际内存流量。屋顶线分析需要选定存储边界及相应算术强度。大页建议、非统一内存放置与预取提示，都须在所用操作系统和硬件上核实。缓存模拟器可以在指定规则下隔离机制，硬件计数器与重复基准则帮助检查这些机制能否解释真实应用。记录设置与不确定性，便于他人复现。"
+    },
+    "589b494fced2": {
+      "scene": "Outro",
+      "en": "The exercises distinguish address arithmetic, serial access expectations, replacement policies and movement bounds. State the cache's initial state and insertion rules before comparing a cyclic scan with MIN. Keep read-only counts separate from total read-plus-write transfers, and include output-buffer space in external-memory examples. The build problem asks you to implement and evaluate insertion variants with explicit seeds and event definitions. For the research problem, use a feasible same-capacity comparator, separate training from heldout evaluation, and never encode future trace outcomes in an online predictor. A proof for a structured trace and an empirical result on a sampled workload are different deliverables.",
+      "zh": "习题区分地址计算、串行访问期望、替换策略与搬运下界。把循环扫描与最优策略比较前，先说明缓存初态和插入规则。区分只读计数与读写总量，外存示例还需为输出缓冲保留空间。动手题要求在明确种子及事件定义下，实现并评估插入变体。研究题应采用同容量且可实现的比较策略，把训练与留出评测分开，并禁止在线预测器编码未来轨迹结果。结构化轨迹的证明与采样负载的经验结果，是不同的交付物。"
+    },
+    "54ccd18b0a23": {
+      "scene": "Outro",
+      "en": "Next, parallel machines. Power and scaling constraints slowed the earlier pace of clock-frequency growth, while multicore designs and vector units became increasingly important. Part 10 studies SIMD, shared-memory execution, coherence and GPU organization, and evaluates parallel versions of the Job under stated workloads and resource limits. More cores do not automatically remove dependencies, serial work, communication or bandwidth bottlenecks. The memory models from this part give us a starting point for measuring those tradeoffs.",
+      "zh": "下一部分研究并行机器。功耗与缩放约束减缓了此前时钟频率增长的速度，多核设计与向量单元则日益重要。第十部分将研究单指令多数据、共享内存执行、一致性与图形处理器组织，并在明确负载和资源限制下评估任务的并行版本。增加核心不会自动消除依赖、串行工作、通信或带宽瓶颈，本部分的存储模型为测量这些取舍提供起点。"
+    },
+    "4b66ab8c6b54": {
+      "scene": "Hook",
+      "en": "This is Part 9 of Computer Science, Built, the third part of Act Two, Making It Fast. <bookmark mark='a'/> In this part: the memory wall, and locality, which is why caches work at all. Direct-mapped and set-associative caches, how they choose what to evict, and what they do with writes. The three kinds of miss, and the average time an access takes. This machine's memory, measured, and how to program for it, including algorithms that use every level of cache without knowing their sizes. The red-blue pebble game, and external-memory models used to analyze many storage algorithms. Then prefetching, the inside of a DRAM chip, and the Job.",
+      "zh": "这是《计算机科学，从零搭建》的第9部分，第二幕“让它变快”的第三部分。<bookmark mark='a'/>这一部分讲：存储墙，以及让缓存得以奏效的局部性。直接映射和组相联缓存，它们怎样选择淘汰谁，怎样处理写。三种缺失，以及一次访问平均要多久。这台机器的存储器，测量出来，以及怎样为它编程，包括不知道各级缓存大小却能利用每一级的算法。红蓝卵石游戏，以及用于分析许多存储算法的外存模型。然后是预取、DRAM 芯片的内部，以及任务。"
+    },
+    "09d417080f19": {
+      "scene": "Job",
+      "en": "The table-only prefix model allows exact LRU counting without expanding billions of visits. <bookmark mark='a'/> A scan touches lines zero through its end index. This is an abstract line stream, excluding letter traffic and stores. <bookmark mark='b'/> Between two references to line l, let e be the end index of the latest earlier scan that reached l. Exactly e distinct other lines intervene. A repeated reference therefore hits a fully associative C-line LRU cache if e is less than C, equivalently if that earlier covering scan had at most C lines. <bookmark mark='c'/> The cached-prefix method evaluates this model over all recorded scan ends. <bookmark mark='d'/> The green comparator pins C minus one front lines and uses one transient slot. Its achievable miss count upper-bounds MIN under matching forced-insertion rules; it is not MIN's exact miss count.",
+      "zh": "仅含表访问的前缀模型，无须展开数十亿次访问就能精确统计最近最少使用缺失。<bookmark mark='a'/>每次扫描触及从零到结束索引的缓存行，这是省略字母流量与写入的抽象行序列。<bookmark mark='b'/>两次引用同一行之间，设最近一次覆盖该行的较早扫描结束索引为 e，期间恰好出现 e 种其他行。因此，重复引用在全相联 C 行最近最少使用缓存中命中的条件是 e 小于 C，也就是那次覆盖扫描最多包含 C 行。<bookmark mark='c'/>缓存前缀状态方法对全部记录的扫描结束位置评估这个模型。<bookmark mark='d'/>绿色比较策略固定保留前 C 减一行，并使用一个临时槽；在相同强制插入规则下，其可实现缺失数是最优缺失数的上界，并非最优策略的精确计数。"
+    }
+  },
+  "title_en": "Computer Science, Built: Part 9, The Memory Hierarchy",
+  "chapters_en": {
+    "Hook": "A second for every cycle",
+    "Wall": "1. The memory wall",
+    "Locality": "2. Locality",
+    "Direct": "3. A direct-mapped cache",
+    "Assoc": "4. Associativity and replacement",
+    "ThreeC": "5. Three kinds of miss",
+    "Amat": "6. Average memory access time",
+    "Measured": "7. This machine's staircase",
+    "Programming": "8. Programming for caches",
+    "Oblivious": "9. Cache-oblivious algorithms",
+    "Pebbles": "10. The red-blue pebble game",
+    "External": "11. External memory and B-trees",
+    "Prefetch": "12. Prefetching",
+    "Dram": "13. Inside DRAM",
+    "Job": "14. The Job meets memory",
+    "Frontier": "15. Frontier: learning to replace",
+    "Outro": "Recap, problems, and where this comes back"
+  }
+}

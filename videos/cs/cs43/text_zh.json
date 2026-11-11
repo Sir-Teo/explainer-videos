@@ -1,0 +1,23 @@
+{
+ "strings": {
+  "load": "负载",
+  "tokens": "令牌",
+  "policy": "策略",
+  "recovered": "恢复时间",
+  "open": "打开",
+  "relay": "中继",
+  "key": "键",
+  "counter": "计数器",
+  "segment": "客户细分",
+  "calls": "调用",
+  "backward": "向后兼容",
+  "forward": "向前兼容",
+  "change": "改动",
+  "response": "响应",
+  "local": "本地时间",
+  "code": "编码",
+  "delivery": "投递",
+  "worker": "工作者",
+  "web": "Web 端"
+ }
+}

@@ -1,0 +1,25 @@
+{
+ "strings": {
+  "the web": "Web",
+  "blocked": "被阻止",
+  "clean": "干净",
+  "canary": "栈金丝雀",
+  "attack": "攻击",
+  "found": "找到",
+  "read": "read",
+  "write": "write",
+  "open": "open",
+  "source": "源地址",
+  "destination": "目的地址",
+  "victim": "受害者",
+  "build": "构建",
+  "web": "web",
+  "log": "log",
+  "time": "time",
+  "bound": "绑定",
+  "scheme": "协议",
+  "object": "客体",
+  "op": "操作",
+  "constant time": "恒定时间"
+ }
+}

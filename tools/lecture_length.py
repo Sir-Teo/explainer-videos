@@ -2,7 +2,7 @@
 """How long a video runs: estimated from its narration before rendering, measured after.
 
     python tools/lecture_length.py ai26                 # per chapter and total; exit 1 if under the floor
-    python tools/lecture_length.py ai26 --floor 30      # the floor in minutes (default 30, the AI series' minimum)
+    python tools/lecture_length.py ai26 --floor 30      # the floor in minutes (default 30; 50 for Computer Science, Built)
     python tools/lecture_length.py --series ai          # every part of a series, one line each
 
 The estimate counts the words of every ``self.voiceover(...)`` line in the scene source at the series' pace (140
@@ -30,10 +30,12 @@ from explainer.paths import VIDEOS, video_dir, video_package  # noqa: E402
 
 WPM = 140
 SERIES_WPM = {"quant": 168}
+FLOORS = {"cs": 50.0}  # minutes; other series: 30
 
 
 def wpm(video: str) -> float:
     return SERIES_WPM.get(video_dir(video).parent.name, WPM)
+
 BOOKMARK = re.compile(r"<bookmark[^>]*/>")
 
 
@@ -92,7 +94,7 @@ def report(video: str, verbose=True) -> float:
 
 def main():
     args = sys.argv[1:]
-    floor = 30.0
+    floor = None  # per series: the AI series' minimum is 30 minutes, this series' 50
     if "--floor" in args:
         i = args.index("--floor")
         floor = float(args[i + 1])
@@ -104,12 +106,14 @@ def main():
         short = 0
         for v in videos:
             mins = report(v, verbose=False)
-            flag = "" if mins >= floor else "  < floor"
-            short += mins < floor
+            f = floor if floor is not None else FLOORS.get(series, 30.0)
+            flag = "" if mins >= f else "  < floor"
+            short += mins < f
             print(f"{v:10s} {mins:5.1f} min{flag}")
         sys.exit(1 if short else 0)
     mins = report(args[0])
-    sys.exit(0 if mins >= floor else 1)
+    f = floor if floor is not None else FLOORS.get(video_dir(args[0]).parent.name, 30.0)
+    sys.exit(0 if mins >= f else 1)
 
 
 if __name__ == "__main__":

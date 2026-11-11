@@ -1,0 +1,13 @@
+{
+  "strings": {
+    "curves: \\ asymptotic binary code families \\\\ blue points: \\ finite examples": "曲线：二元码族的渐近界 \\\\ 蓝点：有限长度的例子",
+    "upper bounds on limiting rate; \\\\ finite codes need finite-length bounds": "极限码率的上界 \\\\ 有限码长需用有限长度的界",
+    "nontrivial perfect binary code parameters: \\\\ repetition, \\ Hamming, \\ and Golay \\ (Tiet\\\"av\\\"ainen, 1973)": "非平凡二元完美码的参数：\\\\ 重复、汉明、Golay（Tietäväinen，1973）",
+    "BP reference \\\\ $\\approx 0.084$": "BP 参考阈值 \\\\ $\\approx 0.084$",
+    "a (3,6) code of length 4,800: \\ design rate $\\tfrac12$, \\\\ 100 blocks per point, \\ 50 rounds of BP": "(3,6) 码，长度 4,800：设计码率 $\\tfrac12$，\\\\ 每点 100 块，至多 50 轮 BP",
+    "0 failures in 100 trials up to $p$ = 0.0725; \\\\ parity checks decide when BP stops": "0 次失败，100 次试验，直至 $p$ = 0.0725；\\\\ 校验决定 BP 何时停止",
+    "BEC density evolution, \\ numerical threshold: \\\\ 0.4294, \\ against capacity's 0.5": "BEC 密度演化，数值阈值：\\\\ 0.4294，容量极限为 0.5",
+    "BSC, \\ rate $\\tfrac12$; \\ BEC-designed frozen set, \\ min-sum SC; \\ block error": "BSC，码率 $\\tfrac12$；BEC 设计冻结位，最小和 SC；块错误率",
+    "the price: \\ length $2^k$ for $k$ bits. \\ binary 2-query codes need exponential length; \\\\ 3-query bounds have large gaps": "代价：$k$ 位编码为 $2^k$ 位；二元 2 查询码需指数长度；\\\\ 3 查询的上下界仍有巨大差距"
+  }
+}

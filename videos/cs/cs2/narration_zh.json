@@ -1,0 +1,529 @@
+{
+ "title": "计算机科学，从零搭建 · 第2部分：证明与计数",
+ "chapters": {
+  "Hook": "14与15",
+  "Logic": "1. 真值的语法",
+  "Proofs": "2. 证明的方法",
+  "Induction": "3. 归纳法",
+  "Structural": "4. 结构上的归纳",
+  "Invariants": "5. 不变量",
+  "Relations": "6. 集合、关系、函数",
+  "Cardinality": "7. 无穷的大小",
+  "Counting": "8. 计数",
+  "Pigeonhole": "9. 鸽子",
+  "Inclusion": "10. 容斥",
+  "Recurrences": "11. 用递推计数",
+  "Numbers": "12. 数",
+  "Chance": "13. 机会",
+  "Graphs": "14. 图",
+  "Outro": "回顾、习题，以及它们会在哪里再出现",
+  "Frontier": "15. 前沿：混乱中的秩序"
+ },
+ "lines": {
+  "db2701c3ac2c": {
+   "scene": "Hook",
+   "en": "In the winter of 1880, half of America and much of Europe was pushing little tiles around a box. <bookmark mark='a'/> Fifteen numbered tiles, sixteen squares, one of them empty. You slide a tile into the empty square, one move at a time, and try to put the numbers in order. <bookmark mark='b'/> The famous version starts with everything in place except the last two: fourteen and fifteen are swapped. <bookmark mark='c'/> The puzzle-maker Sam Loyd later claimed he had offered a thousand dollars to anyone who could put them right. Nobody collected. People spent weeks on it.",
+   "zh": "1880年冬天，半个美国和大半个欧洲都在推一个小盒子里的方块。<bookmark mark='a'/>十五块编了号的方块，十六个格子，其中一个是空的。你把一块方块滑进空格，一次一步，想把数字排好顺序。<bookmark mark='b'/>最有名的版本，除了最后两块，其他都已就位：14和15对调了。<bookmark mark='c'/>谜题作家萨姆·劳埃德后来声称，他曾悬赏一千美元，奖给能把它们复位的人。没有人领到奖金。人们在它上面花了好几个星期。"
+  },
+  "5da93990b60a": {
+   "scene": "Hook",
+   "en": "Instead of trying, watch two numbers while the tiles move. <bookmark mark='a'/> The first: think of the empty square as a sixteenth tile. Every move swaps it with a neighbour. Count the swaps: is the arrangement an even or an odd number of swaps away from where it started? <bookmark mark='b'/> The second: how far the empty square is from its home corner, counting steps along rows and columns. <bookmark mark='c'/> Now move at random. The first number flips between even and odd on every move. So does the second, because the blank moves exactly one square. They flip together, so their sum is always even. Always.",
+   "zh": "先别急着试，在方块移动时盯住两个数。<bookmark mark='a'/>第一个：把空格看成第十六块方块。每一步都是把它和一个邻居交换。数一数交换的次数：当前的排列，离开始时是偶数次交换，还是奇数次？<bookmark mark='b'/>第二个：空格离它的老家，也就是右下角，有多远，沿着行和列数步数。<bookmark mark='c'/>现在随机地走。第一个数每走一步就在偶和奇之间翻转一次。第二个数也一样，因为空格每次恰好移动一格。它们一起翻转，所以它们的和总是偶数。永远如此。"
+  },
+  "902979fefd5d": {
+   "scene": "Hook",
+   "en": "That is the whole proof. <bookmark mark='a'/> Every move swaps the blank with one tile, so the parity of the swaps flips. <bookmark mark='b'/> Every move shifts the blank by one square, so the parity of its distance flips. <bookmark mark='c'/> So their sum is even at the start, and stays even forever. <bookmark mark='d'/> Now look at Loyd's position. It is one swap from the solved board: fourteen and fifteen. One is odd. And the blank is home, distance zero. Odd plus zero is odd. <bookmark mark='e'/> No sequence of moves, of any length, can get there. Weeks of sliding, settled in four lines. <bookmark mark='f'/> A quantity that no allowed move can change is called an invariant. William Johnson and William Story published this in 1879, and proved the converse too: every position with an even sum can be reached.",
+   "zh": "这就是整个证明。<bookmark mark='a'/>每一步都把空格和一块方块交换，所以交换次数的奇偶性翻转。<bookmark mark='b'/>每一步都让空格移动一格，所以它的距离的奇偶性也翻转。<bookmark mark='c'/>于是两者之和一开始是偶数，此后永远是偶数。<bookmark mark='d'/>再看劳埃德的局面。它离复原状态只差一次交换：14和15。一是奇数。而空格就在老家，距离为零。奇数加零是奇数。<bookmark mark='e'/>无论走多少步，任何走法都到不了那里。几个星期的推推拉拉，四行就解决了。<bookmark mark='f'/>一个任何允许的移动都改变不了的量，叫作不变量。威廉·约翰逊和威廉·斯托里在1879年发表了这一结果，还证明了反方向：每个和为偶数的局面都能走到。"
+  },
+  "3bf6e47cf6c0": {
+   "scene": "Hook",
+   "en": "We can check the claim by brute force on smaller boards. <bookmark mark='a'/> Breadth-first search, which Part 18 builds properly, visits every position reachable from the solved one. On a two by two board, twelve of the twenty-four arrangements. On two by three, three hundred and sixty of seven hundred and twenty. On three by three, 181,440 of 362,880: exactly half, every time, and exactly the half the invariant allows. <bookmark mark='b'/> Here is how far those positions are from solved. The hardest need 31 moves, and there are only 2 of them. <bookmark mark='c'/> For the real puzzle, the reachable half is more than ten trillion positions. A search would take a while. The proof took four lines.",
+   "zh": "我们可以在更小的棋盘上用蛮力检验这个结论。<bookmark mark='a'/>广度优先搜索，第18部分会正式搭建它，它会访问从复原状态出发能到达的每一个局面。在2乘2的棋盘上，24种排列中有12种。在2乘3上，720种中有360种。在3乘3上，362880种中有181440种：每次都恰好一半，而且恰好是不变量允许的那一半。<bookmark mark='b'/>这是这些局面离复原有多远。最难的需要31步，而且只有2个。<bookmark mark='c'/>对于真正的十五谜题，可达的那一半超过十万亿个局面。搜索一遍要花些时间。证明只用了四行。"
+  },
+  "255783a36991": {
+   "scene": "Hook",
+   "en": "Part 1 used proofs without saying what a proof is. This is Part 2: proof and counting, the mathematics the rest of the series stands on. <bookmark mark='a'/> Logic, the grammar of precise statements. The standard ways to prove one, and induction, the proof that climbs. Invariants, like the one we just used, which is how we will prove circuits, algorithms and distributed systems correct. Sets, relations, functions and orders, and the sizes of infinite sets. Then counting: choices, Pascal's triangle, pigeonholes, inclusion and exclusion, and the Catalan numbers. And finally numbers, chance and graphs, which carry the cryptography, the algorithms and the networks of later acts.",
+   "zh": "第1部分用了证明，却没有说什么是证明。这是第2部分：证明与计数，整个系列赖以立足的数学。<bookmark mark='a'/>逻辑，精确陈述的语法。证明一个命题的标准方法，以及归纳法，那种层层攀登的证明。不变量，就像我们刚才用的那个，我们将用它证明电路、算法和分布式系统是正确的。集合、关系、函数和序，以及无限集合的大小。然后是计数：选择、帕斯卡三角形、鸽巢、容斥，以及卡特兰数。最后是数、机会和图，它们承载着后面各幕的密码学、算法和网络。"
+  },
+  "e44def7ca2ce": {
+   "scene": "Logic",
+   "en": "Chapter one. The grammar of truth.",
+   "zh": "第1章。真值的语法。"
+  },
+  "8d2e8966211f": {
+   "scene": "Logic",
+   "en": "A proposition is a statement that is either true or false: the blank is in its home corner; the swap parity is even. <bookmark mark='a'/> Logic builds bigger statements from smaller ones with a few connectives, and each one is defined completely by a truth table: one row for every way its parts can be true or false. <bookmark mark='b'/> Not P flips P. <bookmark mark='c'/> P and Q is true only when both are. <bookmark mark='d'/> P or Q is true when at least one is: in mathematics, or is inclusive. <bookmark mark='e'/> George Boole turned this into algebra in 1854. In Part 3 these tables become transistors.",
+   "zh": "命题是一个要么真、要么假的陈述：空格在它的老家；交换的奇偶性是偶。<bookmark mark='a'/>逻辑用几个联结词把小命题组合成大命题，每个联结词都完全由一张真值表定义：它的各部分取真或假的每一种方式，各占一行。<bookmark mark='b'/>非P把P翻转。<bookmark mark='c'/>P且Q只有在两者都真时才真。<bookmark mark='d'/>P或Q只要至少一个为真就真：在数学里，“或”是相容的。<bookmark mark='e'/>乔治·布尔在1854年把这些变成了代数。在第3部分，这些表会变成晶体管。"
+  },
+  "8a7903c2eb9b": {
+   "scene": "Logic",
+   "en": "The connective that causes the most trouble is implication: if P, then Q. <bookmark mark='a'/> Read it as a promise. If it rains, the street will be wet. <bookmark mark='b'/> The promise is broken in exactly one case: it rained, and the street is dry. <bookmark mark='c'/> If it did not rain, the promise was not tested, and it was not broken, so the implication counts as true, whatever the street is like. <bookmark mark='d'/> That is vacuous truth. Every unicorn in this room is purple: true, because there are no unicorns to be anything else. It sounds like a trick, but programs rely on it constantly. A loop that runs zero times satisfies every promise about each of its iterations.",
+   "zh": "最惹麻烦的联结词是蕴涵：如果P，那么Q。<bookmark mark='a'/>把它读成一个承诺。如果下雨，街道就会湿。<bookmark mark='b'/>这个承诺只在一种情况下被打破：下了雨，街道却是干的。<bookmark mark='c'/>如果没下雨，承诺就没有受到检验，也没有被打破，所以无论街道怎样，这个蕴涵都算真。<bookmark mark='d'/>这就是空真。这个房间里的每一头独角兽都是紫色的：真，因为这里根本没有独角兽可以是别的颜色。这听起来像个把戏，但程序时时刻刻都在依赖它。一个一次也没执行的循环，满足关于它每一次迭代的任何承诺。"
+  },
+  "b81542cd799a": {
+   "scene": "Logic",
+   "en": "Two statements are equivalent when they have the same truth table: they say the same thing. <bookmark mark='a'/> If P then Q, and if not Q then not P, agree on all four rows. The second is the contrapositive. The hook's proof used it: if a position is reachable, its sum is even; so, if the sum is odd, the position is not reachable. <bookmark mark='b'/> But if Q then P, the converse, disagrees in two rows. Mixing up a statement and its converse is the most common error in all of reasoning. <bookmark mark='c'/> De Morgan's laws, which say how not passes through and and or, are checked the same way. With n variables a table has two to the n rows. Checking is easy; it is just long. Whether it can always be done quickly is Part 26.",
+   "zh": "两个命题有相同的真值表时，它们等价：说的是同一件事。<bookmark mark='a'/>如果P那么Q，与如果非Q那么非P，在四行上全部一致。后者叫逆否命题。开场的证明就用了它：如果一个局面可达，它的和是偶数；所以，如果和是奇数，这个局面就不可达。<bookmark mark='b'/>但如果Q那么P，也就是逆命题，有两行不一致。把一个命题和它的逆命题混为一谈，是一切推理中最常见的错误。<bookmark mark='c'/>德摩根律说明“非”如何穿过“且”和“或”，也是用同样的方法检验的。n个变量的表有2的n次方行。检验很容易，只是很长。它是否总能快速完成，是第26部分的问题。"
+  },
+  "35b0c7eb4917": {
+   "scene": "Logic",
+   "en": "A predicate is a statement with a blank in it: x is prime; y is bigger than x. Quantifiers fill the blanks. <bookmark mark='a'/> For all x, and there exists an x. <bookmark mark='b'/> Their order matters enormously. For every integer x there is a y bigger than x: true, take x plus one. <bookmark mark='c'/> There is a y that is bigger than every x: false, there is no largest integer. Same symbols, swapped, opposite meaning. <bookmark mark='d'/> To negate a quantified statement, push the not inward and flip each quantifier as it passes. Not everything is P means something is not P. Nothing is P means everything is not P.",
+   "zh": "谓词是一个带空位的陈述：x是素数；y比x大。量词填补这些空位。<bookmark mark='a'/>“对所有x”，以及“存在一个x”。<bookmark mark='b'/>它们的顺序关系重大。对每个整数x，都存在一个比x大的y：真，取x加一即可。<bookmark mark='c'/>存在一个y，比每个x都大：假，没有最大的整数。同样的符号，换个顺序，意思截然相反。<bookmark mark='d'/>要否定一个带量词的命题，就把“非”往里推，每经过一个量词就把它翻转。不是一切都P，意味着有某个不是P。没有东西是P，意味着一切都不是P。"
+  },
+  "0ef120dcaa8a": {
+   "scene": "Logic",
+   "en": "There is a way to read long chains of quantifiers without getting lost: play them as a game. <bookmark mark='a'/> A skeptic chooses every for-all; a prover chooses every there-exists; the prover wins if the final statement holds. The statement is true exactly when the prover has a strategy that always wins. <bookmark mark='b'/> For every x there is a bigger y. The skeptic picks three; the prover answers four. Seven; eight. Ten; eleven. The strategy, y equals x plus one, always wins, so the statement is true. <bookmark mark='c'/> The game handles statements that defeat intuition. Here is continuity, from Analysis, Built: for every epsilon, there is a delta, such that for every x. <bookmark mark='d'/> Its negation, flipping each quantifier, is a winning strategy for the skeptic. Every specification in this series, from a cache that is coherent to a protocol that is safe, is a statement of this shape, and we prove it by showing that the prover always has an answer.",
+   "zh": "有一种办法读长串的量词而不迷路：把它们当作一场游戏来玩。<bookmark mark='a'/>每个“对所有”由一位怀疑者来选；每个“存在”由一位证明者来选；如果最后的陈述成立，证明者获胜。这个命题为真，恰好当证明者有一个总能获胜的策略。<bookmark mark='b'/>对每个x都有一个更大的y。怀疑者选3，证明者答4。7，答8。10，答11。策略y等于x加一总能获胜，所以这个命题为真。<bookmark mark='c'/>这个游戏能处理那些违反直觉的命题。这是《分析学，从零搭建》里的连续性：对每个ε，存在一个δ，使得对每个x。<bookmark mark='d'/>它的否定，把每个量词翻转，就是怀疑者的必胜策略。这个系列里的每一条规格说明，从一个保持一致的缓存到一个安全的协议，都是这种形状的命题，而我们证明它的方式，就是表明证明者总有应对。"
+  },
+  "3682a68bf0e7": {
+   "scene": "Proofs",
+   "en": "Chapter two. Ways to prove.",
+   "zh": "第2章。证明的方法。"
+  },
+  "3809f912761b": {
+   "scene": "Proofs",
+   "en": "A proof is an argument that leaves no case out. The simplest kind is direct: start from what you are given, and walk to what you want. <bookmark mark='a'/> Claim: the sum of two odd numbers is even. An odd number is pairs, plus one left over. <bookmark mark='b'/> Put two of them together, and the two leftovers make one more pair. <bookmark mark='c'/> In symbols, with the definitions written out: two a plus one, plus two b plus one, is two times a plus b plus one, which is even. Notice that the proof starts by writing down exactly what odd means. Most proofs that go wrong go wrong there.",
+   "zh": "证明是一个不漏掉任何情形的论证。最简单的一种是直接证明：从已知出发，走到你想要的结论。<bookmark mark='a'/>命题：两个奇数之和是偶数。一个奇数就是若干对，再多出一个。<bookmark mark='b'/>把两个奇数放在一起，两个多出来的又凑成一对。<bookmark mark='c'/>用符号写，把定义明明白白写出来：2a加1，加上2b加1，等于2乘以a加b加1，是偶数。注意，这个证明一开始就写下了“奇数”到底是什么意思。大多数出错的证明，都错在这里。"
+  },
+  "a42f4385074f": {
+   "scene": "Proofs",
+   "en": "Sometimes the direct road is blocked. <bookmark mark='a'/> Claim: if n squared is even, then n is even. Starting from n squared equals two k gives you nothing to hold. <bookmark mark='b'/> So prove the contrapositive, which chapter one showed says exactly the same thing: if n is odd, then n squared is odd. <bookmark mark='c'/> Now it is one line. Two k plus one, squared, is two times something, plus one. Odd.",
+   "zh": "有时候，直接的路走不通。<bookmark mark='a'/>命题：如果n的平方是偶数，那么n是偶数。从n平方等于2k出发，你什么也抓不住。<bookmark mark='b'/>那就证明它的逆否命题，第1章说明了它说的是完全同一件事：如果n是奇数，那么n的平方是奇数。<bookmark mark='c'/>现在只要一行。2k加1的平方，是2乘某个数，再加1。奇数。"
+  },
+  "5346ea7cb200": {
+   "scene": "Proofs",
+   "en": "Another contradiction, perhaps the oldest proof still taught. Euclid: there are infinitely many primes. <bookmark mark='a'/> Suppose there were only finitely many. <bookmark mark='b'/> Multiply them all together and add one. <bookmark mark='c'/> Every prime on the list leaves remainder one when it divides that number, so none of them divides it. <bookmark mark='d'/> But every number bigger than one has some prime factor. That factor is a prime not on the list. Contradiction. <bookmark mark='e'/> A common misreading is that the new number is itself prime. Computing them: two plus one, three; up to two times three times five times seven times eleven, plus one: all prime. But the next one, thirty thousand and thirty-one, is fifty-nine times five hundred and nine: two new primes, exactly as the proof promised. The one after that is a product of three.",
+   "zh": "再看一个反证法，也许是至今仍在讲授的最古老的证明。欧几里得：素数有无穷多个。<bookmark mark='a'/>假设只有有限多个。<bookmark mark='b'/>把它们全部乘起来，再加一。<bookmark mark='c'/>列表里的每个素数去除这个数，都余一，所以没有一个能整除它。<bookmark mark='d'/>但每个大于一的数都有某个素因子。这个因子就是一个不在列表里的素数。矛盾。<bookmark mark='e'/>常见的误读是：这个新数本身就是素数。把它们算出来：2加1，是3；一直到2乘3乘5乘7乘11再加1：都是素数。但下一个，30031，等于59乘509：两个新的素数，正如证明所承诺的。再下一个是三个素数的乘积。"
+  },
+  "03ec08f95612": {
+   "scene": "Proofs",
+   "en": "Proof by cases splits the world into pieces that together cover everything, and proves the claim in each. <bookmark mark='a'/> Claim: n squared plus n is always even. It is n times n plus one. <bookmark mark='b'/> If n is even, the first factor is even. If n is odd, the second is. <bookmark mark='c'/> Every integer is one or the other, so the claim holds for all of them. The danger in this method is a missing case. A compiler's exhaustiveness check, which Part 14 builds, is a machine that looks for exactly that mistake.",
+   "zh": "分情形证明把整个世界切成几块，这几块合起来覆盖一切，然后在每一块里分别证明结论。<bookmark mark='a'/>命题：n的平方加n总是偶数。它等于n乘以n加一。<bookmark mark='b'/>如果n是偶数，第一个因子是偶数。如果n是奇数，第二个因子是偶数。<bookmark mark='c'/>每个整数不是这个就是那个，所以结论对它们全都成立。这种方法的危险在于漏掉某个情形。编译器的穷尽性检查，第14部分会搭建它，正是一台专门找这种错误的机器。"
+  },
+  "9773e286908c": {
+   "scene": "Proofs",
+   "en": "One more kind, and it matters for computer science. <bookmark mark='a'/> Claim: there are irrational numbers a and b with a to the b rational. <bookmark mark='b'/> Look at root two to the power root two. <bookmark mark='c'/> If it is rational, we are done, with a and b both root two. If it is irrational, raise it to the power root two: the exponents multiply to two, and the answer is two, which is rational. <bookmark mark='d'/> Either way the claim is true, and the proof never tells us which case we are in. It took another theorem, in 1934, to settle that it is the second. <bookmark mark='e'/> A proof like this is non-constructive: it proves something exists without producing it. A constructive proof hands you the object, and so it is, in effect, a program. In Part 14 that observation becomes exact: proofs are programs, and the propositions they prove are types.",
+   "zh": "再看一种，它对计算机科学很要紧。<bookmark mark='a'/>命题：存在无理数a和b，使得a的b次方是有理数。<bookmark mark='b'/>看根号2的根号2次方。<bookmark mark='c'/>如果它是有理数，就完成了，a和b都取根号2。如果它是无理数，再把它取根号2次方：指数相乘得2，答案是2，是有理数。<bookmark mark='d'/>无论哪种情形，命题都成立，而证明从头到尾没有告诉我们是哪一种。直到1934年，另一条定理才确定是第二种。<bookmark mark='e'/>这样的证明是非构造性的：它证明某样东西存在，却没有把它造出来。构造性的证明会把那个对象交到你手上，所以它实际上就是一个程序。在第14部分，这一观察会变得精确：证明就是程序，而它们证明的命题就是类型。"
+  },
+  "f64ee342ac20": {
+   "scene": "Induction",
+   "en": "Chapter three. Induction.",
+   "zh": "第3章。归纳法。"
+  },
+  "06ac3b2a761f": {
+   "scene": "Induction",
+   "en": "Most of the statements this series cares about are about infinitely many things: every input, every length, every number of steps. You cannot check them one by one. Induction proves them all at once. <bookmark mark='a'/> Line up dominoes, one for each natural number. <bookmark mark='b'/> Show that the first one falls: that is the base case, P of zero. <bookmark mark='c'/> And show that whenever one falls, it knocks over the next: if P of n is true, so is P of n plus one, for every n. That is the inductive step. <bookmark mark='d'/> Then every domino falls. Nothing is checked infinitely many times; two finite arguments cover them all.",
+   "zh": "这个系列关心的大多数命题，都涉及无穷多的东西：每一个输入，每一种长度，每一个步数。你不可能一个一个地检查。归纳法一下子证明全部。<bookmark mark='a'/>排好多米诺骨牌，每个自然数一块。<bookmark mark='b'/>证明第一块会倒：这是基础情形，P(0)。<bookmark mark='c'/>再证明只要有一块倒下，它就会撞倒下一块：如果P(n)为真，那么P(n加1)也为真，对每个n都如此。这是归纳步骤。<bookmark mark='d'/>于是每一块都会倒。没有任何东西被检查无穷多次；两个有限的论证就覆盖了全部。"
+  },
+  "0f4e6f3acfac": {
+   "scene": "Induction",
+   "en": "A first example: the sum one plus two up to n. <bookmark mark='a'/> A picture guesses the answer. Stack the numbers as a staircase. <bookmark mark='b'/> A second copy, turned over, completes an n by n plus one rectangle, so the sum is half of n times n plus one. <bookmark mark='c'/> Induction proves it. The base case: one is one times two over two. <bookmark mark='d'/> The step: assume it for n. Add the next number, n plus one, to both sides. <bookmark mark='e'/> Factor, and the right side is exactly the formula for n plus one. That pattern, a picture or an experiment to find the claim and induction to prove it, is how Part 16 will find and prove the running times of algorithms.",
+   "zh": "第一个例子：1加2一直加到n。<bookmark mark='a'/>一幅图猜出了答案。把这些数堆成台阶。<bookmark mark='b'/>再拿一份倒过来，拼成一个n乘n加1的长方形，所以和是n乘n加1的一半。<bookmark mark='c'/>归纳法证明它。基础情形：1等于1乘2除以2。<bookmark mark='d'/>归纳步骤：假设对n成立。两边都加上下一个数n加1。<bookmark mark='e'/>提出公因式，右边恰好是n加1时的公式。这种模式，先用一幅图或一次实验找出结论，再用归纳法证明它，正是第16部分寻找并证明算法运行时间的方式。"
+  },
+  "c042d71daf50": {
+   "scene": "Induction",
+   "en": "Sometimes knowing the claim for n alone is not enough to prove it for n plus one. <bookmark mark='a'/> Claim: every number from two up is a product of primes. Sixty is six times ten, which is two times three, times two times five. <bookmark mark='b'/> If n is prime, it is its own product. If not, it splits into two smaller factors, and we need the claim for those, which can be anywhere below n. <bookmark mark='c'/> Strong induction allows exactly that: assume the claim for every number smaller than n. <bookmark mark='d'/> The same proof can be told backwards. Suppose some number is not a product of primes. Then there is a smallest such number. It is not prime, so it splits into smaller numbers, and those are products of primes, because it was the smallest failure. Contradiction. That every non-empty set of natural numbers has a smallest element is called the well-ordering principle. Ordinary induction, strong induction and well-ordering can each be proved from the others: they are one idea, wearing three coats.",
+   "zh": "有时候，只知道结论对n成立，还不足以证明它对n加1成立。<bookmark mark='a'/>命题：从2开始的每个数都是素数的乘积。60等于6乘10，也就是2乘3，乘以2乘5。<bookmark mark='b'/>如果n是素数，它就是它自己的乘积。如果不是，它就分成两个更小的因子，而我们需要结论对它们成立，它们可能在n以下的任何位置。<bookmark mark='c'/>强归纳法正好允许这样做：假设结论对每个比n小的数都成立。<bookmark mark='d'/>同一个证明也可以倒过来讲。假设有某个数不是素数的乘积。那么就有一个最小的这样的数。它不是素数，所以能分成更小的数，而这些更小的数都是素数的乘积，因为它是最小的反例。矛盾。每个非空的自然数集合都有最小元素，这叫良序原理。普通归纳法、强归纳法和良序原理可以互相推出：它们是同一个想法，穿了三件外衣。"
+  },
+  "5c916ef0342a": {
+   "scene": "Induction",
+   "en": "Induction is only as good as its step, and the step must work for every n. Here is a famous false proof. Claim: in any group of horses, all are the same colour. <bookmark mark='a'/> The base case, one horse, is fine. The step: take n plus one horses. The first n share a colour, by assumption. So do the last n. <bookmark mark='b'/> The groups overlap, so all n plus one share a colour. <bookmark mark='c'/> Where is the bug? Go from one horse to two. The first group is the first horse; the second group is the second horse. They do not overlap at all. The step fails at exactly one value of n, and one failure is enough to break the chain. Off-by-one errors in proofs and off-by-one errors in loops are the same mistake.",
+   "zh": "归纳法的可靠程度，取决于它的步骤，而这个步骤必须对每个n都成立。这里有一个著名的错误证明。命题：任何一群马都是同一种颜色。<bookmark mark='a'/>基础情形，一匹马，没问题。归纳步骤：取n加1匹马。前n匹颜色相同，由假设。后n匹也一样。<bookmark mark='b'/>两组有重叠，所以n加1匹全都同色。<bookmark mark='c'/>错在哪里？从一匹马到两匹马。第一组是第一匹，第二组是第二匹。它们根本没有重叠。这个步骤恰好在一个n上失败，而一次失败就足以打断整条链。证明里的差一错误和循环里的差一错误，是同一种错误。"
+  },
+  "0f0dafbbbc93": {
+   "scene": "Induction",
+   "en": "Induction does more than verify formulas. It builds things. <bookmark mark='a'/> Take a board two to the n squares on a side, remove any one square, and try to tile the rest with L-shaped pieces of three squares. Is it always possible? <bookmark mark='b'/> Induction on n. A one by one board with its square removed is empty: nothing to do. <bookmark mark='c'/> For the step, cut the board into four quarters. <bookmark mark='d'/> One of them contains the hole. Place one piece in the centre, covering a corner of each of the other three quarters. <bookmark mark='e'/> Now there are four smaller boards, each missing one square, and the induction hypothesis tiles each of them. Read the proof as a program, and it is a recursive algorithm. Here it runs: the centre piece first, then each quarter's centre piece, then each sixteenth's.",
+   "zh": "归纳法不只是验证公式。它还能造东西。<bookmark mark='a'/>取一个边长为2的n次方个格子的棋盘，挖掉任意一个格子，试着用三个格子组成的L形骨牌铺满其余部分。总能做到吗？<bookmark mark='b'/>对n做归纳。挖掉唯一格子的1乘1棋盘是空的：什么都不用做。<bookmark mark='c'/>归纳步骤：把棋盘切成四个四分之一。<bookmark mark='d'/>其中一块里有那个洞。在中心放一块骨牌，盖住另外三块各自的一个角。<bookmark mark='e'/>现在有了四个更小的棋盘，每个都缺一个格子，归纳假设把它们各自铺满。把这个证明当作程序来读，它就是一个递归算法。看它运行：先放中心那块，再放每个四分之一的中心块，然后是每个十六分之一的。"
+  },
+  "d51fe5123277": {
+   "scene": "Structural",
+   "en": "Chapter four. Induction on structures.",
+   "zh": "第4章。结构上的归纳。"
+  },
+  "21d4b3596b8c": {
+   "scene": "Structural",
+   "en": "Computer science is full of sets defined by rules rather than by formulas: strings a grammar allows, trees, expressions, lists, programs. <bookmark mark='a'/> Here is a small one: balanced parentheses. The empty string is balanced. And if s and t are balanced, then an open bracket, s, a close bracket, then t, is balanced. Nothing else is. <bookmark mark='b'/> Apply the rules, and the set grows: the empty string; one pair; two ways with two pairs; five with three. <bookmark mark='c'/> These are the Catalan numbers, and chapter eleven counts them.",
+   "zh": "计算机科学里到处是由规则而不是由公式定义的集合：文法允许的字符串、树、表达式、列表、程序。<bookmark mark='a'/>这是一个小例子：配平的括号。空串是配平的。如果s和t是配平的，那么左括号、s、右括号、再接t，也是配平的。除此之外都不是。<bookmark mark='b'/>反复使用这些规则，集合不断长大：空串；一对括号；两对有两种；三对有五种。<bookmark mark='c'/>这些是卡特兰数，第11章会数它们。"
+  },
+  "4b1bf05955fd": {
+   "scene": "Structural",
+   "en": "To prove something about every member of such a set, follow the rules that build it. <bookmark mark='a'/> Claim: in a balanced string, reading left to right, the count of opens minus closes never goes negative, and ends at zero. Here is that count for one string, as a walk. <bookmark mark='b'/> Rule one: the empty string's walk starts and ends at zero. <bookmark mark='c'/> Rule two: assume the claim for s and t, and look at open, s, close, t. The open bracket lifts the whole of s's walk up by one, so it never drops below one and comes back to one. The close bracket brings it to zero, and t's walk goes from zero to zero. <bookmark mark='d'/> That is structural induction: prove the claim for what the base rules make, and show that every rule preserves it. Ordinary induction is the special case where the only rules are zero, and plus one.",
+   "zh": "要证明这样一个集合的每个成员都具有某种性质，就沿着构造它的规则走。<bookmark mark='a'/>命题：在一个配平的串里，从左往右读，左括号数减右括号数永远不会变成负数，并且最后等于零。这是一个串的这个计数，画成一条路径。<bookmark mark='b'/>规则一：空串的路径从零开始，在零结束。<bookmark mark='c'/>规则二：假设结论对s和t成立，看左括号、s、右括号、t。左括号把s的整条路径抬高一格，所以它从不低于一，最后回到一。右括号把它带回零，然后t的路径从零走到零。<bookmark mark='d'/>这就是结构归纳法：对基础规则造出的东西证明结论，并证明每条规则都保持它。普通归纳法是其中的特例，规则只有“零”和“加一”。"
+  },
+  "0448834dee1f": {
+   "scene": "Invariants",
+   "en": "Chapter five. Invariants.",
+   "zh": "第5章。不变量。"
+  },
+  "d3caa44ea258": {
+   "scene": "Invariants",
+   "en": "The hook's proof is an example of the most useful method in this whole series. <bookmark mark='a'/> Model a process as a state machine: states, and the moves allowed between them. The puzzle's states are arrangements, a program's are the values of its variables, a network protocol's are the messages in flight. <bookmark mark='b'/> Some states are bad: a crash, two trains on one track, a lost bank transfer. We want to prove they can never be reached. <bookmark mark='c'/> Find a property that holds at the start, and that every move preserves. Then, by induction on the number of moves, it holds in every reachable state. If the bad states break it, there is no path to them. You never have to explore the states; you only have to check one move.",
+   "zh": "开场的证明，是整个系列里最有用的方法的一个例子。<bookmark mark='a'/>把一个过程建模成状态机：状态，以及状态之间允许的移动。谜题的状态是排列，程序的状态是它的变量的值，网络协议的状态是正在传输的消息。<bookmark mark='b'/>有些状态是坏的：崩溃，两列火车在同一条轨道上，一笔丢失的银行转账。我们想证明它们永远无法到达。<bookmark mark='c'/>找一个在开始时成立、并且每一步移动都保持的性质。那么，对移动次数做归纳，它在每个可达状态都成立。如果坏状态破坏了这个性质，就没有路通向它们。你根本不必探索这些状态；你只需要检查一步移动。"
+  },
+  "05cebbacef31": {
+   "scene": "Invariants",
+   "en": "A puzzle from a film. Two jugs, three gallons and five gallons, no markings, a fountain. Measure out exactly four gallons, or the bomb goes off. <bookmark mark='a'/> You may fill a jug, empty it, or pour one into the other until one is full or the other is empty. <bookmark mark='b'/> Breadth-first search over the states finds a shortest solution, 6 moves. Fill the five. Pour it into the three, leaving two. Empty the three. Pour the two across. Fill the five again. Top up the three, which takes one gallon, and four are left.",
+   "zh": "一个来自电影的谜题。两个水壶，三加仑和五加仑，没有刻度，旁边一个喷泉。量出恰好四加仑，否则炸弹就会爆炸。<bookmark mark='a'/>你可以装满一个壶，倒空它，或者把一个倒进另一个，直到一个满了或另一个空了。<bookmark mark='b'/>在状态上做广度优先搜索，找到一个最短解，6步。装满五加仑的壶。倒进三加仑的壶，剩下二。倒空三加仑的壶。把那二倒过去。再装满五加仑的壶。把三加仑的壶加满，用掉一加仑，剩下四。"
+  },
+  "9da20b259138": {
+   "scene": "Invariants",
+   "en": "Now the question an invariant answers: which amounts are possible at all? <bookmark mark='a'/> The invariant: every amount in either jug is a multiple of the greatest common divisor of the two sizes. <bookmark mark='b'/> It holds at the start, when both are empty. Filling gives A or B; emptying gives zero; pouring moves an amount that is a difference of multiples. Every move preserves it. <bookmark mark='c'/> With three and five, the gcd is one, and every amount is possible. With six and nine it is three: you can search for ever and never get four gallons, and the invariant tells you so before you start. <bookmark mark='d'/> The search finds the converse too: every multiple of the gcd up to the bigger jug does appear. That is Bézout's identity, and Euclid's algorithm again, in chapter twelve.",
+   "zh": "现在来看一个不变量能回答的问题：到底哪些量是可能的？<bookmark mark='a'/>不变量：任一壶中的水量，都是两个壶容量的最大公约数的倍数。<bookmark mark='b'/>开始时两壶皆空，它成立。装满得到A或B；倒空得到零；倒水移动的量是倍数之差。每一步都保持它。<bookmark mark='c'/>三和五的最大公约数是一，所以每个量都可能。六和九是三：你可以永远找下去，也得不到四加仑，而不变量在你开始之前就告诉了你。<bookmark mark='d'/>搜索也找到了反方向：不超过大壶容量的每一个最大公约数的倍数，确实都会出现。这就是贝祖等式，又是欧几里得算法，在第12章。"
+  },
+  "a37f998c8889": {
+   "scene": "Invariants",
+   "en": "One more, to see how little an invariant needs. A robot on a grid moves one step diagonally at a time. Can it reach the square just to its right? <bookmark mark='a'/> Watch it wander. <bookmark mark='b'/> The invariant: x plus y is even. Each move changes x and y by one each, so their sum changes by minus two, zero or two. Every square it can ever visit is green. <bookmark mark='c'/> The target has x plus y equal to one, odd. The robot can wander for ever and it will never get there.",
+   "zh": "再看一个，看看不变量需要的东西有多少。网格上的一个机器人，每次沿对角线走一步。它能走到右边紧挨着的那一格吗？<bookmark mark='a'/>看它四处游荡。<bookmark mark='b'/>不变量：x加y是偶数。每一步让x和y各变化一，所以它们的和变化负二、零或二。它能到达的每一格都是绿色的。<bookmark mark='c'/>目标格的x加y等于一，是奇数。机器人可以永远游荡下去，也永远到不了那里。"
+  },
+  "efae6ef82b7a": {
+   "scene": "Invariants",
+   "en": "Invariants prove that nothing bad happens. A second tool proves that something good eventually does: the process stops. <bookmark mark='a'/> Here is a sorting rule: find two neighbours in the wrong order, and swap them. Repeat. Does it always stop? <bookmark mark='b'/> Count the pairs that are out of order, anywhere in the list. Each swap of neighbours fixes exactly that one pair and changes no other. <bookmark mark='c'/> So the count drops by one at every step, and a natural number cannot drop for ever. At most n choose two swaps. And when no swap is possible, the count is zero, so the list is sorted. That quantity is called a variant, or a ranking function. Euclid's remainders in Part 1 were one; Part 16 uses this very count to analyse sorting algorithms.",
+   "zh": "不变量证明坏事永远不会发生。另一种工具证明好事终将发生：过程会停下来。<bookmark mark='a'/>这是一条排序规则：找两个顺序错了的邻居，交换它们。重复。它总会停下吗？<bookmark mark='b'/>数一数整个列表中顺序错了的数对。每次交换相邻两个数，恰好修正那一对，而不改变其他任何一对。<bookmark mark='c'/>所以这个计数每一步都减一，而一个自然数不可能永远减下去。最多n选2次交换。而当无法再交换时，计数为零，所以列表已经排好了。这样的量叫作变式，或者秩函数。第1部分欧几里得的余数就是一个；第16部分会用这个计数来分析排序算法。"
+  },
+  "6135186d1cb6": {
+   "scene": "Invariants",
+   "en": "In programs, the same idea has a name you will see in code reviews: the loop invariant. <bookmark mark='a'/> This loop adds up the numbers below n. The comment states what is true at the top of every pass: s is the sum of everything below i. <bookmark mark='b'/> It holds before the first pass, when both are zero. Each pass adds i and moves i on, so it still holds. And when the loop ends, the invariant plus the fact that i is no longer less than n gives exactly the answer we wanted. <bookmark mark='c'/> Robert Floyd and Tony Hoare turned this into a logic of programs in the late 1960s, and in Part 54 a machine checks such proofs for us.",
+   "zh": "在程序里，同样的想法有一个你在代码评审中会看到的名字：循环不变量。<bookmark mark='a'/>这个循环把小于n的数加起来。注释写明了每一轮开始时成立的事：s是小于i的所有数之和。<bookmark mark='b'/>第一轮之前它成立，那时两者都是零。每一轮加上i再把i往前移，所以它仍然成立。当循环结束时，不变量加上i不再小于n这一事实，恰好给出我们想要的答案。<bookmark mark='c'/>罗伯特·弗洛伊德和托尼·霍尔在20世纪60年代末把它发展成一套程序逻辑，在第54部分，由一台机器替我们检查这样的证明。"
+  },
+  "514707fdef59": {
+   "scene": "Relations",
+   "en": "Chapter six. Sets, relations and functions.",
+   "zh": "第6章。集合、关系和函数。"
+  },
+  "1dd9002b3caf": {
+   "scene": "Relations",
+   "en": "Almost everything in mathematics, and in a program's data, is built from three things: sets, relations and functions. <bookmark mark='a'/> A function from A to B sends every element of A to exactly one element of B. Draw it as arrows. <bookmark mark='b'/> It is one-to-one, injective, if no two arrows land on the same element. A hash function that is one-to-one never has a collision. <bookmark mark='c'/> It is onto, surjective, if every element of B is hit. <bookmark mark='d'/> And it is a bijection if it is both: a perfect pairing. <bookmark mark='e'/> Bijections are how we count, and how Part 1 compared infinite sets. Two finite sets have the same size exactly when there is a bijection between them.",
+   "zh": "数学中几乎一切，以及程序的数据中几乎一切，都是由三样东西搭成的：集合、关系和函数。<bookmark mark='a'/>从A到B的函数，把A的每个元素送到B的恰好一个元素。把它画成箭头。<bookmark mark='b'/>如果没有两个箭头落在同一个元素上，它就是一对一的，也叫单射。一个单射的散列函数永远不会冲突。<bookmark mark='c'/>如果B的每个元素都被击中，它就是满射。<bookmark mark='d'/>如果两者兼备，它就是双射：一个完美的配对。<bookmark mark='e'/>双射是我们计数的方式，也是第1部分比较无限集合的方式。两个有限集合大小相同，恰好当它们之间存在双射。"
+  },
+  "1c6ed682b2d8": {
+   "scene": "Relations",
+   "en": "A relation is just a set of pairs: which elements are related to which. One kind deserves a name. <bookmark mark='a'/> An equivalence relation is reflexive, symmetric and transitive: everything is related to itself, the relation goes both ways, and it chains. <bookmark mark='b'/> Example: call two integers related when their difference is a multiple of three. <bookmark mark='c'/> Then the integers fall apart into three classes, the numbers that leave remainder zero, one and two, and every integer is in exactly one. Every equivalence relation does this: it partitions its set into disjoint classes. <bookmark mark='d'/> The puzzle's positions under can reach each other form two classes, the hook's two halves. And in Part 5, the states of a machine that no input can tell apart form classes, and merging each class into one state gives the smallest machine possible.",
+   "zh": "关系不过是一个由数对组成的集合：哪些元素和哪些元素有关系。其中一种值得专门命名。<bookmark mark='a'/>等价关系是自反的、对称的、传递的：每样东西都和自己有关系，关系是双向的，而且可以连成链。<bookmark mark='b'/>例子：两个整数之差是三的倍数时，称它们有关系。<bookmark mark='c'/>于是整数分成三类：余零的、余一的、余二的，每个整数恰好在其中一类。每个等价关系都是这样：把它的集合划分成互不相交的类。<bookmark mark='d'/>谜题的局面按“能否互相到达”分成两类，就是开场的两半。在第5部分，一台机器中没有任何输入能区分的那些状态构成类，把每一类合并成一个状态，就得到最小的机器。"
+  },
+  "db7946823cfb": {
+   "scene": "Relations",
+   "en": "A second kind of relation orders things. <bookmark mark='a'/> Take the divisors of sixty, related by divides. It is reflexive and transitive, and antisymmetric: if a divides b and b divides a, they are equal. That makes it a partial order. <bookmark mark='b'/> Partial, because some pairs are not comparable at all: four does not divide six, and six does not divide four. <bookmark mark='c'/> Draw only the steps that multiply by one prime, with bigger numbers higher, and the whole order is visible: a divides b exactly when there is an upward path. <bookmark mark='d'/> Any two elements here have a greatest common lower bound, their gcd, and a least common upper bound, their lcm. An order with that property is a lattice. Lattices come back twice: compilers use them to combine what they know about a program, and replicated databases use them to merge edits without conflicts.",
+   "zh": "第二种关系给东西排序。<bookmark mark='a'/>取六十的所有约数，用“整除”联系起来。它是自反的、传递的，并且是反对称的：如果a整除b且b整除a，它们就相等。这使它成为一个偏序。<bookmark mark='b'/>之所以是“偏”，是因为有些数对根本无法比较：四不整除六，六也不整除四。<bookmark mark='c'/>只画那些乘以一个素数的步骤，大数画在高处，整个序就一目了然：a整除b，恰好当存在一条向上的路径。<bookmark mark='d'/>这里任意两个元素都有一个最大公共下界，就是它们的最大公约数，以及一个最小公共上界，就是它们的最小公倍数。具有这种性质的序叫作格。格会出现两次：编译器用它们合并关于程序的已知信息，复制数据库用它们无冲突地合并编辑。"
+  },
+  "d738c3f8a9cf": {
+   "scene": "Relations",
+   "en": "One theorem about orders, because it turns up in scheduling. <bookmark mark='a'/> A chain is a set in which every two elements are comparable, like one, two, four, twelve, sixty. An antichain is a set in which no two are. <bookmark mark='b'/> Here the largest antichain has four elements: four, six, ten and fifteen. <bookmark mark='c'/> And the whole order can be covered by four chains, and no fewer. <bookmark mark='d'/> Robert Dilworth proved in 1950 that those two numbers are always equal. Read the order as tasks that must come before others: an antichain is work that can run at the same time, and a chain is work one processor must do in sequence. Part 10, with its many cores, meets this trade-off head on.",
+   "zh": "再讲一条关于序的定理，因为它会在调度中出现。<bookmark mark='a'/>链是一个其中任意两个元素都可比较的集合，比如一、二、四、十二、六十。反链是一个其中任意两个都不可比较的集合。<bookmark mark='b'/>这里最大的反链有四个元素：四、六、十和十五。<bookmark mark='c'/>而整个序可以被四条链覆盖，不能更少。<bookmark mark='d'/>罗伯特·迪尔沃思在1950年证明，这两个数总是相等的。把这个序读成任务之间的先后约束：反链是可以同时进行的工作，链是一个处理器必须依次完成的工作。第10部分有很多核心，会正面遇上这种权衡。"
+  },
+  "7e2042eecf3a": {
+   "scene": "Cardinality",
+   "en": "Chapter seven. Sizes of infinity.",
+   "zh": "第7章。无穷的大小。"
+  },
+  "97d3366361ea": {
+   "scene": "Cardinality",
+   "en": "Part 1 said the fractions can be listed. Here is a listing so neat it was only found in the year 2000. <bookmark mark='a'/> Start with one over one. Every fraction p over q has two children: p over p plus q, and p plus q over q. <bookmark mark='b'/> The tree grows: one half and two; one third, three halves, two thirds, three. <bookmark mark='c'/> Neil Calkin and Herbert Wilf proved that every positive fraction appears in this tree exactly once, already in lowest terms. So reading it row by row lists them all, with no repeats: a bijection between the natural numbers and the positive rationals. There are exactly as many fractions as whole numbers.",
+   "zh": "第1部分说分数可以列出来。这里有一种列法，简洁到直到2000年才被发现。<bookmark mark='a'/>从一分之一开始。每个分数p除以q有两个孩子：p除以p加q，以及p加q除以q。<bookmark mark='b'/>树长大了：二分之一和二；三分之一、二分之三、三分之二、三。<bookmark mark='c'/>尼尔·卡尔金和赫伯特·威尔夫证明，每个正分数都在这棵树里恰好出现一次，而且已经是最简形式。所以一行一行地读，就能毫无重复地把它们全部列出：自然数与正有理数之间的一个双射。分数恰好和整数一样多。"
+  },
+  "58d8bdd6bb19": {
+   "scene": "Cardinality",
+   "en": "Part 1 walked the grid of pairs along its diagonals. That walk has a formula. <bookmark mark='a'/> Number the pair x, y by where it falls in the walk. <bookmark mark='b'/> The pairs on diagonal s come after all the earlier diagonals, which hold one plus two up to s pairs, the sum from chapter three. Add y, the position along the diagonal, and you have Cantor's pairing function. <bookmark mark='c'/> It is a bijection from pairs of numbers to numbers, and both directions are computable. Apply it again and again, and a single number can encode a list, a tree, or a whole program. That is how Gödel encoded statements as numbers, and how Part 25 will let programs talk about programs.",
+   "zh": "第1部分沿着对角线走遍了数对的网格。这种走法有一个公式。<bookmark mark='a'/>给数对x、y编号，就是它在这条路线上的位置。<bookmark mark='b'/>第s条对角线上的数对，排在所有更早的对角线之后，那些对角线一共有一加二一直加到s个数对，正是第3章的那个和。再加上y，也就是它在对角线上的位置，就得到康托尔配对函数。<bookmark mark='c'/>它是从数对到数的一个双射，两个方向都可计算。反复使用它，一个数就能编码一个列表、一棵树，甚至一整个程序。哥德尔就是这样把命题编码成数的，第25部分也会这样让程序谈论程序。"
+  },
+  "a6e24c84f29c": {
+   "scene": "Cardinality",
+   "en": "Part 1's diagonal argument proves something more general. <bookmark mark='a'/> Take any set, and any way of assigning to each element a subset. Here, a goes to a and c; b to a alone; c to the empty set; d to everything. <bookmark mark='b'/> Collect the elements that are not in their own subset: b and c. Call it D. <bookmark mark='c'/> Could D be anyone's subset? If D were f of x, then x would be in D exactly when it is not. So no assignment hits every subset: the subsets of any set always outnumber its elements. <bookmark mark='d'/> Apply it again and again, and there is a tower of ever larger infinities, with no top. The same move, the diagonal, is what proved the halting problem undecidable, and Part 25 uses it once more to prove that some problems need more time than others.",
+   "zh": "第1部分的对角线论证证明了更一般的东西。<bookmark mark='a'/>任取一个集合，以及任何一种给每个元素分配一个子集的方式。这里，a对应a和c；b对应a；c对应空集；d对应全部。<bookmark mark='b'/>把不在自己子集里的元素收集起来：b和c。称它为D。<bookmark mark='c'/>D会是某个元素的子集吗？如果D等于f(x)，那么x在D里，恰好当它不在D里。所以没有任何分配方式能击中每一个子集：任何集合的子集，总比它的元素多。<bookmark mark='d'/>一遍又一遍地应用它，就得到一座越来越大的无穷之塔，没有顶。同样的招数，对角线，证明了停机问题不可判定，第25部分还会再用它一次，证明有些问题比别的问题需要更多时间。"
+  },
+  "6de8418ba607": {
+   "scene": "Counting",
+   "en": "Chapter eight. Counting.",
+   "zh": "第8章。计数。"
+  },
+  "d92044a5c454": {
+   "scene": "Counting",
+   "en": "Counting is the raw material of every bound in this series: how many inputs, states, keys, paths. Two rules do most of the work. <bookmark mark='a'/> If you choose from one list or from a separate one, the counts add. <bookmark mark='b'/> If you make one choice and then another, and the second has the same number of options whatever the first was, the counts multiply. Three, then four: twelve outcomes, the leaves of this tree. <bookmark mark='c'/> The product rule is why passwords work. Eight characters, each one of sixty-two letters and digits: sixty-two to the eighth, about two hundred trillion. And why short ones do not: at ten billion guesses a second, all of them take about six hours.",
+   "zh": "计数是这个系列中每一个界的原材料：多少个输入、状态、密钥、路径。两条规则完成了大部分工作。<bookmark mark='a'/>如果你从一张清单或另一张不相交的清单中选，计数相加。<bookmark mark='b'/>如果你先做一个选择，再做另一个，而无论第一个选了什么，第二个的选项数都一样，计数相乘。三，然后四：十二种结果，就是这棵树的叶子。<bookmark mark='c'/>乘法原理就是密码有效的原因。八个字符，每个是六十二个字母和数字之一：六十二的八次方，大约两百万亿。也是短密码无效的原因：每秒一百亿次猜测，全部试完大约要六个小时。"
+  },
+  "61cf3fad5e0e": {
+   "scene": "Counting",
+   "en": "Arrangements next. <bookmark mark='a'/> Line up n different things: n choices for the first place, n minus one for the second, and so on. n factorial. <bookmark mark='b'/> Choose two of four letters, in order: four times three, twelve. <bookmark mark='c'/> But if the order does not matter, each set of two was counted twice, once in each order. Divide by two factorial: six. <bookmark mark='d'/> In general, choosing k of n things, ignoring order, is n factorial over k factorial times n minus k factorial: n choose k. Counting too much and then dividing out a known overcount is one of the most useful tricks there is.",
+   "zh": "接下来是排列。<bookmark mark='a'/>把n个不同的东西排成一行：第一个位置n种选择，第二个n减一种，依此类推。n的阶乘。<bookmark mark='b'/>从四个字母中按顺序选两个：四乘三，十二。<bookmark mark='c'/>但如果顺序无关紧要，每个两元素的集合都被数了两次，每种顺序一次。除以二的阶乘：六。<bookmark mark='d'/>一般地，从n个东西中选k个、不计顺序，是n的阶乘除以k的阶乘乘n减k的阶乘：n选k。先多数，再除掉一个已知的重复倍数，是最有用的技巧之一。"
+  },
+  "037c6b636e3d": {
+   "scene": "Counting",
+   "en": "The numbers n choose k fit into a triangle. <bookmark mark='a'/> Each entry is the sum of the two above it. <bookmark mark='b'/> Why? A counting argument, with no algebra. To choose k people from n, either Ann is chosen, and you pick k minus one more from the others, or she is not, and you pick all k from the others. Those two cases are separate, so they add. A proof that counts the same set two ways is called a bijective, or combinatorial, proof. <bookmark mark='c'/> The same numbers expand powers. Multiply out x plus y, n times: each term picks x from some of the factors and y from the rest, and there are n choose k ways to pick x from k of them.",
+   "zh": "n选k这些数可以排成一个三角形。<bookmark mark='a'/>每个数都是它上方两个数之和。<bookmark mark='b'/>为什么？一个计数论证，不用代数。从n个人中选k个，要么选了安，再从其他人中选k减一个；要么没选她，就从其他人中选全部k个。这两种情形互不重叠，所以相加。用两种方式数同一个集合的证明，叫作双射证明，或组合证明。<bookmark mark='c'/>同样的数也用来展开幂。把x加y连乘n次：每一项从一些因子里取x，从其余因子里取y，而从n个因子中挑k个取x，有n选k种方式。"
+  },
+  "a236789b02e9": {
+   "scene": "Counting",
+   "en": "Colour each entry by whether it is odd. <bookmark mark='a'/> Sixteen rows show a pattern of triangles inside triangles. <bookmark mark='b'/> A hundred and twenty-eight rows, computed, and it is Sierpiński's triangle, a fractal, made of nothing but additions. <bookmark mark='c'/> There is an exact rule behind it, Lucas's theorem: n choose k is odd exactly when every binary one of k is also a one of n. So the number of odd entries in row n is two to the number of ones in n's binary form. Binary keeps turning up uninvited; from Part 3 on, it is all we have.",
+   "zh": "按每个数是不是奇数来上色。<bookmark mark='a'/>十六行就显出一个三角形套三角形的图案。<bookmark mark='b'/>一百二十八行，计算出来的，这是谢尔宾斯基三角形，一个分形，仅仅由加法造成。<bookmark mark='c'/>背后有一条精确的规则，卢卡斯定理：n选k是奇数，恰好当k的每一个二进制的1，也都是n的1。所以第n行的奇数个数，是2的n的二进制中1的个数次方。二进制总是不请自来；从第3部分开始，我们就只有它了。"
+  },
+  "44c1f0be6c65": {
+   "scene": "Counting",
+   "en": "Counting the same set in two ways proves identities that would be tedious by algebra. <bookmark mark='a'/> Choose a committee of three from five engineers and four designers. <bookmark mark='b'/> Ignoring jobs, it is nine choose three: eighty-four. <bookmark mark='c'/> Or split by how many engineers it has, zero to three, and choose each part separately: four, plus thirty, plus forty, plus ten. Eighty-four again, as it must be. <bookmark mark='d'/> In general this is Vandermonde's identity, and the argument proves it for every m, n and r at once.",
+   "zh": "用两种方式数同一个集合，能证明那些用代数会很繁琐的恒等式。<bookmark mark='a'/>从五名工程师和四名设计师中选一个三人委员会。<bookmark mark='b'/>不管职位，就是九选三：八十四。<bookmark mark='c'/>或者按委员会里有几名工程师来分，零到三，再分别选各部分：四，加三十，加四十，加十。又是八十四，理应如此。<bookmark mark='d'/>一般地，这就是范德蒙德恒等式，而这个论证一下子对所有的m、n和r都证明了它。"
+  },
+  "2ee8269f2d92": {
+   "scene": "Counting",
+   "en": "One more bijection, because it is so neat. Share ten identical cookies among four children: how many ways? <bookmark mark='a'/> Write the cookies as stars, and put three bars between them to mark where one child's share ends and the next begins. Three, two, none, five. <bookmark mark='b'/> Every sharing is a row of thirteen symbols with exactly three bars, and every such row is a sharing. <bookmark mark='c'/> So count the rows instead: choose which three of the thirteen positions hold bars. Thirteen choose three, two hundred and eighty-six. Turning one counting problem into another that is easier is what a bijection is for.",
+   "zh": "再看一个双射，因为它太巧妙了。把十块一模一样的饼干分给四个孩子：有多少种分法？<bookmark mark='a'/>把饼干写成星号，在它们之间放三根竖线，标出一个孩子的份额在哪里结束、下一个从哪里开始。三，二，零，五。<bookmark mark='b'/>每一种分法都是一行十三个符号，其中恰好三根竖线，而每一行这样的符号也都是一种分法。<bookmark mark='c'/>所以改数这些行：从十三个位置中选哪三个放竖线。十三选三，两百八十六。把一个计数问题变成另一个更容易的计数问题，这就是双射的用处。"
+  },
+  "1656475e0abf": {
+   "scene": "Pigeonhole",
+   "en": "Chapter nine. Pigeons.",
+   "zh": "第9章。鸽子。"
+  },
+  "c7fb3bc30aad": {
+   "scene": "Pigeonhole",
+   "en": "The simplest principle in mathematics, and one of the most productive. <bookmark mark='a'/> Put seven pigeons into six holes, and some hole gets at least two. <bookmark mark='b'/> More generally, put N things into k boxes and some box holds at least N over k, rounded up. <bookmark mark='c'/> London has about nine million people, and nobody has more than about a hundred and fifty thousand hairs on their head. So at least sixty Londoners have exactly the same number of hairs, and nobody has to count.",
+   "zh": "数学中最简单、也最有成效的原理之一。<bookmark mark='a'/>把七只鸽子放进六个笼子，某个笼子至少有两只。<bookmark mark='b'/>更一般地，把N样东西放进k个盒子，某个盒子至少有N除以k、向上取整那么多。<bookmark mark='c'/>伦敦大约有九百万人，而没有人头上的头发超过大约十五万根。所以至少有六十个伦敦人的头发根数完全相同，而且谁也不用去数。"
+  },
+  "2a2dd10fb883": {
+   "scene": "Pigeonhole",
+   "en": "Here is the principle proving something that does not look like pigeons at all. <bookmark mark='a'/> Paul Erdős and George Szekeres, 1935: any n squared plus one different numbers, in any order, contain a run of n plus one that only goes up, or only goes down. The run need not be adjacent; you may skip. <bookmark mark='b'/> Ten numbers, so n is three: there must be a run of four. Here one is: two, four, seven, eight.",
+   "zh": "看这个原理证明一件看起来和鸽子毫无关系的事。<bookmark mark='a'/>保罗·埃尔德什和乔治·塞凯赖什，1935年：任意n平方加1个互不相同的数，无论怎样排列，都包含一段长为n加1的、只升不降或只降不升的子序列。这段子序列不必相邻；可以跳着取。<bookmark mark='b'/>十个数，所以n是三：一定有一段长为四的。这里就有一段：二、四、七、八。"
+  },
+  "0df48c75e641": {
+   "scene": "Pigeonhole",
+   "en": "The proof is a pigeonhole argument in disguise. <bookmark mark='a'/> Give every number a label: the length of the longest increasing run that ends at it, and the length of the longest decreasing run that ends at it. <bookmark mark='b'/> No two numbers get the same label. Take an earlier one and a later one. If the later is bigger, it can extend every increasing run that ends at the earlier one, so its first coordinate is bigger. If smaller, its second coordinate is. <bookmark mark='c'/> Now suppose there were no run of four. Every coordinate would be one, two or three: only nine possible labels. <bookmark mark='d'/> Ten numbers, nine labels, all different. Impossible. So a run of four exists.",
+   "zh": "这个证明是一个乔装的鸽巢论证。<bookmark mark='a'/>给每个数一个标签：以它结尾的最长上升子序列的长度，以及以它结尾的最长下降子序列的长度。<bookmark mark='b'/>没有两个数得到相同的标签。取一个靠前的数和一个靠后的数。如果靠后的更大，它能接在以靠前那个数结尾的每一段上升子序列后面，所以它的第一个坐标更大。如果更小，它的第二个坐标更大。<bookmark mark='c'/>现在假设没有长为四的子序列。每个坐标只能是一、二或三：只有九种可能的标签。<bookmark mark='d'/>十个数，九种标签，还要全都不同。不可能。所以长为四的子序列一定存在。"
+  },
+  "ee5027ce4d55": {
+   "scene": "Pigeonhole",
+   "en": "The bound is sharp. <bookmark mark='a'/> Three, two, one, six, five, four, nine, eight, seven: nine numbers, and the longest run either way is three. <bookmark mark='b'/> And for a random order of n numbers, the theorem promises a run of about root n. The truth, computed here for random permutations up to a hundred thousand, is about twice that: the longest increasing run, divided by root n, creeps up towards two, a fact proved in 1977. Patience sorting, a card game, computes this length, and Part 22 meets it as an algorithm for longest increasing subsequences.",
+   "zh": "这个界是紧的。<bookmark mark='a'/>三、二、一，六、五、四，九、八、七：九个数，无论哪个方向，最长的都只有三。<bookmark mark='b'/>而对于n个数的随机排列，定理保证有一段大约根号n长的。实际情况，这里对最多十万个数的随机排列计算过，大约是它的两倍：最长上升子序列的长度除以根号n，慢慢逼近二，这一事实在1977年得到证明。一种叫耐心排序的纸牌游戏能算出这个长度，第22部分会把它作为求最长上升子序列的算法。"
+  },
+  "1c5c3e836f61": {
+   "scene": "Pigeonhole",
+   "en": "One more, with a practical sting. <bookmark mark='a'/> There are eight bit strings of length three, and only seven strictly shorter ones, counting the empty string. <bookmark mark='b'/> A compressor that made every length-three input shorter would have to send two of them to the same output, and then it could not tell them apart when decompressing. <bookmark mark='c'/> The same count works at every length: two to the n strings of length n, two to the n minus one shorter ones. So every lossless compressor that shrinks some files makes others longer. Compressors win only because the files we care about are not random, which is where AI, Built began.",
+   "zh": "再看一个，带着实际的刺。<bookmark mark='a'/>长度为三的比特串有八个，而严格更短的只有七个，算上空串。<bookmark mark='b'/>一个让每个长度为三的输入都变短的压缩器，必然把其中两个送到同一个输出，于是解压时就无法分辨它们。<bookmark mark='c'/>同样的计数在每个长度都成立：长度为n的串有2的n次方个，更短的有2的n次方减一个。所以每个让某些文件变小的无损压缩器，都会让另一些文件变大。压缩器之所以管用，只是因为我们关心的文件并不随机，而这正是《人工智能，从零搭建》开始的地方。"
+  },
+  "3991b186900a": {
+   "scene": "Inclusion",
+   "en": "Chapter ten. Inclusion and exclusion.",
+   "zh": "第10章。容斥。"
+  },
+  "94139398385e": {
+   "scene": "Inclusion",
+   "en": "To count the elements in either of two sets, add their sizes. But the elements in both were counted twice, so subtract the overlap once. <bookmark mark='a'/> With three sets, add the three sizes, subtract the three pairwise overlaps, and then the very middle, which was added three times and subtracted three times, must be added back. <bookmark mark='b'/> Example: how many numbers from one to a hundred are divisible by two, three or five? Fifty, plus thirty-three, plus twenty; minus sixteen, ten and six for the multiples of six, ten and fifteen; plus three for the multiples of thirty. Seventy-four. <bookmark mark='c'/> The pattern continues for any number of sets, with alternating signs: inclusion, exclusion, inclusion.",
+   "zh": "要数出在两个集合之一中的元素，把它们的大小相加。但同时在两个集合中的元素被数了两次，所以减去一次重叠部分。<bookmark mark='a'/>三个集合时，加上三个大小，减去三个两两重叠，而正中间那块被加了三次又减了三次，必须加回来。<bookmark mark='b'/>例子：从一到一百，有多少个数能被二、三或五整除？五十，加三十三，加二十；减去十六、十和六，那是六、十和十五的倍数；再加上三，那是三十的倍数。七十四。<bookmark mark='c'/>这个模式对任意多个集合都适用，符号交替：包含，排除，包含。"
+  },
+  "ec0b27c28a87": {
+   "scene": "Inclusion",
+   "en": "Now a classic that inclusion-exclusion answers exactly. <bookmark mark='a'/> n people check their hats, and the hats are handed back at random. What is the chance that nobody gets their own? An arrangement with no fixed points is called a derangement. <bookmark mark='b'/> Count the bad orders instead, with inclusion-exclusion over the people who do get their own hat. Fix any k people: the other hats can go anywhere, n minus k factorial ways. Alternate the signs over k, and what remains is the derangements. <bookmark mark='c'/> For four people: twenty-four, minus twenty-four, plus twelve, minus four, plus one. Nine. <bookmark mark='d'/> Here they are, listed, checked by brute force.",
+   "zh": "现在看一个容斥原理能精确回答的经典问题。<bookmark mark='a'/>n个人寄存帽子，帽子被随机地还回来。没有一个人拿到自己帽子的概率是多少？没有不动点的排列叫作错排。<bookmark mark='b'/>改为数那些坏的排列，对确实拿回自己帽子的人做容斥。固定任意k个人：其余的帽子可以随便发，有n减k的阶乘种方式。对k交替加减，剩下的就是错排。<bookmark mark='c'/>四个人：二十四，减二十四，加十二，减四，加一。九。<bookmark mark='d'/>这里把它们列出来了，用蛮力核对过。"
+  },
+  "bb77d38ff5d6": {
+   "scene": "Inclusion",
+   "en": "Divide by n factorial to get the probability. <bookmark mark='a'/> One person: zero. Two: one half. Three: one third. Then it settles almost at once, at thirty-six point eight percent, and stays there: with ten people or ten thousand, the chance that nobody gets their own hat is the same. <bookmark mark='b'/> The formula is the series for e to the minus one, cut off after n terms. <bookmark mark='c'/> And a simulation agrees: shuffle a hundred thousand times, and about thirty-six point eight percent of shuffles have no fixed point, for ten people, for a deck of fifty-two, or for a thousand; with three it is exactly one third. <bookmark mark='d'/> Notice also that stopping the alternating sum early always overshoots or undershoots, by turns. Those Bonferroni bounds are how inclusion-exclusion is used when the full sum is too big to compute.",
+   "zh": "除以n的阶乘就得到概率。<bookmark mark='a'/>一个人：零。两个人：二分之一。三个人：三分之一。然后它几乎立刻稳定下来，在百分之三十六点八，并一直停在那里：无论十个人还是一万个人，没有人拿到自己帽子的概率都一样。<bookmark mark='b'/>这个公式就是e的负一次方的级数，截到第n项。<bookmark mark='c'/>模拟也吻合：洗十万次牌，大约百分之三十六点八的洗法没有不动点，无论是十个人、一副五十二张的牌，还是一千个人；三个人时恰好是三分之一。<bookmark mark='d'/>还要注意，提前截断这个交错和，总是依次偏大、偏小。这些邦费罗尼界，就是当完整的和大到算不出来时使用容斥的方法。"
+  },
+  "010af9f5c6e8": {
+   "scene": "Inclusion",
+   "en": "Inclusion-exclusion also counts the numbers that share no factor with n. Remove the multiples of each prime that divides n, add back what was removed twice, and so on. <bookmark mark='a'/> The result factors into a product: n times one minus one over p, for each prime p dividing n. This is Euler's phi function. <bookmark mark='b'/> For sixty: sixty, times a half, times two thirds, times four fifths: sixteen. <bookmark mark='c'/> Here it is for every n up to sixty. The primes stand tallest, one less than themselves; numbers with many small factors sit low. <bookmark mark='d'/> Phi is the hidden engine of RSA encryption, which Part 30 builds.",
+   "zh": "容斥原理还能数出与n没有公因子的数。去掉n的每个素因子的倍数，把被去掉两次的加回来，依此类推。<bookmark mark='a'/>结果可以分解成一个乘积：n乘以一减p分之一，对每个整除n的素数p。这就是欧拉φ函数。<bookmark mark='b'/>对六十：六十，乘二分之一，乘三分之二，乘五分之四：十六。<bookmark mark='c'/>这是六十以内每个n的φ值。素数站得最高，比自己少一；有很多小因子的数矮矮地伏着。<bookmark mark='d'/>φ是RSA加密背后隐藏的引擎，第30部分会搭建它。"
+  },
+  "06a9f17d1819": {
+   "scene": "Recurrences",
+   "en": "Chapter eleven. Counting by recursion.",
+   "zh": "第11章。用递推计数。"
+  },
+  "24c158124fe1": {
+   "scene": "Recurrences",
+   "en": "Some counts are easiest to describe in terms of smaller counts. <bookmark mark='a'/> In how many ways can a strip of length n be tiled with squares and dominoes? For length four, here are all five. <bookmark mark='b'/> Look at the first tile. If it is a square, what is left is a strip of length n minus one, tiled any way. If it is a domino, a strip of length n minus two. So the count is the sum of the two before it. <bookmark mark='c'/> One, one, two, three, five, eight: the Fibonacci numbers, which were Part 1's worst cases for Euclid's algorithm. A recurrence like this is also a program, and a slow one if you run it naively; Part 22 fixes that with dynamic programming.",
+   "zh": "有些计数，最容易用更小的计数来描述。<bookmark mark='a'/>用方块和多米诺骨牌铺满一条长为n的带子，有多少种方式？长度为四时，这里是全部五种。<bookmark mark='b'/>看第一块。如果它是方块，剩下的是一条长为n减一的带子，任意铺法。如果是多米诺骨牌，剩下长为n减二的带子。所以计数是前两个之和。<bookmark mark='c'/>一、一、二、三、五、八：斐波那契数，也就是第1部分里欧几里得算法的最坏情形。这样的递推也是一个程序，如果天真地运行，会很慢；第22部分用动态规划解决这个问题。"
+  },
+  "dfbcd53f7e47": {
+   "scene": "Recurrences",
+   "en": "The bracket picture gives a recurrence directly. <bookmark mark='a'/> Every non-empty string is an open bracket, a string A, a close bracket, and a string B. If A has k pairs, B has the remaining n minus k, and the two can be chosen independently: multiply, then add over k. <bookmark mark='b'/> The recurrence has a closed form too, one over n plus one, times two n choose n, which a clever bijection with paths proves. <bookmark mark='c'/> One, one, two, five, fourteen, forty-two, a hundred and thirty-two, growing roughly like four to the n. They count the ways to parse an ambiguous sentence, or to bracket a long product of matrices, which Part 22 optimizes.",
+   "zh": "括号的图直接给出一个递推。<bookmark mark='a'/>每个非空串都是一个左括号、一个串A、一个右括号、再一个串B。如果A有k对，B就有剩下的n减k对，两者可以独立选择：相乘，再对k求和。<bookmark mark='b'/>这个递推也有闭式，n加一分之一，乘以2n选n，可以用一个与路径之间的巧妙双射证明。<bookmark mark='c'/>一、一、二、五、十四、四十二、一百三十二，大致按四的n次方增长。它们数的是一个有歧义的句子有几种分析方式，或者给一长串矩阵乘积加括号有几种方式，第22部分会对后者做优化。"
+  },
+  "f06be88f2f5d": {
+   "scene": "Recurrences",
+   "en": "One more family. <bookmark mark='a'/> In how many ways can n people be split into k non-empty teams, where teams have no names? <bookmark mark='b'/> Follow the last person. Either they join one of the k teams the others already formed, in k ways, or they are a team by themselves, and the others form k minus one teams. That recurrence fills this table. <bookmark mark='c'/> Add up a row, and you get every way to split n things at all: one, two, five, fifteen, fifty-two, two hundred and three, the Bell numbers. A database that groups records, or a cluster that assigns jobs to machines, is choosing one point in this fast-growing space.",
+   "zh": "再看一族。<bookmark mark='a'/>把n个人分成k个非空的队，队没有名字，有多少种分法？<bookmark mark='b'/>跟着最后一个人。要么他加入其他人已经组成的k个队之一，有k种方式；要么他自成一队，其他人组成k减一个队。这个递推填满了这张表。<bookmark mark='c'/>把一行加起来，就得到把n样东西分组的所有方式：一、二、五、十五、五十二、二百零三，贝尔数。一个对记录分组的数据库，或者一个把作业分配给机器的集群，就是在这个飞速增长的空间里挑选一个点。"
+  },
+  "e7759d5017d5": {
+   "scene": "Numbers",
+   "en": "Chapter twelve. Numbers.",
+   "zh": "第12章。数。"
+  },
+  "1ac8bd6e8201": {
+   "scene": "Numbers",
+   "en": "Euclid's algorithm from Part 1 can do more than find the greatest common divisor. Run it on a table, and keep track of how each remainder is made. <bookmark mark='a'/> Every row holds a number r, and two integers s and t with r equal to s times 1071 plus t times 462. The first two rows are trivial. <bookmark mark='b'/> Each new row is the row two above, minus the quotient times the row above, so the invariant survives every step. <bookmark mark='c'/> At the end, twenty-one equals minus three times 1071 plus seven times 462. <bookmark mark='d'/> This is Bézout's identity: the gcd is always a combination of the two numbers, and the combinations are exactly its multiples. It is the converse the jugs were missing: four equals three threes minus one five.",
+   "zh": "第1部分的欧几里得算法，能做的不只是求最大公约数。把它在一张表上运行，并记下每个余数是怎么来的。<bookmark mark='a'/>每一行有一个数r，以及两个整数s和t，使得r等于s乘1071加t乘462。前两行是平凡的。<bookmark mark='b'/>每个新行等于上上一行减去商乘以上一行，所以不变量在每一步都保持。<bookmark mark='c'/>最后，二十一等于负三乘1071加七乘462。<bookmark mark='d'/>这就是贝祖等式：最大公约数总是这两个数的一个组合，而这些组合恰好是它的倍数。这正是水壶问题缺少的反方向：四等于三个三减去一个五。"
+  },
+  "77c56d5a6e03": {
+   "scene": "Numbers",
+   "en": "Remainders have an arithmetic of their own. <bookmark mark='a'/> Two numbers are congruent modulo m when they leave the same remainder, that is, when m divides their difference. On a clock with ten marks, fourteen and four are the same place. You can add and multiply and reduce at any moment; the remainder comes out the same. <bookmark mark='b'/> What is the last digit of seven to the hundredth power? Work modulo ten. Seven, nine, three, one, and then it repeats: the hand comes home every four steps. <bookmark mark='c'/> A hundred is twenty-five fours, so seven to the hundred is congruent to one. The number has eighty-five digits, and we know the last one without computing any of the others.",
+   "zh": "余数有它们自己的算术。<bookmark mark='a'/>两个数模m同余，是指它们的余数相同，也就是m整除它们的差。在一个有十个刻度的钟面上，十四和四在同一个位置。你可以加、可以乘，可以随时约简；余数结果不变。<bookmark mark='b'/>七的一百次方，最后一位是几？在模十下计算。七、九、三、一，然后重复：指针每四步回到原处。<bookmark mark='c'/>一百是二十五个四，所以七的一百次方同余于一。这个数有八十五位，而我们不用算其他任何一位，就知道最后一位。"
+  },
+  "600ff9ba34ac": {
+   "scene": "Numbers",
+   "en": "Can you divide? <bookmark mark='a'/> Solving three x congruent to one, modulo ten, means finding a number that undoes multiplication by three. Try them all: x equals seven works, because twenty-one ends in one. <bookmark mark='b'/> But two x congruent to one has no solution at all: two x is always even, and so is anything congruent to it modulo ten. <bookmark mark='c'/> The rule is Bézout again. a has an inverse modulo m exactly when a and m share no factor: then a s plus m t equals one, and s is the inverse. The extended Euclidean algorithm finds it in a few steps even for numbers hundreds of digits long, which is exactly what RSA, in Part 30, needs.",
+   "zh": "能做除法吗？<bookmark mark='a'/>解三x同余于一、模十，就是要找一个能抵消乘以三的数。全部试一遍：x等于七可以，因为二十一的末位是一。<bookmark mark='b'/>但二x同余于一根本无解：二x总是偶数，任何与它模十同余的数也是偶数。<bookmark mark='c'/>规律又是贝祖等式。a模m有逆，恰好当a和m没有公因子：那时a乘s加m乘t等于一，而s就是逆。扩展欧几里得算法几步就能找到它，即使数字有几百位长，这正是第30部分的RSA所需要的。"
+  },
+  "ffe40b995450": {
+   "scene": "Numbers",
+   "en": "A puzzle from a Chinese mathematics book of about the year four hundred, the Sunzi Suanjing. <bookmark mark='a'/> There is a number that leaves remainder two when divided by three, three when divided by five, and two when divided by seven. What is it? <bookmark mark='b'/> Three clocks, one hand each, all driven by the same x. Count up, and watch for the moment all three hands point at their targets. <bookmark mark='c'/> Twenty-three. And the pattern repeats only every three times five times seven, a hundred and five. <bookmark mark='d'/> There is a construction, not just a search: for each clock, a term that is right on that clock and zero on the other two, built from an inverse. Add them up. <bookmark mark='e'/> This is the Chinese remainder theorem. It lets a computer work with a huge number through its small remainders, in parallel, which Part 30 uses to make RSA four times faster.",
+   "zh": "一道出自约公元四百年的中国算书《孙子算经》的题目。<bookmark mark='a'/>今有物不知其数，三三数之剩二，五五数之剩三，七七数之剩二，问物几何？<bookmark mark='b'/>三个钟面，各一根指针，都由同一个x驱动。往上数，看三根指针同时指向目标的那一刻。<bookmark mark='c'/>二十三。而这个规律只每隔三乘五乘七，也就是一百零五，才重复一次。<bookmark mark='d'/>这里有一个构造，而不只是搜索：对每个钟面，造一项，它在这个钟面上正确，在另外两个上为零，用一个逆元造出来。把它们加起来。<bookmark mark='e'/>这就是中国剩余定理。它让计算机通过一个大数的那些小余数来并行处理它，第30部分用它让RSA快四倍。"
+  },
+  "76bb46475b13": {
+   "scene": "Numbers",
+   "en": "One last theorem, which most people learn without ever seeing why it is true. <bookmark mark='a'/> Every number from two up is a product of primes, in exactly one way, apart from the order. Three hundred and sixty is two cubed, times three squared, times five, and nothing else. <bookmark mark='b'/> That a factorization exists, chapter three proved by strong induction. That it is unique needs a lemma of Euclid's: if a prime divides a product, it divides one of the factors. <bookmark mark='c'/> And that lemma falls out of Bézout. If p does not divide a, then p s plus a t equals one for some s and t; multiply by b, and p divides both terms on the left, so it divides b. <bookmark mark='d'/> It is not a triviality: in other number systems it fails, and six factors in two different ways. Unique factorization is why the hardness of factoring, the thing RSA bets on, is even a well-posed question.",
+   "zh": "最后一条定理，大多数人学过它，却从没见过它为什么成立。<bookmark mark='a'/>从二开始的每个数，都能以恰好一种方式写成素数的乘积，不计顺序。三百六十是二的立方，乘三的平方，乘五，别无其他写法。<bookmark mark='b'/>分解的存在性，第3章用强归纳法证明了。唯一性需要欧几里得的一条引理：如果一个素数整除一个乘积，它就整除其中一个因子。<bookmark mark='c'/>而这条引理来自贝祖等式。如果p不整除a，那么对某些s和t，p乘s加a乘t等于一；两边乘以b，p整除左边的两项，所以它整除b。<bookmark mark='d'/>这并不是理所当然：在别的数系里它不成立，六可以用两种不同的方式分解。唯一分解定理，正是RSA所押注的“分解很难”能够成为一个良定义问题的原因。"
+  },
+  "b60e752b53f1": {
+   "scene": "Chance",
+   "en": "Chapter thirteen. Chance.",
+   "zh": "第13章。机会。"
+  },
+  "ca3a9b4e5f92": {
+   "scene": "Chance",
+   "en": "Probability is counting, divided by counting, and it is where intuition fails most reliably. <bookmark mark='a'/> A game show. A car is behind one of three doors, goats behind the others. You pick a door. The host, who knows where the car is, opens a different door, always showing a goat, and offers you the chance to switch. <bookmark mark='b'/> Most people say it cannot matter: two doors left, fifty-fifty. Simulate three thousand games. Staying wins about a third of the time. Switching wins about two thirds. <bookmark mark='c'/> The reason: switching wins exactly when your first pick was wrong, and it was wrong two times in three. The host's choice gave you information, because it was not random. Whenever a probability argument feels slippery, list the outcomes, or simulate.",
+   "zh": "概率是计数除以计数，也是直觉最可靠地失灵的地方。<bookmark mark='a'/>一个游戏节目。三扇门中的一扇后面有汽车，另外两扇后面是山羊。你选一扇门。知道汽车在哪里的主持人，打开另一扇门，总是露出一只山羊，然后给你换门的机会。<bookmark mark='b'/>大多数人说这无所谓：剩下两扇门，一半对一半。模拟三千局。坚持不换，大约三分之一的时候赢。换门，大约三分之二的时候赢。<bookmark mark='c'/>原因是：换门恰好在你第一次选错时赢，而三次里有两次你会选错。主持人的选择给了你信息，因为它不是随机的。每当一个概率论证让人觉得滑溜，就把结果都列出来，或者模拟一下。"
+  },
+  "eca3fee45b36": {
+   "scene": "Chance",
+   "en": "Conditional probability is the chance of one thing given that another happened, and it is the other half of the Monty Hall surprise. <bookmark mark='a'/> A disease affects one person in a hundred. A test catches ninety-nine percent of cases, but also flags five percent of healthy people. You test positive. How worried should you be? <bookmark mark='b'/> Count ten thousand people. A hundred are sick, and ninety-nine of them test positive. Nine thousand nine hundred are healthy, and four hundred and ninety-five of them test positive too. <bookmark mark='c'/> Of the five hundred and ninety-four positives, only ninety-nine are sick: one in six. Bayes' rule is this count written in symbols. When the thing you are looking for is rare, false alarms swamp it, which is the daily problem of every spam filter, fraud detector and intrusion alarm.",
+   "zh": "条件概率是在另一件事已经发生的条件下，一件事发生的概率，它也是蒙提霍尔之谜的另一半。<bookmark mark='a'/>一种疾病，每一百人中有一人患病。一项检测能查出百分之九十九的病例，但也会把百分之五的健康人标为阳性。你检测呈阳性。你该有多担心？<bookmark mark='b'/>数一万个人。一百人患病，其中九十九人检测阳性。九千九百人健康，其中四百九十五人也检测阳性。<bookmark mark='c'/>在五百九十四个阳性中，只有九十九人真的患病：六分之一。贝叶斯法则就是把这次计数写成符号。当你要找的东西很罕见时，误报会把它淹没，这是每个垃圾邮件过滤器、欺诈检测器和入侵警报每天面对的问题。"
+  },
+  "1406b8d6c196": {
+   "scene": "Chance",
+   "en": "The most useful fact in discrete probability is almost too simple to believe. <bookmark mark='a'/> Back to the hats. On average, how many people get their own? <bookmark mark='b'/> Write the count as a sum of indicators: X i is one if person i gets their own hat, and zero otherwise. Each person has a one in n chance. <bookmark mark='c'/> The expectation of a sum is the sum of the expectations: n times one over n. One. For every n. <bookmark mark='d'/> The indicators are tangled together, since if one person has the wrong hat it changes the odds for the others, but linearity holds anyway, with no independence needed. <bookmark mark='e'/> The simulations agree, and the whole distribution of fixed points is close to the Poisson law with mean one. Part 16 uses exactly this trick, indicators and linearity, to show that quicksort makes about two n times the natural logarithm of n comparisons on average.",
+   "zh": "离散概率中最有用的事实，简单得几乎让人不敢相信。<bookmark mark='a'/>回到帽子。平均有多少人拿到自己的帽子？<bookmark mark='b'/>把计数写成指示变量之和：如果第i个人拿到自己的帽子，X i就是一，否则是零。每个人有n分之一的机会。<bookmark mark='c'/>和的期望等于期望的和：n乘以n分之一。一。对每个n都是。<bookmark mark='d'/>这些指示变量彼此纠缠，因为如果一个人拿错了帽子，就会改变其他人的机会，但线性性照样成立，不需要独立。<bookmark mark='e'/>模拟吻合，而且不动点个数的整个分布，都接近均值为一的泊松分布。第16部分正是用这个技巧，指示变量加线性性，证明快速排序平均大约做二n乘以n的自然对数次比较。"
+  },
+  "96c04cc7a80c": {
+   "scene": "Chance",
+   "en": "Often we cannot compute a probability exactly, but we can bound it, and the bound is what a guarantee is made of. <bookmark mark='a'/> Toss a hundred fair coins. What is the chance of seventy-five heads or more? <bookmark mark='b'/> Markov's inequality uses only the average, fifty: the chance is at most fifty over seventy-five, two thirds. True, and nearly useless. <bookmark mark='c'/> Chebyshev's inequality also uses the spread, the variance, twenty-five: being twenty-five away from the mean has chance at most twenty-five over six hundred and twenty-five, four percent. <bookmark mark='d'/> The exact answer is about three in ten million. Each extra fact about the distribution buys a much sharper bound, and Part 16 adds the Chernoff bound, which is close to the truth. <bookmark mark='e'/> And the crudest bound of all: the chance that any of several bad things happens is at most the sum of their chances. With twenty-three people, the chance that two share a birthday is at most two hundred and fifty-three pairs over three hundred and sixty-five, sixty-nine percent; the truth is fifty-one. Part 17 uses this to size hash tables.",
+   "zh": "我们往往无法精确算出一个概率，但可以给它一个界，而保证就是由界构成的。<bookmark mark='a'/>抛一百枚均匀的硬币。七十五次以上正面朝上的概率是多少？<bookmark mark='b'/>马尔可夫不等式只用平均值，五十：概率至多是五十除以七十五，三分之二。正确，但几乎没用。<bookmark mark='c'/>切比雪夫不等式还用到离散程度，也就是方差，二十五：偏离均值二十五的概率，至多是二十五除以六百二十五，百分之四。<bookmark mark='d'/>精确答案大约是千万分之三。关于分布的每一条额外信息，都换来一个锐利得多的界，第16部分还会加上切尔诺夫界，它非常接近真实值。<bookmark mark='e'/>还有最粗糙的界：几件坏事中任何一件发生的概率，至多是它们各自概率之和。二十三个人里有两人生日相同的概率，至多是二百五十三对除以三百六十五，百分之六十九；真实值是百分之五十一。第17部分用它来确定散列表的大小。"
+  },
+  "091a4b4b1d29": {
+   "scene": "Graphs",
+   "en": "Chapter fourteen. Graphs.",
+   "zh": "第14章。图。"
+  },
+  "f13613a55b31": {
+   "scene": "Graphs",
+   "en": "The last structure of this part, and the one that carries networks, maps, dependencies and the web. <bookmark mark='a'/> The city of Königsberg had seven bridges joining two river banks, an island and a fourth piece of land. Could you take a walk that crosses every bridge exactly once? <bookmark mark='b'/> Leonhard Euler threw away everything but the land and the bridges: dots, and lines between them. A graph. <bookmark mark='c'/> Every time a walk passes through a place, it uses two bridges, one in and one out. So every place except the start and the end must touch an even number of bridges. <bookmark mark='d'/> In Königsberg all four touch an odd number. No such walk exists. That was 1736, and it was the first theorem of graph theory.",
+   "zh": "这一部分的最后一种结构，它承载着网络、地图、依赖关系和万维网。<bookmark mark='a'/>柯尼斯堡城有七座桥，连接两岸、一座岛和第四块陆地。能否走一圈，恰好经过每座桥一次？<bookmark mark='b'/>莱昂哈德·欧拉扔掉了一切，只留下陆地和桥：一些点，以及它们之间的连线。一个图。<bookmark mark='c'/>每当路线经过一个地方，它就用掉两座桥，一座进，一座出。所以除了起点和终点，每个地方连接的桥数都必须是偶数。<bookmark mark='d'/>在柯尼斯堡，四个地方都连着奇数座桥。这样的路线不存在。那是1736年，它是图论的第一条定理。"
+  },
+  "ec263ddc296e": {
+   "scene": "Graphs",
+   "en": "The bridge argument hides a fact about every graph. <bookmark mark='a'/> Label each vertex with its degree, the number of edges that touch it. <bookmark mark='b'/> Add up the degrees. Every edge has two ends, so every edge is counted exactly twice: the sum is twice the number of edges. <bookmark mark='c'/> In particular the sum is even, so the number of vertices with odd degree is even. At any party, the number of people who shook an odd number of hands is even. Counting the same thing two ways, again.",
+   "zh": "桥的论证里藏着一个关于所有图的事实。<bookmark mark='a'/>给每个顶点标上它的度，也就是碰到它的边数。<bookmark mark='b'/>把所有的度加起来。每条边有两个端点，所以每条边恰好被数了两次：和等于边数的两倍。<bookmark mark='c'/>特别地，这个和是偶数，所以度为奇数的顶点个数是偶数。在任何一场聚会上，握手次数为奇数的人数是偶数。又是用两种方式数同一件事。"
+  },
+  "b85fbc0e3c0f": {
+   "scene": "Graphs",
+   "en": "A tree, in graph theory, is a connected graph with no cycles. <bookmark mark='a'/> Several quite different descriptions turn out to be the same: connected with no cycles; connected with exactly n minus one edges; exactly one path between any two vertices; connected, but fragile, so that removing any edge disconnects it. Proving they are equivalent is a good exercise in induction. <bookmark mark='b'/> Nine vertices, eight edges. <bookmark mark='c'/> Add any edge, and it closes a cycle. <bookmark mark='d'/> Remove any edge, and the tree falls into two pieces. Trees are the cheapest way to connect things, which is why a network that must reach every machine without loops, from a power grid to the routing of the internet, builds one.",
+   "zh": "在图论中，树是没有圈的连通图。<bookmark mark='a'/>几种截然不同的描述，结果说的是同一件事：连通且无圈；连通且恰好有n减一条边；任意两个顶点之间恰好一条路径；连通，但很脆弱，去掉任何一条边就不再连通。证明它们等价，是一个很好的归纳法练习。<bookmark mark='b'/>九个顶点，八条边。<bookmark mark='c'/>任意加一条边，它就闭合成一个圈。<bookmark mark='d'/>任意去掉一条边，树就裂成两块。树是把东西连起来的最经济的方式，所以一个必须到达每台机器而又不能有环路的网络，从电网到互联网的路由，都会建一棵树。"
+  },
+  "bab6464315ea": {
+   "scene": "Graphs",
+   "en": "One more theorem, which Part 18 turns into an algorithm. <bookmark mark='a'/> Can the vertices be coloured with two colours so that every edge joins different colours? Colour one vertex blue, its neighbours orange, theirs blue, and so on outward. On this graph it works. <bookmark mark='b'/> On a cycle of five, going round, the colours alternate, blue, orange, blue, orange, blue, and the last vertex is next to the first: a clash. <bookmark mark='c'/> That is the whole story: a graph can be two-coloured exactly when it has no cycle of odd length. Going round an odd cycle flips the colour an odd number of times and you cannot get home; and if there is no odd cycle, colouring by the parity of the distance from a start vertex always works. Parity, one last time.",
+   "zh": "再讲一条定理，第18部分会把它变成算法。<bookmark mark='a'/>能否用两种颜色给顶点上色，使得每条边连接的两端颜色不同？把一个顶点涂蓝，它的邻居涂橙，邻居的邻居涂蓝，依此向外。在这个图上可以。<bookmark mark='b'/>在一个五边的圈上，绕一圈，颜色交替，蓝、橙、蓝、橙、蓝，而最后一个顶点紧挨着第一个：冲突。<bookmark mark='c'/>整个道理就是这样：一个图能被两种颜色上色，恰好当它没有长度为奇数的圈。绕一个奇圈，颜色翻转奇数次，你回不了家；而如果没有奇圈，按到起点距离的奇偶性上色总是可行的。奇偶性，最后一次。"
+  },
+  "9211053fafe7": {
+   "scene": "Frontier",
+   "en": "Chapter fifteen. Frontier: order in chaos.",
+   "zh": "第15章。前沿：混乱中的秩序。"
+  },
+  "e3245042eea6": {
+   "scene": "Frontier",
+   "en": "Part 2's pigeons lead straight to an open frontier. Among any six people, either three all know each other or three are all strangers; five people are not enough. <bookmark mark='a'/> Here are five, with friendship in red and strangers in blue: the red pentagon and the blue star contain no triangle of either colour. <bookmark mark='b'/> With six, pick one person. Five edges, two colours: by the pigeonhole principle, three of them share a colour, say red. <bookmark mark='c'/> If any two of those three people are friends, they make a red triangle with the first; if no two are, the three of them are a blue triangle. <bookmark mark='d'/> A computer agrees: of all thirty-two thousand ways to colour six people's relationships, not one escapes. Frank Ramsey proved in 1930 that this happens for any size: for every k there is a number R of k, a party size where k mutual friends or k mutual strangers are forced. Complete disorder is impossible.",
+   "zh": "第2部分的鸽子直接通向一片未解的前沿。任意六个人中，要么有三个人彼此认识，要么有三个人彼此陌生；五个人则不够。<bookmark mark='a'/>这是五个人，朋友关系用红色，陌生关系用蓝色：红色的五边形和蓝色的五角星里，都没有任何一种颜色的三角形。<bookmark mark='b'/>六个人时，挑出一个人。五条边，两种颜色：根据鸽巢原理，其中三条颜色相同，比如红色。<bookmark mark='c'/>如果这三个人中有任何两个是朋友，他们就和第一个人构成红色三角形；如果没有两个是朋友，这三个人就构成蓝色三角形。<bookmark mark='d'/>计算机也同意：给六个人的关系着色的三万两千多种方式里，没有一种能逃过。弗兰克·拉姆齐在1930年证明，任何大小都是如此：对每个 k，都有一个数 R(k)，到了这么多人的聚会，k 个彼此认识或 k 个彼此陌生的人必然出现。完全的无序是不可能的。"
+  },
+  "20aeae26390c": {
+   "scene": "Frontier",
+   "en": "For four, the answer is eighteen. <bookmark mark='a'/> The colouring that shows seventeen is not enough comes from number theory: seat seventeen people in a circle and make two of them friends when the difference of their seats is a perfect square modulo seventeen. <bookmark mark='b'/> The largest group of mutual friends has three people, and so has the largest group of strangers: our program checked every group of four. <bookmark mark='c'/> And in 1955 Greenwood and Gleason proved that eighteen people always contain four. After that the exact values stop. For five, the answer is known only to lie between forty-three and forty-six.",
+   "zh": "对四来说，答案是十八。<bookmark mark='a'/>说明十七个人还不够的那种着色来自数论：让十七个人围坐一圈，当两人座位号之差是模十七的完全平方数时，让他们成为朋友。<bookmark mark='b'/>最大的一群彼此认识的人有三个，最大的一群彼此陌生的人也有三个：我们的程序检查了每一组四个人。<bookmark mark='c'/>1955年，格林伍德和格利森证明了十八个人中总有四个。此后精确值就断了。对五来说，只知道答案在四十三到四十六之间。"
+  },
+  "03991b6fc52d": {
+   "scene": "Frontier",
+   "en": "For large k, two bounds from Paul Erdős have stood for most of a century. <bookmark mark='a'/> The upper one, with George Szekeres in 1935, is an induction of the kind Part 2 taught: R of k and l is at most R of k minus one and l, plus R of k and l minus one, which solves to a binomial coefficient, less than four to the k. <bookmark mark='b'/> The lower one, from 1947, founded the probabilistic method. Colour every relationship by tossing a coin, and count the expected number of one-colour groups of k, by linearity of expectation. Below two to the k over two people, that expectation is less than one, so some colouring has no such group at all. <bookmark mark='c'/> So R of k lies between root two to the k and four to the k: an exponential gap, and for seventy-five years nobody could move either end by an exponential factor.",
+   "zh": "对很大的 k，保罗·埃尔德什的两个界维持了将近一个世纪。<bookmark mark='a'/>上界是他和乔治·塞凯赖什在1935年给出的，用的是第2部分教过的那种归纳：R(k, l) 至多是 R(k−1, l) 加上 R(k, l−1)，解出来是一个二项式系数，小于四的 k 次方。<bookmark mark='b'/>下界来自1947年，它开创了概率方法。用抛硬币决定每一段关系的颜色，再用期望的线性性数出单色的 k 人组的期望个数。人数少于二的 k/2 次方时，这个期望小于一，所以一定有某种着色根本没有这样的组。<bookmark mark='c'/>于是 R(k) 落在根号二的 k 次方和四的 k 次方之间：一个指数级的鸿沟，七十五年来，没有人能把哪一端移动一个指数因子。"
+  },
+  "498e87b9970e": {
+   "scene": "Frontier",
+   "en": "Then, in 2023, the upper end moved. <bookmark mark='a'/> For decades the only progress shaved off factors smaller than any exponential: Andrew Thomason in 1988, David Conlon in 2009. <bookmark mark='b'/> In March 2023 Marcelo Campos, Simon Griffiths, Robert Morris and Julian Sahasrabudhe proved that R of k is less than four minus a small epsilon, all to the k, the first exponential improvement since 1935, with a new way of growing a structure they called a book. <bookmark mark='c'/> A year later Gupta, Ndiaye, Norin and Wei sharpened the same argument to three point eight to the k. The lower bound has not moved by an exponential factor since 1947. <bookmark mark='d'/> And the small cases remain brutally hard: the five-person number is between forty-three and forty-six, the forty-six proved in 2024 with linear programming and a large computer search. Erdős liked to say that if aliens demanded R of five on pain of destroying the Earth, we should set every computer to work on it; if they asked for R of six, we should try to destroy the aliens.",
+   "zh": "然后，在2023年，上界动了。<bookmark mark='a'/>几十年来，唯一的进展只削掉了比任何指数都小的因子：1988年的安德鲁·托马森，2009年的戴维·康伦。<bookmark mark='b'/>2023年3月，马塞洛·坎波斯、西蒙·格里菲斯、罗伯特·莫里斯和朱利安·萨哈斯拉布德证明了 R(k) 小于四减去一个小小的 ε 的 k 次方，这是1935年以来第一个指数级的改进，用的是一种培养他们称之为“书”的结构的新方法。<bookmark mark='c'/>一年后，古普塔、恩迪亚耶、诺林和魏把同一个论证打磨到了三点八的 k 次方。下界自1947年以来没有移动过一个指数因子。<bookmark mark='d'/>而小的情形依然极其困难：五人的那个数在四十三到四十六之间，其中的四十六是2024年用线性规划和大规模计算机搜索证明的。埃尔德什喜欢说，如果外星人以毁灭地球相要挟，要我们给出 R(5)，我们应该动用所有的计算机去算；如果他们要的是 R(6)，我们应该设法消灭外星人。"
+  },
+  "2ff9bd6a10d5": {
+   "scene": "Frontier",
+   "en": "The lower bound hides a deeper open problem. <bookmark mark='a'/> Erdős's argument proves that good colourings exist, colourings of two to the k over two people with no large one-colour group, without saying where a single one of them is. <bookmark mark='b'/> Nobody knows how to build one by a rule that matches a random colouring: this has been open since 1947. <bookmark mark='c'/> Paley graphs are the natural candidate. We computed the largest group of friends in every Paley graph up to four hundred people: it grows like the logarithm, as a random colouring's would, nine at most here. But the best bound anyone can prove is of the order of the square root, near twenty at four hundred, far from the truth. <bookmark mark='d'/> Building order-free structures on purpose is the same problem as extracting good randomness from bad sources, which Parts 20 and 27 take up. It is the research problem of this part.",
+   "zh": "下界背后藏着一个更深的未解问题。<bookmark mark='a'/>埃尔德什的论证证明了好的着色存在，也就是二的 k/2 次方个人、没有大的单色组的着色，却没有说出其中任何一个在哪里。<bookmark mark='b'/>没有人知道怎样按某种规则构造出一个和随机着色一样好的着色：这个问题自1947年起悬而未决。<bookmark mark='c'/>Paley 图是天然的候选。我们算出了四百人以内每个 Paley 图中最大的一群朋友：它像对数那样增长，就像随机着色会做的那样，这里最多九个。但任何人能证明的最好的界是平方根量级，四百人时接近二十，离真相很远。<bookmark mark='d'/>有意地构造没有秩序的结构，和从劣质来源中提取好的随机性是同一个问题，第20和第27部分会讨论它。这就是这一部分的研究题。"
+  },
+  "0aaec899cf51": {
+   "scene": "Outro",
+   "en": "What we built in this part. Logic, the grammar of precise statements, and the ways to prove them: directly, by contrapositive, by contradiction, by cases, and by induction, on numbers and on structures. Invariants, which proved Loyd's puzzle impossible and every jug amount a multiple of the gcd. Counting: choices, Pascal's triangle and its hidden fractal, pigeonholes, inclusion and exclusion, and the Catalan numbers. And remainders, chance and graphs, the raw materials of cryptography, algorithms and networks.",
+   "zh": "这一部分我们搭建了什么。逻辑，精确陈述的语法，以及证明它们的方法：直接证明、逆否、反证、分情形，以及归纳法，对数也对结构。不变量，它证明了劳埃德的谜题不可能，以及每个水壶的水量都是最大公约数的倍数。计数：选择、帕斯卡三角形和它隐藏的分形、鸽巢、容斥，以及卡特兰数。还有余数、机会和图，它们是密码学、算法和网络的原材料。"
+  },
+  "d83cd1acac9b": {
+   "scene": "Outro",
+   "en": "Where this comes back. Invariants and decreasing measures prove algorithms in Part 16, locks in Part 33, replicated systems in Part 39, and whole programs by machine in Part 54. Structural induction is how Part 12 reasons about grammars and Part 14 about types. Counting and pigeonholes give the lower bounds of Part 16, the hash tables of Part 17 and the randomized algorithms of Part 20. Bézout, congruences and the Chinese remainder theorem are the arithmetic of Parts 29 and 30. Linearity of expectation and tail bounds analyse every randomized algorithm. And graphs carry Part 18's algorithms and Part 36's networks.",
+   "zh": "这些会在哪里再出现。不变量和递减量，在第16部分证明算法，在第33部分证明锁，在第39部分证明复制系统，在第54部分由机器证明整个程序。结构归纳法是第12部分推理文法、第14部分推理类型的方式。计数和鸽巢给出第16部分的下界、第17部分的散列表，以及第20部分的随机化算法。贝祖等式、同余和中国剩余定理是第29和第30部分的算术。期望的线性性和尾部界用来分析每一个随机化算法。而图承载着第18部分的算法和第36部分的网络。"
+  },
+  "a6ccb54a510f": {
+   "scene": "Outro",
+   "en": "In practice, this mathematics is everywhere in engineering, usually without its name. An assertion is an invariant you check while the program runs, and property-based testing tries it on thousands of random inputs. The best question in a code review is: what is true at the top of this loop? Capacity planning is counting. Incident analysis is probability, with base rates that make most alarms false. And these are the puzzles of the first round of technical interviews.",
+   "zh": "在实践中，这些数学在工程中无处不在，只是通常不叫这个名字。断言就是你在程序运行时检查的不变量，基于性质的测试则在成千上万个随机输入上尝试它。代码评审中最好的问题是：在这个循环的开头，什么是成立的？容量规划就是计数。事故分析是概率，而基础比率让大多数警报都是误报。这些也正是技术面试第一轮的题目。"
+  },
+  "18874e4ce54c": {
+   "scene": "Outro",
+   "en": "Seven problems, with full solutions in the part's notes. Pause on any of them. The sixth is a build problem: it asks you to run this part's search on a board we did not show. The last, marked with a star, is a research problem whose second half nobody has solved.",
+   "zh": "七道习题，完整解答在本部分的笔记里。可以在任何一道上暂停。第六道是动手题：要你在一个我们没有展示的棋盘上运行这一部分的搜索。最后一道标了星号，是研究题，它的后半部分至今无人解决。"
+  },
+  "13b0a1023918": {
+   "scene": "Outro",
+   "en": "Next time: logic from switches. Chapter one's truth tables were written on paper. Part 3 builds them out of physical switches, relays first, the way Claude Shannon showed in 1937, then transistors. And it proves a surprising fact: one kind of gate, NAND, wired together enough times, computes every truth table there is. That gate is the only part Pebble needs.",
+   "zh": "下一次：用开关搭逻辑。第1章的真值表写在纸上。第3部分用物理的开关把它们搭出来，先是继电器，正如克劳德·香农在1937年所展示的，然后是晶体管。它还会证明一个令人惊讶的事实：一种逻辑门，与非门，只要连接足够多次，就能计算任何一张真值表。这种门，就是Pebble唯一需要的零件。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分依据的书和论文都在屏幕上，也在笔记里。感谢观看。"
+  },
+  "e39ced87ecce": {
+   "scene": "Proofs",
+   "en": "Proof by contradiction assumes the opposite of what you want, and derives something impossible. The classic: the square root of two is not a fraction. <bookmark mark='a'/> Suppose it were p over q, in lowest terms. Squaring, p squared is two q squared. <bookmark mark='b'/> Here is that equation as a picture. A square of side p has the same area as two squares of side q. <bookmark mark='c'/> Put the two smaller squares in opposite corners of the big one. They overlap in the middle, and they leave two corners uncovered. Since the areas match, the overlap has exactly the combined area of the two uncovered corners. <bookmark mark='d'/> But that is the same equation again, with smaller whole numbers: a square equal to two smaller squares. <bookmark mark='e'/> Repeat, and the numbers shrink forever, which whole numbers cannot do. So there was no p and q to begin with. The usual proof uses parity, the hook's tool, in the same way: it shows p and q are both even, so the fraction was not in lowest terms.",
+   "zh": "反证法先假设你想证明的结论的反面，然后推出不可能的事。经典的例子：根号2不是分数。<bookmark mark='a'/>假设它是p除以q，已化成最简。两边平方，p的平方等于2倍的q的平方。<bookmark mark='b'/>把这个等式画成图。边长为p的正方形，面积等于两个边长为q的正方形。<bookmark mark='c'/>把两个小正方形放进大正方形相对的两个角。它们在中间重叠，并留下两个角没有盖住。既然面积相等，重叠部分的面积恰好等于两个未覆盖角的面积之和。<bookmark mark='d'/>但这又是同一个等式，只是整数更小了：一个正方形等于两个更小的正方形之和。<bookmark mark='e'/>不断重复，这些数会无休止地变小，而整数做不到这一点。所以一开始就不存在这样的p和q。通常的证明用的是奇偶性，也就是开场的工具，思路一样：它表明p和q都是偶数，所以那个分数并不是最简的。"
+  },
+  "0f43e0486405": {
+   "scene": "Structural",
+   "en": "Trees are the other great recursive structure. <bookmark mark='a'/> Here we use full binary trees: either a leaf, or a node with exactly two full binary subtrees. <bookmark mark='b'/> Build some and count. One leaf, no internal nodes. Grow it: two leaves, one node. Three and two. Four and three. Whatever shape, the leaves outnumber the internal nodes by exactly one. <bookmark mark='c'/> The proof follows the definition. A leaf: one leaf, zero nodes. A node: its leaves are the leaves of its two subtrees; by the hypothesis each has one more leaf than nodes; add the new node, and the difference is still one. A knockout tournament with sixty-four teams therefore plays exactly sixty-three games, whatever the bracket looks like.",
+   "zh": "树是另一种伟大的递归结构。<bookmark mark='a'/>这里用的是严格二叉树：要么是一片叶子，要么是一个结点，恰好有两棵严格二叉子树。每个内部结点恰好有两个孩子。<bookmark mark='b'/>造几棵来数一数。一片叶子，没有内部结点。长大一点：两片叶子，一个结点。三和二。四和三。无论什么形状，叶子都恰好比内部结点多一个。<bookmark mark='c'/>证明顺着定义走。一片叶子：一片叶子，零个结点。一个结点：它的叶子就是两棵子树的叶子；由假设，每棵子树的叶子比结点多一个；加上这个新结点，差仍然是一。所以一场有六十四支队伍的淘汰赛，不管对阵表长什么样，恰好要打六十三场。"
+  },
+  "23eb6844686c": {
+   "scene": "Structural",
+   "en": "The structure that matters most to us is the expression. <bookmark mark='a'/> Two plus three, times seven minus one, is a tree: operators at the nodes, numbers at the leaves. <bookmark mark='b'/> Its meaning is defined by recursion on the same structure. The value of a number is itself. The value of a sum is the sum of the values of its parts, and similarly for a difference and a product. <bookmark mark='c'/> Evaluate bottom up: five, six, thirty. <bookmark mark='d'/> Every interpreter is this definition, written as a program, and every fact about such programs, that evaluation always finishes, that a well-typed program never goes wrong, is proved by structural induction on this tree. Part 12 builds the parser that makes the tree; Part 14 proves the type system safe.",
+   "zh": "对我们最要紧的结构是表达式。<bookmark mark='a'/>2加3，乘以7减1，是一棵树：运算符在结点上，数在叶子上。<bookmark mark='b'/>它的含义是在同一结构上递归定义的。一个数的值就是它自己。一个和的值是各部分的值之和；差与乘积也按各部分的值来计算。<bookmark mark='c'/>自底向上求值：五，六，三十。<bookmark mark='d'/>每个解释器都是把这个定义写成程序，而关于这类程序的每一个事实，比如求值总会结束，类型正确的程序永远不会出错，都是在这棵树上用结构归纳法证明的。第12部分搭建造出这棵树的语法分析器；第14部分证明类型系统是安全的。"
+  },
+  "118c1702f9ae": {
+   "scene": "Cardinality",
+   "en": "Finding an exact bijection can be hard. A theorem makes it unnecessary. <bookmark mark='a'/> If A fits one-to-one inside B, and B fits one-to-one inside A, then there is a bijection between them. <bookmark mark='b'/> Example: the open interval from zero to one, and the closed one, which also contains its two endpoints. <bookmark mark='c'/> The open one sits inside the closed one, unchanged. The closed one shrinks into the middle half of the open one. So they are the same size, without our first having to write a bijection between them. The proof follows each element back and forth through the two maps and builds the pairing from those chains.",
+   "zh": "找到一个确切的双射可能很难。一条定理让它变得不必要。<bookmark mark='a'/>如果A能一对一地放进B，B也能一对一地放进A，那么它们之间就存在双射。<bookmark mark='b'/>例子：从零到一的开区间，以及闭区间，后者还包含两个端点。<bookmark mark='c'/>开区间原封不动地放在闭区间里面。闭区间则缩小放进开区间的中间那一半。所以它们一样大，无须先写出它们之间的双射。证明沿着这两个映射把每个元素来回追踪，用这些链构造出配对。"
+  },
+  "4d7c23ab9772": {
+   "scene": "Recurrences",
+   "en": "Chapter four's balanced brackets had a count: one, one, two, five. Those numbers count a surprising number of other things. <bookmark mark='a'/> Here are the five bracket strings with three pairs. <bookmark mark='b'/> Each one is a full binary tree: open bracket, A, close bracket, B, becomes a root with A hanging to the left and B to the right. Five trees with three internal nodes. <bookmark mark='c'/> Each tree is a way to cut a pentagon into triangles with diagonals that do not cross: the root is the triangle on the bottom edge, and its subtrees triangulate the two sides. Five triangulations. <bookmark mark='d'/> And each bracket string is a mountain range: up for an open bracket, down for a close, never below sea level. Five again. These are bijections, so all four counts are the same number, for every size: the Catalan numbers.",
+   "zh": "第4章的配平括号有一个计数：一、一、二、五。这些数还数着许多别的东西，多得惊人。<bookmark mark='a'/>这是三对括号的五个串。<bookmark mark='b'/>每一个都是一棵严格二叉树：左括号、A、右括号、B，变成一个根，A挂在左边，B挂在右边。三个内部结点的树有五棵。<bookmark mark='c'/>每棵树都是用互不相交的对角线把五边形切成三角形的一种方式：根是底边上的那个三角形，它的子树把两侧剖分成三角形。五种三角剖分。<bookmark mark='d'/>每个括号串还是一条山脉：左括号向上，右括号向下，永远不低于海平面。又是五条。这些都是双射，所以四种计数对每个大小都是同一个数：卡特兰数。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 2, Proof and Counting",
+ "chapters_en": {
+  "Hook": "Fourteen, fifteen",
+  "Logic": "1. The grammar of truth",
+  "Proofs": "2. Ways to prove",
+  "Induction": "3. Induction",
+  "Structural": "4. Induction on structures",
+  "Invariants": "5. Invariants",
+  "Relations": "6. Sets, relations, functions",
+  "Cardinality": "7. Sizes of infinity",
+  "Counting": "8. Counting",
+  "Pigeonhole": "9. Pigeons",
+  "Inclusion": "10. Inclusion and exclusion",
+  "Recurrences": "11. Counting by recursion",
+  "Numbers": "12. Numbers",
+  "Chance": "13. Chance",
+  "Graphs": "14. Graphs",
+  "Frontier": "15. Frontier: order in chaos",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}

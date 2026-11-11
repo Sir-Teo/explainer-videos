@@ -17,8 +17,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from tools.make import all_videos  # noqa: E402
 from explainer.paths import video_package  # noqa: E402
+from tools.make import all_videos  # noqa: E402
 from tools.qa_series import OUT, check_status, fingerprint, inputs_current, preflight_passed, runtime_completed  # noqa: E402
 
 

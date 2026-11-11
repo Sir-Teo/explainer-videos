@@ -1,0 +1,188 @@
+from __future__ import annotations
+
+import numpy as np
+
+from explainer.cs import *  # noqa: F403
+from videos.cs.cs21.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
+
+
+class Lz(VoiceoverScene):
+    def construct(self):
+        self.card()
+        self.arcs()
+        self.deflate()
+        self.lz78()
+        self.measured()
+
+    def card(self):
+        card = chapter_card(10, r"Compression, \ I: \ Lempel and Ziv", r"How do you say it again, shorter?",
+                            lit=(1977, 1978), extra=((1977, r"LZ77"), (1978, r"LZ78")), part=PART)
+        with self.voiceover("Chapter ten. Compression, part one: Lempel and Ziv."):
+            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
+        self.play(FadeOut(card))
+
+    def arcs(self):
+        d = load("lz")
+        head = label(r"LZ77: \ point back to where you said it before", font_size=32).to_edge(UP, buff=0.3)
+        txt = d["passage"][:150]
+        per = 50
+        lines = [txt[i:i + per] for i in range(0, len(txt), per)]
+        cw = 0.245
+        rows = VGroup()
+        for r, ln in enumerate(lines):
+            rows.add(VGroup(*[mono(c if c != " " else "·", 15, WHITE) for c in ln]))
+            for k, m in enumerate(rows[-1]):
+                m.move_to([-6.1 + k * cw, 1.6 - r * 1.3, 0])
+        arcs = VGroup()
+        for pos, L, D in d["arcs"]:
+            if pos + L > len(txt):
+                continue
+            src = pos - D
+            r1, c1 = divmod(src, per)
+            r2, c2 = divmod(pos, per)
+            a = np.array([-6.1 + c1 * cw, 1.6 - r1 * 1.3 + 0.2, 0])
+            b = np.array([-6.1 + c2 * cw, 1.6 - r2 * 1.3 + 0.2, 0])
+            arc = ArcBetweenPoints(b, a, angle=0.9 if r1 == r2 else 0.5, color=LAM, stroke_width=2)
+            ul = VGroup(*[Line([-6.1 + ((pos + k) % per) * cw - cw / 2, 1.6 - ((pos + k) // per) * 1.3 - 0.18, 0],
+                               [-6.1 + ((pos + k) % per) * cw + cw / 2, 1.6 - ((pos + k) // per) * 1.3 - 0.18, 0],
+                               color=HEAD, stroke_width=3) for k in range(L)])
+            tag = mono(f"({L},{D})", 12, HEAD).next_to(ul, DOWN, buff=0.04)
+            arcs.add(VGroup(arc, ul, tag))
+        side = VGroup(
+            label(r"a match: \ (length, \ distance) \ copies $L$ characters from $D$ back", font_size=21, color=HEAD),
+            label(r"a window of 32 KB; \ matches of 3 to 258 characters \ (DEFLATE's limits)", font_size=21,
+                  color=GREY_A),
+            label(r"find matches with a hash table of 3-character prefixes \ (Part 17)", font_size=21, color=DATA),
+        ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.45)
+        with self.voiceover(
+            "In 1977 Abraham Lempel and Jacob Ziv proposed the idea behind zip, gzip and PNG. <bookmark mark='a'/> "
+            "Read the text left to right. Whenever the next stretch has appeared recently, don't write it again: "
+            "write a pair, how long it is and how far back it was. Here is the opening of A Tale of Two Cities. "
+            "It was the, of times, it was the: each repetition becomes an arc back to its first appearance. "
+            "<bookmark mark='b'/> The search looks back over a window, thirty-two kilobytes in DEFLATE, and "
+            "matches from three to two hundred and fifty-eight characters. <bookmark mark='c'/> Finding the "
+            "longest match fast is a hashing problem: index every three-character prefix in the window, and follow "
+            "the chain of earlier positions with the same prefix."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(rows))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[Create(a) for a in arcs], lag_ratio=0.3), FadeIn(side[0]), run_time=4.0)
+            vo.wait_until("b")
+            self.play(FadeIn(side[1]))
+            vo.wait_until("c")
+            self.play(FadeIn(side[2]))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def deflate(self):
+        head = label(r"Inside DEFLATE", font_size=34).to_edge(UP, buff=0.35)
+        lines = VGroup(
+            label(r"literals and match lengths share one alphabet of 286 symbols; \ distances have 30", font_size=22,
+                  color=WHITE),
+            label(r"large lengths and distances are buckets plus extra bits: \ distance 1{,}000 is bucket 19 plus 8 bits",
+                  font_size=22, color=GREY_A),
+            label('dynamic blocks carry codebooks; \\ fixed-code and stored blocks are alternatives', font_size=22, color=LAM),
+            label(r"\textbf{lazy matching}: \ before taking a match, \ check whether the next position starts a "
+                  r"longer one", font_size=22, color=YES),
+            label(r"levels 1--9 trade chain length and laziness for speed; \ decompression is always fast: \ "
+                  r"copy bytes", font_size=22, color=HEAD),
+            label(r"Katz (1993), \ for PKZIP; \ RFC 1951 (1996); \ inside zip, \ gzip, \ PNG and HTTP", font_size=20,
+                  color=GREY_A),
+        ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.5)
+        with self.voiceover(
+            "DEFLATE, the format inside zip and gzip, puts Lempel–Ziv and Huffman together. <bookmark mark='a'/> Literal bytes and match lengths share one alphabet of two hundred and eighty-six symbols, and distances have their own thirty. <bookmark mark='b'/> Big values are coded as a bucket plus a few extra raw bits, so that the Huffman alphabets stay small. <bookmark mark='c'/> Dynamic blocks carry a pair of compressed Huffman codebooks; fixed-code blocks and stored blocks are alternatives. <bookmark mark='d'/> The compressor's cleverest trick is lazy matching: before committing to a match, it checks whether starting one character later would give a longer one. Our instrument prices tokens only; it does not implement the full framing or block choices. <bookmark mark='e'/> The levels from one to nine trade how hard the compressor searches against speed, while decompression is always quick, little more than copying bytes. <bookmark mark='f'/> Phil Katz designed it in 1993 for PKZIP; it was standardized in 1996 and has been everywhere since."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(lines[0]))
+            for mk, ln in zip("abcdef", lines):
+                vo.wait_until(mk)
+                self.play(Indicate(ln, color=WHITE) if mk == "a" else FadeIn(ln, shift=UP * 0.1))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def lz78(self):
+        head = label(r"LZ78 and LZW: \ grow a dictionary of phrases", font_size=34).to_edge(UP, buff=0.35)
+        lines = VGroup(
+            label(r"read the longest phrase already in the dictionary; \ emit its number; \ add it plus the next "
+                  r"character", font_size=22, color=WHITE),
+            label(r"\texttt{a}, \ \texttt{b}, \ \texttt{ab}, \ \texttt{aba}, \ \dots: \ the phrases grow by one "
+                  r"character each time", font_size=22, color=LAM),
+            label(r"Welch (1984): \ start with all 256 bytes; \ Unix \texttt{compress}, \ GIF", font_size=22,
+                  color=GREY_A),
+            label('classic universal LZ schemes: \\ asymptotic entropy rate for stationary ergodic sources', font_size=22, color=YES),
+            label('a fixed 32 KB window is a separate constraint; \\ no universality claim for this instrument', font_size=22, color=HEAD),
+        )
+        lines[:2].arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.45)
+        lines[2:].arrange(DOWN, buff=0.3).to_edge(DOWN, buff=0.5)
+        text = "abababababababab"
+        book, i, parse = {"": 0}, 0, []
+        while i < len(text):
+            w = ""
+            while i + len(w) < len(text) and w + text[i + len(w)] in book:
+                w += text[i + len(w)]
+            c = text[i + len(w)] if i + len(w) < len(text) else ""
+            parse.append((w + c, book[w], c))
+            if c:
+                book[w + c] = len(book)
+            i += len(w) + 1
+        chips = VGroup()
+        for k, (ph, ref, c) in enumerate(parse):
+            box = VGroup(*[VGroup(Square(side_length=0.5, stroke_color=LAM, stroke_width=1.5), mono(ch, 22, WHITE))
+                           for ch in ph]).arrange(RIGHT, buff=0)
+            for b_ in box:
+                b_[1].move_to(b_[0])
+            num = mono(str(k + 1), 15, HEAD).next_to(box, UP, buff=0.1)
+            out = mono(f"({ref},{c})" if c else f"({ref})", 15, YES).next_to(box, DOWN, buff=0.12)
+            chips.add(VGroup(box, num, out))
+        chips.arrange(RIGHT, buff=0.18, aligned_edge=UP).move_to(DOWN * 0.1)
+        if chips.width > 13.0:
+            chips.width = 13.0
+        cap = label(r"above: \ the phrase's number; \ below: \ what is written, \ (earlier phrase, next character)",
+                    font_size=18, color=GREY_A).next_to(chips, DOWN, buff=0.3)
+        with self.voiceover(
+            "A year later Ziv and Lempel gave a second scheme. <bookmark mark='a'/> Keep a dictionary of phrases. Read the longest phrase already in it, write down its number, and add that phrase plus the next character as a new entry. <bookmark mark='b'/> The phrases grow one character at a time, so common stretches of text soon have a number of their own. <bookmark mark='c'/> Terry Welch's variant, LZW, starts with every single byte in the dictionary. It ran Unix's compress command and GIF images. <bookmark mark='d'/> Ziv and Lempel proved something remarkable: for any stationary ergodic source, the number of bits per character tends to the source's entropy rate, the best possible. <bookmark mark='e'/> That asymptotic result concerns classic universal LZ schemes. It is not a guarantee for our fixed thirty-two-kilobyte window and bounded match search."
+        ) as vo:
+            self.play(FadeIn(head))
+            vo.wait_until("a")
+            self.play(FadeIn(lines[0], shift=UP * 0.1))
+            self.play(LaggedStart(*[FadeIn(c) for c in chips], lag_ratio=0.35), FadeIn(cap), run_time=3.0)
+            for mk, ln in zip("bcde", lines[1:]):
+                vo.wait_until(mk)
+                self.play(FadeIn(ln, shift=UP * 0.1))
+        self.wait(0.3)
+        self.clear_scene()
+
+    def measured(self):
+        d = load("lz")
+        head = label('Payload cost models against decoded codec files', font_size=34).to_edge(UP, buff=0.35)
+        rows = [[r["book"], f"{r['n'] / 1000:.0f}", f"{r['ours'] / 1000:.0f}", f"{r['zlib'] / 1000:.0f}",
+                 f"{r['lzw'] / 1000:.0f}", f"{r['bz2'] / 1000:.0f}", f"{r['xz'] / 1000:.0f}"] for r in d["rows"]]
+        tab = grid_table([r"KB", r"text", 'LZ77 bit model', r"\texttt{zlib -9}", 'LZW model', r"\texttt{bzip2}",
+                          r"\texttt{xz}"], rows, widths=[3.0, 1.2, 2.8, 1.6, 1.2, 1.4, 1.2], row_h=0.5,
+                         font_size=19, mono_cols=(), colors=[[WHITE, GREY_A, YES, DATA, GREY_A, LAM, HEAD]] * len(rows))
+        tab.next_to(head, DOWN, buff=0.5).set_x(0)
+        md = next(r for r in d["rows"] if r["book"] == "Moby Dick")
+        notes = VGroup(
+            label(rf"\textit{{Moby-Dick}}: \ {words(md['matches'])} matches \ (mean {md['mean_len']:.1f} characters) "
+                  rf"and {words(md['literals'])} literals", font_size=20, color=WHITE),
+            label('models omit framing and codebooks; \\ no DEFLATE stream is emitted; \\ tokens round-trip', font_size=20,
+                  color=YES),
+            label(r"\texttt{bzip2} sorts \ (chapter 8); \ \texttt{xz} \ (LZMA) \ models what follows each match",
+                  font_size=20, color=GREY_A),
+            label(r"DEFLATE is LZ77 plus Huffman \ (Part 19, \ and \textit{AI, Built}, Part 1): \ zip, \ gzip, \ PNG, "
+                  r"\ HTTP", font_size=20, color=DATA),
+        ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.45)
+        with self.voiceover(
+            "We parse three novels into literals and back-references, then estimate their payload bit costs. <bookmark mark='a'/> Every token stream is decoded and compared byte for byte with its input. The LZW codes also pass an independent decoder. <bookmark mark='b'/> These columns are models: they omit framing, transmitted codebooks and other metadata, and do not form a complete DEFLATE file. A close payload estimate is not an end-to-end compressor result. <bookmark mark='c'/> The zlib, bzip2 and xz columns are actual emitted files, each decoded and checked. Their relative sizes are observations on these novels, not a universal ranking. <bookmark mark='d'/> DEFLATE combines LZ back-references with Huffman coding; real formats also define how headers, codebooks, blocks and end markers are transmitted."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
+            self.play(LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.3))
+            vo.wait_until("a")
+            self.play(FadeIn(notes[0]))
+            vo.wait_until("b")
+            self.play(FadeIn(notes[1]))
+            vo.wait_until("c")
+            self.play(FadeIn(notes[2]))
+            vo.wait_until("d")
+            self.play(FadeIn(notes[3]))
+        self.wait(0.3)
+        self.clear_scene()

@@ -1,0 +1,369 @@
+{
+ "title": "计算机科学，从零搭建 · 第24部分：实践中的算法",
+ "chapters": {
+  "Hook": "同样的大 O，不同的世界",
+  "PrefixSums": "1. 前缀和",
+  "Fenwick": "2. Fenwick 树",
+  "SegmentTrees": "3. 线段树",
+  "RangeMin": "4. 区间最小值与最近公共祖先",
+  "Monotone": "5. 双指针与单调栈",
+  "Searching": "6. 搜索答案",
+  "Bits": "7. 比特与四个俄罗斯人算法",
+  "Splitting": "8. 折半搜索与平方根分块",
+  "Layouts": "9. 算法工程（上）：布局",
+  "Simd": "10. 算法工程（下）：SIMD 与哈希",
+  "Sorting": "11. 实践中的排序",
+  "Benchmarking": "12. 诚实地做基准测试",
+  "Craft": "13. 作为手艺的解题",
+  "TheJob": "14. 工程优化后的 Job",
+  "Frontier": "15. 前沿：学习索引与预测",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "63768eb64b4d": {
+   "scene": "Hook",
+   "en": "Here are two loops that add up n numbers. <bookmark mark='a'/> The first walks an array in order. <bookmark mark='b'/> The second follows a linked list with nodes shuffled through an allocated pool. <bookmark mark='c'/> Both compute the same sum in linear time. That asymptotic classification leaves constants and the memory-access pattern unspecified. <bookmark mark='d'/> Contiguous accesses can benefit from cache lines and prefetching, while following pointers creates dependencies between addresses. Those mechanisms motivate the experiment; elapsed time alone does not measure cache misses or identify their individual contributions.",
+   "zh": "这里有两个把 n 个数加起来的循环。<bookmark mark='a'/>第一个顺序遍历数组。<bookmark mark='b'/>第二个沿链表行走，节点在一块已分配的内存池中随机打乱。<bookmark mark='c'/>两者都在线性时间内算出相同的和。这个渐近分类没有规定常数，也没有描述内存访问方式。<bookmark mark='d'/>连续访问可以利用缓存行和预取，指针追踪则使下一个地址依赖前一次读取。这些机制是实验的动机；单凭耗时不能测出缓存未命中次数，也不能分离各个机制的贡献。"
+  },
+  "ce62f0422c4f": {
+   "scene": "Hook",
+   "en": "Here they are, timed on this shared machine. <bookmark mark='a'/> The first marked point is a thousand elements. Read its measured ratio beside the plot. <bookmark mark='b'/> The second is sixty-five thousand elements. <bookmark mark='c'/> The last is sixteen million. All five native trials, the compiler flags and the complete sum checks are retained. The plotted minima describe this workload on this host, and can change on another run. <bookmark mark='d'/> Big O still describes growth; the measurements add information about these implementations. This part builds everyday algorithmic tools, then asks what their concrete costs are.",
+   "zh": "这是在这台共享机器上的计时。<bookmark mark='a'/>第一个标记是一千个元素，旁边给出了实测比值。<bookmark mark='b'/>第二个是六万五千个元素。<bookmark mark='c'/>最后一个是一千六百万个元素。五次原生试验、编译选项和完整求和检查都已保存。图中的最小值描述这台主机上的这个工作负载，重新运行可能改变。<bookmark mark='d'/>大 O 仍然描述增长趋势，测量则补充具体实现的信息。本部分先搭建日常算法工具，再考察它们的实际代价。"
+  },
+  "655c444ccaed": {
+   "scene": "Hook",
+   "en": "Part 24 of Computer Science, Built: Algorithms in Practice. <bookmark mark='a'/> In this part: the everyday data structures of real code, prefix sums, Fenwick and segment trees, range minimum and lowest common ancestors; the linear-time patterns, two pointers, monotonic stacks and binary search on the answer; word-level tricks and the Four Russians; meet in the middle and square roots; then algorithm engineering, measured on this machine: memory layouts, vector instructions, hash tables and sorting; how to benchmark honestly; and the Job, engineered, for the ledger's tenth row.",
+   "zh": "计算机科学，从零搭建，第24部分：实践中的算法。<bookmark mark='a'/>这一部分包括：真实代码中的日常数据结构，前缀和、Fenwick 树与线段树、区间最小值与最近公共祖先；线性时间的套路，双指针、单调栈与二分答案；字级技巧与四个俄罗斯人算法；折半搜索与平方根分块；然后是在这台机器上测量的算法工程：内存布局、向量指令、哈希表与排序；如何诚实地做基准测试；以及经过工程优化的 Job，填上账本的第十行。"
+  },
+  "70cab58163e5": {
+   "scene": "PrefixSums",
+   "en": "Chapter one. Prefix sums.",
+   "zh": "第1章。前缀和。"
+  },
+  "bf68bc34b8ec": {
+   "scene": "PrefixSums",
+   "en": "The simplest precomputation in the business. <bookmark mark='a'/> Here are sixteen numbers, and we will be asked, over and over, for the sum of some stretch of them. <bookmark mark='b'/> Walk the array once and write down the running totals: S of i is the sum of everything before position i. <bookmark mark='c'/> Now any range sum is one subtraction. Positions three to ten: the total up to eleven, minus the total up to three, forty-four minus eight, thirty-six. <bookmark mark='d'/> Linear work once, then constant work per question. Nearly every index in this part makes some version of that trade.",
+   "zh": "这一行里最简单的预计算。<bookmark mark='a'/>这里有十六个数，我们会被反复问到其中某一段的和。<bookmark mark='b'/>把数组走一遍，记下累计和：S i 是位置 i 之前所有元素的和。<bookmark mark='c'/>现在任何一段的和都只是一次减法。位置三到十：到十一为止的总和，减去到三为止的总和，四十四减八，三十六。<bookmark mark='d'/>一次线性的工作，然后每个问题常数时间。这一部分里几乎每一种索引都在做某种形式的这种交换。"
+  },
+  "a534404f553e": {
+   "scene": "PrefixSums",
+   "en": "Run the idea backwards and it handles updates. <bookmark mark='a'/> Suppose we must add three to positions two to nine, two to positions five to twelve, and one to positions zero to four. Doing it directly touches every position in every range. <bookmark mark='b'/> Instead keep a difference array: for each update, add the amount where its range starts and subtract it just after the range ends. Two cells per update, however long the range. <bookmark mark='c'/> One prefix sum at the end rebuilds the array: the running total switches each update on at its start and off after its end. <bookmark mark='d'/> In two dimensions the same trick costs four corners per rectangle.",
+   "zh": "把这个想法倒过来用，它就能处理更新。<bookmark mark='a'/>假设要给位置二到九加三，给位置五到十二加二，给位置零到四加一。直接做，就要碰到每个区间里的每个位置。<bookmark mark='b'/>改用差分数组：对每次更新，在区间开始处加上这个量，在区间结束之后紧接着减去它。每次更新两个单元，无论区间多长。<bookmark mark='c'/>最后做一次前缀和就重建出数组：累计和在每次更新的起点把它打开，在终点之后把它关上。<bookmark mark='d'/>在二维中，同样的技巧每个矩形只需四个角。"
+  },
+  "2293bb78c7a6": {
+   "scene": "PrefixSums",
+   "en": "Prefix sums work in two dimensions. <bookmark mark='a'/> Here is a small image. <bookmark mark='b'/> Its integral image stores, at each position, the sum of every pixel above and to the left. One pass builds it. <bookmark mark='c'/> Then the sum over any rectangle is four lookups: the corner below and to the right, minus the two strips we do not want, plus the corner we subtracted twice. <bookmark mark='d'/> Paul Viola and Michael Jones built real-time face detection on this in 2001: thousands of rectangle features per window, each in constant time, as the AI series showed. Frank Crow had used the same tables in 1984 to blur textures in computer graphics.",
+   "zh": "前缀和在二维中同样适用。<bookmark mark='a'/>这是一幅小图像。<bookmark mark='b'/>它的积分图在每个位置存储其左上方所有像素之和，扫一遍就能建好。<bookmark mark='c'/>于是任何矩形内的和都是四次查表：右下角的值，减去不需要的两条，再加回被减了两次的那个角。<bookmark mark='d'/>Paul Viola 和 Michael Jones 在2001年用它做出了实时人脸检测：每个窗口几千个矩形特征，每个都是常数时间，正如 AI 系列所展示的。Frank Crow 早在1984年就在计算机图形学中用同样的表来模糊纹理。"
+  },
+  "f1b3ecb6d864": {
+   "scene": "PrefixSums",
+   "en": "One more property makes prefix sums a workhorse: they parallelize, although each total seems to depend on the one before. <bookmark mark='a'/> In the first round, every element adds its left neighbour. <bookmark mark='b'/> In the second, every element adds the value two places to its left; in the third, four places. <bookmark mark='c'/> After log n rounds every position holds its prefix sum, and each round is done by all elements at once. Daniel Hillis and Guy Steele ran this on the Connection Machine, and Guy Blelloch made it work-efficient. <bookmark mark='d'/> Graphics cards use scans to compact streams, to sort, and to handle sparse matrices.",
+   "zh": "还有一个性质让前缀和成为主力：它能并行，尽管每个累计和看起来都依赖前一个。<bookmark mark='a'/>第一轮，每个元素加上它左边的邻居。<bookmark mark='b'/>第二轮，每个元素加上左边隔两个位置的值；第三轮，隔四个位置。<bookmark mark='c'/>经过 log n 轮，每个位置都持有它的前缀和，而每一轮都由所有元素同时完成。Daniel Hillis 和 Guy Steele 在连接机上这样运行它，Guy Blelloch 让它做到了工作量最优。<bookmark mark='d'/>显卡用扫描来压缩数据流、排序和处理稀疏矩阵。"
+  },
+  "7603827a7d1e": {
+   "scene": "Fenwick",
+   "en": "Chapter two. Fenwick trees.",
+   "zh": "第2章。Fenwick 树。"
+  },
+  "b858303be8d8": {
+   "scene": "Fenwick",
+   "en": "Prefix sums answer in constant time, but one update can force n of them to change. Peter Fenwick's tree of 1994 balances the two, with one array and two loops. <bookmark mark='a'/> Cell i stores the sum of a range ending at i whose length is the lowest set bit of i. Odd cells hold one element; cells that are multiples of two but not four hold two; multiples of four, four; and so on. <bookmark mark='b'/> The lowest set bit is i and minus i, in two's complement, the trick from Part 4. <bookmark mark='c'/> To sum the first thirteen elements, take cell thirteen, then strip its lowest bit to get twelve, then eight, and stop at zero. Three cells cover one to thirteen exactly. <bookmark mark='d'/> To add to element five, update every cell whose range contains five: add the lowest bit instead. Five, six, eight, sixteen.",
+   "zh": "前缀和能常数时间回答，但一次更新可能迫使 n 个前缀和改变。Peter Fenwick 1994年的树在两者之间取得平衡，只用一个数组和两个循环。<bookmark mark='a'/>单元 i 存储一个以 i 结尾的区间之和，区间长度是 i 的最低置位比特。奇数单元存一个元素；是二的倍数但不是四的倍数的单元存两个；四的倍数存四个；依此类推。<bookmark mark='b'/>最低置位比特就是 i 与负 i 按位与，在补码中成立，这是第4部分的技巧。<bookmark mark='c'/>要求前十三个元素的和，取单元十三，再去掉它的最低比特得到十二，然后是八，到零为止。三个单元恰好覆盖一到十三。<bookmark mark='d'/>要给第五个元素加上一个值，就更新每个区间包含五的单元：改为加上最低比特。五、六、八、十六。"
+  },
+  "c97cca9fcd12": {
+   "scene": "Fenwick",
+   "en": "Why is it right, and why fast? <bookmark mark='a'/> A query clears one set bit of its positive index each step. Its responsibility intervals partition the requested prefix. The exact count is the index's population count, bounded by floor log base two of n plus one. <bookmark mark='b'/> An update moves its lowest set bit left until the index exceeds n, with the same logarithmic bound. Zero is a valid empty-prefix endpoint but never a valid update index. <bookmark mark='c'/> These are two traversals of the same interval representation. <bookmark mark='d'/> The table measures a fixed seeded mixture of updates and queries, with every final cell independently checked. Its average is an observation of that distribution, rather than a universal half-logarithm identity.",
+   "zh": "它为什么正确，又为什么快？<bookmark mark='a'/>查询每一步清除正索引的一个置位比特，访问区间恰好划分所求前缀。精确步数是索引的置位比特数，上界为以二为底的 n 的对数向下取整再加一。<bookmark mark='b'/>更新把最低置位比特向左推进，直到索引超过 n，也满足这个对数上界。零可以表示空前缀，却不能作为更新位置。<bookmark mark='c'/>这是同一区间表示上的两种遍历。<bookmark mark='d'/>表中测量固定种子生成的更新与查询混合，并独立核对最终每个单元。平均访问数属于这个分布，不是普遍成立的半对数恒等式。"
+  },
+  "10ee1aa6c2bb": {
+   "scene": "Fenwick",
+   "en": "How do they compare on a real machine? <bookmark mark='a'/> All four structures hold two to the twenty values, but their timed operation counts differ. The slow plain and prefix arrays receive only the first thousand and twenty-four operations; Fenwick and segment trees receive the full million-operation trace. The caption makes this distinction explicit. <bookmark mark='b'/> Read the per-operation minima from three process runs. Complete answer streams are checked against an independent block-sum reference after timing. <bookmark mark='c'/> This demonstrates the cost of linear updates or queries at this scale. It is not an equal-length, steady-state benchmark of all four structures. <bookmark mark='d'/> Fenwick's original application was arithmetic coding's frequency tables, a useful example of matching operations to a data structure.",
+   "zh": "它们在真实机器上如何比较？<bookmark mark='a'/>四种结构都保存二的二十次方个值，但计时操作数不同。较慢的普通数组和前缀数组只执行最前面的一千零二十四次操作，Fenwick 树和线段树执行完整的一百万次轨迹。字幕明确区分了这一点。<bookmark mark='b'/>表中是三个进程运行的每次操作最小耗时。计时后，完整答案流由独立的分块求和参考核对。<bookmark mark='c'/>这展示了此规模下线性更新或查询的代价，并不是四种结构执行等长轨迹的稳态比较。<bookmark mark='d'/>Fenwick 最初用它维护算术编码的频率表，说明了如何让数据结构匹配所需操作。"
+  },
+  "fab153203123": {
+   "scene": "SegmentTrees",
+   "en": "Chapter three. Segment trees.",
+   "zh": "第3章。线段树。"
+  },
+  "a45c8d01e492": {
+   "scene": "SegmentTrees",
+   "en": "Fenwick trees need an operation you can undo, like subtraction. For the minimum of a range you cannot subtract, and you need a segment tree. <bookmark mark='a'/> Build a balanced tree over the array. Each node holds the minimum of the stretch below it: the leaves are the elements, the root the whole array. Any associative operation works the same way. <bookmark mark='b'/> To answer positions three to twelve, descend from the root and stop at every node whose range lies entirely inside the query. Four nodes cover this range. At most two per level ever do, so a query costs logarithmic time. <bookmark mark='c'/> Changing one element changes only the nodes above it, one per level. <bookmark mark='d'/> Minimum, maximum, greatest common divisor, matrix products: anything associative. Even the maximum subarray sum, if each node keeps four numbers instead of one.",
+   "zh": "Fenwick 树需要一个可以撤销的运算，比如减法。区间最小值无法相减，这时就需要线段树。<bookmark mark='a'/>在数组之上建一棵平衡树。每个节点保存它下面那一段的最小值：叶子是各个元素，根是整个数组。任何满足结合律的运算都一样。<bookmark mark='b'/>要回答位置三到十二，从根往下走，在每个区间完全落在查询之内的节点处停下。四个节点覆盖了这个区间。每层至多两个，所以一次查询是对数时间。<bookmark mark='c'/>改变一个元素，只会改变它上方的节点，每层一个。<bookmark mark='d'/>最小值、最大值、最大公约数、矩阵乘积：任何满足结合律的东西都行。甚至最大子段和，只要每个节点存四个数而不是一个。"
+  },
+  "8117eb47f541": {
+   "scene": "SegmentTrees",
+   "en": "The trick that makes segment trees so flexible is that a node can carry a small record instead of one number. <bookmark mark='a'/> Take the maximum-sum stretch of consecutive elements, the problem Bentley made famous. For each half, keep four numbers: its total, its best prefix, its best suffix, and its best stretch anywhere. <bookmark mark='b'/> Two halves combine in constant time. The total adds. The best prefix is either the left's, or the whole left plus the right's best prefix, and the suffix is the mirror image. <bookmark mark='c'/> And the best stretch lies in the left half, in the right half, or across the middle, where it is the left's best suffix joined to the right's best prefix. Here the winner is the one that crosses: six, which brute force confirms. <bookmark mark='d'/> Because this combination is associative, the segment tree can answer the maximum subarray of any range, while elements change underneath it.",
+   "zh": "让线段树如此灵活的诀窍在于，一个节点可以存一个小记录，而不是一个数。<bookmark mark='a'/>以 Bentley 使之出名的最大连续子段和为例。对每一半保存四个数：总和、最好的前缀、最好的后缀，以及任意位置最好的一段。<bookmark mark='b'/>两半在常数时间内合并。总和相加。最好的前缀要么是左半的，要么是整个左半加上右半最好的前缀；后缀与之对称。<bookmark mark='c'/>而最好的一段要么在左半，要么在右半，要么跨过中点，此时它是左半最好的后缀接上右半最好的前缀。这里胜出的是跨过中点的那一段：六，暴力搜索也确认了。<bookmark mark='d'/>因为这种合并满足结合律，线段树就能回答任意区间的最大子段和，同时元素还在下面不断变化。"
+  },
+  "331a079cf36b": {
+   "scene": "SegmentTrees",
+   "en": "What if updates cover ranges too? <bookmark mark='a'/> At each fully covered segment, change its sum by the update times segment length and leave a pending tag. <bookmark mark='b'/> Push that tag before a later operation descends below the node. This maintains both stored sums and deferred effects. <bookmark mark='c'/> The seeded experiment counts nodes visited by five hundred updates; an independent difference-array construction checks every final element after the count is captured. <bookmark mark='d'/> Persistence is a related, separate construction. A point update copies its logarithmic root-to-leaf path. A persistent lazy range-update tree also needs a consistent policy for copying tags and children; that extension is discussed rather than implemented here.",
+   "zh": "如果更新也覆盖区间呢？<bookmark mark='a'/>对于完全覆盖的段，把更新量乘段长加入总和，并留下待处理标记。<bookmark mark='b'/>之后的操作要下探时，先下推标记，同时维护存储的和与延迟效果。<bookmark mark='c'/>固定种子实验统计五百次更新访问的节点数，先保存该计数，再用独立差分数组核对最终每个元素。<bookmark mark='d'/>可持久化是相关但独立的构造。单点更新复制对数长度的根到叶路径；可持久化惰性区间树还需要一致的标记与孩子复制策略，这里讨论该扩展，并未实现。"
+  },
+  "7e78ba4157f0": {
+   "scene": "RangeMin",
+   "en": "Chapter four. Range minimum, and lowest common ancestors.",
+   "zh": "第4章。区间最小值，与最近公共祖先。"
+  },
+  "13f79c03e06c": {
+   "scene": "RangeMin",
+   "en": "If the array never changes, a range minimum can be answered with two table lookups. <bookmark mark='a'/> Precompute the minimum of every window whose length is a power of two. Row zero is the array itself; each row is built from the one above, the smaller of two neighbouring windows. That is n log n numbers. <bookmark mark='b'/> To answer positions two to twelve, a range of eleven, take the largest power of two that fits, eight, and look up two windows of length eight: one starting at the left end, one ending at the right end. <bookmark mark='c'/> They overlap, and for the minimum that does not matter, because the minimum of a number with itself is that number. <bookmark mark='d'/> For a sum the overlap would be counted twice, which is why sums use the trees of the last two chapters.",
+   "zh": "如果数组不变，区间最小值可以用两次查表回答。<bookmark mark='a'/>预先算出每个长度为二的幂的窗口的最小值。第零行就是数组本身；每一行都由上一行算出，取两个相邻窗口中较小的那个。总共 n log n 个数。<bookmark mark='b'/>要回答位置二到十二，一段长为十一的区间，取能放得下的最大的二的幂，八，查两个长度为八的窗口：一个从左端开始，一个在右端结束。<bookmark mark='c'/>它们重叠了，而对最小值来说这无关紧要，因为一个数与它自己的最小值就是它本身。<bookmark mark='d'/>对于求和，重叠部分会被算两次，这就是为什么求和要用前两章的树。"
+  },
+  "9470de96a270": {
+   "scene": "RangeMin",
+   "en": "In a rooted tree, the lowest common ancestor is the deepest node above both query nodes. <bookmark mark='a'/> An Euler tour records nodes and depths on entry and after returning from each child. <bookmark mark='b'/> Between the first occurrences of seven and four, the minimum depth identifies their ancestor, node one. <bookmark mark='c'/> Our implementation uses a sparse table, with n log n preprocessing and constant-time queries. The linear-preprocessing theorem cited later uses a different construction. <bookmark mark='d'/> Binary lifting instead stores ancestors at powers of two and answers in logarithmic time. These statements concern a rooted tree. A version-control history is generally a directed acyclic graph and can have several merge bases; it requires the broader treatment in Part 41.",
+   "zh": "在有根树中，最近公共祖先是同时位于两个查询节点上方的最深节点。<bookmark mark='a'/>欧拉遍历在进入节点以及从每个孩子返回后，记录节点和深度。<bookmark mark='b'/>七和四的首次出现之间，最小深度对应它们的祖先，节点一。<bookmark mark='c'/>这里的实现使用稀疏表，预处理为 n 乘 log n，查询为常数时间。后面引用的线性预处理定理使用另一种构造。<bookmark mark='d'/>倍增法保存二的幂层祖先，查询为对数时间。这些结论针对有根树；版本控制历史通常是有向无环图，可能有多个合并基点，需要第41部分的更一般处理。"
+  },
+  "572238434131": {
+   "scene": "RangeMin",
+   "en": "The reduction runs the other way as well. <bookmark mark='a'/> Recursively put an interval's leftmost minimum at its Cartesian-tree root. Equal values are ordered by their array indices, so parent values need only be no larger than child values. <bookmark mark='b'/> A monotone stack builds this tree in linear time. <bookmark mark='c'/> The lowest common ancestor of two array positions is their interval's leftmost minimum. Our checks cover every illustrated range and node pair. <bookmark mark='d'/> Bender and Farach-Colton give a linear-preprocessing, constant-query construction. Succinct results can encode the static query structure in two n plus lower-order bits; this is an index-space theorem, not the memory use of our Python sparse table.",
+   "zh": "这个归约也可以反过来。<bookmark mark='a'/>递归地把区间最左边的最小值放在笛卡尔树根部。相等值按数组索引排序，所以父节点的值只需不大于孩子。<bookmark mark='b'/>单调栈在线性时间内构建这棵树。<bookmark mark='c'/>两个数组位置的最近公共祖先，就是它们区间中最左边的最小值。检查覆盖图示的每个区间和每对节点。<bookmark mark='d'/>Bender 与 Farach-Colton 给出了线性预处理、常数查询的构造。简洁数据结构结果可把静态查询结构编码在二 n 加低阶项个比特内；这是索引空间定理，并不是这里 Python 稀疏表的内存用量。"
+  },
+  "05c79222c23c": {
+   "scene": "Monotone",
+   "en": "Chapter five. Two pointers, and monotonic stacks.",
+   "zh": "第5章。双指针，与单调栈。"
+  },
+  "f9a7a683a62a": {
+   "scene": "Monotone",
+   "en": "Slide a window of four along an array and report each maximum. Checking every element separately costs n times k. <bookmark mark='a'/> Maintain a deque of indices with strictly decreasing values. When a new value arrives, remove smaller or equal values from the back: the newer equal value expires later. The diagram displays their values for readability. <bookmark mark='b'/> Remove an expired index from the front; the surviving front supplies the maximum. <bookmark mark='c'/> Each index enters once and leaves at most once, which proves linear total work. <bookmark mark='d'/> This amortized argument counts all iterations of the inner loop across the complete input. It does not assume the deque has constant length.",
+   "zh": "让宽度四的窗口沿数组滑动，输出每个最大值。逐个扫描窗口需要 n 乘 k 的工作。<bookmark mark='a'/>维护索引双端队列，其对应值严格递减。新值到来时，从队尾删除较小或相等的值；较新的相等值会更晚过期。图中为方便阅读显示的是这些索引对应的值。<bookmark mark='b'/>从队首删除过期索引，剩下的队首给出最大值。<bookmark mark='c'/>每个索引只进入一次，最多离开一次，因此总工作量是线性的。<bookmark mark='d'/>这个摊还证明累计整个输入上的内层循环次数，并不假设队列长度是常数。"
+  },
+  "48209522f618": {
+   "scene": "Monotone",
+   "en": "The window need not have a fixed width. <bookmark mark='a'/> Find the longest substring without repeated letters. Move the right end forward; if its new letter is already present, move the left end just beyond the previous occurrence, never backwards. <bookmark mark='b'/> A last-position table makes the illustrated fixed-alphabet updates constant time. <bookmark mark='c'/> Both endpoints advance at most n times, giving linear total work. <bookmark mark='d'/> Similar windows solve other problems only when their feasibility has the required monotonicity. In particular, the usual budget-sum window requires nonnegative values. Negative values can make extending a window decrease its sum, invalidating that simple rule.",
+   "zh": "窗口不必固定宽度。<bookmark mark='a'/>求不含重复字母的最长子串。右端向前移动；新字母若已出现，就把左端移到前一次出现之后，绝不后退。<bookmark mark='b'/>在图示固定字母表中，最后出现位置表使每次更新为常数时间。<bookmark mark='c'/>两端各最多前进 n 次，所以总工作是线性的。<bookmark mark='d'/>类似窗口能否解决别的问题，取决于可行性是否具备所需单调性。常见的预算和窗口要求数值非负；负数可能使窗口扩张时总和下降，破坏这个简单规则。"
+  },
+  "9def5774cf70": {
+   "scene": "Monotone",
+   "en": "A stack can be monotone too. <bookmark mark='a'/> To find each next strictly greater value, keep indices awaiting an answer and pop those with smaller values when a new element arrives. Equal values may remain. <bookmark mark='b'/> Each index is pushed and popped at most once, proving linear total work. <bookmark mark='c'/> The histogram routine uses a different, explicit tie rule: it also pops equal heights. A pop identifies a candidate span, but an equal-height pop need not find a strictly lower right boundary. The later representative can extend the same-height rectangle. <bookmark mark='d'/> Enumerating every possible rectangle independently confirms the illustrated maximum area, sixteen. <bookmark mark='e'/> The reusable idea is a monotone frontier plus a precise invariant; equality rules depend on the question being answered.",
+   "zh": "栈也可以是单调的。<bookmark mark='a'/>为每个位置寻找下一个严格更大的值，把尚未得到答案的索引留在栈中；新元素到来时弹出较小值，相等值可以保留。<bookmark mark='b'/>每个索引最多入栈、出栈各一次，因此总工作是线性的。<bookmark mark='c'/>直方图程序采用另一个明确规则：相等高度也弹出。弹出时得到候选跨度，但相等高度的弹出并不意味着找到了右边严格更低的柱子；较后的代表可以继续扩展同高度矩形。<bookmark mark='d'/>独立枚举所有矩形，确认图中最大面积为十六。<bookmark mark='e'/>可以复用的是单调边界与精确不变量；相等值如何处理，要由所求问题决定。"
+  },
+  "9ea6ee7a803c": {
+   "scene": "Searching",
+   "en": "Chapter six. Searching for the answer.",
+   "zh": "第6章。搜索答案。"
+  },
+  "2ca4a1f0eba9": {
+   "scene": "Searching",
+   "en": "Binary search works on a monotone predicate, not just a sorted array. <bookmark mark='a'/> These nonnegative package weights must be shipped in order within four days. <bookmark mark='b'/> A greedy feasibility check fills each day until the next package would exceed capacity. Larger capacities remain feasible. <bookmark mark='c'/> Search between the largest weight and the total weight. The routine first checks that the upper bound is feasible, and counts that actual predicate call along with the search calls. The minimum capacity is eighteen. <bookmark mark='d'/> State the monotonicity and feasible-endpoint contract before applying this pattern to other problems. <bookmark mark='e'/> The displayed lower-bound implementation has a separate half-open interval invariant. Tests cover empty arrays and boundary answers; finite tests support the implementation while the invariant explains its correctness.",
+   "zh": "二分搜索作用于单调谓词，不只作用于有序数组。<bookmark mark='a'/>这些非负包裹重量必须按顺序在四天内运完。<bookmark mark='b'/>贪心可行性检查每天尽量装载，直到下一个包裹会超过容量。更大的容量仍然可行。<bookmark mark='c'/>在最大重量与总重量之间搜索。程序先检查上界可行，并把这次实际谓词调用计入搜索调用数。最小容量是十八。<bookmark mark='d'/>把这个模式用于其他问题之前，先说明单调性和可行端点约定。<bookmark mark='e'/>屏幕上的下界查找另有半开区间不变量。测试覆盖空数组和边界答案；有限测试支持实现，不变量解释正确性。"
+  },
+  "4b0fc9d88699": {
+   "scene": "Searching",
+   "en": "Binary search is famous for being easy to get wrong, so here is a version to trust. <bookmark mark='a'/> Keep an invariant: everything to the left of lo is smaller than x, and everything from hi onwards is at least x. Each step shrinks the gap between them, and when it closes, lo is the answer. <bookmark mark='b'/> Use half-open ranges, from lo up to but not including hi, and the plus-or-minus-one guesswork disappears: the empty range is simply lo equal to hi. <bookmark mark='c'/> Compute the middle as lo plus half the difference. Adding lo and hi first overflows a 32-bit integer once an array has a billion elements, a bug Joshua Bloch found in 2006 in Java's own library, where it had sat for nine years. <bookmark mark='d'/> And return the boundary, the first position not less than x, rather than just found or not found. Lower and upper bounds answer counting and range questions too.",
+   "zh": "二分查找以容易写错而闻名，所以这里给出一个值得信赖的版本。<bookmark mark='a'/>保持一个不变式：lo 左边的一切都小于 x，从 hi 起的一切都至少为 x。每一步都缩小两者之间的空隙，空隙闭合时，lo 就是答案。<bookmark mark='b'/>使用半开区间，从 lo 到 hi 但不含 hi，加一减一的猜测就消失了：空区间就是 lo 等于 hi。<bookmark mark='c'/>把中点算成 lo 加上差的一半。先把 lo 和 hi 相加，一旦数组有十亿个元素就会让32位整数溢出；Joshua Bloch 在2006年在 Java 自己的库中发现了这个错误，它已经在那里待了九年。<bookmark mark='d'/>并且返回分界点，即第一个不小于 x 的位置，而不只是找到或没找到。下界和上界还能回答计数和区间问题。"
+  },
+  "1d2df5f6b2ee": {
+   "scene": "Searching",
+   "en": "Sometimes you know roughly where the answer is. <bookmark mark='a'/> Galloping probes exponentially increasing distances, then binary-searches the bracket. This routine searches a sorted suffix starting at the supplied index. To obtain the global lower bound, all preceding elements must be smaller than the target. <bookmark mark='b'/> Work is logarithmic in the distance plus one. The table counts actual key reads for both methods, including bound construction, instead of substituting a logarithmic estimate. <bookmark mark='c'/> Close answers can need fewer reads; the crossover depends on the exact search loops and target. <bookmark mark='d'/> Merging sorted runs and intersecting posting lists often provide a useful starting position. <bookmark mark='e'/> Ternary search is a separate pattern for a unimodal objective on a valid finite interval; an arbitrary function need not satisfy that premise.",
+   "zh": "有时我们大致知道答案在哪里。<bookmark mark='a'/>跳跃查找探测指数增长的距离，再在括定区间内二分。这里的程序从指定索引开始搜索有序后缀；若要得到全局下界，之前的所有元素必须都小于目标。<bookmark mark='b'/>工作量是距离加一的对数。表格对两种方法都统计实际键读取，包括建立边界的探测，而不是代入对数估计。<bookmark mark='c'/>附近答案可能需要更少读取；交叉位置取决于具体循环和目标。<bookmark mark='d'/>合并有序段或求倒排表交集时，通常能提供有用的起始位置。<bookmark mark='e'/>三分搜索是另一种模式，要求有限有效区间上的目标函数单峰；任意函数并不满足这个前提。"
+  },
+  "bccf23a8cf9b": {
+   "scene": "Bits",
+   "en": "Chapter seven. Bits, and the Four Russians.",
+   "zh": "第7章。比特，与四个俄罗斯人算法。"
+  },
+  "0b962d2b033c": {
+   "scene": "Bits",
+   "en": "A sixty-four-bit machine word can represent a set of sixty-four positions. <bookmark mark='a'/> Population count may use a hardware instruction when the target ISA supports it. Clearing the lowest set bit visits the members one at a time. <bookmark mark='b'/> Isolating that bit gives the Fenwick step. <bookmark mark='c'/> Exclusive-or with a one-bit right shift gives a Gray-code sequence, whose neighbours differ in one bit. <bookmark mark='d'/> Fixed-width set union and intersection use a bounded number of word operations. A Python integer can span many machine words, so its bit-operation cost grows with its stored length. Negative patterns are excluded from these finite-subset routines. <bookmark mark='e'/> Warren's Hacker's Delight collects such transformations; check width, signedness and instruction support before translating one to native code.",
+   "zh": "一个六十四位机器字可以表示六十四个位置的集合。<bookmark mark='a'/>目标指令集支持时，置位比特计数可以使用硬件指令；反复清除最低置位比特则逐个访问成员。<bookmark mark='b'/>分离最低置位比特就得到 Fenwick 的步长。<bookmark mark='c'/>与右移一位后的值异或，得到相邻项只差一个比特的格雷码。<bookmark mark='d'/>定长集合的并与交使用有界数量的机器字操作。Python 整数可以跨越多个机器字，位运算代价随存储长度增长。这些有限子集程序拒绝负比特模式。<bookmark mark='e'/>Warren 的《Hacker's Delight》收集了这类变换；翻译成原生代码前，要检查位宽、有无符号和指令支持。"
+  },
+  "117948f948a5": {
+   "scene": "Bits",
+   "en": "Some dynamic programs run over every subset of a set, and need every subset of each subset. <bookmark mark='a'/> These three lines visit every submask of m, from m itself down to zero: subtract one, which borrows through the lowest member, and mask, which throws away what is not in m. <bookmark mark='b'/> Over all masks of n elements the loop body runs three to the n times, not four to the n, because each element is either outside the mask, in the mask but not the submask, or in both. We counted: exactly three to the n, every time. <bookmark mark='c'/> That is the inner loop of dynamic programming over subsets, for partitions, schedules and Steiner trees.",
+   "zh": "有些动态规划要遍历一个集合的每个子集，而且需要每个子集的每个子集。<bookmark mark='a'/>这三行代码访问 m 的每个子掩码，从 m 本身直到零：减一，借位穿过最低的成员；再按位与，丢掉不在 m 中的部分。<bookmark mark='b'/>对 n 个元素的所有掩码，循环体恰好运行三的 n 次方次，而不是四的 n 次方次，因为每个元素要么在掩码之外，要么在掩码中但不在子掩码中，要么两者都在。我们数过：每次都恰好是三的 n 次方。<bookmark mark='c'/>这就是子集动态规划的内层循环，用于集合划分、调度和 Steiner 树。"
+  },
+  "7bf4db31efd8": {
+   "scene": "Bits",
+   "en": "Word packing is related to the Four Russians tradition, but the mechanisms should be distinguished. <bookmark mark='a'/> The historical method groups small subproblems and precomputes their possible answers. Our experiments below use direct word-parallel operations rather than implementing that complete table-based algorithm. <bookmark mark='b'/> Packed transitive closure processes sixty-four columns per stored word. Every reachability result is checked against independent breadth-first searches. <bookmark mark='c'/> The LCS experiment compares full dynamic programming with a multiword bit algorithm on the same generated strings. Carry propagation spans all words of a row; the measured ratios are in the table. Both programs run three times and retain their raw clocks. <bookmark mark='d'/> Packing can improve constants and word-operation counts, while storage, preprocessing and multiword work remain part of the cost model.",
+   "zh": "按字打包与四个俄罗斯人算法的传统相关，但应区分机制。<bookmark mark='a'/>历史方法把小子问题分组，并预计算它们可能的答案。下面的实验直接使用字级并行操作，并没有实现完整的查表算法。<bookmark mark='b'/>打包的传递闭包每个存储字处理六十四列，每个可达性结果都由独立的广度优先搜索核对。<bookmark mark='c'/>最长公共子序列实验在相同生成字符串上比较完整动态规划和多字位算法，进位沿整行所有机器字传播，实测比值见表。两个程序都运行三次并保留原始时钟。<bookmark mark='d'/>打包可以改善常数和机器字操作数，但存储、预处理以及多字工作仍然属于代价模型。"
+  },
+  "284aea72499c": {
+   "scene": "Splitting",
+   "en": "Chapter eight. Meet in the middle, and square roots.",
+   "zh": "第8章。折半搜索，与平方根分块。"
+  },
+  "5a6092ea22ff": {
+   "scene": "Splitting",
+   "en": "Meet in the middle reduces the exponent of some exhaustive searches. <bookmark mark='a'/> Subset sum asks whether selected numbers total a target. The brute-force routine here enumerates all subsets. <bookmark mark='b'/> Generate the sums of each half, sort one list, then search it for the complement of each sum in the other. The sorting and searches contribute additional factors; the displayed work counter counts generated sums and search calls, not every comparison or bit operation. <bookmark mark='c'/> The twenty-item example agrees with brute force; both have three retained timing trials. <bookmark mark='d'/> At forty items, two million generated sums replace a trillion full subsets, but sorting, exponential storage and the bit lengths of sums still matter. <bookmark mark='e'/> Bidirectional search uses a related meet-in-the-middle idea, with its own graph and stopping conditions.",
+   "zh": "折半相遇可以降低某些穷举搜索的指数。<bookmark mark='a'/>子集和问题问：选出的一些数能否合计为目标。这里的暴力程序枚举全部子集。<bookmark mark='b'/>生成两半的所有子集和，将其中一组排序，再为另一组的每个和查找补数。排序和搜索还带来额外因子；图中的工作计数只统计生成的和与搜索调用，不包括每次比较或比特操作。<bookmark mark='c'/>二十项实例与暴力结果一致，两种方法各保留三次计时。<bookmark mark='d'/>四十项时，约两百万个生成的和替代约一万亿个完整子集，但排序、指数存储以及和的位长仍需考虑。<bookmark mark='e'/>双向搜索使用相关的相遇思路，但有自己的图条件与停止规则。"
+  },
+  "d0fd8d3d524b": {
+   "scene": "Splitting",
+   "en": "Square-root decomposition divides work another way. <bookmark mark='a'/> Store totals for blocks of about square root n elements. <bookmark mark='b'/> A query scans boundary fragments and uses whole-block totals in the middle; the displayed example counts every touched element or block. <bookmark mark='c'/> Its update and query costs depend on the stored summary; not every operation admits an equally cheap merge. <bookmark mark='d'/> Mo's algorithm instead reorders offline queries by endpoint blocks and maintains a moving answer. It needs efficient add and remove operations for that statistic. <bookmark mark='e'/> For all twenty thousand distinct-count queries, we retain the deterministic input specification and output hash, and check every answer with an independent last-occurrence sweep using a sum tree. Pointer moves are an abstract work count, separate from Python wall time.",
+   "zh": "平方根分解换一种方式划分工作。<bookmark mark='a'/>每块约有根号 n 个元素，保存块总和。<bookmark mark='b'/>查询扫描两端碎片，中间使用完整块总和；图示实例统计碰到的每个元素或块。<bookmark mark='c'/>更新和查询代价取决于保存的摘要，并不是每种操作都能同样廉价地合并。<bookmark mark='d'/>Mo 算法改为按端点块重排离线查询，维护移动中的答案，要求所求统计能有效加入和删除元素。<bookmark mark='e'/>对于全部两万个不同值计数查询，保留确定性输入规范与输出哈希，并用独立的最后出现位置扫描和求和树核对每个答案。指针移动是抽象工作计数，与 Python 墙钟时间分开。"
+  },
+  "5c560efae3b9": {
+   "scene": "Layouts",
+   "en": "Chapter nine. Algorithm engineering, part one: layouts.",
+   "zh": "第9章。算法工程（上）：布局。"
+  },
+  "8fe3d8b47829": {
+   "scene": "Layouts",
+   "en": "Search layout changes the concrete implementation of a lower-bound query. <bookmark mark='a'/> In a sorted array, binary search visits progressively smaller intervals, often at distant addresses. <bookmark mark='b'/> Eytzinger order stores an implicit tree breadth first, with children at twice the parent index and twice plus one. This groups top levels and can make a future region suitable for explicit prefetching. Our code bounds the prefetch address within the allocation. <bookmark mark='c'/> The array B-tree packs sixteen thirty-two-bit keys into a sixty-four-byte node and uses an AVX-512 vector comparison, followed by a mask count and child selection. <bookmark mark='d'/> Khuong and Morin study these layouts. Our experiment measures the exact retained implementations on this host; it does not measure a cache-miss rate or prove which microarchitectural mechanism caused a speed difference.",
+   "zh": "搜索布局改变下界查询的具体实现。<bookmark mark='a'/>有序数组的二分查找访问逐渐缩小的区间，地址往往相距较远。<bookmark mark='b'/>Eytzinger 顺序按广度优先保存隐式树，孩子索引为父索引的两倍及两倍加一。这使上层聚集，也可能使未来区域适合显式预取；这里的代码把预取地址限制在已分配范围内。<bookmark mark='c'/>数组 B 树把十六个三十二位键放入六十四字节节点，用 AVX-512 向量比较，再统计掩码并选择孩子。<bookmark mark='d'/>Khuong 与 Morin 研究了这些布局。本实验在这台主机上测量保留的具体实现，没有测量缓存未命中率，也没有证明哪个微架构机制导致时间差。"
+  },
+  "e198a653aeac": {
+   "scene": "Layouts",
+   "en": "Each size receives a million generated lookup queries. <bookmark mark='a'/> The red curve is ordinary binary search, with minima from three repetitions. Full sources, ISA flags and raw clock reads accompany the data. <bookmark mark='b'/> Branch-free binary search changes the instruction sequence. Its relative performance is specific to this processor and workload. <bookmark mark='c'/> Eytzinger order adds a different layout and explicit prefetching. <bookmark mark='d'/> The array B-tree uses sixteen-way AVX-512 comparisons within a node. Every actual answer is checked after timing against a certified lower-bound value. <bookmark mark='e'/> These implementations perform different scalar and SIMD work. Their elapsed times alone do not isolate cache misses, branch misses or prefetch effects. They share a lookup specification, rather than an identical comparison trace.",
+   "zh": "每个规模执行一百万次生成的查找。<bookmark mark='a'/>红线是普通二分查找，显示三次重复中的最小值；数据同时保存完整源程序、指令集选项和原始时钟。<bookmark mark='b'/>无分支二分改变指令序列，相对表现属于这台处理器和这个负载。<bookmark mark='c'/>Eytzinger 顺序引入不同布局与显式预取。<bookmark mark='d'/>数组 B 树在节点内使用十六路 AVX-512 比较。每个实际答案都在计时后与有下界证书的结果核对。<bookmark mark='e'/>这些实现进行不同的标量与向量工作；仅凭耗时无法分离缓存未命中、分支误判或预取的影响。它们共享查找规范，而不是相同的比较轨迹。"
+  },
+  "bc13f220a320": {
+   "scene": "Layouts",
+   "en": "Branches are another possible cost. <bookmark mark='a'/> This experiment stores values from zero to two hundred and fifty-five in thirty-two-bit integers, then sums those at least a hundred and twenty-eight. <bookmark mark='b'/> We compare shuffled and sorted order using the same multiset. The branchy function disables if-conversion and vectorization. A separate histogram certifies the sum. The observed timing difference is consistent with a branch-prediction explanation, but no branch-miss counter was collected. <bookmark mark='c'/> A mask-based function provides another implementation on the same inputs. <bookmark mark='d'/> Read all four measured times. Their ordering describes these loops; it does not establish that predictable branches are universally free or that binary search is always limited by memory.",
+   "zh": "分支是另一个可能的代价。<bookmark mark='a'/>这个实验用三十二位整数存储零到二百五十五之间的值，再累加不小于一百二十八的元素。<bookmark mark='b'/>相同多重集合分别打乱和排序。有分支函数禁用条件转换和向量化，另用直方图独立核对求和。观察到的时间差与分支预测解释相容，但这里没有采集分支误判计数器。<bookmark mark='c'/>基于掩码的函数提供同输入上的另一种实现。<bookmark mark='d'/>请看四个实测时间，它们描述这些循环，并不证明可预测分支总是免费，也不证明二分查找总受内存限制。"
+  },
+  "951b9c256c9e": {
+   "scene": "Simd",
+   "en": "Chapter ten. Algorithm engineering, part two: vector instructions and hashing.",
+   "zh": "第10章。算法工程（下）：向量指令与哈希。"
+  },
+  "e0d76fe03996": {
+   "scene": "Simd",
+   "en": "The isolated tokenizer finds ASCII words and lower-cases letters. <bookmark mark='a'/> On this AVX2-capable host it loads thirty-two bytes, combines case bits, subtracts the code for a, and compares the lanes. Several vector instructions implement that sequence. <bookmark mark='b'/> Movemask gathers the lane results into an integer mask. <bookmark mark='c'/> A word begins where a letter has a non-letter predecessor; the mask carries boundary state between vector blocks. <bookmark mark='d'/> The table reports scalar and vector timings on the complete corpus. After each trial, we check every transformed byte and every word-start mask, as well as total words and letters. <bookmark mark='e'/> The simdjson work illustrates related classification techniques. An isolated tokenizer's timing is not a measured phase fraction of the complete word-count program.",
+   "zh": "独立分词程序识别 ASCII 单词并把字母转成小写。<bookmark mark='a'/>在支持 AVX2 的这台主机上，它读取三十二字节，合并大小写比特，减去字母 a 的编码，再比较各通道。这是多条向量指令组成的序列。<bookmark mark='b'/>Movemask 把各通道结果收集成整数掩码。<bookmark mark='c'/>单词起点是前一字节不是字母的字母位置，掩码还要在向量块之间传递边界状态。<bookmark mark='d'/>表中给出完整语料上的标量和向量耗时。每次试验之后，核对每个变换后的字节、每个单词起点掩码以及单词和字母总数。<bookmark mark='e'/>simdjson 展示了相关分类技术。独立分词程序的耗时并不是完整词频程序中实测的阶段占比。"
+  },
+  "35e9c9b9a4be": {
+   "scene": "Simd",
+   "en": "Compilers can vectorize some loops automatically. <bookmark mark='a'/> We compile the same three kernels at O one and at O three with the native ISA enabled. The table gives measured costs per element, amortized over fixed loop counts; the disassembly is retained. <bookmark mark='b'/> Restrict promises the relevant pointer regions do not overlap. It is a contract the caller must obey, rather than a request that makes arbitrary aliasing safe. <bookmark mark='c'/> The prefix kernel carries a dependency; an ordinary scalar loop is not the parallel scan shown earlier. Every final array element and reduction is checked outside the timers. <bookmark mark='d'/> These builds change several optimizations together. Inspect the actual assembly to identify vector instructions, and avoid attributing the entire timing difference to vectorization alone.",
+   "zh": "编译器可以自动向量化某些循环。<bookmark mark='a'/>同样三个内核分别以 O 一和启用本机指令集的 O 三编译。表中给出按固定循环次数摊销的每元素耗时，同时保留反汇编。<bookmark mark='b'/>Restrict 承诺相关指针区域不重叠，调用者必须遵守这个约定；它不会让任意别名访问自动安全。<bookmark mark='c'/>前缀内核带有跨元素依赖，普通标量循环并不是前面展示的并行扫描。计时之外检查最终每个数组元素和归约值。<bookmark mark='d'/>这两个构建同时改变多种优化。应检查实际汇编中的向量指令，不能把全部时间差都归因于向量化。"
+  },
+  "a8b92c6e4c2f": {
+   "scene": "Simd",
+   "en": "Vector comparisons also help hash-table lookup. <bookmark mark='a'/> Our teaching Swiss-style table stores sixteen control bytes per group, each carrying an empty marker or seven hash bits. <bookmark mark='b'/> An SSE2 comparison filters candidate slots, followed by full key checks. Group probing and collisions still require work. <bookmark mark='c'/> The two open-addressing tables use the same requested capacity and occupancies. The standard unordered map chooses its own bucket count, which is recorded separately. Its occupancy is not automatically seven eighths. <bookmark mark='d'/> Read insertion and lookup times for each workload. Every inserted-key count and every lookup is checked against an independently sorted multiset after timing. <bookmark mark='e'/> Production Abseil and other modern tables develop related ideas with additional policies and guarantees; this small implementation does not reproduce every production design.",
+   "zh": "向量比较也能帮助哈希查找。<bookmark mark='a'/>这里的教学 Swiss 风格表每组保存十六个控制字节，表示空槽或七个哈希比特。<bookmark mark='b'/>SSE2 比较筛选候选槽，之后仍要核对完整键，分组探测与碰撞仍需工作。<bookmark mark='c'/>两个开放寻址表使用相同请求容量和占用率；标准无序映射自行选择桶数，数据单独记录。因此它的占用率不会自动等于八分之七。<bookmark mark='d'/>表中分别显示各负载的插入与查找耗时。计时后，以独立排序的多重集合核对每个已插入键的计数和每次查找。<bookmark mark='e'/>生产版本的 Abseil 等现代哈希表在相关思想上增加了更多策略与保证；这个小实现并没有复现全部生产设计。"
+  },
+  "e9c8a04b5ec0": {
+   "scene": "Sorting",
+   "en": "Chapter eleven. Sorting in practice.",
+   "zh": "第11章。实践中的排序。"
+  },
+  "e34f155861fc": {
+   "scene": "Sorting",
+   "en": "What does this production sort do? <bookmark mark='a'/> This GCC libstdc++ implementation uses an introsort family: quicksort partitioning with a depth limit. <bookmark mark='b'/> A fallback prevents the quadratic worst case of unguarded quicksort. The C++ interface specifies complexity requirements without mandating one algorithm for all libraries. <bookmark mark='c'/> This implementation finishes small partitions with insertion sorting. The cutoff is an implementation detail. <bookmark mark='d'/> Pattern-defeating quicksort is another important family, rather than a timeless description of every language's current library. <bookmark mark='e'/> Timsort and related run-merging policies exploit existing order. Python and Java have type- and version-specific choices; primitive arrays need not use the object-sorting algorithm. <bookmark mark='f'/> Match any library claim to a concrete version, type, comparator contract and retained build.",
+   "zh": "这里的生产排序实际做什么？<bookmark mark='a'/>这个 GCC 的 libstdc++ 实现使用内省排序家族：带深度限制的快速划分。<bookmark mark='b'/>回退机制避免无防护快速排序的平方最坏情况。C++ 接口规定复杂度要求，并没有要求所有库都采用同一个算法。<bookmark mark='c'/>此实现用插入排序完成小分区，切换阈值属于实现细节。<bookmark mark='d'/>模式消除快速排序是另一个重要家族，并不是对所有语言当前库的永久描述。<bookmark mark='e'/>Timsort 及相关有序段合并策略利用已有顺序。Python 与 Java 的选择取决于版本和数据类型，原始类型数组不一定使用对象排序算法。<bookmark mark='f'/>任何库算法声明，都应对应具体版本、类型、比较器约定和保留的构建。"
+  },
+  "5838162066b4": {
+   "scene": "Sorting",
+   "en": "Comparison sorting has an n log n worst-case lower bound for arbitrary distinct keys. <bookmark mark='a'/> Our radix sort instead uses thirty-two-bit unsigned keys and four stable byte passes, including a fixed counter-array cost per pass. <bookmark mark='b'/> Small batches can be dominated by that overhead. <bookmark mark='c'/> The crossover in this measurement is a finite workload result, not a universal threshold. <bookmark mark='d'/> Each timed batch includes its input copy; every output element of every batch is retained until checked against the library sort after the timer. Three repetitions supply the plotted minima. <bookmark mark='e'/> The word-RAM explanation assumes bounded-width keys. Wider integers, memory traffic, temporary storage and parallel implementations change the comparison.",
+   "zh": "任意互异键的比较排序有最坏情况 n 乘 log n 下界。<bookmark mark='a'/>这里的基数排序使用三十二位无符号键，进行四轮稳定的按字节分配，每轮还有固定计数数组开销。<bookmark mark='b'/>小批次可能主要消耗在这个开销上。<bookmark mark='c'/>此次测量的交叉点是有限工作负载的结果，不是通用阈值。<bookmark mark='d'/>每个计时批次包含输入复制；保存每批的全部输出元素，计时结束后逐一与库排序核对。图中显示三次重复的最小值。<bookmark mark='e'/>机器字模型解释要求键宽有界；更宽整数、内存流量、临时空间和并行实现会改变比较结果。"
+  },
+  "083a65ebfb35": {
+   "scene": "Sorting",
+   "en": "Often the complete order is unnecessary. <bookmark mark='a'/> Here four methods extract the twenty largest of sixteen million generated keys. <bookmark mark='b'/> Full sort, partial sort and a small heap solve different amounts of ordering work. An independent fixed-size sorted insertion reference checks every returned top-twenty list. <bookmark mark='c'/> The standard nth-element contract gives linear average complexity for this nonparallel overload, rather than a universal worst-case linear promise. Its timing includes sorting and extracting the selected twenty. Array input copies are outside these timers; heap construction and extraction are inside its timer. <bookmark mark='d'/> The measured winner belongs to this fixed k and distribution. Choosing the required output specification can matter more than tuning a full sort.",
+   "zh": "经常并不需要完整顺序。<bookmark mark='a'/>这里用四种方法从一千六百万个生成键中提取最大的二十个。<bookmark mark='b'/>完整排序、部分排序和小堆完成的排序工作量不同，独立的定长有序插入参考核对每份前二十结果。<bookmark mark='c'/>这个非并行 nth-element 接口保证平均线性复杂度，并不普遍承诺最坏线性时间。它的计时包括选中二十个元素的排序与提取。数组输入复制在这些计时之外，堆的构建与提取则在堆计时之内。<bookmark mark='d'/>实测胜者属于这个固定的 k 和分布。选择真正需要的输出规范，可能比调优完整排序更重要。"
+  },
+  "712a340a7000": {
+   "scene": "Benchmarking",
+   "en": "Chapter twelve. Benchmarking honestly.",
+   "zh": "第12章。诚实地做基准测试。"
+  },
+  "3c5a345cbc35": {
+   "scene": "Benchmarking",
+   "en": "The benchmark demonstration records thirty process runs, with six observations in each. <bookmark mark='a'/> We retain every observation and compare the first with the median of the later five, so a single sample is not compared with a selected minimum. <bookmark mark='b'/> Any first-versus-later difference can have several causes. These clocks alone do not establish a cold-cache effect or a particular change in processor frequency. <bookmark mark='c'/> The plot uses an axis that contains all current observations. For a controlled comparison, choose a sample plan in advance, randomize or interleave variants, and report uncertainty and the sampling unit. Repeating until a preferred confidence interval appears requires a valid sequential procedure; ordinary fixed-sample intervals do not justify optional stopping.",
+   "zh": "基准示例记录三十次进程运行，每次包含六个观测。<bookmark mark='a'/>保留全部观测，把第一次与后五次的中位数比较，避免把单一样本与挑选出的最小值比较。<bookmark mark='b'/>首次与后续之间的差异可能有多种原因，单凭这些时钟不能确认冷缓存效应或某种处理器频率变化。<bookmark mark='c'/>图轴容纳当前全部观测。受控比较应预先确定抽样方案，随机化或交错运行变体，报告不确定性和抽样单位。若要一直重复到出现满意的置信区间，就需要有效的序贯方法；普通固定样本区间不能支持这种可选停止。"
+  },
+  "0d1274180e27": {
+   "scene": "Benchmarking",
+   "en": "Two traps illustrate why controls matter. <bookmark mark='a'/> We vary an environment variable's size with a fixed, shuffled execution schedule, retaining five process runs per size. The observed spread also includes shared-host variation and uncontrolled address randomization, so it does not isolate a causal layout effect. <bookmark mark='b'/> Mytkowicz and colleagues studied measurement bias from layout choices. Curtsinger and Berger's Stabilizer samples layouts during execution; our small demonstration does not reproduce that system. <bookmark mark='c'/> The second trap is dead-code elimination. The unused loop has no observable result; inspect the retained assembly alongside its clock interval. <bookmark mark='d'/> The kept version has an independently checked exact sum. Its measured time is shown rather than quoted from an earlier host. A benchmark needs both observable work and a correctness check.",
+   "zh": "两个陷阱说明控制变量的重要性。<bookmark mark='a'/>这里按预定打乱顺序改变环境变量大小，每种大小保留五次进程运行。观察到的波动同时包含共享主机变化和未控制的地址随机化，因此不能单独识别布局的因果影响。<bookmark mark='b'/>Mytkowicz 等人研究了布局选择造成的测量偏差，Curtsinger 与 Berger 的 Stabilizer 在运行时抽样布局；这个小演示没有复现该系统。<bookmark mark='c'/>第二个陷阱是死代码删除。未使用的循环没有可观察结果，应把保留的汇编与时钟区间一起检查。<bookmark mark='d'/>保留结果的版本有独立核对的精确求和，耗时显示当前测量值，不再引用旧主机结果。基准需要可观察的工作和正确性检查。"
+  },
+  "c83a9d07e523": {
+   "scene": "Craft",
+   "en": "Chapter thirteen. Problem solving as a craft.",
+   "zh": "第13章。作为手艺的解题。"
+  },
+  "7acd723cdf14": {
+   "scene": "Craft",
+   "en": "Pólya's problem-solving advice is useful for programs. <bookmark mark='a'/> Understand the specification and work small cases, including empty inputs and boundary values. <bookmark mark='b'/> Devise a plan by recognizing structure, then state the assumptions that make it applicable. <bookmark mark='c'/> Implement a simple independent reference before optimizing. <bookmark mark='d'/> Look back: explain an invariant and compare complete outputs on targeted and generated cases. Tests can expose counterexamples without proving every possible execution correct. <bookmark mark='e'/> This episode's receipts identify which illustrated algorithms, input domains and native workloads were actually checked. One test file does not certify the entire series.",
+   "zh": "Pólya 的解题建议也适用于程序。<bookmark mark='a'/>理解规范，手算小例子，包括空输入和边界值。<bookmark mark='b'/>识别结构，制定计划，再明确使方法适用的前提。<bookmark mark='c'/>优化之前，先实现简单而独立的参考。<bookmark mark='d'/>回顾时解释不变量，并在针对性和生成用例上比较完整输出。测试能揭示反例，却不能证明每种执行都正确。<bookmark mark='e'/>本部分的记录明确哪些图示算法、输入范围和原生负载实际经过检查；一个测试文件不能认证整个系列。"
+  },
+  "d03d31ca1808": {
+   "scene": "Craft",
+   "en": "Count unordered index pairs whose sum is at most T. <bookmark mark='a'/> With one, two, three and threshold four, the valid pairs are one with two, and one with three. The empty input has none. <bookmark mark='b'/> Sorting preserves the pair count. If the smallest remaining value plus the largest fits, that smallest value pairs with every remaining position between them. <bookmark mark='c'/> Count those pairs and advance the left pointer; otherwise decrease the right pointer. This remains valid for negative values and duplicates because the sorted-order inequalities still hold. <bookmark mark='d'/> Two thousand retained small fixtures agree with brute force. The timing table uses three fixed repetitions per method after input preparation, followed by equality checks; it does not replace the invariant proof.",
+   "zh": "统计和不超过 T 的无序索引对。<bookmark mark='a'/>数列一、二、三，阈值四，有效对是一与二、一与三；空输入没有有效对。<bookmark mark='b'/>排序保持配对数量。如果剩余最小值与最大值之和满足条件，这个最小值就能与中间每个剩余位置配对。<bookmark mark='c'/>一次计入这些对并前移左指针，否则左移右指针。负数和重复值也适用，因为排序不等式仍成立。<bookmark mark='d'/>保留的两千个小用例都与暴力结果一致。计时表在准备输入后，每种方法固定运行三次，之后核对相等；这不能代替不变量证明。"
+  },
+  "4e6e0d6038e0": {
+   "scene": "Craft",
+   "en": "Algorithmic fluency comes from recognizing recurring structures. <bookmark mark='a'/> The course's catalogue includes counting maps, windows, heaps, graph traversals, union-find, dynamic programming, tries and string matching. Some are implemented in earlier episodes; others are applications or design exercises. A catalogue is not a certificate that every possible variant has been built and tested. <bookmark mark='b'/> Practical judgment also asks for input limits, operation mix, memory use and an appropriate measurement plan. <bookmark mark='c'/> Skiena's Algorithm Design Manual organizes problems by related structures, a useful companion to Pólya's planning step.",
+   "zh": "算法熟练来自识别反复出现的结构。<bookmark mark='a'/>课程目录包括计数映射、窗口、堆、图遍历、并查集、动态规划、字典树与字符串匹配。有些在前面实现，有些属于应用或设计练习；目录不能认证所有变体都已经构建和测试。<bookmark mark='b'/>实践判断还要考虑输入限制、操作比例、内存用量与合适的测量计划。<bookmark mark='c'/>Skiena 的《算法设计手册》按相关结构组织问题，可以辅助 Pólya 的制定计划步骤。"
+  },
+  "e0ed2ba2beb5": {
+   "scene": "TheJob",
+   "en": "Chapter fourteen. The Job, engineered.",
+   "zh": "第14章。工程优化后的 Job。"
+  },
+  "8575d50d5cb0": {
+   "scene": "TheJob",
+   "en": "The Job counts the words of the fixed thirty-novel corpus and selects the twenty most common. <bookmark mark='a'/> The engineered version classifies ASCII bytes with AVX2. <bookmark mark='b'/> It hashes letter blocks while retaining exact key comparisons. <bookmark mark='c'/> A teaching Swiss-style table filters sixteen control bytes at once. <bookmark mark='d'/> The first eight letters, length and count live in the slot; longer words also consult their stored bytes. Its fixed table, pool and word-length bounds are checked against this corpus. <bookmark mark='e'/> Seven whole-program runs retain both minimum and median times, exact top-twenty output and every distinct word count, independently checked against Python. <bookmark mark='f'/> The comparison is empirical for these two programs on the same host. No hardware counters were collected, so we make no claim of one cache miss per word or a proven performance floor.",
+   "zh": "Job 对固定的三十部小说语料统计词频，并选出最常见的二十个词。<bookmark mark='a'/>工程版本使用 AVX2 分类 ASCII 字节。<bookmark mark='b'/>按字母块计算哈希，同时保留精确键比较。<bookmark mark='c'/>教学 Swiss 风格表一次筛选十六个控制字节。<bookmark mark='d'/>前八个字母、长度和计数保存在槽内，长词还需访问存储的完整字节。这个语料已检查固定表容量、字节池和词长上限。<bookmark mark='e'/>完整程序各运行七次，保存最小值、中位数、精确前二十输出以及每个不同词的计数，并独立与 Python 核对。<bookmark mark='f'/>这是相同主机上两个程序的实证比较；没有采集硬件计数器，因此不声称每词一次缓存未命中，也不声称已达到性能下限。"
+  },
+  "bb78a3869203": {
+   "scene": "TheJob",
+   "en": "Amdahl's law is a model for a specified phase fraction. <bookmark mark='a'/> In this counterfactual example, suppose thirty percent of a program's baseline time belongs to a phase that can be accelerated. This fraction is an assumption, not a profile of our Job. <bookmark mark='b'/> Making that phase ten times faster gives a total cost of seventy plus three units, or speedup one over zero point seven three. Even an infinitely fast phase leaves seventy units. <bookmark mark='c'/> The isolated tokenizer timings cannot be subtracted from a different complete program to recover its phases. Measure phases in a consistent program and workload before using them for a prediction; evaluate the actual whole-program change separately.",
+   "zh": "Amdahl 定律是针对给定阶段占比的模型。<bookmark mark='a'/>在这个反事实示例中，假设某阶段占基准程序耗时的百分之三十。这个比例是假设，并不是 Job 的性能剖析。<bookmark mark='b'/>把该阶段加速十倍，总耗时变成七十加三个单位，加速比为一除以零点七三；即使该阶段无限快，仍需七十个单位。<bookmark mark='c'/>不能从另一个完整程序的时间中减去独立分词程序的时间，就还原各个阶段。预测前应在一致的程序和负载中测量阶段，并单独评估实际完整程序的变化。"
+  },
+  "d2fc9767f470": {
+   "scene": "TheJob",
+   "en": "The ledger now contains two kinds of quantity. <bookmark mark='a'/> Earlier Pebble rows are modeled costs under their stated machine and clock assumptions. The native row is measured wall time on the current host. <bookmark mark='b'/> Their numeric ratio is not an empirical speedup between two physical processors. Input conventions, implementations and modeled costs must be checked before making a cross-system claim. <bookmark mark='c'/> We do have a same-host comparison: Part 17's native C program and the engineered program process the same bytes with identical output and complete counts. Their seven observations are retained. <bookmark mark='d'/> Keep the modeled teaching ledger and the measured native experiment visibly distinguished; they answer different questions about the tower we built.",
+   "zh": "账本现在包含两类量。<bookmark mark='a'/>前面的 Pebble 行是在明确机器与时钟假设下计算的模型代价；原生行是在当前主机上测量的墙钟时间。<bookmark mark='b'/>它们的数值比不是两台物理处理器之间的实测加速比。跨系统比较前，必须检查输入约定、实现和模型计价。<bookmark mark='c'/>这里确实有同主机比较：第17部分的原生 C 与工程版本处理相同字节，产生相同输出和完整词频，各保留七次观测。<bookmark mark='d'/>应在视觉上区分教学模型账本和原生测量实验，它们回答我们所搭建系统的不同问题。"
+  },
+  "a143507ddbdf": {
+   "scene": "Frontier",
+   "en": "Chapter fifteen. Frontier: learned indexes, and algorithms with predictions.",
+   "zh": "第15章。前沿：学习索引，与带预测的算法。"
+  },
+  "8a3a5e5ad76f": {
+   "scene": "Frontier",
+   "en": "A learned index predicts positions from keys. <bookmark mark='a'/> Our keys are the corpus's word-start byte offsets; their storage is reported separately. <bookmark mark='b'/> This teaching implementation greedily fits lines anchored at segment starts. It evaluates every stored-key error, then certifies each query's predicted search bracket and falls back to full binary search if needed. Every actual query is independently checked with NumPy searchsorted. <bookmark mark='c'/> Kraska and colleagues developed learned-index systems, while the PGM work provides stronger indexing constructions; our floating-point anchored fit is not its optimal segmentation algorithm. <bookmark mark='d'/> The table counts native segment structs and separator keys, including padding. It also records peak requested model storage. Lookup clocks exclude fitting and validation, and a smaller model can still incur segment-search and fallback costs.",
+   "zh": "学习索引从键预测位置。<bookmark mark='a'/>这里的键是语料中单词起点的字节偏移，键数组存储单独报告。<bookmark mark='b'/>教学实现贪心拟合以段起点为锚的直线，计算每个存储键的误差；对每个查询，认证预测搜索区间，必要时回退到完整二分。实际全部查询都与 NumPy 的下界搜索独立核对。<bookmark mark='c'/>Kraska 等人发展了学习索引系统，PGM 工作给出更强的索引构造；这里的浮点锚定拟合并不是它的最优分段算法。<bookmark mark='d'/>表中计入原生段结构体和分隔键，包括填充字节，同时记录模型请求存储的峰值。查找计时不含拟合与验证；模型更小仍可能需要段查找和回退开销。"
+  },
+  "023270adb0d0": {
+   "scene": "Frontier",
+   "en": "Predictions can also guide an online decision. <bookmark mark='a'/> In discrete ski rental, buying costs B and each rental day costs one. If the forecast is at least B, buy at the start of day ceiling lambda B; otherwise use day ceiling B over lambda. Lambda lies above zero and at most one. <bookmark mark='b'/> The literature's one plus lambda consistency and one plus one over lambda robustness are upper bounds. Our table gives the tighter exact discrete worst case, attained at one of the two buy-day witnesses. <bookmark mark='c'/> With B ten and lambda one tenth, a short forecast and a hundred-day season cost a hundred and nine against optimum ten: ratio ten point nine. Synthetic Gaussian forecast experiments provide means, not worst-case proofs or trained-model performance. <bookmark mark='d'/> This deterministic policy illustrates the tradeoff studied by Purohit, Svitkina and Kumar. A forecast can help, while the guarantee must cover forecasts that are completely wrong.",
+   "zh": "预测也能指导在线决策。<bookmark mark='a'/>离散滑雪租赁中，购买花费 B，每天租金一。预测不少于 B 时，在 lambda B 向上取整那天开始时购买；否则在 B 除以 lambda 向上取整那天购买。Lambda 大于零且不超过一。<bookmark mark='b'/>文献中的一加 lambda 一致性和一加 lambda 倒数稳健性是上界。表中给出更紧的离散精确最坏比值，由两个购买日见证之一达到。<bookmark mark='c'/>当 B 为十、lambda 为十分之一，短季预测遇上一百天季节，花费一百零九，最优花费十，比值十点九。合成高斯预测实验给出均值，不是最坏情况证明，也不是训练模型的表现。<bookmark mark='d'/>这个确定性策略展示 Purohit、Svitkina 与 Kumar 研究的权衡：预测可以有帮助，但保证必须覆盖完全错误的预测。"
+  },
+  "259d860c8d30": {
+   "scene": "Frontier",
+   "en": "Cost models describe selected resources. <bookmark mark='a'/> Our four searches share a lower-bound specification while performing different scalar comparisons, vector work and memory accesses. <bookmark mark='b'/> The word-RAM model counts bounded-width operations under its assumptions, not elapsed host nanoseconds. <bookmark mark='c'/> External-memory analysis instead counts transfers between memory levels with a specified block size and capacity. <bookmark mark='d'/> In an ideal-cache model, suitable cache-oblivious search layouts can achieve logarithmic-in-block-base transfer bounds without encoding the block size. Optimality requires the model's cache, block and problem assumptions; it is not a blanket statement about every real cache. <bookmark mark='e'/> Prefetching, SIMD, branches and shared-host interference call for additional modeling or controlled experiments. The research task is to specify a useful model and test its predictions on held-out workloads.",
+   "zh": "代价模型描述选定的资源。<bookmark mark='a'/>四种查找共享下界规范，却执行不同的标量比较、向量工作和内存访问。<bookmark mark='b'/>机器字 RAM 模型在其假设下计数定宽操作，不计主机上的墙钟纳秒。<bookmark mark='c'/>外存分析则在明确块大小和容量下，统计内存层级之间的传输。<bookmark mark='d'/>理想缓存模型中，合适的缓存无关搜索布局可以在不编码块大小的前提下，达到以块大小为底的对数传输界。最优性需要该模型的缓存、块和问题假设，并不是对所有真实缓存的笼统结论。<bookmark mark='e'/>预取、向量指令、分支和共享主机干扰需要额外建模或受控实验。研究任务是明确有用模型，再在留出的负载上检验预测。"
+  },
+  "163f87849866": {
+   "scene": "Frontier",
+   "en": "Here are three concrete research directions. <bookmark mark='a'/> Specify a cost model and evaluate whether it ranks unseen implementations and workloads. <bookmark mark='b'/> Dynamic learned indexes with worst-case guarantees already exist, including the PGM work. Reproduce an existing baseline before asking a narrower question about update patterns, adversarial keys or resource tradeoffs. <bookmark mark='c'/> For the segment experiment, separate a finite corpus fit from the probabilistic theorem. Under positive independent identically distributed gaps with finite nonzero variance, the paper analyzes a fixed-slope mean-exit-time construction in a suitable large-epsilon regime. Our anchored greedy fit is a different procedure. <bookmark mark='d'/> First reproduce that baseline on generated independent gaps. Then compare real, shuffled and correlated gaps across scales and seeds. A slope through a few corpus points is a descriptive statistic, not a new asymptotic law or a contradiction of the theorem.",
+   "zh": "这里有三个具体研究方向。<bookmark mark='a'/>明确一个代价模型，评估它能否排列未见过的实现和负载。<bookmark mark='b'/>具有最坏保证的动态学习索引已经存在，包括 PGM 工作。先复现已有基线，再提出关于更新模式、对抗键或资源权衡的更窄问题。<bookmark mark='c'/>分段实验应区分有限语料拟合与概率定理。对正的独立同分布间隔，在方差有限且非零等条件下，论文在适当的大误差参数区间分析固定斜率的平均退出时间构造；这里的锚定贪心拟合是不同程序。<bookmark mark='d'/>先在生成的独立间隔上复现基线，再跨尺度与种子比较真实、打乱和相关间隔。少数语料点拟合的斜率只是描述统计，不是新的渐近定律，也不构成对定理的反驳。"
+  },
+  "66857a142462": {
+   "scene": "Outro",
+   "en": "What we built in this part. Prefix sums, difference arrays and integral images; Fenwick and segment trees with explicit range contracts; static range minima and rooted-tree ancestors; monotone frontiers and answer search; word packing and exponential-search reductions. We then measured concrete native implementations with retained sources, raw trials and complete output checks. Their timings describe this workload and host. The Job's measured comparison and the modeled Pebble ledger remain separate kinds of evidence.",
+   "zh": "本部分搭建了前缀和、差分数组与积分图，带明确区间约定的 Fenwick 树与线段树，静态区间最小值与有根树祖先，单调边界与答案搜索，机器字打包以及指数搜索的降阶。之后测量具体原生实现，保留源程序、原始试验和完整输出检查。耗时描述这个负载和这台主机。Job 的实测比较与 Pebble 模型账本，仍然是两类不同证据。"
+  },
+  "ce67710cfe94": {
+   "scene": "Outro",
+   "en": "Where this comes back. Database indexes and query engines use tree layouts, bitmaps and vector batches. Version-control histories require ancestor reasoning on directed acyclic graphs. Search engines intersect posting lists and decode compressed values with SIMD. Systems work studies latency distributions under load, which calls for a sampling plan and controlled comparisons. The roofline model later relates arithmetic intensity to resource ceilings under stated assumptions. Together these topics show why choosing an operation count, memory model or empirical benchmark depends on the question.",
+   "zh": "这些思想还会出现在哪里？数据库索引和查询引擎使用树布局、位图与向量批次；版本控制历史需要有向无环图上的祖先推理；搜索引擎求倒排表交集并以向量指令解码压缩值；系统工作研究负载下的延迟分布，需要抽样方案和受控比较；后面的屋顶线模型在明确假设下把算术强度与资源上限联系起来。这些主题共同说明：选择操作计数、内存模型或实测基准，要取决于所问的问题。"
+  },
+  "c78de46b403b": {
+   "scene": "Outro",
+   "en": "In practice. Interviews test the patterns of chapter thirteen, with their costs and edge cases. Databases and search engines are built from B-plus trees, bitmaps, galloping intersections and vector scans. Games and exchanges keep leaderboards and order books in Fenwick and segment trees. And performance work on a hot path starts with a profiler and an honest benchmark, and usually ends with a better memory layout.",
+   "zh": "在实践中。面试考第13章的那些模式，以及它们的代价和边界情况。数据库和搜索引擎由 B+ 树、位图、倍增求交和向量扫描构成。游戏和交易所用 Fenwick 树和线段树维护排行榜和订单簿。而热路径上的性能优化，从性能剖析器和诚实的基准测试开始，通常以更好的内存布局结束。"
+  },
+  "228fd6440bb7": {
+   "scene": "Outro",
+   "en": "Six exercises have worked guidance in the notes. Pause to attempt one before reading its solution. The fifth asks for a bounded Fenwick design for Pebble: specify the vocabulary size, word-length limits and counter width before implementation. The notes include an independently checked arithmetic trace; they do not claim that a new Pebble port was executed. The last exercise is an experimental research plan. Reproduce the cited independent-gap baseline before interpreting a finite corpus slope, and record negative results as well as matches.",
+   "zh": "笔记中给出六道习题的解答指导，阅读之前可以暂停尝试。第五题要求为 Pebble 设计有界 Fenwick 结构：实现前明确词表大小、词长限制和计数位宽。笔记包含独立检查的算术轨迹，不声称已经执行新的 Pebble 移植。最后一题是实验研究计划：先复现引用的独立间隔基线，再解释有限语料斜率，同时记录不一致结果与一致结果。"
+  },
+  "b0777746700d": {
+   "scene": "Outro",
+   "en": "Next time, Act Five begins, with limits. Part 1 proved that one problem cannot be solved. Part 25 finds the same impossibility everywhere: in every non-trivial question about what programs do, in equations over the integers, in tilings of the plane, and in Gödel's theorem, all from the fact that a program can print its own source. And the busy beaver marks the place where proof itself runs out. Part 25, Undecidable.",
+   "zh": "下一次，第五幕开始，讲的是极限。第1部分证明了有一个问题无法解决。第25部分会在各处发现同样的不可能性：在关于程序行为的每个非平凡问题中，在整数上的方程中，在平面的铺砌中，在哥德尔定理中，而这一切都源于一个程序能打印出自己的源代码。忙碌海狸则标出了证明本身走到尽头的地方。第25部分，不可判定。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分所依据的书和论文都在屏幕上，也在笔记里。感谢观看。"
+  }
+ }
+}

@@ -1,0 +1,461 @@
+{
+ "title": "计算机科学，从零搭建 · 第37部分：网络（二）：可靠的对话",
+ "chapters": {
+  "Hook": "来自法兰克福的三十部小说",
+  "Transport": "1. 传输问题",
+  "Rdt": "2. 从零开始的可靠性",
+  "Windows": "3. 滑动窗口",
+  "Tcp": "4. TCP",
+  "Rtt": "5. 会学习的定时器",
+  "Collapse": "6. 拥塞崩溃",
+  "Aimd": "7. AIMD",
+  "Mathis": "8. Mathis 公式",
+  "Buffers": "9. 队列",
+  "Modern": "10. 现代拥塞控制",
+  "Num": "11. 作为优化的 TCP",
+  "Dns": "12. 名字",
+  "Web": "13. 网页的传输",
+  "Cdn": "14. 边缘的缓存",
+  "OurTcp": "15. 经由我们的 TCP 取来的小说",
+  "Frontier": "16. 前沿：拥塞控制能公平吗？",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "b67f32a4fd5e": {
+   "scene": "Hook",
+   "en": "The thirty novels we have been counting all series live, this time, on a server in Frankfurt. Pebble 1, in San Francisco, fetches them: twenty-five megabytes, seventeen thousand packets, across a path with a round trip of a hundred and eight milliseconds and a hundred megabits a second to spare. <bookmark mark='a'/> The path is not perfect. One packet in a thousand is lost on the way, and IP, as we saw last time, does nothing about it. <bookmark mark='b'/> Our TCP fetches them three times, with three different rules for how fast to send. Reno, the rule of 1990, takes thirty-five seconds. CUBIC, the default on Linux, twenty-four. BBR, Google's rule of 2016, three. <bookmark mark='c'/> The physics allows two point two: the bytes at a hundred megabits a second, plus the round trips to ask. <bookmark mark='d'/> Same bytes, same link, same losses. Why is one rule eleven times slower than another? And how does anything arrive complete and in order at all, over a network that loses, reorders and duplicates packets?",
+   "zh": "我们整个系列都在统计的那三十部小说，这一次存放在法兰克福的一台服务器上。旧金山的 Pebble 1 去取它们：二十五兆字节，一万七千个分组，路径的往返时间是一百零八毫秒，还有每秒一百兆比特的余量可用。<bookmark mark='a'/>这条路径并不完美。每一千个分组里就有一个在途中丢失，而 IP，正如我们上次看到的，对此什么也不做。<bookmark mark='b'/>我们的 TCP 把它们取了三次，用三种不同的规则决定发送多快。Reno，1990 年的规则，用了三十五秒。CUBIC，Linux 上的默认规则，二十四秒。BBR，Google 2016 年的规则，三秒。<bookmark mark='c'/>物理允许的极限是二点二秒：以每秒一百兆比特传完这些字节，再加上发出请求所需的往返。<bookmark mark='d'/>同样的字节，同样的链路，同样的丢失。为什么一种规则比另一种慢十一倍？而在一个会丢失、重排、复制分组的网络上，任何东西又是怎么完整、按序地到达的？"
+  },
+  "f0cc07c79b60": {
+   "scene": "Hook",
+   "en": "Here is what each did. The height is each sender's window, the most packets it allows in flight, sent but not yet acknowledged, on a logarithmic scale. To keep a hundred megabits a second busy across a hundred and eight milliseconds, about nine hundred packets must be in flight at once: the pipe. <bookmark mark='a'/> Reno climbs toward it, one packet per round trip, and halves its window at every loss. With one loss in a thousand packets it never gets close. <bookmark mark='b'/> CUBIC climbs faster, along a cubic curve. <bookmark mark='c'/> BBR ignores the losses altogether. It measures the pipe, fills it, and stays there. Each of these is a theory of what a lost packet means, and this part builds all of them.",
+   "zh": "下面是它们各自的表现。高度是每个发送方的窗口，也就是它允许在途的最多分组数：已发送但尚未被确认，用对数刻度表示。要让每秒一百兆比特的链路在一百零八毫秒的往返里一直忙着，大约需要九百个分组同时在途：这就是管道。<bookmark mark='a'/>Reno 朝它爬升，每个往返加一个分组，每次丢失就把窗口减半。在每一千个分组丢一个的情况下，它永远接近不了。<bookmark mark='b'/>CUBIC 爬得更快，沿着一条三次曲线。<bookmark mark='c'/>BBR 完全不理会丢失。它测量管道，把它填满，然后待在那里。每一种都是关于“丢了一个分组意味着什么”的一套理论，而这一部分会把它们全部搭建出来。"
+  },
+  "671e5b9982a1": {
+   "scene": "Hook",
+   "en": "This is Part 37 of Computer Science, Built: Networks, reliable conversation. <bookmark mark='a'/> We build reliable delivery from nothing, prove how many sequence numbers it needs, and then build TCP: its handshake, its acknowledgements, and timers that learn the round trip. We reproduce the collapse of October 1986, when the Internet's throughput fell a thousandfold, and the cure, additive increase and multiplicative decrease, which we prove fair. We derive the throughput of a TCP flow from its loss rate, watch queues swell, and meet CUBIC and BBR, and the theorem that TCP is quietly solving an optimization problem. Then we climb: names, the web, and caches.",
+   "zh": "这是计算机科学，从零搭建，第37部分：网络，可靠的对话。<bookmark mark='a'/>我们从零搭建可靠传输，证明它需要多少个序列号，然后搭建 TCP：它的握手，它的确认，以及能学会往返时间的计时器。我们重现 1986 年十月的那次崩溃，当时互联网的吞吐量跌了一千倍；还有它的解药，加性增、乘性减，我们会证明它是公平的。我们从丢失率推导出一条 TCP 流的吞吐量，看着队列膨胀，认识 CUBIC 和 BBR，以及那条定理：TCP 其实在悄悄地求解一个优化问题。然后我们往上爬：名字，网页，以及缓存。"
+  },
+  "343a6df888aa": {
+   "scene": "Transport",
+   "en": "Chapter one. The transport problem.",
+   "zh": "第一章。传输问题。"
+  },
+  "c15281a61727": {
+   "scene": "Transport",
+   "en": "Send ten thousand numbered datagrams across a channel like the Internet: one percent loss, an occasional duplicate, and a few packets held back in a queue while later ones overtake them. <bookmark mark='a'/> These are the first twenty to arrive. Twelve has been overtaken by seven others. <bookmark mark='b'/> Of ten thousand, a hundred and nine never arrive, eighteen arrive twice, and two hundred and eighty-four arrive after a packet sent later. <bookmark mark='c'/> This is all IP promises: best effort. Queues overflow and drop; a corrupted frame fails its CRC and is thrown away; routes change in the middle of a transfer; a radio resends a frame whose acknowledgement it missed. <bookmark mark='d'/> A program reading a file, or a web page, wants something else entirely: a stream of bytes, every one of them, exactly once, in order. Building that on top of this is the transport layer's job.",
+   "zh": "在一个像互联网那样的信道上发送一万个编了号的数据报：百分之一的丢失，偶尔的重复，还有少数分组被扣在某个队列里，让后发的分组超过去。<bookmark mark='a'/>这是最先到达的二十个。十二号被另外七个分组超了过去。<bookmark mark='b'/>一万个里，一百零九个始终没有到达，十八个到了两次，两百八十四个比一个后发的分组到得还晚。<bookmark mark='c'/>这就是 IP 承诺的全部：尽力而为。队列溢出就丢弃；损坏的帧通不过 CRC 校验，被扔掉；路由在传输中途改变；无线电漏收了某一帧的确认，就把那一帧再发一遍。<bookmark mark='d'/>一个读文件或者读网页的程序，想要的是完全不同的东西：一个字节流，每个字节都在，恰好一次，按顺序。在这之上把它建出来，就是传输层的工作。"
+  },
+  "038481bbcab2": {
+   "scene": "Transport",
+   "en": "First, the simplest thing a transport adds. An IP address names a machine, but a machine runs many programs. <bookmark mark='a'/> A port number, sixteen bits, names the program: four four three for a web server, fifty-three for names, twenty-two for remote logins. The operating system reads the port and hands the data to whichever program is listening. <bookmark mark='b'/> A conversation is then named by four numbers: both addresses and both ports. Your browser picks a fresh source port for each connection, so many tabs can talk to the same server without confusion. <bookmark mark='c'/> UDP, David Reed and Jon Postel's user datagram protocol of 1980, adds exactly this and a checksum: eight bytes of header and no promises. It is what DNS, video calls and games use, and, as we will see at the end, what the newest web protocol is built on.",
+   "zh": "先看传输层添加的最简单的东西。IP 地址命名一台机器，但一台机器上运行着许多程序。<bookmark mark='a'/>端口号，十六位，命名的是程序：网页服务器是四四三，域名服务是五十三，远程登录是二十二。操作系统读出端口，把数据交给正在监听它的那个程序。<bookmark mark='b'/>于是一次对话由四个数命名：两个地址和两个端口。你的浏览器为每个连接挑一个新的源端口，所以许多标签页可以和同一台服务器交谈而不会混淆。<bookmark mark='c'/>UDP，David Reed 和 Jon Postel 在 1980 年提出的用户数据报协议，恰好只加了这个，外加一个校验和：八个字节的头部，没有任何承诺。DNS、视频通话和游戏用的就是它；而且我们在最后会看到，最新的网页协议也建立在它之上。"
+  },
+  "51939b83cd55": {
+   "scene": "Transport",
+   "en": "TCP, the transmission control protocol, makes the other contract. Every byte arrives, or the program is told the connection failed. Bytes come out in the order they went in, each exactly once. There are no messages, only a stream. <bookmark mark='a'/> It costs a handshake before any data flows, twenty bytes of header on every packet, and a sender that sometimes waits when it could send. <bookmark mark='b'/> And notice who keeps these promises: only the two computers at the ends. The routers in between know nothing about the conversation, exactly as the end-to-end argument of the last part said they should not. Everything in the next three chapters happens inside two machines, talking through a network that will not help.",
+   "zh": "TCP，传输控制协议，订立的是另一份契约。每个字节都会到达，否则程序会被告知连接失败。字节按进去的顺序出来，每个恰好一次。没有消息，只有一个流。<bookmark mark='a'/>它的代价是：数据流动之前要先握手，每个分组都带二十个字节的头部，还有一个本可以发送、有时却在等待的发送方。<bookmark mark='b'/>再注意是谁在兑现这些承诺：只有两端的两台计算机。中间的路由器对这次对话一无所知，正如上一部分的端到端论证所说，它们本就不该知道。接下来三章里的一切，都发生在两台机器内部，它们隔着一个不肯帮忙的网络交谈。"
+  },
+  "f5a1710d40c1": {
+   "scene": "Rdt",
+   "en": "Chapter two. Reliability from scratch.",
+   "zh": "第二章。从零开始的可靠性。"
+  },
+  "9cb2e725c96f": {
+   "scene": "Rdt",
+   "en": "The simplest protocol that could possibly work. The sender sends one packet and starts a timer. <bookmark mark='a'/> The receiver, on getting a packet, sends back an acknowledgement, an ACK. When the ACK arrives, the sender sends the next packet. <bookmark mark='b'/> If a packet is lost, no ACK comes. <bookmark mark='c'/> The timer expires, and the sender sends the same packet again. <bookmark mark='d'/> Corruption needs no separate treatment: a checksum detects it, and a corrupted packet is thrown away, so it becomes a loss. Loss is the only failure left. Retransmission handles it, as long as the channel delivers something eventually.",
+   "zh": "能行得通的最简单的协议。发送方发出一个分组，并启动一个计时器。<bookmark mark='a'/>接收方收到分组后，回送一个确认，也就是 ACK。ACK 到达时，发送方发送下一个分组。<bookmark mark='b'/>如果一个分组丢了，就不会有 ACK 回来。<bookmark mark='c'/>计时器到期，发送方把同一个分组再发一遍。<bookmark mark='d'/>损坏不需要单独处理：校验和能检测出它，损坏的分组被扔掉，于是它就变成了一次丢失。丢失是剩下的唯一故障。只要信道最终总能送达一些东西，重传就能处理它。"
+  },
+  "52bf38630867": {
+   "scene": "Rdt",
+   "en": "ACKs can be lost too. <bookmark mark='a'/> Here the packet arrives, but its ACK does not. The sender's timer expires, and it sends the packet again. <bookmark mark='b'/> To the receiver, this looks exactly like the next packet. Without more information it delivers the same data twice. <bookmark mark='c'/> The fix is to number the packets. With stop-and-wait, the receiver is only ever unsure between the packet it just got and the next one, so a single bit is enough: packets are numbered zero, one, zero, one. This is the alternating-bit protocol, published in 1969 by Bartlett, Scantlebury and Wilkinson at Britain's National Physical Laboratory. <bookmark mark='d'/> The receiver acknowledges the bit it received, and passes a packet up only if its bit is the one expected next. <bookmark mark='e'/> We tested it: twenty runs of five hundred packets, losing one packet or ACK in ten. Every run delivered exactly zero to four hundred ninety-nine, once each, in order.",
+   "zh": "ACK 也可能丢。<bookmark mark='a'/>这里分组到达了，但它的 ACK 没有。发送方的计时器到期，于是它再次发送这个分组。<bookmark mark='b'/>在接收方看来，这和下一个分组一模一样。没有更多信息，它就会把同样的数据交付两次。<bookmark mark='c'/>解决办法是给分组编号。在停等协议中，接收方只会在刚收到的分组和下一个分组之间拿不准，所以一个比特就够了：分组依次编号为零、一、零、一。这就是交替位协议，由英国国家物理实验室的 Bartlett、Scantlebury 和 Wilkinson 于 1969 年发表。<bookmark mark='d'/>接收方确认它收到的那个比特，并且只有当分组的比特正是它期待的下一个时，才把分组往上交。<bookmark mark='e'/>我们测试了它：二十次运行，每次五百个分组，每十个分组或 ACK 丢一个。每一次运行都恰好交付了零到四百九十九，每个一次，按顺序。"
+  },
+  "9c07601539ee": {
+   "scene": "Rdt",
+   "en": "That proof of correctness assumed something the Internet does not give: that packets arrive in the order they were sent. <bookmark mark='a'/> Suppose an old copy of a packet with bit zero is delayed in some queue. Meanwhile the conversation moves on, and the receiver comes to expect bit zero again. The old copy arrives, carries the right bit, and is delivered as new data. <bookmark mark='b'/> We repeated the test with one packet in five delayed. Not one run of twenty was correct; the first went wrong at position eight, delivering packet six a second time. <bookmark mark='c'/> One bit is enough on a wire, never on a network of queues. <bookmark mark='d'/> The cure is many sequence numbers, enough that a number is reused only after any old packet carrying it must be dead. TCP numbers bytes with thirty-two bits, and IP's time-to-live bounds how long a packet can wander.",
+   "zh": "那个正确性证明假设了一件互联网并不提供的事：分组按发送的顺序到达。<bookmark mark='a'/>假设一个比特为零的分组，它的一个旧副本被耽搁在某个队列里。与此同时对话继续进行，接收方又开始期待比特零。旧副本到了，带着正确的比特，被当作新数据交付。<bookmark mark='b'/>我们让五分之一的分组被延迟，重复了这个测试。二十次运行，没有一次正确；第一次在第八个位置出错，把六号分组又交付了一遍。<bookmark mark='c'/>一个比特在一根导线上够用，在一个由队列组成的网络上永远不够。<bookmark mark='d'/>解药是很多个序列号，多到一个号码只有在任何携带它的旧分组都必然已经消亡之后，才会被重用。TCP 用三十二位给字节编号，而 IP 的生存时间限定了一个分组能游荡多久。"
+  },
+  "1c2436ac669d": {
+   "scene": "Rdt",
+   "en": "Stop-and-wait is correct, and hopeless. <bookmark mark='a'/> Call the packet length L and the link rate R. Sending takes L over R; then the sender sits idle for a whole round trip, waiting. The fraction of time the link is busy is L over R, divided by the round trip plus L over R. <bookmark mark='b'/> Our simulator agrees with the formula to four digits, at every link speed: one tenth, one hundredth, one thousandth. The faster the link, the worse it gets. <bookmark mark='c'/> Across the Atlantic at a gigabit a second, a packet takes twelve microseconds to send and a hundred and eight milliseconds to acknowledge. Stop-and-wait uses a hundredth of a percent of the link: a tenth of a megabit, out of a thousand. <bookmark mark='d'/> The only way out is not to wait: keep many packets in flight at once.",
+   "zh": "停等协议是正确的，也是无望的。<bookmark mark='a'/>记分组长度为 L，链路速率为 R。发送需要 L 除以 R 的时间；然后发送方要闲坐整整一个往返，等待。链路忙碌的时间比例，是 L 除以 R，再除以往返时间加上 L 除以 R。<bookmark mark='b'/>我们的模拟器在每一种链路速度下都和公式吻合到四位数字：十分之一，百分之一，千分之一。链路越快，情况越糟。<bookmark mark='c'/>横跨大西洋，每秒一吉比特，一个分组发送只需十二微秒，确认却要一百零八毫秒。停等协议只用了链路的万分之一：一千兆比特里，只用了零点一兆比特。<bookmark mark='d'/>唯一的出路是不等待：同时让许多分组在途。"
+  },
+  "3686d9bd7efa": {
+   "scene": "Windows",
+   "en": "Chapter three. Sliding windows.",
+   "zh": "第三章。滑动窗口。"
+  },
+  "d6c382bd242c": {
+   "scene": "Windows",
+   "en": "Instead of one packet at a time, allow W packets to be sent and not yet acknowledged: a window over the stream. <bookmark mark='a'/> The sender sends the first six and waits. As ACKs come back for zero, one and two, the window slides forward, and six, seven and eight go out. A steady stream of ACKs clocks out a steady stream of packets. <bookmark mark='b'/> In a round trip the sender now transmits W packets instead of one, so the utilization is W times larger, until it reaches one. <bookmark mark='c'/> To fill the pipe, the window must cover a whole round trip of sending: the bandwidth-delay product of the last part. Across the Atlantic at a gigabit a second, that is nine thousand packets in flight.",
+   "zh": "不再一次一个分组，而是允许 W 个分组已发送而尚未确认：在流上开一个窗口。<bookmark mark='a'/>发送方发出前六个，然后等待。随着零、一、二的 ACK 回来，窗口向前滑动，六、七、八被发了出去。稳定的 ACK 流，驱动着稳定的分组流。<bookmark mark='b'/>现在一个往返里发送方发出 W 个分组而不是一个，所以利用率大了 W 倍，直到达到一。<bookmark mark='c'/>要填满管道，窗口必须覆盖整整一个往返的发送量：也就是上一部分的带宽时延积。横跨大西洋，每秒一吉比特，那就是九千个分组同时在途。"
+  },
+  "c3e0befed1f1": {
+   "scene": "Windows",
+   "en": "With many packets in flight, what happens when one is lost? There are two classic answers. <bookmark mark='a'/> Go-Back-N keeps the receiver simple. It accepts only the next packet in order and discards anything after a gap, acknowledging, again and again, everything up to the last good packet. When the sender's timer expires, it goes back and resends the lost packet and every packet after it. <bookmark mark='b'/> Selective Repeat makes the receiver work harder. It buffers packets that arrive after a gap, and acknowledges each one individually. The sender resends only the packet that was lost, and when it arrives, the receiver delivers the whole run at once. TCP began close to Go-Back-N and has moved, with selective acknowledgements, to Selective Repeat.",
+   "zh": "有许多分组在途时，丢了一个会怎样？有两种经典的回答。<bookmark mark='a'/>回退N让接收方保持简单。它只接受按序的下一个分组，丢弃缺口之后的一切，并一遍又一遍地确认截至最后一个完好分组的全部内容。发送方的计时器到期时，它就回退，重发丢失的分组以及之后的每一个分组。<bookmark mark='b'/>选择重传让接收方多干些活。它把缺口之后到达的分组缓存起来，并逐个确认。发送方只重发丢失的那个分组，等它到达，接收方就把整段一次交付。TCP 起初接近回退N，后来借助选择确认，转向了选择重传。"
+  },
+  "6c7aa87763c2": {
+   "scene": "Windows",
+   "en": "We measured both, on a channel with a hundred-millisecond round trip and a thousand packets a second. <bookmark mark='a'/> With no loss, both follow the formula exactly: utilization doubles with the window, until a hundred and twenty-eight packets fill the pipe. <bookmark mark='b'/> With two percent loss, Go-Back-N falls apart as the window grows. Every loss throws away a window's worth of good packets: at a window of a hundred and twenty-eight it sends nearly five thousand retransmissions for two thousand packets. <bookmark mark='c'/> Selective Repeat resends only what was lost, eighty-eight packets, and does three times better. But both still stall for a whole timeout after each loss, waiting to be sure. TCP's answer, fast retransmit, will be to treat a few later ACKs as evidence of a loss, without waiting for the timer.",
+   "zh": "我们在一个往返一百毫秒、每秒一千个分组的信道上测量了两者。<bookmark mark='a'/>没有丢失时，两者都和公式完全一致：窗口翻倍，利用率就翻倍，直到一百二十八个分组填满管道。<bookmark mark='b'/>有百分之二的丢失时，随着窗口增大，回退N就垮了。每一次丢失都要扔掉一整个窗口的好分组：在窗口为一百二十八时，为了两千个分组，它发了将近五千次重传。<bookmark mark='c'/>选择重传只重发丢掉的，八十八个分组，表现好了三倍。但两者在每次丢失后都仍然要停顿整整一个超时，等着确定真的丢了。TCP 的回答，快速重传，将会把几个后来的 ACK 当作丢失的证据，而不必等计时器。"
+  },
+  "7cb7118c8453": {
+   "scene": "Windows",
+   "en": "With a window, how many sequence numbers are enough? With numbers taken modulo S, Go-Back-N is correct exactly when the window is at most S minus one, and Selective Repeat exactly when it is at most half of S. <bookmark mark='a'/> Here is why half. Suppose the receiver has just accepted packets zero to W minus one, and moved its window on to W through two W minus one, but every one of its ACKs was lost. <bookmark mark='b'/> The sender, hearing nothing, resends packet zero. If two W is more than S, the number zero is the same as S, which is inside the receiver's new window, and the receiver accepts an old packet as new data. <bookmark mark='c'/> If two W is at most S, what the sender might send and what the receiver might expect never share a number, so nothing is misclassified. Go-Back-N's receiver expects only one packet, which gives W plus one at most S. <bookmark mark='d'/> We tested the edges with three-bit numbers, S equal to eight, ten runs each. Go-Back-N with seven: always correct; with eight: never. Selective Repeat with four: always; with five: never. The bound is exact.",
+   "zh": "有了窗口，多少个序列号才够？序列号取模 S 时，回退N正确，当且仅当窗口至多为 S 减一；选择重传正确，当且仅当窗口至多为 S 的一半。<bookmark mark='a'/>下面说明为什么是一半。假设接收方刚刚接受了零到 W 减一号分组，把窗口移到了 W 到二 W 减一，但它的每一个 ACK 都丢了。<bookmark mark='b'/>发送方什么也没听到，于是重发零号分组。如果二 W 大于 S，号码零就和 S 相同，而 S 落在接收方的新窗口里，于是接收方把一个旧分组当作新数据接受了。<bookmark mark='c'/>如果二 W 至多为 S，发送方可能发送的号码和接收方可能期待的号码就永远不会重叠，于是什么都不会被误判。回退N的接收方只期待一个分组，这就给出 W 加一至多为 S。<bookmark mark='d'/>我们用三位的序列号，也就是 S 等于八，测试了边界，每种运行十次。回退N窗口为七：总是正确；为八：从不正确。选择重传窗口为四：总是正确；为五：从不正确。这个界是精确的。"
+  },
+  "05cf873bdb3e": {
+   "scene": "Tcp",
+   "en": "Chapter four. TCP.",
+   "zh": "第四章。TCP。"
+  },
+  "46043ab1222c": {
+   "scene": "Tcp",
+   "en": "TCP is those ideas, engineered. Its header is twenty bytes. <bookmark mark='a'/> The ports, as in UDP. Then a thirty-two-bit sequence number, which counts bytes, not packets: the position in the stream of this segment's first byte. <bookmark mark='b'/> The acknowledgement number is cumulative: it names the next byte the receiver expects, which says everything before it has arrived. An option, selective acknowledgement, adds the blocks received beyond a gap, which gives the sender Selective Repeat's information. <bookmark mark='c'/> Flags open, acknowledge, close and reset connections, and the window field says how much more the receiver can buffer. <bookmark mark='d'/> A connection carries data both ways at once, so every segment can carry data in one direction and an acknowledgement for the other.",
+   "zh": "TCP 就是把这些想法工程化。它的头部有二十个字节。<bookmark mark='a'/>端口，和 UDP 一样。然后是一个三十二位的序列号，它数的是字节而不是分组：这个报文段的第一个字节在流中的位置。<bookmark mark='b'/>确认号是累积的：它指出接收方期待的下一个字节，也就说明了此前的一切都已到达。一个选项，选择确认，补充缺口之后已收到的数据块，这就给了发送方选择重传所需的信息。<bookmark mark='c'/>标志位用来打开、确认、关闭和重置连接，窗口字段则说明接收方还能再缓存多少。<bookmark mark='d'/>一个连接同时双向传送数据，所以每个报文段都能在一个方向上携带数据，同时为另一个方向携带确认。"
+  },
+  "b32ddab0b6ce": {
+   "scene": "Tcp",
+   "en": "Before any data, the two ends must agree on where each stream starts. <bookmark mark='a'/> The client sends a segment with the SYN flag and its initial sequence number, x. <bookmark mark='b'/> The server replies with its own SYN, its own number y, and an acknowledgement of x plus one. <bookmark mark='c'/> The client acknowledges y plus one, and can send its request in the same segment. <bookmark mark='d'/> Each initial number is chosen at random, so that a delayed segment from an earlier connection between the same ports, or one forged by someone who cannot see the traffic, is unlikely to fall inside the window. <bookmark mark='e'/> The cost is time. The response's first byte arrives two round trips after the SYN was sent: two hundred and sixteen milliseconds to Frankfurt, before any encryption is set up. The last chapter of this part is about removing those round trips.",
+   "zh": "在任何数据之前，两端必须就每个流从哪里开始达成一致。<bookmark mark='a'/>客户端发送一个报文段，带着 SYN 标志和它的初始序列号 x。<bookmark mark='b'/>服务器回复它自己的 SYN、它自己的号码 y，以及对 x 加一的确认。<bookmark mark='c'/>客户端确认 y 加一，并且可以在同一个报文段里发出它的请求。<bookmark mark='d'/>每个初始号码都是随机选的，这样，同样两个端口之间某个早先连接的迟到报文段，或者一个看不到流量的人伪造的报文段，就不太可能落进窗口里。<bookmark mark='e'/>代价是时间。响应的第一个字节在 SYN 发出两个往返之后才到达：到法兰克福是两百一十六毫秒，而这还没算上建立加密。这一部分的最后一章，讲的就是如何去掉这些往返。"
+  },
+  "3dfe89af39f2": {
+   "scene": "Tcp",
+   "en": "The handshake has a weakness, exploited in 1996 against internet providers in New York. A server must remember each connection that has sent a SYN but not yet the final ACK. <bookmark mark='a'/> An attacker sends SYNs from forged addresses, which never answer. The table of half-open connections, a few hundred entries, fills in seconds, and real clients are turned away. <bookmark mark='b'/> Dan Bernstein's answer was to remember nothing. The server puts the state it needs into the one number the client must send back: its own initial sequence number. <bookmark mark='c'/> Five bits of the time, three bits for the packet size the client asked for, and twenty-four bits of a keyed hash of the addresses, the ports and the time. Here is one, built the way Linux builds it. <bookmark mark='d'/> When the final ACK comes back carrying this number plus one, the server recomputes the hash. If it matches, the client really received the SYN+ACK, and the connection is created only then. A forger who cannot see the replies cannot guess twenty-four bits.",
+   "zh": "握手有一个弱点，1996 年被人用来攻击纽约的互联网服务商。服务器必须记住每一个已经发来 SYN、但还没发来最后那个 ACK 的连接。<bookmark mark='a'/>攻击者从伪造的地址发送 SYN，这些地址永远不会回答。半开连接的表只有几百个条目，几秒钟就被填满，真正的客户端被拒之门外。<bookmark mark='b'/>Dan Bernstein 的回答是什么都不记。服务器把它需要的状态，放进客户端必须送回的那个号码里：它自己的初始序列号。<bookmark mark='c'/>五位表示时间，三位表示客户端请求的分组大小，二十四位是对地址、端口和时间的带密钥哈希。这里是一个，按 Linux 的方式构造。<bookmark mark='d'/>当最后的 ACK 带着这个号码加一回来时，服务器重新计算哈希。如果匹配，说明客户端确实收到了 SYN+ACK，连接直到这时才被创建。一个看不到回复的伪造者，猜不中二十四位。"
+  },
+  "c4f0aa084f0c": {
+   "scene": "Tcp",
+   "en": "Closing takes four segments, because each direction closes on its own. <bookmark mark='a'/> The client sends FIN: it has no more to say. The server acknowledges, may keep sending, and eventually sends its own FIN, which the client acknowledges. <bookmark mark='b'/> Then the side that closed first does something odd: it waits. For twice the maximum segment lifetime, it keeps the connection's four numbers reserved. If its final ACK was lost, the server will resend its FIN and must get an answer; and any stray segment of this connection must die before a new connection with the same addresses and ports could mistake it for its own. That is the alternating-bit failure again, prevented by time. <bookmark mark='c'/> On Linux the wait is sixty seconds, so a client opening many short connections to one server runs out of port numbers at about five hundred and fifty a second, which is why busy services reuse connections.",
+   "zh": "关闭需要四个报文段，因为每个方向各自关闭。<bookmark mark='a'/>客户端发送 FIN：它没有更多要说的了。服务器确认，可能继续发送，最终发出它自己的 FIN，客户端再确认。<bookmark mark='b'/>然后，先关闭的一方做了一件奇怪的事：它等待。在两倍最大报文段寿命的时间里，它保留着这个连接的四个数。如果它的最后一个 ACK 丢了，服务器会重发 FIN，并且必须得到回答；而这个连接的任何游荡报文段都必须先消亡，否则一个地址和端口都相同的新连接可能会把它误认为自己的。这又是交替位协议的那种失败，这次靠时间来防止。<bookmark mark='c'/>在 Linux 上这段等待是六十秒，所以一个向同一台服务器打开许多短连接的客户端，大约在每秒五百五十个连接时就会耗尽端口号，这就是繁忙的服务要复用连接的原因。"
+  },
+  "3aa555bd9c45": {
+   "scene": "Tcp",
+   "en": "One more thing a sender must respect: the receiver. If the program reading the data is slow, its buffer fills. <bookmark mark='a'/> So every ACK carries the window: how many more bytes the receiver has room for. The sender never has more than that in flight. This is flow control, protecting the receiver. <bookmark mark='b'/> It also caps the speed: at most one window per round trip, whatever the link. The original header gave the window sixteen bits, sixty-four kilobytes, which allows under five megabits a second to Frankfurt. <bookmark mark='c'/> In 1992 an option let both ends scale the window by up to two to the fourteen. A fast transfer across an ocean needs a buffer as large as the bandwidth-delay product: one point three five megabytes at a hundred megabits a second. Protecting the network, rather than the receiver, is the much harder problem, and it is the next three chapters.",
+   "zh": "发送方还必须尊重另一方：接收方。如果读取数据的程序很慢，它的缓冲区就会填满。<bookmark mark='a'/>所以每个 ACK 都携带窗口：接收方还有多少字节的空间。发送方在途的数据从不超过这个数。这就是流量控制，保护的是接收方。<bookmark mark='b'/>它也给速度设了上限：每个往返至多一个窗口，不管链路多快。最初的头部给窗口十六位，也就是六十四千字节，到法兰克福只允许不到每秒五兆比特。<bookmark mark='c'/>1992 年，一个选项让两端可以把窗口放大，最多放大到二的十四次方倍。跨越大洋的快速传输，需要一个和带宽时延积一样大的缓冲区：每秒一百兆比特时是一点三五兆字节。保护网络而不是接收方，是一个难得多的问题，它就是接下来三章的内容。"
+  },
+  "3771afe8f2a4": {
+   "scene": "Rtt",
+   "en": "Chapter five. Timers that learn.",
+   "zh": "第五章。会学习的计时器。"
+  },
+  "f758768999a8": {
+   "scene": "Rtt",
+   "en": "A sender that retransmits must decide how long to wait. Too short, and it resends packets that were only delayed, adding traffic to a network that is already slow. Too long, and every loss costs a long silence. <bookmark mark='a'/> The right wait depends on the round trip, and the round trip is not a constant. Here is one flow from San Francisco to Frankfurt, sharing a bottleneck with five others that join over time. Its round trips start at the hundred and eight milliseconds of light in fibre and climb, as queues build, past three hundred. The timer must learn this, from samples, as it goes.",
+   "zh": "一个会重传的发送方必须决定等多久。太短，它就会重发那些只是被耽搁了的分组，给一个本已很慢的网络增加流量。太长，每一次丢失都要付出一段漫长的沉默。<bookmark mark='a'/>合适的等待时间取决于往返时间，而往返时间并不是常数。这是一条从旧金山到法兰克福的流，它与另外五条随时间陆续加入的流共享一个瓶颈。它的往返时间从光在光纤中走的一百零八毫秒起步，随着队列堆积，一路攀升，超过三百毫秒。计时器必须一边运行，一边从样本中学会这一点。"
+  },
+  "3d57ff3196c8": {
+   "scene": "Rtt",
+   "en": "The original TCP specification kept a smoothed average of the samples, and waited a fixed multiple, beta, of it, with beta between one point three and two. <bookmark mark='a'/> Van Jacobson and Mike Karels, in 1988, also kept a smoothed average of how far each sample strays from the mean, and waited the mean plus four of those deviations. <bookmark mark='b'/> Here are the two timers over our samples. The fixed multiple of two stays far above the samples, all the time. Jacobson's hugs them when they are steady and opens up when they swing. <bookmark mark='c'/> Count the samples that arrived after the timer would have fired, each a needless retransmission. With beta one point three, fifteen. With beta two, none, but it waits almost half a second on average before recovering a real loss. Jacobson's timer fires early once, and waits a third less. Measuring the variance is what makes a timer both safe and quick, and the same estimator still runs in every TCP today.",
+   "zh": "最初的 TCP 规范对样本保持一个平滑平均值，并等待它的一个固定倍数 beta，beta 介于一点三和二之间。<bookmark mark='a'/>1988 年，Van Jacobson 和 Mike Karels 还对每个样本偏离均值的程度保持一个平滑平均，等待的时间是均值加上四倍偏差。<bookmark mark='b'/>这是两种计时器在我们的样本上的表现。固定的两倍始终远远高于样本。Jacobson 的计时器在样本平稳时紧贴着它们，在样本摆动时张开。<bookmark mark='c'/>数一数那些在计时器本该触发之后才到达的样本，每一个都是一次不必要的重传。beta 为一点三时，十五次。beta 为二时，一次也没有，但它在恢复一次真正的丢失之前，平均要等将近半秒。Jacobson 的计时器只过早触发了一次，而等待时间少了三分之一。正是测量方差，让计时器既安全又迅速；同一个估计器至今仍在每一个 TCP 里运行。"
+  },
+  "ff96b7ffb403": {
+   "scene": "Rtt",
+   "en": "One trap remains. <bookmark mark='a'/> A segment is lost, the timer fires, and it is sent again. An ACK arrives. Did it answer the first copy, or the second? If we guess wrong, we measure a round trip that is far too long or far too short. <bookmark mark='b'/> Phil Karn, writing amateur radio packet software, proposed the fix with Craig Partridge in 1987: take no samples from a segment that was retransmitted, and each time the timer fires, double it, until a clean sample arrives. <bookmark mark='c'/> It is Ethernet's exponential backoff once more. A network that keeps failing to answer is asked more and more patiently. <bookmark mark='d'/> Modern TCPs also stamp each segment with the time it was sent, and the receiver echoes the stamp, which removes the ambiguity entirely.",
+   "zh": "还剩一个陷阱。<bookmark mark='a'/>一个报文段丢了，计时器触发，它被再发一次。一个 ACK 到了。它回答的是第一个副本，还是第二个？如果猜错，我们测出的往返时间不是太长，就是太短。<bookmark mark='b'/>Phil Karn 在编写业余无线电分组软件时，和 Craig Partridge 一起在 1987 年提出了解决办法：不从被重传过的报文段取样；而且计时器每触发一次，就把它加倍，直到一个干净的样本到来。<bookmark mark='c'/>这又是以太网的指数退避。一个总是不回答的网络，会被越来越耐心地询问。<bookmark mark='d'/>现代的 TCP 还会给每个报文段打上发送时间的时间戳，接收方回显这个时间戳，这就彻底消除了歧义。"
+  },
+  "08c5e7991145": {
+   "scene": "Collapse",
+   "en": "Chapter six. Congestion collapse.",
+   "zh": "第六章。拥塞崩溃。"
+  },
+  "6b48547d3d8e": {
+   "scene": "Collapse",
+   "en": "In October 1986, the link between the Lawrence Berkeley Laboratory and the University of California at Berkeley, four hundred yards and three routers apart, normally carried thirty-two kilobits a second. <bookmark mark='a'/> Then, for days, it carried forty bits a second. A thousandfold drop, and the links were not idle: they were completely busy. <bookmark mark='b'/> Every TCP of the time sent a full window as fast as the receiver allowed, with no thought for the network in between. Queues in the routers overflowed and dropped packets. Retransmission timers, which did not account for time spent waiting in queues, fired for packets that were only delayed. And the links filled with copies of packets that had not been lost, each one making the queues longer and the next timeouts more likely. John Nagle had predicted this, and named it, two years earlier: congestion collapse.",
+   "zh": "1986 年 10 月，劳伦斯伯克利实验室和加州大学伯克利分校之间的那条链路，两地相距四百码，中间隔着三台路由器，平时每秒能传三十二千比特。<bookmark mark='a'/>后来，一连好几天，它每秒只传四十比特。下降了一千倍，而链路并没有闲着：它们忙得满满当当。<bookmark mark='b'/>当时的每一个 TCP，都以接收方允许的最快速度发出整个窗口，完全不考虑中间的网络。路由器里的队列溢出，丢弃分组。重传定时器没有把分组在队列里等待的时间算进去，于是对那些只是被耽搁了的分组也触发了超时。链路里塞满了并没有丢失的分组的副本，每一个副本都让队列更长，让下一次超时更可能发生。John Nagle 早在两年前就预言了这件事，还给它起了名字：拥塞崩溃。"
+  },
+  "1379aea45464": {
+   "scene": "Collapse",
+   "en": "We can make it happen. Four flows share a two-megabit link, with hundred-millisecond round trips and a queue of thirty packets. <bookmark mark='a'/> Each runs a TCP of 1986: a fixed window, a fixed timer of two hundred milliseconds, and on a timeout, resend everything outstanding. We raise the window and measure the goodput, the rate of new data delivered. <bookmark mark='b'/> While the total window is small, goodput rises with it. Then the windows outgrow the pipe by so much that packets wait in the queue longer than the timer allows: the timers fire, and copies of waiting packets join the queue behind them. <bookmark mark='c'/> Goodput falls off a cliff, to a little over one megabit, while the link stays almost perfectly busy, carrying eleven thousand retransmissions a minute, most of them packets that were never lost. Our collapse is fifty percent, not a thousandfold, because we have one hop, not three, and a gentler timer. <bookmark mark='d'/> Now replace each sender with Jacobson's TCP. Goodput is one point nine four megabits at every load: the link's capacity, minus headers.",
+   "zh": "我们可以让它重现。四条流共享一条每秒两兆比特的链路，往返时间一百毫秒，队列能放三十个分组。<bookmark mark='a'/>每条流运行一个 1986 年的 TCP：固定的窗口，固定的两百毫秒定时器，一旦超时，就把所有还没确认的数据全部重发。我们逐步增大窗口，测量有效吞吐量，也就是新数据被交付的速率。<bookmark mark='b'/>总窗口还小的时候，有效吞吐量随它上升。接着，窗口比管道大出太多，分组在队列里等待的时间超过了定时器允许的长度：定时器触发，正在等待的分组的副本又排到了它们后面。<bookmark mark='c'/>有效吞吐量断崖式下跌，跌到一兆比特多一点，而链路几乎始终满负荷，每分钟承载一万一千次重传，其中大多数分组根本没有丢。我们的崩溃是百分之五十，而不是一千倍，因为我们只有一跳，不是三跳，定时器也温和一些。<bookmark mark='d'/>现在把每个发送方换成 Jacobson 的 TCP。在每一种负荷下，有效吞吐量都是一点九四兆比特：正好是链路的容量，减去头部。"
+  },
+  "b74653d15979": {
+   "scene": "Collapse",
+   "en": "Van Jacobson, at the Berkeley lab, and Mike Karels diagnosed the collapse and published the cure in 1988. The idea is conservation. <bookmark mark='a'/> A connection in equilibrium should put a new packet into the network only when an old one leaves it. <bookmark mark='b'/> An ACK is the evidence that a packet has left, so each ACK releases one new packet. The ACKs return at the rate the bottleneck delivers, so the sender's pace automatically becomes the bottleneck's. <bookmark mark='c'/> Conservation fails if packets are resent while still in the network: hence the timer of the last chapter. <bookmark mark='d'/> And the right amount in flight must be found. A new variable, the congestion window, limits it. In a network of reliable links, a lost packet almost always means some queue overflowed, so a loss halves the window, and each round trip without loss adds one packet. <bookmark mark='e'/> Finally, slow start, to reach equilibrium in the first place.",
+   "zh": "Van Jacobson 当时在伯克利实验室，他和 Mike Karels 诊断出了这次崩溃，并在 1988 年发表了治疗方法。核心思想是守恒。<bookmark mark='a'/>一个处于平衡状态的连接，只有当一个旧分组离开网络时，才应该放进一个新分组。<bookmark mark='b'/>ACK 就是分组已经离开的证据，所以每个 ACK 放行一个新分组。ACK 以瓶颈交付的速率返回，于是发送方的节奏自动变成了瓶颈的节奏。<bookmark mark='c'/>如果分组还在网络里就被重发，守恒就被打破了：这就是上一章那个定时器的用处。<bookmark mark='d'/>此外，还必须找到合适的在途数据量。一个新的变量，拥塞窗口，来限制它。在由可靠链路组成的网络里，丢失一个分组几乎总是意味着某个队列溢出了，所以一次丢失让窗口减半，而每一个没有丢失的往返让窗口增加一个分组。<bookmark mark='e'/>最后是慢启动，用来在一开始就到达平衡。"
+  },
+  "37cc7c658b58": {
+   "scene": "Collapse",
+   "en": "Here is our Reno, alone on a ten-megabit link with a hundred-millisecond round trip, and a buffer as large as the pipe. <bookmark mark='a'/> Slow start is not slow: every ACK adds one packet to the window, so the window doubles each round trip, one, two, four, eight, until a queue overflows. <bookmark mark='b'/> From then on, congestion avoidance. Each ACK adds one over the window, so the window grows by one packet per round trip, a straight line, until the buffer overflows again and the window halves. <bookmark mark='c'/> And Reno does not wait for a timer: when three later packets have been acknowledged and one has not, that one is presumed lost, and is resent at once. This is the sawtooth, the heartbeat of the Internet since 1990. With a buffer of one pipe, the halving never empties the link: utilization is ninety-nine percent.",
+   "zh": "这是我们的 Reno，独自跑在一条每秒十兆比特的链路上，往返时间一百毫秒，缓冲区和管道一样大。<bookmark mark='a'/>慢启动一点也不慢：每个 ACK 给窗口加一个分组，所以窗口每个往返翻一倍，一、二、四、八，直到某个队列溢出。<bookmark mark='b'/>从那以后是拥塞避免。每个 ACK 加上窗口分之一，所以窗口每个往返增长一个分组，一条直线，直到缓冲区再次溢出，窗口减半。<bookmark mark='c'/>而且 Reno 不等定时器：当后面的三个分组都已被确认，而有一个还没有，就推定那一个已经丢失，立刻重发。这就是锯齿，自 1990 年以来互联网的心跳。缓冲区有一个管道那么大时，减半永远不会让链路空下来：利用率是百分之九十九。"
+  },
+  "b8b30581025e": {
+   "scene": "Aimd",
+   "en": "Chapter seven. Additive increase, multiplicative decrease.",
+   "zh": "第七章。加性增、乘性减。"
+  },
+  "08d0bfc00e5a": {
+   "scene": "Aimd",
+   "en": "Why should a TCP add one packet per round trip but halve its window on a loss? In 1989 Dah-Ming Chiu and Raj Jain answered with a picture. Take two users sharing a link of capacity C. Plot user one's rate across, and user two's up. <bookmark mark='a'/> On the diagonal line where the rates sum to C, the link is exactly full: efficient. Below it the link is underused, and above it, overloaded. <bookmark mark='b'/> On the forty-five degree line through the origin, the two get equal shares: fair. The goal is where the lines cross. <bookmark mark='c'/> Neither user can see the other. All each learns, every round, is one bit: was the link overloaded? And each changes its own rate by a rule. <bookmark mark='d'/> Adding the same amount to both rates moves the point along a forty-five degree line. <bookmark mark='e'/> Multiplying both by the same factor moves it along a line through the origin. Those two facts are the whole proof.",
+   "zh": "为什么 TCP 每个往返只加一个分组，遇到丢失却要把窗口减半？1989 年，Dah-Ming Chiu 和 Raj Jain 用一幅图给出了回答。设两个用户共享一条容量为 C 的链路。横轴画用户一的速率，纵轴画用户二的速率。<bookmark mark='a'/>在两个速率之和等于 C 的那条斜线上，链路恰好满载：这叫高效。斜线下方，链路没有用足；上方则是过载。<bookmark mark='b'/>在过原点的四十五度线上，两人得到相等的份额：这叫公平。目标就在两条线的交点。<bookmark mark='c'/>两个用户都看不到对方。每一轮，每个人得知的只有一个比特：链路过载了吗？然后每个人按一条规则调整自己的速率。<bookmark mark='d'/>给两个速率加上同样的量，点就沿一条四十五度线移动。<bookmark mark='e'/>把两个速率乘以同一个因子，点就沿一条过原点的直线移动。这两个事实，就是全部的证明。"
+  },
+  "2a2879557d04": {
+   "scene": "Aimd",
+   "en": "Here are four rules, each started with user one at a tenth of the link and user two at six tenths. <bookmark mark='a'/> Additive increase, multiplicative decrease. Each increase moves the point up the forty-five degree line until it crosses into overload; each halving pulls it toward the origin. The zig-zag closes in on the fairness line and oscillates around the goal. <bookmark mark='b'/> Additive increase and additive decrease slides up and down one forty-five degree line forever. The difference between the users never changes. <bookmark mark='c'/> Multiplicative both ways slides along one line through the origin. The ratio never changes: user two keeps six times user one's share. <bookmark mark='d'/> And multiplicative increase with additive decrease is worse than either: it drives user one to zero. <bookmark mark='e'/> Measured with Jain's fairness index, which is one when shares are equal, only AIMD reaches one.",
+   "zh": "这里有四条规则，每条都从用户一占链路的十分之一、用户二占十分之六开始。<bookmark mark='a'/>加性增、乘性减。每次增加让点沿四十五度线向上走，直到越线进入过载区；每次减半又把它拉向原点。这条折线一步步逼近公平线，并在目标附近振荡。<bookmark mark='b'/>加性增、加性减，则沿着同一条四十五度线永远上下滑动。两个用户之间的差距永远不变。<bookmark mark='c'/>增和减都用乘性，就沿着一条过原点的直线滑动。比例永远不变：用户二始终拿着用户一六倍的份额。<bookmark mark='d'/>而乘性增、加性减比两者都糟：它把用户一逼到零。<bookmark mark='e'/>用 Jain 公平指数来衡量，份额相等时它等于一，只有 AIMD 达到了一。"
+  },
+  "c23d579fca41": {
+   "scene": "Aimd",
+   "en": "The proof fits in four lines. <bookmark mark='a'/> Measure the unfairness by the difference between the two rates. <bookmark mark='b'/> An additive increase adds the same to both, so the difference does not change. <bookmark mark='c'/> A multiplicative decrease multiplies both by b, so it multiplies the difference by b: it halves it. <bookmark mark='d'/> The increases always carry the sum back into overload, so the halvings never stop, and after k of them the difference is b to the k times what it was: it goes to zero. Meanwhile the total rises to C, falls to half of C, and rises again: on average three quarters full, exactly the mean load we measured. <bookmark mark='e'/> Chiu and Jain proved more: among all linear rules, only additive increase with multiplicative decrease converges to fairness and efficiency from every starting point. Jacobson had chosen it by engineering intuition a year before; it was the only answer.",
+   "zh": "证明只要四行。<bookmark mark='a'/>用两个速率之差来衡量不公平的程度。<bookmark mark='b'/>加性增给两者加上同样的量，所以差不变。<bookmark mark='c'/>乘性减把两者都乘以 b，所以差也乘以 b：减半。<bookmark mark='d'/>增加总会把总和带回过载区，所以减半永远不会停止，经过 k 次之后，差变成原来的 b 的 k 次方倍：它趋于零。与此同时，总量升到 C，跌到 C 的一半，再升上去：平均是四分之三满，恰好是我们测到的平均负荷。<bookmark mark='e'/>Chiu 和 Jain 证明了更多：在所有线性规则中，只有加性增、乘性减能从任何起点收敛到公平和高效。Jacobson 一年前凭工程直觉选中了它；它是唯一的答案。"
+  },
+  "14ead11bad3a": {
+   "scene": "Mathis",
+   "en": "Chapter eight. The Mathis formula.",
+   "zh": "第八章。Mathis 公式。"
+  },
+  "866a5ef2761a": {
+   "scene": "Mathis",
+   "en": "In 1997 Matt Mathis and his colleagues asked how fast a Reno flow can go if the network drops a fraction p of its packets at random. <bookmark mark='a'/> In steady state, the window climbs from half of some peak W to W, one packet per round trip, then a loss halves it. Each tooth lasts W over two round trips. <bookmark mark='b'/> The packets sent in one tooth are the area under it: W over two round trips, at an average window of three quarters of W. That is three eighths of W squared. <bookmark mark='c'/> One of those packets is the loss, so three eighths W squared is one over p, and W is the square root of eight over three p. <bookmark mark='d'/> The rate is the average window, a packet's size each, per round trip. Out comes the Mathis formula: the packet size over the round trip, times the square root of three over two p. Throughput falls only as the square root of the loss rate, and directly as the round trip.",
+   "zh": "1997 年，Matt Mathis 和他的同事们提出一个问题：如果网络随机丢弃一个流中比例为 p 的分组，一个 Reno 流能跑多快？<bookmark mark='a'/>在稳态下，窗口从某个峰值 W 的一半爬升到 W，每个往返加一个分组，然后一次丢失把它减半。每个锯齿持续 W 除以二个往返。<bookmark mark='b'/>一个锯齿里发出的分组数，就是它下方的面积：W 除以二个往返，平均窗口是 W 的四分之三。也就是八分之三乘以 W 的平方。<bookmark mark='c'/>这些分组里有一个是丢失的，所以八分之三 W 平方等于 p 分之一，W 等于三 p 分之八的平方根。<bookmark mark='d'/>速率就是平均窗口，每个分组一个分组大小，再除以往返时间。于是得出 Mathis 公式：分组大小除以往返时间，再乘以二 p 分之三的平方根。吞吐量只随丢失率的平方根下降，却与往返时间成反比。"
+  },
+  "dafc03695e6f": {
+   "scene": "Mathis",
+   "en": "We tested the formula on our own TCP: a single Reno flow, a hundred-millisecond round trip, a link far faster than it can use, and random losses at five rates. <bookmark mark='a'/> On logarithmic axes the formula is a straight line of slope minus a half, and the measurements sit on it. At one loss in ten thousand, fourteen point three megabits a second, against fourteen point three predicted. <bookmark mark='b'/> At higher loss rates our flow does slightly better than the formula, because it learns about every lost packet at once, as selective acknowledgements allow, and recovers several in a single round trip. Padhye and colleagues extended the formula in 1998 to include timeouts, which matter when losses come in bursts. <bookmark mark='c'/> Look at what it says about long distance. Across the Atlantic, at a hundred and eight milliseconds and one loss in a thousand, Reno is limited to four megabits a second, on a link of a hundred. That is why Reno, in the hook, took thirty-five seconds.",
+   "zh": "我们在自己的 TCP 上检验了这个公式：一个 Reno 流，往返时间一百毫秒，链路远比它能用到的快，在五种丢失率下随机丢包。<bookmark mark='a'/>在对数坐标轴上，公式是一条斜率为负二分之一的直线，测量点就落在线上。在万分之一的丢失率下，测得每秒十四点三兆比特，预测值也是十四点三。<bookmark mark='b'/>在更高的丢失率下，我们的流比公式略好一些，因为它像选择性确认所允许的那样，一次就得知每一个丢失的分组，并在一个往返内恢复好几个。Padhye 和同事们在 1998 年扩展了这个公式，把超时也纳入进来；当丢失成串出现时，超时就很重要。<bookmark mark='c'/>看看它对长距离意味着什么。横跨大西洋，往返一百零八毫秒，丢失率千分之一，Reno 被限制在每秒四兆比特，而链路有一百兆。这就是为什么开场那个例子里，Reno 花了三十五秒。"
+  },
+  "4338668c0c18": {
+   "scene": "Mathis",
+   "en": "The formula has a consequence nobody designed. <bookmark mark='a'/> Put two Reno flows on a twenty-megabit link, one with a twenty-millisecond round trip and the other further away. With equal round trips they split the link evenly. <bookmark mark='b'/> But a window grows by one packet per round trip, so the nearby flow grows ten times as often as one with ten times its round trip, while both suffer the same drops. <bookmark mark='c'/> At five times the round trip, the near flow gets two point three times as much. At ten times, thirty-two times as much: worse than one over the round trip, approaching one over its square, as Lakshman and Madhow showed for a shared drop-tail queue. <bookmark mark='d'/> AIMD is fair between equals. Between a user next door and a user across an ocean, it is not, and this is one of the reasons the next generation of algorithms grows with the clock, not with round trips.",
+   "zh": "这个公式有一个谁也没有设计过的后果。<bookmark mark='a'/>把两个 Reno 流放到一条每秒二十兆比特的链路上，一个往返二十毫秒，另一个离得更远。往返相等时，它们平分链路。<bookmark mark='b'/>但窗口每个往返才增长一个分组，所以近处的流，增长的频率是往返时间为它十倍的流的十倍，而两者遭受的丢包却一样。<bookmark mark='c'/>往返时间是五倍时，近的流拿到二点三倍。十倍时，拿到三十二倍：比往返时间的倒数还糟，接近往返时间平方的倒数，正如 Lakshman 和 Madhow 针对共享的尾部丢弃队列所证明的。<bookmark mark='d'/>AIMD 在对等者之间是公平的。在隔壁的用户和大洋彼岸的用户之间，它并不公平；这也是下一代算法按时钟、而不是按往返次数增长的原因之一。"
+  },
+  "2fa8aff4a404": {
+   "scene": "Buffers",
+   "en": "Chapter nine. Queues.",
+   "zh": "第九章。队列。"
+  },
+  "998010f1bf4b": {
+   "scene": "Buffers",
+   "en": "A router needs a queue, to absorb bursts. How long should it be? We gave one Reno flow, on a ten-megabit link with a hundred-millisecond round trip, buffers from a tenth of the bandwidth-delay product to eight times it. <bookmark mark='a'/> Too small, and every halving of the window drains the queue and leaves the link idle for a while: with a tenth of the product, the link is busy only seventy-eight percent of the time. With one full product, the queue never quite empties, and the link is ninety-nine percent busy. That was the rule of thumb from 1994. <bookmark mark='b'/> Beyond that, a bigger buffer buys no throughput at all. It buys delay. A loss-based TCP keeps growing its window until something is dropped, so it fills whatever buffer it is given. With eight times the product, every packet waits four hundred milliseconds in the queue, and the round trip is over half a second.",
+   "zh": "路由器需要队列，来吸收突发。队列应该多长？我们给一个 Reno 流，在一条每秒十兆比特、往返一百毫秒的链路上，配上从带宽时延积的十分之一到八倍不等的缓冲区。<bookmark mark='a'/>太小的话，窗口每次减半都会把队列排空，让链路闲置一阵：缓冲区只有带宽时延积的十分之一时，链路只有百分之七十八的时间在忙。缓冲区等于一整个带宽时延积时，队列从不会完全排空，链路百分之九十九的时间在忙。这是 1994 年提出的经验法则。<bookmark mark='b'/>再往上，更大的缓冲区根本换不来吞吐量。它换来的是延迟。基于丢失的 TCP 会一直增大窗口，直到有分组被丢弃，所以给它多大的缓冲区，它就填满多大。缓冲区是带宽时延积的八倍时，每个分组要在队列里等四百毫秒，往返时间超过半秒。"
+  },
+  "5521dd6f5851": {
+   "scene": "Buffers",
+   "en": "In 2010 Jim Gettys, at Bell Labs, noticed that his home network became unusable whenever he uploaded a file. <bookmark mark='a'/> His cable modem had a buffer of a few hundred packets, and an upload link of about a megabit a second. Two hundred and fifty-six packets of fifteen hundred bytes, at a megabit a second, is three seconds. Once an upload filled that queue, every packet from the house, a video call, a keystroke, a DNS lookup, waited three seconds behind it. <bookmark mark='b'/> He found the same everywhere: in home routers, modems, Wi-Fi drivers and phones. He called it bufferbloat. <bookmark mark='c'/> Memory had become cheap, so buffers grew, and nobody had noticed that a buffer sized for the fastest link a device might see was seconds long on the link it actually had.",
+   "zh": "2010 年，贝尔实验室的 Jim Gettys 注意到，每当他上传文件，家里的网络就没法用了。<bookmark mark='a'/>他的有线调制解调器有几百个分组的缓冲区，上行链路大约每秒一兆比特。二百五十六个一千五百字节的分组，以每秒一兆比特的速度发送，就是三秒。一旦一次上传填满了这个队列，家里发出的每一个分组，一次视频通话、一次按键、一次 DNS 查询，都要排在它后面等上三秒。<bookmark mark='b'/>他发现到处都是这样：家用路由器、调制解调器、Wi-Fi 驱动和手机里都是。他把它叫作缓冲膨胀。<bookmark mark='c'/>内存变便宜了，于是缓冲区越来越大，却没有人注意到：一个按设备可能遇到的最快链路来定尺寸的缓冲区，放在它实际所用的链路上，有好几秒长。"
+  },
+  "d97430f67cb8": {
+   "scene": "Buffers",
+   "en": "The cure is to manage the queue, not just size it. Here a buffer of a thousand packets is shared by a Reno flow and a CUBIC flow on a ten-megabit link. <bookmark mark='a'/> With plain drop-tail, the flows fill it: more than a second of delay, all the time. <bookmark mark='b'/> Random early detection, by Sally Floyd and Van Jacobson in 1993, drops packets at random before the queue is full, with a probability that rises with the average length, so flows back off early. Delay falls to a quarter of a second. But RED has knobs that depend on the link, and in practice it was rarely switched on. <bookmark mark='c'/> CoDel, by Kathleen Nichols and Van Jacobson in 2012, has none. It measures how long each packet waited, and if even the shortest wait stays above five milliseconds for a hundred milliseconds, it starts dropping, faster and faster, until the queue drains. The mean delay is three milliseconds instead of a thousand. It gives up some throughput here, eighty-eight percent busy, because two flows with long round trips refill slowly; with more flows the loss disappears. CoDel and its descendant, fq_codel, now run in Linux and in many home routers.",
+   "zh": "治疗方法是管理队列，而不只是定下它的大小。这里，一个一千个分组的缓冲区，由一个 Reno 流和一个 CUBIC 流在一条每秒十兆比特的链路上共享。<bookmark mark='a'/>用普通的尾部丢弃，两个流把它填满：时时刻刻都有超过一秒的延迟。<bookmark mark='b'/>随机早期检测，也就是 RED，由 Sally Floyd 和 Van Jacobson 在 1993 年提出，它在队列满之前就随机丢弃分组，丢弃概率随平均队长上升，于是流会提早退让。延迟降到四分之一秒。但 RED 有一些取决于链路的调节旋钮，实践中很少被打开。<bookmark mark='c'/>CoDel 由 Kathleen Nichols 和 Van Jacobson 在 2012 年提出，一个旋钮也没有。它测量每个分组等了多久，如果连最短的等待时间也在一百毫秒里一直高于五毫秒，它就开始丢包，越丢越快，直到队列排空。平均延迟是三毫秒，而不是一千毫秒。在这里它牺牲了一些吞吐量，链路百分之八十八的时间在忙，因为两个往返很长的流重新填满得很慢；流多起来，这个损失就消失了。CoDel 和它的后代 fq_codel，如今运行在 Linux 和许多家用路由器里。"
+  },
+  "b4a4587661b5": {
+   "scene": "Buffers",
+   "en": "At the other end of the Internet, the backbone, the rule of one bandwidth-delay product had become expensive: at a hundred gigabits a second, a quarter-second of buffer is three gigabytes of very fast memory per port. <bookmark mark='a'/> In 2004 Guido Appenzeller, Isaac Keslassy and Nick McKeown pointed out that the rule was derived for one flow. One flow's window swings by half. But many flows, out of step with each other, swing independently, and their total varies only by about one over the square root of n as much: the central limit theorem. So the buffer can shrink by the square root of n. <bookmark mark='b'/> We checked. With one flow, both rules are the same. With sixty-four flows, a buffer an eighth the size keeps the link ninety-seven and a half percent busy, against ninety-eight and a half with the full one. <bookmark mark='c'/> A backbone link carrying ten thousand flows needs a hundredth of the old buffer, and router designers took notice.",
+   "zh": "在互联网的另一端，也就是骨干网，一个带宽时延积的规则变得很昂贵：在每秒一百吉比特的速率下，四分之一秒的缓冲区，就是每个端口三吉字节的高速内存。<bookmark mark='a'/>2004 年，Guido Appenzeller、Isaac Keslassy 和 Nick McKeown 指出，这条规则是针对单个流推导出来的。一个流的窗口会摆动一半。但许多步调不一致的流各自独立地摆动，它们总和的变化幅度只有大约根号 n 分之一：这就是中心极限定理。所以缓冲区可以缩小到原来的根号 n 分之一。<bookmark mark='b'/>我们验证了一下。只有一个流时，两条规则是一样的。有六十四个流时，八分之一大小的缓冲区让链路百分之九十七点五的时间在忙，而完整大小的缓冲区是百分之九十八点五。<bookmark mark='c'/>一条承载一万个流的骨干链路，只需要原来缓冲区的百分之一，路由器的设计者们注意到了这一点。"
+  },
+  "4abc6d409106": {
+   "scene": "Modern",
+   "en": "Chapter ten. Modern congestion control.",
+   "zh": "第十章。现代拥塞控制。"
+  },
+  "4eb86f3ae2ed": {
+   "scene": "Modern",
+   "en": "On fast, long paths Reno is hopeless: after a single loss on our hundred-megabit transatlantic path, climbing back by one packet per round trip takes over a minute and a half. Injong Rhee and his students replaced the line with a cubic. <bookmark mark='a'/> After a loss, CUBIC remembers the window where it happened, cuts to seven tenths of it, and follows a cubic curve in time: steep at first, flattening as it approaches the old window, where the last trouble was, and then accelerating beyond it to probe for more. <bookmark mark='b'/> Its growth depends on the clock, not on the number of round trips, so a distant flow grows as fast as a nearby one. <bookmark mark='c'/> CUBIC has been the default in Linux since 2006, and so in most of the servers on the Internet.",
+   "zh": "在又快又长的路径上，Reno 毫无希望：在我们那条每秒一百兆比特的跨大西洋路径上，仅仅一次丢失之后，每个往返加一个分组地爬回去，要花一分半钟以上。Injong Rhee 和他的学生们把那条直线换成了一条三次曲线。<bookmark mark='a'/>丢失之后，CUBIC 记住发生丢失时的窗口，降到它的十分之七，然后沿着一条关于时间的三次曲线增长：起初陡峭，接近旧窗口，也就是上次出问题的地方时变得平缓，然后越过它加速，去探测更多带宽。<bookmark mark='b'/>它的增长取决于时钟，而不是往返的次数，所以远处的流和近处的流增长得一样快。<bookmark mark='c'/>CUBIC 自 2006 年起就是 Linux 的默认算法，因此也是互联网上大多数服务器的默认算法。"
+  },
+  "2464e4377efa": {
+   "scene": "Modern",
+   "en": "What is the ideal amount of data to have in flight? Plot two things against it. <bookmark mark='a'/> Below one bandwidth-delay product, the pipe is not full: the delivery rate grows with the data in flight, and the round trip is just propagation. <bookmark mark='b'/> Above it, the rate is stuck at the bottleneck's, and every extra packet only waits in a queue, lengthening the round trip. <bookmark mark='c'/> Leonard Kleinrock observed in 1979 that the best place to operate is the knee: exactly one bandwidth-delay product in flight, full rate at minimum delay. <bookmark mark='d'/> Loss-based congestion control cannot operate there. Its only signal is a loss, and a loss happens only when the buffer is full, so it lives at the cliff, at the far end of the queue, and pays the whole buffer in delay.",
+   "zh": "在途数据量的理想值是多少？把两样东西对它作图。<bookmark mark='a'/>低于一个带宽时延积时，管道没有满：交付速率随在途数据量增长，往返时间只是传播时延。<bookmark mark='b'/>高于它时，速率卡在瓶颈的速率上，每多一个分组，都只是在队列里等待，拉长往返时间。<bookmark mark='c'/>Leonard Kleinrock 在 1979 年指出，最佳的工作点是拐点：在途数据恰好是一个带宽时延积，以最小的延迟达到满速率。<bookmark mark='d'/>基于丢失的拥塞控制没法在那里工作。它唯一的信号是丢失，而丢失只有在缓冲区满了才会发生，所以它活在悬崖边上，在队列的最远端，把整个缓冲区都付作了延迟。"
+  },
+  "0ead2dfaf069": {
+   "scene": "Modern",
+   "en": "In 2016 Neal Cardwell, Yuchung Cheng, Van Jacobson and their colleagues at Google published BBR, a congestion control that aims for Kleinrock's point. Instead of reacting to losses, it builds a model of the path. <bookmark mark='a'/> The bottleneck bandwidth is estimated as the highest rate at which ACKs have come back in the last ten round trips. <bookmark mark='b'/> The propagation delay is the lowest round trip seen in the last ten seconds. <bookmark mark='c'/> BBR then paces its packets out at the estimated bandwidth, keeps about one bandwidth-delay product in flight, and every eight round trips sends a little faster for one round, to see if the pipe has grown, and a little slower for the next, to drain what that added. <bookmark mark='d'/> It starts up by doubling, like slow start, then drains the queue that built; and every ten seconds it briefly empties the pipe, to measure the delay again. Here is our BBR's window on the transatlantic path: the startup spike, then a steady cap at two pipes, while pacing keeps about one pipe actually in flight, with the dips of those re-measurements. <bookmark mark='e'/> And losses it does not treat as congestion at all.",
+   "zh": "2016 年，Neal Cardwell、Yuchung Cheng、Van Jacobson 和他们在 Google 的同事们发表了 BBR，一种瞄准 Kleinrock 那个点的拥塞控制。它不对丢失做出反应，而是为路径建立一个模型。<bookmark mark='a'/>瓶颈带宽，被估计为最近十个往返里 ACK 返回的最高速率。<bookmark mark='b'/>传播时延，是最近十秒里见过的最短往返时间。<bookmark mark='c'/>然后 BBR 以估计的带宽节拍发送分组，保持大约一个带宽时延积在途，并且每八个往返，用一轮稍微发快一点，看看管道是否变大了，再用下一轮稍微发慢一点，排掉多出来的那部分。<bookmark mark='d'/>它启动时像慢启动一样翻倍，然后排空积起来的队列；每隔十秒，它会短暂地清空管道，重新测量时延。这是我们的 BBR 在跨大西洋路径上的窗口：启动时的尖峰，然后稳定在两个管道的上限，而节拍发送让实际在途的数据保持在大约一个管道，带着那些重新测量造成的凹陷。<bookmark mark='e'/>至于丢失，它根本不把它当作拥塞。"
+  },
+  "83b6202f0268": {
+   "scene": "Modern",
+   "en": "We ran each algorithm alone on the transatlantic path, a hundred megabits a second, a buffer of one bandwidth-delay product. <bookmark mark='a'/> On a clean path, all three fill the pipe, about ninety-five megabits a second. But CUBIC keeps the queue eighty milliseconds long on average, and BBR eight: the same throughput at a tenth of the delay. <bookmark mark='b'/> Now lose one packet in a thousand at random, as a noisy radio link or a failing cable might. Reno falls to five and a half megabits, CUBIC to eight, as the Mathis formula says. BBR, which does not read random loss as congestion, keeps ninety-five. <bookmark mark='c'/> When Google switched its servers to BBR, it reported large gains on exactly such paths. That is the hook's answer: the eleven times was a theory of what a lost packet means.",
+   "zh": "我们让每个算法单独跑在跨大西洋路径上，每秒一百兆比特，缓冲区是一个带宽时延积。<bookmark mark='a'/>在干净的路径上，三者都填满了管道，大约每秒九十五兆比特。但 CUBIC 让队列平均保持八十毫秒长，BBR 只有八毫秒：同样的吞吐量，十分之一的延迟。<bookmark mark='b'/>现在随机丢掉千分之一的分组，就像一条嘈杂的无线链路或一根出了故障的电缆那样。Reno 跌到五点五兆比特，CUBIC 跌到八兆，正如 Mathis 公式所说。BBR 不把随机丢失理解为拥塞，保持在九十五。<bookmark mark='c'/>Google 把自己的服务器切换到 BBR 时，报告说恰恰在这样的路径上有很大的提升。这就是开场问题的答案：那十一倍，来自一种关于丢失的分组意味着什么的理论。"
+  },
+  "02f9ebfb8b60": {
+   "scene": "Modern",
+   "en": "The hardest problem in congestion control is not one flow; it is different algorithms sharing a link. <bookmark mark='a'/> Put BBR and CUBIC together on fifty megabits a second. With a shallow buffer, BBR, which ignores the losses that keep CUBIC down, takes forty-seven megabits and leaves CUBIC one point three. With a buffer four times the product, CUBIC fills the queue, BBR's round trip estimate inflates, and the split is thirty to eighteen. Neither is fair. <bookmark mark='b'/> The older story runs the other way. TCP Vegas, by Lawrence Brakmo and Larry Peterson in 1994, was the first delay-based algorithm: it slows down as soon as it sees its own packets queueing, keeping about four in the queue. Alone, it fills the link with a near-empty queue. Beside Reno, which keeps filling the queue, Vegas sees only delay, backs off, and gets nothing at all. <bookmark mark='c'/> A polite algorithm loses to a greedy one. So delay-based control spread where one owner controls every sender: in data centres, DCTCP has switches mark packets instead of dropping them, and senders back off in proportion to the marks, keeping queues tiny. <bookmark mark='d'/> Newer versions of BBR now respond to loss and marks too.",
+   "zh": "拥塞控制里最难的问题不是一个流，而是不同的算法共享一条链路。<bookmark mark='a'/>把 BBR 和 CUBIC 一起放到每秒五十兆比特的链路上。缓冲区浅的时候，BBR 无视那些压制着 CUBIC 的丢失，拿走四十七兆比特，只给 CUBIC 留下一点三。缓冲区是带宽时延积的四倍时，CUBIC 填满队列，BBR 对往返时间的估计被抬高，分成三十比十八。两种情况都不公平。<bookmark mark='b'/>更早的故事方向正好相反。TCP Vegas 由 Lawrence Brakmo 和 Larry Peterson 在 1994 年提出，是第一个基于时延的算法：它一看到自己的分组在排队就放慢，在队列里只保持大约四个分组。单独运行时，它能以几乎空的队列填满链路。和 Reno 在一起时，Reno 不停地填队列，Vegas 只看到时延，于是退让，结果什么也得不到。<bookmark mark='c'/>礼貌的算法输给了贪婪的算法。所以基于时延的控制，在一个所有者掌控所有发送方的地方流行开来：在数据中心里，DCTCP 让交换机给分组打标记而不是丢弃，发送方按标记的比例退让，让队列保持极短。<bookmark mark='d'/>较新版本的 BBR 如今也会对丢失和标记做出反应。"
+  },
+  "ee82819359db": {
+   "scene": "Num",
+   "en": "Chapter eleven. TCP as an optimization algorithm.",
+   "zh": "第十一章。作为优化算法的 TCP。"
+  },
+  "a964e9935957": {
+   "scene": "Num",
+   "en": "So far we have described congestion control as a set of rules. In 1997 and 1998 Frank Kelly, a mathematician at Cambridge, asked what problem those rules are solving. <bookmark mark='a'/> Take a network: here, two links in a row, each of capacity one, a long flow that crosses both, and two short flows that use one each. <bookmark mark='b'/> Give each flow a utility, a concave function of its rate saying how much it values bandwidth, and choose all the rates at once to maximize total utility, subject to no link carrying more than its capacity. This is network utility maximization. <bookmark mark='c'/> With logarithmic utilities, the solution has a name: proportional fairness. A rate is increased only if the percentage gain to some flows outweighs the percentage loss to others.",
+   "zh": "到目前为止，我们把拥塞控制描述成一组规则。1997 年和 1998 年，剑桥的数学家 Frank Kelly 问：这些规则在解决的到底是什么问题？<bookmark mark='a'/>取一个网络：这里是两条串联的链路，每条容量为一，一个穿过两条链路的长流，以及两个各用一条链路的短流。<bookmark mark='b'/>给每个流一个效用，它是速率的凹函数，表示这个流有多看重带宽，然后同时选定所有速率，使总效用最大，约束是没有哪条链路承载超过它的容量。这就是网络效用最大化。<bookmark mark='c'/>当效用是对数函数时，这个解有一个名字：比例公平。只有当某些流获得的百分比收益，超过其他流的百分比损失时，才提高一个速率。"
+  },
+  "979f971508e4": {
+   "scene": "Num",
+   "en": "The problem decomposes, by the duality of Part 23. <bookmark mark='a'/> Attach a price to each link's capacity constraint: a Lagrange multiplier. <bookmark mark='b'/> The Lagrangian adds, for each link, its price times its overload. <bookmark mark='c'/> Now look at one flow. Its part of the Lagrangian is the log of its rate minus its rate times the total price along its path. It can maximize that alone: <bookmark mark='d'/> its best rate is one over the path price. <bookmark mark='e'/> And look at one link. It needs to know only its own load: if more is offered than it can carry, it raises its price a little; if less, it lowers it. <bookmark mark='f'/> This is gradient ascent on the dual problem. Every flow and every link acts on local information only, and together they converge to the global optimum.",
+   "zh": "这个问题可以用第23部分的对偶来分解。<bookmark mark='a'/>给每条链路的容量约束配一个价格：一个拉格朗日乘子。<bookmark mark='b'/>拉格朗日函数为每条链路加上一项：它的价格乘以它的过载量。<bookmark mark='c'/>现在看一个流。它在拉格朗日函数里的那部分，是它速率的对数，减去它的速率乘以它路径上的总价格。它可以独自把这一项最大化：<bookmark mark='d'/>它的最佳速率是路径价格分之一。<bookmark mark='e'/>再看一条链路。它只需要知道自己的负载：如果送来的流量超过它能承载的，它就把价格调高一点；如果不足，就调低一点。<bookmark mark='f'/>这就是在对偶问题上的梯度上升。每个流和每条链路都只依据本地信息行动，而它们合在一起，收敛到全局最优。"
+  },
+  "477f75761aef": {
+   "scene": "Num",
+   "en": "We ran it on the two-link network. <bookmark mark='a'/> The rates swing at first, as prices overshoot, and then settle: the long flow at one third, each short flow at two thirds. <bookmark mark='b'/> Both links end up full, each with price one and a half. The long flow pays both prices, so it gets half the rate of a short flow. <bookmark mark='c'/> Compare max-min fairness, which raises everyone's rate together until a link fills: it gives all three a half. Proportional fairness carries more in total, five thirds against three halves, by charging the long flow for using two links. With three links in a row, the long flow gets a quarter. Which fairness is right is a question of values, not mathematics; what the mathematics says is which one a given algorithm is computing.",
+   "zh": "我们在这个双链路网络上运行了它。<bookmark mark='a'/>速率一开始来回摆动，因为价格冲过了头，然后稳定下来：长流在三分之一，每个短流在三分之二。<bookmark mark='b'/>两条链路最终都满载，价格各为一点五。长流要付两份价格，所以它得到的速率是短流的一半。<bookmark mark='c'/>对比一下最大最小公平，它让所有人的速率一起上升，直到某条链路满了：它给三个流各二分之一。比例公平承载的总量更多，三分之五对二分之三，靠的是向长流收取使用两条链路的费用。如果是三条链路串联，长流得到四分之一。哪种公平是对的，是价值观的问题，不是数学问题；数学能告诉我们的，是某个算法在计算的是哪一种。"
+  },
+  "6e9e4b4a670a": {
+   "scene": "Num",
+   "en": "And here is the surprise. Real TCPs are this algorithm, in disguise. <bookmark mark='a'/> The price of a link is something the flows can observe: for Reno and CUBIC, the probability that a packet is dropped; for delay-based algorithms like Vegas, the time packets spend in the queue. <bookmark mark='b'/> Each flow adjusts its rate to the total price on its path. <bookmark mark='c'/> And each algorithm turns out to maximize a particular utility. Reno's, as Steven Low, Srinivas Kunniyur and Rayadurgam Srikant worked out, is approximately minus three halves over the round trip squared times the rate: setting its derivative equal to the loss rate gives back the Mathis formula, and the unfairness to long round trips is built into the utility itself. <bookmark mark='d'/> Vegas keeps a fixed number of its own packets queued, and is exactly proportionally fair. <bookmark mark='e'/> No one designed TCP this way. The engineering came first, and a decade later the theory explained what it had built.",
+   "zh": "惊人之处就在这里。真实的 TCP 就是这个算法，只是换了一身装扮。<bookmark mark='a'/>链路的价格是流能观察到的东西：对 Reno 和 CUBIC 来说，是分组被丢弃的概率；对 Vegas 这样基于时延的算法来说，是分组在队列里花的时间。<bookmark mark='b'/>每个流根据它路径上的总价格，调整自己的速率。<bookmark mark='c'/>结果发现，每个算法都在最大化一个特定的效用。正如 Steven Low、Srinivas Kunniyur 和 Rayadurgam Srikant 所推导的，Reno 的效用大约是负二分之三，除以往返时间的平方与速率的乘积：令它的导数等于丢失率，就重新得到了 Mathis 公式，而对长往返时间的不公平，就内置在这个效用本身里。<bookmark mark='d'/>Vegas 让自己固定数量的分组排在队列里，恰好是比例公平的。<bookmark mark='e'/>没有人是这样设计 TCP 的。工程在先，十年之后，理论才解释了它造出的东西。"
+  },
+  "f3d88345a371": {
+   "scene": "Dns",
+   "en": "Chapter twelve. Names.",
+   "zh": "第十二章。名字。"
+  },
+  "e5be63c7d53e": {
+   "scene": "Dns",
+   "en": "Programs name machines by names, not numbers. In the early ARPANET, every host downloaded one file, hosts dot t x t, listing every name; by 1983 that no longer scaled, and Paul Mockapetris designed the domain name system. <bookmark mark='a'/> Names form a tree. Thirteen root servers, answered by well over a thousand machines around the world, know who runs each top-level domain; each of those knows who runs each domain beneath it; and each domain answers for its own names. <bookmark mark='b'/> To find gutenberg dot org, a resolver asks a root server, which refers it to the servers for dot org; asks one of those, which refers it to Gutenberg's own servers; and asks them. <bookmark mark='c'/> The answer comes with a time to live: how many seconds it may be cached. Three round trips the first time; none for the next five minutes. The whole system is held together by caching, over UDP, one datagram each way.",
+   "zh": "程序用名字而不是数字来称呼机器。在早期的 ARPANET 上，每台主机都下载同一个文件，hosts 点 txt，里面列着所有的名字；到 1983 年，这种做法已经无法扩展，于是 Paul Mockapetris 设计了域名系统。<bookmark mark='a'/>名字构成一棵树。十三个根服务器，由遍布世界的一千多台机器应答，它们知道每个顶级域由谁负责；每个顶级域又知道它下面的每个域由谁负责；而每个域为自己的名字作答。<bookmark mark='b'/>为了找到 gutenberg 点 org，解析器先问一个根服务器，它把解析器指向点 org 的服务器；再问其中一台，它又指向古腾堡自己的服务器；最后问它们。<bookmark mark='c'/>答案附带一个生存时间：它可以被缓存多少秒。第一次要三个往返；接下来五分钟，一个也不用。整个系统靠缓存维系，运行在 UDP 之上，每个方向一个数据报。"
+  },
+  "91f8ade65d5f": {
+   "scene": "Dns",
+   "en": "We gave our resolver a day of lookups: fifty thousand of them, for two thousand names whose popularity falls off as a power law, each with a time to live between a minute and a day. <bookmark mark='a'/> Fifty-six percent were answered from the cache without sending a packet. The rest needed nought point eight seven round trips on average, not three, because the referrals from the root and the top-level domains are themselves cached for two days. <bookmark mark='b'/> The time to live is a dial. Long ones make lookups fast and servers idle. Short ones let a name move to a new address within seconds, which is how content delivery networks steer each user to a nearby server, as we will see.",
+   "zh": "我们给解析器一天的查询：五万次，涉及两千个名字，它们的热度按幂律递减，每个名字的生存时间在一分钟到一天之间。<bookmark mark='a'/>百分之五十六由缓存直接回答，一个分组都没有发。其余的平均需要零点八七个往返，而不是三个，因为来自根和顶级域的指引本身也被缓存了两天。<bookmark mark='b'/>生存时间是一个旋钮。长的让查询变快，让服务器清闲。短的让一个名字能在几秒内搬到新地址，内容分发网络正是这样把每个用户引向附近的服务器，我们后面会看到。"
+  },
+  "30e4a48e2baf": {
+   "scene": "Dns",
+   "en": "Caching makes DNS fast, and a poisoned cache makes it dangerous. In 2008 Dan Kaminsky found a way to poison almost any resolver in seconds. <bookmark mark='a'/> The attacker asks your resolver about a name that cannot be in its cache, a random name under bank dot com. <bookmark mark='b'/> While the resolver waits for the real answer, the attacker sends forged ones, each claiming that the server for all of bank dot com is at the attacker's address. <bookmark mark='c'/> A reply is accepted if it carries the query's sixteen-bit identifier. If the real answer wins the race, the attacker simply asks for another random name, and races again. <bookmark mark='d'/> With a hundred forgeries a race, the expected number of races is six hundred and fifty-six: about a minute. Once one succeeds, every user of that resolver is sent to the attacker for everything at the bank. <bookmark mark='e'/> The emergency fix, coordinated in secret among vendors and released together in July 2008, randomized the source port of every query as well, sixteen more bits to guess: fifty days instead of a minute. The real fix is to sign the answers, with the public keys of Part 30, from the root down: DNSSEC.",
+   "zh": "缓存让 DNS 变快，而被投毒的缓存让它变得危险。2008 年，Dan Kaminsky 找到了一种方法，几秒之内就能毒化几乎任何解析器。<bookmark mark='a'/>攻击者向你的解析器询问一个不可能在缓存里的名字，bank 点 com 下面的一个随机名字。<bookmark mark='b'/>在解析器等待真正答案的时候，攻击者发来伪造的答案，每一个都声称，整个 bank 点 com 的服务器就在攻击者的地址上。<bookmark mark='c'/>一个回复只要带着查询的十六位标识符，就会被接受。如果真正的答案赢了这场赛跑，攻击者就换一个随机名字再问，再赛一次。<bookmark mark='d'/>每场赛跑伪造一百个答案，期望的赛跑次数是六百五十六次：大约一分钟。一旦有一次成功，那个解析器的每个用户，访问这家银行的一切，都会被送到攻击者那里。<bookmark mark='e'/>紧急修复由各厂商秘密协调，于 2008 年七月一起发布，它把每个查询的源端口也随机化了，又多出十六位要猜：要五十天，而不是一分钟。真正的修复是给答案签名，用第30部分的公钥，从根开始一路向下：DNSSEC。"
+  },
+  "248fe19aee5e": {
+   "scene": "Web",
+   "en": "Chapter thirteen. The web's transport.",
+   "zh": "第十三章。网页的传输。"
+  },
+  "d16b323b5271": {
+   "scene": "Web",
+   "en": "TCP gives one ordered stream. A web page is not one thing. <bookmark mark='a'/> It is an HTML file, and then dozens of objects it refers to: images, scripts, style sheets. Ours has forty. <bookmark mark='b'/> The first web fetched each object over a new TCP connection, paying a handshake and a slow start every time. <bookmark mark='c'/> HTTP one point one kept connections open, but each could carry only one request at a time, so browsers opened six connections to each server, and six slow starts, and six congestion controllers competing with each other. <bookmark mark='d'/> HTTP/2, grown from Google's SPDY, put everything on one connection. Each object becomes a numbered stream, and the streams' frames are interleaved, so a small image need not wait behind a large one.",
+   "zh": "TCP 提供一条有序的流。而一个网页不是一样东西。<bookmark mark='a'/>它是一个 HTML 文件，再加上它引用的几十个对象：图片、脚本、样式表。我们这个网页有四十个。<bookmark mark='b'/>最早的网页为每个对象新建一个 TCP 连接，每次都要付出一次握手和一次慢启动。<bookmark mark='c'/>HTTP 一点一让连接保持打开，但每个连接一次只能承载一个请求，于是浏览器向每个服务器打开六个连接，也就有六次慢启动，六个拥塞控制器彼此竞争。<bookmark mark='d'/>HTTP/2 由 Google 的 SPDY 发展而来，把一切都放到一个连接上。每个对象成为一条编号的流，各条流的帧交错传送，于是一张小图片不必排在一张大图片后面等。"
+  },
+  "07fafd44f642": {
+   "scene": "Web",
+   "en": "But the streams are interleaved inside one TCP byte stream, and TCP delivers bytes in order. <bookmark mark='a'/> Lose one packet, here belonging to stream two. Everything after it in the byte stream, the packets of streams one, three and four as well, is held by the receiver until the hole is filled, a round trip later. <bookmark mark='b'/> The four objects have nothing to do with each other, but TCP does not know that. <bookmark mark='c'/> It is the head-of-line blocking of the switch in the last part, moved into the transport: multiplexing over one ordered channel ties every stream to the slowest. <bookmark mark='d'/> Six separate connections have six separate orders, so on a lossy path old HTTP one point one can beat HTTP/2.",
+   "zh": "但这些流是在一条 TCP 字节流内部交错的，而 TCP 按顺序交付字节。<bookmark mark='a'/>丢掉一个分组，这里它属于流二。字节流中在它之后的一切，包括流一、流三和流四的分组，都被接收方扣住，直到空洞被填上，那是一个往返之后。<bookmark mark='b'/>这四个对象彼此毫无关系，但 TCP 并不知道。<bookmark mark='c'/>这就是上一部分交换机里的队头阻塞，被搬进了传输层：在一条有序的通道上多路复用，会把每一条流都绑在最慢的那条上。<bookmark mark='d'/>六个独立的连接有六个独立的顺序，所以在有损的路径上，老的 HTTP 一点一可以胜过 HTTP/2。"
+  },
+  "e999ab23b718": {
+   "scene": "Web",
+   "en": "We measured it: forty-one objects fetched across our hundred-and-eight-millisecond path, two hundred times at each loss rate, timing when each object becomes usable. <bookmark mark='a'/> HTTP one point one's six connections share the link six ways and send in parallel. In our model they do well, because it leaves out their six handshakes and six slow starts, which in practice cost them dearly. <bookmark mark='b'/> HTTP/2 on one connection is as good as anything when nothing is lost, but every loss stalls every stream, and its mean climbs from two hundred and nine milliseconds to three hundred and thirty-six at five percent loss. <bookmark mark='c'/> The third line keeps the streams but gives each its own order, so a loss delays only the stream it belongs to: two hundred and twenty-seven milliseconds at five percent. That is QUIC.",
+   "zh": "我们测量了它：四十一个对象，穿过我们一百零八毫秒的路径取回，每个丢包率各做两百次，记录每个对象何时变得可用。<bookmark mark='a'/>HTTP 一点一的六个连接把链路分成六份，并行发送。在我们的模型里它们表现不错，因为模型省略了它们的六次握手和六次慢启动，而在实践中，这些让它们付出沉重的代价。<bookmark mark='b'/>一个连接上的 HTTP/2，在什么都不丢的时候和任何方案一样好，但每一次丢失都会让每一条流停顿，在百分之五的丢包率下，它的均值从两百零九毫秒攀升到三百三十六毫秒。<bookmark mark='c'/>第三条线保留了流，但给每条流各自的顺序，于是一次丢失只耽搁它所属的那条流：在百分之五时是两百二十七毫秒。那就是 QUIC。"
+  },
+  "5d8d5a5183d2": {
+   "scene": "Web",
+   "en": "Why not fix TCP? Because TCP lives in every operating system kernel, and its header is read, and rewritten, by firewalls and other boxes all over the Internet, which break anything new. TCP had ossified. So Jim Roskind and Google's team built a new transport on top of UDP, which every box passes untouched. Standardized in 2021 as QUIC, it now carries a large share of the web. <bookmark mark='a'/> It merges the transport with TLS, the encryption of Part 30. A new connection needs one round trip before the request, instead of two or three, and a client returning to a server it knows can send its request in the very first packet. <bookmark mark='b'/> Inside, it has streams with independent orders, and loss recovery and congestion control much like TCP's, but every packet, including a retransmission, gets a fresh number, so Karn's ambiguity disappears. <bookmark mark='c'/> Almost all of it is encrypted, even most of the header, so no middlebox can come to depend on it. <bookmark mark='d'/> A connection is named by an identifier, not by addresses and ports, so a phone walking out of Wi-Fi onto a cellular network keeps its connections. <bookmark mark='e'/> And it runs in ordinary programs, so it can change as fast as browsers do.",
+   "zh": "为什么不修好 TCP？因为 TCP 活在每一个操作系统的内核里，而它的头部被遍布互联网的防火墙和其他盒子读取，甚至改写，这些盒子会弄坏任何新东西。TCP 已经僵化了。于是 Jim Roskind 和 Google 的团队在 UDP 之上构建了一个新的传输协议，因为每个盒子都会原封不动地放行 UDP。它在 2021 年标准化为 QUIC，如今承载着网页流量的很大一部分。<bookmark mark='a'/>它把传输层和 TLS，也就是第30部分的加密，合二为一。一个新连接在发出请求之前只需要一个往返，而不是两三个；而回到一个已经认识的服务器的客户端，可以在第一个分组里就发出请求。<bookmark mark='b'/>在内部，它有顺序彼此独立的流，还有和 TCP 很像的丢失恢复与拥塞控制，但每个分组，包括重传的分组，都会得到一个新的编号，所以 Karn 的歧义消失了。<bookmark mark='c'/>几乎所有内容都是加密的，连头部的大部分也是，所以没有任何中间盒能开始依赖它。<bookmark mark='d'/>一个连接由一个标识符来命名，而不是由地址和端口，所以一部手机从 Wi-Fi 走到蜂窝网络上，仍能保住它的连接。<bookmark mark='e'/>而且它运行在普通程序里，所以它能和浏览器一样快地演进。"
+  },
+  "080f51003184": {
+   "scene": "Cdn",
+   "en": "Chapter fourteen. Caches at the edge.",
+   "zh": "第十四章。边缘的缓存。"
+  },
+  "784b5f668935": {
+   "scene": "Cdn",
+   "en": "Everything in this part says that distance is expensive. Throughput falls as one over the round trip, and every handshake costs round trips. <bookmark mark='a'/> So the cheapest optimization of all is to make the path shorter. A content delivery network, starting with Akamai in 1998, keeps copies of popular content in thousands of places near users. <bookmark mark='b'/> Users are steered to a nearby copy in two ways: by DNS, answering each resolver with the address of a nearby site, with short times to live; or by anycast, announcing the same address from every site and letting BGP route each user to the closest. <bookmark mark='c'/> A request the nearby cache cannot answer goes back to the origin. So the question is how much a small cache can answer, and that depends on what people ask for.",
+   "zh": "这一部分的一切都在说：距离是昂贵的。吞吐量与往返时间成反比，每次握手都要花掉若干个往返。<bookmark mark='a'/>所以最便宜的优化，就是把路径变短。内容分发网络，从 1998 年的 Akamai 开始，把热门内容的副本放在靠近用户的成千上万个地方。<bookmark mark='b'/>把用户引向附近的副本有两种方式：通过 DNS，用附近站点的地址回答每个解析器，并设置很短的生存时间；或者通过任播，从每个站点通告同一个地址，让 BGP 把每个用户路由到最近的那个站点。<bookmark mark='c'/>附近的缓存回答不了的请求，会回到源站。所以问题在于，一个小缓存能回答多少，而这取决于人们请求什么。"
+  },
+  "9bf86ea19c8d": {
+   "scene": "Cdn",
+   "en": "In 1935 George Kingsley Zipf noticed that in any long text, the k-th most common word appears roughly in proportion to one over k. We can check it on the novels we have been counting all series. <bookmark mark='a'/> Four point six million words, fifty-eight thousand distinct ones; the commonest are the, and, to, of, a. Plot each word's count against its rank, both on logarithmic scales. <bookmark mark='b'/> The points fall on a line. Fitted between ranks ten and ten thousand, its slope is minus one point two two. <bookmark mark='c'/> Requests for web objects follow the same kind of law, as Lee Breslau and colleagues measured in 1999, with exponents a little below one: a few objects are requested constantly, and a long tail almost never. That shape is what makes caching work.",
+   "zh": "1935 年，George Kingsley Zipf 注意到，在任何一篇长文本里，第 k 常见的词，出现次数大致与 k 分之一成正比。我们可以在整个系列一直在数的那些小说上验证它。<bookmark mark='a'/>四百六十万个词，五万八千个不同的词；最常见的是 the、and、to、of、a。把每个词的次数对它的排名作图，两个轴都取对数刻度。<bookmark mark='b'/>这些点落在一条直线上。在排名十到一万之间拟合，斜率是负一点二二。<bookmark mark='c'/>对网页对象的请求遵循同一类定律，正如 Lee Breslau 和同事们在 1999 年测量到的，指数略小于一：少数对象被不断请求，而一条长尾几乎从来没人要。正是这个形状，让缓存起作用。"
+  },
+  "3eabb6f39a25": {
+   "scene": "Cdn",
+   "en": "Treat each word of the novels, in order, as a request, and put a cache in front of it that keeps the most recently used words: least-recently-used replacement, as in Part 9. <bookmark mark='a'/> A cache of a thousand words, under two percent of the vocabulary, answers seventy-nine percent of the requests. That is Zipf's law at work. <bookmark mark='b'/> In 2002 Hao Che and his colleagues found a simple, accurate way to predict an LRU cache's hit rate when requests are independent: each object stays in the cache for about the same characteristic time T, set so that the expected number of objects in it equals its size. <bookmark mark='c'/> Here the formula underestimates, by up to ten points. The reason is in the text: words are not independent draws. Whale comes in bursts, in the chapters about whales, and recency captures that, just as it captures the bursts of real web traffic when something becomes popular. At ten thousand words, LRU matches the best static choice of the most common words.",
+   "zh": "把小说里的每个词，按顺序当作一个请求，在它前面放一个缓存，保留最近用过的词：最近最少使用替换，就像第9部分那样。<bookmark mark='a'/>一个一千词的缓存，不到词汇量的百分之二，回答了百分之七十九的请求。这就是齐普夫定律在起作用。<bookmark mark='b'/>2002 年，Hao Che 和同事们找到了一种简单而准确的方法，在请求彼此独立时预测 LRU 缓存的命中率：每个对象在缓存里停留大约相同的特征时间 T，T 的取值使缓存中对象的期望个数等于缓存的大小。<bookmark mark='c'/>在这里，这个公式低估了，最多低十个百分点。原因就在文本里：词不是独立的抽样。whale，鲸，这个词成串出现，集中在讲鲸的那些章节里，而最近性抓住了这一点，就像它抓住真实网络流量中某样东西突然走红时的突发一样。到一万个词时，LRU 与最常见词的最佳静态选择不相上下。"
+  },
+  "966510fea396": {
+   "scene": "OurTcp",
+   "en": "Chapter fifteen. The novels, over our TCP.",
+   "zh": "第十五章。那些小说，经由我们的 TCP。"
+  },
+  "4fad3586c29a": {
+   "scene": "OurTcp",
+   "en": "Back to the hook. Our TCP fetches the twenty-five megabytes of novels from Frankfurt, over a hundred megabits a second, a hundred and eight milliseconds, a buffer of one pipe, and one random loss in a thousand. Here are the first five seconds. <bookmark mark='a'/> All three start with slow start, doubling each round trip: about ten round trips, one second, to reach the pipe. <bookmark mark='b'/> Reno and CUBIC are knocked down by the first random loss before they reach it, and Reno then crawls back at one packet per round trip. CUBIC's curve climbs faster, and is knocked down again. <bookmark mark='c'/> BBR's startup overshoots to nearly three pipes, overflowing the buffer and losing fifteen hundred packets of its own, which it resends without slowing; then it drains and sits on the pipe until the novels are done, at three point two seconds.",
+   "zh": "回到开场的问题。我们的 TCP 从法兰克福取回二十五兆字节的那些小说，链路是每秒一百兆比特，往返一百零八毫秒，缓冲区是一个管道的大小，随机丢包率是千分之一。这是前五秒。<bookmark mark='a'/>三者都从慢启动开始，每个往返翻一倍：大约十个往返，也就是一秒钟，才填满管道。<bookmark mark='b'/>Reno 和 CUBIC 还没填满，就被第一次随机丢失打了下来，然后 Reno 以每个往返一个分组的速度慢慢爬回来。CUBIC 的曲线爬得更快，又被打了下来。<bookmark mark='c'/>BBR 的启动冲过了头，几乎到了三个管道，溢出缓冲区，自己丢掉了一千五百个分组，它不减速地把它们重发；然后它排空队列，稳稳地待在管道上，直到小说传完，用时三点二秒。"
+  },
+  "058cca76a11f": {
+   "scene": "OurTcp",
+   "en": "Here is the account. <bookmark mark='a'/> Twenty-five million bytes, seventeen thousand packets, of which thirteen are lost at random. <bookmark mark='b'/> Reno takes thirty-five seconds, three hundred and twenty round trips, and resends only thirteen packets. CUBIC takes twenty-four. BBR takes three point two, twenty-nine round trips, and resends sixteen hundred packets, almost all of them dropped by its own startup. The physics allows two point two. <bookmark mark='c'/> The last column is the key. On the same path with no random loss, all three take three point two seconds: a dozen round trips of slow start, then the pipe. The whole factor of eleven comes from how each algorithm interprets thirteen lost packets. Reno reads each as a full queue and halves; on a path where losses are noise, that is the wrong theory, and it costs thirty seconds.",
+   "zh": "这是这笔账。<bookmark mark='a'/>两千五百万字节，一万七千个分组，其中十三个随机丢失。<bookmark mark='b'/>Reno 用了三十五秒，三百二十个往返，只重发了十三个分组。CUBIC 用了二十四秒。BBR 用了三点二秒，二十九个往返，重发了一千六百个分组，几乎全是被它自己的启动阶段丢掉的。物理允许的是二点二秒。<bookmark mark='c'/>最后一列是关键。在同一条路径上，如果没有随机丢失，三者都用三点二秒：十几个往返的慢启动，然后就是满管道。这整整十一倍的差距，全都来自每个算法如何解读十三个丢失的分组。Reno 把每一个都读作队列已满，于是减半；在丢失只是噪声的路径上，这是错误的理论，它要付出三十秒的代价。"
+  },
+  "28737b2bbb00": {
+   "scene": "OurTcp",
+   "en": "The ledger gets row fourteen. <bookmark mark='a'/> The novels, fetched from Frankfurt over our TCP with CUBIC, the default on Linux, in twenty-four seconds, then counted under PebbleOS, as in row twelve, in under three. <bookmark mark='b'/> Twenty-seven seconds in all, and ninety percent of it is the network. For the first time in this series, computing is not what limits the Job: distance is. <bookmark mark='c'/> With BBR the fetch takes three seconds; with Reno, thirty-five. The next parts spread the Job over many machines, and every one of them will pay this toll to talk to the others.",
+   "zh": "账本添上第十四行。<bookmark mark='a'/>那些小说，经由我们的 TCP，用 Linux 上默认的 CUBIC，从法兰克福取回，用时二十四秒，然后像第十二行那样在 PebbleOS 下计数，不到三秒。<bookmark mark='b'/>总共二十七秒，其中百分之九十是网络。在这个系列里第一次，限制作业的不是计算：而是距离。<bookmark mark='c'/>用 BBR，取回只要三秒；用 Reno，要三十五秒。接下来的几部分会把作业分摊到许多台机器上，而它们每一台和别的机器交谈时，都要付这笔过路费。"
+  },
+  "e3980e52e95b": {
+   "scene": "Frontier",
+   "en": "Chapter sixteen. Frontier: can congestion control be fair?",
+   "zh": "第十六章。前沿：拥塞控制能做到公平吗？"
+  },
+  "bf9285ca83c9": {
+   "scene": "Frontier",
+   "en": "Half a century after the alternating bit, congestion control still has open questions, and in 2022 it acquired an impossibility theorem. <bookmark mark='a'/> To keep queues short, modern algorithms react to delay rather than waiting for loss. Each, in steady state, keeps the queueing delay inside some small range. <bookmark mark='b'/> But some delay has nothing to do with congestion. Wi-Fi and cellular links deliver ACKs in batches; schedulers hold packets back; two paths differ by a few milliseconds. <bookmark mark='c'/> Venkat Arun, Mohammad Alizadeh and Hari Balakrishnan proved that if this non-congestive delay can exceed the range an algorithm converges to, there is a network in which one of two flows gets an arbitrarily small share. <bookmark mark='d'/> The reason is simple to state. A flow cannot tell its own queue apart from delay it cannot see the cause of. Add a little noise to one flow's path, and it believes the link is busier than it is, and yields. <bookmark mark='e'/> Low delay, full use of the link, and fairness despite jitter: you can choose two.",
+   "zh": "在交替位协议之后半个世纪，拥塞控制仍有悬而未决的问题，而在 2022 年，它得到了一个不可能性定理。<bookmark mark='a'/>为了让队列保持短小，现代算法对时延作出反应，而不是等待丢包。每一种算法在稳态下，都把排队时延保持在某个小范围之内。<bookmark mark='b'/>但有些时延与拥塞毫无关系。Wi-Fi 和蜂窝链路成批地交付 ACK；调度器会把分组扣住；两条路径之间相差几毫秒。<bookmark mark='c'/>Venkat Arun、Mohammad Alizadeh 和 Hari Balakrishnan 证明：如果这种非拥塞性的时延可以超过一个算法所收敛到的范围，那么就存在一个网络，在其中两条流之一只能得到任意小的份额。<bookmark mark='d'/>原因说起来很简单。一条流无法把自己造成的排队，和它看不到成因的时延区分开来。给一条流的路径加上一点噪声，它就会以为链路比实际更忙，于是退让。<bookmark mark='e'/>低时延、链路的充分利用，以及抖动之下的公平：三者只能选两个。"
+  },
+  "28ac6e3f00f5": {
+   "scene": "Frontier",
+   "en": "We can watch it happen in our simulator. Two flows of the same algorithm share a twenty-megabit link, and one flow's ACKs are delayed by a random amount, up to D, kept in order, as a Wi-Fi link might deliver them. <bookmark mark='a'/> With Vegas, the jittery flow's share falls steadily: at forty milliseconds of jitter it gets one and a half megabits against seventeen point seven, and it keeps falling. <bookmark mark='b'/> BBR resists better, because its estimate of the propagation delay is a minimum, which filters noise out, but at forty milliseconds the split is fifteen to four. <bookmark mark='c'/> Reno is hurt only as any longer round trip hurts it, and the damage stops growing, because it converges on losses, not delays. Its price for that robustness is the full buffer of delay we saw in chapter nine.",
+   "zh": "我们可以在模拟器里看着它发生。同一种算法的两条流共享一条二十兆比特的链路，其中一条流的 ACK 被延迟一个随机的量，最多为 D，并保持顺序，就像一条 Wi-Fi 链路可能的交付方式那样。<bookmark mark='a'/>用 Vegas，有抖动的那条流的份额稳步下降：在四十毫秒的抖动下，它只得到一点五兆比特，而另一条是十七点七，并且还在继续下降。<bookmark mark='b'/>BBR 抵抗得更好，因为它对传播时延的估计取的是最小值，能把噪声滤掉，但在四十毫秒时，分配是十五比四。<bookmark mark='c'/>Reno 受到的伤害，仅相当于任何更长的往返时间对它的伤害，而且伤害不再增长，因为它依据丢包收敛，而不是依据时延。为了这种稳健，它付出的代价，是我们在第九章看到的那整整一个缓冲区的时延。"
+  },
+  "f44f2bb5d16f": {
+   "scene": "Frontier",
+   "en": "Where this leaves the field. <bookmark mark='a'/> The theorem says what is impossible, but not the exact price: how much queueing delay must an algorithm accept to stay within some factor of fair, when the noise can reach D? That curve is not known. <bookmark mark='b'/> One escape is to ask the network for help. L4S, standardized in 2023, has routers mark packets with explicit congestion notification long before queues build, so senders need not guess congestion from delay; if every sender on a link cooperates, queues stay under a millisecond. <bookmark mark='c'/> Another is to let computers design the rules. Remy, in 2013, searched for congestion control rules automatically; later systems learned them with reinforcement learning; and in 2021 Arun and colleagues used an SMT solver, the tool of Part 26, to prove properties of real algorithms, and found flaws in some. <bookmark mark='d'/> And no theory yet describes the Internet as it is, with Reno, CUBIC, BBR and a dozen variants of QUIC's control all sharing the same queues. <bookmark mark='e'/> This part's research problem asks you to measure that delay and fairness trade-off on our own simulator.",
+   "zh": "这个领域如今走到了哪里。<bookmark mark='a'/>定理说明了什么是不可能的，却没有给出确切的代价：当噪声可以达到 D 时，一个算法必须接受多少排队时延，才能保持在公平的某个倍数之内？那条曲线还没有人知道。<bookmark mark='b'/>一条出路是请网络帮忙。L4S 于 2023 年标准化，它让路由器远在队列积起来之前，就用显式拥塞通知，也就是 ECN，来标记分组，这样发送方就不必从时延中猜测拥塞；如果一条链路上的每个发送方都配合，队列就能保持在一毫秒以下。<bookmark mark='c'/>另一条出路是让计算机来设计规则。2013 年的 Remy 自动搜索拥塞控制规则；后来的系统用强化学习来学这些规则；而在 2021 年，Arun 和同事们用 SMT 求解器，也就是第26部分的工具，证明真实算法的性质，并在其中一些里发现了缺陷。<bookmark mark='d'/>而且，还没有任何理论能描述互联网真实的样子：Reno、CUBIC、BBR，以及 QUIC 拥塞控制的十几种变体，全都共享同样的队列。<bookmark mark='e'/>这一部分的研究问题，请你在我们自己的模拟器上测量时延与公平之间的这种权衡。"
+  },
+  "8d5490971e80": {
+   "scene": "Outro",
+   "en": "What we built in this part. Reliable delivery from nothing: stop-and-wait, the alternating bit, and windows, with the exact number of sequence numbers they need. TCP's handshake, its cookies and its timers. The collapse of 1986, reproduced, and Jacobson's cure, with Chiu and Jain's proof that it is fair. The Mathis formula, measured; queues, bufferbloat and CoDel; CUBIC and BBR; and Kelly's theorem that all of this is an optimization algorithm, with prices on links. Then names, the web over QUIC, and caches shaped by Zipf's law.",
+   "zh": "这一部分我们搭建了什么。从零开始的可靠交付：停等协议、交替位协议，以及窗口，还有它们恰好需要多少个序号。TCP 的握手、它的 cookie 和它的计时器。1986 年的崩溃，我们重现了它，以及 Jacobson 的解药，还有 Chiu 和 Jain 关于它公平的证明。经过测量的 Mathis 公式；队列、缓冲膨胀和 CoDel；CUBIC 和 BBR；以及 Kelly 的定理：这一切都是一个优化算法，价格标在链路上。然后是名字、跑在 QUIC 上的网页，以及由齐普夫定律塑造的缓存。"
+  },
+  "460b1334b0fb": {
+   "scene": "Outro",
+   "en": "Where this comes back. Part 38 asks machines to agree over a network that loses and delays messages, where a timeout can never tell a dead machine from a slow one. Part 39 replicates data across these round trips, and runs the Job on many machines. Part 42 builds the browser on top of QUIC and TLS. Part 45 rents load balancers and content networks by the hour. And Parts 49 and 50 find retries, backoff and CoDel's ideas inside every large service.",
+   "zh": "它们会在哪里再出现。第38部分要求机器在一个会丢失和延迟消息的网络上达成一致，在那里，超时永远无法分辨一台死掉的机器和一台慢的机器。第39部分跨越这些往返来复制数据，并在许多台机器上运行作业。第42部分在 QUIC 和 TLS 之上构建浏览器。第45部分按小时租用负载均衡器和内容分发网络。而第49和第50部分，会在每一个大型服务的内部，找到重试、退避和 CoDel 的思想。"
+  },
+  "8d32d37c0633": {
+   "scene": "Outro",
+   "en": "In practice. On long, fast paths, make sure socket buffers can hold a bandwidth-delay product, and try BBR, which on Linux is one setting. At home, turn on fq_codel or CAKE, shaping just below the link's rate, and bufferbloat disappears. Reuse connections: every new one costs round trips and a slow start. To see what TCP is doing, ss with the t and i flags shows each connection's window, round trip and retransmissions, and Wireshark draws its sequence numbers over time. And choose DNS times to live on purpose.",
+   "zh": "在实践中。在又长又快的路径上，确保套接字缓冲区能容纳一个带宽时延积，并试试 BBR，在 Linux 上它只是一项设置。在家里，打开 fq_codel 或 CAKE，把整形速率设在略低于链路速率的地方，缓冲膨胀就会消失。复用连接：每个新连接都要花掉若干个往返和一次慢启动。要看 TCP 在做什么，带 t 和 i 选项的 ss 会显示每个连接的窗口、往返时间和重传，而 Wireshark 会画出它的序号随时间的变化。还有，要有意识地选择 DNS 的生存时间。"
+  },
+  "cbae6ccf25a4": {
+   "scene": "Outro",
+   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build problem: add delayed acknowledgements to our TCP, as real receivers do, and see what breaks. The last, marked with a star, is a research problem: how much queueing delay must any algorithm accept to stay fair when one flow's path is noisy? Measure the curve, and compare it with the starvation theorem.",
+   "zh": "六道习题，完整解答在这一部分的笔记里。任何一道都可以暂停来看。第五道是动手题：给我们的 TCP 加上延迟确认，就像真实的接收方那样，看看什么会坏掉。最后一道标着星号，是研究问题：当一条流的路径有噪声时，任何算法必须接受多少排队时延，才能保持公平？测量这条曲线，并把它与饥饿定理比较。"
+  },
+  "dcc2a7f4213f": {
+   "scene": "Outro",
+   "en": "Next time, Part 38: Distributed systems, agreement. Over the lossy network of this part, two generals can never be sure they agree, and with no clock in common, even the order of events is a matter of definition. Fischer, Lynch and Paterson proved that consensus is impossible when messages can be arbitrarily slow. Paxos and Raft reach it anyway, and we build Raft on our network and try to break it. Part 38, Agreement.",
+   "zh": "下一次，第38部分：分布式系统，达成一致。在这一部分这样有损的网络上，两位将军永远无法确定他们达成了一致，而没有共同的时钟，就连事件的顺序也成了一个定义问题。Fischer、Lynch 和 Paterson 证明了：当消息可以任意慢时，共识是不可能的。Paxos 和 Raft 却照样达成了共识，我们会在自己的网络上搭建 Raft，并试着把它弄坏。第38部分，达成一致。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分所依据的书和论文都在屏幕上和笔记里。感谢观看。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 37, Networks II: Reliable Conversation",
+ "chapters_en": {
+  "Hook": "Thirty novels from Frankfurt",
+  "Transport": "1. The transport problem",
+  "Rdt": "2. Reliability from scratch",
+  "Windows": "3. Sliding windows",
+  "Tcp": "4. TCP",
+  "Rtt": "5. Timers that learn",
+  "Collapse": "6. Congestion collapse",
+  "Aimd": "7. AIMD",
+  "Mathis": "8. The Mathis formula",
+  "Buffers": "9. Queues",
+  "Modern": "10. Modern congestion control",
+  "Num": "11. TCP as optimization",
+  "Dns": "12. Names",
+  "Web": "13. The web's transport",
+  "Cdn": "14. Caches at the edge",
+  "OurTcp": "15. The novels, over our TCP",
+  "Frontier": "16. Frontier: can congestion control be fair?",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}

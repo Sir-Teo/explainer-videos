@@ -1,0 +1,364 @@
+{
+  "title": "计算机科学，从零搭建 · 第25部分：不可判定",
+  "chapters": {
+    "Hook": "三个问题，三条线索",
+    "Classes": "1. 可判定与可识别",
+    "Reductions": "2. 映射归约",
+    "Rice": "3. Rice 定理",
+    "Recursion": "4. 知道自己代码的程序",
+    "Pcp": "5. Post 对应问题",
+    "Tiles": "6. 铺满平面",
+    "Hilbert": "7. 希尔伯特第十问题",
+    "Godel": "8. 经由停机问题的 Gödel",
+    "Degrees": "9. 谕示与算术层级",
+    "Kolmogorov": "10. Kolmogorov 复杂度",
+    "Omega": "11. Chaitin 的 Omega",
+    "Beavers": "12. 再谈忙碌的海狸",
+    "Boundary": "13. 可判定性在哪里终止",
+    "Wild": "14. 实际系统中的不可判定性",
+    "Frontier": "15. 前沿：其他环上的希尔伯特第十问题",
+    "Outro": "回顾、习题，以及它们会在哪里再出现"
+  },
+  "lines": {
+    "9004d57a0237": {
+      "scene": "Hook",
+      "en": "Here are three questions linking geometry, arithmetic and programs. <bookmark mark='a'/> Can these eleven fixed-orientation Wang tiles cover the whole plane? <bookmark mark='b'/> Our search constructs finite patches. The separate Jeandel and Rao theorem proves full-plane tilings exist and none is periodic. <bookmark mark='c'/> Does x squared minus sixty-one y squared equal one have a solution with positive y? <bookmark mark='d'/> A million attempted positive values find none. Continued fractions give the least solution, with x equal to one billion, seven hundred and sixty-six million, three hundred and nineteen thousand and forty-nine. <bookmark mark='e'/> Can a program print its own source without reading a file? <bookmark mark='f'/> Yes. Both our Python and Pebble quines do exactly that. <bookmark mark='g'/> Tiling and general integer equations lead to undecidability. The quine question has a constructive answer: self-reference supplies a technique used in the impossibility proofs.",
+      "zh": "三个问题把几何、算术和程序联系起来。<bookmark mark='a'/>这十一种方向固定的 Wang 砖能铺满平面吗？<bookmark mark='b'/>搜索构造了有限拼片；另一个独立的 Jeandel 与 Rao 定理证明，它们能铺满平面，而且只能非周期铺砌。<bookmark mark='c'/>当 y 为正整数时，x 的平方减去六十一倍 y 的平方等于一，有解吗？<bookmark mark='d'/>尝试一百万个正整数 y，仍未找到解。连分数给出最小解，其中 x 等于十七亿六千六百三十一万九千零四十九。<bookmark mark='e'/>程序能不读取文件就打印自身源码吗？<bookmark mark='f'/>能。我们的 Python 和 Pebble 自打印程序都逐字节做到了。<bookmark mark='g'/>铺砌与一般整数方程通向不可判定性；自打印问题则有构造性的答案。自引用提供了不可能性证明所用的一种技巧。"
+    },
+    "70cac2f63d0d": {
+      "scene": "Hook",
+      "en": "Part 25 of Computer Science, Built: Undecidable. Act Five begins: limits and secrets. <bookmark mark='a'/> We study decidability, recognition and reductions; Rice's theorem for nontrivial extensional program properties; constructive self-reference; dominoes, tiles and integer equations; effective arithmetic theories and incompleteness; oracles and the arithmetic hierarchy; plain program complexity, prefix-free Omega, and busy beavers. Each result has a model and assumptions, and our finite experiments will keep their limits explicit.",
+      "zh": "计算机科学，从零搭建，第25部分：不可判定。第五幕开始：极限与秘密。<bookmark mark='a'/>我们讨论可判定、可识别与归约；针对非平凡外延性质的 Rice 定理；构造性的自引用；多米诺、砖块与整数方程；有效算术理论与不完备性；谕示与算术层级；普通程序复杂度、前缀无关的 Omega，以及忙碌海狸。每个结果都有模型和前提，有限实验也会明确说明自己的边界。"
+    },
+    "21381cd4a369": {
+      "scene": "Classes",
+      "en": "Chapter one. Decidable, and recognizable.",
+      "zh": "第1章。可判定，与可识别。"
+    },
+    "3758f1b0e5df": {
+      "scene": "Classes",
+      "en": "Part 1 proved that halting is undecidable. <bookmark mark='a'/> A decider always halts and answers membership correctly. <bookmark mark='b'/> A recognizer accepts every member and never accepts a nonmember. On a nonmember it may reject or run forever. <bookmark mark='c'/> Co-recognizable means that the complement has a recognizer. <bookmark mark='d'/> K contains machine descriptions whose machines halt on their own descriptions, whether accepting or rejecting. <bookmark mark='e'/> Simulate the machine; any halt confirms membership in K. <bookmark mark='f'/> But the diagonal argument proves no decider for K exists.",
+      "zh": "第1部分证明了停机不可判定。<bookmark mark='a'/>判定器总会停机，并正确回答成员关系。<bookmark mark='b'/>识别器接受每个成员，绝不接受非成员；在非成员上，它可以拒绝，也可以永远运行。<bookmark mark='c'/>补可识别，就是补集有识别器。<bookmark mark='d'/>K 包含那些在自身描述上会停机的机器描述，接受或拒绝都算停机。<bookmark mark='e'/>模拟机器；任何停机都能确认它属于 K。<bookmark mark='f'/>但对角线论证证明，K 没有判定器。"
+    },
+    "c736cd2bff5d": {
+      "scene": "Classes",
+      "en": "Draw the classes. <bookmark mark='a'/> Recognizable sets on the left, co-recognizable on the right. <bookmark mark='b'/> Their intersection is exactly the decidable sets. Dovetail recognizers for a language and its complement. Wait for one to ACCEPT, not merely halt. Exactly one accepts eventually, and neither gives a false acceptance. <bookmark mark='c'/> K is recognizable and undecidable, so its complement cannot be recognizable. <bookmark mark='d'/> TOT, the machines halting on every input, is neither recognizable nor co-recognizable. This forbids uniform recognizers for the two sides; it does not rule out finite proofs for particular machines.",
+      "zh": "画出这些类。<bookmark mark='a'/>左边是可识别集，右边是补可识别集。<bookmark mark='b'/>交集恰好是可判定集。交错运行语言及其补集的识别器，等待其中一个接受，而不是仅仅停机。最终恰有一方接受，且都不会错误接受。<bookmark mark='c'/>K 可识别而不可判定，所以其补集不可识别。<bookmark mark='d'/>TOT 是在所有输入上都停机的机器集合，它既不可识别，也不是补可识别的。这禁止的是处理所有实例的统一识别器，并不排除特定机器拥有有限证明。"
+    },
+    "ab6b9fc2a09d": {
+      "scene": "Reductions",
+      "en": "Chapter two. Mapping reductions.",
+      "zh": "第2章。映射归约。"
+    },
+    "0041fb8d1f02": {
+      "scene": "Reductions",
+      "en": "Almost every impossibility proof after the first one is a reduction. <bookmark mark='a'/> A maps to B if a computable function f turns every question about A into a question about B with the same answer: members land inside B, and non-members land outside. <bookmark mark='b'/> Then a decider for B gives a decider for A: compute f, and ask. <bookmark mark='c'/> Read backwards, if A is undecidable, B must be too. To prove a new problem impossible, you show that the halting problem reduces to it.",
+      "zh": "第一个不可能性证明之后，几乎每一个都是归约。<bookmark mark='a'/>说 A 映射归约到 B，如果有一个可计算函数 f，把每个关于 A 的问题变成一个答案相同的关于 B 的问题：成员落在 B 里面，非成员落在外面。<bookmark mark='b'/>那么 B 的判定器就给出 A 的判定器：算出 f，再去问。<bookmark mark='c'/>倒过来读，如果 A 不可判定，B 也必然不可判定。要证明一个新问题不可能，就证明停机问题能归约到它。"
+    },
+    "faacfe9e7156": {
+      "scene": "Reductions",
+      "en": "Here is the catalogue. <bookmark mark='a'/> Acceptance is recognizable and undecidable. To reduce K to acceptance, wrap M so that it simulates M on its own description and ACCEPTS after any halt, including rejection. Emptiness is co-recognizable; equivalence and totality are neither. <bookmark mark='b'/> A standard construction ignores the new machine's input and simulates a chosen computation. <bookmark mark='c'/> Make M prime accept everything if M accepts w, and nothing otherwise. Then M prime has an empty language exactly when M does NOT accept w. A decider for emptiness would decide acceptance by reversing its answer. The exercises give both reductions needed for equivalence. <bookmark mark='d'/> Rice's theorem handles many nontrivial semantic questions together.",
+      "zh": "先看这份目录。<bookmark mark='a'/>接受问题可识别而不可判定。把 K 归约到接受问题时，要包装 M：模拟它在自身描述上的运行，只要停机就接受，包括原模拟拒绝的情况。空语言问题补可识别；等价性和全停机性则两边都不在。<bookmark mark='b'/>常用构造是忽略新机器的输入，模拟指定计算。<bookmark mark='c'/>若 M 接受 w，就让 M 撇接受一切，否则什么都不接受。因此，M 撇的语言为空，当且仅当 M 不接受 w。把空语言判定器的答案反转，就能判定接受问题。习题给出了等价性所需的两个归约。<bookmark mark='d'/>Rice 定理一次处理许多非平凡语义问题。"
+    },
+    "eabc1deb4827": {
+      "scene": "Rice",
+      "en": "Chapter three. Rice's theorem.",
+      "zh": "第3章。Rice 定理。"
+    },
+    "67f50d3c9fe6": {
+      "scene": "Rice",
+      "en": "Rice's theorem concerns partial computable input-output functions in an effective universal programming system. <bookmark mark='a'/> A property is extensional if equal partial functions always agree on it. Faults and divergence both count as undefined under this convention. <bookmark mark='b'/> Nontrivial means that some computed functions have the property and some lack it. <bookmark mark='c'/> Defined on zero, total, computes sorting, or equals a fixed partial computable function are examples. Never dividing by zero is not an extensional example under these observations. <bookmark mark='d'/> Suppose the nowhere-defined function lacks P and some program Y has it. <bookmark mark='e'/> Construct M prime to simulate M on w, then run Y on its own input if the simulation halts. <bookmark mark='f'/> If M halts, M prime computes Y's function; otherwise it computes the nowhere-defined function. <bookmark mark='g'/> A decider for P would decide halting. If the nowhere-defined function has P, apply the argument to its complement.",
+      "zh": "Rice 定理讨论有效通用编程系统中的部分可计算输入输出函数。<bookmark mark='a'/>外延性质要求：部分函数相同，性质就相同。这里出错和发散都视为没有定义输出。<bookmark mark='b'/>非平凡表示有些可计算函数具有该性质，有些没有。<bookmark mark='c'/>例如在零上有定义、处处有定义、计算排序函数，或等于给定部分可计算函数。在这种观察方式下，从不除以零不是外延性质的例子。<bookmark mark='d'/>设处处无定义的函数没有性质 P，而程序 Y 有。<bookmark mark='e'/>构造 M 撇：先在 w 上模拟 M，模拟停机后再在自己的输入上运行 Y。<bookmark mark='f'/>若 M 停机，M 撇计算 Y 的函数；否则它处处无定义。<bookmark mark='g'/>P 的判定器就会判定停机。如果处处无定义的函数有 P，就对补性质使用同样论证。"
+    },
+    "993d2e74dc13": {
+      "scene": "Rice",
+      "en": "These limits guide software design under unbounded semantics. <bookmark mark='a'/> Exact detection of a specified nontrivial extensional malicious behaviour is undecidable. The behaviour and observation model must be stated. <bookmark mark='b'/> Detecting all dead code is impossible in general; optimization impossibility claims likewise require a particular objective and model. <bookmark mark='c'/> No terminating analyzer decides every instance of such an undecidable property both without missed cases and without false alarms. <bookmark mark='d'/> Practical tools use conservative approximations or incomplete searches. <bookmark mark='e'/> Restrictions can make particular questions decidable. Totality alone does not make all semantic questions decidable: even equality of total primitive recursive programs is problematic. <bookmark mark='f'/> Syntactic questions about a finite program description remain decidable by inspection.",
+      "zh": "这些限制在无界语义下指导软件设计。<bookmark mark='a'/>精确检测指定的、非平凡的外延恶意行为不可判定，但必须先说明行为与观察模型。<bookmark mark='b'/>一般情形下无法找出全部死代码；关于最优编译的不可能性也需要指定目标与模型。<bookmark mark='c'/>对这样的不可判定性质，不存在总会结束、既无漏报又无误报的分析器。<bookmark mark='d'/>实用工具采用保守近似或不完备搜索。<bookmark mark='e'/>限制可以让特定问题可判定。但仅保证程序终止，并不会让所有语义问题可判定，例如全停机的原始递归程序之间的等价性仍有困难。<bookmark mark='f'/>有限程序描述的语法问题则可以直接检查判定。"
+    },
+    "9894a0a78da3": {
+      "scene": "Recursion",
+      "en": "Chapter four. Programs that know their own code.",
+      "zh": "第4章。知道自己代码的程序。"
+    },
+    "c9b20243c921": {
+      "scene": "Recursion",
+      "en": "Can a program print its own source? The obvious attempt fails: a print statement must contain its own text, which contains the print statement, forever. <bookmark mark='a'/> The trick is to split the program in two. Here in Python, the string s is a template of the whole program, with a hole. The print statement fills the hole with the string itself, quoted. <bookmark mark='b'/> Our Pebble language has no string formatting, so its quine is longer: seven hundred and fifty-nine lines. Most of them store the rest of the program as numbers, one character each. <bookmark mark='c'/> The tail then prints the head from that data, then prints each assignment statement, then prints the tail. Part A describes part B; part B prints A twice, once as code and once as the text it encodes. <bookmark mark='d'/> We ran it on the emulator: ninety-nine thousand instructions, and the output is the source, byte for byte.",
+      "zh": "一个程序能打印出自己的源代码吗？最直接的尝试会失败：打印语句必须包含自己的文本，而那段文本又包含打印语句，没完没了。<bookmark mark='a'/>诀窍是把程序拆成两半。在这个 Python 例子里，字符串 s 是整个程序的模板，留着一个洞。打印语句用加了引号的字符串自己去填这个洞。<bookmark mark='b'/>我们的 Pebble 语言没有字符串格式化，所以它的自打印程序更长：七百五十九行。其中大多数行把程序的其余部分存成数字，每个字符一个。<bookmark mark='c'/>然后尾部先从这些数据打印出头部，再打印每一条赋值语句，最后打印尾部。A 部分描述 B 部分；B 部分把 A 打印两遍，一遍作为代码，一遍作为它所编码的文本。<bookmark mark='d'/>我们在模拟器上运行了它：九万九千条指令，输出就是源代码，逐字节相同。"
+    },
+    "6c88eca7eb13": {
+      "scene": "Recursion",
+      "en": "Kleene's recursion theorem makes self-reference precise. <bookmark mark='a'/> In an acceptable effective numbering of programs, every TOTAL computable transformation of program indices has an index whose program computes the same partial function as its transform. <bookmark mark='b'/> This constructs programs with an embedded description of themselves. It does not provide arbitrary source introspection to every existing program. <bookmark mark='c'/> Printing a supplied description gives the quine construction. <bookmark mark='d'/> If H decided halting, construct R with its own description embedded, ask H whether R halts, and do the opposite. H must be wrong. <bookmark mark='e'/> The construction packages the diagonal argument as a programming technique. <bookmark mark='f'/> Related self-reference appears in Gödel sentences and Thompson's compiler construction in Part 55.",
+      "zh": "Kleene 递归定理把自引用说得精确。<bookmark mark='a'/>在可接受的有效程序编号下，每个作用于程序编号的全可计算变换，都有一个编号，使其程序与变换后的程序计算同一个部分函数。<bookmark mark='b'/>它构造出嵌有自身描述的程序，并不是为每个已有程序提供任意读取自身源码的能力。<bookmark mark='c'/>打印给定描述，就得到自打印构造。<bookmark mark='d'/>若 H 能判定停机，就构造嵌有自身描述的 R，询问 H 自己是否停机，然后反着做，H 必然出错。<bookmark mark='e'/>这个构造把对角线论证封装成编程技巧。<bookmark mark='f'/>相关自引用还出现在 Gödel 语句，以及第55部分 Thompson 的编译器构造中。"
+    },
+    "c2e1297c6309": {
+      "scene": "Pcp",
+      "en": "Chapter five. Post's correspondence problem.",
+      "zh": "第5章。Post 对应问题。"
+    },
+    "e446fbce9f60": {
+      "scene": "Pcp",
+      "en": "Post's correspondence problem uses a NONEMPTY sequence of dominoes. <bookmark mark='a'/> Each has a top and bottom string; repetitions are allowed. <bookmark mark='b'/> For these four, the sequence two, one, three, two, four is a match. <bookmark mark='c'/> Concatenating each row gives the same string. <bookmark mark='d'/> The general question asks whether any nonempty match exists. <bookmark mark='e'/> Post proved it undecidable. Matches are finite certificates. Some no-match instances also have finite proofs, including exhausted finite residual graphs. What fails is a total general decider; the full no-match set is not recognizable.",
+      "zh": "Post 对应问题要求多米诺序列非空。<bookmark mark='a'/>每张都有上串和下串，可以重复使用。<bookmark mark='b'/>这四张的序列二、一、三、二、四构成匹配。<bookmark mark='c'/>连接两行，得到同一个字符串。<bookmark mark='d'/>一般问题问是否存在任意非空匹配。<bookmark mark='e'/>Post 证明它不可判定。匹配本身是有限证书；某些无匹配实例也有有限证明，例如穷尽一个有限的可达剩余状态图。不存在的是通用的全停机判定器，而且全部无匹配实例组成的集合不可识别。"
+    },
+    "63cf0a2f83ec": {
+      "scene": "Pcp",
+      "en": "Computation histories explain the reduction. <bookmark mark='a'/> Our example moves right twice and accepts input one zero. The didactic tape model rejects a left move off its first cell; it never clamps the head. <bookmark mark='b'/> Start, transition, copying, cleanup and closing dominoes encode successive configurations. The start domino is REQUIRED first: this is modified PCP. <bookmark mark='c'/> The bottom row leads the top by one configuration, until accepting cleanup lets the rows close. <bookmark mark='d'/> We check the full concatenated top and bottom for equality, and retain the complete accepting trace. <bookmark mark='e'/> The standard construction reduces acceptance to modified PCP. A separate transformation converts modified PCP to ordinary PCP. The displayed witness illustrates the construction under its stated alphabet and boundary conventions.",
+      "zh": "计算历史解释了这个归约。<bookmark mark='a'/>例子向右移动两次，并接受输入一零。这里的教学纸带模型在越过最左端时拒绝，不会把读头强行留在原处。<bookmark mark='b'/>起始、转移、复制、清理与收尾多米诺编码连续配置。起始多米诺必须放第一张，因此这里是修改版 PCP。<bookmark mark='c'/>下行比上行领先一个配置，直到接受状态的清理使两行闭合。<bookmark mark='d'/>我们核对完整上下串相等，并保留完整的接受轨迹。<bookmark mark='e'/>标准构造把接受问题归约到修改版 PCP；还要另一个变换才能得到普通 PCP。屏幕上的见证在明确的字母表与边界约定下展示这个构造。"
+    },
+    "43f613df8106": {
+      "scene": "Pcp",
+      "en": "Our search uses fixed budgets and retains every sampled instance. <bookmark mark='a'/> We draw twenty thousand three-domino sets with one-to-three-bit words. Every result says matched, exhausted, depth limit or node limit; an unfinished search is not a no-match proof. <bookmark mark='b'/> The longest shortest match among the solved sample instances has fifteen dominoes. <bookmark mark='c'/> The displayed four-domino instance really has shortest match length two hundred and six. We execute the search, check the full strings and retain a residual-graph distance certificate excluding shorter matches. No computable shortest-match bound exists for UNRESTRICTED PCP. This does not settle the fixed four-domino case. <bookmark mark='d'/> Two dominoes are decidable. Neary's published 2015 theorem proves undecidability for five. <bookmark mark='e'/> That published theorem leaves three and four open; its five-pair result supersedes a conflicting earlier preprint.",
+      "zh": "搜索使用固定预算，并保留每个抽样实例。<bookmark mark='a'/>我们抽取两万组三张多米诺，词长为一到三位。每个结果都注明匹配、穷尽、深度上限或节点上限；未完成的搜索不是无匹配证明。<bookmark mark='b'/>已解出的样本中，最长的最短匹配有十五张。<bookmark mark='c'/>屏幕上的四张实例，其最短匹配确为二百零六张。我们实际运行搜索、核对完整字符串，并保留剩余状态图距离证书，排除更短匹配。无可计算最短匹配界的结论针对张数不受限的 PCP，并未解决固定四张的情形。<bookmark mark='d'/>两张时可判定；Neary 正式发表于2015年的定理证明五张时不可判定。<bookmark mark='e'/>该正式论文把三张与四张列为开放情形；应采用五张的正式结果，而不是结论冲突的早期预印本。"
+    },
+    "f602ac7a14e7": {
+      "scene": "Pcp",
+      "en": "Here is the promised ambiguity reduction. <bookmark mark='a'/> For each domino, the T rules generate its top string, and the B rules its bottom, followed by distinct index markers in reverse sequence order. Markers use a disjoint terminal alphabet. <bookmark mark='b'/> Each half is unambiguous because the markers determine every rule choice. <bookmark mark='c'/> A string has parses through both halves precisely when the same nonempty index sequence makes equal top and bottom strings. <bookmark mark='d'/> Thus grammar ambiguity, and nonempty intersection of two context-free languages, are undecidable. <bookmark mark='e'/> Context-free grammar universality is also undecidable, but needs another reduction; this construction alone does not prove it. Parser conflicts concern particular parsing methods and are not a general ambiguity decider.",
+      "zh": "这就是之前承诺的歧义归约。<bookmark mark='a'/>每张多米诺对应的 T 规则生成上串，B 规则生成下串，末尾按倒序附上索引标记；标记使用与原字符串不相交的终结符字母表。<bookmark mark='b'/>标记确定每一步规则选择，所以每一半都无歧义。<bookmark mark='c'/>同一字符串能经两半分别解析，当且仅当相同的非空索引序列使上下串相等。<bookmark mark='d'/>因此文法歧义，以及两个上下文无关语言的非空交，均不可判定。<bookmark mark='e'/>上下文无关文法的全域性也不可判定，但需要另一个归约，不能只凭这里的构造证明。解析冲突针对特定解析方法，并非通用歧义判定器。"
+    },
+    "7fe7f276f47c": {
+      "scene": "Tiles",
+      "en": "Chapter six. Tiling the plane.",
+      "zh": "第6章。铺满平面。"
+    },
+    "5618617b404c": {
+      "scene": "Tiles",
+      "en": "Wang tiles are oriented squares with colored edges. <bookmark mark='a'/> Copies cannot rotate, and adjacent edges must match. The plane problem asks for an infinite tiling. <bookmark mark='b'/> Our backtracker constructs all five displayed finite patches, retaining every grid and checking every edge independently. <bookmark mark='c'/> On the sixty-four tori up to eight by eight, sixty-two bounded searches finish with refutations and two hit the cap. Separately, complete closed-row graphs are acyclic at every width one through eight. Their checked topological certificates exclude tori of ANY height at these widths. <bookmark mark='d'/> These are finite-width results. Full-plane aperiodicity and minimality among Wang square sets come from Jeandel and Rao's theorem, including their five-color set T shown here.",
+      "zh": "Wang 砖是有方向、边缘带颜色的正方形。<bookmark mark='a'/>复制品不能旋转，相邻边必须同色。平面问题要求无限铺砌。<bookmark mark='b'/>回溯构造出屏幕上的五块有限拼片，保留全部网格，并独立核对每条相邻边。<bookmark mark='c'/>边长不超过八的六十四个环面搜索中，六十二个完成并排除铺砌，两个达到上限。另外，宽度一到八的完整闭合行图均无环；经过检查的拓扑证书排除了这些宽度下任意正高度的环面铺砌。<bookmark mark='d'/>这些只是有限宽度结论。全平面的非周期性与 Wang 正方形砖集合的最小性，来自 Jeandel 与 Rao 的定理，其中明确包括这里五种颜色的 T 集合。"
+    },
+    "366811c5167a": {
+      "scene": "Tiles",
+      "en": "A local computation tableau is the first idea, not the whole plane reduction. <bookmark mark='a'/> Rows encode tape configurations with a marked head and state. <bookmark mark='b'/> Local edge constraints enforce valid neighboring transitions. <bookmark mark='c'/> To obtain a full-plane equivalence with nonhalting, the reduction also needs hierarchical forcing of initialized computations on arbitrarily large scales. Without that mechanism, arbitrary rows could evade the intended start. <bookmark mark='d'/> Berger supplied this difficult aperiodic forcing in 1966; his construction used twenty thousand, four hundred and twenty-six tiles. <bookmark mark='e'/> Later constructions reduced the counts, under different square-tile or geometric-shape conventions. Jeandel and Rao's eleven-tile minimum concerns oriented Wang squares, not every possible tile shape.",
+      "zh": "局部计算表格只是第一步，还不是完整的平面归约。<bookmark mark='a'/>每行编码纸带配置，并标明读头与状态。<bookmark mark='b'/>局部边约束保证相邻行的转移合法。<bookmark mark='c'/>要得到全平面铺砌与不停机的等价，还必须分层强制在任意大尺度上出现正确初始化的计算；否则任意行可能绕开指定起点。<bookmark mark='d'/>Berger 在1966年完成了这个困难的非周期强制构造，用了两万零四百二十六种砖。<bookmark mark='e'/>后续构造在不同正方形砖或几何形状约定下减少了数量。Jeandel 与 Rao 的十一种最小性针对有方向的 Wang 正方形砖，并非一切可能形状。"
+    },
+    "935e9d8ebe00": {
+      "scene": "Tiles",
+      "en": "The sequence ended in 2023, with an amateur. <bookmark mark='a'/> David Smith, a retired print technician who played with shapes, found a single tile that covers the plane, but only aperiodically. With Joseph Myers, Craig Kaplan and Chaim Goodman-Strauss he proved it. <bookmark mark='b'/> It is called the hat: thirteen vertices, eight kites cut from a hexagonal grid. <bookmark mark='c'/> The hat needs reflected copies as well; two months later the same team found the spectre, which does not. <bookmark mark='d'/> It answered the einstein problem, German for one stone, which had been open since Berger's aperiodic sets. <bookmark mark='e'/> And it is still true that no algorithm can tell, for an arbitrary finite set of tiles, whether it covers the plane.",
+      "zh": "这个序列在2023年由一位业余爱好者画上了句号。<bookmark mark='a'/>David Smith，一位喜欢摆弄形状的退休印刷技师，找到了一块单独的砖，能铺满平面，但只能非周期地铺。他和 Joseph Myers、Craig Kaplan、Chaim Goodman-Strauss 一起证明了它。<bookmark mark='b'/>它叫作“帽子”：十三个顶点，由六边形网格切出的八个风筝形组成。<bookmark mark='c'/>帽子还需要它的镜像；两个月后，同一个团队找到了“幽灵”，它不需要镜像。<bookmark mark='d'/>它回答了“einstein 问题”，德语意思是“一块石头”，这个问题自 Berger 的非周期砖组以来一直悬而未决。<bookmark mark='e'/>而且仍然成立的是：对任意一组有限的砖，没有算法能判断它能否铺满平面。"
+    },
+    "48bf9c859e5f": {
+      "scene": "Hilbert",
+      "en": "Chapter seven. Hilbert's tenth problem.",
+      "zh": "第7章。希尔伯特第十问题。"
+    },
+    "f54ad3e028a5": {
+      "scene": "Hilbert",
+      "en": "Hilbert asked for an algorithm deciding integer polynomial solvability. <bookmark mark='a'/> Pell's equation illustrates distant witnesses: take positive nonsquare D and require y positive. Continued fractions give least solutions, including the thirty-digit x for D equal to nine hundred and ninety-one. <bookmark mark='b'/> Our deterministic brute search finds D thirteen in one hundred and eighty attempts and D twenty-nine in one thousand, eight hundred and twenty. A million attempts for sixty-one find none. <bookmark mark='c'/> For positive nonsquare D, Lagrange's theorem ensures a positive solution. We retain every convergent through the least one, check its exact identity, and record nine timing repetitions. <bookmark mark='d'/> A cutoff only excludes the searched range. General no-solution claims require a proof, not merely a search that has not yet found a witness.",
+      "zh": "Hilbert 要求算法判定整数多项式是否有整数解。<bookmark mark='a'/>Pell 方程展示了遥远的见证：D 取正的非平方整数，且要求 y 为正。连分数给出最小解，D 为九百九十一时，x 有三十位。<bookmark mark='b'/>固定预算的暴力搜索在一百八十次找到 D 为十三的解，在一千八百二十次找到 D 为二十九的解；对六十一尝试一百万次仍未找到。<bookmark mark='c'/>正的非平方 D 总有正解，这是 Lagrange 定理。我们保留直到最小解的全部收敛分数，核对精确恒等式，并记录九次计时。<bookmark mark='d'/>达到上限只排除了已搜索范围。要断言完全无解，必须另有证明，不能仅凭尚未找到见证的搜索。"
+    },
+    "eead48ddfc89": {
+      "scene": "Hilbert",
+      "en": "Recognizable sets are Diophantine, including the primes. <bookmark mark='a'/> Jones, Sato, Wada and Wiens wrote a twenty-six-variable polynomial of degree twenty-five. <bookmark mark='b'/> Over nonnegative integer inputs, its positive values are exactly the primes. <bookmark mark='c'/> It is k plus two times one minus a sum of fourteen squares. Positivity forces every square to vanish. For each prime k plus two, THERE EXISTS an auxiliary tuple satisfying those equations. An arbitrary auxiliary tuple need not satisfy them. <bookmark mark='d'/> This is a representation theorem, not an efficient prime generator or a measured assertion about random inputs. The existential auxiliary variables carry the computation.",
+      "zh": "可识别集都是丢番图集，素数集也一样。<bookmark mark='a'/>Jones、Sato、Wada 与 Wiens 写出了二十六变量、二十五次的多项式。<bookmark mark='b'/>当输入为非负整数时，它的正值集合恰好是素数集。<bookmark mark='c'/>形式是 k 加二，乘以一减去十四个平方之和。结果为正迫使每个平方都为零。对每个素数 k 加二，存在一组辅助变量满足这些方程；任意选取的辅助变量并不一定满足。<bookmark mark='d'/>这是表示定理，不是高效素数生成器，也不是关于随机输入的实测结论。存在量化的辅助变量承载了计算。"
+    },
+    "2a5939d2fe20": {
+      "scene": "Godel",
+      "en": "Chapter eight. Gödel, through halting.",
+      "zh": "第8章。经由停机问题的 Gödel。"
+    },
+    "cca6dd2192be": {
+      "scene": "Godel",
+      "en": "In 1931 Kurt Gödel needed arithmetic to talk about itself. <bookmark mark='a'/> Give every symbol a code number. <bookmark mark='b'/> Then encode a formula as a product of prime powers: two to the code of the first symbol, times three to the code of the second, and so on. Zero equals zero is two times twenty-seven times five: two hundred and seventy. A short statement that adding zero changes nothing has forty-seven digits. <bookmark mark='c'/> Factoring recovers the formula, so nothing is lost. <bookmark mark='d'/> A proof is a list of formulas, so it has a number too, and whether one number is a proof of another is a mechanical check. Part 1 did the same for machines, with description strings. Gödel did it first, for logic.",
+      "zh": "1931年，Kurt Gödel 需要让算术谈论它自己。<bookmark mark='a'/>给每个符号一个编码数。<bookmark mark='b'/>然后把一个公式编码成素数幂的乘积：二的第一个符号编码次方，乘以三的第二个符号编码次方，依此类推。零等于零是二乘二十七乘五：两百七十。一句“加零什么都不改变”的短陈述有四十七位。<bookmark mark='c'/>因式分解就能还原公式，所以什么都没丢。<bookmark mark='d'/>证明是一串公式，所以它也有一个编号，而一个数是否是另一个数的证明，是一项机械的检查。第1部分对机器做过同样的事，用的是描述字符串。Gödel 最先为逻辑做了这件事。"
+    },
+    "b40e4bc8694a": {
+      "scene": "Godel",
+      "en": "An effective sound arithmetic theory cannot prove every true nonhalting statement. <bookmark mark='a'/> Effective means its theorems can be enumerated by a program. <bookmark mark='b'/> Assume soundness and enough arithmetic to express the machine computations and verify finite halting witnesses. <bookmark mark='c'/> Suppose every true nonhalting assertion had a proof. <bookmark mark='d'/> Dovetail the actual run of M on w with theorem enumeration seeking the assertion that it never halts. <bookmark mark='e'/> If it halts, the simulation finishes; otherwise the assumed proof appears. Soundness prevents a false answer. <bookmark mark='f'/> This would decide halting, so the theory is incomplete. Effective axiomatization is essential: the set of all true arithmetic statements is not a counterexample to this scoped theorem.",
+      "zh": "有效而可靠的算术理论，无法证明全部真实的不停机语句。<bookmark mark='a'/>有效表示定理能由程序枚举。<bookmark mark='b'/>假设理论可靠，并且算术能力足以表达机器计算、核验有限停机见证。<bookmark mark='c'/>再假设每个真实的不停机断言都有证明。<bookmark mark='d'/>交错执行 M 在 w 上的运行与定理枚举，寻找它不停机的断言。<bookmark mark='e'/>若停机，模拟会完成；否则假设中的证明会出现。可靠性保证答案不会错。<bookmark mark='f'/>这样就能判定停机，产生矛盾，因此理论不完备。有效公理化不可省略：全部真算术语句组成的集合，并不是这个带前提定理的反例。"
+    },
+    "e21fb4f63092": {
+      "scene": "Godel",
+      "en": "Self-reference identifies a particular missing statement. <bookmark mark='a'/> Construct R with its own description embedded, and enumerate T's proofs searching for a proof that R never halts. Finding one makes R halt. <bookmark mark='b'/> If T proved nonhalting, R would halt, contradicting soundness. <bookmark mark='c'/> Thus R actually runs forever and its nonhalting is true but unprovable in this effective sound T. <bookmark mark='d'/> This is a program version of the Gödel self-reference idea. <bookmark mark='e'/> The exact historical assumptions differ: Gödel used consistency for unprovability and a stronger omega-consistency assumption for the opposite direction. Rosser's modified sentence obtains incompleteness from consistency alone, with the usual effective arithmetic hypotheses.",
+      "zh": "自引用能指出一个具体缺失的语句。<bookmark mark='a'/>构造嵌有自身描述的 R，枚举 T 的证明，寻找 R 不停机的证明；一旦找到就停机。<bookmark mark='b'/>若 T 证明不停机，R 便会停机，与可靠性矛盾。<bookmark mark='c'/>因此 R 实际永远运行，它的不停机在这个有效可靠的 T 中真实却不可证明。<bookmark mark='d'/>这是 Gödel 自引用思想的程序版本。<bookmark mark='e'/>历史上的精确假设有所不同：Gödel 对不可证明方向使用一致性，对另一方向使用更强的欧米伽一致性。Rosser 修改了语句，在通常的有效算术前提下，仅凭一致性就得到不完备性。"
+    },
+    "e76634f8b0ae": {
+      "scene": "Godel",
+      "en": "The second theorem needs a formal internal proof argument. <bookmark mark='a'/> Use an effective arithmetic theory with its standard provability predicate and the Hilbert-Bernays-Loeb derivability conditions. The suitable Gödel argument can then be formalized inside T. <bookmark mark='b'/> Internalized consistency implies the relevant Gödel sentence; proving consistency would therefore contradict the first theorem. <bookmark mark='c'/> A consistent sufficiently strong such T cannot prove its own standard consistency assertion. This does not follow just by repeating our informal soundness argument. <bookmark mark='d'/> It obstructs Hilbert's desired consistency proof when the proposed finitistic reasoning is formalizable within T; it does not prohibit every external consistency proof. <bookmark mark='e'/> For ZFC, standard consistency says that no encoded proof of contradiction exists. <bookmark mark='f'/> The corresponding proof-search machine connects the theorem to busy beavers, subject to the same effective arithmetic assumptions.",
+      "zh": "第二不完备定理需要正式的内部证明论证。<bookmark mark='a'/>取有效算术理论、标准可证明性谓词，以及 Hilbert、Bernays、Loeb 的可导性条件；适当的 Gödel 论证才能在 T 内形式化。<bookmark mark='b'/>内部的一致性断言推出相应 Gödel 语句；若能证明自身一致性，就与第一定理冲突。<bookmark mark='c'/>因此，满足这些条件、足够强且一致的 T，不能证明自身的标准一致性断言。不能只重复之前非形式的可靠性论证就得到这个结论。<bookmark mark='d'/>当所设想的有穷推理可在 T 内形式化时，它阻碍 Hilbert 的一致性证明目标，却不禁止一切外部一致性证明。<bookmark mark='e'/>ZFC 的标准一致性表示不存在矛盾的编码证明。<bookmark mark='f'/>对应的证明搜索机器把该定理与忙碌海狸联系起来，仍需同样的有效算术前提。"
+    },
+    "c64f75143337": {
+      "scene": "Degrees",
+      "en": "Chapter nine. Oracles and the arithmetic hierarchy.",
+      "zh": "第9章。谕示与算术层级。"
+    },
+    "8da56950ccb5": {
+      "scene": "Degrees",
+      "en": "An oracle answers a chosen membership query in one abstract step. <bookmark mark='a'/> Turing reducibility permits an algorithm to query the oracle during its computation. <bookmark mark='b'/> A K oracle decides a sigma-one question after a computable reduction to K and one query. The reduction itself still takes computation; the whole task is not necessarily one step. <bookmark mark='c'/> The diagonal argument relativizes: machines with a K oracle cannot decide their own halting problem, K prime. <bookmark mark='d'/> Repeating the jump produces an infinite strictly increasing tower of Turing degrees.",
+      "zh": "谕示机用一个抽象步骤回答指定的成员查询。<bookmark mark='a'/>图灵归约允许算法在计算中查询谕示。<bookmark mark='b'/>K 谕示可以在先进行一个可计算归约后，用一次查询判定 Sigma 一问题。归约本身仍需计算，整个任务未必只有一步。<bookmark mark='c'/>对角线论证可以相对化：拥有 K 谕示的机器，仍无法判定这类机器自身的停机问题 K 撇。<bookmark mark='d'/>重复跳跃，得到图灵度严格递增的无限高塔。"
+    },
+    "b362c5c5f169": {
+      "scene": "Degrees",
+      "en": "Count alternating quantifier BLOCKS over computable predicate matrices. <bookmark mark='a'/> Delta one means decidable sets. Bounded-formula delta zero is a different syntactic class. <bookmark mark='b'/> A leading existential block gives sigma one: for example there exists a time when M halts. <bookmark mark='c'/> A universal block gives pi one, including the displayed nonhalting formulations. These are upper-level formulations of conjectures, not completeness classifications of individual closed sentences. <bookmark mark='d'/> Finitely many halting inputs, FIN, is sigma-two-complete. <bookmark mark='e'/> Totality, TOT, is pi-two-complete. The other displayed conjectures admit pi-two formulations; that does not make them complete. <bookmark mark='f'/> Cofinitely many halting inputs, COF, is sigma-three-complete. <bookmark mark='g'/> Post's theorem says sigma n plus one is recognizable relative to the n-th jump; pi n plus one is co-recognizable relative to that oracle.",
+      "zh": "计算可计算谓词之前交替的量词块。<bookmark mark='a'/>Delta 一表示可判定集；有界公式的 Delta 零是不同的语法类。<bookmark mark='b'/>前置存在量词块给出 Sigma 一，例如存在某个时刻 M 停机。<bookmark mark='c'/>全称量词块给出 Pi 一，包括屏幕上的不停机表述。这些是猜想的层级上界表述，并不是对单个闭语句的完备性分类。<bookmark mark='d'/>仅在有限多个输入上停机的 FIN 是 Sigma 二完备。<bookmark mark='e'/>全停机集 TOT 是 Pi 二完备；其他列出的猜想有 Pi 二表述，不代表它们完备。<bookmark mark='f'/>在除有限个外全部输入上停机的 COF 是 Sigma 三完备。<bookmark mark='g'/>Post 定理说，Sigma n 加一恰为相对于第 n 次跳跃可识别的集合；Pi n 加一则相对于同一谕示补可识别。"
+    },
+    "d81520348982": {
+      "scene": "Degrees",
+      "en": "Post asked about the computably enumerable degrees below K. <bookmark mark='a'/> Must a recognizable set be decidable or complete? <bookmark mark='b'/> Friedberg and Muchnik constructed incomparable computably enumerable sets A and B. Both degrees are strictly between the decidable degree and K. <bookmark mark='c'/> Their priority constructions meet infinitely many requirements, each injured only finitely often by higher priorities. <bookmark mark='d'/> Sacks's density theorem inserts a degree between any two DISTINCT COMPARABLE computably enumerable degrees. It does not insert one between the incomparable A and B in this drawing. <bookmark mark='e'/> Finding convincing natural intermediate examples is a research theme, with naturalness an informal criterion. It is not the theorem that every conceivable natural problem is decidable or complete.",
+      "zh": "Post 研究 K 以下的可计算枚举图灵度。<bookmark mark='a'/>可识别集是否必须可判定或完备？<bookmark mark='b'/>Friedberg 与 Muchnik 构造出互不可比的可计算枚举集 A 与 B，它们的度都严格位于可判定度和 K 之间。<bookmark mark='c'/>优先构造满足无穷多个要求，每个要求只被更高优先级有限次打断。<bookmark mark='d'/>Sacks 稠密性定理在两个不同且可比较的可计算枚举度之间插入另一个度，不是在图中不可比的 A 与 B 之间插入。<bookmark mark='e'/>寻找令人信服的自然中间度例子是研究主题；自然性是非正式标准，并不存在一条覆盖所有所谓自然问题的二分定理。"
+    },
+    "1b4b7ec7171e": {
+      "scene": "Kolmogorov",
+      "en": "Chapter ten. Kolmogorov complexity.",
+      "zh": "第10章。Kolmogorov 复杂度。"
+    },
+    "d02ddd6688dc": {
+      "scene": "Kolmogorov",
+      "en": "Fix an optimal plain description machine U. <bookmark mark='a'/> Plain complexity C of x is the minimum number of program BITS needed to output x. Later we will distinguish optimal prefix-free complexity K. <bookmark mark='b'/> Each retained input here has one hundred thousand bytes. Random bytes grow slightly under these three compressors. <bookmark mark='c'/> English and decimal pi compress, partly because their byte encodings contain redundancy. Every compressed output is retained and decompressed to its full original input. <bookmark mark='d'/> Our finite pi printer also needs its requested length, caller, libraries and interpreter. An independent integer-interval Chudnovsky computation certifies all one hundred thousand digits, including the leading three. <bookmark mark='e'/> Eight times a compressed byte length, PLUS fixed decoding and framing costs, supplies a plain-complexity upper bound. It does not compute the shortest description.",
+      "zh": "固定一个最优的普通描述机 U。<bookmark mark='a'/>x 的普通复杂度 C，是输出 x 所需程序的最少比特数；稍后要与最优前缀无关复杂度 K 区分。<bookmark mark='b'/>这里保留的每个输入有十万字节。随机字节经这三种压缩器后略有膨胀。<bookmark mark='c'/>英文与十进制圆周率可以压缩，部分原因是字节编码有冗余。我们保留每个压缩输出，并完整解压核对原输入。<bookmark mark='d'/>有限圆周率打印器还需要指定长度、调用代码、库与解释器。独立的 Chudnovsky 整数区间计算认证了包括开头三在内的全部十万位数字。<bookmark mark='e'/>压缩字节数乘八，再加固定解码与封装开销，给出普通复杂度上界，却不能算出最短描述。"
+    },
+    "77b6119696af": {
+      "scene": "Kolmogorov",
+      "en": "The invariance theorem requires an OPTIMAL description system. <bookmark mark='a'/> An optimal U simulates every description machine V with a fixed additive program-length cost. <bookmark mark='b'/> The interpreter or compiler description is fixed for V. <bookmark mark='c'/> Combining it with a V description of x produces a U description only that constant longer, under the stipulated effective encoding. <bookmark mark='d'/> If both machines are optimal, the two inequalities bound their difference by a constant. <bookmark mark='e'/> The constant can matter for short strings; machine independence means only this additive equivalence. <bookmark mark='f'/> Arbitrary computational universality alone does not guarantee an additive length overhead, and an interpreter's raw source size omits its own runtime and encoding costs.",
+      "zh": "不变性定理要求最优描述系统。<bookmark mark='a'/>最优 U 能以固定的程序长度附加开销模拟每个描述机 V。<bookmark mark='b'/>对固定 V，解释器或编译器的描述也是固定的。<bookmark mark='c'/>在规定的有效编码下，把它与 x 的 V 描述组合，就得到仅长一个常数的 U 描述。<bookmark mark='d'/>若两台机器都最优，双向不等式把复杂度之差限制在常数内。<bookmark mark='e'/>常数对短字符串可能很重要；机器无关只表示这种加性等价。<bookmark mark='f'/>仅仅计算上通用，并不保证加性长度开销；解释器的源码大小也未包含运行环境和编码成本。"
+    },
+    "8e89ab920918": {
+      "scene": "Kolmogorov",
+      "en": "Count descriptions. <bookmark mark='a'/> Fewer than two to the n programs have length strictly below n, so at least one n-bit string has plain complexity at least n. <bookmark mark='b'/> More generally, fewer than a two-to-the-minus-k fraction have C strictly below n minus k, for zero through n as the deficit range. <bookmark mark='c'/> Thus fewer than one in a thousand and twenty-four have C below n minus ten. Saying shortened BY ten would instead include equality and change the threshold. <bookmark mark='d'/> Incompressibility is relative to a fixed machine and deficit. At least one minus two to the minus c of n-bit strings have C at least n minus c. The exact threshold C at least n guarantees some strings, not an overwhelming fraction. An injective lossless compressor cannot shorten every input.",
+      "zh": "计算描述的数量。<bookmark mark='a'/>长度严格小于 n 的程序不足二的 n 次方个，所以至少有一个 n 位字符串的普通复杂度不小于 n。<bookmark mark='b'/>更一般地，当亏损参数 k 在零到 n 之间时，满足 C 严格小于 n 减 k 的字符串，占比小于二的负 k 次方。<bookmark mark='c'/>因此 C 小于 n 减十的比例不足一千零二十四分之一；若说缩短十位，就包含等号，阈值会不同。<bookmark mark='d'/>不可压缩性依赖固定机器与亏损参数。至少一减二的负 c 次方比例的 n 位字符串满足 C 不小于 n 减 c。精确阈值 C 不小于 n 只保证存在一些字符串，并不保证占绝大多数。可逆的无损压缩器不能缩短所有输入。"
+    },
+    "dd19a4c1e54e": {
+      "scene": "Kolmogorov",
+      "en": "Turn Berry's paradox into a program. <bookmark mark='a'/> The phrase names an object allegedly too complex for that phrase. <bookmark mark='b'/> If plain C were computable, search strings in shortlex order and output the first with C above L. Counting ensures one exists. <bookmark mark='c'/> Encoding L in this fixed plain program costs about log L plus a constant, less than L for large L. <bookmark mark='d'/> That contradicts the selected string's complexity, proving C uncomputable. <bookmark mark='e'/> For an EFFECTIVELY AXIOMATIZED SOUND theory T, enumerate proofs instead, seeking any assertion C of x exceeds L. <bookmark mark='f'/> Beyond a T-dependent constant none can appear. The effective hypothesis is essential. Incompressibility of most strings means a stated fixed deficit; it is not a claim that every sound theory lacks all proofs of randomness.",
+      "zh": "把 Berry 悖论改写成程序。<bookmark mark='a'/>一个短短的词组，声称命名了无法如此简短描述的对象。<bookmark mark='b'/>若普通复杂度 C 可计算，就按先短后字典顺序搜索，输出第一个 C 大于 L 的字符串；计数保证它存在。<bookmark mark='c'/>在固定的普通程序中编码 L，只需大约对数 L 加一个常数，L 足够大时就小于 L。<bookmark mark='d'/>这与所选字符串的复杂度矛盾，证明 C 不可计算。<bookmark mark='e'/>对有效公理化且可靠的理论 T，可以改为枚举证明，寻找任意 C 大于 L 的断言。<bookmark mark='f'/>超过一个依赖 T 的常数后，这种证明不会出现。有效性不可省略；多数字符串不可压缩需要指定固定亏损，并不是说任意可靠理论都无法证明任何随机性。"
+    },
+    "9ad22211dd7e": {
+      "scene": "Omega",
+      "en": "Chapter eleven. Chaitin's Omega.",
+      "zh": "第11章。Chaitin 的 Omega。"
+    },
+    "3497dbe86536": {
+      "scene": "Omega",
+      "en": "Fix an optimal prefix-free machine U. <bookmark mark='a'/> Feed it an infinite fair coin stream. A finite halting program prefix may eventually appear; some streams never yield one. <bookmark mark='b'/> Its halting domain is prefix-free, so Kraft's inequality bounds the total cylinder measure by one. <bookmark mark='c'/> Omega is that halting measure, strictly between zero and one for this optimal machine. <bookmark mark='d'/> Dovetail all finite programs and add each halting program's weight once. This gives computable increasing lower approximations. <bookmark mark='e'/> There is no uniform computable convergence modulus providing every requested precision. This does not rule out certifying particular finite prefixes for specially analyzed machines.",
+      "zh": "固定一台最优前缀无关机 U。<bookmark mark='a'/>给它无限的公平硬币比特流，可能最终出现有限的停机程序前缀，也可能永远不会出现。<bookmark mark='b'/>停机定义域前缀无关，因此 Kraft 不等式保证总柱集测度不超过一。<bookmark mark='c'/>Omega 就是这个停机测度，对这种最优机器严格介于零和一之间。<bookmark mark='d'/>交错模拟所有有限程序，每个停机程序的权重只加一次，得到可计算、不断上升的下近似。<bookmark mark='e'/>不存在统一可计算的收敛模数来提供任意所需精度；这不排除对经过特殊分析的机器认证某些有限前缀。"
+    },
+    "bb06dcc1187f": {
+      "scene": "Omega",
+      "en": "Our finite experiment is a sample fraction, distinct from universal Omega. <bookmark mark='a'/> Draw five thousand independent uniform six-rule, three-state two-symbol machines with replacement, and retain every machine and halt time. <bookmark mark='b'/> Two thousand, two hundred and fifty-one halt: the exact SAMPLE fraction is zero point four five zero two. The population has sixteen to the sixth machines; this sample is not a census. <bookmark mark='c'/> The longest observed halting run takes eleven steps. <bookmark mark='d'/> Independent tape replay through the known bound S of three equals twenty-one classifies every sampled machine, matching the two-thousand-step runs. The displayed Wilson interval describes sampling uncertainty under the iid model. <bookmark mark='e'/> For universal Omega there is no computable all-length halting-time bound. Finite model certainty does not transfer to universal halting measure.",
+      "zh": "这个有限实验测量样本比例，与通用机的 Omega 不同。<bookmark mark='a'/>独立、均匀、有放回地抽取五千台六条规则、三状态双符号机器，保留每台机器和停机时刻。<bookmark mark='b'/>其中两千二百五十一台停机，精确的样本比例是零点四五零二。总体有十六的六次方台机器，这不是总体普查。<bookmark mark='c'/>样本中最长停机运行用了十一步。<bookmark mark='d'/>独立纸带模拟运行到已知界 S 三等于二十一，就能分类全部样本，与两千步的运行完全一致。屏幕上的 Wilson 区间描述独立同分布抽样模型下的抽样不确定性。<bookmark mark='e'/>通用 Omega 没有覆盖全部程序长度的可计算停机时间界。有限模型的确定性不能移植到通用停机测度。"
+    },
+    "be0b5297f3e6": {
+      "scene": "Omega",
+      "en": "Omega depends on the chosen optimal prefix-free machine. <bookmark mark='a'/> Calude, Dinneen and Shu analyzed one particular machine and certified a finite prefix. This is not a uniform algorithm for arbitrary precision or arbitrary machines. <bookmark mark='b'/> Given the first n bits, let a be their dyadic truncation. Dovetail programs until the partial sum is AT LEAST a. Equality is sufficient if reached; insisting on equality alone could miss an overshoot. <bookmark mark='c'/> The remaining mass is then less than two to the minus n. Any still-running program of at most n bits can never halt. <bookmark mark='d'/> With enough bits this settles any particular effectively encoded finite program's halting, including the displayed conjecture-search examples. No machine-independent few-thousand-bit budget is claimed. <bookmark mark='e'/> Its prefixes satisfy optimal PREFIX-FREE complexity K at least n minus a constant, distinct from the preceding chapter's plain C. <bookmark mark='f'/> An effective sound arithmetic theory determines only finitely many bits. Solovay's special-machine result also has soundness conditions on ZFC; it is not an unconditional claim about an arbitrary formal theory.",
+      "zh": "Omega 依赖所选的最优前缀无关机。<bookmark mark='a'/>Calude、Dinneen 与 Shu 分析了特定机器并认证有限前缀，这不是针对任意机器、任意精度的统一算法。<bookmark mark='b'/>已知前 n 位，令 a 为其二进制截断值。交错运行程序，直到部分和至少为 a。若恰好相等也足够；但若只等待相等，求和可能跳过目标而永远不停。<bookmark mark='c'/>此时剩余测度严格小于二的负 n 次方，长度不超过 n 位而仍在运行的程序，便永远不会停机。<bookmark mark='d'/>知道足够多位，就能解决任何特定有效编码的有限程序的停机，包括列出的猜想搜索例子；这里不声称存在与机器无关的几千位统一预算。<bookmark mark='e'/>其前缀的最优前缀无关复杂度 K 不小于 n 减常数，要与上一章的普通复杂度 C 区分。<bookmark mark='f'/>有效可靠的算术理论只能确定有限多个比特。Solovay 的特殊机器结果也对 ZFC 有可靠性条件，并非关于任意形式理论的无条件断言。"
+    },
+    "534233696a70": {
+      "scene": "Beavers",
+      "en": "Chapter twelve. Busy beavers, again.",
+      "zh": "第12章。再谈忙碌的海狸。"
+    },
+    "f5d58347e625": {
+      "scene": "Beavers",
+      "en": "Compare primitive recursive, total computable and busy-beaver growth. <bookmark mark='a'/> Primitive recursion computes exponentials, variable-height towers, and fixed iterations of such constructions. <bookmark mark='b'/> Ackermann's diagonal growth eventually dominates every primitive recursive function, while remaining total computable. <bookmark mark='c'/> For an effectively enumerable total language of functions from unbounded natural numbers to natural numbers, assume a computable total interpreter on valid codes, extended by a default on invalid codes. <bookmark mark='d'/> If the language also represented that interpreter and the diagonal function interpreter of x on x plus one, applying the diagonal to its own code would contradict equality. The coding and closure assumptions matter, including for typed languages. <bookmark mark='e'/> The LAST column, S, eventually dominates every total computable function, including Ackermann.",
+      "zh": "比较原始递归、全可计算与忙碌海狸三种增长。<bookmark mark='a'/>原始递归可以计算指数、可变高度幂塔，以及这类构造的固定层次迭代。<bookmark mark='b'/>Ackermann 的对角增长最终超过每个原始递归函数，但它仍然全可计算。<bookmark mark='c'/>考虑有效可枚举的全停机语言，函数从无界自然数映到自然数，并假设有可计算的全解释器，非法代码用默认值处理。<bookmark mark='d'/>若语言还能表示这个解释器，以及解释器在 x 上解释 x 再加一的对角函数，把对角函数用于自身代码就会矛盾。编码与闭包前提很重要，讨论带类型语言时也一样。<bookmark mark='e'/>最后一列 S 最终超过所有全可计算函数，包括 Ackermann。"
+    },
+    "4279c1505df6": {
+      "scene": "Beavers",
+      "en": "Busy-beaver tables combine established values and conditional encoding claims. <bookmark mark='a'/> S of five is established. Other rows describe particular conjecture-search machines: the reported twenty-seven-state Goldbach encoding still needs verification, while larger published constructions have different evidence. <bookmark mark='b'/> Knowing S of n settles a conjecture only after a CORRECT at-most-n-state encoding is established. We therefore make no unconditional Goldbach conclusion from the unverified twenty-seven-state claim. <bookmark mark='c'/> An effectively axiomatized sound sufficiently strong arithmetic theory can prove only finitely many exact S values: otherwise theorem enumeration would give a computable bound contradicting domination. <bookmark mark='d'/> A checked seven-thousand-nine-hundred-and-ten-state construction gives a published ZFC upper bound under the usual consistency assumptions. The smaller four-hundred-and-thirty-two-state 2025 claim is conditional on its construction checking out. The first unprovable value is unknown.",
+      "zh": "忙碌海狸表格混合了已证数值与带条件的编码主张。<bookmark mark='a'/>S 五已经确定。其他行描述特定猜想搜索机器；所报告的二十七状态哥德巴赫编码仍需核验，其他较大构造的证据也各有不同。<bookmark mark='b'/>只有先确立正确的、至多 n 状态的编码，知道 S n 才能解决相应猜想。因此不能从尚未核验的二十七状态主张无条件推出哥德巴赫结论。<bookmark mark='c'/>有效公理化、可靠且足够强的算术理论，只能证明有限多个精确 S 值；否则枚举定理就能给出可计算上界，与支配增长矛盾。<bookmark mark='d'/>已检查的七千九百一十状态构造，在通常一致性前提下给出正式发表的 ZFC 上界。2025年较小的四百三十二状态主张，仍以构造得到核验为条件。第一个不可证明的数值尚未知。"
+    },
+    "3a04ffb679c2": {
+      "scene": "Boundary",
+      "en": "Chapter thirteen. Where decidability ends.",
+      "zh": "第13章。可判定性在哪里终止。"
+    },
+    "63c7a560f243": {
+      "scene": "Boundary",
+      "en": "Decidability depends on the theory's exact language. <bookmark mark='a'/> Presburger arithmetic, with addition on natural numbers, is decidable; the doubly exponential lower bound is WORST CASE as formula length grows. <bookmark mark='b'/> Tarski decides first-order polynomial formulas over real closed fields, covering the corresponding algebraic geometry. Arbitrary real functions are outside that statement. <bookmark mark='c'/> Adding multiplication on natural numbers makes the full first-order theory undecidable. <bookmark mark='d'/> The full first-order theory of the rationals is also undecidable, via definitions of the integers. <bookmark mark='e'/> Its purely existential polynomial-equation problem is the separate open Hilbert-tenth question. <bookmark mark='f'/> In the ordered real field, integers are not first-order definable; this prevents that particular arithmetic encoding.",
+      "zh": "可判定性取决于理论的精确语言。<bookmark mark='a'/>自然数上只有加法的 Presburger 算术可判定；双指数下界针对公式长度增长时的最坏情况。<bookmark mark='b'/>Tarski 判定实闭域上的一阶多项式公式，覆盖相应的代数几何；任意实函数不在这个结论内。<bookmark mark='c'/>给自然数加入乘法，完整一阶理论就不可判定。<bookmark mark='d'/>有理数的完整一阶理论也不可判定，可以通过定义整数来证明。<bookmark mark='e'/>只有存在量词的多项式方程问题，则是另一个尚开放的 Hilbert 第十问题。<bookmark mark='f'/>在有序实数域中，整数无法一阶定义，因此不能直接用这种方式编码整数算术。"
+    },
+    "38ff4e5ae200": {
+      "scene": "Boundary",
+      "en": "The ordinary Collatz question remains distinct from its universal generalizations. <bookmark mark='a'/> For positive integers, halve an even value and triple an odd value then add one. Twenty-seven takes one hundred and eleven steps to reach one. <bookmark mark='b'/> We retain stopping lengths and full trajectory peaks for EVERY positive start below a million, independently checked by an overflow-guarded native implementation. The longest takes five hundred and twenty-four steps from eight hundred and thirty-seven thousand, seven hundred and ninety-nine. <bookmark mark='c'/> These finite checks prove only this finite prefix; larger published verification ranges are dated claims, not executions of this run. <bookmark mark='d'/> Conway's generalized residue-dependent iterations can encode universal computation and have an undecidable halting problem. <bookmark mark='e'/> That does not prove ordinary Collatz undecidable or independent. It could be true with a proof, true but independent of a specified theory, or false. No independence result is established here.",
+      "zh": "普通 Collatz 问题与通用的推广必须分开。<bookmark mark='a'/>对正整数，偶数减半，奇数乘三加一；二十七经过一百一十一步到达一。<bookmark mark='b'/>我们保留一百万以下每个正整数起点的停机长度与完整轨迹峰值，并用带溢出检查的原生实现独立核对。最长轨迹从八十三万七千七百九十九出发，需五百二十四步。<bookmark mark='c'/>这些有限检查只证明这段有限前缀。文献中更大的验证范围是带日期的外部主张，不是这次运行的执行范围。<bookmark mark='d'/>Conway 的推广按余数选择迭代规则，可以编码通用计算，其停机问题不可判定。<bookmark mark='e'/>这并未证明普通 Collatz 不可判定或独立。猜想可能为真且可证明，也可能相对指定理论独立，还可能为假；这里没有建立独立性结果。"
+    },
+    "4d3164f55337": {
+      "scene": "Wild",
+      "en": "Chapter fourteen. Undecidability in the wild.",
+      "zh": "第14章。野外的不可判定性。"
+    },
+    "a6289b49979d": {
+      "scene": "Wild",
+      "en": "Universality can appear in unexpected rule systems under IDEAL UNBOUNDED resources. <bookmark mark='a'/> C++ template metaprograms encode computation; real compilers impose depth and memory limits. <bookmark mark='b'/> Grigore's Java-generics result concerns the formal unbounded subtyping problem. Recursive type-level systems likewise differ from finite implementations with cutoffs. <bookmark mark='c'/> The Magic construction uses a precise idealized game model; finite hardware limits are not part of its universality theorem. <bookmark mark='d'/> Dolan's move-instruction construction requires a repeating control-flow convention as well as unbounded storage. A finite straight-line list of moves alone is not universal. <bookmark mark='e'/> Life uses an unbounded grid; the displayed finite glider merely illustrates local dynamics. <bookmark mark='f'/> Choose restrictions for a particular decision problem. Being less than Turing complete by itself does not prove all semantic questions decidable.",
+      "zh": "在理想的无界资源下，意想不到的规则系统也能通用。<bookmark mark='a'/>C++ 模板元程序能编码计算，实际编译器则有深度与内存限制。<bookmark mark='b'/>Grigore 关于 Java 泛型的结果针对形式上的无界子类型问题；递归类型系统也应与带截断的有限实现区分。<bookmark mark='c'/>Magic 的构造采用精确定义的理想化游戏模型，有限硬件限制并非通用性定理的前提。<bookmark mark='d'/>Dolan 的移动指令构造除了无界存储，还需要重复执行的控制流约定；有限的直线移动指令序列本身不通用。<bookmark mark='e'/>生命游戏使用无界网格，屏幕上有限的滑翔机只展示局部演化。<bookmark mark='f'/>应当针对具体判定问题选择限制。仅仅未达到图灵完备，并不能证明所有语义问题都可判定。"
+    },
+    "41e4e82e9b6e": {
+      "scene": "Wild",
+      "en": "The spectral-gap theorem has a precise thermodynamic scope. <bookmark mark='a'/> Consider a computably specified family of two-dimensional translation-invariant nearest-neighbor Hamiltonians with fixed local dimension. <bookmark mark='b'/> Ask about the spectral gap in the growing-lattice limit. <bookmark mark='c'/> The promise separates robust gapped and gapless cases; gap structure influences phases, but is not a universal finite-material conductor test. <bookmark mark='d'/> Cubitt, Perez-Garcia and Wolf proved this promised family problem undecidable. It is not a claim that a particular finite Hamiltonian's eigenvalues cannot be approximated. <bookmark mark='e'/> Their construction combines aperiodic forcing and computation so that halting controls the limiting gap. Finite experimental evidence and the ideal limit are different questions.",
+      "zh": "谱隙定理有精确的热力学极限范围。<bookmark mark='a'/>考虑可计算指定的二维、平移不变、最近邻相互作用 Hamilton 量族，局部维数固定。<bookmark mark='b'/>问题是在晶格不断增大时是否存在谱隙。<bookmark mark='c'/>承诺条件区分稳健的有隙和无隙情形；谱结构影响物相，但不是针对任意有限材料的通用导电性测试。<bookmark mark='d'/>Cubitt、Perez-Garcia 与 Wolf 证明这个带承诺的族问题不可判定，并不是说某个有限 Hamilton 量的特征值不能近似计算。<bookmark mark='e'/>其构造结合非周期强制与计算，让停机控制极限谱隙。有限实验的证据与理想极限是不同的问题。"
+    },
+    "3db37465040a": {
+      "scene": "Frontier",
+      "en": "Chapter fifteen, the frontier. Hilbert's tenth problem over other rings.",
+      "zh": "第15章，前沿。其他环上的希尔伯特第十问题。"
+    },
+    "7f04ffe942ec": {
+      "scene": "Frontier",
+      "en": "Hilbert's tenth extends to effectively presented rings of integers. <bookmark mark='a'/> For a number field K, ask for solutions in its ring of integers, with coefficients in that ring. <bookmark mark='b'/> A Diophantine definition of the ordinary integers transfers undecidability. <bookmark mark='c'/> Earlier all-field conditional results used conjectural finiteness of Shafarevich groups, not merely an unspecified elliptic-curve claim. <bookmark mark='d'/> Koymans and Pagano's December 2024 work gives an unconditional result for every number field. <bookmark mark='e'/> Their tools include elliptic rank stability and additive combinatorics. <bookmark mark='f'/> Independently, Alpoge, Bhargava, Ho and Shnidman's 2025 work uses positive-rank abelian varieties stable in quadratic extensions. The two routes should not be conflated. <bookmark mark='g'/> Combined with earlier reductions, Hilbert's tenth is undecidable over every infinite commutative unital ring finitely generated as a Z algebra, with an effective presentation.",
+      "zh": "Hilbert 第十问题可以推广到有效表示的整数环。<bookmark mark='a'/>对数域 K，问题要求系数和解都位于它的整数环。<bookmark mark='b'/>若普通整数在其中有丢番图定义，就能传递不可判定性。<bookmark mark='c'/>早期覆盖所有数域的条件性结果使用了 Shafarevich 群有限性的猜想，不能只笼统说成椭圆曲线猜想。<bookmark mark='d'/>Koymans 与 Pagano 在2024年十二月的工作，对每个数域给出无条件结果。<bookmark mark='e'/>工具包括椭圆曲线秩稳定性与加性组合学。<bookmark mark='f'/>独立地，Alpoge、Bhargava、Ho 与 Shnidman 在2025年的工作使用二次扩张中秩稳定的正秩阿贝尔簇，不能把两条路线混为一谈。<bookmark mark='g'/>结合早期归约，结论覆盖每个作为整数代数有限生成、具有有效表示的无限交换含幺环。"
+    },
+    "4e051879ec4b": {
+      "scene": "Frontier",
+      "en": "Hilbert's tenth over the rationals remains a separate question. <bookmark mark='a'/> The displayed rational points satisfy y squared equals x cubed minus two; their exact fraction identities can be checked directly. <bookmark mark='b'/> A Diophantine definition of integers in rationals would transfer integer undecidability. <bookmark mark='c'/> Mazur's topological conjecture would obstruct such a definition; it does not itself give a decision algorithm. <bookmark mark='d'/> Integers ARE first-order definable in rationals. Koenigsmann gives a universal definition, and a DIFFERENT forall-exists definition with only one universally quantified variable. These are distinct quantifier claims. <bookmark mark='e'/> Thus the full first-order theory is undecidable, while the purely existential polynomial-equation fragment remains open. <bookmark mark='f'/> General integer equations restricted to two unknowns present another unresolved decision question in the cited literature.",
+      "zh": "有理数上的 Hilbert 第十问题仍是另一个问题。<bookmark mark='a'/>屏幕上的有理点满足 y 的平方等于 x 的立方减二，可以直接核对精确分数恒等式。<bookmark mark='b'/>若整数在有理数中有丢番图定义，就能传递整数上的不可判定性。<bookmark mark='c'/>Mazur 的拓扑猜想会阻碍这种定义，但它本身不提供判定算法。<bookmark mark='d'/>整数确实能在有理数中一阶定义。Koenigsmann 给出一个全称定义，还给出另一个全称后接存在量词、仅含一个全称变量的定义；这两条量词主张不同。<bookmark mark='e'/>所以完整一阶理论不可判定，而纯存在的多项式方程片段仍开放。<bookmark mark='f'/>引用文献中，一般整数方程限制为两个未知数，也构成另一个未解决的判定问题。"
+    },
+    "cef900a49b2c": {
+      "scene": "Frontier",
+      "en": "Small universality claims require model labels. <bookmark mark='a'/> The cited constructions give undecidability bounds of nine natural-number unknowns and eleven integer unknowns. These are sufficient bounds, not proved minimal counts. <bookmark mark='b'/> Neary's published theorem uses five dominoes. Smith's two-state three-symbol 2007 machine uses a nonstandard infinite-background convention; it is not ordinary blank-background universality. The smaller ZFC busy-beaver encoding is explicitly conditional on verification, and the matrix row records the cited mortality literature's scope. <bookmark mark='c'/> Gaps between sufficient constructions and decision results motivate research, but the models and evidence must remain visible.",
+      "zh": "小规模通用性主张必须标明模型。<bookmark mark='a'/>引用的构造给出九个自然数未知数、十一个整数未知数时的不可判定上界，这是充分数量，并非已证最小值。<bookmark mark='b'/>Neary 的正式定理使用五张多米诺。Smith 在2007年的二状态三符号机器采用非标准无限背景约定，并非普通空白背景的通用性。较小的 ZFC 忙碌海狸编码明确以核验为条件；矩阵一行记录引用文献的致死性问题范围。<bookmark mark='c'/>充分构造与已知判定结果之间的空隙推动研究，但模型与证据必须保持清楚。"
+    },
+    "36c11c7fe8e8": {
+      "scene": "Outro",
+      "en": "In practice, specify the model and the exact question. Terminating exact analysis of a nontrivial extensional property over universal unbounded programs is impossible; practical tools use approximations or restrictions. Finite compiler limits are different from ideal universality. A less expressive or total language can help with particular decisions, but does not automatically decide every semantic property. Testing an unbounded input domain cannot exhaust it. Exhaustive testing of a fully specified FINITE model, however, can establish absence of bugs within that model. Keep those scopes distinct.",
+      "zh": "实践中，先明确模型与精确问题。对通用无界程序的非平凡外延性质，不可能有总会结束的精确分析；实用工具采用近似或限制。有限编译器的上限与理想通用性不同。表达力较弱或全停机的语言有助于特定判定，却不会自动让所有语义性质可判定。测试无法穷尽无界输入域；但对完整规定的有限模型进行穷尽测试，确实可以证明该模型内没有错误。必须区分这些范围。"
+    },
+    "9bd24692775d": {
+      "scene": "Outro",
+      "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+      "zh": "这一部分所依据的书和论文都在屏幕上和笔记里。感谢观看。"
+    },
+    "8a897915908e": {
+      "scene": "Outro",
+      "en": "What we built in this part. Decidable, recognizable and co-recognizable, and reductions that carry impossibility from one problem to the next. Rice's theorem for nontrivial extensional properties of unbounded programs. Programs that print their own source, in Python and in Pebble. Dominoes, tiles and Diophantine equations, each hiding a Turing machine, and the hat. Gödel's theorems, proved from halting; oracles and the arithmetic hierarchy; Kolmogorov complexity and Chaitin's Omega; and the busy beaver, where proof runs out.",
+      "zh": "这一部分我们造了什么。可判定、可识别与补可识别，以及把不可能性从一个问题带到下一个问题的归约。针对无界程序非平凡外延性质的 Rice 定理。打印自己源代码的程序，用 Python，也用 Pebble。多米诺、砖块和丢番图方程，每一个都藏着一台图灵机，还有帽子。从停机证明的 Gödel 定理；谕示与算术层级；Kolmogorov 复杂度与 Chaitin 的 Omega；以及忙碌海狸，在那里证明走到了尽头。"
+    },
+    "664e670d926d": {
+      "scene": "Hilbert",
+      "en": "The answer took seventy years and four people. <bookmark mark='a'/> Call a set of numbers Diophantine if, over natural-number parameters and auxiliary variables, an integer-coefficient polynomial vanishes exactly for its members. Integer-variable solvability is equivalent by standard encodings, such as sums of four squares for nonnegativity. <bookmark mark='b'/> In 1961 Martin Davis, Hilary Putnam and Julia Robinson proved that every recognizable set is Diophantine, provided that exponentiation is. <bookmark mark='c'/> In 1970 Yuri Matiyasevich, aged twenty-two, closed the gap: the relation y equals two to the x is Diophantine, with a construction built on the Fibonacci numbers. <bookmark mark='d'/> So the recognizable sets and the Diophantine sets are the same. <bookmark mark='e'/> In particular there is a polynomial that has a solution exactly when machine number n halts on itself. <bookmark mark='f'/> A process for Hilbert's problem would decide halting. There is none.",
+      "zh": "答案用了七十年和四个人。<bookmark mark='a'/>参数与辅助变量取自然数，整数系数多项式为零恰好刻画该集合的成员，就称它是丢番图集。通过标准编码，例如用四平方和表示非负整数，可以转成整数变量的可解性问题。<bookmark mark='b'/>1961年，Martin Davis、Hilary Putnam 和 Julia Robinson 证明，只要指数运算是丢番图的，每个可识别集就都是丢番图集。<bookmark mark='c'/>1970年，二十二岁的 Yuri Matiyasevich 补上了缺口：关系 y 等于二的 x 次方是丢番图的，构造建立在斐波那契数之上。<bookmark mark='d'/>所以可识别集和丢番图集是同一回事。<bookmark mark='e'/>特别地，存在一个多项式，它有解恰好当第 n 号机器在自身上停机。<bookmark mark='f'/>Hilbert 问题的过程就会判定停机。这样的过程不存在。"
+    },
+    "84f68770df3e": {
+      "scene": "Beavers",
+      "en": "The proof is a machine built in three pieces. <bookmark mark='a'/> Take any TOTAL computable natural-valued function f, computed by a machine with c states. For each n, build a machine that first writes n on its tape, which takes n states; <bookmark mark='b'/> then computes the larger of f of two n and f of two n plus one, using a fixed number c of states; then counts that number down to zero, a few states more. <bookmark mark='c'/> It has n plus a constant states, and it halts after more than f of two n steps. <bookmark mark='d'/> So the busy beaver of n plus that constant is bigger than f of two n. <bookmark mark='e'/> Once n is larger than the constant, the busy beaver of two n is bigger still. The same maximum also covers the next odd size, by monotonicity of S. Thus S passes f at every sufficiently large size and stays ahead. <bookmark mark='f'/> No computable function can even bound it.",
+      "zh": "证明是一台由三块拼成的机器。<bookmark mark='a'/>任取一个取自然数值的全可计算函数 f，由一台有 c 个状态的机器计算。对每个 n，造一台机器，先把 n 写到纸带上，这要用 n 个状态；<bookmark mark='b'/>然后计算 f 在二 n 与二 n 加一处的较大值，这使用固定的 c 个状态；然后把这个数倒数到零，再多几个状态。<bookmark mark='c'/>它有 n 加一个常数个状态，停机前运行超过 f 的二 n 步。<bookmark mark='d'/>所以 n 加这个常数处的忙碌海狸大于 f 的二 n。<bookmark mark='e'/>一旦 n 大于这个常数，二 n 处的忙碌海狸就更大。这个最大值结合 S 的单调性也覆盖下一个奇数规模。因此 S 在所有足够大的规模都超过 f，并且一直领先。<bookmark mark='f'/>没有可计算函数能给它设一个上界。"
+    },
+    "335ccbed71d4": {
+      "scene": "Boundary",
+      "en": "John Conway invented the strangest programming language of all. <bookmark mark='a'/> A program is a list of fractions. Start with a POSITIVE INTEGER; repeatedly multiply it by the first fraction in the list that gives a whole number; stop when none does. <bookmark mark='b'/> This list, PRIMEGAME, starts from two. Record powers of two reached AFTER positive steps, excluding the initial two to the first power. After nineteen steps, four, which is two squared. After sixty-nine, eight. Then thirty-two, a hundred and twenty-eight, two to the eleven. <bookmark mark='c'/> The exponents are exactly the primes, in order. Our run reached every prime up to a hundred and twenty-seven in under three million steps. <bookmark mark='d'/> Why does this work? The exponents of the primes in n act as registers, and each fraction is an instruction that decrements some registers and increments others. That is Part 1's counter machine, and it is universal. <bookmark mark='e'/> So whether a list of fractions ever stops is undecidable.",
+      "zh": "John Conway 发明了最奇怪的编程语言。<bookmark mark='a'/>一个程序是一串分数。从正整数开始；反复把它乘以列表中第一个能得到整数的分数；没有这样的分数时停下。<bookmark mark='b'/>这个列表叫 PRIMEGAME，从二开始。只记录正步数之后出现的二次幂，不计初始的二的一次方。十九步后，四，也就是二的平方。六十九步后，八。然后是三十二、一百二十八、二的十一次方。<bookmark mark='c'/>指数恰好是素数，按顺序。我们的运行在不到三百万步里得到了直到一百二十七的每个素数。<bookmark mark='d'/>为什么行得通？n 里各个素数的指数充当寄存器，每个分数是一条指令，减少某些寄存器、增加另一些。那就是第1部分的计数器机，它是通用的。<bookmark mark='e'/>所以一串分数是否终究会停下，是不可判定的。"
+    },
+    "f70bb363e57d": {
+      "scene": "Boundary",
+      "en": "Undecidability also hides in pure algebra. <bookmark mark='a'/> Max Dehn asked in 1911: given a group by finitely many generators and relations, can you decide whether a word in the generators equals the identity? Pyotr Novikov in 1955 and William Boone in 1958 found groups where no algorithm can. <bookmark mark='b'/> Or take a handful of three-by-three integer matrices. Does some product of them, in some order, with repetition, give the zero matrix? Michael Paterson proved in 1970 that this is undecidable, by turning Post's dominoes into matrices. <bookmark mark='c'/> The cited Neary 2015 paper records unrestricted two-by-two integer mortality as open. This is a dated literature status, not a claimed new 2026 survey.",
+      "zh": "不可判定性也藏在纯代数里。<bookmark mark='a'/>Max Dehn 在1911年问：给定一个由有限多个生成元和关系定义的群，你能判定生成元组成的一个词是否等于单位元吗？Pyotr Novikov 在1955年、William Boone 在1958年找到了没有算法能做到的群。<bookmark mark='b'/>或者拿几个三乘三的整数矩阵。它们按某种顺序、允许重复的某个乘积，会得到零矩阵吗？Michael Paterson 在1970年证明这不可判定，办法是把 Post 的多米诺变成矩阵。<bookmark mark='c'/>引用的 Neary 2015年论文将一般二乘二整数矩阵致死性列为开放问题。这是带日期的文献状态，不是声称刚完成了2026年的全面调查。"
+    },
+    "a8970858b15d": {
+      "scene": "Frontier",
+      "en": "Five open problems from this part. <bookmark mark='a'/> Hilbert's tenth over the rationals. <bookmark mark='b'/> Post's problem for three or four dominoes. <bookmark mark='c'/> Convincing natural intermediate computably enumerable degrees, with naturalness understood informally. <bookmark mark='d'/> The exact point where set theory loses track of the busy beaver. <bookmark mark='e'/> And whether the Collatz conjecture, if true, can be proved from the ordinary axioms of arithmetic. <bookmark mark='f'/> This part's research problem takes the second, for three dominoes.",
+      "zh": "这一部分的五个未解问题。<bookmark mark='a'/>有理数上的希尔伯特第十问题。<bookmark mark='b'/>三张或四张多米诺的 Post 问题。<bookmark mark='c'/>令人信服的自然中间可计算枚举度，其中自然性作非正式理解。<bookmark mark='d'/>集合论失去对忙碌海狸掌控的确切位置。<bookmark mark='e'/>以及 Collatz 猜想如果为真，能否从普通的算术公理证明。<bookmark mark='f'/>这一部分的研究问题取第二个，三张多米诺的情形。"
+    },
+    "b89f63c61b2f": {
+      "scene": "Outro",
+      "en": "Where this comes back. Part 26 proves the time hierarchy theorem with the same diagonal, and asks the question this part cannot answer: not whether, but how fast. Part 54 checks proofs and specifications, using restrictions or incomplete proof search where general decision is impossible. Part 55 shows that safety in access control is undecidable, and builds Ken Thompson's trojan compiler on a quine. Part 57 turns Kolmogorov's idea into Occam's razor for learning, and Part 58 makes recursion a fixed point, the semantic cousin of Kleene's theorem.",
+      "zh": "这些会在哪里再出现。第26部分用同样的对角线证明时间层级定理，并提出这一部分无法回答的问题：不是能不能，而是多快。第54部分检查证明与规范；在一般判定不可能时，采用限制或不完备的证明搜索。第55部分说明访问控制中的安全性不可判定，并在一个自打印程序上造出 Ken Thompson 的特洛伊编译器。第57部分把 Kolmogorov 的思想变成学习中的奥卡姆剃刀，第58部分把递归变成不动点，那是 Kleene 定理在语义学里的表亲。"
+    },
+    "94de6b0512b3": {
+      "scene": "Outro",
+      "en": "Next time: this part asked what can be computed at all. Part 26 asks what can be computed quickly. In 1956 Gödel wrote to John von Neumann about the cost of finding proofs compared with checking them. Cook and Levin later proved SAT complete for NP, and Karp linked twenty-one further problems by reductions. The P versus NP question remains open after more than fifty years. Part 26, P versus NP.",
+      "zh": "下一次：这一部分问什么能够计算，第26部分问什么能够快速计算。1956年，Gödel 致信 John von Neumann，讨论寻找证明与检查证明的代价。后来 Cook 与 Levin 证明 SAT 对 NP 完备，Karp 又用归约联系了二十一个问题。五十多年过去，P 与 NP 问题仍未解决。第26部分，P 与 NP。"
+    },
+    "7e0de4f41a9a": {
+      "scene": "Outro",
+      "en": "Six problems. The notes give worked solutions to the first five, including an executed Pebble program that prints its own source backwards. The starred task explores finite three-domino PCP instances with explicit certificates and cutoff statuses, then asks about a computable general bound. Finiteness alone guarantees that some bound exists for a fixed finite family; finding a useful explicit bound is a different task. The unrestricted three-domino decision problem remains the research lead.",
+      "zh": "六道习题。笔记给出前五道的完整解答，包括已经执行、把自身源码倒着打印的 Pebble 程序。星号题用明确证书与截断状态研究有限的三张 PCP 实例，再探索可计算的一般界。对固定有限集合，有限性本身保证某个界存在；找出有用的显式界则是另一项任务。一般三张 PCP 的判定问题才是研究线索。"
+    }
+  }
+}

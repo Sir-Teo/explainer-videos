@@ -27,3 +27,6 @@ Manim videos with local neural narration. See README.md for layout and build com
   textbook coverage map and every part's paper list are `videos/quant/READING.md`; it follows
   `videos/ai/LECTURE_GUIDE.md`; shared instruments are in `explainer/quant/`, the House library in
   `explainer/quant/house/`.
+- *Computer Science, Built* (`videos/cs/`): sixty-one parts in eleven acts (`cs1` … `cs61`: a CS degree plus industry practice in Acts I–X, a research tier in Act XI and a *Frontier* chapter in every part), Parts 1–61 built or in progress; the series plan
+  is `videos/cs/README.md`, the chapter-by-chapter syllabus and standard are `videos/cs/SYLLABUS.md`. The machine the
+  series builds (Pebble) and its instruments will live in `explainer/cs/`.

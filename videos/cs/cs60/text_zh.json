@@ -1,0 +1,16 @@
+{
+ "strings": {
+  "fetch": "取指",
+  "memory": "存储器",
+  "grid": "网格",
+  "array": "阵列",
+  "tree": "树形",
+  "down": "向下",
+  "cycles": "周期数",
+  "pass": "传递",
+  "values": "非零值",
+  "layout": "版图",
+  "cycle": "周期",
+  "add": "加法"
+ }
+}

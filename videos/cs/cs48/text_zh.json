@@ -1,0 +1,33 @@
+{
+ "strings": {
+  "policy": "策略",
+  "space": "空间",
+  "database": "数据库",
+  "app": "应用",
+  "cache": "缓存",
+  "key": "键",
+  "operation": "操作",
+  "reader": "读取者",
+  "seconds": "秒",
+  "without": "不合并",
+  "misses": "未命中次数",
+  "requests": "请求",
+  "so": "由此",
+  "block": "构件",
+  "estimate": "估算",
+  "balance": "均衡",
+  "keys": "键",
+  "writes": "写入",
+  "capacity 100/s": "容量 100/s",
+  "tiered": "分级合并",
+  "levels": "层数",
+  "join": "连接",
+  "plain": "不加盐",
+  "worker 1": "工作进程 1",
+  "worker 2": "工作进程 2",
+  "worker 3": "工作进程 3",
+  "1 ms": "1 ms",
+  "name": "name",
+  "users": "users"
+ }
+}

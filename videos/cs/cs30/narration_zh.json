@@ -1,0 +1,406 @@
+{
+ "title": "计算机科学，从零搭建 · 第30部分：公钥",
+ "chapters": {
+  "Hook": "两个陌生人，一个秘密",
+  "Puzzles": "1. 密钥分配与 Merkle 谜题",
+  "Toolkit": "2. 工具箱：模运算",
+  "Groups": "3. 群与离散对数",
+  "DiffieHellman": "4. Diffie–Hellman",
+  "Rsa": "5. RSA",
+  "Oracle": "6. Bleichenbacher 的预言机",
+  "Factoring": "7. 因数分解",
+  "DiscreteLogs": "8. 离散对数",
+  "Curves": "9. 椭圆曲线",
+  "Signatures": "10. 签名",
+  "Pki": "11. 证书与信任",
+  "Tls": "12. TLS 1.3",
+  "Shor": "13. Shor 的威胁",
+  "Lattices": "14. 格",
+  "Beyond": "15. 零知识、秘密共享与在秘密上计算",
+  "Frontier": "16. 前沿：后量子，以及更远",
+  "Outro": "回顾、习题，以及它们会在哪里再出现"
+ },
+ "lines": {
+  "ab66589f3017": {
+   "scene": "Hook",
+   "en": "Alice and Bob have never met. They want a secret only they know, and every word they say is overheard by Eve. <bookmark mark='a'/> They agree in public on two numbers: a prime, twenty-three, and five. <bookmark mark='b'/> Alice picks a secret number, six, and Bob picks fifteen. Neither tells anyone. <bookmark mark='c'/> Alice sends five to the sixth power, reduced mod twenty-three: eight. Bob sends five to the fifteenth: nineteen. <bookmark mark='d'/> Now Alice raises Bob's nineteen to her six, and Bob raises Alice's eight to his fifteen. Both get two. <bookmark mark='e'/> Eve heard every number, twenty-three, five, eight and nineteen, and the secret two was never said. <bookmark mark='f'/> Both computed five to the power six times fifteen, by different routes. Whitfield Diffie and Martin Hellman published this in 1976, and it changed what cryptography could do.",
+   "zh": "Alice 和 Bob 从未见过面。他们想要一个只有彼此知道的秘密，而他们说的每一句话都被 Eve 听着。<bookmark mark='a'/>他们公开商定两个数：一个素数，二十三，还有五。<bookmark mark='b'/>Alice 挑一个秘密的数，六；Bob 挑十五。谁也不告诉别人。<bookmark mark='c'/>Alice 发出五的六次方模二十三：八。Bob 发出五的十五次方：十九。<bookmark mark='d'/>现在 Alice 把 Bob 的十九升到她的六次方，Bob 把 Alice 的八升到他的十五次方。两人都得到二。<bookmark mark='e'/>Eve 听到了每一个数，二十三、五、八和十九，而秘密的二从未被说出口。<bookmark mark='f'/>两人都算出了五的六乘十五次方，只是走的路不同。Whitfield Diffie 和 Martin Hellman 在1976年发表了这个方法，它改变了密码学能做的事。"
+  },
+  "a1521cde7b52": {
+   "scene": "Hook",
+   "en": "With small numbers Eve could simply try every exponent. <bookmark mark='a'/> In practice the prime has two thousand and forty-eight bits, six hundred and seventeen decimal digits, and the exchange still takes a few hundredths of a second, even in Python. <bookmark mark='b'/> To learn the secret, Eve must find the exponent from the power: the discrete logarithm, which nobody knows how to compute at this size. <bookmark mark='c'/> Every HTTPS connection your browser makes begins with an exchange like this one, usually on an elliptic curve. <bookmark mark='d'/> And with a signature, because Alice must also know that the person she agreed a secret with is Bob, and not someone in the middle.",
+   "zh": "数很小时，Eve 可以把每个指数都试一遍。<bookmark mark='a'/>实际中，素数有两千零四十八位，六百一十七位十进制数字，而这次交换即使在 Python 里也只要百分之几秒。<bookmark mark='b'/>要得到秘密，Eve 必须由幂求出指数：离散对数，在这种规模下没人知道怎么算。<bookmark mark='c'/>你的浏览器建立的每一个 HTTPS 连接，都以这样一次交换开始，通常是在椭圆曲线上。<bookmark mark='d'/>还要加上一个签名，因为 Alice 还必须知道，和她商定秘密的人是 Bob，而不是夹在中间的某个人。"
+  },
+  "22719f2aafbd": {
+   "scene": "Hook",
+   "en": "Part 30 of Computer Science, Built: Public Keys. <bookmark mark='a'/> In this part: why distributing keys was the hard problem, and the number theory that solved it; Diffie-Hellman, and RSA built from scratch, with an attack on its padding; how factoring and discrete logarithms are attacked, which is what sets the key sizes; elliptic curves, their signatures and how one repeated number destroyed a console's security; certificates, and a full TLS handshake between two of our machines; and then the quantum threat, the lattices that answer it, and cryptography that computes on secrets.",
+   "zh": "计算机科学，从零搭建，第30部分：公钥。<bookmark mark='a'/>这一部分包括：为什么分发密钥曾是难题，以及解决它的数论；Diffie-Hellman，以及从零搭建的 RSA，外加对它填充的一次攻击；因数分解和离散对数如何被攻击，正是这决定了密钥长度；椭圆曲线、它们的签名，以及一个重复的数怎样毁掉了一台游戏机的安全；证书，以及我们两台机器之间一次完整的 TLS 握手；然后是量子威胁、应对它的格，以及在秘密上做计算的密码学。"
+  },
+  "7776aa726d2e": {
+   "scene": "Puzzles",
+   "en": "Chapter one. Key distribution, and Merkle's puzzles.",
+   "zh": "第1章。密钥分配与 Merkle 谜题。"
+  },
+  "938fa5564c3c": {
+   "scene": "Puzzles",
+   "en": "Everything in Part 29 assumed that the two sides already shared a key. Where does it come from? <bookmark mark='a'/> If every pair of people needs its own key, n people need n times n minus one over two keys. Eight people need twenty-eight; a million need five hundred billion. <bookmark mark='b'/> For most of history each key was carried by hand, by courier, before any message could be sent. Governments ran fleets of couriers carrying key material. <bookmark mark='c'/> A trusted centre that shares a key with everyone reduces the count, and Kerberos, in Part 55, works this way; but the centre can read everything. <bookmark mark='d'/> On the internet, strangers meet billions of times a day, and need a key immediately.",
+   "zh": "第29部分的一切都假定双方已经共享一把密钥。它从哪里来？<bookmark mark='a'/>如果每两个人都需要自己的密钥，n 个人就需要 n 乘 n 减一再除以二把密钥。八个人需要二十八把；一百万人需要五千亿把。<bookmark mark='b'/>历史上大部分时间，每把密钥都要在发送任何消息之前，由信使亲手送达。各国政府维持着成队的信使专门递送密钥材料。<bookmark mark='c'/>一个与每个人共享密钥的可信中心能减少数量，第55部分的 Kerberos 就是这样工作的；但这个中心什么都能读。<bookmark mark='d'/>在互联网上，陌生人每天相遇数十亿次，而且马上就需要密钥。"
+  },
+  "e118211727fe": {
+   "scene": "Puzzles",
+   "en": "In 1974 Ralph Merkle, an undergraduate at Berkeley, proposed a way out, in a course project his professor didn't understand. <bookmark mark='a'/> Alice makes many puzzles. Each holds an identifying number and a key, locked under a deliberately weak key that takes some effort to find. Each puzzle uses a separate public salt in its hash checks and pad, preventing one weak-key lookup table from unlocking all the puzzles. The identifying number stays encrypted. <bookmark mark='b'/> Bob picks one puzzle at random, solves it, and announces its number in public. <bookmark mark='c'/> Alice looks up which key that number belongs to. Now they share it. <bookmark mark='d'/> Eve hears the number, but doesn't know which puzzle it came from, so she has to solve puzzles until she finds it: about half of them in the simple independent brute-force model. <bookmark mark='e'/> We measured Bob's search and successful agreement. Eve's table entries are modeled work, approximately n squared over four; we did not time an optimal attacker. <bookmark mark='f'/> That gap is only quadratic: a determined Eve with a big computer catches up. <bookmark mark='g'/> Barak and Mahmoody proved a quadratic barrier for classical key agreement in the ideal random-oracle model. This model is the scope of the theorem; it is not a claim about every possible concrete hash construction.",
+   "zh": "1974年，伯克利本科生 Ralph Merkle 在课程项目中提出了一个办法。<bookmark mark='a'/>Alice 制作许多谜题，每题把一个标识号和共享密钥用弱密钥锁住。每题的检查哈希与掩码都加入各自的公开盐，防止一张弱密钥查找表同时破解所有题。标识号本身仍被加密。<bookmark mark='b'/>Bob 随机选一题解开，公开其中的标识号。<bookmark mark='c'/>Alice 查表找到对应密钥，双方达成一致。<bookmark mark='d'/>Eve 听到了标识号，却不知道来自哪题；在简单独立暴力搜索模型中，她平均要解大约一半的题。<bookmark mark='e'/>我们测量了 Bob 的搜索次数和密钥一致性。表中 Eve 的工作量约为 n 平方除以四，是模型值，并不是对最优攻击者的计时。<bookmark mark='f'/>差距只有二次方，大机器仍能追上。<bookmark mark='g'/>Barak 和 Mahmoody 在2009年证明了经典随机预言机模型中的二次方障碍。定理的范围是理想模型，并非对所有具体哈希构造的断言。"
+  },
+  "3d22e12d1d4d": {
+   "scene": "Puzzles",
+   "en": "The structure was found twice. <bookmark mark='a'/> At GCHQ, the British signals agency, James Ellis argued in 1970 that encryption without a shared secret was possible. Clifford Cocks, a young mathematician, found a way in 1973: essentially RSA. Malcolm Williamson found the Diffie-Hellman exchange in 1974. All of it stayed classified. <bookmark mark='b'/> In public, Diffie and Hellman published in 1976, and Rivest, Shamir and Adleman at MIT found RSA in 1977. GCHQ told its story only in 1997. <bookmark mark='c'/> The idea in both: a key you can publish to the world, which locks a secret that only you can open. The next two chapters build the mathematics it needs.",
+   "zh": "这种结构被发现了两次。<bookmark mark='a'/>在英国信号情报机构 GCHQ，James Ellis 在1970年论证了不需要共享秘密的加密是可能的。年轻的数学家 Clifford Cocks 在1973年找到了办法：本质上就是 RSA。Malcolm Williamson 在1974年找到了 Diffie-Hellman 交换。这一切都被保密。<bookmark mark='b'/>在公开世界里，Diffie 和 Hellman 于1976年发表，MIT 的 Rivest、Shamir 和 Adleman 于1977年找到了 RSA。GCHQ 直到1997年才讲出自己的故事。<bookmark mark='c'/>两者的思想相同：一把可以公之于众的密钥，锁住一个只有你能打开的秘密。接下来两章搭建它所需的数学。"
+  },
+  "f4546af87822": {
+   "scene": "Toolkit",
+   "en": "Chapter two. The toolkit: modular arithmetic.",
+   "zh": "第2章。工具箱：模运算。"
+  },
+  "f9d8ab5023af": {
+   "scene": "Toolkit",
+   "en": "Public-key cryptography computes with numbers hundreds of digits long, but always on a clock. <bookmark mark='a'/> On a twelve-hour clock, nine plus seven is four: keep only the remainder after dividing by twelve. Arithmetic modulo n never lets numbers grow past n. <bookmark mark='b'/> Addition, subtraction and multiplication work as usual. Division is the question: to divide by a you need an inverse, a number that multiplied by a gives one. <bookmark mark='c'/> An inverse exists exactly when a shares no factor with n. Five times five is twenty-five, which is one on this clock, so five is its own inverse; four has none. <bookmark mark='d'/> Gauss wrote the theory down in 1801. Finding inverses quickly needs an algorithm two thousand years older.",
+   "zh": "公钥密码学用几百位长的数计算，但总是在一个钟面上。<bookmark mark='a'/>在十二小时的钟面上，九加七等于四：除以十二后只保留余数。模 n 的算术从不让数超过 n。<bookmark mark='b'/>加、减、乘照常进行。问题在除法：要除以 a，你需要一个逆，一个与 a 相乘得一的数。<bookmark mark='c'/>逆存在，当且仅当 a 与 n 没有公因子。五乘五是二十五，在这个钟面上是一，所以五是它自己的逆；四没有逆。<bookmark mark='d'/>Gauss 在1801年写下了这套理论。而要快速求逆，需要一个比它早两千年的算法。"
+  },
+  "a09ef8f350e3": {
+   "scene": "Toolkit",
+   "en": "Euclid's algorithm, from about 300 BC, finds the greatest common divisor. <bookmark mark='a'/> Divide two hundred and forty by forty-six, keep the remainder, ten; divide forty-six by ten, and so on, until the remainder is zero. The last nonzero remainder, two, is the gcd. <bookmark mark='b'/> The extension: carry two coefficients along, so that every remainder is written as some multiple of two hundred and forty plus some multiple of forty-six. <bookmark mark='c'/> At the end, two equals two hundred and forty times minus nine, plus forty-six times forty-seven. That is Bézout's identity. <bookmark mark='d'/> When the gcd is one, the same identity hands you an inverse. The inverse of seventeen modulo three thousand one hundred and twenty is two thousand seven hundred and fifty-three, a number we will meet as an RSA key. <bookmark mark='e'/> The number of steps grows only with the number of digits, so this is instant even for numbers six hundred digits long.",
+   "zh": "Euclid 的算法，约公元前300年，求最大公约数。<bookmark mark='a'/>用四十六除两百四十，保留余数十；用十除四十六，依此类推，直到余数为零。最后一个非零余数，二，就是最大公约数。<bookmark mark='b'/>扩展的做法：一路带着两个系数，使每个余数都写成两百四十的某个倍数加上四十六的某个倍数。<bookmark mark='c'/>最后，二等于两百四十乘负九，加上四十六乘四十七。这就是 Bézout 等式。<bookmark mark='d'/>当最大公约数是一时，同一个等式就交给你一个逆。十七模三千一百二十的逆是两千七百五十三，我们会在 RSA 密钥里再见到这个数。<bookmark mark='e'/>步数只随位数增长，所以即使对六百位的数，这也是瞬间完成的。"
+  },
+  "5398acaf3032": {
+   "scene": "Toolkit",
+   "en": "The other tool is raising to a huge power. <bookmark mark='a'/> To compute three to the two hundred and eighteen, modulo a thousand, don't multiply two hundred and seventeen times. Write the exponent in binary. <bookmark mark='b'/> Then read its bits from the top. For every bit, square what you have; when the bit is a one, also multiply by three. Eight squarings and five multiplications, and the answer is four hundred and eighty-nine. <bookmark mark='c'/> A two-thousand-bit exponent needs about four thousand multiplications, rather than two to the two thousand. <bookmark mark='d'/> Part 16 counted its steps, Part 20's primality test ran on it, and it will reappear on elliptic curves. <bookmark mark='e'/> With Euclid and squaring, the basic operations on six-hundred-digit numbers take milliseconds. What makes them useful for secrets is structure, the subject of the next chapter.",
+   "zh": "另一个工具是求一个很大的幂。<bookmark mark='a'/>要算三的两百一十八次方模一千，不要乘两百一十七次。把指数写成二进制。<bookmark mark='b'/>然后从高位读它的各位。每读一位，把手上的数平方；遇到一，再乘以三。八次平方、五次乘法，答案是四百八十九。<bookmark mark='c'/>一个两千位的指数大约需要四千次乘法，而不是二的两千次方次。<bookmark mark='d'/>第16部分数过它的步数，第20部分的素性检验靠它运行，它还会在椭圆曲线上再次出现。<bookmark mark='e'/>有了 Euclid 和平方，六百位数的基本运算只要几毫秒。让它们能用于保密的，是结构，那是下一章的主题。"
+  },
+  "f50669fcc417": {
+   "scene": "Groups",
+   "en": "Chapter three. Groups, and the discrete logarithm.",
+   "zh": "第3章。群与离散对数。"
+  },
+  "50b88c221242": {
+   "scene": "Groups",
+   "en": "Take the nonzero numbers modulo a prime, twenty-three, with multiplication. Any two multiply to another one, and every one has an inverse: this is a group. <bookmark mark='a'/> Start at one and keep multiplying by five: five, two, ten, four, twenty, and so on, jumping around the circle. <bookmark mark='b'/> After twenty-two steps every number has been visited, and we are back at one. Five generates the whole group. <bookmark mark='c'/> Gauss proved that for every prime the group is cyclic like this: some number generates all of it. <bookmark mark='d'/> Going forward, from x to five to the x, is easy even for huge numbers, by repeated squaring. Going back, from five to the x to x, is the discrete logarithm. The jumps are what make it hard.",
+   "zh": "取模一个素数，二十三，的非零数，配上乘法。任意两个相乘得到另一个，每一个都有逆：这就是一个群。<bookmark mark='a'/>从一开始，不断乘以五：五、二、十、四、二十，依此类推，在圆周上跳来跳去。<bookmark mark='b'/>二十二步之后，每个数都被访问过，我们回到了一。五生成了整个群。<bookmark mark='c'/>Gauss 证明了，对每个素数，这个群都像这样是循环的：有某个数生成它的全部。<bookmark mark='d'/>正向，从 x 到五的 x 次方，靠反复平方，即使对巨大的数也很容易。反向，从五的 x 次方回到 x，就是离散对数。那些跳跃正是它困难的原因。"
+  },
+  "cd93f49c70a2": {
+   "scene": "Groups",
+   "en": "Not every number generates the group. <bookmark mark='a'/> The order of a number is how many steps it takes to come back to one. <bookmark mark='b'/> Here are all twenty-two, coloured by order. Every order is one, two, eleven or twenty-two: exactly the divisors of twenty-two. <bookmark mark='c'/> That is Lagrange's theorem: in any finite group, the order of every element divides the size of the group. <bookmark mark='d'/> It proves Fermat's little theorem at once. The group has p minus one elements, so every a raised to the p minus one is one. <bookmark mark='e'/> The same argument for the numbers coprime to n, of which there are phi of n, gives Euler's theorem. Chapter five builds RSA on it.",
+   "zh": "并不是每个数都能生成这个群。<bookmark mark='a'/>一个数的阶，是它回到一所需的步数。<bookmark mark='b'/>这是全部二十二个数，按阶着色。每个阶都是一、二、十一或二十二：恰好是二十二的因数。<bookmark mark='c'/>这就是拉格朗日定理：在任何有限群中，每个元素的阶都整除群的大小。<bookmark mark='d'/>它立刻证明了费马小定理。这个群有 p 减一个元素，所以每个 a 的 p 减一次方都是一。<bookmark mark='e'/>对与 n 互素的数，共有 phi(n) 个，同样的论证给出欧拉定理。第五章把 RSA 建在它上面。"
+  },
+  "fab633c905ea": {
+   "scene": "Groups",
+   "en": "Here is what makes the discrete logarithm hard, for the prime one thousand and nineteen. <bookmark mark='a'/> Plot two to the x, modulo the prime, for every exponent. At first the powers grow smoothly, two, four, eight; then reduction wraps them around, and the points scatter like noise. <bookmark mark='b'/> Going backward means taking a height and finding which exponent produced it. <bookmark mark='c'/> There is no trend to follow. The best general methods, which chapter eight builds, take about the square root of p steps, and for a two-thousand-bit prime better methods exist but are still far too slow. <bookmark mark='d'/> So the map from x to g to the x is, as far as anyone knows, a one-way function: easy forward, hard to invert. Part 29 showed that one-way functions give all of symmetric cryptography. This one has extra structure, and that structure gives public keys.",
+   "zh": "这就是离散对数困难的原因，以素数一千零一十九为例。<bookmark mark='a'/>对每个指数画出二的 x 次方模这个素数。起初幂平稳增长，二、四、八；然后取模把它们绕回来，点像噪声一样散开。<bookmark mark='b'/>反向意味着给定一个高度，找出产生它的指数。<bookmark mark='c'/>没有趋势可循。最好的通用方法，第八章会搭建，大约需要 p 的平方根步；对两千位的素数，更好的方法是存在的，但仍然太慢。<bookmark mark='d'/>所以从 x 到 g 的 x 次方的映射，就人们所知，是一个单向函数：正向容易，反向难。第29部分说明了单向函数能给出全部对称密码学。这个函数还有额外的结构，而这结构给出了公钥。"
+  },
+  "08afc945a1c4": {
+   "scene": "DiffieHellman",
+   "en": "Chapter four. Diffie-Hellman.",
+   "zh": "第4章。Diffie-Hellman。"
+  },
+  "dc5c1318d058": {
+   "scene": "DiffieHellman",
+   "en": "The idea is easiest with paint. <bookmark mark='a'/> Alice and Bob agree in public on a colour, yellow. Each secretly picks a colour of their own. <bookmark mark='b'/> Each mixes their secret colour into the public one, and sends the mixture. Mixing is easy; separating a mixture back into its colours is not. <bookmark mark='c'/> Alice adds her secret colour to Bob's mixture; Bob adds his to Alice's. Both end up with yellow, red and blue together: the same colour. <bookmark mark='d'/> Eve saw the yellow and both mixtures, but to get the final colour she would have to unmix one of them.",
+   "zh": "用颜料来讲最容易。<bookmark mark='a'/>Alice 和 Bob 公开商定一种颜色，黄色。各自再秘密挑一种自己的颜色。<bookmark mark='b'/>各自把秘密颜色混进公开颜色里，把混合色发出去。混合容易；把混合色再分离成原来的颜色则不容易。<bookmark mark='c'/>Alice 把她的秘密颜色加进 Bob 的混合色；Bob 把他的加进 Alice 的。两人最后都得到黄、红、蓝三者混在一起：同一种颜色。<bookmark mark='d'/>Eve 看到了黄色和两种混合色，但要得到最终的颜色，她必须把其中一种混合色分离开。"
+  },
+  "033837a4f7e0": {
+   "scene": "DiffieHellman",
+   "en": "Now the mathematics. <bookmark mark='a'/> The public colour is a generator g of a group modulo a prime. The secrets are exponents. Mixing is exponentiation: Alice sends g to the a, Bob sends g to the b. <bookmark mark='b'/> Alice raises Bob's number to a, Bob raises Alice's to b, and exponents multiply, so both get g to the a b. Unmixing is the discrete logarithm. <bookmark mark='c'/> The security assumption is called computational Diffie-Hellman: from g, g to the a and g to the b, nobody can compute g to the a b. <bookmark mark='d'/> Proofs usually need a stronger one, decisional Diffie-Hellman: the shared value cannot even be told apart from a random group element. It fails in the full group modulo p, so real systems work in a subgroup of prime order. <bookmark mark='e'/> The shared value is then hashed into a key. And the same exchange on an elliptic curve, chapter nine, is smaller and faster.",
+   "zh": "现在看数学。<bookmark mark='a'/>公开颜色是模一个素数的群的生成元 g。秘密是指数。混合就是求幂：Alice 发出 g 的 a 次方，Bob 发出 g 的 b 次方。<bookmark mark='b'/>Alice 把 Bob 的数升到 a 次方，Bob 把 Alice 的升到 b 次方，指数相乘，所以两人都得到 g 的 a b 次方。分离就是离散对数。<bookmark mark='c'/>安全假设叫计算 Diffie-Hellman：由 g、g 的 a 次方和 g 的 b 次方，没人能算出 g 的 a b 次方。<bookmark mark='d'/>证明通常需要更强的假设，判定 Diffie-Hellman：共享值甚至无法与群中的随机元素区分开。它在模 p 的整个群里不成立，所以实际系统在素数阶的子群里工作。<bookmark mark='e'/>然后把共享值哈希成密钥。同样的交换放在椭圆曲线上，第九章，更小也更快。"
+  },
+  "c0fe58644bc0": {
+   "scene": "DiffieHellman",
+   "en": "Diffie-Hellman defeats a listener. It does not defeat someone who can change the messages. <bookmark mark='a'/> Mallory sits between Alice and Bob, intercepts g to the a and g to the b, and runs one exchange with each side, using her own secret. <bookmark mark='b'/> In our run Alice ends up sharing fifteen, with Mallory, and Bob shares eight, also with Mallory. Each believes the key is shared with the other. <bookmark mark='c'/> Now Mallory decrypts everything Alice sends, reads or changes it, and re-encrypts it for Bob. <bookmark mark='d'/> The exchange protects against eavesdropping, not against impersonation. <bookmark mark='e'/> The fix is for Bob to sign his half with a key Alice can verify, which needs signatures and some way to trust a public key: chapters ten and eleven.",
+   "zh": "Diffie-Hellman 挫败的是窃听者，挫败不了能篡改消息的人。<bookmark mark='a'/>Mallory 坐在 Alice 和 Bob 之间，截下 g 的 a 次方和 g 的 b 次方，用她自己的秘密分别和两边各做一次交换。<bookmark mark='b'/>在我们的运行中，Alice 最终与 Mallory 共享十五，Bob 与 Mallory 共享八。各自都以为密钥是和对方共享的。<bookmark mark='c'/>现在 Mallory 解密 Alice 发出的一切，阅读或改动，再为 Bob 重新加密。<bookmark mark='d'/>这次交换防住了窃听，防不住冒充。<bookmark mark='e'/>修复方法是 Bob 用一把 Alice 能验证的密钥给他那一半签名，这需要签名，以及某种信任公钥的方式：第十章和第十一章。"
+  },
+  "9cf3e99aae37": {
+   "scene": "Rsa",
+   "en": "Chapter five. RSA.",
+   "zh": "第5章。RSA。"
+  },
+  "a5ffbbd6bb74": {
+   "scene": "Rsa",
+   "en": "Diffie and Hellman described public-key encryption but did not build it. The next year Ron Rivest, Adi Shamir and Leonard Adleman did. <bookmark mark='a'/> Pick two primes, here sixty-one and fifty-three, and multiply them: three thousand two hundred and thirty-three. This product n is public. <bookmark mark='b'/> Count how many numbers below n share no factor with it: phi of n, which is easy only if you know the two primes: three thousand one hundred and twenty. <bookmark mark='c'/> Choose a public exponent, seventeen, and compute its inverse modulo phi with Euclid: two thousand seven hundred and fifty-three, the private exponent. <bookmark mark='d'/> To encrypt the message sixty-five, raise it to the seventeenth power mod n: two thousand seven hundred and ninety. To decrypt, raise that to the private exponent, and sixty-five comes back. <bookmark mark='e'/> The pair n and e can be published. Decrypting needs d, and computing d needs the primes.",
+   "zh": "Diffie 和 Hellman 描述了公钥加密，却没有造出来。第二年，Ron Rivest、Adi Shamir 和 Leonard Adleman 造出来了。<bookmark mark='a'/>挑两个素数，这里是六十一和五十三，把它们相乘：三千二百三十三。这个乘积 n 是公开的。<bookmark mark='b'/>数一数小于 n 且与它没有公因子的数有多少：phi(n)，只有知道这两个素数才容易算：三千一百二十。<bookmark mark='c'/>选一个公开指数，十七，用 Euclid 算出它模 phi 的逆：两千七百五十三，即私有指数。<bookmark mark='d'/>要加密消息六十五，把它升到十七次方模 n：两千七百九十。要解密，把它升到私有指数次方，六十五就回来了。<bookmark mark='e'/>n 和 e 这一对可以公开。解密需要 d，而算出 d 需要那两个素数。"
+  },
+  "ced000e50a0e": {
+   "scene": "Rsa",
+   "en": "Why does this work? <bookmark mark='a'/> Because d is the inverse of e modulo phi of n, e times d is one more than a multiple of phi. <bookmark mark='b'/> So raising the ciphertext to d gives m to the e d, which is m times m to the phi, raised to some power. By Euler's theorem from chapter three, m to the phi is one, and m is left. <bookmark mark='c'/> Euler needs m to share no factor with n; for the vanishingly rare messages that do, check the equation modulo p and modulo q separately and combine the two with the Chinese remainder theorem. <bookmark mark='d'/> The security assumption is that, knowing only n and e, nobody can take e-th roots modulo n. <bookmark mark='e'/> Factoring n would break it. Whether there is an easier way to break it than factoring is still unknown.",
+   "zh": "为什么这行得通？<bookmark mark='a'/>因为 d 是 e 模 phi(n) 的逆，e 乘 d 比 phi 的某个倍数大一。<bookmark mark='b'/>所以把密文升到 d 次方得到 m 的 e d 次方，也就是 m 乘以 m 的 phi 次方的若干次幂。由第三章的欧拉定理，m 的 phi 次方是一，剩下的就是 m。<bookmark mark='c'/>欧拉定理要求 m 与 n 没有公因子；对极为罕见的那些有公因子的消息，分别模 p 和模 q 验证这个等式，再用中国剩余定理合起来。<bookmark mark='d'/>安全假设是：只知道 n 和 e，没人能在模 n 下开 e 次方根。<bookmark mark='e'/>分解 n 就能攻破它。是否有比分解更容易的攻破方法，至今未知。"
+  },
+  "bdb2bb90a3cc": {
+   "scene": "Rsa",
+   "en": "Real keys use primes of a thousand bits or more. <bookmark mark='a'/> To find one, pick a random odd number of the right size and test it with Part 20's Miller-Rabin test, and keep going until one passes. Primes are plentiful: by the prime number theorem, about one odd number in three hundred and fifty-five at this size is prime, and our three searches took three hundred and fifty-four, ninety-nine and three hundred and sixty tries. <bookmark mark='b'/> A complete two-thousand-bit key took under a second. <bookmark mark='c'/> Decrypting directly costs twenty-nine milliseconds. Decrypting modulo p and modulo q separately, with half-size numbers, and combining by the Chinese remainder theorem, costs nine: over three times faster, which is why every implementation keeps the primes in the private key.",
+   "zh": "真实的密钥用一千位或更大的素数。<bookmark mark='a'/>要找一个，就挑一个合适大小的随机奇数，用第20部分的 Miller-Rabin 检验测试它，一直试到有一个通过为止。素数很多：由素数定理，在这个规模下大约每三百五十五个奇数里有一个素数，我们的三次搜索分别用了三百五十四、九十九和三百六十次尝试。<bookmark mark='b'/>一把完整的两千位密钥用了不到一秒。<bookmark mark='c'/>直接解密要二十九毫秒。用一半大小的数分别模 p 和模 q 解密，再用中国剩余定理合起来，只要九毫秒：快了三倍多，这就是每个实现都把素数留在私钥里的原因。"
+  },
+  "21a6330b5ead": {
+   "scene": "Rsa",
+   "en": "Raising to a power is not yet encryption. <bookmark mark='a'/> Textbook RSA is deterministic, so by Part 29's definition it is not secure: an attacker can encrypt guesses and compare. <bookmark mark='b'/> It is also malleable. Multiply a ciphertext by two to the e, and the message inside doubles. <bookmark mark='c'/> We encoded pay Bob one hundred dollars as a number, multiplied its ciphertext, and it decrypted to exactly twice the number. <bookmark mark='d'/> The standard fix is optimal asymmetric encryption padding, OAEP, from Mihir Bellare and Phillip Rogaway: mix the message with fresh randomness through two hash-based masks before encrypting. <bookmark mark='e'/> Now two encryptions of the same message differ, and the round trip checks our encoding. RSA-OAEP's security theorem also needs the RSA assumption and its random-oracle model. <bookmark mark='f'/> The same trapdoor signs: raise a hash of the message to the private exponent, and anyone can check it with the public one. Hashing first matters, because raw signatures multiply too. <bookmark mark='g'/> Our custom expanded hash is a teaching encoding, not standardized RSA-PSS. Use a standard signature encoding in practice; the arithmetic alone does not define a secure scheme.",
+   "zh": "做幂运算还不等于安全加密。<bookmark mark='a'/>教科书 RSA 是确定性的，攻击者能加密猜测并比较，因此不满足第29部分的安全定义。<bookmark mark='b'/>它也可篡改：密文乘以二的 e 次方，消息就在模 n 意义下翻倍。<bookmark mark='c'/>我们把支付一百美元编码成数，修改密文后，解密的数恰好翻倍。<bookmark mark='d'/>标准修补是 OAEP：Bellare 与 Rogaway 在1994年提出用两个哈希掩码把消息和新鲜随机性混合。<bookmark mark='e'/>同一消息两次加密会不同，往返测试检查了编码实现。RSA-OAEP 的安全定理还依赖 RSA 假设与随机预言机模型。<bookmark mark='f'/>同一陷门可用于签名：对消息的哈希作私钥幂运算，再用公钥检验；原始签名也具有乘法结构，所以编码不可省略。<bookmark mark='g'/>这里展开哈希的自定义编码用于教学，并不是标准 RSA-PSS。实际使用应选标准签名编码；算术本身并没有定义一个安全方案。"
+  },
+  "4a78af906bd4": {
+   "scene": "Oracle",
+   "en": "Chapter six. Bleichenbacher's oracle.",
+   "zh": "第6章。Bleichenbacher 的预言机。"
+  },
+  "2b33e314108b": {
+   "scene": "Oracle",
+   "en": "For twenty years, TLS used RSA to send the session key, with a padding format called PKCS one version one point five. <bookmark mark='a'/> The padded message starts with the bytes zero and two, then random nonzero bytes, a zero, and the message. <bookmark mark='b'/> A server decrypting a ciphertext checks this format, and early servers sent a different error when it was wrong. That is an oracle, like Part 29's padding oracle. <bookmark mark='c'/> Combine it with malleability. Multiply the ciphertext by s to the e, and the server is checking m times s. <bookmark mark='d'/> Whenever it says the padding is valid, the attacker learns that m times s, modulo n, lies in a narrow window. <bookmark mark='e'/> Each answer cuts down the set of possible messages. Daniel Bleichenbacher showed in 1998 how to choose the s values so the set shrinks to a single number.",
+   "zh": "二十年来，TLS 一直用 RSA 发送会话密钥，配一种叫 PKCS 一 一点五版的填充格式。<bookmark mark='a'/>填充后的消息以字节零和二开头，接着是随机的非零字节、一个零，然后是消息。<bookmark mark='b'/>服务器解密密文时检查这个格式，早期的服务器在格式不对时会发出不同的错误。这就是一个预言机，就像第29部分的填充预言机。<bookmark mark='c'/>把它和可延展性结合起来。把密文乘以 s 的 e 次方，服务器检查的就是 m 乘 s。<bookmark mark='d'/>每当它说填充有效，攻击者就知道 m 乘 s 模 n 落在一个窄窗口里。<bookmark mark='e'/>每个回答都缩小可能消息的集合。Daniel Bleichenbacher 在1998年说明了怎样选取 s，使这个集合缩到只剩一个数。"
+  },
+  "c56f12de7b57": {
+   "scene": "Oracle",
+   "en": "We built a server that answers only valid or invalid, and ran the attack. <bookmark mark='a'/> The curve shows how many bits of uncertainty remain about the message. For a two-hundred-and-fifty-six-bit key it falls slowly while the attacker searches for the first valid s, then steeply, about a bit per query. <bookmark mark='b'/> Thirty-three thousand queries in all; for a three-hundred-and-eighty-four-bit key, a hundred and twenty-nine thousand. <bookmark mark='c'/> Out comes the message, with no key and no factoring. <bookmark mark='d'/> Against real key sizes the attack takes around a million queries, which gave it its name. <bookmark mark='e'/> Servers kept leaking the bit, through error messages and timing: in 2017 the ROBOT study found it still working against major websites. <bookmark mark='f'/> TLS 1.3 removed RSA key transport altogether, and uses only Diffie-Hellman.",
+   "zh": "我们搭了一个只回答有效或无效的服务器，跑了这个攻击。<bookmark mark='a'/>曲线表示关于消息还剩多少位的不确定性。对两百五十六位的密钥，攻击者寻找第一个有效 s 时它下降得很慢，之后陡然下降，大约每次查询一位。<bookmark mark='b'/>一共三万三千次查询；对三百八十四位的密钥，十二万九千次。<bookmark mark='c'/>消息就出来了，不需要密钥，也不需要分解。<bookmark mark='d'/>对真实的密钥长度，这个攻击大约需要一百万次查询，它的名字由此而来。<bookmark mark='e'/>服务器一直在通过错误信息和时间泄露这一位：2017年的 ROBOT 研究发现，它对一些大型网站依然有效。<bookmark mark='f'/>TLS 1.3 干脆取消了 RSA 密钥传输，只用 Diffie-Hellman。"
+  },
+  "f040795eb0d1": {
+   "scene": "Factoring",
+   "en": "Chapter seven. Factoring.",
+   "zh": "第7章。因数分解。"
+  },
+  "bd359ee8a284": {
+   "scene": "Factoring",
+   "en": "The simplest fast factoring method is John Pollard's, from 1975. <bookmark mark='a'/> Pick a starting number and iterate: square it, add one, reduce modulo n. The values look random. <bookmark mark='b'/> Now imagine reducing them, also, modulo the factor p we are looking for, one thousand and nine. There are only p possible values, so by the birthday paradox they start repeating after about the square root of p steps. <bookmark mark='c'/> Here, after a tail of seven values, the sequence falls into a cycle of fourteen. Drawn out, it has the shape of the Greek letter rho. <bookmark mark='d'/> We cannot see the values mod p, but we don't need to. A repeat mod p means p divides the difference of two values, so the gcd of that difference with n is p. <bookmark mark='e'/> And it is: one thousand and nine. <bookmark mark='f'/> Part 17's tortoise-and-hare trick detects the cycle without storing the sequence.",
+   "zh": "最简单的快速分解方法是 John Pollard 在1975年提出的。<bookmark mark='a'/>挑一个起始数并迭代：平方、加一、模 n。这些值看起来是随机的。<bookmark mark='b'/>现在想象把它们同时模我们要找的因子 p，一千零九。只有 p 种可能的值，所以按生日悖论，大约 p 的平方根步之后它们就开始重复。<bookmark mark='c'/>这里，经过七个值的尾巴之后，序列落进一个长度为十四的环。画出来，形状像希腊字母 rho。<bookmark mark='d'/>我们看不到模 p 的值，但也不需要。模 p 重复意味着 p 整除两个值之差，所以这个差与 n 的最大公约数就是 p。<bookmark mark='e'/>果然：一千零九。<bookmark mark='f'/>第17部分的龟兔赛跑技巧不用存储整个序列就能发现这个环。"
+  },
+  "c0ffa665fefe": {
+   "scene": "Factoring",
+   "en": "How does rho scale? We factored products of two equal-sized primes, from ten digits to thirty-four. <bookmark mark='a'/> Rho needs about the square root of the smaller prime, the fourth root of n, so its time grows exponentially in the number of digits: a straight line on this logarithmic scale. <bookmark mark='b'/> The quadratic sieve, which we build next, grows more slowly than any exponential: sub-exponentially. <bookmark mark='c'/> In our Python, at these small sizes, the two are close: at thirty-four digits rho took forty-three seconds and the sieve eighty-seven. <bookmark mark='d'/> But the sieve's curve bends. Past about forty digits it wins, and the gap then grows without limit. For RSA-sized numbers, only the sieves matter.",
+   "zh": "rho 的规模如何增长？我们分解了两个等长素数的乘积，从十位到三十四位。<bookmark mark='a'/>rho 大约需要较小素数的平方根步，也就是 n 的四次方根，所以它的时间随位数指数增长：在这张对数图上是一条直线。<bookmark mark='b'/>二次筛法，我们接下来就搭它，增长得比任何指数都慢：亚指数。<bookmark mark='c'/>在我们的 Python 里，在这些小规模上，两者很接近：三十四位时，rho 用了四十三秒，筛法八十七秒。<bookmark mark='d'/>但筛法的曲线是弯的。大约过了四十位它就胜出，之后差距无限扩大。对 RSA 大小的数，只有筛法要紧。"
+  },
+  "d52134eae67e": {
+   "scene": "Factoring",
+   "en": "The sieve rests on an old idea of Fermat's, sharpened by Carl Pomerance in 1981. <bookmark mark='a'/> If you can find x and y whose squares agree modulo n, but which are not equal or opposite, then n divides x minus y times x plus y, and a gcd splits it. <bookmark mark='b'/> To build such squares, take x just above the square root of n, so that x squared minus n is fairly small, and keep only the x for which it is smooth: a product of small primes. <bookmark mark='c'/> Here is one from our run: a twelve-digit value that factors entirely into primes below thirteen hundred. <bookmark mark='d'/> Finding them is a sieve, like Eratosthenes': for each small prime, mark the positions it divides, rather than testing each value. <bookmark mark='e'/> Write each smooth value's exponents mod two as a vector. A set of vectors summing to zero, which Gaussian elimination over the two-element field finds, multiplies to a perfect square on both sides. <bookmark mark='f'/> For our twenty-digit number: a hundred and sixteen small primes, a hundred and twenty-seven relations, a combination of forty-six of them, and the factor.",
+   "zh": "筛法建立在 Fermat 的一个老想法上，由 Carl Pomerance 在1981年磨砺成形。<bookmark mark='a'/>如果你能找到 x 和 y，它们的平方模 n 相等，但它们既不相等也不互为相反数，那么 n 整除 x 减 y 乘以 x 加 y，一个最大公约数就能把它分开。<bookmark mark='b'/>为了造出这样的平方，取刚好大于 n 的平方根的 x，使 x 的平方减 n 比较小，只保留那些使它光滑的 x：即它是小素数的乘积。<bookmark mark='c'/>这是我们运行中的一个：一个十二位的值，完全分解成一千三百以下的素数。<bookmark mark='d'/>找到它们靠的是筛，就像 Eratosthenes 的筛：对每个小素数，标出它整除的位置，而不是逐个检验每个值。<bookmark mark='e'/>把每个光滑值的指数模二写成一个向量。一组和为零的向量，可以用二元域上的高斯消元找到，它们相乘在两边都是完全平方。<bookmark mark='f'/>对我们的二十位数：一百一十六个小素数，一百二十七个关系，其中四十六个的组合，然后就是因子。"
+  },
+  "60c2ae2188b0": {
+   "scene": "Factoring",
+   "en": "The fastest known method is the number field sieve, from the early nineteen-nineties, which takes the same idea into algebraic number fields. <bookmark mark='a'/> Its running time grows like the exponential of the cube root of the number of digits, roughly. <bookmark mark='b'/> Public records track it: a hundred digits in 1991; RSA-155, a five-hundred-and-twelve-bit key, in 1999; RSA-250, eight hundred and twenty-nine bits, in 2020, at a cost of about two thousand seven hundred core-years. <bookmark mark='c'/> A two-thousand-and-forty-eight-bit key, six hundred and seventeen digits, is far beyond this line, and is rated at about a hundred and twelve bits of security. <bookmark mark='d'/> But the curve is sub-exponential, so key sizes must grow quickly for more security: three thousand and seventy-two bits for a hundred and twenty-eight, fifteen thousand for two hundred and fifty-six. Elliptic curves, chapter nine, do much better.",
+   "zh": "已知最快的方法是数域筛法，来自九十年代初，它把同样的想法带进代数数域。<bookmark mark='a'/>它的运行时间大致随位数的立方根的指数增长。<bookmark mark='b'/>公开的纪录记录着它：1991年一百位；1999年 RSA-155，一把五百一十二位的密钥；2020年 RSA-250，八百二十九位，代价约两千七百核年。<bookmark mark='c'/>一把两千零四十八位、六百一十七位数字的密钥，远在这条线之外，被评为约一百一十二位的安全性。<bookmark mark='d'/>但曲线是亚指数的，所以要更高的安全性，密钥长度必须迅速增长：一百二十八位安全需要三千零七十二位，两百五十六位安全需要一万五千位。椭圆曲线，第九章，要好得多。"
+  },
+  "4898616f7e28": {
+   "scene": "DiscreteLogs",
+   "en": "Chapter eight. Discrete logarithms.",
+   "zh": "第8章。离散对数。"
+  },
+  "d0aed5f838b7": {
+   "scene": "DiscreteLogs",
+   "en": "Chapter three left a question: how fast can g to the x be undone? Trying every x takes p steps. Daniel Shanks found a square root in 1971. <bookmark mark='a'/> Write the unknown x as i times m plus j, with m about the square root of p. First take baby steps: store g to the j for every j below m. <bookmark mark='b'/> Then take giant steps from the target: h, h divided by g to the m, by g to the two m, and so on, looking each one up in the table. <bookmark mark='c'/> When one matches, x is read off. About two square roots of p operations, and a square root's worth of memory. <bookmark mark='d'/> Our runs: each four more bits of p multiply the time by about five, close to the four a square root predicts. Pollard's rho does the same with almost no memory.",
+   "zh": "第三章留下一个问题：g 的 x 次方能多快被还原？试遍每个 x 要 p 步。Daniel Shanks 在1971年找到了平方根的方法。<bookmark mark='a'/>把未知的 x 写成 i 乘 m 加 j，m 约为 p 的平方根。先走小步：对每个小于 m 的 j 存下 g 的 j 次方。<bookmark mark='b'/>再从目标出发走大步：h，h 除以 g 的 m 次方，再除以 g 的 2m 次方，依此类推，每一个都到表里查。<bookmark mark='c'/>一旦匹配，x 就读出来了。大约两倍 p 的平方根次运算，以及平方根大小的内存。<bookmark mark='d'/>我们的运行：p 每多四位，时间大约乘以五，接近平方根预言的四。Pollard 的 rho 几乎不用内存就能做到同样的事。"
+  },
+  "b0c86fb3c474": {
+   "scene": "DiscreteLogs",
+   "en": "The square root is of the group's order, and the order's structure matters. <bookmark mark='a'/> Stephen Pohlig and Martin Hellman showed in 1978 that a discrete logarithm splits into one smaller logarithm for each prime factor of p minus one, glued back together by the Chinese remainder theorem. <bookmark mark='b'/> Here is an eighty-four-bit prime whose p minus one is a product of small primes. <bookmark mark='c'/> The largest is a hundred and nine, so every piece is tiny, and the whole logarithm takes under a millisecond. <bookmark mark='d'/> A safe prime is twice a prime plus one. Then p minus one has a huge prime factor, and nothing beats the full square root. <bookmark mark='e'/> So Diffie-Hellman groups are built from safe primes, or work in a subgroup of large prime order.",
+   "zh": "这个平方根是对群的阶而言的，而阶的结构很重要。<bookmark mark='a'/>Stephen Pohlig 和 Martin Hellman 在1978年证明，离散对数可以拆成 p 减一的每个素因子各一个更小的对数，再用中国剩余定理粘回去。<bookmark mark='b'/>这是一个八十四位的素数，它的 p 减一是一串小素数的乘积。<bookmark mark='c'/>最大的是一百零九，所以每一块都很小，整个对数不到一毫秒。<bookmark mark='d'/>安全素数是一个素数的两倍加一。那时 p 减一有一个巨大的素因子，没有什么能胜过完整的平方根。<bookmark mark='e'/>所以 Diffie-Hellman 的群用安全素数构造，或者在大素数阶的子群里工作。"
+  },
+  "2de6574c3b0c": {
+   "scene": "DiscreteLogs",
+   "en": "For the numbers modulo p there is something better than square roots, because numbers can be factored. <bookmark mark='a'/> If some power of g happens to factor into small primes, its exponent is a linear combination of the logarithms of those primes. <bookmark mark='b'/> Collect enough such smooth powers and solve the linear system, and you know the logarithm of every small prime. <bookmark mark='c'/> Then multiply the target by random powers of g until the product is smooth, and its logarithm falls out. Ours works on a thirty-bit prime in a tenth of a second. <bookmark mark='d'/> Index calculus is sub-exponential, like the sieves, which is why Diffie-Hellman over integers needs primes of two thousand bits. <bookmark mark='e'/> Worse, the expensive first stage depends only on the prime, not on the exchange. <bookmark mark='f'/> In 2015 the Logjam researchers showed that servers still accepting old five-hundred-and-twelve-bit export groups could be broken in minutes after one precomputation, and that a handful of shared thousand-bit primes were within reach of a national agency. <bookmark mark='g'/> Elliptic curve points cannot be factored into small pieces. There, only the generic square-root attacks are known.",
+   "zh": "对模 p 的数，有比平方根更好的方法，因为数可以分解。<bookmark mark='a'/>如果 g 的某个幂恰好分解成小素数，它的指数就是这些素数对数的线性组合。<bookmark mark='b'/>收集足够多这样的光滑幂，解出线性方程组，就知道了每个小素数的对数。<bookmark mark='c'/>然后把目标乘以 g 的随机幂，直到乘积光滑，它的对数就出来了。我们的方法对一个三十位的素数只要十分之一秒。<bookmark mark='d'/>指数演算是亚指数的，和筛法一样，这就是整数上的 Diffie-Hellman 需要两千位素数的原因。<bookmark mark='e'/>更糟的是，代价高昂的第一阶段只依赖于素数，与具体的交换无关。<bookmark mark='f'/>2015年，Logjam 的研究者表明，仍接受旧的五百一十二位出口级群的服务器，在一次预计算之后几分钟就能被攻破；而少数几个被广泛共享的一千位素数，在一个国家机构的能力范围之内。<bookmark mark='g'/>椭圆曲线上的点无法分解成小块。在那里，人们只知道通用的平方根攻击。"
+  },
+  "174db3938747": {
+   "scene": "Curves",
+   "en": "Chapter nine. Elliptic curves.",
+   "zh": "第9章。椭圆曲线。"
+  },
+  "d82b9b24da15": {
+   "scene": "Curves",
+   "en": "An elliptic curve is the set of points where y squared equals a cubic in x. Here is y squared equals x cubed minus x plus one. The remarkable fact is that its points can be added. <bookmark mark='a'/> Take two points, P and Q. The line through them meets the curve in exactly one more point, R: a cubic has three roots, and we know two. <bookmark mark='b'/> Reflect R in the x-axis. That point is defined to be P plus Q. <bookmark mark='c'/> With these whole-number points, minus one, one plus zero, one is one, minus one. <bookmark mark='d'/> With one extra point at infinity as zero, where vertical lines meet, and reflection as negation, the points form a group. <bookmark mark='e'/> Associativity, that adding P and Q first then R gives the same as Q and R first, is true and takes real work to prove. It is the curve's deepest property, and we will simply check it numerically.",
+   "zh": "椭圆曲线是 y 的平方等于 x 的一个三次式的点的集合。这是 y 的平方等于 x 的立方减 x 加一。了不起的是，它的点可以相加。<bookmark mark='a'/>取两个点 P 和 Q。过它们的直线恰好再与曲线交于一点 R：三次方程有三个根，我们已知两个。<bookmark mark='b'/>把 R 关于 x 轴反射。这个点被定义为 P 加 Q。<bookmark mark='c'/>用这些整数点：负一、一 加上 零、一，等于 一、负一。<bookmark mark='d'/>再加上一个无穷远点作为零，竖直线在那里相交，以反射作为取负，这些点就构成一个群。<bookmark mark='e'/>结合律，即先加 P 和 Q 再加 R，与先加 Q 和 R 结果相同，是成立的，但证明要花真功夫。它是这条曲线最深刻的性质，我们只在数值上验证它。"
+  },
+  "a9707d8a5ba1": {
+   "scene": "Curves",
+   "en": "Adding a point to itself uses the tangent line. <bookmark mark='a'/> At P, minus one, one, the slope of the curve is one. <bookmark mark='b'/> The tangent meets the curve again at three, five. Reflect, and two P is three, minus five. <bookmark mark='c'/> In coordinates, the slope, the new x and the new y come from a few lines of algebra. <bookmark mark='d'/> They use only addition, subtraction, multiplication and division. So the same formulas make sense over any field, including the integers modulo a prime, where the curve stops being a curve and becomes a scatter of points.",
+   "zh": "一个点加它自己要用切线。<bookmark mark='a'/>在 P，负一、一，曲线的斜率是一。<bookmark mark='b'/>切线在三、五处再次与曲线相交。反射之后，两倍 P 是三、负五。<bookmark mark='c'/>用坐标表示，斜率、新的 x 和新的 y 来自几行代数。<bookmark mark='d'/>它们只用加、减、乘、除。所以同样的公式在任何域上都有意义，包括模一个素数的整数，在那里曲线不再是曲线，而变成一片散点。"
+  },
+  "56f591bc7df9": {
+   "scene": "Curves",
+   "en": "Over the integers modulo ninety-seven, the curve y squared equals x cubed plus two x plus three becomes this. <bookmark mark='a'/> Ninety-nine points, and the point at infinity: a group of a hundred. <bookmark mark='b'/> The symmetry about the middle is the reflection, y to minus y. <bookmark mark='c'/> Take a point G and keep adding it: G, two G, three G. The multiples jump around the grid with no visible order, fifty of them before they return to zero. <bookmark mark='d'/> Given a multiple Q equals k times G, finding k is the elliptic-curve discrete logarithm. <bookmark mark='e'/> Computing k times G is easy: double and add, chapter two's square and multiply in new clothes. On the standard curve P-256, with two-hundred-and-fifty-six-bit numbers, it takes twenty milliseconds in Python.",
+   "zh": "在模九十七的整数上，曲线 y 的平方等于 x 的立方加二 x 加三变成了这样。<bookmark mark='a'/>九十九个点，加上无穷远点：一个一百阶的群。<bookmark mark='b'/>关于中线的对称就是反射，y 变成负 y。<bookmark mark='c'/>取一个点 G，不断加它：G、两倍 G、三倍 G。这些倍数在网格上毫无规律地跳来跳去，五十个之后才回到零。<bookmark mark='d'/>给定一个倍数 Q 等于 k 乘 G，求 k 就是椭圆曲线离散对数。<bookmark mark='e'/>计算 k 乘 G 很容易：倍加法，就是第二章的平方乘换了一身衣服。在标准曲线 P-256 上，用两百五十六位的数，Python 里要二十毫秒。"
+  },
+  "f713c39a9681": {
+   "scene": "Curves",
+   "en": "Why use curves at all? <bookmark mark='a'/> Because their keys are small. For the same security, RSA needs a three-thousand-bit modulus where a curve needs two hundred and fifty-six bits; at higher levels the gap widens. <bookmark mark='b'/> The reason is the last chapter's index calculus: points on a good curve cannot be broken into small factors, so the only known attack is a generic square root. <bookmark mark='c'/> Victor Miller and Neal Koblitz proposed curve cryptography independently in 1985. NIST standardised P-256, and in 2006 Daniel Bernstein designed Curve25519 to be fast and hard to implement wrongly. <bookmark mark='d'/> Its X25519 function uses a Montgomery ladder, which performs the same operations whatever the key bits are. <bookmark mark='e'/> Ours matches the RFC's test vector, and two parties agree on a secret. <bookmark mark='f'/> Almost every TLS connection today begins with exactly this computation.",
+   "zh": "为什么要用曲线？<bookmark mark='a'/>因为它们的密钥很小。同样的安全性，RSA 需要三千位的模数，曲线只需要两百五十六位；安全级别越高，差距越大。<bookmark mark='b'/>原因是上一章的指数演算：好曲线上的点无法拆成小因子，所以已知的攻击只有通用的平方根。<bookmark mark='c'/>Victor Miller 和 Neal Koblitz 在1985年各自独立地提出了曲线密码学。NIST 标准化了 P-256，2006年 Daniel Bernstein 设计了 Curve25519，既快又不容易实现错。<bookmark mark='d'/>它的 X25519 函数用 Montgomery 阶梯，不论密钥的位是什么，执行的操作都一样。<bookmark mark='e'/>我们的实现与 RFC 的测试向量一致，两方也商定出了同一个秘密。<bookmark mark='f'/>今天几乎每一个 TLS 连接都正是从这个计算开始的。"
+  },
+  "699de71f1082": {
+   "scene": "Signatures",
+   "en": "Chapter ten. Signatures.",
+   "zh": "第10章。签名。"
+  },
+  "428b843bb2f2": {
+   "scene": "Signatures",
+   "en": "Encryption hides; a signature proves who wrote something. The elliptic-curve digital signature algorithm, ECDSA, signs most of the web's certificates and most Bitcoin transactions. <bookmark mark='a'/> To sign, pick a fresh random number k, take the x coordinate of k times G as r, and combine k, the message's hash and the private key into s. <bookmark mark='b'/> To verify, anyone holding the public key computes two multipliers from s and checks that a combination of G and Q lands back on r. <bookmark mark='c'/> It works because that combination is exactly k times G. <bookmark mark='d'/> Only the holder of d can produce such a pair, while anyone can check it. <bookmark mark='e'/> Because bad random numbers ruin signatures, RFC 6979 derives k deterministically from the key and the message with HMAC. <bookmark mark='f'/> Our implementation reproduces the standard's test signature exactly. <bookmark mark='g'/> Everything hangs on k: it must be secret, uniform, and never used twice.",
+   "zh": "加密负责隐藏；签名证明是谁写的。椭圆曲线数字签名算法 ECDSA，签着网络上大部分证书和大部分比特币交易。<bookmark mark='a'/>签名时，挑一个新的随机数 k，取 k 乘 G 的 x 坐标作为 r，再把 k、消息的哈希和私钥组合成 s。<bookmark mark='b'/>验证时，任何持有公钥的人由 s 算出两个乘数，检查 G 和 Q 的一个组合是否落回 r。<bookmark mark='c'/>它成立，是因为那个组合恰好就是 k 乘 G。<bookmark mark='d'/>只有持有 d 的人能造出这样一对数，而任何人都能检查。<bookmark mark='e'/>由于糟糕的随机数会毁掉签名，RFC 6979 用 HMAC 由密钥和消息确定性地导出 k。<bookmark mark='f'/>我们的实现精确地复现了标准的测试签名。<bookmark mark='g'/>一切都系于 k：它必须保密、均匀，而且绝不能用两次。"
+  },
+  "9d3eb0a16064": {
+   "scene": "Signatures",
+   "en": "Here is what happens if k repeats. <bookmark mark='a'/> Two signatures on two different messages, made with the same nonce. The first half of each signature, r, is identical: the giveaway. <bookmark mark='b'/> Subtract the two s values: the private key cancels, and what is left gives k from the two hashes. <bookmark mark='c'/> With k known, one line of algebra gives the private key d. <bookmark mark='d'/> Our recovery finds both, correctly, and signs a message the key's owner never approved; it verifies. <bookmark mark='e'/> This is not hypothetical. In 2010 the fail0verflow group found that Sony signed PlayStation 3 software with the same k every time, and recovered the master signing key from two signatures. <bookmark mark='f'/> Even nonces that are merely biased by a few bits leak the key, given enough signatures, through the lattice methods of chapter fourteen.",
+   "zh": "看看 k 重复时会发生什么。<bookmark mark='a'/>两条不同消息上的两个签名，用的是同一个随机数。每个签名的前一半 r 都相同：这就露馅了。<bookmark mark='b'/>把两个 s 相减：私钥抵消，剩下的部分由两个哈希给出 k。<bookmark mark='c'/>知道了 k，一行代数就给出私钥 d。<bookmark mark='d'/>我们的恢复正确地找出了两者，并为一条密钥主人从未批准的消息签了名；签名通过验证。<bookmark mark='e'/>这不是假设。2010年，fail0verflow 小组发现索尼给 PlayStation 3 软件签名时每次都用同一个 k，并从两个签名恢复出了主签名密钥。<bookmark mark='f'/>即使随机数只是偏了几位，只要签名足够多，也会通过第十四章的格方法泄露密钥。"
+  },
+  "256ecc800a8a": {
+   "scene": "Pki",
+   "en": "Chapter eleven. Certificates, and trust.",
+   "zh": "第11章。证书与信任。"
+  },
+  "18be28688521": {
+   "scene": "Pki",
+   "en": "A signature tells you which key signed. It does not tell you whose key that is. <bookmark mark='a'/> A certificate binds a name to a public key, and is signed by a certificate authority. Here the website pebble dot example has a key, certified by an intermediate authority, which is certified in turn by a root authority. <bookmark mark='b'/> The root's key is not certified by anyone: it ships inside your browser or operating system, in a list of about a hundred and fifty root certificates. <bookmark mark='c'/> Our chain, signed with our ECDSA, verifies. Change one character of the website's name and the signature fails. A certificate the attacker signs with their own key fails too, because no trusted root vouches for it. <bookmark mark='d'/> So trust is delegated: you trust the roots, the roots trust the intermediates, and they vouch for websites.",
+   "zh": "签名告诉你是哪把密钥签的，却不告诉你那是谁的密钥。<bookmark mark='a'/>证书把一个名字绑定到一把公钥上，由证书颁发机构签名。这里，网站 pebble 点 example 有一把密钥，由一个中间机构认证，而中间机构又由一个根机构认证。<bookmark mark='b'/>根的密钥不由任何人认证：它随浏览器或操作系统一起分发，在一个约一百五十张根证书的列表里。<bookmark mark='c'/>我们用自己的 ECDSA 签的这条链通过了验证。把网站名字改一个字符，签名就失败。攻击者用自己的密钥签的证书也会失败，因为没有受信任的根为它担保。<bookmark mark='d'/>所以信任是委托的：你信任根，根信任中间机构，中间机构为网站担保。"
+  },
+  "763cf10769d0": {
+   "scene": "Pki",
+   "en": "The weakness of this system is its breadth. <bookmark mark='a'/> Any trusted root can certify any name, so the least careful authority sets the security of every website. <bookmark mark='b'/> In 2011 the Dutch authority DigiNotar was broken into, and certificates for google dot com, signed by a trusted root, were used to intercept users in Iran. DigiNotar was removed from every browser and went bankrupt. <bookmark mark='c'/> The response, from Ben Laurie and Adam Langley at Google, was Certificate Transparency: every certificate must be recorded in public, append-only logs. <bookmark mark='d'/> The logs are Part 29's Merkle trees. A short proof shows that a certificate is in the log, and another that the log has only ever grown, never been rewritten. <bookmark mark='e'/> Since 2018 Chrome rejects certificates that cannot prove they were logged, so a misissued certificate can no longer be used in secret. <bookmark mark='f'/> And since Let's Encrypt began issuing free, automated certificates in 2015, most of the web has moved to HTTPS.",
+   "zh": "这个系统的弱点在于它的广度。<bookmark mark='a'/>任何受信任的根都能为任何名字签发证书，所以最不谨慎的那个机构决定了每个网站的安全。<bookmark mark='b'/>2011年，荷兰的证书机构 DigiNotar 被入侵，由受信任的根签发的 google 点 com 证书被用来拦截伊朗的用户。DigiNotar 被所有浏览器除名，随后破产。<bookmark mark='c'/>谷歌的 Ben Laurie 和 Adam Langley 给出的回应是证书透明：每张证书都必须记录在公开的、只能追加的日志里。<bookmark mark='d'/>这些日志就是第29部分的 Merkle 树。一个简短的证明表明某张证书在日志里，另一个证明表明日志只增长过，从未被改写。<bookmark mark='e'/>自2018年起，Chrome 拒绝无法证明已被记录的证书，所以错误签发的证书再也无法被秘密使用。<bookmark mark='f'/>而自2015年 Let's Encrypt 开始免费、自动地签发证书以来，网络的大部分已转向 HTTPS。"
+  },
+  "06ea57b86fa2": {
+   "scene": "Tls",
+   "en": "Chapter twelve. TLS 1.3.",
+   "zh": "第12章。TLS 1.3。"
+  },
+  "c25ba637d1b4": {
+   "scene": "Tls",
+   "en": "Everything so far comes together in TLS 1.3, the protocol under HTTPS, standardised in 2018. We ran a version of it between two of our machines. <bookmark mark='a'/> The client sends a hello containing a fresh X25519 public key. <bookmark mark='b'/> The server answers with its own. Both can now compute the same shared secret, and every later message is encrypted. <bookmark mark='c'/> The server's next flight, encrypted, carries its certificate chain, a signature over everything said so far, and a MAC called Finished. The signature is what defeats chapter four's man in the middle: only the holder of the certified key could have signed this transcript. <bookmark mark='d'/> The client checks it all and sends its own Finished MAC. <bookmark mark='e'/> Then application data flows, under authenticated encryption. One round trip, and every check passed.",
+   "zh": "前面的一切在 TLS 1.3 中汇合，它是 HTTPS 之下的协议，2018年标准化。我们在自己的两台机器之间跑了它的一个版本。<bookmark mark='a'/>客户端发出一个问候，里面有一把新鲜的 X25519 公钥。<bookmark mark='b'/>服务器回以它自己的公钥。现在双方都能算出同一个共享秘密，此后的每条消息都是加密的。<bookmark mark='c'/>服务器的下一批消息经过加密，带着它的证书链、对迄今所有对话的签名，以及一个叫 Finished 的 MAC。正是这个签名挫败了第四章的中间人：只有持有被认证密钥的人才能签出这份记录。<bookmark mark='d'/>客户端检查这一切，并发出自己的 Finished MAC。<bookmark mark='e'/>然后应用数据在认证加密下流动。一个往返，每项检查都通过了。"
+  },
+  "c411a0b04464": {
+   "scene": "Tls",
+   "en": "Where do all those keys come from? <bookmark mark='a'/> The shared secret from the exchange goes through HKDF, a key-derivation function built from HMAC by Hugo Krawczyk; ours matches its standard's test vectors. <bookmark mark='b'/> From one secret it derives separate keys for the handshake, for the Finished MACs and for application data, each labelled, and each mixed with a hash of the transcript. So if an attacker changes a single byte of either hello, nothing verifies. <bookmark mark='c'/> The exchange keys are ephemeral, used once and discarded. The server's long-term key only signs. <bookmark mark='d'/> That is forward secrecy: an attacker who records today's traffic and steals the server's key next year still cannot read it. With the old RSA key transport, they could. <bookmark mark='e'/> TLS 1.3 also deleted most of what earlier versions got wrong: RSA key transport, CBC modes, custom groups, compression and renegotiation, all the subjects of famous attacks.",
+   "zh": "这些密钥都从哪里来？<bookmark mark='a'/>交换得到的共享秘密经过 HKDF，这是 Hugo Krawczyk 用 HMAC 搭成的密钥派生函数；我们的实现与其标准的测试向量一致。<bookmark mark='b'/>它由一个秘密派生出握手、Finished MAC 和应用数据各自的密钥，每把都带标签，每把都混入了对话记录的哈希。所以只要攻击者改动任一个问候中的一个字节，什么都验证不过。<bookmark mark='c'/>交换用的密钥是临时的，用一次就丢弃。服务器的长期密钥只用来签名。<bookmark mark='d'/>这就是前向保密：攻击者记录下今天的流量，明年偷到服务器的密钥，仍然读不了它。用旧的 RSA 密钥传输，他们就能读。<bookmark mark='e'/>TLS 1.3 还删掉了早期版本中大部分出过错的东西：RSA 密钥传输、CBC 模式、自定义群、压缩和重新协商，它们都是著名攻击的对象。"
+  },
+  "42ab5ffe54c8": {
+   "scene": "Shor",
+   "en": "Chapter thirteen. Shor's threat.",
+   "zh": "第13章。Shor 的威胁。"
+  },
+  "9d44d761466d": {
+   "scene": "Shor",
+   "en": "Every public-key system so far rests on factoring or discrete logarithms. In 1994 Peter Shor showed that a quantum computer could do both. The key is that factoring reduces to finding a period. <bookmark mark='a'/> Take N equals fifteen and a equals seven, and list the powers of seven mod fifteen: one, seven, four, thirteen, one, and around again. The period is four. <bookmark mark='b'/> Seven to the fourth is one, so fifteen divides seven squared minus one times seven squared plus one, and the gcds give three and five. <bookmark mark='c'/> The same works for twenty-one and thirty-five. <bookmark mark='d'/> For a large N, the period is astronomically long, and no classical method finds it faster than factoring itself. <bookmark mark='e'/> A quantum computer can put all the powers in superposition and read the period off with the quantum Fourier transform, in polynomial time. Part 53 builds it, and factors fifteen on our simulator. <bookmark mark='f'/> The same idea solves discrete logarithms, in any group. RSA, Diffie-Hellman and elliptic curves fall together.",
+   "zh": "到目前为止的每个公钥系统，都建立在因数分解或离散对数之上。1994年，Peter Shor 证明量子计算机两者都能做到。关键在于，因数分解可以归结为寻找周期。<bookmark mark='a'/>取 N 等于十五、a 等于七，列出七的各次幂模十五：一、七、四、十三、一，然后再绕一圈。周期是四。<bookmark mark='b'/>七的四次方是一，所以十五整除七的平方减一乘以七的平方加一，最大公约数给出三和五。<bookmark mark='c'/>对二十一和三十五同样有效。<bookmark mark='d'/>对一个大的 N，周期长得天文数字一般，没有任何经典方法能比因数分解本身更快地找到它。<bookmark mark='e'/>量子计算机能把所有的幂放进叠加态，再用量子傅里叶变换读出周期，用时是多项式的。第53部分会搭建它，并在我们的模拟器上分解十五。<bookmark mark='f'/>同样的思想能在任何群里求离散对数。RSA、Diffie-Hellman 和椭圆曲线一起倒下。"
+  },
+  "6938469ad0ed": {
+   "scene": "Shor",
+   "en": "How close is the threat? <bookmark mark='a'/> The largest quantum computers today have about a thousand physical qubits, too noisy for Shor's algorithm at any useful size. <bookmark mark='b'/> Breaking a two-thousand-bit RSA key needs error correction, Part 28's subject transplanted into quantum hardware; a 2025 estimate by Craig Gidney put it at under a million noisy qubits running for about a week. <bookmark mark='c'/> When such a machine will exist, nobody knows. <bookmark mark='d'/> But an adversary can record encrypted traffic now and decrypt it whenever the machine arrives, so any secret that must last a decade is already exposed. <bookmark mark='e'/> In August 2024 the US standards institute published the first post-quantum standards: a key-encapsulation mechanism, ML-KEM, and two signature schemes. <bookmark mark='f'/> Browsers and large websites have already switched on hybrid key exchange, X25519 together with ML-KEM, which stays secure as long as either one does. <bookmark mark='g'/> Symmetric cryptography is in much better shape: Grover's algorithm only halves the effective key length. The next chapter builds the mathematics under ML-KEM.",
+   "zh": "威胁有多近？<bookmark mark='a'/>今天最大的量子计算机大约有一千个物理量子比特，噪声太大，在任何有用的规模上都跑不了 Shor 算法。<bookmark mark='b'/>攻破一把两千位的 RSA 密钥需要纠错，也就是把第28部分的主题移植到量子硬件上；Craig Gidney 2025年的估计是不到一百万个带噪量子比特，运行大约一周。<bookmark mark='c'/>这样的机器何时出现，没人知道。<bookmark mark='d'/>但对手现在就可以录下加密的流量，等机器到来时再解密，所以任何需要保密十年的秘密已经暴露在风险之中。<bookmark mark='e'/>2024年8月，美国标准机构发布了首批后量子标准：一个密钥封装机制 ML-KEM，以及两个签名方案。<bookmark mark='f'/>浏览器和大型网站已经启用了混合密钥交换，X25519 与 ML-KEM 一起用，只要其中任何一个安全，它就安全。<bookmark mark='g'/>对称密码学的处境要好得多：Grover 算法只把有效密钥长度减半。下一章搭建 ML-KEM 之下的数学。"
+  },
+  "1dfd8b39b30f": {
+   "scene": "Lattices",
+   "en": "Chapter fourteen. Lattices.",
+   "zh": "第14章。格。"
+  },
+  "9de2cecfd6ac": {
+   "scene": "Lattices",
+   "en": "A lattice is a regular grid of points in space: all whole-number combinations of a few basis vectors. <bookmark mark='a'/> The same lattice has many bases. These two long, nearly parallel vectors, ninety, one hundred and twenty-three and fifty-six, seventy-six, generate exactly the same points as these two short ones. <bookmark mark='b'/> Gauss's reduction, subtracting multiples of one vector from the other, finds the short basis in a few steps. <bookmark mark='c'/> In two dimensions that is easy. In hundreds of dimensions, finding a short vector given a bad basis is believed to be hard, and unlike factoring, no quantum algorithm is known to help. <bookmark mark='d'/> The LLL algorithm of Arjen Lenstra, Hendrik Lenstra and László Lovász, from 1982, finds a fairly short vector in polynomial time: within an exponential factor of the shortest. That factor is the gap cryptography lives in.",
+   "zh": "格是空间里一组规则排列的点：几个基向量的所有整数组合。<bookmark mark='a'/>同一个格有许多组基。这两个又长又几乎平行的向量，九十、一百二十三和五十六、七十六，生成的点与这两个短向量完全相同。<bookmark mark='b'/>Gauss 的约化，从一个向量里减去另一个向量的倍数，几步就找到了短基。<bookmark mark='c'/>在二维这很容易。在几百维中，给定一组坏基去找一个短向量，被认为是困难的，而且与因数分解不同，还没有已知的量子算法能帮上忙。<bookmark mark='d'/>Arjen Lenstra、Hendrik Lenstra 和 László Lovász 在1982年提出的 LLL 算法，能在多项式时间内找到一个相当短的向量：与最短向量相差一个指数因子以内。密码学就生存在这个因子留出的缝隙里。"
+  },
+  "d5d5b547be18": {
+   "scene": "Lattices",
+   "en": "LLL first appeared in cryptography as a weapon. <bookmark mark='a'/> In 1978 Merkle and Hellman proposed encrypting a string of bits as the sum of a subset of public weights. <bookmark mark='b'/> Here are some of the twenty weights of ours. <bookmark mark='c'/> The trapdoor was an easy, superincreasing sequence disguised by modular multiplication. <bookmark mark='d'/> Shamir broke it in 1982, and Lagarias and Odlyzko showed that for such knapsacks the secret bits form an unusually short vector in a lattice built from the weights. <bookmark mark='e'/> Our LLL finds it, and all twenty bits. <bookmark mark='f'/> The same tool finds ECDSA keys from biased nonces and breaks RSA with badly chosen small exponents. <bookmark mark='g'/> So lattice-based schemes must choose parameters far beyond the reach of LLL and its stronger successors.",
+   "zh": "LLL 最初是作为武器出现在密码学里的。<bookmark mark='a'/>1978年，Merkle 和 Hellman 提出把一串比特加密成一组公开权重中某个子集的和。<bookmark mark='b'/>这是我们二十个权重中的几个。<bookmark mark='c'/>陷门是一个简单的超递增序列，用模乘法伪装起来。<bookmark mark='d'/>Shamir 在1982年攻破了它；Lagarias 和 Odlyzko 证明，对这样的背包，秘密的比特构成由权重搭成的一个格中一个异常短的向量。<bookmark mark='e'/>我们的 LLL 找到了它，二十位全对。<bookmark mark='f'/>同一个工具能从有偏的随机数找出 ECDSA 密钥，也能攻破小指数选得不好的 RSA。<bookmark mark='g'/>所以基于格的方案必须把参数选在 LLL 及其更强的后继者远远够不到的地方。"
+  },
+  "761c223cb414": {
+   "scene": "Lattices",
+   "en": "The problem post-quantum encryption uses is Oded Regev's learning with errors, from 2005. <bookmark mark='a'/> A secret vector s; a public random matrix A; and b, which is A times s plus a small random error, everything modulo q. Without the error, Gaussian elimination would find s instantly. The small noise makes it, as far as anyone knows, hard: it is a lattice problem in disguise. <bookmark mark='b'/> Regev proved something unusual: breaking random instances is as hard as solving the worst-case lattice problem, by a quantum reduction. Cryptography rarely has guarantees that strong. <bookmark mark='c'/> To encrypt a bit, add up a random subset of the public samples and add the bit times half of q. Decryption subtracts the secret's contribution and is left with the bit times q over two, plus a little accumulated noise. Here are four hundred decryptions: zeros land near zero, ones near q over two, far from the boundary. Every one decrypted correctly.",
+   "zh": "后量子加密所用的问题，是 Oded Regev 在2005年提出的带误差学习。<bookmark mark='a'/>一个秘密向量 s；一个公开的随机矩阵 A；以及 b，它等于 A 乘 s 加上一个小的随机误差，一切都模 q。没有误差，高斯消元能立刻找到 s。这点小噪声，就人们所知，让它变得困难：它是一个伪装起来的格问题。<bookmark mark='b'/>Regev 证明了一件不寻常的事：攻破随机实例，和解决最坏情况的格问题一样难，靠的是一个量子归约。密码学很少有这么强的保证。<bookmark mark='c'/>要加密一位，把公开样本中随机一个子集加起来，再加上这一位乘以 q 的一半。解密时减去秘密的贡献，剩下这一位乘 q 除以二，加上一点累积的噪声。这是四百次解密：零落在零附近，一落在 q 的一半附近，离边界很远。每一次都解密正确。"
+  },
+  "f77ab3142e0a": {
+   "scene": "Lattices",
+   "en": "Plain LWE needs enormous keys, so the standard uses structure. <bookmark mark='a'/> ML-KEM, formerly called Kyber, works with polynomials modulo x to the two hundred and fifty-six plus one, with coefficients modulo three thousand three hundred and twenty-nine, arranged in small vectors and matrices. <bookmark mark='b'/> Multiplying polynomials is done with the number-theoretic transform, Part 19's FFT over a finite field: in our Python, about twelve times faster than schoolbook multiplication. <bookmark mark='c'/> We implemented the arithmetic of the smallest parameter set, and encrypted a hundred random messages of two hundred and fifty-six bits. Every bit decrypted correctly. <bookmark mark='d'/> Keys are eight hundred bytes and ciphertexts seven hundred and sixty-eight: bigger than elliptic curves, small enough for every TLS handshake. <bookmark mark='e'/> For signatures there is a lattice scheme, ML-DSA, and a conservative one built only from hash functions, SLH-DSA. <bookmark mark='f'/> Its ancestor is Leslie Lamport's one-time signature from 1979: publish hashes of two secrets for each bit of the message hash, and sign by revealing one secret per bit. Big, and usable once. <bookmark mark='g'/> A Merkle tree over many one-time keys turns it into a scheme for many signatures, whose security rests only on the hash function.",
+   "zh": "普通的 LWE 需要巨大的密钥，所以标准用了结构。<bookmark mark='a'/>ML-KEM，以前叫 Kyber，处理模 x 的两百五十六次方加一的多项式，系数模三千三百二十九，排成小的向量和矩阵。<bookmark mark='b'/>多项式乘法用数论变换完成，也就是第19部分的 FFT 搬到有限域上：在我们的 Python 里，比课本式乘法快大约十二倍。<bookmark mark='c'/>我们实现了最小参数集的算术，加密了一百条两百五十六位的随机消息。每一位都解密正确。<bookmark mark='d'/>公钥八百字节，密文七百六十八字节：比椭圆曲线大，但对每次 TLS 握手都足够小。<bookmark mark='e'/>签名方面有一个格方案 ML-DSA，以及一个只用哈希函数搭成的保守方案 SLH-DSA。<bookmark mark='f'/>它的祖先是 Leslie Lamport 1979年的一次性签名：对消息哈希的每一位公布两个秘密的哈希，签名时每位揭示其中一个秘密。很大，而且只能用一次。<bookmark mark='g'/>用一棵 Merkle 树管理许多一次性密钥，就把它变成能签许多次的方案，其安全性只依赖于哈希函数。"
+  },
+  "10aad566336f": {
+   "scene": "Beyond",
+   "en": "Chapter fifteen. Zero knowledge, secret sharing, and computing on secrets.",
+   "zh": "第15章。零知识、秘密共享与在秘密上计算。"
+  },
+  "fe0ab8ad8956": {
+   "scene": "Beyond",
+   "en": "Public-key ideas do more than encrypt and sign. Claus Schnorr's protocol proves that you know a discrete logarithm without revealing it. <bookmark mark='a'/> The prover commits to a random power of g. <bookmark mark='b'/> The verifier sends a random challenge. <bookmark mark='c'/> The prover answers with k plus e times x, which, because k is random, says nothing about x by itself. <bookmark mark='d'/> The verifier checks one equation. <bookmark mark='e'/> As in Part 27, a simulator who knows the challenge in advance can produce transcripts that look the same without knowing x: zero knowledge. <bookmark mark='f'/> Amos Fiat and Adi Shamir's trick replaces the verifier with a hash of the commitment and a message, and the proof becomes a signature. <bookmark mark='g'/> Ours verifies. <bookmark mark='h'/> Ed25519, the signature in SSH and Signal, is Schnorr on an elliptic curve, and Bitcoin adopted Schnorr signatures in 2021.",
+   "zh": "公钥的思想不只能加密和签名。Claus Schnorr 的协议能证明你知道一个离散对数，而不泄露它。<bookmark mark='a'/>证明者承诺 g 的一个随机幂。<bookmark mark='b'/>验证者发出一个随机挑战。<bookmark mark='c'/>证明者回答 k 加 e 乘 x，由于 k 是随机的，它本身不透露任何关于 x 的信息。<bookmark mark='d'/>验证者检查一个等式。<bookmark mark='e'/>和第27部分一样，一个事先知道挑战的模拟者，不知道 x 也能造出看起来一样的对话记录：这就是零知识。<bookmark mark='f'/>Amos Fiat 和 Adi Shamir 的技巧用承诺与消息的哈希代替验证者，证明就变成了签名。<bookmark mark='g'/>我们的签名通过验证。<bookmark mark='h'/>SSH 和 Signal 用的签名 Ed25519 就是椭圆曲线上的 Schnorr，比特币也在2021年采用了 Schnorr 签名。"
+  },
+  "754dfb50d84f": {
+   "scene": "Beyond",
+   "en": "A key that unlocks everything should not live in one place, or with one person. Adi Shamir's answer, from 1979, is a polynomial. <bookmark mark='a'/> Make the secret the value at zero of a random polynomial of degree two. Hand out its values at one, two, three, four and five as shares. <bookmark mark='b'/> Any three shares determine the polynomial, by Part 28's Lagrange interpolation, and so the secret. Over the integers modulo a prime, with our five shares: shares one, two and three give thirty-one thousand three hundred and thirty-seven, and so do two, four and five. <bookmark mark='c'/> Two shares are consistent with every possible secret, so they reveal nothing at all: here they produce garbage. <bookmark mark='d'/> The shares are exactly a Reed-Solomon codeword. The scheme guards backup keys and threshold signatures, including the recovery of the internet's DNSSEC root key.",
+   "zh": "一把能打开一切的密钥，不应该放在一个地方，也不应该交给一个人。Adi Shamir 1979年的答案是一个多项式。<bookmark mark='a'/>让秘密成为一个随机二次多项式在零处的值。把它在一、二、三、四、五处的值作为份额分发出去。<bookmark mark='b'/>任意三个份额就确定了这个多项式，靠第28部分的拉格朗日插值，于是也确定了秘密。在模一个素数的整数上，用我们的五个份额：一、二、三号份额给出三万一千三百三十七，二、四、五号也一样。<bookmark mark='c'/>两个份额与每一个可能的秘密都相容，所以它们什么也不透露：这里它们给出的是乱码。<bookmark mark='d'/>这些份额恰好是一个 Reed-Solomon 码字。这个方案守护着备份密钥和门限签名，包括互联网 DNSSEC 根密钥的恢复。"
+  },
+  "c7036a9c79e2": {
+   "scene": "Beyond",
+   "en": "Two more ideas complete the picture. <bookmark mark='a'/> In multiparty computation, several parties each hold a private input, and together compute a function of all of them, learning only the result. <bookmark mark='b'/> Andrew Yao's garbled circuits of 1986, and Goldreich, Micali and Wigderson's protocol a year later, showed that any function can be computed this way. <bookmark mark='c'/> In 2008 Danish sugar-beet farmers set their contract prices by an auction run as a multiparty computation; today it checks passwords against breach lists without revealing them. <bookmark mark='d'/> Fully homomorphic encryption goes further: anyone can compute on ciphertexts, and only the key holder can read the result. <bookmark mark='e'/> Lattice encryption allows it, but each operation adds noise, and after a while the noise swamps the message. In 2009 Craig Gentry found the way out, bootstrapping: evaluate the decryption itself homomorphically, which removes the old noise. <bookmark mark='f'/> Once a trillion times slower than plain computation, it now runs in production for some private lookups. <bookmark mark='g'/> And differential privacy, from AI, Built part 31, protects what is learned from data that is released.",
+   "zh": "还有两个想法让图景完整。<bookmark mark='a'/>在多方计算中，几方各持一个私密输入，一起计算它们全部的一个函数，只得知结果。<bookmark mark='b'/>姚期智1986年的混淆电路，以及一年后 Goldreich、Micali 和 Wigderson 的协议，证明了任何函数都能这样计算。<bookmark mark='c'/>2008年，丹麦的甜菜农用一场以多方计算进行的拍卖确定了合同价格；今天，它被用来在不泄露密码的前提下对照泄露名单检查密码。<bookmark mark='d'/>全同态加密走得更远：任何人都能在密文上计算，只有密钥持有者能读出结果。<bookmark mark='e'/>格加密允许这样做，但每次运算都会增加噪声，过一阵噪声就会淹没消息。2009年，Craig Gentry 找到了出路，自举：以同态方式计算解密本身，从而去掉旧的噪声。<bookmark mark='f'/>它曾比普通计算慢一万亿倍，如今已在生产中用于一些私密查询。<bookmark mark='g'/>还有差分隐私，来自《人工智能，从零搭建》第31部分，它保护的是从发布的数据中能学到的东西。"
+  },
+  "0d81805558d3": {
+   "scene": "Frontier",
+   "en": "Chapter sixteen. The frontier: post-quantum, and beyond.",
+   "zh": "第16章。前沿：后量子，以及更远。"
+  },
+  "961731b187c5": {
+   "scene": "Frontier",
+   "en": "Post-quantum cryptography rests on younger assumptions, and some have not survived. <bookmark mark='a'/> Lattices and hash functions became standards in 2024. In 2025 a code-based scheme, HQC, built on Part 28's mathematics, was chosen as a backup with a different foundation. <bookmark mark='b'/> But in 2022 two leading candidates fell. Ward Beullens broke the Rainbow signature scheme with a weekend on a laptop. Wouter Castryck and Thomas Decru broke SIKE, based on maps between elliptic curves, in about an hour on one core, using a theorem from 1997 that nobody had connected to it. <bookmark mark='c'/> The lesson is old: an assumption earns trust only by surviving years of attack. That is why new systems combine a classical and a post-quantum algorithm, and why the standards keep backups built on different mathematics.",
+   "zh": "后量子密码学建立在更年轻的假设上，有些没能幸存。<bookmark mark='a'/>格和哈希函数在2024年成为标准。2025年，一个基于编码的方案 HQC，建立在第28部分的数学之上，被选为基础不同的后备。<bookmark mark='b'/>但在2022年，两个领先的候选倒下了。Ward Beullens 用笔记本电脑一个周末就攻破了 Rainbow 签名方案。Wouter Castryck 和 Thomas Decru 用一个核大约一小时攻破了基于椭圆曲线之间映射的 SIKE，用的是一个1997年的、从没人把它联系起来的定理。<bookmark mark='c'/>教训是老的：一个假设只有经受住多年的攻击才能赢得信任。这就是新系统把经典算法和后量子算法组合起来的原因，也是标准保留建立在不同数学上的后备方案的原因。"
+  },
+  "34450db03ff0": {
+   "scene": "Frontier",
+   "en": "Even lattices carry uncertainty. <bookmark mark='a'/> Their security levels are estimates: the best known reduction attacks, extrapolated to hundreds of dimensions. <bookmark mark='b'/> Those estimates have moved, as better sieving algorithms took bits off the security of every scheme. <bookmark mark='c'/> In April 2024 a preprint claimed a quantum algorithm solving learning with errors in polynomial time, which would have broken the new standards before they were published. <bookmark mark='d'/> Within ten days, readers found a bug, and the claim was withdrawn. <bookmark mark='e'/> Nothing proves that lattice problems resist quantum computers. As with factoring before Shor, we know only that nobody has found a way.",
+   "zh": "即使是格也带着不确定性。<bookmark mark='a'/>它们的安全级别是估计值：把已知最好的约化攻击外推到几百维。<bookmark mark='b'/>这些估计变动过，更好的筛法从每个方案的安全性中削掉了若干位。<bookmark mark='c'/>2024年4月，一篇预印本声称有一个在多项式时间内解带误差学习的量子算法，那将在新标准发布之前就攻破它们。<bookmark mark='d'/>不到十天，读者发现了一个错误，这个声称被撤回。<bookmark mark='e'/>没有任何证明说格问题能抵抗量子计算机。就像 Shor 之前的因数分解一样，我们只知道还没有人找到办法。"
+  },
+  "974786c43358": {
+   "scene": "Frontier",
+   "en": "Six open problems. <bookmark mark='a'/> Whether factoring or discrete logarithms can be solved in polynomial time by an ordinary computer. <bookmark mark='b'/> Whether public-key encryption can be built from any one-way function, as everything in Part 29 was; Impagliazzo and Rudich showed in 1989 that the standard black-box techniques cannot. <bookmark mark='c'/> Whether a quantum algorithm breaks the lattice problems under the new standards. <bookmark mark='d'/> Whether well-chosen elliptic curves have any attack better than the generic square root. <bookmark mark='e'/> How quickly the concrete difficulty of learning with errors grows as the dimension does, which is what sets every post-quantum key size. <bookmark mark='f'/> And whether computing on encrypted data can ever be nearly as cheap as computing in the clear. <bookmark mark='g'/> This part's research problem takes a small, computable case of the fifth.",
+   "zh": "六个未解决的问题。<bookmark mark='a'/>因数分解或离散对数能否被普通计算机在多项式时间内解决。<bookmark mark='b'/>公钥加密能否像第29部分的一切那样由任意单向函数构造；Impagliazzo 和 Rudich 在1989年证明了标准的黑盒技术做不到。<bookmark mark='c'/>是否有量子算法能攻破新标准之下的格问题。<bookmark mark='d'/>选得好的椭圆曲线是否有比通用平方根更好的攻击。<bookmark mark='e'/>带误差学习的具体难度随维数增长得有多快，正是它决定了每一个后量子密钥长度。<bookmark mark='f'/>以及在加密数据上计算，能否便宜到接近在明文上计算。<bookmark mark='g'/>这一部分的研究题取第五个问题的一个可计算的小情形。"
+  },
+  "c4ef7e4324c8": {
+   "scene": "Outro",
+   "en": "What we built in this part. Merkle's puzzles, and the number theory of groups, from Euclid to Lagrange. Diffie-Hellman, and RSA from scratch, with the padding oracle that haunted it for twenty years. Factoring by rho and by a sieve, and discrete logarithms by baby steps, Pohlig-Hellman and index calculus, which set the key sizes. Elliptic curves, ECDSA, and the repeated nonce that gave away a console's key. Certificates and a TLS 1.3 handshake. And Shor's threat, with the lattices that answer it.",
+   "zh": "这一部分我们搭建了什么。Merkle 谜题，以及从 Euclid 到拉格朗日的群的数论。Diffie-Hellman，以及从零写出的 RSA，外加困扰了它二十年的填充预言机。用 rho 和筛法做因数分解，用小步大步、Pohlig-Hellman 和指数演算求离散对数，正是它们决定了密钥长度。椭圆曲线、ECDSA，以及泄露了一台游戏机密钥的那个重复的随机数。证书和一次 TLS 1.3 握手。还有 Shor 的威胁，以及应对它的格。"
+  },
+  "1aa53e5b5843": {
+   "scene": "Outro",
+   "en": "Where this comes back. Part 37's QUIC carries TLS 1.3 inside the transport protocol itself. Part 38 uses signatures to reach agreement when some machines lie. Part 41 signs software releases, and Part 43 puts mutual TLS between every pair of services. Part 53 runs Shor's algorithm on our quantum simulator. And Part 55 returns to authentication: passkeys, and a famous protocol whose flaw went unnoticed for seventeen years.",
+   "zh": "这些内容在哪里还会出现。第37部分的 QUIC 把 TLS 1.3 放进传输协议本身。第38部分用签名在有机器撒谎时达成共识。第41部分给软件发布签名，第43部分在每两个服务之间加上双向 TLS。第53部分在我们的量子模拟器上运行 Shor 算法。第55部分回到认证：通行密钥，以及一个缺陷十七年无人察觉的著名协议。"
+  },
+  "2cd73028027c": {
+   "scene": "Outro",
+   "en": "In practice. Use TLS 1.3 everywhere, with certificates renewed automatically. Prefer X25519, Ed25519 or P-256, and RSA only with large keys. Let a vetted library make signatures, with deterministic or well-seeded nonces. Turn on hybrid post-quantum key exchange, and find out which of your secrets must stay secret for more than a decade. And keep private keys in hardware, with backups split among people.",
+   "zh": "实践中。处处用 TLS 1.3，证书自动续期。优先用 X25519、Ed25519 或 P-256，RSA 只用大密钥。让经过审查的库来做签名，用确定性的或种子良好的随机数。打开混合后量子密钥交换，弄清楚你的哪些秘密需要保密十年以上。把私钥放在硬件里，备份分给几个人保管。"
+  },
+  "ce8e0c42c04d": {
+   "scene": "Outro",
+   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build problem: a hybrid post-quantum handshake between our machines. The last, marked with a star, is a research problem: where small lattice attacks stop working is a question the standards depend on, and the notes say where to start.",
+   "zh": "六道习题，完整解答见本部分的笔记。可以在任何一道上暂停。第五道是动手题：在我们的机器之间实现一次混合后量子握手。最后一道标着星号，是研究题：小规模格攻击在哪里失效，是标准所依赖的问题，笔记里说明了从哪里入手。"
+  },
+  "ea8dc4323e18": {
+   "scene": "Outro",
+   "en": "That completes Act Five, on limits and secrets. Next, Act Six: one machine, many programs. Part 31 builds the kernel: how time-sharing gave every user the illusion of a whole computer, the protection that required, processes and system calls, the scheduler, and the queueing theory that explains why a busy server feels so much slower than a quiet one. Part 31, The Kernel.",
+   "zh": "第五幕，极限与秘密，到此结束。接下来是第六幕：一台机器，许多程序。第31部分搭建内核：分时怎样让每个用户都以为自己拥有整台计算机，这需要怎样的保护，进程与系统调用，调度器，以及解释繁忙的服务器为什么比空闲的慢得多的排队论。第31部分，内核。"
+  },
+  "9bd24692775d": {
+   "scene": "Outro",
+   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+   "zh": "这一部分所依据的书和论文都在屏幕上和笔记里。感谢观看。"
+  }
+ },
+ "title_en": "Computer Science, Built: Part 30, Public Keys",
+ "chapters_en": {
+  "Hook": "Two strangers, one secret",
+  "Puzzles": "1. Key distribution and Merkle's puzzles",
+  "Toolkit": "2. The toolkit: modular arithmetic",
+  "Groups": "3. Groups and the discrete logarithm",
+  "DiffieHellman": "4. Diffie-Hellman",
+  "Rsa": "5. RSA",
+  "Oracle": "6. Bleichenbacher's oracle",
+  "Factoring": "7. Factoring",
+  "DiscreteLogs": "8. Discrete logarithms",
+  "Curves": "9. Elliptic curves",
+  "Signatures": "10. Signatures",
+  "Pki": "11. Certificates and trust",
+  "Tls": "12. TLS 1.3",
+  "Shor": "13. Shor's threat",
+  "Lattices": "14. Lattices",
+  "Beyond": "15. Zero knowledge, sharing and computing on secrets",
+  "Frontier": "16. Frontier: post-quantum and beyond",
+  "Outro": "Recap, problems, and where this comes back"
+ }
+}
