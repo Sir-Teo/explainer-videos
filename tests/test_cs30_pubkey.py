@@ -5,6 +5,21 @@ from explainer.cs.algo import pubkey as P
 
 
 class TestVectors(unittest.TestCase):
+    def test_input_lengths_and_scalar_domains(self):
+        for n in (0, 31, 33):
+            with self.assertRaises(ValueError):
+                P.x25519(bytes(n), bytes(32))
+            with self.assertRaises(ValueError):
+                P.x25519(bytes(32), bytes(n))
+        for length in (-1, 8161):
+            with self.assertRaises(ValueError):
+                P.hkdf_expand(bytes(32), b"", length)
+        self.assertEqual(P.P256.mul(-1, P.P256.G), P.P256.neg(P.P256.G))
+        self.assertFalse(P.ecdsa_verify(None, b"sample", (1, 1)))
+        self.assertFalse(P.ecdsa_verify((0, 0), b"sample", (1, 1)))
+        with self.assertRaises(ValueError):
+            P.ecdsa_sign(1, b"sample", k=0)
+
     def test_x25519_rfc7748(self):
         k = bytes.fromhex("a546e36bf0527c9d3b16154b82465edd62144c0ac1fc5a18506a2244ba449ac4")
         u = bytes.fromhex("e6db6867583030db3594c1a424b15f7c726624ec26b3353b10a903a6d0ab1c4c")
@@ -62,6 +77,39 @@ class TestNumberTheory(unittest.TestCase):
 
 
 class TestSchemes(unittest.TestCase):
+    def test_puzzles_do_not_share_weak_key_checks(self):
+        class SameWeakKey(random.Random):
+            def randrange(self, *args):
+                return 0
+        result = P.merkle_puzzles(4, SameWeakKey(4), include_puzzles=True)
+        self.assertTrue(result["agreed"])
+        self.assertEqual(result["bob_tries"], 1)
+        # Even when every weak key is identical, each public puzzle has a
+        # different check; the same precomputed tag cannot unlock all of them.
+        puzzles = result["puzzles"]
+        self.assertEqual(len({tag for _, tag, _ in puzzles}), 4)
+        self.assertEqual(len({salt for salt, _, _ in puzzles}), 4)
+
+    def test_oaep_and_rsa_reject_noncanonical_representatives(self):
+        rng = random.Random(10)
+        key = P.rsa_keygen(768, rng)
+        ct = P.oaep_encrypt(b"message", key, rng)
+        for bad in (ct[:-1], b"\0" + ct, P.i2b(key["n"], len(ct))):
+            with self.assertRaises(ValueError):
+                P.oaep_decrypt(bad, key)
+        for bad in (b"", bytes(65), bytes(97)):
+            with self.assertRaises(ValueError):
+                P.oaep_decode(bad, 96)
+        for x in (-1, key["n"]):
+            with self.assertRaises(ValueError):
+                P.rsa_enc(x, key)
+            with self.assertRaises(ValueError):
+                P.rsa_dec(x, key)
+        sig = P.rsa_sign(b"message", key)
+        self.assertFalse(P.rsa_verify(b"message", sig + key["n"], key))
+        with self.assertRaises(ValueError):
+            P.pkcs1_v15_pad(b"x" * 22, 32, rng)
+
     def test_rsa(self):
         rng = random.Random(1)
         key = P.rsa_keygen(768, rng)

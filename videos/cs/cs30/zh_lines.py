@@ -48,12 +48,7 @@ ZH = {
         "各国政府维持着成队的信使专门递送密钥材料。<bookmark mark='c'/>一个与每个人共享密钥的可信中心能减少数量，第55部分的 Kerberos 就是这样工作"
         "的；但这个中心什么都能读。<bookmark mark='d'/>在互联网上，陌生人每天相遇数十亿次，而且马上就需要密钥。",
     "In 1974 Ralph Merkle,":
-        "1974年，伯克利的本科生 Ralph Merkle 在一份课程项目里提出了一条出路，而他的教授没看懂。<bookmark mark='a'/>Alice 制作许多谜题。每个谜题装着"
-        "一个编号和一把密钥，用一把故意很弱、要花些力气才能找到的密钥锁住。<bookmark mark='b'/>Bob 随机挑一个谜题，解开它，公开宣布它的编号。"
-        "<bookmark mark='c'/>Alice 查出这个编号对应哪把密钥。现在他们共享了它。<bookmark mark='d'/>Eve 听到了编号，却不知道它来自哪个谜题，只好一个"
-        "个解谜题直到找到它：大约要解一半。<bookmark mark='e'/>我们跑了一遍。Bob 的工作量与 n 成正比；Eve 的工作量按 n 的平方增长。<bookmark "
-        "mark='f'/>这个差距只是平方级的：一个下定决心、有台大计算机的 Eve 能追上来。<bookmark mark='g'/>而且，只用类似哈希的函数，它无法再改进，"
-        "Boaz Barak 和 Mohammad Mahmoody 在2009年证明了这一点。真正的公钥系统需要数学结构。",
+        "1974年，伯克利本科生 Ralph Merkle 在课程项目中提出了一个办法。<bookmark mark='a'/>Alice 制作许多谜题，每题把一个标识号和共享密钥用弱密钥锁住。每题的检查哈希与掩码都加入各自的公开盐，防止一张弱密钥查找表同时破解所有题。标识号本身仍被加密。<bookmark mark='b'/>Bob 随机选一题解开，公开其中的标识号。<bookmark mark='c'/>Alice 查表找到对应密钥，双方达成一致。<bookmark mark='d'/>Eve 听到了标识号，却不知道来自哪题；在简单独立暴力搜索模型中，她平均要解大约一半的题。<bookmark mark='e'/>我们测量了 Bob 的搜索次数和密钥一致性。表中 Eve 的工作量约为 n 平方除以四，是模型值，并不是对最优攻击者的计时。<bookmark mark='f'/>差距只有二次方，大机器仍能追上。<bookmark mark='g'/>Barak 和 Mahmoody 在2009年证明了经典随机预言机模型中的二次方障碍。定理的范围是理想模型，并非对所有具体哈希构造的断言。",
     "The structure was found twice.":
         "这种结构被发现了两次。<bookmark mark='a'/>在英国信号情报机构 GCHQ，James Ellis 在1970年论证了不需要共享秘密的加密是可能的。年轻的数学家 "
         "Clifford Cocks 在1973年找到了办法：本质上就是 RSA。Malcolm Williamson 在1974年找到了 Diffie-Hellman 交换。这一切都被保密。<bookmark "
@@ -133,12 +128,7 @@ ZH = {
         "尝试。<bookmark mark='b'/>一把完整的两千位密钥用了不到一秒。<bookmark mark='c'/>直接解密要二十九毫秒。用一半大小的数分别模 p 和模 q 解密，"
         "再用中国剩余定理合起来，只要九毫秒：快了三倍多，这就是每个实现都把素数留在私钥里的原因。",
     "Raising to a power is not yet encryption.":
-        "求幂还不等于加密。<bookmark mark='a'/>教科书式 RSA 是确定性的，按第29部分的定义它并不安全：攻击者可以加密自己的猜测再比较。<bookmark "
-        "mark='b'/>它还是可延展的。把密文乘以二的 e 次方，里面的消息就翻倍。<bookmark mark='c'/>我们把「付给 Bob 一百美元」编码成一个数，把它的密文"
-        "乘一下，解密出来恰好是这个数的两倍。<bookmark mark='d'/>标准的修复是最优非对称加密填充 OAEP，来自 Mihir Bellare 和 Phillip Rogaway：加密前"
-        "先把消息与新鲜的随机数经过两个基于哈希的掩码混合。<bookmark mark='e'/>现在同一条消息的两次加密不同了，攻击者可以利用的结构也消失了。"
-        "<bookmark mark='f'/>同一个陷门也能签名：把消息的哈希升到私有指数次方，任何人都能用公开指数检查它。先哈希很重要，因为原始签名也会相乘。"
-        "<bookmark mark='g'/>RSA 的算术五十年来屹立不倒。包在它外面的填充却没有。",
+        "做幂运算还不等于安全加密。<bookmark mark='a'/>教科书 RSA 是确定性的，攻击者能加密猜测并比较，因此不满足第29部分的安全定义。<bookmark mark='b'/>它也可篡改：密文乘以二的 e 次方，消息就在模 n 意义下翻倍。<bookmark mark='c'/>我们把支付一百美元编码成数，修改密文后，解密的数恰好翻倍。<bookmark mark='d'/>标准修补是 OAEP：Bellare 与 Rogaway 在1994年提出用两个哈希掩码把消息和新鲜随机性混合。<bookmark mark='e'/>同一消息两次加密会不同，往返测试检查了编码实现。RSA-OAEP 的安全定理还依赖 RSA 假设与随机预言机模型。<bookmark mark='f'/>同一陷门可用于签名：对消息的哈希作私钥幂运算，再用公钥检验；原始签名也具有乘法结构，所以编码不可省略。<bookmark mark='g'/>这里展开哈希的自定义编码用于教学，并不是标准 RSA-PSS。实际使用应选标准签名编码；算术本身并没有定义一个安全方案。",
     # ------------------------------------------------------------------ Oracle
     "Chapter six. Bleichenbacher's oracle.": "第6章。Bleichenbacher 的预言机。",
     "For twenty years, TLS used RSA to send the session key,":

@@ -6,7 +6,7 @@ everyone listens. That took Diffie and Hellman (1976), RSA (1977) and the number
 it compact, and lattices may keep it safe against a quantum computer. Two of our machines end the part by running a
 TLS 1.3-style handshake. Everything is built from scratch and run; **the code is for learning, never for real use**.
 
-The instrument is `explainer/cs/algo/pubkey.py`. It holds:
+The instrument is [`pubkey.py`](../../../explainer/cs/algo/pubkey.py). It holds:
 * number theory: extended Euclid with a trace, inverses, square-and-multiply with a trace, the CRT, Miller–Rabin,
   generators and orders;
 * Merkle's puzzles; Diffie–Hellman and its man in the middle;
@@ -32,6 +32,16 @@ The instrument is `explainer/cs/algo/pubkey.py`. It holds:
     ML-KEM-512's parameters, using our own sampling instead of SHAKE and no byte encodings;
 * Lamport one-time signatures; Schnorr signatures with Fiat–Shamir; Shamir secret sharing.
 
+Each Merkle puzzle uses its own public salt in both hash checks and its pad, while its identifying number stays
+encrypted. This prevents one shared weak-key lookup table from solving all puzzles. Bob's search counts and
+agreement are measured; Eve's approximately `n²/4` entries are an independent brute-force work model. The quadratic
+barrier theorem concerns classical protocols in the ideal random-oracle model.
+
+The RSA signature example uses a custom expanded-hash encoding for teaching, rather than standardized RSA-PSS.
+RSA-OAEP checks ciphertext and encoding lengths and canonical representatives. The Bleichenbacher demonstration
+uses a prefix-only `00 02` oracle, stronger than a complete PKCS #1 v1.5 padding parser. These examples do not
+implement a production TLS stack or production certificate policy.
+
 It is tested in `tests/test_cs30_pubkey.py`:
 * X25519 against RFC 7748;
 * HKDF against RFC 5869's first test case;
@@ -54,7 +64,8 @@ Outside the tests, the `cryptography` library (version 50) cross-checked our cod
   - The same exchange in RFC 3526's 2048-bit group: 27 ms in Python.
 * **1. Key distribution and Merkle's puzzles.**
   - n(n−1)/2 keys.
-  - Merkle's puzzles at n = 100, 1,000 and 10,000: Bob took 60, 178 and 2,110 tries, against Eve's n²/4.
+  - Independently salted Merkle puzzles at n = 100, 1,000 and 10,000: measured Bob search counts and successful
+    agreement, compared with modeled Eve work of approximately n²/4.
   - GCHQ's earlier discoveries.
 * **2. Modular arithmetic.**
   - The clock. Extended Euclid on (240, 46): 240·(−9) + 46·47 = 2.

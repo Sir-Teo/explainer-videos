@@ -106,6 +106,8 @@ SMALL_PRIMES = [p for p in range(2, 1000) if all(p % q for q in range(2, int(p *
 
 
 def is_probable_prime(n, rng=None, rounds=40):
+    if not isinstance(rounds, int) or rounds < 1:
+        raise ValueError("at least one Miller-Rabin round is required")
     if n < 2:
         return False
     for p in SMALL_PRIMES:
@@ -117,6 +119,8 @@ def is_probable_prime(n, rng=None, rounds=40):
 
 
 def random_prime(bits, rng):
+    if not isinstance(bits, int) or bits < 2:
+        raise ValueError("prime bit length must be at least two")
     while True:
         n = rng.getrandbits(bits) | (1 << (bits - 1)) | 1
         if is_probable_prime(n, rng):
@@ -165,28 +169,40 @@ def find_generator(p):
 
 # --------------------------------------------------------------------------------------------- key agreement
 
-def merkle_puzzles(n, rng, bits=None):
+def merkle_puzzles(n, rng, bits=None, include_puzzles=False):
     """Merkle's puzzles (1974): Alice publishes n puzzles, each a (key id, key) pair locked under a key from a space of
     n; Bob solves one at random (about n/2 tries), announces its id; Eve must solve about n/2 puzzles of n/2 tries."""
+    if not isinstance(n, int) or not 1 <= n <= 2 ** 32:
+        raise ValueError("puzzle count must be between one and 2^32")
     space = n
     puzzles, secrets = [], {}
     for i in range(n):
         pk = rng.randrange(space)
-        pid, key = rng.getrandbits(32), rng.getrandbits(64)
-        tag = H(i2b(pk, 8) + b"check")[:4]
-        payload = K.xor(i2b(pid, 4) + i2b(key, 8), H(i2b(pk, 8) + b"pad")[:12])
-        puzzles.append((tag, payload))
+        pid = rng.getrandbits(64)
+        while pid in secrets:
+            pid = rng.getrandbits(64)
+        key = rng.getrandbits(64)
+        # Domain-separate each public puzzle. Without this salt, one table of
+        # n weak-key hashes solves every puzzle in linear total work.
+        salt = i2b(i, 8)
+        tag = H(b"CS30-puzzle-check\x00" + salt + i2b(pk, 8))
+        payload = K.xor(i2b(pid, 8) + i2b(key, 8), H(b"CS30-puzzle-pad\x00" + salt + i2b(pk, 8))[:16])
+        puzzles.append((salt, tag, payload))
         secrets[pid] = key
     j = rng.randrange(n)
+    salt, tag, payload = puzzles[j]
     tries = 0
     for pk in range(space):
         tries += 1
-        if H(i2b(pk, 8) + b"check")[:4] == puzzles[j][0]:
-            plain = K.xor(puzzles[j][1], H(i2b(pk, 8) + b"pad")[:12])
-            pid, key = b2i(plain[:4]), b2i(plain[4:])
+        if H(b"CS30-puzzle-check\x00" + salt + i2b(pk, 8)) == tag:
+            plain = K.xor(payload, H(b"CS30-puzzle-pad\x00" + salt + i2b(pk, 8))[:16])
+            pid, key = b2i(plain[:8]), b2i(plain[8:])
             break
-    return {"n": n, "bob_tries": tries, "agreed": secrets[pid] == key, "eve_expected": n * n // 4,
-            "alice_work": n}
+    result = {"n": n, "bob_tries": tries, "agreed": secrets[pid] == key, "eve_expected": n * n // 4,
+              "alice_work": n, "version": 2}
+    if include_puzzles:
+        result["puzzles"] = puzzles
+    return result
 
 
 def dh_keypair(p, g, rng):
@@ -208,7 +224,9 @@ def dh_mitm(p, g, rng):
 # --------------------------------------------------------------------------------------------- RSA
 
 def rsa_keygen(bits, rng, e=65537):
-    while True:
+    if not isinstance(bits, int) or bits < 8 or not isinstance(e, int) or e < 3 or e % 2 == 0:
+        raise ValueError("RSA requires at least eight modulus bits and an odd exponent >= 3")
+    for _ in range(10000):
         p = random_prime(bits // 2, rng)
         q = random_prime(bits - bits // 2, rng)
         if p == q:
@@ -216,16 +234,22 @@ def rsa_keygen(bits, rng, e=65537):
         phi = (p - 1) * (q - 1)
         if math.gcd(e, phi) == 1 and (p * q).bit_length() == bits:
             break
+    else:
+        raise ValueError("could not generate distinct compatible RSA primes within the attempt budget")
     d = inv_mod(e, phi)
     return {"n": p * q, "e": e, "d": d, "p": p, "q": q, "dp": d % (p - 1), "dq": d % (q - 1),
             "qinv": inv_mod(q, p)}
 
 
 def rsa_enc(m, key):
+    if not 0 <= m < key["n"]:
+        raise ValueError("RSA message representative must be in [0,n)")
     return pow(m, key["e"], key["n"])
 
 
 def rsa_dec(c, key, use_crt=True):
+    if not 0 <= c < key["n"]:
+        raise ValueError("RSA ciphertext representative must be in [0,n)")
     if not use_crt:
         return pow(c, key["d"], key["n"])
     mp = pow(c, key["dp"], key["p"])
@@ -259,13 +283,17 @@ def oaep_encode(msg, k, rng, label=b""):
 
 def oaep_decode(em, k, label=b""):
     hl = 32
+    if k < 2 * hl + 2 or len(em) != k:
+        raise ValueError("decryption error")
     mseed, mdb = em[1:1 + hl], em[1 + hl:]
     seed = K.xor(mseed, mgf1(mdb, hl))
     db = K.xor(mdb, mgf1(seed, k - hl - 1))
     if em[0] != 0 or db[:hl] != H(label):
         raise ValueError("decryption error")
     rest = db[hl:]
-    i = rest.index(b"\x01")
+    i = rest.find(b"\x01")
+    if i < 0:
+        raise ValueError("decryption error")
     if any(rest[:i]):
         raise ValueError("decryption error")
     return rest[i + 1:]
@@ -278,28 +306,35 @@ def oaep_encrypt(msg, key, rng):
 
 def oaep_decrypt(ct, key):
     k = klen(key)
+    if len(ct) != k or b2i(ct) >= key["n"]:
+        raise ValueError("decryption error")
     return oaep_decode(i2b(rsa_dec(b2i(ct), key), k), k)
 
 
 def rsa_sign(msg, key):
-    """Hash-and-sign with a full-domain-style hash (MGF1 of SHA-256 to the modulus size, top byte cleared)."""
+    """Teaching hash-and-sign encoding: expanded SHA-256 with top byte cleared, not standardized RSA-PSS."""
     k = klen(key)
     h = b"\x00" + mgf1(H(msg), k - 1)
     return pow(b2i(h), key["d"], key["n"])
 
 
 def rsa_verify(msg, sig, key):
+    if not isinstance(sig, int) or not 0 <= sig < key["n"]:
+        return False
     k = klen(key)
     return pow(sig, key["e"], key["n"]) == b2i(b"\x00" + mgf1(H(msg), k - 1))
 
 
 def pkcs1_v15_pad(msg, k, rng):
+    if len(msg) > k - 11:
+        raise ValueError("PKCS #1 v1.5 needs at least eight nonzero padding bytes")
     ps = bytes(rng.randrange(1, 256) for _ in range(k - 3 - len(msg)))
     return b"\x00\x02" + ps + b"\x00" + msg
 
 
 def pkcs1_v15_conforming(em):
-    return em[0] == 0 and em[1] == 2
+    """Prefix-only teaching oracle for Bleichenbacher's interval attack, not a full padding parser."""
+    return len(em) >= 2 and em[0] == 0 and em[1] == 2
 
 
 def bleichenbacher(c, key, oracle, trace=None):
@@ -675,6 +710,8 @@ class Curve:
 
     def mul(self, k, P, trace=None):
         """Double-and-add from the top bit; ``trace`` (a list) collects ('D'|'A', point) steps."""
+        if k < 0:
+            return self.mul(-k, self.neg(P), trace)
         R = INF
         for bit in bin(k)[2:]:
             R = self.add(R, R)
@@ -761,14 +798,20 @@ def rfc6979_k(d, h1, curve):
 
 def ecdsa_sign(d, msg, curve=P256, k=None):
     n = curve.n
+    if not 1 <= d < n or k is not None and not 1 <= k < n:
+        raise ValueError("ECDSA private key and nonce must be in [1,n)")
     z = b2i(H(msg)) >> max(0, 256 - n.bit_length())
-    k = k or rfc6979_k(d, H(msg), curve)
+    k = rfc6979_k(d, H(msg), curve) if k is None else k
     r = curve.mul(k, curve.G)[0] % n
     s = inv_mod(k, n) * (z + r * d) % n
     return r, s
 
 
 def ecdsa_verify(Q, msg, sig, curve=P256):
+    if Q is INF or not curve.on(Q) or not all(0 <= x < curve.p for x in Q):
+        return False
+    if curve.mul(curve.n, Q) is not INF:
+        return False
     r, s = sig
     n = curve.n
     if not (1 <= r < n and 1 <= s < n):
@@ -794,6 +837,8 @@ X25519_P = 2 ** 255 - 19
 
 def x25519(k: bytes, u: bytes) -> bytes:
     """RFC 7748's Montgomery ladder on Curve25519."""
+    if len(k) != 32 or len(u) != 32:
+        raise ValueError("X25519 scalar and coordinate must each be 32 bytes")
     p, a24 = X25519_P, 121665
     kk = bytearray(k)
     kk[0] &= 248
@@ -850,6 +895,8 @@ def hkdf_extract(salt, ikm):
 
 
 def hkdf_expand(prk, info, length):
+    if not isinstance(length, int) or not 0 <= length <= 255 * 32:
+        raise ValueError("HKDF-SHA256 output length must be between zero and 8160 bytes")
     out, t, c = b"", b"", 1
     while len(out) < length:
         t = _hmac.new(prk, t + info + bytes([c]), hashlib.sha256).digest()

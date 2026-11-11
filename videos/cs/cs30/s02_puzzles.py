@@ -62,15 +62,15 @@ class Puzzles(VoiceoverScene):
         d = load("puzzles")
         head = label(r"Merkle's puzzles: \ the first public key exchange", font_size=34).to_edge(UP, buff=0.3)
         steps = VGroup(
-            label(r"1. \ Alice makes $n$ puzzles, \ each a (number, key) pair locked under a weak key that takes $n$ "
-                  r"tries to find", font_size=21, color=WHITE),
+            label(r"1. \ Alice makes $n$ independently salted puzzles; \\ each hides an ID and key under one of $n$ weak keys",
+                  font_size=21, color=WHITE),
             label(r"2. \ Bob picks one puzzle at random and solves it: \ about $n$ work; \ he announces its number",
                   font_size=21, color=HEAD),
             label(r"3. \ Alice looks the number up: \ both now hold that puzzle's key", font_size=21, color=DATA),
             label(r"4. \ Eve doesn't know which puzzle: \ she must solve about half of them: \ $n^2/4$ work",
                   font_size=21, color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(head, DOWN, buff=0.45)
-        tab = grid_table([r"puzzles $n$", r"Bob's tries \ (measured)", r"Eve's work \ ($n^2/4$)", r"agreed?"],
+        tab = grid_table([r"puzzles $n$", r"Bob's tries \ (measured)", r"Eve model \ ($\approx n^2/4$)", r"agreed?"],
                          [[f"{r['n']:,}", f"{r['bob']:,}", f"{r['eve']:,}", "yes" if r["agreed"] else "no"]
                           for r in d["rows"]], widths=[2.0, 3.0, 3.0, 1.4], row_h=0.5, font_size=21,
                          mono_cols=(0, 1, 2, 3))
@@ -78,20 +78,24 @@ class Puzzles(VoiceoverScene):
         lines = VGroup(
             label(r"only a \textbf{quadratic} gap: \ a billion puzzles for Bob means a billion billion for Eve",
                   font_size=21, color=YES),
-            label(r"Barak and Mahmoody \ (2009): \ with hash functions alone, \ quadratic is the best possible",
+            label(r"Barak--Mahmoody \ (2009): \ quadratic barrier in the classical random-oracle model",
                   font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "In 1974 Ralph Merkle, an undergraduate at Berkeley, proposed a way out, in a course project his "
             "professor didn't understand. <bookmark mark='a'/> Alice makes many puzzles. Each holds an identifying "
-            "number and a key, locked under a deliberately weak key that takes some effort to find. <bookmark "
+            "number and a key, locked under a deliberately weak key that takes some effort to find. Each puzzle "
+            "uses a separate public salt in its hash checks and pad, preventing one weak-key lookup table from "
+            "unlocking all the puzzles. The identifying number stays encrypted. <bookmark "
             "mark='b'/> Bob picks one puzzle at random, solves it, and announces its number in public. <bookmark "
             "mark='c'/> Alice looks up which key that number belongs to. Now they share it. <bookmark mark='d'/> Eve "
             "hears the number, but doesn't know which puzzle it came from, so she has to solve puzzles until she finds "
-            "it: about half of them. <bookmark mark='e'/> We ran it. Bob does work proportional to n; Eve's work grows "
-            "as n squared. <bookmark mark='f'/> That gap is only quadratic: a determined Eve with a big computer "
-            "catches up. <bookmark mark='g'/> And it cannot be improved using only hash-like functions, as Boaz Barak "
-            "and Mohammad Mahmoody proved in 2009. A real public-key system needs mathematical structure."
+            "it: about half of them in the simple independent brute-force model. <bookmark mark='e'/> We measured "
+            "Bob's search and successful agreement. Eve's table entries are modeled work, approximately n squared "
+            "over four; we did not time an optimal attacker. <bookmark mark='f'/> That gap is only quadratic: a "
+            "determined Eve with a big computer catches up. <bookmark mark='g'/> Barak and Mahmoody proved a "
+            "quadratic barrier for classical key agreement in the ideal random-oracle model. This model is the "
+            "scope of the theorem; it is not a claim about every possible concrete hash construction."
         ) as vo:
             self.play(FadeIn(head))
             for mk, st in zip("abcd", steps):

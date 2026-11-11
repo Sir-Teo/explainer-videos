@@ -37,7 +37,14 @@ from explainer.ai.cache import Cache
 from explainer.cs.algo import pubkey as P
 
 CACHE = Cache("cs30")
-load = CACHE.load
+
+
+def load(name):
+    out = CACHE.load(name)
+    if name == "puzzles" and out.get("version") != 2:
+        out = compute_puzzles()
+        CACHE.save(name, out)
+    return out
 
 # RFC 3526's 2048-bit MODP group (group 14)
 MODP2048 = int(
@@ -68,7 +75,7 @@ def compute_puzzles() -> dict:
     for n in (100, 1000, 10000):
         r = P.merkle_puzzles(n, rng)
         rows.append({"n": n, "bob": r["bob_tries"], "eve": r["eve_expected"], "agreed": r["agreed"]})
-    return {"rows": rows}
+    return {"rows": rows, "version": 2}
 
 
 def compute_euclid() -> dict:

@@ -165,7 +165,7 @@ class Rsa(VoiceoverScene):
                   color=YES),
             label(r"\textbf{signing}: \ $\sigma = H(m)^d$, \ checked as $\sigma^e = H(m)$: \ hash first, \ or "
                   r"$\sigma_1 \sigma_2$ signs $m_1 m_2$", font_size=22, color=HEAD),
-            label(r"the trapdoor is the easy part: \ the padding is where RSA keeps failing \ (next chapter)",
+            label(r"our hash-and-sign encoding is educational; \ standard signatures use RSA-PSS",
                   font_size=22, color=GREY_A),
         ).arrange(DOWN, buff=0.24).next_to(head, DOWN, buff=0.55)
         with self.voiceover(
@@ -176,10 +176,12 @@ class Rsa(VoiceoverScene):
             "to exactly twice the number. <bookmark mark='d'/> The standard fix is optimal asymmetric encryption "
             "padding, OAEP, from Mihir Bellare and Phillip Rogaway: mix the message with fresh randomness through two "
             "hash-based masks before encrypting. <bookmark mark='e'/> Now two encryptions of the same message differ, "
-            "and the structure an attacker could exploit is gone. <bookmark mark='f'/> The same trapdoor signs: raise "
+            "and the round trip checks our encoding. RSA-OAEP's security theorem also needs the RSA assumption "
+            "and its random-oracle model. <bookmark mark='f'/> The same trapdoor signs: raise "
             "a hash of the message to the private exponent, and anyone can check it with the public one. Hashing first "
-            "matters, because raw signatures multiply too. <bookmark mark='g'/> RSA's arithmetic has held for "
-            "fifty years. The padding around it has not."
+            "matters, because raw signatures multiply too. <bookmark mark='g'/> Our custom expanded hash is a "
+            "teaching encoding, not standardized RSA-PSS. Use a standard signature encoding in practice; the "
+            "arithmetic alone does not define a secure scheme."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdefg", lines):

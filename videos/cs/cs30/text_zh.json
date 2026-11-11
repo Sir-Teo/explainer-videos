@@ -1,0 +1,8 @@
+{
+  "strings": {
+    "1. \\ Alice makes $n$ independently salted puzzles; \\\\ each hides an ID and key under one of $n$ weak keys": "1. Alice 制作 $n$ 个分别加盐的谜题；\\\\ 每题用 $n$ 个弱密钥之一隐藏标识号与共享密钥",
+    "Barak--Mahmoody \\ (2009): \\ quadratic barrier in the classical random-oracle model": "Barak--Mahmoody（2009）：经典随机预言机模型中的二次方障碍",
+    "our hash-and-sign encoding is educational; \\ standard signatures use RSA-PSS": "自定义哈希签名编码用于教学；标准签名使用 RSA-PSS",
+    "Eve model \\ ($\\approx n^2/4$)": "Eve 模型（$\\approx n^2/4$）"
+  }
+}
