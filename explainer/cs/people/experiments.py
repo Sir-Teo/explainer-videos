@@ -5,6 +5,7 @@ discovery rates, sample-ratio mismatch, Simpson's paradox, and bandits against f
 from __future__ import annotations
 
 import math
+from statistics import NormalDist
 
 import numpy as np
 
@@ -14,17 +15,22 @@ def phi(z):
 
 
 def z_test(x1, n1, x2, n2):
+    if n1 <= 0 or n2 <= 0 or not 0 <= x1 <= n1 or not 0 <= x2 <= n2:
+        raise ValueError("success counts must lie within positive sample sizes")
     p1, p2 = x1 / n1, x2 / n2
     p = (x1 + x2) / (n1 + n2)
     se = math.sqrt(p * (1 - p) * (1 / n1 + 1 / n2))
     z = (p2 - p1) / se if se else 0.0
-    return z, 2 * (1 - phi(abs(z)))
+    return z, math.erfc(abs(z) / math.sqrt(2))
 
 
 def sample_size(p, lift, alpha=0.05, power=0.8):
     """Per arm, for a relative lift on a base rate p: n = (z_{1-a/2} + z_{power})^2 * 2 p(1-p) / delta^2, which is
     about 16 sigma^2 / delta^2 at alpha 0.05 and power 0.8 (since (1.96 + 0.84)^2 * 2 = 15.7)."""
-    za, zb = 1.959964, 0.841621
+    if not (0 < p < 1 and lift != 0 and 0 < p * (1 + lift) < 1 and 0 < alpha < 1 and 0 < power < 1):
+        raise ValueError("need interior event rates, nonzero lift, and alpha/power in (0, 1)")
+    normal = NormalDist()
+    za, zb = normal.inv_cdf(1 - alpha / 2), normal.inv_cdf(power)
     d = p * lift
     exact = (za + zb) ** 2 * 2 * p * (1 - p) / d ** 2
     rule = 16 * p * (1 - p) / d ** 2
@@ -126,7 +132,7 @@ def srm(n_a=50_000, n_b=49_000):
     n = n_a + n_b
     e = n / 2
     chi2 = (n_a - e) ** 2 / e + (n_b - e) ** 2 / e
-    p = 2 * (1 - phi(math.sqrt(chi2)))
+    p = math.erfc(math.sqrt(chi2 / 2))
     return {"a": n_a, "b": n_b, "chi2": chi2, "p": p}
 
 

@@ -34,6 +34,15 @@ class Experiments(unittest.TestCase):
     def test_sample_size(self):
         s = experiments.sample_size(0.05, 0.05)
         self.assertAlmostEqual(s["n_per_arm"] / s["rule_16"], 1, delta=0.05)
+        self.assertGreater(experiments.sample_size(.05, .05, alpha=.01)["n_per_arm"], s["n_per_arm"])
+        self.assertGreater(experiments.sample_size(.05, .05, power=.9)["n_per_arm"], s["n_per_arm"])
+        with self.assertRaises(ValueError):
+            experiments.sample_size(.05, 0)
+
+    def test_extreme_p_values_do_not_cancel(self):
+        _, p = experiments.z_test(500, 1000, 700, 1000)
+        self.assertGreater(p, 0)
+        self.assertLess(p, 1e-15)
 
     def test_peeking_inflates(self):
         r = experiments.peeking(days=20, trials=800)
