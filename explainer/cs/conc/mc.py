@@ -108,6 +108,8 @@ def _val(v, R, ri):
 
 
 def initial(prog: Program, model: str):
+    if model not in ("sc", "tso", "pso"):
+        raise ValueError("memory model must be sc, tso or pso")
     n = len(prog.threads)
     mem = tuple(prog.init[v] for v in prog.vars)
     regs = tuple(tuple(0 for _ in prog.regs[t]) for t in range(n))
@@ -261,6 +263,8 @@ def halted(prog: Program, s) -> bool:
 def explore(prog: Program, model: str = "sc", invariant=None, project=None, limit: int = 5_000_000) -> Result:
     """Every reachable state.  ``invariant(state, prog)`` returning False marks a violation (search continues, the
     first one kept); ``project(state, prog)`` names a terminal state's outcome (default: the final memory)."""
+    if not isinstance(limit, int) or limit < 1:
+        raise ValueError("state budget must be a positive integer")
     project = project or (lambda s, p: tuple(zip(p.vars, s[2])))
     s0 = initial(prog, model)
     parent = {s0: None}

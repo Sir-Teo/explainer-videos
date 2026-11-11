@@ -7,13 +7,13 @@ until the hardware reorders them. The fix has two parts: a theory of memory mode
 synchronization primitives by power, at whose top compare-and-swap can implement every concurrent object. Pebble gains
 an atomic extension and PebbleOS gains threads.
 
-The instruments are in `explainer/cs/conc/` (tested in `tests/test_cs33_conc.py`):
+The instruments are in [`explainer/cs/conc/`](../../../explainer/cs/conc) (tested in `tests/test_cs33_conc.py`):
 * `mc.py`, **an exhaustive interleaving model checker**:
   - programs in a tiny assembly language, one instruction list per thread (loads and stores, indexed access,
     arithmetic, branches, `cas`, `tas`, `fai`, blocking `lock` and semaphore `P`/`V`, fences, critical-section
     markers, outputs);
   - three memory models: **SC** (interleaving), **TSO** (a FIFO store buffer per thread, x86) and **PSO** (one FIFO
-    per thread and variable, a stand-in for Arm's weaker model); atomics and fences drain the buffer;
+    per thread and variable, illustrating store-store reordering); atomics and fences drain the buffer;
   - breadth-first search over states, so every violation comes with a shortest schedule; deadlock detection;
     counting schedules of loop-free programs;
   - the part's programs: counter++, the naive flag lock, Peterson (with fences for TSO and PSO), the bakery, the
@@ -23,6 +23,15 @@ The instruments are in `explainer/cs/conc/` (tested in `tests/test_cs33_conc.py`
   stacks; random correct and buggy histories;
 * `locks.py`: TAS, TTAS, TTAS with backoff, ticket and MCS spin locks on Part 10's MESI caches, with a single bus
   that each transaction occupies for 8 cycles.
+
+These are operational teaching models, rather than complete x86, Arm or C++ specifications. Allowed behaviors
+expand from SC to TSO to PSO; the recap's inclusions refer to those behavior sets. A successful exhaustive search
+establishes a property for the modeled finite program. Exceeding its state budget raises an error.
+
+The linearizability checker accepts completed histories for its named sequential specifications; enqueue, push and
+register write have void (`None`) results. It rejects unknown operations and malformed intervals. Its intervals are
+closed: equal endpoint timestamps alone do not encode returned-before-invoked order. Use ordered timestamps when
+that order is known. Search-budget exhaustion raises `TooHard`, with the actual call count retained in `stats`.
 
 Pebble's **atomic extension** (`explainer/cs/pebble/isa.py`, `emu.py`): `cas rd, rs1, rs2` and `amoadd rd, rs1, rs2`
 on opcodes 52 and 53, the two that Part 6 reserved; kept out of `OPS`, so Part 6's tables are unchanged.

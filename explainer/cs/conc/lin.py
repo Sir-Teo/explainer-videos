@@ -17,6 +17,7 @@ v or None), ``counter`` (inc -> the old value).
 from __future__ import annotations
 
 import random
+import math
 from dataclasses import dataclass
 
 
@@ -32,15 +33,17 @@ class Op:
 
 def apply(spec: str, state, op: Op):
     """(ok, new state) for one operation on the sequential object."""
+    if spec not in KINDS or op.kind not in KINDS[spec]:
+        raise ValueError("operation is not part of the selected sequential specification")
     if spec == "register":
         if op.kind == "write":
-            return True, op.arg
+            return op.ret is None, op.arg
         return op.ret == state, state
     if spec == "counter":
         return op.ret == state, state + 1
     if spec in ("queue", "stack"):
         if op.kind in ("enq", "push"):
-            return True, state + (op.arg,)
+            return op.ret is None, state + (op.arg,)
         if not state:
             return op.ret is None, state
         if spec == "queue":
@@ -50,6 +53,7 @@ def apply(spec: str, state, op: Op):
 
 
 INIT = {"register": 0, "counter": 0, "queue": (), "stack": ()}
+KINDS = {"register": {"read", "write"}, "counter": {"inc"}, "queue": {"enq", "deq"}, "stack": {"push", "pop"}}
 
 
 class TooHard(Exception):
@@ -58,7 +62,20 @@ class TooHard(Exception):
 
 def check(history: list[Op], spec: str, stats: dict | None = None, limit: int | None = None):
     """A linearization (list of indices into ``history``) or None.  ``limit``: give up (raise TooHard) after that many
-    search steps."""
+    search steps. This interface accepts completed operations with finite, closed intervals. Equal endpoint
+    timestamps do not encode event order; use ordered timestamps to express returned-before-invoked precedence.
+    Values stored in the object must be hashable for memoization.
+    """
+    history = list(history)
+    if spec not in KINDS:
+        raise ValueError("unknown sequential specification")
+    if limit is not None and (not isinstance(limit, int) or limit < 0):
+        raise ValueError("search limit must be a nonnegative integer")
+    for op in history:
+        if op.kind not in KINDS[spec]:
+            raise ValueError("operation is not part of the selected sequential specification")
+        if not math.isfinite(op.start) or not math.isfinite(op.end) or op.end < op.start:
+            raise ValueError("completed operations need finite, ordered invocation/response times")
     n = len(history)
     seen = set()
     order = []
@@ -86,9 +103,11 @@ def check(history: list[Op], spec: str, stats: dict | None = None, limit: int | 
                     return True
                 order.pop()
         return False
-    found = go(frozenset(range(n)), INIT[spec])
-    if stats is not None:
-        stats["calls"] = calls[0]
+    try:
+        found = go(frozenset(range(n)), INIT[spec])
+    finally:
+        if stats is not None:
+            stats["calls"] = calls[0]
     return list(order) if found else None
 
 

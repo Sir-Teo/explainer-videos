@@ -31,8 +31,8 @@ class Outro(VoiceoverScene):
         tiles = Group(
             tile(MathTex(r"\binom{6}{3} = 20", font_size=52, color=NO), r"the race, \ model-checked", NO),
             tile(MathTex(r"\textsf{flag}, \textsf{turn}", font_size=48, color=DATA), r"Peterson, \ proved", DATA),
-            tile(MathTex(r"\textsf{SC} \supset \textsf{TSO} \supset \textsf{PSO}", font_size=40, color=HEAD),
-                 r"store buffers and fences", HEAD),
+            tile(MathTex(r"\mathcal{B}_{\rm SC} \subseteq \mathcal{B}_{\rm TSO} \subseteq \mathcal{B}_{\rm PSO}", font_size=40, color=HEAD),
+                 r"allowed behaviors in our models", HEAD),
             tile(MathTex(r"O(1)\ \text{per handoff}", font_size=40, color=YES), r"locks; \ MCS", YES),
             tile(MathTex(r"\textsf{DRF} \Rightarrow \textsf{SC}", font_size=48, color=LAM), r"memory models", LAM),
             tile(MathTex(r"\textsf{CAS}: \infty", font_size=48, color=KERN), r"consensus numbers", KERN),

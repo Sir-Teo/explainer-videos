@@ -18,6 +18,14 @@ def final_c(r):
 
 
 class ModelChecker(unittest.TestCase):
+    def test_unknown_model_and_exhausted_state_budget(self):
+        with self.assertRaises(ValueError):
+            M.explore(M.counter(), "arm")
+        with self.assertRaises(ValueError):
+            M.explore(M.counter(), limit=0)
+        with self.assertRaises(RuntimeError):
+            M.explore(M.counter(), limit=1)
+
     def test_counter_schedules_match_the_multinomial(self):
         p = M.counter(2, 1)
         sch = M.schedules(p, project=lambda s, q: dict(zip(q.vars, s[2]))["c"])
@@ -80,6 +88,22 @@ class ModelChecker(unittest.TestCase):
 
 
 class Linearizability(unittest.TestCase):
+    def test_specification_operations_and_void_results(self):
+        for spec, kind in (("queue", "push"), ("stack", "enq"), ("counter", "read"), ("register", "inc")):
+            with self.assertRaises(ValueError):
+                L.check([L.Op(0, kind, 1, None, 0, 1)], spec)
+        for spec, kind in (("queue", "enq"), ("stack", "push"), ("register", "write")):
+            self.assertIsNone(L.check([L.Op(0, kind, 1, "failed", 0, 1)], spec))
+
+    def test_invalid_history_times_and_budget_remain_explicit(self):
+        for start, end in ((2, 1), (float("nan"), 2), (0, float("inf"))):
+            with self.assertRaises(ValueError):
+                L.check([L.Op(0, "inc", None, 0, start, end)], "counter")
+        stats = {}
+        with self.assertRaises(L.TooHard):
+            L.check([L.Op(0, "inc", None, 0, 0, 1)], "counter", stats, limit=0)
+        self.assertEqual(stats["calls"], 1)
+
     def test_hand_histories(self):
         Op = L.Op
         self.assertIsNone(L.check([Op(0, "write", 1, None, 0, 2), Op(1, "read", None, 1, 1, 3),
