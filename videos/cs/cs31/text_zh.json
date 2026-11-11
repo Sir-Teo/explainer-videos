@@ -1,0 +1,7 @@
+{
+  "strings": {
+    "EDF: \\ $U \\le 1$ for independent, \\ preemptible, \\ implicit-deadline tasks; \\\\ one CPU, \\ no blocking or overhead \\ (Liu--Layland, \\ 1973)": "EDF：$U \\le 1$，任务独立、可抢占、截止期等于周期；\\\\ 单 CPU，无阻塞或开销（Liu--Layland，1973）",
+    "fixed priorities protect higher-priority tasks \\\\ from overload confined to lower-priority work": "固定优先级保护高优先级任务，\\\\ 使其不受仅由低优先级工作造成的过载影响",
+    "target utilisation $U$ \\ (4 tasks; \\ work rounded to ticks)": "目标利用率 $U$（4 项任务，工作量舍入为整数刻度）"
+  }
+}

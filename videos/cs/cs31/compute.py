@@ -43,7 +43,14 @@ import numpy as np
 from explainer.ai.cache import Cache
 
 CACHE = Cache("cs31")
-load = CACHE.load
+
+
+def load(name):
+    out = CACHE.load(name)
+    if name == "realtime" and out.get("version") != 2:
+        out = compute_realtime()
+        CACHE.save(name, out)
+    return out
 
 TOK = r"""
 // tok: the text in, one lower-case word per line out
@@ -565,7 +572,7 @@ def compute_realtime() -> dict:
     rng = random.Random(7)
     curve = []
     for U in np.arange(0.5, 1.001, 0.05):
-        ok_rta = ok_ll = 0
+        ok_rta = ok_ll = ok_edf = 0
         trials = 400
         for _ in range(trials):
             us = rt.uunifast(4, float(U), rng)
@@ -574,13 +581,14 @@ def compute_realtime() -> dict:
             Ureal = sum(c / t for c, t in tasks)
             ok_rta += all(r is not None for r in rt.rta(tasks)) and Ureal <= 1
             ok_ll += Ureal <= rt.ll_bound(4)
-        curve.append({"U": float(U), "rms": ok_rta / trials, "ll": ok_ll / trials, "edf": 1.0})
+            ok_edf += Ureal <= 1
+        curve.append({"U": float(U), "rms": ok_rta / trials, "ll": ok_ll / trials, "edf": ok_edf / trials})
     ts = [(2, 5), (4, 7)]
     rms = rt.schedule(ts, "rms", 35)
     edf = rt.schedule(ts, "edf", 35)
     return {"bounds": bounds, "ln2": math.log(2), "curve": curve, "tasks": ts, "U": sum(c / t for c, t in ts),
             "rms": rms, "edf": edf, "rta": rt.rta(ts), "pf_no": rt.pathfinder(False), "pf_pi": rt.pathfinder(True),
-            "harmonic": rt.rta([(5, 10), (5, 20), (5, 40)])}
+            "harmonic": rt.rta([(5, 10), (5, 20), (5, 40)]), "version": 2}
 
 
 def compute_queue() -> dict:

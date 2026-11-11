@@ -51,10 +51,10 @@ class RealTime(VoiceoverScene):
             label(rf"T2 misses its deadline at {md}", font_size=18, color=NO))
         miss[1].next_to(miss[0], RIGHT, buff=0.2).shift(DOWN * 0.42)
         lines = VGroup(
-            label(r"EDF meets every deadline whenever $U \le 1$: \ it is \textbf{optimal} on one processor \ (Liu and "
-                  r"Layland, \ 1973)", font_size=21, color=YES),
-            label(r"so why fixed priorities? \ simpler, \ and when overloaded they fail predictably: \ the lowest "
-                  r"priority first", font_size=21, color=GREY_A),
+            label(r"EDF: \ $U \le 1$ for independent, \ preemptible, \ implicit-deadline tasks; \\ one CPU, \ "
+                  r"no blocking or overhead \ (Liu--Layland, \ 1973)", font_size=21, color=YES),
+            label(r"fixed priorities protect higher-priority tasks \\ from overload confined to lower-priority work",
+                  font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "In a car's brakes or an aircraft's controls, a late answer is a wrong answer. Real-time systems run "
@@ -66,9 +66,11 @@ class RealTime(VoiceoverScene):
             "preempting it. It misses its deadline. <bookmark mark='d'/> Earliest deadline first instead runs "
             "whichever task's deadline is nearest, so priorities change from moment to moment. It meets every "
             "deadline. <bookmark mark='e'/> Liu and Layland proved in 1973 that on one processor, earliest deadline "
-            "first succeeds whenever the total utilisation is at most one, which nothing can beat. <bookmark "
+            "first succeeds whenever the total utilisation is at most one for independent, preemptible tasks "
+            "whose deadlines equal their periods, with no blocking or scheduling overhead. <bookmark "
             "mark='f'/> Fixed priorities are still the common choice: they are simple, and when the system is "
-            "overloaded, it is always the lowest-priority task that suffers, which engineers can plan for."
+            "overloaded only by lower-priority work, the higher-priority tasks remain protected. If their own "
+            "demand is excessive, higher-priority tasks can miss deadlines too."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -98,7 +100,7 @@ class RealTime(VoiceoverScene):
         yt = VGroup(*[label(f"{int(y * 100)}\\%", font_size=15, color=GREY_A).next_to(ax.c2p(0.5, y), LEFT,
                                                                                     buff=0.08)
                       for y in (0, 0.25, 0.5, 0.75, 1.0)])
-        xl = label(r"utilisation $U$ \ (4 random tasks)", font_size=17, color=GREY_A).next_to(xt, DOWN, buff=0.1)
+        xl = label(r"target utilisation $U$ \ (4 tasks; \ work rounded to ticks)", font_size=17, color=GREY_A).next_to(xt, DOWN, buff=0.1)
         yl = label(r"task sets that meet every deadline", font_size=17, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(
             ax, LEFT)
         cv = d["curve"]
@@ -132,10 +134,13 @@ class RealTime(VoiceoverScene):
             "the natural logarithm of two, about sixty-nine percent. <bookmark mark='b'/> The proof sketch: the worst "
             "moment is when all tasks are released together, and the worst task set has periods within a factor of "
             "two, each task's work just filling the gap between the next two periods. <bookmark mark='c'/> But the "
-            "test is only sufficient. We generated random sets of four tasks at each utilisation. <bookmark "
-            "mark='d'/> The Liu-Layland test accepts almost nothing above seventy-six percent. The exact test, which "
-            "computes each task's worst response time, accepts every set up to eighty percent, and most up to ninety. "
-            "<bookmark mark='e'/> Earliest deadline first meets them all, up to a hundred. <bookmark mark='f'/> And "
+            "test is only sufficient. We generated random sets of four tasks at each target utilisation and "
+            "rounded their work to whole ticks, changing the realized load. <bookmark "
+            "mark='d'/> The sufficient utilization bound admits fewer samples than response-time analysis, which "
+            "computes each task's worst response time. These are finite sampled task sets, not universal acceptance rates. "
+            "<bookmark mark='e'/> Earliest deadline first accepts exactly the generated sets with realized load "
+            "at most one. Rounding can make that fraction less than one near a target of one hundred percent. "
+            "<bookmark mark='f'/> And "
             "when the periods divide one another, rate monotonic can use the whole processor: periods of ten, twenty "
             "and forty, at eighty-seven and a half percent, are comfortably on time."
         ) as vo:

@@ -16,13 +16,22 @@ import random
 
 
 def ll_bound(n: int) -> float:
-    return n * (2 ** (1 / n) - 1)
+    if not isinstance(n, int) or n < 1:
+        raise ValueError("task count must be positive")
+    return n * math.expm1(math.log(2) / n)
+
+
+def _tasks(tasks):
+    tasks = list(tasks)
+    if any(not isinstance(C, int) or not isinstance(T, int) or C < 0 or T <= 0 for C, T in tasks):
+        raise ValueError("tasks need nonnegative integer work and positive integer periods")
+    return tasks
 
 
 def rta(tasks: list[tuple[int, int]]) -> list[float | None]:
     """Worst-case response time of each task under rate-monotonic priorities (shorter period first); None if it
     can exceed its period."""
-    ts = sorted(tasks, key=lambda x: x[1])
+    ts = sorted(_tasks(tasks), key=lambda x: x[1])
     out = []
     for i, (C, T) in enumerate(ts):
         R = C
@@ -39,6 +48,8 @@ def rta(tasks: list[tuple[int, int]]) -> list[float | None]:
 
 
 def uunifast(n: int, U: float, rng: random.Random) -> list[float]:
+    if not isinstance(n, int) or n < 1 or not math.isfinite(U) or U < 0:
+        raise ValueError("need a positive task count and finite nonnegative utilization")
     us, s = [], U
     for i in range(1, n):
         nxt = s * rng.random() ** (1 / (n - i))
@@ -50,8 +61,14 @@ def uunifast(n: int, U: float, rng: random.Random) -> list[float]:
 
 def schedule(tasks: list[tuple[int, int]], policy: str = "rms", horizon: int | None = None) -> dict:
     """Tick-by-tick: each tick runs the released job with the highest priority (RMS: shortest period; EDF: earliest
-    absolute deadline).  Returns the segments (start, end, task index), and the misses (task, deadline)."""
-    H = horizon or math.lcm(*[T for _, T in tasks])
+    absolute deadline). Missed jobs are dropped at their deadlines. Returns segments (start, end, task index)
+    and misses (task, deadline), including deadlines exactly at the horizon."""
+    tasks = _tasks(tasks)
+    if policy not in ("rms", "edf"):
+        raise ValueError("policy must be rms or edf")
+    H = horizon if horizon is not None else (math.lcm(*[T for _, T in tasks]) if tasks else 0)
+    if not isinstance(H, int) or H < 0:
+        raise ValueError("horizon must be a nonnegative integer")
     jobs = []               # [task, remaining, deadline, release]
     seg, miss = [], []
     for t in range(H):
@@ -73,6 +90,8 @@ def schedule(tasks: list[tuple[int, int]], policy: str = "rms", horizon: int | N
             else:
                 seg.append((t, t + 1, j[0]))
         jobs = [j for j in jobs if j[1] > 0]
+    # Work in [0,H) is complete now; deadlines at H must also be checked.
+    miss.extend((j[0], j[2]) for j in jobs if j[2] <= H and j[1] > 0)
     return {"segments": seg, "misses": miss, "horizon": H, "U": sum(C / T for C, T in tasks)}
 
 

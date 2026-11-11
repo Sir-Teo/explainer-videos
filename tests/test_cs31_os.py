@@ -175,6 +175,26 @@ class TestQueues(unittest.TestCase):
 
 
 class TestRealTime(unittest.TestCase):
+    def test_deadline_at_horizon_and_zero_horizon(self):
+        self.assertEqual(rt.schedule([(2, 1)], "edf", 1)["misses"], [(0, 1)])
+        self.assertEqual(rt.schedule([(1, 1)], "edf", 1)["misses"], [])
+        zero = rt.schedule([(2, 5)], horizon=0)
+        self.assertEqual((zero["segments"], zero["misses"], zero["horizon"]), ([], [], 0))
+        self.assertEqual(rt.schedule([])["horizon"], 0)
+
+    def test_realtime_rejects_invalid_model_inputs(self):
+        for tasks in ([(1, 0)], [(-1, 3)], [(0.5, 3)]):
+            with self.assertRaises(ValueError):
+                rt.schedule(tasks)
+            with self.assertRaises(ValueError):
+                rt.rta(tasks)
+        with self.assertRaises(ValueError):
+            rt.schedule([(1, 3)], "unknown")
+        with self.assertRaises(ValueError):
+            rt.ll_bound(0)
+        with self.assertRaises(ValueError):
+            rt.uunifast(0, 0.5, random.Random(1))
+
     def test_bounds(self):
         self.assertAlmostEqual(rt.ll_bound(2), 0.8284, places=4)
         self.assertEqual(rt.rta([(1, 4), (2, 6), (3, 12)]), [1, 3, 10])

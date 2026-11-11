@@ -7,7 +7,7 @@ whole machine. That needed protection, traps, processes and a scheduler. Queuein
 server is slow. Pebble gains a kernel mode, and PebbleOS, a kernel of 284 instructions, boots on it and runs the Job as
 two processes joined by a pipe: ledger row 11.
 
-The instruments are in `explainer/cs/os/` (tested in `tests/test_cs31_os.py`):
+The instruments are in [`explainer/cs/os/`](../../../explainer/cs/os) (tested in `tests/test_cs31_os.py`):
 * `machine.py`, **Pebble with a kernel mode**:
   - a mode bit and the privileged extension of `explainer/cs/pebble/isa.py`: `ecall`, `eret`, `csrr`, `csrw`;
   - nine control registers (status, epc, cause, tval, tvec, scratch, timer, lo, hi);
@@ -28,6 +28,17 @@ The instruments are in `explainer/cs/os/` (tested in `tests/test_cs31_os.py`):
   under d-FCFS, c-FCFS and preemptive quanta with overhead;
 * `rt.py`: the Liu–Layland bound, response-time analysis, UUniFast, RMS and EDF timelines, and the Mars Pathfinder
   inversion with and without priority inheritance.
+
+The real-time model uses independent, preemptible periodic tasks, deadlines equal to periods, one processor, and
+zero blocking/scheduler overhead. Deadline checks include the final simulation tick. In the random task-set chart,
+the horizontal coordinate is target utilization: rounding execution costs to integer ticks changes actual load.
+EDF's acceptance fraction uses that realized load rather than assuming every generated set is feasible. Fixed
+priorities protect high-priority work from overload confined to lower-priority tasks; they do not protect an
+infeasible high-priority task set from itself.
+
+Queueing examples distinguish stationary formulas from finite simulations. The reported `L` is derived from the
+total sojourn-time area over a window including the drain, so its agreement with Little's law is an accounting
+illustration rather than an independent validation of the event simulator.
 
 Measured on this machine (`videos/cs/cs31/compute.py` compiles and runs small C programs):
 * a function call against `getpid` and a vDSO `clock_gettime`;
