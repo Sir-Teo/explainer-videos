@@ -44,9 +44,14 @@ class Resolver:
 
 
 def kaminsky_odds(id_bits: int = 16, port_bits: int = 0, forged: int = 100, races: int = 1) -> float:
+    """Success probability for independent uniform guesses, with replacement, across all races."""
+    if min(id_bits, port_bits, forged, races) < 0:
+        raise ValueError("bit counts and attempt counts must be nonnegative")
     space = 2 ** (id_bits + port_bits)
-    p_one = 1 - (1 - 1 / space) ** forged if forged < space else 1.0
-    return 1 - (1 - p_one) ** races
+    attempts = forged * races
+    if not attempts:
+        return 0.0
+    return 1.0 if space == 1 else -math.expm1(attempts * math.log1p(-1 / space))
 
 
 def page_load(objects, loss: float, rtt: float, rate_pps: float, mode: str, rng: random.Random) -> dict:
@@ -54,6 +59,12 @@ def page_load(objects, loss: float, rtt: float, rate_pps: float, mode: str, rng:
     send and arrives one RTT/2 later; a lost packet is resent one RTT after it was sent (fast retransmit).  Data is
     delivered to the application in order within each ordering domain: per connection for HTTP/1.1 and HTTP/2, per
     stream for QUIC."""
+    if mode not in ("http1", "http2", "quic") or not 0 <= loss < 1 or rtt < 0 or rate_pps <= 0:
+        raise ValueError("invalid transport mode or path parameters")
+    if any(not isinstance(n, int) or n < 0 for n in objects):
+        raise ValueError("object sizes must be nonnegative packet counts")
+    if not objects:
+        return {"mode": mode, "page": 0.0, "mean_object": 0.0}
     if mode == "http1":
         conns = [[] for _ in range(6)]
         for i, n in enumerate(objects):
@@ -71,7 +82,7 @@ def page_load(objects, loss: float, rtt: float, rate_pps: float, mode: str, rng:
                     left[i] -= 1
         domains = [order]
         senders = 1
-    finish = {}
+    finish = {i: 0.0 for i in range(len(objects))}
     for d in domains:
         t = 0.0
         if mode == "http1":
@@ -110,6 +121,8 @@ def zipf_fit(counts, lo: int = 10, hi: int = 10000) -> float:
 
 
 def lru_hit_rate(requests, size: int) -> float:
+    if size < 0:
+        raise ValueError("cache size must be nonnegative")
     cache: OrderedDict = OrderedDict()
     hits = 0
     for r in requests:
@@ -120,21 +133,29 @@ def lru_hit_rate(requests, size: int) -> float:
             cache[r] = True
             if len(cache) > size:
                 cache.popitem(last=False)
-    return hits / len(requests)
+    return hits / len(requests) if requests else 0.0
 
 
 def che(probs, size: int) -> float:
     """Che's approximation: find T with sum (1 - e^{-p_i T}) = size; hit rate = sum p_i (1 - e^{-p_i T})."""
-    lo, hi = 0.0, 1e12
+    if size < 0 or any(not math.isfinite(p) or p < 0 for p in probs):
+        raise ValueError("cache size and probabilities must be nonnegative and finite")
+    if size == 0:
+        return 0.0
+    if size >= sum(p > 0 for p in probs):
+        return sum(probs)
+    lo, hi = 0.0, 1.0
+    while sum(-math.expm1(-p * hi) for p in probs) < size:
+        hi *= 2
     for _ in range(200):
         T = (lo + hi) / 2
-        occ = sum(1 - math.exp(-p * T) for p in probs)
+        occ = sum(-math.expm1(-p * T) for p in probs)
         if occ > size:
             hi = T
         else:
             lo = T
     T = (lo + hi) / 2
-    return sum(p * (1 - math.exp(-p * T)) for p in probs)
+    return sum(p * -math.expm1(-p * T) for p in probs)
 
 
 _ = heapq

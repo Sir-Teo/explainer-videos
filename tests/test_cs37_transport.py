@@ -9,6 +9,25 @@ from explainer.cs.net import app, cc, rdt
 from explainer.cs.net.tcp import Flow, dumbbell, jain, mathis
 
 
+class AppEdges(unittest.TestCase):
+    def test_guess_probabilities(self):
+        self.assertAlmostEqual(app.kaminsky_odds(1, 0, 2), .75)
+        self.assertAlmostEqual(app.kaminsky_odds(2, 0, 2, 3), 1 - (3 / 4)**6)
+        self.assertGreater(app.kaminsky_odds(64, 0, 1), 0)
+        self.assertEqual(app.kaminsky_odds(0, 0, 0), 0)
+        self.assertEqual(app.kaminsky_odds(0, 0, 1), 1)
+
+    def test_empty_and_full_caches_and_pages(self):
+        self.assertEqual(app.lru_hit_rate([], 0), 0)
+        self.assertEqual(app.che([.8, .2], 0), 0)
+        self.assertEqual(app.che([.8, .2], 2), 1)
+        self.assertAlmostEqual(app.che([.5, .5], 1), .5)
+        for objects in ([], [0, 0]):
+            self.assertEqual(app.page_load(objects, 0, .1, 100, "quic", random.Random(0))["page"], 0)
+        with self.assertRaises(ValueError):
+            app.page_load([1], 1, .1, 100, "quic", random.Random(0))
+
+
 class Reliable(unittest.TestCase):
     def test_protocols_deliver_in_order_under_loss(self):
         ch = lambda s: rdt.Channel(delay=0.05, rate=1000, loss=0.05, dup=0.02, reorder=0.1, seed=s)  # noqa: E731
