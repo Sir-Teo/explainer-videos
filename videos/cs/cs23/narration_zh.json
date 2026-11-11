@@ -1,367 +1,363 @@
 {
- "title": "计算机科学，从零搭建 · 第23部分：优化",
- "chapters": {
-  "Hook": "多面体上的最优点",
-  "LinearPrograms": "1. 线性规划",
-  "Simplex": "2. 单纯形法",
-  "Duality": "3. 对偶",
-  "KleeMinty": "4. 理论上是指数的，实践中却很快",
-  "PolyTime": "5. 多项式时间：椭球与中心路径",
-  "Unimodular": "6. 当顶点都是整数时",
-  "IntegerPrograms": "7. 整数规划",
-  "Approximation": "8. 近似：覆盖问题",
-  "Tsp": "9. 旅行商问题",
-  "MaxCut": "10. 随机超平面：最大割",
-  "Online": "11. 在线：看不见未来的决策",
-  "Weights": "12. 乘性权重",
-  "Convex": "13. 一页纸讲凸优化",
-  "Frontier": "14. 前沿：更快的线性规划、Hirsch 问题与唯一博弈猜想",
-  "Outro": "回顾、习题，以及它们会在哪里再出现"
- },
- "lines": {
-  "de5da2eec81b": {
-   "scene": "Hook",
-   "en": "In 1945 the economist George Stigler asked what it costs, at the least, to feed a person for a year. He had seventy-seven foods and nine nutrients, and a person needs enough of each. <bookmark mark='a'/> By trial and insight he found a diet costing thirty-nine dollars and ninety-three cents a year, at 1939 prices, mostly wheat flour, cabbage and evaporated milk. He wrote that there was no direct way to find the true minimum. <bookmark mark='b'/> Two years later George Dantzig invented one. Jack Laderman's team worked his simplex method by hand on desk calculators, <bookmark mark='c'/> roughly a hundred and twenty person-days of arithmetic, and found thirty-nine sixty-nine. And it came with something Stigler could not have: a proof that no diet is cheaper. <bookmark mark='d'/> That proof, which this part calls duality, is the idea that lasts.",
-   "zh": "1945年，经济学家 George Stigler 问：养活一个人一年，最少要花多少钱？他有七十七种食物和九种营养素，一个人每种营养都要摄入足够。<bookmark mark='a'/>凭着试算和洞察，他找到一份每年三十九美元九十三美分的食谱，按1939年的价格计，主要是小麦粉、卷心菜和炼乳。他写道，没有直接的办法找到真正的最小值。<bookmark mark='b'/>两年后，George Dantzig 发明了这样的办法。Jack Laderman 的团队用台式计算器，手工执行他的单纯形法，<bookmark mark='c'/>大约花了一百二十个人日的算术，得到三十九美元六十九美分。而且它带来了 Stigler 不可能有的东西：一个证明，证明没有更便宜的食谱。<bookmark mark='d'/>这个证明，这一部分称之为对偶，才是经久不衰的思想。"
-  },
-  "a6f1da4358d4": {
-   "scene": "Hook",
-   "en": "This part is about choosing the best, and about the three kinds of answer we can get. <bookmark mark='a'/> For linear programs, the best point of a polytope, there are fast algorithms and exact answers that come with a proof. <bookmark mark='b'/> For problems with integer choices, like the travelling salesman, the exact answer is NP-hard; we settle for algorithms with proven guarantees, and heuristics that do better than the guarantees promise. <bookmark mark='c'/> And for decisions made without seeing the future, like which page to evict from a cache, we measure ourselves against a clairvoyant who sees everything, and prove we are never too far behind.",
-   "zh": "这一部分讲的是如何选出最好的，以及我们能得到的三种答案。<bookmark mark='a'/>对线性规划，也就是多面体上的最优点，有快速的算法，以及附带证明的精确答案。<bookmark mark='b'/>对带整数选择的问题，比如旅行商问题，求精确答案是 NP 难的；我们退而求其次，用有保证的算法，以及比保证承诺的做得更好的启发式方法。<bookmark mark='c'/>而对看不见未来就要做出的决定，比如缓存该淘汰哪一页，我们拿自己和一位什么都看得见的先知比较，并证明自己永远不会落后太多。"
-  },
-  "b042c746cdc1": {
-   "scene": "Hook",
-   "en": "Part 23 of Computer Science, Built: Optimization. <bookmark mark='a'/> In this part: linear programs, the simplex method and duality; why simplex is exponential in theory and fast in practice, and the polynomial methods that came after it; integer programs and when they are easy; approximation algorithms for covers, the travelling salesman, knapsack and MAX-CUT; online algorithms and multiplicative weights; and convex optimization in a page.",
-   "zh": "计算机科学，从零搭建，第23部分：优化。<bookmark mark='a'/>这一部分包括：线性规划、单纯形法与对偶；为什么单纯形法在理论上是指数的、在实践中却很快，以及在它之后出现的多项式方法；整数规划，以及它何时是容易的；覆盖问题、旅行商问题、背包问题和最大割的近似算法；在线算法与乘性权重；以及一页纸讲完的凸优化。"
-  },
-  "5812d59cb410": {
-   "scene": "LinearPrograms",
-   "en": "Chapter one. Linear programs.",
-   "zh": "第1章。线性规划。"
-  },
-  "9b31812b1383": {
-   "scene": "LinearPrograms",
-   "en": "A linear program asks for the largest value of a linear function, subject to linear inequalities. <bookmark mark='a'/> Here is a small one, the first example in Vašek Chvátal's textbook: three products with profits five, four and three, made from three scarce resources, with the amounts each product needs on the left and the supply on the right. <bookmark mark='b'/> In matrix form: maximize c transpose x subject to A x at most b, with x non-negative. <bookmark mark='c'/> Leonid Kantorovich formulated such problems in 1939 to plan a plywood trust in Leningrad. <bookmark mark='d'/> George Dantzig met them in 1947, scheduling for the US Air Force, when programming still meant planning. <bookmark mark='e'/> Kantorovich and Tjalling Koopmans shared the 1975 Nobel prize in economics for this work; Dantzig, famously, did not.",
-   "zh": "线性规划要求在一组线性不等式的约束下，求一个线性函数的最大值。<bookmark mark='a'/>这是一个小例子，Vašek Chvátal 教科书中的第一个例子：三种产品，利润分别是五、四、三，用三种稀缺资源制成；左边是每种产品所需的资源量，右边是供应量。<bookmark mark='b'/>写成矩阵形式：在 A x 不超过 b、x 非负的条件下，最大化 c 转置 x。<bookmark mark='c'/>Leonid Kantorovich 在1939年为列宁格勒的一家胶合板托拉斯制定计划时，提出了这类问题。<bookmark mark='d'/>George Dantzig 在1947年为美国空军做调度时遇到了它们，那时“规划”这个词还只是“计划”的意思。<bookmark mark='e'/>Kantorovich 和 Tjalling Koopmans 因这项工作分享了1975年的诺贝尔经济学奖；众所周知，Dantzig 没有得奖。"
-  },
-  "1781c0236cb2": {
-   "scene": "LinearPrograms",
-   "en": "Most of the work of linear programming is modelling: deciding what the variables are. <bookmark mark='a'/> Here is the kind of problem Kantorovich, and independently Frank Hitchcock in 1941, studied. Two plants make thirty and forty units; three stores need twenty, twenty-five and twenty-five; each road has a cost per unit shipped. <bookmark mark='b'/> Use one variable per road, the amount sent along it. <bookmark mark='c'/> Minimize the total cost, subject to each plant's capacity and each store's demand. <bookmark mark='d'/> Serving every store from its cheapest plant would cost three hundred and fifty-five dollars, but it asks plant B for fifty units, and B makes forty. <bookmark mark='e'/> The optimum costs three hundred and sixty-five: store three is split between the two plants, and ten units travel the more expensive road. <bookmark mark='f'/> A handful of tricks bring far more problems into this form. An equation is two inequalities. A variable that may be negative is the difference of two that may not. To minimize the largest of several linear costs, add a variable t, require each cost to be at most t, and minimize t. Absolute values work the same way. That is why so much of operations research is linear programming.",
-   "zh": "线性规划的大部分工作在于建模：决定变量是什么。<bookmark mark='a'/>这是 Kantorovich，以及1941年独立地由 Frank Hitchcock 研究过的那类问题。两家工厂分别生产三十和四十个单位；三家商店分别需要二十、二十五和二十五；每条道路有每单位的运费。<bookmark mark='b'/>每条道路一个变量：沿它运送的数量。<bookmark mark='c'/>在每家工厂的产能和每家商店的需求约束下，最小化总费用。<bookmark mark='d'/>让每家商店都从最便宜的工厂进货，要花三百五十五美元，但这要求工厂 B 供应五十个单位，而 B 只能生产四十个。<bookmark mark='e'/>最优解花费三百六十五美元：商店三由两家工厂分担，有十个单位走了更贵的那条路。<bookmark mark='f'/>几个小技巧能把多得多的问题化成这种形式。一个等式就是两个不等式。可以为负的变量，是两个非负变量之差。要最小化几个线性费用中最大的那个，就添一个变量 t，要求每个费用都不超过 t，再最小化 t。绝对值也是同样的做法。这就是为什么运筹学中有那么多内容就是线性规划。"
-  },
-  "4ddc72823858": {
-   "scene": "LinearPrograms",
-   "en": "Each inequality cuts space in half, and the points satisfying all of them form a convex polytope. <bookmark mark='a'/> For our three products it is this solid in three dimensions, with the axes as three of its walls. <bookmark mark='b'/> It has six corners. <bookmark mark='c'/> The objective's level sets, the points with the same profit, are parallel planes. <bookmark mark='d'/> Push the plane in the direction of more profit until it is about to leave the polytope. The last point it touches is a corner: two units of the first product and one of the third, for a profit of thirteen. <bookmark mark='e'/> That is always so: a linear function on a polytope reaches its maximum at a vertex, so there are only finitely many places to look. The difficulty is that a polytope in many dimensions can have astronomically many vertices.",
-   "zh": "每个不等式把空间切成两半，满足所有不等式的点构成一个凸多面体。<bookmark mark='a'/>对我们的三种产品，它就是这个三维立体，坐标轴平面是它的三面墙。<bookmark mark='b'/>它有六个顶点。<bookmark mark='c'/>目标函数的等值集，也就是利润相同的点，是一族平行的平面。<bookmark mark='d'/>沿利润增加的方向推动这个平面，直到它即将离开多面体。它最后碰到的点是一个顶点：第一种产品两个单位、第三种一个单位，利润为十三。<bookmark mark='e'/>情况总是如此：多面体上的线性函数在某个顶点取到最大值，所以只有有限个地方需要查看。难处在于，高维的多面体可以有天文数字般多的顶点。"
-  },
-  "d15f0b76d684": {
-   "scene": "Simplex",
-   "en": "Chapter two. The simplex method.",
-   "zh": "第2章。单纯形法。"
-  },
-  "1894ce9caf7a": {
-   "scene": "Simplex",
-   "en": "Dantzig's simplex method walks from corner to corner. <bookmark mark='a'/> Start at a vertex; the origin, making nothing at all, is one. <bookmark mark='b'/> From the current vertex, look along the edges that leave it. Is any of them uphill, increasing the profit? <bookmark mark='c'/> If so, move along it until you hit the next vertex. Here the walk goes from zero profit to twelve and a half, making only the first product, and then to thirteen. <bookmark mark='d'/> When no edge goes uphill, you are done. That is the subtle part: a local check proves a global optimum, because in a convex region a vertex with no improving edge cannot be beaten anywhere. <bookmark mark='e'/> Here it took two moves.",
-   "zh": "Dantzig 的单纯形法从一个顶点走到另一个顶点。<bookmark mark='a'/>从某个顶点出发；原点，什么都不生产，就是一个顶点。<bookmark mark='b'/>在当前顶点，查看从它出发的各条边。有没有哪条是上坡的，能增加利润？<bookmark mark='c'/>如果有，就沿它走，直到碰到下一个顶点。这里，路径从零利润走到十二点五，只生产第一种产品，然后到十三。<bookmark mark='d'/>当没有上坡的边时，就完成了。微妙之处在于：一个局部检查证明了全局最优，因为在凸区域中，没有改进边的顶点在任何地方都无法被超越。<bookmark mark='e'/>这里走了两步。"
-  },
-  "f52dc89fda6b": {
-   "scene": "Simplex",
-   "en": "In algebra, the walk is a sequence of pivots. <bookmark mark='a'/> Add a slack variable to each inequality, the unused amount of each resource, and the constraints become equations. The slacks themselves form the first basis: the origin, where all resources are unused. <bookmark mark='b'/> The bottom row holds the objective. A negative entry means increasing that variable raises the profit; Dantzig's rule picks the most negative, here the first product. <bookmark mark='c'/> How far can it rise? The ratio test divides each right-hand side by the column's entry and takes the smallest: the first resource runs out first, at two and a half. <bookmark mark='d'/> The pivot is one step of Gaussian elimination, making that column a unit vector. <bookmark mark='e'/> One more pivot brings in the third product, and now the bottom row has no negative entries. The profit is thirteen, and the numbers under the slack columns, one, zero and one, are the prices of the resources, which the next chapter shows are a proof.",
-   "zh": "在代数上，这条路径是一连串的转轴。<bookmark mark='a'/>给每个不等式添一个松弛变量，即每种资源未用掉的数量，约束就变成了等式。松弛变量本身构成第一个基：原点，所有资源都未使用。<bookmark mark='b'/>最下面一行是目标函数。负的元素意味着增加那个变量会提高利润；Dantzig 规则选最负的那个，这里是第一种产品。<bookmark mark='c'/>它能增加多少？比值检验把每个右端项除以该列的元素，取最小者：第一种资源最先用完，在二点五处。<bookmark mark='d'/>转轴就是高斯消元的一步，把这一列变成单位向量。<bookmark mark='e'/>再一次转轴引入第三种产品，现在最下面一行没有负元素了。利润是十三，而松弛变量各列下面的数，一、零、一，是各资源的价格；下一章会说明，它们就是一个证明。"
-  },
-  "dfa8ceae5741": {
-   "scene": "Simplex",
-   "en": "Which edge should the walk take? <bookmark mark='a'/> Dantzig's rule takes the steepest coefficient. <bookmark mark='b'/> At degenerate vertices, where more constraints are tight than the dimension needs, a pivot can change the basis without moving, and with an unlucky rule the method can cycle through the same bases forever. <bookmark mark='c'/> Robert Bland's rule, from 1977, always picks the smallest eligible index, and provably never cycles. <bookmark mark='d'/> Production solvers use smarter rules, like steepest edge, and keep the tableau implicit, as an LU factorization of the basis, updated after each pivot. <bookmark mark='e'/> The simplex method was named one of the ten most important algorithms of the twentieth century. Whether some pivot rule always finishes in polynomially many steps is still unknown, and chapter four shows why that question is subtle.",
-   "zh": "路径应该走哪条边？<bookmark mark='a'/>Dantzig 规则取最陡的系数。<bookmark mark='b'/>在退化顶点处，紧约束比维数所需的更多，一次转轴可能改变了基却没有移动；规则选得不巧，方法会在同样的几个基之间永远循环。<bookmark mark='c'/>Robert Bland 1977年的规则总是选下标最小的可选变量，可以证明它永不循环。<bookmark mark='d'/>工业级求解器使用更聪明的规则，比如最陡边规则，并且不显式保存单纯形表，而是把它表示为基的 LU 分解，每次转轴后更新。<bookmark mark='e'/>单纯形法被评为二十世纪最重要的十个算法之一。是否存在某种转轴规则总能在多项式步内结束，至今仍不知道；第4章会说明为什么这个问题很微妙。"
-  },
-  "8309089df5de": {
-   "scene": "Duality",
-   "en": "Chapter three. Duality.",
-   "zh": "第3章。对偶。"
-  },
-  "656bd4072669": {
-   "scene": "Duality",
-   "en": "How could anyone prove that thirteen is the best possible profit? <bookmark mark='a'/> Multiply each constraint by a non-negative number and add them up. <bookmark mark='b'/> If the combined left side has at least the objective's coefficients, five, four and three, then for any feasible plan the profit is at most the combined right side. <bookmark mark='c'/> Three times the first constraint gives six, nine and three, which covers five, four and three, so the profit is at most fifteen. Five thirds of the third constraint proves thirteen and a third. Five quarters of the second fails: it doesn't cover the coefficients of the second and third products. And one of the first plus one of the third proves exactly thirteen. <bookmark mark='d'/> Finding the best bound is itself a linear program, the dual: minimize five y one plus eleven y two plus eight y three, subject to the covering conditions.",
-   "zh": "怎样才能证明十三就是可能的最大利润？<bookmark mark='a'/>把每个约束乘以一个非负数，再加起来。<bookmark mark='b'/>如果合并后的左边至少达到目标函数的系数五、四、三，那么对任何可行的计划，利润都不超过合并后的右边。<bookmark mark='c'/>第一个约束乘以三得到六、九、三，覆盖了五、四、三，所以利润至多为十五。第三个约束乘以三分之五，证明利润至多十三又三分之一。第二个约束乘以四分之五则不行：它覆盖不了第二、第三种产品的系数。而第一个约束加上第三个约束，恰好证明了十三。<bookmark mark='d'/>寻找最好的界，本身就是一个线性规划，即对偶问题：在覆盖条件下，最小化五 y 一加十一 y 二加八 y 三。"
-  },
-  "3af21bc32ade": {
-   "scene": "Duality",
-   "en": "So every linear program has a twin. <bookmark mark='a'/> The primal maximizes over x; the dual minimizes over y, with the matrix transposed and the roles of b and c exchanged. <bookmark mark='b'/> Weak duality is the argument we just made: every feasible plan earns at most every feasible bound. <bookmark mark='c'/> Strong duality says more: at the optimum they are equal, so the best bound is always tight. John von Neumann saw it in 1947, in a conversation with Dantzig, and Gale, Kuhn and Tucker proved it in 1951. <bookmark mark='d'/> The engine of the proof is Farkas' lemma, from 1902: a system of linear equations either has a non-negative solution, or there is a short certificate that it doesn't, and never both. <bookmark mark='e'/> Geometrically, a point outside a convex cone can always be separated from it by a hyperplane. <bookmark mark='f'/> The practical meaning is that every optimum comes with a proof a sceptic can check with one multiplication of a matrix by a vector.",
-   "zh": "所以每个线性规划都有一个孪生兄弟。<bookmark mark='a'/>原始问题对 x 求最大，对偶问题对 y 求最小，矩阵被转置，b 和 c 的角色互换。<bookmark mark='b'/>弱对偶就是我们刚才的论证：每个可行计划的收益都不超过每个可行的界。<bookmark mark='c'/>强对偶说得更多：在最优处两者相等，所以最好的界总是紧的。John von Neumann 在1947年与 Dantzig 的一次谈话中看出了这一点，Gale、Kuhn 和 Tucker 在1951年证明了它。<bookmark mark='d'/>证明的引擎是1902年的 Farkas 引理：一个线性方程组要么有非负解，要么有一个简短的证书说明它没有，二者绝不同时成立。<bookmark mark='e'/>从几何上看，凸锥之外的点总能用一个超平面与它分开。<bookmark mark='f'/>它的实际意义是：每个最优解都附带一个证明，怀疑者只需做一次矩阵乘向量就能检验。"
-  },
-  "e071048798e0": {
-   "scene": "Duality",
-   "en": "The dual variables mean something. <bookmark mark='a'/> The optimal y i is the shadow price of resource i: how much the best profit would rise with one more unit of it. <bookmark mark='b'/> It is a local price. We added one unit of the first resource and re-solved: the profit rose by a third, not by one, because the extra unit changed which constraints were tight. <bookmark mark='c'/> Complementary slackness ties the two programs together: a resource that is not used up has price zero, and a product whose resources are worth more than its profit is not made. <bookmark mark='d'/> Here the second resource has a unit to spare, so its price is zero, and the second product would cost three more in resources than it earns, so the optimum doesn't make it. <bookmark mark='e'/> Every solver reports these prices, and economists read them as the prices a competitive market would set.",
-   "zh": "对偶变量是有含义的。<bookmark mark='a'/>最优的 y i 是资源 i 的影子价格：多一个单位的这种资源，最大利润会增加多少。<bookmark mark='b'/>这是一个局部的价格。我们给第一种资源加一个单位再重新求解：利润增加了三分之一，而不是一，因为多出的这一单位改变了哪些约束是紧的。<bookmark mark='c'/>互补松弛把两个规划联系在一起：没有用完的资源价格为零；所耗资源的价值高于其利润的产品不会被生产。<bookmark mark='d'/>这里第二种资源还剩一个单位，所以它的价格为零；第二种产品所耗资源的价值比它的利润多三，所以最优解不生产它。<bookmark mark='e'/>每个求解器都会报告这些价格，经济学家把它们解读为竞争市场会定出的价格。"
-  },
-  "64389dab41fd": {
-   "scene": "KleeMinty",
-   "en": "Chapter four. Exponential in theory, fast in practice.",
-   "zh": "第4章。理论上是指数的，实践中却很快。"
-  },
-  "5724fd39d079": {
-   "scene": "KleeMinty",
-   "en": "How many pivots can the simplex method need? <bookmark mark='a'/> In 1972 Victor Klee and George Minty built a bad example: a cube, squashed so that it is no longer square. <bookmark mark='b'/> Each coordinate's bounds depend a little on the coordinate before it, which tilts every face slightly. <bookmark mark='c'/> On this cube, Dantzig's rule visits every vertex before reaching the top, climbing at every step. In n dimensions that is two to the n vertices. <bookmark mark='d'/> Here in three dimensions: seven pivots, through all eight corners.",
-   "zh": "单纯形法最多可能需要多少次转轴？<bookmark mark='a'/>1972年，Victor Klee 和 George Minty 构造了一个坏例子：一个被压扁、不再方正的立方体。<bookmark mark='b'/>每个坐标的上下界都稍稍依赖于前一个坐标，这使得每个面都略微倾斜。<bookmark mark='c'/>在这个立方体上，Dantzig 规则在到达顶端之前会访问每一个顶点，每一步都在上升。在 n 维中，那是二的 n 次方个顶点。<bookmark mark='d'/>这里是三维：七次转轴，经过全部八个顶点。"
-  },
-  "e487af793fb9": {
-   "scene": "KleeMinty",
-   "en": "We ran our simplex on Klee–Minty cubes up to twelve dimensions. <bookmark mark='a'/> Dantzig's rule takes exactly two to the n minus one pivots, every time: four thousand and ninety-five at twelve. <bookmark mark='b'/> Bland's rule does better on this cube but is exponential on its own variants, as David Avis and Chvátal showed. <bookmark mark='c'/> The greatest-improvement rule, which tries every edge and takes the one that gains most, solves this cube in one pivot; Robert Jeroslow built cubes in 1973 that defeat it too. <bookmark mark='d'/> The pattern repeated for decades: almost every pivot rule proposed has acquired its own bad example, the last famous one, Zadeh's rule, in 2011. <bookmark mark='e'/> No pivot rule is known to run in polynomial time.",
-   "zh": "我们在最高十二维的 Klee–Minty 立方体上运行了自己的单纯形法。<bookmark mark='a'/>Dantzig 规则每次都恰好需要二的 n 次方减一次转轴：十二维时是四千零九十五次。<bookmark mark='b'/>Bland 规则在这个立方体上表现好一些，但在它自己的变体上同样是指数的，David Avis 和 Chvátal 证明了这一点。<bookmark mark='c'/>最大改进规则试遍每条边、取增益最大的那条，它一次转轴就解决了这个立方体；Robert Jeroslow 在1973年构造了也能打败它的立方体。<bookmark mark='d'/>这种模式重复了几十年：几乎每一个被提出的转轴规则都有了自己的坏例子，最后一个著名的是2011年的 Zadeh 规则。<bookmark mark='e'/>还没有任何已知的转轴规则能在多项式时间内运行。"
-  },
-  "72b1ca558a46": {
-   "scene": "KleeMinty",
-   "en": "Yet the simplex method is fast on real problems, usually a small multiple of the number of constraints. Why? <bookmark mark='a'/> On random dense programs our simplex took under half as many pivots as there are constraints: thirty-four on average for a hundred and sixty. <bookmark mark='b'/> Daniel Spielman and Shang-Hua Teng explained it in 2001 with smoothed analysis: take any linear program, even the worst, and add a little Gaussian noise to its data. The expected number of pivots is then polynomial in the size and in one over the size of the noise. <bookmark mark='c'/> The bad instances are knife-edge constructions. Shake them and they fall over. On our ten-dimensional cube, tiny noise changes nothing, but noise of ten percent cuts the thousand and twenty-three pivots to about four hundred, and thirty percent to about seventy-five. <bookmark mark='d'/> They won the Gödel Prize for it, and smoothed analysis now explains why other algorithms that are bad in the worst case work in practice.",
-   "zh": "然而单纯形法在实际问题上很快，通常只需要约束数的一个小倍数。为什么？<bookmark mark='a'/>在随机的稠密规划上，我们的单纯形法用的转轴次数还不到约束数的一半：一百六十个约束平均三十四次。<bookmark mark='b'/>Daniel Spielman 和滕尚华在2001年用平滑分析解释了这一点：取任何一个线性规划，哪怕是最坏的，给它的数据加上一点高斯噪声。那么转轴次数的期望就是规模以及噪声大小倒数的多项式。<bookmark mark='c'/>坏实例是刀锋上的构造，摇一摇它们就倒了。在我们的十维立方体上，极小的噪声什么也改变不了，但百分之十的噪声把一千零二十三次转轴减到大约四百次，百分之三十则减到大约七十五次。<bookmark mark='d'/>他们因此获得了哥德尔奖，平滑分析如今还解释了为什么其他一些最坏情况下很差的算法在实践中却管用。"
-  },
-  "5dddb3b52668": {
-   "scene": "PolyTime",
-   "en": "Chapter five. Polynomial time: ellipsoids and the central path.",
-   "zh": "第5章。多项式时间：椭球与中心路径。"
-  },
-  "2e479cb86a5d": {
-   "scene": "PolyTime",
-   "en": "In 1979 Leonid Khachiyan proved that linear programs can be solved in polynomial time, by a method that walks no edges at all. <bookmark mark='a'/> Ask instead whether a polytope is empty. Start with a ball large enough to contain it. <bookmark mark='b'/> Look at the ball's centre. If it is feasible, you're done. If not, some constraint is violated there, and that constraint says the polytope lies entirely on one side of a line through the centre. <bookmark mark='c'/> Replace the half that remains by the smallest ellipsoid that contains it, and repeat. <bookmark mark='d'/> Each step shrinks the volume by a fixed factor, e to the minus one over two n plus two, so after polynomially many steps the ellipsoid is smaller than any non-empty polytope with these numbers could be. <bookmark mark='e'/> Here, nine cuts reach a feasible point. Optimization reduces to feasibility by binary search on the objective, or by adding the objective as one more cut.",
-   "zh": "1979年，Leonid Khachiyan 证明了线性规划可以在多项式时间内求解，用的方法根本不沿边行走。<bookmark mark='a'/>换个问法：多面体是不是空的？从一个大到足以包含它的球开始。<bookmark mark='b'/>看球心。如果它可行，就完成了。如果不可行，那里就有某个约束被违反，而这个约束说明多面体整个位于过球心的某条直线的一侧。<bookmark mark='c'/>用包含剩下那一半的最小椭球代替它，然后重复。<bookmark mark='d'/>每一步都把体积缩小一个固定的倍数，e 的负二 n 加二分之一次方，所以经过多项式步之后，椭球会比用这些数据构成的任何非空多面体都小。<bookmark mark='e'/>这里，九次切割就到达了一个可行点。优化问题可以通过对目标值二分查找，或者把目标函数作为又一个切割加进去，归结为可行性问题。"
-  },
-  "024affb3df18": {
-   "scene": "PolyTime",
-   "en": "How many steps? <bookmark mark='a'/> As the feasible region gets thinner, the number of cuts grows with the logarithm of one over its width: in two dimensions, about seventeen more for every factor of ten, on average. <bookmark mark='b'/> In general the bound is n squared times the number of bits in the input, polynomial, and the New York Times reported it on its front page. <bookmark mark='c'/> In practice the method is far slower than simplex, and nobody solves linear programs with it. <bookmark mark='d'/> Its legacy is a theorem. Martin Grötschel, László Lovász and Alexander Schrijver showed that the method never needs the constraints written down, only a way to find a violated one. So a linear program with exponentially many constraints is still solvable in polynomial time, if violated constraints can be found efficiently. Separation is as easy as optimization.",
-   "zh": "需要多少步？<bookmark mark='a'/>可行域越薄，切割次数就随它宽度倒数的对数增长：在二维中，宽度每缩小十倍，平均多大约十七次。<bookmark mark='b'/>一般地，界是 n 的平方乘以输入的位数，是多项式的，《纽约时报》把它登上了头版。<bookmark mark='c'/>在实践中，这个方法比单纯形法慢得多，没有人用它求解线性规划。<bookmark mark='d'/>它留下的遗产是一个定理。Martin Grötschel、László Lovász 和 Alexander Schrijver 证明，这个方法从不需要把约束写出来，只需要一种找出被违反约束的办法。所以，即使一个线性规划有指数多个约束，只要能高效地找到被违反的约束，它仍然可以在多项式时间内求解。分离和优化一样容易。"
-  },
-  "2c98e3d55569": {
-   "scene": "PolyTime",
-   "en": "The method that made polynomial time practical came in 1984 from Narendra Karmarkar at Bell Labs. <bookmark mark='a'/> Instead of walking along the boundary, stay strictly inside. <bookmark mark='b'/> Add to the objective a barrier, the sum of the logarithms of the slacks, which rises to infinity at every wall, and weight the true objective by a parameter t. <bookmark mark='c'/> For each t there is one best point, and as t grows these points trace a smooth curve, the central path, from the middle of the polytope to the optimal vertex. <bookmark mark='d'/> Follow it: increase t a little, take a few steps of Newton's method to get back to the path, and repeat. The distance from optimal is at most the number of constraints divided by t. <bookmark mark='e'/> The theory promises the square root of m times the log of one over the accuracy; in practice it takes twenty to eighty Newton steps whatever the size. <bookmark mark='f'/> It is Newton's method from the AI series, and every serious solver runs it alongside simplex.",
-   "zh": "让多项式时间变得实用的方法，1984年来自贝尔实验室的 Narendra Karmarkar。<bookmark mark='a'/>不沿着边界走，而是严格地待在内部。<bookmark mark='b'/>给目标函数加上一个障碍项，即各松弛量的对数之和，它在每面墙上都趋于无穷，并用参数 t 给真正的目标函数加权。<bookmark mark='c'/>对每个 t 都有一个最优点；随着 t 增大，这些点描出一条光滑的曲线，即中心路径，从多面体的中间通向最优顶点。<bookmark mark='d'/>沿着它走：把 t 增大一点，用几步牛顿法回到路径上，然后重复。与最优值的差距至多是约束数除以 t。<bookmark mark='e'/>理论上保证的是 m 的平方根乘以精度倒数的对数；实践中，无论规模多大，都只需要二十到八十步牛顿迭代。<bookmark mark='f'/>这正是 AI 系列中的牛顿法，每个严肃的求解器都把它和单纯形法一起运行。"
-  },
-  "227583189520": {
-   "scene": "Unimodular",
-   "en": "Chapter six. When the vertices are integers.",
-   "zh": "第6章。当顶点都是整数时。"
-  },
-  "757faf05ea5c": {
-   "scene": "Unimodular",
-   "en": "Most integer programs are hard, but some are linear programs in disguise. <bookmark mark='a'/> Take bipartite matching from Part 18. Give each edge a variable between zero and one, and require that the edges at each vertex sum to at most one. <bookmark mark='b'/> The constraint matrix has a column for each edge, with a one at each of its ends: the incidence matrix. <bookmark mark='c'/> For a bipartite graph it is totally unimodular: every square submatrix has determinant zero, one or minus one. We checked every one of this matrix's square submatrices. <bookmark mark='d'/> Then by Cramer's rule every vertex of the polytope has integer coordinates, because each coordinate is a ratio of determinants and the denominator is plus or minus one. <bookmark mark='e'/> So the simplex method, which ends at a vertex, solves the integer problem for free. On a hundred random weighted bipartite graphs, not one optimal vertex had a fractional coordinate.",
-   "zh": "大多数整数规划都很难，但有些其实是伪装起来的线性规划。<bookmark mark='a'/>以第18部分的二分图匹配为例。给每条边一个介于零和一之间的变量，并要求每个顶点处各边之和至多为一。<bookmark mark='b'/>约束矩阵每条边一列，在它的两个端点处各有一个一：这就是关联矩阵。<bookmark mark='c'/>对二分图，它是全单模的：每个方子矩阵的行列式都是零、一或负一。我们检查了这个矩阵的每一个方子矩阵。<bookmark mark='d'/>于是由克莱姆法则，多面体的每个顶点都有整数坐标，因为每个坐标都是行列式之比，而分母是正负一。<bookmark mark='e'/>所以终止于顶点的单纯形法，免费地解决了整数问题。在一百个随机赋权的二分图上，没有一个最优顶点有分数坐标。"
-  },
-  "ccb3a91228ad": {
-   "scene": "Unimodular",
-   "en": "Outside bipartite graphs it fails, and the smallest failure is a triangle. <bookmark mark='a'/> Its incidence matrix has determinant two. <bookmark mark='b'/> The linear program happily puts one half on each edge, for a total of one and a half, though any matching in a triangle has just one edge. <bookmark mark='c'/> On a hundred random weighted graphs that were not bipartite, a quarter of the optimal vertices were fractional. <bookmark mark='d'/> Jack Edmonds repaired it in 1965: add a constraint for every odd set of vertices, saying it contains at most half as many edges, rounded down, and the polytope is integral again. <bookmark mark='e'/> There are exponentially many such constraints, but a violated one can be found quickly, so by chapter five's theorem the program is still solvable in polynomial time.",
-   "zh": "离开二分图它就失效了，最小的反例是一个三角形。<bookmark mark='a'/>它的关联矩阵行列式为二。<bookmark mark='b'/>线性规划乐于在每条边上放二分之一，总共一点五，尽管三角形中任何匹配都只有一条边。<bookmark mark='c'/>在一百个随机赋权的非二分图上，四分之一的最优顶点是分数的。<bookmark mark='d'/>Jack Edmonds 在1965年修补了它：为每个奇数大小的顶点集添一个约束，说它内部至多含有其一半、向下取整那么多条边，多面体就又是整的了。<bookmark mark='e'/>这样的约束有指数多个，但被违反的约束可以很快找到，所以由第5章的定理，这个规划仍然可以在多项式时间内求解。"
-  },
-  "e36c5fa179d2": {
-   "scene": "Unimodular",
-   "en": "The same miracle explains other results we already know. <bookmark mark='a'/> Maximum flow is a linear program whose matrix, a directed incidence matrix, is totally unimodular. <bookmark mark='b'/> Its dual is minimum cut, so Part 18's max-flow min-cut theorem is linear programming duality in disguise. <bookmark mark='c'/> And integer capacities always admit an integer maximum flow, as Ford and Fulkerson's augmenting paths found. <bookmark mark='d'/> Interval matrices, which arise in scheduling, and network matrices are totally unimodular too. <bookmark mark='e'/> Paul Seymour proved in 1980 that every totally unimodular matrix is assembled from network matrices and two small exceptions, so whether a matrix has the property can be tested in polynomial time.",
-   "zh": "同样的奇迹解释了我们已经知道的其他结果。<bookmark mark='a'/>最大流是一个线性规划，它的矩阵是有向关联矩阵，是全单模的。<bookmark mark='b'/>它的对偶是最小割，所以第18部分的最大流最小割定理，就是伪装起来的线性规划对偶。<bookmark mark='c'/>而整数容量总有整数的最大流，正如 Ford 和 Fulkerson 的增广路径所找到的那样。<bookmark mark='d'/>调度中出现的区间矩阵，以及网络矩阵，也都是全单模的。<bookmark mark='e'/>Paul Seymour 在1980年证明，每个全单模矩阵都是由网络矩阵和两个小的例外拼装而成的，所以一个矩阵是否具有这种性质，可以在多项式时间内检验。"
-  },
-  "5db65b689db5": {
-   "scene": "IntegerPrograms",
-   "en": "Chapter seven. Integer programming.",
-   "zh": "第7章。整数规划。"
-  },
-  "42757ddb059a": {
-   "scene": "IntegerPrograms",
-   "en": "Insist that the answer be made of whole things, and linear programming becomes NP-hard. The standard attack keeps linear programming as a guide. <bookmark mark='a'/> Here is a knapsack: eight items with values and weights, and a capacity of eighty. Relax it: let items be taken fractionally. That linear program is easy, greedy by value per unit of weight, and its optimum bounds what any whole choice can reach. <bookmark mark='b'/> The root's bound is a hundred and eighty-four, with one item taken in part. Branch on that item: one subproblem takes it, the other leaves it out, and each has its own bound. <bookmark mark='c'/> Any node whose bound cannot beat the best whole answer found so far is pruned without being explored. <bookmark mark='d'/> Here the best answer, a hundred and seventy-four, is found and proved optimal after twenty-four nodes, instead of the two hundred and fifty-six possible choices. Ailsa Land and Alison Doig invented the method in 1960, at the London School of Economics.",
-   "zh": "坚持答案必须由整个的东西组成，线性规划就变成了 NP 难的。标准的攻法仍以线性规划为向导。<bookmark mark='a'/>这是一个背包问题：八件物品，各有价值和重量，容量为八十。把它松弛：允许物品按分数取。这个线性规划很容易，按单位重量的价值贪心即可，它的最优值给出任何整数选择所能达到的上界。<bookmark mark='b'/>根节点的界是一百八十四，有一件物品只取了一部分。在这件物品上分支：一个子问题取它，另一个不取，各有自己的界。<bookmark mark='c'/>任何一个界不能超过迄今最好整数解的节点，都不经探索就被剪掉。<bookmark mark='d'/>这里，最好的答案一百七十四在二十四个节点之后被找到并被证明最优，而不是检查全部二百五十六种可能的选择。Ailsa Land 和 Alison Doig 于1960年在伦敦政治经济学院发明了这个方法。"
-  },
-  "84e831006491": {
-   "scene": "IntegerPrograms",
-   "en": "How well does it scale? <bookmark mark='a'/> On random knapsacks of up to a hundred and sixty items, where there are two to the hundred and sixty choices, branch and bound needed a few hundred nodes on average, because the linear bound was within a percent or two of the truth. Bad instances exist, but the bound does most of the work. <bookmark mark='b'/> Ralph Gomory showed in 1958 how to cut instead of branch: derive a new inequality that every whole solution satisfies but the fractional optimum violates, add it, and solve again. <bookmark mark='c'/> Modern solvers do both, branch and cut, with layers of presolving and heuristics. <bookmark mark='d'/> Robert Bixby measured their progress: between 1991 and 2007 the algorithms alone became about thirty thousand times faster, on top of the hardware. <bookmark mark='e'/> They schedule airline crews, run power grids, match kidney donors and place components on chips.",
-   "zh": "它的扩展性如何？<bookmark mark='a'/>在最多一百六十件物品、有二的一百六十次方种选择的随机背包上，分支定界平均只需要几百个节点，因为线性界与真值相差不过百分之一二。坏实例是存在的，但界承担了大部分工作。<bookmark mark='b'/>Ralph Gomory 在1958年展示了如何用切割代替分支：推导出一个新的不等式，每个整数解都满足它，而分数最优解违反它；把它加进去，再求解。<bookmark mark='c'/>现代求解器两者都做，即分支切割，再加上层层的预处理和启发式方法。<bookmark mark='d'/>Robert Bixby 度量过它们的进步：1991年到2007年间，仅算法本身就快了大约三万倍，这还没算硬件的提升。<bookmark mark='e'/>它们为航空公司排机组，调度电网，匹配肾脏捐献者，在芯片上布置元件。"
-  },
-  "06c6f358fcea": {
-   "scene": "IntegerPrograms",
-   "en": "Knapsack also shows a different kind of compromise. <bookmark mark='a'/> Part 19 solved it exactly by dynamic programming, in time proportional to the capacity, which can be astronomically large. <bookmark mark='b'/> Oscar Ibarra and Chul Kim rounded every value down to a multiple of epsilon times the largest value, divided by n, and solved the rounded problem exactly, by dynamic programming over values. <bookmark mark='c'/> Each item loses less than one rounding unit, so the whole answer loses at most epsilon times the best value, and the table has n squared over epsilon entries. Any accuracy you like, in time polynomial in n and one over epsilon: a fully polynomial-time approximation scheme. <bookmark mark='d'/> On a hard, strongly correlated instance, even epsilon of nine tenths, which promises only a tenth of the optimum, found ninety-nine point three percent; from a tenth down, it found the exact optimum, and the work grew only in proportion to one over epsilon.",
-   "zh": "背包问题还展示了另一种妥协。<bookmark mark='a'/>第19部分用动态规划精确地解决了它，时间与容量成正比，而容量可以大得惊人。<bookmark mark='b'/>Oscar Ibarra 和 Chul Kim 把每个价值向下取整到 epsilon 乘以最大价值再除以 n 的倍数，然后对价值做动态规划，精确地求解取整后的问题。<bookmark mark='c'/>每件物品损失不到一个取整单位，所以整个答案至多损失 epsilon 乘以最优值，而表格有 n 的平方除以 epsilon 个元素。任意你想要的精度，时间是 n 和 epsilon 倒数的多项式：一个完全多项式时间近似方案。<bookmark mark='d'/>在一个困难的强相关实例上，即使 epsilon 取十分之九，只保证最优值的十分之一，它也找到了百分之九十九点三；从十分之一往下，它找到的就是精确最优解，而工作量只与 epsilon 的倒数成正比地增长。"
-  },
-  "d53efa1ae46a": {
-   "scene": "Approximation",
-   "en": "Chapter eight. Approximation: covers.",
-   "zh": "第8章。近似：覆盖问题。"
-  },
-  "00b31aec4812": {
-   "scene": "Approximation",
-   "en": "When the exact answer is out of reach, ask for an answer provably close to it. <bookmark mark='a'/> A vertex cover is a set of vertices touching every edge, and finding the smallest one is NP-hard. <bookmark mark='b'/> Here is a two-line algorithm. Take any edge whose ends are both uncovered and add both ends. Repeat until every edge is covered. <bookmark mark='c'/> The edges it took share no vertex, and any cover at all must contain at least one end of each of them, so the optimum is at least half of what we took. That is a factor two guarantee, proved without knowing the optimum. <bookmark mark='d'/> Here it takes eight vertices, against an optimum of six. <bookmark mark='e'/> The second way uses the linear program: give each vertex a fraction, require each edge's two fractions to sum to at least one, and minimize the total. Then keep every vertex whose fraction is at least a half. <bookmark mark='f'/> The relaxation's vertices only take the values zero, a half and one. Here it puts a half everywhere, four and a half in all, a lower bound on the optimum, and rounding keeps all nine. Again at most twice the linear program, so at most twice the optimum.",
-   "zh": "当精确答案遥不可及时，就要一个可证明与它接近的答案。<bookmark mark='a'/>顶点覆盖是一组触及每条边的顶点，找出最小的那组是 NP 难的。<bookmark mark='b'/>这里有一个两行的算法。取任意一条两端都未被覆盖的边，把两端都加进来。重复，直到每条边都被覆盖。<bookmark mark='c'/>它取的这些边两两没有公共顶点，而任何覆盖都必须至少包含其中每条边的一端，所以最优解至少是我们所取的一半。这就是一个二倍的保证，而且不需要知道最优解就证明了。<bookmark mark='d'/>这里它取了八个顶点，而最优是六个。<bookmark mark='e'/>第二种办法用线性规划：给每个顶点一个分数，要求每条边两端的分数之和至少为一，并最小化总和。然后保留分数至少为二分之一的每个顶点。<bookmark mark='f'/>松弛问题的顶点只取零、二分之一和一这几个值。这里它处处取二分之一，总共四点五，这是最优解的一个下界，而取整保留了全部九个顶点。同样至多是线性规划值的两倍，所以至多是最优解的两倍。"
-  },
-  "a4f7d3033d34": {
-   "scene": "Approximation",
-   "en": "We ran both on a hundred random graphs with sixteen vertices, against the exact optimum found by brute force. <bookmark mark='a'/> Both stay comfortably inside their guarantee of two, though both are tight on other graphs. <bookmark mark='b'/> Nobody knows how to do better than two minus a vanishing amount, and Subhash Khot and Oded Regev showed that if the Unique Games Conjecture is true, nobody can. <bookmark mark='c'/> The linear program cannot help further either: on a complete graph its value is n over two, while the optimum is n minus one, an integrality gap of two.",
-   "zh": "我们在一百个十六个顶点的随机图上运行了这两种算法，并与暴力搜索得到的精确最优解比较。<bookmark mark='a'/>两者都稳稳地落在二倍的保证之内，尽管在别的图上两者都是紧的。<bookmark mark='b'/>没有人知道如何做得比二减去一个趋于零的量更好；Subhash Khot 和 Oded Regev 证明了，如果唯一博弈猜想成立，就没有人能做到。<bookmark mark='c'/>线性规划也帮不上更多的忙：在完全图上，它的值是 n 的一半，而最优解是 n 减一，整性间隙为二。"
-  },
-  "40e809b8364e": {
-   "scene": "Approximation",
-   "en": "Set cover is the general form: cover a universe of elements with as few of the given sets as possible. <bookmark mark='a'/> The greedy algorithm repeatedly takes the set that covers the most elements not yet covered. <bookmark mark='b'/> David Johnson and László Lovász proved in the 1970s that greedy uses at most the n-th harmonic number times the optimum, about the natural log of n. <bookmark mark='c'/> The proof spreads the cost of each chosen set over the elements it newly covers, and shows that the elements of any one optimal set pay at most H n in total. <bookmark mark='d'/> The bound is nearly tight. In this trap two rows cover everything, but greedy is lured by columns of sizes doubling down, and takes seven sets where two suffice. <bookmark mark='e'/> On random instances it was within six percent on average. And Uriel Feige proved that doing better than the logarithm is hard, so greedy, the first thing anyone would try, is essentially the best possible.",
-   "zh": "集合覆盖是一般形式：用尽可能少的给定集合覆盖一个元素全集。<bookmark mark='a'/>贪心算法反复选取覆盖最多尚未覆盖元素的那个集合。<bookmark mark='b'/>David Johnson 和 László Lovász 在1970年代证明，贪心所用的集合数至多是第 n 个调和数乘以最优值，大约是 n 的自然对数。<bookmark mark='c'/>证明把每个选中集合的代价分摊到它新覆盖的元素上，并说明任何一个最优集合中的元素总共至多支付 H n。<bookmark mark='d'/>这个界几乎是紧的。在这个陷阱里，两行就覆盖了一切，但贪心被大小逐次减半的各列引诱，用了七个集合，而两个就够了。<bookmark mark='e'/>在随机实例上，它平均只差百分之六。Uriel Feige 证明了，做得比对数更好是困难的，所以任何人都会先试的贪心，本质上已经是最好的了。"
-  },
-  "da3f619787c6": {
-   "scene": "Tsp",
-   "en": "Chapter nine. The travelling salesman.",
-   "zh": "第9章。旅行商问题。"
-  },
-  "caac6abb9ca6": {
-   "scene": "Tsp",
-   "en": "The travelling salesman wants the shortest tour through all the cities. <bookmark mark='a'/> In general no approximation factor at all is possible: give the missing roads of a graph enormous lengths, and any algorithm that was within a factor c would tell you whether the graph has a Hamiltonian cycle. <bookmark mark='b'/> So assume real distances, which obey the triangle inequality: going straight is never longer than a detour. <bookmark mark='c'/> Then here is a factor two. The minimum spanning tree is no longer than the best tour, because removing one edge of the tour leaves a spanning tree. Walk around the tree, using every edge twice, and skip cities you have already visited. <bookmark mark='d'/> Nicos Christofides, and independently Anatoliy Serdyukov, did better in 1976. The tree's odd-degree vertices can be paired up by a matching at most half the optimum. Add it, and every degree is even, so there is an Euler tour; shortcut it. <bookmark mark='e'/> At most three halves of the optimum. <bookmark mark='f'/> And here is the optimum itself, from Held and Karp's dynamic program.",
-   "zh": "旅行商想要一条经过所有城市的最短回路。<bookmark mark='a'/>一般情况下，任何近似因子都不可能：给图中不存在的道路赋上巨大的长度，那么任何能做到 c 倍以内的算法，都会告诉你这个图有没有哈密顿回路。<bookmark mark='b'/>所以假定真实的距离，它们满足三角不等式：直走永远不比绕路长。<bookmark mark='c'/>这样就有了一个二倍的算法。最小生成树不比最优回路长，因为从回路中去掉一条边就剩下一棵生成树。绕着树走一圈，每条边走两次，跳过已经访问过的城市。<bookmark mark='d'/>Nicos Christofides，以及独立地 Anatoliy Serdyukov，在1976年做得更好。树中奇数度的顶点可以用一个至多为最优值一半的匹配配成对。把它加进来，每个顶点的度都成了偶数，于是有一条欧拉回路；再走捷径。<bookmark mark='e'/>至多是最优值的二分之三。<bookmark mark='f'/>而这就是最优回路本身，来自 Held 和 Karp 的动态规划。"
-  },
-  "06081123b29f": {
-   "scene": "Tsp",
-   "en": "How do they do in general? We ran them on forty random instances of twelve cities, against the exact optimum. <bookmark mark='a'/> The double tree averaged twenty-one percent above optimal, and Christofides seven percent. But the best performer has no guarantee at all: nearest neighbour followed by two-opt, which keeps finding two edges whose swap shortens the tour, uncrossing them, until no swap helps. It averaged just over one percent above optimal. <bookmark mark='b'/> That gap between guarantee and practice runs through this whole chapter. <bookmark mark='c'/> For forty-five years nobody improved on three halves, until Anna Karlin, Nathan Klein and Shayan Oveis Gharan beat it in 2021 by ten to the minus thirty-six, a tiny number and a large conceptual step. <bookmark mark='d'/> For cities in the plane, Sanjeev Arora and Joseph Mitchell found an approximation scheme: within one plus epsilon, for any epsilon you choose.",
-   "zh": "一般情况下它们表现如何？我们在四十个十二城市的随机实例上运行了它们，与精确最优解比较。<bookmark mark='a'/>双树平均比最优高百分之二十一，Christofides 高百分之七。但表现最好的方法根本没有保证：最近邻之后再做二交换，不断寻找交换后能缩短回路的两条边，把它们解开，直到没有交换能改进为止。它平均只比最优高百分之一多一点。<bookmark mark='b'/>保证与实践之间的这种差距贯穿了整整这一章。<bookmark mark='c'/>四十五年里没有人改进过二分之三，直到2021年，Anna Karlin、Nathan Klein 和 Shayan Oveis Gharan 把它改进了十的负三十六次方，一个极小的数，却是一大步概念上的进展。<bookmark mark='d'/>对于平面上的城市，Sanjeev Arora 和 Joseph Mitchell 找到了一个近似方案：对你选的任何 epsilon，都能做到一加 epsilon 倍以内。"
-  },
-  "92e6d4113daf": {
-   "scene": "Tsp",
-   "en": "And at scale? <bookmark mark='a'/> The exact dynamic program for fifteen cities already takes a few tenths of a second in Python, and every extra city doubles it. <bookmark mark='b'/> For three hundred random cities, nearest neighbour builds a tour of length sixteen point two, and two-opt shortens it to thirteen point nine in a tenth of a second. <bookmark mark='c'/> The optimum for random points is close to zero point seven one two four times the square root of n, a theorem from 1959, which predicts about twelve point three here. Two-opt is twelve percent above that estimate, which ignores the boundary of the square, so its true gap is somewhat smaller. <bookmark mark='d'/> Lin–Kernighan moves, and Keld Helsgaun's implementation of them, get within a fraction of a percent. <bookmark mark='e'/> And the Concorde program, built on linear programming cuts like Gomory's, has proved optimal tours through eighty-five thousand nine hundred cities, the points of a circuit board. <bookmark mark='f'/> Its uses run from delivery vans to telescopes and genome maps.",
-   "zh": "规模大了又如何？<bookmark mark='a'/>十五个城市的精确动态规划在 Python 中就已经要零点几秒，每多一个城市时间就翻倍。<bookmark mark='b'/>对三百个随机城市，最近邻构造出长度十六点二的回路，二交换在十分之一秒内把它缩短到十三点九。<bookmark mark='c'/>随机点的最优回路长度接近零点七一二四乘以 n 的平方根，这是1959年的一个定理，它在这里预测大约十二点三。二交换比这个估计高百分之十二，而这个估计忽略了正方形的边界，所以真实的差距要小一些。<bookmark mark='d'/>Lin–Kernighan 移动，以及 Keld Helsgaun 对它们的实现，能做到相差不到百分之一。<bookmark mark='e'/>而建立在 Gomory 那样的线性规划割平面之上的 Concorde 程序，已经证明了经过八万五千九百个城市的回路是最优的，这些城市是一块电路板上的点。<bookmark mark='f'/>它的用途从送货车一直延伸到望远镜和基因组图谱。"
-  },
-  "c77714ca2855": {
-   "scene": "MaxCut",
-   "en": "Chapter ten. A random hyperplane: MAX-CUT.",
-   "zh": "第10章。随机超平面：最大割。"
-  },
-  "21d39140fa13": {
-   "scene": "MaxCut",
-   "en": "Here is one of the most elegant algorithms in this course. <bookmark mark='a'/> MAX-CUT asks for a split of a graph's vertices into two sides that cuts as many edges as possible. It is NP-hard. <bookmark mark='b'/> Write each vertex's side as plus or minus one; an edge is cut when the product of its ends is minus one. <bookmark mark='c'/> Michel Goemans and David Williamson relaxed the signs to unit vectors, and rewarded each edge for how far apart its two vectors point. <bookmark mark='d'/> That is a semidefinite program, a cousin of linear programming that can be solved efficiently. The vectors of adjacent vertices spread apart over the sphere. <bookmark mark='e'/> For this graph of twelve vertices the relaxation is worth eighteen point three, a little above the true maximum of eighteen. <bookmark mark='f'/> Now cut the sphere with a random plane through its centre, and put the vertices on each side of the plane on each side of the cut.",
-   "zh": "这是本课程中最优美的算法之一。<bookmark mark='a'/>最大割问题要求把图的顶点分成两边，使被切断的边尽可能多。它是 NP 难的。<bookmark mark='b'/>把每个顶点所在的一边写成正一或负一；一条边被切断，当且仅当它两端的乘积是负一。<bookmark mark='c'/>Michel Goemans 和 David Williamson 把这些符号松弛为单位向量，并按每条边两端向量分开的程度给它奖励。<bookmark mark='d'/>这是一个半定规划，是线性规划的近亲，可以高效求解。相邻顶点的向量在球面上彼此散开。<bookmark mark='e'/>对这个十二个顶点的图，松弛问题的值是十八点三，比真正的最大值十八略高。<bookmark mark='f'/>现在用一个过球心的随机平面切开球面，把平面两侧的顶点分别放到割的两边。"
-  },
-  "932734a01806": {
-   "scene": "MaxCut",
-   "en": "Why is that good? <bookmark mark='a'/> Two vectors at angle theta are separated by a random plane with probability theta over pi: the plane's direction has to fall in the wedge between them. <bookmark mark='b'/> Compare that with what the relaxation credited the edge, one minus cos theta over two. Their ratio is never less than about zero point eight seven eight. <bookmark mark='c'/> The worst case is an angle of about a hundred and thirty-four degrees. <bookmark mark='d'/> So edge by edge, the expected cut is at least zero point eight seven eight times the relaxation, which is at least the optimum. <bookmark mark='e'/> Before 1995 the best known guarantee was one half, from putting every vertex on a random side.",
-   "zh": "为什么这样做好？<bookmark mark='a'/>夹角为 theta 的两个向量被随机平面分开的概率是 theta 除以 pi：平面的方向必须落在它们之间的楔形里。<bookmark mark='b'/>把这与松弛问题给这条边的奖励，即一减 cos theta 再除以二，相比较。它们的比值永远不小于大约零点八七八。<bookmark mark='c'/>最坏的情况是大约一百三十四度的夹角。<bookmark mark='d'/>所以逐条边来看，割的期望至少是松弛值的零点八七八倍，而松弛值至少是最优值。<bookmark mark='e'/>1995年之前，已知最好的保证是二分之一，来自把每个顶点随机放到一边。"
-  },
-  "e7a8767f675a": {
-   "scene": "MaxCut",
-   "en": "We tried it on thirty random graphs, against the true maximum found by checking every split. <bookmark mark='a'/> Random sides cut about two thirds of the maximum. One random hyperplane averaged ninety-six percent, and its worst graph ninety-four, comfortably above the guarantee; the best of two hundred hyperplanes found the optimum on every graph. We solved the semidefinite program the simple way, by gradient steps on unit vectors. <bookmark mark='b'/> And the constant is no accident. Subhash Khot and colleagues showed in 2004 that if the Unique Games Conjecture holds, nobody can beat zero point eight seven eight in polynomial time. <bookmark mark='c'/> Without the conjecture, Johan Håstad proved that beating sixteen seventeenths is NP-hard. <bookmark mark='d'/> Relax to geometry, then round at random: the template now runs through the whole field.",
-   "zh": "我们在三十个随机图上试了它，与检查每种划分得到的真正最大值比较。<bookmark mark='a'/>随机分边大约切到最大值的三分之二。一个随机超平面平均达到百分之九十六，最差的图也有百分之九十四，远在保证之上；两百个超平面中最好的那个在每个图上都找到了最优解。我们用简单的办法求解半定规划：在单位向量上做梯度步。<bookmark mark='b'/>而这个常数并非偶然。Subhash Khot 和同事们在2004年证明，如果唯一博弈猜想成立，就没有人能在多项式时间内超过零点八七八。<bookmark mark='c'/>不依赖这个猜想，Johan Håstad 证明了超过十七分之十六是 NP 难的。<bookmark mark='d'/>先松弛为几何，再随机取整：这个模板如今贯穿了整个领域。"
-  },
-  "d0fcdf4b4c93": {
-   "scene": "Online",
-   "en": "Chapter eleven. Online: deciding without the future.",
-   "zh": "第11章。在线：看不见未来的决策。"
-  },
-  "9615f067f6c6": {
-   "scene": "Online",
-   "en": "So far every algorithm saw its whole input. Many real decisions are made before the future arrives. <bookmark mark='a'/> Skis cost ten to buy, or one a day to rent, and you don't know how many days of snow there will be. <bookmark mark='b'/> Judge a strategy by its competitive ratio: in the worst case, how much more it pays than someone who knew the future, who would rent for short seasons and buy at once for long ones. <bookmark mark='c'/> Rent for nine days, then buy. If the season is short you paid what the clairvoyant paid; if it is long you paid nineteen instead of ten. Never more than twice. <bookmark mark='d'/> No deterministic rule does better, because an adversary who knows your rule can end the season the day after you buy. <bookmark mark='e'/> But if you buy on a random day, with the right probabilities, the adversary cannot aim, and the expected ratio falls to e over e minus one, about one point five eight. Our simulation of that rule paid fifteen point four for long seasons, against ten.",
-   "zh": "到目前为止，每个算法都看得到完整的输入。而许多真实的决定，是在未来到来之前做出的。<bookmark mark='a'/>雪板买一副要十，租一天要一，而你不知道会下几天雪。<bookmark mark='b'/>用竞争比来评判一个策略：在最坏情况下，它比一个知道未来的人多付多少；那个人在雪季短时会一直租，在雪季长时会立刻买。<bookmark mark='c'/>先租九天，再买。如果雪季短，你付的和先知一样；如果雪季长，你付了十九而不是十。永远不超过两倍。<bookmark mark='d'/>没有确定性规则能做得更好，因为知道你规则的对手可以让雪季恰好在你买下的那天结束。<bookmark mark='e'/>但如果你以合适的概率在随机的一天买，对手就无从瞄准，期望比值降到 e 除以 e 减一，大约一点五八。我们对这条规则的模拟，在长雪季里付了十五点四，而先知付十。"
-  },
-  "5de247bbd437": {
-   "scene": "Online",
-   "en": "Caches face the same problem every nanosecond: when the cache is full and a new line arrives, which old one should go? <bookmark mark='a'/> We replayed the Job's memory trace from Part 9, a hundred and fifty-five thousand accesses to ninety-two distinct lines, through caches of eight to ninety-six lines, under several policies. <bookmark mark='b'/> Laszlo Belady showed in 1966 that the optimal policy evicts the line whose next use is furthest in the future. It is perfect, and impossible online, but it measures everyone else. <bookmark mark='c'/> Least recently used stays within a factor of about one and a fifth to seven of the clairvoyant here, and FIFO is close behind. <bookmark mark='d'/> Once the cache is large, the randomized policies win: the marking algorithm, which evicts a random page not used since the current phase began, and even plain random eviction. The Job sweeps through its tables in loops, and loops are exactly where LRU is weakest, as the next example shows.",
-   "zh": "缓存每一纳秒都面临同样的问题：缓存满了，又来了一个新的行，哪个旧的该走？<bookmark mark='a'/>我们把第9部分 Job 的内存访问轨迹，十五万五千次访问、九十二个不同的行，在八到九十六行的缓存上，按几种策略重放了一遍。<bookmark mark='b'/>Laszlo Belady 在1966年证明，最优策略是淘汰下一次使用离现在最远的那一行。它是完美的，却无法在线实现，但它可以用来衡量其他所有策略。<bookmark mark='c'/>最近最少使用在这里与先知相差大约一点二倍到七倍，先进先出紧随其后。<bookmark mark='d'/>一旦缓存变大，随机化策略就胜出了：标记算法随机淘汰一个自当前阶段开始以来未被使用的页，甚至纯粹的随机淘汰也胜过 LRU。Job 在循环中扫过它的表，而循环恰恰是 LRU 最薄弱的地方，下一个例子会说明这一点。"
-  },
-  "cfce6bb5308e": {
-   "scene": "Online",
-   "en": "How bad can least recently used be? <bookmark mark='a'/> Use a cache of four pages and request five pages in a cycle. The page LRU evicts is always the very next one requested, so every request is a fault. <bookmark mark='b'/> The clairvoyant evicts the page needed furthest away and faults about once every four requests. <bookmark mark='c'/> Daniel Sleator and Robert Tarjan founded competitive analysis with this example in 1985: LRU and FIFO are k-competitive, and the same adversary forces every deterministic policy to fault on every request, so none does better. Randomized marking cannot be trapped like this and pays a logarithmic factor, two H k. <bookmark mark='d'/> Real programs are kinder than adversaries, which is why approximations of LRU run every cache from Part 9 to Part 32.",
-   "zh": "最近最少使用能有多糟？<bookmark mark='a'/>用一个四页的缓存，循环请求五个页。LRU 淘汰的页总是下一个就要请求的那一页，所以每次请求都缺页。<bookmark mark='b'/>先知淘汰最远才需要的那一页，大约每四次请求才缺页一次。<bookmark mark='c'/>Daniel Sleator 和 Robert Tarjan 在1985年用这个例子创立了竞争分析：LRU 和 FIFO 是 k-竞争的，而同样的对手能迫使每个确定性策略在每次请求时都缺页，所以没有哪个做得更好。随机化的标记算法不会这样落入陷阱，只付出一个对数因子，二倍的 H k。<bookmark mark='d'/>真实的程序比对手仁慈，这就是为什么从第9部分到第32部分，每一个缓存都运行着 LRU 的近似。"
-  },
-  "484205053fe6": {
-   "scene": "Weights",
-   "en": "Chapter twelve. Multiplicative weights.",
-   "zh": "第12章。乘性权重。"
-  },
-  "9c7f2a6d73bc": {
-   "scene": "Weights",
-   "en": "One algorithm keeps turning up in this part's last chapters, and in much of computer science. <bookmark mark='a'/> Each day, ten experts each predict, and you must act on their advice before seeing who was right. Keep a weight for each expert and follow one at random, in proportion to the weights. <bookmark mark='b'/> After each day, multiply the weight of every expert who was wrong by a factor a little below one. <bookmark mark='c'/> Here one expert is wrong forty-five percent of the time and the others half the time. Within a few hundred rounds the weights find it. <bookmark mark='d'/> Measure regret: how much worse you did than the single best expert, chosen with hindsight. <bookmark mark='e'/> For any sequence of losses whatsoever, even one chosen by an adversary, the regret is at most the square root of T over two times log n. <bookmark mark='f'/> Our measured regret stays under that bound, and the regret per round shrinks towards zero: in the long run you do as well as the best expert, without knowing which one it is.",
-   "zh": "有一个算法在这一部分的最后几章里反复出现，在计算机科学的许多地方也是如此。<bookmark mark='a'/>每天有十位专家各自做出预测，你必须在知道谁对之前就按他们的建议行动。给每位专家一个权重，按权重的比例随机跟随一位。<bookmark mark='b'/>每天结束后，把每位说错了的专家的权重乘以一个略小于一的因子。<bookmark mark='c'/>这里有一位专家百分之四十五的时间出错，其他人百分之五十。几百轮之内，权重就找到了它。<bookmark mark='d'/>用遗憾来衡量：你比事后挑出的那位最好的专家差多少。<bookmark mark='e'/>对任何损失序列，哪怕是对手挑选的，遗憾都至多是 T 除以二乘以 log n 的平方根。<bookmark mark='f'/>我们测得的遗憾始终在这个界之下，每轮的遗憾趋于零：从长远看，你做得和最好的专家一样好，却不需要知道是哪一位。"
-  },
-  "5fc7d89507c7": {
-   "scene": "Weights",
-   "en": "The proof is four lines, and it is worth seeing once. <bookmark mark='a'/> Watch the total weight. It starts at n, one per expert. <bookmark mark='b'/> At the end it is at least the weight of the best expert alone, which has been multiplied by e to the minus eta once for each of its losses. <bookmark mark='c'/> And in each round, when we follow an expert in proportion to the weights, the total weight shrinks by a factor of about e to the minus eta times our expected loss that round, with a small correction from Hoeffding's inequality. <bookmark mark='d'/> Chain the rounds together, and the two facts squeeze: our loss cannot be much more than the best expert's, or the weight would have fallen below the best expert's own. <bookmark mark='e'/> Take logarithms, choose eta to balance the two terms, and the regret is the square root of T over two times log n. <bookmark mark='f'/> It is a potential argument, like the amortized analyses of Parts 16 and 17, and the same pattern proves boosting and the minimax theorem.",
-   "zh": "证明只有四行，值得看一次。<bookmark mark='a'/>盯住总权重。它从 n 开始，每位专家一。<bookmark mark='b'/>到最后，它至少是最好的那位专家单独的权重，而那个权重每出一次错就被乘一次 e 的负 eta 次方。<bookmark mark='c'/>而在每一轮中，当我们按权重比例跟随专家时，总权重缩小的因子大约是 e 的负 eta 乘以这一轮我们的期望损失次方，外加 Hoeffding 不等式给出的一个小修正。<bookmark mark='d'/>把各轮串起来，两个事实就形成夹击：我们的损失不可能比最好专家的多太多，否则总权重就会跌到最好专家自己的权重之下。<bookmark mark='e'/>取对数，选择 eta 使两项平衡，遗憾就是 T 除以二乘以 log n 的平方根。<bookmark mark='f'/>这是一个势函数论证，就像第16和第17部分的均摊分析，同样的模式还证明了提升法和极小极大定理。"
-  },
-  "7e7a914352b9": {
-   "scene": "Weights",
-   "en": "The same few lines prove theorems. <bookmark mark='a'/> In a zero-sum game, let one player run multiplicative weights over its strategies while the other always plays its best response. <bookmark mark='b'/> The two players' average strategies converge to the value of the game, here zero point four eight four six, as the gap between what each can guarantee closes. That is von Neumann's minimax theorem, proved by running an algorithm, and it is linear programming duality again. <bookmark mark='c'/> Put the weights on training examples instead of experts and you get boosting, which the AI series built. <bookmark mark='d'/> Put them on the constraints of a linear program and you get fast approximate solvers for flows and packing problems. <bookmark mark='e'/> Sanjeev Arora, Elad Hazan and Satyen Kale surveyed it under the title: a meta-algorithm and its applications.",
-   "zh": "同样的几行代码能证明定理。<bookmark mark='a'/>在一个零和博弈中，让一方对自己的策略运行乘性权重，另一方总是给出最佳应对。<bookmark mark='b'/>双方的平均策略收敛到博弈的值，这里是零点四八四六，双方各自能保证的值之间的差距随之闭合。这就是 von Neumann 的极小极大定理，用运行一个算法来证明，而它又一次是线性规划的对偶。<bookmark mark='c'/>把权重放在训练样本上而不是专家上，就得到了提升法，AI 系列构造过它。<bookmark mark='d'/>把权重放在线性规划的约束上，就得到了求解流和装箱类问题的快速近似算法。<bookmark mark='e'/>Sanjeev Arora、Elad Hazan 和 Satyen Kale 以这样的标题综述了它：一个元算法及其应用。"
-  },
-  "c68989750cec": {
-   "scene": "Convex",
-   "en": "Chapter thirteen. Convex optimization in a page.",
-   "zh": "第13章。一页纸讲凸优化。"
-  },
-  "d01149e5faaf": {
-   "scene": "Convex",
-   "en": "Linear programs are the simplest convex problems, and the interior-point method of chapter five already used the general tool. <bookmark mark='a'/> Here is a smooth convex function of two variables, a log-sum-exp from Boyd and Vandenberghe's textbook, stretched so its valley is narrow. <bookmark mark='b'/> Gradient descent steps downhill, choosing each step's length by backtracking. <bookmark mark='c'/> In a narrow valley the downhill direction points mostly across the valley, not along it, so the path zigzags: forty steps to reach ten digits. <bookmark mark='d'/> Newton's method fits a quadratic to the function at the current point, using second derivatives, and jumps to that quadratic's minimum. <bookmark mark='e'/> Four steps. Near the optimum the number of correct digits doubles with every step. <bookmark mark='f'/> But each Newton step solves a linear system in the Hessian, which is hopeless with a billion variables, and that is why the gradient methods of the AI series train neural networks.",
-   "zh": "线性规划是最简单的凸问题，而第5章的内点法已经用到了一般的工具。<bookmark mark='a'/>这是一个两变量的光滑凸函数，来自 Boyd 和 Vandenberghe 教科书中的对数和指数函数，被拉伸得山谷很窄。<bookmark mark='b'/>梯度下降沿下坡方向前进，用回溯法选择每一步的步长。<bookmark mark='c'/>在狭窄的山谷里，下坡方向主要横穿山谷，而不是沿着山谷，所以路径呈之字形：要四十步才达到十位精度。<bookmark mark='d'/>牛顿法利用二阶导数，在当前点用一个二次函数拟合原函数，然后跳到这个二次函数的最小点。<bookmark mark='e'/>四步。在最优点附近，正确的位数每一步都翻倍。<bookmark mark='f'/>但每一步牛顿法都要解一个以海森矩阵为系数的线性方程组，有十亿个变量时这毫无希望，这就是为什么 AI 系列中训练神经网络用的是梯度方法。"
-  },
-  "7c95be777e7d": {
-   "scene": "Convex",
-   "en": "Convex optimization fits on a page. <bookmark mark='a'/> Minimize a convex function over a convex set, and every local minimum is a global one, with a dual certificate to prove it. <bookmark mark='b'/> At the optimum the Karush–Kuhn–Tucker conditions hold: the gradient of the objective is balanced by a non-negative combination of the gradients of the tight constraints. <bookmark mark='c'/> Those multipliers are the shadow prices of chapter three, generalized. <bookmark mark='d'/> There is a ladder of problem classes: linear programs, convex quadratic programs, second-order cone programs, and semidefinite programs like chapter ten's. <bookmark mark='e'/> Yurii Nesterov and Arkadi Nemirovski showed that interior-point methods solve all of them to any accuracy in polynomial time. <bookmark mark='f'/> Without convexity, local minima are everywhere and the general problem is NP-hard, though neural networks are trained anyway, which is one of the AI series' puzzles. <bookmark mark='g'/> As Tyrrell Rockafellar put it, the great watershed in optimization is not between linear and non-linear, but between convex and non-convex.",
-   "zh": "凸优化可以写在一页纸上。<bookmark mark='a'/>在凸集上最小化凸函数，每个局部最小值都是全局最小值，并有一个对偶证书来证明它。<bookmark mark='b'/>在最优点，Karush–Kuhn–Tucker 条件成立：目标函数的梯度被紧约束梯度的一个非负组合所平衡。<bookmark mark='c'/>这些乘子就是第3章的影子价格，推广了而已。<bookmark mark='d'/>问题类形成一个阶梯：线性规划、凸二次规划、二阶锥规划，以及像第10章那样的半定规划。<bookmark mark='e'/>Yurii Nesterov 和 Arkadi Nemirovski 证明，内点法能在多项式时间内把它们全都求解到任意精度。<bookmark mark='f'/>没有凸性，局部最小值就到处都是，一般问题是 NP 难的；尽管如此，神经网络照样被训练出来了，这是 AI 系列的谜题之一。<bookmark mark='g'/>正如 Tyrrell Rockafellar 所说，优化中的分水岭不在线性与非线性之间，而在凸与非凸之间。"
-  },
-  "5f9b2e7360d4": {
-   "scene": "Frontier",
-   "en": "Chapter fourteen. Frontier: faster linear programs, the Hirsch question, and the unique games conjecture.",
-   "zh": "第14章。前沿：更快的线性规划、Hirsch 问题，以及唯一博弈猜想。"
-  },
-  "56bb1caec024": {
-   "scene": "Frontier",
-   "en": "The first front is speed. <bookmark mark='a'/> Karmarkar's method needed about n to the three and a half operations for a linear program with n variables. Pravin Vaidya brought it to n to the two and a half, with fewer steps and the observation that consecutive Newton steps barely change the matrix, so its inverse can be updated instead of recomputed. <bookmark mark='b'/> In 2019 Michael Cohen, Yin Tat Lee and Zhao Song pushed the idea to its natural end: n to the omega, where omega, about two point three seven, is the exponent of matrix multiplication. Jan van den Brand made it deterministic a year later. Solving a linear program now costs about as much as multiplying two matrices, and the floor, just reading the input, is n squared. <bookmark mark='c'/> The same machinery produced the biggest algorithms result of the decade. In 2022, Li Chen, Rasmus Kyng, Yang Liu, Richard Peng, Maximilian Probst Gutenberg and Sushant Sachdeva solved maximum flow in almost linear time, m to the one plus a vanishing exponent. <bookmark mark='d'/> It is an interior-point method on Part 18's flow program, where each step changes the flow so little that clever dynamic data structures keep it up to date.",
-   "zh": "第一条战线是速度。<bookmark mark='a'/>对 n 个变量的线性规划，Karmarkar 的方法大约需要 n 的三点五次方次运算。Pravin Vaidya 把它降到 n 的二点五次方：步数更少，并且注意到相继的牛顿步几乎不改变矩阵，所以它的逆可以更新而不必重新计算。<bookmark mark='b'/>2019年，Michael Cohen、Yin Tat Lee 和 Zhao Song 把这个思路推到了自然的终点：n 的 omega 次方，其中 omega 约为二点三七，是矩阵乘法的指数。一年后，Jan van den Brand 把它变成了确定性的。如今求解一个线性规划，代价大约和两个矩阵相乘一样，而下限，仅仅读入输入，是 n 的平方。<bookmark mark='c'/>同样的工具催生了这十年最重要的算法成果。2022年，Li Chen、Rasmus Kyng、Yang Liu、Richard Peng、Maximilian Probst Gutenberg 和 Sushant Sachdeva 在几乎线性的时间内解决了最大流，m 的一加一个趋于零的指数次方。<bookmark mark='d'/>它是作用在第18部分流规划上的内点法，每一步对流的改变都非常小，巧妙的动态数据结构就能让它保持最新。"
-  },
-  "c06f99df1d8d": {
-   "scene": "Frontier",
-   "en": "The second front is the simplex method's own question. Could there be a pivot rule that always takes polynomially many steps? <bookmark mark='a'/> Then every polytope would have to have a short path between any two vertices. Here is one with twenty-four random facets and forty-four vertices; its two farthest vertices are eight edges apart. <bookmark mark='b'/> In 1957 Warren Hirsch conjectured that the distance is never more than the number of facets minus the dimension. <bookmark mark='c'/> On random polytopes it holds easily: the diameter grows roughly like the square root of the number of facets, far below the bound. <bookmark mark='d'/> But in 2010 Francisco Santos built a counterexample, a polytope in forty-three dimensions with eighty-six facets whose diameter is at least forty-four. <bookmark mark='e'/> The best upper bound known is not even polynomial: Gil Kalai and Daniel Kleitman's n to the log d plus two. <bookmark mark='f'/> Whether the diameter is bounded by some polynomial, the polynomial Hirsch conjecture, is open, and until it is settled nobody can hope to prove a simplex rule polynomial.",
-   "zh": "第二条战线是单纯形法自己的问题。会不会有一个转轴规则总在多项式步内结束？<bookmark mark='a'/>那样的话，每个多面体的任意两个顶点之间都必须有一条短路径。这是一个有二十四个随机面、四十四个顶点的多面体；它相距最远的两个顶点相隔八条边。<bookmark mark='b'/>1957年，Warren Hirsch 猜想这个距离永远不超过面数减去维数。<bookmark mark='c'/>在随机多面体上，它轻松成立：直径大致随面数的平方根增长，远低于这个界。<bookmark mark='d'/>但在2010年，Francisco Santos 构造了一个反例：一个四十三维、八十六个面的多面体，直径至少为四十四。<bookmark mark='e'/>已知最好的上界甚至不是多项式的：Gil Kalai 和 Daniel Kleitman 的 n 的 log d 加二次方。<bookmark mark='f'/>直径是否以某个多项式为界，即多项式 Hirsch 猜想，仍未解决；在它解决之前，没有人能指望证明某个单纯形规则是多项式的。"
-  },
-  "e812bf90da70": {
-   "scene": "Frontier",
-   "en": "The third front is the other side of approximation: proving that nothing does better. <bookmark mark='a'/> Here are this part's problems, with the best known algorithm and the thresholds below which approximation is known to be hard. <bookmark mark='b'/> The tool is the PCP theorem of 1992: any proof can be rewritten so that a verifier checking a few random bits catches any error with good probability. <bookmark mark='c'/> It turns approximation into decision: getting closer than a threshold would solve an NP-complete problem. Johan Håstad showed that for MAX-3SAT the trivial seven-eighths is exactly right. Part 27 builds the theorem. <bookmark mark='d'/> For the other problems there are gaps, and in 2002 Subhash Khot proposed the unique games conjecture. If it is true, vertex cover cannot beat two and MAX-CUT cannot beat Goemans and Williamson's zero point eight seven eight, so both algorithms in this part are optimal. In 2018 Khot, Dor Minzer and Muli Safra proved a weaker cousin, the two-to-two theorem, which already makes vertex cover hard below the square root of two. <bookmark mark='e'/> And Prasad Raghavendra showed that if the conjecture holds, one semidefinite program is the best possible algorithm for every constraint satisfaction problem at once.",
-   "zh": "第三条战线是近似的另一面：证明没有什么能做得更好。<bookmark mark='a'/>这是这一部分的问题，列出了已知最好的算法，以及低于它就已知很难近似的阈值。<bookmark mark='b'/>工具是1992年的 PCP 定理：任何证明都可以改写成这样，只检查随机几位的验证者，就能以很大的概率抓住任何错误。<bookmark mark='c'/>它把近似变成了判定：近似得比某个阈值更好，就能解决一个 NP 完全问题。Johan Håstad 证明，对 MAX-3SAT，平凡的八分之七恰恰就是对的。第27部分会构造这个定理。<bookmark mark='d'/>对其他问题还有差距；2002年，Subhash Khot 提出了唯一博弈猜想。如果它成立，顶点覆盖就无法超过二，最大割无法超过 Goemans 和 Williamson 的零点八七八，所以这一部分的这两个算法都是最优的。2018年，Khot、Dor Minzer 和 Muli Safra 证明了一个较弱的近亲，二对二定理，它已经让顶点覆盖在二的平方根以下变得困难。<bookmark mark='e'/>而 Prasad Raghavendra 证明，如果这个猜想成立，一个半定规划就同时是每一个约束满足问题的最佳可能算法。"
-  },
-  "99c16ff65ade": {
-   "scene": "Frontier",
-   "en": "Here is where things stand. <bookmark mark='a'/> Is there a strongly polynomial algorithm for linear programming, one whose number of steps depends only on the numbers of variables and constraints, not on how many bits the coefficients have? Max flow has one; general linear programming does not, and Steve Smale listed the question among his problems for this century. <bookmark mark='b'/> Is the diameter of every polytope bounded by a polynomial? <bookmark mark='c'/> And is the unique games conjecture true? <bookmark mark='d'/> This part's research problem takes the second.",
-   "zh": "现状如下。<bookmark mark='a'/>线性规划有没有强多项式算法，即步数只依赖于变量数和约束数、而不依赖于系数有多少位？最大流有一个；一般的线性规划没有，Steve Smale 把这个问题列入了他为本世纪提出的问题之中。<bookmark mark='b'/>每个多面体的直径都以一个多项式为界吗？<bookmark mark='c'/>唯一博弈猜想是真的吗？<bookmark mark='d'/>这一部分的研究题选的是第二个。"
-  },
-  "5968804cc221": {
-   "scene": "Outro",
-   "en": "What we built in this part. Linear programs, and the simplex method walking the edges of a polytope. Duality, which turns every optimum into a certificate a sceptic can check. The Klee–Minty cube, which makes the walk exponential, and smoothed analysis, which explains why it never is in practice. The ellipsoid and the central path. Total unimodularity, which makes some integer programs free, and branch and bound for the rest. Approximation with proofs: covers, tours, knapsacks, and a random hyperplane through a sphere of vectors. And decisions without the future: ski rental, paging, and multiplicative weights.",
-   "zh": "这一部分我们构造了什么。线性规划，以及沿着多面体的边行走的单纯形法。对偶，它把每个最优解变成一份怀疑者可以检验的证书。让这条路径变成指数长的 Klee–Minty 立方体，以及解释它在实践中为何从不如此的平滑分析。椭球与中心路径。让某些整数规划免费可解的全单模性，以及处理其余问题的分支定界。有证明的近似：覆盖、回路、背包，以及穿过一个向量球面的随机超平面。还有看不见未来的决策：租雪板、页面置换和乘性权重。"
-  },
-  "e39dca7529d5": {
-   "scene": "Outro",
-   "en": "Where this comes back. Part 27 builds the PCP theorem behind this part's hardness results, and the unique games conjecture. Part 32's kernel replaces pages with CLOCK, a cheap approximation of least recently used. Part 45's cloud packs virtual machines onto servers, an integer program solved by heuristics every second, and Part 48 balances load online. Part 52 explains why linear programming solvers fight floating point. And Part 57 turns multiplicative weights into a theory of learning. The AI series used this part's tools throughout: gradient descent and Newton's method, boosting, and the convex losses that make training tractable.",
-   "zh": "它们会在哪里再出现。第27部分构造这一部分困难性结果背后的 PCP 定理，以及唯一博弈猜想。第32部分的内核用 CLOCK 置换页面，它是最近最少使用的一种廉价近似。第45部分的云把虚拟机装到服务器上，这是一个每秒都在用启发式方法求解的整数规划；第48部分在线地做负载均衡。第52部分解释为什么线性规划求解器要与浮点数搏斗。第57部分则把乘性权重变成一套学习理论。AI 系列自始至终都在使用这一部分的工具：梯度下降和牛顿法、提升法，以及让训练变得可行的凸损失函数。"
-  },
-  "737cb8841c2f": {
-   "scene": "Outro",
-   "en": "In practice. HiGHS, Gurobi, CPLEX and OR-Tools run simplex, barrier and branch and cut on problems with millions of variables. Airlines schedule crews, carriers route vehicles, and supply chains plan with integer programs. Power grids and kidney exchanges are cleared by optimization, with dual prices. Every cache makes online decisions, and every model is trained by the descendants of gradient descent.",
-   "zh": "在实践中。HiGHS、Gurobi、CPLEX 和 OR-Tools 在有数百万变量的问题上运行单纯形法、障碍法和分支切割。航空公司排班机组，承运商规划车辆路线，供应链用整数规划做计划。电网和肾脏交换由优化来出清，并给出对偶价格。每个缓存都在做在线决策，而每个模型都由梯度下降的后代训练出来。"
-  },
-  "43a95b058ce3": {
-   "scene": "Outro",
-   "en": "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build problem: the simplex method in the Pebble language, with exact fractions, run on the emulator. The last, marked with a star, is a research problem: its answer is not known, and the notes say where to start.",
-   "zh": "六道习题，完整解答在这一部分的笔记里。可以在任何一道上暂停。第五道是构造题：用 Pebble 语言、以精确分数实现单纯形法，在模拟器上运行。最后一道标有星号，是研究题：它的答案尚不知道，笔记里说明了从哪里入手。"
-  },
-  "87038a891033": {
-   "scene": "Outro",
-   "en": "Next time, algorithms in practice. Big-O hides constants, and in production the constants and the machine decide. The everyday tools of real code: prefix sums, Fenwick and segment trees, two pointers, monotonic stacks and bit tricks. Then algorithm engineering, where a textbook hash table or binary search becomes many times faster by respecting the caches, branch predictors and vector units of Act Two, and how to measure that honestly. Part 24, Algorithms in Practice.",
-   "zh": "下一次，实践中的算法。大 O 隐藏了常数，而在生产环境里，决定一切的是常数和机器。真实代码中的日常工具：前缀和、Fenwick 树和线段树、双指针、单调栈和位运算技巧。然后是算法工程：一个教科书式的哈希表或二分查找，只要尊重第二幕讲过的缓存、分支预测器和向量单元，就能快上许多倍，以及如何诚实地测量这一点。第24部分，实践中的算法。"
-  },
-  "9bd24692775d": {
-   "scene": "Outro",
-   "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
-   "zh": "这一部分所依据的书和论文都在屏幕上，也在笔记里。感谢观看。"
+  "title": "计算机科学，从零搭建 · 第23部分：优化",
+  "chapters": {
+    "Hook": "多面体上的最优点",
+    "LinearPrograms": "1. 线性规划",
+    "Simplex": "2. 单纯形法",
+    "Duality": "3. 对偶",
+    "KleeMinty": "4. 理论上是指数的，实践中却很快",
+    "PolyTime": "5. 多项式时间：椭球与中心路径",
+    "Unimodular": "6. 当顶点都是整数时",
+    "IntegerPrograms": "7. 整数规划",
+    "Approximation": "8. 近似：覆盖问题",
+    "Tsp": "9. 旅行商问题",
+    "MaxCut": "10. 随机超平面：最大割",
+    "Online": "11. 在线：看不见未来的决策",
+    "Weights": "12. 乘性权重",
+    "Convex": "13. 一页纸讲凸优化",
+    "Frontier": "14. 前沿：更快的线性规划、Hirsch 问题与唯一博弈猜想",
+    "Outro": "回顾、习题，以及它们会在哪里再出现"
+  },
+  "lines": {
+    "de5da2eec81b": {
+      "scene": "Hook",
+      "en": "In 1945 the economist George Stigler asked what it costs, at the least, to feed a person for a year. He had seventy-seven foods and nine nutrients, and a person needs enough of each. <bookmark mark='a'/> By trial and insight he found a diet costing thirty-nine dollars and ninety-three cents a year, at 1939 prices, mostly wheat flour, cabbage and evaporated milk. He wrote that there was no direct way to find the true minimum. <bookmark mark='b'/> Two years later George Dantzig invented one. Jack Laderman's team worked his simplex method by hand on desk calculators, <bookmark mark='c'/> roughly a hundred and twenty person-days of arithmetic, and found thirty-nine sixty-nine. And it came with something Stigler could not have: a proof that no diet is cheaper. <bookmark mark='d'/> That proof, which this part calls duality, is the idea that lasts.",
+      "zh": "1945年，经济学家 George Stigler 问：养活一个人一年，最少要花多少钱？他有七十七种食物和九种营养素，一个人每种营养都要摄入足够。<bookmark mark='a'/>凭着试算和洞察，他找到一份每年三十九美元九十三美分的食谱，按1939年的价格计，主要是小麦粉、卷心菜和炼乳。他写道，没有直接的办法找到真正的最小值。<bookmark mark='b'/>两年后，George Dantzig 发明了这样的办法。Jack Laderman 的团队用台式计算器，手工执行他的单纯形法，<bookmark mark='c'/>大约花了一百二十个人日的算术，得到三十九美元六十九美分。而且它带来了 Stigler 不可能有的东西：一个证明，证明没有更便宜的食谱。<bookmark mark='d'/>这个证明，这一部分称之为对偶，才是经久不衰的思想。"
+    },
+    "a6f1da4358d4": {
+      "scene": "Hook",
+      "en": "This part is about choosing the best, and about the three kinds of answer we can get. <bookmark mark='a'/> For linear programs, the best point of a polytope, there are fast algorithms and exact answers that come with a proof. <bookmark mark='b'/> For problems with integer choices, like the travelling salesman, the exact answer is NP-hard; we settle for algorithms with proven guarantees, and heuristics that do better than the guarantees promise. <bookmark mark='c'/> And for decisions made without seeing the future, like which page to evict from a cache, we measure ourselves against a clairvoyant who sees everything, and prove we are never too far behind.",
+      "zh": "这一部分讲的是如何选出最好的，以及我们能得到的三种答案。<bookmark mark='a'/>对线性规划，也就是多面体上的最优点，有快速的算法，以及附带证明的精确答案。<bookmark mark='b'/>对带整数选择的问题，比如旅行商问题，求精确答案是 NP 难的；我们退而求其次，用有保证的算法，以及比保证承诺的做得更好的启发式方法。<bookmark mark='c'/>而对看不见未来就要做出的决定，比如缓存该淘汰哪一页，我们拿自己和一位什么都看得见的先知比较，并证明自己永远不会落后太多。"
+    },
+    "b042c746cdc1": {
+      "scene": "Hook",
+      "en": "Part 23 of Computer Science, Built: Optimization. <bookmark mark='a'/> In this part: linear programs, the simplex method and duality; why simplex is exponential in theory and fast in practice, and the polynomial methods that came after it; integer programs and when they are easy; approximation algorithms for covers, the travelling salesman, knapsack and MAX-CUT; online algorithms and multiplicative weights; and convex optimization in a page.",
+      "zh": "计算机科学，从零搭建，第23部分：优化。<bookmark mark='a'/>这一部分包括：线性规划、单纯形法与对偶；为什么单纯形法在理论上是指数的、在实践中却很快，以及在它之后出现的多项式方法；整数规划，以及它何时是容易的；覆盖问题、旅行商问题、背包问题和最大割的近似算法；在线算法与乘性权重；以及一页纸讲完的凸优化。"
+    },
+    "5812d59cb410": {
+      "scene": "LinearPrograms",
+      "en": "Chapter one. Linear programs.",
+      "zh": "第1章。线性规划。"
+    },
+    "9b31812b1383": {
+      "scene": "LinearPrograms",
+      "en": "A linear program asks for the largest value of a linear function, subject to linear inequalities. <bookmark mark='a'/> Here is a small one, the first example in Vašek Chvátal's textbook: three products with profits five, four and three, made from three scarce resources, with the amounts each product needs on the left and the supply on the right. <bookmark mark='b'/> In matrix form: maximize c transpose x subject to A x at most b, with x non-negative. <bookmark mark='c'/> Leonid Kantorovich formulated such problems in 1939 to plan a plywood trust in Leningrad. <bookmark mark='d'/> George Dantzig met them in 1947, scheduling for the US Air Force, when programming still meant planning. <bookmark mark='e'/> Kantorovich and Tjalling Koopmans shared the 1975 Nobel prize in economics for this work; Dantzig, famously, did not.",
+      "zh": "线性规划要求在一组线性不等式的约束下，求一个线性函数的最大值。<bookmark mark='a'/>这是一个小例子，Vašek Chvátal 教科书中的第一个例子：三种产品，利润分别是五、四、三，用三种稀缺资源制成；左边是每种产品所需的资源量，右边是供应量。<bookmark mark='b'/>写成矩阵形式：在 A x 不超过 b、x 非负的条件下，最大化 c 转置 x。<bookmark mark='c'/>Leonid Kantorovich 在1939年为列宁格勒的一家胶合板托拉斯制定计划时，提出了这类问题。<bookmark mark='d'/>George Dantzig 在1947年为美国空军做调度时遇到了它们，那时“规划”这个词还只是“计划”的意思。<bookmark mark='e'/>Kantorovich 和 Tjalling Koopmans 因这项工作分享了1975年的诺贝尔经济学奖；众所周知，Dantzig 没有得奖。"
+    },
+    "1781c0236cb2": {
+      "scene": "LinearPrograms",
+      "en": "Most of the work of linear programming is modelling: deciding what the variables are. <bookmark mark='a'/> Here is the kind of problem Kantorovich, and independently Frank Hitchcock in 1941, studied. Two plants make thirty and forty units; three stores need twenty, twenty-five and twenty-five; each road has a cost per unit shipped. <bookmark mark='b'/> Use one variable per road, the amount sent along it. <bookmark mark='c'/> Minimize the total cost, subject to each plant's capacity and each store's demand. <bookmark mark='d'/> Serving every store from its cheapest plant would cost three hundred and fifty-five dollars, but it asks plant B for fifty units, and B makes forty. <bookmark mark='e'/> The optimum costs three hundred and sixty-five: store three is split between the two plants, and ten units travel the more expensive road. <bookmark mark='f'/> A handful of tricks bring far more problems into this form. An equation is two inequalities. A variable that may be negative is the difference of two that may not. To minimize the largest of several linear costs, add a variable t, require each cost to be at most t, and minimize t. Absolute values work the same way. That is why so much of operations research is linear programming.",
+      "zh": "线性规划的大部分工作在于建模：决定变量是什么。<bookmark mark='a'/>这是 Kantorovich，以及1941年独立地由 Frank Hitchcock 研究过的那类问题。两家工厂分别生产三十和四十个单位；三家商店分别需要二十、二十五和二十五；每条道路有每单位的运费。<bookmark mark='b'/>每条道路一个变量：沿它运送的数量。<bookmark mark='c'/>在每家工厂的产能和每家商店的需求约束下，最小化总费用。<bookmark mark='d'/>让每家商店都从最便宜的工厂进货，要花三百五十五美元，但这要求工厂 B 供应五十个单位，而 B 只能生产四十个。<bookmark mark='e'/>最优解花费三百六十五美元：商店三由两家工厂分担，有十个单位走了更贵的那条路。<bookmark mark='f'/>几个小技巧能把多得多的问题化成这种形式。一个等式就是两个不等式。可以为负的变量，是两个非负变量之差。要最小化几个线性费用中最大的那个，就添一个变量 t，要求每个费用都不超过 t，再最小化 t。绝对值也是同样的做法。这就是为什么运筹学中有那么多内容就是线性规划。"
+    },
+    "2283cdd03a32": {
+      "scene": "LinearPrograms",
+      "en": "Each linear inequality cuts space in half; their intersection is a convex polyhedron, which may be unbounded. <bookmark mark='a'/> Our particular three-product region is bounded, so it is a polytope, with the coordinate planes among its walls. <bookmark mark='b'/> Exact rational plane intersections give its six vertices. <bookmark mark='c'/> Points with the same profit lie on parallel objective planes. <bookmark mark='d'/> Push a plane towards greater profit until it last touches our region: two units of product one and one of product three, earning thirteen. <bookmark mark='e'/> A nonempty bounded polytope has a vertex attaining the maximum of every linear objective. This gives finitely many candidates, but their number can grow exponentially with the dimension.",
+      "zh": "每个线性不等式切出一个半空间；它们的交集是凸多面体，可能无界。<bookmark mark='a'/>本例三种产品的可行域有界，所以是有界多面体，坐标平面也构成它的边界。<bookmark mark='b'/>精确有理数平面求交得到六个顶点。<bookmark mark='c'/>利润相同的点位于一族平行的目标平面上。<bookmark mark='d'/>把平面向利润增加的方向推，最后接触本例区域的位置是第一种产品两单位、第三种一单位，利润十三。<bookmark mark='e'/>在非空有界多面体上，每个线性目标都至少有一个取到最大值的顶点。因此候选点有限，但高维中顶点数仍可指数增长。"
+    },
+    "d15f0b76d684": {
+      "scene": "Simplex",
+      "en": "Chapter two. The simplex method.",
+      "zh": "第2章。单纯形法。"
+    },
+    "fde0ed51ec80": {
+      "scene": "Simplex",
+      "en": "Dantzig's simplex method walks from vertex to vertex. <bookmark mark='a'/> Our implementation begins at the origin, a feasible slack basis because every right-hand side is nonnegative. Finding an initial feasible basis for arbitrary data needs a separate Phase One, which this teaching code does not implement. <bookmark mark='b'/> Inspect the reduced costs for a feasible improving pivot. <bookmark mark='c'/> Move until a constraint blocks further travel. Here the objective goes from zero to twelve and a half, then thirteen. <bookmark mark='d'/> Nonnegative reduced costs certify global optimality for this maximization tableau. Degenerate bases can require zero-length pivots; merely seeing no immediate positive movement is insufficient. <bookmark mark='e'/> This example reaches an exact primal and dual certificate after two pivots.",
+      "zh": "Dantzig 的单纯形法沿顶点移动。<bookmark mark='a'/>本实现从原点开始，因为右端项都非负，松弛变量构成可行基。一般数据需要另行执行第一阶段来寻找可行基，本教学代码没有实现它。<bookmark mark='b'/>检查约化成本，选择可行的改进转轴。<bookmark mark='c'/>沿方向前进，直到约束阻挡；本例目标从零到十二点五，再到十三。<bookmark mark='d'/>对此最大化表，约化成本全非负才是全局最优证书。退化基可能需要零步长转轴，眼前无法正向移动并不足以证明最优。<bookmark mark='e'/>本例两次转轴后得到精确的原始与对偶证书。"
+    },
+    "f52dc89fda6b": {
+      "scene": "Simplex",
+      "en": "In algebra, the walk is a sequence of pivots. <bookmark mark='a'/> Add a slack variable to each inequality, the unused amount of each resource, and the constraints become equations. The slacks themselves form the first basis: the origin, where all resources are unused. <bookmark mark='b'/> The bottom row holds the objective. A negative entry means increasing that variable raises the profit; Dantzig's rule picks the most negative, here the first product. <bookmark mark='c'/> How far can it rise? The ratio test divides each right-hand side by the column's entry and takes the smallest: the first resource runs out first, at two and a half. <bookmark mark='d'/> The pivot is one step of Gaussian elimination, making that column a unit vector. <bookmark mark='e'/> One more pivot brings in the third product, and now the bottom row has no negative entries. The profit is thirteen, and the numbers under the slack columns, one, zero and one, are the prices of the resources, which the next chapter shows are a proof.",
+      "zh": "在代数上，这条路径是一连串的转轴。<bookmark mark='a'/>给每个不等式添一个松弛变量，即每种资源未用掉的数量，约束就变成了等式。松弛变量本身构成第一个基：原点，所有资源都未使用。<bookmark mark='b'/>最下面一行是目标函数。负的元素意味着增加那个变量会提高利润；Dantzig 规则选最负的那个，这里是第一种产品。<bookmark mark='c'/>它能增加多少？比值检验把每个右端项除以该列的元素，取最小者：第一种资源最先用完，在二点五处。<bookmark mark='d'/>转轴就是高斯消元的一步，把这一列变成单位向量。<bookmark mark='e'/>再一次转轴引入第三种产品，现在最下面一行没有负元素了。利润是十三，而松弛变量各列下面的数，一、零、一，是各资源的价格；下一章会说明，它们就是一个证明。"
+    },
+    "aeb2fa710d85": {
+      "scene": "Simplex",
+      "en": "Here is an executed stopping-status example. Maximize x between zero and one. <bookmark mark='a'/> With a zero pivot budget our code returns the feasible origin and reports iteration limit, not optimal. The incumbent earns zero, while the true optimum is one. <bookmark mark='b'/> Its zero dual multiplier does not cover the objective coefficient one. A feasible primal answer alone cannot certify optimality. <bookmark mark='c'/> Allow one pivot. The returned primal x and dual y both equal one; both are feasible, and their equal objectives certify the optimum. The budget status and the certificate now agree.",
+      "zh": "这是实际执行的停止状态例子：在零到一之间最大化 x。<bookmark mark='a'/>转轴预算为零时，代码返回可行原点并报告达到迭代上限，而非最优。当前值为零，真正最优值是一。<bookmark mark='b'/>返回的零对偶乘子覆盖不了目标系数一，只有可行原始解不能认证最优。<bookmark mark='c'/>允许一次转轴后，原始 x 和对偶 y 都为一，双方可行且目标相等，认证最优；预算状态与证书终于一致。"
+    },
+    "1905c7a2b44c": {
+      "scene": "Simplex",
+      "en": "Which pivot should the walk take? <bookmark mark='a'/> Dantzig chooses the largest improving reduced-cost coefficient; this is not a normalized geometric slope. <bookmark mark='b'/> At a degenerate vertex a pivot can change the basis without moving, and unsuitable choices can cycle. <bookmark mark='c'/> Bland's smallest eligible index rule prevents cycling in exact arithmetic. <bookmark mark='d'/> Our full tableau updates all m times n plus m entries at each pivot. Production revised simplex maintains basis factorizations. Its normalized steepest-edge rules differ from our selector called greatest improvement, which tests the whole gain of each candidate pivot. <bookmark mark='e'/> A small number of pivots in one example gives no polynomial worst-case guarantee; the next chapters examine that distinction.",
+      "zh": "该选哪次转轴？<bookmark mark='a'/>Dantzig 选最大的改进约化成本系数，它不是归一化的几何斜率。<bookmark mark='b'/>退化顶点处，基可以改变而位置不动，选择不当可能循环。<bookmark mark='c'/>Bland 选择最小合法下标的规则在精确运算中避免循环。<bookmark mark='d'/>本代码每次更新整个单纯形表，工作量为 m 乘以 n 加 m。生产级修正单纯形维护基的分解；其归一化最陡边规则不同于这里逐项试算完整目标增益的最大改进规则。<bookmark mark='e'/>单个例子转轴少，并不能给出多项式最坏情况保证，接下来会研究这个区别。"
+    },
+    "8309089df5de": {
+      "scene": "Duality",
+      "en": "Chapter three. Duality.",
+      "zh": "第3章。对偶。"
+    },
+    "656bd4072669": {
+      "scene": "Duality",
+      "en": "How could anyone prove that thirteen is the best possible profit? <bookmark mark='a'/> Multiply each constraint by a non-negative number and add them up. <bookmark mark='b'/> If the combined left side has at least the objective's coefficients, five, four and three, then for any feasible plan the profit is at most the combined right side. <bookmark mark='c'/> Three times the first constraint gives six, nine and three, which covers five, four and three, so the profit is at most fifteen. Five thirds of the third constraint proves thirteen and a third. Five quarters of the second fails: it doesn't cover the coefficients of the second and third products. And one of the first plus one of the third proves exactly thirteen. <bookmark mark='d'/> Finding the best bound is itself a linear program, the dual: minimize five y one plus eleven y two plus eight y three, subject to the covering conditions.",
+      "zh": "怎样才能证明十三就是可能的最大利润？<bookmark mark='a'/>把每个约束乘以一个非负数，再加起来。<bookmark mark='b'/>如果合并后的左边至少达到目标函数的系数五、四、三，那么对任何可行的计划，利润都不超过合并后的右边。<bookmark mark='c'/>第一个约束乘以三得到六、九、三，覆盖了五、四、三，所以利润至多为十五。第三个约束乘以三分之五，证明利润至多十三又三分之一。第二个约束乘以四分之五则不行：它覆盖不了第二、第三种产品的系数。而第一个约束加上第三个约束，恰好证明了十三。<bookmark mark='d'/>寻找最好的界，本身就是一个线性规划，即对偶问题：在覆盖条件下，最小化五 y 一加十一 y 二加八 y 三。"
+    },
+    "938a8cd5b952": {
+      "scene": "Duality",
+      "en": "Every linear program has a dual. <bookmark mark='a'/> Our primal maximizes over nonnegative x with A x at most b; its dual minimizes b transpose y with nonnegative y and A transpose y at least c. <bookmark mark='b'/> Weak duality holds for every feasible pair. <bookmark mark='c'/> If the primal is feasible with a finite optimum, strong duality gives an attained equal dual optimum. This does not say that every infeasible or unbounded program has an optimal pair. <bookmark mark='d'/> One form of Farkas' lemma says exactly one alternative holds: A x equals b for some nonnegative x, or a vector y satisfies A transpose y nonnegative and b transpose y negative. <bookmark mark='e'/> This is separation from the finitely generated cone of A's columns. <bookmark mark='f'/> To certify an optimum, check both feasibilities and equal objective values; matrix-vector checks suffice once the candidate pair is supplied.",
+      "zh": "每个线性规划都有对偶。<bookmark mark='a'/>这里原始问题在非负 x、A x 不超过 b 下最大化；对偶在非负 y、A 转置 y 至少为 c 下最小化 b 转置 y。<bookmark mark='b'/>弱对偶对每对可行解都成立。<bookmark mark='c'/>如果原始问题可行且最优值有限，强对偶保证对偶也取得相等的最优值；这不意味着无解或无界问题也有最优解对。<bookmark mark='d'/>Farkas 引理的一种形式是：非负 x 满足 A x 等于 b，或者存在 y 使 A 转置 y 非负、b 转置 y 为负，两者恰有一个成立。<bookmark mark='e'/>几何上，这是把 b 与 A 的列生成的有限生成锥分开。<bookmark mark='f'/>拿到候选解对后，检查双方可行和目标相等，就得到可用矩阵向量运算核验的最优证书。"
+    },
+    "180140867034": {
+      "scene": "Duality",
+      "en": "Dual variables are local sensitivity bounds. <bookmark mark='a'/> While the same optimal basis remains valid, y i gives the change in optimal value per infinitesimal unit of resource i. <bookmark mark='b'/> A whole extra unit can leave that range. We add one unit and resolve: resource one's gain is one third, although its original dual price is one. <bookmark mark='c'/> Complementary slackness says a resource with positive slack has zero price, and a product with strictly positive reduced cost is unused. <bookmark mark='d'/> Resource two has slack one and price zero; product two has reduced cost three and quantity zero. <bookmark mark='e'/> These prices describe this mathematical model and its local range; they need not equal the finite change from any proposed large intervention.",
+      "zh": "对偶变量给出局部敏感性界。<bookmark mark='a'/>在同一最优基保持有效的范围内，y 的第 i 项给出资源 i 增加微小单位时的最优值变化率。<bookmark mark='b'/>增加整整一单位可能超出此范围。本例重新求解后，资源一的利润增量是三分之一，原来的对偶价格却是一。<bookmark mark='c'/>互补松弛说明：资源有正松弛，价格就为零；产品有严格正的约化成本，用量就为零。<bookmark mark='d'/>第二种资源剩一单位且价格为零；第二种产品约化成本三且产量为零。<bookmark mark='e'/>这些价格描述模型及局部有效区间，不能直接当作任意大幅变更的有限收益。"
+    },
+    "64389dab41fd": {
+      "scene": "KleeMinty",
+      "en": "Chapter four. Exponential in theory, fast in practice.",
+      "zh": "第4章。理论上是指数的，实践中却很快。"
+    },
+    "6d12c6e1406d": {
+      "scene": "KleeMinty",
+      "en": "How many pivots can simplex need? <bookmark mark='a'/> Klee and Minty constructed deformed cubes showing exponential behavior for Dantzig's rule. <bookmark mark='b'/> We execute a fixed power-coefficient variant: each upper row depends on all earlier coordinates, with powers of two in the matrix and powers of five on the right. The objective also uses powers of two. This is the model drawn here after rescaling the axes. <bookmark mark='c'/> Exact arithmetic checks feasibility and strict objective increase at every visited vertex. Dantzig visits all two to the n vertices on these instances. <bookmark mark='d'/> In three dimensions that is seven pivots through eight corners, not a theorem about every pivot rule or every cube.",
+      "zh": "单纯形法可能需要多少次转轴？<bookmark mark='a'/>Klee 与 Minty 构造变形立方体，展示 Dantzig 规则的指数行为。<bookmark mark='b'/>这里执行固定幂系数版本：每行上界依赖全部较早坐标，矩阵使用二的幂，右端项使用五的幂，目标也使用二的幂。图中把各坐标轴重新缩放。<bookmark mark='c'/>精确运算核验每个访问顶点的可行性和目标严格上升；这些实例中 Dantzig 访问全部二的 n 次方个顶点。<bookmark mark='d'/>三维就是七次转轴经过八个角点，这不是关于所有转轴规则或所有立方体的结论。"
+    },
+    "e487af793fb9": {
+      "scene": "KleeMinty",
+      "en": "We ran our simplex on Klee–Minty cubes up to twelve dimensions. <bookmark mark='a'/> Dantzig's rule takes exactly two to the n minus one pivots, every time: four thousand and ninety-five at twelve. <bookmark mark='b'/> Bland's rule does better on this cube but is exponential on its own variants, as David Avis and Chvátal showed. <bookmark mark='c'/> The greatest-improvement rule, which tries every edge and takes the one that gains most, solves this cube in one pivot; Robert Jeroslow built cubes in 1973 that defeat it too. <bookmark mark='d'/> The pattern repeated for decades: almost every pivot rule proposed has acquired its own bad example, the last famous one, Zadeh's rule, in 2011. <bookmark mark='e'/> No pivot rule is known to run in polynomial time.",
+      "zh": "我们在最高十二维的 Klee–Minty 立方体上运行了自己的单纯形法。<bookmark mark='a'/>Dantzig 规则每次都恰好需要二的 n 次方减一次转轴：十二维时是四千零九十五次。<bookmark mark='b'/>Bland 规则在这个立方体上表现好一些，但在它自己的变体上同样是指数的，David Avis 和 Chvátal 证明了这一点。<bookmark mark='c'/>最大改进规则试遍每条边、取增益最大的那条，它一次转轴就解决了这个立方体；Robert Jeroslow 在1973年构造了也能打败它的立方体。<bookmark mark='d'/>这种模式重复了几十年：几乎每一个被提出的转轴规则都有了自己的坏例子，最后一个著名的是2011年的 Zadeh 规则。<bookmark mark='e'/>还没有任何已知的转轴规则能在多项式时间内运行。"
+    },
+    "f1165a18f795": {
+      "scene": "KleeMinty",
+      "en": "Finite experiments and smoothed analysis answer different questions. <bookmark mark='a'/> Our dense positive random LPs take relatively few Dantzig pivots on these one hundred seeded instances; their optimal values are checked independently. <bookmark mark='b'/> Spielman and Teng analyze a particular two-phase shadow-vertex method under additive Gaussian perturbations of constraint normals and right-hand sides. Their expected polynomial bound depends on dimensions and inverse perturbation scale. It is not a theorem for our Dantzig implementation. <bookmark mark='c'/> Our separate cube experiment multiplies nonzero matrix entries by one plus sigma times a Gaussian. Zeros stay zero. The table summarizes only optimal runs and separately counts unbounded ones; every status is checked against another solver. <bookmark mark='d'/> These observations illustrate sensitivity under this chosen model. They do not establish the shadow-vertex theorem, nor show that all bad instances disappear under arbitrary noise.",
+      "zh": "有限实验与平滑分析回答不同问题。<bookmark mark='a'/>这批一百个固定种子的正系数稠密随机线性规划，Dantzig 转轴相对较少，最优值也经过独立核验。<bookmark mark='b'/>Spielman 与 Teng 分析特定的两阶段影子顶点法，对约束法向量和右端项添加高斯扰动；期望多项式界依赖维数和扰动尺度的倒数，不是对本 Dantzig 实现的定理。<bookmark mark='c'/>另一个立方体实验把非零矩阵项乘以一加 sigma 倍高斯量，零项仍为零。表格只汇总有最优解的运行，并另列无界次数；每个状态由另一求解器核验。<bookmark mark='d'/>这些观测展示所选模型的敏感性，既不证明影子顶点定理，也不说明任意噪声都会消除所有坏例子。"
+    },
+    "5dddb3b52668": {
+      "scene": "PolyTime",
+      "en": "Chapter five. Polynomial time: ellipsoids and the central path.",
+      "zh": "第5章。多项式时间：椭球与中心路径。"
+    },
+    "a06ac041e128": {
+      "scene": "PolyTime",
+      "en": "Khachiyan's 1979 result gives polynomial bit complexity for rational linear programming. <bookmark mark='a'/> This illustration starts with a radius-six ball whose enclosure of the target region is checked separately. <bookmark mark='b'/> If its centre violates a constraint, that constraint gives a central separating cut containing the feasible region. <bookmark mark='c'/> Replace the retained half with an enclosing ellipsoid and repeat. <bookmark mark='d'/> In exact arithmetic its volume contracts by at least the displayed factor. A full complexity argument also needs input encoding and radius or lower-dimensional feasibility treatment; small volume alone does not prove an arbitrary region empty. <bookmark mark='e'/> Our floating run finds a feasible point after nine cuts. Exhausting its numerical cut budget would mean no point found, not a general infeasibility certificate.",
+      "zh": "Khachiyan 在1979年的结果证明有理数线性规划具有多项式位复杂度。<bookmark mark='a'/>示例从半径六的球开始，并另行核验它包住目标区域。<bookmark mark='b'/>若中心违反约束，该约束给出保留可行域的过中心分离切割。<bookmark mark='c'/>用包住剩余半体的椭球替换，再重复。<bookmark mark='d'/>精确运算中体积至少按图示比例收缩；完整复杂度论证还需要输入编码、半径界或低维可行性的处理，仅体积小不能证明任意区域为空。<bookmark mark='e'/>浮点示例九次切割找到可行点；若耗尽数值迭代预算，只表示未找到点，不是一般的不可行证书。"
+    },
+    "df6624a5571a": {
+      "scene": "PolyTime",
+      "en": "How many cuts do these examples take? <bookmark mark='a'/> As this fixed two-dimensional region becomes thinner, the recorded counts rise. This finite table is not a fitted universal iteration law. <bookmark mark='b'/> Polynomial bit complexity for rational LP depends on dimension and coefficient encoding; exact-arithmetic work and floating iteration counts are different measurements. <bookmark mark='c'/> Ellipsoids are primarily a theoretical tool for LP rather than the usual production solver. <bookmark mark='d'/> Their lasting result is the separation-optimization equivalence for appropriately represented, bounded convex sets with the required radius and accuracy information. Exponentially many constraints can be handled when a polynomial-time separation oracle and these representation assumptions are available.",
+      "zh": "这些例子需要多少次切割？<bookmark mark='a'/>固定的二维区域变薄时，记录的次数增加；有限表格不是拟合得到的通用迭代定律。<bookmark mark='b'/>有理数线性规划的多项式位复杂度依赖维数和系数编码，精确运算工作量与浮点迭代次数是不同测量。<bookmark mark='c'/>椭球法在线性规划中主要是理论工具，并非通常采用的生产求解方法。<bookmark mark='d'/>它留下分离与优化等价的结果，但需要凸集的适当表示、界、半径与精度信息。在这些假设下，多项式时间的分离预言机可以处理指数多个约束。"
+    },
+    "773b348d9633": {
+      "scene": "PolyTime",
+      "en": "Karmarkar's 1984 breakthrough made interior-point methods central to practical optimization. This illustration is a log-barrier Newton path follower. <bookmark mark='a'/> Begin strictly inside all the inequalities. <bookmark mark='b'/> Minimize minus t times the objective minus the sum of log slacks. The negative logarithms repel the boundary. <bookmark mark='c'/> Under the usual existence and nondegeneracy conditions, central points approach an optimal face as t grows; this example has the unique optimum two, three. <bookmark mark='d'/> The ideal central point has duality gap m over t. Our approximate Newton points instead carry independently checked rational gap upper bounds, including stationarity residuals. <bookmark mark='e'/> The familiar square-root-m iteration theorem requires a specified short-step method and centrality control. Our one hundred twenty-seven Newton steps do not establish that theorem or a size-independent practical count. <bookmark mark='f'/> Strict feasibility, line-search convergence and the cost of linear solves all matter.",
+      "zh": "Karmarkar 在1984年的突破使内点法成为实用优化的重要方法。这里演示的是对数障碍牛顿路径跟踪。<bookmark mark='a'/>起点必须严格满足所有不等式。<bookmark mark='b'/>最小化负 t 倍目标，再减去所有松弛量的对数；负对数排斥边界。<bookmark mark='c'/>在通常的存在性和非退化条件下，中心点随 t 增大接近最优面；本例唯一最优点为二、三。<bookmark mark='d'/>理想中心点的对偶间隙是 m 除以 t；近似牛顿点则附带独立有理数间隙上界，并计入驻点残差。<bookmark mark='e'/>常见的根号 m 迭代定理要求指定的短步长方法与中心性控制，这里一百二十七次牛顿步既不证明该定理，也不说明实用次数与规模无关。<bookmark mark='f'/>严格可行、线搜索收敛和线性方程求解成本都很重要。"
+    },
+    "227583189520": {
+      "scene": "Unimodular",
+      "en": "Chapter six. When the vertices are integers.",
+      "zh": "第6章。当顶点都是整数时。"
+    },
+    "7f857dc74edd": {
+      "scene": "Unimodular",
+      "en": "Some integer models have integral linear relaxations. <bookmark mark='a'/> Give each edge of a bipartite graph a variable between zero and one, with incident values summing to at most one at each vertex. <bookmark mark='b'/> Its unsigned vertex-edge incidence matrix has two ones per column. <bookmark mark='c'/> Bipartiteness makes this matrix totally unimodular: every square minor is zero or plus or minus one. We independently check all nine hundred twenty-three nonempty square minors in the drawing. A partial minor search would be inconclusive. <bookmark mark='d'/> With integer right-hand sides and integer variable bounds, the augmented constraint matrix stays totally unimodular. Every nonsingular vertex basis has determinant plus or minus one, so Cramer's rule gives integer coordinates. <bookmark mark='e'/> Thus an optimal vertex solves the matching problem. All one hundred seeded weighted bipartite LPs have exact primal-dual certificates and agree with independent integer matching optima.",
+      "zh": "有些整数模型具有整数线性松弛。<bookmark mark='a'/>给二分图每条边一个零到一变量，每个顶点的关联变量总和不超过一。<bookmark mark='b'/>其无向顶点边关联矩阵每列有两个一。<bookmark mark='c'/>二分性使矩阵全幺模：每个方形子式为零或正负一；图中的九百二十三个非空方形子式都独立核验，只查部分子式只能得到未定结论。<bookmark mark='d'/>右端项和变量界为整数时，增广约束矩阵仍全幺模；非奇异顶点基的行列式为正负一，克拉默法则因此给出整数坐标。<bookmark mark='e'/>最优顶点也就解决匹配问题；一百个固定种子的加权二分 LP 都有精确原始对偶证书，并与独立整数匹配最优值一致。"
+    },
+    "ccb3a91228ad": {
+      "scene": "Unimodular",
+      "en": "Outside bipartite graphs it fails, and the smallest failure is a triangle. <bookmark mark='a'/> Its incidence matrix has determinant two. <bookmark mark='b'/> The linear program happily puts one half on each edge, for a total of one and a half, though any matching in a triangle has just one edge. <bookmark mark='c'/> On a hundred random weighted graphs that were not bipartite, a quarter of the optimal vertices were fractional. <bookmark mark='d'/> Jack Edmonds repaired it in 1965: add a constraint for every odd set of vertices, saying it contains at most half as many edges, rounded down, and the polytope is integral again. <bookmark mark='e'/> There are exponentially many such constraints, but a violated one can be found quickly, so by chapter five's theorem the program is still solvable in polynomial time.",
+      "zh": "离开二分图它就失效了，最小的反例是一个三角形。<bookmark mark='a'/>它的关联矩阵行列式为二。<bookmark mark='b'/>线性规划乐于在每条边上放二分之一，总共一点五，尽管三角形中任何匹配都只有一条边。<bookmark mark='c'/>在一百个随机赋权的非二分图上，四分之一的最优顶点是分数的。<bookmark mark='d'/>Jack Edmonds 在1965年修补了它：为每个奇数大小的顶点集添一个约束，说它内部至多含有其一半、向下取整那么多条边，多面体就又是整的了。<bookmark mark='e'/>这样的约束有指数多个，但被违反的约束可以很快找到，所以由第5章的定理，这个规划仍然可以在多项式时间内求解。"
+    },
+    "b23a645eb779": {
+      "scene": "Unimodular",
+      "en": "Integrality explains familiar combinatorial optimization results. <bookmark mark='a'/> A directed graph's node-arc incidence matrix is totally unimodular; adding integer capacity bounds preserves the flow integrality argument. <bookmark mark='b'/> LP duality then yields the max-flow min-cut relationship. <bookmark mark='c'/> Integral capacities admit an integral maximum flow, although fractional optimal flows may also exist as combinations of optimal vertices. <bookmark mark='d'/> Consecutive-ones interval matrices and network matrices provide other useful totally unimodular families. <bookmark mark='e'/> Seymour's decomposition of regular matroids, using graphic, cographic and the exceptional R-ten building block with specified sums, underlies polynomial recognition. Our brute-force minor enumeration is an exact small-matrix teaching check, not that recognition algorithm.",
+      "zh": "整数性解释熟悉的组合优化结果。<bookmark mark='a'/>有向图的点弧关联矩阵全幺模，加入整数容量界仍保留流的整数性论证。<bookmark mark='b'/>线性规划对偶给出最大流最小割关系。<bookmark mark='c'/>整数容量保证存在整数最大流，但多个最优顶点的组合也可能产生分数最优流。<bookmark mark='d'/>连续一的区间矩阵与网络矩阵是其他有用的全幺模家族。<bookmark mark='e'/>Seymour 把正则拟阵通过指定求和分解为图拟阵、余图拟阵及例外的 R 十，这支撑多项式识别；本穷举子式只是小矩阵的精确教学检查，不是那个识别算法。"
+    },
+    "5db65b689db5": {
+      "scene": "IntegerPrograms",
+      "en": "Chapter seven. Integer programming.",
+      "zh": "第7章。整数规划。"
+    },
+    "42757ddb059a": {
+      "scene": "IntegerPrograms",
+      "en": "Insist that the answer be made of whole things, and linear programming becomes NP-hard. The standard attack keeps linear programming as a guide. <bookmark mark='a'/> Here is a knapsack: eight items with values and weights, and a capacity of eighty. Relax it: let items be taken fractionally. That linear program is easy, greedy by value per unit of weight, and its optimum bounds what any whole choice can reach. <bookmark mark='b'/> The root's bound is a hundred and eighty-four, with one item taken in part. Branch on that item: one subproblem takes it, the other leaves it out, and each has its own bound. <bookmark mark='c'/> Any node whose bound cannot beat the best whole answer found so far is pruned without being explored. <bookmark mark='d'/> Here the best answer, a hundred and seventy-four, is found and proved optimal after twenty-four nodes, instead of the two hundred and fifty-six possible choices. Ailsa Land and Alison Doig invented the method in 1960, at the London School of Economics.",
+      "zh": "坚持答案必须由整个的东西组成，线性规划就变成了 NP 难的。标准的攻法仍以线性规划为向导。<bookmark mark='a'/>这是一个背包问题：八件物品，各有价值和重量，容量为八十。把它松弛：允许物品按分数取。这个线性规划很容易，按单位重量的价值贪心即可，它的最优值给出任何整数选择所能达到的上界。<bookmark mark='b'/>根节点的界是一百八十四，有一件物品只取了一部分。在这件物品上分支：一个子问题取它，另一个不取，各有自己的界。<bookmark mark='c'/>任何一个界不能超过迄今最好整数解的节点，都不经探索就被剪掉。<bookmark mark='d'/>这里，最好的答案一百七十四在二十四个节点之后被找到并被证明最优，而不是检查全部二百五十六种可能的选择。Ailsa Land 和 Alison Doig 于1960年在伦敦政治经济学院发明了这个方法。"
+    },
+    "199691fb8c0e": {
+      "scene": "IntegerPrograms",
+      "en": "An exact bound matters even when a fraction looks like an integer. Both items are worth one hundred; their weights are a trillion and one, and capacity is a trillion minus one. <bookmark mark='a'/> The relaxation takes the light item and one minus two trillionths of the heavy item. Its value is just below two hundred. <bookmark mark='b'/> Rounding that fraction to one would select both items and exceed capacity by two. A small coordinate error has become an invalid solution. <bookmark mark='c'/> Exact branching rejects the heavy-item branch as infeasible and keeps the light item, proving an integer optimum of one hundred. Closeness to an integer cannot replace feasibility and exact branch logic.",
+      "zh": "即使分数看起来像整数，精确界也很重要。两项价值都为一百，重量分别是一万亿和一，容量是一万亿减一。<bookmark mark='a'/>松弛取轻物品全部，加重物品的一减万亿分之二，总价值略低于二百。<bookmark mark='b'/>若把分数舍成一，就会同时选两项，超重二；小小坐标误差变成非法解。<bookmark mark='c'/>精确分支排除选择重物品的不可行分支，只保留轻物品，证明整数最优为一百。接近整数不能代替可行性和精确分支逻辑。"
+    },
+    "abd1d9da94b9": {
+      "scene": "IntegerPrograms",
+      "en": "How well does branch and bound scale here? <bookmark mark='a'/> On these forty random knapsacks up to one hundred sixty items, tight fractional upper bounds prune most of the search. Independent capacity dynamic programming checks every integer optimum; this finite family gives no worst-case speed guarantee. <bookmark mark='b'/> Gomory cuts add inequalities valid for whole solutions but violated by a fractional candidate. <bookmark mark='c'/> Branch and cut combines these ideas with presolving and heuristics. <bookmark mark='d'/> Progress in solvers depends on problem family, benchmark protocol, algorithms and hardware. We make no single universal speedup claim from this experiment. <bookmark mark='e'/> The resulting models support crew scheduling, energy systems, kidney exchanges and placement problems, subject to their own constraints and validation.",
+      "zh": "这里分支定界扩展得如何？<bookmark mark='a'/>这四十个最多一百六十项的随机背包中，紧的分数上界剪掉大部分搜索；独立容量动态规划核验每个整数最优值，但有限样本不给出最坏情况速度保证。<bookmark mark='b'/>Gomory 割加入整数解都满足、分数候选却违反的不等式。<bookmark mark='c'/>分支割把这些思想与预处理、启发式结合。<bookmark mark='d'/>求解器进展取决于问题族、基准协议、算法和硬件，本实验不支持一个通用加速倍数。<bookmark mark='e'/>这些模型可服务于机组排班、能源系统、肾脏交换和布局，但各自仍需约束建模与核验。"
+    },
+    "3a232754cd9e": {
+      "scene": "IntegerPrograms",
+      "en": "Knapsack also admits controlled approximation. <bookmark mark='a'/> Capacity dynamic programming is exact but pseudopolynomial: the numeric capacity may be exponential in its bit length. <bookmark mark='b'/> Our standard value-scaling teaching scheme first removes overweight items, then rounds feasible values down in units of epsilon times the largest feasible value divided by the item count. This is not the faster original Ibarra-Kim implementation. <bookmark mark='c'/> Total rounding loss is at most epsilon times that largest value, hence at most epsilon times OPT. The scaled sum is quadratic in n over epsilon; this code's reported n times that sum is a work model, not allocated table memory. <bookmark mark='d'/> The correlated twenty-item experiment checks each result against an independent exact optimum. High observed accuracy is welcome, but the promised guarantee remains one minus epsilon; the repeated host timings are observations, with generation and validation outside the clock.",
+      "zh": "背包还允许可控近似。<bookmark mark='a'/>按容量的动态规划精确但只是伪多项式，因为数值容量可能相对其位数指数增长。<bookmark mark='b'/>这里用标准价值缩放教学方案：先去掉超重物品，再按 epsilon 乘最大可行价值除以物品数向下取整；它不是 Ibarra 与 Kim 原论文中更快的实现。<bookmark mark='c'/>总舍入损失至多 epsilon 倍最大可行价值，因此至多 epsilon 倍最优值。缩放总和为 n 平方除以 epsilon 的量级；代码报告的 n 乘此总和是工作模型，不是实际分配的表内存。<bookmark mark='d'/>二十项相关实例逐个与独立精确最优值比较；观测精度高不改变一减 epsilon 的承诺，重复主机计时也只是观测，生成和验证都在计时之外。"
+    },
+    "d53efa1ae46a": {
+      "scene": "Approximation",
+      "en": "Chapter eight. Approximation: covers.",
+      "zh": "第8章。近似：覆盖问题。"
+    },
+    "00b31aec4812": {
+      "scene": "Approximation",
+      "en": "When the exact answer is out of reach, ask for an answer provably close to it. <bookmark mark='a'/> A vertex cover is a set of vertices touching every edge, and finding the smallest one is NP-hard. <bookmark mark='b'/> Here is a two-line algorithm. Take any edge whose ends are both uncovered and add both ends. Repeat until every edge is covered. <bookmark mark='c'/> The edges it took share no vertex, and any cover at all must contain at least one end of each of them, so the optimum is at least half of what we took. That is a factor two guarantee, proved without knowing the optimum. <bookmark mark='d'/> Here it takes eight vertices, against an optimum of six. <bookmark mark='e'/> The second way uses the linear program: give each vertex a fraction, require each edge's two fractions to sum to at least one, and minimize the total. Then keep every vertex whose fraction is at least a half. <bookmark mark='f'/> The relaxation's vertices only take the values zero, a half and one. Here it puts a half everywhere, four and a half in all, a lower bound on the optimum, and rounding keeps all nine. Again at most twice the linear program, so at most twice the optimum.",
+      "zh": "当精确答案遥不可及时，就要一个可证明与它接近的答案。<bookmark mark='a'/>顶点覆盖是一组触及每条边的顶点，找出最小的那组是 NP 难的。<bookmark mark='b'/>这里有一个两行的算法。取任意一条两端都未被覆盖的边，把两端都加进来。重复，直到每条边都被覆盖。<bookmark mark='c'/>它取的这些边两两没有公共顶点，而任何覆盖都必须至少包含其中每条边的一端，所以最优解至少是我们所取的一半。这就是一个二倍的保证，而且不需要知道最优解就证明了。<bookmark mark='d'/>这里它取了八个顶点，而最优是六个。<bookmark mark='e'/>第二种办法用线性规划：给每个顶点一个分数，要求每条边两端的分数之和至少为一，并最小化总和。然后保留分数至少为二分之一的每个顶点。<bookmark mark='f'/>松弛问题的顶点只取零、二分之一和一这几个值。这里它处处取二分之一，总共四点五，这是最优解的一个下界，而取整保留了全部九个顶点。同样至多是线性规划值的两倍，所以至多是最优解的两倍。"
+    },
+    "a2475a55ca16": {
+      "scene": "Approximation",
+      "en": "We checked both methods on a hundred seeded sixteen-vertex graphs against exhaustive optima. <bookmark mark='a'/> Their finite ratios stay within two. Tightness needs the right examples and the actual tie policy; it does not follow from this table. <bookmark mark='b'/> Khot and Regev show, assuming the Unique Games Conjecture, hardness for every fixed factor two minus epsilon. That is a conditional asymptotic statement, not a limit measured by our sample. <bookmark mark='c'/> On the complete graph the fractional cover value is n over two and the integer optimum n minus one. Their ratio approaches two as n grows. This relaxation therefore cannot certify a uniformly smaller factor on all graphs.",
+      "zh": "我们在一百个固定种子的十六顶点图上，与穷举最优值比较两种方法。<bookmark mark='a'/>有限比值都不超过二；要证明紧性，需要适当实例和实际平局规则，不能只看此表。<bookmark mark='b'/>Khot 与 Regev 在唯一博弈猜想下，证明任意固定的二减 epsilon 因子都困难，这是有条件的渐近结论，不是样本测出的极限。<bookmark mark='c'/>完全图的分数覆盖值为 n 除以二，整数最优为 n 减一，比值随 n 增大趋近二。因此这个松弛不能在所有图上认证统一更小的因子。"
+    },
+    "334635236328": {
+      "scene": "Approximation",
+      "en": "Set cover asks for the fewest sets covering every element. <bookmark mark='a'/> Greedy chooses a set covering the most currently uncovered elements. Our domain rejects families that cannot cover the universe. <bookmark mark='b'/> The classic guarantee is H n times optimum, with n the universe size. <bookmark mark='c'/> Charge each newly covered element an equal share of its chosen set's unit cost. Elements of any optimum set pay at most the harmonic sum, so all chosen costs total at most H n times OPT. <bookmark mark='d'/> The retained doubling-column examples have optimum two; their actual greedy choices and all sixty random instances are checked by an independent subset-union dynamic program. <bookmark mark='e'/> Selected hardness results have distinct premises: Feige's 1998 threshold uses a stronger complexity assumption, while Dinur and Steurer establish fixed-epsilon logarithmic NP-hardness. Observed small average gaps do not weaken these worst-case statements.",
+      "zh": "集合覆盖要求用最少集合覆盖每个元素。<bookmark mark='a'/>贪心选择当前覆盖最多未覆盖元素的集合，代码拒绝无法覆盖全集的输入。<bookmark mark='b'/>经典保证是全集大小 n 的调和数 H n 乘最优值。<bookmark mark='c'/>把所选集合的单位成本均摊给新覆盖元素；任何最优集合的元素收费和至多一个调和数，求和即得总成本至多 H n 倍最优。<bookmark mark='d'/>保留的倍增列例子最优值为二；实际贪心选择以及六十个随机实例都由独立子集并集动态规划核验。<bookmark mark='e'/>所引困难结果前提不同：Feige 的1998年阈值使用更强复杂度假设，Dinur 与 Steurer 则证明固定 epsilon 的对数 NP 困难性。样本平均差距小并不削弱最坏情况结论。"
+    },
+    "da3f619787c6": {
+      "scene": "Tsp",
+      "en": "Chapter nine. The travelling salesman.",
+      "zh": "第9章。旅行商问题。"
+    },
+    "5118ed239b66": {
+      "scene": "Tsp",
+      "en": "The travelling salesman seeks a shortest tour. <bookmark mark='a'/> For general nonmetric distances, a fixed-factor polynomial approximation would decide Hamiltonian cycle, so no such guarantee exists unless P equals NP. <bookmark mark='b'/> Assume instead a complete symmetric metric with triangle inequality, as for these planar Euclidean points. <bookmark mark='c'/> An MST costs at most the optimum tour. Doubling its edges gives an Euler walk of cost at most twice OPT, and metric shortcuts give a tour. <bookmark mark='d'/> Christofides and Serdyukov improve this by matching the tree's odd-degree vertices. A minimum perfect matching costs at most half OPT; adding it makes every degree even, and shortcutting the Euler walk yields a tour. <bookmark mark='e'/> The factor is three halves for the specified metric model. Independent Kruskal and blossom calculations check our MST and matching weights. <bookmark mark='f'/> Held-Karp finds the combinatorial optimum using floating Euclidean lengths, separately checked by a backward recurrence. Our teaching matching uses exponential subset DP; it is not a polynomial blossom implementation.",
+      "zh": "旅行商寻找最短巡回。<bookmark mark='a'/>一般非度量距离下，固定因子的多项式近似就能判定哈密顿回路，因此除非 P 等于 NP，否则不存在这样的保证。<bookmark mark='b'/>改为假设完全、对称且满足三角不等式的度量，如这些平面欧氏点。<bookmark mark='c'/>最小生成树不比最优巡回贵；边加倍后有欧拉游走，成本至多二倍最优，再用度量捷径得到巡回。<bookmark mark='d'/>Christofides 与 Serdyukov 对树的奇度顶点做最小完美匹配，其成本至多最优的一半；加入后全为偶度，再取欧拉游走和捷径。<bookmark mark='e'/>近似因子是二分之三，适用于指定度量；独立 Kruskal 与花算法核验树及匹配权重。<bookmark mark='f'/>Held-Karp 使用浮点欧氏长度求组合最优，并由反向递推另行核验；教学匹配采用指数子集动态规划，不是多项式花算法。"
+    },
+    "97660ba3e795": {
+      "scene": "Tsp",
+      "en": "These forty seeded twelve-city instances compare finite tour ratios with independently checked optima. <bookmark mark='a'/> Double tree and Christofides obey their metric guarantees. Nearest neighbour followed by two-opt has the smallest sample mean here. Two-opt tries improving pairs of edges; uncrossing is one kind of improvement, not its entire definition. <bookmark mark='b'/> That empirical outcome is specific to this family and stopping rule. The combined heuristic inherits nearest neighbour's logarithmic metric guarantee because it never lengthens the starting tour. This sample does not establish a constant-factor improvement. <bookmark mark='c'/> A selected 2021 randomized metric-TSP theorem of Karlin, Klein and Oveis Gharan gives three halves minus a positive epsilon larger than ten to the minus thirty-six. It is a separate algorithm, not executed here, and is not presented as today's best bound. <bookmark mark='d'/> Euclidean TSP also admits a polynomial-time approximation scheme for each fixed positive epsilon, with dimension and epsilon dependence kept in its cost.",
+      "zh": "这四十个固定种子的十二城实例，把有限巡回比值与独立核验的最优值比较。<bookmark mark='a'/>倍树与 Christofides 都满足度量保证；最近邻加 2-opt 在此样本平均最好。2-opt 尝试改进边对，解交叉只是改进的一种，不是完整定义。<bookmark mark='b'/>经验结果依赖此实例族和停止规则，组合启发式从不延长起始巡回，因此继承最近邻的对数度量保证；此样本不能建立常数因子的改进。<bookmark mark='c'/>所选 Karlin、Klein 与 Oveis Gharan 的2021年随机度量 TSP 定理给出二分之三减正 epsilon，其中 epsilon 大于十的负三十六次方；这是另一个未执行的算法，也不声称是今天最佳界。<bookmark mark='d'/>欧氏 TSP 对每个固定正 epsilon 有多项式时间近似方案，成本仍包含维数及 epsilon 的依赖。"
+    },
+    "ed57102cb3a8": {
+      "scene": "Tsp",
+      "en": "Implementation cost matters alongside guarantees. <bookmark mark='a'/> Held-Karp's exponential state count makes fifteen cities a small timing case, not a scalable route planner. The caption reports the minimum of three shared-host runs on identical prepared points. <bookmark mark='b'/> At three hundred cities we time two-opt alone, after nearest neighbour has prepared the starting tour. Generation, length checks and references run outside the clock. <bookmark mark='c'/> The zero point seven one two four square-root-n expression is a numerical asymptotic prediction for independent uniform points in the unit square. It is neither this instance's optimum nor a finite gap certificate. <bookmark mark='d'/> Lin-Kernighan and LKH use more powerful local moves, with performance depending on the instance and configuration. <bookmark mark='e'/> Concorde has proved optimality for a particular eighty-five-thousand-nine-hundred-city circuit-board instance using exact certification machinery. That historical result is not a runtime promise for arbitrary inputs. <bookmark mark='f'/> Delivery, drilling and scheduling often add constraints beyond symmetric metric TSP, so their models require separate checks.",
+      "zh": "实现成本与保证同样重要。<bookmark mark='a'/>Held-Karp 的指数状态数使十五城只是小计时案例，不能作为大规模路径规划；字幕给相同预生成点上三次共享主机运行的最小值。<bookmark mark='b'/>三百城时只计 2-opt，最近邻事先准备起始巡回，生成、长度核验和参照都在计时之外。<bookmark mark='c'/>零点七一二四乘根号 n 是单位方形独立均匀点的数值渐近预测，既不是本实例最优值，也不是有限间隙证书。<bookmark mark='d'/>Lin-Kernighan 与 LKH 使用更强局部移动，表现依赖实例和配置。<bookmark mark='e'/>Concorde 曾借助精确认证机制证明某个八万五千九百城电路板实例的最优性，这个历史结果不承诺任意输入的运行时间。<bookmark mark='f'/>配送、钻孔和调度常有对称度量 TSP 以外的约束，需要另行核验模型。"
+    },
+    "c77714ca2855": {
+      "scene": "MaxCut",
+      "en": "Chapter ten. A random hyperplane: MAX-CUT.",
+      "zh": "第10章。随机超平面：最大割。"
+    },
+    "9235fc0cb8b2": {
+      "scene": "MaxCut",
+      "en": "A geometric relaxation gives a useful route to MAX-CUT. <bookmark mark='a'/> Split vertices into two sides and maximize crossing edges, an NP-hard problem. <bookmark mark='b'/> Encode each side by a sign, so an edge contributes one minus the sign product over two. <bookmark mark='c'/> Replace signs by unit vectors; their Gram matrix gives a semidefinite relaxation. <bookmark mark='d'/> We optimize vectors locally by projected gradient. That produces a feasible primal objective, not a certified global SDP optimum. The three-dimensional sphere is a separate rank-three visualization. <bookmark mark='e'/> For this graph the exact cut is eighteen. A separate rational dual matrix certificate bounds it above; local vector values and certified upper bounds are stored separately. <bookmark mark='f'/> A random plane through the origin rounds the pictured vectors to an actual feasible cut.",
+      "zh": "几何松弛为最大割提供一条途径。<bookmark mark='a'/>把顶点分成两侧，使跨侧边最多，这是 NP 难问题。<bookmark mark='b'/>用正负号表示两侧，每条边贡献一减两端符号乘积再除以二。<bookmark mark='c'/>把符号换成单位向量，其 Gram 矩阵构成半定松弛。<bookmark mark='d'/>这里用投影梯度局部优化向量，只得到可行原始目标值，不是经认证的全局半定最优值；三维球面还是另一个秩三示意。<bookmark mark='e'/>此图精确最大割为十八；另有有理数对偶矩阵证书给出上界，局部向量值与认证上界分别存储。<bookmark mark='f'/>过原点的随机平面把图中向量舍入为真正可行的割。"
+    },
+    "04bbb76dbb1e": {
+      "scene": "MaxCut",
+      "en": "A two-vertex graph makes the certificate issue visible. Its one edge can certainly be cut. <bookmark mark='a'/> Start our seeded vector solver but allow zero gradient steps. Its feasible local objective is about zero point one three eight, below the exact cut value one. It therefore cannot be an upper bound. <bookmark mark='b'/> Independently choose both dual multipliers equal to one half. The displayed quadratic form is a square divided by four, so the dual matrix is positive semidefinite and the multipliers sum to one. <bookmark mark='c'/> That separate certificate proves every cut is at most one. A feasible cut attaining one and a valid dual upper bound of one close the gap; a local primal value alone would not.",
+      "zh": "两个顶点的图能看清证书问题，唯一一条边当然可以被割开。<bookmark mark='a'/>启动固定种子的向量求解器，但不做梯度步，得到约零点一三八的可行局部目标，比精确割值一还小，因此不能作为上界。<bookmark mark='b'/>独立选择两个对偶乘子都为二分之一；图示二次型是一个平方除以四，所以对偶矩阵半正定，乘子和为一。<bookmark mark='c'/>这个独立证书证明每个割至多为一。达到一的可行割和等于一的合法对偶上界闭合间隙，局部原始值本身做不到。"
+    },
+    "a917cb6f90d6": {
+      "scene": "MaxCut",
+      "en": "Why does hyperplane rounding help? <bookmark mark='a'/> Vectors at angle theta are separated with probability theta over pi. <bookmark mark='b'/> Compare this probability with the edge's vector reward, one minus cosine theta over two. The ratio is at least alpha, about zero point eight seven eight. <bookmark mark='c'/> Its minimum is near one hundred thirty-four degrees, checked here by an independent scalar root solve. <bookmark mark='d'/> For any fixed vectors, expected cut is at least alpha times their own objective. To conclude alpha times the integer optimum, the theorem uses a globally optimal SDP solution, or explicitly accounts for its optimization error. Our local solver alone supplies neither premise. <bookmark mark='e'/> Independent random vertex labels give the elementary one-half guarantee. A finite average of sampled cuts estimates an expectation; it does not prove a universal bound.",
+      "zh": "超平面舍入为什么有效？<bookmark mark='a'/>夹角 theta 的向量以 theta 除以圆周率的概率被分开。<bookmark mark='b'/>把概率与边的向量奖励，也就是一减余弦 theta 再除以二比较，比值至少为约零点八七八的 alpha。<bookmark mark='c'/>最小值在约一百三十四度，由独立标量求根核验。<bookmark mark='d'/>对任意固定向量，期望割至少是 alpha 倍其自身目标；要推出 alpha 倍整数最优值，定理需要全局最优半定解，或明确计入优化误差。本地局部求解器本身不提供这个前提。<bookmark mark='e'/>独立随机顶点标签给出基本的二分之一保证；有限割样本均值只是期望的估计，不证明通用界。"
+    },
+    "9492e50e2e19": {
+      "scene": "MaxCut",
+      "en": "These thirty seeded graphs have separately enumerated exact maximum cuts. <bookmark mark='a'/> The table compares two hundred valid random vertex assignments and two hundred hyperplanes per graph. It reports finite means and best observed cuts. Exact rational positive-definiteness certificates give separate dual upper bounds; the projected-gradient objectives remain local primal observations. <bookmark mark='b'/> The dated Khot-Kindler-Mossel-O'Donnell result says, under the Unique Games Conjecture, no polynomial algorithm uniformly improves alpha by a fixed positive amount. <bookmark mark='c'/> Without that conjecture, Håstad's hardness excludes a factor sixteen seventeenths plus any fixed epsilon unless P equals NP. <bookmark mark='d'/> Geometry and random rounding are the template; the certificate, optimization error and expectation model determine which guarantee actually follows.",
+      "zh": "这三十个固定种子图都另行穷举了精确最大割。<bookmark mark='a'/>表中比较每图二百个合法随机顶点分配和二百个超平面，报告有限均值与观测最好割；精确有理数正定性证书另给对偶上界，投影梯度值仍是局部原始观测。<bookmark mark='b'/>Khot、Kindler、Mossel 与 O'Donnell 的所引历史结果在唯一博弈猜想下，排除多项式算法统一超过 alpha 一个固定正量。<bookmark mark='c'/>不依赖该猜想，Håstad 的困难性结果排除十七分之十六加任意固定 epsilon 的近似因子，除非 P 等于 NP。<bookmark mark='d'/>模板是几何松弛与随机舍入，真正能推出哪种保证则取决于证书、优化误差和期望模型。"
+    },
+    "d0fcdf4b4c93": {
+      "scene": "Online",
+      "en": "Chapter eleven. Online: deciding without the future.",
+      "zh": "第11章。在线：看不见未来的决策。"
+    },
+    "7436f1a95888": {
+      "scene": "Online",
+      "en": "Online decisions arrive before their future is known. <bookmark mark='a'/> Rent skis for one per day or buy for ten. The discrete convention charges rental only on days before purchase. <bookmark mark='b'/> Compare cost with the clairvoyant optimum, the smaller of season length and ten. For randomized rules the season must be fixed independently of the random buy day. <bookmark mark='c'/> Rent nine days, then buy: the worst ratio is nineteen over ten. <bookmark mark='d'/> A deterministic lower-bound adversary ends the season on the purchase day. This gives the required ratio even for a rule that buys early. <bookmark mark='e'/> For our buy-day distribution the exact discrete ratio is one over one minus nine tenths to the tenth power, about one point five three five. The familiar e over e minus one is the continuous or large-buy-price limit, about one point five eight two. The sampled curve estimates the separately calculated exact expectation.",
+      "zh": "在线决策发生时，未来还未知。<bookmark mark='a'/>滑雪板每天租金一，购买价十；离散约定只在购买日之前付租金。<bookmark mark='b'/>与已知未来的最优值比较，即季节天数与十中较小者；随机策略要求季节预先确定，独立于随机购买日。<bookmark mark='c'/>租九天再买，最坏比值是十九除以十。<bookmark mark='d'/>确定性下界的对手在购买当天结束季节，即使很早购买，也能给出所需下界。<bookmark mark='e'/>本购买日分布的精确离散比值是一除以一减十分之九的十次方，约一点五三五；常见的 e 除以 e 减一是连续模型或购买价趋大时的极限，约一点五八二。抽样曲线估计另行精确计算的期望。"
+    },
+    "30d769a12df4": {
+      "scene": "Online",
+      "en": "We replay only the Job's data accesses, excluding instruction fetches. <bookmark mark='a'/> Its one hundred fifty-five thousand two hundred sixty-six accesses map to ninety-two distinct sixty-four-byte lines. The model is an initially empty fully associative cache with unit miss cost, not a hardware latency simulation. <bookmark mark='b'/> Belady evicts the page whose next use lies furthest ahead; offline next-use preprocessing is separate from online policy work. An independent full-trace simulator checks every displayed result. <bookmark mark='c'/> The table shows finite outcomes for these capacities and seeds, including least recently used, first in first out and random policies. <bookmark mark='d'/> Marking clears marks at a new phase and evicts a random unmarked resident. Its two-H-k expected competitive theorem assumes an oblivious request sequence and allows an additive initial term. These particular random outcomes establish no universal winner.",
+      "zh": "这里只重放 Job 的数据访问，不包含取指。<bookmark mark='a'/>十五万五千二百六十六次访问映射到九十二条不同的六十四字节缓存行；模型是初始为空、全相联、每次缺失成本一的缓存，不是硬件延迟仿真。<bookmark mark='b'/>Belady 淘汰下一次使用最远的页；离线预处理与在线策略工作分开。独立全轨迹模拟器核验表中每个结果。<bookmark mark='c'/>表格只展示这些容量与种子的有限结果，比较最近最少用、先进先出及随机策略。<bookmark mark='d'/>标记算法在新阶段清空标记，随机淘汰未标记驻留页；其二倍调和数的期望竞争定理要求请求序列独立于随机选择，并允许初始加法项。这些随机结果不证明存在通用赢家。"
+    },
+    "93745fa8867c": {
+      "scene": "Online",
+      "en": "A cyclic trace exposes one weakness of least recently used. <bookmark mark='a'/> Cycle over five pages with capacity four: every request misses under LRU. <bookmark mark='b'/> Offline OPT misses roughly once per four requests after its initial fills; the exact finite counts appear here. <bookmark mark='c'/> This fixed cycle alone does not defeat every deterministic policy. The general lower bound uses an adaptive request to a page absent from that policy's cache. LRU and FIFO are k-competitive with the usual additive constant. Randomized marking's expected two-H-k upper bound concerns oblivious sequences, not that adaptive adversary. <bookmark mark='d'/> Locality, capacity, associativity and replacement cost determine which model helps explain a real cache. This unit-cost trace study isolates only one part of that behavior.",
+      "zh": "循环轨迹揭示最近最少用的一项弱点。<bookmark mark='a'/>容量四时循环访问五页，LRU 每次都缺失。<bookmark mark='b'/>离线最优在初始填充后约每四次请求缺失一次，精确有限计数见表。<bookmark mark='c'/>这个固定循环本身不能击败所有确定性策略；一般下界会自适应请求该策略缓存中没有的页。LRU 与 FIFO 在通常加法常数下具有 k 竞争性；随机标记的二倍调和数期望上界针对独立于随机选择的序列，并不针对这个自适应对手。<bookmark mark='d'/>局部性、容量、相联度和替换成本共同决定真实缓存的适用模型，这项单位成本轨迹研究只隔离其中一部分。"
+    },
+    "484205053fe6": {
+      "scene": "Weights",
+      "en": "Chapter twelve. Multiplicative weights.",
+      "zh": "第12章。乘性权重。"
+    },
+    "9ad69328e5c5": {
+      "scene": "Weights",
+      "en": "Multiplicative weights turns past losses into a distribution over experts. <bookmark mark='a'/> Each round our calculation assigns a probability to every expert before seeing that round's losses; it accumulates the distribution's expected loss, without sampling a realized expert. <bookmark mark='b'/> Multiply weights by the exponential of minus eta times loss, computed in stable log space. <bookmark mark='c'/> These seeded binary losses give one expert error probability forty-five percent and the rest fifty percent. Their finite histories are retained. <bookmark mark='d'/> Expected-loss regret compares the algorithm with the best fixed expert in hindsight. <bookmark mark='e'/> For losses in zero to one, the bound is log n over eta plus eta T over eight. Choosing eta for each displayed horizon gives the square root of T log n over two. <bookmark mark='f'/> Independent prefix-loss softmax calculations reproduce every row. A sampled expert's realized loss would additionally require a probabilistic deviation statement.",
+      "zh": "乘性权重把过去的损失转成专家分布。<bookmark mark='a'/>每轮在看到当轮损失前分配概率，计算累计的是分布的期望损失，没有抽样实际专家。<bookmark mark='b'/>权重乘以负 eta 倍损失的指数，并在稳定对数空间中计算。<bookmark mark='c'/>固定种子的二元损失中，一位专家的错误概率为百分之四十五，其余为百分之五十；有限历史都保留。<bookmark mark='d'/>期望损失遗憾与事后最佳固定专家比较。<bookmark mark='e'/>损失在零到一时，上界是 log n 除以 eta，加 eta T 除以八；每个展示时域重新选择 eta，得到 T log n 除以二的平方根。<bookmark mark='f'/>独立前缀损失 softmax 复现每行；若抽样实际专家，其真实损失还需要概率偏差陈述。"
+    },
+    "5fc7d89507c7": {
+      "scene": "Weights",
+      "en": "The proof is four lines, and it is worth seeing once. <bookmark mark='a'/> Watch the total weight. It starts at n, one per expert. <bookmark mark='b'/> At the end it is at least the weight of the best expert alone, which has been multiplied by e to the minus eta once for each of its losses. <bookmark mark='c'/> And in each round, when we follow an expert in proportion to the weights, the total weight shrinks by a factor of about e to the minus eta times our expected loss that round, with a small correction from Hoeffding's inequality. <bookmark mark='d'/> Chain the rounds together, and the two facts squeeze: our loss cannot be much more than the best expert's, or the weight would have fallen below the best expert's own. <bookmark mark='e'/> Take logarithms, choose eta to balance the two terms, and the regret is the square root of T over two times log n. <bookmark mark='f'/> It is a potential argument, like the amortized analyses of Parts 16 and 17, and the same pattern proves boosting and the minimax theorem.",
+      "zh": "证明只有四行，值得看一次。<bookmark mark='a'/>盯住总权重。它从 n 开始，每位专家一。<bookmark mark='b'/>到最后，它至少是最好的那位专家单独的权重，而那个权重每出一次错就被乘一次 e 的负 eta 次方。<bookmark mark='c'/>而在每一轮中，当我们按权重比例跟随专家时，总权重缩小的因子大约是 e 的负 eta 乘以这一轮我们的期望损失次方，外加 Hoeffding 不等式给出的一个小修正。<bookmark mark='d'/>把各轮串起来，两个事实就形成夹击：我们的损失不可能比最好专家的多太多，否则总权重就会跌到最好专家自己的权重之下。<bookmark mark='e'/>取对数，选择 eta 使两项平衡，遗憾就是 T 除以二乘以 log n 的平方根。<bookmark mark='f'/>这是一个势函数论证，就像第16和第17部分的均摊分析，同样的模式还证明了提升法和极小极大定理。"
+    },
+    "4726986cd087": {
+      "scene": "Weights",
+      "en": "The same update supplies finite game certificates. <bookmark mark='a'/> Let the maximizing row player use multiplicative weights and the column player choose a best response each round. <bookmark mark='b'/> Average the actual row and column distributions. The smallest payoff against the averaged row is a lower bound on the game value; the largest against the averaged column is an upper bound. Both distributions are retained and checked. A separate exact rational equilibrium certifies this game's value near zero point four eight four six. Finite gaps are not exact convergence. <bookmark mark='c'/> Related weighting ideas power boosting, with its own assumptions and update rules. <bookmark mark='d'/> Constraint weights also support approximate packing and flow solvers with explicit width and accuracy parameters. <bookmark mark='e'/> Arora, Hazan and Kale survey this shared potential-method pattern and its applications.",
+      "zh": "同样的更新给出有限博弈证书。<bookmark mark='a'/>最大化行玩家使用乘性权重，列玩家每轮选最佳响应。<bookmark mark='b'/>平均实际行列分布；对平均行策略的最小收益是博弈值下界，对平均列策略的最大收益是上界。两个分布都保留并核验，另一个精确有理数均衡认证本例约零点四八四六的博弈值；有限间隙不是精确收敛。<bookmark mark='c'/>相关加权思想也用于提升，但各有假设和更新规则。<bookmark mark='d'/>给约束加权还支持带明确宽度、精度参数的近似装箱与流求解器。<bookmark mark='e'/>Arora、Hazan 与 Kale 的综述解释这类共享势函数方法及其应用。"
+    },
+    "c68989750cec": {
+      "scene": "Convex",
+      "en": "Chapter thirteen. Convex optimization in a page.",
+      "zh": "第13章。一页纸讲凸优化。"
+    },
+    "4774883a99df": {
+      "scene": "Convex",
+      "en": "This small convex example lets us compare actual optimization paths. <bookmark mark='a'/> The function is a two-dimensional log-sum-exp with the displayed coefficients. Its independent analytic optimum is minus half log two, zero. This instance is only moderately conditioned near that point. <bookmark mark='b'/> Gradient descent chooses step lengths by backtracking. <bookmark mark='c'/> Here it needs forty steps to make objective error less than ten to the minus ten, measured against the analytic value rather than Newton's last iterate. <bookmark mark='d'/> Newton solves the local Hessian system to obtain a step. <bookmark mark='e'/> Here it needs four steps. Quadratic local convergence requires regularity and a sufficiently close starting region; four observations do not prove a general digits-doubling law. <bookmark mark='f'/> A Newton step costs a linear solve. Structure, sparsity and dimension decide whether that cost is worthwhile; there is no universal winner.",
+      "zh": "这个小凸例子用于比较实际优化路径。<bookmark mark='a'/>函数是图示系数的二维对数指数和；独立解析最优点为负二分之一 log 二、零，附近条件数只是中等程度。<bookmark mark='b'/>梯度下降用回溯选择步长。<bookmark mark='c'/>本例四十步使目标误差小于十的负十次方，参照的是解析值，而非牛顿法最后一次迭代。<bookmark mark='d'/>牛顿法解局部 Hessian 方程来确定步。<bookmark mark='e'/>本例四步达到阈值；局部二次收敛需要正则性和足够近的起点，四次观测不证明通用的有效位数倍增规律。<bookmark mark='f'/>牛顿步要解线性方程，是否值得取决于结构、稀疏性和维数，没有通用赢家。"
+    },
+    "7e54b1679aa3": {
+      "scene": "Convex",
+      "en": "Convexity gives powerful guarantees with explicit premises. <bookmark mark='a'/> Every local minimum of a convex objective on a convex domain is global, but existence of a dual certificate needs appropriate duality conditions. <bookmark mark='b'/> For differentiable convex inequalities, KKT includes primal feasibility, nonnegative multipliers, stationarity and complementary slackness. Slater's condition is one sufficient regularity condition for necessity and strong duality. <bookmark mark='c'/> The multipliers generalize LP shadow prices. <bookmark mark='d'/> LP, convex quadratic, second-order cone and semidefinite formulations offer increasingly expressive structured models. <bookmark mark='e'/> Polynomial complexity claims must specify input representation, an available barrier or oracle, accuracy and conditioning. Arbitrary convex functions do not automatically admit a uniform polynomial algorithm. <bookmark mark='f'/> General nonconvex optimization can be NP-hard; individual nonconvex problems can still be easy. <bookmark mark='g'/> Rockafellar's convex versus nonconvex watershed is a useful organizing principle, with these assumptions kept visible.",
+      "zh": "凸性带来有明确前提的强保证。<bookmark mark='a'/>凸域上凸目标的每个局部最小值都是全局的，但对偶证书存在还需适当对偶条件。<bookmark mark='b'/>可微凸不等式问题的 KKT 包含原始可行、乘子非负、驻点条件和互补松弛；Slater 条件是保证必要性与强对偶的一种充分正则条件。<bookmark mark='c'/>乘子推广了线性规划的影子价格。<bookmark mark='d'/>线性、凸二次、二阶锥与半定模型依次提供更丰富的结构化表达。<bookmark mark='e'/>多项式复杂度必须说明输入表示、可用障碍或预言机、精度和条件数，任意凸函数不会自动获得统一多项式算法。<bookmark mark='f'/>一般非凸优化可以是 NP 难的，具体非凸问题也可能容易。<bookmark mark='g'/>保留这些前提后，Rockafellar 的凸与非凸分水岭仍是有用的组织原则。"
+    },
+    "5f9b2e7360d4": {
+      "scene": "Frontier",
+      "en": "Chapter fourteen. Frontier: faster linear programs, the Hirsch question, and the unique games conjecture.",
+      "zh": "第14章。前沿：更快的线性规划、Hirsch 问题，以及唯一博弈猜想。"
+    },
+    "723bbc382f1a": {
+      "scene": "Frontier",
+      "en": "The first frontier is complexity under a stated input model. <bookmark mark='a'/> Interior-point advances reduce both iteration count and the cost of maintaining successive linear systems. Arithmetic-operation bounds and bit complexity are different. <bookmark mark='b'/> The selected 2019 Cohen-Lee-Song result gives a dense-LP bound involving n to omega, two additional exponent terms, and a log accuracy factor. At the paper's exponent estimates the matrix-multiplication term dominates. Van den Brand gives a related deterministic bound. These dated theorems do not make every LP inherently equivalent to one matrix product. <bookmark mark='c'/> The selected 2022 six-author flow result gives almost-linear exact directed max-flow and min-cost flow for polynomially bounded integral input data. <bookmark mark='d'/> Dynamic graph and interior-point machinery are central to that result. The input assumptions and hidden factors belong to the theorem; none of these asymptotic algorithms is executed by our small Python examples.",
+      "zh": "第一个前沿是在明确输入模型下研究复杂度。<bookmark mark='a'/>内点法进展同时降低迭代数与维护连续线性系统的成本，算术运算界和位复杂度是不同概念。<bookmark mark='b'/>所选2019年 Cohen、Lee、Song 结果包含 n 的 omega 次方、另外两个指数项及对数精度因子；按论文的指数估计，矩阵乘法项占主导。van den Brand 给出相关确定性界。这些历史定理不意味着每个线性规划本质上等价于一次矩阵乘法。<bookmark mark='c'/>所选2022年六位作者的流结果，在整数数据有多项式界时，给出近线性的精确有向最大流与最小费用流算法。<bookmark mark='d'/>动态图和内点方法是关键；输入假设与隐藏因子属于定理，本 Python 小例子并没有执行这些渐近算法。"
+    },
+    "bc0bcfebe713": {
+      "scene": "Frontier",
+      "en": "The second frontier concerns paths along polytope edges. <bookmark mark='a'/> Our drawn bounded three-dimensional polytope has twenty-four facets, forty-four vertices and diameter eight. Independent breadth-first searches check every vertex's eccentricity. <bookmark mark='b'/> Hirsch conjectured diameter at most facets minus dimension. <bookmark mark='c'/> Each displayed row contains twenty seeded, certified bounded three-dimensional samples. We reject uncertified draws before construction; these finite means support no universal growth law or high-dimensional claim. <bookmark mark='d'/> Santos disproved the original conjecture with a forty-three-dimensional example having eighty-six facets and diameter at least forty-four. <bookmark mark='e'/> Kalai and Kleitman's 1992 quasipolynomial bound is historical, not the latest bound. Todd's 2014 refinement is at most n minus d to the power log base two d. <bookmark mark='f'/> A polynomial general diameter bound would be necessary but not sufficient for an efficient pivot rule: the rule must also find appropriate objective-improving paths. Our exercise compares finite routing rules without attempting to settle the open conjecture.",
+      "zh": "第二个前沿研究沿多面体边的路径。<bookmark mark='a'/>图中有界三维多面体有二十四个面、四十四个顶点，直径八；独立广度优先搜索核验每个顶点的离心率。<bookmark mark='b'/>Hirsch 曾猜想直径不超过面数减维数。<bookmark mark='c'/>每行有二十个固定种子、经过有界性认证的三维样本，未获认证的抽样在构造前拒绝；这些有限均值不支持通用增长定律或高维结论。<bookmark mark='d'/>Santos 用四十三维、八十六面且直径至少四十四的例子推翻原猜想。<bookmark mark='e'/>Kalai 与 Kleitman 的1992年准多项式界是历史结果，并非最新；Todd 在2014年改进为 n 减 d 的以二为底 log d 次方。<bookmark mark='f'/>一般多项式直径界是高效转轴规则的必要而非充分条件，规则还必须找到适当的目标改进路径；习题只比较有限路由规则，不要求解决开放猜想。"
+    },
+    "241bdfe67dd5": {
+      "scene": "Frontier",
+      "en": "The third frontier asks how close polynomial algorithms can get. <bookmark mark='a'/> The table distinguishes selected algorithmic guarantees, unconditional NP-hardness thresholds and conditional Unique Games thresholds; fixed epsilon qualifications matter. <bookmark mark='b'/> The PCP theorem gives polynomial-size encodings of NP witnesses with a randomized verifier using logarithmically many random bits and constantly many queries. Completeness and a fixed soundness gap concern valid versus false statements, not perfect error detection in arbitrary proofs. <bookmark mark='c'/> Gap reductions yield approximation hardness, including Håstad's seven-eighths-plus-epsilon barrier for MAX-3SAT unless P equals NP. <bookmark mark='d'/> Under the Unique Games Conjecture the corresponding fixed-factor thresholds for vertex cover and MAX-CUT match their standard approximation guarantees. The two-to-two theorem yields a separate vertex-cover hardness result. <bookmark mark='e'/> Raghavendra's conditional optimality theorem concerns each fixed finite-domain constraint-satisfaction problem and its appropriate SDP rounding framework, not every problem called constraint satisfaction with unrestricted representation.",
+      "zh": "第三个前沿问多项式算法能逼近到什么程度。<bookmark mark='a'/>表格区分所选算法保证、NP 困难阈值和唯一博弈条件阈值，固定 epsilon 的限定很重要。<bookmark mark='b'/>PCP 定理把 NP 见证编码成多项式长度，随机验证器只用对数随机位和常数次查询；完备性与固定可靠性差距区分真命题和假命题，不是完美检出任意证明中的每个错误。<bookmark mark='c'/>间隙归约带来近似困难性，例如除非 P 等于 NP，否则 MAX-3SAT 不能保证八分之七加固定 epsilon。<bookmark mark='d'/>唯一博弈猜想下，顶点覆盖和最大割的相应固定因子阈值与标准近似保证匹配；二对二定理另给顶点覆盖困难性结果。<bookmark mark='e'/>Raghavendra 的有条件最优性定理针对每个固定有限域约束满足问题及相应半定舍入框架，不是对任意表示、凡叫约束满足的问题都适用。"
+    },
+    "98eb3d298058": {
+      "scene": "Frontier",
+      "en": "Three questions organize this frontier. <bookmark mark='a'/> Strongly polynomial LP asks for an arithmetic-operation count polynomial in dimensions and independent of coefficient bit lengths, while also controlling intermediate encoding size. This is not a claim that reading arbitrary-precision input is free. <bookmark mark='b'/> A general polynomial bound on polytope diameter remains a separate geometric question. <bookmark mark='c'/> The Unique Games Conjecture governs conditional approximation thresholds. <bookmark mark='d'/> Our research-style exercise stays finite: generate certified bounded polytopes, compute exact graph distances, and compare a specified routing rule with shortest paths. Report seeds, failures and model limits; a successful finite experiment does not settle any of these open questions.",
+      "zh": "三个问题组织了这个前沿。<bookmark mark='a'/>强多项式线性规划要求算术运算次数为维数的多项式且独立于系数位数，同时控制中间编码长度，这不意味着读取任意精度输入免费。<bookmark mark='b'/>多面体直径的一般多项式界是另一个几何问题。<bookmark mark='c'/>唯一博弈猜想决定有条件近似阈值。<bookmark mark='d'/>研究式习题保持有限：生成认证有界多面体，计算精确图距离，比较指定路由与最短路，报告种子、失败和模型限制；有限实验成功不解决这些开放问题。"
+    },
+    "f7696314cb52": {
+      "scene": "Outro",
+      "en": "What we built: linear programs with exact primal-dual certificates; a feasible-basis simplex whose budget status is explicit; and Klee-Minty instances checked in exact arithmetic. A separate shadow-vertex theorem explains one specified perturbation model. Ellipsoids, residual-certified barrier points and total unimodularity show where polynomial methods and integrality apply. Exact knapsack bounds expose why a nearly integral relaxation still needs a valid branch. Covers, metric tours and hyperplane rounding distinguish general guarantees from finite local measurements. Discrete ski rental, unit-cost paging and multiplicative weights keep their adversary and expected-loss models explicit.",
+      "zh": "这一部分构建了带精确原始对偶证书的线性规划、明确报告预算状态的可行基单纯形，以及用精确运算核验的 Klee-Minty 实例；另一个影子顶点定理解释指定扰动模型。椭球、残差认证障碍点与全幺模展示多项式方法和整数性的适用范围；精确背包界说明几乎整数的松弛仍需合法分支。覆盖、度量巡回与超平面舍入区分一般保证和有限局部测量；离散滑雪租赁、单位成本换页和乘性权重明确保留对手与期望损失模型。"
+    },
+    "e39dca7529d5": {
+      "scene": "Outro",
+      "en": "Where this comes back. Part 27 builds the PCP theorem behind this part's hardness results, and the unique games conjecture. Part 32's kernel replaces pages with CLOCK, a cheap approximation of least recently used. Part 45's cloud packs virtual machines onto servers, an integer program solved by heuristics every second, and Part 48 balances load online. Part 52 explains why linear programming solvers fight floating point. And Part 57 turns multiplicative weights into a theory of learning. The AI series used this part's tools throughout: gradient descent and Newton's method, boosting, and the convex losses that make training tractable.",
+      "zh": "它们会在哪里再出现。第27部分构造这一部分困难性结果背后的 PCP 定理，以及唯一博弈猜想。第32部分的内核用 CLOCK 置换页面，它是最近最少使用的一种廉价近似。第45部分的云把虚拟机装到服务器上，这是一个每秒都在用启发式方法求解的整数规划；第48部分在线地做负载均衡。第52部分解释为什么线性规划求解器要与浮点数搏斗。第57部分则把乘性权重变成一套学习理论。AI 系列自始至终都在使用这一部分的工具：梯度下降和牛顿法、提升法，以及让训练变得可行的凸损失函数。"
+    },
+    "737cb8841c2f": {
+      "scene": "Outro",
+      "en": "In practice. HiGHS, Gurobi, CPLEX and OR-Tools run simplex, barrier and branch and cut on problems with millions of variables. Airlines schedule crews, carriers route vehicles, and supply chains plan with integer programs. Power grids and kidney exchanges are cleared by optimization, with dual prices. Every cache makes online decisions, and every model is trained by the descendants of gradient descent.",
+      "zh": "在实践中。HiGHS、Gurobi、CPLEX 和 OR-Tools 在有数百万变量的问题上运行单纯形法、障碍法和分支切割。航空公司排班机组，承运商规划车辆路线，供应链用整数规划做计划。电网和肾脏交换由优化来出清，并给出对偶价格。每个缓存都在做在线决策，而每个模型都由梯度下降的后代训练出来。"
+    },
+    "7baaf37b2563": {
+      "scene": "Outro",
+      "en": "Six exercises in the notes have worked guidance. The fifth designs a bounded three-by-three rational simplex port in Pebble; prove intermediate word bounds and verify it on the emulator before claiming a working build. We have not executed that port here. The last is a finite reproducible study of certified bounded polytopes and routing rules, with independent breadth-first-search references. Its deliverable is measured evidence and explicit limits, not a solution to the polynomial Hirsch conjecture.",
+      "zh": "笔记有六道附解答指引的习题。第五道设计有限三乘三有理数单纯形的 Pebble 移植；应先证明中间字长界并在模拟器验证，再声称完成构建，这里没有执行该移植。最后一道研究认证有界多面体与路由规则，用独立广度优先搜索作参照，交付可复现实证和明确局限，不要求解决多项式 Hirsch 猜想。"
+    },
+    "87038a891033": {
+      "scene": "Outro",
+      "en": "Next time, algorithms in practice. Big-O hides constants, and in production the constants and the machine decide. The everyday tools of real code: prefix sums, Fenwick and segment trees, two pointers, monotonic stacks and bit tricks. Then algorithm engineering, where a textbook hash table or binary search becomes many times faster by respecting the caches, branch predictors and vector units of Act Two, and how to measure that honestly. Part 24, Algorithms in Practice.",
+      "zh": "下一次，实践中的算法。大 O 隐藏了常数，而在生产环境里，决定一切的是常数和机器。真实代码中的日常工具：前缀和、Fenwick 树和线段树、双指针、单调栈和位运算技巧。然后是算法工程：一个教科书式的哈希表或二分查找，只要尊重第二幕讲过的缓存、分支预测器和向量单元，就能快上许多倍，以及如何诚实地测量这一点。第24部分，实践中的算法。"
+    },
+    "9bd24692775d": {
+      "scene": "Outro",
+      "en": "The books and papers this part follows are on screen and in the notes. Thank you for watching.",
+      "zh": "这一部分所依据的书和论文都在屏幕上，也在笔记里。感谢观看。"
+    }
   }
- },
- "title_en": "Computer Science, Built: Part 23, Optimization",
- "chapters_en": {
-  "Hook": "The best point of a polytope",
-  "LinearPrograms": "1. Linear programs",
-  "Simplex": "2. The simplex method",
-  "Duality": "3. Duality",
-  "KleeMinty": "4. Exponential in theory, fast in practice",
-  "PolyTime": "5. Polynomial time: ellipsoids and the central path",
-  "Unimodular": "6. When the vertices are integers",
-  "IntegerPrograms": "7. Integer programming",
-  "Approximation": "8. Approximation: covers",
-  "Tsp": "9. The travelling salesman",
-  "MaxCut": "10. A random hyperplane: MAX-CUT",
-  "Online": "11. Online: deciding without the future",
-  "Weights": "12. Multiplicative weights",
-  "Convex": "13. Convex optimization in a page",
-  "Frontier": "14. Frontier: faster LPs, the Hirsch question, the UGC",
-  "Outro": "Recap, problems, and where this comes back"
- }
 }

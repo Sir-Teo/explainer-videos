@@ -17,13 +17,94 @@ from fractions import Fraction
 
 import numpy as np
 
+def _graph(n, edges):
+    n = _integer(n, "vertices")
+    out = []
+    for edge in edges:
+        if len(edge) != 2:
+            raise ValueError("edges must contain two endpoints")
+        u, v = (_integer(x, "endpoint") for x in edge)
+        if u >= n or v >= n or u == v:
+            raise ValueError("edges require distinct valid endpoints")
+        out.append((u, v))
+    return n, out
+
+
+def _points(points):
+    points = [tuple(map(float, point)) for point in points]
+    if points and (len(points[0]) == 0 or any(len(point) != len(points[0]) for point in points)):
+        raise ValueError("points require a common positive dimension")
+    if not all(math.isfinite(v) for point in points for v in point):
+        raise ValueError("point coordinates must be finite")
+    return points
+
+
+
+def _integer(value, name, minimum=0):
+    import operator
+    if isinstance(value, (bool, np.bool_)):
+        raise ValueError(f"{name} must be an integer")
+    try:
+        value = operator.index(value)
+    except TypeError as exc:
+        raise ValueError(f"{name} must be an integer") from exc
+    if value < minimum:
+        raise ValueError(f"{name} must be at least {minimum}")
+    return value
+
+
+def _knapsack_instance(vals, wts, cap):
+    vals = [_integer(v, "value") for v in vals]
+    wts = [_integer(w, "weight", 1) for w in wts]
+    cap = _integer(cap, "capacity")
+    if len(vals) != len(wts):
+        raise ValueError("values and weights must have equal length")
+    return vals, wts, cap
+
+
+def _determinant_bareiss(matrix):
+    """Exact integer determinant by fraction-free elimination."""
+    A = [list(row) for row in matrix]
+    n = len(A)
+    if n == 0:
+        return 1
+    sign, previous = 1, 1
+    for k in range(n - 1):
+        pivot_row = next((i for i in range(k, n) if A[i][k]), None)
+        if pivot_row is None:
+            return 0
+        if pivot_row != k:
+            A[k], A[pivot_row] = A[pivot_row], A[k]
+            sign = -sign
+        pivot = A[k][k]
+        for i in range(k + 1, n):
+            for j in range(k + 1, n):
+                numerator = A[i][j] * pivot - A[i][k] * A[k][j]
+                quotient, remainder = divmod(numerator, previous)
+                assert remainder == 0
+                A[i][j] = quotient
+            A[i][k] = 0
+        previous = pivot
+    return sign * A[-1][-1]
+
+
 # --------------------------------------------------------------------------------------------------- simplex
 
 def simplex(c, A, b, rule: str = "dantzig", exact: bool = False, max_pivots: int = 100000):
     """Maximize c.x subject to A x <= b, x >= 0, with b >= 0 (so the slack basis is feasible).  Tableau simplex.
     ``rule``: "dantzig" (largest coefficient), "bland" (smallest index) or "steepest" (largest improvement).
     Returns dict: x, value, pivots, path (the vertex after each pivot, in the original variables), basis, duals."""
+    if rule not in ("dantzig", "bland", "steepest"):
+        raise ValueError("unknown pivot rule")
+    max_pivots = _integer(max_pivots, "max_pivots")
+    c, A, b = list(c), [list(row) for row in A], list(b)
     m, n = len(A), len(c)
+    if len(b) != m or any(len(row) != n for row in A):
+        raise ValueError("incompatible simplex dimensions")
+    if not all(math.isfinite(v) for v in [*c, *b, *(v for row in A for v in row)]):
+        raise ValueError("simplex inputs must be finite")
+    if any(v < 0 for v in b):
+        raise ValueError("this slack-basis simplex requires b >= 0; no Phase I is implemented")
     num = Fraction if exact else float
     T = [[num(v) for v in A[i]] + [num(1 if j == i else 0) for j in range(m)] + [num(b[i])] for i in range(m)]
     z = [num(-v) for v in c] + [num(0)] * m + [num(0)]
@@ -74,14 +155,20 @@ def simplex(c, A, b, rule: str = "dantzig", exact: bool = False, max_pivots: int
         if bv < n:
             x[bv] = T[i][-1]
     duals = [z[n + i] for i in range(m)]
-    return {"status": "optimal", "x": [float(v) for v in x], "value": float(z[-1]), "pivots": pivots, "path": path,
-            "basis": basis, "duals": [float(v) for v in duals], "x_exact": x, "value_exact": z[-1]}
+    return {"status": "iteration_limit" if any(v < -eps for v in z[:-1]) else "optimal", "x": [float(v) for v in x], "value": float(z[-1]), "pivots": pivots, "path": path,
+            "basis": basis, "duals": [float(v) for v in duals], "duals_exact": duals, "x_exact": x, "value_exact": z[-1]}
 
 
 def klee_minty(n: int, eps: Fraction = Fraction(1, 3)):
-    """The Klee-Minty cube in the form max x_n s.t. eps x_{j-1} <= x_j <= 1 - eps x_{j-1}, rewritten for simplex with
-    the standard deformed product: max sum 2^{n-j} x_j, s.t. 2 sum_{i<j} 2^{j-i} x_i + x_j <= 5^j.  Dantzig's rule
-    visits all 2^n vertices.  Returns (c, A, b)."""
+    """Fixed power-coefficient Klee-Minty variant, indexed from zero:
+    max sum_j 2**(n-1-j)*x_j, with x>=0 and
+    2*sum_{i<j}2**(j-i)*x_i+x_j <= 5**(j+1).
+    Dantzig's rule visits all2**n vertices in exact arithmetic. The legacy eps
+    argument is retained only at its default value; this variant does not use it.
+    """
+    n = _integer(n, "dimension", 1)
+    if eps != Fraction(1, 3):
+        raise ValueError("this fixed Klee-Minty variant does not parameterize eps")
     c = [2 ** (n - 1 - j) for j in range(n)]
     A, b = [], []
     for j in range(n):
@@ -101,6 +188,11 @@ def random_lp(n, m, rng):
 
 def vertices_3d(A, b):
     """All vertices of {x >= 0, A x <= b} in 3D, by intersecting every triple of planes."""
+    A, b = [list(row) for row in A], list(b)
+    if len(A) != len(b) or any(len(row) != 3 for row in A):
+        raise ValueError("3D vertex enumeration requires compatible three-column constraints")
+    if not all(math.isfinite(x) for x in [*b, *(v for row in A for v in row)]):
+        raise ValueError("vertex-enumeration data must be finite")
     P = [(list(row), float(v)) for row, v in zip(A, b)] + [([-1 if k == i else 0 for k in range(3)], 0.0)
                                                            for i in range(3)]
     out = []
@@ -124,24 +216,40 @@ def hull_faces_3d(V):
 # --------------------------------------------------------------------------------------------------- ellipsoid
 
 def ellipsoid_feasible(A, b, R: float = 10.0, max_steps: int = 10000, log: bool = False):
-    """Find x with A x <= b (2D or more) by the central-cut ellipsoid method, starting from the ball of radius R.
-    Returns (x or None, steps, log of (centre, shape matrix) per step)."""
-    A = np.asarray(A, float)
-    b = np.asarray(b, float)
+    """Central cuts in dimension>=2, initially enclosing the sought region in B(0,R).
+    None means the budget was exhausted (or a contradictory constant was found),
+    and is not a general infeasibility certificate."""
+    A, b = np.asarray(A, float), np.asarray(b, float)
+    if A.ndim != 2 or A.shape[1] < 2 or b.shape != (A.shape[0],):
+        raise ValueError("ellipsoid requires compatible dimensions, n>=2")
+    if not np.isfinite(A).all() or not np.isfinite(b).all() or not math.isfinite(R) or R <= 0:
+        raise ValueError("ellipsoid data must be finite and R positive")
+    max_steps = _integer(max_steps, "max_steps")
     n = A.shape[1]
-    x = np.zeros(n)
-    P = np.eye(n) * R * R
+    x, P = np.zeros(n), np.eye(n) * R * R
+    if not np.isfinite(P).all():
+        raise ValueError("initial squared radius must be finite")
     trail = [(x.copy(), P.copy())]
-    for step in range(max_steps):
-        viol = A @ x - b
-        k = int(np.argmax(viol))
-        if viol[k] <= 0:
+    for step in range(max_steps + 1):
+        violation = A @ x - b
+        if len(b) == 0 or np.max(violation) <= 0:
             return x, step, trail
+        if step == max_steps:
+            break
+        k = int(np.argmax(violation))
         a = A[k]
+        if not np.any(a):
+            return None, step, trail
         Pa = P @ a
-        g = Pa / math.sqrt(a @ Pa)
+        denominator = float(a @ Pa)
+        if not math.isfinite(denominator) or denominator <= 0:
+            raise RuntimeError("ellipsoid numerical shape breakdown")
+        g = Pa / math.sqrt(denominator)
         x = x - g / (n + 1)
         P = (n * n / (n * n - 1.0)) * (P - (2.0 / (n + 1)) * np.outer(g, g))
+        P = (P + P.T) / 2
+        if not np.isfinite(x).all() or not np.isfinite(P).all():
+            raise RuntimeError("ellipsoid numerical overflow")
         if log:
             trail.append((x.copy(), P.copy()))
     return None, max_steps, trail
@@ -150,35 +258,53 @@ def ellipsoid_feasible(A, b, R: float = 10.0, max_steps: int = 10000, log: bool 
 # ---------------------------------------------------------------------------------------- interior point
 
 def barrier_path(c, A, b, ts=None, x0=None, newton_tol=1e-10):
-    """Central path of max c.x s.t. A x <= b: x*(t) = argmin -t c.x - sum log(b - A x), traced by damped Newton from a
-    strictly feasible x0.  Returns (list of (t, x, Newton steps)), total Newton steps."""
-    c = np.asarray(c, float)
-    A = np.asarray(A, float)
-    b = np.asarray(b, float)
-    x = np.asarray(x0, float) if x0 is not None else np.zeros(A.shape[1])
-    ts = ts if ts is not None else [0.5 * 1.6 ** k for k in range(28)]
+    """Damped Newton log-barrier trace from a strictly feasible initial point.
+    Numerical failure or a Newton/line-search budget raises instead of certifying convergence."""
+    c, A, b = np.asarray(c, float), np.asarray(A, float), np.asarray(b, float)
+    if c.ndim != 1 or not len(c) or A.ndim != 2 or A.shape[1] != len(c) or b.shape != (len(A),):
+        raise ValueError("incompatible barrier dimensions")
+    x = np.zeros(len(c)) if x0 is None else np.asarray(x0, float).copy()
+    if x.shape != c.shape or not all(np.isfinite(a).all() for a in (c, A, b, x)):
+        raise ValueError("barrier inputs must be finite")
+    if not math.isfinite(newton_tol) or newton_tol <= 0 or np.any(b - A @ x <= 0):
+        raise ValueError("barrier requires positive tolerance and strictly feasible x0")
+    ts = list(ts) if ts is not None else [0.5 * 1.6 ** k for k in range(28)]
+    if any(not math.isfinite(t) or t <= 0 for t in ts):
+        raise ValueError("barrier parameters must be finite and positive")
     out, total = [], 0
     for t in ts:
         steps = 0
-        for _ in range(100):
+        for iteration in range(100):
             s = b - A @ x
             g = -t * c + A.T @ (1.0 / s)
-            H = A.T @ np.diag(1.0 / s ** 2) @ A
-            dx = -np.linalg.solve(H, g)
-            lam2 = float(-g @ dx)
-            if lam2 / 2 < newton_tol:
+            H = A.T @ ((1.0 / s ** 2)[:, None] * A)
+            try:
+                dx = -np.linalg.solve(H, g)
+            except np.linalg.LinAlgError as exc:
+                raise RuntimeError("singular barrier Hessian") from exc
+            decrement = float(-g @ dx)
+            if not np.isfinite(dx).all() or not math.isfinite(decrement) or decrement < -1e-12:
+                raise RuntimeError("barrier numerical breakdown")
+            if decrement / 2 < newton_tol:
                 break
-            step = 1.0
-            while np.any(b - A @ (x + step * dx) <= 0):
-                step *= 0.5
             f0 = -t * c @ x - np.sum(np.log(s))
-            while True:
+            step = 1.0
+            for backtrack in range(80):
                 xn = x + step * dx
-                if -t * c @ xn - np.sum(np.log(b - A @ xn)) <= f0 - 0.25 * step * lam2 or step < 1e-12:
-                    break
+                slack = b - A @ xn
+                if np.all(slack > 0):
+                    objective = -t * c @ xn - np.sum(np.log(slack))
+                    if math.isfinite(objective) and objective <= f0 - 0.25 * step * decrement:
+                        break
                 step *= 0.5
+            else:
+                raise RuntimeError("barrier line-search budget exhausted")
+            if np.array_equal(xn, x):
+                raise RuntimeError("barrier line search cannot make numerical progress")
             x = xn
             steps += 1
+        else:
+            raise RuntimeError("barrier Newton budget exhausted")
         total += steps
         out.append((t, x.copy(), steps))
     return out, total
@@ -187,21 +313,35 @@ def barrier_path(c, A, b, ts=None, x0=None, newton_tol=1e-10):
 # ---------------------------------------------------------------------------------- total unimodularity
 
 def is_totally_unimodular(M, max_k: int | None = None):
-    """Brute force: every square submatrix has determinant 0, 1 or -1.  Exponential; for small matrices.  Returns
-    (bool, a witness submatrix (rows, cols, det) if not)."""
-    M = np.asarray(M, int)
+    """Exact small-integer minor search. Return (False, witness) on an obstruction,
+    (True, None) after all sizes, or (None, None) after an inconclusive partial search."""
+    import operator
+    M = np.asarray(M, object)
+    if M.ndim != 2:
+        raise ValueError("TU requires a rectangular integer matrix")
+    try:
+        rows = [[operator.index(v) for v in row] for row in M]
+    except TypeError as exc:
+        raise ValueError("TU requires exact integer entries") from exc
     m, n = M.shape
-    K = min(m, n) if max_k is None else max_k
+    full = min(m, n)
+    K = full if max_k is None else _integer(max_k, "max_k")
+    if K > full:
+        raise ValueError("max_k exceeds the matrix dimensions")
     for k in range(1, K + 1):
         for R in itertools.combinations(range(m), k):
             for C in itertools.combinations(range(n), k):
-                d = round(np.linalg.det(M[np.ix_(R, C)]))
+                d = _determinant_bareiss([[rows[i][j] for j in C] for i in R])
                 if d not in (-1, 0, 1):
                     return False, (R, C, d)
-    return True, None
+    return (True if K == full else None), None
 
 
 def bipartite_incidence(edges, nl, nr):
+    nl, nr = _integer(nl, "left vertices"), _integer(nr, "right vertices")
+    edges = [tuple(_integer(v, "endpoint") for v in edge) for edge in edges]
+    if any(len(edge) != 2 or edge[0] >= nl or edge[1] >= nr for edge in edges):
+        raise ValueError("bipartite endpoints must belong to their respective sides")
     M = np.zeros((nl + nr, len(edges)), int)
     for k, (u, v) in enumerate(edges):
         M[u, k] = 1
@@ -212,102 +352,111 @@ def bipartite_incidence(edges, nl, nr):
 # --------------------------------------------------------------------------------------- integer programming
 
 def knapsack_lp_bound(vals, wts, cap, fixed):
-    """Fractional knapsack bound given fixed decisions (dict i -> 0/1).  Returns (bound, x)."""
-    rem = cap - sum(wts[i] for i, v in fixed.items() if v == 1)
+    """Exact fractional upper bound for nonnegative integer values/positive weights."""
+    vals, wts, cap = _knapsack_instance(vals, wts, cap)
+    fixed = {_integer(i, "item index"): _integer(v, "decision") for i, v in fixed.items()}
+    if any(i >= len(vals) or v not in (0, 1) for i, v in fixed.items()):
+        raise ValueError("fixed decisions require valid indices and zero or one")
+    rem = cap - sum(wts[i] for i, v in fixed.items() if v)
     if rem < 0:
         return -math.inf, None
-    val = sum(vals[i] for i, v in fixed.items() if v == 1)
-    x = {i: float(v) for i, v in fixed.items()}
-    free = sorted((i for i in range(len(vals)) if i not in fixed), key=lambda i: -vals[i] / wts[i])
+    value = Fraction(sum(vals[i] for i, v in fixed.items() if v))
+    x = {i: Fraction(v) for i, v in fixed.items()}
+    free = sorted((i for i in range(len(vals)) if i not in fixed),
+                  key=lambda i: (-Fraction(vals[i], wts[i]), i))
     for i in free:
-        if wts[i] <= rem:
-            x[i] = 1.0
-            rem -= wts[i]
-            val += vals[i]
-        else:
-            x[i] = rem / wts[i]
-            val += vals[i] * x[i]
-            rem = 0
-            for j in free[free.index(i) + 1:]:
-                x[j] = 0.0
-            break
-    for i in free:
-        x.setdefault(i, 0.0)
-    return val, x
+        take = Fraction(min(wts[i], rem), wts[i])
+        x[i] = take
+        value += vals[i] * take
+        rem -= wts[i] * take
+    return value, x
 
 
 def branch_and_bound_knapsack(vals, wts, cap, log: bool = False):
-    """0/1 knapsack by best-first branch and bound with the LP bound.  Returns (best value, choice, nodes, tree log)."""
+    """Exact integer 0/1 best-first search, with exact rational pruning bounds."""
     import heapq
-    best, best_x = 0, None
-    root_b, _ = knapsack_lp_bound(vals, wts, cap, {})
-    heap = [(-root_b, 0, {})]
-    nodes = 0
-    tree = []
-    uid = 0
+    vals, wts, cap = _knapsack_instance(vals, wts, cap)
+    best, best_x = 0, {i: 0 for i in range(len(vals))}
+    root, _ = knapsack_lp_bound(vals, wts, cap, {})
+    heap = [(-root, 0, {})]
+    nodes, uid, tree = 0, 0, []
     while heap:
-        nb, _, fixed = heapq.heappop(heap)
-        bound = -nb
+        negative_bound, _, fixed = heapq.heappop(heap)
+        bound = -negative_bound
         nodes += 1
-        if bound <= best + 1e-9:
+        if bound <= best:
             if log:
                 tree.append({"fixed": dict(fixed), "bound": bound, "fate": "pruned"})
             continue
-        bnd, x = knapsack_lp_bound(vals, wts, cap, fixed)
-        frac = [i for i, v in x.items() if 1e-9 < v < 1 - 1e-9]
-        if not frac:
-            val = sum(vals[i] for i, v in x.items() if v > 0.5)
-            if val > best:
-                best, best_x = val, {i: int(v > 0.5) for i, v in x.items()}
+        bound, x = knapsack_lp_bound(vals, wts, cap, fixed)
+        fractional = [i for i, v in x.items() if v not in (0, 1)]
+        if not fractional:
+            choice = {i: int(v) for i, v in x.items()}
+            assert sum(wts[i] * v for i, v in choice.items()) <= cap
+            value = sum(vals[i] * v for i, v in choice.items())
+            if value > best:
+                best, best_x = value, choice
             if log:
-                tree.append({"fixed": dict(fixed), "bound": bnd, "fate": "integral", "value": val})
+                tree.append({"fixed": dict(fixed), "bound": bound, "fate": "integral", "value": value})
             continue
+        i = fractional[0]
         if log:
-            tree.append({"fixed": dict(fixed), "bound": bnd, "fate": "branch", "on": frac[0]})
-        i = frac[0]
-        for v in (1, 0):
-            f2 = dict(fixed)
-            f2[i] = v
-            b2, _ = knapsack_lp_bound(vals, wts, cap, f2)
-            if b2 > best + 1e-9:
+            tree.append({"fixed": dict(fixed), "bound": bound, "fate": "branch", "on": i})
+        for decision in (1, 0):
+            child = dict(fixed)
+            child[i] = decision
+            child_bound, _ = knapsack_lp_bound(vals, wts, cap, child)
+            if child_bound > best:
                 uid += 1
-                heapq.heappush(heap, (-b2, uid, f2))
+                heapq.heappush(heap, (-child_bound, uid, child))
             elif log:
-                tree.append({"fixed": f2, "bound": b2, "fate": "pruned"})
+                tree.append({"fixed": child, "bound": child_bound, "fate": "pruned"})
     return best, best_x, nodes, tree
 
 
 def knapsack_dp(vals, wts, cap):
+    vals, wts, cap = _knapsack_instance(vals, wts, cap)
     best = [0] * (cap + 1)
-    for v, w in zip(vals, wts):
-        for c in range(cap, w - 1, -1):
-            best[c] = max(best[c], best[c - w] + v)
+    for value, weight in zip(vals, wts):
+        for capacity in range(cap, weight - 1, -1):
+            best[capacity] = max(best[capacity], best[capacity - weight] + value)
     return best[cap]
 
 
 def knapsack_fptas(vals, wts, cap, eps):
-    """Ibarra-Kim: scale values down by K = eps vmax / n, solve exactly by DP over (scaled) value.  Returns (value of
-    the chosen set in the true values, table size)."""
-    n = len(vals)
-    vmax = max(v for v, w in zip(vals, wts) if w <= cap)
-    K = eps * vmax / n
-    sv = [int(v // K) for v in vals]
-    V = sum(sv)
-    INF = math.inf
-    minw = [0] + [INF] * V
-    choice = [[] for _ in range(V + 1)]
-    for i in range(n):
-        for s in range(V, sv[i] - 1, -1):
-            if minw[s - sv[i]] + wts[i] < minw[s]:
-                minw[s] = minw[s - sv[i]] + wts[i]
-                choice[s] = choice[s - sv[i]] + [i]
+    """Value scaling for the integer domain. Return true value and n*V work model;
+    the second result is not an allocated-memory measurement."""
+    vals, wts, cap = _knapsack_instance(vals, wts, cap)
+    try:
+        epsilon = eps if isinstance(eps, Fraction) else Fraction(str(eps))
+    except (ValueError, ZeroDivisionError) as exc:
+        raise ValueError("epsilon must be in (0, 1]") from exc
+    if not 0 < epsilon <= 1:
+        raise ValueError("epsilon must be in (0, 1]")
+    items = [(v, w) for v, w in zip(vals, wts) if w <= cap and v > 0]
+    if not items:
+        return 0, 0
+    n = len(items)
+    scale = epsilon * max(v for v, _ in items) / n
+    scaled = [int(Fraction(v) // scale) for v, _ in items]
+    V = sum(scaled)
+    minw = [0] + [cap + 1] * V
+    choice = [()] * (V + 1)
+    for i, (_, weight) in enumerate(items):
+        for s in range(V, scaled[i] - 1, -1):
+            candidate = minw[s - scaled[i]] + weight
+            if candidate < minw[s]:
+                minw[s] = candidate
+                choice[s] = choice[s - scaled[i]] + (i,)
     s = max(s for s in range(V + 1) if minw[s] <= cap)
-    return sum(vals[i] for i in choice[s]), (n * V)
+    assert len(set(choice[s])) == len(choice[s])
+    return sum(items[i][0] for i in choice[s]), n * V
 
 
 # ------------------------------------------------------------------------------------------ approximation
 
 def vertex_cover_exact(n, edges):
+    n, edges = _graph(n, edges)
     best = None
     for k in range(n + 1):
         for S in itertools.combinations(range(n), k):
@@ -318,6 +467,7 @@ def vertex_cover_exact(n, edges):
 
 
 def vertex_cover_matching(n, edges, seed=0):
+    n, edges = _graph(n, edges)
     rng = random.Random(seed)
     E = list(edges)
     rng.shuffle(E)
@@ -329,36 +479,46 @@ def vertex_cover_matching(n, edges, seed=0):
 
 
 def vertex_cover_lp(n, edges):
+    n, edges = _graph(n, edges)
+    if not edges:
+        return 0.0, np.zeros(n), set()
     from scipy.optimize import linprog
     A = np.zeros((len(edges), n))
     for k, (u, v) in enumerate(edges):
         A[k, u] = A[k, v] = -1
     r = linprog(np.ones(n), A_ub=A, b_ub=-np.ones(len(edges)), bounds=[(0, 1)] * n, method="highs")
+    if not r.success:
+        raise RuntimeError("vertex-cover LP solver failed: " + r.message)
     x = r.x
     return float(r.fun), x, {i for i in range(n) if x[i] >= 0.5 - 1e-9}
 
 
 def set_cover_greedy(universe, sets):
-    U = set(universe)
+    U, sets = set(universe), [set(s) for s in sets]
+    if U - set().union(*sets):
+        raise ValueError("set family does not cover the universe")
     chosen = []
     while U:
-        k = max(range(len(sets)), key=lambda i: len(U & sets[i]))
-        chosen.append(k)
-        U -= sets[k]
+        i = max(range(len(sets)), key=lambda k: len(U & sets[k]))
+        chosen.append(i)
+        U -= sets[i]
     return chosen
 
 
 def set_cover_exact(universe, sets):
-    U = set(universe)
-    for k in range(1, len(sets) + 1):
-        for C in itertools.combinations(range(len(sets)), k):
-            if set().union(*(sets[i] for i in C)) >= U:
-                return list(C)
+    U, sets = set(universe), [set(s) for s in sets]
+    if U - set().union(*sets):
+        raise ValueError("set family does not cover the universe")
+    for k in range(len(sets) + 1):
+        for chosen in itertools.combinations(range(len(sets)), k):
+            if set().union(*(sets[i] for i in chosen)) >= U:
+                return list(chosen)
 
 
 def harmonic_bad_set_cover(k: int):
     """The classic instance where greedy pays H_k-ish: two 'rows' cover everything optimally; greedy is lured by columns
     of sizes 2, 4, 8, ...  Universe of size 2(2^k - 1).  Returns (universe, sets, optimum = 2)."""
+    k = _integer(k, "trap size", 2)
     U = list(range(2 * (2 ** k - 1)))
     top = set(range(2 ** k - 1))
     bot = set(range(2 ** k - 1, 2 * (2 ** k - 1)))
@@ -375,11 +535,17 @@ def harmonic_bad_set_cover(k: int):
 # --------------------------------------------------------------------------------------------------- TSP
 
 def tour_length(P, tour):
+    P, tour = _points(P), [_integer(i, "tour index") for i in tour]
+    if any(i >= len(P) for i in tour):
+        raise ValueError("tour indices must refer to input points")
     return sum(math.dist(P[tour[i]], P[tour[(i + 1) % len(tour)]]) for i in range(len(tour)))
 
 
 def held_karp(P):
     """Exact TSP by Held-Karp dynamic programming, O(2^n n^2).  Returns (length, tour)."""
+    P = _points(P)
+    if len(P) <= 1:
+        return 0.0, list(range(len(P)))
     n = len(P)
     D = [[math.dist(P[i], P[j]) for j in range(n)] for i in range(n)]
     INF = math.inf
@@ -413,6 +579,9 @@ def held_karp(P):
 
 
 def mst_prim(P):
+    P = _points(P)
+    if not P:
+        return []
     n = len(P)
     inside = [False] * n
     best = [math.inf] * n
@@ -433,6 +602,9 @@ def mst_prim(P):
 
 
 def double_tree(P):
+    P = _points(P)
+    if not P:
+        return [], []
     edges = mst_prim(P)
     adj = {i: [] for i in range(len(P))}
     for u, v in edges:
@@ -453,6 +625,10 @@ def double_tree(P):
 
 def min_weight_perfect_matching(P, nodes):
     """Exact, by DP over subsets (|nodes| <= ~20)."""
+    P, nodes = _points(P), list(nodes)
+    nodes = [_integer(i, "matching index") for i in nodes]
+    if len(nodes) % 2 or len(set(nodes)) != len(nodes) or any(i >= len(P) for i in nodes):
+        raise ValueError("matching requires an even number of distinct valid nodes")
     nodes = list(nodes)
     k = len(nodes)
     from functools import lru_cache
@@ -478,6 +654,9 @@ def min_weight_perfect_matching(P, nodes):
 
 def christofides(P):
     """Christofides-Serdyukov: MST + min-weight perfect matching on odd vertices + Euler tour + shortcuts."""
+    P = _points(P)
+    if not P:
+        return [], [], (), []
     edges = mst_prim(P)
     deg = [0] * len(P)
     for u, v in edges:
@@ -509,6 +688,9 @@ def christofides(P):
 
 
 def two_opt(P, tour):
+    P, tour = _points(P), [_integer(i, "tour index") for i in tour]
+    if sorted(tour) != list(range(len(P))):
+        raise ValueError("two-opt requires a permutation of all points")
     tour = list(tour)
     n = len(tour)
     improved, moves = True, 0
@@ -525,6 +707,9 @@ def two_opt(P, tour):
 
 
 def nearest_neighbour_tour(P):
+    P = _points(P)
+    if not P:
+        return []
     n = len(P)
     tour, left = [0], set(range(1, n))
     while left:
@@ -538,6 +723,9 @@ def nearest_neighbour_tour(P):
 # ------------------------------------------------------------------------------------------- MAX-CUT
 
 def maxcut_exact(n, edges):
+    n, edges = _graph(n, edges)
+    if n == 0:
+        return 0, 0
     best, bs = -1, None
     for mask in range(1 << (n - 1)):
         c = sum(1 for u, v in edges if ((mask >> u) ^ (mask >> v)) & 1)
@@ -547,32 +735,43 @@ def maxcut_exact(n, edges):
 
 
 def gw_vectors(n, edges, dim=None, iters=3000, lr=0.05, seed=0):
-    """The Goemans-Williamson SDP by the Burer-Monteiro low-rank method: unit vectors v_i in R^k minimizing
-    sum over edges of v_i . v_j (i.e. maximizing sum (1 - v_i.v_j)/2), by projected gradient.  Returns (V, SDP value)."""
-    k = dim or max(3, int(math.ceil(math.sqrt(2 * n))) + 1)
+    """Projected-gradient unit vectors and their local primal objective.
+    This nonconvex finite solve does not certify an SDP optimum or MAX-CUT upper bound."""
+    n, edges = _graph(n, edges)
+    k = max(3, int(math.ceil(math.sqrt(2 * n))) + 1) if dim is None else _integer(dim, "dimension", 1)
+    iters = _integer(iters, "iterations")
+    if not math.isfinite(lr) or lr < 0:
+        raise ValueError("learning rate must be finite and nonnegative")
     rng = np.random.default_rng(seed)
     V = rng.standard_normal((n, k))
-    V /= np.linalg.norm(V, axis=1, keepdims=True)
-    E = np.array(edges)
-    for it in range(iters):
+    if n:
+        V /= np.linalg.norm(V, axis=1, keepdims=True)
+    E = np.asarray(edges, dtype=int).reshape(-1, 2)
+    for _ in range(iters):
         G = np.zeros_like(V)
         np.add.at(G, E[:, 0], V[E[:, 1]])
         np.add.at(G, E[:, 1], V[E[:, 0]])
         V = V - lr * G
-        V /= np.linalg.norm(V, axis=1, keepdims=True)
-    val = float(np.sum((1 - np.sum(V[E[:, 0]] * V[E[:, 1]], axis=1)) / 2))
-    return V, val
+        norms = np.linalg.norm(V, axis=1, keepdims=True)
+        if not np.isfinite(V).all() or np.any(norms == 0):
+            raise RuntimeError("projected-gradient normalization failed")
+        V /= norms
+    value = float(np.sum((1 - np.sum(V[E[:, 0]] * V[E[:, 1]], axis=1)) / 2))
+    return V, value
 
 
 def gw_round(V, edges, trials=200, seed=1):
-    rng = np.random.default_rng(seed)
-    E = np.array(edges)
-    vals = []
+    V = np.asarray(V, float)
+    if V.ndim != 2 or V.shape[1] == 0 or not np.isfinite(V).all() or np.any(np.linalg.norm(V, axis=1) == 0):
+        raise ValueError("rounding requires finite nonzero vectors")
+    _, edges = _graph(len(V), edges)
+    trials = _integer(trials, "trials", 1)
+    E = np.asarray(edges, dtype=int).reshape(-1, 2)
+    rng, values = np.random.default_rng(seed), []
     for _ in range(trials):
-        r = rng.standard_normal(V.shape[1])
-        side = V @ r >= 0
-        vals.append(int(np.sum(side[E[:, 0]] != side[E[:, 1]])))
-    return vals
+        side = V @ rng.standard_normal(V.shape[1]) >= 0
+        values.append(int(np.sum(side[E[:, 0]] != side[E[:, 1]])))
+    return values
 
 
 def gw_alpha():
@@ -586,6 +785,9 @@ def gw_alpha():
 
 def ski_rental(B, days, strategy="break_even", rng=None):
     """Rent costs 1 a day, buying costs B.  Returns the cost of the strategy when the season lasts ``days``."""
+    B, days = _integer(B, "buy cost", 1), _integer(days, "season length")
+    if rng is None:
+        rng = random.Random()
     if strategy == "break_even":
         buy_day = B
     elif strategy == "random":
@@ -607,6 +809,14 @@ def ski_rental(B, days, strategy="break_even", rng=None):
 
 def paging(trace, k, policy, rng=None):
     """Page faults of a cache of k pages: "lru", "fifo", "random", "marking" (randomized), or "opt" (Belady)."""
+    k = _integer(k, "cache capacity")
+    if policy not in ("opt", "marking", "lru", "fifo", "random"):
+        raise ValueError("unknown paging policy")
+    trace = list(trace)
+    if k == 0:
+        return len(trace)
+    if rng is None:
+        rng = random.Random()
     faults = 0
     if policy == "opt":
         nxt = [0] * len(trace)
@@ -663,37 +873,47 @@ def paging(trace, k, policy, rng=None):
 # ------------------------------------------------------------------------------------- multiplicative weights
 
 def hedge(losses, eta):
-    """Hedge / multiplicative weights over n experts with losses in [0, 1] (T x n array).  Returns (algorithm's
-    cumulative expected loss, best expert's loss, the weight history)."""
+    """Cumulative expected loss and normalized distributions for losses in [0,1]."""
     L = np.asarray(losses, float)
+    if L.ndim != 2 or L.shape[1] == 0 or not np.isfinite(L).all() or np.any((L < 0) | (L > 1)):
+        raise ValueError("losses must be a finite T by n array in [0,1], with n>0")
+    if not math.isfinite(eta) or eta <= 0:
+        raise ValueError("eta must be finite and positive")
     T, n = L.shape
-    w = np.ones(n)
-    alg = 0.0
-    hist = []
-    for t in range(T):
-        p = w / w.sum()
-        hist.append(p.copy())
-        alg += float(p @ L[t])
-        w *= np.exp(-eta * L[t])
-    return alg, float(L.sum(0).min()), np.array(hist)
+    logw = np.zeros(n)
+    algorithm, history = 0.0, []
+    for losses_t in L:
+        w = np.exp(logw - logw.max())
+        distribution = w / w.sum()
+        history.append(distribution.copy())
+        algorithm += float(distribution @ losses_t)
+        with np.errstate(over='raise', invalid='raise'):
+            logw -= eta * (losses_t - losses_t.min())
+            logw -= logw.max()
+    return algorithm, float(L.sum(0).min()), np.array(history).reshape(T, n)
 
 
-def mw_zero_sum(M, T, eta=None):
-    """Approximate the value of the zero-sum game with payoff matrix M (row player maximizes, entries in [0, 1]) by
-    letting the row player run multiplicative weights against a best-responding column player.  Returns (lower,
-    upper) bounds on the value, and the averaged row strategy."""
+def mw_zero_sum(M, T, eta=None, *, return_column=False):
+    """Finite empirical primal/dual game bounds; row payoffs lie in [0,1]."""
     M = np.asarray(M, float)
+    if M.ndim != 2 or min(M.shape) == 0 or not np.isfinite(M).all() or np.any((M < 0) | (M > 1)):
+        raise ValueError("payoffs must be a nonempty finite matrix in [0,1]")
+    T = _integer(T, "rounds", 1)
     m, n = M.shape
-    eta = eta or math.sqrt(math.log(m) / T)
-    w = np.ones(m)
-    avg_p = np.zeros(m)
-    avg_q = np.zeros(n)
+    eta = math.sqrt(math.log(m) / T) if eta is None else float(eta)
+    if not math.isfinite(eta) or eta < 0:
+        raise ValueError("eta must be finite and nonnegative")
+    logw, avg_p, avg_q = np.zeros(m), np.zeros(m), np.zeros(n)
     for _ in range(T):
-        p = w / w.sum()
-        j = int(np.argmin(p @ M))
-        avg_p += p
+        w = np.exp(logw - logw.max())
+        distribution = w / w.sum()
+        j = int(np.argmin(distribution @ M))
+        avg_p += distribution
         avg_q[j] += 1
-        w *= np.exp(eta * M[:, j])
+        with np.errstate(over='raise', invalid='raise'):
+            logw += eta * (M[:, j] - M[:, j].max())
+            logw -= logw.max()
     avg_p /= T
     avg_q /= T
-    return float(np.min(avg_p @ M)), float(np.max(M @ avg_q)), avg_p
+    result = (float(np.min(avg_p @ M)), float(np.max(M @ avg_q)), avg_p)
+    return (*result, avg_q) if return_column else result

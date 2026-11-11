@@ -45,25 +45,27 @@ class Online(VoiceoverScene):
                   color=HEAD),
             label(r"break-even: \ rent $B - 1$ days, \ then buy: \\ never more than $2 - 1/B$ times the best", font_size=21,
                   color=NO),
-            label(r"no deterministic rule does better: \\ an adversary ends the season the day after you buy",
+            label('no deterministic rule improves this ratio: \\\\ end the season on its purchase day',
                   font_size=21, color=GREY_A),
-            label(rf"randomized \ (Karlin et al., 1994): \\ $e/(e - 1) \approx {o['e_ratio']:.3f}$ in expectation",
+            label(rf"discrete $B=10$: \ ratio {o['discrete_ratio']:.3f}; \\ continuous/large-$B$ limit $e/(e-1)\approx{o['e_ratio']:.3f}$; \\ season fixed before the random draw",
                   font_size=21, color=LAM),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
         if side.width > 5.6:
             side.width = 5.6
             side.to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "So far every algorithm saw its whole input. Many real decisions are made before the future arrives. "
-            "<bookmark mark='a'/> Skis cost ten to buy, or one a day to rent, and you don't know how many days of snow "
-            "there will be. <bookmark mark='b'/> Judge a strategy by its competitive ratio: in the worst case, how "
-            "much more it pays than someone who knew the future, who would rent for short seasons and buy at once "
-            "for long ones. <bookmark mark='c'/> Rent for nine days, then buy. If the season is short you paid what "
-            "the clairvoyant paid; if it is long you paid nineteen instead of ten. Never more than twice. <bookmark "
-            "mark='d'/> No deterministic rule does better, because an adversary who knows your rule can end the season "
-            "the day after you buy. <bookmark mark='e'/> But if you buy on a random day, with the right "
-            "probabilities, the adversary cannot aim, and the expected ratio falls to e over e minus one, about one "
-            "point five eight. Our simulation of that rule paid fifteen point four for long seasons, against ten."
+            (
+            "Online decisions arrive before their future is known. <bookmark mark='a'/> Rent skis for one per "
+            'day or buy for ten. The discrete convention charges rental only on days before purchase. <bookmark '
+            "mark='b'/> Compare cost with the clairvoyant optimum, the smaller of season length and ten. For "
+            "randomized rules the season must be fixed independently of the random buy day. <bookmark mark='c'/> "
+            "Rent nine days, then buy: the worst ratio is nineteen over ten. <bookmark mark='d'/> A "
+            'deterministic lower-bound adversary ends the season on the purchase day. This gives the required '
+            "ratio even for a rule that buys early. <bookmark mark='e'/> For our buy-day distribution the exact "
+            'discrete ratio is one over one minus nine tenths to the tenth power, about one point five three '
+            'five. The familiar e over e minus one is the continuous or large-buy-price limit, about one point '
+            'five eight two. The sampled curve estimates the separately calculated exact expectation.'
+        )
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl))
             vo.wait_until("a")
@@ -93,22 +95,24 @@ class Online(VoiceoverScene):
                   r"holds $k$ of them", font_size=21, color=WHITE),
             label(r"Belady (1966): \ evict the line used \textbf{furthest in the future}: \ optimal, \ and impossible "
                   r"online", font_size=21, color=YES),
-            label(r"LRU: \ 1.2 to 6.9 times the clairvoyant; \ randomized policies win once the cache is large",
+            label('finite trace outcomes for these capacities and separate seeds; \\ no universal winner',
                   font_size=21, color=DATA),
-            label(r"marking: \ evict a random unmarked page; \ $2H_k$-competitive \ (Fiat et al., 1991)", font_size=21,
+            label('marking: \\ expected $2H_k$ competitiveness for oblivious requests, \\ plus an initial additive term', font_size=21,
                   color=LAM),
         ).arrange(DOWN, buff=0.24).next_to(tab, DOWN, buff=0.4)
         with self.voiceover(
-            "Caches face the same problem every nanosecond: when the cache is full and a new line arrives, which old "
-            "one should go? <bookmark mark='a'/> We replayed the Job's memory trace from Part 9, a hundred and "
-            "fifty-five thousand accesses to ninety-two distinct lines, through caches of eight to ninety-six lines, "
-            "under several policies. <bookmark mark='b'/> Laszlo Belady showed in 1966 that the optimal policy evicts "
-            "the line whose next use is furthest in the future. It is perfect, and impossible online, but it measures "
-            "everyone else. <bookmark mark='c'/> Least recently used stays within a factor of about one and a "
-            "fifth to seven of the clairvoyant here, and FIFO is close behind. <bookmark mark='d'/> Once the cache "
-            "is large, the randomized policies win: the marking algorithm, which evicts a random page not used since "
-            "the current phase began, and even plain random eviction. The Job sweeps through its tables in loops, "
-            "and loops are exactly where LRU is weakest, as the next example shows."
+            (
+            "We replay only the Job's data accesses, excluding instruction fetches. <bookmark mark='a'/> Its one "
+            'hundred fifty-five thousand two hundred sixty-six accesses map to ninety-two distinct '
+            'sixty-four-byte lines. The model is an initially empty fully associative cache with unit miss cost, '
+            "not a hardware latency simulation. <bookmark mark='b'/> Belady evicts the page whose next use lies "
+            'furthest ahead; offline next-use preprocessing is separate from online policy work. An independent '
+            "full-trace simulator checks every displayed result. <bookmark mark='c'/> The table shows finite "
+            'outcomes for these capacities and seeds, including least recently used, first in first out and '
+            "random policies. <bookmark mark='d'/> Marking clears marks at a new phase and evicts a random "
+            'unmarked resident. Its two-H-k expected competitive theorem assumes an oblivious request sequence '
+            'and allows an additive initial term. These particular random outcomes establish no universal winner.'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule),
                       LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.25))
@@ -137,22 +141,24 @@ class Online(VoiceoverScene):
                          colors=[[WHITE, GREY_A, NO, LAM, YES, HEAD]] * len(rows))
         tab.next_to(cap, DOWN, buff=0.4).set_x(0)
         notes = VGroup(
-            label(r"Sleator and Tarjan (1985): \ LRU and FIFO are $k$-competitive, \ and no deterministic policy is "
-                  r"better \ (proved by this adversary)", font_size=21, color=HEAD),
+            label('LRU/FIFO: \\ $k$-competitive up to an additive term; \\\\ general deterministic lower bound uses a policy-adaptive request, \\ not this fixed cycle', font_size=21, color=HEAD),
             label(r"OPT evicts the page needed furthest away: \ about one fault per $k$ requests", font_size=21,
                   color=YES),
-            label(r"yet real traces have locality, \ and LRU's approximations rule every cache \ (Parts 9 and 32)",
+            label('model: \\ initially empty, \\ fully associative, \\ unit misses; \\ data accesses only',
                   font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "How bad can least recently used be? <bookmark mark='a'/> Use a cache of four pages and request five "
-            "pages in a cycle. The page LRU evicts is always the very next one requested, so every request is a "
-            "fault. <bookmark mark='b'/> The clairvoyant evicts the page needed furthest away and faults about once "
-            "every four requests. <bookmark mark='c'/> Daniel Sleator and Robert Tarjan founded competitive analysis "
-            "with this example in 1985: LRU and FIFO are k-competitive, and the same adversary forces every "
-            "deterministic policy to fault on every request, so none does better. Randomized marking cannot be "
-            "trapped like this and pays a logarithmic factor, two H k. <bookmark mark='d'/> Real programs are kinder "
-            "than adversaries, which is why approximations of LRU run every cache from Part 9 to Part 32."
+            (
+            "A cyclic trace exposes one weakness of least recently used. <bookmark mark='a'/> Cycle over five "
+            "pages with capacity four: every request misses under LRU. <bookmark mark='b'/> Offline OPT misses "
+            'roughly once per four requests after its initial fills; the exact finite counts appear here. '
+            "<bookmark mark='c'/> This fixed cycle alone does not defeat every deterministic policy. The general "
+            "lower bound uses an adaptive request to a page absent from that policy's cache. LRU and FIFO are "
+            "k-competitive with the usual additive constant. Randomized marking's expected two-H-k upper bound "
+            "concerns oblivious sequences, not that adaptive adversary. <bookmark mark='d'/> Locality, capacity, "
+            'associativity and replacement cost determine which model helps explain a real cache. This unit-cost '
+            'trace study isolates only one part of that behavior.'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(cells))
             vo.wait_until("a")

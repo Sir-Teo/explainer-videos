@@ -41,7 +41,7 @@ class Tsp(VoiceoverScene):
         ch = tour_mob(d["christofides"], HEAD)
         opt = tour_mob(d["tour"], YES, 4)
         side = VGroup(
-            label(r"no factor is possible in general: \\ a $c$-approximation would decide Hamiltonian cycle", font_size=20,
+            label('general nonmetric TSP: \\ no fixed-factor polynomial approximation unless $P=NP$', font_size=20,
                   color=NO),
             label(r"so assume the \textbf{triangle inequality}: \\ shortcuts never hurt", font_size=20, color=WHITE),
             label(rf"\textbf{{double tree}}: \ minimum spanning tree $\le$ OPT, \\ walk it twice, \ shortcut: \ "
@@ -56,17 +56,20 @@ class Tsp(VoiceoverScene):
             side.width = 5.6
             side.to_edge(RIGHT, buff=0.3)
         with self.voiceover(
-            "The travelling salesman wants the shortest tour through all the cities. <bookmark mark='a'/> In general "
-            "no approximation factor at all is possible: give the missing roads of a graph enormous lengths, and any "
-            "algorithm that was within a factor c would tell you whether the graph has a Hamiltonian cycle. "
-            "<bookmark mark='b'/> So assume real distances, which obey the triangle inequality: going straight is "
-            "never longer than a detour. <bookmark mark='c'/> Then here is a factor two. The minimum spanning tree "
-            "is no longer than the best tour, because removing one edge of the tour leaves a spanning tree. Walk "
-            "around the tree, using every edge twice, and skip cities you have already visited. <bookmark mark='d'/> "
-            "Nicos Christofides, and independently Anatoliy Serdyukov, did better in 1976. The tree's odd-degree "
-            "vertices can be paired up by a matching at most half the optimum. Add it, and every degree is even, so "
-            "there is an Euler tour; shortcut it. <bookmark mark='e'/> At most three halves of the optimum. <bookmark "
-            "mark='f'/> And here is the optimum itself, from Held and Karp's dynamic program."
+            (
+            "The travelling salesman seeks a shortest tour. <bookmark mark='a'/> For general nonmetric "
+            'distances, a fixed-factor polynomial approximation would decide Hamiltonian cycle, so no such '
+            "guarantee exists unless P equals NP. <bookmark mark='b'/> Assume instead a complete symmetric "
+            "metric with triangle inequality, as for these planar Euclidean points. <bookmark mark='c'/> An MST "
+            'costs at most the optimum tour. Doubling its edges gives an Euler walk of cost at most twice OPT, '
+            "and metric shortcuts give a tour. <bookmark mark='d'/> Christofides and Serdyukov improve this by "
+            "matching the tree's odd-degree vertices. A minimum perfect matching costs at most half OPT; adding "
+            "it makes every degree even, and shortcutting the Euler walk yields a tour. <bookmark mark='e'/> The "
+            'factor is three halves for the specified metric model. Independent Kruskal and blossom calculations '
+            "check our MST and matching weights. <bookmark mark='f'/> Held-Karp finds the combinatorial optimum "
+            'using floating Euclidean lengths, separately checked by a backward recurrence. Our teaching '
+            'matching uses exponential subset DP; it is not a polynomial blossom implementation.'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(cities))
             vo.wait_until("a")
@@ -94,30 +97,23 @@ class Tsp(VoiceoverScene):
                 [r"Christofides--Serdyukov", r"$\le 1.5$", f"{s['christofides']['mean']:.3f}",
                  f"{s['christofides']['max']:.3f}"],
                 [r"nearest neighbour", r"$O(\log n)$", f"{s['nn']['mean']:.3f}", f"{s['nn']['max']:.3f}"],
-                [r"nearest neighbour + 2-opt", r"none", f"{s['two_opt']['mean']:.3f}", f"{s['two_opt']['max']:.3f}"]]
+                [r"nearest neighbour + 2-opt", r"$O(\log n)$", f"{s['two_opt']['mean']:.3f}", f"{s['two_opt']['max']:.3f}"]]
         tab = grid_table([r"", r"guarantee", r"mean", r"worst"], rows, widths=[4.6, 2.2, 1.6, 1.6], row_h=0.5,
                          font_size=22, mono_cols=(), colors=[[NO] * 4, [HEAD] * 4, [GREY_A] * 4, [YES] * 4])
         tab.next_to(head, DOWN, buff=0.5).set_x(0)
         notes = VGroup(
-            label(r"\textbf{2-opt}: \ while two edges cross, \ uncross them \ (reverse the path between)", font_size=22,
+            label('\\textbf{2-opt}: \\ replace any improving pair of tour edges; \\ reversals include uncrossings', font_size=22,
                   color=YES),
-            label(r"guarantees and practice disagree: \ the heuristic with no guarantee wins", font_size=22,
+            label('this finite sample: \\ nearest neighbour plus 2-opt has the lowest mean ratio', font_size=22,
                   color=WHITE),
-            label(r"for 45 years nothing beat $\tfrac32$; \ Karlin, \ Klein and Oveis Gharan (2021): \ $\tfrac32 - "
-                  r"10^{-36}$", font_size=22, color=LAM),
+            label('selected 2021 randomized metric-TSP theorem: \\ $3/2-\\varepsilon$, \\ $\\varepsilon>10^{-36}$; \\\\ not executed by these local algorithms', font_size=22, color=LAM),
             label(r"in the plane: \ Arora (1996) and Mitchell: \ a $(1 + \varepsilon)$-approximation for every "
                   r"$\varepsilon$ \ (a PTAS)", font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.28).next_to(tab, DOWN, buff=0.45)
         with self.voiceover(
-            "How do they do in general? We ran them on forty random instances of twelve cities, against the exact "
-            "optimum. <bookmark mark='a'/> The double tree averaged twenty-one percent above optimal, and "
-            "Christofides seven percent. But the best performer has no guarantee at all: nearest neighbour followed by "
-            "two-opt, which keeps finding two edges whose swap shortens the tour, uncrossing them, until no swap "
-            "helps. It averaged just over one percent above optimal. <bookmark mark='b'/> That gap between guarantee and practice runs "
-            "through this whole chapter. <bookmark mark='c'/> For forty-five years nobody improved on three halves, "
-            "until Anna Karlin, Nathan Klein and Shayan Oveis Gharan beat it in 2021 by ten to the minus thirty-six, "
-            "a tiny number and a large conceptual step. <bookmark mark='d'/> For cities in the plane, Sanjeev Arora "
-            "and Joseph Mitchell found an approximation scheme: within one plus epsilon, for any epsilon you choose."
+            (
+            "These forty seeded twelve-city instances compare finite tour ratios with independently checked optima. <bookmark mark='a'/> Double tree and Christofides obey their metric guarantees. Nearest neighbour followed by two-opt has the smallest sample mean here. Two-opt tries improving pairs of edges; uncrossing is one kind of improvement, not its entire definition. <bookmark mark='b'/> That empirical outcome is specific to this family and stopping rule. The combined heuristic inherits nearest neighbour's logarithmic metric guarantee because it never lengthens the starting tour. This sample does not establish a constant-factor improvement. <bookmark mark='c'/> A selected 2021 randomized metric-TSP theorem of Karlin, Klein and Oveis Gharan gives three halves minus a positive epsilon larger than ten to the minus thirty-six. It is a separate algorithm, not executed here, and is not presented as today's best bound. <bookmark mark='d'/> Euclidean TSP also admits a polynomial-time approximation scheme for each fixed positive epsilon, with dimension and epsilon dependence kept in its cost."
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule),
                       LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.3))
@@ -134,13 +130,11 @@ class Tsp(VoiceoverScene):
         b = t["big"]
         head = label(r"Real tours", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
-            label(rf"Held--Karp for 15 cities: \ {t['t_hk15']:.1f} s in Python; \ each extra city doubles it",
+            label(rf"Held--Karp for 15 cities: \ {t['t_hk15']:.2f} s; \ minimum of 3 shared-host trials; \ exponential DP",
                   font_size=22, color=NO),
-            label(rf"{b[1]['n']} random cities: \ nearest neighbour {b[1]['nn']:.2f}, \ after 2-opt {b[1]['two_opt']:.2f}, "
-                  rf"\ in {b[1]['seconds']:.2f} s", font_size=22, color=YES),
-            label(rf"Beardwood, \ Halton and Hammersley (1959): \ the optimum is about $0.7124\sqrt n$ \ "
-                  rf"({b[1]['bhh']:.2f} here)", font_size=22, color=GREY_A),
-            label(r"Lin--Kernighan \ (1973) \ and Helsgaun's LKH: \ $k$-opt moves, \ within a fraction of a percent",
+            label(rf"{b[1]['n']} random cities: \ nearest neighbour {b[1]['nn']:.2f}; \ 2-opt {b[1]['two_opt']:.2f}; \ {b[1]['seconds']:.2f} s (3 trials, minimum)", font_size=22, color=YES),
+            label(rf"uniform planar points: \ asymptotic numerical prediction $0.7124\sqrt n$ ({b[1]['bhh']:.2f}); \ not a finite bound", font_size=22, color=GREY_A),
+            label('Lin--Kernighan and LKH: \\ richer local moves; \\ instance- and configuration-dependent outcomes',
                   font_size=22, color=LAM),
             label(r"Concorde \ (Applegate, \ Bixby, \ Chv\'atal and Cook): \ \textbf{proved} optimal tours of 85,900 "
                   r"cities, \ by LP cutting planes", font_size=22, color=HEAD),
@@ -148,17 +142,21 @@ class Tsp(VoiceoverScene):
                   font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "And at scale? <bookmark mark='a'/> The exact dynamic program for fifteen cities already takes a few "
-            "tenths of a second in Python, and every extra city doubles it. <bookmark mark='b'/> For three hundred "
-            "random cities, nearest neighbour builds a tour of length sixteen point two, and two-opt shortens it "
-            "to thirteen point nine in a tenth of a second. <bookmark mark='c'/> The optimum for random points is "
-            "close to zero point seven one two four times the square root of n, a theorem from 1959, which predicts "
-            "about twelve point three here. Two-opt is twelve percent above that estimate, which ignores the "
-            "boundary of the square, so its true gap is somewhat smaller. <bookmark mark='d'/> "
-            "Lin–Kernighan moves, and Keld Helsgaun's implementation of them, get within a fraction of a percent. "
-            "<bookmark mark='e'/> And the Concorde program, built on linear programming cuts like Gomory's, has proved "
-            "optimal tours through eighty-five thousand nine hundred cities, the points of a circuit board. <bookmark "
-            "mark='f'/> Its uses run from delivery vans to telescopes and genome maps."
+            (
+            "Implementation cost matters alongside guarantees. <bookmark mark='a'/> Held-Karp's exponential "
+            'state count makes fifteen cities a small timing case, not a scalable route planner. The caption '
+            "reports the minimum of three shared-host runs on identical prepared points. <bookmark mark='b'/> At "
+            'three hundred cities we time two-opt alone, after nearest neighbour has prepared the starting tour. '
+            "Generation, length checks and references run outside the clock. <bookmark mark='c'/> The zero point "
+            'seven one two four square-root-n expression is a numerical asymptotic prediction for independent '
+            "uniform points in the unit square. It is neither this instance's optimum nor a finite gap "
+            "certificate. <bookmark mark='d'/> Lin-Kernighan and LKH use more powerful local moves, with "
+            "performance depending on the instance and configuration. <bookmark mark='e'/> Concorde has proved "
+            'optimality for a particular eighty-five-thousand-nine-hundred-city circuit-board instance using '
+            'exact certification machinery. That historical result is not a runtime promise for arbitrary '
+            "inputs. <bookmark mark='f'/> Delivery, drilling and scheduling often add constraints beyond "
+            'symmetric metric TSP, so their models require separate checks.'
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):

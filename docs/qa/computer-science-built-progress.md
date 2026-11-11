@@ -1,10 +1,38 @@
 # Computer Science, Built — sequential polish
 
 Work on `computer-science-built`, one video at a time, with separate commits.
-Current video: **cs23, Optimization**. CS1–CS22 source/preview polish checkpoints
+Current video: **cs24, Algorithms in Practice**. CS1–CS23 source/preview polish checkpoints
 are complete at the scopes below. Their production release gates remain open; this
 ledger does not treat sampled previews as listening or final-production approval.
 The syllabus's earlier draft-preview claims are separate.
+
+## Final CS23 preview checkpoint, 11 November 2026
+
+- Repair finite/domain/stopping contracts, exact tableau certificates and knapsack bounds, exact TU minors,
+  graph iterators, stable multiplicative weights, local SDP/dual separation and certified bounded polytopes.
+  All 15 fresh schema-2 producer payloads change; ten timing groups retain 30 raw trials with independent
+  validation outside timers. All 27 tests and 1,491 separate UBSan/GMP native reference fixtures pass.
+- Independent references cover exact/perturbed LPs, all measured simplex bases, 201 matching LP certificates,
+  41 integer knapsacks, 101 vertex covers, 66 set covers, 42 small TSP optima, 31 exact cuts, complete paging
+  traces, six Hedge horizons, four game rows and 101 certified bounded polytopes. Preserve full inputs/certificates.
+- Polish bilingual theorem/model scopes and six worked exercises. Add executed stopping, infeasible-rounding
+  and local-objective/dual-bound witnesses. Native review catches and repairs the omitted slack-column tableau
+  cost and the Chinese transportation-store mistranslation. The bounded Pebble design remains unexecuted.
+- Review all 32 endpoint and 32 silent motion overviews: 572 appearance states, 1,280 temporal samples and
+  84,870 decoded frames. Thirty-seven chapter reviews inherit only through actual PNG equality; 27 are fresh.
+  Five raw sparse-content alerts retain fresh exact-frame dispositions, including a 7.75-second Chinese Hook
+  introductory title interval. All five have zero scanner blank runs; production pacing remains open.
+- Review all 94 native 1080p15 clips: 76,384 frames, 2,256 samples and 94 native stills. Twenty-nine complete
+  movie hashes preserve archived positive reviews; 65 receive fresh review. Four actual English narrated pilots
+  decode 13,352 frames plus audio; all 160 samples/four stills have positive sampled visual reviews. Two
+  narrated reviews inherit only through identical complete movie bytes. Superseded findings remain archived.
+- All 68 English speech blocks pass automated signal/alignment (45.9646 minutes); all 226 cue requests meet
+  250 ms. Source pairs and actual runtime captures each cover 68/68 bilingual blocks. All 589 captured captions
+  have zero unresolved explanatory translation leads; 31 retained originals and four numeric-unit leads are classified.
+
+[Verified CS23 evidence](evidence/cs23-polish-20261111/README.md).
+Continuous narrated listening, Chinese speech/listening, whole-video native production review and runtime at
+selected narration pace remain open release gates. Every raw receipt retains its actual frozen render fingerprint.
 
 ## Final CS22 preview checkpoint, 11 November 2026
 
@@ -600,9 +628,9 @@ Evidence, exact source/data hashes, reports and reproduction commands:
 
 ## Continue here
 
-1. Preserve CS23's untouched source/history/data, complete all 15 original producers and review its 32
-   original bilingual endpoint captures before applying the isolated optimization proposals.
-2. Repair confirmed simplex, knapsack, TU, cover-iterator, stable-weight, SDP/cut and polytope-model issues;
-   rebuild numerical provenance, polish bilingual explanations and verify current previews/speech scheduling.
-3. Commit CS23 separately and continue CS24–CS61 in order, preserving the distinction between preview
+1. Preserve CS24's untouched source/history/data, complete all 19 original producers and its derived ledger,
+   and review its 34 original bilingual endpoint captures before applying confirmed repairs.
+2. Check practice-instrument domains, full numerical/native outputs, benchmark provenance and learned-index
+   storage/search contracts; polish bilingual explanations and verify current previews/speech scheduling.
+3. Commit CS24 separately and continue CS25–CS61 in order, preserving the distinction between preview
    checks and the open production/listening gates.

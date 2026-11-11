@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from explainer.cs import *  # noqa: F403
+from explainer.cs.algo import optim as O
+from fractions import Fraction
 from videos.cs.cs23.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, View3, grid_table, load, mono, words)
 
 VARS = ["x_1", "x_2", "x_3", "s_1", "s_2", "s_3"]
@@ -20,6 +22,7 @@ class Simplex(VoiceoverScene):
         self.card()
         self.walk()
         self.tableau()
+        self.budget()
         self.rules()
 
     def card(self):
@@ -55,20 +58,24 @@ class Simplex(VoiceoverScene):
             label(r"at each vertex, \ look along its edges: \\ is any of them uphill?", font_size=22, color=LAM),
             label(rf"move along it to the next vertex: \\ profit {vals[0]:.0f} $\to$ {vals[1]:.1f} $\to$ {vals[2]:.0f}",
                   font_size=22, color=HEAD),
-            label(r"no uphill edge left: \ \textbf{optimal}, \\ because the region is convex", font_size=22, color=YES),
+            label('nonnegative reduced costs certify optimality; \\\\ feasible incumbent alone is insufficient', font_size=22, color=YES),
             label(rf"{s['dantzig']['pivots']} pivots, \ each a little Gaussian elimination", font_size=21, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).to_edge(RIGHT, buff=0.4)
         if side.width > 6.0:
             side.width = 6.0
             side.to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Dantzig's simplex method walks from corner to corner. <bookmark mark='a'/> Start at a vertex; the "
-            "origin, making nothing at all, is one. <bookmark mark='b'/> From the current vertex, look along the edges "
-            "that leave it. Is any of them uphill, increasing the profit? <bookmark mark='c'/> If so, move along it "
-            "until you hit the next vertex. Here the walk goes from zero profit to twelve and a half, making only "
-            "the first product, and then to thirteen. <bookmark mark='d'/> When no edge goes uphill, you are done. "
-            "That is the subtle part: a local check proves a global optimum, because in a convex region a vertex "
-            "with no improving edge cannot be beaten anywhere. <bookmark mark='e'/> Here it took two moves."
+            (
+            "Dantzig's simplex method walks from vertex to vertex. <bookmark mark='a'/> Our implementation "
+            'begins at the origin, a feasible slack basis because every right-hand side is nonnegative. Finding '
+            'an initial feasible basis for arbitrary data needs a separate Phase One, which this teaching code '
+            "does not implement. <bookmark mark='b'/> Inspect the reduced costs for a feasible improving pivot. "
+            "<bookmark mark='c'/> Move until a constraint blocks further travel. Here the objective goes from "
+            "zero to twelve and a half, then thirteen. <bookmark mark='d'/> Nonnegative reduced costs certify "
+            'global optimality for this maximization tableau. Degenerate bases can require zero-length pivots; '
+            "merely seeing no immediate positive movement is insufficient. <bookmark mark='e'/> This example "
+            'reaches an exact primal and dual certificate after two pivots.'
+        )
         ) as vo:
             self.play(FadeIn(head))
             self.add(ax, poly, trail, w)
@@ -115,7 +122,7 @@ class Simplex(VoiceoverScene):
                   r"negative)", font_size=21, color=LAM),
             label(r"leaving: \ the \textbf{ratio test}, \ the first constraint to become tight along that edge",
                   font_size=21, color=HEAD),
-            label(r"a pivot is Gaussian elimination on one column: \ $O(mn)$ arithmetic", font_size=21, color=GREY_A),
+            label(r"one pivot updates the full tableau: \ $O(m(n+m))$ arithmetic, including slacks", font_size=21, color=GREY_A),
             label(r"bottom row all $\ge 0$: \ optimal, \ $z = 13$; \ the slack columns hold the dual \ (chapter 3)",
                   font_size=21, color=YES),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.3)
@@ -164,26 +171,28 @@ class Simplex(VoiceoverScene):
         s = load("simplex")
         head = label(r"Choosing the edge", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
-            label(r"Dantzig's rule: \ the steepest coefficient", font_size=22, color=WHITE),
+            label('Dantzig: \\ largest improving reduced-cost coefficient', font_size=22, color=WHITE),
             label(r"degenerate vertices \ (more than $n$ tight constraints) \ allow pivots that go nowhere, \ and "
                   r"\textbf{cycling} forever", font_size=22, color=NO),
             label(rf"Bland's rule \ (1977): \ always the smallest index; \ provably never cycles \ "
                   rf"({s['bland']['pivots']} pivots here too)", font_size=22, color=YES),
-            label(r"real solvers: \ steepest edge, \ the revised simplex with LU factorizations, \ the dual simplex",
+            label('full teaching tableau: \\ $O(m(n+m))$ arithmetic per pivot; \\\\ revised simplex maintains basis factors',
                   font_size=22, color=LAM),
             label(r"one of the ``top ten algorithms of the 20th century'' \ (Dongarra and Sullivan, 2000)",
                   font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.34).next_to(head, DOWN, buff=0.55)
         with self.voiceover(
-            "Which edge should the walk take? <bookmark mark='a'/> Dantzig's rule takes the steepest coefficient. "
-            "<bookmark mark='b'/> At degenerate vertices, where more constraints are tight than the dimension needs, "
-            "a pivot can change the basis without moving, and with an unlucky rule the method can cycle through the "
-            "same bases forever. <bookmark mark='c'/> Robert Bland's rule, from 1977, always picks the smallest "
-            "eligible index, and provably never cycles. <bookmark mark='d'/> Production solvers use smarter rules, "
-            "like steepest edge, and keep the tableau implicit, as an LU factorization of the basis, updated after "
-            "each pivot. <bookmark mark='e'/> The simplex method was named one of the ten most important algorithms of "
-            "the twentieth century. Whether some pivot rule always finishes in polynomially many steps is still "
-            "unknown, and chapter four shows why that question is subtle."
+            (
+            "Which pivot should the walk take? <bookmark mark='a'/> Dantzig chooses the largest improving "
+            "reduced-cost coefficient; this is not a normalized geometric slope. <bookmark mark='b'/> At a "
+            'degenerate vertex a pivot can change the basis without moving, and unsuitable choices can cycle. '
+            "<bookmark mark='c'/> Bland's smallest eligible index rule prevents cycling in exact arithmetic. "
+            "<bookmark mark='d'/> Our full tableau updates all m times n plus m entries at each pivot. "
+            'Production revised simplex maintains basis factorizations. Its normalized steepest-edge rules '
+            'differ from our selector called greatest improvement, which tests the whole gain of each candidate '
+            "pivot. <bookmark mark='e'/> A small number of pivots in one example gives no polynomial worst-case "
+            'guarantee; the next chapters examine that distinction.'
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcde", lines):
@@ -191,3 +200,32 @@ class Simplex(VoiceoverScene):
                 self.play(FadeIn(ln, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
+
+
+    def budget(self):
+        stopped = O.simplex([1], [[1]], [1], exact=True, max_pivots=0)
+        solved = O.simplex([1], [[1]], [1], exact=True, max_pivots=1)
+        assert stopped['status'] == 'iteration_limit' and stopped['x_exact'] == [0]
+        assert stopped['value_exact'] == 0 and stopped['duals_exact'] == [0]
+        assert solved['status'] == 'optimal' and solved['value_exact'] == 1
+        head = label('A feasible incumbent still needs an optimality certificate',font_size=31).to_edge(UP,buff=.35)
+        line = NumberLine(x_range=[0,1,.25],length=4,include_numbers=True,font_size=25).move_to(LEFT*3.7+DOWN*.3)
+        start = Dot(line.n2p(0),radius=.11,color=NO)
+        end = Dot(line.n2p(1),radius=.11,color=YES)
+        names = VGroup(label('feasible: x = 0',font_size=22,color=NO).next_to(start,UP,buff=.35),
+                       label('optimal: x = 1',font_size=22,color=YES).next_to(end,DOWN,buff=.35))
+        rows = VGroup(
+            MathTex(r'\max x\quad\hbox{subject to }0\le x\le1',font_size=32,color=WHITE),
+            label('zero pivot budget: iteration limit; incumbent value 0',font_size=23,color=NO),
+            MathTex(r'y=0:\quad y\not\ge1',font_size=36,color=NO),
+            label('the returned dual does not cover the objective',font_size=22,color=NO),
+            MathTex(r'x=1,\ y=1:\quad c^Tx=b^Ty=1',font_size=33,color=YES),
+            label('one pivot: feasible pair and equal objectives certify 1',font_size=22,color=YES),
+        ).arrange(DOWN,buff=.33).move_to(RIGHT*2.5)
+        if rows.width>7.3:rows.width=7.3;rows.set_x(2.5)
+        with self.voiceover("Here is an executed stopping-status example. Maximize x between zero and one. <bookmark mark='a'/> With a zero pivot budget our code returns the feasible origin and reports iteration limit, not optimal. The incumbent earns zero, while the true optimum is one. <bookmark mark='b'/> Its zero dual multiplier does not cover the objective coefficient one. A feasible primal answer alone cannot certify optimality. <bookmark mark='c'/> Allow one pivot. The returned primal x and dual y both equal one; both are feasible, and their equal objectives certify the optimum. The budget status and the certificate now agree.") as vo:
+            self.play(FadeIn(head),Create(line),FadeIn(start),FadeIn(names[0]),FadeIn(rows[0]))
+            vo.wait_until('a');self.play(FadeIn(rows[1]))
+            vo.wait_until('b');self.play(FadeIn(rows[2]),FadeIn(rows[3]))
+            vo.wait_until('c');self.play(FadeIn(end),FadeIn(names[1]),FadeIn(rows[4]),FadeIn(rows[5]))
+        self.wait(.3);self.clear_scene()

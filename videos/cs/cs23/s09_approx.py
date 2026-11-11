@@ -110,20 +110,23 @@ class Approximation(VoiceoverScene):
                                                                          [GREY_A, GREY_A, GREY_A]])
         tab.next_to(head, DOWN, buff=0.5).set_x(0)
         notes = VGroup(
-            label(r"both stay well inside the factor 2 on these graphs, \ and both are tight on others \ "
-                  r"(a complete bipartite graph)", font_size=22, color=WHITE),
+            label('finite ratios stay within 2; \\ tightness depends on the graph and actual tie policy', font_size=22, color=WHITE),
             label(r"nothing better than $2 - \varepsilon$ is known; \ under the Unique Games Conjecture, \ nothing better "
                   r"exists \ (Khot and Regev, 2008)", font_size=22, color=NO),
             label(r"the LP's integrality gap is 2: \ on a complete graph, \ $\mathrm{LP} = n/2$ \ but \ "
                   r"$\mathrm{OPT} = n - 1$", font_size=22, color=GREY_A),
         ).arrange(DOWN, buff=0.3).next_to(tab, DOWN, buff=0.5)
         with self.voiceover(
-            "We ran both on a hundred random graphs with sixteen vertices, against the exact optimum found by brute "
-            "force. <bookmark mark='a'/> Both stay comfortably inside their guarantee of two, though both are tight "
-            "on other graphs. <bookmark mark='b'/> Nobody knows how to do better than two minus a vanishing amount, "
-            "and Subhash Khot and Oded Regev showed that if the Unique Games Conjecture is true, nobody can. "
-            "<bookmark mark='c'/> The linear program cannot help further either: on a complete graph its value is n "
-            "over two, while the optimum is n minus one, an integrality gap of two."
+            (
+            'We checked both methods on a hundred seeded sixteen-vertex graphs against exhaustive optima. '
+            "<bookmark mark='a'/> Their finite ratios stay within two. Tightness needs the right examples and "
+            "the actual tie policy; it does not follow from this table. <bookmark mark='b'/> Khot and Regev "
+            'show, assuming the Unique Games Conjecture, hardness for every fixed factor two minus epsilon. That '
+            "is a conditional asymptotic statement, not a limit measured by our sample. <bookmark mark='c'/> On "
+            'the complete graph the fractional cover value is n over two and the integer optimum n minus one. '
+            'Their ratio approaches two as n grows. This relaxation therefore cannot certify a uniformly smaller '
+            'factor on all graphs.'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule),
                       LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.3))
@@ -154,20 +157,22 @@ class Approximation(VoiceoverScene):
         foot = VGroup(
             label(rf"on {len(rs)} random instances: \ greedy averaged {np.mean([r['greedy'] / r['opt'] for r in rs]):.2f} "
                   rf"$\times$ OPT, \ worst {max(r['greedy'] / r['opt'] for r in rs):.2f}", font_size=21, color=WHITE),
-            label(r"Feige (1998); \ Dinur and Steurer (2014): \ beating $(1 - \varepsilon) \ln n$ is NP-hard, \ so greedy "
-                  r"is essentially optimal \ (Part 27)", font_size=21, color=NO),
+            label('Dinur--Steurer (2014): \\ fixed $\\varepsilon>0$, \\ $(1-\\varepsilon)\\ln n$ hardness unless $P=NP$', font_size=21, color=NO),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Set cover is the general form: cover a universe of elements with as few of the given sets as possible. "
-            "<bookmark mark='a'/> The greedy algorithm repeatedly takes the set that covers the most elements not "
-            "yet covered. <bookmark mark='b'/> David Johnson and László Lovász proved in the 1970s that greedy uses at "
-            "most the n-th harmonic number times the optimum, about the natural log of n. <bookmark mark='c'/> The "
-            "proof spreads the cost of each chosen set over the elements it newly covers, and shows that the "
-            "elements of any one optimal set pay at most H n in total. <bookmark mark='d'/> The bound is nearly "
-            "tight. In this trap two rows cover everything, but greedy is lured by columns of sizes doubling down, "
-            "and takes seven sets where two suffice. <bookmark mark='e'/> On random instances it was within six "
-            "percent on average. And Uriel Feige proved that doing better than the logarithm is hard, so greedy, the "
-            "first thing anyone would try, is essentially the best possible."
+            (
+            "Set cover asks for the fewest sets covering every element. <bookmark mark='a'/> Greedy chooses a "
+            'set covering the most currently uncovered elements. Our domain rejects families that cannot cover '
+            "the universe. <bookmark mark='b'/> The classic guarantee is H n times optimum, with n the universe "
+            "size. <bookmark mark='c'/> Charge each newly covered element an equal share of its chosen set's "
+            'unit cost. Elements of any optimum set pay at most the harmonic sum, so all chosen costs total at '
+            "most H n times OPT. <bookmark mark='d'/> The retained doubling-column examples have optimum two; "
+            'their actual greedy choices and all sixty random instances are checked by an independent '
+            "subset-union dynamic program. <bookmark mark='e'/> Selected hardness results have distinct "
+            "premises: Feige's 1998 threshold uses a stronger complexity assumption, while Dinur and Steurer "
+            'establish fixed-epsilon logarithmic NP-hardness. Observed small average gaps do not weaken these '
+            'worst-case statements.'
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abc", lines[:3]):

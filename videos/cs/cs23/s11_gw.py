@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from explainer.cs import *  # noqa: F403
+from explainer.cs.algo import optim as O
+from fractions import Fraction
 from videos.cs.cs23.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, View3, grid_table, load, mono, words)
 
 
@@ -8,6 +10,7 @@ class MaxCut(VoiceoverScene):
     def construct(self):
         self.card()
         self.sphere()
+        self.local_bound()
         self.alpha()
         self.measured()
 
@@ -62,7 +65,7 @@ class MaxCut(VoiceoverScene):
             MathTex(r"\max \sum_{ij \in E} \frac{1 - v_i \cdot v_j}{2}, \quad \|v_i\| = 1", font_size=32, color=LAM),
             label(r"relax: \ unit \textbf{vectors} instead of signs; \\ a semidefinite program, \ solvable", font_size=21,
                   color=LAM),
-            label(rf"here 12 vertices: \ SDP value {g['sdp']:.2f}, \ true maximum {g['exact']}", font_size=21,
+            label(rf"exact cut {g['exact']}; \ rank-3 local {g['sdp3_local']:.2f}; \\ separate certified dual upper {g['sdp']:.2f}", font_size=21,
                   color=HEAD),
             label(r"round: \ a \textbf{random hyperplane} through the centre; \\ each side of it is a side of the cut",
                   font_size=21, color=YES),
@@ -71,16 +74,18 @@ class MaxCut(VoiceoverScene):
             side.width = 5.8
             side.to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "Here is one of the most elegant algorithms in this course. <bookmark mark='a'/> MAX-CUT asks for a split "
-            "of a graph's vertices into two sides that cuts as many edges as possible. It is NP-hard. <bookmark "
-            "mark='b'/> Write each vertex's side as plus or minus one; an edge is cut when the product of its ends is "
-            "minus one. <bookmark mark='c'/> Michel Goemans and David Williamson relaxed the signs to unit vectors, and "
-            "rewarded each edge for how far apart its two vectors point. <bookmark mark='d'/> That is a semidefinite "
-            "program, a cousin of linear programming that can be solved efficiently. The vectors of adjacent vertices "
-            "spread apart over the sphere. <bookmark mark='e'/> For this graph of twelve vertices the relaxation is "
-            "worth eighteen point three, a little above the true maximum of eighteen. <bookmark mark='f'/> Now cut the "
-            "sphere with a random plane through its centre, and put the vertices on each side of the plane on each "
-            "side of the cut."
+            (
+            "A geometric relaxation gives a useful route to MAX-CUT. <bookmark mark='a'/> Split vertices into "
+            "two sides and maximize crossing edges, an NP-hard problem. <bookmark mark='b'/> Encode each side by "
+            "a sign, so an edge contributes one minus the sign product over two. <bookmark mark='c'/> Replace "
+            "signs by unit vectors; their Gram matrix gives a semidefinite relaxation. <bookmark mark='d'/> We "
+            'optimize vectors locally by projected gradient. That produces a feasible primal objective, not a '
+            'certified global SDP optimum. The three-dimensional sphere is a separate rank-three visualization. '
+            "<bookmark mark='e'/> For this graph the exact cut is eighteen. A separate rational dual matrix "
+            'certificate bounds it above; local vector values and certified upper bounds are stored separately. '
+            "<bookmark mark='f'/> A random plane through the origin rounds the pictured vectors to an actual "
+            'feasible cut.'
+        )
         ) as vo:
             self.play(FadeIn(head))
             self.add(w)
@@ -125,8 +130,7 @@ class MaxCut(VoiceoverScene):
                     f"{g['alpha']:.4f}", font_size=30, color=HEAD),
             label(rf"attained at $\theta \approx {g['theta']:.2f}$ \ ({math.degrees(g['theta']):.0f}$^\circ$)",
                   font_size=21, color=NO),
-            label(r"edge by edge, \ the expected cut is at least $\alpha$ times the SDP, \\ which is at least OPT: \ "
-                  r"a $0.878$-approximation", font_size=21, color=YES),
+            label('for fixed vectors: \\ $\\mathbb E[\\mathrm{cut}]\\ge\\alpha F(V)$; \\\\ globally optimal SDP vectors give $\\alpha\\,\\mathrm{OPT}$ \\\\ (or explicitly subtract optimization error)', font_size=21, color=YES),
             label(r"random assignment gives $\tfrac12$; \ nothing beat it for 20 years before 1995", font_size=21,
                   color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
@@ -134,14 +138,18 @@ class MaxCut(VoiceoverScene):
             side.width = 6.0
             side.to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "Why is that good? <bookmark mark='a'/> Two vectors at angle theta are separated by a random plane with "
-            "probability theta over pi: the plane's direction has to fall in the wedge between them. <bookmark "
-            "mark='b'/> Compare that with what the relaxation credited the edge, one minus cos theta over two. Their "
-            "ratio is never less than about zero point eight seven eight. <bookmark mark='c'/> The worst case is an "
-            "angle of about a hundred and thirty-four degrees. <bookmark mark='d'/> So edge by edge, the expected "
-            "cut is at least zero point eight seven eight times the relaxation, which is at least the optimum. "
-            "<bookmark mark='e'/> Before 1995 the best known guarantee was one half, from putting every vertex on a "
-            "random side."
+            (
+            "Why does hyperplane rounding help? <bookmark mark='a'/> Vectors at angle theta are separated with "
+            "probability theta over pi. <bookmark mark='b'/> Compare this probability with the edge's vector "
+            'reward, one minus cosine theta over two. The ratio is at least alpha, about zero point eight seven '
+            "eight. <bookmark mark='c'/> Its minimum is near one hundred thirty-four degrees, checked here by an "
+            "independent scalar root solve. <bookmark mark='d'/> For any fixed vectors, expected cut is at least "
+            'alpha times their own objective. To conclude alpha times the integer optimum, the theorem uses a '
+            'globally optimal SDP solution, or explicitly accounts for its optimization error. Our local solver '
+            "alone supplies neither premise. <bookmark mark='e'/> Independent random vertex labels give the "
+            'elementary one-half guarantee. A finite average of sampled cuts estimates an expectation; it does '
+            'not prove a universal bound.'
+        )
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xl))
             vo.wait_until("a")
@@ -163,33 +171,35 @@ class MaxCut(VoiceoverScene):
         r = g["rows"]
         head = label(r"Thirty random graphs of 16 vertices", font_size=32).to_edge(UP, buff=0.35)
         rows = [[r"random sides", r"$\tfrac12$", f"{np.mean([x['random_mean'] / x['exact'] for x in r]):.3f}"],
-                [r"Goemans--Williamson, \ one hyperplane", rf"${g['alpha']:.3f}$",
+                ['local vectors, \\ 200-plane sample mean', r"local only",
                  f"{np.mean([x['gw_mean'] / x['exact'] for x in r]):.3f} \\ (worst {min(x['gw_mean'] / x['exact'] for x in r):.3f})"],
                 [r"best of 200 hyperplanes", r"---", f"{np.mean([x['gw_best'] / x['exact'] for x in r]):.3f}"],
-                [r"the SDP itself \ (an upper bound)", r"---", f"{np.mean([x['sdp'] / x['exact'] for x in r]):.3f}"]]
+                ['certified dual upper bound', r"---", f"{np.mean([x['sdp'] / x['exact'] for x in r]):.3f}"]]
         tab = grid_table([r"", r"guarantee", r"mean ratio to the true maximum"], rows, widths=[5.0, 1.9, 5.0],
                          row_h=0.5, font_size=22, mono_cols=(), colors=[[NO] * 3, [YES] * 3, [LAM] * 3, [GREY_A] * 3])
         tab.next_to(head, DOWN, buff=0.5).set_x(0)
         notes = VGroup(
-            label(r"our SDP: \ unit vectors in $\mathbb{R}^k$, \ $k \approx \sqrt{2n}$, \ by projected gradient \ "
-                  r"(Burer and Monteiro)", font_size=21, color=GREY_A),
+            label('projected-gradient vectors: \\ local primal objective; \\\\ separate rational dual PSD certificates give upper bounds', font_size=21, color=GREY_A),
             label(r"Khot, \ Kindler, \ Mossel and O'Donnell (2004): \ under the Unique Games Conjecture, \ "
                   r"$0.878$ is \textbf{optimal}", font_size=22, color=HEAD),
-            label(r"H\aa stad (2001): \ beating $\tfrac{16}{17} \approx 0.941$ is NP-hard, \ unconditionally",
+            label('H\\aa stad (2001): \\ factor $16/17+\\varepsilon$ is NP-hard for fixed $\\varepsilon>0$; \\ unless $P=NP$',
                   font_size=22, color=NO),
             label(r"the template \ (relax to geometry, \ round at random) \ now runs through approximation algorithms",
                   font_size=21, color=YES),
         ).arrange(DOWN, buff=0.26).next_to(tab, DOWN, buff=0.45)
         with self.voiceover(
-            "We tried it on thirty random graphs, against the true maximum found by checking every split. <bookmark "
-            "mark='a'/> Random sides cut about two thirds of the maximum. One random hyperplane averaged ninety-six "
-            "percent, and its worst graph ninety-four, comfortably above the guarantee; the best of two hundred "
-            "hyperplanes found the optimum on every graph. We solved the semidefinite program the simple way, by "
-            "gradient steps on unit vectors. <bookmark mark='b'/> And the constant is no accident. Subhash Khot and "
-            "colleagues showed in 2004 that if the Unique Games Conjecture holds, nobody can beat zero point eight "
-            "seven eight in polynomial time. <bookmark mark='c'/> Without the conjecture, Johan Håstad proved that "
-            "beating sixteen seventeenths is NP-hard. <bookmark mark='d'/> Relax to geometry, then round at random: "
-            "the template now runs through the whole field."
+            (
+            "These thirty seeded graphs have separately enumerated exact maximum cuts. <bookmark mark='a'/> The "
+            'table compares two hundred valid random vertex assignments and two hundred hyperplanes per graph. '
+            'It reports finite means and best observed cuts. Exact rational positive-definiteness certificates '
+            'give separate dual upper bounds; the projected-gradient objectives remain local primal '
+            "observations. <bookmark mark='b'/> The dated Khot-Kindler-Mossel-O'Donnell result says, under the "
+            'Unique Games Conjecture, no polynomial algorithm uniformly improves alpha by a fixed positive '
+            "amount. <bookmark mark='c'/> Without that conjecture, Håstad's hardness excludes a factor sixteen "
+            "seventeenths plus any fixed epsilon unless P equals NP. <bookmark mark='d'/> Geometry and random "
+            'rounding are the template; the certificate, optimization error and expectation model determine '
+            'which guarantee actually follows.'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule),
                       LaggedStart(*[FadeIn(VGroup(*x)) for x in tab.cells[1:]], lag_ratio=0.3))
@@ -200,3 +210,33 @@ class MaxCut(VoiceoverScene):
                 self.play(FadeIn(n_))
         self.wait(0.3)
         self.clear_scene()
+
+
+    def local_bound(self):
+        vectors, local = O.gw_vectors(2,[(0,1)],iters=0,seed=0)
+        optimum, _ = O.maxcut_exact(2,[(0,1)])
+        assert 0 < local < optimum == 1
+        # lambda=(1/2,1/2); diag(lambda)-L/4=[[1/4,1/4],[1/4,1/4]].
+        dual = [[Fraction(1,4)]*2 for _ in range(2)]
+        assert sum([Fraction(1,2),Fraction(1,2)]) == 1
+        assert dual[0][0]*dual[1][1]-dual[0][1]*dual[1][0] == 0
+        head=label('A local vector objective is not an upper bound',font_size=32).to_edge(UP,buff=.35)
+        left,right=LEFT*4.8,LEFT*2.3
+        edge=Line(left,right,color=HEAD,stroke_width=5)
+        nodes=VGroup(Dot(left,radius=.16,color=DATA),Dot(right,radius=.16,color=NO))
+        graph_note=label('one edge; exact maximum cut = 1',font_size=24,color=YES).next_to(nodes,DOWN,buff=.6)
+        rows=VGroup(
+            label('zero gradient iterations; seed 0',font_size=24,color=GREY_A),
+            MathTex(rf'F(V)={local:.6f}<1=\mathrm{{OPT}}',font_size=38,color=NO),
+            label('the feasible local primal value cannot certify an upper bound',font_size=22,color=NO),
+            MathTex(r'\lambda=(1/2,1/2),\quad \sum_i\lambda_i=1',font_size=32,color=YES),
+            MathTex(r'z^T(\operatorname{Diag}\lambda-L/4)z=(z_1+z_2)^2/4\ge0',font_size=29,color=YES),
+            label('separate dual certificate: every cut is at most 1',font_size=24,color=YES),
+        ).arrange(DOWN,buff=.35).move_to(RIGHT*2.25)
+        if rows.width>7.8:rows.width=7.8;rows.set_x(2.25)
+        with self.voiceover("A two-vertex graph makes the certificate issue visible. Its one edge can certainly be cut. <bookmark mark='a'/> Start our seeded vector solver but allow zero gradient steps. Its feasible local objective is about zero point one three eight, below the exact cut value one. It therefore cannot be an upper bound. <bookmark mark='b'/> Independently choose both dual multipliers equal to one half. The displayed quadratic form is a square divided by four, so the dual matrix is positive semidefinite and the multipliers sum to one. <bookmark mark='c'/> That separate certificate proves every cut is at most one. A feasible cut attaining one and a valid dual upper bound of one close the gap; a local primal value alone would not.") as vo:
+            self.play(FadeIn(head),Create(edge),FadeIn(nodes),FadeIn(graph_note),FadeIn(rows[0]))
+            vo.wait_until('a');self.play(FadeIn(rows[1]),FadeIn(rows[2]))
+            vo.wait_until('b');self.play(FadeIn(rows[3]),FadeIn(rows[4]))
+            vo.wait_until('c');self.play(FadeIn(rows[5]),Indicate(edge,color=YES))
+        self.wait(.3);self.clear_scene()

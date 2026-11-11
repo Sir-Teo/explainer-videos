@@ -157,7 +157,7 @@ class LinearPrograms(VoiceoverScene):
         opt = always_redraw(lambda: Dot(view.p(d["opt"]), radius=0.1, color=HEAD))
         vdots = always_redraw(lambda: VGroup(*[Dot(view.p(v), radius=0.05, color=WHITE) for v in V]))
         side = VGroup(
-            label(r"each inequality is a half-space; \\ together, \ a convex \textbf{polytope}", font_size=22,
+            label('half-spaces form a convex polyhedron; \\\\ this bounded example is a polytope', font_size=22,
                   color=DATA),
             label(rf"this one has {len(V)} vertices", font_size=22, color=WHITE),
             label(r"the objective's level sets are parallel planes, \\ $5x_1 + 4x_2 + 3x_3 = v$", font_size=22,
@@ -171,15 +171,17 @@ class LinearPrograms(VoiceoverScene):
             side.width = 6.2
             side.to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Each inequality cuts space in half, and the points satisfying all of them form a convex polytope. "
-            "<bookmark mark='a'/> For our three products it is this solid in three dimensions, with the axes as "
-            "three of its walls. <bookmark mark='b'/> It has six corners. <bookmark mark='c'/> The objective's level "
-            "sets, the points with the same profit, are parallel planes. <bookmark mark='d'/> Push the plane in the "
-            "direction of more profit until it is about to leave the polytope. The last point it touches is a "
-            "corner: two units of the first product and one of the third, for a profit of thirteen. <bookmark "
-            "mark='e'/> That is always so: a linear function on a polytope reaches its maximum at a vertex, so "
-            "there are only finitely many places to look. The difficulty is that a polytope in many dimensions can "
-            "have astronomically many vertices."
+            (
+            'Each linear inequality cuts space in half; their intersection is a convex polyhedron, which may be '
+            "unbounded. <bookmark mark='a'/> Our particular three-product region is bounded, so it is a "
+            "polytope, with the coordinate planes among its walls. <bookmark mark='b'/> Exact rational plane "
+            "intersections give its six vertices. <bookmark mark='c'/> Points with the same profit lie on "
+            "parallel objective planes. <bookmark mark='d'/> Push a plane towards greater profit until it last "
+            'touches our region: two units of product one and one of product three, earning thirteen. <bookmark '
+            "mark='e'/> A nonempty bounded polytope has a vertex attaining the maximum of every linear "
+            'objective. This gives finitely many candidates, but their number can grow exponentially with the '
+            'dimension.'
+        )
         ) as vo:
             self.play(FadeIn(head))
             self.add(ax, poly, vdots)

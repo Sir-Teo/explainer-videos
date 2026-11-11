@@ -39,13 +39,16 @@ class Outro(VoiceoverScene):
         ).arrange_in_grid(rows=2, cols=3, buff=(0.35, 0.35)).move_to(DOWN * 0.2)
         head = label(rf"Part {PART}: \ Optimization", font_size=38).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "What we built in this part. Linear programs, and the simplex method walking the edges of a polytope. "
-            "Duality, which turns every optimum into a certificate a sceptic can check. The Klee–Minty cube, which "
-            "makes the walk exponential, and smoothed analysis, which explains why it never is in practice. The "
-            "ellipsoid and the central path. Total unimodularity, which makes some integer programs free, and branch "
-            "and bound for the rest. Approximation with proofs: covers, tours, knapsacks, and a random hyperplane "
-            "through a sphere of vectors. And decisions without the future: ski rental, paging, and multiplicative "
-            "weights."
+            (
+            'What we built: linear programs with exact primal-dual certificates; a feasible-basis simplex whose '
+            'budget status is explicit; and Klee-Minty instances checked in exact arithmetic. A separate '
+            'shadow-vertex theorem explains one specified perturbation model. Ellipsoids, residual-certified '
+            'barrier points and total unimodularity show where polynomial methods and integrality apply. Exact '
+            'knapsack bounds expose why a nearly integral relaxation still needs a valid branch. Covers, metric '
+            'tours and hyperplane rounding distinguish general guarantees from finite local measurements. '
+            'Discrete ski rental, unit-cost paging and multiplicative weights keep their adversary and '
+            'expected-loss models explicit.'
+        )
         ):
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
@@ -104,17 +107,18 @@ class Outro(VoiceoverScene):
             r"rule does better.",
             r"Show that $\theta/(1 - \cos\theta)$ is minimized where $\theta = \tan(\theta/2)$, \ and compute "
             r"Goemans--Williamson's $\alpha$ to four digits.",
-            r"\textit{Build.} \ Bland's-rule simplex in the Pebble language, \ with fractions as pairs of integers: \ "
-            r"solve chapter 1's LP on the emulator and print 13.",
-            r"$\bigstar$ \textit{Research.} \ Our random polytopes have diameter about $\sqrt n$. \ Prove that every "
-            r"$d$-polytope with $n$ facets has diameter polynomial in $n$ and $d$ \ (the polynomial Hirsch "
-            r"conjecture), \ or build a family that defeats it.",
+            '\\textit{Build.} \\ Design a bounded $3\\times3$ rational simplex port in Pebble; \\ prove word bounds, \\ then verify on the emulator. \\ Not executed here.',
+            '$\\bigstar$ \\textit{Research.} \\ Generate certified bounded 3D polytopes; \\ independently check BFS diameters; \\ compare a fixed routing rule and report seeds and failures.',
         ], font_size=22)
         with self.voiceover(
-            "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build "
-            "problem: the simplex method in the Pebble language, with exact fractions, run on the emulator. The "
-            "last, marked with a star, is a research problem: its answer is not known, and the notes say where to "
-            "start."
+            (
+            'Six exercises in the notes have worked guidance. The fifth designs a bounded three-by-three '
+            'rational simplex port in Pebble; prove intermediate word bounds and verify it on the emulator '
+            'before claiming a working build. We have not executed that port here. The last is a finite '
+            'reproducible study of certified bounded polytopes and routing rules, with independent '
+            'breadth-first-search references. Its deliverable is measured evidence and explicit limits, not a '
+            'solution to the polynomial Hirsch conjecture.'
+        )
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)

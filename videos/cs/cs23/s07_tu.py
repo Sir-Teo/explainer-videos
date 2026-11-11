@@ -47,16 +47,19 @@ class Unimodular(VoiceoverScene):
                   rf"{d['frac_bipartite']} fractional optima", font_size=21, color=YES),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Most integer programs are hard, but some are linear programs in disguise. <bookmark mark='a'/> Take "
-            "bipartite matching from Part 18. Give each edge a variable between zero and one, and require that the "
-            "edges at each vertex sum to at most one. <bookmark mark='b'/> The constraint matrix has a column for "
-            "each edge, with a one at each of its ends: the incidence matrix. <bookmark mark='c'/> For a bipartite "
-            "graph it is totally unimodular: every square submatrix has determinant zero, one or minus one. We "
-            "checked every one of this matrix's square submatrices. <bookmark mark='d'/> Then by Cramer's rule every "
-            "vertex of the polytope has integer coordinates, because each coordinate is a ratio of determinants and "
-            "the denominator is plus or minus one. <bookmark mark='e'/> So the simplex method, which ends at a vertex, "
-            "solves the integer problem for free. On a hundred random weighted bipartite graphs, not one optimal "
-            "vertex had a fractional coordinate."
+            (
+            "Some integer models have integral linear relaxations. <bookmark mark='a'/> Give each edge of a "
+            'bipartite graph a variable between zero and one, with incident values summing to at most one at '
+            "each vertex. <bookmark mark='b'/> Its unsigned vertex-edge incidence matrix has two ones per "
+            "column. <bookmark mark='c'/> Bipartiteness makes this matrix totally unimodular: every square minor "
+            'is zero or plus or minus one. We independently check all nine hundred twenty-three nonempty square '
+            "minors in the drawing. A partial minor search would be inconclusive. <bookmark mark='d'/> With "
+            'integer right-hand sides and integer variable bounds, the augmented constraint matrix stays totally '
+            "unimodular. Every nonsingular vertex basis has determinant plus or minus one, so Cramer's rule "
+            "gives integer coordinates. <bookmark mark='e'/> Thus an optimal vertex solves the matching problem. "
+            'All one hundred seeded weighted bipartite LPs have exact primal-dual certificates and agree with '
+            'independent integer matching optima.'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(nodes), Create(lines))
             vo.wait_until("a")
@@ -130,18 +133,22 @@ class Unimodular(VoiceoverScene):
                   font_size=22, color=LAM),
             label(r"also totally unimodular: \ interval matrices \ (scheduling), \ network matrices, \ shortest paths",
                   font_size=22, color=HEAD),
-            label(r"Seymour (1980): \ every TU matrix is built from network matrices and two small exceptions",
+            label('Seymour: \\ regular-matroid decomposition and polynomial recognition; \\\\ our exhaustive minors are a separate small-matrix check',
                   font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.36).next_to(head, DOWN, buff=0.6)
         with self.voiceover(
-            "The same miracle explains other results we already know. <bookmark mark='a'/> Maximum flow is a linear "
-            "program whose matrix, a directed incidence matrix, is totally unimodular. <bookmark mark='b'/> Its dual "
-            "is minimum cut, so Part 18's max-flow min-cut theorem is linear programming duality in disguise. "
-            "<bookmark mark='c'/> And integer capacities always admit an integer maximum flow, as Ford and "
-            "Fulkerson's augmenting paths found. <bookmark mark='d'/> Interval matrices, which arise in scheduling, "
-            "and network matrices are totally unimodular too. <bookmark mark='e'/> Paul Seymour proved in 1980 that "
-            "every totally unimodular matrix is assembled from network matrices and two small exceptions, so "
-            "whether a matrix has the property can be tested in polynomial time."
+            (
+            "Integrality explains familiar combinatorial optimization results. <bookmark mark='a'/> A directed "
+            "graph's node-arc incidence matrix is totally unimodular; adding integer capacity bounds preserves "
+            "the flow integrality argument. <bookmark mark='b'/> LP duality then yields the max-flow min-cut "
+            "relationship. <bookmark mark='c'/> Integral capacities admit an integral maximum flow, although "
+            "fractional optimal flows may also exist as combinations of optimal vertices. <bookmark mark='d'/> "
+            'Consecutive-ones interval matrices and network matrices provide other useful totally unimodular '
+            "families. <bookmark mark='e'/> Seymour's decomposition of regular matroids, using graphic, "
+            'cographic and the exceptional R-ten building block with specified sums, underlies polynomial '
+            'recognition. Our brute-force minor enumeration is an exact small-matrix teaching check, not that '
+            'recognition algorithm.'
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcde", lines):

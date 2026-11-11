@@ -44,8 +44,7 @@ class KleeMinty(VoiceoverScene):
         tr = always_redraw(trail)
         side = VGroup(
             label(r"Klee and Minty (1972): \ a cube, \ squashed", font_size=22, color=WHITE),
-            label(r"each coordinate's bounds depend on the one before: \\ $\varepsilon x_{j-1} \le x_j \le 1 - "
-                  r"\varepsilon x_{j-1}$", font_size=22, color=LAM),
+            label('fixed power variant: \\\\ $0\\le x_j,\\quad x_j+\\sum_{i<j}2^{j-i+1}x_i\\le5^{j+1}$ \\\\ $\\max\\sum_j2^{n-1-j}x_j$; zero-based indices', font_size=22, color=LAM),
             label(r"Dantzig's rule visits \textbf{every} vertex: \\ $2^n$ of them, \ always uphill", font_size=22,
                   color=NO),
             label(rf"here $n = 3$: \ {len(path) - 1} pivots, \ all 8 corners", font_size=22, color=HEAD),
@@ -54,12 +53,16 @@ class KleeMinty(VoiceoverScene):
             side.width = 6.0
             side.to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "How many pivots can the simplex method need? <bookmark mark='a'/> In 1972 Victor Klee and George Minty "
-            "built a bad example: a cube, squashed so that it is no longer square. <bookmark mark='b'/> Each "
-            "coordinate's bounds depend a little on the coordinate before it, which tilts every face slightly. "
-            "<bookmark mark='c'/> On this cube, Dantzig's rule visits every vertex before reaching the top, "
-            "climbing at every step. In n dimensions that is two to the n vertices. <bookmark mark='d'/> Here in "
-            "three dimensions: seven pivots, through all eight corners."
+            (
+            "How many pivots can simplex need? <bookmark mark='a'/> Klee and Minty constructed deformed cubes "
+            "showing exponential behavior for Dantzig's rule. <bookmark mark='b'/> We execute a fixed "
+            'power-coefficient variant: each upper row depends on all earlier coordinates, with powers of two in '
+            'the matrix and powers of five on the right. The objective also uses powers of two. This is the '
+            "model drawn here after rescaling the axes. <bookmark mark='c'/> Exact arithmetic checks feasibility "
+            'and strict objective increase at every visited vertex. Dantzig visits all two to the n vertices on '
+            "these instances. <bookmark mark='d'/> In three dimensions that is seven pivots through eight "
+            'corners, not a theorem about every pivot rule or every cube.'
+        )
         ) as vo:
             self.play(FadeIn(head))
             self.add(poly, tr)
@@ -89,7 +92,7 @@ class KleeMinty(VoiceoverScene):
         tab.next_to(head, DOWN, buff=0.4).to_edge(LEFT, buff=0.6)
         side = VGroup(
             label(r"Dantzig: \ exactly $2^n - 1$, \ every time", font_size=22, color=NO),
-            label(r"Bland's rule is exponential here too \\ (Avis and Chv\'atal, 1978)", font_size=22, color=LAM),
+            label("Bland's observed counts on this variant; \\\\ separate variants give exponential lower bounds", font_size=22, color=LAM),
             label(r"greatest improvement solves this cube in one pivot, \\ but Jeroslow (1973) built cubes that defeat it",
                   font_size=22, color=YES),
             label(r"almost every rule proposed has its own bad cube; \\ Zadeh's rule fell in 2011 \ (Friedmann)",
@@ -119,10 +122,10 @@ class KleeMinty(VoiceoverScene):
 
     def smoothed(self):
         k = load("kleeminty")
-        head = label(r"Why it works anyway: \ smoothed analysis", font_size=34).to_edge(UP, buff=0.35)
-        r1 = [[rf"{p['sigma']:g}", f"{p['mean']:.0f}", str(p["max"])] for p in k["perturbed"]]
-        t1 = grid_table([r"noise $\sigma$", r"mean pivots", r"worst"], r1, widths=[1.8, 2.0, 1.4], row_h=0.4,
-                        font_size=20, mono_cols=(), colors=[[WHITE, NO, GREY_A]] * len(r1))
+        head = label('Finite experiments and a separate smoothed theorem', font_size=34).to_edge(UP, buff=0.35)
+        r1 = [[rf"{p['sigma']:g}", f"{p['mean']:.0f}", str(p["max"]), str(p["unbounded_trials"])] for p in k["perturbed"]]
+        t1 = grid_table([r"noise $\sigma$", r"optimal mean", r"worst", r"unbounded"], r1, widths=[1.4, 1.7, 1.2, 1.5], row_h=0.4,
+                        font_size=20, mono_cols=(), colors=[[WHITE, NO, GREY_A, GREY_A]] * len(r1))
         c1 = label(rf"Klee--Minty, \ $n = {k['perturbed_n']}$, \ every entry of $A$ \\ multiplied by $1 + \sigma g$, \ "
                    r"$g$ Gaussian", font_size=18, color=GREY_A)
         g1 = VGroup(c1, t1).arrange(DOWN, buff=0.2)
@@ -133,27 +136,28 @@ class KleeMinty(VoiceoverScene):
         g2 = VGroup(c2, t2).arrange(DOWN, buff=0.2)
         VGroup(g1, g2).arrange(RIGHT, buff=0.9, aligned_edge=UP).next_to(head, DOWN, buff=0.4)
         notes = VGroup(
-            label(r"in practice: \ a small multiple of the number of constraints \ (here under half of $m$)",
+            label('100 seeded positive dense LPs: \\ finite pivot observations',
                   font_size=22, color=YES),
-            label(r"Spielman and Teng (2001): \ perturb any LP by Gaussian noise of size $\sigma$; \ the expected pivots "
-                  r"are polynomial in $n$, $m$ and $1/\sigma$", font_size=22, color=LAM),
-            label(r"bad instances are knife-edge constructions: \ shake them and they fall over", font_size=22,
+            label('Spielman--Teng: \\ two-phase shadow vertex; \\\\ additive Gaussian normals and RHS; \\ expected polynomial in dimensions and $1/\\sigma$', font_size=22, color=LAM),
+            label('our Dantzig experiment: \\ multiplicative matrix noise; \\\\ zeros stay zero; \\ not the theorem model', font_size=22,
                   color=HEAD),
             label(r"G\"odel Prize 2008; \ the idea now explains $k$-means, \ local search and more", font_size=21,
                   color=GREY_A),
         ).arrange(DOWN, buff=0.26).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Yet the simplex method is fast on real problems, usually a small multiple of the number of "
-            "constraints. Why? <bookmark mark='a'/> On random dense programs our simplex took under half as many "
-            "pivots as there are constraints: thirty-four on average for a hundred and sixty. <bookmark mark='b'/> "
-            "Daniel Spielman and Shang-Hua Teng explained it in 2001 with smoothed analysis: take any linear "
-            "program, even the worst, and add a little Gaussian noise to its data. The expected number of pivots is "
-            "then polynomial in the size and in one over the size of the noise. <bookmark mark='c'/> The bad "
-            "instances are knife-edge constructions. Shake them and they fall over. On our ten-dimensional cube, "
-            "tiny noise changes nothing, but noise of ten percent cuts the thousand and twenty-three pivots to about "
-            "four hundred, and thirty percent to about seventy-five. <bookmark mark='d'/> They won the Gödel Prize "
-            "for it, and smoothed analysis now explains why other algorithms that are bad in the worst case work in "
-            "practice."
+            (
+            "Finite experiments and smoothed analysis answer different questions. <bookmark mark='a'/> Our dense "
+            'positive random LPs take relatively few Dantzig pivots on these one hundred seeded instances; their '
+            "optimal values are checked independently. <bookmark mark='b'/> Spielman and Teng analyze a "
+            'particular two-phase shadow-vertex method under additive Gaussian perturbations of constraint '
+            'normals and right-hand sides. Their expected polynomial bound depends on dimensions and inverse '
+            "perturbation scale. It is not a theorem for our Dantzig implementation. <bookmark mark='c'/> Our "
+            'separate cube experiment multiplies nonzero matrix entries by one plus sigma times a Gaussian. '
+            'Zeros stay zero. The table summarizes only optimal runs and separately counts unbounded ones; every '
+            "status is checked against another solver. <bookmark mark='d'/> These observations illustrate "
+            'sensitivity under this chosen model. They do not establish the shadow-vertex theorem, nor show that '
+            'all bad instances disappear under arbitrary noise.'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(g2))
             vo.wait_until("a")

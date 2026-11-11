@@ -66,16 +66,18 @@ class PolyTime(VoiceoverScene):
             side.width = 6.4
             side.to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "In 1979 Leonid Khachiyan proved that linear programs can be solved in polynomial time, by a method "
-            "that walks no edges at all. <bookmark mark='a'/> Ask instead whether a polytope is empty. Start with a "
-            "ball large enough to contain it. <bookmark mark='b'/> Look at the ball's centre. If it is feasible, "
-            "you're done. If not, some constraint is violated there, and that constraint says the polytope lies "
-            "entirely on one side of a line through the centre. <bookmark mark='c'/> Replace the half that remains "
-            "by the smallest ellipsoid that contains it, and repeat. <bookmark mark='d'/> Each step shrinks the "
-            "volume by a fixed factor, e to the minus one over two n plus two, so after polynomially many steps the "
-            "ellipsoid is smaller than any non-empty polytope with these numbers could be. <bookmark mark='e'/> Here, "
-            "nine cuts reach a feasible point. Optimization reduces to feasibility by binary search on the "
-            "objective, or by adding the objective as one more cut."
+            (
+            "Khachiyan's 1979 result gives polynomial bit complexity for rational linear programming. <bookmark "
+            "mark='a'/> This illustration starts with a radius-six ball whose enclosure of the target region is "
+            "checked separately. <bookmark mark='b'/> If its centre violates a constraint, that constraint gives "
+            "a central separating cut containing the feasible region. <bookmark mark='c'/> Replace the retained "
+            "half with an enclosing ellipsoid and repeat. <bookmark mark='d'/> In exact arithmetic its volume "
+            'contracts by at least the displayed factor. A full complexity argument also needs input encoding '
+            'and radius or lower-dimensional feasibility treatment; small volume alone does not prove an '
+            "arbitrary region empty. <bookmark mark='e'/> Our floating run finds a feasible point after nine "
+            'cuts. Exhausting its numerical cut budget would mean no point found, not a general infeasibility '
+            'certificate.'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(region))
             vo.wait_until("a")
@@ -84,7 +86,12 @@ class PolyTime(VoiceoverScene):
             self.play(FadeIn(side[1]))
             vo.wait_until("c")
             self.play(FadeIn(side[2]))
+            volume_shown = False
             for k in range(1, len(tr)):
+                if k == 3:
+                    vo.wait_until("d")
+                    self.play(FadeIn(side[3]))
+                    volume_shown = True
                 c0 = np.array(tr[k - 1]["c"])
                 P0 = np.array(tr[k - 1]["P"])
                 viol = A @ c0 - b
@@ -97,8 +104,9 @@ class PolyTime(VoiceoverScene):
                 self.play(Create(cut), run_time=0.4)
                 self.play(Transform(E, newE), cdot.animate.move_to(T(tr[k]["c"])), FadeOut(cut), run_time=0.7)
                 del P0
-            vo.wait_until("d")
-            self.play(FadeIn(side[3]))
+            if not volume_shown:
+                vo.wait_until("d")
+                self.play(FadeIn(side[3]))
             vo.wait_until("e")
             self.play(FadeIn(side[4]), Flash(cdot.get_center(), color=YES))
         self.wait(0.3)
@@ -109,30 +117,29 @@ class PolyTime(VoiceoverScene):
         head2 = label(r"Polynomial, \ but slow", font_size=34).to_edge(UP, buff=0.35)
         tab.next_to(head2, DOWN, buff=0.4).to_edge(LEFT, buff=1.0)
         notes = VGroup(
-            label(r"steps grow with $\log(1/\text{width})$: \ \\ about 17 more for every factor of 10, \ in 2D", font_size=21,
+            label('these fixed 2D regions: \\ widths and actual cut counts; \\\\ no universal fitted iteration law', font_size=21,
                   color=WHITE),
-            label(r"the bound is $O(n^2 L)$ steps for input of $L$ bits: \\ polynomial, \ and front-page news in 1979",
+            label('rational LP: \\ polynomial bit complexity; \\\\ coefficient encoding and radius assumptions matter',
                   font_size=21, color=HEAD),
-            label(r"but far slower than simplex in practice: \\ nobody solves LPs this way", font_size=21, color=NO),
-            label(r"its legacy: \ \textbf{separation} $\equiv$ \textbf{optimization} \\ (Gr\"otschel, Lov\'asz and "
-                  r"Schrijver, 1981): \\ an LP with exponentially many constraints \\ is easy if violated ones can be "
-                  r"found", font_size=21, color=YES),
+            label('primarily a theoretical LP tool; \\\\ a finite numerical budget is not an infeasibility proof', font_size=21, color=NO),
+            label('separation $\\equiv$ optimization: \\\\ suitable convex-set representation, \\ bounds and accuracy; \\\\ efficient separation oracle', font_size=21, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(tab, RIGHT, buff=0.6).align_to(tab, UP)
         room = 7.0 - (tab.get_right()[0] + 0.5)
         if notes.width > room:
             notes.width = room
             notes.next_to(tab, RIGHT, buff=0.5).align_to(tab, UP)
         with self.voiceover(
-            "How many steps? <bookmark mark='a'/> As the feasible region gets thinner, the number of cuts grows with "
-            "the logarithm of one over its width: in two dimensions, about seventeen more for every factor of ten, "
-            "on average. "
-            "<bookmark mark='b'/> In general the bound is n squared times the number of bits in the input, "
-            "polynomial, and the New York Times reported it on its front page. <bookmark mark='c'/> In practice the "
-            "method is far slower than simplex, and nobody solves linear programs with it. <bookmark mark='d'/> Its "
-            "legacy is a theorem. Martin Grötschel, László Lovász and Alexander Schrijver showed that the method "
-            "never needs the constraints written down, only a way to find a violated one. So a linear program with "
-            "exponentially many constraints is still solvable in polynomial time, if violated constraints can be "
-            "found efficiently. Separation is as easy as optimization."
+            (
+            "How many cuts do these examples take? <bookmark mark='a'/> As this fixed two-dimensional region "
+            'becomes thinner, the recorded counts rise. This finite table is not a fitted universal iteration '
+            "law. <bookmark mark='b'/> Polynomial bit complexity for rational LP depends on dimension and "
+            'coefficient encoding; exact-arithmetic work and floating iteration counts are different '
+            "measurements. <bookmark mark='c'/> Ellipsoids are primarily a theoretical tool for LP rather than "
+            "the usual production solver. <bookmark mark='d'/> Their lasting result is the "
+            'separation-optimization equivalence for appropriately represented, bounded convex sets with the '
+            'required radius and accuracy information. Exponentially many constraints can be handled when a '
+            'polynomial-time separation oracle and these representation assumptions are available.'
+        )
         ) as vo:
             self.play(FadeIn(head2), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule),
                       LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.2))
@@ -178,27 +185,30 @@ class PolyTime(VoiceoverScene):
                     color=LAM),
             label(r"the log barrier keeps $x$ inside; \ as $t \to \infty$, \ $x^\star(t)$ slides to the optimum",
                   font_size=21, color=HEAD),
-            label(rf"each $t$: \ a few Newton steps \ ({d['total_newton']} in all here); \ the gap is $m/t$", font_size=21,
+            label(rf"each $t$: \ Newton steps ({d['total_newton']} total); \\ ideal central gap $m/t$; \ returned points use residual-corrected certificates", font_size=21,
                   color=WHITE),
-            label(r"$O(\sqrt m \log(1/\varepsilon))$ steps in theory; \ 20--80 in practice, \ whatever the size",
+            label('short-step theory: \\ $O(\\sqrt m\\log(1/\\varepsilon))$ with centrality control; \\\\ this teaching schedule has its own finite Newton counts',
                   font_size=21, color=YES),
-            label(r"Newton's method from \textit{AI, Built} Part 4; \ in Gurobi, \ MOSEK, \ HiGHS beside simplex",
+            label('log barrier and Newton solves; \\\\ strict feasibility and convergence checks required',
                   font_size=20, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.35)
         if side.width > 6.4:
             side.width = 6.4
             side.to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "The method that made polynomial time practical came in 1984 from Narendra Karmarkar at Bell Labs. "
-            "<bookmark mark='a'/> Instead of walking along the boundary, stay strictly inside. <bookmark mark='b'/> "
-            "Add to the objective a barrier, the sum of the logarithms of the slacks, which rises to infinity at every "
-            "wall, and weight the true objective by a parameter t. <bookmark mark='c'/> For each t there is one "
-            "best point, and as t grows these points trace a smooth curve, the central path, from the middle of the "
-            "polytope to the optimal vertex. <bookmark mark='d'/> Follow it: increase t a little, take a few steps of "
-            "Newton's method to get back to the path, and repeat. The distance from optimal is at most the number of "
-            "constraints divided by t. <bookmark mark='e'/> The theory promises the square root of m times the log "
-            "of one over the accuracy; in practice it takes twenty to eighty Newton steps whatever the size. <bookmark "
-            "mark='f'/> It is Newton's method from the AI series, and every serious solver runs it alongside simplex."
+            (
+            "Karmarkar's 1984 breakthrough made interior-point methods central to practical optimization. This "
+            "illustration is a log-barrier Newton path follower. <bookmark mark='a'/> Begin strictly inside all "
+            "the inequalities. <bookmark mark='b'/> Minimize minus t times the objective minus the sum of log "
+            "slacks. The negative logarithms repel the boundary. <bookmark mark='c'/> Under the usual existence "
+            'and nondegeneracy conditions, central points approach an optimal face as t grows; this example has '
+            "the unique optimum two, three. <bookmark mark='d'/> The ideal central point has duality gap m over "
+            't. Our approximate Newton points instead carry independently checked rational gap upper bounds, '
+            "including stationarity residuals. <bookmark mark='e'/> The familiar square-root-m iteration theorem "
+            'requires a specified short-step method and centrality control. Our one hundred twenty-seven Newton '
+            "steps do not establish that theorem or a size-independent practical count. <bookmark mark='f'/> "
+            'Strict feasibility, line-search convergence and the cost of linear solves all matter.'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(region), GrowArrow(cvec))
             vo.wait_until("a")

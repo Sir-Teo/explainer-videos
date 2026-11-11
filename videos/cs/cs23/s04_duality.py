@@ -96,16 +96,18 @@ class Duality(VoiceoverScene):
         sep = DashedLine(o + np.array([-0.6, -0.25, 0]), o + np.array([0.9, 1.9, 0]), color=HEAD)
         pic = VGroup(cone, r1, r2, pt, sep)
         with self.voiceover(
-            "So every linear program has a twin. <bookmark mark='a'/> The primal maximizes over x; the dual "
-            "minimizes over y, with the matrix transposed and the roles of b and c exchanged. <bookmark mark='b'/> "
-            "Weak duality is the argument we just made: every feasible plan earns at most every feasible bound. "
-            "<bookmark mark='c'/> Strong duality says more: at the optimum they are equal, so the best bound is "
-            "always tight. John von Neumann saw it in 1947, in a conversation with Dantzig, and Gale, Kuhn and Tucker "
-            "proved it in 1951. <bookmark mark='d'/> The engine of the proof is Farkas' lemma, from 1902: a system of "
-            "linear equations either has a non-negative solution, or there is a short certificate that it doesn't, "
-            "and never both. <bookmark mark='e'/> Geometrically, a point outside a convex cone can always be "
-            "separated from it by a hyperplane. <bookmark mark='f'/> The practical meaning is that every optimum comes "
-            "with a proof a sceptic can check with one multiplication of a matrix by a vector."
+            (
+            "Every linear program has a dual. <bookmark mark='a'/> Our primal maximizes over nonnegative x with "
+            'A x at most b; its dual minimizes b transpose y with nonnegative y and A transpose y at least c. '
+            "<bookmark mark='b'/> Weak duality holds for every feasible pair. <bookmark mark='c'/> If the primal "
+            'is feasible with a finite optimum, strong duality gives an attained equal dual optimum. This does '
+            "not say that every infeasible or unbounded program has an optimal pair. <bookmark mark='d'/> One "
+            "form of Farkas' lemma says exactly one alternative holds: A x equals b for some nonnegative x, or a "
+            "vector y satisfies A transpose y nonnegative and b transpose y negative. <bookmark mark='e'/> This "
+            "is separation from the finitely generated cone of A's columns. <bookmark mark='f'/> To certify an "
+            'optimum, check both feasibilities and equal objective values; matrix-vector checks suffice once the '
+            'candidate pair is supplied.'
+        )
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):
@@ -127,7 +129,7 @@ class Duality(VoiceoverScene):
                          colors=[[WHITE, YES, HEAD, LAM]] * 3)
         tab.next_to(head, DOWN, buff=0.5).set_x(0)
         notes = VGroup(
-            label(r"$y_i$ is the \textbf{shadow price}: \ what one more unit of resource $i$ is worth \ (within a range)",
+            label('$y_i$: \\ local marginal resource value while the basis remains valid',
                   font_size=22, color=YES),
             label(r"measured: \ adding one unit of resource 1 earns $\tfrac13$ here, \ less than $y_1 = 1$, \ because the "
                   r"basis changes", font_size=21, color=GREY_A),
@@ -139,15 +141,17 @@ class Duality(VoiceoverScene):
                   font_size=21, color=HEAD),
         ).arrange(DOWN, buff=0.26).next_to(tab, DOWN, buff=0.45)
         with self.voiceover(
-            "The dual variables mean something. <bookmark mark='a'/> The optimal y i is the shadow price of resource "
-            "i: how much the best profit would rise with one more unit of it. <bookmark mark='b'/> It is a local "
-            "price. We added one unit of the first resource and re-solved: the profit rose by a third, not by one, "
-            "because the extra unit changed which constraints were tight. <bookmark mark='c'/> Complementary "
-            "slackness ties the two programs together: a resource that is not used up has price zero, and a "
-            "product whose resources are worth more than its profit is not made. <bookmark mark='d'/> Here the "
-            "second resource has a unit to spare, so its price is zero, and the second product would cost three more "
-            "in resources than it earns, so the optimum doesn't make it. <bookmark mark='e'/> Every solver reports "
-            "these prices, and economists read them as the prices a competitive market would set."
+            (
+            "Dual variables are local sensitivity bounds. <bookmark mark='a'/> While the same optimal basis "
+            'remains valid, y i gives the change in optimal value per infinitesimal unit of resource i. '
+            "<bookmark mark='b'/> A whole extra unit can leave that range. We add one unit and resolve: resource "
+            "one's gain is one third, although its original dual price is one. <bookmark mark='c'/> "
+            'Complementary slackness says a resource with positive slack has zero price, and a product with '
+            "strictly positive reduced cost is unused. <bookmark mark='d'/> Resource two has slack one and price "
+            "zero; product two has reduced cost three and quantity zero. <bookmark mark='e'/> These prices "
+            'describe this mathematical model and its local range; they need not equal the finite change from '
+            'any proposed large intervention.'
+        )
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule),
                       LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.3))

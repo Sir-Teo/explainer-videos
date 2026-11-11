@@ -38,30 +38,32 @@ class Weights(VoiceoverScene):
                          font_size=19, mono_cols=(), colors=[[WHITE, HEAD, GREY_A]] * len(rows))
         tab.next_to(cap, DOWN, buff=0.25).align_to(ax, LEFT)
         side = VGroup(
-            label(r"each round, \ every expert predicts; \\ we follow a weighted random one", font_size=21, color=WHITE),
+            label('each round: \\ a distribution over experts; \\\\ compute expected loss, \\ no realized expert draw', font_size=21, color=WHITE),
             MathTex(r"w_i \leftarrow w_i \, e^{-\eta\, \ell_i}", font_size=34, color=LAM),
             label(r"multiply the weight of each expert who erred", font_size=21, color=LAM),
-            label(r"\textbf{regret}: \ our loss minus the best expert's, \\ chosen in hindsight", font_size=21,
+            label('\\textbf{expected-loss regret}: \\ against the best fixed expert in hindsight', font_size=21,
                   color=HEAD),
             MathTex(r"\text{regret} \le \sqrt{\tfrac{T}{2} \ln n}", font_size=32, color=YES),
-            label(r"so the average regret per round $\to 0$, \\ against \textbf{any} sequence of losses", font_size=21,
+            label('losses in $[0,1]$; \\ eta retuned for each displayed $T$; \\\\ realized sampled loss needs a separate deviation bound', font_size=21,
                   color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.26).to_edge(RIGHT, buff=0.35)
         if side.width > 5.6:
             side.width = 5.6
             side.to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "One algorithm keeps turning up in this part's last chapters, and in much of computer science. <bookmark "
-            "mark='a'/> Each day, ten experts each predict, and you must act on their advice before seeing who was "
-            "right. Keep a weight for each expert and follow one at random, in proportion to the weights. <bookmark "
-            "mark='b'/> After each day, multiply the weight of every expert who was wrong by a factor a little below "
-            "one. <bookmark mark='c'/> Here one expert is wrong forty-five percent of the time and the others half "
-            "the time. Within a few hundred rounds the weights find it. <bookmark mark='d'/> Measure regret: how much "
-            "worse you did than the single best expert, chosen with hindsight. <bookmark mark='e'/> For any sequence "
-            "of losses whatsoever, even one chosen by an adversary, the regret is at most the square root of T over "
-            "two times log n. <bookmark mark='f'/> Our measured regret stays under that bound, and the regret per "
-            "round shrinks towards zero: in the long run you do as well as the best expert, without knowing which one "
-            "it is."
+            (
+            "Multiplicative weights turns past losses into a distribution over experts. <bookmark mark='a'/> "
+            "Each round our calculation assigns a probability to every expert before seeing that round's losses; "
+            "it accumulates the distribution's expected loss, without sampling a realized expert. <bookmark "
+            "mark='b'/> Multiply weights by the exponential of minus eta times loss, computed in stable log "
+            "space. <bookmark mark='c'/> These seeded binary losses give one expert error probability forty-five "
+            "percent and the rest fifty percent. Their finite histories are retained. <bookmark mark='d'/> "
+            'Expected-loss regret compares the algorithm with the best fixed expert in hindsight. <bookmark '
+            "mark='e'/> For losses in zero to one, the bound is log n over eta plus eta T over eight. Choosing "
+            "eta for each displayed horizon gives the square root of T log n over two. <bookmark mark='f'/> "
+            "Independent prefix-loss softmax calculations reproduce every row. A sampled expert's realized loss "
+            'would additionally require a probabilistic deviation statement.'
+        )
         ) as vo:
             self.play(FadeIn(head), Create(ax))
             vo.wait_until("a")
@@ -136,8 +138,7 @@ class Weights(VoiceoverScene):
         lines = VGroup(
             label(r"\textbf{zero-sum games}: \ one player runs multiplicative weights, \ the other best-responds", font_size=22,
                   color=WHITE),
-            label(rf"the averages converge to the game's value \ ({m['game_value']:.4f}, \ by LP): \ \textbf{{von "
-                  rf"Neumann's minimax theorem}}, \ proved by an algorithm", font_size=22, color=YES),
+            label(rf"finite empirical lower/upper bounds; \ exact rational equilibrium value {m['game_value']:.4f}", font_size=22, color=YES),
         ).arrange(DOWN, buff=0.25).next_to(head, DOWN, buff=0.4)
         tab.next_to(lines, DOWN, buff=0.35).set_x(0)
         more = VGroup(
@@ -149,15 +150,18 @@ class Weights(VoiceoverScene):
                   color=GREY_A),
         ).arrange(DOWN, buff=0.22).next_to(tab, DOWN, buff=0.4)
         with self.voiceover(
-            "The same few lines prove theorems. <bookmark mark='a'/> In a zero-sum game, let one player run "
-            "multiplicative weights over its strategies while the other always plays its best response. <bookmark "
-            "mark='b'/> The two players' average strategies converge to the value of the game, here zero point four "
-            "eight four six, as the gap between what each can guarantee closes. That is von Neumann's minimax theorem, "
-            "proved by running an algorithm, and it is linear programming duality again. <bookmark mark='c'/> Put "
-            "the weights on training examples instead of experts and you get boosting, which the AI series built. "
-            "<bookmark mark='d'/> Put them on the constraints of a linear program and you get fast approximate "
-            "solvers for flows and packing problems. <bookmark mark='e'/> Sanjeev Arora, Elad Hazan and Satyen Kale "
-            "surveyed it under the title: a meta-algorithm and its applications."
+            (
+            "The same update supplies finite game certificates. <bookmark mark='a'/> Let the maximizing row "
+            'player use multiplicative weights and the column player choose a best response each round. '
+            "<bookmark mark='b'/> Average the actual row and column distributions. The smallest payoff against "
+            'the averaged row is a lower bound on the game value; the largest against the averaged column is an '
+            'upper bound. Both distributions are retained and checked. A separate exact rational equilibrium '
+            "certifies this game's value near zero point four eight four six. Finite gaps are not exact "
+            "convergence. <bookmark mark='c'/> Related weighting ideas power boosting, with its own assumptions "
+            "and update rules. <bookmark mark='d'/> Constraint weights also support approximate packing and flow "
+            "solvers with explicit width and accuracy parameters. <bookmark mark='e'/> Arora, Hazan and Kale "
+            'survey this shared potential-method pattern and its applications.'
+        )
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
