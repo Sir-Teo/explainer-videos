@@ -283,11 +283,15 @@ def dataflow_model(n: int, m: int | None = None, dataflow: str = "os", A=None, B
     t0 = time.perf_counter()
     rng = np.random.default_rng(seed)
     m = n if m is None else m
+    if n < 1 or m < 1 or dataflow not in ("os", "ws"):
+        raise ValueError("dataflow needs positive array dimensions and mode os or ws")
     if A is None:
         A = rng.integers(-128, 128, ((n if dataflow == "os" else m), n), dtype=np.int64)
     if B is None:
         B = rng.integers(-128, 128, (n, n), dtype=np.int64)
     A, B = np.asarray(A, np.int64), np.asarray(B, np.int64)
+    if A.shape != ((n if dataflow == "os" else m), n) or B.shape != (n, n):
+        raise ValueError("matrix dimensions must match the selected systolic dataflow")
     busy = 0
     if dataflow == "os":
         a = np.zeros((n, n), np.int64)
@@ -359,6 +363,9 @@ def scaling(ns=(16, 64, 256), stream: int = 16) -> list[dict]:
 # ---------------------------------------------------------------------------
 def quantize(x: np.ndarray, bits: int = 8) -> tuple[np.ndarray, float]:
     """Symmetric per-tensor quantization: q = round(x / s), s = max |x| / (2^(bits-1) - 1), so x ~ s q."""
+    x = np.asarray(x, dtype=float)
+    if not 2 <= bits <= 32 or not x.size or not np.isfinite(x).all():
+        raise ValueError("quantization needs 2--32 bits and a nonempty finite tensor")
     qmax = (1 << (bits - 1)) - 1
     s = float(np.max(np.abs(x))) / qmax or 1.0
     q = np.clip(np.rint(x / s), -qmax, qmax).astype(np.int8 if bits <= 8 else np.int32)
@@ -387,7 +394,7 @@ def quantized_matmul(n: int = 256, seed: int = 0, systolic_n: int = 64) -> dict:
     f32 = (A.astype(np.float32) @ B.astype(np.float32)).astype(np.float64)
     f16 = (A.astype(np.float16).astype(np.float32) @ B.astype(np.float16).astype(np.float32)).astype(np.float64)
     q, info = int8_matmul(A, B)
-    k = systolic_n
+    k = min(systolic_n, n)
     qa, _ = quantize(A[:k, :k])
     qb, _ = quantize(B[:k, :k])
     sys = dataflow_model(k, k, "ws", A=qa, B=qb)

@@ -135,6 +135,21 @@ class Systolic(unittest.TestCase):
 
 
 class Quantization(unittest.TestCase):
+    def test_integer_input_and_invalid_quantizers(self):
+        x = np.array([-128, 0, 127], dtype=np.int8)
+        q, scale = systolic.quantize(x)
+        self.assertGreater(scale, 0)
+        self.assertEqual(int(q[0]), -127)
+        self.assertLessEqual(float(np.max(np.abs(q.astype(float) * scale - x))), scale / 2 + 1e-12)
+        for bits in (1, 33):
+            with self.assertRaises(ValueError):
+                systolic.quantize(x, bits)
+        with self.assertRaises(ValueError):
+            systolic.quantize([float("nan")])
+        self.assertEqual(systolic.quantized_matmul(n=8)["systolic_n"], 8)
+        with self.assertRaises(ValueError):
+            systolic.dataflow_model(2, A=np.ones((3, 2)), B=np.eye(2))
+
     def test_quantize_bound(self):
         x = np.random.default_rng(0).standard_normal(1000)
         q, s = systolic.quantize(x)
