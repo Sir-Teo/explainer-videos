@@ -81,6 +81,17 @@ class Intersections(unittest.TestCase):
 
 
 class Bvh(unittest.TestCase):
+    def test_mesh_and_builder_contracts(self):
+        self.assertEqual(R.terrain(6).shape, (6, 3, 3))
+        for n in (0, 1, 5):
+            with self.assertRaises(ValueError):
+                R.terrain(n)
+        for kwargs in ({"method": "typo"}, {"max_leaf": 0}, {"nbins": 1}):
+            with self.assertRaises(ValueError):
+                R.build_bvh(R.terrain(2), **kwargs)
+        with self.assertRaises(ValueError):
+            R.build_bvh(np.empty((0, 3, 3)))
+
     def test_matches_brute_force(self):
         O, D = R.camera_rays(24)
         for tris in (R.terrain(2000, seed=5), R.icosphere(3, 0.4) + np.array([0.5, 0.5, 0.0])):

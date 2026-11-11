@@ -78,6 +78,8 @@ def terrain(n: int, seed: int = 0, roughness: float = 0.15) -> np.ndarray:
     """A random height field over the unit square made of exactly n triangles (n even): an a x b grid of cells, two
     triangles each, 2ab = n with a, b as close as possible.  Heights are a few random sinusoids plus jitter.
     Returns (n, 3, 3) vertices."""
+    if n < 2 or n % 2:
+        raise ValueError("terrain needs a positive even triangle count")
     m = n // 2
     a = int(np.sqrt(m))
     while m % a:
@@ -375,6 +377,10 @@ def _brute(O, D, tris):
 def build_bvh(triangles, method: str = "sah", max_leaf: int = 4, nbins: int = 16) -> dict:
     """Build a BVH over (n, 3, 3) triangles; returns the node arrays plus build time and shape statistics."""
     tris = np.ascontiguousarray(triangles, float)
+    if tris.ndim != 3 or tris.shape[1:] != (3, 3) or not len(tris) or not np.isfinite(tris).all():
+        raise ValueError("BVH needs a nonempty array of finite (3, 3) triangles")
+    if method not in ("sah", "median") or max_leaf < 1 or nbins < 2:
+        raise ValueError("invalid BVH method, leaf size, or bin count")
     t0 = time.perf_counter()
     out = _build(tris.min(1), tris.max(1), tris.mean(1), method == "sah", max_leaf, nbins)
     build_s = time.perf_counter() - t0
