@@ -34,6 +34,11 @@ class Control(unittest.TestCase):
         names = [n for _, n in steps]
         self.assertLess(names.index("queue"), names.index("service"))
         self.assertEqual(steps[-1], ("destroy", "old-cache"))
+        actual = {"app": ("service", {}, ["db"]), "db": ("database", {}, ["net"]),
+                  "net": ("network", {}, [])}
+        self.assertEqual(control.plan({}, actual)["steps"], [("destroy", n) for n in ("app", "db", "net")])
+        with self.assertRaises(ValueError):
+            control.plan({"a": ("x", {}, ["b"]), "b": ("x", {}, ["a"])}, {})
 
 
 class Durability(unittest.TestCase):

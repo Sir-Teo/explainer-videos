@@ -100,20 +100,28 @@ def plan(desired: dict, actual: dict):
     create = [n for n in desired if n not in actual]
     update = [n for n in desired if n in actual and desired[n][:2] != actual[n][:2]]
     destroy = [n for n in actual if n not in desired]
-    order, seen = [], set()
+    def dependency_order(graph):
+        order, seen, active = [], set(), set()
 
-    def visit(n, graph):
-        if n in seen:
-            return
-        seen.add(n)
-        for d in graph[n][2]:
-            if d in graph:
-                visit(d, graph)
-        order.append(n)
-    for n in desired:
-        visit(n, desired)
+        def visit(n):
+            if n in active:
+                raise ValueError("resource dependencies contain a cycle")
+            if n in seen:
+                return
+            active.add(n)
+            for d in graph[n][2]:
+                if d in graph:
+                    visit(d)
+            active.remove(n)
+            seen.add(n)
+            order.append(n)
+        for n in graph:
+            visit(n)
+        return order
+
+    order = dependency_order(desired)
     apply = [("create" if n in create else "update", n) for n in order if n in create or n in update]
-    rev = [("destroy", n) for n in reversed([x for x in actual if x in destroy])]
+    rev = [("destroy", n) for n in reversed(dependency_order(actual)) if n in destroy]
     return {"create": create, "update": update, "destroy": destroy, "steps": apply + rev}
 
 
