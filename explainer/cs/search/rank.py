@@ -17,6 +17,8 @@ def idf_bm25(N, df):
 
 def bm25_scores(post, lengths, query, k1=1.2, b=0.75):
     N = len(lengths)
+    if not N:
+        return {}
     avg = sum(lengths) / N
     sc = defaultdict(float)
     for q in query:
@@ -46,7 +48,8 @@ def tfidf_scores(post, lengths, query):
 
 
 def top(sc, k=10):
-    return [d for d, _ in heapq.nlargest(k, sc.items(), key=lambda x: x[1])]
+    """Highest score first, with ties broken by increasing document ID."""
+    return [d for d, _ in heapq.nlargest(k, sc.items(), key=lambda x: (x[1], -x[0]))]
 
 
 def saturation(k1s=(0.5, 1.2, 2.0, 5.0), tfs=range(0, 21)):
@@ -64,6 +67,8 @@ def ndcg(ranked, grades, k=10):
 
 
 def avg_precision(ranked, rel, k=10):
+    if k <= 0:
+        return 0.0
     hits, s = 0, 0.0
     for i, d in enumerate(ranked[:k]):
         if d in rel:
@@ -125,6 +130,8 @@ def wand(post, lengths, query, k=10, k1=1.2, b=0.75):
     current doc, find the pivot where the sum of upper bounds first exceeds the threshold (the k-th best score), and
     skip every cursor before it to the pivot document.  Returns the top k and how many documents were scored."""
     N = len(lengths)
+    if k <= 0 or not N:
+        return {"top": [], "scored": 0, "candidates": len({d for q in query for d, _ in post.get(q, [])})}
     avg = sum(lengths) / N
     lists, ub = [], []
     for q in query:
@@ -145,7 +152,7 @@ def wand(post, lengths, query, k=10, k1=1.2, b=0.75):
         acc, pivot = 0.0, None
         for i in live:
             acc += ub[i]
-            if acc > theta:
+            if acc >= theta:
                 pivot = i
                 break
         if pivot is None:
@@ -160,9 +167,9 @@ def wand(post, lengths, query, k=10, k1=1.2, b=0.75):
                     cur[i] += 1
             scored += 1
             if len(heap) < k:
-                heapq.heappush(heap, (s, pd))
-            elif s > heap[0][0]:
-                heapq.heapreplace(heap, (s, pd))
+                heapq.heappush(heap, (s, -pd))
+            elif (s, -pd) > heap[0]:
+                heapq.heapreplace(heap, (s, -pd))
             if len(heap) == k:
                 theta = heap[0][0]
         else:
@@ -173,4 +180,4 @@ def wand(post, lengths, query, k=10, k1=1.2, b=0.75):
                 while cur[i] < len(L) and L[cur[i]][0] < pd:
                     cur[i] += 1
     exhaustive = len({d for L in lists for d, _ in L})
-    return {"top": [d for _, d in sorted(heap, reverse=True)], "scored": scored, "candidates": exhaustive}
+    return {"top": [-d for _, d in sorted(heap, reverse=True)], "scored": scored, "candidates": exhaustive}

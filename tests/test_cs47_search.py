@@ -34,6 +34,15 @@ class Index(unittest.TestCase):
 
 
 class Rank(unittest.TestCase):
+    def test_wand_ties_and_empty_results(self):
+        post, lengths = index.build([(i, "A", "whale") for i in range(8)])
+        for k in (0, 1, 3, 20):
+            expected = rank.top(rank.bm25_scores(post, lengths, ["whale"]), k)
+            self.assertEqual(rank.wand(post, lengths, ["whale"], k)["top"], expected)
+        self.assertEqual(rank.wand({}, [], ["whale"])["top"], [])
+        self.assertEqual(rank.bm25_scores({}, [], ["whale"]), {})
+        self.assertEqual(rank.avg_precision([1], {1}, k=0), 0)
+
     def test_wand_matches_exhaustive(self):
         post, lengths = index.build(DOCS)
         q = [text.porter("white"), text.porter("whale")]
