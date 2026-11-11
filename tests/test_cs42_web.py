@@ -89,6 +89,18 @@ class Platform(unittest.TestCase):
     def test_origin(self):
         self.assertTrue(platform.same_origin("https://a.com/x", "https://a.com:443/y"))
         self.assertFalse(platform.same_origin("https://a.com", "http://a.com"))
+        self.assertFalse(platform.same_origin("https://a.com:0", "https://a.com"))
+        self.assertFalse(platform.same_origin("data:text/plain,a", "data:text/plain,b"))
+
+    def test_cors_preserves_origin_port(self):
+        args = ("https://a.com:8443", "https://b.com")
+        self.assertTrue(platform.cors(*args, allow_origin="https://a.com:8443")["readable"])
+        self.assertFalse(platform.cors(*args, allow_origin="https://a.com")["readable"])
+        r = platform.cors(*args, method="PUT", allow_methods=("PUT",), allow_origin="*",
+                          credentials=True, allow_credentials=True)
+        self.assertTrue(r["preflight"])
+        self.assertFalse(r["readable"])
+        self.assertIn("never sent", r["why"])
 
 
 if __name__ == "__main__":

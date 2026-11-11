@@ -42,13 +42,28 @@ def grey_threshold(bg="#ffffff", need=4.5):
 # ---------------------------------------------------------------- origins
 
 def origin(url: str):
+    """Tuple origins for HTTP(S)/WebSocket URLs; None for this model's opaque origins."""
     u = urlsplit(url)
-    port = u.port or {"http": 80, "https": 443}.get(u.scheme)
+    defaults = {"http": 80, "https": 443, "ws": 80, "wss": 443}
+    if u.scheme not in defaults or u.hostname is None:
+        return None
+    port = u.port if u.port is not None else defaults[u.scheme]
     return (u.scheme, u.hostname, port)
 
 
 def same_origin(a: str, b: str) -> bool:
-    return origin(a) == origin(b)
+    oa = origin(a)
+    return oa is not None and oa == origin(b)
+
+
+def _serialized_origin(url: str) -> str:
+    o = origin(url)
+    if o is None:
+        return "null"
+    scheme, host, port = o
+    host = f"[{host}]" if ":" in host else host
+    default = 443 if scheme in ("https", "wss") else 80
+    return f"{scheme}://{host}" + (f":{port}" if port != default else "")
 
 
 def site(url: str):
@@ -65,14 +80,15 @@ def cors(page: str, target: str, method="GET", headers=(), allow_origin=None, al
         return {"preflight": False, "readable": True, "why": "same origin"}
     simple = method in ("GET", "HEAD", "POST") and all(h.lower() in ("accept", "accept-language", "content-language",
                                                                       "content-type") for h in headers)
+    o = _serialized_origin(page)
+    origin_allowed = allow_origin == o or (allow_origin == "*" and not credentials)
     if not simple:
-        if allow_origin not in ("*", "%s://%s" % origin(page)[:2]) or (method not in allow_methods and
+        if not origin_allowed or (credentials and not allow_credentials) or (method not in allow_methods and
                                                                           method not in ("GET", "HEAD", "POST")):
             return {"preflight": True, "readable": False, "why": "preflight refused; the request is never sent"}
         if any(h.lower() not in [x.lower() for x in allow_headers] for h in headers):
             return {"preflight": True, "readable": False, "why": "a header was not allowed"}
-    o = "%s://%s" % origin(page)[:2]
-    ok = allow_origin == o or (allow_origin == "*" and not credentials)
+    ok = origin_allowed
     if credentials and not allow_credentials:
         ok = False
     return {"preflight": not simple, "readable": ok,
