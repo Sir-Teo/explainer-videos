@@ -13,16 +13,22 @@ import uuid
 # ---------------------------------------------------------------- unique IDs
 
 def birthday(bits=122, ns=(1e9, 1e12, 1e15, 2.71e18)):
-    """P(any collision) ~ 1 - exp(-n^2 / 2^(bits+1)) for n random IDs of `bits` random bits (UUIDv4 has 122)."""
-    return [{"n": n, "p": -math.expm1(-(n * n) / 2 ** (bits + 1))} for n in ns]
+    """P(any collision) ~ 1 - exp(-n(n-1) / 2^(bits+1)); UUIDv4 has 122 random bits."""
+    if bits < 1 or any(n < 0 for n in ns):
+        raise ValueError("need positive random bits and nonnegative ID counts")
+    return [{"n": n, "p": -math.expm1(-(n * max(0, n - 1)) / 2 ** (bits + 1))} for n in ns]
 
 
 def snowflake(ts_ms: int, machine: int, seq: int, epoch=1288834974657):
     """41 bits of milliseconds since an epoch, 10 bits of machine, 12 bits of sequence (Twitter, 2010)."""
+    if not (0 <= ts_ms - epoch < 1 << 41 and 0 <= machine < 1 << 10 and 0 <= seq < 1 << 12):
+        raise ValueError("timestamp, machine, and sequence must fit their Snowflake fields")
     return ((ts_ms - epoch) << 22) | (machine << 12) | seq
 
 
 def uuid7(ts_ms: int, rng: random.Random):
+    if not 0 <= ts_ms < 1 << 48:
+        raise ValueError("UUIDv7 timestamp must fit 48 bits")
     rand = rng.getrandbits(74)
     v = (ts_ms << 80) | (0x7 << 76) | ((rand >> 62) << 64) | (0b10 << 62) | (rand & ((1 << 62) - 1))
     return uuid.UUID(int=v)

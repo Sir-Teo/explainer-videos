@@ -24,6 +24,8 @@ def maglev_table(backends, M=65537):
     """Each backend gets a permutation of table slots (offset, skip from two hashes); backends take turns claiming
     their next preferred free slot until the table is full.  Every backend ends up with M/N slots, +-1."""
     N = len(backends)
+    if N == 0 or M < 2 or any(M % d == 0 for d in range(2, math.isqrt(M) + 1)):
+        raise ValueError("Maglev needs backends and a prime table size so each sequence is a permutation")
     offset = [h64(b, "o") % M for b in backends]
     skip = [h64(b, "s") % (M - 1) + 1 for b in backends]
     nxt = [0] * N
@@ -264,14 +266,11 @@ def token_bucket(arrivals, rate, burst):
 
 
 def envelope_ok(allowed, rate, burst):
-    worst = 0.0
-    j = 0
+    """Check every interval in linear time, including intervals longer than ten seconds."""
+    worst, floor = 0.0, float("inf")
     for i, t in enumerate(allowed):
-        while allowed[j] < t - 10.0:
-            j += 1
-        for k in range(j, i + 1):
-            s = t - allowed[k]
-            worst = max(worst, (i - k + 1) - (burst + rate * s))
+        floor = min(floor, i - rate * t)
+        worst = max(worst, i + 1 - rate * t - floor - burst)
     return worst <= 1e-9, worst
 
 

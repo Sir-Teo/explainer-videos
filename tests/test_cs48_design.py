@@ -4,6 +4,14 @@ from explainer.cs.design import blocks, keys
 
 
 class Blocks(unittest.TestCase):
+    def test_envelope_checks_long_intervals(self):
+        ok, excess = blocks.envelope_ok(list(range(50)), rate=.5, burst=10)
+        self.assertFalse(ok)
+        self.assertAlmostEqual(excess, 15.5)
+        for backends, size in (([], 7), (["a", "b"], 8)):
+            with self.assertRaises(ValueError):
+                blocks.maglev_table(backends, size)
+
     def test_maglev_balanced(self):
         t = blocks.maglev_table([f"b{i}" for i in range(7)], M=251)
         counts = [t.count(i) for i in range(7)]
@@ -23,6 +31,19 @@ class Blocks(unittest.TestCase):
 
 
 class Keys(unittest.TestCase):
+    def test_id_fields_do_not_overlap(self):
+        import random
+        for args in ((0, 1024, 0), (0, 0, 4096), (-1, 0, 0), (1 << 41, 0, 0)):
+            with self.assertRaises(ValueError):
+                keys.snowflake(*args, epoch=0)
+        self.assertEqual(keys.snowflake(0, 1023, 4095, epoch=0), (1 << 22) - 1)
+        u = keys.uuid7(1234, random.Random(1))
+        self.assertEqual(u.version, 7)
+        self.assertEqual(u.int >> 80, 1234)
+        with self.assertRaises(ValueError):
+            keys.uuid7(1 << 48, random.Random(1))
+        self.assertEqual(keys.birthday(ns=(0, 1)), [{"n": 0, "p": 0}, {"n": 1, "p": 0}])
+
     def test_curves_are_bijections(self):
         for f in (keys.morton, keys.hilbert):
             self.assertEqual(sorted(f(x, y, 3) for x in range(8) for y in range(8)), list(range(64)))
