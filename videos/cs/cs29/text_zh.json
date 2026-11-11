@@ -1,0 +1,11 @@
+{
+  "strings": {
+    "fixed-work Python loop": "固定工作量的 Python 循环",
+    "stateless encryption needs fresh randomness; \\\\ nonce-based encryption instead requires correct nonce management": "无状态加密需要新鲜随机性；\\\\ 基于 nonce 的加密需要正确管理 nonce",
+    "encrypt-then-MAC: \\ IND-CPA encryption + strong MAC, \\ independent keys; \\\\ authenticate IVs and verify before decrypting": "先加密后认证：IND-CPA 加密与强 MAC，使用独立密钥；\\\\ 认证 IV，并在解密前验证标签",
+    "nonce reuse exposes equations in $H$: \\ key recovery can enable forgeries \\ (Joux, 2006)": "重复 nonce 暴露关于 $H$ 的方程；恢复密钥可能实现伪造（Joux，2006）",
+    "with reliable timing: \\ about $16 \\times 256$ candidates; \\\\ repeated measurements may be needed": "若计时可靠，约需 $16 \\times 256$ 个候选；\\\\ 可能需要重复测量",
+    "\\textbf{HMAC} \\ (Bellare, \\ Canetti, \\ Krawczyk, \\ 1996): \\ $H\\bigl((k \\oplus \\mathrm{opad})\\,\\|\\, H((k \\oplus \\mathrm{ipad}) \\,\\|\\, m)\\bigr)$: \\ variable-length messages, \\ hash assumptions matter": "\\textbf{HMAC} \\ (Bellare, \\ Canetti, \\ Krawczyk, \\ 1996): \\ $H\\bigl((k \\oplus \\mathrm{opad})\\,\\|\\, H((k \\oplus \\mathrm{ipad}) \\,\\|\\, m)\\bigr)$: \\ 可变长消息；安全依赖哈希构造的假设",
+    "measured average prefix slope: \\ 20 ns/byte; \\\\ timing can expose correct prefixes": "测得平均前缀斜率：20 纳秒/字节；\\\\ 时间可能泄露正确前缀"
+  }
+}

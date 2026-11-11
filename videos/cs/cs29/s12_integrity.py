@@ -110,7 +110,7 @@ class Integrity(VoiceoverScene):
             label(rf"our forgery \ ({len(forged)} bytes) \ verifies: \ {'valid' if d['forgery_valid'] else 'invalid'}",
                   font_size=21, color=NO),
             label(r"\textbf{HMAC} \ (Bellare, \ Canetti, \ Krawczyk, \ 1996): \ $H\bigl((k \oplus \mathrm{opad})"
-                  r"\,\|\, H((k \oplus \mathrm{ipad}) \,\|\, m)\bigr)$: \ any length, \ any good hash", font_size=21,
+                  r"\,\|\, H((k \oplus \mathrm{ipad}) \,\|\, m)\bigr)$: \ variable-length messages, \ hash assumptions matter", font_size=21,
                   color=YES),
         ).arrange(DOWN, buff=0.16).to_edge(DOWN, buff=0.3)
         with self.voiceover(
@@ -123,7 +123,8 @@ class Integrity(VoiceoverScene):
             "two-block message is the second tag. <bookmark mark='d'/> Our forgery verifies. Prefixing the length "
             "fixes it; the standard mode, CMAC, fixes it by treating the last block specially. <bookmark mark='e'/> The other "
             "standard is HMAC, from 1996: hash the key with the message, then hash the key with that result. It "
-            "works with any good hash function and any message length, and it secures most web APIs' signed "
+            "supports variable-length messages under appropriate assumptions on the hash construction, and is "
+            "widely used for web APIs' signed "
             "requests and tokens."
         ) as vo:
             self.play(FadeIn(head), FadeIn(es), FadeIn(ms), FadeIn(xs), FadeIn(wires), FadeIn(tag))
@@ -149,13 +150,13 @@ class Integrity(VoiceoverScene):
                    r"a secret point $H$ of $\mathrm{GF}(2^{128})$", font_size=20, color=GREY_A).next_to(f, DOWN,
                                                                                                       buff=0.2)
         lines = VGroup(
-            label(r"encrypt-then-MAC \ (Bellare and Namprempre, 2000): \ the generic composition that is always "
-                  r"secure", font_size=21, color=WHITE),
+            label(r"encrypt-then-MAC: \ IND-CPA encryption + strong MAC, \ independent keys; \\ authenticate IVs "
+                  r"and verify before decrypting", font_size=21, color=WHITE),
             label(r"\textbf{AEAD}: \ one mode does both: \ GCM = CTR encryption + GHASH; \ TLS 1.3 allows nothing "
                   r"else", font_size=21, color=DATA),
             label(rf"ours matches NIST's GCM test vectors: \ tag \texttt{{{d['gcm_tag'][:16]}}}$\ldots$", font_size=21,
                   color=YES),
-            label(r"two polynomials sharing a nonce give an equation in $H$: \ its roots let anyone forge \ (Joux, "
+            label(r"nonce reuse exposes equations in $H$: \ key recovery can enable forgeries \ (Joux, "
                   r"2006)", font_size=21, color=NO),
             label(r"2016: \ 184 HTTPS servers found repeating GCM nonces", font_size=21, color=NO),
             label(r"ChaCha20-Poly1305: \ the same idea, \ a polynomial modulo the prime $2^{130} - 5$", font_size=21,
@@ -163,15 +164,17 @@ class Integrity(VoiceoverScene):
         ).arrange(DOWN, buff=0.16).next_to(fl, DOWN, buff=0.4)
         with self.voiceover(
             "Combine encryption and a MAC, and in which order? <bookmark mark='a'/> Mihir Bellare and Chanathip "
-            "Namprempre showed in 2000 that encrypting first and then computing a MAC over the ciphertext is always "
-            "secure, while the other orders can fail, as the padding oracle did. Receivers check the tag first and "
+            "Namprempre proved a composition theorem in 2000: combine IND-CPA encryption and a strongly "
+            "unforgeable MAC with independent keys. Authenticate the complete ciphertext, including its IV, "
+            "then verify the tag before decrypting. Other orders can fail, as the padding oracle illustrated. "
+            "Receivers check the tag first and "
             "never decrypt a forgery. <bookmark mark='b'/> Modern modes do both at once: authenticated encryption. "
             "Galois counter mode, GCM, encrypts in counter mode and computes its tag with a polynomial: the "
             "ciphertext blocks are the coefficients, evaluated at a secret point H of the field with two to the one "
             "hundred and twenty-eight elements. Part 28's algebra again. TLS 1.3 allows only modes like this. "
             "<bookmark mark='c'/> Ours matches the standard's test vectors. <bookmark mark='d'/> The polynomial "
             "makes nonces critical. Two messages tagged with the same nonce give an equation whose roots include H, "
-            "and with H anyone can forge tags. <bookmark mark='e'/> A 2016 survey found a hundred and eighty-four "
+            "and additional transcripts or attempts can resolve candidates and enable forgeries. <bookmark mark='e'/> A 2016 survey found a hundred and eighty-four "
             "HTTPS servers repeating GCM nonces. <bookmark mark='f'/> ChaCha20 pairs with Poly1305, the same idea "
             "with a polynomial modulo the prime two to the hundred and thirty minus five."
         ) as vo:

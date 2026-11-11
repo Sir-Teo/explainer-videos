@@ -88,8 +88,8 @@ class Definitions(VoiceoverScene):
                   r"\ it learns nothing it could use", font_size=21, color=YES),
             label(r"Goldwasser and Micali \ (1982): \ this is equivalent to \textbf{semantic security}: \ no "
                   r"function of $m$ leaks", font_size=21, color=WHITE),
-            label(r"consequence: \ encryption must be \textbf{randomised} \ (a fresh IV or nonce): \ else "
-                  r"$\mathcal{A}$ asks for $\mathrm{Enc}(m_0)$ and compares", font_size=21, color=NO),
+            label(r"stateless encryption needs fresh randomness; \\ nonce-based encryption instead requires "
+                  r"correct nonce management", font_size=21, color=NO),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "What should the attacker be unable to do? Shafi Goldwasser and Silvio Micali answered in 1982 with a "
@@ -102,7 +102,9 @@ class Definitions(VoiceoverScene):
             "about any message: Goldwasser and Micali proved this equivalent to semantic security, and it won them "
             "the Turing Award. <bookmark mark='e'/> One consequence is immediate. If encryption is deterministic, "
             "the adversary simply asks for the encryption of m-zero in advance and compares. Secure encryption must "
-            "be randomised, which is exactly what our logo was missing."
+            "use fresh randomness in this stateless game. A stateful scheme can instead manage unique nonces, "
+            "with a security definition that enforces the nonce rules. CBC needs unpredictable IVs; CTR needs "
+            "nonrepeating counters under each key."
         ) as vo:
             self.play(FadeIn(head), FadeIn(L), FadeIn(R), Create(vl), Create(vr))
             vo.wait_until("a")

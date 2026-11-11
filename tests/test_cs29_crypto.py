@@ -7,6 +7,44 @@ from explainer.cs.algo import crypto as K
 
 
 class TestVectors(unittest.TestCase):
+    def test_block_and_nonce_contracts(self):
+        aes = K.AES(bytes(16))
+        for n in (0, 15, 17, 24, 32):
+            with self.assertRaises(ValueError):
+                K.AES(bytes(n))
+        for n in (0, 15, 17):
+            with self.assertRaises(ValueError):
+                aes.enc(bytes(n))
+            with self.assertRaises(ValueError):
+                aes.dec(bytes(n))
+        for operation in (K.cbc_encrypt, K.cbc_decrypt):
+            with self.assertRaises(ValueError):
+                operation(aes, bytes(15), bytes(16))
+            with self.assertRaises(ValueError):
+                operation(aes, bytes(16), bytes(17))
+        with self.assertRaises(ValueError):
+            K.aes_gcm_encrypt(bytes(16), bytes(16), b"message")
+        with self.assertRaises(ValueError):
+            K.ctr_encrypt(aes, bytes(7), b"message")
+
+    def test_chacha_counter_boundary(self):
+        key, nonce = bytes(32), bytes(12)
+        self.assertEqual(K.chacha20_encrypt(key, 2 ** 32 - 1, nonce, bytes(64)),
+                         K.chacha20_block(key, 2 ** 32 - 1, nonce))
+        with self.assertRaises(ValueError):
+            K.chacha20_encrypt(key, 2 ** 32 - 1, nonce, bytes(65))
+        with self.assertRaises(ValueError):
+            K.chacha20_block(key, -1, nonce)
+
+    def test_padding_roundtrips_and_rejects_malformed_lengths(self):
+        for block_size in (8, 16):
+            for length in (0, 1, 7, 8, 15, 16, 17, 32):
+                data = bytes(length)
+                self.assertEqual(K.pkcs7_unpad(K.pkcs7_pad(data, block_size), block_size), data)
+        for data in (b"", b"\x01", b"x" * 15 + b"\x00", b"x" * 15 + b"\x02"):
+            with self.assertRaises(ValueError):
+                K.pkcs7_unpad(data)
+
     def test_aes_fips197(self):
         k = bytes.fromhex("000102030405060708090a0b0c0d0e0f")
         aes = K.AES(k)

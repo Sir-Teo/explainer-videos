@@ -8,7 +8,7 @@ ciphers and hash functions on that assumption. The attacks in this part show how
 attack here is built from scratch and run; **the code is for learning, never for real use**, as the video says on
 screen.
 
-The instrument is `explainer/cs/algo/crypto.py`. It holds:
+The instrument is [`crypto.py`](../../../explainer/cs/algo/crypto.py). It holds:
 * classical ciphers and their breaks:
   - Caesar, substitution and Vigenère;
   - a quadgram language model with hill climbing from al-Kindi's frequency-matched start;
@@ -26,7 +26,18 @@ The instrument is `explainer/cs/algo/crypto.py`. It holds:
 * birthday collision search; Merkle trees and inclusion proofs;
 * Heys' 16-bit SPN, its difference table and a differential attack on the last round; a 16-bit toy cipher and the
   meet-in-the-middle attack on its double encryption;
-* early-exit and constant-time comparison; a PID-seeded key generator.
+* early-exit and fixed-work comparison loops; a PID-seeded key generator.
+
+The block-cipher interface implements AES-128 on complete 16-byte blocks; callers pad explicitly. The ChaCha20
+interface follows the IETF 32-bit counter/96-bit nonce layout and rejects counter exhaustion. The GCM example accepts
+96-bit nonces and emits full 128-bit tags. Nonce requirements depend on the mode: CBC needs unpredictable IVs, while
+CTR and GCM require nonce/counter uniqueness under a key.
+
+Encrypt-then-MAC relies on IND-CPA encryption, a strongly unforgeable MAC, independent keys, and authentication of the
+complete ciphertext including its IV. Verify before decrypting. The timing plots are local Python measurements;
+the fixed-work loop illustrates removing early exit and does not establish constant-time execution. Use
+`hmac.compare_digest` for tag comparisons. A bytewise timing attack requires a reliable statistical signal and may
+need many measurements for each candidate.
 
 It is tested in `tests/test_cs29_crypto.py`, against published vectors where they exist:
 * AES-128 against FIPS-197 Appendices B and C.1, and S(0x53) = 0xED;
@@ -111,7 +122,7 @@ Vigenère round trips, Merkle proofs and both comparisons.
     linear cryptanalysis; AES's wide-trail bound.
   - Meet in the middle on double encryption: 131,072 cipher calls instead of 2³²; two candidates survive two pairs.
 * **15. Side channels and bad randomness.**
-  - Early-exit comparison: 208 to 524 ns over 0–16 correct bytes; constant time is flat at about 720 ns.
+  - Early-exit versus fixed-work comparison over 0–16 correct bytes; times depend on the runtime and host.
   - Cache attacks on AES T-tables; power analysis.
   - The Debian OpenSSL bug in miniature: a PID-seeded key found after 23,107 tries in 2 s. Dual_EC_DRBG.
 * **16. Frontier: proofs, quanta and lightweight ciphers.**
@@ -202,7 +213,7 @@ python tools/build.py cs29                 # 1080p
 
    The fix:
    - Compute `t = hmac_sha256(k_mac, iv + c)` at encryption.
-   - At decryption, check t with `constant_time_equal` *before* decrypting.
+   - At decryption, check t with `hmac.compare_digest` *before* decrypting.
    - Return one error for every failure.
 
    The oracle now answers "invalid" for every doctored ciphertext, because the attacker cannot produce a valid tag,
@@ -264,7 +275,7 @@ python tools/build.py cs29                 # 1080p
 
    *解答。* 服务器就是一个函数 `oracle(iv, c)`：运行 `pkcs7_unpad(cbc_decrypt(aes, iv, c))`，返回是否抛出异常。
    `crypto.padding_oracle_attack(iv, c, oracle)` 从右到左恢复每一块，每字节至多 256 次、平均约 128 次查询（第 10 章测得 134）。修复：加密时
-   计算 `t = hmac_sha256(k_mac, iv + c)`；解密时*先*用 `constant_time_equal` 检查 t，再解密；任何失败都返回同一个错误。现在预言机对每个
+   计算 `t = hmac_sha256(k_mac, iv + c)`；解密时*先*用 `hmac.compare_digest` 检查 t，再解密；任何失败都返回同一个错误。现在预言机对每个
    篡改过的密文都答「无效」，因为攻击者造不出有效标签，攻击什么也学不到。加密与 MAC 用不同的密钥；更好的是直接用 AEAD 模式。
 
 6. ★ **研究：差分路径聚集有多严重？** 对 3 到 6 轮的 Heys SPN，计算最佳差分在所有路径上求和的精确期望概率，并与最佳单条路径比较。

@@ -311,6 +311,10 @@ def quarter_round(a, b, c, d):
 
 
 def chacha20_block(key, counter, nonce):
+    if len(key) != 32 or len(nonce) != 12:
+        raise ValueError("IETF ChaCha20 requires a 32-byte key and 12-byte nonce")
+    if not isinstance(counter, int) or not 0 <= counter < 2 ** 32:
+        raise ValueError("ChaCha20 block counter must fit in 32 bits")
     const = [0x61707865, 0x3320646E, 0x79622D32, 0x6B206574]
     st = const + list(struct.unpack("<8I", key)) + [counter] + list(struct.unpack("<3I", nonce))
     x = list(st)
@@ -322,6 +326,10 @@ def chacha20_block(key, counter, nonce):
 
 
 def chacha20_encrypt(key, counter, nonce, data):
+    if len(key) != 32 or len(nonce) != 12 or not isinstance(counter, int) or not 0 <= counter < 2 ** 32:
+        raise ValueError("invalid IETF ChaCha20 key, nonce or counter")
+    if (len(data) + 63) // 64 > 2 ** 32 - counter:
+        raise ValueError("ChaCha20 counter would wrap; use a new nonce")
     out = bytearray()
     for i in range(0, len(data), 64):
         ks = chacha20_block(key, counter + i // 64, nonce)
@@ -372,6 +380,8 @@ MUL3 = [_gmul(x, 3) for x in range(256)]
 
 
 def key_expansion(key):
+    if len(key) != 16:
+        raise ValueError("this implementation supports AES-128 keys only")
     w = [list(key[4 * i:4 * i + 4]) for i in range(4)]
     for i in range(4, 44):
         t = list(w[i - 1])
@@ -406,6 +416,8 @@ def _add(s, k):
 
 
 def aes_encrypt_block(block, round_keys, rounds=10, trace=False):
+    if len(block) != 16 or not isinstance(rounds, int) or not 0 <= rounds <= 10:
+        raise ValueError("AES requires a 16-byte block and 0..10 teaching rounds")
     s = _add(list(block), round_keys[0])
     steps = [("AddRoundKey 0", s)] if trace else None
     for r in range(1, rounds + 1):
@@ -441,6 +453,8 @@ def _inv_mix_columns(s):
 
 
 def aes_decrypt_block(block, round_keys):
+    if len(block) != 16:
+        raise ValueError("AES requires a 16-byte block")
     s = _add(list(block), round_keys[10])
     for r in range(9, -1, -1):
         s = _inv_shift_rows(s)
@@ -488,22 +502,30 @@ def avalanche_by_round(rng, trials=200):
 # ----------------------------------------------------------------------------------------------- modes
 
 def pkcs7_pad(data, n=16):
+    if not isinstance(n, int) or not 1 <= n <= 255:
+        raise ValueError("PKCS#7 block size must be between 1 and 255")
     k = n - len(data) % n
     return data + bytes([k]) * k
 
 
-def pkcs7_unpad(data):
+def pkcs7_unpad(data, n=16):
+    if not isinstance(n, int) or not 1 <= n <= 255 or not data or len(data) % n:
+        raise ValueError("bad padded length or block size")
     k = data[-1]
-    if k < 1 or k > 16 or data[-k:] != bytes([k]) * k:
+    if k < 1 or k > n or data[-k:] != bytes([k]) * k:
         raise ValueError("bad padding")
     return data[:-k]
 
 
 def ecb_encrypt(aes, data):
+    if len(data) % 16:
+        raise ValueError("ECB input must contain whole blocks; pad explicitly")
     return b"".join(aes.enc(data[i:i + 16]) for i in range(0, len(data), 16))
 
 
 def cbc_encrypt(aes, iv, data):
+    if len(iv) != 16 or len(data) % 16:
+        raise ValueError("CBC requires a 16-byte IV and whole input blocks")
     out, prev = [], iv
     for i in range(0, len(data), 16):
         prev = aes.enc(xor(data[i:i + 16], prev))
@@ -512,6 +534,8 @@ def cbc_encrypt(aes, iv, data):
 
 
 def cbc_decrypt(aes, iv, data):
+    if len(iv) != 16 or len(data) % 16:
+        raise ValueError("CBC requires a 16-byte IV and whole input blocks")
     out, prev = [], iv
     for i in range(0, len(data), 16):
         blk = data[i:i + 16]
@@ -521,6 +545,8 @@ def cbc_decrypt(aes, iv, data):
 
 
 def ctr_encrypt(aes, nonce8, data):
+    if len(nonce8) != 8:
+        raise ValueError("this CTR layout requires an 8-byte nonce")
     out = bytearray()
     for i in range(0, len(data), 16):
         ks = aes.enc(nonce8 + struct.pack(">Q", i // 16))
@@ -531,6 +557,8 @@ def ctr_encrypt(aes, nonce8, data):
 def padding_oracle_attack(iv, ct, oracle):
     """Vaudenay (2002): recover the plaintext of a CBC ciphertext using only a valid-padding oracle.
     Returns (plaintext with padding, number of oracle queries)."""
+    if len(iv) != 16 or not ct or len(ct) % 16:
+        raise ValueError("attack requires a 16-byte IV and nonempty whole ciphertext blocks")
     blocks = [iv] + [ct[i:i + 16] for i in range(0, len(ct), 16)]
     plain = b""
     queries = 0
@@ -555,6 +583,8 @@ def padding_oracle_attack(iv, ct, oracle):
                             continue
                     found = g
                     break
+            if found is None:
+                raise ValueError("oracle supplied no consistent padding candidate")
             inter[pos] = found ^ pad
         plain += xor(bytes(inter), prev)
     return plain, queries
@@ -649,6 +679,11 @@ def ghash(h, data):
 
 
 def aes_gcm_encrypt(key, iv12, plaintext, aad=b""):
+    """Teaching AES-128-GCM encryption with a 96-bit nonce and full 128-bit tag."""
+    if len(iv12) != 12:
+        raise ValueError("this GCM implementation requires a 12-byte nonce")
+    if len(plaintext) > (2 ** 32 - 2) * 16:
+        raise ValueError("plaintext exceeds GCM's per-nonce counter budget")
     aes = AES(key)
     h = aes.enc(bytes(16))
     j0 = iv12 + b"\x00\x00\x00\x01"
@@ -863,6 +898,10 @@ def early_exit_equal(a, b):
 
 
 def constant_time_equal(a, b):
+    """Fixed-work teaching loop, not a constant-time guarantee in Python.
+
+    Use hmac.compare_digest for real tag comparisons.
+    """
     if len(a) != len(b):
         return False
     d = 0

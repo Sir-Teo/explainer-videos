@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import math
+
 from explainer.cs import *  # noqa: F403
 from videos.cs.cs29.common import (BG, DATA, HEAD, LAM, NO, PART, YES, code, load, mono)
 
@@ -28,11 +30,12 @@ class SideChannels(VoiceoverScene):
         const = code(["def equal(a, b):", "    d = 0", "    for x, y in zip(a, b):", "        d |= x ^ y",
                       "    return d == 0"], size=17)
         el = label(r"early exit", font_size=19, color=NO)
-        cl = label(r"constant time", font_size=19, color=YES)
+        cl = label(r"fixed-work Python loop", font_size=19, color=YES)
         codes = VGroup(VGroup(el, early).arrange(DOWN, aligned_edge=LEFT, buff=0.12),
                        VGroup(cl, const).arrange(DOWN, aligned_edge=LEFT, buff=0.12)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.35).next_to(head, DOWN, buff=0.45).to_edge(LEFT, buff=0.7)
-        ax = Axes(x_range=[0, 16, 4], y_range=[0, 800, 200], x_length=5.0, y_length=3.2,
+        ymax = max(800, math.ceil(max(max(r["early_ns"], r["constant_ns"]) for r in t) / 200) * 200)
+        ax = Axes(x_range=[0, 16, 4], y_range=[0, ymax, ymax / 4], x_length=5.0, y_length=3.2,
                   axis_config={"color": GREY_D, "include_numbers": False}).next_to(codes, RIGHT, buff=1.2).align_to(
             codes, UP).shift(DOWN * 0.3)
         e = VMobject(color=NO, stroke_width=3).set_points_as_corners([ax.c2p(r["correct"], r["early_ns"]) for r in t])
@@ -43,15 +46,15 @@ class SideChannels(VoiceoverScene):
         xt = VGroup(*[label(str(x), font_size=15, color=GREY_A).next_to(ax.c2p(x, 0), DOWN, buff=0.08)
                       for x in (0, 4, 8, 12, 16)])
         yt = VGroup(*[label(str(y), font_size=15, color=GREY_A).next_to(ax.c2p(0, y), LEFT, buff=0.08)
-                      for y in (0, 400, 800)])
+                      for y in (0, ymax / 2, ymax)])
         xl = label(r"correct leading bytes in the guess", font_size=16, color=GREY_A).next_to(xt, DOWN, buff=0.1)
         yl = label(r"nanoseconds per comparison", font_size=16, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(
             ax, LEFT)
         slope = (t[-1]["early_ns"] - t[0]["early_ns"]) / 16
         lines = VGroup(
-            label(rf"each correct byte costs {slope:.0f} ns more: \ the time says how much of a MAC guess is right",
+            label(rf"measured average prefix slope: \ {slope:.0f} ns/byte; \\ timing can expose correct prefixes",
                   font_size=20, color=NO),
-            label(r"so guess one byte at a time: \ $16 \times 256$ tries instead of $256^{16}$", font_size=20,
+            label(r"with reliable timing: \ about $16 \times 256$ candidates; \\ repeated measurements may be needed", font_size=20,
                   color=HEAD),
             label(r"Kocher \ (1996): \ timing recovered RSA and Diffie--Hellman keys; \ use "
                   r"\texttt{hmac.compare\_digest}", font_size=20, color=YES),
@@ -60,14 +63,14 @@ class SideChannels(VoiceoverScene):
             "Everything so far attacked the mathematics. Real systems also leak through how long they take, how "
             "much power they draw, what they leave in the cache. <bookmark mark='a'/> Here is the obvious way to "
             "check a MAC tag: compare byte by byte, and stop at the first difference. <bookmark mark='b'/> We timed "
-            "it against guesses with more and more correct leading bytes. The time climbs steadily, about twenty "
-            "nanoseconds per correct byte, measured from Python, where the noise is worst. <bookmark mark='c'/> An "
-            "attacker submitting forged tags can now find the right first byte by trying all two hundred and "
-            "fifty-six and keeping the slowest; then the second; and so on. Four thousand tries instead of two to "
-            "the hundred and twenty-eight. <bookmark mark='d'/> The fix is code whose running time does not depend "
-            "on secrets: XOR every pair of bytes, OR the results together, decide at the end. Its line is flat. "
-            "Paul Kocher showed in 1996 that timing alone recovers RSA and Diffie-Hellman keys. Python ships the "
-            "constant-time comparison; use it."
+            "it against guesses with more correct leading bytes. The measured times depend on this machine and "
+            "Python runtime. <bookmark mark='c'/> If an attacker can distinguish prefix lengths reliably, it can "
+            "guess one byte at a time: roughly sixteen times two hundred and fifty-six candidate guesses. Real "
+            "timing attacks generally require repeated measurements and statistical analysis, not one query per "
+            "guess. <bookmark mark='d'/> The second loop visits every pair of bytes, ORs the XORs, and decides at "
+            "the end. This illustrates removing early exit; Python does not guarantee its running time is "
+            "independent of secrets. Kocher's 1996 work demonstrated timing attacks on RSA and Diffie-Hellman. "
+            "For tag comparisons use the standard hmac.compare_digest implementation."
         ) as vo:
             self.play(FadeIn(head), FadeIn(codes[0]))
             vo.wait_until("b")
@@ -165,7 +168,7 @@ class SideChannels(VoiceoverScene):
             "certificate generated on Debian and Ubuntu came from a short list, and attackers simply generated the "
             "whole list. <bookmark mark='c'/> Here is the same mistake in miniature: a hundred-and-twenty-eight-bit "
             "AES key, seeded from a process ID. We tried every ID in turn, and found the key after twenty-three "
-            "thousand tries, in two seconds. A hundred and twenty-eight bits of key, fifteen bits of randomness. "
+            "thousand tries. The measured runtime is displayed. A hundred and twenty-eight bits of key, fifteen bits of randomness. "
             "<bookmark mark='d'/> And randomness can be sabotaged deliberately. Dual EC DRBG, a generator "
             "standardised in 2006, used two elliptic-curve constants of unexplained origin; whoever knew the "
             "relation between them could predict its output. It was withdrawn in 2014. <bookmark mark='e'/> The "
