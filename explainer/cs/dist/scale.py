@@ -52,13 +52,19 @@ def pbs(N=3, R=1, W=1, t=0.0, trials=20000, seed=0, w_mean=10.0, r_mean=10.0):
 # ---- CRDTs -------------------------------------------------------------------------------------------------------
 class GCounter:
     def __init__(self, n, me):
+        if n <= 0 or not 0 <= me < n:
+            raise ValueError("counter needs a nonempty replica set and a valid local replica")
         self.v = [0] * n
         self.me = me
 
     def inc(self, k=1):
+        if k < 0:
+            raise ValueError("grow-only counters cannot decrement")
         self.v[self.me] += k
 
     def merge(self, o):
+        if len(self.v) != len(o.v):
+            raise ValueError("counter replica sets must match")
         self.v = [max(a, b) for a, b in zip(self.v, o.v)]
 
     def value(self):

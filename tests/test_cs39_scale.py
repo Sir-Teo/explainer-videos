@@ -15,6 +15,20 @@ class Quorums(unittest.TestCase):
 
 
 class Crdts(unittest.TestCase):
+    def test_counter_monotonicity_contract(self):
+        a, b = S.GCounter(2, 0), S.GCounter(2, 1)
+        a.inc(3)
+        b.inc(2)
+        a.merge(b)
+        a.merge(b)
+        self.assertEqual(a.value(), 5)
+        with self.assertRaises(ValueError):
+            a.inc(-1)
+        with self.assertRaises(ValueError):
+            a.merge(S.GCounter(3, 0))
+        with self.assertRaises(ValueError):
+            S.PNCounter(2, 0).dec(-1)
+
     def test_crdts_converge_naive_does_not(self):
         for k in ("gcounter", "pncounter", "orset", "lww"):
             r = S.crdt_converge(k, trials=100)

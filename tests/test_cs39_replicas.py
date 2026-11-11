@@ -13,6 +13,9 @@ class TestReplicas(unittest.TestCase):
         self.assertAlmostEqual(rows[0]["concurrent"], rows[1]["concurrent"])
 
     def test_merkle_finds_all(self):
+        for kwargs in ({"fanout": 1}, {"leaf": 0}, {"keys": 0}):
+            with self.assertRaises(ValueError):
+                replicas.merkle_sync(**kwargs)
         m = replicas.merkle_sync(keys=1 << 12, diffs=(0, 1, 7, 50))
         for r in m["rows"]:
             self.assertTrue(r["found_all"])

@@ -71,6 +71,8 @@ def merkle_sync(keys: int = 1 << 20, diffs=(0, 1, 10, 100, 1000, 10000), fanout:
     """Two replicas of ``keys`` keys differ in ``d`` random keys.  Walk both Merkle trees from the root, exchanging
     only the children of nodes whose hashes differ; at the leaves, exchange the leaf's keys.  Against: send one hash
     per key.  Returns bytes and round trips for each d, and checks that every differing key was found."""
+    if keys <= 0 or fanout < 2 or leaf <= 0 or any(not 0 <= d <= keys for d in diffs):
+        raise ValueError("need positive keys/leaf size, fanout >= 2, and differences within the key count")
     rng = random.Random(seed)
     base = [i.to_bytes(8, "little") + rng.randbytes(8) for i in range(keys)]
     ta = _tree(base, fanout, leaf)
