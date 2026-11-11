@@ -117,8 +117,11 @@ def stack_randomization(runs: int = 20) -> dict:
 
 
 def bootstrap(xs, stat=np.median, B: int = 10_000, alpha: float = 0.05, seed: int = 0):
+    """Percentile interval from IID resampling of a finite, nonempty one-dimensional sample."""
     rng = np.random.default_rng(seed)
     xs = np.asarray(xs)
+    if xs.ndim != 1 or not xs.size or not np.isfinite(xs).all() or B <= 0 or not 0 < alpha < 1:
+        raise ValueError("bootstrap needs a finite nonempty sample, positive resamples, and alpha in (0, 1)")
     boots = np.array([stat(rng.choice(xs, len(xs))) for _ in range(B)])
     return float(np.quantile(boots, alpha / 2)), float(np.quantile(boots, 1 - alpha / 2))
 
@@ -162,6 +165,8 @@ def speedup_means() -> dict:
 def goldbach(limit: int = 2_000_000) -> dict:
     """Every even number from 4 to ``limit`` is a sum of two primes (checked), with the even numbers that need the
     largest smallest prime.  Oliveira e Silva, Herzog and Pardi (2014) verified it to 4 x 10^18."""
+    if limit < 4:
+        raise ValueError("Goldbach check needs an upper bound of at least four")
     sieve = np.ones(limit + 1, bool)
     sieve[:2] = False
     for p in range(2, int(limit ** 0.5) + 1):
@@ -195,6 +200,8 @@ def goldbach(limit: int = 2_000_000) -> dict:
 def collatz(limit: int = 1_000_000) -> dict:
     """Every start below ``limit`` reaches 1 (checked); the record stopping times.  Verified far beyond this by
     distributed search (to about 2^68 by 2020)."""
+    if limit < 2:
+        raise ValueError("Collatz check needs at least the starting value one")
     steps = np.zeros(limit, np.int32)
     records = []
     best = -1
