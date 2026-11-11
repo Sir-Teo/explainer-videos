@@ -24,7 +24,7 @@ class Monotone(VoiceoverScene):
         head = label(r"The maximum of every window", font_size=34).to_edge(UP, buff=0.3)
         row = cells_row(a, w=0.66, h=0.58, font=22).move_to(UP * 1.6)
         win = SurroundingRectangle(VGroup(*row.boxes[0:k]), color=HEAD, buff=0.05, stroke_width=3)
-        dql = label(r"deque \ (indices, \ values decreasing)", font_size=20, color=LAM).move_to(LEFT * 4.6 + DOWN * 0.1)
+        dql = label('deque values \\ (newer equal values survive)', font_size=20, color=LAM).move_to(LEFT * 4.6 + DOWN * 0.1)
 
         def dq_mob(ix):
             g = VGroup(*[VGroup(Rectangle(width=0.66, height=0.58, stroke_color=LAM, stroke_width=2).set_fill(LAM, 0.2),
@@ -37,7 +37,7 @@ class Monotone(VoiceoverScene):
         outl = label(r"maxima", font_size=20, color=YES).move_to(LEFT * 4.6 + DOWN * 1.3)
         outs = VGroup(*[mono(str(v), 22, YES) for v in mx]).arrange(RIGHT, buff=0.3).next_to(outl, RIGHT, buff=0.4)
         notes = VGroup(
-            label(r"arriving: \ pop every smaller value from the back \ (it can never be a maximum again)",
+            label('arriving: pop smaller or equal values; the newer equal expires later',
                   font_size=21, color=LAM),
             label(r"leaving: \ drop the front once it falls out of the window; \ the front is always the maximum",
                   font_size=21, color=HEAD),
@@ -47,15 +47,14 @@ class Monotone(VoiceoverScene):
                   font_size=21, color=WHITE),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "Slide a window of four along an array and report the largest value in each position of the window. "
-            "Checking all four each time costs n times k. <bookmark mark='a'/> Keep instead a double-ended queue of "
-            "positions whose values decrease from front to back. When a new value arrives, every smaller value at "
-            "the back can never be a window's maximum again, because the newcomer is larger and will stay longer; "
-            "pop them. <bookmark mark='b'/> When the front falls out of the window, drop it. The front is always the "
-            "current maximum. <bookmark mark='c'/> Each position enters the queue once and leaves at most once, so "
-            "the whole pass is linear, however wide the window. <bookmark mark='d'/> This is the two-pointer "
-            "pattern: both ends of the window only move forward. The inner loop looks quadratic, and the amortized "
-            "count proves it linear."
+            'Slide a window of four along an array and report each maximum. Checking every element separately '
+            "costs n times k. <bookmark mark='a'/> Maintain a deque of indices with strictly decreasing values. "
+            'When a new value arrives, remove smaller or equal values from the back: the newer equal value '
+            "expires later. The diagram displays their values for readability. <bookmark mark='b'/> Remove an "
+            "expired index from the front; the surviving front supplies the maximum. <bookmark mark='c'/> Each "
+            "index enters once and leaves at most once, which proves linear total work. <bookmark mark='d'/> "
+            'This amortized argument counts all iterations of the inner loop across the complete input. It does '
+            'not assume the deque has constant length.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(row), FadeIn(dql), FadeIn(outl))
             self.play(Create(win), FadeIn(dq))
@@ -104,17 +103,17 @@ class Monotone(VoiceoverScene):
                   color=WHITE),
             label(rf"best here: \ ``{text[best[0]:best[1]]}'', \ {best[1] - best[0]} letters; \ $2n$ pointer moves at "
                   r"most, \ against $O(n^2)$ windows", font_size=21, color=YES),
-            label(r"the same skeleton: \ minimum window covering a set, \ subarrays with sum $\le S$, \ deduplicating "
-                  r"streams", font_size=21, color=GREY_A),
+            label('budget-sum windows require nonnegative values; \\\\ other window problems need their own monotonicity invariant', font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.22).next_to(cells, DOWN, buff=0.8)
         with self.voiceover(
-            "The window need not have a fixed width. <bookmark mark='a'/> Find the longest stretch of this string "
-            "with no repeated letter. Move the right end one letter at a time. When the new letter already occurs "
-            "inside the window, jump the left end to just past that earlier occurrence. <bookmark mark='b'/> A table "
-            "of each letter's last position makes every move constant time, and the left end never moves backwards. "
-            "<bookmark mark='c'/> So the whole scan is at most two n pointer moves, where checking every window "
-            "would be quadratic. <bookmark mark='d'/> The same two-pointer skeleton finds the smallest window "
-            "containing a set of words, or the longest subarray whose sum stays under a budget."
+            "The window need not have a fixed width. <bookmark mark='a'/> Find the longest substring without "
+            'repeated letters. Move the right end forward; if its new letter is already present, move the left '
+            "end just beyond the previous occurrence, never backwards. <bookmark mark='b'/> A last-position "
+            "table makes the illustrated fixed-alphabet updates constant time. <bookmark mark='c'/> Both "
+            "endpoints advance at most n times, giving linear total work. <bookmark mark='d'/> Similar windows "
+            'solve other problems only when their feasibility has the required monotonicity. In particular, the '
+            'usual budget-sum window requires nonnegative values. Negative values can make extending a window '
+            'decrease its sum, invalidating that simple rule.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(cells), Create(win))
             vo.wait_until("a")
@@ -149,8 +148,7 @@ class Monotone(VoiceoverScene):
                   r"answers every smaller one on top", font_size=21, color=LAM),
             label(r"the stack's values are monotone, \ hence the name; \\ each position is pushed and popped once",
                   font_size=21, color=WHITE),
-            label(r"histogram: \ when a bar is popped, \ the bar that popped it and the one below it \\ are its "
-                  r"right and left limits: \ a candidate rectangle", font_size=21, color=HEAD),
+            label('histogram: pop equal heights too; \\\\ equal-height pops are not strictly-lower right boundaries', font_size=21, color=HEAD),
             label(rf"best here: \ height {hh}, \ bars {lo}--{hi}, \ area {area} \\ (brute force agrees: "
                   rf"{d['rect_brute']})", font_size=21, color=YES),
             label(r"the same idea: \ stock spans, \ trapping rain water, \\ the skyline problem, \ maximal "
@@ -160,16 +158,15 @@ class Monotone(VoiceoverScene):
             side.width = 6.2
             side.to_edge(RIGHT, buff=0.35).shift(DOWN * 0.2)
         with self.voiceover(
-            "A stack can be monotone too. <bookmark mark='a'/> For each element, find the next element to its right "
-            "that is larger. Keep a stack of positions still waiting for an answer. Each new value answers every "
-            "smaller value on top of the stack, pops them, and waits itself. <bookmark mark='b'/> The waiting values "
-            "are always in decreasing order, and each position is pushed and popped once: linear time again. "
-            "<bookmark mark='c'/> The famous application is the largest rectangle under a histogram. When a bar is "
-            "popped, the bar that popped it is the first lower bar to its right, and the bar beneath it on the stack "
-            "is the first lower bar to its left. Between them lies the widest rectangle of that bar's height. "
-            "<bookmark mark='d'/> Here the best has height four across four bars, area sixteen, and brute force "
-            "agrees. <bookmark mark='e'/> Stock spans, trapped rain water and the skyline problem are the same "
-            "stack in different clothes."
+            "A stack can be monotone too. <bookmark mark='a'/> To find each next strictly greater value, keep "
+            'indices awaiting an answer and pop those with smaller values when a new element arrives. Equal '
+            "values may remain. <bookmark mark='b'/> Each index is pushed and popped at most once, proving "
+            "linear total work. <bookmark mark='c'/> The histogram routine uses a different, explicit tie rule: "
+            'it also pops equal heights. A pop identifies a candidate span, but an equal-height pop need not '
+            'find a strictly lower right boundary. The later representative can extend the same-height '
+            "rectangle. <bookmark mark='d'/> Enumerating every possible rectangle independently confirms the "
+            "illustrated maximum area, sixteen. <bookmark mark='e'/> The reusable idea is a monotone frontier "
+            'plus a precise invariant; equality rules depend on the question being answered.'
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.06),
                       FadeIn(vals))

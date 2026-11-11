@@ -50,16 +50,15 @@ class Simd(VoiceoverScene):
                   r"way \ (Langdale and Lemire, 2019)", font_size=20, color=GREY_A),
         ).arrange(DOWN, buff=0.2).next_to(sb, DOWN, buff=0.45)
         with self.voiceover(
-            "The Job spends much of its time finding words, one byte at a time. A modern core can look at thirty-two "
-            "bytes in one instruction. <bookmark mark='a'/> Load thirty-two bytes. OR each with hexadecimal twenty, "
-            "which lower-cases every letter, subtract the code for a, and the letters are exactly the bytes that come "
-            "out at most twenty-five, all thirty-two compared at once. <bookmark mark='b'/> One more instruction, "
-            "movemask, gathers the thirty-two answers into the bits of an ordinary integer. <bookmark mark='c'/> "
-            "Now the word boundaries are bit tricks from chapter seven: a start is a letter whose left neighbour is "
-            "not one, L and not L shifted. <bookmark mark='d'/> On the whole corpus, twenty-five megabytes, the "
-            "byte-at-a-time loop takes forty milliseconds and the vector version four and a half: almost nine times "
-            "faster, with the same counts. <bookmark mark='e'/> The simdjson library parses JSON at gigabytes per "
-            "second with exactly these ideas."
+            "The isolated tokenizer finds ASCII words and lower-cases letters. <bookmark mark='a'/> On this "
+            'AVX2-capable host it loads thirty-two bytes, combines case bits, subtracts the code for a, and '
+            "compares the lanes. Several vector instructions implement that sequence. <bookmark mark='b'/> "
+            "Movemask gathers the lane results into an integer mask. <bookmark mark='c'/> A word begins where a "
+            'letter has a non-letter predecessor; the mask carries boundary state between vector blocks. '
+            "<bookmark mark='d'/> The table reports scalar and vector timings on the complete corpus. After each "
+            'trial, we check every transformed byte and every word-start mask, as well as total words and '
+            "letters. <bookmark mark='e'/> The simdjson work illustrates related classification techniques. An "
+            "isolated tokenizer's timing is not a measured phase fraction of the complete word-count program."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cells))
             vo.wait_until("a")
@@ -93,20 +92,20 @@ class Simd(VoiceoverScene):
                   color=YES),
             label(r"\texttt{restrict} promises the arrays don't overlap; \ without it the compiler must check or give up",
                   font_size=21, color=WHITE),
-            label(r"a prefix sum carries a dependency from each iteration to the next: \ little to vectorize \ "
-                  r"(it gains only from unrolling)", font_size=21, color=NO),
+            label(r"prefix iterations are dependent; \ this timer also includes an array copy \\ the build comparison changes several optimizations", font_size=21, color=NO),
             label(r"write simple loops over arrays, \ and read the compiler's report \ (\texttt{-fopt-info-vec})",
                   font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.22).next_to(tab, DOWN, buff=0.45)
         with self.voiceover(
-            "Writing vector instructions by hand is a last resort. The compiler will often do it for you. <bookmark "
-            "mark='a'/> The same three loops, compiled without and with vectorization. A scaled vector addition and "
-            "a plain sum run about three times faster, because every iteration is independent and the compiler can "
-            "pack eight or sixteen of them into each instruction. <bookmark mark='b'/> It can only do that when it can prove "
-            "the arrays don't overlap, which is what the restrict keyword promises. <bookmark mark='c'/> A running "
-            "prefix sum carries a dependency from each element to the next, so there is little to vectorize; it gains "
-            "less, and only from unrolling. <bookmark mark='d'/> The practical rule: keep hot loops simple, over "
-            "arrays, without hidden aliasing, and ask the compiler to report what it vectorized."
+            "Compilers can vectorize some loops automatically. <bookmark mark='a'/> We compile the same three "
+            'kernels at O one and at O three with the native ISA enabled. The table gives measured costs per '
+            "element, amortized over fixed loop counts; the disassembly is retained. <bookmark mark='b'/> "
+            'Restrict promises the relevant pointer regions do not overlap. It is a contract the caller must '
+            "obey, rather than a request that makes arbitrary aliasing safe. <bookmark mark='c'/> The prefix "
+            'kernel carries a dependency; an ordinary scalar loop is not the parallel scan shown earlier. Every '
+            "final array element and reduction is checked outside the timers. <bookmark mark='d'/> These builds "
+            'change several optimizations together. Inspect the actual assembly to identify vector instructions, '
+            'and avoid attributing the entire timing difference to vectorization alone.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
             vo.wait_until("a")
@@ -151,32 +150,30 @@ class Simd(VoiceoverScene):
                 [r"linear probing", f"{h5['linear_get']:.0f}", f"{h8['linear_get']:.0f}", f"{h8['linear_ins']:.0f}"],
                 [r"Swiss-style \ (SSE2 groups)", f"{h5['swiss_get']:.0f}", f"{h8['swiss_get']:.0f}",
                  f"{h8['swiss_ins']:.0f}"]]
-        tab = grid_table([r"16 M slots, \ ns per operation", r"find, \ $\tfrac12$ full", r"find, \ $\tfrac78$ full",
-                          r"insert, \ $\tfrac78$ full"], rows, widths=[5.0, 2.2, 2.2, 2.4], row_h=0.46, font_size=21,
+        tab = grid_table([r"OA cap $2^{24}$, \ ns per operation", r"find, \ request $\tfrac12$", r"find, \ request $\tfrac78$",
+                          r"insert, \ request $\tfrac78$"], rows, widths=[5.0, 2.2, 2.2, 2.4], row_h=0.46, font_size=21,
                          mono_cols=(), colors=[[GREY_A] * 4, [NO] * 4, [YES] * 4])
         tab.next_to(grp, DOWN, buff=0.8).set_x(0)
         notes = VGroup(
-            label(r"half the finds miss; \ 64-bit keys; \ C++ with \texttt{-O2 -march=native}", font_size=20,
+            label('half the probes reuse inserted keys; half are random; every answer checked', font_size=20,
                   color=GREY_A),
-            label(rf"at $\tfrac78$ full, \ linear probing's clusters cost {h8['linear_get'] / h8['swiss_get']:.1f}"
-                  r"$\times$; \ the control bytes keep probes short and in one cache line", font_size=21, color=YES),
-            label(r"chaining pays a pointer chase per node, \ the opening chapter's linked list again", font_size=21,
+            label('load requests apply to OA tables; unordered map has its own bucket count', font_size=21, color=YES),
+            label('teaching SSE2 groups and this GCC chained map; no hardware-miss counters', font_size=21,
                   color=NO),
             label(r"Google's Abseil (2017), \ Rust's \texttt{HashMap}, \ Facebook's F14: \ all this design", font_size=20,
                   color=GREY_A),
         ).arrange(DOWN, buff=0.18).next_to(tab, DOWN, buff=0.35)
         with self.voiceover(
-            "Vector instructions also rebuilt the hash table. <bookmark mark='a'/> A Swiss table, Google's design from "
-            "2017, keeps a separate array of control bytes, one per slot, in groups of sixteen. An empty slot is "
-            "marked; a full one stores seven bits of its key's hash. <bookmark mark='b'/> Part of the hash picks a "
-            "group; the other seven bits are compared against all sixteen control bytes in one instruction, giving a "
-            "mask of the few slots worth checking. Usually there is one, and it is the key. <bookmark mark='c'/> "
-            "We timed three tables with sixteen million slots. <bookmark mark='d'/> Half full, the open-addressing "
-            "tables are close. Seven eighths full, linear probing's clusters grow long and it falls behind by more "
-            "than two and a half times, while the Swiss table barely notices: its probes stay short and inside one "
-            "cache line. <bookmark mark='e'/> The standard library's chained map pays for a pointer chase on every "
-            "node, the linked list of the opening chapter again. Abseil, Rust's standard HashMap and Facebook's F14 "
-            "all use this design."
+            "Vector comparisons also help hash-table lookup. <bookmark mark='a'/> Our teaching Swiss-style table "
+            'stores sixteen control bytes per group, each carrying an empty marker or seven hash bits. <bookmark '
+            "mark='b'/> An SSE2 comparison filters candidate slots, followed by full key checks. Group probing "
+            "and collisions still require work. <bookmark mark='c'/> The two open-addressing tables use the same "
+            'requested capacity and occupancies. The standard unordered map chooses its own bucket count, which '
+            "is recorded separately. Its occupancy is not automatically seven eighths. <bookmark mark='d'/> Read "
+            'insertion and lookup times for each workload. Every inserted-key count and every lookup is checked '
+            "against an independently sorted multiset after timing. <bookmark mark='e'/> Production Abseil and "
+            'other modern tables develop related ideas with additional policies and guarantees; this small '
+            'implementation does not reproduce every production design.'
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

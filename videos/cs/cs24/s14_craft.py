@@ -29,21 +29,19 @@ class Craft(VoiceoverScene):
                   font_size=22, color=HEAD),
             label(r"\textbf{4. Look back.} \ Check the invariant; \ stress-test the fast version against the slow one "
                   r"on thousands of random inputs", font_size=22, color=YES),
-            label(r"every algorithm in this series was checked this way: \ \texttt{tests/test\_cs24\_practice.py} "
-                  r"compares each structure with brute force", font_size=20, color=GREY_A),
+            label('this episode: explicit checked cases, domains and complete-output receipts', font_size=20, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(head, DOWN, buff=0.5)
         if steps.width > 13.0:
             steps.width = 13.0
         with self.voiceover(
-            "In 1945 George Pólya wrote a small book on how to solve mathematical problems, and it is still the best "
-            "advice for algorithms. <bookmark mark='a'/> First, understand the problem: work three tiny examples by "
-            "hand, and find the edge cases before they find you. <bookmark mark='b'/> Second, make a plan, and the "
-            "most powerful question is: have I seen this before, in disguise? Booking meeting rooms is interval "
-            "colouring; the cheapest way to connect cities is a spanning tree; a puzzle with a monotone answer is a "
-            "binary search. <bookmark mark='c'/> Third, carry it out, and write the brute force first, because it is "
-            "the reference you will test the fast version against. <bookmark mark='d'/> Fourth, look back: state the "
-            "invariant, and stress-test the fast solution against the slow one on thousands of random inputs. "
-            "<bookmark mark='e'/> That is how every structure in this part was checked."
+            "Pólya's problem-solving advice is useful for programs. <bookmark mark='a'/> Understand the "
+            'specification and work small cases, including empty inputs and boundary values. <bookmark '
+            "mark='b'/> Devise a plan by recognizing structure, then state the assumptions that make it "
+            "applicable. <bookmark mark='c'/> Implement a simple independent reference before optimizing. "
+            "<bookmark mark='d'/> Look back: explain an invariant and compare complete outputs on targeted and "
+            'generated cases. Tests can expose counterexamples without proving every possible execution correct. '
+            "<bookmark mark='e'/> This episode's receipts identify which illustrated algorithms, input domains "
+            'and native workloads were actually checked. One test file does not certify the entire series.'
         ) as vo:
             self.play(FadeIn(head))
             for mk, s_ in zip("abcde", steps):
@@ -83,15 +81,15 @@ class Craft(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16).next_to(cells, DOWN, buff=0.4)
         tab.next_to(notes, DOWN, buff=0.3).set_x(0)
         with self.voiceover(
-            "Here are the four steps on a small problem: count the pairs whose sum is at most T. <bookmark mark='a'/> "
-            "Understand it with tiny cases: one, two, three with T equal to four gives two pairs; an empty array gives "
-            "none. <bookmark mark='b'/> Plan. The pairs don't depend on the order, so sort. Then if the smallest "
-            "remaining value plus the largest fits under T, so does the smallest plus everything in between: all "
-            "those pairs at once. <bookmark mark='c'/> Carry it out: brute force first, then two pointers from the "
-            "ends. If the pair fits, count j minus i and move i right; if not, move j left. <bookmark mark='d'/> Look "
-            "back: two thousand random small inputs, and the fast version never disagreed with the slow one. Only "
-            "then time it: on four thousand numbers in Python, four hundred milliseconds for the brute force, under "
-            "one millisecond for the two pointers."
+            "Count unordered index pairs whose sum is at most T. <bookmark mark='a'/> With one, two, three and "
+            'threshold four, the valid pairs are one with two, and one with three. The empty input has none. '
+            "<bookmark mark='b'/> Sorting preserves the pair count. If the smallest remaining value plus the "
+            'largest fits, that smallest value pairs with every remaining position between them. <bookmark '
+            "mark='c'/> Count those pairs and advance the left pointer; otherwise decrease the right pointer. "
+            'This remains valid for negative values and duplicates because the sorted-order inequalities still '
+            "hold. <bookmark mark='d'/> Two thousand retained small fixtures agree with brute force. The timing "
+            'table uses three fixed repetitions per method after input preparation, followed by equality checks; '
+            'it does not replace the invariant proof.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(prob))
             vo.wait_until("a")
@@ -115,7 +113,7 @@ class Craft(VoiceoverScene):
         self.clear_scene()
 
     def repertoire(self):
-        head = label(r"The repertoire, \ and where this course builds it", font_size=32).to_edge(UP, buff=0.3)
+        head = label(r"A pattern catalogue, \ with related course parts", font_size=32).to_edge(UP, buff=0.3)
         rows = [
             [r"hash maps, \ counting, \ dedup", r"Part 17", r"two pointers, \ sliding windows", r"24 ch. 5"],
             [r"stacks, \ queues, \ monotonic stacks", r"17, \ 24", r"binary search on the answer", r"24 ch. 6"],
@@ -125,7 +123,7 @@ class Craft(VoiceoverScene):
             [r"tries, \ string matching", r"Part 21", r"backtracking, \ subsets, \ bitmasks", r"19, \ 24"],
             [r"an LRU cache", r"9, \ 17, \ 23", r"Fenwick and segment trees", r"24 ch. 2--3"],
         ]
-        tab = grid_table([r"pattern", r"built in", r"pattern", r"built in"], rows, widths=[4.6, 1.8, 4.6, 1.8],
+        tab = grid_table([r"pattern", r"related parts", r"pattern", r"related parts"], rows, widths=[4.6, 1.8, 4.6, 1.8],
                          row_h=0.46, font_size=20, mono_cols=(), colors=[[WHITE, DATA, WHITE, DATA]] * len(rows))
         tab.next_to(head, DOWN, buff=0.45).set_x(0)
         notes = VGroup(
@@ -135,15 +133,14 @@ class Craft(VoiceoverScene):
                   color=GREY_A),
         ).arrange(DOWN, buff=0.18).next_to(tab, DOWN, buff=0.35)
         with self.voiceover(
-            "Programming interviews draw on a repertoire of about twenty patterns, and this course has now built all "
-            "of them. <bookmark mark='a'/> Hash maps for counting, from Part 17; two pointers and sliding windows "
-            "from this part; heaps for the top k; breadth-first and depth-first search and topological order from "
-            "Part 18; union-find and spanning trees; dynamic programming and backtracking from Part 19; tries and "
-            "string matching from Part 21; and the least-recently-used cache, a hash map threaded with a doubly linked "
-            "list, which needed Part 9's hierarchy and Part 23's competitive analysis to justify. <bookmark mark='b'/> An interview tests "
-            "fluency. The job tests judgment: which tool, and what it costs on a real machine, which is what the "
-            "second half of this part measured. <bookmark mark='c'/> Steven Skiena's Algorithm Design Manual is a "
-            "catalogue of problems in disguise, for when Pólya's second step needs help."
+            "Algorithmic fluency comes from recognizing recurring structures. <bookmark mark='a'/> The course's "
+            'catalogue includes counting maps, windows, heaps, graph traversals, union-find, dynamic '
+            'programming, tries and string matching. Some are implemented in earlier episodes; others are '
+            'applications or design exercises. A catalogue is not a certificate that every possible variant has '
+            "been built and tested. <bookmark mark='b'/> Practical judgment also asks for input limits, "
+            "operation mix, memory use and an appropriate measurement plan. <bookmark mark='c'/> Skiena's "
+            "Algorithm Design Manual organizes problems by related structures, a useful companion to Pólya's "
+            'planning step.'
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

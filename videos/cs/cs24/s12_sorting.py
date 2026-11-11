@@ -38,14 +38,11 @@ class Sorting(VoiceoverScene):
         big_ = rows[-1]
         small = rows[0]
         side = VGroup(
-            label(r"comparison sorts need $\log_2 n!$ comparisons \ (Part 16); \\ radix sort compares nothing: \ "
-                  r"$O(wn / 8)$ for $w$-bit keys", font_size=20, color=WHITE),
+            label('comparison lower bound: $\\lceil\\log_2(n!)\\rceil$ in the worst case; \\\\ radix uses fixed-width digits and extra counters', font_size=20, color=WHITE),
             label(rf"{small['n']} keys: \ \texttt{{std::sort}} {small['std_sort']:.0f} ns a key, \ radix "
                   rf"{small['radix']:.0f}: \\ counting 256 buckets four times is overhead", font_size=20, color=NO),
             label(rf"crossover: \ about {d['crossover']} keys", font_size=20, color=HEAD),
-            label(rf"{words(big_['n'])} keys: \ {big_['std_sort']:.0f} against {big_['radix']:.0f} ns, \ "
-                  rf"{big_['std_sort'] / big_['radix']:.1f}$\times$; \\ the jump at $2^{{22}}$ is the array "
-                  r"leaving the cache", font_size=20, color=YES),
+            label('three fixed repetitions; every batch checked; cache effects not isolated', font_size=20, color=YES),
             label(r"in practice: \ hybrids. \ ska\_sort, \ vqsort \ (Google, 2021, SIMD), \\ IPS$^4$o \ (parallel, "
                   r"in place); \ Timsort for nearly sorted data", font_size=20, color=LAM),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.24).to_edge(RIGHT, buff=0.3)
@@ -53,15 +50,15 @@ class Sorting(VoiceoverScene):
             side.width = 5.4
             side.to_edge(RIGHT, buff=0.3)
         with self.voiceover(
-            "Part 16 proved that sorting by comparisons needs n log n of them. <bookmark mark='a'/> Radix sort "
-            "makes no comparisons. Least-significant-digit radix sort counts the keys by their lowest byte, moves "
-            "them into place, and repeats for each of the four bytes: four linear passes for any number of keys. "
-            "<bookmark mark='b'/> For sixteen keys it is far slower than the standard library's introsort, because "
-            "each pass clears and scans two hundred and fifty-six counters. <bookmark mark='c'/> The two cross at "
-            "about sixty-four keys on this machine. <bookmark mark='d'/> At sixteen million keys, radix sort is three "
-            "and a half times faster, and its curve jumps when the arrays stop fitting in the cache, the hierarchy "
-            "again. <bookmark mark='e'/> Real libraries are hybrids: radix for big integer arrays, insertion sort "
-            "for tiny ones, vectorized quicksorts like Google's vqsort, and parallel in-place samplesorts like IPS4o."
+            'Comparison sorting has an n log n worst-case lower bound for arbitrary distinct keys. <bookmark '
+            "mark='a'/> Our radix sort instead uses thirty-two-bit unsigned keys and four stable byte passes, "
+            "including a fixed counter-array cost per pass. <bookmark mark='b'/> Small batches can be dominated "
+            "by that overhead. <bookmark mark='c'/> The crossover in this measurement is a finite workload "
+            "result, not a universal threshold. <bookmark mark='d'/> Each timed batch includes its input copy; "
+            'every output element of every batch is retained until checked against the library sort after the '
+            "timer. Three repetitions supply the plotted minima. <bookmark mark='e'/> The word-RAM explanation "
+            'assumes bounded-width keys. Wider integers, memory traffic, temporary storage and parallel '
+            'implementations change the comparison.'
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(yl), FadeIn(xl))
             vo.wait_until("a")
@@ -81,24 +78,25 @@ class Sorting(VoiceoverScene):
                   color=WHITE),
             label(r"if the recursion gets deeper than $2 \log_2 n$, \ switch to heapsort: \ never quadratic",
                   font_size=22, color=NO),
-            label(r"below 16 elements, \ insertion sort: \ few branches, \ all in cache", font_size=22, color=HEAD),
-            label(r"pdqsort \ (Peters, 2021; \ Go, \ Rust): \ also spots already-sorted runs and adversarial patterns",
+            label('small partitions: insertion-sort finish in this libstdc++ build', font_size=22, color=HEAD),
+            label('pdqsort: a pattern-defeating quicksort family; library choices change',
                   font_size=22, color=LAM),
-            label(r"Timsort \ (Python, \ Java): \ merges natural runs, \ galloping \ (chapter 6); \ stable", font_size=22,
+            label('Timsort family: stable natural-run merging; type and version matter', font_size=22,
                   color=YES),
             label(r"every one of them is Part 16's algorithms, \ stitched together by measurement", font_size=21,
                   color=GREY_A),
         ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "What does a production sort actually do? <bookmark mark='a'/> The C++ standard library uses David "
-            "Musser's introsort of 1997: quicksort, with the median of three elements as the pivot. <bookmark "
-            "mark='b'/> If the recursion ever gets deeper than about twice log n, a sign of a bad input, it switches "
-            "to heapsort, so the worst case is n log n after all. <bookmark mark='c'/> And below sixteen elements it "
-            "finishes with insertion sort, which is quadratic and, at that size, fastest. <bookmark mark='d'/> Orson "
-            "Peters' pattern-defeating quicksort, now in Go and Rust, also notices sorted runs and inputs designed to "
-            "attack it. <bookmark mark='e'/> Python and Java use Timsort, which finds the runs already present in real "
-            "data and merges them, galloping as in chapter six. <bookmark mark='f'/> Every one of them is the "
-            "algorithms of Part 16, stitched together where measurements said the crossovers are."
+            "What does this production sort do? <bookmark mark='a'/> This GCC libstdc++ implementation uses an "
+            "introsort family: quicksort partitioning with a depth limit. <bookmark mark='b'/> A fallback "
+            'prevents the quadratic worst case of unguarded quicksort. The C++ interface specifies complexity '
+            "requirements without mandating one algorithm for all libraries. <bookmark mark='c'/> This "
+            'implementation finishes small partitions with insertion sorting. The cutoff is an implementation '
+            "detail. <bookmark mark='d'/> Pattern-defeating quicksort is another important family, rather than a "
+            "timeless description of every language's current library. <bookmark mark='e'/> Timsort and related "
+            'run-merging policies exploit existing order. Python and Java have type- and version-specific '
+            "choices; primitive arrays need not use the object-sorting algorithm. <bookmark mark='f'/> Match any "
+            'library claim to a concrete version, type, comparator contract and retained build.'
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):
@@ -122,20 +120,21 @@ class Sorting(VoiceoverScene):
                   color=WHITE),
             label(rf"the heap compares each key with its smallest member and almost always stops there: \ "
                   rf"{t['sort'] / t['heap']:.0f}$\times$ faster than sorting", font_size=22, color=YES),
-            label(r"quickselect is linear but touches the whole array several times; \ for small $k$ the heap wins",
+            label('\\texttt{nth\\_element}: linear average complexity; \\\\ timings include extracting and sorting the selected twenty',
                   font_size=22, color=HEAD),
             label(r"ask for what you need: \ ``the top $k$'' is a different, \ easier problem than ``sorted''",
                   font_size=22, color=GREY_A),
         ).arrange(DOWN, buff=0.22).next_to(tab, DOWN, buff=0.45)
         with self.voiceover(
-            "Often you don't need the whole order. <bookmark mark='a'/> The Job only wants the twenty most common "
-            "words, and here are four ways to find the twenty largest of sixteen million keys. <bookmark mark='b'/> "
-            "Sorting everything takes over a second and a half. A heap of twenty, scanned once, compares each key "
-            "with the heap's smallest member, almost always finds it smaller, and moves on: about seventeen "
-            "milliseconds, a hundred times faster. The library's partial sort does the same. <bookmark mark='c'/> "
-            "Quickselect, the library's nth element, is linear in theory but sweeps the whole array several times, "
-            "so for a small k the heap wins. <bookmark mark='d'/> The lesson is older than computers: ask for what "
-            "you need. The top k is a different and much easier problem than a sorted list."
+            "Often the complete order is unnecessary. <bookmark mark='a'/> Here four methods extract the twenty "
+            "largest of sixteen million generated keys. <bookmark mark='b'/> Full sort, partial sort and a small "
+            'heap solve different amounts of ordering work. An independent fixed-size sorted insertion reference '
+            "checks every returned top-twenty list. <bookmark mark='c'/> The standard nth-element contract gives "
+            'linear average complexity for this nonparallel overload, rather than a universal worst-case linear '
+            'promise. Its timing includes sorting and extracting the selected twenty. Array input copies are '
+            "outside these timers; heap construction and extraction are inside its timer. <bookmark mark='d'/> "
+            'The measured winner belongs to this fixed k and distribution. Choosing the required output '
+            'specification can matter more than tuning a full sort.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
             vo.wait_until("a")

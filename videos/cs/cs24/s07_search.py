@@ -50,15 +50,16 @@ class Searching(VoiceoverScene):
                   font_size=20, color=GREY_A),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Binary search works on anything monotone, not just arrays. <bookmark mark='a'/> Ten packages must be "
-            "shipped in order, within four days. What is the smallest daily capacity that does it? <bookmark "
-            "mark='b'/> For a given capacity the answer is easy to check: load each day greedily until the next "
-            "package would not fit. And the answer is monotone: if a capacity works, every larger one works too. "
-            "<bookmark mark='c'/> So binary-search the boundary between the capacities that fail and the ones that "
-            "work. Five checks find it: eighteen. <bookmark mark='d'/> This is one of the most useful patterns in "
-            "practice: minimize the largest load, maximize the smallest gap, find the earliest day something "
-            "becomes true. <bookmark mark='e'/> And a warning from Knuth: binary search was first published in "
-            "1946, and the first version that was correct for every length appeared fourteen years later."
+            "Binary search works on a monotone predicate, not just a sorted array. <bookmark mark='a'/> These "
+            "nonnegative package weights must be shipped in order within four days. <bookmark mark='b'/> A "
+            'greedy feasibility check fills each day until the next package would exceed capacity. Larger '
+            "capacities remain feasible. <bookmark mark='c'/> Search between the largest weight and the total "
+            'weight. The routine first checks that the upper bound is feasible, and counts that actual predicate '
+            "call along with the search calls. The minimum capacity is eighteen. <bookmark mark='d'/> State the "
+            'monotonicity and feasible-endpoint contract before applying this pattern to other problems. '
+            "<bookmark mark='e'/> The displayed lower-bound implementation has a separate half-open interval "
+            'invariant. Tests cover empty arrays and boundary answers; finite tests support the implementation '
+            'while the invariant explains its correctness.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(pk))
             vo.wait_until("a")
@@ -78,12 +79,12 @@ class Searching(VoiceoverScene):
     def pitfalls(self):
         head = label(r"Getting binary search right", font_size=34).to_edge(UP, buff=0.35)
         code_ = VGroup(*[mono(t, 21, c) for t, c in (
-            ("lo, hi = 0, n          # answer in [lo, hi)", WHITE),
+            ("lo, hi = 0, n          # search elements in [lo, hi)", WHITE),
             ("while lo < hi:", WHITE),
             ("    mid = lo + (hi - lo) // 2", YES),
             ("    if a[mid] < x: lo = mid + 1", WHITE),
             ("    else:          hi = mid", WHITE),
-            ("return lo             # first index with a[i] >= x", WHITE))]).arrange(DOWN, aligned_edge=LEFT,
+            ("return lo             # first i with a[i] >= x, or n", WHITE))]).arrange(DOWN, aligned_edge=LEFT,
                                                                                     buff=0.08)
         code_.next_to(head, DOWN, buff=0.45)
         notes = VGroup(
@@ -125,8 +126,8 @@ class Searching(VoiceoverScene):
         notes = VGroup(
             label(r"probe $1, 2, 4, 8, \ldots$ places ahead \\ until you pass the target, \\ then binary-search the "
                   r"last gap", font_size=21, color=WHITE),
-            label(r"cost $\approx 2 \log_2 d$, \ not $\log_2 n$: \\ Bentley and Yao (1976)", font_size=21, color=YES),
-            label(rf"on {words(d['n'])} keys \ it wins \\ while $d$ is below about $\sqrt n$", font_size=21, color=HEAD),
+            label(r"$O(1+\log(d+1))$ reads for distance $d$: \\ Bentley and Yao (1976)", font_size=21, color=YES),
+            label(r"the measured crossover depends on \\ the exact loops and target", font_size=21, color=HEAD),
             label(r"used where searches are local: \\ merging sorted runs \ (Timsort), \\ intersecting posting lists \ "
                   r"(Part 47)", font_size=21, color=LAM),
             label(r"\textbf{ternary search}: \ for the peak of a \\ unimodal function, \ discard a third each step",
@@ -137,15 +138,16 @@ class Searching(VoiceoverScene):
             notes.width = room
             notes.next_to(tab, RIGHT, buff=0.5).align_to(tab, UP)
         with self.voiceover(
-            "Sometimes you know roughly where the answer is. <bookmark mark='a'/> Galloping, or exponential search, "
-            "probes one place ahead, then two, four, eight, until it passes the target, and then binary-searches the "
-            "last gap. <bookmark mark='b'/> If the answer is d places away, that costs about two log d probes, "
-            "whatever the length of the array. Jon Bentley and Andrew Yao analysed it in 1976. <bookmark mark='c'/> "
-            "On a million keys it beats plain binary search until the answer is about a thousand places away. "
-            "<bookmark mark='d'/> That is exactly the situation when merging two sorted runs, which is why Timsort "
-            "gallops, and when intersecting the posting lists of a search engine. <bookmark mark='e'/> And for the "
-            "peak of a function that rises and then falls, ternary search throws away a third of the interval at "
-            "each step."
+            "Sometimes you know roughly where the answer is. <bookmark mark='a'/> Galloping probes exponentially "
+            'increasing distances, then binary-searches the bracket. This routine searches a sorted suffix '
+            'starting at the supplied index. To obtain the global lower bound, all preceding elements must be '
+            "smaller than the target. <bookmark mark='b'/> Work is logarithmic in the distance plus one. The "
+            'table counts actual key reads for both methods, including bound construction, instead of '
+            "substituting a logarithmic estimate. <bookmark mark='c'/> Close answers can need fewer reads; the "
+            "crossover depends on the exact search loops and target. <bookmark mark='d'/> Merging sorted runs "
+            "and intersecting posting lists often provide a useful starting position. <bookmark mark='e'/> "
+            'Ternary search is a separate pattern for a unimodal objective on a valid finite interval; an '
+            'arbitrary function need not satisfy that premise.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule),
                       LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.15))

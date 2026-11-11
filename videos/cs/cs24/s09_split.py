@@ -33,7 +33,7 @@ class Splitting(VoiceoverScene):
             label(r"try every subset: \ $2^n$; \ meet in the middle \ (Horowitz and Sahni, 1974): \ "
                   r"$O(2^{n/2} \cdot n)$", font_size=22, color=YES),
             label(rf"$n = {d['n']}$: \ {words(d['brute_sums'])} sums by brute force \ ({d['brute_s'] * 1000:.0f} ms), \ "
-                  rf"{words(d['mitm_work'])} steps in the middle \ ({d['mitm_s'] * 1000:.1f} ms); \ both find it",
+                  rf"{words(d['mitm_work'])} generated sums + search calls \ ({d['mitm_s'] * 1000:.1f} ms) \\ excludes sorting/comparison/bit-operation counts; \ both find it",
                   font_size=22, color=HEAD),
             label(rf"$n = 40$: \ {big(d['n40_brute'])} subsets, \ against {big(d['n40_mitm'])} sums: \ the square root "
                   r"of an exponential", font_size=22, color=YES),
@@ -41,16 +41,16 @@ class Splitting(VoiceoverScene):
                   font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.24).next_to(VGroup(L, R), DOWN, buff=0.5)
         with self.voiceover(
-            "Some exponential problems can be made exponentially smaller. <bookmark mark='a'/> Subset sum asks "
-            "whether some of n numbers add up to a target. It is NP-complete, as Part 26 will prove, and trying every "
-            "subset costs two to the n. <bookmark mark='b'/> Split the numbers into two halves. List every subset "
-            "sum of the first half, and every subset sum of the second half, sorted. For each sum s on the left, "
-            "binary-search the right for the target minus s. Ellis Horowitz and Sartaj Sahni did this in 1974: two "
-            "to the n over two, times n. <bookmark mark='c'/> On twenty numbers, brute force generated a million sums "
-            "in seventy milliseconds; the middle found the same answer in a fraction of a millisecond. <bookmark "
-            "mark='d'/> At forty numbers it is a trillion subsets against two million sums. Still exponential, but "
-            "the square root of it. <bookmark mark='e'/> The same move computes discrete logarithms in Part 30, "
-            "breaks double encryption in Part 29, and runs a shortest-path search from both ends."
+            "Meet in the middle reduces the exponent of some exhaustive searches. <bookmark mark='a'/> Subset "
+            'sum asks whether selected numbers total a target. The brute-force routine here enumerates all '
+            "subsets. <bookmark mark='b'/> Generate the sums of each half, sort one list, then search it for the "
+            'complement of each sum in the other. The sorting and searches contribute additional factors; the '
+            'displayed work counter counts generated sums and search calls, not every comparison or bit '
+            "operation. <bookmark mark='c'/> The twenty-item example agrees with brute force; both have three "
+            "retained timing trials. <bookmark mark='d'/> At forty items, two million generated sums replace a "
+            'trillion full subsets, but sorting, exponential storage and the bit lengths of sums still matter. '
+            "<bookmark mark='e'/> Bidirectional search uses a related meet-in-the-middle idea, with its own "
+            'graph and stopping conditions.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(notes[0]))
             vo.wait_until("a")
@@ -89,21 +89,21 @@ class Splitting(VoiceoverScene):
             label(r"crude, \ but it handles operations no tree handles neatly", font_size=22, color=GREY_A),
             label(r"\textbf{Mo's order}: \ answer offline queries sorted by $(\lfloor l/\sqrt n \rfloor, r)$, \ moving "
                   r"two pointers", font_size=22, color=LAM),
-            label(rf"distinct values in {words(d['mo_q'])} ranges of {words(d['mo_n'])}: \ {words(d['mo_moves'])} "
-                  rf"pointer moves \ against {words(d['mo_naive'])} elements scanned one range at a time",
+            label(rf"{words(d['mo_q'])} distinct-count queries on an array of {words(d['mo_n'])} elements \\ "
+                  rf"{words(d['mo_moves'])} pointer moves; \ {words(d['mo_naive'])} elements scanned range by range",
                   font_size=22, color=YES),
         ).arrange(DOWN, buff=0.24).next_to(blocks, DOWN, buff=0.5)
         with self.voiceover(
-            "The square root is the other way to split. <bookmark mark='a'/> Cut the array into about root n blocks "
-            "of root n elements each, and keep every block's total. <bookmark mark='b'/> A range query adds up the "
-            "whole blocks in its middle and the single elements at its two ends: about root n steps. A range of eight "
-            "and a half thousand elements in blocks of a hundred took a hundred and eighty-nine steps. <bookmark "
-            "mark='c'/> It is cruder than a tree, and more flexible: almost any operation can be kept per block. "
-            "<bookmark mark='d'/> Mo's algorithm uses the same idea on time. Given all the queries in advance, sort "
-            "them by the block of their left end, then by their right end, and answer them in that order, moving two "
-            "pointers and keeping a running answer. <bookmark mark='e'/> For the number of distinct values in twenty "
-            "thousand ranges, that took two million pointer moves, against eighty-four million elements if each range "
-            "were scanned on its own."
+            "Square-root decomposition divides work another way. <bookmark mark='a'/> Store totals for blocks of "
+            "about square root n elements. <bookmark mark='b'/> A query scans boundary fragments and uses "
+            'whole-block totals in the middle; the displayed example counts every touched element or block. '
+            "<bookmark mark='c'/> Its update and query costs depend on the stored summary; not every operation "
+            "admits an equally cheap merge. <bookmark mark='d'/> Mo's algorithm instead reorders offline queries "
+            'by endpoint blocks and maintains a moving answer. It needs efficient add and remove operations for '
+            "that statistic. <bookmark mark='e'/> For all twenty thousand distinct-count queries, we retain the "
+            'deterministic input specification and output hash, and check every answer with an independent '
+            'last-occurrence sweep using a sum tree. Pointer moves are an abstract work count, separate from '
+            'Python wall time.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(cells))
             vo.wait_until("a")

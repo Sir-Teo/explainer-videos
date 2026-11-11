@@ -5,7 +5,7 @@ from videos.cs.cs24.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, curve, 
 
 
 def human_bytes(b):
-    for unit, v in (("GB", 1 << 30), ("MB", 1 << 20), ("KB", 1 << 10)):
+    for unit, v in (("GiB", 1 << 30), ("MiB", 1 << 20), ("KiB", 1 << 10)):
         if b >= v:
             return f"{b / v:.0f} {unit}"
     return f"{b} B"
@@ -73,27 +73,25 @@ class Layouts(VoiceoverScene):
         l2 = label(r"Eytzinger \ (breadth-first): \ node $k$'s children at $2k$, $2k + 1$", font_size=20,
                    color=LAM).next_to(r2, UP, buff=0.12)
         notes = VGroup(
-            label(r"sorted: \ the first probes are far apart, \ each a cache miss on a large array", font_size=21,
+            label('sorted: early probes are far apart; cache misses are not counted here', font_size=21,
                   color=DATA),
-            label(r"Eytzinger: \ the top of the tree is packed at the front, \ hot in cache; \ the next four levels "
-                  r"are one cache line ahead, \ so \textbf{prefetch} them", font_size=21, color=LAM),
+            label('Eytzinger: grouped top levels; prefetch a contiguous future candidate region \\\\ the guarded address stays inside the allocation', font_size=21, color=LAM),
             label(r"B-tree layout: \ 16 keys per 64-byte node, \ compared with one AVX-512 instruction; \ "
                   r"$\log_{17} n$ levels", font_size=21, color=HEAD),
             label(r"Khuong and Morin (2017): \ ``Array layouts for comparison-based searching''", font_size=20,
                   color=GREY_A),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Binary search is optimal in comparisons, and on a large array it is slow, for the reason of the opening "
-            "chapter. <bookmark mark='a'/> Here are fifteen sorted keys and the probes for one hundred and ten: the "
-            "middle, then a quarter of the way along, and so on. On a big array every early probe lands on a "
-            "different cache line, far from the last. <bookmark mark='b'/> The Eytzinger layout, named after a "
-            "sixteenth-century genealogist who numbered ancestors this way, stores the implicit search tree "
-            "breadth-first: the root, then its two children, then four grandchildren. Node k's children sit at two "
-            "k and two k plus one. The top levels are packed together and stay in cache, and the next few levels of "
-            "any path lie in one predictable region, so the program can prefetch them before it knows which way it "
-            "will go. <bookmark mark='c'/> Or pack sixteen keys into each sixty-four-byte node, a B-tree in an "
-            "array, and compare a query against all sixteen with one vector instruction. <bookmark mark='d'/> Paul-"
-            "Virgile Khuong and Pat Morin measured these layouts in 2017; here they are on this machine."
+            "Search layout changes the concrete implementation of a lower-bound query. <bookmark mark='a'/> In a "
+            'sorted array, binary search visits progressively smaller intervals, often at distant addresses. '
+            "<bookmark mark='b'/> Eytzinger order stores an implicit tree breadth first, with children at twice "
+            'the parent index and twice plus one. This groups top levels and can make a future region suitable '
+            'for explicit prefetching. Our code bounds the prefetch address within the allocation. <bookmark '
+            "mark='c'/> The array B-tree packs sixteen thirty-two-bit keys into a sixty-four-byte node and uses "
+            "an AVX-512 vector comparison, followed by a mask count and child selection. <bookmark mark='d'/> "
+            'Khuong and Morin study these layouts. Our experiment measures the exact retained implementations on '
+            'this host; it does not measure a cache-miss rate or prove which microarchitectural mechanism caused '
+            'a speed difference.'
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -123,11 +121,6 @@ class Layouts(VoiceoverScene):
         keys = VGroup(*[label(txt, font_size=18, color=col) for _, txt, col in series]).arrange(
             DOWN, aligned_edge=LEFT, buff=0.08).next_to(ax.c2p(12.3, 1000), DR, buff=0.05)
         caches = VGroup()
-        for name, b in (("L1", 48 << 10), ("L2", 2 << 20), ("L3", 260 << 20)):
-            x = math.log2(b)
-            if 12 <= x <= 28:
-                caches.add(DashedLine(ax.c2p(x, 0), ax.c2p(x, 1000), color=GREY_D, stroke_width=1.2))
-                caches.add(mono(name, 14, GREY_B).next_to(ax.c2p(x, 1000), UP, buff=0.05))
         big_ = rows[-1]
         small = rows[0]
         side = VGroup(
@@ -136,24 +129,25 @@ class Layouts(VoiceoverScene):
             label(rf"{words(big_['bytes'] // 4)} keys \ ({human_bytes(big_['bytes'])}): \\ {big_['branchy']:.0f} ns "
                   rf"against {big_['btree']:.0f} ns, \ {big_['branchy'] / big_['btree']:.1f}$\times$", font_size=20,
                   color=YES),
-            label(r"branch-free code did not help on this CPU: \\ the misses are memory, \ not branches", font_size=20,
+            label('latency alone does not identify cache or branch misses', font_size=20,
                   color=GREY_A),
-            label(r"the layout changes nothing in the RAM model \\ and everything on the machine", font_size=20,
+            label('same lookup specification; different scalar, SIMD and memory work', font_size=20,
                   color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.3)
         if side.width > 5.0:
             side.width = 5.0
             side.to_edge(RIGHT, buff=0.3)
         with self.voiceover(
-            "A million random searches at each size, from a thousand keys to sixty-four million. <bookmark "
-            "mark='a'/> Plain binary search climbs from seventy nanoseconds to nine hundred as the array outgrows "
-            "each cache. <bookmark mark='b'/> On this processor the branch-free version is barely faster: the cost is "
-            "the memory, not mispredicted branches. That differs between machines, which is why you measure. "
-            "<bookmark mark='c'/> The Eytzinger layout with prefetching is three to four times faster at every size. "
-            "<bookmark mark='d'/> And the B-tree layout, sixteen keys compared at once, is fastest of all: about five "
-            "times faster than the textbook at sixty-four million keys. <bookmark mark='e'/> Every one of them makes "
-            "about log n comparisons. The layout changes nothing in the model of Part 16, and everything on the "
-            "machine."
+            "Each size receives a million generated lookup queries. <bookmark mark='a'/> The red curve is "
+            'ordinary binary search, with minima from three repetitions. Full sources, ISA flags and raw clock '
+            "reads accompany the data. <bookmark mark='b'/> Branch-free binary search changes the instruction "
+            "sequence. Its relative performance is specific to this processor and workload. <bookmark mark='c'/> "
+            "Eytzinger order adds a different layout and explicit prefetching. <bookmark mark='d'/> The array "
+            'B-tree uses sixteen-way AVX-512 comparisons within a node. Every actual answer is checked after '
+            "timing against a certified lower-bound value. <bookmark mark='e'/> These implementations perform "
+            'different scalar and SIMD work. Their elapsed times alone do not isolate cache misses, branch '
+            'misses or prefetch effects. They share a lookup specification, rather than an identical comparison '
+            'trace.'
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(caches))
             vo.wait_until("a")
@@ -179,31 +173,30 @@ class Layouts(VoiceoverScene):
             DOWN, aligned_edge=LEFT, buff=0.08).next_to(head, DOWN, buff=0.45)
         rows = [[r"with a branch", f"{b['random_branchy']:.2f}", f"{b['sorted_branchy']:.2f}"],
                 [r"branch-free \ (a mask)", f"{b['random_branchless']:.2f}", f"{b['sorted_branchless']:.2f}"]]
-        tab = grid_table([rf"ns per element, \ {words(b['n'])} random bytes", r"shuffled", r"sorted"], rows,
+        tab = grid_table([rf"ns per element, \ {words(b['n'])} 32-bit values in $[0,255]$", r"shuffled", r"sorted"], rows,
                          widths=[5.4, 2.0, 2.0], row_h=0.48, font_size=22, mono_cols=(),
                          colors=[[NO] * 3, [YES] * 3])
         tab.next_to(code_, DOWN, buff=0.45).set_x(0)
         notes = VGroup(
-            label(rf"shuffled data: \ the branch is a coin flip, \ mispredicted half the time: \ "
-                  rf"{b['random_branchy'] / b['sorted_branchy']:.1f}$\times$ slower than the same loop on sorted data",
+            label('shuffled versus sorted: measured time, not a measured miss rate',
                   font_size=21, color=NO),
             label(r"each misprediction throws away the pipeline's speculative work \ (Parts 7 and 8)", font_size=21,
                   color=WHITE),
-            label(r"the mask version has no branch to mispredict: \ the same speed on any data", font_size=21,
+            label('mask version: inspect its actual instructions and measured times', font_size=21,
                   color=YES),
-            label(r"so: \ predictable branches are nearly free; \ unpredictable ones on hot paths are worth removing",
+            label('branch effects depend on code, data, compiler and processor',
                   font_size=21, color=HEAD),
         ).arrange(DOWN, buff=0.2).next_to(tab, DOWN, buff=0.4)
         with self.voiceover(
-            "Branch-free search did not help this processor, but that does not mean branches are free. <bookmark "
-            "mark='a'/> Here is a loop that adds up the bytes of an array that are at least a hundred and "
-            "twenty-eight, with an if. <bookmark mark='b'/> On shuffled data that if is a coin flip. The predictor of "
-            "Parts 7 and 8 guesses wrong half the time, and every wrong guess throws away the work the pipeline did "
-            "speculatively. On sorted data the branch goes one way and then the other, and is almost always "
-            "predicted. The same loop, the same values, five times faster. <bookmark mark='c'/> Replace the if with "
-            "a mask, the comparison turned into all ones or all zeros, and there is nothing left to predict: the "
-            "same speed on either data. <bookmark mark='d'/> Predictable branches are nearly free. Unpredictable ones "
-            "in a hot loop are worth removing, and binary search's were not the bottleneck because the memory was."
+            "Branches are another possible cost. <bookmark mark='a'/> This experiment stores values from zero to "
+            'two hundred and fifty-five in thirty-two-bit integers, then sums those at least a hundred and '
+            "twenty-eight. <bookmark mark='b'/> We compare shuffled and sorted order using the same multiset. "
+            'The branchy function disables if-conversion and vectorization. A separate histogram certifies the '
+            'sum. The observed timing difference is consistent with a branch-prediction explanation, but no '
+            "branch-miss counter was collected. <bookmark mark='c'/> A mask-based function provides another "
+            "implementation on the same inputs. <bookmark mark='d'/> Read all four measured times. Their "
+            'ordering describes these loops; it does not establish that predictable branches are universally '
+            'free or that binary search is always limited by memory.'
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

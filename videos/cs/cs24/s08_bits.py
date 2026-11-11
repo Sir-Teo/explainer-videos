@@ -27,8 +27,7 @@ class Bits(VoiceoverScene):
                          colors=[[WHITE, DATA, YES, LAM, HEAD]] * len(rows))
         tab.next_to(head, DOWN, buff=0.35).to_edge(LEFT, buff=0.5)
         notes = VGroup(
-            label(r"\textbf{popcount}: \ one instruction on every modern CPU; \\ $x \mathbin{\&} (x - 1)$ clears the "
-                  r"lowest set bit", font_size=21, color=YES),
+            label('\\textbf{popcount}: hardware support depends on the target ISA; \\\\ $x\\mathbin{\\&}(x-1)$ clears the lowest set bit', font_size=21, color=YES),
             label(r"\textbf{lowest set bit}: \ $x \mathbin{\&} -x$ \ (chapter 2's Fenwick tree)", font_size=21,
                   color=LAM),
             label(r"\textbf{Gray code}: \ $i \oplus (i \gg 1)$; \\ neighbours differ in one bit \ (rotary encoders, \ Karnaugh maps)",
@@ -41,13 +40,16 @@ class Bits(VoiceoverScene):
         if notes.width > room:
             notes.width = room
         with self.voiceover(
-            "A machine word is sixty-four bits, and it is often best read as a set of sixty-four small things. "
-            "<bookmark mark='a'/> Counting the members is one instruction, popcount; and x and x minus one clears the "
-            "lowest member, so a loop of that visits each member once. <bookmark mark='b'/> x and minus x isolates "
-            "the lowest member, the trick behind Fenwick's tree. <bookmark mark='c'/> i exclusive-or i shifted right "
-            "once is the Gray code, where neighbours differ in a single bit, which is why rotary encoders use it. "
-            "<bookmark mark='d'/> Union, intersection and membership of small sets become single instructions. "
-            "<bookmark mark='e'/> Henry Warren's book collects hundreds of these."
+            "A sixty-four-bit machine word can represent a set of sixty-four positions. <bookmark mark='a'/> "
+            'Population count may use a hardware instruction when the target ISA supports it. Clearing the '
+            "lowest set bit visits the members one at a time. <bookmark mark='b'/> Isolating that bit gives the "
+            "Fenwick step. <bookmark mark='c'/> Exclusive-or with a one-bit right shift gives a Gray-code "
+            "sequence, whose neighbours differ in one bit. <bookmark mark='d'/> Fixed-width set union and "
+            'intersection use a bounded number of word operations. A Python integer can span many machine words, '
+            'so its bit-operation cost grows with its stored length. Negative patterns are excluded from these '
+            "finite-subset routines. <bookmark mark='e'/> Warren's Hacker's Delight collects such "
+            'transformations; check width, signedness and instruction support before translating one to native '
+            'code.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule),
                       LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.05))
@@ -123,16 +125,16 @@ class Bits(VoiceoverScene):
                   r"\texttt{agrep}", font_size=20, color=GREY_A),
         ).arrange(DOWN, buff=0.22).next_to(tab, DOWN, buff=0.4)
         with self.voiceover(
-            "In 1970 four Soviet mathematicians, Arlazarov, Dinic, Kronrod and Faradzev, noticed that a computer "
-            "can process a whole word of bits in one step, and shaved a logarithm off boolean matrix problems. "
-            "<bookmark mark='a'/> Here is their idea at work on this machine. <bookmark mark='b'/> Warshall's "
-            "transitive closure, with each row of the reachability matrix packed into words, ORs sixty-four columns "
-            "at once; the compiler already vectorized the byte version, and the bitset version is still about ten "
-            "times faster. <bookmark mark='c'/> The longest common subsequence of two strings is a quadratic dynamic "
-            "program, but one row of it can be computed with a few word operations: an addition propagates the "
-            "carries along the row. On two strings of twenty thousand letters, that is over a hundred times faster, "
-            "with the same answer. <bookmark mark='d'/> The same trick runs inside diff, DNA aligners and the "
-            "approximate matcher agrep."
+            'Word packing is related to the Four Russians tradition, but the mechanisms should be distinguished. '
+            "<bookmark mark='a'/> The historical method groups small subproblems and precomputes their possible "
+            'answers. Our experiments below use direct word-parallel operations rather than implementing that '
+            "complete table-based algorithm. <bookmark mark='b'/> Packed transitive closure processes sixty-four "
+            'columns per stored word. Every reachability result is checked against independent breadth-first '
+            "searches. <bookmark mark='c'/> The LCS experiment compares full dynamic programming with a "
+            'multiword bit algorithm on the same generated strings. Carry propagation spans all words of a row; '
+            'the measured ratios are in the table. Both programs run three times and retain their raw clocks. '
+            "<bookmark mark='d'/> Packing can improve constants and word-operation counts, while storage, "
+            'preprocessing and multiword work remain part of the cost model.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(notes[0]))
             vo.wait_until("a")

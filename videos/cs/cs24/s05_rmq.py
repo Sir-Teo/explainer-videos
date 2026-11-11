@@ -34,7 +34,7 @@ class RangeMin(VoiceoverScene):
         self.cartesian()
 
     def card(self):
-        card = chapter_card(4, r"Range minimum and lowest common ancestors", r"Can a range minimum be one lookup?",
+        card = chapter_card(4, r"Range minimum and lowest common ancestors", r"Can a range minimum take constant time?",
                             lit=(1984, 2000), extra=((1984, r"Harel--Tarjan"), (2000, r"Bender--Farach-Colton")),
                             part=PART)
         with self.voiceover("Chapter four. Range minimum, and lowest common ancestors."):
@@ -74,14 +74,7 @@ class RangeMin(VoiceoverScene):
                   color=GREY_A),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "If the array never changes, a range minimum can be a single lookup. <bookmark mark='a'/> Precompute "
-            "the minimum of every window whose length is a power of two. Row zero is the array itself; each row is "
-            "built from the one above, the smaller of two neighbouring windows. That is n log n numbers. <bookmark "
-            "mark='b'/> To answer positions two to twelve, a range of eleven, take the largest power of two that "
-            "fits, eight, and look up two windows of length eight: one starting at the left end, one ending at the "
-            "right end. <bookmark mark='c'/> They overlap, and for the minimum that does not matter, because the "
-            "minimum of a number with itself is that number. <bookmark mark='d'/> For a sum the overlap would be "
-            "counted twice, which is why sums use the trees of the last two chapters."
+            "If the array never changes, a range minimum can be answered with two table lookups. <bookmark mark='a'/> Precompute the minimum of every window whose length is a power of two. Row zero is the array itself; each row is built from the one above, the smaller of two neighbouring windows. That is n log n numbers. <bookmark mark='b'/> To answer positions two to twelve, a range of eleven, take the largest power of two that fits, eight, and look up two windows of length eight: one starting at the left end, one ending at the right end. <bookmark mark='c'/> They overlap, and for the minimum that does not matter, because the minimum of a number with itself is that number. <bookmark mark='d'/> For a sum the overlap would be counted twice, which is why sums use the trees of the last two chapters."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[0]), FadeIn(idx), FadeIn(levl[0]))
             vo.wait_until("a")
@@ -123,19 +116,18 @@ class RangeMin(VoiceoverScene):
                   color=HEAD),
             label(rf"\textbf{{binary lifting}}: \ store each node's $2^j$-th ancestor; \ LCA(9, 11) = "
                   rf"{d['lca_9_11']} after {d['lift_steps']} jump{'' if d['lift_steps'] == 1 else 's'}", font_size=21, color=LAM),
-            label(r"used everywhere trees are queried: \ version control's merge base \ (Part 41), \ taxonomies, \ "
-                  r"phylogenies", font_size=20, color=GREY_A),
+            label('rooted-tree ancestors: taxonomies and phylogenies; \\\\ version histories are DAGs and may have several merge bases', font_size=20, color=GREY_A),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "In a rooted tree, the lowest common ancestor of two nodes is the deepest node above both. <bookmark "
-            "mark='a'/> Walk around the tree, writing down each node every time you pass it, with its depth. "
-            "<bookmark mark='b'/> Between the first visits of nodes seven and four, the tour must climb to their common "
-            "ancestor and no higher, so the shallowest node in that stretch is the answer: node one. <bookmark "
-            "mark='c'/> Lowest common ancestor is range minimum on the depths, and the sparse table answers it in "
-            "constant time. <bookmark mark='d'/> The other classic is binary lifting: store each node's ancestor "
-            "two to the j levels up. Lift the deeper node to the same depth, then lift both by decreasing powers of "
-            "two while they differ. Version control finds the merge base of two branches this way, as Part 41 "
-            "will show."
+            'In a rooted tree, the lowest common ancestor is the deepest node above both query nodes. <bookmark '
+            "mark='a'/> An Euler tour records nodes and depths on entry and after returning from each child. "
+            "<bookmark mark='b'/> Between the first occurrences of seven and four, the minimum depth identifies "
+            "their ancestor, node one. <bookmark mark='c'/> Our implementation uses a sparse table, with n log n "
+            'preprocessing and constant-time queries. The linear-preprocessing theorem cited later uses a '
+            "different construction. <bookmark mark='d'/> Binary lifting instead stores ancestors at powers of "
+            'two and answers in logarithmic time. These statements concern a rooted tree. A version-control '
+            'history is generally a directed acyclic graph and can have several merge bases; it requires the '
+            'broader treatment in Part 41.'
         ) as vo:
             self.play(FadeIn(head), Create(edges), FadeIn(nodes))
             vo.wait_until("a")
@@ -167,23 +159,22 @@ class RangeMin(VoiceoverScene):
                          for i in range(n) if par[i] != -1])
         nodes = VGroup(*[gnode(str(a[i]), pos[i], color=HEAD, r=0.22, font=16) for i in range(n)])
         notes = VGroup(
-            label(r"root: \ the minimum; \ left and right subtrees: \ the same, \ recursively, \ on each side",
+            label('root: leftmost minimum; equal values ordered by index; \\\\ parent values are non-strict minima',
                   font_size=21, color=HEAD),
             label(r"built in $O(n)$ with one stack \ (chapter 5's monotonic stack)", font_size=21, color=WHITE),
             label(r"RMQ$(l, r)$ on the array $=$ LCA$(l, r)$ in this tree: \ the two problems are \textbf{the same}",
                   font_size=21, color=YES),
-            label(r"Bender and Farach-Colton (2000): \ $O(n)$ preprocessing, \ $O(1)$ queries, \ by going back and "
-                  r"forth \ (Fischer and Heun: \ $2n + o(n)$ bits)", font_size=20, color=GREY_A),
+            label('cited: linear preprocessing and constant queries; \\\\ implemented here: sparse-table $O(n\\log n)$ preprocessing', font_size=20, color=GREY_A),
         ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "The reduction runs the other way as well. <bookmark mark='a'/> The Cartesian tree of an array puts "
-            "the minimum at the root, builds the left part's tree to its left and the right part's to its right, and "
-            "so on down. <bookmark mark='b'/> One left-to-right pass with a stack builds it, the monotonic stack of "
-            "the next chapter. <bookmark mark='c'/> The minimum of any range of the array is the lowest common "
-            "ancestor of its two ends in this tree. So range minimum and lowest common ancestor are the same "
-            "problem. <bookmark mark='d'/> Michael Bender and Martín Farach-Colton used the two reductions together "
-            "to reach linear preprocessing and constant queries, and Johannes Fischer and Volker Heun squeezed the "
-            "structure into two bits per element."
+            "The reduction runs the other way as well. <bookmark mark='a'/> Recursively put an interval's "
+            'leftmost minimum at its Cartesian-tree root. Equal values are ordered by their array indices, so '
+            "parent values need only be no larger than child values. <bookmark mark='b'/> A monotone stack "
+            "builds this tree in linear time. <bookmark mark='c'/> The lowest common ancestor of two array "
+            "positions is their interval's leftmost minimum. Our checks cover every illustrated range and node "
+            "pair. <bookmark mark='d'/> Bender and Farach-Colton give a linear-preprocessing, constant-query "
+            'construction. Succinct results can encode the static query structure in two n plus lower-order '
+            'bits; this is an index-space theorem, not the memory use of our Python sparse table.'
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

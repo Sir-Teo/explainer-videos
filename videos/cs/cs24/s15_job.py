@@ -24,7 +24,7 @@ class TheJob(VoiceoverScene):
         head = label(r"Part 17's hash table, \ engineered for this machine", font_size=32).to_edge(UP, buff=0.3)
         changes = VGroup(
             label(r"\textbf{1.} \ words found 32 bytes at a time \ (chapter 10's AVX2 scan)", font_size=22, color=DATA),
-            label(r"\textbf{2.} \ hash 8 letters per multiply, \ not one letter per step", font_size=22, color=LAM),
+            label('\\textbf{2.} \\ hash letter blocks; retain exact key equality', font_size=22, color=LAM),
             label(r"\textbf{3.} \ a Swiss-style table: \ 16 control bytes per group, \ one SSE2 compare", font_size=22,
                   color=HEAD),
             label(r"\textbf{4.} \ the first 8 letters, \ the length and the count live \textbf{in the slot}: \ a short "
@@ -43,21 +43,19 @@ class TheJob(VoiceoverScene):
                   r"byte for byte, \ as the Python reference", font_size=21, color=WHITE),
             label(rf"{d['speedup']:.1f}$\times$ by best time; \ the engineered runs spread widely \ (chapter 12: "
                   r"this machine is shared)", font_size=21, color=YES),
-            label(r"what is left: \ one hash and one cache miss per word, \ the floor for a table of 58 thousand "
-                  r"words", font_size=21, color=GREY_A),
+            label('fixed-capacity corpus experiment; no measured cache-miss floor', font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.2).next_to(tab, DOWN, buff=0.35)
         with self.voiceover(
-            "The Job counts the words of thirty novels and lists the twenty most common. Part 17 did it with an "
-            "open-addressing hash table, and we ran that program in C on this machine. Now we engineer it. "
-            "<bookmark mark='a'/> First, find the words with the vector scan of chapter ten. <bookmark mark='b'/> "
-            "Second, hash eight letters at a time with one multiplication instead of one letter per step. <bookmark "
-            "mark='c'/> Third, a Swiss-style table, sixteen control bytes compared at once. <bookmark mark='d'/> And "
-            "fourth, store the first eight letters, the length and the count inside the slot itself, so that a short "
-            "word, which is most words, is found and counted without touching any other memory. <bookmark "
-            "mark='e'/> Best of seven runs: a hundred and fifty-five milliseconds for the textbook version, seventy-"
-            "five for the engineered one, about twice as fast, with identical output. <bookmark mark='f'/> The "
-            "engineered runs varied a lot, so the honest claim is the best time and the median together. What is "
-            "left is about one hash and one cache miss per word."
+            'The Job counts the words of the fixed thirty-novel corpus and selects the twenty most common. '
+            "<bookmark mark='a'/> The engineered version classifies ASCII bytes with AVX2. <bookmark mark='b'/> "
+            "It hashes letter blocks while retaining exact key comparisons. <bookmark mark='c'/> A teaching "
+            "Swiss-style table filters sixteen control bytes at once. <bookmark mark='d'/> The first eight "
+            'letters, length and count live in the slot; longer words also consult their stored bytes. Its fixed '
+            "table, pool and word-length bounds are checked against this corpus. <bookmark mark='e'/> Seven "
+            'whole-program runs retain both minimum and median times, exact top-twenty output and every distinct '
+            "word count, independently checked against Python. <bookmark mark='f'/> The comparison is empirical "
+            'for these two programs on the same host. No hardware counters were collected, so we make no claim '
+            'of one cache miss per word or a proven performance floor.'
         ) as vo:
             self.play(FadeIn(head))
             for mk, c in zip("abcd", changes):
@@ -72,57 +70,24 @@ class TheJob(VoiceoverScene):
         self.clear_scene()
 
     def breakdown(self):
-        d = load("job")
-        tk = load("simd")["token"]
-        tb, en = d["textbook"]["best"], d["engineered"]["best"]
-        scan_t, scan_e = tk["scalar_s"], tk["simd_s"]
-        head = label(r"Where the time went: \ Amdahl's law", font_size=32).to_edge(UP, buff=0.35)
-        sc = 60.0
-        x0 = -4.6
-
-        def bar(y, parts, cap):
-            g = VGroup()
-            x = x0
-            for v, col, txt in parts:
-                r = Rectangle(width=v * sc, height=0.6, stroke_width=0).set_fill(col, 0.75)
-                r.move_to([x + v * sc / 2, y, 0])
-                g.add(r)
-                if v * sc > 0.9:
-                    g.add(label(txt, font_size=17, color=WHITE).move_to(r))
-                x += v * sc
-            g.add(label(cap, font_size=20, color=GREY_A).next_to(g[0], LEFT, buff=0.2))
-            g.add(mono(f"{sum(p[0] for p in parts) * 1000:.0f} ms", 18, WHITE).next_to(g[-2] if len(parts) > 1 else g[0],
-                                                                                    RIGHT, buff=0.2))
+        head=label('Amdahl model: assumed phase fraction, not a Job profile',font_size=30).to_edge(UP,buff=0.35)
+        def bar(y,phase,caption):
+            x=-3.8;g=VGroup()
+            for value,color in [(70,NO),(phase,DATA)]:
+                if value:
+                    rect=Rectangle(width=value*0.075,height=0.6,stroke_width=0).set_fill(color,0.8)
+                    rect.move_to([x+value*0.075/2,y,0]);g.add(rect);x+=value*0.075
+            g.add(label(caption,font_size=19).next_to(g,LEFT,buff=0.2))
+            g.add(label(rf"{70+phase:g} units",font_size=18,color=WHITE).move_to([4.7,y,0]))
             return g
-        b1 = bar(1.3, [(scan_t, DATA, r"finding words"), (tb - scan_t, NO, r"the table")], r"textbook")
-        b2 = bar(0.2, [(scan_e, DATA, r""), (tb - scan_t, NO, r"the old table")], r"SIMD scan only")
-        b3 = bar(-0.9, [(scan_e, DATA, r""), (en - scan_e, YES, r"the new table")], r"engineered")
-        notes = VGroup(
-            label(rf"finding words was {scan_t / tb * 100:.0f}\% of the textbook time; \ the SIMD scan makes that "
-                  rf"part {scan_t / scan_e:.0f}$\times$ faster", font_size=21, color=DATA),
-            label(rf"alone, \ that buys only {tb / (tb - scan_t + scan_e):.2f}$\times$: \ Amdahl (1967), \ the part you "
-                  r"don't speed up decides", font_size=21, color=NO),
-            label(r"so the table had to change too: \ profile first, \ then engineer the biggest part", font_size=21,
-                  color=YES),
-        ).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "Before engineering anything, measure where the time goes. <bookmark mark='a'/> In the textbook program, "
-            "finding the words took about a quarter of the time, and the hash table the rest. <bookmark mark='b'/> "
-            "The vector scan makes the first part nine times faster. But on its own that would make the whole "
-            "program only about thirty percent faster, because the table is untouched. That is Amdahl's law, from 1967: "
-            "the part you do not speed up decides the total. <bookmark mark='c'/> So the table had to change as "
-            "well, and the slot that carries the word's first letters is what took it from about a hundred and "
-            "fifteen milliseconds to seventy. Profile first; then engineer the largest part."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(b1))
-            vo.wait_until("a")
-            self.play(FadeIn(notes[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(b2), FadeIn(notes[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(b3), FadeIn(notes[2]))
-        self.wait(0.3)
-        self.clear_scene()
+        b1=bar(1.4,30,'baseline');b2=bar(0.2,3,'phase10x');b3=bar(-1.0,0,'phase infinite')
+        notes=VGroup(*[label(s,font_size=21,color=c) for s,c in [('assume $f=0.30$ of 100 baseline units; phase acceleration $s=10$',DATA),('$T_{new}/T_{old}=(1-f)+f/s=0.73$; speedup $\\approx1.37$',HEAD),('isolated tokenizer times do not identify whole-program phases',YES)]]).arrange(DOWN,buff=0.22).to_edge(DOWN,buff=0.4)
+        with self.voiceover("Amdahl's law is a model for a specified phase fraction. <bookmark mark='a'/> In this counterfactual example, suppose thirty percent of a program's baseline time belongs to a phase that can be accelerated. This fraction is an assumption, not a profile of our Job. <bookmark mark='b'/> Making that phase ten times faster gives a total cost of seventy plus three units, or speedup one over zero point seven three. Even an infinitely fast phase leaves seventy units. <bookmark mark='c'/> The isolated tokenizer timings cannot be subtracted from a different complete program to recover its phases. Measure phases in a consistent program and workload before using them for a prediction; evaluate the actual whole-program change separately.") as vo:
+            self.play(FadeIn(head),FadeIn(b1))
+            vo.wait_until('a');self.play(FadeIn(notes[0]))
+            vo.wait_until('b');self.play(FadeIn(b2),FadeIn(notes[1]))
+            vo.wait_until('c');self.play(FadeIn(b3),FadeIn(notes[2]))
+        self.wait(0.3);self.clear_scene()
 
     def ledger(self):
         d = load("job")
@@ -131,26 +96,17 @@ class TheJob(VoiceoverScene):
         head = label(r"Ledger row 10", font_size=36).to_edge(UP, buff=0.35)
         tab = ledger_table(led, shown=len(led), highlight=(len(led) - 1,), font_size=20, row_h=0.34,
                            label_width=4.8).scale(0.92).move_to(UP * 1.0)
-        notes = VGroup(
-            label(r"rows 1--9 priced the Job on the Pebble cores of Parts 6--10; \ row 10 is measured on real "
-                  r"hardware", font_size=21, color=WHITE),
-            label(rf"the same textbook C on this machine: \ {row['textbook_native_seconds'] * 1000:.0f} ms, \ against "
-                  rf"Pebble's {d['pebble_hash_s']:.2f} s: \ a real 2.1 GHz core, \ wider and with larger caches",
-                  font_size=21, color=COST),
-            label(rf"engineering on top: \ {d['speedup']:.1f}$\times$ more, \ {row['seconds'] * 1000:.0f} ms for 25 MB",
-                  font_size=21, color=YES),
-            label(r"from the first row, \ 281 seconds on a single-cycle Pebble, \ to 75 milliseconds: \ hardware, "
-                  r"\ compilers and algorithms all contributed", font_size=21, color=GREY_A),
-        ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.35)
+        notes=VGroup(label('rows1--9: modeled Pebble costs; native row: measured host wall time',font_size=21,color=WHITE),label('model/native ratios are not empirical cross-processor speedups',font_size=21,color=WHITE),label('same-host native comparison: identical corpus, complete checked counts',font_size=21,color=WHITE),label('seven observations per native program; minimum and median retained',font_size=21,color=WHITE)).arrange(DOWN,buff=0.22).to_edge(DOWN,buff=0.4)
         with self.voiceover(
-            "So the ledger gets its tenth row, and it is a new kind of row. <bookmark mark='a'/> Rows one to nine "
-            "priced the Job on the cores we built, from the single-cycle Pebble of Part 6 to the four cores of Part "
-            "10. Row ten is measured on the real processor that rendered this video. <bookmark mark='b'/> Part 17's "
-            "textbook program alone runs five times faster here than on our modelled core, because a real core is "
-            "wider, faster and has far larger caches. <bookmark mark='c'/> The engineering then doubles that again: "
-            "seventy-five milliseconds for twenty-five megabytes. <bookmark mark='d'/> From two hundred and eighty-one "
-            "seconds on the first row to seventy-five milliseconds, a factor of nearly four thousand, and every layer "
-            "of the tower contributed to it."
+            "The ledger now contains two kinds of quantity. <bookmark mark='a'/> Earlier Pebble rows are modeled "
+            'costs under their stated machine and clock assumptions. The native row is measured wall time on the '
+            "current host. <bookmark mark='b'/> Their numeric ratio is not an empirical speedup between two "
+            'physical processors. Input conventions, implementations and modeled costs must be checked before '
+            "making a cross-system claim. <bookmark mark='c'/> We do have a same-host comparison: Part 17's "
+            'native C program and the engineered program process the same bytes with identical output and '
+            "complete counts. Their seven observations are retained. <bookmark mark='d'/> Keep the modeled "
+            'teaching ledger and the measured native experiment visibly distinguished; they answer different '
+            'questions about the tower we built.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab.axis), FadeIn(tab.rows[:-1]))
             self.play(FadeIn(tab.rows[-1]))

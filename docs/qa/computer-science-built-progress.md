@@ -1,10 +1,36 @@
 # Computer Science, Built — sequential polish
 
 Work on `computer-science-built`, one video at a time, with separate commits.
-Current video: **cs24, Algorithms in Practice**. CS1–CS23 source/preview polish checkpoints
+Current video: **cs25, Undecidable**. CS1–CS24 source/preview polish checkpoints
 are complete at the scopes below. Their production release gates remain open; this
 ledger does not treat sampled previews as listening or final-production approval.
 The syllabus's earlier draft-preview claims are separate.
+
+## Final CS24 preview checkpoint, 11 November 2026
+
+- Repair practice-instrument index/integer/graph/stopping contracts, exact galloping reads, learned-index
+  brackets/fallback and discrete ski-rental bounds. All 19 fresh schema-2 producers and their derived ledger
+  change; 29 tests and 32 separate UBSan fixture cases pass. Preserve 15 native builds, 165 executions,
+  2,570 raw clock reads, 1,374 intervals, 317 native semantic records and 328 independent illustration checks.
+- Check full measured outputs, every sorted element/map count, closure/LCS, token bytes and vector results,
+  all 57,895 Job word counts and every learned-index query. Qualify anchored greedy fitting, active/peak
+  storage, fixed-order/shared-host timings, synthetic means and exact finite worst bounds.
+- Polish 69 bilingual narration pairs and six exercises. Add bounded Fenwick, duplicate-deque, Cartesian,
+  submask and IID fixed-slope witnesses. Separate assumed Amdahl phases and modeled/native ledger costs.
+  Native review repairs lower-bound comments and the Chinese Mo query/array caption; retain every finding.
+- Review all 34 endpoint and 34 silent motion overviews: 515 endpoint appearances, 1,360 temporal samples
+  and 78,039 decoded frames. Sixty-one reviews inherit only through actual PNG equality; seven are fresh.
+  Four sparse-transition alerts retain byte-bound earlier exact-frame dispositions and zero blank runs.
+- Review all 98 native 1080p15 clips: 71,571 frames, 2,352 samples and 98 native stills. Seventy-eight complete
+  movie hashes preserve positive archived reviews; twenty receive fresh review. Four actual English narrated
+  pilots decode 9,705 frames plus audio; all 160 samples/four stills retain reviews through identical movies.
+- All 69 English speech blocks pass automated signal/alignment (40.32 minutes); all 201 cues meet 250 ms.
+  Canonical pairs and actual runtime captures cover 69/69 bilingual blocks. All 659 captured captions have
+  zero unresolved explanatory translation leads; 42 retained originals and 30 numeric/unit leads are classified.
+
+[Verified CS24 evidence](evidence/cs24-polish-20261111/README.md).
+Continuous narrated listening, Chinese speech/listening, whole-video native production review and runtime at
+selected narration pace remain open release gates. Raw receipts retain their actual frozen render fingerprints.
 
 ## Final CS23 preview checkpoint, 11 November 2026
 
@@ -628,9 +654,10 @@ Evidence, exact source/data hashes, reports and reproduction commands:
 
 ## Continue here
 
-1. Preserve CS24's untouched source/history/data, complete all 19 original producers and its derived ledger,
-   and review its 34 original bilingual endpoint captures before applying confirmed repairs.
-2. Check practice-instrument domains, full numerical/native outputs, benchmark provenance and learned-index
-   storage/search contracts; polish bilingual explanations and verify current previews/speech scheduling.
-3. Commit CS24 separately and continue CS25–CS61 in order, preserving the distinction between preview
+1. Preserve CS25's untouched source/history/data, run all ten original producers and original tests, and
+   inspect all 34 original bilingual endpoint captures before applying confirmed repairs.
+2. Check bounded PCP/tiling searches, TM histories, quines, Pell/Collatz/FRACTRAN domains, full numerical
+   witnesses and provenance. Polish reductions, semantic properties, hierarchy/theory assumptions,
+   plain/prefix-free complexity, finite-sample halting probabilities and dated primary research scopes.
+3. Commit CS25 separately and continue CS26–CS61 in order, preserving the distinction between preview
    checks and the open production/listening gates.

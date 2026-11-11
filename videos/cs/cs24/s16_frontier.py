@@ -23,7 +23,7 @@ class Frontier(VoiceoverScene):
     def learned(self):
         f = load("frontier")
         head = label(r"A learned index over the corpus's word offsets", font_size=30).to_edge(UP, buff=0.3)
-        rows = [[str(r["eps"]), words(r["segments"]), f"{r['model_bytes'] / 1024:,.1f} KB", f"{r['binary_ns']:.0f}",
+        rows = [[str(r["eps"]), words(r["segments"]), f"{r['model_bytes'] / 1024:,.1f} KiB", f"{r['binary_ns']:.0f}",
                  f"{r['learned_ns']:.0f}"] for r in f["rows"]]
         tab = grid_table([r"error $\varepsilon$", r"segments", r"model", r"binary search, \ ns",
                           r"learned, \ ns"], rows, widths=[1.6, 1.8, 1.8, 2.8, 2.0], row_h=0.42, font_size=20,
@@ -32,24 +32,23 @@ class Frontier(VoiceoverScene):
         notes = VGroup(
             label(rf"keys: \ the {words(f['n'])} byte offsets where words start \ ({f['key_bytes'] / 1e6:.0f} MB)",
                   font_size=21, color=WHITE),
-            label(r"the model: \ straight lines, \ each guaranteed within $\varepsilon$ positions of the truth \ "
-                  r"(a greedy PGM-style fit); \ then binary-search only $\pm\varepsilon$", font_size=21, color=LAM),
+            label('anchored greedy fit; validate each search bracket; full-search fallback \\\\ every actual query checked independently', font_size=21, color=LAM),
             label(r"Kraska, \ Beutel, \ Chi, \ Dean and Polyzotis (2018): \ ``The case for learned index structures''; "
                   r"\ Ferragina and Vinciguerra's PGM index (2020)", font_size=20, color=GREY_A),
-            label(r"1.5 KB of lines index 37 MB of keys, \ and find them faster: \ the data's regularity is the index",
+            label('model bytes include native structs, padding and separator keys \\\\ active storage differs from peak requested storage',
                   font_size=21, color=YES),
         ).arrange(DOWN, buff=0.2).next_to(tab, DOWN, buff=0.35)
         with self.voiceover(
-            "The frontier has a simple question: what if a data structure could learn the shape of its data? "
-            "<bookmark mark='a'/> Take the four point six million positions where words begin in our corpus, a "
-            "sorted array of thirty-seven megabytes. <bookmark mark='b'/> A sorted array is a function from keys to "
-            "positions, and this one is nearly a straight line. Fit it with line segments, each guaranteed to "
-            "predict every position within epsilon. To look a key up, find its segment, predict, and binary-search "
-            "only the small window around the prediction. <bookmark mark='c'/> Tim Kraska and colleagues at Google "
-            "proposed learned indexes in 2018; Paolo Ferragina and Giorgio Vinciguerra's PGM index made the "
-            "guarantees exact. <bookmark mark='d'/> Here sixty-four segments, a kilobyte and a half, index the whole "
-            "array to within two hundred and fifty-six positions, and lookups are about one and a half times faster "
-            "than binary search."
+            "A learned index predicts positions from keys. <bookmark mark='a'/> Our keys are the corpus's "
+            "word-start byte offsets; their storage is reported separately. <bookmark mark='b'/> This teaching "
+            'implementation greedily fits lines anchored at segment starts. It evaluates every stored-key error, '
+            "then certifies each query's predicted search bracket and falls back to full binary search if "
+            "needed. Every actual query is independently checked with NumPy searchsorted. <bookmark mark='c'/> "
+            'Kraska and colleagues developed learned-index systems, while the PGM work provides stronger '
+            'indexing constructions; our floating-point anchored fit is not its optimal segmentation algorithm. '
+            "<bookmark mark='d'/> The table counts native segment structs and separator keys, including padding. "
+            'It also records peak requested model storage. Lookup clocks exclude fitting and validation, and a '
+            'smaller model can still incur segment-search and fallback costs.'
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -72,30 +71,29 @@ class Frontier(VoiceoverScene):
         get = {(s["lam"], s["sigma"]): s for s in f["ski"]}
         rows = [[f"{lam:g}"] + [f"{get[(lam, sg)]['mean']:.2f}" for sg in sigmas] +
                 [f"{get[(lam, sigmas[0])]['worst_case']:.1f}"] for lam in lams]
-        tab = grid_table([r"trust $\lambda$"] + [rf"error {sg:g}$B$" for sg in sigmas] + [r"worst case"], rows,
+        tab = grid_table([r"$\lambda$"] + [rf"noise {sg:g}$B$" for sg in sigmas] + [r"worst case"], rows,
                          widths=[1.6] + [1.6] * len(sigmas) + [1.8], row_h=0.44, font_size=20, mono_cols=(),
                          colors=[[WHITE] + [YES] * len(sigmas) + [NO]] * len(rows))
         tab.next_to(head, DOWN, buff=0.45).set_x(0)
         notes = VGroup(
-            label(r"a model predicts the season's length; \ with parameter $\lambda$, \ buy early if it says long, \ "
-                  r"late if short \ (Purohit, \ Svitkina and Kumar, 2018)", font_size=21, color=WHITE),
-            label(r"\textbf{consistency} $1 + \lambda$ when the prediction is right; \ \textbf{robustness} "
-                  r"$1 + 1/\lambda$ however wrong it is", font_size=21, color=YES),
-            label(r"mean ratio to the clairvoyant, \ 4,000 seasons per cell, \ $B = 10$", font_size=20, color=GREY_A),
+            label('forecast long: buy on $\\lceil\\lambda B\\rceil$; short: $\\lceil B/\\lambda\\rceil$ \\\\ buy at start of day; rent one unit per earlier day', font_size=21, color=WHITE),
+            label('published upper bounds: $1+\\lambda$ consistency, $1+1/\\lambda$ robustness \\\\ table: exact discrete worst ratio; two buy-day witnesses', font_size=21, color=YES),
+            label('Gaussian noise SD $\\sigma B$; 4,000 seasons per cell; $B=10$ \\\\ finite means are separate from the exact discrete worst bound', font_size=20, color=GREY_A),
             label(r"the same bargain for caching \ (Lykouris and Vassilvitskii, 2018), \ scheduling, \ and Part 23's "
                   r"online problems", font_size=21, color=LAM),
         ).arrange(DOWN, buff=0.2).next_to(tab, DOWN, buff=0.35)
         with self.voiceover(
-            "Part 23's online algorithms assumed nothing about the future. In practice we often have a forecast. "
-            "<bookmark mark='a'/> Give ski rental a prediction of the season's length, and a trust parameter lambda: "
-            "if the forecast says long, buy after lambda B days; if short, wait until B over lambda. <bookmark "
-            "mark='b'/> If the forecast is right the cost is at most one plus lambda times the best, and however wrong "
-            "it is, never more than one plus one over lambda. <bookmark mark='c'/> With lambda a tenth and a perfect "
-            "forecast we pay exactly what the clairvoyant pays; as the forecast's error grows, the cost rises "
-            "gracefully, and the worst case stays bounded. With lambda equal to one we are back at Part 23's "
-            "break-even rule, which ignores the forecast. <bookmark mark='d'/> Manish Purohit, Zoya Svitkina and "
-            "Ravi Kumar, and Thodoris Lykouris and Sergei Vassilvitskii for caching, started this field in 2018: "
-            "use machine learning when it is right, and keep a worst-case guarantee when it is not."
+            "Predictions can also guide an online decision. <bookmark mark='a'/> In discrete ski rental, buying "
+            'costs B and each rental day costs one. If the forecast is at least B, buy at the start of day '
+            'ceiling lambda B; otherwise use day ceiling B over lambda. Lambda lies above zero and at most one. '
+            "<bookmark mark='b'/> The literature's one plus lambda consistency and one plus one over lambda "
+            'robustness are upper bounds. Our table gives the tighter exact discrete worst case, attained at one '
+            "of the two buy-day witnesses. <bookmark mark='c'/> With B ten and lambda one tenth, a short "
+            'forecast and a hundred-day season cost a hundred and nine against optimum ten: ratio ten point '
+            'nine. Synthetic Gaussian forecast experiments provide means, not worst-case proofs or trained-model '
+            "performance. <bookmark mark='d'/> This deterministic policy illustrates the tradeoff studied by "
+            'Purohit, Svitkina and Kumar. A forecast can help, while the guarantee must cover forecasts that are '
+            'completely wrong.'
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -114,28 +112,28 @@ class Frontier(VoiceoverScene):
         lay = load("layouts")["rows"][-1]
         head = label(r"The theory--practice gap, \ measured", font_size=32).to_edge(UP, buff=0.35)
         lines = VGroup(
-            label(rf"four searches, \ the same $\log_2 n$ comparisons: \ {lay['branchy']:.0f}, \ "
-                  rf"{lay['branchless']:.0f}, \ {lay['eytzinger']:.0f} and {lay['btree']:.0f} ns \ (chapter 9)",
+            label('four lower-bound implementations; different comparisons and SIMD work',
                   font_size=22, color=WHITE),
-            label(r"the RAM model of Part 16 counts operations; \ the machine charges for distance", font_size=22,
+            label('word-RAM: bounded-width operations; external memory: block transfers', font_size=22,
                   color=NO),
             label(r"external memory \ (Aggarwal and Vitter, 1988): \ count block transfers of size $B$", font_size=22,
                   color=LAM),
-            label(r"cache-oblivious \ (Frigo, \ Leiserson, \ Prokop and Ramachandran, 1999): \ optimal for every $B$ "
-                  r"at once, \ the van Emde Boas layout", font_size=22, color=HEAD),
-            label(r"neither predicts prefetching, \ SIMD or branch prediction: \ a model that does is open", font_size=22,
+            label('cache-oblivious search: $O(1+\\log_B n)$ transfers in an ideal-cache model \\\\ model and layout assumptions are required', font_size=22, color=HEAD),
+            label('research task: specify a model, then test held-out workload predictions', font_size=22,
                   color=YES),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Underneath this whole part runs a gap between theory and practice. <bookmark mark='a'/> Four searches "
-            "with exactly the same comparisons differ fivefold on sixty-four million keys. <bookmark mark='b'/> The "
-            "random-access machine of Part 16 counts operations; real machines charge for distance. <bookmark "
-            "mark='c'/> Alok Aggarwal and Jeffrey Vitter's external-memory model counts the transfers of blocks "
-            "between a small fast memory and a large slow one. <bookmark mark='d'/> The cache-oblivious model of "
-            "Matteo Frigo, Charles Leiserson and colleagues asks for algorithms that are optimal for every block size "
-            "at once, without knowing it, like the van Emde Boas tree layout. <bookmark mark='e'/> Neither captures "
-            "prefetching, vector units or branch prediction, which decided several of this part's measurements. A "
-            "model simple enough to reason with and accurate enough to rank real implementations is still missing."
+            "Cost models describe selected resources. <bookmark mark='a'/> Our four searches share a lower-bound "
+            'specification while performing different scalar comparisons, vector work and memory accesses. '
+            "<bookmark mark='b'/> The word-RAM model counts bounded-width operations under its assumptions, not "
+            "elapsed host nanoseconds. <bookmark mark='c'/> External-memory analysis instead counts transfers "
+            "between memory levels with a specified block size and capacity. <bookmark mark='d'/> In an "
+            'ideal-cache model, suitable cache-oblivious search layouts can achieve logarithmic-in-block-base '
+            "transfer bounds without encoding the block size. Optimality requires the model's cache, block and "
+            "problem assumptions; it is not a blanket statement about every real cache. <bookmark mark='e'/> "
+            'Prefetching, SIMD, branches and shared-host interference call for additional modeling or controlled '
+            'experiments. The research task is to specify a useful model and test its predictions on held-out '
+            'workloads.'
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcde", lines):
@@ -150,25 +148,28 @@ class Frontier(VoiceoverScene):
         xs = np.log([r["eps"] for r in rr[:4]])
         ys = np.log([f["n"] / r["segments"] for r in rr[:4]])
         slope = float(np.polyfit(xs, ys, 1)[0])
-        head = label(r"Open questions", font_size=36).to_edge(UP, buff=0.4)
+        head = label('Research plans and established baselines', font_size=36).to_edge(UP, buff=0.4)
         qs = VGroup(
             label(r"a cost model that ranks real implementations: \ caches, \ prefetching, \ SIMD, \ branches",
                   font_size=23, color=YES),
-            label(r"learned indexes with worst-case guarantees under inserts and adversarial keys", font_size=23,
+            label('dynamic PGM already exists: reproduce it, then scope a narrower update question', font_size=23,
                   color=LAM),
-            label(rf"why our corpus needs segments of length $\sim\varepsilon^{{{slope:.1f}}}$, \ when independent "
-                  r"gaps give $\varepsilon^2$", font_size=23, color=HEAD),
+            label('finite corpus slope versus the IID fixed-slope MET baseline: \\\\ different procedures and regimes; reproduce before comparing', font_size=23, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.5).next_to(head, DOWN, buff=0.8)
         star = label(r"$\bigstar$ \ the part's research problem takes the third", font_size=22, color=GREY_A
                      ).to_edge(DOWN, buff=0.8)
         with self.voiceover(
-            "Here is where things stand. <bookmark mark='a'/> Is there a cost model that ranks real implementations "
-            "correctly, accounting for caches, prefetching, vector units and branches, and is still simple enough to "
-            "prove things in? <bookmark mark='b'/> Can learned indexes keep worst-case guarantees when keys are "
-            "inserted, or chosen by an adversary? <bookmark mark='c'/> And a puzzle from our own measurements. "
-            "Ferragina, Lillo and Vinciguerra proved that if the gaps between keys are independent, the segments "
-            "grow like epsilon squared. On our corpus they grow more slowly, roughly like epsilon to the one point "
-            "four. Why? <bookmark mark='d'/> This part's research problem takes the third."
+            "Here are three concrete research directions. <bookmark mark='a'/> Specify a cost model and evaluate "
+            "whether it ranks unseen implementations and workloads. <bookmark mark='b'/> Dynamic learned indexes "
+            'with worst-case guarantees already exist, including the PGM work. Reproduce an existing baseline '
+            'before asking a narrower question about update patterns, adversarial keys or resource tradeoffs. '
+            "<bookmark mark='c'/> For the segment experiment, separate a finite corpus fit from the "
+            'probabilistic theorem. Under positive independent identically distributed gaps with finite nonzero '
+            'variance, the paper analyzes a fixed-slope mean-exit-time construction in a suitable large-epsilon '
+            "regime. Our anchored greedy fit is a different procedure. <bookmark mark='d'/> First reproduce that "
+            'baseline on generated independent gaps. Then compare real, shuffled and correlated gaps across '
+            'scales and seeds. A slope through a few corpus points is a descriptive statistic, not a new '
+            'asymptotic law or a contradiction of the theorem.'
         ) as vo:
             self.play(FadeIn(head))
             for mk, q in zip("abc", qs):

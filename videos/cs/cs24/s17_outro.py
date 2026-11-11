@@ -40,13 +40,12 @@ class Outro(VoiceoverScene):
         ).arrange_in_grid(rows=2, cols=3, buff=(0.35, 0.35)).move_to(DOWN * 0.2)
         head = label(rf"Part {PART}: \ Algorithms in Practice", font_size=38).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "What we built in this part. Prefix sums and difference arrays, and the integral image. Fenwick trees "
-            "from a single bit trick, and segment trees for any associative operation, lazily. Sparse tables, "
-            "lowest common ancestors and the Cartesian tree that makes them the same problem. Two pointers, "
-            "monotonic stacks and binary search on the answer. Bit tricks, submasks and the Four Russians; meet in "
-            "the middle and square roots. Then the machine: two linear loops a hundred and forty times apart, "
-            "search layouts, vector scans, Swiss tables and radix sort, all measured honestly, and the Job at "
-            "seventy-five milliseconds."
+            'What we built in this part. Prefix sums, difference arrays and integral images; Fenwick and segment '
+            'trees with explicit range contracts; static range minima and rooted-tree ancestors; monotone '
+            'frontiers and answer search; word packing and exponential-search reductions. We then measured '
+            'concrete native implementations with retained sources, raw trials and complete output checks. Their '
+            "timings describe this workload and host. The Job's measured comparison and the modeled Pebble "
+            'ledger remain separate kinds of evidence.'
         ):
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
@@ -56,19 +55,20 @@ class Outro(VoiceoverScene):
     def payoffs(self):
         card = payoff_card([
             (r"B+ trees and vectorized query execution", [35]),
-            (r"merge bases as lowest common ancestors", [41]),
+            (r"ancestor queries and DAG merge bases", [41]),
             (r"columnar files and SIMD scans", [46]),
             (r"galloping intersection and SIMD posting-list codecs", [47]),
             (r"caches, \ tail latency and p99 against load", [48]),
             (r"the roofline: \ when memory, \ not arithmetic, \ is the limit", [60]),
         ], font_size=23)
         with self.voiceover(
-            "Where this comes back. Part 35's database indexes a billion rows with three levels of a B-plus tree, the "
-            "layout of chapter nine, and executes queries in vectors. Part 41 finds merge bases as lowest common "
-            "ancestors. Part 46 scans columnar files with vector instructions. Part 47's search engine gallops "
-            "through posting lists and decodes them with SIMD. Part 48 measures tail latency under load, which needs "
-            "the benchmarking of chapter twelve. And Part 60's roofline model makes this part's lesson exact: most "
-            "programs are limited by memory, not by arithmetic."
+            'Where this comes back. Database indexes and query engines use tree layouts, bitmaps and vector '
+            'batches. Version-control histories require ancestor reasoning on directed acyclic graphs. Search '
+            'engines intersect posting lists and decode compressed values with SIMD. Systems work studies '
+            'latency distributions under load, which calls for a sampling plan and controlled comparisons. The '
+            'roofline model later relates arithmetic intensity to resource ceilings under stated assumptions. '
+            'Together these topics show why choosing an operation count, memory model or empirical benchmark '
+            'depends on the question.'
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.3), run_time=3.0)
@@ -104,16 +104,18 @@ class Outro(VoiceoverScene):
             r"Show that every range-minimum query is a lowest-common-ancestor query in the Cartesian tree, \ and "
             r"build the tree in $O(n)$.",
             r"Prove that enumerating every submask of every mask of $n$ bits takes exactly $3^n$ steps.",
-            r"\textit{Build.} \ A Fenwick tree in the Pebble language, \ over the Job's word counts: \ answer ``how "
-            r"many words of the novel are among the top $k$?'' \ for every $k$.",
-            r"$\bigstar$ \textit{Research.} \ Our corpus's learned-index segments grow like $\varepsilon^{1.4}$, \ "
-            r"not $\varepsilon^2$. \ Model the gaps of real text, \ with their correlations, \ and prove a bound that "
-            r"matches; \ or show which property of text breaks the independent-gaps theory.",
+            r"\textit{Build.} \ Specify a bounded Pebble Fenwick design: fixed vocabulary, word lengths, counter width. \ "
+            r"Check the notes' arithmetic trace before attempting a port.",
+            r"$\bigstar$ \textit{Research.} \ Reproduce the IID fixed-slope mean-exit baseline; \ "
+            r"compare real and shuffled gaps across scales. \ A finite anchored-fit slope is not a new asymptotic law.",
         ], font_size=22)
         with self.voiceover(
-            "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build "
-            "problem: a Fenwick tree in the Pebble language, run on the emulator over the Job's own counts. The last, "
-            "marked with a star, is a research problem: its answer is not known, and the notes say where to start."
+            'Six exercises have worked guidance in the notes. Pause to attempt one before reading its solution. '
+            'The fifth asks for a bounded Fenwick design for Pebble: specify the vocabulary size, word-length '
+            'limits and counter width before implementation. The notes include an independently checked '
+            'arithmetic trace; they do not claim that a new Pebble port was executed. The last exercise is an '
+            'experimental research plan. Reproduce the cited independent-gap baseline before interpreting a '
+            'finite corpus slope, and record negative results as well as matches.'
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)

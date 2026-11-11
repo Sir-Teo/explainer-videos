@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import random
+import statistics
 
 from explainer.cs import *  # noqa: F403
 from videos.cs.cs24.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, load, mono)
@@ -23,35 +24,37 @@ class Benchmarking(VoiceoverScene):
         b = load("bench")
         runs = b["runs"]
         head = label(r"The same program, \ thirty times", font_size=34).to_edge(UP, buff=0.3)
-        lo, hi = 35.0, 80.0
-        ax = NumberLine(x_range=[lo, hi, 5], length=11.0, color=GREY_D, include_numbers=False).move_to(UP * 0.6)
-        ticks = VGroup(*[mono(f"{v:.0f}", 15, GREY_B).next_to(ax.n2p(v), DOWN, buff=0.12) for v in range(35, 81, 5)])
+        samples=[r[0]*1000 for r in runs]+[statistics.median(r[1:])*1000 for r in runs]
+        step=max(1,math.ceil((max(samples)-min(samples))/8))
+        lo=math.floor(min(samples)/step)*step-step;hi=math.ceil(max(samples)/step)*step+step
+        ax = NumberLine(x_range=[lo, hi, step], length=11.0, color=GREY_D, include_numbers=False).move_to(UP * 0.6)
+        ticks = VGroup(*[mono(f"{v:.0f}", 15, GREY_B).next_to(ax.n2p(v), DOWN, buff=0.12) for v in range(lo,hi+1,step)])
         ml = label(r"milliseconds", font_size=18, color=GREY_A).next_to(ticks, DOWN, buff=0.1)
         rng = random.Random(2)
-        first = VGroup(*[Dot(ax.n2p(min(hi, r[0] * 1000)) + UP * (0.9 + 0.5 * rng.random()), radius=0.05, color=NO)
+        first = VGroup(*[Dot(ax.n2p(r[0] * 1000) + UP * (0.9 + 0.5 * rng.random()), radius=0.05, color=NO)
                          for r in runs])
-        warm = VGroup(*[Dot(ax.n2p(min(hi, min(r[1:]) * 1000)) + UP * (0.15 + 0.5 * rng.random()), radius=0.05,
+        warm = VGroup(*[Dot(ax.n2p(statistics.median(r[1:]) * 1000) + UP * (0.15 + 0.5 * rng.random()), radius=0.05,
                             color=YES) for r in runs])
-        kl = VGroup(label(r"first repetition, \ cold", font_size=18, color=NO),
-                    label(r"best of the next five, \ warm", font_size=18, color=YES)).arrange(
+        kl = VGroup(label(r"first observation", font_size=18, color=NO),
+                    label(r"median of the later five", font_size=18, color=YES)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.08).next_to(ax, UP, buff=1.6).align_to(ax, LEFT)
         notes = VGroup(
-            label(rf"cold runs average {b['first_mean'] * 1000:.1f} ms, \ warm {b['warm_mean'] * 1000:.1f} ms: \ "
-                  r"caches, \ branch predictors, \ page faults and clock speed all warm up", font_size=21, color=NO),
-            label(rf"warm runs still spread from {b['warm_min'] * 1000:.1f} to {b['warm_max'] * 1000:.1f} ms \ "
-                  rf"(standard deviation {b['warm_sd'] * 1000:.1f} ms): \ report a distribution, \ not one number",
+            label('first versus later median: matched summaries; causes are not isolated', font_size=21, color=NO),
+            label('all thirty processes retained; plot includes every current observation',
                   font_size=21, color=YES),
-            label(r"compare medians with confidence intervals; \ repeat until the interval is small enough to decide",
+            label('predefine the sample plan; interleave variants; report sampling uncertainty',
                   font_size=21, color=WHITE),
         ).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Every number in this part came from a stopwatch, so it is fair to ask how far to trust them. <bookmark "
-            "mark='a'/> Here is one small program run thirty times, timing the same loop six times inside each run. "
-            "<bookmark mark='b'/> The first repetition is consistently slower, about a quarter, because the caches, "
-            "the branch predictors and the page tables start cold, and the processor may still be raising its clock. "
-            "Warm up before you measure. <bookmark mark='c'/> Even warm, the runs spread by more than ten percent. "
-            "A single timing is an anecdote. Report the distribution, compare medians with confidence intervals, and "
-            "keep repeating until the intervals are narrow enough to decide."
+            'The benchmark demonstration records thirty process runs, with six observations in each. <bookmark '
+            "mark='a'/> We retain every observation and compare the first with the median of the later five, so "
+            "a single sample is not compared with a selected minimum. <bookmark mark='b'/> Any "
+            'first-versus-later difference can have several causes. These clocks alone do not establish a '
+            "cold-cache effect or a particular change in processor frequency. <bookmark mark='c'/> The plot uses "
+            'an axis that contains all current observations. For a controlled comparison, choose a sample plan '
+            'in advance, randomize or interleave variants, and report uncertainty and the sampling unit. '
+            'Repeating until a preferred confidence interval appears requires a valid sequential procedure; '
+            'ordinary fixed-sample intervals do not justify optional stopping.'
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(ticks), FadeIn(ml))
             vo.wait_until("a")
@@ -67,10 +70,12 @@ class Benchmarking(VoiceoverScene):
         b = load("bench")
         pads = b["pads"]
         head = label(r"Two traps", font_size=34).to_edge(UP, buff=0.3)
-        ax = Axes(x_range=[0, 4096, 1024], y_range=[30, 80, 10], x_length=6.0, y_length=3.0,
+        low=min(p['min']*1000 for p in pads);high=max(p['max']*1000 for p in pads)
+        step=max(1,math.ceil((high-low)/5));ylo=math.floor(low/step)*step-step;yhi=math.ceil(high/step)*step+step
+        ax = Axes(x_range=[0, 4096, 1024], y_range=[ylo, yhi, step], x_length=6.0, y_length=3.0,
                   axis_config={"color": GREY_D, "include_numbers": False}).to_edge(LEFT, buff=1.0).shift(UP * 0.4)
-        xt = VGroup(*[mono(str(v), 14, GREY_B).next_to(ax.c2p(v, 30), DOWN, buff=0.1) for v in range(0, 4097, 1024)])
-        yt = VGroup(*[mono(str(v), 14, GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1) for v in range(30, 81, 10)])
+        xt = VGroup(*[mono(str(v), 14, GREY_B).next_to(ax.c2p(v, ylo), DOWN, buff=0.1) for v in range(0, 4097, 1024)])
+        yt = VGroup(*[mono(str(v), 14, GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1) for v in range(ylo,yhi+1,step)])
         xl = label(r"bytes of environment variables", font_size=18, color=GREY_A).next_to(xt, DOWN, buff=0.1)
         yl = label(r"ms: \ median of 5 runs, \ and the range", font_size=18, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
         pts = VGroup(*[Line(ax.c2p(p["pad"], p["min"] * 1000), ax.c2p(p["pad"], p["max"] * 1000), color=GREY_C,
@@ -86,26 +91,23 @@ class Benchmarking(VoiceoverScene):
             label(r"benchmark libraries add a \texttt{DoNotOptimize} sink", font_size=19, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(code_, DOWN, buff=0.3).align_to(code_, LEFT)
         notes = VGroup(
-            label(rf"\textbf{{layout bias}}: \ only the environment's size changed, \ and the median moved by up to "
-                  rf"{(b['pad_spread'] - 1) * 100:.0f}\%", font_size=21, color=HEAD),
+            label('observed spread with shuffled PAD sizes; shared-host and ASLR effects remain', font_size=21, color=HEAD),
             label(r"Mytkowicz, \ Diwan, \ Hauswirth and Sweeney (2009): \ environment size and link order can flip "
                   r"a conclusion; \ Stabilizer (2013) randomizes layout", font_size=20, color=GREY_A),
             label(r"\textbf{dead code}: \ a benchmark whose result is unused may measure nothing at all", font_size=21,
                   color=NO),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Two traps catch experienced engineers. <bookmark mark='a'/> The first is layout. We ran the same "
-            "binary with nothing changed except the size of its environment variables, which shifts where the stack "
-            "begins. The median moved by up to twenty-two percent. On a shared cloud machine part of that is noise from "
-            "neighbours, and that is the point: without randomized layouts and many repetitions, a change of that "
-            "size cannot be told apart from luck. "
-            "<bookmark mark='b'/> Todd Mytkowicz and colleagues showed in 2009 that such accidents, the environment's "
-            "size and even the order of object files at link time, can turn a measured speedup into a slowdown. "
-            "Charlie Curtsinger and Emery Berger's Stabilizer re-randomizes the layout during a run, so that "
-            "differences can be tested statistically. <bookmark mark='c'/> The second trap is the optimizer. This "
-            "loop's result is never used, so the compiler deleted it: a hundred million iterations in a "
-            "microsecond. <bookmark mark='d'/> Keep the result, and the same loop takes a hundred and twenty "
-            "milliseconds. A benchmark whose output is unused may be measuring nothing."
+            "Two traps illustrate why controls matter. <bookmark mark='a'/> We vary an environment variable's "
+            'size with a fixed, shuffled execution schedule, retaining five process runs per size. The observed '
+            'spread also includes shared-host variation and uncontrolled address randomization, so it does not '
+            "isolate a causal layout effect. <bookmark mark='b'/> Mytkowicz and colleagues studied measurement "
+            "bias from layout choices. Curtsinger and Berger's Stabilizer samples layouts during execution; our "
+            "small demonstration does not reproduce that system. <bookmark mark='c'/> The second trap is "
+            'dead-code elimination. The unused loop has no observable result; inspect the retained assembly '
+            "alongside its clock interval. <bookmark mark='d'/> The kept version has an independently checked "
+            'exact sum. Its measured time is shown rather than quoted from an earlier host. A benchmark needs '
+            'both observable work and a correctness check.'
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

@@ -171,18 +171,18 @@ class SegmentTrees(VoiceoverScene):
             label(r"push the tag down only when a later operation needs to go below it", font_size=22, color=LAM),
             label(r"random ranges, \ 500 per size: \ the lazy tree's work grows like $\log n$", font_size=22,
                   color=YES),
-            label(r"\textbf{persistence}: \ copy only the $\log n$ nodes on the path, \ and every old version stays "
-                  r"queryable", font_size=22, color=HEAD),
+            label('\\textbf{persistence}: point update copies $O(\\log n)$ path nodes; \\\\ range updates need a consistent lazy-tag copying design', font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.22).next_to(tab, DOWN, buff=0.4)
         with self.voiceover(
-            "What if the updates are ranges too? <bookmark mark='a'/> To add a value to every element from l to r, "
-            "descend as a query does, and at each covering node, update its summary and leave a tag saying: everything "
-            "below me owes this amount. <bookmark mark='b'/> The tag is pushed to the children only when a later "
-            "query or update has to go beneath it. That laziness is the whole trick. <bookmark mark='c'/> On random "
-            "ranges, touching every element costs about a quarter of n per update; the lazy tree visits a few dozen "
-            "nodes, growing with the logarithm. <bookmark mark='d'/> And because an update changes only one path of "
-            "nodes, you can copy that path instead of overwriting it, and keep every past version of the array, "
-            "queryable, for the price of a logarithm per update. That is a persistent segment tree."
+            "What if updates cover ranges too? <bookmark mark='a'/> At each fully covered segment, change its "
+            "sum by the update times segment length and leave a pending tag. <bookmark mark='b'/> Push that tag "
+            'before a later operation descends below the node. This maintains both stored sums and deferred '
+            "effects. <bookmark mark='c'/> The seeded experiment counts nodes visited by five hundred updates; "
+            'an independent difference-array construction checks every final element after the count is '
+            "captured. <bookmark mark='d'/> Persistence is a related, separate construction. A point update "
+            'copies its logarithmic root-to-leaf path. A persistent lazy range-update tree also needs a '
+            'consistent policy for copying tags and children; that extension is discussed rather than '
+            'implemented here.'
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

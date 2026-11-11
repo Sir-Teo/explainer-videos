@@ -34,21 +34,22 @@ class Hook(VoiceoverScene):
                                     stroke_width=2, tip_length=0.12) for a, b in zip(order[:10], order[1:11])])
         notes = VGroup(
             label(r"the same number of additions, \ the same big-O, \ the same answer", font_size=22, color=WHITE),
-            label(r"the array streams through the caches; \ each list node is a fresh trip to memory", font_size=22,
+            label('contiguous reads versus dependent pointer loads; cache misses are not measured', font_size=22,
                   color=HEAD),
         ).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.5)
         with self.voiceover(
             "Here are two loops that add up n numbers. <bookmark mark='a'/> The first walks an array in order. "
-            "<bookmark mark='b'/> The second follows a linked list whose nodes are scattered through memory. "
-            "<bookmark mark='c'/> Both do n additions, both are linear time, and they compute the same sum. Every "
-            "analysis in Parts 16 to 23 would call them equal. <bookmark mark='d'/> The machine does not. The array "
-            "streams through the caches a line at a time, with the prefetcher running ahead, while each list node is "
-            "a separate trip to memory that cannot start until the previous one has returned."
+            "<bookmark mark='b'/> The second follows a linked list with nodes shuffled through an allocated "
+            "pool. <bookmark mark='c'/> Both compute the same sum in linear time. That asymptotic classification "
+            "leaves constants and the memory-access pattern unspecified. <bookmark mark='d'/> Contiguous "
+            'accesses can benefit from cache lines and prefetching, while following pointers creates '
+            'dependencies between addresses. Those mechanisms motivate the experiment; elapsed time alone does '
+            'not measure cache misses or identify their individual contributions.'
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(FadeIn(c1), FadeIn(t1), FadeIn(mem), FadeIn(ml))
-            self.play(LaggedStart(*[FadeIn(s) for s in sweep], lag_ratio=0.08), run_time=1.5)
+            self.play(LaggedStart(*[FadeIn(s) for s in sweep], lag_ratio=0.08), run_time=1.0)
             vo.wait_until("b")
             self.play(FadeIn(c2), FadeIn(t2), FadeOut(sweep))
             self.play(LaggedStart(*[Create(h) for h in hops], lag_ratio=0.3), run_time=2.5)
@@ -73,12 +74,12 @@ class Hook(VoiceoverScene):
         r16 = next(r for r in rows if r["logn"] == 16)
         r24 = rows[-1]
         side = VGroup(
-            label(rf"$n = {words(rows[0]['n'])}$: \ {rows[0]['ratio']:.0f}$\times$ apart \\ (everything fits in L1)",
+            label(rf"$n = {words(rows[0]['n'])}$: \ {rows[0]['ratio']:.0f}$\times$ apart \\ (small working set; residency not measured)",
                   font_size=21, color=WHITE),
             label(rf"$n = {words(r16['n'])}$: \ {r16['ratio']:.0f}$\times$", font_size=21, color=HEAD),
             label(rf"$n = {words(r24['n'])}$: \ {r24['ratio']:.0f}$\times$ \\ ({r24['list_ns']:.0f} ns a node, \ "
                   rf"{r24['array_ns']:.1f} ns an element)", font_size=21, color=NO),
-            label(r"big-O hides the constant, \\ and here the constant is \\ the memory hierarchy \ (Part 9)",
+            label(r"same asymptotic class; different access patterns \\ timing alone does not identify the cause \\ memory hierarchy: Part 9",
                   font_size=21, color=YES),
             label(rf"{h['cpu']} \\ gcc \texttt{{-O2}}", font_size=16, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
@@ -86,13 +87,13 @@ class Hook(VoiceoverScene):
             side.width = 5.2
             side.to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "Here they are, timed on the machine that made this video. <bookmark mark='a'/> With a thousand "
-            "elements everything fits in the first-level cache, and the list is already five times slower. "
-            "<bookmark mark='b'/> At sixty-five thousand it is twenty-two times slower. <bookmark mark='c'/> At sixteen "
-            "million the array costs a nanosecond and a half per element and the list two hundred: a hundred and "
-            "forty times apart, with the same big-O. <bookmark mark='d'/> Big-O hides the constant factor, and on "
-            "real hardware the constant is mostly the memory hierarchy of Part 9. This part is about the tools that "
-            "real code is built from, and about engineering them for the machine."
+            "Here they are, timed on this shared machine. <bookmark mark='a'/> The first marked point is a "
+            "thousand elements. Read its measured ratio beside the plot. <bookmark mark='b'/> The second is "
+            "sixty-five thousand elements. <bookmark mark='c'/> The last is sixteen million. All five native "
+            'trials, the compiler flags and the complete sum checks are retained. The plotted minima describe '
+            "this workload on this host, and can change on another run. <bookmark mark='d'/> Big O still "
+            'describes growth; the measurements add information about these implementations. This part builds '
+            'everyday algorithmic tools, then asks what their concrete costs are.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(side[4]))
             vo.wait_until("a")

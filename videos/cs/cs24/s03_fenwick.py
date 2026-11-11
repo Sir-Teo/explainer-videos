@@ -75,11 +75,9 @@ class Fenwick(VoiceoverScene):
         d = load("fenwick")
         head = label(r"Why both loops are logarithmic", font_size=32).to_edge(UP, buff=0.35)
         lines = VGroup(
-            label(r"\textbf{query}: \ each step clears the lowest set bit of $i$, \ so at most $\log_2 n$ steps; \\ "
-                  r"the ranges $(i - \mathrm{lowbit}(i), i]$ tile $[1, i]$ without gaps or overlaps", font_size=22,
+            label('\\textbf{query}: clear one set bit per step; at most $\\lfloor\\log_2 n\\rfloor+1$ cells \\\\ responsibility ranges partition the prefix', font_size=22,
                   color=YES),
-            label(r"\textbf{update}: \ adding the lowest set bit moves it at least one place left, \\ so at most "
-                  r"$\log_2 n$ steps; \ and these are exactly the cells whose ranges contain $i$", font_size=22,
+            label('\\textbf{update}: move the lowest set bit left; at most $\\lfloor\\log_2 n\\rfloor+1$ cells \\\\ update indices are $1\\ldots n$', font_size=22,
                   color=NO),
             label(r"the two loops are the binary representation read in opposite directions", font_size=22,
                   color=HEAD),
@@ -89,13 +87,14 @@ class Fenwick(VoiceoverScene):
                          row_h=0.36, font_size=20, mono_cols=(), colors=[[WHITE, YES, GREY_A]] * len(rows))
         tab.next_to(lines, DOWN, buff=0.4).set_x(0)
         with self.voiceover(
-            "Why is it right, and why fast? <bookmark mark='a'/> A query clears one set bit of i each step, so it "
-            "takes at most log n steps, and the ranges it visits sit end to end, covering one to i exactly once. "
-            "<bookmark mark='b'/> An update adds the lowest set bit, which pushes that bit at least one place to the "
-            "left, so it too takes at most log n steps, and it visits exactly the cells whose ranges contain i. "
-            "<bookmark mark='c'/> The two loops read the same binary representation in opposite directions. "
-            "<bookmark mark='d'/> Measured on random operations, the cells touched grow by one each time n is "
-            "multiplied by four: about half of log n on average, because a random number has half its bits set."
+            "Why is it right, and why fast? <bookmark mark='a'/> A query clears one set bit of its positive "
+            'index each step. Its responsibility intervals partition the requested prefix. The exact count is '
+            "the index's population count, bounded by floor log base two of n plus one. <bookmark mark='b'/> An "
+            'update moves its lowest set bit left until the index exceeds n, with the same logarithmic bound. '
+            "Zero is a valid empty-prefix endpoint but never a valid update index. <bookmark mark='c'/> These "
+            "are two traversals of the same interval representation. <bookmark mark='d'/> The table measures a "
+            'fixed seeded mixture of updates and queries, with every final cell independently checked. Its '
+            'average is an observation of that distribution, rather than a universal half-logarithm identity.'
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abc", lines):
@@ -119,23 +118,24 @@ class Fenwick(VoiceoverScene):
                          colors=[[GREY_A] * 4, [GREY_A] * 4, [YES] * 4, [LAM] * 4])
         tab.next_to(head, DOWN, buff=0.5).set_x(0)
         notes = VGroup(
-            label(rf"$n = 2^{{20}}$ numbers, \ a million random operations, \ C with \texttt{{-O2}}", font_size=22,
+            label('$n=2^{20}$; naive arrays: $2^{10}$ operations; trees: $2^{20}$ \\\\ first shared trace prefix; three process runs; minima', font_size=22,
                   color=WHITE),
-            label(rf"Fenwick is {t['segtree_ns'] / t['fenwick_ns']:.1f}$\times$ faster than the segment tree here: "
-                  r"\ one array, \ $n$ cells, \ no recursion", font_size=22, color=YES),
-            label(r"the naive structures are a thousand times slower: \ the asymptotics do decide this one",
+            label('per-operation minima for the stated trace lengths; full answer checks outside timers', font_size=22, color=YES),
+            label('linear updates or queries cost more here; workload lengths differ',
                   font_size=22, color=NO),
             label(r"in practice: \ order books, \ leaderboards, \ arithmetic coding's frequency tables \ (Fenwick's "
                   r"original use)", font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.24).next_to(tab, DOWN, buff=0.45)
         with self.voiceover(
-            "How do they compare on a real machine? <bookmark mark='a'/> A million numbers, a million random "
-            "operations, half updates and half prefix queries, in C. <bookmark mark='b'/> The Fenwick tree takes "
-            "about fifty nanoseconds an operation, nearly three times faster than a segment tree, because it is one "
-            "array of n cells with no recursion and no wasted nodes. <bookmark mark='c'/> The naive structures, "
-            "constant time on one operation and linear on the other, take well over a hundred thousand. Here the "
-            "asymptotics really do decide. <bookmark mark='d'/> Fenwick designed his tree for the frequency tables "
-            "of arithmetic coding; order books and game leaderboards use it today."
+            "How do they compare on a real machine? <bookmark mark='a'/> All four structures hold two to the "
+            'twenty values, but their timed operation counts differ. The slow plain and prefix arrays receive '
+            'only the first thousand and twenty-four operations; Fenwick and segment trees receive the full '
+            "million-operation trace. The caption makes this distinction explicit. <bookmark mark='b'/> Read the "
+            'per-operation minima from three process runs. Complete answer streams are checked against an '
+            "independent block-sum reference after timing. <bookmark mark='c'/> This demonstrates the cost of "
+            'linear updates or queries at this scale. It is not an equal-length, steady-state benchmark of all '
+            "four structures. <bookmark mark='d'/> Fenwick's original application was arithmetic coding's "
+            'frequency tables, a useful example of matching operations to a data structure.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule),
                       LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.3))
