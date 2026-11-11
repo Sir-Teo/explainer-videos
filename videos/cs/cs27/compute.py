@@ -27,18 +27,89 @@ Items:
 
 from __future__ import annotations
 
+import argparse
+import functools
 import itertools
+import json
+import platform
+import sys
+from pathlib import Path
 import math
 import random
 import statistics
 import time
 
 from explainer.ai.cache import Cache
+from explainer.cache_lock import cache_lock, locked_item
+from . import computational_references as R
 from explainer.cs.algo import proofs as P
 from explainer.cs.algo import complexity as X
 
-CACHE = Cache("cs27")
-load = CACHE.load
+SOURCE_FILES=tuple(Path(p) for p in (__file__,P.__file__,X.__file__,R.__file__,
+    str(Path(__file__).with_name('reference_native.cpp')),'explainer/ai/cache.py','explainer/cache_lock.py','pyproject.toml'))
+def source_signature():
+    return {str(p.resolve().relative_to(Path.cwd())):R.digest(p.read_bytes()) for p in SOURCE_FILES}
+def cache_current(name,path=None):
+    try:
+        d=json.loads((CACHE.path(name) if path is None else Path(path)).read_text())
+        return d.get('schema')==2 and d.get('source_sha256')==source_signature() and all(
+            Path(a['path']).is_file() and R.digest(Path(a['path']).read_bytes())==a['sha256'] for a in d['artifacts'])
+    except (OSError,ValueError,KeyError):return False
+class ProofCache(Cache):
+    @locked_item(lambda self,name:self.path(name))
+    def load(self,name):
+        if not cache_current(name): self.save(name,ITEMS[name]())
+        return super().load(name)
+    def main(self,items,doc=None):
+        parser=argparse.ArgumentParser(description=doc);parser.add_argument('names',nargs='*',default=list(items));parser.add_argument('--force',action='store_true');a=parser.parse_args()
+        if any(n not in items for n in a.names):parser.error('unknown producer')
+        for name in a.names:
+            with cache_lock(self.path(name)):
+                if not a.force and cache_current(name):print('  cached',name,flush=True);continue
+                start=time.monotonic();print('  compute',name,flush=True)
+                self.save(name,items[name]());print('  done',name,f'{time.monotonic()-start:.3f}s',flush=True)
+CACHE=ProofCache('cs27')
+load=CACHE.load
+CURRENT=None
+
+def _producer(name,fn):
+    @functools.wraps(fn)
+    def run():
+        global CURRENT
+        assert CURRENT is None
+        before=source_signature();started=time.time_ns()
+        with R.Recorder(P,X) as recorder:
+            CURRENT=recorder
+            try:data=fn()
+            finally:CURRENT=None
+        evidence=recorder.evidence()
+        if '_evidence' in data:evidence['producer_witnesses']=data.pop('_evidence')
+        # Original wall-clock spans include logging overhead; display only the
+        # recorded teaching-call intervals, never serialization or validation.
+        if name=='pit':
+            for row in data['rows']:
+                times=[c['elapsed_ns']/1e9 for c in evidence['calls'] if c['fn']=='P.vandermonde_test'
+                       and evidence['objects'][c['input']]['args'][1]==row['p']
+                       and not evidence['objects'][c['input']]['kwargs'].get('wrong',False)]
+                row['seconds']=statistics.mean(times);row['raw_seconds']=times
+        if name=='williams':
+            for row,build,search in zip(data['rows'],recorder.times('P.sat_to_ov'),recorder.times('P.ov_brute')):
+                row['build_s']=build;row['ov_s']=search
+        raw=R.artifact(f'{name}-{started}-raw.json.gz',evidence)
+        try:
+            check=R.validate_recording(name,evidence)
+        except BaseException as exc:
+            evidence['validation_failure']=dict(type=type(exc).__name__,message=str(exc))
+            R.artifact(f'{name}-{started}-failed-check.json.gz',evidence)
+            raise
+        saved=R.artifact(f'{name}-{started}-checked.json.gz',evidence)
+        assert before==source_signature()
+        data.update(schema=2,item=name,source_sha256=before,artifacts=[raw,saved],validation=check,
+                    provenance=dict(started_utc_ns=started,finished_utc_ns=time.time_ns(),python=sys.version,
+                        platform=platform.platform(),rng='seeded random.Random, noncryptographic teaching experiments',
+                        timing='Teaching call intervals; full serialization and independent checks excluded. Host-specific finite measurements.'))
+        return data
+    return run
 
 WEB = [[1, 2, -3], [-1, 3, 4], [-2, -3, -4], [1, -2, 4], [-1, 2, 3]]
 
@@ -89,10 +160,7 @@ def compute_switching() -> dict:
             rho = P.random_restriction(n, p, rng)
             g = P.restrict(f, rho)
             free = [v for v in range(n) if v not in rho]
-            if len(free) > 10:
-                d = 99
-            else:
-                d = P.dt_depth(P.truth_table(g, free), len(free))
+            d = P.dt_depth(P.truth_table(g, free), len(free))
             hist[d] = hist.get(d, 0) + 1
         ge = {s: sum(c for d, c in hist.items() if d >= s) / trials for s in (1, 2, 3)}
         rows.append({"p": p, "hist": {str(k): v for k, v in sorted(hist.items())}, "ge": ge,
@@ -183,83 +251,67 @@ def compute_blr() -> dict:
 
 
 def compute_maxsat() -> dict:
-    rng = random.Random(7)
-    rows = []
-    for ratio in (4.0, 5.0, 6.0, 8.0):
-        n = 100
-        m = int(ratio * n)
-        rnd, ws = [], []
-        for _ in range(5):
-            cl = X.random_ksat(n, m, 3, rng)
+    rng=random.Random(7);rows=[];witnesses=[]
+    for ratio in (4.0,5.0,6.0,8.0):
+        n=100;m=int(ratio*n);rnd=[];ws=[]
+        for trial in range(5):
+            cl=X.random_ksat(n,m,3,rng);assignments=[]
             for _ in range(20):
-                a = [False] + [rng.random() < 0.5 for _ in range(n)]
-                rnd.append(sum(any(a[abs(l)] == (l > 0) for l in c) for c in cl) / m)
-            best, _ = P.walksat(n, cl, rng, flips=4000)
-            ws.append(best / m)
-        rows.append({"ratio": ratio, "random": statistics.mean(rnd), "walksat": statistics.mean(ws)})
-    return {"rows": rows}
+                a=[False]+[rng.random()<0.5 for _ in range(n)]
+                count=sum(any(a[abs(l)]==(l>0) for l in c) for c in cl)
+                assignments.append(dict(model=a,satisfied=count));rnd.append(count/m)
+            best,model=P.walksat(n,cl,rng,flips=4000);ws.append(best/m)
+            witnesses.append(dict(ratio=ratio,trial=trial,n=n,clauses=cl,random_assignments=assignments,walksat_model=model,walksat_satisfied=best))
+        rows.append(dict(ratio=ratio,random=statistics.mean(rnd),walksat=statistics.mean(ws)))
+    return dict(rows=rows,_evidence=witnesses)
 
 
 def compute_vc() -> dict:
-    rng = random.Random(8)
-    rows = []
-    n = 40
-    for k in (4, 6, 8, 10, 12):
-        cover = rng.sample(range(n), k)
-        others = [v for v in range(n) if v not in cover]
-        edges = set()
+    rng=random.Random(8);rows=[];witnesses=[];n=40
+    for k in (4,6,8,10,12):
+        planted=rng.sample(range(n),k);others=[v for v in range(n) if v not in planted];edges=set()
         for v in others:
-            for u in rng.sample(cover, min(2, k)):
-                edges.add((min(u, v), max(u, v)))
-        for u, w in itertools.combinations(cover, 2):
-            if rng.random() < 0.3:
-                edges.add((u, w))
-        edges = sorted(edges)
-        t = time.perf_counter()
-        c, nodes = P.vc_branch(edges, k)
-        bt = time.perf_counter() - t
-        ker = P.buss_kernel(edges, k)
-        rows.append({"k": k, "edges": len(edges), "found": c is not None, "nodes": nodes, "bound": 2 ** (k + 1) - 1,
-                     "seconds": bt, "brute_subsets": math.comb(n, k),
-                     "kernel_edges": len(ker[1]) if ker else None, "forced": len(ker[0]) if ker else None})
-    return {"n": n, "rows": rows}
+            for u in rng.sample(planted,min(2,k)):edges.add(tuple(sorted((u,v))))
+        for u,w in itertools.combinations(planted,2):
+            if rng.random()<0.3:edges.add(tuple(sorted((u,w))))
+        edges=sorted(edges);covers=[];seconds=[];counts=[]
+        for _ in range(30):
+            c,nodes=P.vc_branch(edges,k);covers.append(c);counts.append(nodes);seconds.append(CURRENT.times('P.vc_branch')[-1])
+        assert len(set(counts))==1
+        ker=P.buss_kernel(edges,k)
+        rows.append(dict(k=k,edges=len(edges),found=c is not None,nodes=nodes,bound=2**(k+1)-1,seconds=statistics.median(seconds),raw_seconds=seconds,brute_subsets=math.comb(n,k),kernel_edges=len(ker[1]) if ker else None,forced=len(ker[0]) if ker else None))
+        witnesses.append(dict(n=n,k=k,edges=edges,planted_cover=planted,covers=covers,kernel=ker))
+    return dict(n=n,rows=rows,_evidence=witnesses)
 
 
 def compute_permanent() -> dict:
-    rng = random.Random(9)
-    rows = []
-    for n in (8, 10, 12, 14, 16, 18, 20):
-        A = [[rng.randrange(0, 2) for _ in range(n)] for _ in range(n)]
-        t = time.perf_counter()
-        pm = P.permanent_ryser(A)
-        tp = time.perf_counter() - t
-        t = time.perf_counter()
-        d = P.det_bareiss(A)
-        td = time.perf_counter() - t
-        rows.append({"n": n, "perm": pm, "perm_s": tp, "det": d, "det_s": td})
-    big = []
-    for n in (50, 100, 200):
-        A = [[rng.randrange(0, 2) for _ in range(n)] for _ in range(n)]
-        t = time.perf_counter()
-        P.det_bareiss(A)
-        big.append({"n": n, "det_s": time.perf_counter() - t})
-    return {"rows": rows, "det_big": big}
+    rng=random.Random(9);rows=[];big=[]
+    for n in (8,10,12,14,16,18,20):
+        A=[[rng.randrange(2) for _ in range(n)] for _ in range(n)];perms=[];dets=[];pt=[];dt=[]
+        for _ in range(30):
+            perms.append(P.permanent_ryser(A));pt.append(CURRENT.times('P.permanent_ryser')[-1])
+            dets.append(P.det_bareiss(A));dt.append(CURRENT.times('P.det_bareiss')[-1])
+        assert len(set(perms))==len(set(dets))==1
+        rows.append(dict(n=n,perm=perms[0],perm_s=statistics.median(pt),det=dets[0],det_s=statistics.median(dt),perm_raw_seconds=pt,det_raw_seconds=dt))
+    for n in (50,100,200):
+        A=[[rng.randrange(2) for _ in range(n)] for _ in range(n)];dets=[];dt=[]
+        for _ in range(30):dets.append(P.det_bareiss(A));dt.append(CURRENT.times('P.det_bareiss')[-1])
+        assert len(set(dets))==1
+        big.append(dict(n=n,det=dets[0],det_s=statistics.median(dt),raw_seconds=dt))
+    return dict(rows=rows,det_big=big)
 
 
 def compute_finegrained() -> dict:
-    rng = random.Random(10)
-    ov, ts = [], []
-    for n in (500, 1000, 2000, 4000):
-        A = [rng.getrandbits(64) | (1 << 63) for _ in range(n)]
-        B = [rng.getrandbits(64) | (1 << 63) for _ in range(n)]
-        t = time.perf_counter()
-        P.ov_brute(A, B)
-        ov.append({"n": n, "seconds": time.perf_counter() - t})
-        xs = [rng.randrange(-10 ** 9, 10 ** 9) | 1 for _ in range(n)]        # all odd: no triple sums to 0
-        t = time.perf_counter()
-        r = P.three_sum(xs)
-        ts.append({"n": n, "seconds": time.perf_counter() - t, "found": r is not None})
-    return {"ov": ov, "three_sum": ts}
+    rng=random.Random(10);ov=[];ts=[]
+    for n in (500,1000,2000,4000):
+        A=[rng.getrandbits(64)|(1<<63) for _ in range(n)];B=[rng.getrandbits(64)|(1<<63) for _ in range(n)]
+        xs=[rng.randrange(-10**9,10**9)|1 for _ in range(n)];ot=[];tt=[]
+        for _ in range(30):
+            answer=P.ov_brute(A,B);ot.append(CURRENT.times('P.ov_brute')[-1]);assert not answer
+            triple=P.three_sum(xs);tt.append(CURRENT.times('P.three_sum')[-1]);assert triple is None
+        ov.append(dict(n=n,seconds=statistics.median(ot),raw_seconds=ot,answer=False,negative_certificate='all vectors share bit 63'))
+        ts.append(dict(n=n,seconds=statistics.median(tt),raw_seconds=tt,found=False,negative_certificate='sum of three odd integers is odd, hence nonzero'))
+    return dict(ov=ov,three_sum=ts)
 
 
 def compute_planted() -> dict:
@@ -276,25 +328,20 @@ def compute_planted() -> dict:
 
 
 def compute_oneway() -> dict:
-    rows = []
-    for bits in (24, 32, 40, 48, 56, 64, 72, 80):
-        mul, fac, steps = [], [], []
-        for s in range(5):
-            rng = random.Random(100 * bits + s)
-            p = P.next_prime(rng.getrandbits(bits // 2) | (1 << (bits // 2 - 1)))
-            q = P.next_prime(rng.getrandbits(bits // 2) | (1 << (bits // 2 - 1)))
-            t = time.perf_counter()
-            for _ in range(1000):
-                N = p * q
-            mul.append((time.perf_counter() - t) / 1000)
-            t = time.perf_counter()
-            f, st = P.pollard_rho(N, random.Random(s))
-            fac.append(time.perf_counter() - t)
-            steps.append(st)
-            assert f in (p, q)
-        rows.append({"bits": bits, "mul_s": statistics.median(mul), "factor_s": statistics.median(fac),
-                     "steps": statistics.median(steps)})
-    return {"rows": rows}
+    rows=[];witnesses=[]
+    for bits in (24,32,40,48,56,64,72,80):
+        mul=[];fac=[];steps=[];actual_bits=[]
+        for seed in range(5):
+            rng=random.Random(100*bits+seed)
+            p=P.next_prime(rng.getrandbits(bits//2)|(1<<(bits//2-1)));q=P.next_prime(rng.getrandbits(bits//2)|(1<<(bits//2-1)))
+            start=time.perf_counter_ns()
+            for _ in range(1000):N=p*q
+            multiplication_ns=time.perf_counter_ns()-start;mul.append(multiplication_ns/1e12)
+            factor,count=P.pollard_rho(N,random.Random(seed));fac.append(CURRENT.times('P.pollard_rho')[-1]);steps.append(count);actual_bits.append(N.bit_length())
+            assert factor is not None and 1<factor<N and N%factor==0
+            witnesses.append(dict(requested_bits=bits,seed=seed,p=p,q=q,N=N,actual_bits=N.bit_length(),factor=factor,steps=count,multiplication_batch_ns=multiplication_ns,batch_operations=1000,factor_seconds=fac[-1]))
+        rows.append(dict(bits=bits,actual_bits=actual_bits,mul_s=statistics.median(mul),factor_s=statistics.median(fac),steps=statistics.median(steps),mul_raw_seconds=mul,factor_raw_seconds=fac,raw_steps=steps))
+    return dict(rows=rows,_evidence=witnesses)
 
 
 def compute_unique() -> dict:
@@ -304,8 +351,12 @@ def compute_unique() -> dict:
         edges, planted = P.ug_instance(n, m, k, eps, random.Random(5))
         roots = random.Random(1).sample(range(n), 10)
         best = max(P.ug_value(edges, P.ug_propagate(n, edges, k, r), k) for r in roots)
-        rnd = statistics.mean(P.ug_value(edges, [random.Random(s).randrange(k) for _ in range(n)], k)
-                              for s in range(5))
+        random_values=[]
+        for seed in range(5):
+            trial_rng=random.Random(seed)
+            labels=[trial_rng.randrange(k) for _ in range(n)]
+            random_values.append(P.ug_value(edges,labels,k))
+        rnd=statistics.mean(random_values)
         rows.append({"eps": eps, "planted": P.ug_value(edges, planted, k), "propagate": best, "random": rnd})
     return {"n": n, "m": m, "k": k, "rows": rows}
 
@@ -341,7 +392,69 @@ def compute_pit() -> dict:
     return {"n": n, "trials": trials, "terms": math.factorial(n), "degree": n * (n - 1) // 2, "rows": rows}
 
 
-ITEMS = {k[8:]: v for k, v in globals().items() if k.startswith("compute_")}
+def _fs_challenge(statement,history,p):
+    import hashlib
+    payload=b'CS27-SUMCHECK-FS-TEACHING-v1\0'+json.dumps(dict(statement=statement,history=history),sort_keys=True,separators=(',',':')).encode()
+    limit=(1<<256)//p*p
+    for counter in itertools.count():
+        raw=hashlib.sha256(payload+counter.to_bytes(8,'big')).digest();value=int.from_bytes(raw,'big')
+        if value<limit:return value%p,dict(counter=counter,digest=raw.hex())
+
+def _fs_verify(statement,proof):
+    try:
+        n=statement['n'];p=statement['p'];clauses=statement['clauses'];cur=statement['claim']%p;history=[];prefix=[]
+        if n!=20 or not P.is_prime(p) or statement['degree_bound']!=1 or len(proof)!=n:return False
+        if any(sum(abs(l)==v for c in clauses for l in c)>1 for v in range(1,n+1)):return False
+        for message in proof:
+            if len(message)!=2 or any(type(v) is not int or not 0<=v<p for v in message):return False
+            if sum(message)%p!=cur:return False
+            history.append(dict(message=message))
+            r,_=_fs_challenge(statement,history,p);cur=(message[0]+r*(message[1]-message[0]))%p
+            history[-1]['challenge']=r;prefix.append(r)
+        return cur==P.arith_eval(clauses,prefix,p)
+    except (ValueError,TypeError,KeyError,IndexError):return False
+
+def compute_fiat_shamir() -> dict:
+    import copy
+    n=20;p=(1<<61)-1;clauses=[[i,i+1] for i in range(1,n+1,2)]
+    statement=dict(n=n,p=p,clauses=clauses,claim=3**10,degree_bound=1)
+    def suffix_sum(prefix):
+        # This intentionally structured example factors over ten disjoint pairs.
+        product=1
+        for a,b in clauses:
+            if b<=len(prefix):value=prefix[a-1]+prefix[b-1]-prefix[a-1]*prefix[b-1]
+            elif a<=len(prefix):value=1+prefix[a-1]
+            else:value=3
+            product=product*value%p
+        return product
+    prefix=[];proof=[];history=[];rounds=[];cur=statement['claim']
+    for i in range(n):
+        message=[suffix_sum(prefix+[v]) for v in (0,1)];assert sum(message)%p==cur
+        history.append(dict(message=message));r,hash_record=_fs_challenge(statement,history,p)
+        cur=(message[0]+r*(message[1]-message[0]))%p;history[-1]['challenge']=r;prefix.append(r);proof.append(message)
+        rounds.append(dict(round=i+1,message=message,r=r,next=cur,hash=hash_record))
+    cases=[]
+    def test(label,st,pr):cases.append(dict(label=label,statement=st,proof=pr,accepted=_fs_verify(st,pr)))
+    test('honest structured 20-variable instance',copy.deepcopy(statement),copy.deepcopy(proof))
+    st=copy.deepcopy(statement);st['claim']+=1;test('altered count claim',st,copy.deepcopy(proof))
+    pr=copy.deepcopy(proof);pr[0][0]=(pr[0][0]+1)%p;test('altered message',copy.deepcopy(statement),pr)
+    st=copy.deepcopy(statement);st['clauses'][0][0]*=-1;test('altered statement formula',st,copy.deepcopy(proof))
+    test('truncated proof',copy.deepcopy(statement),copy.deepcopy(proof[:-1]))
+    pr=copy.deepcopy(proof);pr[0].append(0);test('oversized degree message',copy.deepcopy(statement),pr)
+    assert cases[0]['accepted'] and not any(c['accepted'] for c in cases[1:])
+    return dict(n=n,clauses=10,true=3**10,p=p,rounds=n,scope='A structured factorable teaching example with transcript-bound hash challenges and six actual mutation checks. No generic Fiat-Shamir security theorem, succinctness claim or deployed proof system.',_evidence=dict(statement=statement,proof=proof,rounds=rounds,cases=cases,challenge_domain='CS27-SUMCHECK-FS-TEACHING-v1 with NUL terminator; canonical JSON; SHA-256 rejection sampling'))
+
+def compute_blr_minima() -> dict:
+    records=[];best={};N=16
+    for mask in range(1<<N):
+        table=[mask>>x&1 for x in range(N)];spectrum=R.fourier(table,4)
+        distance=(N-max(spectrum))//2;bad=(N**3-sum(c**3 for c in spectrum))//(2*N)
+        records.append([mask,distance,bad])
+        if distance not in best or bad<best[distance]['bad_pairs']:
+            best[distance]=dict(distance_numerator=distance,distance=distance/N,bad_pairs=bad,rejection=bad/N**2,witness=mask)
+    return dict(n=4,functions=len(records),rows=[best[k] for k in sorted(best)],_evidence=dict(records=records,rows=[best[k] for k in sorted(best)]))
+
+ITEMS = {k[8:]: _producer(k[8:],v) for k,v in list(globals().items()) if k.startswith("compute_")}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

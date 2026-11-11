@@ -54,15 +54,7 @@ class Derandom(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).next_to(seed, RIGHT, buff=1.6).align_to(seed, UP)
         fit_right(lines)
         with self.voiceover(
-            "Part 20's frontier previewed the idea; here is how it works. <bookmark mark='a'/> Start with a short "
-            "truly random seed, only logarithmically many bits. Choose many subsets of its positions that overlap "
-            "very little, a combinatorial design, and apply a hard function f to each subset. Each application "
-            "gives one output bit. <bookmark mark='b'/> Noam Nisan and Avi Wigderson showed in 1988 that the small "
-            "overlaps keep the outputs nearly independent. <bookmark mark='c'/> If some small circuit could tell this "
-            "output from real coins, a hybrid argument would turn it into a small circuit that computes f, "
-            "contradicting f's hardness. <bookmark mark='d'/> So the output fools every small circuit, and a "
-            "randomized algorithm is one. With a logarithmic seed there are only polynomially many seeds: try them "
-            "all and take the majority. No coins at all."
+            "The Nisan–Wigderson construction links circuit hardness with pseudorandomness. <bookmark mark='a'/> Apply a hard Boolean function to overlapping subsets of a random seed. The subset system must satisfy quantitative design bounds. <bookmark mark='b'/> The picture is schematic: small overlaps alone do not prove that arbitrary output bits are independent. The theorem controls distinguishability by circuits of a specified size. <bookmark mark='c'/> A hybrid argument converts a successful distinguisher into a circuit predicting the hard function; suitable hardness amplification supplies the needed average-case hardness. <bookmark mark='d'/> Under sufficiently strong, efficiently evaluable hardness assumptions, the seed can be logarithmic in the simulated input length. Enumerating all seeds then yields deterministic polynomial-time simulation."
         ) as vo:
             self.play(FadeIn(head), FadeIn(seed), FadeIn(sl))
             vo.wait_until("a")
@@ -76,7 +68,7 @@ class Derandom(VoiceoverScene):
 
     def identity(self):
         d = load("pit")
-        head = label(r"The problem nobody can derandomize", font_size=34).to_edge(UP, buff=0.3)
+        head = label('General circuit PIT; a known identity as an example', font_size=34).to_edge(UP, buff=0.3)
         eq = MathTex(r"\det \begin{pmatrix} 1 & x_1 & x_1^2 & \cdots \\ 1 & x_2 & x_2^2 & \cdots \\ \vdots & & & "
                      r"\ddots \end{pmatrix} \;\overset{?}{=}\; \prod_{i < j} (x_j - x_i)", font_size=34, color=WHITE)
         eq.next_to(head, DOWN, buff=0.35)
@@ -94,20 +86,11 @@ class Derandom(VoiceoverScene):
                   rf"{d['rows'][-1]['seconds'] * 1e6:.0f} $\mu$s", font_size=21, color=WHITE),
             label(r"\textbf{Schwartz--Zippel}: \ a nonzero polynomial of degree $d$ vanishes at a random point with "
                   r"probability $\le d/p$", font_size=21, color=HEAD),
-            label(r"identity testing is in coRP; \ no deterministic polynomial algorithm is known", font_size=21,
+            label('general arithmetic-circuit PIT: randomized; deterministic polynomial time remains open', font_size=21,
                   color=NO),
         ).arrange(DOWN, buff=0.2).next_to(tl, DOWN, buff=0.3)
         with self.voiceover(
-            "Here is the problem at the centre of derandomization. <bookmark mark='a'/> Is this determinant, the "
-            "Vandermonde determinant, equal to the product of all the differences? Expanding it for ten variables "
-            "would produce over three and a half million terms. <bookmark mark='b'/> Instead, pick random values "
-            "modulo a prime and compare the two sides: about a tenth of a millisecond. Richard DeMillo and Richard "
-            "Lipton, Jacob Schwartz and Richard Zippel proved that a nonzero polynomial of degree d vanishes at a "
-            "random point with probability at most d over p. <bookmark mark='c'/> The true identity passed every "
-            "test. A false one, with a single sign changed, slipped through a little less often than the bound allows when "
-            "the field is tiny, and never once in five thousand tries over a field of a million. <bookmark "
-            "mark='d'/> So identity testing has a fast randomized algorithm. Nobody knows a deterministic "
-            "polynomial one."
+            "General arithmetic-circuit identity testing remains a central derandomization problem. The Vandermonde formula is a known identity used to illustrate the randomized test. <bookmark mark='a'/> Evaluating a determinant and its product expression at a point avoids explicitly expanding all factorially many permutation terms. The recorded timings measure this implementation on this host. <bookmark mark='b'/> Over a prime field, a nonzero polynomial of total degree d has at most d divided by the field size probability of vanishing at uniformly independent coordinates. The field and formal-polynomial assumptions matter. <bookmark mark='c'/> We retain every sampled point and compare both true and deliberately false expressions with an independent native computation. Zero observed false passes is a finite sample result. <bookmark mark='d'/> The open problem concerns general circuit representations with suitable degree and field access, not this specific identity, which has a deterministic proof."
         ) as vo:
             self.play(FadeIn(head), Write(eq))
             vo.wait_until("a")
@@ -130,7 +113,7 @@ class Derandom(VoiceoverScene):
                   r"polynomial time", font_size=22, color=YES),
             label(r"the converse also holds, \ in part: \ derandomizing identity testing would itself prove circuit "
                   r"lower bounds \ (Kabanets and Impagliazzo, 2004)", font_size=22, color=NO),
-            label(r"so derandomization and lower bounds are \textbf{the same problem}, \ seen from two sides",
+            label('precise conditional links connect derandomization and circuit lower bounds',
                   font_size=22, color=DATA),
             label(r"the poster child: \ primality, \ randomized since the 1970s, \ deterministic since 2002 \ (AKS)",
                   font_size=22, color=LAM),
@@ -138,15 +121,7 @@ class Derandom(VoiceoverScene):
                   color=GREY_A),
         ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "This turns into a striking trade-off. <bookmark mark='a'/> Russell Impagliazzo and Avi Wigderson "
-            "proved in 1997: if some problem solvable in exponential time requires exponential-size circuits, then "
-            "P equals BPP. <bookmark mark='b'/> Almost everyone believes that hypothesis, so almost everyone "
-            "believes randomness gives no extra power to polynomial-time algorithms. <bookmark mark='c'/> The "
-            "converse holds too, in part: Valentine Kabanets and Impagliazzo showed that removing the coins from "
-            "polynomial identity testing would itself prove new circuit lower bounds. <bookmark mark='d'/> So "
-            "derandomization and lower bounds are the same problem seen from two sides. <bookmark mark='e'/> "
-            "Primality is the poster child: randomized tests since the 1970s, a deterministic polynomial one since "
-            "2002. <bookmark mark='f'/> In practice nobody uses the deterministic test: Miller-Rabin is far faster."
+            "Hardness and derandomization have precise conditional connections. <bookmark mark='a'/> Impagliazzo and Wigderson showed that if some language in E, deterministic time two to a constant times n, requires exponential-size Boolean circuits, then P equals BPP. <bookmark mark='b'/> This is a circuit-hardness assumption with a particular quantitative strength, rather than a consequence of P differing from NP alone. <bookmark mark='c'/> Kabanets and Impagliazzo connected suitable deterministic identity testing over integer arithmetic circuits to a disjunction of new Boolean or arithmetic circuit lower bounds. <bookmark mark='d'/> These implications connect different problems; they do not establish an unrestricted equivalence between all lower bounds and all derandomization. <bookmark mark='e'/> Primality provides a concrete success: the AKS algorithm places it in deterministic polynomial time. <bookmark mark='f'/> Efficient probabilistic tests remain useful in practice; this engineering comparison depends on the algorithms and input sizes."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):

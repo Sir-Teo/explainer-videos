@@ -36,19 +36,11 @@ class Pcp(VoiceoverScene):
                   r"\tfrac12$", font_size=22, color=NO),
             label(r"\textbf{the PCP theorem}: \ NP = PCP$(O(\log n), O(1))$ \ (Arora--Safra; \ Arora, \ Lund, \ "
                   r"Motwani, \ Sudan, \ Szegedy, \ 1992)", font_size=22, color=HEAD),
-            label(r"H\aa stad \ (2001): \ 3 bits are enough, \ with error just above $\tfrac12$", font_size=22,
+            label('H\\aa stad: 3 queries; completeness $1-\\varepsilon$, soundness $\\tfrac12+\\varepsilon$', font_size=22,
                   color=LAM),
         ).arrange(DOWN, buff=0.25).next_to(bl, DOWN, buff=0.4)
         with self.voiceover(
-            "Here is the most surprising theorem in this part. <bookmark mark='a'/> Take any statement with an NP "
-            "proof, say that a formula is satisfiable. The proof can be rewritten, in polynomial length, in a special "
-            "robust format, so that a verifier who flips a logarithmic number of coins and reads just a constant "
-            "number of bits of it can check it. <bookmark mark='b'/> A correct proof is always accepted. <bookmark "
-            "mark='c'/> If the statement is false, every purported proof is rejected at least half the time. "
-            "<bookmark mark='d'/> That is the PCP theorem, proved in 1992 by Sanjeev Arora and Shmuel Safra, and "
-            "Arora, Carsten Lund, Rajeev Motwani, Madhu Sudan and Mario Szegedy. <bookmark mark='e'/> Johan Håstad "
-            "later showed that three bits suffice. Reading three bits of a proof, chosen at random, is as convincing "
-            "as reading all of it, given a proof written the right way."
+            "The PCP theorem is a statement about specially encoded proofs and precise acceptance probabilities. <bookmark mark='a'/> A polynomial-time verifier uses logarithmically many random bits and queries a constant number of bits of a polynomial-length proof. <bookmark mark='b'/> For each true input there exists a proof accepted with probability one. <bookmark mark='c'/> For each false input every purported proof is accepted with probability at most one half. This does not promise to detect every isolated changed bit. <bookmark mark='d'/> Arora and Safra, and Arora, Lund, Motwani, Sudan and Szegedy established the theorem; later work refined its parameters. <bookmark mark='e'/> Håstad’s three-query refinement has completeness arbitrarily close to one and soundness just above one half. The near-perfect completeness qualifier matters; it cannot simply inherit the preceding perfect-completeness statement."
         ) as vo:
             self.play(FadeIn(head), FadeIn(bits), FadeIn(bl))
             vo.wait_until("a")
@@ -82,22 +74,13 @@ class Pcp(VoiceoverScene):
             label(r"three queries; \ linear functions always pass", font_size=20, color=YES),
             label(r"we corrupted a linear function in $t$ places \\ and computed the exact rejection rate", font_size=20,
                   color=GREY_A),
-            label(r"small distance $\delta$: \ rejection $\approx 3\delta - 6\delta^2$, \\ the bound of Bellare et al. "
-                  r"(1996)", font_size=20, color=HEAD),
+            label('Bellare et al.: rejection $\\ge 3\\delta-6\\delta^2$; bound in the stated distance range', font_size=20, color=HEAD),
             label(r"far from linear $\Rightarrow$ caught often: \\ the kind of robustness PCPs are built from",
                   font_size=20, color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(ax, RIGHT, buff=0.6).align_to(ax, UP)
         fit_right(notes)
         with self.voiceover(
-            "The full proof is long, but its flavour fits in a small experiment. <bookmark mark='a'/> Is a Boolean "
-            "function on eight bits a parity, the exclusive or of some subset of its inputs? <bookmark mark='b'/> "
-            "Manuel Blum, Michael Luby and Ronitt Rubinfeld proposed a test: pick two random inputs x and y, and "
-            "check that f of x plus f of y equals f of x exclusive-or y. <bookmark mark='c'/> It reads three values, "
-            "and parities always pass. <bookmark mark='d'/> We took a parity, corrupted it in more and more places, "
-            "and computed the exact probability that the test rejects. <bookmark mark='e'/> For small distances it "
-            "follows three delta minus six delta squared, the bound proved by Mihir Bellare and coauthors. <bookmark "
-            "mark='f'/> A function far from every parity is caught often. PCP constructions encode proofs so that "
-            "every wrong proof is far from every right one, and tests like this one find the difference."
+            "The BLR test provides an executable local-testing example, rather than a complete PCP construction. <bookmark mark='a'/> The target is a linear Boolean function: parity of a subset of the input bits, including the zero function. A constant-one offset is not linear in this convention. <bookmark mark='b'/> Draw x and y independently and uniformly, then test whether f of x plus f of y equals f of x exclusive-or y, with output addition in the field of two elements. <bookmark mark='c'/> Linear functions always pass. <bookmark mark='d'/> We retain each full eight-bit truth table and compute both its exact rejection probability and its distance to the nearest linear function. Independent Walsh-spectrum identities check both results. <bookmark mark='e'/> The curve three delta minus six delta squared is a lower bound in its stated distance range, not an asserted exact value for every corrupted function. Our exercise exhaustively determines all four-bit minima. <bookmark mark='f'/> Local robustness is a component used in PCP constructions; this experiment does not by itself establish the PCP theorem."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(ticks), FadeIn(notes[0]))
             for mk, n_ in zip("bcd", notes[1:4]):
@@ -118,8 +101,7 @@ class Pcp(VoiceoverScene):
                   r"constraints must be violated", font_size=21, color=WHITE),
             label(r"start: \ an NP-hard graph where unsatisfiable means \textbf{at least one} violated constraint",
                   font_size=21, color=DATA),
-            label(r"each step: \ make the graph an \textbf{expander} \ (Part 56), \ take walks: \ the violated "
-                  r"fraction \textbf{doubles}", font_size=21, color=HEAD),
+            label('gap amplification: expander powering gives controlled constant-factor growth', font_size=21, color=HEAD),
             label(r"then shrink the alphabet back down \ (composition), \ losing only a constant", font_size=21,
                   color=LAM),
             label(r"after $O(\log n)$ steps: \ a constant fraction violated, \ in polynomial size: \ the PCP theorem",
@@ -128,15 +110,7 @@ class Pcp(VoiceoverScene):
                   font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.55)
         with self.voiceover(
-            "In 2005 Irit Dinur gave a new proof, combinatorial and much shorter. <bookmark mark='a'/> Think of a "
-            "proof as an assignment to a graph of constraints. <bookmark mark='b'/> Satisfiability already gives a "
-            "graph where, if the formula is unsatisfiable, at least one constraint fails: a gap of one constraint. "
-            "<bookmark mark='c'/> Each step of Dinur's proof turns the graph into an expander, the kind Part 56 "
-            "studies, and replaces constraints by walks on it, doubling the fraction of violated constraints. "
-            "<bookmark mark='d'/> A second step shrinks the alphabet back down, losing only a constant factor. "
-            "<bookmark mark='e'/> After logarithmically many rounds, a constant fraction of constraints must fail, "
-            "and the graph is still polynomial: that is the PCP theorem. <bookmark mark='f'/> A result first proved "
-            "with heavy algebra became a forty-page combinatorial argument."
+            "Dinur’s combinatorial PCP proof amplifies a constraint-satisfaction gap. This panel is an outline of its ingredients. <bookmark mark='a'/> A constraint graph represents a verifier: an assignment to its labels must satisfy all constraints in a yes-instance. <bookmark mark='b'/> Initially, a no-instance may force only an inverse-polynomial fraction of constraints to fail. <bookmark mark='c'/> Expander-based powering increases a sufficiently small gap by a controlled constant factor; it also changes the alphabet and graph size. <bookmark mark='d'/> Alphabet reduction and composition control that growth. These steps require careful completeness and size analysis; the gap does not double without limits. <bookmark mark='e'/> After logarithmically many amplification stages, the no-instance has a constant unsatisfied fraction while the total construction remains polynomial. <bookmark mark='f'/> This gives the PCP theorem through a combinatorial route. We illustrate the proof architecture rather than execute a full PCP reduction here."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):

@@ -84,22 +84,14 @@ class ZeroKnowledge(VoiceoverScene):
         hl = Line(pos[u], pos[v], stroke_width=6, color=LAM)
         steps = VGroup(
             label(r"1. \ the prover \textbf{permutes} the three colours at random", font_size=20, color=WHITE),
-            label(r"2. \ commits to every vertex's colour: \ a hash $H(\text{nonce} \,\|\, \text{colour})$ \\ "
-                  r"(binding: \ can't change it; \ hiding: \ reveals nothing)", font_size=20, color=DATA),
+            label('2. commit to every colour with a salted hash; binding/hiding require assumptions', font_size=20, color=DATA),
             label(r"3. \ the verifier picks one random \textbf{edge}", font_size=20, color=LAM),
             label(r"4. \ the prover opens just those two commitments", font_size=20, color=WHITE),
             label(r"5. \ accept if the two colours differ; \ repeat with fresh colours", font_size=20, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.5).shift(UP * 0.4)
         fit_right(steps)
         with self.voiceover(
-            "Oded Goldreich, Silvio Micali and Avi Wigderson showed in 1986 that every problem in NP has a "
-            "zero-knowledge proof, through three-colouring. Here is the Petersen graph, which the prover knows how to "
-            "colour. <bookmark mark='a'/> Each round, the prover first shuffles the three colours at random, <bookmark "
-            "mark='b'/> then commits to every vertex's colour, here by publishing a hash of a random nonce and the "
-            "colour. It cannot change a colour later, and the hash reveals nothing. <bookmark mark='c'/> The verifier "
-            "points at one edge. <bookmark mark='d'/> The prover opens the two commitments at its ends, <bookmark "
-            "mark='e'/> and the verifier checks that the colours differ and the hashes match. Then everything starts "
-            "again with a fresh shuffle."
+            "Goldreich, Micali and Wigderson obtained zero-knowledge proofs for NP using suitable commitments and reductions. Here is the three-colouring teaching protocol. <bookmark mark='a'/> Every round freshly permutes the three colours. <bookmark mark='b'/> The prover commits to each vertex using a salted hash. Binding and hiding require computational assumptions; a fixed hash and a seeded Python generator do not supply an unconditional security theorem. <bookmark mark='c'/> The honest verifier uniformly selects an edge only after commitments have been sent. <bookmark mark='d'/> The prover opens the endpoint commitments, and the verifier checks both hashes and the two colours. Our full public commitment and opening records are retained. <bookmark mark='e'/> Different colours pass; equal colours fail. Fresh independent rounds amplify soundness under the commitment assumptions. The public graph and the claim of colourability are already known to the verifier."
         ) as vo:
             self.play(FadeIn(head), Create(es), FadeIn(boxes))
             vo.wait_until("a")
@@ -131,12 +123,7 @@ class ZeroKnowledge(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(tab, RIGHT, buff=0.7).align_to(tab, UP)
         fit_right(notes)
         with self.voiceover(
-            "Is it sound? <bookmark mark='a'/> We gave a cheating prover a colouring with two bad edges out of "
-            "fifteen. <bookmark mark='b'/> It is caught whenever the verifier picks one of them. <bookmark "
-            "mark='c'/> In two thousand runs, the fraction still undetected after k rounds follows one minus two "
-            "fifteenths to the k: forty-seven percent after five rounds, six percent after twenty. A cheater with a "
-            "single bad edge survives longer, one minus one over m to the k. <bookmark mark='d'/> Three hundred and "
-            "one rounds push even that below one in a billion."
+            "The measured cheating experiment fixes an invalid colouring rather than solving a cryptographic attack. <bookmark mark='a'/> The supplied colouring has two bad edges among fifteen. <bookmark mark='b'/> With independent uniform edge challenges and binding commitments, it survives k rounds with probability thirteen fifteenths to the k. The table compares two thousand actual trials with this exact finite model. <bookmark mark='c'/> A colouring with only one bad edge has the weaker survival bound one minus one over the number of edges, raised to k. <bookmark mark='d'/> Three hundred and one rounds put that bound below one in a billion. These probabilities assume correct commitment binding and independent challenges; our seeded experiment demonstrates the mechanics."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab), FadeIn(notes[0]))
             for mk, n_ in zip("bcd", notes[1:]):
@@ -147,7 +134,7 @@ class ZeroKnowledge(VoiceoverScene):
 
     def simulator(self):
         z = load("zk")
-        head = label(r"Why the verifier learns nothing", font_size=34).to_edge(UP, buff=0.3)
+        head = label('Opened-colour marginals; full zero knowledge needs more', font_size=34).to_edge(UP, buff=0.3)
         pairs = z["dist"]["pairs"]
         names = [f"{a + 1}{b + 1}" for a, b in pairs]
         bars = VGroup()
@@ -159,31 +146,21 @@ class ZeroKnowledge(VoiceoverScene):
             nm = mono(names[k], 16, GREY_A).move_to([k * 1.0 + 0.18, -0.25, 0])
             bars.add(VGroup(b1, b2, nm))
         bars.next_to(head, DOWN, buff=0.7).to_edge(LEFT, buff=1.0)
-        leg = VGroup(label(r"real transcripts", font_size=19, color=DATA),
+        leg = VGroup(label('real opened-colour pairs', font_size=19, color=DATA),
                      label(r"simulated, \ no colouring known", font_size=19, color=HEAD)).arrange(RIGHT, buff=0.5)
         leg.next_to(bars, DOWN, buff=0.4)
         lines = VGroup(
             label(r"what the verifier sees each round: \\ two different colours, \ uniformly random", font_size=21,
                   color=WHITE),
-            label(r"a \textbf{simulator} with no colouring \\ can produce exactly that: \\ pick two different colours "
-                  r"at random", font_size=21, color=HEAD),
+            label('a simulator samples the same ordered-colour-pair marginal without a colouring', font_size=21, color=HEAD),
             label(r"6,000 rounds each: \ every pair near $\tfrac16$", font_size=21, color=YES),
-            label(r"so the transcript carries no information \\ the verifier couldn't have made itself", font_size=21,
+            label('this histogram checks a marginal; full simulation must include commitments and verifier state', font_size=21,
                   color=DATA),
-            label(r"Fiat--Shamir: \ replace the verifier's coins by a hash \\ and the proof becomes a signature \ "
-                  r"(Part 30)", font_size=20, color=LAM),
+            label('Fiat--Shamir: suitable public-coin protocols, transcript binding and additional security analysis', font_size=20, color=LAM),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(bars, RIGHT, buff=0.8).align_to(bars, UP)
         fit_right(lines)
         with self.voiceover(
-            "And what does the verifier learn? <bookmark mark='a'/> In each round it sees two different colours at "
-            "the ends of an edge. Because the colours were freshly shuffled, the pair is uniformly random. <bookmark "
-            "mark='b'/> A simulator that knows no colouring at all can produce exactly the same thing: pick two "
-            "different colours at random. <bookmark mark='c'/> Over six thousand rounds each, the real and simulated "
-            "transcripts show every ordered pair about one sixth of the time. <bookmark mark='d'/> Anything the "
-            "verifier could compute from the conversation, it could have computed from the simulation, so it learns "
-            "nothing beyond the fact that the graph is colourable. <bookmark mark='e'/> Amos Fiat and Adi Shamir "
-            "showed how to replace the verifier's coins with a hash of the conversation, turning such proofs into "
-            "signatures; Part 30 uses it, and so do today's blockchains."
+            "The histogram measures one carefully limited part of the verifier’s view. <bookmark mark='a'/> For a valid colouring and a fresh uniform colour permutation, the two opened endpoint colours form a uniform ordered pair of distinct colours. <bookmark mark='b'/> A simulator can sample that pair distribution without knowing the colouring. This equality is exact for the marginal distribution. <bookmark mark='c'/> Six thousand real and simulated pair samples fluctuate around one sixth for each ordered pair. Their empirical similarity alone is not a proof of zero knowledge. <bookmark mark='d'/> A complete zero-knowledge argument must simulate commitments, openings, verifier randomness and the full interaction. It uses the commitment assumptions and, for arbitrary verifiers, the appropriate simulator and rewinding analysis. <bookmark mark='e'/> Fiat–Shamir can remove interaction from suitable public-coin protocols under additional security conditions. It is not a universal transformation from any proof into a secure signature. Our exercise is explicitly a transcript-bound teaching demonstration."
         ) as vo:
             self.play(FadeIn(head), FadeIn(bars), FadeIn(leg))
             for mk, ln in zip("abcde", lines):

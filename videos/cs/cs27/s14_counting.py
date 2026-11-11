@@ -42,14 +42,7 @@ class Counting(VoiceoverScene):
                   r"in P \ (Part 18)", font_size=22, color=NO),
         ).arrange(DOWN, buff=0.24).next_to(forms, DOWN, buff=0.45)
         with self.voiceover(
-            "NP asks whether a certificate exists. <bookmark mark='a'/> Leslie Valiant defined the class sharp-P in "
-            "1979: count the certificates. <bookmark mark='b'/> How many assignments satisfy this formula? Chapter "
-            "six's sum-check protocol was exactly such a count. <bookmark mark='c'/> Here are two famous functions of "
-            "a matrix. They differ only by a sign. <bookmark mark='d'/> The determinant, with the signs, is computed "
-            "by Gaussian elimination in cubic time. <bookmark mark='e'/> The permanent, without them, counts the "
-            "perfect matchings of a bipartite graph when the matrix has zeros and ones. <bookmark mark='f'/> Valiant "
-            "proved the permanent sharp-P-complete. Finding one perfect matching is easy, as Part 18 showed; counting "
-            "them is as hard as counting the solutions of any NP problem."
+            "NP asks whether a polynomially bounded witness exists. Counting asks how many such witnesses are accepted. <bookmark mark='a'/> A number-P function counts accepting witnesses of a polynomial-time verifier under a fixed polynomial witness-length convention. <bookmark mark='b'/> For zero-one matrices, compare the determinant’s signed permutation sum with the permanent’s unsigned sum. <bookmark mark='c'/> The determinant is computable in polynomial time. Gaussian elimination has cubic arithmetic-operation complexity; integer bit complexity needs an additional size analysis. <bookmark mark='d'/> The permanent of a bipartite adjacency matrix counts perfect matchings exactly. <bookmark mark='e'/> Valiant proved that this counting problem is number-P-complete even though deciding whether a perfect matching exists is in P. <bookmark mark='f'/> This is a complexity classification, not a proof that counting requires exponential time. Such a separation would require an unproved complexity assumption."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -92,23 +85,17 @@ class Counting(VoiceoverScene):
         big = {r["n"]: r["det_s"] for r in d["det_big"]}
         notes = VGroup(
             label(r"random 0/1 matrices, \ exact integer arithmetic", font_size=20, color=GREY_A),
-            label(r"Ryser \ (1963): \ inclusion--exclusion over \\ column subsets, \ $O(2^n n)$: \ the best known",
+            label('Ryser: subset inclusion--exclusion, $O(n2^n)$ integer arithmetic operations',
                   font_size=20, color=HEAD),
             label(rf"$n = {last['n']}$: \ {words(last['perm'])} \\ perfect matchings, \ in {last['perm_s']:.1f} s",
                   font_size=20, color=HEAD),
             label(rf"the determinant: \ {last['det_s'] * 1000:.2f} ms; \\ at $n = 200$, \ {big[200]:.2f} s",
                   font_size=20, color=DATA),
-            label(r"each $+2$ in $n$ multiplies \\ the permanent's time by about 4", font_size=20, color=NO),
+            label('30 actual call intervals per matrix; medians on this host; arithmetic bit costs matter', font_size=20, color=NO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(ax, RIGHT, buff=0.7).align_to(ax, UP)
         fit_right(notes)
         with self.voiceover(
-            "We timed both on random zero-one matrices, with exact integers. <bookmark mark='a'/> The best known "
-            "algorithm for the permanent is still Herbert Ryser's from 1963: inclusion and exclusion over subsets of "
-            "columns, about two to the n steps. <bookmark mark='b'/> At n equals twenty, our matrix has over two "
-            "trillion perfect matchings, and counting them took two point three seconds. <bookmark mark='c'/> The "
-            "determinant of the same matrix took a quarter of a millisecond, and a two-hundred by two-hundred "
-            "determinant takes under a second. <bookmark mark='d'/> Every two extra rows multiply the permanent's "
-            "time by about four. One sign separates polynomial from exponential."
+            "The measurements compare two exact integer implementations on retained random zero-one matrices. <bookmark mark='a'/> Ryser’s inclusion-exclusion formula uses exponentially many subsets with Gray-code updates. We independently check its complete integer result using a native assignment-subset dynamic program. <bookmark mark='b'/> The twenty-by-twenty matrix has the displayed exact perfect-matching count. The time is a median of thirty actual calls on this host, not a universal runtime claim. <bookmark mark='c'/> Bareiss elimination gives exact determinants, including for the retained two-hundred-by-two-hundred matrix. An independent native modular determinant plus Chinese-remainder reconstruction certifies each complete integer using a Hadamard bound. <bookmark mark='d'/> The observed growth illustrates these implementations. Increasing n by two does not force an exact factor-four wall-clock increase, and this comparison does not prove an exponential lower bound for every permanent algorithm."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(notes[0]))
             vo.wait_until("a")
@@ -127,31 +114,18 @@ class Counting(VoiceoverScene):
     def toda(self):
         head = label(r"How powerful is counting?", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
-            label(r"\textbf{Toda} \ (1991): \ $\mathrm{PH} \subseteq \mathrm{P}^{\#\mathrm{P}}$: \ one counting "
-                  r"oracle answers the whole polynomial hierarchy \ (Part 26)", font_size=22, color=HEAD),
+            label('Toda: $\\mathrm{PH}\\subseteq\\mathrm{P}^{\\#\\mathrm{P}}$; polynomial-time computation with a counting oracle', font_size=22, color=HEAD),
             label(r"\textbf{Valiant and Vazirani} \ (1986): \ random constraints isolate one solution: \ unique SAT "
                   r"is as hard as SAT, \ under randomized reductions", font_size=22, color=DATA),
-            label(r"\textbf{Stockmeyer} \ (1983): \ counting \textbf{approximately} needs only an NP oracle, \ with "
-                  r"randomness", font_size=22, color=WHITE),
-            label(r"\textbf{Jerrum, \ Sinclair and Vigoda} \ (2004): \ the permanent of a non-negative matrix, "
-                  r"\ within $1 \pm \varepsilon$, \ in polynomial time", font_size=22, color=YES),
+            label('Stockmeyer: randomized multiplicative approximate counting with an NP oracle', font_size=22, color=WHITE),
+            label('JSV: FPRAS for nonnegative rational permanent; polynomial in input bits and $1/\\varepsilon$', font_size=22, color=YES),
             label(r"by a Markov chain on matchings \ (\textit{AI, Built} 5, \ MCMC): \ sampling and counting are one "
                   r"problem", font_size=22, color=GREY_A),
             label(r"FKT \ (Kasteleyn, 1961): \ matchings of a \textbf{planar} graph exactly: \ a Pfaffian, \ a "
                   r"determinant with chosen signs", font_size=22, color=LAM),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "How much power does counting give? <bookmark mark='a'/> Seinosuke Toda proved in 1991 that a machine "
-            "with a sharp-P oracle can decide everything in the polynomial hierarchy of Part 26. One count is worth "
-            "any number of alternating quantifiers. <bookmark mark='b'/> Leslie Valiant and Vijay Vazirani showed "
-            "that random constraints can isolate a single solution, so even deciding satisfiability for formulas "
-            "promised to have at most one solution is hard. <bookmark mark='c'/> Approximate counting is much "
-            "weaker: Larry Stockmeyer showed it needs only an NP oracle and randomness. <bookmark mark='d'/> And for "
-            "the permanent of a non-negative matrix, Mark Jerrum, Alistair Sinclair and Eric Vigoda found a "
-            "polynomial-time approximation in 2004, <bookmark mark='e'/> using a Markov chain that samples random "
-            "matchings, the Markov chain Monte Carlo of AI, Built, Part 5. <bookmark mark='f'/> And one exact special case: Pieter "
-            "Kasteleyn counted the perfect matchings of planar graphs in 1961, by turning the permanent into a "
-            "determinant with cleverly chosen signs."
+            "Counting has striking relationships with decision and approximation. <bookmark mark='a'/> Toda’s theorem places the polynomial hierarchy inside deterministic polynomial time with a number-P oracle. We state this oracle-class inclusion without deriving a query-count refinement here. <bookmark mark='b'/> Valiant and Vazirani give randomized isolation reductions connecting SAT with the promise of a unique solution. This is not a deterministic NP-completeness claim for the unique-solution promise problem. <bookmark mark='c'/> Stockmeyer’s approximate counting uses randomness and an NP oracle to obtain a specified multiplicative accuracy with polynomial dependence on the relevant precision parameters. It is not an ordinary polynomial-time counting algorithm. <bookmark mark='d'/> Jerrum, Sinclair and Vigoda give a fully polynomial randomized approximation scheme for the permanent of nonnegative rational matrices, including input-bit, accuracy and failure-probability costs. <bookmark mark='e'/> Their sampling method depends on a carefully analysed Markov chain; the existence of a chain alone does not guarantee fast mixing or accurate counting. <bookmark mark='f'/> For planar graphs, Pfaffian methods count perfect matchings exactly under their specified graph and weight conventions. Structural restrictions can therefore change the counting problem substantially."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):

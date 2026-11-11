@@ -31,22 +31,15 @@ class Parameterized(VoiceoverScene):
         lines = VGroup(
             label(r"\textbf{bounded search tree}: \ some end of any edge $(u, v)$ is in the cover: \ branch on the "
                   r"two choices, \ $k$ levels", font_size=21, color=WHITE),
-            label(r"time $O(2^k \cdot m)$: \ fine for $k = 30$ on a million edges; \ brute force is $\binom{n}{k}$",
+            label('branching costs $O(2^k m)$; graph work and parameter size both matter',
                   font_size=21, color=YES),
             label(r"\textbf{Buss's kernel}: \ a vertex of degree $> k$ must be in the cover; \ after removing them, "
                   r"more than $k^2$ edges means no", font_size=21, color=DATA),
-            label(r"so any instance shrinks to $O(k^2)$ edges in linear time, \ \textbf{before} the search", font_size=21,
+            label('kernel theorem: $O(k^2)$ edges; this teaching implementation repeatedly scans edges', font_size=21,
                   color=HEAD),
         ).arrange(DOWN, buff=0.22).next_to(tl, DOWN, buff=0.35)
         with self.voiceover(
-            "Some NP-hard problems are easy when a parameter is small. <bookmark mark='a'/> Vertex cover asks for k "
-            "vertices touching every edge. Pick any edge; one of its ends must be in the cover. Branch on the two "
-            "choices, and recurse with k minus one. The tree has at most two to the k plus one nodes. <bookmark "
-            "mark='b'/> On our graphs of forty vertices, a cover of size twelve took under eight thousand nodes and "
-            "eight milliseconds; trying every set of twelve vertices would mean five and a half billion. <bookmark "
-            "mark='c'/> Jonathan Buss added a preprocessing rule: a vertex with more than k neighbours must be in any "
-            "small cover, and after taking those, a yes-instance has at most k squared edges left. <bookmark "
-            "mark='d'/> So every instance shrinks to a kernel of size polynomial in k before the search begins."
+            "Parameterized algorithms separate dependence on a small parameter from dependence on the input size. <bookmark mark='a'/> For vertex cover of budget k, choose an uncovered edge. Every valid cover contains at least one endpoint, so branch on the two choices. <bookmark mark='b'/> The search tree has at most two to the k-plus-one minus one nodes. Each node still performs graph work; a small parameter does not by itself promise a practical runtime on arbitrarily large inputs. <bookmark mark='c'/> Buss’s rule forces a vertex whose degree exceeds the remaining budget. After applying it, too many remaining edges certify failure; otherwise an equivalent quadratic-size kernel remains. <bookmark mark='d'/> We retain the complete graph, cover, forced vertices, residual kernel and thirty raw timing intervals. Linear-time kernelization is a theorem about efficient implementations; this teaching routine repeatedly scans its edges."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab), FadeIn(tl))
             for mk, ln in zip("abcd", lines):
@@ -60,10 +53,9 @@ class Parameterized(VoiceoverScene):
         lines = VGroup(
             label(r"\textbf{FPT}: \ solvable in $f(k) \cdot n^{O(1)}$ for some function $f$ \ (Downey and Fellows)",
                   font_size=22, color=WHITE),
-            label(r"vertex cover: \ FPT, \ now $O(1.2738^k + kn)$ \ (Chen, \ Kanj, \ Xia, 2010)", font_size=22,
+            label('vertex cover is FPT; dated example: $O(1.2738^k+kn)$ (Chen--Kanj--Xia, 2010)', font_size=22,
                   color=YES),
-            label(r"$k$-clique: \ W[1]-hard: \ no $f(k) \cdot n^{O(1)}$ algorithm unless FPT = W[1]; \ $n^k$ seems "
-                  r"necessary", font_size=22, color=NO),
+            label('$k$-clique is W[1]-hard; no FPT algorithm unless FPT = W[1]', font_size=22, color=NO),
             label(r"\textbf{treewidth}: \ how tree-like a graph is \ (Robertson and Seymour)", font_size=22,
                   color=DATA),
             label(r"Courcelle \ (1990): \ any property expressible in monadic second-order logic \\ is linear-time on "
@@ -72,15 +64,7 @@ class Parameterized(VoiceoverScene):
                   r"many real networks", font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "This is the theory of fixed-parameter tractability, built by Rodney Downey and Michael Fellows. "
-            "<bookmark mark='a'/> A problem is FPT if it can be solved in time f of k times a polynomial in n, for "
-            "any function f. <bookmark mark='b'/> Vertex cover is FPT; the record is about one point two seven to "
-            "the k. <bookmark mark='c'/> Clique, by contrast, is W-one-hard: it is believed to need n to the k. "
-            "<bookmark mark='d'/> A different parameter, treewidth, measures how much a graph resembles a tree. "
-            "<bookmark mark='e'/> Bruno Courcelle proved that any property expressible in monadic second-order "
-            "logic can be checked in linear time on graphs of bounded treewidth. <bookmark mark='f'/> Colouring, "
-            "Hamiltonian cycles and independent sets all become easy on such graphs, which include many real "
-            "networks."
+            "Fixed-parameter tractability has a precise runtime definition. <bookmark mark='a'/> FPT means time f of k times n to a constant exponent independent of k. <bookmark mark='b'/> Vertex cover is FPT; the displayed one-point-two-seven-three-eight-to-the-k bound is a dated 2010 algorithmic example, not a verified current-record claim. <bookmark mark='c'/> Parameterized clique is W-one-hard. An FPT algorithm would collapse FPT and W-one; this does not rule out every improvement to the naive n-to-the-k enumeration. Stronger exponent barriers require stronger assumptions such as ETH. <bookmark mark='d'/> Treewidth measures how a graph can be decomposed into a tree of small overlapping bags. <bookmark mark='e'/> Courcelle’s theorem gives linear input-size dependence for each fixed monadic-second-order formula and fixed treewidth bound, with parameter-dependent constants and decomposition conditions. <bookmark mark='f'/> Colouring with a fixed palette, Hamiltonicity and independent-set variants illustrate this structural approach. Arbitrary formulas and unbounded treewidth are outside that fixed-parameter statement."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):

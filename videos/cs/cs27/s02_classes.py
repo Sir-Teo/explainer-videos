@@ -23,8 +23,8 @@ class Classes(VoiceoverScene):
         head = label(r"Four ways to use coins \ (Gill, 1977)", font_size=34).to_edge(UP, buff=0.35)
         rows = [[r"\textbf{RP}", r"never wrong on \textbf{no}; \ says yes with probability $\ge \tfrac12$ on yes",
                  r"compositeness \ (Miller--Rabin, \ Part 20)"],
-                [r"\textbf{coRP}", r"never wrong on \textbf{yes}", r"primality, \ the same test read backwards"],
-                [r"\textbf{ZPP}", r"never wrong; \ the \textbf{running time} is random", r"Las Vegas: \ quicksort with "
+                [r"\textbf{coRP}", 'never wrong on yes; rejects no with probability $\\ge \\tfrac12$', r"primality, \ the same test read backwards"],
+                [r"\textbf{ZPP}", 'zero error; expected polynomial time on every input', r"Las Vegas: \ quicksort with "
                  r"random pivots"],
                 [r"\textbf{BPP}", r"wrong with probability $\le \tfrac13$ \ on every input", r"polynomial identity "
                  r"testing \ (Part 20)"]]
@@ -39,14 +39,7 @@ class Classes(VoiceoverScene):
                   color=NO),
         ).arrange(DOWN, buff=0.22).next_to(tab, DOWN, buff=0.45)
         with self.voiceover(
-            "Part 20 used coins to make algorithms simpler and faster. Here are the classes they define, named by "
-            "John Gill in 1977. <bookmark mark='a'/> RP allows one-sided error: never a false yes, and a true yes at "
-            "least half the time. Compositeness is the classic example, with the Miller-Rabin test. <bookmark "
-            "mark='b'/> coRP is the mirror image. <bookmark mark='c'/> ZPP never errs, but its running time is a "
-            "random variable, like quicksort with random pivots. <bookmark mark='d'/> And BPP allows error on both "
-            "sides, at most a third, on every input. <bookmark mark='e'/> They nest: P inside ZPP, which is exactly "
-            "RP intersect coRP, inside BPP, inside polynomial space. <bookmark mark='f'/> Notice that the probability "
-            "is over the algorithm's coins. The input is arbitrary, even chosen by an adversary."
+            "Randomized decision classes use probabilities over the algorithm’s own independent coins, for each fixed input. <bookmark mark='a'/> RP has polynomial worst-case running time, rejects every no-instance, and accepts each yes-instance with probability at least one half. Compositeness supplies an example. <bookmark mark='b'/> coRP reverses those roles: yes-instances always pass, and no-instances are rejected with probability at least one half. <bookmark mark='c'/> ZPP requires zero error and expected polynomial running time on every input. Randomized quicksort illustrates the Las Vegas style, although sorting itself is a function problem. <bookmark mark='d'/> BPP has polynomial worst-case running time and error at most one third on every input. Identity testing is a one-sided example within BPP. <bookmark mark='e'/> P is contained in ZPP, which equals the intersection of RP and coRP; these classes lie within BPP and PSPACE. <bookmark mark='f'/> None of these definitions averages over an input distribution. An adversary may choose the input."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
             for mk, r in zip("abcd", tab.cells[1:]):
@@ -68,7 +61,7 @@ class Classes(VoiceoverScene):
         tab.next_to(head, DOWN, buff=0.4).to_edge(LEFT, buff=1.2)
         notes = VGroup(
             label(r"each run errs with probability $\tfrac13$, \ independently", font_size=21, color=WHITE),
-            label(r"the majority errs only if more than half the runs do: \\ the binomial tail, \ computed exactly",
+            label('the binomial tail, evaluated numerically; exact rational cross-check',
                   font_size=21, color=DATA),
             label(r"Chernoff: \ error $\le e^{-k/18}$: \ exponentially small \\ (the tail bounds of "
                   r"\textit{AI, Built} Part 5)", font_size=21, color=HEAD),
@@ -77,13 +70,7 @@ class Classes(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).next_to(tab, RIGHT, buff=0.8).align_to(tab, UP)
         fit_right(notes)
         with self.voiceover(
-            "Why a third? Any constant below a half would do, because errors can be driven down. <bookmark "
-            "mark='a'/> Run the algorithm k times with fresh coins and take the majority answer. <bookmark "
-            "mark='b'/> The majority is wrong only if more than half of the runs are. We computed the exact binomial "
-            "tail: a hundred and one runs bring the error from a third to under three in ten thousand; two hundred "
-            "and one runs, to about one in two million. <bookmark mark='c'/> The Chernoff bound, from the tail "
-            "bounds of AI, Built, guarantees exponential decay in k. <bookmark mark='d'/> So the threshold of a "
-            "third is arbitrary: any error bounded away from a half defines the same class."
+            "Any fixed error bound below one half can be amplified. <bookmark mark='a'/> Run the algorithm independently an odd number of times and take the majority answer. <bookmark mark='b'/> The displayed binomial tail assumes each run errs with probability exactly one third; for smaller errors it is an upper bound. We evaluate this expression numerically and check it against exact rational sums. <bookmark mark='c'/> Hoeffding’s inequality gives the simpler upper bound exponential in minus the number of runs divided by eighteen. <bookmark mark='d'/> Thus a linear number of independent repetitions in the desired error exponent suffices; independence and a constant gap below one half are essential."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -114,14 +101,7 @@ class Classes(VoiceoverScene):
                   r"hierarchy of Part 26", font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.22).next_to(tab, DOWN, buff=0.4)
         with self.voiceover(
-            "Amplification has a surprising consequence. <bookmark mark='a'/> Amplify until the error on each "
-            "input is below two to the minus n plus one: for inputs of a hundred bits, about eleven hundred runs. "
-            "<bookmark mark='b'/> There are two to the n inputs of length n, so the probability that a random "
-            "string of coins is bad for any of them is at most two to the n times the error: below a half. <bookmark "
-            "mark='c'/> So some single string of coins is good for every input of that length. <bookmark "
-            "mark='d'/> Build it into the circuit, and the randomness disappears: one polynomial-size circuit per "
-            "input length. Leonard Adleman proved this in 1978. <bookmark mark='e'/> And Michael Sipser, Péter Gács "
-            "and Clemens Lautemann showed that BPP sits in the second level of the polynomial hierarchy of Part 26."
+            "Amplification also gives a nonuniform simulation of BPP. <bookmark mark='a'/> Reduce each fixed input’s failure probability below one divided by two raised to the quantity n plus one, using polynomially many independent runs. <bookmark mark='b'/> A union bound over all two-to-the-n inputs of length n makes the probability that a coin string fails on any of them less than one half. <bookmark mark='c'/> Hence at least one fixed coin string works for every input of that length. This is an existence argument. <bookmark mark='d'/> Hardwire that polynomial-length string into a polynomial-size circuit or advice string. The argument does not give a uniform efficient procedure for finding it. <bookmark mark='e'/> This proves BPP is contained in P over poly. The Sipser–Gács–Lautemann theorem separately places BPP in the second level of the polynomial hierarchy and its dual."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab))
             for mk, ln in zip("abcde", lines):

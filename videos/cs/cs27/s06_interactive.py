@@ -73,29 +73,20 @@ class Interactive(VoiceoverScene):
         lines = VGroup(
             label(r"\textbf{IP}: \ a randomized polynomial-time verifier talks to an all-powerful prover", font_size=22,
                   color=WHITE),
-            label(r"\textbf{completeness}: \ true statements are accepted \ (with probability $\ge \tfrac23$)",
+            label('completeness: true inputs have some prover accepted with probability $\\ge \\tfrac23$',
                   font_size=22, color=YES),
-            label(r"\textbf{soundness}: \ false ones are rejected whatever the prover does \ (probability $\ge "
-                  r"\tfrac23$)", font_size=22, color=NO),
+            label('soundness: every prover on a false input is accepted with probability $\\le \\tfrac13$', font_size=22, color=NO),
             label(r"Goldwasser, \ Micali and Rackoff \ (1985): \ private coins, \ and the idea of \textbf{knowledge}",
                   font_size=22, color=DATA),
             label(r"Babai \ (1985): \ \textbf{Arthur--Merlin} games, \ where the coins are public", font_size=22,
                   color=HEAD),
-            label(r"Goldwasser and Sipser \ (1986): \ private and public coins give the same power", font_size=22,
+            label('Goldwasser--Sipser (1986): private/public coins have equal power with polynomial rounds', font_size=22,
                   color=LAM),
             label(r"NP is IP with no coins and one message. \ How much more does interaction buy? \ Next chapter",
                   font_size=22, color=GREY_A),
         ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "The general setting is called IP. <bookmark mark='a'/> A verifier that runs in polynomial time and "
-            "flips coins exchanges messages with an all-powerful prover. <bookmark mark='b'/> True statements must be "
-            "accepted with high probability, <bookmark mark='c'/> and false ones rejected with high probability, "
-            "whatever the prover tries. <bookmark mark='d'/> Shafi Goldwasser, Silvio Micali and Charles Rackoff "
-            "introduced the idea in 1985, together with the question of how much knowledge a proof conveys. "
-            "<bookmark mark='e'/> László Babai independently defined Arthur-Merlin games, in which the verifier's "
-            "coins are shown to the prover. <bookmark mark='f'/> Goldwasser and Sipser showed that hiding the coins "
-            "makes no difference. <bookmark mark='g'/> NP is the special case with one message and no coins. How "
-            "much more does interaction give? The answer is the next chapter."
+            "IP formalizes interactive proofs with a probabilistic polynomial-time verifier and a computationally unbounded prover. <bookmark mark='a'/> The conversation has polynomially many rounds and polynomial communication. <bookmark mark='b'/> Completeness says that for a true input there exists a prover strategy making the verifier accept with probability at least two thirds. <bookmark mark='c'/> Soundness says that for a false input every prover strategy is accepted with probability at most one third. The input is fixed; probability is over verifier randomness. <bookmark mark='d'/> Goldwasser, Micali and Rackoff introduced the framework together with zero knowledge. <bookmark mark='e'/> Babai’s Arthur–Merlin protocols expose the verifier’s random coins. Constant-round AM is distinguished from the full polynomial-round class. <bookmark mark='f'/> Goldwasser and Sipser showed that private coins can be replaced by public coins with controlled round overhead; allowing polynomially many rounds preserves the power of IP. <bookmark mark='g'/> NP is the one-message deterministic-verification special case. IP equals PSPACE, but a strict separation between NP and IP has not been proved."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdefg", lines):

@@ -50,15 +50,7 @@ class Frontier(VoiceoverScene):
         note = label(r"RE: \ everything a program can \textbf{confirm}, \ including ``this program halts'' "
                      r"\ (Part 25)", font_size=21, color=NO).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Each new kind of verifier has reached a larger class. <bookmark mark='a'/> Reading a proof gives NP. "
-            "<bookmark mark='b'/> Questioning one prover with random coins gives PSPACE, chapter six's theorem. "
-            "<bookmark mark='c'/> In 1988 Michael Ben-Or, Shafi Goldwasser, Joe Kilian and Avi Wigderson asked: what "
-            "if there are two provers, questioned separately, like suspects in different rooms? László Babai, Lance "
-            "Fortnow and Carsten Lund showed in 1991 that this reaches nondeterministic exponential time. It was the "
-            "seed of the PCP theorem. <bookmark mark='d'/> Then the provers were allowed to share quantum "
-            "entanglement. In 2020 Zhengfeng Ji, Anand Natarajan, Thomas Vidick, John Wright and Henry Yuen proved "
-            "that the class jumps all the way to RE. <bookmark mark='e'/> A verifier who runs in polynomial time can "
-            "be convinced that a program halts, a question no algorithm can decide."
+            "These proof models give a chain of class inclusions; not every adjacent inclusion is known to be strict. <bookmark mark='a'/> Ordinary polynomial-time witness verification gives NP. <bookmark mark='b'/> Polynomial-round randomized interaction with one unbounded prover gives IP, equal to PSPACE. <bookmark mark='c'/> Multiple classical provers who cannot communicate during the protocol give MIP, equal to NEXP. Their strategies can be agreed beforehand. <bookmark mark='d'/> Entangled provers change the class dramatically. The MIP-star theorem, first announced in 2020, gives equality with the recursively enumerable languages. <bookmark mark='e'/> A classical polynomial-time verifier can check an appropriate interaction encoding halting, while the provers may need unbounded finite-dimensional resources. This does not give a uniform algorithm deciding halting; the theorem’s completeness and soundness quantifiers remain essential."
         ) as vo:
             self.play(FadeIn(head))
             for i, mk in enumerate("abcd"):
@@ -85,20 +77,11 @@ class Frontier(VoiceoverScene):
                   r"correlations differ", font_size=22, color=DATA),
             label(r"and \textbf{Connes' embedding conjecture} \ (1976), \ a question about operator algebras, \ is "
                   r"false", font_size=22, color=NO),
-            label(r"a 200-page proof from complexity theory settled a 45-year-old problem in pure mathematics",
+            label('MIP* = RE: cited theorem and consequences; full proof not reproduced here',
                   font_size=22, color=YES),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "The result reached far beyond complexity theory. <bookmark mark='a'/> The verifier tests whether the "
-            "provers' answers show correlations that only entanglement can produce, the kind of Bell test Part 53 "
-            "describes. <bookmark mark='b'/> Entanglement helps honest provers, but it also helps cheaters, which is "
-            "what makes these games hard to analyse. <bookmark mark='c'/> The key step compresses verifiers: a game "
-            "that checks a larger game, which checks a larger one, so that a finite conversation certifies an "
-            "unbounded computation. <bookmark mark='d'/> As a consequence, Tsirelson's problem in physics has a "
-            "negative answer: two natural mathematical models of quantum correlations are different. <bookmark "
-            "mark='e'/> And Alain Connes's embedding conjecture of 1976, a central question about operator algebras, "
-            "is false. <bookmark mark='f'/> A long proof about interactive proofs settled a problem in pure "
-            "mathematics."
+            "The result has consequences for mathematical models of quantum correlations. <bookmark mark='a'/> The verifier asks separated provers questions and tests their answer correlations. The permitted entanglement helps honest strategies but also enlarges the cheating strategies covered by soundness. <bookmark mark='b'/> The tensor-product model allows finite-dimensional entangled resources without a computable uniform dimension bound sufficient for all instances. <bookmark mark='c'/> Recursive compression links games checking games to computations of unbounded duration. We describe this architecture without reproducing the full proof. <bookmark mark='d'/> The theorem separates the closure of finite-dimensional tensor-product correlations from the commuting-operator correlation model, yielding a negative answer to the relevant Tsirelson problem. <bookmark mark='e'/> Through known equivalences it also refutes Connes’ embedding conjecture. <bookmark mark='f'/> Our source reading includes the abstract and stated consequences of the October 2026 arXiv revision. The theorem is cited from that literature, not established by this episode’s small classical simulations."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):
@@ -112,7 +95,7 @@ class Frontier(VoiceoverScene):
         steps = [(r"computation", r"a program, \\ a circuit", DATA),
                  (r"arithmetize", r"polynomials \\ over a field", HEAD),
                  (r"sum-check / PCP", r"chapters 6 and 8", YES),
-                 (r"commit", r"to polynomials \\ (KZG, \ FRI)", LAM),
+                 (r"commit", 'PCS / oracle commitments', LAM),
                  (r"Fiat--Shamir", r"hash replaces \\ the verifier's coins", CTRL)]
         boxes = VGroup()
         for t, s, c in steps:
@@ -123,13 +106,12 @@ class Frontier(VoiceoverScene):
         arrows = VGroup(*[Arrow(boxes[i].get_right(), boxes[i + 1].get_left(), buff=0.04, color=GREY_B,
                                 stroke_width=2, max_tip_length_to_length_ratio=0.35) for i in range(4)])
         lines = VGroup(
-            label(r"the output: \ a proof of a few hundred bytes, \ checked in milliseconds, \ however long the "
-                  r"computation", font_size=21, color=WHITE),
+            label('proof size, verifier work and setup depend on the system, security parameters and public input', font_size=21, color=WHITE),
             label(r"Kilian \ (1992), \ Micali \ (1994): \ PCPs plus hashing; \ GKR \ (2008): \ sum-check for "
                   r"delegating computation", font_size=21, color=GREY_A),
             label(r"Groth \ (2016): \ three group elements; \ Zcash \ (2016) \ made them zero-knowledge payments",
                   font_size=21, color=HEAD),
-            label(r"\textbf{rollups}: \ thousands of transactions executed off-chain, \ one proof checked on-chain",
+            label('validity rollups: aggregate argument; optimistic rollups use dispute mechanisms',
                   font_size=21, color=YES),
             label(r"\textbf{zkVMs}: \ proofs that a whole RISC-V program ran correctly \ (Part 6's machine, "
                   r"certified)", font_size=21, color=DATA),
@@ -137,18 +119,7 @@ class Frontier(VoiceoverScene):
                   color=NO),
         ).arrange(DOWN, buff=0.2).next_to(boxes, DOWN, buff=0.45)
         with self.voiceover(
-            "Meanwhile, interactive proofs went into production. <bookmark mark='a'/> The recipe: write a "
-            "computation as a circuit, turn the circuit into polynomials, check them with sum-check or a PCP, commit "
-            "to the polynomials cryptographically, and replace the verifier's random coins with a hash of the "
-            "transcript, the trick of Amos Fiat and Adi Shamir. <bookmark mark='b'/> The result is a proof of a few "
-            "hundred bytes that anyone can check in milliseconds, however long the computation was. <bookmark "
-            "mark='c'/> Joe Kilian and Silvio Micali saw this in the 1990s; Goldwasser, Kalai and Rothblum built "
-            "delegation on sum-check in 2008. <bookmark mark='d'/> Jens Groth's 2016 system needs just three group "
-            "elements, and Zcash used such proofs the same year for private payments. <bookmark mark='e'/> Rollups "
-            "execute thousands of transactions elsewhere and post one proof. <bookmark mark='f'/> Zero-knowledge "
-            "virtual machines prove that an entire RISC-V program ran correctly. <bookmark mark='g'/> The catch is "
-            "the prover, still orders of magnitude slower than simply running the program; making it fast is an "
-            "active race."
+            "Practical proof systems combine several ingredients with distinct security assumptions. <bookmark mark='a'/> Arithmetize a specified bounded computation into field constraints. Some systems use sum-check or related interactive oracle proofs to reduce verification work. <bookmark mark='b'/> Commitments bind the prover to the relevant polynomials or oracles; the commitment scheme determines important assumptions and costs. <bookmark mark='c'/> Fiat–Shamir removes interaction only for suitable protocols under an appropriate analysis, often in a random-oracle model. A fixed real hash is an instantiation rather than an unconditional theorem. <bookmark mark='d'/> Groth16 has constant-size proofs in group elements under its algebraic assumptions and structured setup. Transparent systems use different assumptions and typically different proof-size trade-offs. <bookmark mark='e'/> Validity rollups can aggregate transaction verification into such arguments; optimistic rollups follow a different dispute-based mechanism. <bookmark mark='f'/> A zkVM proves a bounded execution according to an encoded machine and constraints. Zero knowledge is an additional property and must not be inferred from succinctness alone. <bookmark mark='g'/> Proof size and verifier work depend on the system, security parameters and public input. Prover overhead can be substantial. None of our small teaching protocols is presented as a deployed secure proof system."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -166,7 +137,7 @@ class Frontier(VoiceoverScene):
             label(r"1. \ Is P = BPP? \ Can it be proved without proving circuit lower bounds?", font_size=22,
                   color=WHITE),
             label(r"2. \ Is the Unique Games Conjecture true?", font_size=22, color=WHITE),
-            label(r"3. \ Are SETH, \ 3SUM and APSP related? \ No reduction between them is known", font_size=22,
+            label('3. How do specified SETH, 3SUM and APSP variants relate through reductions?', font_size=22,
                   color=WHITE),
             label(r"4. \ VP vs VNP: \ does the permanent need superpolynomial \textbf{algebraic} circuits?",
                   font_size=22, color=WHITE),
@@ -178,15 +149,7 @@ class Frontier(VoiceoverScene):
         star = label(r"$\bigstar$ \ the part's research problem takes a small case of the sixth", font_size=22,
                      color=GREY_A).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Six open problems. <bookmark mark='a'/> Whether randomness ever helps polynomial-time computation, and "
-            "whether that can be shown without first proving circuit lower bounds, which Kabanets and Impagliazzo "
-            "showed is nearly unavoidable. <bookmark mark='b'/> Whether the Unique Games Conjecture is true. "
-            "<bookmark mark='c'/> How the three fine-grained conjectures relate: no reduction between any two is "
-            "known. <bookmark mark='d'/> Valiant's algebraic version of P versus NP: does the permanent need "
-            "algebraic circuits of superpolynomial size? <bookmark mark='e'/> Whether cryptography can rest on an "
-            "NP-complete problem. <bookmark mark='f'/> And how sound the simplest tests can be: the exact rejection "
-            "curve of the linearity test, whose start we measured in chapter eight. <bookmark mark='g'/> This part's "
-            "research problem takes a small, computable case of the sixth."
+            "Here are the broader questions behind the examples. <bookmark mark='a'/> Does randomness increase the power of polynomial-time computation, and what new hardness results would derandomization imply? <bookmark mark='b'/> What is the status of the precise near-satisfiable Unique Games promise? <bookmark mark='c'/> How do the stated variants of SETH, 3SUM and APSP relate through fine-grained reductions? We do not assert an equivalence between them. <bookmark mark='d'/> Over a suitable field, such as characteristic zero, does the permanent require superpolynomial arithmetic circuits? Characteristic two is different because signs vanish and permanent equals determinant. <bookmark mark='e'/> Can useful average-case cryptographic hardness be derived from standard worst-case assumptions through suitable reductions? The reduction model matters. <bookmark mark='f'/> How do exact local-test soundness bounds behave as the dimension grows? Our exhaustive four-bit BLR computation settles only that finite domain. <bookmark mark='g'/> The research exercise starts with complete finite witnesses, then asks which general patterns can actually be proved."
         ) as vo:
             self.play(FadeIn(head))
             for mk, it in zip("abcdef", items):

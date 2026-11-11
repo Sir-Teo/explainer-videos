@@ -45,14 +45,7 @@ class Communication(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(tab, RIGHT, buff=0.6).align_to(tab, UP)
         fit_right(notes)
         with self.voiceover(
-            "In 1979 Andrew Yao asked a clean question: if Alice holds one input and Bob another, how many bits must "
-            "they exchange to compute something about both? <bookmark mark='a'/> Take equality. Are two n-bit "
-            "strings the same? <bookmark mark='b'/> With randomness it is cheap. Alice treats her string as a "
-            "polynomial, picks a random point, and sends the point and the value: Part 20's fingerprint as a "
-            "protocol. Different strings agree at a random point with probability at most n over q. <bookmark "
-            "mark='c'/> On strings of a thousand bits differing in a single place, with a field of a million, our "
-            "twenty thousand trials never erred. For strings of a trillion bits, a hundred and sixty-two bits are enough. <bookmark "
-            "mark='d'/> Without randomness, Alice must send all n bits, and that can be proved."
+            "Equality illustrates how randomness can reduce communication. Assume equal-length n-bit strings and a prime field. <bookmark mark='a'/> Alice chooses a uniform field element, evaluates her string polynomial there, and sends the point and value. Bob evaluates his own polynomial at that point. This is a private-coin one-way protocol. <bookmark mark='b'/> Each field element uses the ceiling of log base two of the field size bits. The large-input rows are analytic communication bounds, not experiments on trillion-bit inputs. <bookmark mark='c'/> Equal strings always agree. For unequal strings, the difference polynomial has degree at most n minus one, so the error is at most that degree divided by the field size. Every actual sampled challenge is retained. <bookmark mark='d'/> Deterministic equality needs linear communication in the standard model. Randomization trades this communication for explicitly bounded one-sided error."
         ) as vo:
             self.play(FadeIn(head), FadeIn(alice), FadeIn(bob))
             vo.wait_until("b")
@@ -116,20 +109,14 @@ class Communication(VoiceoverScene):
                   r"of the stream \ and sends the $s$ bits to Bob", font_size=22, color=WHITE),
             label(r"so a stream question that would solve disjointness needs $s = \Omega(n)$", font_size=22,
                   color=DATA),
-            label(r"exact distinct counts, \ exact frequency moments, \ the most frequent item: \ all linear space",
+            label('one-pass exact distinct counts and higher moments have hard instances; $F_1$ is a counter',
                   font_size=22, color=NO),
             label(r"Alon, \ Matias and Szegedy \ (1996): \ the lower bounds behind Part 20's sketches", font_size=22,
                   color=HEAD),
             label(r"so HyperLogLog and Count-Min approximate \textbf{because they must}", font_size=22, color=YES),
         ).arrange(DOWN, buff=0.38).next_to(head, DOWN, buff=0.6)
         with self.voiceover(
-            "This explains a design choice from Part 20. <bookmark mark='a'/> A streaming algorithm with s bits of "
-            "memory is a one-way protocol: Alice runs it on the first half of the stream and hands its memory to "
-            "Bob. <bookmark mark='b'/> So any stream question that would answer disjointness needs linear memory. "
-            "<bookmark mark='c'/> Exact distinct counts, exact frequency moments and the exact most frequent item "
-            "all fall this way. <bookmark mark='d'/> Noga Alon, Yossi Matias and Mario Szegedy proved these bounds "
-            "in 1996, alongside the sketches. <bookmark mark='e'/> HyperLogLog and Count-Min approximate because they "
-            "must."
+            "Communication lower bounds explain some streaming-space limits. <bookmark mark='a'/> In a one-pass protocol, Alice processes the first portion of a stream and sends its memory state to Bob, who processes the rest. A streaming algorithm using s bits therefore yields a one-way communication protocol using s bits. <bookmark mark='b'/> For a suitably encoded disjointness problem over a growing universe, this yields linear worst-case space bounds even with bounded error. <bookmark mark='c'/> Exact distinct counting and higher frequency moments have hard instances in the relevant models. The first frequency moment in an insertion-only stream is simply the stream length and needs only a counter. <bookmark mark='d'/> The Alon–Matias–Szegedy results establish specific approximation and space trade-offs, rather than a universal lower bound for every statistic. <bookmark mark='e'/> HyperLogLog and Count-Min choose approximation to obtain useful small-space guarantees. The pass count, update model, universe size and desired error remain part of each statement."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcde", lines):

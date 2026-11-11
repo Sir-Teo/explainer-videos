@@ -39,18 +39,7 @@ class FineGrained(VoiceoverScene):
             label(r"these are not P vs NP questions: \ they ask for the \textbf{exponent}", font_size=21, color=YES),
         ).arrange(DOWN, buff=0.2).next_to(tab, DOWN, buff=0.4)
         with self.voiceover(
-            "NP-hardness separates polynomial from exponential. Many practical questions are finer: is quadratic "
-            "time really necessary? <bookmark mark='a'/> Fine-grained complexity answers with a few conjectures. "
-            "The strong exponential time hypothesis says satisfiability with long clauses cannot be solved much faster "
-            "than two to the n. Part 21 used it for edit distance. The 3SUM conjecture, that finding three numbers "
-            "summing to zero needs quadratic time, explains why many geometry problems from Part 22 resist faster "
-            "algorithms. And the all-pairs shortest paths conjecture covers a family of cubic graph problems. "
-            "<bookmark mark='b'/> The link from SAT to quadratic problems is a beautiful trick of Ryan Williams. "
-            "Split the variables into two halves, and turn each half-assignment into a vector with one coordinate per "
-            "clause, zero if that half already satisfies the clause. <bookmark mark='c'/> Two vectors are orthogonal "
-            "exactly when together they satisfy every clause. <bookmark mark='d'/> So a truly subquadratic algorithm "
-            "for orthogonal vectors would break the strong exponential time hypothesis. <bookmark mark='e'/> These "
-            "questions are not about P versus NP. They are about exponents."
+            "NP-hardness alone does not prove an exponential lower bound. Fine-grained hypotheses ask more specific questions about achievable exponents. <bookmark mark='a'/> SETH says that for every fixed positive epsilon, some fixed clause width rules out a two-to-the-one-minus-epsilon-times-n SAT algorithm in the specified deterministic model. <bookmark mark='b'/> The 3SUM and APSP hypotheses concern fixed exponent improvements over quadratic and cubic time, with input and machine models stated. Logarithmic speedups do not refute them. <bookmark mark='c'/> Split a sparse bounded-width SAT instance’s variables into two halves. Each partial assignment becomes a vector whose coordinates identify clauses it fails to satisfy. <bookmark mark='d'/> Two vectors are orthogonal exactly when their combined assignment satisfies every clause. Under the dimensional and polynomial-overhead conditions, a fixed exponent improvement for the relevant OV family would refute SETH. <bookmark mark='e'/> The three hypotheses are distinct conditional assumptions. Their reductions and precise variants must be stated rather than treating all fast-problem lower bounds as one conjecture."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -84,14 +73,7 @@ class FineGrained(VoiceoverScene):
                   r"\ which check every pair, \ are the slow rows", font_size=21, color=NO),
         ).arrange(DOWN, buff=0.22).next_to(tl, DOWN, buff=0.35)
         with self.voiceover(
-            "We ran the reduction. <bookmark mark='a'/> Six random formulas, each with twenty-four variables and a "
-            "hundred and one clauses. Each half of the variables gives four thousand and ninety-six vectors, one "
-            "coordinate per clause. <bookmark mark='b'/> On every formula, searching for an orthogonal pair gives "
-            "the same answer as our SAT solver. <bookmark mark='c'/> And the number of pairs is four thousand and "
-            "ninety-six squared, which is two to the twenty-four: exactly the number of assignments. Brute-force "
-            "orthogonal vectors is brute-force SAT. <bookmark mark='d'/> So any algorithm that beats N squared by a "
-            "polynomial factor would beat two to the n for satisfiability. The slow rows are the unsatisfiable "
-            "formulas, where every pair has to be checked."
+            "We execute the SAT-to-orthogonal-vectors reduction on six complete finite inputs. <bookmark mark='a'/> Each formula has twenty-four variables and a hundred and one clauses. Every one of the two halves’ four thousand and ninety-six vectors is retained and independently reconstructed. <bookmark mark='b'/> Orthogonal-vector search is checked with a separate native implementation. Positive pairs decode to satisfying assignments; SAT statuses are also cross-checked with native Glucose. Native UNSAT agreement is implementation evidence rather than a retained refutation proof. <bookmark mark='c'/> Each pair of half assignments corresponds to one full assignment, so the full cross-product has two to the twenty-fourth pairs. <bookmark mark='d'/> Search may stop early on positive instances. The measured times describe these specific inputs and implementations, not an exponential lower bound or an asymptotic theorem."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule), FadeIn(tl))
             vo.wait_until("a")
@@ -122,13 +104,7 @@ class FineGrained(VoiceoverScene):
                   r"constants, \ or approximate", font_size=21, color=YES),
         ).arrange(DOWN, buff=0.25).next_to(tab, DOWN, buff=0.45)
         with self.voiceover(
-            "Here are the two baselines on this machine. <bookmark mark='a'/> We fed both algorithms instances "
-            "with no solution, so they had to do all their work. <bookmark mark='b'/> Each doubling of n costs about "
-            "four times as much: quadratic. Four thousand vectors take six tenths of a second; four thousand numbers, "
-            "three quarters. <bookmark mark='c'/> The conjectures are delicate: Allan Grønlund and Seth Pettie shaved "
-            "logarithmic factors off 3SUM in 2014, so the conjecture now asks only that no polynomial improvement "
-            "exists. <bookmark mark='d'/> For an engineer, a conditional lower bound is a stopping rule: stop looking "
-            "for a better exponent, and work on constants, parallelism or approximation instead."
+            "The timing table uses finite negative instances with explicit certificates. <bookmark mark='a'/> Every vector in the OV fixtures shares bit sixty-three, so no orthogonal pair exists. Every integer in the 3SUM fixtures is odd, so three of them cannot sum to zero. Full inputs are retained. <bookmark mark='b'/> We report the median of thirty teaching-call intervals per size; serialization and independent checking occur outside those timers. <bookmark mark='c'/> These loops show roughly quadratic growth over the measured sizes. Fixed sixty-four-bit vectors are an implementation benchmark, distinct from growing-dimension OV hardness assumptions. <bookmark mark='d'/> Known logarithmic 3SUM improvements and future algorithmic changes must be distinguished from a fixed polynomial-exponent improvement. Conditional lower bounds are useful only within their stated models and assumptions."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab))
             for mk, ln in zip("abcd", lines):

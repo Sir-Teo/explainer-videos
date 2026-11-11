@@ -43,14 +43,7 @@ class Ugc(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).next_to(nodes, RIGHT, buff=1.4).align_to(nodes, UP)
         fit_right(lines)
         with self.voiceover(
-            "In 2002 Subhash Khot proposed a conjecture about a simple kind of constraint problem. <bookmark "
-            "mark='a'/> Give each vertex a label from zero to k minus one. Each edge demands that the label at one "
-            "end equal the label at the other plus some constant, modulo k. A label on one end determines the other "
-            "uniquely: hence unique games. <bookmark mark='b'/> If every constraint can be met, there is an easy "
-            "algorithm: fix one label and propagate. <bookmark mark='c'/> Khot conjectured that telling apart games "
-            "where nearly all constraints can be met from games where almost none can is NP-hard. <bookmark "
-            "mark='d'/> Nearly satisfiable is exactly where propagation fails: a single violated edge sends the labels "
-            "astray."
+            "A general unique game assigns labels from a finite alphabet, and each directed edge specifies a permutation relating its endpoint labels. <bookmark mark='a'/> Knowing one endpoint label uniquely determines the other. The drawing and experiment use the special case of cyclic shifts modulo k. <bookmark mark='b'/> For a satisfiable connected instance, choose a root label, propagate along a spanning tree, and check every remaining edge. General permutation games may require trying each possible root label. <bookmark mark='c'/> The Unique Games Conjecture says that for every positive completeness and soundness tolerance, some sufficiently large fixed alphabet makes distinguishing almost-satisfiable instances from instances with very small optimum NP-hard. <bookmark mark='d'/> The hard distinction is approximate satisfiability. It does not contradict the easy test for fully satisfiable games, and the planted shift instances are not a general hardness experiment."
         ) as vo:
             self.play(FadeIn(head), Create(edges), FadeIn(nodes), FadeIn(gl))
             for mk, ln in zip("abcd", lines):
@@ -84,15 +77,7 @@ class Ugc(VoiceoverScene):
             label(r"UGC says that is essentially the best any efficient algorithm can do", font_size=21, color=LAM),
         ).arrange(DOWN, buff=0.2).next_to(tl, DOWN, buff=0.35)
         with self.voiceover(
-            "We can watch propagation fail. We planted a labelling on three thousand vertices and nine thousand "
-            "edges, with seven labels, then corrupted a fraction epsilon of the constraints. <bookmark mark='a'/> "
-            "With no corruption, propagation from any vertex satisfies every constraint. <bookmark mark='b'/> With "
-            "five percent corrupted, the hidden labelling still satisfies ninety-five percent, but propagation gets "
-            "only eighty-three: each bad edge in the search tree corrupts everything below it. <bookmark mark='c'/> "
-            "At twenty percent, propagation falls to a half, and random labels get one seventh. <bookmark "
-            "mark='d'/> A semidefinite program does much better, losing only about the square root of epsilon log "
-            "k, as Moses Charikar and Konstantin and Yury Makarychev showed in 2006. <bookmark mark='e'/> The "
-            "conjecture says that, up to constants, nothing efficient can do better."
+            "This finite experiment plants a labelling on a connected simple graph, then corrupts a specified number of edge shifts. <bookmark mark='a'/> We retain all three thousand vertices, nine thousand distinct edges and seven-symbol labels. Ten chosen roots supply the displayed best propagation score. <bookmark mark='b'/> With no corrupted edges, propagation satisfies every constraint. <bookmark mark='c'/> After corruption, a spanning-tree mistake can spread through a subtree. The planted labelling’s displayed score is a lower bound on the true optimum, not a computed optimum certificate. <bookmark mark='d'/> The random baseline now uses independent label draws from one seeded generator per trial. An earlier implementation reset the generator at every vertex and produced constant labels; that original data is preserved. <bookmark mark='e'/> These finite results compare two heuristics on one planted model. General unique-game approximation theorems and conjectured worst-case hardness use their own promises and alphabet parameters."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule), FadeIn(tl))
             self.play(LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.3), run_time=2.5)
@@ -108,25 +93,14 @@ class Ugc(VoiceoverScene):
             label(r"vertex cover: \ factor 2 is optimal \ (Khot and Regev, 2003)", font_size=22, color=YES),
             label(r"MAX-CUT: \ Goemans--Williamson's 0.878 is optimal \ (Khot, \ Kindler, \ Mossel, \ O'Donnell, "
                   r"2004)", font_size=22, color=YES),
-            label(r"Raghavendra \ (2008): \ for \textbf{every} constraint problem, \ one semidefinite program is the "
-                  r"best algorithm", font_size=22, color=HEAD),
-            label(r"evidence against: \ unique games in time $\exp(n^{\varepsilon})$ \ (Arora, \ Barak, \ Steurer, "
-                  r"2010)", font_size=22, color=NO),
-            label(r"evidence for: \ the \textbf{2-to-2 theorem} \ (Khot, \ Minzer, \ Safra, 2018), \ a weaker form, "
-                  r"\ proved", font_size=22, color=DATA),
+            label('Raghavendra: each fixed finite-domain bounded-arity MAX-CSP; optimal SDP threshold under UGC', font_size=22, color=HEAD),
+            label('near-satisfiable unique-game algorithms: subexponential, parameter-dependent (ABS, 2010)', font_size=22, color=NO),
+            label('Grassmann / 2-to-2 results: related hardness with different completeness promises (2018)', font_size=22, color=DATA),
             label(r"which already gives vertex cover hardness $\sqrt 2 - \varepsilon$", font_size=22, color=GREY_A),
             label(r"the conjecture itself: \ open", font_size=24, color=LAM),
         ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Part 23 met the conjecture's consequences; here is the whole picture. <bookmark mark='a'/> If it holds, "
-            "the factor two for vertex cover is optimal, <bookmark mark='b'/> and so is Goemans and Williamson's "
-            "point eight seven eight for MAX-CUT. <bookmark mark='c'/> Prasad Raghavendra showed in 2008 that it "
-            "would make one semidefinite program the optimal approximation algorithm for every constraint "
-            "satisfaction problem at once. <bookmark mark='d'/> There is evidence against it: Sanjeev Arora, Boaz "
-            "Barak and David Steurer found an algorithm for unique games that is subexponential. <bookmark "
-            "mark='e'/> And evidence for it: in 2018 Subhash Khot, Dor Minzer and Muli Safra proved the 2-to-2 "
-            "theorem, a slightly weaker version, <bookmark mark='f'/> which already shows vertex cover is hard to "
-            "approximate below the square root of two. <bookmark mark='g'/> The conjecture itself remains open."
+            "The consequences below are conditional on the Unique Games Conjecture, except where a separate theorem is explicitly stated. <bookmark mark='a'/> It would make improving vertex cover below factor two by any fixed positive constant NP-hard. <bookmark mark='b'/> It would make the Goemans–Williamson MAX-CUT approximation constant optimal up to arbitrarily small additive error in the appropriate worst-case sense. <bookmark mark='c'/> Raghavendra’s theorem concerns each fixed finite-domain, bounded-arity MAX-CSP: a canonical semidefinite relaxation and rounding achieve its optimal approximation threshold under the conjecture. It does not cover every optimization problem. <bookmark mark='d'/> Subexponential algorithms solve certain near-satisfiable unique-game promises with parameter-dependent runtimes. They neither refute the conjecture nor establish P equals NP. <bookmark mark='e'/> The Grassmann-graph and two-to-two games results establish related hardness theorems with different completeness promises. <bookmark mark='f'/> In particular, the known unique-game hardness regime with completeness near one half must not be confused with the conjecture’s near-one completeness requirement. <bookmark mark='g'/> These are precise conditional and partial results; our planted seven-label experiment decides none of the outstanding worst-case questions."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdefg", lines):

@@ -42,14 +42,7 @@ class Circuits(VoiceoverScene):
                   color=YES),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Circuits give a purely combinatorial way at P versus NP. <bookmark mark='a'/> P slash poly is the class "
-            "of problems with a polynomial-size circuit for each input length. <bookmark mark='b'/> It contains P, "
-            "and, by Adleman, BPP. <bookmark mark='c'/> So proving that SAT needs circuits of superpolynomial size "
-            "would separate P from NP, with no machines involved, only gates. <bookmark mark='d'/> Richard Karp and "
-            "Richard Lipton showed that if SAT did have small circuits, the polynomial hierarchy would collapse to "
-            "its second level. <bookmark mark='e'/> So most believe SAT needs large circuits, but proving it runs "
-            "into Part 26's barriers. <bookmark mark='f'/> What can be proved is lower bounds for restricted "
-            "circuits. The first success was circuits of constant depth."
+            "Circuits give a sufficient route to separating P from NP. <bookmark mark='a'/> P over poly allows a nonuniform family, with one circuit per input length and a common polynomial size bound. <bookmark mark='b'/> Every P language and, by Adleman’s argument, every BPP language has such a family. <bookmark mark='c'/> Proving SAT has no polynomial-size circuit family would imply P differs from NP, and would establish the stronger statement that NP is not contained in P over poly. It is a sufficient route, not an equivalence. <bookmark mark='d'/> Karp and Lipton showed that if NP were contained in P over poly, the polynomial hierarchy would collapse to its second level. <bookmark mark='e'/> These implications explain the interest in circuit lower bounds while retaining the natural-proof and other barriers discussed in Part 26. <bookmark mark='f'/> The following chapters study restricted circuit classes, for which lower bounds are known under their precise model assumptions."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):
@@ -131,20 +124,12 @@ class Circuits(VoiceoverScene):
                   r"to an AND-of-ORs", font_size=21, color=DATA),
             label(r"so a depth-$d$ circuit collapses level by level under repeated restrictions", font_size=21,
                   color=GREY_A),
-            label(r"but \textbf{parity} of the free variables stays parity: \ it never collapses", font_size=22,
+            label('parity retains depth equal to the number of free variables; zero free variables gives a constant', font_size=22,
                   color=NO),
             label(r"so constant-depth circuits for parity need $2^{n^{\Omega(1/d)}}$ gates", font_size=22, color=YES),
         ).arrange(DOWN, buff=0.2).next_to(tl, DOWN, buff=0.35)
         with self.voiceover(
-            "How often does a restriction leave something complicated? <bookmark mark='a'/> We applied fifteen "
-            "hundred random restrictions at each value of p and computed the exact decision-tree depth of what was "
-            "left. Håstad's switching lemma bounds the chance of depth s or more by five p w to the s, and the "
-            "measured frequencies sit well inside the bound where it applies. <bookmark mark='b'/> A shallow decision "
-            "tree can be written either way round, so an OR of ANDs switches into an AND of ORs. <bookmark "
-            "mark='c'/> Apply restrictions repeatedly, and a circuit of constant depth collapses one level at a "
-            "time. <bookmark mark='d'/> But parity never collapses: restrict it, and you get the parity of the free "
-            "variables. <bookmark mark='e'/> So parity needs exponentially large circuits of constant depth, the "
-            "result of Furst, Saxe and Sipser, Ajtai, and Yao, made sharp by Håstad."
+            "This experiment fixes one width-three DNF and samples restrictions independently. <bookmark mark='a'/> Each variable is left free with probability p; otherwise it is fixed to a fair Boolean value. We retain every actual restriction and compute the exact minimum decision-tree depth of its resulting truth table. <bookmark mark='b'/> The switching lemma bounds the probability of depth at least t by five p times the width, raised to t, in this standard formulation. The bound can be vacuous when it exceeds one. <bookmark mark='c'/> A shallow decision tree yields a small-width CNF, explaining the switch between OR-of-ANDs and AND-of-ORs. <bookmark mark='d'/> Iterating carefully chosen restrictions controls fixed-depth circuits. Parity on the remaining free variables still has decision-tree depth equal to their number; it becomes constant if none remain. <bookmark mark='e'/> The finite table illustrates this mechanism. Håstad’s lower-bound theorem, with fixed circuit depth and its quantitative parameters, is a separate asymptotic result."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -159,8 +144,8 @@ class Circuits(VoiceoverScene):
         head = label(r"Further lower bounds", font_size=34).to_edge(UP, buff=0.35)
         rows = [[r"AC$^0$ \ (constant depth)", r"parity needs exponential size", r"H\aa stad \ (1986)"],
                 [r"AC$^0$ with mod-3 gates", r"parity still exponential", r"Razborov \ (1987); \ Smolensky \ (1987)"],
-                [r"monotone \ (no NOT gates)", r"clique needs $n^{\Omega(\sqrt k)}$", r"Razborov \ (1985)"],
-                [r"ACC$^0$ \ (any mod gates)", r"NEXP $\not\subseteq$ ACC$^0$", r"Williams \ (2011)"]]
+                [r"monotone \ (no NOT gates)", 'clique lower bounds in specified $k$ regimes', r"Razborov \ (1985)"],
+                ['ACC$^0$: fixed depth and moduli', r"NEXP $\not\subseteq$ ACC$^0$", r"Williams \ (2011)"]]
         tab = grid_table([r"circuits", r"lower bound", r"by"], rows, widths=[4.0, 4.6, 4.6], row_h=0.55,
                          font_size=20, mono_cols=(), colors=[[WHITE, DATA, GREY_A]] * 4)
         tab.next_to(head, DOWN, buff=0.45).set_x(0)
@@ -169,18 +154,11 @@ class Circuits(VoiceoverScene):
                   font_size=21, color=WHITE),
             label(r"Williams: \ a SAT algorithm for ACC$^0$ circuits only slightly faster than $2^n$ \ "
                   r"$\Rightarrow$ \ a lower bound against them", font_size=21, color=YES),
-            label(r"algorithms imply lower bounds: \ the one method that has crossed Part 26's barriers", font_size=21,
+            label('Williams: an algorithm-to-lower-bound method beyond earlier restricted techniques', font_size=21,
                   color=HEAD),
         ).arrange(DOWN, buff=0.22).next_to(tab, DOWN, buff=0.45)
         with self.voiceover(
-            "Other restricted models fell too. <bookmark mark='a'/> Alexander Razborov and Roman Smolensky showed "
-            "that even with gates counting modulo three, parity needs exponential size; their method approximates "
-            "the whole circuit by a polynomial of low degree. Razborov also proved that monotone circuits, with no "
-            "negations, need superpolynomial size for clique. And Ryan Williams separated nondeterministic "
-            "exponential time from ACC zero. <bookmark mark='b'/> His proof is unusual: a satisfiability algorithm "
-            "for those circuits, only slightly faster than trying all two to the n inputs, implies a lower bound "
-            "against them. <bookmark mark='c'/> Algorithms imply lower bounds. It is the one method so far that has "
-            "crossed the barriers of Part 26."
+            "Other circuit models require their own exact restrictions. <bookmark mark='a'/> Parity lower bounds hold for constant-depth AND, OR and NOT circuits; Razborov and Smolensky extend the method to modular gates over a fixed prime characteristic different from the target parity modulus. <bookmark mark='b'/> Monotone-clique lower bounds exclude negation and depend on the clique-size regime. They must not be transferred to unrestricted Boolean circuits. <bookmark mark='c'/> Williams proved that NEXP has no polynomial-size nonuniform ACC-zero circuit family, with fixed depth and fixed allowed modular gates. His algorithm-to-lower-bound connection is a theorem about those circuit classes, not a solution of P versus NP."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
             vo.wait_until("a")

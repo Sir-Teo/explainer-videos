@@ -40,12 +40,7 @@ class Approx(VoiceoverScene):
                   r"$1 - \varepsilon$ is too", font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.3).next_to(lab, DOWN, buff=0.6)
         with self.voiceover(
-            "Why does a statement about proofs matter for algorithms? <bookmark mark='a'/> Read each of the "
-            "verifier's possible tests as a constraint on the proof bits, so a proof is an assignment. <bookmark "
-            "mark='b'/> If the statement is true, some assignment satisfies every constraint. <bookmark mark='c'/> If "
-            "it is false, every assignment violates a constant fraction. <bookmark mark='d'/> So an algorithm that "
-            "could tell these two cases apart, or approximate the best fraction within that gap, would decide SAT. "
-            "Feige, Goldwasser, Lovász, Safra and Szegedy found this connection in 1991, before the theorem itself."
+            "PCPs imply hardness of approximation through a gap-preserving reduction. <bookmark mark='a'/> Encode each verifier acceptance test as a bounded-arity constraint, with proof bits serving as assignment variables. <bookmark mark='b'/> Perfect completeness gives an assignment satisfying every constraint in a yes-instance. <bookmark mark='c'/> Soundness bounds the fraction that any assignment can satisfy in a no-instance, leaving a constant gap. Conversion to a particular clause format may change that constant. <bookmark mark='d'/> An approximation strong enough to distinguish the two cases would solve the original NP-hard decision problem. The objective, reduction, completeness and soundness parameters determine the actual approximation threshold."
         ) as vo:
             self.play(FadeIn(head), FadeIn(bar), FadeIn(lab[0]))
             vo.wait_until("a")
@@ -74,19 +69,12 @@ class Approx(VoiceoverScene):
                   font_size=21, color=HEAD),
             label(r"H\aa stad \ (2001): \ for every $\varepsilon > 0$, \ beating $\tfrac78 + \varepsilon$ on "
                   r"\textbf{satisfiable} formulas is NP-hard", font_size=21, color=NO),
-            label(r"so the dumbest algorithm is optimal in the worst case, \ unless P = NP", font_size=21, color=WHITE),
+            label('no deterministic fixed improvement in the worst case unless P = NP', font_size=21, color=WHITE),
             label(r"on random formulas local search does far better: \ worst case and typical case differ",
                   font_size=21, color=YES),
         ).arrange(DOWN, buff=0.22).next_to(tl, DOWN, buff=0.35)
         with self.voiceover(
-            "The sharpest example is MAX-3SAT: satisfy as many three-literal clauses as possible. <bookmark "
-            "mark='a'/> Flip a coin for every variable. Each clause fails only if all three literals do, with "
-            "probability one eighth, so a random assignment satisfies seven eighths of the clauses on average. Our "
-            "measurements: eighty-seven and a half percent, every time. <bookmark mark='b'/> Johan Håstad proved in "
-            "2001 that doing even slightly better than seven eighths, on formulas that are fully satisfiable, is "
-            "NP-hard. <bookmark mark='c'/> The coin is optimal. <bookmark mark='d'/> On random formulas, of course, "
-            "local search finds assignments satisfying ninety-seven to a hundred percent. Hardness of approximation "
-            "is about the worst case."
+            "Consider MAX-E3SAT with three distinct variables in each clause. <bookmark mark='a'/> A uniform random assignment satisfies each such clause with probability seven eighths, so linearity of expectation guarantees that fraction on average. Conditional expectation can derandomize this guarantee. <bookmark mark='b'/> Our finite random formulas and bounded WalkSAT runs are retained in full. Their better scores concern this sample distribution and do not improve a worst-case approximation guarantee. <bookmark mark='c'/> Håstad proved that for every fixed positive epsilon, distinguishing satisfiable instances from instances with optimum at most seven eighths plus epsilon is NP-hard. <bookmark mark='d'/> Consequently, a deterministic polynomial-time algorithm beating that threshold would imply P equals NP. Randomized algorithms require the corresponding randomized complexity qualification. Sampling success on easy instances does not establish such a uniform algorithm."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab), FadeIn(tl))
             for mk, ln in zip("abcd", lines):
@@ -96,7 +84,7 @@ class Approx(VoiceoverScene):
         self.clear_scene()
 
     def table(self):
-        head = label(r"Tight bounds", font_size=34).to_edge(UP, buff=0.35)
+        head = label('Selected approximation bounds', font_size=34).to_edge(UP, buff=0.35)
         rows = [[r"MAX-3SAT", r"$\tfrac78$ \ (random)", r"$\tfrac78 + \varepsilon$", r"H\aa stad \ (2001)"],
                 [r"MAX-3LIN", r"$\tfrac12$ \ (random)", r"$\tfrac12 + \varepsilon$", r"H\aa stad \ (2001)"],
                 [r"set cover", r"$\ln n$ \ (greedy)", r"$(1 - \varepsilon) \ln n$", r"Feige \ (1998); \ Dinur--Steurer "
@@ -106,20 +94,14 @@ class Approx(VoiceoverScene):
                  r"\ (2018)"],
                 [r"MAX-CUT", r"0.878 \ (Goemans--Williamson)", r"$\tfrac{16}{17} + \varepsilon$", r"H\aa stad; \ "
                  r"Trevisan et al."]]
-        tab = grid_table([r"problem", r"best algorithm", r"NP-hard to beat", r"by"], rows,
+        tab = grid_table([r"problem", 'illustrative algorithm / guarantee', r"NP-hard to beat", r"by"], rows,
                          widths=[2.4, 3.6, 2.6, 4.6], row_h=0.5, font_size=19, mono_cols=(),
                          colors=[[WHITE, YES, NO, GREY_A]] * 4 + [[WHITE, YES, HEAD, GREY_A]] * 2)
         tab.next_to(head, DOWN, buff=0.45).set_x(0)
         note = label(r"the last two rows have a gap between what we can do and what we can rule out: \ chapter 10",
                      font_size=22, color=HEAD).next_to(tab, DOWN, buff=0.45)
         with self.voiceover(
-            "For several problems the PCP theorem gives exactly matching limits. <bookmark mark='a'/> MAX-3SAT, at "
-            "seven eighths. Linear equations modulo two, at a half: a random assignment again. Set cover, where the "
-            "greedy algorithm's factor of ln n cannot be improved. Clique, which cannot be approximated within n to "
-            "the one minus epsilon. <bookmark mark='b'/> Then vertex cover, where the simple algorithm of Part 23 gets "
-            "within a factor two but hardness is only known below the square root of two, and MAX-CUT, where "
-            "Goemans and Williamson's semidefinite programming gets point eight seven eight and hardness stops at "
-            "sixteen seventeenths. <bookmark mark='c'/> Those gaps are the subject of the next chapter."
+            "Compare approximation thresholds only for the stated optimization problems and models. <bookmark mark='a'/> MAX-E3SAT has the seven-eighths guarantee. The MAX-E3LIN result instead concerns distinguishing almost-satisfiable linear systems from systems whose optimum is near one half; exactly satisfiable linear systems are solved by elimination. <bookmark mark='b'/> Set-cover hardness has logarithmic dependence on the universe size. Clique hardness gives an n to the one-minus-epsilon barrier, while the trivial n approximation is merely a simple baseline, not the best known algorithm. <bookmark mark='c'/> Vertex cover and MAX-CUT retain gaps between unconditional algorithms and known hardness. The next chapter explains which sharper barriers would follow from the Unique Games Conjecture."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
             vo.wait_until("a")

@@ -46,14 +46,7 @@ class Sumcheck(VoiceoverScene):
             label(r"a sum of $2^n$ terms: \ too many for the verifier to add up", font_size=21, color=NO),
         ).arrange(DOWN, buff=0.2).next_to(rules, DOWN, buff=0.45)
         with self.voiceover(
-            "In 1990 Carsten Lund, Lance Fortnow, Howard Karloff and Noam Nisan found the key idea: turn logic into "
-            "algebra. <bookmark mark='a'/> Not x becomes one minus x; and becomes multiplication; an OR of three "
-            "literals becomes one minus the product of their negations. <bookmark mark='b'/> On zeros and ones this "
-            "polynomial agrees with the formula, so the number of satisfying assignments is the sum of the "
-            "polynomial over the Boolean cube. <bookmark mark='c'/> But the polynomial is also defined at any point of "
-            "a finite field; we use the integers modulo ninety-seven. Its degree in each variable is at most the "
-            "number of clauses, five. <bookmark mark='d'/> The prover claims the sum is seven. <bookmark mark='e'/> "
-            "The verifier cannot add up two to the n terms. Here is how it checks anyway."
+            "Arithmetization converts a Boolean formula into a polynomial. <bookmark mark='a'/> Negation becomes one minus the variable; conjunction becomes multiplication; a clause becomes one minus the product of the false-literal indicators. <bookmark mark='b'/> On Boolean points this polynomial equals the formula. Summing over the Boolean cube therefore gives its satisfying-assignment count modulo the field characteristic. <bookmark mark='c'/> We use the prime field of ninety-seven elements. For this formula each variable occurs at most once per clause, so five is a valid individual-degree bound. Our implementation also handles repeated occurrences by enlarging that bound. <bookmark mark='d'/> The example has seven satisfying assignments, smaller than ninety-seven, so no ambiguity from modular counting arises. <bookmark mark='e'/> In general, a modulus larger than the possible count, or additional reconstruction information, is needed to recover the integer count. The protocol itself verifies a field-valued sum."
         ) as vo:
             self.play(FadeIn(head), FadeIn(f))
             vo.wait_until("a")
@@ -89,19 +82,11 @@ class Sumcheck(VoiceoverScene):
                   r"a random point", font_size=20, color=DATA),
             label(rf"at the end one evaluation of $P_\varphi$ at the random point: \ {fin['final']} = {fin['claim']}: "
                   r"\ accepted", font_size=20, color=YES),
-            label(r"the verifier did $n$ rounds of a few field operations, \ plus one evaluation, \ instead of $2^n$",
+            label('$n$ rounds, degree-dependent field work, one final evaluation; field-valued sum',
                   font_size=20, color=HEAD),
         ).arrange(DOWN, buff=0.18).next_to(tab, DOWN, buff=0.4)
         with self.voiceover(
-            "The protocol peels off one variable per round. <bookmark mark='a'/> In round one the prover sends a "
-            "polynomial in a single variable: the sum with x one left free and everything else summed over zero and "
-            "one. It sends it as six values, enough to pin down a polynomial of degree five. <bookmark mark='b'/> "
-            "The verifier checks that its values at zero and one add up to the claim, seven, then picks a random "
-            "field element, thirty, and the claim becomes the polynomial's value there: thirty-three. Round two does "
-            "the same with x one fixed at thirty, and so on. <bookmark mark='c'/> After the last round the verifier "
-            "evaluates the arithmetized formula once, at the four random values, and gets ninety-one, exactly the "
-            "final claim. Accept. <bookmark mark='d'/> The verifier did a few field operations per round and a single "
-            "evaluation, instead of adding up two to the n terms."
+            "The verifier reduces the claimed sum one variable at a time. <bookmark mark='a'/> In each round the prover sends a univariate polynomial as six values at distinct field points, fixing a degree-at-most-five polynomial. <bookmark mark='b'/> The values at zero and one must add to the current claim. Only after receiving the message does the verifier draw an independent uniform challenge and update the claim by interpolation. The table contains the actual retained transcript. <bookmark mark='c'/> After four rounds, the verifier evaluates the original arithmetized formula at the four challenges and compares it with the final claim. <bookmark mark='d'/> Communication and verifier arithmetic are polynomial in the number of variables, the degree bound and field-element bit length. This teaching Lagrange evaluator performs degree-dependent work; the prover still does exponential suffix summation."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
             vo.wait_until("a")
@@ -135,16 +120,7 @@ class Sumcheck(VoiceoverScene):
                   font_size=22, color=YES),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.55)
         with self.voiceover(
-            "What if the prover lies? <bookmark mark='a'/> Say it claims eight. Its first polynomial must add up to "
-            "eight at zero and one, so it is not the true polynomial. <bookmark mark='b'/> Two different polynomials "
-            "of degree d agree on at most d points. <bookmark mark='c'/> So the only hope is that the verifier's random "
-            "point happens to be one where the false polynomial and the true one agree; then the lie disappears. "
-            "That happens with probability at most d over p. <bookmark mark='d'/> Otherwise the false claim moves "
-            "into the next round, and if it survives every round, the final evaluation exposes it. <bookmark "
-            "mark='e'/> We built the best possible cheater, one whose false polynomial agrees with the true one at "
-            "as many points as it can. Modulo ninety-seven, it survived nineteen point three percent of three thousand "
-            "runs, against a bound of nineteen point one. <bookmark mark='f'/> With a field of a million elements, it "
-            "never survived."
+            "Soundness concerns every prover strategy, including adaptive ones. <bookmark mark='a'/> If the current claim is false, any polynomial that passes the sum-at-zero-and-one check must differ from the true polynomial. <bookmark mark='b'/> Two distinct polynomials of degree at most d agree at no more than d field points. <bookmark mark='c'/> Therefore, conditioned on any earlier transcript where the claim is still false, the next independent uniform challenge repairs that false claim with probability at most d divided by the field size. <bookmark mark='d'/> If no round repairs it, the final direct evaluation rejects. A union bound gives n d divided by the field size; a sequential conditional argument also gives one minus one minus d over p to the n. Independence between success events is unnecessary. <bookmark mark='e'/> Our specific cheating strategy adds a polynomial with chosen roots. Its measured frequency comes from three thousand trials, with ordinary sampling uncertainty. It is not a counterexample when a sample proportion lies above a theoretical probability bound. <bookmark mark='f'/> A larger field lowers the soundness bound. No observed success in three hundred trials remains a finite observation, not zero soundness error."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):

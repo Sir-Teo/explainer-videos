@@ -39,12 +39,7 @@ class Outro(VoiceoverScene):
             tile(MathTex(r"2^k, \ \mathrm{perm}", font_size=50, color=CTRL), r"fine-grained; \ FPT; \ \#P", CTRL),
         ).arrange_in_grid(rows=2, cols=3, buff=(0.35, 0.35)).move_to(DOWN * 0.2)
         with self.voiceover(
-            "What we built in this part. Randomized classes, amplification and Adleman's theorem in numbers; "
-            "pseudorandomness from hardness. Random restrictions collapsing a formula, and the communication cost "
-            "of equality. Interactive proofs, and sum-check run step by step, catching a cheater at the predicted "
-            "rate. Zero knowledge, with a simulator nobody can tell from the real thing. The PCP theorem, the "
-            "linearity test, and why a coin is the best approximation for MAX-3SAT; the Unique Games Conjecture. "
-            "Fine-grained and parameterized complexity, counting, and the average case that cryptography needs."
+            'This part built executable examples of amplification, fingerprints, random restrictions, interactive proofs and sum-check; checked salted-hash commitments and opened-colour marginals; explored PCP and approximation theorems, unique games, fine-grained and parameterized algorithms; and compared exact counting with average-case experiments. Full finite inputs, models and transcripts support the measurements. Theorems retain their model, completeness, soundness and security assumptions. A marginal simulator histogram and a small hash-challenge demonstration do not independently establish cryptographic security.'
         ):
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
@@ -61,12 +56,7 @@ class Outro(VoiceoverScene):
             (r"the hardness of learning", [57]),
         ], font_size=23)
         with self.voiceover(
-            "Where this comes back. Part 28 builds the codes that PCPs are made of: Reed-Solomon, which is "
-            "polynomial evaluation, and codes you can test by reading a few symbols. Part 29 builds pseudorandom "
-            "generators from one-way functions. Part 30 turns zero knowledge into signatures with Fiat and Shamir, "
-            "builds public keys on lattices, and sketches succinct proofs. Part 53 meets entanglement and the game "
-            "behind MIP star. Part 56 builds expanders, the engine of Dinur's proof. And Part 57 shows why some "
-            "learning problems are hard, using cryptographic assumptions like those of chapter fourteen."
+            'Where this returns: Part 28 develops error-correcting codes and local testing; Part 29 studies pseudorandom generators and one-way functions; Part 30 develops suitable identification, signature, lattice and succinct-argument constructions with their assumptions. Part 53 studies quantum entanglement; Part 56 returns to expanders; Part 57 connects learning hardness with specified computational assumptions. Each connection uses a precise construction rather than a universal conversion between proof systems.'
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.3), run_time=3.0)
@@ -82,10 +72,7 @@ class Outro(VoiceoverScene):
             (r"small parameters", r"exponential in $k$, \ not $n$: \ kernels first, \ then search"),
         ])
         with self.voiceover(
-            "In practice. Compare huge files by fingerprints, a few dozen bits instead of all of them. Use "
-            "succinct proofs to check computations you did not run yourself. Use zero knowledge to prove you know "
-            "a secret without revealing it. Treat a conditional lower bound as a stopping rule. And when a hard "
-            "problem has a small parameter, shrink the instance to a kernel and search."
+            'In practice, choose the object and guarantee first. Fingerprints need a length, field or hash model and an error bound. Succinct verification needs a specified computation and proof-system assumptions. Zero knowledge needs a simulator-based definition for the full verifier view. Fine-grained lower bounds apply conditionally to their exact input and machine models. Parameterized methods trade parameter dependence against input-size work; a small kernel and measured implementation costs help decide whether that trade is useful.'
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.35), run_time=3.0)
@@ -101,16 +88,13 @@ class Outro(VoiceoverScene):
             r"degree in each variable.",
             r"Show that for vertex cover, \ after Buss's rule, \ a yes-instance has at most $k^2$ edges and $k^2 + k$ "
             r"non-isolated vertices.",
-            r"\textit{Build.} \ Make chapter 6's sum-check non-interactive with Fiat--Shamir: \ derive each "
-            r"challenge by hashing the transcript, \ and verify a proof for a 20-variable formula.",
+            '\\textit{Build.} Transcript-bound hash challenges for the structured 20-variable example; serialize canonically and test mutations.',
             r"$\bigstar$ \textit{Research.} \ For functions on $n \le 4$ bits, \ find by exhaustive search the "
             r"minimum BLR rejection rate at each distance $\delta$, \ and compare it with $3\delta - 6\delta^2$, "
             r"\ $\delta$, \ and the known bounds.",
         ], font_size=22)
         with self.voiceover(
-            "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build "
-            "problem: a non-interactive sum-check proof with the Fiat-Shamir transform. The last, marked with a "
-            "star, is a research problem: its general answer is not known, and the notes say where to start."
+            'Six exercises connect the definitions with complete finite checks. Prove amplification and the deterministic equality lower bound. Prove sum-check soundness using conditional probabilities, and verify Buss’s kernel argument. Build the transcript-bound hash-challenge demonstration for the structured twenty-variable formula, with canonical serialization, domain separation, uniform challenges and explicit mutation checks; it is not a general security proof. Finally compare all sixty-five thousand five hundred and thirty-six four-bit Boolean functions with the exact BLR minima and inspect witnesses before proposing a higher-dimensional theorem.'
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)

@@ -48,27 +48,18 @@ class Average(VoiceoverScene):
                   color=WHITE),
             label(r"the largest clique occurring naturally: \\ about $2 \log_2 n \approx 20$", font_size=20,
                   color=HEAD),
-            label(r"so above 20 the clique is \textbf{determined}: \\ exhaustive search would find it", font_size=20,
+            label('$2\\log_2n$ is an asymptotic reference, not a finite uniqueness certificate', font_size=20,
                   color=GREY_A),
             label(rf"by degrees, \ in polynomial time: \\ none below 70, \ {r70 * 100:.0f}\% at 70, \ all from 80",
                   font_size=20, color=YES),
-            label(r"spectral methods reach $c\sqrt n$ \ (Alon, \\ Krivelevich, \ Sudakov, 1998): \ no better known",
+            label('spectral recovery: sufficiently large $c\\sqrt n$ in its stated random model',
                   font_size=20, color=NO),
             label(r"the \textbf{planted clique conjecture}: \\ between the lines, \ no efficient algorithm", font_size=20,
                   color=LAM),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.24).next_to(ax, RIGHT, buff=0.7).align_to(ax, UP).shift(UP * 0.3)
         fit_right(notes)
         with self.voiceover(
-            "NP-completeness is about the worst case. Cryptography needs problems that are hard on random instances. "
-            "<bookmark mark='a'/> Here is the favourite test case. Take a random graph on a thousand vertices, and "
-            "secretly add all the edges among k of them. <bookmark mark='b'/> A random graph already has cliques of "
-            "about twice log n vertices, here about twenty. <bookmark mark='c'/> So once k is above twenty, the "
-            "hidden clique is the only one that large, and trying every set of vertices would find it. <bookmark "
-            "mark='d'/> A polynomial algorithm, taking the vertices of highest degree and cleaning up, finds nothing "
-            "below seventy, and every clique from eighty on, near the square root of n log n. <bookmark mark='e'/> "
-            "Spectral methods improve the constant, to any multiple of root n, but nobody knows a polynomial "
-            "algorithm below that. <bookmark mark='f'/> The conjecture that none exists is now used as an assumption, "
-            "like SETH, to explain why problems in statistics and machine learning have the same gap."
+            "Worst-case NP-hardness does not establish average-case cryptographic hardness. Planted clique gives a specific distributional example. <bookmark mark='a'/> Generate a thousand-vertex random graph with independent fair edges, then plant a clique on a uniformly chosen vertex subset. Every actual graph and planted subset is retained. <bookmark mark='b'/> Twice the base-two logarithm of n is a rough asymptotic reference for the largest background clique. It is not a deterministic finite threshold proving uniqueness of the planted set. <bookmark mark='c'/> The degree heuristic selects high-degree vertices and applies the stated score-based cleanup. Each plotted recovery rate uses twenty actual trials, so sampling uncertainty matters. <bookmark mark='d'/> Spectral algorithms reach different size regimes under their own assumptions and success guarantees. The finite degree experiment does not establish an optimal recovery threshold. <bookmark mark='e'/> Planted-clique hardness conjectures specify the clique-size regime, distribution, recovery or detection task and computational model. <bookmark mark='f'/> Information-theoretic identifiability and efficient recoverability are different questions. We do not infer either general theorem merely from this plotted curve."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl))
             vo.wait_until("a")
@@ -98,11 +89,11 @@ class Average(VoiceoverScene):
         yt = VGroup(*[label(t, font_size=15, color=GREY_A).next_to(ax.c2p(20, y + 8), LEFT, buff=0.08)
                       for y, t in ((-7, r"0.1 $\mu$s"), (-6, r"1 $\mu$s"), (-4, r"0.1 ms"), (-2, r"10 ms"),
                                    (0, r"1 s"))])
-        xl = label(r"bits in $N = pq$", font_size=17, color=GREY_A).next_to(ax, DOWN, buff=0.35)
+        xl = label('median actual product bit length', font_size=17, color=GREY_A).next_to(ax, DOWN, buff=0.35)
         def lg(t):
             return math.log10(t) + 8
-        mp = [ax.c2p(r["bits"], lg(r["mul_s"])) for r in d["rows"]]
-        fp = [ax.c2p(r["bits"], lg(r["factor_s"])) for r in d["rows"]]
+        mp = [ax.c2p(sorted(r["actual_bits"])[len(r["actual_bits"]) // 2], lg(r["mul_s"])) for r in d["rows"]]
+        fp = [ax.c2p(sorted(r["actual_bits"])[len(r["actual_bits"]) // 2], lg(r["factor_s"])) for r in d["rows"]]
         md = VGroup(*[Dot(p, radius=0.07, color=DATA) for p in mp])
         fd = VGroup(*[Dot(p, radius=0.07, color=NO) for p in fp])
         ml = VMobject(color=DATA, stroke_width=2).set_points_as_corners(mp)
@@ -114,24 +105,16 @@ class Average(VoiceoverScene):
         notes = VGroup(
             label(r"a \textbf{one-way function}: \ easy to compute, \\ hard to invert \textbf{on random inputs}",
                   font_size=20, color=WHITE),
-            label(rf"{last['bits']} bits: \ multiplying takes {last['mul_s'] * 1e9:.0f} ns; \\ factoring, \ "
+            label(rf"{min(last['actual_bits'])}--{max(last['actual_bits'])} actual bits: \ multiplying takes {last['mul_s'] * 1e9:.0f} ns; \\ factoring, \ "
                   rf"{last['factor_s']:.1f} s", font_size=20, color=NO),
-            label(r"rho takes about $N^{1/4}$ steps: \ each 8 bits \\ cost about $4\times$", font_size=20, color=GREY_A),
-            label(r"the best method, \ the number field sieve, \\ is subexponential: \ RSA-250 \ (829 bits) \\ fell in "
-                  r"2020, \ after 2,700 core-years", font_size=20, color=HEAD),
+            label('rho: balanced-factor random-map heuristic $N^{1/4}$; bounded runs and full update counts', font_size=20, color=GREY_A),
+            label('number field sieve: a stronger factoring method; RSA-250 (2020) is a dated example', font_size=20, color=HEAD),
             label(r"nobody has \textbf{proved} any function one-way: \\ that would prove P $\ne$ NP", font_size=20,
                   color=LAM),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).next_to(ax, RIGHT, buff=0.6).align_to(ax, UP)
         fit_right(notes)
         with self.voiceover(
-            "Cryptography needs something stronger: a function that is easy to compute and hard to invert on random "
-            "inputs. <bookmark mark='a'/> Multiplication is the classic candidate. <bookmark mark='b'/> Multiplying "
-            "two forty-bit primes takes about fifty nanoseconds. Factoring their product with Pollard's rho method "
-            "took half a second. <bookmark mark='c'/> Rho needs about the fourth root of N steps, so every eight "
-            "more bits cost about four times as much. <bookmark mark='d'/> The best known method, the number field "
-            "sieve, is faster, but still worse than polynomial: the 829-bit challenge number RSA-250 fell in 2020, "
-            "after about two thousand seven hundred core-years. <bookmark mark='e'/> Yet nobody has proved any "
-            "function one-way. A proof would imply P is not NP."
+            "A one-way function must be efficiently computable yet hard for every probabilistic polynomial-time inverter on its specified random-input distribution. <bookmark mark='a'/> Success means finding any valid preimage, and the allowed success probability must be negligible as the security parameter grows. A finite timing difference is not that definition. <bookmark mark='b'/> The experiment multiplies sampled balanced primes and factors their products with bounded Brent-style rho. We retain every prime, actual product bit length, factor, raw timing and count of all modular orbit updates. <bookmark mark='c'/> The familiar fourth-root-of-the-product rho estimate assumes balanced factors and random-map heuristic behaviour. Actual trials can vary, and budget exhaustion returns no factor without a primality or hardness conclusion. <bookmark mark='d'/> More powerful factoring methods exist; dated record factorizations and this small rho implementation should not be conflated. <bookmark mark='e'/> Factoring-based one-way-function candidates require an appropriate input and preimage domain and an average-case hardness assumption. Their existence does not follow from P differing from NP alone."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl))
             vo.wait_until("a")
@@ -153,7 +136,7 @@ class Average(VoiceoverScene):
                   r"pseudorandom generator", font_size=22, color=DATA),
             label(r"and from those: \ private-key encryption, \ signatures, \ commitments \ (chapter 7): \ "
                   r"\textbf{Minicrypt}", font_size=22, color=YES),
-            label(r"\textbf{Ajtai} \ (1996): \ for lattices, \ the average case is as hard as the \textbf{worst} case",
+            label('Ajtai: specified average-case lattice problems from worst-case approximate lattice assumptions',
                   font_size=22, color=HEAD),
             label(r"\textbf{Regev} \ (2005): \ learning with errors; \ the basis of post-quantum public keys \ "
                   r"(ML-KEM, \ Part 30)", font_size=22, color=LAM),
@@ -161,16 +144,7 @@ class Average(VoiceoverScene):
                   r"Bogdanov and Trevisan)", font_size=22, color=NO),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "This is the bridge to the next acts of the series. <bookmark mark='a'/> Leonid Levin started a theory "
-            "of average-case completeness in 1986. <bookmark mark='b'/> Johan Håstad, Russell Impagliazzo, Levin "
-            "and Michael Luby proved that any one-way function at all can be turned into a pseudorandom generator. "
-            "<bookmark mark='c'/> From those come private-key encryption, signatures and the commitments of chapter "
-            "seven: Impagliazzo's Minicrypt. Part 29 builds it. <bookmark mark='d'/> Miklós Ajtai found problems on "
-            "lattices whose random instances are as hard as their worst ones, <bookmark mark='e'/> and Oded Regev's "
-            "learning with errors turned that into public-key encryption that resists quantum computers, now "
-            "standardized, in Part 30. <bookmark mark='f'/> What nobody can do is base cryptography on an NP-complete "
-            "problem: results of Joan Feigenbaum and Lance Fortnow, and of Andrej Bogdanov and Luca Trevisan, "
-            "suggest the standard techniques cannot."
+            "Average-case complexity provides the bridge from algorithms to cryptographic assumptions. <bookmark mark='a'/> Levin’s distributional problems specify both a language and an efficiently samplable input distribution; the reduction must preserve the relevant average-case guarantees. <bookmark mark='b'/> Håstad, Impagliazzo, Levin and Luby showed that one-way functions imply pseudorandom generators, with the necessary quantitative reductions. <bookmark mark='c'/> Further constructions give fundamental private-key primitives. Public-key encryption requires additional capabilities and does not follow from an arbitrary one-way function by this theorem. <bookmark mark='d'/> Ajtai’s lattice results relate particular average-case problems to specified worst-case approximate lattice problems, with dimension and approximation parameters. <bookmark mark='e'/> Regev’s original LWE result uses a quantum reduction from appropriate worst-case lattice problems under its modulus and noise conditions. This is not a proof that every lattice problem or every encryption system is secure. <bookmark mark='f'/> Worst-case-to-average-case reductions from unrestricted NP-complete problems face known barriers in particular reduction models. Those barriers do not establish that cryptography is impossible."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):

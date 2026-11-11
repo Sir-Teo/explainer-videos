@@ -47,9 +47,9 @@ class Hook(VoiceoverScene):
         items = [
             (r"\textbf{1. A proof you check by sampling}", r"read a few random bits \\ of a long proof; \\ a wrong "
              r"proof is caught \\ with high probability", DATA),
-            (r"\textbf{2. A proof by conversation}", rf"a prover claims {s['true']} assignments \\ satisfy a formula; "
-             rf"\\ a liar survives our questions \\ {s['cheat_survive'] * 100:.0f}\% of the time mod {s['p']}, \\ "
-             r"and never mod a million", HEAD),
+            (r"\textbf{2. A proof by conversation}", rf"claims {s['true']} satisfying assignments; \\ sampled cheating survival: \\ "
+             rf"{round(s['cheat_survive'] * s['trials'])} of {s['trials']:,} mod {s['p']}; \\ "
+             rf"{round(s['cheat_survive_big'] * 300)} of 300 mod {s['big_p']:,}", HEAD),
             (r"\textbf{3. A proof that reveals nothing}", rf"a graph is 3-colourable, \\ yet no colouring is shown; "
              rf"\\ a cheater survives {z['rounds_for_1e9']} rounds \\ with probability below $10^{{-9}}$", YES),
         ]
@@ -67,16 +67,7 @@ class Hook(VoiceoverScene):
         moral = label(r"each trades certainty for a probability of error that can be made as small as you like",
                       font_size=23, color=LAM).next_to(cards, DOWN, buff=0.35)
         with self.voiceover(
-            "A proof used to mean a document you read from beginning to end. This part breaks that idea three ways. "
-            "<bookmark mark='a'/> First: a proof can be written so that reading a handful of random bits of it is "
-            "enough. A correct proof always passes; any proof of a false statement is caught with high probability. "
-            "<bookmark mark='b'/> Second: a proof can be a conversation. A prover claims a formula has seven "
-            "satisfying assignments. We ask random questions, and a lying prover survives about one time in five "
-            "when we work modulo ninety-seven, and never in our trials with a field of a million elements. "
-            "<bookmark mark='c'/> Third: a proof can reveal nothing except that the statement is true. You can be "
-            "convinced that a graph has a three-colouring without learning anything about it; a cheater has less "
-            "than a one in a billion chance of surviving three hundred rounds. <bookmark mark='d'/> Each trades "
-            "certainty for a chance of error, and the chance can be made as small as we like."
+            "A proof can be more than a document read from beginning to end. This part studies three precise alternatives. <bookmark mark='a'/> A probabilistically checkable proof uses a robust encoding. True statements have an accepting proof; every proof of a false statement is rejected with bounded probability. <bookmark mark='b'/> Sum-check turns a claimed exponential sum into a conversation about low-degree polynomials over a finite field. Our small experiment checks complete transcripts; its sample frequencies do not establish the theorem. <bookmark mark='c'/> A zero-knowledge protocol can convince a verifier without revealing additional efficiently usable information about a secret colouring, under its stated definition and commitment assumptions. The graph and statement remain public. <bookmark mark='d'/> We will distinguish perfect completeness, soundness error, computational assumptions and actual finite measurements throughout."
         ) as vo:
             self.play(FadeIn(head))
             for mk, c in zip("abc", cards):
