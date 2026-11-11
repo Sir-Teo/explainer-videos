@@ -22,10 +22,13 @@ def poisson2d(m: int) -> sp.csr_matrix:
 
 
 def steepest(A, b, tol=1e-8, max_iter=20000):
+    b = np.asarray(b, dtype=float)
     x = np.zeros_like(b)
     r = b.copy()
     hist = [1.0]
     nb = np.linalg.norm(b)
+    if nb == 0:
+        return x, [0.0]
     for _ in range(max_iter):
         Ar = A @ r
         a = (r @ r) / (r @ Ar)
@@ -38,16 +41,22 @@ def steepest(A, b, tol=1e-8, max_iter=20000):
 
 
 def cg(A, b, tol=1e-8, max_iter=20000, M=None):
+    b = np.asarray(b, dtype=float)
     x = np.zeros_like(b)
     r = b.copy()
+    nb = np.linalg.norm(b)
+    if nb == 0:
+        return x, [0.0]
     z = M(r) if M else r
     p = z.copy()
     rz = r @ z
-    nb = np.linalg.norm(b)
     hist = [1.0]
     for _ in range(max_iter):
         Ap = A @ p
-        a = rz / (p @ Ap)
+        curvature = p @ Ap
+        if curvature <= 0 or rz <= 0:
+            raise ValueError("CG requires positive definite matrix and preconditioner")
+        a = rz / curvature
         x += a * p
         r -= a * Ap
         hist.append(float(np.linalg.norm(r) / nb))

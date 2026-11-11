@@ -70,6 +70,17 @@ class Eigen(unittest.TestCase):
 
 
 class Iterative(unittest.TestCase):
+    def test_zero_and_integer_right_hand_sides(self):
+        for solver in (iterative.cg, iterative.steepest):
+            x, hist = solver(np.eye(3), [0, 0, 0])
+            np.testing.assert_array_equal(x, np.zeros(3))
+            self.assertEqual(hist, [0])
+            x, hist = solver(np.eye(3), [1, 2, 3])
+            np.testing.assert_allclose(x, [1, 2, 3])
+            self.assertEqual(hist[-1], 0)
+        with self.assertRaises(ValueError):
+            iterative.cg(-np.eye(3), np.ones(3))
+
     def test_cg_solves(self):
         A = iterative.poisson2d(10)
         b = np.ones(100)
