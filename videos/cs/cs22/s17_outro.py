@@ -34,16 +34,11 @@ class Outro(VoiceoverScene):
             tile(MathTex(r"2n + k", font_size=48, color=LAM), r"the sweep line", LAM),
             tile(MathTex(r"z = x^2 + y^2", font_size=44, color=HEAD), r"Voronoi, \ Delaunay, \ lifting", HEAD),
             tile(MathTex(r"\mathbb{E}[\deg] < 6", font_size=46, color=CTRL), r"backwards analysis", CTRL),
-            tile(MathTex(r"\sqrt n + k", font_size=48, color=COST), r"kd-trees; \ HNSW", COST),
+            tile(MathTex(r"\sqrt n + k", font_size=48, color=COST), '2D kd-tree range reporting', COST),
         ).arrange_in_grid(rows=2, cols=3, buff=(0.35, 0.35)).move_to(DOWN * 0.2)
         head = label(rf"Part {PART}: \ Geometry", font_size=38).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "What we built in this part. An orientation test that is never wrong, at almost no cost. Five convex "
-            "hull algorithms, and the reduction from sorting that bounds them all. The sweep line, and guards for "
-            "an art gallery. Voronoi diagrams by Fortune's sweep, Delaunay triangulations by flips and by random "
-            "insertion, and the paraboloid that makes them one thing. Backwards analysis, linear programming, "
-            "kd-trees, point location, navigable graphs in high dimensions, and a robot that slides between "
-            "obstacles."
+            'We built exact integer predicates and a floating orientation filter with a rational fallback. We compared five convex-hull implementations with explicit counters, swept intersections, and proved a guard bound. Voronoi, Delaunay and lifting linked planar diagrams to three-dimensional hulls. Random order explained expected update costs and low-dimensional linear programming. Range queries, point location and approximate neighbour graphs showed different storage and query tradeoffs. Finally, a translating robot used configuration obstacles and independently checked collision-free segments. Every measurement belongs to its stated input, arithmetic and implementation model.'
         ):
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
@@ -74,17 +69,14 @@ class Outro(VoiceoverScene):
 
     def practice(self):
         card = practice_card([
-            (r"maps", r"PostGIS, \ GEOS and S2: \ exact predicates, \ R-trees, \ point location, \ polygon overlay"),
+            (r"maps", 'PostGIS/GEOS: \\ polygon overlay; \\ S2: \\ spherical cell indexes'),
             (r"meshes", r"CGAL, \ Shewchuk's \texttt{Triangle}, \ TetGen: \ Delaunay meshes for simulation"),
             (r"graphics", r"edge functions on every GPU; \ BVHs for ray tracing; \ collision tests in games"),
             (r"robots", r"configuration spaces, \ sampling planners \ (OMPL), \ visibility graphs"),
             (r"vectors", r"FAISS, \ pgvector, \ Lucene: \ HNSW graphs for embeddings"),
         ])
         with self.voiceover(
-            "In practice. Geographic systems like PostGIS and Google's S2 library run on exact predicates, R-trees and "
-            "polygon overlay. CGAL and Shewchuk's Triangle build Delaunay meshes for simulation. Every graphics card "
-            "rasterizes with orientation tests, and every game tests collisions. Robot planners search configuration "
-            "spaces, and every vector database searches a navigable graph."
+            'These ideas recur in geographic overlay, mesh generation, graphics, robotics and vector search. Production systems choose different robustness policies, indexes and precision models. PostGIS, GEOS and S2 are not interchangeable implementations. CGAL and Triangle offer geometry algorithms with documented contracts. Sampling planners still require collision checking. Vector-search libraries offer graph and other index families. Our teaching implementations illustrate the primitives; they do not reproduce every library or establish production performance.'
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.35), run_time=3.0)
@@ -94,22 +86,16 @@ class Outro(VoiceoverScene):
     def problems(self):
         ps = problem_set([
             r"Prove that after sorting, \ Graham's scan makes fewer than $2n$ orientation tests.",
-            r"Prove that the trapezoidal map of $n$ non-crossing segments has at most $3n + 1$ trapezoids.",
+            'For disjoint nonvertical segments with distinct endpoint $x$ in a box, \\ prove the $3n+1$ trapezoid bound.',
             r"Prove the lifting lemma: \ $d$ is inside the circle through $a, b, c$ exactly when its lift is below the "
             r"plane through theirs; \ derive the in-circle determinant from it.",
             r"Show that Seidel's algorithm moves the optimum at most $2H_n$ times in expectation, \ and does $O(n)$ "
             r"expected work.",
-            r"\textit{Build.} \ The orientation test and Andrew's monotone chain in the Pebble language, \ with "
-            r"coordinates below $2^{15}$ so every product fits in a word: \ hull 10,000 points on the emulator.",
-            r"$\bigstar$ \textit{Research.} \ Our HNSW found 99.7\% of the true neighbours with 182 distance "
-            r"computations, \ and no theorem explains it. \ Prove a query bound for graphs built by its diversity rule "
-            r"on data of low doubling dimension, \ or construct inputs that force $\Omega(n)$ computations.",
+            '\\textit{Build.} \\ Implement orientation and monotone chain in Pebble; \\ integer coordinates $0\\le x,y<2^{15}$. \\ Verify on the emulator.',
+            '$\\bigstar$ \\textit{Research.} \\ Reproduce an Indyk--Xu (2023) graph hard instance; \\ state the exact construction, \\ measure recall@10 and query distance evaluations.',
         ], font_size=22)
         with self.voiceover(
-            "Six problems, with full solutions in the part's notes. Pause on any of them. The fifth is a build "
-            "problem: the orientation test and the monotone chain in the Pebble language, run on the emulator. The "
-            "last, marked with a star, is a research problem: its answer is not known, and the notes say where to "
-            "start."
+            'The notes contain six worked exercises. The build exercise asks you to implement a bounded-integer hull in Pebble and verify it on the emulator; this chapter does not claim that port has already run. The starred exercise starts from a published graph hard instance, then asks you to state and test a specific modification. Pause to choose an exercise and record the input and arithmetic assumptions before implementing it.'
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)

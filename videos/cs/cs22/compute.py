@@ -15,7 +15,7 @@ Items:
     voronoi   Fortune's sweep: a logged small run, and event counts against n
     delaunay  empty circles, Lawson flips from a bad triangulation, incremental insertion counts
     lifting   a small set lifted to the paraboloid; its lower hull against the Delaunay triangulation
-    lp        Seidel's LP: a logged run in the plane, and recomputations against 2 ln n
+    lp        Seidel's LP: a logged run in the plane, and recomputations against exact 2 H_n
     kd        a kd-tree's cells, and range-query visits against sqrt(n) + k
     pointloc  a trapezoidal map, and trapezoid counts against 3n + 1
     highdim   distance concentration, kd-trees against dimension, a navigable small-world graph
@@ -28,6 +28,15 @@ Items:
 
 from __future__ import annotations
 
+import functools
+import hashlib
+import inspect
+import json
+from pathlib import Path
+from explainer.cache_lock import locked_item
+from .measurement_references import (protocol,digest,hull_reference,crossing_pairs,triangulation_certificate,
+                                      delaunay_certificate,circle_certificate,path_certificate,segment_interior_reference)
+
 import math
 import random
 import time
@@ -37,17 +46,42 @@ import numpy as np
 from explainer.ai.cache import Cache
 from explainer.cs.algo import geometry as G
 
-CACHE = Cache("cs22")
-load = CACHE.load
+SCHEMAS = {name:2 for name in ('hook','orient','hulls','sweep','gallery','voronoi','delaunay','lifting','lp','kd','pointloc','highdim','duality','planning','emst','welzl','frontier')}
+
+class GeometryCache(Cache):
+    @locked_item(lambda self,name:self.path(name))
+    def load(self,name):
+        if not cache_current(name,self.path(name)):
+            self.save(name,ITEMS[name]())
+        return super().load(name)
+
+CACHE = GeometryCache("cs22")
+
+def cache_current(name,path=None):
+    path = CACHE.path(name) if path is None else path
+    return name not in SCHEMAS or path.exists() and json.loads(path.read_text()).get('schema') == SCHEMAS[name]
+
+def load(name):
+    return CACHE.load(name)
+
+_TRIALS=[]
+
+def _elapsed(start,operation):
+    elapsed=time.perf_counter()-start
+    _TRIALS.append(dict(operation=operation,samples=[elapsed],repeats=1,statistic='single observation',validation='checked after timer'))
+    return elapsed
 
 
-def _best(f, reps=3):
-    best, out = math.inf, None
+def _best(f,reps=3):
+    samples=[];hashes=[];out=None
     for _ in range(reps):
-        t0 = time.perf_counter()
-        out = f()
-        best = min(best, time.perf_counter() - t0)
-    return best, out
+        start=time.perf_counter();out=f();samples.append(time.perf_counter()-start)
+        hashes.append(digest(out))
+    assert len(set(hashes))==1, "repeated deterministic operation changed output"
+    _TRIALS.append(dict(operation=inspect.currentframe().f_back.f_code.co_name,samples=samples,repeats=reps,
+                        statistic='minimum',seconds=min(samples),output_sha256=hashes,
+                        validation='all repeated outputs have identical canonical hashes; final output checked independently after timing'))
+    return min(samples),out
 
 
 def _ints(n, rng, M=10 ** 6):
@@ -91,6 +125,7 @@ def compute_orient() -> dict:
         t_f, _ = _best(lambda: [G.orient_float(*x) for x in data])
         t_a, outs = _best(lambda: [G.orient_adaptive(*x) for x in data])
         t_e, ex_s = _best(lambda: [G.orient_exact(*x) for x in data], reps=1)
+        assert [sign for sign,_ in outs]==ex_s
         wrong = sum(1 for x, e in zip(data, ex_s) if int(np.sign(G.orient_float(*x))) != e)
         rows.append({"inputs": name, "n": len(data), "float_ns": t_f / len(data) * 1e9,
                      "adaptive_ns": t_a / len(data) * 1e9, "exact_ns": t_e / len(data) * 1e9,
@@ -133,19 +168,26 @@ def compute_hulls() -> dict:
                 c = G.Counter()
                 t0 = time.perf_counter()
                 h = f(P, c)
+                seconds = _elapsed(t0,'hulls:'+dist+':'+str(n)+':'+name)
                 if name == "chan":
                     h = h[0]
+                assert set(h)==set(hull_reference(P))
+                row[name + "_verified"] = True
                 row[name] = c.n
                 row[name + "_cmp"] = c.cmp
-                row[name + "_s"] = time.perf_counter() - t0
+                row[name + "_s"] = seconds
                 row["h"] = len(h)
+            row['input_sha256']=digest(P)
             rows.append(row)
     # a small set for the animations
     small = _ints(28, random.Random(7), 1000)
     c = G.Counter()
     hull = G.graham(small, c)
     o = min(small, key=lambda p: (p[1], p[0]))
-    order = sorted((p for p in small if p != o), key=lambda p: (math.atan2(p[1] - o[1], p[0] - o[0])))
+    def angular(a,b):
+        turn=G.orient_int(o,a,b)
+        return -turn if turn else G._sgn(G._d2(o,a)-G._d2(o,b))
+    order = sorted((p for p in small if p != o), key=functools.cmp_to_key(angular))
     # the Graham scan step by step: the stack after each point
     st = [o]
     steps = []
@@ -155,6 +197,7 @@ def compute_hulls() -> dict:
             popped.append(st.pop())
         st.append(p)
         steps.append({"p": p, "popped": popped, "stack": list(st)})
+    assert st==hull
     # sorting by hull
     xs = [11, -26, 38, -6, 19, -37, 3, 28, -15]        # an unsorted list, spread out enough to label
     lifted = [(x, x * x) for x in xs]
@@ -181,12 +224,10 @@ def compute_sweep() -> dict:
             S.append((a, (a[0] + L, a[1] + t * L)))
         t0 = time.perf_counter()
         f, e, ts, _ = G.bentley_ottmann(S)
-        t_bo = time.perf_counter() - t0
-        if n <= 1000:
-            br = G.brute_intersections(S)
-            ok = sorted((i, j) for i, j, _ in f) == sorted((i, j) for i, j, _ in br)
-        else:
-            ok = None
+        t_bo = _elapsed(t0,'sweep:'+str(n))
+        br = crossing_pairs(S)
+        ok = sorted((i,j)for i,j,_ in f)==br
+        assert ok
         rows.append({"n": n, "k": len(f), "events": e, "tests": ts, "pairs": n * (n - 1) // 2, "seconds": t_bo,
                      "ok": ok})
     return {"segs": segs, "found": [[i, j, list(p)] for i, j, p in found], "events": ev, "tests": tests, "log": log,
@@ -203,6 +244,8 @@ def compute_gallery() -> dict:
     cm = G.comb(5)
     ct, _ = G.ear_clip(cm)
     cc = G.fisk_colouring(len(cm), ct)
+    assert triangulation_certificate(poly,tris,col)['area2']==abs(G.polygon_area2(poly))
+    assert triangulation_certificate(cm,ct,cc)['area2']==abs(G.polygon_area2(cm))
     rows = []
     for seed in range(200):
         P = G.star_polygon(60, seed=100 + seed)
@@ -210,6 +253,8 @@ def compute_gallery() -> dict:
             P = P[::-1]
         T, _ = G.ear_clip(P)
         C = G.fisk_colouring(len(P), T)
+        cert=triangulation_certificate(P,T,C)
+        assert len(T)==len(P)-2 and cert['area2']==abs(G.polygon_area2(P))
         rows.append(min(C.count(c) for c in range(3)))
     return {"poly": poly, "tris": tris, "tests": tests, "col": col, "counts": counts, "comb": cm, "comb_tris": ct,
             "comb_col": cc, "comb_counts": [cc.count(c) for c in range(3)],
@@ -225,8 +270,10 @@ def compute_voronoi() -> dict:
         P = _ints(n, rng)
         t0 = time.perf_counter()
         R = G.fortune(P)
-        t = time.perf_counter() - t0
+        t = _elapsed(t0,'fortune:'+str(n))
         ref = G.lifting_delaunay(P)
+        assert R['triangles']==ref and R['counts']['site']==n
+        assert R['counts']['circle']==2*n-2-len(hull_reference(P))
         h = len(G.monotone_chain(P))
         rows.append({"n": n, "site": R["counts"]["site"], "circle": R["counts"]["circle"],
                      "false": R["counts"]["false"], "expected": 2 * n - 2 - h, "match": R["triangles"] == ref,
@@ -278,6 +325,7 @@ def compute_delaunay() -> dict:
     for n in (1000, 4000, 16000):
         Q = _ints(n, rng)
         D = G.delaunay(Q, seed=n)
+        cert=delaunay_certificate(Q,D.triangles())
         rows.append({"n": n, "order": "random", "created": D.created, "flips": D.flips, "walk": D.walk})
     for k in (100, 200, 400, 800):
         # a flat convex chain, then points above its middle, inserted from the top down: each new one sees them all
@@ -286,8 +334,11 @@ def compute_delaunay() -> dict:
         Q = A + B
         D = G.delaunay(Q, order=list(range(2 * k)))
         Dr = G.delaunay(Q, seed=1)
+        delaunay_certificate(Q,D.triangles());delaunay_certificate(Q,Dr.triangles())
         rows.append({"n": 2 * k, "order": "adversarial", "created": D.created, "flips": D.flips, "walk": D.walk,
                      "created_random": Dr.created, "flips_random": Dr.flips})
+    assert L==ref
+    delaunay_certificate(P,L)
     return {"P": P, "T0": [list(t) for t in T0], "flips": flips, "seq": seq, "L": L, "match": L == ref,
             "angles": [math.degrees(a) for a in angles], "min0": math.degrees(G.min_angle(P, T0)),
             "min1": math.degrees(G.min_angle(P, L)), "rows": rows}
@@ -302,6 +353,7 @@ def compute_lifting() -> dict:
     lower = sorted(tuple(sorted(s)) for s, e in zip(H.simplices, H.equations) if e[2] < 0)
     upper = sorted(tuple(sorted(s)) for s, e in zip(H.simplices, H.equations) if e[2] >= 0)
     sd = sorted(tuple(sorted(s)) for s in SD(np.asarray(P)).simplices)
+    assert lower==sd
     # the in-circle determinant equals an orientation test in 3D on the lifted points
     a, b, c, d = (0.0, 0.0), (4.0, 0.0), (0.0, 4.0), (1.0, 1.0)
     M = np.array([[*p, p[0] ** 2 + p[1] ** 2, 1.0] for p in (a, b, c, d)])
@@ -333,14 +385,14 @@ def compute_lp() -> dict:
                 t = rng.uniform(0, 2 * math.pi)
                 Hs.append((math.cos(t), math.sin(t), 1 + rng.random()))
             x, rc, w = G.seidel_lp(Hs, (1.0, 0.3), seed=s)
+            reference=linprog([-1,-0.3],A_ub=[h[:2]for h in Hs],b_ub=[h[2]for h in Hs],bounds=[(-1e6,1e6)]*2)
+            assert reference.success and x is not None
+            assert np.all(np.asarray(Hs)[:,:2]@np.asarray(x)<=np.asarray(Hs)[:,2]+1e-7)
+            assert abs(x[0]+.3*x[1]+reference.fun)<1e-6
             recs.append(rc)
             works.append(w)
-        if n <= 1000:
-            r = linprog([-1, -0.3], A_ub=[h[:2] for h in Hs], b_ub=[h[2] for h in Hs], bounds=[(None, None)] * 2)
-            ok = abs((x[0] + 0.3 * x[1]) + r.fun) < 1e-6
-        else:
-            ok = None
-        rows.append({"n": n, "recompute": float(np.mean(recs)), "bound": 2 * (math.log(n) + 0.5772),
+        ok=True
+        rows.append({"n": n, "recompute": float(np.mean(recs)), "bound": 2 * math.fsum(1/i for i in range(1,n+1)),
                      "work_per_n": float(np.mean(works)) / n, "ok": ok})
     return {"H": H, "c": c, "order": order, "trace": trace, "rows": rows}
 
@@ -369,18 +421,21 @@ def compute_kd() -> dict:
     T.visited = 0
     box = ((0.22, 0.28), (0.68, 0.7))
     got = T.range(*box)
+    assert sorted(got)==np.flatnonzero(np.all(P>=box[0],axis=1)&np.all(P<=box[1],axis=1)).tolist()
     rows = []
     for n in (1000, 10000, 100000, 300000):
         Q = rng.random((n, 2))
         t0 = time.perf_counter()
         K = G.KDTree(Q)
-        tb = time.perf_counter() - t0
+        tb = _elapsed(t0,'kd build:'+str(n))
         vis, ks = [], []
         for _ in range(40):
             x, y = rng.random(2) * 0.9
             w = 0.02
             K.visited = 0
             out = K.range((x, y), (x + w, y + w))
+            ref=np.flatnonzero(np.all(Q>=(x,y),axis=1)&np.all(Q<=(x+w,y+w),axis=1)).tolist()
+            assert sorted(out)==ref
             vis.append(K.visited)
             ks.append(len(out))
         rows.append({"n": n, "visited": float(np.mean(vis)), "k": float(np.mean(ks)), "sqrt_n": math.sqrt(n),
@@ -413,7 +468,10 @@ def compute_pointloc() -> dict:
                 if any(G._seg_x_cross((a, b), s) is not None for s in S):
                     continue
                 S.append((a, b))
-            counts.append(G._trapezoids(S, (-1, -10, 120, 110)))
+            assert len(S)==n and not crossing_pairs(S)
+            count=G._trapezoids(S,(-1,-10,120,110))
+            assert count<=3*n+1
+            counts.append(count)
         rows.append({"n": n, "max": max(counts), "mean": float(np.mean(counts)), "bound": 3 * n + 1})
     return {"segs": segs, "walls": walls, "trapezoids": nt, "rows": rows}
 
@@ -435,7 +493,9 @@ def compute_highdim() -> dict:
         vis = []
         for _ in range(20):
             T.visited = 0
-            T.nearest(rng.random(d))
+            query=rng.random(d);index,distance=T.nearest(query)
+            ds=((X-query)**2).sum(1);assert abs(distance**2-ds.min())<=1e-10
+            assert abs(ds[index]-ds.min())<=1e-10
             vis.append(T.visited)
         kd.append({"d": d, "visited": float(np.mean(vis)), "nodes": 2 * n - 1, "share": float(np.mean(vis)) /
                    (2 * n - 1)})
@@ -443,13 +503,14 @@ def compute_highdim() -> dict:
     centres = rng.standard_normal((200, 16)) * 3
     X = (centres[rng.integers(0, 200, 20000)] + rng.standard_normal((20000, 16))).astype(np.float64)
     Q = (centres[rng.integers(0, 200, 100)] + rng.standard_normal((100, 16)))
-    truth = [set(np.argsort(((X - q) ** 2).sum(1))[:10].tolist()) for q in Q]
+    truth = [set(np.argsort(((X - q) ** 2).sum(1),kind='stable')[:10].tolist()) for q in Q]
+    assert len(Q)==100 and sum(map(len,truth))==1000
     t0 = time.perf_counter()
     adj, build_evals = G.nsw_build(X, M=12, ef=80)
-    t_nsw = time.perf_counter() - t0
+    t_nsw = _elapsed(t0,'single-layer NSW build')
     t0 = time.perf_counter()
     H = G.HNSW(X, M=12, ef_construction=80)
-    t_h = time.perf_counter() - t0
+    t_h = _elapsed(t0,'hierarchical NSW build')
     nsw, hn = [], []
     for ef in (10, 20, 40, 80, 160):
         rec, ev = 0.0, 0
@@ -465,7 +526,8 @@ def compute_highdim() -> dict:
             r = H.query(q, 10, ef)
             rec += len(tr & {j for _, j in r}) / 10
         hn.append({"ef": ef, "recall": rec / len(Q), "evals": H.evals / len(Q)})
-    return {"conc": conc, "kd": kd, "kd_n": n, "nsw": nsw, "hnsw": hn, "nsw_n": 20000, "nsw_build_s": t_nsw,
+    assert all(0<=r['recall']<=1 and r['evals']>=10 for r in nsw+hn)
+    return {"measurement_scope":"mean recall@10 on100 seeded clustered queries; query distance evaluations exclude construction and are not elapsed CPU time; simplified teaching NSW/HNSW-style implementations", "query_count":len(Q),"truth_neighbors":1000,"input_sha256":digest(X),"queries_sha256":digest(Q),"conc": conc, "kd": kd, "kd_n": n, "nsw": nsw, "hnsw": hn, "nsw_n": 20000, "nsw_build_s": t_nsw,
             "hnsw_build_s": t_h, "nsw_build_evals": build_evals, "levels": [len(L) for L in H.levels]}
 
 
@@ -491,9 +553,14 @@ def compute_planning() -> dict:
     runs = []
     for sd in range(20):
         nodes, par, rp, it = G.rrt(start, goal, cs, box, step=0.5, iters=4000, seed=sd)
-        rl = sum(math.dist(a, b) for a, b in zip(rp, rp[1:])) if rp else None
+        for i,parent in enumerate(par):
+            if parent>=0:assert not any(segment_interior_reference(nodes[parent],nodes[i],P)for P in cs)
+        rl = path_certificate(rp,cs) if rp else None
         runs.append({"seed": sd, "nodes": len(nodes), "iters": it, "length": rl})
-    show = sorted(runs, key=lambda r: abs(r["length"] / length - 1.3))[0]["seed"]
+    assert abs(path_certificate(path,cs)-length)<1e-8
+    successes=[r for r in runs if r['length'] is not None]
+    assert successes
+    show = min(successes,key=lambda r:abs(r['length']/length-1.3))['seed']
     nodes, par, rp, it = G.rrt(start, goal, cs, box, step=0.5, iters=4000, seed=show)
     ok = [r for r in runs if r["length"]]
     return {"robot": robot, "obs": obs, "cspace": cs, "start": start, "goal": goal, "path": path, "length": length,
@@ -516,11 +583,13 @@ def compute_emst() -> dict:
         t0 = time.perf_counter()
         T = G.lifting_delaunay(Q)
         ed, wd, nd = G.emst_delaunay(Q, T)
-        t1 = time.perf_counter()
+        t_delaunay = _elapsed(t0,'EMST triangulation plus Kruskal:'+str(n))
+        t0 = time.perf_counter()
         wp = G.emst_prim(Q)
-        t2 = time.perf_counter()
+        t_prim = _elapsed(t0,'complete graph Prim:'+str(n))
+        assert abs(wd-wp)<=1e-6*max(1.,wp)
         rows.append({"n": n, "delaunay_edges": nd, "pairs": n * (n - 1) // 2, "w_delaunay": wd, "w_prim": wp,
-                     "same": abs(wd - wp) < 1e-6 * wp, "t_delaunay": t1 - t0, "t_prim": t2 - t1})
+                     "same": abs(wd - wp) < 1e-6 * wp, "t_delaunay": t_delaunay, "t_prim": t_prim})
     return {"P": P, "delaunay": sorted(D), "mst": e, "rows": rows}
 
 
@@ -535,12 +604,14 @@ def compute_welzl() -> dict:
         c, r, _ = G.welzl(Q[:k], seed=10 ** 6)
         steps.append([c[0], c[1], r])
     c, r, rb = G.welzl(P)
+    circle_certificate(P,c,r)
     rows = []
     for n in (100, 1000, 10000, 100000):
         X = [(rng.gauss(0, 1), rng.gauss(0, 1)) for _ in range(n)]
         t0 = time.perf_counter()
         cc, rr, rb2 = G.welzl(X, seed=n)
-        tw = time.perf_counter() - t0
+        tw = _elapsed(t0,'Welzl:'+str(n))
+        certificate=circle_certificate(X,cc,rr)
         far = max(math.dist(cc, x) for x in X)
         rows.append({"n": n, "rebuilt": rb2, "ln_n": math.log(n), "seconds": tw, "ok": abs(far - rr) < 1e-9 * rr})
     return {"P": Q, "steps": steps, "c": list(c), "r": r, "rows": rows}
@@ -563,11 +634,25 @@ def compute_frontier() -> dict:
             if i < j < k and a + b + c == 0]
     col = [(a, b, c) for i, a in enumerate(nums) for j, b in enumerate(nums) for k, c in enumerate(nums)
            if i < j < k and G.orient_int((a, a ** 3), (b, b ** 3), (c, c ** 3)) == 0]
+    assert sorted(trip)==sorted(col)
     return {"float_ns": t_f / len(near) * 1e9, "exact_ns": t_e / len(near) * 1e9, "nums": nums, "triples": trip,
             "collinear": col}
 
 
-ITEMS = {k[8:]: v for k, v in globals().items() if k.startswith("compute_")}
+def _checked_producer(name,function):
+    @functools.wraps(function)
+    def checked():
+        global _TRIALS
+        previous=_TRIALS;_TRIALS=[]
+        try:
+            start=time.perf_counter();data=function();total=time.perf_counter()-start
+            data.update(schema=SCHEMAS[name],protocol=protocol(),timed_trials=list(_TRIALS),
+                        producer_wall_seconds=total,producer_wall_scope='includes input generation and post-timer references; not an algorithm benchmark',
+                        validation='producer invariants and independent finite references checked outside algorithm timers')
+            return data
+        finally:_TRIALS=previous
+    return checked
 
+ITEMS = {k[8:]:_checked_producer(k[8:],v) for k,v in list(globals().items()) if k.startswith("compute_")}
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from explainer.cs import *  # noqa: F403
+from explainer.cs.algo import geometry as G
 from videos.cs.cs22.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 SIDE = 5.6
@@ -16,6 +17,7 @@ class KdTree(VoiceoverScene):
     def construct(self):
         self.card()
         self.build()
+        self.boundary()
         self.measured()
         self.others()
 
@@ -43,7 +45,7 @@ class KdTree(VoiceoverScene):
         side = VGroup(
             label(r"split the points at the median $x$; \\ split each half at its median $y$; \ repeat", font_size=21,
                   color=WHITE),
-            label(r"$O(n \log n)$ to build, \ $O(n)$ space, \ depth $\log_2 n$", font_size=21, color=DATA),
+            label('median partition at each level: \\ $O(n\\log n)$ build model, $O(n)$ space', font_size=21, color=DATA),
             label(r"a query descends only into cells \\ that meet the rectangle", font_size=21, color=NO),
             label(rf"here: \ {len(d['inside'])} points reported, \ {d['visited']} of "
                   rf"{2 * len(P) - 1} nodes visited", font_size=21, color=HEAD),
@@ -95,17 +97,13 @@ class KdTree(VoiceoverScene):
                          mono_cols=(), colors=[[WHITE, HEAD, NO, GREY_A, YES, GREY_A]] * len(rows))
         tab.next_to(head, DOWN, buff=0.5).set_x(0)
         notes = VGroup(
-            label(r"averages of 40 queries; \ the visits stay below $\sqrt n + k$, \ far below $n$",
+            label('40 queries per size, all checked; \\ node visits are counts, not query timings',
                   font_size=22, color=WHITE),
-            label(r"the $\sqrt n$ is the price of linear space: \ in $d$ dimensions it becomes $n^{1 - 1/d}$", font_size=22,
+            label('for balanced kd-trees in fixed $d$: \\ reporting bound $O(n^{1-1/d}+k)$', font_size=22,
                   color=NO),
         ).arrange(DOWN, buff=0.3).next_to(tab, DOWN, buff=0.45)
         with self.voiceover(
-            "We built kd-trees of up to three hundred thousand random points and asked forty small square queries "
-            "of each. <bookmark mark='a'/> The visits stay below root n plus k: about three "
-            "hundred and thirty nodes for three hundred thousand points, where a scan would look at all of them. "
-            "<bookmark mark='b'/> The square root is the price of linear space, and it gets worse with dimension: in "
-            "d dimensions a kd-tree query costs n to the one minus one over d, a warning for chapter twelve."
+            "For each size up to three hundred thousand seeded random points, we checked all forty closed-rectangle queries against a full NumPy scan after timing. <bookmark mark='a'/> The table reports mean output size and node visits. These samples fall below root n plus k, but big O does not promise a leading constant of one. Node visits do not directly measure latency, and the last column times construction only. <bookmark mark='b'/> A balanced kd-tree's standard orthogonal-reporting bound in fixed dimension is n to the one minus one over d, plus output size. Ties need consistent closed-boundary handling, as the previous witness showed. The dimension dependence warns us that pruning may deteriorate as dimension grows."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule),
                       LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.3))
@@ -125,8 +123,7 @@ class KdTree(VoiceoverScene):
                   r"\ so one binary search serves a whole path: \ $O(\log n + k)$", font_size=22, color=LAM),
             label(r"\textbf{interval trees} and \textbf{segment trees}: \ which intervals contain a point?", font_size=22,
                   color=YES),
-            label(r"in databases, \ R-trees \ (Guttman, 1984) \ group nearby rectangles in pages of a B-tree \ "
-                  r"(Part 17): \ PostGIS, \ SQLite, \ every map server", font_size=22, color=HEAD),
+            label('R-trees \\ (Guttman, 1984): \\ nearby rectangles in tree pages; \\ PostGIS and SQLite spatial indexes', font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.34).next_to(head, DOWN, buff=0.55)
         with self.voiceover(
             "If we can afford more space, queries get faster. <bookmark mark='a'/> A range tree is a balanced tree "
@@ -144,3 +141,34 @@ class KdTree(VoiceoverScene):
                 self.play(FadeIn(ln, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
+
+
+    def boundary(self):
+        points = np.array([[1.,0.],[1.,1.],[1.,1.],[2.,1.]])
+        tree = G.KDTree(points)
+        got = sorted(tree.range((1.,0.),(1.,1.)))
+        assert got == [0,1,2]
+        head = label('Closed range queries include split-plane ties',font_size=32).to_edge(UP,buff=.35)
+        pos = lambda x,y: np.array([-3.6+(x-1)*2.8,-1.2+y*2.5,0])
+        split = DashedLine(pos(1,-.3),pos(1,1.4),color=LAM,stroke_width=3)
+        query = Line(pos(1,0),pos(1,1),color=HEAD,stroke_width=12).set_opacity(.5)
+        dots = VGroup(*[Dot(pos(*q),radius=.11,color=YES if i in got else GREY_B)for i,q in enumerate(points)])
+        duplicate = Circle(radius=.2,color=DATA,stroke_width=3).move_to(pos(1,1))
+        labels = VGroup(label('record 0',font_size=21,color=YES).next_to(pos(1,0),LEFT),
+                        label('records 1 and 2',font_size=21,color=YES).next_to(pos(1,1),LEFT),
+                        label('record 3',font_size=21,color=GREY_A).next_to(pos(2,1),DOWN))
+        notes = VGroup(
+            MathTex(r'[1,1]\times[0,1]',font_size=40,color=HEAD),
+            label('two records share the same coordinates',font_size=22,color=DATA),
+            label('equal split coordinates may occur in both children',font_size=22,color=LAM),
+            label(r'$\ell_x=s$: \ visit the left child too',font_size=25,color=YES),
+            label('returned records: 0, 1, 2',font_size=26,color=YES),
+        ).arrange(DOWN,buff=.4).move_to(RIGHT*2.8)
+        if notes.width>7.:notes.width=7.;notes.set_x(2.8)
+        with self.voiceover("A closed rectangle has a boundary, and that boundary matters. <bookmark mark='a'/> Query x equal to one and y between zero and one, including both endpoints. There are three records on this line, because two records share one position. <bookmark mark='b'/> Median partitioning can put equal split coordinates in either child. When the lower query bound equals the split, skipping the left child can lose a valid record. Visit it too. <bookmark mark='c'/> The executed query returns records zero, one and two. Geometry includes the boundary; the implementation must preserve that convention.") as vo:
+            self.play(FadeIn(head),Create(split),FadeIn(dots),FadeIn(labels),FadeIn(notes[0]))
+            vo.wait_until('a');self.play(Create(query),Create(duplicate),FadeIn(notes[1]))
+            vo.wait_until('b');self.play(FadeIn(notes[2]),FadeIn(notes[3]))
+            vo.wait_until('c');self.play(FadeIn(notes[4]),Indicate(duplicate,color=YES))
+        self.wait(.3);self.clear_scene()
+

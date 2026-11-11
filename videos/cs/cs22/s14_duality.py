@@ -56,17 +56,10 @@ class Duality(VoiceoverScene):
         facts = VGroup(
             label(r"the line through two points $\leftrightarrow$ the point where their dual lines cross", font_size=21,
                   color=WHITE),
-            label(r"above $\leftrightarrow$ above: \ order is preserved, \ so a question about one becomes a question "
-                  r"about the other", font_size=21, color=YES),
+            label('point above line $\\leftrightarrow$ dual line below point; \\ incidence is preserved', font_size=21, color=YES),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.2)
         with self.voiceover(
-            "Some of geometry's best tricks change what the objects are. <bookmark mark='a'/> Send the point a, b to "
-            "the line y equals a x minus b. Each point on the left becomes a line on the right, in the same colour. "
-            "<bookmark mark='b'/> Now take the line through two of the points: the white one. It becomes a single "
-            "point, and that point is exactly where the two dual lines cross. <bookmark mark='c'/> And the map "
-            "preserves above and below: a point above a line becomes a line above a point. So a question about "
-            "points and the lines through them becomes a question about lines and their crossings, and sometimes "
-            "the second is much easier to answer."
+            "Map a point a, b to the line y equals a x minus b. <bookmark mark='a'/> Each coloured point becomes a line of the same colour. A nonvertical line y equals m x plus c maps to the point m, minus c. <bookmark mark='b'/> Incidence is preserved: two primal points on a line become two dual lines meeting at its dual point. <bookmark mark='c'/> Check the inequality carefully. If b is greater than m a plus c, then a m minus b is less than minus c. A point above a primal line therefore becomes a dual line below its dual point. This convention reverses the above relation; the algebra fixes the direction."
         ) as vo:
             self.play(FadeIn(head), FadeIn(axL), FadeIn(axR), FadeIn(ttl), FadeIn(pts))
             vo.wait_until("a")
@@ -82,32 +75,25 @@ class Duality(VoiceoverScene):
     def arrangements(self):
         head = label(r"Arrangements of lines", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
-            label(r"$n$ lines cut the plane into $\binom{n}{2} + n + 1$ faces: \ the \textbf{arrangement}", font_size=22,
+            label('no parallels or triple intersections: \\ $\\binom n2+n+1$ arrangement faces', font_size=22,
                   color=WHITE),
             label(r"the \textbf{zone theorem}: \ a new line meets only $O(n)$ edges of the faces it crosses, \ so the "
                   r"arrangement is built in $O(n^2)$", font_size=22, color=LAM),
             label(r"``are any three points collinear?'' \ becomes \ ``do any three dual lines meet?'': \ a vertex of "
                   r"the arrangement, \ $O(n^2)$", font_size=22, color=YES),
-            label(r"nobody knows how to do it faster: \ the frontier chapter shows why \ (3SUM)", font_size=22,
+            label('3SUM reductions give conditional barriers; \\ no unrestricted quadratic lower bound is claimed', font_size=22,
                   color=NO),
             label(r"the same duality turns the hull of points into the intersection of half-planes, \ and the "
                   r"lifting map's Voronoi into an upper envelope \ (chapter 7)", font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.34).next_to(head, DOWN, buff=0.55)
         with self.voiceover(
-            "Dual lines meet in arrangements. <bookmark mark='a'/> n lines in general position cut the plane into "
-            "about n squared over two faces. <bookmark mark='b'/> The zone theorem says a new line passes through "
-            "faces whose boundaries have only order n edges in all, so the whole arrangement can be built "
-            "incrementally in n squared time. <bookmark mark='c'/> That answers questions like this: are any three "
-            "of n points on one line? Dualize, and ask whether any three dual lines pass through one vertex of the "
-            "arrangement. <bookmark mark='d'/> n squared, and nobody knows how to do it fundamentally faster; the "
-            "frontier chapter explains why that is no accident. <bookmark mark='e'/> The same duality turns the hull "
-            "of a set of points into an intersection of half-planes, and it is the reason the Voronoi diagram is an "
-            "upper envelope of planes."
+            "An arrangement partitions the plane with lines. <bookmark mark='a'/> With no parallels and no triple intersections, n lines give n choose two plus n plus one faces. Degeneracies reduce that count. <bookmark mark='b'/> The zone theorem bounds the total boundary complexity of faces crossed by another line by order n, supporting quadratic construction. <bookmark mark='c'/> Collinearity becomes concurrency under our duality. An arrangement algorithm that explicitly handles degeneracies can therefore detect three collinear distinct input points. <bookmark mark='d'/> Three-sum reductions explain conditional barriers to a truly subquadratic algorithm in stated models. They are not an unconditional quadratic lower bound, and logarithmic improvements are possible. <bookmark mark='e'/> Duality also links convex hulls, half-plane intersections and envelopes. Each transformation needs its incidence and sign conventions checked."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(lines[0]))
             for mk, ln in zip("abcde", lines):
                 vo.wait_until(mk)
-                self.play(FadeIn(ln, shift=UP * 0.1))
+                if ln is not lines[0]:
+                    self.play(FadeIn(ln, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
 

@@ -133,8 +133,8 @@ class Delaunay(VoiceoverScene):
                 old = lines.pop(frozenset((a, b)))
                 new = Line(f(P[c]), f(P[dd]), color=YES, stroke_width=2.4)
                 lines[frozenset((c, dd))] = new
-                self.play(old.animate.set_color(NO), run_time=0.15)
-                self.play(ReplacementTransform(old, new), run_time=0.35)
+                self.play(old.animate.set_color(NO), run_time=0.1)
+                self.play(ReplacementTransform(old, new), run_time=0.15)
             self.play(FadeIn(side[3]), *[x.animate.set_color(YES) for x in lines.values()])
             vo.wait_until("e")
             self.play(FadeIn(side[4]))
@@ -146,8 +146,7 @@ class Delaunay(VoiceoverScene):
     def uses(self):
         head = label(r"What the empty circles buy", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
-            label(r"no slivers that can be avoided: \ meshes for finite-element simulation \ (Ruppert's refinement, "
-                  r"1995)", font_size=22, color=YES),
+            label('mesh refinement adds sites; \\ angle guarantees require input-angle assumptions \\ (Ruppert, 1995)', font_size=22, color=YES),
             label(r"terrain models from scattered heights \ (TINs); \ interpolation by natural neighbours", font_size=22,
                   color=DATA),
             label(r"every point's nearest neighbour, \ and every edge of the minimum spanning tree, \ is a Delaunay edge",
@@ -156,14 +155,7 @@ class Delaunay(VoiceoverScene):
                   r"\ or by inserting points at random \ (chapter 8)", font_size=22, color=WHITE),
         ).arrange(DOWN, buff=0.34).next_to(head, DOWN, buff=0.55)
         with self.voiceover(
-            "The empty circles are worth having. <bookmark mark='a'/> A triangulation without needless slivers is "
-            "what simulations need: finite-element meshes are Delaunay, refined by adding points, as in Jim "
-            "Ruppert's algorithm. <bookmark mark='b'/> Terrain models join scattered height measurements this way, "
-            "and the triangulation gives natural interpolation between them. <bookmark mark='c'/> And it holds the "
-            "answers to other questions: each point's nearest neighbour is joined to it by a Delaunay edge, and so is "
-            "every edge of the minimum spanning tree, as we are about to check. <bookmark mark='e'/> It can be "
-            "built in n log n three ways: by Fortune's sweep, by divide and conquer, or, most simply, by inserting "
-            "the points in random order, which is the next chapter but one."
+            "The empty-circle property has useful consequences. <bookmark mark='a'/> Delaunay refinement adds sites to improve simulation meshes. Ruppert's quality and termination guarantees require assumptions about the input geometry; a small required input angle cannot simply be erased. <bookmark mark='b'/> Terrain triangulations and natural-neighbour interpolation use related constructions. <bookmark mark='c'/> In general position, nearest-neighbour edges and the Euclidean minimum spanning tree lie in the Delaunay graph. We check spanning-tree weights next. <bookmark mark='e'/> Sweeps, divide and conquer, and randomized insertion with suitable point location achieve n log n bounds in their arithmetic models. Our walking locator is a simpler implementation and does not acquire that guarantee merely by shuffling."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abce", lines):
@@ -182,7 +174,7 @@ class Delaunay(VoiceoverScene):
         T = VGroup(*[Line(f(P[int(a)]), f(P[int(b)]), color=YES, stroke_width=3) for a, b in d["mst"]])
         rows = [[words(r["n"]), words(r["delaunay_edges"]), words(r["pairs"]), r"yes" if r["same"] else r"NO",
                  f"{r['t_delaunay']:.2f} s", f"{r['t_prim']:.2f} s"] for r in d["rows"]]
-        tab = grid_table([r"points", r"Delaunay edges", r"all pairs", r"same tree", r"via Delaunay", r"Prim"],
+        tab = grid_table([r"points", r"Delaunay edges", r"all pairs", 'same weight', r"via Delaunay", r"Prim"],
                          rows, widths=[1.2, 1.8, 1.9, 1.3, 1.6, 1.0], row_h=0.44, font_size=20, mono_cols=(),
                          colors=[[WHITE, YES, NO, YES, YES, GREY_A]] * len(rows))
         side = VGroup(
@@ -196,20 +188,12 @@ class Delaunay(VoiceoverScene):
             side.width = 7.2
         side.to_edge(RIGHT, buff=0.3)
         with self.voiceover(
-            "Here is the claim tested. <bookmark mark='a'/> Seventy points, their Delaunay triangulation in grey, "
-            "and in green their minimum spanning tree, the shortest network that connects them all. Every green "
-            "edge lies on a grey one. <bookmark mark='b'/> The reason is an exchange argument: if a tree edge a b "
-            "were not a Delaunay edge, some point would sit inside the circle with a b as diameter, closer to both "
-            "ends, and swapping it in would make the tree shorter. <bookmark mark='c'/> So Kruskal's algorithm "
-            "from Part 18 need only look at the Delaunay edges, about three per point. For eight thousand points that "
-            "is twenty-four thousand edges instead of thirty-two million pairs, and the tree comes out identical to "
-            "Prim's algorithm run on every pair. Michael Shamos and Dan Hoey made this the first n log n algorithm "
-            "for the problem in 1975."
+            "Here are seventy points, their Delaunay edges, and a minimum spanning tree. <bookmark mark='a'/> Every green edge is present in the triangulation. <bookmark mark='b'/> Remove an MST edge a b and consider its cut. Any site inside the disk with diameter a b is closer to both ends. Joining that site to the endpoint on the other side gives a shorter crossing edge, contradicting minimality. Thus the diameter disk is empty and the edge is Delaunay. <bookmark mark='c'/> Kruskal can search the linear-sized Delaunay graph. For every displayed size, including eight thousand points, we independently run complete-graph Prim after timing and compare total weights within a declared numerical tolerance. Equal weights certify these numerical results; they need not identify a unique tree when ties occur. The two timing columns are separate host measurements."
         ) as vo:
             self.play(FadeIn(head), FadeIn(sd))
             vo.wait_until("a")
-            self.play(LaggedStart(*[Create(x) for x in D], lag_ratio=0.01), run_time=2.0)
-            self.play(LaggedStart(*[Create(x) for x in T], lag_ratio=0.03), run_time=2.5)
+            self.play(LaggedStart(*[Create(x) for x in D], lag_ratio=0.01), run_time=1.0)
+            self.play(LaggedStart(*[Create(x) for x in T], lag_ratio=0.03), run_time=1.3)
             vo.wait_until("b")
             self.play(FadeIn(side[0]))
             vo.wait_until("c")

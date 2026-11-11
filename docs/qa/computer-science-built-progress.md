@@ -1,10 +1,37 @@
 # Computer Science, Built — sequential polish
 
 Work on `computer-science-built`, one video at a time, with separate commits.
-Current video: **cs22, Geometry**. CS1–CS21 source/preview polish checkpoints
+Current video: **cs23, Optimization**. CS1–CS22 source/preview polish checkpoints
 are complete at the scopes below. Their production release gates remain open; this
 ledger does not treat sampled previews as listening or final-production approval.
 The syllabus's earlier draft-preview claims are separate.
+
+## Final CS22 preview checkpoint, 11 November 2026
+
+- Repair exact predicate domains/fallbacks, hull tie/tangent work, integer triangulations, closed KD queries,
+  finite LP/RRT domains and complete convex-segment clipping. Seventeen fresh schema-2 producers retain raw
+  timing repetitions and post-timer references; all 17 payloads change. All 27 tests and 13 numerical/model
+  groups pass, alongside 3,999 algorithm cases, 2,400 hull cases and 112,941 triangulation checks.
+- A separate UBSan/GMP reference passes 2,157 fixtures and 3,914 exact predicate checks. Full measured hulls,
+  crossings, triangulations, LPs, KD queries, enclosing circles and spanning trees have independent references.
+  All six configuration-obstacle pairs have exact separation certificates; all 136 RRT parent edges are checked.
+- Polish bilingual explanations, theorem/implementation scopes and six worked exercises. Add floating-underflow,
+  duplicate-coordinate KD and missed-corner-collision witnesses. Correct dual vertical order, dated research
+  claims and the Chinese geometric-disk caption. No executed Pebble port or continuous listening is claimed.
+- Review all 34 endpoint and 34 silent motion overviews: 565 appearance states, 1,360 temporal samples and
+  89,025 decoded frames. Every raw receipt has its actual frozen source fingerprint. Sixty-six chapter reviews
+  inherit only through actual PNG equality; both corrected Chinese hull chapter reviews are fresh.
+- Review all 76 native 1080p15 clips: 62,652 decoded frames, 1,824 samples and 76 native stills. Seventy-five
+  complete movie hashes preserve archived positive reviews; the corrected hull table receives fresh review.
+  Three actual English narrated pilots decode 10,141 frames plus audio; 120 samples/three stills retain reviews
+  through identical complete movie hashes. Superseded failures and the repaired archive-reference audit remain.
+- All 72 English speech blocks pass signal/alignment (45.7221 minutes); all 230 cue requests meet 250 ms.
+  Source pairs and runtime captures each cover 72/72 bilingual blocks. All 583 captured captions have zero
+  unresolved explanatory translation leads; 28 retained originals and four numeric-unit leads are classified.
+
+[Verified CS22 evidence](evidence/cs22-polish-20261110/README.md).
+Continuous narrated listening, Chinese speech/listening, whole-video native production review and runtime at
+selected narration pace remain open release gates.
 
 ## Final CS21 preview checkpoint, 10 November 2026
 
@@ -573,8 +600,9 @@ Evidence, exact source/data hashes, reports and reproduction commands:
 
 ## Continue here
 
-1. Apply CS22's isolated geometry/provenance repairs after its 34 original bilingual endpoint reviews.
-2. Rebuild all CS22 numerical payloads, finish bilingual scope/visual repairs, and verify current previews,
-   native clips, English speech and cue scheduling with exact provenance.
-3. Commit CS22 separately and continue CS23–CS61 in order, preserving the distinction between preview
+1. Preserve CS23's untouched source/history/data, complete all 15 original producers and review its 32
+   original bilingual endpoint captures before applying the isolated optimization proposals.
+2. Repair confirmed simplex, knapsack, TU, cover-iterator, stable-weight, SDP/cut and polytope-model issues;
+   rebuild numerical provenance, polish bilingual explanations and verify current previews/speech scheduling.
+3. Commit CS23 separately and continue CS24–CS61 in order, preserving the distinction between preview
    checks and the open production/listening gates.

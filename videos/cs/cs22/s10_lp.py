@@ -131,7 +131,7 @@ class Lp(VoiceoverScene):
         d = load("lp")
         head = label(r"Why random order makes it linear", font_size=32).to_edge(UP, buff=0.35)
         lines = VGroup(
-            label(r"backwards again: \ the optimum of $i$ constraints is fixed by \textbf{two} of them", font_size=22,
+            label('exact model, fixed box and consistent ties: \\ at most two constraints determine the optimum', font_size=22,
                   color=WHITE),
             MathTex(r"\Pr[\text{the $i$-th constraint moved it}] \le \frac{2}{i} \qquad \Rightarrow \qquad "
                     r"\mathbb{E}[\text{work}] \le \sum_{i} \frac{2}{i}\, O(i) = O(n)", font_size=32, color=YES),
@@ -145,15 +145,7 @@ class Lp(VoiceoverScene):
                          mono_cols=(), colors=[[WHITE, NO, GREY_A, YES, YES]] * len(rows))
         tab.next_to(lines, DOWN, buff=0.4).set_x(0)
         with self.voiceover(
-            "How much does this cost? <bookmark mark='a'/> Backwards analysis once more. After i constraints, the "
-            "optimum is a corner where two constraint lines meet. The i-th constraint, a random one of the i, moved "
-            "the optimum only if it is one of those two. <bookmark mark='b'/> That happens with probability at most "
-            "two over i, and then costs order i. Summed, the expected work is linear. <bookmark mark='c'/> We ran it "
-            "on up to a hundred thousand random constraints. The optimum moved about as often as two times the "
-            "harmonic number predicts, twenty-three times among a hundred thousand constraints, and the total "
-            "one-dimensional work came to fewer than three steps per constraint, falling as n grew. In d dimensions the same algorithm takes "
-            "d factorial times n, and Nimrod Megiddo showed in 1984 that linear time is possible deterministically "
-            "for any fixed dimension."
+            "What does backwards analysis prove? <bookmark mark='a'/> In the exact bounded model, with a consistent tie rule and feasible prefixes, at most two input constraints form a basis for the optimum. Some basis constraints can instead come from the fixed box. <bookmark mark='b'/> The last constraint is uniform among i inputs, so the probability it changes the chosen optimum is at most two over i. A change costs order i, giving expected linear work. This expectation is over insertion order. <bookmark mark='c'/> Our floating implementation uses explicit tolerances and a finite box. For every trial at every size, a separate SciPy linear program checks feasibility and objective after timing. The table reports average moves, counted one-dimensional work, and the exact harmonic bound. Agreement on these instances does not turn floating tolerances into an exact theorem. The factorial dependence on dimension makes this approach useful chiefly for fixed small dimension."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -178,7 +170,7 @@ class Lp(VoiceoverScene):
         head = label(r"The same idea: \ the smallest enclosing circle", font_size=32).to_edge(UP, buff=0.3)
         dots_ = VGroup(*[Dot(T(p), radius=0.06, color=GREY_B) for p in P])
         circ = Circle(radius=0.01, color=HEAD, stroke_width=2.5).move_to(T(P[0]))
-        rows = [[words(r["n"]), words(r["rebuilt"]), f"{3 * (r['ln_n'] + 0.5772):.0f}", f"{r['seconds'] * 1000:.1f} ms"]
+        rows = [[words(r["n"]), words(r["rebuilt"]), f"{3 * sum(1 / i for i in range(1, r['n'] + 1)):.1f}", f"{r['seconds'] * 1000:.1f} ms"]
                 for r in d["rows"]]
         tab = grid_table([r"points", r"rebuilt", r"$3 H_n$", r"time"], rows, widths=[1.7, 1.3, 1.3, 1.6],
                          row_h=0.42, font_size=19, mono_cols=(), colors=[[WHITE, NO, GREY_A, YES]] * len(rows))
@@ -197,16 +189,7 @@ class Lp(VoiceoverScene):
             side.width = 5.8
             side.to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "The same trick solves a different problem: the smallest circle that encloses a set of points, where to "
-            "put one radio mast to cover a set of houses. <bookmark mark='a'/> Add the points in random order. While "
-            "a new point is inside the current circle, nothing changes. When it falls outside, the new smallest "
-            "circle must pass through it. <bookmark mark='b'/> Finding that circle is the same problem one level "
-            "down, with one point fixed on the boundary, and then two. <bookmark mark='c'/> A circle is fixed by at "
-            "most three points, so backwards analysis says the i-th point breaks it with probability at most three "
-            "over i, and the expected number of rebuilds is at most three times the harmonic number. <bookmark "
-            "mark='d'/> We counted: a hundred thousand points rebuilt the circle only twenty-nine times, near that "
-            "average, and the whole computation took half a second in Python. <bookmark mark='e'/> Emo Welzl's algorithm runs in expected linear time, and Megiddo had found "
-            "a deterministic one in 1983."
+            "Backwards analysis also finds the smallest enclosing circle. <bookmark mark='a'/> Add points in random order. A point outside the current minimum circle must lie on the new minimum circle. <bookmark mark='b'/> Recurse with that point fixed on the boundary, then with two fixed points. <bookmark mark='c'/> A minimum circle has a basis of at most three points, so the probability of a top-level rebuild at step i is at most three over i. Three H n is an expected upper bound, not a prediction for one random order. <bookmark mark='d'/> The table reports actual top-level rebuilds and single-run host times. Post-timing checks establish containment and a numerical minimality certificate: the centre is a convex combination of two or three boundary support points. Containment alone would not certify a minimum. <bookmark mark='e'/> Welzl's exact-model algorithm has expected linear work. Floating circle construction here is numerical; small cases also receive independent reference checks. Megiddo gave deterministic linear algorithms in fixed dimension."
         ) as vo:
             self.play(FadeIn(head), FadeIn(dots_))
             vo.wait_until("a")

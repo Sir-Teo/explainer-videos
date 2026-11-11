@@ -5,7 +5,7 @@ from explainer.cs.algo import geometry as G
 from videos.cs.cs22.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 BOX = (-7.4, -4.2, 7.4, 4.2)          # data coordinates of the drawing box
-SC = 0.66
+SC = 0.62
 ORG = np.array([-2.25, -0.35, 0])
 
 
@@ -89,7 +89,7 @@ class Voronoi(VoiceoverScene):
             label(r"$n$ sites; \ each region holds \\ the points nearest to its site", font_size=21, color=WHITE),
             label(r"edges: \ equidistant from two sites", font_size=21, color=DATA),
             label(r"vertices: \ from three, \ the centre \\ of an empty circle", font_size=21, color=LAM),
-            label(r"at most $2n - 5$ vertices \\ and $3n - 6$ edges \ (Euler)", font_size=21, color=YES),
+            label('general position, $n\\ge3$: \\\\ at most $2n-5$ vertices, $3n-6$ edges', font_size=21, color=YES),
             label(r"Dirichlet (1850), \ Vorono\"i (1908); \\ Snow's cholera map (1854)", font_size=20, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.3)
         if side.width > 4.0:
@@ -100,18 +100,12 @@ class Voronoi(VoiceoverScene):
         qd = Dot(S(q), radius=0.08, color=WHITE)
         ql = DashedLine(S(q), S(sites[near]), color=WHITE, stroke_width=1.5)
         with self.voiceover(
-            "Scatter n post offices over a city. For every address, which one is nearest? <bookmark mark='a'/> The "
-            "answer divides the plane into regions, one per site: the Voronoi diagram. <bookmark mark='b'/> Its "
-            "edges are the points equally far from two sites, pieces of their perpendicular bisectors. <bookmark "
-            "mark='c'/> Its vertices are equally far from three, the centres of circles through three sites with "
-            "no site inside. <bookmark mark='d'/> Euler's formula keeps it small: at most two n minus five vertices "
-            "and three n minus six edges. <bookmark mark='e'/> Dirichlet used it in 1850 and Georgy Voronoi in "
-            "1908; John Snow's map of the 1854 cholera outbreak in London is a Voronoi diagram of water pumps."
+            "Scatter n distinct sites over the plane. Which site is nearest to each point? <bookmark mark='a'/> The Voronoi regions answer that question. <bookmark mark='b'/> A shared edge lies on two sites' perpendicular bisector. <bookmark mark='c'/> In general position, a vertex is the centre of an empty circle through three sites. Cocircular and collinear inputs need separate conventions. <bookmark mark='d'/> For at least three noncollinear sites, Euler gives at most two n minus five finite vertices and three n minus six edges. <bookmark mark='e'/> Dirichlet and Voronoi studied this partition. Nearest-pump regions also offer a geometric interpretation of Snow's cholera investigation; the historical map itself is not a computed Voronoi diagram."
         ) as vo:
             self.play(FadeIn(head), FadeIn(frame), FadeIn(sd))
             self.play(FadeIn(qd), Create(ql))
             vo.wait_until("a")
-            self.play(LaggedStart(*[Create(e) for e in edges], lag_ratio=0.04), FadeIn(side[0]), run_time=2.5)
+            self.play(LaggedStart(*[Create(e) for e in edges], lag_ratio=0.04), FadeIn(side[0]), run_time=1.8)
             vo.wait_until("b")
             self.play(FadeIn(side[1]), Indicate(edges, color=WHITE))
             vo.wait_until("c")
@@ -249,14 +243,7 @@ class Voronoi(VoiceoverScene):
                   color=GREY_A),
         ).arrange(DOWN, buff=0.28).next_to(tab, DOWN, buff=0.45)
         with self.voiceover(
-            "We implemented the sweep, with the beach line kept as a simple list, and ran it on up to two thousand "
-            "random sites. <bookmark mark='a'/> Every Voronoi vertex is exactly one circle event, and there are "
-            "always two n minus two minus h of them, where h is the number of sites on the convex hull. <bookmark "
-            "mark='b'/> Many more circle events are scheduled than happen: when a new arc arrives under a shrinking "
-            "one, the predicted vertex is a false alarm and is cancelled. <bookmark mark='c'/> The three sites of "
-            "each vertex form a triangle of the Delaunay triangulation, the subject of the next chapter, and our "
-            "triangles agree exactly with a completely different method, the lifting map of chapter seven. "
-            "<bookmark mark='d'/> A plain list makes our sweep quadratic; a balanced tree makes it n log n."
+            "Our finite-precision sweep keeps the beach line in a plain list. We ran it on seeded random sites up to two thousand. <bookmark mark='a'/> On these nondegenerate inputs, circle events match two n minus two minus h, with h hull sites. <bookmark mark='b'/> Cancelled event predictions count as false alarms. <bookmark mark='c'/> Every output triangle set agrees with a separate Qhull construction after timing. This is full numerical agreement on these inputs, not an exact-arithmetic proof for all inputs. <bookmark mark='d'/> The list implementation can take quadratic time. The balanced-tree Fortune algorithm has the n log n bound under its event and arithmetic assumptions."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule),
                       LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.3))

@@ -35,8 +35,7 @@ class Gallery(VoiceoverScene):
             tri = Polygon(f(g), f((t[0] - 2, 2)), f(t), f((t[0] + 2, 2)), stroke_width=0).set_fill(HEAD, 0.25)
             views.add(tri)
         side = VGroup(
-            label(r"Klee (1973): \ how many guards, \\ each seeing in every direction, \\ watch a gallery with "
-                  r"$n$ walls?", font_size=23, color=WHITE),
+            label('Klee (1973): \\ a simple polygon without holes; \\\\ point guards see in every direction', font_size=23, color=WHITE),
             label(r"Chv\'atal (1975): \ $\lfloor n/3 \rfloor$ always suffice, \\ and sometimes are needed", font_size=23,
                   color=YES),
             label(rf"this comb has {len(P)} walls and {len(tips)} teeth: \\ no guard sees into two tips, \\ so it needs "
@@ -46,12 +45,7 @@ class Gallery(VoiceoverScene):
             side.width = 5.4
             side.to_edge(RIGHT, buff=0.45)
         with self.voiceover(
-            "In 1973 Victor Klee asked a question about museums. A gallery is a polygon with n walls; a guard "
-            "stands at one point and sees in every direction. How many guards are enough for any gallery with n "
-            "walls? <bookmark mark='a'/> Václav Chvátal proved in 1975 that n over three always suffice, rounded "
-            "down, and that sometimes that many are needed. <bookmark mark='b'/> Here is why some galleries need "
-            "them: a comb. Each tooth's tip can be seen only from inside that tooth, so every tooth needs its own "
-            "guard, and a comb with k teeth has three k plus two walls."
+            "Klee's gallery is a simple polygon without holes. A point guard sees along every segment that stays inside it. <bookmark mark='a'/> Chvátal proved in 1975 that floor n over three guards always suffice, and some polygons require that many. <bookmark mark='b'/> This comb has seventeen walls and five separated teeth. No guard can see all the way into two tips, so it needs five guards, exactly the bound. The theorem concerns continuous point guards; camera direction, range and obstacles inside a room would define other problems."
         ) as vo:
             self.play(FadeIn(head), Create(poly), FadeIn(side[0]))
             vo.wait_until("a")
@@ -133,33 +127,26 @@ class Gallery(VoiceoverScene):
         rg = d["random_guards"]
         head = label(r"Triangulating, \ and finding the fewest guards", font_size=32).to_edge(UP, buff=0.35)
         lines = VGroup(
-            label(rf"ear clipping: \ $O(n^2)$; \ our 22-gon took {words(d['tests'])} tests", font_size=22,
+            label(rf"rescanning ears: \ up to $O(n^3)$; \ 22-gon: {words(d['tests'])} candidate/containment tests", font_size=22,
                   color=WHITE),
             label(r"split into monotone pieces, \ then triangulate each by a stack: \ $O(n \log n)$ \ (Garey, \ "
                   r"Johnson, \ Preparata and Tarjan, \ 1978)", font_size=22, color=DATA),
-            label(r"Chazelle (1991): \ $O(n)$, \ a landmark nobody implements", font_size=22, color=LAM),
+            label('Chazelle (1991): \\ a theoretical $O(n)$ algorithm for simple polygons', font_size=22, color=LAM),
             label(rf"on 200 random {rg['n']}-gons, \ Fisk's smallest colour averaged {rg['mean']:.1f} guards, \ "
                   rf"against the bound of {rg['bound']}", font_size=22, color=YES),
             label(r"but the true minimum is \textbf{NP-hard} to find \ (Lee and Lin, 1986), \ and even "
                   r"$\exists\mathbb{R}$-complete \ (Abrahamsen, \ Adamaszek and Miltzow, \ 2018)", font_size=22,
                   color=NO),
-            label(r"in practice: \ placing cameras and sensors, \ triangulating polygons for every graphics card",
+            label('applications: \\ coverage with cameras and sensors, \\ polygon triangulation for graphics',
                   font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "How fast can we triangulate? <bookmark mark='a'/> Ear clipping is quadratic. <bookmark mark='b'/> "
-            "Splitting the polygon into monotone pieces, which a stack triangulates in linear time, gives n log n. "
-            "<bookmark mark='c'/> Bernard Chazelle found a linear-time algorithm in 1991, a landmark so intricate "
-            "that nobody implements it. <bookmark mark='d'/> Fisk's argument gives a guard set, not the smallest "
-            "one: on two hundred random polygons with sixty corners, the smallest colour class averaged seventeen "
-            "guards. <bookmark mark='e'/> Finding the true minimum is NP-hard, and in 2018 it was shown to be as "
-            "hard as deciding statements about real numbers, a class just above NP. <bookmark mark='f'/> Behind the "
-            "puzzle are camera placement, sensor coverage, and the triangulation of every polygon a graphics card "
-            "draws."
+            "How fast can we triangulate a simple polygon without holes? <bookmark mark='a'/> Maintaining a set of valid ears gives a quadratic algorithm. Our short implementation repeatedly rescans candidates and containment points, and can take cubic time. The displayed count records candidate and containment tests, not every arithmetic operation. <bookmark mark='b'/> Splitting into monotone pieces, then using stacks, gives n log n time. <bookmark mark='c'/> Chazelle proved a linear-time bound in 1991; we have not implemented that algorithm. <bookmark mark='d'/> Our two hundred polygons, each with sixty vertices, all pass independent triangle, area and colouring checks. The smallest colour gives a valid guard set, usually smaller than the worst-case bound, without certifying a minimum. <bookmark mark='e'/> Finding a minimum continuous point-guard set is existential-real complete, hence NP-hard. This is a different task from Fisk's constructive guarantee. <bookmark mark='f'/> Coverage and triangulation motivate practical variants, whose geometric and visibility assumptions must be stated separately."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(lines[0]))
             for mk, ln in zip("abcdef", lines):
                 vo.wait_until(mk)
-                self.play(FadeIn(ln, shift=UP * 0.1))
+                if ln is not lines[0]:
+                    self.play(FadeIn(ln, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()

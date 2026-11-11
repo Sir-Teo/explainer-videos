@@ -36,7 +36,7 @@ class PointLocation(VoiceoverScene):
         q = (6.2, 3.3)
         qd = Dot(f(q), radius=0.09, color=NO)
         side = VGroup(
-            label(r"a map is a subdivision by $n$ segments; \\ a query asks which face holds a point", font_size=21,
+            label('noncrossing segments, distinct endpoint $x$; \\\\ query a face inside a fixed box', font_size=21,
                   color=WHITE),
             label(r"draw a vertical line through every endpoint: \\ within a slab the segments don't cross, \\ so they "
                   r"are sorted", font_size=21, color=GREY_A),
@@ -87,7 +87,7 @@ class PointLocation(VoiceoverScene):
                   r"at most $2n + n + 1$", font_size=21, color=WHITE),
             label(r"random maps of 5, \ 20 and 80 segments: \\ " + ", \\ ".join(words(r["max"]) for r in d["rows"])
                   + r" \ trapezoids, \ every time", font_size=21, color=GREY_A),
-            label(r"insert the segments in \textbf{random} order, \\ keeping a search structure of the splits:", font_size=21,
+            label('textbook method: random insertion + search DAG; \\\\ our drawing enumerates walls directly', font_size=21,
                   color=HEAD),
             label(r"expected $O(n)$ space, \ $O(\log n)$ query, \\ $O(n \log n)$ build \ (Mulmuley 1990; \ Seidel "
                   r"1991)", font_size=21, color=YES),
@@ -98,17 +98,7 @@ class PointLocation(VoiceoverScene):
             side.width = 5.4
             side.to_edge(RIGHT, buff=0.4)
         with self.voiceover(
-            "The fix is to stop the walls early. <bookmark mark='a'/> From each endpoint, draw a wall up and a wall "
-            "down, but only as far as the nearest segment. The plane falls into trapezoids. <bookmark mark='b'/> "
-            "These seven segments make twenty-two trapezoids, <bookmark mark='c'/> and that is no accident: every "
-            "trapezoid's left side is fixed by one endpoint; a left endpoint can play that part for at most two "
-            "trapezoids, and a right endpoint for one, so there are never more than three n plus one. On twenty random maps of five, twenty and eighty "
-            "segments, every one hit the bound exactly. <bookmark mark='d'/> To query it fast, insert the segments "
-            "in random order and keep a record of how each trapezoid was split, a search structure shaped like a "
-            "directed acyclic graph. <bookmark mark='e'/> Ketan Mulmuley and Raimund Seidel showed that it has "
-            "expected linear size and answers in logarithmic time. <bookmark mark='f'/> The proof is backwards "
-            "analysis, a third time. David Kirkpatrick had reached the same bounds deterministically in 1983, with a "
-            "hierarchy of ever coarser triangulations."
+            "Stop each vertical wall at the nearest segment or box boundary. We assume disjoint segments, distinct endpoint x coordinates, and no vertical segments. <bookmark mark='a'/> That partitions the box into trapezoids. <bookmark mark='b'/> Our seven-segment example has twenty-two. <bookmark mark='c'/> Charge left boundaries to endpoints: a left endpoint contributes at most two, a right endpoint at most one, plus the box. Hence at most three n plus one; these separated samples attain equality. <bookmark mark='d'/> A different algorithm inserts segments randomly and records splits in a search DAG. Our illustration directly enumerates walls and counts cells; it does not execute that search structure or benchmark queries. <bookmark mark='e'/> The randomized structure has expected linear space and logarithmic query cost under its stated query and general-position model, with expected n log n construction. <bookmark mark='f'/> Backwards analysis proves those bounds. Kirkpatrick's triangulation hierarchy provides a deterministic alternative for planar point location."
         ) as vo:
             self.play(FadeIn(head), FadeIn(frame), FadeIn(S), FadeIn(ends))
             vo.wait_until("a")

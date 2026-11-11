@@ -107,8 +107,8 @@ class Lifting(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(side[0]))
             vo.wait_until("b")
-            self.play(FadeIn(side[1]), ph.animate.set_value(0.42), run_time=3.0)
-            self.play(lam.animate.set_value(1.0), run_time=3.0)
+            self.play(FadeIn(side[1]), ph.animate.set_value(0.42), run_time=2.0)
+            self.play(lam.animate.set_value(1.0), run_time=2.0)
             vo.wait_until("c")
             self.play(FadeIn(side[2]), th.animate.set_value(0.9), run_time=5.0, rate_func=smooth)
             vo.wait_until("d")
@@ -144,22 +144,12 @@ class Lifting(VoiceoverScene):
                   r"\texttt{scipy.spatial.Delaunay}", font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.45)
         with self.voiceover(
-            "The lifting map also explains the in-circle test. <bookmark mark='a'/> Write the coordinates of four "
-            "points with their lifted heights in a four by four determinant. <bookmark mark='b'/> It is the "
-            "orientation test in three dimensions, the sign of a volume, asking whether d's lifted point lies below "
-            "the plane through the other three. <bookmark mark='c'/> For one example the four by four determinant "
-            "and chapter six's three by three both come out at ninety-six, because subtracting the last row reduces "
-            "one to the other. <bookmark mark='d'/> It also finishes chapter six: a Lawson flip replaces an edge "
-            "where the lifted surface bends up with one where it bends down, so the surface drops with every flip, "
-            "and since there are only finitely many triangulations, flipping stops. <bookmark mark='e'/> And the "
-            "Voronoi diagram is the same picture turned over: lift each site to a plane tangent to the paraboloid, "
-            "and the Voronoi regions are the shadows of the faces of their upper envelope. <bookmark mark='f'/> We "
-            "checked the theorem: the lower faces of scipy's hull of our lifted points are exactly scipy's "
-            "Delaunay triangulation."
+            "The lifting map explains the in-circle test. <bookmark mark='a'/> Put four lifted coordinates in the determinant. <bookmark mark='b'/> For counter-clockwise a, b, c, a positive sign means d lifts below their plane and lies inside their circle. Reversing that orientation reverses the sign. <bookmark mark='c'/> In this integer example both determinants are ninety-six; subtracting d's row and expanding the last column proves the identity exactly. <bookmark mark='d'/> A strict illegal-edge flip lowers the lifted surface. With finitely many triangulations and consistent handling of cocircular ties, such flips terminate. <bookmark mark='e'/> The upper envelope of tangent planes gives the same nearest-site regions: squared distance is the common x squared plus y squared minus the tangent-plane height. <bookmark mark='f'/> Our finite Qhull lower hull and Delaunay triangle sets agree on this sample. That numerical check illustrates the theorem; it does not replace an exact construction or a degeneracy policy."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(lines[0]))
             for mk, ln in zip("abcdef", lines):
                 vo.wait_until(mk)
-                self.play(FadeIn(ln, shift=UP * 0.1))
+                if ln is not lines[0]:
+                    self.play(FadeIn(ln, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()

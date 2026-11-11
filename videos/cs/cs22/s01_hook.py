@@ -82,7 +82,7 @@ class Hook(VoiceoverScene):
 
     def grid(self):
         o = load("orient")
-        head = label(r"Every float within 256 steps of $(\tfrac12, \tfrac12)$", font_size=32).to_edge(UP, buff=0.3)
+        head = label('a $256\\times256$ successor-float grid, \\ starting at $(\\tfrac12,\\tfrac12)$', font_size=32).to_edge(UP, buff=0.3)
         img = sign_image(o["grid_float"], scale=3).set_height(5.2).move_to(LEFT * 3.0 + DOWN * 0.35)
         img2 = sign_image(o["grid_float"], o["grid_exact"], scale=3).set_height(5.2).move_to(img)
         key = VGroup(
@@ -97,12 +97,7 @@ class Hook(VoiceoverScene):
             key.width = 6.4
             key.to_edge(RIGHT, buff=0.5)
         with self.voiceover(
-            "Kettner and his colleagues drew the picture in 2008. <bookmark mark='a'/> Take every float within two "
-            "hundred and fifty-six steps of one half, one half, a grid of sixty-five thousand points, and colour "
-            "each by what floating point says: blue for left, green for right, grey for on the line. The true line "
-            "runs exactly along the diagonal. <bookmark mark='b'/> Instead of a clean split, a speckled band. "
-            "<bookmark mark='c'/> Mark the wrong answers in red: nearly twelve thousand. This part starts by "
-            "fixing that test, and then builds on it the beautiful structures of the plane."
+            "Kettner and colleagues illustrated this problem in 2008. <bookmark mark='a'/> Our grid starts at one half, one half. Each coordinate takes two hundred and fifty-six successive representable values toward positive infinity. Blue means floating-point left, green right, and grey collinear. The exact line is the diagonal. <bookmark mark='b'/> Rounded arithmetic produces a speckled band instead of one clean split. <bookmark mark='c'/> Red marks the answers that disagree with exact rational signs. These are all sixty-five thousand five hundred and thirty-six sampled grid points, not every float in a geometric neighborhood. We will repair the predicate before building geometric structures."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -118,7 +113,7 @@ class Hook(VoiceoverScene):
         title = label(rf"Part {PART}: \ Geometry", font_size=46).to_edge(UP, buff=0.4)
         smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
         obj = objectives_card([
-            r"the orientation test, \ and how to make it exact without paying for exactness",
+            'the orientation filter, \\ with a rational exact fallback',
             r"convex hulls, \ the sweep line, \ and guarding an art gallery",
             r"Voronoi diagrams by Fortune's sweep; \ Delaunay triangulations, \ and the lifting map between them",
             r"randomized incremental algorithms, \ and backwards analysis to price them",
@@ -126,12 +121,7 @@ class Hook(VoiceoverScene):
             r"duality, \ motion planning, \ and the frontier: \ exactness, \ 3SUM, \ nearest neighbours",
         ], font_size=26).move_to(DOWN * 0.2)
         with self.voiceover(
-            "Part 22 of Computer Science, Built: Geometry. <bookmark mark='a'/> In this part: the orientation test, "
-            "made exact at almost no cost; convex hulls, the sweep line, and guards for an art gallery; Voronoi "
-            "diagrams grown by a sweep of parabolas, and Delaunay triangulations, which turn out to be the shadow of "
-            "a three-dimensional hull; randomized algorithms and the backwards analysis that prices them; linear "
-            "programming, range search, point location and the curse of high dimensions; and motion planning for "
-            "a robot."
+            "Part 22 of Computer Science, Built: Geometry. <bookmark mark='a'/> In this part: filtered orientation tests with an exact fallback; convex hulls, the sweep line, and guards for an art gallery; Voronoi diagrams grown by a sweep of parabolas, and Delaunay triangulations, which turn out to be the shadow of a three-dimensional hull; randomized algorithms and the backwards analysis that prices them; linear programming, range search, point location and the curse of high dimensions; and motion planning for a robot."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")

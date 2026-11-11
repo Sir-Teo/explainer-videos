@@ -79,11 +79,11 @@ class Sweep(VoiceoverScene):
                                                rf" \ {e['seg']} $\times$ {e['other']}"),
                             font_size=21, color=kind_col[e["kind"]]).move_to(ev_lab)
                 anims = [sweep.animate.set_x(x), Transform(stat, new), Transform(ev_lab, lab)]
-                self.play(*anims, run_time=0.95)
+                self.play(*anims, run_time=0.4)
                 newly = [k for k in found if k not in marks and found[k][0] <= e["x"] + 1e-9]
                 for k in newly:
                     marks[k] = Dot(f(found[k]), radius=0.09, color=NO)
-                    self.play(FadeIn(marks[k], scale=1.6), run_time=0.3)
+                    self.play(FadeIn(marks[k], scale=1.6), run_time=0.15)
             vo.wait_until("e")
             self.play(sweep.animate.set_x(f((max(p[0] for p in allp) + 0.4, 0))[0]), run_time=0.8)
         self.wait(0.3)
@@ -102,7 +102,7 @@ class Sweep(VoiceoverScene):
         notes = VGroup(
             label(r"events $= 2n + k$; \ tests $\approx 2 \times$ events, \ against $n^2/2$ for brute force",
                   font_size=22, color=WHITE),
-            label(r"$O((n + k) \log n)$; \ Chazelle and Edelsbrunner (1992): \ $O(n \log n + k)$, \ optimal", font_size=22,
+            label('balanced status: $O((n+k)\\log n)$; \\ our measured status is a plain list', font_size=22,
                   color=LAM),
             label(r"the sweep is a paradigm: \ turn a 2D problem into a sequence of 1D ones \ (Fortune's Voronoi "
                   r"sweep, \ chapter 5)", font_size=22, color=HEAD),
@@ -110,15 +110,7 @@ class Sweep(VoiceoverScene):
                   r"in CAD", font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.28).next_to(tab, DOWN, buff=0.45)
         with self.voiceover(
-            "We ran our sweep on short random segments in the unit square, from a hundred to three thousand, and "
-            "checked it against testing every pair. <bookmark mark='a'/> The number of events is always exactly two "
-            "per segment plus one per crossing, and the pair tests are about twice the events: for three thousand "
-            "segments, twenty thousand tests instead of four and a half million. <bookmark mark='b'/> Bernard "
-            "Chazelle and Herbert Edelsbrunner later shaved the bound to n log n plus k, which is optimal. "
-            "<bookmark mark='c'/> The idea outlives the problem. A sweep turns a two-dimensional question into a "
-            "sequence of one-dimensional ones, and chapter five sweeps a line over a set of points to build a "
-            "Voronoi diagram. <bookmark mark='d'/> Sweeps compute the overlay of map layers in geographic systems, "
-            "check the design rules of chips, and take unions and intersections of polygons in CAD."
+            "We ran our sweep on short random segments, from a hundred to three thousand. Every output pair was independently checked against all pairs after timing. <bookmark mark='a'/> On these general-position inputs, each endpoint and crossing supplies an event; neighbour tests are far fewer than all pairs. These are counts of executed tests, not a bound on total runtime. <bookmark mark='b'/> The textbook balanced-tree algorithm takes n plus k times log n. Our teaching implementation uses a plain list with linear updates, so its measured runtime does not inherit that bound. Chazelle and Edelsbrunner's 1992 algorithm achieves n log n plus k in its comparison model. <bookmark mark='c'/> The broader idea is a sweep: turn a two-dimensional question into a sequence of one-dimensional ones. Fortune's sweep will do that for Voronoi diagrams. <bookmark mark='d'/> Related sweeps support map overlay, chip design checks and polygon operations; robust production versions also need explicit degeneracy handling."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule),
                       LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.3))

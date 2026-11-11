@@ -5,7 +5,8 @@ sandwiches and configuration-space planning.
 
 Points are pairs (or numpy rows).  Every algorithm that the part measures counts its own work: orientation tests,
 events, flips, triangles created, nodes visited.  Integer inputs make the integer predicates exact; ``orient_exact``
-and ``incircle_exact`` take any floats and decide with rationals, as Shewchuk's predicates do in the end.
+and ``incircle_exact`` decide finite binary64 inputs with rationals. The conservative filter falls back on
+underflow/overflow; this teaching fallback differs from Shewchuk's floating-point expansions.
 """
 
 from __future__ import annotations
@@ -13,6 +14,7 @@ from __future__ import annotations
 import heapq
 import math
 import random
+from numbers import Integral
 from fractions import Fraction
 
 import numpy as np
@@ -29,30 +31,70 @@ def orient_float(p, q, r) -> float:
 
 
 def _sgn(x) -> int:
-    return (x > 0) - (x < 0)
+    return int(x > 0) - int(x < 0)
+
+
+def _scalar(x):
+    return x.item() if isinstance(x, np.generic) else x
+
+
+def _fraction(x):
+    x = _scalar(x)
+    if isinstance(x, Integral):
+        return Fraction(int(x))
+    if not math.isfinite(x):
+        raise ValueError("coordinates must be finite")
+    return Fraction(x)
+
+
+def _points(pts):
+    points = [tuple(_scalar(x) for x in p) for p in pts]
+    if any(not isinstance(x, Integral) and not math.isfinite(x) for p in points for x in p):
+        raise ValueError("coordinates must be finite")
+    return points
 
 
 def orient_exact(p, q, r) -> int:
     """The true sign of the orientation determinant, with every float read as the rational it is."""
-    F = Fraction
+    F = _fraction
     px, py, qx, qy, rx, ry = (F(v) for v in (p[0], p[1], q[0], q[1], r[0], r[1]))
     return _sgn((qx - px) * (ry - py) - (qy - py) * (rx - px))
 
 
 def orient_adaptive(p, q, r):
-    """Shewchuk's filter: trust the float when it is far from zero against a proved error bound, else go exact.
-    Returns (sign, whether the exact stage ran)."""
-    a = (q[0] - p[0]) * (r[1] - p[1])
-    b = (q[1] - p[1]) * (r[0] - p[0])
-    det = a - b
-    if abs(det) >= CCW_ERRBOUND * (abs(a) + abs(b)):
-        return _sgn(det), False
+    """Conservative binary64 filter; exact fallback outside the normal finite arithmetic domain.
+
+    Returns (sign, whether exact arithmetic ran). Nonfinite coordinates are rejected.
+    This rational fallback is not Shewchuk's expansion implementation.
+    """
+    values = [_scalar(v) for point in (p, q, r) for v in point]
+    if any(isinstance(v, Integral) for v in values):
+        return orient_exact(p, q, r), True
+    values = [float(v) for v in values]
+    if not all(math.isfinite(v) for v in values):
+        raise ValueError("coordinates must be finite")
+    px, py, qx, qy, rx, ry = values
+    dx, dy, ex, ey = qx-px, qy-py, rx-px, ry-py
+    normal = np.finfo(float).tiny
+    safe = lambda v: math.isfinite(v) and (v == 0.0 or abs(v) >= normal)
+    if all(safe(v) for v in (dx, dy, ex, ey)):
+        a, b = dx*ey, dy*ex
+        products_safe = all(safe(v) and (v != 0.0 or u == 0.0 or w == 0.0)
+                            for v, u, w in ((a, dx, ey), (b, dy, ex)))
+        det, magnitude = a-b, abs(a)+abs(b)
+        bound = CCW_ERRBOUND*magnitude
+        if products_safe and all(safe(v) for v in (det, magnitude, bound)) and bound > 0.0 and abs(det) > bound:
+            return _sgn(det), False
     return orient_exact(p, q, r), True
 
 
 def orient_int(p, q, r) -> int:
-    """Exact for integer coordinates (Python integers never overflow)."""
-    return _sgn((q[0] - p[0]) * (r[1] - p[1]) - (q[1] - p[1]) * (r[0] - p[0]))
+    """Exact integer-coordinate predicate, promoting NumPy scalars before arithmetic."""
+    values = [_scalar(x) for point in (p, q, r) for x in point]
+    if not all(isinstance(x, Integral) for x in values):
+        raise TypeError("orient_int requires integer coordinates")
+    px, py, qx, qy, rx, ry = map(int, values)
+    return _sgn((qx-px)*(ry-py)-(qy-py)*(rx-px))
 
 
 def incircle_float(a, b, c, d) -> float:
@@ -65,7 +107,7 @@ def incircle_float(a, b, c, d) -> float:
 
 
 def incircle_exact(a, b, c, d) -> int:
-    F = Fraction
+    F = _fraction
     return _sgn(incircle_float(*[(F(p[0]), F(p[1])) for p in (a, b, c, d)]))
 
 
@@ -89,7 +131,13 @@ def kettner_grid(p, q, r, n: int = 256):
 # ------------------------------------------------------------------------------------------------ convex hulls
 
 class Counter:
-    """Counts orientation tests (n) and, where an algorithm sorts, comparisons (cmp)."""
+    """Counts orientation/determinant evaluations (n) and sorting-comparator calls (cmp).
+
+    Quickhull counts each raw determinant evaluated while selecting a farthest
+    point. An orientation evaluated inside a sorting comparator counts in both
+    categories. Other arithmetic, hashing, selection and tie comparisons are
+    outside this deliberately limited work metric.
+    """
 
     def __init__(self):
         self.n = 0
@@ -97,7 +145,7 @@ class Counter:
 
     def orient(self, p, q, r):
         self.n += 1
-        return orient_int(p, q, r)
+        return orient_int(p, q, r) if all(isinstance(_scalar(x), Integral) for point in (p,q,r) for x in point) else orient_adaptive(p,q,r)[0]
 
 
 def _counted_sort(P, key, ctr):
@@ -114,7 +162,7 @@ def _counted_sort(P, key, ctr):
 def monotone_chain(pts, ctr: Counter | None = None):
     """Andrew's monotone chain (1979): sort, then a lower and an upper hull.  Counter-clockwise, no collinear points."""
     ctr = ctr or Counter()
-    P = _counted_sort(set(map(tuple, pts)), lambda p: p, ctr)
+    P = _counted_sort(set(_points(pts)), lambda p: p, ctr)
     if len(P) <= 2:
         return P
     lo, up = [], []
@@ -132,11 +180,11 @@ def monotone_chain(pts, ctr: Counter | None = None):
 def jarvis(pts, ctr: Counter | None = None):
     """Gift wrapping (Jarvis 1973): O(nh) orientation tests."""
     ctr = ctr or Counter()
-    P = sorted(set(map(tuple, pts)))
+    P = list(dict.fromkeys(_points(pts)))
     if len(P) <= 2:
         return P
     hull = []
-    a = P[0]
+    a = min(P)
     while True:
         hull.append(a)
         b = P[0] if P[0] != a else P[1]
@@ -159,11 +207,16 @@ def _d2(a, b):
 def graham(pts, ctr: Counter | None = None):
     """Graham's scan (1972): sort by angle around the lowest point, then one stack pass."""
     ctr = ctr or Counter()
-    P = list(set(map(tuple, pts)))
+    P = list(set(_points(pts)))
     if len(P) <= 2:
         return sorted(P)
     o = min(P, key=lambda p: (p[1], p[0]))
-    rest = _counted_sort([p for p in P if p != o], lambda p: (math.atan2(p[1] - o[1], p[0] - o[0]), _d2(o, p)), ctr)
+    import functools
+    def angular(a, b):
+        ctr.cmp += 1
+        turn = ctr.orient(o, a, b)
+        return -turn if turn else _sgn(_d2(o, a)-_d2(o, b))
+    rest = sorted((p for p in P if p != o), key=functools.cmp_to_key(angular))
     st = [o]
     for p in rest:
         while len(st) >= 2 and ctr.orient(st[-2], st[-1], p) <= 0:
@@ -174,16 +227,18 @@ def graham(pts, ctr: Counter | None = None):
 
 def quickhull(pts, ctr: Counter | None = None):
     ctr = ctr or Counter()
-    P = sorted(set(map(tuple, pts)))
+    P = list(dict.fromkeys(_points(pts)))
     if len(P) <= 2:
         return P
-    a, b = P[0], P[-1]
+    a, b = min(P), max(P)
 
     def hull(u, v, S):
         """Points of S lie strictly right of u -> v; returns the hull chain strictly between u and v."""
         if not S:
             return []
-        far = min(S, key=lambda p: (v[0] - u[0]) * (p[1] - u[1]) - (v[1] - u[1]) * (p[0] - u[0]))  # farthest
+        # Equal-distance points share a supporting line. Choose its extreme
+        # endpoint, rather than an arbitrary interior point in input order.
+        far = min(S, key=lambda p: ((v[0] - u[0]) * (p[1] - u[1]) - (v[1] - u[1]) * (p[0] - u[0]), p))
         ctr.n += len(S)
         s1 = [p for p in S if ctr.orient(u, far, p) < 0]
         s2 = [p for p in S if ctr.orient(far, v, p) < 0]
@@ -196,45 +251,55 @@ def quickhull(pts, ctr: Counter | None = None):
 
 
 def _turn(p, q, r):
-    return orient_int(p, q, r)
+    return orient_int(p, q, r) if all(isinstance(_scalar(x), Integral) for point in (p,q,r) for x in point) else orient_adaptive(p,q,r)[0]
+
+
+def _binary_tangent(hull, p, ctr):
+    """Binary search the right tangent of a strictly convex CCW polygon from outside."""
+    n = len(hull)
+    if n <= 2:
+        if n == 1:
+            return 0
+        o = ctr.orient(p,hull[0],hull[1])
+        return 1 if o < 0 or o == 0 and _d2(p,hull[1]) > _d2(p,hull[0]) else 0
+    def turn(i,j):
+        return ctr.orient(p,hull[i%n],hull[j%n])
+    if turn(1,0) <= 0 and turn(n-1,0) <= 0:
+        return 0
+    a,b = 0,n
+    for _ in range(n.bit_length()+3):
+        c = (a+b)//2
+        down = turn(c+1,c) <= 0
+        if down and turn(c-1,c) <= 0:
+            return c%n
+        up_a = turn(a+1,a) > 0
+        if up_a:
+            if down or turn(a,c) > 0:
+                b = c
+            else:
+                a = c
+        else:
+            if not down or turn(a,c) >= 0:
+                a = c
+            else:
+                b = c
+    raise AssertionError(("tangent search did not converge",p,hull,a,b))
 
 
 def _tangent(hull, p, ctr):
-    """Index of the point of the convex polygon ``hull`` (counter-clockwise) that is the right tangent from p,
-    by binary search (the classic implementation of Chan's algorithm)."""
-    n = len(hull)
-    if n == 1:
-        return 0
-
-    def turn(a, b, c):
-        ctr.n += 1
-        return _turn(a, b, c)
-    lo, hi = 0, n
-    l_before = turn(p, hull[0], hull[-1])
-    l_after = turn(p, hull[0], hull[1 % n])
-    while lo < hi:
-        c = (lo + hi) // 2
-        c_before = turn(p, hull[c], hull[(c - 1) % n])
-        c_after = turn(p, hull[c], hull[(c + 1) % n])
-        c_side = turn(p, hull[lo], hull[c])
-        if c_before != -1 and c_after != -1:
-            return c
-        if (c_side == 1 and (l_after == -1 or l_before == l_after)) or (c_side == -1 and c_before == -1):
-            hi = c
-        else:
-            lo = c + 1
-            if lo >= n:
-                return n - 1
-            l_before = -c_after
-            l_after = turn(p, hull[lo], hull[(lo + 1) % n])
-    return lo % n
+    """Resolve collinear tangent endpoints by the farther endpoint, including two-point groups."""
+    i = _binary_tangent(hull,p,ctr)
+    for j in ((i-1)%len(hull),(i+1)%len(hull)):
+        if ctr.orient(p,hull[i],hull[j]) == 0 and _d2(p,hull[j]) > _d2(p,hull[i]):
+            i = j
+    return i
 
 
 def chan(pts, ctr: Counter | None = None):
-    """Chan (1996): guess h by squaring; hull groups of m points with Graham, then wrap them with binary-search
+    """Chan (1996): guess h by squaring; hull groups with monotone chain, then wrap them with binary-search
     tangents.  O(n log h) orientation tests.  Returns (hull, the guesses tried)."""
     ctr = ctr or Counter()
-    P = sorted(set(map(tuple, pts)))
+    P = list(dict.fromkeys(_points(pts)))
     n = len(P)
     if n <= 3:
         return monotone_chain(P, ctr), [n]
@@ -244,14 +309,16 @@ def chan(pts, ctr: Counter | None = None):
         m = min(2 ** (2 ** t), n)
         tried.append(m)
         groups = [monotone_chain(P[i:i + m], ctr) for i in range(0, n, m)]
-        start = P[0]
+        positions = [{point:i for i,point in enumerate(g)} for g in groups]
+        start = min(P)
         hull = [start]
         ok = False
         for _ in range(m):
             p = hull[-1]
             best = None
-            for g in groups:
-                q = g[_tangent(g, p, ctr)] if p not in g else g[(g.index(p) + 1) % len(g)]
+            for g, pos in zip(groups, positions):
+                i = pos.get(p)
+                q = g[_tangent(g, p, ctr)] if i is None else g[(i + 1) % len(g)]
                 if q == p:
                     continue
                 if best is None:
@@ -265,8 +332,7 @@ def chan(pts, ctr: Counter | None = None):
                 break
             hull.append(best)
         if ok:
-            # Chan's wrap turns clockwise; return counter-clockwise from the lowest-leftmost point
-            return monotone_chain(hull, Counter()), tried
+            return hull, tried
         t += 1
 
 
@@ -372,6 +438,8 @@ def _in_tri(p, a, b, c):
 def ear_clip(poly):
     """Triangulate a simple counter-clockwise polygon (integer vertices) by cutting ears (Meisters 1975).
     Returns (triangles as vertex-index triples, tests made)."""
+    if len(poly) < 3:
+        return [], 0
     idx = list(range(len(poly)))
     tris = []
     tests = 0
@@ -458,9 +526,19 @@ class Delaunay:
     Counts triangles created and flips."""
 
     def __init__(self, pts):
-        self.P = [tuple(map(int, p)) for p in pts]
+        values = _points(pts)
+        if any(len(p) != 2 or not all(isinstance(x, Integral) for x in p) for p in values):
+            raise TypeError("Delaunay requires integer coordinate pairs")
+        self.P = [tuple(map(int,p)) for p in values]
+        if len(set(self.P)) != len(self.P):
+            raise ValueError("Delaunay requires distinct points")
+        self._inserted = set()
         n = len(self.P)
-        M = 10 ** 15
+        # Integer noncollinear triples have area determinant at least one.
+        # Their circumcenters/radii are bounded by a constant times (bound+1)^3;
+        # these artificial vertices also lie outside all original circumcircles.
+        bound = max((abs(x) for p in self.P for x in p), default=0)
+        M = 256*(bound+1)**3
         self.P += [(-3 * M, -3 * M), (3 * M, 0), (0, 3 * M)]
         self.S = (n, n + 1, n + 2)
         self.E: dict[tuple[int, int], int] = {}
@@ -502,6 +580,9 @@ class Delaunay:
                 return a, b, c
 
     def insert(self, i):
+        if not isinstance(i, Integral) or not 0 <= i < self.S[0] or i in self._inserted:
+            raise ValueError("insert a valid input index exactly once")
+        self._inserted.add(i)
         a, b, c = self.locate(self.P[i])
         self._del(a, b, c)
         self._add(a, b, i)
@@ -512,17 +593,19 @@ class Delaunay:
         self._legalize(i, c, a)
 
     def _legalize(self, p, a, b):
-        d = self.E.get((b, a))
-        if d is None:
-            return
-        if self._incircle(a, b, p, d) > 0:
-            self._del(a, b, p)
-            self._del(b, a, d)
-            self._add(a, d, p)
-            self._add(d, b, p)
-            self.flips += 1
-            self._legalize(p, a, d)
-            self._legalize(p, d, b)
+        pending = [(a,b)]
+        while pending:
+            a,b = pending.pop()
+            d = self.E.get((b,a))
+            if d is None:
+                continue
+            if self._incircle(a,b,p,d) > 0:
+                self._del(a,b,p)
+                self._del(b,a,d)
+                self._add(a,d,p)
+                self._add(d,b,p)
+                self.flips += 1
+                pending.extend(((d,b),(a,d)))
 
     def triangles(self):
         """The triangles not touching the enclosing triangle, each as a sorted triple."""
@@ -539,6 +622,9 @@ def delaunay(pts, order=None, seed: int = 0):
     if order is None:
         order = list(range(n))
         random.Random(seed).shuffle(order)
+    order = list(order)
+    if len(order) != n or set(order) != set(range(n)):
+        raise ValueError("order must be a permutation of all input indices")
     D = Delaunay(pts)
     for i in order:
         D.insert(i)
@@ -778,6 +864,13 @@ def fortune(sites):
 def seidel_lp(H, c, box: float = 1e6, seed: int = 0):
     """Maximize c . x subject to half-planes a . x <= b (rows of H = (a1, a2, b)), inside a big box, by Seidel's
     randomized incremental algorithm (1991).  Returns (x, recomputations, total 1D work)."""
+    H = [tuple(h) for h in H]
+    if not math.isfinite(box) or box <= 0:
+        raise ValueError("box must be finite and positive")
+    if len(c) != 2 or not all(math.isfinite(v) for v in c):
+        raise ValueError("finite two-dimensional objective required")
+    if any(len(h) != 3 or not all(math.isfinite(v) for v in h) for h in H):
+        raise ValueError("finite half-plane triples required")
     rng = random.Random(seed)
     H = [tuple(h) for h in H]
     rng.shuffle(H)
@@ -788,6 +881,10 @@ def seidel_lp(H, c, box: float = 1e6, seed: int = 0):
     work = 0
     seen = list(cons)
     for i, (a1, a2, b) in enumerate(H):
+        if a1 == 0 and a2 == 0:
+            if b < 0:
+                return None, recompute, work
+            continue
         if a1 * x[0] + a2 * x[1] <= b + 1e-9:
             seen.append((a1, a2, b))
             continue
@@ -836,8 +933,8 @@ class KDTree:
             return ("leaf", idx)
         ax = depth % self.d
         vals = self.P[idx, ax]
-        order = idx[np.argsort(vals, kind="stable")]
-        m = len(order) // 2
+        m = len(idx) // 2
+        order = idx[np.argpartition(vals, m)]
         split = self.P[order[m], ax]
         return ("node", ax, split, self._build(order[:m], depth + 1), self._build(order[m:], depth + 1))
 
@@ -854,7 +951,7 @@ class KDTree:
                         out.append(int(i))
                 return
             _, ax, s, L, R = nd
-            if lo[ax] < s:
+            if lo[ax] <= s:
                 b2 = bhi.copy()
                 b2[ax] = s
                 go(L, blo, b2)
@@ -1122,25 +1219,39 @@ def minkowski_cspace(obstacle, robot):
 
 
 def _seg_hits_poly(a, b, poly):
-    """Does segment ab pass through the interior of the convex polygon (counter-clockwise)?"""
-    n = len(poly)
-    # interior point of the segment inside? sample the midpoint and test proper crossings with edges
-    for k in range(n):
-        u, v = poly[k], poly[(k + 1) % n]
-        o1, o2 = orient_float(a, b, u), orient_float(a, b, v)
-        o3, o4 = orient_float(u, v, a), orient_float(u, v, b)
-        if o1 * o2 < 0 and o3 * o4 < 0:
-            return True
-    for t in (0.5, 0.25, 0.75):
-        m = (a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1]))
-        if all(orient_float(poly[k], poly[(k + 1) % n], m) > 1e-9 for k in range(n)):
-            return True
-    return False
+    """Intersect a segment with the strict interior of a convex CCW polygon.
+
+    Boundary contact and travel along edges are allowed. Half-plane interval clipping
+    checks the complete segment, including paths through two polygon vertices.
+    Arithmetic is floating point; this is not an exact collision certificate.
+    """
+    if len(poly) < 3:
+        raise ValueError("a convex polygon needs at least three vertices")
+    lo, hi = 0.0, 1.0
+    for u, v in zip(poly, (*poly[1:], poly[0])):
+        f0, f1 = orient_float(u, v, a), orient_float(u, v, b)
+        slope = f1-f0
+        if slope == 0.0:
+            if f0 <= 0.0:
+                return False
+        elif slope > 0.0:
+            lo = max(lo, -f0/slope)
+        else:
+            hi = min(hi, -f0/slope)
+        if lo >= hi:
+            return False
+    return lo < hi
+
+
+def _strictly_inside(p, poly):
+    return all(orient_float(u,v,p) > 0 for u,v in zip(poly,(*poly[1:],poly[0])))
 
 
 def visibility_path(start, goal, polys):
     """The shortest path among polygonal obstacles runs along the visibility graph of their vertices (Lozano-Pérez and
     Wesley 1979): build it and run Dijkstra.  Returns (path, length, edges in the graph)."""
+    if any(_strictly_inside(p, poly) for p in (start,goal) for poly in polys):
+        raise ValueError("start and goal must lie outside obstacle interiors")
     V = [tuple(start), tuple(goal)] + [tuple(p) for poly in polys for p in poly]
     n = len(V)
     adj = [[] for _ in range(n)]
@@ -1167,6 +1278,8 @@ def visibility_path(start, goal, polys):
                 dist[v] = d + w
                 prev[v] = u
                 heapq.heappush(h, (d + w, v))
+    if not math.isfinite(dist[1]):
+        return [], math.inf, edges
     path = []
     u = 1
     while u != -1:
@@ -1181,6 +1294,14 @@ def rrt(start, goal, polys, box, step: float = 0.6, iters: int = 4000, goal_bias
     """LaValle's rapidly-exploring random tree in a 2D configuration space: sample a point (sometimes the goal), find
     the nearest tree node, step towards the sample, keep the step if it is collision-free.  Returns (nodes, parent,
     path to the goal or None, iterations used)."""
+    if not math.isfinite(step) or step <= 0 or not isinstance(iters, Integral) or iters < 0:
+        raise ValueError("positive finite step and nonnegative integer iteration limit required")
+    if not 0 <= goal_bias <= 1 or len(box) != 4 or not all(math.isfinite(x) for x in box) or box[0] >= box[2] or box[1] >= box[3]:
+        raise ValueError("invalid sampling box or goal probability")
+    if any(_strictly_inside(p, poly) for p in (start,goal) for poly in polys):
+        raise ValueError("start and goal must lie outside obstacle interiors")
+    if tuple(start) == tuple(goal):
+        return [tuple(start)], [-1], [tuple(start)], 0
     rng = random.Random(seed)
     x0, y0, x1, y1 = box
     nodes = [tuple(start)]
@@ -1237,6 +1358,8 @@ def emst_prim(pts):
     """Prim's algorithm on the complete graph, O(n^2) with numpy: the reference answer."""
     P = np.asarray(pts, dtype=float)
     n = len(P)
+    if n == 0:
+        return 0.0
     inside = np.zeros(n, bool)
     best = np.full(n, np.inf)
     best[0] = 0.0
@@ -1254,6 +1377,8 @@ def welzl(pts, seed: int = 0):
     """Welzl (1991): the smallest circle enclosing the points, by randomized incremental construction (iterative
     form).  Returns ((cx, cy), r, the number of times the circle was rebuilt)."""
     P = [tuple(map(float, p)) for p in pts]
+    if not P:
+        return (0.0,0.0), 0.0, 0
     random.Random(seed).shuffle(P)
     rebuilt = 0
 

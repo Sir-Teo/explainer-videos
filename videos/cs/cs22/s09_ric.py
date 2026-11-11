@@ -92,31 +92,19 @@ class Incremental(VoiceoverScene):
                     r"\frac{2\,(3i - 6)}{i} \;<\; 6", font_size=34, color=YES),
             label(r"Euler: \ a planar triangulation with $i$ vertices has at most $3i - 6$ edges", font_size=21,
                   color=GREY_A),
-            label(r"so each insertion makes fewer than 6 new triangles on average, \ $O(n)$ in all \ "
-                  r"(at most $9n + 1$, \ counting flips)", font_size=22, color=YES),
-            label(r"locating points: \ $O(n \log n)$ expected, \ by the same argument over \textit{conflict lists} \ "
-                  r"(Clarkson and Shor, 1989)", font_size=22, color=LAM),
+            label('expected final-star size $<6$; \\ total update history $O(n)$ in expectation', font_size=22, color=YES),
+            label('conflict-list point location: expected $O(n\\log n)$; \\ our locator walks triangles', font_size=22, color=LAM),
             label(r"Seidel (1993) named the trick; \ it prices quicksort, \ treaps and chapter 9's LP the same way",
                   font_size=21, color=HEAD),
         ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.45)
         with self.voiceover(
-            "In a bad order, a single insertion can change almost everything: a point can arrive connected to all i "
-            "points before it, and the total becomes quadratic. <bookmark mark='a'/> In a random order, a beautiful "
-            "argument shows it cannot. <bookmark mark='b'/> Run the algorithm backwards. Look at the triangulation "
-            "after i insertions. Because the order is random, the point inserted last is equally likely to be any of "
-            "the i points present. <bookmark mark='c'/> Its expected degree is the average degree of the "
-            "triangulation, twice the number of edges over i, <bookmark mark='d'/> and Euler's formula says a planar "
-            "triangulation has fewer than three i edges. <bookmark mark='e'/> So the average degree is below six, and "
-            "each insertion creates fewer than six new triangles on average, whatever the points. <bookmark "
-            "mark='f'/> Finding where each point goes costs n log n in expectation, by the same argument applied to "
-            "lists of conflicts, which Kenneth Clarkson and Peter Shor introduced in 1989. <bookmark mark='g'/> "
-            "Raimund Seidel named the trick backwards analysis. It prices randomized quicksort, treaps and the "
-            "linear programming of the next chapter in exactly the same way."
+            "An adversarial insertion order can require quadratic update work. <bookmark mark='a'/> Random order gives an expected bound, not a guarantee for every shuffle. <bookmark mark='b'/> Condition on the i sites present. The last inserted site is uniform among them. <bookmark mark='c'/> Its expected final degree is twice the number of edges divided by i. <bookmark mark='d'/> Euler bounds that below six for a nondegenerate planar triangulation with at least three vertices. <bookmark mark='e'/> This controls the final insertion star and leads to an expected linear update history. Our implementation also counts destroyed triangles, flip intermediates and artificial outer vertices; its counter is not this final degree and has no asserted strict nine n plus one bound. <bookmark mark='f'/> Suitable conflict lists give expected n log n point location. Our simpler triangle walk is measured separately and has no such proven bound here. <bookmark mark='g'/> Seidel called this backwards analysis: condition on the set, then randomize which object came last. We will use the same idea for linear programming."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(lines[0]))
             for mk, ln in zip("abcdefg", lines):
                 vo.wait_until(mk)
-                self.play(FadeIn(ln, shift=UP * 0.1))
+                if ln is not lines[0]:
+                    self.play(FadeIn(ln, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
 
@@ -139,14 +127,7 @@ class Incremental(VoiceoverScene):
         note = label(r"the bad set: \ a flat convex chain, \ then points above its middle inserted from the top down: "
                      r"\ each new one is joined to the whole chain", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "We counted the triangles our incremental algorithm creates. <bookmark mark='a'/> On random points, "
-            "inserted in random order, it is about nine per point at every size, just under the bound of nine n "
-            "plus one, with about three flips per point. <bookmark mark='b'/> Then a set built to be bad: a long, "
-            "nearly flat convex chain, followed by points above its middle, inserted from the top down, so that each "
-            "new point is joined to the whole chain. In that order the work grows quadratically: for sixteen hundred "
-            "points, eight hundred and seventy thousand triangles. <bookmark mark='c'/> Shuffle the same points, and "
-            "it is thirteen thousand again, eight per point. The shuffle costs one line of code, and the guarantee "
-            "holds for every input."
+            "These tables count all triangle objects created by this implementation, including intermediate and artificial ones. <bookmark mark='a'/> On the sampled random sets and random orders, that count stays roughly proportional to n. It is not a measurement of the final degree below six. <bookmark mark='b'/> The adversarial set combines a shallow convex chain with points inserted above its middle. Its chosen order produces quadratic growth in the displayed counts. <bookmark mark='c'/> Shuffling that same set sharply reduces this run's work. The expected update bound concerns randomness in the order for a fixed admissible set; a single successful shuffle is an illustration, not a worst-case runtime proof for our walking implementation."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

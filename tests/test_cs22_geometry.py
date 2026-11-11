@@ -40,6 +40,13 @@ class Predicates(unittest.TestCase):
 
 
 class Hulls(unittest.TestCase):
+    def test_quickhull_support_line_ties(self):
+        from itertools import permutations
+        points = [(-2, 0), (3, 0), (8, 1), (-8, 1), (-4, 0)]
+        expected = [(-8, 1), (-4, 0), (3, 0), (8, 1)]
+        for order in permutations(points):
+            self.assertEqual(_norm(G.quickhull(order)), expected)
+
     def test_all_hulls_agree(self):
         rng = random.Random(1)
         for n in (3, 10, 200, 2000):
@@ -155,6 +162,79 @@ class Misc(unittest.TestCase):
         self.assertEqual(path[-1], (8, 8))
         self.assertGreaterEqual(length, math.dist((0, 0), (8, 8)))
 
+
+
+class GeometryBoundaryRegressions(unittest.TestCase):
+    def test_filter_underflow_and_overflow(self):
+        for points in [((0.,0.),(1e-200,0.),(0.,1e-200)),
+                       ((1e308,1e308),(-1e308,1e308),(0.,-1e308)),
+                       ((0.,0.),(math.ulp(0.),0.),(0.,math.ulp(0.)))]:
+            sign,exact=G.orient_adaptive(*points)
+            self.assertEqual(sign,G.orient_exact(*points));self.assertTrue(exact)
+
+    def test_numpy_integer_promotion(self):
+        P=np.array([[0,0],[2**62,0],[0,2**62]],dtype=np.int64)
+        self.assertEqual(G.orient_int(*P),1)
+        self.assertEqual(G.orient_exact(*P),1)
+        self.assertEqual(G.incircle_exact(*np.array([[0,0],[4,0],[0,4],[1,1]],np.int64)),1)
+
+    def test_nonfinite_predicate_domain(self):
+        for x in (math.inf,-math.inf,math.nan):
+            for method in (G.orient_exact,G.orient_adaptive):
+                with self.assertRaises(ValueError):method((0.,0.),(1.,0.),(x,1.))
+        with self.assertRaises(TypeError):G.orient_int((0.,0.),(1.,0.),(0.,1.))
+
+    def test_wide_integer_graham_angles(self):
+        m=2**60;P=[(0,0),(m,m),(m+1,m+2),(2*m,2*m+1)]
+        self.assertEqual(set(G.graham(P)),set(P))
+
+    def test_collinear_tangent_endpoint(self):
+        hull=[(1,1),(2,0),(2,2),(1,2)];p=(0,2)
+        self.assertEqual(hull[G._tangent(hull,p,G.Counter())],(2,0))
+        for points in [[(0,0),(0,1),(0,2),(1,1),(2,0)],[(0,0),(1,0),(2,0),(2,1),(2,2),(1,2),(0,2)]]:
+            got=G.chan(points)[0]
+            self.assertEqual(set(got),set(G.monotone_chain(points)))
+            self.assertGreater(G.polygon_area2(got),0)
+
+    def test_closed_kd_duplicate_split(self):
+        P=np.array([[1,0],[1,1],[1,1],[2,1]],float);tree=G.KDTree(P)
+        self.assertEqual(sorted(tree.range((1,0),(1,1))),[0,1,2])
+        self.assertEqual(sorted(tree.range((1,1),(1,1))),[1,2])
+
+    def test_complete_segment_collision(self):
+        square=[(0,0),(1,0),(1,1),(0,1)]
+        self.assertTrue(G._seg_hits_poly((-100,-100),(100,100),square))
+        self.assertFalse(G._seg_hits_poly((-100,0),(100,0),square))
+        self.assertFalse(G._seg_hits_poly((-1,1),(1,-1),square))
+        self.assertTrue(G._seg_hits_poly((.5,.5),(.5,.5),square))
+
+    def test_planner_start_goal_and_iteration_domains(self):
+        square=[(0,0),(1,0),(1,1),(0,1)]
+        with self.assertRaises(ValueError):G.visibility_path((.5,.5),(2,2),[square])
+        self.assertEqual(G.rrt((2,2),(2,2),[square],(-3,-3,3,3))[2],[(2,2)])
+        with self.assertRaises(ValueError):G.rrt((2,2),(3,3),[],(0,0,4,4),step=0)
+        self.assertIsNone(G.rrt((2,2),(3,3),[],(0,0,4,4),iters=0)[2])
+
+    def test_delaunay_coordinate_domains(self):
+        for P in [[(0,0),(1,0),(0,1),(0,0)],[(.1,.1),(.9,.1),(.1,.9)]]:
+            with self.assertRaises((TypeError,ValueError)):G.delaunay(P)
+        with self.assertRaises(ValueError):G.delaunay([(0,0),(1,0),(0,1)],order=[0,1,1])
+
+    def test_delaunay_wide_and_thin_triangles(self):
+        for P in [[(0,0),(10**18,0),(0,10**18)],[(0,0),(10**12,1),(10**12+1,1)]]:
+            self.assertEqual(G.delaunay(P).triangles(),[(0,1,2)])
+        self.assertEqual(G.delaunay([(0,0),(1,1),(2,2)]).triangles(),[])
+
+    def test_zero_normal_lp(self):
+        self.assertIsNone(G.seidel_lp([(0,0,-1)],(1,1))[0])
+        self.assertIsNotNone(G.seidel_lp(iter([(0,0,1)]),(1,1))[0])
+        with self.assertRaises(ValueError):G.seidel_lp([],(1,1),box=0)
+
+    def test_empty_domains(self):
+        self.assertEqual(G.ear_clip([]),([],0))
+        self.assertEqual(G.welzl([]),((0.,0.),0.,0))
+        self.assertEqual(G.emst_prim([]),0.)
+        self.assertEqual(G.delaunay([]).triangles(),[])
 
 if __name__ == "__main__":
     unittest.main()

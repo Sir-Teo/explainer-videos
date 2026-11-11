@@ -89,7 +89,7 @@ class Hulls(VoiceoverScene):
             if r["n"] != 10000:
                 continue
             rows.append([rf"{r['dist']}", words(r["h"]),
-                         words(r["jarvis"]) if r["jarvis"] is not None else r"$\approx 3 \times 10^7$",
+                         words(r["jarvis"]) if r["jarvis"] is not None else r"---",
                          words(r["graham"] + r["graham_cmp"]), words(r["monotone"] + r["monotone_cmp"]),
                          words(r["quickhull"]), words(r["chan"] + r["chan_cmp"])])
         tab = grid_table([r"10,000 points in a", r"$h$", r"Jarvis $nh$", r"Graham", r"monotone chain",
@@ -97,28 +97,17 @@ class Hulls(VoiceoverScene):
                          font_size=21, mono_cols=(), colors=[[WHITE, GREY_A, NO, DATA, YES, LAM, HEAD]] * len(rows))
         tab.next_to(head, DOWN, buff=0.45).set_x(0)
         notes = VGroup(
-            label(r"orientation tests, \ plus comparisons where the algorithm sorts", font_size=20, color=GREY_A),
+            label('orientation/determinant evaluations + sort-comparator calls; \\\\ nested evaluations count in both; \\\\ dash = unmeasured', font_size=20, color=GREY_A),
             label(r"Jarvis (1973), \ gift wrapping: \ $h$ rounds of $n$ tests: \ fine for a square, \ hopeless on a "
                   r"circle", font_size=21, color=NO),
             label(r"Graham and Andrew's monotone chain \ (1979): \ the sort dominates, \ $\approx n \log_2 n$",
                   font_size=21, color=YES),
             label(r"quickhull: \ like quicksort, \ fast on random points, \ quadratic in the worst case",
                   font_size=21, color=LAM),
-            label(r"Chan (1996): \ $O(n \log h)$, \ optimal; \ its constant is large, \ so in practice the monotone "
-                  r"chain wins", font_size=21, color=HEAD),
+            label('Chan (1996): \\ output-sensitive $O(n\\log h)$ theory; \\ compare these particular implementations', font_size=21, color=HEAD),
         ).arrange(DOWN, buff=0.24).next_to(tab, DOWN, buff=0.4)
         with self.voiceover(
-            "We implemented five hull algorithms with counters, and ran each on ten thousand points drawn from a "
-            "square, from a disk, and from a circle. <bookmark mark='a'/> The hull of random points in a square has "
-            "only about twenty vertices; in a disk, about seventy-five; on a circle, every point is on the hull. "
-            "<bookmark mark='b'/> Jarvis's gift wrapping, from 1973, finds one hull vertex per round by checking "
-            "every point, n times h tests: cheap on the square, hopeless on the circle. <bookmark mark='c'/> "
-            "Graham's scan and Andrew's monotone chain, which sorts by x and builds the lower and upper hulls "
-            "separately, cost about n log n whatever the shape, almost all of it sorting. <bookmark mark='d'/> "
-            "Quickhull splits the points like quicksort, and like quicksort it is fast on random input and "
-            "quadratic on bad input. <bookmark mark='e'/> Timothy Chan's algorithm, from 1996, needs only n log h, "
-            "which is optimal, but its constant factor is large. At these sizes the monotone chain wins, and it is "
-            "what most libraries use."
+            "These counters compare five teaching implementations on seeded point sets. <bookmark mark='a'/> The square and disk have small hulls. The rounded circle has many hull vertices, but rounding means some generated points are not extreme. The table reports the actual h. <bookmark mark='b'/> Jarvis wraps one vertex per round and checks the points again. The largest circle run is left unmeasured, shown by a dash; it is not replaced with an invented count. <bookmark mark='c'/> Graham and Andrew's monotone chain sort before scanning. Here we add orientation or determinant evaluations and sorting-comparator calls, including a determinant used inside a comparison in both named counters. This is a chosen work metric, not elapsed CPU time. <bookmark mark='d'/> Quickhull counts its farthest-point determinants too and divides around farthest points; its worst case is quadratic even when some random cases are cheap. <bookmark mark='e'/> Chan's bound depends on output size. Our groups use sorting hulls and binary tangents, and the measured constants belong to this implementation and these inputs. No universal library winner follows from this table."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule), FadeIn(notes[0]))
             vo.wait_until("a")
@@ -190,30 +179,18 @@ class Hulls(VoiceoverScene):
         lines = VGroup(
             label(r"but $n \log n$ is the price when $h \approx n$; \ when the hull is small, \ can we pay less?",
                   font_size=22, color=WHITE),
-            label(r"Chan (1996): \ split the points into groups of $m$, \ hull each group with Graham: "
-                  r"\ $O(n \log m)$", font_size=22, color=DATA),
+            label('Chan (1996): \\ groups of $m$; \\ each sorted hull costs $O(m\\log m)$', font_size=22, color=DATA),
             label(r"then wrap the whole set like Jarvis, \ finding the next vertex in each group's hull by \textbf{binary "
                   r"search} for its tangent", font_size=22, color=LAM),
             label(r"$h$ rounds of $\frac{n}{m} \log m$: \ with $m = h$, \ $O(n \log h)$ in all", font_size=22,
                   color=YES),
             label(r"$h$ is unknown: \ guess $m = 2^{2^t}$ for $t = 1, 2, \dots$ \ and give up after $m$ rounds; \ the "
                   r"failed guesses cost a geometric series", font_size=22, color=HEAD),
-            label(r"Kirkpatrick and Seidel (1986) got $O(n \log h)$ first, \ and proved it optimal; \ in 3D, \ hulls "
-                  r"take $O(n \log n)$ \ (Preparata and Hong; \ Clarkson and Shor, \ chapter 8)", font_size=20,
+            label('Kirkpatrick--Seidel (1986): \\ planar $O(n\\log h)$; \\\\ Chan (1996) gives output-sensitive algorithms in both 2D and 3D', font_size=20,
                   color=GREY_A),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.45)
         with self.voiceover(
-            "There is a loophole. <bookmark mark='a'/> The lower bound needs every point on the hull. When the hull "
-            "has only h vertices, can we pay n log h? <bookmark mark='b'/> Timothy Chan's algorithm splits the "
-            "points into groups of m and finds each group's hull with Graham's scan. <bookmark mark='c'/> Then it "
-            "wraps the whole set like Jarvis: to find the next vertex, it asks each small hull for its tangent from "
-            "the current point, which a binary search answers in log m steps. <bookmark mark='d'/> If m equals h, "
-            "that is h rounds of n over m times log m, and n log h in all. <bookmark mark='e'/> We don't know h, so "
-            "Chan guesses: m equal to four, then sixteen, then two hundred and fifty-six, squaring each time, and "
-            "abandons a guess after m rounds. The failed guesses form a geometric series and cost nothing extra in "
-            "order. <bookmark mark='f'/> Kirkpatrick and Seidel reached n log h first, in 1986, under the title "
-            "The ultimate planar convex hull algorithm. In three dimensions the hull still costs n log n, with the "
-            "randomized method of chapter eight."
+            "There is a loophole. <bookmark mark='a'/> The lower bound needs every point on the hull. When the hull has only h vertices, can we pay n log h? <bookmark mark='b'/> Timothy Chan's algorithm splits the points into groups of m and finds each group's hull with a sorting method; our instrument uses the monotone chain. <bookmark mark='c'/> Then it wraps the whole set like Jarvis: to find the next vertex, it asks each small hull for its tangent from the current point, which a binary search answers in log m steps. <bookmark mark='d'/> If m equals h, that is h rounds of n over m times log m, and n log h in all. <bookmark mark='e'/> We don't know h, so Chan guesses: m equal to four, then sixteen, then two hundred and fifty-six, squaring each time, and abandons a guess after m rounds. The failed guesses form a geometric series and cost nothing extra in order. <bookmark mark='f'/> Kirkpatrick and Seidel reached n log h first, in 1986, under the title The ultimate planar convex hull algorithm. Chan's 1996 paper also gives an output-sensitive algorithm in three dimensions; the general n log n construction is not the only bound."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):
