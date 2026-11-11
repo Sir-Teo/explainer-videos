@@ -61,6 +61,15 @@ class TestTesting(unittest.TestCase):
 
 
 class TestProcess(unittest.TestCase):
+    def test_schedule_keeps_remainder_tasks(self):
+        r = process.schedule(tasks=5, median=3, sigma=0, parallel=2, trials=10)
+        self.assertEqual(r["plan"], 9)
+        self.assertEqual(r["p50"], 9)
+        self.assertEqual(r["on_time"], 1)
+        self.assertEqual(process.schedule(tasks=2, median=3, sigma=0, parallel=4, trials=10)["p50"], 3)
+        with self.assertRaises(ValueError):
+            process.schedule(parallel=0)
+
     def test_brooks_law_condition(self):
         base = process.brooks()
         self.assertLess(process.brooks(add_at=2, add=4), base)

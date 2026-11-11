@@ -49,15 +49,16 @@ def brooks_table(work: float = 120.0, team: int = 6, add: int = 4):
 
 def schedule(tasks: int = 20, median: float = 5.0, sigma: float = 0.6, parallel: int = 1, trials: int = 100_000,
              seed: int = 0):
-    """``tasks`` tasks with lognormal durations (median ``median`` days), done in ``parallel`` equal streams that
+    """``tasks`` tasks with lognormal durations (median ``median`` days), split as evenly as possible into streams that
     must all finish.  The plan adds up medians; returns the plan, P50, P80, P95 and the chance of meeting the
     plan."""
+    if tasks <= 0 or parallel <= 0 or trials <= 0 or not math.isfinite(median) or median <= 0 or not math.isfinite(sigma) or sigma < 0:
+        raise ValueError("tasks, parallelism, trials, and median must be positive; sigma nonnegative and finite")
     rng = np.random.default_rng(seed)
     d = median * np.exp(rng.normal(0, sigma, size=(trials, tasks)))
-    per = tasks // parallel
-    streams = d[:, :per * parallel].reshape(trials, parallel, per).sum(axis=2)
+    streams = np.column_stack([part.sum(axis=1) for part in np.array_split(d, parallel, axis=1)])
     total = streams.max(axis=1)
-    plan = median * per
+    plan = median * math.ceil(tasks / parallel)
     q = np.percentile(total, [50, 80, 95])
     return {"tasks": tasks, "parallel": parallel, "plan": plan, "p50": float(q[0]), "p80": float(q[1]),
             "p95": float(q[2]), "on_time": float((total <= plan).mean()), "mean_task": float(d.mean()),
