@@ -9,6 +9,15 @@ from explainer.cs.semantics import meaning as M
 
 
 class Semantics(unittest.TestCase):
+    def test_substitution_avoids_capturing_free_variables(self):
+        term = M.subst(("lam", "y", ("var", "x")), "x", ("var", "y"))
+        self.assertEqual(M.free_vars(term), {"y"})
+        self.assertEqual(M.big(("app", term, ("int", 0)), {"y": ("int", 7)}), ("int", 7))
+        recursive = ("fix", "f", "y", ("app", ("var", "x"), ("var", "y")))
+        replaced = M.subst(recursive, "x", ("lam", "z", ("var", "y")))
+        self.assertEqual(M.free_vars(replaced), {"y"})
+        self.assertEqual(M.big(("app", replaced, ("int", 0)), {"y": ("int", 7)}), ("int", 7))
+
     def test_three_semantics_agree(self):
         rng = random.Random(7)
         for _ in range(60):

@@ -48,16 +48,54 @@ def is_value(t) -> bool:
     return t[0] in ("int", "bool", "lam", "fix")
 
 
+def free_vars(t):
+    k = t[0]
+    if k in ("int", "bool"):
+        return set()
+    if k == "var":
+        return {t[1]}
+    if k == "lam":
+        return free_vars(t[2]) - {t[1]}
+    if k == "fix":
+        return free_vars(t[3]) - {t[1], t[2]}
+    children = t[1:] if k in ("app", "if") else t[2:] if k == "op" else None
+    if children is None:
+        raise ValueError(k)
+    return set().union(*(free_vars(c) for c in children))
+
+
+def _fresh(name, used):
+    i = 0
+    while f"{name}_{i}" in used:
+        i += 1
+    return f"{name}_{i}"
+
+
 def subst(t, x, v):
+    """Capture-avoiding substitution, including open function values."""
     k = t[0]
     if k in ("int", "bool"):
         return t
     if k == "var":
         return v if t[1] == x else t
     if k == "lam":
-        return t if t[1] == x else ("lam", t[1], subst(t[2], x, v))
+        name, body = t[1:]
+        if name == x or x not in free_vars(body):
+            return t
+        if name in free_vars(v):
+            fresh = _fresh(name, free_vars(body) | free_vars(v) | {x})
+            body, name = subst(body, name, ("var", fresh)), fresh
+        return ("lam", name, subst(body, x, v))
     if k == "fix":
-        return t if x in (t[1], t[2]) else ("fix", t[1], t[2], subst(t[3], x, v))
+        names, body = list(t[1:3]), t[3]
+        if x in names or x not in free_vars(body):
+            return t
+        for name in dict.fromkeys(names):
+            if name in free_vars(v):
+                fresh = _fresh(name, free_vars(body) | free_vars(v) | set(names) | {x})
+                body = subst(body, name, ("var", fresh))
+                names = [fresh if n == name else n for n in names]
+        return ("fix", *names, subst(body, x, v))
     if k == "app":
         return ("app", subst(t[1], x, v), subst(t[2], x, v))
     if k == "if":
