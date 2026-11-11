@@ -70,6 +70,20 @@ class Overload(unittest.TestCase):
 
 
 class Observe(unittest.TestCase):
+    def test_sketch_contracts_and_merge(self):
+        a, b = observe.DDSketch(.01), observe.DDSketch(.01)
+        a.add(10)
+        b.add(100)
+        a.merge(b)
+        self.assertAlmostEqual(a.quantile(0), 10, delta=.1)
+        self.assertAlmostEqual(a.quantile(1), 100, delta=1)
+        self.assertTrue(math.isnan(observe.DDSketch().quantile(.5)))
+        with self.assertRaises(ValueError):
+            a.merge(observe.DDSketch(.1))
+        for x in (0, -1, float("inf"), float("nan")):
+            with self.assertRaises(ValueError):
+                a.add(x)
+
     def test_ddsketch_guarantee(self):
         rng = random.Random(0)
         xs = sorted(rng.lognormvariate(3, 1.5) for _ in range(20_000))

@@ -18,6 +18,8 @@ class DDSketch:
     with 2 gamma^i / (gamma + 1) is within a relative error alpha of every value in the bucket."""
 
     def __init__(self, alpha: float = 0.01):
+        if not 0 < alpha < 1:
+            raise ValueError("relative error must lie in (0, 1)")
         self.alpha = alpha
         self.gamma = (1 + alpha) / (1 - alpha)
         self.lg = math.log(self.gamma)
@@ -25,17 +27,25 @@ class DDSketch:
         self.n = 0
 
     def add(self, x: float) -> None:
+        if not math.isfinite(x) or x <= 0:
+            raise ValueError("this sketch models positive finite values")
         i = math.ceil(math.log(x) / self.lg)
         self.counts[i] = self.counts.get(i, 0) + 1
         self.n += 1
 
     def merge(self, other: "DDSketch") -> "DDSketch":
+        if self.alpha != other.alpha:
+            raise ValueError("merged sketches must use the same relative error")
         for i, c in other.counts.items():
             self.counts[i] = self.counts.get(i, 0) + c
         self.n += other.n
         return self
 
     def quantile(self, q: float) -> float:
+        if not 0 <= q <= 1:
+            raise ValueError("quantile must lie in [0, 1]")
+        if not self.n:
+            return float("nan")
         rank = q * (self.n - 1)
         seen = 0
         for i in sorted(self.counts):
