@@ -7,6 +7,9 @@
   chapter by chapter, and the phases.
 - [`READING.md`](READING.md): every textbook the series covers and the parts each maps to, coverage maps for the
   core books, the industry and history library, and the full paper list for every part.
+- **The course site** (GitHub Pages; built by [`tools/course_site.py`](../../tools/course_site.py), published by
+  [`.github/workflows/course-site.yml`](../../.github/workflows/course-site.yml)): a page of course material for
+  every part. See [The course](#the-course-tracks-labs-and-the-site) below.
 
 A forty-three-part course on quantitative finance in English and Chinese. It aims to be as complete as the standard
 textbooks taken together, as technical as a PhD course, and as close to the academic and industry frontier as
@@ -40,8 +43,9 @@ model because it allows a price below zero.
 quant stack. Each part adds a desk or a component: the data layer, the vol desk's surface and hedger, the rates
 curve, the XVA engine, the factor library, the ML and LLM signals, the alpha miners, the risk model and optimizer,
 the execution desk, the market maker, the crypto book, compliance and risk reports. A `HouseChart` card opens each
-part with what is built so far. **The finale opens the whole Track Record**: every registered strategy, scored once on
-the sealed 2021–25 hold-out, with every trial counted, reported as a firm would (Part 43).
+part with what is built so far. **The finale turns the question on the House itself**: what record a strategy must
+keep (registered before its test, every trial counted, costs stated, reported whatever the result) for a claim of
+skill to mean anything (Part 43).
 
 * **Act I, Markets and Money** (1–3): the fair game; the machinery of markets (instruments, clearing, margin,
   shorting, repo, prime brokerage, the players and the quant industry map); value, accounting and the firm.
@@ -68,10 +72,14 @@ the sealed 2021–25 hold-out, with every trial counted, reported as a firm woul
    violations and speed: Black–Scholes, SVI/SSVI, a VAE, local vol, Heston, SABR, Bates, rough Bergomi, quadratic
    rough Heston, path-dependent vol, the neural calibrator, a neural SDE.
 3. **The Track Record and the sealed envelope** (the investing scoreboard). All research uses data to 31 December
-   2020. Every strategy is registered (code hash, parameters, costs, trial count) before its 2021-onward hold-out
-   is opened, once, in its part. The result is shown whatever it is.
-4. **The trial counter**. Every backtest the series runs is counted. The finale deflates the Track Record by the
-   true number of trials, including the millions of formulas Part 29's alpha miners search.
+   2020. A strategy is registered (code hash, parameters, costs, trial count) before any test on later data; the
+   registry is [`data/track_record.json`](data/track_record.json) and [`data/envelope.json`](data/envelope.json).
+   *As shipped, the films teach the protocol and its arithmetic (what must be frozen, how little five years can
+   prove) and do not present hold-out outcomes: each part's registration chapter says so on screen, and its README
+   states which computations are excluded from the presentation.*
+4. **The trial counter**. Every backtest the series runs is counted (23,562 by the finale: ten thousand are
+   Part 26's trading rules, thirteen thousand Part 29's mined formulas). Part 26 derives what that count does to a
+   Sharpe ratio; Part 43 applies it to a claim of skill.
 5. **Crisis files, firm files and desk questions** in every part:
    - the event where the idea broke, measured from data;
    - the firms whose business it is, from the public record;
@@ -80,6 +88,40 @@ the sealed 2021–25 hold-out, with every trial counted, reported as a firm woul
    fair game, Thorp, LTCM, crowding, roughness and Hawkes, control from HJB to RL, liquidity, overfitting,
    correlation, and the links to *AI, Built* (autodiff, double descent, transformers, diffusion, RL, High-Flyer
    and DeepSeek).
+
+## The course: tracks, labs and the site
+
+The films are also a course, and the material around them is generated from the same source.
+
+- **Four tracks.** Every chapter has a home level: undergraduate (a first course: 179 chapters, about 10 hours),
+  master's (the derivations, models and numerical methods), PhD (each part's research chapter, frontier chapter,
+  qualifying-exam problems and open problems) and industry (industry chapters, crisis and firm files, the House's
+  rule, desk questions). Twenty-eight parts open at undergraduate level; the other fifteen need the toolkit of
+  Parts 4-8. The table is [`course/`](course/__init__.py): for each part its level, prerequisites, opening
+  question and story, objectives per track and key results. `tests/test_quant_course.py` checks it against every
+  manifest.
+- **A lab for every part** ([`labs/`](labs/__init__.py)): forty-three short programs on the House library. Each
+  is seeded, runs in seconds on simulated data, asserts the theory it illustrates and draws one figure. They need
+  numpy, scipy, matplotlib and numba, not manim:
+
+  ```bash
+  pip install numpy scipy matplotlib numba
+  python -m videos.quant.labs 10            # Lab 10: manufacture an option by delta hedging
+  python -m videos.quant.labs --all         # all forty-three (about a minute)
+  python -m pytest -q tests/test_quant_labs.py
+  ```
+- **The site.** One page per part: an interactive to play with, the chapters by track with their length, the lab
+  with its code, output and figure, the README's notes, desk questions and worked solutions (English and
+  Chinese), and the part's papers. Forty-four canvas interactives, no dependencies.
+
+  ```bash
+  pip install numpy scipy matplotlib numba markdown
+  python tools/course_site.py               # -> _site/
+  python -m http.server -d _site 8000       # http://localhost:8000/quant/
+  ```
+
+  It is published by GitHub Actions on every push to `main` once Pages is enabled for the repository
+  (Settings → Pages → Source: *GitHub Actions*), at `https://<owner>.github.io/explainer-videos/quant/`.
 
 ## What gets trained
 

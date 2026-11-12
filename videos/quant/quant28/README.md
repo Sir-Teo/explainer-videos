@@ -1,3 +1,5 @@
+
+
 # Quant, Built — Part 28: Text, LLMs and Alternative Data
 
 Part 28 of the [43-part course](../SYLLABUS.md), following the [lecture standard](../../ai/LECTURE_GUIDE.md). Twenty chapters connect text representations, central-bank communication, supervised screening, local language models and alternative-data economics. Scientific presentation revision, bilingual construction and actual rendered visual review are complete on the pinned source below. Full continuous production listening and pronunciation review remain separately pending.
@@ -137,10 +139,4 @@ A使用会议日期截至2007年的纪要；会议日期可能早于发布日期
 
     高斯条件期望定价给 `lambda=Cov(v,y)/Var(y)=N beta sigma_v²/(N² beta² sigma_v²+sigma_u²)`。联立得 `beta²=sigma_u²/(N sigma_v²)`，取正根 `beta=sigma_u/(sigma_v sqrt(N))`，`lambda=sigma_v sqrt(N)/[(N+1)sigma_u]`。因 `lambda N beta=N/(N+1)`，每人预期利润 `beta sigma_v²[1−lambda N beta]=sigma_u sigma_v/[(N+1)sqrt(N)]`。高斯条件方差为 `sigma_v²−Cov(v,y)²/Var(y)=sigma_v²/(N+1)`。lambda正使观察p与观察y等价，故这也是Var(v|p)。总利润 `sqrt(N)sigma_u sigma_v/(N+1)`。供应商收入、异质噪声信号或多期交易结论需另建模型，不能直接推出。
 
-## Current visual review
-
-Visual pass complete on `quantitative-finance`: 40 bilingual endpoint sheets, 20 English forty-frame motion sheets and 20 focused native frames actually inspected on source `b66faccf5f3556a649a86f061457a00921a5db07`. The chaptered silent timing preview runs 74:23, with 20 chapters and English subtitles. Eleven CPU speech reports cover 80 sampled lines; the actual narrated opening runs 161.067 seconds. Image and signal checks do not certify pronunciation or continuous production listening, which remain pending. [Artifact-bound evidence](../../../docs/qa/quant28-polish-evidence.json).
-
-## 当前视觉审阅
-
-本轮已实际检查 40 张双语旁白节点画面表、20 张英文四十帧动画表和 20 张重点原尺寸画面，覆盖全部二十章。分章静音时序预览为 74:23，含二十章和英文字幕。十一份 CPU 语音报告覆盖 80 个抽样句段，并核验实际配音开场。十三个常规原始计算均已恢复；首次模型启动在训练之前因包装器的多进程命名空间出错，修复启动方式后原始模型只训练一次。封存策略仍被排除，未新增市场试验。画面与信号检查不替代完整成片连续听审或发音认证，后者仍单独待办。
+*Review log of the earlier QA passes on this part: [`docs/qa/quant/part28.md`](../../../docs/qa/quant/part28.md).*

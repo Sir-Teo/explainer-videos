@@ -1,3 +1,5 @@
+
+
 # Quant, Built — Part 12: The Volatility Surface
 
 Part 12 of a forty-three-part series on quantitative finance (see [the series plan](../README.md) and
@@ -197,6 +199,7 @@ paper; Deribit DVOL methodology: ch. 11.
    cancels. With corr(η(K), η(K ± h)) = ρ and corr(η(K−h), η(K+h)) = ρ₂, Var = (s²/h⁴)[6 − 8ρ + 2ρ₂]: positively
    correlated neighbours help, which is why smooth (correlated) errors such as a stale forward do less harm than
    independent ones, and why alternating errors (bid–ask bounce, ρ < 0) do more.
+
 ## For the researcher
 
 * **The theorems.** Breeden and Litzenberger (1978); Aït-Sahalia and Lo (1998), "Nonparametric estimation of
@@ -299,7 +302,6 @@ paper; Deribit DVOL methodology: ch. 11.
 * **简化。** 对数正态真值、零利率、三个等间距执行价、独立误差；Deribit的噪声是成交相对标记价，包含半个价差和标记价自身的误差。
 * **开放问题。** 形状约束与相关误差下的最优速率；陈旧与交替的误差；尾部推断。
 
-
 ## Scientific scope of this polish pass
 
 The Surface pools marks from 00:00 through 12:00 UTC around an 08:00 reference.
@@ -385,12 +387,4 @@ silent-playback pass is complete. Full production-voice listening remains pendin
 
 SVXY changed its daily target from −1× to −0.5× effective at the close of 27 February 2018, as stated in [the issuer announcement filed with the SEC](https://www.sec.gov/Archives/edgar/data/1415311/000119312518059052/d503117dex991.htm). The XIV discussion labels the 2021 appeal as a pleading-stage decision, without treating allegations as findings. A February 2025 class-certification order is also retained in the source-check artifacts; it concerns procedure, not a merits determination.
 
-
-## Sequential polish validation
-
-The [Part 12 evidence record](../../../docs/qa/quant12-polish-evidence.json)
-records 66 current, reviewed bilingual endpoint and English silent-playback receipts,
-reviewed sheet hashes, original calculation-source preservation, frozen cache
-restoration, existing tests and 57 sampled speech lines. Full production-voice
-listening and synchronization remain pending. The local chaptered preview is
-`renders/quant12_polished_silent.mp4`.
+*Review log of the earlier QA passes on this part: [`docs/qa/quant/part12.md`](../../../docs/qa/quant/part12.md).*

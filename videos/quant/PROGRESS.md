@@ -15,6 +15,25 @@ EXPLAINER_TTS=silent python tools/qa_scene.py quant10 Hook   # one chapter, sile
 
 Videos, audio, `media/`, `renders/` and `.cache/` are never committed (`.gitignore`); everything regenerates.
 
+## Direction, 12 November 2026: the course layer
+
+The owner: polish the whole series; it should run from undergraduate to PhD to industry with hands-on work, and
+every part should have course material on GitHub Pages. What was added (record:
+[`docs/qa/quantitative-finance-polish.md`](../../docs/qa/quantitative-finance-polish.md)):
+
+- `videos/quant/course/`: the course table (levels, four tracks, stories, objectives, key results), tested
+  against every manifest. **When a part's chapters are renumbered, update its `U`/`D`/`I` lists there.**
+- `videos/quant/labs/labNN.py`: a runnable lab per part on the House (no manim): `python -m videos.quant.labs N`.
+- `tools/course_site.py` → `_site/`: the course site (a page per part with an interactive, the lab, the README's
+  notes and solutions, the papers). Published by `.github/workflows/course-site.yml` once Pages is enabled.
+- `SharpePrecision` in `explainer/quant/viz.py`, used in the precision beats of Parts 24, 25, 26 and 33.
+- Review logs moved from the part READMEs to `docs/qa/quant/`.
+
+    python -m pytest -q tests/test_quant_labs.py tests/test_quant_course.py     # about two minutes
+    python tools/course_site.py && python -m http.server -d _site 8000          # http://localhost:8000/quant/
+
+Next, if the films are taken further: the text-led chapters listed at the end of the polish record.
+
 ## Done
 
 - **Phase 0 (partial).** `explainer/quant/` (acts, parts, timeline, cards, House chart; palette `explainer.style.QC`),

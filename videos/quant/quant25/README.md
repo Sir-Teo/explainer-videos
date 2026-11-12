@@ -1,3 +1,5 @@
+
+
 # Quant, Built — Part 25: The Factor Zoo
 
 Part 25 of [Quant, Built](../README.md), following the [syllabus](../SYLLABUS.md). The lecture preserves the original numerical methods while distinguishing selected published evidence, illustrative inference and a genuinely fresh test. The endpoint and motion visual review is complete; production listening remains separately pending.
@@ -146,10 +148,4 @@ python tools/make.py quant25 --cpu-voice -q m                 # English and Chin
 
 范围审查包括全部直方图尾部、最低约负一点零零五的交叉验证分数、全部散点、完整弱因子模拟和全部发表后地毯观测。密度曲线仍限于实际计算网格负四至七，不外推。字幕表仅追加；原有字符串值不变。源码翻译、实际渲染、抽样信号与对齐检查，以及完整连续听审分别记录。
 
-## Current visual review
-
-Visual pass complete on `quantitative-finance`: 30 bilingual endpoint sheets, 15 English forty-frame motion sheets and 26 focused native frames actually inspected on source `f5e27e38ca32efbca2953dfee34f391109a2b83b`. The chaptered silent timing preview runs 65:21, with 15 chapters and English subtitles. Eleven CPU speech reports cover 102 sampled lines; the actual narrated opening runs 176.333 seconds. Signal and visual checks do not certify pronunciation or continuous production listening, which remain pending. [Artifact-bound evidence](../../../docs/qa/quant25-polish-evidence.json).
-
-## 当前视觉审阅
-
-本轮已实际检查30张双语旁白节点画面表、15张英文四十帧动画表及26张重点原尺寸画面。分章静音时序预览为65:21，含15章和英文字幕。十一份CPU语音报告覆盖102个抽样句段，并核验实际配音开场。信号与画面检查不替代发音或完整生产成片连续听审，后者仍是独立待办。
+*Review log of the earlier QA passes on this part: [`docs/qa/quant/part25.md`](../../../docs/qa/quant/part25.md).*

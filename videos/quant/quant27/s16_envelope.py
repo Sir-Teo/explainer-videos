@@ -60,14 +60,39 @@ class Envelope(VoiceoverScene):
         self.clear_scene()
 
     def comparison(self):
-        eq = MathTex(r"D_t=A_t-B_t,\quad \sigma_D^2=\sigma_A^2+\sigma_B^2-2\rho\sigma_A\sigma_B", font_size=38).to_edge(UP, buff=.6)
+        eq = MathTex(r"D_t=A_t-B_t,\quad \sigma_D^2=\sigma_A^2+\sigma_B^2-2\rho\sigma_A\sigma_B", font_size=38).to_edge(UP, buff=.4)
         if eq.width > 12.3: eq.scale_to_fit_width(12.3)
-        example = desk_question(r"fixed mathematical example; arbitrary units",
-                                r"$\sigma_A=\sigma_B=1$, $\rho=0.8$, $T=100$: $\sigma_D=\sqrt{0.4}\approx0.632$, $\operatorname{se}(\bar D)\approx0.0632$ under IID differences", width=12, font_size=30).next_to(eq, DOWN, buff=.6)
-        foot = wrapped_label(r"This is paired-mean arithmetic, not a historical strategy result or a Sharpe-difference formula. Serial dependence, estimated risk and model selection need additional treatment.", 12, 26, GREY_A).to_edge(DOWN, buff=.55)
+        # the same arithmetic as geometry: the one- and two-sd ellipses of (A, B); the spread of D = A - B is their
+        # width across the diagonal, sqrt(2 (1 - rho)), which shrinks as the correlation rises
+        rho = ValueTracker(0.0)
+        g = axes([-3, 3], [-3, 3], x_length=4.3, y_length=4.3, xticks=[-2, 0, 2], yticks=[-2, 0, 2], font_size=16).move_to(LEFT * 3.4 + DOWN * .35)
+        ax = g.ax
+        ang = np.linspace(0, 2 * np.pi, 121)
+        def ellipse(k, width, op):
+            r = rho.get_value()
+            major, minor = k * np.sqrt(1 + r), k * np.sqrt(1 - r)  # along (1, 1) and (1, -1)
+            x = (major * np.cos(ang) + minor * np.sin(ang)) / np.sqrt(2)
+            y = (major * np.cos(ang) - minor * np.sin(ang)) / np.sqrt(2)
+            return curve(ax, x, y, QC.SPOT, stroke_width=width).set_stroke(opacity=op)
+        def across():
+            h = np.sqrt(1 - rho.get_value()) / np.sqrt(2)
+            return Line(ax.c2p(-h, h), ax.c2p(h, -h), color=QC.P, stroke_width=6)
+        shapes = VGroup(always_redraw(lambda: ellipse(2, 2, .45)), always_redraw(lambda: ellipse(1, 3, 1)), always_redraw(across))
+        diag = DashedLine(ax.c2p(-2.9, -2.9), ax.c2p(2.9, 2.9), color=GREY_C, stroke_width=1.5)
+        names = VGroup(MathTex("A", font_size=28).next_to(ax.c2p(3, -3), RIGHT, buff=.12), MathTex("B", font_size=28).next_to(ax.c2p(-3, 3), UP, buff=.1))
+        sd = lambda: float(np.sqrt(2 * (1 - rho.get_value())))
+        reads = VGroup(readout(r"\rho=", rho.get_value, digits=2, font_size=34),
+                       readout(r"\sigma_D=\sqrt{2(1-\rho)}=", sd, digits=3, font_size=32, color=QC.P),
+                       readout(r"\operatorname{se}(\bar D)=\sigma_D/\sqrt{100}=", lambda: sd() / 10, digits=4, font_size=32, color=QC.P),
+                       label(r"fixed mathematical example; arbitrary units", font_size=20, color=GREY_A)
+                       ).arrange(DOWN, aligned_edge=LEFT, buff=.38).next_to(g, RIGHT, buff=.9)
+        foot = wrapped_label(r"This is paired-mean arithmetic, not a historical strategy result or a Sharpe-difference formula. Serial dependence, estimated risk and model selection need additional treatment.", 12, 22, GREY_A).to_edge(DOWN, buff=.35)
         with self.voiceover("For a mean comparison, use the paired difference. The variance of A minus B includes their covariance. <bookmark mark='a'/> In a fixed mathematical example, both standard deviations are one, correlation is point eight, and there are one hundred independent paired observations. The difference has standard deviation about point six three two, so its mean has standard error about point zero six three two. Ignoring covariance would answer the wrong precision question. <bookmark mark='b'/> These are invented arbitrary units, not a new strategy test or a formula for a difference of Sharpe ratios. Serial dependence, estimated risk and selection require further analysis.") as vo:
-            self.play(FadeIn(eq))
-            vo.wait_until('a'); self.play(FadeIn(example))
+            self.play(FadeIn(eq), FadeIn(g), FadeIn(diag), FadeIn(names), FadeIn(shapes), FadeIn(reads))
+            vo.wait_until('a')
+            self.play(rho.animate.set_value(0.8), run_time=4.0)
+            self.play(Indicate(reads[1], color=QC.P, scale_factor=1.06))
+            self.play(Indicate(reads[2], color=QC.P, scale_factor=1.06))
             vo.wait_until('b'); self.play(FadeIn(foot))
         self.clear_scene()
 

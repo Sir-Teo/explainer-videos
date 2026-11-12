@@ -367,3 +367,79 @@ class TrainingReplay(VGroup):
         dot.clear_updaters()
         cnt.clear_updaters()
         return dot, cnt
+
+
+# ---------------------------------------------------------------------------
+# What a hold-out can say (the registration chapters, Parts 24-26 and 33)
+# ---------------------------------------------------------------------------
+class SharpePrecision(VGroup):
+    """How precisely ``years`` (a ``ValueTracker``) of returns pin down an annual Sharpe ratio, under the iid
+    approximation se = 1/sqrt(Y).  Two sampling densities of the estimate share one axis: a strategy with no skill
+    (grey) and one whose true Sharpe ratio is ``alt`` (amber).  The t = 2 hurdle stands at 2/sqrt(Y); the part of the
+    amber bell beyond it (the chance that such a strategy would pass) is filled.  As the years grow the bells narrow,
+    separate, and the hurdle walks in.  Fixed arithmetic: nothing here is estimated from data.
+
+    ``mark``: an estimate to read off (a dot on the axis and its t-statistic, ``mark * sqrt(Y)``, among the readouts).
+    ``g.ax``: the axes; ``g.readouts``: live years, standard error, hurdle and pass probability; ``g.legend``."""
+
+    def __init__(self, years: ValueTracker, alt: float = 0.5, x_range=(-1.5, 2.5), x_length=8.2, y_length=3.5,
+                 y_max: float = 1.05, font_size=22, xticks=(-1, 0, 1, 2), mark: float | None = None):
+        super().__init__()
+        from scipy.stats import norm
+
+        def se() -> float:
+            return 1.0 / np.sqrt(max(years.get_value(), 1e-6))
+
+        frame = axes([x_range[0], x_range[1]], [0, y_max], x_length=x_length, y_length=y_length,
+                     xlabel=r"estimated annual Sharpe ratio", xticks=list(xticks), font_size=font_size - 4)
+        ax = frame.ax
+        xs = np.linspace(x_range[0], x_range[1], 241)
+
+        def density(mu: float):
+            s = se()
+            return np.minimum(np.exp(-0.5 * ((xs - mu) / s) ** 2) / (s * np.sqrt(2 * np.pi)), y_max)
+
+        def hurdle() -> float:
+            return min(2 * se(), x_range[1])
+
+        def passed():
+            keep = xs >= hurdle()
+            if keep.sum() < 2:
+                return VMobject()
+            pts = [ax.c2p(x, y) for x, y in zip(xs[keep], density(alt)[keep])]
+            poly = Polygon(ax.c2p(xs[keep][0], 0), *pts, ax.c2p(xs[keep][-1], 0), stroke_width=0)
+            return poly.set_fill(QC.P, opacity=0.35)
+
+        fill = always_redraw(passed)
+        null = always_redraw(lambda: curve(ax, xs, density(0.0), GREY_B, stroke_width=3))
+        skilled = always_redraw(lambda: curve(ax, xs, density(alt), QC.P, stroke_width=3))
+        line = always_redraw(lambda: DashedLine(ax.c2p(hurdle(), 0), ax.c2p(hurdle(), 0.9 * y_max), color=QC.LOSS,
+                                                stroke_width=2.5, dash_length=0.08))
+        tag = MathTex(r"t=2", font_size=font_size, color=QC.LOSS)
+        tag.add_updater(lambda m: m.next_to(ax.c2p(hurdle(), 0.9 * y_max), UP, buff=0.06))
+        tag.update()
+        self.legend = VGroup(
+            VGroup(Line(ORIGIN, RIGHT * 0.4, color=GREY_B, stroke_width=5),
+                   label(r"no skill: true Sharpe ratio 0", font_size=font_size - 3, color=GREY_B)).arrange(RIGHT, buff=0.15),
+            VGroup(Line(ORIGIN, RIGHT * 0.4, color=QC.P, stroke_width=5),
+                   label(rf"true Sharpe ratio {alt:g}", font_size=font_size - 3, color=QC.P)).arrange(RIGHT, buff=0.15),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        self.readouts = VGroup(
+            readout(r"Y=", years.get_value, digits=1, font_size=font_size + 6, color=WHITE),
+            readout(r"\mathrm{se}\approx 1/\sqrt{Y}=", se, digits=2, font_size=font_size + 2, color=GREY_A),
+            readout(r"t=2:\ \widehat{SR}\geq", lambda: 2 * se(), digits=2, font_size=font_size + 2, color=QC.LOSS),
+            readout(rf"\mathbb{{P}}(t>2\mid SR={alt:g})=", lambda: float(norm.sf(2 - alt / se())), digits=2,
+                    font_size=font_size + 2, color=QC.P),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        if mark is not None:
+            self.readouts.add(readout(rf"\widehat{{SR}}={mark:g}:\ t\approx", lambda: mark / se(), digits=2,
+                                      font_size=font_size + 2, color=QC.GAIN))
+            self.readouts.arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        self.ax, self.frame, self.curves, self.hurdle = ax, frame, VGroup(fill, null, skilled), VGroup(line, tag)
+        if mark is not None:
+            dot = Dot(ax.c2p(mark, 0), radius=0.07, color=QC.GAIN)
+            dot.add_updater(lambda m: m.move_to(ax.c2p(mark, 0)))
+            self.hurdle.add(dot)
+        side = VGroup(self.readouts, self.legend).arrange(DOWN, aligned_edge=LEFT, buff=0.45)
+        side.next_to(ax, RIGHT, buff=0.5).align_to(ax, UP)
+        self.add(frame, self.curves, self.hurdle, side)

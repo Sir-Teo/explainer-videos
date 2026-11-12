@@ -41,11 +41,18 @@ class Track(VoiceoverScene):
         self.clear_scene()
 
     def precision(self):
-        eq=MathTex(r"t\approx SR_{\rm annual}\sqrt{Y},\qquad {\rm se}(\widehat{SR}_{\rm annual})\approx {1\over\sqrt{Y}}",font_size=34).to_edge(UP,buff=0.7)
-        example=desk_question(r"fixed five-year illustration",r"$Y=5$: approximate standard error $0.45$; $t=2$ needs an annual Sharpe ratio near $0.89$",width=12.0,font_size=23).next_to(eq,DOWN,buff=0.65)
-        foot=wrapped_label(r"IID, stable, modest-Sharpe approximation. Serial dependence, tails, estimation and selection can materially change uncertainty. No realised holdout statistic is displayed.",12.0,20,GREY_A).to_edge(DOWN,buff=0.5)
+        eq=MathTex(r"t\approx SR_{\rm annual}\sqrt{Y},\qquad {\rm se}(\widehat{SR}_{\rm annual})\approx {1\over\sqrt{Y}}",font_size=34).to_edge(UP,buff=0.45)
+        # the same arithmetic as a picture: the estimate's sampling density narrowing as the years of test grow
+        years=ValueTracker(1.0)
+        gauge=SharpePrecision(years).next_to(eq,DOWN,buff=0.4)
+        foot=wrapped_label(r"IID, stable, modest-Sharpe approximation. Serial dependence, tails, estimation and selection can materially change uncertainty. No realised holdout statistic is displayed.",12.0,20,GREY_A).to_edge(DOWN,buff=0.35)
         with self.voiceover("Five years is a short test. Under a stable independent-return approximation, the mean t-statistic is the annual Sharpe ratio times the square root of years. <bookmark mark='a'/> At five years, the rough standard error of an estimated annual Sharpe ratio is forty-five hundredths. Reaching a t-statistic of two would require about point eight nine. These are fixed arithmetic illustrations, not results from the sealed sample. <bookmark mark='b'/> Serial dependence, tails and selection can make the approximation unreliable; failure to reject zero is not evidence that two strategies are equivalent.") as vo:
-            self.play(FadeIn(eq));vo.wait_until('a');self.play(FadeIn(example));vo.wait_until('b');self.play(FadeIn(foot))
+            self.play(FadeIn(eq),FadeIn(gauge))
+            self.play(years.animate.set_value(5.0),run_time=4.0)
+            vo.wait_until('a')
+            self.play(Indicate(gauge.readouts[1],color=WHITE,scale_factor=1.08))
+            self.play(Indicate(gauge.readouts[2],color=QC.LOSS,scale_factor=1.08))
+            vo.wait_until('b');self.play(FadeIn(foot))
         self.clear_scene()
 
     def trials(self):

@@ -1,3 +1,5 @@
+
+
 # Quant, Built — Part 24: Factors
 
 Seventeen chapters connect factor definitions, model tests, crashes, international evidence and implementation limits. Research return calculations end in December 2020. Chapter 13 is a conceptual registration and holdout-accounting lesson: this review neither opens nor scores the sealed experiment. The endpoint and motion visual review is complete; production listening remains separately pending.
@@ -82,7 +84,6 @@ Research pause: for N=2, if the only nonzero cross covariance is `Cov(x_1,r_2)=c
 * ch. 11: Liu, Stambaugh and Yuan (2019).
 * ch. 12: Frazzini, Israel and Moskowitz (2018); Novy-Marx and Velikov (2016); press reports on AQR's assets.
 
-
 # 第二十四部分：因子
 
 十七个章节讨论因子定义、模型检验、崩盘、国际证据与实施边界。收益计算截至二〇二〇年十二月。第十三章仅作登记与留出记账的概念讨论；本次审查没有打开、评分或检查封存实验，也没有新增市场试验。本轮视觉审查已完成；完整成片听审仍另行待办。
@@ -123,10 +124,4 @@ Research pause: for N=2, if the only nonzero cross covariance is `Cov(x_1,r_2)=c
 
 研究专题暂停题：N=2且唯一非零交叉协方差为`Cov(x_1,r_2)=c>0`时，该联系的利润贡献为`−c/4`。这仅指交叉项；均值差异可另有贡献，仅无自相关不意味着总利润必等于`−c/4`。
 
-## Current visual review
-
-Visual pass complete on `quantitative-finance`: 34 bilingual endpoint sheets, 17 English forty-frame motion sheets and 24 focused native frames actually inspected on source `9baf04efcaccf7c7e27dc4a95a29ebb716a97cb2`. The chaptered silent timing preview runs 64:07, with 17 chapters and English subtitles. Eleven CPU speech reports cover 90 sampled lines; the actual narrated opening runs 201.625 seconds. These signal and visual checks do not certify pronunciation or continuous production listening, which remain pending. [Artifact-bound evidence](../../../docs/qa/quant24-polish-evidence.json).
-
-## 当前视觉审阅
-
-本轮已实际检查34张双语旁白节点画面表、17张英文四十帧动画表及24张重点原尺寸画面。分章静音时序预览为64:07，含17章和英文字幕。十一份CPU语音报告覆盖90个抽样句段，并核验实际配音开场。信号与画面检查不替代发音或完整生产成片连续听审，后者仍是独立待办。
+*Review log of the earlier QA passes on this part: [`docs/qa/quant/part24.md`](../../../docs/qa/quant/part24.md).*
