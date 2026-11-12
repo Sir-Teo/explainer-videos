@@ -5,7 +5,7 @@ Manim videos with local neural narration. See README.md for layout and build com
 - Run everything from the repo root; videos are addressed by name (`python tools/build.py quantum`), and
   `explainer/paths.py` (`video_dir`, `video_package`) resolves `videos/<series>/<name>/`. Never hard-code `videos/<name>`.
 - A new video goes in `videos/<series>/<name>/` with `manifest.py`, `README.md`, `sNN_*.py` scenes.
-- Generated and git-ignored: `media/`, `renders/`, `published/`, `.cache/`. Narration/manim caches are keyed by video
+- Generated and git-ignored: `media/`, `renders/`, `published/`, `.cache/`, `_site/`. Narration/manim caches are keyed by video
   name and scene module name, so renaming either invalidates them.
 - Chinese narration: `videos/<series>/<name>/narration_zh.json`; each bilingual series (`analysis`, `ai`, `philosophy`) keeps its on-screen text
   table (`<series>_text_zh.json`) and term guide in `videos/<series>/`.
@@ -26,7 +26,13 @@ Manim videos with local neural narration. See README.md for layout and build com
   the Track Record, the trial counter), model zoo, data plan, parts and phases are `videos/quant/SYLLABUS.md`; the
   textbook coverage map and every part's paper list are `videos/quant/READING.md`; it follows
   `videos/ai/LECTURE_GUIDE.md`; shared instruments are in `explainer/quant/`, the House library in
-  `explainer/quant/house/`.
+  `explainer/quant/house/`. It is also a course: `videos/quant/course/` is the table of levels, tracks, stories,
+  objectives and key results (chapter numbers must match each `manifest.py`; `tests/test_quant_course.py`),
+  `videos/quant/labs/labNN.py` is one runnable lab per part (numpy/scipy only, no manim; `python -m videos.quant.labs N`;
+  `tests/test_quant_labs.py`), and `tools/course_site.py` builds the GitHub Pages site into `_site/` (interactives in
+  `videos/quant/course/site/widgets/`; published by `.github/workflows/course-site.yml`). The films present the
+  evaluation protocol but not sealed hold-out outcomes: do not run the full `compute` of parts whose README says
+  not to (it would register or open strategy experiments).
 - *Computer Science, Built* (`videos/cs/`): sixty-one parts in eleven acts (`cs1` … `cs61`: a CS degree plus industry practice in Acts I–X, a research tier in Act XI and a *Frontier* chapter in every part), Parts 1–61 built or in progress; the series plan
   is `videos/cs/README.md`, the chapter-by-chapter syllabus and standard are `videos/cs/SYLLABUS.md`. The machine the
   series builds (Pebble) and its instruments will live in `explainer/cs/`.

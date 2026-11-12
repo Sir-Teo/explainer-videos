@@ -1,3 +1,5 @@
+
+
 # Quant, Built — Part 42: Machines in the Market
 
 Part 42 of the forty-three-part series asks how trading rules, learning and shared inputs interact through a market. A simulator can demonstrate a mechanism without identifying the mechanism behind real prices. This distinction connects the artificial markets, herding chain, dealer learner, pricing game and common-signal crowd throughout this part.
@@ -272,8 +274,4 @@ Official historical sources reviewed for this revision:
 
 上方英文来源区给出论文和官方历史链接。二〇二四年IMF、FSB报告是当时潜在脆弱性与数据缺口的评估；欧盟规则适用范围、人工智能法的分阶段实施与美国具体市场准入义务需分别分析。SEC二〇一三年Knight报告描述部署路由故障及超过四亿六千万美元损失，不是所有事件都属流动性撤走。二〇一四年国债十二分钟事件的“没有明显新公开催化信息”只针对该窗口。二〇二五年预测分析提案撤回，不等于其他责任消失。以上是教学历史材料，不是当前完整法律意见。
 
-## Current visual review
-
-The current visual pass is complete at fingerprint `d484a049dc426860456a804f467bf46e8c96b99bb07bf33b143249933e99bf94`. All 24 bilingual endpoint sheets, twelve English forty-frame motion sheets, scene-native frames, exact flagged/manual concern intervals, current bilingual construction captures and the narrated opening were actually inspected. The versioned evidence is `docs/qa/quant42-polish-evidence.json`; generated artifacts and the twelve-chapter silent timing preview remain in the workspace. Eleven actual CPU speech reports check sampled signal/timing. Full continuous production-voice listening, pronunciation and mastering remain separately pending. Dense derivations/references and brief staged entrances/page fades remain documented presentation limitations.
-
-当前视觉检查已完成：已实际查看全部二十四张双语端点图、十二张英文四十帧运动图、每个场景的原始帧、自动标记与人工发现问题的精确区间，以及当前双语构建图和带旁白开场。证据文件为 `docs/qa/quant42-polish-evidence.json`。十一份实际CPU语音报告检查抽样信号和时序；完整制作语音的连续听审、发音审查和母带制作仍单独待做。密集推导与参考文字、短暂分阶段入场和页面淡出保留为已记录的呈现限制。
+*Review log of the earlier QA passes on this part: [`docs/qa/quant/part42.md`](../../../docs/qa/quant/part42.md).*

@@ -1,3 +1,5 @@
+
+
 # Quant, Built — Part 26: Backtesting Without Fooling Yourself
 
 Part 26 of [Quant, Built](../README.md), following [the syllabus](../SYLLABUS.md). A selected historical return is not a promise of executable future returns. This lecture separates data availability, selection, execution assumptions, uncertainty, validation and monitoring. Educational methods, not investment advice.
@@ -126,10 +128,4 @@ The scientific, bilingual construction and rendered visual review is complete on
 
 参考文献和教材对应关系见英文列表。科学源稿、双语构造和实际渲染视觉审查已完成，证据索引见下文；完整生产语音听审和发音检查仍另行待办。
 
-## Current visual review
-
-Visual pass complete on `quantitative-finance`: 38 bilingual endpoint sheets, 19 English forty-frame motion sheets and 20 focused native frames actually inspected on source `e2f29a766e3c5ca3a67667aff286f5f8834db679`. The chaptered silent timing preview runs 70:23, with 19 chapters and English subtitles. Eleven CPU speech reports cover 84 sampled lines; the actual narrated opening runs 223.600 seconds. Signal and image checks do not certify pronunciation or continuous production listening, which remain pending. [Artifact-bound evidence](../../../docs/qa/quant26-polish-evidence.json).
-
-## 当前视觉审阅
-
-本轮已实际检查38张双语旁白节点画面表、19张英文四十帧动画表及20张重点原尺寸画面。分章静音时序预览为70:23，含19章和英文字幕。十一份CPU语音报告覆盖84个抽样句段，并核验实际配音开场。信号与画面检查不替代发音或完整生产成片连续听审，后者仍为独立待办。两项原历史计算未通过冻结数据校验，不展示不可用输出；固定算术例子与原历史结果明确区分。
+*Review log of the earlier QA passes on this part: [`docs/qa/quant/part26.md`](../../../docs/qa/quant/part26.md).*

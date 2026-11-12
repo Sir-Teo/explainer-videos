@@ -1,3 +1,5 @@
+
+
 # Part 27 — Machine Learning for Returns
 
 This lecture studies weak return signals, model complexity, learned factor structures and prediction intervals. Published stock results, mathematical examples and the smaller original crypto calculations are distinct kinds of evidence. A model's training fit, a nominal interval or a high-dimensional architecture does not supply missing evaluation assumptions.
@@ -152,10 +154,4 @@ Problems 1–6 develop the basic calculations; 7–10 extend the implementation 
 
 12. **（资格考试）高斯有限样本与极限风险。** $X$元素独立标准正态，独立噪声方差$\sigma^2$，固定$\|b\|^2=r^2$，测试协变量独立且各向同性。$P<N-1$时OLS条件协方差为$\sigma^2(X^\top X)^{-1}$；逆Wishart均值为$I/(N-P-1)$，故期望超额预测风险为$\sigma^2P/(N-P-1)$，比例极限为$\sigma^2\gamma/(1-\gamma)$。$P>N+1$时最小范数误差分成丢失信号$(I-X^+X)b$及拟合噪声$X^+\varepsilon$。旋转不变性给出期望偏差平方$r^2(1-N/P)$；$XX^\top$是自由度$P$的Wishart矩阵，噪声项为$\sigma^2N/(P-N-1)$。极限为$r^2(1-1/\gamma)+\sigma^2/(\gamma-1)$。信号和噪声均为1、$\gamma>1$时等于$1+1/[\gamma(\gamma-1)]>1$，高于零预测超额风险；$\gamma=1/2$时超额风险为1。总均方误差还需加新噪声方差1。较强信号$r^2>\sigma^2$下，$\gamma>r^2/(r^2-\sigma^2)$时可优于零预测，因此单位信号例子的结论并不普遍。
 
-## Current visual review
-
-Visual pass complete on `quantitative-finance`: 36 bilingual endpoint sheets, 18 English forty-frame motion sheets and 20 focused native frames actually inspected on source `bd34d3801908edd6d4501ce57cc8120cea063e27`. The chaptered silent timing preview runs 61:04, with 18 chapters and English subtitles. Eleven CPU speech reports cover 80 sampled lines; the actual narrated opening runs 197.933 seconds. Signal/image checks do not certify pronunciation or continuous production listening, which remain pending. [Artifact-bound evidence](../../../docs/qa/quant27-polish-evidence.json).
-
-## 当前视觉审阅
-
-本轮已实际检查36张双语旁白节点画面表、18张英文四十帧动画表和20张重点原尺寸画面。分章静音时序预览为61:04，含18章和英文字幕。十一份CPU语音报告覆盖80个抽样句段，并核验实际配音开场。预训练迁移在首个SPY公开输入冻结哈希不符时停止，数值结果保持缺失；固定模拟示意不是替代历史策略。信号与画面检查不替代完整成片连续听审或发音认证，后者仍单独待办。
+*Review log of the earlier QA passes on this part: [`docs/qa/quant/part27.md`](../../../docs/qa/quant/part27.md).*

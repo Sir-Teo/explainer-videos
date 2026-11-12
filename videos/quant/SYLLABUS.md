@@ -13,6 +13,16 @@ that narration follows the data, compute, the QA loop and the Chinese edition. T
 chapter maps to), the industry library and **the full paper list, part by part** are in [`READING.md`](READING.md).
 This file has the standard, the devices, the threads and the parts.
 
+> **Status, 12 November 2026.** All 43 parts are built. Two things have changed since this plan was written; where
+> this file and the films disagree, the films and each part's README are authoritative.
+>
+> 1. *Hold-out outcomes are not presented.* The registration chapters of Parts 24-33 and the finale teach the
+>    evaluation protocol and its fixed arithmetic (what must be frozen before a fresh test, how little five years
+>    can prove). Entries in Section 6 that read "opened on 2021-25 (...)" describe what the computation registered
+>    in [`data/track_record.json`](data/track_record.json), not what the films show.
+> 2. *The course layer* (Section 1a): every chapter has a home level, the series has four tracks, each part has a
+>    runnable lab, and a course site is generated from the repository.
+
 ## 1. The standard every part meets
 
 **Revision of November 2026: a part replaces a course.** The series is meant to be watched *instead of* the
@@ -167,6 +177,35 @@ running. Colours: `C.Q` for risk-neutral objects, `C.P` for real-world ones.
 - `contact_sheet.py`, `dead_air.py`, `collect_text.py --check` and `check_narration.py`.
 - `qa_series.py` and `qa_audio.py` once those tools take `--series quant`.
 - `pytest tests/test_quant_house.py` for the House library.
+
+## 1a. Levels, tracks, labs and the course site
+
+The series is one course at four levels, from a first undergraduate course to the research frontier and the
+trading floor. The table is [`course/`](course/__init__.py); `tests/test_quant_course.py` holds it to the films.
+
+- **Every chapter has one home tier.** `U`, undergraduate: the cold open, the history, definitions, the idea
+  as a picture, the arithmetic, the crisis as a story. `M`, master's: the derivations, the models, estimation and
+  numerical methods. `D`, doctoral: the research chapter, the frontier chapter, and chapters whose tools are
+  those of the research literature. `I`, industry: the industry chapter, crisis and firm files, the House's
+  rule. The recap belongs to every track.
+- **A track watches its tier and those it builds on**: undergraduate `U`; master's `U + M + I`; PhD everything;
+  industry `U + I`. A part "starts at" the lowest tier at which its core can be followed: 28 parts start at `U`,
+  15 at `M` (5, 12-17, 19, 21, 27, 29, 31, 33, 36, 42), which need the toolkit of Parts 4-8.
+- **Each part's entry** gives its prerequisites (parts, and what is needed from outside the series), the question
+  it opens with, its story in a paragraph, what it hands to later parts, two or three things a student can do
+  afterwards at each tier, and three to five key results in TeX.
+- **Problem sets are tiered the same way**: the first problems are drills, the middle ones extensions, the last
+  two (marked "qual") proofs at qualifying-exam level; desk questions are the industry tier.
+- **A lab per part** ([`labs/labNN.py`](labs/__init__.py)): at most about seventy lines on the House library,
+  seeded, a few seconds, simulated data only (no downloads, no registry access), one figure in the films' palette,
+  three "now change it" tasks, and an `assert` of the theory it illustrates, so running the lab tests it. Labs
+  import without manim.
+- **The site** ([`tools/course_site.py`](../../tools/course_site.py)) is generated, never edited: a part's page is
+  its course entry, its manifest, its lab (run at build time), its README (review logs of QA passes excluded) and
+  its section of READING.md. One interactive per part lives in `course/site/widgets/`; each is a simulation with
+  its assumptions stated under it, and none uses market data.
+
+When a part's chapters are renumbered, update its `U`/`D`/`I` lists in `course/`; the test fails otherwise.
 
 ## 2. The devices
 

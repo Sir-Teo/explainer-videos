@@ -1,3 +1,5 @@
+
+
 # Quant, Built — Part 6: Financial Econometrics
 
 Part 6 of a forty-three-part series on quantitative finance (see [the series plan](../README.md) and
@@ -272,7 +274,6 @@ edition, Bali–Engle–Murray's Part I, and course syllabi for Hayashi).
   Pérignon et al.'s 52%, Nagel's abstract, Glasserman–Lin's findings. Dropped: the Two Sigma Venn "Factor Lens" claim
   (its documentation could not be read from this environment); Glasserman–Lin's journal venue (cited as arXiv).
 
-
 ## For the researcher
 
 * **The theorems.** Phillips (1987) and Chan and Wei (1987) for local-to-unity limits; Elliott and Stock (1994) and
@@ -363,12 +364,4 @@ FRED的人均实际消费与CPI；FOMC例行会议日期（1994–2020，转录�
 局部单位根极限（Phillips 1987；Chan与Wei 1987），预测检验（Elliott与Stock 1994；Cavanagh、Elliott与Stock 1995），邦费罗尼区间（Campbell与
 Yogo 2006），IVX（2015）。开放问题：处处有良好功效的一致有效检验；多个持久预测变量；断点与近单位根之辨。
 
-## Current polish and QA
-
-The sequential review is tracked in [the finance QA log](../../../docs/qa/quantitative-finance-polish.md).
-The MLE demonstration shows complete confidence regions and scales all three covariances by the same sample
-multiplier. Its static SE labels refer to the original sample. Histograms retain the full sample as their density
-denominator, leaving observations outside the window outside the plot. The bootstrap quiz specifies one fixed
-circular block, not a geometric block whose mean length equals the sample size. The DiD derivation distinguishes
-nonnegative two-by-two comparison weights from potentially negative treatment-effect weights. The DML remainder
-includes both the cross-product of nuisance errors and the squared treatment-model error.
+*Review log of the earlier QA passes on this part: [`docs/qa/quant/part06.md`](../../../docs/qa/quant/part06.md).*

@@ -1,3 +1,5 @@
+
+
 # Quant, Built — Part 11: Trading Options
 
 Part 11 of a forty-three-part series on quantitative finance (see [the series plan](../README.md) and
@@ -285,6 +287,7 @@ python tools/make.py quant11 --cpu-voice -q m            # English and Chinese, 
    mean-variance (average) premium; a positive third cumulant, a residual that loses big in crashes, adds a term
    growing like q² per unit within the local cumulant expansion. This correction increases total compensation
    faster than linearly, but a moment finite only near zero does not establish finite prices for arbitrary q.
+
 ## For the researcher
 
 * **The theorems.** Gârleanu, Pedersen and Poteshman (2009), "Demand-Based Option Pricing," *RFS* 22(10); Bollen and
@@ -421,11 +424,4 @@ python tools/make.py quant11 --cpu-voice -q m            # English and Chinese, 
   第12部分的每周SSVI网格；第10部分的月度损益；芝加哥期权交易所COR3M（新的`data.cboe_index`，冻结到2025-12-31）；FRED的VIX；弗伦奇的数据。
 * 在试验计数器上登记：预测者优势检验（第7章）和样本外预测器（第18章）。
 
-
-## Sequential polish validation
-
-The [Part 11 evidence record](../../../docs/qa/quant11-polish-evidence.json)
-records the current bilingual endpoint and English silent-playback pass, manual
-sheet hashes, calculation-source preservation, original cache restoration and
-sample speech checks. Full production-voice listening and synchronization remain
-pending. The local chaptered preview is `renders/quant11_polished_silent.mp4`.
+*Review log of the earlier QA passes on this part: [`docs/qa/quant/part11.md`](../../../docs/qa/quant/part11.md).*

@@ -1,3 +1,5 @@
+
+
 # Quant, Built — Part 23: Risk and Return
 
 The opening of Act IV covers portfolio choice, equilibrium pricing, consumption, intermediaries, demand and speculative resale. Sixteen scenes include an opening, thirteen chapters, a research chapter and an outro. The English narration estimate is about 60 minutes; final media duration is measured separately. See the [syllabus](../SYLLABUS.md).
@@ -64,7 +66,6 @@ Opening; 1 Markowitz; 2 Tobin and estimation; 3 CAPM; 4 SDF and HJ; 5 APT/ICAPM;
 * ch. 12: Blanchard and Watson (1982); Diba and Grossman (1988); Abreu and Brunnermeier (2003); Brunnermeier and Nagel
   (2004); Greenwood, Shleifer and You (2019).
 
-
 ## Problems, with solutions
 
 1. **The frontier.** Minimise ½ w'Σw subject to w'μ = m and w'1 = 1. The first-order condition Σw = λμ + γ1 gives
@@ -103,7 +104,6 @@ Opening; 1 Markowitz; 2 Tobin and estimation; 3 CAPM; 4 SDF and HJ; 5 APT/ICAPM;
    indeed the higher bidder in each state.
 12. **(qual) When the premium vanishes.** If type j has the highest Q_j(d + P) in every state, P = βQ_j(d + P), the
    same equation as V_j, whose solution is unique: P = V_j = max_i V_i. Strict premiums require changing **strict** optimists and suitable reachability, rather than an arbitrary change of tie-break. The positive transition matrices in the fixed example satisfy the relevant conditions.
-
 
 ## Data, reproducibility and QA scope
 
@@ -164,15 +164,8 @@ Current final render evidence is reported separately in [the QA ledger](../../..
 11. **（资格考试）不动点。** 映射TP = β max_i Q_i(d + P)单调且满足|TP − TP′|_∞ ≤ β|P − P′|_∞，是压缩映射，有唯一不动点。由P = TP ≥ βQ_i(d + P)与V_i = βQ_i(d + V_i)得P − V_i ≥ βQ_i(P − V_i)，迭代得P − V_i ≥ 0。对例子，猜测持有者（状态0为第1类，状态1为第2类）并解线性方程组P₀ = ¾[½P₀ + ½(1 + P₁)]、P₁ = ¾[¼P₀ + ¾(1 + P₁)]：P₀ = 24/13，P₁ = 27/13；再验证所猜的类型在每个状态下确实出价更高。
 12. **（资格考试）溢价何时消失。** 若第j类在每个状态下都有最高的Q_j(d + P)，则P = βQ_j(d + P)，与V_j的方程相同，而其解唯一：P = V_j = max_i V_i。严格溢价需要严格乐观者改变和适当可达性，仅改变平手时的持有人不够。本例的正转移矩阵满足相关条件。
 
-
 ## 数据与审阅
 
 十三项原始计算均通过正常哈希检查恢复，没有force/refresh、受保护算法改动、新市场试验、注册表修改或封存实验读取。累计次数保持本部分317、全局23562，98个受保护文件不变。公开French字节确实读到2025年，包括先读取再限制日期的辅助函数；它们与封存实验载荷不同，不能说2021–2025年公开数据从未读取。原拟合窗口示例止于2020年12月，描述历史可以更晚。三个原有纯数值回归测试通过，不认证经验时间对齐。命名显示审计保留原缓存哈希和样本矩，不替代旧缓存。连续生产配音试听与发音认证是独立的待完成范围，不能用静音预览、信号或文字时序检查替代。
 
-## Current visual review
-
-Visual pass complete on `quantitative-finance`: 32 bilingual endpoint sheets, 16 English forty-frame motion sheets and 29 focused native frames actually inspected on source `27549ce7b136a78142e5678a3da34cb64fcb103b`. The chaptered silent timing preview runs 70:54 with 16 chapters and English subtitles. Eleven CPU speech reports cover 82 sampled lines; the actual narrated opening runs 157.067 seconds. These signal/visual checks do not certify pronunciation or continuous production listening, which remain pending. [Artifact-bound evidence](../../../docs/qa/quant23-polish-evidence.json).
-
-## 当前视觉审阅
-
-本轮已实际检查32张双语旁白节点画面表、16张英文四十帧动画表及29张重点原尺寸画面。分章静音时序预览为70:54，含16章与英文字幕。十一份CPU语音报告覆盖82个抽样句段，并核验实际配音开场。信号和画面检查不替代发音或完整生产成片连续听审，后者仍是独立待办。
+*Review log of the earlier QA passes on this part: [`docs/qa/quant/part23.md`](../../../docs/qa/quant/part23.md).*

@@ -24,7 +24,7 @@ every video builds from source. Each video lives in `videos/<series>/<name>/` wi
 | AI, Built (31 parts: [the plan](videos/ai/README.md); English and Chinese) | 30–60 min each | `python tools/make.py ai1` … `ai31`, or `--series ai` |
 | Statistics, Built (65 parts, BSc to PhD: [the plan](videos/stats/README.md), [syllabus](videos/stats/SYLLABUS.md); Parts 1–65 written, English) | 50–80 min each | `python -m videos.stats.stats65.compute && python tools/build.py stats65` |
 | Philosophy, Built (42 parts, from logic to ethics: [the plan](videos/philosophy/README.md); English and Chinese) | 50–65 min each | `python -m videos.philosophy.philosophyN.compute && python tools/build.py philosophyN` |
-| Quant, Built (43 parts: [the plan](videos/quant/README.md), [syllabus](videos/quant/SYLLABUS.md), [reading](videos/quant/READING.md), [progress](videos/quant/PROGRESS.md); English and Chinese) | 50–60 min each | `python -m videos.quant.quantN.compute && python tools/make.py quantN`, or `--series quant` |
+| Quant, Built (43 parts: [the plan](videos/quant/README.md), [syllabus](videos/quant/SYLLABUS.md), [reading](videos/quant/READING.md), [progress](videos/quant/PROGRESS.md); a [course site](videos/quant/README.md#the-course-tracks-labs-and-the-site) with a page and a runnable lab per part; English and Chinese) | 50–65 min each | `python -m videos.quant.quantN.compute && python tools/make.py quantN`, or `--series quant`; labs: `python -m videos.quant.labs N`; site: `python tools/course_site.py` |
 | Computer Science, Built (61 parts: [the plan](videos/cs/README.md); English and Chinese) | 50–60 min each | `python -m videos.cs.csN.compute && python tools/make.py csN`, or `--series cs` |
 
 ## Layout
@@ -33,7 +33,8 @@ every video builds from source. Each video lives in `videos/<series>/<name>/` wi
 explainer/   shared toolkit: style, TTS, voiceover, language tables, paths (explainer/paths.py finds a video by name)
 videos/      one package per video, grouped by series: ai/ analysis/ philosophy/ physics/ math/ ml/ markets/ quant/
 tools/       build, narration, QA, publishing scripts (run from the repo root)
-docs/        CREDITS.md
+docs/        CREDITS.md, QA records
+_site/       the Quant, Built course site (tools/course_site.py), generated, git-ignored
 renders/ published/ media/ .cache/   generated, git-ignored
 ```
 

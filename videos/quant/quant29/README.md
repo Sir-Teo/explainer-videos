@@ -1,3 +1,5 @@
+
+
 # Quant, Built · Part 29: Alpha Mining and Automated Research
 
 Scientific presentation revision, bilingual construction and actual rendered visual review are complete on the pinned source below. All twelve ordinary originals restored. The current table covers 125 narration contexts (91 manual translations and 34 unchanged-expression reuses), with 86 actual computed placeholders checked and 44 numerical display ranges verified. Corrected labels distinguish random draws, per-run GP cache counts and historical registration metadata. The 197 added captions preserve every earlier entry, yielding 33,961. Sealed strategy results remain excluded. Earlier diagnostic and final-attempt artifacts are preserved with their actual fingerprints; no old final approval transfers. Full continuous production listening and pronunciation review remain separately pending.
@@ -229,10 +231,4 @@ $$a>\frac{2S}{TS+2K+\sqrt{(TS+2K)^2+4(TS+K)}}.$$
 
 中文参考文献与上方所列版本对应。硬件成本及模型训练费用均按作者的比较范围解释；V3的5.576百万美元仅按假设租价折算官方训练，不包含先前研究、消融或整个项目投资，也不是R1费用。行业报道、模型历史信息集与可交易净收益均不由一个纸面性能数字自动证明。
 
-## Current visual review
-
-Visual pass complete on `quantitative-finance`: 34 bilingual endpoint sheets, 17 English forty-frame motion sheets and 23 focused native frames actually inspected on source `f8830b2e28d2883fbaae5550e283b2efb8adf8e1`. Every flagged interval has an artifact-bound decision. The chaptered silent timing preview runs 66:17, with 17 chapters and English subtitles. Eleven CPU speech reports cover 88 sampled lines; the actual narrated opening runs 213.267 seconds. Full continuous production listening and pronunciation review remain separately pending. [Artifact-bound evidence](../../../docs/qa/quant29-polish-evidence.json).
-
-## 当前视觉审阅
-
-本轮已实际检查 34 张双语旁白节点画面表、17 张英文四十帧动画表和 23 张重点原尺寸画面，覆盖全部十七个场景。每个标记区间均保留对应画面与审阅记录。分章静音时序预览为 66:17，含十七章和英文字幕。十一份 CPU 语音报告覆盖 88 个抽样句段，并核验实际配音开场。十二个常规原始计算均已恢复，没有重试、新增市场试验或登记修改；封存策略仍被排除。当前恢复计数与原登记计数的差异保留并明确披露。画面与信号检查不替代完整成片连续听审或发音认证，后者仍单独待办。
+*Review log of the earlier QA passes on this part: [`docs/qa/quant/part29.md`](../../../docs/qa/quant/part29.md).*

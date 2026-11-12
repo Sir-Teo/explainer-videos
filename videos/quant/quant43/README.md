@@ -1,3 +1,5 @@
+
+
 # Quant, Built — Part 43: Can You Beat the Market?
 
 The last part of the forty-three-part series asks what a claim of investment skill means, which evidence can support it, and where the assumptions enter. It combines Sharpe's holdings identity, stylised Gaussian fund populations, competitive Bayesian allocation, historical return statistics, careful pricing-summary comparisons and a return to Bachelier. The House is a teaching governance example. This part does not recommend or approve a portfolio.
@@ -349,8 +351,4 @@ CFTC确认二〇二〇年四月二十日五月WTI合约结算为-37.63美元，�
 
 上方英文来源区提供原始论文、SPIVA历史报告、CME清算通知和CFTC报告链接。八个普通输出及八个复用公共输入均有精确哈希证据；不要重新拟合或打开被排除策略。最终视觉证据已完成，见 `docs/qa/quant43-polish-evidence.json`。语音抽样信号及时序检查已经完成；完整制作旁白的连续听审、发音检查及母带制作仍单独待做。
 
-## Current visual review
-
-Visual review is complete at fingerprint `b38b924490198ca6f1c5a78c5f34e5c62de0bf1c2e13b02260f307fc926aa125`. All current bilingual endpoint sheets, thirteen English forty-frame motion sheets, scene-native frames, exact automated/manual concern intervals and the actual narrated opening were inspected. The generated artifacts and thirteen-chapter silent timing preview remain in the workspace; the versioned evidence is `docs/qa/quant43-polish-evidence.json`. Dense derivations and references, brief partial entrances and staged sparse holds remain documented limits. Full continuous production-voice listening and mastering are separately pending.
-
-当前视觉检查已完成：已实际查看全部二十六张双语端点图、十三张英文四十帧运动图、每个场景的原始帧、自动及人工问题的精确区间，以及实际带旁白开场。生成文件和十三章静音时序预览保留在工作区，版本化证据为 `docs/qa/quant43-polish-evidence.json`。密集推导和参考文字、短暂部分入场及分阶段稀疏停留均保留为已记录限制。完整制作语音的连续听审、发音和母带处理仍单独待做。
+*Review log of the earlier QA passes on this part: [`docs/qa/quant/part43.md`](../../../docs/qa/quant/part43.md).*

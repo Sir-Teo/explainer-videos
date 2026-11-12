@@ -1,3 +1,5 @@
+
+
 # Quant, Built — Part 14: Rough and Path-Dependent Volatility
 
 Part 14 of a forty-three-part series on quantitative finance (see [the series plan](../README.md) and
@@ -235,22 +237,4 @@ Primary checks: [Fukasawa theorem](https://arxiv.org/html/2002.09215v1), [nearly
 
 本次保持原计算模块、House算法、全局数据清单与试验记录不变；仅以正常命令恢复原缓存。速度章依赖第十七部分固定种子合成数据与原40轮训练及合成验证划分，并未打开封存市场留出集。不同偏斜曲线使用不同窗口与差分方法，不能将表格差异完全归因于模型类别；原始符号与完整观测绝对值均保留。明确标出的示意核截顶与单因子可见阈值属于显示选择。全部21章英中导出标题已核对。完整连续生产语音聆听需另行完成，不能以静态图或音频信号检查代替。
 
-
-## Validation in this polish pass
-
-All 21 English and 21 Mandarin narration-beat checks and 21 English silent motion
-checks pass against the frozen source. All 63 receipts have zero automated warnings. Their sheets were visually
-reviewed. Chinese source coverage is 123/123; the narration estimate is
-64.2 minutes. Twelve sampled speech reports cover 71 lines. The actual
-166.4-second narrated English opening has a reviewed contact sheet,
-dead-air scan and verified audio stream. Full continuous production-voice
-listening and synchronization remain pending.
-
-The local silent preview is `renders/quant14_polished_silent.mp4` (73:51,
-21 embedded chapters and English subtitles). See
-[the evidence record](../../../docs/qa/quant14-polish-evidence.json) and
-[the sequential QA log](../../../docs/qa/quantitative-finance-polish.md).
-
-本轮通过21个英文与21个中文叙述节点检查，以及21个英文静音动画检查，联系表均已人工审阅。
-中文覆盖123/123，叙述估计64.2分钟。12份实际语音报告检查71句的信号与时间标记，
-实际英文开场也已审阅。完整连续生产语音聆听和同步仍待单独完成；这些检查不证明发音正确。
+*Review log of the earlier QA passes on this part: [`docs/qa/quant/part14.md`](../../../docs/qa/quant/part14.md).*
