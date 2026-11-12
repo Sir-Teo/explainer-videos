@@ -64,10 +64,20 @@ class Envelope(VoiceoverScene):
             "Selection comes next. The eight threshold variants and the later mathematical-band configuration share the same research period and pipeline. Choosing a winner after comparing them spends information. A counter documents that search; it does not erase selection or make the rules independent. Any null maximum-Sharpe calculation must state its error model and dependence assumptions. This review adds no new market trial or registration. A future evaluation would require a fixed protocol and genuinely independent evidence appropriate to the question.")
 
     def precision(self):
-        self.panel(
-            r"Precision is conditional", r"\operatorname{se}(\hat S_{\rm annual})\approx T_{\rm years}^{-1/2},\qquad (2/0.3)^2\approx44.4",
-            r"A low-Sharpe iid approximation needs decades. Serial dependence, nonnormality, selection and changing risk alter precision.",
-            "Even an ideal clean return series can be imprecise. Under the simple independent-return approximation, the annual Sharpe standard error is roughly one over the square root of years. A Sharpe of point three is two such standard errors from zero only after about forty-four point four years. This is a planning calculation, not a universal sample-size guarantee. Serial correlation, skew, changing volatility and strategy selection alter it. The appropriate conclusion here is a documented research proxy and a clear evaluation specification, with no sealed-year verdict.")
+        head = label(r"Precision is conditional", font_size=31).to_edge(UP, buff=0.35)
+        eq = MathTex(r"\operatorname{se}(\hat S_{\rm annual})\approx T_{\rm years}^{-1/2},\qquad (2/0.3)^2\approx44.4", font_size=32, color=RES_C).next_to(head, DOWN, buff=0.22)
+        # the planning calculation as a picture: the years it takes for a Sharpe ratio of 0.3 to stand two standard
+        # errors from zero (the hurdle walks in to 0.3 at about 44 years)
+        years = ValueTracker(5.0)
+        gauge = SharpePrecision(years, alt=0.3, x_range=(-1.0, 1.6), xticks=(-1, -0.5, 0, 0.5, 1, 1.5), y_max=3.3,
+                                y_length=3.1).next_to(eq, DOWN, buff=0.3)
+        text = wrapped_label(r"A low-Sharpe iid approximation needs decades. Serial dependence, nonnormality, selection and changing risk alter precision.", 11.7, 21, GREY_A).to_edge(DOWN, buff=0.3)
+        self.add(head, eq, gauge, text)
+        with self.voiceover("Even an ideal clean return series can be imprecise. Under the simple independent-return approximation, the annual Sharpe standard error is roughly one over the square root of years. A Sharpe of point three is two such standard errors from zero only after about forty-four point four years. This is a planning calculation, not a universal sample-size guarantee. Serial correlation, skew, changing volatility and strategy selection alter it. The appropriate conclusion here is a documented research proxy and a clear evaluation specification, with no sealed-year verdict.") as vo:
+            self.wait(min(6.0, 0.25 * vo.duration))
+            self.play(years.animate.set_value(44.4), run_time=min(9.0, 0.35 * vo.duration), rate_func=smooth)
+            self.play(Indicate(gauge.readouts[2], color=QC.LOSS, scale_factor=1.08))
+        self.clear_scene()
 
     def question(self):
         self.panel(

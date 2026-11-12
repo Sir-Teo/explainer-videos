@@ -43,11 +43,18 @@ class Envelope(VoiceoverScene):
         self.clear_scene()
 
     def precision(self):
-        eq=MathTex(r"t\approx SR_{\rm annual}\sqrt{Y},\qquad {\rm se}(\widehat{SR}_{\rm annual})\approx Y^{-1/2}",font_size=35).to_edge(UP,buff=.7)
-        example=desk_question(r"fixed five-year arithmetic illustration",r"$Y=5$: approximate standard error $0.45$; an estimated annual Sharpe ratio $0.4$ corresponds to $t\approx0.89$",width=12,font_size=23).next_to(eq,DOWN,buff=.65)
-        foot=wrapped_label(r"Stable IID, modest-Sharpe approximation only. Dependence, tails, selection and costs can change the uncertainty or economic conclusion. No realised experiment result is displayed.",12,21,GREY_A).to_edge(DOWN,buff=.5)
+        eq=MathTex(r"t\approx SR_{\rm annual}\sqrt{Y},\qquad {\rm se}(\widehat{SR}_{\rm annual})\approx Y^{-1/2}",font_size=35).to_edge(UP,buff=.45)
+        # the same arithmetic as a picture; the green dot is the illustrative estimate of 0.4 and its t-statistic
+        years=ValueTracker(1.0)
+        gauge=SharpePrecision(years,alt=0.4,mark=0.4).next_to(eq,DOWN,buff=.4)
+        foot=wrapped_label(r"Stable IID, modest-Sharpe approximation only. Dependence, tails, selection and costs can change the uncertainty or economic conclusion. No realised experiment result is displayed.",12,21,GREY_A).to_edge(DOWN,buff=.35)
         with self.voiceover("Five years can still be a noisy test. Under an independent, stable, modest-Sharpe approximation, the mean t-statistic is the annual Sharpe ratio times the square root of years. <bookmark mark='a'/> At five years, the rough standard error is point four five. A fixed illustrative Sharpe ratio of point four gives a t-statistic near point eight nine. These numbers are arithmetic examples, not a sealed outcome. <bookmark mark='b'/> Dependence, tails, selection and costs can change the conclusion. Nonrejection of zero does not establish equivalence or absence of an economic effect.") as vo:
-            self.play(FadeIn(eq));vo.wait_until('a');self.play(FadeIn(example));vo.wait_until('b');self.play(FadeIn(foot))
+            self.play(FadeIn(eq),FadeIn(gauge))
+            self.play(years.animate.set_value(5.0),run_time=4.0)
+            vo.wait_until('a')
+            self.play(Indicate(gauge.readouts[1],color=WHITE,scale_factor=1.08))
+            self.play(Indicate(gauge.readouts[4],color=QC.GAIN,scale_factor=1.08))
+            vo.wait_until('b');self.play(FadeIn(foot))
         self.clear_scene()
 
     def boundary(self):

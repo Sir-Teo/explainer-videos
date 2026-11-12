@@ -36509,7 +36509,9 @@
     "all eight public derived inputs match exact hashes in committed earlier-part approvals": "八个公开衍生输入均匹配此前已提交批准中的精确哈希",
     "a retrospective pool of option marks, not one executable simultaneous market snapshot": "回顾性期权价格汇集，不是同时可执行的市场快照",
     "additional dates, markets, numerical checks and application-level losses": "还需更多日期、市场、数值检查及应用层损失",
-    "Pause and predict: fresh random numbers price the same dated quotes. Does that test tomorrow's market, simulation robustness, or realised hedge P\\&L?": "暂停并预测：用新随机数给同一日期报价定价，是检验明日市场、模拟稳健性，还是实际对冲损益？"
+    "Pause and predict: fresh random numbers price the same dated quotes. Does that test tomorrow's market, simulation robustness, or realised hedge P\\&L?": "暂停并预测：用新随机数给同一日期报价定价，是检验明日市场、模拟稳健性，还是实际对冲损益？",
+    "estimated annual Sharpe ratio": "年化夏普比率的估计值",
+    "no skill: true Sharpe ratio 0": "无能力：真实夏普比率为0"
   },
   "phrases": {
     "you owe": "你欠",
@@ -36967,6 +36969,10 @@
     [
       "\\\\text\\{ESS\\}/N",
       "\\\\text{有效样本数}/N"
+    ],
+    [
+      "^true Sharpe ratio ([0-9.]+)$",
+      "真实夏普比率为\\1"
     ]
   ]
 }
