@@ -37,6 +37,14 @@ strings were added to `videos/quant/quant_text_zh.json`.
 | 26 | 15. Registration and evaluation accounting | yes, frames read | passes |
 | 33 | 10. An evaluation protocol | yes, frames read | passes, 0 strings left |
 
+Three more fixed-arithmetic beats were rewritten the same way (same narration, same numbers, now drawn):
+
+| Part | Chapter and beat | What it is now | Rendered | Chinese dry run |
+|---|---|---|---|---|
+| 26 | 2. Survivorship: four fabricated outcomes | four bars and the mean of what the report includes, which jumps from 0% to 15% when the filter is applied | yes, frames read | passes, 0 strings left |
+| 27 | 15. Evaluation for learned models: the paired comparison | the one- and two-sd ellipses of (A, B) tightening as the correlation goes to 0.8, with the spread of A − B as their width across the diagonal and live readouts | yes, frames read | passes, 0 strings left |
+| 30 | 12. Evaluation protocol: the two-asset toy | portfolio volatility against the weight, one curve with minimum variance, equal risk and 1/N marked on it | yes, frames read | passes, 0 strings left (one string added) |
+
 **Changed in the documents.** Review logs moved from 26 part READMEs to `docs/qa/quant/partNN.md`. The series
 README and SYLLABUS now say what the films show about the Track Record (the evaluation protocol and its
 arithmetic, not hold-out outcomes); SYLLABUS gained Section 1a, the standard for levels, tracks, labs and the
@@ -49,7 +57,7 @@ site.
 - *Only Parts 1 and 10 were computed here.* The READMEs of several later parts say not to run their full
   `compute` (it would register or open strategy experiments), so their caches were not rebuilt and their chapters
   were not preflighted in this pass.
-- *About 65 other chapters are still mostly cards and equations* (a scan for chapters with at most one drawn
+- *About 60 other chapters are still mostly cards and equations* (a scan for chapters with at most one drawn
   object; list below). They are the natural next targets for instruments like `SharpePrecision`. The remaining
   registration chapters (Parts 27-32) have no precision beat to replace.
 - *The site has no video embeds.* The films are not hosted from this repository; a part's page gives the build
@@ -59,8 +67,7 @@ site.
 - *GitHub Pages must be switched on once* by the repository owner: Settings → Pages → Source: GitHub Actions.
 
 Chapters that are still text-led, by part (module names): 3 `s19_industry`; 5 `s22_research`; 17 `s12_production`;
-18 `s11_rv`; 20 `s08_defaults`, `s09_altman`, `s15_whale`; 24 `s06_profit`, `s13_firms`; 25 `s08_fgx`; 26
-`s03_survivor`; 27 `s15_firms`, `s16_envelope`; 28 `s10_transformers`, `s11_llms`, `s17_envelope`; 29 `s11_china`,
+18 `s11_rv`; 20 `s08_defaults`, `s09_altman`, `s15_whale`; 24 `s06_profit`, `s13_firms`; 25 `s08_fgx`; 27 `s15_firms`; 28 `s10_transformers`, `s11_llms`, `s17_envelope`; 29 `s11_china`,
 `s12_highflyer`, `s13_humans`, `s14_envelope`; 30 `s13_envelope`; 31 `s02_law`, `s12_envelope`; 32 `s04_voltarget`,
 `s08_calendar`, `s09_envelope`, `s11_research`; 33 `s02_history`; 34 `s02_models`, `s04_pods`, `s06_risk`,
 `s07_tech`, `s09_interview`, `s10_culture`; 35 `s10_hft`; 36 `s07_deep`; 38 `s02_business`, `s05_tick`, `s06_etf`,

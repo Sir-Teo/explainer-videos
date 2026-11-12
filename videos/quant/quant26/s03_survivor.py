@@ -19,12 +19,28 @@ class Survivor(VoiceoverScene):
         self.play(FadeOut(c))
 
     def fixed_outcomes(self):
-        head=label(r"Four fabricated one-year outcomes",font_size=32).to_edge(UP,buff=.5)
-        rows=VGroup(*[VGroup(label(n,font_size=25),MathTex(v,font_size=30,color=col),label(status,font_size=21,color=col)).arrange(RIGHT,buff=.6) for n,v,status,col in [('A',r'-20\%',r'excluded by the chosen filter',BAD),('B',r'-10\%',r'excluded by the chosen filter',BAD),('C',r'+10\%',r'retained',GOOD),('D',r'+20\%',r'retained',GOOD)]]).arrange(DOWN,buff=.3).shift(UP*.4)
-        all_mean=MathTex(r"\text{all four mean}=(-20-10+10+20)/4=0\%",font_size=29).to_edge(DOWN,buff=1.3)
-        kept=MathTex(r"\text{retained mean}=(10+20)/2=15\%",font_size=29,color=GOOD).next_to(all_mean,DOWN,buff=.35)
+        head=label(r"Four fabricated one-year outcomes",font_size=32).to_edge(UP,buff=.4)
+        vals=[-20,-10,10,20]
+        g=axes([0,5],[-25,25],x_length=6.6,y_length=3.5,yticks=[-20,-10,0,10,20],yfmt=lambda v:rf"{v:+g}\%" if v else r"0\%",font_size=18).move_to(LEFT*2.3+UP*.55)
+        ax=g.ax
+        zero=Line(ax.c2p(0,0),ax.c2p(5,0),color=GREY_C,stroke_width=2)
+        bars=VGroup(*[Polygon(ax.c2p(i+.62,0),ax.c2p(i+1.38,0),ax.c2p(i+1.38,v),ax.c2p(i+.62,v),stroke_width=0).set_fill(BAD if v<0 else GOOD,opacity=.85) for i,v in enumerate(vals)])
+        names=VGroup(*[label(n,font_size=25).next_to(ax.c2p(i+1,0),UP if v<0 else DOWN,buff=.12) for i,(n,v) in enumerate(zip("ABCD",vals))])
+        nums=VGroup(*[MathTex(rf"{v:+d}\%",font_size=22,color=BAD if v<0 else GOOD).next_to(bars[i],DOWN if v<0 else UP,buff=.06) for i,v in enumerate(vals)])
+        key=VGroup(label(r"excluded by the chosen filter",font_size=21,color=BAD),label(r"retained",font_size=21,color=GOOD)).arrange(DOWN,aligned_edge=LEFT,buff=.25).next_to(g,RIGHT,buff=.7).shift(UP*.5)
+        # the mean of whatever the report includes: a line across the bars, with its value at the right end
+        mean=DashedLine(ax.c2p(.3,0),ax.c2p(4.7,0),color=WHITE,stroke_width=3,dash_length=.1)
+        tag=MathTex(r"0\%",font_size=30).next_to(mean,RIGHT,buff=.12)
+        all_mean=MathTex(r"\text{all four mean}=(-20-10+10+20)/4=0\%",font_size=27).to_edge(DOWN,buff=1.05)
+        kept=MathTex(r"\text{retained mean}=(10+20)/2=15\%",font_size=27,color=GOOD).next_to(all_mean,DOWN,buff=.28)
         with self.voiceover("Here are four explicitly fabricated one-year outcomes: minus twenty, minus ten, plus ten and plus twenty percent. <bookmark mark='a'/> Their equally weighted arithmetic mean is zero. Now impose a reporting filter that retains only the two nonnegative outcomes. <bookmark mark='b'/> The reported mean becomes fifteen percent. Nothing about the four outcomes improved. Conditioning changed the group that appears in the report. This example is fixed arithmetic, not a market simulation, strategy backtest or estimate of an actual fund population.") as vo:
-            self.play(FadeIn(head),FadeIn(rows));vo.wait_until('a');self.play(FadeIn(all_mean));vo.wait_until('b');self.play(FadeIn(kept),Indicate(VGroup(rows[2],rows[3]),color=GOOD))
+            self.play(FadeIn(head),FadeIn(g),FadeIn(zero),LaggedStart(*[GrowFromEdge(bars[i],UP if vals[i]<0 else DOWN) for i in range(4)],lag_ratio=.25),FadeIn(names))
+            self.play(FadeIn(nums))
+            vo.wait_until('a');self.play(Create(mean),FadeIn(tag),FadeIn(all_mean))
+            vo.wait_until('b')
+            self.play(bars[0].animate.set_fill(opacity=.18),bars[1].animate.set_fill(opacity=.18),nums[0].animate.set_opacity(.3),nums[1].animate.set_opacity(.3),FadeIn(key))
+            up=DashedLine(ax.c2p(2.3,15),ax.c2p(4.7,15),color=GOOD,stroke_width=3,dash_length=.1)
+            self.play(Transform(mean,up),Transform(tag,MathTex(r"15\%",font_size=30,color=GOOD).next_to(up,RIGHT,buff=.12)),FadeIn(kept))
         self.clear_scene()
 
     def conditioning(self):

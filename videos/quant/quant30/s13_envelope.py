@@ -52,19 +52,31 @@ class Envelope(VoiceoverScene):
 
     def fixed_weights(self):
         v_gmv, v_ew, v_erc = math.sqrt(.008), math.sqrt(.0125), math.sqrt(2 * (.1 * 2/3)**2)
+        head = MathTex(r"\Sigma=\operatorname{diag}(0.1^2,0.2^2),\quad \rho=0", font_size=32).to_edge(UP, buff=.45)
+        # portfolio volatility against the weight in the calmer asset: one curve, three named points on it
+        g = axes([0, 1], [8, 20.5], x_length=6.4, y_length=3.7, xticks=[0, .25, .5, .75, 1], yticks=[10, 15, 20],
+                 yfmt=lambda v: rf"{v:g}\%", xlabel=r"weight in the 10\% asset", font_size=18).move_to(LEFT * 2.9 + DOWN * .25)
+        ax = g.ax
+        w = np.linspace(0, 1, 101)
+        vol = 100 * np.sqrt((w * .1) ** 2 + ((1 - w) * .2) ** 2)
+        line = curve(ax, w, vol, QC.SPOT, stroke_width=4)
+        pts = [(.8, 100 * v_gmv, QC.GAIN), (2 / 3, 100 * v_erc, QC.P), (.5, 100 * v_ew, QC.OPTION)]
+        dots = VGroup(*[Dot(ax.c2p(x, y), radius=.09, color=c) for x, y, c in pts])
+        drops = VGroup(*[DashedLine(ax.c2p(x, 8), ax.c2p(x, y), color=c, stroke_width=2, dash_length=.07) for x, y, c in pts])
         rows = VGroup(
-            MathTex(r"\Sigma=\operatorname{diag}(0.1^2,0.2^2),\quad \rho=0", font_size=32),
-            MathTex(rf"w_{{\rm GMV}}=(0.8,0.2),\quad \sigma_{{\rm GMV}}={100*v_gmv:.3f}\%", font_size=30),
-            MathTex(rf"w_{{\rm ERC}}=(2/3,1/3),\quad \sigma_{{\rm ERC}}={100*v_erc:.3f}\%", font_size=30),
-            MathTex(rf"w_{{1/N}}=(0.5,0.5),\quad \sigma_{{1/N}}={100*v_ew:.3f}\%", font_size=30),
-            wrapped_label(r"Fixed chosen annual covariance, known exactly; no assets, historical sample or expected-return comparison", 11.2, 19, GREY_A),
-        ).arrange(DOWN, buff=0.4)
+            MathTex(rf"w_{{\rm GMV}}=(0.8,0.2),\quad \sigma_{{\rm GMV}}={100*v_gmv:.3f}\%", font_size=28, color=QC.GAIN),
+            MathTex(rf"w_{{\rm ERC}}=(2/3,1/3),\quad \sigma_{{\rm ERC}}={100*v_erc:.3f}\%", font_size=28, color=QC.P),
+            MathTex(rf"w_{{1/N}}=(0.5,0.5),\quad \sigma_{{1/N}}={100*v_ew:.3f}\%", font_size=28, color=QC.OPTION),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=.45).next_to(g, RIGHT, buff=.6).shift(UP * .3)
+        foot = wrapped_label(r"Fixed chosen annual covariance, known exactly; no assets, historical sample or expected-return comparison", 11.2, 19, GREY_A).to_edge(DOWN, buff=.35)
         with self.voiceover(f"A fixed two-asset covariance toy. <bookmark mark='a'/> Choose uncorrelated annual volatilities ten and twenty percent, known exactly. Minimum variance gives eighty and twenty percent weights and volatility {100*v_gmv:.3f} percent. <bookmark mark='b'/> Equal risk contributions give two thirds and one third, with {100*v_erc:.3f} percent volatility. Equal money gives {100*v_ew:.3f} percent. This shows that equal money, equal risk and minimum variance differ; it does not compare returns or estimation performance.") as vo:
-            self.play(FadeIn(rows[0]), FadeIn(rows[-1]))
+            self.play(FadeIn(head), FadeIn(g), FadeIn(foot))
+            self.play(Create(line), run_time=2)
             vo.wait_until("a")
-            self.play(FadeIn(rows[1]))
+            self.play(Create(drops[0]), FadeIn(dots[0], scale=1.6), FadeIn(rows[0]))
             vo.wait_until("b")
-            self.play(FadeIn(rows[2]), FadeIn(rows[3]))
+            self.play(Create(drops[1]), FadeIn(dots[1], scale=1.6), FadeIn(rows[1]))
+            self.play(Create(drops[2]), FadeIn(dots[2], scale=1.6), FadeIn(rows[2]))
         self.clear_scene()
 
     def drift(self):
