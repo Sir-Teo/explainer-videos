@@ -440,3 +440,129 @@ shown(3, "CREDE_2017", "shown as the example of two names for nearly one thing; 
 shown(3, "HEDGE_2018", "the reliability paradox is stated here and paid off with its record later", row_in=59)
 shown(3, "FLAKE_FRIED_2020", "counts of how measures are reported in journals: a description of practice, not a "
       "finding about minds")
+
+# ---------------------------------------------------------------------------
+# Part 4 · The Evidence
+# ---------------------------------------------------------------------------
+_ML1 = ("R. A. Klein et al., Investigating variation in replicability: a 'Many Labs' replication project, Social "
+        "Psychology 45 (2014) 142-152")
+_OSC = "Open Science Collaboration, Estimating the reproducibility of psychological science, Science 349 (2015) aac4716"
+
+add(Finding(
+    key="precognition", part=4, title=r"Feeling the future",
+    claim="People's responses are influenced by events that have not yet happened.",
+    original=Study("Bem", 2011, n="more than 1,000 participants in 9 experiments",
+                   design="well-known effects run backwards in time, the cause coming after the response",
+                   effect=0.22, unit="d", found="mean d = 0.22; 8 of the 9 experiments significant"),
+    status="failed",
+    record=(Study("Ritchie, Wiseman and French", 2012, n="150 in three preregistered attempts",
+                  design="exact replications of the recall experiment", found="no effect (combined p = .83)"),
+            Study("Galak, LeBoeuf, Nelson and Simmons", 2012, n="3,289 in seven experiments",
+                  design="the recall experiments again, and a meta-analysis of every attempt", effect=0.04, unit="d",
+                  found="no effect; across all replication attempts d = 0.04")),
+    note="The methods were the field's ordinary methods, which is why the result mattered: it showed what those "
+         "methods could produce.",
+    sources=("D. J. Bem, Feeling the future: experimental evidence for anomalous retroactive influences on cognition "
+             "and affect, Journal of Personality and Social Psychology 100 (2011) 407-425",
+             "S. J. Ritchie, R. Wiseman and C. C. French, Failing the future: three unsuccessful attempts to "
+             "replicate Bem's 'retroactive facilitation of recall' effect, PLoS ONE 7 (2012) e33423",
+             "J. Galak, R. A. LeBoeuf, L. D. Nelson and J. P. Simmons, Correcting the past: failures to replicate "
+             "psi, Journal of Personality and Social Psychology 103 (2012) 933-948"),
+    checked="2026-11-13",
+    data=("BEM_2011",),
+))
+
+add(Finding(
+    key="low_power", part=4, title=r"Published studies are underpowered",
+    claim="The typical published study in psychology has had about an even chance, or less, of detecting a "
+          "medium-sized effect.",
+    original=Study("Cohen", 1962, n="a year of one journal", design="the power of each study's tests, computed "
+                   "for small, medium and large effects", effect=0.48, unit="power",
+                   found="mean power 0.48 for a medium effect"),
+    status="replicated",
+    record=(Study("Sedlmeier and Gigerenzer", 1989, n="the same journal, 24 years later",
+                  found="power for a medium effect had not risen (0.37)"),),
+    note="Known for sixty years, and the root of two later rows: small studies that reach significance overstate "
+         "the effect, and so shrink when repeated.",
+    sources=("J. Cohen, The statistical power of abnormal-social psychological research: a review, Journal of "
+             "Abnormal and Social Psychology 65 (1962) 145-153",
+             "P. Sedlmeier and G. Gigerenzer, Do studies of statistical power have an effect on the power of "
+             "studies?, Psychological Bulletin 105 (1989) 309-316"),
+    checked="2026-11-13",
+    data=("COHEN_1962",),
+))
+
+add(Finding(
+    key="effects_shrink", part=4, title=r"Published effects shrink when repeated",
+    claim="When published findings are repeated with larger samples, fewer are significant and the effects are "
+          "about half as large.",
+    original=Study("Open Science Collaboration", 2015, n="100 studies from three journals",
+                   design="one high-powered replication of each", effect=0.36, unit="share significant",
+                   found="97% of originals significant, 36% of replications; effects half the size"),
+    status="replicated",
+    record=(Study("Camerer and 23 others", 2018, n="21 experiments from Nature and Science",
+                  found="13 of 21 (62%) significant; effects about half the size"),
+            Study("Klein and 185 others (Many Labs 2)", 2018, n="28 findings, 15,305 participants",
+                  found="15 of 28 (54%) significant; median d 0.15 against 0.60")),
+    note="How low the rate 'really' is was disputed in 2016, and depends on the definition of success. That "
+         "published effects are overstated is not in dispute.",
+    sources=(_OSC,
+             "C. F. Camerer et al., Evaluating the replicability of social science experiments in Nature and "
+             "Science between 2010 and 2015, Nature Human Behaviour 2 (2018) 637-644",
+             "R. A. Klein et al., Many Labs 2: investigating variation in replicability across samples and "
+             "settings, Advances in Methods and Practices in Psychological Science 1 (2018) 443-490"),
+    checked="2026-11-13",
+    data=("OSC_2015", "MANY_LABS", "CAMERER_2018"),
+))
+
+add(Finding(
+    key="flag_priming", part=4, title=r"A flag shifts political views",
+    claim="A brief exposure to a national flag shifts people's political attitudes.",
+    original=Study("Carter, Ferguson and Hassin", 2011, design="a small flag shown, or not, during a survey",
+                   found="a shift toward conservative positions, reported to last for months"),
+    status="failed",
+    record=(Study("Klein and 50 others (Many Labs 1)", 2014, n="36 samples, 6,344 participants",
+                  found="did not replicate"),),
+    sources=("T. J. Carter, M. J. Ferguson and R. R. Hassin, A single exposure to the American flag shifts support "
+             "toward Republicanism up to 8 months later, Psychological Science 22 (2011) 1011-1018", _ML1),
+    checked="2026-11-13",
+    data=("MANY_LABS",),
+))
+
+add(Finding(
+    key="currency_priming", part=4, title=r"Money primes a belief in the system",
+    claim="A brief exposure to an image of money increases support for the existing social system.",
+    original=Study("Caruso, Vohs, Baxter and Waytz", 2013, design="a banknote in the background of the screen, "
+                   "or not", found="more endorsement of free markets and of social inequality"),
+    status="failed",
+    record=(Study("Klein and 50 others (Many Labs 1)", 2014, n="36 samples, 6,344 participants",
+                  found="did not replicate"),),
+    sources=("E. M. Caruso, K. D. Vohs, B. Baxter and A. Waytz, Mere exposure to money increases endorsement of "
+             "free-market systems and social inequality, Journal of Experimental Psychology: General 142 (2013) "
+             "301-306", _ML1),
+    checked="2026-11-13",
+    data=("MANY_LABS",),
+))
+
+add(Finding(
+    key="imagined_contact", part=4, title=r"Imagined contact reduces prejudice",
+    claim="Imagining a pleasant meeting with a member of another group reduces prejudice toward that group.",
+    original=Study("Husnu and Crisp", 2010, design="an imagined conversation, against an imagined outdoor scene",
+                   found="greater willingness to engage with the other group"),
+    status="contested",
+    record=(Study("Klein and 50 others (Many Labs 1)", 2014, n="36 samples, 6,344 participants",
+                  found="weak support for replicability"),),
+    note="Present in the pooled data, and much smaller than first reported.",
+    sources=("S. Husnu and R. J. Crisp, Elaboration enhances the imagined contact effect, Journal of Experimental "
+             "Social Psychology 46 (2010) 943-950", _ML1),
+    checked="2026-11-13",
+    data=("MANY_LABS",),
+))
+
+shown(4, "SIMMONS_2011", "a simulation of what flexible analysis does to a null result, recomputed here: a "
+      "demonstration, not an empirical finding")
+shown(4, "SCHEEL_2021", "a comparison of two literatures; shown at the frontier as early evidence on a reform, "
+      "before the meta-science part", row_in=50)
+shown(4, "LEVELT_2012", "the findings of an inquiry into one case of fraud")
+shown(4, "DREBER_2015", "prediction markets on replications: shown at the frontier, entered with meta-science",
+      row_in=50)

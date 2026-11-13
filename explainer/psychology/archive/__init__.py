@@ -19,7 +19,8 @@ from dataclasses import dataclass, field
 __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBBINGHAUS_1885", "WOODS_2015",
            "PFUNGST_1907", "PEIRCE_JASTROW_1884", "ROSENTHAL_FODE_1963", "RAUDENBUSH_1984", "DE_QUIDT_2018",
            "LIT_2011", "MITCHELL_2021", "STEVENS_1946", "FORER_1949", "JOHANSSON_2005", "CREDE_2017", "HEDGE_2018",
-           "FLAKE_FRIED_2020"]
+           "FLAKE_FRIED_2020", "BEM_2011", "COHEN_1962", "SIMMONS_2011", "OSC_2015", "MANY_LABS", "CAMERER_2018",
+           "SCHEEL_2021", "LEVELT_2012", "DREBER_2015"]
 
 
 @dataclass(frozen=True)
@@ -433,7 +434,156 @@ FLAKE_FRIED_2020 = Dataset(
     },
 )
 
+# ---------------------------------------------------------------------------
+# Part 4
+# ---------------------------------------------------------------------------
+BEM_2011 = Dataset(
+    key="bem_2011",
+    title="Nine experiments that appeared to show people responding to events that had not yet happened",
+    source="D. J. Bem, Feeling the future: experimental evidence for anomalous retroactive influences on cognition "
+           "and affect, Journal of Personality and Social Psychology 100 (2011) 407-425; with the replications of "
+           "J. Galak, R. A. LeBoeuf, L. D. Nelson and J. P. Simmons, Correcting the past: failures to replicate psi, "
+           "the same journal 103 (2012) 933-948, and S. J. Ritchie, R. Wiseman and C. C. French, Failing the future, "
+           "PLoS ONE 7 (2012) e33423",
+    cite=r"Bem (2011)",
+    checked="the three abstracts read (Europe PMC), 2026-11-13; the experiments' procedures are as the abstracts "
+            "describe them",
+    licence="facts only",
+    data={
+        "experiments": 9, "participants_more_than": 1000, "mean_d": 0.22, "significant": 8,
+        "effects": ("precognitive approach to erotic stimuli and avoidance of negative stimuli", "retroactive priming",
+                    "retroactive habituation", "retroactive facilitation of recall"),
+        "galak": {"experiments": 7, "n": 3289, "meta_d": 0.04},  # of Bem's Experiments 8 and 9
+        "ritchie": {"attempts": 3, "n": 150, "p_one_tailed": 0.83},  # of the recall experiment; preregistered
+    },
+)
+
+COHEN_1962 = Dataset(
+    key="cohen_1962",
+    title="The power of a year of published psychology",
+    source="J. Cohen, The statistical power of abnormal-social psychological research: a review, Journal of Abnormal "
+           "and Social Psychology 65 (1962) 145-153; P. Sedlmeier and G. Gigerenzer, Do studies of statistical power "
+           "have an effect on the power of studies?, Psychological Bulletin 105 (1989) 309-316",
+    cite=r"Cohen (1962); \ Sedlmeier \& Gigerenzer (1989)",
+    checked="the figure for medium effects read from Cohen's own later account (A power primer, 1992), 2026-11-13; "
+            "the figures for small and large effects and Sedlmeier and Gigerenzer's are from secondary summaries",
+    licence="facts only",
+    data={
+        "journal_year": 1960, "power_medium": 0.48, "power_small": 0.18, "power_large": 0.83,
+        "later_year": 1984, "later_power_medium": 0.37,
+        "conclusion": "the power of studies in the same journal had not increased 24 years later",
+    },
+)
+
+SIMMONS_2011 = Dataset(
+    key="simmons_2011",
+    title="How undisclosed flexibility raises the false-positive rate",
+    source="J. P. Simmons, L. D. Nelson and U. Simonsohn, False-positive psychology: undisclosed flexibility in data "
+           "collection and analysis allows presenting anything as significant, Psychological Science 22 (2011) "
+           "1359-1366",
+    cite=r"Simmons, Nelson \& Simonsohn (2011)",
+    checked="the abstract read (Europe PMC), 2026-11-13; the combined figure of 60.7% confirmed from two secondary "
+            "accounts; the paper's Table 1 was not read, so the film recomputes the rates and quotes only the total",
+    licence="facts only",
+    data={
+        "nominal": 0.05, "combined": 0.607,
+        "flexibilities": ("two dependent variables", "ten more observations per cell after a first look",
+                          "a covariate, with or without its interaction", "dropping one of three conditions"),
+        "requirements_for_authors": 6, "guidelines_for_reviewers": 4,
+    },
+)
+
+OSC_2015 = Dataset(
+    key="osc_2015",
+    title="The Reproducibility Project: Psychology",
+    source="Open Science Collaboration, Estimating the reproducibility of psychological science, Science 349 (2015) "
+           "aac4716; D. T. Gilbert, G. King, S. Pettigrew and T. D. Wilson, Comment, Science 351 (2016) 1037; "
+           "C. J. Anderson et al., Response, Science 351 (2016) 1037",
+    cite=r"Open Science Collaboration (2015)",
+    checked="the three abstracts read (Europe PMC), 2026-11-13",
+    licence="facts only",
+    data={
+        "studies": 100, "journals": 3, "original_significant": 0.97, "replication_significant": 0.36,
+        "original_in_replication_ci": 0.47, "rated_replicated": 0.39, "combined_significant": 0.68,
+        "effect_ratio": 0.5,  # "replication effects were half the magnitude of original effects"
+        "predictor": "the strength of the original evidence, more than characteristics of the teams",
+        "comment": "three statistical errors alleged; 'the data are consistent with the opposite conclusion'",
+        "response": "both optimistic and pessimistic conclusions are possible, and neither is yet warranted",
+    },
+)
+
+MANY_LABS = Dataset(
+    key="many_labs",
+    title="Many Labs 1 and 2: the same protocols run in many laboratories at once",
+    source="R. A. Klein et al., Investigating variation in replicability: a 'Many Labs' replication project, Social "
+           "Psychology 45 (2014) 142-152; R. A. Klein et al., Many Labs 2: investigating variation in replicability "
+           "across samples and settings, Advances in Methods and Practices in Psychological Science 1 (2018) 443-490",
+    cite=r"Klein et al.\ (2014, 2018)",
+    checked="the abstract of the first read (Europe PMC); the figures of the second read from its abstract as "
+            "reproduced by institutional repositories, 2026-11-13",
+    licence="facts only",
+    data={
+        "ml1": {"effects": 13, "samples": 36, "participants": 6344, "replicated": 10, "weak": 1, "failed": 2},
+        "ml2": {"effects": 28, "samples": 125, "participants": 15305, "countries": 36, "replicated": 15,
+                "replicated_strict": 14, "median_d_original": 0.60, "median_d_replication": 0.15,
+                "smaller_than_original": 21},
+        "finding": "replicability depended on the effect, and hardly at all on the sample or the setting",
+    },
+)
+
+CAMERER_2018 = Dataset(
+    key="camerer_2018",
+    title="Replications of 21 social-science experiments published in Nature and Science",
+    source="C. F. Camerer et al., Evaluating the replicability of social science experiments in Nature and Science "
+           "between 2010 and 2015, Nature Human Behaviour 2 (2018) 637-644",
+    cite=r"Camerer et al.\ (2018)",
+    checked="the abstract read (Europe PMC), 2026-11-13",
+    licence="facts only",
+    data={"studies": 21, "replicated": 13, "share": 0.62, "effect_ratio": 0.5, "sample_ratio": 5,
+          "peers": "peer beliefs of replicability were strongly related to replicability"},
+)
+
+SCHEEL_2021 = Dataset(
+    key="scheel_2021",
+    title="Positive results in the standard literature and in Registered Reports",
+    source="A. M. Scheel, M. R. M. J. Schijen and D. Lakens, An excess of positive results: comparing the standard "
+           "psychology literature with Registered Reports, Advances in Methods and Practices in Psychological "
+           "Science 4 (2021) 1-12",
+    cite=r"Scheel, Schijen \& Lakens (2021)",
+    checked="the abstract read (Europe PMC, preprint record), 2026-11-13",
+    licence="facts only",
+    data={"standard_n": 152, "standard_positive": 0.96, "registered_n": 71, "registered_positive": 0.44},
+)
+
+LEVELT_2012 = Dataset(
+    key="levelt_2012",
+    title="The Stapel affair: what three committees found",
+    source="Levelt, Noort and Drenth Committees, Flawed Science: the fraudulent research practices of social "
+           "psychologist Diederik Stapel (Tilburg, 28 November 2012)",
+    cite=r"Levelt, Noort \& Drenth Committees (2012)",
+    checked="the count and the committees' conclusions read from university news reports of the final report, "
+            "2026-11-13; the report itself was not read",
+    licence="facts only",
+    data={"publications_with_fraud": 55, "exposed": 2011,
+          "culture": "a general culture of careless, selective and uncritical handling of research and data",
+          "coauthors": "no co-author or doctoral student was found to have taken part in the fraud"},
+)
+
+DREBER_2015 = Dataset(
+    key="dreber_2015",
+    title="Prediction markets on which studies would replicate",
+    source="A. Dreber et al., Using prediction markets to estimate the reproducibility of scientific research, "
+           "Proceedings of the National Academy of Sciences 112 (2015) 15343-15347",
+    cite=r"Dreber et al.\ (2015)",
+    checked="the abstract read (Europe PMC, PMC4687569), 2026-11-13",
+    licence="open access (summary statistics)",
+    data={"studies": 44, "median_prior": 0.09,
+          "finding": "the markets predicted the outcomes of the replications well, and better than a survey of the "
+                     "same participants"},
+)
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
-                          FLAKE_FRIED_2020)}
+                          FLAKE_FRIED_2020, BEM_2011, COHEN_1962, SIMMONS_2011, OSC_2015, MANY_LABS, CAMERER_2018,
+                          SCHEEL_2021, LEVELT_2012, DREBER_2015)}
