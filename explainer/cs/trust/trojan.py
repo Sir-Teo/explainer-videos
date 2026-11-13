@@ -8,6 +8,10 @@ identical bytes, independent of how the caller happens to hold the object).  *Ru
 ``exec(marshal.loads(binary))`` and calling the function it defines.  A compiler can therefore compile its own
 source, which is all Thompson's attack needs.
 
+A marshalled code object is CPython bytecode, so the binaries' sizes and hashes depend on the interpreter version:
+the film's 499, 498 and 1,119 bytes are Python 3.12's (the version ``pyproject.toml`` pins); 3.13 gives 507, 506
+and 1,131.  Every equality and difference the film shows holds on any version.
+
 **The attack (Thompson).**
 
 1. ``login(password)`` accepts one correct password; a *backdoored* login also accepts a magic password.

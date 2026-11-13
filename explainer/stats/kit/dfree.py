@@ -26,10 +26,12 @@ def bahadur_savage_coverage(n: int, eps: float, shift: float = 3.0, alpha: float
     P(no atom) = (1 - eps)^n, so coverage <= 1 - (1 - eps)^n + (1 - eps)^n P(t-interval of N(0,1) data covers shift)."""
     p_none = (1 - eps) ** n
     z = stats.t.ppf(1 - alpha / 2, n - 1)
-    # with no atom, the data are N(0,1): the interval covers 'shift' with probability P(|xbar - shift| <= z s / sqrt n),
-    # negligible for shift >= 1 and moderate n; bound it by the normal approximation
-    cov_none = float(stats.norm.cdf(z - shift * math.sqrt(n)) - stats.norm.cdf(-z - shift * math.sqrt(n)))
-    return {"p_none": p_none, "upper": float(1 - p_none + p_none * cov_none), "mean": shift}
+    # with no atom, the data are N(0,1): the interval covers 'shift' with probability P(|xbar - shift| <= z s / sqrt n)
+    # = P(|T| <= z), T noncentral t with n - 1 df and noncentrality shift sqrt(n) (by symmetry); exact, and
+    # negligible for shift >= 1 and moderate n
+    nc = abs(shift) * math.sqrt(n)
+    cov_none = max(0.0, float(stats.nct.cdf(z, n - 1, nc) - stats.nct.cdf(-z, n - 1, nc)))
+    return {"p_none": p_none, "no_atom_coverage": cov_none, "upper": float(1 - p_none + p_none * cov_none), "mean": shift}
 
 
 def bahadur_savage_sim(n: int, eps: float, rng: np.random.Generator, shift: float = 3.0, reps: int = 4000,

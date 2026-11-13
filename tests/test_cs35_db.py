@@ -92,6 +92,12 @@ class TestJoinsAndTrees(unittest.TestCase):
         self.assertEqual(r["measured"]["block nested loops"], r["formula"]["block nested loops"])
         self.assertEqual(r["measured"]["sort-merge"], r["formula"]["sort-merge"])
 
+    def test_grace_hash_is_reproducible(self):
+        """The partitioning hash is crc32, so the count does not depend on PYTHONHASHSEED."""
+        r = joins.compare(B=20)
+        self.assertEqual(r["measured"]["grace hash"], 1826)
+        self.assertFalse(r["buckets_fit"])
+
     def test_bptree(self):
         t = BPlusTree(order=5)
         ks = list(range(500))

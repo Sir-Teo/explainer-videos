@@ -191,7 +191,10 @@ def phase_estimation(theta: float = 0.3, t: int = 6) -> dict:
 def order_finding(a: int, N: int, t: int | None = None, shots: int = 20, seed: int = 0) -> dict:
     """Shor's algorithm for the order r of a modulo N: a counting register of t qubits in superposition, the work
     register holding a^x mod N (computed classically into the state, since the modular exponentiation circuit is
-    not the point), the inverse QFT on the counting register, and continued fractions on each measured value."""
+    not the point), the inverse QFT on the counting register, and continued fractions on each measured value.
+
+    The returned ``r`` is the true order, found classically by trying r = 1, 2, ...; what the measurements gave is
+    in ``samples`` (each shot's denominator and whether it is an order) and ``success_rate``."""
     rng = np.random.default_rng(seed)
     t = t or 2 * math.ceil(math.log2(N)) + 1
     Q = 2 ** t
@@ -218,6 +221,9 @@ def order_finding(a: int, N: int, t: int | None = None, shots: int = 20, seed: i
 
 
 def shor(N: int, a: int, seed: int = 0) -> dict:
+    """Order finding, then the classical last step: gcd(a^(r/2) +- 1, N) when r is even and a^(r/2) is not -1.
+    The factors are computed from ``order_finding``'s true order ``r`` (found classically), not from the sampled
+    measurements, so they do not depend on the seed; ``samples`` shows which shots would have yielded r."""
     o = order_finding(a, N, seed=seed)
     r = o["r"]
     factors = None

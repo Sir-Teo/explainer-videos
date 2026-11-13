@@ -17,6 +17,12 @@ of 3Blue1Brown: formulas derived on screen, one idea per frame drawn large, and 
 The course runs from a first-year introduction to the level of a doctoral qualifying exam, and it follows the
 standard textbooks (listed part by part in the syllabus).
 
+**Course site.** `python tools/series_site.py --series philosophy` builds this course's GitHub Pages site into `_site/philosophy/`: a course
+map and a page per part with its chapters, notes, problems and sources, generated from this README's table of parts,
+[`SYLLABUS.md`](SYLLABUS.md) and each part's `manifest.py` and `README.md` ([`tools/series_site.py`](../../tools/series_site.py)).
+It is also a course: four tracks through the chapters, and a runnable lab (`python -m videos.philosophy.labs 1`) and an
+interactive for every part, in [`course/`](course/) and [`labs/`](labs/) ([how they are written](../coursekit/AUTHORING.md)).
+
 ## The story: *Calculemus*
 
 In 1685 Leibniz wrote that the only way to settle a dispute would be to make reasoning "as tangible as that of the
@@ -80,7 +86,7 @@ argument teach us about building them well.
 | 4 | Necessity and Possibility | Kripke semantics | correspondence limits (Goldblatt–Thomason) | Kripke and LTL model checker; Peterson's mutex verified |
 | 5 | Beyond True and False | many-valued and paraconsistent logic | the sorites | n-valued matrix evaluator; the catuṣkoṭi as FDE |
 | 6 | Paradise and Paradox | ZFC, ordinals, cardinals | Russell; the independence of CH | hereditarily finite sets; the ordinal spiral |
-| 7 | The Limits of Proof | arithmetization | Gödel I and II, halting, Tarski, Löb | Gödel numbering, a quine, Turing machines, Goodstein |
+| 7 | The Limits of Proof | arithmetization | Gödel I and II, halting, Tarski, Löb | Gödel numbering, a quine, Turing machines, busy beavers |
 | 8 | The Liar | Kripke's fixed points | revenge; Curry; Yablo | Kleene-jump and revision-sequence engines |
 | 9 | What Is Mathematics About? | Curry–Howard | Benacerraf's dilemmas | a proof-checking type checker; Kripke models for intuitionism |
 | 10 | The Mind's Own Laws | Spinoza's geometric method | Hume's problem; Kant's antinomies | the proof graph of Spinoza's *Ethics* |

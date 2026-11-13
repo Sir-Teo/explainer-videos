@@ -4,7 +4,7 @@
   frames; its mirror image is valid too.
 * Gödel's ontological proof in a finite higher-order modal logic: properties are sets of (world, individual) pairs,
   positiveness a set of properties. The Reasoner searches every model with up to two worlds and two individuals:
-  Gödel's original axioms have no model at all (Benzmüller and Woltzenlogel Paleo, 2014), and every model of Scott's
+  Gödel's original axioms have no model at all (Benzmüller and Woltzenlogel Paleo, 2016), and every model of Scott's
   variant has a single world, i.e. modal collapse.
 * Van Inwagen's argument that the principle of sufficient reason collapses modality, on a finite space of worlds.
 * Fine-tuning: likelihoods for design, a single chance universe and a multiverse, on the evidence that some

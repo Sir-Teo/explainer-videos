@@ -121,7 +121,7 @@ def rate_interval(x, alpha=0.05):
 
 
 def fieller(mx, my, vx, vy, cxy=0.0, df=None, alpha=0.05):
-    """Fieller (1954): the set of ratios rho = mu_y/mu_x with (my - rho mx)^2 <= q^2 (vy - 2 rho cxy + rho^2 vx).
+    """Fieller (1940, 1954): the set of ratios rho = mu_y/mu_x with (my - rho mx)^2 <= q^2 (vy - 2 rho cxy + rho^2 vx).
     Returns ("bounded", lo, hi), ("complement", lo, hi) meaning (-inf, lo] u [hi, inf), or ("all", -inf, inf)."""
     q = float(stats.t.ppf(1 - alpha / 2, df)) if df else _z(alpha)
     a = mx * mx - q * q * vx

@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 """Build the course site for *Quant, Built*: one page of course material per part, for GitHub Pages.
 
-    python tools/course_site.py                  # -> _site/ (runs the 43 labs: about a minute)
+    python tools/course_site.py                  # -> _site/ (runs the 43 labs: about a minute), then the
+                                                 #    other courses and the landing page (tools/series_site.py)
+    python tools/course_site.py --quant-only     # this course alone
     python tools/course_site.py --no-labs        # pages only, reusing lab figures already in _site/
     python tools/course_site.py --parts 10 12    # just these parts' pages (and the index)
     python -m http.server -d _site 8000          # look at it
@@ -267,6 +269,7 @@ def shell(title: str, body: str, depth: int, description: str = "", scripts: str
     <a href="{up}quant/tracks.html">Tracks</a>
     <a href="{up}quant/labs.html">Labs</a>
     <a href="{up}quant/reading.html">Reading</a>
+    <a href="{up}index.html">All courses</a>
     <a href="{REPO}/tree/main/videos/quant">GitHub</a>
   </nav>
 </header>
@@ -604,14 +607,8 @@ def doc_page(title: str, source: Path, lede: str) -> str:
     return shell(f"{title} · Quant, Built", body, 1, lede)
 
 
-def main() -> None:
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--out", default=str(ROOT / "_site"))
-    ap.add_argument("--no-labs", action="store_true", help="do not rerun labs whose figure and output already exist")
-    ap.add_argument("--parts", nargs="*", type=int, help="only rebuild these parts' pages")
-    args = ap.parse_args()
-    out = Path(args.out)
-    (out / "quant" / "labs").mkdir(parents=True, exist_ok=True)
+def write_assets(out: Path) -> None:
+    """The stylesheet, the script and the interactives, shared by every course on the site."""
     (out / "assets").mkdir(parents=True, exist_ok=True)
     for f in ASSETS.iterdir():
         if f.is_file():
@@ -619,9 +616,19 @@ def main() -> None:
     # the interactives: one file per act in the source, one file on the site
     (out / "assets" / "widgets.js").write_text("\n".join(f.read_text() for f in sorted((ASSETS / "widgets").glob("*.js"))))
     (out / ".nojekyll").write_text("")
-    (out / "index.html").write_text('<!doctype html><meta charset="utf-8"><title>Explainer Videos: course sites</title>'
-                                    '<meta http-equiv="refresh" content="0; url=quant/index.html">'
-                                    '<a href="quant/index.html">Quant, Built</a>\n')
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--out", default=str(ROOT / "_site"))
+    ap.add_argument("--no-labs", action="store_true", help="do not rerun labs whose figure and output already exist")
+    ap.add_argument("--parts", nargs="*", type=int, help="only rebuild these parts' pages")
+    ap.add_argument("--quant-only", action="store_true",
+                    help="skip the other courses and the landing page (tools/series_site.py)")
+    args = ap.parse_args()
+    out = Path(args.out)
+    (out / "quant" / "labs").mkdir(parents=True, exist_ok=True)
+    write_assets(out)
     info, start = {}, time.time()
     wanted = set(args.parts or range(1, course.N_PARTS + 1))
     for n in range(1, course.N_PARTS + 1):
@@ -642,6 +649,15 @@ def main() -> None:
         "Syllabus", QUANT / "SYLLABUS.md", "The plan of record: the standard every part meets, the devices, the "
                                            "model zoo, the data, and all 43 parts chapter by chapter."))
     print(f"site: {out}  ({time.time() - start:.0f} s)")
+    if args.quant_only:
+        if not (out / "index.html").exists():
+            (out / "index.html").write_text('<!doctype html><meta charset="utf-8"><title>Explainer Videos</title>'
+                                            '<meta http-equiv="refresh" content="0; url=quant/index.html">'
+                                            '<a href="quant/index.html">Quant, Built</a>\n')
+        return
+    import series_site  # the other courses, and the landing page that lists them all
+
+    series_site.build(out)
 
 
 if __name__ == "__main__":

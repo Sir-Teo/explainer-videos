@@ -257,5 +257,5 @@ var QB = (function () {
   }
 
   return { mount: mount, C: C, rng: rng, pdf: pdf, cdf: cdf, inv: inv, bs: bs, linspace: linspace, mean: mean, sd: sd, quantile: quantile,
-    hist: hist, fmt: fmt, pct: pct, widget: widget, W: registry };
+    hist: hist, fmt: fmt, pct: pct, widget: widget, Axes: Axes, W: registry };
 })();

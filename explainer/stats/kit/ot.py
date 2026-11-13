@@ -139,7 +139,9 @@ def empirical_rate(d: int, ns, reps: int, rng: np.random.Generator, p: float = 1
 def sinkhorn(a, b, C, eps: float, iters: int = 2000, tol: float = 1e-10) -> dict:
     """Entropic OT min <P, C> - eps H(P) by log-domain Sinkhorn: alternating the dual updates
     f = -eps log sum_j b_j exp((g_j - C_ij)/eps), and the same for g.  Returns the plan, the transport cost <P, C>,
-    the entropic objective, the dual potentials and the marginal error per iteration."""
+    the entropic objective, the dual potentials and the marginal error per iteration.  The linear rate worsens as
+    eps shrinks (at eps well below the typical cost it can need more than ``iters`` sweeps), so the loop may stop at
+    the cap: ``converged`` says whether the last marginal error is below ``tol``."""
     a, b, C = np.asarray(a, float), np.asarray(b, float), np.asarray(C, float)
     la, lb = np.log(a), np.log(b)
     f, g = np.zeros(len(a)), np.zeros(len(b))
@@ -154,7 +156,8 @@ def sinkhorn(a, b, C, eps: float, iters: int = 2000, tol: float = 1e-10) -> dict
         if err < tol:
             break
     obj = float(np.sum(a * f) + np.sum(b * g))
-    return {"P": P, "cost": float(np.sum(P * C)), "obj": obj, "f": f, "g": g, "errs": errs, "iters": len(errs)}
+    return {"P": P, "cost": float(np.sum(P * C)), "obj": obj, "f": f, "g": g, "errs": errs, "iters": len(errs),
+            "converged": bool(errs[-1] < tol)}
 
 
 def sinkhorn_divergence(X, Y, eps: float, p: float = 2.0) -> float:

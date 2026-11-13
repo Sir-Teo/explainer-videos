@@ -60,6 +60,9 @@ def test_sinkhorn():
     costs = []
     for eps in (1.0, 0.3, 0.1):
         s = O.sinkhorn(a, a, C, eps, 50000, 1e-10)
+        # the flag reports the stop honestly: eps = 0.1 is still at ~2e-6 after 50,000 sweeps
+        assert s["converged"] == (s["errs"][-1] < 1e-10) == (eps > 0.2) and s["iters"] == len(s["errs"])
+        assert not O.sinkhorn(a, a, C, eps, 2, 1e-10)["converged"]
         assert np.allclose(s["P"].sum(1), a, atol=1e-5) and np.allclose(s["P"].sum(0), a, atol=1e-12)
         # the dual objective equals the primal entropic objective <P, C> + eps sum P log(P / ab')
         ent = float(np.sum(s["P"] * np.log(s["P"] / (a[:, None] * a[None, :]) + 1e-300)))

@@ -19,6 +19,7 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.2; lett
 h1 { font-size: clamp(2rem, 5vw, 3.1rem); margin: 0.2em 0 0.35em; }
 h2 { font-size: 1.55rem; margin: 2.6rem 0 0.8rem; padding-top: 1.2rem; border-top: 1px solid var(--line); }
 h3 { font-size: 1.12rem; margin: 1.4rem 0 0.5rem; }
+section[id], article [id] { scroll-margin-top: 64px; }  /* anchors land below the sticky top bar */
 main { max-width: 1120px; margin: 0 auto; padding: 0 20px 40px; }
 footer { max-width: 1120px; margin: 40px auto 0; padding: 22px 20px 50px; border-top: 1px solid var(--line);
   color: var(--muted); font-size: 0.86rem; }
@@ -114,6 +115,9 @@ footer p { margin: 0.3em 0; max-width: var(--measure); }
   overflow-x: auto; position: relative; min-width: 0; }  /* positioned: KaTeX's hidden MathML must not widen the page */
 .result .name { color: var(--muted); font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; }
 .result .katex-display { margin: 0.55em 0; }
+.result.wide { grid-column: 1 / -1; }
+.result .tex.wrap { display: block; text-align: center; margin: 0.7em 0 0.75em; line-height: 2.5; overflow-x: auto; overflow-y: hidden; }
+.result .tex.wrap .katex { white-space: normal; }
 .result .katex { font-size: 0.98em; }
 
 .track-buttons { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 14px; }
@@ -209,6 +213,23 @@ th { color: var(--muted); font-weight: 600; font-size: 0.8rem; letter-spacing: 0
 .widget .readout b { color: var(--ink); font-family: var(--mono); font-weight: 600; }
 .widget .w-note { color: var(--muted); font-size: 0.82rem; margin: 10px 0 0; }
 
+/* the other courses (tools/series_site.py) and the landing page */
+.sub { font: italic 1.2rem/1.4 var(--serif); color: var(--soft); margin: -0.2em 0 0.8em; max-width: 60ch; }
+.glance { display: grid; grid-template-columns: minmax(8em, max-content) 1fr; gap: 8px 18px; margin: 20px 0;
+  padding: 14px 16px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; }
+.glance dt { color: var(--muted); font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; padding-top: 2px; }
+.glance dd { margin: 0; color: var(--soft); font-size: 0.95rem; max-width: 84ch; }
+.cgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 14px; }
+.ccard { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; align-content: start; background: var(--panel);
+  border: 1px solid var(--line); border-radius: 12px; padding: 16px; color: var(--ink);
+  transition: border-color 0.15s, transform 0.15s; }
+.ccard:hover { text-decoration: none; border-color: var(--idea); transform: translateY(-2px); }
+.ccard .mark { grid-row: span 2; width: 40px; height: 40px; font-size: 1.3rem; }
+.ccard .t { font: 600 1.25rem var(--serif); }
+.ccard .zh { color: var(--muted); font-size: 0.86rem; }
+.ccard .q { grid-column: 1 / -1; color: var(--soft); font-size: 0.93rem; margin-top: 10px; }
+.ccard .m { grid-column: 1 / -1; color: var(--muted); font-size: 0.84rem; margin-top: 8px; }
+@media (max-width: 640px) { .glance { grid-template-columns: 1fr; gap: 2px; } .glance dd { margin-bottom: 8px; } }
 .pager { display: flex; justify-content: space-between; gap: 16px; margin-top: 40px; padding-top: 18px;
   border-top: 1px solid var(--line); font-family: var(--serif); }
 .pager .next { text-align: right; margin-left: auto; }

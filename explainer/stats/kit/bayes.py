@@ -171,7 +171,9 @@ class Hier:
         return mean, var
 
     def draws(self, n: int, rng: np.random.Generator) -> dict:
-        """Exact posterior draws: tau from the grid (with jitter inside its cell), mu | tau, then theta | mu, tau."""
+        """Independent posterior draws, no MCMC: tau from the grid posterior, jittered uniformly inside its cell (so tau
+        is exact only up to the grid's resolution, a piecewise-constant density), then mu | tau and theta | mu, tau
+        drawn exactly."""
         p = self.post_tau * np.gradient(self.tau)
         p = p / p.sum()
         k = rng.choice(len(self.tau), size=n, p=p)

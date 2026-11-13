@@ -17,6 +17,7 @@ from __future__ import annotations
 import heapq
 import math
 import random
+import zlib
 
 
 def make(n: int, page_rows: int, keys: int, seed: int) -> list[list]:
@@ -121,7 +122,8 @@ def grace_hash(R, S, B, page_rows):
         for page in P:
             io.reads += 1
             for t in page:
-                buckets[hash(("p", t[0])) % nb].append(t)
+                # crc32, not hash(): a tuple holding a string hashes differently in every process
+                buckets[zlib.crc32(repr(t[0]).encode()) % nb].append(t)
         pages = []
         for bk in buckets:
             bp = [bk[j:j + page_rows] for j in range(0, len(bk), page_rows)]

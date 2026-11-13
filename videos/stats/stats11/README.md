@@ -36,7 +36,7 @@ Every number on screen is computed in [`compute.py`](compute.py) or inline in a 
   coverage against simulation).
 - **`IntervalRain`** (in `explainer/stats/viz.py`): intervals falling against the truth, with a running tally.
 
-The Coverage Board gains seven rows (R = 10,000):
+The Coverage Board gains seven rows, all simulated (R = 10,000 draws, seed 11000; the exact sums at p = 0.05, n = 50 are 91.99% for Wald and 88.53% for Jeffreys, each about two Monte Carlo SEs above its simulated row):
 
 | Method | Setting | Achieved | Verdict |
 |---|---|---|---|

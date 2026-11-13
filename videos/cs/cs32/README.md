@@ -72,7 +72,8 @@ Measured on this machine (`videos/cs/cs32/compute.py` compiles and runs a small 
     fault per million accesses to a disk costs 8%.
 * **7. Which page to evict.**
   - Belady's OPT and its exchange argument.
-  - Belady's string: FIFO faults 9 times with 3 frames and 10 with 4. Random strings with the anomaly: 2 of 20,000.
+  - Belady's string: FIFO faults 9 times with 3 frames and 10 with 4. Random strings with the anomaly: 2 of 20,000
+    (length 20 over 6 pages, 4 against 5 frames).
   - LRU's stack property, proved; no anomaly in 5,000 random strings.
   - How bad can LRU be: 4 pages in a cycle with 3 frames, 120 faults in 120 references against OPT's 42. Sleator and
     Tarjan (1985): k/(k − h + 1). On the Job's trace, LRU with 2h frames beats OPT with h for h = 2, 4, 8, 16.

@@ -7,6 +7,17 @@ Manim videos with local neural narration. See README.md for layout and build com
 - A new video goes in `videos/<series>/<name>/` with `manifest.py`, `README.md`, `sNN_*.py` scenes.
 - Generated and git-ignored: `media/`, `renders/`, `published/`, `.cache/`, `_site/`. Narration/manim caches are keyed by video
   name and scene module name, so renaming either invalidates them.
+- Course sites (GitHub Pages, `.github/workflows/course-site.yml`): `tools/course_site.py` builds `_site/`, *Quant, Built*
+  from its own course table and every other series (`ai`, `stats`, `cs`, `philosophy`, `analysis`, the single films) through
+  `tools/series_site.py`, which only parses each part's `manifest.py` and `README.md` and the series' `README.md` (its
+  `## The parts` table gives the acts and each part's row) and `SYLLABUS.md` (`Part N · ` headings); README sections whose
+  headings read as QA or review logs are left off the pages. Keep those shapes; `tests/test_series_site.py` checks them.
+- Every series is also a course (`videos/coursekit/`, how-to in `videos/coursekit/AUTHORING.md`): `videos/<series>/course/`
+  is the table of levels, tracks, stories, objectives and key results (`parts_AA_BB.py`; chapter numbers must match each
+  `manifest.py`), `videos/<series>/labs/labNN.py` one runnable lab per part (numpy/scipy and the series' own library, no
+  manim; `python -m videos.stats.labs 12`), `videos/<series>/course/site/widgets/*.js` one interactive per part.
+  `python tools/check_course.py <series> N` checks a part end to end (it drives the interactive in a browser);
+  `tests/test_courses.py` runs every lab. *Quant, Built* keeps its own older copy of the same scheme.
 - Chinese narration: `videos/<series>/<name>/narration_zh.json`; each bilingual series (`analysis`, `ai`, `philosophy`) keeps its on-screen text
   table (`<series>_text_zh.json`) and term guide in `videos/<series>/`.
 - *AI, Built* (`videos/ai/`): thirty-one parts (`ai1` … `ai31`); the series plan is `videos/ai/README.md`, the

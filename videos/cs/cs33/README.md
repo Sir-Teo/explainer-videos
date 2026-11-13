@@ -112,7 +112,8 @@ Measured on this machine (`videos/cs/cs33/conc.c`, and the compiler):
   - `cas` and `amoadd`; threads as PCBs sharing a page table; a CAS lock that yields.
   - Two threads, 2,000 increments each: plain load-add-store gives 2,765 at quantum 500 and 2,810 at 3,000 (4,000 at
     97, by luck); `amoadd` and the lock always 4,000.
-  - The quantum sweep: every one of 75 quanta from 40 to 3,000 loses updates.
+  - The quantum sweep: every one of 75 other quanta (40 to 3,000 in steps of 40, so 97 is not among them) loses
+    updates.
 * **16. Frontier: checking concurrent programs.**
   - Linearizability checking is NP-complete; our checker's cost on random queue histories.
   - Weak-memory verification: 1,487, 21,169 and 61,051 states for Peterson under SC, TSO and PSO.

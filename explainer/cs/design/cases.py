@@ -106,6 +106,8 @@ def crawler(pages=1e9, days=30, hosts=10_000_000, delay_s=1.0, page_kb=100, work
 
 
 def bloom_check(n=200_000, bits_per=9.6, seed=1):
+    """A Bloom filter of n crawled URLs by double hashing on BLAKE2b, probed with 20,000 unseen URLs.  The URLs and
+    the hash are fixed, so the result is deterministic: `seed` is accepted and ignored."""
     m = int(n * bits_per)
     k = max(1, round(bits_per * math.log(2)))
     arr = np.zeros(m, dtype=bool)
@@ -248,7 +250,11 @@ def abr_experiment(seeds=(3, 4, 5, 6, 7)):
 def ledger(n=5000, fail=0.05, retry=0.3, seed=4, idempotent=True):
     """Payments move money between accounts as balanced journal entries (debits = credits).  The client times out
     on some requests and retries; with idempotency keys the retry returns the first result.  Checks the invariant
-    sum(balances) = 0 and the number of double charges."""
+    sum(balances) = 0 and the number of double charges.
+
+    The keyed and the naive run are not paired: a retry the key suppresses draws no decline, so after the first such
+    retry the two runs see different amounts, retries and declines even with one seed.  Their entry counts therefore
+    do not differ by exactly the naive run's double charges (the film's 6,209 - 4,839 = 1,370 against 1,390)."""
     rng = random.Random(seed)
     bal = {"customer": 0, "merchant": 0, "fees": 0, "bank": 0}
     entries, seen, double = [], {}, 0

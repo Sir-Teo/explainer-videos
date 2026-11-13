@@ -100,8 +100,7 @@ def tsls(y, X, Z) -> dict:
     """Two-stage least squares of y on X with instruments Z (both with their own constant columns), with a
     heteroskedasticity-robust sandwich covariance."""
     y, X, Z = np.asarray(y, float), np.asarray(X, float), np.asarray(Z, float)
-    PZ = Z @ np.linalg.pinv(Z.T @ Z) @ Z.T
-    Xh = PZ @ X
+    Xh = Z @ (np.linalg.pinv(Z.T @ Z) @ (Z.T @ X))  # P_Z X without forming the n x n projection
     b = np.linalg.solve(Xh.T @ X, Xh.T @ y)
     e = y - X @ b
     A = np.linalg.inv(Xh.T @ Xh)

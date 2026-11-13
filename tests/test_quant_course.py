@@ -84,7 +84,7 @@ def test_every_widget_exists():
 @pytest.fixture(scope="module")
 def site(tmp_path_factory):
     out = tmp_path_factory.mktemp("site")
-    run = subprocess.run([sys.executable, "tools/course_site.py", "--out", str(out), "--parts", "5", "10", "36", "43"],
+    run = subprocess.run([sys.executable, "tools/course_site.py", "--out", str(out), "--parts", "5", "10", "36", "43", "--quant-only"],
                          cwd=ROOT, capture_output=True, text=True)
     assert run.returncode == 0, run.stderr[-3000:]
     return out

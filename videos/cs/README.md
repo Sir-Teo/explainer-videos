@@ -30,6 +30,12 @@ are in [`SYLLABUS.md`](SYLLABUS.md).
 reviewed for Parts 1–42, narrated masters pending; instruments and computations exist for every part; see
 [`SYLLABUS.md`](SYLLABUS.md) §8).
 
+**Course site.** `python tools/series_site.py --series cs` builds this course's GitHub Pages site into `_site/cs/`: a course
+map and a page per part with its chapters, notes, problems and sources, generated from this README's table of parts,
+[`SYLLABUS.md`](SYLLABUS.md) and each part's `manifest.py` and `README.md` ([`tools/series_site.py`](../../tools/series_site.py)).
+It is also a course: four tracks through the chapters, and a runnable lab (`python -m videos.cs.labs 1`) and an
+interactive for every part, in [`course/`](course/) and [`labs/`](labs/) ([how they are written](../coursekit/AUTHORING.md)).
+
 ## The story
 
 **A pebble.** *Calculus* is Latin for a small stone, the kind people once counted with. In 1928 Hilbert asked

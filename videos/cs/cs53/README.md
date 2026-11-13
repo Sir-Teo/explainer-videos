@@ -196,7 +196,8 @@ python tools/build.py cs53
 5. **Build.** Use our simulator to run Shor on N = 35, and count the shots needed to find the order.
 
    *Solution notes.* Call `algorithms.shor(35, a)` (or `order_finding(a, 35, shots=...)` for more shots) for an a
-   coprime to 35. The orders divide λ(35) = lcm(4, 6) = 12; of the 24 residues coprime to 35, 18 have an even order r
+   coprime to 35 (its `r` and `factors` come from the true order, found classically; what each shot gave is in
+   `samples`). The orders divide λ(35) = lcm(4, 6) = 12; of the 24 residues coprime to 35, 18 have an even order r
    with a^(r/2) ≢ −1 (the exceptions are 1, 11 and 16, of odd order, and 19, 24 and 34, with a^(r/2) ≡ −1), so a
    random a works with probability 3/4. With a = 2, r = 12 (2¹² = 4,096 = 117 · 35 + 1); the instrument uses
    t = 2⌈log₂ 35⌉ + 1 = 13 counting qubits, Q = 8,192 ≥ 35² = 1,225. Since 12 does not divide 8,192, only the four

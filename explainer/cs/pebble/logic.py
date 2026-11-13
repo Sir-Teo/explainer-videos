@@ -46,11 +46,13 @@ def min_cover(on: set[int], dc: set[int], n: int) -> list[tuple[int, int]]:
         return []
     primes = sorted(prime_implicants(set(on), set(dc), n), key=lambda t: (-bin(t[1]).count("1"), t))
     left, chosen = set(on), []
+    cov = {p: {m for m in left if covers(p, m)} for p in primes}      # computed once: the loop below only intersects
+    sole = {p: {m for m in cov[p] if sum(m in cov[q] for q in primes) == 1} for p in primes}
     while left:
-        ess = [p for p in primes if any(sum(covers(q, m) for q in primes) == 1 and covers(p, m) for m in left)]
-        pick = ess[0] if ess else max(primes, key=lambda p: (sum(covers(p, m) for m in left), bin(p[1]).count("1")))
+        ess = next((p for p in primes if sole[p] & left), None)       # the only prime covering some minterm left
+        pick = ess if ess is not None else max(primes, key=lambda p: (len(cov[p] & left), bin(p[1]).count("1")))
         chosen.append(pick)
-        left = {m for m in left if not covers(pick, m)}
+        left -= cov[pick]
     return chosen
 
 

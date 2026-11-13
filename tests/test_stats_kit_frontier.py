@@ -58,6 +58,15 @@ def test_proximal_beats_naive_adjustment():
     # 2SLS with X as its own instrument is OLS
     X = np.column_stack([np.ones(n), A, Z])
     assert np.allclose(F.tsls(Y, X, X)["b"], np.linalg.lstsq(X, Y, rcond=None)[0])
+    # and agrees with the textbook form built from the explicit n x n projection onto the instruments
+    m = 400
+    Xd, Zd = np.column_stack([np.ones(m), A[:m], W[:m]]), np.column_stack([np.ones(m), A[:m], Z[:m]])
+    Xh = Zd @ np.linalg.pinv(Zd.T @ Zd) @ Zd.T @ Xd
+    r = F.tsls(Y[:m], Xd, Zd)
+    b = np.linalg.solve(Xh.T @ Xd, Xh.T @ Y[:m])
+    Ai = np.linalg.inv(Xh.T @ Xh)
+    V = Ai @ (Xh * (Y[:m] - Xd @ b)[:, None] ** 2).T @ Xh @ Ai
+    assert np.allclose(r["b"], b, rtol=1e-9) and np.allclose(r["V"], V, rtol=1e-8)
 
 
 def test_interference_exposures():

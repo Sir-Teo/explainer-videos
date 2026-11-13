@@ -505,11 +505,17 @@ def proportional(hit: float = 0.95, false_alarm: float = 0.05) -> dict:
     probability), compare candidate causes of pecking: how much the cause's two settings differ in their effect, the
     information it carries about pecking, and how many bits of the cause it takes. 'Red' makes the whole difference
     with one bit; 'scarlet' makes less of a difference; the exact shade makes the same difference as red with more
-    bits than it needs. Realization-insensitivity: had the red been a different red, Sophie would still have pecked."""
+    bits than it needs. Realization-insensitivity: had the red been a different red, Sophie would still have pecked.
+
+    ``info`` sets the cause's values with equal chances but scores each against the pecking rate over the six shades
+    taken evenly. For a cause whose values hold equally many shades ('red', the exact shade) that is the mutual
+    information under the intervention; for an uneven one it is not: 'scarlet' gives 0.369 (the film's figure), where
+    the mutual information with scarlet set half the time is 0.273, and the score is not bounded by ``cause_bits``."""
     peck = {s: (hit if r else false_alarm) for s, r in SHADES}
 
     def info(groups):
-        # mutual information between a cause variable (a partition of the shades, values chosen uniformly) and pecking
+        # a cause variable is a partition of the shades, its values chosen uniformly; each value's pecking rate is
+        # compared with the rate over all shades taken evenly (the mutual information only when the cells are equal)
         py = sum(peck[s] for s, _ in SHADES) / len(SHADES)
         I, Hc = 0.0, 0.0
         for g in groups:

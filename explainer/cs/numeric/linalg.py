@@ -31,7 +31,12 @@ def hilbert(n: int) -> np.ndarray:
 
 def forward_vs_backward(ns=(4, 6, 8, 10, 12), seed: int = 0) -> list[dict]:
     """Solve H x = b for the Hilbert matrix with a known x: the backward error ||b - H x^|| / (||H|| ||x^||) stays near
-    machine epsilon, while the forward error grows with kappa; forward <= kappa * backward (Wilkinson)."""
+    machine epsilon, while the forward error grows with kappa; forward <= kappa * backward (Wilkinson).
+
+    ``backward`` is the residual as computed in floating point and ``bound`` is kappa times it.  Wilkinson's
+    inequality is about the exact residual of the exact b; here b = H x was rounded and so is b - H x^, which can
+    come out exactly 0.  So for some seeds ``bound`` is 0, or a little below ``forward`` (not for the default seed,
+    the film's); kappa * (backward + eps) always holds."""
     rng = np.random.default_rng(seed)
     out = []
     for n in ns:

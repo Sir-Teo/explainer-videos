@@ -23,6 +23,10 @@ def test_composition_and_putnam():
     d = M.composition_counts(2, 3)
     assert d["nihilism"] == 6 and d["universalism"] == 63 and 6 < d["contact"] < 63
     assert M.putnam_world(3)["polish"] == 7
+    assert d["scattered_example"] == [0, 2]
+    for n in (1, 2):            # a row of one or two blocks has no scattered group
+        row = M.composition_counts(1, n)
+        assert row["contact"] == row["universalism"] == 2 ** n - 1 and row["scattered_example"] is None
 
 
 def test_goodman_and_geach_kaplan():

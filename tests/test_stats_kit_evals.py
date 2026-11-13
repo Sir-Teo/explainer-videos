@@ -90,6 +90,13 @@ def test_collapse_and_factuality():
     rng = np.random.default_rng(6)
     c = E.gaussian_collapse(10, 50, 2000, rng)
     assert abs(c["paths"][:, 10].mean() - 0.9 ** 10) < 0.03
+    # paths[:, t] is the variance after t refits, the index `expected` uses (not t + 1)
+    assert np.allclose(c["expected"][:4], 0.9 ** np.arange(4))
+    rng2 = np.random.default_rng(16)
+    c1 = E.gaussian_collapse(10, 1, 40000, rng2)["paths"][:, 1]
+    assert abs(c1.mean() - 0.9) < 4 * c1.std() / 200 and abs(c1.mean() - 0.81) > 0.05
+    a = E.gaussian_collapse(10, 30, 300, rng2, accumulate=True)["paths"]
+    assert abs(np.median(a[:, -1]) - 1) < 0.15
     assert abs(c["drift"] - (stats.chi2(9).expect(np.log) - math.log(10))) < 1e-9 and c["drift"] < 0
     cs, ct = E.claim_responses(400, 6, 0.8, 2.0, rng)
     ts, tt = E.claim_responses(2000, 6, 0.8, 2.0, rng)

@@ -80,6 +80,12 @@ computation. The rigour rises with the stage: calculus-level proofs in the bache
 theorem–proof in the PhD core, research papers in the last stage. The videos are named `stats1` … `stats65`, in
 `videos/stats/statsN/`.
 
+**Course site.** `python tools/series_site.py --series stats` builds this course's GitHub Pages site into `_site/stats/`: a course
+map and a page per part with its chapters, notes, problems and sources, generated from this README's table of parts,
+[`SYLLABUS.md`](SYLLABUS.md) and each part's `manifest.py` and `README.md` ([`tools/series_site.py`](../../tools/series_site.py)).
+It is also a course: four tracks through the chapters, and a runnable lab (`python -m videos.stats.labs 1`) and an
+interactive for every part, in [`course/`](course/) and [`labs/`](labs/) ([how they are written](../coursekit/AUTHORING.md)).
+
 ## The story
 
 **Graunt's question.** In 1662 John Graunt, a London haberdasher, read half a century of weekly *Bills of

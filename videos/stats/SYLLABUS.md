@@ -626,7 +626,7 @@ Coverage Board becomes the series' judge. Next come intervals for relationships 
    coverage curves.
 5. **Likelihood intervals.** Wald vs profile; log-odds; the rule of three.
 6. **Discreteness.** Exact coverage impossible; mid-p.
-7. **Fieller (1954).** Ratios: bounded, the whole line, or two rays (Part 46 proves this is unavoidable).
+7. **Fieller (1940, 1954).** Ratios: bounded, the whole line, or two rays (Part 46 proves this is unavoidable).
 8. **Simultaneous intervals.** Bonferroni; Scheffé (1953); the DKW band.
 9. **Prediction and tolerance intervals.** Wilks' (1941) order-statistic limits, the ancestor of conformal (Part
    34).
@@ -1549,9 +1549,10 @@ entropy, chaining and Talagrand's inequality. Next, infinite-dimensional nuisanc
 8. **Z-estimators with nuisance parameters.**
 9. **Rates of convergence.** The rate theorem; cube-root asymptotics (Kim & Pollard 1990): Grenander and Chernoff's
    distribution (Part 29).
-10. **The bootstrap empirical process** (Giné & Zinn 1990); the multiplier bootstrap.
-11. **KS with estimated parameters**, done right (Board).
-12. **Outro.**
+10. **Uniform laws at work: learning.** Why minimizing training error works: excess risk by a uniform deviation.
+11. **The bootstrap empirical process** (Giné & Zinn 1990); the multiplier bootstrap.
+12. **KS with estimated parameters**, done right (Board).
+13. **Outro.**
 
 *Built:* statkit.empirical. *Books:* van der Vaart & Wellner; Kosorok; Pollard; Giné & Nickl.
 
@@ -1742,7 +1743,7 @@ theory of knockoffs each answer it, at different prices in power. Next, inferenc
 5. **Data fission and thinning** (Leiner et al.; Neufeld et al.). Splitting a single observation.
 6. **Knockoff theory.** Fixed-X and model-X; the supermartingale proof; robustness to estimated distributions.
 7. **Conformal selection** (Jin & Candès 2023).
-8. **Inference on winners** (Andrews, Kitagawa & McCloskey *(verify)*).
+8. **Inference on winners** (Andrews, Kitagawa & McCloskey 2024).
 9. **Selection in unsupervised problems.** Post-clustering inference (Gao, Bien & Witten 2022).
 10. **Open problems.**
 

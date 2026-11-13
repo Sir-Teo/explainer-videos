@@ -162,7 +162,12 @@ def _tangent(path, at_start=True):
 
 def hyp_triangle(A, B, C) -> dict:
     """A hyperbolic triangle in the Poincaré disk: its sides (geodesic arcs), its angles (the disk is conformal, so
-    Euclidean angles between the arcs' tangents), the angle sum, and its area, which equals the defect pi - sum."""
+    Euclidean angles between the arcs' tangents), the angle sum, and its area, which equals the defect pi - sum.
+
+    The tangents are read off the drawing: each is the first chord of the side's 60-point arc, not the arc's exact
+    tangent, so every angle comes out a little large and the sum is high by up to about 3 degrees for big triangles
+    (the centred triangle with vertices at radius 0.9: 23.51 here, 20.81 by the hyperbolic law of cosines); ``defect``
+    is low by the same amount."""
     sides = {"AB": geodesic(A, B), "BC": geodesic(B, C), "CA": geodesic(C, A)}
 
     def angle(p1, p2):

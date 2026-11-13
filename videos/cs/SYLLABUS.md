@@ -966,7 +966,7 @@ Interpreters*.
 *Story:* In 1957 FORTRAN had to produce code as good as hand-written code, or nobody would use it. The compiler
 turns a parse tree into a graph. On that graph, optimization becomes a fixed-point computation over lattices, and
 register allocation becomes graph coloring: NP-hard in general, but solvable in polynomial time on SSA programs. Our
-own compiler, about 2,500 lines, beats Part 6's hand-written Job by 12% in instructions, and finds Part 6's pointer
+own compiler, about 2,500 lines, comes within 3.2% of Part 6's hand-written Job in instructions, and finds Part 6's pointer
 by itself.
 1. History: Hopper's A-0 (1952); FORTRAN (Backus 1957, eighteen person-years, "half as fast"); front, middle and
    back ends; M + N instead of M × N (UNCOL 1958, GCC, LLVM); the list Job through every stage, counted.
@@ -1156,7 +1156,7 @@ calculus.
 11. Beating n log n: counting and radix sort, radix sort animated; timed in C (ten million keys: radix sort 3.8× faster
     than `std::sort`, 6.7× than `qsort`); Hollerith; integer sorting on the word-RAM (Han & Thorup 2002, cited).
 12. Selection: quickselect (3.36 n measured, (2 + 2 ln 2) n theory); **median of medians** (Blum, Floyd, Pratt, Rivest
-    & Tarjan 1973), T(n) ≤ T(n/5) + T(7n/10) + O(n) solved, 7.8 n measured; why groups of five (three fails, seven
+    & Tarjan 1973), T(n) ≤ T(n/5) + T(7n/10) + O(n) solved, 8.29 n measured; why groups of five (three fails, seven
     works).
 13. Generating functions: Fibonacci and Binet, checked to n = 61; Catalan numbers from C = 1 + zC²; the singularity at
     1/4 and 4ⁿ/(√π n^{3/2}), with the ratio computed (Flajolet & Sedgewick).
@@ -1185,7 +1185,7 @@ Hoare 1962; Blum et al. 1973; de Gouw et al. 2015; Spielman & Teng 2001.
 ### Part 17 · Data Structures (~50)
 *Story:* The Job is a dictionary problem: insert, look up, count. Hashing does it in expected constant time, if the
 hash function can't be gamed. Balanced trees guarantee their time, and splay trees earn it on average. The ledger
-records the drop: 0.81 s, and the verdict of Act IV so far, hardware's 24× against algorithms' 72×.
+records the drop: about 0.794 s projected, and the verdict of Act IV so far, hardware's 24× against algorithms' 72×.
 1. Abstract data types against implementations (Liskov & Zilles 1974); Luhn's hashing (1953); the birthday bound,
    1 − e^{−n²/2m} (derived), and on our vocabulary (101 full-hash collisions predicted 100; 12,495 slot pairs
    predicted 12,786).
@@ -1215,7 +1215,7 @@ records the drop: 0.81 s, and the verdict of Act IV so far, hardware's 24× agai
     9).
 14. Hash tables in practice: Python, Java, C++, Rust and Go; the Job natively (Python 0.91 s, C++ 0.19 s, C 0.11 s).
 15. The Job v2, a hash table in the Pebble language: 1.06 slots per word on the corpus; an exact 27-event
-    instruction model (0.01% on held-out passages); the corpus through Part 9's caches (+6%); ledger row 8 (0.81 s:
+    instruction model (0.01% on held-out passages); the corpus through Part 9's caches (+6%); ledger row 8 (0.794 s projected:
     6.3× row 7, 72× row 5, 15× row 4); rows 0 → 4 against rows 5 → 8. *Frontier*: Yao's conjecture refuted
     (Farach-Colton, Krapivin & Kuszmaul 2025) against measured uniform probing; dynamic optimality and tango trees;
     cell-probe lower bounds; learned indexes; open problems. Outro.
@@ -1256,7 +1256,7 @@ between an Euler tour and a Hamiltonian cycle is the first glimpse of P against 
 8. All pairs: Floyd–Warshall as DP; Johnson's reweighting (proved, with a worked example; 150 vertices and 231
    negative edges, matching Floyd–Warshall); the min-plus product and the APSP conjecture (Part 27).
 9. Route planning: A* (callback to *AI, Built* 2), landmarks, contraction hierarchies; vertices settled per query on
-   4,800 intersections: Dijkstra 2,525, bidirectional 1,237, A* 657, landmarks 208, CH 113.
+   4,800 intersections: Dijkstra 2,525, bidirectional 1,237, A* 657, landmarks 212, CH 113.
 10. MSTs: the cut property, proved on a worked example, and the cycle property; Kruskal with Part 17's union–find,
     Prim/Jarník, Borůvka (1926, for the Moravian grid; 4 rounds); Karger, Klein & Tarjan.
 11. **Max-flow min-cut**: augmenting paths and the residual graph; the theorem (proved; 19 = 10 + 9); Edmonds–Karp
@@ -1369,7 +1369,7 @@ removed at all.
    (ε, δ) guarantee, measured on every word of the novels.
 10. **The Job in kilobytes**: Count-Min with conservative update and double hashing, 32 candidates in a heap, in the
     Pebble language; every instruction emulated (1.07 billion); 18,588 bytes against 1.9 MB; ledger row 9, 1.00 s
-    against 0.81 s; the same algorithm over 20 hash functions in C (exact 25% of the time at 16 KB, 95% at 64 KB;
+    against 0.794 s; the same algorithm over 20 hash functions in C (exact 25% of the time at 16 KB, 95% at 64 KB;
     the top 20 always among the candidates).
 11. Distinct counting: Flajolet–Martin, **HyperLogLog** (error against 1.04/√m from 16 to 16,384 registers), the
     corpus and its 4.5 million five-word phrases in 3 KB.
@@ -1418,7 +1418,7 @@ ways in the 25 MB of novels, from 24,974,844 character comparisons down to 16 ra
    branching node; *Moby-Dick*'s 741 billion distinct substrings; 10–20 bytes per character.
 7. **Suffix arrays** (Manber & Myers 1990): sorted suffixes and the block for t; prefix doubling as a rank table on
    banana$; SA-IS and Kasai's LCP; all 24,971,556 suffixes of the novels in 105 s (100 MB); Queequeg's 253 in 167
-   comparisons; the longest repeat (383 characters of chapter headings).
+   comparisons; the longest repeat (428 characters of chapter headings).
 8. **The Burrows–Wheeler transform** (1994): rotations sorted; LF arrows walking banana$ back out (proved; all of
    *Moby-Dick* inverted exactly); what precedes he, hi and ho in *Moby-Dick* (72% t before he); nH_k for every k
    (Manzini 2001); 578,682 runs, move-to-front, bzip2 against zlib.

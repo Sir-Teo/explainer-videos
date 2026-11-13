@@ -181,7 +181,10 @@ def weighted_mean(y, w) -> float:
 def meng(y_pop, R) -> dict:
     """Meng (2018): for any subset R of a finite population, ybar_R - ybar_N = rho(R, Y) * sqrt((1 - f)/f) * sigma_Y,
     with f = n/N, rho the population correlation of the inclusion indicator with Y, and sigma_Y the population SD
-    (divisor N).  Also the effective SRS size n_eff = f/(1 - f) / rho^2 (for small f, about 1 / rho^2 times f/(1-f))."""
+    (divisor N).  Also the effective SRS size n_eff = f/(1 - f) / rho^2 (about f / rho^2 for small f): the m at which
+    sigma^2/m equals this one subset's realized squared error.  It uses the realized rho, not Meng's E[rho^2] over
+    the inclusion mechanism, and ignores the SRS's fpc, so it is infinite when rho = 0 (no error) and a random sample
+    of size n gives a value scattered around n, not n itself."""
     y = np.asarray(y_pop, float)
     R = np.asarray(R, bool)
     N, n = len(y), int(R.sum())

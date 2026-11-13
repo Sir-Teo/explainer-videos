@@ -190,7 +190,8 @@ def _normalize(m, axis):
 
 def rsa(meaning, prior=None, alpha: float = 1.0, cost=None, depth: int = 1) -> dict:
     """meaning: utterances x states (0/1). L0(s|u) ~ [[u]](s) P(s); S1(u|s) ~ exp(alpha (log L0(s|u) - cost(u)));
-    L1(s|u) ~ S1(u|s) P(s). Returns the three matrices (rows: utterances for listeners, states for the speaker)."""
+    L1(s|u) ~ S1(u|s) P(s). Returns the three matrices (rows: utterances for listeners, states for the speaker),
+    each entry rounded to 4 decimals, so a row may sum to 1 only to that precision."""
     M = np.array(meaning, float)
     nU, nS = M.shape
     P = np.ones(nS) / nS if prior is None else np.array(prior, float)
@@ -247,7 +248,7 @@ def reference_game() -> dict:
 def scalar(n: int = 3, alpha: float = 4.0) -> dict:
     """States: how many of n cookies were eaten. Utterances: 'none', 'some', 'all'. Literally 'some' is true in states
     1..n, including n. The pragmatic listener, reasoning about a speaker who would have said 'all' if she could, hears
-    'some' as 'some but not all'."""
+    'some' as 'some but not all'. The matrices are ``rsa``'s, rounded to 4 decimals."""
     states = list(range(n + 1))
     words = ["none", "some", "all"]
     meaning = [[s == 0 for s in states], [s >= 1 for s in states], [s == n for s in states]]

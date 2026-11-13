@@ -52,8 +52,25 @@
     });
   }
 
+  // A key result wider than its card takes the full row; if it is still too wide (a phone), it is set smaller.
+  function fitResults() {
+    document.querySelectorAll(".result").forEach(function (card) {
+      var tex = card.querySelector(".katex-display, .tex.wrap");
+      if (!tex) return;
+      card.classList.remove("wide"); tex.style.fontSize = "";
+      var over = function () { return tex.scrollWidth > tex.clientWidth + 1; };
+      if (over()) card.classList.add("wide");
+      for (var size = 0.95; over() && size >= 0.78; size -= 0.05) tex.style.fontSize = size + "em";
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
     renderMath(document.body);
+    fitResults();
+    window.addEventListener("load", fitResults);  // again once the math fonts have set the real widths
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitResults);
+    var timer = 0;
+    window.addEventListener("resize", function () { clearTimeout(timer); timer = setTimeout(fitResults, 150); });
     trackButtons();
     mapFilter();
   });

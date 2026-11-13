@@ -338,12 +338,14 @@ def gaussian_collapse(n: int, T: int, reps: int, rng: np.random.Generator, accum
     samples, draw n new samples from the fit, refit, and repeat T times.  With replacement, E[sigma_t^2] =
     ((n - 1)/n)^t and log sigma_t^2 is a random walk with negative drift, so sigma_t -> 0 almost surely.  With
     ``accumulate`` the new samples are added to all earlier ones (Gerstgrasser et al. 2024), and the variance stays
-    put.  Returns the sigma^2 paths (reps x (T + 1))."""
+    put.  Generation 0 is a fit with mean 0 and variance 1 exactly (the first sample is standardized), so
+    ``paths[:, t]`` is the variance after t refits and its mean is ``expected[t]``.  Returns the sigma^2 paths
+    (reps x (T + 1))."""
     paths = np.zeros((reps, T + 1))
     for r in range(reps):
         x = rng.standard_normal(n)
-        pool = x.copy()
-        mu, s2 = x.mean(), x.var()
+        pool = (x - x.mean()) / x.std()
+        mu, s2 = 0.0, 1.0
         paths[r, 0] = 1.0
         for t in range(1, T + 1):
             new = mu + math.sqrt(s2) * rng.standard_normal(n)

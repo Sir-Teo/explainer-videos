@@ -253,7 +253,9 @@ def _connected(S, adj) -> bool:
 
 def composition_counts(rows: int = 2, cols: int = 3) -> dict:
     """How many objects are there, on each answer to van Inwagen's question, among rows x cols blocks? Nihilism: only
-    the simples. Contact: every connected group composes something. Universalism: every nonempty group does."""
+    the simples. Contact: every connected group composes something. Universalism: every nonempty group does.
+    ``scattered_example`` is the first group that is not connected, or None when every group is (one or two blocks
+    in a row)."""
     cells, adj = grid_graph(rows, cols)
     n = len(cells)
     subsets = [S for k in range(1, n + 1) for S in itertools.combinations(range(n), k)]
@@ -261,7 +263,7 @@ def composition_counts(rows: int = 2, cols: int = 3) -> dict:
     by_size = {k: sum(1 for S in contact if len(S) == k) for k in range(1, n + 1)}
     return {"rows": rows, "cols": cols, "simples": n, "nihilism": n, "contact": len(contact),
             "universalism": 2 ** n - 1, "contact_by_size": by_size,
-            "scattered_example": next(list(S) for S in subsets if not _connected(S, adj))}
+            "scattered_example": next((list(S) for S in subsets if not _connected(S, adj)), None)}
 
 
 def putnam_world(k: int = 3) -> dict:

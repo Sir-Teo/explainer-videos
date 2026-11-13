@@ -32,6 +32,18 @@ class Part3(unittest.TestCase):
         cover = [p for p in primes if c.term_str(p, 4) in ("B'D", "BC'")]  # C'D is a prime but redundant
         self.assertTrue(all((x in m) == any(c.covers(p, x) for p in cover) for x in range(16)))
 
+    def test_min_cover_parity_of_eight(self):
+        """No two minterms of parity merge: 128 essential primes, found without recounting covers every round."""
+        from explainer.cs.pebble.logic import covers, min_cover
+        on = {m for m in range(256) if bin(m).count("1") % 2}
+        terms = min_cover(on, set(), 8)
+        self.assertEqual(sorted(terms), sorted((m, 0) for m in on))
+        on, dc = {1, 3, 5, 7, 9, 13}, {11, 15}                   # essential primes first, then the greedy pick
+        terms = min_cover(on, dc, 4)
+        self.assertTrue(all(any(covers(t, m) for t in terms) for m in on))
+        self.assertFalse(any(covers(t, m) for t in terms for m in set(range(16)) - on - dc))
+        self.assertEqual(on, {1, 3, 5, 7, 9, 13})
+
     def test_monotone_count_problem_4(self):
         pts = list(itertools.product((0, 1), repeat=3))
         n = sum(1 for tt in range(256) if all(

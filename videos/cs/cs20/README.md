@@ -1,8 +1,8 @@
 # Computer Science, Built — Part 20: Randomness as a Resource
 
 Part 20 of the [61-part course](../README.md) develops randomized algorithms through proofs, worked visual
-examples and reproducible experiments. The instruments are [randomized.py](../../../../explainer/cs/algo/randomized.py)
-and [job3.py](../../../../explainer/cs/algo/job3.py); producers live in `compute.py`, independent references in
+examples and reproducible experiments. The instruments are [randomized.py](../../../explainer/cs/algo/randomized.py)
+and [job3.py](../../../explainer/cs/algo/job3.py); producers live in `compute.py`, independent references in
 `measurements.py`, and regression checks in `tests/test_cs20_randomized.py`.
 
 The opening compares the exact word table with a Count-Min sketch retaining 32 candidate words. For this corpus

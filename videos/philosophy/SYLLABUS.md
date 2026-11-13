@@ -430,8 +430,8 @@ Hamkins 2012 (RSL); Koellner (SEP), "The Continuum Hypothesis".
    say).
 10. Busy beavers: BB(4) = 107 steps; BB(5) = 47,176,870, proved by the bbchallenge collaboration in Coq (2024).
     BB(n) eventually escapes ZFC (Yedidia and Aaronson 2016; later improvements).
-11. Natural independence: Goodstein's theorem (sequences computed; they reach astronomical sizes and then return to
-    0), Kirby–Paris 1982, Paris–Harrington.
+11. Natural independence: Goodstein's theorem and the hydra (Kirby–Paris 1982; the sequences are computed in
+    Part 6), Ramsey's R(3,3) = 6 by brute force, Paris–Harrington.
 12. Chaitin's Ω and incompleteness from information (the Berry paradox formalized).
 13. Tarski's undefinability of truth (1933/36), proved from the diagonal lemma (bridge to Part 8).
 14. Löb's theorem (1955) and provability logic GL; Solovay's completeness (1976). GL is checked on finite
@@ -441,11 +441,11 @@ Hamkins 2012 (RSL); Koellner (SEP), "The Continuum Hypothesis".
 16. Proof theory's answer: Gentzen's consistency proof of PA by induction to ε₀ (Part 6's spiral); ordinal analysis.
 17. Recap and Problems.
 
-*Built:* `reasoner.arith` (Gödel numbering, a PA proof checker on a fragment, quines, a Turing-machine simulator,
-Goodstein sequences, small busy beavers).
+*Built:* `reasoner.arith` (Robinson's Q as a rewriting system, Gödel numbering, quines, a Turing-machine simulator,
+small busy beavers, R(3,3) by brute force).
 *Wall:* Gödel I and II; the halting problem; Tarski; Löb.
-*Visuals:* the diagonal lemma as a loop of mirrors; the Turing tape; a Goodstein base-bump tower growing and then
-collapsing; GL's frames as finite trees.
+*Visuals:* the diagonal lemma as a loop of mirrors; the Turing tape; the busy beavers' space–time diagrams;
+GL's frames as finite trees.
 *References:* Smith, *An Introduction to Gödel's Theorems*; Boolos–Burgess–Jeffrey chs. 15–18; Boolos, *The Logic of
 Provability*; Franzén, *Gödel's Theorem: An Incomplete Guide*; Aaronson, "The Busy Beaver Frontier" (2020).
 
@@ -951,7 +951,7 @@ and Jago, *Impossible Worlds*.
 2. Plantinga's modal ontological argument in S5, proved valid by the Reasoner; the possibility premise and its
    mirror image ("possibly God does not exist").
 3. Gödel's ontological proof (published 1987). Built: formalized in higher-order modal logic and checked; it
-   reproduces the known result (Benzmüller and Woltzenlogel Paleo 2014) that Gödel's original axioms are
+   reproduces the known results (Benzmüller and Woltzenlogel Paleo 2014, 2016) that Gödel's original axioms are
    inconsistent and that Scott's variant implies modal collapse (□(p ↔ □p)).
 4. Cosmological arguments: Aquinas's five ways; Leibniz's PSR argument; the Kalam (al-Ghazālī; Craig) and the
    infinity premises (callback to Part 6's Hilbert hotel).
@@ -969,15 +969,15 @@ and Jago, *Impossible Worlds*.
 13. Non-theistic traditions: Buddhist arguments against a creator (Dharmakīrti); the Dao as non-agential ground.
 14. Recap and Problems.
 
-*Built:* `reasoner.hol` (a small higher-order modal logic, enough for Gödel's proof); `reasoner.branching`
-(Ockhamist and Peircean semantics).
+*Built:* `reasoner.theism` (a small higher-order modal logic, enough for Gödel's proof; Ockhamist and Peircean
+semantics for branching time).
 *Wall:* modal collapse in Gödel's and Scott's systems; the symmetry of the modal ontological argument.
 *Price List:* the problem of evil (from Part 2), with each theodicy as a correction set.
 *Visuals:* S5 worlds where God exists in one and therefore all; the modal collapse proof lighting every □;
 branching time with Ockhamist "thin red line" vs Peircean all-branches truth.
 *References:* Oppy, *Arguing about Gods*; Plantinga, *The Nature of Necessity*; Sobel, *Logic and Theism*;
-Benzmüller and Woltzenlogel Paleo 2014 (ECAI); Hájek (SEP), "Pascal's Wager"; Earman, *Hume's Abject Failure*;
-Øhrstrøm and Hasle, *Temporal Logic: From Ancient Ideas to Artificial Intelligence*.
+Benzmüller and Woltzenlogel Paleo 2014 (ECAI), 2016 (IJCAI); Hájek (SEP), "Pascal's Wager"; Earman, *Hume's Abject
+Failure*; Øhrstrøm and Hasle, *Temporal Logic: From Ancient Ideas to Artificial Intelligence*.
 
 #### Part 24 · Laws, Chance and the Arrow (~60)
 1. What is a law? The regularity view and accidental generalizations (gold spheres vs uranium spheres).
@@ -1003,7 +1003,7 @@ Benzmüller and Woltzenlogel Paleo 2014 (ECAI); Hájek (SEP), "Pascal's Wager"; 
 15. Other arrows: the causal, the epistemic (records), the radiative; are they the thermodynamic arrow?
 16. Recap and Problems.
 
-*Built:* `reasoner.physics.laws` (best-system toy: candidate laws scored for simplicity and strength on generated
+*Built:* `reasoner.physlaws` (best-system toy: candidate laws scored for simplicity and strength on generated
 data; Norton's dome solutions; Lorenz Lyapunov exponents; the Kac ring; Szilard's engine).
 *Wall:* Loschmidt and Zermelo (no time-symmetric dynamics gives the arrow alone); the big bad bug.
 *Price List:* the arrow of time (dynamics are time-symmetric; entropy increases; the increase is lawlike; no special
@@ -1039,7 +1039,7 @@ Leff and Rex (eds.), *Maxwell's Demon 2*.
     speculative.
 16. Recap and Problems.
 
-*Built:* `reasoner.physics.spacetime` (Poincaré disk geometry; Minkowski diagram engine; Deutsch CTC fixed-point
+*Built:* `reasoner.spacetime` (Poincaré disk geometry; Minkowski diagram engine; Deutsch CTC fixed-point
 solver).
 *Wall:* the hole argument (substantivalism seems to imply indeterminism); Malament vs Reichenbach.
 *Price List:* the hole-argument cluster (spacetime points are real; GR is deterministic; diffeomorphic models

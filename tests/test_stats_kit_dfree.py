@@ -1,6 +1,7 @@
 """Tests for statkit.dfree, the distribution-free toolkit of Part 57."""
 
 import numpy as np
+from scipy import stats
 
 from explainer.stats.kit import dfree as F
 
@@ -16,6 +17,12 @@ def test_bahadur_savage_and_quantile_lemma():
         sim = F.bahadur_savage_sim(50, eps, r, reps=4000)
         assert sim <= ub + 0.02
     assert F.bahadur_savage_sim(50, 0.003, r, reps=4000) < 0.2  # coverage can be driven toward zero
+    # the no-atom term is the exact noncentral-t probability, checked by simulating N(0, 1) samples of size 5
+    b = F.bahadur_savage_coverage(5, 0.01, shift=0.7)
+    x = rng(2).standard_normal((200_000, 5))
+    hit = np.abs(x.mean(1) - 0.7) <= stats.t.ppf(0.975, 4) * x.std(1, ddof=1) / np.sqrt(5)
+    assert abs(hit.mean() - b["no_atom_coverage"]) < 4 * hit.std() / np.sqrt(len(hit))
+    assert abs(b["upper"] - (1 - b["p_none"] * (1 - b["no_atom_coverage"]))) < 1e-12
     q = F.quantile_lemma_coverage(19, 0.1)
     assert q["exact"] == 0.9 and q["lower"] <= q["exact"] <= q["upper"]
     # split conformal's coverage is exactly k/(n+1)

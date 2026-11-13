@@ -93,12 +93,12 @@ def cantor_check(n: int) -> dict:
     one of the (2^n)^n functions."""
     X = list(range(n))
     subsets = [frozenset(c) for r in range(n + 1) for c in itertools.combinations(X, r)]
-    count = 0
+    count, missed = 0, 0
     for images in itertools.product(subsets, repeat=n):
         D = frozenset(x for x in X if x not in images[x])
-        assert D not in images
+        missed += D not in images
         count += 1
-    return {"n": n, "functions": count, "subsets": len(subsets), "all_miss": True}
+    return {"n": n, "functions": count, "subsets": len(subsets), "all_miss": missed == count}
 
 
 def cantor_pair(x: int, y: int) -> int:

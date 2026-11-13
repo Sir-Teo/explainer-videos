@@ -160,6 +160,12 @@ def _valid(models, premises, concl):
 
 
 def analyse(premises, concl, n: int = 3) -> dict:
+    """Check an inference on every serial model of up to ``n`` worlds. ``idle`` (None unless the inference is valid
+    and its conclusion has an O or P) is True when each outermost O- or P-subformula of the conclusion, one at a time,
+    can be swapped for a fresh atom with the inference still valid. That is a sufficient test for an ought that does
+    no work, and stricter than Schurz's (1997), which replaces what stands inside the O: p |- p & O(q v ~q) is valid,
+    no theorem and not ``idle`` here, though its ought is a logical truth and adds nothing. So "theorem or idle" is
+    the pattern on the film's eight inferences (``schurz_table``), not a general statement of Schurz's theorem."""
     atoms = sorted(set().union(*[_atoms(p) for p in premises], _atoms(concl))) + ["fresh"]
     M = _Models(atoms, n)
     valid, m, w = _valid(M, premises, concl)

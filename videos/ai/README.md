@@ -12,6 +12,12 @@ The chapter-by-chapter plan and production standard are in [`SYLLABUS.md`](SYLLA
 sources and bilingual narration tables. Generated videos from the earlier 20-part cut must be rebuilt against the
 current manifests; the presence of source files or an old export does not indicate that a part has passed QA.
 
+**Course site.** `python tools/series_site.py --series ai` builds this course's GitHub Pages site into `_site/ai/`: a course
+map and a page per part with its chapters, notes, problems and sources, generated from this README's table of parts,
+[`SYLLABUS.md`](SYLLABUS.md) and each part's `manifest.py` and `README.md` ([`tools/series_site.py`](../../tools/series_site.py)).
+It is also a course: four tracks through the chapters, and a runnable lab (`python -m videos.ai.labs 1`) and an
+interactive for every part, in [`course/`](course/) and [`labs/`](labs/) ([how they are written](../coursekit/AUTHORING.md)).
+
 ## Selected reviewed-input preflight
 
 From the repository root, `python tools/check_reviewed_render_inputs.py` checks for entry-point files at selected

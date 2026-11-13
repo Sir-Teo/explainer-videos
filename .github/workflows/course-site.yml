@@ -1,4 +1,7 @@
-# Builds the Quant, Built course site (one page of course material per part) and publishes it to GitHub Pages.
+# Builds the course sites (one page of course material per part of every series, and a landing page) and publishes
+# them to GitHub Pages.  Quant, Built has its own table, labs and interactives (tools/course_site.py); the other
+# series are generated from their manifests, READMEs and syllabi, with tracks, a lab and an interactive per part
+# from videos/coursekit (tools/series_site.py).
 # One-time setup in the repository: Settings -> Pages -> Build and deployment -> Source: "GitHub Actions".
 name: Course site
 
@@ -6,17 +9,32 @@ on:
   push:
     branches: [main]
     paths:
-      - "videos/quant/**"
+      - "videos/**"
       - "explainer/quant/house/**"
       - "tools/course_site.py"
+      - "tools/series_site.py"
       - "tests/test_quant_course.py"
       - "tests/test_quant_labs.py"
+      - "tests/test_series_site.py"
+      - "tests/test_courses.py"
+      - "explainer/stats/**"
+      - "explainer/cs/**"
+      - "explainer/philosophy/reasoner/**"
+      - "explainer/ai/autodiff.py"
       - ".github/workflows/course-site.yml"
   pull_request:
     paths:
       - "videos/quant/course/**"
       - "videos/quant/labs/**"
+      - "videos/*/README.md"
+      - "videos/*/SYLLABUS.md"
+      - "videos/*/course/**"
+      - "videos/*/labs/**"
+      - "videos/coursekit/**"
+      - "tests/test_courses.py"
       - "tools/course_site.py"
+      - "tools/series_site.py"
+      - "tests/test_series_site.py"
       - ".github/workflows/course-site.yml"
   workflow_dispatch:
 
@@ -40,8 +58,8 @@ jobs:
       # The House library is numpy and scipy; the films' toolkit (manim, torch, TeX) is not needed here.
       - name: Install
         run: pip install "numpy>=1.26" "scipy>=1.11" "numba>=0.59" "matplotlib>=3.8" "markdown>=3.5" "pytest>=8"
-      - name: Check the course table and the labs
-        run: python -m pytest -q tests/test_quant_course.py tests/test_quant_labs.py
+      - name: Check the course table, the labs and the other courses' pages
+        run: python -m pytest -q tests/test_quant_course.py tests/test_quant_labs.py tests/test_series_site.py tests/test_courses.py
       - name: Build the site
         run: python tools/course_site.py --out _site
       - uses: actions/upload-pages-artifact@v3
