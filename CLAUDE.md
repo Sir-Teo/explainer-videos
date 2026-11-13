@@ -47,3 +47,8 @@ Manim videos with local neural narration. See README.md for layout and build com
 - *Computer Science, Built* (`videos/cs/`): sixty-one parts in eleven acts (`cs1` … `cs61`: a CS degree plus industry practice in Acts I–X, a research tier in Act XI and a *Frontier* chapter in every part), Parts 1–61 built or in progress; the series plan
   is `videos/cs/README.md`, the chapter-by-chapter syllabus and standard are `videos/cs/SYLLABUS.md`. The machine the
   series builds (Pebble) and its instruments will live in `explainer/cs/`.
+- *Psychology, Built* (`videos/psychology/`): planned, sixty-two parts in thirteen acts (`psych1` … `psych62`: a degree,
+  the graduate methods sequence, industry practice and a research tier); nothing is built yet. The series plan is
+  `videos/psychology/README.md`, the chapter-by-chapter syllabus, the standard and the open decisions are
+  `videos/psychology/SYLLABUS.md`. Its model subject (Psyche), the Pool, the Battery and the Replication Ledger will
+  live in `explainer/psychology/`.
